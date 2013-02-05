@@ -33,8 +33,8 @@ import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.data.conference.Roommanagement;
 import org.apache.openmeetings.data.user.Usermanagement;
 import org.apache.openmeetings.data.whiteboard.EmoticonsManager;
-import org.apache.openmeetings.persistence.beans.rooms.Client;
-import org.apache.openmeetings.persistence.beans.rooms.Rooms;
+import org.apache.openmeetings.persistence.beans.room.Client;
+import org.apache.openmeetings.persistence.beans.room.Room;
 import org.apache.openmeetings.remote.red5.ScopeApplicationAdapter;
 import org.apache.openmeetings.remote.util.SessionVariablesUtil;
 import org.apache.openmeetings.session.ISessionManager;
@@ -116,7 +116,7 @@ public class ChatService implements IPendingServiceCallback {
 				return 1; //TODO weird
 			}
 			Long user_level = usermanagement.getUserLevelByID(currentClient.getUser_id());
-			Rooms room = roommanagement.getRoomById(user_level, room_id);
+			Room room = roommanagement.getRoomById(user_level, room_id);
 			@SuppressWarnings("rawtypes")
 			ArrayList messageMap = (ArrayList) newMessage;
 			// adding delimiter space, cause otherwise an emoticon in the last
@@ -203,7 +203,7 @@ public class ChatService implements IPendingServiceCallback {
 			Client currentClient = this.sessionManager.getClientByStreamId(current.getClient().getId(), null);
 			Long room_id = currentClient.getRoom_id();
 			Long user_level = usermanagement.getUserLevelByID(currentClient.getUser_id());
-			Rooms room = roommanagement.getRoomById(user_level, room_id);
+			Room room = roommanagement.getRoomById(user_level, room_id);
 			log.debug("room_id: " + room_id);
 
 			@SuppressWarnings("rawtypes")

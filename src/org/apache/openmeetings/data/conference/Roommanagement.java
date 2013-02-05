@@ -40,11 +40,11 @@ import org.apache.openmeetings.data.conference.dao.RoomModeratorsDao;
 import org.apache.openmeetings.data.user.Organisationmanagement;
 import org.apache.openmeetings.data.user.dao.UsersDao;
 import org.apache.openmeetings.persistence.beans.domain.Organisation_Users;
-import org.apache.openmeetings.persistence.beans.rooms.RoomTypes;
-import org.apache.openmeetings.persistence.beans.rooms.Rooms;
-import org.apache.openmeetings.persistence.beans.rooms.Rooms_Organisation;
+import org.apache.openmeetings.persistence.beans.room.Room;
+import org.apache.openmeetings.persistence.beans.room.RoomOrganisation;
+import org.apache.openmeetings.persistence.beans.room.RoomType;
 import org.apache.openmeetings.persistence.beans.sip.asterisk.MeetMe;
-import org.apache.openmeetings.persistence.beans.user.Users;
+import org.apache.openmeetings.persistence.beans.user.User;
 import org.apache.openmeetings.session.ISessionManager;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -88,7 +88,7 @@ public class Roommanagement {
 	 */
 	public Long addRoomType(String name, boolean deleted) {
 		try {
-			RoomTypes rtype = new RoomTypes();
+			RoomType rtype = new RoomType();
 			rtype.setName(name);
 			rtype.setStarttime(new Date());
 			rtype.setDeleted(deleted);
@@ -106,10 +106,10 @@ public class Roommanagement {
 	 * 
 	 * @return List of RoomTypes
 	 */
-	public List<RoomTypes> getAllRoomTypes() {
+	public List<RoomType> getAllRoomTypes() {
 		try {
-			TypedQuery<RoomTypes> query = em
-					.createQuery("select c from RoomTypes as c where c.deleted <> :deleted", RoomTypes.class);
+			TypedQuery<RoomType> query = em
+					.createNamedQuery("getAllRoomTypes", RoomType.class);
 			query.setParameter("deleted", true);
 			return query.getResultList();
 		} catch (Exception ex2) {
@@ -124,15 +124,15 @@ public class Roommanagement {
 	 * @param roomtypes_id
 	 * @return RoomTypes-Object or NULL
 	 */
-	public RoomTypes getRoomTypesById(long roomtypes_id) {
+	public RoomType getRoomTypesById(long roomtypes_id) {
 		try {
-			TypedQuery<RoomTypes> query = em
-					.createQuery("select c from RoomTypes as c where c.roomtypes_id = :roomtypes_id AND c.deleted <> :deleted", RoomTypes.class);
+			TypedQuery<RoomType> query = em
+					.createNamedQuery("getRoomTypesById", RoomType.class);
 			query.setParameter("roomtypes_id", roomtypes_id);
 			query.setParameter("deleted", true);
 			List<?> ll = query.getResultList();
 			if (ll.size() > 0) {
-				return (RoomTypes) ll.get(0);
+				return (RoomType) ll.get(0);
 			}
 		} catch (Exception ex2) {
 			log.error("[getRoomTypesById] ", ex2);
@@ -147,7 +147,7 @@ public class Roommanagement {
 	 * @param rooms_id
 	 * @return
 	 */
-	public Rooms getRoomById(long user_level, long rooms_id) {
+	public Room getRoomById(long user_level, long rooms_id) {
 		try {
 			if (authLevelManagement.checkUserLevel(user_level)) {
 				return roomDao.get(rooms_id);
@@ -160,10 +160,10 @@ public class Roommanagement {
 		return null;
 	}
 
-	public Rooms getRoomWithCurrentUsersById(long user_level, long rooms_id) {
+	public Room getRoomWithCurrentUsersById(long user_level, long rooms_id) {
 		try {
 			if (authLevelManagement.checkUserLevel(user_level)) {
-				Rooms room = roomDao.get(rooms_id);
+				Room room = roomDao.get(rooms_id);
 
 				if (room != null) {
 					room.setCurrentusers(sessionManager.getClientListByRoom(room.getRooms_id()));
@@ -183,22 +183,19 @@ public class Roommanagement {
 	 * @param externalRoomId
 	 * @return Rooms-Object or NULL
 	 */
-	public Rooms getRoomByExternalId(Long externalRoomId,
+	public Room getRoomByExternalId(Long externalRoomId,
 			String externalRoomType, long roomtypes_id) {
 		log.debug("getRoombyExternalId : " + externalRoomId + " - "
 				+ externalRoomType + " - " + roomtypes_id);
 		try {
-			String hql = "select c from Rooms as c JOIN c.roomtype as rt "
-					+ "where c.externalRoomId = :externalRoomId AND c.externalRoomType = :externalRoomType "
-					+ "AND rt.roomtypes_id = :roomtypes_id AND c.deleted <> :deleted";
-			TypedQuery<Rooms> query = em.createQuery(hql, Rooms.class);
+			TypedQuery<Room> query = em.createNamedQuery("getRoomByExternalId", Room.class);
 			query.setParameter("externalRoomId", externalRoomId);
 			query.setParameter("externalRoomType", externalRoomType);
 			query.setParameter("roomtypes_id", roomtypes_id);
 			query.setParameter("deleted", true);
 			List<?> ll = query.getResultList();
 			if (ll.size() > 0) {
-				return (Rooms) ll.get(0);
+				return (Room) ll.get(0);
 			} else {
 				log.error("Could not find room " + externalRoomId);
 			}
@@ -208,7 +205,7 @@ public class Roommanagement {
 		return null;
 	}
 
-	public Rooms getRoomByExternalId(long user_level, Long externalRoomId,
+	public Room getRoomByExternalId(long user_level, Long externalRoomId,
 			String externalRoomType, long roomtypes_id) {
 		try {
 			if (authLevelManagement.checkUserLevel(user_level)) {
@@ -223,13 +220,13 @@ public class Roommanagement {
 		return null;
 	}
 
-	public SearchResult<Rooms> getRooms(long user_level, int start, int max,
+	public SearchResult<Room> getRooms(long user_level, int start, int max,
 			String orderby, boolean asc, String search) {
 		try {
 			if (authLevelManagement.checkAdminLevel(user_level)) {
-				SearchResult<Rooms> sResult = new SearchResult<Rooms>();
+				SearchResult<Room> sResult = new SearchResult<Room>();
 				sResult.setRecords(this.selectMaxFromRooms(search));
-				sResult.setObjectName(Rooms.class.getName());
+				sResult.setObjectName(Room.class.getName());
 				sResult.setResult(this.getRoomsInternatlByHQL(start, max,
 						orderby, asc, search));
 				return sResult;
@@ -240,18 +237,18 @@ public class Roommanagement {
 		return null;
 	}
 	
-	public SearchResult<Rooms> getRoomsWithCurrentUsers(long user_level, int start,
+	public SearchResult<Room> getRoomsWithCurrentUsers(long user_level, int start,
 			int max, String orderby, boolean asc) {
 		try {
 			if (authLevelManagement.checkAdminLevel(user_level)) {
-				SearchResult<Rooms> sResult = new SearchResult<Rooms>();
+				SearchResult<Room> sResult = new SearchResult<Room>();
 				sResult.setRecords(this.selectMaxFromRooms(""));
-				sResult.setObjectName(Rooms.class.getName());
+				sResult.setObjectName(Room.class.getName());
 
-				List<Rooms> rooms = this.getRoomsInternatl(start, max, orderby,
+				List<Room> rooms = this.getRoomsInternatl(start, max, orderby,
 						asc);
 
-				for (Rooms room : rooms) {
+				for (Room room : rooms) {
 					room.setCurrentusers(sessionManager.getClientListByRoom(room.getRooms_id()));
 				}
 
@@ -264,15 +261,15 @@ public class Roommanagement {
 		return null;
 	}
 
-	public List<Rooms> getRoomsWithCurrentUsersByList(long user_level,
+	public List<Room> getRoomsWithCurrentUsersByList(long user_level,
 			int start, int max, String orderby, boolean asc) {
 		try {
 			if (authLevelManagement.checkAdminLevel(user_level)) {
 
-				List<Rooms> rooms = this.getRoomsInternatl(start, max, orderby,
+				List<Room> rooms = this.getRoomsInternatl(start, max, orderby,
 						asc);
 
-				for (Rooms room : rooms) {
+				for (Room room : rooms) {
 					room.setCurrentusers(sessionManager.getClientListByRoom(room.getRooms_id()));
 				}
 
@@ -285,16 +282,16 @@ public class Roommanagement {
 		return null;
 	}
 
-	public List<Rooms> getRoomsWithCurrentUsersByListAndType(long user_level,
+	public List<Room> getRoomsWithCurrentUsersByListAndType(long user_level,
 			int start, int max, String orderby, boolean asc,
 			String externalRoomType) {
 		try {
 			if (authLevelManagement.checkAdminLevel(user_level)) {
 
-				List<Rooms> rooms = this.getRoomsInternatlbyType(start, max,
+				List<Room> rooms = this.getRoomsInternatlbyType(start, max,
 						orderby, asc, externalRoomType);
 
-				for (Rooms room : rooms) {
+				for (Room room : rooms) {
 					room.setCurrentusers(sessionManager.getClientListByRoom(room.getRooms_id()));
 				}
 
@@ -309,17 +306,13 @@ public class Roommanagement {
 
 	public Long selectMaxFromRooms(String search) {
 		try {
-			String hql = "select count(c.rooms_id) from Rooms c "
-					+ "where c.deleted <> true AND c.name LIKE :search ";
-
 			if (search.length() == 0) {
 				search = "%";
 			} else {
 				search = "%" + search + "%";
 			}
-
 			// get all users
-			TypedQuery<Long> query = em.createQuery(hql, Long.class);
+			TypedQuery<Long> query = em.createNamedQuery("selectMaxFromRooms", Long.class);
 			query.setParameter("search", search);
 			List<Long> ll = query.getResultList();
 			log.debug("Number of records" + ll.get(0));
@@ -340,12 +333,12 @@ public class Roommanagement {
 	 * @param asc
 	 * @return
 	 */
-	public List<Rooms> getRoomsInternatl(int start, int max, String orderby,
+	public List<Room> getRoomsInternatl(int start, int max, String orderby,
 			boolean asc) {
 		try {
 			CriteriaBuilder cb = em.getCriteriaBuilder();
-			CriteriaQuery<Rooms> cq = cb.createQuery(Rooms.class);
-			Root<Rooms> c = cq.from(Rooms.class);
+			CriteriaQuery<Room> cq = cb.createQuery(Room.class);
+			Root<Room> c = cq.from(Room.class);
 			Predicate condition = cb.equal(c.get("deleted"), false);
 			cq.where(condition);
 			cq.distinct(asc);
@@ -354,10 +347,10 @@ public class Roommanagement {
 			} else {
 				cq.orderBy(cb.desc(c.get(orderby)));
 			}
-			TypedQuery<Rooms> q = em.createQuery(cq);
+			TypedQuery<Room> q = em.createQuery(cq);
 			q.setFirstResult(start);
 			q.setMaxResults(max);
-			List<Rooms> ll = q.getResultList();
+			List<Room> ll = q.getResultList();
 			return ll;
 		} catch (Exception ex2) {
 			log.error("[getRooms ] ", ex2);
@@ -375,11 +368,11 @@ public class Roommanagement {
 	 * @param asc
 	 * @return
 	 */
-	public List<Rooms> getRoomsInternatlByHQL(int start, int max,
+	public List<Room> getRoomsInternatlByHQL(int start, int max,
 			String orderby, boolean asc, String search) {
 		try {
 
-			String hql = "select c from Rooms c "
+			String hql = "select c from Room c "
 					+ "where c.deleted <> true AND c.name LIKE :search ";
 
 			if (search.length() == 0) {
@@ -396,7 +389,7 @@ public class Roommanagement {
 					hql += " DESC";
 				}
 			}
-			TypedQuery<Rooms> query = em.createQuery(hql, Rooms.class);
+			TypedQuery<Room> query = em.createQuery(hql, Room.class);
 			query.setParameter("search", search);
 			query.setFirstResult(start);
 			query.setMaxResults(max);
@@ -409,15 +402,15 @@ public class Roommanagement {
 		return null;
 	}
 
-	public List<Rooms> getAllRooms() {
+	public List<Room> getAllRooms() {
 		try {
 			CriteriaBuilder cb = em.getCriteriaBuilder();
-			CriteriaQuery<Rooms> cq = cb.createQuery(Rooms.class);
-			Root<Rooms> c = cq.from(Rooms.class);
+			CriteriaQuery<Room> cq = cb.createQuery(Room.class);
+			Root<Room> c = cq.from(Room.class);
 			Predicate condition = cb.equal(c.get("deleted"), false);
 			cq.where(condition);
-			TypedQuery<Rooms> q = em.createQuery(cq);
-			List<Rooms> ll = q.getResultList();
+			TypedQuery<Room> q = em.createQuery(cq);
+			List<Room> ll = q.getResultList();
 			return ll;
 		} catch (Exception ex2) {
 			log.error("[getAllRooms]", ex2);
@@ -425,9 +418,9 @@ public class Roommanagement {
 		return null;
 	}
 
-	public List<Rooms> getBackupRooms() {
+	public List<Room> getBackupRooms() {
 		try {
-			return em.createNamedQuery("getBackupRooms", Rooms.class)
+			return em.createNamedQuery("getBackupRooms", Room.class)
 					.getResultList();
 		} catch (Exception e) {
 			log.error("[getBackupRooms]", e);
@@ -435,12 +428,12 @@ public class Roommanagement {
 		return null;
 	}
 
-	public List<Rooms> getRoomsInternatlbyType(int start, int max,
+	public List<Room> getRoomsInternatlbyType(int start, int max,
 			String orderby, boolean asc, String externalRoomType) {
 		try {
 			CriteriaBuilder cb = em.getCriteriaBuilder();
-			CriteriaQuery<Rooms> cq = cb.createQuery(Rooms.class);
-			Root<Rooms> c = cq.from(Rooms.class);
+			CriteriaQuery<Room> cq = cb.createQuery(Room.class);
+			Root<Room> c = cq.from(Room.class);
 			Predicate condition = cb.equal(c.get("deleted"), false);
 			Predicate subCondition = cb.equal(c.get("externalRoomType"),
 					externalRoomType);
@@ -451,10 +444,10 @@ public class Roommanagement {
 			} else {
 				cq.orderBy(cb.desc(c.get(orderby)));
 			}
-			TypedQuery<Rooms> q = em.createQuery(cq);
+			TypedQuery<Room> q = em.createQuery(cq);
 			q.setFirstResult(start);
 			q.setMaxResults(max);
-			List<Rooms> ll = q.getResultList();
+			List<Room> ll = q.getResultList();
 			return ll;
 		} catch (Exception ex2) {
 			log.error("[getRooms ] ", ex2);
@@ -462,18 +455,18 @@ public class Roommanagement {
 		return null;
 	}
 
-	public List<Rooms_Organisation> getOrganisationsByRoom(long user_level,
+	public List<RoomOrganisation> getOrganisationsByRoom(long user_level,
 			long rooms_id) {
 		try {
 			if (authLevelManagement.checkUserLevel(user_level)) {
-				String hql = "select c from Rooms_Organisation as c "
+				String hql = "select c from RoomOrganisation as c "
 						+ "where c.room.rooms_id = :rooms_id "
 						+ "AND c.deleted <> :deleted";
-				TypedQuery<Rooms_Organisation> q = em.createQuery(hql, Rooms_Organisation.class);
+				TypedQuery<RoomOrganisation> q = em.createQuery(hql, RoomOrganisation.class);
 
 				q.setParameter("rooms_id", rooms_id);
 				q.setParameter("deleted", true);
-				List<Rooms_Organisation> ll = q.getResultList();
+				List<RoomOrganisation> ll = q.getResultList();
 				return ll;
 			}
 		} catch (Exception ex2) {
@@ -489,21 +482,14 @@ public class Roommanagement {
 	 * @param roomtypes_id
 	 * @return
 	 */
-	public List<Rooms> getPublicRooms(long user_level, long roomtypes_id) {
+	public List<Room> getPublicRooms(long user_level, long roomtypes_id) {
 		try {
 			if (authLevelManagement.checkUserLevel(user_level)) {
-				String queryString = "SELECT r from Rooms r "
-						+ "JOIN r.roomtype as rt "
-						+ "WHERE "
-						+ "r.ispublic=:ispublic and r.deleted=:deleted and rt.roomtypes_id=:roomtypes_id";
-				TypedQuery<Rooms> q = em.createQuery(queryString, Rooms.class);
-				//
+				TypedQuery<Room> q = em.createNamedQuery("getPublicRooms", Room.class);
 				q.setParameter("ispublic", true);
 				q.setParameter("deleted", false);
 				q.setParameter("roomtypes_id", new Long(roomtypes_id));
-
-				List<Rooms> ll = q.getResultList();
-
+				List<Room> ll = q.getResultList();
 				return ll;
 			}
 		} catch (Exception ex2) {
@@ -512,13 +498,13 @@ public class Roommanagement {
 		return null;
 	}
 
-	public List<Rooms> getRoomsByIds(List<Integer> roomIds) {
+	public List<Room> getRoomsByIds(List<Integer> roomIds) {
 		try {
 			if (roomIds == null || roomIds.size() == 0) {
-				return new LinkedList<Rooms>();
+				return new LinkedList<Room>();
 			}
 
-			String queryString = "SELECT r from Rooms r " + "WHERE ";
+			String queryString = "SELECT r from Room r " + "WHERE ";
 
 			queryString += "(";
 
@@ -533,9 +519,9 @@ public class Roommanagement {
 
 			queryString += ")";
 
-			TypedQuery<Rooms> q = em.createQuery(queryString, Rooms.class);
+			TypedQuery<Room> q = em.createQuery(queryString, Room.class);
 
-			List<Rooms> ll = q.getResultList();
+			List<Room> ll = q.getResultList();
 
 			return ll;
 
@@ -545,20 +531,13 @@ public class Roommanagement {
 		return null;
 	}
 
-	public List<Rooms> getPublicRoomsWithoutType(long user_level) {
+	public List<Room> getPublicRoomsWithoutType(long user_level) {
 		try {
 			if (authLevelManagement.checkUserLevel(user_level)) {
-
-				String queryString = "SELECT r from Rooms r " + "WHERE "
-						+ "r.ispublic = :ispublic and r.deleted <> :deleted "
-						+ "ORDER BY r.name ASC";
-
-				TypedQuery<Rooms> q = em.createQuery(queryString, Rooms.class);
-
+				TypedQuery<Room> q = em.createNamedQuery("getPublicRoomsWithoutType", Room.class);
 				q.setParameter("ispublic", true);
 				q.setParameter("deleted", true);
-				List<Rooms> ll = q.getResultList();
-
+				List<Room> ll = q.getResultList();
 				return ll;
 			}
 		} catch (Exception ex2) {
@@ -572,23 +551,15 @@ public class Roommanagement {
 	 * Get Appointed Meetings
 	 */
 	// ---------------------------------------------------------------------------------------------
-	public List<Rooms> getAppointedMeetings(Long userid, Long user_level) {
+	public List<Room> getAppointedMeetings(Long userid, Long user_level) {
 		log.debug("Roommanagement.getAppointedMeetings");
 
 		try {
 			if (authLevelManagement.checkUserLevel(user_level)) {
-
-				String queryString = "SELECT r from Rooms r "
-						+ "JOIN r.roomtype as rt " + "WHERE "
-						+ "r.deleted=:deleted and r.appointment=:appointed";
-				TypedQuery<Rooms> q = em.createQuery(queryString, Rooms.class);
-				//
+				TypedQuery<Room> q = em.createNamedQuery("getAppointedMeetings", Room.class);
 				q.setParameter("appointed", true);
 				q.setParameter("deleted", false);
-
-				List<Rooms> ll = q.getResultList();
-
-				return ll;
+				return q.getResultList();
 			}
 		} catch (Exception ex2) {
 			log.error("[getAppointedMeetings] ", ex2);
@@ -598,34 +569,6 @@ public class Roommanagement {
 	}
 
 	// ---------------------------------------------------------------------------------------------
-
-	/**
-	 * get all rooms which are availible for public
-	 * 
-	 * @param user_level
-	 * @param roomtypes_id
-	 * @return
-	 */
-	public List<Rooms> getPublicRooms(long user_level) {
-		try {
-			if (authLevelManagement.checkUserLevel(user_level)) {
-				// log.error("### getPublicRooms: create Query "+roomtypes_id);
-				String queryString = "SELECT r from Rooms r "
-						+ "JOIN r.roomtype as rt " + "WHERE "
-						+ "r.ispublic=:ispublic and r.deleted=:deleted";
-				TypedQuery<Rooms> q = em.createQuery(queryString, Rooms.class);
-				//
-				q.setParameter("ispublic", true);
-				q.setParameter("deleted", false);
-
-				List<Rooms> ll = q.getResultList();
-				return ll;
-			}
-		} catch (Exception ex2) {
-			log.error("[getRoomsByOrganisation] ", ex2);
-		}
-		return null;
-	}
 
 	//TODO move it to helper or DAO
 	public String getSipNumber(long roomId) {
@@ -642,7 +585,7 @@ public class Roommanagement {
      * @return number of participants
      */
     public Integer getSipConferenceMembersNumber(Long rooms_id) {
-    	Rooms rooms = roomDao.get(rooms_id);
+    	Room rooms = roomDao.get(rooms_id);
     	return rooms.getMeetme() != null ? rooms.getMeetme().getMembers() : null;
     }
 
@@ -674,7 +617,7 @@ public class Roommanagement {
 		try {
 			if (authLevelManagement.checkAdminLevel(user_level)) {
 
-				Rooms r = new Rooms();
+				Room r = new Room();
 				r.setName(name);
 				r.setComment(comment);
 				r.setStarttime(new Date());
@@ -759,7 +702,7 @@ public class Roommanagement {
 
 		try {
 			if (authLevelManagement.checkModLevel(user_level)) {
-				Rooms r = new Rooms();
+				Room r = new Room();
 				r.setName(name);
 				r.setComment(comment);
 				r.setStarttime(new Date());
@@ -814,7 +757,7 @@ public class Roommanagement {
 		log.debug("addExternalRoom");
 
 		try {
-			Rooms r = new Rooms();
+			Room r = new Room();
 			r.setName(name);
 			r.setComment(comment);
 			r.setStarttime(new Date());
@@ -879,7 +822,7 @@ public class Roommanagement {
 			long organisation_id) {
 		try {
 			if (authLevelManagement.checkAdminLevel(user_level)) {
-				Rooms_Organisation rOrganisation = new Rooms_Organisation();
+				RoomOrganisation rOrganisation = new RoomOrganisation();
 				rOrganisation.setRoom(roomDao.get(rooms_id));
 				log.debug("addRoomToOrganisation rooms '"
 						+ rOrganisation.getRoom().getName() + "'");
@@ -898,7 +841,7 @@ public class Roommanagement {
 		return null;
 	}
 
-	public Long addRoomOrganisation(Rooms_Organisation rOrganisation) {
+	public Long addRoomOrganisation(RoomOrganisation rOrganisation) {
 		try {
 
 			rOrganisation.setStarttime(new Date());
@@ -918,18 +861,18 @@ public class Roommanagement {
 	 * @param rooms_organisation_id
 	 * @return
 	 */
-	public Rooms_Organisation getRoomsOrganisationById(
+	public RoomOrganisation getRoomsOrganisationById(
 			long rooms_organisation_id) {
 		try {
 			CriteriaBuilder cb = em.getCriteriaBuilder();
-			CriteriaQuery<Rooms_Organisation> cq = cb
-					.createQuery(Rooms_Organisation.class);
-			Root<Rooms_Organisation> c = cq.from(Rooms_Organisation.class);
+			CriteriaQuery<RoomOrganisation> cq = cb
+					.createQuery(RoomOrganisation.class);
+			Root<RoomOrganisation> c = cq.from(RoomOrganisation.class);
 			Predicate condition = cb.equal(c.get("rooms_organisation_id"),
 					rooms_organisation_id);
 			cq.where(condition);
-			TypedQuery<Rooms_Organisation> q = em.createQuery(cq);
-			List<Rooms_Organisation> ll = q.getResultList();
+			TypedQuery<RoomOrganisation> q = em.createQuery(cq);
+			List<RoomOrganisation> ll = q.getResultList();
 
 			if (ll.size() > 0) {
 				return ll.get(0);
@@ -948,22 +891,16 @@ public class Roommanagement {
 	 * @param roomtypes_id
 	 * @return
 	 */
-	public List<Rooms_Organisation> getRoomsOrganisationByOrganisationIdAndRoomType(
+	public List<RoomOrganisation> getRoomsOrganisationByOrganisationIdAndRoomType(
 			long user_level, long organisation_id, long roomtypes_id) {
 		try {
 			if (authLevelManagement.checkUserLevel(user_level)) {
-				String hql = "select c from Rooms_Organisation as c "
-						+ "where c.room.roomtypes_id = :roomtypes_id "
-						+ "AND c.organisation.organisation_id = :organisation_id "
-						+ "AND c.deleted <> :deleted";
-				TypedQuery<Rooms_Organisation> q = em.createQuery(hql, Rooms_Organisation.class);
-
+				TypedQuery<RoomOrganisation> q = em.
+						createNamedQuery("getRoomsOrganisationByOrganisationIdAndRoomType", RoomOrganisation.class);
 				q.setParameter("roomtypes_id", roomtypes_id);
 				q.setParameter("organisation_id", organisation_id);
 				q.setParameter("deleted", true);
-				List<Rooms_Organisation> ll = q.getResultList();
-
-				return ll;
+				return q.getResultList();
 			} else {
 				log.error("[notauthentificated] " + user_level);
 			}
@@ -979,24 +916,18 @@ public class Roommanagement {
 	 * @param organisation_id
 	 * @return list of Rooms_Organisation with Rooms as Sub-Objects or null
 	 */
-	public List<Rooms_Organisation> getRoomsOrganisationByOrganisationId(
+	public List<RoomOrganisation> getRoomsOrganisationByOrganisationId(
 			long user_level, long organisation_id) {
 		try {
 			if (authLevelManagement.checkUserLevel(user_level)) {
 
-				String hql = "SELECT c FROM Rooms_Organisation c "
-						+ "LEFT JOIN FETCH c.room "
-						+ "WHERE c.organisation.organisation_id = :organisation_id "
-						+ "AND c.deleted <> :deleted AND c.room.deleted <> :deleted AND c.room.appointment = false "
-						+ "AND c.organisation.deleted <> :deleted "
-						+ "ORDER BY c.room.name ASC";
-
-				TypedQuery<Rooms_Organisation> query = em.createQuery(hql, Rooms_Organisation.class);
+				TypedQuery<RoomOrganisation> query = em.
+						createNamedQuery("getRoomsOrganisationByOrganisationId", RoomOrganisation.class);
 
 				query.setParameter("organisation_id", organisation_id);
 				query.setParameter("deleted", true);
 
-				List<Rooms_Organisation> ll = query.getResultList();
+				List<RoomOrganisation> ll = query.getResultList();
 
 				return ll;
 			} else {
@@ -1009,14 +940,14 @@ public class Roommanagement {
 		return null;
 	}
 
-	public SearchResult<Rooms_Organisation> getRoomsOrganisationByOrganisationId(long user_level,
+	public SearchResult<RoomOrganisation> getRoomsOrganisationByOrganisationId(long user_level,
 			long organisation_id, int start, int max, String orderby,
 			boolean asc) {
 		try {
 			if (authLevelManagement.checkModLevel(user_level)) {
 
-				SearchResult<Rooms_Organisation> sResult = new SearchResult<Rooms_Organisation>();
-				sResult.setObjectName(Rooms_Organisation.class.getName());
+				SearchResult<RoomOrganisation> sResult = new SearchResult<RoomOrganisation>();
+				sResult.setObjectName(RoomOrganisation.class.getName());
 				sResult.setRecords(this.selectMaxFromRoomsByOrganisation(
 						organisation_id).longValue());
 				sResult.setResult(this.getRoomsOrganisationByOrganisationId(
@@ -1032,14 +963,11 @@ public class Roommanagement {
 	public Integer selectMaxFromRoomsByOrganisation(long organisation_id) {
 		try {
 			// get all users
-			String hql = "select c from Rooms_Organisation as c "
-					+ "where c.organisation.organisation_id = :organisation_id "
-					+ "AND c.deleted <> :deleted";
-			TypedQuery<Rooms_Organisation> q = em.createQuery(hql, Rooms_Organisation.class);
+			TypedQuery<RoomOrganisation> q = em.createNamedQuery("selectMaxFromRoomsByOrganisation", RoomOrganisation.class);
 
 			q.setParameter("organisation_id", organisation_id);
 			q.setParameter("deleted", true);
-			List<Rooms_Organisation> ll = q.getResultList();
+			List<RoomOrganisation> ll = q.getResultList();
 
 			return ll.size();
 		} catch (Exception ex2) {
@@ -1057,11 +985,11 @@ public class Roommanagement {
 	 * @param asc
 	 * @return
 	 */
-	private List<Rooms_Organisation> getRoomsOrganisationByOrganisationId(
+	private List<RoomOrganisation> getRoomsOrganisationByOrganisationId(
 			long organisation_id, int start, int max, String orderby,
 			boolean asc) {
 		try {
-			String hql = "select c from Rooms_Organisation as c "
+			String hql = "select c from RoomOrganisation as c "
 					+ "where c.organisation.organisation_id = :organisation_id "
 					+ "AND c.deleted <> :deleted";
 			if (orderby.startsWith("c.")) {
@@ -1075,13 +1003,13 @@ public class Roommanagement {
 				hql += " DESC";
 			}
 
-			TypedQuery<Rooms_Organisation> q = em.createQuery(hql, Rooms_Organisation.class);
+			TypedQuery<RoomOrganisation> q = em.createQuery(hql, RoomOrganisation.class);
 
 			q.setParameter("organisation_id", organisation_id);
 			q.setParameter("deleted", true);
 			q.setFirstResult(start);
 			q.setMaxResults(max);
-			List<Rooms_Organisation> ll = q.getResultList();
+			List<RoomOrganisation> ll = q.getResultList();
 
 			return ll;
 		} catch (Exception ex2) {
@@ -1090,19 +1018,16 @@ public class Roommanagement {
 		return null;
 	}
 
-	private Rooms_Organisation getRoomsOrganisationByOrganisationIdAndRoomId(
+	private RoomOrganisation getRoomsOrganisationByOrganisationIdAndRoomId(
 			long organisation_id, long rooms_id) {
 		try {
-			String hql = "select c from Rooms_Organisation as c "
-					+ "where c.room.rooms_id = :rooms_id "
-					+ "AND c.organisation.organisation_id = :organisation_id "
-					+ "AND c.deleted <> :deleted";
-			TypedQuery<Rooms_Organisation> q = em.createQuery(hql, Rooms_Organisation.class);
+			TypedQuery<RoomOrganisation> q = em.
+					createNamedQuery("getRoomsOrganisationByOrganisationIdAndRoomId", RoomOrganisation.class);
 
 			q.setParameter("rooms_id", rooms_id);
 			q.setParameter("organisation_id", organisation_id);
 			q.setParameter("deleted", true);
-			List<Rooms_Organisation> ll = q.getResultList();
+			List<RoomOrganisation> ll = q.getResultList();
 
 			if (ll.size() > 0) {
 				return ll.get(0);
@@ -1118,31 +1043,26 @@ public class Roommanagement {
 	 * @param organisation_id
 	 * @return
 	 */
-	public List<Rooms_Organisation> getRoomsOrganisationByRoomsId(long rooms_id) {
+	public List<RoomOrganisation> getRoomsOrganisationByRoomsId(long rooms_id) {
 		try {
-			String hql = "select c from Rooms_Organisation as c "
-					+ "where c.room.rooms_id = :rooms_id "
-					+ "AND c.deleted <> :deleted";
-			TypedQuery<Rooms_Organisation> q = em.createQuery(hql, Rooms_Organisation.class);
-
+			TypedQuery<RoomOrganisation> q = em.createNamedQuery("getRoomsOrganisationByRoomsId", RoomOrganisation.class);
 			q.setParameter("rooms_id", rooms_id);
 			q.setParameter("deleted", true);
-			List<Rooms_Organisation> ll = q.getResultList();
-			return ll;
+			return q.getResultList();
 		} catch (Exception ex2) {
 			log.error("[getRoomsByOrganisation] ", ex2);
 		}
 		return null;
 	}
 
-	public List<Rooms_Organisation> getRoomsOrganisations() {
+	public List<RoomOrganisation> getRoomsOrganisations() {
 		try {
 			CriteriaBuilder cb = em.getCriteriaBuilder();
-			CriteriaQuery<Rooms_Organisation> cq = cb
-					.createQuery(Rooms_Organisation.class);
-			cq.from(Rooms_Organisation.class);
-			TypedQuery<Rooms_Organisation> q = em.createQuery(cq);
-			List<Rooms_Organisation> ll = q.getResultList();
+			CriteriaQuery<RoomOrganisation> cq = cb
+					.createQuery(RoomOrganisation.class);
+			cq.from(RoomOrganisation.class);
+			TypedQuery<RoomOrganisation> q = em.createQuery(cq);
+			List<RoomOrganisation> ll = q.getResultList();
 			return ll;
 		} catch (Exception ex2) {
 			log.error("[getRoomsByOrganisation] ", ex2);
@@ -1159,19 +1079,19 @@ public class Roommanagement {
 	private boolean checkUserOrgRoom(long user_id, long rooms_id) {
 		try {
 
-			Users us = usersDao.get(user_id);
+			User us = usersDao.get(user_id);
 			List<Organisation_Users> s = us.getOrganisation_users();
 
 			for (Iterator<Organisation_Users> it = s.iterator(); it.hasNext();) {
 				Organisation_Users orgUsers = it.next();
 				long organisation_id = orgUsers.getOrganisation()
 						.getOrganisation_id();
-				List<Rooms_Organisation> ll = this
+				List<RoomOrganisation> ll = this
 						.getRoomsOrganisationByOrganisationId(3,
 								organisation_id);
-				for (Iterator<Rooms_Organisation> it2 = ll.iterator(); it2
+				for (Iterator<RoomOrganisation> it2 = ll.iterator(); it2
 						.hasNext();) {
-					Rooms_Organisation roomOrg = it2.next();
+					RoomOrganisation roomOrg = it2.next();
 					if (roomOrg.getRoom().getRooms_id() == rooms_id) {
 						return true;
 					}
@@ -1195,14 +1115,14 @@ public class Roommanagement {
 	 * @param comment
 	 * @return
 	 */
-	public Rooms updateRoomsSelf(long user_id, long user_level, long rooms_id,
+	public Room updateRoomsSelf(long user_id, long user_level, long rooms_id,
 			long roomtypes_id, String name, boolean ispublic, String comment) {
 		try {
 			if (authLevelManagement.checkModLevel(user_level)) {
 
 				if (this.checkUserOrgRoom(user_id, rooms_id)) {
 
-					Rooms r = roomDao.get(rooms_id);
+					Room r = roomDao.get(rooms_id);
 					r.setComment(comment);
 					r.setIspublic(ispublic);
 					r.setName(name);
@@ -1289,7 +1209,7 @@ public class Roommanagement {
 		try {
 			log.debug("*** updateRoom numberOfPartizipants: "
 					+ numberOfPartizipants);
-			Rooms r = roomDao.get(rooms_id);
+			Room r = roomDao.get(rooms_id);
 			r.setComment(comment);
 
 			r.setIspublic(ispublic);
@@ -1372,7 +1292,7 @@ public class Roommanagement {
 			log.debug("*** updateRoom numberOfPartizipants: "
 					+ numberOfPartizipants);
 			if (authLevelManagement.checkModLevel(user_level)) {
-				Rooms r = roomDao.get(rooms_id);
+				Room r = roomDao.get(rooms_id);
 				r.setComment(comment);
 
 				r.setIspublic(ispublic);
@@ -1417,7 +1337,7 @@ public class Roommanagement {
 	private boolean checkRoomAlreadyInOrg(Long orgid, List organisations)
 			throws Exception {
 		for (Iterator it = organisations.iterator(); it.hasNext();) {
-			Rooms_Organisation rOrganisation = (Rooms_Organisation) it.next();
+			RoomOrganisation rOrganisation = (RoomOrganisation) it.next();
 			if (rOrganisation.getOrganisation().getOrganisation_id()
 					.equals(orgid))
 				return true;
@@ -1435,9 +1355,9 @@ public class Roommanagement {
 		return false;
 	}
 
-	private Long updateRoomOrganisations(List<Integer> organisations, Rooms room)
+	private Long updateRoomOrganisations(List<Integer> organisations, Room room)
 			throws Exception {
-		List<Rooms_Organisation> roomOrganisations = this.getOrganisationsByRoom(3,
+		List<RoomOrganisation> roomOrganisations = this.getOrganisationsByRoom(3,
 				room.getRooms_id());
 
 		List<Long> roomsToAdd = new LinkedList<Long>();
@@ -1450,8 +1370,8 @@ public class Roommanagement {
 				roomsToAdd.add(orgIdToAdd);
 		}
 
-		for (Iterator<Rooms_Organisation> it = roomOrganisations.iterator(); it.hasNext();) {
-			Rooms_Organisation rOrganisation = it.next();
+		for (Iterator<RoomOrganisation> it = roomOrganisations.iterator(); it.hasNext();) {
+			RoomOrganisation rOrganisation = it.next();
 			Long orgIdToDel = rOrganisation.getOrganisation()
 					.getOrganisation_id();
 			if (!this.checkRoomShouldByDeleted(orgIdToDel, organisations))
@@ -1502,7 +1422,7 @@ public class Roommanagement {
 		try {
 			List ll = this.getRoomsOrganisationByRoomsId(rooms_id);
 			for (Iterator it = ll.iterator(); it.hasNext();) {
-				Rooms_Organisation rOrg = (Rooms_Organisation) it.next();
+				RoomOrganisation rOrg = (RoomOrganisation) it.next();
 				this.deleteRoomsOrganisation(rOrg);
 			}
 		} catch (Exception ex2) {
@@ -1521,7 +1441,7 @@ public class Roommanagement {
 			List ll = this.getRoomsOrganisationByOrganisationId(3,
 					organisation_id);
 			for (Iterator it = ll.iterator(); it.hasNext();) {
-				Rooms_Organisation rOrg = (Rooms_Organisation) it.next();
+				RoomOrganisation rOrg = (RoomOrganisation) it.next();
 				this.deleteRoomsOrganisation(rOrg);
 			}
 		} catch (Exception ex2) {
@@ -1536,7 +1456,7 @@ public class Roommanagement {
 	 */
 	public Long deleteRoomsOrganisationByID(long rooms_organisation_id) {
 		try {
-			Rooms_Organisation rOrg = this
+			RoomOrganisation rOrg = this
 					.getRoomsOrganisationById(rooms_organisation_id);
 			return this.deleteRoomsOrganisation(rOrg);
 		} catch (Exception ex2) {
@@ -1548,7 +1468,7 @@ public class Roommanagement {
 	private Long deleteRoomFromOrganisationByRoomAndOrganisation(long rooms_id,
 			long organisation_id) {
 		try {
-			Rooms_Organisation rOrganisation = this
+			RoomOrganisation rOrganisation = this
 					.getRoomsOrganisationByOrganisationIdAndRoomId(
 							organisation_id, rooms_id);
 			return this.deleteRoomsOrganisation(rOrganisation);
@@ -1563,7 +1483,7 @@ public class Roommanagement {
 	 * 
 	 * @param rOrg
 	 */
-	public Long deleteRoomsOrganisation(Rooms_Organisation rOrg) {
+	public Long deleteRoomsOrganisation(RoomOrganisation rOrg) {
 		try {
 			rOrg.setDeleted(true);
 			rOrg.setUpdatetime(new Date());
@@ -1586,7 +1506,7 @@ public class Roommanagement {
 	public void closeRoom(Long rooms_id, Boolean status) {
 		try {
 
-			Rooms room = roomDao.get(rooms_id);
+			Room room = roomDao.get(rooms_id);
 
 			room.setIsClosed(status);
 
@@ -1603,7 +1523,7 @@ public class Roommanagement {
 	 * @param rooms_id
 	 * @return Rooms-Object or NULL
 	 */
-	public Rooms getRoomByOwnerAndTypeId(Long ownerId, Long roomtypesId,
+	public Room getRoomByOwnerAndTypeId(Long ownerId, Long roomtypesId,
 			String roomName) {
 		try {
 
@@ -1612,19 +1532,12 @@ public class Roommanagement {
 			}
 			log.debug("getRoomByOwnerAndTypeId : " + ownerId + " || "
 					+ roomtypesId);
-
-			String hql = "select c from Rooms as c "
-					+ "where c.ownerId = :ownerId "
-					+ "AND c.roomtype.roomtypes_id = :roomtypesId "
-					+ "AND c.deleted <> :deleted";
-
-			Rooms room = null;
-
-			TypedQuery<Rooms> query = em.createQuery(hql, Rooms.class);
+			Room room = null;
+			TypedQuery<Room> query = em.createNamedQuery("getRoomByOwnerAndTypeId", Room.class);
 			query.setParameter("ownerId", ownerId);
 			query.setParameter("roomtypesId", roomtypesId);
 			query.setParameter("deleted", true);
-			List<Rooms> ll = query.getResultList();
+			List<Room> ll = query.getResultList();
 			if (ll.size() > 0) {
 				room = ll.get(0);
 			}

@@ -29,7 +29,7 @@ import javax.persistence.TypedQuery;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.data.user.Usermanagement;
-import org.apache.openmeetings.persistence.beans.user.UserContacts;
+import org.apache.openmeetings.persistence.beans.user.UserContact;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,7 +47,7 @@ public class UserContactsDao {
 	public Long addUserContact(Long user_id, Long ownerId, Boolean pending, String hash) {
 		try {
 			
-			UserContacts userContact = new UserContacts();
+			UserContact userContact = new UserContact();
 			userContact.setInserted(new Date());
 			userContact.setOwner(userManagement.getUserById(ownerId));
 			userContact.setContact(userManagement.getUserById(user_id));
@@ -64,7 +64,7 @@ public class UserContactsDao {
 		return null;
 	}
 	
-	public Long addUserContactObj(UserContacts userContact) {
+	public Long addUserContactObj(UserContact userContact) {
 		try {
 			
 			userContact.setInserted(new Date());
@@ -79,32 +79,30 @@ public class UserContactsDao {
 		return null;
 	}
 	
+	/**
+	 * @param userContactDeleteId
+	 * @return rowcount of update
+	 */
 	public Integer deleteUserContact(Long userContactDeleteId) {
 		try {
-			
-			String hql = "delete from UserContacts u where u.userContactId = :userContactDeleteId";
-			
-			Query query = em.createQuery(hql);
+			Query query = em.createNamedQuery("deleteUserContact");
 			query.setParameter("userContactDeleteId", userContactDeleteId);
-	        int rowCount = query.executeUpdate();
-			
-			return rowCount;			
+	        return query.executeUpdate();
 		} catch (Exception e) {
 			log.error("[deleteUserContact]",e);
 		}
 		return null;
 	}
 	
+	/**
+	 * @param ownerId
+	 * @return rowcount of update
+	 */
 	public Integer deleteAllUserContacts(Long ownerId) {
 		try {
-			
-			String hql = "delete from UserContacts u where u.owner.user_id = :ownerId";
-			
-			Query query = em.createQuery(hql);
+			Query query = em.createNamedQuery("deleteAllUserContacts");
 	        query.setParameter("ownerId",ownerId);
-	        int rowCount = query.executeUpdate();
-			
-			return rowCount;			
+	        return query.executeUpdate();
 		} catch (Exception e) {
 			log.error("[deleteAllUserContacts]",e);
 		}
@@ -113,11 +111,7 @@ public class UserContactsDao {
 	
 	public Long checkUserContacts(Long user_id, Long ownerId) {
 		try {
-			
-			String hql = "select count(c.userContactId) from UserContacts c " +
-							"where c.contact.user_id = :user_id AND c.owner.user_id = :ownerId ";
-			
-			TypedQuery<Long> query = em.createQuery(hql, Long.class); 
+			TypedQuery<Long> query = em.createNamedQuery("checkUserContacts", Long.class); 
 			query.setParameter("user_id", user_id);
 			query.setParameter("ownerId", ownerId);
 			List<Long> ll = query.getResultList();
@@ -132,149 +126,94 @@ public class UserContactsDao {
 		return null;
 	}
 	
-	public UserContacts getContactsByHash(String hash) {
+	public UserContact getContactsByHash(String hash) {
 		try {
-			
-			String hql = "select c from UserContacts c " +
-							"where c.hash like :hash ";
-			
-			TypedQuery<UserContacts> query = em.createQuery(hql, UserContacts.class); 
+			TypedQuery<UserContact> query = em.createNamedQuery("getContactsByHash", UserContact.class); 
 			query.setParameter("hash", hash);
-			List<UserContacts> ll = query.getResultList();
-			
+			List<UserContact> ll = query.getResultList();
 			if (ll.size() > 0) {
 				return ll.get(0);
 			}
-			
-			
 		} catch (Exception e) {
 			log.error("[getContactsByHash]",e);
 		}
 		return null;
 	}
 	
-	public List<UserContacts> getContactsByUserAndStatus(Long ownerId, Boolean pending) {
+	public List<UserContact> getContactsByUserAndStatus(Long ownerId, Boolean pending) {
 		try {
-			
-			String hql = "select c from UserContacts c " +
-							"where c.owner.user_id = :ownerId " +
-							"AND c.pending = :pending " +
-							"AND c.contact.deleted <> true";
-			
-			TypedQuery<UserContacts> query = em.createQuery(hql, UserContacts.class);
+			TypedQuery<UserContact> query = em.createNamedQuery("getContactsByUserAndStatus", UserContact.class);
 			query.setParameter("ownerId", ownerId);
 			query.setParameter("pending", pending);
-			List<UserContacts> ll = query.getResultList();
-			
-			return ll;
-			
+			return query.getResultList();
 		} catch (Exception e) {
 			log.error("[getContactsByUserAndStatus]",e);
 		}
 		return null;
 	}
 	
-	public UserContacts getUserContactByShareCalendar(Long contactId,
+	public UserContact getUserContactByShareCalendar(Long contactId,
 			Boolean shareCalendar, Long userId) {
 		try {
-
-			String hql = "select c from UserContacts c "
-					+ "where c.contact.user_id = :userId "
-					+ "AND c.owner.user_id = :contactId "
-					+ "AND c.shareCalendar = :shareCalendar "
-					+ "AND c.contact.deleted <> true";
-
-			TypedQuery<UserContacts> query = em.createQuery(hql,
-					UserContacts.class);
+			TypedQuery<UserContact> query = em.createNamedQuery("getUserContactByShareCalendar",
+					UserContact.class);
 			query.setParameter("contactId", contactId);
 			query.setParameter("userId", userId);
 			query.setParameter("shareCalendar", shareCalendar);
-			List<UserContacts> ll = query.getResultList();
-
+			List<UserContact> ll = query.getResultList();
 			if (ll.size() > 0) {
 				return ll.get(0);
 			}
-
 		} catch (Exception e) {
 			log.error("[getUserContactByShareCalendar]", e);
 		}
 		return null;
 	}
 
-	public List<UserContacts> getContactsByShareCalendar(Long contactId, Boolean shareCalendar) {
+	public List<UserContact> getContactsByShareCalendar(Long contactId, Boolean shareCalendar) {
 		try {
-			
-			String hql = "select c from UserContacts c " +
-							"where c.contact.user_id = :contactId " +
-							"AND c.shareCalendar = :shareCalendar " +
-							"AND c.contact.deleted <> true";
-			
-			TypedQuery<UserContacts> query = em.createQuery(hql, UserContacts.class); 
+			TypedQuery<UserContact> query = em.createNamedQuery("getContactsByShareCalendar", UserContact.class); 
 			query.setParameter("contactId", contactId);
 			query.setParameter("shareCalendar", shareCalendar);
-			List<UserContacts> ll = query.getResultList();
-			
-			return ll;
-			
+			return query.getResultList();
 		} catch (Exception e) {
 			log.error("[getContactsByShareCalendar]",e);
 		}
 		return null;
 	}
 	
-	public List<UserContacts> getContactRequestsByUserAndStatus(Long user_id, Boolean pending) {
+	public List<UserContact> getContactRequestsByUserAndStatus(Long user_id, Boolean pending) {
 		try {
-			
-			String hql = "select c from UserContacts c " +
-							"where c.contact.user_id = :user_id " +
-							"AND c.pending = :pending " +
-							"AND c.contact.deleted <> true";
-			
-			TypedQuery<UserContacts> query = em.createQuery(hql, UserContacts.class); 
+			TypedQuery<UserContact> query = em.createNamedQuery("getContactRequestsByUserAndStatus", UserContact.class); 
 			query.setParameter("user_id", user_id);
 			query.setParameter("pending", pending);
-			List<UserContacts> ll = query.getResultList();
-			
-			return ll;
-			
+			return query.getResultList();
 		} catch (Exception e) {
 			log.error("[getContactRequestsByUserAndStatus]",e);
 		}
 		return null;
 	}
 	
-	public UserContacts getUserContacts(Long userContactId) {
+	public UserContact getUserContacts(Long userContactId) {
 		try {
-			
-			String hql = "select c from UserContacts c " +
-							"where c.userContactId = :userContactId";
-			
-			TypedQuery<UserContacts> query = em.createQuery(hql, UserContacts.class); 
+			TypedQuery<UserContact> query = em.createNamedQuery("getUserContactsById", UserContact.class); 
 			query.setParameter("userContactId", userContactId);
-			UserContacts userContacts = null;
+			UserContact userContacts = null;
 			try {
 				userContacts = query.getSingleResult();
 		    } catch (NoResultException ex) {
 		    }
-			
 			return userContacts;
-			
 		} catch (Exception e) {
 			log.error("[getUserContacts]",e);
 		}
 		return null;
 	}
 	
-	public List<UserContacts> getUserContacts() {
+	public List<UserContact> getUserContacts() {
 		try {
-			
-			String hql = "select c from UserContacts c ";
-			
-			TypedQuery<UserContacts> query = em.createQuery(hql, UserContacts.class); 
-			List<UserContacts> userContacts = query.getResultList();
-			
-			return userContacts;
-			
+			TypedQuery<UserContact> query = em.createNamedQuery("getUserContacts", UserContact.class); 
+			return query.getResultList();
 		} catch (Exception e) {
 			log.error("[getUserContacts]",e);
 		}
@@ -284,7 +223,7 @@ public class UserContactsDao {
 	public Long updateContactStatus(Long userContactId, Boolean pending) {
 		try {
 			
-			UserContacts userContacts = this.getUserContacts(userContactId);
+			UserContact userContacts = this.getUserContacts(userContactId);
 			
 			if (userContacts == null) {
 				return null;
@@ -308,7 +247,7 @@ public class UserContactsDao {
 		return null;
 	}
 	
-	public void updateContact(UserContacts userContacts) {
+	public void updateContact(UserContact userContacts) {
 		try {
 			userContacts.setUpdated(new Date());
 			

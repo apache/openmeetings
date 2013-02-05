@@ -29,7 +29,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "userlevel")
+@Table(name = "user_level")
 public class Userlevel implements Serializable {
 	private static final long serialVersionUID = -1779037202328443340L;
 	@Id

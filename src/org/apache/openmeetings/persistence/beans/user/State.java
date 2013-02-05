@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.persistence.beans.adresses;
+package org.apache.openmeetings.persistence.beans.user;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -26,11 +26,18 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "states")
-public class States implements Serializable {
+@NamedQueries({
+	@NamedQuery(name = "getStateById", query = "select c from State as c " +
+			"where c.state_id = :state_id AND c.deleted <> :deleted"),
+	@NamedQuery(name = "getStates", query = "select c from State as c where c.deleted <> :deleted"),
+})
+@Table(name = "state")
+public class State implements Serializable {
 	private static final long serialVersionUID = -1629546369219451403L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

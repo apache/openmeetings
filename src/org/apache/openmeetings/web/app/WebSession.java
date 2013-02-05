@@ -32,7 +32,7 @@ import org.apache.openmeetings.data.user.Usermanagement;
 import org.apache.openmeetings.data.user.dao.UsersDao;
 import org.apache.openmeetings.persistence.beans.basic.Sessiondata;
 import org.apache.openmeetings.persistence.beans.lang.FieldLanguage;
-import org.apache.openmeetings.persistence.beans.user.Users;
+import org.apache.openmeetings.persistence.beans.user.User;
 import org.apache.wicket.authroles.authentication.AbstractAuthenticatedWebSession;
 import org.apache.wicket.authroles.authorization.strategies.role.Roles;
 import org.apache.wicket.request.Request;
@@ -86,8 +86,8 @@ public class WebSession extends AbstractAuthenticatedWebSession {
 		Object u = Application.getBean(Usermanagement.class).loginUser(SID, login, password,
 				null, null, false);
 		
-		if (u instanceof Users) {
-			Users user = (Users)u;
+		if (u instanceof User) {
+			User user = (User)u;
 			userId = user.getUser_id();
 			tz = TimeZone.getTimeZone(user.getOmTimeZone().getIcal());
 			ISO8601FORMAT.setTimeZone(tz);

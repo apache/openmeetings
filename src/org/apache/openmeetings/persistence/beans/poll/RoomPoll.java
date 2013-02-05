@@ -34,8 +34,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import org.apache.openmeetings.persistence.beans.rooms.Rooms;
-import org.apache.openmeetings.persistence.beans.user.Users;
+import org.apache.openmeetings.persistence.beans.room.Room;
+import org.apache.openmeetings.persistence.beans.user.User;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Root;
@@ -73,12 +73,12 @@ public class RoomPoll {
 	@OneToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "users_id")
 	@Element(name="createdbyuserid", data=true, required=false)
-	private Users createdBy;
+	private User createdBy;
 	
 	@OneToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "rooms_id")
 	@Element(name="roomid", data=true, required=false)
-	private Rooms room;
+	private Room room;
 	
 	@OneToMany(fetch = FetchType.EAGER, cascade=CascadeType.ALL)
 	@JoinColumn(name = "room_poll_id")
@@ -88,7 +88,7 @@ public class RoomPoll {
 	/**
 	 * @return the createdBy
 	 */
-	public Users getCreatedBy() {
+	public User getCreatedBy() {
 		return createdBy;
 	}
 
@@ -96,7 +96,7 @@ public class RoomPoll {
 	 * @param createdBy
 	 *            the createdBy to set
 	 */
-	public void setCreatedBy(Users createdBy) {
+	public void setCreatedBy(User createdBy) {
 		this.createdBy = createdBy;
 	}
 
@@ -174,11 +174,11 @@ public class RoomPoll {
 		this.pollType = pollType;
 	}
 
-	public Rooms getRoom() {
+	public Room getRoom() {
 		return room;
 	}
 
-	public void setRoom(Rooms room) {
+	public void setRoom(Room room) {
 		this.room = room;
 	}
 

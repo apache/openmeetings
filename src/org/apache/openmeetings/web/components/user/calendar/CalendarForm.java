@@ -28,8 +28,8 @@ import org.apache.openmeetings.data.user.dao.UsersDao;
 import org.apache.openmeetings.persistence.beans.calendar.Appointment;
 import org.apache.openmeetings.persistence.beans.calendar.AppointmentReminderTyps;
 import org.apache.openmeetings.persistence.beans.domain.Organisation_Users;
-import org.apache.openmeetings.persistence.beans.rooms.RoomTypes;
-import org.apache.openmeetings.persistence.beans.rooms.Rooms;
+import org.apache.openmeetings.persistence.beans.room.RoomType;
+import org.apache.openmeetings.persistence.beans.room.Room;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -68,18 +68,18 @@ public class CalendarForm extends Form<Appointment> {
 				, Application.getBean(AppointmentReminderTypDao.class).getAppointmentReminderTypList()
 				, new ChoiceRenderer<AppointmentReminderTyps>("name", "typId")));
 		
-		final DropDownChoice<RoomTypes> roomType = new DropDownChoice<RoomTypes>(
+		final DropDownChoice<RoomType> roomType = new DropDownChoice<RoomType>(
 				"room.roomtype"
 				, Application.getBean(Roommanagement.class).getAllRoomTypes()
-				, new ChoiceRenderer<RoomTypes>("name", "roomtypes_id"));
+				, new ChoiceRenderer<RoomType>("name", "roomtypes_id"));
 		roomType.setEnabled(createRoom);
 		roomType.setOutputMarkupId(true);
 		add(roomType);
 		
-		final DropDownChoice<Rooms> room = new DropDownChoice<Rooms>(
+		final DropDownChoice<Room> room = new DropDownChoice<Room>(
 				"room"
 				, getRoomList()
-				, new ChoiceRenderer<Rooms>("name", "rooms_id"));
+				, new ChoiceRenderer<Room>("name", "rooms_id"));
 		room.setEnabled(!createRoom);
 		room.setOutputMarkupId(true);
 		add(room);
@@ -109,9 +109,9 @@ public class CalendarForm extends Form<Appointment> {
 		return Boolean.TRUE.equals(getModelObject().getIsPasswordProtected());
 	}
 	
-	private List<Rooms> getRoomList() {
+	private List<Room> getRoomList() {
 		//FIXME need to be reviewed
-		List<Rooms> result = new ArrayList<Rooms>();
+		List<Room> result = new ArrayList<Room>();
 		RoomDao dao = Application.getBean(RoomDao.class);
 		result.addAll(dao.getPublicRooms());
 		for (Organisation_Users ou : Application.getBean(UsersDao.class).get(WebSession.getUserId()).getOrganisation_users()) {

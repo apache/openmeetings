@@ -35,7 +35,7 @@ import org.apache.openmeetings.data.user.Organisationmanagement;
 import org.apache.openmeetings.data.user.Usermanagement;
 import org.apache.openmeetings.data.user.dao.UsersDao;
 import org.apache.openmeetings.persistence.beans.domain.Organisation;
-import org.apache.openmeetings.persistence.beans.user.Users;
+import org.apache.openmeetings.persistence.beans.user.User;
 import org.apache.openmeetings.remote.red5.ScopeApplicationAdapter;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -182,7 +182,7 @@ public class Export extends HttpServlet {
 							.longValue();
 					System.out.println("organisation_id: " + organisation_id);
 
-					List<Users> uList = null;
+					List<User> uList = null;
 					String downloadName = "users";
 					if (moduleName.equals("userorganisations")) {
 						Organisation orga = getOrganisationmanagement()

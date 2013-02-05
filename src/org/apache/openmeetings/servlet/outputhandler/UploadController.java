@@ -37,7 +37,7 @@ import org.apache.openmeetings.documents.GeneratePDF;
 import org.apache.openmeetings.documents.GenerateThumbs;
 import org.apache.openmeetings.documents.beans.ConverterProcessResultList;
 import org.apache.openmeetings.documents.beans.UploadCompleteMessage;
-import org.apache.openmeetings.persistence.beans.user.Users;
+import org.apache.openmeetings.persistence.beans.user.User;
 import org.apache.openmeetings.remote.red5.ScopeApplicationAdapter;
 import org.apache.openmeetings.utils.OmFileHelper;
 import org.apache.openmeetings.utils.StoredFile;
@@ -297,7 +297,7 @@ public class UploadController extends AbstractUploadController {
 						.generateThumb("_big_", completeName, 240));
 
 				String pictureuri = completeName.getName();
-				Users us = usersDao.get(userId);
+				User us = usersDao.get(userId);
 				us.setUpdatetime(new java.util.Date());
 				us.setPictureuri(pictureuri);
 				usersDao.update(us, userId);

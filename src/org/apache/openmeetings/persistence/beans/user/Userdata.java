@@ -21,7 +21,6 @@ package org.apache.openmeetings.persistence.beans.user;
 import java.io.Serializable;
 import java.util.Date;
 
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -31,7 +30,7 @@ import javax.persistence.Lob;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "userdata")
+@Table(name = "user_data")
 public class Userdata implements Serializable {
 	private static final long serialVersionUID = 8365799229794940172L;
 	@Id

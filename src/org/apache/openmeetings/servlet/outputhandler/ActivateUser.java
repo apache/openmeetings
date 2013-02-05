@@ -28,7 +28,7 @@ import org.apache.openmeetings.data.basic.Fieldmanagment;
 import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
 import org.apache.openmeetings.data.user.Usermanagement;
 import org.apache.openmeetings.persistence.beans.lang.Fieldlanguagesvalues;
-import org.apache.openmeetings.persistence.beans.user.Users;
+import org.apache.openmeetings.persistence.beans.user.User;
 import org.apache.openmeetings.remote.red5.ScopeApplicationAdapter;
 import org.apache.velocity.Template;
 import org.apache.velocity.context.Context;
@@ -120,7 +120,7 @@ public class ActivateUser extends VelocityViewServlet {
 						"activation_template.vm");
 			}
 			//
-			Users user = getUsermanagement().getUserByActivationHash(hash);
+			User user = getUsermanagement().getUserByActivationHash(hash);
 
 			if (user == null) {
 				// No User Found with this Hash

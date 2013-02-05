@@ -29,7 +29,7 @@ import org.apache.openmeetings.persistence.beans.basic.OmTimeZone;
 import org.apache.openmeetings.persistence.beans.calendar.Appointment;
 import org.apache.openmeetings.persistence.beans.calendar.MeetingMember;
 import org.apache.openmeetings.persistence.beans.invitation.Invitations;
-import org.apache.openmeetings.persistence.beans.user.Users;
+import org.apache.openmeetings.persistence.beans.user.User;
 import org.apache.openmeetings.utils.math.CalendarPatterns;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -337,7 +337,7 @@ public class MeetingMemberLogic {
 				return null;
 			}
 
-			Users user = userManagement.getUserById(users_id);
+			User user = userManagement.getUserById(users_id);
 
 			if (user == null) {
 				log.error("could not retrieve user!");

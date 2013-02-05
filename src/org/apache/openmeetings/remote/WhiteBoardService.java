@@ -38,7 +38,7 @@ import org.apache.openmeetings.data.whiteboard.dto.Cliparts;
 import org.apache.openmeetings.data.whiteboard.dto.WhiteboardObject;
 import org.apache.openmeetings.data.whiteboard.dto.WhiteboardObjectList;
 import org.apache.openmeetings.data.whiteboard.dto.WhiteboardSyncLockObject;
-import org.apache.openmeetings.persistence.beans.rooms.Client;
+import org.apache.openmeetings.persistence.beans.room.Client;
 import org.apache.openmeetings.remote.red5.ScopeApplicationAdapter;
 import org.apache.openmeetings.session.ISessionManager;
 import org.apache.openmeetings.utils.OmFileHelper;

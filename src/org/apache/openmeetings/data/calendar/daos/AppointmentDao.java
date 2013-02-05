@@ -46,8 +46,8 @@ import org.apache.openmeetings.persistence.beans.calendar.Appointment;
 import org.apache.openmeetings.persistence.beans.calendar.AppointmentCategory;
 import org.apache.openmeetings.persistence.beans.calendar.AppointmentReminderTyps;
 import org.apache.openmeetings.persistence.beans.calendar.MeetingMember;
-import org.apache.openmeetings.persistence.beans.rooms.Rooms;
-import org.apache.openmeetings.persistence.beans.user.Users;
+import org.apache.openmeetings.persistence.beans.room.Room;
+import org.apache.openmeetings.persistence.beans.user.User;
 import org.apache.openmeetings.utils.math.CalendarPatterns;
 import org.apache.openmeetings.utils.math.TimezoneUtil;
 import org.red5.logging.Red5LoggerFactory;
@@ -192,7 +192,7 @@ public class AppointmentDao {
 			String appointmentLocation, String appointmentDescription,
 			Date appointmentstart, Date appointmentend, Boolean isDaily,
 			Boolean isWeekly, Boolean isMonthly, Boolean isYearly,
-			Long categoryId, Long remind, Rooms room, Long language_id,
+			Long categoryId, Long remind, Room room, Long language_id,
 			Boolean isPasswordProtected, String password,
 			Boolean isConnectedEvent, String jNameTimeZone) {
 		try {
@@ -460,7 +460,7 @@ public class AppointmentDao {
 			}
 
 			// Adding Invitor as Meetingmember
-			Users user = userManagement.getUserById(users_id);
+			User user = userManagement.getUserById(users_id);
 
 			String invitorName = user.getFirstname() + " " + user.getLastname()
 					+ " [" + user.getAdresses().getEmail() + "]";
@@ -558,7 +558,7 @@ public class AppointmentDao {
 						// timezone from his profile otherwise get the timezones
 						// from the variable jNameTimeZone
 						if (sendToUserId > 0) {
-							Users interalUser = userManagement
+							User interalUser = userManagement
 									.getUserById(sendToUserId);
 							timezoneMember = timezoneUtil
 									.getTimezoneByUser(interalUser);
@@ -649,7 +649,7 @@ public class AppointmentDao {
 					.getMeetingMemberByAppointmentId(ap.getAppointmentId());
 
 			// Adding Invitor Name
-			Users user = userManagement.getUserById(users_id);
+			User user = userManagement.getUserById(users_id);
 			String invitorName = user.getFirstname() + " " + user.getLastname()
 					+ " [" + user.getAdresses().getEmail() + "]";
 

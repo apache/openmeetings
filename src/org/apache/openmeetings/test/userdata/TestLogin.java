@@ -22,7 +22,7 @@ import static org.junit.Assert.assertNotNull;
 
 import org.apache.openmeetings.data.user.Usermanagement;
 import org.apache.openmeetings.persistence.beans.basic.Sessiondata;
-import org.apache.openmeetings.persistence.beans.user.Users;
+import org.apache.openmeetings.persistence.beans.user.User;
 import org.apache.openmeetings.remote.MainService;
 import org.apache.openmeetings.test.AbstractOpenmeetingsSpringTest;
 import org.junit.Test;
@@ -40,7 +40,7 @@ public class TestLogin extends AbstractOpenmeetingsSpringTest {
 	public void testTestLogin(){
 		Sessiondata sessionData = mService.getsessiondata();
 		
-		Users us = (Users) userManagement.loginUser(sessionData.getSession_id(), username, userpass, null, null, false);
+		User us = (User) userManagement.loginUser(sessionData.getSession_id(), username, userpass, null, null, false);
 		
 		assertNotNull("User is unable to login", us);
 		

@@ -32,8 +32,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import org.apache.openmeetings.persistence.beans.basic.OmTimeZone;
-import org.apache.openmeetings.persistence.beans.rooms.Rooms;
-import org.apache.openmeetings.persistence.beans.user.Users;
+import org.apache.openmeetings.persistence.beans.room.Room;
+import org.apache.openmeetings.persistence.beans.user.User;
 
 @Entity
 @Table(name = "invitations")
@@ -47,7 +47,7 @@ public class Invitations implements Serializable {
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "invitedBy", nullable = true)
-	private Users invitedBy;
+	private User invitedBy;
 	
 	@Column(name = "starttime")
 	private Date starttime;
@@ -60,7 +60,7 @@ public class Invitations implements Serializable {
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "roomid", nullable = true)
-	private Rooms room;
+	private Room room;
 
 	// the hash for the link
 	@Column(name = "hash")
@@ -128,19 +128,19 @@ public class Invitations implements Serializable {
 		this.invitations_id = invitations_id;
 	}
 
-	public Rooms getRoom() {
+	public Room getRoom() {
 		return room;
 	}
 
-	public void setRoom(Rooms room) {
+	public void setRoom(Room room) {
 		this.room = room;
 	}
 
-	public Users getInvitedBy() {
+	public User getInvitedBy() {
 		return invitedBy;
 	}
 
-	public void setInvitedBy(Users invitedBy) {
+	public void setInvitedBy(User invitedBy) {
 		this.invitedBy = invitedBy;
 	}
 

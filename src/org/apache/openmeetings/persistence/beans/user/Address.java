@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.persistence.beans.adresses;
+package org.apache.openmeetings.persistence.beans.user;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -36,9 +36,9 @@ import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
 
 @Entity
-@Table(name = "adresses")
+@Table(name = "address")
 @Root(name="address")
-public class Adresses implements Serializable {
+public class Address implements Serializable {
 
 	private static final long serialVersionUID = 1387576041912128161L;
 	@Id
@@ -66,7 +66,7 @@ public class Adresses implements Serializable {
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "state_id")
 	@Element(name="state_id", data=true, required=false)
-	private States states;
+	private State states;
 	
 	@Column(name = "street")
 	@Element(data=true, required=false)
@@ -134,11 +134,11 @@ public class Adresses implements Serializable {
 		this.starttime = starttime;
 	}
 
-	public States getStates() {
+	public State getStates() {
 		return states;
 	}
 
-	public void setStates(States states) {
+	public void setStates(State states) {
 		this.states = states;
 	}
 

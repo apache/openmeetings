@@ -29,13 +29,13 @@ import org.apache.openmeetings.data.user.Organisationmanagement;
 import org.apache.openmeetings.data.user.dao.SalutationDao;
 import org.apache.openmeetings.data.user.dao.StateDao;
 import org.apache.openmeetings.data.user.dao.UsersDao;
-import org.apache.openmeetings.persistence.beans.adresses.States;
 import org.apache.openmeetings.persistence.beans.basic.OmTimeZone;
 import org.apache.openmeetings.persistence.beans.domain.Organisation;
 import org.apache.openmeetings.persistence.beans.domain.Organisation_Users;
 import org.apache.openmeetings.persistence.beans.lang.FieldLanguage;
-import org.apache.openmeetings.persistence.beans.user.Salutations;
-import org.apache.openmeetings.persistence.beans.user.Users;
+import org.apache.openmeetings.persistence.beans.user.Salutation;
+import org.apache.openmeetings.persistence.beans.user.State;
+import org.apache.openmeetings.persistence.beans.user.User;
 import org.apache.openmeetings.utils.crypt.ManageCryptStyle;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
@@ -64,20 +64,20 @@ import org.apache.wicket.validation.validator.EmailAddressValidator;
 import org.apache.wicket.validation.validator.StringValidator;
 
 /**
- * CRUD operations in form for {@link Users}
+ * CRUD operations in form for {@link User}
  * 
  * @author swagner
  * 
  */
-public class UserForm extends AdminBaseForm<Users> {
+public class UserForm extends AdminBaseForm<User> {
 
 	private static final long serialVersionUID = 1L;
 
 	private WebMarkupContainer listContainer;
 
-	private Users user;
+	private User user;
 
-	private final List<Salutations> saluationList = Application.getBean(
+	private final List<Salutation> saluationList = Application.getBean(
 			SalutationDao.class).getUserSalutations(
 			WebSession.getLanguage());
 	private final List<FieldLanguage> languageList = Application.getBean(
@@ -86,27 +86,27 @@ public class UserForm extends AdminBaseForm<Users> {
 	private PasswordTextField passwordField;
 
 	/**
-	 * Get id list of {@link Salutations}
+	 * Get id list of {@link Salutation}
 	 * 
 	 * @return
 	 */
 	private List<Long> getSalutationsIds() {
 		ArrayList<Long> saluationIdList = new ArrayList<Long>(
 				saluationList.size());
-		for (Salutations saluation : saluationList) {
+		for (Salutation saluation : saluationList) {
 			saluationIdList.add(saluation.getSalutations_id());
 		}
 		return saluationIdList;
 	}
 
 	/**
-	 * Get a name for a given id of {@link Salutations}
+	 * Get a name for a given id of {@link Salutation}
 	 * 
 	 * @param id
 	 * @return
 	 */
 	private String getSaluationLabelById(Long id) {
-		for (Salutations saluation : saluationList) {
+		for (Salutation saluation : saluationList) {
 			if (id.equals(saluation.getSalutations_id())) {
 				return saluation.getLabel().getValue();
 			}
@@ -144,8 +144,8 @@ public class UserForm extends AdminBaseForm<Users> {
 	}
 
 	public UserForm(String id, WebMarkupContainer listContainer,
-			final Users user) {
-		super(id, new CompoundPropertyModel<Users>(user));
+			final User user) {
+		super(id, new CompoundPropertyModel<User>(user));
 		setOutputMarkupId(true);
 		this.listContainer = listContainer;
 		this.user = user;
@@ -162,7 +162,7 @@ public class UserForm extends AdminBaseForm<Users> {
 
 	@Override
 	protected void onSaveSubmit(AjaxRequestTarget target, Form<?> form) {
-		Users u = getModelObject();
+		User u = getModelObject();
 		// TODO: Why the password field is not set via the Model is because its
 		// FetchType is Lazy, this extra hook here might be not needed with a
 		// different mechanism to protect the password from being read
@@ -197,12 +197,12 @@ public class UserForm extends AdminBaseForm<Users> {
 
 	@Override
 	protected void onRefreshSubmit(AjaxRequestTarget target, Form<?> form) {
-		Users user = getModelObject();
+		User user = getModelObject();
 		if (user.getUser_id() <= 0) {
 			user = Application.getBean(UsersDao.class).get(
 					user.getUser_id());
 		} else {
-			user = new Users();
+			user = new User();
 		}
 		setModelObject(user);
 		target.add(this);
@@ -298,8 +298,8 @@ public class UserForm extends AdminBaseForm<Users> {
 		add(new TextField<String>("adresses.additionalname"));
 		add(new TextField<String>("adresses.zip"));
 		add(new TextField<String>("adresses.town"));
-		add(new DropDownChoice<States>("adresses.states", Application.getBean(
-				StateDao.class).getStates(), new ChoiceRenderer<States>(
+		add(new DropDownChoice<State>("adresses.states", Application.getBean(
+				StateDao.class).getStates(), new ChoiceRenderer<State>(
 				"name", "state_id")));
 
 		final String field159 = WebSession.getString(159);

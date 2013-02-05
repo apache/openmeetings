@@ -27,7 +27,7 @@ import java.util.Map;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.persistence.beans.basic.Server;
-import org.apache.openmeetings.persistence.beans.rooms.Client;
+import org.apache.openmeetings.persistence.beans.room.Client;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 

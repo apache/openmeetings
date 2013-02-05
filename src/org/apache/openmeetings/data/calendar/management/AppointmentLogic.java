@@ -37,8 +37,8 @@ import org.apache.openmeetings.persistence.beans.calendar.Appointment;
 import org.apache.openmeetings.persistence.beans.calendar.MeetingMember;
 import org.apache.openmeetings.persistence.beans.invitation.Invitations;
 import org.apache.openmeetings.persistence.beans.lang.Fieldlanguagesvalues;
-import org.apache.openmeetings.persistence.beans.rooms.Rooms;
-import org.apache.openmeetings.persistence.beans.user.Users;
+import org.apache.openmeetings.persistence.beans.room.Room;
+import org.apache.openmeetings.persistence.beans.user.User;
 import org.apache.openmeetings.utils.math.CalendarPatterns;
 import org.apache.openmeetings.utils.math.TimezoneUtil;
 import org.red5.logging.Red5LoggerFactory;
@@ -107,7 +107,7 @@ public class AppointmentLogic {
 	public Appointment getAppointmentByRoom(Long room_id) throws Exception {
 		log.debug("getAppointmentByRoom");
 
-		Rooms room = roomDao.get(room_id);
+		Room room = roomDao.get(room_id);
 
 		if (room == null)
 			throw new Exception("Room does not exist in database!");
@@ -159,7 +159,7 @@ public class AppointmentLogic {
 		try {
 
 			// Adding creator as MeetingMember
-			Users user = userManagement.getUserById(userId);
+			User user = userManagement.getUserById(userId);
 			
 			Long room_id = roomId > 0 ? roomId : roommanagement.addRoom(3, // user level
 					appointmentName, // name
@@ -199,7 +199,7 @@ public class AppointmentLogic {
 			log.debug("Appointmentlogic.saveAppointment : Room - " + room_id);
 			log.debug("Appointmentlogic.saveAppointment : Reminder - " + remind);
 	
-			Rooms room = roomDao.get(room_id);
+			Room room = roomDao.get(room_id);
 
 			// Re-factor the given time ignoring the Date is always UTC!
 			TimeZone timezone = timezoneUtil.getTimezoneByUser(user);
@@ -257,7 +257,7 @@ public class AppointmentLogic {
 					// timezone from his profile otherwise get the timezones
 					// from the variable jNameTimeZone
 					if (sendToUserId > 0) {
-						Users interalUser = userManagement
+						User interalUser = userManagement
 								.getUserById(sendToUserId);
 						phone = interalUser.getPhoneForSMS();
 						timezoneMember = timezoneUtil
@@ -343,7 +343,7 @@ public class AppointmentLogic {
 
 			}
 
-			Rooms room = point.getRoom();
+			Room room = point.getRoom();
 
 			// Deleting/Notifing Meetingmembers
 			List<MeetingMember> members = meetingMemberDao

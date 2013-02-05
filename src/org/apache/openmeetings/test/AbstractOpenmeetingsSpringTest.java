@@ -30,7 +30,7 @@ import org.apache.openmeetings.data.user.dao.UsersDao;
 import org.apache.openmeetings.installation.ImportInitvalues;
 import org.apache.openmeetings.installation.InstallationConfig;
 import org.apache.openmeetings.persistence.beans.calendar.Appointment;
-import org.apache.openmeetings.persistence.beans.user.Users;
+import org.apache.openmeetings.persistence.beans.user.User;
 import org.apache.openmeetings.utils.crypt.ManageCryptStyle;
 import org.junit.Before;
 import org.junit.runner.RunWith;
@@ -114,8 +114,8 @@ public abstract class AbstractOpenmeetingsSpringTest extends AbstractJUnit4Sprin
 		return ap;
 	}
 
-	public Users createUser(int rnd) throws Exception {
-		Users users = new Users();
+	public User createUser(int rnd) throws Exception {
+		User users = new User();
 		// add user
 		users.setFirstname("firstname" + rnd);
 		users.setLastname("lastname" + rnd);

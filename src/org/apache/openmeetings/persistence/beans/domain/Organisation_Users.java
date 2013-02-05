@@ -34,7 +34,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
 import org.apache.openmeetings.persistence.beans.IDataProviderEntity;
-import org.apache.openmeetings.persistence.beans.user.Users;
+import org.apache.openmeetings.persistence.beans.user.User;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
 
@@ -67,7 +67,7 @@ public class Organisation_Users implements Serializable, IDataProviderEntity {
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "user_id", insertable = true, updatable = true)
-	private Users user;
+	private User user;
 	
 	@Column(name = "starttime")
 	private Date starttime;
@@ -180,11 +180,11 @@ public class Organisation_Users implements Serializable, IDataProviderEntity {
 		return true;
 	}
 
-	public Users getUser() {
+	public User getUser() {
 		return user;
 	}
 
-	public void setUser(Users user) {
+	public void setUser(User user) {
 		this.user = user;
 	}
 }

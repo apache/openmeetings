@@ -33,8 +33,8 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
 import org.apache.openmeetings.persistence.beans.IDataProviderEntity;
-import org.apache.openmeetings.persistence.beans.rooms.Rooms;
-import org.apache.openmeetings.persistence.beans.user.Users;
+import org.apache.openmeetings.persistence.beans.room.Room;
+import org.apache.openmeetings.persistence.beans.user.User;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
 
@@ -57,7 +57,7 @@ public class ChatMessage implements Serializable, IDataProviderEntity {
 	@ManyToOne
 	@JoinColumn(name = "from_user_id")
 	@Element(name = "fromUserId", data = true, required = false)
-	private Users fromUser;
+	private User fromUser;
 	
 	// necessary to hold messages from external guests enters by invitation hash
 	@Column(name = "from_email")
@@ -71,12 +71,12 @@ public class ChatMessage implements Serializable, IDataProviderEntity {
 	@ManyToOne
 	@JoinColumn(name = "to_room_id")
 	@Element(name = "toRoomId", data = true, required = false)
-	private Rooms toRoom;
+	private Room toRoom;
 	
 	@ManyToOne
 	@JoinColumn(name = "to_user_id")
 	@Element(name = "toUserId", data = true, required = false)
-	private Users toUser;
+	private User toUser;
 
 	// necessary to hold messages to external guests enters by invitation hash
 	@Column(name = "to_email")
@@ -103,11 +103,11 @@ public class ChatMessage implements Serializable, IDataProviderEntity {
 		this.id = id;
 	}
 
-	public Users getFromUser() {
+	public User getFromUser() {
 		return fromUser;
 	}
 
-	public void setFromUser(Users fromUser) {
+	public void setFromUser(User fromUser) {
 		this.fromUser = fromUser;
 	}
 
@@ -127,19 +127,19 @@ public class ChatMessage implements Serializable, IDataProviderEntity {
 		this.fromName = fromName;
 	}
 
-	public Rooms getToRoom() {
+	public Room getToRoom() {
 		return toRoom;
 	}
 
-	public void setToRoom(Rooms toRoom) {
+	public void setToRoom(Room toRoom) {
 		this.toRoom = toRoom;
 	}
 
-	public Users getToUser() {
+	public User getToUser() {
 		return toUser;
 	}
 
-	public void setToUser(Users toUser) {
+	public void setToUser(User toUser) {
 		this.toUser = toUser;
 	}
 

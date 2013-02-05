@@ -35,9 +35,9 @@ import org.apache.openmeetings.data.user.Usermanagement;
 import org.apache.openmeetings.persistence.beans.calendar.Appointment;
 import org.apache.openmeetings.persistence.beans.calendar.AppointmentCategory;
 import org.apache.openmeetings.persistence.beans.calendar.AppointmentReminderTyps;
-import org.apache.openmeetings.persistence.beans.rooms.RoomTypes;
-import org.apache.openmeetings.persistence.beans.rooms.Rooms;
-import org.apache.openmeetings.persistence.beans.user.Users;
+import org.apache.openmeetings.persistence.beans.room.RoomType;
+import org.apache.openmeetings.persistence.beans.room.Room;
+import org.apache.openmeetings.persistence.beans.user.User;
 import org.apache.openmeetings.utils.math.TimezoneUtil;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -141,7 +141,7 @@ public class CalendarService {
 
 			if (authLevelManagement.checkUserLevel(user_level)) {
 				
-				Users us = userManagement.getUserById(users_id);
+				User us = userManagement.getUserById(users_id);
 				
 				// Refactor the given time ignoring the Date is always UTC!
 				TimeZone timezone = timezoneUtil.getTimezoneByUser(us);
@@ -187,7 +187,7 @@ public class CalendarService {
 
 				log.debug("appointmentId " + appointmentId);
 				
-				Users us = userManagement.getUserById(users_id);
+				User us = userManagement.getUserById(users_id);
 				
 				// Refactor the given time ignoring the Date is always UTC!
 				TimeZone timezone = timezoneUtil.getTimezoneByUser(us);
@@ -206,7 +206,7 @@ public class CalendarService {
 				appointmentLogic
 						.getAppointMentById(appointmentId);
 
-				Users user = userManagement.getUserById(users_id);
+				User user = userManagement.getUserById(users_id);
 				
 				return appointmentDao.updateAppointmentByTime(appointmentId,
 						appointmentstart, appointmentend, users_id, baseurl,
@@ -238,7 +238,7 @@ public class CalendarService {
 				log.debug("updateAppointment");
 
 				Appointment app = appointmentLogic.getAppointMentById(appointmentId);
-				Rooms room = app.getRoom();
+				Room room = app.getRoom();
 				if (roomId > 0) {
 					if ( room.getRooms_id() != roomId) {
 						app.setRoom(roomDao.get(roomId));
@@ -249,7 +249,7 @@ public class CalendarService {
 						}
 					}
 				} else {
-					RoomTypes rt = roommanagement.getRoomTypesById(roomType);
+					RoomType rt = roommanagement.getRoomTypesById(roomType);
 	
 					if (room != null) {
 	
@@ -260,7 +260,7 @@ public class CalendarService {
 						roomDao.update(room, users_id);
 					}
 				}
-				Users user = userManagement.getUserById(users_id);
+				User user = userManagement.getUserById(users_id);
 				
 				// Refactor the given time ignoring the Date is always UTC!
 				TimeZone timezone = timezoneUtil.getTimezoneByUser(user);

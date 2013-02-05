@@ -26,7 +26,7 @@ import java.util.List;
 import org.apache.openmeetings.data.user.dao.UsersDao;
 import org.apache.openmeetings.persistence.beans.domain.Organisation;
 import org.apache.openmeetings.persistence.beans.domain.Organisation_Users;
-import org.apache.openmeetings.persistence.beans.user.Users;
+import org.apache.openmeetings.persistence.beans.user.User;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -43,25 +43,25 @@ public class AddUsersForm extends Form<Void> {
 	private static final long serialVersionUID = -2458265250684437277L;
 	private Organisation organisation;
 	private String userSearchText;
-	private List<Users> usersInList = new ArrayList<Users>();
-	private List<Users> usersToAdd = new ArrayList<Users>();
+	private List<User> usersInList = new ArrayList<User>();
+	private List<User> usersToAdd = new ArrayList<User>();
 	
 	public AddUsersForm(String id, final GroupForm groupForm) {
 		super(id);
 		
-		IModel<List<Users>> listUsersModel = new PropertyModel<List<Users>>(AddUsersForm.this, "usersInList");
-		IModel<List<Users>> selectedUsersModel = new PropertyModel<List<Users>>(AddUsersForm.this, "usersToAdd");
-		final ListMultipleChoice<Users> users = new ListMultipleChoice<Users>("users"
+		IModel<List<User>> listUsersModel = new PropertyModel<List<User>>(AddUsersForm.this, "usersInList");
+		IModel<List<User>> selectedUsersModel = new PropertyModel<List<User>>(AddUsersForm.this, "usersToAdd");
+		final ListMultipleChoice<User> users = new ListMultipleChoice<User>("users"
 				, selectedUsersModel
 				, listUsersModel
-				, new IChoiceRenderer<Users>() {
+				, new IChoiceRenderer<User>() {
 			private static final long serialVersionUID = 1L;
 
-			public Object getDisplayValue(Users object) {
+			public Object getDisplayValue(User object) {
 				return getUser(object);
 			}
 
-			public String getIdValue(Users object, int index) {
+			public String getIdValue(User object, int index) {
 				return "" + object.getUser_id();
 			}
 		});
@@ -82,7 +82,7 @@ public class AddUsersForm extends Form<Void> {
 
 			protected void onAfterSubmit(AjaxRequestTarget target, Form<?> form) {
 				UsersDao userDao = Application.getBean(UsersDao.class);
-				for (Users u : usersToAdd) {
+				for (User u : usersToAdd) {
 					List<Organisation_Users> orgUsers = u.getOrganisation_users();
 					boolean found = false;
 					for (Organisation_Users ou : orgUsers) {

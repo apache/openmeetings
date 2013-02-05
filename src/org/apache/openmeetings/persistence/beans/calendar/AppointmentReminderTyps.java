@@ -31,7 +31,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import org.apache.openmeetings.persistence.beans.user.Users;
+import org.apache.openmeetings.persistence.beans.user.User;
 
 
 @Entity
@@ -48,7 +48,7 @@ public class AppointmentReminderTyps implements Serializable {
 	
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name="user_id", nullable=true)
-	private Users user;
+	private User user;
 	
 	@Column(name="starttime")
 	private Date starttime;
@@ -73,10 +73,10 @@ public class AppointmentReminderTyps implements Serializable {
 		this.name = name;
 	}
 	
-	public Users getUser() {
+	public User getUser() {
 		return user;
 	}
-	public void setUser(Users user) {
+	public void setUser(User user) {
 		this.user = user;
 	}
 	

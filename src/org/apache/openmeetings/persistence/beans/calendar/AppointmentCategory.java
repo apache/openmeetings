@@ -21,7 +21,7 @@ package org.apache.openmeetings.persistence.beans.calendar;
 import java.io.Serializable;
 import java.util.Date;
 
-import org.apache.openmeetings.persistence.beans.user.Users;
+import org.apache.openmeetings.persistence.beans.user.User;
 
 
 
@@ -50,7 +50,7 @@ public class AppointmentCategory implements Serializable {
 	
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name="user_id", nullable=true)
-	private Users user;
+	private User user;
 	
 	@Column(name="starttime")
 	private Date starttime;
@@ -79,10 +79,10 @@ public class AppointmentCategory implements Serializable {
 		this.name = name;
 	}
 	
-	public Users getUser() {
+	public User getUser() {
 		return user;
 	}
-	public void setUser(Users user) {
+	public void setUser(User user) {
 		this.user = user;
 	}
 	

@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.persistence.beans.rooms;
+package org.apache.openmeetings.persistence.beans.room;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -29,6 +29,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
 import org.apache.openmeetings.persistence.beans.domain.Organisation;
@@ -36,9 +38,31 @@ import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
 
 @Entity
+@NamedQueries({
+	@NamedQuery(name = "getRoomsOrganisationByOrganisationIdAndRoomType", query = "select c from RoomOrganisation as c "
+			+ "where c.room.roomtypes_id = :roomtypes_id "
+			+ "AND c.organisation.organisation_id = :organisation_id "
+			+ "AND c.deleted <> :deleted"),
+	@NamedQuery(name = "getRoomsOrganisationByOrganisationId", query = "SELECT c FROM RoomOrganisation c "
+			+ "LEFT JOIN FETCH c.room "
+			+ "WHERE c.organisation.organisation_id = :organisation_id "
+			+ "AND c.deleted <> :deleted AND c.room.deleted <> :deleted AND c.room.appointment = false "
+			+ "AND c.organisation.deleted <> :deleted "
+			+ "ORDER BY c.room.name ASC"),
+	@NamedQuery(name = "selectMaxFromRoomsByOrganisation", query = "select c from Rooms_Organisation as c "
+			+ "where c.organisation.organisation_id = :organisation_id "
+			+ "AND c.deleted <> :deleted"),
+	@NamedQuery(name = "getRoomsOrganisationByOrganisationIdAndRoomId", query = "select c from RoomOrganisation as c "
+			+ "where c.room.rooms_id = :rooms_id "
+			+ "AND c.organisation.organisation_id = :organisation_id "
+			+ "AND c.deleted <> :deleted"),
+	@NamedQuery(name = "getRoomsOrganisationByRoomsId", query = "select c from Rooms_Organisation as c "
+			+ "where c.room.rooms_id = :rooms_id "
+			+ "AND c.deleted <> :deleted"),
+})
 @Table(name = "rooms_organisation")
 @Root(name="room_organisation")
-public class Rooms_Organisation implements Serializable {
+public class RoomOrganisation implements Serializable {
 	private static final long serialVersionUID = 4153935045968138984L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -49,7 +73,7 @@ public class Rooms_Organisation implements Serializable {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name="rooms_id", nullable=true)
 	@Element(name="rooms_id", data=true, required=false)
-	private Rooms room;
+	private Room room;
 	
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name="organisation_id", nullable=true)
@@ -66,11 +90,11 @@ public class Rooms_Organisation implements Serializable {
 	@Element(data=true)
 	private boolean deleted;
 
-	public Rooms_Organisation(Organisation org) {
+	public RoomOrganisation(Organisation org) {
 		this.organisation = org;
 	}
 
-	public Rooms_Organisation() {
+	public RoomOrganisation() {
 	}
 
 	public Organisation getOrganisation() {
@@ -80,10 +104,10 @@ public class Rooms_Organisation implements Serializable {
 		this.organisation = organisation;
 	}
 	
-	public Rooms getRoom() {
+	public Room getRoom() {
 		return room;
 	}
-	public void setRoom(Rooms room) {
+	public void setRoom(Room room) {
 		this.room = room;
 	}
 

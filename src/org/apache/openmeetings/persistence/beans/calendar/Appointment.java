@@ -38,8 +38,8 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import org.apache.openmeetings.persistence.beans.rooms.Rooms;
-import org.apache.openmeetings.persistence.beans.user.Users;
+import org.apache.openmeetings.persistence.beans.room.Room;
+import org.apache.openmeetings.persistence.beans.user.User;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
 
@@ -106,7 +106,7 @@ public class Appointment implements Serializable {
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "user_id", nullable = true)
 	@Element(name="users_id", data=true, required=false)
-	private Users userId;
+	private User userId;
 
 	@Column(name = "starttime")
 	private Date starttime;
@@ -142,7 +142,7 @@ public class Appointment implements Serializable {
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "room_id", nullable = true)
 	@Element(name="room_id", data=true, required=false)
-	private Rooms room;
+	private Room room;
 
 	@Column(name = "icalId")
 	@Element(data=true, required=false)
@@ -178,11 +178,11 @@ public class Appointment implements Serializable {
 		this.appointmentId = appointmentId;
 	}
 
-	public Users getUserId() {
+	public User getUserId() {
 		return userId;
 	}
 
-	public void setUserId(Users userId) {
+	public void setUserId(User userId) {
 		this.userId = userId;
 	}
 
@@ -318,11 +318,11 @@ public class Appointment implements Serializable {
 		this.meetingMember = meetingMember;
 	}
 
-	public Rooms getRoom() {
+	public Room getRoom() {
 		return room;
 	}
 
-	public void setRoom(Rooms room) {
+	public void setRoom(Room room) {
 		this.room = room;
 	}
 

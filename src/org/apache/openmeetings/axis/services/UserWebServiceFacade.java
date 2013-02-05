@@ -27,7 +27,7 @@ import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.data.beans.basic.ErrorResult;
 import org.apache.openmeetings.data.beans.basic.SearchResult;
 import org.apache.openmeetings.persistence.beans.basic.Sessiondata;
-import org.apache.openmeetings.persistence.beans.user.Users;
+import org.apache.openmeetings.persistence.beans.user.User;
 import org.apache.openmeetings.remote.red5.ScopeApplicationAdapter;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -302,7 +302,7 @@ public class UserWebServiceFacade {
 				organisation_id, insertedby);
 	}
 
-	public SearchResult<Users> getUsersByOrganisation(String SID,
+	public SearchResult<User> getUsersByOrganisation(String SID,
 			long organisation_id, int start, int max, String orderby,
 			boolean asc) throws AxisFault {
 		return getUserServiceProxy().getUsersByOrganisation(SID,

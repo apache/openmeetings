@@ -31,7 +31,7 @@ import org.apache.openmeetings.data.user.Usermanagement;
 import org.apache.openmeetings.data.user.dao.UsersDao;
 import org.apache.openmeetings.persistence.beans.basic.OmTimeZone;
 import org.apache.openmeetings.persistence.beans.invitation.Invitations;
-import org.apache.openmeetings.persistence.beans.user.Users;
+import org.apache.openmeetings.persistence.beans.user.User;
 import org.red5.logging.Red5LoggerFactory;
 import org.red5.server.api.service.IPendingServiceCall;
 import org.red5.server.api.service.IPendingServiceCallback;
@@ -160,7 +160,7 @@ public class InvitationService implements IPendingServiceCallback {
 	}
 
 	public String sendInvitationByHash(String SID, String invitationHash, String message, String baseurl, String subject, Long language_id) {
-		Users us = userDAO.get(sessionManagement.checkSession(SID));
+		User us = userDAO.get(sessionManagement.checkSession(SID));
 		Invitations inv = (Invitations)invitationManagement.getInvitationByHashCode(invitationHash, true);
 		return invitationManagement.sendInvitionLink(us, inv, message, baseurl, subject, language_id);
 	}

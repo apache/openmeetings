@@ -24,7 +24,7 @@ import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.data.user.Emailmanagement;
 import org.apache.openmeetings.data.user.Usermanagement;
 import org.apache.openmeetings.data.user.dao.UsersDao;
-import org.apache.openmeetings.persistence.beans.user.Users;
+import org.apache.openmeetings.persistence.beans.user.User;
 import org.apache.openmeetings.servlet.outputhandler.BackupImportController;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -44,7 +44,7 @@ public class UserImport {
 	private BackupImportController backupController;
 
 	public Long addUsersByDocument(InputStream is) throws Exception {
-		for(Users us : backupController.readUserList(is, "users")) {
+		for(User us : backupController.readUserList(is, "users")) {
 			
 			boolean mailCheck = true;
 

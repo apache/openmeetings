@@ -20,7 +20,7 @@ package org.apache.openmeetings.web.components.admin.groups;
 
 import org.apache.openmeetings.data.user.dao.OrganisationUserDao;
 import org.apache.openmeetings.persistence.beans.domain.Organisation_Users;
-import org.apache.openmeetings.persistence.beans.user.Users;
+import org.apache.openmeetings.persistence.beans.user.User;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.components.ConfirmCallListener;
@@ -41,7 +41,7 @@ public class GroupUsersPanel extends Panel {
 	private static final long serialVersionUID = -1813488722913433227L;
 	private long organisationId;
 	
-	public static String getUser(Users u) {
+	public static String getUser(User u) {
 		return u.getLogin() + " [" + u.getFirstname() + ", " + u.getLastname() + "]";
 	}
 	
@@ -70,7 +70,7 @@ public class GroupUsersPanel extends Panel {
 			@Override
 			protected void populateItem(Item<Organisation_Users> item) {
 				final Organisation_Users orgUser = item.getModelObject();
-				Users u = orgUser.getUser();
+				User u = orgUser.getUser();
 				if (u != null) {
 					item.add(new Label("label", Model.of(getUser(u))));
 				} else {

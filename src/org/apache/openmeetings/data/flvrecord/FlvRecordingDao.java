@@ -104,7 +104,7 @@ public class FlvRecordingDao {
 			
 			log.debug("getFlvRecordingByExternalUserId :externalUserId: "+externalUserId);
 			
-			String hql = "SELECT c FROM FlvRecording c, Rooms r, Users u " +
+			String hql = "SELECT c FROM FlvRecording c, Room r, User u " +
 					"WHERE c.room_id = r.rooms_id " +
 					"AND c.insertedBy = u.user_id " +
 					"AND u.externalUserId LIKE :externalUserId " +
@@ -130,7 +130,7 @@ public class FlvRecordingDao {
 			
 			log.debug("getFlvRecordingByExternalRoomType :externalRoomType: "+externalRoomType);
 			
-			String hql = "SELECT c FROM FlvRecording c, Rooms r " +
+			String hql = "SELECT c FROM FlvRecording c, Room r " +
 					"WHERE c.room_id = r.rooms_id " +
 					"AND r.externalRoomType LIKE :externalRoomType " +
 					"AND c.insertedBy LIKE :insertedBy " +
@@ -170,7 +170,7 @@ public class FlvRecordingDao {
 			
 			log.debug("getFlvRecordingByExternalRoomType :externalRoomType: "+externalRoomType);
 			
-			String hql = "SELECT c FROM FlvRecording c, Rooms r " +
+			String hql = "SELECT c FROM FlvRecording c, Room r " +
 					"WHERE c.room_id = r.rooms_id " +
 					"AND r.externalRoomType LIKE :externalRoomType " +
 					"AND c.deleted <> :deleted ";

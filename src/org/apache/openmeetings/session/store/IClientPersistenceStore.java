@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.openmeetings.persistence.beans.basic.Server;
-import org.apache.openmeetings.persistence.beans.rooms.Client;
+import org.apache.openmeetings.persistence.beans.room.Client;
 
 public interface IClientPersistenceStore {
 

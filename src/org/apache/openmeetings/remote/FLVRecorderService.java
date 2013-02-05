@@ -46,7 +46,7 @@ import org.apache.openmeetings.data.user.dao.UsersDao;
 import org.apache.openmeetings.persistence.beans.flvrecord.FlvRecording;
 import org.apache.openmeetings.persistence.beans.flvrecord.FlvRecordingLog;
 import org.apache.openmeetings.persistence.beans.flvrecord.FlvRecordingMetaData;
-import org.apache.openmeetings.persistence.beans.rooms.Client;
+import org.apache.openmeetings.persistence.beans.room.Client;
 import org.apache.openmeetings.remote.red5.ScopeApplicationAdapter;
 import org.apache.openmeetings.session.ISessionManager;
 import org.apache.openmeetings.utils.OmFileHelper;

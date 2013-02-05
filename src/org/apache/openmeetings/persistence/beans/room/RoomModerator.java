@@ -16,15 +16,10 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.persistence.beans.rooms;
+package org.apache.openmeetings.persistence.beans.room;
 
 import java.io.Serializable;
 import java.util.Date;
-
-
-import org.apache.openmeetings.persistence.beans.user.Users;
-import org.simpleframework.xml.Element;
-import org.simpleframework.xml.Root;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -32,14 +27,30 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
+import org.apache.openmeetings.persistence.beans.user.User;
+import org.simpleframework.xml.Element;
+import org.simpleframework.xml.Root;
+
 @Entity
+@NamedQueries({
+	@NamedQuery(name = "getRoomModeratorById", query = "select c from RoomModerator as c " +
+			"where c.roomModeratorsId = :roomModeratorsId"),
+	@NamedQuery(name = "getRoomModeratorByRoomId", query = "select c from RoomModerator as c "
+			+ "where c.roomId = :roomId AND c.deleted <> :deleted"),	
+	@NamedQuery(name = "getRoomModeratorByUserAndRoomId", query = "select c from RoomModerator as c "
+			+ "where c.roomId = :roomId "
+			+ "AND c.deleted <> :deleted "
+			+ "AND c.user.user_id = :user_id"),			
+})
 @Table(name = "rooms_moderator")
 @Root(name = "room_moderator")
-public class RoomModerators implements Serializable {
+public class RoomModerator implements Serializable {
 	private static final long serialVersionUID = 5407758673591515018L;
 	
 	@Id
@@ -57,7 +68,7 @@ public class RoomModerators implements Serializable {
 	@ManyToOne(fetch = FetchType.EAGER) 
 	@JoinColumn (name="user_id")
 	@Element(name="user_id", data = true, required=false)
-	private Users user;
+	private User user;
 	
 	@Column(name = "starttime")
 	private Date starttime;
@@ -83,10 +94,10 @@ public class RoomModerators implements Serializable {
 	}
 	
 	
-	public Users getUser() {
+	public User getUser() {
 		return user;
 	}
-	public void setUser(Users user) {
+	public void setUser(User user) {
 		this.user = user;
 	}
 	

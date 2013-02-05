@@ -30,7 +30,7 @@ import javax.persistence.criteria.Root;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.data.basic.Fieldmanagment;
-import org.apache.openmeetings.persistence.beans.user.Salutations;
+import org.apache.openmeetings.persistence.beans.user.Salutation;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,7 +61,7 @@ public class SalutationDao {
 	 */
 	public Long addUserSalutation(String titelname, long fieldvalues_id) {
 		try {
-			Salutations ti = new Salutations();
+			Salutation ti = new Salutation();
 			ti.setName(titelname);
 			ti.setDeleted(false);
 			ti.setFieldvalues_id(fieldvalues_id);
@@ -81,15 +81,15 @@ public class SalutationDao {
 	 * @param user_level
 	 * @return
 	 */
-	public List<Salutations> getUserSalutations(long language_id) {
+	public List<Salutation> getUserSalutations(long language_id) {
 		try {
 			CriteriaBuilder cb = em.getCriteriaBuilder();
-			CriteriaQuery<Salutations> cq = cb.createQuery(Salutations.class);
-			Root<Salutations> from = cq.from(Salutations.class);
-			CriteriaQuery<Salutations> select = cq.select(from);
-			TypedQuery<Salutations> q = em.createQuery(select);
-			List<Salutations> ll = q.getResultList();
-			for (Salutations ti : ll) {
+			CriteriaQuery<Salutation> cq = cb.createQuery(Salutation.class);
+			Root<Salutation> from = cq.from(Salutation.class);
+			CriteriaQuery<Salutation> select = cq.select(from);
+			TypedQuery<Salutation> q = em.createQuery(select);
+			List<Salutation> ll = q.getResultList();
+			for (Salutation ti : ll) {
 				ti.setLabel(fieldmanagment.getFieldByIdAndLanguage(
 						ti.getFieldvalues_id(), language_id));
 			}

@@ -22,8 +22,6 @@
 <persistence xmlns="http://java.sun.com/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd" version="2.0">
 	<persistence-unit name="openmeetings" transaction-type="RESOURCE_LOCAL">
  		<provider>org.apache.openjpa.persistence.PersistenceProviderImpl</provider>
-		<class>org.apache.openmeetings.persistence.beans.adresses.Adresses</class>
-		<class>org.apache.openmeetings.persistence.beans.adresses.States</class>
 		<class>org.apache.openmeetings.persistence.beans.basic.Configuration</class>
 		<class>org.apache.openmeetings.persistence.beans.basic.ErrorType</class>
 		<class>org.apache.openmeetings.persistence.beans.basic.ErrorValues</class>
@@ -54,18 +52,20 @@
 		<class>org.apache.openmeetings.persistence.beans.poll.PollType</class>
 		<class>org.apache.openmeetings.persistence.beans.poll.RoomPoll</class>
 		<class>org.apache.openmeetings.persistence.beans.poll.RoomPollAnswers</class>
-		<class>org.apache.openmeetings.persistence.beans.rooms.Client</class>
-		<class>org.apache.openmeetings.persistence.beans.rooms.RoomModerators</class>
-		<class>org.apache.openmeetings.persistence.beans.rooms.Rooms</class>
-		<class>org.apache.openmeetings.persistence.beans.rooms.RoomTypes</class>
-		<class>org.apache.openmeetings.persistence.beans.rooms.Rooms_Organisation</class>
-		<class>org.apache.openmeetings.persistence.beans.user.PrivateMessages</class>
-		<class>org.apache.openmeetings.persistence.beans.user.PrivateMessageFolder</class>
-		<class>org.apache.openmeetings.persistence.beans.user.Salutations</class>
-		<class>org.apache.openmeetings.persistence.beans.user.UserContacts</class>
-		<class>org.apache.openmeetings.persistence.beans.user.Userdata</class>
-		<class>org.apache.openmeetings.persistence.beans.user.Userlevel</class>
-		<class>org.apache.openmeetings.persistence.beans.user.Users</class>
+		<class>org.apache.openmeetings.persistence.beans.room.Client</class>
+		<class>org.apache.openmeetings.persistence.beans.room.RoomModerator</class>
+        <class>org.apache.openmeetings.persistence.beans.room.Room</class>
+        <class>org.apache.openmeetings.persistence.beans.room.RoomType</class>
+        <class>org.apache.openmeetings.persistence.beans.room.RoomOrganisation</class>
+		<class>org.apache.openmeetings.persistence.beans.user.Address</class>
+        <class>org.apache.openmeetings.persistence.beans.user.State</class>
+        <class>org.apache.openmeetings.persistence.beans.user.PrivateMessage</class>
+        <class>org.apache.openmeetings.persistence.beans.user.PrivateMessageFolder</class>
+        <class>org.apache.openmeetings.persistence.beans.user.Salutation</class>
+        <class>org.apache.openmeetings.persistence.beans.user.UserContact</class>
+        <class>org.apache.openmeetings.persistence.beans.user.Userdata</class>
+        <class>org.apache.openmeetings.persistence.beans.user.Userlevel</class>
+        <class>org.apache.openmeetings.persistence.beans.user.User</class>
 		<class>org.apache.openmeetings.persistence.beans.files.FileExplorerItem</class>
 		<class>org.apache.openmeetings.persistence.beans.sip.asterisk.AsteriskSipUser</class>
         <class>org.apache.openmeetings.persistence.beans.sip.asterisk.MeetMe</class>

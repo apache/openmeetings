@@ -39,7 +39,7 @@ import org.apache.openmeetings.documents.LibraryDocumentConverter;
 import org.apache.openmeetings.documents.LibraryWmlLoader;
 import org.apache.openmeetings.documents.LoadLibraryPresentation;
 import org.apache.openmeetings.persistence.beans.files.FileExplorerItem;
-import org.apache.openmeetings.persistence.beans.rooms.Client;
+import org.apache.openmeetings.persistence.beans.room.Client;
 import org.apache.openmeetings.session.ISessionManager;
 import org.apache.openmeetings.utils.OmFileHelper;
 import org.apache.openmeetings.utils.crypt.MD5;

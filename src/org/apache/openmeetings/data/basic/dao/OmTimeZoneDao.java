@@ -27,7 +27,7 @@ import javax.persistence.TypedQuery;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.persistence.beans.basic.OmTimeZone;
-import org.apache.openmeetings.persistence.beans.user.Users;
+import org.apache.openmeetings.persistence.beans.user.User;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,7 +54,7 @@ public class OmTimeZoneDao {
 	 *            can be null
 	 * @return
 	 */
-	public OmTimeZone getDefaultOmTimeZone(Users user) {
+	public OmTimeZone getDefaultOmTimeZone(User user) {
 		
 		if (user != null && user.getOmTimeZone() != null) {
 			return user.getOmTimeZone();

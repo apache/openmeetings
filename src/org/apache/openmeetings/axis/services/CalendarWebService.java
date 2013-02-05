@@ -44,10 +44,10 @@ import org.apache.openmeetings.data.user.dao.UserContactsDao;
 import org.apache.openmeetings.persistence.beans.calendar.Appointment;
 import org.apache.openmeetings.persistence.beans.calendar.AppointmentCategory;
 import org.apache.openmeetings.persistence.beans.calendar.AppointmentReminderTyps;
-import org.apache.openmeetings.persistence.beans.rooms.RoomTypes;
-import org.apache.openmeetings.persistence.beans.rooms.Rooms;
-import org.apache.openmeetings.persistence.beans.user.UserContacts;
-import org.apache.openmeetings.persistence.beans.user.Users;
+import org.apache.openmeetings.persistence.beans.room.RoomType;
+import org.apache.openmeetings.persistence.beans.room.Room;
+import org.apache.openmeetings.persistence.beans.user.UserContact;
+import org.apache.openmeetings.persistence.beans.user.User;
 import org.apache.openmeetings.utils.math.TimezoneUtil;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -362,7 +362,7 @@ public class CalendarWebService {
 
 				appointmentLogic.getAppointMentById(appointmentId);
 
-				Users user = userManagement.getUserById(users_id);
+				User user = userManagement.getUserById(users_id);
 
 				return appointmentDao.updateAppointmentByTime(appointmentId,
 						appointmentstart, appointmentend, users_id, baseurl,
@@ -474,12 +474,12 @@ public class CalendarWebService {
 
 			log.debug("updateAppointment");
 
-			RoomTypes rt = roommanagement.getRoomTypesById(roomType);
+			RoomType rt = roommanagement.getRoomTypesById(roomType);
 
 			Appointment app = appointmentLogic
 					.getAppointMentById(appointmentId);
 
-			Rooms room = app.getRoom();
+			Room room = app.getRoom();
 			if (room != null) {
 
 				room.setComment(appointmentDescription);
@@ -489,7 +489,7 @@ public class CalendarWebService {
 				roomDao.update(room, users_id);
 			}
 
-			Users user = userManagement.getUserById(users_id);
+			User user = userManagement.getUserById(users_id);
 
 			return appointmentDao.updateAppointment(appointmentId,
 					appointmentName, appointmentDescription, appointmentstart
@@ -703,7 +703,7 @@ public class CalendarWebService {
 			if (authLevelManagement.checkUserLevel(user_level)) {
 				
 				if (!requestUserId.equals(users_id)) {
-					UserContacts userContacts = userContactsDaoImpl
+					UserContact userContacts = userContactsDaoImpl
 							.getUserContactByShareCalendar(requestUserId, true,
 									users_id);
 					if (userContacts == null) {

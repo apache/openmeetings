@@ -35,11 +35,11 @@ import org.apache.openmeetings.data.user.Usermanagement;
 import org.apache.openmeetings.data.user.dao.StateDao;
 import org.apache.openmeetings.data.user.dao.UsersDao;
 import org.apache.openmeetings.ldap.config.ConfigReader;
-import org.apache.openmeetings.persistence.beans.adresses.States;
 import org.apache.openmeetings.persistence.beans.basic.LdapConfig;
-import org.apache.openmeetings.persistence.beans.user.Users;
+import org.apache.openmeetings.persistence.beans.user.State;
+import org.apache.openmeetings.persistence.beans.user.User;
 import org.apache.openmeetings.remote.util.SessionVariablesUtil;
-import org.apache.openmeetings.persistence.beans.rooms.Client;
+import org.apache.openmeetings.persistence.beans.room.Client;
 import org.apache.openmeetings.utils.OmFileHelper;
 import org.apache.openmeetings.utils.crypt.ManageCryptStyle;
 import org.red5.logging.Red5LoggerFactory;
@@ -424,7 +424,7 @@ public class LdapLoginManagement {
 
 		// check if user already exists
 
-		Users u = null;
+		User u = null;
 
 		try {
 			u = userManagement.getUserByLogin(user);
@@ -519,7 +519,7 @@ public class LdapLoginManagement {
 				}
 
 				// Return UserObject
-				Users u2 = userManagement.getUserById(userid);
+				User u2 = userManagement.getUserById(userid);
 
 				if (u2 == null)
 					return new Long(-1);
@@ -649,10 +649,10 @@ public class LdapLoginManagement {
 
 		if (state != null) {
 			// Lookup for states
-			List<States> states = statemanagement.getStates();
+			List<State> states = statemanagement.getStates();
 
 			for (int i = 0; i < states.size(); i++) {
-				States oneState = states.get(i);
+				State oneState = states.get(i);
 
 				if (oneState.getName().equals(state)) {
 					state_id = oneState.getState_id();

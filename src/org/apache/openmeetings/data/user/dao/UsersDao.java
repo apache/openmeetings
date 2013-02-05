@@ -33,8 +33,8 @@ import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.data.IDataProviderDao;
 import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
 import org.apache.openmeetings.data.basic.dao.OmTimeZoneDao;
-import org.apache.openmeetings.persistence.beans.adresses.Adresses;
-import org.apache.openmeetings.persistence.beans.user.Users;
+import org.apache.openmeetings.persistence.beans.user.Address;
+import org.apache.openmeetings.persistence.beans.user.User;
 import org.apache.openmeetings.utils.DaoHelper;
 import org.apache.openmeetings.utils.crypt.ManageCryptStyle;
 import org.red5.logging.Red5LoggerFactory;
@@ -43,13 +43,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * CRUD operations for {@link Users}
+ * CRUD operations for {@link User}
  * 
  * @author swagner, solomax
  * 
  */
 @Transactional
-public class UsersDao implements IDataProviderDao<Users> {
+public class UsersDao implements IDataProviderDao<User> {
 
 	private static final Logger log = Red5LoggerFactory.getLogger(
 			UsersDao.class, OpenmeetingsVariables.webAppRootKey);
@@ -69,7 +69,7 @@ public class UsersDao implements IDataProviderDao<Users> {
 	private StateDao stateDaoImpl;
 
 	/**
-	 * Get a new instance of the {@link Users} entity, with all default values
+	 * Get a new instance of the {@link User} entity, with all default values
 	 * set
 	 * 
 	 * @param currentUser
@@ -77,8 +77,8 @@ public class UsersDao implements IDataProviderDao<Users> {
 	 *            one (if the current user has one)
 	 * @return
 	 */
-	public Users getNewUserInstance(Users currentUser) {
-		Users user = new Users();
+	public User getNewUserInstance(User currentUser) {
+		User user = new User();
 		user.setSalutations_id(1L); // TODO: Fix default selection to be
 									// configurable
 		user.setLevel_id(1L);
@@ -88,7 +88,7 @@ public class UsersDao implements IDataProviderDao<Users> {
 		user.setForceTimeZoneCheck(false);
 		user.setSendSMS(false);
 		user.setAge(new Date());
-		Adresses adresses = new Adresses();
+		Address adresses = new Address();
 		adresses.setStates(stateDaoImpl.getStateById(1L));
 		user.setAdresses(adresses);
 		user.setStatus(1);
@@ -98,30 +98,20 @@ public class UsersDao implements IDataProviderDao<Users> {
 		return user;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.apache.openmeetings.data.OmDAO#get(int, int)
-	 */
-	public List<Users> get(int first, int count) {
-		TypedQuery<Users> q = em.createNamedQuery("getNondeletedUsers", Users.class);
+	public List<User> get(int first, int count) {
+		TypedQuery<User> q = em.createNamedQuery("getNondeletedUsers", User.class);
 		q.setFirstResult(first);
 		q.setMaxResults(count);
 		return q.getResultList();
 	}
 
-	public List<Users> get(String search, int start, int count, String sort) {
-		TypedQuery<Users> q = em.createQuery(DaoHelper.getSearchQuery("Users", "u", search, true, false, sort, searchFields), Users.class);
+	public List<User> get(String search, int start, int count, String sort) {
+		TypedQuery<User> q = em.createQuery(DaoHelper.getSearchQuery("User", "u", search, true, false, sort, searchFields), User.class);
 		q.setFirstResult(start);
 		q.setMaxResults(count);
 		return q.getResultList();
 	}
 	
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.apache.openmeetings.data.OmDAO#count()
-	 */
 	public long count() {
 		// get all users
 		TypedQuery<Long> q = em.createNamedQuery("countNondeletedUsers", Long.class);
@@ -129,23 +119,16 @@ public class UsersDao implements IDataProviderDao<Users> {
 	}
 
 	public long count(String search) {
-		TypedQuery<Long> q = em.createQuery(DaoHelper.getSearchQuery("Users", "u", search, true, true, null, searchFields), Long.class);
+		TypedQuery<Long> q = em.createQuery(DaoHelper.getSearchQuery("User", "u", search, true, true, null, searchFields), Long.class);
 		return q.getSingleResult();
 	}
 	
-	public List<Users> get(String search) {
-		TypedQuery<Users> q = em.createQuery(DaoHelper.getSearchQuery("Users", "u", search, true, false, null, searchFields), Users.class);
+	public List<User> get(String search) {
+		TypedQuery<User> q = em.createQuery(DaoHelper.getSearchQuery("User", "u", search, true, false, null, searchFields), User.class);
 		return q.getResultList();
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * org.apache.openmeetings.data.OmDAO#update(org.apache.openmeetings.persistence
-	 * .beans.OmEntity, long)
-	 */
-	public Users update(Users u, long userId) {
+	public User update(User u, long userId) {
 		if (u.getUser_id() == null) {
 			u.setStarttime(new Date());
 			em.persist(u);
@@ -156,31 +139,18 @@ public class UsersDao implements IDataProviderDao<Users> {
 		return u;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * org.apache.openmeetings.data.OmDAO#delete(org.apache.openmeetings.persistence
-	 * .beans.OmEntity, long)
-	 */
-	public void delete(Users u, long userId) {
+	public void delete(User u, long userId) {
 		deleteUserID(u.getUser_id());
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.apache.openmeetings.data.OmDAO#get(long)
-	 */
-	public Users get(long user_id) {
+	public User get(long user_id) {
 		if (user_id > 0) {
 			try {
-				TypedQuery<Users> query = em.createQuery(
-						"select c from Users as c where c.user_id = :user_id",
-						Users.class);
+				TypedQuery<User> query = em.createNamedQuery("getUserById",
+						User.class);
 				query.setParameter("user_id", user_id);
 
-				Users users = null;
+				User users = null;
 				try {
 					users = query.getSingleResult();
 				} catch (NoResultException ex) {
@@ -198,11 +168,11 @@ public class UsersDao implements IDataProviderDao<Users> {
 	public Long deleteUserID(long userId) {
 		try {
 			if (userId != 0) {
-				Users us = get(userId);
+				User us = get(userId);
 				us.setDeleted(true);
 				us.setUpdatetime(new Date());
 				us.setSipUser(null);
-				Adresses adr = us.getAdresses();
+				Address adr = us.getAdresses();
 				if (adr != null) {
 					adr.setDeleted(true);
 				}
@@ -222,9 +192,9 @@ public class UsersDao implements IDataProviderDao<Users> {
 		return null;
 	}
 
-	public List<Users> getAllUsers() {
+	public List<User> getAllUsers() {
 		try {
-			TypedQuery<Users> q = em.createNamedQuery("getNondeletedUsers", Users.class);
+			TypedQuery<User> q = em.createNamedQuery("getNondeletedUsers", User.class);
 			return q.getResultList();
 		} catch (Exception ex2) {
 			log.error("[getAllUsers] ", ex2);
@@ -232,12 +202,12 @@ public class UsersDao implements IDataProviderDao<Users> {
 		return null;
 	}
 
-	public List<Users> getAllUsersDeleted() {
+	public List<User> getAllUsersDeleted() {
 		try {
-			TypedQuery<Users> q = em.createNamedQuery("getAllUsers",
-					Users.class);
+			TypedQuery<User> q = em.createNamedQuery("getAllUsers",
+					User.class);
 			@SuppressWarnings("unchecked")
-			OpenJPAQuery<Users> kq = OpenJPAPersistence.cast(q);
+			OpenJPAQuery<User> kq = OpenJPAPersistence.cast(q);
 			kq.getFetchPlan().addFetchGroup("backupexport");
 			return kq.getResultList();
 		} catch (Exception ex2) {
@@ -254,10 +224,8 @@ public class UsersDao implements IDataProviderDao<Users> {
 	 */
 	public boolean checkUserLogin(String DataValue) {
 		try {
-			TypedQuery<Users> query = em
-					.createQuery(
-							"select c from Users as c where c.login = :DataValue AND c.deleted <> :deleted",
-							Users.class);
+			TypedQuery<User> query = em
+					.createNamedQuery("checkUserLogin", User.class);
 			query.setParameter("DataValue", DataValue);
 			query.setParameter("deleted", true);
 			int count = query.getResultList().size();
@@ -271,14 +239,12 @@ public class UsersDao implements IDataProviderDao<Users> {
 		return true;
 	}
 
-	public Users getUserByName(String login) {
+	public User getUserByName(String login) {
 		try {
-			String hql = "SELECT u FROM Users as u "
-					+ " where u.login = :login" + " AND u.deleted <> :deleted";
-			TypedQuery<Users> query = em.createQuery(hql, Users.class);
+			TypedQuery<User> query = em.createNamedQuery("getUserByName", User.class);
 			query.setParameter("login", login);
 			query.setParameter("deleted", true);
-			Users us = null;
+			User us = null;
 			try {
 				us = query.getSingleResult();
 			} catch (NoResultException ex) {
@@ -290,15 +256,12 @@ public class UsersDao implements IDataProviderDao<Users> {
 		return null;
 	}
 
-	public Users getUserByEmail(String email) {
+	public User getUserByEmail(String email) {
 		try {
-			String hql = "SELECT u FROM Users as u "
-					+ " where u.adresses.email = :email"
-					+ " AND u.deleted <> :deleted";
-			TypedQuery<Users> query = em.createQuery(hql, Users.class);
+			TypedQuery<User> query = em.createNamedQuery("getUserByEmail", User.class);
 			query.setParameter("email", email);
 			query.setParameter("deleted", true);
-			Users us = null;
+			User us = null;
 			try {
 				us = query.getSingleResult();
 			} catch (NoResultException ex) {
@@ -314,13 +277,10 @@ public class UsersDao implements IDataProviderDao<Users> {
 		try {
 			if (hash.length() == 0)
 				return new Long(-5);
-			String hql = "SELECT u FROM Users as u "
-					+ " where u.resethash = :resethash"
-					+ " AND u.deleted <> :deleted";
-			TypedQuery<Users> query = em.createQuery(hql, Users.class);
+			TypedQuery<User> query = em.createNamedQuery("getUserByHash", User.class);
 			query.setParameter("resethash", hash);
 			query.setParameter("deleted", true);
-			Users us = null;
+			User us = null;
 			try {
 				us = query.getSingleResult();
 			} catch (NoResultException ex) {
@@ -339,8 +299,8 @@ public class UsersDao implements IDataProviderDao<Users> {
 	public Object resetPassByHash(String hash, String pass) {
 		try {
 			Object u = this.getUserByHash(hash);
-			if (u instanceof Users) {
-				Users us = (Users) u;
+			if (u instanceof User) {
+				User us = (User) u;
 				us.updatePassword(cryptManager, configDao, pass);
 				us.setResethash("");
 				update(us, 1L);
@@ -360,15 +320,8 @@ public class UsersDao implements IDataProviderDao<Users> {
 	 */
 	public Long selectMaxFromUsersWithSearch(String search) {
 		try {
-
-			String hql = "select count(c.user_id) from Users c "
-					+ "where c.deleted = false " + "AND ("
-					+ "lower(c.login) LIKE :search "
-					+ "OR lower(c.firstname) LIKE :search "
-					+ "OR lower(c.lastname) LIKE :search " + ")";
-
 			// get all users
-			TypedQuery<Long> query = em.createQuery(hql, Long.class);
+			TypedQuery<Long> query = em.createNamedQuery("selectMaxFromUsersWithSearch", Long.class);
 			query.setParameter("search", StringUtils.lowerCase(search));
 			List<Long> ll = query.getResultList();
 			log.info("selectMaxFromUsers" + ll.get(0));

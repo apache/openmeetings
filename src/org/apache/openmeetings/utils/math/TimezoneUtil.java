@@ -26,7 +26,7 @@ import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
 import org.apache.openmeetings.data.basic.dao.OmTimeZoneDao;
 import org.apache.openmeetings.persistence.beans.basic.OmTimeZone;
-import org.apache.openmeetings.persistence.beans.user.Users;
+import org.apache.openmeetings.persistence.beans.user.User;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,7 +48,7 @@ public class TimezoneUtil {
 	 * @param user
 	 * @return
 	 */
-	public TimeZone getTimezoneByUser(Users user) {
+	public TimeZone getTimezoneByUser(User user) {
 
 		if (user != null && user.getOmTimeZone() != null) {
 

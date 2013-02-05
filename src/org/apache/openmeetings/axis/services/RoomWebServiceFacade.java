@@ -29,8 +29,8 @@ import org.apache.axis2.transport.http.HTTPConstants;
 import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.data.beans.basic.SearchResult;
 import org.apache.openmeetings.persistence.beans.flvrecord.FlvRecording;
-import org.apache.openmeetings.persistence.beans.rooms.RoomTypes;
-import org.apache.openmeetings.persistence.beans.rooms.Rooms;
+import org.apache.openmeetings.persistence.beans.room.RoomType;
+import org.apache.openmeetings.persistence.beans.room.Room;
 import org.apache.openmeetings.remote.red5.ScopeApplicationAdapter;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -70,7 +70,7 @@ public class RoomWebServiceFacade {
 	// organisation_id, roomtypes_id);
 	// }
 
-	public Rooms[] getRoomsPublic(String SID, Long roomtypes_id)
+	public Room[] getRoomsPublic(String SID, Long roomtypes_id)
 			throws AxisFault {
 		return this.getRoomServiceProxy().getRoomsPublic(SID, roomtypes_id);
 	}
@@ -122,7 +122,7 @@ public class RoomWebServiceFacade {
 		return this.getRoomServiceProxy().getFlvRecordingByRoomId(SID, roomId);
 	}
 
-	public RoomTypes[] getRoomTypes(String SID) throws AxisFault {
+	public RoomType[] getRoomTypes(String SID) throws AxisFault {
 		return this.getRoomServiceProxy().getRoomTypes(SID);
 	}
 
@@ -135,7 +135,7 @@ public class RoomWebServiceFacade {
 				roomId9, roomId10);
 	}
 
-	public Rooms getRoomById(String SID, long rooms_id) {
+	public Room getRoomById(String SID, long rooms_id) {
 		return this.getRoomServiceProxy().getRoomById(SID, rooms_id);
 	}
 
@@ -146,7 +146,7 @@ public class RoomWebServiceFacade {
 	 * @return
 	 */
 	@Deprecated
-	public Rooms getRoomWithCurrentUsersById(String SID, long rooms_id)
+	public Room getRoomWithCurrentUsersById(String SID, long rooms_id)
 			throws AxisFault {
 		return this.getRoomServiceProxy().getRoomWithCurrentUsersById(SID,
 				rooms_id);
@@ -158,13 +158,13 @@ public class RoomWebServiceFacade {
 				rooms_id);
 	}
 
-	public SearchResult<Rooms> getRooms(String SID, int start, int max,
+	public SearchResult<Room> getRooms(String SID, int start, int max,
 			String orderby, boolean asc) throws AxisFault {
 		return this.getRoomServiceProxy().getRooms(SID, start, max, orderby,
 				asc);
 	}
 
-	public SearchResult<Rooms> getRoomsWithCurrentUsers(String SID, int start,
+	public SearchResult<Room> getRoomsWithCurrentUsers(String SID, int start,
 			int max, String orderby, boolean asc) throws AxisFault {
 		return this.getRoomServiceProxy().getRoomsWithCurrentUsers(SID, start,
 				max, orderby, asc);

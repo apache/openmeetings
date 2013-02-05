@@ -21,26 +21,51 @@ package org.apache.openmeetings.persistence.beans.user;
 import java.io.Serializable;
 import java.util.Date;
 
-import org.apache.openmeetings.persistence.beans.rooms.Rooms;
-import org.simpleframework.xml.Element;
-import org.simpleframework.xml.Root;
-
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
-import javax.persistence.JoinColumn;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
+import org.apache.openmeetings.persistence.beans.room.Room;
+import org.simpleframework.xml.Element;
+import org.simpleframework.xml.Root;
+
 @Entity
-@Table(name = "private_messages")
+@NamedQueries({
+	@NamedQuery(name = "getPrivateMessages", query = "select c from PrivateMessage c"),
+	@NamedQuery(name = "getPrivateMessagesById", query = "select c from PrivateMessage c " +
+			"where c.privateMessageId = :privateMessageId "),
+	@NamedQuery(name = "getNumberMessages", query = "select COUNT(c.privateMessageId) from PrivateMessage c " +
+			"where c.to.user_id = :toUserId " +
+			"AND c.isTrash = :isTrash " +
+			"AND c.owner.user_id = :toUserId " +
+			"AND c.isRead = :isRead " +
+			"AND c.privateMessageFolderId = :privateMessageFolderId "),
+	@NamedQuery(name = "updatePrivateMessagesToTrash", query = "UPDATE PrivateMessage c " +
+			"SET c.isTrash = :isTrash,c.privateMessageFolderId = :privateMessageFolderId " +
+			"where c.privateMessageId IN (:privateMessageIds) "),
+	@NamedQuery(name = "updatePrivateMessagesReadStatus", query = "UPDATE PrivateMessage c " +
+			"SET c.isRead = :isRead " +
+			"where c.privateMessageId IN (:privateMessageIds) "),
+	@NamedQuery(name = "moveMailsToFolder", query = "UPDATE PrivateMessage c " +
+			"SET c.privateMessageFolderId = :privateMessageFolderId, c.isTrash = false " +
+			"where c.privateMessageId IN (:privateMessageIds) "),		
+	@NamedQuery(name = "deletePrivateMessages", query = "DELETE FROM PrivateMessage c " +
+			"where c.privateMessageId IN (:privateMessageIds) "),	
+	@NamedQuery(name = "getPrivateMessagesByRoom", query = "select c from PrivateMessage c " +
+			"where c.room.rooms_id = :roomId "),				
+})
+@Table(name = "private_message")
 @Root(name="privatemessage")
-public class PrivateMessages implements Serializable {
+public class PrivateMessage implements Serializable {
 	private static final long serialVersionUID = 7541117437029707792L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -67,17 +92,17 @@ public class PrivateMessages implements Serializable {
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name="from_id")
 	@Element(data=true, required=false)
-	private Users from;
+	private User from;
 	
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name="to_id")
 	@Element(data=true, required=false)
-	private Users to;
+	private User to;
 	
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name="owner_id")
 	@Element(data=true, required=false)
-	private Users owner;
+	private User owner;
 	
 		
 	@Column(name="booked_room")
@@ -87,7 +112,7 @@ public class PrivateMessages implements Serializable {
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name="rooms_id")
 	@Element(data=true, required=false)
-	private Rooms room;
+	private Room room;
 	
 	@Column(name="is_read")
 	@Element(data=true)
@@ -141,24 +166,24 @@ public class PrivateMessages implements Serializable {
 		this.inserted = inserted;
 	}
 
-	public Users getFrom() {
+	public User getFrom() {
 		return from;
 	}
-	public void setFrom(Users from) {
+	public void setFrom(User from) {
 		this.from = from;
 	}
 
-	public Users getTo() {
+	public User getTo() {
 		return to;
 	}
-	public void setTo(Users to) {
+	public void setTo(User to) {
 		this.to = to;
 	}
 	
-	public Users getOwner() {
+	public User getOwner() {
 		return owner;
 	}
-	public void setOwner(Users owner) {
+	public void setOwner(User owner) {
 		this.owner = owner;
 	}
 	
@@ -169,10 +194,10 @@ public class PrivateMessages implements Serializable {
 		this.bookedRoom = bookedRoom;
 	}
 
-	public Rooms getRoom() {
+	public Room getRoom() {
 		return room;
 	}
-	public void setRoom(Rooms room) {
+	public void setRoom(Room room) {
 		this.room = room;
 	}
 

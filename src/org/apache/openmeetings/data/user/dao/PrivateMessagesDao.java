@@ -29,9 +29,9 @@ import javax.persistence.TypedQuery;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.openmeetings.OpenmeetingsVariables;
-import org.apache.openmeetings.persistence.beans.rooms.Rooms;
-import org.apache.openmeetings.persistence.beans.user.PrivateMessages;
-import org.apache.openmeetings.persistence.beans.user.Users;
+import org.apache.openmeetings.persistence.beans.room.Room;
+import org.apache.openmeetings.persistence.beans.user.PrivateMessage;
+import org.apache.openmeetings.persistence.beans.user.User;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.transaction.annotation.Transactional;
@@ -44,10 +44,10 @@ public class PrivateMessagesDao {
 	private EntityManager em;
 	
 	public Long addPrivateMessage(String subject, String message, Long parentMessageId, 
-			Users from, Users to, Users owner, Boolean bookedRoom, Rooms room,
+			User from, User to, User owner, Boolean bookedRoom, Room room,
 			Boolean isContactRequest, Long userContactId, String email) {
 		try {
-			PrivateMessages privateMessage = new PrivateMessages();
+			PrivateMessage privateMessage = new PrivateMessage();
 			privateMessage.setInserted(new Date());
 			privateMessage.setSubject(subject);
 			privateMessage.setMessage(message);
@@ -74,7 +74,7 @@ public class PrivateMessagesDao {
 		return null;
 	}
 	
-	public Long addPrivateMessageObj(PrivateMessages privateMessage) {
+	public Long addPrivateMessageObj(PrivateMessage privateMessage) {
 		try {
 			
 			privateMessage = em.merge(privateMessage);
@@ -87,47 +87,33 @@ public class PrivateMessagesDao {
 		return null;
 	}
 	
-	public List<PrivateMessages> getPrivateMessages() {
+	public List<PrivateMessage> getPrivateMessages() {
 		try {
-			
-			String hql = "select c from PrivateMessages c ";
-			
-			TypedQuery<PrivateMessages> query = em.createQuery(hql, PrivateMessages.class); 
-			
-			List<PrivateMessages> privateMessages = query.getResultList();
-			
-			return privateMessages;
-			
+			TypedQuery<PrivateMessage> query = em.createNamedQuery("getPrivateMessages", PrivateMessage.class); 
+			return query.getResultList();
 		} catch (Exception e) {
 			log.error("[getPrivateMessages]",e);
 		}
 		return null;
 	}
 	
-	public PrivateMessages getPrivateMessagesById(Long privateMessageId) {
+	public PrivateMessage getPrivateMessagesById(Long privateMessageId) {
 		try {
-			
-			String hql = "select c from PrivateMessages c " +
-						"where c.privateMessageId = :privateMessageId ";
-			
-			TypedQuery<PrivateMessages> query = em.createQuery(hql, PrivateMessages.class); 
+			TypedQuery<PrivateMessage> query = em.createNamedQuery("getPrivateMessagesById", PrivateMessage.class); 
 			query.setParameter("privateMessageId", privateMessageId);
-			
-			PrivateMessages privateMessage = null;
+			PrivateMessage privateMessage = null;
 			try {
 				privateMessage = query.getSingleResult();
 		    } catch (NoResultException ex) {
 		    }
-			
 			return privateMessage;
-			
 		} catch (Exception e) {
 			log.error("[countPrivateMessagesByUser]",e);
 		}
 		return null;
 	}
 	
-	public void updatePrivateMessages(PrivateMessages privateMessage) {
+	public void updatePrivateMessages(PrivateMessage privateMessage) {
 		try {
 			
 			if (privateMessage.getPrivateMessageFolderId() == null) {
@@ -146,7 +132,7 @@ public class PrivateMessagesDao {
 	public Long countPrivateMessagesByUser(Long toUserId, String search, Long privateMessageFolderId) {
 		try {
 			
-			String hql = "select count(c.privateMessageId) from PrivateMessages c " +
+			String hql = "select count(c.privateMessageId) from PrivateMessage c " +
 						"where c.to.user_id = :toUserId " +
 						"AND c.isTrash = false " +
 						"AND c.owner.user_id = :toUserId " +
@@ -181,32 +167,23 @@ public class PrivateMessagesDao {
 	
 	public Long getNumberMessages(Long toUserId, Long privateMessageFolderId, boolean isRead) {
 		try {
-			
-			String hql = "select COUNT(c.privateMessageId) from PrivateMessages c " +
-						"where c.to.user_id = :toUserId " +
-						"AND c.isTrash = :isTrash " +
-						"AND c.owner.user_id = :toUserId " +
-						"AND c.isRead = :isRead " +
-						"AND c.privateMessageFolderId = :privateMessageFolderId ";
-
-			TypedQuery<Long> query = em.createQuery(hql, Long.class); 
+			TypedQuery<Long> query = em.createNamedQuery("getNumberMessages", Long.class); 
 			query.setParameter("toUserId", toUserId);
 			query.setParameter("isTrash", false);
 			query.setParameter("isRead", false);
 			query.setParameter("privateMessageFolderId", privateMessageFolderId);
 			return query.getSingleResult();
-			
 		} catch (Exception e) {
 			log.error("[getNumberMessages]",e);
 		}
 		return null;
 	}
 	
-	public List<PrivateMessages> getPrivateMessagesByUser(Long toUserId, String search,
+	public List<PrivateMessage> getPrivateMessagesByUser(Long toUserId, String search,
 			String orderBy, int start, Boolean asc, Long privateMessageFolderId, int max) {
 		try {
 			
-			String hql = "select c from PrivateMessages c " +
+			String hql = "select c from PrivateMessage c " +
 						"where c.to.user_id = :toUserId " +
 						"AND c.isTrash = :isTrash " +
 						"AND c.owner.user_id = :toUserId " +
@@ -231,7 +208,7 @@ public class PrivateMessagesDao {
 				hql += " DESC";
 			}
 
-			TypedQuery<PrivateMessages> query = em.createQuery(hql, PrivateMessages.class); 
+			TypedQuery<PrivateMessage> query = em.createQuery(hql, PrivateMessage.class); 
 			query.setParameter("toUserId", toUserId);
 			query.setParameter("isTrash", false);
 			query.setParameter("privateMessageFolderId", privateMessageFolderId);
@@ -240,7 +217,7 @@ public class PrivateMessagesDao {
 			}
 			query.setFirstResult(start);
 			query.setMaxResults(max);
-			List<PrivateMessages> ll = query.getResultList();
+			List<PrivateMessage> ll = query.getResultList();
 			
 			return ll;	
 		} catch (Exception e) {
@@ -253,7 +230,7 @@ public class PrivateMessagesDao {
 			Long privateMessageFolderId) {
 		try {
 			
-			String hql = "select count(c.privateMessageId) from PrivateMessages c " +
+			String hql = "select count(c.privateMessageId) from PrivateMessage c " +
 						"where c.from.user_id = :toUserId " +
 						"AND c.isTrash = :isTrash " +
 						"AND c.owner.user_id = :toUserId " +
@@ -287,11 +264,11 @@ public class PrivateMessagesDao {
 		return null;
 	}
 	
-	public List<PrivateMessages> getTrashPrivateMessagesByUser(Long user_id, String search, 
+	public List<PrivateMessage> getTrashPrivateMessagesByUser(Long user_id, String search, 
 			String orderBy, int start, Boolean asc, int max) {
 		try {
 			
-			String hql = "select c from PrivateMessages c " +
+			String hql = "select c from PrivateMessage c " +
 						"where c.isTrash = true " +
 						"AND c.owner.user_id = :user_id ";
 			
@@ -314,14 +291,14 @@ public class PrivateMessagesDao {
 				hql += " DESC";
 			}
 
-			TypedQuery<PrivateMessages> query = em.createQuery(hql, PrivateMessages.class); 
+			TypedQuery<PrivateMessage> query = em.createQuery(hql, PrivateMessage.class); 
 			if (search.length() != 0) {
 				query.setParameter("search", StringUtils.lowerCase("%"+search+"%"));
 			}
 			query.setParameter("user_id", user_id);
 			query.setFirstResult(start);
 			query.setMaxResults(max);
-			List<PrivateMessages> ll = query.getResultList();
+			List<PrivateMessage> ll = query.getResultList();
 			
 			return ll;	
 		} catch (Exception e) {
@@ -333,7 +310,7 @@ public class PrivateMessagesDao {
 	public Long countTrashPrivateMessagesByUser(Long user_id, String search) {
 		try {
 			
-			String hql = "select count(c.privateMessageId) from PrivateMessages c " +
+			String hql = "select count(c.privateMessageId) from PrivateMessage c " +
 						"where c.isTrash = true  " +
 						"AND c.owner.user_id = :user_id ";
 			
@@ -363,11 +340,11 @@ public class PrivateMessagesDao {
 		return null;
 	}
 	
-	public List<PrivateMessages> getSendPrivateMessagesByUser(Long toUserId, String search, 
+	public List<PrivateMessage> getSendPrivateMessagesByUser(Long toUserId, String search, 
 			String orderBy, int start, Boolean asc, Long privateMessageFolderId, int max) {
 		try {
 			
-			String hql = "select c from PrivateMessages c " +
+			String hql = "select c from PrivateMessage c " +
 						"where c.from.user_id = :toUserId " +
 						"AND c.isTrash = false " +
 						"AND c.owner.user_id = :toUserId " +
@@ -392,7 +369,7 @@ public class PrivateMessagesDao {
 				hql += " DESC";
 			}
 
-			TypedQuery<PrivateMessages> query = em.createQuery(hql, PrivateMessages.class); 
+			TypedQuery<PrivateMessage> query = em.createQuery(hql, PrivateMessage.class); 
 			query.setParameter("toUserId", toUserId);
 			query.setParameter("privateMessageFolderId", privateMessageFolderId);
 			if (search.length() != 0) {
@@ -400,7 +377,7 @@ public class PrivateMessagesDao {
 			}
 			query.setFirstResult(start);
 			query.setMaxResults(max);
-			List<PrivateMessages> ll = query.getResultList();
+			List<PrivateMessage> ll = query.getResultList();
 			
 			return ll;	
 		} catch (Exception e) {
@@ -413,7 +390,7 @@ public class PrivateMessagesDao {
 	public Long countFolderPrivateMessagesByUser(Long toUserId, Long privateMessageFolderId, String search) {
 		try {
 			
-			String hql = "select count(c.privateMessageId) from PrivateMessages c " +
+			String hql = "select count(c.privateMessageId) from PrivateMessage c " +
 						"where c.isTrash = false " +
 						"AND c.owner.user_id = :toUserId " +
 						"AND c.privateMessageFolderId = :privateMessageFolderId ";
@@ -445,11 +422,11 @@ public class PrivateMessagesDao {
 		return null;
 	}
 	
-	public List<PrivateMessages> getFolderPrivateMessagesByUser(Long toUserId, String search, String orderBy, 
+	public List<PrivateMessage> getFolderPrivateMessagesByUser(Long toUserId, String search, String orderBy, 
 			int start, Boolean asc, Long privateMessageFolderId, int max) {
 		try {
 			
-			String hql = "select c from PrivateMessages c " +
+			String hql = "select c from PrivateMessage c " +
 							"where c.isTrash = :isTrash " +
 							"AND c.owner.user_id = :toUserId " +
 							"AND c.privateMessageFolderId = :privateMessageFolderId ";
@@ -477,7 +454,7 @@ public class PrivateMessagesDao {
 			
 			log.debug("privateMessageFolderId "+privateMessageFolderId);
 			
-			TypedQuery<PrivateMessages> query = em.createQuery(hql, PrivateMessages.class); 
+			TypedQuery<PrivateMessage> query = em.createQuery(hql, PrivateMessage.class); 
 			query.setParameter("toUserId", toUserId);
 			query.setParameter("isTrash", false);
 			query.setParameter("privateMessageFolderId", privateMessageFolderId);
@@ -486,7 +463,7 @@ public class PrivateMessagesDao {
 			}
 			query.setFirstResult(start);
 			query.setMaxResults(max);
-			List<PrivateMessages> ll = query.getResultList();
+			List<PrivateMessage> ll = query.getResultList();
 			
 			return ll;
 			
@@ -498,12 +475,7 @@ public class PrivateMessagesDao {
 
 	public int updatePrivateMessagesToTrash(List<Long> privateMessageIds, Boolean isTrash, Long privateMessageFolderId) {
 		try {
-			
-			String hql = "UPDATE PrivateMessages c " +
-						"SET c.isTrash = :isTrash,c.privateMessageFolderId = :privateMessageFolderId " +
-						"where c.privateMessageId IN (:privateMessageIds) ";
-			
-			Query query = em.createQuery(hql); 
+			Query query = em.createNamedQuery("updatePrivateMessagesToTrash"); 
 			query.setParameter("isTrash", isTrash);
 			query.setParameter("privateMessageFolderId", privateMessageFolderId);
 			query.setParameter("privateMessageIds", privateMessageIds);
@@ -512,12 +484,8 @@ public class PrivateMessagesDao {
 			//Refresh the Entities in the Cache as Hibernate will not do it!
 			//FIXME weird code
 			for (Long privateMessageId : privateMessageIds) {
-				String hqlSel = "select c from PrivateMessages c " +
-								"where c.privateMessageId = :privateMessageId ";
-	
-				TypedQuery<PrivateMessages> querySel = em.createQuery(hqlSel, PrivateMessages.class); 
+				TypedQuery<PrivateMessage> querySel = em.createNamedQuery("getPrivateMessagesById", PrivateMessage.class); 
 				querySel.setParameter("privateMessageId", privateMessageId);
-				
 				try {
 					querySel.getSingleResult();
 			    } catch (NoResultException ex) {
@@ -533,12 +501,7 @@ public class PrivateMessagesDao {
 	
 	public int updatePrivateMessagesReadStatus(List<Long> privateMessageIds, Boolean isRead) {
 		try {
-			
-			String hql = "UPDATE PrivateMessages c " +
-						"SET c.isRead = :isRead " +
-						"where c.privateMessageId IN (:privateMessageIds) ";
-			
-			Query query = em.createQuery(hql); 
+			Query query = em.createNamedQuery("updatePrivateMessagesReadStatus"); 
 			query.setParameter("isRead", isRead);
 			query.setParameter("privateMessageIds", privateMessageIds);
 			int updatedEntities = query.executeUpdate();
@@ -546,12 +509,8 @@ public class PrivateMessagesDao {
 			//Refresh the Entities in the Cache as Hibernate will not do it!
 			//FIXME weird code
 			for (Long privateMessageId : privateMessageIds) {
-				String hqlSel = "select c from PrivateMessages c " +
-								"where c.privateMessageId = :privateMessageId ";
-	
-				TypedQuery<PrivateMessages> querySel = em.createQuery(hqlSel, PrivateMessages.class); 
+				TypedQuery<PrivateMessage> querySel = em.createNamedQuery("getPrivateMessagesById", PrivateMessage.class); 
 				querySel.setParameter("privateMessageId", privateMessageId);
-				
 				try {
 					querySel.getSingleResult();
 			    } catch (NoResultException ex) {
@@ -566,12 +525,7 @@ public class PrivateMessagesDao {
 
 	public Integer moveMailsToFolder(List<Long> privateMessageIds, Long privateMessageFolderId) {
 		try {
-			
-			String hql = "UPDATE PrivateMessages c " +
-						"SET c.privateMessageFolderId = :privateMessageFolderId, c.isTrash = false " +
-						"where c.privateMessageId IN (:privateMessageIds) ";
-			
-			Query query = em.createQuery(hql); 
+			Query query = em.createNamedQuery("moveMailsToFolder"); 
 			query.setParameter("privateMessageFolderId", privateMessageFolderId);
 			query.setParameter("privateMessageIds", privateMessageIds);
 			int updatedEntities = query.executeUpdate();
@@ -579,12 +533,8 @@ public class PrivateMessagesDao {
 			//Refresh the Entities in the Cache as Hibernate will not do it!
 			//FIXME weird code
 			for (Long privateMessageId : privateMessageIds) {
-				String hqlSel = "select c from PrivateMessages c " +
-								"where c.privateMessageId = :privateMessageId ";
-	
-				TypedQuery<PrivateMessages> querySel = em.createQuery(hqlSel, PrivateMessages.class); 
+				TypedQuery<PrivateMessage> querySel = em.createNamedQuery("getPrivateMessagesById", PrivateMessage.class); 
 				querySel.setParameter("privateMessageId", privateMessageId);
-				
 				try {
 					querySel.getSingleResult();
 			    } catch (NoResultException ex) {
@@ -599,33 +549,20 @@ public class PrivateMessagesDao {
 	
 	public int deletePrivateMessages(List<Long> privateMessageIds) {
 		try {
-			
-			String hql = "DELETE FROM PrivateMessages c " +
-						"where c.privateMessageId IN (:privateMessageIds) ";
-			
-			Query query = em.createQuery(hql); 
+			Query query = em.createNamedQuery("deletePrivateMessages"); 
 			query.setParameter("privateMessageIds", privateMessageIds);
-			int updatedEntities = query.executeUpdate();
-			
-			return updatedEntities;
+			return query.executeUpdate();
 		} catch (Exception e) {
-			log.error("[updatePrivateMessagesReadStatus]",e);
+			log.error("[deletePrivateMessages]",e);
 		}
 		return -1;
 	}
 	
-	public List<PrivateMessages> getPrivateMessagesByRoom(Long roomId) {
+	public List<PrivateMessage> getPrivateMessagesByRoom(Long roomId) {
 		try {
-			
-			String hql = "select c from PrivateMessages c " +
-						"where c.room.rooms_id = :roomId ";
-			
-			
-			TypedQuery<PrivateMessages> query = em.createQuery(hql, PrivateMessages.class); 
+			TypedQuery<PrivateMessage> query = em.createNamedQuery("getPrivateMessagesByRoom", PrivateMessage.class); 
 			query.setParameter("roomId", roomId);
-			List<PrivateMessages> ll = query.getResultList();
-			
-			return ll;	
+			return query.getResultList();
 		} catch (Exception e) {
 			log.error("[getPrivateMessagesByRoom]",e);
 		}

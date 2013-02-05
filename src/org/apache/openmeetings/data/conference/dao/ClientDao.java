@@ -27,7 +27,7 @@ import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
 import org.apache.openmeetings.persistence.beans.basic.Server;
-import org.apache.openmeetings.persistence.beans.rooms.Client;
+import org.apache.openmeetings.persistence.beans.room.Client;
 import org.springframework.transaction.annotation.Transactional;
 
 /**

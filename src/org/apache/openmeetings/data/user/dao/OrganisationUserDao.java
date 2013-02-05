@@ -26,7 +26,7 @@ import javax.persistence.TypedQuery;
 
 import org.apache.openmeetings.data.IDataProviderDao;
 import org.apache.openmeetings.persistence.beans.domain.Organisation_Users;
-import org.apache.openmeetings.persistence.beans.user.Users;
+import org.apache.openmeetings.persistence.beans.user.User;
 import org.apache.openmeetings.utils.DaoHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -104,7 +104,7 @@ public class OrganisationUserDao implements IDataProviderDao<Organisation_Users>
 
 	public void delete(Organisation_Users entity, long userId) {
 		if (entity.getOrganisation_users_id() != null) {
-			Users u = usersDao.get(entity.getUser_id());
+			User u = usersDao.get(entity.getUser_id());
 			int idx = u.getOrganisation_users().indexOf(entity);
 			//entity has been detached need to re-fetch
 			Organisation_Users ou = u.getOrganisation_users().remove(idx);

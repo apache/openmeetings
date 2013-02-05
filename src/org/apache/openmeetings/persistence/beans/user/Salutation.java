@@ -21,10 +21,6 @@ package org.apache.openmeetings.persistence.beans.user;
 import java.io.Serializable;
 import java.util.Date;
 
-import org.apache.openmeetings.persistence.beans.lang.Fieldlanguagesvalues;
-import org.simpleframework.xml.Element;
-import org.simpleframework.xml.Root;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -33,10 +29,14 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import org.apache.openmeetings.persistence.beans.lang.Fieldlanguagesvalues;
+import org.simpleframework.xml.Element;
+import org.simpleframework.xml.Root;
+
 @Entity
-@Table(name = "salutations")
+@Table(name = "salutation")
 @Root
-public class Salutations implements Serializable {
+public class Salutation implements Serializable {
 	private static final long serialVersionUID = -5806449519074435223L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

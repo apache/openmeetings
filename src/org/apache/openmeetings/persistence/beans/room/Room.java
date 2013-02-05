@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.persistence.beans.rooms;
+package org.apache.openmeetings.persistence.beans.room;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -50,16 +50,35 @@ import org.simpleframework.xml.Root;
 
 @Entity
 @NamedQueries({
-	@NamedQuery(name = "getNondeletedRooms", query = "SELECT r FROM Rooms r WHERE r.deleted = false"),
-	@NamedQuery(name = "getPublicRoomsOrdered", query = "SELECT r from Rooms r WHERE r.ispublic= true AND r.deleted= false AND r.appointment = false ORDER BY r.name ASC"),
-	@NamedQuery(name = "getRoomById", query = "SELECT r FROM Rooms r WHERE r.deleted = false AND r.rooms_id = :id"),
-	@NamedQuery(name = "getSipRoomIdsByIds", query = "SELECT r.rooms_id FROM Rooms r WHERE r.deleted = false AND r.sipEnabled = true AND r.rooms_id IN :ids"),
-	@NamedQuery(name = "countRooms", query = "SELECT COUNT(r) FROM Rooms r WHERE r.deleted = false"),
-	@NamedQuery(name = "getBackupRooms", query = "SELECT r FROM Rooms r LEFT JOIN FETCH r.moderators WHERE r.deleted = false ")
+	@NamedQuery(name = "getNondeletedRooms", query = "SELECT r FROM Room r WHERE r.deleted = false"),
+	@NamedQuery(name = "getPublicRooms", query = "SELECT r from Room r "
+			+ "JOIN r.roomtype as rt "
+			+ "WHERE r.ispublic=:ispublic and r.deleted=:deleted and rt.roomtypes_id=:roomtypes_id"),
+	@NamedQuery(name = "getPublicRoomsWithoutType", query = "SELECT r from Room r " + "WHERE "
+						+ "r.ispublic = :ispublic and r.deleted <> :deleted "
+						+ "ORDER BY r.name ASC"),
+	@NamedQuery(name = "getAppointedMeetings", query = "SELECT r from Room r "
+			+ "JOIN r.roomtype as rt " + "WHERE "
+			+ "r.deleted=:deleted and r.appointment=:appointed"),	
+	@NamedQuery(name = "getRoomByOwnerAndTypeId", query = "select c from Room as c "
+					+ "where c.ownerId = :ownerId "
+					+ "AND c.roomtype.roomtypes_id = :roomtypesId "
+					+ "AND c.deleted <> :deleted"),	
+										
+	@NamedQuery(name = "selectMaxFromRooms", query = "select count(c.rooms_id) from Room c "
+			+ "where c.deleted <> true AND c.name LIKE :search "),
+	@NamedQuery(name = "getRoomByExternalId", query = "select c from Room as c JOIN c.roomtype as rt "
+			+ "where c.externalRoomId = :externalRoomId AND c.externalRoomType = :externalRoomType "
+			+ "AND rt.roomtypes_id = :roomtypes_id AND c.deleted <> :deleted"),
+	@NamedQuery(name = "getPublicRoomsOrdered", query = "SELECT r from Room r WHERE r.ispublic= true AND r.deleted= false AND r.appointment = false ORDER BY r.name ASC"),
+	@NamedQuery(name = "getRoomById", query = "SELECT r FROM Room r WHERE r.deleted = false AND r.rooms_id = :id"),
+	@NamedQuery(name = "getSipRoomIdsByIds", query = "SELECT r.rooms_id FROM Room r WHERE r.deleted = false AND r.sipEnabled = true AND r.rooms_id IN :ids"),
+	@NamedQuery(name = "countRooms", query = "SELECT COUNT(r) FROM Room r WHERE r.deleted = false"),
+	@NamedQuery(name = "getBackupRooms", query = "SELECT r FROM Room r LEFT JOIN FETCH r.moderators WHERE r.deleted = false ")
 })
-@Table(name = "rooms")
+@Table(name = "room")
 @Root(name = "room")
-public class Rooms implements Serializable, IDataProviderEntity {
+public class Room implements Serializable, IDataProviderEntity {
 	private static final long serialVersionUID = -2860312283159251568L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -79,7 +98,7 @@ public class Rooms implements Serializable, IDataProviderEntity {
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "roomtypes_id")
 	@Element(name = "roomtypeId", data = true, required = false)
-	private RoomTypes roomtype;
+	private RoomType roomtype;
 
 	@Column(name = "starttime")
 	private Date starttime;
@@ -103,7 +122,7 @@ public class Rooms implements Serializable, IDataProviderEntity {
 	@Element(data = true, required = false)
 	private boolean appointment;
 
-	// Vars to simulate external Rooms
+	// Vars to simulate external Room
 	@Column(name = "externalRoomId")
 	@Element(data = true, required = false)
 	private Long externalRoomId;
@@ -213,7 +232,7 @@ public class Rooms implements Serializable, IDataProviderEntity {
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "roomId")
 	@ElementList(name = "room_moderators", required=false)
-	private List<RoomModerators> moderators;
+	private List<RoomModerator> moderators;
 
 	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@PrimaryKeyJoinColumn(name="confno", referencedColumnName="confno")
@@ -228,7 +247,7 @@ public class Rooms implements Serializable, IDataProviderEntity {
 	@JoinColumn(name = "rooms_id", insertable = true, updatable = true)
 	@ElementDependent
 	@org.simpleframework.xml.Transient
-	private List<Rooms_Organisation> roomOrganisations = new ArrayList<Rooms_Organisation>();
+	private List<RoomOrganisation> roomOrganisations = new ArrayList<RoomOrganisation>();
 
 	@Transient
 	private List<Client> currentusers;
@@ -257,11 +276,11 @@ public class Rooms implements Serializable, IDataProviderEntity {
 		this.rooms_id = rooms_id;
 	}
 
-	public RoomTypes getRoomtype() {
+	public RoomType getRoomtype() {
 		return roomtype;
 	}
 
-	public void setRoomtype(RoomTypes roomtype) {
+	public void setRoomtype(RoomType roomtype) {
 		this.roomtype = roomtype;
 	}
 
@@ -489,11 +508,11 @@ public class Rooms implements Serializable, IDataProviderEntity {
 		this.showMicrophoneStatus = showMicrophoneStatus;
 	}
 
-	public List<RoomModerators> getModerators() {
+	public List<RoomModerator> getModerators() {
 		return moderators;
 	}
 
-	public void setModerators(List<RoomModerators> moderators) {
+	public void setModerators(List<RoomModerator> moderators) {
 		this.moderators = moderators;
 	}
 
@@ -505,11 +524,11 @@ public class Rooms implements Serializable, IDataProviderEntity {
 		this.chatModerated = chatModerated;
 	}
 
-	public List<Rooms_Organisation> getRoomOrganisations() {
+	public List<RoomOrganisation> getRoomOrganisations() {
 		return roomOrganisations;
 	}
 
-	public void setRoomOrganisations(List<Rooms_Organisation> roomOrganisations) {
+	public void setRoomOrganisations(List<RoomOrganisation> roomOrganisations) {
 		this.roomOrganisations = roomOrganisations;
 	}
 

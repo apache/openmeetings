@@ -35,7 +35,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
 import org.apache.openmeetings.persistence.beans.IDataProviderEntity;
-import org.apache.openmeetings.persistence.beans.user.Users;
+import org.apache.openmeetings.persistence.beans.user.User;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
 
@@ -89,7 +89,7 @@ public class Configuration implements Serializable, IDataProviderEntity {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_id")
 	@Element(name = "user_id", data = true, required = false)
-	private Users user;
+	private User user;
 
 	public String getComment() {
 		return comment;
@@ -147,11 +147,11 @@ public class Configuration implements Serializable, IDataProviderEntity {
 		this.deleted = deleted;
 	}
 
-	public Users getUser() {
+	public User getUser() {
 		return user;
 	}
 
-	public void setUser(Users user) {
+	public void setUser(User user) {
 		this.user = user;
 	}
 

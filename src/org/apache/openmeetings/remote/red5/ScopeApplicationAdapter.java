@@ -48,9 +48,9 @@ import org.apache.openmeetings.documents.beans.UploadCompleteMessage;
 import org.apache.openmeetings.persistence.beans.basic.Server;
 import org.apache.openmeetings.persistence.beans.calendar.Appointment;
 import org.apache.openmeetings.persistence.beans.calendar.MeetingMember;
-import org.apache.openmeetings.persistence.beans.rooms.Client;
-import org.apache.openmeetings.persistence.beans.rooms.Rooms;
-import org.apache.openmeetings.persistence.beans.user.Users;
+import org.apache.openmeetings.persistence.beans.room.Client;
+import org.apache.openmeetings.persistence.beans.room.Room;
+import org.apache.openmeetings.persistence.beans.user.User;
 import org.apache.openmeetings.remote.FLVRecorderService;
 import org.apache.openmeetings.remote.WhiteBoardService;
 import org.apache.openmeetings.remote.util.SessionVariablesUtil;
@@ -1223,7 +1223,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 				return 2L;
 			} else {
 				// No moderator in this room at the moment
-				Rooms room = roomDao.get(currentClient.getRoom_id());
+				Room room = roomDao.get(currentClient.getRoom_id());
 
 				if (room.getIsModeratedRoom()) {
 					return 3L;
@@ -1337,7 +1337,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 		try {
 
 			// appointed meeting or moderated Room?
-			Rooms room = roomDao.get(room_id);
+			Room room = roomDao.get(room_id);
 
 			// not really - default logic
 			if (room.getAppointment() == null || room.getAppointment() == false) {
@@ -1431,7 +1431,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 			// Inject externalUserId if nothing is set yet
 			if (currentClient.getExternalUserId() == null) {
 				if (currentClient.getUser_id() != null) {
-					Users us = usersDao.get(currentClient.getUser_id());
+					User us = usersDao.get(currentClient.getUser_id());
 					if (us != null) {
 						currentClient.setExternalUserId(us.getExternalUserId());
 						currentClient.setExternalUserType(us.getExternalUserType());
@@ -1445,7 +1445,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 			this.sessionManager.updateClientByStreamId(streamid,
 					currentClient, true, null);
 
-            Rooms room = roomDao.get(room_id);
+            Room room = roomDao.get(room_id);
             if (room.getShowMicrophoneStatus()) {
             	currentClient.setCanGiveAudio(true);
             }
@@ -1724,7 +1724,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 			// cause invited users have no associated User, so
 			// you cannot set the firstname,lastname from the UserRecord
 			if (userId != null) {
-				Users us = usersDao.get(userId);
+				User us = usersDao.get(userId);
 				
 				if (us != null) {
 					currentClient.setExternalUserId(us.getExternalUserId());
@@ -1771,7 +1771,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 			log.debug("UDPATE SESSION " + SID + ", " + userId);
 			sessionManagement.updateUserWithoutSession(SID, userId);
 
-			Users user = userManagement.getUserById(userId);
+			User user = userManagement.getUserById(userId);
 
 			if (user != null) {
 				currentClient.setExternalUserId(user.getExternalUserId());
@@ -1781,7 +1781,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 			// only fill this value from User-Record
 			// cause invited users have non
 			// you cannot set the firstname,lastname from the UserRecord
-			Users us = usersDao.get(userId);
+			User us = usersDao.get(userId);
 			if (us != null && us.getPictureuri() != null) {
 				// set Picture-URI
 				currentClient.setPicture_uri(us.getPictureuri());
@@ -2821,7 +2821,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
     }
 
     public synchronized String getSipNumber(Long room_id) {
-        Rooms rooms = roomDao.get(room_id);
+        Room rooms = roomDao.get(room_id);
         if(rooms != null && rooms.getMeetme() != null) {
             log.debug("getSipNumber: room_id: {}, sipNumber: {}", new Object[]{room_id, rooms.getMeetme().getConfno()});
             return rooms.getMeetme().getConfno();

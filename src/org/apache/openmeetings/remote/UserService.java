@@ -52,13 +52,13 @@ import org.apache.openmeetings.persistence.beans.basic.Server;
 import org.apache.openmeetings.persistence.beans.domain.Organisation;
 import org.apache.openmeetings.persistence.beans.invitation.Invitations;
 import org.apache.openmeetings.persistence.beans.lang.Fieldlanguagesvalues;
-import org.apache.openmeetings.persistence.beans.rooms.Client;
-import org.apache.openmeetings.persistence.beans.rooms.Rooms;
+import org.apache.openmeetings.persistence.beans.room.Client;
+import org.apache.openmeetings.persistence.beans.room.Room;
 import org.apache.openmeetings.persistence.beans.user.PrivateMessageFolder;
-import org.apache.openmeetings.persistence.beans.user.PrivateMessages;
-import org.apache.openmeetings.persistence.beans.user.Salutations;
-import org.apache.openmeetings.persistence.beans.user.UserContacts;
-import org.apache.openmeetings.persistence.beans.user.Users;
+import org.apache.openmeetings.persistence.beans.user.PrivateMessage;
+import org.apache.openmeetings.persistence.beans.user.Salutation;
+import org.apache.openmeetings.persistence.beans.user.UserContact;
+import org.apache.openmeetings.persistence.beans.user.User;
 import org.apache.openmeetings.remote.red5.ScopeApplicationAdapter;
 import org.apache.openmeetings.session.ISessionManager;
 import org.apache.openmeetings.templates.RequestContactConfirmTemplate;
@@ -74,7 +74,7 @@ import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
- * Provides method to manipulate {@link Users}
+ * Provides method to manipulate {@link User}
  * 
  * @author sebawagner
  * 
@@ -143,7 +143,7 @@ public class UserService {
 	 * @param SID
 	 * @return get the user bound to this session
 	 */
-	public Users getUserSelf(String SID) {
+	public User getUserSelf(String SID) {
 		Long users_id = sessionManagement.checkSession(SID);
 		return usersDao.get(users_id);
 	}
@@ -171,7 +171,7 @@ public class UserService {
 	 * @param user_id
 	 * @return User with the id given
 	 */
-	public Users getUserById(String SID, long user_id) {
+	public User getUserById(String SID, long user_id) {
 		Long users_id = sessionManagement.checkSession(SID);
 		Long user_level = userManagement.getUserLevelByID(users_id);
 		return userManagement.checkAdmingetUserById(user_level, user_id);
@@ -199,7 +199,7 @@ public class UserService {
 	 * @param SID
 	 * @return all availible Salutations
 	 */
-	public List<Salutations> getUserSalutations(String SID, long language_id) {
+	public List<Salutation> getUserSalutations(String SID, long language_id) {
 		return salutationmanagement.getUserSalutations(language_id);
 	}
 
@@ -216,7 +216,7 @@ public class UserService {
 	 * @param asc
 	 * @return List of the users found
 	 */
-	public List<Users> searchUser(String SID, String searchcriteria,
+	public List<User> searchUser(String SID, String searchcriteria,
 			String searchstring, int max, int start, String orderby, boolean asc) {
 		Long users_id = sessionManagement.checkSession(SID);
 		Long user_level = userManagement.getUserLevelByID(users_id);
@@ -235,13 +235,13 @@ public class UserService {
 	 * @param asc
 	 * @return list of all users of an organisation
 	 */
-	public List<Users> getOrgUserList(String SID, long organisation_id,
+	public List<User> getOrgUserList(String SID, long organisation_id,
 			int start, int max, String orderby, boolean asc) {
 		return organisationmanagement.getUsersByOrganisationId(organisation_id,
 				start, max, orderby, asc);
 	}
 
-	public List<Users> getUserListByModForm(String SID) {
+	public List<User> getUserListByModForm(String SID) {
 		Long users_id = sessionManagement.checkSession(SID);
 		Long user_level = userManagement.getUserLevelByID(users_id);
 		return userManagement.getUserByMod(user_level, users_id);
@@ -294,7 +294,7 @@ public class UserService {
 	 * @param orderby
 	 * @return whole user-list
 	 */
-	public SearchResult<Users> getUserList(String SID, int start, int max,
+	public SearchResult<User> getUserList(String SID, int start, int max,
 			String orderby, boolean asc) {
 		Long users_id = sessionManagement.checkSession(SID);
 		Long user_level = userManagement.getUserLevelByID(users_id);
@@ -302,7 +302,7 @@ public class UserService {
 				.getUsersList(user_level, start, max, orderby, asc);
 	}
 
-	public SearchResult<Users> getUserListWithSearch(String SID, int start,
+	public SearchResult<User> getUserListWithSearch(String SID, int start,
 			int max, String orderby, boolean asc, String search) {
 		Long users_id = sessionManagement.checkSession(SID);
 		Long user_level = userManagement.getUserLevelByID(users_id);
@@ -320,7 +320,7 @@ public class UserService {
 	 * @param orderby
 	 * @return user-list by search criteria
 	 */
-	public SearchResult<Users> getAllUserBySearchRange(String SID,
+	public SearchResult<User> getAllUserBySearchRange(String SID,
 			String search, int start, int max, String orderby, boolean asc) {
 		return userManagement.getAllUserByRange(search, start, max, orderby,
 				asc);
@@ -579,14 +579,14 @@ public class UserService {
 		return false;
 	}
 
-	public Users updateUserSelfTimeZone(String SID, String jname) {
+	public User updateUserSelfTimeZone(String SID, String jname) {
 		try {
 			Long users_id = sessionManagement.checkSession(SID);
 			Long user_level = userManagement.getUserLevelByID(users_id);
 			// users only
 			if (authLevelManagement.checkUserLevel(user_level)) {
 
-				Users us = userManagement.getUserById(users_id);
+				User us = userManagement.getUserById(users_id);
 
 				us.setOmTimeZone(omTimeZoneDaoImpl.getOmTimeZone(jname));
 				us.setForceTimeZoneCheck(false);
@@ -603,7 +603,7 @@ public class UserService {
 		return null;
 	}
 
-	public SearchResult<Users> searchUserProfile(String SID, String searchTxt,
+	public SearchResult<User> searchUserProfile(String SID, String searchTxt,
 			String userOffers, String userSearchs, String orderBy, int start,
 			int max, boolean asc) {
 		try {
@@ -612,9 +612,9 @@ public class UserService {
 			// users only
 			if (authLevelManagement.checkUserLevel(user_level)) {
 
-				SearchResult<Users> searchResult = new SearchResult<Users>();
-				searchResult.setObjectName(Users.class.getName());
-				List<Users> userList = userManagement.searchUserProfile(
+				SearchResult<User> searchResult = new SearchResult<User>();
+				searchResult.setObjectName(User.class.getName());
+				List<User> userList = userManagement.searchUserProfile(
 						searchTxt, userOffers, userSearchs, orderBy, start,
 						max, asc);
 				searchResult.setResult(userList);
@@ -654,9 +654,9 @@ public class UserService {
 				Long userContactId = userContactsDao.addUserContact(
 						userToAdd_id, users_id, true, hash);
 
-				Users user = userManagement.getUserById(users_id);
+				User user = userManagement.getUserById(users_id);
 
-				Users userToAdd = userManagement.getUserById(userToAdd_id);
+				User userToAdd = userManagement.getUserById(userToAdd_id);
 
 				Long language_id = userToAdd.getLanguage_id();
 				if (language_id == null) {
@@ -729,14 +729,14 @@ public class UserService {
 		return null;
 	}
 
-	public List<UserContacts> getPendingUserContacts(String SID) {
+	public List<UserContact> getPendingUserContacts(String SID) {
 		try {
 			Long users_id = sessionManagement.checkSession(SID);
 			Long user_level = userManagement.getUserLevelByID(users_id);
 			// users only
 			if (authLevelManagement.checkUserLevel(user_level)) {
 
-				List<UserContacts> uList = userContactsDao
+				List<UserContact> uList = userContactsDao
 						.getContactRequestsByUserAndStatus(users_id, true);
 
 				return uList;
@@ -756,7 +756,7 @@ public class UserService {
 			// users only
 			if (authLevelManagement.checkUserLevel(user_level)) {
 
-				UserContacts userContact = userContactsDao
+				UserContact userContact = userContactsDao
 						.getContactsByHash(hash);
 
 				if (userContact == null) {
@@ -783,14 +783,14 @@ public class UserService {
 		return null;
 	}
 
-	public List<UserContacts> getUserContacts(String SID) {
+	public List<UserContact> getUserContacts(String SID) {
 		try {
 			Long users_id = sessionManagement.checkSession(SID);
 			Long user_level = userManagement.getUserLevelByID(users_id);
 			// users only
 			if (authLevelManagement.checkUserLevel(user_level)) {
 
-				List<UserContacts> uList = userContactsDao
+				List<UserContact> uList = userContactsDao
 						.getContactsByUserAndStatus(users_id, false);
 
 				return uList;
@@ -809,7 +809,7 @@ public class UserService {
 			// users only
 			if (authLevelManagement.checkUserLevel(user_level)) {
 
-				UserContacts userContacts = userContactsDao
+				UserContact userContacts = userContactsDao
 						.getUserContacts(userContactId);
 
 				if (userContacts == null) {
@@ -836,7 +836,7 @@ public class UserService {
 			// users only
 			if (authLevelManagement.checkUserLevel(user_level)) {
 
-				UserContacts userContacts = userContactsDao
+				UserContact userContacts = userContactsDao
 						.getUserContacts(userContactId);
 
 				if (userContacts == null) {
@@ -860,7 +860,7 @@ public class UserService {
 			// users only
 			if (authLevelManagement.checkUserLevel(user_level)) {
 
-				UserContacts userContacts = userContactsDao
+				UserContact userContacts = userContactsDao
 						.getUserContacts(userContactId);
 
 				if (userContacts == null) {
@@ -882,7 +882,7 @@ public class UserService {
 					userContactsDao.addUserContact(userContacts.getOwner()
 							.getUser_id(), users_id, false, "");
 
-					Users user = userContacts.getOwner();
+					User user = userContacts.getOwner();
 
 					if (user.getAdresses() != null) {
 
@@ -967,7 +967,7 @@ public class UserService {
 			Long user_level = userManagement.getUserLevelByID(users_id);
 			// users only
 			if (authLevelManagement.checkUserLevel(user_level)) {
-				Users from = userManagement.getUserById(users_id);
+				User from = userManagement.getUserById(users_id);
 				TimeZone timezone = timezoneUtil.getTimezoneByUser(from);
 
 				Date appointmentstart = createCalendarDate(timezone,
@@ -982,7 +982,7 @@ public class UserService {
 						+ CalendarPatterns
 								.getDateWithTimeByMiliSeconds(appointmentend));
 
-				Rooms room = null;
+				Room room = null;
 
 				String baseURL = "http://" + domain + ":" + port + webapp;
 				if (port.equals("80")) {
@@ -1056,7 +1056,7 @@ public class UserService {
 						language_id = configurationDaoImpl.getConfValue("default_lang_id", Long.class, "1");
 					}
 					String invitation_link = null;
-					Users to = userManagement.getUserByEmail(email);
+					User to = userManagement.getUserByEmail(email);
 
 					if (bookedRoom) {
 						// Add the appointment to the calendar of the user (if
@@ -1189,8 +1189,8 @@ public class UserService {
 	 * Date appointmentstart = calFrom.getTime(); Date appointmentend =
 	 * calTo.getTime();
 	 */
-	private Long addAppointmentToUser(String subject, String message, Users to,
-			List<String> recipients, Rooms room, Date appointmentstart,
+	private Long addAppointmentToUser(String subject, String message, User to,
+			List<String> recipients, Room room, Date appointmentstart,
 			Date appointmentend, Boolean invitor, Boolean isConnectedEvent,
 			String sendJNameTimeZone) throws Exception {
 
@@ -1201,7 +1201,7 @@ public class UserService {
 
 		for (String email : recipients) {
 
-			Users meetingMember = userManagement.getUserByEmail(email);
+			User meetingMember = userManagement.getUserByEmail(email);
 
 			if (meetingMember != null) {
 
@@ -1235,8 +1235,8 @@ public class UserService {
 			// users only
 			if (authLevelManagement.checkUserLevel(user_level)) {
 
-				SearchResult<PrivateMessages> searchResult = new SearchResult<PrivateMessages>();
-				searchResult.setObjectName(Users.class.getName());
+				SearchResult<PrivateMessage> searchResult = new SearchResult<PrivateMessage>();
+				searchResult.setObjectName(User.class.getName());
 				return privateMessagesDao
 						.getNumberMessages(users_id, 0L, false);
 
@@ -1247,7 +1247,7 @@ public class UserService {
 		return null;
 	}
 
-	public SearchResult<PrivateMessages> getInbox(String SID, String search,
+	public SearchResult<PrivateMessage> getInbox(String SID, String search,
 			String orderBy, int start, Boolean asc, Integer max) {
 		try {
 
@@ -1256,9 +1256,9 @@ public class UserService {
 			// users only
 			if (authLevelManagement.checkUserLevel(user_level)) {
 
-				SearchResult<PrivateMessages> searchResult = new SearchResult<PrivateMessages>();
-				searchResult.setObjectName(Users.class.getName());
-				List<PrivateMessages> userList = privateMessagesDao
+				SearchResult<PrivateMessage> searchResult = new SearchResult<PrivateMessage>();
+				searchResult.setObjectName(User.class.getName());
+				List<PrivateMessage> userList = privateMessagesDao
 						.getPrivateMessagesByUser(users_id, search, orderBy,
 								start, asc, 0L, max);
 
@@ -1279,7 +1279,7 @@ public class UserService {
 		return null;
 	}
 
-	public SearchResult<PrivateMessages> getSend(String SID, String search,
+	public SearchResult<PrivateMessage> getSend(String SID, String search,
 			String orderBy, Integer start, Boolean asc, Integer max) {
 		try {
 
@@ -1288,9 +1288,9 @@ public class UserService {
 			// users only
 			if (authLevelManagement.checkUserLevel(user_level)) {
 
-				SearchResult<PrivateMessages> searchResult = new SearchResult<PrivateMessages>();
-				searchResult.setObjectName(Users.class.getName());
-				List<PrivateMessages> userList = privateMessagesDao
+				SearchResult<PrivateMessage> searchResult = new SearchResult<PrivateMessage>();
+				searchResult.setObjectName(User.class.getName());
+				List<PrivateMessage> userList = privateMessagesDao
 						.getSendPrivateMessagesByUser(users_id, search,
 								orderBy, start, asc, 0L, max);
 
@@ -1311,7 +1311,7 @@ public class UserService {
 		return null;
 	}
 
-	public SearchResult<PrivateMessages> getTrash(String SID, String search,
+	public SearchResult<PrivateMessage> getTrash(String SID, String search,
 			String orderBy, Integer start, Boolean asc, Integer max) {
 		try {
 
@@ -1320,9 +1320,9 @@ public class UserService {
 			// users only
 			if (authLevelManagement.checkUserLevel(user_level)) {
 
-				SearchResult<PrivateMessages> searchResult = new SearchResult<PrivateMessages>();
-				searchResult.setObjectName(Users.class.getName());
-				List<PrivateMessages> userList = privateMessagesDao
+				SearchResult<PrivateMessage> searchResult = new SearchResult<PrivateMessage>();
+				searchResult.setObjectName(User.class.getName());
+				List<PrivateMessage> userList = privateMessagesDao
 						.getTrashPrivateMessagesByUser(users_id, search,
 								orderBy, start, asc, max);
 
@@ -1343,7 +1343,7 @@ public class UserService {
 		return null;
 	}
 
-	public SearchResult<PrivateMessages> getFolder(String SID,
+	public SearchResult<PrivateMessage> getFolder(String SID,
 			Long privateMessageFolderId, String search, String orderBy,
 			Integer start, Boolean asc, Integer max) {
 		try {
@@ -1353,9 +1353,9 @@ public class UserService {
 			// users only
 			if (authLevelManagement.checkUserLevel(user_level)) {
 
-				SearchResult<PrivateMessages> searchResult = new SearchResult<PrivateMessages>();
-				searchResult.setObjectName(Users.class.getName());
-				List<PrivateMessages> userList = privateMessagesDao
+				SearchResult<PrivateMessage> searchResult = new SearchResult<PrivateMessage>();
+				searchResult.setObjectName(User.class.getName());
+				List<PrivateMessage> userList = privateMessagesDao
 						.getFolderPrivateMessagesByUser(users_id, search,
 								orderBy, start, asc, privateMessageFolderId,
 								max);
@@ -1575,10 +1575,10 @@ public class UserService {
 			// users only
 			if (authLevelManagement.checkUserLevel(user_level)) {
 
-				List<UserContacts> uList = userContactsDao
+				List<UserContact> uList = userContactsDao
 						.getContactsByUserAndStatus(users_id, false);
 
-				for (UserContacts userContact : uList) {
+				for (UserContact userContact : uList) {
 
 					if (userContact.getContact().getUser_id().equals(user_id)) {
 						return true;
@@ -1605,7 +1605,7 @@ public class UserService {
 			// users only
 			if (authLevelManagement.checkUserLevel(user_level)) {
 
-				UserContacts userContacts = userContactsDao
+				UserContact userContacts = userContactsDao
 						.getUserContacts(userContactId);
 
 				userContacts.setShareCalendar(shareCalendar);
@@ -1668,7 +1668,7 @@ public class UserService {
 		return null;
 	}
 
-	public List<UserContacts> getUserContactsWithShareCalendar(String SID) {
+	public List<UserContact> getUserContactsWithShareCalendar(String SID) {
 		try {
 			Long users_id = sessionManagement.checkSession(SID);
 			Long user_level = userManagement.getUserLevelByID(users_id);

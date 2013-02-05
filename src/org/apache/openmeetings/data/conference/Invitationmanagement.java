@@ -45,7 +45,7 @@ import org.apache.openmeetings.persistence.beans.calendar.Appointment;
 import org.apache.openmeetings.persistence.beans.calendar.MeetingMember;
 import org.apache.openmeetings.persistence.beans.invitation.Invitations;
 import org.apache.openmeetings.persistence.beans.lang.Fieldlanguagesvalues;
-import org.apache.openmeetings.persistence.beans.user.Users;
+import org.apache.openmeetings.persistence.beans.user.User;
 import org.apache.openmeetings.templates.InvitationTemplate;
 import org.apache.openmeetings.utils.crypt.MD5;
 import org.apache.openmeetings.utils.crypt.ManageCryptStyle;
@@ -174,7 +174,7 @@ public class Invitationmanagement {
 
 				invitation.setDeleted(false);
 
-				Users us = usersDao.get(createdBy);
+				User us = usersDao.get(createdBy);
 				String hashRaw = "HASH" + (System.currentTimeMillis());
 				invitation.setHash(MD5.do_checksum(hashRaw));
 
@@ -223,7 +223,7 @@ public class Invitationmanagement {
 
 		log.debug("cancelInvitation");
 
-		Users user;
+		User user;
 
 		try {
 			user = userManagement.getUserById(canceling_user_id);
@@ -238,7 +238,7 @@ public class Invitationmanagement {
 			return;
 		}
 
-		Users us = member.getUserid();
+		User us = member.getUserid();
 		TimeZone timezone = null;
 		// external users have no user object stored so we will need to get the
 		// timezone from the stored string
@@ -287,7 +287,7 @@ public class Invitationmanagement {
 	}
 
 	private String formatCancelSubject(Long language_id,
-			Appointment appointment, Users user, TimeZone timezone) {
+			Appointment appointment, User user, TimeZone timezone) {
 		try {
 			String message = fieldmanagment.getString(1157L, language_id)
 					+ appointment.getAppointmentName();
@@ -307,7 +307,7 @@ public class Invitationmanagement {
 	}
 
 	private String formatCancelMessage(Long language_id,
-			Appointment appointment, Users user, TimeZone timezone) {
+			Appointment appointment, User user, TimeZone timezone) {
 		try {
 			String message = fieldmanagment.getString(1157L, language_id)
 					+ appointment.getAppointmentName();
@@ -366,7 +366,7 @@ public class Invitationmanagement {
 
 		log.debug("updateInvitation");
 
-		Users user = userManagement.getUserById(canceling_user_id);
+		User user = userManagement.getUserById(canceling_user_id);
 		if (user == null) {
 			log.error("Cancelling user cant be retrieved");
 			return;
@@ -380,7 +380,7 @@ public class Invitationmanagement {
 
 		log.debug("Remindertype : " + appointment.getRemind().getTypId());
 
-		Users us = member.getUserid();
+		User us = member.getUserid();
 		TimeZone timezone = null;
 		// external users have no user object stored so we will need to get the
 		// timezone from the stored string
@@ -420,7 +420,7 @@ public class Invitationmanagement {
 	}
 
 	private String formatUpdateSubject(Long language_id,
-			Appointment appointment, Users user, TimeZone timezone) {
+			Appointment appointment, User user, TimeZone timezone) {
 		try {
 
 			String message = fieldmanagment.getString(1155L, language_id) + " "
@@ -451,7 +451,7 @@ public class Invitationmanagement {
 	}
 
 	private String formatUpdateMessage(Long language_id,
-			Appointment appointment, Users user, TimeZone timezone,
+			Appointment appointment, User user, TimeZone timezone,
 			String invitorName) {
 		try {
 
@@ -560,7 +560,7 @@ public class Invitationmanagement {
 
 				invitation.setDeleted(false);
 
-				Users us = usersDao.get(createdBy);
+				User us = usersDao.get(createdBy);
 				String hashRaw = "InvitationHash"
 						+ (System.currentTimeMillis());
 				log.debug("addInvitationIcalLink : rawHash = " + hashRaw);
@@ -593,7 +593,7 @@ public class Invitationmanagement {
 	}
 
 	// ---------------------------------------------------------------------------------------------------------
-	public String sendInvitionLink(Users us, Invitations inv, String message, String baseurl, String subject, Long language_id) {
+	public String sendInvitionLink(User us, Invitations inv, String message, String baseurl, String subject, Long language_id) {
 		return sendInvitionLink(us != null ? us.getAdresses().getEmail() : inv.getInvitedEMail()
 				, inv.getInvitedname()
 				, message, baseurl, inv.getInvitedEMail(), subject, inv.getHash()
@@ -749,7 +749,7 @@ public class Invitationmanagement {
 		log.debug("sendInvitationIcalCancelMail");
 
 		// Defining Organizer
-		Users user = userManagement.getUserById(organizer_userId);
+		User user = userManagement.getUserById(organizer_userId);
 
 		// TODO: Check time zone handling in iCal Mail
 		// OmTimeZone omTimeZone =
@@ -800,7 +800,7 @@ public class Invitationmanagement {
 		log.debug("sendInvitationIcalUpdateMail");
 
 		// Defining Organizer
-		Users user = userManagement.getUserById(organizer_userId);
+		User user = userManagement.getUserById(organizer_userId);
 
 		IcalHandler handler = new IcalHandler(IcalHandler.ICAL_METHOD_REQUEST);
 
@@ -883,7 +883,7 @@ public class Invitationmanagement {
 			atts.add(attendeeList);
 
 			// Defining Organizer
-			Users user = userManagement.getUserById(organizer_userId);
+			User user = userManagement.getUserById(organizer_userId);
 
 			HashMap<String, String> organizerAttendee = handler
 					.getAttendeeData(email, username, invitor);

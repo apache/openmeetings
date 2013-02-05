@@ -21,11 +21,11 @@ package org.apache.openmeetings.backup;
 import java.util.Map;
 
 import org.apache.openmeetings.data.user.dao.UsersDao;
-import org.apache.openmeetings.persistence.beans.user.Users;
+import org.apache.openmeetings.persistence.beans.user.User;
 import org.simpleframework.xml.stream.InputNode;
 import org.simpleframework.xml.stream.OutputNode;
 
-public class UserConverter extends OmConverter<Users> {
+public class UserConverter extends OmConverter<User> {
 	private UsersDao userDao;
 	private Map<Long, Long> idMap;
 	
@@ -38,15 +38,15 @@ public class UserConverter extends OmConverter<Users> {
 		this.idMap = idMap;
 	}
 	
-	public Users read(InputNode node) throws Exception {
+	public User read(InputNode node) throws Exception {
 		long oldId = getlongValue(node);
 		long newId = idMap.containsKey(oldId) ? idMap.get(oldId) : oldId;
 		
-		Users u = userDao.get(newId);
-		return u == null ? new Users() : u;
+		User u = userDao.get(newId);
+		return u == null ? new User() : u;
 	}
 
-	public void write(OutputNode node, Users value) throws Exception {
+	public void write(OutputNode node, User value) throws Exception {
 		node.setData(true);
 		node.setValue(value == null ? "0" : "" + value.getUser_id());
 	}

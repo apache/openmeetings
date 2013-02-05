@@ -19,11 +19,11 @@
 package org.apache.openmeetings.backup;
 
 import org.apache.openmeetings.data.conference.Roommanagement;
-import org.apache.openmeetings.persistence.beans.rooms.RoomTypes;
+import org.apache.openmeetings.persistence.beans.room.RoomType;
 import org.simpleframework.xml.stream.InputNode;
 import org.simpleframework.xml.stream.OutputNode;
 
-public class RoomTypeConverter extends OmConverter<RoomTypes> {
+public class RoomTypeConverter extends OmConverter<RoomType> {
 	private Roommanagement roommanagement;
 	
 	public RoomTypeConverter() {
@@ -34,12 +34,12 @@ public class RoomTypeConverter extends OmConverter<RoomTypes> {
 		this.roommanagement = roommanagement;
 	}
 	
-	public RoomTypes read(InputNode node) throws Exception {
-		RoomTypes rt = roommanagement.getRoomTypesById(getlongValue(node));
+	public RoomType read(InputNode node) throws Exception {
+		RoomType rt = roommanagement.getRoomTypesById(getlongValue(node));
 		return rt != null ? rt : roommanagement.getRoomTypesById(1); // conference type will be used in case of bad type
 	}
 
-	public void write(OutputNode node, RoomTypes value) throws Exception {
+	public void write(OutputNode node, RoomType value) throws Exception {
 		node.setData(true);
 		node.setValue(value == null ? "0" : "" + value.getRoomtypes_id());
 	}

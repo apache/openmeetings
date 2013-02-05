@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.persistence.beans.rooms;
+package org.apache.openmeetings.persistence.beans.room;
 
 import java.io.Serializable;
 import java.util.Date;

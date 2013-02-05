@@ -36,8 +36,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
-import org.apache.openmeetings.persistence.beans.rooms.Rooms;
-import org.apache.openmeetings.persistence.beans.user.Users;
+import org.apache.openmeetings.persistence.beans.room.Room;
+import org.apache.openmeetings.persistence.beans.user.User;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Root;
@@ -191,10 +191,10 @@ public class FlvRecording implements Serializable {
 
 	// Not Mapped
 	@Transient
-	private Users creator;
+	private User creator;
 
 	@Transient
-	private Rooms room;
+	private Room room;
 
 	@Transient
 	private List<FlvRecordingLog> flvRecordingLog;
@@ -368,19 +368,19 @@ public class FlvRecording implements Serializable {
 		this.flvRecordingMetaData = flvRecordingMetaData;
 	}
 
-	public Users getCreator() {
+	public User getCreator() {
 		return creator;
 	}
 
-	public void setCreator(Users creator) {
+	public void setCreator(User creator) {
 		this.creator = creator;
 	}
 
-	public Rooms getRoom() {
+	public Room getRoom() {
 		return room;
 	}
 
-	public void setRoom(Rooms room) {
+	public void setRoom(Room room) {
 		this.room = room;
 	}
 

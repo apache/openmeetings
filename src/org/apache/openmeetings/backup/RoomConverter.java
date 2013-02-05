@@ -21,11 +21,11 @@ package org.apache.openmeetings.backup;
 import java.util.Map;
 
 import org.apache.openmeetings.data.conference.dao.RoomDao;
-import org.apache.openmeetings.persistence.beans.rooms.Rooms;
+import org.apache.openmeetings.persistence.beans.room.Room;
 import org.simpleframework.xml.stream.InputNode;
 import org.simpleframework.xml.stream.OutputNode;
 
-public class RoomConverter extends OmConverter<Rooms> {
+public class RoomConverter extends OmConverter<Room> {
 	private RoomDao roomDao;
 	private Map<Long, Long> idMap;
 	
@@ -38,15 +38,15 @@ public class RoomConverter extends OmConverter<Rooms> {
 		this.idMap = idMap;
 	}
 	
-	public Rooms read(InputNode node) throws Exception {
+	public Room read(InputNode node) throws Exception {
 		long oldId = getlongValue(node);
 		long newId = idMap.containsKey(oldId) ? idMap.get(oldId) : oldId;
 
-		Rooms r = roomDao.get(newId);
-		return r == null ? new Rooms() : r;
+		Room r = roomDao.get(newId);
+		return r == null ? new Room() : r;
 	}
 
-	public void write(OutputNode node, Rooms value) throws Exception {
+	public void write(OutputNode node, Room value) throws Exception {
 		node.setData(true);
 		node.setValue(value == null ? "0" : "" + value.getRooms_id());
 	}

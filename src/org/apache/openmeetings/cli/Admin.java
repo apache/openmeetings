@@ -45,7 +45,7 @@ import org.apache.openmeetings.installation.ImportInitvalues;
 import org.apache.openmeetings.installation.InstallationConfig;
 import org.apache.openmeetings.persistence.beans.files.FileExplorerItem;
 import org.apache.openmeetings.persistence.beans.flvrecord.FlvRecording;
-import org.apache.openmeetings.persistence.beans.user.Users;
+import org.apache.openmeetings.persistence.beans.user.User;
 import org.apache.openmeetings.servlet.outputhandler.BackupExport;
 import org.apache.openmeetings.servlet.outputhandler.BackupImportController;
 import org.apache.openmeetings.utils.ImportHelper;
@@ -342,7 +342,7 @@ public class Admin {
 						for (File profile : profiles.listFiles()) {
 							long pSize = OmFileHelper.getSize(profile);
 							long userId = getUserIdByProfile(profile.getName());
-							Users u = udao.get(userId);
+							User u = udao.get(userId);
 							if (profile.isFile() || userId < 0 || u == null) {
 								if (cleanup) {
 									FileHelper.removeRec(profile);
@@ -358,7 +358,7 @@ public class Admin {
 							}
 						}
 						long missing = 0;
-						for (Users u : udao.getAllUsersDeleted()) {
+						for (User u : udao.getAllUsersDeleted()) {
 							if (!u.getDeleted() && !new File(OmFileHelper.getUploadProfilesUserDir(u.getUser_id()), u.getPictureuri()).exists()) {
 								missing++;
 							}

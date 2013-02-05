@@ -23,7 +23,7 @@ import javax.servlet.ServletContext;
 import org.apache.axis2.context.MessageContext;
 import org.apache.axis2.transport.http.HTTPConstants;
 import org.apache.openmeetings.OpenmeetingsVariables;
-import org.apache.openmeetings.persistence.beans.rooms.Rooms;
+import org.apache.openmeetings.persistence.beans.room.Room;
 import org.apache.openmeetings.remote.red5.ScopeApplicationAdapter;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -69,8 +69,8 @@ public class JabberWebServiceFacade {
 	 * @param SID The SID from {@link UserWebService.getSession}
 	 * @return array of Rooms
 	 */
-	public Rooms[] getAvailableRooms(String SID) {
-		return getJabberServiceProxy().getAvailableRooms(SID).toArray(new Rooms[0]);
+	public Room[] getAvailableRooms(String SID) {
+		return getJabberServiceProxy().getAvailableRooms(SID).toArray(new Room[0]);
 	}
 
 	/**

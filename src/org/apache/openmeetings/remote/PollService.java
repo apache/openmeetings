@@ -30,7 +30,7 @@ import org.apache.openmeetings.persistence.beans.poll.PollType;
 import org.apache.openmeetings.persistence.beans.poll.RoomPoll;
 import org.apache.openmeetings.persistence.beans.poll.RoomPollAnswers;
 import org.apache.openmeetings.remote.red5.ScopeApplicationAdapter;
-import org.apache.openmeetings.persistence.beans.rooms.Client;
+import org.apache.openmeetings.persistence.beans.room.Client;
 import org.apache.openmeetings.session.ISessionManager;
 import org.red5.logging.Red5LoggerFactory;
 import org.red5.server.api.IConnection;

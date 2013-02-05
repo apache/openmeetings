@@ -19,7 +19,7 @@
 package org.apache.openmeetings.web.components.admin.users;
 
 import org.apache.openmeetings.data.user.dao.UsersDao;
-import org.apache.openmeetings.persistence.beans.user.Users;
+import org.apache.openmeetings.persistence.beans.user.User;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.components.admin.AdminPanel;
@@ -50,13 +50,13 @@ public class UsersPanel extends AdminPanel {
 	public UsersPanel(String id) {
 		super(id);
 
-		final SearchableDataView<Users> dataView = new SearchableDataView<Users>("userList"
-				, new SearchableDataProvider<Users>(UsersDao.class)) {
+		final SearchableDataView<User> dataView = new SearchableDataView<User>("userList"
+				, new SearchableDataProvider<User>(UsersDao.class)) {
 			private static final long serialVersionUID = 8715559628755439596L;
 
 			@Override
-			protected void populateItem(Item<Users> item) {
-				final Users u = item.getModelObject();
+			protected void populateItem(Item<User> item) {
+				final User u = item.getModelObject();
 				item.add(new Label("userId", "" + u.getUser_id()));
 				item.add(new Label("login", u.getLogin()));
 				item.add(new Label("firstName", u.getFirstname()));
@@ -79,11 +79,11 @@ public class UsersPanel extends AdminPanel {
 		final WebMarkupContainer listContainer = new WebMarkupContainer(
 				"listContainer");
 		add(listContainer.add(dataView).setOutputMarkupId(true));
-		DataViewContainer<Users> container = new DataViewContainer<Users>(listContainer, dataView);
-		container.setLinks(new OrderByBorder<Users>("orderById", "user_id", container)
-				, new OrderByBorder<Users>("orderByLogin", "login", container)
-				, new OrderByBorder<Users>("orderByFirstName", "firstname", container)
-				, new OrderByBorder<Users>("orderByLastName", "lastname", container));
+		DataViewContainer<User> container = new DataViewContainer<User>(listContainer, dataView);
+		container.setLinks(new OrderByBorder<User>("orderById", "user_id", container)
+				, new OrderByBorder<User>("orderByLogin", "login", container)
+				, new OrderByBorder<User>("orderByFirstName", "firstname", container)
+				, new OrderByBorder<User>("orderByLastName", "lastname", container));
 		add(container.orderLinks);
 		add(new PagedEntityListPanel("navigator", dataView) {
 			private static final long serialVersionUID = 5097048616003411362L;

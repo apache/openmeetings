@@ -38,7 +38,7 @@ import org.apache.openmeetings.data.user.Usermanagement;
 import org.apache.openmeetings.documents.LoadLibraryPresentation;
 import org.apache.openmeetings.documents.beans.ConverterProcessResultList;
 import org.apache.openmeetings.persistence.beans.files.FileExplorerItem;
-import org.apache.openmeetings.persistence.beans.user.Users;
+import org.apache.openmeetings.persistence.beans.user.User;
 import org.apache.openmeetings.utils.OmFileHelper;
 import org.apache.openmeetings.utils.StoredFile;
 import org.red5.logging.Red5LoggerFactory;
@@ -125,7 +125,7 @@ public class FileWebService {
 				InputStream inputstream = new BufferedInputStream(
 						uc.getInputStream());
 
-				Users externalUser = userManagement.getUserByExternalIdAndType(
+				User externalUser = userManagement.getUserByExternalIdAndType(
 						externalUserId, externalType);
 
 				LinkedHashMap<String, Object> hs = new LinkedHashMap<String, Object>();
@@ -211,7 +211,7 @@ public class FileWebService {
 				InputStream inputstream = new BufferedInputStream(
 						uc.getInputStream());
 
-				Users internalUser = userManagement.getUserById(internalUserId);
+				User internalUser = userManagement.getUserById(internalUserId);
 
 				LinkedHashMap<String, Object> hs = new LinkedHashMap<String, Object>();
 				hs.put("user", internalUser);
@@ -278,7 +278,7 @@ public class FileWebService {
 
 			if (authLevelManagement.checkWebServiceLevel(User_level)) {
 
-				Users userExternal = userManagement.getUserByExternalIdAndType(
+				User userExternal = userManagement.getUserByExternalIdAndType(
 						externalUserId, externalType);
 
 				Long userId = userExternal.getUser_id();

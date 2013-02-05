@@ -27,7 +27,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import org.apache.openmeetings.persistence.beans.user.Users;
+import org.apache.openmeetings.persistence.beans.user.User;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
 
@@ -38,7 +38,7 @@ public class RoomPollAnswers {
 	@OneToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "users_id")
 	@Element(name="voteduserid", data=false, required=false)
-	private Users votedUser;
+	private User votedUser;
 	
 	@Column(name = "answer")
 	@Element(data=false, required=false)
@@ -104,7 +104,7 @@ public class RoomPollAnswers {
 	/**
 	 * @return the votedClient
 	 */
-	public Users getVotedUser() {
+	public User getVotedUser() {
 		return votedUser;
 	}
 
@@ -112,7 +112,7 @@ public class RoomPollAnswers {
 	 * @param votedClient
 	 *            the votedClient to set
 	 */
-	public void setVotedUser(Users votedUser) {
+	public void setVotedUser(User votedUser) {
 		this.votedUser = votedUser;
 	}
 

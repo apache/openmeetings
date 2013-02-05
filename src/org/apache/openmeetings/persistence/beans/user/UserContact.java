@@ -21,24 +21,53 @@ package org.apache.openmeetings.persistence.beans.user;
 import java.io.Serializable;
 import java.util.Date;
 
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
 
 @Entity
-@Table(name = "user_contacts")
+@NamedQueries({
+	@NamedQuery(name = "deleteUserContact", query = "delete from UserContact u where u.userContactId = :userContactDeleteId"),
+	@NamedQuery(name = "deleteAllUserContacts", query = "delete from UserContact u where u.owner.user_id = :ownerId"),
+	@NamedQuery(name = "checkUserContacts", query = "select count(c.userContactId) from UserContact c " +
+			"where c.contact.user_id = :user_id AND c.owner.user_id = :ownerId "),
+	@NamedQuery(name = "getContactsByHash", query = "select c from UserContacts c " +
+			"where c.hash like :hash "),
+	@NamedQuery(name = "getContactsByUserAndStatus", query = "select c from UserContact c " +
+			"where c.owner.user_id = :ownerId " +
+			"AND c.pending = :pending " +
+			"AND c.contact.deleted <> true"),
+	@NamedQuery(name = "getUserContactByShareCalendar", query = "select c from UserContact c "
+			+ "where c.contact.user_id = :userId "
+			+ "AND c.owner.user_id = :contactId "
+			+ "AND c.shareCalendar = :shareCalendar "
+			+ "AND c.contact.deleted <> true"),
+	@NamedQuery(name = "getContactsByShareCalendar", query = "select c from UserContact c " +
+			"where c.contact.user_id = :contactId " +
+			"AND c.shareCalendar = :shareCalendar " +
+			"AND c.contact.deleted <> true"),
+	@NamedQuery(name = "getContactRequestsByUserAndStatus", query = "select c from UserContact c " +
+			"where c.contact.user_id = :user_id " +
+			"AND c.pending = :pending " +
+			"AND c.contact.deleted <> true"),
+	@NamedQuery(name = "getUserContactsById", query = "select c from UserContact c " +
+			"where c.userContactId = :userContactId"),
+	@NamedQuery(name = "getUserContacts", query = "select c from UserContact c"),	
+})
+@Table(name = "user_contact")
 @Root(name="usercontact")
-public class UserContacts implements Serializable {
+public class UserContact implements Serializable {
 	private static final long serialVersionUID = 2391405538978996206L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -49,12 +78,12 @@ public class UserContacts implements Serializable {
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name="user_id")
 	@Element(data=true, required=false)
-	private Users contact;
+	private User contact;
 	
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name="owner_id")
 	@Element(data=true, required=false)
-	private Users owner;
+	private User owner;
 	
 	@Column(name="pending")
 	@Element(data=true)
@@ -81,17 +110,17 @@ public class UserContacts implements Serializable {
 		this.userContactId = userContactId;
 	}
 	
-	public Users getContact() {
+	public User getContact() {
 		return contact;
 	}
-	public void setContact(Users contact) {
+	public void setContact(User contact) {
 		this.contact = contact;
 	}
 	
-	public Users getOwner() {
+	public User getOwner() {
 		return owner;
 	}
-	public void setOwner(Users owner) {
+	public void setOwner(User owner) {
 		this.owner = owner;
 	}
 	

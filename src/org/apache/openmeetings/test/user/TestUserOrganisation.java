@@ -28,7 +28,7 @@ import org.apache.openmeetings.data.user.Organisationmanagement;
 import org.apache.openmeetings.data.user.dao.UsersDao;
 import org.apache.openmeetings.persistence.beans.domain.Organisation;
 import org.apache.openmeetings.persistence.beans.domain.Organisation_Users;
-import org.apache.openmeetings.persistence.beans.user.Users;
+import org.apache.openmeetings.persistence.beans.user.User;
 import org.apache.openmeetings.test.AbstractOpenmeetingsSpringTest;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,8 +39,8 @@ public class TestUserOrganisation extends AbstractOpenmeetingsSpringTest {
 	@Autowired
 	private UsersDao usersDao;
 	
-	private Users getValidUser() {
-		for (Users u : usersDao.getAllUsers()) {
+	private User getValidUser() {
+		for (User u : usersDao.getAllUsers()) {
 			if (!u.getDeleted() && u.getOrganisation_users().size() > 0) {
 				return u;
 			}
@@ -51,9 +51,9 @@ public class TestUserOrganisation extends AbstractOpenmeetingsSpringTest {
 	
 	@Test
 	public void getUsersByOrganisationId() {
-		Users u = getValidUser();
+		User u = getValidUser();
 		Long orgId = u.getOrganisation_users().get(0).getOrganisation().getOrganisation_id();
-		List<Users> ul = orgManagement.getUsersByOrganisationId(orgId, 0, 9999, "login", true);
+		List<User> ul = orgManagement.getUsersByOrganisationId(orgId, 0, 9999, "login", true);
 		assertTrue("Default Organisation should contain at least 1 user: " + ul.size(), ul.size() > 0);
 		
 		Organisation_Users ou = orgManagement.getOrganisation_UserByUserAndOrganisation(u.getUser_id(), orgId);
@@ -65,7 +65,7 @@ public class TestUserOrganisation extends AbstractOpenmeetingsSpringTest {
 		Long orgId = orgManagement.addOrganisation("Test Org", 1); //inserted by not checked
 		assertNotNull("New Organisation have valid id", orgId);
 		
-		List<Users> ul = orgManagement.getUsersByOrganisationId(orgId, 0, 9999, "login", true);
+		List<User> ul = orgManagement.getUsersByOrganisationId(orgId, 0, 9999, "login", true);
 		assertTrue("New Organisation should contain NO users: " + ul.size(), ul.size() == 0);
 		
 		boolean found = false;

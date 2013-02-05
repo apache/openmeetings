@@ -24,9 +24,9 @@ import java.util.List;
 import org.apache.openmeetings.data.conference.Roommanagement;
 import org.apache.openmeetings.data.user.Organisationmanagement;
 import org.apache.openmeetings.persistence.beans.domain.Organisation;
-import org.apache.openmeetings.persistence.beans.rooms.RoomTypes;
-import org.apache.openmeetings.persistence.beans.rooms.Rooms;
-import org.apache.openmeetings.persistence.beans.rooms.Rooms_Organisation;
+import org.apache.openmeetings.persistence.beans.room.RoomType;
+import org.apache.openmeetings.persistence.beans.room.Room;
+import org.apache.openmeetings.persistence.beans.room.RoomOrganisation;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.components.admin.AdminBaseForm;
@@ -45,7 +45,7 @@ import org.apache.wicket.util.time.Duration;
 
 import edu.emory.mathcs.backport.java.util.Arrays;
 
-public class RoomForm extends AdminBaseForm<Rooms> {
+public class RoomForm extends AdminBaseForm<Room> {
 
 	private static final long serialVersionUID = 1L;
 
@@ -54,8 +54,8 @@ public class RoomForm extends AdminBaseForm<Rooms> {
 	@SuppressWarnings("unchecked")
 	List<Long> DROPDOWN_NUMBER_OF_PARTICIPANTS = Arrays.asList(array);
 
-	public RoomForm(String id, final Rooms room) {
-		super(id, new CompoundPropertyModel<Rooms>(room));
+	public RoomForm(String id, final Room room) {
+		super(id, new CompoundPropertyModel<Room>(room));
 		setOutputMarkupId(true);
 		RequiredTextField<String> name = new RequiredTextField<String>("name");
 		name.setLabel(new Model<String>(WebSession.getString(193)));
@@ -73,9 +73,9 @@ public class RoomForm extends AdminBaseForm<Rooms> {
 					}
 				}));
 
-		add(new DropDownChoice<RoomTypes>("roomtype", Application.getBean(
+		add(new DropDownChoice<RoomType>("roomtype", Application.getBean(
 				Roommanagement.class).getAllRoomTypes(),
-				new ChoiceRenderer<RoomTypes>("name", "roomtypes_id")));
+				new ChoiceRenderer<RoomType>("name", "roomtypes_id")));
 
 		add(new TextArea<String>("comment"));
 
@@ -84,14 +84,14 @@ public class RoomForm extends AdminBaseForm<Rooms> {
 
 		List<Organisation> orgList = Application.getBean(
 				Organisationmanagement.class).getOrganisations(3L);
-		List<Rooms_Organisation> orgRooms = new ArrayList<Rooms_Organisation>(
+		List<RoomOrganisation> orgRooms = new ArrayList<RoomOrganisation>(
 				orgList.size());
 		for (Organisation org : orgList) {
-			orgRooms.add(new Rooms_Organisation(org));
+			orgRooms.add(new RoomOrganisation(org));
 		}
-		ListMultipleChoice<Rooms_Organisation> orgChoiceList = new ListMultipleChoice<Rooms_Organisation>(
+		ListMultipleChoice<RoomOrganisation> orgChoiceList = new ListMultipleChoice<RoomOrganisation>(
 				"roomOrganisations", orgRooms,
-				new ChoiceRenderer<Rooms_Organisation>("organisation.name",
+				new ChoiceRenderer<RoomOrganisation>("organisation.name",
 						"organisation.organisation_id"));
 		orgChoiceList.setMaxRows(6);
 		add(orgChoiceList);

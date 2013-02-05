@@ -64,7 +64,6 @@ import org.apache.openmeetings.data.user.dao.PrivateMessageFolderDao;
 import org.apache.openmeetings.data.user.dao.PrivateMessagesDao;
 import org.apache.openmeetings.data.user.dao.UserContactsDao;
 import org.apache.openmeetings.data.user.dao.UsersDao;
-import org.apache.openmeetings.persistence.beans.adresses.States;
 import org.apache.openmeetings.persistence.beans.basic.Configuration;
 import org.apache.openmeetings.persistence.beans.basic.OmTimeZone;
 import org.apache.openmeetings.persistence.beans.calendar.Appointment;
@@ -75,10 +74,11 @@ import org.apache.openmeetings.persistence.beans.files.FileExplorerItem;
 import org.apache.openmeetings.persistence.beans.flvrecord.FlvRecording;
 import org.apache.openmeetings.persistence.beans.poll.PollType;
 import org.apache.openmeetings.persistence.beans.poll.RoomPoll;
-import org.apache.openmeetings.persistence.beans.rooms.RoomTypes;
-import org.apache.openmeetings.persistence.beans.rooms.Rooms;
-import org.apache.openmeetings.persistence.beans.user.PrivateMessages;
-import org.apache.openmeetings.persistence.beans.user.Users;
+import org.apache.openmeetings.persistence.beans.room.RoomType;
+import org.apache.openmeetings.persistence.beans.room.Room;
+import org.apache.openmeetings.persistence.beans.user.PrivateMessage;
+import org.apache.openmeetings.persistence.beans.user.State;
+import org.apache.openmeetings.persistence.beans.user.User;
 import org.apache.openmeetings.utils.OmFileHelper;
 import org.apache.openmeetings.utils.math.CalendarPatterns;
 import org.red5.logging.Red5LoggerFactory;
@@ -169,8 +169,8 @@ public class BackupExport {
 			Strategy strategy = new RegistryStrategy(registry);
 			Serializer serializer = new Persister(strategy);
 	
-			registry.bind(Users.class, UserConverter.class);
-			registry.bind(RoomTypes.class, RoomTypeConverter.class);
+			registry.bind(User.class, UserConverter.class);
+			registry.bind(RoomType.class, RoomTypeConverter.class);
 			
 			writeList(serializer, backup_dir, "rooms.xml",
 					"rooms", roommanagement.getBackupRooms());
@@ -185,7 +185,7 @@ public class BackupExport {
 			Serializer serializer = new Persister(strategy);
 	
 			registry.bind(Organisation.class, OrganisationConverter.class);
-			registry.bind(Rooms.class, RoomConverter.class);
+			registry.bind(Room.class, RoomConverter.class);
 			
 			writeList(serializer, backup_dir, "rooms_organisation.xml",
 					"room_organisations", roommanagement.getRoomsOrganisations());
@@ -201,9 +201,9 @@ public class BackupExport {
 			Serializer serializer = new Persister(strategy);
 	
 			registry.bind(AppointmentCategory.class, AppointmentCategoryConverter.class);
-			registry.bind(Users.class, UserConverter.class);
+			registry.bind(User.class, UserConverter.class);
 			registry.bind(AppointmentReminderTyps.class, AppointmentReminderTypeConverter.class);
-			registry.bind(Rooms.class, RoomConverter.class);
+			registry.bind(Room.class, RoomConverter.class);
 			if (list != null && list.size() > 0) {
 				registry.bind(list.get(0).getAppointmentStarttime().getClass(), DateConverter.class);
 			}
@@ -219,7 +219,7 @@ public class BackupExport {
 			Strategy strategy = new RegistryStrategy(registry);
 			Serializer serializer = new Persister(strategy);
 	
-			registry.bind(Users.class, UserConverter.class);
+			registry.bind(User.class, UserConverter.class);
 			registry.bind(Appointment.class, AppointmentConverter.class);
 			
 			writeList(serializer, backup_dir, "meetingmembers.xml",
@@ -236,13 +236,13 @@ public class BackupExport {
 		 * ##################### Private Messages
 		 */
 		{
-			List<PrivateMessages> list = privateMessagesDao.getPrivateMessages();
+			List<PrivateMessage> list = privateMessagesDao.getPrivateMessages();
 			Registry registry = new Registry();
 			Strategy strategy = new RegistryStrategy(registry);
 			Serializer serializer = new Persister(strategy);
 	
-			registry.bind(Users.class, UserConverter.class);
-			registry.bind(Rooms.class, RoomConverter.class);
+			registry.bind(User.class, UserConverter.class);
+			registry.bind(Room.class, RoomConverter.class);
 			if (list != null && list.size() > 0) {
 				registry.bind(list.get(0).getInserted().getClass(), DateConverter.class);
 			}
@@ -265,7 +265,7 @@ public class BackupExport {
 			Strategy strategy = new RegistryStrategy(registry);
 			Serializer serializer = new Persister(strategy);
 	
-			registry.bind(Users.class, UserConverter.class);
+			registry.bind(User.class, UserConverter.class);
 			
 			writeList(serializer, backup_dir, "userContacts.xml",
 					"usercontacts", userContactsDao.getUserContacts());
@@ -314,8 +314,8 @@ public class BackupExport {
 			Strategy strategy = new RegistryStrategy(registry);
 			Serializer serializer = new Persister(strategy);
 	
-			registry.bind(Users.class, UserConverter.class);
-			registry.bind(Rooms.class, RoomConverter.class);
+			registry.bind(User.class, UserConverter.class);
+			registry.bind(Room.class, RoomConverter.class);
 			registry.bind(PollType.class, PollTypeConverter.class);
 			if (list != null && list.size() > 0) {
 				registry.bind(list.get(0).getCreated().getClass(), DateConverter.class);
@@ -332,8 +332,8 @@ public class BackupExport {
 					0, Integer.MAX_VALUE, "c.configuration_id", true);
 			Registry registry = new Registry();
 			registry.bind(OmTimeZone.class, OmTimeZoneConverter.class);
-			registry.bind(States.class, StateConverter.class);
-			registry.bind(Users.class, UserConverter.class);
+			registry.bind(State.class, StateConverter.class);
+			registry.bind(User.class, UserConverter.class);
 			Strategy strategy = new RegistryStrategy(registry);
 			Serializer serializer = new Persister(strategy);
 	
@@ -419,19 +419,19 @@ public class BackupExport {
 		root.commit();
 	}
 
-	public void exportUsers(File backup_dir, List<Users> list) throws Exception {
+	public void exportUsers(File backup_dir, List<User> list) throws Exception {
 		FileOutputStream fos
 			= new FileOutputStream(new File(backup_dir, "users.xml"));
 		exportUsers(fos, list);
 	}
-	public void exportUsers(OutputStream os, List<Users> list) throws Exception {
+	public void exportUsers(OutputStream os, List<User> list) throws Exception {
 		Registry registry = new Registry();
 		Strategy strategy = new RegistryStrategy(registry);
 		Serializer serializer = new Persister(strategy);
 
 		registry.bind(Organisation.class, OrganisationConverter.class);
 		registry.bind(OmTimeZone.class, OmTimeZoneConverter.class);
-		registry.bind(States.class, StateConverter.class);
+		registry.bind(State.class, StateConverter.class);
 		if (list != null && list.size() > 0) {
 			registry.bind(list.get(0).getRegdate().getClass(), DateConverter.class);
 		}

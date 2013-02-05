@@ -36,7 +36,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
 import org.apache.openmeetings.persistence.beans.IDataProviderEntity;
-import org.apache.openmeetings.persistence.beans.user.Users;
+import org.apache.openmeetings.persistence.beans.user.User;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
 
@@ -79,11 +79,11 @@ public class Server implements Serializable, IDataProviderEntity {
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "insertedby_id", updatable = true, insertable = true)
-	public Users insertedby;
+	public User insertedby;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "updatedby_id", updatable = true, insertable = true)
-	public Users updatedby;
+	public User updatedby;
 
 	@Lob
 	@Column(name = "comment_field", length = 2048)
@@ -170,19 +170,19 @@ public class Server implements Serializable, IDataProviderEntity {
 		this.updated = updated;
 	}
 
-	public Users getInsertedby() {
+	public User getInsertedby() {
 		return insertedby;
 	}
 
-	public void setInsertedby(Users insertedby) {
+	public void setInsertedby(User insertedby) {
 		this.insertedby = insertedby;
 	}
 
-	public Users getUpdatedby() {
+	public User getUpdatedby() {
 		return updatedby;
 	}
 
-	public void setUpdatedby(Users updatedby) {
+	public void setUpdatedby(User updatedby) {
 		this.updatedby = updatedby;
 	}
 

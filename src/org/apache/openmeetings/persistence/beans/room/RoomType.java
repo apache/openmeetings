@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.persistence.beans.rooms;
+package org.apache.openmeetings.persistence.beans.room;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -26,11 +26,18 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "roomtypes")
-public class RoomTypes implements Serializable {
+@NamedQueries({
+	@NamedQuery(name = "getAllRoomTypes", query = "select c from RoomType as c where c.deleted <> :deleted"),
+	@NamedQuery(name = "getRoomTypesById", query = "select c from RoomType as c " +
+			"where c.roomtypes_id = :roomtypes_id AND c.deleted <> :deleted"),
+})
+@Table(name = "roomtype")
+public class RoomType implements Serializable {
 	private static final long serialVersionUID = -4441029424324591356L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

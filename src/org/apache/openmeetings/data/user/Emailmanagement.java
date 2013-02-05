@@ -25,7 +25,7 @@ import javax.persistence.TypedQuery;
 import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.data.basic.Fieldmanagment;
 import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
-import org.apache.openmeetings.persistence.beans.adresses.Adresses;
+import org.apache.openmeetings.persistence.beans.user.Address;
 import org.apache.openmeetings.templates.RegisterUserTemplate;
 import org.apache.openmeetings.utils.mail.MailHandler;
 import org.red5.logging.Red5LoggerFactory;
@@ -118,8 +118,8 @@ public class Emailmanagement {
 			if (email.length() == 0)
 				return true;
 			log.debug("checkUserMail: " + email);
-			TypedQuery<Adresses> query = em
-					.createQuery("select c from Adresses as c where c.email LIKE :email AND c.deleted <> :deleted", Adresses.class);
+			TypedQuery<Address> query = em
+					.createQuery("select c from Address as c where c.email LIKE :email AND c.deleted <> :deleted", Address.class);
 			query.setParameter("email", email);
 			query.setParameter("deleted", true);
 			int count = query.getResultList().size();

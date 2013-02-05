@@ -26,15 +26,15 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
-import org.apache.openmeetings.persistence.beans.adresses.States;
+import org.apache.openmeetings.persistence.beans.user.State;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * CRUD operations for {@link States}
+ * CRUD operations for {@link State}
  * 
- * @author swagner
+ * @author sebawagner
  * 
  */
 @Transactional
@@ -66,7 +66,7 @@ public class StateDao {
 	public Long addState(String name, String shortName, int code) {
 		try {
 
-			States st = new States();
+			State st = new State();
 			st.setName(name);
 			st.setShortName(shortName);
 			st.setCode(code);
@@ -91,13 +91,13 @@ public class StateDao {
 	 * @param state_id
 	 * @return the state-object or null
 	 */
-	public States getStateById(long state_id) {
+	public State getStateById(long state_id) {
 		try {
-			TypedQuery<States> query = em
-					.createQuery("select c from States as c where c.state_id = :state_id AND c.deleted <> :deleted", States.class);
+			TypedQuery<State> query = em
+					.createNamedQuery("getStateById", State.class);
 			query.setParameter("state_id", state_id);
 			query.setParameter("deleted", true);
-			List<States> ll = query.getResultList();
+			List<State> ll = query.getResultList();
 			if (ll.size() > 0) {
 				return ll.get(0);
 			}
@@ -112,12 +112,12 @@ public class StateDao {
 	 * 
 	 * @return List of State Objects or null
 	 */
-	public List<States> getStates() {
+	public List<State> getStates() {
 		try {
-			TypedQuery<States> query = em
-					.createQuery("select c from States as c where c.deleted <> :deleted", States.class);
+			TypedQuery<State> query = em
+					.createNamedQuery("getStates", State.class);
 			query.setParameter("deleted", true);
-			List<States> ll = query.getResultList();
+			List<State> ll = query.getResultList();
 			return ll;
 		} catch (Exception ex2) {
 			log.error("getStates", ex2);

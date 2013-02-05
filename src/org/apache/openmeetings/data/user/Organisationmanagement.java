@@ -43,7 +43,7 @@ import org.apache.openmeetings.data.user.dao.OrganisationUserDao;
 import org.apache.openmeetings.data.user.dao.UsersDao;
 import org.apache.openmeetings.persistence.beans.domain.Organisation;
 import org.apache.openmeetings.persistence.beans.domain.Organisation_Users;
-import org.apache.openmeetings.persistence.beans.user.Users;
+import org.apache.openmeetings.persistence.beans.user.User;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -243,7 +243,7 @@ public class Organisationmanagement {
 	private boolean checkUserAlreadyStored(Long userIdToAdd, List<?> usersStored)
 			throws Exception {
 		for (Iterator<?> it2 = usersStored.iterator(); it2.hasNext();) {
-			Users us = (Users) it2.next();
+			User us = (User) it2.next();
 			if (us.getUser_id().equals(userIdToAdd)) {
 				log.debug("userIdToAdd found: " + userIdToAdd);
 				return true;
@@ -295,15 +295,15 @@ public class Organisationmanagement {
 				Integer key = (Integer) it.next();
 				Long userIdToAdd = Long.valueOf(users.get(key).toString())
 						.longValue();
-				log.error("userIdToAdd: " + userIdToAdd);
+				log.debug("userIdToAdd: " + userIdToAdd);
 				if (!this.checkUserAlreadyStored(userIdToAdd, usersStored))
 					usersToAdd.add(userIdToAdd);
 			}
 
 			for (Iterator it = usersStored.iterator(); it.hasNext();) {
-				Users us = (Users) it.next();
+				User us = (User) it.next();
 				Long userIdStored = us.getUser_id();
-				log.error("userIdStored: " + userIdStored);
+				log.debug("userIdStored: " + userIdStored);
 				if (!this.checkUserShouldBeStored(userIdStored, users))
 					usersToDel.add(userIdStored);
 			}
@@ -442,7 +442,7 @@ public class Organisationmanagement {
 	
 	public Long addOrganisationUserObj(Long user_id, Organisation_Users orgUser) {
 		try {
-			Users u = usersDao.get(user_id);
+			User u = usersDao.get(user_id);
 			
 			orgUser.setStarttime(new Date());
 			orgUser = em.merge(orgUser);
@@ -486,7 +486,7 @@ public class Organisationmanagement {
 						+ organisation_id);
 				//user should be updated to have recent organisation_users list
 				Long id = null;
-				Users u = usersDao.get(user_id);
+				User u = usersDao.get(user_id);
 				List<Organisation_Users> l = u.getOrganisation_users();
 				for (Organisation_Users ou : l) {
 					if (ou.getOrganisation().getOrganisation_id().equals(organisation_id)) {
@@ -509,13 +509,13 @@ public class Organisationmanagement {
 		return null;
 	}
 
-	public SearchResult<Users> getUsersSearchResultByOrganisationId(
+	public SearchResult<User> getUsersSearchResultByOrganisationId(
 			long organisation_id, int start, int max, String orderby,
 			boolean asc) {
 		try {
 
-			SearchResult<Users> sResult = new SearchResult<Users>();
-			sResult.setObjectName(Users.class.getName());
+			SearchResult<User> sResult = new SearchResult<User>();
+			sResult.setObjectName(User.class.getName());
 			sResult.setRecords(orgUserDao.count(organisation_id));
 			sResult.setResult(getUsersByOrganisationId(organisation_id,
 					start, max, orderby, asc));
@@ -538,12 +538,12 @@ public class Organisationmanagement {
 	 * @param asc
 	 * @return
 	 */
-	public List<Users> getUsersByOrganisationId(long organisation_id, int start,
+	public List<User> getUsersByOrganisationId(long organisation_id, int start,
 			int max, String orderby, boolean asc) {
 		try {
 			String hql =
 				"SELECT c FROM "
-				+ "Users c "
+				+ "User c "
 				+ ", IN(c.organisation_users) ou "
 				+ "WHERE c.deleted = false AND ou.organisation.organisation_id = :organisation_id ";
 			if (orderby.startsWith("c.")) {
@@ -557,12 +557,12 @@ public class Organisationmanagement {
 				hql += " DESC";
 			}
 
-			TypedQuery<Users> q = em.createQuery(hql, Users.class);
+			TypedQuery<User> q = em.createQuery(hql, User.class);
 			q.setParameter("organisation_id", organisation_id);
 			q.setFirstResult(start);
 			q.setMaxResults(max);
 
-			List<Users> userL = q.getResultList();
+			List<User> userL = q.getResultList();
 			return userL;
 		} catch (Exception ex2) {
 			log.error("[getUsersByOrganisationId]", ex2);
@@ -575,13 +575,13 @@ public class Organisationmanagement {
 	 * @param organisation_id
 	 * @return
 	 */
-	public List<Users> getUsersByOrganisationId(long organisation_id) {
+	public List<User> getUsersByOrganisationId(long organisation_id) {
 		try {
 
 			// get all users
-			TypedQuery<Users> q = em.createNamedQuery("getUsersByOrganisationId", Users.class);
+			TypedQuery<User> q = em.createNamedQuery("getUsersByOrganisationId", User.class);
 			q.setParameter("organisation_id", organisation_id);
-			List<Users> userL = q.getResultList();
+			List<User> userL = q.getResultList();
 			Collections.sort(userL, new UsersLoginComparator());
 			return userL;
 
@@ -591,8 +591,8 @@ public class Organisationmanagement {
 		return null;
 	}
 
-	class UsersLoginComparator implements Comparator<Users> {
-		public int compare(Users o1, Users o2) {
+	class UsersLoginComparator implements Comparator<User> {
+		public int compare(User o1, User o2) {
 			if (o1 == null || o2 == null)
 				return 0;
 
@@ -647,7 +647,7 @@ public class Organisationmanagement {
 					"SELECT o FROM Organisation AS o "
 					+ "WHERE o.organisation_id NOT IN ("
 					+ "	SELECT ou.organisation.organisation_id "
-					+ "	FROM Users u, IN(u.organisation_users) ou WHERE u.deleted = false AND u.user_id = :user_id)";
+					+ "	FROM User u, IN(u.organisation_users) ou WHERE u.deleted = false AND u.user_id = :user_id)";
 				TypedQuery<Organisation> q = em.createQuery(qSQL, Organisation.class);
 				q.setParameter("user_id", user_id);
 				q.setFirstResult(start);
@@ -701,7 +701,7 @@ public class Organisationmanagement {
 	 * @return
 	 */
 	//FIXME need to refactor
-	public Long updateUserOrganisationsByUser(Users us, List<Long> organisations) {
+	public Long updateUserOrganisationsByUser(User us, List<Long> organisations) {
 		try {
 			LinkedList<Long> orgIdsToAdd = new LinkedList<Long>();
 			LinkedList<Long> orgIdsToDelete = new LinkedList<Long>();

@@ -43,7 +43,6 @@ import org.apache.openmeetings.data.user.Usermanagement;
 import org.apache.openmeetings.data.user.dao.StateDao;
 import org.apache.openmeetings.data.user.dao.UsersDao;
 import org.apache.openmeetings.ldap.LdapLoginManagement;
-import org.apache.openmeetings.persistence.beans.adresses.States;
 import org.apache.openmeetings.persistence.beans.basic.Configuration;
 import org.apache.openmeetings.persistence.beans.basic.LdapConfig;
 import org.apache.openmeetings.persistence.beans.basic.Naviglobal;
@@ -51,9 +50,10 @@ import org.apache.openmeetings.persistence.beans.basic.OmTimeZone;
 import org.apache.openmeetings.persistence.beans.basic.RemoteSessionObject;
 import org.apache.openmeetings.persistence.beans.basic.SOAPLogin;
 import org.apache.openmeetings.persistence.beans.basic.Sessiondata;
-import org.apache.openmeetings.persistence.beans.rooms.Client;
+import org.apache.openmeetings.persistence.beans.room.Client;
+import org.apache.openmeetings.persistence.beans.user.State;
 import org.apache.openmeetings.persistence.beans.user.Userdata;
-import org.apache.openmeetings.persistence.beans.user.Users;
+import org.apache.openmeetings.persistence.beans.user.User;
 import org.apache.openmeetings.remote.red5.ScopeApplicationAdapter;
 import org.apache.openmeetings.remote.util.SessionVariablesUtil;
 import org.apache.openmeetings.rss.LoadAtomRssFeed;
@@ -147,8 +147,8 @@ public class MainService implements IPendingServiceCallback {
 	 * @param USER_ID
 	 * @return - user with SID given
 	 */
-	public Users getUser(String SID, int USER_ID) {
-		Users users = new Users();
+	public User getUser(String SID, int USER_ID) {
+		User users = new User();
 		Long users_id = sessionManagement.checkSession(SID);
 		long user_level = userManagement.getUserLevelByID(users_id);
 		if (user_level > 2) {
@@ -216,13 +216,13 @@ public class MainService implements IPendingServiceCallback {
 		return -1L;
 	}
 
-	public Users loginByRemember(String SID, String remoteHashId) {
+	public User loginByRemember(String SID, String remoteHashId) {
 		try {
 
 			Client currentClient;
 			IConnection current = Red5.getConnectionLocal();
 
-			Users o = null;
+			User o = null;
 
 			currentClient = sessionManager.getClientByStreamId(current
 					.getClient().getId(), null);
@@ -267,8 +267,8 @@ public class MainService implements IPendingServiceCallback {
 
 		if (returnValue instanceof Long) {
 			return returnValue;
-		} else if (returnValue instanceof Users) {
-			Users us = (Users) returnValue;
+		} else if (returnValue instanceof User) {
+			User us = (User) returnValue;
 			if (authLevelManagement.checkUserLevel(
 					us.getLevel_id())) {
 				return us;
@@ -344,13 +344,13 @@ public class MainService implements IPendingServiceCallback {
 			if (o == null)
 				return null;
 
-			if (!o.getClass().isAssignableFrom(Users.class))
+			if (!o.getClass().isAssignableFrom(User.class))
 				return o;
 
 			if (currentClient.getUser_id() != null
 					&& currentClient.getUser_id() > 0) {
 
-				Users u = (Users) o;
+				User u = (User) o;
 				currentClient.setFirstname(u.getFirstname());
 				currentClient.setLastname(u.getLastname());
 
@@ -606,7 +606,7 @@ public class MainService implements IPendingServiceCallback {
 						// If so we need to check that we create this user in
 						// OpenMeetings and update its record
 
-						Users user = userManagement.getUserByExternalIdAndType(
+						User user = userManagement.getUserByExternalIdAndType(
 								userObject.getExternalUserId(),
 								userObject.getExternalUserType());
 
@@ -676,15 +676,15 @@ public class MainService implements IPendingServiceCallback {
 	 * 
 	 * @param SID
 	 */
-	public Users markSessionAsLogedIn(String SID) {
+	public User markSessionAsLogedIn(String SID) {
 		try {
 			sessionManagement.updateUserWithoutSession(SID, -1L);
 			
 			Long defaultRpcUserid = configDao.getConfValue(
 					"default.rpc.userid", Long.class, "-1");
-			Users defaultRpcUser = userManagement.getUserById(defaultRpcUserid);
+			User defaultRpcUser = userManagement.getUserById(defaultRpcUserid);
 			
-			Users user = new Users();
+			User user = new User();
 			user.setOrganisation_users(defaultRpcUser.getOrganisation_users());
 			
 			return user;
@@ -724,7 +724,7 @@ public class MainService implements IPendingServiceCallback {
 	 * 
 	 * @return List of State-Objects or null
 	 */
-	public List<States> getStates() {
+	public List<State> getStates() {
 		return statemanagement.getStates();
 	}
 

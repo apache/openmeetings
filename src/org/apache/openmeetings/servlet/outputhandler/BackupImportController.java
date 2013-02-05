@@ -77,8 +77,6 @@ import org.apache.openmeetings.data.user.dao.StateDao;
 import org.apache.openmeetings.data.user.dao.UserContactsDao;
 import org.apache.openmeetings.data.user.dao.UsersDao;
 import org.apache.openmeetings.documents.beans.UploadCompleteMessage;
-import org.apache.openmeetings.persistence.beans.adresses.Adresses;
-import org.apache.openmeetings.persistence.beans.adresses.States;
 import org.apache.openmeetings.persistence.beans.basic.Configuration;
 import org.apache.openmeetings.persistence.beans.basic.LdapConfig;
 import org.apache.openmeetings.persistence.beans.basic.OmTimeZone;
@@ -92,15 +90,17 @@ import org.apache.openmeetings.persistence.beans.flvrecord.FlvRecording;
 import org.apache.openmeetings.persistence.beans.flvrecord.FlvRecordingMetaData;
 import org.apache.openmeetings.persistence.beans.poll.PollType;
 import org.apache.openmeetings.persistence.beans.poll.RoomPoll;
-import org.apache.openmeetings.persistence.beans.rooms.RoomModerators;
-import org.apache.openmeetings.persistence.beans.rooms.RoomTypes;
-import org.apache.openmeetings.persistence.beans.rooms.Rooms;
-import org.apache.openmeetings.persistence.beans.rooms.Rooms_Organisation;
+import org.apache.openmeetings.persistence.beans.room.Room;
+import org.apache.openmeetings.persistence.beans.room.RoomModerator;
+import org.apache.openmeetings.persistence.beans.room.RoomOrganisation;
+import org.apache.openmeetings.persistence.beans.room.RoomType;
 import org.apache.openmeetings.persistence.beans.sip.asterisk.MeetMe;
+import org.apache.openmeetings.persistence.beans.user.Address;
+import org.apache.openmeetings.persistence.beans.user.PrivateMessage;
 import org.apache.openmeetings.persistence.beans.user.PrivateMessageFolder;
-import org.apache.openmeetings.persistence.beans.user.PrivateMessages;
-import org.apache.openmeetings.persistence.beans.user.UserContacts;
-import org.apache.openmeetings.persistence.beans.user.Users;
+import org.apache.openmeetings.persistence.beans.user.State;
+import org.apache.openmeetings.persistence.beans.user.User;
+import org.apache.openmeetings.persistence.beans.user.UserContact;
 import org.apache.openmeetings.remote.red5.ScopeApplicationAdapter;
 import org.apache.openmeetings.utils.OmFileHelper;
 import org.apache.openmeetings.utils.math.CalendarPatterns;
@@ -267,8 +267,8 @@ public class BackupImportController extends AbstractUploadController {
 		 * ##################### Import Users
 		 */
 		{
-			List<Users> list = readUserList(f, "users.xml", "users");
-			for (Users u : list) {
+			List<User> list = readUserList(f, "users.xml", "users");
+			for (User u : list) {
 				OmTimeZone tz = u.getOmTimeZone();
 				if (tz == null || tz.getJname() == null) {
 					String jNameTimeZone = configurationDao.getConfValue(
@@ -300,11 +300,11 @@ public class BackupImportController extends AbstractUploadController {
 
 			matcher.bind(Long.class, LongTransform.class);
 			matcher.bind(Integer.class, IntegerTransform.class);
-			registry.bind(Users.class, new UserConverter(usersDao, usersMap));
-			registry.bind(RoomTypes.class, new RoomTypeConverter(roommanagement));
+			registry.bind(User.class, new UserConverter(usersDao, usersMap));
+			registry.bind(RoomType.class, new RoomTypeConverter(roommanagement));
 			
-			List<Rooms> list = readList(serializer, f, "rooms.xml", "rooms", Rooms.class);
-			for (Rooms r : list) {
+			List<Room> list = readList(serializer, f, "rooms.xml", "rooms", Room.class);
+			for (Room r : list) {
 				Long roomId = r.getRooms_id();
 
 				// We need to reset ids as openJPA reject to store them
@@ -312,10 +312,12 @@ public class BackupImportController extends AbstractUploadController {
 				r.setRooms_id(null);
 				MeetMe mm = r.getMeetme();
 				r.setMeetme(null);
-				for (Iterator<RoomModerators> i = r.getModerators().iterator(); i.hasNext();) {
-					RoomModerators rm = i.next();
-					if (rm.getUser().getUser_id() == null) {
-						i.remove();
+				if (r.getModerators() != null) {
+					for (Iterator<RoomModerator> i = r.getModerators().iterator(); i.hasNext();) {
+						RoomModerator rm = i.next();
+						if (rm.getUser().getUser_id() == null) {
+							i.remove();
+						}
 					}
 				}
 				r = roomDao.update(r, 1L);
@@ -338,10 +340,10 @@ public class BackupImportController extends AbstractUploadController {
 			Serializer serializer = new Persister(strategy);
 	
 			registry.bind(Organisation.class, new OrganisationConverter(orgDao, organisationsMap));
-			registry.bind(Rooms.class, new RoomConverter(roomDao, roomsMap));
+			registry.bind(Room.class, new RoomConverter(roomDao, roomsMap));
 			
-			List<Rooms_Organisation> list = readList(serializer, f, "rooms_organisation.xml", "room_organisations", Rooms_Organisation.class);
-			for (Rooms_Organisation ro : list) {
+			List<RoomOrganisation> list = readList(serializer, f, "rooms_organisation.xml", "room_organisations", RoomOrganisation.class);
+			for (RoomOrganisation ro : list) {
 				if (!ro.getDeleted()) {
 					// We need to reset this as openJPA reject to store them otherwise
 					ro.setRooms_organisation_id(null);
@@ -360,9 +362,9 @@ public class BackupImportController extends AbstractUploadController {
 			Serializer serializer = new Persister(strategy);
 	
 			registry.bind(AppointmentCategory.class, new AppointmentCategoryConverter(appointmentCategoryDaoImpl));
-			registry.bind(Users.class, new UserConverter(usersDao, usersMap));
+			registry.bind(User.class, new UserConverter(usersDao, usersMap));
 			registry.bind(AppointmentReminderTyps.class, new AppointmentReminderTypeConverter(appointmentReminderTypDaoImpl));
-			registry.bind(Rooms.class, new RoomConverter(roomDao, roomsMap));
+			registry.bind(Room.class, new RoomConverter(roomDao, roomsMap));
 			registry.bind(Date.class, DateConverter.class);
 			
 			List<Appointment> list = readList(serializer, f, "appointements.xml", "appointments", Appointment.class);
@@ -390,7 +392,7 @@ public class BackupImportController extends AbstractUploadController {
 			Strategy strategy = new RegistryStrategy(registry);
 			Serializer serializer = new Persister(strategy);
 	
-			registry.bind(Users.class, new UserConverter(usersDao, usersMap));
+			registry.bind(User.class, new UserConverter(usersDao, usersMap));
 			registry.bind(Appointment.class, new AppointmentConverter(appointmentDao, appointmentsMap));
 			
 			List<MeetingMember> list = readList(serializer, f, "meetingmembers.xml", "meetingmembers", MeetingMember.class);
@@ -479,12 +481,12 @@ public class BackupImportController extends AbstractUploadController {
 			Strategy strategy = new RegistryStrategy(registry);
 			Serializer serializer = new Persister(strategy);
 	
-			registry.bind(Users.class, new UserConverter(usersDao, usersMap));
+			registry.bind(User.class, new UserConverter(usersDao, usersMap));
 			
-			List<UserContacts> list = readList(serializer, f, "userContacts.xml", "usercontacts", UserContacts.class, true);
-			for (UserContacts uc : list) {
+			List<UserContact> list = readList(serializer, f, "userContacts.xml", "usercontacts", UserContact.class, true);
+			for (UserContact uc : list) {
 				Long ucId = uc.getUserContactId();
-				UserContacts storedUC = userContactsDao.getUserContacts(ucId);
+				UserContact storedUC = userContactsDao.getUserContacts(ucId);
 
 				if (storedUC == null && uc.getContact() != null && uc.getContact().getUser_id() != null) {
 					uc.setUserContactId(0);
@@ -503,12 +505,12 @@ public class BackupImportController extends AbstractUploadController {
 			Strategy strategy = new RegistryStrategy(registry);
 			Serializer serializer = new Persister(strategy);
 	
-			registry.bind(Users.class, new UserConverter(usersDao, usersMap));
-			registry.bind(Rooms.class, new RoomConverter(roomDao, roomsMap));
+			registry.bind(User.class, new UserConverter(usersDao, usersMap));
+			registry.bind(Room.class, new RoomConverter(roomDao, roomsMap));
 			registry.bind(Date.class, DateConverter.class);
 			
-			List<PrivateMessages> list = readList(serializer, f, "privateMessages.xml", "privatemessages", PrivateMessages.class, true);
-			for (PrivateMessages p : list) {
+			List<PrivateMessage> list = readList(serializer, f, "privateMessages.xml", "privatemessages", PrivateMessage.class, true);
+			for (PrivateMessage p : list) {
 				p.setPrivateMessageId(0);
 				p.setPrivateMessageFolderId(
 					getNewId(p.getPrivateMessageFolderId(), Maps.MESSAGEFOLDERS));
@@ -561,8 +563,8 @@ public class BackupImportController extends AbstractUploadController {
 			Strategy strategy = new RegistryStrategy(registry);
 			Serializer serializer = new Persister(strategy);
 	
-			registry.bind(Users.class, new UserConverter(usersDao, usersMap));
-			registry.bind(Rooms.class, new RoomConverter(roomDao, roomsMap));
+			registry.bind(User.class, new UserConverter(usersDao, usersMap));
+			registry.bind(Room.class, new RoomConverter(roomDao, roomsMap));
 			registry.bind(PollType.class, new PollTypeConverter(pollManagement));
 			registry.bind(Date.class, DateConverter.class);
 			
@@ -584,7 +586,7 @@ public class BackupImportController extends AbstractUploadController {
 
 			matcher.bind(Long.class, LongTransform.class);
 			registry.bind(Date.class, DateConverter.class);
-			registry.bind(Users.class, new UserConverter(usersDao, usersMap));
+			registry.bind(User.class, new UserConverter(usersDao, usersMap));
 			
 			List<Configuration> list = readList(serializer, f, "configs.xml", "configs", Configuration.class, true);
 			for (Configuration c : list) {
@@ -685,11 +687,11 @@ public class BackupImportController extends AbstractUploadController {
 		return null;
 	}
 	
-	public List<Users> readUserList(InputStream xml, String listNodeName) throws Exception {
+	public List<User> readUserList(InputStream xml, String listNodeName) throws Exception {
 		return readUserList(new InputSource(xml), listNodeName);
 	}
 	
-	public List<Users> readUserList(File baseDir, String fileName, String listNodeName) throws Exception {
+	public List<User> readUserList(File baseDir, String fileName, String listNodeName) throws Exception {
 		File xml = new File(baseDir, fileName);
 		if (!xml.exists()) {
 			throw new Exception(fileName + " missing");
@@ -699,14 +701,14 @@ public class BackupImportController extends AbstractUploadController {
 	}
 	
 	//FIXME (need to be removed in later versions) HACK to fix 2 deleted nodes in users.xml and inline Adresses and sipData
-	private List<Users> readUserList(InputSource xml, String listNodeName) throws Exception {
+	private List<User> readUserList(InputSource xml, String listNodeName) throws Exception {
 		Registry registry = new Registry();
 		Strategy strategy = new RegistryStrategy(registry);
 		Serializer ser = new Persister(strategy);
 
 		registry.bind(Organisation.class, new OrganisationConverter(orgDao, organisationsMap));
 		registry.bind(OmTimeZone.class, new OmTimeZoneConverter(omTimeZoneDaoImpl));
-		registry.bind(States.class, new StateConverter(statemanagement));
+		registry.bind(State.class, new StateConverter(statemanagement));
 		registry.bind(Date.class, DateConverter.class);
 
 		DocumentBuilder dBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
@@ -732,30 +734,30 @@ public class BackupImportController extends AbstractUploadController {
 		Transformer xformer = TransformerFactory.newInstance().newTransformer();
         xformer.transform(new DOMSource(doc), new StreamResult(sw));
         
-		List<Users> list = new ArrayList<Users>();
+		List<User> list = new ArrayList<User>();
 		InputNode root = NodeBuilder.read(new StringReader(sw.toString()));
-		InputNode root1 = NodeBuilder.read(new StringReader(sw.toString())); //HACK to handle Adresses inside user
+		InputNode root1 = NodeBuilder.read(new StringReader(sw.toString())); //HACK to handle Address inside user
 		InputNode listNode = root.getNext();
-		InputNode listNode1 = root1.getNext(); //HACK to handle Adresses inside user
+		InputNode listNode1 = root1.getNext(); //HACK to handle Address inside user
 		if (listNodeName.equals(listNode.getName())) {
 			InputNode item = listNode.getNext();
-			InputNode item1 = listNode1.getNext(); //HACK to handle Adresses inside user
+			InputNode item1 = listNode1.getNext(); //HACK to handle Address inside user
 			while (item != null) {
 				try {
-					Users u = ser.read(Users.class, item, false);
+					User u = ser.read(User.class, item, false);
 					
-					//HACK to handle Adresses inside user
+					//HACK to handle Address inside user
 					if (u.getAdresses() == null) {
-						Adresses a = ser.read(Adresses.class, item1, false);
+						Address a = ser.read(Address.class, item1, false);
 						u.setAdresses(a);
 					}
 					list.add(u);
 				} catch (Exception e) {
-					log.debug("Exception While reading node of type: " + Users.class, e);
+					log.debug("Exception While reading node of type: " + User.class, e);
 				}
 				item = listNode.getNext();
 				do {
-					item1 = listNode1.getNext(); //HACK to handle Adresses inside user
+					item1 = listNode1.getNext(); //HACK to handle Address inside user
 				} while (item != null && !"user".equals(item1.getName()));
 			}
 		}

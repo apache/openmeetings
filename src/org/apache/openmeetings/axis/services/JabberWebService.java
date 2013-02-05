@@ -29,9 +29,9 @@ import org.apache.openmeetings.data.conference.Invitationmanagement;
 import org.apache.openmeetings.data.user.Usermanagement;
 import org.apache.openmeetings.persistence.beans.domain.Organisation_Users;
 import org.apache.openmeetings.persistence.beans.invitation.Invitations;
-import org.apache.openmeetings.persistence.beans.rooms.Rooms;
-import org.apache.openmeetings.persistence.beans.rooms.Rooms_Organisation;
-import org.apache.openmeetings.persistence.beans.user.Users;
+import org.apache.openmeetings.persistence.beans.room.Room;
+import org.apache.openmeetings.persistence.beans.room.RoomOrganisation;
+import org.apache.openmeetings.persistence.beans.user.User;
 import org.apache.openmeetings.remote.ConferenceService;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -70,30 +70,30 @@ public class JabberWebService {
 	 * @param SID The SID from UserService.getSession
 	 * @return List&lt;Rooms&gt; of Rooms
 	 */
-	public List<Rooms> getAvailableRooms(String SID) {
+	public List<Room> getAvailableRooms(String SID) {
 		log.debug("getAvailableRooms enter");
 
-		List<Rooms> result = this.conferenceService
+		List<Room> result = this.conferenceService
 				.getAppointedMeetingRoomsWithoutType(SID);
 
-		List<Rooms> pbl = this.conferenceService.getRoomsPublicWithoutType(SID);
+		List<Room> pbl = this.conferenceService.getRoomsPublicWithoutType(SID);
 		if (pbl != null) {
 			result.addAll(pbl);
 		}
 
 		Long users_id = this.sessionManagement.checkSession(SID);
-		Users u = this.userManagement.getUserById(users_id);
+		User u = this.userManagement.getUserById(users_id);
 		for (Organisation_Users ou : u.getOrganisation_users()) {
-			List<Rooms_Organisation> rol = this.conferenceService
+			List<RoomOrganisation> rol = this.conferenceService
 					.getRoomsByOrganisationWithoutType(SID, ou
 							.getOrganisation().getOrganisation_id().longValue());
 			if (rol != null) {
-				for (Rooms_Organisation ro : rol) {
+				for (RoomOrganisation ro : rol) {
 					result.add(ro.getRoom());
 				}
 			}
 		}
-		for (Rooms r : result) {
+		for (Room r : result) {
 			r.setCurrentusers(null);
 		}
 		return result;

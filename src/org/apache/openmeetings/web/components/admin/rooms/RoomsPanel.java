@@ -19,7 +19,7 @@
 package org.apache.openmeetings.web.components.admin.rooms;
 
 import org.apache.openmeetings.data.conference.dao.RoomDao;
-import org.apache.openmeetings.persistence.beans.rooms.Rooms;
+import org.apache.openmeetings.persistence.beans.room.Room;
 import org.apache.openmeetings.web.components.admin.AdminPanel;
 import org.apache.openmeetings.web.components.admin.SearchableDataView;
 import org.apache.openmeetings.web.components.admin.PagedEntityListPanel;
@@ -46,12 +46,12 @@ public class RoomsPanel extends AdminPanel {
 	@SuppressWarnings("unchecked")
 	public RoomsPanel(String id) {
 		super(id);
-		SearchableDataView<Rooms> dataView = new SearchableDataView<Rooms>("roomList", new SearchableDataProvider<Rooms>(RoomDao.class)) {
+		SearchableDataView<Room> dataView = new SearchableDataView<Room>("roomList", new SearchableDataProvider<Room>(RoomDao.class)) {
 			private static final long serialVersionUID = 8715559628755439596L;
 
 			@Override
-			protected void populateItem(final Item<Rooms> item) {
-				final Rooms room = item.getModelObject();
+			protected void populateItem(final Item<Room> item) {
+				final Room room = item.getModelObject();
 				item.add(new Label("rooms_id", "" + room.getRooms_id()));
 				item.add(new Label("name", "" + room.getName()));
 				item.add(new Label("ispublic", ""+room.getIspublic()));
@@ -71,10 +71,10 @@ public class RoomsPanel extends AdminPanel {
 		
 		final WebMarkupContainer listContainer = new WebMarkupContainer("listContainer");
 		add(listContainer.add(dataView).setOutputMarkupId(true));
-		DataViewContainer<Rooms> container = new DataViewContainer<Rooms>(listContainer, dataView);
-		container.setLinks(new OrderByBorder<Rooms>("orderById", "rooms_id", container)
-				, new OrderByBorder<Rooms>("orderByName", "name", container)
-				, new OrderByBorder<Rooms>("orderByPublic", "ispublic", container));
+		DataViewContainer<Room> container = new DataViewContainer<Room>(listContainer, dataView);
+		container.setLinks(new OrderByBorder<Room>("orderById", "rooms_id", container)
+				, new OrderByBorder<Room>("orderByName", "name", container)
+				, new OrderByBorder<Room>("orderByPublic", "ispublic", container));
 		add(container.orderLinks);
 		add(new PagedEntityListPanel("navigator", dataView) {
 			private static final long serialVersionUID = -1L;
@@ -85,7 +85,7 @@ public class RoomsPanel extends AdminPanel {
 			}
 		});
 		
-		form = new RoomForm("form", new Rooms());
+		form = new RoomForm("form", new Room());
 		form.showNewRecord();
         add(form);
 		

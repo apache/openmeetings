@@ -26,34 +26,34 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
 import org.apache.openmeetings.data.IDataProviderDao;
-import org.apache.openmeetings.persistence.beans.rooms.Rooms;
+import org.apache.openmeetings.persistence.beans.room.Room;
 import org.apache.openmeetings.utils.DaoHelper;
 import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
-public class RoomDao implements IDataProviderDao<Rooms> {
+public class RoomDao implements IDataProviderDao<Room> {
 	
 	public final static String[] searchFields = {"name"};
 	
 	@PersistenceContext
 	private EntityManager em;
 
-	public Rooms get(long id) {
-		TypedQuery<Rooms> q = em.createNamedQuery("getRoomById", Rooms.class);
+	public Room get(long id) {
+		TypedQuery<Room> q = em.createNamedQuery("getRoomById", Room.class);
 		q.setParameter("id", id);
-		List<Rooms> l = q.getResultList();
+		List<Room> l = q.getResultList();
 		return l.isEmpty() ? null : l.get(0);
 	}
 
-	public List<Rooms> get(int start, int count) {
-		TypedQuery<Rooms> q = em.createNamedQuery("getNondeletedRooms", Rooms.class);
+	public List<Room> get(int start, int count) {
+		TypedQuery<Room> q = em.createNamedQuery("getNondeletedRooms", Room.class);
 		q.setFirstResult(start);
 		q.setMaxResults(count);
 		return q.getResultList();
 	}
 
-	public List<Rooms> get(String search, int start, int count, String sort) {
-		TypedQuery<Rooms> q = em.createQuery(DaoHelper.getSearchQuery("Rooms", "r", search, true, false, sort, searchFields), Rooms.class);
+	public List<Room> get(String search, int start, int count, String sort) {
+		TypedQuery<Room> q = em.createQuery(DaoHelper.getSearchQuery("Rooms", "r", search, true, false, sort, searchFields), Room.class);
 		q.setFirstResult(start);
 		q.setMaxResults(count);
 		return q.getResultList();
@@ -69,8 +69,8 @@ public class RoomDao implements IDataProviderDao<Rooms> {
 		return q.getSingleResult();
 	}
 
-	public List<Rooms> getPublicRooms() {
-		return em.createNamedQuery("getPublicRoomsOrdered", Rooms.class)
+	public List<Room> getPublicRooms() {
+		return em.createNamedQuery("getPublicRoomsOrdered", Room.class)
 				.getResultList();
 	}
 	
@@ -80,18 +80,18 @@ public class RoomDao implements IDataProviderDao<Rooms> {
 		return q.getResultList();
 	}
 
-	public List<Rooms> getOrganisationRooms(long orgId) {
-		TypedQuery<Rooms> q = em.createQuery(
-				"SELECT DISTINCT c.room FROM Rooms_Organisation c LEFT JOIN FETCH c.room "
+	public List<Room> getOrganisationRooms(long orgId) {
+		TypedQuery<Room> q = em.createQuery(
+				"SELECT DISTINCT c.room FROM RoomOrganisation c LEFT JOIN FETCH c.room "
 				+ "WHERE c.organisation.organisation_id = :orgId "
 				+ "AND c.deleted = false AND c.room.deleted = false AND c.room.appointment = false "
 				+ "AND c.organisation.deleted = false "
-				+ "ORDER BY c.room.name ASC", Rooms.class);
+				+ "ORDER BY c.room.name ASC", Room.class);
 		q.setParameter("orgId", orgId);
 		return q.getResultList();
 	}
 	
-	public Rooms update(Rooms entity, long userId) {
+	public Room update(Room entity, long userId) {
 		if (entity.getRooms_id() == null) {
 			entity.setStarttime(new Date());
 			em.persist(entity);
@@ -102,7 +102,7 @@ public class RoomDao implements IDataProviderDao<Rooms> {
 		return entity;
 	}
 
-	public void delete(Rooms entity, long userId) {
+	public void delete(Room entity, long userId) {
 		entity.setDeleted(true);
 		update(entity, userId);
 	}

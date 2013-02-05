@@ -42,10 +42,10 @@ import org.apache.openmeetings.data.user.Usermanagement;
 import org.apache.openmeetings.persistence.beans.calendar.Appointment;
 import org.apache.openmeetings.persistence.beans.flvrecord.FlvRecording;
 import org.apache.openmeetings.persistence.beans.invitation.Invitations;
-import org.apache.openmeetings.persistence.beans.rooms.Client;
-import org.apache.openmeetings.persistence.beans.rooms.RoomTypes;
-import org.apache.openmeetings.persistence.beans.rooms.Rooms;
-import org.apache.openmeetings.persistence.beans.user.Users;
+import org.apache.openmeetings.persistence.beans.room.Client;
+import org.apache.openmeetings.persistence.beans.room.RoomType;
+import org.apache.openmeetings.persistence.beans.room.Room;
+import org.apache.openmeetings.persistence.beans.user.User;
 import org.apache.openmeetings.remote.ConferenceService;
 import org.apache.openmeetings.remote.red5.ScopeApplicationAdapter;
 import org.apache.openmeetings.session.ISessionManager;
@@ -104,7 +104,7 @@ public class RoomWebService {
 	 * @return - list of public rooms
 	 * @throws AxisFault
 	 */
-	public Rooms[] getRoomsPublic(String SID, Long roomtypes_id)
+	public Room[] getRoomsPublic(String SID, Long roomtypes_id)
 			throws AxisFault {
 		try {
 
@@ -113,16 +113,16 @@ public class RoomWebService {
 
 			if (authLevelManagement.checkWebServiceLevel(User_level)) {
 
-				List<Rooms> roomList = roommanagement.getPublicRooms(
+				List<Room> roomList = roommanagement.getPublicRooms(
 						User_level, roomtypes_id);
 				// We need to re-marshal the Rooms object cause Axis2 cannot use
 				// our objects
 				if (roomList != null && roomList.size() != 0) {
 					// roomsListObject.setRoomList(roomList);
-					Rooms[] roomItems = new Rooms[roomList.size()];
+					Room[] roomItems = new Room[roomList.size()];
 					int count = 0;
-					for (Iterator<Rooms> it = roomList.iterator(); it.hasNext();) {
-						Rooms room = it.next();
+					for (Iterator<Room> it = roomList.iterator(); it.hasNext();) {
+						Room room = it.next();
 						room.setCurrentusers(null);
 						roomItems[count] = room;
 						count++;
@@ -408,15 +408,15 @@ public class RoomWebService {
 	 * @return - List of available room types
 	 * @throws AxisFault
 	 */
-	public RoomTypes[] getRoomTypes(String SID) throws AxisFault {
+	public RoomType[] getRoomTypes(String SID) throws AxisFault {
 		try {
-			List<RoomTypes> rommTypesList = conferenceService.getRoomTypes(SID);
-			RoomTypes[] roomTypesArray = new RoomTypes[rommTypesList.size()];
+			List<RoomType> rommTypesList = conferenceService.getRoomTypes(SID);
+			RoomType[] roomTypesArray = new RoomType[rommTypesList.size()];
 
 			int count = 0;
-			for (Iterator<RoomTypes> it = rommTypesList.iterator(); it
+			for (Iterator<RoomType> it = rommTypesList.iterator(); it
 					.hasNext();) {
-				RoomTypes roomType = it.next();
+				RoomType roomType = it.next();
 				roomTypesArray[count] = roomType;
 				count++;
 			}
@@ -491,12 +491,12 @@ public class RoomWebService {
 					roomIds.push(roomId10);
 				}
 
-				List<Rooms> rooms = roommanagement.getRoomsByIds(roomIds);
+				List<Room> rooms = roommanagement.getRoomsByIds(roomIds);
 
 				RoomCountBean[] roomsArray = new RoomCountBean[rooms.size()];
 
 				int i = 0;
-				for (Rooms room : rooms) {
+				for (Room room : rooms) {
 					RoomCountBean rCountBean = new RoomCountBean();
 					rCountBean.setRoomId(room.getRooms_id());
 					rCountBean.setRoomName(room.getName());
@@ -528,7 +528,7 @@ public class RoomWebService {
 	 *            the room id
 	 * @return - room with the id given
 	 */
-	public Rooms getRoomById(String SID, long rooms_id) {
+	public Room getRoomById(String SID, long rooms_id) {
 		return conferenceService.getRoomById(SID, rooms_id);
 	}
 
@@ -540,7 +540,7 @@ public class RoomWebService {
 	 * @return - room with the id given
 	 */
 	@Deprecated
-	public Rooms getRoomWithCurrentUsersById(String SID, long rooms_id) {
+	public Room getRoomWithCurrentUsersById(String SID, long rooms_id) {
 		return conferenceService.getRoomWithCurrentUsersById(SID, rooms_id);
 	}
 
@@ -561,7 +561,7 @@ public class RoomWebService {
 
 			if (authLevelManagement.checkWebServiceLevel(user_level)) {
 
-				Rooms room = roommanagement.getRoomById(user_level, rooms_id);
+				Room room = roommanagement.getRoomById(user_level, rooms_id);
 
 				RoomReturn roomReturn = new RoomReturn();
 
@@ -619,7 +619,7 @@ public class RoomWebService {
 	 *            
 	 * @return - List of Objects of Rooms
 	 */
-	public SearchResult<Rooms> getRooms(String SID, int start, int max,
+	public SearchResult<Room> getRooms(String SID, int start, int max,
 			String orderby, boolean asc) {
 		return conferenceService.getRooms(SID, start, max, orderby, asc, "");
 	}
@@ -642,7 +642,7 @@ public class RoomWebService {
 	 *            
 	 * @return - List of Objects of Rooms
 	 */
-	public SearchResult<Rooms> getRoomsWithCurrentUsers(String SID, int start,
+	public SearchResult<Room> getRoomsWithCurrentUsers(String SID, int start,
 			int max, String orderby, boolean asc) {
 		return conferenceService.getRoomsWithCurrentUsers(SID, start, max,
 				orderby, asc);
@@ -1062,7 +1062,7 @@ public class RoomWebService {
 			Long users_id = sessionManagement.checkSession(SID);
 			Long user_level = userManagement.getUserLevelByID(users_id);
 			if (authLevelManagement.checkWebServiceLevel(user_level)) {
-				Rooms room = conferenceService.getRoomByExternalId(SID,
+				Room room = conferenceService.getRoomByExternalId(SID,
 						externalRoomId, externalRoomType, roomtypes_id);
 				Long roomId = null;
 				if (room == null) {
@@ -2053,13 +2053,13 @@ public class RoomWebService {
 	public List<RoomReturn> getRoomsWithCurrentUsersByList(String SID,
 			int start, int max, String orderby, boolean asc) throws AxisFault {
 		try {
-			List<Rooms> rooms = conferenceService
+			List<Room> rooms = conferenceService
 					.getRoomsWithCurrentUsersByList(SID, start, max, orderby,
 							asc);
 
 			List<RoomReturn> returnObjList = new LinkedList<RoomReturn>();
 
-			for (Rooms room : rooms) {
+			for (Room room : rooms) {
 
 				RoomReturn roomReturn = new RoomReturn();
 
@@ -2120,13 +2120,13 @@ public class RoomWebService {
 			int start, int max, String orderby, boolean asc,
 			String externalRoomType) throws AxisFault {
 		try {
-			List<Rooms> rooms = conferenceService
+			List<Room> rooms = conferenceService
 					.getRoomsWithCurrentUsersByListAndType(SID, start, max,
 							orderby, asc, externalRoomType);
 
 			List<RoomReturn> returnObjList = new LinkedList<RoomReturn>();
 
-			for (Rooms room : rooms) {
+			for (Room room : rooms) {
 
 				RoomReturn roomReturn = new RoomReturn();
 
@@ -2283,7 +2283,7 @@ public class RoomWebService {
 					return rooms_id;
 				}
 
-				Users us = userManagement.getUserById(users_id);
+				User us = userManagement.getUserById(users_id);
 
 				appointmentDao.addAppointment("appointmentName", users_id,
 						"appointmentLocation", "appointmentDescription", dFrom,
@@ -2500,7 +2500,7 @@ public class RoomWebService {
 			Long user_level = userManagement.getUserLevelByID(users_id);
 			if (authLevelManagement.checkWebServiceLevel(user_level)) {
 				log.debug("closeRoom 1 " + room_id);
-				Rooms r = roomDao.get(room_id);
+				Room r = roomDao.get(room_id);
 				PropertyUtils.setSimpleProperty(r, paramName, paramValue);
 				roomDao.update(r, users_id);
 			} else {

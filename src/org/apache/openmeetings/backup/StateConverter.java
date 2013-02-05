@@ -19,11 +19,11 @@
 package org.apache.openmeetings.backup;
 
 import org.apache.openmeetings.data.user.dao.StateDao;
-import org.apache.openmeetings.persistence.beans.adresses.States;
+import org.apache.openmeetings.persistence.beans.user.State;
 import org.simpleframework.xml.stream.InputNode;
 import org.simpleframework.xml.stream.OutputNode;
 
-public class StateConverter extends OmConverter<States> {
+public class StateConverter extends OmConverter<State> {
 	private StateDao statemanagement;
 	
 	public StateConverter() {
@@ -34,11 +34,11 @@ public class StateConverter extends OmConverter<States> {
 		this.statemanagement = statemanagement;
 	}
 	
-	public States read(InputNode node) throws Exception {
+	public State read(InputNode node) throws Exception {
 		return statemanagement.getStateById(getlongValue(node));
 	}
 
-	public void write(OutputNode node, States value) throws Exception {
+	public void write(OutputNode node, State value) throws Exception {
 		node.setData(true);
 		node.setValue(value == null ? "0" : "" + value.getState_id());
 	}

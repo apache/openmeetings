@@ -37,7 +37,7 @@ import org.apache.openmeetings.persistence.beans.basic.ErrorValues;
 import org.apache.openmeetings.persistence.beans.basic.RemoteSessionObject;
 import org.apache.openmeetings.persistence.beans.basic.Sessiondata;
 import org.apache.openmeetings.persistence.beans.lang.Fieldlanguagesvalues;
-import org.apache.openmeetings.persistence.beans.user.Users;
+import org.apache.openmeetings.persistence.beans.user.User;
 import org.apache.openmeetings.remote.MainService;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -230,7 +230,7 @@ public class UserWebService {
 					return user_id;
 				}
 
-				Users user = userManagement.getUserById(user_id);
+				User user = userManagement.getUserById(user_id);
 
 				// activate the User
 				user.setStatus(1);
@@ -317,7 +317,7 @@ public class UserWebService {
 					return user_id;
 				}
 
-				Users user = userManagement.getUserById(user_id);
+				User user = userManagement.getUserById(user_id);
 
 				// activate the User
 				user.setStatus(1);
@@ -392,7 +392,7 @@ public class UserWebService {
 
 			if (authLevelManagement.checkAdminLevel(user_level)) {
 
-				Users testUser = userManagement.getUserByExternalIdAndType(
+				User testUser = userManagement.getUserByExternalIdAndType(
 						externalUserId, externalUserType);
 
 				if (testUser != null) {
@@ -410,7 +410,7 @@ public class UserWebService {
 					return user_id;
 				}
 
-				Users user = userManagement.getUserById(user_id);
+				User user = userManagement.getUserById(user_id);
 
 				// activate the User
 				user.setStatus(1);
@@ -488,7 +488,7 @@ public class UserWebService {
 
 			if (authLevelManagement.checkAdminLevel(user_level)) {
 
-				Users userExternal = userManagement.getUserByExternalIdAndType(
+				User userExternal = userManagement.getUserByExternalIdAndType(
 						externalUserId, externalUserType);
 
 				Long userId = userExternal.getUser_id();
@@ -1258,7 +1258,7 @@ public class UserWebService {
 	 *            asc or desc
 	 * @return - users found
 	 */
-	public SearchResult<Users> getUsersByOrganisation(String SID,
+	public SearchResult<User> getUsersByOrganisation(String SID,
 			long organisation_id, int start, int max, String orderby,
 			boolean asc) {
 		try {
@@ -1270,7 +1270,7 @@ public class UserWebService {
 								start, max, orderby, asc);
 			} else {
 				log.error("Need Administration Account");
-				SearchResult<Users> sResult = new SearchResult<Users>();
+				SearchResult<User> sResult = new SearchResult<User>();
 				sResult.setErrorId(-26L);
 				return sResult;
 			}

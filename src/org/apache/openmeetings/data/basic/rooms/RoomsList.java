@@ -18,16 +18,16 @@
  */
 package org.apache.openmeetings.data.basic.rooms;
 
-import org.apache.openmeetings.persistence.beans.rooms.Rooms;
+import org.apache.openmeetings.persistence.beans.room.Room;
 
 public class RoomsList {
 	
-	Rooms[] roomList = null;
+	Room[] roomList = null;
 
-	public Rooms[] getRoomList() {
+	public Room[] getRoomList() {
 		return roomList;
 	}
-	public void setRoomList(Rooms[] roomList) {
+	public void setRoomList(Room[] roomList) {
 		this.roomList = roomList;
 	}
 

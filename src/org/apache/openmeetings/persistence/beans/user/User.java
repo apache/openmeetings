@@ -49,8 +49,6 @@ import org.apache.openjpa.persistence.FetchGroups;
 import org.apache.openjpa.persistence.LoadFetchGroup;
 import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
 import org.apache.openmeetings.persistence.beans.IDataProviderEntity;
-import org.apache.openmeetings.persistence.beans.adresses.Adresses;
-import org.apache.openmeetings.persistence.beans.adresses.States;
 import org.apache.openmeetings.persistence.beans.basic.OmTimeZone;
 import org.apache.openmeetings.persistence.beans.basic.Sessiondata;
 import org.apache.openmeetings.persistence.beans.domain.Organisation_Users;
@@ -75,20 +73,36 @@ import org.simpleframework.xml.Root;
  })
 })
 @NamedQueries({
-		@NamedQuery(name = "getAllUsers", query = "SELECT u FROM Users u"),
-		@NamedQuery(name = "checkPassword", query = "select count(c.user_id) from Users c "
-				+ "where c.deleted = false " //
-				+ "AND c.user_id = :userId " //
-				+ "AND c.password LIKE :password"), //
-		@NamedQuery(name = "updatePassword", query = "UPDATE Users u " //
-				+ "SET u.password = :password " //
-				+ "WHERE u.user_id = :userId"), //
-		@NamedQuery(name = "getNondeletedUsers", query = "SELECT u FROM Users u WHERE u.deleted = false"),
-		@NamedQuery(name = "countNondeletedUsers", query = "SELECT COUNT(u) FROM Users u WHERE u.deleted = false"),
-		@NamedQuery(name = "getUsersByOrganisationId", query = "SELECT u FROM Users u WHERE u.deleted = false AND u.organisation_users.organisation.organisation_id = :organisation_id") })
-@Table(name = "users")
+	@NamedQuery(name = "getUserById", query = "select c from User as c where c.user_id = :user_id"),
+	@NamedQuery(name = "checkUserLogin", query = "select c from User as c where c.login = :DataValue AND c.deleted <> :deleted"),
+	@NamedQuery(name = "getUserByName", query = "SELECT u FROM User as u "
+			+ " where u.login = :login" + " AND u.deleted <> :deleted"),
+	@NamedQuery(name = "getUserByEmail", query = "SELECT u FROM User as u "
+			+ " where u.adresses.email = :email"
+			+ " AND u.deleted <> :deleted"),
+	@NamedQuery(name = "getUserByHash", query = "SELECT u FROM User as u "
+			+ " where u.resethash = :resethash"
+			+ " AND u.deleted <> :deleted"),
+	@NamedQuery(name = "selectMaxFromUsersWithSearch", query = "select count(c.user_id) from User c "
+			+ "where c.deleted = false " + "AND ("
+			+ "lower(c.login) LIKE :search "
+			+ "OR lower(c.firstname) LIKE :search "
+			+ "OR lower(c.lastname) LIKE :search )"),
+	@NamedQuery(name = "getAllUsers", query = "SELECT u FROM User u"),
+	@NamedQuery(name = "checkPassword", query = "select count(c.user_id) from User c "
+			+ "where c.deleted = false " //
+			+ "AND c.user_id = :userId " //
+			+ "AND c.password LIKE :password"), //
+	@NamedQuery(name = "updatePassword", query = "UPDATE User u " //
+			+ "SET u.password = :password " //
+			+ "WHERE u.user_id = :userId"), //
+	@NamedQuery(name = "getNondeletedUsers", query = "SELECT u FROM User u WHERE u.deleted = false"),
+	@NamedQuery(name = "countNondeletedUsers", query = "SELECT COUNT(u) FROM User u WHERE u.deleted = false"),
+	@NamedQuery(name = "getUsersByOrganisationId", query = "SELECT u FROM User u WHERE u.deleted = false AND u.organisation_users.organisation.organisation_id = :organisation_id") 
+})
+@Table(name = "user")
 @Root(name = "user")
-public class Users implements Serializable, IDataProviderEntity {
+public class User implements Serializable, IDataProviderEntity {
 
 	private static final long serialVersionUID = -2265479712596674065L;
 
@@ -176,7 +190,7 @@ public class Users implements Serializable, IDataProviderEntity {
 	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinColumn(name = "adresses_id", insertable = true, updatable = true)
 	@Element(name = "address", required = false)
-	private Adresses adresses;
+	private Address adresses;
 
 	@Transient
 	private Userlevel userlevel;
@@ -247,19 +261,19 @@ public class Users implements Serializable, IDataProviderEntity {
 		this.user_id = user_id;
 	}
 
-	public Adresses getAdresses() {
+	public Address getAdresses() {
 		return adresses;
 	}
 
-	public void setAdresses(Adresses adresses) {
+	public void setAdresses(Address adresses) {
 		this.adresses = adresses;
 	}
 
 	public void setAdresses(String street, String zip, String town,
-			States state, String additionalname, String comment, String fax,
+			State state, String additionalname, String comment, String fax,
 			String phone, String email) {
 		if (this.adresses == null) {
-			this.adresses = new Adresses();
+			this.adresses = new Address();
 		}
 		this.adresses.setStreet(street);
 		this.adresses.setZip(zip);

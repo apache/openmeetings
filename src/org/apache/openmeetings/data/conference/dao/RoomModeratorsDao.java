@@ -30,8 +30,8 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
 import org.apache.openmeetings.data.user.Usermanagement;
-import org.apache.openmeetings.persistence.beans.rooms.RoomModerators;
-import org.apache.openmeetings.persistence.beans.user.Users;
+import org.apache.openmeetings.persistence.beans.room.RoomModerator;
+import org.apache.openmeetings.persistence.beans.user.User;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,10 +53,10 @@ public class RoomModeratorsDao {
 	 * @param isSuperModerator
 	 * @return
 	 */
-	public Long addRoomModeratorByUserId(Users us, Boolean isSuperModerator,
+	public Long addRoomModeratorByUserId(User us, Boolean isSuperModerator,
 			Long roomId) {
 		try {
-			RoomModerators rModerator = new RoomModerators();
+			RoomModerator rModerator = new RoomModerator();
 			rModerator.setUser(us);
 			rModerator.setIsSuperModerator(isSuperModerator);
 			rModerator.setStarttime(new Date());
@@ -71,7 +71,7 @@ public class RoomModeratorsDao {
 		return null;
 	}
 
-	public Long addRoomModeratorByObj(RoomModerators rModerator) {
+	public Long addRoomModeratorByObj(RoomModerator rModerator) {
 		try {
 			rModerator.setStarttime(new Date());
 			rModerator = em.merge(rModerator);
@@ -88,20 +88,15 @@ public class RoomModeratorsDao {
 	 * 
 	 * @return List of RoomTypes
 	 */
-	public RoomModerators getRoomModeratorById(Long roomModeratorsId) {
+	public RoomModerator getRoomModeratorById(Long roomModeratorsId) {
 		try {
-			String hql = "select c from RoomModerators as c where c.roomModeratorsId = :roomModeratorsId";
-
-			TypedQuery<RoomModerators> query = em.createQuery(hql, RoomModerators.class);
-
+			TypedQuery<RoomModerator> query = em.createNamedQuery("getRoomModeratorById", RoomModerator.class);
 			query.setParameter("roomModeratorsId", roomModeratorsId);
-
-			RoomModerators roomModerators = null;
+			RoomModerator roomModerators = null;
 			try {
 				roomModerators = query.getSingleResult();
 			} catch (NoResultException ex) {
 			}
-
 			return roomModerators;
 
 		} catch (Exception ex2) {
@@ -110,21 +105,12 @@ public class RoomModeratorsDao {
 		return null;
 	}
 
-	public List<RoomModerators> getRoomModeratorByRoomId(Long roomId) {
+	public List<RoomModerator> getRoomModeratorByRoomId(Long roomId) {
 		try {
-
-			String hql = "select c from RoomModerators as c "
-					+ "where c.roomId = :roomId AND c.deleted <> :deleted";
-
-			TypedQuery<RoomModerators> query = em.createQuery(hql, RoomModerators.class);
-
+			TypedQuery<RoomModerator> query = em.createQuery("getRoomModeratorByRoomId", RoomModerator.class);
 			query.setParameter("deleted", true);
 			query.setParameter("roomId", roomId);
-
-			List<RoomModerators> roomModerators = query.getResultList();
-
-			return roomModerators;
-
+			return query.getResultList();
 		} catch (Exception ex2) {
 			log.error("[getRoomModeratorByRoomId] ", ex2);
 			ex2.printStackTrace();
@@ -132,25 +118,14 @@ public class RoomModeratorsDao {
 		return null;
 	}
 
-	public List<RoomModerators> getRoomModeratorByUserAndRoomId(Long roomId,
+	public List<RoomModerator> getRoomModeratorByUserAndRoomId(Long roomId,
 			Long user_id) {
 		try {
-
-			String hql = "select c from RoomModerators as c "
-					+ "where c.roomId = :roomId "
-					+ "AND c.deleted <> :deleted "
-					+ "AND c.user.user_id = :user_id";
-
-			TypedQuery<RoomModerators> query = em.createQuery(hql, RoomModerators.class);
-
+			TypedQuery<RoomModerator> query = em.createNamedQuery("getRoomModeratorByUserAndRoomId", RoomModerator.class);
 			query.setParameter("deleted", true);
 			query.setParameter("roomId", roomId);
 			query.setParameter("user_id", user_id);
-
-			List<RoomModerators> roomModerators = query.getResultList();
-
-			return roomModerators;
-
+			return query.getResultList();
 		} catch (Exception ex2) {
 			log.error("[getRoomModeratorByUserAndRoomId] ", ex2);
 			ex2.printStackTrace();
@@ -164,7 +139,7 @@ public class RoomModeratorsDao {
 	 */
 	public void removeRoomModeratorByUserId(Long roomModeratorsId) {
 		try {
-			RoomModerators rModerator = this
+			RoomModerator rModerator = this
 					.getRoomModeratorById(roomModeratorsId);
 
 			if (rModerator == null) {
@@ -190,7 +165,7 @@ public class RoomModeratorsDao {
 	public void updateRoomModeratorByUserId(Long roomModeratorsId,
 			Boolean isSuperModerator) {
 		try {
-			RoomModerators rModerator = this
+			RoomModerator rModerator = this
 					.getRoomModeratorById(roomModeratorsId);
 
 			if (rModerator == null) {
@@ -245,7 +220,7 @@ public class RoomModeratorsDao {
 		try {
 
 			// getLsit of RoomModerators before you add new ones
-			List<RoomModerators> remoteRoomModeratorList = this
+			List<RoomModerator> remoteRoomModeratorList = this
 					.getRoomModeratorByRoomId(roomId);
 
 			for (Iterator<Map<String, Object>> iter = roomModerators.iterator(); iter
@@ -277,11 +252,11 @@ public class RoomModeratorsDao {
 			}
 
 			// Check for items to delete
-			List<RoomModerators> roomModeratorsToDelete = new LinkedList<RoomModerators>();
+			List<RoomModerator> roomModeratorsToDelete = new LinkedList<RoomModerator>();
 
 			if (remoteRoomModeratorList != null) {
 
-				for (RoomModerators roomModerator : remoteRoomModeratorList) {
+				for (RoomModerator roomModerator : remoteRoomModeratorList) {
 
 					boolean found = false;
 
@@ -308,7 +283,7 @@ public class RoomModeratorsDao {
 
 			}
 
-			for (RoomModerators rModerator : roomModeratorsToDelete) {
+			for (RoomModerator rModerator : roomModeratorsToDelete) {
 				System.out.println("Remove Map "
 						+ rModerator.getRoomModeratorsId());
 				this.removeRoomModeratorByUserId(rModerator

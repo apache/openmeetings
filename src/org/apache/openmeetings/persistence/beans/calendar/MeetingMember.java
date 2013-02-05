@@ -33,7 +33,7 @@ import javax.persistence.Table;
 
 import org.apache.openmeetings.persistence.beans.basic.OmTimeZone;
 import org.apache.openmeetings.persistence.beans.invitation.Invitations;
-import org.apache.openmeetings.persistence.beans.user.Users;
+import org.apache.openmeetings.persistence.beans.user.User;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
 
@@ -52,7 +52,7 @@ public class MeetingMember implements Serializable {
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name="user_id", nullable=true)
 	@Element(name="userid", data=true, required=false)
-	private Users userid;
+	private User userid;
 	
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name="appointment_id", nullable=true)
@@ -114,10 +114,10 @@ public class MeetingMember implements Serializable {
 		this.meetingMemberId = groupMemberId;
 	}
 	
-	public Users getUserid() {
+	public User getUserid() {
 		return userid;
 	}
-	public void setUserid(Users userid) {
+	public void setUserid(User userid) {
 		this.userid = userid;
 	}
 	
