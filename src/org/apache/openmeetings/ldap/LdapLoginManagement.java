@@ -726,7 +726,7 @@ public class LdapLoginManagement {
 			
 			User user = usersDao.get(newUserId);
 			user.setPictureuri(pictureUri);
-			usersDao.update(user);
+			usersDao.update(user, 1L);
 
 		} catch (Exception e) {
 			log.error("Error creating user : " + e.getMessage());

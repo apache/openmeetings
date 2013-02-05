@@ -1549,7 +1549,7 @@ public class Usermanagement {
 	}
 
 	public void updateUser(User user) {
-		usersDao.update(user);
+		usersDao.update(user, 1L);
 	}
 
 	/**
