@@ -36,6 +36,7 @@
 				</blockquote><br /><br />
 				Modify file /etc/odbcinst.ini as follows: (replace the path to the *.so files below with the real paths on your system)
 				<blockquote>
+					(The path below is for x32 server, x64 version is most probably located at /usr/lib/x86_64-linux-gnu/odbc)<br/>
 					<i>
 						[MySQL]<br />
 						Description = ODBC for MySQL<br />

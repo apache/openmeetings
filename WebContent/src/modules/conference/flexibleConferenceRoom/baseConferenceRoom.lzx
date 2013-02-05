@@ -61,9 +61,6 @@
     
     <attribute name="meetingTimer" value="null" />
     
-    <attribute name="sipNumberAsArray" value="null" />
-    <attribute name="sipNumberIndex" value="0" type="number" />
-
     <handler name="oninit">
         <![CDATA[
             _mainScrollBar.setAttribute("visibility","hidden");
@@ -90,16 +87,6 @@
             canvas._mainbgcontentNavi.setAttribute('height',0);
             canvas.setAttribute('naviHeightDelta',28);
             
-            if (canvas.thishib.sip_enabled) {
-                if (sipIsEnabled()) {
-                    if ($debug) Debug.write("Dial SIP Number: ",canvas.currentRoomObject.sipNumber);
-                    
-                    preCustomStartCallByCallTo(canvas.currentRoomObject.sipNumber);
-                } else {
-                    new lz.labelerrorPopup(canvas,{error:'SIP Applet is not ready!'});
-                }
-            }
-            
             if(this._chatPanelStrict){
             	var hideChat = this.roomobj.hideChat != null && this.roomobj.hideChat;
 				this._chatPanelStrict.setAttribute('visible', !hideChat);
@@ -110,35 +97,6 @@
         ]]>
     </handler>
     
-    <method name="startDialing">
-        this.sipNumberIndex = 0;
-        this.doNextSipNumber();
-    </method>
-    
-    <method name="doNextSipNumber">
-        <![CDATA[
-            if (this.sipNumberIndex < this.sipNumberAsArray.length) {
-            
-                var nextNumber = this.sipNumberAsArray[this.sipNumberIndex];
-                
-                this.sipNumberIndex++;
-                
-                callDTMFButton(this,nextNumber);
-                
-            } else {
-                
-                if ($debug) Debug.write("Number Completed - Start Dial Process");
-                
-                preCustomStartCall();
-                
-            }
-        ]]>
-    </method>
-    
-    <method name="ringring">
-        if ($debug) Debug.write("ringring - ringring - ringring");
-    </method>
-
 	<handler name="onkeydown" reference="lz.Keys" args="keyCode">
 	<![CDATA[
 		if ($debug) Debug.write("onkeydown:: keyCode = ", keyCode);

@@ -567,12 +567,8 @@
   <xs:complexType name="baseConferenceRoom" mixed="true">
   <xs:complexContent>
   <xs:extension base="project:baseContentView">
-      <xs:attribute name="sipNumberIndex" type="lzx:number" default="0" >
-</xs:attribute>
-      <xs:attribute name="sipNumberAsArray" type="xs:string" default="null" >
-</xs:attribute>
       <xs:attribute name="roomobj" type="xs:string" default="null" >
-</xs:attribute>
+	  </xs:attribute>
       <xs:attribute name="meetingTimer" type="xs:string" default="null" >
 </xs:attribute>
   </xs:extension>
