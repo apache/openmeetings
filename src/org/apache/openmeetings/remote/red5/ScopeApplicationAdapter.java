@@ -2767,7 +2767,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 	 * SIP transport methods
 	 */
 
-	private List<Long> getVerifyedActiveRoomIds(Server s) {
+	private List<Long> getVerifiedActiveRoomIds(Server s) {
 		List<Long> result = new ArrayList<Long>(sessionManager.getActiveRoomIdsByServer(s));
 		//verify
 		for (Iterator<Long> i = result.iterator(); i.hasNext();) {
@@ -2781,9 +2781,9 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 	}
 	
 	public synchronized List<Long> getActiveRoomIds() {
-		List<Long> result = getVerifyedActiveRoomIds(null);
+		List<Long> result = getVerifiedActiveRoomIds(null);
 		for (Server s : serverDao.getActiveServers()) {
-			result.addAll(getVerifyedActiveRoomIds(s));
+			result.addAll(getVerifiedActiveRoomIds(s));
 		}
 		return roomDao.getSipRooms(result);
 	}
