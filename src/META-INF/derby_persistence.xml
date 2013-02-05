@@ -57,6 +57,8 @@
         <class>org.apache.openmeetings.persistence.beans.room.Room</class>
         <class>org.apache.openmeetings.persistence.beans.room.RoomType</class>
         <class>org.apache.openmeetings.persistence.beans.room.RoomOrganisation</class>
+        <class>org.apache.openmeetings.persistence.beans.room.Whiteboard</class>
+        <class>org.apache.openmeetings.persistence.beans.room.WhiteboardItem</class>
 		<class>org.apache.openmeetings.persistence.beans.user.Address</class>
         <class>org.apache.openmeetings.persistence.beans.user.State</class>
         <class>org.apache.openmeetings.persistence.beans.user.PrivateMessage</class>
