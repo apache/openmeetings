@@ -58,6 +58,10 @@ This is used in the conference.
             this.objMessage[1].publicSID = canvas.publicSID;
 			
 			this.sendMessageWithClientByPublicSID.doCall();
+			
+			if (canvas.currentRoomObject != null) {
+				_chattabbottom.updatefontbuttonvisible();
+			}
 		]]>
 	</handler>
 	
