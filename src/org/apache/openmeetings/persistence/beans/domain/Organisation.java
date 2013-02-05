@@ -41,7 +41,7 @@ import org.simpleframework.xml.Root;
 	, @NamedQuery(name="getAnyOrganisationById",
 		query="SELECT c FROM Organisation AS c WHERE c.organisation_id = :organisation_id")
 	, @NamedQuery(name="getOrganisationsByUserId",
-		query="SELECT ou.organisation FROM Users u, IN(u.organisation_users) ou WHERE u.deleted = false AND u.user_id = :user_id")
+		query="SELECT ou.organisation FROM User u, IN(u.organisation_users) ou WHERE u.deleted = false AND u.user_id = :user_id")
 	, @NamedQuery(name="getNondeletedOrganisations", query="SELECT u FROM Organisation u WHERE u.deleted = false")
 	, @NamedQuery(name="countOrganisations", query="SELECT COUNT(c) FROM Organisation AS c WHERE c.deleted = false")
 })
