@@ -103,6 +103,7 @@ import org.apache.openmeetings.persistence.beans.user.User;
 import org.apache.openmeetings.persistence.beans.user.UserContact;
 import org.apache.openmeetings.remote.red5.ScopeApplicationAdapter;
 import org.apache.openmeetings.utils.OmFileHelper;
+import org.apache.openmeetings.utils.crypt.MD5Implementation;
 import org.apache.openmeetings.utils.math.CalendarPatterns;
 import org.red5.logging.Red5LoggerFactory;
 import org.simpleframework.xml.Serializer;
@@ -590,11 +591,17 @@ public class BackupImportController extends AbstractUploadController {
 			
 			List<Configuration> list = readList(serializer, f, "configs.xml", "configs", Configuration.class, true);
 			for (Configuration c : list) {
-				Configuration cfg = configurationDao.get(c
-						.getConf_key());
+				Configuration cfg = configurationDao.get(c.getConf_key());
 				c.setConfiguration_id(cfg == null ? null : cfg.getConfiguration_id());
 				if (c.getUser() != null && c.getUser().getUser_id() == null) {
 					c.setUser(null);
+				}
+				if ("crypt_ClassName".equals(c.getConf_key())) {
+					try {
+						Class.forName(c.getConf_value());
+					} catch (ClassNotFoundException e) {
+						c.setConf_value(MD5Implementation.class.getCanonicalName());
+					}
 				}
 				configurationDao.update(c, 1L);
 			}
