@@ -138,6 +138,17 @@ public class UsersDao implements IDataProviderDao<User> {
 		}
 		return u;
 	}
+	
+	public User update(User u) {
+		if (u.getUser_id() == null) {
+			u.setStarttime(new Date());
+			em.persist(u);
+		} else {
+			u.setUpdatetime(new Date());
+			u =	em.merge(u);
+		}
+		return u;
+	}
 
 	public void delete(User u, long userId) {
 		deleteUserID(u.getUser_id());

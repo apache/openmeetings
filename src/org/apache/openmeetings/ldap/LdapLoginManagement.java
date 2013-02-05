@@ -36,10 +36,10 @@ import org.apache.openmeetings.data.user.dao.StateDao;
 import org.apache.openmeetings.data.user.dao.UsersDao;
 import org.apache.openmeetings.ldap.config.ConfigReader;
 import org.apache.openmeetings.persistence.beans.basic.LdapConfig;
+import org.apache.openmeetings.persistence.beans.room.Client;
 import org.apache.openmeetings.persistence.beans.user.State;
 import org.apache.openmeetings.persistence.beans.user.User;
 import org.apache.openmeetings.remote.util.SessionVariablesUtil;
-import org.apache.openmeetings.persistence.beans.room.Client;
 import org.apache.openmeetings.utils.OmFileHelper;
 import org.apache.openmeetings.utils.crypt.ManageCryptStyle;
 import org.red5.logging.Red5LoggerFactory;
@@ -121,6 +121,7 @@ public class LdapLoginManagement {
 	public static final String LDAP_KEY_TOWN = "l";
 	public static final String LDAP_KEY_PHONE = "telephoneNumber";
 	public static final String LDAP_KEY_TIMEZONE = "timezone";
+	public static final String LDAP_KEY_PICTURE_URI = "pictureUri";
 
 	// LDAP custom attribute mapping keys
 	public static final String CONFIGKEY_LDAP_KEY_LASTNAME = "ldap_user_attr_lastname";
@@ -133,6 +134,7 @@ public class LdapLoginManagement {
 	public static final String CONFIGKEY_LDAP_KEY_COUNTRY = "ldap_user_attr_country";
 	public static final String CONFIGKEY_LDAP_KEY_TOWN = "ldap_user_attr_town";
 	public static final String CONFIGKEY_LDAP_KEY_PHONE = "ldap_user_attr_phone";
+	public static final String CONFIGKEY_LDAP_PICTURE_URI = "ldap_user_picture_uri";
 
 	/**
 	 * Determine if is a supported Auth Type
@@ -319,7 +321,9 @@ public class LdapLoginManagement {
 		String ldap_user_attr_town = configData.get(CONFIGKEY_LDAP_KEY_TOWN);
 		String ldap_user_attr_phone = configData.get(CONFIGKEY_LDAP_KEY_PHONE);
 		String ldap_user_attr_timezone = configData.get(CONFIGKEY_LDAP_TIMEZONE_NAME);
+		String ldap_user_picture_uri = configData.get(CONFIGKEY_LDAP_PICTURE_URI);
 		String ldap_use_lower_case = configData.get(CONFIGKEY_LDAP_USE_LOWER_CASE);
+		
 		
 		if (ldap_use_lower_case != null && ldap_use_lower_case.equals("true")) {
 			user = user.toLowerCase();
@@ -357,6 +361,9 @@ public class LdapLoginManagement {
 		}
 		if (ldap_user_attr_timezone == null) {
 			ldap_user_attr_timezone = LDAP_KEY_TIMEZONE;
+		}
+		if (ldap_user_picture_uri == null) {
+			ldap_user_picture_uri = LDAP_KEY_PICTURE_URI;
 		}
 
 		// Auth Type
@@ -450,7 +457,8 @@ public class LdapLoginManagement {
 			attributes.add(ldap_user_attr_country); // Country
 			attributes.add(ldap_user_attr_town); // Town
 			attributes.add(ldap_user_attr_phone); // Phone
-			attributes.add(ldap_user_attr_timezone); // Phone
+			attributes.add(ldap_user_attr_timezone); // timezone
+			attributes.add(ldap_user_picture_uri); //picture uri
 			
 			HashMap<String, String> ldapAttrs = new HashMap<String, String>();
 			ldapAttrs.put("lastnameAttr", ldap_user_attr_lastname);
@@ -463,8 +471,8 @@ public class LdapLoginManagement {
 			ldapAttrs.put("countryAttr", ldap_user_attr_country);
 			ldapAttrs.put("townAttr", ldap_user_attr_town);
 			ldapAttrs.put("phoneAttr", ldap_user_attr_phone);
-			ldapAttrs.put("phoneAttr", ldap_user_attr_phone);
 			ldapAttrs.put("timezoneAttr", ldap_user_attr_timezone);
+			ldapAttrs.put("pictureUri", ldap_user_picture_uri);
 
 			Vector<HashMap<String, String>> result = lAuth.getData(
 					ldap_search_scope, ldap_search_filter, attributes);
@@ -634,6 +642,11 @@ public class LdapLoginManagement {
 		if (userdata.containsKey(ldapAttrs.get("phoneAttr"))
 				&& userdata.get(ldapAttrs.get("phoneAttr")) != null)
 			phone = userdata.get(ldapAttrs.get("phoneAttr"));
+		
+		String pictureUri = "pictureUri";
+		if (userdata.containsKey(ldapAttrs.get("pictureUri"))
+				&& userdata.get(ldapAttrs.get("pictureUri")) != null)
+			pictureUri = userdata.get(ldapAttrs.get("pictureUri"));
 
 		long state_id = -1;
 		
@@ -710,6 +723,10 @@ public class LdapLoginManagement {
 					false, //showContactData
 					true //showContactDataToContacts
 					);
+			
+			User user = usersDao.get(newUserId);
+			user.setPictureuri(pictureUri);
+			usersDao.update(user);
 
 		} catch (Exception e) {
 			log.error("Error creating user : " + e.getMessage());

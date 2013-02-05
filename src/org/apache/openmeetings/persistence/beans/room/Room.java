@@ -42,6 +42,7 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import org.apache.openjpa.persistence.ElementDependent;
+import org.apache.openjpa.persistence.jdbc.ForeignKey;
 import org.apache.openmeetings.persistence.beans.IDataProviderEntity;
 import org.apache.openmeetings.persistence.beans.sip.asterisk.MeetMe;
 import org.simpleframework.xml.Element;
@@ -97,6 +98,7 @@ public class Room implements Serializable, IDataProviderEntity {
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "roomtypes_id")
+	@ForeignKey(enabled = true)
 	@Element(name = "roomtypeId", data = true, required = false)
 	private RoomType roomtype;
 
