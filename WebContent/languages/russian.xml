@@ -834,7 +834,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>Обновлено:</value>
   </string>
   <string id="270" name="confadminform_labelcomment">
-    <value>Комментарий:</value>
+    <value>Описание:</value>
   </string>
   <string id="271" name="confadminform_labelkey">
     <value>Значение</value>
@@ -1203,7 +1203,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>Имя:</value>
   </string>
   <string id="393" name="recordingsavewin">
-    <value>Комментарий:</value>
+    <value>Описание:</value>
   </string>
   <string id="394" name="recordingsavewin">
     <value>сохранить</value>
@@ -1218,7 +1218,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>Записи публичных и приватных комнат</value>
   </string>
   <string id="398" name="roomslist">
-    <value>Пользователи :</value>
+    <value>Участники :</value>
   </string>
   <string id="399" name="roomslist">
     <value>Присоединившиеся:</value>
@@ -1227,7 +1227,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value></value>
   </string>
   <string id="401" name="roomslist">
-    <value>Пользователи в этой комнате:</value>
+    <value>Участники в этой комнате:</value>
   </string>
   <string id="402" name="roomslist">
     <value>обновить</value>
@@ -1245,7 +1245,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>Комната:</value>
   </string>
   <string id="407" name="roomslist">
-    <value>Пользователи в этой комнате:</value>
+    <value>Участники в этой комнате:</value>
   </string>
   <string id="408" name="roomslist">
     <value>с:</value>
@@ -1785,7 +1785,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>Создание пользователей, комнат, организаций + изменить конфигурацию</value>
   </string>
   <string id="587" name="room Administration roomclients list">
-    <value>Сейчас пользователи в этой комнате</value>
+    <value>Сейчас участников в этой комнате</value>
   </string>
   <string id="588" name="room Administration roomclients list">
     <value>ID</value>
