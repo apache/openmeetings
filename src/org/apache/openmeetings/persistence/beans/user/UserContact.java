@@ -63,7 +63,7 @@ import org.simpleframework.xml.Root;
 			"AND c.contact.deleted <> true"),
 	@NamedQuery(name = "getUserContactsById", query = "select c from UserContact c " +
 			"where c.userContactId = :userContactId"),
-	@NamedQuery(name = "getUserContacts", query = "select c from UserContact c"),	
+	@NamedQuery(name = "getUserContacts", query = "select c from UserContact c")
 })
 @Table(name = "user_contact")
 @Root(name="usercontact")

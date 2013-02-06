@@ -58,7 +58,7 @@ import org.simpleframework.xml.Root;
 			+ "AND c.deleted <> :deleted"),
 	@NamedQuery(name = "getRoomsOrganisationByRoomsId", query = "select c from Rooms_Organisation as c "
 			+ "where c.room.rooms_id = :rooms_id "
-			+ "AND c.deleted <> :deleted"),
+			+ "AND c.deleted <> :deleted")
 })
 @Table(name = "rooms_organisation")
 @Root(name="room_organisation")

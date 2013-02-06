@@ -34,7 +34,7 @@ import javax.persistence.Table;
 @NamedQueries({
 	@NamedQuery(name = "getAllRoomTypes", query = "select c from RoomType as c where c.deleted <> :deleted"),
 	@NamedQuery(name = "getRoomTypesById", query = "select c from RoomType as c " +
-			"where c.roomtypes_id = :roomtypes_id AND c.deleted <> :deleted"),
+			"where c.roomtypes_id = :roomtypes_id AND c.deleted <> :deleted")
 })
 @Table(name = "roomtype")
 public class RoomType implements Serializable {

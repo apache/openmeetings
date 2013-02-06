@@ -57,11 +57,11 @@ import org.simpleframework.xml.Root;
 			"where c.privateMessageId IN (:privateMessageIds) "),
 	@NamedQuery(name = "moveMailsToFolder", query = "UPDATE PrivateMessage c " +
 			"SET c.privateMessageFolderId = :privateMessageFolderId, c.isTrash = false " +
-			"where c.privateMessageId IN (:privateMessageIds) "),		
+			"where c.privateMessageId IN (:privateMessageIds) "),
 	@NamedQuery(name = "deletePrivateMessages", query = "DELETE FROM PrivateMessage c " +
-			"where c.privateMessageId IN (:privateMessageIds) "),	
+			"where c.privateMessageId IN (:privateMessageIds) "),
 	@NamedQuery(name = "getPrivateMessagesByRoom", query = "select c from PrivateMessage c " +
-			"where c.room.rooms_id = :roomId "),				
+			"where c.room.rooms_id = :roomId ")
 })
 @Table(name = "private_message")
 @Root(name="privatemessage")

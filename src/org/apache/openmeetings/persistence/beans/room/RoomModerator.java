@@ -42,11 +42,11 @@ import org.simpleframework.xml.Root;
 	@NamedQuery(name = "getRoomModeratorById", query = "select c from RoomModerator as c " +
 			"where c.roomModeratorsId = :roomModeratorsId"),
 	@NamedQuery(name = "getRoomModeratorByRoomId", query = "select c from RoomModerator as c "
-			+ "where c.roomId = :roomId AND c.deleted <> :deleted"),	
+			+ "where c.roomId = :roomId AND c.deleted <> :deleted"),
 	@NamedQuery(name = "getRoomModeratorByUserAndRoomId", query = "select c from RoomModerator as c "
 			+ "where c.roomId = :roomId "
 			+ "AND c.deleted <> :deleted "
-			+ "AND c.user.user_id = :user_id"),			
+			+ "AND c.user.user_id = :user_id")
 })
 @Table(name = "rooms_moderator")
 @Root(name = "room_moderator")
