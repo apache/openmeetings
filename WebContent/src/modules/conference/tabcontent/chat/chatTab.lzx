@@ -54,8 +54,12 @@ This is used in the conference.
 			}
 			this.objMessage = new Array();
 			this.objMessage[0] = 'newprivatechat';
-            this.objMessage[1] = canvas.thishib.userobject;
-            this.objMessage[1].publicSID = canvas.publicSID;
+			var u = canvas.thishib.userobject;
+			this.objMessage[1] = {
+				publicSID: canvas.publicSID
+				, firstname: u.firstname
+				, lastname: u.lastname
+				};
 			
 			this.sendMessageWithClientByPublicSID.doCall();
 			
