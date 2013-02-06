@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -419,7 +420,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 	}
 
     public synchronized List<Integer> listRoomBroadcast() {
-        List<Integer> broadcastList = new ArrayList<Integer>();
+    	HashSet<Integer> broadcastList = new HashSet<Integer>();
         IConnection current = Red5.getConnectionLocal();
         String streamid = current.getClient().getId();
         Collection<Set<IConnection>> conCollection = current.getScope().getConnections();
@@ -442,13 +443,16 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
                             // as it will be already triggered
                             // in the result of this Function
                             // in the Client
-                            broadcastList.add(Long.valueOf(rcl.getBroadCastID()).intValue());
+                        	Long id = Long.valueOf(rcl.getBroadCastID());
+                        	if (id != null && !broadcastList.contains(id)) {
+                        		broadcastList.add(id.intValue());
+                        	}
                         }
                     }
                 }
             }
         }
-        return broadcastList;
+        return new ArrayList<Integer>(broadcastList);
     }
 
 
