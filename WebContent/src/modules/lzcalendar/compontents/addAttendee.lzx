@@ -176,7 +176,8 @@
     			//parent.parent.getUserContactsBySearchByList.doCall();
     			//parent.parent.getAllUserBySearchRange.doCall();
     			new lz.addExternalAttendee(parent.parent, {
-        			         refObj:parent.refObj, 
+        			         refObj:parent.refObj,
+        			         parentSearch: parent, 
         			         x:parent.x+parent.width/2, 
         			         y:parent.y+40
     			         });

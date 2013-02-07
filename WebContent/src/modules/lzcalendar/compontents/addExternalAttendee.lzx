@@ -22,7 +22,8 @@
 <class name="addExternalAttendee" extends="labelExplorerBox" width="420" height="240"
 	   closable="true" labelid="629" x="$once{ parent.width/2-this.width/2 + 10 }">
 	
-	<attribute name="refObj" value="null"/>	
+	<attribute name="refObj" value="null"/>
+	<attribute name="parentSearch" value="null"/>
 	
 	<handler name="oninit">
 		this._timeZone.selectItem(canvas.jNameTimeZone);
@@ -104,6 +105,9 @@
 			parent.lastname="";
 			parent.email="";
 			parent.close();
+			if (parent.parentSearch != null) {
+				parent.parentSearch.close();
+			}
 			//parent.parent.parent.refObj.close();
 			//if ($debug) Debug.write("userId  search: ",parent.parent.parent.userId);
 		]]>
