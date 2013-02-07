@@ -104,7 +104,6 @@
 				<blockquote>
 					<i>
 						[settings]<br />
-						sipusers => odbc,asterisk,sipusers<br />
 						sippeers => odbc,asterisk,sipusers<br />
 						meetme => odbc,asterisk,meetme<br />
 
