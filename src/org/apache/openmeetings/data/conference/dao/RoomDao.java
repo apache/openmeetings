@@ -91,7 +91,7 @@ public class RoomDao implements IDataProviderDao<Room> {
 		return q.getResultList();
 	}
 	
-	public Room update(Room entity, long userId) {
+	public Room update(Room entity, Long userId) {
 		if (entity.getRooms_id() == null) {
 			entity.setStarttime(new Date());
 			em.persist(entity);
@@ -102,7 +102,7 @@ public class RoomDao implements IDataProviderDao<Room> {
 		return entity;
 	}
 
-	public void delete(Room entity, long userId) {
+	public void delete(Room entity, Long userId) {
 		entity.setDeleted(true);
 		update(entity, userId);
 	}

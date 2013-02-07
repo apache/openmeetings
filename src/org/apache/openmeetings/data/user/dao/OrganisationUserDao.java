@@ -97,12 +97,12 @@ public class OrganisationUserDao implements IDataProviderDao<Organisation_Users>
 		return q.getSingleResult();
 	}
 
-	public Organisation_Users update(Organisation_Users entity, long userId) {
+	public Organisation_Users update(Organisation_Users entity, Long userId) {
 		//if (entity.getOrganisation_users_id())// TODO Auto-generated method stub
 		return entity;
 	}
 
-	public void delete(Organisation_Users entity, long userId) {
+	public void delete(Organisation_Users entity, Long userId) {
 		if (entity.getOrganisation_users_id() != null) {
 			User u = usersDao.get(entity.getUser_id());
 			int idx = u.getOrganisation_users().indexOf(entity);

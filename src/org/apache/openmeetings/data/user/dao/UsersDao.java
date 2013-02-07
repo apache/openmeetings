@@ -128,7 +128,7 @@ public class UsersDao implements IDataProviderDao<User> {
 		return q.getResultList();
 	}
 
-	public User update(User u, long userId) {
+	public User update(User u, Long userId) {
 		if (u.getUser_id() == null) {
 			u.setStarttime(new Date());
 			em.persist(u);
@@ -139,7 +139,7 @@ public class UsersDao implements IDataProviderDao<User> {
 		return u;
 	}
 	
-	public void delete(User u, long userId) {
+	public void delete(User u, Long userId) {
 		deleteUserID(u.getUser_id());
 	}
 

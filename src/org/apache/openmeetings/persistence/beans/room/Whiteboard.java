@@ -12,6 +12,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.apache.openjpa.persistence.jdbc.ElementJoinColumn;
+import org.apache.openjpa.persistence.jdbc.ForeignKey;
 
 @Entity
 @Table(name = "whiteboard")
@@ -42,6 +43,7 @@ public class Whiteboard {
 
 	@OneToMany
 	@ElementJoinColumn(name = "whiteboarditem_id", referencedColumnName = "id")
+	@ForeignKey(enabled = true)
 	private Collection<WhiteboardItem> roomItems;
 
 	public long getId() {

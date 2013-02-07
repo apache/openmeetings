@@ -365,7 +365,7 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 		return q.getSingleResult();
 	}
 	
-	public Configuration update(Configuration entity, long userId) {
+	public Configuration update(Configuration entity, Long userId) {
 		String key = entity.getConf_key();
 		String value = entity.getConf_value();
 		if (entity.getConfiguration_id() == null
@@ -392,7 +392,7 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 		return entity;
 	}
 
-	public void delete(Configuration entity, long userId) {
+	public void delete(Configuration entity, Long userId) {
 		if (userId > 0) {
 			entity.setUser(usersDao.get(userId));
 		}

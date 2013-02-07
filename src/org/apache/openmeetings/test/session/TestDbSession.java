@@ -58,7 +58,7 @@ public class TestDbSession extends AbstractOpenmeetingsSpringTest {
 			server = new Server();
 			server.setName("Test Server");
 			server.setActive(true);
-			serverDao.update(server, 0);
+			serverDao.update(server, null);
 		}
 
 		Client cl1 = new Client();

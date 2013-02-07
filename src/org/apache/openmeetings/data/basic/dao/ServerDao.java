@@ -159,7 +159,7 @@ public class ServerDao implements IDataProviderDao<Server> {
 	 * org.apache.openmeetings.data.OmDAO#update(org.apache.openmeetings.persistence
 	 * .beans.OmEntity, long)
 	 */
-	public Server update(Server entity, long userId) {
+	public Server update(Server entity, Long userId) {
 		entity.setDeleted(false);
 		if (entity.getId() > 0) {
 			if (userId > 0) {
@@ -188,7 +188,7 @@ public class ServerDao implements IDataProviderDao<Server> {
 	 * org.apache.openmeetings.data.OmDAO#delete(org.apache.openmeetings.persistence
 	 * .beans.OmEntity, long)
 	 */
-	public void delete(Server entity, long userId) {
+	public void delete(Server entity, Long userId) {
 		if (entity.getId() > 0) {
 			entity.setUpdated(new Date());
 			if (userId > 0) {

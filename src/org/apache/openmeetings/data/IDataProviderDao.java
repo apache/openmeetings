@@ -80,7 +80,7 @@ public interface IDataProviderDao<T extends IDataProviderEntity> {
 	 * @param entity - entity to be updated
 	 * @param userId - user performed update
 	 */
-	T update(T entity, long userId);
+	T update(T entity, Long userId);
 
 	/**
 	 * Delete an instance of {@link T}
@@ -88,5 +88,5 @@ public interface IDataProviderDao<T extends IDataProviderEntity> {
 	 * @param entity - entity to be deleted
 	 * @param userId - user performed delete
 	 */
-	void delete(T entity, long userId);
+	void delete(T entity, Long userId);
 }

@@ -305,7 +305,7 @@ public class LdapConfigDao implements IDataProviderDao<LdapConfig> {
 		return q.getSingleResult();
 	}
 	
-	public LdapConfig update(LdapConfig entity, long userId) {
+	public LdapConfig update(LdapConfig entity, Long userId) {
 		try {
 			if (entity.getLdapConfigId() <= 0) {
 				entity.setInserted(new Date());
@@ -328,7 +328,7 @@ public class LdapConfigDao implements IDataProviderDao<LdapConfig> {
 		return entity;
 	}
 
-	public void delete(LdapConfig entity, long userId) {
+	public void delete(LdapConfig entity, Long userId) {
 		if (entity.getLdapConfigId() >= 0) {
 			entity.setUpdated(new Date());
 			if (userId > 0) {

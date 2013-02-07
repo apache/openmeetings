@@ -137,7 +137,7 @@ public class FieldLanguagesValuesDaoImpl implements IDataProviderDao<Fieldlangua
 	 * org.apache.openmeetings.data.OmDAO#update(org.apache.openmeetings.persistence
 	 * .beans.OmEntity, long)
 	 */
-	public Fieldlanguagesvalues update(Fieldlanguagesvalues entity, long userId) {
+	public Fieldlanguagesvalues update(Fieldlanguagesvalues entity, Long userId) {
 		entity.setUpdatetime(new Date());
 		if (entity.getFieldlanguagesvalues_id() == null) {
 			em.persist(entity);
@@ -154,7 +154,7 @@ public class FieldLanguagesValuesDaoImpl implements IDataProviderDao<Fieldlangua
 	 * org.apache.openmeetings.data.OmDAO#delete(org.apache.openmeetings.persistence
 	 * .beans.OmEntity, long)
 	 */
-	public void delete(Fieldlanguagesvalues entity, long userId) {
+	public void delete(Fieldlanguagesvalues entity, Long userId) {
 		entity.setDeleted(true);
 		entity.setUpdatetime(new Date());
 		entity = em.merge(entity);
