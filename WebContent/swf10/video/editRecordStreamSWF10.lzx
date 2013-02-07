@@ -631,7 +631,7 @@
     </resetCombobox>
 
     <labelText name="infoTextNoAV" labelid="452" multiline="true" width="280" 
-               fontsize="11" x="10" y="240" visibility="hidden" />
+               fontsize="11" x="10" y="130" visibility="hidden" />
                
     <labelText name="availibleResolutionsLabel" labelid="1429" 
             fontsize="11" x="10" y="224" width="$once{ parent.width-20 }" />
