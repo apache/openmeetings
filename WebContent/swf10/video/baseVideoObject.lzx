@@ -26,18 +26,18 @@
 	a remote-video (subscribing/playing a video)
 	or a self-video (broadcasting a cam/mic)
  -->
-    
 <class name="baseVideoObject" extends="view" bgcolor="0x000000" width="122" height="101">
 
-    <switch>
-	  <when property="$as3">
-		<passthrough>
-		  import flash.filters.DropShadowFilter;
-          import flash.media.*
-		</passthrough>
-	  </when>
+	<switch>
+		<when property="$as3">
+			<passthrough>
+				import flash.filters.DropShadowFilter;
+				import flash.media.*
+				import flash.net.SharedObject;
+			</passthrough>
+		</when>
 	</switch>
-	 
+	
 	<!--- @keywords private -->
 	<attribute name="chatpartnername" value="" type="string" />
 	<!--- @keywords private -->
@@ -50,7 +50,7 @@
 	<attribute name="publicSID" value="" type="string" />
 
 	<!--- micMuted indicates if the microphone is currently turned sound or gain to 0 -->
-    <attribute name="micMuted" value="false" type="boolean" />
+	<attribute name="micMuted" value="false" type="boolean" />
 	
 	<!--- @keywords private -->
 	<attribute name="isremote" value="true" type="boolean" />
@@ -606,11 +606,33 @@
         ]]>
     </handler>
 
-    <method name="giveExclusiveAudio">
-        canvas.videoComp_lc.send(canvas.videoComp_lc_name, 'lc_giveExclusiveAudio', this.publicSID);
-    </method>
-    
-    <!--
+	<method name="giveExclusiveAudio">
+		var so:SharedObject = SharedObject.getLocal('userdata');
+		var userData = so.data;
+		var dontShowExclusiveAudioConfirmation = userData["dontShowExclusiveAudioConfirmation"];
+		var exclusiveAudioListener = new Object();
+		exclusiveAudioListener.sendNoConfirmation = function() {};
+		exclusiveAudioListener.sendConfirmation = function(answer, remember) {
+			if (answer) {
+				canvas.videoComp_lc.send(canvas.videoComp_lc_name, 'lc_giveExclusiveAudio', this.publicSID);
+				if (remember) {
+					userData["dontShowExclusiveAudioConfirmation"] = true;
+					so.flush();
+				}
+			}
+		};
+		if (dontShowExclusiveAudioConfirmation == true) {
+			exclusiveAudioListener.sendConfirmation(true, true);
+		} else {
+			new lz.confirmationSingleSWF10(canvas,{
+											labelid:1386,
+											labeliderror:1539,
+											refObj:exclusiveAudioListener,
+											showCheckBox:true});
+		}
+	</method>
+
+	<!--
         This will mute the Microphone only to the person that is speaking
         if the gain is set to zero NOBODY will hear 'em
      -->

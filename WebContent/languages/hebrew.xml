@@ -4640,4 +4640,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
   <string id="1538" name="room_admin_sip">
     <value>Enable SIP transport in the room</value>
   </string>
+  <string id="1539" name="exclusive_audio_confirm">
+    <value>Do you really want to provide this user an exclusive audio?</value>
+  </string>
 </language>
