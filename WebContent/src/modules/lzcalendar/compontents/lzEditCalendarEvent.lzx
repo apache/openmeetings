@@ -222,21 +222,21 @@
 		
 		<labelText name="_titleLabel" x="4" y="24" labelid="572" fontstyle="bold" /> 
 			
-		<customEdittext name="_title" x="100" y="24" datapath="local:classroot.eventDS:/title"
+		<customEdittext name="_title" x="120" y="24" datapath="local:classroot.eventDS:/title"
 				text="$path{'text()'}" 
-			width="$once{ parent.width-110 }" height="24" />
+			width="$once{ parent.width-130 }" height="24" />
 			
 			
 		<!-- Start Date / Time -->
-		<dateField name="_dateStart" y="50" x="100" width="104" datapath="local:classroot.eventDS:/start">
+		<dateField name="_dateStart" y="50" x="120" width="104" datapath="local:classroot.eventDS:/start">
 			<handler name="ondata" args="d">
 				this.setAttribute("text",parseDateStringFromXmlString(d.childNodes[0].data));
 			</handler>
 		</dateField>
 		
-		<labelText name="_dateTimeStartLabel" x="220" y="50" labelid="570" fontstyle="bold" /> 
+		<labelText name="_dateTimeStartLabel" x="240" y="50" labelid="570" fontstyle="bold" /> 
 			
-		<customEdittext name="_timeStart" x="270" 
+		<customEdittext name="_timeStart" x="290" 
       					y="50" width="50" regexpType="time" text="08:00" datapath="local:classroot.eventDS:/start">
       		<handler name="ondata" args="d">
 				this.setAttribute("text",parseTimeStringFromXmlString(d.childNodes[0].data));
@@ -244,7 +244,7 @@
       	</customEdittext>
       					
       	<!-- End Date / Time -->			
-		<labelText name="_dateTimeEndLabel" x="326" y="50" labelid="571" fontstyle="bold" />  
+		<labelText name="_dateTimeEndLabel" x="346" y="50" labelid="571" fontstyle="bold" />  
 			
 		<!-- 
 		 we currently do not support multi date events
@@ -255,7 +255,7 @@
 		</dateField>
 		 -->
 			
-		<customEdittext name="_timeEnd" x="376" 
+		<customEdittext name="_timeEnd" x="396" 
       					y="50" width="50" regexpType="time" text="10:00" datapath="local:classroot.eventDS:/end">
       		<handler name="ondata" args="d">
 				this.setAttribute("text",parseTimeStringFromXmlString(d.childNodes[0].data));
@@ -265,7 +265,7 @@
         <!-- Remindertype -->
 		<labelText name="_reminderTypeLabel" x="4" y="76" labelid="565" fontstyle="bold" /> 
 		
-		<resetCombobox name="_reminderType" x="100" width="$once{ parent.width-110 }"
+		<resetCombobox name="_reminderType" x="120" width="$once{ parent.width-130 }"
 			 			  editable="false" shownitems="5" y="76" datapath="local:classroot.eventDS:/reminderId">
 			<handler name="onvalue" args="v">						
 				if ($debug) Debug.write("reminderTypeId: ",parent.reminderTypeId);
@@ -304,7 +304,7 @@
 	 	<!-- Roomtype -->
 		<labelText name="_roomTypeLabel" x="4" y="128" labelid="619" fontstyle="bold" /> 
 		
-		<resetCombobox name="_roomType" width="$once{ parent.width-110 }" y="128" x="100" editable="false" 
+		<resetCombobox name="_roomType" width="$once{ parent.width-130 }" y="128" x="120" editable="false" 
 					datapath="local:classroot.eventDS:/roomTypeId" enabled="${ parent._createNewRoom.value }">
 			<handler name="ondata" args="roomTypeIdNode">
 				if ($debug) Debug.write("_roomType ondata 1: ", roomTypeIdNode.childNodes[0].data);
@@ -326,7 +326,7 @@
 	 	<!-- Room list -->
 		<labelText name="_roomLabel" x="4" y="154" labelid="406" fontstyle="bold" /> 
 		
-		<resetCombobox name="_room" width="$once{ parent.width-110 }" y="154" x="100" editable="false" 
+		<resetCombobox name="_room" width="$once{ parent.width-130 }" y="154" x="120" editable="false" 
 				enabled="${ !parent._createNewRoom.value }">
 			<attribute name="appointmentRoomInList" type="boolean" value="false" />
 			
@@ -401,7 +401,7 @@
 		<labelText labelid="525" y="206" x="4" fontstyle="bold" 
 				fgcolor="${ ((!parent._ispasswordProtected.value) ? 0xCCCCCC : 0x000000 ) }" />
 		<customEdittext name="_password" enabled="${ parent._ispasswordProtected.value }" password="true"
-						width="$once{ parent.width-110 }" x="100" y="206" />
+						width="$once{ parent.width-130 }" x="120" y="206" />
 						
 		<view resource="messagebox_info_rsc" x="4" y="226" />
 	
@@ -429,9 +429,9 @@
 	 	
 	 	<labelText name="_participentLabel" x="4" y="302" labelid="803" fontstyle="bold" /> 
 	 	
-	 	<view name="_participentList" x="100" y="302" height="100" 
+	 	<view name="_participentList" x="120" y="302" height="100" 
             		  bgcolor="$once{ canvas.getThemeColor('secondBorderColor') }" 
-            		  width="$once{ parent.width-110 }">
+            		  width="$once{ parent.width-130 }">
            
             <method name="addListItem" args="userId,firstName,lastName,email,memberId,jNameTimeZone">
             	<![CDATA[
@@ -511,14 +511,14 @@
         
         <customEdittext name="_location" 
         		datapath="local:classroot.eventDS:/location" text="$path{'text()'}" 
-        		width="$once{ parent.width-110 }" x="100" y="406" />
+        		width="$once{ parent.width-130 }" x="120" y="406" />
 		
 		<!-- Comment -->
 		<labelText name="_descrLabel" x="4" y="432" labelid="573" fontstyle="bold" /> 
 	
-		<customScrollEdittext name="_descr" y="432" x="100" 
+		<customScrollEdittext name="_descr" y="432" x="120" 
 				datapath="local:classroot.eventDS:/comment" text="$path{'text()'}" 
-				width="$once{ parent.width-110 }" height="124" /> 
+				width="$once{ parent.width-130 }" height="124" /> 
 			
 		<simpleLabelButton name="_saveEvent" labelid="813" width="100" 
 				x="$once{ parent.width-315 }" y="$once{ parent.height-24 }" >
