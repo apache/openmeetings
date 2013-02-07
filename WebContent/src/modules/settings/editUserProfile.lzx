@@ -113,27 +113,7 @@
   		<netparam><method name="getValue"> return canvas.sessionId; </method></netparam>
     	<handler name="ondata" args="value">
     		<![CDATA[
-    		
-    			if (value.pictureuri==null || value.pictureuri.length==0){
-					value.pictureuri = "d.jpg";
-    		    } else if (value.pictureuri.startsWith("http") || value.pictureuri.startsWith("https")) {
-                    //nothing
-				} else {
-					value.pictureuri = "_profile_"+value.pictureuri;
-				}
-				
-				var t = new Date();
-				if (value.pictureuri.startsWith("http") || value.pictureuri.startsWith("https")) {
-                    var downloadurl = value.pictureuri;
-                } else {
-    		        var downloadurl = canvas.getUrl() + 'DownloadHandler?fileName='+value.pictureuri
-    		        		+'&moduleName=userprofile&parentPath=&room_id='
-    		        		+'&sid='+canvas.sessionId+'&r='+t.getTime();
-                }
-                
-		        if ($debug) Debug.write("downloadurl "+downloadurl);
-		        parent._userpic.setAttribute('src',downloadurl);	    		
-				//Debug.write("getUserSelf: ",value);
+				parent._userpic.setAttribute('src', canvas.getPictureUrl(value.pictureuri, '&moduleName=userprofile'));
 	    		parent.initFields(value);
     		]]>
     	</handler>

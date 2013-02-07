@@ -23,19 +23,11 @@
 <class name="videoUserProfilePicSWF10" extends="view" x="1" y="2" width="${parent.width-2}" height="${parent.height-3}" 
 	   clip="true" bgcolor="white">
 	<attribute name="value" value="null" />
+		
 	<handler name="oninit">
 		<![CDATA[
-			if (this.value.picture_uri==null || this.value.picture_uri.length==0){
-				this.value.picture_uri = "d.jpg";
-			} else {
-				this.value.picture_uri = "_profile_"+value.picture_uri;
-			}
-	        var downloadurl = canvas.getUrl() + 'DownloadHandler?fileName='+value.picture_uri
-	        		+'&moduleName=remoteuserprofile&parentPath=&room_id='
-	        		+'&remoteUserid='+this.value.user_id
-	        		+'&sid='+canvas.sessionId;
-	        if ($debug) Debug.write(downloadurl);
-	        this._userpic.setAttribute('src',downloadurl);	
+	        this._userpic.setAttribute('src'
+	        	, canvas.getPictureUrl(value.picture_uri, '&moduleName=remoteuserprofile&remoteUserid='+this.value.user_id));	
         ]]>
 	</handler>	
 	<image name="_userpic" stretches="both" width="${parent.width}" height="${parent.height}" />

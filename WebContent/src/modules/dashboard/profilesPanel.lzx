@@ -77,17 +77,7 @@
 					parent._langAndCountry._timeZone.setAttribute("text","<u>" + value.omTimeZone.jname + "</u>");
 					canvas.timeZoneId = value.omTimeZone.omtimezoneId;
 				}
-				
-				if (value.pictureuri==null || value.pictureuri.length==0){
-					value.pictureuri = "d.jpg";
-				} else {
-					value.pictureuri = "_profile_"+value.pictureuri;
-				}
-		        var downloadurl = canvas.getUrl() + 'DownloadHandler?fileName='+value.pictureuri
-		        		+'&moduleName=userprofile&parentPath=&room_id='
-		        		+'&sid='+canvas.sessionId;
-		        if($debug) Debug.write("dashboard/downloadurl ",downloadurl);
-		        parent._userpic.setAttribute('src',downloadurl);	
+		        parent._userpic.setAttribute('src', canvas.getPictureUrl(value.pictureuri, '&moduleName=userprofile'));
 	        ]]>
     	</handler>
   	</netRemoteCallHib>	    

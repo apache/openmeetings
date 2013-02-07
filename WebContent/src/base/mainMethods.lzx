@@ -1048,7 +1048,23 @@
 		_mainbgcontentNavi.setAttribute("bgcolor",canvas.getThemeColor('mainBackgroundColor'));
 		main_content.setAttribute("bgcolor",canvas.getThemeColor('mainBackgroundColor'));
 	</method>
-	
+
+	<method name="getPictureUrl" args="pictureuri,extraParams">
+	<![CDATA[
+		var pUri = (pictureuri == null || pictureuri.length == 0) ? "d.jpg" : pictureuri;
+		var downloadurl = pUri;
+		if (!pUri.startsWith("http://") && !pUri.startsWith("https://")) {
+			pUri = "_profile_" + pUri;
+			
+			downloadurl = canvas.getUrl() + 'DownloadHandler?fileName=' + pUri
+				+ '&parentPath=&room_id=&r=' + (new Date()).getTime()
+				+ extraParams + '&sid='+canvas.sessionId;
+		}
+		if($debug) Debug.write("getPictureUrl/downloadurl ", downloadurl);
+		return downloadurl;
+	]]>
+	</method>
+		
 	<method name="sendViaLocalConnection" args="lc_name,methodName,tArray">
 		//if ($debug) Debug.info("sendViaLocalConnection ",lc_name,methodName); //,tArray
 		if (tArray == null || tArray.length == 0) {
