@@ -104,6 +104,7 @@ public class RoomDao implements IDataProviderDao<Room> {
 
 	public void delete(Room entity, Long userId) {
 		entity.setDeleted(true);
+		entity.setMeetme(null);
 		update(entity, userId);
 	}
 
