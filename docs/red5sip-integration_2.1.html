@@ -648,6 +648,28 @@ limitations under the License.
                                                 <table border="0" cellspacing="0" cellpadding="0" cellspacing="0" width="100%">
       <tr><td ><!-- bgcolor="#EEEEEE" -->
         <font color="#000000" face="verdana,arial,helvetica,sanserif">
+          <a name="Installing packages for everything"><strong>Installing packages for everything</strong></a>
+        </font>
+        <hr style="width:100%; color:#999999; background-color:#999999; height:1px; border:0px;"/>
+      </td></tr>
+      <tr><td>
+        <blockquote>
+                                    <div>
+				Run the commands
+				<blockquote>
+					<i>
+						sudo apt-get update<br />
+						sudo apt-get install linux-headers-`uname -r` asterisk unixODBC unixODBC-dev libmyodbc asterisk-dahdi
+					</i>
+				</blockquote>
+			</div>
+                            </blockquote>
+      </td></tr>
+      <tr><td><br/></td></tr>
+    </table>
+                                                <table border="0" cellspacing="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr><td ><!-- bgcolor="#EEEEEE" -->
+        <font color="#000000" face="verdana,arial,helvetica,sanserif">
           <a name="ODBC Setup"><strong>ODBC Setup</strong></a>
         </font>
         <hr style="width:100%; color:#999999; background-color:#999999; height:1px; border:0px;"/>
@@ -700,15 +722,6 @@ limitations under the License.
       <tr><td>
         <blockquote>
                                     <div>
-				Run the commands
-				<blockquote>
-					<i>
-						sudo apt-get update<br />
-						sudo sudo apt-get install asterisk unixODBC unixODBC-dev libmyodbc asterisk-dahdi
-					</i>
-				</blockquote>
-			</div>
-                                                <div>
 				Enable asterisk ODBC and MeetMe modules:<br /><br />
 				Modify "[modules]" section of /etc/asterisk/modules.conf as follows:<br />
 				<strong>Add/uncomment the following lines</strong>
@@ -813,12 +826,6 @@ limitations under the License.
 				Build with Apache Ant
 				<blockquote>
 					<i>ant</i>
-				</blockquote>
-			</div>
-                                                <div>
-				Set red5sip.sh to be executable:
-				<blockquote>
-					<i>chmod a+x red5sip.sh</i>
 				</blockquote>
 			</div>
                                                 <div>

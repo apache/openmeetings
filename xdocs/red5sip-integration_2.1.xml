@@ -17,6 +17,17 @@
 			<p>You need Asterisk <strong>version 1.8</strong> to apply this guide!</p>
 			<p>Here is instruction how-to set up red5sip transport integration with OpenMeetings on Ubuntu 12.10.</p>
 		</section>
+		<section name="Installing packages for everything">
+			<div>
+				Run the commands
+				<blockquote>
+					<i>
+						sudo apt-get update<br />
+						sudo apt-get install linux-headers-`uname -r` asterisk unixODBC unixODBC-dev libmyodbc asterisk-dahdi
+					</i>
+				</blockquote>
+			</div>
+		</section>
 		<section name="ODBC Setup">
 			<div>
 				Set up Asterisk connector:<br /><br />
@@ -52,15 +63,6 @@
 			</div>
 		</section>
 		<section name="Setup Asterisk">
-			<div>
-				Run the commands
-				<blockquote>
-					<i>
-						sudo apt-get update<br />
-						sudo sudo apt-get install asterisk unixODBC unixODBC-dev libmyodbc asterisk-dahdi
-					</i>
-				</blockquote>
-			</div>
 			<div>
 				Enable asterisk ODBC and MeetMe modules:<br /><br />
 				Modify "[modules]" section of /etc/asterisk/modules.conf as follows:<br />
@@ -157,12 +159,6 @@
 				Build with Apache Ant
 				<blockquote>
 					<i>ant</i>
-				</blockquote>
-			</div>
-			<div>
-				Set red5sip.sh to be executable:
-				<blockquote>
-					<i>chmod a+x red5sip.sh</i>
 				</blockquote>
 			</div>
 			<div>
