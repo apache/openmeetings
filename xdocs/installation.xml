@@ -238,7 +238,7 @@
 					(
 					<i>cient-side</i>
 					).
-					<a href="http://code.google.com/p/openmeetings/wiki/RecommendedHardwareList">See all recommendations</a>
+					<a href="RecommendedHardwareList.html">See all recommendations</a>
 					for cameras, headsets and speakerphones.
 				</li>
 			</ul>
@@ -257,17 +257,7 @@
 					</a>
 				</li>
 				<li>
-					<a href="http://code.google.com/p/openmeetings/wiki/InstallationCentOS5">Installation on CentOS 5</a>
-				</li>
-				<li>
-					<a href="http://code.google.com/p/openmeetings/wiki/InstallationRHELS">Installation on RHELS 5.6</a>
-				</li>
-				<li>
-					<a
-						href="http://code.google.com/p/openmeetings/wiki/OpenmeetingsEnUbuntu">Instalar Openmeetings en Ubuntu 10.04 (Spanish)</a>
-				</li>
-				<li>
-					<a href="http://code.google.com/p/openmeetings/wiki/UbuntuLucidLTS">Install openmeetings on Ubuntu 10.04 LTS</a>
+					<a href="https://cwiki.apache.org/confluence/display/OPENMEETINGS/Tutorials+for+installing+OpenMeetings+and+Tools">Installation of OM 2.0 for Ubuntu 12.04 x64, Ubuntu 12.10 x64, Debian, Windows XP, 7, 2003, 2008</a>
 				</li>
 				<li>
 					<a
@@ -281,14 +271,8 @@
 				</li>
 				<li>
 					<a
-						href="http://code.google.com/p/openmeetings/wiki/Automatic_script_installation_for_Debian"
-						rel="nofollow">Automatic script installation for Debian</a>
-				</li>
-				<li>
-					<a href="http://code.google.com/p/openmeetings/wiki/InstallationDebian">InstallationDebian</a>
-				</li>
-				<li>
-					<a href="http://code.google.com/p/openmeetings/wiki/qosTips">qosTips</a>
+						href="https://cwiki.apache.org/confluence/display/OPENMEETINGS/Tutorials+for+installing+OpenMeetings+and+Tools"
+						rel="nofollow">Automatic script installation for Ubuntu/Debian (beta)</a>
 				</li>
 				<li>
 					French version of Installation Instructions:
