@@ -28,7 +28,7 @@ import org.simpleframework.xml.stream.OutputNode;
 public class DateConverter implements Converter<Date> {
 	public Date read(InputNode node) throws Exception {
 		String val = node.getValue();
-		return val == null ? new Date() : CalendarPatterns.parseImportDate(val);
+		return val == null || "null".equals(val) ? new Date() : CalendarPatterns.parseImportDate(val);
 	}
 
 	public void write(OutputNode node, Date value) throws Exception {
