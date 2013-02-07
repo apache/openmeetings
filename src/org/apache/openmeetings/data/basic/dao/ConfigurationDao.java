@@ -374,7 +374,7 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 			entity.setDeleted(false);
 			this.updateConfig(entity);
 		} else {
-			if (userId > 0) {
+			if (userId != null) {
 				entity.setUser(usersDao.get(userId));
 			}
 			entity.setDeleted(false);
@@ -393,7 +393,7 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 	}
 
 	public void delete(Configuration entity, Long userId) {
-		if (userId > 0) {
+		if (userId != null) {
 			entity.setUser(usersDao.get(userId));
 		}
 		entity.setDeleted(true);
