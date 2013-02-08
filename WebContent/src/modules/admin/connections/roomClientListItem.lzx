@@ -29,12 +29,13 @@
     <attribute name="scope" value="" type="string" />
     <attribute name="serverId" value="0" type="number" />
     <attribute name="serverAddr" value="" type="string" />
+    <attribute name="kickable" value="true" type="boolean" />
 	
 	<turnOverTextItem text="$once{ parent.streamid }" />
 	<turnOverTextItem text="$once{ parent.login }" />
 	<turnOverTextItem text="$once{ parent.dateConnected }" />
     <turnOverTextItem text="$once{ parent.scope }" />
-    <simpleLabelButton labelid="603" >
+    <simpleLabelButton labelid="603" enabled="${ parent.kickable }">
         <handler name="onclick">
             if ($debug) Debug.write("onclick ",this);
             new lz.confirmationSingle(canvas.main_content._content.inner,{labelid:604,labeliderror:605,refObj:this,showCheckBox:false});

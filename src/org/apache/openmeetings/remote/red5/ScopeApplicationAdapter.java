@@ -593,8 +593,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 				// StreamService.stopRecordAndSave(currentScope,
 				// currentClient.getRoomRecordingName(), currentClient);
 
-				this.flvRecorderService.stopRecordAndSave(currentScope,
-						currentClient, null);
+				flvRecorderService.stopRecordAndSave(currentScope, currentClient, null);
 
 				// set to true and overwrite the default one cause otherwise no
 				// notification is send
@@ -611,65 +610,67 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 						.getConnections();
 				for (Set<IConnection> conset : conCollection) {
 					for (IConnection cons : conset) {
-						if (cons != null) {
-							if (cons instanceof IServiceCapableConnection) {
+						if (cons != null && cons instanceof IServiceCapableConnection) {
 
-								log.debug("sending roomDisconnect to " + cons
-										+ " client id "
-										+ cons.getClient().getId());
+							log.debug("sending roomDisconnect to " + cons
+									+ " client id "
+									+ cons.getClient().getId());
 
-								Client rcl = this.sessionManager
-										.getClientByStreamId(cons.getClient()
-												.getId(), null);
+							Client rcl = this.sessionManager
+									.getClientByStreamId(cons.getClient()
+											.getId(), null);
+
+							/*
+							 * Check if the Client does still exist on the
+							 * list
+							 */
+							if (rcl != null) {
 
 								/*
-								 * Check if the Client does still exist on the
-								 * list
+								 * Do not send back to sender, but actually
+								 * all other clients should receive this
+								 * message swagner 01.10.2009
 								 */
-								if (rcl != null) {
-
-									/*
-									 * Do not send back to sender, but actually
-									 * all other clients should receive this
-									 * message swagner 01.10.2009
-									 */
-									if (!currentClient.getStreamid().equals(
-											rcl.getStreamid())) {
-										
-										// add Notification if another user isrecording
-										log.debug("###########[roomLeave]");
-										if (rcl.getIsRecording()) {
-											log.debug("*** roomLeave Any Client is Recording - stop that");
-											this.flvRecorderService
-													.stopRecordingShowForClient(
-															cons, currentClient);
-										}
-										
-										//If the user was a avclient, we do not broadcast a message about that to everybody
-										if (currentClient.getIsAVClient()) {
-											continue;
-										}
-										
-										if (rcl.getIsScreenClient() != null && rcl
-												.getIsScreenClient()) {
-											// screen sharing clients do not receive events
-											continue;
-										} else if (rcl.getIsAVClient()) {
-											// AVClients or potential AVClients do not receive events
-											continue;
-										}
-										
-										// Send to all connected users
-										((IServiceCapableConnection) cons)
-												.invoke("roomDisconnect",
-													new Object[] { currentClient },this);
-										log.debug("sending roomDisconnect to " + cons);
+								if (!currentClient.getStreamid().equals(
+										rcl.getStreamid())) {
+									
+									// add Notification if another user isrecording
+									log.debug("###########[roomLeave]");
+									if (rcl.getIsRecording()) {
+										log.debug("*** roomLeave Any Client is Recording - stop that");
+										this.flvRecorderService
+												.stopRecordingShowForClient(
+														cons, currentClient);
 									}
-								} else {
-									log.debug("For this StreamId: "
-											+ cons.getClient().getId()
-											+ " There is no Client in the List anymore");
+									
+									//If the user was a avclient, we do not broadcast a message about that to everybody
+									if (currentClient.getIsAVClient()) {
+										continue;
+									}
+									
+									boolean isScreen = rcl.getIsScreenClient() != null && rcl.getIsScreenClient();
+									if (isScreen && currentClient.getPublicSID().equals(rcl.getStreamPublishName())) {
+										//going to terminate screen sharing started by this client
+										((IServiceCapableConnection) cons).invoke("stopStream", new Object[] { },this);
+										continue;
+									} else if (isScreen) {
+										// screen sharing clients do not receive events
+										continue;
+									} else if (rcl.getIsAVClient()) {
+										// AVClients or potential AVClients do not receive events
+										continue;
+									}
+									
+									// Send to all connected users
+									((IServiceCapableConnection) cons)
+											.invoke("roomDisconnect",
+												new Object[] { currentClient },this);
+									log.debug("sending roomDisconnect to " + cons);
 								}
+							} else {
+								log.debug("For this StreamId: "
+										+ cons.getClient().getId()
+										+ " There is no Client in the List anymore");
 							}
 						}
 					}

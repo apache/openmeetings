@@ -65,6 +65,7 @@
             client.setDrawAllowStatus = this.setDrawAllowStatus;
             client.setExclusiveAudioAllowStatus = this.setExclusiveAudioAllowStatus;
             client.exitRoom = this.exitRoom;
+            client.immediateExitRoom = this.immediateExitRoom;
             client.closeWhiteboard = this.closeWhiteboard;
             client.arrangeWindows = this.arrangeWindows;
 
@@ -495,16 +496,16 @@
                 refObj:this,
                 labelid:791,
                 labeliderror:790,
-                refReturnMethod:'exitConfirmMethod',
+                refReturnMethod:'immediateExitRoom',
                 showCheckBox:false
             });
         return;
     </method>
-    
-    <method name="exitConfirmMethod" args="bool,sharedObjectData">
-    	canvas.videoComp_lc.send(canvas.videoComp_lc_name, 'exitRoom', bool);
-    </method>
 
+	<method name="immediateExitRoom" args="bool,ctx">
+		canvas.videoComp_lc.send(canvas.videoComp_lc_name, 'exitRoom', bool);
+	</method>
+	
     <!---
         Shows the close whiteboard dialog
     -->

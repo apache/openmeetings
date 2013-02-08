@@ -300,9 +300,11 @@ public class CoreScreenShare implements IPendingServiceCallback, INetStreamEvent
 		if (invoke.getType() == IEvent.Type.STREAM_DATA) {
 			return;
 		}
-
+		
 		String method = invoke.getCall().getServiceMethodName();
-		if ("sendRemoteCursorEvent".equals(method)) {
+		if ("stopStream".equals(method)) {
+			stopStream();
+		} else if ("sendRemoteCursorEvent".equals(method)) {
 			sendRemoteCursorEvent(invoke.getCall().getArguments()[0]);
 		} else if ("screenSharerAction".equals(method)) {
 			Object[] args = invoke.getCall().getArguments();

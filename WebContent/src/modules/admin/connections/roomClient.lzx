@@ -81,13 +81,14 @@
 	    		    serverId = records[i].server.id;
 	    			tServer = records[i].server.address + " ["+records[i].server.id+"]";
 	    		}
-	    	
+
 	    		new lz.roomClientListItem(this._innerlist._inn._inn,{
 	                    obj:records[i],
 	                    streamid:records[i].streamid,
 	                    login:records[i].username,
                         dateConnected:parseDateToStringTime(records[i].connectedSince),
 	                    scope:records[i].scope,
+	                    kickable: true != records[i].isScreenClient && true != records[i].isAVClient,
 	                    serverId:serverId,
 	                    serverAddr:tServer
                     });
