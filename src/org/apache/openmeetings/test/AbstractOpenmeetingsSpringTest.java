@@ -20,6 +20,7 @@ package org.apache.openmeetings.test;
 
 import static junit.framework.Assert.assertNotNull;
 import static junit.framework.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.util.Date;
 
@@ -31,6 +32,7 @@ import org.apache.openmeetings.installation.ImportInitvalues;
 import org.apache.openmeetings.installation.InstallationConfig;
 import org.apache.openmeetings.persistence.beans.calendar.Appointment;
 import org.apache.openmeetings.persistence.beans.user.User;
+import org.apache.openmeetings.utils.OmFileHelper;
 import org.apache.openmeetings.utils.crypt.ManageCryptStyle;
 import org.junit.Before;
 import org.junit.runner.RunWith;
@@ -51,7 +53,7 @@ public abstract class AbstractOpenmeetingsSpringTest extends AbstractJUnit4Sprin
 	protected static final String username = "swagner";
 	protected static final String userpass = "qweqwe";
 	private static final String orgname = "smoketest";
-	private static final String timeZone = "";
+	private static final String timeZone = "Europe/Berlin";
 	private static final String useremail = "junit@openmeetings.de";
 	
 	@Autowired
@@ -68,20 +70,14 @@ public abstract class AbstractOpenmeetingsSpringTest extends AbstractJUnit4Sprin
 	private ManageCryptStyle cryptManager;
 
 	@Before
-	public void setUp() {
-        try {
-            if (userManagement.getUserById(1L) == null) {
-                makeDefaultScheme();
-                log.info("Default scheme created successfully");
-            } else {
-                log.info("Default scheme already created");
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+	public void setUp() throws Exception {
+        if (userManagement.getUserById(1L) == null) {
+            makeDefaultScheme();
+            log.info("Default scheme created successfully");
+        } else {
+            log.info("Default scheme already created");
         }
-
     }
-
 
 	public Appointment createAppointment() throws Exception {
 		assertNotNull("Can't access to appointment dao implimentation", appointmentDao);
@@ -130,6 +126,11 @@ public abstract class AbstractOpenmeetingsSpringTest extends AbstractJUnit4Sprin
 	}
 
 	private void makeDefaultScheme() throws Exception {
+		String webappsDir = System.getProperty("webapps.root", ".");
+		OmFileHelper.setOmHome(webappsDir);
+		if (!OmFileHelper.getOmHome().exists() || !OmFileHelper.getOmHome().isDirectory()) {
+			fail("Invalid directory is specified as OM HOME: " + webappsDir);
+		}
 		importInitvalues.loadAll(new InstallationConfig(), username, userpass,
 				useremail, orgname, timeZone, false);
 	}

@@ -198,8 +198,6 @@
         this.setAttribute('bandwidthNeededBest',Number(canvas.myConfigSet.getPointer().xpathQuery('config/bandwidthNeededBest/text()')));  
         this.setAttribute('camQualityNormal',Number(canvas.myConfigSet.getPointer().xpathQuery('config/camQualityNormal/text()')));  
         this.setAttribute('camQualityBest',Number(canvas.myConfigSet.getPointer().xpathQuery('config/camQualityBest/text()')));  
-        this.setAttribute('microphoneRateNormal',Number(canvas.myConfigSet.getPointer().xpathQuery('config/microphoneRateNormal/text()')));  
-        this.setAttribute('microphoneRateBest',Number(canvas.myConfigSet.getPointer().xpathQuery('config/microphoneRateBest/text()')));  
         
         this.setAttribute('defaultWhiteboardWidth',Number(canvas.myConfigSet.getPointer().xpathQuery('config/defaultWhiteboardWidth/text()')));  
         this.setAttribute('defaultWhiteboardHeight',Number(canvas.myConfigSet.getPointer().xpathQuery('config/defaultWhiteboardHeight/text()')));  

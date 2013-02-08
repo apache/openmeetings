@@ -673,12 +673,8 @@ public class BackupImportController extends AbstractUploadController {
 			if (listNodeName.equals(listNode.getName())) {
 				InputNode item = listNode.getNext();
 				while (item != null) {
-					try {
-						T o = ser.read(clazz, item, false);
-						list.add(o);
-					} catch (Exception e) {
-						log.debug("Exception While reading node of type: " + clazz, e);
-					}
+					T o = ser.read(clazz, item, false);
+					list.add(o);
 					item = listNode.getNext();
 				}
 			}
@@ -753,18 +749,14 @@ public class BackupImportController extends AbstractUploadController {
 			InputNode item = listNode.getNext();
 			InputNode item1 = listNode1.getNext(); //HACK to handle Address inside user
 			while (item != null) {
-				try {
-					User u = ser.read(User.class, item, false);
-					
-					//HACK to handle Address inside user
-					if (u.getAdresses() == null) {
-						Address a = ser.read(Address.class, item1, false);
-						u.setAdresses(a);
-					}
-					list.add(u);
-				} catch (Exception e) {
-					log.debug("Exception While reading node of type: " + User.class, e);
+				User u = ser.read(User.class, item, false);
+				
+				//HACK to handle Address inside user
+				if (u.getAdresses() == null) {
+					Address a = ser.read(Address.class, item1, false);
+					u.setAdresses(a);
 				}
+				list.add(u);
 				item = listNode.getNext();
 				do {
 					item1 = listNode1.getNext(); //HACK to handle Address inside user

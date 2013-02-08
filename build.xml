@@ -37,6 +37,7 @@
 	<property name="webcontent.src.dir" value="${basedir}/WebContent" />
 	<property name="screensharing.resources" value="${webcontent.src.dir}/screensharing" />
 	<property name="junit.lib.dir" value="${project.lib.dir}/junit" />
+	<property name="junit.backups.dir" value="${junit.lib.dir}/backups" />
 	<property name="rat.lib.dir" value="${project.lib.dir}/rat" />
 	<property name="dtd-generator.lib.dir" value="${project.lib.dir}/dtd-generator" />
 	<property name="svntask.lib.dir" value="${project.lib.dir}/svntask" />
@@ -106,7 +107,7 @@
 		<mkdir dir="${mainlibs.lib.dir}" />
 		<mkdir dir="${om.lib.dir}" />
 		<mkdir dir="${anakia.lib.dir}" />
-		<mkdir dir="${junit.lib.dir}" />
+		<mkdir dir="${junit.backups.dir}" />
 		<mkdir dir="${junit.report.dir}" />
 		<mkdir dir="${rat.lib.dir}" />
 		<mkdir dir="${dtd-generator.lib.dir}" />
@@ -770,6 +771,22 @@
 		<pathelement path="${main.out.dir}" />
 	</path>
 	<target name="test" depends="-dist-test-no-clean" description="Will run all tests unless -Dtestcases=_file_name_pattern_ will be passed">
+		<taskdef resource="net/sf/antcontrib/antlib.xml">
+			<classpath refid="junit.classpath" />
+		</taskdef>
+		<for list="${backup.file.list}" param="prop">
+			<sequential>
+				<if>
+					<not>
+						<available file="${junit.backups.dir}/@{prop}" type="file" />
+					</not>
+					<then>
+						<echo message="Backup file @{prop} does not exists. Downloading ..." />
+						<get src="http://openmeetings.googlecode.com/svn/repository/@{prop}" dest="${junit.backups.dir}" usetimestamp="true"/>
+					</then>
+				</if>
+			</sequential>
+		</for>
 		<mkdir dir="${junit.report.dir}" />
 		<!-- property name="myclsp" refid="junit.classpath" />
 		<echo message="${myclsp}" /-->
@@ -780,6 +797,7 @@
 			<jvmarg value="-Dbasedir=${basedir}" />
 			<jvmarg value="-Dred5.config_root=${red5.root}/conf" />
 			<jvmarg value="-Dwebapps.root=${basedir}/${om.dist.webapp}" />
+			<jvmarg value="-Dbackups.dir=${junit.backups.dir}" />
 			<formatter type="${junit.test.formatter}" />
 			<batchtest todir="${junit.report.dir}">
 				<fileset dir="${main.out.dir}">
@@ -906,7 +924,7 @@
 		</copy>
 		<copy file="${webcontent.src.dir}/red5/index.html" todir="${red5.lib}/webapps/root" overwrite="true" force="true" />
 		<copy todir="${red5.lib}" overwrite="true" force="true">
-			<fileset dir="${webcontent.src.dir}/red5" includes="admin.*" />
+			<fileset dir="${webcontent.src.dir}/red5" includes="admin.*,network_test.sh" />
 		</copy>
 		<!-- FIXME need to be removed as soon as JAudioTagger (will be officially Dual Licensed) -->
 		<xslt in="${red5.lib}/conf/red5-common.xml" out="${red5.lib}/conf/red5-common1.xml" style="build-jaudiotagger.xsl" />

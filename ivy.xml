@@ -278,6 +278,9 @@
 		<dependency org="org.springframework" name="org.springframework.test" rev="3.1.1.RELEASE" conf="junit->*" transitive="false">
 			<include type="jar" />
 		</dependency>
+		<dependency org="ant-contrib" name="ant-contrib" rev="1.0b3" conf="junit->*" transitive="false">
+			<include type="jar" />
+		</dependency>
 		<!--  END OF JUNIT -->
 		
 		<!--  START OF RAT -->
