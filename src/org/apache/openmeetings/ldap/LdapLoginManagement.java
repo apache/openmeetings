@@ -36,6 +36,7 @@ import org.apache.openmeetings.data.user.dao.StateDao;
 import org.apache.openmeetings.data.user.dao.UsersDao;
 import org.apache.openmeetings.ldap.config.ConfigReader;
 import org.apache.openmeetings.persistence.beans.basic.LdapConfig;
+import org.apache.openmeetings.persistence.beans.basic.OmTimeZone;
 import org.apache.openmeetings.persistence.beans.room.Client;
 import org.apache.openmeetings.persistence.beans.user.State;
 import org.apache.openmeetings.persistence.beans.user.User;
@@ -439,56 +440,57 @@ public class LdapLoginManagement {
 		} catch (Exception e) {
 			log.error("Error retrieving Userdata : " + e.getMessage());
 		}
+		
+		// Attributes to retrieve from ldap to either create or update the user
+		List<String> attributes = new ArrayList<String>();
+		attributes.add(ldap_user_attr_lastname); // Lastname
+		attributes.add(ldap_user_attr_firstname); // Firstname
+		attributes.add(ldap_user_attr_mail);// mail
+		attributes.add(ldap_user_attr_street); // Street
+		attributes.add(ldap_user_attr_additional_name); // Additional name
+		attributes.add(ldap_user_attr_fax); // Fax
+		attributes.add(ldap_user_attr_zip); // ZIP
+		attributes.add(ldap_user_attr_country); // Country
+		attributes.add(ldap_user_attr_town); // Town
+		attributes.add(ldap_user_attr_phone); // Phone
+		attributes.add(ldap_user_attr_timezone); // timezone
+		attributes.add(ldap_user_picture_uri); //picture uri
+		
+		HashMap<String, String> ldapAttrs = new HashMap<String, String>();
+		ldapAttrs.put("lastnameAttr", ldap_user_attr_lastname);
+		ldapAttrs.put("firstnameAttr", ldap_user_attr_firstname);
+		ldapAttrs.put("mailAttr", ldap_user_attr_mail);
+		ldapAttrs.put("streetAttr", ldap_user_attr_street);
+		ldapAttrs.put("additionalNameAttr", ldap_user_attr_additional_name);
+		ldapAttrs.put("faxAttr", ldap_user_attr_fax);
+		ldapAttrs.put("zipAttr", ldap_user_attr_zip);
+		ldapAttrs.put("countryAttr", ldap_user_attr_country);
+		ldapAttrs.put("townAttr", ldap_user_attr_town);
+		ldapAttrs.put("phoneAttr", ldap_user_attr_phone);
+		ldapAttrs.put("timezoneAttr", ldap_user_attr_timezone);
+		ldapAttrs.put("pictureUri", ldap_user_picture_uri);
+
+		Vector<HashMap<String, String>> result = lAuth.getData(
+				ldap_search_scope, ldap_search_filter, attributes);
+
+		if (result == null || result.size() < 1) {
+			log.error("Error on Ldap request - no result for user " + user);
+			return new Long(-10);
+		}
+		
+		if (result.size() > 1) {
+			log.error("Error on Ldap request - more than one result for user "
+					+ user);
+			return null;
+		}
+		
+		HashMap<String, String> userData = result.get(0);
+
 
 		// User not existant in local database -> take over data for referential
 		// integrity
 		if (u == null) {
 			log.debug("user doesnt exist local -> create new");
-
-			// Attributes to retrieve from ldap
-			List<String> attributes = new ArrayList<String>();
-			attributes.add(ldap_user_attr_lastname); // Lastname
-			attributes.add(ldap_user_attr_firstname); // Firstname
-			attributes.add(ldap_user_attr_mail);// mail
-			attributes.add(ldap_user_attr_street); // Street
-			attributes.add(ldap_user_attr_additional_name); // Additional name
-			attributes.add(ldap_user_attr_fax); // Fax
-			attributes.add(ldap_user_attr_zip); // ZIP
-			attributes.add(ldap_user_attr_country); // Country
-			attributes.add(ldap_user_attr_town); // Town
-			attributes.add(ldap_user_attr_phone); // Phone
-			attributes.add(ldap_user_attr_timezone); // timezone
-			attributes.add(ldap_user_picture_uri); //picture uri
-			
-			HashMap<String, String> ldapAttrs = new HashMap<String, String>();
-			ldapAttrs.put("lastnameAttr", ldap_user_attr_lastname);
-			ldapAttrs.put("firstnameAttr", ldap_user_attr_firstname);
-			ldapAttrs.put("mailAttr", ldap_user_attr_mail);
-			ldapAttrs.put("streetAttr", ldap_user_attr_street);
-			ldapAttrs.put("additionalNameAttr", ldap_user_attr_additional_name);
-			ldapAttrs.put("faxAttr", ldap_user_attr_fax);
-			ldapAttrs.put("zipAttr", ldap_user_attr_zip);
-			ldapAttrs.put("countryAttr", ldap_user_attr_country);
-			ldapAttrs.put("townAttr", ldap_user_attr_town);
-			ldapAttrs.put("phoneAttr", ldap_user_attr_phone);
-			ldapAttrs.put("timezoneAttr", ldap_user_attr_timezone);
-			ldapAttrs.put("pictureUri", ldap_user_picture_uri);
-
-			Vector<HashMap<String, String>> result = lAuth.getData(
-					ldap_search_scope, ldap_search_filter, attributes);
-
-			if (result == null || result.size() < 1) {
-				log.error("Error on Ldap request - no result for user " + user);
-				return new Long(-10);
-			}
-
-			if (result.size() > 1) {
-				log.error("Error on Ldap request - more than one result for user "
-						+ user);
-				return null;
-			}
-
-			HashMap<String, String> userData = result.get(0);
 
 			try {
 				// Create User with LdapData
@@ -572,6 +574,9 @@ public class LdapLoginManagement {
 				if (ldap_sync_passwd_to_om) {
 					u.updatePassword(cryptManager, configDao, passwd);
 				}
+				
+				//update all other attributes in case ldap provides some and the parameter is configured
+				updateUserFromLdap(userData, ldapAttrs, u);
 
 				usersDao.update(u, null);
 			} catch (Exception e) {
@@ -583,12 +588,12 @@ public class LdapLoginManagement {
 
 		}
 	}
-
+	
 	// ----------------------------------------------------------------------------------------
 
 	/**
-	 * Creation on User with LDAP - Data AutoCreation of Country if not existant
-	 * Added to Default Organisation
+	 * Creation on User with LDAP - Data AutoCreation of Country if does not exist
+	 * Added to default organization
 	 */
 	// ----------------------------------------------------------------------------------------
 	private Long createUserFromLdapData(HashMap<String, String> userdata,
@@ -633,10 +638,28 @@ public class LdapLoginManagement {
 				&& userdata.get(ldapAttrs.get("zipAttr")) != null)
 			zip = userdata.get(ldapAttrs.get("zipAttr"));
 
+		long state_id = -1;
 		String state = null;
 		if (userdata.containsKey(ldapAttrs.get("countryAttr"))
 				&& userdata.get(ldapAttrs.get("countryAttr")) != null)
 			state = userdata.get(ldapAttrs.get("countryAttr"));
+		
+		if (state != null) {
+			// Lookup for states
+			State oneState = statemanagement.getStateByName(state);
+			if (oneState != null) {
+				state_id = oneState.getState_id();
+			}
+		}
+
+		// Create Country
+		if (state_id < 0) {
+			Long id = statemanagement.addState(state);
+			if (id != null)
+				state_id = id;
+
+		}
+		
 
 		String phone = "phone";
 		if (userdata.containsKey(ldapAttrs.get("phoneAttr"))
@@ -648,8 +671,6 @@ public class LdapLoginManagement {
 				&& userdata.get(ldapAttrs.get("pictureUri")) != null)
 			pictureUri = userdata.get(ldapAttrs.get("pictureUri"));
 
-		long state_id = -1;
-		
 		String jName_timeZone = "";
 		if (userdata.containsKey(ldapAttrs.get("timezoneAttr"))
 				&& userdata.get(ldapAttrs.get("timezoneAttr")) != null)
@@ -658,30 +679,6 @@ public class LdapLoginManagement {
 		if (omTimeZoneDaoImpl.getOmTimeZone(jName_timeZone) == null) {
 			jName_timeZone = configDao.getConfValue(
 					"default.timezone", String.class, "Europe/Berlin");
-		}
-
-		if (state != null) {
-			// Lookup for states
-			List<State> states = statemanagement.getStates();
-
-			for (int i = 0; i < states.size(); i++) {
-				State oneState = states.get(i);
-
-				if (oneState.getName().equals(state)) {
-					state_id = oneState.getState_id();
-					break;
-				}
-			}
-
-		}
-
-		// Create Country
-		if (state_id < 0) {
-			Long id = statemanagement.addState(state);
-
-			if (id != null)
-				state_id = id;
-
 		}
 
 		String town = "town";
@@ -746,6 +743,104 @@ public class LdapLoginManagement {
 
 		return newUserId;
 	}
-	// ----------------------------------------------------------------------------------------
 
+	public void updateUserFromLdap(HashMap<String, String> userdata,
+				HashMap<String, String> ldapAttrs, User user)
+			throws Exception {
+		log.debug("LdapLoginmanagement.createUserFromLdapData");
+	
+		// Retrieve Data from LDAP - Data
+	
+		if (userdata.containsKey(ldapAttrs.get("lastnameAttr"))
+				&& userdata.get(ldapAttrs.get("lastnameAttr")) != null)
+			user.setLastname(userdata.get(ldapAttrs.get("lastnameAttr")));
+	
+		if (userdata.containsKey(ldapAttrs.get("firstnameAttr"))
+				&& userdata.get(ldapAttrs.get("firstnameAttr")) != null)
+			user.setFirstname(userdata.get(ldapAttrs.get("firstnameAttr")));
+	
+		if (userdata.containsKey(ldapAttrs.get("mailAttr"))
+				&& userdata.get(ldapAttrs.get("mailAttr")) != null) {
+			if (user.getAdresses() != null ) 
+				user.getAdresses().setEmail(userdata.get(ldapAttrs.get("mailAttr")));
+		}
+			
+		if (userdata.containsKey(ldapAttrs.get("streetAttr"))
+				&& userdata.get(ldapAttrs.get("streetAttr")) != null) {
+			if (user.getAdresses() != null ) 
+				user.getAdresses().setStreet(userdata.get(ldapAttrs.get("streetAttr")));
+		}
+		
+		if (userdata.containsKey(ldapAttrs.get("additionalNameAttr"))
+				&& userdata.get(ldapAttrs.get("additionalNameAttr")) != null) {
+			if (user.getAdresses() != null ) 
+				user.getAdresses().setAdditionalname(userdata.get(ldapAttrs.get("additionalNameAttr")));
+		}
+	
+		if (userdata.containsKey(ldapAttrs.get("faxAttr"))
+				&& userdata.get(ldapAttrs.get("faxAttr")) != null) {
+			if (user.getAdresses() != null ) 
+				user.getAdresses().setFax(userdata.get(ldapAttrs.get("faxAttr")));
+		}
+	
+		if (userdata.containsKey(ldapAttrs.get("zipAttr"))
+				&& userdata.get(ldapAttrs.get("zipAttr")) != null) {
+			if (user.getAdresses() != null ) 
+				user.getAdresses().setZip(userdata.get(ldapAttrs.get("zipAttr")));
+		}
+	
+		long state_id = -1;
+		String state = null;
+		if (userdata.containsKey(ldapAttrs.get("countryAttr"))
+				&& userdata.get(ldapAttrs.get("countryAttr")) != null)
+			state = userdata.get(ldapAttrs.get("countryAttr"));
+		
+		if (state != null) {
+			// Lookup for states
+			State oneState = statemanagement.getStateByName(state);
+			if (oneState != null) {
+				state_id = oneState.getState_id();
+			}
+		}
+		// Create Country if not found
+		if (state_id < 0) {
+			Long id = statemanagement.addState(state);
+			if (id != null)
+				state_id = id;
+
+		}
+		if (user.getAdresses() != null && state_id > 0) {
+			user.getAdresses().setStates(statemanagement.getStateById(state_id));
+		}
+		
+		if (userdata.containsKey(ldapAttrs.get("townAttr"))
+				&& userdata.get(ldapAttrs.get("townAttr")) != null) {
+			if (user.getAdresses() != null )
+				user.getAdresses().setTown(userdata.get(ldapAttrs.get("townAttr")));
+		}
+
+		if (userdata.containsKey(ldapAttrs.get("phoneAttr"))
+				&& userdata.get(ldapAttrs.get("phoneAttr")) != null) {
+			if (user.getAdresses() != null ) 
+				user.getAdresses().setPhone(userdata.get(ldapAttrs.get("phoneAttr")));
+		}
+		
+		if (userdata.containsKey(ldapAttrs.get("pictureUri"))
+				&& userdata.get(ldapAttrs.get("pictureUri")) != null) {
+			user.setPictureuri(userdata.get(ldapAttrs.get("pictureUri")));
+		}
+	
+		String jName_timeZone = "";
+		if (userdata.containsKey(ldapAttrs.get("timezoneAttr"))
+				&& userdata.get(ldapAttrs.get("timezoneAttr")) != null)
+			jName_timeZone = userdata.get(ldapAttrs.get("timezoneAttr"));
+		
+		//only change the timezone if there can be found some in the OpenMeetings database
+		OmTimeZone omTimeZone = omTimeZoneDaoImpl.getOmTimeZone(jName_timeZone);
+		if (omTimeZone != null) {
+			user.setOmTimeZone(omTimeZone);
+		}
+	
+	}
+	
 }

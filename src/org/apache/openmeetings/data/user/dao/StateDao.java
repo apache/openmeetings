@@ -106,6 +106,28 @@ public class StateDao {
 		}
 		return null;
 	}
+	
+	/**
+	 * selects a state by its name
+	 * 
+	 * @param state_id
+	 * @return the state-object or null
+	 */
+	public State getStateByName(String name) {
+		try {
+			TypedQuery<State> query = em
+					.createNamedQuery("getStateByName", State.class);
+			query.setParameter("name", name);
+			query.setParameter("deleted", true);
+			List<State> ll = query.getResultList();
+			if (ll.size() > 0) {
+				return ll.get(0);
+			}
+		} catch (Exception ex2) {
+			log.error("getStateById", ex2);
+		}
+		return null;
+	}
 
 	/**
 	 * Get all state-Object
