@@ -96,6 +96,7 @@
 						disallow=all
 						allow=ulaw
 						host=dynamic
+						nat=yes
 					</i>
 				</blockquote>
 			</div>
