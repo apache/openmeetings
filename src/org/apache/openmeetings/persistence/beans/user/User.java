@@ -100,7 +100,7 @@ import org.simpleframework.xml.Root;
 	@NamedQuery(name = "countNondeletedUsers", query = "SELECT COUNT(u) FROM User u WHERE u.deleted = false"),
 	@NamedQuery(name = "getUsersByOrganisationId", query = "SELECT u FROM User u WHERE u.deleted = false AND u.organisation_users.organisation.organisation_id = :organisation_id") 
 })
-@Table(name = "user")
+@Table(name = "om_user")
 @Root(name = "user")
 public class User implements Serializable, IDataProviderEntity {
 
