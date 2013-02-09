@@ -21,16 +21,15 @@
  <properties>
 <title>Project Dependencies</title>
 <author email="sebawagner@apache.org">
- Podling Documentation Team</author>
+ OpenMeetings Documentation Team</author>
 </properties>
 
 <body>
 <section name="The Apache Podling Project">
 
 <div>
-Apache Podling is a project currently incubating in Apache.
 <p> 
-The common external dependencies of Podling include the tools used to build 
+The common external dependencies of OpenMeetings include the tools used to build 
 and test it:
 </p>
 
@@ -39,6 +38,8 @@ and test it:
 <li>Ant</li>
 <li>JUnit</li>
 </ul>
+
+<p>OpenMeetings will actively download resources from the online repositories while building.</p>
 
 </div>
 </section>
