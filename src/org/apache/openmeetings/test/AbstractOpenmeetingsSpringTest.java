@@ -125,12 +125,16 @@ public abstract class AbstractOpenmeetingsSpringTest extends AbstractJUnit4Sprin
 		return users;
 	}
 
-	private void makeDefaultScheme() throws Exception {
+	protected void setOmHome() {
 		String webappsDir = System.getProperty("webapps.root", ".");
 		OmFileHelper.setOmHome(webappsDir);
 		if (!OmFileHelper.getOmHome().exists() || !OmFileHelper.getOmHome().isDirectory()) {
 			fail("Invalid directory is specified as OM HOME: " + webappsDir);
 		}
+	}
+	
+	private void makeDefaultScheme() throws Exception {
+		setOmHome();
 		importInitvalues.loadAll(new InstallationConfig(), username, userpass,
 				useremail, orgname, timeZone, false);
 	}

@@ -16,6 +16,7 @@ public class TestOldBackups extends AbstractOpenmeetingsSpringTest {
 	
 	@Test
 	public void importOldVersions() {
+		setOmHome();
 		String backupsDir = System.getProperty("backups.dir", ".");
 		File backupsHome = new File(backupsDir);
 		
