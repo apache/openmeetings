@@ -19,12 +19,11 @@
 package org.apache.openmeetings.servlet.outputhandler;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
-import java.util.ArrayList;
+import java.net.URI;
 import java.util.Date;
 import java.util.List;
 import java.util.zip.ZipEntry;
@@ -74,8 +73,8 @@ import org.apache.openmeetings.persistence.beans.files.FileExplorerItem;
 import org.apache.openmeetings.persistence.beans.flvrecord.FlvRecording;
 import org.apache.openmeetings.persistence.beans.poll.PollType;
 import org.apache.openmeetings.persistence.beans.poll.RoomPoll;
-import org.apache.openmeetings.persistence.beans.room.RoomType;
 import org.apache.openmeetings.persistence.beans.room.Room;
+import org.apache.openmeetings.persistence.beans.room.RoomType;
 import org.apache.openmeetings.persistence.beans.user.PrivateMessage;
 import org.apache.openmeetings.persistence.beans.user.State;
 import org.apache.openmeetings.persistence.beans.user.User;
@@ -383,12 +382,7 @@ public class BackupExport {
 			FileHelper.copyRec(sourceDirRec, targetDirRec);
 		}
 
-		List<File> fileList = new ArrayList<File>();
-		log.debug("---Getting references to all files in: "
-				+ backup_dir.getCanonicalPath());
-		getAllFiles(backup_dir, fileList);
-		log.debug("---Creating zip file");
-		writeZipFile(backup_dir, fileList, new FileOutputStream(filePath));
+		writeZipDir(backup_dir, filePath);
 		log.debug("---Done");
 	}
 	
@@ -524,57 +518,45 @@ public class BackupExport {
 		}
 	}
 
-	public void getAllFiles(File dir, List<File> fileList) throws IOException {
+	private void writeZipDir(File directoryToZip, File f) throws IOException {
+		FileOutputStream fos = null;
+		ZipOutputStream zos = null;
 		try {
-			File[] files = dir.listFiles();
-			for (File file : files) {
-				fileList.add(file);
-				if (file.isDirectory()) {
-					// log.debug("directory:" + file.getCanonicalPath());
-					getAllFiles(file, fileList);
-				} else {
-					// log.debug("     file:" + file.getCanonicalPath());
+			fos = new FileOutputStream(f);
+			zos = new ZipOutputStream(fos);
+			
+			writeZipDir(directoryToZip.toURI(), directoryToZip, zos);
+		} finally {
+			if (zos != null) {
+				try {
+					zos.close();
+				} catch (IOException e) {
+					log.debug("Enexpected error while closing ZipOutputStream", e);
 				}
 			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-
-	public void writeZipFile(File directoryToZip, List<File> fileList,
-			FileOutputStream fos) {
-
-		try {
-			ZipOutputStream zos = new ZipOutputStream(fos);
-
-			for (File file : fileList) {
-				if (!file.isDirectory()) { // we only zip files, not directories
-					addToZip(directoryToZip, file, zos);
+			if (fos != null) {
+				try {
+					fos.close();
+				} catch (IOException e) {
+					log.debug("Enexpected error while closing FileOutputStream", e);
 				}
 			}
-
-			zos.close();
-			fos.close();
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
 		}
 	}
+	
+	private void writeZipDir(URI base, File dir, ZipOutputStream zos) throws IOException {
+		for (File file : dir.listFiles()) {
+			if (file.isDirectory()) {
+				writeZipDir(base, file, zos);
+			} else {
+				String path = base.relativize(file.toURI()).toString();
+				log.debug("Writing '" + path + "' to zip file");
+				ZipEntry zipEntry = new ZipEntry(path);
+				zos.putNextEntry(zipEntry);
 
-	public void addToZip(File directoryToZip, File file, ZipOutputStream zos)
-			throws FileNotFoundException, IOException {
-
-		// we want the zipEntry's path to be a relative path that is relative
-		// to the directory being zipped, so chop off the rest of the path
-		String zipFilePath = file.getCanonicalPath().substring(
-				directoryToZip.getCanonicalPath().length() + 1,
-				file.getCanonicalPath().length());
-		log.debug("Writing '" + zipFilePath + "' to zip file");
-		ZipEntry zipEntry = new ZipEntry(zipFilePath);
-		zos.putNextEntry(zipEntry);
-
-		OmFileHelper.copyFile(file, zos);
-		zos.closeEntry();
+				OmFileHelper.copyFile(file, zos);
+				zos.closeEntry();
+			}
+		}
 	}
 }

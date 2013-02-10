@@ -18,6 +18,12 @@
  */
 package org.apache.openmeetings.servlet.outputhandler;
 
+import static org.apache.commons.transaction.util.FileHelper.copyRec;
+import static org.apache.openmeetings.utils.OmFileHelper.getStreamsHibernateDir;
+import static org.apache.openmeetings.utils.OmFileHelper.getUploadDir;
+import static org.apache.openmeetings.utils.OmFileHelper.getUploadProfilesUserDir;
+import static org.apache.openmeetings.utils.OmFileHelper.profilesPrefix;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -194,59 +200,26 @@ public class BackupImportController extends AbstractUploadController {
 		log.debug("##### WRITE FILE TO: " + f);
 		
 		ZipInputStream zipinputstream = new ZipInputStream(is);
-
 		ZipEntry zipentry = zipinputstream.getNextEntry();
-
 		while (zipentry != null) {
+			String fName = zipentry.getName();
+			if (File.pathSeparatorChar != '\\' && fName.indexOf('\\') > -1) {
+				fName = fName.replace('\\', '/');
+			}
 			// for each entry to be extracted
-			File fentryName = new File(f, zipentry.getName());
-
-			if (zipentry.isDirectory()) {
-				if (!fentryName.mkdir()) {
-					break;
-				}
+			File fentry = new File(f, fName);
+			File dir = fentry.isDirectory() ? fentry : fentry.getParentFile();
+			dir.mkdirs();
+			if (fentry.isDirectory()) {
 				zipentry = zipinputstream.getNextEntry();
 				continue;
 			}
 
-			File fparent = new File(fentryName.getParent());
-
-			if (!fparent.exists()) {
-
-				File fparentparent = new File(fparent.getParent());
-
-				if (!fparentparent.exists()) {
-
-					File fparentparentparent = new File(
-							fparentparent.getParent());
-
-					if (!fparentparentparent.exists()) {
-
-						fparentparentparent.mkdir();
-						fparentparent.mkdir();
-						fparent.mkdir();
-
-					} else {
-
-						fparentparent.mkdir();
-						fparent.mkdir();
-
-					}
-
-				} else {
-
-					fparent.mkdir();
-
-				}
-
-			}
-
-			FileHelper.copy(zipinputstream, fentryName);
+			FileHelper.copy(zipinputstream, fentry);
 			zipinputstream.closeEntry();
 			zipentry = zipinputstream.getNextEntry();
 
-		}// while
-
+		}
 		zipinputstream.close();
 
 		/*
@@ -766,84 +739,37 @@ public class BackupImportController extends AbstractUploadController {
 		return list;
 	}
 	
-	private void importFolders(File importBaseDir)
-			throws IOException {
-
+	private Long getProfileId(File f) {
+		String n = f.getName();
+		if (n.indexOf(profilesPrefix) > -1) {
+			return importLongType(n.substring(profilesPrefix.length()));
+		}
+		return null;
+	}
+	
+	private void importFolders(File importBaseDir) throws IOException {
 		// Now check the room files and import them
 		File roomFilesFolder = new File(importBaseDir, "roomFiles");
 
-		File library_dir = OmFileHelper.getUploadDir();
+		File uploadDir = getUploadDir();
 
 		log.debug("roomFilesFolder PATH " + roomFilesFolder.getCanonicalPath());
 
 		if (roomFilesFolder.exists()) {
-
-			File[] files = roomFilesFolder.listFiles();
-			for (File file : files) {
+			for (File file : roomFilesFolder.listFiles()) {
 				if (file.isDirectory()) {
-
-					File parentPathFile = new File(library_dir, file.getName());
-
-					if (!parentPathFile.exists()) {
-						parentPathFile.mkdir();
-					}
-
-					File[] roomOrProfileFiles = file.listFiles();
-					for (File roomOrProfileFileOrFolder : roomOrProfileFiles) {
-
-						if (roomOrProfileFileOrFolder.isDirectory()) {
-
-							String fileOrFolderName = roomOrProfileFileOrFolder
-									.getName();
-							int beginIndex = fileOrFolderName
-									.indexOf(OmFileHelper.profilesPrefix);
-							// Profile folder should be renamed if new user id
-							// is differ from current id.
-							if (beginIndex > -1) {
-								beginIndex = beginIndex
-										+ OmFileHelper.profilesPrefix
-												.length();
-								Long profileId = importLongType(fileOrFolderName
-										.substring(beginIndex));
-								Long newProfileID = getNewId(profileId,
-										Maps.USERS);
-								if (profileId != newProfileID) {
-									fileOrFolderName = fileOrFolderName
-											.replaceFirst(
-													OmFileHelper.profilesPrefix
-															+ profileId,
-													OmFileHelper.profilesPrefix
-															+ newProfileID);
-								}
-							}
-							File roomDocumentFolder = new File(parentPathFile, fileOrFolderName);
-
-							if (!roomDocumentFolder.exists()) {
-								roomDocumentFolder.mkdir();
-
-								File[] roomDocumentFiles = roomOrProfileFileOrFolder
-										.listFiles();
-
-								for (File roomDocumentFile : roomDocumentFiles) {
-									if (roomDocumentFile.isDirectory()) {
-										log.error("Folder detected in Documents space! Folder " + roomDocumentFolder);
-									} else {
-										FileHelper.copy(roomDocumentFile, new File(roomDocumentFolder, roomDocumentFile.getName()));
-									}
-								}
-							} else {
-								log.debug("Document already exists :: ",
-										roomDocumentFolder);
-							}
-						} else {
-							File roomFileOrProfileFile = new File(parentPathFile, roomOrProfileFileOrFolder.getName());
-							if (!roomFileOrProfileFile.exists()) {
-								FileHelper.copy(roomOrProfileFileOrFolder, roomFileOrProfileFile);
-							} else {
-								log.debug("File does already exist :: ", roomFileOrProfileFile);
+					String fName = file.getName();
+					if ("profiles".equals(fName)) {
+						for (File profile : file.listFiles()) {
+							Long oldId = getProfileId(profile);
+							Long id = oldId != null ? getNewId(oldId, Maps.USERS) : null;
+							if (id != null) {
+								copyRec(profile, getUploadProfilesUserDir(id));
 							}
 						}
+						continue;
 					}
+					copyRec(file, new File(uploadDir, fName));
 				}
 			}
 		}
@@ -855,53 +781,56 @@ public class BackupImportController extends AbstractUploadController {
 		log.debug("sourceDirRec PATH " + sourceDirRec.getCanonicalPath());
 
 		if (sourceDirRec.exists()) {
-			File targetDirRec = OmFileHelper.getStreamsHibernateDir();
+			File targetDirRec = getStreamsHibernateDir();
 
-			FileHelper.copyRec(sourceDirRec, targetDirRec);
+			copyRec(sourceDirRec, targetDirRec);
 		}
 	}
 
 	private Long importLongType(String value) {
-
 		if (value.equals("null") || value.equals("")) {
 			return null;
 		}
 
 		return Long.valueOf(value).longValue();
-
 	}
 
 	private Long getNewId(Long oldId, Maps map) {
 		Long newId = oldId;
 		switch (map) {
-		case USERS:
-			if (usersMap.get(oldId) != null)
-				newId = usersMap.get(oldId);
-			break;
-		case ORGANISATIONS:
-			if (organisationsMap.get(oldId) != null)
-				newId = organisationsMap.get(oldId);
-			break;
-		case APPOINTMENTS:
-			if (appointmentsMap.get(oldId) != null)
-				newId = appointmentsMap.get(oldId);
-			break;
-		case ROOMS:
-			if (roomsMap.get(oldId) != null)
-				newId = roomsMap.get(oldId);
-			break;
-		case MESSAGEFOLDERS:
-			if (messageFoldersMap.get(oldId) != null)
-				newId = messageFoldersMap.get(oldId);
-			break;
-		case USERCONTACTS:
-			if (userContactsMap.get(oldId) != null)
-				newId = userContactsMap.get(oldId);
-			break;
-		default:
-			break;
+			case USERS:
+				if (usersMap.containsKey(oldId)) {
+					newId = usersMap.get(oldId);
+				}
+				break;
+			case ORGANISATIONS:
+				if (organisationsMap.containsKey(oldId)) {
+					newId = organisationsMap.get(oldId);
+				}
+				break;
+			case APPOINTMENTS:
+				if (appointmentsMap.containsKey(oldId)) {
+					newId = appointmentsMap.get(oldId);
+				}
+				break;
+			case ROOMS:
+				if (roomsMap.containsKey(oldId)) {
+					newId = roomsMap.get(oldId);
+				}
+				break;
+			case MESSAGEFOLDERS:
+				if (messageFoldersMap.containsKey(oldId)) {
+					newId = messageFoldersMap.get(oldId);
+				}
+				break;
+			case USERCONTACTS:
+				if (userContactsMap.containsKey(oldId)) {
+					newId = userContactsMap.get(oldId);
+				}
+				break;
+			default:
+				break;
 		}
 		return newId;
 	}
-
 }
