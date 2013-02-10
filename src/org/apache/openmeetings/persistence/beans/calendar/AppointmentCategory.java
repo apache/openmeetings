@@ -21,20 +21,19 @@ package org.apache.openmeetings.persistence.beans.calendar;
 import java.io.Serializable;
 import java.util.Date;
 
-import org.apache.openmeetings.persistence.beans.user.User;
-
-
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
-import javax.persistence.JoinColumn;
 import javax.persistence.Table;
+
+import org.apache.openjpa.persistence.jdbc.ForeignKey;
+import org.apache.openmeetings.persistence.beans.user.User;
 
 @Entity
 @Table(name = "appointmentcategory")
@@ -50,6 +49,7 @@ public class AppointmentCategory implements Serializable {
 	
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name="user_id", nullable=true)
+	@ForeignKey(enabled = true)
 	private User user;
 	
 	@Column(name="starttime")

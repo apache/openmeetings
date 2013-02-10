@@ -36,6 +36,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import org.apache.openjpa.persistence.jdbc.ForeignKey;
 import org.apache.openmeetings.persistence.beans.lang.Fieldlanguagesvalues;
 
 @Entity
@@ -98,6 +99,7 @@ public class Naviglobal implements Serializable {
 	
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "global_id")
+	@ForeignKey(enabled = true)
 	private List<Navimain> mainnavi;
 	
 	@Transient

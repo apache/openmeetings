@@ -32,6 +32,7 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
+import org.apache.openjpa.persistence.jdbc.ForeignKey;
 import org.apache.openmeetings.persistence.beans.IDataProviderEntity;
 import org.apache.openmeetings.persistence.beans.room.Room;
 import org.apache.openmeetings.persistence.beans.user.User;
@@ -57,6 +58,7 @@ public class ChatMessage implements Serializable, IDataProviderEntity {
 	@ManyToOne
 	@JoinColumn(name = "from_user_id")
 	@Element(name = "fromUserId", data = true, required = false)
+	@ForeignKey(enabled = true)
 	private User fromUser;
 	
 	// necessary to hold messages from external guests enters by invitation hash
@@ -71,11 +73,13 @@ public class ChatMessage implements Serializable, IDataProviderEntity {
 	@ManyToOne
 	@JoinColumn(name = "to_room_id")
 	@Element(name = "toRoomId", data = true, required = false)
+	@ForeignKey(enabled = true)
 	private Room toRoom;
 	
 	@ManyToOne
 	@JoinColumn(name = "to_user_id")
 	@Element(name = "toUserId", data = true, required = false)
+	@ForeignKey(enabled = true)
 	private User toUser;
 
 	// necessary to hold messages to external guests enters by invitation hash

@@ -33,6 +33,7 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
+import org.apache.openjpa.persistence.jdbc.ForeignKey;
 import org.apache.openmeetings.persistence.beans.domain.Organisation;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
@@ -56,7 +57,7 @@ import org.simpleframework.xml.Root;
 			+ "where c.room.rooms_id = :rooms_id "
 			+ "AND c.organisation.organisation_id = :organisation_id "
 			+ "AND c.deleted <> :deleted"),
-	@NamedQuery(name = "getRoomsOrganisationByRoomsId", query = "select c from Rooms_Organisation as c "
+	@NamedQuery(name = "getRoomsOrganisationByRoomsId", query = "select c from RoomOrganisation as c "
 			+ "where c.room.rooms_id = :rooms_id "
 			+ "AND c.deleted <> :deleted")
 })
@@ -72,11 +73,13 @@ public class RoomOrganisation implements Serializable {
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name="rooms_id", nullable=true)
+	@ForeignKey(enabled = true)
 	@Element(name="rooms_id", data=true, required=false)
 	private Room room;
 	
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name="organisation_id", nullable=true)
+	@ForeignKey(enabled = true)
 	@Element(name="organisation_id", data=true, required=false)
 	private Organisation organisation;
 	

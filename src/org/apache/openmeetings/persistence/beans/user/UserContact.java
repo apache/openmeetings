@@ -33,6 +33,7 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
+import org.apache.openjpa.persistence.jdbc.ForeignKey;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
 
@@ -82,6 +83,7 @@ public class UserContact implements Serializable {
 	
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name="owner_id")
+	@ForeignKey(enabled = true)
 	@Element(data=true, required=false)
 	private User owner;
 	

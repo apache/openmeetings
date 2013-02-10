@@ -31,6 +31,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import org.apache.openjpa.persistence.jdbc.ForeignKey;
+
 
 
 @Entity
@@ -44,6 +46,7 @@ public class ConferenceLog implements Serializable {
 	
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name="conferencelogtype_id", updatable=true, insertable=true)
+	@ForeignKey(enabled = true)
 	private ConferenceLogType conferenceLogType;
 	
 	@Column(name="inserted")

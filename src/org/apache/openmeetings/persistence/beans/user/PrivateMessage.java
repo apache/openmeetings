@@ -34,6 +34,7 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
+import org.apache.openjpa.persistence.jdbc.ForeignKey;
 import org.apache.openmeetings.persistence.beans.room.Room;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
@@ -91,16 +92,19 @@ public class PrivateMessage implements Serializable {
 	
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name="from_id")
+	@ForeignKey(enabled = true)
 	@Element(data=true, required=false)
 	private User from;
 	
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name="to_id")
+	@ForeignKey(enabled = true)
 	@Element(data=true, required=false)
 	private User to;
 	
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name="owner_id")
+	@ForeignKey(enabled = true)
 	@Element(data=true, required=false)
 	private User owner;
 	
@@ -111,6 +115,7 @@ public class PrivateMessage implements Serializable {
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name="rooms_id")
+	@ForeignKey(enabled = true)
 	@Element(data=true, required=false)
 	private Room room;
 	

@@ -23,10 +23,14 @@ import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import org.apache.openjpa.persistence.jdbc.ForeignKey;
 import org.apache.openmeetings.persistence.beans.user.User;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
@@ -35,8 +39,15 @@ import org.simpleframework.xml.Root;
 @Table(name = "room_poll_answers")
 @Root(name="roompollanswer")
 public class RoomPollAnswers {
+	
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id")
+	private Long id;
+	
 	@OneToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "users_id")
+	@ForeignKey(enabled = true)
 	@Element(name="voteduserid", data=false, required=false)
 	private User votedUser;
 	
@@ -55,6 +66,14 @@ public class RoomPollAnswers {
 	@OneToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "room_poll_id")
 	private RoomPoll roomPoll;
+	
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
 
 	/**
 	 * @return the answer

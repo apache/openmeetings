@@ -47,6 +47,7 @@ import org.apache.openjpa.persistence.FetchAttribute;
 import org.apache.openjpa.persistence.FetchGroup;
 import org.apache.openjpa.persistence.FetchGroups;
 import org.apache.openjpa.persistence.LoadFetchGroup;
+import org.apache.openjpa.persistence.jdbc.ForeignKey;
 import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
 import org.apache.openmeetings.persistence.beans.IDataProviderEntity;
 import org.apache.openmeetings.persistence.beans.basic.OmTimeZone;
@@ -189,6 +190,7 @@ public class User implements Serializable, IDataProviderEntity {
 
 	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinColumn(name = "adresses_id", insertable = true, updatable = true)
+	@ForeignKey(enabled = true)
 	@Element(name = "address", required = false)
 	private Address adresses;
 
@@ -223,6 +225,7 @@ public class User implements Serializable, IDataProviderEntity {
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "omtimezoneId", insertable = true, updatable = true)
+	@ForeignKey(enabled = true)
 	@Element(data = true, required = false)
 	private OmTimeZone omTimeZone; // In UTC +/- hours
 

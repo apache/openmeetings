@@ -31,6 +31,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import org.apache.openjpa.persistence.jdbc.ForeignKey;
 import org.apache.openmeetings.data.flvrecord.listener.async.StreamAudioWriter;
 import org.apache.openmeetings.data.flvrecord.listener.async.StreamVideoWriter;
 import org.simpleframework.xml.Element;
@@ -58,6 +59,7 @@ public class FlvRecordingMetaData implements Serializable {
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "flvrecording_id", nullable = true)
+	@ForeignKey(enabled = true)
 	private FlvRecording flvRecording;
 
 	@Column(name = "record_start")

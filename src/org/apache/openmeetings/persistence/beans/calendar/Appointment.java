@@ -38,6 +38,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.apache.openjpa.persistence.jdbc.ForeignKey;
 import org.apache.openmeetings.persistence.beans.room.Room;
 import org.apache.openmeetings.persistence.beans.user.User;
 import org.simpleframework.xml.Element;
@@ -100,11 +101,13 @@ public class Appointment implements Serializable {
 	
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "category_id", nullable = true)
+	@ForeignKey(enabled = true)
 	@Element(name="categoryId", data=true, required=false)
 	private AppointmentCategory appointmentCategory;
 	
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "user_id", nullable = true)
+	@ForeignKey(enabled = true)
 	@Element(name="users_id", data=true, required=false)
 	private User userId;
 
@@ -120,6 +123,7 @@ public class Appointment implements Serializable {
 	
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "remind_id", nullable = true)
+	@ForeignKey(enabled = true)
 	@Element(name="typId", data=true, required=false)
 	private AppointmentReminderTyps remind;
 
@@ -141,6 +145,7 @@ public class Appointment implements Serializable {
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "room_id", nullable = true)
+	@ForeignKey(enabled = true)
 	@Element(name="room_id", data=true, required=false)
 	private Room room;
 

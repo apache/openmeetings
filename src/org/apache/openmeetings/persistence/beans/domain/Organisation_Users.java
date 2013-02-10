@@ -33,6 +33,7 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
+import org.apache.openjpa.persistence.jdbc.ForeignKey;
 import org.apache.openmeetings.persistence.beans.IDataProviderEntity;
 import org.apache.openmeetings.persistence.beans.user.User;
 import org.simpleframework.xml.Element;
@@ -58,6 +59,7 @@ public class Organisation_Users implements Serializable, IDataProviderEntity {
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "organisation_id", insertable = true, updatable = true)
+	@ForeignKey(enabled = true)
 	@Element(name="organisation_id", required=false)
 	private Organisation organisation;
 
@@ -67,6 +69,7 @@ public class Organisation_Users implements Serializable, IDataProviderEntity {
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "user_id", insertable = true, updatable = true)
+	@ForeignKey(enabled = true)
 	private User user;
 	
 	@Column(name = "starttime")

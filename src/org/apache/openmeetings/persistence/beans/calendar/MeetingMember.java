@@ -31,6 +31,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import org.apache.openjpa.persistence.jdbc.ForeignKey;
 import org.apache.openmeetings.persistence.beans.basic.OmTimeZone;
 import org.apache.openmeetings.persistence.beans.invitation.Invitations;
 import org.apache.openmeetings.persistence.beans.user.User;
@@ -51,11 +52,13 @@ public class MeetingMember implements Serializable {
 	
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name="user_id", nullable=true)
+	@ForeignKey(enabled = true)
 	@Element(name="userid", data=true, required=false)
 	private User userid;
 	
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name="appointment_id", nullable=true)
+	@ForeignKey(enabled = true)
 	@Element(data=true, required=false)
 	private Appointment appointment;
 	
@@ -99,9 +102,11 @@ public class MeetingMember implements Serializable {
 	
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name="invitation", nullable=true, insertable=false)
+	@ForeignKey(enabled = true)
 	private Invitations invitation;
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name="omtimezoneId", nullable=true, insertable=true)
+	@ForeignKey(enabled = true)
 	private OmTimeZone omTimeZone;
 	
 	@Column(name="is_connected_event")

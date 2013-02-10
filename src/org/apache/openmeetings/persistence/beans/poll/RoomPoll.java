@@ -34,6 +34,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import org.apache.openjpa.persistence.jdbc.ForeignKey;
 import org.apache.openmeetings.persistence.beans.room.Room;
 import org.apache.openmeetings.persistence.beans.user.User;
 import org.simpleframework.xml.Element;
@@ -67,16 +68,19 @@ public class RoomPoll {
 	
 	@OneToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "poll_type_id")
+	@ForeignKey(enabled = true)
 	@Element(name="polltypeid", data=true, required=false)
 	private PollType pollType;
 	
 	@OneToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "users_id")
+	@ForeignKey(enabled = true)
 	@Element(name="createdbyuserid", data=true, required=false)
 	private User createdBy;
 	
 	@OneToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "rooms_id")
+	@ForeignKey(enabled = true)
 	@Element(name="roomid", data=true, required=false)
 	private Room room;
 	

@@ -31,6 +31,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import org.apache.openjpa.persistence.jdbc.ForeignKey;
 import org.apache.openmeetings.persistence.beans.basic.OmTimeZone;
 import org.apache.openmeetings.persistence.beans.room.Room;
 import org.apache.openmeetings.persistence.beans.user.User;
@@ -47,6 +48,7 @@ public class Invitations implements Serializable {
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "invitedBy", nullable = true)
+	@ForeignKey(enabled = true)
 	private User invitedBy;
 	
 	@Column(name = "starttime")
@@ -60,6 +62,7 @@ public class Invitations implements Serializable {
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "roomid", nullable = true)
+	@ForeignKey(enabled = true)
 	private Room room;
 
 	// the hash for the link
@@ -112,6 +115,7 @@ public class Invitations implements Serializable {
 	
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "omtimezoneId", insertable = true, updatable = true)
+	@ForeignKey(enabled = true)
 	private OmTimeZone omTimeZone; // In UTC +/- hours
 	
 	private boolean allowEntry = true;

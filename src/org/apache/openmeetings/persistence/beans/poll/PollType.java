@@ -28,6 +28,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import org.apache.openjpa.persistence.jdbc.ForeignKey;
 import org.apache.openmeetings.persistence.beans.lang.Fieldvalues;
 
 @Entity
@@ -40,6 +41,7 @@ public class PollType {
 	
 	@OneToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "fieldvalues_id")
+	@ForeignKey(enabled = true)
 	private Fieldvalues label;
 	
 	@Column(name = "numeric_answer")

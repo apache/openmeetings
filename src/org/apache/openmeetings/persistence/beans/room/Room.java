@@ -233,11 +233,13 @@ public class Room implements Serializable, IDataProviderEntity {
 
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "roomId")
+	@ForeignKey(enabled = true)
 	@ElementList(name = "room_moderators", required=false)
 	private List<RoomModerator> moderators;
 
 	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@PrimaryKeyJoinColumn(name="confno", referencedColumnName="confno")
+	@ForeignKey(enabled = true)
 	@Element(name = "meetme", required = false)
 	private MeetMe meetme;
 	

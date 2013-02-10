@@ -21,8 +21,6 @@ package org.apache.openmeetings.persistence.beans.lang;
 import java.io.Serializable;
 import java.util.Date;
 
-
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -36,6 +34,7 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
+import org.apache.openjpa.persistence.jdbc.ForeignKey;
 import org.apache.openmeetings.persistence.beans.IDataProviderEntity;
 
 @Entity
@@ -86,6 +85,7 @@ public class Fieldlanguagesvalues implements Serializable, IDataProviderEntity {
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "fieldvalues_id")
+	@ForeignKey(enabled = true)
 	private Fieldvalues fieldvalues;
 	
 	public Fieldlanguagesvalues() {
