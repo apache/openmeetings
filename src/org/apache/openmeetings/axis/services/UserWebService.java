@@ -23,17 +23,17 @@ import java.util.Date;
 import org.apache.axis2.AxisFault;
 import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.data.basic.AuthLevelmanagement;
-import org.apache.openmeetings.data.basic.ErrorManagement;
 import org.apache.openmeetings.data.basic.Fieldmanagment;
 import org.apache.openmeetings.data.basic.Sessionmanagement;
 import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
+import org.apache.openmeetings.data.basic.dao.ErrorDao;
 import org.apache.openmeetings.data.basic.dao.SOAPLoginDao;
 import org.apache.openmeetings.data.beans.basic.ErrorResult;
 import org.apache.openmeetings.data.beans.basic.SearchResult;
 import org.apache.openmeetings.data.user.Organisationmanagement;
 import org.apache.openmeetings.data.user.Usermanagement;
 import org.apache.openmeetings.data.user.dao.UsersDao;
-import org.apache.openmeetings.persistence.beans.basic.ErrorValues;
+import org.apache.openmeetings.persistence.beans.basic.ErrorValue;
 import org.apache.openmeetings.persistence.beans.basic.RemoteSessionObject;
 import org.apache.openmeetings.persistence.beans.basic.Sessiondata;
 import org.apache.openmeetings.persistence.beans.lang.Fieldlanguagesvalues;
@@ -69,7 +69,7 @@ public class UserWebService {
 	@Autowired
 	private Fieldmanagment fieldmanagment;
 	@Autowired
-	private ErrorManagement errorManagement;
+	private ErrorDao errorManagement;
 	@Autowired
 	private Organisationmanagement organisationmanagement;
 	@Autowired
@@ -144,7 +144,7 @@ public class UserWebService {
 	public ErrorResult getErrorByCode(String SID, long errorid, long language_id) {
 		try {
 			if (errorid < 0) {
-				ErrorValues eValues = errorManagement
+				ErrorValue eValues = errorManagement
 						.getErrorValuesById(errorid * (-1));
 				if (eValues != null) {
 					Fieldlanguagesvalues errorValue = fieldmanagment

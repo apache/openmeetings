@@ -24,9 +24,17 @@ import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
 @Entity
+@NamedQueries({
+	@NamedQuery(name = "getErrorTypes", query = "select c from ErrorType as c "
+					+ "WHERE c.deleted <> :deleted"),
+	@NamedQuery(name = "getErrorType", query = "select c from ErrorType as c "
+					+ "WHERE c.deleted <> :deleted AND c.errortype_id = :errortype_id")
+})
 @Table(name = "errortypes")
 public class ErrorType implements Serializable {
 	private static final long serialVersionUID = 1519570470483604258L;

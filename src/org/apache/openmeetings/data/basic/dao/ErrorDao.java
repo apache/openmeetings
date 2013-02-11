@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.data.basic;
+package org.apache.openmeetings.data.basic.dao;
 
 import java.util.Date;
 import java.util.List;
@@ -28,15 +28,15 @@ import javax.persistence.TypedQuery;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.persistence.beans.basic.ErrorType;
-import org.apache.openmeetings.persistence.beans.basic.ErrorValues;
+import org.apache.openmeetings.persistence.beans.basic.ErrorValue;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
-public class ErrorManagement {
+public class ErrorDao {
 	private static final Logger log = Red5LoggerFactory.getLogger(
-			ErrorManagement.class, OpenmeetingsVariables.webAppRootKey);
+			ErrorDao.class, OpenmeetingsVariables.webAppRootKey);
 
 	@PersistenceContext
 	private EntityManager em;
@@ -59,9 +59,7 @@ public class ErrorManagement {
 
 	public List<ErrorType> getErrorTypes() {
 		try {
-			String hql = "select c from ErrorType as c "
-					+ "WHERE c.deleted <> :deleted ";
-			TypedQuery<ErrorType> query = em.createQuery(hql, ErrorType.class);
+			TypedQuery<ErrorType> query = em.createNamedQuery("getErrorTypes", ErrorType.class);
 			query.setParameter("deleted", true);
 			List<ErrorType> ll = query.getResultList();
 			return ll;
@@ -73,9 +71,7 @@ public class ErrorManagement {
 
 	public ErrorType getErrorType(Long errortype_id) {
 		try {
-			String hql = "select c from ErrorType as c "
-					+ "WHERE c.deleted <> :deleted AND c.errortype_id = :errortype_id";
-			TypedQuery<ErrorType> query = em.createQuery(hql, ErrorType.class);
+			TypedQuery<ErrorType> query = em.createNamedQuery("getErrorType", ErrorType.class);
 			query.setParameter("deleted", true);
 			query.setParameter("errortype_id", errortype_id);
 			return query.getSingleResult();
@@ -88,7 +84,7 @@ public class ErrorManagement {
 	public Long addErrorValues(Long errorvalues_id, Long errortype_id,
 			Long fieldvalues_id) {
 		try {
-			ErrorValues eValue = new ErrorValues();
+			ErrorValue eValue = new ErrorValue();
 			eValue.setErrorvalues_id(errorvalues_id);
 			eValue.setErrortype_id(errortype_id);
 			eValue.setDeleted(false);
@@ -104,7 +100,7 @@ public class ErrorManagement {
 
 	public Long getErrorValueById(Long errortype_id, Long fieldvalues_id) {
 		try {
-			ErrorValues eValue = new ErrorValues();
+			ErrorValue eValue = new ErrorValue();
 			eValue.setErrortype_id(errortype_id);
 			eValue.setStarttime(new Date());
 			eValue.setFieldvalues_id(fieldvalues_id);
@@ -119,7 +115,7 @@ public class ErrorManagement {
 
 	public Long updateErrorValues(Long errortype_id, Long fieldvalues_id) {
 		try {
-			ErrorValues eValue = new ErrorValues();
+			ErrorValue eValue = new ErrorValue();
 			eValue.setErrortype_id(errortype_id);
 			eValue.setStarttime(new Date());
 			eValue.setFieldvalues_id(fieldvalues_id);
@@ -132,15 +128,12 @@ public class ErrorManagement {
 		return null;
 	}
 
-	public ErrorValues getErrorValuesById(Long errorvalues_id) {
+	public ErrorValue getErrorValuesById(Long errorvalues_id) {
 		try {
-			String hql = "select c from ErrorValues as c "
-					+ " where c.errorvalues_id = :errorvalues_id "
-					+ " AND c.deleted <> :deleted";
-			TypedQuery<ErrorValues> query = em.createQuery(hql, ErrorValues.class);
+			TypedQuery<ErrorValue> query = em.createNamedQuery("getErrorValuesById", ErrorValue.class);
 			query.setParameter("errorvalues_id", errorvalues_id);
 			query.setParameter("deleted", true);
-			ErrorValues e = null;
+			ErrorValue e = null;
 			try {
 				e = query.getSingleResult();
 			} catch (NoResultException ex) {

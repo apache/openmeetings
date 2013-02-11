@@ -19,10 +19,10 @@
 package org.apache.openmeetings.remote;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
-import org.apache.openmeetings.data.basic.ErrorManagement;
 import org.apache.openmeetings.data.basic.Fieldmanagment;
+import org.apache.openmeetings.data.basic.dao.ErrorDao;
 import org.apache.openmeetings.data.beans.basic.ErrorResult;
-import org.apache.openmeetings.persistence.beans.basic.ErrorValues;
+import org.apache.openmeetings.persistence.beans.basic.ErrorValue;
 import org.apache.openmeetings.persistence.beans.lang.Fieldlanguagesvalues;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -40,7 +40,7 @@ public class ErrorService {
 	@Autowired
 	private Fieldmanagment fieldmanagment;
 	@Autowired
-	private ErrorManagement errorManagement;
+	private ErrorDao errorManagement;
 
 	/**
 	 * Gets an Error-Object by its id TODO: add error-code-handlers -20
@@ -52,21 +52,13 @@ public class ErrorService {
 	 * @return - ErrorResult object with the id given
 	 */
 	public ErrorResult getErrorByCode(String SID, Long errorid, Long language_id) {
-		// Long users_id = Sessionmanagement.getInstance().checkSession(SID);
-		// long user_level =
-		// Usermanagement.getInstance().getUserLevelByID(users_id);
-
 		if (errorid < 0) {
 			log.debug("errorid, language_id: " + errorid + "|" + language_id);
-			ErrorValues eValues = errorManagement.getErrorValuesById(-1
+			ErrorValue eValues = errorManagement.getErrorValuesById(-1
 					* errorid);
 			if (eValues != null) {
 				log.debug("eValues.getFieldvalues_id() = " + eValues.getFieldvalues_id());
-				// log.debug(eValues.getFieldvalues().getFieldvalues_id());
 				log.debug("eValues.getErrorType() = " + errorManagement.getErrorType(eValues.getErrortype_id()));
-				// log.debug(eValues.getErrorType().getErrortype_id());
-				// log.debug(eValues.getErrorType().getFieldvalues());
-				// log.debug(eValues.getErrorType().getFieldvalues().getFieldvalues_id());
 				Fieldlanguagesvalues errorValue = fieldmanagment
 						.getFieldByIdAndLanguage(eValues.getFieldvalues_id(),
 								language_id);
@@ -82,7 +74,6 @@ public class ErrorService {
 			return new ErrorResult(errorid,
 					"Error ... please check your input", "Error");
 		}
-
 		return null;
 	}
 

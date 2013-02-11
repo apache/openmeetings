@@ -216,7 +216,7 @@
 	<bean id="organisationDao" class="org.apache.openmeetings.data.user.dao.OrganisationDao" />
 	<bean id="organisationUserDao" class="org.apache.openmeetings.data.user.dao.OrganisationUserDao" />
 	<bean id="salutationmanagement" class="org.apache.openmeetings.data.user.dao.SalutationDao" />
-	<bean id="errorManagement" class="org.apache.openmeetings.data.basic.ErrorManagement" />
+	<bean id="errorManagement" class="org.apache.openmeetings.data.basic.dao.ErrorDao" />
 	<bean id="navimanagement" class="org.apache.openmeetings.data.basic.Navimanagement" />
 	<bean id="pollManagement" class="org.apache.openmeetings.data.conference.PollManagement" />
 	<bean id="omTimeZoneDaoImpl" class="org.apache.openmeetings.data.basic.dao.OmTimeZoneDao" />

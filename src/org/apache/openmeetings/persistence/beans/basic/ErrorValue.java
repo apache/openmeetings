@@ -24,11 +24,18 @@ import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "errorvalues")
-public class ErrorValues implements Serializable {
+@NamedQueries({
+	@NamedQuery(name = "getErrorValuesById", query = "select c from ErrorValues as c "
+					+ " where c.errorvalues_id = :errorvalues_id "
+					+ " AND c.deleted <> :deleted")
+})
+@Table(name = "errorvalue")
+public class ErrorValue implements Serializable {
 	private static final long serialVersionUID = -1892810463706968018L;
 
 	@Id

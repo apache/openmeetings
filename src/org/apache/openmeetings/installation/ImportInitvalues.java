@@ -29,11 +29,11 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
-import org.apache.openmeetings.data.basic.ErrorManagement;
 import org.apache.openmeetings.data.basic.FieldLanguageDaoImpl;
 import org.apache.openmeetings.data.basic.Fieldmanagment;
 import org.apache.openmeetings.data.basic.Navimanagement;
 import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
+import org.apache.openmeetings.data.basic.dao.ErrorDao;
 import org.apache.openmeetings.data.basic.dao.OmTimeZoneDao;
 import org.apache.openmeetings.data.calendar.daos.AppointmentCategoryDao;
 import org.apache.openmeetings.data.calendar.daos.AppointmentReminderTypDao;
@@ -79,7 +79,7 @@ public class ImportInitvalues {
 	@Autowired
 	private Navimanagement navimanagement;
 	@Autowired
-	private ErrorManagement errorManagement;
+	private ErrorDao errorManagement;
 	@Autowired
 	private SalutationDao salutationmanagement;
 	@Autowired
