@@ -98,6 +98,10 @@ public class AsteriskSipUser implements Serializable {
 	@Element(data=true, required = false)
 	private String md5secret;
 
+	@Column(name = "nat", nullable=false)
+	@Element(data=true, required = false)
+	private String nat = "yes";
+
 	public long getId() {
 		return id;
 	}
@@ -216,5 +220,13 @@ public class AsteriskSipUser implements Serializable {
 
 	public void setMd5secret(String md5secret) {
 		this.md5secret = md5secret;
+	}
+
+	public String getNat() {
+		return nat;
+	}
+
+	public void setNat(String nat) {
+		this.nat = nat;
 	}
 }
