@@ -22,6 +22,7 @@ import static org.apache.commons.transaction.util.FileHelper.copyRec;
 import static org.apache.openmeetings.utils.OmFileHelper.getStreamsHibernateDir;
 import static org.apache.openmeetings.utils.OmFileHelper.getUploadDir;
 import static org.apache.openmeetings.utils.OmFileHelper.getUploadProfilesUserDir;
+import static org.apache.openmeetings.utils.OmFileHelper.getUploadRoomDir;
 import static org.apache.openmeetings.utils.OmFileHelper.profilesPrefix;
 
 import java.io.File;
@@ -760,6 +761,7 @@ public class BackupImportController extends AbstractUploadController {
 				if (file.isDirectory()) {
 					String fName = file.getName();
 					if ("profiles".equals(fName)) {
+						// profile should correspond to the new user id
 						for (File profile : file.listFiles()) {
 							Long oldId = getProfileId(profile);
 							Long id = oldId != null ? getNewId(oldId, Maps.USERS) : null;
@@ -768,6 +770,14 @@ public class BackupImportController extends AbstractUploadController {
 							}
 						}
 						continue;
+					} else {
+						// check if folder is room folder, store it under new id if necessary
+						Long oldId = importLongType(fName);
+						Long id = oldId != null ? getNewId(oldId, Maps.ROOMS) : null;
+						if (id != null) {
+							copyRec(file, getUploadRoomDir(id.toString()));
+							continue;
+						}
 					}
 					copyRec(file, new File(uploadDir, fName));
 				}
@@ -779,11 +789,8 @@ public class BackupImportController extends AbstractUploadController {
 		File sourceDirRec = new File(importBaseDir, "recordingFiles");
 
 		log.debug("sourceDirRec PATH " + sourceDirRec.getCanonicalPath());
-
 		if (sourceDirRec.exists()) {
-			File targetDirRec = getStreamsHibernateDir();
-
-			copyRec(sourceDirRec, targetDirRec);
+			copyRec(sourceDirRec, getStreamsHibernateDir());
 		}
 	}
 
