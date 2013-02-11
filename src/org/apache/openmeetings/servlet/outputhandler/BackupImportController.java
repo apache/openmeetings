@@ -795,11 +795,13 @@ public class BackupImportController extends AbstractUploadController {
 	}
 
 	private Long importLongType(String value) {
-		if (value.equals("null") || value.equals("")) {
-			return null;
+		Long val = null;
+		try {
+			val = Long.valueOf(value);
+		} catch (Exception e) {
+			// no-op
 		}
-
-		return Long.valueOf(value).longValue();
+		return val;
 	}
 
 	private Long getNewId(Long oldId, Maps map) {

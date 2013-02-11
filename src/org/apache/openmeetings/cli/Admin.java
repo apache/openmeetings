@@ -65,7 +65,8 @@ public class Admin {
 	private InstallationConfig cfg = null;
 	private Options opts = null;
 	private CommandLine cmdl = null;
-	private ClassPathXmlApplicationContext ctx = null; 
+	private ClassPathXmlApplicationContext ctx = null;
+	private final static String PERSISTENCE_NAME = "classes/META-INF/persistence.xml";
 
 	private Admin() {
 		cfg = new InstallationConfig();
@@ -234,7 +235,7 @@ public class Admin {
 						cfg.mailUseTls = "1";
 					}
 					ConnectionProperties connectionProperties = new ConnectionProperties();
-					File conf = new File(OmFileHelper.getWebinfDir(), "classes/META-INF/persistence.xml");
+					File conf = new File(OmFileHelper.getWebinfDir(), PERSISTENCE_NAME);
 					if (!conf.exists() || cmdl.hasOption("db-type") || cmdl.hasOption("db-host") || cmdl.hasOption("db-port") || cmdl.hasOption("db-name") || cmdl.hasOption("db-user") || cmdl.hasOption("db-pass")) {
 						String dbType = cmdl.getOptionValue("db-type", "derby");
 						File srcConf = new File(OmFileHelper.getWebinfDir(), "classes/META-INF/" + dbType + "_persistence.xml");
@@ -574,18 +575,28 @@ public class Admin {
 		return (pass == null || pass.length() < InstallationConfig.USER_PASSWORD_MINIMUM_LENGTH);
 	}
 	
+	public static void dropDB() throws Exception {
+		File conf = new File(OmFileHelper.getWebinfDir(), PERSISTENCE_NAME);
+		ConnectionProperties connectionProperties = ConnectionPropertiesPatcher.getConnectionProperties(conf);
+		immediateDropDB(connectionProperties);
+	}
+	
 	private void dropDB(ConnectionProperties props) throws Exception {
-		if(cmdl.hasOption("drop")) {	
-			String[] args = {
-					"-schemaAction", "retain,drop"
-					, "-properties", new File(OmFileHelper.getWebinfDir(), "classes/META-INF/persistence.xml").getCanonicalPath()
-					, "-connectionDriverName", props.getDriver()
-					, "-connectionURL", props.getURL()
-					, "-connectionUserName", props.getLogin()
-					, "-connectionPassword", props.getPassword()
-					, "-ignoreErrors", "true"};
-			MappingTool.main(args);
+		if(cmdl.hasOption("drop")) {
+			immediateDropDB(props);
 		}
+	}
+	
+	private static void immediateDropDB(ConnectionProperties props) throws Exception {
+		String[] args = {
+				"-schemaAction", "retain,drop"
+				, "-properties", new File(OmFileHelper.getWebinfDir(), PERSISTENCE_NAME).getCanonicalPath()
+				, "-connectionDriverName", props.getDriver()
+				, "-connectionURL", props.getURL()
+				, "-connectionUserName", props.getLogin()
+				, "-connectionPassword", props.getPassword()
+				, "-ignoreErrors", "true"};
+		MappingTool.main(args);
 	}
 	
 	private File checkRestoreFile(String file) {

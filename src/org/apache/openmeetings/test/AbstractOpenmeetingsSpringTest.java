@@ -71,7 +71,8 @@ public abstract class AbstractOpenmeetingsSpringTest extends AbstractJUnit4Sprin
 
 	@Before
 	public void setUp() throws Exception {
-        if (userManagement.getUserById(1L) == null) {
+		setOmHome();
+        if (usersDao.count() < 1) {
             makeDefaultScheme();
             log.info("Default scheme created successfully");
         } else {
@@ -126,7 +127,7 @@ public abstract class AbstractOpenmeetingsSpringTest extends AbstractJUnit4Sprin
 	}
 
 	protected void setOmHome() {
-		String webappsDir = System.getProperty("webapps.root", ".");
+		String webappsDir = System.getProperty("om.home", ".");
 		OmFileHelper.setOmHome(webappsDir);
 		if (!OmFileHelper.getOmHome().exists() || !OmFileHelper.getOmHome().isDirectory()) {
 			fail("Invalid directory is specified as OM HOME: " + webappsDir);
@@ -134,7 +135,6 @@ public abstract class AbstractOpenmeetingsSpringTest extends AbstractJUnit4Sprin
 	}
 	
 	private void makeDefaultScheme() throws Exception {
-		setOmHome();
 		importInitvalues.loadAll(new InstallationConfig(), username, userpass,
 				useremail, orgname, timeZone, false);
 	}
