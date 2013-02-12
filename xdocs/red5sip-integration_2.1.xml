@@ -31,7 +31,7 @@
 		<section name="ODBC Setup">
 			<div>
 				Set up Asterisk connector:<br /><br />
-				Modify file /etc/odbc.ini as follows: (replace USER, PASSWORD and Socket with values relative to your system)
+				Modify file <tt>/etc/odbc.ini</tt> as follows: (replace USER, PASSWORD and Socket with values relative to your system)
 				<blockquote>
 					<i>
 						[asterisk-connector]<br />
@@ -45,9 +45,9 @@
 						Socket = /var/run/mysqld/mysqld.sock<br />
 					</i>
 				</blockquote><br /><br />
-				Modify file /etc/odbcinst.ini as follows: (replace the path to the *.so files below with the real paths on your system)
+				Modify file <tt>/etc/odbcinst.ini</tt> as follows: (replace the path to the *.so files below with the real paths on your system)
 				<blockquote>
-					(The path below is for x32 server, x64 version is most probably located at /usr/lib/x86_64-linux-gnu/odbc)<br/>
+					(The path below is for x32 server, x64 version is most probably located at <tt>/usr/lib/x86_64-linux-gnu/odbc</tt>)<br/>
 					<i>
 						[MySQL]<br />
 						Description = ODBC for MySQL<br />
@@ -65,7 +65,7 @@
 		<section name="Setup Asterisk">
 			<div>
 				Enable asterisk ODBC and MeetMe modules:<br /><br />
-				Modify "[modules]" section of /etc/asterisk/modules.conf as follows:<br />
+				Modify "[modules]" section of <tt>/etc/asterisk/modules.conf</tt> as follows:<br />
 				<strong>Add/uncomment the following lines</strong>
 				<blockquote>
 					<i>
@@ -81,38 +81,37 @@
 			</div>
 			<div>
 				Enable caching of SIP users:<br /><br />
-				Modify "[general]" section of /etc/asterisk/sip.conf uncomment the following line:
+				Modify "[general]" section of <tt>/etc/asterisk/sip.conf</tt> uncomment the following line:
 				<blockquote>
 					<i>rtcachefriends=yes</i>
 				</blockquote>
 				add following section to create internal user for red5sip:
 				<blockquote>
 					<i>
-						[sip]
-						type=friend
-						user=sip
-						context=rooms
-						secret=12345
-						disallow=all
-						allow=ulaw
-						host=dynamic
+						[red5sip_user]<br />
+						type=friend<br />
+						user=red5sip_user<br />
+						context=rooms<br />
+						secret=12345<br />
+						disallow=all<br />
+						allow=ulaw<br />
+						host=dynamic<br />
 						nat=yes
 					</i>
 				</blockquote>
 			</div>
 			<div>
-				Add next lines into the /etc/asterisk/extconfig.conf:
+				Add next lines into the <tt>/etc/asterisk/extconfig.conf</tt>:
 				<blockquote>
 					<i>
 						[settings]<br />
 						sippeers => odbc,asterisk,sipusers<br />
 						meetme => odbc,asterisk,meetme<br />
-
 					</i>
 				</blockquote>
 			</div>
 			<div>
-				Add next lines into the /etc/asterisk/extensions.conf:
+				Add next lines into the <tt>/etc/asterisk/extensions.conf</tt>:
 				<blockquote>
 					<i>
 						[rooms]<br />
@@ -131,7 +130,7 @@
 				</blockquote>
 			</div>
 			<div>
-				Create/update "[asterisk]" section in /etc/asterisk/res_odbc.conf:
+				Create/update "[asterisk]" section in <tt>/etc/asterisk/res_odbc.conf</tt>:
 				<blockquote>
 					<i>
 						[asterisk]<br />
@@ -146,6 +145,12 @@
 				Restart asterisk:
 				<blockquote>
 					<i>service asterisk restart</i>
+				</blockquote>
+			</div>
+			<div>
+				Ensure dahdi was installed successfully:
+				<blockquote>
+					<i>modprobe dahdi</i>
 				</blockquote>
 			</div>
 		</section>
@@ -168,17 +173,21 @@
 				</blockquote>
 			</div>
 			<div>
-				Insert proper values to the /opt/red5sip/settings.properties
+				Insert proper values to the <tt>/opt/red5sip/settings.properties</tt>
 
 				<blockquote>
 					<i>
-						red5.host - red5 server address (127.0.0.1)<br />
-						sip.obproxy - asterisk adderss (127.0.0.1)<br />
-						sip.phone - sip phone number (sip)<br />
-						sip.authid - sip auth id (sip)<br />
-						sip.secret - sip password (12345)<br />
-						sip.realm - sip realm (asterisk)<br />
-						sip.proxy - <br />
+						red5.host=127.0.0.1 # red5 server address<br />
+						red5.codec=asao<br />
+						red5.codec.rate=22 # should correlate with mic settings in config.xml<br />
+						sip.obproxy=127.0.0.1 # asterisk adderss<br />
+						sip.phone=red5sip_user # sip phone number<br />
+						sip.authid=red5sip_user # sip auth id<br />
+						sip.secret=12345 # sip password<br />
+						sip.realm=asterisk # sip realm<br />
+						sip.proxy=127.0.0.1 # address of sip proxy <br />
+						rooms.forceStart=no # TBD <br />
+						rooms=1 # TBD (not in use) <br />
 					</i>
 				</blockquote>
 			</div>
