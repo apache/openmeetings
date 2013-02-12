@@ -525,10 +525,12 @@ public class BackupImportController extends AbstractUploadController {
 			registry.bind(Date.class, DateConverter.class);
 			
 			List<FileExplorerItem> list = readList(serializer, f, "fileExplorerItems.xml", "fileExplorerItems", FileExplorerItem.class, true);
-			for (FileExplorerItem fileExplorerItem : list) {
+			for (FileExplorerItem file : list) {
 				// We need to reset this as openJPA reject to store them otherwise
-				fileExplorerItem.setFileExplorerItemId(0);
-				fileExplorerItemDao.addFileExplorerItem(fileExplorerItem);
+				file.setFileExplorerItemId(0);
+				Long roomId = file.getRoom_id();
+				file.setRoom_id(roomsMap.containsKey(roomId) ? roomsMap.get(roomId) : null);
+				fileExplorerItemDao.addFileExplorerItem(file);
 			}
 		}
 
