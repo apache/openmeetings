@@ -31,7 +31,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
-import org.apache.openmeetings.data.basic.Sessionmanagement;
+import org.apache.openmeetings.data.basic.SessiondataDao;
 import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
 import org.apache.openmeetings.data.basic.dao.ServerDao;
 import org.apache.openmeetings.data.calendar.daos.MeetingMemberDao;
@@ -95,7 +95,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 	@Autowired
 	private AppointmentLogic appointmentLogic;
 	@Autowired
-	private Sessionmanagement sessionManagement;
+	private SessiondataDao sessionManagement;
 	@Autowired
 	private Usermanagement userManagement;
 	@Autowired

@@ -22,8 +22,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
-import org.apache.openmeetings.data.basic.AuthLevelmanagement;
-import org.apache.openmeetings.data.basic.Sessionmanagement;
+import org.apache.openmeetings.data.basic.AuthLevelUtil;
+import org.apache.openmeetings.data.basic.SessiondataDao;
 import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
 import org.apache.openmeetings.data.user.Usermanagement;
 import org.apache.openmeetings.utils.ImportHelper;
@@ -37,11 +37,11 @@ public abstract class AbstractUploadController {
 	private static final Logger log = Red5LoggerFactory.getLogger(
 			AbstractUploadController.class, OpenmeetingsVariables.webAppRootKey);
 	@Autowired
-	protected Sessionmanagement sessionManagement;
+	protected SessiondataDao sessionManagement;
 	@Autowired
 	protected Usermanagement userManagement;
 	@Autowired
-	protected AuthLevelmanagement authLevelManagement;
+	protected AuthLevelUtil authLevelManagement;
 	@Autowired
 	protected ConfigurationDao configurationDaoImpl;
 	

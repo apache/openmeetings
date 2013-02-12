@@ -22,8 +22,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
-import org.apache.openmeetings.data.basic.AuthLevelmanagement;
-import org.apache.openmeetings.data.basic.Sessionmanagement;
+import org.apache.openmeetings.data.basic.AuthLevelUtil;
+import org.apache.openmeetings.data.basic.SessiondataDao;
 import org.apache.openmeetings.data.beans.basic.SearchResult;
 import org.apache.openmeetings.data.user.Organisationmanagement;
 import org.apache.openmeetings.data.user.Usermanagement;
@@ -43,13 +43,13 @@ public class OrganisationService {
 	private static final Logger log = Red5LoggerFactory.getLogger(
 			OrganisationService.class, OpenmeetingsVariables.webAppRootKey);
 	@Autowired
-	private Sessionmanagement sessionManagement;
+	private SessiondataDao sessionManagement;
 	@Autowired
 	private Usermanagement userManagement;
 	@Autowired
 	private Organisationmanagement organisationmanagement;
 	@Autowired
-	private AuthLevelmanagement authLevelManagement;
+	private AuthLevelUtil authLevelManagement;
 
 	/**
 	 * Loads a List of all available Organizations (Admin-role only)

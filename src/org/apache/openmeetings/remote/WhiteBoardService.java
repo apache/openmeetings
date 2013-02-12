@@ -29,8 +29,8 @@ import java.util.LinkedList;
 import java.util.Map;
 
 import org.apache.commons.collections.ComparatorUtils;
-import org.apache.openmeetings.data.basic.AuthLevelmanagement;
-import org.apache.openmeetings.data.basic.Sessionmanagement;
+import org.apache.openmeetings.data.basic.AuthLevelUtil;
+import org.apache.openmeetings.data.basic.SessiondataDao;
 import org.apache.openmeetings.data.user.Usermanagement;
 import org.apache.openmeetings.data.whiteboard.WhiteBoardObjectListManagerById;
 import org.apache.openmeetings.data.whiteboard.WhiteBoardObjectSyncManager;
@@ -71,9 +71,9 @@ public class WhiteBoardService implements IPendingServiceCallback {
 	@Autowired
 	private final WhiteBoardObjectListManagerById whiteBoardObjectListManagerById = null;
 	@Autowired
-	private Sessionmanagement sessionManagement;
+	private SessiondataDao sessionManagement;
 	@Autowired
-	private AuthLevelmanagement authLevelManagement;
+	private AuthLevelUtil authLevelManagement;
 
 	/**
 	 * Loading the List of Objects on the whiteboard

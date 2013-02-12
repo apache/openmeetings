@@ -36,7 +36,7 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
-import org.apache.openmeetings.data.basic.AuthLevelmanagement;
+import org.apache.openmeetings.data.basic.AuthLevelUtil;
 import org.apache.openmeetings.data.beans.basic.SearchResult;
 import org.apache.openmeetings.data.user.dao.OrganisationDao;
 import org.apache.openmeetings.data.user.dao.OrganisationUserDao;
@@ -70,7 +70,7 @@ public class Organisationmanagement {
 	@Autowired
 	private OrganisationUserDao orgUserDao;
 	@Autowired
-	private AuthLevelmanagement authLevelManagement;
+	private AuthLevelUtil authLevelManagement;
 
 	/**
 	 * adds a new organisation if userlevel is admin

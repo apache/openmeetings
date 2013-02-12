@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.data.basic.files;
+package org.apache.openmeetings.data.beans.files;
 /**
  * Response of one Library-Files-Request
  * @author sebastianwagner

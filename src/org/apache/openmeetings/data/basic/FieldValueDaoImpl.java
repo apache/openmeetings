@@ -43,7 +43,7 @@ public class FieldValueDaoImpl implements IDataProviderDao<Fieldvalues> {
 	@Autowired
 	private ConfigurationDao configurationDaoImpl;
 	@Autowired
-	private FieldLanguagesValuesDaoImpl flvDaoImpl;
+	private FieldLanguagesValuesDao flvDaoImpl;
 
 	private Long getDefaultLanguage() {
 		return configurationDaoImpl.getConfValue("default_lang_id", Long.class, "1");

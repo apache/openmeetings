@@ -24,7 +24,7 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
-import org.apache.openmeetings.data.basic.AuthLevelmanagement;
+import org.apache.openmeetings.data.basic.AuthLevelUtil;
 import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
 import org.dom4j.Attribute;
 import org.dom4j.Document;
@@ -41,7 +41,7 @@ public class LoadAtomRssFeed {
 	@Autowired
 	private ConfigurationDao configDao;
 	@Autowired
-	private AuthLevelmanagement authLevelmanagement;
+	private AuthLevelUtil authLevelmanagement;
 
 	public LinkedHashMap<String, LinkedHashMap<String, LinkedHashMap<String, LinkedHashMap<String, Object>>>> getRssFeeds(
 			Long user_level) {

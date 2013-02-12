@@ -16,19 +16,24 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.data.basic.rooms;
+package org.apache.openmeetings.data.basic;
 
-import org.apache.openmeetings.persistence.beans.room.Room;
-
-public class RoomsList {
-	
-	Room[] roomList = null;
-
-	public Room[] getRoomList() {
-		return roomList;
+public class AuthLevelUtil {
+	 
+	public boolean checkUserLevel(Long user_level) {
+		return user_level == 1 || user_level == 2 || user_level == 3;
 	}
-	public void setRoomList(Room[] roomList) {
-		this.roomList = roomList;
+	
+	public boolean checkModLevel(Long user_level) {
+		return user_level == 2 || user_level == 3;
+	}
+	
+	public boolean checkAdminLevel(Long user_level) {
+		return user_level == 3;
+	}
+	
+	public boolean checkWebServiceLevel(Long user_level) {
+		return user_level == 3 || user_level == 4;
 	}
 
 }

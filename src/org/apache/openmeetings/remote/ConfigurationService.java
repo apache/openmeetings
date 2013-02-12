@@ -21,8 +21,8 @@ package org.apache.openmeetings.remote;
 import java.util.LinkedHashMap;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
-import org.apache.openmeetings.data.basic.AuthLevelmanagement;
-import org.apache.openmeetings.data.basic.Sessionmanagement;
+import org.apache.openmeetings.data.basic.AuthLevelUtil;
+import org.apache.openmeetings.data.basic.SessiondataDao;
 import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
 import org.apache.openmeetings.data.beans.basic.SearchResult;
 import org.apache.openmeetings.data.user.Usermanagement;
@@ -43,9 +43,9 @@ public class ConfigurationService {
 			ConfigurationService.class, OpenmeetingsVariables.webAppRootKey);
 
 	@Autowired
-	private AuthLevelmanagement authLevelManagement;
+	private AuthLevelUtil authLevelManagement;
 	@Autowired
-	private Sessionmanagement sessionManagement;
+	private SessiondataDao sessionManagement;
 	@Autowired
 	private ConfigurationDao configurationDaoImpl;
     @Autowired

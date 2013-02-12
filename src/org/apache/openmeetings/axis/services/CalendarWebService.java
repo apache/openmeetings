@@ -28,8 +28,8 @@ import java.util.TimeZone;
 
 import org.apache.axis2.AxisFault;
 import org.apache.openmeetings.OpenmeetingsVariables;
-import org.apache.openmeetings.data.basic.AuthLevelmanagement;
-import org.apache.openmeetings.data.basic.Sessionmanagement;
+import org.apache.openmeetings.data.basic.AuthLevelUtil;
+import org.apache.openmeetings.data.basic.SessiondataDao;
 import org.apache.openmeetings.data.calendar.beans.AppointmentDTO;
 import org.apache.openmeetings.data.calendar.beans.Day;
 import org.apache.openmeetings.data.calendar.beans.Week;
@@ -70,7 +70,7 @@ public class CalendarWebService {
 	@Autowired
 	private AppointmentLogic appointmentLogic;
 	@Autowired
-	private Sessionmanagement sessionManagement;
+	private SessiondataDao sessionManagement;
 	@Autowired
 	private Usermanagement userManagement;
 	@Autowired
@@ -78,7 +78,7 @@ public class CalendarWebService {
 	@Autowired
 	private RoomDao roomDao;
 	@Autowired
-	private AuthLevelmanagement authLevelManagement;
+	private AuthLevelUtil authLevelManagement;
 	@Autowired
 	private AppointmentCategoryDao appointmentCategoryDaoImpl;
 	@Autowired

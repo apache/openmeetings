@@ -57,10 +57,10 @@ public class Fieldmanagment {
 	private EntityManager em;
 
 	@Autowired
-	private FieldLanguageDaoImpl fieldLanguageDaoImpl;
+	private FieldLanguageDao fieldLanguageDaoImpl;
 
 	@Autowired
-	private FieldLanguagesValuesDaoImpl fieldLanguagesValuesDAO;
+	private FieldLanguagesValuesDao fieldLanguagesValuesDAO;
 
 	@Autowired
 	private ConfigurationDao configurationDaoImpl;

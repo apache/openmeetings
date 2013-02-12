@@ -18,7 +18,7 @@
  */
 package org.apache.openmeetings.web.components;
 
-import org.apache.openmeetings.data.basic.Navimanagement;
+import org.apache.openmeetings.data.basic.NaviBuilder;
 import org.apache.openmeetings.persistence.beans.basic.Naviglobal;
 import org.apache.openmeetings.persistence.beans.basic.Navimain;
 import org.apache.openmeetings.web.app.Application;
@@ -84,7 +84,7 @@ public class MenuPanel extends BasePanel {
 		super(id);
 		setMarkupId(id);
 		
-		final Navimanagement man = Application.getBean(Navimanagement.class);
+		final NaviBuilder man = Application.getBean(NaviBuilder.class);
 		add(new ListView<Naviglobal>("mainItem", man.getMainMenu(WebSession.getUserLevel(), WebSession.getUserId(), WebSession.getLanguage())) {
 			private static final long serialVersionUID = 2173926553418745231L;
 

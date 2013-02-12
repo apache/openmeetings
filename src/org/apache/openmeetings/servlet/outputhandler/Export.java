@@ -29,8 +29,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
-import org.apache.openmeetings.data.basic.AuthLevelmanagement;
-import org.apache.openmeetings.data.basic.Sessionmanagement;
+import org.apache.openmeetings.data.basic.AuthLevelUtil;
+import org.apache.openmeetings.data.basic.SessiondataDao;
 import org.apache.openmeetings.data.user.Organisationmanagement;
 import org.apache.openmeetings.data.user.Usermanagement;
 import org.apache.openmeetings.data.user.dao.UsersDao;
@@ -52,12 +52,12 @@ public class Export extends HttpServlet {
 	private static final Logger log = Red5LoggerFactory.getLogger(Export.class,
 			OpenmeetingsVariables.webAppRootKey);
 
-	private Sessionmanagement getSessionManagement() {
+	private SessiondataDao getSessionManagement() {
 		try {
 			if (ScopeApplicationAdapter.initComplete) {
 				ApplicationContext context = WebApplicationContextUtils
 						.getWebApplicationContext(getServletContext());
-				return context.getBean("sessionManagement", Sessionmanagement.class);
+				return context.getBean("sessionManagement", SessiondataDao.class);
 			}
 		} catch (Exception err) {
 			log.error("[getSessionManagement]", err);
@@ -104,12 +104,12 @@ public class Export extends HttpServlet {
 		return null;
 	}
 
-	private AuthLevelmanagement getAuthLevelManagement() {
+	private AuthLevelUtil getAuthLevelManagement() {
 		try {
 			if (ScopeApplicationAdapter.initComplete) {
 				ApplicationContext context = WebApplicationContextUtils
 						.getWebApplicationContext(getServletContext());
-				return context.getBean("authLevelManagement", AuthLevelmanagement.class);
+				return context.getBean("authLevelManagement", AuthLevelUtil.class);
 			}
 		} catch (Exception err) {
 			log.error("[getAuthLevelManagement]", err);

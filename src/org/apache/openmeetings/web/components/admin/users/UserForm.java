@@ -22,7 +22,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.apache.openmeetings.data.basic.FieldLanguageDaoImpl;
+import org.apache.openmeetings.data.basic.FieldLanguageDao;
 import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
 import org.apache.openmeetings.data.basic.dao.OmTimeZoneDao;
 import org.apache.openmeetings.data.user.Organisationmanagement;
@@ -81,7 +81,7 @@ public class UserForm extends AdminBaseForm<User> {
 			SalutationDao.class).getUserSalutations(
 			WebSession.getLanguage());
 	private final List<FieldLanguage> languageList = Application.getBean(
-			FieldLanguageDaoImpl.class).getLanguages();
+			FieldLanguageDao.class).getLanguages();
 
 	private PasswordTextField passwordField;
 

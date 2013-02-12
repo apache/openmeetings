@@ -16,26 +16,19 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.quartz.scheduler;
+package org.apache.openmeetings.data.beans.rooms;
 
-import org.apache.openmeetings.OpenmeetingsVariables;
-import org.apache.openmeetings.data.basic.SessiondataDao;
-import org.red5.logging.Red5LoggerFactory;
-import org.slf4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
- 
-public class SessionClearJob {
-	private static Logger log = Red5LoggerFactory.getLogger(SessionClearJob.class, OpenmeetingsVariables.webAppRootKey);
-	@Autowired
-	private SessiondataDao sessionManagement;
+import org.apache.openmeetings.persistence.beans.room.Room;
 
-	public void doIt() {
-		log.trace("SessionClearJob.execute");
-		try {
-			// TODO Generate report
-			sessionManagement.clearSessionTable();
-		} catch (Exception err){
-			log.error("execute",err);
-		}
+public class RoomsList {
+	
+	Room[] roomList = null;
+
+	public Room[] getRoomList() {
+		return roomList;
 	}
+	public void setRoomList(Room[] roomList) {
+		this.roomList = roomList;
+	}
+
 }

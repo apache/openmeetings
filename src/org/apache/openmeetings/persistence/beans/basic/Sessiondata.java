@@ -21,16 +21,25 @@ package org.apache.openmeetings.persistence.beans.basic;
 import java.io.Serializable;
 import java.util.Date;
 
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
 @Entity
+@NamedQueries({
+	@NamedQuery(name = "getSessionById", query = "select c from Sessiondata as c "
+					+ "where c.session_id LIKE :session_id"),
+	@NamedQuery(name = "getSessionToDelete", query = "Select c from Sessiondata c "
+					+ "WHERE c.refresh_time < :refresh_time " + "AND ( "
+					+ "c.storePermanent IS NULL " + "OR "
+					+ "c.storePermanent = false " + ")")
+})
 @Table(name = "sessiondata")
 public class Sessiondata implements Serializable {
 	private static final long serialVersionUID = 1928177917452866750L;

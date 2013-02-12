@@ -29,9 +29,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
-import org.apache.openmeetings.data.basic.FieldLanguageDaoImpl;
+import org.apache.openmeetings.data.basic.FieldLanguageDao;
 import org.apache.openmeetings.data.basic.Fieldmanagment;
-import org.apache.openmeetings.data.basic.Sessionmanagement;
+import org.apache.openmeetings.data.basic.SessiondataDao;
 import org.apache.openmeetings.data.user.Usermanagement;
 import org.apache.openmeetings.persistence.beans.lang.FieldLanguage;
 import org.apache.openmeetings.persistence.beans.lang.Fieldlanguagesvalues;
@@ -83,12 +83,12 @@ public class LangExport extends HttpServlet {
 			+ "see http://openmeetings.apache.org/LanguageEditor.html for Details \n"
 			+ "###############################################";
 
-	public Sessionmanagement getSessionManagement() {
+	public SessiondataDao getSessionManagement() {
 		try {
 			if (ScopeApplicationAdapter.initComplete) {
 				ApplicationContext context = WebApplicationContextUtils
 						.getWebApplicationContext(getServletContext());
-				return context.getBean("sessionManagement", Sessionmanagement.class);
+				return context.getBean("sessionManagement", SessiondataDao.class);
 			}
 		} catch (Exception err) {
 			log.error("[getSessionManagement]", err);
@@ -122,12 +122,12 @@ public class LangExport extends HttpServlet {
 		return null;
 	}
 
-	public FieldLanguageDaoImpl getFieldLanguageDaoImpl() {
+	public FieldLanguageDao getFieldLanguageDaoImpl() {
 		try {
 			if (ScopeApplicationAdapter.initComplete) {
 				ApplicationContext context = WebApplicationContextUtils
 						.getWebApplicationContext(getServletContext());
-				return context.getBean("fieldLanguageDaoImpl", FieldLanguageDaoImpl.class);
+				return context.getBean("fieldLanguageDaoImpl", FieldLanguageDao.class);
 			}
 		} catch (Exception err) {
 			log.error("[getFieldLanguageDaoImpl]", err);

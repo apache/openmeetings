@@ -20,7 +20,7 @@ package org.apache.openmeetings.web.components.admin.labels;
 
 import java.util.Iterator;
 
-import org.apache.openmeetings.data.basic.FieldLanguageDaoImpl;
+import org.apache.openmeetings.data.basic.FieldLanguageDao;
 import org.apache.openmeetings.data.basic.FieldValueDaoImpl;
 import org.apache.openmeetings.persistence.beans.lang.FieldLanguage;
 import org.apache.openmeetings.persistence.beans.lang.Fieldlanguagesvalues;
@@ -61,8 +61,8 @@ public class LangPanel extends AdminPanel {
 	@SuppressWarnings("unchecked")
 	public LangPanel(String id) {
 		super(id);
-		FieldLanguageDaoImpl langDao = Application
-				.getBean(FieldLanguageDaoImpl.class);
+		FieldLanguageDao langDao = Application
+				.getBean(FieldLanguageDao.class);
 		language = langDao.getFieldLanguageById(1L);
 
 		Fieldlanguagesvalues flv = new Fieldlanguagesvalues();

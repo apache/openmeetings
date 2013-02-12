@@ -27,7 +27,7 @@ import java.util.Random;
 import java.util.Vector;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
-import org.apache.openmeetings.data.basic.Sessionmanagement;
+import org.apache.openmeetings.data.basic.SessiondataDao;
 import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
 import org.apache.openmeetings.data.basic.dao.LdapConfigDao;
 import org.apache.openmeetings.data.basic.dao.OmTimeZoneDao;
@@ -59,7 +59,7 @@ public class LdapLoginManagement {
 			LdapLoginManagement.class, OpenmeetingsVariables.webAppRootKey);
 
 	@Autowired
-	private Sessionmanagement sessionManagement;
+	private SessiondataDao sessionManagement;
 	@Autowired
 	private ConfigurationDao configDao;
 	@Autowired

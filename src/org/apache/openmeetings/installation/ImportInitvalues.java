@@ -29,9 +29,9 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
-import org.apache.openmeetings.data.basic.FieldLanguageDaoImpl;
+import org.apache.openmeetings.data.basic.FieldLanguageDao;
 import org.apache.openmeetings.data.basic.Fieldmanagment;
-import org.apache.openmeetings.data.basic.Navimanagement;
+import org.apache.openmeetings.data.basic.NaviBuilder;
 import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
 import org.apache.openmeetings.data.basic.dao.ErrorDao;
 import org.apache.openmeetings.data.basic.dao.OmTimeZoneDao;
@@ -71,13 +71,13 @@ public class ImportInitvalues {
 	@Autowired
 	private Fieldmanagment fieldmanagment;
 	@Autowired
-	private FieldLanguageDaoImpl fieldLanguageDaoImpl;
+	private FieldLanguageDao fieldLanguageDaoImpl;
 	@Autowired
 	private StateDao statemanagement;
 	@Autowired
 	private OmTimeZoneDao omTimeZoneDaoImpl;
 	@Autowired
-	private Navimanagement navimanagement;
+	private NaviBuilder navimanagement;
 	@Autowired
 	private ErrorDao errorManagement;
 	@Autowired

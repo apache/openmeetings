@@ -31,7 +31,7 @@ import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.lang.StringUtils;
 import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.data.basic.Fieldmanagment;
-import org.apache.openmeetings.data.basic.Sessionmanagement;
+import org.apache.openmeetings.data.basic.SessiondataDao;
 import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
 import org.apache.openmeetings.persistence.beans.room.Client;
 import org.apache.openmeetings.session.ISessionManager;
@@ -55,7 +55,7 @@ public class ScreenController {
 	@Autowired
 	private ISessionManager sessionManager;
 	@Autowired
-	public Sessionmanagement sessionManagement;
+	public SessiondataDao sessionManagement;
 	@Autowired
 	public ConfigurationDao configurationDaoImpl;
 	@Autowired

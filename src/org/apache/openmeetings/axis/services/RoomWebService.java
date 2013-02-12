@@ -29,8 +29,8 @@ import java.util.Map;
 import org.apache.axis2.AxisFault;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.openmeetings.OpenmeetingsVariables;
-import org.apache.openmeetings.data.basic.AuthLevelmanagement;
-import org.apache.openmeetings.data.basic.Sessionmanagement;
+import org.apache.openmeetings.data.basic.AuthLevelUtil;
+import org.apache.openmeetings.data.basic.SessiondataDao;
 import org.apache.openmeetings.data.beans.basic.SearchResult;
 import org.apache.openmeetings.data.calendar.daos.AppointmentDao;
 import org.apache.openmeetings.data.calendar.management.MeetingMemberLogic;
@@ -69,7 +69,7 @@ public class RoomWebService {
 	@Autowired
 	private AppointmentDao appointmentDao;
 	@Autowired
-	private Sessionmanagement sessionManagement;
+	private SessiondataDao sessionManagement;
 	@Autowired
 	private Usermanagement userManagement;
 	@Autowired
@@ -81,7 +81,7 @@ public class RoomWebService {
 	@Autowired
 	private ScopeApplicationAdapter scopeApplicationAdapter;
 	@Autowired
-	private AuthLevelmanagement authLevelManagement;
+	private AuthLevelUtil authLevelManagement;
 	@Autowired
 	private ConferenceService conferenceService;
 	@Autowired

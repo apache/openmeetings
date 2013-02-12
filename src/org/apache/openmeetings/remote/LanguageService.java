@@ -23,10 +23,10 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
-import org.apache.openmeetings.data.basic.AuthLevelmanagement;
-import org.apache.openmeetings.data.basic.FieldLanguageDaoImpl;
+import org.apache.openmeetings.data.basic.AuthLevelUtil;
+import org.apache.openmeetings.data.basic.FieldLanguageDao;
 import org.apache.openmeetings.data.basic.Fieldmanagment;
-import org.apache.openmeetings.data.basic.Sessionmanagement;
+import org.apache.openmeetings.data.basic.SessiondataDao;
 import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
 import org.apache.openmeetings.data.beans.basic.SearchResult;
 import org.apache.openmeetings.data.user.Usermanagement;
@@ -47,7 +47,7 @@ public class LanguageService {
 	private static final Logger log = Red5LoggerFactory.getLogger(
 			LanguageService.class, OpenmeetingsVariables.webAppRootKey);
 	@Autowired
-	private Sessionmanagement sessionManagement;
+	private SessiondataDao sessionManagement;
 	@Autowired
 	private ConfigurationDao configurationDaoImpl;
 	@Autowired
@@ -55,9 +55,9 @@ public class LanguageService {
 	@Autowired
 	private Fieldmanagment fieldmanagment;
 	@Autowired
-	private FieldLanguageDaoImpl fieldLanguageDaoImpl;
+	private FieldLanguageDao fieldLanguageDaoImpl;
 	@Autowired
-	private AuthLevelmanagement authLevelManagement;
+	private AuthLevelUtil authLevelManagement;
 
 	/**
 	 * get a List of all availaible Languages

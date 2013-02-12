@@ -33,8 +33,8 @@ import java.util.TimeZone;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.cluster.beans.ServerDTO;
-import org.apache.openmeetings.data.basic.AuthLevelmanagement;
-import org.apache.openmeetings.data.basic.Sessionmanagement;
+import org.apache.openmeetings.data.basic.AuthLevelUtil;
+import org.apache.openmeetings.data.basic.SessiondataDao;
 import org.apache.openmeetings.data.basic.dao.ServerDao;
 import org.apache.openmeetings.data.beans.basic.SearchResult;
 import org.apache.openmeetings.data.calendar.management.AppointmentLogic;
@@ -72,7 +72,7 @@ public class ConferenceService {
 	@Autowired
 	private AppointmentLogic appointmentLogic;
 	@Autowired
-	private Sessionmanagement sessionManagement;
+	private SessiondataDao sessionManagement;
 	@Autowired
 	private Usermanagement userManagement;
 	@Autowired
@@ -82,7 +82,7 @@ public class ConferenceService {
 	@Autowired
 	private RoomModeratorsDao roomModeratorsDao;
 	@Autowired
-	private AuthLevelmanagement authLevelManagement;
+	private AuthLevelUtil authLevelManagement;
 	@Autowired
 	private TimezoneUtil timezoneUtil;
 	@Autowired

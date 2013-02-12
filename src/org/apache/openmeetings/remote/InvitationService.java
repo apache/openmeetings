@@ -23,7 +23,7 @@ import java.util.Date;
 import java.util.TimeZone;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
-import org.apache.openmeetings.data.basic.Sessionmanagement;
+import org.apache.openmeetings.data.basic.SessiondataDao;
 import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
 import org.apache.openmeetings.data.basic.dao.OmTimeZoneDao;
 import org.apache.openmeetings.data.conference.Invitationmanagement;
@@ -43,7 +43,7 @@ public class InvitationService implements IPendingServiceCallback {
 	private static final Logger log = Red5LoggerFactory.getLogger(
 			InvitationService.class, OpenmeetingsVariables.webAppRootKey);
 	@Autowired
-	private Sessionmanagement sessionManagement;
+	private SessiondataDao sessionManagement;
 	@Autowired
 	private ConfigurationDao configurationDaoImpl;
 	@Autowired

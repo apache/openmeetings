@@ -22,7 +22,7 @@ import java.io.InputStream;
 import java.util.Iterator;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
-import org.apache.openmeetings.data.basic.FieldLanguageDaoImpl;
+import org.apache.openmeetings.data.basic.FieldLanguageDao;
 import org.apache.openmeetings.data.basic.Fieldmanagment;
 import org.apache.openmeetings.persistence.beans.lang.Fieldlanguagesvalues;
 import org.apache.openmeetings.persistence.beans.lang.Fieldvalues;
@@ -40,7 +40,7 @@ public class LanguageImport {
 	@Autowired
 	private Fieldmanagment fieldmanagment;
 	@Autowired
-	private FieldLanguageDaoImpl fieldLanguageDaoImpl;
+	private FieldLanguageDao fieldLanguageDaoImpl;
 
 	public Long addLanguageByDocument(Long language_id, InputStream is)
 			throws Exception {

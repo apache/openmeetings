@@ -24,7 +24,7 @@
 		<provider>org.apache.openjpa.persistence.PersistenceProviderImpl</provider>
 		<class>org.apache.openmeetings.persistence.beans.basic.Configuration</class>
 		<class>org.apache.openmeetings.persistence.beans.basic.ErrorType</class>
-		<class>org.apache.openmeetings.persistence.beans.basic.ErrorValues</class>
+		<class>org.apache.openmeetings.persistence.beans.basic.ErrorValue</class>
 		<class>org.apache.openmeetings.persistence.beans.basic.LdapConfig</class>
 		<class>org.apache.openmeetings.persistence.beans.basic.Naviglobal</class>
 		<class>org.apache.openmeetings.persistence.beans.basic.Navimain</class>

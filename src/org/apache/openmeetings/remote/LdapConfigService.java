@@ -23,8 +23,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
-import org.apache.openmeetings.data.basic.AuthLevelmanagement;
-import org.apache.openmeetings.data.basic.Sessionmanagement;
+import org.apache.openmeetings.data.basic.AuthLevelUtil;
+import org.apache.openmeetings.data.basic.SessiondataDao;
 import org.apache.openmeetings.data.basic.dao.LdapConfigDao;
 import org.apache.openmeetings.data.beans.basic.SearchResult;
 import org.apache.openmeetings.data.user.Usermanagement;
@@ -44,11 +44,11 @@ public class LdapConfigService {
 	@Autowired
 	private LdapConfigDao ldapConfigDaoImpl;
 	@Autowired
-	private Sessionmanagement sessionManagement;
+	private SessiondataDao sessionManagement;
     @Autowired
     private Usermanagement userManagement;
 	@Autowired
-	private AuthLevelmanagement authLevelManagement;
+	private AuthLevelUtil authLevelManagement;
 	
 	private static final Logger log = Red5LoggerFactory.getLogger(LdapConfigService.class, OpenmeetingsVariables.webAppRootKey);
 	

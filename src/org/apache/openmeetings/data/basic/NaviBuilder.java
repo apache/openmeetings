@@ -35,10 +35,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
-public class Navimanagement {
+public class NaviBuilder {
 
 	private static final Logger log = Red5LoggerFactory.getLogger(
-			Navimanagement.class, OpenmeetingsVariables.webAppRootKey);
+			NaviBuilder.class, OpenmeetingsVariables.webAppRootKey);
 
 	@PersistenceContext
 	private EntityManager em;

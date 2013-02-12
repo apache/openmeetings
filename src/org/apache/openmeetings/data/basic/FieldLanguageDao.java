@@ -39,12 +39,12 @@ import org.springframework.transaction.annotation.Transactional;
  * 
  */
 @Transactional
-public class FieldLanguageDaoImpl implements Serializable {
+public class FieldLanguageDao implements Serializable {
 
 	private static final long serialVersionUID = -2714490167956230305L;
 
 	private static final Logger log = Red5LoggerFactory.getLogger(
-			FieldLanguageDaoImpl.class, OpenmeetingsVariables.webAppRootKey);
+			FieldLanguageDao.class, OpenmeetingsVariables.webAppRootKey);
 
 	@PersistenceContext
 	private EntityManager em;

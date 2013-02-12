@@ -20,7 +20,7 @@ package org.apache.openmeetings.web.components.admin.labels;
 
 import java.util.Date;
 
-import org.apache.openmeetings.data.basic.FieldLanguageDaoImpl;
+import org.apache.openmeetings.data.basic.FieldLanguageDao;
 import org.apache.openmeetings.persistence.beans.lang.FieldLanguage;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
@@ -52,7 +52,7 @@ public class AddLanguageForm extends Form<Void> {
 
 			@Override
 			public void onSubmit(AjaxRequestTarget target, Form<?> form) {
-				FieldLanguageDaoImpl langDao = Application.getBean(FieldLanguageDaoImpl.class);
+				FieldLanguageDao langDao = Application.getBean(FieldLanguageDao.class);
 				
 				FieldLanguage fl = new FieldLanguage();
 				fl.setLanguage_id(langDao.getNextAvailableId());

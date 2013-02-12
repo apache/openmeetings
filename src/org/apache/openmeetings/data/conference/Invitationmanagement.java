@@ -31,7 +31,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
-import org.apache.openmeetings.data.basic.AuthLevelmanagement;
+import org.apache.openmeetings.data.basic.AuthLevelUtil;
 import org.apache.openmeetings.data.basic.Fieldmanagment;
 import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
 import org.apache.openmeetings.data.basic.dao.OmTimeZoneDao;
@@ -96,7 +96,7 @@ public class Invitationmanagement {
 	@Autowired
 	private InvitationTemplate invitationTemplate;
 	@Autowired
-	private AuthLevelmanagement authLevelManagement;
+	private AuthLevelUtil authLevelManagement;
 	@Autowired
 	private TimezoneUtil timezoneUtil;
 	@Autowired

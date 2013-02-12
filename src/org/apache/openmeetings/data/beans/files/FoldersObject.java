@@ -16,26 +16,28 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.data.basic.files;
-
-import java.util.LinkedList;
-
-public class TestObject {
+package org.apache.openmeetings.data.beans.files;
+/**
+ * Represents a Folder in the File System
+ * @author sebastianwagner
+ *
+ */
+public class FoldersObject {
 	
-	private LinkedList<String> list1 = null;
-	private LinkedList<String> list2 = null;
-	public LinkedList<String> getList1() {
-		return list1;
-	}
-	public void setList1(LinkedList<String> list1) {
-		this.list1 = list1;
-	}
-	public LinkedList<String> getList2() {
-		return list2;
-	}
-	public void setList2(LinkedList<String> list2) {
-		this.list2 = list2;
-	}
+	private String folderName;
+	private String lastModified;
 	
+	public String getFolderName() {
+		return folderName;
+	}
+	public void setFolderName(String folderName) {
+		this.folderName = folderName;
+	}
+	public String getLastModified() {
+		return lastModified;
+	}
+	public void setLastModified(String lastModified) {
+		this.lastModified = lastModified;
+	}
 
 }

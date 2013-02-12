@@ -23,7 +23,7 @@ import static org.junit.Assert.assertNotNull;
 
 import java.util.List;
 
-import org.apache.openmeetings.data.basic.Navimanagement;
+import org.apache.openmeetings.data.basic.NaviBuilder;
 import org.apache.openmeetings.persistence.beans.basic.Naviglobal;
 import org.apache.openmeetings.persistence.beans.basic.Navimain;
 import org.apache.openmeetings.test.AbstractOpenmeetingsSpringTest;
@@ -33,7 +33,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class TestNavi extends AbstractOpenmeetingsSpringTest {
 	
 	@Autowired
-	private Navimanagement navimanagement;
+	private NaviBuilder navimanagement;
 	
 	@Test
 	public void testGetNavi(){

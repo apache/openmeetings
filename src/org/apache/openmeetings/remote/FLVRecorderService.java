@@ -27,8 +27,8 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
-import org.apache.openmeetings.data.basic.AuthLevelmanagement;
-import org.apache.openmeetings.data.basic.Sessionmanagement;
+import org.apache.openmeetings.data.basic.AuthLevelUtil;
+import org.apache.openmeetings.data.basic.SessiondataDao;
 import org.apache.openmeetings.data.conference.dao.RoomDao;
 import org.apache.openmeetings.data.flvrecord.FlvRecordingDao;
 import org.apache.openmeetings.data.flvrecord.FlvRecordingLogDao;
@@ -98,13 +98,13 @@ public class FLVRecorderService implements IPendingServiceCallback {
 	@Autowired
 	private FlvRecordingLogDao flvRecordingLogDaoImpl;
 	@Autowired
-	private Sessionmanagement sessionManagement;
+	private SessiondataDao sessionManagement;
 	@Autowired
 	private Usermanagement userManagement;
 	@Autowired
 	private ScopeApplicationAdapter scopeApplicationAdapter;
 	@Autowired
-	private AuthLevelmanagement authLevelManagement;
+	private AuthLevelUtil authLevelManagement;
 	@Autowired
 	private FlvRecordingMetaDeltaDao flvRecordingMetaDeltaDao;
 	@Autowired

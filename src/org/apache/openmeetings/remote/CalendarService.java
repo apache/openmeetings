@@ -23,8 +23,8 @@ import java.util.List;
 import java.util.TimeZone;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
-import org.apache.openmeetings.data.basic.AuthLevelmanagement;
-import org.apache.openmeetings.data.basic.Sessionmanagement;
+import org.apache.openmeetings.data.basic.AuthLevelUtil;
+import org.apache.openmeetings.data.basic.SessiondataDao;
 import org.apache.openmeetings.data.calendar.daos.AppointmentCategoryDao;
 import org.apache.openmeetings.data.calendar.daos.AppointmentDao;
 import org.apache.openmeetings.data.calendar.daos.AppointmentReminderTypDao;
@@ -53,7 +53,7 @@ public class CalendarService {
 	@Autowired
 	private AppointmentLogic appointmentLogic;
 	@Autowired
-	private Sessionmanagement sessionManagement;
+	private SessiondataDao sessionManagement;
 	@Autowired
 	private Usermanagement userManagement;
 	@Autowired
@@ -61,7 +61,7 @@ public class CalendarService {
 	@Autowired
 	private RoomDao roomDao;
 	@Autowired
-	private AuthLevelmanagement authLevelManagement;
+	private AuthLevelUtil authLevelManagement;
 	@Autowired
 	private AppointmentCategoryDao appointmentCategoryDaoImpl;
 	@Autowired

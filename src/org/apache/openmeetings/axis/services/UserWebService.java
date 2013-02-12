@@ -22,9 +22,9 @@ import java.util.Date;
 
 import org.apache.axis2.AxisFault;
 import org.apache.openmeetings.OpenmeetingsVariables;
-import org.apache.openmeetings.data.basic.AuthLevelmanagement;
+import org.apache.openmeetings.data.basic.AuthLevelUtil;
 import org.apache.openmeetings.data.basic.Fieldmanagment;
-import org.apache.openmeetings.data.basic.Sessionmanagement;
+import org.apache.openmeetings.data.basic.SessiondataDao;
 import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
 import org.apache.openmeetings.data.basic.dao.ErrorDao;
 import org.apache.openmeetings.data.basic.dao.SOAPLoginDao;
@@ -61,7 +61,7 @@ public class UserWebService {
 			UserWebService.class, OpenmeetingsVariables.webAppRootKey);
 
 	@Autowired
-	private Sessionmanagement sessionManagement;
+	private SessiondataDao sessionManagement;
 	@Autowired
 	private ConfigurationDao configurationDaoImpl;
 	@Autowired
@@ -79,7 +79,7 @@ public class UserWebService {
 	@Autowired
 	private MainService mainService;
 	@Autowired
-	private AuthLevelmanagement authLevelManagement;
+	private AuthLevelUtil authLevelManagement;
 
 	/**
 	 * load this session id before doing anything else Returns an Object of Type

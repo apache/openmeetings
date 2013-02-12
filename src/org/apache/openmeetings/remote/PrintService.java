@@ -24,8 +24,8 @@ import java.util.List;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.batik.beans.PrintBean;
-import org.apache.openmeetings.data.basic.AuthLevelmanagement;
-import org.apache.openmeetings.data.basic.Sessionmanagement;
+import org.apache.openmeetings.data.basic.AuthLevelUtil;
+import org.apache.openmeetings.data.basic.SessiondataDao;
 import org.apache.openmeetings.data.user.Usermanagement;
 import org.apache.openmeetings.utils.crypt.MD5;
 import org.red5.logging.Red5LoggerFactory;
@@ -39,11 +39,11 @@ public class PrintService {
 	
 	private static HashMap<String,PrintBean> currentExportList = new HashMap<String,PrintBean>();
 	@Autowired
-	private Sessionmanagement sessionManagement;
+	private SessiondataDao sessionManagement;
     @Autowired
     private Usermanagement userManagement;
 	@Autowired
-	private AuthLevelmanagement authLevelManagement;
+	private AuthLevelUtil authLevelManagement;
 	
 	/*
 	 * Export List

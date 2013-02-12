@@ -29,9 +29,9 @@ import java.util.TimeZone;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.cluster.SlaveHTTPConnectionManager;
-import org.apache.openmeetings.data.basic.AuthLevelmanagement;
+import org.apache.openmeetings.data.basic.AuthLevelUtil;
 import org.apache.openmeetings.data.basic.Fieldmanagment;
-import org.apache.openmeetings.data.basic.Sessionmanagement;
+import org.apache.openmeetings.data.basic.SessiondataDao;
 import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
 import org.apache.openmeetings.data.basic.dao.OmTimeZoneDao;
 import org.apache.openmeetings.data.basic.dao.ServerDao;
@@ -91,7 +91,7 @@ public class UserService {
 	@Autowired
 	private AppointmentDao appointmentDao;
 	@Autowired
-	private Sessionmanagement sessionManagement;
+	private SessiondataDao sessionManagement;
 	@Autowired
 	private ConfigurationDao configurationDaoImpl;
 	@Autowired
@@ -127,7 +127,7 @@ public class UserService {
 	@Autowired
 	private RequestContactConfirmTemplate requestContactConfirmTemplate;
 	@Autowired
-	private AuthLevelmanagement authLevelManagement;
+	private AuthLevelUtil authLevelManagement;
 	@Autowired
 	private TimezoneUtil timezoneUtil;
 	@Autowired

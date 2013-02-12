@@ -40,7 +40,7 @@ import org.springframework.transaction.annotation.Transactional;
  * 
  */
 @Transactional
-public class FieldLanguagesValuesDaoImpl implements IDataProviderDao<Fieldlanguagesvalues> {
+public class FieldLanguagesValuesDao implements IDataProviderDao<Fieldlanguagesvalues> {
 	@PersistenceContext
 	private EntityManager em;
 	@Autowired

@@ -19,8 +19,8 @@
 package org.apache.openmeetings.remote;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
-import org.apache.openmeetings.data.basic.AuthLevelmanagement;
-import org.apache.openmeetings.data.basic.Sessionmanagement;
+import org.apache.openmeetings.data.basic.AuthLevelUtil;
+import org.apache.openmeetings.data.basic.SessiondataDao;
 import org.apache.openmeetings.data.calendar.management.MeetingMemberLogic;
 import org.apache.openmeetings.data.user.Usermanagement;
 import org.red5.logging.Red5LoggerFactory;
@@ -32,11 +32,11 @@ public class MeetingMemberService {
 	private static final Logger log = Red5LoggerFactory.getLogger(
 			MeetingMemberService.class, OpenmeetingsVariables.webAppRootKey);
 	@Autowired
-	private Sessionmanagement sessionManagement;
+	private SessiondataDao sessionManagement;
 	@Autowired
 	private Usermanagement userManagement;
 	@Autowired
-	private AuthLevelmanagement authLevelManagement;
+	private AuthLevelUtil authLevelManagement;
 	@Autowired
 	private MeetingMemberLogic meetingMemberLogic;
 

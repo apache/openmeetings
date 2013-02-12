@@ -47,8 +47,8 @@ import org.apache.openmeetings.backup.RoomConverter;
 import org.apache.openmeetings.backup.RoomTypeConverter;
 import org.apache.openmeetings.backup.StateConverter;
 import org.apache.openmeetings.backup.UserConverter;
-import org.apache.openmeetings.data.basic.AuthLevelmanagement;
-import org.apache.openmeetings.data.basic.Sessionmanagement;
+import org.apache.openmeetings.data.basic.AuthLevelUtil;
+import org.apache.openmeetings.data.basic.SessiondataDao;
 import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
 import org.apache.openmeetings.data.basic.dao.LdapConfigDao;
 import org.apache.openmeetings.data.calendar.daos.AppointmentDao;
@@ -111,7 +111,7 @@ public class BackupExport {
 	@Autowired
 	private AppointmentDao appointmentDao;
 	@Autowired
-	private Sessionmanagement sessionManagement;
+	private SessiondataDao sessionManagement;
 	@Autowired
 	private Usermanagement userManagement;
 	@Autowired
@@ -135,7 +135,7 @@ public class BackupExport {
 	@Autowired
 	private UserContactsDao userContactsDao;
 	@Autowired
-	private AuthLevelmanagement authLevelManagement;
+	private AuthLevelUtil authLevelManagement;
 	@Autowired
 	private PollManagement pollManagement;
 	@Autowired

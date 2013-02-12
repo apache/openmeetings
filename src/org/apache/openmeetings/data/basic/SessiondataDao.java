@@ -49,10 +49,10 @@ import org.springframework.transaction.annotation.Transactional;
  * 
  */
 @Transactional
-public class Sessionmanagement {
+public class SessiondataDao {
 
 	private static final Logger log = Red5LoggerFactory.getLogger(
-			Sessionmanagement.class, OpenmeetingsVariables.webAppRootKey);
+			SessiondataDao.class, OpenmeetingsVariables.webAppRootKey);
 	@PersistenceContext
 	private EntityManager em;
 
@@ -123,27 +123,14 @@ public class Sessionmanagement {
 	 */
 	public Long checkSession(String SID) {
 		try {
-
-			String hql = "select c from Sessiondata as c "
-					+ "where c.session_id LIKE :session_id";
-
-			// log.debug("checkSession User: || "+SID);
-			// session.flush();
-			TypedQuery<Sessiondata> query = em.createQuery(hql, Sessiondata.class);
+			TypedQuery<Sessiondata> query = em.createNamedQuery("getSessionById", Sessiondata.class);
 			query.setParameter("session_id", SID);
-
 			List<Sessiondata> sessions = query.getResultList();
 
 			Sessiondata sessiondata = null;
 			if (sessions != null && sessions.size() > 0) {
 				sessiondata = sessions.get(0);
 			}
-
-			// if (sessiondata!=null) {
-			// log.debug("checkSession USER_ID: "+sessiondata.getUser_id());
-			// } else {
-			// log.debug("Session IS NULL SID: "+SID);
-			// }
 
 			// Update the Session Object
 			if (sessiondata != null)
@@ -174,11 +161,7 @@ public class Sessionmanagement {
 		try {
 			log.debug("updateUser User: " + USER_ID + " || " + SID);
 
-			String hql = "select c from Sessiondata as c "
-					+ "where c.session_id LIKE :session_id";
-
-			// log.debug("checkSession User: || "+SID);
-			TypedQuery<Sessiondata> query = em.createQuery(hql, Sessiondata.class);
+			TypedQuery<Sessiondata> query = em.createNamedQuery("getSessionById", Sessiondata.class);
 			query.setParameter("session_id", SID);
 
 			List<Sessiondata> sessions = query.getResultList();
@@ -196,7 +179,6 @@ public class Sessionmanagement {
 					+ " userId: " + USER_ID);
 
 			sessiondata.setRefresh_time(new Date());
-			// session.refresh(sd);
 			sessiondata.setUser_id(USER_ID);
 			if (sessiondata.getId() == null) {
 				em.persist(sessiondata);
@@ -205,8 +187,6 @@ public class Sessionmanagement {
 					em.merge(sessiondata);
 				}
 			}
-
-			// log.debug("session updated User: "+USER_ID);
 			return true;
 		} catch (Exception ex2) {
 			log.error("[updateUser]: ", ex2);
@@ -218,12 +198,7 @@ public class Sessionmanagement {
 			Long language_id) {
 		try {
 			log.debug("updateUser User: " + USER_ID + " || " + SID);
-
-			String hql = "select c from Sessiondata as c "
-					+ "where c.session_id LIKE :session_id";
-
-			// log.debug("checkSession User: || "+SID);
-			TypedQuery<Sessiondata> query = em.createQuery(hql, Sessiondata.class);
+			TypedQuery<Sessiondata> query = em.createNamedQuery("getSessionById", Sessiondata.class);
 			query.setParameter("session_id", SID);
 
 			List<Sessiondata> sessions = query.getResultList();
@@ -241,7 +216,6 @@ public class Sessionmanagement {
 					+ " userId: " + USER_ID);
 
 			sessiondata.setRefresh_time(new Date());
-			// session.refresh(sd);
 			sessiondata.setUser_id(USER_ID);
 			if (storePermanent) {
 				sessiondata.setStorePermanent(storePermanent);
@@ -266,12 +240,7 @@ public class Sessionmanagement {
 	public Boolean updateUserOrg(String SID, Long organization_id) {
 		try {
 			log.debug("updateUserOrg User: " + organization_id + " || " + SID);
-
-			String hql = "select c from Sessiondata as c "
-					+ "where c.session_id LIKE :session_id";
-
-			// log.debug("checkSession User: || "+SID);
-			TypedQuery<Sessiondata> query = em.createQuery(hql, Sessiondata.class);
+			TypedQuery<Sessiondata> query = em.createNamedQuery("getSessionById", Sessiondata.class);
 			query.setParameter("session_id", SID);
 
 			List<Sessiondata> sessions = query.getResultList();
@@ -289,7 +258,6 @@ public class Sessionmanagement {
 					+ " organisation_id: " + organization_id);
 
 			sessiondata.setRefresh_time(new Date());
-			// session.refresh(sd);
 			sessiondata.setOrganization_id(organization_id);
 			if (sessiondata.getId() == null) {
 				em.persist(sessiondata);
@@ -298,7 +266,6 @@ public class Sessionmanagement {
 					em.merge(sessiondata);
 				}
 			}
-			// log.debug("session updated User: "+USER_ID);
 			return true;
 		} catch (Exception ex2) {
 			log.error("[updateUser]: ", ex2);
@@ -309,12 +276,7 @@ public class Sessionmanagement {
 	public Boolean updateUserWithoutSession(String SID, Long USER_ID) {
 		try {
 			log.debug("updateUser User: " + USER_ID + " || " + SID);
-
-			String hql = "select c from Sessiondata as c "
-					+ "where c.session_id LIKE :session_id";
-
-			// log.debug("checkSession User: || "+SID);
-			TypedQuery<Sessiondata> query = em.createQuery(hql, Sessiondata.class);
+			TypedQuery<Sessiondata> query = em.createNamedQuery("getSessionById", Sessiondata.class);
 			query.setParameter("session_id", SID);
 
 			List<Sessiondata> sessions = query.getResultList();
@@ -332,7 +294,6 @@ public class Sessionmanagement {
 					+ " userId: " + USER_ID);
 
 			sessiondata.setRefresh_time(new Date());
-			// session.refresh(sd);
 			sessiondata.setUser_id(USER_ID);
 			if (sessiondata.getId() == null) {
 				em.persist(sessiondata);
@@ -341,8 +302,6 @@ public class Sessionmanagement {
 					em.merge(sessiondata);
 				}
 			}
-
-			// log.debug("session updated User: "+USER_ID);
 			return true;
 		} catch (Exception ex2) {
 			log.error("[updateUser]: ", ex2);
@@ -370,9 +329,6 @@ public class Sessionmanagement {
 				// log.error("Found session to update: "+SID);
 			}
 			Sessiondata sd = fullList.get(0);
-			// log.debug("Found session to update: "+sd.getSession_id()+
-			// " userId: "+USER_ID);
-
 			sd.setRefresh_time(new Date());
 			sd.setSessionXml(sessionXml);
 
@@ -383,7 +339,6 @@ public class Sessionmanagement {
 					em.merge(sd);
 				}
 			}
-			// log.debug("session updated User: "+USER_ID);
 			return true;
 		} catch (Exception ex2) {
 			log.error("[updateUserRemoteSession]: ", ex2);
@@ -398,7 +353,6 @@ public class Sessionmanagement {
 	 */
 	private void updatesession(String SID) {
 		try {
-			// log.debug("****** updatesession: "+SID);
 			CriteriaBuilder cb = em.getCriteriaBuilder();
 			CriteriaQuery<Sessiondata> cq = cb.createQuery(Sessiondata.class);
 			Root<Sessiondata> c = cq.from(Sessiondata.class);
@@ -438,20 +392,9 @@ public class Sessionmanagement {
 	 */
 	private List<Sessiondata> getSessionToDelete(Date refresh_time) {
 		try {
-
-			String hql = "Select c from Sessiondata c "
-					+ "WHERE c.refresh_time < :refresh_time " + "AND ( "
-					+ "c.storePermanent IS NULL " + "OR "
-					+ "c.storePermanent = false " + ")";
-
-			TypedQuery<Sessiondata> query = em.createQuery(hql, Sessiondata.class);
+			TypedQuery<Sessiondata> query = em.createNamedQuery("getSessionToDelete", Sessiondata.class);
 			query.setParameter("refresh_time", refresh_time);
-			List<Sessiondata> fullList = query.getResultList();
-
-			log.debug("Sessions To Delete :: " + fullList.size());
-
-			return fullList;
-
+			return query.getResultList();
 		} catch (Exception ex2) {
 			log.error("[getSessionToDelete]: ", ex2);
 		}

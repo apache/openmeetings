@@ -23,10 +23,10 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.TimeZone;
 
-import org.apache.openmeetings.data.basic.AuthLevelmanagement;
-import org.apache.openmeetings.data.basic.FieldLanguageDaoImpl;
+import org.apache.openmeetings.data.basic.AuthLevelUtil;
+import org.apache.openmeetings.data.basic.FieldLanguageDao;
 import org.apache.openmeetings.data.basic.Fieldmanagment;
-import org.apache.openmeetings.data.basic.Sessionmanagement;
+import org.apache.openmeetings.data.basic.SessiondataDao;
 import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
 import org.apache.openmeetings.data.user.Usermanagement;
 import org.apache.openmeetings.data.user.dao.UsersDao;
@@ -63,7 +63,7 @@ public class WebSession extends AbstractAuthenticatedWebSession {
 		Roles r = null;
 		if (isSignedIn()) {
 			userLevel = Application.getBean(Usermanagement.class).getUserLevelByID(userId);
-			AuthLevelmanagement authLevel = Application.getBean(AuthLevelmanagement.class);
+			AuthLevelUtil authLevel = Application.getBean(AuthLevelUtil.class);
 			r = new Roles(Roles.USER);
 			if (authLevel.checkUserLevel(userLevel)) {
 				r.add(Roles.USER);
@@ -81,7 +81,7 @@ public class WebSession extends AbstractAuthenticatedWebSession {
 	}
 
 	public boolean signIn(String login, String password) {
-		Sessiondata sessData = Application.getBean(Sessionmanagement.class).startsession();
+		Sessiondata sessData = Application.getBean(SessiondataDao.class).startsession();
 		SID = sessData.getSession_id();
 		Object u = Application.getBean(Usermanagement.class).loginUser(SID, login, password,
 				null, null, false);
@@ -118,7 +118,7 @@ public class WebSession extends AbstractAuthenticatedWebSession {
 	}
 	
 	public static FieldLanguage getLanguageObj() {
-		return Application.getBean(FieldLanguageDaoImpl.class).getFieldLanguageById(getLanguage());
+		return Application.getBean(FieldLanguageDao.class).getFieldLanguageById(getLanguage());
 	}
 	
 	public static String getSid() {

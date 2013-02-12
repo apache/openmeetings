@@ -217,13 +217,13 @@
 	<bean id="organisationUserDao" class="org.apache.openmeetings.data.user.dao.OrganisationUserDao" />
 	<bean id="salutationmanagement" class="org.apache.openmeetings.data.user.dao.SalutationDao" />
 	<bean id="errorManagement" class="org.apache.openmeetings.data.basic.dao.ErrorDao" />
-	<bean id="navimanagement" class="org.apache.openmeetings.data.basic.Navimanagement" />
+	<bean id="navimanagement" class="org.apache.openmeetings.data.basic.NaviBuilder" />
 	<bean id="pollManagement" class="org.apache.openmeetings.data.conference.PollManagement" />
 	<bean id="omTimeZoneDaoImpl" class="org.apache.openmeetings.data.basic.dao.OmTimeZoneDao" />
 	<bean id="statemanagement" class="org.apache.openmeetings.data.user.dao.StateDao" />
-	<bean id="fieldLanguageDaoImpl" class="org.apache.openmeetings.data.basic.FieldLanguageDaoImpl" />
+	<bean id="fieldLanguageDaoImpl" class="org.apache.openmeetings.data.basic.FieldLanguageDao" />
 	<bean id="fieldValueDaoImpl" class="org.apache.openmeetings.data.basic.FieldValueDaoImpl" />
-	<bean id="fieldLanguagesValuesDAO" class="org.apache.openmeetings.data.basic.FieldLanguagesValuesDaoImpl" />
+	<bean id="fieldLanguagesValuesDAO" class="org.apache.openmeetings.data.basic.FieldLanguagesValuesDao" />
 	<bean id="fieldmanagment" class="org.apache.openmeetings.data.basic.Fieldmanagment" />
 	<bean id="configurationDaoImpl" class="org.apache.openmeetings.data.basic.dao.ConfigurationDao" />
 	<bean id="appointmentDao"
@@ -232,7 +232,7 @@
 		class="org.apache.openmeetings.data.calendar.management.AppointmentLogic" />
 	<bean id="meetingMemberLogic"
 		class="org.apache.openmeetings.data.calendar.management.MeetingMemberLogic" />
-	<bean id="sessionManagement" class="org.apache.openmeetings.data.basic.Sessionmanagement" />
+	<bean id="sessionManagement" class="org.apache.openmeetings.data.basic.SessiondataDao" />
 	<bean id="userManagement" class="org.apache.openmeetings.data.user.Usermanagement" />
 	<bean id="roomModeratorsDao"
 		class="org.apache.openmeetings.data.conference.dao.RoomModeratorsDao" />
@@ -278,7 +278,7 @@
 	<bean id="userImport" class="org.apache.openmeetings.xmlimport.UserImport" />
 	<bean id="libraryWmlLoader" class="org.apache.openmeetings.documents.LibraryWmlLoader" />
 	<bean id="loadAtomRssFeed" class="org.apache.openmeetings.rss.LoadAtomRssFeed" />
-	<bean id="authLevelManagement" class="org.apache.openmeetings.data.basic.AuthLevelmanagement" />
+	<bean id="authLevelManagement" class="org.apache.openmeetings.data.basic.AuthLevelUtil" />
 	<bean id="generateSWF" class="org.apache.openmeetings.documents.GenerateSWF" />
 	<bean id="fileUtils" class="org.apache.openmeetings.data.file.FileUtils" />
 	<bean id="ldapLoginManagement" class="org.apache.openmeetings.ldap.LdapLoginManagement" />

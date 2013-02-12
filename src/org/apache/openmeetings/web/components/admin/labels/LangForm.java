@@ -18,7 +18,7 @@
  */
 package org.apache.openmeetings.web.components.admin.labels;
 
-import org.apache.openmeetings.data.basic.FieldLanguageDaoImpl;
+import org.apache.openmeetings.data.basic.FieldLanguageDao;
 import org.apache.openmeetings.persistence.beans.lang.FieldLanguage;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.components.ConfirmCallListener;
@@ -46,8 +46,8 @@ public class LangForm extends Form<Void> {
 	private DropDownChoice<FieldLanguage> languages;
 
 	public void updateLanguages(AjaxRequestTarget target) {
-		FieldLanguageDaoImpl langDao = Application
-				.getBean(FieldLanguageDaoImpl.class);
+		FieldLanguageDao langDao = Application
+				.getBean(FieldLanguageDao.class);
 		languages.setChoices(langDao.getLanguages());
 		// add(languages);
 		target.add(languages);
@@ -66,8 +66,8 @@ public class LangForm extends Form<Void> {
 		super(id);
 		setOutputMarkupId(true);
 
-		FieldLanguageDaoImpl langDao = Application
-				.getBean(FieldLanguageDaoImpl.class);
+		FieldLanguageDao langDao = Application
+				.getBean(FieldLanguageDao.class);
 		
 		languages = new DropDownChoice<FieldLanguage>("language"
 				, new PropertyModel<FieldLanguage>(langPanel, "language")
@@ -96,7 +96,7 @@ public class LangForm extends Form<Void> {
 			@Override
 			protected void onEvent(AjaxRequestTarget target) {
 				langPanel.language.setDeleted(true);
-				FieldLanguageDaoImpl langDao = Application.getBean(FieldLanguageDaoImpl.class);
+				FieldLanguageDao langDao = Application.getBean(FieldLanguageDao.class);
 				try {
 					langDao.updateLanguage(langPanel.language);
 				} catch (Exception e) {

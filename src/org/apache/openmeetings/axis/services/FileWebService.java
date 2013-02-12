@@ -27,8 +27,8 @@ import java.util.LinkedHashMap;
 
 import org.apache.axis2.AxisFault;
 import org.apache.openmeetings.OpenmeetingsVariables;
-import org.apache.openmeetings.data.basic.AuthLevelmanagement;
-import org.apache.openmeetings.data.basic.Sessionmanagement;
+import org.apache.openmeetings.data.basic.AuthLevelUtil;
+import org.apache.openmeetings.data.basic.SessiondataDao;
 import org.apache.openmeetings.data.file.FileProcessor;
 import org.apache.openmeetings.data.file.FileUtils;
 import org.apache.openmeetings.data.file.dao.FileExplorerItemDao;
@@ -59,13 +59,13 @@ public class FileWebService {
 	private static final Logger log = Red5LoggerFactory.getLogger(
 			FileWebService.class, OpenmeetingsVariables.webAppRootKey);
 	@Autowired
-	private Sessionmanagement sessionManagement;
+	private SessiondataDao sessionManagement;
 	@Autowired
 	private Usermanagement userManagement;
 	@Autowired
 	private FileExplorerItemDao fileExplorerItemDao;
 	@Autowired
-	private AuthLevelmanagement authLevelManagement;
+	private AuthLevelUtil authLevelManagement;
 	@Autowired
 	private FileProcessor fileProcessor;
 	@Autowired

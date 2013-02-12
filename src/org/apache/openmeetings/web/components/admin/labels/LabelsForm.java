@@ -18,7 +18,7 @@
  */
 package org.apache.openmeetings.web.components.admin.labels;
 
-import org.apache.openmeetings.data.basic.FieldLanguagesValuesDaoImpl;
+import org.apache.openmeetings.data.basic.FieldLanguagesValuesDao;
 import org.apache.openmeetings.data.basic.FieldValueDaoImpl;
 import org.apache.openmeetings.persistence.beans.lang.Fieldlanguagesvalues;
 import org.apache.openmeetings.persistence.beans.lang.Fieldvalues;
@@ -64,7 +64,7 @@ public class LabelsForm extends AdminBaseForm<Fieldlanguagesvalues> {
 	protected void onRefreshSubmit(AjaxRequestTarget target, Form<?> form) {
 		Fieldlanguagesvalues flv = getModelObject();
 		if (flv.getFieldlanguagesvalues_id() != null) {
-			flv = Application.getBean(FieldLanguagesValuesDaoImpl.class)
+			flv = Application.getBean(FieldLanguagesValuesDao.class)
 					.get(getModelObject().getFieldlanguagesvalues_id());
 		} else {
 			flv = new Fieldlanguagesvalues();
@@ -81,7 +81,7 @@ public class LabelsForm extends AdminBaseForm<Fieldlanguagesvalues> {
 		Application.getBean(FieldValueDaoImpl.class).update(fv, WebSession.getUserId());
 		
 		flv.setFieldvalues(fv);
-		Application.getBean(FieldLanguagesValuesDaoImpl.class)
+		Application.getBean(FieldLanguagesValuesDao.class)
 			.update(flv, WebSession.getUserId());
 		hideNewRecord();
 		target.add(panel.listContainer);
@@ -90,7 +90,7 @@ public class LabelsForm extends AdminBaseForm<Fieldlanguagesvalues> {
 
 	@Override
 	protected void onDeleteSubmit(AjaxRequestTarget target, Form<?> form) {
-		Application.getBean(FieldLanguagesValuesDaoImpl.class)
+		Application.getBean(FieldLanguagesValuesDao.class)
 			.delete(getModelObject(), WebSession.getUserId());
 		target.add(panel.listContainer);
 		target.appendJavaScript("labelsInit();");

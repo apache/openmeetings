@@ -16,24 +16,26 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.data.basic;
+package org.apache.openmeetings.data.beans.files;
 
-public class AuthLevelmanagement {
-	 
-	public boolean checkUserLevel(Long user_level) {
-		return user_level == 1 || user_level == 2 || user_level == 3;
+import java.util.LinkedList;
+
+public class TestObject {
+	
+	private LinkedList<String> list1 = null;
+	private LinkedList<String> list2 = null;
+	public LinkedList<String> getList1() {
+		return list1;
+	}
+	public void setList1(LinkedList<String> list1) {
+		this.list1 = list1;
+	}
+	public LinkedList<String> getList2() {
+		return list2;
+	}
+	public void setList2(LinkedList<String> list2) {
+		this.list2 = list2;
 	}
 	
-	public boolean checkModLevel(Long user_level) {
-		return user_level == 2 || user_level == 3;
-	}
-	
-	public boolean checkAdminLevel(Long user_level) {
-		return user_level == 3;
-	}
-	
-	public boolean checkWebServiceLevel(Long user_level) {
-		return user_level == 3 || user_level == 4;
-	}
 
 }

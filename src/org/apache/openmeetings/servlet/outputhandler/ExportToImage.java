@@ -39,7 +39,7 @@ import org.apache.batik.transcoder.TranscoderOutput;
 import org.apache.batik.transcoder.image.JPEGTranscoder;
 import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.batik.beans.PrintBean;
-import org.apache.openmeetings.data.basic.Sessionmanagement;
+import org.apache.openmeetings.data.basic.SessiondataDao;
 import org.apache.openmeetings.data.record.WhiteboardMapToSVG;
 import org.apache.openmeetings.data.user.Usermanagement;
 import org.apache.openmeetings.documents.GenerateImage;
@@ -60,12 +60,12 @@ public class ExportToImage extends HttpServlet {
 	private static final Logger log = Red5LoggerFactory.getLogger(
 			ExportToImage.class, OpenmeetingsVariables.webAppRootKey);
 
-	public Sessionmanagement getSessionManagement() {
+	public SessiondataDao getSessionManagement() {
 		try {
 			if (ScopeApplicationAdapter.initComplete) {
 				ApplicationContext context = WebApplicationContextUtils
 						.getWebApplicationContext(getServletContext());
-				return (Sessionmanagement) context.getBean("sessionManagement");
+				return (SessiondataDao) context.getBean("sessionManagement");
 			}
 		} catch (Exception err) {
 			log.error("[getSessionManagement]", err);

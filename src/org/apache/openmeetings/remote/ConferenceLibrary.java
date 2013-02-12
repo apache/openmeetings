@@ -28,8 +28,8 @@ import java.util.Set;
 
 import org.apache.commons.transaction.util.FileHelper;
 import org.apache.openmeetings.OpenmeetingsVariables;
-import org.apache.openmeetings.data.basic.AuthLevelmanagement;
-import org.apache.openmeetings.data.basic.Sessionmanagement;
+import org.apache.openmeetings.data.basic.AuthLevelUtil;
+import org.apache.openmeetings.data.basic.SessiondataDao;
 import org.apache.openmeetings.data.file.dao.FileExplorerItemDao;
 import org.apache.openmeetings.data.file.dto.LibraryPresentation;
 import org.apache.openmeetings.data.user.Usermanagement;
@@ -65,13 +65,13 @@ public class ConferenceLibrary implements IPendingServiceCallback {
 	@Autowired
 	private ISessionManager sessionManager = null;
 	@Autowired
-	private Sessionmanagement sessionManagement;
+	private SessiondataDao sessionManagement;
 	@Autowired
 	private Usermanagement userManagement;
 	@Autowired
 	private FileExplorerItemDao fileExplorerItemDao;
 	@Autowired
-	private AuthLevelmanagement authLevelManagement;
+	private AuthLevelUtil authLevelManagement;
 	@Autowired
 	private LibraryWmlLoader libraryWmlLoader;
 	@Autowired

@@ -32,7 +32,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
-import org.apache.openmeetings.data.basic.Sessionmanagement;
+import org.apache.openmeetings.data.basic.SessiondataDao;
 import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
 import org.apache.openmeetings.data.basic.dao.OmTimeZoneDao;
 import org.apache.openmeetings.data.calendar.management.AppointmentLogic;
@@ -69,12 +69,12 @@ public class CalendarServlet extends HttpServlet {
 		return null;
 	}
 
-	public Sessionmanagement getSessionManagement() {
+	public SessiondataDao getSessionManagement() {
 		try {
 			if (ScopeApplicationAdapter.initComplete) {
 				ApplicationContext context = WebApplicationContextUtils
 						.getWebApplicationContext(getServletContext());
-				return (Sessionmanagement) context.getBean("sessionManagement");
+				return (SessiondataDao) context.getBean("sessionManagement");
 			}
 		} catch (Exception err) {
 			log.error("[getSessionManagement]", err);

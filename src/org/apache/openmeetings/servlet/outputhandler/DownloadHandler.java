@@ -30,7 +30,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.openmeetings.OpenmeetingsVariables;
-import org.apache.openmeetings.data.basic.Sessionmanagement;
+import org.apache.openmeetings.data.basic.SessiondataDao;
 import org.apache.openmeetings.data.file.dao.FileExplorerItemDao;
 import org.apache.openmeetings.data.user.Usermanagement;
 import org.apache.openmeetings.persistence.beans.files.FileExplorerItem;
@@ -53,12 +53,12 @@ public class DownloadHandler extends HttpServlet {
 	private static final String defaultChatImageName = "_chat_profile_pic.jpg";
 	private static final String defaultSWFName = "deleted.swf";
 
-	public Sessionmanagement getSessionManagement() {
+	public SessiondataDao getSessionManagement() {
 		try {
 			if (ScopeApplicationAdapter.initComplete) {
 				ApplicationContext context = WebApplicationContextUtils
 						.getWebApplicationContext(getServletContext());
-				return (Sessionmanagement) context.getBean("sessionManagement");
+				return (SessiondataDao) context.getBean("sessionManagement");
 			}
 		} catch (Exception err) {
 			log.error("[getSessionManagement]", err);
