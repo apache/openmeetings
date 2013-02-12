@@ -834,12 +834,6 @@ limitations under the License.
 				</blockquote>
 			</div>
                                                 <div>
-				Install jsvc:
-				<blockquote>
-					<i>apt-get install jsvc</i>
-				</blockquote>
-			</div>
-                                                <div>
 				Insert proper values to the <tt>/opt/red5sip/settings.properties</tt>
 
 				<blockquote>
@@ -862,9 +856,9 @@ limitations under the License.
 				Add red5sip to autostart:
 				<blockquote>
 					<i>
-						ln -s /opt/red5sip/red5sip.sh /etc/init.d/red5sip<br />
-						chmod a+x /etc/init.d/red5sip<br />
-						update-rc.d /etc/init.d/red5sip defaults
+						sudo cp /opt/red5sip/red5sip /etc/init.d/<br />
+						sudo chmod a+x /etc/init.d/red5sip<br />
+						sudo update-rc.d /etc/init.d/red5sip defaults
 					</i>
 				</blockquote>
 			</div>
