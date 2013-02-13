@@ -26,11 +26,15 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
-
-
 @Entity
+@NamedQueries({
+	@NamedQuery(name = "getConferenceLogTypeByEventName", query = "select a from ConferenceLogType a " +
+					"WHERE a.eventType = :eventType")
+})
 @Table(name = "conferencelogtype")
 public class ConferenceLogType implements Serializable {
 	private static final long serialVersionUID = 4388958579350356294L;

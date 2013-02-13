@@ -40,41 +40,30 @@ public class ConferenceLogTypeDao {
 
 	public Long addConferenceLogType(String eventType) {
 		try {
-			
 			ConferenceLogType confLogType = new ConferenceLogType();
 			confLogType.setEventType(eventType);
 			confLogType.setInserted(new Date());
-			
 			confLogType = em.merge(confLogType);
-			Long appointment_id = confLogType.getConferenceLogTypeId();
-
-			return appointment_id;
+			return confLogType.getConferenceLogTypeId();
 		} catch (Exception ex2) {
-			log.error("[addConferenceLogType]: ",ex2);
+			log.error("[addConferenceLogType]: ", ex2);
 		}
 		return null;
 	}
 	
 	public ConferenceLogType getConferenceLogTypeByEventName(String eventType) {
 		try {
-			
-			String hql = "select a from ConferenceLogType a " +
-					"WHERE a.eventType = :eventType ";
-					
-			TypedQuery<ConferenceLogType> query = em.createQuery(hql, ConferenceLogType.class);
+			TypedQuery<ConferenceLogType> query = em.createNamedQuery("getConferenceLogTypeByEventName", ConferenceLogType.class);
 			query.setParameter("eventType",eventType);
 			
 			//Seems like this does throw an error sometimes cause it does not return a unique Result
 			//ConferenceLogType confLogType = (ConferenceLogType) query.getSingleResult();
 			List<ConferenceLogType> confLogTypes = query.getResultList();
-			ConferenceLogType confLogType = null;
 			if (confLogTypes != null && confLogTypes.size() > 0) {
-				confLogType = confLogTypes.get(0);
+				return confLogTypes.get(0);
 			}
-			
-			return confLogType;
 		} catch (Exception ex2) {
-			log.error("[getConferenceLogTypeByEventName]: " + ex2);
+			log.error("[getConferenceLogTypeByEventName]: ", ex2);
 		}
 		return null;
 	}
