@@ -36,13 +36,13 @@ import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
 import org.apache.openmeetings.data.basic.dao.ServerDao;
 import org.apache.openmeetings.data.calendar.daos.MeetingMemberDao;
 import org.apache.openmeetings.data.calendar.management.AppointmentLogic;
-import org.apache.openmeetings.data.conference.Roommanagement;
+import org.apache.openmeetings.data.conference.RoomManager;
 import org.apache.openmeetings.data.conference.dao.RoomDao;
 import org.apache.openmeetings.data.logs.ConferenceLogDao;
-import org.apache.openmeetings.data.user.Usermanagement;
+import org.apache.openmeetings.data.user.UserManager;
 import org.apache.openmeetings.data.user.dao.UsersDao;
 import org.apache.openmeetings.data.whiteboard.EmoticonsManager;
-import org.apache.openmeetings.data.whiteboard.WhiteboardManagement;
+import org.apache.openmeetings.data.whiteboard.WhiteboardManager;
 import org.apache.openmeetings.data.whiteboard.dto.BrowserStatus;
 import org.apache.openmeetings.data.whiteboard.dto.RoomStatus;
 import org.apache.openmeetings.documents.beans.UploadCompleteMessage;
@@ -87,7 +87,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 	@Autowired
 	private WhiteBoardService whiteBoardService;
 	@Autowired
-	private WhiteboardManagement whiteboardManagement;
+	private WhiteboardManager whiteboardManagement;
 	@Autowired
 	private FLVRecorderService flvRecorderService;
 	@Autowired
@@ -97,9 +97,9 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 	@Autowired
 	private SessiondataDao sessionManagement;
 	@Autowired
-	private Usermanagement userManagement;
+	private UserManager userManager;
 	@Autowired
-	private Roommanagement roommanagement;
+	private RoomManager roomManager;
 	@Autowired
 	private ConferenceLogDao conferenceLogDao;
 	@Autowired
@@ -1785,7 +1785,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 			log.debug("UDPATE SESSION " + SID + ", " + userId);
 			sessionManagement.updateUserWithoutSession(SID, userId);
 
-			User user = userManagement.getUserById(userId);
+			User user = userManager.getUserById(userId);
 
 			if (user != null) {
 				currentClient.setExternalUserId(user.getExternalUserId());
@@ -2806,8 +2806,8 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
         IConnection current = Red5.getConnectionLocal();
         String streamid = current.getClient().getId();
         Client currentClient = this.sessionManager.getClientByStreamId(streamid, null);
-        log.debug("getSipConferenceMembersNumber: " + roommanagement.getSipConferenceMembersNumber(currentClient.getRoom_id()));
-        String newNumber = "("+Integer.toString(roommanagement.getSipConferenceMembersNumber(currentClient.getRoom_id())-1)+")";
+        log.debug("getSipConferenceMembersNumber: " + roomManager.getSipConferenceMembersNumber(currentClient.getRoom_id()));
+        String newNumber = "("+Integer.toString(roomManager.getSipConferenceMembersNumber(currentClient.getRoom_id())-1)+")";
         if(!newNumber.equals(currentClient.getLastname())) {
             currentClient.setLastname(newNumber);
             this.sessionManager.updateClientByStreamId(streamid, currentClient, false, null);
@@ -2852,7 +2852,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
         currentClient.setRoom_id(room_id);
         currentClient.setRoomEnter(new Date());
         currentClient.setFirstname("SIP Transport");
-        currentClient.setLastname("("+Integer.toString(roommanagement.getSipConferenceMembersNumber(room_id)-1)+")");
+        currentClient.setLastname("("+Integer.toString(roomManager.getSipConferenceMembersNumber(room_id)-1)+")");
         currentClient.setBroadCastID(Long.parseLong(broadCastId));
         currentClient.setIsBroadcasting(true);
         currentClient.setPublicSID(publicSID);

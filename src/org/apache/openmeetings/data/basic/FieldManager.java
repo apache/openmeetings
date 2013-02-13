@@ -48,10 +48,10 @@ import org.springframework.transaction.annotation.Transactional;
  * 
  */
 @Transactional
-public class Fieldmanagment {
+public class FieldManager {
 
 	private static final Logger log = Red5LoggerFactory.getLogger(
-			Fieldmanagment.class, OpenmeetingsVariables.webAppRootKey);
+			FieldManager.class, OpenmeetingsVariables.webAppRootKey);
 
 	@PersistenceContext
 	private EntityManager em;

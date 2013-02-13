@@ -25,7 +25,7 @@ import org.apache.openmeetings.data.basic.AuthLevelUtil;
 import org.apache.openmeetings.data.basic.SessiondataDao;
 import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
 import org.apache.openmeetings.data.beans.basic.SearchResult;
-import org.apache.openmeetings.data.user.Usermanagement;
+import org.apache.openmeetings.data.user.UserManager;
 import org.apache.openmeetings.persistence.beans.basic.Configuration;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -49,14 +49,14 @@ public class ConfigurationService {
 	@Autowired
 	private ConfigurationDao configurationDaoImpl;
     @Autowired
-    private Usermanagement userManagement;
+    private UserManager userManager;
 	
 	/*
 	 * Configuration Handlers
 	 */    
     public SearchResult<Configuration> getAllConf(String SID, int start ,int max, String orderby, boolean asc){
         Long users_id = sessionManagement.checkSession(SID);
-		Long user_level = userManagement.getUserLevelByID(users_id);
+		Long user_level = userManager.getUserLevelByID(users_id);
 		if (authLevelManagement.checkAdminLevel(user_level)) {
 			return configurationDaoImpl.getAllConf(start, max, orderby, asc);
 		} else {
@@ -75,7 +75,7 @@ public class ConfigurationService {
 	 */
     public Configuration getConfByConfigurationId(String SID,long configuration_id){
         Long users_id = sessionManagement.checkSession(SID);
-        Long user_level = userManagement.getUserLevelByID(users_id);     	
+        Long user_level = userManager.getUserLevelByID(users_id);     	
 		if (authLevelManagement.checkAdminLevel(user_level)) {
 			return configurationDaoImpl.get(configuration_id);
 		} else {
@@ -94,7 +94,7 @@ public class ConfigurationService {
 	 */
     public Long saveOrUpdateConfiguration(String SID, LinkedHashMap<String, ?> values){
         Long users_id = sessionManagement.checkSession(SID);
-		Long user_level = userManagement.getUserLevelByID(users_id);
+		Long user_level = userManager.getUserLevelByID(users_id);
 		if (authLevelManagement.checkAdminLevel(user_level)) {
 			return configurationDaoImpl.saveOrUpdateConfiguration(values,
 					users_id);
@@ -114,7 +114,7 @@ public class ConfigurationService {
 	 */
     public Long deleteConfiguration(String SID, LinkedHashMap<String, ?> values){
         Long users_id = sessionManagement.checkSession(SID);
-		Long user_level = userManagement.getUserLevelByID(users_id);
+		Long user_level = userManager.getUserLevelByID(users_id);
 		if (authLevelManagement.checkAdminLevel(user_level)) {
 			return configurationDaoImpl.deleteConfByConfiguration(values,
 					users_id);

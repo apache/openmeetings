@@ -25,8 +25,8 @@ import org.apache.openmeetings.data.basic.AuthLevelUtil;
 import org.apache.openmeetings.data.basic.SessiondataDao;
 import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
 import org.apache.openmeetings.data.basic.dao.OmTimeZoneDao;
-import org.apache.openmeetings.data.conference.Invitationmanagement;
-import org.apache.openmeetings.data.user.Usermanagement;
+import org.apache.openmeetings.data.conference.InvitationManager;
+import org.apache.openmeetings.data.user.UserManager;
 import org.apache.openmeetings.persistence.beans.domain.Organisation_Users;
 import org.apache.openmeetings.persistence.beans.invitation.Invitations;
 import org.apache.openmeetings.persistence.beans.room.Room;
@@ -51,13 +51,13 @@ public class JabberWebService {
 	@Autowired
 	private AuthLevelUtil authLevelManagement;
 	@Autowired
-	private Usermanagement userManagement;
+	private UserManager userManager;
 	@Autowired
 	private SessiondataDao sessionManagement;
 	@Autowired
 	private ConferenceService conferenceService;
 	@Autowired
-	private Invitationmanagement invitationManagement;
+	private InvitationManager invitationManager;
 	@Autowired
 	private OmTimeZoneDao omTimeZoneDaoImpl;
 	@Autowired
@@ -82,7 +82,7 @@ public class JabberWebService {
 		}
 
 		Long users_id = this.sessionManagement.checkSession(SID);
-		User u = this.userManagement.getUserById(users_id);
+		User u = this.userManager.getUserById(users_id);
 		for (Organisation_Users ou : u.getOrganisation_users()) {
 			List<RoomOrganisation> rol = this.conferenceService
 					.getRoomsByOrganisationWithoutType(SID, ou
@@ -109,7 +109,7 @@ public class JabberWebService {
 	 */
 	public int getUserCount(String SID, Long roomId) {
 		Long users_id = this.sessionManagement.checkSession(SID);
-		Long user_level = this.userManagement.getUserLevelByID(users_id);
+		Long user_level = this.userManager.getUserLevelByID(users_id);
 
 		if (this.authLevelManagement.checkUserLevel(user_level)) {
 			return conferenceService.getRoomClientsListByRoomId(roomId).size();
@@ -128,8 +128,8 @@ public class JabberWebService {
 	 */
 	public String getInvitationHash(String SID, String username, Long room_id) {
 		Long users_id = this.sessionManagement.checkSession(SID);
-		Long user_level = this.userManagement.getUserLevelByID(users_id);
-		Invitations invitation = this.invitationManagement.addInvitationLink(
+		Long user_level = this.userManager.getUserLevelByID(users_id);
+		Invitations invitation = this.invitationManager.addInvitationLink(
 				user_level, username, username, username, username, username,
 				room_id, "", Boolean.valueOf(false), null, Integer.valueOf(3),
 				null, null, users_id, "", Long.valueOf(1L),

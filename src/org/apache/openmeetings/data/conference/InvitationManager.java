@@ -32,13 +32,13 @@ import javax.persistence.TypedQuery;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.data.basic.AuthLevelUtil;
-import org.apache.openmeetings.data.basic.Fieldmanagment;
+import org.apache.openmeetings.data.basic.FieldManager;
 import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
 import org.apache.openmeetings.data.basic.dao.OmTimeZoneDao;
 import org.apache.openmeetings.data.calendar.daos.AppointmentDao;
 import org.apache.openmeetings.data.calendar.management.AppointmentLogic;
 import org.apache.openmeetings.data.conference.dao.RoomDao;
-import org.apache.openmeetings.data.user.Usermanagement;
+import org.apache.openmeetings.data.user.UserManager;
 import org.apache.openmeetings.data.user.dao.UsersDao;
 import org.apache.openmeetings.persistence.beans.basic.OmTimeZone;
 import org.apache.openmeetings.persistence.beans.calendar.Appointment;
@@ -66,10 +66,10 @@ import org.springframework.transaction.annotation.Transactional;
  * 
  */
 @Transactional
-public class Invitationmanagement {
+public class InvitationManager {
 
 	private static final Logger log = Red5LoggerFactory.getLogger(
-			Invitationmanagement.class, OpenmeetingsVariables.webAppRootKey);
+			InvitationManager.class, OpenmeetingsVariables.webAppRootKey);
 
 	@PersistenceContext
 	private EntityManager em;
@@ -78,9 +78,9 @@ public class Invitationmanagement {
 	@Autowired
 	private ConfigurationDao configurationDaoImpl;
 	@Autowired
-	private Usermanagement userManagement;
+	private UserManager userManager;
 	@Autowired
-	private Fieldmanagment fieldmanagment;
+	private FieldManager fieldmanagment;
 	@Autowired
 	private ManageCryptStyle manageCryptStyle;
 	@Autowired
@@ -226,7 +226,7 @@ public class Invitationmanagement {
 		User user;
 
 		try {
-			user = userManagement.getUserById(canceling_user_id);
+			user = userManager.getUserById(canceling_user_id);
 		} catch (Exception e) {
 			log.error("cancelInvitation Cancelling user cant be retrieved");
 			return;
@@ -366,7 +366,7 @@ public class Invitationmanagement {
 
 		log.debug("updateInvitation");
 
-		User user = userManagement.getUserById(canceling_user_id);
+		User user = userManager.getUserById(canceling_user_id);
 		if (user == null) {
 			log.error("Cancelling user cant be retrieved");
 			return;
@@ -749,7 +749,7 @@ public class Invitationmanagement {
 		log.debug("sendInvitationIcalCancelMail");
 
 		// Defining Organizer
-		User user = userManagement.getUserById(organizer_userId);
+		User user = userManager.getUserById(organizer_userId);
 
 		// TODO: Check time zone handling in iCal Mail
 		// OmTimeZone omTimeZone =
@@ -800,7 +800,7 @@ public class Invitationmanagement {
 		log.debug("sendInvitationIcalUpdateMail");
 
 		// Defining Organizer
-		User user = userManagement.getUserById(organizer_userId);
+		User user = userManager.getUserById(organizer_userId);
 
 		IcalHandler handler = new IcalHandler(IcalHandler.ICAL_METHOD_REQUEST);
 
@@ -883,7 +883,7 @@ public class Invitationmanagement {
 			atts.add(attendeeList);
 
 			// Defining Organizer
-			User user = userManagement.getUserById(organizer_userId);
+			User user = userManager.getUserById(organizer_userId);
 
 			HashMap<String, String> organizerAttendee = handler
 					.getAttendeeData(email, username, invitor);

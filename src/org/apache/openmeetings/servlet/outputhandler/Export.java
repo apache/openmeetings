@@ -31,8 +31,8 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.data.basic.AuthLevelUtil;
 import org.apache.openmeetings.data.basic.SessiondataDao;
-import org.apache.openmeetings.data.user.Organisationmanagement;
-import org.apache.openmeetings.data.user.Usermanagement;
+import org.apache.openmeetings.data.user.OrganisationManager;
+import org.apache.openmeetings.data.user.UserManager;
 import org.apache.openmeetings.data.user.dao.UsersDao;
 import org.apache.openmeetings.persistence.beans.domain.Organisation;
 import org.apache.openmeetings.persistence.beans.user.User;
@@ -65,12 +65,12 @@ public class Export extends HttpServlet {
 		return null;
 	}
 
-	private Usermanagement getUserManagement() {
+	private UserManager getUserManager() {
 		try {
 			if (ScopeApplicationAdapter.initComplete) {
 				ApplicationContext context = WebApplicationContextUtils
 						.getWebApplicationContext(getServletContext());
-				return context.getBean("userManagement", Usermanagement.class);
+				return context.getBean("userManagement", UserManager.class);
 			}
 		} catch (Exception err) {
 			log.error("[getUserManagement]", err);
@@ -78,12 +78,12 @@ public class Export extends HttpServlet {
 		return null;
 	}
 
-	private Organisationmanagement getOrganisationmanagement() {
+	private OrganisationManager getOrganisationManager() {
 		try {
 			if (ScopeApplicationAdapter.initComplete) {
 				ApplicationContext context = WebApplicationContextUtils
 						.getWebApplicationContext(getServletContext());
-				return context.getBean("organisationmanagement", Organisationmanagement.class);
+				return context.getBean("organisationmanagement", OrganisationManager.class);
 			}
 		} catch (Exception err) {
 			log.error("[getOrganisationmanagement]", err);
@@ -144,7 +144,7 @@ public class Export extends HttpServlet {
 
 		try {
 
-			if (getUserManagement() == null || getSessionManagement() == null
+			if (getUserManager() == null || getSessionManagement() == null
 					|| getUsersDao() == null) {
 				return;
 			}
@@ -156,7 +156,7 @@ public class Export extends HttpServlet {
 			System.out.println("sid: " + sid);
 
 			Long users_id = getSessionManagement().checkSession(sid);
-			Long user_level = getUserManagement().getUserLevelByID(users_id);
+			Long user_level = getUserManager().getUserLevelByID(users_id);
 
 			System.out.println("users_id: " + users_id);
 			System.out.println("user_level: " + user_level);
@@ -185,10 +185,10 @@ public class Export extends HttpServlet {
 					List<User> uList = null;
 					String downloadName = "users";
 					if (moduleName.equals("userorganisations")) {
-						Organisation orga = getOrganisationmanagement()
+						Organisation orga = getOrganisationManager()
 								.getOrganisationById(organisation_id);
 						downloadName += "_" + orga.getName();
-						uList = getOrganisationmanagement()
+						uList = getOrganisationManager()
 								.getUsersByOrganisationId(organisation_id);
 					} else {
 						uList = getUsersDao().getAllUsers();

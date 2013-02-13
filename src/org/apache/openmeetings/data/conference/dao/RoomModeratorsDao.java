@@ -29,7 +29,7 @@ import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
-import org.apache.openmeetings.data.user.Usermanagement;
+import org.apache.openmeetings.data.user.UserManager;
 import org.apache.openmeetings.persistence.beans.room.RoomModerator;
 import org.apache.openmeetings.persistence.beans.user.User;
 import org.red5.logging.Red5LoggerFactory;
@@ -43,7 +43,7 @@ public class RoomModeratorsDao {
 	private static final Logger log = Red5LoggerFactory
 			.getLogger(RoomModeratorsDao.class);
 	@Autowired
-	private Usermanagement userManagement;
+	private UserManager userManagement;
 	@PersistenceContext
 	private EntityManager em;
 

@@ -41,7 +41,7 @@ import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.batik.beans.PrintBean;
 import org.apache.openmeetings.data.basic.SessiondataDao;
 import org.apache.openmeetings.data.record.WhiteboardMapToSVG;
-import org.apache.openmeetings.data.user.Usermanagement;
+import org.apache.openmeetings.data.user.UserManager;
 import org.apache.openmeetings.documents.GenerateImage;
 import org.apache.openmeetings.remote.PrintService;
 import org.apache.openmeetings.remote.red5.ScopeApplicationAdapter;
@@ -73,12 +73,12 @@ public class ExportToImage extends HttpServlet {
 		return null;
 	}
 
-	public Usermanagement getUserManagement() {
+	public UserManager getUserManager() {
 		try {
 			if (ScopeApplicationAdapter.initComplete) {
 				ApplicationContext context = WebApplicationContextUtils
 						.getWebApplicationContext(getServletContext());
-				return (Usermanagement) context.getBean("userManagement");
+				return (UserManager) context.getBean("userManagement");
 			}
 		} catch (Exception err) {
 			log.error("[getUserManagement]", err);
@@ -111,7 +111,7 @@ public class ExportToImage extends HttpServlet {
 			IOException {
 
 		try {
-			if (getUserManagement() == null || getSessionManagement() == null
+			if (getUserManager() == null || getSessionManagement() == null
 					|| getGenerateImage() == null) {
 				return;
 			}
@@ -139,7 +139,7 @@ public class ExportToImage extends HttpServlet {
 			}
 
 			Long users_id = getSessionManagement().checkSession(sid);
-			Long user_level = getUserManagement().getUserLevelByID(users_id);
+			Long user_level = getUserManager().getUserLevelByID(users_id);
 
 			log.debug("users_id: " + users_id);
 			log.debug("user_level: " + user_level);

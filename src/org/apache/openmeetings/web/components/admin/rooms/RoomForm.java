@@ -21,8 +21,8 @@ package org.apache.openmeetings.web.components.admin.rooms;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.openmeetings.data.conference.Roommanagement;
-import org.apache.openmeetings.data.user.Organisationmanagement;
+import org.apache.openmeetings.data.conference.RoomManager;
+import org.apache.openmeetings.data.user.OrganisationManager;
 import org.apache.openmeetings.persistence.beans.domain.Organisation;
 import org.apache.openmeetings.persistence.beans.room.RoomType;
 import org.apache.openmeetings.persistence.beans.room.Room;
@@ -74,7 +74,7 @@ public class RoomForm extends AdminBaseForm<Room> {
 				}));
 
 		add(new DropDownChoice<RoomType>("roomtype", Application.getBean(
-				Roommanagement.class).getAllRoomTypes(),
+				RoomManager.class).getAllRoomTypes(),
 				new ChoiceRenderer<RoomType>("name", "roomtypes_id")));
 
 		add(new TextArea<String>("comment"));
@@ -83,7 +83,7 @@ public class RoomForm extends AdminBaseForm<Room> {
 		add(new CheckBox("ispublic"));
 
 		List<Organisation> orgList = Application.getBean(
-				Organisationmanagement.class).getOrganisations(3L);
+				OrganisationManager.class).getOrganisations(3L);
 		List<RoomOrganisation> orgRooms = new ArrayList<RoomOrganisation>(
 				orgList.size());
 		for (Organisation org : orgList) {

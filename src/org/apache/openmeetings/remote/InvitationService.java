@@ -26,8 +26,8 @@ import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.data.basic.SessiondataDao;
 import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
 import org.apache.openmeetings.data.basic.dao.OmTimeZoneDao;
-import org.apache.openmeetings.data.conference.Invitationmanagement;
-import org.apache.openmeetings.data.user.Usermanagement;
+import org.apache.openmeetings.data.conference.InvitationManager;
+import org.apache.openmeetings.data.user.UserManager;
 import org.apache.openmeetings.data.user.dao.UsersDao;
 import org.apache.openmeetings.persistence.beans.basic.OmTimeZone;
 import org.apache.openmeetings.persistence.beans.invitation.Invitations;
@@ -49,11 +49,11 @@ public class InvitationService implements IPendingServiceCallback {
 	@Autowired
 	private UsersDao userDAO;
 	@Autowired
-	private Usermanagement userManagement;
+	private UserManager userManager;
 	@Autowired
 	private OmTimeZoneDao omTimeZoneDaoImpl;
 	@Autowired
-	private Invitationmanagement invitationManagement;
+	private InvitationManager invitationManager;
 
 	public void resultReceived(IPendingServiceCall arg0) {
 		// TODO Auto-generated method stub
@@ -106,7 +106,7 @@ public class InvitationService implements IPendingServiceCallback {
 			log.info("validFromMinute: " + validFromMinute);
 
 			Long users_id = sessionManagement.checkSession(SID);
-			Long user_level = userManagement.getUserLevelByID(users_id);
+			Long user_level = userManager.getUserLevelByID(users_id);
 
 			OmTimeZone omTimeZone = omTimeZoneDaoImpl
 					.getOmTimeZone(jNameTimeZone);
@@ -140,7 +140,7 @@ public class InvitationService implements IPendingServiceCallback {
 			Date dFrom = calFrom.getTime();
 			Date dTo = calTo.getTime();
 
-			Invitations invitation = invitationManagement
+			Invitations invitation = invitationManager
 					.addInvitationLink(user_level, username, message, baseurl,
 							email, subject, room_id, conferencedomain,
 							isPasswordProtected, invitationpass, valid, dFrom,
@@ -161,17 +161,17 @@ public class InvitationService implements IPendingServiceCallback {
 
 	public String sendInvitationByHash(String SID, String invitationHash, String message, String baseurl, String subject, Long language_id) {
 		User us = userDAO.get(sessionManagement.checkSession(SID));
-		Invitations inv = (Invitations)invitationManagement.getInvitationByHashCode(invitationHash, true);
-		return invitationManagement.sendInvitionLink(us, inv, message, baseurl, subject, language_id);
+		Invitations inv = (Invitations)invitationManager.getInvitationByHashCode(invitationHash, true);
+		return invitationManager.sendInvitionLink(us, inv, message, baseurl, subject, language_id);
 	}
 	
 	public Object getInvitationByHash(String hashCode) {
-		return invitationManagement.getInvitationByHashCode(
+		return invitationManager.getInvitationByHashCode(
 				hashCode, true);
 	}
 
 	public Object checkInvitationPass(String hashCode, String pass) {
-		return invitationManagement.checkInvitationPass(hashCode,
+		return invitationManager.checkInvitationPass(hashCode,
 				pass);
 	}
 }

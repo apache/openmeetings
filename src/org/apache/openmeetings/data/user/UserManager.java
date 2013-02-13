@@ -39,7 +39,7 @@ import javax.persistence.criteria.Root;
 import org.apache.commons.lang.StringUtils;
 import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.data.basic.AuthLevelUtil;
-import org.apache.openmeetings.data.basic.Fieldmanagment;
+import org.apache.openmeetings.data.basic.FieldManager;
 import org.apache.openmeetings.data.basic.SessiondataDao;
 import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
 import org.apache.openmeetings.data.basic.dao.OmTimeZoneDao;
@@ -76,10 +76,10 @@ import org.springframework.transaction.annotation.Transactional;
  * 
  */
 @Transactional
-public class Usermanagement {
+public class UserManager {
 
 	private static final Logger log = Red5LoggerFactory.getLogger(
-			Usermanagement.class, OpenmeetingsVariables.webAppRootKey);
+			UserManager.class, OpenmeetingsVariables.webAppRootKey);
 
 	@PersistenceContext
 	private EntityManager em;
@@ -89,19 +89,19 @@ public class Usermanagement {
 	@Autowired
 	private ConfigurationDao configDao;
 	@Autowired
-	private Fieldmanagment fieldmanagment;
+	private FieldManager fieldmanagment;
 	@Autowired
 	private StateDao statemanagement;
 	@Autowired
 	private OmTimeZoneDao omTimeZoneDaoImpl;
 	@Autowired
-	private Organisationmanagement organisationmanagement;
+	private OrganisationManager organisationManager;
 	@Autowired
 	private ManageCryptStyle cryptManager;
 	@Autowired
 	private UsersDao usersDao;
 	@Autowired
-	private Emailmanagement emailManagement;
+	private EmailManager emailManagement;
 	@Autowired
 	private ScopeApplicationAdapter scopeApplicationAdapter;
 	@Autowired
@@ -464,7 +464,7 @@ public class Usermanagement {
 
 					// add or delete organisations from this user
 					if (organisations != null) {
-						organisationmanagement.updateUserOrganisationsByUser(
+						organisationManager.updateUserOrganisationsByUser(
 								us, organisations);
 					}
 					us = usersDao.get(user_id);
@@ -663,7 +663,7 @@ public class Usermanagement {
 					log.debug("user_id, organisation_id" + user_id + ", "
 							+ organisation_id);
 
-					Organisation_Users ou = organisationmanagement
+					Organisation_Users ou = organisationManager
 							.getOrganisation_UserByUserAndOrganisation(user_id,
 									organisation_id);
 
@@ -1017,7 +1017,7 @@ public class Usermanagement {
 			if (orgIds != null) {
 				List<Organisation_Users> orgList = users.getOrganisation_users();
 				for (Long orgId : orgIds) {
-					orgList.add(organisationmanagement.getOrgUser(orgId, null));
+					orgList.add(organisationManager.getOrgUser(orgId, null));
 				}
 			}
 			return addUser(users);

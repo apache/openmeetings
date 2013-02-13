@@ -29,7 +29,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
-import org.apache.openmeetings.data.basic.Fieldmanagment;
+import org.apache.openmeetings.data.basic.FieldManager;
 import org.apache.openmeetings.persistence.beans.user.Salutation;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -49,7 +49,7 @@ public class SalutationDao {
 			SalutationDao.class, OpenmeetingsVariables.webAppRootKey);
 
 	@Autowired
-	private Fieldmanagment fieldmanagment;
+	private FieldManager fieldmanagment;
 
 	@PersistenceContext
 	private EntityManager em;

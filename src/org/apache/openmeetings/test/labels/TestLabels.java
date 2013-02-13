@@ -18,7 +18,7 @@
  */
 package org.apache.openmeetings.test.labels;
 
-import org.apache.openmeetings.data.basic.Fieldmanagment;
+import org.apache.openmeetings.data.basic.FieldManager;
 import org.apache.openmeetings.test.AbstractOpenmeetingsSpringTest;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +26,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class TestLabels extends AbstractOpenmeetingsSpringTest {
 	
 	@Autowired
-	private Fieldmanagment fieldmanagment;
+	private FieldManager fieldmanagment;
 	
 	@Test
 	public void testGetNavi(){

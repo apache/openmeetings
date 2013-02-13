@@ -30,7 +30,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.lang.StringUtils;
 import org.apache.openmeetings.OpenmeetingsVariables;
-import org.apache.openmeetings.data.basic.Fieldmanagment;
+import org.apache.openmeetings.data.basic.FieldManager;
 import org.apache.openmeetings.data.basic.SessiondataDao;
 import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
 import org.apache.openmeetings.persistence.beans.room.Client;
@@ -59,7 +59,7 @@ public class ScreenController {
 	@Autowired
 	public ConfigurationDao configurationDaoImpl;
 	@Autowired
-	public Fieldmanagment fieldmanagment;
+	public FieldManager fieldmanagment;
 
 	private enum ConnectionType {
 		rtmp

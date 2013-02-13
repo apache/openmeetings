@@ -30,7 +30,7 @@ import java.util.TimeZone;
 import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.cluster.SlaveHTTPConnectionManager;
 import org.apache.openmeetings.data.basic.AuthLevelUtil;
-import org.apache.openmeetings.data.basic.Fieldmanagment;
+import org.apache.openmeetings.data.basic.FieldManager;
 import org.apache.openmeetings.data.basic.SessiondataDao;
 import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
 import org.apache.openmeetings.data.basic.dao.OmTimeZoneDao;
@@ -38,11 +38,11 @@ import org.apache.openmeetings.data.basic.dao.ServerDao;
 import org.apache.openmeetings.data.beans.basic.SearchResult;
 import org.apache.openmeetings.data.calendar.daos.AppointmentDao;
 import org.apache.openmeetings.data.calendar.daos.MeetingMemberDao;
-import org.apache.openmeetings.data.conference.Invitationmanagement;
-import org.apache.openmeetings.data.conference.Roommanagement;
+import org.apache.openmeetings.data.conference.InvitationManager;
+import org.apache.openmeetings.data.conference.RoomManager;
 import org.apache.openmeetings.data.conference.dao.RoomDao;
-import org.apache.openmeetings.data.user.Organisationmanagement;
-import org.apache.openmeetings.data.user.Usermanagement;
+import org.apache.openmeetings.data.user.OrganisationManager;
+import org.apache.openmeetings.data.user.UserManager;
 import org.apache.openmeetings.data.user.dao.PrivateMessageFolderDao;
 import org.apache.openmeetings.data.user.dao.PrivateMessagesDao;
 import org.apache.openmeetings.data.user.dao.SalutationDao;
@@ -54,11 +54,11 @@ import org.apache.openmeetings.persistence.beans.invitation.Invitations;
 import org.apache.openmeetings.persistence.beans.lang.Fieldlanguagesvalues;
 import org.apache.openmeetings.persistence.beans.room.Client;
 import org.apache.openmeetings.persistence.beans.room.Room;
-import org.apache.openmeetings.persistence.beans.user.PrivateMessageFolder;
 import org.apache.openmeetings.persistence.beans.user.PrivateMessage;
+import org.apache.openmeetings.persistence.beans.user.PrivateMessageFolder;
 import org.apache.openmeetings.persistence.beans.user.Salutation;
-import org.apache.openmeetings.persistence.beans.user.UserContact;
 import org.apache.openmeetings.persistence.beans.user.User;
+import org.apache.openmeetings.persistence.beans.user.UserContact;
 import org.apache.openmeetings.remote.red5.ScopeApplicationAdapter;
 import org.apache.openmeetings.session.ISessionManager;
 import org.apache.openmeetings.templates.RequestContactConfirmTemplate;
@@ -95,19 +95,19 @@ public class UserService {
 	@Autowired
 	private ConfigurationDao configurationDaoImpl;
 	@Autowired
-	private Usermanagement userManagement;
+	private UserManager userManager;
 	@Autowired
-	private Fieldmanagment fieldmanagment;
+	private FieldManager fieldmanagment;
 	@Autowired
 	private OmTimeZoneDao omTimeZoneDaoImpl;
 	@Autowired
 	private SalutationDao salutationmanagement;
 	@Autowired
-	private Organisationmanagement organisationmanagement;
+	private OrganisationManager organisationManager;
 	@Autowired
 	private ManageCryptStyle cryptManager;
 	@Autowired
-	private Roommanagement roommanagement;
+	private RoomManager roomManager;
 	@Autowired
 	private RoomDao roomDao;
 	@Autowired
@@ -131,7 +131,7 @@ public class UserService {
 	@Autowired
 	private TimezoneUtil timezoneUtil;
 	@Autowired
-	private Invitationmanagement invitationManagement;
+	private InvitationManager invitationManager;
 	@Autowired
 	private ServerDao serverDao;
 	@Autowired
@@ -151,7 +151,7 @@ public class UserService {
 	public Long resetUserPwd(String SID, String email, String login,
 			String applink) {
 		sessionManagement.checkSession(SID);
-		return userManagement.resetUser(email, login, applink);
+		return userManager.resetUser(email, login, applink);
 	}
 
 	public Object getUserByHash(String SID, String hash) {
@@ -173,8 +173,8 @@ public class UserService {
 	 */
 	public User getUserById(String SID, long user_id) {
 		Long users_id = sessionManagement.checkSession(SID);
-		Long user_level = userManagement.getUserLevelByID(users_id);
-		return userManagement.checkAdmingetUserById(user_level, user_id);
+		Long user_level = userManager.getUserLevelByID(users_id);
+		return userManager.checkAdmingetUserById(user_level, user_id);
 	}
 
 	/**
@@ -219,8 +219,8 @@ public class UserService {
 	public List<User> searchUser(String SID, String searchcriteria,
 			String searchstring, int max, int start, String orderby, boolean asc) {
 		Long users_id = sessionManagement.checkSession(SID);
-		Long user_level = userManagement.getUserLevelByID(users_id);
-		return userManagement.searchUser(user_level, searchcriteria,
+		Long user_level = userManager.getUserLevelByID(users_id);
+		return userManager.searchUser(user_level, searchcriteria,
 				searchstring, max, start, orderby, asc);
 	}
 
@@ -237,14 +237,14 @@ public class UserService {
 	 */
 	public List<User> getOrgUserList(String SID, long organisation_id,
 			int start, int max, String orderby, boolean asc) {
-		return organisationmanagement.getUsersByOrganisationId(organisation_id,
+		return organisationManager.getUsersByOrganisationId(organisation_id,
 				start, max, orderby, asc);
 	}
 
 	public List<User> getUserListByModForm(String SID) {
 		Long users_id = sessionManagement.checkSession(SID);
-		Long user_level = userManagement.getUserLevelByID(users_id);
-		return userManagement.getUserByMod(user_level, users_id);
+		Long user_level = userManager.getUserLevelByID(users_id);
+		return userManager.getUserByMod(user_level, users_id);
 	}
 
 	/**
@@ -261,8 +261,8 @@ public class UserService {
 	public List<Organisation> getOrganisationListByUser(String SID,
 			long client_user, int start, int max, String orderby, boolean asc) {
 		Long users_id = sessionManagement.checkSession(SID);
-		long user_level = userManagement.getUserLevelByID(users_id);
-		return organisationmanagement.getOrganisationsByUserId(user_level,
+		long user_level = userManager.getUserLevelByID(users_id);
+		return organisationManager.getOrganisationsByUserId(user_level,
 				client_user, start, max, orderby, asc);
 	}
 
@@ -280,8 +280,8 @@ public class UserService {
 	public List<Organisation> getRestOrganisationListByUser(String SID,
 			long client_user, int start, int max, String orderby, boolean asc) {
 		Long users_id = sessionManagement.checkSession(SID);
-		Long user_level = userManagement.getUserLevelByID(users_id);
-		return organisationmanagement.getRestOrganisationsByUserId(user_level,
+		Long user_level = userManager.getUserLevelByID(users_id);
+		return organisationManager.getRestOrganisationsByUserId(user_level,
 				client_user, start, max, orderby, asc);
 	}
 
@@ -297,16 +297,16 @@ public class UserService {
 	public SearchResult<User> getUserList(String SID, int start, int max,
 			String orderby, boolean asc) {
 		Long users_id = sessionManagement.checkSession(SID);
-		Long user_level = userManagement.getUserLevelByID(users_id);
-		return userManagement
+		Long user_level = userManager.getUserLevelByID(users_id);
+		return userManager
 				.getUsersList(user_level, start, max, orderby, asc);
 	}
 
 	public SearchResult<User> getUserListWithSearch(String SID, int start,
 			int max, String orderby, boolean asc, String search) {
 		Long users_id = sessionManagement.checkSession(SID);
-		Long user_level = userManagement.getUserLevelByID(users_id);
-		return userManagement.getUsersListWithSearch(user_level, start, max,
+		Long user_level = userManager.getUserLevelByID(users_id);
+		return userManager.getUsersListWithSearch(user_level, start, max,
 				orderby, asc, search);
 	}
 
@@ -322,7 +322,7 @@ public class UserService {
 	 */
 	public SearchResult<User> getAllUserBySearchRange(String SID,
 			String search, int start, int max, String orderby, boolean asc) {
-		return userManagement.getAllUserByRange(search, start, max, orderby,
+		return userManager.getAllUserByRange(search, start, max, orderby,
 				asc);
 	}
 
@@ -337,9 +337,9 @@ public class UserService {
 			@SuppressWarnings("rawtypes") ObjectMap values) {
 		try {
 			Long users_id = sessionManagement.checkSession(SID);
-			Long user_level = userManagement.getUserLevelByID(users_id);
+			Long user_level = userManager.getUserLevelByID(users_id);
 			if (user_level != null && user_level >= 1) {
-				return userManagement.saveOrUpdateUser(new Long(3), values,
+				return userManager.saveOrUpdateUser(new Long(3), values,
 						users_id);
 			} else {
 				return new Long(-2);
@@ -367,7 +367,7 @@ public class UserService {
 						.longValue();
 			}
 			Long users_id = sessionManagement.checkSession(SID);
-			Long user_level = userManagement.getUserLevelByID(users_id);
+			Long user_level = userManager.getUserLevelByID(users_id);
 
 			List<?> orgO = (List<?>) argObjectMap.get("organisations");
 			List<Long> orgIds = new ArrayList<Long>(orgO.size());
@@ -384,7 +384,7 @@ public class UserService {
 
 			long userId;
 			if (user_idClient == null || user_idClient == 0) {
-				userId = userManagement.registerUserInit(
+				userId = userManager.registerUserInit(
 						user_level,
 						Long.valueOf(argObjectMap.get("level_id").toString())
 								.longValue(),
@@ -427,7 +427,7 @@ public class UserService {
 								argObjectMap.get("showContactDataToContacts")
 										.toString()).booleanValue());
 			} else {
-				userId = userManagement.updateUser(
+				userId = userManager.updateUser(
 						user_level,
 						user_idClient,
 						Long.valueOf(argObjectMap.get("level_id").toString())
@@ -494,7 +494,7 @@ public class UserService {
 		log.debug("deleteUserAdmin");
 		try {
 			Long users_id = sessionManagement.checkSession(SID);
-			Long user_level = userManagement.getUserLevelByID(users_id);
+			Long user_level = userManager.getUserLevelByID(users_id);
 
 			// admins only
 			if (authLevelManagement.checkAdminLevel(user_level)) {
@@ -531,7 +531,7 @@ public class UserService {
 	public Boolean kickUserByStreamId(String SID, String streamid, long serverId) {
 		try {
 			Long users_id = sessionManagement.checkSession(SID);
-			Long user_level = userManagement.getUserLevelByID(users_id);
+			Long user_level = userManager.getUserLevelByID(users_id);
 			// admins only
 			if (authLevelManagement.checkAdminLevel(user_level)) {
 
@@ -582,17 +582,17 @@ public class UserService {
 	public User updateUserSelfTimeZone(String SID, String jname) {
 		try {
 			Long users_id = sessionManagement.checkSession(SID);
-			Long user_level = userManagement.getUserLevelByID(users_id);
+			Long user_level = userManager.getUserLevelByID(users_id);
 			// users only
 			if (authLevelManagement.checkUserLevel(user_level)) {
 
-				User us = userManagement.getUserById(users_id);
+				User us = userManager.getUserById(users_id);
 
 				us.setOmTimeZone(omTimeZoneDaoImpl.getOmTimeZone(jname));
 				us.setForceTimeZoneCheck(false);
 				us.setUpdatetime(new Date());
 
-				userManagement.updateUser(us);
+				userManager.updateUser(us);
 
 				return us;
 
@@ -608,17 +608,17 @@ public class UserService {
 			int max, boolean asc) {
 		try {
 			Long users_id = sessionManagement.checkSession(SID);
-			Long user_level = userManagement.getUserLevelByID(users_id);
+			Long user_level = userManager.getUserLevelByID(users_id);
 			// users only
 			if (authLevelManagement.checkUserLevel(user_level)) {
 
 				SearchResult<User> searchResult = new SearchResult<User>();
 				searchResult.setObjectName(User.class.getName());
-				List<User> userList = userManagement.searchUserProfile(
+				List<User> userList = userManager.searchUserProfile(
 						searchTxt, userOffers, userSearchs, orderBy, start,
 						max, asc);
 				searchResult.setResult(userList);
-				Long resultInt = userManagement.searchCountUserProfile(
+				Long resultInt = userManager.searchCountUserProfile(
 						searchTxt, userOffers, userSearchs);
 				searchResult.setRecords(resultInt);
 
@@ -634,7 +634,7 @@ public class UserService {
 			String domain, String port, String webapp) {
 		try {
 			Long users_id = sessionManagement.checkSession(SID);
-			Long user_level = userManagement.getUserLevelByID(users_id);
+			Long user_level = userManager.getUserLevelByID(users_id);
 			// users only
 			if (authLevelManagement.checkUserLevel(user_level)) {
 
@@ -654,9 +654,9 @@ public class UserService {
 				Long userContactId = userContactsDao.addUserContact(
 						userToAdd_id, users_id, true, hash);
 
-				User user = userManagement.getUserById(users_id);
+				User user = userManager.getUserById(users_id);
 
-				User userToAdd = userManagement.getUserById(userToAdd_id);
+				User userToAdd = userManager.getUserById(userToAdd_id);
 
 				Long language_id = userToAdd.getLanguage_id();
 				if (language_id == null) {
@@ -732,7 +732,7 @@ public class UserService {
 	public List<UserContact> getPendingUserContacts(String SID) {
 		try {
 			Long users_id = sessionManagement.checkSession(SID);
-			Long user_level = userManagement.getUserLevelByID(users_id);
+			Long user_level = userManager.getUserLevelByID(users_id);
 			// users only
 			if (authLevelManagement.checkUserLevel(user_level)) {
 
@@ -752,7 +752,7 @@ public class UserService {
 			Boolean status) {
 		try {
 			Long users_id = sessionManagement.checkSession(SID);
-			Long user_level = userManagement.getUserLevelByID(users_id);
+			Long user_level = userManager.getUserLevelByID(users_id);
 			// users only
 			if (authLevelManagement.checkUserLevel(user_level)) {
 
@@ -786,7 +786,7 @@ public class UserService {
 	public List<UserContact> getUserContacts(String SID) {
 		try {
 			Long users_id = sessionManagement.checkSession(SID);
-			Long user_level = userManagement.getUserLevelByID(users_id);
+			Long user_level = userManager.getUserLevelByID(users_id);
 			// users only
 			if (authLevelManagement.checkUserLevel(user_level)) {
 
@@ -805,7 +805,7 @@ public class UserService {
 	public Long checkPendingStatus(String SID, Long userContactId) {
 		try {
 			Long users_id = sessionManagement.checkSession(SID);
-			Long user_level = userManagement.getUserLevelByID(users_id);
+			Long user_level = userManager.getUserLevelByID(users_id);
 			// users only
 			if (authLevelManagement.checkUserLevel(user_level)) {
 
@@ -832,7 +832,7 @@ public class UserService {
 	public Integer removeContactUser(String SID, Long userContactId) {
 		try {
 			Long users_id = sessionManagement.checkSession(SID);
-			Long user_level = userManagement.getUserLevelByID(users_id);
+			Long user_level = userManager.getUserLevelByID(users_id);
 			// users only
 			if (authLevelManagement.checkUserLevel(user_level)) {
 
@@ -856,7 +856,7 @@ public class UserService {
 			Boolean pending) {
 		try {
 			Long users_id = sessionManagement.checkSession(SID);
-			Long user_level = userManagement.getUserLevelByID(users_id);
+			Long user_level = userManager.getUserLevelByID(users_id);
 			// users only
 			if (authLevelManagement.checkUserLevel(user_level)) {
 
@@ -964,10 +964,10 @@ public class UserService {
 		try {
 
 			Long users_id = sessionManagement.checkSession(SID);
-			Long user_level = userManagement.getUserLevelByID(users_id);
+			Long user_level = userManager.getUserLevelByID(users_id);
 			// users only
 			if (authLevelManagement.checkUserLevel(user_level)) {
-				User from = userManagement.getUserById(users_id);
+				User from = userManager.getUserById(users_id);
 				TimeZone timezone = timezoneUtil.getTimezoneByUser(from);
 
 				Date appointmentstart = createCalendarDate(timezone,
@@ -995,7 +995,7 @@ public class UserService {
 				Long appointmentId = null;
 
 				if (bookedRoom) {
-					room_id = roommanagement.addRoom(3, // Userlevel
+					room_id = roomManager.addRoom(3, // Userlevel
 							subject, // name
 							roomtype_id, // RoomType
 							"", // Comment
@@ -1056,7 +1056,7 @@ public class UserService {
 						language_id = configurationDaoImpl.getConfValue("default_lang_id", Long.class, "1");
 					}
 					String invitation_link = null;
-					User to = userManagement.getUserByEmail(email);
+					User to = userManager.getUserByEmail(email);
 
 					if (bookedRoom) {
 						// Add the appointment to the calendar of the user (if
@@ -1073,7 +1073,7 @@ public class UserService {
 									sendJNameTimeZone);
 						}
 
-						Invitations invitation = invitationManagement
+						Invitations invitation = invitationManager
 								.addInvitationLink(
 										new Long(2), // userlevel
 										from.getFirstname() + " "
@@ -1201,7 +1201,7 @@ public class UserService {
 
 		for (String email : recipients) {
 
-			User meetingMember = userManagement.getUserByEmail(email);
+			User meetingMember = userManager.getUserByEmail(email);
 
 			if (meetingMember != null) {
 
@@ -1231,7 +1231,7 @@ public class UserService {
 		try {
 
 			Long users_id = sessionManagement.checkSession(SID);
-			Long user_level = userManagement.getUserLevelByID(users_id);
+			Long user_level = userManager.getUserLevelByID(users_id);
 			// users only
 			if (authLevelManagement.checkUserLevel(user_level)) {
 
@@ -1252,7 +1252,7 @@ public class UserService {
 		try {
 
 			Long users_id = sessionManagement.checkSession(SID);
-			Long user_level = userManagement.getUserLevelByID(users_id);
+			Long user_level = userManager.getUserLevelByID(users_id);
 			// users only
 			if (authLevelManagement.checkUserLevel(user_level)) {
 
@@ -1284,7 +1284,7 @@ public class UserService {
 		try {
 
 			Long users_id = sessionManagement.checkSession(SID);
-			Long user_level = userManagement.getUserLevelByID(users_id);
+			Long user_level = userManager.getUserLevelByID(users_id);
 			// users only
 			if (authLevelManagement.checkUserLevel(user_level)) {
 
@@ -1316,7 +1316,7 @@ public class UserService {
 		try {
 
 			Long users_id = sessionManagement.checkSession(SID);
-			Long user_level = userManagement.getUserLevelByID(users_id);
+			Long user_level = userManager.getUserLevelByID(users_id);
 			// users only
 			if (authLevelManagement.checkUserLevel(user_level)) {
 
@@ -1349,7 +1349,7 @@ public class UserService {
 		try {
 
 			Long users_id = sessionManagement.checkSession(SID);
-			Long user_level = userManagement.getUserLevelByID(users_id);
+			Long user_level = userManager.getUserLevelByID(users_id);
 			// users only
 			if (authLevelManagement.checkUserLevel(user_level)) {
 
@@ -1382,7 +1382,7 @@ public class UserService {
 		try {
 
 			Long users_id = sessionManagement.checkSession(SID);
-			Long user_level = userManagement.getUserLevelByID(users_id);
+			Long user_level = userManager.getUserLevelByID(users_id);
 			// users only
 			if (authLevelManagement.checkUserLevel(user_level)) {
 
@@ -1402,7 +1402,7 @@ public class UserService {
 			Long newFolderId) {
 		try {
 			Long users_id = sessionManagement.checkSession(SID);
-			Long user_level = userManagement.getUserLevelByID(users_id);
+			Long user_level = userManager.getUserLevelByID(users_id);
 			// users only
 			if (authLevelManagement.checkUserLevel(user_level)) {
 
@@ -1428,7 +1428,7 @@ public class UserService {
 			Boolean isTrash) {
 		try {
 			Long users_id = sessionManagement.checkSession(SID);
-			Long user_level = userManagement.getUserLevelByID(users_id);
+			Long user_level = userManager.getUserLevelByID(users_id);
 			// users only
 			if (authLevelManagement.checkUserLevel(user_level)) {
 
@@ -1455,7 +1455,7 @@ public class UserService {
 			@SuppressWarnings("rawtypes") List privateMessageIntsIds) {
 		try {
 			Long users_id = sessionManagement.checkSession(SID);
-			Long user_level = userManagement.getUserLevelByID(users_id);
+			Long user_level = userManager.getUserLevelByID(users_id);
 			// users only
 			if (authLevelManagement.checkUserLevel(user_level)) {
 
@@ -1481,7 +1481,7 @@ public class UserService {
 			Boolean isRead) {
 		try {
 			Long users_id = sessionManagement.checkSession(SID);
-			Long user_level = userManagement.getUserLevelByID(users_id);
+			Long user_level = userManager.getUserLevelByID(users_id);
 			// users only
 			if (authLevelManagement.checkUserLevel(user_level)) {
 
@@ -1508,7 +1508,7 @@ public class UserService {
 			Boolean isRead) {
 		try {
 			Long users_id = sessionManagement.checkSession(SID);
-			Long user_level = userManagement.getUserLevelByID(users_id);
+			Long user_level = userManager.getUserLevelByID(users_id);
 			// users only
 			if (authLevelManagement.checkUserLevel(user_level)) {
 
@@ -1535,7 +1535,7 @@ public class UserService {
 	public List<PrivateMessageFolder> getPrivateMessageFoldersByUser(String SID) {
 		try {
 			Long users_id = sessionManagement.checkSession(SID);
-			Long user_level = userManagement.getUserLevelByID(users_id);
+			Long user_level = userManager.getUserLevelByID(users_id);
 			// users only
 			if (authLevelManagement.checkUserLevel(user_level)) {
 
@@ -1553,7 +1553,7 @@ public class UserService {
 	public Long addPrivateMessageFolder(String SID, String folderName) {
 		try {
 			Long users_id = sessionManagement.checkSession(SID);
-			Long user_level = userManagement.getUserLevelByID(users_id);
+			Long user_level = userManager.getUserLevelByID(users_id);
 			// users only
 			if (authLevelManagement.checkUserLevel(user_level)) {
 
@@ -1571,7 +1571,7 @@ public class UserService {
 	public Boolean checkUserIsInContactList(String SID, Long user_id) {
 		try {
 			Long users_id = sessionManagement.checkSession(SID);
-			Long user_level = userManagement.getUserLevelByID(users_id);
+			Long user_level = userManager.getUserLevelByID(users_id);
 			// users only
 			if (authLevelManagement.checkUserLevel(user_level)) {
 
@@ -1600,7 +1600,7 @@ public class UserService {
 			Boolean shareCalendar) {
 		try {
 			Long users_id = sessionManagement.checkSession(SID);
-			Long user_level = userManagement.getUserLevelByID(users_id);
+			Long user_level = userManager.getUserLevelByID(users_id);
 
 			// users only
 			if (authLevelManagement.checkUserLevel(user_level)) {
@@ -1623,7 +1623,7 @@ public class UserService {
 			Long privateMessageFolderId, String folderName) {
 		try {
 			Long users_id = sessionManagement.checkSession(SID);
-			Long user_level = userManagement.getUserLevelByID(users_id);
+			Long user_level = userManager.getUserLevelByID(users_id);
 			// users only
 			if (authLevelManagement.checkUserLevel(user_level)) {
 
@@ -1650,7 +1650,7 @@ public class UserService {
 			Long privateMessageFolderId) {
 		try {
 			Long users_id = sessionManagement.checkSession(SID);
-			Long user_level = userManagement.getUserLevelByID(users_id);
+			Long user_level = userManager.getUserLevelByID(users_id);
 			// users only
 			if (authLevelManagement.checkUserLevel(user_level)) {
 
@@ -1671,7 +1671,7 @@ public class UserService {
 	public List<UserContact> getUserContactsWithShareCalendar(String SID) {
 		try {
 			Long users_id = sessionManagement.checkSession(SID);
-			Long user_level = userManagement.getUserLevelByID(users_id);
+			Long user_level = userManager.getUserLevelByID(users_id);
 			// users only
 			if (authLevelManagement.checkUserLevel(user_level)) {
 
@@ -1701,7 +1701,7 @@ public class UserService {
 	public Boolean kickUserByPublicSID(String SID, String publicSID) {
 		try {
 			Long users_id = sessionManagement.checkSession(SID);
-			Long user_level = userManagement.getUserLevelByID(users_id);
+			Long user_level = userManager.getUserLevelByID(users_id);
 			// users only
 			if (authLevelManagement.checkUserLevel(user_level)) {
 

@@ -31,7 +31,7 @@ import org.apache.openmeetings.data.basic.SessiondataDao;
 import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
 import org.apache.openmeetings.data.basic.dao.LdapConfigDao;
 import org.apache.openmeetings.data.basic.dao.OmTimeZoneDao;
-import org.apache.openmeetings.data.user.Usermanagement;
+import org.apache.openmeetings.data.user.UserManager;
 import org.apache.openmeetings.data.user.dao.StateDao;
 import org.apache.openmeetings.data.user.dao.UsersDao;
 import org.apache.openmeetings.ldap.config.ConfigReader;
@@ -63,7 +63,7 @@ public class LdapLoginManagement {
 	@Autowired
 	private ConfigurationDao configDao;
 	@Autowired
-	private Usermanagement userManagement;
+	private UserManager userManager;
 	@Autowired
 	private StateDao statemanagement;
 	@Autowired
@@ -435,7 +435,7 @@ public class LdapLoginManagement {
 		User u = null;
 
 		try {
-			u = userManagement.getUserByLogin(user);
+			u = userManager.getUserByLogin(user);
 
 		} catch (Exception e) {
 			log.error("Error retrieving Userdata : " + e.getMessage());
@@ -529,7 +529,7 @@ public class LdapLoginManagement {
 				}
 
 				// Return UserObject
-				User u2 = userManagement.getUserById(userid);
+				User u2 = userManager.getUserById(userid);
 
 				if (u2 == null)
 					return new Long(-1);
@@ -537,7 +537,7 @@ public class LdapLoginManagement {
 				u2.setExternalUserType(EXTERNAL_USER_TYPE_LDAP); // TIBO
 
 				// initialize lazy collection
-				userManagement.refreshUserObject(u2);
+				userManager.refreshUserObject(u2);
 
 				log.debug("getUserbyId : " + userid + " : " + u2.getLogin());
 
@@ -692,7 +692,7 @@ public class LdapLoginManagement {
 
 			// Check if LDAP Users get a SIP Account Issue 1099
 
-			newUserId = userManagement.registerUserInit(
+			newUserId = userManager.registerUserInit(
 					2,// user_level
 					1,// level_id
 					1,// available

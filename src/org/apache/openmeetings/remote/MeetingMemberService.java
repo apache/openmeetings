@@ -22,7 +22,7 @@ import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.data.basic.AuthLevelUtil;
 import org.apache.openmeetings.data.basic.SessiondataDao;
 import org.apache.openmeetings.data.calendar.management.MeetingMemberLogic;
-import org.apache.openmeetings.data.user.Usermanagement;
+import org.apache.openmeetings.data.user.UserManager;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +34,7 @@ public class MeetingMemberService {
 	@Autowired
 	private SessiondataDao sessionManagement;
 	@Autowired
-	private Usermanagement userManagement;
+	private UserManager userManager;
 	@Autowired
 	private AuthLevelUtil authLevelManagement;
 	@Autowired
@@ -48,7 +48,7 @@ public class MeetingMemberService {
 		try {
 
 			Long users_id = sessionManagement.checkSession(SID);
-			Long user_level = userManagement.getUserLevelByID(users_id);
+			Long user_level = userManager.getUserLevelByID(users_id);
 			if (authLevelManagement.checkUserLevel(user_level)) {
 
 				return meetingMemberLogic.updateMeetingMember(
@@ -69,7 +69,7 @@ public class MeetingMemberService {
 		try {
 
 			Long users_id = sessionManagement.checkSession(SID);
-			Long user_level = userManagement.getUserLevelByID(users_id);
+			Long user_level = userManager.getUserLevelByID(users_id);
 			if (authLevelManagement.checkUserLevel(user_level)) {
 
 				return meetingMemberLogic.deleteMeetingMember(

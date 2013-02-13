@@ -55,10 +55,10 @@ import org.springframework.transaction.annotation.Transactional;
  * 
  */
 @Transactional
-public class Organisationmanagement {
+public class OrganisationManager {
 
 	private static Logger log = Red5LoggerFactory
-			.getLogger(Organisationmanagement.class,
+			.getLogger(OrganisationManager.class,
 					OpenmeetingsVariables.webAppRootKey);
 
 	@PersistenceContext

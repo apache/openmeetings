@@ -18,7 +18,7 @@
  */
 package org.apache.openmeetings.test.poll;
 
-import org.apache.openmeetings.data.conference.PollManagement;
+import org.apache.openmeetings.data.conference.PollManager;
 import org.apache.openmeetings.persistence.beans.poll.PollType;
 import org.apache.openmeetings.test.AbstractOpenmeetingsSpringTest;
 import org.junit.Test;
@@ -27,14 +27,14 @@ import static org.junit.Assert.*;
 
 public class TestPollManagement extends AbstractOpenmeetingsSpringTest {
 	@Autowired
-	private PollManagement pollManagement;
+	private PollManager pollManager;
 	
 	@Test
 	public void addPollType() {
 		long maxId = 1;
-		for (PollType pt : pollManagement.getPollTypes()) {
+		for (PollType pt : pollManager.getPollTypes()) {
 			maxId = Math.max(maxId, pt.getPollTypesId());
 		}
-		assertNotNull("Poll created is null", pollManagement.addPollType(26L, false));
+		assertNotNull("Poll created is null", pollManager.addPollType(26L, false));
 	}
 }

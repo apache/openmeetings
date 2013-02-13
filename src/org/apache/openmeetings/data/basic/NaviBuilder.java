@@ -44,7 +44,7 @@ public class NaviBuilder {
 	private EntityManager em;
 
 	@Autowired
-	private Fieldmanagment fieldmanagment;
+	private FieldManager fieldmanagment;
 
 	public Naviglobal getGlobalMenuEntry(long globalId) {
 		try {

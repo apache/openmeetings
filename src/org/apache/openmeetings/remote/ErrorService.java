@@ -19,7 +19,7 @@
 package org.apache.openmeetings.remote;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
-import org.apache.openmeetings.data.basic.Fieldmanagment;
+import org.apache.openmeetings.data.basic.FieldManager;
 import org.apache.openmeetings.data.basic.dao.ErrorDao;
 import org.apache.openmeetings.data.beans.basic.ErrorResult;
 import org.apache.openmeetings.persistence.beans.basic.ErrorValue;
@@ -38,7 +38,7 @@ public class ErrorService {
 			ErrorService.class, OpenmeetingsVariables.webAppRootKey);
 
 	@Autowired
-	private Fieldmanagment fieldmanagment;
+	private FieldManager fieldmanagment;
 	@Autowired
 	private ErrorDao errorManagement;
 

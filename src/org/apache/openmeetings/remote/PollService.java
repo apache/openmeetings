@@ -24,8 +24,8 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
-import org.apache.openmeetings.data.conference.PollManagement;
-import org.apache.openmeetings.data.user.Usermanagement;
+import org.apache.openmeetings.data.conference.PollManager;
+import org.apache.openmeetings.data.user.UserManager;
 import org.apache.openmeetings.persistence.beans.poll.PollType;
 import org.apache.openmeetings.persistence.beans.poll.RoomPoll;
 import org.apache.openmeetings.persistence.beans.poll.RoomPollAnswers;
@@ -54,11 +54,11 @@ public class PollService implements IPendingServiceCallback {
 	@Autowired
 	private ISessionManager sessionManager;
 	@Autowired
-	private Usermanagement usermanagement;
+	private UserManager userManager;
 	@Autowired
 	private ScopeApplicationAdapter scopeApplicationAdapter;
 	@Autowired
-	private PollManagement pollManagement;
+	private PollManager pollManager;
 
 	public String createPoll(String pollName, String pollQuestion, int pollTypeId) {
 		String returnValue = "";
@@ -74,10 +74,10 @@ public class PollService implements IPendingServiceCallback {
 
 			if (rc.getIsMod()) {
 				// will move all existing polls to the archive
-				pollManagement.closePoll(rc.getRoom_id());
+				pollManager.closePoll(rc.getRoom_id());
 				
 				sendNotification(currentcon, "newPoll",
-						new Object[] { pollManagement.createPoll(rc,
+						new Object[] { pollManager.createPoll(rc,
 								pollName, pollQuestion, (long) pollTypeId) });
 				returnValue = "200";
 			} else {
@@ -104,7 +104,7 @@ public class PollService implements IPendingServiceCallback {
 
 			if (rc.getIsMod()) {
 				// will move all existing polls to the archive
-				return pollManagement.closePoll(rc.getRoom_id());
+				return pollManager.closePoll(rc.getRoom_id());
 			}
 
 		} catch (Exception err) {
@@ -126,7 +126,7 @@ public class PollService implements IPendingServiceCallback {
 
 			if (rc.getIsMod()) {
 				// will move all existing polls to the archive
-				return pollManagement.deletePoll(poll_id);
+				return pollManager.deletePoll(poll_id);
 			}
 
 		} catch (Exception err) {
@@ -167,7 +167,7 @@ public class PollService implements IPendingServiceCallback {
 	}
 
 	public List<PollType> getPollTypeList() {
-		return pollManagement.getPollTypes();
+		return pollManager.getPollTypes();
 	}
 
 	public int vote(int pollvalue, int pollTypeId) {
@@ -184,16 +184,16 @@ public class PollService implements IPendingServiceCallback {
 				return -1;
 			}
 			long roomId = rc.getRoom_id();
-			if (!pollManagement.hasPoll(roomId)) {
+			if (!pollManager.hasPoll(roomId)) {
 				log.error("POLL IS NULL for RoomId: " + rc.getRoom_id());
 				return -1;
 			}
-			if (pollManagement.hasVoted(roomId, rc.getUser_id())) {
+			if (pollManager.hasVoted(roomId, rc.getUser_id())) {
 				log.debug("hasVoted: true");
 				return -1;
 			}
 			// get Poll
-			RoomPoll roomP = pollManagement.getPoll(roomId);
+			RoomPoll roomP = pollManager.getPoll(roomId);
 
 			log.debug("vote: " + pollvalue + " " + pollTypeId + " "
 					+ roomP.getPollQuestion());
@@ -208,11 +208,11 @@ public class PollService implements IPendingServiceCallback {
 				// Is boolean Question
 				rpA.setAnswer(new Boolean(pollvalue == 1));
 			}
-			rpA.setVotedUser(usermanagement.getUserById(rc.getUser_id()));
+			rpA.setVotedUser(userManager.getUserById(rc.getUser_id()));
 			rpA.setVoteDate(new Date());
 			rpA.setRoomPoll(roomP);
 			roomP.getRoomPollAnswerList().add(rpA);
-			pollManagement.updatePoll(roomP);
+			pollManager.updatePoll(roomP);
 			return 1;
 		} catch (Exception err) {
 			log.error("[vote]", err);
@@ -231,7 +231,7 @@ public class PollService implements IPendingServiceCallback {
 					.getClient().getId(), null);
 
 			// get Poll
-			return pollManagement.getPoll(rc.getRoom_id());
+			return pollManager.getPoll(rc.getRoom_id());
 		} catch (Exception err) {
 			log.error("[getPoll]", err);
 		}
@@ -246,8 +246,8 @@ public class PollService implements IPendingServiceCallback {
 					.getClientByStreamId(streamid, null);
 
 			long roomId = rc.getRoom_id();
-			if (pollManagement.hasPoll(roomId)) {
-				return pollManagement.hasVoted(roomId, rc.getUser_id()) ? -1 : 1;
+			if (pollManager.hasPoll(roomId)) {
+				return pollManager.hasVoted(roomId, rc.getUser_id()) ? -1 : 1;
 			} else {
 				return -2;
 			}
@@ -264,7 +264,7 @@ public class PollService implements IPendingServiceCallback {
 					.getClient().getId(), null);
 
 			// get Poll
-			return pollManagement.getArchivedPollList(rc.getRoom_id());
+			return pollManager.getArchivedPollList(rc.getRoom_id());
 		} catch (Exception err) {
 			log.error("[getArchivedPollList]", err);
 		}

@@ -20,17 +20,17 @@ package org.apache.openmeetings.test.smoke;
 
 import static junit.framework.Assert.assertNotNull;
 
-import org.apache.openmeetings.data.user.Usermanagement;
+import org.apache.openmeetings.data.user.UserManager;
 import org.apache.openmeetings.test.AbstractOpenmeetingsSpringTest;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class TestSmokeBasic extends AbstractOpenmeetingsSpringTest {
 	@Autowired
-	private Usermanagement userManagement;
+	private UserManager userManager;
 	
 	@Test
 	public void createErrorValueAndTest() {
-        assertNotNull(userManagement.getUserById(1L));
+        assertNotNull(userManager.getUserById(1L));
 	}	
 }

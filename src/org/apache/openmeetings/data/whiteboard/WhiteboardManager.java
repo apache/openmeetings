@@ -29,10 +29,10 @@ import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
-public class WhiteboardManagement {
+public class WhiteboardManager {
 
 	private static final Logger log = Red5LoggerFactory.getLogger(
-			WhiteboardManagement.class, OpenmeetingsVariables.webAppRootKey);
+			WhiteboardManager.class, OpenmeetingsVariables.webAppRootKey);
 	
 	@Autowired
 	private WhiteBoardObjectListManagerById whiteBoardObjectListManagerById;

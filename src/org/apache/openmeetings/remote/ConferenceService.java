@@ -38,10 +38,10 @@ import org.apache.openmeetings.data.basic.SessiondataDao;
 import org.apache.openmeetings.data.basic.dao.ServerDao;
 import org.apache.openmeetings.data.beans.basic.SearchResult;
 import org.apache.openmeetings.data.calendar.management.AppointmentLogic;
-import org.apache.openmeetings.data.conference.Roommanagement;
+import org.apache.openmeetings.data.conference.RoomManager;
 import org.apache.openmeetings.data.conference.dao.RoomDao;
 import org.apache.openmeetings.data.conference.dao.RoomModeratorsDao;
-import org.apache.openmeetings.data.user.Usermanagement;
+import org.apache.openmeetings.data.user.UserManager;
 import org.apache.openmeetings.persistence.beans.basic.Server;
 import org.apache.openmeetings.persistence.beans.calendar.Appointment;
 import org.apache.openmeetings.persistence.beans.room.Client;
@@ -74,9 +74,9 @@ public class ConferenceService {
 	@Autowired
 	private SessiondataDao sessionManagement;
 	@Autowired
-	private Usermanagement userManagement;
+	private UserManager userManager;
 	@Autowired
-	private Roommanagement roommanagement;
+	private RoomManager roomManager;
 	@Autowired
 	private RoomDao roomDao;
 	@Autowired
@@ -102,14 +102,14 @@ public class ConferenceService {
 			long organisation_id, long roomtypes_id) {
 		try {
 			Long users_id = sessionManagement.checkSession(SID);
-			Long user_level = userManagement.getUserLevelByID(users_id);
+			Long user_level = userManager.getUserLevelByID(users_id);
 
 			log.debug("getRoomsByOrganisationAndType");
 
 			if (user_level == null) {
 				return null;
 			}
-			List<RoomOrganisation> roomOrgsList = roommanagement
+			List<RoomOrganisation> roomOrgsList = roomManager
 					.getRoomsOrganisationByOrganisationIdAndRoomType(
 							user_level, organisation_id, roomtypes_id);
 
@@ -137,14 +137,14 @@ public class ConferenceService {
 			String SID, long organisation_id) {
 		try {
 			Long users_id = sessionManagement.checkSession(SID);
-			Long user_level = userManagement.getUserLevelByID(users_id);
+			Long user_level = userManager.getUserLevelByID(users_id);
 
 			log.debug("getRoomsByOrganisationAndType");
 
 			if (user_level == null) {
 				return null;
 			}
-			List<RoomOrganisation> roomOrgsList = roommanagement
+			List<RoomOrganisation> roomOrgsList = roomManager
 					.getRoomsOrganisationByOrganisationId(user_level,
 							organisation_id);
 			
@@ -174,10 +174,10 @@ public class ConferenceService {
 		log.debug("getRoomsByOrganisation");
 
 		Long user_id = sessionManagement.checkSession(SID);
-		Long user_level = userManagement.getUserLevelByIdAndOrg(user_id,
+		Long user_level = userManager.getUserLevelByIdAndOrg(user_id,
 				organisation_id);
 
-		return roommanagement.getRoomsOrganisationByOrganisationId(user_level,
+		return roomManager.getRoomsOrganisationByOrganisationId(user_level,
 				organisation_id, start, max, orderby, asc);
 	}
 
@@ -193,10 +193,10 @@ public class ConferenceService {
 			log.debug("getRoomsPublic");
 
 			Long users_id = sessionManagement.checkSession(SID);
-			Long User_level = userManagement.getUserLevelByID(users_id);
+			Long User_level = userManager.getUserLevelByID(users_id);
 			log.error("getRoomsPublic user_level: " + User_level);
 
-			List<Room> roomList = roommanagement.getPublicRooms(User_level,
+			List<Room> roomList = roomManager.getPublicRooms(User_level,
 					roomtypes_id);
 
 			// Filter : no appointed meetings
@@ -223,7 +223,7 @@ public class ConferenceService {
 		try {
 
 			Long users_id = sessionManagement.checkSession(SID);
-			Long user_level = userManagement.getUserLevelByID(users_id);
+			Long user_level = userManager.getUserLevelByID(users_id);
 			log.debug("getRoomsPublic user_level: " + user_level);
 
 			List<Room> roomList = roomDao.getPublicRooms();
@@ -307,7 +307,7 @@ public class ConferenceService {
 
 			returnMap.put("appointment", appointment);
 
-			User us = userManagement.getUserById(currentClient.getUser_id());
+			User us = userManager.getUserById(currentClient.getUser_id());
 			TimeZone timezone = timezoneUtil.getTimezoneByUser(us);
 
 			returnMap.put("appointment", appointment);
@@ -338,7 +338,7 @@ public class ConferenceService {
 		log.debug("ConferenceService.getAppointedMeetings");
 
 		Long users_id = sessionManagement.checkSession(SID);
-		Long user_level = userManagement.getUserLevelByID(users_id);
+		Long user_level = userManager.getUserLevelByID(users_id);
 
 		if (authLevelManagement.checkUserLevel(user_level)) {
 
@@ -378,7 +378,7 @@ public class ConferenceService {
 		log.debug("ConferenceService.getAppointedMeetings");
 		try {
 			Long users_id = sessionManagement.checkSession(SID);
-			Long user_level = userManagement.getUserLevelByID(users_id);
+			Long user_level = userManager.getUserLevelByID(users_id);
 
 			if (authLevelManagement.checkUserLevel(user_level)) {
 				List<Appointment> appointments = appointmentLogic
@@ -414,9 +414,9 @@ public class ConferenceService {
 	 */
 	public List<RoomType> getRoomTypes(String SID) {
 		Long users_id = sessionManagement.checkSession(SID);
-		Long user_level = userManagement.getUserLevelByID(users_id);
+		Long user_level = userManager.getUserLevelByID(users_id);
 		if (authLevelManagement.checkUserLevel(user_level)) {
-			return roommanagement.getAllRoomTypes();
+			return roomManager.getAllRoomTypes();
 		}
 		return null;
 	}
@@ -429,14 +429,14 @@ public class ConferenceService {
 	 */
 	public Room getRoomById(String SID, long rooms_id) {
 		Long users_id = sessionManagement.checkSession(SID);
-		Long user_level = userManagement.getUserLevelByID(users_id);
-		return roommanagement.getRoomById(user_level, rooms_id);
+		Long user_level = userManager.getUserLevelByID(users_id);
+		return roomManager.getRoomById(user_level, rooms_id);
 	}
 
 	public Room getRoomWithCurrentUsersById(String SID, long rooms_id) {
 		Long users_id = sessionManagement.checkSession(SID);
-		Long user_level = userManagement.getUserLevelByID(users_id);
-		Room room = roommanagement.getRoomById(user_level, rooms_id);
+		Long user_level = userManager.getUserLevelByID(users_id);
+		Room room = roomManager.getRoomById(user_level, rooms_id);
 		room.setCurrentusers(sessionManager.getClientListByRoom(room.getRooms_id()));
 		return room;
 	}
@@ -452,8 +452,8 @@ public class ConferenceService {
 	public Room getRoomByExternalId(String SID, Long externalUserId,
 			String externalUserType, long roomtypes_id) {
 		Long users_id = sessionManagement.checkSession(SID);
-		Long user_level = userManagement.getUserLevelByID(users_id);
-		return roommanagement.getRoomByExternalId(user_level, externalUserId,
+		Long user_level = userManager.getUserLevelByID(users_id);
+		return roomManager.getRoomByExternalId(user_level, externalUserId,
 				externalUserType, roomtypes_id);
 	}
 
@@ -472,8 +472,8 @@ public class ConferenceService {
 		log.debug("getRooms");
 
 		Long users_id = sessionManagement.checkSession(SID);
-		Long user_level = userManagement.getUserLevelByID(users_id);
-		return roommanagement.getRooms(user_level, start, max, orderby, asc,
+		Long user_level = userManager.getUserLevelByID(users_id);
+		return roomManager.getRooms(user_level, start, max, orderby, asc,
 				search);
 	}
 
@@ -482,8 +482,8 @@ public class ConferenceService {
 		log.debug("getRooms");
 
 		Long users_id = sessionManagement.checkSession(SID);
-		Long user_level = userManagement.getUserLevelByID(users_id);
-		return roommanagement.getRoomsWithCurrentUsers(user_level, start, max,
+		Long user_level = userManager.getUserLevelByID(users_id);
+		return roomManager.getRoomsWithCurrentUsers(user_level, start, max,
 				orderby, asc);
 	}
 
@@ -497,8 +497,8 @@ public class ConferenceService {
 	public List<RoomOrganisation> getOrganisationByRoom(String SID,
 			long rooms_id) {
 		Long users_id = sessionManagement.checkSession(SID);
-		Long user_level = userManagement.getUserLevelByID(users_id);
-		return roommanagement.getOrganisationsByRoom(user_level, rooms_id);
+		Long user_level = userManager.getUserLevelByID(users_id);
+		return roomManager.getOrganisationsByRoom(user_level, rooms_id);
 	}
 
 	/**
@@ -510,7 +510,7 @@ public class ConferenceService {
 	public Long saveOrUpdateRoom(String SID, Object argObject) {
 		try {
 			Long users_id = sessionManagement.checkSession(SID);
-			long User_level = userManagement.getUserLevelByID(users_id);
+			long User_level = userManager.getUserLevelByID(users_id);
 			log.debug("argObject: 1 - " + argObject.getClass().getName());
 			@SuppressWarnings("unchecked")
 			LinkedHashMap<String, Object> argObjectMap = (LinkedHashMap<String, Object>) argObject;
@@ -536,7 +536,7 @@ public class ConferenceService {
 
 			long roomId = -1;
 			if (rooms_id == 0) {
-				roomId = roommanagement.addRoom(
+				roomId = roomManager.addRoom(
 						User_level
 						, argObjectMap.get("name").toString()
 						, Long.valueOf(argObjectMap.get("roomtypes_id").toString()).longValue()
@@ -573,7 +573,7 @@ public class ConferenceService {
 						, Boolean.valueOf(argObjectMap.get("sipEnabled").toString())
 						);
 			} else if (rooms_id > 0) {
-				roomId = roommanagement.updateRoom(
+				roomId = roomManager.updateRoom(
 						User_level
 						, rooms_id
 						, Long.valueOf(argObjectMap.get("roomtypes_id").toString()).longValue()
@@ -625,7 +625,7 @@ public class ConferenceService {
 		try {
 
 			Long users_id = sessionManagement.checkSession(SID);
-			long user_level = userManagement.getUserLevelByID(users_id);
+			long user_level = userManager.getUserLevelByID(users_id);
 
 			if (authLevelManagement.checkUserLevel(user_level)) {
 
@@ -649,8 +649,8 @@ public class ConferenceService {
 	 */
 	public Long deleteRoom(String SID, long rooms_id) {
 		Long users_id = sessionManagement.checkSession(SID);
-		long user_level = userManagement.getUserLevelByID(users_id);
-		return roommanagement.deleteRoomById(user_level, rooms_id);
+		long user_level = userManager.getUserLevelByID(users_id);
+		return roomManager.deleteRoomById(user_level, rooms_id);
 	}
 	
 	/**
@@ -699,7 +699,7 @@ public class ConferenceService {
 			String orderby, boolean asc) {
 		try {
 			Long users_id = sessionManagement.checkSession(SID);
-			Long user_level = userManagement.getUserLevelByID(users_id);
+			Long user_level = userManager.getUserLevelByID(users_id);
 			if (authLevelManagement.checkAdminLevel(user_level)) {
 				return this.sessionManager.getListByStartAndMax(start, max,
 						orderby, asc);
@@ -719,7 +719,7 @@ public class ConferenceService {
 	public String getSessionStatistics(String SID) {
 		try {
 			Long users_id = sessionManagement.checkSession(SID);
-			Long user_level = userManagement.getUserLevelByID(users_id);
+			Long user_level = userManager.getUserLevelByID(users_id);
 			if (authLevelManagement.checkAdminLevel(user_level)) {
 				return this.sessionManager.getSessionStatistics();
 			}
@@ -734,8 +734,8 @@ public class ConferenceService {
 		log.debug("getRooms");
 
 		Long users_id = sessionManagement.checkSession(SID);
-		Long user_level = userManagement.getUserLevelByID(users_id);
-		return roommanagement.getRoomsWithCurrentUsersByList(user_level, start,
+		Long user_level = userManager.getUserLevelByID(users_id);
+		return roomManager.getRoomsWithCurrentUsersByList(user_level, start,
 				max, orderby, asc);
 	}
 
@@ -745,17 +745,17 @@ public class ConferenceService {
 		log.debug("getRooms");
 
 		Long users_id = sessionManagement.checkSession(SID);
-		Long user_level = userManagement.getUserLevelByID(users_id);
-		return roommanagement.getRoomsWithCurrentUsersByListAndType(user_level,
+		Long user_level = userManager.getUserLevelByID(users_id);
+		return roomManager.getRoomsWithCurrentUsersByListAndType(user_level,
 				start, max, orderby, asc, externalRoomType);
 	}
 
 	public Room getRoomByOwnerAndType(String SID, Long roomtypesId,
 			String roomName) {
 		Long users_id = sessionManagement.checkSession(SID);
-		Long user_level = userManagement.getUserLevelByID(users_id);
+		Long user_level = userManager.getUserLevelByID(users_id);
 		if (authLevelManagement.checkUserLevel(user_level)) {
-			return roommanagement.getRoomByOwnerAndTypeId(users_id,
+			return roomManager.getRoomByOwnerAndTypeId(users_id,
 					roomtypesId, roomName);
 		}
 		return null;
@@ -771,7 +771,7 @@ public class ConferenceService {
 	 */
 	public ServerDTO getServerForSession(String SID, long roomId) {
 		Long users_id = sessionManagement.checkSession(SID);
-		Long user_level = userManagement.getUserLevelByID(users_id);
+		Long user_level = userManager.getUserLevelByID(users_id);
 		if (authLevelManagement.checkUserLevel(user_level)) {
 			List<Server> serverList = serverDao.getActiveServers();
 			

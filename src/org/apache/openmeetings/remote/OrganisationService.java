@@ -25,8 +25,8 @@ import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.data.basic.AuthLevelUtil;
 import org.apache.openmeetings.data.basic.SessiondataDao;
 import org.apache.openmeetings.data.beans.basic.SearchResult;
-import org.apache.openmeetings.data.user.Organisationmanagement;
-import org.apache.openmeetings.data.user.Usermanagement;
+import org.apache.openmeetings.data.user.OrganisationManager;
+import org.apache.openmeetings.data.user.UserManager;
 import org.apache.openmeetings.persistence.beans.domain.Organisation;
 import org.apache.openmeetings.persistence.beans.user.User;
 import org.red5.logging.Red5LoggerFactory;
@@ -45,9 +45,9 @@ public class OrganisationService {
 	@Autowired
 	private SessiondataDao sessionManagement;
 	@Autowired
-	private Usermanagement userManagement;
+	private UserManager userManager;
 	@Autowired
-	private Organisationmanagement organisationmanagement;
+	private OrganisationManager organisationManager;
 	@Autowired
 	private AuthLevelUtil authLevelManagement;
 
@@ -61,8 +61,8 @@ public class OrganisationService {
 			String orderby, boolean asc) {
 		try {
 			Long users_id = sessionManagement.checkSession(SID);
-			long user_level = userManagement.getUserLevelByID(users_id);
-			return organisationmanagement.getOrganisations(user_level, start,
+			long user_level = userManager.getUserLevelByID(users_id);
+			return organisationManager.getOrganisations(user_level, start,
 					max, orderby, asc);
 		} catch (Exception e) {
 			log.error("getOrganisations", e);
@@ -73,8 +73,8 @@ public class OrganisationService {
 	public List<Organisation> getAllOrganisations(String SID) {
 		try {
 			Long users_id = sessionManagement.checkSession(SID);
-			Long user_level = userManagement.getUserLevelByID(users_id);
-			return organisationmanagement.getOrganisations(user_level);
+			Long user_level = userManager.getUserLevelByID(users_id);
+			return organisationManager.getOrganisations(user_level);
 		} catch (Exception e) {
 			log.error("getAllOrganisations", e);
 		}
@@ -90,8 +90,8 @@ public class OrganisationService {
 	 */
 	public Organisation getOrganisationById(String SID, long organisation_id) {
 		Long users_id = sessionManagement.checkSession(SID);
-		long user_level = userManagement.getUserLevelByID(users_id);
-		return organisationmanagement.getOrganisationById(user_level,
+		long user_level = userManager.getUserLevelByID(users_id);
+		return organisationManager.getOrganisationById(user_level,
 				organisation_id);
 	}
 
@@ -104,8 +104,8 @@ public class OrganisationService {
 	 */
 	public Long deleteOrganisation(String SID, long organisation_id) {
 		Long users_id = sessionManagement.checkSession(SID);
-		long user_level = userManagement.getUserLevelByID(users_id);
-		return organisationmanagement.deleteOrganisation(user_level,
+		long user_level = userManager.getUserLevelByID(users_id);
+		return organisationManager.deleteOrganisation(user_level,
 				organisation_id, users_id);
 	}
 
@@ -119,16 +119,16 @@ public class OrganisationService {
 	public Long saveOrUpdateOrganisation(String SID, Object regObjectObj) {
 		try {
 			Long users_id = sessionManagement.checkSession(SID);
-			long user_level = userManagement.getUserLevelByID(users_id);
+			long user_level = userManager.getUserLevelByID(users_id);
 			@SuppressWarnings("rawtypes")
 			LinkedHashMap<?, ?> argObjectMap = (LinkedHashMap) regObjectObj;
 			long organisation_id = Long.valueOf(
 					argObjectMap.get("organisation_id").toString()).longValue();
 			if (organisation_id == 0) {
-				return organisationmanagement.addOrganisation(user_level,
+				return organisationManager.addOrganisation(user_level,
 						argObjectMap.get("orgname").toString(), users_id);
 			} else {
-				return organisationmanagement.updateOrganisation(user_level,
+				return organisationManager.updateOrganisation(user_level,
 						organisation_id,
 						argObjectMap.get("orgname").toString(), users_id);
 			}
@@ -155,9 +155,9 @@ public class OrganisationService {
 			boolean asc) {
 		try {
 			Long users_id = sessionManagement.checkSession(SID);
-			Long user_level = userManagement.getUserLevelByID(users_id);
+			Long user_level = userManager.getUserLevelByID(users_id);
 			if (authLevelManagement.checkAdminLevel(user_level)) {
-				return organisationmanagement
+				return organisationManager
 						.getUsersSearchResultByOrganisationId(organisation_id,
 								start, max, orderby, asc);
 			} else {
@@ -176,9 +176,9 @@ public class OrganisationService {
 			Long user_id) {
 		try {
 			Long users_id = sessionManagement.checkSession(SID);
-			Long user_level = userManagement.getUserLevelByID(users_id);
+			Long user_level = userManager.getUserLevelByID(users_id);
 			if (authLevelManagement.checkAdminLevel(user_level)) {
-				return organisationmanagement.addUserToOrganisation(user_id,
+				return organisationManager.addUserToOrganisation(user_id,
 						organisation_id, users_id);
 			} else {
 				return -26L;
@@ -193,8 +193,8 @@ public class OrganisationService {
 			Long user_id, String comment) {
 		try {
 			Long users_id = sessionManagement.checkSession(SID);
-			Long user_level = userManagement.getUserLevelByID(users_id);
-			return organisationmanagement.deleteUserFromOrganisation(
+			Long user_level = userManager.getUserLevelByID(users_id);
+			return organisationManager.deleteUserFromOrganisation(
 					user_level, user_id, organisation_id);
 		} catch (Exception err) {
 			log.error("getUsersByOrganisation", err);

@@ -27,7 +27,7 @@ import org.apache.openmeetings.data.basic.AuthLevelUtil;
 import org.apache.openmeetings.data.basic.SessiondataDao;
 import org.apache.openmeetings.data.basic.dao.LdapConfigDao;
 import org.apache.openmeetings.data.beans.basic.SearchResult;
-import org.apache.openmeetings.data.user.Usermanagement;
+import org.apache.openmeetings.data.user.UserManager;
 import org.apache.openmeetings.persistence.beans.basic.LdapConfig;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -46,7 +46,7 @@ public class LdapConfigService {
 	@Autowired
 	private SessiondataDao sessionManagement;
     @Autowired
-    private Usermanagement userManagement;
+    private UserManager userManager;
 	@Autowired
 	private AuthLevelUtil authLevelManagement;
 	
@@ -54,7 +54,7 @@ public class LdapConfigService {
 	
 	public Long deleteLdapConfigById(String SID, Long ldapConfigId) {
         Long users_id = sessionManagement.checkSession(SID);
-        Long user_level = userManagement.getUserLevelByID(users_id);
+        Long user_level = userManager.getUserLevelByID(users_id);
         if (authLevelManagement.checkAdminLevel(user_level)){
         	return this.ldapConfigDaoImpl.deleteLdapConfigById(ldapConfigId);
         }
@@ -63,7 +63,7 @@ public class LdapConfigService {
 	
 	public LdapConfig getLdapConfigById(String SID, Long ldapConfigId) {
         Long users_id = sessionManagement.checkSession(SID);
-        Long user_level = userManagement.getUserLevelByID(users_id);
+        Long user_level = userManager.getUserLevelByID(users_id);
         if (authLevelManagement.checkAdminLevel(user_level)){
         	return this.ldapConfigDaoImpl.get(ldapConfigId);
         }
@@ -106,7 +106,7 @@ public class LdapConfigService {
 	 */
 	public SearchResult<LdapConfig> getLdapConfigs(String SID, int start, int max, String orderby, boolean asc){
         Long users_id = sessionManagement.checkSession(SID);
-        Long user_level = userManagement.getUserLevelByID(users_id);
+        Long user_level = userManager.getUserLevelByID(users_id);
         if (authLevelManagement.checkAdminLevel(user_level)){
         	
         	SearchResult<LdapConfig> searchResult = new SearchResult<LdapConfig>();
@@ -128,7 +128,7 @@ public class LdapConfigService {
 	public Long saveOrUpdateLdapConfig(String SID, LinkedHashMap<Object,Object> values)  {
 		try {
 			Long users_id = sessionManagement.checkSession(SID);
-			Long user_level = userManagement.getUserLevelByID(users_id);
+			Long user_level = userManager.getUserLevelByID(users_id);
 			if (authLevelManagement.checkAdminLevel(user_level)){
 			
 				long ldapConfigId = Long.valueOf(

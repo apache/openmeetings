@@ -28,7 +28,7 @@ import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
-import org.apache.openmeetings.data.user.Usermanagement;
+import org.apache.openmeetings.data.user.UserManager;
 import org.apache.openmeetings.persistence.beans.user.UserContact;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -42,15 +42,15 @@ public class UserContactsDao {
 	@PersistenceContext
 	private EntityManager em;
     @Autowired
-    private Usermanagement userManagement;
+    private UserManager userManager;
 
 	public Long addUserContact(Long user_id, Long ownerId, Boolean pending, String hash) {
 		try {
 			
 			UserContact userContact = new UserContact();
 			userContact.setInserted(new Date());
-			userContact.setOwner(userManagement.getUserById(ownerId));
-			userContact.setContact(userManagement.getUserById(user_id));
+			userContact.setOwner(userManager.getUserById(ownerId));
+			userContact.setContact(userManager.getUserById(user_id));
 			userContact.setPending(pending);
 			userContact.setHash(hash);
 			

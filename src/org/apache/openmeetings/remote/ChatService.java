@@ -30,8 +30,8 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
-import org.apache.openmeetings.data.conference.Roommanagement;
-import org.apache.openmeetings.data.user.Usermanagement;
+import org.apache.openmeetings.data.conference.RoomManager;
+import org.apache.openmeetings.data.user.UserManager;
 import org.apache.openmeetings.data.whiteboard.EmoticonsManager;
 import org.apache.openmeetings.persistence.beans.room.Client;
 import org.apache.openmeetings.persistence.beans.room.Room;
@@ -64,9 +64,9 @@ public class ChatService implements IPendingServiceCallback {
 	@Autowired
 	private EmoticonsManager emoticonsManager;
 	@Autowired
-	private Roommanagement roommanagement;
+	private RoomManager roomManager;
 	@Autowired
-	private Usermanagement usermanagement;
+	private UserManager userManager;
 	
 	//the overall chat room is just another room
 	private static final Long overallChatRoomName = new Long(-1);
@@ -115,8 +115,8 @@ public class ChatService implements IPendingServiceCallback {
 			if (room_id == null) {
 				return 1; //TODO weird
 			}
-			Long user_level = usermanagement.getUserLevelByID(currentClient.getUser_id());
-			Room room = roommanagement.getRoomById(user_level, room_id);
+			Long user_level = userManager.getUserLevelByID(currentClient.getUser_id());
+			Room room = roomManager.getRoomById(user_level, room_id);
 			@SuppressWarnings("rawtypes")
 			ArrayList messageMap = (ArrayList) newMessage;
 			// adding delimiter space, cause otherwise an emoticon in the last
@@ -202,8 +202,8 @@ public class ChatService implements IPendingServiceCallback {
 			IConnection current = Red5.getConnectionLocal();
 			Client currentClient = this.sessionManager.getClientByStreamId(current.getClient().getId(), null);
 			Long room_id = currentClient.getRoom_id();
-			Long user_level = usermanagement.getUserLevelByID(currentClient.getUser_id());
-			Room room = roommanagement.getRoomById(user_level, room_id);
+			Long user_level = userManager.getUserLevelByID(currentClient.getUser_id());
+			Room room = roomManager.getRoomById(user_level, room_id);
 			log.debug("room_id: " + room_id);
 
 			@SuppressWarnings("rawtypes")

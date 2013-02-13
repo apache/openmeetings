@@ -53,12 +53,12 @@ import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
 import org.apache.openmeetings.data.basic.dao.LdapConfigDao;
 import org.apache.openmeetings.data.calendar.daos.AppointmentDao;
 import org.apache.openmeetings.data.calendar.daos.MeetingMemberDao;
-import org.apache.openmeetings.data.conference.PollManagement;
-import org.apache.openmeetings.data.conference.Roommanagement;
+import org.apache.openmeetings.data.conference.PollManager;
+import org.apache.openmeetings.data.conference.RoomManager;
 import org.apache.openmeetings.data.file.dao.FileExplorerItemDao;
 import org.apache.openmeetings.data.flvrecord.FlvRecordingDao;
-import org.apache.openmeetings.data.user.Organisationmanagement;
-import org.apache.openmeetings.data.user.Usermanagement;
+import org.apache.openmeetings.data.user.OrganisationManager;
+import org.apache.openmeetings.data.user.UserManager;
 import org.apache.openmeetings.data.user.dao.PrivateMessageFolderDao;
 import org.apache.openmeetings.data.user.dao.PrivateMessagesDao;
 import org.apache.openmeetings.data.user.dao.UserContactsDao;
@@ -113,11 +113,11 @@ public class BackupExport {
 	@Autowired
 	private SessiondataDao sessionManagement;
 	@Autowired
-	private Usermanagement userManagement;
+	private UserManager userManager;
 	@Autowired
-	private Organisationmanagement organisationmanagement;
+	private OrganisationManager organisationManager;
 	@Autowired
-	private Roommanagement roommanagement;
+	private RoomManager roomManager;
 	@Autowired
 	private FileExplorerItemDao fileExplorerItemDao;
 	@Autowired
@@ -137,7 +137,7 @@ public class BackupExport {
 	@Autowired
 	private AuthLevelUtil authLevelManagement;
 	@Autowired
-	private PollManagement pollManagement;
+	private PollManager pollManager;
 	@Autowired
 	private ConfigurationDao configurationDaoImpl;
 
@@ -153,7 +153,7 @@ public class BackupExport {
 		 * ##################### Backup Organizations
 		 */
 		writeList(simpleSerializer, backup_dir, "organizations.xml",
-				"organisations", organisationmanagement.getOrganisations(3L));
+				"organisations", organisationManager.getOrganisations(3L));
 
 		/*
 		 * ##################### Backup Users
@@ -172,7 +172,7 @@ public class BackupExport {
 			registry.bind(RoomType.class, RoomTypeConverter.class);
 			
 			writeList(serializer, backup_dir, "rooms.xml",
-					"rooms", roommanagement.getBackupRooms());
+					"rooms", roomManager.getBackupRooms());
 		}
 
 		/*
@@ -187,7 +187,7 @@ public class BackupExport {
 			registry.bind(Room.class, RoomConverter.class);
 			
 			writeList(serializer, backup_dir, "rooms_organisation.xml",
-					"room_organisations", roommanagement.getRoomsOrganisations());
+					"room_organisations", roomManager.getRoomsOrganisations());
 		}
 
 		/*
@@ -308,7 +308,7 @@ public class BackupExport {
 		 * ##################### Polls
 		 */
 		{
-			List<RoomPoll> list = pollManagement.getPollListBackup();
+			List<RoomPoll> list = pollManager.getPollListBackup();
 			Registry registry = new Registry();
 			Strategy strategy = new RegistryStrategy(registry);
 			Serializer serializer = new Persister(strategy);
@@ -450,7 +450,7 @@ public class BackupExport {
 		log.debug("sid: " + sid);
 
 		Long users_id = sessionManagement.checkSession(sid);
-		Long user_level = userManagement.getUserLevelByID(users_id);
+		Long user_level = userManager.getUserLevelByID(users_id);
 
 		log.debug("users_id: " + users_id);
 		log.debug("user_level: " + user_level);

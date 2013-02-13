@@ -23,7 +23,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
-import org.apache.openmeetings.data.basic.Fieldmanagment;
+import org.apache.openmeetings.data.basic.FieldManager;
 import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
 import org.apache.openmeetings.persistence.beans.user.Address;
 import org.apache.openmeetings.templates.RegisterUserTemplate;
@@ -40,10 +40,10 @@ import org.springframework.transaction.annotation.Transactional;
  *
  */
 @Transactional
-public class Emailmanagement {
+public class EmailManager {
 
 	private static final Logger log = Red5LoggerFactory.getLogger(
-			Emailmanagement.class, OpenmeetingsVariables.webAppRootKey);
+			EmailManager.class, OpenmeetingsVariables.webAppRootKey);
 
 	@PersistenceContext
 	private EntityManager em;
@@ -51,7 +51,7 @@ public class Emailmanagement {
 	@Autowired
 	private ConfigurationDao configDao;
 	@Autowired
-	private Fieldmanagment fieldmanagment;
+	private FieldManager fieldmanagment;
 	@Autowired
 	private MailHandler mailHandler;
 	@Autowired

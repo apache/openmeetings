@@ -25,7 +25,7 @@ import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.data.basic.AuthLevelUtil;
 import org.apache.openmeetings.data.basic.SessiondataDao;
 import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
-import org.apache.openmeetings.data.user.Usermanagement;
+import org.apache.openmeetings.data.user.UserManager;
 import org.apache.openmeetings.utils.ImportHelper;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -39,7 +39,7 @@ public abstract class AbstractUploadController {
 	@Autowired
 	protected SessiondataDao sessionManagement;
 	@Autowired
-	protected Usermanagement userManagement;
+	protected UserManager userManager;
 	@Autowired
 	protected AuthLevelUtil authLevelManagement;
 	@Autowired
@@ -65,7 +65,7 @@ public abstract class AbstractUploadController {
 			log.debug("sid: " + sid);
 
 			Long userId = sessionManagement.checkSession(sid);
-			Long userLevel = userManagement.getUserLevelByID(userId);
+			Long userLevel = userManager.getUserLevelByID(userId);
 			log.debug("userId = " + userId + ", userLevel = " + userLevel);
 			info.userId = userId;
 

@@ -26,7 +26,7 @@ import java.util.Date;
 
 import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
 import org.apache.openmeetings.data.calendar.daos.AppointmentDao;
-import org.apache.openmeetings.data.user.Usermanagement;
+import org.apache.openmeetings.data.user.UserManager;
 import org.apache.openmeetings.data.user.dao.UsersDao;
 import org.apache.openmeetings.installation.ImportInitvalues;
 import org.apache.openmeetings.installation.InstallationConfig;
@@ -59,7 +59,7 @@ public abstract class AbstractOpenmeetingsSpringTest extends AbstractJUnit4Sprin
 	@Autowired
 	private AppointmentDao appointmentDao;
 	@Autowired
-	private Usermanagement userManagement;
+	private UserManager userManager;
 	@Autowired
 	private UsersDao usersDao;
 	@Autowired
@@ -119,9 +119,9 @@ public abstract class AbstractOpenmeetingsSpringTest extends AbstractJUnit4Sprin
 		users.setLogin("login");
 		users.updatePassword(cryptManager, configDao, "pass" + rnd);
 		users.setLanguage_id(1L);
-		Long user_id = userManagement.addUser(users);
+		Long user_id = userManager.addUser(users);
 		assertTrue("Cann't add user", user_id > 0);
-		users = userManagement.getUserByIdAndDeleted(user_id);
+		users = userManager.getUserByIdAndDeleted(user_id);
 		assertNotNull("User should not be null", users);
 		return users;
 	}

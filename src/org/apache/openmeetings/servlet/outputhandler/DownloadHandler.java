@@ -32,7 +32,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.data.basic.SessiondataDao;
 import org.apache.openmeetings.data.file.dao.FileExplorerItemDao;
-import org.apache.openmeetings.data.user.Usermanagement;
+import org.apache.openmeetings.data.user.UserManager;
 import org.apache.openmeetings.persistence.beans.files.FileExplorerItem;
 import org.apache.openmeetings.remote.red5.ScopeApplicationAdapter;
 import org.apache.openmeetings.utils.OmFileHelper;
@@ -66,12 +66,12 @@ public class DownloadHandler extends HttpServlet {
 		return null;
 	}
 
-	public Usermanagement getUserManagement() {
+	public UserManager getUserManager() {
 		try {
 			if (ScopeApplicationAdapter.initComplete) {
 				ApplicationContext context = WebApplicationContextUtils
 						.getWebApplicationContext(getServletContext());
-				return (Usermanagement) context.getBean("userManagement");
+				return (UserManager) context.getBean("userManagement");
 			}
 		} catch (Exception err) {
 			log.error("[getUserManagement]", err);
@@ -115,7 +115,7 @@ public class DownloadHandler extends HttpServlet {
 
 		try {
 
-			if (getUserManagement() == null || getSessionManagement() == null) {
+			if (getUserManager() == null || getSessionManagement() == null) {
 				return;
 			}
 
@@ -140,7 +140,7 @@ public class DownloadHandler extends HttpServlet {
 			log.debug("sid: " + sid);
 
 			Long users_id = getSessionManagement().checkSession(sid);
-			Long user_level = getUserManagement().getUserLevelByID(users_id);
+			Long user_level = getUserManager().getUserLevelByID(users_id);
 
 			if (user_level != null && user_level > 0) {
 				String room_id = httpServletRequest.getParameter("room_id");

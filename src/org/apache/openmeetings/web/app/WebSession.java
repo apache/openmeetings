@@ -25,10 +25,10 @@ import java.util.TimeZone;
 
 import org.apache.openmeetings.data.basic.AuthLevelUtil;
 import org.apache.openmeetings.data.basic.FieldLanguageDao;
-import org.apache.openmeetings.data.basic.Fieldmanagment;
+import org.apache.openmeetings.data.basic.FieldManager;
 import org.apache.openmeetings.data.basic.SessiondataDao;
 import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
-import org.apache.openmeetings.data.user.Usermanagement;
+import org.apache.openmeetings.data.user.UserManager;
 import org.apache.openmeetings.data.user.dao.UsersDao;
 import org.apache.openmeetings.persistence.beans.basic.Sessiondata;
 import org.apache.openmeetings.persistence.beans.lang.FieldLanguage;
@@ -62,7 +62,7 @@ public class WebSession extends AbstractAuthenticatedWebSession {
 	public Roles getRoles() {
 		Roles r = null;
 		if (isSignedIn()) {
-			userLevel = Application.getBean(Usermanagement.class).getUserLevelByID(userId);
+			userLevel = Application.getBean(UserManager.class).getUserLevelByID(userId);
 			AuthLevelUtil authLevel = Application.getBean(AuthLevelUtil.class);
 			r = new Roles(Roles.USER);
 			if (authLevel.checkUserLevel(userLevel)) {
@@ -83,7 +83,7 @@ public class WebSession extends AbstractAuthenticatedWebSession {
 	public boolean signIn(String login, String password) {
 		Sessiondata sessData = Application.getBean(SessiondataDao.class).startsession();
 		SID = sessData.getSession_id();
-		Object u = Application.getBean(Usermanagement.class).loginUser(SID, login, password,
+		Object u = Application.getBean(UserManager.class).loginUser(SID, login, password,
 				null, null, false);
 		
 		if (u instanceof User) {
@@ -104,7 +104,7 @@ public class WebSession extends AbstractAuthenticatedWebSession {
 	}
 	
 	public static String getString(long id) {
-		Fieldmanagment fieldManagment = Application.getBean(Fieldmanagment.class);
+		FieldManager fieldManagment = Application.getBean(FieldManager.class);
 		return fieldManagment.getString(id, getLanguage());
 	}
 	

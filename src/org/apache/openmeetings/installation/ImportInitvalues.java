@@ -30,17 +30,17 @@ import java.util.Map;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.data.basic.FieldLanguageDao;
-import org.apache.openmeetings.data.basic.Fieldmanagment;
+import org.apache.openmeetings.data.basic.FieldManager;
 import org.apache.openmeetings.data.basic.NaviBuilder;
 import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
 import org.apache.openmeetings.data.basic.dao.ErrorDao;
 import org.apache.openmeetings.data.basic.dao.OmTimeZoneDao;
 import org.apache.openmeetings.data.calendar.daos.AppointmentCategoryDao;
 import org.apache.openmeetings.data.calendar.daos.AppointmentReminderTypDao;
-import org.apache.openmeetings.data.conference.PollManagement;
-import org.apache.openmeetings.data.conference.Roommanagement;
-import org.apache.openmeetings.data.user.Organisationmanagement;
-import org.apache.openmeetings.data.user.Usermanagement;
+import org.apache.openmeetings.data.conference.PollManager;
+import org.apache.openmeetings.data.conference.RoomManager;
+import org.apache.openmeetings.data.user.OrganisationManager;
+import org.apache.openmeetings.data.user.UserManager;
 import org.apache.openmeetings.data.user.dao.SalutationDao;
 import org.apache.openmeetings.data.user.dao.StateDao;
 import org.apache.openmeetings.data.user.dao.UsersDao;
@@ -65,11 +65,11 @@ public class ImportInitvalues {
 	@Autowired
 	private ConfigurationDao configurationDaoImpl;
 	@Autowired
-	private Usermanagement userManagement;
+	private UserManager userManager;
 	@Autowired
 	private UsersDao usersDao;
 	@Autowired
-	private Fieldmanagment fieldmanagment;
+	private FieldManager fieldmanagment;
 	@Autowired
 	private FieldLanguageDao fieldLanguageDaoImpl;
 	@Autowired
@@ -83,22 +83,22 @@ public class ImportInitvalues {
 	@Autowired
 	private SalutationDao salutationmanagement;
 	@Autowired
-	private Organisationmanagement organisationmanagement;
+	private OrganisationManager organisationManager;
 	@Autowired
-	private Roommanagement roommanagement;
+	private RoomManager roomManager;
 	@Autowired
 	private AppointmentCategoryDao appointmentCategoryDaoImpl;
 	@Autowired
 	private AppointmentReminderTypDao appointmentReminderTypDaoImpl;
 	@Autowired
-	private PollManagement pollManagement;
+	private PollManager pollManager;
 
 	public void loadMainMenu() {
 
-		userManagement.addUserLevel("User", 1);
-		userManagement.addUserLevel("Moderator", 2);
-		userManagement.addUserLevel("Admin", 3);
-		userManagement.addUserLevel("Web-Service (only access via SOAP)", 4);
+		userManager.addUserLevel("User", 1);
+		userManager.addUserLevel("Moderator", 2);
+		userManager.addUserLevel("Admin", 3);
+		userManager.addUserLevel("Web-Service (only access via SOAP)", 4);
 		log.debug("UserLevels ADDED");
 
 		/*
@@ -485,23 +485,23 @@ public class ImportInitvalues {
 	}
 
 	public void loadRoomTypes() {
-		long conference_Id = roommanagement.addRoomType(
+		long conference_Id = roomManager.addRoomType(
 				"conference (1-25 users)", false);
 		log.debug("conference_Id: " + conference_Id);
 
 		// Audience room type is not in use anymore
-		roommanagement.addRoomType("audience (1-50 users)", true);
+		roomManager.addRoomType("audience (1-50 users)", true);
 
-		long restricted_Id = roommanagement.addRoomType(
+		long restricted_Id = roomManager.addRoomType(
 				"restricted  (1-150 users)", false);
 		log.debug("restricted_Id: " + restricted_Id);
 
-		long interview_Id = roommanagement.addRoomType(
+		long interview_Id = roomManager.addRoomType(
 				"interview  (1:1 meeting with recording)", false);
 		log.debug("interview_Id: " + interview_Id);
 
 		// Custom room type is not in use anymore
-		roommanagement.addRoomType("custom (extension point for your plugin)",
+		roomManager.addRoomType("custom (extension point for your plugin)",
 				true);
 		log.debug("RoomTypes ADDED");
 	}
@@ -513,7 +513,7 @@ public class ImportInitvalues {
 			long restricted_Id = 3;
 			long interview_Id = 4;
 
-			roommanagement.addRoom(3, "public Interview Room", interview_Id,
+			roomManager.addRoom(3, "public Interview Room", interview_Id,
 					"", new Long(16), true, null, false, false, null, false,
 					null, true, false, true, false, "", "", null, null, null,
 					false, // hideTopBar
@@ -531,7 +531,7 @@ public class ImportInitvalues {
 					false //sipEnabled
 					);
 
-			roommanagement.addRoom(3, "public Conference Room", conference_Id,
+			roomManager.addRoom(3, "public Conference Room", conference_Id,
 					"", new Long(32), true, null, false, false, null, false,
 					null, true, false, true, false, "", "", null, null, null,
 					false, // hideTopBar
@@ -549,7 +549,7 @@ public class ImportInitvalues {
 					false //sipEnabled
 					);
 
-			roommanagement.addRoom(3, "public Video Only Room", conference_Id,
+			roomManager.addRoom(3, "public Video Only Room", conference_Id,
 					"", new Long(32), true, null, false, false, null, false,
 					null, true, false, true, false, "", "", null, null, null,
 					false, // hideTopBar
@@ -567,7 +567,7 @@ public class ImportInitvalues {
 					false //sipEnabled
 					);
 
-			roommanagement.addRoom(3, "public Video And Whiteboard Room",
+			roomManager.addRoom(3, "public Video And Whiteboard Room",
 					conference_Id, "", new Long(32), true, null, false, false,
 					null, false, null, true, false, true, false, "", "", null,
 					null, null, false, // hideTopBar
@@ -585,7 +585,7 @@ public class ImportInitvalues {
 					false //sipEnabled
 					);
 
-			roommanagement.addRoom(3, "public Restricted Room", restricted_Id,
+			roomManager.addRoom(3, "public Restricted Room", restricted_Id,
 					"", new Long(100), true, null, false, false, null, false,
 					null, true, false, true, false, "", "", null, null, null,
 					false, // hideTopBar
@@ -603,7 +603,7 @@ public class ImportInitvalues {
 					false //sipEnabled
 					);
 
-			roommanagement.addRoom(3, "restricted room with micro option set",
+			roomManager.addRoom(3, "restricted room with micro option set",
 					restricted_Id, "", new Long(100), true, null, false, false,
 					null, false, null, true, false, true, false, "", "", null,
 					null, null, false, // hideTopBar
@@ -621,7 +621,7 @@ public class ImportInitvalues {
 					false //sipEnabled
 					);
 
-			roommanagement.addRoom(3, "conference room with micro option set",
+			roomManager.addRoom(3, "conference room with micro option set",
 					conference_Id, "", new Long(32), true, null, false, false,
 					null, false, null, true, false, true, false, "", "", null,
 					null, null, false, // hideTopBar
@@ -639,7 +639,7 @@ public class ImportInitvalues {
 					false //sipEnabled
 					);
 
-			long room2 = roommanagement.addRoom(3, "private Conference Room",
+			long room2 = roomManager.addRoom(3, "private Conference Room",
 					conference_Id, "", new Long(32), false, null, false, false,
 					null, false, null, true, false, true, false, "", "", null,
 					null, null, false, // hideTopBar
@@ -657,7 +657,7 @@ public class ImportInitvalues {
 					false //sipEnabled
 					);
 
-			roommanagement.addRoomToOrganisation(3, room2, 1);
+			roomManager.addRoomToOrganisation(3, room2, 1);
 
 		}
 	}
@@ -673,11 +673,11 @@ public class ImportInitvalues {
 				default_lang_id = 1L;
 
 			// Add default group
-			Long organisation_id = organisationmanagement.addOrganisation(
+			Long organisation_id = organisationManager.addOrganisation(
 					defaultOrganisationName, 1);
 
 			// BaseUrl as param is empty as we do not send an EMAIL here
-			Long user_id = userManagement.registerUserInit(new Long(3), 3, 1,
+			Long user_id = userManager.registerUserInit(new Long(3), 3, 1,
 					1, username, userpass, "lastname", "firstname", email,
 					new java.util.Date(), "street", "no", "fax", "zip", 1,
 					"town", default_lang_id, false,
@@ -982,8 +982,8 @@ public class ImportInitvalues {
 	 */
 	// ------------------------------------------------------------------------------
 	public void loadPollTypes() {
-		pollManagement.addPollType(26L, false);
-		pollManagement.addPollType(27L, true);
+		pollManager.addPollType(26L, false);
+		pollManager.addPollType(27L, true);
 	}
 
 	// ------------------------------------------------------------------------------

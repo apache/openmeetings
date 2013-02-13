@@ -23,7 +23,7 @@ import java.util.Iterator;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.data.basic.FieldLanguageDao;
-import org.apache.openmeetings.data.basic.Fieldmanagment;
+import org.apache.openmeetings.data.basic.FieldManager;
 import org.apache.openmeetings.persistence.beans.lang.Fieldlanguagesvalues;
 import org.apache.openmeetings.persistence.beans.lang.Fieldvalues;
 import org.dom4j.Document;
@@ -38,7 +38,7 @@ public class LanguageImport {
 			LanguageImport.class, OpenmeetingsVariables.webAppRootKey);
 
 	@Autowired
-	private Fieldmanagment fieldmanagment;
+	private FieldManager fieldmanagment;
 	@Autowired
 	private FieldLanguageDao fieldLanguageDaoImpl;
 

@@ -22,7 +22,7 @@ import java.io.StringWriter;
 import java.util.Date;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
-import org.apache.openmeetings.data.basic.Fieldmanagment;
+import org.apache.openmeetings.data.basic.FieldManager;
 import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
 import org.apache.openmeetings.persistence.beans.lang.Fieldlanguagesvalues;
 import org.apache.velocity.VelocityContext;
@@ -36,7 +36,7 @@ public class InvitationTemplate extends VelocityLoader {
 	private static final String templateName = "invitation.vm";
 
 	@Autowired
-	private Fieldmanagment fieldmanagment;
+	private FieldManager fieldmanagment;
 	@Autowired
 	private ConfigurationDao configurationmanagement;
 

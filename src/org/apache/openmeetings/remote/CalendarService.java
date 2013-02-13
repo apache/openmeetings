@@ -29,14 +29,14 @@ import org.apache.openmeetings.data.calendar.daos.AppointmentCategoryDao;
 import org.apache.openmeetings.data.calendar.daos.AppointmentDao;
 import org.apache.openmeetings.data.calendar.daos.AppointmentReminderTypDao;
 import org.apache.openmeetings.data.calendar.management.AppointmentLogic;
-import org.apache.openmeetings.data.conference.Roommanagement;
+import org.apache.openmeetings.data.conference.RoomManager;
 import org.apache.openmeetings.data.conference.dao.RoomDao;
-import org.apache.openmeetings.data.user.Usermanagement;
+import org.apache.openmeetings.data.user.UserManager;
 import org.apache.openmeetings.persistence.beans.calendar.Appointment;
 import org.apache.openmeetings.persistence.beans.calendar.AppointmentCategory;
 import org.apache.openmeetings.persistence.beans.calendar.AppointmentReminderTyps;
-import org.apache.openmeetings.persistence.beans.room.RoomType;
 import org.apache.openmeetings.persistence.beans.room.Room;
+import org.apache.openmeetings.persistence.beans.room.RoomType;
 import org.apache.openmeetings.persistence.beans.user.User;
 import org.apache.openmeetings.utils.math.TimezoneUtil;
 import org.red5.logging.Red5LoggerFactory;
@@ -55,9 +55,9 @@ public class CalendarService {
 	@Autowired
 	private SessiondataDao sessionManagement;
 	@Autowired
-	private Usermanagement userManagement;
+	private UserManager userManager;
 	@Autowired
-	private Roommanagement roommanagement;
+	private RoomManager roomManager;
 	@Autowired
 	private RoomDao roomDao;
 	@Autowired
@@ -75,7 +75,7 @@ public class CalendarService {
 				+ ", enddate - " + endtime);
 		try {
 			Long users_id = sessionManagement.checkSession(SID);
-			Long user_level = userManagement.getUserLevelByID(users_id);
+			Long user_level = userManager.getUserLevelByID(users_id);
 			if (authLevelManagement.checkUserLevel(user_level)) {
 
 				return appointmentLogic.getAppointmentByRange(users_id,
@@ -92,7 +92,7 @@ public class CalendarService {
 		try {
 
 			Long users_id = sessionManagement.checkSession(SID);
-			Long user_level = userManagement.getUserLevelByID(users_id);
+			Long user_level = userManager.getUserLevelByID(users_id);
 			if (authLevelManagement.checkUserLevel(user_level)) {
 
 				return appointmentLogic.getNextAppointment();
@@ -110,7 +110,7 @@ public class CalendarService {
 		try {
 
 			Long users_id = sessionManagement.checkSession(SID);
-			Long user_level = userManagement.getUserLevelByID(users_id);
+			Long user_level = userManager.getUserLevelByID(users_id);
 			if (authLevelManagement.checkUserLevel(user_level)) {
 
 				return appointmentLogic
@@ -137,11 +137,11 @@ public class CalendarService {
 			Long users_id = sessionManagement.checkSession(SID);
 			log.debug("saveAppointMent users_id:" + users_id);
 
-			Long user_level = userManagement.getUserLevelByID(users_id);
+			Long user_level = userManager.getUserLevelByID(users_id);
 
 			if (authLevelManagement.checkUserLevel(user_level)) {
 				
-				User us = userManagement.getUserById(users_id);
+				User us = userManager.getUserById(users_id);
 				
 				// Refactor the given time ignoring the Date is always UTC!
 				TimeZone timezone = timezoneUtil.getTimezoneByUser(us);
@@ -180,14 +180,14 @@ public class CalendarService {
 		try {
 
 			Long users_id = sessionManagement.checkSession(SID);
-			Long user_level = userManagement.getUserLevelByID(users_id);
+			Long user_level = userManager.getUserLevelByID(users_id);
 			if (authLevelManagement.checkUserLevel(user_level)) {
 
 				log.debug("updateAppointment");
 
 				log.debug("appointmentId " + appointmentId);
 				
-				User us = userManagement.getUserById(users_id);
+				User us = userManager.getUserById(users_id);
 				
 				// Refactor the given time ignoring the Date is always UTC!
 				TimeZone timezone = timezoneUtil.getTimezoneByUser(us);
@@ -206,7 +206,7 @@ public class CalendarService {
 				appointmentLogic
 						.getAppointMentById(appointmentId);
 
-				User user = userManagement.getUserById(users_id);
+				User user = userManager.getUserById(users_id);
 				
 				return appointmentDao.updateAppointmentByTime(appointmentId,
 						appointmentstart, appointmentend, users_id, baseurl,
@@ -232,7 +232,7 @@ public class CalendarService {
 		try {
 
 			Long users_id = sessionManagement.checkSession(SID);
-			Long user_level = userManagement.getUserLevelByID(users_id);
+			Long user_level = userManager.getUserLevelByID(users_id);
 			if (authLevelManagement.checkUserLevel(user_level)) {
 
 				log.debug("updateAppointment");
@@ -249,7 +249,7 @@ public class CalendarService {
 						}
 					}
 				} else {
-					RoomType rt = roommanagement.getRoomTypesById(roomType);
+					RoomType rt = roomManager.getRoomTypesById(roomType);
 	
 					if (room != null) {
 	
@@ -260,7 +260,7 @@ public class CalendarService {
 						roomDao.update(room, users_id);
 					}
 				}
-				User user = userManagement.getUserById(users_id);
+				User user = userManager.getUserById(users_id);
 				
 				// Refactor the given time ignoring the Date is always UTC!
 				TimeZone timezone = timezoneUtil.getTimezoneByUser(user);
@@ -299,7 +299,7 @@ public class CalendarService {
 		try {
 
 			Long users_id = sessionManagement.checkSession(SID);
-			Long user_level = userManagement.getUserLevelByID(users_id);
+			Long user_level = userManager.getUserLevelByID(users_id);
 			if (authLevelManagement.checkUserLevel(user_level)) {
 
 				return appointmentLogic.deleteAppointment(appointmentId,
@@ -318,7 +318,7 @@ public class CalendarService {
 		try {
 
 			Long users_id = sessionManagement.checkSession(SID);
-			Long user_level = userManagement.getUserLevelByID(users_id);
+			Long user_level = userManager.getUserLevelByID(users_id);
 			if (authLevelManagement.checkUserLevel(user_level)) {
 
 				Appointment appointment = new Appointment();
@@ -347,7 +347,7 @@ public class CalendarService {
 		try {
 
 			Long users_id = sessionManagement.checkSession(SID);
-			Long user_level = userManagement.getUserLevelByID(users_id);
+			Long user_level = userManager.getUserLevelByID(users_id);
 
 			if (authLevelManagement.checkUserLevel(user_level)) {
 
@@ -385,7 +385,7 @@ public class CalendarService {
 
 		try {
 			Long users_id = sessionManagement.checkSession(SID);
-			Long user_level = userManagement.getUserLevelByID(users_id);
+			Long user_level = userManager.getUserLevelByID(users_id);
 			if (authLevelManagement.checkUserLevel(user_level)) {
 
 				List<AppointmentReminderTyps> res = appointmentReminderTypDaoImpl

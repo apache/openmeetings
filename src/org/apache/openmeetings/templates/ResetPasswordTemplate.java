@@ -21,7 +21,7 @@ package org.apache.openmeetings.templates;
 import java.io.StringWriter;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
-import org.apache.openmeetings.data.basic.Fieldmanagment;
+import org.apache.openmeetings.data.basic.FieldManager;
 import org.apache.openmeetings.persistence.beans.lang.Fieldlanguagesvalues;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
@@ -32,7 +32,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class ResetPasswordTemplate extends VelocityLoader {
 
 	@Autowired
-	private Fieldmanagment fieldmanagment;
+	private FieldManager fieldmanagment;
 
 	private static final String templateName = "resetPass.vm";
 

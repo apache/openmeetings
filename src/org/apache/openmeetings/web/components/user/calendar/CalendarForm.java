@@ -22,7 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.openmeetings.data.calendar.daos.AppointmentReminderTypDao;
-import org.apache.openmeetings.data.conference.Roommanagement;
+import org.apache.openmeetings.data.conference.RoomManager;
 import org.apache.openmeetings.data.conference.dao.RoomDao;
 import org.apache.openmeetings.data.user.dao.UsersDao;
 import org.apache.openmeetings.persistence.beans.calendar.Appointment;
@@ -70,7 +70,7 @@ public class CalendarForm extends Form<Appointment> {
 		
 		final DropDownChoice<RoomType> roomType = new DropDownChoice<RoomType>(
 				"room.roomtype"
-				, Application.getBean(Roommanagement.class).getAllRoomTypes()
+				, Application.getBean(RoomManager.class).getAllRoomTypes()
 				, new ChoiceRenderer<RoomType>("name", "roomtypes_id"));
 		roomType.setEnabled(createRoom);
 		roomType.setOutputMarkupId(true);

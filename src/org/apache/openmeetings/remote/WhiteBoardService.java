@@ -31,7 +31,7 @@ import java.util.Map;
 import org.apache.commons.collections.ComparatorUtils;
 import org.apache.openmeetings.data.basic.AuthLevelUtil;
 import org.apache.openmeetings.data.basic.SessiondataDao;
-import org.apache.openmeetings.data.user.Usermanagement;
+import org.apache.openmeetings.data.user.UserManager;
 import org.apache.openmeetings.data.whiteboard.WhiteBoardObjectListManagerById;
 import org.apache.openmeetings.data.whiteboard.WhiteBoardObjectSyncManager;
 import org.apache.openmeetings.data.whiteboard.dto.Cliparts;
@@ -61,7 +61,7 @@ public class WhiteBoardService implements IPendingServiceCallback {
 	private static final Logger log = Red5LoggerFactory.getLogger(
 			WhiteBoardService.class, "openmeetings");
 	@Autowired
-	private Usermanagement userManagement;
+	private UserManager userManager;
 	@Autowired
 	private final ScopeApplicationAdapter scopeApplicationAdapter = null;
 	@Autowired
@@ -222,7 +222,7 @@ public class WhiteBoardService implements IPendingServiceCallback {
 					.getClientByStreamId(streamid, null);
 
 			Long users_id = sessionManagement.checkSession(SID);
-			Long user_level = userManagement.getUserLevelByID(users_id);
+			Long user_level = userManager.getUserLevelByID(users_id);
 
 			if (authLevelManagement.checkUserLevel(user_level)) {
 
@@ -264,7 +264,7 @@ public class WhiteBoardService implements IPendingServiceCallback {
 					.getClientByStreamId(streamid, null);
 
 			Long users_id = sessionManagement.checkSession(SID);
-			Long user_level = userManagement.getUserLevelByID(users_id);
+			Long user_level = userManager.getUserLevelByID(users_id);
 
 			if (authLevelManagement.checkUserLevel(user_level)) {
 
@@ -306,7 +306,7 @@ public class WhiteBoardService implements IPendingServiceCallback {
 					.getClientByStreamId(streamid, null);
 
 			Long users_id = sessionManagement.checkSession(SID);
-			Long user_level = userManagement.getUserLevelByID(users_id);
+			Long user_level = userManager.getUserLevelByID(users_id);
 
 			if (authLevelManagement.checkUserLevel(user_level)) {
 
@@ -348,7 +348,7 @@ public class WhiteBoardService implements IPendingServiceCallback {
 					.getClientByStreamId(streamid, null);
 
 			Long users_id = sessionManagement.checkSession(SID);
-			Long user_level = userManagement.getUserLevelByID(users_id);
+			Long user_level = userManager.getUserLevelByID(users_id);
 
 			if (authLevelManagement.checkUserLevel(user_level)) {
 				if (currentClient.getIsMod()) {

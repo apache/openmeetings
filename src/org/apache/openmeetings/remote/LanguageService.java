@@ -25,11 +25,11 @@ import java.util.Map;
 import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.data.basic.AuthLevelUtil;
 import org.apache.openmeetings.data.basic.FieldLanguageDao;
-import org.apache.openmeetings.data.basic.Fieldmanagment;
+import org.apache.openmeetings.data.basic.FieldManager;
 import org.apache.openmeetings.data.basic.SessiondataDao;
 import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
 import org.apache.openmeetings.data.beans.basic.SearchResult;
-import org.apache.openmeetings.data.user.Usermanagement;
+import org.apache.openmeetings.data.user.UserManager;
 import org.apache.openmeetings.persistence.beans.lang.FieldLanguage;
 import org.apache.openmeetings.persistence.beans.lang.Fieldlanguagesvalues;
 import org.apache.openmeetings.persistence.beans.lang.Fieldvalues;
@@ -51,9 +51,9 @@ public class LanguageService {
 	@Autowired
 	private ConfigurationDao configurationDaoImpl;
 	@Autowired
-	private Usermanagement userManagement;
+	private UserManager userManager;
 	@Autowired
-	private Fieldmanagment fieldmanagment;
+	private FieldManager fieldmanagment;
 	@Autowired
 	private FieldLanguageDao fieldLanguageDaoImpl;
 	@Autowired
@@ -98,7 +98,7 @@ public class LanguageService {
 	public Fieldvalues getFieldvalueById(String SID, Long fieldvalues_id,
 			Long language_id) {
 		Long users_id = sessionManagement.checkSession(SID);
-		Long user_level = userManagement.getUserLevelByID(users_id);
+		Long user_level = userManager.getUserLevelByID(users_id);
 		if (authLevelManagement.checkAdminLevel(user_level)) {
 			return fieldmanagment.getFieldvaluesById(fieldvalues_id,
 					language_id);
@@ -108,7 +108,7 @@ public class LanguageService {
 
 	public Long addLanguage(String SID, String langName, String code) {
 		Long users_id = sessionManagement.checkSession(SID);
-		Long user_level = userManagement.getUserLevelByID(users_id);
+		Long user_level = userManager.getUserLevelByID(users_id);
 		if (authLevelManagement.checkAdminLevel(user_level)) {
 			if (langName.length() == 0)
 				return new Long(-30);
@@ -120,7 +120,7 @@ public class LanguageService {
 
 	public Long updateLanguage(String SID, Long language_id, String langName, String code) {
 		Long users_id = sessionManagement.checkSession(SID);
-		Long user_level = userManagement.getUserLevelByID(users_id);
+		Long user_level = userManager.getUserLevelByID(users_id);
 		if (authLevelManagement.checkAdminLevel(user_level)) {
 			if (langName.length() == 0)
 				return new Long(-30);
@@ -132,7 +132,7 @@ public class LanguageService {
 
 	public Long deleteLanguage(String SID, Long language_id) {
 		Long users_id = sessionManagement.checkSession(SID);
-		Long user_level = userManagement.getUserLevelByID(users_id);
+		Long user_level = userManager.getUserLevelByID(users_id);
 		if (authLevelManagement.checkAdminLevel(user_level)) {
 			return fieldLanguageDaoImpl.updateFieldLanguage(language_id, "",
 					"", true);
@@ -143,7 +143,7 @@ public class LanguageService {
 	public Long deleteFieldlanguagesvaluesById(String SID,
 			Long fieldlanguagesvalues_id) {
 		Long users_id = sessionManagement.checkSession(SID);
-		Long user_level = userManagement.getUserLevelByID(users_id);
+		Long user_level = userManager.getUserLevelByID(users_id);
 		if (authLevelManagement.checkAdminLevel(user_level)) {
 			return fieldmanagment
 					.deleteFieldlanguagesvaluesById(fieldlanguagesvalues_id);
@@ -164,7 +164,7 @@ public class LanguageService {
 	public SearchResult<Fieldvalues> getFieldsByLanguage(String SID, int start, int max,
 			String orderby, boolean asc, Long language_id, String search) {
 		Long users_id = sessionManagement.checkSession(SID);
-		Long user_level = userManagement.getUserLevelByID(users_id);
+		Long user_level = userManager.getUserLevelByID(users_id);
 		if (authLevelManagement.checkAdminLevel(user_level)) {
 			return fieldmanagment.getFieldsByLanguage(start, max, orderby, asc,
 					language_id, search);
@@ -182,7 +182,7 @@ public class LanguageService {
 			LinkedHashMap<Object, Object> values) {
 		try {
 			Long users_id = sessionManagement.checkSession(SID);
-			Long user_level = userManagement.getUserLevelByID(users_id);
+			Long user_level = userManager.getUserLevelByID(users_id);
 			Long fieldvalues_id = Long.valueOf(
 					values.get("fieldvalues_id").toString()).longValue();
 			String name = values.get("name").toString();

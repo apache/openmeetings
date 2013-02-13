@@ -18,11 +18,12 @@
  */
 package org.apache.openmeetings.test.domain;
 
-import java.util.List;
 import static org.junit.Assert.assertTrue;
 
+import java.util.List;
+
 import org.apache.log4j.Logger;
-import org.apache.openmeetings.data.user.Organisationmanagement;
+import org.apache.openmeetings.data.user.OrganisationManager;
 import org.apache.openmeetings.persistence.beans.domain.Organisation;
 import org.apache.openmeetings.test.AbstractOpenmeetingsSpringTest;
 import org.junit.Test;
@@ -31,7 +32,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class TestUserGroupAggregation extends AbstractOpenmeetingsSpringTest {
 
 	@Autowired
-	private Organisationmanagement organisationmanagement;
+	private OrganisationManager organisationManager;
 
 	private static final Logger log = Logger
 			.getLogger(TestUserGroupAggregation.class);
@@ -39,7 +40,7 @@ public class TestUserGroupAggregation extends AbstractOpenmeetingsSpringTest {
 	@Test
 	public void testitNow() {
 
-		List<Organisation> orgUser = organisationmanagement.getOrganisationsByUserId(3, 1, 0,
+		List<Organisation> orgUser = organisationManager.getOrganisationsByUserId(3, 1, 0,
 				100, "organisation_id", true);
 
 		assertTrue("Default user must belong to at least one organisation", orgUser.size() > 0);
@@ -48,7 +49,7 @@ public class TestUserGroupAggregation extends AbstractOpenmeetingsSpringTest {
 			log.error("testitNow: organisation Id: '" + orgUserObj.getOrganisation_id() + "'; name: '" + orgUserObj.getName() + "'");
 		}
 
-		List<Organisation> orgUser2 = organisationmanagement.getRestOrganisationsByUserId(3,
+		List<Organisation> orgUser2 = organisationManager.getRestOrganisationsByUserId(3,
 				1, 0, 100, "organisation_id", true);
 
 		log.error("testitNow: rest organisations count: " + orgUser2.size());

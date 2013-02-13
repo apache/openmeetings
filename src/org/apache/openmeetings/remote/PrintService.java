@@ -26,7 +26,7 @@ import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.batik.beans.PrintBean;
 import org.apache.openmeetings.data.basic.AuthLevelUtil;
 import org.apache.openmeetings.data.basic.SessiondataDao;
-import org.apache.openmeetings.data.user.Usermanagement;
+import org.apache.openmeetings.data.user.UserManager;
 import org.apache.openmeetings.utils.crypt.MD5;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -41,7 +41,7 @@ public class PrintService {
 	@Autowired
 	private SessiondataDao sessionManagement;
     @Autowired
-    private Usermanagement userManagement;
+    private UserManager userManager;
 	@Autowired
 	private AuthLevelUtil authLevelManagement;
 	
@@ -53,7 +53,7 @@ public class PrintService {
 	public String addPrintList(String SID, @SuppressWarnings("rawtypes") List map, int width, int height) {
 		try {
 			Long users_id = sessionManagement.checkSession(SID);
-	        Long user_level = userManagement.getUserLevelByID(users_id);
+	        Long user_level = userManager.getUserLevelByID(users_id);
 	        if (authLevelManagement.checkUserLevel(user_level)) {
 	        	String hashRaw = ""+new Date();
 	        	String hash = MD5.do_checksum(hashRaw);

@@ -71,12 +71,12 @@ import org.apache.openmeetings.data.calendar.daos.AppointmentCategoryDao;
 import org.apache.openmeetings.data.calendar.daos.AppointmentDao;
 import org.apache.openmeetings.data.calendar.daos.AppointmentReminderTypDao;
 import org.apache.openmeetings.data.calendar.daos.MeetingMemberDao;
-import org.apache.openmeetings.data.conference.PollManagement;
-import org.apache.openmeetings.data.conference.Roommanagement;
+import org.apache.openmeetings.data.conference.PollManager;
+import org.apache.openmeetings.data.conference.RoomManager;
 import org.apache.openmeetings.data.conference.dao.RoomDao;
 import org.apache.openmeetings.data.file.dao.FileExplorerItemDao;
 import org.apache.openmeetings.data.flvrecord.FlvRecordingDao;
-import org.apache.openmeetings.data.user.Organisationmanagement;
+import org.apache.openmeetings.data.user.OrganisationManager;
 import org.apache.openmeetings.data.user.dao.OrganisationDao;
 import org.apache.openmeetings.data.user.dao.PrivateMessageFolderDao;
 import org.apache.openmeetings.data.user.dao.PrivateMessagesDao;
@@ -145,11 +145,11 @@ public class BackupImportController extends AbstractUploadController {
 	@Autowired
 	private OmTimeZoneDao omTimeZoneDaoImpl;
 	@Autowired
-	private Organisationmanagement organisationmanagement;
+	private OrganisationManager organisationManager;
 	@Autowired
 	private OrganisationDao orgDao;
 	@Autowired
-	private Roommanagement roommanagement;
+	private RoomManager roomManager;
 	@Autowired
 	private RoomDao roomDao;
 	@Autowired
@@ -175,7 +175,7 @@ public class BackupImportController extends AbstractUploadController {
 	@Autowired
 	private ScopeApplicationAdapter scopeApplicationAdapter;
 	@Autowired
-	private PollManagement pollManagement;
+	private PollManager pollManager;
 	@Autowired
 	private ConfigurationDao configurationDao;
 
@@ -232,7 +232,7 @@ public class BackupImportController extends AbstractUploadController {
 			for (Organisation o : list) {
 				long oldId = o.getOrganisation_id();
 				o.setOrganisation_id(null);
-				Long newId = organisationmanagement.addOrganisationObj(o);
+				Long newId = organisationManager.addOrganisationObj(o);
 				organisationsMap.put(oldId, newId);
 			}
 		}
@@ -279,7 +279,7 @@ public class BackupImportController extends AbstractUploadController {
 			matcher.bind(Long.class, LongTransform.class);
 			matcher.bind(Integer.class, IntegerTransform.class);
 			registry.bind(User.class, new UserConverter(usersDao, usersMap));
-			registry.bind(RoomType.class, new RoomTypeConverter(roommanagement));
+			registry.bind(RoomType.class, new RoomTypeConverter(roomManager));
 			
 			List<Room> list = readList(serializer, f, "rooms.xml", "rooms", Room.class);
 			for (Room r : list) {
@@ -300,7 +300,7 @@ public class BackupImportController extends AbstractUploadController {
 				}
 				r = roomDao.update(r, -1L);
 				if (mm != null) {
-					mm.setConfno(roommanagement.getSipNumber(r.getRooms_id()));
+					mm.setConfno(roomManager.getSipNumber(r.getRooms_id()));
 					r.setMeetme(mm);
 					r = roomDao.update(r, 1L); //FIXME double update
 				}
@@ -325,7 +325,7 @@ public class BackupImportController extends AbstractUploadController {
 				if (!ro.getDeleted()) {
 					// We need to reset this as openJPA reject to store them otherwise
 					ro.setRooms_organisation_id(null);
-					roommanagement.addRoomOrganisation(ro);
+					roomManager.addRoomOrganisation(ro);
 				}
 			}
 		}
@@ -545,12 +545,12 @@ public class BackupImportController extends AbstractUploadController {
 	
 			registry.bind(User.class, new UserConverter(usersDao, usersMap));
 			registry.bind(Room.class, new RoomConverter(roomDao, roomsMap));
-			registry.bind(PollType.class, new PollTypeConverter(pollManagement));
+			registry.bind(PollType.class, new PollTypeConverter(pollManager));
 			registry.bind(Date.class, DateConverter.class);
 			
 			List<RoomPoll> list = readList(serializer, f, "roompolls.xml", "roompolls", RoomPoll.class, true);
 			for (RoomPoll rp : list) {
-				pollManagement.savePollBackup(rp);
+				pollManager.savePollBackup(rp);
 			}
 		}
 		

@@ -24,9 +24,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
-import org.apache.openmeetings.data.basic.Fieldmanagment;
+import org.apache.openmeetings.data.basic.FieldManager;
 import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
-import org.apache.openmeetings.data.user.Usermanagement;
+import org.apache.openmeetings.data.user.UserManager;
 import org.apache.openmeetings.persistence.beans.lang.Fieldlanguagesvalues;
 import org.apache.openmeetings.persistence.beans.user.User;
 import org.apache.openmeetings.remote.red5.ScopeApplicationAdapter;
@@ -58,28 +58,28 @@ public class ActivateUser extends VelocityViewServlet {
 		return null;
 	}
 
-	private Usermanagement getUsermanagement() {
+	private UserManager getUserManager() {
 		try {
 			if (!ScopeApplicationAdapter.initComplete) {
 				return null;
 			}
 			ApplicationContext context = WebApplicationContextUtils
 					.getWebApplicationContext(getServletContext());
-			return (Usermanagement) context.getBean("userManagement");
+			return (UserManager) context.getBean("userManagement");
 		} catch (Exception err) {
 			log.error("[getUsermanagement]", err);
 		}
 		return null;
 	}
 
-	private Fieldmanagment getFieldmanagment() {
+	private FieldManager getFieldmanagment() {
 		try {
 			if (!ScopeApplicationAdapter.initComplete) {
 				return null;
 			}
 			ApplicationContext context = WebApplicationContextUtils
 					.getWebApplicationContext(getServletContext());
-			return (Fieldmanagment) context.getBean("fieldmanagment");
+			return (FieldManager) context.getBean("fieldmanagment");
 		} catch (Exception err) {
 			log.error("[getgetFieldmanagment()]", err);
 		}
@@ -93,7 +93,7 @@ public class ActivateUser extends VelocityViewServlet {
 		try {
 
 			if (getConfigurationmanagement() == null
-					|| getUsermanagement() == null
+					|| getUserManager() == null
 					|| getFieldmanagment() == null) {
 				return getVelocityView().getVelocityEngine().getTemplate(
 						"booting.vm");
@@ -120,7 +120,7 @@ public class ActivateUser extends VelocityViewServlet {
 						"activation_template.vm");
 			}
 			//
-			User user = getUsermanagement().getUserByActivationHash(hash);
+			User user = getUserManager().getUserByActivationHash(hash);
 
 			if (user == null) {
 				// No User Found with this Hash
@@ -155,7 +155,7 @@ public class ActivateUser extends VelocityViewServlet {
 				user.setStatus(1);
 				user.setUpdatetime(new Date());
 
-				getUsermanagement().updateUser(user);
+				getUserManager().updateUser(user);
 
 				Fieldlanguagesvalues labelid671 = getFieldmanagment()
 						.getFieldByIdAndLanguage(new Long(671), default_lang_id);

@@ -21,10 +21,10 @@ package org.apache.openmeetings.data.calendar.management;
 import java.util.TimeZone;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
-import org.apache.openmeetings.data.basic.Fieldmanagment;
+import org.apache.openmeetings.data.basic.FieldManager;
 import org.apache.openmeetings.data.calendar.daos.MeetingMemberDao;
-import org.apache.openmeetings.data.conference.Invitationmanagement;
-import org.apache.openmeetings.data.user.Usermanagement;
+import org.apache.openmeetings.data.conference.InvitationManager;
+import org.apache.openmeetings.data.user.UserManager;
 import org.apache.openmeetings.persistence.beans.basic.OmTimeZone;
 import org.apache.openmeetings.persistence.beans.calendar.Appointment;
 import org.apache.openmeetings.persistence.beans.calendar.MeetingMember;
@@ -43,11 +43,11 @@ public class MeetingMemberLogic {
 	@Autowired
 	private AppointmentLogic appointmentLogic;
 	@Autowired
-	private Usermanagement userManagement;
+	private UserManager userManager;
 	@Autowired
-	private Fieldmanagment fieldmanagment;
+	private FieldManager fieldmanagment;
 	@Autowired
-	private Invitationmanagement invitationManagement;
+	private InvitationManager invitationManager;
 	@Autowired
 	private MeetingMemberDao meetingMemberDao;
 
@@ -117,7 +117,7 @@ public class MeetingMemberLogic {
 			if (point.getRemind().getTypId() == 2) {
 				log.debug("Invitation for Appointment : simple email");
 
-				Invitations invitation = invitationManagement
+				Invitations invitation = invitationManager
 						.addInvitationLink(
 								new Long(2), // userlevel
 								firstname + " " + lastname, // username
@@ -149,7 +149,7 @@ public class MeetingMemberLogic {
 
 				System.out.println("### SENDING iCAL EMAIL");
 
-				invitationId = invitationManagement
+				invitationId = invitationManager
 						.addInvitationIcalLink(
 								new Long(2), // userlevel
 								firstname + " " + lastname, // username
@@ -175,7 +175,7 @@ public class MeetingMemberLogic {
 			// Setting InvitationId within MeetingMember
 
 			if (invitationId != null) {
-				Invitations invi = invitationManagement
+				Invitations invi = invitationManager
 						.getInvitationbyId(invitationId);
 
 				member.setInvitation(invi);
@@ -337,7 +337,7 @@ public class MeetingMemberLogic {
 				return null;
 			}
 
-			User user = userManagement.getUserById(users_id);
+			User user = userManager.getUserById(users_id);
 
 			if (user == null) {
 				log.error("could not retrieve user!");
@@ -347,7 +347,7 @@ public class MeetingMemberLogic {
 			log.debug("before sending cancelMail");
 
 			// cancel invitation
-			invitationManagement.cancelInvitation(point, member, users_id,
+			invitationManager.cancelInvitation(point, member, users_id,
 					language_id);
 
 			log.debug("after sending cancelmail");

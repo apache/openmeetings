@@ -20,7 +20,7 @@ package org.apache.openmeetings.test.calendar;
 
 import org.apache.log4j.Logger;
 import org.apache.openmeetings.data.beans.basic.SearchResult;
-import org.apache.openmeetings.data.user.Usermanagement;
+import org.apache.openmeetings.data.user.UserManager;
 import org.apache.openmeetings.persistence.beans.user.User;
 import org.apache.openmeetings.test.AbstractOpenmeetingsSpringTest;
 import org.junit.Test;
@@ -29,7 +29,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 public class TestDatabaseStructureUsersSearch extends AbstractOpenmeetingsSpringTest {
     @Autowired
-    private Usermanagement userManagement;
+    private UserManager userManager;
 
 	private static final Logger log = Logger.getLogger(TestDatabaseStructureUsersSearch.class);
 
@@ -38,7 +38,7 @@ public class TestDatabaseStructureUsersSearch extends AbstractOpenmeetingsSpring
 
 		try {
 			
-			 SearchResult<User> users = userManagement.getAllUserByRange("first", 0, 10, "orderby", true);
+			 SearchResult<User> users = userManager.getAllUserByRange("first", 0, 10, "orderby", true);
 			 log.debug("[result]" + users.getResult().size());
 			 log.debug("[records]"+ users.getRecords());
 			 

@@ -27,9 +27,9 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
-import org.apache.openmeetings.data.basic.Fieldmanagment;
+import org.apache.openmeetings.data.basic.FieldManager;
 import org.apache.openmeetings.data.conference.dao.RoomDao;
-import org.apache.openmeetings.data.user.Usermanagement;
+import org.apache.openmeetings.data.user.UserManager;
 import org.apache.openmeetings.persistence.beans.poll.PollType;
 import org.apache.openmeetings.persistence.beans.poll.RoomPoll;
 import org.apache.openmeetings.persistence.beans.poll.RoomPollAnswers;
@@ -40,16 +40,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
-public class PollManagement {
+public class PollManager {
 	private static final Logger log = Red5LoggerFactory
-			.getLogger(PollManagement.class);
+			.getLogger(PollManager.class);
 
 	@PersistenceContext
 	private EntityManager em;
 	@Autowired
-	private Fieldmanagment fieldmanagment;
+	private FieldManager fieldmanagment;
 	@Autowired
-	private Usermanagement usermanagement;
+	private UserManager userManager;
 	@Autowired
 	private RoomDao roomDao;
 
@@ -78,7 +78,7 @@ public class PollManagement {
 	public RoomPoll createPoll(Client rc, String pollName, String pollQuestion, Long pollTypeId) {
 		RoomPoll roomP = new RoomPoll();
 		
-		roomP.setCreatedBy(usermanagement.getUserById(rc.getUser_id()));
+		roomP.setCreatedBy(userManager.getUserById(rc.getUser_id()));
 		roomP.setCreated(new Date());
 		roomP.setPollName(pollName);
 		roomP.setPollQuestion(pollQuestion);

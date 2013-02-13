@@ -30,9 +30,9 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.data.basic.FieldLanguageDao;
-import org.apache.openmeetings.data.basic.Fieldmanagment;
+import org.apache.openmeetings.data.basic.FieldManager;
 import org.apache.openmeetings.data.basic.SessiondataDao;
-import org.apache.openmeetings.data.user.Usermanagement;
+import org.apache.openmeetings.data.user.UserManager;
 import org.apache.openmeetings.persistence.beans.lang.FieldLanguage;
 import org.apache.openmeetings.persistence.beans.lang.Fieldlanguagesvalues;
 import org.apache.openmeetings.remote.red5.ScopeApplicationAdapter;
@@ -96,12 +96,12 @@ public class LangExport extends HttpServlet {
 		return null;
 	}
 
-	public Usermanagement getUserManagement() {
+	public UserManager getUserManager() {
 		try {
 			if (ScopeApplicationAdapter.initComplete) {
 				ApplicationContext context = WebApplicationContextUtils
 						.getWebApplicationContext(getServletContext());
-				return context.getBean("userManagement", Usermanagement.class);
+				return context.getBean("userManagement", UserManager.class);
 			}
 		} catch (Exception err) {
 			log.error("[getUserManagement]", err);
@@ -109,12 +109,12 @@ public class LangExport extends HttpServlet {
 		return null;
 	}
 
-	public Fieldmanagment getFieldmanagment() {
+	public FieldManager getFieldmanagment() {
 		try {
 			if (ScopeApplicationAdapter.initComplete) {
 				ApplicationContext context = WebApplicationContextUtils
 						.getWebApplicationContext(getServletContext());
-				return context.getBean("fieldmanagment", Fieldmanagment.class);
+				return context.getBean("fieldmanagment", FieldManager.class);
 			}
 		} catch (Exception err) {
 			log.error("[getFieldmanagment]", err);
@@ -149,7 +149,7 @@ public class LangExport extends HttpServlet {
 
 		try {
 
-			if (getUserManagement() == null
+			if (getUserManager() == null
 					|| getFieldLanguageDaoImpl() == null
 					|| getFieldmanagment() == null
 					|| getSessionManagement() == null) {
@@ -170,7 +170,7 @@ public class LangExport extends HttpServlet {
 			log.debug("language_id: " + language_id);
 
 			Long users_id = getSessionManagement().checkSession(sid);
-			Long user_level = getUserManagement().getUserLevelByID(users_id);
+			Long user_level = getUserManager().getUserLevelByID(users_id);
 
 			log.debug("users_id: " + users_id);
 			log.debug("user_level: " + user_level);

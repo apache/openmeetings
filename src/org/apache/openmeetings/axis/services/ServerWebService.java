@@ -23,7 +23,7 @@ import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.data.basic.AuthLevelUtil;
 import org.apache.openmeetings.data.basic.SessiondataDao;
 import org.apache.openmeetings.data.basic.dao.ServerDao;
-import org.apache.openmeetings.data.user.Usermanagement;
+import org.apache.openmeetings.data.user.UserManager;
 import org.apache.openmeetings.persistence.beans.basic.Server;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -44,7 +44,7 @@ public class ServerWebService {
 	@Autowired
 	private SessiondataDao sessionManagement;
 	@Autowired
-	private Usermanagement userManagement;
+	private UserManager userManager;
 	@Autowired
 	private AuthLevelUtil authLevelManagement;
 	@Autowired
@@ -64,7 +64,7 @@ public class ServerWebService {
 	public Server[] getServers(String SID, int start, int max) throws AxisFault {
 		log.debug("getServers enter");
 		Long users_id = sessionManagement.checkSession(SID);
-		Long user_level = userManagement.getUserLevelByID(users_id);
+		Long user_level = userManager.getUserLevelByID(users_id);
 
 		if (authLevelManagement.checkWebServiceLevel(user_level)) {
 			return serversDao.get(start, max).toArray(new Server[0]);
@@ -85,7 +85,7 @@ public class ServerWebService {
 	public int getServerCount(String SID) throws AxisFault {
 		log.debug("getServerCount enter");
 		Long users_id = sessionManagement.checkSession(SID);
-		Long user_level = userManagement.getUserLevelByID(users_id);
+		Long user_level = userManager.getUserLevelByID(users_id);
 
 		if (authLevelManagement.checkWebServiceLevel(user_level)) {
 			return (int) serversDao.count();
@@ -127,7 +127,7 @@ public class ServerWebService {
 			Boolean active, String comment) throws AxisFault {
 		log.debug("saveServerCount enter");
 		Long users_id = sessionManagement.checkSession(SID);
-		Long user_level = userManagement.getUserLevelByID(users_id);
+		Long user_level = userManager.getUserLevelByID(users_id);
 
 		if (authLevelManagement.checkWebServiceLevel(user_level)) {
 			Server s = serversDao.get(id);
@@ -162,7 +162,7 @@ public class ServerWebService {
 	public boolean deleteServer(String SID, long id) throws AxisFault {
 		log.debug("saveServerCount enter");
 		Long users_id = sessionManagement.checkSession(SID);
-		Long user_level = userManagement.getUserLevelByID(users_id);
+		Long user_level = userManager.getUserLevelByID(users_id);
 
 		if (authLevelManagement.checkWebServiceLevel(user_level)) {
 			Server s = serversDao.get(id);

@@ -21,8 +21,8 @@ package org.apache.openmeetings.xmlimport;
 import java.io.InputStream;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
-import org.apache.openmeetings.data.user.Emailmanagement;
-import org.apache.openmeetings.data.user.Usermanagement;
+import org.apache.openmeetings.data.user.EmailManager;
+import org.apache.openmeetings.data.user.UserManager;
 import org.apache.openmeetings.data.user.dao.UsersDao;
 import org.apache.openmeetings.persistence.beans.user.User;
 import org.apache.openmeetings.servlet.outputhandler.BackupImportController;
@@ -35,9 +35,9 @@ public class UserImport {
 	private static final Logger log = Red5LoggerFactory.getLogger(
 			UserImport.class, OpenmeetingsVariables.webAppRootKey);
 	@Autowired
-	private Usermanagement userManagement;
+	private UserManager userManager;
 	@Autowired
-	private Emailmanagement emailManagement;
+	private EmailManager emailManagement;
 	@Autowired
 	private UsersDao usersDao;
 	@Autowired
@@ -55,7 +55,7 @@ public class UserImport {
 
 			// check for duplicate Login or mail:
 			if (usersDao.checkUserLogin(us.getLogin()) && mailCheck) {
-				userManagement.addUser(us);
+				userManager.addUser(us);
 			}
 		}
 		return null;

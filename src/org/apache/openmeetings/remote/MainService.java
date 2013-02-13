@@ -35,11 +35,11 @@ import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
 import org.apache.openmeetings.data.basic.dao.LdapConfigDao;
 import org.apache.openmeetings.data.basic.dao.OmTimeZoneDao;
 import org.apache.openmeetings.data.basic.dao.SOAPLoginDao;
-import org.apache.openmeetings.data.conference.Feedbackmanagement;
-import org.apache.openmeetings.data.conference.Invitationmanagement;
-import org.apache.openmeetings.data.conference.Roommanagement;
+import org.apache.openmeetings.data.conference.FeedbackManager;
+import org.apache.openmeetings.data.conference.InvitationManager;
+import org.apache.openmeetings.data.conference.RoomManager;
 import org.apache.openmeetings.data.logs.ConferenceLogDao;
-import org.apache.openmeetings.data.user.Usermanagement;
+import org.apache.openmeetings.data.user.UserManager;
 import org.apache.openmeetings.data.user.dao.StateDao;
 import org.apache.openmeetings.data.user.dao.UsersDao;
 import org.apache.openmeetings.ldap.LdapLoginManagement;
@@ -88,7 +88,7 @@ public class MainService implements IPendingServiceCallback {
 	@Autowired
 	private ConfigurationDao configDao;
 	@Autowired
-	private Usermanagement userManagement;
+	private UserManager userManager;
 	@Autowired
 	private StateDao statemanagement;
 	@Autowired
@@ -96,7 +96,7 @@ public class MainService implements IPendingServiceCallback {
 	@Autowired
 	private NaviBuilder navimanagement;
 	@Autowired
-	private Roommanagement roommanagement;
+	private RoomManager roomManager;
 	@Autowired
 	private ConferenceLogDao conferenceLogDao;
 	@Autowired
@@ -106,9 +106,9 @@ public class MainService implements IPendingServiceCallback {
 	@Autowired
 	private SOAPLoginDao soapLoginDao;
 	@Autowired
-	private Invitationmanagement invitationManagement;
+	private InvitationManager invitationManager;
 	@Autowired
-	private Feedbackmanagement feedbackManagement;
+	private FeedbackManager feedbackManager;
 	@Autowired
 	private AuthLevelUtil authLevelManagement;
 	@Autowired
@@ -130,7 +130,7 @@ public class MainService implements IPendingServiceCallback {
 		try {
 			Long user_id = sessionManagement.checkSession(SID);
 			// log.error("getNavi 1: "+users_id);
-			Long user_level = userManagement.getUserLevelByIdAndOrg(user_id,
+			Long user_level = userManager.getUserLevelByIdAndOrg(user_id,
 					organisation_id);
 			// log.error("getNavi 2: "+user_level);
 			return navimanagement.getMainMenu(user_level, user_id, language_id);
@@ -150,7 +150,7 @@ public class MainService implements IPendingServiceCallback {
 	public User getUser(String SID, int USER_ID) {
 		User users = new User();
 		Long users_id = sessionManagement.checkSession(SID);
-		long user_level = userManagement.getUserLevelByID(users_id);
+		long user_level = userManager.getUserLevelByID(users_id);
 		if (user_level > 2) {
 			users = usersDao.get(new Long(USER_ID));
 		} else {
@@ -227,7 +227,7 @@ public class MainService implements IPendingServiceCallback {
 			currentClient = sessionManager.getClientByStreamId(current
 					.getClient().getId(), null);
 
-			o = userManagement.loginUserByRemoteHash(SID, remoteHashId);
+			o = userManager.loginUserByRemoteHash(SID, remoteHashId);
 
 			if (o == null)
 				return null;
@@ -337,7 +337,7 @@ public class MainService implements IPendingServiceCallback {
 
 				currentClient = sessionManager.getClientByStreamId(current.getClient().getId(), null);
 
-				o = userManagement.loginUser(SID, usernameOrEmail, Userpass,
+				o = userManager.loginUser(SID, usernameOrEmail, Userpass,
 						currentClient, current.getClient(), storePermanent);
 			}
 
@@ -564,7 +564,7 @@ public class MainService implements IPendingServiceCallback {
 	public Long loginUserByRemote(String SID) {
 		try {
 			Long users_id = sessionManagement.checkSession(SID);
-			Long user_level = userManagement.getUserLevelByID(users_id);
+			Long user_level = userManager.getUserLevelByID(users_id);
 			if (authLevelManagement.checkWebServiceLevel(
 					user_level)) {
 
@@ -606,14 +606,14 @@ public class MainService implements IPendingServiceCallback {
 						// If so we need to check that we create this user in
 						// OpenMeetings and update its record
 
-						User user = userManagement.getUserByExternalIdAndType(
+						User user = userManager.getUserByExternalIdAndType(
 								userObject.getExternalUserId(),
 								userObject.getExternalUserType());
 
 						if (user == null) {
 							String jName_timeZone = configDao.getConfValue("default.timezone", String.class, "");
 
-							long userId = userManagement
+							long userId = userManager
 									.addUserWithExternalKey(1, 0, 0,
 											userObject.getFirstname(),
 											userObject.getUsername(),
@@ -632,7 +632,7 @@ public class MainService implements IPendingServiceCallback {
 
 							user.setPictureuri(userObject.getPictureUrl());
 
-							userManagement.updateUser(user);
+							userManager.updateUser(user);
 
 							currentClient.setUser_id(user.getUser_id());
 							SessionVariablesUtil.setUserId(current.getClient(), user.getUser_id());
@@ -682,7 +682,7 @@ public class MainService implements IPendingServiceCallback {
 			
 			Long defaultRpcUserid = configDao.getConfValue(
 					"default.rpc.userid", Long.class, "-1");
-			User defaultRpcUser = userManagement.getUserById(defaultRpcUserid);
+			User defaultRpcUser = userManager.getUserById(defaultRpcUserid);
 			
 			User user = new User();
 			user.setOrganisation_users(defaultRpcUser.getOrganisation_users());
@@ -712,7 +712,7 @@ public class MainService implements IPendingServiceCallback {
 			
 			currentClient.setUserObject(null, null, null, null);
 			
-			return userManagement.logout(SID, users_id);
+			return userManager.logout(SID, users_id);
 		} catch (Exception err) {
 			log.error("[logoutUser]",err);
 		}
@@ -809,7 +809,7 @@ public class MainService implements IPendingServiceCallback {
 				baseURL = "https://" + domain + webapp;
 			}
 
-			return userManagement.registerUser(regObject.get("Username")
+			return userManager.registerUser(regObject.get("Username")
 					.toString(), regObject.get("Userpass").toString(),
 					regObject.get("lastname").toString(),
 					regObject.get("firstname").toString(),
@@ -858,7 +858,7 @@ public class MainService implements IPendingServiceCallback {
 			String lastname, String firstname, String email, Date age,
 			String street, String additionalname, String fax, String zip,
 			long states_id, String town, long language_id, String phone) {
-		return userManagement.registerUser(Username, Userpass, lastname,
+		return userManager.registerUser(Username, Userpass, lastname,
 				firstname, email, age, street, additionalname, fax, zip,
 				states_id, town, language_id, phone, false, "", true, "");
 	}
@@ -871,9 +871,9 @@ public class MainService implements IPendingServiceCallback {
 	 */
 	public Long deleteUserIDSelf(String SID) {
 		Long users_id = sessionManagement.checkSession(SID);
-		long user_level = userManagement.getUserLevelByID(users_id);
+		long user_level = userManager.getUserLevelByID(users_id);
 		if (user_level >= 1) {
-			userManagement.logout(SID, users_id);
+			userManager.logout(SID, users_id);
 			return usersDao.deleteUserID(users_id);
 		} else {
 			return new Long(-10);
@@ -901,8 +901,8 @@ public class MainService implements IPendingServiceCallback {
 			String domain, String room, String roomtype, String baseurl,
 			String email, String subject, Long room_id) {
 		Long users_id = sessionManagement.checkSession(SID);
-		Long user_level = userManagement.getUserLevelByID(users_id);
-		return invitationManagement.sendInvitionLink(user_level,
+		Long user_level = userManager.getUserLevelByID(users_id);
+		return invitationManager.sendInvitionLink(user_level,
 				username, message, domain, room, roomtype, baseurl, email,
 				usersDao.get(users_id).getAdresses().getEmail(), subject, room_id, null, null);
 	}
@@ -918,15 +918,15 @@ public class MainService implements IPendingServiceCallback {
 	 */
 	public String sendFeedback(String SID, String username, String message,
 			String email) {
-		return feedbackManagement.sendFeedback(username, email,
+		return feedbackManager.sendFeedback(username, email,
 				message);
 	}
 
 	public List<Userdata> getUserdata(String SID) {
 		Long users_id = sessionManagement.checkSession(SID);
-		Long user_level = userManagement.getUserLevelByID(users_id);
+		Long user_level = userManager.getUserLevelByID(users_id);
 		if (authLevelManagement.checkUserLevel(user_level)) {
-			return userManagement.getUserdataDashBoard(users_id);
+			return userManager.getUserdataDashBoard(users_id);
 		}
 		return null;
 	}
@@ -940,7 +940,7 @@ public class MainService implements IPendingServiceCallback {
 	public LinkedHashMap<String, LinkedHashMap<String, LinkedHashMap<String, LinkedHashMap<String, Object>>>> getRssFeeds(
 			String SID) {
 		Long users_id = sessionManagement.checkSession(SID);
-		Long user_level = userManagement.getUserLevelByID(users_id);
+		Long user_level = userManager.getUserLevelByID(users_id);
 		return loadAtomRssFeed.getRssFeeds(user_level);
 	}
 
@@ -953,7 +953,7 @@ public class MainService implements IPendingServiceCallback {
 	public LinkedHashMap<String, LinkedHashMap<String, LinkedHashMap<String, Object>>> getRssFeedByURL(
 			String SID, String urlEndPoint) {
 		Long users_id = sessionManagement.checkSession(SID);
-		Long user_level = userManagement.getUserLevelByID(users_id);
+		Long user_level = userManager.getUserLevelByID(users_id);
 		if (authLevelManagement.checkUserLevel(user_level)) {
 			return loadAtomRssFeed.parseRssFeed(urlEndPoint);
 		} else {
@@ -973,7 +973,7 @@ public class MainService implements IPendingServiceCallback {
 	public LinkedHashMap<Integer, Client> getUsersByDomain(String SID,
 			String domain) {
 		Long users_id = sessionManagement.checkSession(SID);
-		Long user_level = userManagement.getUserLevelByID(users_id);
+		Long user_level = userManager.getUserLevelByID(users_id);
 		if (authLevelManagement.checkUserLevel(user_level)) {
 			LinkedHashMap<Integer, Client> lMap = new LinkedHashMap<Integer, Client>();
 			// Integer counter = 0;
@@ -994,10 +994,10 @@ public class MainService implements IPendingServiceCallback {
 	public int closeRoom(String SID, Long room_id, Boolean status) {
 		try {
 			Long users_id = sessionManagement.checkSession(SID);
-			Long user_level = userManagement.getUserLevelByID(users_id);
+			Long user_level = userManager.getUserLevelByID(users_id);
 			if (authLevelManagement.checkUserLevel(user_level)) {
 
-				roommanagement.closeRoom(room_id, status);
+				roomManager.closeRoom(room_id, status);
 
 				if (status) {
 					Map<String, String> message = new HashMap<String, String>();
@@ -1024,7 +1024,7 @@ public class MainService implements IPendingServiceCallback {
 	public List<Configuration> getDashboardConfiguration(String SID) {
 		try {
 			Long users_id = sessionManagement.checkSession(SID);
-			Long user_level = userManagement.getUserLevelByID(users_id);
+			Long user_level = userManager.getUserLevelByID(users_id);
 			if (authLevelManagement.checkUserLevel(user_level)) {
 				return configDao.getConfKeys(new String[] {
 						"dashboard.show.chat", //

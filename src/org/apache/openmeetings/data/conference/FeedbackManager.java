@@ -19,7 +19,7 @@
 package org.apache.openmeetings.data.conference;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
-import org.apache.openmeetings.data.basic.Fieldmanagment;
+import org.apache.openmeetings.data.basic.FieldManager;
 import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
 import org.apache.openmeetings.templates.FeedbackTemplate;
 import org.apache.openmeetings.utils.mail.MailHandler;
@@ -27,14 +27,14 @@ import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
-public class Feedbackmanagement {
+public class FeedbackManager {
 	private static final Logger log = Red5LoggerFactory.getLogger(
-			Feedbackmanagement.class, OpenmeetingsVariables.webAppRootKey);
+			FeedbackManager.class, OpenmeetingsVariables.webAppRootKey);
 
 	@Autowired
 	private ConfigurationDao configurationDaoImpl;
 	@Autowired
-	private Fieldmanagment fieldmanagment;
+	private FieldManager fieldmanagment;
 	@Autowired
 	private MailHandler mailHandler;
 	@Autowired

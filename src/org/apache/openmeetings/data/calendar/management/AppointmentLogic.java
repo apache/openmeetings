@@ -23,15 +23,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.TimeZone;
 
-import org.apache.openmeetings.data.basic.Fieldmanagment;
+import org.apache.openmeetings.data.basic.FieldManager;
 import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
 import org.apache.openmeetings.data.basic.dao.OmTimeZoneDao;
 import org.apache.openmeetings.data.calendar.daos.AppointmentDao;
 import org.apache.openmeetings.data.calendar.daos.MeetingMemberDao;
-import org.apache.openmeetings.data.conference.Invitationmanagement;
-import org.apache.openmeetings.data.conference.Roommanagement;
+import org.apache.openmeetings.data.conference.InvitationManager;
+import org.apache.openmeetings.data.conference.RoomManager;
 import org.apache.openmeetings.data.conference.dao.RoomDao;
-import org.apache.openmeetings.data.user.Usermanagement;
+import org.apache.openmeetings.data.user.UserManager;
 import org.apache.openmeetings.persistence.beans.basic.OmTimeZone;
 import org.apache.openmeetings.persistence.beans.calendar.Appointment;
 import org.apache.openmeetings.persistence.beans.calendar.MeetingMember;
@@ -55,17 +55,17 @@ public class AppointmentLogic {
 	@Autowired
 	private ConfigurationDao configurationDaoImpl;
 	@Autowired
-	private Usermanagement userManagement;
+	private UserManager userManager;
 	@Autowired
-	private Fieldmanagment fieldmanagment;
+	private FieldManager fieldmanagment;
 	@Autowired
 	private OmTimeZoneDao omTimeZoneDaoImpl;
 	@Autowired
-	private Roommanagement roommanagement;
+	private RoomManager roomManager;
 	@Autowired
 	private RoomDao roomDao;
 	@Autowired
-	private Invitationmanagement invitationManagement;
+	private InvitationManager invitationManager;
 	@Autowired
 	private MeetingMemberDao meetingMemberDao;
 	@Autowired
@@ -159,9 +159,9 @@ public class AppointmentLogic {
 		try {
 
 			// Adding creator as MeetingMember
-			User user = userManagement.getUserById(userId);
+			User user = userManager.getUserById(userId);
 			
-			Long room_id = roomId > 0 ? roomId : roommanagement.addRoom(3, // user level
+			Long room_id = roomId > 0 ? roomId : roomManager.addRoom(3, // user level
 					appointmentName, // name
 					roomType, // RoomType
 					"", // Comment
@@ -257,7 +257,7 @@ public class AppointmentLogic {
 					// timezone from his profile otherwise get the timezones
 					// from the variable jNameTimeZone
 					if (sendToUserId > 0) {
-						User interalUser = userManagement
+						User interalUser = userManager
 								.getUserById(sendToUserId);
 						phone = interalUser.getPhoneForSMS();
 						timezoneMember = timezoneUtil
@@ -499,13 +499,13 @@ public class AppointmentLogic {
 					String message = generateMessage(labelid1158, ment,
 							language_id, labelid1153, labelid1154, tZone);
 
-					invitationManagement.sendInvitationReminderLink(language_id, message,
+					invitationManager.sendInvitationReminderLink(language_id, message,
 							inv.getBaseUrl(), mm.getEmail(), subject,
 							inv.getHash());
 
-					invitationManagement.sendInvitationReminderSMS(mm.getPhone(), smsSubject, language_id);
+					invitationManager.sendInvitationReminderSMS(mm.getPhone(), smsSubject, language_id);
 					inv.setUpdatetime(new Date());
-					invitationManagement.updateInvitation(inv);
+					invitationManager.updateInvitation(inv);
 				}
 			}
 		}

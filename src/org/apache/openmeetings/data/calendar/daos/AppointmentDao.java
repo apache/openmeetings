@@ -38,8 +38,8 @@ import javax.persistence.criteria.Root;
 import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.data.basic.dao.OmTimeZoneDao;
 import org.apache.openmeetings.data.calendar.management.MeetingMemberLogic;
-import org.apache.openmeetings.data.conference.Invitationmanagement;
-import org.apache.openmeetings.data.user.Usermanagement;
+import org.apache.openmeetings.data.conference.InvitationManager;
+import org.apache.openmeetings.data.user.UserManager;
 import org.apache.openmeetings.data.user.dao.UsersDao;
 import org.apache.openmeetings.persistence.beans.basic.OmTimeZone;
 import org.apache.openmeetings.persistence.beans.calendar.Appointment;
@@ -63,7 +63,7 @@ public class AppointmentDao {
 	@PersistenceContext
 	private EntityManager em;
 	@Autowired
-	private Usermanagement userManagement;
+	private UserManager userManager;
 	@Autowired
 	private OmTimeZoneDao omTimeZoneDaoImpl;
 	@Autowired
@@ -75,7 +75,7 @@ public class AppointmentDao {
 	@Autowired
 	private UsersDao usersDao;
 	@Autowired
-	private Invitationmanagement invitationManagement;
+	private InvitationManager invitationManager;
 	@Autowired
 	private MeetingMemberLogic meetingMemberLogic;
 	@Autowired
@@ -431,7 +431,7 @@ public class AppointmentDao {
 			}
 
 			// Update Invitation hash to new time
-			invitationManagement.updateInvitationByAppointment(appointmentId,
+			invitationManager.updateInvitationByAppointment(appointmentId,
 					appointmentstart, appointmentend);
 
 			ap.setAppointmentName(appointmentName);
@@ -460,7 +460,7 @@ public class AppointmentDao {
 			}
 
 			// Adding Invitor as Meetingmember
-			User user = userManagement.getUserById(users_id);
+			User user = userManager.getUserById(users_id);
 
 			String invitorName = user.getFirstname() + " " + user.getLastname()
 					+ " [" + user.getAdresses().getEmail() + "]";
@@ -508,7 +508,7 @@ public class AppointmentDao {
 					// meetingMemberDao.deleteMeetingMember(memberRemote.getMeetingMemberId());
 				} else {
 					// Notify member of changes
-					invitationManagement.updateInvitation(ap, memberRemote,
+					invitationManager.updateInvitation(ap, memberRemote,
 							users_id, language_id, invitorName);
 
 				}
@@ -558,7 +558,7 @@ public class AppointmentDao {
 						// timezone from his profile otherwise get the timezones
 						// from the variable jNameTimeZone
 						if (sendToUserId > 0) {
-							User interalUser = userManagement
+							User interalUser = userManager
 									.getUserById(sendToUserId);
 							timezoneMember = timezoneUtil
 									.getTimezoneByUser(interalUser);
@@ -630,7 +630,7 @@ public class AppointmentDao {
 			}
 
 			// Update Invitation hash to new time
-			invitationManagement.updateInvitationByAppointment(appointmentId,
+			invitationManager.updateInvitationByAppointment(appointmentId,
 					appointmentstart, appointmentend);
 
 			ap.setAppointmentStarttime(appointmentstart);
@@ -649,7 +649,7 @@ public class AppointmentDao {
 					.getMeetingMemberByAppointmentId(ap.getAppointmentId());
 
 			// Adding Invitor Name
-			User user = userManagement.getUserById(users_id);
+			User user = userManager.getUserById(users_id);
 			String invitorName = user.getFirstname() + " " + user.getLastname()
 					+ " [" + user.getAdresses().getEmail() + "]";
 
@@ -657,7 +657,7 @@ public class AppointmentDao {
 			for (MeetingMember memberRemote : meetingsRemoteMembers) {
 
 				// Notify member of changes
-				invitationManagement.updateInvitation(ap, memberRemote,
+				invitationManager.updateInvitation(ap, memberRemote,
 						users_id, language_id, invitorName);
 
 			}

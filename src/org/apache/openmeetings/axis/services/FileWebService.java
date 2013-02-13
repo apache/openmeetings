@@ -34,7 +34,7 @@ import org.apache.openmeetings.data.file.FileUtils;
 import org.apache.openmeetings.data.file.dao.FileExplorerItemDao;
 import org.apache.openmeetings.data.file.dto.FileExplorerObject;
 import org.apache.openmeetings.data.file.dto.LibraryPresentation;
-import org.apache.openmeetings.data.user.Usermanagement;
+import org.apache.openmeetings.data.user.UserManager;
 import org.apache.openmeetings.documents.LoadLibraryPresentation;
 import org.apache.openmeetings.documents.beans.ConverterProcessResultList;
 import org.apache.openmeetings.persistence.beans.files.FileExplorerItem;
@@ -61,7 +61,7 @@ public class FileWebService {
 	@Autowired
 	private SessiondataDao sessionManagement;
 	@Autowired
-	private Usermanagement userManagement;
+	private UserManager userManager;
 	@Autowired
 	private FileExplorerItemDao fileExplorerItemDao;
 	@Autowired
@@ -116,7 +116,7 @@ public class FileWebService {
 		try {
 
 			Long users_id = sessionManagement.checkSession(SID);
-			Long User_level = userManagement.getUserLevelByID(users_id);
+			Long User_level = userManager.getUserLevelByID(users_id);
 
 			if (authLevelManagement.checkWebServiceLevel(User_level)) {
 
@@ -125,7 +125,7 @@ public class FileWebService {
 				InputStream inputstream = new BufferedInputStream(
 						uc.getInputStream());
 
-				User externalUser = userManagement.getUserByExternalIdAndType(
+				User externalUser = userManager.getUserByExternalIdAndType(
 						externalUserId, externalType);
 
 				LinkedHashMap<String, Object> hs = new LinkedHashMap<String, Object>();
@@ -202,7 +202,7 @@ public class FileWebService {
 		try {
 
 			Long users_id = sessionManagement.checkSession(SID);
-			Long User_level = userManagement.getUserLevelByID(users_id);
+			Long User_level = userManager.getUserLevelByID(users_id);
 
 			if (authLevelManagement.checkWebServiceLevel(User_level)) {
 
@@ -211,7 +211,7 @@ public class FileWebService {
 				InputStream inputstream = new BufferedInputStream(
 						uc.getInputStream());
 
-				User internalUser = userManagement.getUserById(internalUserId);
+				User internalUser = userManager.getUserById(internalUserId);
 
 				LinkedHashMap<String, Object> hs = new LinkedHashMap<String, Object>();
 				hs.put("user", internalUser);
@@ -274,11 +274,11 @@ public class FileWebService {
 		try {
 
 			Long users_id = sessionManagement.checkSession(SID);
-			Long User_level = userManagement.getUserLevelByID(users_id);
+			Long User_level = userManager.getUserLevelByID(users_id);
 
 			if (authLevelManagement.checkWebServiceLevel(User_level)) {
 
-				User userExternal = userManagement.getUserByExternalIdAndType(
+				User userExternal = userManager.getUserByExternalIdAndType(
 						externalUserId, externalType);
 
 				Long userId = userExternal.getUser_id();
@@ -341,7 +341,7 @@ public class FileWebService {
 		try {
 
 			Long users_id = sessionManagement.checkSession(SID);
-			Long User_level = userManagement.getUserLevelByID(users_id);
+			Long User_level = userManager.getUserLevelByID(users_id);
 
 			if (authLevelManagement.checkWebServiceLevel(User_level)) {
 
@@ -399,7 +399,7 @@ public class FileWebService {
 			String fileName, Long room_id, Boolean isOwner) throws AxisFault {
 		try {
 			Long users_id = sessionManagement.checkSession(SID);
-			Long user_level = userManagement.getUserLevelByID(users_id);
+			Long user_level = userManager.getUserLevelByID(users_id);
 			if (authLevelManagement.checkUserLevel(user_level)) {
 
 				log.debug("addFolder " + parentFileExplorerItemId);
@@ -455,7 +455,7 @@ public class FileWebService {
 		try {
 
 			Long users_id = sessionManagement.checkSession(SID);
-			Long User_level = userManagement.getUserLevelByID(users_id);
+			Long User_level = userManager.getUserLevelByID(users_id);
 
 			if (authLevelManagement.checkWebServiceLevel(User_level)) {
 
@@ -486,7 +486,7 @@ public class FileWebService {
 		try {
 
 			Long users_id = sessionManagement.checkSession(SID);
-			Long User_level = userManagement.getUserLevelByID(users_id);
+			Long User_level = userManager.getUserLevelByID(users_id);
 
 			if (authLevelManagement.checkWebServiceLevel(User_level)) {
 
@@ -516,7 +516,7 @@ public class FileWebService {
 		try {
 
 			Long users_id = sessionManagement.checkSession(SID);
-			Long User_level = userManagement.getUserLevelByID(users_id);
+			Long User_level = userManager.getUserLevelByID(users_id);
 
 			if (authLevelManagement.checkUserLevel(User_level)) {
 
@@ -564,7 +564,7 @@ public class FileWebService {
 		try {
 
 			Long users_id = sessionManagement.checkSession(SID);
-			Long user_level = userManagement.getUserLevelByID(users_id);
+			Long user_level = userManager.getUserLevelByID(users_id);
 
 			if (authLevelManagement.checkWebServiceLevel(user_level)) {
 
@@ -610,7 +610,7 @@ public class FileWebService {
 		try {
 
 			Long webservice_users_id = sessionManagement.checkSession(SID);
-			Long user_level = userManagement
+			Long user_level = userManager
 					.getUserLevelByID(webservice_users_id);
 
 			if (authLevelManagement.checkWebServiceLevel(user_level)) {
@@ -681,7 +681,7 @@ public class FileWebService {
 		try {
 
 			Long users_id = sessionManagement.checkSession(SID);
-			Long user_level = userManagement.getUserLevelByID(users_id);
+			Long user_level = userManager.getUserLevelByID(users_id);
 
 			if (authLevelManagement.checkUserLevel(user_level)) {
 
@@ -758,7 +758,7 @@ public class FileWebService {
 		try {
 
 			Long webservice_users_id = sessionManagement.checkSession(SID);
-			Long user_level = userManagement
+			Long user_level = userManager
 					.getUserLevelByID(webservice_users_id);
 
 			if (authLevelManagement.checkWebServiceLevel(user_level)) {
@@ -808,7 +808,7 @@ public class FileWebService {
 		try {
 
 			Long users_id = sessionManagement.checkSession(SID);
-			Long user_level = userManagement.getUserLevelByID(users_id);
+			Long user_level = userManager.getUserLevelByID(users_id);
 
 			if (authLevelManagement.checkUserLevel(user_level)) {
 
@@ -853,7 +853,7 @@ public class FileWebService {
 		try {
 
 			Long webservice_users_id = sessionManagement.checkSession(SID);
-			Long user_level = userManagement
+			Long user_level = userManager
 					.getUserLevelByID(webservice_users_id);
 
 			if (authLevelManagement.checkWebServiceLevel(user_level)) {
@@ -889,7 +889,7 @@ public class FileWebService {
 		try {
 
 			Long users_id = sessionManagement.checkSession(SID);
-			Long user_level = userManagement.getUserLevelByID(users_id);
+			Long user_level = userManager.getUserLevelByID(users_id);
 
 			if (authLevelManagement.checkUserLevel(user_level)) {
 
@@ -945,7 +945,7 @@ public class FileWebService {
 		try {
 
 			Long webservice_users_id = sessionManagement.checkSession(SID);
-			Long user_level = userManagement
+			Long user_level = userManager
 					.getUserLevelByID(webservice_users_id);
 
 			if (authLevelManagement.checkWebServiceLevel(user_level)) {
@@ -1004,7 +1004,7 @@ public class FileWebService {
 		try {
 
 			Long users_id = sessionManagement.checkSession(SID);
-			Long user_level = userManagement.getUserLevelByID(users_id);
+			Long user_level = userManager.getUserLevelByID(users_id);
 
 			if (authLevelManagement.checkUserLevel(user_level)) {
 				

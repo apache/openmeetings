@@ -18,24 +18,24 @@
  */
 package org.apache.openmeetings.backup;
 
-import org.apache.openmeetings.data.conference.PollManagement;
+import org.apache.openmeetings.data.conference.PollManager;
 import org.apache.openmeetings.persistence.beans.poll.PollType;
 import org.simpleframework.xml.stream.InputNode;
 import org.simpleframework.xml.stream.OutputNode;
 
 public class PollTypeConverter extends OmConverter<PollType> {
-	private PollManagement pollManagement;
+	private PollManager pollManager;
 	
 	public PollTypeConverter() {
 		//default constructor is for export
 	}
 	
-	public PollTypeConverter(PollManagement pollManagement) {
-		this.pollManagement = pollManagement;
+	public PollTypeConverter(PollManager pollManagement) {
+		this.pollManager = pollManagement;
 	}
 	
 	public PollType read(InputNode node) throws Exception {
-		return pollManagement.getPollType(getlongValue(node));
+		return pollManager.getPollType(getlongValue(node));
 	}
 
 	public void write(OutputNode node, PollType value) throws Exception {

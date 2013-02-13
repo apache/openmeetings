@@ -37,7 +37,7 @@ import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
 import org.apache.openmeetings.data.beans.basic.SearchResult;
 import org.apache.openmeetings.data.conference.dao.RoomDao;
 import org.apache.openmeetings.data.conference.dao.RoomModeratorsDao;
-import org.apache.openmeetings.data.user.Organisationmanagement;
+import org.apache.openmeetings.data.user.OrganisationManager;
 import org.apache.openmeetings.data.user.dao.UsersDao;
 import org.apache.openmeetings.persistence.beans.domain.Organisation_Users;
 import org.apache.openmeetings.persistence.beans.room.Room;
@@ -57,16 +57,16 @@ import org.springframework.transaction.annotation.Transactional;
  * 
  */
 @Transactional
-public class Roommanagement {
+public class RoomManager {
 
 	private static final Logger log = Red5LoggerFactory
-			.getLogger(Roommanagement.class);
+			.getLogger(RoomManager.class);
 
 	@PersistenceContext
 	private EntityManager em;
 
 	@Autowired
-	private Organisationmanagement organisationmanagement;
+	private OrganisationManager organisationManager;
 	@Autowired
 	private RoomModeratorsDao roomModeratorsDao;
 	@Autowired
@@ -827,7 +827,7 @@ public class Roommanagement {
 				log.debug("addRoomToOrganisation rooms '"
 						+ rOrganisation.getRoom().getName() + "'");
 				rOrganisation.setStarttime(new Date());
-				rOrganisation.setOrganisation(organisationmanagement
+				rOrganisation.setOrganisation(organisationManager
 						.getOrganisationById(organisation_id));
 				rOrganisation.setDeleted(false);
 

@@ -19,7 +19,7 @@
 package org.apache.openmeetings.test.domain;
 
 import org.apache.log4j.Logger;
-import org.apache.openmeetings.data.user.Organisationmanagement;
+import org.apache.openmeetings.data.user.OrganisationManager;
 import org.apache.openmeetings.data.user.dao.UsersDao;
 import org.apache.openmeetings.persistence.beans.user.User;
 import org.apache.openmeetings.test.AbstractOpenmeetingsSpringTest;
@@ -29,7 +29,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class TestAddGroup extends AbstractOpenmeetingsSpringTest {
 
 	@Autowired
-	private Organisationmanagement organisationmanagement;
+	private OrganisationManager organisationManager;
 	@Autowired
 	private UsersDao usersDao;
 
@@ -38,12 +38,12 @@ public class TestAddGroup extends AbstractOpenmeetingsSpringTest {
 	@Test
 	public void testAddingGroup() {
 
-		long organisation_id = organisationmanagement.addOrganisation(
+		long organisation_id = organisationManager.addOrganisation(
 				"default", 1);
 
 		log.error("new organisation: " + organisation_id);
 
-		long organisation_usersid = organisationmanagement
+		long organisation_usersid = organisationManager
 				.addUserToOrganisation(new Long(1), organisation_id,
 						new Long(1));
 

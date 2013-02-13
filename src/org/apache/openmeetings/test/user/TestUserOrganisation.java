@@ -24,7 +24,7 @@ import static org.junit.Assert.fail;
 
 import java.util.List;
 
-import org.apache.openmeetings.data.user.Organisationmanagement;
+import org.apache.openmeetings.data.user.OrganisationManager;
 import org.apache.openmeetings.data.user.dao.UsersDao;
 import org.apache.openmeetings.persistence.beans.domain.Organisation;
 import org.apache.openmeetings.persistence.beans.domain.Organisation_Users;
@@ -35,7 +35,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 public class TestUserOrganisation extends AbstractOpenmeetingsSpringTest {
 	@Autowired
-	private Organisationmanagement orgManagement;
+	private OrganisationManager orgManagement;
 	@Autowired
 	private UsersDao usersDao;
 	

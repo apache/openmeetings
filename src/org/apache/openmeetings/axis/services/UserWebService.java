@@ -23,15 +23,15 @@ import java.util.Date;
 import org.apache.axis2.AxisFault;
 import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.data.basic.AuthLevelUtil;
-import org.apache.openmeetings.data.basic.Fieldmanagment;
+import org.apache.openmeetings.data.basic.FieldManager;
 import org.apache.openmeetings.data.basic.SessiondataDao;
 import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
 import org.apache.openmeetings.data.basic.dao.ErrorDao;
 import org.apache.openmeetings.data.basic.dao.SOAPLoginDao;
 import org.apache.openmeetings.data.beans.basic.ErrorResult;
 import org.apache.openmeetings.data.beans.basic.SearchResult;
-import org.apache.openmeetings.data.user.Organisationmanagement;
-import org.apache.openmeetings.data.user.Usermanagement;
+import org.apache.openmeetings.data.user.OrganisationManager;
+import org.apache.openmeetings.data.user.UserManager;
 import org.apache.openmeetings.data.user.dao.UsersDao;
 import org.apache.openmeetings.persistence.beans.basic.ErrorValue;
 import org.apache.openmeetings.persistence.beans.basic.RemoteSessionObject;
@@ -65,13 +65,13 @@ public class UserWebService {
 	@Autowired
 	private ConfigurationDao configurationDaoImpl;
 	@Autowired
-	private Usermanagement userManagement;
+	private UserManager userManagement;
 	@Autowired
-	private Fieldmanagment fieldmanagment;
+	private FieldManager fieldmanagment;
 	@Autowired
 	private ErrorDao errorManagement;
 	@Autowired
-	private Organisationmanagement organisationmanagement;
+	private OrganisationManager organisationManager;
 	@Autowired
 	private SOAPLoginDao soapLoginDao;
 	@Autowired
@@ -1229,7 +1229,7 @@ public class UserWebService {
 			Long user_level = userManagement.getUserLevelByID(users_id);
 			if (authLevelManagement.checkWebServiceLevel(user_level)) {
 
-				return organisationmanagement.addUserToOrganisation(user_id,
+				return organisationManager.addUserToOrganisation(user_id,
 						organisation_id, users_id);
 
 			} else {
@@ -1265,7 +1265,7 @@ public class UserWebService {
 			Long users_id = sessionManagement.checkSession(SID);
 			Long user_level = userManagement.getUserLevelByID(users_id);
 			if (authLevelManagement.checkWebServiceLevel(user_level)) {
-				return organisationmanagement
+				return organisationManager
 						.getUsersSearchResultByOrganisationId(organisation_id,
 								start, max, orderby, asc);
 			} else {

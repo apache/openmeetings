@@ -32,8 +32,8 @@ import org.apache.openmeetings.data.basic.AuthLevelUtil;
 import org.apache.openmeetings.data.basic.SessiondataDao;
 import org.apache.openmeetings.data.file.dao.FileExplorerItemDao;
 import org.apache.openmeetings.data.file.dto.LibraryPresentation;
-import org.apache.openmeetings.data.user.Usermanagement;
-import org.apache.openmeetings.data.whiteboard.WhiteboardManagement;
+import org.apache.openmeetings.data.user.UserManager;
+import org.apache.openmeetings.data.whiteboard.WhiteboardManager;
 import org.apache.openmeetings.documents.LibraryChartLoader;
 import org.apache.openmeetings.documents.LibraryDocumentConverter;
 import org.apache.openmeetings.documents.LibraryWmlLoader;
@@ -67,7 +67,7 @@ public class ConferenceLibrary implements IPendingServiceCallback {
 	@Autowired
 	private SessiondataDao sessionManagement;
 	@Autowired
-	private Usermanagement userManagement;
+	private UserManager userManager;
 	@Autowired
 	private FileExplorerItemDao fileExplorerItemDao;
 	@Autowired
@@ -75,7 +75,7 @@ public class ConferenceLibrary implements IPendingServiceCallback {
 	@Autowired
 	private LibraryWmlLoader libraryWmlLoader;
 	@Autowired
-	private WhiteboardManagement whiteboardManagement;
+	private WhiteboardManager whiteboardManagement;
 
 	public LibraryPresentation getPresentationPreviewFileExplorer(String SID,
 			String parentFolder) {
@@ -83,7 +83,7 @@ public class ConferenceLibrary implements IPendingServiceCallback {
 		try {
 
 			Long users_id = sessionManagement.checkSession(SID);
-			Long user_level = userManagement.getUserLevelByID(users_id);
+			Long user_level = userManager.getUserLevelByID(users_id);
 
 			log.debug("#############users_id : " + users_id);
 			log.debug("#############user_level : " + user_level);
@@ -126,7 +126,7 @@ public class ConferenceLibrary implements IPendingServiceCallback {
 			Object tObjectRef) {
 		try {
 			Long users_id = sessionManagement.checkSession(SID);
-			Long user_level = userManagement.getUserLevelByID(users_id);
+			Long user_level = userManager.getUserLevelByID(users_id);
 			if (authLevelManagement.checkUserLevel(user_level)) {
 				// LinkedHashMap tObject = (LinkedHashMap)t;
 				// ArrayList tObject = (ArrayList)t;
@@ -177,7 +177,7 @@ public class ConferenceLibrary implements IPendingServiceCallback {
 			Long fileExplorerItemId, Long whiteboardId) {
 		try {
 			Long users_id = sessionManagement.checkSession(SID);
-			Long user_level = userManagement.getUserLevelByID(users_id);
+			Long user_level = userManager.getUserLevelByID(users_id);
 
 			if (authLevelManagement.checkUserLevel(user_level)) {
 
@@ -261,7 +261,7 @@ public class ConferenceLibrary implements IPendingServiceCallback {
 	public ArrayList loadChartObject(String SID, Long room_id, String fileName) {
 		try {
 			Long users_id = sessionManagement.checkSession(SID);
-			Long user_level = userManagement.getUserLevelByID(users_id);
+			Long user_level = userManager.getUserLevelByID(users_id);
 			if (authLevelManagement.checkUserLevel(user_level)) {
 				return LibraryChartLoader.getInstance().loadChart(OmFileHelper.getUploadRoomDir(room_id.toString()),
 						fileName);
@@ -281,7 +281,7 @@ public class ConferenceLibrary implements IPendingServiceCallback {
 		try {
 
 			Long users_id = sessionManagement.checkSession(SID);
-			Long user_level = userManagement.getUserLevelByID(users_id);
+			Long user_level = userManager.getUserLevelByID(users_id);
 
 			if (authLevelManagement.checkUserLevel(user_level)) {
 

@@ -36,7 +36,7 @@ import org.apache.openmeetings.data.basic.SessiondataDao;
 import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
 import org.apache.openmeetings.data.basic.dao.OmTimeZoneDao;
 import org.apache.openmeetings.data.calendar.management.AppointmentLogic;
-import org.apache.openmeetings.data.user.Usermanagement;
+import org.apache.openmeetings.data.user.UserManager;
 import org.apache.openmeetings.persistence.beans.calendar.Appointment;
 import org.apache.openmeetings.persistence.beans.calendar.MeetingMember;
 import org.apache.openmeetings.remote.red5.ScopeApplicationAdapter;
@@ -96,12 +96,12 @@ public class CalendarServlet extends HttpServlet {
 		return null;
 	}
 
-	public Usermanagement getUserManagement() {
+	public UserManager getUserManager() {
 		try {
 			if (ScopeApplicationAdapter.initComplete) {
 				ApplicationContext context = WebApplicationContextUtils
 						.getWebApplicationContext(getServletContext());
-				return (Usermanagement) context.getBean("userManagement");
+				return (UserManager) context.getBean("userManagement");
 			}
 		} catch (Exception err) {
 			log.error("[getUserManagement]", err);
@@ -142,7 +142,7 @@ public class CalendarServlet extends HttpServlet {
 
 		try {
 
-			if (getUserManagement() == null || getOmTimeZoneDaoImpl() == null
+			if (getUserManager() == null || getOmTimeZoneDaoImpl() == null
 					|| getConfigurationDaoImpl() == null
 					|| getSessionManagement() == null
 					|| getAppointmentLogic() == null
@@ -158,7 +158,7 @@ public class CalendarServlet extends HttpServlet {
 			log.debug("sid: " + sid);
 
 			Long users_id = getSessionManagement().checkSession(sid);
-			Long user_level = getUserManagement().getUserLevelByID(users_id);
+			Long user_level = getUserManager().getUserLevelByID(users_id);
 
 			if (user_level != null && user_level > 0) {
 

@@ -25,7 +25,7 @@ import java.util.List;
 import org.apache.openmeetings.data.basic.FieldLanguageDao;
 import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
 import org.apache.openmeetings.data.basic.dao.OmTimeZoneDao;
-import org.apache.openmeetings.data.user.Organisationmanagement;
+import org.apache.openmeetings.data.user.OrganisationManager;
 import org.apache.openmeetings.data.user.dao.SalutationDao;
 import org.apache.openmeetings.data.user.dao.StateDao;
 import org.apache.openmeetings.data.user.dao.UsersDao;
@@ -357,7 +357,7 @@ public class UserForm extends AdminBaseForm<User> {
 		add(new TextArea<String>("adresses.comment"));
 
 		List<Organisation> orgList = Application.getBean(
-				Organisationmanagement.class).getOrganisations(3L);
+				OrganisationManager.class).getOrganisations(3L);
 		List<Organisation_Users> orgUsers = new ArrayList<Organisation_Users>(
 				orgList.size());
 		for (Organisation org : orgList) {
