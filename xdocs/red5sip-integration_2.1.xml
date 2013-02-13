@@ -172,6 +172,7 @@
 				<blockquote>
 					<i>
 						red5.host=127.0.0.1 # red5 server address<br />
+						om.context=openmeetings # Openmeetings context<br /> 
 						red5.codec=asao<br />
 						red5.codec.rate=22 # should correlate with mic settings in config.xml<br />
 						sip.obproxy=127.0.0.1 # asterisk adderss<br />
