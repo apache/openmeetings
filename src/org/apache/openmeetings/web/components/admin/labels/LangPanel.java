@@ -21,7 +21,7 @@ package org.apache.openmeetings.web.components.admin.labels;
 import java.util.Iterator;
 
 import org.apache.openmeetings.data.basic.FieldLanguageDao;
-import org.apache.openmeetings.data.basic.FieldValueDaoImpl;
+import org.apache.openmeetings.data.basic.FieldValueDao;
 import org.apache.openmeetings.persistence.beans.lang.FieldLanguage;
 import org.apache.openmeetings.persistence.beans.lang.Fieldlanguagesvalues;
 import org.apache.openmeetings.persistence.beans.lang.Fieldvalues;
@@ -73,20 +73,20 @@ public class LangPanel extends AdminPanel {
 
 		final SearchableDataView<Fieldvalues> dataView = new SearchableDataView<Fieldvalues>(
 				"langList"
-				, new SearchableDataProvider<Fieldvalues>(FieldValueDaoImpl.class) {
+				, new SearchableDataProvider<Fieldvalues>(FieldValueDao.class) {
 					private static final long serialVersionUID = -6822789354860988626L;
 
 					@Override
 					public long size() {
 						return search == null
-								? Application.getBean(FieldValueDaoImpl.class).count()
-								: Application.getBean(FieldValueDaoImpl.class).count(language.getLanguage_id(), search);
+								? Application.getBean(FieldValueDao.class).count()
+								: Application.getBean(FieldValueDao.class).count(language.getLanguage_id(), search);
 					}
 					
 					public Iterator<? extends Fieldvalues> iterator(long first, long count) {
 						return (search == null && getSort() == null
-								? Application.getBean(FieldValueDaoImpl.class).get(language.getLanguage_id(), (int)first, (int)count)
-								: Application.getBean(FieldValueDaoImpl.class).get(language.getLanguage_id(), search, (int)first, (int)count, getSortStr())).iterator();
+								? Application.getBean(FieldValueDao.class).get(language.getLanguage_id(), (int)first, (int)count)
+								: Application.getBean(FieldValueDao.class).get(language.getLanguage_id(), search, (int)first, (int)count, getSortStr())).iterator();
 					}
 				}) {
 			private static final long serialVersionUID = 8715559628755439596L;

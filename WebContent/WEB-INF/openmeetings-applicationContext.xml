@@ -222,7 +222,7 @@
 	<bean id="omTimeZoneDaoImpl" class="org.apache.openmeetings.data.basic.dao.OmTimeZoneDao" />
 	<bean id="statemanagement" class="org.apache.openmeetings.data.user.dao.StateDao" />
 	<bean id="fieldLanguageDaoImpl" class="org.apache.openmeetings.data.basic.FieldLanguageDao" />
-	<bean id="fieldValueDaoImpl" class="org.apache.openmeetings.data.basic.FieldValueDaoImpl" />
+	<bean id="fieldValueDaoImpl" class="org.apache.openmeetings.data.basic.FieldValueDao" />
 	<bean id="fieldLanguagesValuesDAO" class="org.apache.openmeetings.data.basic.FieldLanguagesValuesDao" />
 	<bean id="fieldmanagment" class="org.apache.openmeetings.data.basic.Fieldmanagment" />
 	<bean id="configurationDaoImpl" class="org.apache.openmeetings.data.basic.dao.ConfigurationDao" />

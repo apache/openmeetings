@@ -35,7 +35,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
-public class FieldValueDaoImpl implements IDataProviderDao<Fieldvalues> {
+public class FieldValueDao implements IDataProviderDao<Fieldvalues> {
 	public final static String[] searchFields = {"value", "fieldvalues.name"};
 	
 	@PersistenceContext

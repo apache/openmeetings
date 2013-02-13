@@ -19,7 +19,7 @@
 package org.apache.openmeetings.web.components.admin.labels;
 
 import org.apache.openmeetings.data.basic.FieldLanguagesValuesDao;
-import org.apache.openmeetings.data.basic.FieldValueDaoImpl;
+import org.apache.openmeetings.data.basic.FieldValueDao;
 import org.apache.openmeetings.persistence.beans.lang.Fieldlanguagesvalues;
 import org.apache.openmeetings.persistence.beans.lang.Fieldvalues;
 import org.apache.openmeetings.web.app.Application;
@@ -78,7 +78,7 @@ public class LabelsForm extends AdminBaseForm<Fieldlanguagesvalues> {
 	protected void onSaveSubmit(AjaxRequestTarget target, Form<?> form) {
 		Fieldlanguagesvalues flv = getModelObject();
 		Fieldvalues fv = flv.getFieldvalues();
-		Application.getBean(FieldValueDaoImpl.class).update(fv, WebSession.getUserId());
+		Application.getBean(FieldValueDao.class).update(fv, WebSession.getUserId());
 		
 		flv.setFieldvalues(fv);
 		Application.getBean(FieldLanguagesValuesDao.class)
