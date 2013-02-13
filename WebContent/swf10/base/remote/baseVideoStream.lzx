@@ -276,16 +276,19 @@
 			this._ns.close();
 			//remove NetStream from Video-Object
 			this.clear();
+			this._ns = null;
 		} else if (this.mode == "broadcast") {
             this._ns.publish(false);
             //remove NetStream from Video-Object
             this.clear();
             this._ns.close();
+            this._ns = null;
         } else if (this.mode == "record") {
             this._ns.publish(false);
             //remove NetStream from Video-Object
             this.clear();
             this._ns.close();
+            this._ns = null;
         } else {
 			if ($debug) Debug.warn("Not known Mode: ",this.mode,this);
 		}
