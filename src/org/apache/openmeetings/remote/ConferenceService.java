@@ -72,7 +72,7 @@ public class ConferenceService {
 	@Autowired
 	private AppointmentLogic appointmentLogic;
 	@Autowired
-	private SessiondataDao sessionManagement;
+	private SessiondataDao sessiondataDao;
 	@Autowired
 	private UserManager userManager;
 	@Autowired
@@ -82,7 +82,7 @@ public class ConferenceService {
 	@Autowired
 	private RoomModeratorsDao roomModeratorsDao;
 	@Autowired
-	private AuthLevelUtil authLevelManagement;
+	private AuthLevelUtil authLevelUtil;
 	@Autowired
 	private TimezoneUtil timezoneUtil;
 	@Autowired
@@ -101,7 +101,7 @@ public class ConferenceService {
 	public List<RoomOrganisation> getRoomsByOrganisationAndType(String SID,
 			long organisation_id, long roomtypes_id) {
 		try {
-			Long users_id = sessionManagement.checkSession(SID);
+			Long users_id = sessiondataDao.checkSession(SID);
 			Long user_level = userManager.getUserLevelByID(users_id);
 
 			log.debug("getRoomsByOrganisationAndType");
@@ -136,7 +136,7 @@ public class ConferenceService {
 	public List<RoomOrganisation> getRoomsByOrganisationWithoutType(
 			String SID, long organisation_id) {
 		try {
-			Long users_id = sessionManagement.checkSession(SID);
+			Long users_id = sessiondataDao.checkSession(SID);
 			Long user_level = userManager.getUserLevelByID(users_id);
 
 			log.debug("getRoomsByOrganisationAndType");
@@ -173,7 +173,7 @@ public class ConferenceService {
 
 		log.debug("getRoomsByOrganisation");
 
-		Long user_id = sessionManagement.checkSession(SID);
+		Long user_id = sessiondataDao.checkSession(SID);
 		Long user_level = userManager.getUserLevelByIdAndOrg(user_id,
 				organisation_id);
 
@@ -192,7 +192,7 @@ public class ConferenceService {
 		try {
 			log.debug("getRoomsPublic");
 
-			Long users_id = sessionManagement.checkSession(SID);
+			Long users_id = sessiondataDao.checkSession(SID);
 			Long User_level = userManager.getUserLevelByID(users_id);
 			log.error("getRoomsPublic user_level: " + User_level);
 
@@ -222,7 +222,7 @@ public class ConferenceService {
 	public List<Room> getRoomsPublicWithoutType(String SID) {
 		try {
 
-			Long users_id = sessionManagement.checkSession(SID);
+			Long users_id = sessiondataDao.checkSession(SID);
 			Long user_level = userManager.getUserLevelByID(users_id);
 			log.debug("getRoomsPublic user_level: " + user_level);
 
@@ -337,10 +337,10 @@ public class ConferenceService {
 	public List<Room> getAppointedMeetings(String SID, Long room_types_id) {
 		log.debug("ConferenceService.getAppointedMeetings");
 
-		Long users_id = sessionManagement.checkSession(SID);
+		Long users_id = sessiondataDao.checkSession(SID);
 		Long user_level = userManager.getUserLevelByID(users_id);
 
-		if (authLevelManagement.checkUserLevel(user_level)) {
+		if (authLevelUtil.checkUserLevel(user_level)) {
 
 			List<Appointment> points = appointmentLogic
 					.getTodaysAppointmentsForUser(users_id);
@@ -377,10 +377,10 @@ public class ConferenceService {
 	public List<Room> getAppointedMeetingRoomsWithoutType(String SID) {
 		log.debug("ConferenceService.getAppointedMeetings");
 		try {
-			Long users_id = sessionManagement.checkSession(SID);
+			Long users_id = sessiondataDao.checkSession(SID);
 			Long user_level = userManager.getUserLevelByID(users_id);
 
-			if (authLevelManagement.checkUserLevel(user_level)) {
+			if (authLevelUtil.checkUserLevel(user_level)) {
 				List<Appointment> appointments = appointmentLogic
 						.getTodaysAppointmentsForUser(users_id);
 				List<Room> result = new ArrayList<Room>();
@@ -413,9 +413,9 @@ public class ConferenceService {
 	 * @return - all room types available
 	 */
 	public List<RoomType> getRoomTypes(String SID) {
-		Long users_id = sessionManagement.checkSession(SID);
+		Long users_id = sessiondataDao.checkSession(SID);
 		Long user_level = userManager.getUserLevelByID(users_id);
-		if (authLevelManagement.checkUserLevel(user_level)) {
+		if (authLevelUtil.checkUserLevel(user_level)) {
 			return roomManager.getAllRoomTypes();
 		}
 		return null;
@@ -428,13 +428,13 @@ public class ConferenceService {
 	 * @return - room with the id given
 	 */
 	public Room getRoomById(String SID, long rooms_id) {
-		Long users_id = sessionManagement.checkSession(SID);
+		Long users_id = sessiondataDao.checkSession(SID);
 		Long user_level = userManager.getUserLevelByID(users_id);
 		return roomManager.getRoomById(user_level, rooms_id);
 	}
 
 	public Room getRoomWithCurrentUsersById(String SID, long rooms_id) {
-		Long users_id = sessionManagement.checkSession(SID);
+		Long users_id = sessiondataDao.checkSession(SID);
 		Long user_level = userManager.getUserLevelByID(users_id);
 		Room room = roomManager.getRoomById(user_level, rooms_id);
 		room.setCurrentusers(sessionManager.getClientListByRoom(room.getRooms_id()));
@@ -451,7 +451,7 @@ public class ConferenceService {
 	 */
 	public Room getRoomByExternalId(String SID, Long externalUserId,
 			String externalUserType, long roomtypes_id) {
-		Long users_id = sessionManagement.checkSession(SID);
+		Long users_id = sessiondataDao.checkSession(SID);
 		Long user_level = userManager.getUserLevelByID(users_id);
 		return roomManager.getRoomByExternalId(user_level, externalUserId,
 				externalUserType, roomtypes_id);
@@ -471,7 +471,7 @@ public class ConferenceService {
 			String orderby, boolean asc, String search) {
 		log.debug("getRooms");
 
-		Long users_id = sessionManagement.checkSession(SID);
+		Long users_id = sessiondataDao.checkSession(SID);
 		Long user_level = userManager.getUserLevelByID(users_id);
 		return roomManager.getRooms(user_level, start, max, orderby, asc,
 				search);
@@ -481,7 +481,7 @@ public class ConferenceService {
 			int max, String orderby, boolean asc) {
 		log.debug("getRooms");
 
-		Long users_id = sessionManagement.checkSession(SID);
+		Long users_id = sessiondataDao.checkSession(SID);
 		Long user_level = userManager.getUserLevelByID(users_id);
 		return roomManager.getRoomsWithCurrentUsers(user_level, start, max,
 				orderby, asc);
@@ -496,7 +496,7 @@ public class ConferenceService {
 	 */
 	public List<RoomOrganisation> getOrganisationByRoom(String SID,
 			long rooms_id) {
-		Long users_id = sessionManagement.checkSession(SID);
+		Long users_id = sessiondataDao.checkSession(SID);
 		Long user_level = userManager.getUserLevelByID(users_id);
 		return roomManager.getOrganisationsByRoom(user_level, rooms_id);
 	}
@@ -509,7 +509,7 @@ public class ConferenceService {
 	 */
 	public Long saveOrUpdateRoom(String SID, Object argObject) {
 		try {
-			Long users_id = sessionManagement.checkSession(SID);
+			Long users_id = sessiondataDao.checkSession(SID);
 			long User_level = userManager.getUserLevelByID(users_id);
 			log.debug("argObject: 1 - " + argObject.getClass().getName());
 			@SuppressWarnings("unchecked")
@@ -624,10 +624,10 @@ public class ConferenceService {
 			Long roomId) {
 		try {
 
-			Long users_id = sessionManagement.checkSession(SID);
+			Long users_id = sessiondataDao.checkSession(SID);
 			long user_level = userManager.getUserLevelByID(users_id);
 
-			if (authLevelManagement.checkUserLevel(user_level)) {
+			if (authLevelUtil.checkUserLevel(user_level)) {
 
 				return roomModeratorsDao.getRoomModeratorByRoomId(roomId);
 
@@ -648,7 +648,7 @@ public class ConferenceService {
 	 * @return - id of the room being deleted
 	 */
 	public Long deleteRoom(String SID, long rooms_id) {
-		Long users_id = sessionManagement.checkSession(SID);
+		Long users_id = sessiondataDao.checkSession(SID);
 		long user_level = userManager.getUserLevelByID(users_id);
 		return roomManager.deleteRoomById(user_level, rooms_id);
 	}
@@ -698,9 +698,9 @@ public class ConferenceService {
 	public SearchResult<Client> getRoomClientsMap(String SID, int start, int max,
 			String orderby, boolean asc) {
 		try {
-			Long users_id = sessionManagement.checkSession(SID);
+			Long users_id = sessiondataDao.checkSession(SID);
 			Long user_level = userManager.getUserLevelByID(users_id);
-			if (authLevelManagement.checkAdminLevel(user_level)) {
+			if (authLevelUtil.checkAdminLevel(user_level)) {
 				return this.sessionManager.getListByStartAndMax(start, max,
 						orderby, asc);
 			}
@@ -718,9 +718,9 @@ public class ConferenceService {
 	 */
 	public String getSessionStatistics(String SID) {
 		try {
-			Long users_id = sessionManagement.checkSession(SID);
+			Long users_id = sessiondataDao.checkSession(SID);
 			Long user_level = userManager.getUserLevelByID(users_id);
-			if (authLevelManagement.checkAdminLevel(user_level)) {
+			if (authLevelUtil.checkAdminLevel(user_level)) {
 				return this.sessionManager.getSessionStatistics();
 			}
 		} catch (Exception err) {
@@ -733,7 +733,7 @@ public class ConferenceService {
 			int max, String orderby, boolean asc) {
 		log.debug("getRooms");
 
-		Long users_id = sessionManagement.checkSession(SID);
+		Long users_id = sessiondataDao.checkSession(SID);
 		Long user_level = userManager.getUserLevelByID(users_id);
 		return roomManager.getRoomsWithCurrentUsersByList(user_level, start,
 				max, orderby, asc);
@@ -744,7 +744,7 @@ public class ConferenceService {
 			String externalRoomType) {
 		log.debug("getRooms");
 
-		Long users_id = sessionManagement.checkSession(SID);
+		Long users_id = sessiondataDao.checkSession(SID);
 		Long user_level = userManager.getUserLevelByID(users_id);
 		return roomManager.getRoomsWithCurrentUsersByListAndType(user_level,
 				start, max, orderby, asc, externalRoomType);
@@ -752,9 +752,9 @@ public class ConferenceService {
 
 	public Room getRoomByOwnerAndType(String SID, Long roomtypesId,
 			String roomName) {
-		Long users_id = sessionManagement.checkSession(SID);
+		Long users_id = sessiondataDao.checkSession(SID);
 		Long user_level = userManager.getUserLevelByID(users_id);
-		if (authLevelManagement.checkUserLevel(user_level)) {
+		if (authLevelUtil.checkUserLevel(user_level)) {
 			return roomManager.getRoomByOwnerAndTypeId(users_id,
 					roomtypesId, roomName);
 		}
@@ -770,9 +770,9 @@ public class ConferenceService {
 	 *         {@link Server} entity is returned
 	 */
 	public ServerDTO getServerForSession(String SID, long roomId) {
-		Long users_id = sessionManagement.checkSession(SID);
+		Long users_id = sessiondataDao.checkSession(SID);
 		Long user_level = userManager.getUserLevelByID(users_id);
-		if (authLevelManagement.checkUserLevel(user_level)) {
+		if (authLevelUtil.checkUserLevel(user_level)) {
 			List<Server> serverList = serverDao.getActiveServers();
 			
 			//if there is no cluster set up, just redirect to the current one

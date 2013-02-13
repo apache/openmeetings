@@ -32,7 +32,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class ResetPasswordTemplate extends VelocityLoader {
 
 	@Autowired
-	private FieldManager fieldmanagment;
+	private FieldManager fieldManager;
 
 	private static final String templateName = "resetPass.vm";
 
@@ -45,18 +45,18 @@ public class ResetPasswordTemplate extends VelocityLoader {
 
 			super.init();
 
-			Fieldlanguagesvalues labelid514 = fieldmanagment
+			Fieldlanguagesvalues labelid514 = fieldManager
 					.getFieldByIdAndLanguage(new Long(514), default_lang_id);
-			Fieldlanguagesvalues labelid515 = fieldmanagment
+			Fieldlanguagesvalues labelid515 = fieldManager
 					.getFieldByIdAndLanguage(new Long(515), default_lang_id);
-			Fieldlanguagesvalues labelid516 = fieldmanagment
+			Fieldlanguagesvalues labelid516 = fieldManager
 					.getFieldByIdAndLanguage(new Long(516), default_lang_id);
 
 			/* lets make a Context and put data into it */
 			VelocityContext context = new VelocityContext();
 			context.put("reset_link", reset_link);
 			context.put("reset_link2", reset_link);
-			context.put("labelid513", fieldmanagment.getString(513L, default_lang_id));
+			context.put("labelid513", fieldManager.getString(513L, default_lang_id));
 			context.put("labelid514", labelid514.getValue());
 			context.put("labelid515", labelid515.getValue());
 			context.put("labelid516", labelid516.getValue());

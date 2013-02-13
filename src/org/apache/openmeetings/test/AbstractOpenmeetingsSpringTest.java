@@ -65,7 +65,7 @@ public abstract class AbstractOpenmeetingsSpringTest extends AbstractJUnit4Sprin
 	@Autowired
 	private ImportInitvalues importInitvalues;
 	@Autowired
-	private ConfigurationDao configDao;
+	private ConfigurationDao configurationDao;
 	@Autowired
 	private ManageCryptStyle cryptManager;
 
@@ -117,7 +117,7 @@ public abstract class AbstractOpenmeetingsSpringTest extends AbstractJUnit4Sprin
 		users.setFirstname("firstname" + rnd);
 		users.setLastname("lastname" + rnd);
 		users.setLogin("login");
-		users.updatePassword(cryptManager, configDao, "pass" + rnd);
+		users.updatePassword(cryptManager, configurationDao, "pass" + rnd);
 		users.setLanguage_id(1L);
 		Long user_id = userManager.addUser(users);
 		assertTrue("Cann't add user", user_id > 0);

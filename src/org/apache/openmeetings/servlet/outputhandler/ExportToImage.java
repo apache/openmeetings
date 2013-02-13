@@ -60,7 +60,7 @@ public class ExportToImage extends HttpServlet {
 	private static final Logger log = Red5LoggerFactory.getLogger(
 			ExportToImage.class, OpenmeetingsVariables.webAppRootKey);
 
-	public SessiondataDao getSessionManagement() {
+	public SessiondataDao getSessiondataDao() {
 		try {
 			if (ScopeApplicationAdapter.initComplete) {
 				ApplicationContext context = WebApplicationContextUtils
@@ -111,7 +111,7 @@ public class ExportToImage extends HttpServlet {
 			IOException {
 
 		try {
-			if (getUserManager() == null || getSessionManagement() == null
+			if (getUserManager() == null || getSessiondataDao() == null
 					|| getGenerateImage() == null) {
 				return;
 			}
@@ -138,7 +138,7 @@ public class ExportToImage extends HttpServlet {
 				exportType = "svg";
 			}
 
-			Long users_id = getSessionManagement().checkSession(sid);
+			Long users_id = getSessiondataDao().checkSession(sid);
 			Long user_level = getUserManager().getUserLevelByID(users_id);
 
 			log.debug("users_id: " + users_id);

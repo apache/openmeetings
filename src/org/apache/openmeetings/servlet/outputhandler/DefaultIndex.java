@@ -40,7 +40,7 @@ public class DefaultIndex extends VelocityViewServlet {
 	private static final Logger log = Red5LoggerFactory.getLogger(
 			DefaultIndex.class, OpenmeetingsVariables.webAppRootKey);
 
-	private ConfigurationDao getConfigurationDaoImpl() {
+	private ConfigurationDao getConfigurationDao() {
 		try {
 			if (!ScopeApplicationAdapter.initComplete) {
 				return null;
@@ -61,13 +61,13 @@ public class DefaultIndex extends VelocityViewServlet {
 
 		try {
 
-			if (getConfigurationDaoImpl() == null) {
+			if (getConfigurationDao() == null) {
 				return getVelocityView().getVelocityEngine().getTemplate(
 						"booting.vm");
 			}
 
 			String template = "usual_template.vm";
-			ctx.put("APP_NAME", getConfigurationDaoImpl().getAppName());
+			ctx.put("APP_NAME", getConfigurationDao().getAppName());
 			// Parse the Param for the SWF URL
 			String swf = httpServletRequest.getParameter("swf");
 			if (swf == null) {

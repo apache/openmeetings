@@ -55,11 +55,11 @@ public class ScreenController {
 	@Autowired
 	private ISessionManager sessionManager;
 	@Autowired
-	public SessiondataDao sessionManagement;
+	public SessiondataDao sessiondataDao;
 	@Autowired
-	public ConfigurationDao configurationDaoImpl;
+	public ConfigurationDao configurationDao;
 	@Autowired
-	public FieldManager fieldmanagment;
+	public FieldManager fieldManager;
 
 	private enum ConnectionType {
 		rtmp
@@ -74,7 +74,7 @@ public class ScreenController {
 			if (delim) {
 				result.append(';');
 			}
-			result.append(fieldmanagment.getFieldByIdAndLanguage((long)id, language_id).getValue());
+			result.append(fieldManager.getFieldByIdAndLanguage((long)id, language_id).getValue());
 			delim = true;
 		}
 		return result.toString();
@@ -85,7 +85,7 @@ public class ScreenController {
 			HttpServletResponse response) {
 		try {
 			String sid = request.getParameter("sid");
-			Long users_id = sessionManagement.checkSession(sid);
+			Long users_id = sessiondataDao.checkSession(sid);
 			String publicSID = request.getParameter("publicSID");
 			if (publicSID == null) {
 				throw new Exception("publicSID is empty: " + publicSID);
@@ -193,7 +193,7 @@ public class ScreenController {
 					.getPublishingCount(roomId));
 			
 			Context ctx = new VelocityContext();
-			ctx.put("APP_NAME", configurationDaoImpl.getAppName());
+			ctx.put("APP_NAME", configurationDao.getAppName());
 			ctx.put("PUBLIC_SID", publicSID);
 			ctx.put("LABELSHARER", label_sharer);
 			addKeystore(ctx);
@@ -204,7 +204,7 @@ public class ScreenController {
 			ctx.put("red5-host", rtmphostlocal);
 			ctx.put("red5-app", OpenmeetingsVariables.webAppRootKey + "/" + roomId);
 			ctx.put("default_quality_screensharing",
-					configurationDaoImpl
+					configurationDao
 						.getConfValue("default.quality.screensharing", String.class, "1"));
 			//invited guest does not have valid user_id (have user_id == -1)
 			ctx.put("user_id", users_id);

@@ -69,7 +69,7 @@ public class CalendarServlet extends HttpServlet {
 		return null;
 	}
 
-	public SessiondataDao getSessionManagement() {
+	public SessiondataDao getSessiondataDao() {
 		try {
 			if (ScopeApplicationAdapter.initComplete) {
 				ApplicationContext context = WebApplicationContextUtils
@@ -82,7 +82,7 @@ public class CalendarServlet extends HttpServlet {
 		return null;
 	}
 
-	public ConfigurationDao getConfigurationDaoImpl() {
+	public ConfigurationDao getConfigurationDao() {
 		try {
 			if (ScopeApplicationAdapter.initComplete) {
 				ApplicationContext context = WebApplicationContextUtils
@@ -143,8 +143,8 @@ public class CalendarServlet extends HttpServlet {
 		try {
 
 			if (getUserManager() == null || getOmTimeZoneDaoImpl() == null
-					|| getConfigurationDaoImpl() == null
-					|| getSessionManagement() == null
+					|| getConfigurationDao() == null
+					|| getSessiondataDao() == null
 					|| getAppointmentLogic() == null
 					|| getTimezoneUtil() == null) {
 				return;
@@ -157,7 +157,7 @@ public class CalendarServlet extends HttpServlet {
 			}
 			log.debug("sid: " + sid);
 
-			Long users_id = getSessionManagement().checkSession(sid);
+			Long users_id = getSessiondataDao().checkSession(sid);
 			Long user_level = getUserManager().getUserLevelByID(users_id);
 
 			if (user_level != null && user_level > 0) {

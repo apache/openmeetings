@@ -42,11 +42,11 @@ public class ServerWebService {
 			ServerWebService.class, OpenmeetingsVariables.webAppRootKey);
 
 	@Autowired
-	private SessiondataDao sessionManagement;
+	private SessiondataDao sessiondataDao;
 	@Autowired
 	private UserManager userManager;
 	@Autowired
-	private AuthLevelUtil authLevelManagement;
+	private AuthLevelUtil authLevelUtil;
 	@Autowired
 	private ServerDao serversDao;
 
@@ -63,10 +63,10 @@ public class ServerWebService {
 	 */
 	public Server[] getServers(String SID, int start, int max) throws AxisFault {
 		log.debug("getServers enter");
-		Long users_id = sessionManagement.checkSession(SID);
+		Long users_id = sessiondataDao.checkSession(SID);
 		Long user_level = userManager.getUserLevelByID(users_id);
 
-		if (authLevelManagement.checkWebServiceLevel(user_level)) {
+		if (authLevelUtil.checkWebServiceLevel(user_level)) {
 			return serversDao.get(start, max).toArray(new Server[0]);
 		} else {
 			log.warn("Insuffisient permissions");
@@ -84,10 +84,10 @@ public class ServerWebService {
 	 */
 	public int getServerCount(String SID) throws AxisFault {
 		log.debug("getServerCount enter");
-		Long users_id = sessionManagement.checkSession(SID);
+		Long users_id = sessiondataDao.checkSession(SID);
 		Long user_level = userManager.getUserLevelByID(users_id);
 
-		if (authLevelManagement.checkWebServiceLevel(user_level)) {
+		if (authLevelUtil.checkWebServiceLevel(user_level)) {
 			return (int) serversDao.count();
 		} else {
 			log.warn("Insuffisient permissions");
@@ -126,10 +126,10 @@ public class ServerWebService {
 			int port, String user, String pass, String webapp, String protocol,
 			Boolean active, String comment) throws AxisFault {
 		log.debug("saveServerCount enter");
-		Long users_id = sessionManagement.checkSession(SID);
+		Long users_id = sessiondataDao.checkSession(SID);
 		Long user_level = userManager.getUserLevelByID(users_id);
 
-		if (authLevelManagement.checkWebServiceLevel(user_level)) {
+		if (authLevelUtil.checkWebServiceLevel(user_level)) {
 			Server s = serversDao.get(id);
 			if (s == null) {
 				s = new Server();
@@ -161,10 +161,10 @@ public class ServerWebService {
 	 */
 	public boolean deleteServer(String SID, long id) throws AxisFault {
 		log.debug("saveServerCount enter");
-		Long users_id = sessionManagement.checkSession(SID);
+		Long users_id = sessiondataDao.checkSession(SID);
 		Long user_level = userManager.getUserLevelByID(users_id);
 
-		if (authLevelManagement.checkWebServiceLevel(user_level)) {
+		if (authLevelUtil.checkWebServiceLevel(user_level)) {
 			Server s = serversDao.get(id);
 			if (s != null) {
 				serversDao.delete(s, users_id);

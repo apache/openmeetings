@@ -25,6 +25,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -32,6 +34,11 @@ import org.apache.openjpa.persistence.jdbc.ForeignKey;
 import org.apache.openmeetings.persistence.beans.lang.Fieldvalues;
 
 @Entity
+@NamedQueries({
+	@NamedQuery(name = "getPollTypes", query = "SELECT pt FROM PollType pt"),
+	@NamedQuery(name = "getPollType", query = "SELECT pt FROM PollType pt " +
+			"WHERE pt.pollTypesId = :pollTypesId")		
+})
 @Table(name = "poll_types")
 public class PollType {
 	@Id

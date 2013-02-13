@@ -43,13 +43,13 @@ public class OrganisationService {
 	private static final Logger log = Red5LoggerFactory.getLogger(
 			OrganisationService.class, OpenmeetingsVariables.webAppRootKey);
 	@Autowired
-	private SessiondataDao sessionManagement;
+	private SessiondataDao sessiondataDao;
 	@Autowired
 	private UserManager userManager;
 	@Autowired
 	private OrganisationManager organisationManager;
 	@Autowired
-	private AuthLevelUtil authLevelManagement;
+	private AuthLevelUtil authLevelUtil;
 
 	/**
 	 * Loads a List of all available Organizations (Admin-role only)
@@ -60,7 +60,7 @@ public class OrganisationService {
 	public SearchResult<Organisation> getOrganisations(String SID, int start, int max,
 			String orderby, boolean asc) {
 		try {
-			Long users_id = sessionManagement.checkSession(SID);
+			Long users_id = sessiondataDao.checkSession(SID);
 			long user_level = userManager.getUserLevelByID(users_id);
 			return organisationManager.getOrganisations(user_level, start,
 					max, orderby, asc);
@@ -72,7 +72,7 @@ public class OrganisationService {
 
 	public List<Organisation> getAllOrganisations(String SID) {
 		try {
-			Long users_id = sessionManagement.checkSession(SID);
+			Long users_id = sessiondataDao.checkSession(SID);
 			Long user_level = userManager.getUserLevelByID(users_id);
 			return organisationManager.getOrganisations(user_level);
 		} catch (Exception e) {
@@ -89,7 +89,7 @@ public class OrganisationService {
 	 * @return - organisation with given id
 	 */
 	public Organisation getOrganisationById(String SID, long organisation_id) {
-		Long users_id = sessionManagement.checkSession(SID);
+		Long users_id = sessiondataDao.checkSession(SID);
 		long user_level = userManager.getUserLevelByID(users_id);
 		return organisationManager.getOrganisationById(user_level,
 				organisation_id);
@@ -103,7 +103,7 @@ public class OrganisationService {
 	 * @return - id of organisation in case of success, null otherwise
 	 */
 	public Long deleteOrganisation(String SID, long organisation_id) {
-		Long users_id = sessionManagement.checkSession(SID);
+		Long users_id = sessiondataDao.checkSession(SID);
 		long user_level = userManager.getUserLevelByID(users_id);
 		return organisationManager.deleteOrganisation(user_level,
 				organisation_id, users_id);
@@ -118,7 +118,7 @@ public class OrganisationService {
 	 */
 	public Long saveOrUpdateOrganisation(String SID, Object regObjectObj) {
 		try {
-			Long users_id = sessionManagement.checkSession(SID);
+			Long users_id = sessiondataDao.checkSession(SID);
 			long user_level = userManager.getUserLevelByID(users_id);
 			@SuppressWarnings("rawtypes")
 			LinkedHashMap<?, ?> argObjectMap = (LinkedHashMap) regObjectObj;
@@ -154,9 +154,9 @@ public class OrganisationService {
 			long organisation_id, int start, int max, String orderby,
 			boolean asc) {
 		try {
-			Long users_id = sessionManagement.checkSession(SID);
+			Long users_id = sessiondataDao.checkSession(SID);
 			Long user_level = userManager.getUserLevelByID(users_id);
-			if (authLevelManagement.checkAdminLevel(user_level)) {
+			if (authLevelUtil.checkAdminLevel(user_level)) {
 				return organisationManager
 						.getUsersSearchResultByOrganisationId(organisation_id,
 								start, max, orderby, asc);
@@ -175,9 +175,9 @@ public class OrganisationService {
 	public Long addUserToOrganisation(String SID, Long organisation_id,
 			Long user_id) {
 		try {
-			Long users_id = sessionManagement.checkSession(SID);
+			Long users_id = sessiondataDao.checkSession(SID);
 			Long user_level = userManager.getUserLevelByID(users_id);
-			if (authLevelManagement.checkAdminLevel(user_level)) {
+			if (authLevelUtil.checkAdminLevel(user_level)) {
 				return organisationManager.addUserToOrganisation(user_id,
 						organisation_id, users_id);
 			} else {
@@ -192,7 +192,7 @@ public class OrganisationService {
 	public Long deleteUserFromOrganisation(String SID, Long organisation_id,
 			Long user_id, String comment) {
 		try {
-			Long users_id = sessionManagement.checkSession(SID);
+			Long users_id = sessiondataDao.checkSession(SID);
 			Long user_level = userManager.getUserLevelByID(users_id);
 			return organisationManager.deleteUserFromOrganisation(
 					user_level, user_id, organisation_id);

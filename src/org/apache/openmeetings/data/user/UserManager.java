@@ -85,11 +85,11 @@ public class UserManager {
 	private EntityManager em;
 
 	@Autowired
-	private SessiondataDao sessionManagement;
+	private SessiondataDao sessiondataDao;
 	@Autowired
-	private ConfigurationDao configDao;
+	private ConfigurationDao configurationDao;
 	@Autowired
-	private FieldManager fieldmanagment;
+	private FieldManager fieldManager;
 	@Autowired
 	private StateDao statemanagement;
 	@Autowired
@@ -109,7 +109,7 @@ public class UserManager {
 	@Autowired
 	private ResetPasswordTemplate resetPasswordTemplate;
 	@Autowired
-	private AuthLevelUtil authLevelManagement;
+	private AuthLevelUtil authLevelUtil;
 	@Autowired
 	private ISessionManager sessionManager;
 
@@ -126,7 +126,7 @@ public class UserManager {
 	public SearchResult<User> getUsersList(long user_level, int start, int max,
 			String orderby, boolean asc) {
 		try {
-			if (authLevelManagement.checkAdminLevel(user_level)) {
+			if (authLevelUtil.checkAdminLevel(user_level)) {
 				SearchResult<User> sresult = new SearchResult<User>();
 				sresult.setObjectName(User.class.getName());
 				sresult.setRecords(usersDao.count());
@@ -206,7 +206,7 @@ public class UserManager {
 	public User checkAdmingetUserById(long user_level, long user_id) {
 		// FIXME: We have to check here for the User only cause the
 		// Org-Moderator otherwise cannot access it
-		if (authLevelManagement.checkUserLevel(user_level)) {
+		if (authLevelUtil.checkUserLevel(user_level)) {
 			return usersDao.get(user_id);
 		}
 		return null;
@@ -252,7 +252,7 @@ public class UserManager {
 
 				if (usersDao.verifyPassword(users.getUser_id(), userpass)) {
 
-					Boolean bool = sessionManagement.updateUser(SID,
+					Boolean bool = sessiondataDao.updateUser(SID,
 							users.getUser_id(), storePermanent,
 							users.getLanguage_id());
 					if (bool == null) {
@@ -311,14 +311,14 @@ public class UserManager {
 	public User loginUserByRemoteHash(String SID, String remoteHash) {
 		try {
 
-			Sessiondata sessionData = sessionManagement
+			Sessiondata sessionData = sessiondataDao
 					.getSessionByHash(remoteHash);
 
 			if (sessionData != null) {
 
 				User u = getUserById(sessionData.getUser_id());
 
-				sessionManagement.updateUserWithoutSession(SID, u.getUser_id());
+				sessiondataDao.updateUserWithoutSession(SID, u.getUser_id());
 
 				return u;
 			}
@@ -330,7 +330,7 @@ public class UserManager {
 	}
 
 	public Long logout(String SID, long USER_ID) {
-		sessionManagement.updateUser(SID, 0, false, null);
+		sessiondataDao.updateUser(SID, 0, false, null);
 		return new Long(-12);
 	}
 
@@ -360,7 +360,7 @@ public class UserManager {
 	 */
 	public List<User> searchUser(long user_level, String searchcriteria,
 			String searchstring, int max, int start, String orderby, boolean asc) {
-		if (authLevelManagement.checkAdminLevel(user_level)) {
+		if (authLevelUtil.checkAdminLevel(user_level)) {
 			try {
 				CriteriaBuilder cb = em.getCriteriaBuilder();
 				CriteriaQuery<User> cq = cb.createQuery(User.class);
@@ -439,7 +439,7 @@ public class UserManager {
 			Boolean forceTimeZoneCheck, String userOffers, String userSearchs,
 			Boolean showContactData, Boolean showContactDataToContacts) {
 
-		if (authLevelManagement.checkUserLevel(user_level) && user_id != 0) {
+		if (authLevelUtil.checkUserLevel(user_level) && user_id != 0) {
 			try {
 				User us = usersDao.get(user_id);
 
@@ -493,7 +493,7 @@ public class UserManager {
 					}
 					if (password.length() != 0) {
 						try {
-							us.updatePassword(cryptManager, configDao, password);
+							us.updatePassword(cryptManager, configurationDao, password);
 						} catch (Exception e) {
 							return new Long(-7);
 						}
@@ -722,7 +722,7 @@ public class UserManager {
 		
 		boolean sendConfirmation = baseURL != null
 				&& !baseURL.isEmpty()
-				&& 1 == configDao.getConfValue(
+				&& 1 == configurationDao.getConfValue(
 						"sendEmailWithVerficationCode", Integer.class, "0");
 		
 		return registerUser(login, Userpass, lastname, firstname, email, age,
@@ -748,7 +748,7 @@ public class UserManager {
 			boolean generateSipUserData, String jNameTimeZone, Boolean sendConfirmation) {
 		try {
 			// Checks if FrontEndUsers can register
-			if ("1".equals(configDao.getConfValue(
+			if ("1".equals(configurationDao.getConfValue(
 					"allow_frontend_register", String.class, "0"))) {
 				
 				// TODO: Read and generate SIP-Data via RPC-Interface Issue 1098
@@ -756,7 +756,7 @@ public class UserManager {
 				Long user_id = this.registerUserInit(3, 1, 0, 1, login,
 						Userpass, lastname, firstname, email, age, street,
 						additionalname, fax, zip, states_id, town, language_id,
-						true, Arrays.asList(configDao.getConfValue(
+						true, Arrays.asList(configurationDao.getConfValue(
 								"default_domain_id", Long.class, null)), phone,
 						sendSMS, baseURL,
 						sendConfirmation, jNameTimeZone, false, "", "", false, true);
@@ -868,9 +868,9 @@ public class UserManager {
 		// User Level must be at least Admin
 		// Moderators will get a temp update of there UserLevel to add Users to
 		// their Group
-		if (authLevelManagement.checkModLevel(user_level)) {
+		if (authLevelUtil.checkModLevel(user_level)) {
 
-			Integer userLoginMinimumLength = configDao.getConfValue(
+			Integer userLoginMinimumLength = configurationDao.getConfValue(
 					"user.login.minimum.length", Integer.class, "4");
 			if (userLoginMinimumLength == null) {
 				throw new Exception(
@@ -1009,7 +1009,7 @@ public class UserManager {
 			} else {
 				users.setLanguage_id(null);
 			}
-			users.updatePassword(cryptManager, configDao, userpass);
+			users.updatePassword(cryptManager, configurationDao, userpass);
 			users.setRegdate(new Date());
 			users.setDeleted(false);
 			
@@ -1096,7 +1096,7 @@ public class UserManager {
 			} else {
 				users.setLanguage_id(null);
 			}
-			users.updatePassword(cryptManager, configDao, userpass, emptyPass);
+			users.updatePassword(cryptManager, configurationDao, userpass, emptyPass);
 			users.setRegdate(new Date());
 			users.setDeleted(false);
 
@@ -1154,7 +1154,7 @@ public class UserManager {
 	public Long saveOrUpdateUser(Long user_level, ObjectMap<?, ?> values,
 			Long users_id) {
 		try {
-			if (authLevelManagement.checkAdminLevel(user_level)) {
+			if (authLevelUtil.checkAdminLevel(user_level)) {
 				Long returnLong = null;
 
 				Long user_id = Long.parseLong(values.get("user_id").toString());
@@ -1177,7 +1177,7 @@ public class UserManager {
 
 					String password = values.get("password").toString();
 					if (password != null && !password.isEmpty()) {
-						savedUser.updatePassword(cryptManager, configDao, password);
+						savedUser.updatePassword(cryptManager, configurationDao, password);
 					}
 
 					String email = values.get("email").toString();
@@ -1296,12 +1296,12 @@ public class UserManager {
 
 		String email = us.getAdresses().getEmail();
 
-		Long default_lang_id = configDao.getConfValue("default_lang_id", Long.class, "1");
+		Long default_lang_id = configurationDao.getConfValue("default_lang_id", Long.class, "1");
 
 		String template = resetPasswordTemplate.getResetPasswordTemplate(
 				reset_link, default_lang_id);
 
-		mailHandler.sendMail(email, fieldmanagment.getString(517L, default_lang_id), template);
+		mailHandler.sendMail(email, fieldManager.getString(517L, default_lang_id), template);
 	}
 
 	/**
@@ -1448,13 +1448,13 @@ public class UserManager {
 	 */
 	public Boolean kickUserByStreamId(String SID, Long room_id) {
 		try {
-			Long users_id = sessionManagement.checkSession(SID);
+			Long users_id = sessiondataDao.checkSession(SID);
 			Long user_level = getUserLevelByID(users_id);
 
 			// admins only
-			if (authLevelManagement.checkAdminLevel(user_level)) {
+			if (authLevelUtil.checkAdminLevel(user_level)) {
 
-				sessionManagement.clearSessionByRoomId(room_id);
+				sessiondataDao.clearSessionByRoomId(room_id);
 
 				for (Client rcl : sessionManager.getClientListByRoom(room_id)) {
 					if (rcl == null) {
@@ -1486,11 +1486,11 @@ public class UserManager {
 
 	public Boolean kickUserByPublicSID(String SID, String publicSID) {
 		try {
-			Long users_id = sessionManagement.checkSession(SID);
+			Long users_id = sessiondataDao.checkSession(SID);
 			Long user_level = getUserLevelByID(users_id);
 
 			// admins only
-			if (authLevelManagement.checkWebServiceLevel(user_level)) {
+			if (authLevelUtil.checkWebServiceLevel(user_level)) {
 
 				Client rcl = sessionManager
 						.getClientByPublicSID(publicSID, false, null);
@@ -1564,7 +1564,7 @@ public class UserManager {
 	public SearchResult<User> getUsersListWithSearch(Long user_level, int start,
 			int max, String orderby, boolean asc, String search) {
 		try {
-			if (authLevelManagement.checkAdminLevel(user_level)) {
+			if (authLevelUtil.checkAdminLevel(user_level)) {
 
 				String hql = "select c from User c "
 						+ "where c.deleted = false " + "AND ("

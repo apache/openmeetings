@@ -43,9 +43,9 @@ public class InvitationService implements IPendingServiceCallback {
 	private static final Logger log = Red5LoggerFactory.getLogger(
 			InvitationService.class, OpenmeetingsVariables.webAppRootKey);
 	@Autowired
-	private SessiondataDao sessionManagement;
+	private SessiondataDao sessiondataDao;
 	@Autowired
-	private ConfigurationDao configurationDaoImpl;
+	private ConfigurationDao configurationDao;
 	@Autowired
 	private UsersDao userDAO;
 	@Autowired
@@ -105,7 +105,7 @@ public class InvitationService implements IPendingServiceCallback {
 			log.info("validFromHour: " + validFromHour);
 			log.info("validFromMinute: " + validFromMinute);
 
-			Long users_id = sessionManagement.checkSession(SID);
+			Long users_id = sessiondataDao.checkSession(SID);
 			Long user_level = userManager.getUserLevelByID(users_id);
 
 			OmTimeZone omTimeZone = omTimeZoneDaoImpl
@@ -113,7 +113,7 @@ public class InvitationService implements IPendingServiceCallback {
 
 			// If everything fails
 			if (omTimeZone == null) {
-				omTimeZone = omTimeZoneDaoImpl.getOmTimeZone(configurationDaoImpl.getConfValue("default.timezone", String.class, "Europe/Berlin"));
+				omTimeZone = omTimeZoneDaoImpl.getOmTimeZone(configurationDao.getConfValue("default.timezone", String.class, "Europe/Berlin"));
 			}
 
 			Calendar date = Calendar.getInstance();
@@ -160,7 +160,7 @@ public class InvitationService implements IPendingServiceCallback {
 	}
 
 	public String sendInvitationByHash(String SID, String invitationHash, String message, String baseurl, String subject, Long language_id) {
-		User us = userDAO.get(sessionManagement.checkSession(SID));
+		User us = userDAO.get(sessiondataDao.checkSession(SID));
 		Invitations inv = (Invitations)invitationManager.getInvitationByHashCode(invitationHash, true);
 		return invitationManager.sendInvitionLink(us, inv, message, baseurl, subject, language_id);
 	}

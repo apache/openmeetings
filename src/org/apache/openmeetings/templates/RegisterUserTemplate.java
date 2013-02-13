@@ -32,7 +32,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class RegisterUserTemplate extends VelocityLoader {
 
 	@Autowired
-	private FieldManager fieldmanagment;
+	private FieldManager fieldManager;
 
 	private static final String templateName = "register_mail.vm";
 
@@ -48,17 +48,17 @@ public class RegisterUserTemplate extends VelocityLoader {
 
 			super.init();
 
-			Fieldlanguagesvalues labelid507 = fieldmanagment
+			Fieldlanguagesvalues labelid507 = fieldManager
 					.getFieldByIdAndLanguage(new Long(507), default_lang_id);
-			Fieldlanguagesvalues labelid508 = fieldmanagment
+			Fieldlanguagesvalues labelid508 = fieldManager
 					.getFieldByIdAndLanguage(new Long(508), default_lang_id);
-			Fieldlanguagesvalues labelid509 = fieldmanagment
+			Fieldlanguagesvalues labelid509 = fieldManager
 					.getFieldByIdAndLanguage(new Long(509), default_lang_id);
-			Fieldlanguagesvalues labelid510 = fieldmanagment
+			Fieldlanguagesvalues labelid510 = fieldManager
 					.getFieldByIdAndLanguage(new Long(510), default_lang_id);
-			Fieldlanguagesvalues labelid667 = fieldmanagment
+			Fieldlanguagesvalues labelid667 = fieldManager
 					.getFieldByIdAndLanguage(new Long(667), default_lang_id);
-			Fieldlanguagesvalues labelid668 = fieldmanagment
+			Fieldlanguagesvalues labelid668 = fieldManager
 					.getFieldByIdAndLanguage(new Long(668), default_lang_id);
 
 			/* lets make a Context and put data into it */
@@ -68,12 +68,12 @@ public class RegisterUserTemplate extends VelocityLoader {
 			context.put("userpass", userpass);
 			context.put("mail", email);
 			context.put("verification_url", verification_url);
-			context.put("labelid506", fieldmanagment.getString(506L, default_lang_id));
+			context.put("labelid506", fieldManager.getString(506L, default_lang_id));
 			context.put("labelid507", labelid507.getValue());
 			context.put("labelid508", labelid508.getValue());
 			context.put("labelid509", labelid509.getValue());
 			context.put("labelid510", labelid510.getValue());
-			context.put("labelid511", fieldmanagment.getString(511L, default_lang_id));
+			context.put("labelid511", fieldManager.getString(511L, default_lang_id));
 			context.put("labelid667", labelid667.getValue());
 			context.put("labelid668", labelid668.getValue());
 
@@ -100,13 +100,13 @@ public class RegisterUserTemplate extends VelocityLoader {
 			
 			super.init();
 
-			Fieldlanguagesvalues labelid507 = fieldmanagment
+			Fieldlanguagesvalues labelid507 = fieldManager
 					.getFieldByIdAndLanguage(new Long(507), default_lang_id);
-			Fieldlanguagesvalues labelid508 = fieldmanagment
+			Fieldlanguagesvalues labelid508 = fieldManager
 					.getFieldByIdAndLanguage(new Long(508), default_lang_id);
-			Fieldlanguagesvalues labelid509 = fieldmanagment
+			Fieldlanguagesvalues labelid509 = fieldManager
 					.getFieldByIdAndLanguage(new Long(509), default_lang_id);
-			Fieldlanguagesvalues labelid510 = fieldmanagment
+			Fieldlanguagesvalues labelid510 = fieldManager
 					.getFieldByIdAndLanguage(new Long(510), default_lang_id);
 
 			/* lets make a Context and put data into it */
@@ -115,12 +115,12 @@ public class RegisterUserTemplate extends VelocityLoader {
 			context.put("username", username);
 			context.put("userpass", userpass);
 			context.put("mail", email);
-			context.put("labelid506", fieldmanagment.getString(506L, default_lang_id));
+			context.put("labelid506", fieldManager.getString(506L, default_lang_id));
 			context.put("labelid507", labelid507.getValue());
 			context.put("labelid508", labelid508.getValue());
 			context.put("labelid509", labelid509.getValue());
 			context.put("labelid510", labelid510.getValue());
-			context.put("labelid511", fieldmanagment.getString(511L, default_lang_id));
+			context.put("labelid511", fieldManager.getString(511L, default_lang_id));
 
 			/* lets render a template */
 

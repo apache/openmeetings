@@ -83,7 +83,7 @@ public class LangExport extends HttpServlet {
 			+ "see http://openmeetings.apache.org/LanguageEditor.html for Details \n"
 			+ "###############################################";
 
-	public SessiondataDao getSessionManagement() {
+	public SessiondataDao getSessiondataDao() {
 		try {
 			if (ScopeApplicationAdapter.initComplete) {
 				ApplicationContext context = WebApplicationContextUtils
@@ -109,7 +109,7 @@ public class LangExport extends HttpServlet {
 		return null;
 	}
 
-	public FieldManager getFieldmanagment() {
+	public FieldManager getFieldmanager() {
 		try {
 			if (ScopeApplicationAdapter.initComplete) {
 				ApplicationContext context = WebApplicationContextUtils
@@ -151,8 +151,8 @@ public class LangExport extends HttpServlet {
 
 			if (getUserManager() == null
 					|| getFieldLanguageDaoImpl() == null
-					|| getFieldmanagment() == null
-					|| getSessionManagement() == null) {
+					|| getFieldmanager() == null
+					|| getSessiondataDao() == null) {
 				return;
 			}
 
@@ -169,7 +169,7 @@ public class LangExport extends HttpServlet {
 			Long language_id = Long.valueOf(language).longValue();
 			log.debug("language_id: " + language_id);
 
-			Long users_id = getSessionManagement().checkSession(sid);
+			Long users_id = getSessiondataDao().checkSession(sid);
 			Long user_level = getUserManager().getUserLevelByID(users_id);
 
 			log.debug("users_id: " + users_id);
@@ -179,10 +179,10 @@ public class LangExport extends HttpServlet {
 				FieldLanguage fl = getFieldLanguageDaoImpl()
 						.getFieldLanguageById(language_id);
 
-				List<Fieldlanguagesvalues> flvList = getFieldmanagment().getMixedFieldValuesList(language_id);
+				List<Fieldlanguagesvalues> flvList = getFieldmanager().getMixedFieldValuesList(language_id);
 
 				if (fl != null && flvList != null) {
-					Document doc = createDocument(flvList, getFieldmanagment().getUntranslatedFieldValuesList(language_id));
+					Document doc = createDocument(flvList, getFieldmanager().getUntranslatedFieldValuesList(language_id));
 
 					String requestedFile = fl.getName() + ".xml";
 

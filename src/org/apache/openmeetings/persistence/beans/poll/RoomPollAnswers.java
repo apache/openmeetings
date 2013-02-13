@@ -27,6 +27,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -36,6 +38,11 @@ import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
 
 @Entity
+@NamedQueries({
+	@NamedQuery(name = "hasVoted", query = "SELECT rpa FROM RoomPollAnswers rpa "
+				+ "WHERE rpa.roomPoll.room.rooms_id = :room_id " +
+				"AND rpa.votedUser.user_id = :userid AND rpa.roomPoll.archived = :archived")
+})
 @Table(name = "room_poll_answers")
 @Root(name="roompollanswer")
 public class RoomPollAnswers {

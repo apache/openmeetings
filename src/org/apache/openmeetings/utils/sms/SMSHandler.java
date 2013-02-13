@@ -41,7 +41,7 @@ public class SMSHandler {
 			SMSHandler.class, OpenmeetingsVariables.webAppRootKey);
 
 	@Autowired
-	protected ConfigurationDao configurationDaoImpl;
+	protected ConfigurationDao configurationDao;
 	@Autowired
 	protected TaskExecutor taskExecutor;
 
@@ -49,9 +49,9 @@ public class SMSHandler {
 	
 	private boolean checkBalance() throws Exception {
 		if (gateway == null) {
-			String smsProvider = configurationDaoImpl.getConfValue("sms.provider", String.class, null);
-			String smsUsername = configurationDaoImpl.getConfValue("sms.username", String.class, null);
-			String smsUserpass = configurationDaoImpl.getConfValue("sms.userpass", String.class, null);
+			String smsProvider = configurationDao.getConfValue("sms.provider", String.class, null);
+			String smsUsername = configurationDao.getConfValue("sms.username", String.class, null);
+			String smsUserpass = configurationDao.getConfValue("sms.userpass", String.class, null);
 
 			if (smsProvider == null || smsProvider.length() == 0 ||
 					smsUsername == null || smsUsername.length() == 0) {

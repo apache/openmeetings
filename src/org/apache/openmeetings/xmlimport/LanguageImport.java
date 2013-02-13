@@ -38,7 +38,7 @@ public class LanguageImport {
 			LanguageImport.class, OpenmeetingsVariables.webAppRootKey);
 
 	@Autowired
-	private FieldManager fieldmanagment;
+	private FieldManager fieldManager;
 	@Autowired
 	private FieldLanguageDao fieldLanguageDaoImpl;
 
@@ -74,22 +74,22 @@ public class LanguageImport {
 	private void addFieldValueById(Long language_id, Long fieldvalues_id,
 			String fieldName, String value) throws Exception {
 
-		Fieldvalues fv = fieldmanagment.getFieldvaluesById(fieldvalues_id);
+		Fieldvalues fv = fieldManager.getFieldvaluesById(fieldvalues_id);
 
 		if (fv == null) {
-			fv = fieldmanagment.addFieldById(fieldName, fieldvalues_id);
+			fv = fieldManager.addFieldById(fieldName, fieldvalues_id);
 		}
 
-		Fieldlanguagesvalues flv = fieldmanagment.getFieldByIdAndLanguage(
+		Fieldlanguagesvalues flv = fieldManager.getFieldByIdAndLanguage(
 				fieldvalues_id, language_id);
 
 		if (flv == null) {
-			fieldmanagment.addFieldValueByFieldAndLanguage(fv,
+			fieldManager.addFieldValueByFieldAndLanguage(fv,
 					language_id, value);
 		} else {
 			flv.setValue(value);
 			flv.setUpdatetime(new java.util.Date());
-			fieldmanagment.updateFieldValueByFieldAndLanguage(flv);
+			fieldManager.updateFieldValueByFieldAndLanguage(flv);
 		}
 	}
 

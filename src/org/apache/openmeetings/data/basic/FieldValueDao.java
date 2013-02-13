@@ -41,12 +41,12 @@ public class FieldValueDao implements IDataProviderDao<Fieldvalues> {
 	@PersistenceContext
 	private EntityManager em;
 	@Autowired
-	private ConfigurationDao configurationDaoImpl;
+	private ConfigurationDao configurationDao;
 	@Autowired
 	private FieldLanguagesValuesDao flvDaoImpl;
 
 	private Long getDefaultLanguage() {
-		return configurationDaoImpl.getConfValue("default_lang_id", Long.class, "1");
+		return configurationDao.getConfValue("default_lang_id", Long.class, "1");
 	}
 	
 	public Fieldvalues get(long id) {

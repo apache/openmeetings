@@ -47,7 +47,7 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
 public class Install extends VelocityViewServlet {
 	private static final long serialVersionUID = 3684381243236013771L;
 
-	private ConfigurationDao getConfigurationDaoImpl() {
+	private ConfigurationDao getConfigurationDao() {
 		try {
 			if (!ScopeApplicationAdapter.initComplete) {
 				return null;
@@ -145,12 +145,12 @@ public class Install extends VelocityViewServlet {
 		try {
 			ctx.put("APP_ROOT", OpenmeetingsVariables.webAppRootKey);
 
-			if (getImportInitvalues() == null || getConfigurationDaoImpl() == null) {
+			if (getImportInitvalues() == null || getConfigurationDao() == null) {
 				return getVelocityView().getVelocityEngine().getTemplate(
 						"booting_install.vm");
 			}
 
-			ctx.put("APP_NAME", getConfigurationDaoImpl().getAppName());
+			ctx.put("APP_NAME", getConfigurationDao().getAppName());
 			String command = httpServletRequest.getParameter("command");
 
 			String lang = httpServletRequest.getParameter("lang");

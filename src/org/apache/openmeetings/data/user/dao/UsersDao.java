@@ -62,7 +62,7 @@ public class UsersDao implements IDataProviderDao<User> {
 	@Autowired
 	private ManageCryptStyle cryptManager;
 	@Autowired
-	private ConfigurationDao configDao;
+	private ConfigurationDao configurationDao;
 	@Autowired
 	private OmTimeZoneDao omTimeZoneDaoImpl;
 	@Autowired
@@ -82,7 +82,7 @@ public class UsersDao implements IDataProviderDao<User> {
 		user.setSalutations_id(1L); // TODO: Fix default selection to be
 									// configurable
 		user.setLevel_id(1L);
-		user.setLanguage_id(configDao.getConfValue(
+		user.setLanguage_id(configurationDao.getConfValue(
 				"default_lang_id", Long.class, "1"));
 		user.setOmTimeZone(omTimeZoneDaoImpl.getDefaultOmTimeZone(currentUser));
 		user.setForceTimeZoneCheck(false);
@@ -301,7 +301,7 @@ public class UsersDao implements IDataProviderDao<User> {
 			Object u = this.getUserByHash(hash);
 			if (u instanceof User) {
 				User us = (User) u;
-				us.updatePassword(cryptManager, configDao, pass);
+				us.updatePassword(cryptManager, configurationDao, pass);
 				us.setResethash("");
 				update(us, -1L);
 				return new Long(-8);

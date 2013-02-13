@@ -78,7 +78,7 @@ public class TestSendIcalMessage extends AbstractOpenmeetingsSpringTest {
 			OpenmeetingsVariables.webAppRootKey);
 
 	@Autowired
-	private ConfigurationDao configDao;
+	private ConfigurationDao configurationDao;
 
 	private byte[] iCalMimeBody;
 
@@ -239,18 +239,18 @@ public class TestSendIcalMessage extends AbstractOpenmeetingsSpringTest {
 		log.debug("sendIcalMessage");
 
 		// Evaluating Configuration Data
-		String smtpServer = configDao.getConfValue("smtp_server", String.class, "");
-		String smtpPort = configDao.getConfValue("smtp_port", String.class, "");
-		String from = configDao.getConfValue("system_email_addr", String.class, "");
-		String emailUsername = configDao.getConfValue("email_username", String.class, "");
-		String emailUserpass = configDao.getConfValue("email_userpass", String.class, "");
+		String smtpServer = configurationDao.getConfValue("smtp_server", String.class, "");
+		String smtpPort = configurationDao.getConfValue("smtp_port", String.class, "");
+		String from = configurationDao.getConfValue("system_email_addr", String.class, "");
+		String emailUsername = configurationDao.getConfValue("email_username", String.class, "");
+		String emailUserpass = configurationDao.getConfValue("email_userpass", String.class, "");
 
 		Properties props = System.getProperties();
 
 		props.put("mail.smtp.host", smtpServer);
 		props.put("mail.smtp.port", smtpPort);
 
-		boolean isTls = (1 == configDao.getConfValue("mail.smtp.starttls.enable", Integer.class, "0"));
+		boolean isTls = (1 == configurationDao.getConfValue("mail.smtp.starttls.enable", Integer.class, "0"));
 		if (isTls) {
 			props.put("mail.smtp.starttls.enable", "true");
 		}

@@ -30,6 +30,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -42,6 +44,18 @@ import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Root;
 
 @Entity
+@NamedQueries({
+	@NamedQuery(name = "closePoll", query = "UPDATE RoomPoll rp SET rp.archived = :archived " +
+			"WHERE rp.room.rooms_id = :rooms_id"),
+	@NamedQuery(name = "deletePoll", query = "DELETE FROM RoomPoll rp WHERE rp.roomPollId = :roomPollId"),
+	@NamedQuery(name = "getPoll", query = "SELECT rp FROM RoomPoll rp " +
+			"WHERE rp.room.rooms_id = :room_id AND rp.archived = :archived"),
+	@NamedQuery(name = "getPollListBackup", query = "SELECT rp FROM RoomPoll rp"),
+	@NamedQuery(name = "getArchivedPollList", query = "SELECT rp FROM RoomPoll rp " +
+			"WHERE rp.room.rooms_id = :room_id AND rp.archived = :archived"),
+	@NamedQuery(name = "hasPoll", query = "SELECT COUNT(rp) FROM RoomPoll rp " +
+			"WHERE rp.room.rooms_id = :room_id AND rp.archived = :archived")
+})
 @Table(name = "room_polls")
 @Root(name="roompoll")
 public class RoomPoll {

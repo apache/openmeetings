@@ -36,9 +36,9 @@ public class InvitationTemplate extends VelocityLoader {
 	private static final String templateName = "invitation.vm";
 
 	@Autowired
-	private FieldManager fieldmanagment;
+	private FieldManager fieldManager;
 	@Autowired
-	private ConfigurationDao configurationmanagement;
+	private ConfigurationDao configurationDao;
 
 	private static final Logger log = Red5LoggerFactory.getLogger(
 			InvitationTemplate.class, OpenmeetingsVariables.webAppRootKey);
@@ -49,15 +49,15 @@ public class InvitationTemplate extends VelocityLoader {
 
 			super.init();
 
-			Fieldlanguagesvalues labelid501 = fieldmanagment
+			Fieldlanguagesvalues labelid501 = fieldManager
 					.getFieldByIdAndLanguage(new Long(501), default_lang_id);
-			Fieldlanguagesvalues labelid502 = fieldmanagment
+			Fieldlanguagesvalues labelid502 = fieldManager
 					.getFieldByIdAndLanguage(new Long(502), default_lang_id);
-			Fieldlanguagesvalues labelid503 = fieldmanagment
+			Fieldlanguagesvalues labelid503 = fieldManager
 					.getFieldByIdAndLanguage(new Long(503), default_lang_id);
-			Fieldlanguagesvalues labelid504 = fieldmanagment
+			Fieldlanguagesvalues labelid504 = fieldManager
 					.getFieldByIdAndLanguage(new Long(504), default_lang_id);
-			Fieldlanguagesvalues labelid505 = fieldmanagment
+			Fieldlanguagesvalues labelid505 = fieldManager
 					.getFieldByIdAndLanguage(new Long(505), default_lang_id);
 			// Fieldlanguagesvalues labelid570 =
 			// fieldmanagment.getFieldByIdAndLanguage(new Long(570),
@@ -74,13 +74,13 @@ public class InvitationTemplate extends VelocityLoader {
 			context.put("invitation_link", invitation_link);
 			context.put("invitation_link2", invitation_link);
 
-			context.put("labelid500", fieldmanagment.getString(500L, default_lang_id));
+			context.put("labelid500", fieldManager.getString(500L, default_lang_id));
 			context.put("labelid501", labelid501.getValue());
 			context.put("labelid502", labelid502.getValue());
 			context.put("labelid503", labelid503.getValue());
 			context.put("labelid504", labelid504.getValue());
 			context.put("labelid505", labelid505.getValue());
-			context.put("APP_NAME", configurationmanagement.getAppName());
+			context.put("APP_NAME", configurationDao.getAppName());
 
 
 			/* lets render a template */
@@ -111,15 +111,15 @@ public class InvitationTemplate extends VelocityLoader {
 
 			super.init();
 
-			Fieldlanguagesvalues labelid623 = fieldmanagment
+			Fieldlanguagesvalues labelid623 = fieldManager
 					.getFieldByIdAndLanguage(new Long(623), default_lang_id);
-			Fieldlanguagesvalues labelid624 = fieldmanagment
+			Fieldlanguagesvalues labelid624 = fieldManager
 					.getFieldByIdAndLanguage(new Long(624), default_lang_id);
-			Fieldlanguagesvalues labelid625 = fieldmanagment
+			Fieldlanguagesvalues labelid625 = fieldManager
 					.getFieldByIdAndLanguage(new Long(625), default_lang_id);
-			Fieldlanguagesvalues labelid626 = fieldmanagment
+			Fieldlanguagesvalues labelid626 = fieldManager
 					.getFieldByIdAndLanguage(new Long(626), default_lang_id);
-			Fieldlanguagesvalues labelid627 = fieldmanagment
+			Fieldlanguagesvalues labelid627 = fieldManager
 					.getFieldByIdAndLanguage(new Long(627), default_lang_id);
 
 			/* lets make a Context and put data into it */
@@ -129,13 +129,13 @@ public class InvitationTemplate extends VelocityLoader {
 			context.put("message", message);
 			context.put("invitation_link", invitation_link);
 			context.put("invitation_link2", invitation_link);
-			context.put("labelid500", fieldmanagment.getString(622L, default_lang_id));
+			context.put("labelid500", fieldManager.getString(622L, default_lang_id));
 			context.put("labelid501", labelid623.getValue());
 			context.put("labelid502", labelid624.getValue());
 			context.put("labelid503", labelid625.getValue());
 			context.put("labelid504", labelid626.getValue());
 			context.put("labelid505", labelid627.getValue());
-			context.put("APP_NAME", configurationmanagement.getAppName());
+			context.put("APP_NAME", configurationDao.getAppName());
 
 			/* lets render a template */
 			StringWriter w = new StringWriter();

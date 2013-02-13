@@ -70,7 +70,7 @@ public class CalendarWebService {
 	@Autowired
 	private AppointmentLogic appointmentLogic;
 	@Autowired
-	private SessiondataDao sessionManagement;
+	private SessiondataDao sessiondataDao;
 	@Autowired
 	private UserManager userManager;
 	@Autowired
@@ -78,7 +78,7 @@ public class CalendarWebService {
 	@Autowired
 	private RoomDao roomDao;
 	@Autowired
-	private AuthLevelUtil authLevelManagement;
+	private AuthLevelUtil authLevelUtil;
 	@Autowired
 	private AppointmentCategoryDao appointmentCategoryDaoImpl;
 	@Autowired
@@ -105,9 +105,9 @@ public class CalendarWebService {
 		log.debug("getAppointmentByRange : startdate - " + starttime
 				+ ", enddate - " + endtime);
 		try {
-			Long users_id = sessionManagement.checkSession(SID);
+			Long users_id = sessiondataDao.checkSession(SID);
 			Long user_level = userManager.getUserLevelByID(users_id);
-			if (authLevelManagement.checkUserLevel(user_level)) {
+			if (authLevelUtil.checkUserLevel(user_level)) {
 
 				return appointmentLogic.getAppointmentByRange(users_id,
 						starttime, endtime);
@@ -137,9 +137,9 @@ public class CalendarWebService {
 		log.debug("getAppointmentByRange : startdate - " + starttime
 				+ ", enddate - " + endtime);
 		try {
-			Long users_id = sessionManagement.checkSession(SID);
+			Long users_id = sessiondataDao.checkSession(SID);
 			Long user_level = userManager.getUserLevelByID(users_id);
-			if (authLevelManagement.checkWebServiceLevel(user_level)) {
+			if (authLevelUtil.checkWebServiceLevel(user_level)) {
 
 				return appointmentLogic.getAppointmentByRange(userId,
 						starttime, endtime);
@@ -161,9 +161,9 @@ public class CalendarWebService {
 
 		try {
 
-			Long users_id = sessionManagement.checkSession(SID);
+			Long users_id = sessiondataDao.checkSession(SID);
 			Long user_level = userManager.getUserLevelByID(users_id);
-			if (authLevelManagement.checkUserLevel(user_level)) {
+			if (authLevelUtil.checkUserLevel(user_level)) {
 
 				return appointmentLogic.getNextAppointment();
 			}
@@ -186,9 +186,9 @@ public class CalendarWebService {
 
 		try {
 
-			Long users_id = sessionManagement.checkSession(SID);
+			Long users_id = sessiondataDao.checkSession(SID);
 			Long user_level = userManager.getUserLevelByID(users_id);
-			if (authLevelManagement.checkUserLevel(user_level)) {
+			if (authLevelUtil.checkUserLevel(user_level)) {
 
 				return appointmentLogic.getNextAppointment();
 			}
@@ -214,9 +214,9 @@ public class CalendarWebService {
 
 		try {
 
-			Long users_id = sessionManagement.checkSession(SID);
+			Long users_id = sessiondataDao.checkSession(SID);
 			Long user_level = userManager.getUserLevelByID(users_id);
-			if (authLevelManagement.checkUserLevel(user_level)) {
+			if (authLevelUtil.checkUserLevel(user_level)) {
 
 				return appointmentLogic
 						.searchAppointmentByName(appointmentName);
@@ -292,12 +292,12 @@ public class CalendarWebService {
 		log.debug("saveAppointMent SID:" + SID + ", baseUrl : " + baseUrl);
 
 		try {
-			Long users_id = sessionManagement.checkSession(SID);
+			Long users_id = sessiondataDao.checkSession(SID);
 			log.debug("saveAppointMent users_id:" + users_id);
 
 			Long user_level = userManager.getUserLevelByID(users_id);
 
-			if (authLevelManagement.checkUserLevel(user_level)) {
+			if (authLevelUtil.checkUserLevel(user_level)) {
 
 				List<Map<String, String>> newList = new ArrayList<Map<String, String>>();
 
@@ -354,9 +354,9 @@ public class CalendarWebService {
 			Long languageId) {
 		try {
 
-			Long users_id = sessionManagement.checkSession(SID);
+			Long users_id = sessiondataDao.checkSession(SID);
 			Long user_level = userManager.getUserLevelByID(users_id);
-			if (authLevelManagement.checkUserLevel(user_level)) {
+			if (authLevelUtil.checkUserLevel(user_level)) {
 
 				log.debug("appointmentId " + appointmentId);
 
@@ -440,10 +440,10 @@ public class CalendarWebService {
 			Boolean isPasswordProtected, String password) throws AxisFault {
 		try {
 
-			Long users_id = sessionManagement.checkSession(SID);
+			Long users_id = sessiondataDao.checkSession(SID);
 			Long user_level = userManager.getUserLevelByID(users_id);
 
-			if (authLevelManagement.checkUserLevel(user_level)) {
+			if (authLevelUtil.checkUserLevel(user_level)) {
 				// check if the appointment belongs to the current user
 				Appointment appointment = appointmentLogic
 						.getAppointMentById(appointmentId);
@@ -451,7 +451,7 @@ public class CalendarWebService {
 					throw new AxisFault(
 							"The Appointment cannot be updated by the given user");
 				}
-			} else if (authLevelManagement.checkUserLevel(user_level)) {
+			} else if (authLevelUtil.checkUserLevel(user_level)) {
 				// fine
 			} else {
 				throw new AxisFault(
@@ -527,15 +527,15 @@ public class CalendarWebService {
 			Long language_id) throws AxisFault {
 		try {
 
-			Long users_id = sessionManagement.checkSession(SID);
+			Long users_id = sessiondataDao.checkSession(SID);
 			Long user_level = userManager.getUserLevelByID(users_id);
 
-			if (authLevelManagement.checkWebServiceLevel(user_level)) {
+			if (authLevelUtil.checkWebServiceLevel(user_level)) {
 
 				return appointmentLogic.deleteAppointment(appointmentId,
 						users_id, language_id);
 
-			} else if (authLevelManagement.checkUserLevel(user_level)) {
+			} else if (authLevelUtil.checkUserLevel(user_level)) {
 
 				Appointment appointment = appointmentLogic
 						.getAppointMentById(appointmentId);
@@ -568,9 +568,9 @@ public class CalendarWebService {
 	public Appointment getAppointmentByRoomId(String SID, Long room_id) {
 		try {
 
-			Long users_id = sessionManagement.checkSession(SID);
+			Long users_id = sessiondataDao.checkSession(SID);
 			Long user_level = userManager.getUserLevelByID(users_id);
-			if (authLevelManagement.checkUserLevel(user_level)) {
+			if (authLevelUtil.checkUserLevel(user_level)) {
 
 				Appointment appointment = new Appointment();
 
@@ -603,10 +603,10 @@ public class CalendarWebService {
 
 		try {
 
-			Long users_id = sessionManagement.checkSession(SID);
+			Long users_id = sessiondataDao.checkSession(SID);
 			Long user_level = userManager.getUserLevelByID(users_id);
 
-			if (authLevelManagement.checkUserLevel(user_level)) {
+			if (authLevelUtil.checkUserLevel(user_level)) {
 
 				List<AppointmentCategory> res = appointmentCategoryDaoImpl
 						.getAppointmentCategoryList();
@@ -642,9 +642,9 @@ public class CalendarWebService {
 		log.debug("getAppointmentReminderTypList");
 
 		try {
-			Long users_id = sessionManagement.checkSession(SID);
+			Long users_id = sessiondataDao.checkSession(SID);
 			Long user_level = userManager.getUserLevelByID(users_id);
-			if (authLevelManagement.checkUserLevel(user_level)) {
+			if (authLevelUtil.checkUserLevel(user_level)) {
 
 				List<AppointmentReminderTyps> res = appointmentReminderTypDaoImpl
 						.getAppointmentReminderTypList();
@@ -698,9 +698,9 @@ public class CalendarWebService {
 			Long omTimeZoneId, String javaTimeZoneName) throws AxisFault {
 		try {
 
-			Long users_id = sessionManagement.checkSession(SID);
+			Long users_id = sessiondataDao.checkSession(SID);
 			Long user_level = userManager.getUserLevelByID(users_id);
-			if (authLevelManagement.checkUserLevel(user_level)) {
+			if (authLevelUtil.checkUserLevel(user_level)) {
 				
 				if (!requestUserId.equals(users_id)) {
 					UserContact userContacts = userContactsDaoImpl

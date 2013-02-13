@@ -37,13 +37,13 @@ public abstract class AbstractUploadController {
 	private static final Logger log = Red5LoggerFactory.getLogger(
 			AbstractUploadController.class, OpenmeetingsVariables.webAppRootKey);
 	@Autowired
-	protected SessiondataDao sessionManagement;
+	protected SessiondataDao sessiondataDao;
 	@Autowired
 	protected UserManager userManager;
 	@Autowired
 	protected AuthLevelUtil authLevelManagement;
 	@Autowired
-	protected ConfigurationDao configurationDaoImpl;
+	protected ConfigurationDao configurationDao;
 	
 	protected class UploadInfo {
 		MultipartFile file;
@@ -64,7 +64,7 @@ public abstract class AbstractUploadController {
 			info.sid = sid;
 			log.debug("sid: " + sid);
 
-			Long userId = sessionManagement.checkSession(sid);
+			Long userId = sessiondataDao.checkSession(sid);
 			Long userLevel = userManager.getUserLevelByID(userId);
 			log.debug("userId = " + userId + ", userLevel = " + userLevel);
 			info.userId = userId;
@@ -88,7 +88,7 @@ public abstract class AbstractUploadController {
 			//FIXME encoding HACK
 			info.filename = new String (multipartFile.getOriginalFilename().getBytes ("iso-8859-1"), "UTF-8");
 			long fileSize = multipartFile.getSize();
-			long maxSize = ImportHelper.getMaxUploadSize(configurationDaoImpl);
+			long maxSize = ImportHelper.getMaxUploadSize(configurationDao);
 			log.debug("uploading " + fileSize + " bytes");
 			if (fileSize > maxSize) {
 				throw new ServletException("Maximum upload size: " + maxSize + " exceeded: " + fileSize);

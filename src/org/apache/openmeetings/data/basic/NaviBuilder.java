@@ -44,7 +44,7 @@ public class NaviBuilder {
 	private EntityManager em;
 
 	@Autowired
-	private FieldManager fieldmanagment;
+	private FieldManager fieldManager;
 
 	public Naviglobal getGlobalMenuEntry(long globalId) {
 		try {
@@ -61,14 +61,14 @@ public class NaviBuilder {
 	public List<Naviglobal> getMainMenu(long user_level, long USER_ID, long language_id) {
 		List<Naviglobal> ll = getMainMenu(user_level, USER_ID);
 		for (Naviglobal navigl : ll) {
-			navigl.setLabel(fieldmanagment.getFieldByIdAndLanguageByNavi(
+			navigl.setLabel(fieldManager.getFieldByIdAndLanguageByNavi(
 					navigl.getFieldvalues_id(), language_id));
-			navigl.setTooltip(fieldmanagment.getFieldByIdAndLanguageByNavi(
+			navigl.setTooltip(fieldManager.getFieldByIdAndLanguageByNavi(
 					navigl.getTooltip_fieldvalues_id(), language_id));
 			for (Navimain navim : navigl.getMainnavi()) {
-				navim.setLabel(fieldmanagment.getFieldByIdAndLanguageByNavi(
+				navim.setLabel(fieldManager.getFieldByIdAndLanguageByNavi(
 						navim.getFieldvalues_id(), language_id));
-				navim.setTooltip(fieldmanagment.getFieldByIdAndLanguageByNavi(
+				navim.setTooltip(fieldManager.getFieldByIdAndLanguageByNavi(
 						navim.getTooltip_fieldvalues_id(), language_id));
 			}
 		}

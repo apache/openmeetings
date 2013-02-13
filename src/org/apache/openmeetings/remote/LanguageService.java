@@ -47,17 +47,17 @@ public class LanguageService {
 	private static final Logger log = Red5LoggerFactory.getLogger(
 			LanguageService.class, OpenmeetingsVariables.webAppRootKey);
 	@Autowired
-	private SessiondataDao sessionManagement;
+	private SessiondataDao sessiondataDao;
 	@Autowired
-	private ConfigurationDao configurationDaoImpl;
+	private ConfigurationDao configurationDao;
 	@Autowired
 	private UserManager userManager;
 	@Autowired
-	private FieldManager fieldmanagment;
+	private FieldManager fieldManager;
 	@Autowired
 	private FieldLanguageDao fieldLanguageDaoImpl;
 	@Autowired
-	private AuthLevelUtil authLevelManagement;
+	private AuthLevelUtil authLevelUtil;
 
 	/**
 	 * get a List of all availaible Languages
@@ -77,11 +77,11 @@ public class LanguageService {
 	 */
 	@Deprecated
 	public List<Fieldlanguagesvalues> getLanguageById(Long language_id) {
-		return fieldmanagment.getAllFieldsByLanguage(language_id);
+		return fieldManager.getAllFieldsByLanguage(language_id);
 	}
 
 	public Integer getDefaultLanguage() {
-		return configurationDaoImpl.getConfValue("default_lang_id", Integer.class, "1");
+		return configurationDao.getConfValue("default_lang_id", Integer.class, "1");
 	}
 
 	/**
@@ -92,24 +92,24 @@ public class LanguageService {
 	 */
 	public List<Map<String, Object>> getLanguageByIdAndMax(Long language_id,
 			int start, int max) {
-		return fieldmanagment.getLabelsByLanguage(language_id, start, max);
+		return fieldManager.getLabelsByLanguage(language_id, start, max);
 	}
 
 	public Fieldvalues getFieldvalueById(String SID, Long fieldvalues_id,
 			Long language_id) {
-		Long users_id = sessionManagement.checkSession(SID);
+		Long users_id = sessiondataDao.checkSession(SID);
 		Long user_level = userManager.getUserLevelByID(users_id);
-		if (authLevelManagement.checkAdminLevel(user_level)) {
-			return fieldmanagment.getFieldvaluesById(fieldvalues_id,
+		if (authLevelUtil.checkAdminLevel(user_level)) {
+			return fieldManager.getFieldvaluesById(fieldvalues_id,
 					language_id);
 		}
 		return null;
 	}
 
 	public Long addLanguage(String SID, String langName, String code) {
-		Long users_id = sessionManagement.checkSession(SID);
+		Long users_id = sessiondataDao.checkSession(SID);
 		Long user_level = userManager.getUserLevelByID(users_id);
-		if (authLevelManagement.checkAdminLevel(user_level)) {
+		if (authLevelUtil.checkAdminLevel(user_level)) {
 			if (langName.length() == 0)
 				return new Long(-30);
 			FieldLanguage lang = fieldLanguageDaoImpl.addLanguage(0, langName, false, code);
@@ -119,9 +119,9 @@ public class LanguageService {
 	}
 
 	public Long updateLanguage(String SID, Long language_id, String langName, String code) {
-		Long users_id = sessionManagement.checkSession(SID);
+		Long users_id = sessiondataDao.checkSession(SID);
 		Long user_level = userManager.getUserLevelByID(users_id);
-		if (authLevelManagement.checkAdminLevel(user_level)) {
+		if (authLevelUtil.checkAdminLevel(user_level)) {
 			if (langName.length() == 0)
 				return new Long(-30);
 			return fieldLanguageDaoImpl.updateFieldLanguage(language_id,
@@ -131,9 +131,9 @@ public class LanguageService {
 	}
 
 	public Long deleteLanguage(String SID, Long language_id) {
-		Long users_id = sessionManagement.checkSession(SID);
+		Long users_id = sessiondataDao.checkSession(SID);
 		Long user_level = userManager.getUserLevelByID(users_id);
-		if (authLevelManagement.checkAdminLevel(user_level)) {
+		if (authLevelUtil.checkAdminLevel(user_level)) {
 			return fieldLanguageDaoImpl.updateFieldLanguage(language_id, "",
 					"", true);
 		}
@@ -142,10 +142,10 @@ public class LanguageService {
 
 	public Long deleteFieldlanguagesvaluesById(String SID,
 			Long fieldlanguagesvalues_id) {
-		Long users_id = sessionManagement.checkSession(SID);
+		Long users_id = sessiondataDao.checkSession(SID);
 		Long user_level = userManager.getUserLevelByID(users_id);
-		if (authLevelManagement.checkAdminLevel(user_level)) {
-			return fieldmanagment
+		if (authLevelUtil.checkAdminLevel(user_level)) {
+			return fieldManager
 					.deleteFieldlanguagesvaluesById(fieldlanguagesvalues_id);
 		}
 		return null;
@@ -163,10 +163,10 @@ public class LanguageService {
 	 */
 	public SearchResult<Fieldvalues> getFieldsByLanguage(String SID, int start, int max,
 			String orderby, boolean asc, Long language_id, String search) {
-		Long users_id = sessionManagement.checkSession(SID);
+		Long users_id = sessiondataDao.checkSession(SID);
 		Long user_level = userManager.getUserLevelByID(users_id);
-		if (authLevelManagement.checkAdminLevel(user_level)) {
-			return fieldmanagment.getFieldsByLanguage(start, max, orderby, asc,
+		if (authLevelUtil.checkAdminLevel(user_level)) {
+			return fieldManager.getFieldsByLanguage(start, max, orderby, asc,
 					language_id, search);
 		}
 		return null;
@@ -181,7 +181,7 @@ public class LanguageService {
 	public Long saveOrUpdateLabel(String SID,
 			LinkedHashMap<Object, Object> values) {
 		try {
-			Long users_id = sessionManagement.checkSession(SID);
+			Long users_id = sessiondataDao.checkSession(SID);
 			Long user_level = userManager.getUserLevelByID(users_id);
 			Long fieldvalues_id = Long.valueOf(
 					values.get("fieldvalues_id").toString()).longValue();
@@ -192,18 +192,18 @@ public class LanguageService {
 			Long language_id = Long.valueOf(
 					values.get("language_id").toString()).longValue();
 			String value = values.get("value").toString();
-			if (authLevelManagement.checkAdminLevel(user_level)) {
+			if (authLevelUtil.checkAdminLevel(user_level)) {
 				if (fieldvalues_id > 0 && fieldlanguagesvalues_id > 0) {
 					log.error("UPDATE LABEL");
-					return fieldmanagment.updateLabel(fieldvalues_id, name,
+					return fieldManager.updateLabel(fieldvalues_id, name,
 							fieldlanguagesvalues_id, value);
 				} else if (fieldvalues_id > 0 && fieldlanguagesvalues_id == 0) {
 					log.error("INSERT NEW LABEL");
-					return fieldmanagment.addAndUpdateLabel(fieldvalues_id,
+					return fieldManager.addAndUpdateLabel(fieldvalues_id,
 							name, value, language_id);
 				} else {
 					log.error("INSERT NEW FIELD AND LABEL");
-					return fieldmanagment.addFieldAndLabel(name, value,
+					return fieldManager.addFieldAndLabel(name, value,
 							language_id);
 				}
 			}

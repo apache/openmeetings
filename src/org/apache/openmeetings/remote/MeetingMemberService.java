@@ -32,11 +32,11 @@ public class MeetingMemberService {
 	private static final Logger log = Red5LoggerFactory.getLogger(
 			MeetingMemberService.class, OpenmeetingsVariables.webAppRootKey);
 	@Autowired
-	private SessiondataDao sessionManagement;
+	private SessiondataDao sessiondataDao;
 	@Autowired
 	private UserManager userManager;
 	@Autowired
-	private AuthLevelUtil authLevelManagement;
+	private AuthLevelUtil authLevelUtil;
 	@Autowired
 	private MeetingMemberLogic meetingMemberLogic;
 
@@ -47,9 +47,9 @@ public class MeetingMemberService {
 
 		try {
 
-			Long users_id = sessionManagement.checkSession(SID);
+			Long users_id = sessiondataDao.checkSession(SID);
 			Long user_level = userManager.getUserLevelByID(users_id);
-			if (authLevelManagement.checkUserLevel(user_level)) {
+			if (authLevelUtil.checkUserLevel(user_level)) {
 
 				return meetingMemberLogic.updateMeetingMember(
 						meetingMemberId, firstname, lastname, memberStatus,
@@ -68,9 +68,9 @@ public class MeetingMemberService {
 
 		try {
 
-			Long users_id = sessionManagement.checkSession(SID);
+			Long users_id = sessiondataDao.checkSession(SID);
 			Long user_level = userManager.getUserLevelByID(users_id);
-			if (authLevelManagement.checkUserLevel(user_level)) {
+			if (authLevelUtil.checkUserLevel(user_level)) {
 
 				return meetingMemberLogic.deleteMeetingMember(
 						meetingMemberId, users_id, language_id);

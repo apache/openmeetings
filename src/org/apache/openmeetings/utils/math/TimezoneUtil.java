@@ -37,7 +37,7 @@ public class TimezoneUtil {
 			TimezoneUtil.class, OpenmeetingsVariables.webAppRootKey);
 
 	@Autowired
-	private ConfigurationDao configurationDaoImpl;
+	private ConfigurationDao configurationDao;
 	@Autowired
 	private OmTimeZoneDao omTimeZoneDaoImpl;
 
@@ -63,7 +63,7 @@ public class TimezoneUtil {
 
 		// if user has not time zone get one from the server configuration
 
-		String defaultTzName = configurationDaoImpl.getConfValue("default.timezone", String.class, "Europe/Berlin");
+		String defaultTzName = configurationDao.getConfValue("default.timezone", String.class, "Europe/Berlin");
 
 		OmTimeZone omTimeZone = omTimeZoneDaoImpl.getOmTimeZone(defaultTzName);
 
@@ -102,7 +102,7 @@ public class TimezoneUtil {
 
 		// if user has not time zone get one from the server configuration
 
-		String defaultTzName = configurationDaoImpl.getConfValue("default.timezone", String.class, "Europe/Berlin");
+		String defaultTzName = configurationDao.getConfValue("default.timezone", String.class, "Europe/Berlin");
 
 		OmTimeZone omTimeZoneDefault = omTimeZoneDaoImpl.getOmTimeZone(defaultTzName);
 
@@ -137,7 +137,7 @@ public class TimezoneUtil {
 
 		// if user has not time zone get one from the server configuration
 
-		String defaultTzName = configurationDaoImpl.getConfValue("default.timezone", String.class, "Europe/Berlin");
+		String defaultTzName = configurationDao.getConfValue("default.timezone", String.class, "Europe/Berlin");
 
 		OmTimeZone omTimeZoneDefault = omTimeZoneDaoImpl.getOmTimeZone(defaultTzName);
 

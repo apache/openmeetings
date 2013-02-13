@@ -43,7 +43,7 @@ public class OmTimeZoneDao {
 	private EntityManager em;
 
 	@Autowired
-	private ConfigurationDao configurationDaoImpl;
+	private ConfigurationDao configurationDao;
 
 	/**
 	 * Get a default {@link OmTimeZone}, if user is set, it will return the
@@ -60,7 +60,7 @@ public class OmTimeZoneDao {
 			return user.getOmTimeZone();
 		}
 		
-		String jNameTimeZone = configurationDaoImpl.getConfValue(
+		String jNameTimeZone = configurationDao.getConfValue(
 				"default.timezone", String.class, "Europe/Berlin");
 		
 		OmTimeZone omTimeZone = this.getOmTimeZone(jNameTimeZone);

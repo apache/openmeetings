@@ -49,11 +49,11 @@ public class JabberWebService {
 			JabberWebService.class, OpenmeetingsVariables.webAppRootKey);
 
 	@Autowired
-	private AuthLevelUtil authLevelManagement;
+	private AuthLevelUtil authLevelUtil;
 	@Autowired
 	private UserManager userManager;
 	@Autowired
-	private SessiondataDao sessionManagement;
+	private SessiondataDao sessiondataDao;
 	@Autowired
 	private ConferenceService conferenceService;
 	@Autowired
@@ -61,7 +61,7 @@ public class JabberWebService {
 	@Autowired
 	private OmTimeZoneDao omTimeZoneDaoImpl;
 	@Autowired
-	private ConfigurationDao cfgManagement;
+	private ConfigurationDao configurationDao;
 
 	/**
 	 * Get List&lt;Rooms&gt; of all rooms available to the user.
@@ -81,7 +81,7 @@ public class JabberWebService {
 			result.addAll(pbl);
 		}
 
-		Long users_id = this.sessionManagement.checkSession(SID);
+		Long users_id = this.sessiondataDao.checkSession(SID);
 		User u = this.userManager.getUserById(users_id);
 		for (Organisation_Users ou : u.getOrganisation_users()) {
 			List<RoomOrganisation> rol = this.conferenceService
@@ -108,10 +108,10 @@ public class JabberWebService {
 	 * @return number of users as int
 	 */
 	public int getUserCount(String SID, Long roomId) {
-		Long users_id = this.sessionManagement.checkSession(SID);
+		Long users_id = this.sessiondataDao.checkSession(SID);
 		Long user_level = this.userManager.getUserLevelByID(users_id);
 
-		if (this.authLevelManagement.checkUserLevel(user_level)) {
+		if (this.authLevelUtil.checkUserLevel(user_level)) {
 			return conferenceService.getRoomClientsListByRoomId(roomId).size();
 		}
 		return -1;
@@ -127,14 +127,14 @@ public class JabberWebService {
 	 * @return hash to enter the room
 	 */
 	public String getInvitationHash(String SID, String username, Long room_id) {
-		Long users_id = this.sessionManagement.checkSession(SID);
+		Long users_id = this.sessiondataDao.checkSession(SID);
 		Long user_level = this.userManager.getUserLevelByID(users_id);
 		Invitations invitation = this.invitationManager.addInvitationLink(
 				user_level, username, username, username, username, username,
 				room_id, "", Boolean.valueOf(false), null, Integer.valueOf(3),
 				null, null, users_id, "", Long.valueOf(1L),
 				Boolean.valueOf(false), null, null, null, username
-				, omTimeZoneDaoImpl.getOmTimeZone(cfgManagement.getConfValue("default.timezone", String.class, "Europe/Berlin")));
+				, omTimeZoneDaoImpl.getOmTimeZone(configurationDao.getConfValue("default.timezone", String.class, "Europe/Berlin")));
 
 		return ((invitation == null) ? null : invitation.getHash());
 	}

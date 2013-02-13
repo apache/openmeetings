@@ -49,9 +49,9 @@ public class EmailManager {
 	private EntityManager em;
 
 	@Autowired
-	private ConfigurationDao configDao;
+	private ConfigurationDao configurationDao;
 	@Autowired
-	private FieldManager fieldmanagment;
+	private FieldManager fieldManager;
 	@Autowired
 	private MailHandler mailHandler;
 	@Autowired
@@ -70,11 +70,11 @@ public class EmailManager {
 			String link, Boolean sendEmailWithVerficationCode) {
 		String succ = "valid email";
 
-		Integer sendEmailAtRegister = configDao.getConfValue("sendEmailAtRegister", Integer.class, "0");
+		Integer sendEmailAtRegister = configurationDao.getConfValue("sendEmailAtRegister", Integer.class, "0");
 
 		if (sendEmailAtRegister == 1) {
 
-			Long default_lang_id = configDao.getConfValue("default_lang_id", Long.class, "1");
+			Long default_lang_id = configurationDao.getConfValue("default_lang_id", Long.class, "1");
 
 			if (sendEmailWithVerficationCode) {
 
@@ -85,7 +85,7 @@ public class EmailManager {
 								Userpass, EMail, default_lang_id,
 								verification_url);
 
-				succ = mailHandler.sendMail(EMail, fieldmanagment.getString(512L, default_lang_id), template);
+				succ = mailHandler.sendMail(EMail, fieldManager.getString(512L, default_lang_id), template);
 
 			} else {
 
@@ -93,7 +93,7 @@ public class EmailManager {
 						.getRegisterUserTemplate(Username, Userpass, EMail,
 								default_lang_id);
 
-				succ = mailHandler.sendMail(EMail, fieldmanagment.getString(512L, default_lang_id), template);
+				succ = mailHandler.sendMail(EMail, fieldManager.getString(512L, default_lang_id), template);
 			}
 
 			return succ;

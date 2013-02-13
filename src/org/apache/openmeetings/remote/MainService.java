@@ -84,9 +84,9 @@ public class MainService implements IPendingServiceCallback {
 	@Autowired
 	private ScopeApplicationAdapter scopeApplicationAdapter;
 	@Autowired
-	private SessiondataDao sessionManagement;
+	private SessiondataDao sessiondataDao;
 	@Autowired
-	private ConfigurationDao configDao;
+	private ConfigurationDao configurationDao;
 	@Autowired
 	private UserManager userManager;
 	@Autowired
@@ -110,7 +110,7 @@ public class MainService implements IPendingServiceCallback {
 	@Autowired
 	private FeedbackManager feedbackManager;
 	@Autowired
-	private AuthLevelUtil authLevelManagement;
+	private AuthLevelUtil authLevelUtil;
 	@Autowired
 	private LoadAtomRssFeed loadAtomRssFeed;
 	@Autowired
@@ -128,7 +128,7 @@ public class MainService implements IPendingServiceCallback {
 	 */
 	public List<Naviglobal> getNavi(String SID, long language_id, Long organisation_id) {
 		try {
-			Long user_id = sessionManagement.checkSession(SID);
+			Long user_id = sessiondataDao.checkSession(SID);
 			// log.error("getNavi 1: "+users_id);
 			Long user_level = userManager.getUserLevelByIdAndOrg(user_id,
 					organisation_id);
@@ -149,7 +149,7 @@ public class MainService implements IPendingServiceCallback {
 	 */
 	public User getUser(String SID, int USER_ID) {
 		User users = new User();
-		Long users_id = sessionManagement.checkSession(SID);
+		Long users_id = sessiondataDao.checkSession(SID);
 		long user_level = userManager.getUserLevelByID(users_id);
 		if (user_level > 2) {
 			users = usersDao.get(new Long(USER_ID));
@@ -203,12 +203,12 @@ public class MainService implements IPendingServiceCallback {
 	 * @return a unique session identifier
 	 */
 	public Sessiondata getsessiondata() {
-		return sessionManagement.startsession();
+		return sessiondataDao.startsession();
 	}
 
 	public Long setCurrentUserOrganization(String SID, Long organization_id) {
 		try {
-			sessionManagement.updateUserOrg(SID, organization_id);
+			sessiondataDao.updateUserOrg(SID, organization_id);
 			return 1L;
 		} catch (Exception err) {
 			log.error("[setCurrentUserOrganization]", err);
@@ -236,7 +236,7 @@ public class MainService implements IPendingServiceCallback {
 				throw new Exception("Users has no organization assigned");
 			}
 
-			o.setSessionData(sessionManagement.getSessionByHash(remoteHashId));
+			o.setSessionData(sessiondataDao.getSessionByHash(remoteHashId));
 			currentClient.setUser_id(o.getUser_id());
 			SessionVariablesUtil.setUserId(current.getClient(), o.getUser_id());
 			
@@ -269,7 +269,7 @@ public class MainService implements IPendingServiceCallback {
 			return returnValue;
 		} else if (returnValue instanceof User) {
 			User us = (User) returnValue;
-			if (authLevelManagement.checkUserLevel(
+			if (authLevelUtil.checkUserLevel(
 					us.getLevel_id())) {
 				return us;
 			} else {
@@ -457,7 +457,7 @@ public class MainService implements IPendingServiceCallback {
 					.getClientByStreamId(streamId, null);
 
 			if (currentClient.getUser_id() != null) {
-				sessionManagement.updateUser(SID, currentClient.getUser_id());
+				sessiondataDao.updateUser(SID, currentClient.getUser_id());
 			}
 
 			currentClient.setAllowRecording(soapLogin.getAllowRecording());
@@ -563,12 +563,12 @@ public class MainService implements IPendingServiceCallback {
 	 */
 	public Long loginUserByRemote(String SID) {
 		try {
-			Long users_id = sessionManagement.checkSession(SID);
+			Long users_id = sessiondataDao.checkSession(SID);
 			Long user_level = userManager.getUserLevelByID(users_id);
-			if (authLevelManagement.checkWebServiceLevel(
+			if (authLevelUtil.checkWebServiceLevel(
 					user_level)) {
 
-				Sessiondata sd = sessionManagement.getSessionByHash(SID);
+				Sessiondata sd = sessiondataDao.getSessionByHash(SID);
 				if (sd == null || sd.getSessionXml() == null) {
 					return new Long(-37);
 				} else {
@@ -611,7 +611,7 @@ public class MainService implements IPendingServiceCallback {
 								userObject.getExternalUserType());
 
 						if (user == null) {
-							String jName_timeZone = configDao.getConfValue("default.timezone", String.class, "");
+							String jName_timeZone = configurationDao.getConfValue("default.timezone", String.class, "");
 
 							long userId = userManager
 									.addUserWithExternalKey(1, 0, 0,
@@ -652,7 +652,7 @@ public class MainService implements IPendingServiceCallback {
 					log.debug("UPDATE USER BY STREAMID " + streamId);
 
 					if (currentClient.getUser_id() != null) {
-						sessionManagement.updateUser(SID,
+						sessiondataDao.updateUser(SID,
 								currentClient.getUser_id());
 					}
 
@@ -678,9 +678,9 @@ public class MainService implements IPendingServiceCallback {
 	 */
 	public User markSessionAsLogedIn(String SID) {
 		try {
-			sessionManagement.updateUserWithoutSession(SID, -1L);
+			sessiondataDao.updateUserWithoutSession(SID, -1L);
 			
-			Long defaultRpcUserid = configDao.getConfValue(
+			Long defaultRpcUserid = configurationDao.getConfValue(
 					"default.rpc.userid", Long.class, "-1");
 			User defaultRpcUser = userManager.getUserById(defaultRpcUserid);
 			
@@ -703,7 +703,7 @@ public class MainService implements IPendingServiceCallback {
 	 */
 	public Long logoutUser(String SID) {
 		try {
-			Long users_id = sessionManagement.checkSession(SID);
+			Long users_id = sessiondataDao.checkSession(SID);
 			IConnection current = Red5.getConnectionLocal();
 			Client currentClient = this.sessionManager
 					.getClientByStreamId(current.getClient().getId(), null);
@@ -740,7 +740,7 @@ public class MainService implements IPendingServiceCallback {
 	 * @return configuration with key "allow_frontend_register"
 	 */
 	public Configuration allowFrontendRegister(String SID) {
-		return configDao.get("allow_frontend_register");
+		return configurationDao.get("allow_frontend_register");
 	}
 	
 	public List<Configuration> getGeneralOptions(String SID) {
@@ -748,9 +748,9 @@ public class MainService implements IPendingServiceCallback {
 			
 			List<Configuration> cList = new LinkedList<Configuration>();
 			
-			cList.add(configDao.get("exclusive.audio.keycode"));
-			cList.add(configDao.get("red5sip.enable"));
-			cList.add(configDao.get("max_upload_size"));
+			cList.add(configurationDao.get("exclusive.audio.keycode"));
+			cList.add(configurationDao.get("red5sip.enable"));
+			cList.add(configurationDao.get("max_upload_size"));
 			
 			return cList;
 			
@@ -764,16 +764,16 @@ public class MainService implements IPendingServiceCallback {
 		try {
 
 			List<Configuration> cList = new LinkedList<Configuration>();
-			cList.add(configDao
+			cList.add(configurationDao
 					.get("allow_frontend_register"));
-			cList.add(configDao.get("show.facebook.login"));
-			cList.add(configDao
+			cList.add(configurationDao.get("show.facebook.login"));
+			cList.add(configurationDao
 					.get("user.login.minimum.length"));
-			cList.add(configDao
+			cList.add(configurationDao
 					.get("user.pass.minimum.length"));
-			cList.add(configDao
+			cList.add(configurationDao
 					.get("user.pass.minimum.length"));
-			cList.add(configDao.get("ldap_default_id"));
+			cList.add(configurationDao.get("ldap_default_id"));
 
 			return cList;
 		} catch (Exception err) {
@@ -870,7 +870,7 @@ public class MainService implements IPendingServiceCallback {
 	 * @return - id of user being deleted, or error code
 	 */
 	public Long deleteUserIDSelf(String SID) {
-		Long users_id = sessionManagement.checkSession(SID);
+		Long users_id = sessiondataDao.checkSession(SID);
 		long user_level = userManager.getUserLevelByID(users_id);
 		if (user_level >= 1) {
 			userManager.logout(SID, users_id);
@@ -900,7 +900,7 @@ public class MainService implements IPendingServiceCallback {
 	public String sendInvitation(String SID, String username, String message,
 			String domain, String room, String roomtype, String baseurl,
 			String email, String subject, Long room_id) {
-		Long users_id = sessionManagement.checkSession(SID);
+		Long users_id = sessiondataDao.checkSession(SID);
 		Long user_level = userManager.getUserLevelByID(users_id);
 		return invitationManager.sendInvitionLink(user_level,
 				username, message, domain, room, roomtype, baseurl, email,
@@ -923,9 +923,9 @@ public class MainService implements IPendingServiceCallback {
 	}
 
 	public List<Userdata> getUserdata(String SID) {
-		Long users_id = sessionManagement.checkSession(SID);
+		Long users_id = sessiondataDao.checkSession(SID);
 		Long user_level = userManager.getUserLevelByID(users_id);
-		if (authLevelManagement.checkUserLevel(user_level)) {
+		if (authLevelUtil.checkUserLevel(user_level)) {
 			return userManager.getUserdataDashBoard(users_id);
 		}
 		return null;
@@ -939,7 +939,7 @@ public class MainService implements IPendingServiceCallback {
 	@Deprecated
 	public LinkedHashMap<String, LinkedHashMap<String, LinkedHashMap<String, LinkedHashMap<String, Object>>>> getRssFeeds(
 			String SID) {
-		Long users_id = sessionManagement.checkSession(SID);
+		Long users_id = sessiondataDao.checkSession(SID);
 		Long user_level = userManager.getUserLevelByID(users_id);
 		return loadAtomRssFeed.getRssFeeds(user_level);
 	}
@@ -952,9 +952,9 @@ public class MainService implements IPendingServiceCallback {
 	 */
 	public LinkedHashMap<String, LinkedHashMap<String, LinkedHashMap<String, Object>>> getRssFeedByURL(
 			String SID, String urlEndPoint) {
-		Long users_id = sessionManagement.checkSession(SID);
+		Long users_id = sessiondataDao.checkSession(SID);
 		Long user_level = userManager.getUserLevelByID(users_id);
-		if (authLevelManagement.checkUserLevel(user_level)) {
+		if (authLevelUtil.checkUserLevel(user_level)) {
 			return loadAtomRssFeed.parseRssFeed(urlEndPoint);
 		} else {
 			return null;
@@ -972,9 +972,9 @@ public class MainService implements IPendingServiceCallback {
 	@Deprecated
 	public LinkedHashMap<Integer, Client> getUsersByDomain(String SID,
 			String domain) {
-		Long users_id = sessionManagement.checkSession(SID);
+		Long users_id = sessiondataDao.checkSession(SID);
 		Long user_level = userManager.getUserLevelByID(users_id);
-		if (authLevelManagement.checkUserLevel(user_level)) {
+		if (authLevelUtil.checkUserLevel(user_level)) {
 			LinkedHashMap<Integer, Client> lMap = new LinkedHashMap<Integer, Client>();
 			// Integer counter = 0;
 			// for (Iterator<String> it =
@@ -993,9 +993,9 @@ public class MainService implements IPendingServiceCallback {
 
 	public int closeRoom(String SID, Long room_id, Boolean status) {
 		try {
-			Long users_id = sessionManagement.checkSession(SID);
+			Long users_id = sessiondataDao.checkSession(SID);
 			Long user_level = userManager.getUserLevelByID(users_id);
-			if (authLevelManagement.checkUserLevel(user_level)) {
+			if (authLevelUtil.checkUserLevel(user_level)) {
 
 				roomManager.closeRoom(room_id, status);
 
@@ -1023,10 +1023,10 @@ public class MainService implements IPendingServiceCallback {
 
 	public List<Configuration> getDashboardConfiguration(String SID) {
 		try {
-			Long users_id = sessionManagement.checkSession(SID);
+			Long users_id = sessiondataDao.checkSession(SID);
 			Long user_level = userManager.getUserLevelByID(users_id);
-			if (authLevelManagement.checkUserLevel(user_level)) {
-				return configDao.getConfKeys(new String[] {
+			if (authLevelUtil.checkUserLevel(user_level)) {
+				return configurationDao.getConfKeys(new String[] {
 						"dashboard.show.chat", //
 						"dashboard.show.myrooms", //
 						"dashboard.show.rssfeed", //

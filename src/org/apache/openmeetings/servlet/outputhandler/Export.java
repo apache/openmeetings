@@ -52,7 +52,7 @@ public class Export extends HttpServlet {
 	private static final Logger log = Red5LoggerFactory.getLogger(Export.class,
 			OpenmeetingsVariables.webAppRootKey);
 
-	private SessiondataDao getSessionManagement() {
+	private SessiondataDao getSessiondataDao() {
 		try {
 			if (ScopeApplicationAdapter.initComplete) {
 				ApplicationContext context = WebApplicationContextUtils
@@ -144,7 +144,7 @@ public class Export extends HttpServlet {
 
 		try {
 
-			if (getUserManager() == null || getSessionManagement() == null
+			if (getUserManager() == null || getSessiondataDao() == null
 					|| getUsersDao() == null) {
 				return;
 			}
@@ -155,7 +155,7 @@ public class Export extends HttpServlet {
 			}
 			System.out.println("sid: " + sid);
 
-			Long users_id = getSessionManagement().checkSession(sid);
+			Long users_id = getSessiondataDao().checkSession(sid);
 			Long user_level = getUserManager().getUserLevelByID(users_id);
 
 			System.out.println("users_id: " + users_id);

@@ -26,12 +26,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class TestLabels extends AbstractOpenmeetingsSpringTest {
 	
 	@Autowired
-	private FieldManager fieldmanagment;
+	private FieldManager fieldManager;
 	
 	@Test
 	public void testGetNavi(){
 		
-		fieldmanagment.getFieldsByLanguage(0,100,"c.fieldvalues_id",true,1L,"");
+		fieldManager.getFieldsByLanguage(0,100,"c.fieldvalues_id",true,1L,"");
 		
 	}
 

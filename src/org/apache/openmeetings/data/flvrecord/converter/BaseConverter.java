@@ -41,14 +41,14 @@ public abstract class BaseConverter {
 			BaseConverter.class, OpenmeetingsVariables.webAppRootKey);
 
 	@Autowired
-	private ConfigurationDao configurationmanagement;
+	private ConfigurationDao configurationDao;
 	@Autowired
 	private FlvRecordingMetaDataDao flvRecordingMetaDataDaoImpl;
 	@Autowired
 	private FlvRecordingMetaDeltaDao flvRecordingMetaDeltaDaoImpl;
 
 	private String getPath(String key, String app) {
-		String path = configurationmanagement.getConfValue(key, String.class, "");
+		String path = configurationDao.getConfValue(key, String.class, "");
 		if (!path.equals("") && !path.endsWith(File.separator)) {
 			path += File.separator;
 		}
@@ -69,7 +69,7 @@ public abstract class BaseConverter {
 	}
 
 	protected boolean isUseOldStyleFfmpegMap() {
-		return "1".equals(configurationmanagement.getConfValue(
+		return "1".equals(configurationDao.getConfValue(
 				"use.old.style.ffmpeg.map.option", String.class, "0"));
 	}
 	

@@ -104,8 +104,8 @@ public class WebSession extends AbstractAuthenticatedWebSession {
 	}
 	
 	public static String getString(long id) {
-		FieldManager fieldManagment = Application.getBean(FieldManager.class);
-		return fieldManagment.getString(id, getLanguage());
+		FieldManager fieldManager = Application.getBean(FieldManager.class);
+		return fieldManager.getString(id, getLanguage());
 	}
 	
 	public static long getLanguage() {

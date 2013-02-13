@@ -27,13 +27,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class SessionClearJob {
 	private static Logger log = Red5LoggerFactory.getLogger(SessionClearJob.class, OpenmeetingsVariables.webAppRootKey);
 	@Autowired
-	private SessiondataDao sessionManagement;
+	private SessiondataDao sessiondataDao;
 
 	public void doIt() {
 		log.trace("SessionClearJob.execute");
 		try {
 			// TODO Generate report
-			sessionManagement.clearSessionTable();
+			sessiondataDao.clearSessionTable();
 		} catch (Exception err){
 			log.error("execute",err);
 		}

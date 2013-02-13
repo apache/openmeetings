@@ -43,13 +43,13 @@ public class ImportHelper {
 	/**
 	 * returns the max upload size configured by max_upload_size config key
 	 * 
-	 * @param configurationDaoImpl
+	 * @param configurationDao
 	 * @return
 	 */
 	public static final long getMaxUploadSize(
-			ConfigurationDao configurationDaoImpl) {
+			ConfigurationDao configurationDao) {
 		try {
-			return configurationDaoImpl.getConfValue("max_upload_size",
+			return configurationDao.getConfValue("max_upload_size",
 					Long.class, "" + DEFAULT_MAX_UPLOAD_SIZE);
 		} catch (Exception e) {
 			log.error("Invalid value saved for max_upload_size conf key: ", e);

@@ -76,11 +76,11 @@ public class InvitationManager {
 	@Autowired
 	private AppointmentLogic appointmentLogic;
 	@Autowired
-	private ConfigurationDao configurationDaoImpl;
+	private ConfigurationDao configurationDao;
 	@Autowired
 	private UserManager userManager;
 	@Autowired
-	private FieldManager fieldmanagment;
+	private FieldManager fieldManager;
 	@Autowired
 	private ManageCryptStyle manageCryptStyle;
 	@Autowired
@@ -96,7 +96,7 @@ public class InvitationManager {
 	@Autowired
 	private InvitationTemplate invitationTemplate;
 	@Autowired
-	private AuthLevelUtil authLevelManagement;
+	private AuthLevelUtil authLevelUtil;
 	@Autowired
 	private TimezoneUtil timezoneUtil;
 	@Autowired
@@ -132,7 +132,7 @@ public class InvitationManager {
 			Long language_id, Boolean sendMail, Date gmtTimeStart,
 			Date gmtTimeEnd, Long appointmentId, String fromUserField, OmTimeZone omTimeZone) {
 		try {
-			if (authLevelManagement.checkUserLevel(user_level)) {
+			if (authLevelUtil.checkUserLevel(user_level)) {
 
 				Invitations invitation = new Invitations();
 				invitation.setIsPasswordProtected(isPasswordProtected);
@@ -289,7 +289,7 @@ public class InvitationManager {
 	private String formatCancelSubject(Long language_id,
 			Appointment appointment, User user, TimeZone timezone) {
 		try {
-			String message = fieldmanagment.getString(1157L, language_id)
+			String message = fieldManager.getString(1157L, language_id)
 					+ appointment.getAppointmentName();
 
 			message += " "
@@ -309,21 +309,21 @@ public class InvitationManager {
 	private String formatCancelMessage(Long language_id,
 			Appointment appointment, User user, TimeZone timezone) {
 		try {
-			String message = fieldmanagment.getString(1157L, language_id)
+			String message = fieldManager.getString(1157L, language_id)
 					+ appointment.getAppointmentName();
 
 			if (appointment.getAppointmentDescription().length() != 0) {
 
-				Fieldlanguagesvalues labelid1152 = fieldmanagment
+				Fieldlanguagesvalues labelid1152 = fieldManager
 						.getFieldByIdAndLanguage(new Long(1152), language_id);
 				message += labelid1152.getValue()
 						+ appointment.getAppointmentDescription();
 
 			}
 
-			Fieldlanguagesvalues labelid1153 = fieldmanagment
+			Fieldlanguagesvalues labelid1153 = fieldManager
 					.getFieldByIdAndLanguage(new Long(1153), language_id);
-			Fieldlanguagesvalues labelid1154 = fieldmanagment
+			Fieldlanguagesvalues labelid1154 = fieldManager
 					.getFieldByIdAndLanguage(new Long(1154), language_id);
 
 			message += "<br/>"
@@ -342,7 +342,7 @@ public class InvitationManager {
 			String invitorName = user.getFirstname() + " " + user.getLastname()
 					+ " [" + user.getAdresses().getEmail() + "]";
 
-			Fieldlanguagesvalues labelid1156 = fieldmanagment
+			Fieldlanguagesvalues labelid1156 = fieldManager
 					.getFieldByIdAndLanguage(new Long(1156), language_id);
 			message += labelid1156.getValue() + invitorName + "<br/>";
 
@@ -423,12 +423,12 @@ public class InvitationManager {
 			Appointment appointment, User user, TimeZone timezone) {
 		try {
 
-			String message = fieldmanagment.getString(1155L, language_id) + " "
+			String message = fieldManager.getString(1155L, language_id) + " "
 					+ appointment.getAppointmentName();
 
 			if (appointment.getAppointmentDescription().length() != 0) {
 
-				Fieldlanguagesvalues labelid1152 = fieldmanagment
+				Fieldlanguagesvalues labelid1152 = fieldManager
 						.getFieldByIdAndLanguage(new Long(1152), language_id);
 				message += labelid1152.getValue()
 						+ appointment.getAppointmentDescription();
@@ -455,21 +455,21 @@ public class InvitationManager {
 			String invitorName) {
 		try {
 
-			String message = fieldmanagment.getString(1155L, language_id) + " "
+			String message = fieldManager.getString(1155L, language_id) + " "
 					+ appointment.getAppointmentName();
 
 			if (appointment.getAppointmentDescription().length() != 0) {
 
-				Fieldlanguagesvalues labelid1152 = fieldmanagment
+				Fieldlanguagesvalues labelid1152 = fieldManager
 						.getFieldByIdAndLanguage(new Long(1152), language_id);
 				message += labelid1152.getValue()
 						+ appointment.getAppointmentDescription();
 
 			}
 
-			Fieldlanguagesvalues labelid1153 = fieldmanagment
+			Fieldlanguagesvalues labelid1153 = fieldManager
 					.getFieldByIdAndLanguage(1153L, language_id);
-			Fieldlanguagesvalues labelid1154 = fieldmanagment
+			Fieldlanguagesvalues labelid1154 = fieldManager
 					.getFieldByIdAndLanguage(1154L, language_id);
 
 			message += "<br/>"
@@ -485,7 +485,7 @@ public class InvitationManager {
 							appointment.getAppointmentEndtime(), timezone)
 					+ "<br/>";
 
-			Fieldlanguagesvalues labelid1156 = fieldmanagment
+			Fieldlanguagesvalues labelid1156 = fieldManager
 					.getFieldByIdAndLanguage(new Long(1156), language_id);
 			message += labelid1156.getValue() + invitorName + "<br/>";
 
@@ -528,7 +528,7 @@ public class InvitationManager {
 		log.debug("addInvitationIcalLink");
 
 		try {
-			if (authLevelManagement.checkUserLevel(user_level)) {
+			if (authLevelUtil.checkUserLevel(user_level)) {
 
 				Invitations invitation = new Invitations();
 				invitation.setIsPasswordProtected(isPasswordProtected);
@@ -660,7 +660,7 @@ public class InvitationManager {
 
 			return mailHandler.sendMail(email, subject
 					, message + "<br/><a href='" + invitation_link + "'>"
-					+ fieldmanagment.getFieldByIdAndLanguage(626L, langId) + "</a>");
+					+ fieldManager.getFieldByIdAndLanguage(626L, langId) + "</a>");
 		} catch (Exception e) {
 			log.error("sendInvitationReminderLink", e);
 		}
@@ -938,14 +938,14 @@ public class InvitationManager {
 			String baseurl, String email, String replyTo, String subject, Long room_id,
 			Date starttime, Date endtime) {
 		try {
-			if (authLevelManagement.checkUserLevel(user_level)) {
+			if (authLevelUtil.checkUserLevel(user_level)) {
 
 				String invitation_link = baseurl
 						+ "?lzproxied=solo&lzr=swf8&lzt=swf&domain=" + domain
 						+ "&room=" + room + "&roomtype=" + roomtype + "&email="
 						+ email + "&roomid=" + room_id;
 
-				Long default_lang_id = configurationDaoImpl.getConfValue("default_lang_id", Long.class, "1");
+				Long default_lang_id = configurationDao.getConfValue("default_lang_id", Long.class, "1");
 
 				String template = invitationTemplate
 						.getRegisterInvitationTemplate(username, message,
@@ -1066,7 +1066,7 @@ public class InvitationManager {
 
 				} else if (invitation.getIsValidByTime()) {
 					OmTimeZone tz = invitation.getOmTimeZone() == null 
-							? omTimeZoneDaoImpl.getOmTimeZone(configurationDaoImpl.getConfValue("default.timezone", String.class, "Europe/Berlin"))
+							? omTimeZoneDaoImpl.getOmTimeZone(configurationDao.getConfValue("default.timezone", String.class, "Europe/Berlin"))
 							: invitation.getOmTimeZone();
 					Calendar now = Calendar.getInstance(TimeZone.getTimeZone(tz.getIcal()));
 					Calendar start = Calendar.getInstance(TimeZone.getTimeZone(tz.getIcal()));

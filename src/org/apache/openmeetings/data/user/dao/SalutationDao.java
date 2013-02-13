@@ -49,7 +49,7 @@ public class SalutationDao {
 			SalutationDao.class, OpenmeetingsVariables.webAppRootKey);
 
 	@Autowired
-	private FieldManager fieldmanagment;
+	private FieldManager fieldManager;
 
 	@PersistenceContext
 	private EntityManager em;
@@ -90,7 +90,7 @@ public class SalutationDao {
 			TypedQuery<Salutation> q = em.createQuery(select);
 			List<Salutation> ll = q.getResultList();
 			for (Salutation ti : ll) {
-				ti.setLabel(fieldmanagment.getFieldByIdAndLanguage(
+				ti.setLabel(fieldManager.getFieldByIdAndLanguage(
 						ti.getFieldvalues_id(), language_id));
 			}
 

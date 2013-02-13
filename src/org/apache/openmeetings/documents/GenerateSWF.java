@@ -37,7 +37,7 @@ public class GenerateSWF {
 			.getLogger(GenerateSWF.class, OpenmeetingsVariables.webAppRootKey);
 
 	@Autowired
-	private ConfigurationDao configurationDaoImpl;
+	private ConfigurationDao configurationDao;
 
 	public final static boolean isPosix = System.getProperty("os.name")
 			.toUpperCase().indexOf("WINDOWS") == -1;
@@ -45,7 +45,7 @@ public class GenerateSWF {
 	public final static String execExt = isPosix ? "" : ".exe";
 
 	private String getPathToSwfTools() {
-		String pathToSWFTools = configurationDaoImpl.getConfValue(
+		String pathToSWFTools = configurationDao.getConfValue(
 				"swftools_path", String.class, "");
 		// If SWFTools Path is not blank a File.separator at the end of the path
 		// is needed
@@ -57,7 +57,7 @@ public class GenerateSWF {
 	}
 
 	private String getSwfZoom() {
-		String valueForSwfZoom = configurationDaoImpl.getConfValue(
+		String valueForSwfZoom = configurationDao.getConfValue(
 				"swftools_zoom", String.class, "");
 		// WARNING CODE NOT COMPLETE: If SWFTools zoom (dpi) should be an integer between 50 and  600 with a default value of 100 dpi
 		if (valueForSwfZoom.equals("")) {
@@ -67,7 +67,7 @@ public class GenerateSWF {
 	}
 
 	private String getSwfJpegQuality() {
-		String valueForSwfJpegQuality = configurationDaoImpl.getConfValue(
+		String valueForSwfJpegQuality = configurationDao.getConfValue(
 				"swftools_jpegquality", String.class, "");
 		// WARNING CODE NOT COMPLETE: If SWFTools JPEG Quality should be an integer between 1 and 100, with a default value of 85
 		if (valueForSwfJpegQuality.equals("")) {

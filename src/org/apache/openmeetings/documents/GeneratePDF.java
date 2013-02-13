@@ -43,7 +43,7 @@ public class GeneratePDF {
 	@Autowired
 	private GenerateSWF generateSWF;
 	@Autowired
-	private ConfigurationDao configurationDaoImpl;
+	private ConfigurationDao configurationDao;
 
 	public ConverterProcessResultList convertPDF(String fileName,
 			String roomName, boolean fullProcessing, File inFile)
@@ -106,9 +106,9 @@ public class GeneratePDF {
 	public ConverterProcessResult doJodConvert(File fileFullPath, File destinationFolder, String outputfile) {
 		try {
 
-			String jodPath = configurationDaoImpl.getConfValue("jod.path",
+			String jodPath = configurationDao.getConfValue("jod.path",
 					String.class, "./jod");
-			String officePath = configurationDaoImpl.getConfValue(
+			String officePath = configurationDao.getConfValue(
 					"office.path", String.class, "");
 
 			File jodFolder = new File(jodPath);

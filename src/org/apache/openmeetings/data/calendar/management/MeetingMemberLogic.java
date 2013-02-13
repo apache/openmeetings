@@ -45,7 +45,7 @@ public class MeetingMemberLogic {
 	@Autowired
 	private UserManager userManager;
 	@Autowired
-	private FieldManager fieldmanagment;
+	private FieldManager fieldManager;
 	@Autowired
 	private InvitationManager invitationManager;
 	@Autowired
@@ -195,7 +195,7 @@ public class MeetingMemberLogic {
 	private String formatSubject(Long language_id, Appointment point,
 			TimeZone timezone) {
 		try {
-			String message = fieldmanagment.getString(1151L, language_id) + " "
+			String message = fieldManager.getString(1151L, language_id) + " "
 					+ point.getAppointmentName();
 
 			message += " "
@@ -217,27 +217,27 @@ public class MeetingMemberLogic {
 	private String formatMessage(Long language_id, Appointment point,
 			TimeZone timezone, String invitorName) {
 		try {
-			String message = fieldmanagment.getString(1151L, language_id) + " "
+			String message = fieldManager.getString(1151L, language_id) + " "
 					+ point.getAppointmentName();
 
 			if (point.getAppointmentDescription().length() != 0) {
-				message += fieldmanagment.getString(1152L, language_id)
+				message += fieldManager.getString(1152L, language_id)
 						+ point.getAppointmentDescription();
 			}
 
 			message += "<br/>"
-					+ fieldmanagment.getString(1153L, language_id)
+					+ fieldManager.getString(1153L, language_id)
 					+ ' '
 					+ CalendarPatterns.getDateWithTimeByMiliSecondsAndTimeZone(
 							point.getAppointmentStarttime(), timezone)
 					+ "<br/>";
 
-			message += fieldmanagment.getString(1154L, language_id)
+			message += fieldManager.getString(1154L, language_id)
 					+ ' '
 					+ CalendarPatterns.getDateWithTimeByMiliSecondsAndTimeZone(
 							point.getAppointmentEndtime(), timezone) + "<br/>";
 
-			message += fieldmanagment.getString(1156L, language_id) + invitorName + "<br/>";
+			message += fieldManager.getString(1156L, language_id) + invitorName + "<br/>";
 
 			return message;
 		} catch (Exception err) {

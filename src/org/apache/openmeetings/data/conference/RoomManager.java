@@ -72,11 +72,11 @@ public class RoomManager {
 	@Autowired
 	private UsersDao usersDao;
 	@Autowired
-	private AuthLevelUtil authLevelManagement;
+	private AuthLevelUtil authLevelUtil;
 	@Autowired
 	private ISessionManager sessionManager;
     @Autowired
-	private ConfigurationDao configurationDaoImpl;
+	private ConfigurationDao configurationDao;
     @Autowired
 	private RoomDao roomDao;
 
@@ -149,7 +149,7 @@ public class RoomManager {
 	 */
 	public Room getRoomById(long user_level, long rooms_id) {
 		try {
-			if (authLevelManagement.checkUserLevel(user_level)) {
+			if (authLevelUtil.checkUserLevel(user_level)) {
 				return roomDao.get(rooms_id);
 			} else
 				log.error("getRoombyId : Userlevel" + user_level
@@ -162,7 +162,7 @@ public class RoomManager {
 
 	public Room getRoomWithCurrentUsersById(long user_level, long rooms_id) {
 		try {
-			if (authLevelManagement.checkUserLevel(user_level)) {
+			if (authLevelUtil.checkUserLevel(user_level)) {
 				Room room = roomDao.get(rooms_id);
 
 				if (room != null) {
@@ -208,7 +208,7 @@ public class RoomManager {
 	public Room getRoomByExternalId(long user_level, Long externalRoomId,
 			String externalRoomType, long roomtypes_id) {
 		try {
-			if (authLevelManagement.checkUserLevel(user_level)) {
+			if (authLevelUtil.checkUserLevel(user_level)) {
 				return this.getRoomByExternalId(externalRoomId,
 						externalRoomType, roomtypes_id);
 			} else
@@ -223,7 +223,7 @@ public class RoomManager {
 	public SearchResult<Room> getRooms(long user_level, int start, int max,
 			String orderby, boolean asc, String search) {
 		try {
-			if (authLevelManagement.checkAdminLevel(user_level)) {
+			if (authLevelUtil.checkAdminLevel(user_level)) {
 				SearchResult<Room> sResult = new SearchResult<Room>();
 				sResult.setRecords(this.selectMaxFromRooms(search));
 				sResult.setObjectName(Room.class.getName());
@@ -240,7 +240,7 @@ public class RoomManager {
 	public SearchResult<Room> getRoomsWithCurrentUsers(long user_level, int start,
 			int max, String orderby, boolean asc) {
 		try {
-			if (authLevelManagement.checkAdminLevel(user_level)) {
+			if (authLevelUtil.checkAdminLevel(user_level)) {
 				SearchResult<Room> sResult = new SearchResult<Room>();
 				sResult.setRecords(this.selectMaxFromRooms(""));
 				sResult.setObjectName(Room.class.getName());
@@ -264,7 +264,7 @@ public class RoomManager {
 	public List<Room> getRoomsWithCurrentUsersByList(long user_level,
 			int start, int max, String orderby, boolean asc) {
 		try {
-			if (authLevelManagement.checkAdminLevel(user_level)) {
+			if (authLevelUtil.checkAdminLevel(user_level)) {
 
 				List<Room> rooms = this.getRoomsInternatl(start, max, orderby,
 						asc);
@@ -286,7 +286,7 @@ public class RoomManager {
 			int start, int max, String orderby, boolean asc,
 			String externalRoomType) {
 		try {
-			if (authLevelManagement.checkAdminLevel(user_level)) {
+			if (authLevelUtil.checkAdminLevel(user_level)) {
 
 				List<Room> rooms = this.getRoomsInternatlbyType(start, max,
 						orderby, asc, externalRoomType);
@@ -458,7 +458,7 @@ public class RoomManager {
 	public List<RoomOrganisation> getOrganisationsByRoom(long user_level,
 			long rooms_id) {
 		try {
-			if (authLevelManagement.checkUserLevel(user_level)) {
+			if (authLevelUtil.checkUserLevel(user_level)) {
 				String hql = "select c from RoomOrganisation as c "
 						+ "where c.room.rooms_id = :rooms_id "
 						+ "AND c.deleted <> :deleted";
@@ -484,7 +484,7 @@ public class RoomManager {
 	 */
 	public List<Room> getPublicRooms(long user_level, long roomtypes_id) {
 		try {
-			if (authLevelManagement.checkUserLevel(user_level)) {
+			if (authLevelUtil.checkUserLevel(user_level)) {
 				TypedQuery<Room> q = em.createNamedQuery("getPublicRooms", Room.class);
 				q.setParameter("ispublic", true);
 				q.setParameter("deleted", false);
@@ -533,7 +533,7 @@ public class RoomManager {
 
 	public List<Room> getPublicRoomsWithoutType(long user_level) {
 		try {
-			if (authLevelManagement.checkUserLevel(user_level)) {
+			if (authLevelUtil.checkUserLevel(user_level)) {
 				TypedQuery<Room> q = em.createNamedQuery("getPublicRoomsWithoutType", Room.class);
 				q.setParameter("ispublic", true);
 				q.setParameter("deleted", true);
@@ -555,7 +555,7 @@ public class RoomManager {
 		log.debug("Roommanagement.getAppointedMeetings");
 
 		try {
-			if (authLevelManagement.checkUserLevel(user_level)) {
+			if (authLevelUtil.checkUserLevel(user_level)) {
 				TypedQuery<Room> q = em.createNamedQuery("getAppointedMeetings", Room.class);
 				q.setParameter("appointed", true);
 				q.setParameter("deleted", false);
@@ -572,9 +572,9 @@ public class RoomManager {
 
 	//TODO move it to helper or DAO
 	public String getSipNumber(long roomId) {
-		String sipEnabled = configurationDaoImpl.getConfValue("red5sip.enable", String.class, "no");
+		String sipEnabled = configurationDao.getConfValue("red5sip.enable", String.class, "no");
         if("yes".equals(sipEnabled)) {
-        	return configurationDaoImpl.getConfValue("red5sip.room_prefix", String.class, "400") + roomId;
+        	return configurationDao.getConfValue("red5sip.room_prefix", String.class, "400") + roomId;
         }
         return null;
 	}
@@ -615,7 +615,7 @@ public class RoomManager {
 			, boolean filesOpened, boolean autoVideoSelect, boolean sipEnabled) {
 
 		try {
-			if (authLevelManagement.checkAdminLevel(user_level)) {
+			if (authLevelUtil.checkAdminLevel(user_level)) {
 
 				Room r = new Room();
 				r.setName(name);
@@ -701,7 +701,7 @@ public class RoomManager {
 		log.debug("addRoom");
 
 		try {
-			if (authLevelManagement.checkModLevel(user_level)) {
+			if (authLevelUtil.checkModLevel(user_level)) {
 				Room r = new Room();
 				r.setName(name);
 				r.setComment(comment);
@@ -821,7 +821,7 @@ public class RoomManager {
 	public Long addRoomToOrganisation(long user_level, long rooms_id,
 			long organisation_id) {
 		try {
-			if (authLevelManagement.checkAdminLevel(user_level)) {
+			if (authLevelUtil.checkAdminLevel(user_level)) {
 				RoomOrganisation rOrganisation = new RoomOrganisation();
 				rOrganisation.setRoom(roomDao.get(rooms_id));
 				log.debug("addRoomToOrganisation rooms '"
@@ -894,7 +894,7 @@ public class RoomManager {
 	public List<RoomOrganisation> getRoomsOrganisationByOrganisationIdAndRoomType(
 			long user_level, long organisation_id, long roomtypes_id) {
 		try {
-			if (authLevelManagement.checkUserLevel(user_level)) {
+			if (authLevelUtil.checkUserLevel(user_level)) {
 				TypedQuery<RoomOrganisation> q = em.
 						createNamedQuery("getRoomsOrganisationByOrganisationIdAndRoomType", RoomOrganisation.class);
 				q.setParameter("roomtypes_id", roomtypes_id);
@@ -919,7 +919,7 @@ public class RoomManager {
 	public List<RoomOrganisation> getRoomsOrganisationByOrganisationId(
 			long user_level, long organisation_id) {
 		try {
-			if (authLevelManagement.checkUserLevel(user_level)) {
+			if (authLevelUtil.checkUserLevel(user_level)) {
 
 				TypedQuery<RoomOrganisation> query = em.
 						createNamedQuery("getRoomsOrganisationByOrganisationId", RoomOrganisation.class);
@@ -944,7 +944,7 @@ public class RoomManager {
 			long organisation_id, int start, int max, String orderby,
 			boolean asc) {
 		try {
-			if (authLevelManagement.checkModLevel(user_level)) {
+			if (authLevelUtil.checkModLevel(user_level)) {
 
 				SearchResult<RoomOrganisation> sResult = new SearchResult<RoomOrganisation>();
 				sResult.setObjectName(RoomOrganisation.class.getName());
@@ -1118,7 +1118,7 @@ public class RoomManager {
 	public Room updateRoomsSelf(long user_id, long user_level, long rooms_id,
 			long roomtypes_id, String name, boolean ispublic, String comment) {
 		try {
-			if (authLevelManagement.checkModLevel(user_level)) {
+			if (authLevelUtil.checkModLevel(user_level)) {
 
 				if (this.checkUserOrgRoom(user_id, rooms_id)) {
 
@@ -1174,7 +1174,7 @@ public class RoomManager {
 
 			log.debug("*** updateRoom numberOfPartizipants: "
 					+ numberOfPartizipants);
-			if (authLevelManagement.checkAdminLevel(user_level)) {
+			if (authLevelUtil.checkAdminLevel(user_level)) {
 
 				return this.updateRoomInternal(rooms_id, roomtypes_id, name,
 						ispublic, comment, numberOfPartizipants, organisations,
@@ -1291,7 +1291,7 @@ public class RoomManager {
 		try {
 			log.debug("*** updateRoom numberOfPartizipants: "
 					+ numberOfPartizipants);
-			if (authLevelManagement.checkModLevel(user_level)) {
+			if (authLevelUtil.checkModLevel(user_level)) {
 				Room r = roomDao.get(rooms_id);
 				r.setComment(comment);
 
@@ -1401,7 +1401,7 @@ public class RoomManager {
 	 */
 	public Long deleteRoomById(long user_level, long rooms_id) {
 		try {
-			if (authLevelManagement.checkWebServiceLevel(user_level)) {
+			if (authLevelUtil.checkWebServiceLevel(user_level)) {
 				this.deleteAllRoomsOrganisationOfRoom(rooms_id);
 				roomDao.delete(roomDao.get(rooms_id), -1L);
 				return rooms_id;

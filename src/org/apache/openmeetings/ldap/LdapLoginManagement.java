@@ -59,9 +59,9 @@ public class LdapLoginManagement {
 			LdapLoginManagement.class, OpenmeetingsVariables.webAppRootKey);
 
 	@Autowired
-	private SessiondataDao sessionManagement;
+	private SessiondataDao sessiondataDao;
 	@Autowired
-	private ConfigurationDao configDao;
+	private ConfigurationDao configurationDao;
 	@Autowired
 	private UserManager userManager;
 	@Autowired
@@ -516,7 +516,7 @@ public class LdapLoginManagement {
 				}
 
 				// Update Session
-				Boolean bool = sessionManagement.updateUser(SID, userid);
+				Boolean bool = sessiondataDao.updateUser(SID, userid);
 
 				if (bool == null) {
 					// Exception
@@ -557,7 +557,7 @@ public class LdapLoginManagement {
 			}
 
 			// Update Session
-			Boolean bool = sessionManagement.updateUser(SID, u.getUser_id());
+			Boolean bool = sessiondataDao.updateUser(SID, u.getUser_id());
 
 			if (bool == null) {
 				// Exception
@@ -572,7 +572,7 @@ public class LdapLoginManagement {
 			try {
 				// Update password (could have changed in LDAP)
 				if (ldap_sync_passwd_to_om) {
-					u.updatePassword(cryptManager, configDao, passwd);
+					u.updatePassword(cryptManager, configurationDao, passwd);
 				}
 				
 				//update all other attributes in case ldap provides some and the parameter is configured
@@ -677,7 +677,7 @@ public class LdapLoginManagement {
 			jName_timeZone = userdata.get(ldapAttrs.get("timezoneAttr"));
 		
 		if (omTimeZoneDaoImpl.getOmTimeZone(jName_timeZone) == null) {
-			jName_timeZone = configDao.getConfValue(
+			jName_timeZone = configurationDao.getConfValue(
 					"default.timezone", String.class, "Europe/Berlin");
 		}
 
@@ -703,10 +703,10 @@ public class LdapLoginManagement {
 					new java.util.Date(), //age
 					street,
 					additionalname, fax, zip, state_id, town, 
-					configDao.getConfValue("default_lang_id",
+					configurationDao.getConfValue("default_lang_id",
 							Long.class, "0"), // language_id
 					false, // sendWelcomeMessage
-					Arrays.asList(configDao.getConfValue(
+					Arrays.asList(configurationDao.getConfValue(
 							"default_domain_id", Long.class, null)), // organozation
 																		// Ids
 					phone, 

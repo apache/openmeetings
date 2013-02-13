@@ -91,11 +91,11 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 	@Autowired
 	private FLVRecorderService flvRecorderService;
 	@Autowired
-	private ConfigurationDao configurationDaoImpl;
+	private ConfigurationDao configurationDao;
 	@Autowired
 	private AppointmentLogic appointmentLogic;
 	@Autowired
-	private SessiondataDao sessionManagement;
+	private SessiondataDao sessiondataDao;
 	@Autowired
 	private UserManager userManager;
 	@Autowired
@@ -1732,7 +1732,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 			currentClient.setUserObject(userId, username, firstname, lastname);
 
 			// Update Session Data
-			sessionManagement.updateUserWithoutSession(SID, userId);
+			sessiondataDao.updateUserWithoutSession(SID, userId);
 
 			// only fill this value from User-Record
 			// cause invited users have no associated User, so
@@ -1783,7 +1783,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 
 			// Update Session Data
 			log.debug("UDPATE SESSION " + SID + ", " + userId);
-			sessionManagement.updateUserWithoutSession(SID, userId);
+			sessiondataDao.updateUserWithoutSession(SID, userId);
 
 			User user = userManager.getUserById(userId);
 
@@ -2726,7 +2726,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 
 	private boolean getWhiteboardDrawStatus() {
 		if (ScopeApplicationAdapter.whiteboardDrawStatus == null) {
-			String drawStatus = configurationDaoImpl.getConfValue(
+			String drawStatus = configurationDao.getConfValue(
 					"show.whiteboard.draw.status", String.class, "0");
 			ScopeApplicationAdapter.whiteboardDrawStatus = "1".equals(drawStatus);
 		}
@@ -2737,7 +2737,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 		try {
 
 			if (ScopeApplicationAdapter.configKeyCryptClassName == null) {
-				String cryptClass = configurationDaoImpl.getConfValue("crypt_ClassName", String.class, null);
+				String cryptClass = configurationDao.getConfValue("crypt_ClassName", String.class, null);
 
 				if (cryptClass != null) {
 					ScopeApplicationAdapter.configKeyCryptClassName = cryptClass;
@@ -2752,7 +2752,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 	}
 
     public String getExclusiveAudioKeyCode() {
-		return configurationDaoImpl.getConfValue("exclusive.audio.keycode", String.class, null);
+		return configurationDao.getConfValue("exclusive.audio.keycode", String.class, null);
     }
 
 	public synchronized IScope getRoomScope(String room) {

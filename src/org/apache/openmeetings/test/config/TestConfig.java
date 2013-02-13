@@ -37,7 +37,7 @@ public class TestConfig extends AbstractOpenmeetingsSpringTest {
 			TestAppointmentAddAppointment.class);
 	
 	@Autowired
-	private ConfigurationDao configurationmanagement;
+	private ConfigurationDao configurationDao;
 
 
 	@Test
@@ -47,7 +47,7 @@ public class TestConfig extends AbstractOpenmeetingsSpringTest {
 
 			System.err.println("THIS");
 
-			Configuration smtp_server = configurationmanagement
+			Configuration smtp_server = configurationDao
 					.get(
 					"smtp_server");
 			
@@ -65,7 +65,7 @@ public class TestConfig extends AbstractOpenmeetingsSpringTest {
 	public void getConfigs() {
 		
 		try {
-			List<Configuration> list = configurationmanagement.get(4, 6);
+			List<Configuration> list = configurationDao.get(4, 6);
 			
 			for (Configuration conf : list) {
 				System.err.println("conf.getConf_key() " + conf.getConf_key());

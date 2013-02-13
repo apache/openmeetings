@@ -63,15 +63,15 @@ public class ConferenceLibrary implements IPendingServiceCallback {
 			ConferenceLibrary.class, OpenmeetingsVariables.webAppRootKey);
 
 	@Autowired
-	private ISessionManager sessionManager = null;
+	private ISessionManager sessionManager;
 	@Autowired
-	private SessiondataDao sessionManagement;
+	private SessiondataDao sessiondataDao;
 	@Autowired
 	private UserManager userManager;
 	@Autowired
 	private FileExplorerItemDao fileExplorerItemDao;
 	@Autowired
-	private AuthLevelUtil authLevelManagement;
+	private AuthLevelUtil authLevelUtil;
 	@Autowired
 	private LibraryWmlLoader libraryWmlLoader;
 	@Autowired
@@ -82,13 +82,13 @@ public class ConferenceLibrary implements IPendingServiceCallback {
 
 		try {
 
-			Long users_id = sessionManagement.checkSession(SID);
+			Long users_id = sessiondataDao.checkSession(SID);
 			Long user_level = userManager.getUserLevelByID(users_id);
 
 			log.debug("#############users_id : " + users_id);
 			log.debug("#############user_level : " + user_level);
 
-			if (authLevelManagement.checkUserLevel(user_level)) {
+			if (authLevelUtil.checkUserLevel(user_level)) {
 
 				File working_dir = new File(OmFileHelper.getUploadFilesDir(), parentFolder);
 				log.debug("############# working_dir : " + working_dir);
@@ -125,9 +125,9 @@ public class ConferenceLibrary implements IPendingServiceCallback {
 	public Long saveAsObject(String SID, Long room_id, String fileName,
 			Object tObjectRef) {
 		try {
-			Long users_id = sessionManagement.checkSession(SID);
+			Long users_id = sessiondataDao.checkSession(SID);
 			Long user_level = userManager.getUserLevelByID(users_id);
-			if (authLevelManagement.checkUserLevel(user_level)) {
+			if (authLevelUtil.checkUserLevel(user_level)) {
 				// LinkedHashMap tObject = (LinkedHashMap)t;
 				// ArrayList tObject = (ArrayList)t;
 
@@ -176,10 +176,10 @@ public class ConferenceLibrary implements IPendingServiceCallback {
 	public void loadWmlObject(String SID, Long room_id,
 			Long fileExplorerItemId, Long whiteboardId) {
 		try {
-			Long users_id = sessionManagement.checkSession(SID);
+			Long users_id = sessiondataDao.checkSession(SID);
 			Long user_level = userManager.getUserLevelByID(users_id);
 
-			if (authLevelManagement.checkUserLevel(user_level)) {
+			if (authLevelUtil.checkUserLevel(user_level)) {
 
 				IConnection current = Red5.getConnectionLocal();
 				Client currentClient = this.sessionManager
@@ -260,9 +260,9 @@ public class ConferenceLibrary implements IPendingServiceCallback {
 	@SuppressWarnings("rawtypes")
 	public ArrayList loadChartObject(String SID, Long room_id, String fileName) {
 		try {
-			Long users_id = sessionManagement.checkSession(SID);
+			Long users_id = sessiondataDao.checkSession(SID);
 			Long user_level = userManager.getUserLevelByID(users_id);
-			if (authLevelManagement.checkUserLevel(user_level)) {
+			if (authLevelUtil.checkUserLevel(user_level)) {
 				return LibraryChartLoader.getInstance().loadChart(OmFileHelper.getUploadRoomDir(room_id.toString()),
 						fileName);
 			}
@@ -280,10 +280,10 @@ public class ConferenceLibrary implements IPendingServiceCallback {
 	public Long copyFileToCurrentRoom(String SID, Long flvFileExplorerId) {
 		try {
 
-			Long users_id = sessionManagement.checkSession(SID);
+			Long users_id = sessiondataDao.checkSession(SID);
 			Long user_level = userManager.getUserLevelByID(users_id);
 
-			if (authLevelManagement.checkUserLevel(user_level)) {
+			if (authLevelUtil.checkUserLevel(user_level)) {
 
 				IConnection current = Red5.getConnectionLocal();
 				String streamid = current.getClient().getId();

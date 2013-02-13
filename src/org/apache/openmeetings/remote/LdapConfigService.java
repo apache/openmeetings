@@ -44,27 +44,27 @@ public class LdapConfigService {
 	@Autowired
 	private LdapConfigDao ldapConfigDaoImpl;
 	@Autowired
-	private SessiondataDao sessionManagement;
+	private SessiondataDao sessiondataDao;
     @Autowired
     private UserManager userManager;
 	@Autowired
-	private AuthLevelUtil authLevelManagement;
+	private AuthLevelUtil authLevelUtil;
 	
 	private static final Logger log = Red5LoggerFactory.getLogger(LdapConfigService.class, OpenmeetingsVariables.webAppRootKey);
 	
 	public Long deleteLdapConfigById(String SID, Long ldapConfigId) {
-        Long users_id = sessionManagement.checkSession(SID);
+        Long users_id = sessiondataDao.checkSession(SID);
         Long user_level = userManager.getUserLevelByID(users_id);
-        if (authLevelManagement.checkAdminLevel(user_level)){
+        if (authLevelUtil.checkAdminLevel(user_level)){
         	return this.ldapConfigDaoImpl.deleteLdapConfigById(ldapConfigId);
         }
         return null;
 	}
 	
 	public LdapConfig getLdapConfigById(String SID, Long ldapConfigId) {
-        Long users_id = sessionManagement.checkSession(SID);
+        Long users_id = sessiondataDao.checkSession(SID);
         Long user_level = userManager.getUserLevelByID(users_id);
-        if (authLevelManagement.checkAdminLevel(user_level)){
+        if (authLevelUtil.checkAdminLevel(user_level)){
         	return this.ldapConfigDaoImpl.get(ldapConfigId);
         }
         return null;
@@ -105,9 +105,9 @@ public class LdapConfigService {
 	 * @return - the list of lgap config object being searched
 	 */
 	public SearchResult<LdapConfig> getLdapConfigs(String SID, int start, int max, String orderby, boolean asc){
-        Long users_id = sessionManagement.checkSession(SID);
+        Long users_id = sessiondataDao.checkSession(SID);
         Long user_level = userManager.getUserLevelByID(users_id);
-        if (authLevelManagement.checkAdminLevel(user_level)){
+        if (authLevelUtil.checkAdminLevel(user_level)){
         	
         	SearchResult<LdapConfig> searchResult = new SearchResult<LdapConfig>();
         	searchResult.setObjectName(LdapConfig.class.getName());
@@ -127,9 +127,9 @@ public class LdapConfigService {
 	 */
 	public Long saveOrUpdateLdapConfig(String SID, LinkedHashMap<Object,Object> values)  {
 		try {
-			Long users_id = sessionManagement.checkSession(SID);
+			Long users_id = sessiondataDao.checkSession(SID);
 			Long user_level = userManager.getUserLevelByID(users_id);
-			if (authLevelManagement.checkAdminLevel(user_level)){
+			if (authLevelUtil.checkAdminLevel(user_level)){
 			
 				long ldapConfigId = Long.valueOf(
 						values.get("ldapConfigId").toString()).longValue();

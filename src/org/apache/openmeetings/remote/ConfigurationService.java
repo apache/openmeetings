@@ -43,11 +43,11 @@ public class ConfigurationService {
 			ConfigurationService.class, OpenmeetingsVariables.webAppRootKey);
 
 	@Autowired
-	private AuthLevelUtil authLevelManagement;
+	private AuthLevelUtil authLevelUtil;
 	@Autowired
-	private SessiondataDao sessionManagement;
+	private SessiondataDao sessiondataDao;
 	@Autowired
-	private ConfigurationDao configurationDaoImpl;
+	private ConfigurationDao configurationDao;
     @Autowired
     private UserManager userManager;
 	
@@ -55,10 +55,10 @@ public class ConfigurationService {
 	 * Configuration Handlers
 	 */    
     public SearchResult<Configuration> getAllConf(String SID, int start ,int max, String orderby, boolean asc){
-        Long users_id = sessionManagement.checkSession(SID);
+        Long users_id = sessiondataDao.checkSession(SID);
 		Long user_level = userManager.getUserLevelByID(users_id);
-		if (authLevelManagement.checkAdminLevel(user_level)) {
-			return configurationDaoImpl.getAllConf(start, max, orderby, asc);
+		if (authLevelUtil.checkAdminLevel(user_level)) {
+			return configurationDao.getAllConf(start, max, orderby, asc);
 		} else {
 			log.error("[getConfByConfigurationId] Permission denied "
 					+ user_level);
@@ -74,10 +74,10 @@ public class ConfigurationService {
 	 * @return - configuration with the id given, null otherwise
 	 */
     public Configuration getConfByConfigurationId(String SID,long configuration_id){
-        Long users_id = sessionManagement.checkSession(SID);
+        Long users_id = sessiondataDao.checkSession(SID);
         Long user_level = userManager.getUserLevelByID(users_id);     	
-		if (authLevelManagement.checkAdminLevel(user_level)) {
-			return configurationDaoImpl.get(configuration_id);
+		if (authLevelUtil.checkAdminLevel(user_level)) {
+			return configurationDao.get(configuration_id);
 		} else {
 			log.error("[getConfByConfigurationId] Permission denied "
 					+ user_level);
@@ -93,10 +93,10 @@ public class ConfigurationService {
 	 * @return - id of configuration being updated, null otherwise
 	 */
     public Long saveOrUpdateConfiguration(String SID, LinkedHashMap<String, ?> values){
-        Long users_id = sessionManagement.checkSession(SID);
+        Long users_id = sessiondataDao.checkSession(SID);
 		Long user_level = userManager.getUserLevelByID(users_id);
-		if (authLevelManagement.checkAdminLevel(user_level)) {
-			return configurationDaoImpl.saveOrUpdateConfiguration(values,
+		if (authLevelUtil.checkAdminLevel(user_level)) {
+			return configurationDao.saveOrUpdateConfiguration(values,
 					users_id);
 		} else {
 			log.error("[getConfByConfigurationId] Permission denied "
@@ -113,10 +113,10 @@ public class ConfigurationService {
 	 * @return - id of configuration being deleted in case of success, null otherwise
 	 */
     public Long deleteConfiguration(String SID, LinkedHashMap<String, ?> values){
-        Long users_id = sessionManagement.checkSession(SID);
+        Long users_id = sessiondataDao.checkSession(SID);
 		Long user_level = userManager.getUserLevelByID(users_id);
-		if (authLevelManagement.checkAdminLevel(user_level)) {
-			return configurationDaoImpl.deleteConfByConfiguration(values,
+		if (authLevelUtil.checkAdminLevel(user_level)) {
+			return configurationDao.deleteConfByConfiguration(values,
 					users_id);
 		} else {
 			log.error("[getConfByConfigurationId] Permission denied "

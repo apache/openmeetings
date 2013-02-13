@@ -44,7 +44,7 @@ public class FieldLanguagesValuesDao implements IDataProviderDao<Fieldlanguagesv
 	@PersistenceContext
 	private EntityManager em;
 	@Autowired
-	private ConfigurationDao configurationDaoImpl;
+	private ConfigurationDao configurationDao;
 
 	/*
 	 * (non-Javadoc)
@@ -52,7 +52,7 @@ public class FieldLanguagesValuesDao implements IDataProviderDao<Fieldlanguagesv
 	 * @see org.apache.openmeetings.data.OmDAO#get(int, int)
 	 */
 	public List<Fieldlanguagesvalues> get(int first, int count) {
-		return get(configurationDaoImpl.getConfValue("default_lang_id",
+		return get(configurationDao.getConfValue("default_lang_id",
 				Long.class, "1"), first, count);
 	}
 

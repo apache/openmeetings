@@ -53,11 +53,11 @@ public class AppointmentLogic {
 	@Autowired
 	private AppointmentDao appointmentDao;
 	@Autowired
-	private ConfigurationDao configurationDaoImpl;
+	private ConfigurationDao configurationDao;
 	@Autowired
 	private UserManager userManager;
 	@Autowired
-	private FieldManager fieldmanagment;
+	private FieldManager fieldManager;
 	@Autowired
 	private OmTimeZoneDao omTimeZoneDaoImpl;
 	@Autowired
@@ -153,7 +153,7 @@ public class AppointmentLogic {
 		
 		// TODO:Add this user as the default Moderator of the Room
 
-		Long numberOfParticipants = configurationDaoImpl.getConfValue(
+		Long numberOfParticipants = configurationDao.getConfValue(
 				"calendar.conference.rooms.default.size", Long.class, "50");
 
 		try {
@@ -401,7 +401,7 @@ public class AppointmentLogic {
 	public void doScheduledMeetingReminder() throws Exception {
 		// log.debug("doScheduledMeetingReminder");
 
-		Integer minutesReminderSend = configurationDaoImpl.getConfValue(
+		Integer minutesReminderSend = configurationDao.getConfValue(
 				"number.minutes.reminder.send", Integer.class, ""
 						+ DEFAULT_MINUTES_REMINDER_SEND);
 		if (minutesReminderSend == null) {
@@ -424,14 +424,14 @@ public class AppointmentLogic {
 			return;
 		}
 
-		Long language_id = configurationDaoImpl.getConfValue("default_lang_id", Long.class, "1");
+		Long language_id = configurationDao.getConfValue("default_lang_id", Long.class, "1");
 
 		// Get the required labels one time for all meeting members. The
 		// Language of the email will be the system default language
-		String labelid1158 = fieldmanagment.getString(1158L, language_id);
-		Fieldlanguagesvalues labelid1153 = fieldmanagment
+		String labelid1158 = fieldManager.getString(1158L, language_id);
+		Fieldlanguagesvalues labelid1153 = fieldManager
 				.getFieldByIdAndLanguage(1153L, language_id);
-		Fieldlanguagesvalues labelid1154 = fieldmanagment
+		Fieldlanguagesvalues labelid1154 = fieldManager
 				.getFieldByIdAndLanguage(1154L, language_id);
 
 		for (int i = 0; i < points.size(); i++) {
@@ -530,7 +530,7 @@ public class AppointmentLogic {
 	}
 
 	private String generateSMSSubject(String labelid1158, Appointment ment) {
-		String subj = configurationDaoImpl.getConfValue("sms.subject", String.class, null);
+		String subj = configurationDao.getConfValue("sms.subject", String.class, null);
 		return subj == null || subj.length() == 0 ? 
 				labelid1158 + " " + ment.getAppointmentName() : subj;
 	}
@@ -557,7 +557,7 @@ public class AppointmentLogic {
 
 		if (ment.getAppointmentDescription().length() != 0) {
 
-			Fieldlanguagesvalues labelid1152 = fieldmanagment
+			Fieldlanguagesvalues labelid1152 = fieldManager
 					.getFieldByIdAndLanguage(new Long(1152), language_id);
 			message += labelid1152.getValue()
 					+ ment.getAppointmentDescription();

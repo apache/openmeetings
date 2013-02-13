@@ -32,9 +32,9 @@ public class FeedbackManager {
 			FeedbackManager.class, OpenmeetingsVariables.webAppRootKey);
 
 	@Autowired
-	private ConfigurationDao configurationDaoImpl;
+	private ConfigurationDao configurationDao;
 	@Autowired
-	private FieldManager fieldmanagment;
+	private FieldManager fieldManager;
 	@Autowired
 	private MailHandler mailHandler;
 	@Autowired
@@ -42,14 +42,14 @@ public class FeedbackManager {
 
 	public String sendFeedback(String username, String email, String message) {
 		try {
-			Long default_lang_id = configurationDaoImpl.getConfValue(
+			Long default_lang_id = configurationDao.getConfValue(
 					"default_lang_id", Long.class, "1");
 
 			String template = feedbackTemplate.getFeedBackTemplate(username,
 					email, message, default_lang_id);
 
 			return mailHandler.sendMail("openmeetings-user@googlegroups.com",
-					fieldmanagment.getString(499L, default_lang_id), template);
+					fieldManager.getString(499L, default_lang_id), template);
 
 		} catch (Exception err) {
 			log.error("sendInvitationLink", err);

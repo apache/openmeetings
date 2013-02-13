@@ -53,7 +53,7 @@ public class DownloadHandler extends HttpServlet {
 	private static final String defaultChatImageName = "_chat_profile_pic.jpg";
 	private static final String defaultSWFName = "deleted.swf";
 
-	public SessiondataDao getSessionManagement() {
+	public SessiondataDao getSessiondataDao() {
 		try {
 			if (ScopeApplicationAdapter.initComplete) {
 				ApplicationContext context = WebApplicationContextUtils
@@ -115,7 +115,7 @@ public class DownloadHandler extends HttpServlet {
 
 		try {
 
-			if (getUserManager() == null || getSessionManagement() == null) {
+			if (getUserManager() == null || getSessiondataDao() == null) {
 				return;
 			}
 
@@ -139,7 +139,7 @@ public class DownloadHandler extends HttpServlet {
 			}
 			log.debug("sid: " + sid);
 
-			Long users_id = getSessionManagement().checkSession(sid);
+			Long users_id = getSessiondataDao().checkSession(sid);
 			Long user_level = getUserManager().getUserLevelByID(users_id);
 
 			if (user_level != null && user_level > 0) {

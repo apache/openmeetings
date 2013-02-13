@@ -38,7 +38,7 @@ public class ErrorService {
 			ErrorService.class, OpenmeetingsVariables.webAppRootKey);
 
 	@Autowired
-	private FieldManager fieldmanagment;
+	private FieldManager fieldManager;
 	@Autowired
 	private ErrorDao errorManagement;
 
@@ -59,10 +59,10 @@ public class ErrorService {
 			if (eValues != null) {
 				log.debug("eValues.getFieldvalues_id() = " + eValues.getFieldvalues_id());
 				log.debug("eValues.getErrorType() = " + errorManagement.getErrorType(eValues.getErrortype_id()));
-				Fieldlanguagesvalues errorValue = fieldmanagment
+				Fieldlanguagesvalues errorValue = fieldManager
 						.getFieldByIdAndLanguage(eValues.getFieldvalues_id(),
 								language_id);
-				Fieldlanguagesvalues typeValue = fieldmanagment
+				Fieldlanguagesvalues typeValue = fieldManager
 						.getFieldByIdAndLanguage(errorManagement.getErrorType(eValues.getErrortype_id())
 								.getFieldvalues_id(), language_id);
 				if (errorValue != null) {

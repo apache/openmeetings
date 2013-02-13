@@ -39,11 +39,11 @@ public class PrintService {
 	
 	private static HashMap<String,PrintBean> currentExportList = new HashMap<String,PrintBean>();
 	@Autowired
-	private SessiondataDao sessionManagement;
+	private SessiondataDao sessiondataDao;
     @Autowired
     private UserManager userManager;
 	@Autowired
-	private AuthLevelUtil authLevelManagement;
+	private AuthLevelUtil authLevelUtil;
 	
 	/*
 	 * Export List
@@ -52,9 +52,9 @@ public class PrintService {
 	
 	public String addPrintList(String SID, @SuppressWarnings("rawtypes") List map, int width, int height) {
 		try {
-			Long users_id = sessionManagement.checkSession(SID);
+			Long users_id = sessiondataDao.checkSession(SID);
 	        Long user_level = userManager.getUserLevelByID(users_id);
-	        if (authLevelManagement.checkUserLevel(user_level)) {
+	        if (authLevelUtil.checkUserLevel(user_level)) {
 	        	String hashRaw = ""+new Date();
 	        	String hash = MD5.do_checksum(hashRaw);
 	        	PrintService.addPrintItembyMap(hash, map, width, height);

@@ -53,7 +53,7 @@ public class CalendarService {
 	@Autowired
 	private AppointmentLogic appointmentLogic;
 	@Autowired
-	private SessiondataDao sessionManagement;
+	private SessiondataDao sessiondataDao;
 	@Autowired
 	private UserManager userManager;
 	@Autowired
@@ -61,7 +61,7 @@ public class CalendarService {
 	@Autowired
 	private RoomDao roomDao;
 	@Autowired
-	private AuthLevelUtil authLevelManagement;
+	private AuthLevelUtil authLevelUtil;
 	@Autowired
 	private AppointmentCategoryDao appointmentCategoryDaoImpl;
 	@Autowired
@@ -74,9 +74,9 @@ public class CalendarService {
 		log.debug("getAppointmentByRange : startdate - " + starttime
 				+ ", enddate - " + endtime);
 		try {
-			Long users_id = sessionManagement.checkSession(SID);
+			Long users_id = sessiondataDao.checkSession(SID);
 			Long user_level = userManager.getUserLevelByID(users_id);
-			if (authLevelManagement.checkUserLevel(user_level)) {
+			if (authLevelUtil.checkUserLevel(user_level)) {
 
 				return appointmentLogic.getAppointmentByRange(users_id,
 						starttime, endtime);
@@ -91,9 +91,9 @@ public class CalendarService {
 
 		try {
 
-			Long users_id = sessionManagement.checkSession(SID);
+			Long users_id = sessiondataDao.checkSession(SID);
 			Long user_level = userManager.getUserLevelByID(users_id);
-			if (authLevelManagement.checkUserLevel(user_level)) {
+			if (authLevelUtil.checkUserLevel(user_level)) {
 
 				return appointmentLogic.getNextAppointment();
 			}
@@ -109,9 +109,9 @@ public class CalendarService {
 
 		try {
 
-			Long users_id = sessionManagement.checkSession(SID);
+			Long users_id = sessiondataDao.checkSession(SID);
 			Long user_level = userManager.getUserLevelByID(users_id);
-			if (authLevelManagement.checkUserLevel(user_level)) {
+			if (authLevelUtil.checkUserLevel(user_level)) {
 
 				return appointmentLogic
 						.searchAppointmentByName(appointmentName);
@@ -134,12 +134,12 @@ public class CalendarService {
 		log.debug("saveAppointMent SID:" + SID + ", baseUrl : " + baseUrl);
 
 		try {
-			Long users_id = sessionManagement.checkSession(SID);
+			Long users_id = sessiondataDao.checkSession(SID);
 			log.debug("saveAppointMent users_id:" + users_id);
 
 			Long user_level = userManager.getUserLevelByID(users_id);
 
-			if (authLevelManagement.checkUserLevel(user_level)) {
+			if (authLevelUtil.checkUserLevel(user_level)) {
 				
 				User us = userManager.getUserById(users_id);
 				
@@ -179,9 +179,9 @@ public class CalendarService {
 			Long language_id) {
 		try {
 
-			Long users_id = sessionManagement.checkSession(SID);
+			Long users_id = sessiondataDao.checkSession(SID);
 			Long user_level = userManager.getUserLevelByID(users_id);
-			if (authLevelManagement.checkUserLevel(user_level)) {
+			if (authLevelUtil.checkUserLevel(user_level)) {
 
 				log.debug("updateAppointment");
 
@@ -231,9 +231,9 @@ public class CalendarService {
 			String password, long roomId) {
 		try {
 
-			Long users_id = sessionManagement.checkSession(SID);
+			Long users_id = sessiondataDao.checkSession(SID);
 			Long user_level = userManager.getUserLevelByID(users_id);
-			if (authLevelManagement.checkUserLevel(user_level)) {
+			if (authLevelUtil.checkUserLevel(user_level)) {
 
 				log.debug("updateAppointment");
 
@@ -298,9 +298,9 @@ public class CalendarService {
 
 		try {
 
-			Long users_id = sessionManagement.checkSession(SID);
+			Long users_id = sessiondataDao.checkSession(SID);
 			Long user_level = userManager.getUserLevelByID(users_id);
-			if (authLevelManagement.checkUserLevel(user_level)) {
+			if (authLevelUtil.checkUserLevel(user_level)) {
 
 				return appointmentLogic.deleteAppointment(appointmentId,
 						users_id, language_id);
@@ -317,9 +317,9 @@ public class CalendarService {
 	public Appointment getAppointmentByRoomId(String SID, Long room_id) {
 		try {
 
-			Long users_id = sessionManagement.checkSession(SID);
+			Long users_id = sessiondataDao.checkSession(SID);
 			Long user_level = userManager.getUserLevelByID(users_id);
-			if (authLevelManagement.checkUserLevel(user_level)) {
+			if (authLevelUtil.checkUserLevel(user_level)) {
 
 				Appointment appointment = new Appointment();
 
@@ -346,10 +346,10 @@ public class CalendarService {
 
 		try {
 
-			Long users_id = sessionManagement.checkSession(SID);
+			Long users_id = sessiondataDao.checkSession(SID);
 			Long user_level = userManager.getUserLevelByID(users_id);
 
-			if (authLevelManagement.checkUserLevel(user_level)) {
+			if (authLevelUtil.checkUserLevel(user_level)) {
 
 				List<AppointmentCategory> res = appointmentCategoryDaoImpl
 						.getAppointmentCategoryList();
@@ -384,9 +384,9 @@ public class CalendarService {
 		log.debug("getAppointmentReminderTypList");
 
 		try {
-			Long users_id = sessionManagement.checkSession(SID);
+			Long users_id = sessiondataDao.checkSession(SID);
 			Long user_level = userManager.getUserLevelByID(users_id);
-			if (authLevelManagement.checkUserLevel(user_level)) {
+			if (authLevelUtil.checkUserLevel(user_level)) {
 
 				List<AppointmentReminderTyps> res = appointmentReminderTypDaoImpl
 						.getAppointmentReminderTypList();

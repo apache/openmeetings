@@ -39,7 +39,7 @@ public class LoadAtomRssFeed {
 	private static final Logger log = Red5LoggerFactory.getLogger(
 			LoadAtomRssFeed.class, OpenmeetingsVariables.webAppRootKey);
 	@Autowired
-	private ConfigurationDao configDao;
+	private ConfigurationDao configurationDao;
 	@Autowired
 	private AuthLevelUtil authLevelmanagement;
 
@@ -49,10 +49,10 @@ public class LoadAtomRssFeed {
 			if (authLevelmanagement.checkUserLevel(user_level)) {
 				LinkedHashMap<String, LinkedHashMap<String, LinkedHashMap<String, LinkedHashMap<String, Object>>>> returnMap = new LinkedHashMap<String, LinkedHashMap<String, LinkedHashMap<String, LinkedHashMap<String, Object>>>>();
 
-				String url1 = configDao.getConfValue("rss_feed1", String.class, "");
+				String url1 = configurationDao.getConfValue("rss_feed1", String.class, "");
 				returnMap.put("feed1", this.parseRssFeed(url1));
 
-				String url2 = configDao.getConfValue("rss_feed2", String.class, "");
+				String url2 = configurationDao.getConfValue("rss_feed2", String.class, "");
 				returnMap.put("feed2", this.parseRssFeed(url2));
 
 				return returnMap;

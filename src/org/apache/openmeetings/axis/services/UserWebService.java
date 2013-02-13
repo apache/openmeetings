@@ -61,13 +61,13 @@ public class UserWebService {
 			UserWebService.class, OpenmeetingsVariables.webAppRootKey);
 
 	@Autowired
-	private SessiondataDao sessionManagement;
+	private SessiondataDao sessiondataDao;
 	@Autowired
-	private ConfigurationDao configurationDaoImpl;
+	private ConfigurationDao configurationDao;
 	@Autowired
 	private UserManager userManagement;
 	@Autowired
-	private FieldManager fieldmanagment;
+	private FieldManager fieldManager;
 	@Autowired
 	private ErrorDao errorManagement;
 	@Autowired
@@ -79,7 +79,7 @@ public class UserWebService {
 	@Autowired
 	private MainService mainService;
 	@Autowired
-	private AuthLevelUtil authLevelManagement;
+	private AuthLevelUtil authLevelUtil;
 
 	/**
 	 * load this session id before doing anything else Returns an Object of Type
@@ -147,10 +147,10 @@ public class UserWebService {
 				ErrorValue eValues = errorManagement
 						.getErrorValuesById(errorid * (-1));
 				if (eValues != null) {
-					Fieldlanguagesvalues errorValue = fieldmanagment
+					Fieldlanguagesvalues errorValue = fieldManager
 							.getFieldByIdAndLanguage(
 									eValues.getFieldvalues_id(), language_id);
-					Fieldlanguagesvalues typeValue = fieldmanagment
+					Fieldlanguagesvalues typeValue = fieldManager
 							.getFieldByIdAndLanguage(errorManagement
 									.getErrorType(eValues.getErrortype_id())
 									.getFieldvalues_id(), language_id);
@@ -213,12 +213,12 @@ public class UserWebService {
 			long states_id, String town, long language_id, String baseURL)
 			throws AxisFault {
 		try {
-			Long users_id = sessionManagement.checkSession(SID);
+			Long users_id = sessiondataDao.checkSession(SID);
 			Long user_level = userManagement.getUserLevelByID(users_id);
 
-			if (authLevelManagement.checkWebServiceLevel(user_level)) {
+			if (authLevelUtil.checkWebServiceLevel(user_level)) {
 
-				String jName_timeZone = configurationDaoImpl.getConfValue("default.timezone", String.class, "");
+				String jName_timeZone = configurationDao.getConfValue("default.timezone", String.class, "");
 
 				Long user_id = userManagement.registerUser(username, userpass,
 						lastname, firstname, email, new Date(), street,
@@ -295,10 +295,10 @@ public class UserWebService {
 			long states_id, String town, long language_id, String baseURL,
 			String jNameTimeZone) throws AxisFault {
 		try {
-			Long users_id = sessionManagement.checkSession(SID);
+			Long users_id = sessiondataDao.checkSession(SID);
 			Long user_level = userManagement.getUserLevelByID(users_id);
 
-			if (authLevelManagement.checkWebServiceLevel(user_level)) {
+			if (authLevelUtil.checkWebServiceLevel(user_level)) {
 
 				Long user_id = userManagement.registerUser(username, userpass,
 						lastname, firstname, email, new Date(), street,
@@ -387,10 +387,10 @@ public class UserWebService {
 			String jNameTimeZone, String externalUserId, String externalUserType)
 			throws AxisFault {
 		try {
-			Long users_id = sessionManagement.checkSession(SID);
+			Long users_id = sessiondataDao.checkSession(SID);
 			Long user_level = userManagement.getUserLevelByID(users_id);
 
-			if (authLevelManagement.checkAdminLevel(user_level)) {
+			if (authLevelUtil.checkAdminLevel(user_level)) {
 
 				User testUser = userManagement.getUserByExternalIdAndType(
 						externalUserId, externalUserType);
@@ -446,10 +446,10 @@ public class UserWebService {
 	 */
 	public Long deleteUserById(String SID, Long userId) throws AxisFault {
 		try {
-			Long users_id = sessionManagement.checkSession(SID);
+			Long users_id = sessiondataDao.checkSession(SID);
 			Long user_level = userManagement.getUserLevelByID(users_id);
 
-			if (authLevelManagement.checkAdminLevel(user_level)) {
+			if (authLevelUtil.checkAdminLevel(user_level)) {
 
 				// Setting user deleted
 				usersDao.deleteUserID(userId);
@@ -483,10 +483,10 @@ public class UserWebService {
 	public Long deleteUserByExternalUserIdAndType(String SID,
 			String externalUserId, String externalUserType) throws AxisFault {
 		try {
-			Long users_id = sessionManagement.checkSession(SID);
+			Long users_id = sessiondataDao.checkSession(SID);
 			Long user_level = userManagement.getUserLevelByID(users_id);
 
-			if (authLevelManagement.checkAdminLevel(user_level)) {
+			if (authLevelUtil.checkAdminLevel(user_level)) {
 
 				User userExternal = userManagement.getUserByExternalIdAndType(
 						externalUserId, externalUserType);
@@ -537,9 +537,9 @@ public class UserWebService {
 		log.debug("UserService.setUserObject");
 
 		try {
-			Long users_id = sessionManagement.checkSession(SID);
+			Long users_id = sessiondataDao.checkSession(SID);
 			Long user_level = userManagement.getUserLevelByID(users_id);
-			if (authLevelManagement.checkWebServiceLevel(user_level)) {
+			if (authLevelUtil.checkWebServiceLevel(user_level)) {
 
 				RemoteSessionObject remoteSessionObject = new RemoteSessionObject(
 						username, firstname, lastname, profilePictureUrl, email);
@@ -557,7 +557,7 @@ public class UserWebService {
 
 				log.debug("xmlString " + xmlString);
 
-				sessionManagement.updateUserRemoteSession(SID, xmlString);
+				sessiondataDao.updateUserRemoteSession(SID, xmlString);
 
 				return new Long(1);
 			} else {
@@ -604,9 +604,9 @@ public class UserWebService {
 		log.debug("UserService.setUserObject");
 
 		try {
-			Long users_id = sessionManagement.checkSession(SID);
+			Long users_id = sessiondataDao.checkSession(SID);
 			Long user_level = userManagement.getUserLevelByID(users_id);
-			if (authLevelManagement.checkWebServiceLevel(user_level)) {
+			if (authLevelUtil.checkWebServiceLevel(user_level)) {
 
 				RemoteSessionObject remoteSessionObject = new RemoteSessionObject(
 						username, firstname, lastname, profilePictureUrl,
@@ -627,7 +627,7 @@ public class UserWebService {
 
 				log.debug("xmlString " + xmlString);
 
-				sessionManagement.updateUserRemoteSession(SID, xmlString);
+				sessiondataDao.updateUserRemoteSession(SID, xmlString);
 
 				return new Long(1);
 			} else {
@@ -677,9 +677,9 @@ public class UserWebService {
 			Long room_id, int becomeModeratorAsInt, int showAudioVideoTestAsInt)
 			throws AxisFault {
 		try {
-			Long users_id = sessionManagement.checkSession(SID);
+			Long users_id = sessiondataDao.checkSession(SID);
 			Long user_level = userManagement.getUserLevelByID(users_id);
-			if (authLevelManagement.checkWebServiceLevel(user_level)) {
+			if (authLevelUtil.checkWebServiceLevel(user_level)) {
 
 				RemoteSessionObject remoteSessionObject = new RemoteSessionObject(
 						username, firstname, lastname, profilePictureUrl,
@@ -700,7 +700,7 @@ public class UserWebService {
 
 				log.debug("xmlString " + xmlString);
 
-				sessionManagement.updateUserRemoteSession(SID, xmlString);
+				sessiondataDao.updateUserRemoteSession(SID, xmlString);
 
 				boolean becomeModerator = false;
 				if (becomeModeratorAsInt != 0) {
@@ -778,9 +778,9 @@ public class UserWebService {
 		log.debug("UserService.setUserObject");
 
 		try {
-			Long users_id = sessionManagement.checkSession(SID);
+			Long users_id = sessiondataDao.checkSession(SID);
 			Long user_level = userManagement.getUserLevelByID(users_id);
-			if (authLevelManagement.checkWebServiceLevel(user_level)) {
+			if (authLevelUtil.checkWebServiceLevel(user_level)) {
 
 				RemoteSessionObject remoteSessionObject = new RemoteSessionObject(
 						username, firstname, lastname, profilePictureUrl,
@@ -801,7 +801,7 @@ public class UserWebService {
 
 				log.debug("xmlString " + xmlString);
 
-				sessionManagement.updateUserRemoteSession(SID, xmlString);
+				sessiondataDao.updateUserRemoteSession(SID, xmlString);
 
 				boolean becomeModerator = false;
 				if (becomeModeratorAsInt != 0) {
@@ -880,9 +880,9 @@ public class UserWebService {
 			String externalUserType, Long room_id, int becomeModeratorAsInt,
 			int showAudioVideoTestAsInt, int allowRecording) {
 		try {
-			Long users_id = sessionManagement.checkSession(SID);
+			Long users_id = sessiondataDao.checkSession(SID);
 			Long user_level = userManagement.getUserLevelByID(users_id);
-			if (authLevelManagement.checkWebServiceLevel(user_level)) {
+			if (authLevelUtil.checkWebServiceLevel(user_level)) {
 
 				RemoteSessionObject remoteSessionObject = new RemoteSessionObject(
 						username, firstname, lastname, profilePictureUrl,
@@ -904,7 +904,7 @@ public class UserWebService {
 
 				log.debug("xmlString " + xmlString);
 
-				sessionManagement.updateUserRemoteSession(SID, xmlString);
+				sessiondataDao.updateUserRemoteSession(SID, xmlString);
 
 				boolean becomeModerator = false;
 				if (becomeModeratorAsInt != 0) {
@@ -977,9 +977,9 @@ public class UserWebService {
 		log.debug("UserService.setUserObjectMainLandingZone");
 
 		try {
-			Long users_id = sessionManagement.checkSession(SID);
+			Long users_id = sessiondataDao.checkSession(SID);
 			Long user_level = userManagement.getUserLevelByID(users_id);
-			if (authLevelManagement.checkWebServiceLevel(user_level)) {
+			if (authLevelUtil.checkWebServiceLevel(user_level)) {
 
 				RemoteSessionObject remoteSessionObject = new RemoteSessionObject(
 						username, firstname, lastname, profilePictureUrl,
@@ -1000,7 +1000,7 @@ public class UserWebService {
 
 				log.debug("xmlString " + xmlString);
 
-				sessionManagement.updateUserRemoteSession(SID, xmlString);
+				sessiondataDao.updateUserRemoteSession(SID, xmlString);
 
 				String hash = soapLoginDao.addSOAPLogin(SID, null, false, true,
 						true, // allowSameURLMultipleTimes
@@ -1077,9 +1077,9 @@ public class UserWebService {
 			Long room_id, int becomeModeratorAsInt,
 			int showAudioVideoTestAsInt, int showNickNameDialogAsInt) {
 		try {
-			Long users_id = sessionManagement.checkSession(SID);
+			Long users_id = sessiondataDao.checkSession(SID);
 			Long user_level = userManagement.getUserLevelByID(users_id);
-			if (authLevelManagement.checkWebServiceLevel(user_level)) {
+			if (authLevelUtil.checkWebServiceLevel(user_level)) {
 
 				RemoteSessionObject remoteSessionObject = new RemoteSessionObject(
 						username, firstname, lastname, profilePictureUrl,
@@ -1101,7 +1101,7 @@ public class UserWebService {
 
 				log.debug("xmlString " + xmlString);
 
-				sessionManagement.updateUserRemoteSession(SID, xmlString);
+				sessiondataDao.updateUserRemoteSession(SID, xmlString);
 
 				boolean becomeModerator = false;
 				if (becomeModeratorAsInt != 0) {
@@ -1162,9 +1162,9 @@ public class UserWebService {
 			String username, String firstname, String lastname,
 			String externalUserId, String externalUserType, Long recording_id) {
 		try {
-			Long users_id = sessionManagement.checkSession(SID);
+			Long users_id = sessiondataDao.checkSession(SID);
 			Long user_level = userManagement.getUserLevelByID(users_id);
-			if (authLevelManagement.checkWebServiceLevel(user_level)) {
+			if (authLevelUtil.checkWebServiceLevel(user_level)) {
 
 				RemoteSessionObject remoteSessionObject = new RemoteSessionObject(
 						username, firstname, "", "", "", externalUserId,
@@ -1185,7 +1185,7 @@ public class UserWebService {
 
 				log.debug("xmlString " + xmlString);
 
-				sessionManagement.updateUserRemoteSession(SID, xmlString);
+				sessiondataDao.updateUserRemoteSession(SID, xmlString);
 
 				String hash = soapLoginDao.addSOAPLogin(SID, null, false,
 						false, true, // allowSameURLMultipleTimes
@@ -1225,9 +1225,9 @@ public class UserWebService {
 	public Long addUserToOrganisation(String SID, Long user_id,
 			Long organisation_id, Long insertedby) {
 		try {
-			Long users_id = sessionManagement.checkSession(SID);
+			Long users_id = sessiondataDao.checkSession(SID);
 			Long user_level = userManagement.getUserLevelByID(users_id);
-			if (authLevelManagement.checkWebServiceLevel(user_level)) {
+			if (authLevelUtil.checkWebServiceLevel(user_level)) {
 
 				return organisationManager.addUserToOrganisation(user_id,
 						organisation_id, users_id);
@@ -1262,9 +1262,9 @@ public class UserWebService {
 			long organisation_id, int start, int max, String orderby,
 			boolean asc) {
 		try {
-			Long users_id = sessionManagement.checkSession(SID);
+			Long users_id = sessiondataDao.checkSession(SID);
 			Long user_level = userManagement.getUserLevelByID(users_id);
-			if (authLevelManagement.checkWebServiceLevel(user_level)) {
+			if (authLevelUtil.checkWebServiceLevel(user_level)) {
 				return organisationManager
 						.getUsersSearchResultByOrganisationId(organisation_id,
 								start, max, orderby, asc);

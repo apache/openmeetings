@@ -111,7 +111,7 @@ public class BackupExport {
 	@Autowired
 	private AppointmentDao appointmentDao;
 	@Autowired
-	private SessiondataDao sessionManagement;
+	private SessiondataDao sessiondataDao;
 	@Autowired
 	private UserManager userManager;
 	@Autowired
@@ -135,11 +135,11 @@ public class BackupExport {
 	@Autowired
 	private UserContactsDao userContactsDao;
 	@Autowired
-	private AuthLevelUtil authLevelManagement;
+	private AuthLevelUtil authLevelUtil;
 	@Autowired
 	private PollManager pollManager;
 	@Autowired
-	private ConfigurationDao configurationDaoImpl;
+	private ConfigurationDao configurationDao;
 
 	public void performExport(File filePath, File backup_dir,
 			boolean includeFiles) throws Exception {
@@ -327,7 +327,7 @@ public class BackupExport {
 		 * ##################### Config
 		 */
 		{
-			List<Configuration> list = configurationDaoImpl.getConfigurations(
+			List<Configuration> list = configurationDao.getConfigurations(
 					0, Integer.MAX_VALUE, "c.configuration_id", true);
 			Registry registry = new Registry();
 			registry.bind(OmTimeZone.class, OmTimeZoneConverter.class);
@@ -449,13 +449,13 @@ public class BackupExport {
 		}
 		log.debug("sid: " + sid);
 
-		Long users_id = sessionManagement.checkSession(sid);
+		Long users_id = sessiondataDao.checkSession(sid);
 		Long user_level = userManager.getUserLevelByID(users_id);
 
 		log.debug("users_id: " + users_id);
 		log.debug("user_level: " + user_level);
 
-		if (authLevelManagement.checkAdminLevel(user_level)) {
+		if (authLevelUtil.checkAdminLevel(user_level)) {
 			// if (true) {
 
 			String includeFileOption = httpServletRequest

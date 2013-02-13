@@ -47,7 +47,7 @@ public class PollManager {
 	@PersistenceContext
 	private EntityManager em;
 	@Autowired
-	private FieldManager fieldmanagment;
+	private FieldManager fieldManager;
 	@Autowired
 	private UserManager userManager;
 	@Autowired
@@ -56,7 +56,7 @@ public class PollManager {
 	public Long addPollType(Long labelId, Boolean isNumeric) {
 		log.debug("Adding poll type: " + labelId + ", " + isNumeric);
 		PollType pt = new PollType();
-		pt.setLabel(fieldmanagment.getFieldvaluesById(labelId));
+		pt.setLabel(fieldManager.getFieldvaluesById(labelId));
 		pt.setIsNumericAnswer(isNumeric);
 
 		em.persist(pt);
@@ -65,12 +65,12 @@ public class PollManager {
 	}
 	
 	public List<PollType> getPollTypes() {
-		TypedQuery<PollType> q = em.createQuery("SELECT pt FROM PollType pt",PollType.class);
-		return q.getResultList();
+		return em.createNamedQuery("getPollTypes", PollType.class)
+				.getResultList();
 	}
 	
 	public PollType getPollType(Long typeId) {
-		TypedQuery<PollType> q = em.createQuery("SELECT pt FROM PollType pt WHERE pt.pollTypesId = :pollTypesId", PollType.class);
+		TypedQuery<PollType> q = em.createNamedQuery("getPollType", PollType.class);
 		q.setParameter("pollTypesId", typeId);
 		return q.getSingleResult();
 	}
@@ -101,7 +101,7 @@ public class PollManager {
 	public boolean closePoll(Long room_id){
 		try {
 			log.debug(" :: closePoll :: ");
-			Query q = em.createQuery("UPDATE RoomPoll rp SET rp.archived = :archived WHERE rp.room.rooms_id = :rooms_id");
+			Query q = em.createNamedQuery("closePoll");
 			q.setParameter("rooms_id", room_id);
 			q.setParameter("archived", true);
 			return q.executeUpdate() > 0;
@@ -114,7 +114,7 @@ public class PollManager {
 	public boolean deletePoll(Long poll_id){
 		try {
 			log.debug(" :: deletePoll :: ");
-			Query q = em.createQuery("DELETE FROM RoomPoll rp WHERE rp.roomPollId = :roomPollId");
+			Query q = em.createNamedQuery("deletePoll");
 			q.setParameter("roomPollId", poll_id);
 			return q.executeUpdate() > 0;
 		} catch (Exception err) {
@@ -126,7 +126,7 @@ public class PollManager {
 	public RoomPoll getPoll(Long room_id) {
 		try {
 			log.debug(" :: getPoll :: " + room_id);
-			TypedQuery<RoomPoll> q = em.createQuery("SELECT rp FROM RoomPoll rp WHERE rp.room.rooms_id = :room_id AND rp.archived = :archived", RoomPoll.class);
+			TypedQuery<RoomPoll> q = em.createNamedQuery("getPoll", RoomPoll.class);
 			q.setParameter("room_id", room_id);
 			q.setParameter("archived", false);
 			return q.getSingleResult();
@@ -140,7 +140,7 @@ public class PollManager {
 	
 	public List<RoomPoll> getPollListBackup() {
 		try {
-			TypedQuery<RoomPoll> q = em.createQuery("SELECT rp FROM RoomPoll rp",RoomPoll.class);
+			TypedQuery<RoomPoll> q = em.createNamedQuery("getPollListBackup",RoomPoll.class);
 			return q.getResultList();
 		} catch (NoResultException nre) {
 			//expected
@@ -153,7 +153,7 @@ public class PollManager {
 	public List<RoomPoll> getArchivedPollList(Long room_id) {
 		try {
 			log.debug(" :: getPoll :: " + room_id);
-			TypedQuery<RoomPoll> q = em.createQuery("SELECT rp FROM RoomPoll rp WHERE rp.room.rooms_id = :room_id AND rp.archived = :archived",RoomPoll.class);
+			TypedQuery<RoomPoll> q = em.createNamedQuery("getArchivedPollList",RoomPoll.class);
 			q.setParameter("room_id", room_id);
 			q.setParameter("archived", true);
 			return q.getResultList();
@@ -168,7 +168,7 @@ public class PollManager {
 	public boolean hasPoll(Long room_id) {
 		try {
 			log.debug(" :: hasPoll :: " + room_id);
-			TypedQuery<Long> q = em.createQuery("SELECT COUNT(rp) FROM RoomPoll rp WHERE rp.room.rooms_id = :room_id AND rp.archived = :archived", Long.class);
+			TypedQuery<Long> q = em.createNamedQuery("hasPoll", Long.class);
 			q.setParameter("room_id", room_id);
 			q.setParameter("archived", false);
 			return q.getSingleResult() > 0;
@@ -183,8 +183,7 @@ public class PollManager {
 	public boolean hasVoted(Long room_id, Long userid) {
 		try {
 			log.debug(" :: hasVoted :: " + room_id + ", " + userid);
-			TypedQuery<RoomPollAnswers> q = em.createQuery("SELECT rpa FROM RoomPollAnswers rpa "
-				+ "WHERE rpa.roomPoll.room.rooms_id = :room_id AND rpa.votedUser.user_id = :userid AND rpa.roomPoll.archived = :archived", RoomPollAnswers.class);
+			TypedQuery<RoomPollAnswers> q = em.createNamedQuery("hasVoted", RoomPollAnswers.class);
 			q.setParameter("room_id", room_id);
 			q.setParameter("userid", userid);
 			q.setParameter("archived", false);
