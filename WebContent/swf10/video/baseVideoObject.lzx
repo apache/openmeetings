@@ -37,7 +37,7 @@
 			</passthrough>
 		</when>
 	</switch>
-	
+	 
 	<!--- @keywords private -->
 	<attribute name="chatpartnername" value="" type="string" />
 	<!--- @keywords private -->
@@ -438,7 +438,7 @@
 			<handler name="onclick">
 				<![CDATA[
 			      	if (canvas.ismoderator || canvas.isAllowedToGiveExclusiveAudio) {
-			          	parent.parent.giveExclusiveAudio();
+			          	parent.parent.confirmExclusiveAudio();
 			        } else {
 			        	new lz.labelerrorPopupSWF10(canvas,{errorlabelid:1478});
 			        }
@@ -577,7 +577,7 @@
 		<![CDATA[
 	      	if (canvas.ismoderator || canvas.isAllowedToGiveExclusiveAudio) {
 	      		this._giveExclusiveAudioView._micButton._toolTipTextExclusiveAudio.cleanHolder();
-	          	this.giveExclusiveAudio();
+	          	this.confirmExclusiveAudio();
 	        } else {
 				new lz.labelerrorPopupSWF10(canvas,{errorlabelid:1478});        
 	        }
@@ -607,6 +607,10 @@
     </handler>
 
 	<method name="giveExclusiveAudio">
+		canvas.videoComp_lc.send(canvas.videoComp_lc_name, 'lc_giveExclusiveAudio', this.publicSID);
+	</method>
+
+    <method name="confirmExclusiveAudio">
 		var so:SharedObject = SharedObject.getLocal('userdata');
 		var userData = so.data;
 		var dontShowExclusiveAudioConfirmation = userData["dontShowExclusiveAudioConfirmation"];
@@ -614,7 +618,7 @@
 		exclusiveAudioListener.sendNoConfirmation = function() {};
 		exclusiveAudioListener.sendConfirmation = function(answer, remember) {
 			if (answer) {
-				canvas.videoComp_lc.send(canvas.videoComp_lc_name, 'lc_giveExclusiveAudio', this.publicSID);
+				giveExclusiveAudio();
 				if (remember) {
 					userData["dontShowExclusiveAudioConfirmation"] = true;
 					so.flush();
