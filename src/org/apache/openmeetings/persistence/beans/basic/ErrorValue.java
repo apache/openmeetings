@@ -30,7 +30,7 @@ import javax.persistence.Table;
 
 @Entity
 @NamedQueries({
-	@NamedQuery(name = "getErrorValuesById", query = "select c from ErrorValues as c "
+	@NamedQuery(name = "getErrorValuesById", query = "select c from ErrorValue as c "
 					+ " where c.errorvalues_id = :errorvalues_id "
 					+ " AND c.deleted <> :deleted")
 })
