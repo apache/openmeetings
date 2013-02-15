@@ -29,62 +29,18 @@ import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
 import org.apache.openmeetings.data.user.UserManager;
 import org.apache.openmeetings.persistence.beans.lang.Fieldlanguagesvalues;
 import org.apache.openmeetings.persistence.beans.user.User;
-import org.apache.openmeetings.remote.red5.ScopeApplicationAdapter;
+import org.apache.openmeetings.servlet.BaseVelocityViewServlet;
 import org.apache.velocity.Template;
 import org.apache.velocity.context.Context;
-import org.apache.velocity.tools.view.VelocityViewServlet;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
-import org.springframework.context.ApplicationContext;
-import org.springframework.web.context.support.WebApplicationContextUtils;
 
-public class ActivateUser extends VelocityViewServlet {
+public class ActivateUser extends BaseVelocityViewServlet {
+	
 	private static final long serialVersionUID = -8892729047921796170L;
+	
 	private static Logger log = Red5LoggerFactory.getLogger(ActivateUser.class,
 			OpenmeetingsVariables.webAppRootKey);
-
-	private ConfigurationDao getConfigurationDao() {
-		try {
-			if (!ScopeApplicationAdapter.initComplete) {
-				return null;
-			}
-			ApplicationContext context = WebApplicationContextUtils
-					.getWebApplicationContext(getServletContext());
-			return (ConfigurationDao) context
-					.getBean("configurationDaoImpl");
-		} catch (Exception err) {
-			log.error("[getConfigurationmanagement]", err);
-		}
-		return null;
-	}
-
-	private UserManager getUserManager() {
-		try {
-			if (!ScopeApplicationAdapter.initComplete) {
-				return null;
-			}
-			ApplicationContext context = WebApplicationContextUtils
-					.getWebApplicationContext(getServletContext());
-			return (UserManager) context.getBean("userManagement");
-		} catch (Exception err) {
-			log.error("[getUsermanagement]", err);
-		}
-		return null;
-	}
-
-	private FieldManager getFieldmanager() {
-		try {
-			if (!ScopeApplicationAdapter.initComplete) {
-				return null;
-			}
-			ApplicationContext context = WebApplicationContextUtils
-					.getWebApplicationContext(getServletContext());
-			return (FieldManager) context.getBean("fieldmanagment");
-		} catch (Exception err) {
-			log.error("[getgetFieldmanagment()]", err);
-		}
-		return null;
-	}
 
 	@Override
 	public Template handleRequest(HttpServletRequest httpServletRequest,
@@ -92,9 +48,9 @@ public class ActivateUser extends VelocityViewServlet {
 
 		try {
 
-			if (getConfigurationDao() == null
-					|| getUserManager() == null
-					|| getFieldmanager() == null) {
+			if (getBean(ConfigurationDao.class) == null
+					|| getBean(UserManager.class) == null
+					|| getBean(FieldManager.class) == null) {
 				return getVelocityView().getVelocityEngine().getTemplate(
 						"booting.vm");
 			}
@@ -102,14 +58,14 @@ public class ActivateUser extends VelocityViewServlet {
 			String hash = httpServletRequest.getParameter("u");
 			String loginURL = OpenmeetingsVariables.webAppRootPath;
 
-			Long default_lang_id = getConfigurationDao()
+			Long default_lang_id = getBean(ConfigurationDao.class)
 					.getConfValue("default_lang_id", Long.class, "1");
-			ctx.put("APP_NAME", getConfigurationDao().getAppName());
+			ctx.put("APP_NAME", getBean(ConfigurationDao.class).getAppName());
 			if (hash == null) {
 				// No hash
-				Fieldlanguagesvalues labelid669 = getFieldmanager()
+				Fieldlanguagesvalues labelid669 = getBean(FieldManager.class)
 						.getFieldByIdAndLanguage(new Long(669), default_lang_id);
-				Fieldlanguagesvalues labelid672 = getFieldmanager()
+				Fieldlanguagesvalues labelid672 = getBean(FieldManager.class)
 						.getFieldByIdAndLanguage(new Long(672), default_lang_id);
 
 				ctx.put("message", labelid669.getValue());
@@ -120,13 +76,13 @@ public class ActivateUser extends VelocityViewServlet {
 						"activation_template.vm");
 			}
 			//
-			User user = getUserManager().getUserByActivationHash(hash);
+			User user = getBean(UserManager.class).getUserByActivationHash(hash);
 
 			if (user == null) {
 				// No User Found with this Hash
-				Fieldlanguagesvalues labelid669 = getFieldmanager()
+				Fieldlanguagesvalues labelid669 = getBean(FieldManager.class)
 						.getFieldByIdAndLanguage(new Long(669), default_lang_id);
-				Fieldlanguagesvalues labelid672 = getFieldmanager()
+				Fieldlanguagesvalues labelid672 = getBean(FieldManager.class)
 						.getFieldByIdAndLanguage(new Long(672), default_lang_id);
 
 				ctx.put("message", labelid669.getValue());
@@ -138,9 +94,9 @@ public class ActivateUser extends VelocityViewServlet {
 
 			} else if (user.getStatus() == 1) {
 				// already activated
-				Fieldlanguagesvalues labelid670 = getFieldmanager()
+				Fieldlanguagesvalues labelid670 = getBean(FieldManager.class)
 						.getFieldByIdAndLanguage(new Long(670), default_lang_id);
-				Fieldlanguagesvalues labelid672 = getFieldmanager()
+				Fieldlanguagesvalues labelid672 = getBean(FieldManager.class)
 						.getFieldByIdAndLanguage(new Long(672), default_lang_id);
 
 				ctx.put("message", labelid670.getValue());
@@ -155,11 +111,11 @@ public class ActivateUser extends VelocityViewServlet {
 				user.setStatus(1);
 				user.setUpdatetime(new Date());
 
-				getUserManager().updateUser(user);
+				getBean(UserManager.class).updateUser(user);
 
-				Fieldlanguagesvalues labelid671 = getFieldmanager()
+				Fieldlanguagesvalues labelid671 = getBean(FieldManager.class)
 						.getFieldByIdAndLanguage(new Long(671), default_lang_id);
-				Fieldlanguagesvalues labelid672 = getFieldmanager()
+				Fieldlanguagesvalues labelid672 = getBean(FieldManager.class)
 						.getFieldByIdAndLanguage(new Long(672), default_lang_id);
 
 				ctx.put("message", labelid671.getValue());
@@ -171,7 +127,7 @@ public class ActivateUser extends VelocityViewServlet {
 
 			} else {
 				// unkown Status
-				Fieldlanguagesvalues labelid672 = getFieldmanager()
+				Fieldlanguagesvalues labelid672 = getBean(FieldManager.class)
 						.getFieldByIdAndLanguage(new Long(672), default_lang_id);
 
 				ctx.put("message", "Unkown Status");

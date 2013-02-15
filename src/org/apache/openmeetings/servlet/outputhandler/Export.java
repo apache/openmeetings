@@ -24,7 +24,6 @@ import java.util.Date;
 import java.util.List;
 
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -36,99 +35,21 @@ import org.apache.openmeetings.data.user.UserManager;
 import org.apache.openmeetings.data.user.dao.UsersDao;
 import org.apache.openmeetings.persistence.beans.domain.Organisation;
 import org.apache.openmeetings.persistence.beans.user.User;
-import org.apache.openmeetings.remote.red5.ScopeApplicationAdapter;
+import org.apache.openmeetings.servlet.BaseHttpServlet;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
-import org.springframework.context.ApplicationContext;
-import org.springframework.web.context.support.WebApplicationContextUtils;
 
 /**
  * 
  * @author sebastianwagner
  * 
  */
-public class Export extends HttpServlet {
+public class Export extends BaseHttpServlet {
+	
 	private static final long serialVersionUID = 8527093674786692472L;
+	
 	private static final Logger log = Red5LoggerFactory.getLogger(Export.class,
 			OpenmeetingsVariables.webAppRootKey);
-
-	private SessiondataDao getSessiondataDao() {
-		try {
-			if (ScopeApplicationAdapter.initComplete) {
-				ApplicationContext context = WebApplicationContextUtils
-						.getWebApplicationContext(getServletContext());
-				return context.getBean("sessionManagement", SessiondataDao.class);
-			}
-		} catch (Exception err) {
-			log.error("[getSessionManagement]", err);
-		}
-		return null;
-	}
-
-	private UserManager getUserManager() {
-		try {
-			if (ScopeApplicationAdapter.initComplete) {
-				ApplicationContext context = WebApplicationContextUtils
-						.getWebApplicationContext(getServletContext());
-				return context.getBean("userManagement", UserManager.class);
-			}
-		} catch (Exception err) {
-			log.error("[getUserManagement]", err);
-		}
-		return null;
-	}
-
-	private OrganisationManager getOrganisationManager() {
-		try {
-			if (ScopeApplicationAdapter.initComplete) {
-				ApplicationContext context = WebApplicationContextUtils
-						.getWebApplicationContext(getServletContext());
-				return context.getBean("organisationmanagement", OrganisationManager.class);
-			}
-		} catch (Exception err) {
-			log.error("[getOrganisationmanagement]", err);
-		}
-		return null;
-	}
-
-	private UsersDao getUsersDao() {
-		try {
-			if (ScopeApplicationAdapter.initComplete) {
-				ApplicationContext context = WebApplicationContextUtils
-						.getWebApplicationContext(getServletContext());
-				return context.getBean("usersDao", UsersDao.class);
-			}
-		} catch (Exception err) {
-			log.error("[getUsersDao]", err);
-		}
-		return null;
-	}
-
-	private AuthLevelUtil getAuthLevelManagement() {
-		try {
-			if (ScopeApplicationAdapter.initComplete) {
-				ApplicationContext context = WebApplicationContextUtils
-						.getWebApplicationContext(getServletContext());
-				return context.getBean("authLevelManagement", AuthLevelUtil.class);
-			}
-		} catch (Exception err) {
-			log.error("[getAuthLevelManagement]", err);
-		}
-		return null;
-	}
-
-	private BackupExport getBackupExport() {
-		try {
-			if (ScopeApplicationAdapter.initComplete) {
-				ApplicationContext context = WebApplicationContextUtils
-						.getWebApplicationContext(getServletContext());
-				return context.getBean("backupExport", BackupExport.class);
-			}
-		} catch (Exception err) {
-			log.error("[getBackupExport]", err);
-		}
-		return null;
-	}
 
 	/*
 	 * (non-Javadoc)
@@ -144,8 +65,8 @@ public class Export extends HttpServlet {
 
 		try {
 
-			if (getUserManager() == null || getSessiondataDao() == null
-					|| getUsersDao() == null) {
+			if (getBean(UserManager.class) == null || getBean(SessiondataDao.class) == null
+					|| getBean(UsersDao.class) == null) {
 				return;
 			}
 
@@ -155,14 +76,14 @@ public class Export extends HttpServlet {
 			}
 			System.out.println("sid: " + sid);
 
-			Long users_id = getSessiondataDao().checkSession(sid);
-			Long user_level = getUserManager().getUserLevelByID(users_id);
+			Long users_id = getBean(SessiondataDao.class).checkSession(sid);
+			Long user_level = getBean(UserManager.class).getUserLevelByID(users_id);
 
 			System.out.println("users_id: " + users_id);
 			System.out.println("user_level: " + user_level);
 
 			// if (user_level!=null && user_level > 0) {
-			if (getAuthLevelManagement().checkUserLevel(user_level)) {
+			if (getBean(AuthLevelUtil.class).checkUserLevel(user_level)) {
 
 				String moduleName = httpServletRequest
 						.getParameter("moduleName");
@@ -185,13 +106,13 @@ public class Export extends HttpServlet {
 					List<User> uList = null;
 					String downloadName = "users";
 					if (moduleName.equals("userorganisations")) {
-						Organisation orga = getOrganisationManager()
+						Organisation orga = getBean(OrganisationManager.class)
 								.getOrganisationById(organisation_id);
 						downloadName += "_" + orga.getName();
-						uList = getOrganisationManager()
+						uList = getBean(OrganisationManager.class)
 								.getUsersByOrganisationId(organisation_id);
 					} else {
-						uList = getUsersDao().getAllUsers();
+						uList = getBean(UsersDao.class).getAllUsers();
 					}
 
 					if (uList != null) {
@@ -204,9 +125,7 @@ public class Export extends HttpServlet {
 						httpServletResponse.setHeader("Content-Disposition",
 								"attachment; filename=\"" + downloadName
 										+ ".xml\"");
-						// httpServletResponse.setHeader("Content-Length", ""+
-						// rf.length());
-						getBackupExport().exportUsers(out, uList);
+						getBean(BackupExport.class).exportUsers(out, uList);
 
 						out.flush();
 						out.close();

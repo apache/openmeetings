@@ -18,45 +18,13 @@
  */
 package org.apache.openmeetings.axis.services;
 
-import javax.servlet.ServletContext;
-
 import org.apache.axis2.AxisFault;
-import org.apache.axis2.context.MessageContext;
-import org.apache.axis2.transport.http.HTTPConstants;
-import org.apache.openmeetings.OpenmeetingsVariables;
+import org.apache.openmeetings.axis.BaseWebService;
 import org.apache.openmeetings.data.file.dto.FileExplorerObject;
 import org.apache.openmeetings.data.file.dto.LibraryPresentation;
 import org.apache.openmeetings.persistence.beans.files.FileExplorerItem;
-import org.apache.openmeetings.remote.red5.ScopeApplicationAdapter;
-import org.red5.logging.Red5LoggerFactory;
-import org.slf4j.Logger;
-import org.springframework.context.ApplicationContext;
-import org.springframework.web.context.support.WebApplicationContextUtils;
 
-public class FileWebServiceFacade {
-
-	private static final Logger log = Red5LoggerFactory.getLogger(
-			FileWebServiceFacade.class, OpenmeetingsVariables.webAppRootKey);
-
-	private ServletContext getServletContext() throws Exception {
-		MessageContext mc = MessageContext.getCurrentMessageContext();
-		return (ServletContext) mc
-				.getProperty(HTTPConstants.MC_HTTP_SERVLETCONTEXT);
-	}
-
-	private FileWebService geFileServiceProxy() {
-		try {
-			if (!ScopeApplicationAdapter.initComplete) {
-				throw new Exception("Server not yet initialized, retry in couple of seconds");
-			}
-			ApplicationContext context = WebApplicationContextUtils
-					.getWebApplicationContext(getServletContext());
-			return (FileWebService) context.getBean("fileWebService");
-		} catch (Exception err) {
-			log.error("[geRoomServiceProxy]", err);
-		}
-		return null;
-	}
+public class FileWebServiceFacade extends BaseWebService {
 
 	/**
 	 * 
@@ -99,7 +67,7 @@ public class FileWebServiceFacade {
 			Long externalFileId, String externalType, Long room_id,
 			boolean isOwner, String path, Long parentFolderId,
 			String fileSystemName) throws AxisFault {
-		return this.geFileServiceProxy().importFile(SID, externalUserId,
+		return getBeanUtil().getBean(FileWebService.class, getServletContext()).importFile(SID, externalUserId,
 				externalFileId, externalType, room_id, isOwner, path,
 				parentFolderId, fileSystemName);
 	}
@@ -145,7 +113,7 @@ public class FileWebServiceFacade {
 			Long internalUserId, Long externalFileId, String externalType,
 			Long room_id, boolean isOwner, String path, Long parentFolderId,
 			String fileSystemName) throws AxisFault {
-		return this.geFileServiceProxy().importFileByInternalUserId(SID,
+		return getBeanUtil().getBean(FileWebService.class, getServletContext()).importFileByInternalUserId(SID,
 				internalUserId, externalFileId, externalType, room_id, isOwner,
 				path, parentFolderId, fileSystemName);
 	}
@@ -171,7 +139,7 @@ public class FileWebServiceFacade {
 			String externalUserId, Long parentFileExplorerItemId,
 			String folderName, Long room_id, Boolean isOwner,
 			Long externalFilesid, String externalType) throws AxisFault {
-		return this.geFileServiceProxy().addFolderByExternalUserIdAndType(SID,
+		return getBeanUtil().getBean(FileWebService.class, getServletContext()).addFolderByExternalUserIdAndType(SID,
 				externalUserId, parentFileExplorerItemId, folderName, room_id,
 				isOwner, externalFilesid, externalType);
 
@@ -197,7 +165,7 @@ public class FileWebServiceFacade {
 			Long parentFileExplorerItemId, String folderName, Long room_id,
 			Boolean isOwner, Long externalFilesid, String externalType)
 			throws AxisFault {
-		return this.geFileServiceProxy().addFolderByUserId(SID, userId,
+		return getBeanUtil().getBean(FileWebService.class, getServletContext()).addFolderByUserId(SID, userId,
 				parentFileExplorerItemId, folderName, room_id, isOwner,
 				externalFilesid, externalType);
 	}
@@ -215,13 +183,13 @@ public class FileWebServiceFacade {
 	 */
 	public Long addFolderSelf(String SID, Long parentFileExplorerItemId,
 			String fileName, Long room_id, Boolean isOwner) throws AxisFault {
-		return this.geFileServiceProxy().addFolderSelf(SID,
+		return getBeanUtil().getBean(FileWebService.class, getServletContext()).addFolderSelf(SID,
 				parentFileExplorerItemId, fileName, room_id, isOwner);
 	}
 	
 	public Long addFolderSelfInternal(String SID, Long parentFileExplorerItemId,
 			String fileName, Long roomId, Boolean isOwner) throws AxisFault {
-		return this.geFileServiceProxy().addFolderSelf(SID,
+		return getBeanUtil().getBean(FileWebService.class, getServletContext()).addFolderSelf(SID,
 				parentFileExplorerItemId, fileName, roomId, isOwner);
 	}
 	
@@ -237,7 +205,7 @@ public class FileWebServiceFacade {
 	 */
 	public Long deleteFileOrFolderByExternalIdAndType(String SID,
 			Long externalFilesid, String externalType) throws AxisFault {
-		return this.geFileServiceProxy().deleteFileOrFolderByExternalIdAndType(
+		return getBeanUtil().getBean(FileWebService.class, getServletContext()).deleteFileOrFolderByExternalIdAndType(
 				SID, externalFilesid, externalType);
 	}
 
@@ -251,7 +219,7 @@ public class FileWebServiceFacade {
 	 */
 	public Long deleteFileOrFolder(String SID, Long fileExplorerItemId)
 			throws AxisFault {
-		return this.geFileServiceProxy().deleteFileOrFolder(SID,
+		return getBeanUtil().getBean(FileWebService.class, getServletContext()).deleteFileOrFolder(SID,
 				fileExplorerItemId);
 	}
 
@@ -265,75 +233,75 @@ public class FileWebServiceFacade {
 	 */
 	public Long deleteFileOrFolderSelf(String SID, Long fileExplorerItemId)
 			throws AxisFault {
-		return this.geFileServiceProxy().deleteFileOrFolderSelf(SID,
+		return getBeanUtil().getBean(FileWebService.class, getServletContext()).deleteFileOrFolderSelf(SID,
 				fileExplorerItemId);
 	}
 
 	public String[] getImportFileExtensions() throws AxisFault {
-		return this.geFileServiceProxy().getImportFileExtensions();
+		return getBeanUtil().getBean(FileWebService.class, getServletContext()).getImportFileExtensions();
 	}
 
 	public LibraryPresentation getPresentationPreviewFileExplorer(String SID,
 			String parentFolder) throws AxisFault {
-		return this.geFileServiceProxy().getPresentationPreviewFileExplorer(
+		return getBeanUtil().getBean(FileWebService.class, getServletContext()).getPresentationPreviewFileExplorer(
 				SID, parentFolder);
 	}
 
 	public FileExplorerObject getFileExplorerByRoom(String SID, Long room_id,
 			Long owner_id) throws AxisFault {
-		return this.geFileServiceProxy().getFileExplorerByRoom(SID, room_id,
+		return getBeanUtil().getBean(FileWebService.class, getServletContext()).getFileExplorerByRoom(SID, room_id,
 				owner_id);
 	}
 
 	public FileExplorerObject getFileExplorerByRoomSelf(String SID, Long room_id)
 			throws AxisFault {
-		return this.geFileServiceProxy()
+		return getBeanUtil().getBean(FileWebService.class, getServletContext())
 				.getFileExplorerByRoomSelf(SID, room_id);
 	}
 	
 	public FileExplorerObject getFileExplorerByRoomSelfInternal(String SID, Long roomId)
 			throws AxisFault {
-		return this.geFileServiceProxy()
+		return getBeanUtil().getBean(FileWebService.class, getServletContext())
 				.getFileExplorerByRoomSelf(SID, roomId);
 	}
 
 	public FileExplorerItem[] getFileExplorerByParent(String SID,
 			Long parentFileExplorerItemId, Long room_id, Boolean isOwner,
 			Long owner_id) throws AxisFault {
-		return this.geFileServiceProxy().getFileExplorerByParent(SID,
+		return getBeanUtil().getBean(FileWebService.class, getServletContext()).getFileExplorerByParent(SID,
 				parentFileExplorerItemId, room_id, isOwner, owner_id);
 	}
 
 	public FileExplorerItem[] getFileExplorerByParentSelf(String SID,
 			Long parentFileExplorerItemId, Long room_id, Boolean isOwner)
 			throws AxisFault {
-		return this.geFileServiceProxy().getFileExplorerByParentSelf(SID,
+		return getBeanUtil().getBean(FileWebService.class, getServletContext()).getFileExplorerByParentSelf(SID,
 				parentFileExplorerItemId, room_id, isOwner);
 	}
 	
 	public FileExplorerItem[] getFileExplorerByParentSelfInternal(String SID,
 			Long parentFileExplorerItemId, Long roomId, Boolean isOwner)
 			throws AxisFault {
-		return this.geFileServiceProxy().getFileExplorerByParentSelf(SID,
+		return getBeanUtil().getBean(FileWebService.class, getServletContext()).getFileExplorerByParentSelf(SID,
 				parentFileExplorerItemId, roomId, isOwner);
 	}
 
 	public Long updateFileOrFolderName(String SID, Long fileExplorerItemId,
 			String fileName) throws AxisFault {
-		return this.geFileServiceProxy().updateFileOrFolderName(SID,
+		return getBeanUtil().getBean(FileWebService.class, getServletContext()).updateFileOrFolderName(SID,
 				fileExplorerItemId, fileName);
 	}
 
 	public Long updateFileOrFolderNameSelf(String SID, Long fileExplorerItemId,
 			String fileName) throws AxisFault {
-		return this.geFileServiceProxy().updateFileOrFolderNameSelf(SID,
+		return getBeanUtil().getBean(FileWebService.class, getServletContext()).updateFileOrFolderNameSelf(SID,
 				fileExplorerItemId, fileName);
 	}
 
 	public Long moveFile(String SID, Long fileExplorerItemId,
 			Long newParentFileExplorerItemId, Long room_id, Boolean isOwner,
 			Boolean moveToHome, Long owner_id) throws AxisFault {
-		return this.geFileServiceProxy().moveFile(SID, fileExplorerItemId,
+		return getBeanUtil().getBean(FileWebService.class, getServletContext()).moveFile(SID, fileExplorerItemId,
 				newParentFileExplorerItemId, room_id, isOwner, moveToHome,
 				owner_id);
 	}
@@ -341,17 +309,15 @@ public class FileWebServiceFacade {
 	public Long moveFileSelf(String SID, Long fileExplorerItemId,
 			Long newParentFileExplorerItemId, Long room_id, Boolean isOwner,
 			Boolean moveToHome) throws AxisFault {
-		return this.geFileServiceProxy().moveFileSelf(SID, fileExplorerItemId,
+		return getBeanUtil().getBean(FileWebService.class, getServletContext()).moveFileSelf(SID, fileExplorerItemId,
 				newParentFileExplorerItemId, room_id, isOwner, moveToHome);
 	}
 	
 	public Long moveFileSelfInternal(String SID, Long fileExplorerItemId,
 			Long newParentFileExplorerItemId, Long roomId, Boolean isOwner,
 			Boolean moveToHome) throws AxisFault {
-		return this.geFileServiceProxy().moveFileSelf(SID, fileExplorerItemId,
+		return getBeanUtil().getBean(FileWebService.class, getServletContext()).moveFileSelf(SID, fileExplorerItemId,
 				newParentFileExplorerItemId, roomId, isOwner, moveToHome);
 	}
-	
-	
 
 }

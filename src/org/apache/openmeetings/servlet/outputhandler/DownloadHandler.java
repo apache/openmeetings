@@ -24,7 +24,6 @@ import java.io.OutputStream;
 import java.util.Date;
 
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -34,14 +33,13 @@ import org.apache.openmeetings.data.basic.SessiondataDao;
 import org.apache.openmeetings.data.file.dao.FileExplorerItemDao;
 import org.apache.openmeetings.data.user.UserManager;
 import org.apache.openmeetings.persistence.beans.files.FileExplorerItem;
-import org.apache.openmeetings.remote.red5.ScopeApplicationAdapter;
+import org.apache.openmeetings.servlet.BaseHttpServlet;
 import org.apache.openmeetings.utils.OmFileHelper;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
-import org.springframework.context.ApplicationContext;
-import org.springframework.web.context.support.WebApplicationContextUtils;
 
-public class DownloadHandler extends HttpServlet {
+public class DownloadHandler extends BaseHttpServlet {
+	
 	private static final long serialVersionUID = 7243653203578587544L;
 
 	private static final Logger log = Red5LoggerFactory.getLogger(
@@ -52,45 +50,6 @@ public class DownloadHandler extends HttpServlet {
 	private static final String defaultProfileImageNameBig = "_big_profile_pic.jpg";
 	private static final String defaultChatImageName = "_chat_profile_pic.jpg";
 	private static final String defaultSWFName = "deleted.swf";
-
-	public SessiondataDao getSessiondataDao() {
-		try {
-			if (ScopeApplicationAdapter.initComplete) {
-				ApplicationContext context = WebApplicationContextUtils
-						.getWebApplicationContext(getServletContext());
-				return (SessiondataDao) context.getBean("sessionManagement");
-			}
-		} catch (Exception err) {
-			log.error("[getSessionManagement]", err);
-		}
-		return null;
-	}
-
-	public UserManager getUserManager() {
-		try {
-			if (ScopeApplicationAdapter.initComplete) {
-				ApplicationContext context = WebApplicationContextUtils
-						.getWebApplicationContext(getServletContext());
-				return (UserManager) context.getBean("userManagement");
-			}
-		} catch (Exception err) {
-			log.error("[getUserManagement]", err);
-		}
-		return null;
-	}
-	
-	public FileExplorerItemDao getFileExplorerItemDaoImpl() {
-		try {
-			if (ScopeApplicationAdapter.initComplete) {
-				ApplicationContext context = WebApplicationContextUtils
-						.getWebApplicationContext(getServletContext());
-				return (FileExplorerItemDao) context.getBean("fileExplorerItemDao");
-			}
-		} catch (Exception err) {
-			log.error("[getUserManagement]", err);
-		}
-		return null;
-	}
 
 	private void logNonExistentFolder(File f) {
 		if (!f.exists()) {
@@ -115,7 +74,7 @@ public class DownloadHandler extends HttpServlet {
 
 		try {
 
-			if (getUserManager() == null || getSessiondataDao() == null) {
+			if (getBean(UserManager.class) == null || getBean(SessiondataDao.class) == null) {
 				return;
 			}
 
@@ -139,8 +98,8 @@ public class DownloadHandler extends HttpServlet {
 			}
 			log.debug("sid: " + sid);
 
-			Long users_id = getSessiondataDao().checkSession(sid);
-			Long user_level = getUserManager().getUserLevelByID(users_id);
+			Long users_id = getBean(SessiondataDao.class).checkSession(sid);
+			Long user_level = getBean(UserManager.class).getUserLevelByID(users_id);
 
 			if (user_level != null && user_level > 0) {
 				String room_id = httpServletRequest.getParameter("room_id");
@@ -311,7 +270,7 @@ public class DownloadHandler extends HttpServlet {
 						
 						String fileNameResult = requestedFile;
 						if (fileExplorerItemId != null && fileExplorerItemId > 0) {
-							FileExplorerItem fileExplorerItem = getFileExplorerItemDaoImpl().getFileExplorerItemsById(fileExplorerItemId);
+							FileExplorerItem fileExplorerItem = getBean(FileExplorerItemDao.class).getFileExplorerItemsById(fileExplorerItemId);
 							if (fileExplorerItem != null) {
 								
 								fileNameResult = fileExplorerItem.getFileName().substring(0, fileExplorerItem.getFileName().length()-4)

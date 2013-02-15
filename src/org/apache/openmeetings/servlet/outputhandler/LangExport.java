@@ -24,7 +24,6 @@ import java.util.Date;
 import java.util.List;
 
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -35,7 +34,7 @@ import org.apache.openmeetings.data.basic.SessiondataDao;
 import org.apache.openmeetings.data.user.UserManager;
 import org.apache.openmeetings.persistence.beans.lang.FieldLanguage;
 import org.apache.openmeetings.persistence.beans.lang.Fieldlanguagesvalues;
-import org.apache.openmeetings.remote.red5.ScopeApplicationAdapter;
+import org.apache.openmeetings.servlet.BaseHttpServlet;
 import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
@@ -44,18 +43,19 @@ import org.dom4j.io.OutputFormat;
 import org.dom4j.io.XMLWriter;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
-import org.springframework.context.ApplicationContext;
-import org.springframework.web.context.support.WebApplicationContextUtils;
 
 /**
  * 
  * @author sebastianwagner
  * 
  */
-public class LangExport extends HttpServlet {
+public class LangExport extends BaseHttpServlet {
+	
 	private static final long serialVersionUID = 243294279856160463L;
+	
 	private static final Logger log = Red5LoggerFactory.getLogger(
 			LangExport.class, OpenmeetingsVariables.webAppRootKey);
+	
 	public static final String FILE_COMMENT = ""
 			+ "\n"
 			+ "  Licensed to the Apache Software Foundation (ASF) under one\n"
@@ -83,58 +83,6 @@ public class LangExport extends HttpServlet {
 			+ "see http://openmeetings.apache.org/LanguageEditor.html for Details \n"
 			+ "###############################################";
 
-	public SessiondataDao getSessiondataDao() {
-		try {
-			if (ScopeApplicationAdapter.initComplete) {
-				ApplicationContext context = WebApplicationContextUtils
-						.getWebApplicationContext(getServletContext());
-				return context.getBean("sessionManagement", SessiondataDao.class);
-			}
-		} catch (Exception err) {
-			log.error("[getSessionManagement]", err);
-		}
-		return null;
-	}
-
-	public UserManager getUserManager() {
-		try {
-			if (ScopeApplicationAdapter.initComplete) {
-				ApplicationContext context = WebApplicationContextUtils
-						.getWebApplicationContext(getServletContext());
-				return context.getBean("userManagement", UserManager.class);
-			}
-		} catch (Exception err) {
-			log.error("[getUserManagement]", err);
-		}
-		return null;
-	}
-
-	public FieldManager getFieldmanager() {
-		try {
-			if (ScopeApplicationAdapter.initComplete) {
-				ApplicationContext context = WebApplicationContextUtils
-						.getWebApplicationContext(getServletContext());
-				return context.getBean("fieldmanagment", FieldManager.class);
-			}
-		} catch (Exception err) {
-			log.error("[getFieldmanagment]", err);
-		}
-		return null;
-	}
-
-	public FieldLanguageDao getFieldLanguageDaoImpl() {
-		try {
-			if (ScopeApplicationAdapter.initComplete) {
-				ApplicationContext context = WebApplicationContextUtils
-						.getWebApplicationContext(getServletContext());
-				return context.getBean("fieldLanguageDaoImpl", FieldLanguageDao.class);
-			}
-		} catch (Exception err) {
-			log.error("[getFieldLanguageDaoImpl]", err);
-		}
-		return null;
-	}
-
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -149,10 +97,10 @@ public class LangExport extends HttpServlet {
 
 		try {
 
-			if (getUserManager() == null
-					|| getFieldLanguageDaoImpl() == null
-					|| getFieldmanager() == null
-					|| getSessiondataDao() == null) {
+			if (getBean(UserManager.class) == null
+					|| getBean(FieldLanguageDao.class) == null
+					|| getBean(FieldManager.class) == null
+					|| getBean(SessiondataDao.class) == null) {
 				return;
 			}
 
@@ -169,20 +117,20 @@ public class LangExport extends HttpServlet {
 			Long language_id = Long.valueOf(language).longValue();
 			log.debug("language_id: " + language_id);
 
-			Long users_id = getSessiondataDao().checkSession(sid);
-			Long user_level = getUserManager().getUserLevelByID(users_id);
+			Long users_id = getBean(SessiondataDao.class).checkSession(sid);
+			Long user_level = getBean(UserManager.class).getUserLevelByID(users_id);
 
 			log.debug("users_id: " + users_id);
 			log.debug("user_level: " + user_level);
 
 			if (user_level != null && user_level > 0) {
-				FieldLanguage fl = getFieldLanguageDaoImpl()
+				FieldLanguage fl = getBean(FieldLanguageDao.class)
 						.getFieldLanguageById(language_id);
 
-				List<Fieldlanguagesvalues> flvList = getFieldmanager().getMixedFieldValuesList(language_id);
+				List<Fieldlanguagesvalues> flvList = getBean(FieldManager.class).getMixedFieldValuesList(language_id);
 
 				if (fl != null && flvList != null) {
-					Document doc = createDocument(flvList, getFieldmanager().getUntranslatedFieldValuesList(language_id));
+					Document doc = createDocument(flvList, getBean(FieldManager.class).getUntranslatedFieldValuesList(language_id));
 
 					String requestedFile = fl.getName() + ".xml";
 

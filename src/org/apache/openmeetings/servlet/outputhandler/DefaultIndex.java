@@ -26,34 +26,18 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
-import org.apache.openmeetings.remote.red5.ScopeApplicationAdapter;
+import org.apache.openmeetings.servlet.BaseVelocityViewServlet;
 import org.apache.velocity.Template;
 import org.apache.velocity.context.Context;
-import org.apache.velocity.tools.view.VelocityViewServlet;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
-import org.springframework.context.ApplicationContext;
-import org.springframework.web.context.support.WebApplicationContextUtils;
 
-public class DefaultIndex extends VelocityViewServlet {
+public class DefaultIndex extends BaseVelocityViewServlet {
+	
 	private static final long serialVersionUID = 3043617619650666432L;
+	
 	private static final Logger log = Red5LoggerFactory.getLogger(
 			DefaultIndex.class, OpenmeetingsVariables.webAppRootKey);
-
-	private ConfigurationDao getConfigurationDao() {
-		try {
-			if (!ScopeApplicationAdapter.initComplete) {
-				return null;
-			}
-			ApplicationContext context = WebApplicationContextUtils
-					.getWebApplicationContext(getServletContext());
-			return (ConfigurationDao) context
-					.getBean("configurationDaoImpl");
-		} catch (Exception err) {
-			log.error("[getConfigurationmanagement]", err);
-		}
-		return null;
-	}
 
 	@Override
 	public Template handleRequest(HttpServletRequest httpServletRequest,
@@ -61,13 +45,13 @@ public class DefaultIndex extends VelocityViewServlet {
 
 		try {
 
-			if (getConfigurationDao() == null) {
+			if (getBean(ConfigurationDao.class) == null) {
 				return getVelocityView().getVelocityEngine().getTemplate(
 						"booting.vm");
 			}
 
 			String template = "usual_template.vm";
-			ctx.put("APP_NAME", getConfigurationDao().getAppName());
+			ctx.put("APP_NAME", getBean(ConfigurationDao.class).getAppName());
 			// Parse the Param for the SWF URL
 			String swf = httpServletRequest.getParameter("swf");
 			if (swf == null) {

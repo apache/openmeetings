@@ -27,7 +27,6 @@ import java.util.Date;
 import java.util.List;
 
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -44,60 +43,21 @@ import org.apache.openmeetings.data.record.WhiteboardMapToSVG;
 import org.apache.openmeetings.data.user.UserManager;
 import org.apache.openmeetings.documents.GenerateImage;
 import org.apache.openmeetings.remote.PrintService;
-import org.apache.openmeetings.remote.red5.ScopeApplicationAdapter;
+import org.apache.openmeetings.servlet.BaseHttpServlet;
 import org.apache.openmeetings.utils.OmFileHelper;
 import org.apache.openmeetings.utils.math.CalendarPatterns;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
-import org.springframework.context.ApplicationContext;
-import org.springframework.web.context.support.WebApplicationContextUtils;
 import org.w3c.dom.DOMImplementation;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-public class ExportToImage extends HttpServlet {
+public class ExportToImage extends BaseHttpServlet {
+	
 	private static final long serialVersionUID = -3535998254746084297L;
+	
 	private static final Logger log = Red5LoggerFactory.getLogger(
 			ExportToImage.class, OpenmeetingsVariables.webAppRootKey);
-
-	public SessiondataDao getSessiondataDao() {
-		try {
-			if (ScopeApplicationAdapter.initComplete) {
-				ApplicationContext context = WebApplicationContextUtils
-						.getWebApplicationContext(getServletContext());
-				return (SessiondataDao) context.getBean("sessionManagement");
-			}
-		} catch (Exception err) {
-			log.error("[getSessionManagement]", err);
-		}
-		return null;
-	}
-
-	public UserManager getUserManager() {
-		try {
-			if (ScopeApplicationAdapter.initComplete) {
-				ApplicationContext context = WebApplicationContextUtils
-						.getWebApplicationContext(getServletContext());
-				return (UserManager) context.getBean("userManagement");
-			}
-		} catch (Exception err) {
-			log.error("[getUserManagement]", err);
-		}
-		return null;
-	}
-
-	public GenerateImage getGenerateImage() {
-		try {
-			if (ScopeApplicationAdapter.initComplete) {
-				ApplicationContext context = WebApplicationContextUtils
-						.getWebApplicationContext(getServletContext());
-				return (GenerateImage) context.getBean("generateImage");
-			}
-		} catch (Exception err) {
-			log.error("[getGenerateImage]", err);
-		}
-		return null;
-	}
 
 	/*
 	 * (non-Javadoc)
@@ -111,8 +71,8 @@ public class ExportToImage extends HttpServlet {
 			IOException {
 
 		try {
-			if (getUserManager() == null || getSessiondataDao() == null
-					|| getGenerateImage() == null) {
+			if (getBean(UserManager.class) == null || getBean(SessiondataDao.class) == null
+					|| getBean(GenerateImage.class) == null) {
 				return;
 			}
 
@@ -138,8 +98,8 @@ public class ExportToImage extends HttpServlet {
 				exportType = "svg";
 			}
 
-			Long users_id = getSessiondataDao().checkSession(sid);
-			Long user_level = getUserManager().getUserLevelByID(users_id);
+			Long users_id = getBean(SessiondataDao.class).checkSession(sid);
+			Long user_level = getBean(UserManager.class).getUserLevelByID(users_id);
 
 			log.debug("users_id: " + users_id);
 			log.debug("user_level: " + user_level);

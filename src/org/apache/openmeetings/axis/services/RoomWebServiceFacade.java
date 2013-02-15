@@ -21,47 +21,14 @@ package org.apache.openmeetings.axis.services;
 import java.util.Date;
 import java.util.List;
 
-import javax.servlet.ServletContext;
-
 import org.apache.axis2.AxisFault;
-import org.apache.axis2.context.MessageContext;
-import org.apache.axis2.transport.http.HTTPConstants;
-import org.apache.openmeetings.OpenmeetingsVariables;
+import org.apache.openmeetings.axis.BaseWebService;
 import org.apache.openmeetings.data.beans.basic.SearchResult;
 import org.apache.openmeetings.persistence.beans.flvrecord.FlvRecording;
-import org.apache.openmeetings.persistence.beans.room.RoomType;
 import org.apache.openmeetings.persistence.beans.room.Room;
-import org.apache.openmeetings.remote.red5.ScopeApplicationAdapter;
-import org.red5.logging.Red5LoggerFactory;
-import org.slf4j.Logger;
-import org.springframework.context.ApplicationContext;
-import org.springframework.web.context.support.WebApplicationContextUtils;
+import org.apache.openmeetings.persistence.beans.room.RoomType;
 
-public class RoomWebServiceFacade {
-
-	private static final Logger log = Red5LoggerFactory.getLogger(
-			RoomWebServiceFacade.class, OpenmeetingsVariables.webAppRootKey);
-
-	private ServletContext getServletContext() throws Exception {
-		MessageContext mc = MessageContext.getCurrentMessageContext();
-		return (ServletContext) mc
-				.getProperty(HTTPConstants.MC_HTTP_SERVLETCONTEXT);
-	}
-
-	private RoomWebService getRoomServiceProxy() {
-		try {
-			if (!ScopeApplicationAdapter.initComplete) {
-				throw new Exception(
-						"Server not yet initialized, retry in couple of seconds");
-			}
-			ApplicationContext context = WebApplicationContextUtils
-					.getWebApplicationContext(getServletContext());
-			return context.getBean("roomWebService", RoomWebService.class);
-		} catch (Exception err) {
-			log.error("[getRoomServiceProxy]", err);
-		}
-		return null;
-	}
+public class RoomWebServiceFacade extends BaseWebService {
 
 	// TODO: Not implemented yet
 	// public List<Rooms_Organisation> getRoomsByOrganisationAndType(String SID,
@@ -72,7 +39,7 @@ public class RoomWebServiceFacade {
 
 	public Room[] getRoomsPublic(String SID, Long roomtypes_id)
 			throws AxisFault {
-		return this.getRoomServiceProxy().getRoomsPublic(SID, roomtypes_id);
+		return getBeanUtil().getBean(RoomWebService.class, getServletContext()).getRoomsPublic(SID, roomtypes_id);
 	}
 
 	/**
@@ -87,56 +54,56 @@ public class RoomWebServiceFacade {
 	 */
 	public boolean deleteFlvRecording(String SID, Long flvRecordingId)
 			throws AxisFault {
-		return this.getRoomServiceProxy().deleteFlvRecording(SID,
+		return getBeanUtil().getBean(RoomWebService.class, getServletContext()).deleteFlvRecording(SID,
 				flvRecordingId);
 	}
 
 	public FLVRecordingReturn[] getFlvRecordingByExternalUserId(String SID,
 			String externalUserId) throws AxisFault {
-		return this.getRoomServiceProxy().getFlvRecordingByExternalUserId(SID,
+		return getBeanUtil().getBean(RoomWebService.class, getServletContext()).getFlvRecordingByExternalUserId(SID,
 				externalUserId);
 	}
 
 	public FLVRecordingReturn[] getFlvRecordingByExternalRoomTypeAndCreator(
 			String SID, String externalRoomType, Long insertedBy)
 			throws AxisFault {
-		return this.getRoomServiceProxy()
+		return getBeanUtil().getBean(RoomWebService.class, getServletContext())
 				.getFlvRecordingByExternalRoomTypeAndCreator(SID,
 						externalRoomType, insertedBy);
 	}
 
 	public List<FlvRecording> getFlvRecordingByExternalRoomTypeByList(
 			String SID, String externalRoomType) throws AxisFault {
-		return this.getRoomServiceProxy()
+		return getBeanUtil().getBean(RoomWebService.class, getServletContext())
 				.getFlvRecordingByExternalRoomTypeByList(SID, externalRoomType);
 	}
 
 	public FlvRecording[] getFlvRecordingByExternalRoomType(String SID,
 			String externalRoomType) throws AxisFault {
-		return this.getRoomServiceProxy().getFlvRecordingByExternalRoomType(
+		return getBeanUtil().getBean(RoomWebService.class, getServletContext()).getFlvRecordingByExternalRoomType(
 				SID, externalRoomType);
 	}
 
 	public FlvRecording[] getFlvRecordingByRoomId(String SID, Long roomId)
 			throws AxisFault {
-		return this.getRoomServiceProxy().getFlvRecordingByRoomId(SID, roomId);
+		return getBeanUtil().getBean(RoomWebService.class, getServletContext()).getFlvRecordingByRoomId(SID, roomId);
 	}
 
 	public RoomType[] getRoomTypes(String SID) throws AxisFault {
-		return this.getRoomServiceProxy().getRoomTypes(SID);
+		return getBeanUtil().getBean(RoomWebService.class, getServletContext()).getRoomTypes(SID);
 	}
 
 	public RoomCountBean[] getRoomCounters(String SID, Integer roomId1,
 			Integer roomId2, Integer roomId3, Integer roomId4, Integer roomId5,
 			Integer roomId6, Integer roomId7, Integer roomId8, Integer roomId9,
 			Integer roomId10) throws AxisFault {
-		return this.getRoomServiceProxy().getRoomCounters(SID, roomId1,
+		return getBeanUtil().getBean(RoomWebService.class, getServletContext()).getRoomCounters(SID, roomId1,
 				roomId2, roomId3, roomId4, roomId5, roomId6, roomId7, roomId8,
 				roomId9, roomId10);
 	}
 
 	public Room getRoomById(String SID, long rooms_id) {
-		return this.getRoomServiceProxy().getRoomById(SID, rooms_id);
+		return getBeanUtil().getBean(RoomWebService.class, getServletContext()).getRoomById(SID, rooms_id);
 	}
 
 	/**
@@ -148,25 +115,25 @@ public class RoomWebServiceFacade {
 	@Deprecated
 	public Room getRoomWithCurrentUsersById(String SID, long rooms_id)
 			throws AxisFault {
-		return this.getRoomServiceProxy().getRoomWithCurrentUsersById(SID,
+		return getBeanUtil().getBean(RoomWebService.class, getServletContext()).getRoomWithCurrentUsersById(SID,
 				rooms_id);
 	}
 
 	public RoomReturn getRoomWithClientObjectsById(String SID, long rooms_id)
 			throws AxisFault {
-		return this.getRoomServiceProxy().getRoomWithClientObjectsById(SID,
+		return getBeanUtil().getBean(RoomWebService.class, getServletContext()).getRoomWithClientObjectsById(SID,
 				rooms_id);
 	}
 
 	public SearchResult<Room> getRooms(String SID, int start, int max,
 			String orderby, boolean asc) throws AxisFault {
-		return this.getRoomServiceProxy().getRooms(SID, start, max, orderby,
+		return getBeanUtil().getBean(RoomWebService.class, getServletContext()).getRooms(SID, start, max, orderby,
 				asc);
 	}
 
 	public SearchResult<Room> getRoomsWithCurrentUsers(String SID, int start,
 			int max, String orderby, boolean asc) throws AxisFault {
-		return this.getRoomServiceProxy().getRoomsWithCurrentUsers(SID, start,
+		return getBeanUtil().getBean(RoomWebService.class, getServletContext()).getRoomsWithCurrentUsers(SID, start,
 				max, orderby, asc);
 	}
 
@@ -209,7 +176,7 @@ public class RoomWebServiceFacade {
 			Boolean showFilesPanel, Integer filesPanelXPosition,
 			Integer filesPanelYPosition, Integer filesPanelHeight,
 			Integer filesPanelWidth) throws AxisFault {
-		return this.getRoomServiceProxy().addRoom(SID, name, roomtypes_id,
+		return getBeanUtil().getBean(RoomWebService.class, getServletContext()).addRoom(SID, name, roomtypes_id,
 				comment, numberOfPartizipants, ispublic, videoPodWidth,
 				videoPodHeight, videoPodXPosition, videoPodYPosition,
 				moderationPanelXPosition, showWhiteBoard,
@@ -223,7 +190,7 @@ public class RoomWebServiceFacade {
 			Long roomtypes_id, String comment, Long numberOfPartizipants,
 			Boolean ispublic, Boolean appointment, Boolean isDemoRoom,
 			Integer demoTime, Boolean isModeratedRoom) throws AxisFault {
-		return this.getRoomServiceProxy().addRoomWithModeration(SID, name,
+		return getBeanUtil().getBean(RoomWebService.class, getServletContext()).addRoomWithModeration(SID, name,
 				roomtypes_id, comment, numberOfPartizipants, ispublic,
 				appointment, isDemoRoom, demoTime, isModeratedRoom);
 	}
@@ -251,7 +218,7 @@ public class RoomWebServiceFacade {
 			Boolean ispublic, Boolean appointment, Boolean isDemoRoom,
 			Integer demoTime, Boolean isModeratedRoom,
 			Boolean allowUserQuestions) throws AxisFault {
-		return this.getRoomServiceProxy().addRoomWithModerationAndQuestions(
+		return getBeanUtil().getBean(RoomWebService.class, getServletContext()).addRoomWithModerationAndQuestions(
 				SID, name, roomtypes_id, comment, numberOfPartizipants,
 				ispublic, appointment, isDemoRoom, demoTime, isModeratedRoom,
 				allowUserQuestions);
@@ -262,7 +229,7 @@ public class RoomWebServiceFacade {
 			Long numberOfPartizipants, Boolean ispublic, Boolean appointment,
 			Boolean isDemoRoom, Integer demoTime, Boolean isModeratedRoom,
 			Boolean allowUserQuestions, Boolean isAudioOnly) throws AxisFault {
-		return this.getRoomServiceProxy()
+		return getBeanUtil().getBean(RoomWebService.class, getServletContext())
 				.addRoomWithModerationQuestionsAndAudioType(SID, name,
 						roomtypes_id, comment, numberOfPartizipants, ispublic,
 						appointment, isDemoRoom, demoTime, isModeratedRoom,
@@ -290,7 +257,7 @@ public class RoomWebServiceFacade {
 			Boolean ispublic, Boolean appointment, Boolean isDemoRoom,
 			Integer demoTime, Boolean isModeratedRoom, Long externalRoomId,
 			String externalRoomType) throws AxisFault {
-		return this.getRoomServiceProxy().getRoomIdByExternalId(SID, name,
+		return getBeanUtil().getBean(RoomWebService.class, getServletContext()).getRoomIdByExternalId(SID, name,
 				roomtypes_id, comment, numberOfPartizipants, ispublic,
 				appointment, isDemoRoom, demoTime, isModeratedRoom,
 				externalRoomId, externalRoomType);
@@ -336,7 +303,7 @@ public class RoomWebServiceFacade {
 			Boolean showFilesPanel, Integer filesPanelXPosition,
 			Integer filesPanelYPosition, Integer filesPanelHeight,
 			Integer filesPanelWidth, Boolean appointment) throws AxisFault {
-		return this.getRoomServiceProxy().updateRoom(SID, rooms_id, name,
+		return getBeanUtil().getBean(RoomWebService.class, getServletContext()).updateRoom(SID, rooms_id, name,
 				roomtypes_id, comment, numberOfPartizipants, ispublic,
 				videoPodWidth, videoPodHeight, videoPodXPosition,
 				videoPodYPosition, moderationPanelXPosition, showWhiteBoard,
@@ -350,7 +317,7 @@ public class RoomWebServiceFacade {
 			Long roomtypes_id, String comment, Long numberOfPartizipants,
 			Boolean ispublic, Boolean appointment, Boolean isDemoRoom,
 			Integer demoTime, Boolean isModeratedRoom) throws AxisFault {
-		return this.getRoomServiceProxy().updateRoomWithModeration(SID,
+		return getBeanUtil().getBean(RoomWebService.class, getServletContext()).updateRoomWithModeration(SID,
 				room_id, name, roomtypes_id, comment, numberOfPartizipants,
 				ispublic, appointment, isDemoRoom, demoTime, isModeratedRoom);
 	}
@@ -360,7 +327,7 @@ public class RoomWebServiceFacade {
 			Long numberOfPartizipants, Boolean ispublic, Boolean appointment,
 			Boolean isDemoRoom, Integer demoTime, Boolean isModeratedRoom,
 			Boolean allowUserQuestions) throws AxisFault {
-		return this.getRoomServiceProxy().updateRoomWithModerationAndQuestions(
+		return getBeanUtil().getBean(RoomWebService.class, getServletContext()).updateRoomWithModerationAndQuestions(
 				SID, room_id, name, roomtypes_id, comment,
 				numberOfPartizipants, ispublic, appointment, isDemoRoom,
 				demoTime, isModeratedRoom, allowUserQuestions);
@@ -375,7 +342,7 @@ public class RoomWebServiceFacade {
 			Boolean hideActivitiesAndActions, Boolean hideFilesExplorer,
 			Boolean hideActionsMenu, Boolean hideScreenSharing,
 			Boolean hideWhiteboard) {
-		return this.getRoomServiceProxy()
+		return getBeanUtil().getBean(RoomWebService.class, getServletContext())
 				.updateRoomWithModerationQuestionsAudioTypeAndHideOptions(SID,
 						room_id, name, roomtypes_id, comment,
 						numberOfPartizipants, ispublic, appointment,
@@ -387,11 +354,11 @@ public class RoomWebServiceFacade {
 	}
 
 	public Long deleteRoom(String SID, long rooms_id) throws AxisFault {
-		return this.getRoomServiceProxy().deleteRoom(SID, rooms_id);
+		return getBeanUtil().getBean(RoomWebService.class, getServletContext()).deleteRoom(SID, rooms_id);
 	}
 
 	public Boolean kickUser(String SID_Admin, Long room_id) throws AxisFault {
-		return this.getRoomServiceProxy().kickUser(SID_Admin, room_id);
+		return getBeanUtil().getBean(RoomWebService.class, getServletContext()).kickUser(SID_Admin, room_id);
 	}
 
 	public Long addRoomWithModerationAndExternalType(String SID, String name,
@@ -399,7 +366,7 @@ public class RoomWebServiceFacade {
 			Boolean ispublic, Boolean appointment, Boolean isDemoRoom,
 			Integer demoTime, Boolean isModeratedRoom, String externalRoomType)
 			throws AxisFault {
-		return this.getRoomServiceProxy().addRoomWithModerationAndExternalType(
+		return getBeanUtil().getBean(RoomWebService.class, getServletContext()).addRoomWithModerationAndExternalType(
 				SID, name, roomtypes_id, comment, numberOfPartizipants,
 				ispublic, appointment, isDemoRoom, demoTime, isModeratedRoom,
 				externalRoomType);
@@ -411,7 +378,7 @@ public class RoomWebServiceFacade {
 			Boolean isDemoRoom, Integer demoTime, Boolean isModeratedRoom,
 			String externalRoomType, Boolean allowUserQuestions,
 			Boolean isAudioOnly) throws AxisFault {
-		return this.getRoomServiceProxy()
+		return getBeanUtil().getBean(RoomWebService.class, getServletContext())
 				.addRoomWithModerationExternalTypeAndAudioType(SID, name,
 						roomtypes_id, comment, numberOfPartizipants, ispublic,
 						appointment, isDemoRoom, demoTime, isModeratedRoom,
@@ -424,7 +391,7 @@ public class RoomWebServiceFacade {
 			Integer demoTime, Boolean isModeratedRoom, String externalRoomType,
 			Boolean allowUserQuestions, Boolean isAudioOnly,
 			Boolean waitForRecording, Boolean allowRecording) throws AxisFault {
-		return this.getRoomServiceProxy()
+		return getBeanUtil().getBean(RoomWebService.class, getServletContext())
 				.addRoomWithModerationAndRecordingFlags(SID, name,
 						roomtypes_id, comment, numberOfPartizipants, ispublic,
 						appointment, isDemoRoom, demoTime, isModeratedRoom,
@@ -439,7 +406,7 @@ public class RoomWebServiceFacade {
 			String externalRoomType, Boolean allowUserQuestions,
 			Boolean isAudioOnly, Boolean waitForRecording,
 			Boolean allowRecording, Boolean hideTopBar) throws AxisFault {
-		return this.getRoomServiceProxy()
+		return getBeanUtil().getBean(RoomWebService.class, getServletContext())
 				.addRoomWithModerationExternalTypeAndTopBarOption(SID, name,
 						roomtypes_id, comment, numberOfPartizipants, ispublic,
 						appointment, isDemoRoom, demoTime, isModeratedRoom,
@@ -456,7 +423,7 @@ public class RoomWebServiceFacade {
 			Boolean hideActivitiesAndActions, Boolean hideFilesExplorer,
 			Boolean hideActionsMenu, Boolean hideScreenSharing,
 			Boolean hideWhiteboard) throws AxisFault {
-		return this.getRoomServiceProxy().addRoomWithModerationQuestionsAudioTypeAndHideOptions(SID, name, roomtypes_id, comment, numberOfPartizipants, ispublic, appointment, isDemoRoom, demoTime, isModeratedRoom, allowUserQuestions, isAudioOnly, hideTopBar, hideChat, hideActivitiesAndActions, hideFilesExplorer, hideActionsMenu, hideScreenSharing, hideWhiteboard);
+		return getBeanUtil().getBean(RoomWebService.class, getServletContext()).addRoomWithModerationQuestionsAudioTypeAndHideOptions(SID, name, roomtypes_id, comment, numberOfPartizipants, ispublic, appointment, isDemoRoom, demoTime, isModeratedRoom, allowUserQuestions, isAudioOnly, hideTopBar, hideChat, hideActivitiesAndActions, hideFilesExplorer, hideActionsMenu, hideScreenSharing, hideWhiteboard);
 	}
 	
 	/**
@@ -499,7 +466,7 @@ public class RoomWebServiceFacade {
 			Boolean isPasswordProtected, String invitationpass, Integer valid,
 			String validFromDate, String validFromTime, String validToDate,
 			String validToTime) throws AxisFault {
-		return this.getRoomServiceProxy().getInvitationHash(SID, username,
+		return getBeanUtil().getBean(RoomWebService.class, getServletContext()).getInvitationHash(SID, username,
 				room_id, isPasswordProtected, invitationpass, valid,
 				validFromDate, validFromTime, validToDate, validToTime);
 
@@ -565,7 +532,7 @@ public class RoomWebServiceFacade {
 			String invitationpass, Integer valid, String validFromDate,
 			String validFromTime, String validToDate, String validToTime,
 			Long language_id, Boolean sendMail) throws AxisFault {
-		return this.getRoomServiceProxy().sendInvitationHash(SID, username,
+		return getBeanUtil().getBean(RoomWebService.class, getServletContext()).sendInvitationHash(SID, username,
 				message, baseurl, email, subject, room_id, conferencedomain,
 				isPasswordProtected, invitationpass, valid, validFromDate,
 				validFromTime, validToDate, validToTime, language_id, sendMail);
@@ -624,7 +591,7 @@ public class RoomWebServiceFacade {
 			Long room_id, String conferencedomain, Boolean isPasswordProtected,
 			String invitationpass, Integer valid, Date fromDate, Date toDate,
 			Long language_id, Boolean sendMail) throws AxisFault {
-		return this.getRoomServiceProxy().sendInvitationHashWithDateObject(SID,
+		return getBeanUtil().getBean(RoomWebService.class, getServletContext()).sendInvitationHashWithDateObject(SID,
 				username, message, baseurl, email, subject, room_id,
 				conferencedomain, isPasswordProtected, invitationpass, valid,
 				fromDate, toDate, language_id, sendMail);
@@ -632,14 +599,14 @@ public class RoomWebServiceFacade {
 
 	public List<RoomReturn> getRoomsWithCurrentUsersByList(String SID,
 			int start, int max, String orderby, boolean asc) throws AxisFault {
-		return this.getRoomServiceProxy().getRoomsWithCurrentUsersByList(SID,
+		return getBeanUtil().getBean(RoomWebService.class, getServletContext()).getRoomsWithCurrentUsersByList(SID,
 				start, max, orderby, asc);
 	}
 
 	public List<RoomReturn> getRoomsWithCurrentUsersByListAndType(String SID,
 			int start, int max, String orderby, boolean asc,
 			String externalRoomType) throws AxisFault {
-		return this.getRoomServiceProxy()
+		return getBeanUtil().getBean(RoomWebService.class, getServletContext())
 				.getRoomsWithCurrentUsersByListAndType(SID, start, max,
 						orderby, asc, externalRoomType);
 	}
@@ -652,7 +619,7 @@ public class RoomWebServiceFacade {
 			String validFromTime, String validToDate, String validToTime,
 			Boolean isPasswordProtected, String password, Long reminderTypeId,
 			String redirectURL) throws AxisFault {
-		return this.getRoomServiceProxy()
+		return getBeanUtil().getBean(RoomWebService.class, getServletContext())
 				.addRoomWithModerationAndExternalTypeAndStartEnd(SID, name,
 						roomtypes_id, comment, numberOfPartizipants, ispublic,
 						appointment, isDemoRoom, demoTime, isModeratedRoom,
@@ -664,7 +631,7 @@ public class RoomWebServiceFacade {
 	public Long addMeetingMemberRemindToRoom(String SID, Long room_id,
 			String firstname, String lastname, String email, String phone,
 			String baseUrl, Long language_id) throws AxisFault {
-		return this.getRoomServiceProxy().addMeetingMemberRemindToRoom(SID,
+		return getBeanUtil().getBean(RoomWebService.class, getServletContext()).addMeetingMemberRemindToRoom(SID,
 				room_id, firstname, lastname, email, phone, language_id);
 	}
 
@@ -672,19 +639,19 @@ public class RoomWebServiceFacade {
 			String firstname, String lastname, String email, String baseUrl,
 			Long language_id, String jNameTimeZone, String invitorName)
 			throws AxisFault {
-		return this.getRoomServiceProxy().addExternalMeetingMemberRemindToRoom(
+		return getBeanUtil().getBean(RoomWebService.class, getServletContext()).addExternalMeetingMemberRemindToRoom(
 				SID, room_id, firstname, lastname, email, baseUrl, language_id,
 				jNameTimeZone, invitorName);
 	}
 
 	public int closeRoom(String SID, Long room_id, Boolean status)
 			throws AxisFault {
-		return this.getRoomServiceProxy().closeRoom(SID, room_id, status);
+		return getBeanUtil().getBean(RoomWebService.class, getServletContext()).closeRoom(SID, room_id, status);
 	}
 
 	public int modifyRoomParameter(String SID, Long room_id, String paramName,
 			String paramValue) throws AxisFault {
-		return getRoomServiceProxy().modifyRoomParameter(SID, room_id,
+		return getBeanUtil().getBean(RoomWebService.class, getServletContext()).modifyRoomParameter(SID, room_id,
 				paramName, paramValue);
 	}
 

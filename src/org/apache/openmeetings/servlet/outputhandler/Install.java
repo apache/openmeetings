@@ -33,48 +33,17 @@ import org.apache.openmeetings.documents.InstallationDocumentHandler;
 import org.apache.openmeetings.installation.ImportInitvalues;
 import org.apache.openmeetings.installation.InstallationConfig;
 import org.apache.openmeetings.persistence.beans.basic.OmTimeZone;
-import org.apache.openmeetings.remote.red5.ScopeApplicationAdapter;
+import org.apache.openmeetings.servlet.BaseVelocityViewServlet;
 import org.apache.openmeetings.utils.ImportHelper;
 import org.apache.openmeetings.utils.OmFileHelper;
 import org.apache.velocity.Template;
 import org.apache.velocity.context.Context;
-import org.apache.velocity.tools.view.VelocityViewServlet;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
-import org.springframework.context.ApplicationContext;
-import org.springframework.web.context.support.WebApplicationContextUtils;
 
-public class Install extends VelocityViewServlet {
+public class Install extends BaseVelocityViewServlet {
+	
 	private static final long serialVersionUID = 3684381243236013771L;
-
-	private ConfigurationDao getConfigurationDao() {
-		try {
-			if (!ScopeApplicationAdapter.initComplete) {
-				return null;
-			}
-			ApplicationContext context = WebApplicationContextUtils
-					.getWebApplicationContext(getServletContext());
-			return (ConfigurationDao) context
-					.getBean("configurationDaoImpl");
-		} catch (Exception err) {
-			log.error("[getConfigurationmanagement]", err);
-		}
-		return null;
-	}
-
-	private ImportInitvalues getImportInitvalues() {
-		try {
-			if (!ScopeApplicationAdapter.initComplete) {
-				return null;
-			}
-			ApplicationContext context = WebApplicationContextUtils
-					.getWebApplicationContext(getServletContext());
-			return (ImportInitvalues) context.getBean("importInitvalues");
-		} catch (Exception err) {
-			log.error("[getImportInitvalues]", err);
-		}
-		return null;
-	}
 
 	private static final Logger log = Red5LoggerFactory.getLogger(
 			Install.class, OpenmeetingsVariables.webAppRootKey);
@@ -84,7 +53,7 @@ public class Install extends VelocityViewServlet {
 		String[] headerList = header != null ? header.split(",") : new String[0];
 		String headCode = headerList.length > 0 ? headerList[0] : "en";
 		
-		LinkedHashMap<Integer, LinkedHashMap<String, Object>> allLanguagesAll = getImportInitvalues()
+		LinkedHashMap<Integer, LinkedHashMap<String, Object>> allLanguagesAll = getBean(ImportInitvalues.class)
 				.getLanguageFiles();
 		LinkedHashMap<Integer, String> allLanguages = new LinkedHashMap<Integer, String>();
 		//first iteration for preferred language
@@ -117,7 +86,7 @@ public class Install extends VelocityViewServlet {
 		allFonts.put("Verdana", "Verdana");
 		allFonts.put("Arial", "Arial");
 
-		List<OmTimeZone> omTimeZoneList = getImportInitvalues()
+		List<OmTimeZone> omTimeZoneList = getBean(ImportInitvalues.class)
 				.getTimeZones();
 
 		Template tpl = super.getTemplate("install_step1_"
@@ -145,12 +114,12 @@ public class Install extends VelocityViewServlet {
 		try {
 			ctx.put("APP_ROOT", OpenmeetingsVariables.webAppRootKey);
 
-			if (getImportInitvalues() == null || getConfigurationDao() == null) {
+			if (getBean(ImportInitvalues.class) == null || getBean(ConfigurationDao.class) == null) {
 				return getVelocityView().getVelocityEngine().getTemplate(
 						"booting_install.vm");
 			}
 
-			ctx.put("APP_NAME", getConfigurationDao().getAppName());
+			ctx.put("APP_NAME", getBean(ConfigurationDao.class).getAppName());
 			String command = httpServletRequest.getParameter("command");
 
 			String lang = httpServletRequest.getParameter("lang");
@@ -261,7 +230,7 @@ public class Install extends VelocityViewServlet {
 					cfg.urlFeed2 = getServletContext().getInitParameter(
 							"url_feed2");
 					
-					getImportInitvalues().loadAll(cfg, username,
+					getBean(ImportInitvalues.class).loadAll(cfg, username,
 							userpass, useremail, orgname, timeZone, false);
 
 					// update to next step

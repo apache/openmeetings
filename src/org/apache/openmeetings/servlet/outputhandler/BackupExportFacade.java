@@ -22,42 +22,25 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
-import org.apache.openmeetings.remote.red5.ScopeApplicationAdapter;
+import org.apache.openmeetings.servlet.BaseHttpServlet;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
-import org.springframework.context.ApplicationContext;
-import org.springframework.web.context.support.WebApplicationContextUtils;
 
 /**
  * 
  * @author sebastianwagner
  * 
  */
-public class BackupExportFacade extends HttpServlet {
+public class BackupExportFacade extends BaseHttpServlet {
 
 	private static final long serialVersionUID = -928315730609302260L;
 
 	private static final Logger log = Red5LoggerFactory.getLogger(
 			BackupExportFacade.class, OpenmeetingsVariables.webAppRootKey);
-
-	private BackupExport getBackupExport() {
-		try {
-			if (!ScopeApplicationAdapter.initComplete) {
-				return null;
-			}
-			ApplicationContext context = WebApplicationContextUtils
-					.getWebApplicationContext(getServletContext());
-			return (BackupExport) context.getBean("backupExport");
-		} catch (Exception err) {
-			log.error("[getBackupExport]", err);
-		}
-		return null;
-	}
 
 	/*
 	 * (non-Javadoc)
@@ -73,7 +56,7 @@ public class BackupExportFacade extends HttpServlet {
 
 		try {
 
-			if (getBackupExport() == null) {
+			if (getBean(BackupExport.class) == null) {
 				OutputStream out = httpServletResponse.getOutputStream();
 
 				String msg = "Server is not booted yet";
@@ -86,7 +69,7 @@ public class BackupExportFacade extends HttpServlet {
 				return;
 			}
 
-			getBackupExport().service(httpServletRequest, httpServletResponse,
+			getBean(BackupExport.class).service(httpServletRequest, httpServletResponse,
 					getServletContext());
 
 		} catch (Exception er) {

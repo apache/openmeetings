@@ -18,17 +18,8 @@
  */
 package org.apache.openmeetings.axis.services;
 
-import javax.servlet.ServletContext;
-
-import org.apache.axis2.context.MessageContext;
-import org.apache.axis2.transport.http.HTTPConstants;
-import org.apache.openmeetings.OpenmeetingsVariables;
+import org.apache.openmeetings.axis.BaseWebService;
 import org.apache.openmeetings.persistence.beans.room.Room;
-import org.apache.openmeetings.remote.red5.ScopeApplicationAdapter;
-import org.red5.logging.Red5LoggerFactory;
-import org.slf4j.Logger;
-import org.springframework.context.ApplicationContext;
-import org.springframework.web.context.support.WebApplicationContextUtils;
 
 /**
  * This class provides method entry points necessary for OM to Jabber integration.
@@ -36,32 +27,8 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
  * @author solomax
  *
  */
-public class JabberWebServiceFacade {
-	private static final Logger log = Red5LoggerFactory
-			.getLogger(JabberWebServiceFacade.class,
-					OpenmeetingsVariables.webAppRootKey);
-
-	private ServletContext getServletContext() throws Exception {
-		MessageContext mc = MessageContext.getCurrentMessageContext();
-		return ((ServletContext) mc
-				.getProperty(HTTPConstants.MC_HTTP_SERVLETCONTEXT));
-	}
-
-	private JabberWebService getJabberServiceProxy() {
-		try {
-			if (!ScopeApplicationAdapter.initComplete) {
-				throw new Exception("Server not yet initialized, retry in couple of seconds");
-			}
-			ApplicationContext context = WebApplicationContextUtils
-					.getWebApplicationContext(getServletContext());
-
-			return ((JabberWebService) context.getBean("jabberWebService"));
-		} catch (Exception err) {
-			log.error("[getJabberServiceProxy]", err);
-		}
-		return null;
-	}
-
+public class JabberWebServiceFacade extends BaseWebService {
+	
 	/**
 	 * Get array of all rooms available to the user.
 	 * No admin rights are necessary for this call
@@ -70,7 +37,7 @@ public class JabberWebServiceFacade {
 	 * @return array of Rooms
 	 */
 	public Room[] getAvailableRooms(String SID) {
-		return getJabberServiceProxy().getAvailableRooms(SID).toArray(new Room[0]);
+		return getBeanUtil().getBean(JabberWebService.class, getServletContext()).getAvailableRooms(SID).toArray(new Room[0]);
 	}
 
 	/**
@@ -82,7 +49,7 @@ public class JabberWebServiceFacade {
 	 * @return number of users as int
 	 */
 	public int getUserCount(String SID, Long roomId) {
-		return getJabberServiceProxy().getUserCount(SID, roomId);
+		return getBeanUtil().getBean(JabberWebService.class, getServletContext()).getUserCount(SID, roomId);
 	}
 
 	/**
@@ -95,7 +62,7 @@ public class JabberWebServiceFacade {
 	 * @return hash to enter the room
 	 */
 	public String getInvitationHash(String SID, String username, Long room_id) {
-		return getJabberServiceProxy()
+		return getBeanUtil().getBean(JabberWebService.class, getServletContext())
 				.getInvitationHash(SID, username, room_id);
 	}
 }
