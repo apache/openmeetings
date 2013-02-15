@@ -19,7 +19,6 @@
 package org.apache.openmeetings.servlet.outputhandler;
 
 import java.io.IOException;
-import java.io.OutputStream;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -27,6 +26,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.servlet.BaseHttpServlet;
+import org.apache.openmeetings.servlet.ServerNotInitializedException;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 
@@ -55,27 +55,12 @@ public class BackupExportFacade extends BaseHttpServlet {
 			IOException {
 
 		try {
-
-			if (getBean(BackupExport.class) == null) {
-				OutputStream out = httpServletResponse.getOutputStream();
-
-				String msg = "Server is not booted yet";
-
-				out.write(msg.getBytes());
-
-				out.flush();
-				out.close();
-
-				return;
-			}
-
 			getBean(BackupExport.class).service(httpServletRequest, httpServletResponse,
 					getServletContext());
-
+		} catch (ServerNotInitializedException e) {
+			handleNotBooted(httpServletResponse);
 		} catch (Exception er) {
-			log.error("ERROR ", er);
-			log.debug("Error exporting: " + er);
-			er.printStackTrace();
+			log.error("Error exporting ", er);
 		}
 	}
 

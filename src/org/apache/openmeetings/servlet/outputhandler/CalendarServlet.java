@@ -32,12 +32,12 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.data.basic.SessiondataDao;
-import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
 import org.apache.openmeetings.data.calendar.management.AppointmentLogic;
 import org.apache.openmeetings.data.user.UserManager;
 import org.apache.openmeetings.persistence.beans.calendar.Appointment;
 import org.apache.openmeetings.persistence.beans.calendar.MeetingMember;
 import org.apache.openmeetings.servlet.BaseHttpServlet;
+import org.apache.openmeetings.servlet.ServerNotInitializedException;
 import org.apache.openmeetings.utils.math.TimezoneUtil;
 import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
@@ -60,15 +60,6 @@ public class CalendarServlet extends BaseHttpServlet {
 			IOException {
 
 		try {
-
-			if (getBean(UserManager.class) == null
-					|| getBean(ConfigurationDao.class) == null
-					|| getBean(SessiondataDao.class) == null
-					|| getBean(AppointmentLogic.class) == null
-					|| getBean(TimezoneUtil.class) == null) {
-				return;
-			}
-
 			String sid = httpServletRequest.getParameter("sid");
 
 			if (sid == null) {
@@ -295,7 +286,8 @@ public class CalendarServlet extends BaseHttpServlet {
 				out.close();
 
 			}
-
+		} catch (ServerNotInitializedException e) {
+			return;
 		} catch (Exception er) {
 			log.error("[Calendar :: service]", er);
 		}

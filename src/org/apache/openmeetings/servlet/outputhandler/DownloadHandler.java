@@ -21,7 +21,6 @@ package org.apache.openmeetings.servlet.outputhandler;
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.Date;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -34,6 +33,7 @@ import org.apache.openmeetings.data.file.dao.FileExplorerItemDao;
 import org.apache.openmeetings.data.user.UserManager;
 import org.apache.openmeetings.persistence.beans.files.FileExplorerItem;
 import org.apache.openmeetings.servlet.BaseHttpServlet;
+import org.apache.openmeetings.servlet.ServerNotInitializedException;
 import org.apache.openmeetings.utils.OmFileHelper;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -73,11 +73,6 @@ public class DownloadHandler extends BaseHttpServlet {
 			IOException {
 
 		try {
-
-			if (getBean(UserManager.class) == null || getBean(SessiondataDao.class) == null) {
-				return;
-			}
-
 			httpServletRequest.setCharacterEncoding("UTF-8");
 
 			log.debug("\nquery = " + httpServletRequest.getQueryString());
@@ -302,14 +297,13 @@ public class DownloadHandler extends BaseHttpServlet {
 					out.close();
 				}
 			} else {
-				System.out
-						.println("ERROR DownloadHandler: not authorized FileDownload "
-								+ (new Date()));
+				log.error("ERROR DownloadHandler: not authorized FileDownload ");
 			}
 
+		} catch (ServerNotInitializedException e) {
+			return;
 		} catch (Exception er) {
 			log.error("Error downloading: ", er);
-			// er.printStackTrace();
 		}
 	}
 

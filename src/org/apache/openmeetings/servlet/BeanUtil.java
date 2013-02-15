@@ -24,7 +24,7 @@ import org.apache.openmeetings.remote.red5.ScopeApplicationAdapter;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
 public class BeanUtil {
-	public <T> T getBean(Class<T> beanClass, ServletContext ctx) {
+	public <T> T getBean(Class<T> beanClass, ServletContext ctx) throws ServerNotInitializedException {
 		if (ScopeApplicationAdapter.initComplete) {
 			return WebApplicationContextUtils.getWebApplicationContext(ctx).getBean(beanClass);
 		} else {

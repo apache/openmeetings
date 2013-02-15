@@ -41,9 +41,9 @@ import org.apache.openmeetings.batik.beans.PrintBean;
 import org.apache.openmeetings.data.basic.SessiondataDao;
 import org.apache.openmeetings.data.record.WhiteboardMapToSVG;
 import org.apache.openmeetings.data.user.UserManager;
-import org.apache.openmeetings.documents.GenerateImage;
 import org.apache.openmeetings.remote.PrintService;
 import org.apache.openmeetings.servlet.BaseHttpServlet;
+import org.apache.openmeetings.servlet.ServerNotInitializedException;
 import org.apache.openmeetings.utils.OmFileHelper;
 import org.apache.openmeetings.utils.math.CalendarPatterns;
 import org.red5.logging.Red5LoggerFactory;
@@ -71,11 +71,6 @@ public class ExportToImage extends BaseHttpServlet {
 			IOException {
 
 		try {
-			if (getBean(UserManager.class) == null || getBean(SessiondataDao.class) == null
-					|| getBean(GenerateImage.class) == null) {
-				return;
-			}
-
 			String sid = request.getParameter("sid");
 			if (sid == null) {
 				sid = "default";
@@ -175,11 +170,10 @@ public class ExportToImage extends BaseHttpServlet {
 						//TODO not implemented yet
 				}
 			}
-
+		} catch (ServerNotInitializedException e) {
+			return;
 		} catch (Exception er) {
-			log.error("ERROR ", er);
-			System.out.println("Error exporting: " + er);
-			er.printStackTrace();
+			log.error("Error exporting to image ", er);
 		}
 	}
 	

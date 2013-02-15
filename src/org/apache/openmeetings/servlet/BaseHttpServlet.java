@@ -18,14 +18,29 @@
  */
 package org.apache.openmeetings.servlet;
 
+import java.io.IOException;
+import java.io.OutputStream;
+
 import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletResponse;
 
 public abstract class BaseHttpServlet extends HttpServlet {
 	private static final long serialVersionUID = -2713422496723115524L;
 	
 	private BeanUtil beanUtil = new BeanUtil();
 
-	protected <T> T getBean(Class<T> beanClass) {
+	protected <T> T getBean(Class<T> beanClass) throws ServerNotInitializedException {
 		return beanUtil.getBean(beanClass, getServletContext());
+	}
+	
+	protected void handleNotBooted(HttpServletResponse response) throws IOException {
+		OutputStream out = response.getOutputStream();
+
+		String msg = "Server is not booted yet";
+
+		out.write(msg.getBytes());
+
+		out.flush();
+		out.close();
 	}
 }

@@ -29,7 +29,7 @@ public abstract class BaseVelocityViewServlet extends VelocityViewServlet {
 	
 	private BeanUtil beanUtil = new BeanUtil();
 
-	protected <T> T getBean(Class<T> beanClass) {
+	protected <T> T getBean(Class<T> beanClass) throws ServerNotInitializedException {
 		return beanUtil.getBean(beanClass, getServletContext());
 	}
 	

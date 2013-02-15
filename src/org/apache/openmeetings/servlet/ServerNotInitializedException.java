@@ -18,7 +18,7 @@
  */
 package org.apache.openmeetings.servlet;
 
-public class ServerNotInitializedException extends RuntimeException {
+public class ServerNotInitializedException extends Exception {
 	private static final long serialVersionUID = -7771909924751249321L;
 	
 	public ServerNotInitializedException(String msg) {
