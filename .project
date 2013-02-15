@@ -1,17 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
-   Licensed under the Apache License, Version 2.0 (the "License");
-   you may not use this file except in compliance with the License.
-   You may obtain a copy of the License at
-
-       http://www.apache.org/licenses/LICENSE-2.0
-
-   Unless required by applicable law or agreed to in writing, software
-   distributed under the License is distributed on an "AS IS" BASIS,
-   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-   See the License for the specific language governing permissions and
-   limitations under the License.
- -->
 <projectDescription>
 	<name>Openmeetings</name>
 	<comment></comment>
@@ -67,7 +54,7 @@
 	</natures>
 	<filteredResources>
 		<filter>
-			<id>1339742413697</id>
+			<id>1360927555041</id>
 			<name></name>
 			<type>26</type>
 			<matcher>
@@ -76,7 +63,7 @@
 			</matcher>
 		</filter>
 		<filter>
-			<id>1339742413708</id>
+			<id>1360927555045</id>
 			<name></name>
 			<type>10</type>
 			<matcher>
@@ -85,7 +72,7 @@
 			</matcher>
 		</filter>
 		<filter>
-			<id>1339742413718</id>
+			<id>1360927555050</id>
 			<name></name>
 			<type>26</type>
 			<matcher>
@@ -94,16 +81,16 @@
 			</matcher>
 		</filter>
 		<filter>
-			<id>1339742413728</id>
+			<id>1360927555055</id>
 			<name></name>
 			<type>26</type>
 			<matcher>
 				<id>org.eclipse.ui.ide.multiFilter</id>
-				<arguments>1.0-projectRelativePath-matches-false-false-build/openlaszlo</arguments>
+				<arguments>1.0-projectRelativePath-matches-false-false-build/openlaszlo*</arguments>
 			</matcher>
 		</filter>
 		<filter>
-			<id>1339742413738</id>
+			<id>1360927555060</id>
 			<name></name>
 			<type>30</type>
 			<matcher>
@@ -112,7 +99,7 @@
 			</matcher>
 		</filter>
 		<filter>
-			<id>1339742413748</id>
+			<id>1360927555064</id>
 			<name></name>
 			<type>30</type>
 			<matcher>
