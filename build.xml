@@ -737,6 +737,7 @@
 		<javadoc classpathref="build.webservice.classpath" useexternalfile="true">
 			<fileset dir="src/org/apache/openmeetings/axis/services">
 				<include name="*WebService.java" />
+				<exclude name="BaseWebService.java" />
 			</fileset>
 			<doclet name="org.apache.openmeetings.doc.WebServiceDoclet" pathref="build.webservice.classpath" />
 		</javadoc>
