@@ -34,7 +34,7 @@ public abstract class BaseWebService {
 
 	private BeanUtil beanUtil = new BeanUtil();
 	
-	public BeanUtil getBeanUtil() {
+	protected BeanUtil getBeanUtil() {
 		return beanUtil;
 	}
 	
