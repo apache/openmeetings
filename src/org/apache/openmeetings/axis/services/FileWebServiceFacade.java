@@ -19,7 +19,6 @@
 package org.apache.openmeetings.axis.services;
 
 import org.apache.axis2.AxisFault;
-import org.apache.openmeetings.axis.BaseWebService;
 import org.apache.openmeetings.data.file.dto.FileExplorerObject;
 import org.apache.openmeetings.data.file.dto.LibraryPresentation;
 import org.apache.openmeetings.persistence.beans.files.FileExplorerItem;

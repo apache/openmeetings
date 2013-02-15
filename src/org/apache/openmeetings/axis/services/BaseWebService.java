@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.axis;
+package org.apache.openmeetings.axis.services;
 
 import javax.servlet.ServletContext;
 
@@ -38,7 +38,7 @@ public abstract class BaseWebService {
 		return beanUtil;
 	}
 	
-	public ServletContext getServletContext() {
+	protected ServletContext getServletContext() {
 		try {
 			MessageContext mc = MessageContext.getCurrentMessageContext();
 			return (ServletContext) mc

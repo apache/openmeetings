@@ -18,7 +18,6 @@
  */
 package org.apache.openmeetings.axis.services;
 
-import org.apache.openmeetings.axis.BaseWebService;
 import org.apache.openmeetings.persistence.beans.room.Room;
 
 /**

@@ -22,7 +22,6 @@ import java.util.Date;
 import java.util.List;
 
 import org.apache.axis2.AxisFault;
-import org.apache.openmeetings.axis.BaseWebService;
 import org.apache.openmeetings.data.beans.basic.SearchResult;
 import org.apache.openmeetings.persistence.beans.flvrecord.FlvRecording;
 import org.apache.openmeetings.persistence.beans.room.Room;

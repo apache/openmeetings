@@ -23,7 +23,6 @@ import java.util.Date;
 import java.util.List;
 
 import org.apache.axis2.AxisFault;
-import org.apache.openmeetings.axis.BaseWebService;
 import org.apache.openmeetings.data.calendar.beans.Week;
 import org.apache.openmeetings.persistence.beans.calendar.Appointment;
 import org.apache.openmeetings.persistence.beans.calendar.AppointmentCategory;

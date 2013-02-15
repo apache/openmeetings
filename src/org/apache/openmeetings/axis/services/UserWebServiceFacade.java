@@ -19,7 +19,6 @@
 package org.apache.openmeetings.axis.services;
 
 import org.apache.axis2.AxisFault;
-import org.apache.openmeetings.axis.BaseWebService;
 import org.apache.openmeetings.data.beans.basic.ErrorResult;
 import org.apache.openmeetings.data.beans.basic.SearchResult;
 import org.apache.openmeetings.persistence.beans.basic.Sessiondata;
