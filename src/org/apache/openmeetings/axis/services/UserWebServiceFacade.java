@@ -313,5 +313,9 @@ public class UserWebServiceFacade {
 			throws AxisFault {
 		return getUserServiceProxy().kickUserByPublicSID(SID, publicSID);
 	}
+	
+	public Long addOrganisation(String SID, String name) throws AxisFault {
+		return getUserServiceProxy().addOrganisation(SID, name);
+	}
 
 }

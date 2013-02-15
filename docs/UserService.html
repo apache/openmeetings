@@ -175,6 +175,10 @@ limitations under the License.
                 <a href="#kickUserByPublicSID"><b>kickUserByPublicSID</b></a><br/>
                 <div class="navigation_comment"><i >Kick a user by its public SID</i></div>
                 </div>
+                                               <div>
+                <a href="#addOrganisation"><b>addOrganisation</b></a><br/>
+                <div class="navigation_comment"><i >add a new organisation</i></div>
+                </div>
                            </div>
 	   
 	    <h3>Methods Details in UserService</h3>
@@ -2270,6 +2274,58 @@ limitations under the License.
     			    			<br/>
     			REST Sample Call/URL:<br/>
     			    			    				    								    				    												<a href="http://localhost:5080/openmeetings/services/UserService/kickUserByPublicSID?SID=VALUE&publicSID=VALUE">http://localhost:5080/openmeetings/services/UserService/kickUserByPublicSID?SID=VALUE&amp;publicSID=VALUE</a>
+    		  </div>
+    	   				    		      <div class="method">
+		        <div class="method_header">
+		        <div style="margin-left:10px">
+    			<a name="addOrganisation" ><b>addOrganisation</b></a>
+    			</div>
+    			</div>
+    			
+    			Method: <i>addOrganisation (
+    			    			    			       			   String SID
+    			       			    			       			     , 
+    			       			   String name
+    			       			    			)
+    			</i><br/>
+    			<p>
+    			  add a new organisation
+    			</p>
+    			<p>
+                  Return Type: java.lang.Long
+                </p>
+    			<p>Params:</p>
+    			    			
+    				    			<table rules="all" border="1">
+	    			   <thead>
+	    			   <tr>
+	    			     <th width="200" align="left">Type</th>
+	    			     <th width="200" align="left">Fieldname</th>
+	    			     <th width="400" align="left">Description</th>
+	    			   </tr>
+	    			   </thead>
+	    			   <tbody>
+	    			   	    			   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">SID</td>
+	                     <td valign="top">The SID from getSession</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">name</td>
+	                     <td valign="top">the name of the org</td>
+	                   </tr>
+	                   
+	                   	                   	                   </tbody>
+	    			</table>
+    			    			<br/>
+    			REST Sample Call/URL:<br/>
+    			    			    				    								    				    												<a href="http://localhost:5080/openmeetings/services/UserService/addOrganisation?SID=VALUE&name=VALUE">http://localhost:5080/openmeetings/services/UserService/addOrganisation?SID=VALUE&amp;name=VALUE</a>
     		  </div>
     	   			
 	

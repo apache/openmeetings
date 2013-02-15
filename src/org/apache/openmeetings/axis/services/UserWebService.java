@@ -1305,5 +1305,25 @@ public class UserWebService {
 		}
 		return null;
 	}
+	
+	/**
+	 * add a new organisation
+	 * 
+	 * @param SID
+	 *            The SID from getSession
+	 * @param name
+	 *            the name of the org
+	 * @return the new id of the org or -1 in case an error happened
+	 * @throws AxisFault
+	 */
+	public Long addOrganisation(String SID, String name) throws AxisFault {
+		Long users_id = sessiondataDao.checkSession(SID);
+		Long user_level = userManagement.getUserLevelByID(users_id);
+		if (authLevelUtil.checkWebServiceLevel(user_level)) {
+			return organisationManager.addOrganisation(name, users_id);
+		}
+		log.error("Could not create organization");
+		return -1L;
+	}
 
 }
