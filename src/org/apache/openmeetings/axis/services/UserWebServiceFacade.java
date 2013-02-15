@@ -23,21 +23,15 @@ import javax.servlet.ServletContext;
 import org.apache.axis2.AxisFault;
 import org.apache.axis2.context.MessageContext;
 import org.apache.axis2.transport.http.HTTPConstants;
-import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.data.beans.basic.ErrorResult;
 import org.apache.openmeetings.data.beans.basic.SearchResult;
 import org.apache.openmeetings.persistence.beans.basic.Sessiondata;
 import org.apache.openmeetings.persistence.beans.user.User;
 import org.apache.openmeetings.remote.red5.ScopeApplicationAdapter;
-import org.red5.logging.Red5LoggerFactory;
-import org.slf4j.Logger;
 import org.springframework.context.ApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
 public class UserWebServiceFacade {
-
-	private static final Logger log = Red5LoggerFactory.getLogger(
-			UserWebServiceFacade.class, OpenmeetingsVariables.webAppRootKey);
 
 	private ServletContext getServletContext() throws Exception {
 		MessageContext mc = MessageContext.getCurrentMessageContext();
@@ -45,18 +39,18 @@ public class UserWebServiceFacade {
 				.getProperty(HTTPConstants.MC_HTTP_SERVLETCONTEXT);
 	}
 
-	private UserWebService getUserServiceProxy() {
-		try {
-			if (!ScopeApplicationAdapter.initComplete) {
-				throw new Exception("Server not yet initialized, retry in couple of seconds");
-			}
-			ApplicationContext context = WebApplicationContextUtils
-					.getWebApplicationContext(getServletContext());
-			return (UserWebService) context.getBean("userWebService");
-		} catch (Exception err) {
-			log.error("[getUserServiceProxy]", err);
+	private UserWebService getUserServiceProxy() throws AxisFault {
+		if (!ScopeApplicationAdapter.initComplete) {
+			throw new AxisFault("Server not yet initialized, retry in couple of seconds");
 		}
-		return null;
+		ApplicationContext context;
+		try {
+			context = WebApplicationContextUtils
+					.getWebApplicationContext(getServletContext());
+			return context.getBean(UserWebService.class);
+		} catch (Exception e) {
+			throw new AxisFault("Servlet context is not available yet, retry in couple of seconds");
+		}
 	}
 
 	/**
@@ -90,8 +84,9 @@ public class UserWebServiceFacade {
 	 * @param errorid
 	 * @param language_id
 	 * @return
+	 * @throws AxisFault 
 	 */
-	public ErrorResult getErrorByCode(String SID, Long errorid, Long language_id) {
+	public ErrorResult getErrorByCode(String SID, Long errorid, Long language_id) throws AxisFault {
 		return getUserServiceProxy().getErrorByCode(SID, errorid, language_id);
 	}
 
