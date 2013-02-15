@@ -32,29 +32,29 @@ public class CalendarWebServiceFacade extends BaseWebService {
 	
 	public List<Appointment> getAppointmentByRange(String SID, Date starttime,
 			Date endtime) throws AxisFault {
-		return getBeanUtil().getBean(CalendarWebService.class, getServletContext()).getAppointmentByRange(SID, starttime,
+		return getBean(CalendarWebService.class).getAppointmentByRange(SID, starttime,
 				endtime);
 	}
 
 	public List<Appointment> getAppointmentByRangeForUserId(String SID,
 			long userId, Date starttime, Date endtime) throws AxisFault {
-		return getBeanUtil().getBean(CalendarWebService.class, getServletContext()).getAppointmentByRangeForUserId(SID,
+		return getBean(CalendarWebService.class).getAppointmentByRangeForUserId(SID,
 				userId, starttime, endtime);
 	}
 
 	public Appointment getNextAppointment(String SID) throws AxisFault {
-		return getBeanUtil().getBean(CalendarWebService.class, getServletContext()).getNextAppointment(SID);
+		return getBean(CalendarWebService.class).getNextAppointment(SID);
 	}
 
 	public Appointment getNextAppointmentForUserId(String SID, long userId)
 			throws AxisFault {
-		return getBeanUtil().getBean(CalendarWebService.class, getServletContext()).getNextAppointmentForUserId(SID,
+		return getBean(CalendarWebService.class).getNextAppointmentForUserId(SID,
 				userId);
 	}
 
 	public List<Appointment> searchAppointmentByName(String SID,
 			String appointmentName) throws AxisFault {
-		return getBeanUtil().getBean(CalendarWebService.class, getServletContext()).searchAppointmentByName(SID,
+		return getBean(CalendarWebService.class).searchAppointmentByName(SID,
 				appointmentName);
 	}
 
@@ -65,7 +65,7 @@ public class CalendarWebServiceFacade extends BaseWebService {
 			Boolean isYearly, Long categoryId, Long remind, String[] mmClient,
 			Long roomType, String baseUrl, Long languageId,
 			Boolean isPasswordProtected, String password, long roomId) throws AxisFault {
-		return getBeanUtil().getBean(CalendarWebService.class, getServletContext()).saveAppointment(SID, appointmentName,
+		return getBean(CalendarWebService.class).saveAppointment(SID, appointmentName,
 				appointmentLocation, appointmentDescription, appointmentstart,
 				appointmentend, isDaily, isWeekly, isMonthly, isYearly,
 				categoryId, remind, mmClient, roomType, baseUrl, languageId,
@@ -75,7 +75,7 @@ public class CalendarWebServiceFacade extends BaseWebService {
 	public Long updateAppointmentTimeOnly(String SID, Long appointmentId,
 			Date appointmentstart, Date appointmentend, String baseurl,
 			Long languageId) throws AxisFault {
-		return getBeanUtil().getBean(CalendarWebService.class, getServletContext()).updateAppointmentTimeOnly(SID,
+		return getBean(CalendarWebService.class).updateAppointmentTimeOnly(SID,
 				appointmentId, appointmentstart, appointmentend, baseurl,
 				languageId);
 	}
@@ -87,7 +87,7 @@ public class CalendarWebServiceFacade extends BaseWebService {
 			Boolean isMonthly, Boolean isYearly, Long categoryId, Long remind,
 			String[] mmClient, Long roomType, String baseurl, Long languageId,
 			Boolean isPasswordProtected, String password) throws AxisFault {
-		return getBeanUtil().getBean(CalendarWebService.class, getServletContext()).updateAppointment(SID, appointmentId,
+		return getBean(CalendarWebService.class).updateAppointment(SID, appointmentId,
 				appointmentName, appointmentLocation, appointmentDescription,
 				appointmentstart, appointmentend, isDaily, isWeekly, isMonthly,
 				isYearly, categoryId, remind, mmClient, roomType, baseurl,
@@ -96,29 +96,29 @@ public class CalendarWebServiceFacade extends BaseWebService {
 
 	public Long deleteAppointment(String SID, Long appointmentId,
 			Long language_id) throws AxisFault {
-		return getBeanUtil().getBean(CalendarWebService.class, getServletContext()).deleteAppointment(SID, appointmentId,
+		return getBean(CalendarWebService.class).deleteAppointment(SID, appointmentId,
 				language_id);
 	}
 
 	public Appointment getAppointmentByRoomId(String SID, Long room_id)
 			throws AxisFault {
-		return getBeanUtil().getBean(CalendarWebService.class, getServletContext()).getAppointmentByRoomId(SID, room_id);
+		return getBean(CalendarWebService.class).getAppointmentByRoomId(SID, room_id);
 	}
 
 	public List<AppointmentCategory> getAppointmentCategoryList(String SID)
 			throws AxisFault {
-		return getBeanUtil().getBean(CalendarWebService.class, getServletContext()).getAppointmentCategoryList(SID);
+		return getBean(CalendarWebService.class).getAppointmentCategoryList(SID);
 	}
 
 	public List<AppointmentReminderTyps> getAppointmentReminderTypList(
 			String SID) throws AxisFault {
-		return getBeanUtil().getBean(CalendarWebService.class, getServletContext()).getAppointmentReminderTypList(SID);
+		return getBean(CalendarWebService.class).getAppointmentReminderTypList(SID);
 	}
 
 	public List<Week> getAppointmentsByWeekCalendar(String SID,
 			int firstDayInWeek, Date startDate, Long requestUserId,
 			Long omTimeZoneId, String javaTimeZoneName) throws AxisFault {
-		return getBeanUtil().getBean(CalendarWebService.class, getServletContext()).getAppointmentsByWeekCalendar(SID,
+		return getBean(CalendarWebService.class).getAppointmentsByWeekCalendar(SID,
 				firstDayInWeek, startDate, requestUserId, omTimeZoneId,
 				javaTimeZoneName);
 	}

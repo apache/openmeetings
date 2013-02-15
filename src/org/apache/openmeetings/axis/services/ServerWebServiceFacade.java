@@ -28,14 +28,14 @@ public class ServerWebServiceFacade extends BaseWebService {
 	 * {@link ServerWebService#getServers(String, int, int)}
 	 */
 	public Server[] getServers(String SID, int start, int max) throws AxisFault {
-		return getBeanUtil().getBean(ServerWebService.class, getServletContext()).getServers(SID, start, max);
+		return getBean(ServerWebService.class).getServers(SID, start, max);
 	}
 
 	/**
 	 * Proxy method please see {@link ServerWebService#getServerCount(String)}
 	 */
 	public int getServerCount(String SID) throws AxisFault {
-		return getBeanUtil().getBean(ServerWebService.class, getServletContext()).getServerCount(SID);
+		return getBean(ServerWebService.class).getServerCount(SID);
 	}
 
 	/**
@@ -45,7 +45,7 @@ public class ServerWebServiceFacade extends BaseWebService {
 	public long saveServer(String SID, long id, String name, String address,
 			int port, String user, String pass, String webapp, String protocol,
 			Boolean active, String comment) throws AxisFault {
-		return getBeanUtil().getBean(ServerWebService.class, getServletContext()).saveServer(SID, id, name, address, port,
+		return getBean(ServerWebService.class).saveServer(SID, id, name, address, port,
 				user, pass, webapp, protocol, active, comment);
 	}
 
@@ -54,7 +54,7 @@ public class ServerWebServiceFacade extends BaseWebService {
 	 * {@link ServerWebService#deleteServer(String, long)}
 	 */
 	public boolean deleteServer(String SID, long id) throws AxisFault {
-		return getBeanUtil().getBean(ServerWebService.class, getServletContext()).deleteServer(SID, id);
+		return getBean(ServerWebService.class).deleteServer(SID, id);
 	}
 
 }

@@ -20,32 +20,31 @@ package org.apache.openmeetings.axis.services;
 
 import javax.servlet.ServletContext;
 
+import org.apache.axis2.AxisFault;
 import org.apache.axis2.context.MessageContext;
 import org.apache.axis2.transport.http.HTTPConstants;
-import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.servlet.BeanUtil;
-import org.red5.logging.Red5LoggerFactory;
-import org.slf4j.Logger;
+import org.apache.openmeetings.servlet.ServerNotInitializedException;
 
 public abstract class BaseWebService {
-	
-	private static final Logger log = Red5LoggerFactory.getLogger(
-			BaseWebService.class, OpenmeetingsVariables.webAppRootKey);
-
 	private BeanUtil beanUtil = new BeanUtil();
 	
-	protected BeanUtil getBeanUtil() {
-		return beanUtil;
-	}
-	
-	protected ServletContext getServletContext() {
+	private ServletContext getServletContext() throws AxisFault {
 		try {
 			MessageContext mc = MessageContext.getCurrentMessageContext();
 			return (ServletContext) mc
 					.getProperty(HTTPConstants.MC_HTTP_SERVLETCONTEXT);
 		} catch (Exception err) {
-			log.error("[getServletContext]", err);
+			throw new AxisFault("Servlet context is not available yet, retry in couple of seconds");
 		}
-		return null;
+	}
+	
+	// package access
+	<T> T getBean(Class<? extends T> clazz) throws AxisFault {
+		try {
+			return beanUtil.getBean(clazz, getServletContext());
+		} catch (ServerNotInitializedException e) {
+			throw new AxisFault(e.getMessage());
+		}
 	}
 }

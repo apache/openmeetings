@@ -32,7 +32,7 @@ public class UserWebServiceFacade extends BaseWebService {
 	 * @return Sessiondata-Object
 	 */
 	public Sessiondata getSession() throws AxisFault {
-		return getBeanUtil().getBean(UserWebService.class, getServletContext()).getSession();
+		return getBean(UserWebService.class).getSession();
 	}
 
 	/**
@@ -47,7 +47,7 @@ public class UserWebServiceFacade extends BaseWebService {
 	 */
 	public Long loginUser(String SID, String username, String userpass)
 			throws AxisFault {
-		return getBeanUtil().getBean(UserWebService.class, getServletContext()).loginUser(SID, username, userpass);
+		return getBean(UserWebService.class).loginUser(SID, username, userpass);
 	}
 
 	/**
@@ -57,9 +57,10 @@ public class UserWebServiceFacade extends BaseWebService {
 	 * @param errorid
 	 * @param language_id
 	 * @return
+	 * @throws AxisFault 
 	 */
-	public ErrorResult getErrorByCode(String SID, Long errorid, Long language_id) {
-		return getBeanUtil().getBean(UserWebService.class, getServletContext()).getErrorByCode(SID, errorid, language_id);
+	public ErrorResult getErrorByCode(String SID, Long errorid, Long language_id) throws AxisFault {
+		return getBean(UserWebService.class).getErrorByCode(SID, errorid, language_id);
 	}
 
 	public Long addNewUser(String SID, String username, String userpass,
@@ -67,7 +68,7 @@ public class UserWebServiceFacade extends BaseWebService {
 			String additionalname, String street, String zip, String fax,
 			long states_id, String town, long language_id, String baseURL)
 			throws AxisFault {
-		return getBeanUtil().getBean(UserWebService.class, getServletContext()).addNewUser(SID, username, userpass,
+		return getBean(UserWebService.class).addNewUser(SID, username, userpass,
 				lastname, firstname, email, additionalname, street, zip, fax,
 				states_id, town, language_id, baseURL);
 	}
@@ -77,7 +78,7 @@ public class UserWebServiceFacade extends BaseWebService {
 			String additionalname, String street, String zip, String fax,
 			long states_id, String town, long language_id, String baseURL,
 			String jNameTimeZone) throws AxisFault {
-		return getBeanUtil().getBean(UserWebService.class, getServletContext()).addNewUserWithTimeZone(SID, username,
+		return getBean(UserWebService.class).addNewUserWithTimeZone(SID, username,
 				userpass, lastname, firstname, email, additionalname, street,
 				zip, fax, states_id, town, language_id, baseURL, jNameTimeZone);
 
@@ -113,7 +114,7 @@ public class UserWebServiceFacade extends BaseWebService {
 			long states_id, String town, long language_id,
 			String jNameTimeZone, String externalUserId, String externalUserType)
 			throws AxisFault {
-		return getBeanUtil().getBean(UserWebService.class, getServletContext()).addNewUserWithExternalType(SID, username,
+		return getBean(UserWebService.class).addNewUserWithExternalType(SID, username,
 				userpass, lastname, firstname, email, additionalname, street,
 				zip, fax, states_id, town, language_id, jNameTimeZone,
 				externalUserId, externalUserType);
@@ -130,7 +131,7 @@ public class UserWebServiceFacade extends BaseWebService {
 	 * @throws AxisFault
 	 */
 	public Long deleteUserById(String SID, Long userId) throws AxisFault {
-		return getBeanUtil().getBean(UserWebService.class, getServletContext()).deleteUserById(SID, userId);
+		return getBean(UserWebService.class).deleteUserById(SID, userId);
 	}
 
 	/**
@@ -145,7 +146,7 @@ public class UserWebServiceFacade extends BaseWebService {
 	 */
 	public Long deleteUserByExternalUserIdAndType(String SID,
 			String externalUserId, String externalUserType) throws AxisFault {
-		return getBeanUtil().getBean(UserWebService.class, getServletContext()).deleteUserByExternalUserIdAndType(SID,
+		return getBean(UserWebService.class).deleteUserByExternalUserIdAndType(SID,
 				externalUserId, externalUserType);
 	}
 
@@ -163,7 +164,7 @@ public class UserWebServiceFacade extends BaseWebService {
 	public Long setUserObject(String SID, String username, String firstname,
 			String lastname, String profilePictureUrl, String email)
 			throws AxisFault {
-		return getBeanUtil().getBean(UserWebService.class, getServletContext()).setUserObject(SID, username, firstname,
+		return getBean(UserWebService.class).setUserObject(SID, username, firstname,
 				lastname, profilePictureUrl, email);
 	}
 
@@ -191,7 +192,7 @@ public class UserWebServiceFacade extends BaseWebService {
 			String firstname, String lastname, String profilePictureUrl,
 			String email, String externalUserId, String externalUserType)
 			throws AxisFault {
-		return getBeanUtil().getBean(UserWebService.class, getServletContext()).setUserObjectWithExternalUser(SID,
+		return getBean(UserWebService.class).setUserObjectWithExternalUser(SID,
 				username, firstname, lastname, profilePictureUrl, email,
 				externalUserId, externalUserType);
 	}
@@ -201,7 +202,7 @@ public class UserWebServiceFacade extends BaseWebService {
 			String email, String externalUserId, String externalUserType,
 			Long room_id, int becomeModeratorAsInt, int showAudioVideoTestAsInt)
 			throws AxisFault {
-		return getBeanUtil().getBean(UserWebService.class, getServletContext()).setUserObjectAndGenerateRoomHash(SID,
+		return getBean(UserWebService.class).setUserObjectAndGenerateRoomHash(SID,
 				username, firstname, lastname, profilePictureUrl, email,
 				externalUserId, externalUserType, room_id,
 				becomeModeratorAsInt, showAudioVideoTestAsInt);
@@ -212,7 +213,7 @@ public class UserWebServiceFacade extends BaseWebService {
 			String profilePictureUrl, String email, String externalUserId,
 			String externalUserType, Long room_id, int becomeModeratorAsInt,
 			int showAudioVideoTestAsInt) throws AxisFault {
-		return getBeanUtil().getBean(UserWebService.class, getServletContext()).setUserObjectAndGenerateRoomHashByURL(SID,
+		return getBean(UserWebService.class).setUserObjectAndGenerateRoomHashByURL(SID,
 				username, firstname, lastname, profilePictureUrl, email,
 				externalUserId, externalUserType, room_id,
 				becomeModeratorAsInt, showAudioVideoTestAsInt);
@@ -223,7 +224,7 @@ public class UserWebServiceFacade extends BaseWebService {
 			String profilePictureUrl, String email, String externalUserId,
 			String externalUserType, Long room_id, int becomeModeratorAsInt,
 			int showAudioVideoTestAsInt, int allowRecording) throws AxisFault {
-		return getBeanUtil().getBean(UserWebService.class, getServletContext())
+		return getBean(UserWebService.class)
 				.setUserObjectAndGenerateRoomHashByURLAndRecFlag(SID, username,
 						firstname, lastname, profilePictureUrl, email,
 						externalUserId, externalUserType, room_id,
@@ -235,7 +236,7 @@ public class UserWebServiceFacade extends BaseWebService {
 			String firstname, String lastname, String profilePictureUrl,
 			String email, String externalUserId, String externalUserType)
 			throws AxisFault {
-		return getBeanUtil().getBean(UserWebService.class, getServletContext()).setUserObjectMainLandingZone(SID,
+		return getBean(UserWebService.class).setUserObjectMainLandingZone(SID,
 				username, firstname, lastname, profilePictureUrl, email,
 				externalUserId, externalUserType);
 	}
@@ -246,7 +247,7 @@ public class UserWebServiceFacade extends BaseWebService {
 			Long room_id, int becomeModeratorAsInt,
 			int showAudioVideoTestAsInt, int showNickNameDialogAsInt)
 			throws AxisFault {
-		return getBeanUtil().getBean(UserWebService.class, getServletContext()).setUserAndNickName(SID, username,
+		return getBean(UserWebService.class).setUserAndNickName(SID, username,
 				firstname, lastname, profilePictureUrl, email, externalUserId,
 				externalUserType, room_id, becomeModeratorAsInt,
 				showAudioVideoTestAsInt, showNickNameDialogAsInt);
@@ -256,7 +257,7 @@ public class UserWebServiceFacade extends BaseWebService {
 			String username, String firstname, String lastname,
 			String externalUserId, String externalUserType, Long recording_id)
 			throws AxisFault {
-		return getBeanUtil().getBean(UserWebService.class, getServletContext())
+		return getBean(UserWebService.class)
 				.setUserObjectAndGenerateRecordingHashByURL(SID, username,
 						firstname, lastname, externalUserId, externalUserType,
 						recording_id);
@@ -265,24 +266,24 @@ public class UserWebServiceFacade extends BaseWebService {
 	public Long addUserToOrganisation(String SID, Long user_id,
 			Long organisation_id, Long insertedby)
 			throws AxisFault {
-		return getBeanUtil().getBean(UserWebService.class, getServletContext()).addUserToOrganisation(SID, user_id,
+		return getBean(UserWebService.class).addUserToOrganisation(SID, user_id,
 				organisation_id, insertedby);
 	}
 
 	public SearchResult<User> getUsersByOrganisation(String SID,
 			long organisation_id, int start, int max, String orderby,
 			boolean asc) throws AxisFault {
-		return getBeanUtil().getBean(UserWebService.class, getServletContext()).getUsersByOrganisation(SID,
+		return getBean(UserWebService.class).getUsersByOrganisation(SID,
 				organisation_id, start, max, orderby, asc);
 	}
 
 	public Boolean kickUserByPublicSID(String SID, String publicSID)
 			throws AxisFault {
-		return getBeanUtil().getBean(UserWebService.class, getServletContext()).kickUserByPublicSID(SID, publicSID);
+		return getBean(UserWebService.class).kickUserByPublicSID(SID, publicSID);
 	}
 	
 	public Long addOrganisation(String SID, String name) throws AxisFault {
-		return getBeanUtil().getBean(UserWebService.class, getServletContext()).addOrganisation(SID, name);
+		return getBean(UserWebService.class).addOrganisation(SID, name);
 	}
 
 }

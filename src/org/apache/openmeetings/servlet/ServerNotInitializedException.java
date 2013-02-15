@@ -18,14 +18,10 @@
  */
 package org.apache.openmeetings.servlet;
 
-import javax.servlet.http.HttpServlet;
-
-public abstract class BaseHttpServlet extends HttpServlet {
-	private static final long serialVersionUID = -2713422496723115524L;
+public class ServerNotInitializedException extends RuntimeException {
+	private static final long serialVersionUID = -7771909924751249321L;
 	
-	private BeanUtil beanUtil = new BeanUtil();
-
-	protected <T> T getBean(Class<T> beanClass) {
-		return beanUtil.getBean(beanClass, getServletContext());
+	public ServerNotInitializedException(String msg) {
+		super(msg);
 	}
 }

@@ -20,27 +20,15 @@ package org.apache.openmeetings.servlet;
 
 import javax.servlet.ServletContext;
 
-import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.remote.red5.ScopeApplicationAdapter;
-import org.red5.logging.Red5LoggerFactory;
-import org.slf4j.Logger;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
 public class BeanUtil {
-	
-	private static final Logger log = Red5LoggerFactory.getLogger(
-			BeanUtil.class, OpenmeetingsVariables.webAppRootKey);
-	
 	public <T> T getBean(Class<T> beanClass, ServletContext ctx) {
-		try {
-			if (ScopeApplicationAdapter.initComplete) {
-				return WebApplicationContextUtils.getWebApplicationContext(
-						ctx).getBean(beanClass);
-			}
-		} catch (Exception err) {
-			log.error("[getBean]", err);
+		if (ScopeApplicationAdapter.initComplete) {
+			return WebApplicationContextUtils.getWebApplicationContext(ctx).getBean(beanClass);
+		} else {
+			throw new ServerNotInitializedException("Server not yet initialized, retry in couple of seconds");
 		}
-		return null;
 	}
-
 }

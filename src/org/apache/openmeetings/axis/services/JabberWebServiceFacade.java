@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.axis.services;
 
+import org.apache.axis2.AxisFault;
 import org.apache.openmeetings.persistence.beans.room.Room;
 
 /**
@@ -34,9 +35,10 @@ public class JabberWebServiceFacade extends BaseWebService {
 	 * 
 	 * @param SID The SID from {@link UserWebService.getSession}
 	 * @return array of Rooms
+	 * @throws AxisFault 
 	 */
-	public Room[] getAvailableRooms(String SID) {
-		return getBeanUtil().getBean(JabberWebService.class, getServletContext()).getAvailableRooms(SID).toArray(new Room[0]);
+	public Room[] getAvailableRooms(String SID) throws AxisFault {
+		return getBean(JabberWebService.class).getAvailableRooms(SID).toArray(new Room[0]);
 	}
 
 	/**
@@ -46,9 +48,10 @@ public class JabberWebServiceFacade extends BaseWebService {
 	 * @param SID The SID from {@link UserWebService.getSession}
 	 * @param roomId id of the room to get users
 	 * @return number of users as int
+	 * @throws AxisFault 
 	 */
-	public int getUserCount(String SID, Long roomId) {
-		return getBeanUtil().getBean(JabberWebService.class, getServletContext()).getUserCount(SID, roomId);
+	public int getUserCount(String SID, Long roomId) throws AxisFault {
+		return getBean(JabberWebService.class).getUserCount(SID, roomId);
 	}
 
 	/**
@@ -59,9 +62,10 @@ public class JabberWebServiceFacade extends BaseWebService {
 	 * @param username The name of invited user, will be displayed in the rooms user list
 	 * @param room_id id of the room to get users
 	 * @return hash to enter the room
+	 * @throws AxisFault 
 	 */
-	public String getInvitationHash(String SID, String username, Long room_id) {
-		return getBeanUtil().getBean(JabberWebService.class, getServletContext())
+	public String getInvitationHash(String SID, String username, Long room_id) throws AxisFault {
+		return getBean(JabberWebService.class)
 				.getInvitationHash(SID, username, room_id);
 	}
 }

@@ -21,15 +21,11 @@ package org.apache.openmeetings.servlet;
 import org.apache.velocity.tools.view.VelocityViewServlet;
 
 public abstract class BaseVelocityViewServlet extends VelocityViewServlet {
-
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 5075547695876679590L;
 	
 	private BeanUtil beanUtil = new BeanUtil();
 
-	public <T> T getBean(Class<T> beanClass) {
+	protected <T> T getBean(Class<T> beanClass) {
 		return beanUtil.getBean(beanClass, getServletContext());
 	}
 }
