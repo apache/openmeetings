@@ -21,7 +21,7 @@
 			<div>
 				All downloads can be verified using the Apache OpenMeetings code
 				signing
-				<a href="http://www.apache.org/dist/incubator/openmeetings/KEYS">KEYS</a>
+				<a href="http://archive.apache.org/dist/incubator/openmeetings/2.0-incubating/KEYS">KEYS</a>
 				.
 			</div>
 			<p>
@@ -37,14 +37,14 @@
 						Binaries:
 						<ul>
 							<li>
-								<a href="http://www.apache.org/dyn/closer.cgi/incubator/openmeetings/2.0-incubating/apache-openmeetings-incubating-2.0.0.r1361497-14-07-2012_1108.zip">apache-openmeetings-incubating-2.0.0.r1361497-14-07-2012_1108.zip</a>
-								<a href="http://www.apache.org/dist/incubator/openmeetings/2.0-incubating/apache-openmeetings-incubating-2.0.0.r1361497-14-07-2012_1108.zip.sig">[SIG]</a>
-								<a href="http://www.apache.org/dist/incubator/openmeetings/2.0-incubating/apache-openmeetings-incubating-2.0.0.r1361497-14-07-2012_1108.zip.md5">[MD5]</a>
+								<a href="http://archive.apache.org/dist/incubator/openmeetings/2.0-incubating/apache-openmeetings-incubating-2.0.0.r1361497-14-07-2012_1108.zip">apache-openmeetings-incubating-2.0.0.r1361497-14-07-2012_1108.zip</a>
+								<a href="http://archive.apache.org/dist/incubator/openmeetings/2.0-incubating/apache-openmeetings-incubating-2.0.0.r1361497-14-07-2012_1108.zip.sig">[SIG]</a>
+								<a href="http://archive.apache.org/dist/incubator/openmeetings/2.0-incubating/apache-openmeetings-incubating-2.0.0.r1361497-14-07-2012_1108.zip.md5">[MD5]</a>
 							</li>
 							<li>
-								<a href="http://www.apache.org/dyn/closer.cgi/incubator/openmeetings/2.0-incubating/apache-openmeetings-incubating-2.0.0.r1361497-14-07-2012_1108.tar.gz">apache-openmeetings-incubating-2.0.0.r1361497-14-07-2012_1108.tar.gz</a>
-								<a href="http://www.apache.org/dist/incubator/openmeetings/2.0-incubating/apache-openmeetings-incubating-2.0.0.r1361497-14-07-2012_1108.tar.gz.sig">[SIG]</a>
-								<a href="http://www.apache.org/dist/incubator/openmeetings/2.0-incubating/apache-openmeetings-incubating-2.0.0.r1361497-14-07-2012_1108.tar.gz.md5">[MD5]</a>
+								<a href="http://archive.apache.org/dist/incubator/openmeetings/2.0-incubating/apache-openmeetings-incubating-2.0.0.r1361497-14-07-2012_1108.tar.gz">apache-openmeetings-incubating-2.0.0.r1361497-14-07-2012_1108.tar.gz</a>
+								<a href="http://archive.apache.org/dist/incubator/openmeetings/2.0-incubating/apache-openmeetings-incubating-2.0.0.r1361497-14-07-2012_1108.tar.gz.sig">[SIG]</a>
+								<a href="http://archive.apache.org/dist/incubator/openmeetings/2.0-incubating/apache-openmeetings-incubating-2.0.0.r1361497-14-07-2012_1108.tar.gz.md5">[MD5]</a>
 							</li>
 						</ul>
 					</li>
@@ -52,14 +52,14 @@
 						Sources:
 						<ul>
 							<li>
-								<a href="http://www.apache.org/dyn/closer.cgi/incubator/openmeetings/2.0-incubating/apache-openmeetings-incubating-2.0.0.r1361497-14-07-2012_1108-src.zip">apache-openmeetings-incubating-2.0.0.r1361497-14-07-2012_1108-src.zip</a>
-								<a href="http://www.apache.org/dist/incubator/openmeetings/2.0-incubating/apache-openmeetings-incubating-2.0.0.r1361497-14-07-2012_1108-src.zip.sig">[SIG]</a>
-								<a href="http://www.apache.org/dist/incubator/openmeetings/2.0-incubating/apache-openmeetings-incubating-2.0.0.r1361497-14-07-2012_1108-src.zip.md5">[MD5]</a>
+								<a href="http://archive.apache.org/dist/incubator/openmeetings/2.0-incubating/apache-openmeetings-incubating-2.0.0.r1361497-14-07-2012_1108-src.zip">apache-openmeetings-incubating-2.0.0.r1361497-14-07-2012_1108-src.zip</a>
+								<a href="http://archive.apache.org/dist/incubator/openmeetings/2.0-incubating/apache-openmeetings-incubating-2.0.0.r1361497-14-07-2012_1108-src.zip.sig">[SIG]</a>
+								<a href="http://archive.apache.org/dist/incubator/openmeetings/2.0-incubating/apache-openmeetings-incubating-2.0.0.r1361497-14-07-2012_1108-src.zip.md5">[MD5]</a>
 							</li>
 							<li>
-								<a href="http://www.apache.org/dyn/closer.cgi/incubator/openmeetings/2.0-incubating/apache-openmeetings-incubating-2.0.0.r1361497-14-07-2012_1108-src.tar.gz">apache-openmeetings-incubating-2.0.0.r1361497-14-07-2012_1108-src.tar.gz</a>
-								<a href="http://www.apache.org/dist/incubator/openmeetings/2.0-incubating/apache-openmeetings-incubating-2.0.0.r1361497-14-07-2012_1108-src.tar.gz.sig">[SIG]</a>
-								<a href="http://www.apache.org/dist/incubator/openmeetings/2.0-incubating/apache-openmeetings-incubating-2.0.0.r1361497-14-07-2012_1108-src.tar.gz.md5">[MD5]</a>
+								<a href="http://archive.apache.org/dist/incubator/openmeetings/2.0-incubating/apache-openmeetings-incubating-2.0.0.r1361497-14-07-2012_1108-src.tar.gz">apache-openmeetings-incubating-2.0.0.r1361497-14-07-2012_1108-src.tar.gz</a>
+								<a href="http://archive.apache.org/dist/incubator/openmeetings/2.0-incubating/apache-openmeetings-incubating-2.0.0.r1361497-14-07-2012_1108-src.tar.gz.sig">[SIG]</a>
+								<a href="http://archive.apache.org/dist/incubator/openmeetings/2.0-incubating/apache-openmeetings-incubating-2.0.0.r1361497-14-07-2012_1108-src.tar.gz.md5">[MD5]</a>
 							</li>
 						</ul>
 					</li>
