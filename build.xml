@@ -54,6 +54,7 @@
 	<property name="dist.persistence.dir" value="${dist.webapps.dir}/WEB-INF/classes/META-INF/" />
 
 	<property name="laszlo.home" value="${build.base.dir}/openlaszlo" />
+	<property name="laszlo46.home" value="${build.base.dir}/openlaszlo46" />
 
 	<!-- screenshare.out.dir -->
 	<property name="screenshare.out.dir" value="${dist.webapps.dir}/screensharing" />
@@ -79,6 +80,10 @@
 			fxgutils.jar" />
 	</path>
 
+	<path id="laszlo46.lib">
+		<fileset dir="${laszlo46.home}/WEB-INF/lib" includes="*.jar" />
+	</path>
+	
 	<!-- compile classpath -->
 	<path id="check.classpath">
 		<fileset dir="${red5.server.lib}" includes="*.jar" />
@@ -113,6 +118,7 @@
 		<mkdir dir="${dtd-generator.lib.dir}" />
 		<mkdir dir="${svntask.lib.dir}" />
 		<mkdir dir="${laszlo.home}" />
+		<mkdir dir="${laszlo46.home}" />
 		<echo file="${build.base.dir}/velocity.properties" append="false">runtime.log = ${build.base.dir}/velocity.log${line.separator}output.encoding=UTF-8${line.separator}</echo>
 	</target>
 
@@ -465,8 +471,8 @@
 	<target name="-compile.flash" description="compile flash application">
 		<!-- commented for now
 		<echo message="flash.src.dir == '${flash.src.dir}'" />
-		<echo message="classpathref == '${laszlo.lib}'" />
-		<echo message="laszlo.home == '${laszlo.home}'" />
+		<echo message="classpathref == '${flash.classpath.ref}'" />
+		<echo message="laszlo.home == '${flash.lps.home}'" />
 		<echo message="flash.debug == '${flash.debug}'" />
 		<echo message="laszlo.proxied == '${laszlo.proxied}'" />
 		<echo message="flash.runtime == '${flash.runtime}'" />
@@ -474,8 +480,8 @@
 		<echo message="flash.main.file == '${flash.main.file}'" />
 		<echo message="flash.out.file == '${flash.out.file}'" />
 		-->
-		<java classname="org.openlaszlo.compiler.Main" fork="true" newenvironment="true" failonerror="true" dir="${flash.src.dir}" classpathref="laszlo.lib">
-			<jvmarg value="-DLPS_HOME=${laszlo.home}" />
+		<java classname="org.openlaszlo.compiler.Main" fork="true" newenvironment="true" failonerror="true" dir="${flash.src.dir}" classpathref="${flash.classpath.ref}">
+			<jvmarg value="-DLPS_HOME=${flash.lps.home}" />
 			<jvmarg value="-Dlzdebug=false" />
 			<jvmarg value="-Dlzproxied=${laszlo.proxied}" />
 			<jvmarg value="-Xms512M" />
@@ -486,7 +492,9 @@
 
 	<target name="compile.laszlo.networktesting" depends="compile.laszlo.networktesting.debug">
 		<antcall target="-compile.flash" inheritAll="true" inheritRefs="true">
+			<param name="flash.classpath.ref" value="laszlo.lib" />
 			<param name="flash.src.dir" value="${laszlo.as3.src.dir}/networkTesting" />
+			<param name="flash.lps.home" value="${laszlo.home}" />
 			<param name="flash.runtime" value="swf10" />
 			<param name="flash.main.file" value="networktesting.lzx" />
 			<param name="flash.out.file" value="networktesting.swf10.swf" />
@@ -494,9 +502,11 @@
 		</antcall>
 	</target>
 
-	<target name="compile.laszlo.networktesting.debug">
+	<target name="compile.laszlo.networktesting.debug" depends="-retrieve-openlaszlo">
 		<antcall target="-compile.flash" inheritAll="true" inheritRefs="true">
+			<param name="flash.classpath.ref" value="laszlo.lib" />
 			<param name="flash.src.dir" value="${laszlo.as3.src.dir}/networkTesting" />
+			<param name="flash.lps.home" value="${laszlo.home}" />
 			<param name="flash.runtime" value="swf10" />
 			<param name="flash.main.file" value="networktesting.lzx" />
 			<param name="flash.out.file" value="networktestingdebug.swf10.swf" />
@@ -506,7 +516,9 @@
 
 	<target name="compile.laszlo.main.as3" depends="compile.laszlo.main.debug.as3">
 		<antcall target="-compile.flash" inheritAll="true" inheritRefs="true">
+			<param name="flash.classpath.ref" value="laszlo.lib" />
 			<param name="flash.src.dir" value="${laszlo.as3.src.dir}" />
+			<param name="flash.lps.home" value="${laszlo.home}" />
 			<param name="flash.runtime" value="swf10" />
 			<param name="flash.main.file" value="main.as3.lzx" />
 			<param name="flash.out.file" value="main.as3.swf10.swf" />
@@ -516,7 +528,9 @@
 
 	<target name="compile.laszlo.main.debug.as3" depends="-retrieve-openlaszlo">
 		<antcall target="-compile.flash" inheritAll="true" inheritRefs="true">
+			<param name="flash.classpath.ref" value="laszlo.lib" />
 			<param name="flash.src.dir" value="${laszlo.as3.src.dir}" />
+			<param name="flash.lps.home" value="${laszlo.home}" />
 			<param name="flash.runtime" value="swf10" />
 			<param name="flash.main.file" value="main.as3.lzx" />
 			<param name="flash.out.file" value="maindebug.as3.swf10.swf" />
@@ -526,7 +540,9 @@
 
 	<target name="compile.laszlo.main" depends="compile.laszlo.main.debug">
 		<antcall target="-compile.flash" inheritAll="true" inheritRefs="true">
+			<param name="flash.classpath.ref" value="laszlo.lib" />
 			<param name="flash.src.dir" value="${laszlo.src.dir}" />
+			<param name="flash.lps.home" value="${laszlo.home}" />
 			<param name="flash.runtime" value="swf8" />
 			<param name="flash.main.file" value="main.lzx" />
 			<param name="flash.out.file" value="main.swf8.swf" />
@@ -536,7 +552,9 @@
 
 	<target name="compile.laszlo.main.debug" depends="-retrieve-openlaszlo">
 		<antcall target="-compile.flash" inheritAll="true" inheritRefs="true">
+			<param name="flash.classpath.ref" value="laszlo.lib" />
 			<param name="flash.src.dir" value="${laszlo.src.dir}" />
+			<param name="flash.lps.home" value="${laszlo.home}" />
 			<param name="flash.runtime" value="swf8" />
 			<param name="flash.main.file" value="main.lzx" />
 			<param name="flash.out.file" value="maindebug.swf8.swf" />
@@ -850,6 +868,7 @@
 		<available classpathref="check.classpath" classname="com.mysql.jdbc.Driver" property="mysql.installed" />
 		<available classpathref="check.classpath" classname="org.apache.derby.jdbc.ClientDriver" property="derby.installed" />
 		<available file="${laszlo.home}/WEB-INF/lib" type="dir" property="laszlo.installed" />
+		<available file="${laszlo46.home}/WEB-INF/lib" type="dir" property="laszlo46.installed" />
 		<available file="${red5.lib}/red5.sh" type="file" property="red5.installed" />
 		<available classpathref="check.classpath" classname="org.red5.client.net.rtmp.RTMPClient" property="red5.client.installed" />
 	</target>
@@ -1051,6 +1070,12 @@
 			<param name="ivy.lib.location" value="${laszlo.home}" />
 		</antcall>
 	</target>
+	<target name="-retrieve-openlaszlo46" unless="laszlo46.installed" description="Retrieves the libraries if needed" depends="-availability-check">
+		<antcall target="-retrieve" inheritAll="true" inheritRefs="true">
+			<param name="ivy.conf.name" value="openlaszlo46" />
+			<param name="ivy.lib.location" value="${laszlo46.home}" />
+		</antcall>
+	</target>
 	<!-- Check for Command line admin depandencies -->
 	<target name="-retrieve-cmdadmin" unless="cmdadmin.installed" description="Retrieves the libraries if needed" depends="-availability-check">
 		<antcall target="-retrieve" inheritAll="true" inheritRefs="true">
@@ -1118,6 +1143,7 @@
 		<antcall target="-retrieve-dtd-generator" inheritAll="true" inheritRefs="true" />
 		<antcall target="-retrieve-tools.jar" inheritAll="true" inheritRefs="true" />
 		<antcall target="-retrieve-openlaszlo" inheritAll="true" inheritRefs="true" />
+		<antcall target="-retrieve-openlaszlo46" inheritAll="true" inheritRefs="true" />
 		<antcall target="-retrieve-cmdadmin" inheritAll="true" inheritRefs="true" />
 		<antcall target="-process-db" inheritAll="true" inheritRefs="true" />
 	</target>

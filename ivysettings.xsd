@@ -24,7 +24,7 @@
       <xs:sequence>
         <xs:element ref="settings"/>
         <xs:element ref="resolvers"/>
-        <xs:element ref="triggers"/>
+        <xs:element ref="triggers" minOccurs="0"/>
       </xs:sequence>
     </xs:complexType>
   </xs:element>
