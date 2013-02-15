@@ -18,6 +18,10 @@
  */
 package org.apache.openmeetings.servlet;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.velocity.Template;
 import org.apache.velocity.tools.view.VelocityViewServlet;
 
 public abstract class BaseVelocityViewServlet extends VelocityViewServlet {
@@ -27,5 +31,22 @@ public abstract class BaseVelocityViewServlet extends VelocityViewServlet {
 
 	protected <T> T getBean(Class<T> beanClass) {
 		return beanUtil.getBean(beanClass, getServletContext());
+	}
+	
+	protected Template getBooting() {
+		return getVelocityView().getVelocityEngine().getTemplate("booting_install.vm");
+	}
+	
+	@Override
+	protected void error(HttpServletRequest request, HttpServletResponse response, Throwable e) {
+		if (e instanceof ServerNotInitializedException) {
+            try {
+				mergeTemplate(getBooting(), createContext(request, response), response);
+				return;
+			} catch (Exception e1) {
+				// no-op
+			}
+		}
+		super.error(request, response, e);
 	}
 }

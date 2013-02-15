@@ -27,6 +27,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
 import org.apache.openmeetings.servlet.BaseVelocityViewServlet;
+import org.apache.openmeetings.servlet.ServerNotInitializedException;
 import org.apache.velocity.Template;
 import org.apache.velocity.context.Context;
 import org.red5.logging.Red5LoggerFactory;
@@ -44,12 +45,6 @@ public class DefaultIndex extends BaseVelocityViewServlet {
 			HttpServletResponse httpServletResponse, Context ctx) {
 
 		try {
-
-			if (getBean(ConfigurationDao.class) == null) {
-				return getVelocityView().getVelocityEngine().getTemplate(
-						"booting.vm");
-			}
-
 			String template = "usual_template.vm";
 			ctx.put("APP_NAME", getBean(ConfigurationDao.class).getAppName());
 			// Parse the Param for the SWF URL
@@ -108,9 +103,9 @@ public class DefaultIndex extends BaseVelocityViewServlet {
 
 			return getVelocityView().getVelocityEngine().getTemplate(template);
 
+		} catch (ServerNotInitializedException err) {
+			return getBooting();
 		} catch (Exception er) {
-			System.out.println("Error downloading: " + er);
-			er.printStackTrace();
 			log.error("[Calendar :: service]", er);
 		}
 		return null;

@@ -30,6 +30,7 @@ import org.apache.openmeetings.data.user.UserManager;
 import org.apache.openmeetings.persistence.beans.lang.Fieldlanguagesvalues;
 import org.apache.openmeetings.persistence.beans.user.User;
 import org.apache.openmeetings.servlet.BaseVelocityViewServlet;
+import org.apache.openmeetings.servlet.ServerNotInitializedException;
 import org.apache.velocity.Template;
 import org.apache.velocity.context.Context;
 import org.red5.logging.Red5LoggerFactory;
@@ -47,14 +48,6 @@ public class ActivateUser extends BaseVelocityViewServlet {
 			HttpServletResponse httpServletResponse, Context ctx) {
 
 		try {
-
-			if (getBean(ConfigurationDao.class) == null
-					|| getBean(UserManager.class) == null
-					|| getBean(FieldManager.class) == null) {
-				return getVelocityView().getVelocityEngine().getTemplate(
-						"booting.vm");
-			}
-
 			String hash = httpServletRequest.getParameter("u");
 			String loginURL = OpenmeetingsVariables.webAppRootPath;
 
@@ -139,6 +132,8 @@ public class ActivateUser extends BaseVelocityViewServlet {
 
 			}
 
+		} catch (ServerNotInitializedException err) {
+			return getBooting();
 		} catch (Exception err) {
 			log.error("[ActivateUser]", err);
 			err.printStackTrace();

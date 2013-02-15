@@ -19,7 +19,6 @@
 package org.apache.openmeetings.servlet.outputhandler;
 
 import java.io.File;
-import java.io.IOException;
 import java.io.StringWriter;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -34,6 +33,7 @@ import org.apache.openmeetings.installation.ImportInitvalues;
 import org.apache.openmeetings.installation.InstallationConfig;
 import org.apache.openmeetings.persistence.beans.basic.OmTimeZone;
 import org.apache.openmeetings.servlet.BaseVelocityViewServlet;
+import org.apache.openmeetings.servlet.ServerNotInitializedException;
 import org.apache.openmeetings.utils.ImportHelper;
 import org.apache.openmeetings.utils.OmFileHelper;
 import org.apache.velocity.Template;
@@ -108,21 +108,15 @@ public class Install extends BaseVelocityViewServlet {
 	 * , javax.servlet.http.HttpServletResponse)
 	 */
 	@Override
-	public Template handleRequest(HttpServletRequest httpServletRequest,
-			HttpServletResponse httpServletResponse, Context ctx) {
+	public Template handleRequest(HttpServletRequest request,
+			HttpServletResponse response, Context ctx) {
 
 		try {
 			ctx.put("APP_ROOT", OpenmeetingsVariables.webAppRootKey);
-
-			if (getBean(ImportInitvalues.class) == null || getBean(ConfigurationDao.class) == null) {
-				return getVelocityView().getVelocityEngine().getTemplate(
-						"booting_install.vm");
-			}
-
 			ctx.put("APP_NAME", getBean(ConfigurationDao.class).getAppName());
-			String command = httpServletRequest.getParameter("command");
+			String command = request.getParameter("command");
 
-			String lang = httpServletRequest.getParameter("lang");
+			String lang = request.getParameter("lang");
 			if (lang == null)
 				lang = "EN";
 
@@ -153,7 +147,7 @@ public class Install extends BaseVelocityViewServlet {
 				} else {
 					int i = InstallationDocumentHandler.getCurrentStepNumber();
 					if (i == 0) {
-						return getStep2Template(httpServletRequest, ctx, lang);
+						return getStep2Template(request, ctx, lang);
 					} else {
 						return getVelocityView().getVelocityEngine()
 								.getTemplate("install_step2_" + lang + ".vm");
@@ -164,7 +158,7 @@ public class Install extends BaseVelocityViewServlet {
 
 				int i = InstallationDocumentHandler.getCurrentStepNumber();
 				if (i == 0) {
-					return getStep2Template(httpServletRequest, ctx, lang);
+					return getStep2Template(request, ctx, lang);
 				} else {
 					ctx.put("error",
 							"This Step of the installation has already been done. continue with step 2 <A HREF='?command=step2'>continue with step 2</A>");
@@ -179,47 +173,47 @@ public class Install extends BaseVelocityViewServlet {
 
 					log.debug("do init installation");
 
-					String username = httpServletRequest.getParameter("username");
-					String userpass = httpServletRequest.getParameter("userpass");
-					String useremail = httpServletRequest.getParameter("useremail");
-					String orgname = httpServletRequest.getParameter("orgname");
+					String username = request.getParameter("username");
+					String userpass = request.getParameter("userpass");
+					String useremail = request.getParameter("useremail");
+					String orgname = request.getParameter("orgname");
 					InstallationConfig cfg = new InstallationConfig();
-					cfg.allowFrontendRegister = httpServletRequest.getParameter("configdefault");
+					cfg.allowFrontendRegister = request.getParameter("configdefault");
 
-					cfg.mailReferer = httpServletRequest.getParameter("configreferer");
-					cfg.smtpServer = httpServletRequest.getParameter("configsmtp");
-					cfg.smtpPort = httpServletRequest.getParameter("configsmtpport");
-					cfg.mailAuthName = httpServletRequest.getParameter("configmailuser");
-					cfg.mailAuthPass = httpServletRequest.getParameter("configmailpass");
-					cfg.mailUseTls = httpServletRequest.getParameter("mailusetls");
-					cfg.replyToOrganizer = httpServletRequest.getParameter("replyToOrganizer");
+					cfg.mailReferer = request.getParameter("configreferer");
+					cfg.smtpServer = request.getParameter("configsmtp");
+					cfg.smtpPort = request.getParameter("configsmtpport");
+					cfg.mailAuthName = request.getParameter("configmailuser");
+					cfg.mailAuthPass = request.getParameter("configmailpass");
+					cfg.mailUseTls = request.getParameter("mailusetls");
+					cfg.replyToOrganizer = request.getParameter("replyToOrganizer");
 
-					cfg.defaultLangId = httpServletRequest.getParameter("configdefaultLang");
-					cfg.swfZoom = httpServletRequest.getParameter("swftools_zoom");
-					cfg.swfJpegQuality = httpServletRequest.getParameter("swftools_jpegquality");
-					cfg.swfPath = httpServletRequest.getParameter("swftools_path");
-					cfg.imageMagicPath = httpServletRequest.getParameter("imagemagick_path");
-					cfg.sendEmailAtRegister = httpServletRequest.getParameter("sendEmailAtRegister");
-					cfg.sendEmailWithVerficationCode = httpServletRequest.getParameter("sendEmailWithVerficationCode");
-					cfg.createDefaultRooms = httpServletRequest.getParameter("createDefaultRooms");
+					cfg.defaultLangId = request.getParameter("configdefaultLang");
+					cfg.swfZoom = request.getParameter("swftools_zoom");
+					cfg.swfJpegQuality = request.getParameter("swftools_jpegquality");
+					cfg.swfPath = request.getParameter("swftools_path");
+					cfg.imageMagicPath = request.getParameter("imagemagick_path");
+					cfg.sendEmailAtRegister = request.getParameter("sendEmailAtRegister");
+					cfg.sendEmailWithVerficationCode = request.getParameter("sendEmailWithVerficationCode");
+					cfg.createDefaultRooms = request.getParameter("createDefaultRooms");
 
-					cfg.defaultExportFont = httpServletRequest.getParameter("default_export_font");
+					cfg.defaultExportFont = request.getParameter("default_export_font");
 
-					cfg.cryptClassName = httpServletRequest.getParameter("crypt_ClassName");
+					cfg.cryptClassName = request.getParameter("crypt_ClassName");
 
-					cfg.ffmpegPath = httpServletRequest.getParameter("ffmpeg_path");
+					cfg.ffmpegPath = request.getParameter("ffmpeg_path");
 
-					cfg.soxPath = httpServletRequest.getParameter("sox_path");
+					cfg.soxPath = request.getParameter("sox_path");
 
                     // red5sip integration config
-                    cfg.red5SipEnable = httpServletRequest.getParameter("red5sip_enable");
-                    cfg.red5SipRoomPrefix = httpServletRequest.getParameter("red5sip_room_prefix");
-                    cfg.red5SipExtenContext = httpServletRequest.getParameter("red5sip_exten_context");
+                    cfg.red5SipEnable = request.getParameter("red5sip_enable");
+                    cfg.red5SipRoomPrefix = request.getParameter("red5sip_room_prefix");
+                    cfg.red5SipExtenContext = request.getParameter("red5sip_exten_context");
 
-					String timeZone = httpServletRequest.getParameter("timeZone");
+					String timeZone = request.getParameter("timeZone");
 					cfg.ical_timeZone = timeZone;
 					
-					cfg.jodPath = httpServletRequest.getParameter("jod_path");
+					cfg.jodPath = request.getParameter("jod_path");
 
 					log.debug("step 0+ start init with values. " + username
 							+ " ***** " + useremail + " " + orgname + " "
@@ -256,9 +250,8 @@ public class Install extends BaseVelocityViewServlet {
 				}
 
 			}
-
-		} catch (IOException err) {
-			log.error("Install: ", err);
+		} catch (ServerNotInitializedException err) {
+			return getBooting();
 		} catch (Exception err2) {
 			log.error("Install: ", err2);
 		}
