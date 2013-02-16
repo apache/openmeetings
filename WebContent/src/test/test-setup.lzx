@@ -67,15 +67,19 @@
 
 	<method name="startBroadCast">
 	<![CDATA[
-		this._camera = Camera.getCamera(camDevices.getValue());
+	    if ($debug) Debug.write("startBroadCast 1");
+	    if (this._camera != null) {
+		  this._camera = Camera.getCamera(camDevices.getValue());
+		}
+		if ($debug) Debug.write("startBroadCast 2");
 		//sets the Mode
 		//see: http://help.adobe.com/en_US/FlashPlatform/reference/actionscript/3/flash/media/Camera.html#setMode%28%29
-		this._camera.setMode(Number(streamwidth.getText()),Number(streamheight.getText()),Number(streamfps.getText()),streamfavorarea.getValue());	
-		
+		if (this._camera != null) this._camera.setMode(Number(streamwidth.getText()),Number(streamheight.getText()),Number(streamfps.getText()),streamfavorarea.getValue());	
+		if ($debug) Debug.write("startBroadCast 3");
 		//sets the Quality
 		//see: http://help.adobe.com/en_US/FlashPlatform/reference/actionscript/3/flash/media/Camera.html#setQuality%28%29
-		this._camera.setQuality(Number(streambandwidth.getText()),Number(streamquality.getText()));	
-		
+		if (this._camera != null) this._camera.setQuality(Number(streambandwidth.getText()),Number(streamquality.getText()));	
+		if ($debug) Debug.write("startBroadCast 4");
 		if (useEnhancedMicrophone.getValue()) {
 			this._micro = Microphone.getEnhancedMicrophone(micDevices.getValue());
 			
@@ -84,27 +88,28 @@
 		} else {
 			this._micro = Microphone.getMicrophone(micDevices.getValue());
 		}
-		
+		if ($debug) Debug.write("startBroadCast 5");
 		this._micro.codec = SoundCodec.NELLYMOSER;
-		
+		if ($debug) Debug.write("startBroadCast 6");
 		//sets the Microphone Rate in Khz
 		//see:http://help.adobe.com/en_US/FlashPlatform/reference/actionscript/3/flash/media/Microphone.html#rate
 		this._micro.rate = Number(streamrate.getText());
-		
+		if ($debug) Debug.write("startBroadCast 7");
 		this._micro.gain = 50;
-		
+		if ($debug) Debug.write("startBroadCast 8");
 		//sets wether useEchoSupression should be used or not
 		//http://help.adobe.com/en_US/FlashPlatform/reference/actionscript/3/flash/media/Microphone.html#useEchoSuppression
 		this._micro.setUseEchoSuppression(streamuseEchoSuppression.getValue());
-		
+		if ($debug) Debug.write("startBroadCast 9");
 		//attaches the Camera to the View
-		broadCastVideo.attachVideo(this._camera);
-		
+		if (this._camera != null) broadCastVideo.attachVideo(this._camera);
+		if ($debug) Debug.write("startBroadCast 10");
 		this._nsBroadCast =  new NetStream(this._nc);
 		//see: http://livedocs.adobe.com/flash/9.0_de/ActionScriptLangRefV3/flash/net/NetStream.html
         //according to the docs the construct to catch event has to be implemented like this.
         var t = this;
 		var clientObject = new Object();
+		if ($debug) Debug.write("startBroadCast 11");
 		clientObject.onMetaData = function(metadata:Object):void {
 			t.onMetaData(metadata);
 		};
@@ -123,14 +128,16 @@
 		clientObject.asyncError = function(error:Object):void {
 			t.asyncError(error);
 		};
+		if ($debug) Debug.write("startBroadCast 12");
 		this._nsBroadCast.client = clientObject;
 		//this is a workaround, attaching the event to the client object does not work
 		this._nsBroadCast.addEventListener(NetStatusEvent.NET_STATUS, onNetStatus2);
-	
-		this._nsBroadCast.attachCamera(this._camera);
+	    if ($debug) Debug.write("startBroadCast 13");
+		if (this._camera != null) this._nsBroadCast.attachCamera(this._camera);
 	    this._nsBroadCast.attachAudio(this._micro);
-	    
+	    if ($debug) Debug.write("startBroadCast 14");
 	    this._nsBroadCast.publish(streamname.getText(),"live");
+	    if ($debug) Debug.write("startBroadCast 15");
     ]]>
 	</method>
 	

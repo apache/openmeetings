@@ -513,6 +513,18 @@
 			<param name="flash.debug" value="--debug" />
 		</antcall>
 	</target>
+	
+	<target name="compile.laszlo.testsetup.as3" depends="-retrieve-openlaszlo46">
+        <antcall target="-compile.flash" inheritAll="true" inheritRefs="true">
+            <param name="flash.classpath.ref" value="laszlo46.lib" />
+            <param name="flash.src.dir" value="${laszlo.src.dir}" />
+            <param name="flash.lps.home" value="${laszlo46.home}" />
+            <param name="flash.runtime" value="swf11" />
+            <param name="flash.main.file" value="test/test-setup.lzx" />
+            <param name="flash.out.file" value="test-setup.as3.swf11.swf" />
+            <param name="flash.debug" value="" />
+        </antcall>
+    </target>
 
 	<target name="compile.laszlo.main.as3" depends="compile.laszlo.main.debug.as3">
 		<antcall target="-compile.flash" inheritAll="true" inheritRefs="true">

@@ -233,11 +233,11 @@
 	    	if ($debug) Debug.write("this.myvideocontainer: ",this.myvideocontainer);
 	    	if ($debug) Debug.write(valCam,valMic,settings);
 			this.myvideocontainer.setAttribute('isremote',false);
-
 			var _micro = null;
 			var _camera = null;
 			if (valMic != null) {
-			     _micro = Microphone.getMicrophone(valMic);
+			     _micro = Microphone.getEnhancedMicrophone(valMic);
+			     if ($debug) Debug.write(_micro.enhancedOptions);
 			     if (_micro != null) {
 				     _micro.codec = SoundCodec.NELLYMOSER;
 				     //_micro.framesPerPacket = 1;
@@ -259,7 +259,6 @@
 			
 			if ($debug) Debug.write("_camera.setMode: ",videoview.width,videoview.height,canvas.framesPerSecond,true);
 
-			//Microphone.set
 			if ($debug) Debug.write("canvas.microphoneRateBest: ",canvas.microphoneRateBest);
 			if (_camera != null) {
    				if ($debug) Debug.write("_camera.setQuality BEST: ",canvas.isInterview,(canvas.bandwidthNeededBest*2),canvas.camQualityBest);
