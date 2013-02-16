@@ -50,7 +50,7 @@ public class DefaultIndex extends BaseVelocityViewServlet {
 			// Parse the Param for the SWF URL
 			String swf = httpServletRequest.getParameter("swf");
 			if (swf == null) {
-				ctx.put("SWF_URL", "main.as3.swf10.swf");
+				ctx.put("SWF_URL", "main.as3.swf11.swf");
 			} else {
 				ctx.put("SWF_URL", swf);
 			}
