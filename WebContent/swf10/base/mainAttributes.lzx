@@ -32,8 +32,7 @@
 	<attribute name="bandwidthNeededBest" value="32768" type="number" />
 	<attribute name="camQualityNormal" value="75" type="number" />
 	<attribute name="camQualityBest" value="75" type="number" />
-	<attribute name="microphoneRateNormal" value="22" type="number" /> 
-	<attribute name="microphoneRateBest" value="44" type="number" /> 
+	<attribute name="microphoneRateBest" value="22" type="number" /> 
 		
 
 	<!--- 

@@ -46,7 +46,6 @@
         <xs:element ref="bandwidthNeededBest"/>
         <xs:element ref="camQualityNormal"/>
         <xs:element ref="camQualityBest"/>
-        <xs:element ref="microphoneRateNormal"/>
         <xs:element ref="microphoneRateBest"/>
         <xs:element ref="defaultWhiteboardWidth"/>
         <xs:element ref="defaultWhiteboardHeight"/>
@@ -136,7 +135,6 @@
   <xs:element name="bandwidthNeededBest" type="xs:integer"/>
   <xs:element name="camQualityNormal" type="xs:integer"/>
   <xs:element name="camQualityBest" type="xs:integer"/>
-  <xs:element name="microphoneRateNormal" type="xs:integer"/>
   <xs:element name="microphoneRateBest" type="xs:integer"/>
   <xs:element name="defaultWhiteboardWidth" type="xs:integer"/>
   <xs:element name="defaultWhiteboardHeight" type="xs:integer"/>

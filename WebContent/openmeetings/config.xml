@@ -235,9 +235,7 @@ of the red5-servlet
     is the next available capture level above 8 kHz that your sound 
     capture device supports, usually 11 kHz.
  -->
-<!-- Quality-Modus *normal* -->
-<microphoneRateNormal>22</microphoneRateNormal>
-<!-- Microphone Settings Quality-Modus *best* -->
+<!-- Microphone Settings Quality-Modus -->
 <microphoneRateBest>22</microphoneRateBest>
 
 <!--
