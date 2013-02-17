@@ -38,6 +38,7 @@
         this.setAttribute('camQualityNormal',Number(canvas.myConfigSet.getPointer().xpathQuery('config/camQualityNormal/text()')));  
         this.setAttribute('camQualityBest',Number(canvas.myConfigSet.getPointer().xpathQuery('config/camQualityBest/text()')));  
         this.setAttribute('microphoneRateBest',Number(canvas.myConfigSet.getPointer().xpathQuery('config/microphoneRateBest/text()')));  
+        this.setAttribute('echoPath',Number(canvas.myConfigSet.getPointer().xpathQuery('config/echoPath/text()')));
         
         //httphostlocal variable is loaded from the SWF8 application, cause it needs value, SWF10 app
         //knows nothing about the rtmphostlocal, and we don't want to parse the URL from the browser

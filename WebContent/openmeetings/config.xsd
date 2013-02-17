@@ -47,6 +47,7 @@
         <xs:element ref="camQualityNormal"/>
         <xs:element ref="camQualityBest"/>
         <xs:element ref="microphoneRateBest"/>
+        <xs:element ref="echoPath" />
         <xs:element ref="defaultWhiteboardWidth"/>
         <xs:element ref="defaultWhiteboardHeight"/>
         <xs:element ref="availableCameraResolutions"/>
@@ -136,6 +137,22 @@
   <xs:element name="camQualityNormal" type="xs:integer"/>
   <xs:element name="camQualityBest" type="xs:integer"/>
   <xs:element name="microphoneRateBest" type="xs:integer"/>
+  <xs:element name="echoPath">
+    <xs:annotation>
+        <xs:documentation>
+            AEC configuration value - 
+			Specifies the echo path length (in milliseconds). A longer echo path means better 
+			echo cancellation but also introduces longer delays and requires more processing power. 
+			The default value is 128; the only other possible value is 256.
+        </xs:documentation>
+    </xs:annotation>
+    <xs:simpleType>
+        <xs:restriction base="xs:int">
+            <xs:enumeration value="128" />
+            <xs:enumeration value="256" />
+        </xs:restriction>
+    </xs:simpleType>
+  </xs:element>
   <xs:element name="defaultWhiteboardWidth" type="xs:integer"/>
   <xs:element name="defaultWhiteboardHeight" type="xs:integer"/>
   <xs:element name="availableCameraResolutions">

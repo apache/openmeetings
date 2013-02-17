@@ -40,6 +40,8 @@
             <passthrough>
                 import flash.media.Camera;
                 import flash.media.Microphone;
+                import flash.media.MicrophoneEnhancedMode;
+                import flash.media.MicrophoneEnhancedOptions;
                 import flash.net.SharedObject;
                 import flash.media.SoundCodec;
             </passthrough>
@@ -237,6 +239,16 @@
 			var _camera = null;
 			if (valMic != null) {
 			     _micro = Microphone.getEnhancedMicrophone(valMic);
+			     
+			     if (canvas.echoPath == 256) {
+			         var options:MicrophoneEnhancedOptions = new MicrophoneEnhancedOptions(); 
+			         options.mode = MicrophoneEnhancedMode.FULL_DUPLEX; 
+			         options.echoPath = 256; 
+			         options.nonLinearProcessing = true;
+			         _micro.enhancedOptions = options;
+			         if ($debug) Debug.write("echoPath set to 256");
+			     }
+			     
 			     if ($debug) Debug.write(_micro.enhancedOptions);
 			     if (_micro != null) {
 				     _micro.codec = SoundCodec.NELLYMOSER;

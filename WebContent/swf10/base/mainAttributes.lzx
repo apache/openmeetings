@@ -33,6 +33,7 @@
 	<attribute name="camQualityNormal" value="75" type="number" />
 	<attribute name="camQualityBest" value="75" type="number" />
 	<attribute name="microphoneRateBest" value="22" type="number" /> 
+	<attribute name="echoPath" value="128" type="number" /> 
 		
 
 	<!--- 
