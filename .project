@@ -67,7 +67,7 @@
 	</natures>
 	<filteredResources>
 		<filter>
-			<id>1360927555041</id>
+			<id>1361089169002</id>
 			<name></name>
 			<type>26</type>
 			<matcher>
@@ -76,7 +76,7 @@
 			</matcher>
 		</filter>
 		<filter>
-			<id>1360927555045</id>
+			<id>1361089169005</id>
 			<name></name>
 			<type>10</type>
 			<matcher>
@@ -85,7 +85,7 @@
 			</matcher>
 		</filter>
 		<filter>
-			<id>1360927555050</id>
+			<id>1361089169008</id>
 			<name></name>
 			<type>26</type>
 			<matcher>
@@ -94,7 +94,7 @@
 			</matcher>
 		</filter>
 		<filter>
-			<id>1360927555055</id>
+			<id>1361089169010</id>
 			<name></name>
 			<type>26</type>
 			<matcher>
@@ -103,7 +103,7 @@
 			</matcher>
 		</filter>
 		<filter>
-			<id>1360927555060</id>
+			<id>1361089169013</id>
 			<name></name>
 			<type>30</type>
 			<matcher>
@@ -112,12 +112,21 @@
 			</matcher>
 		</filter>
 		<filter>
-			<id>1360927555064</id>
+			<id>1361089169024</id>
 			<name></name>
 			<type>30</type>
 			<matcher>
 				<id>org.eclipse.ui.ide.multiFilter</id>
 				<arguments>1.0-projectRelativePath-matches-false-false-build/red5/client/bin</arguments>
+			</matcher>
+		</filter>
+		<filter>
+			<id>1361089169027</id>
+			<name></name>
+			<type>6</type>
+			<matcher>
+				<id>org.eclipse.ui.ide.multiFilter</id>
+				<arguments>1.0-name-matches-false-false-.ant-targets-build.xml</arguments>
 			</matcher>
 		</filter>
 	</filteredResources>
