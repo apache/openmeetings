@@ -583,7 +583,7 @@ public class FieldManager {
 	}
 	
 	private String performReplace(String val, String appName) {
-		return val.replaceAll("\\$APP_NAME", appName);
+		return val == null ? val : val.replaceAll("\\$APP_NAME", appName);
 	}
 	
 	private Fieldlanguagesvalues performReplace(Fieldlanguagesvalues f, String appName) {
