@@ -936,14 +936,18 @@
         </netRemoteCallHib>
 
         <!--- Notification of new User --> 
-        <netRemoteCallHib name="addNewUser" funcname="addNewUser">
-            <handler name="ondata" args="value">
-                //The onResult-Handler will be called be the rtmpconnection
-                if ($debug) Debug.write("addNewUser: ",value);    
-                canvas._videocontainer.addClientItem(value.connectedSince,value.isMod,value.streamid,value.room_id,'',value.formatedDate,value.userpos,value.usercolor,value);
-                canvas.setAttribute('numberofpartners',canvas.numberofpartners+1);
-            </handler>  
-        </netRemoteCallHib>    
+		<netRemoteCallHib name="addNewUser" funcname="addNewUser">
+			<handler name="ondata" args="value">
+				//The onResult-Handler will be called be the rtmpconnection
+				if ($debug) Debug.write("addNewUser: ",value);
+				if(value.sipTransport) {
+					canvas._videocontainer.addItem(value.connectedSince,value.isMod,value.streamid,value.room_id,'',value.formatedDate,value.userpos,value.usercolor,value);
+				} else {
+					canvas._videocontainer.addClientItem(value.connectedSince,value.isMod,value.streamid,value.room_id,'',value.formatedDate,value.userpos,value.usercolor,value);
+				}
+				canvas.setAttribute('numberofpartners',canvas.numberofpartners+1);
+			</handler>
+		</netRemoteCallHib>    
         
         <netRemoteCallHib name="getCurrentModeratorList" funcname="getCurrentModeratorList">
             <handler name="ondata" args="value">
@@ -960,30 +964,10 @@
                     
                     //if ($debug) Debug.write("throw event to drawarea: ",canvas.moderatorStreamID,canvas.ismoderator);
                     
-                    if (canvas.ismoderator){
-                        if (this.parent.modus == "conference"){
-                            if ($debug) Debug.write("############## showDevicePopUp 3");
-                            canvas._videocontainer._videoviewcontent.showDevicePopUp(false);
-                        }
-                    } else if (value==null){
-                        //I think we never can run into this! value is always != null, this is from a previous implementation
-                        if ($debug) Debug.write("############   value IS NULL: ",this.parent.modus);
-                        //no moderator availible
-                        //check if this is conferenceViewmodus
-                        if (this.parent.modus == "conference"){
-                            if ($debug) Debug.write("############## showDevicePopUp 4");
-                            canvas._videocontainer._videoviewcontent.showDevicePopUp(false);
-                        } else {
-                            // in audienceView modus you get no notification
-                            // cause you are not able to register your stream
-                            // as non moderator
-                        }       
-                    } else {
-                        if (this.parent.modus == "conference"){
-                            if ($debug) Debug.write("############## showDevicePopUp 1a");
-                            canvas._videocontainer._videoviewcontent.showDevicePopUp(false);
-                        }
-                    }
+					if (this.parent.modus == "conference"){
+						if ($debug) Debug.write("############## showDevicePopUp");
+						canvas._videocontainer._videoviewcontent.showDevicePopUp(false);
+					}
                     canvas._drawarea.onopenWhiteBoard.sendEvent();
                     
                     if ($debug) Debug.write("roomType_id ",canvas.currentRoomObject);
@@ -1001,8 +985,6 @@
                             }
                         }
                     }
-                    //@deprecated call to old screensharing implementation
-                    //parent.checkSharingSession.doCall();
                 ]]>
             </handler>
         </netRemoteCallHib>

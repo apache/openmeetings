@@ -102,7 +102,6 @@
         if(vidContainer == null) {
             vidContainer = isBroadcasting ? this.getNewVideoObject(publicSID) : this.getNewVideoObjectByPos(publicSID);
             vidContainer.publicSID = publicSID;
-            
         }
         if ($debug) Debug.write("Is interview ? ",canvas.isInterview);
         if (canvas.isInterview) {
@@ -211,15 +210,7 @@
 			if (obj!=null){
 				this.broadCastViewRef = obj;
 			} else {
-                //Get a Free VideoView Slot
-                var freePos = this.getVideoObjectFreePos(this.offsetLength,this.videoWidth,this.videoHeight);
-
-				this.broadCastViewRef = new lz.videoObjectBroadcast(this,{
-	                    publicSID:publicSID, width:videoWidth,height:videoHeight,
-	                    x:freePos[0],
-	                    y:freePos[1],
-	                    isInterview:canvas.isInterview
-                    });
+				this.broadCastViewRef = getNewVideoObjectByPos(publicSID);
 
 				this.broadCastViewRef._chatvideoinner.r.destroy();
 				if ($debug) Debug.write("getNewVideoObject canvas.userobject ",publicSID,canvas.userobject);

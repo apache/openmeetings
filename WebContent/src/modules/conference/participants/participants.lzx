@@ -260,18 +260,19 @@
         this._videoviewcontent.startStream(publicSID,broadcastId,firstname,lastname,interviewPodId,VWidth,VHeight);
     </method>
     
-    <method name="addClientItem" args="connectedSince,isMod,streamid,username,room_id,formatedDate,position,color,object">
-        <![CDATA[
-        if ($debug) Debug.write("### initializeStreams addClientItem: ",connectedSince,isMod,streamid,username,room_id,formatedDate);
-
-        if (canvas.publicSID != object.publicSID){
-            this._videoviewcontent.createVideoObject(object.publicSID, false, -1, object);
-        }
-
-        //Do Add it anyway
-        this._participants.addItem(object);
-        ]]>
-    </method>
+	<method name="addClientItem" args="connectedSince,isMod,streamid,username,room_id,formatedDate,position,color,object">
+	<![CDATA[
+		if ($debug) Debug.write("### initializeStreams addClientItem: ",connectedSince,isMod,streamid,username,room_id,formatedDate);
+		
+		if (canvas.publicSID != object.publicSID){
+		if ($debug) Debug.write("### initializeStreams createVideoObject: ", object);
+			this._videoviewcontent.createVideoObject(object.publicSID, false, -1, object);
+		}
+		
+		//Do Add it anyway
+		this._participants.addItem(object);
+	]]>
+	</method>
     
     <moderationMiniIconsEventUserList name="_applyAndStatusIcons" x="2" y="2" >
         <handler name="onismoderator" reference="canvas" args="m">

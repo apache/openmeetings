@@ -2860,12 +2860,10 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
         currentClient.setVWidth(120);
         currentClient.setVHeight(90);
         currentClient.setSipTransport(true);
-        this.sessionManager.updateClientByStreamId(streamid, currentClient, false, null);
+        sessionManager.updateClientByStreamId(streamid, currentClient, false, null);
         SessionVariablesUtil.initClient(c, false, publicSID); //TODO not sure if this should be marked as AVClient or not 
 
-
-        Collection<Set<IConnection>> conCollection = current
-                .getScope().getConnections();
+        Collection<Set<IConnection>> conCollection = current.getScope().getConnections();
         for (Set<IConnection> conset : conCollection) {
             for (IConnection conn : conset) {
                 if (conn != null) {
@@ -2879,15 +2877,10 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 					}
 					
                     if (!client.getId().equals(current.getClient().getId())) {
-                        // It is not needed to send back
-                        // that event to the actual
-                        // Moderator
-                        // as it will be already triggered
-                        // in the result of this Function
-                        // in the Client
+                        // It is not needed to send back that event to the actual Moderator
+                        // as it will be already triggered in the result of this Function in the Client
                         if (conn instanceof IServiceCapableConnection) {
                             ((IServiceCapableConnection) conn).invoke("addNewUser", new Object[]{currentClient}, this);
-                            ((IServiceCapableConnection) conn).invoke("newStream", new Object[]{currentClient}, this);
                             log.debug("sending setSipTransport to " + conn);
                         }
                     }
