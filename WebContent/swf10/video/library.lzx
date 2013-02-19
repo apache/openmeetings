@@ -57,7 +57,6 @@
     <include href="videoUserProfilePicSWF10.lzx" />
     <include href="editRecordStreamSWF10.lzx" />
     <include href="baseVideoObject.lzx" />
-    <include href="videoObjectBroadcast.lzx" />
     <include href="videoObjectPlayBroadcast.lzx" />
     <include href="videoObjectTestBroadcast.lzx" />
     <include href="videoObjectPlayTestBroadcast.lzx" />

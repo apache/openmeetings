@@ -350,22 +350,17 @@
     </method>
 
 
-    <method name="setSpeakingByPos" args="publicSID,bool">
-        <![CDATA[
-            //if ($debug) Debug.write("setSpeakingByPos ",publicSID,bool);
-            var obj = this.getVideoObjectByPublicSID(publicSID);
-            if (obj == null) {
-            	if ($debug) Debug.warn("Could not find user for setSpeakingByPos ",publicSID,bool);
-            	return;
-            }
-            if (bool){
-                obj._loudness.loudness.setAttribute('opacity',1);
-            } else {
-                obj._loudness.loudness.setAttribute('opacity',0.2);
-            }
-            return;
-        ]]>
-    </method>
+	<method name="setSpeakingByPos" args="publicSID,bool">
+	<![CDATA[
+		//if ($debug) Debug.write("setSpeakingByPos ",publicSID,bool);
+		var obj = this.getVideoObjectByPublicSID(publicSID);
+		if (obj == null) {
+			if ($debug) Debug.warn("Could not find user for setSpeakingByPos ",publicSID,bool);
+			return;
+		}
+		obj._loudness.setSpeaking(bool);
+	]]>
+	</method>
 
     <method name="setAVSettingsToClient" args="rcl">
         if ($debug) Debug.write("setAVSettingsToClient ",rcl.publicSID,rcl);

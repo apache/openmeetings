@@ -2331,32 +2331,6 @@ This is used in the conference.
   </xs:extension>
   </xs:complexContent>
   </xs:complexType>
-<xs:element name="videoObjectBroadcast" type="project:videoObjectBroadcast" >
-<xs:annotation>
-<xs:documentation xml:lang="en">
-
-	contains microphone and camera for broadcasting,
-	this class is used only in Meetings-Modus
- </xs:documentation>
-</xs:annotation>
-</xs:element>
-  <xs:complexType name="videoObjectBroadcast" mixed="true">
-  <xs:complexContent>
-  <xs:extension base="project:baseVideoObject">
-      <xs:attribute name="ratioW" type="xs:string" default="1" >
-<xs:annotation>
-<xs:documentation xml:lang="en">
-
-	contains microphone and camera for broadcasting,
-	this class is used only in Meetings-Modus
- </xs:documentation>
-</xs:annotation>
-</xs:attribute>
-      <xs:attribute name="ratioH" type="xs:string" default="1" >
-</xs:attribute>
-  </xs:extension>
-  </xs:complexContent>
-  </xs:complexType>
 <xs:element name="selectedDayLook" type="project:selectedDayLook" >
 </xs:element>
   <xs:complexType name="selectedDayLook" mixed="true">
