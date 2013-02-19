@@ -2802,15 +2802,21 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 		return result.isEmpty() ? result : roomDao.getSipRooms(result);
 	}
 	
+	private String getSipTransportLastname(Long roomId) {
+		Integer c = roomManager.getSipConferenceMembersNumber(roomId);
+		String count = (c != null && c > 0) ? "" + (c - 1) : "";
+		return "(" + count + ")";
+	}
+	
     public synchronized void updateSipTransport() {
         IConnection current = Red5.getConnectionLocal();
         String streamid = current.getClient().getId();
-        Client currentClient = this.sessionManager.getClientByStreamId(streamid, null);
-        log.debug("getSipConferenceMembersNumber: " + roomManager.getSipConferenceMembersNumber(currentClient.getRoom_id()));
-        String newNumber = "("+Integer.toString(roomManager.getSipConferenceMembersNumber(currentClient.getRoom_id())-1)+")";
-        if(!newNumber.equals(currentClient.getLastname())) {
+        Client currentClient = sessionManager.getClientByStreamId(streamid, null);
+        String newNumber = getSipTransportLastname(currentClient.getRoom_id());
+        log.debug("getSipConferenceMembersNumber: " + newNumber);
+        if (!newNumber.equals(currentClient.getLastname())) {
             currentClient.setLastname(newNumber);
-            this.sessionManager.updateClientByStreamId(streamid, currentClient, false, null);
+            sessionManager.updateClientByStreamId(streamid, currentClient, false, null);
             log.debug("updateSipTransport: {}, {}, {}, {}", new Object[]{currentClient.getPublicSID(),
                     currentClient.getRoom_id(), currentClient.getFirstname(), currentClient.getLastname()});
             sendMessageWithClient(new String[]{"personal",currentClient.getFirstname(),currentClient.getLastname()});
@@ -2824,7 +2830,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
     public synchronized void joinToConfCall(String number) {
         IConnection current = Red5.getConnectionLocal();
         String streamid = current.getClient().getId();
-        Client currentClient = this.sessionManager.getClientByStreamId(streamid, null);
+        Client currentClient = sessionManager.getClientByStreamId(streamid, null);
         try {
         	String sipNumber = getSipNumber(currentClient.getRoom_id());
             log.debug("asterisk -rx \"originate Local/" + number + "@rooms extension " + sipNumber + "@rooms\"");
@@ -2848,11 +2854,11 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
         IClient c = current.getClient();
         String streamid = c.getId();
         // Notify all clients of the same scope (room)
-        Client currentClient = this.sessionManager.getClientByStreamId(streamid, null);
+        Client currentClient = sessionManager.getClientByStreamId(streamid, null);
         currentClient.setRoom_id(room_id);
         currentClient.setRoomEnter(new Date());
         currentClient.setFirstname("SIP Transport");
-        currentClient.setLastname("("+Integer.toString(roomManager.getSipConferenceMembersNumber(room_id)-1)+")");
+        currentClient.setLastname(getSipTransportLastname(room_id));
         currentClient.setBroadCastID(Long.parseLong(broadCastId));
         currentClient.setIsBroadcasting(true);
         currentClient.setPublicSID(publicSID);

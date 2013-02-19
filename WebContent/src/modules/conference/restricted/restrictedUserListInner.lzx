@@ -156,9 +156,18 @@
         ]]>
     </method>
     
-    
-    <method name="getVideoObjectByPublicSID" args="publicSID">
-        if ($debug) Debug.error(" :: getVideoObjectByPublicSID :: ",publicSID);
+	<method name="getVideoObjectByPublicSID" args="publicSID">
+	<![CDATA[
+		var v = null;
+		var vList = this._table._innerlist._inn._inn.subviews;
+		for (var i = 0; i < vList.length; ++i) {
+			if (vList[i].refObj.publicSID == publicSID) {
+				v = vList[i];
+				break;
+			}
+		}
+		return v;
+	]]>
     </method>
     
     <view name="userStatus" layout="axis:y">

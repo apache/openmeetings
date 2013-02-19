@@ -68,6 +68,7 @@
             client.immediateExitRoom = this.immediateExitRoom;
             client.closeWhiteboard = this.closeWhiteboard;
             client.arrangeWindows = this.arrangeWindows;
+            client.updateFirstLastName = this.updateFirstLastName;
 
             var lc:LocalConnection = new LocalConnection();
             lc.connect(canvas.vid_lc_name);
@@ -490,6 +491,13 @@
 
 	<method name="immediateExitRoom" args="bool,ctx">
 		canvas.videoComp_lc.send(canvas.videoComp_lc_name, 'exitRoom', bool);
+	</method>
+
+	<method name="updateFirstLastName" args="publicSID,first,last">
+		var v = getVideoObjectByPublicSID(publicSID);
+		if (v != null) {
+			v.setAttribute('chatpartnername', first + ' ' + last);
+		}
 	</method>
 	
     <!---

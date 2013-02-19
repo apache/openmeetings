@@ -391,8 +391,8 @@
         </handler>
     </image>
     
-    <labelText name="_firstName" fontsize="10" x="40" text="$once{ parent.firstname }" />
-    <labelText name="_lastName" fontsize="10" x="40" y="20" text="$once{ parent.lastname }" />
+    <labelText name="_firstName" fontsize="10" x="40" text="${ parent.firstname }" />
+    <labelText name="_lastName" fontsize="10" x="40" y="20" text="${ parent.lastname }" />
     
 	<miniIcons name="_start_private_chat_rsc" x="114" y = "2" width="16" height="16"
 		resource="start_private_chat_rsc" showhandcursor="true"

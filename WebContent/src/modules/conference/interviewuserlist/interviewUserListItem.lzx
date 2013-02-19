@@ -141,11 +141,7 @@
     	  resource="userstatus_multiframe_rsc" />
     
     <labelText name="_userName" x="41" y="2"
-    		   text="$once{ parent.firstname+' '+parent.lastname }" />
-    
-    <!--
-    <labelTooltip name="_userName" text="$once{ parent.firstname+' '+parent.lastname }" />
-     -->
+    		   text="$once{ parent.firstname + ' ' + parent.lastname }" />
      
     <animatorgroup name="showItem" started="false" process="simultaneous">
     	<animator attribute="height" to="62" duration="750" />

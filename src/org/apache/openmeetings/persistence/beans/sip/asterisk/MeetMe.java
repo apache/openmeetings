@@ -25,10 +25,12 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import org.apache.openjpa.persistence.DataCache;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
 
 @Entity
+@DataCache(enabled=false)
 @Table(name = "meetme")
 @Root(name="member")
 public class MeetMe implements Serializable {

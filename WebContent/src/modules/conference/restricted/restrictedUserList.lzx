@@ -37,7 +37,7 @@
     <handler name="onallowUserQuestions" args="bool">
         if (bool != null) {
             if (!bool) {
-                this._participents._applyAndStatusIcons.destroy();
+                this._participants._applyAndStatusIcons.destroy();
             }
         }
     </handler>
@@ -188,7 +188,7 @@
             canvas.thishib.checkLzRecording.doCall();
             
             //Render and Show User-List
-            parent._participents.sortAndRenderList();
+            parent._participants.sortAndRenderList();
             
             if (canvas._currentChatPanel.visible) {
 				canvas._currentChatPanel.toggleopen();
@@ -211,7 +211,7 @@
             if (streamid!=canvas.streamid){
                 
                 //do add others
-                this._participents.initialAddItem(object);
+                this._participants.initialAddItem(object);
                 
                 //if ($debug) Debug.write("???????? object.isBroadcasting :: ",object.isBroadcasting);
                 
@@ -223,7 +223,7 @@
                 
             } else {
                 //do add self too
-                this._participents.initialAddItem(object);
+                this._participants.initialAddItem(object);
             }
            
         ]]>
@@ -231,7 +231,7 @@
 
     <method name="receiveExclusiveAudioFlag" args="publicSID">
     <![CDATA[
-        var vList = this._participents._table.renderList;
+        var vList = this._participants._table.renderList;
         for (var i=0;i<vList.length;i++) {
             var item = vList[i];
             var rcl = new Object();
@@ -255,12 +255,12 @@
                 this._videoviewcontent.createVideo(object.publicSID, object.firstname+' '+object.lastname, object.broadCastID, object.avsettings, -1, object);
 
                 //do add others
-                this._participents.addItem(object);
+                this._participants.addItem(object);
 
                 //return myvideocontainer;
             } else {
                 //do add self too
-                this._participents.addItem(object);
+                this._participants.addItem(object);
             }
            
         ]]>
@@ -275,7 +275,7 @@
         }
 
         //Do Add it anyway
-        this._participents.addItem(object);
+        this._participants.addItem(object);
         ]]>
     </method>
         
@@ -309,14 +309,14 @@
      -->
     <method name="disconnectclient" args="publicSID">
         this._videoviewcontent.disconnectclient(publicSID);
-        this._participents.disconnectclient(publicSID);
+        this._participants.disconnectclient(publicSID);
     </method>
 
     <method name="updateMuteStatusVideoView" args="roomClient">
         this._videoviewcontent.updateMuteStatusVideoView(roomClient);
     </method>
     
-    <restrictedUserListInner name="_participents" />
+    <restrictedUserListInner name="_participants" />
     
 </class>
 
