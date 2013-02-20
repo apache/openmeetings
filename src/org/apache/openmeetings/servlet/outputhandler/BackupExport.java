@@ -518,14 +518,14 @@ public class BackupExport {
 		}
 	}
 
-	private void writeZipDir(File directoryToZip, File f) throws IOException {
+	private void writeZipDir(File directoryToZip, File zipFile) throws IOException {
 		FileOutputStream fos = null;
 		ZipOutputStream zos = null;
 		try {
-			fos = new FileOutputStream(f);
+			fos = new FileOutputStream(zipFile);
 			zos = new ZipOutputStream(fos);
 			
-			writeZipDir(directoryToZip.toURI(), directoryToZip, zos);
+			writeZipDir(directoryToZip.toURI(), directoryToZip, zos, zipFile);
 		} finally {
 			if (zos != null) {
 				try {
@@ -544,10 +544,13 @@ public class BackupExport {
 		}
 	}
 	
-	private void writeZipDir(URI base, File dir, ZipOutputStream zos) throws IOException {
+	private void writeZipDir(URI base, File dir, ZipOutputStream zos, File zipFile) throws IOException {
 		for (File file : dir.listFiles()) {
+			if (zipFile.equals(file)) {
+				continue;
+			}
 			if (file.isDirectory()) {
-				writeZipDir(base, file, zos);
+				writeZipDir(base, file, zos, zipFile);
 			} else {
 				String path = base.relativize(file.toURI()).toString();
 				log.debug("Writing '" + path + "' to zip file");
