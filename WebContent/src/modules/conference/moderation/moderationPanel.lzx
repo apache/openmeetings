@@ -88,35 +88,9 @@
         ]]>
     </method>   
     
-    <method name="checkForApplyScreen" args="record">
-        <![CDATA[
-        
-            var organisation_id = 1;
-            
-            if ($debug) Debug.write(hib.userobject); 
-            if ($debug) Debug.write(hib.currentdomainObj); 
-            
-            if (hib.currentdomainObj != null) {
-                organisation_id = hib.currentdomainObj.organisation_id
-            }
-        
-            var downloadurl = canvas.getUrl() + 'screen.upload?'
-                +'rtmphostlocal='+canvas.getHttpHost()
-                +'&domain='+hib.conferencedomain
-                +'&organization_id='+organisation_id
-                +'&sid='+canvas.sessionId
-                +'&red5httpport='+canvas.red5httpport
-                +'&connectionType='+canvas.thishib.getProtocol()
-                +'&port='+canvas.thishib.getPort()
-                +'&publicSID='+canvas.publicSID
-                +'&httpRootKey='+canvas.httpRootKey
-                +'&languageAsString='+hib.userlang;
-
-            if ($debug) Debug.write(downloadurl); 
-            lz.Browser.loadURL(downloadurl,'_blank');  
-            
-        ]]>        
-    </method>  
+	<method name="checkForApplyScreen" args="record">
+		lz.Browser.loadURL(canvas.getScreenSharingUrl(), '_blank');
+	</method>  
     
     <labelText name="_roomName" fgcolor="0xFFFFFF" y="4" fontstyle="bold" fontsize="12" /> 
     

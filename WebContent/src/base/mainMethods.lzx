@@ -115,19 +115,19 @@
     </method>
     
     <method name="getHttpHost">
-    	<![CDATA[
-	    	if (canvas.httphostlocal != null && canvas.httphostlocal.length > 0) {
-				return canvas.httphostlocal;
-			}
-			return canvas.rtmphostlocal;
-		]]>
+   	<![CDATA[
+    	if (canvas.httphostlocal != null && canvas.httphostlocal.length > 0) {
+			return canvas.httphostlocal;
+		}
+		return canvas.rtmphostlocal;
+	]]>
     </method>
         
 	<method name="getUrl">
-		<![CDATA[
-			return canvas.protocol + '://' + getHttpHost()
-				+ ':' + canvas.red5httpport + canvas.httpRootKey;
-		]]>
+	<![CDATA[
+		return canvas.protocol + '://' + getHttpHost()
+			+ ':' + canvas.red5httpport + canvas.httpRootKey;
+	]]>
 	</method>
         
 	<method name="getServicesUrl">
@@ -136,11 +136,11 @@
 	]]>
 	</method>
 
-    <method name="getTestingUrl">
-    <![CDATA[
-        return getUrl() + '?swf=networktesting' + ($debug ? 'debug' : '') + '.swf10.swf';
-    ]]>
-    </method>
+	<method name="getTestingUrl">
+	<![CDATA[
+		return getUrl() + '?swf=networktesting' + ($debug ? 'debug' : '') + '.swf10.swf';
+	]]>
+	</method>
 
 	<method name="getAppBaseUrl">
 	<![CDATA[
@@ -149,6 +149,28 @@
 		var port = (urlObject.port != null && urlObject.port != undefined) ? urlObject.port : 80;
 		//if($debug) Debug.write("getBaseUrl:: [urlObject, port]", urlObject, port);
 		return urlObject.protocol + "://" + urlObject.host + (port != 80 ? ":" + port : "") + urlObject.path;;
+	]]>
+	</method>
+
+	<method name="getScreenSharingUrl">
+	<![CDATA[
+		var organisation_id = (hib.currentdomainObj != null && hib.currentdomainObj.organisation_id != null)
+			? hib.currentdomainObj.organisation_id : 1;
+		if ($debug) Debug.write("mainMethods::getScreenSharingUrl ", hib.userobject, hib.currentdomainObj);
+		
+		var downloadurl = canvas.getAppBaseUrl() + 'screen.upload?'
+			+'rtmphostlocal=' + canvas.getHttpHost()
+			+'&domain=' + hib.conferencedomain
+			+'&organization_id=' + organisation_id
+			+'&sid=' + canvas.sessionId
+			+'&red5httpport=' + canvas.red5httpport
+			+'&connectionType=' + canvas.thishib.getProtocol()
+			+'&port=' + canvas.thishib.getPort()
+			+'&publicSID=' + canvas.publicSID
+			+'&httpRootKey=' + canvas.httpRootKey
+			+'&languageAsString=' + hib.userlang;
+		if ($debug) Debug.write("mainMethods::getScreenSharingUrl ", downloadurl); 
+		return downloadurl;
 	]]>
 	</method>
 	

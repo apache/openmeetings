@@ -136,47 +136,9 @@
         name="_sharingClientName" fontstyle="bold" />    
     
     
-    <method name="checkForApplyScreen">
-        <![CDATA[
-            var organisation_id = 1;
-        
-            if ($debug) Debug.write(hib.userobject); 
-            if ($debug) Debug.write(hib.currentdomainObj); 
-            
-            if (hib.currentdomainObj != null) {
-                organisation_id = hib.currentdomainObj.organisation_id
-            }
-        
-            var downloadurl = canvas.getUrl() + 'screen.upload?'
-                +'rtmphostlocal='+canvas.getHttpHost()
-                +'&domain='+hib.conferencedomain
-                +'&organization_id='+organisation_id
-                +'&sid='+canvas.sessionId
-                +'&red5httpport='+canvas.red5httpport
-                +'&connectionType='+canvas.thishib.getProtocol()
-                +'&port='+canvas.thishib.getPort()
-                +'&publicSID='+canvas.publicSID
-                +'&httpRootKey='+canvas.httpRootKey
-                +'&languageAsString='+hib.userlang;
-
-            if ($debug) Debug.write(downloadurl); 
-            lz.Browser.loadURL(downloadurl,'_blank');  
-
-        ]]>        
-    </method> 
-    
-    <!--
-    <handler name="onmousedown" >
-		if ($debug) Debug.write("onmousedown multiWhiteboardPanel");
-		this._drawareaMask._drawarea.onmousedownMethod();
-	</handler>
-	
-	<handler name="onmouseup" >
-		if ($debug) Debug.write("onmouseup multiWhiteboardPanel");
-		this._drawareaMask._drawarea.onmouseupMethod();
-	</handler>
-	 -->
-	
+	<method name="checkForApplyScreen">
+		lz.Browser.loadURL(canvas.getScreenSharingUrl(), '_blank');
+	</method> 
 	
     <!-- 
         The Content Area    
