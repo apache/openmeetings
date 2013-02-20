@@ -26,8 +26,11 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
 import org.apache.openmeetings.data.IDataProviderDao;
+import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
 import org.apache.openmeetings.persistence.beans.room.Room;
+import org.apache.openmeetings.persistence.beans.sip.asterisk.MeetMe;
 import org.apache.openmeetings.utils.DaoHelper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
@@ -37,6 +40,8 @@ public class RoomDao implements IDataProviderDao<Room> {
 	
 	@PersistenceContext
 	private EntityManager em;
+    @Autowired
+	private ConfigurationDao cfgDao;
 
 	public Room get(long id) {
 		TypedQuery<Room> q = em.createNamedQuery("getRoomById", Room.class);
@@ -90,21 +95,51 @@ public class RoomDao implements IDataProviderDao<Room> {
 		q.setParameter("orgId", orgId);
 		return q.getResultList();
 	}
+
+	private boolean isSipEnabled() {
+		return "yes".equals(cfgDao.getConfValue("red5sip.enable", String.class, "no"));
+	}
+	
+	private String getSipNumber(long roomId) {
+        if (isSipEnabled()) {
+        	return cfgDao.getConfValue("red5sip.room_prefix", String.class, "400") + roomId;
+        }
+        return null;
+	}
 	
 	public Room update(Room entity, Long userId) {
+		return update(entity, userId, entity.getMeetme() == null ? null : entity.getMeetme().getPin());
+	}
+	
+	public Room update(Room entity, Long userId, String pin) {
 		if (entity.getRooms_id() == null) {
 			entity.setStarttime(new Date());
 			em.persist(entity);
 		} else {
 			entity.setUpdatetime(new Date());
-			entity = em.merge(entity);
 		}
+		if (entity.isSipEnabled() && isSipEnabled()) {
+			String sipNumber = getSipNumber(entity.getRooms_id());
+			if (entity.getMeetme() == null || !sipNumber.equals(entity.getMeetme().getConfno())) {
+				MeetMe m = new MeetMe();
+				m.setConfno(sipNumber);
+				entity.setMeetme(m);
+			}
+			entity.getMeetme().setPin(pin);
+		} else {
+			if (entity.getMeetme() != null) {
+				em.remove(entity.getMeetme());
+			}
+			entity.setMeetme(null);
+		}
+		entity = em.merge(entity);
 		return entity;
 	}
 
 	public void delete(Room entity, Long userId) {
 		entity.setDeleted(true);
 		entity.setMeetme(null);
+		entity.setSipEnabled(false);
 		update(entity, userId);
 	}
 

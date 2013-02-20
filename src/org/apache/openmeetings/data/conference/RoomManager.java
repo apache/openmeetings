@@ -43,7 +43,6 @@ import org.apache.openmeetings.persistence.beans.domain.Organisation_Users;
 import org.apache.openmeetings.persistence.beans.room.Room;
 import org.apache.openmeetings.persistence.beans.room.RoomOrganisation;
 import org.apache.openmeetings.persistence.beans.room.RoomType;
-import org.apache.openmeetings.persistence.beans.sip.asterisk.MeetMe;
 import org.apache.openmeetings.persistence.beans.user.User;
 import org.apache.openmeetings.session.ISessionManager;
 import org.red5.logging.Red5LoggerFactory;
@@ -570,15 +569,6 @@ public class RoomManager {
 
 	// ---------------------------------------------------------------------------------------------
 
-	//TODO move it to helper or DAO
-	public String getSipNumber(long roomId) {
-		String sipEnabled = configurationDao.getConfValue("red5sip.enable", String.class, "no");
-        if("yes".equals(sipEnabled)) {
-        	return configurationDao.getConfValue("red5sip.room_prefix", String.class, "400") + roomId;
-        }
-        return null;
-	}
-	
     /**
      * Returns number of SIP conference participants
      * @param rooms_id id of room
@@ -659,19 +649,7 @@ public class RoomManager {
 				r.setAutoVideoSelect(autoVideoSelect);
 				r.setSipEnabled(sipEnabled);
 				
-                /*****************************************************************************************************/
-
-				r = em.merge(r);
-				long returnId = r.getRooms_id();
-				String sipNumber = getSipNumber(returnId);
-				if (sipNumber != null) {
-					r.setMeetme(new MeetMe());
-					r.getMeetme().setConfno(sipNumber);
-					r.getMeetme().setPin(conferencePin);
-				} else {
-					r.setMeetme(null);
-				}
-				r = em.merge(r); //FIXME double merge
+				r = roomDao.update(r, ownerId, conferencePin);
 
 				if (organisations != null) {
 					Long t = this.updateRoomOrganisations(organisations, r);
@@ -684,7 +662,7 @@ public class RoomManager {
 							roomModerators, r.getRooms_id());
 				}
 
-				return returnId;
+				return r.getRooms_id();
 			}
 		} catch (Exception ex2) {
 			log.error("[addRoom] ", ex2);
@@ -1231,17 +1209,7 @@ public class RoomManager {
 
 			r.setIsClosed(isClosed);
 			r.setRedirectURL(redirectURL);
-
-			String sipNumber = getSipNumber(rooms_id);
-			if (sipNumber == null) {
-				r.setMeetme(null);
-			} else if (r.getMeetme() == null || !sipNumber.equals(r.getMeetme().getConfno())) {
-				r.setMeetme(new MeetMe());
-				r.getMeetme().setConfno(sipNumber);
-				r.getMeetme().setPin(conferencePin);
-			}
 			r.setOwnerId(ownerId);
-
 			r.setWaitForRecording(waitForRecording);
 			r.setAllowRecording(allowRecording);
 			
@@ -1257,14 +1225,7 @@ public class RoomManager {
 			r.setFilesOpened(filesOpened);
 			r.setAutoVideoSelect(autoVideoSelect);
 			r.setSipEnabled(sipEnabled);
-
-			if (r.getRooms_id() == null) {
-				em.persist(r);
-			} else {
-				if (!em.contains(r)) {
-					r = em.merge(r);
-				}
-			}
+			roomDao.update(r, ownerId);
 
 			if (organisations != null) {
 				Long t = this.updateRoomOrganisations(organisations, r);

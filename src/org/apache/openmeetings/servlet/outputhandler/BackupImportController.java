@@ -101,7 +101,6 @@ import org.apache.openmeetings.persistence.beans.room.Room;
 import org.apache.openmeetings.persistence.beans.room.RoomModerator;
 import org.apache.openmeetings.persistence.beans.room.RoomOrganisation;
 import org.apache.openmeetings.persistence.beans.room.RoomType;
-import org.apache.openmeetings.persistence.beans.sip.asterisk.MeetMe;
 import org.apache.openmeetings.persistence.beans.user.Address;
 import org.apache.openmeetings.persistence.beans.user.PrivateMessage;
 import org.apache.openmeetings.persistence.beans.user.PrivateMessageFolder;
@@ -285,11 +284,8 @@ public class BackupImportController extends AbstractUploadController {
 			for (Room r : list) {
 				Long roomId = r.getRooms_id();
 
-				// We need to reset ids as openJPA reject to store them
-				// otherwise
+				// We need to reset ids as openJPA reject to store them otherwise
 				r.setRooms_id(null);
-				MeetMe mm = r.getMeetme();
-				r.setMeetme(null);
 				if (r.getModerators() != null) {
 					for (Iterator<RoomModerator> i = r.getModerators().iterator(); i.hasNext();) {
 						RoomModerator rm = i.next();
@@ -298,12 +294,7 @@ public class BackupImportController extends AbstractUploadController {
 						}
 					}
 				}
-				r = roomDao.update(r, -1L);
-				if (mm != null) {
-					mm.setConfno(roomManager.getSipNumber(r.getRooms_id()));
-					r.setMeetme(mm);
-					r = roomDao.update(r, 1L); //FIXME double update
-				}
+				r = roomDao.update(r, null);
 				roomsMap.put(roomId, r.getRooms_id());
 			}
 		}

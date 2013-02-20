@@ -575,5 +575,4 @@ public class Room implements Serializable, IDataProviderEntity {
 	public void setSipEnabled(boolean sipEnabled) {
 		this.sipEnabled = sipEnabled;
 	}
-
 }
