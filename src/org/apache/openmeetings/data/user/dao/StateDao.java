@@ -124,7 +124,7 @@ public class StateDao {
 				return ll.get(0);
 			}
 		} catch (Exception ex2) {
-			log.error("getStateById", ex2);
+			log.error("getStateByName", ex2);
 		}
 		return null;
 	}
