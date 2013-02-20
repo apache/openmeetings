@@ -36,7 +36,7 @@ import javax.persistence.Table;
 			"where c.state_id = :state_id AND c.deleted <> :deleted"),
 	@NamedQuery(name = "getStates", query = "select c from State as c where c.deleted <> :deleted"),
 	@NamedQuery(name = "getStateByName", query = "select c from State as c " +
-			"where c.name LIKE :name AND c.deleted <> :deleted")
+			"where lower(c.name) LIKE lower(:name) AND c.deleted <> :deleted")
 })
 @Table(name = "state")
 public class State implements Serializable {
