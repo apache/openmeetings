@@ -115,9 +115,12 @@ public class StateDao {
 	 */
 	public State getStateByName(String name) {
 		try {
+			if (name == null) {
+				return null;
+			}
 			TypedQuery<State> query = em
 					.createNamedQuery("getStateByName", State.class);
-			query.setParameter("name", name);
+			query.setParameter("name", name.toLowerCase());
 			query.setParameter("deleted", true);
 			List<State> ll = query.getResultList();
 			if (ll.size() > 0) {

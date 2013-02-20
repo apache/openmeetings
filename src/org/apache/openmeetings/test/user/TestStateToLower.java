@@ -23,6 +23,7 @@ public class TestStateToLower extends AbstractOpenmeetingsSpringTest {
 		assertTrue(state_alabania != null);
 		assertTrue(state_alabania_lower != null);
 		assertTrue(state_alabania.getState_id().equals(3L));
+		assertTrue(state_alabania_lower.getState_id().equals(3L));
 		assertTrue(state_alabania.getState_id().equals(state_alabania_lower.getState_id()));
 		
 	}
