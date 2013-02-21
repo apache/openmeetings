@@ -365,10 +365,7 @@ public class UserManager {
 				CriteriaBuilder cb = em.getCriteriaBuilder();
 				CriteriaQuery<User> cq = cb.createQuery(User.class);
 				Root<User> c = cq.from(User.class);
-				Expression<String> literal = cb.literal("%" + searchstring
-						+ "%");
-				// crit.add(Restrictions.ilike(searchcriteria, "%" +
-				// searchstring + "%"));
+				Expression<String> literal = cb.literal("%" + searchstring + "%");
 				Path<String> path = c.get(searchcriteria);
 				Predicate predicate = cb.like(path, literal);
 				Predicate condition = cb.notEqual(c.get("deleted"), true);

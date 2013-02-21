@@ -108,7 +108,7 @@
 
 		if (canvas.GIVE_EXCLUSIVE_AUDIO_KEY == keyCode) {
 			if (canvas.ismoderator || canvas.isAllowedToGiveExclusiveAudio) {
-				var obj = canvas._videocontainer.getVideoObjectByPublicSID(canvas.publicSID);
+				var obj = canvas._videocontainer._participants.getUserListItemByPublicSID(canvas.publicSID);
 				if (null != obj) {
 					obj._giveExclusiveAudioView._micButton.onclick.sendEvent();
 				}

@@ -26,12 +26,6 @@
 	<attribute name="connectedSince" value="" type="string" />
 	
     <attribute name="isMod" value="false" type="boolean" />
-    <!--<attribute name="canDraw" value="false" type="boolean" />-->
-    <!--<attribute name="canShare" value="false" type="boolean" />-->
-    <!--<attribute name="canRemote" value="false" type="boolean" />-->
-    <!--<attribute name="canGiveAudio" value="false" type="boolean" />-->
-    <!--<attribute name="isBroadcasting" value="false" type="boolean" />-->
-    <!--<attribute name="micMuted" value="false" type="boolean" />-->
     
     <attribute name="streamid" value="" type="string" />
     <attribute name="username" value="" type="string" />

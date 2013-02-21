@@ -138,7 +138,7 @@
     
 	<method name="disconnectclient" args="publicSID">
 	<![CDATA[
-		var item = getVideoObjectByPublicSID(publicSID);
+		var item = getUserListItemByPublicSID(publicSID);
 		if (item) {
 			item.destroy();
 		}
@@ -148,10 +148,10 @@
     <!--- get a Objects List Item
         @param string publicSID publicSID
      -->
-	<method name="getVideoObjectByPublicSID" args="publicSID">
+	<method name="getUserListItemByPublicSID" args="publicSID">
 	<![CDATA[
 		for (var i=0;i<this._table.innerList.subviews.length;i++){
-			//if ($debug) Debug.write("getVideoObjectByPublicSID : this._table.innerList.subviews[i]",this._table.innerList.subviews[i]);
+			//if ($debug) Debug.write("getUserListItemByPublicSID : this._table.innerList.subviews[i]",this._table.innerList.subviews[i]);
 			if (this._table.innerList.subviews[i].refObj.publicSID==publicSID){
 				return this._table.innerList.subviews[i];
 			}

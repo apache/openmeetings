@@ -1661,9 +1661,10 @@
                     canvas.currentActivityList.applyForGiveExclusiveAudioOn(value.client,value.message[1]);
                 } else if (value.message[0] == 'personal') {
                 	var pSID = value.client.publicSID;
-                    var vo = canvas._videocontainer._participants.getVideoObjectByPublicSID(pSID);
+                    var vo = canvas._videocontainer._participants.getUserListItemByPublicSID(pSID);
                     if (vo != null) {
                     	vo.setAttribute('lastname', value.message[2]);
+                    	vo.refObj.lastname = value.message[2];
                     }
 					canvas.sendViaLocalConnection(canvas.vid_lc_name, "updateFirstLastName", [pSID, value.message[1], value.message[2]]);
                 } else {

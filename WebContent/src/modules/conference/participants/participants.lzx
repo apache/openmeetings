@@ -195,7 +195,7 @@
     <method name="receiveExclusiveAudioFlag" args="publicSID">
     <![CDATA[
     	if ($debug) Debug.write("receiveExclusiveAudioFlag: ",publicSID);
-        var obj = this._participants.getVideoObjectByPublicSID(publicSID);
+        var obj = this._participants.getUserListItemByPublicSID(publicSID);
 
         for (var i=0; i<obj.parent.subviews.length; i++) {
             var item = obj.parent.subviews[i];
@@ -224,7 +224,7 @@
     </method>
 
     <method name="setSpeakingByPos" args="publicSID,bool">
-    	var tObj = this._participants.getVideoObjectByPublicSID(publicSID);
+    	var tObj = this._participants.getUserListItemByPublicSID(publicSID);
     	if (tObj != null) {
     		tObj._miniIcons._loudness.loudness.setAttribute('opacity', bool ? 1 : 0.2);
         }

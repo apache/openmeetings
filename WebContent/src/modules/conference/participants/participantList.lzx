@@ -151,7 +151,7 @@
     <!--- get a Objects List Item
         @param string publicSID publicSID
      -->
-	<method name="getVideoObjectByPublicSID" args="publicSID">
+	<method name="getUserListItemByPublicSID" args="publicSID">
 	<![CDATA[
 		var v = null;
 		var lst = this._table.innerList;
