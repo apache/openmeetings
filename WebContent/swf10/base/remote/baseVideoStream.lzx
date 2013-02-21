@@ -313,28 +313,30 @@
 	<!--- sets the Volume of the VideoStream
 		@param number volume Number between 0 and 100
 	 -->
-    <method name="setSoundVolume" args="volume">
-        //this.soundRef.setVolume(volume);
-        if (this._ns!=null){
-            this._ns.soundTransform = new SoundTransform(volume/100.0);
-        }
-    </method>
+	<method name="setSoundVolume" args="volume">
+		//if ($debug) Debug.write(":: setSoundVolume ", parent.parent.publicSID);
+		//this.soundRef.setVolume(volume);
+		if (this._ns!=null){
+			this._ns.soundTransform = new SoundTransform(volume/100.0);
+		}
+	</method>
 
-    <method name="muteMicro" args="mute">
-        if(this.micro != null) {
-            if(mute) {
-            	if (this.micro.gain == 0) {
-            		return;
-            	}
-            	if ($debug) Debug.write("Make Gain mute again from ",this.micro.gain);
-                this.setAttribute('micGain', this.micro.gain);
-                this.micro.gain = 0;
-            } else {
-            	if ($debug) Debug.write("Make Gain loud again to ",this.micGain);
-                this.micro.gain = this.micGain;
-            }
-        }
-    </method>
+	<method name="muteMicro" args="mute">
+		if ($debug) Debug.write(":: muteMicro ", mute, parent.parent.publicSID);
+		if(this.micro != null) {
+			if(mute) {
+				if (this.micro.gain == 0) {
+					return;
+				}
+				if ($debug) Debug.write("Make Gain mute again from ",this.micro.gain);
+				this.setAttribute('micGain', this.micro.gain);
+				this.micro.gain = 0;
+			} else {
+				if ($debug) Debug.write("Make Gain loud again to ",this.micGain);
+				this.micro.gain = this.micGain;
+			}
+		}
+	</method>
     
     <!---
         pause or resumes the NetStream

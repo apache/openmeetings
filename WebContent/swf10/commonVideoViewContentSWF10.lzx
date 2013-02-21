@@ -336,14 +336,14 @@
         return;
     ]]></method>
 
-    <method name="updateMuteStatusVideoView" args="roomClient">
-        <![CDATA[
-            for (var i=0;i<this.subviews.length;i++){
-                this.subviews[i].muteMicrophone(roomClient);
-    		}
-    		return;
-        ]]>
-    </method>
+	<method name="updateMuteStatusVideoView" args="roomClient">
+	<![CDATA[
+		var obj = this.getVideoObjectByPublicSID(roomClient.publicSID);
+		if (obj != null) {
+			obj.muteMicrophone(roomClient);
+		}
+	]]>
+	</method>
 
     <method name="ismoderatorChanged" args="m">
         canvas.setAttribute("ismoderator", m);
@@ -496,6 +496,7 @@
 	<method name="updateFirstLastName" args="publicSID,first,last">
 		var v = getVideoObjectByPublicSID(publicSID);
 		if (v != null) {
+			if ($debug) Debug.write("!!!!!!! updating FirstLastName",publicSID,first,last);
 			v.setAttribute('chatpartnername', first + ' ' + last);
 		}
 	</method>

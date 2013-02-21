@@ -1174,21 +1174,18 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 		try {
 			log.debug("*..*switchMicMuted publicSID: " + publicSID);
 
-			Client currentClient = this.sessionManager
-					.getClientByPublicSID(publicSID, false, null);
+			Client currentClient = sessionManager.getClientByPublicSID(publicSID, false, null);
 			if (currentClient == null) {
 				return -1L;
 			}
 
 			currentClient.setMicMuted(mute);
-			this.sessionManager.updateClientByStreamId(
-					currentClient.getStreamid(), currentClient, false, null);
+			sessionManager.updateClientByStreamId(currentClient.getStreamid(), currentClient, false, null);
 
 			HashMap<Integer, Object> newMessage = new HashMap<Integer, Object>();
 			newMessage.put(0, "updateMuteStatus");
 			newMessage.put(1, currentClient);
-			this.sendMessageWithClient(newMessage);
-
+			sendMessageWithClient(newMessage);
 		} catch (Exception err) {
 			log.error("[switchMicMuted]", err);
 		}
