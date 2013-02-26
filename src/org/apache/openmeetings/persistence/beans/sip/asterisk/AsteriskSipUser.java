@@ -100,7 +100,11 @@ public class AsteriskSipUser implements Serializable {
 
 	@Column(name = "nat", nullable=false)
 	@Element(data=true, required = false)
-	private String nat = "yes";
+	private String nat = "force_rport,comedia";
+	
+	@Column(name = "callbackextension", nullable=true, length=250)
+	@Element(data=true, required = false)
+	private String callbackextension;
 
 	public long getId() {
 		return id;
@@ -228,5 +232,13 @@ public class AsteriskSipUser implements Serializable {
 
 	public void setNat(String nat) {
 		this.nat = nat;
+	}
+
+	public String getCallbackextension() {
+		return callbackextension;
+	}
+
+	public void setCallbackextension(String callbackextension) {
+		this.callbackextension = callbackextension;
 	}
 }

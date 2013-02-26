@@ -70,7 +70,6 @@
         <class>org.apache.openmeetings.persistence.beans.user.User</class>
 		<class>org.apache.openmeetings.persistence.beans.files.FileExplorerItem</class>
 		<class>org.apache.openmeetings.persistence.beans.sip.asterisk.AsteriskSipUser</class>
-        <class>org.apache.openmeetings.persistence.beans.sip.asterisk.MeetMe</class>
 		<exclude-unlisted-classes>false</exclude-unlisted-classes>
         <properties>
             <property name="openjpa.RuntimeUnenhancedClasses" value="unsupported" />

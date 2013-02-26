@@ -36,15 +36,12 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
-import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import org.apache.openjpa.persistence.ElementDependent;
 import org.apache.openjpa.persistence.jdbc.ForeignKey;
 import org.apache.openmeetings.persistence.beans.IDataProviderEntity;
-import org.apache.openmeetings.persistence.beans.sip.asterisk.MeetMe;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Root;
@@ -237,15 +234,17 @@ public class Room implements Serializable, IDataProviderEntity {
 	@ElementList(name = "room_moderators", required=false)
 	private List<RoomModerator> moderators;
 
-	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-	@PrimaryKeyJoinColumn(name="confno", referencedColumnName="confno")
-	@ForeignKey(enabled = true)
-	@Element(name = "meetme", required = false)
-	private MeetMe meetme;
-	
 	@Column(name = "sip_enabled")
 	@Element(data = true, required = false)
 	private boolean sipEnabled;
+	
+	@Column(name = "confno")
+	@Element(data = true, required = false)
+	private String confno;
+	
+	@Column(name = "pin")
+	@Element(data = true, required = false)
+	private String pin;
 	
 	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinColumn(name = "rooms_id", insertable = true, updatable = true)
@@ -560,19 +559,27 @@ public class Room implements Serializable, IDataProviderEntity {
 		this.autoVideoSelect = autoVideoSelect;
 	}
 
-	public MeetMe getMeetme() {
-		return meetme;
-	}
-
-	public void setMeetme(MeetMe meetme) {
-		this.meetme = meetme;
-	}
-
 	public boolean isSipEnabled() {
 		return sipEnabled;
 	}
 
 	public void setSipEnabled(boolean sipEnabled) {
 		this.sipEnabled = sipEnabled;
+	}
+
+	public String getConfno() {
+		return confno;
+	}
+
+	public void setConfno(String confno) {
+		this.confno = confno;
+	}
+
+	public String getPin() {
+		return pin;
+	}
+
+	public void setPin(String pin) {
+		this.pin = pin;
 	}
 }

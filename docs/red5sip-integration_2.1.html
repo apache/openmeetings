@@ -639,7 +639,7 @@ limitations under the License.
       <tr><td>
         <blockquote>
                                     <p>You need Apache OpenMeetings <strong>version 2.1</strong> to apply this guide!</p>
-                                                <p>You need Asterisk <strong>version 1.8</strong> to apply this guide!</p>
+                                                <p>You need Asterisk <strong>version 11</strong> to apply this guide!</p>
                                                 <p>Here is instruction how-to set up red5sip transport integration with OpenMeetings on Ubuntu 12.10.</p>
                             </blockquote>
       </td></tr>
@@ -648,7 +648,7 @@ limitations under the License.
                                                 <table border="0" cellspacing="0" cellpadding="0" cellspacing="0" width="100%">
       <tr><td ><!-- bgcolor="#EEEEEE" -->
         <font color="#000000" face="verdana,arial,helvetica,sanserif">
-          <a name="Installing packages for everything"><strong>Installing packages for everything</strong></a>
+          <a name="Prerequisites"><strong>Prerequisites</strong></a>
         </font>
         <hr style="width:100%; color:#999999; background-color:#999999; height:1px; border:0px;"/>
       </td></tr>
@@ -658,8 +658,8 @@ limitations under the License.
 				Run the commands
 				<blockquote>
 					<i>
-						sudo apt-get update<br />
-						sudo apt-get install linux-headers-`uname -r` asterisk unixODBC unixODBC-dev libmyodbc asterisk-dahdi
+						sudo apt-get update &amp;&amp; sudo apt-get upgrade<br />
+						sudo apt-get install build-essential linux-headers-`uname -r` libxml2-dev libncurses5-dev libsqlite3-dev sqlite3 openssl libssl-dev<br />
 					</i>
 				</blockquote>
 			</div>
@@ -677,6 +677,15 @@ limitations under the License.
       <tr><td>
         <blockquote>
                                     <div>
+				Run the commands
+				<blockquote>
+					<i>
+						sudo apt-get update<br />
+						sudo apt-get install unixODBC unixODBC-dev libmyodbc
+					</i>
+				</blockquote>
+			</div>
+                                                <div>
 				Set up Asterisk connector:<br /><br />
 				Modify file <tt>/etc/odbc.ini</tt> as follows: (replace USER, PASSWORD and Socket with values relative to your system)
 				<blockquote>
@@ -715,78 +724,55 @@ limitations under the License.
                                                 <table border="0" cellspacing="0" cellpadding="0" cellspacing="0" width="100%">
       <tr><td ><!-- bgcolor="#EEEEEE" -->
         <font color="#000000" face="verdana,arial,helvetica,sanserif">
-          <a name="Setup Asterisk"><strong>Setup Asterisk</strong></a>
+          <a name="Building and setting up Asterisk"><strong>Building and setting up Asterisk</strong></a>
         </font>
         <hr style="width:100%; color:#999999; background-color:#999999; height:1px; border:0px;"/>
       </td></tr>
       <tr><td>
         <blockquote>
                                     <div>
-				Enable asterisk ODBC and MeetMe modules:<br /><br />
+				Run the commands
+				<blockquote>
+					<i>
+						sudo mkdir /usr/src/asterisk &amp;&amp; cd /usr/src/asterisk<br />
+						sudo wget http://downloads.asterisk.org/pub/telephony/asterisk/asterisk-11.2.1.tar.gz<br />
+						sudo tar -xvzf asterisk-11.2.1.tar.gz<br />
+						cd ./asterisk-11.2.1<br />
+						sudo make clean<br />
+						sudo ./configure<br />
+						sudo make<br />
+						sudo make install<br />
+						sudo make samples<br />
+						sudo make config<br />
+						sudo service asterisk start<br />
+					</i>
+				</blockquote>
+			</div>
+                            </blockquote>
+      </td></tr>
+      <tr><td><br/></td></tr>
+    </table>
+                                                <table border="0" cellspacing="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr><td ><!-- bgcolor="#EEEEEE" -->
+        <font color="#000000" face="verdana,arial,helvetica,sanserif">
+          <a name="Configure Asterisk"><strong>Configure Asterisk</strong></a>
+        </font>
+        <hr style="width:100%; color:#999999; background-color:#999999; height:1px; border:0px;"/>
+      </td></tr>
+      <tr><td>
+        <blockquote>
+                                    <div>
+				Enable asterisk ODBC module:<br /><br />
 				Modify "[modules]" section of <tt>/etc/asterisk/modules.conf</tt> as follows:<br />
 				<strong>Add/uncomment the following lines</strong>
 				<blockquote>
 					<i>
 						preload =&gt; res_odbc.so<br />
 						preload =&gt; res_config_odbc.so<br />
-						load =&gt; app_meetme.so<br />
-					</i>
-				</blockquote>
-				<strong>Remove/comment the following lines</strong>
-				<blockquote>
-					<i>noload =&gt; res_config_odbc.so</i>
-				</blockquote>
-			</div>
-                                                <div>
-				Enable caching of SIP users:<br /><br />
-				Modify "[general]" section of <tt>/etc/asterisk/sip.conf</tt> uncomment the following line:
-				<blockquote>
-					<i>rtcachefriends=yes</i>
-				</blockquote>
-				add following section to create internal user for red5sip:
-				<blockquote>
-					<i>
-						[red5sip_user]<br />
-						type=friend<br />
-						user=red5sip_user<br />
-						context=rooms<br />
-						secret=12345<br />
-						disallow=all<br />
-						allow=ulaw<br />
-						host=dynamic<br />
-						nat=yes
 					</i>
 				</blockquote>
 			</div>
-                                                <div>
-				Add next lines into the <tt>/etc/asterisk/extconfig.conf</tt>:
-				<blockquote>
-					<i>
-						[settings]<br />
-						sippeers =&gt; odbc,asterisk,sipusers<br />
-						meetme =&gt; odbc,asterisk,meetme<br />
-					</i>
-				</blockquote>
-			</div>
-                                                <div>
-				Add next lines into the <tt>/etc/asterisk/extensions.conf</tt>:
-				<blockquote>
-					<i>
-						[rooms]<br />
-						switch =&gt; Realtime/@<br /><br />
-						exten =&gt; _400X!,1,MeetMe(${EXTEN},dM)<br /><br />
-						exten =&gt; &lt;extension&gt;,1,Set(SIP_NO=&lt;number to call with sipnet&gt;)<br />
-						exten =&gt; &lt;extension&gt;,2,Goto(sipnet-out,s,1)<br /><br />
-						exten =&gt; _.,1,Answer<br />
-						exten =&gt; _.,2,Playback(invalid)<br />
-						exten =&gt; _.,3,Hangup<br /><br />
-						[sipnet-out]<br /><br />
-						exten =&gt; s,1,Answer<br />
-						exten =&gt; s,n,Dial(SIP/${SIP_NO}@SIPNET,30)<br />
-						exten =&gt; s,n,HangUp
-					</i>
-				</blockquote>
-			</div>
+                                                <br />
                                                 <div>
 				Create/update "[asterisk]" section in <tt>/etc/asterisk/res_odbc.conf</tt>:
 				<blockquote>
@@ -798,12 +784,105 @@ limitations under the License.
 					</i>
 				</blockquote>
 			</div>
+                                                <br />
+                                                <div>
+				Modify <tt>/etc/asterisk/sip.conf</tt><br />
+				<strong>Add/uncomment the following line</strong>:<br />
+				<blockquote>
+					<i>
+						videosupport=yes<br />
+						rtcachefriends=yes<br />
+					</i>
+				</blockquote>
+				<strong>Add user for the "SIP Transport"</strong>:<br />
+				<blockquote>
+					<i>
+						[red5sip_user]<br />
+						type=friend<br />
+						secret=12345<br />
+						disallow=all<br />
+						allow=ulaw<br />
+						allow=h264<br />
+						host=dynamic<br />
+						nat=force_rport,comedia<br />
+						context=rooms<br />
+					</i>
+				</blockquote>
+			</div>
+                                                <br />
+                                                <div>
+				Add next lines into the <tt>/etc/asterisk/extconfig.conf</tt>:
+				<blockquote>
+					<i>
+						[settings]<br />
+						sippeers =&gt; odbc,asterisk,sipusers<br />
+					</i>
+				</blockquote>
+			</div>
+                                                <br />
+                                                <div>
+				Modify <tt>/etc/asterisk/confbridge.conf</tt><br />
+				<strong>Add/uncomment the following line in <tt>[default_bridge]</tt> section</strong>:<br />
+				<blockquote>
+					<i>
+						video_mode = follow_talker<br />
+					</i>
+				</blockquote>
+			</div>
+                                                <br />
+                                                <div>
+				Modify <tt>/etc/asterisk/extensions.conf</tt><br />
+				<strong>Add the following section</strong>:<br />
+				<blockquote>
+					<i>
+						[rooms]<br />
+						exten =&gt; _400X!,1,GotoIf($[${DB_EXISTS(openmeetings/rooms/${EXTEN})}]?ok:notavail)<br />
+						exten =&gt; _400X!,n(ok),SET(PIN=${DB(openmeetings/rooms/${EXTEN})})<br />
+						exten =&gt; _400X!,n,Set(CONFBRIDGE(user,pin)=${PIN})<br />
+						exten =&gt; _400X!,n,Confbridge(${EXTEN},,default_user)<br />
+						exten =&gt; _400X!,n,Hangup<br />
+						exten =&gt; _400X!,n(notavail),Answer()<br />
+						exten =&gt; _400X!,n,Playback(invalid)<br />
+						exten =&gt; _400X!,n,Hangup<br />
+					</i>
+				</blockquote>
+			</div>
+                                                <br />
+                                                <div>
+				To enable Asterisk Manager API modify <tt>/etc/asterisk/manager.conf</tt><br />
+				<strong>Add/Modify the following sections</strong>:<br />
+				<blockquote>
+					<i>
+						[general]<br />
+						enabled = yes<br />
+						webenabled = no<br />
+						port = 5038<br />
+						bindaddr = 127.0.0.1<br />
+						<br />
+						[openmeetings]<br />
+						secret = 12345<br />
+						deny=0.0.0.0/0.0.0.0<br />
+						permit=127.0.0.1/255.255.255.0<br />
+						read = all<br />
+						write = system,call,command,originate<br />
+					</i>
+				</blockquote>
+			</div>
+                                                <br />
+                                                <div>
+				Update Openmeetings with creadentials for Asterisk manager. 
+				Modify <tt>/opt/red5/webapps/openmeetings/WEB-INF/openmeetings-applicationContext.xml</tt><br />
+				find <strong>&lt;bean id="sipDao" class="org.apache.openmeetings.data.conference.dao.SipDao"&gt;</strong>
+				uncomment its parameters and set it to your custom values.   
+			</div>
+                                                <br />
                                                 <div>
 				Restart asterisk:
 				<blockquote>
 					<i>service asterisk restart</i>
 				</blockquote>
 			</div>
+                                                <br />
                                                 <div>
 				Ensure dahdi was installed successfully:
 				<blockquote>

@@ -37,6 +37,7 @@ import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
 import org.apache.openmeetings.data.beans.basic.SearchResult;
 import org.apache.openmeetings.data.conference.dao.RoomDao;
 import org.apache.openmeetings.data.conference.dao.RoomModeratorsDao;
+import org.apache.openmeetings.data.conference.dao.SipDao;
 import org.apache.openmeetings.data.user.OrganisationManager;
 import org.apache.openmeetings.data.user.dao.UsersDao;
 import org.apache.openmeetings.persistence.beans.domain.Organisation_Users;
@@ -78,6 +79,8 @@ public class RoomManager {
 	private ConfigurationDao configurationDao;
     @Autowired
 	private RoomDao roomDao;
+    @Autowired
+	private SipDao sipDao;
 
 	/**
 	 * add a new Record to the table roomtypes
@@ -575,8 +578,8 @@ public class RoomManager {
      * @return number of participants
      */
     public Integer getSipConferenceMembersNumber(Long rooms_id) {
-    	Room rooms = roomDao.get(rooms_id);
-    	return rooms.getMeetme() != null ? rooms.getMeetme().getMembers() : null;
+    	Room r = roomDao.get(rooms_id);
+    	return sipDao.countUsers(r.getConfno());
     }
 
 	/**

@@ -28,20 +28,20 @@ import javax.persistence.TypedQuery;
 import org.apache.openmeetings.data.IDataProviderDao;
 import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
 import org.apache.openmeetings.persistence.beans.room.Room;
-import org.apache.openmeetings.persistence.beans.sip.asterisk.MeetMe;
 import org.apache.openmeetings.utils.DaoHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
 public class RoomDao implements IDataProviderDao<Room> {
-	
 	public final static String[] searchFields = {"name"};
 	
 	@PersistenceContext
 	private EntityManager em;
     @Autowired
 	private ConfigurationDao cfgDao;
+    @Autowired
+    private SipDao sipDao;
 
 	public Room get(long id) {
 		TypedQuery<Room> q = em.createNamedQuery("getRoomById", Room.class);
@@ -108,7 +108,7 @@ public class RoomDao implements IDataProviderDao<Room> {
 	}
 	
 	public Room update(Room entity, Long userId) {
-		return update(entity, userId, entity.getMeetme() == null ? null : entity.getMeetme().getPin());
+		return update(entity, userId, null);
 	}
 	
 	public Room update(Room entity, Long userId, String pin) {
@@ -120,17 +120,15 @@ public class RoomDao implements IDataProviderDao<Room> {
 		}
 		if (entity.isSipEnabled() && isSipEnabled()) {
 			String sipNumber = getSipNumber(entity.getRooms_id());
-			if (entity.getMeetme() == null || !sipNumber.equals(entity.getMeetme().getConfno())) {
-				MeetMe m = new MeetMe();
-				m.setConfno(sipNumber);
-				entity.setMeetme(m);
+			if (!sipNumber.equals(entity.getConfno())) {
+				sipDao.update(sipNumber, pin);
+				entity.setConfno(sipNumber);
+				entity.setPin(pin);
 			}
-			entity.getMeetme().setPin(pin);
 		} else {
-			if (entity.getMeetme() != null) {
-				em.remove(entity.getMeetme());
-			}
-			entity.setMeetme(null);
+			sipDao.delete(entity.getConfno());
+			entity.setConfno(null);
+			entity.setPin(null);
 		}
 		entity = em.merge(entity);
 		return entity;
@@ -138,7 +136,6 @@ public class RoomDao implements IDataProviderDao<Room> {
 
 	public void delete(Room entity, Long userId) {
 		entity.setDeleted(true);
-		entity.setMeetme(null);
 		entity.setSipEnabled(false);
 		update(entity, userId);
 	}

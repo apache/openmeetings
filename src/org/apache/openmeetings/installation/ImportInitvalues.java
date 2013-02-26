@@ -39,6 +39,7 @@ import org.apache.openmeetings.data.calendar.daos.AppointmentCategoryDao;
 import org.apache.openmeetings.data.calendar.daos.AppointmentReminderTypDao;
 import org.apache.openmeetings.data.conference.PollManager;
 import org.apache.openmeetings.data.conference.RoomManager;
+import org.apache.openmeetings.data.conference.dao.SipDao;
 import org.apache.openmeetings.data.user.OrganisationManager;
 import org.apache.openmeetings.data.user.UserManager;
 import org.apache.openmeetings.data.user.dao.SalutationDao;
@@ -92,6 +93,8 @@ public class ImportInitvalues {
 	private AppointmentReminderTypDao appointmentReminderTypDaoImpl;
 	@Autowired
 	private PollManager pollManager;
+	@Autowired
+	private SipDao sipDao;
 
 	public void loadMainMenu() {
 
@@ -994,6 +997,7 @@ public class ImportInitvalues {
 		if (!force && usersDao.getAllUsers().size() > 0) {
 			log.debug("System contains users, no need to install data one more time.");
 		}
+		sipDao.delete();
 		loadMainMenu();
 		loadErrorMappingsFromXML();
 		loadInitLanguages();

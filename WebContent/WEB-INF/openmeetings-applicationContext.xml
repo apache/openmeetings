@@ -18,72 +18,59 @@
   under the License.
   
 -->
-<beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:tx="http://www.springframework.org/schema/tx"
-	xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:context="http://www.springframework.org/schema/context"
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:context="http://www.springframework.org/schema/context"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd 
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
 		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
 		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd">
-	<bean id="entityManagerFactory"
-		class="org.springframework.orm.jpa.LocalEntityManagerFactoryBean">
+	<bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalEntityManagerFactoryBean">
 		<property name="persistenceUnitName" value="openmeetings" />
 	</bean>
 	<bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
 		<property name="entityManagerFactory" ref="entityManagerFactory" />
 	</bean>
 
-	<bean
-		class="org.springframework.orm.jpa.support.PersistenceAnnotationBeanPostProcessor" />
+	<bean class="org.springframework.orm.jpa.support.PersistenceAnnotationBeanPostProcessor" />
 
 	<bean id="jpaTransactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
 		<property name="entityManagerFactory" ref="entityManagerFactory" />
 	</bean>
-	<bean id="multipartResolver"
-		class="org.springframework.web.multipart.commons.CommonsMultipartResolver" />
+	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver" />
 	<!-- Configures the @Controller programming model -->
 	<mvc:annotation-driven />
 
-	<tx:annotation-driven transaction-manager="jpaTransactionManager" proxy-target-class="true"/>
+	<tx:annotation-driven transaction-manager="jpaTransactionManager" proxy-target-class="true" />
 	<context:annotation-config />
 	<context:component-scan base-package="org.apache.openmeetings" />
 
 	<!-- New Class for the Streaming Handlers -->
-	<bean id="web.handler"
-		class="org.apache.openmeetings.remote.red5.ScopeApplicationAdapter" />
-		
+	<bean id="web.handler" class="org.apache.openmeetings.remote.red5.ScopeApplicationAdapter" />
+
 	<!-- Session configuration start -->
-	
-	<bean id="openmeetings.SessionManager" 
-		class="org.apache.openmeetings.session.SessionManager">
+
+	<bean id="openmeetings.SessionManager" class="org.apache.openmeetings.session.SessionManager">
 		<property name="cache">
-	        <ref bean="openmeetings.HashMapStore"/>  <!-- Memory based session cache by default -->
-	    </property>	
+			<ref bean="openmeetings.HashMapStore" />  <!-- Memory based session cache by default -->
+		</property>
 	</bean>
-	<bean id="openmeetings.EmoticonsManager" 
-		class="org.apache.openmeetings.data.whiteboard.EmoticonsManager" />
-		
-	<!--  Singletons for memory based cache -->
-	<bean id="openmeetings.HashMapStore" scope="singleton" 
-		class="org.apache.openmeetings.session.store.HashMapStore" />
-	<bean id="whiteBoardObjectListManagerById" scope="singleton"  
-	    class="org.apache.openmeetings.data.whiteboard.WhiteBoardObjectListManagerById" />
+	<bean id="openmeetings.EmoticonsManager" class="org.apache.openmeetings.data.whiteboard.EmoticonsManager" />
+
+	<!-- Singletons for memory based cache -->
+	<bean id="openmeetings.HashMapStore" scope="singleton" class="org.apache.openmeetings.session.store.HashMapStore" />
+	<bean id="whiteBoardObjectListManagerById" scope="singleton"
+		class="org.apache.openmeetings.data.whiteboard.WhiteBoardObjectListManagerById" />
 	<!-- WhiteBoardObjectSyncManager can stay in the memory, even on cluster! -->
-	<bean id="whiteBoardObjectSyncManager" scope="singleton"  
-	    class="org.apache.openmeetings.data.whiteboard.WhiteBoardObjectSyncManager" />
-	
+	<bean id="whiteBoardObjectSyncManager" scope="singleton" class="org.apache.openmeetings.data.whiteboard.WhiteBoardObjectSyncManager" />
+
 	<!-- Database cache -->
-	<bean id="openmeetings.DatabaseStore"
-		class="org.apache.openmeetings.session.store.DatabaseStore" />
-	
-	<bean id="openmeetings.ServerUtil" scope="singleton"
-		class="org.apache.openmeetings.session.ServerUtil">
-		<!-- 
-			Need to be uncommented and set to the real ID if in cluster mode
-		<property name="serverId" value="1" />
-		 -->  
-	</bean>	
-	
+	<bean id="openmeetings.DatabaseStore" class="org.apache.openmeetings.session.store.DatabaseStore" />
+
+	<bean id="openmeetings.ServerUtil" scope="singleton" class="org.apache.openmeetings.session.ServerUtil">
+		<!-- Need to be uncommented and set to the real ID if in cluster mode <property name="serverId" value="1" /> -->
+	</bean>
+
 	<!-- Cluster related config start -->
 
 	<!-- Start of Services -->
@@ -99,30 +86,22 @@
 	<bean id="userservice.service" class="org.apache.openmeetings.remote.UserService" />
 	<bean id="fileservice.service" class="org.apache.openmeetings.remote.ConferenceLibrary" />
 	<bean id="openmeetings.FileProcessor" class="org.apache.openmeetings.data.file.FileProcessor" />
-	<bean id="openmeetings.FlvExplorerConverter"
-		class="org.apache.openmeetings.data.flvrecord.converter.FlvExplorerConverter" />
+	<bean id="openmeetings.FlvExplorerConverter" class="org.apache.openmeetings.data.flvrecord.converter.FlvExplorerConverter" />
 	<bean id="errorservice.service" class="org.apache.openmeetings.remote.ErrorService" />
 	<bean id="conferenceservice.service" class="org.apache.openmeetings.remote.ConferenceService" />
 	<bean id="configservice.service" class="org.apache.openmeetings.remote.ConfigurationService" />
 	<bean id="chatservice.service" class="org.apache.openmeetings.remote.ChatService" />
 	<bean id="calendarservice.service" class="org.apache.openmeetings.remote.CalendarService" />
 	<bean id="flvrecorderservice.service" class="org.apache.openmeetings.remote.FLVRecorderService" />
-	<bean id="openmeetings.FlvRecorderConverterTask"
-		class="org.apache.openmeetings.data.flvrecord.converter.FlvRecorderConverterTask" />
-	<bean id="openmeetings.FlvInterviewConverterTask"
-		class="org.apache.openmeetings.data.flvrecord.converter.FlvInterviewConverterTask" />
-	<bean id="openmeetings.FlvInterviewReConverterTask"
-		class="org.apache.openmeetings.data.flvrecord.converter.FlvInterviewReConverterTask" />
-	<bean id="openmeetings.FlvInterviewConverter"
-		class="org.apache.openmeetings.data.flvrecord.converter.FlvInterviewConverter" />
-	<bean id="openmeetings.FlvRecorderConverter"
-		class="org.apache.openmeetings.data.flvrecord.converter.FlvRecorderConverter" />
-	<bean id="openmeetings.SlaveHTTPConnectionManager"
-		class="org.apache.openmeetings.cluster.SlaveHTTPConnectionManager" />
-	
+	<bean id="openmeetings.FlvRecorderConverterTask" class="org.apache.openmeetings.data.flvrecord.converter.FlvRecorderConverterTask" />
+	<bean id="openmeetings.FlvInterviewConverterTask" class="org.apache.openmeetings.data.flvrecord.converter.FlvInterviewConverterTask" />
+	<bean id="openmeetings.FlvInterviewReConverterTask" class="org.apache.openmeetings.data.flvrecord.converter.FlvInterviewReConverterTask" />
+	<bean id="openmeetings.FlvInterviewConverter" class="org.apache.openmeetings.data.flvrecord.converter.FlvInterviewConverter" />
+	<bean id="openmeetings.FlvRecorderConverter" class="org.apache.openmeetings.data.flvrecord.converter.FlvRecorderConverter" />
+	<bean id="openmeetings.SlaveHTTPConnectionManager" class="org.apache.openmeetings.cluster.SlaveHTTPConnectionManager" />
+
 	<bean id="openmeetings.SessionClearJob" class="org.apache.openmeetings.quartz.scheduler.SessionClearJob" />
-	<bean id="sessionClearJob"
-		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+	<bean id="sessionClearJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
 		<property name="targetObject">
 			<ref bean="openmeetings.SessionClearJob" />
 		</property>
@@ -145,11 +124,9 @@
 			<value>300000</value>
 		</property>
 	</bean>
-	
-	<bean id="openmeetings.MeetingReminderJob"
-		class="org.apache.openmeetings.quartz.scheduler.MeetingReminderJob" />
-	<bean id="meetingReminderClear"
-		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+
+	<bean id="openmeetings.MeetingReminderJob" class="org.apache.openmeetings.quartz.scheduler.MeetingReminderJob" />
+	<bean id="meetingReminderClear" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
 		<property name="targetObject">
 			<ref bean="openmeetings.MeetingReminderJob" />
 		</property>
@@ -172,7 +149,7 @@
 			<value>100000</value>
 		</property>
 	</bean>
-	<bean id="testSetupCleanupJob" class="org.apache.openmeetings.quartz.scheduler.TestSetupCleanupJob"/>
+	<bean id="testSetupCleanupJob" class="org.apache.openmeetings.quartz.scheduler.TestSetupCleanupJob" />
 	<bean id="testSetupCleanup" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
 		<property name="targetObject">
 			<ref bean="testSetupCleanupJob" />
@@ -187,13 +164,13 @@
 			<ref bean="testSetupCleanup" />
 		</property>
 		<property name="startDelay">
-			<value>1800000</value> <!--  30 minutes -->
+			<value>1800000</value> <!-- 30 minutes -->
 		</property>
 		<property name="repeatInterval">
-			<value>1800000</value> <!--  30 minutes -->
+			<value>1800000</value> <!-- 30 minutes -->
 		</property>
 	</bean>
-	
+
 	<bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
 		<property name="triggers">
 			<list>
@@ -206,12 +183,18 @@
 	<!-- End of Services -->
 
 	<!-- Interface Transactional -->
-	<bean id="appointmentReminderTypDaoImpl"
-		class="org.apache.openmeetings.data.calendar.daos.AppointmentReminderTypDao" />
-	<bean id="appointmentCategoryDaoImpl"
-		class="org.apache.openmeetings.data.calendar.daos.AppointmentCategoryDao" />
+	<bean id="appointmentReminderTypDaoImpl" class="org.apache.openmeetings.data.calendar.daos.AppointmentReminderTypDao" />
+	<bean id="appointmentCategoryDaoImpl" class="org.apache.openmeetings.data.calendar.daos.AppointmentCategoryDao" />
 	<bean id="roommanagement" class="org.apache.openmeetings.data.conference.RoomManager" />
-	<bean id="roomDao" class="org.apache.openmeetings.data.conference.dao.RoomDao" />
+	<bean id="roomDao" class="org.apache.openmeetings.data.conference.dao.RoomDao"/>
+	<bean id="sipDao" class="org.apache.openmeetings.data.conference.dao.SipDao">
+	<!--  Should be uncommented and updated with real values for Asterisk
+		<constructor-arg><value>127.0.0.1</value></constructor-arg>
+		<constructor-arg><value>5038</value></constructor-arg>
+		<constructor-arg><value>openmeetings</value></constructor-arg>
+		<constructor-arg><value>12345</value></constructor-arg>
+	 -->
+	</bean>
 	<bean id="organisationmanagement" class="org.apache.openmeetings.data.user.OrganisationManager" />
 	<bean id="organisationDao" class="org.apache.openmeetings.data.user.dao.OrganisationDao" />
 	<bean id="organisationUserDao" class="org.apache.openmeetings.data.user.dao.OrganisationUserDao" />
@@ -226,48 +209,36 @@
 	<bean id="fieldLanguagesValuesDAO" class="org.apache.openmeetings.data.basic.FieldLanguagesValuesDao" />
 	<bean id="fieldmanagment" class="org.apache.openmeetings.data.basic.FieldManager" />
 	<bean id="configurationDaoImpl" class="org.apache.openmeetings.data.basic.dao.ConfigurationDao" />
-	<bean id="appointmentDao"
-		class="org.apache.openmeetings.data.calendar.daos.AppointmentDao" />
-	<bean id="appointmentLogic"
-		class="org.apache.openmeetings.data.calendar.management.AppointmentLogic" />
-	<bean id="meetingMemberLogic"
-		class="org.apache.openmeetings.data.calendar.management.MeetingMemberLogic" />
+	<bean id="appointmentDao" class="org.apache.openmeetings.data.calendar.daos.AppointmentDao" />
+	<bean id="appointmentLogic" class="org.apache.openmeetings.data.calendar.management.AppointmentLogic" />
+	<bean id="meetingMemberLogic" class="org.apache.openmeetings.data.calendar.management.MeetingMemberLogic" />
 	<bean id="sessionManagement" class="org.apache.openmeetings.data.basic.SessiondataDao" />
 	<bean id="userManagement" class="org.apache.openmeetings.data.user.UserManager" />
-	<bean id="roomModeratorsDao"
-		class="org.apache.openmeetings.data.conference.dao.RoomModeratorsDao" />
+	<bean id="roomModeratorsDao" class="org.apache.openmeetings.data.conference.dao.RoomModeratorsDao" />
 	<bean id="conferenceLogDao" class="org.apache.openmeetings.data.logs.ConferenceLogDao" />
 	<bean id="conferenceLogTypeDao" class="org.apache.openmeetings.data.logs.ConferenceLogTypeDao" />
 	<bean id="emailManagement" class="org.apache.openmeetings.data.user.EmailManager" />
-	<bean id="fileExplorerItemDao"
-		class="org.apache.openmeetings.data.file.dao.FileExplorerItemDao" />
+	<bean id="fileExplorerItemDao" class="org.apache.openmeetings.data.file.dao.FileExplorerItemDao" />
 	<bean id="flvRecordingDao" class="org.apache.openmeetings.data.flvrecord.FlvRecordingDao" />
-	<bean id="flvRecordingLogDao"
-		class="org.apache.openmeetings.data.flvrecord.FlvRecordingLogDao" />
-	<bean id="flvRecordingMetaDataDao"
-		class="org.apache.openmeetings.data.flvrecord.FlvRecordingMetaDataDao" />
-	<bean id="flvRecordingMetaDeltaDao"
-		class="org.apache.openmeetings.data.flvrecord.FlvRecordingMetaDeltaDao" />
+	<bean id="flvRecordingLogDao" class="org.apache.openmeetings.data.flvrecord.FlvRecordingLogDao" />
+	<bean id="flvRecordingMetaDataDao" class="org.apache.openmeetings.data.flvrecord.FlvRecordingMetaDataDao" />
+	<bean id="flvRecordingMetaDeltaDao" class="org.apache.openmeetings.data.flvrecord.FlvRecordingMetaDeltaDao" />
 	<bean id="ldapConfigDao" class="org.apache.openmeetings.data.basic.dao.LdapConfigDao" />
-	<bean id="invitationManagement"
-		class="org.apache.openmeetings.data.conference.InvitationManager" />
-	<bean id="meetingMemberDao"
-		class="org.apache.openmeetings.data.calendar.daos.MeetingMemberDao" />
-	<bean id="privateMessageFolderDao"
-		class="org.apache.openmeetings.data.user.dao.PrivateMessageFolderDao" />
-	<bean id="privateMessagesDao"
-		class="org.apache.openmeetings.data.user.dao.PrivateMessagesDao" />
+	<bean id="invitationManagement" class="org.apache.openmeetings.data.conference.InvitationManager" />
+	<bean id="meetingMemberDao" class="org.apache.openmeetings.data.calendar.daos.MeetingMemberDao" />
+	<bean id="privateMessageFolderDao" class="org.apache.openmeetings.data.user.dao.PrivateMessageFolderDao" />
+	<bean id="privateMessagesDao" class="org.apache.openmeetings.data.user.dao.PrivateMessagesDao" />
 	<bean id="soapLoginDao" class="org.apache.openmeetings.data.basic.dao.SOAPLoginDao" />
 	<bean id="userContactsDao" class="org.apache.openmeetings.data.user.dao.UserContactsDao" />
 	<bean id="usersDao" class="org.apache.openmeetings.data.user.dao.UsersDao" />
 	<bean id="serverDao" class="org.apache.openmeetings.data.basic.dao.ServerDao" />
 	<bean id="chatDao" class="org.apache.openmeetings.data.chat.ChatDao" />
 	<bean id="clientDao" class="org.apache.openmeetings.data.conference.dao.ClientDao" />
-	
+
 
 	<!-- No Interface -->
 	<bean id="manageCryptStyle" class="org.apache.openmeetings.utils.crypt.ManageCryptStyle" />
-    <bean id="generateImage" class="org.apache.openmeetings.documents.GenerateImage" />
+	<bean id="generateImage" class="org.apache.openmeetings.documents.GenerateImage" />
 	<bean id="generateThumbs" class="org.apache.openmeetings.documents.GenerateThumbs" />
 	<bean id="generatePDF" class="org.apache.openmeetings.documents.GeneratePDF" />
 	<bean id="mailHandler" class="org.apache.openmeetings.utils.mail.MailHandler" />
@@ -284,33 +255,31 @@
 	<bean id="ldapLoginManagement" class="org.apache.openmeetings.ldap.LdapLoginManagement" />
 	<bean id="timezoneUtil" class="org.apache.openmeetings.utils.math.TimezoneUtil" />
 	<bean id="whiteboardManagement" class="org.apache.openmeetings.data.whiteboard.WhiteboardManager" />
-	
+
 	<!-- Templates -->
 	<bean id="registerUserTemplate" class="org.apache.openmeetings.templates.RegisterUserTemplate" />
 	<bean id="feedbackTemplate" class="org.apache.openmeetings.templates.FeedbackTemplate" />
 	<bean id="invitationTemplate" class="org.apache.openmeetings.templates.InvitationTemplate" />
 	<bean id="requestContactTemplate" class="org.apache.openmeetings.templates.RequestContactTemplate" />
-	<bean id="requestContactConfirmTemplate"
-		class="org.apache.openmeetings.templates.RequestContactConfirmTemplate" />
+	<bean id="requestContactConfirmTemplate" class="org.apache.openmeetings.templates.RequestContactConfirmTemplate" />
 	<bean id="resetPasswordTemplate" class="org.apache.openmeetings.templates.ResetPasswordTemplate" />
 
 	<!-- Thread Executor -->
-	<bean id="taskExecutor"
-		class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
+	<bean id="taskExecutor" class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
 		<property name="corePoolSize" value="5" />
 		<property name="maxPoolSize" value="10" />
 		<property name="queueCapacity" value="25" />
 	</bean>
 
-	<bean id="mailThread" class="org.apache.openmeetings.utils.mail.MailThread"/>
-	<bean id="mailiCalThread" class="org.apache.openmeetings.utils.mail.MailiCalThread"/>
+	<bean id="mailThread" class="org.apache.openmeetings.utils.mail.MailThread" />
+	<bean id="mailiCalThread" class="org.apache.openmeetings.utils.mail.MailiCalThread" />
 
 	<!-- Axis2 Service Proxy's -->
 	<bean id="userWebService" class="org.apache.openmeetings.axis.services.UserWebService" />
 	<bean id="roomWebService" class="org.apache.openmeetings.axis.services.RoomWebService" />
 	<bean id="fileWebService" class="org.apache.openmeetings.axis.services.FileWebService" />
 	<bean id="calendarWebService" class="org.apache.openmeetings.axis.services.CalendarWebService" />
-  	<bean id="jabberWebService" class="org.apache.openmeetings.axis.services.JabberWebService" />
+	<bean id="jabberWebService" class="org.apache.openmeetings.axis.services.JabberWebService" />
 	<bean id="serverWebService" class="org.apache.openmeetings.axis.services.ServerWebService" />
 
 	<!-- Servlet Facade Beans -->

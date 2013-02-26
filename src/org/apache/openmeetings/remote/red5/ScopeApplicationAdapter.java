@@ -2838,10 +2838,10 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
     }
 
     public synchronized String getSipNumber(Long room_id) {
-        Room rooms = roomDao.get(room_id);
-        if(rooms != null && rooms.getMeetme() != null) {
-            log.debug("getSipNumber: room_id: {}, sipNumber: {}", new Object[]{room_id, rooms.getMeetme().getConfno()});
-            return rooms.getMeetme().getConfno();
+        Room r = roomDao.get(room_id);
+        if(r != null && r.getConfno() != null) {
+            log.debug("getSipNumber: room_id: {}, sipNumber: {}", new Object[]{room_id, r.getConfno()});
+            return r.getConfno();
         }
         return null;
     }
