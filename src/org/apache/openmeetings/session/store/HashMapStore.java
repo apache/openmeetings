@@ -179,6 +179,13 @@ public class HashMapStore implements IClientPersistenceStore {
 		HashSet<Long> rooms = new HashSet<Long>();
 		for (Client cl : clientsByStreamId.values()) {
 			Long roomId = cl.getRoom_id();
+			Server s = cl.getServer();
+			if ((server == null && s != null) || (server != null && s == null)) {
+				continue;
+			}
+			if (server != null && s != null && server.getId() != s.getId()) {
+				continue;
+			}
 			if (roomId != null && roomId > 0 && !rooms.contains(roomId)) {
 				rooms.add(roomId);
 			}

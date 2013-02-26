@@ -35,7 +35,6 @@ import org.springframework.beans.factory.annotation.Autowired;
  *
  */
 public class ServerUtil {
-	
 	protected static final Logger log = Red5LoggerFactory.getLogger(
 			ServerUtil.class, OpenmeetingsVariables.webAppRootKey);
 
@@ -58,6 +57,7 @@ public class ServerUtil {
 	public String getServerId() {
 		return serverId;
 	}
+	
 	public void setServerId(String serverId) {
 		this.serverId = serverId;
 	}
@@ -70,7 +70,7 @@ public class ServerUtil {
 		if (serverId == null) {
 			return null;
 		}
-		if (currentServer != null && currentServer.getId().equals(serverId)) {
+		if (currentServer != null && serverId.equals(currentServer.getId().toString())) {
 			return currentServer;
 		}
 		currentServer = serverDao.get(Long.parseLong(serverId));
@@ -79,5 +79,4 @@ public class ServerUtil {
 		}
 		return currentServer;
 	}
-	
 }
