@@ -124,8 +124,10 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 			Configuration conf_reminder = get(confKey);
 
 			if (conf_reminder == null) {
-				log.warn("Could not find key in configuration CONF_KEY: "
-						+ confKey);
+				log.warn("Could not find key in configuration CONF_KEY: " + confKey);
+				if (defaultValue == null) {
+					return null;
+				}
 			} else {
 				// Use the custom value as default value
 				defaultValue = conf_reminder.getConf_value();
