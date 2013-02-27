@@ -579,7 +579,7 @@ public class RoomManager {
      */
     public Integer getSipConferenceMembersNumber(Long rooms_id) {
     	Room r = roomDao.get(rooms_id);
-    	return sipDao.countUsers(r.getConfno());
+    	return r == null || r.getConfno() == null ? null : sipDao.countUsers(r.getConfno());
     }
 
 	/**
