@@ -155,14 +155,14 @@
 			this.numberOfParticipants.selectItem(String(obj.numberOfPartizipants));
 			this.roomtype.selectItem(String(obj.roomtype.roomtypes_id));
 			
-			if (obj.meetme != null && obj.meetme.confno != null) {
-		        this.sipNumber.setAttribute("text", obj.meetme.confno);
+			if (obj != null && obj.confno != null) {
+		        this.sipNumber.setAttribute("text", obj.confno);
 			} else {
 				this.sipNumber.setAttribute("text","");
 			}
 			
-			if (obj.meetme != null && obj.meetme.pin != null) {
-                this.conferencePin.setAttribute("text", obj.meetme.pin);
+			if (obj != null && obj.pin != null) {
+                this.conferencePin.setAttribute("text", obj.pin);
 			} else {
 				this.conferencePin.setAttribute("text", "");
 			}
