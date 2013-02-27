@@ -266,7 +266,7 @@ public class Server implements Serializable, IDataProviderEntity {
 			return false;
 		} else {
 			Server s = (Server)obj;
-			return s.id == id && ((s.name != null && s.name.equals(name)) || (s.name == null && s.name == name));
+			return s.id == id && ((s.address != null && s.address.equals(address)) || (s.address == null && s.address == address));
 		}
 	}
 	
@@ -274,7 +274,7 @@ public class Server implements Serializable, IDataProviderEntity {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + (int)id + (name == null ? 0 : name.hashCode());
+		result = prime * result + (int)id + (address == null ? 0 : address.hashCode());
 		return result;
 	}
 	
