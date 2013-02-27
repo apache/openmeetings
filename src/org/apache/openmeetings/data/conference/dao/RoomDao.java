@@ -112,15 +112,6 @@ public class RoomDao implements IDataProviderDao<Room> {
 	}
 	
 	public Room update(Room entity, Long userId) {
-		return update(entity, userId, null);
-	}
-	
-	private boolean isPinChanged(Room entity, String pin) {
-		return (pin == null && entity.getPin() != null)
-				|| !pin.equals(entity.getPin());
-	}
-	
-	public Room update(Room entity, Long userId, String pin) {
 		if (entity.getRooms_id() == null) {
 			entity.setStarttime(new Date());
 			em.persist(entity);
@@ -129,11 +120,10 @@ public class RoomDao implements IDataProviderDao<Room> {
 		}
 		if (entity.isSipEnabled() && isSipEnabled()) {
 			String sipNumber = getSipNumber(entity.getRooms_id());
-			if (!sipNumber.equals(entity.getConfno()) || isPinChanged(entity, pin)) {
-				sipDao.update(sipNumber, pin);
+			if (!sipNumber.equals(entity.getConfno())) {
 				entity.setConfno(sipNumber);
-				entity.setPin(pin);
 			}
+			sipDao.update(sipNumber, entity.getPin());
 		} else {
 			sipDao.delete(entity.getConfno());
 			entity.setConfno(null);

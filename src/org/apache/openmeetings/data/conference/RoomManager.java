@@ -651,8 +651,9 @@ public class RoomManager {
 				r.setFilesOpened(filesOpened);
 				r.setAutoVideoSelect(autoVideoSelect);
 				r.setSipEnabled(sipEnabled);
+				r.setPin(conferencePin);
 				
-				r = roomDao.update(r, ownerId, conferencePin);
+				r = roomDao.update(r, ownerId);
 
 				if (organisations != null) {
 					Long t = this.updateRoomOrganisations(organisations, r);
@@ -1227,6 +1228,7 @@ public class RoomManager {
 			r.setChatOpened(chatOpened);
 			r.setFilesOpened(filesOpened);
 			r.setAutoVideoSelect(autoVideoSelect);
+			r.setPin(conferencePin);
 			r.setSipEnabled(sipEnabled);
 			roomDao.update(r, ownerId);
 
