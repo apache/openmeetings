@@ -4536,10 +4536,10 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>Envoyer SMS</value>
   </string>
   <string id="1504" name="publishing_message">
-    <value>Publier. Utilisateur:</value>
+    <value>Publier. Utilisateur :</value>
   </string>
   <string id="1505" name="cmd_line_admin">
-    <value>Pour économiser du temps et de la bande passante vous pouvez utiliser la ligne de commande pour sauvegarder/restaurer/mettre à niveau votre système :\n 1) Aller dans le répertoire d'installation d'OM (par ex. /opt/red5) \n 2) Arrêter OM (par ex. ./red5-shutdown.sh)\n 3) ./admin.sh -b -file ~/nom_du_backup.zip (créer la sauvegarde d'OM)\n 4) télécharger la nouvelle version d'OM\n 5) mv /opt/red5 /opt.red5.bak (déplacer la version d'OM qui fonctionne par sécurité.)\n 6) extraire la nouvelle version d'OM dans /opt/red5\n 7) ./admin.sh -i -file ~/today_om_backup.zip (or './admin.sh -i -file ~/today_om_backup.zip --db-type mysql --db-user om_user --db-pass om_user_pass' in case of you are using non-default DB )\n 8) Démarrer OM\n</value>
+    <value>Pour économiser du temps et de la bande passante vous pouvez utiliser la ligne de commande pour sauvegarder/restaurer/mettre à niveau votre système :\n 1) Aller dans le répertoire d'installation d'OM (par ex. /opt/red5) \n 2) Arrêter OM (par ex. ./red5-shutdown.sh)\n 3) ./admin.sh -b -file ~/nom_du_backup.zip (créer la sauvegarde d'OM)\n 4) télécharger la nouvelle version d'OM\n 5) mv /opt/red5 /opt.red5.bak (déplacer la version d'OM qui fonctionne par sécurité.)\n 6) extraire la nouvelle version d'OM dans /opt/red5\n 7) ./admin.sh -i -file ~/today_om_backup.zip (ou './admin.sh -i -file ~/today_om_backup.zip --db-type mysql --db-user om_user --db-pass om_user_pass' dans le cas d'une BD qui n'est pas celle par défaut )\n 8) Démarrer OM\n</value>
   </string>
   <string id="1506" name="public_room_tooltip">
     <value>Salles pour tous les utilisateurs</value>
@@ -4554,93 +4554,93 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>Créer/Modifier salle particulière</value>
   </string>
   <string id="1510" name="multiple_addresses">
-    <value>You can enter multiple addresses in the format: firstname1 lastname1 &lt;email1&gt;,"firstname2 lastname2" &lt;email2&gt;,'firstname3 lastname3' &lt;email3&gt;, ...</value>
+    <value>Vous pouvez entrer plusieurs adresses sous le format : prénom1 nom1 &lt;e-mail1&gt;,"prénom2 nom2" &lt;e-mail2&gt;,'prénom3 nom3' &lt;e-mail3&gt;, ...</value>
   </string>
   <string id="1511" name="stream_volume">
-    <value>Adjust stream volume</value>
+    <value>Ajuster le volume</value>
   </string>
   <string id="1512" name="microphone_volume">
-    <value>Adjust microphone volume</value>
+    <value>Ajuster le volume du micro</value>
   </string>
   <string id="1513" name="chat_moderated">
-    <value>Is chat moderated</value>
+    <value>T'chat est-t-il modéré</value>
   </string>
   <string id="1514" name="chat_moderated">
-    <value>Allow message</value>
+    <value>Autoriser les messages</value>
   </string>
   <string id="1515" name="chat_opened">
-    <value>Chat panel opened by default</value>
+    <value>Panneau de t'chat ouvert par défaut</value>
   </string>
   <string id="1516" name="files_opened">
-    <value>Files panel opened by default</value>
+    <value>Panneau des fichiers ouvert par défaut</value>
   </string>
   <string id="1517" name="server admin section lastping">
-    <value>Last ping</value>
+    <value>Dernier ping</value>
   </string>
   <string id="1518" name="server admin section lastping info">
-    <value>Every slave sends a ping to the master every 3 seconds (configurable). Slave lastPing must be smaller then 1 minute so that the master uses the slave.</value>
+    <value>Chaque 'esclave' envoie un ping au maitre toutes les 3 secondes (configurable). Le dernier ping doit être inférieur à 1 minute pour que le maitre utilise l'esclave.</value>
   </string>
   <string id="1519" name="server admin port">
-    <value>HTTP Port</value>
+    <value>Port HTTP</value>
   </string>
   <string id="1520" name="server admin user">
-    <value>User (SOAP-Access)</value>
+    <value>Utilisateur (Accès SOAP)</value>
   </string>
   <string id="1521" name="server admin password">
-    <value>Password</value>
+    <value>Mot de passe</value>
   </string>
   <string id="1522" name="server admin webapp path">
-    <value>Webapp path</value>
+    <value>Chemin vers Webapp</value>
   </string>
   <string id="1523" name="server admin protocol">
-    <value>Protocol</value>
+    <value>Protocole</value>
   </string>
   <string id="1524" name="server admin ping running">
-    <value>Ping running</value>
+    <value>Ping</value>
   </string>
   <string id="1525" name="server admin active">
-    <value>Active</value>
+    <value>Actif</value>
   </string>
   <string id="1526" name="generate_hash">
-    <value>Generate URL</value>
+    <value>Générer URL</value>
   </string>
   <string id="1527" name="network testing link">
-    <value>Network testing</value>
+    <value>Test réseau</value>
   </string>
   <string id="1528" name="room_options">
-    <value>Auto select interview video pod</value>
+    <value>Sélection auto de la fenêtre vidéo de l'interview</value>
   </string>
   <string id="1529" name="font_underline">
-    <value>Underline</value>
+    <value>Souligné</value>
   </string>
   <string id="1530" name="font_style">
-    <value>Font style</value>
+    <value>Style de police</value>
   </string>
   <string id="1531" name="allow_font_styles">
-    <value>Allow font styles</value>
+    <value>Autoriser les styles de police</value>
   </string>
   <string id="1532" name="font_color">
-    <value>Font color</value>
+    <value>Couleur de police</value>
   </string>
   <string id="1533" name="hyperlink">
-    <value>Hyperlink</value>
+    <value>Hyperlien</value>
   </string>
   <string id="1534" name="connection admin">
-    <value>Show session statistics</value>
+    <value>Montrer les statistiques de session</value>
   </string>
   <string id="1535" name="connection admin">
-    <value>Session details</value>
+    <value>Détails de session</value>
   </string>
   <string id="1536" name="system_import">
-    <value>System import</value>
+    <value>Importer Système</value>
   </string>
   <string id="1537" name="include_into_backup">
-    <value>Include uploaded files and recordings in backup</value>
+    <value>Inclure les fichiers uploadés et les enregistrements dans le backup</value>
   </string>
   <string id="1538" name="room_admin_sip">
-    <value>Enable SIP transport in the room</value>
+    <value>Activer le transport SIP dans la salle</value>
   </string>
   <string id="1539" name="exclusive_audio_confirm">
-    <value>Do you really want to provide this user an exclusive audio?</value>
+    <value>Voulez-vous vraiment donner l'audio exclusif à cet utilisateur ?</value>
   </string>
 </language>
