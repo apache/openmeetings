@@ -2064,7 +2064,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>Moderator</value>
   </string>
   <string id="680" name="event user list">
-    <value>Moderation: Bitte wählen Sie einen beliebigen Benutzer aus der Liste um ihm den Zugriff auf die Zeichenbrett, die Moderation oder das Video zu ermöglichen.</value>
+    <value>Moderation: Wählen Sie einen Benutzer aus der Liste um ihm den Zugriff auf Zeichenbrett, Moderation oder Video zu ermöglichen.</value>
   </string>
   <string id="681" name="event user list">
     <value>Dieser Benutzer ist bereits Moderator. Er hat automatisch das Recht zu zeichnen.</value>
@@ -2139,7 +2139,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>Aktualisieren</value>
   </string>
   <string id="705" name="file explorer">
-    <value>Papierkorb (Ziehen Sie ein File mit der Maus hierher)</value>
+    <value>Papierkorb (Ziehen Sie eine Datei mit der Maus hierher)</value>
   </string>
   <string id="706" name="file explorer">
     <value>Meine Dateien (persönliches Laufwerk)</value>
@@ -2553,7 +2553,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>Dr.</value>
   </string>
   <string id="843" name="property panel whiteboard">
-    <value>Properties</value>
+    <value>Einstellungen</value>
   </string>
   <string id="844" name="screen sharer">
     <value>Teilnehmern Mauszeiger anzeigen</value>
@@ -2634,7 +2634,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>Aufnahmen</value>
   </string>
   <string id="870" name="screen share">
-    <value>Sie können gleichzeitig ihren Bildschirm teilen oder auch die komplette Session aufnehmen. Wenn Sie nur den Bildschirm teilen wollen genügt es oben Start zu drücken. Die fertige Aufnahme befindet sich bei den anderen Aufnahmen im öffentlichen Ordner.</value>
+    <value>Sie können gleichzeitig ihren Bildschirm teilen ode die komplette Session aufnehmen. Wenn Sie nur den Bildschirm teilen wollen genügt esauf Start zu drücken. Die fertige Aufnahme befindet sich bei den anderen Aufnahmen im öffentlichen Ordner.</value>
   </string>
   <string id="871" name="screen share">
     <value>Aufnahme starten</value>
@@ -3291,7 +3291,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>Kopieren und Einfügen</value>
   </string>
   <string id="1089" name="screen-sharer-quality">
-    <value>Qualität der Bildschirmübertragung:</value>
+    <value>Qualität der Übertragung:</value>
   </string>
   <string id="1090" name="screen-sharer-quality">
     <value>Sehr hohe Qualität</value>
@@ -3945,7 +3945,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>Mein Konferenzraum (für 1-16 Benutzer)</value>
   </string>
   <string id="1307" name="my rooms">
-    <value>My Webinarraum (für 1-120 Benutzer)</value>
+    <value>Mein Webinarraum (für 1-120 Benutzer)</value>
   </string>
   <string id="1308" name="room administration">
     <value>Eigne ID</value>
@@ -4119,7 +4119,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>Whiteboard entfernen</value>
   </string>
   <string id="1365" name="whiteboard">
-    <value>Um whiteboards zu entfernen benötigen Sie Moderations- oder Schreibrechte für die Whiteboard.</value>
+    <value>Um Whiteboards zu entfernen benötigen Sie Moderations- oder Schreibrechte für die Whiteboards.</value>
   </string>
   <string id="1366" name="whiteboard">
     <value>Nicht erlaubt</value>
@@ -4335,13 +4335,13 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>Chat verbergen</value>
   </string>
   <string id="1437" name="hide_activities_and_actions">
-    <value>AktivitÃ¤ten verbergen</value>
+    <value>Aktivitäten verbergen</value>
   </string>
   <string id="1438" name="hide_files_explorer">
     <value>Dateiverwaltung verbergen</value>
   </string>
   <string id="1439" name="hide_actions_menu">
-    <value>Aktionenmenu verbergen</value>
+    <value>Aktionenmenü verbergen</value>
   </string>
   <string id="1440" name="hide_screen_sharing">
     <value>Screen Sharing verbergen</value>
@@ -4419,7 +4419,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>Prof</value>
   </string>
   <string id="1465" name="sharing client">
-    <value>Publish</value>
+    <value>Veröffentlichen</value>
   </string>
   <string id="1466" name="sharing client">
     <value>Start Publish</value>
@@ -4437,210 +4437,210 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>Publish Id</value>
   </string>
   <string id="1471" name="sharing client">
-    <value>Reduce the width of the SharingScreen before you try to move it left</value>
+    <value>Reduzieren Sie die Breite des Sharing-Screens, bevor Sie versuchen ihn nach links zu verschieben.</value>
   </string>
   <string id="1472" name="sharing client">
-    <value>Reduce the height of the SharingScreen before you try to move it bottom</value>
+    <value>Reduzieren Sie die Höhe des Sharing-Screens, bevor Sie versuchen ihn nach unten zu verschieben,</value>
   </string>
   <string id="1473" name="sharing client">
-    <value>Reduce the x of the SharingScreen before you try to make it wider</value>
+    <value>Reduzieren Sie x des Sharing-Screens, bevor Sie versuchen ihn zu erweitern weiter,</value>
   </string>
   <string id="1474" name="sharing client">
-    <value>Reduce the y of the SharingScreen before you try to make it higher</value>
+    <value>Reduzieren Sie y des Sharing-Screens, bevor Sie versuchen die Höhe zu verändern.</value>
   </string>
   <string id="1475" name="sharing client">
-    <value>Fill these settings stream your screen data to 3th party providers like justin.tv</value>
+    <value>Tragen Sie hier die Einstellungen zu Ihren Bildschirmdaten für Drittanbeiter wie justin.tv ein</value>
   </string>
   <string id="1476" name="sharing client">
-    <value>Please start Screen sharing to be able to publish it</value>
+    <value>Bitte starten Sie Screen-Sharing, um in der Lage zu sein, ihn zu veröffentlichen</value>
   </string>
   <string id="1477" name="sharing client">
-    <value>Moderator permission required to start recording</value>
+    <value>Moderator Berechtigung erforderliche, um die Aufnahme zu starten</value>
   </string>
   <string id="1478" name="no right for exclusive audio">
-    <value>You don't have permission to apply exclusive audio to any participant. You need moderation role or the right for exclusive audio to make any microphone exclusive turned on..</value>
+    <value>Sie haben keine Berechtigung, um jedem Teilnehmer Audio-Rechte zu gewähren. Sie müssen Rolle Moderator besitzen oder das Recht Audio für jedes Mikrofon einzuschalten.</value>
   </string>
   <string id="1479" name="conference menu">
-    <value>Upload new file to file explorer</value>
+    <value>neue Datei in Datei-Explorer hochladen</value>
   </string>
   <string id="1480" name="conference menu">
-    <value>Open new dialog with sharing settings</value>
+    <value>Öffne neuen Dialog mit Sharing-Einstellungen</value>
   </string>
   <string id="1481" name="conference menu">
-    <value>An existing moderator must approve it</value>
+    <value>Ein existierender Moderator muss dies genehmigen</value>
   </string>
   <string id="1482" name="conference menu">
-    <value>Ask moderator to share your webcam/micro</value>
+    <value>Fragen Sie den Moderator, um Ihr/e Webcam/Mikro zu teilen</value>
   </string>
   <string id="1483" name="conference menu">
-    <value>Gather feedback by creating a poll</value>
+    <value>Feedback sammeln, indem sie eine Umfrage starten</value>
   </string>
   <string id="1484" name="conference menu">
-    <value>Past and current poll results as charts</value>
+    <value>Vergangene und gegenwärtige Umfrage-Ergebnisse als Diagramme</value>
   </string>
   <string id="1485" name="conference menu">
-    <value>Vote if there is a poll for this conference room</value>
+    <value>Stimmen Sie ab, wenn es eine Umfrage für diesen Konferenzraum gibt</value>
   </string>
   <string id="1486" name="conference menu">
-    <value>Edit cam and mic settings</value>
+    <value>Bearbeiten der Webcam und Mikrofon-Einstellungen</value>
   </string>
   <string id="1487" name="conference menu">
-    <value>Confirm and leave the room</value>
+    <value>Bestätigen und verlassen des Raumes</value>
   </string>
   <string id="1488" name="conference menu">
-    <value>Call external people via VoIP/SIP</value>
+    <value>Rufen Sie externe Personen über VoIP/SIP an</value>
   </string>
   <string id="1489" name="conference menu">
-    <value>Send an email with a direct link to this room</value>
+    <value>Senden Sie eine E-Mail mit einem direkten Link zu diesem Raum</value>
   </string>
   <string id="1490" name="conference menu">
-    <value>Change your whiteboard settings</value>
+    <value>Ändern Sie Ihre Whiteboard-Einstellungen</value>
   </string>
   <string id="1491" name="backup admin">
-    <value>Max upload size</value>
+    <value>Maximal Upload-Größe</value>
   </string>
   <string id="1492" name="conference menu">
-    <value>Ask moderator to share your whiteboard</value>
+    <value>Fragen Sie den Moderator, um Ihr Whiteboard teilen</value>
   </string>
   <string id="1493" name="private chat">
     <value>Start Private Chat</value>
   </string>
   <string id="1494" name="all_private_chat">
-    <value>All</value>
+    <value>Alle</value>
   </string>
   <string id="1495" name="private chat">
-    <value>You cannot start a private chat with yourself.</value>
+    <value>Sie können nicht mit sichselbst einen privaten Chat starten.</value>
   </string>
   <string id="1496" name="private chat">
-    <value>You've already started a private chat with this participant.</value>
+    <value>Sie haben bereits einen privaten Chat mit diesem Teilnehmer gestartet.</value>
   </string>
   <string id="1497" name="private chat">
-    <value>Do you really want to delete this private chat?</value>
+    <value>Wollen Sie wirklich diesen privaten Chat löschen?</value>
   </string>
   <string id="1498" name="Servers">
-    <value>Servers</value>
+    <value>Server</value>
   </string>
   <string id="1499" name="Servers">
-    <value>Servers participating in cluster</value>
+    <value>Beteiligten Server im Cluster</value>
   </string>
   <string id="1500" name="Server name">
     <value>Server Name</value>
   </string>
   <string id="1501" name="Server Address">
-    <value>Server Address</value>
+    <value>Server-Addresse</value>
   </string>
   <string id="1502" name="Server details">
-    <value>Server details</value>
+    <value>Server-Details</value>
   </string>
   <string id="1503" name="Send SMS">
-    <value>Send SMS</value>
+    <value>Sende SMS</value>
   </string>
   <string id="1504" name="publishing_message">
-    <value>Publishing. User:</value>
+    <value>Veröffentlichen. Nutzer:</value>
   </string>
   <string id="1505" name="cmd_line_admin">
-    <value>To save time and internet traffic you can use command line admin to backup/restore/upgrade:\n 1) go to OM install dir (for ex. /opt/red5) \n 2) stop OM (for ex. ./red5-shutdown.sh)\n 3) ./admin.sh -b -file ~/today_om_backup.zip (create backup of current OM)\n 4) download archive with new OM\n 5) mv /opt/red5 /opt.red5.bak (move working version of OM just in case :))\n 6) extract downloaded OM to the /opt/red5\n 7) ./admin.sh -i -file ~/today_om_backup.zip (or './admin.sh -i -file ~/today_om_backup.zip --db-type mysql --db-user om_user --db-pass om_user_pass' in case of you are using non-default DB )\n 8) start OM\n</value>
+    <value>Um Zeit und Internet-Verkehr sparen, können Sie den Befehl admin für Backup/Wiederherstellen/Aktualisieren verwenden. (1) Gehen sie zum OM-Installationspfad (z.b. /opt/red5) (2) Stopen Sie OM (z.b. ./red5-shutdown.sh) (3) ./admin.sh -b -file ~/heute_om_backup.zip (Backup vom bestehenden OM erstellen) (4) Laden Sie die neue Version OM herunter (5) mv /opt/red5 /opt.red5.bak (kopieren Sie die existierende OM-Version für den Fall :)) (6) Entpacken Sie die heruntergeladene OM-Version nach /opt/red5 (7) ./admin.sh -i -file ~/heute_om_backup.zip (or './admin.sh -i -file ~/heute_om_backup.zip --db-type mysql --db-user om_user --db-pass om_user_pass', für den Fall, dass Sie eine Nicht-Standard-DB verwenden) (8) Starten Sie OM</value>
   </string>
   <string id="1506" name="public_room_tooltip">
-    <value>Rooms common to all user</value>
+    <value>gemeinsame Räume für alle Benutzer</value>
   </string>
   <string id="1507" name="private_room_tooltip">
-    <value>Rooms common to the current user group</value>
+    <value>gemeinsame Räume für die aktuelle Benutzer-Gruppe</value>
   </string>
   <string id="1508" name="my_room_tooltip">
-    <value>Rooms of the current user</value>
+    <value>Räume des aktuellen Benutzers</value>
   </string>
   <string id="1509" name="create_new_room">
-    <value>Create/Modify appointment special room</value>
+    <value>Erstellen/Ändern Termin spezieller Raum</value>
   </string>
   <string id="1510" name="multiple_addresses">
-    <value>You can enter multiple addresses in the format: firstname1 lastname1 &lt;email1&gt;,"firstname2 lastname2" &lt;email2&gt;,'firstname3 lastname3' &lt;email3&gt;, ...</value>
+    <value>Sie können mehrere Adressen im folgenden Format angeben: vorname1 nachname1 &lt;email1&gt;,"vorname2 nachname2" &lt;email2&gt;,'vorname nachname3' &lt;email3&gt;, ...</value>
   </string>
   <string id="1511" name="stream_volume">
-    <value>Adjust stream volume</value>
+    <value>Stream-Volumen anpassen</value>
   </string>
   <string id="1512" name="microphone_volume">
-    <value>Adjust microphone volume</value>
+    <value>Mikrofon-Volumen anpassen</value>
   </string>
   <string id="1513" name="chat_moderated">
-    <value>Is chat moderated</value>
+    <value>Chat ist moderiert</value>
   </string>
   <string id="1514" name="chat_moderated">
-    <value>Allow message</value>
+    <value>Erlaube Nachrichten</value>
   </string>
   <string id="1515" name="chat_opened">
-    <value>Chat panel opened by default</value>
+    <value>Chat-Feld standardmäßig geöffnet</value>
   </string>
   <string id="1516" name="files_opened">
-    <value>Files panel opened by default</value>
+    <value>Dateien-Fenster standardmäßig geöffnet</value>
   </string>
   <string id="1517" name="server admin section lastping">
-    <value>Last ping</value>
+    <value>letzter ping</value>
   </string>
   <string id="1518" name="server admin section lastping info">
-    <value>Every slave sends a ping to the master every 3 seconds (configurable). Slave lastPing must be smaller then 1 minute so that the master uses the slave.</value>
+    <value>Jeder Slave sendet alle 3 Sekunden einen Ping an den Master (konfigurierbar). Der lastPing des Slave muss kleiner sein als 1 Minute, so dass der Master den Slave verwendet.</value>
   </string>
   <string id="1519" name="server admin port">
     <value>HTTP Port</value>
   </string>
   <string id="1520" name="server admin user">
-    <value>User (SOAP-Access)</value>
+    <value>Benutzer (SOAP-Access)</value>
   </string>
   <string id="1521" name="server admin password">
-    <value>Password</value>
+    <value>Passwort</value>
   </string>
   <string id="1522" name="server admin webapp path">
-    <value>Webapp path</value>
+    <value>Webapplikations-Pfad</value>
   </string>
   <string id="1523" name="server admin protocol">
-    <value>Protocol</value>
+    <value>Protokoll</value>
   </string>
   <string id="1524" name="server admin ping running">
-    <value>Ping running</value>
+    <value>ping läuft</value>
   </string>
   <string id="1525" name="server admin active">
     <value>Active</value>
   </string>
   <string id="1526" name="generate_hash">
-    <value>Generate URL</value>
+    <value>URL generieren</value>
   </string>
   <string id="1527" name="network testing link">
-    <value>Network testing</value>
+    <value>Neztwerk testen</value>
   </string>
   <string id="1528" name="room_options">
-    <value>Auto select interview video pod</value>
+    <value>Auswahl Interview Video Pod</value>
   </string>
   <string id="1529" name="font_underline">
-    <value>Underline</value>
+    <value>unterstreichen</value>
   </string>
   <string id="1530" name="font_style">
-    <value>Font style</value>
+    <value>Schriftart</value>
   </string>
   <string id="1531" name="allow_font_styles">
-    <value>Allow font styles</value>
+    <value>Schriftarten erlauben</value>
   </string>
   <string id="1532" name="font_color">
-    <value>Font color</value>
+    <value>Schriftfarbe</value>
   </string>
   <string id="1533" name="hyperlink">
     <value>Hyperlink</value>
   </string>
   <string id="1534" name="connection admin">
-    <value>Show session statistics</value>
+    <value>Session-Statistiken anzeigen</value>
   </string>
   <string id="1535" name="connection admin">
-    <value>Session details</value>
+    <value>Details zur Session</value>
   </string>
   <string id="1536" name="system_import">
-    <value>System import</value>
+    <value>System Import</value>
   </string>
   <string id="1537" name="include_into_backup">
-    <value>Include uploaded files and recordings in backup</value>
+    <value>beinhaltet hochgeladene Dateien und Aufnahmen im Backup</value>
   </string>
   <string id="1538" name="room_admin_sip">
-    <value>Enable SIP transport in the room</value>
+    <value>Aktivieren Sie SIP-Verkehr im Raum</value>
   </string>
   <string id="1539" name="exclusive_audio_confirm">
-    <value>Do you really want to provide this user an exclusive audio?</value>
+    <value>Wollen Sie wirklich diesem Benutzer exklusive Audiorechte geben?</value>
   </string>
 </language>
