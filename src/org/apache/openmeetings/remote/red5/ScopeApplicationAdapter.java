@@ -2824,18 +2824,21 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
      * Perform call to specified phone number and join to conference
      * @param number to call
      */
-    public synchronized void joinToConfCall(String number) {
-        IConnection current = Red5.getConnectionLocal();
-        String streamid = current.getClient().getId();
-        Client currentClient = sessionManager.getClientByStreamId(streamid, null);
-        try {
-        	String sipNumber = getSipNumber(currentClient.getRoom_id());
-            log.debug("asterisk -rx \"originate Local/" + number + "@rooms extension " + sipNumber + "@rooms\"");
-            Runtime.getRuntime().exec(new String[]{"asterisk", "-rx", "originate Local/" + number + "@rooms extension " + sipNumber + "@rooms"});
-        } catch (IOException e) {
-            log.error("Executing asterisk originate error: ", e);
-        }
-    }
+	public synchronized void joinToConfCall(String number) {
+		IConnection current = Red5.getConnectionLocal();
+		String streamid = current.getClient().getId();
+		Client currentClient = sessionManager.getClientByStreamId(streamid, null);
+		try {
+			String sipNumber = getSipNumber(currentClient.getRoom_id());
+			log.debug("asterisk -rx \"originate Local/" + number + "@rooms-out extension " + sipNumber
+					+ "@rooms-originate\"");
+			Runtime.getRuntime().exec(
+					new String[] { "asterisk", "-rx",
+							"originate Local/" + number + "@rooms-out extension " + sipNumber + "@rooms-originate" });
+		} catch (IOException e) {
+			log.error("Executing asterisk originate error: ", e);
+		}
+	}
 
     public synchronized String getSipNumber(Long room_id) {
         Room r = roomDao.get(room_id);

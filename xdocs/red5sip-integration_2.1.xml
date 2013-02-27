@@ -134,7 +134,7 @@
 						allow=h264<br />
 						host=dynamic<br />
 						nat=force_rport,comedia<br />
-						context=rooms<br />
+						context=rooms-red5sip<br />
 					</i>
 				</blockquote>
 			</div><br />
@@ -148,15 +148,6 @@
 				</blockquote>
 			</div><br />
 			<div>
-				Modify <tt>/etc/asterisk/confbridge.conf</tt><br />
-				<strong>Add/uncomment the following line in <tt>[default_bridge]</tt> section</strong>:<br />
-				<blockquote>
-					<i>
-						video_mode = follow_talker<br />
-					</i>
-				</blockquote>
-			</div><br />
-			<div>
 				Modify <tt>/etc/asterisk/extensions.conf</tt><br />
 				<strong>Add the following section</strong>:<br />
 				<blockquote>
@@ -164,12 +155,50 @@
 						[rooms]<br />
 						exten => _400X!,1,GotoIf($[${DB_EXISTS(openmeetings/rooms/${EXTEN})}]?ok:notavail)<br />
 						exten => _400X!,n(ok),SET(PIN=${DB(openmeetings/rooms/${EXTEN})})<br />
+						exten => _400X!,n,Set(CONFBRIDGE(user,template)=sip_user)<br />
 						exten => _400X!,n,Set(CONFBRIDGE(user,pin)=${PIN})<br />
-						exten => _400X!,n,Confbridge(${EXTEN},,default_user)<br />
+						exten => _400X!,n(ok),Confbridge(${EXTEN},default_bridge,)<br />
 						exten => _400X!,n,Hangup<br />
 						exten => _400X!,n(notavail),Answer()<br />
 						exten => _400X!,n,Playback(invalid)<br />
 						exten => _400X!,n,Hangup<br />
+						<br />
+						[rooms-originate]<br />
+						exten => _400X!,1,Confbridge(${EXTEN},default_bridge,sip_user)<br />
+						exten => _400X!,n,Hangup<br />
+						<br />
+						[rooms-out]<br />
+						; *****************************************************<br />
+						; Extensions for outgoing calls from Openmeetings room.<br />
+						; *****************************************************<br />
+						<br />
+						[rooms-red5sip]<br />
+						exten => _400X!,1,GotoIf($[${DB_EXISTS(openmeetings/rooms/${EXTEN})}]?ok:notavil)<br />
+						exten => _400X!,n(ok),Confbridge(${EXTEN},default_bridge,red5sip_user)<br />
+						exten => _400X!,n(notavail),Hangup <br />
+					</i>
+				</blockquote>
+			</div><br />
+			<div>
+				Modify <tt>/etc/asterisk/confbridge.conf</tt><br />
+				<strong>Add/Modify the following secions</strong>:<br />
+				<blockquote>
+					<i>
+						[general]<br />
+						<br />
+						[red5sip_user]<br />
+						type=user<br />
+						marked=yes<br />
+						<br />
+						[sip_user]<br />
+						type=user<br />
+						end_marked=yes<br />
+						wait_marked=yes<br />
+						music_on_hold_when_empty=yes<br />
+						<br />
+						[default_bridge]<br />
+						type=bridge<br />
+						video_mode=follow_talker<br /> 
 					</i>
 				</blockquote>
 			</div><br />
@@ -188,8 +217,8 @@
 						secret = 12345<br />
 						deny=0.0.0.0/0.0.0.0<br />
 						permit=127.0.0.1/255.255.255.0<br />
-						read = all,reporting<br />
-						write = all,system,call,command,originate<br />
+						read = all<br />
+						write = all<br />
 					</i>
 				</blockquote>
 			</div><br />
