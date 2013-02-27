@@ -75,8 +75,7 @@ public class RoomDao implements IDataProviderDao<Room> {
 	}
 
 	public List<Room> getPublicRooms() {
-		return em.createNamedQuery("getPublicRoomsOrdered", Room.class)
-				.getResultList();
+		return em.createNamedQuery("getPublicRoomsOrdered", Room.class).getResultList();
 	}
 	
 	public List<Long> getSipRooms(List<Long> ids) {
@@ -96,6 +95,11 @@ public class RoomDao implements IDataProviderDao<Room> {
 		return q.getResultList();
 	}
 
+	public Long getRoomsCapacityByIds(List<Long> ids) {
+		return ids == null || ids.isEmpty() ? 0
+			: em.createNamedQuery("getRoomsCapacityByIds", Long.class).setParameter("ids", ids).getSingleResult();
+	}
+	
 	private boolean isSipEnabled() {
 		return "yes".equals(cfgDao.getConfValue("red5sip.enable", String.class, "no"));
 	}

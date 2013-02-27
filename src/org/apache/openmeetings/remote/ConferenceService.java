@@ -19,16 +19,12 @@
 package org.apache.openmeetings.remote;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.TimeZone;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
@@ -775,98 +771,29 @@ public class ConferenceService {
 		if (authLevelUtil.checkUserLevel(user_level)) {
 			List<Server> serverList = serverDao.getActiveServers();
 
-			// if there is no cluster set up, just redirect to the current one
-			if (serverList.size() == 0) {
-				return null;
-			}
-
-			// if the room is already opened on a server, redirect the user to that one,
-			// we do that in two loop's because there is no query involved here,
-			// only the first user that enters the conference room needs to be adjusted
-			// to that server that has the less maxUser count in its rooms currently.
-			// But if the room is already opened, then the maxUser is no more relevant,
-			// the user will be just redirected to the same server
-
+			long minimum = -1;
+			Server result = null;
+			HashMap<Server, List<Long>> activeRoomsMap = new HashMap<Server, List<Long>>();
 			for (Server server : serverList) {
-				for (Long activeRoomId : sessionManager.getActiveRoomIdsByServer(server)) {
-					if (activeRoomId.equals(roomId)) {
-						return new ServerDTO(server);
-					}
+				List<Long> roomIds = sessionManager.getActiveRoomIdsByServer(server);
+				if (roomIds.contains(roomId)) {
+					// if the room is already opened on a server, redirect the user to that one,
+					log.debug("Room is already opened on a server " + server.getAddress());
+					return new ServerDTO(server);
 				}
+				activeRoomsMap.put(server, roomIds);
 			}
-
-			// the room is not opened on any server yet, its the first user, get the maxUser
-			// per room
-
-			// TODO / FIXME: Get room's maxUser in a single query instead a query for each room
-			final Map<Server, List<Room>> serverRoomMap = new HashMap<Server, List<Room>>();
-			// Slave/Server rooms
-			for (Server server : serverList) {
-				List<Room> roomList = new ArrayList<Room>();
-				for (Long activeRoomId : sessionManager.getActiveRoomIdsByServer(server)) {
-					// FIXME / TODO: This is the single query to get the room by its id
-					roomList.add(roomDao.get(activeRoomId));
+			for (Server server : activeRoomsMap.keySet()) {
+				List<Long> roomIds = activeRoomsMap.get(server);
+				Long capacity = roomDao.getRoomsCapacityByIds(roomIds);
+				if (minimum < 0 || capacity < minimum) {
+					minimum = capacity;
+					result = server;
 				}
-				serverRoomMap.put(server, roomList);
+				log.debug("Checking server: " + server + " Number of rooms " + roomIds.size() + " RoomIds: "
+						+ roomIds + " max(Sum): " + capacity);
 			}
-
-			// calc server with lowest max users
-			List<Server> list = new LinkedList<Server>();
-			list.addAll(serverRoomMap.keySet());
-			Collections.sort(list, new Comparator<Server>() {
-				public int compare(Server s1, Server s2) {
-					int maxUsersInRoomS1 = 0;
-					log.debug("serverRoomMap.get(s1) SIZE " + serverRoomMap.get(s1).size());
-					for (Room room : serverRoomMap.get(s1)) {
-						log.debug("s1 room: " + room);
-						maxUsersInRoomS1 += room.getNumberOfPartizipants();
-					}
-					int maxUsersInRoomS2 = 0;
-					log.debug("serverRoomMap.get(s2) SIZE " + serverRoomMap.get(s2).size());
-					for (Room room : serverRoomMap.get(s2)) {
-						log.debug("s2 room: " + room);
-						maxUsersInRoomS2 += room.getNumberOfPartizipants();
-					}
-
-					return maxUsersInRoomS1 - maxUsersInRoomS2;
-				}
-			});
-
-			LinkedHashMap<Server, List<Room>> serverRoomMapOrdered = new LinkedHashMap<Server, List<Room>>();
-			for (Server server : list) {
-				serverRoomMapOrdered.put(server, serverRoomMap.get(server));
-			}
-
-			if (log.isDebugEnabled()) {
-				log.debug("Resulting order: ");
-				for (Entry<Server, List<Room>> entry : serverRoomMapOrdered.entrySet()) {
-					int maxUsersInRoom = 0;
-					for (Room room : entry.getValue()) {
-						maxUsersInRoom += room.getNumberOfPartizipants();
-					}
-
-					String roomids = "";
-					for (Room r : entry.getValue()) {
-						roomids += " " + r.getRooms_id();
-					}
-
-					log.debug("entry " + entry.getKey() + " Number of rooms " + entry.getValue().size() + " RoomIds: "
-							+ roomids + " max(Sum): " + maxUsersInRoom);
-				}
-
-			}
-
-			log.debug("Resulting Server");
-
-			Server s = serverRoomMapOrdered.entrySet().iterator().next().getKey();
-
-			if (s == null) {
-				return null;
-			}
-
-			// Somehow this object here cannot be serialized cause its abused by OpenJPA
-			// so get a fresh copy from the entity manager and return that
-			return new ServerDTO(s);
+			return result == null ? null : new ServerDTO(result);
 		}
 
 		log.error("Could not get server for cluster session");

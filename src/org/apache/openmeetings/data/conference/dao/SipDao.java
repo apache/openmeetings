@@ -59,6 +59,10 @@ public class SipDao {
 	}
 
 	private ManagerResponse exec(ManagerAction action) {
+		if (connection == null) {
+			log.warn("There is no Asterisk configured");
+			return null;
+		}
 		try {
 			connection.login();
 			ManagerResponse r = connection.sendAction(action);
@@ -73,6 +77,10 @@ public class SipDao {
 	}
 
 	private ResponseEvents execEvent(EventGeneratingAction action) {
+		if (connection == null) {
+			log.warn("There is no Asterisk configured");
+			return null;
+		}
 		try {
 			connection.login("on");
 			ResponseEvents r = connection.sendEventGeneratingAction(action);

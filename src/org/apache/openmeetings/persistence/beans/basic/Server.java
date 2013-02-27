@@ -258,6 +258,27 @@ public class Server implements Serializable, IDataProviderEntity {
 	}
 
 	@Override
+	public boolean equals(Object obj) {
+		if (obj == null) {
+			return false;
+		}
+		if (!(obj instanceof Server)) {
+			return false;
+		} else {
+			Server s = (Server)obj;
+			return s.id == id && ((s.name != null && s.name.equals(name)) || (s.name == null && s.name == name));
+		}
+	}
+	
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + (int)id + (name == null ? 0 : name.hashCode());
+		return result;
+	}
+	
+	@Override
 	public String toString() {
 		return "Server [id=" + id + ", name=" + name + ", address=" + address
 				+ ", port=" + port + ", user=" + user + ", pass=" + pass

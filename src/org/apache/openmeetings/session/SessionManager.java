@@ -432,10 +432,7 @@ public class SessionManager implements ISessionManager {
 	}
 
 	public List<Long> getActiveRoomIdsByServer(Server server) {
-		if (server == null) {
-			server = serverUtil.getCurrentServer();
-		}
-		return sessionManager.getActiveRoomIdsByServer(server);
+		return sessionManager.getActiveRoomIdsByServer(server == null ? serverUtil.getCurrentServer() : server);
 	}
 
 	public String getSessionStatistics() {
