@@ -29,10 +29,8 @@ import java.util.Map;
 import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.persistence.beans.basic.Server;
 import org.apache.openmeetings.persistence.beans.room.Client;
-import org.apache.openmeetings.session.ServerUtil;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * Stores the session in the memory.
@@ -52,8 +50,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class HashMapStore implements IClientPersistenceStore {
 	protected static final Logger log = Red5LoggerFactory.getLogger(
 			HashMapStore.class, OpenmeetingsVariables.webAppRootKey);
-	@Autowired
-	private ServerUtil serverUtil;
 	
 	
 	private LinkedHashMap<String, Client> clientsByStreamId = new LinkedHashMap<String, Client>();
@@ -182,13 +178,6 @@ public class HashMapStore implements IClientPersistenceStore {
 		HashSet<Long> rooms = new HashSet<Long>();
 		for (Client cl : clientsByStreamId.values()) {
 			Long roomId = cl.getRoom_id();
-			Server s = cl.getServer() == null ? serverUtil.getCurrentServer() : cl.getServer();
-			if ((server == null && s != null) || (server != null && s == null)) {
-				continue;
-			}
-			if (server != null && s != null && server.getId() != s.getId()) {
-				continue;
-			}
 			if (roomId != null && roomId > 0 && !rooms.contains(roomId)) {
 				rooms.add(roomId);
 			}
