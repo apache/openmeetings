@@ -902,7 +902,11 @@ limitations under the License.
 				Update Openmeetings with creadentials for Asterisk manager. 
 				Modify <tt>/opt/red5/webapps/openmeetings/WEB-INF/openmeetings-applicationContext.xml</tt><br />
 				find <strong>&lt;bean id="sipDao" class="org.apache.openmeetings.data.conference.dao.SipDao"&gt;</strong>
-				uncomment its parameters and set it to your custom values.   
+				uncomment its parameters and set it to your custom values.
+				<p style="font-size: larger; color: blue;">
+					IMPORTANT: this step should be done <strong>BEFORE</strong> system install/restore
+					otherwise all SIP related room information will be lost
+				</p>   
 			</div>
                                                 <br />
                                                 <div>
