@@ -1082,6 +1082,9 @@
 			<param name="ivy.conf.name" value="openlaszlo" />
 			<param name="ivy.lib.location" value="${laszlo.home}" />
 		</antcall>
+		<delete>
+			<fileset dir="${laszlo.home}" includes="openlaszlo*.tgz"/>
+		</delete>
 	</target>
 	<target name="-retrieve-openlaszlo46" unless="laszlo46.installed" description="Retrieves the libraries if needed" depends="-availability-check">
 		<antcall target="-retrieve" inheritAll="true" inheritRefs="true">
@@ -1089,6 +1092,9 @@
 			<param name="ivy.lib.location" value="${laszlo46.home}" />
 		</antcall>
 		<chmod dir="${laszlo46.home}/WEB-INF/flexsdk" perm="755" includes="**/mxmlc*" />
+		<delete>
+			<fileset dir="${laszlo46.home}" includes="openlaszlo*.tgz"/>
+		</delete>
 	</target>
 	<!-- Check for Command line admin depandencies -->
 	<target name="-retrieve-cmdadmin" unless="cmdadmin.installed" description="Retrieves the libraries if needed" depends="-availability-check">
