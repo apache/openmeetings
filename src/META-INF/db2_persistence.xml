@@ -19,13 +19,16 @@
   
 -->
 <!-- persistence.xml schema -->
-<persistence xmlns="http://java.sun.com/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd" version="2.0">
+<persistence xmlns="http://java.sun.com/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd"
+	version="2.0">
 	<persistence-unit name="openmeetings" transaction-type="RESOURCE_LOCAL">
 		<provider>org.apache.openjpa.persistence.PersistenceProviderImpl</provider>
 		<class>org.apache.openmeetings.persistence.beans.basic.Configuration</class>
 		<class>org.apache.openmeetings.persistence.beans.basic.ErrorType</class>
 		<class>org.apache.openmeetings.persistence.beans.basic.ErrorValue</class>
 		<class>org.apache.openmeetings.persistence.beans.basic.LdapConfig</class>
+		<class>org.apache.openmeetings.persistence.beans.basic.MailMessage</class>
 		<class>org.apache.openmeetings.persistence.beans.basic.Naviglobal</class>
 		<class>org.apache.openmeetings.persistence.beans.basic.Navimain</class>
 		<class>org.apache.openmeetings.persistence.beans.basic.OmTimeZone</class>
@@ -58,22 +61,22 @@
 		<class>org.apache.openmeetings.persistence.beans.room.RoomType</class>
 		<class>org.apache.openmeetings.persistence.beans.room.RoomOrganisation</class>
 		<class>org.apache.openmeetings.persistence.beans.room.Whiteboard</class>
-        <class>org.apache.openmeetings.persistence.beans.room.WhiteboardItem</class>
+		<class>org.apache.openmeetings.persistence.beans.room.WhiteboardItem</class>
 		<class>org.apache.openmeetings.persistence.beans.user.Address</class>
-        <class>org.apache.openmeetings.persistence.beans.user.State</class>
-        <class>org.apache.openmeetings.persistence.beans.user.PrivateMessage</class>
-        <class>org.apache.openmeetings.persistence.beans.user.PrivateMessageFolder</class>
-        <class>org.apache.openmeetings.persistence.beans.user.Salutation</class>
-        <class>org.apache.openmeetings.persistence.beans.user.UserContact</class>
-        <class>org.apache.openmeetings.persistence.beans.user.Userdata</class>
-        <class>org.apache.openmeetings.persistence.beans.user.Userlevel</class>
-        <class>org.apache.openmeetings.persistence.beans.user.User</class>
+		<class>org.apache.openmeetings.persistence.beans.user.State</class>
+		<class>org.apache.openmeetings.persistence.beans.user.PrivateMessage</class>
+		<class>org.apache.openmeetings.persistence.beans.user.PrivateMessageFolder</class>
+		<class>org.apache.openmeetings.persistence.beans.user.Salutation</class>
+		<class>org.apache.openmeetings.persistence.beans.user.UserContact</class>
+		<class>org.apache.openmeetings.persistence.beans.user.Userdata</class>
+		<class>org.apache.openmeetings.persistence.beans.user.Userlevel</class>
+		<class>org.apache.openmeetings.persistence.beans.user.User</class>
 		<class>org.apache.openmeetings.persistence.beans.files.FileExplorerItem</class>
 		<class>org.apache.openmeetings.persistence.beans.sip.asterisk.AsteriskSipUser</class>
 		<exclude-unlisted-classes>false</exclude-unlisted-classes>
 		<properties>
-			<property name="openjpa.RuntimeUnenhancedClasses" value="unsupported"/>
-            <property name="openjpa.ConnectionDriverName" value="org.apache.commons.dbcp.BasicDataSource" />
+			<property name="openjpa.RuntimeUnenhancedClasses" value="unsupported" />
+			<property name="openjpa.ConnectionDriverName" value="org.apache.commons.dbcp.BasicDataSource" />
 			<property name="openjpa.ConnectionProperties"
 				value="DriverClassName=com.ibm.db2.jcc.DB2Driver
 					, Url=jdbc:db2://localhost:50000/openmeet
@@ -82,13 +85,13 @@
 					, TestOnBorrow=true
 					, poolPreparedStatements=true
 					, Username=db2admin
-					, Password=admin"/>
-			<property name="openjpa.jdbc.SynchronizeMappings" value="buildSchema"/>
+					, Password=admin" />
+			<property name="openjpa.jdbc.SynchronizeMappings" value="buildSchema" />
 			<property name="openjpa.Log" value="DefaultLevel=WARN, Tool=INFO" />
-			<property name="openjpa.DataCache" value="true"/>
-			<property name="openjpa.QueryCache" value="true"/> 
-			<property name="openjpa.jdbc.DBDictionary"  value="batchLimit=100"/> 
-			<property name="openjpa.jdbc.QuerySQLCache"  value="false"/>
+			<property name="openjpa.DataCache" value="true" />
+			<property name="openjpa.QueryCache" value="true" />
+			<property name="openjpa.jdbc.DBDictionary" value="batchLimit=100" />
+			<property name="openjpa.jdbc.QuerySQLCache" value="false" />
 		</properties>
 	</persistence-unit>
 </persistence>
