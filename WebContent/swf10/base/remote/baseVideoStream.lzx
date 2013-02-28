@@ -211,6 +211,33 @@
         ]]>
     </method>
 
+	<method name="prepare" args="mode,streamName,camReference,micReference">
+		if (this._ns != null){
+			this._stop();
+		}
+		this.mode = mode;
+		this.createStream();
+		
+		if (camReference != null) {
+			this.setAttribute('camera', camReference);
+			this._ns.attachCamera(camReference);
+			//invokes Method in baseVideoView which shows the cam
+			this.attachCamera(camReference);
+			
+			var h264Settings:H264VideoStreamSettings = new H264VideoStreamSettings();
+			h264Settings.setProfileLevel(H264Profile.BASELINE, H264Level.LEVEL_1_2);
+			h264Settings.setQuality(camReference.bandwidth, camReference.quality);
+			h264Settings.setKeyFrameInterval(camReference.keyFrameInterval);
+			h264Settings.setMode(camReference.width, camReference.height, camReference.fps);
+			this._ns.videoStreamSettings = h264Settings;
+		}
+		if (micReference != null) {
+			this.setAttribute('micro', micReference);
+			this._ns.attachAudio(micReference);
+		}
+		
+		this._ns.publish(streamName, (mode == "broadcast") ? "live" : mode);
+	</method>
 	<!---
 		BroadCasts a Stream
 		@param string streamName the streamname to broadcast
@@ -218,46 +245,11 @@
 		@param micropone micReference a reference to the Micropohne Object to stream
 	 -->
 	<method name="broadcast" args="streamName,camReference,micReference">
-		if (this._ns!=null){
-			this._stop();
-		}
-		this.mode = "broadcast";
-		this.createStream();
-		if (camReference!=null) {
-			this.setAttribute('camera',camReference);
-			this._ns.attachCamera(camReference);
-			//invokes Method in baseVideoView which shows the cam
-			this.attachCamera(camReference);
-		}
-	    if (micReference!=null) {
-	    	this.setAttribute('micro',micReference);
-	    	this._ns.attachAudio(micReference);
-	    }
-
-	    this._ns.publish(streamName,"live");
+		prepare("broadcast", streamName, camReference, micReference);
 	</method>
 
 	<method name="record" args="streamName,camReference,micReference">
-        if (this._ns!=null){
-            this._stop();
-        }
-        this.mode = "record";
-        this.createStream();
-
-        this.setBuffer(6);
-
-        if (camReference!=null) {
-            this.setAttribute('camera',camReference);
-            this._ns.attachCamera(camReference);
-            //invokes Method in baseVideoView which shows the cam
-            this.attachCamera(camReference);
-        }
-        if (micReference!=null) {
-            this.setAttribute('micro',micReference);
-            this._ns.attachAudio(micReference);
-        }
-
-        this._ns.publish(streamName,"record");
+		prepare("record", streamName, camReference, micReference);
     </method>
     
 	<!---
