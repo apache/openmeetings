@@ -67,6 +67,9 @@ public class SipDao {
 			connection.login();
 			ManagerResponse r = connection.sendAction(action);
 			connection.logoff();
+			if (log.isDebugEnabled() && r != null) {
+				log.debug(r.toString());
+			}
 			return (r instanceof ManagerError) ? null : r;
 		} catch (Exception e) {
 			if (log.isDebugEnabled()) {
