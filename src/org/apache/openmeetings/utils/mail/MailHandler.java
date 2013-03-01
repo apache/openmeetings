@@ -65,7 +65,28 @@ public class MailHandler {
 	private TaskExecutor taskExecutor;
 	@Autowired
 	private MailMessageDao mailMessageDao;
+	private String smtpServer;
+	private String smtpPort;
+	private String from;
+	private String mailAuthUser;
+	private String mailAuthPass;
+	private boolean mailTls;
+	private boolean mailAddReplyTo;
 
+	public MailHandler() {
+		init();
+	}
+	
+	private void init() {
+		smtpServer = cfgDao.getConfValue("smtp_server", String.class, null);
+		smtpPort = cfgDao.getConfValue("smtp_port", String.class, "25");
+		from = cfgDao.getConfValue("system_email_addr", String.class, null);
+		mailAuthUser = cfgDao.getConfValue("email_username", String.class, null);
+		mailAuthPass = cfgDao.getConfValue("email_userpass", String.class, null);
+		mailTls = "1".equals(cfgDao.getConfValue("mail.smtp.starttls.enable", String.class, "0"));
+		mailAddReplyTo = "1".equals(cfgDao.getConfValue("inviter.email.as.replyto", String.class, "1"));
+	}
+	
 	protected MimeMessage appendIcsBody(MimeMessage msg, MailMessage m) throws Exception {
 		log.debug("setMessageBody for iCal message");
 		// -- Create a new message --
@@ -113,19 +134,12 @@ public class MailHandler {
 	private MimeMessage getBasicMimeMessage() throws Exception {
 		log.debug("getBasicMimeMessage");
 
-		// Evaluating Configuration Data
-		String smtpServer = cfgDao.getConfValue("smtp_server", String.class, null);
-		String smtpPort = cfgDao.getConfValue("smtp_port", String.class, "25");
-		String from = cfgDao.getConfValue("system_email_addr", String.class, null);
-		String mailAuthUser = cfgDao.getConfValue("email_username", String.class, null);
-		String mailAuthPass = cfgDao.getConfValue("email_userpass", String.class, null);
-
 		Properties props = System.getProperties();
 
 		props.put("mail.smtp.host", smtpServer);
 		props.put("mail.smtp.port", smtpPort);
 
-		if ("1".equals(cfgDao.getConfValue("mail.smtp.starttls.enable", String.class, "0"))) {
+		if (mailTls) {
 			props.put("mail.smtp.starttls.enable", "true");
 		}
 
@@ -147,13 +161,13 @@ public class MailHandler {
 		return msg;
 	}
 	
-	private MimeMessage getMimeMessage(MimeMessage base, MailMessage m) throws Exception {
+	private MimeMessage getMimeMessage(MailMessage m) throws Exception {
 		log.debug("getMimeMessage");
 		// Building MimeMessage
-		MimeMessage msg = base == null ? getBasicMimeMessage() : new MimeMessage(base);
+		MimeMessage msg = getBasicMimeMessage();
 		msg.setSubject(m.getSubject());
 		String replyTo = m.getReplyTo();
-		if (replyTo != null && "1".equals(cfgDao.getConfValue("inviter.email.as.replyto", String.class, "1"))) {
+		if (replyTo != null && mailAddReplyTo) {
 			log.debug("setReplyTo " + replyTo);
 			if (MailUtil.matches(replyTo)) {
 				msg.setReplyTo(new InternetAddress[]{new InternetAddress(replyTo)});
@@ -177,10 +191,6 @@ public class MailHandler {
 	}
 	
 	public void send(final MailMessage m, boolean send) {
-		send(null, m, send);
-	}
-	
-	public void send(final MimeMessage base, final MailMessage m, boolean send) {
 		if (send) {
 			if (m.getId() != 0) {
 				m.setStatus(Status.SENDING);
@@ -194,7 +204,7 @@ public class MailHandler {
 
 					// -- Send the message --
 					try {
-						Transport.send(getMimeMessage(base, m));
+						Transport.send(getMimeMessage(m));
 						m.setStatus(Status.DONE);
 					} catch (Exception e) {
 						log.error("Error while sending message", e);
@@ -221,11 +231,11 @@ public class MailHandler {
 	}
 	
 	public void sendMails() throws Exception {
-		MimeMessage base = getBasicMimeMessage();
+		init();
 		log.debug("sendMails enter ...");
 		List<MailMessage> list = mailMessageDao.get(0, 1);
 		while (!list.isEmpty()) {
-			send(base, list.get(0), true);
+			send(list.get(0), true);
 			list = mailMessageDao.get(0, 1);
 		}
 		log.debug("... sendMails done.");
