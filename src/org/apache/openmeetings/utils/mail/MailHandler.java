@@ -57,6 +57,7 @@ public class MailHandler {
 	private static final Logger log = Red5LoggerFactory.getLogger(
 			MailHandler.class, OpenmeetingsVariables.webAppRootKey);
 	private static final int MAIL_SEND_TIMEOUT = 60 * 60 * 1000; // 1 hour
+	private static final int MAXIMUM_ERROR_COUNT = 5;
 	
 	@Autowired
 	private ConfigurationDao cfgDao;
@@ -197,7 +198,8 @@ public class MailHandler {
 						m.setStatus(Status.DONE);
 					} catch (Exception e) {
 						log.error("Error while sending message", e);
-						m.setStatus(Status.NONE);
+						m.setErrorCount(m.getErrorCount() + 1);
+						m.setStatus(m.getErrorCount() < MAXIMUM_ERROR_COUNT ? Status.NONE : Status.ERROR);
 					}
 					if (m.getId() != 0) {
 						mailMessageDao.update(m, null);

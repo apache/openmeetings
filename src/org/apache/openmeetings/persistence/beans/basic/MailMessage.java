@@ -46,6 +46,7 @@ public class MailMessage implements IDataProviderEntity {
 	public enum Status {
 		NONE
 		, SENDING
+		, ERROR
 		, DONE
 	}
 	
@@ -81,6 +82,9 @@ public class MailMessage implements IDataProviderEntity {
 	
 	@Column(name = "updated")
 	private Calendar updated;
+	
+	@Column(name = "errorCount", nullable = false)
+	private int errorCount = 0;
 	
 	public MailMessage(String recipients, String replyTo, String subject, String body) {
 		this(recipients, replyTo, subject, body, null);
@@ -164,5 +168,13 @@ public class MailMessage implements IDataProviderEntity {
 
 	public void setIcs(byte[] ics) {
 		this.ics = ics;
+	}
+
+	public int getErrorCount() {
+		return errorCount;
+	}
+
+	public void setErrorCount(int errorCount) {
+		this.errorCount = errorCount;
 	}
 }
