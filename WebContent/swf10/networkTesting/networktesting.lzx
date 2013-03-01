@@ -72,8 +72,8 @@
 				if ($debug) Debug.write("url ", url);
 				url = url.substr(url.indexOf("//") + 2);
 				var portIdx = url.indexOf(":");
-				host = url.substr(0, portIdx != -1 ? portIdx : url.indexOf("/")));
-				if ($debug) Debug.write("canvas.host ", canvas.host);
+				host = url.substr(0, portIdx != -1 ? portIdx : url.indexOf("/"));
+				if ($debug) Debug.write("host ", host);
 			}
 		}
 		return host;
