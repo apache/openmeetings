@@ -68,7 +68,6 @@ public class EmailManager {
 	 */
 	public String sendMail(String Username, String Userpass, String EMail,
 			String link, Boolean sendEmailWithVerficationCode) {
-		String succ = "valid email";
 
 		Integer sendEmailAtRegister = configurationDao.getConfValue("sendEmailAtRegister", Integer.class, "0");
 
@@ -76,30 +75,22 @@ public class EmailManager {
 
 			Long default_lang_id = configurationDao.getConfValue("default_lang_id", Long.class, "1");
 
+			String template = null;
 			if (sendEmailWithVerficationCode) {
-
 				String verification_url = link;
 
-				String template = registerUserTemplate
+				template = registerUserTemplate
 						.getRegisterUserWithVerificationTemplate(Username,
 								Userpass, EMail, default_lang_id,
 								verification_url);
-
-				succ = mailHandler.sendMail(EMail, fieldManager.getString(512L, default_lang_id), template);
-
 			} else {
-
-				String template = registerUserTemplate
+				template = registerUserTemplate
 						.getRegisterUserTemplate(Username, Userpass, EMail,
 								default_lang_id);
-
-				succ = mailHandler.sendMail(EMail, fieldManager.getString(512L, default_lang_id), template);
 			}
-
-			return succ;
-		} else {
-			return "success";
+			mailHandler.send(EMail, fieldManager.getString(512L, default_lang_id), template);
 		}
+		return "success";
 	}
 
 	public String addEmailCon(String EMail, int CONTACT_ID) {

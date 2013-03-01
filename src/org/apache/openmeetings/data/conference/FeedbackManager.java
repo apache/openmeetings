@@ -48,11 +48,11 @@ public class FeedbackManager {
 			String template = feedbackTemplate.getFeedBackTemplate(username,
 					email, message, default_lang_id);
 
-			return mailHandler.sendMail("openmeetings-user@googlegroups.com",
+			mailHandler.send("user@openmeetings.apache.org",
 					fieldManager.getString(499L, default_lang_id), template);
-
+			return "success";
 		} catch (Exception err) {
-			log.error("sendInvitationLink", err);
+			log.error("sendFeedback", err);
 		}
 		return null;
 	}

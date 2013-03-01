@@ -146,7 +146,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 			for (String scopeName : scope.getScopeNames()) {
 				log.debug("scopeName :: " + scopeName);
 			}
-
+			
 			ScopeApplicationAdapter.initComplete = true;
 		    log.debug("\n" + 
 		    		"\t################################################\n" +

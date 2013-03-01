@@ -1298,7 +1298,7 @@ public class UserManager {
 		String template = resetPasswordTemplate.getResetPasswordTemplate(
 				reset_link, default_lang_id);
 
-		mailHandler.sendMail(email, fieldManager.getString(517L, default_lang_id), template);
+		mailHandler.send(email, fieldManager.getString(517L, default_lang_id), template);
 	}
 
 	/**

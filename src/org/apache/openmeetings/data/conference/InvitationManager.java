@@ -40,6 +40,7 @@ import org.apache.openmeetings.data.calendar.management.AppointmentLogic;
 import org.apache.openmeetings.data.conference.dao.RoomDao;
 import org.apache.openmeetings.data.user.UserManager;
 import org.apache.openmeetings.data.user.dao.UsersDao;
+import org.apache.openmeetings.persistence.beans.basic.MailMessage;
 import org.apache.openmeetings.persistence.beans.basic.OmTimeZone;
 import org.apache.openmeetings.persistence.beans.calendar.Appointment;
 import org.apache.openmeetings.persistence.beans.calendar.MeetingMember;
@@ -51,7 +52,6 @@ import org.apache.openmeetings.utils.crypt.MD5;
 import org.apache.openmeetings.utils.crypt.ManageCryptStyle;
 import org.apache.openmeetings.utils.mail.IcalHandler;
 import org.apache.openmeetings.utils.mail.MailHandler;
-import org.apache.openmeetings.utils.mail.MailiCalThread;
 import org.apache.openmeetings.utils.math.CalendarPatterns;
 import org.apache.openmeetings.utils.math.TimezoneUtil;
 import org.apache.openmeetings.utils.sms.SMSHandler;
@@ -89,8 +89,6 @@ public class InvitationManager {
 	private UsersDao usersDao;
 	@Autowired
 	private MailHandler mailHandler;
-	@Autowired
-	private MailiCalThread mailiCalThread;
 	@Autowired
 	private SMSHandler smsHandler;
 	@Autowired
@@ -631,8 +629,8 @@ public class InvitationManager {
 					fromUserField, message, invitation_link, language_id, dStart,
 					dEnd);
 
-			return mailHandler.sendMail(email, replyTo, subject, template);
-
+			mailHandler.send(email, replyTo, subject, template);
+			return "success";
 		} catch (Exception err) {
 			log.error("sendInvitationLink", err);
 		}
@@ -658,9 +656,14 @@ public class InvitationManager {
 			String invitation_link = baseUrl + "?invitationHash="
 					+ invitationHash;
 
-			return mailHandler.sendMail(email, subject
+			mailHandler.send(new MailMessage(
+					email
+					, null
+					, subject
 					, message + "<br/><a href='" + invitation_link + "'>"
-					+ fieldManager.getFieldByIdAndLanguage(626L, langId) + "</a>");
+							+ fieldManager.getFieldByIdAndLanguage(626L, langId) + "</a>"), true);
+			
+			return "success";
 		} catch (Exception e) {
 			log.error("sendInvitationReminderLink", e);
 		}
@@ -700,7 +703,8 @@ public class InvitationManager {
 			String cancelling_person, String subject, String message) {
 		log.debug("sendInvitationCancelmail");
 		try {
-			return mailHandler.sendMail(email, subject, message);
+			mailHandler.send(email, subject, message);
+			return "success";
 		} catch (Exception e) {
 			log.error("sendInvitationCancelmail : " + e.getMessage());
 		}
@@ -724,7 +728,8 @@ public class InvitationManager {
 			String replyTo, String subject, String message) {
 		log.debug("sendInvitationUpdateMail");
 		try {
-			return mailHandler.sendMail(email, replyTo, subject, message);
+			mailHandler.send(email, replyTo, subject, message);
+			return "success";
 		} catch (Exception e) {
 			log.error("sendInvitationUpdateMail : " + e.getMessage());
 		}
@@ -752,8 +757,7 @@ public class InvitationManager {
 		User user = userManager.getUserById(organizer_userId);
 
 		// TODO: Check time zone handling in iCal Mail
-		// OmTimeZone omTimeZone =
-		// omTimeZoneDaoImpl.getOmTimeZone(jNameTimeZone);
+		// OmTimeZone omTimeZone = omTimeZoneDaoImpl.getOmTimeZone(jNameTimeZone);
 
 		IcalHandler handler = new IcalHandler(IcalHandler.ICAL_METHOD_CANCEL);
 
@@ -777,8 +781,7 @@ public class InvitationManager {
 
 		log.debug(handler.getICalDataAsString());
 
-		mailiCalThread.doSend(email, user.getAdresses().getEmail(), subject, handler.getIcalAsByteArray(),
-				message);
+		mailHandler.send(new MailMessage(email, user.getAdresses().getEmail(), subject, message, handler.getIcalAsByteArray()));
 
 		return null;
 	}
@@ -823,8 +826,7 @@ public class InvitationManager {
 
 		log.debug(handler.getICalDataAsString());
 
-		mailiCalThread.doSend(email, user.getAdresses().getEmail(), subject, handler.getIcalAsByteArray(),
-				message);
+		mailHandler.send(new MailMessage(email, user.getAdresses().getEmail(), subject, message, handler.getIcalAsByteArray()));
 
 		return null;
 	}
@@ -907,12 +909,9 @@ public class InvitationManager {
 
 			log.debug(handler.getICalDataAsString());
 
-			mailiCalThread.doSend(email, replyToEmail, subject, handler.getIcalAsByteArray(),
-					template);
+			mailHandler.send(new MailMessage(email, replyToEmail, subject, template, handler.getIcalAsByteArray()));
 
 			return "success";
-			// return MailHandler.sendMail(email, subject, template);
-
 		} catch (Exception err) {
 			log.error("sendInvitionIcalLink", err);
 		}
@@ -952,8 +951,8 @@ public class InvitationManager {
 								invitation_link, default_lang_id, starttime,
 								endtime);
 
-				return mailHandler.sendMail(email, replyTo, subject, template);
-
+				mailHandler.send(email, replyTo, subject, template);
+				return "success";
 			}
 		} catch (Exception err) {
 			log.error("sendInvitationLink", err);

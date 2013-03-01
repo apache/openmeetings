@@ -18,21 +18,43 @@
  */
 package org.apache.openmeetings.persistence.beans.basic;
 
+import java.util.Calendar;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Lob;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
+import org.apache.openmeetings.persistence.beans.IDataProviderEntity;
+
 @Entity
+@NamedQueries({
+	@NamedQuery(name = "getMailMessageById", query = "SELECT m FROM MailMessage m WHERE m.id = :id")
+	, @NamedQuery(name = "getMailMessages"
+		, query = "SELECT m FROM MailMessage m WHERE m.status = :status ORDER BY m.updated, m.inserted")
+	, @NamedQuery(name = "countMailMessages", query = "SELECT COUNT(m) FROM MailMessage m WHERE m.status = :status")
+})
 @Table(name = "email")
-public class MailMessage {
+public class MailMessage implements IDataProviderEntity {
+	public enum Status {
+		NONE
+		, SENDING
+		, DONE
+	}
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
 	private Long id;
 	
+	@Lob
 	@Column(name = "recipients")
 	private String recipients;
 	
@@ -42,12 +64,36 @@ public class MailMessage {
 	@Column(name = "subject")
 	private String subject;
 	
+	@Lob
 	@Column(name = "body")
 	private String body;
 
-	@Column(name = "processed")
-	private boolean processed;
+	@Lob
+	@Column(name = "ics")
+	private byte[] ics;
 
+	@Column(name = "status", nullable = false)
+	@Enumerated(EnumType.STRING)
+	private Status status = Status.NONE;
+
+	@Column(name = "inserted")
+	private Calendar inserted;
+	
+	@Column(name = "updated")
+	private Calendar updated;
+	
+	public MailMessage(String recipients, String replyTo, String subject, String body) {
+		this(recipients, replyTo, subject, body, null);
+	}
+	
+	public MailMessage(String recipients, String replyTo, String subject, String body, byte[] ics) {
+		this.recipients = recipients;
+		this.replyTo = replyTo;
+		this.subject = subject;
+		this.body = body;
+		this.ics = ics;
+	}
+	
 	public Long getId() {
 		return id;
 	}
@@ -88,11 +134,35 @@ public class MailMessage {
 		this.body = body;
 	}
 
-	public boolean isProcessed() {
-		return processed;
+	public Status getStatus() {
+		return status;
 	}
 
-	public void setProcessed(boolean processed) {
-		this.processed = processed;
+	public void setStatus(Status status) {
+		this.status = status;
+	}
+
+	public Calendar getInserted() {
+		return inserted;
+	}
+
+	public void setInserted(Calendar inserted) {
+		this.inserted = inserted;
+	}
+
+	public Calendar getUpdated() {
+		return updated;
+	}
+
+	public void setUpdated(Calendar updated) {
+		this.updated = updated;
+	}
+
+	public byte[] getIcs() {
+		return ics;
+	}
+
+	public void setIcs(byte[] ics) {
+		this.ics = ics;
 	}
 }

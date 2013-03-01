@@ -171,12 +171,57 @@
 		</property>
 	</bean>
 
+	<!-- Mail related jobs -->
+	<bean id="mailHandler" class="org.apache.openmeetings.utils.mail.MailHandler" />
+	<bean id="resetSendingMailStatus" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject">
+			<ref bean="mailHandler" />
+		</property>
+		<property name="targetMethod">
+			<value>resetSendingStatus</value>
+		</property>
+		<property name="concurrent" value="false" />
+	</bean>
+	<bean id="triggerResetSendingMailStatus" class="org.springframework.scheduling.quartz.SimpleTriggerBean">
+		<property name="jobDetail">
+			<ref bean="resetSendingMailStatus" />
+		</property>
+		<property name="startDelay">
+			<value>60000</value> <!-- 1 minute -->
+		</property>
+		<property name="repeatInterval">
+			<value>900000</value> <!-- 15 minutes -->
+		</property>
+	</bean>
+	<bean id="sendMails" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject">
+			<ref bean="mailHandler" />
+		</property>
+		<property name="targetMethod">
+			<value>sendMails</value>
+		</property>
+		<property name="concurrent" value="false" />
+	</bean>
+	<bean id="triggerSendMails" class="org.springframework.scheduling.quartz.SimpleTriggerBean">
+		<property name="jobDetail">
+			<ref bean="sendMails" />
+		</property>
+		<property name="startDelay">
+			<value>180000</value> <!-- 3 minute -->
+		</property>
+		<property name="repeatInterval">
+			<value>180000</value> <!-- 3 minutes -->
+		</property>
+	</bean>
+	
 	<bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
 		<property name="triggers">
 			<list>
 				<ref local="triggerSessionClear" />
 				<ref local="triggerMeetingReminder" />
 				<ref local="triggerTestSetupCleanup" />
+				<ref local="triggerResetSendingMailStatus" />
+				<ref local="triggerSendMails" />
 			</list>
 		</property>
 	</bean>
@@ -234,14 +279,13 @@
 	<bean id="serverDao" class="org.apache.openmeetings.data.basic.dao.ServerDao" />
 	<bean id="chatDao" class="org.apache.openmeetings.data.chat.ChatDao" />
 	<bean id="clientDao" class="org.apache.openmeetings.data.conference.dao.ClientDao" />
-
+	<bean id="mailMessageDao" class="org.apache.openmeetings.data.basic.dao.MailMessageDao" />
 
 	<!-- No Interface -->
 	<bean id="manageCryptStyle" class="org.apache.openmeetings.utils.crypt.ManageCryptStyle" />
 	<bean id="generateImage" class="org.apache.openmeetings.documents.GenerateImage" />
 	<bean id="generateThumbs" class="org.apache.openmeetings.documents.GenerateThumbs" />
 	<bean id="generatePDF" class="org.apache.openmeetings.documents.GeneratePDF" />
-	<bean id="mailHandler" class="org.apache.openmeetings.utils.mail.MailHandler" />
 	<bean id="smsHandler" class="org.apache.openmeetings.utils.sms.SMSHandler" />
 	<bean id="feedbackManagement" class="org.apache.openmeetings.data.conference.FeedbackManager" />
 	<bean id="importInitvalues" class="org.apache.openmeetings.installation.ImportInitvalues" />
@@ -270,9 +314,6 @@
 		<property name="maxPoolSize" value="10" />
 		<property name="queueCapacity" value="25" />
 	</bean>
-
-	<bean id="mailThread" class="org.apache.openmeetings.utils.mail.MailThread" />
-	<bean id="mailiCalThread" class="org.apache.openmeetings.utils.mail.MailiCalThread" />
 
 	<!-- Axis2 Service Proxy's -->
 	<bean id="userWebService" class="org.apache.openmeetings.axis.services.UserWebService" />

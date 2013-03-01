@@ -716,7 +716,7 @@ public class UserService {
 								denyLinkHTML, profileLinkHTML);
 
 				if (userToAdd.getAdresses() != null) {
-					mailHandler.sendMail(userToAdd.getAdresses().getEmail(),
+					mailHandler.send(userToAdd.getAdresses().getEmail(),
 							user.getFirstname() + " " + user.getLastname()
 									+ " " + fValue1193.getValue(), template);
 				}
@@ -915,7 +915,7 @@ public class UserService {
 								false, null, false, 0L, user.getAdresses()
 										.getEmail());
 
-						mailHandler.sendMail(user.getAdresses().getEmail(),
+						mailHandler.send(user.getAdresses().getEmail(),
 								userContacts.getContact().getFirstname()
 										+ " "
 										+ userContacts.getContact()
@@ -1171,7 +1171,7 @@ public class UserService {
 								+ labelid504.getValue() + "</a><br/>";
 					}
 
-					mailHandler.sendMail(email, fValue1301.getValue() + " "
+					mailHandler.send(email, fValue1301.getValue() + " "
 							+ subject, message.replaceAll("\\<.*?>", "")
 							+ aLinkHTML + invitation_link);
 
