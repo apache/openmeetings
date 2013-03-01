@@ -250,10 +250,10 @@
 			<conferencDropDownMenuItem labelid="42" command="cmd_checkPollVoted" 
 						 enabled="true"/>
 			<horizontalDropDownSpacer
-						 visible="$once{ (canvas.RED5_SIP_ENABLE == 'yes') ? true : false }" />
+						 visible="$once{ canvas.RED5_SIP_ENABLE == 'yes' &amp;&amp; canvas.currentRoomObject.sipEnabled }" />
             <conferencDropDownMenuItem labelid="1447" command="cmd_showSipDialer" 
-            			 visible="$once{ (canvas.RED5_SIP_ENABLE == 'yes') ? true : false }"
-            			 enabled="$once{ (canvas.RED5_SIP_ENABLE == 'yes') ? true : false }"/>
+            			 visible="$once{ canvas.RED5_SIP_ENABLE == 'yes' &amp;&amp; canvas.currentRoomObject.sipEnabled }"
+            			 enabled="$once{ canvas.RED5_SIP_ENABLE == 'yes' &amp;&amp; canvas.currentRoomObject.sipEnabled }"/>
             <horizontalDropDownSpacer />
 			<conferencDropDownMenuItem labelid="1126" command="cmd_editWhiteboardDefault" 
 						 enabled="true"/>
