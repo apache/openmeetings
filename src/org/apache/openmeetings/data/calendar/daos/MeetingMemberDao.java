@@ -188,7 +188,7 @@ public class MeetingMemberDao {
 			gm.setMemberStatus(memberStatus);
 			gm.setAppointmentStatus(appointmentStatus);
 			gm.setAppointment(appointmentDao.getAppointmentById(appointmentId));
-			gm.setUserid(usersDao.get(userid));
+			gm.setUserid(userid == null ? null : usersDao.get(userid));
 			gm.setEmail(email);
 			gm.setPhone(phone);
 

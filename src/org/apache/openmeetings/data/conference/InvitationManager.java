@@ -360,7 +360,7 @@ public class InvitationManager {
 	 */
 	// -----------------------------------------------------------------------------------------------
 	public void updateInvitation(Appointment appointment, MeetingMember member,
-			Long canceling_user_id, Long language_id, String invitorName) {
+			Long canceling_user_id, Long language_id, String invitorName, boolean sendMail) {
 
 		log.debug("updateInvitation");
 
@@ -398,6 +398,7 @@ public class InvitationManager {
 
 		// checking reminderType and send emails, reminder type 1 receives
 		// nothing
+		if (sendMail) {
 		if (appointment.getRemind().getTypId() == 2) {
 			sendInvitationUpdateMail(member.getEmail(), appointment, user
 					.getAdresses().getEmail(), subject, message);
@@ -413,6 +414,7 @@ public class InvitationManager {
 				log.error("Error sending IcalUpdateMail for User "
 						+ member.getEmail() + " : " + e.getMessage());
 			}
+		}
 		}
 
 	}

@@ -179,6 +179,7 @@ public class TimezoneUtil {
 		cal.set(Calendar.HOUR_OF_DAY, calOrig.get(Calendar.HOUR_OF_DAY));
 		cal.set(Calendar.MINUTE, calOrig.get(Calendar.MINUTE));
 		cal.set(Calendar.SECOND, calOrig.get(Calendar.SECOND));
+		cal.set(Calendar.MILLISECOND, 0);
 
 		return cal;
 	}

@@ -420,6 +420,12 @@ public class AppointmentDao {
 			AppointmentCategory appointmentCategory = appointmentCategoryDaoImpl
 					.getAppointmentCategoryById(categoryId);
 
+			boolean sendMail = !ap.getAppointmentName().equals(appointmentName) ||
+					!ap.getAppointmentDescription().equals(appointmentDescription) ||
+					!ap.getAppointmentLocation().equals(appointmentLocation) ||
+					!ap.getAppointmentStarttime().equals(appointmentstart) ||
+					!ap.getAppointmentEndtime().equals(appointmentend);
+			
 			// change connected events of other participants
 			if (ap.getIsConnectedEvent() != null && ap.getIsConnectedEvent()) {
 				this.updateConnectedEvents(ap, appointmentName,
@@ -509,7 +515,7 @@ public class AppointmentDao {
 				} else {
 					// Notify member of changes
 					invitationManager.updateInvitation(ap, memberRemote,
-							users_id, language_id, invitorName);
+							users_id, language_id, invitorName, sendMail);
 
 				}
 			}
@@ -581,8 +587,10 @@ public class AppointmentDao {
 
 						// Not In Remote List available - intern OR extern user
 						meetingMemberLogic.addMeetingMember(
-								clientMember.get("firstname").toString(),
-								clientMember.get("lastname").toString(),
+								clientMember.get("firstname") == null ?
+										clientMember.get("firstname").toString() : "",
+								clientMember.get("lastname") == null ? 
+										clientMember.get("lastname").toString() : "",
 								"0", // member - Status
 								"0", // appointement - Status
 								appointmentId,
@@ -623,6 +631,9 @@ public class AppointmentDao {
 
 			Appointment ap = this.getAppointmentById(appointmentId);
 
+			if (!ap.getStarttime().equals(appointmentstart) ||
+					!ap.getAppointmentEndtime().equals(appointmentend)) {
+
 			// change connected events of other participants
 			if (ap.getIsConnectedEvent() != null && ap.getIsConnectedEvent()) {
 				this.updateConnectedEventsTimeOnly(ap, appointmentstart,
@@ -639,11 +650,9 @@ public class AppointmentDao {
 
 			if (ap.getAppointmentId() == null) {
 				em.persist(ap);
-			} else {
-				if (!em.contains(ap)) {
+				} else if (!em.contains(ap)) {
 					em.merge(ap);
 				}
-			}
 
 			List<MeetingMember> meetingsRemoteMembers = meetingMemberDao
 					.getMeetingMemberByAppointmentId(ap.getAppointmentId());
@@ -658,10 +667,10 @@ public class AppointmentDao {
 
 				// Notify member of changes
 				invitationManager.updateInvitation(ap, memberRemote,
-						users_id, language_id, invitorName);
+							users_id, language_id, invitorName, true);
 
 			}
-
+			}
 			return appointmentId;
 		} catch (Exception ex2) {
 			log.error("[updateAppointmentByTime]: ", ex2);
