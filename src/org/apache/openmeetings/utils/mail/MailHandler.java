@@ -73,10 +73,6 @@ public class MailHandler {
 	private boolean mailTls;
 	private boolean mailAddReplyTo;
 
-	public MailHandler() {
-		init();
-	}
-	
 	private void init() {
 		smtpServer = cfgDao.getConfValue("smtp_server", String.class, null);
 		smtpPort = cfgDao.getConfValue("smtp_port", String.class, "25");
@@ -133,7 +129,9 @@ public class MailHandler {
 	
 	private MimeMessage getBasicMimeMessage() throws Exception {
 		log.debug("getBasicMimeMessage");
-
+		if (smtpServer == null) {
+			init();
+		}
 		Properties props = System.getProperties();
 
 		props.put("mail.smtp.host", smtpServer);
