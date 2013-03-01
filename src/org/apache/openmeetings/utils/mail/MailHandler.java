@@ -146,10 +146,10 @@ public class MailHandler {
 		return msg;
 	}
 	
-	private MimeMessage getMimeMessage(MailMessage m) throws Exception {
+	private MimeMessage getMimeMessage(MimeMessage base, MailMessage m) throws Exception {
 		log.debug("getMimeMessage");
 		// Building MimeMessage
-		MimeMessage msg = getBasicMimeMessage();
+		MimeMessage msg = base == null ? getBasicMimeMessage() : new MimeMessage(base);
 		msg.setSubject(m.getSubject());
 		String replyTo = m.getReplyTo();
 		if (replyTo != null && "1".equals(cfgDao.getConfValue("inviter.email.as.replyto", String.class, "1"))) {
@@ -176,6 +176,10 @@ public class MailHandler {
 	}
 	
 	public void send(final MailMessage m, boolean send) {
+		send(null, m, send);
+	}
+	
+	public void send(final MimeMessage base, final MailMessage m, boolean send) {
 		if (send) {
 			if (m.getId() != 0) {
 				m.setStatus(Status.SENDING);
@@ -189,7 +193,7 @@ public class MailHandler {
 
 					// -- Send the message --
 					try {
-						Transport.send(getMimeMessage(m));
+						Transport.send(getMimeMessage(base, m));
 						m.setStatus(Status.DONE);
 					} catch (Exception e) {
 						log.error("Error while sending message", e);
@@ -214,11 +218,12 @@ public class MailHandler {
 		log.debug("... resetSendingStatus done.");
 	}
 	
-	public void sendMails() {
+	public void sendMails() throws Exception {
+		MimeMessage base = getBasicMimeMessage();
 		log.debug("sendMails enter ...");
 		List<MailMessage> list = mailMessageDao.get(0, 1);
 		while (!list.isEmpty()) {
-			send(list.get(0), true);
+			send(base, list.get(0), true);
 			list = mailMessageDao.get(0, 1);
 		}
 		log.debug("... sendMails done.");
