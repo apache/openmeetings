@@ -23,6 +23,7 @@
 <class name="NetworkTest" extends="view">
 
     <attribute name="testName" type="string" value="null" />
+    <attribute name="protocol" type="string" value="null" />
     <attribute name="host" type="string" value="null" />
     <attribute name="port" type="number" value="null" />
     <attribute name="running" type="boolean" value="false" />

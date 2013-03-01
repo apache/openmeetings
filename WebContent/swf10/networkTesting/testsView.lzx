@@ -50,28 +50,28 @@
     />
 
     <PingTest
-        name="pingTest" host="${canvas.host}" port="${canvas.httpPort}"
+        name="pingTest" protocol="${canvas.httpProtocol}" host="${canvas.httpHost}" port="${canvas.httpPort}"
         x="${parent.offset}"
         y="${parent.label.y + parent.label.height + parent.offset/2}"
     />
     <PortAvailabilityTest
-        name="portTest" host="${canvas.host}" port="${canvas.rtmpPort}"
+        name="portTest" protocol="${canvas.rtmpProtocol}" host="${canvas.rtmpHost}" port="${canvas.rtmpPort}"
         x="${parent.pingTest.x + parent.pingTest.width + parent.offset}"
         y="${parent.pingTest.y}"
      />
     <JitterTest
-        name="jitterTest" host="${canvas.host}" port="${canvas.httpPort}"
+        name="jitterTest" protocol="${canvas.httpProtocol}" host="${canvas.httpHost}" port="${canvas.httpPort}"
         x="${parent.portTest.x + parent.portTest.width + parent.offset}"
         y="${parent.pingTest.y}"
     />
     <DownloadSpeedTest
-        name="downloadTest" host="${canvas.host}" port="${canvas.httpPort}"
+        name="downloadTest" protocol="${canvas.httpProtocol}" host="${canvas.httpHost}" port="${canvas.httpPort}"
         x="${parent.jitterTest.x + parent.jitterTest.width + parent.offset}"
         y="${parent.pingTest.y}"
     />
 
     <UploadSpeedTest
-        name="uploadTest" host="${canvas.host}" port="${canvas.httpPort}"
+        name="uploadTest" protocol="${canvas.httpProtocol}" host="${canvas.httpHost}" port="${canvas.httpPort}"
         x="${parent.downloadTest.x + parent.downloadTest.width + parent.offset}"
         y="${parent.pingTest.y}"
     />

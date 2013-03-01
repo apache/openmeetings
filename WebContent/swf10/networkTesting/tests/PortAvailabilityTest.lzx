@@ -39,7 +39,7 @@
     </handler>
 
     <method name="start">
-        var hostUrl = "rtmp://" + host + ":" + port + canvas.rtmpUriPath;
+        var hostUrl = protocol + "://" + host + ":" + port + canvas.rtmpUriPath;
         rtmp.setAttribute("src", hostUrl);
         this.log(": start test... " + hostUrl);
 

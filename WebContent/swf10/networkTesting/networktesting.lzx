@@ -46,23 +46,23 @@
 	]]></handler>
 	
     <!--
-        These attributes are rewritten by values from "networktesting-config.xml"
+        These attributes are rewritten by values from "config.xml"
     -->
-    <attribute name="host" type="string" value="" />
+    <attribute name="rtmpProtocol" type="string" value="rtmp" />
+    <attribute name="rtmpHost" type="string" value="" />
     <attribute name="rtmpPort" type="number" value="1935" />
+    
+    <attribute name="httpProtocol" type="string" value="http" />
+    <attribute name="httpHost" type="string" value="" />
     <attribute name="httpPort" type="number" value="5080" />
     <attribute name="uriContext" type="string" value="/openmeetings" />
     <attribute name="rtmpUriPath" type="string" value="/openmeetings/hibernate" />
 
-	<method name="getSettings">
-		var settingsPtr = canvas.settings.getPointer();
-		
-		canvas.setAttribute("host", settingsPtr.xpathQuery("config/hostAddress/text()"));
-		if (!canvas.host) {
-			// trying to get host from JS call
-			var url:String = ExternalInterface.call("window.location.href.toString");
-			// in case of IE or some other security issues we will fail ...
-			url = url ? url : canvas.proxyurl;
+	<method name="getBrowserHost">
+		var host:String = ExternalInterface.call("window.location.host.toString()");
+		// in case of IE or some other security issues we will fail ...
+		if (!host) {
+			var url:String = canvas.proxyurl;
 			if (url) {
 				if ($debug) Debug.write("url ", url);
 				var paramsIdx = url.indexOf("?");
@@ -72,13 +72,31 @@
 				if ($debug) Debug.write("url ", url);
 				url = url.substr(url.indexOf("//") + 2);
 				var portIdx = url.indexOf(":");
-				canvas.setAttribute("host", url.substr(0, portIdx != -1 ? portIdx : url.indexOf("/")));
+				host = url.substr(0, portIdx != -1 ? portIdx : url.indexOf("/")));
 				if ($debug) Debug.write("canvas.host ", canvas.host);
 			}
 		}
-		canvas.setAttribute("rtmpPort", settingsPtr.xpathQuery("config/rtmpPort/text()"));
-		canvas.setAttribute("httpPort", settingsPtr.xpathQuery("config/httpPort/text()"));
+		return host;
+	</method>
+	
+	<method name="getSettings">
+		var settingsPtr = canvas.settings.getPointer();
 		
+		var useSSL:Boolean = ("yes" == settingsPtr.xpathQuery("config/useSSL/text()"));
+		canvas.setAttribute("rtmpProtocol", useSSL ? "rtmps" : "rtmp");
+		canvas.setAttribute("rtmpHost", settingsPtr.xpathQuery("config/rtmphostlocal/text()"));
+		if (!canvas.rtmpHost) {
+			canvas.rtmpHost = getBrowserHost();
+		}
+		canvas.setAttribute("rtmpPort", settingsPtr.xpathQuery("config/rtmpPort/text()"));
+		
+		canvas.setAttribute("httpProtocol", settingsPtr.xpathQuery("config/protocol/text()"));
+		canvas.setAttribute("httpHost", settingsPtr.xpathQuery("config/httphostlocal/text()"));
+		if (!canvas.httpHost) {
+			canvas.httpHost = rtmpHost;
+		}
+		canvas.setAttribute("httpPort", settingsPtr.xpathQuery("config/red5httpport/text()"));
+
 		canvas.setAttribute("uriContext", settingsPtr.xpathQuery("config/uriContext/text()"));
 		canvas.setAttribute("rtmpUriPath", settingsPtr.xpathQuery("config/rtmpUriPath/text()"));
 	</method>
