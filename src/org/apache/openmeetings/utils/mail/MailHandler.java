@@ -132,7 +132,7 @@ public class MailHandler {
 		if (smtpServer == null) {
 			init();
 		}
-		Properties props = System.getProperties();
+		Properties props = new Properties(System.getProperties());
 
 		props.put("mail.smtp.host", smtpServer);
 		props.put("mail.smtp.port", smtpPort);
@@ -147,10 +147,10 @@ public class MailHandler {
 				&& mailAuthPass != null && mailAuthPass.length() > 0) {
 			// use SMTP Authentication
 			props.put("mail.smtp.auth", "true");
-			session = Session.getDefaultInstance(props, new SmtpAuthenticator(mailAuthUser, mailAuthPass));
+			session = Session.getInstance(props, new SmtpAuthenticator(mailAuthUser, mailAuthPass));
 		} else {
 			// not use SMTP Authentication
-			session = Session.getDefaultInstance(props, null);
+			session = Session.getInstance(props, null);
 		}
 
 		// Building MimeMessage
@@ -190,7 +190,7 @@ public class MailHandler {
 	
 	public void send(final MailMessage m, boolean send) {
 		if (send) {
-			if (m.getId() != 0) {
+			if (m.getId() != null) {
 				m.setStatus(Status.SENDING);
 				mailMessageDao.update(m, null);
 			}
@@ -209,7 +209,7 @@ public class MailHandler {
 						m.setErrorCount(m.getErrorCount() + 1);
 						m.setStatus(m.getErrorCount() < MAXIMUM_ERROR_COUNT ? Status.NONE : Status.ERROR);
 					}
-					if (m.getId() != 0) {
+					if (m.getId() != null) {
 						mailMessageDao.update(m, null);
 					}
 				}
