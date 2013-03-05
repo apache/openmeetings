@@ -114,6 +114,10 @@ public class AsteriskSipUser implements Serializable {
 	@Element(data=true, required = false)
 	private String callbackextension;
 
+	@Column(name = "allow", nullable=false, length=100)
+	@Element(data=true, required = false)
+	private String allow = "ulaw;alaw;h264";
+
 	public long getId() {
 		return id;
 	}
@@ -248,5 +252,13 @@ public class AsteriskSipUser implements Serializable {
 
 	public void setCallbackextension(String callbackextension) {
 		this.callbackextension = callbackextension;
+	}
+
+	public String getAllow() {
+		return allow;
+	}
+
+	public void setAllow(String allow) {
+		this.allow = allow;
 	}
 }
