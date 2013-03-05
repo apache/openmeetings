@@ -236,7 +236,7 @@
 				_micro.enhancedOptions = options;
 				if ($debug) Debug.write("echoPath set to 256");
 				if ($debug) Debug.write(_micro.enhancedOptions);
-			} else {
+			} else if (_micro == null) {
 				_micro = Microphone.getMicrophone(valMic);
 			}
 			
