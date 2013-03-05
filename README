@@ -10,7 +10,34 @@ document editing and other groupware tools using API functions of the Red5 Strea
 Server for Remoting and Streaming. 
 
 
-Release Notes
+Release Notes 2.1
+=============
+_Admin/Calendar HTML5 UI_
+Additional HTML5 Wicket based UI is added (fully customizable with CSS)
+
+_Integration with Asterisk_
+Integration with Asterisk was refactored. Confbridge is now used instead of Meetme.
+Basic support for video is added (unstable).
+
+_Using SWF11 for Video Components_
+All audio/video related components now use SWF11 for broadcasting and receiving 
+audio and video signals. Echo cancellation can be enabled in the config. H264 is now used
+as video codec to enable SIP video support.
+
+_Cluster capabilities_
+OM can be configured in cluster environment
+
+_Private Chat_
+Ability to send private chat messages in the room is added
+
+_Network testing tool/script_
+Network testing *nix script is added and GUI network testing tools are added.
+
+_Emails Queue_
+Emails are now able to be resend in case of bad SMTP settings
+
+
+Release Notes 2.0
 =============
 see CHANGES file for detailed log
 
