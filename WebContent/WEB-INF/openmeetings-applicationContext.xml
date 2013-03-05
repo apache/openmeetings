@@ -53,6 +53,9 @@
 	<bean id="openmeetings.SessionManager" class="org.apache.openmeetings.session.SessionManager">
 		<property name="cache">
 			<ref bean="openmeetings.HashMapStore" />  <!-- Memory based session cache by default -->
+			<!-- The following section should be used in clustering mode
+			<ref bean="openmeetings.DatabaseStore" />
+			-->
 		</property>
 	</bean>
 	<bean id="openmeetings.EmoticonsManager" class="org.apache.openmeetings.data.whiteboard.EmoticonsManager" />
