@@ -22,6 +22,8 @@ import java.io.Serializable;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -35,6 +37,11 @@ import org.simpleframework.xml.Root;
 @Root(name="asterisksipuser")
 public class AsteriskSipUser implements Serializable {
 	private static final long serialVersionUID = -565831761546365623L;
+	public enum Type {
+		friend,
+		user,
+		peer
+	}
 
 	@Id
 	@Column(name = "id")
@@ -43,8 +50,9 @@ public class AsteriskSipUser implements Serializable {
 	private long id;
 
 	@Column(name = "type", nullable = false, length=6)
+	@Enumerated(EnumType.STRING)
 	@Element(data=true, required=false)
-	private String type = "friend"; //	Varchar 6
+	private Type type = Type.friend;
 	
 	@Column(name = "name", nullable = false, length=128)
 	@Element(data=true, required=false)
@@ -66,9 +74,9 @@ public class AsteriskSipUser implements Serializable {
 	@Element(data=true, required=false)
 	private String ipaddr = ""; //	Varchar 128
 	
-	@Column(name = "port", nullable = false, length=5)
+	@Column(name = "port", nullable = false, length=8)
 	@Element(data=true, required=false)
-	private String port = ""; //	Varchar 5
+	private Integer port = 0; //	mediumint(8)
 	
 	@Column(name = "regseconds", nullable = false)
 	@Element(data=true, required = false)
@@ -114,11 +122,11 @@ public class AsteriskSipUser implements Serializable {
 		this.id = id;
 	}
 
-	public String getType() {
+	public Type getType() {
 		return type;
 	}
 
-	public void setType(String type) {
+	public void setType(Type type) {
 		this.type = type;
 	}
 
@@ -162,11 +170,11 @@ public class AsteriskSipUser implements Serializable {
 		this.ipaddr = ipaddr;
 	}
 
-	public String getPort() {
+	public Integer getPort() {
 		return port;
 	}
 
-	public void setPort(String port) {
+	public void setPort(Integer port) {
 		this.port = port;
 	}
 
