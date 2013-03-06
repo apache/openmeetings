@@ -118,13 +118,11 @@
 
 				<p>Get the source from your TAG: </p>
 				<div class="xmlcode">
-					svn checkout
-					https://svn.apache.org/repos/asf/openmeetings/tags/$BRANCHORTAG/
-					<br />
+					svn checkout https://svn.apache.org/repos/asf/openmeetings/tags/$BRANCHORTAG/<br />
 					$BRANCHORTAG should be replaced with your new TAG
 				</div>
 
-				<p>Edit the file build.properties</p>
+				<p>Edit the file build.properties change</p>
 				<div class="xmlcode">
 					project.status=SNAPSHOT
 				</div>
@@ -140,11 +138,15 @@
 				<p>Test running the binary's</p>
 				<p>Create MD5 checksums</p>
 				<div class="xmlcode">
-					#On OSX you might use this command to make a MD5 checksum and store
-					it to a file
-					<br />
-					md5 -r apache-openmeetings-XXX-src.zip >
-					apache-openmeetings-XXX-src.zip.md5
+					#On OSX you might use this command to make a MD5 checksum and store it to a file<br />
+					md5 -r apache-openmeetings-XXX-src.zip >apache-openmeetings-XXX-src.zip.md5
+				</div>
+				<div class="xmlcode">
+					#To create MD5 hashes On Ubuntu:<br />
+					for f in `ls -1 *.tar.gz *.zip`; do md5sum $f > $f.md5; done<br/>
+					<br/>
+					#To check MD5 hashes On Ubuntu:<br />
+					for f in `ls -1 *.tar.gz *.zip`; do md5sum -c $f.md5; done
 				</div>
 				<p>
 					Create signatures with the your KEY for every file, the KEY must be available at:<br />
@@ -152,57 +154,66 @@
 						http://www.apache.org/dist/incubator/openmeetings/KEYS
 					</a>
 				</p>
-				<p>Upload the build artefacts to your public_html in your home directory at people.apache.org
+				<div class="xmlcode">
+					#To create signatures On Ubuntu:<br />
+					for f in `ls -1 *.tar.gz *.zip`; do gpg --armor --output $f.asc --detach-sig $f; done<br/>
+					<br/>
+					#To check signatures On Ubuntu:<br />
+					for f in `ls -1 *.tar.gz *.zip`; do gpg --verify $f.asc; done
+				</div>
+				
+				<p>
+					Commit artifacts you have created with KEYS file to the
+					<tt>https://dist.apache.org/repos/dist/dev/openmeetings/</tt>
+					Proposed file structure for "Release Candidate 1" of 2.1 will be:
 				</p>
 				<div class="xmlcode">
-					#On OSX you might use this command to upload the file<br />
-					scp apache-openmeetings-XXXX.zip sebawagner@people.apache.org:~/public_html/
+					2.1<br />
+					2.1/rc1<br />
+					2.1/rc1/src<br />
+					2.1/rc1/src/apache-openmeetings-2.1.0-src.zip<br />
+					2.1/rc1/src/apache-openmeetings-2.1.0-src.tar.gz<br />
+					2.1/rc1/src/apache-openmeetings-2.1.0-src.zip.md5<br />
+					2.1/rc1/src/apache-openmeetings-2.1.0-src.zip.asc<br />
+					2.1/rc1/src/apache-openmeetings-2.1.0-src.tar.gz.md5<br />
+					2.1/rc1/src/apache-openmeetings-2.1.0-src.tar.gz.asc<br />
+					2.1/rc1/bin<br />
+					2.1/rc1/bin/apache-openmeetings-2.1.0.zip<br />
+					2.1/rc1/bin/apache-openmeetings-2.1.0.tar.gz<br />
+					2.1/rc1/bin/apache-openmeetings-2.1.0.zip.md5<br />
+					2.1/rc1/bin/apache-openmeetings-2.1.0.zip.asc<br />
+					2.1/rc1/bin/apache-openmeetings-2.1.0.tar.gz.md5<br />
+					2.1/rc1/bin/apache-openmeetings-2.1.0.tar.gz.asc<br />
+					2.1/rc1/KEYS
 				</div>
 			</subsection>
 
 			<subsection name="Step2 - VOTE and RESULT emails">
 				<p>
-					Send a "VOTE" to the developer mailing list including links to
-					release artefacts.
-					<br />
-					A VOTE always contains two parts:
-					<br />
-					Send an email to the developer mailing list with the subject line:
-					<br />
-					[VOTE] Apache OpenMeetings x.xx release
-					<br />
+					Send a "VOTE" to the developer mailing list including links to release artefacts.<br />
+					A VOTE always contains two parts:<br />
+					Send an email to the developer mailing list with the subject line:<br />
+					[VOTE] Apache OpenMeetings x.xx release<br />
 					An example for such an email:
 					<a
 						href="http://mail-archives.apache.org/mod_mbox/incubator-openmeetings-dev/201207.mbox/%3CCACeMiA9dXXMnxA3EhJVPGhpvO4z2cLNqHVP7uOhSHT8e_vHoFQ%40mail.gmail.com%3E">example Vote email</a>
 					<br />
-					Forward (Not CC) this Vote email to: private@incubator.apache.org
+					Forward (Not CC) this Vote email to: private@openmeetings.apache.org<br />
 					<br />
-					<br />
-					After the vote is over, send a "RESULT" email to the list with the
-					subject line:
-					<br />
-					[RESULT][VOTE] Apache OpenMeetings x.xx release
-					<br />
+					After the vote is over, send a "RESULT" email to the list with the subject line:<br />
+					[RESULT][VOTE] Apache OpenMeetings x.xx release<br />
 					An example for such an email:
 					<a
 						href="http://mail-archives.apache.org/mod_mbox/incubator-openmeetings-dev/201207.mbox/%3CCACeMiA-ibo6fGCbnLjJX9H5H2kFGDVJRMfxPyMtzWzCWNi%2BpOg%40mail.gmail.com%3E">example Result email</a>
 					<br />
-					Forward (Not CC) this RESULT VOTE email to:
-					private@incubator.apache.org
+					Forward (Not CC) this RESULT VOTE email to: private@openmeetings.apache.org<br />
 					<br />
-					<br />
-					After the Vote was successful on the Developer mailing list,
-					you
-					need organize a vote on the general list:
-					general@incubator.apache.org
-					<br />
-					The vote on the general list has the same process, first a VOTE
-					email, then a RESULT email.
-					<br />
+					After the Vote was successful on the Developer mailing list, you
+					need organize a vote on the general list: general@incubator.apache.org<br />
+					The vote on the general list has the same process, first a VOTE email, then a RESULT email.<br />
 					You need at least 3 IPMC votes for the release. You can summarize
 					the IPMC votes from both votes (dev + general).
 				</p>
-
 			</subsection>
 
 			<subsection name="Step3 - Distribute and announce">
