@@ -36,7 +36,7 @@ limitations under the License.
            
                                     
                         
-            <title>Apache OpenMeetings - Clustering (Manual)</title>
+            <title>Apache OpenMeetings - Clustering</title>
             <link rel="stylesheet" type="text/css" href="css/openmeetings.css">
             <link rel="stylesheet" type="text/css" href="css/jquery-ui.css">
             <link rel="stylesheet" type="text/css" href="css/coin-slider-styles.css">
@@ -385,9 +385,9 @@ limitations under the License.
 				            				currentLocation = "Configuration";
 					            			currentLink = "/FFMPEGVersionSwitch.html".substr(1, "/FFMPEGVersionSwitch.html".length);
 						            	} 
-				            							        				        							            				            						            			else if (document.location.href.indexOf("/ClusteringManual.html") > 0) {
+				            							        				        							            				            						            			else if (document.location.href.indexOf("/Clustering.html") > 0) {
 				            				currentLocation = "Configuration";
-					            			currentLink = "/ClusteringManual.html".substr(1, "/ClusteringManual.html".length);
+					            			currentLink = "/Clustering.html".substr(1, "/Clustering.html".length);
 						            	} 
 				            							        				        							            				            						            			else if (document.location.href.indexOf("/GetVersionInfo.html") > 0) {
 				            				currentLocation = "Configuration";
@@ -618,7 +618,7 @@ limitations under the License.
 	            			            			    <a href="./FFMPEGVersionSwitch.html">FFMPEG Version Switch</a>
 <br/>
 	            			        		        	            	            	<b>Clustering</b><br/>
-	            			            			    <a href="./ClusteringManual.html">Clustering (Manual)</a>
+	            			            			    <a href="./Clustering.html">Clustering</a>
 <br/>
 	            			        		        	            	            	<b>Misc</b><br/>
 	            			            			    <a href="./GetVersionInfo.html">Get version info</a>
@@ -641,16 +641,9 @@ limitations under the License.
       <tr><td>
         <blockquote>
                                     <p>
-				You require OpenMeetings Version 2.1 or later for the manual clustering.
-			</p>
-                                                <p>Manual balancing supposes that each room and user belongs to
-				particular OpenMeetings server in the cluster.</p>
-                                                <p>One database is used for all the OpenMeetings servers, so there is
-				one user table and one conference room table there. Room and User tables has
-				additional field named “server” – OpenMeetings server on which the
-				conferences in this room would happen is stored there.</p>
-                                                <p>Certain folders should be shared between all servers to allow access
-				to the files/recording</p>
+				OpenMeetings 2.1 or later is required to use clustering. One database is used for all OpenMeetings 
+				servers, so all database tables are shared across OM instances. Certain folders should be shared 
+				between all servers to allow access to the files/recording.</p>
                             </blockquote>
       </td></tr>
       <tr><td><br/></td></tr>
@@ -675,22 +668,150 @@ limitations under the License.
 					Schedulers to drop user sessions as outdated)
 				</li>
 				<li>All servers should be configured to use the same DB</li>
-				<li>Servers should be added in Administration-&gt;Servers section
-				</li>
-				<li>Servers should be assigned to the Users/Rooms in the
-					Administration-&gt;Users and Administration-&gt;Conference Rooms sections
-					correspondingly
-				</li>
-				<li>
-					Consider all servers are installed into
-					<div class="xmlcode">/opt/red5</div>
-					then the folders
-					<div class="xmlcode">/opt/red5/webapps/openmeetings/upload</div>
-					and
-					<div class="xmlcode">/opt/red5/webapps/openmeetings/streams</div>
-					should be mounted to the same physical folders (using SAMBA or NFS)
+				<li>Servers should be added in Administration -&gt; Servers section</li>
+			</ul>
+                            </blockquote>
+      </td></tr>
+      <tr><td><br/></td></tr>
+    </table>
+                                                <table border="0" cellspacing="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr><td ><!-- bgcolor="#EEEEEE" -->
+        <font color="#000000" face="verdana,arial,helvetica,sanserif">
+          <a name="Database"><strong>Database</strong></a>
+        </font>
+        <hr style="width:100%; color:#999999; background-color:#999999; height:1px; border:0px;"/>
+      </td></tr>
+      <tr><td>
+        <blockquote>
+                                    <ul>
+				<li>Add users who can connect to the database remotely</li>
+				<li>Update <tt>/opt/red5/webapps/openmeetings/WEB-INF/classes/META-INF/persistence.xml</tt>
+					set correct server address, login and password. Also add the following section:
+					<div class="xmlcode">&lt;property name="openjpa.RemoteCommitProvider" value="tcp(Addresses=10.1.1.1;10.1.1.2)" /&gt;</div>
+					Instead of the 10.1.1.1 and 10.1.1.2 set semicolon separated IPs of all nodes of the cluster.
 				</li>
 			</ul>
+                            </blockquote>
+      </td></tr>
+      <tr><td><br/></td></tr>
+    </table>
+                                                <table border="0" cellspacing="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr><td ><!-- bgcolor="#EEEEEE" -->
+        <font color="#000000" face="verdana,arial,helvetica,sanserif">
+          <a name="File systems"><strong>File systems</strong></a>
+        </font>
+        <hr style="width:100%; color:#999999; background-color:#999999; height:1px; border:0px;"/>
+      </td></tr>
+      <tr><td>
+        <blockquote>
+                                    <ul>
+				<li>Install NFS to the data server. In the file <tt>/etc/exports</tt> add the following lines:
+					<div class="xmlcode">
+						/opt/red5/webapps/openmeetings/upload 10.1.1.2(rw,sync,no_subtree_check,no_root_squash)<br />
+						/opt/red5/webapps/openmeetings/streams 10.1.1.2(rw,sync,no_subtree_check,no_root_squash)
+					</div>
+					Here 10.1.1.2 - is node ip for NFS remote access. Add these lines for all nodes except node with 
+					folders.
+				</li>
+				<li>
+					Install NFS common tools to other nodes. In the file <tt>/etc/fstab</tt> do the following:
+					<div class="xmlcode">
+						10.1.1.1:/opt/red5/webapps/openmeetings/upload/<br />
+						/opt/red5/webapps/openmeetings/upload nfs timeo=50,hard,intr<br />
+						10.1.1.1:/opt/red5/webapps/openmeetings/streams/<br />
+						/opt/red5/webapps/openmeetings/streams nfs timeo=50,hard,intr
+					</div>
+					Here 10.1.1.1 – data server ip. And run the command:
+					<div class="xmlcode">
+						mount -a
+					</div>
+				</li>
+			</ul>
+                            </blockquote>
+      </td></tr>
+      <tr><td><br/></td></tr>
+    </table>
+                                                <table border="0" cellspacing="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr><td ><!-- bgcolor="#EEEEEE" -->
+        <font color="#000000" face="verdana,arial,helvetica,sanserif">
+          <a name="OM nodes configuration"><strong>OM nodes configuration</strong></a>
+        </font>
+        <hr style="width:100%; color:#999999; background-color:#999999; height:1px; border:0px;"/>
+      </td></tr>
+      <tr><td>
+        <blockquote>
+                                    <tt>/opt/red5/webapps/openmeetings/WEB-NF/openmeetings-applicationContext.xml</tt>
+                                                <ul>
+				<li>
+					For each node uncomment line:
+					<div class="xmlcode">
+						&lt;!-- Need to be uncommented and set to the real ID if in cluster mode--&gt;<br />
+						&lt;property name="serverId" value="1" /&gt;
+					</div>
+					and input the unique value for each node.
+				</li>
+				<li> 
+					Replace <tt>&lt;ref bean="openmeetings.HashMapStore" /&gt;  &lt;!-- Memory based session cache by default --&gt;</tt><br />
+					with <tt>&lt;ref bean="openmeetings.DatabaseStore" /&gt;</tt> 
+					(Currently commented out with following comment: <tt>"The following section should be used in clustering mode"</tt>)
+				</li>
+			</ul>
+                            </blockquote>
+      </td></tr>
+      <tr><td><br/></td></tr>
+    </table>
+                                                <table border="0" cellspacing="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr><td ><!-- bgcolor="#EEEEEE" -->
+        <font color="#000000" face="verdana,arial,helvetica,sanserif">
+          <a name="Configuring cluster in Administration"><strong>Configuring cluster in Administration</strong></a>
+        </font>
+        <hr style="width:100%; color:#999999; background-color:#999999; height:1px; border:0px;"/>
+      </td></tr>
+      <tr><td>
+        <blockquote>
+                                    <ul>
+				<li>Go to the <tt>Administration -&gt; Users</tt> and create Webservice user (only access via SOAP).</li>
+				<li>
+					Go to the <tt>Administration -&gt; Servers</tt> and add all cluster nodes with the following settings:
+					<div class="xmlcode">
+						Server Name = node name;<br />
+						Active = check the checkbox. If the checkbox is checked it means node is active and you can use this node;<br />
+						Server Address = node ip;<br />
+						HTTP Port = 5080 - port for http part of Openmeetings;<br />
+						User (SOAP Access) = login of Webservice user from the previous step;<br />
+						Password = password of Webservise user;<br />
+						Webapp path = openmeetings - path where OM installed on this node, it would be better if this path will be the same for all nodes;<br />
+						Protocol = http.
+					</div>
+				</li> 
+			</ul>
+                                                <img src="./images/cluster1.png" width="852" height="603" align="">
+                            </blockquote>
+      </td></tr>
+      <tr><td><br/></td></tr>
+    </table>
+                                                <table border="0" cellspacing="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr><td ><!-- bgcolor="#EEEEEE" -->
+        <font color="#000000" face="verdana,arial,helvetica,sanserif">
+          <a name="Ensure everything works as expected"><strong>Ensure everything works as expected</strong></a>
+        </font>
+        <hr style="width:100%; color:#999999; background-color:#999999; height:1px; border:0px;"/>
+      </td></tr>
+      <tr><td>
+        <blockquote>
+                                    <ul>
+				<li>Set up the cluster and loggin with two users, go to the same room (also check before room 
+				entering that the status page with the room list shows the correct number of participants before 
+				entering the room). Both users should be in the same room.
+				</li>
+				<li>Do the same with only two users but go to _different_ rooms. The calculation should send 
+				both users to different servers, cause based on the calculation two different rooms on a cluster 
+				with two nodes should go exactly one room for each node. You can now loggin really to node1 
+				and node2 of your cluster while those users are loggedin and go to <tt>Administration &gt; Connections</tt>
+				and check in the column "servers" where they are located. They should be on different server.
+				</li>
+			</ul>
+                                                <img src="./images/cluster2.png" width="852" height="603" align="">
                             </blockquote>
       </td></tr>
       <tr><td><br/></td></tr>

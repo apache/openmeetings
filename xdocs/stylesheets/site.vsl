@@ -148,7 +148,7 @@ limitations under the License.
 #if ($value.getAttributeValue("align"))
 #set ($align=$value.getAttributeValue("align"))
 #end
-<img src="$relativePath$value.getAttributeValue("src")" width="$!width" height="$!height" align="$!align">
+<img src="$relativePath/$value.getAttributeValue("src")" width="$!width" height="$!height" align="$!align">
 #end
 
 #macro ( source $value)

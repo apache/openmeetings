@@ -119,7 +119,7 @@
             <subitem name="FFMPEG Version Switch" href="/FFMPEGVersionSwitch.html" />
         </item>
     	<item name="Clustering" >
-    		<subitem name="Clustering (Manual)" href="/ClusteringManual.html" />
+    		<subitem name="Clustering" href="/Clustering.html" />
     	</item>
     	<item name="Misc" >
     		<subitem name="Get version info" href="/GetVersionInfo.html" />
