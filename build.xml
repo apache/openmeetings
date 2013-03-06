@@ -159,7 +159,9 @@
 	</target>
 	
 	<!-- build artefacts -->
-	<target name="dist-release" description="pack binary distribution" depends="dist-bin">
+	<target name="dist-release" description="pack binary distribution">
+		<property name="archive.file.name" value="${dist.dir}/apache-${project.distname}-${project.version}" />
+		<antcall target="dist-bin" />
 		<zip destfile="${archive.file.name}.zip">
 			<zipfileset dir="${dist.dir}/red5">
 				<include name="**" />
