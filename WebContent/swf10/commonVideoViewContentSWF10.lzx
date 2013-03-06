@@ -56,7 +56,6 @@
             client.startStream = this.startStream;
             client.removeVideoByUser = this.removeVideoByUser;
             client.muteSound = this.muteSound;
-            // client.videoOnMove = this.videoOnMove; function not in use ?! swagner 04.02.2012
             client.updateMuteStatusVideoView = this.updateMuteStatusVideoView;
             client.ismoderatorChanged = this.ismoderatorChanged;
             // update rights to SWF10 client
@@ -69,6 +68,7 @@
             client.closeWhiteboard = this.closeWhiteboard;
             client.arrangeWindows = this.arrangeWindows;
             client.updateFirstLastName = this.updateFirstLastName;
+            client.setSessionId = this.setSessionId;
 
             var lc:LocalConnection = new LocalConnection();
             lc.connect(canvas.vid_lc_name);
@@ -377,7 +377,7 @@
             obj.setVideouserProfilePic(rcl);
             obj.setAttribute("visibility","hidden");
         } else {
-            obj.deleteVideoConfProfilePic(null);
+            obj.deleteVideoConfProfilePic();
             obj.setAttribute("visibility","visible");
         }
         obj.thisVars = rcl;
@@ -496,7 +496,6 @@
 	<method name="updateFirstLastName" args="publicSID,first,last">
 		var v = getVideoObjectByPublicSID(publicSID);
 		if (v != null) {
-			if ($debug) Debug.write("!!!!!!! updating FirstLastName",publicSID,first,last);
 			v.setAttribute('chatpartnername', first + ' ' + last);
 		}
 	</method>
@@ -523,19 +522,6 @@
     	canvas.videoComp_lc.send(canvas.videoComp_lc_name, 'closeWhiteboard', bool);
     </method>
         
-    <!--
-    function not in use ?! swagner 04.02.2012
-    <method name="videoOnMove" args="interviewPodId, x, y">
-        if($debug) Debug.write("videoOnY: ", interviewPodId, y);
-        var obj = getVideoObjectByInterviewPodId(interviewPodId);
-        if($debug) Debug.write("getVideoObjectByInterviewPodId: ", interviewPodId, obj);
-        if(obj != null) {
-            obj.setAttribute('x', x);
-            obj.setAttribute('y', y);
-        }
-    </method>
-     -->
-
 	<!-- arranges video pods -->
 	<method name="arrangeWindows">
 	<![CDATA[
@@ -578,6 +564,10 @@
 	]]>
 	</method>
 
+	<method name="setSessionId" args="session_id">
+		canvas.setAttribute("sessionId", session_id);
+	</method>
+	
     <!-- @keyword private -->
     <method name="sortFunction" args="el1, el2">
         <![CDATA[

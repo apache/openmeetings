@@ -218,12 +218,9 @@
 		<!--- resets all values and stops the streaming -->
 		<method name="resetValues">
 		<![CDATA[
-	    	this.clientVars=null;
-	    	if (this.showUserProfilePic && !this.isremote){
-	    		this._chatvideoinner.userProfilePic.destroy();
-	    		this.showUserProfilePic = false;
-	    	}
 	    	if ($debug) Debug.write("resetValues: ",this.isremote);
+	    	this.clientVars=null;
+	    	deleteVideoConfProfilePic();
 	    	if (this.isremote){
 	    		this._chatvideoinner._videostream.restart();
 	    	} else {
@@ -232,14 +229,13 @@
 		]]>
 		</method>
 		<method name="setVideouserProfilePic" args="value">
-			if ($debug)
-			Debug.write("### setVideouserProfilePic ",value);
-			this.deleteVideoConfProfilePic(value);
+			if ($debug) Debug.write("### setVideouserProfilePic ",value);
+			this.deleteVideoConfProfilePic();
 			new lz.videoUserProfilePicSWF10(this._chatvideoinner,{name:'userProfilePic',value:value});
 			this.showUserProfilePic = true;
 		</method>
-		<method name="deleteVideoConfProfilePic" args="value">
-			if ($debug) Debug.write("### deleteVideoConfProfilePic ",value);
+		<method name="deleteVideoConfProfilePic">
+			if ($debug) Debug.write("### deleteVideoConfProfilePic ###");
 			if ($debug) Debug.write("delete ",this.showUserProfilePic);
 			if (this.showUserProfilePic) {
 				this._chatvideoinner.userProfilePic.destroy();

@@ -183,9 +183,6 @@
             lz.Timer.addTimer( this.refreshDelegate, canvas.refreshSession );
             canvas.thishib.loaderVar.setProgress();
             
-            //check and get the Applet SIP Status
-            getAppletStatus();
-            
             //Load Session Data
             this.getsessiondata.callRPC();    
         }
@@ -261,7 +258,8 @@
             //The onResult-Handler will be called be the rtmpconnection
             if ($debug) Debug.write("hibRtmpConnection/getsessiondata [",value,"]");
             canvas.sessionObject = value;
-            canvas.sessionId = value.session_id;     
+            canvas.sessionId = value.session_id;
+			canvas.sendViaLocalConnection(canvas.vid_lc_name, "setSessionId", [canvas.sessionId]);
             canvas.thishib.loaderVar.setProgress();
             parent.getPublicSID.doCall();
         </handler>  

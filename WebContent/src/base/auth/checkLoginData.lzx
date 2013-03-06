@@ -187,10 +187,6 @@
             }
             
             this.parent.loginUser.doCall();
-            
-            //Recheck the Applet Status 
-            getAppletStatus();
-            
         </handler>
     </simpleLabelButton>   
         

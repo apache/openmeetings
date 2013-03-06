@@ -1291,6 +1291,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 			Object newMessage, Integer vWidth, Integer vHeight, 
 			long room_id, String publicSID, Integer interviewPodId) {
 		try {
+			log.error("[setUserAVSettings]" + avsettings + newMessage);
 
 			IConnection current = Red5.getConnectionLocal();
 			IClient c = current.getClient();
@@ -2862,12 +2863,13 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
         currentClient.setBroadCastID(Long.parseLong(broadCastId));
         currentClient.setIsBroadcasting(true);
         currentClient.setPublicSID(publicSID);
-        currentClient.setAvsettings("av");
+        currentClient.setAvsettings("a");
         currentClient.setVWidth(120);
         currentClient.setVHeight(90);
         currentClient.setSipTransport(true);
+        currentClient.setPicture_uri("phone.png");
         sessionManager.updateClientByStreamId(streamid, currentClient, false, null);
-        SessionVariablesUtil.initClient(c, false, publicSID); //TODO not sure if this should be marked as AVClient or not 
+        SessionVariablesUtil.initClient(c, false, publicSID);
 
         Collection<Set<IConnection>> conCollection = current.getScope().getConnections();
         for (Set<IConnection> conset : conCollection) {
