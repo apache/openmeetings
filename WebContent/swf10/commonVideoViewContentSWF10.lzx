@@ -125,7 +125,7 @@
 	 -->
     <method name="createVideo" args="publicSID,displayName,broadcastId,avsettings,interviewPodId,object">
         <![CDATA[
-            if($debug) Debug.info("createVideo, publicSID: ",publicSID,"broadcastId: ",broadcastId,"AVsettings: ",avsettings);
+            if ($debug) Debug.info("createVideo, publicSID: ",publicSID,"broadcastId: ",broadcastId,"AVsettings: ",avsettings);
             if ($debug) Debug.write(" createVideo ALL vars ",object);
             var vidContainer = getVideoObjectByPublicSID(publicSID);
             if(vidContainer == null) {

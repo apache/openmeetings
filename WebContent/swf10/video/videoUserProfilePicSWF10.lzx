@@ -26,11 +26,8 @@
 		
 	<handler name="oninit">
 	<![CDATA[
-		if($debug) Debug.write("value:: ", value);
-		var extra = value.sipTransport ? "&parentPath=../default&moduleName=videoconf1"
-			: '&parentPath=&moduleName=remoteuserprofile&remoteUserid='+this.value.user_id;
-
-		this._userpic.setAttribute('src', canvas.getPictureUrl(value.picture_uri, extra));
+		this._userpic.setAttribute('src', canvas.getPictureUrl(value.picture_uri
+			, '&moduleName=remoteuserprofile&remoteUserid='+this.value.user_id));
 	]]>
 	</handler>	
 	<image name="_userpic" stretches="both" width="${parent.width}" height="${parent.height}" />

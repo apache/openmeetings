@@ -220,7 +220,9 @@
 		<![CDATA[
 	    	if ($debug) Debug.write("resetValues: ",this.isremote);
 	    	this.clientVars=null;
-	    	deleteVideoConfProfilePic();
+	    	if (!this.isremote) {
+	    		deleteVideoConfProfilePic();
+	    	}
 	    	if (this.isremote){
 	    		this._chatvideoinner._videostream.restart();
 	    	} else {
