@@ -107,15 +107,21 @@
 				</p>
 
 				<p>
-					Create a TAG of the SVN tree that you would like to release
+					Create a TAG of the SVN tree that you would like to release<br/>
+					Example:
+					<div class="xmlcode">
+						svn copy -r1453158 https://svn.apache.org/repos/asf/openmeetings/trunk/singlewebapp \<br/>
+							https://svn.apache.org/repos/asf/openmeetings/tags/2.1RC1 \<br/>
+							-m "Release candidate 1"
+					</div>
 				</p>
 
 				<p>Get the source from your TAG: </p>
 				<div class="xmlcode">
 					svn checkout
-					https://svn.apache.org/repos/asf/openmeetings/$TREE/$BRANCHORTAG/
+					https://svn.apache.org/repos/asf/openmeetings/tags/$BRANCHORTAG/
 					<br />
-					$TREE and $BRANCHORTAG should be replaced with your new TAG
+					$BRANCHORTAG should be replaced with your new TAG
 				</div>
 
 				<p>Edit the file build.properties</p>
@@ -141,20 +147,16 @@
 					apache-openmeetings-XXX-src.zip.md5
 				</div>
 				<p>
-					Create signatures with the your KEY for every file, the KEY must be
-					available at:
-					<br />
-					<a href="http://www.apache.org/dist/incubator/openmeetings/KEYS">http://www.apache.org/dist/incubator/openmeetings/KEYS
+					Create signatures with the your KEY for every file, the KEY must be available at:<br />
+					<a href="http://www.apache.org/dist/incubator/openmeetings/KEYS">
+						http://www.apache.org/dist/incubator/openmeetings/KEYS
 					</a>
 				</p>
-				<p>Upload the build artefacts to your public_html in your home
-					directory at people.apache.org
+				<p>Upload the build artefacts to your public_html in your home directory at people.apache.org
 				</p>
 				<div class="xmlcode">
-					#On OSX you might use this command to upload the file
-					<br />
-					scp apache-openmeetings-XXXX.zip
-					sebawagner@people.apache.org:~/public_html/
+					#On OSX you might use this command to upload the file<br />
+					scp apache-openmeetings-XXXX.zip sebawagner@people.apache.org:~/public_html/
 				</div>
 			</subsection>
 
