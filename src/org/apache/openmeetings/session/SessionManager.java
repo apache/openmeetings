@@ -181,13 +181,10 @@ public class SessionManager implements ISessionManager {
 			return null;
 		}
 
-		public synchronized Boolean updateAVClientByStreamId(String streamId,
-				Client rcm, Server server) {
+		public synchronized Boolean updateAVClientByStreamId(String streamId, Client rcm, Server server) {
 			try {
-
 				// get the corresponding user session object and update the settings
-				Client rclUsual = getClientByPublicSID(rcm.getPublicSID(),
-						false, server);
+				Client rclUsual = getClientByPublicSID(rcm.getPublicSID(), false, server);
 				if (rclUsual != null) {
 					rclUsual.setBroadCastID(rcm.getBroadCastID());
 					rclUsual.setAvsettings(rcm.getAvsettings());
@@ -197,10 +194,9 @@ public class SessionManager implements ISessionManager {
 					rclUsual.setVY(rcm.getVY());
 					Client rclSaved = cache.get(server, rclUsual.getStreamid());
 					if (rclSaved != null) {
-						cache.put(rclUsual.getStreamid(),rclUsual);
+						cache.put(rclUsual.getStreamid(), rclUsual);
 					} else {
-						log.debug("Tried to update a non existing Client "
-								+ rclUsual.getStreamid());
+						log.debug("Tried to update a non existing Client " + rclUsual.getStreamid());
 					}
 				}
 
@@ -262,7 +258,6 @@ public class SessionManager implements ISessionManager {
 					// and no pseudo session object like the audio/video or screen
 					// sharing connection
 					roomClientList.add(rcl);
-
 				}
 			} catch (Exception err) {
 				log.error("[getClientListByRoom]", err);

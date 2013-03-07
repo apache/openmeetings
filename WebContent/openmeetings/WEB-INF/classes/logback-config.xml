@@ -33,7 +33,7 @@
 		<ImmediateFlush>true</ImmediateFlush>
 		<layout class="ch.qos.logback.classic.PatternLayout">
 			<Pattern>
-				%5p %d{MM-dd HH:mm:ss.SSS } %F %r %L %c [%t] - %m%n
+				%5p %d{MM-dd HH:mm:ss.SSS } %c{15}:%L [%t] - %m%n
 			</Pattern>
 		</layout>
   </appender>
