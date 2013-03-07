@@ -105,7 +105,7 @@
         canvas.thishib.connect();
     </method>
     
-    <method name="disconnect" >
+    <method name="disconnect" args="arg">
         if($debug) Debug.write("Do disconnect");
         canvas.thishib.disconnect();
     </method>

@@ -97,7 +97,7 @@
 			pUri = "_profile_" + pUri;
 			
 			downloadurl = canvas.getUrl() + 'DownloadHandler?fileName=' + pUri
-				+ '&parentPath=&room_id=&r=' + (new Date()).getTime()
+				+ '&room_id=&r=' + (new Date()).getTime()
 				+ extraParams + '&sid='+canvas.sessionId;
 		}
 		if($debug) Debug.write("getPictureUrl/downloadurl ", downloadurl);

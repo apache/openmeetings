@@ -1291,30 +1291,26 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 			Object newMessage, Integer vWidth, Integer vHeight, 
 			long room_id, String publicSID, Integer interviewPodId) {
 		try {
-			log.error("[setUserAVSettings]" + avsettings + newMessage);
+			log.debug("[setUserAVSettings] {} {}", new Object[]{avsettings, newMessage});
 
 			IConnection current = Red5.getConnectionLocal();
 			IClient c = current.getClient();
 			String streamid = c.getId();
-			Client currentClient = this.sessionManager
-					.getClientByStreamId(streamid, null);
+			Client currentClient = sessionManager.getClientByStreamId(streamid, null);
 			currentClient.setAvsettings(avsettings);
 			currentClient.setRoom_id(room_id);
 			currentClient.setPublicSID(publicSID);
 			currentClient.setVWidth(vWidth);
 			currentClient.setVHeight(vHeight);
 			currentClient.setInterviewPodId(interviewPodId);
-			// Long room_id = currentClient.getRoom_id();
-			this.sessionManager.updateAVClientByStreamId(streamid,
-					currentClient, null);
+			sessionManager.updateAVClientByStreamId(streamid, currentClient, null);
 			SessionVariablesUtil.initClient(c, false, publicSID);
 
 			HashMap<String, Object> hsm = new HashMap<String, Object>();
 			hsm.put("client", currentClient);
 			hsm.put("message", newMessage);
 
-			Collection<Set<IConnection>> conCollection = current.getScope()
-					.getConnections();
+			Collection<Set<IConnection>> conCollection = current.getScope().getConnections();
 			for (Set<IConnection> conset : conCollection) {
 				for (IConnection conn : conset) {
 					if (conn != null) {
@@ -1327,9 +1323,8 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 								// AVClients or potential AVClients do not receive events
 								continue;
 							}
-							((IServiceCapableConnection) conn).invoke(
-								"sendVarsToMessageWithClient",
-									new Object[] { hsm }, this);
+							((IServiceCapableConnection)conn)
+								.invoke("sendVarsToMessageWithClient", new Object[] { hsm }, this);
 						}
 					}
 				}
@@ -2802,8 +2797,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 	
 	private String getSipTransportLastname(Long roomId) {
 		Integer c = roomManager.getSipConferenceMembersNumber(roomId);
-		String count = (c != null && c > 0) ? "" + (c - 1) : "";
-		return "(" + count + ")";
+		return (c != null && c > 0) ? "(" + (c - 1) + ")" : "";
 	}
 	
     public synchronized void updateSipTransport() {
