@@ -2863,7 +2863,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
         currentClient.setBroadCastID(Long.parseLong(broadCastId));
         currentClient.setIsBroadcasting(true);
         currentClient.setPublicSID(publicSID);
-        currentClient.setAvsettings("a");
+        currentClient.setAvsettings("av");
         currentClient.setVWidth(120);
         currentClient.setVHeight(90);
         currentClient.setSipTransport(true);
