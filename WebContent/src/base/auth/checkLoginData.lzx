@@ -24,7 +24,7 @@
 <!--- LOGIN panel window -->
 <class name="checkLoginData" extends="labelExplorerBox" labelid="108"
     docking="true" resizeable="false" closable="false" 
-    width="460" height="230"
+    width="480" height="230"
      x="$once{ canvas.width/2 - this.width/2 }"  y="60">
      
     <attribute name="user_login_minimum_length" type="number" value="4" />
@@ -58,7 +58,7 @@
     <attribute name="enterPressed" type="boolean" value="false"/>
     
     <labelText name="n1" labelid="109" width="300" y="26" resize="false" x="2" fontstyle="bold"/>
-    <customEdittext name="username" y="24" x="120" width="330" >
+    <customEdittext name="username" y="24" x="180" width="270" >
         <handler name="oninit">
             var g = canvas.getUserData();
             if($debug) Debug.write("checkLoginData/g: ",g);
@@ -81,7 +81,7 @@
     </customEdittext>    
 
     <labelText name="n2" labelid="110" width="300" y="48" resize="false" x="2" fontstyle="bold"/>
-    <customEdittext name="userpass" y="48" password="true" x="120" width="330" >
+    <customEdittext name="userpass" y="48" password="true" x="180" width="270" >
         <handler name="oninit">
             var g = canvas.getUserData();
             if (g["userpass"]!=null) this.setAttribute('text',g["userpass"]);
@@ -102,8 +102,9 @@
         </handler>
     </customEdittext>
     
-	<labelText name="domain_label" labelid="1372" width="300" y="72" resize="false" x="2" fontstyle="bold"/>     
-    <resetCombobox name="domain" width="330" y="72" x="120" editable="false">
+	<labelText name="domain_label" labelid="1372" width="300" y="72" resize="false" x="2"
+		fontstyle="bold" visible="false"/>     
+    <resetCombobox name="domain" y="72" x="180" width="270" editable="false" visible="false">
     	<handler name="oninit">
     		//this.selectItemAt(0);
     		this.getActiveLdapConfigs.doCall();
@@ -118,7 +119,11 @@
                 //The onResult-Handler will be called be the rtmpconnection
                 <![CDATA[
                     if ($debug) Debug.write("getActiveLdapConfigs: ",value);
-                    for (var i=0;i<value.length;i++) {
+                    if (value.length > 1) {
+                    	parent.parent.domain_label.setAttribute("visible", true);
+                    	parent.parent.domain.setAttribute("visible", true);
+                    }
+                    for (var i = 0; i < value.length; i++) {
                         parent.addItem(value[i].name,value[i].ldapConfigId);
                     }
                     
@@ -148,9 +153,9 @@
     
     <labelText name="organisation_label" labelid="184" width="300" y="86" 
     			resize="false" x="2" visible="false" fontstyle="bold" />     
-        <resetCombobox name="organisation" width="330" y="84" x="120" editable="false" visible="false" />
+        <resetCombobox name="organisation" y="84" x="180" width="270" editable="false" visible="false" />
         
-    <simpleLabelButton labelid="123" name="_register" width="120" y="$once{ parent.height-40 }" 
+    <simpleLabelButton labelid="123" name="_register" width="160" y="$once{ parent.height-40 }" 
         visible="false" x="10" height="22">
         <handler name="onclick">
 	        <![CDATA[
@@ -167,7 +172,7 @@
         </handler>
     </simpleLabelButton>     
     
-    <simpleLabelButton labelid="1294" name="_facebook" width="120" y="$once{ parent.height-40 }" 
+    <simpleLabelButton labelid="1294" name="_facebook" width="160" y="$once{ parent.height-40 }" 
             visible="false" x="200" height="22">
     	<image src="$once{ canvas.getThemeImage('icon_facebook_rsc_png') }" x="2" y="1" />
         <handler name="onclick">
@@ -293,6 +298,7 @@
                         parent.colors.setAttribute('visible',false);
                         parent._register.setAttribute('visible',false);
                         parent.b2.setAttribute('visible',false);
+                        parent.testing.setAttribute('visible',false);
                         parent.organisation_label_info.setAttribute('visible',true);
                         parent.organisation_label.setAttribute('visible',true);
                         parent.organisation.setAttribute('visible',true);
@@ -335,7 +341,7 @@
         </handler>  
     </netRemoteCallHib>    
     
-    <labelCheckbox x="120" y="96" fontsize="11"
+    <labelCheckbox x="180" y="96" fontsize="11"
         	name="_savelogindata" labelid="288" >
         <handler name="oninit">
             var g = canvas.getUserData();
