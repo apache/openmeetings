@@ -93,7 +93,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>Создать</value>
   </string>
   <string id="23" name="infomessage">
-    <value>Информация: каждый подключённый пользователь получает сообщение с новым опросом.</value>
+    <value>Информация: каждый подключённый участник получает сообщение с новым опросом.</value>
   </string>
   <string id="24" name="creatpoll">
     <value>Создать опрос</value>
@@ -171,7 +171,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>Вхождения</value>
   </string>
   <string id="49" name="modleave">
-    <value>Модератор/лектор этой комнаты покинул совещание.</value>
+    <value>Модератор/лектор этой комнаты покидает совещание.</value>
   </string>
   <string id="50" name="systemmessage">
     <value>Системное сообщение</value>
@@ -291,7 +291,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>Ожидание</value>
   </string>
   <string id="89" name="applyMessage">
-    <value>Пользователь желает запросить функцию модератора:</value>
+    <value>Участник желает запросить функцию модератора:</value>
   </string>
   <string id="90" name="accept">
     <value>Согласие</value>
@@ -303,7 +303,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>Отменить</value>
   </string>
   <string id="93" name="sendmodrequestmessage">
-    <value>Отсылка запроса следующему пользователю</value>
+    <value>Отсылка запроса следующему участнику</value>
   </string>
   <string id="94" name="accept">
     <value>Выдано согласие</value>
@@ -1140,7 +1140,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>к последнему</value>
   </string>
   <string id="372" name="videobox">
-    <value>Пользователь говорит (By clicking here you can give exclusive audio / mute the microphone of others)</value>
+    <value>Участник говорит (Нажимая здесь Вы предоставляете этому участнику эксклюзивный микрофон / выключая микрофоны остальных участников)</value>
   </string>
   <string id="373" name="videobox">
     <value>Включить/выключить звук</value>
@@ -1236,7 +1236,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>Эта комната полна. Попробуйте через несколько минут.</value>
   </string>
   <string id="404" name="roomsList">
-    <value>Кликните на комнату для деталей</value>
+    <value>Нажмите на комнату для деталей</value>
   </string>
   <string id="405" name="roomslist">
     <value>Чат с пользователями этой комнаты:</value>
@@ -1281,7 +1281,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>Кто-то уже записывает в данный момент:</value>
   </string>
   <string id="419" name="record_message">
-    <value>Идет запись! Пользователь:</value>
+    <value>Идет запись! Участник:</value>
   </string>
   <string id="420" name="record_cancel">
     <value>отмена</value>
@@ -1515,7 +1515,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>Ширина | Высота</value>
   </string>
   <string id="497" name="moderator_gone_message">
-    <value>Модератор покинул комнату. Сейчас нет модераторов. Вы можете запросить функции модератора, либо подождать.</value>
+    <value>Модератор покидает комнату. Сейчас нет модераторов. Вы можете запросить функции модератора, либо подождать.</value>
   </string>
   <string id="498" name="moderator_message_event_no_mod">
     <value>В этой комнате нет модератора, но есть участники. Вы можете запросить функции модератора или подождать</value>
@@ -1527,7 +1527,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>$APP_NAME: Приглашение</value>
   </string>
   <string id="501" name="invitation_text_from">
-    <value>Сообщение от пользователя:</value>
+    <value>Сообщение от участника:</value>
   </string>
   <string id="502" name="invitation_text_message">
     <value>Текст сообщения:</value>
@@ -1701,7 +1701,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>Синхронизация</value>
   </string>
   <string id="559" name="Synchronizing message">
-    <value>Синхронизация пользователей, подождите</value>
+    <value>Синхронизация участников, подождите</value>
   </string>
   <string id="560" name="exportToSVG">
     <value></value>
@@ -1779,7 +1779,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>Совещание - проведите конференцию с 4 участниками (число участников может доходить до 16)у каждого будет аудио/видео</value>
   </string>
   <string id="585" name="tooltip main-menu">
-    <value>Лекция - проведите конференцию с участниками, число которых – до 200Аудио/видео будет только у модератора</value>
+    <value>Лекция - проведите конференцию с участниками, число которых – до 200. Аудио/видео будет только у модератора</value>
   </string>
   <string id="586" name="tooltip main-menu">
     <value>Создание пользователей, комнат, организаций + изменить конфигурацию</value>
@@ -1851,13 +1851,13 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>Этот пользователь - модератор в этой комнате</value>
   </string>
   <string id="609" name="participents panel">
-    <value>Пользователю разрешено рисовать на доске</value>
+    <value>Участнику разрешено рисовать на доске</value>
   </string>
   <string id="610" name="participents panel">
     <value>(Ре)старт аудио/видео или изменение установок устройства</value>
   </string>
   <string id="611" name="participents panel">
-    <value>Разрешить этому польз-лю рисовать на доске</value>
+    <value>Разрешить этому участнику рисовать на доске</value>
   </string>
   <string id="612" name="participents panel">
     <value>Запретить рисовать на доске</value>
@@ -1953,10 +1953,10 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>ОК</value>
   </string>
   <string id="643" name="window screensharing">
-    <value>Другой пользователь делает экран общим</value>
+    <value>Другой участник делает экран общим</value>
   </string>
   <string id="644" name="window screen sharing">
-    <value>Пользователь делает экран общим:</value>
+    <value>Участник делает экран общим:</value>
   </string>
   <string id="645" name="window screen sharing">
     <value>Сделать экран общим</value>
@@ -1974,7 +1974,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>Модерация</value>
   </string>
   <string id="650" name="menu moderation">
-    <value>Модерировать пользователей</value>
+    <value>Модерировать участников</value>
   </string>
   <string id="651" name="menu moderation">
     <value>Модерировать комнаты</value>
@@ -2028,7 +2028,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>Для завершения регистрации кликните на эту ссылку или скопируйте URL в окно браузера.</value>
   </string>
   <string id="668" name="email verification">
-    <value>Кликните для верификации вашего e-mail.</value>
+    <value>Нажмите для проверки вашего e-mail.</value>
   </string>
   <string id="669" name="errorMessage_UserActivationServlet [ActivateUser]">
     <value>Для этого Хеша не найдено пользователей.</value>
@@ -2103,13 +2103,13 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>Пользователь</value>
   </string>
   <string id="693" name="apply for mod message">
-    <value>желает стать модератором. Для того, чтобы разрешить или запретить функцию модерации, используйте иконки статуса рядом с именами пользователей в списке пользователей.</value>
+    <value>желает стать модератором. Для того, чтобы разрешить или запретить функцию модерации, используйте иконки статуса рядом с именами в списке участников.</value>
   </string>
   <string id="694" name="apply for whiteboard">
-    <value>желает рисовать на доске. Для того, чтобы разрешить или запретить рисовать на доске, используйте иконки статуса рядом с именами в списке пользователей.</value>
+    <value>желает рисовать на доске. Для того, чтобы разрешить или запретить рисовать на доске, используйте иконки статуса рядом с именами в списке участников.</value>
   </string>
   <string id="695" name="695">
-    <value>желает сделать своё Аудио/Видео общим. Для того, чтобы разрешить или запретить пользователям делать Аудио/Видео общим, используйте иконки статуса рядом с именами пользователей в списке пользователей.</value>
+    <value>желает сделать своё Аудио/Видео общим. Для того, чтобы разрешить или запретить участникам делать Аудио/Видео общим, используйте иконки статуса рядом с именами в списке участников.</value>
   </string>
   <string id="696" name="moderation message">
     <value>Нужно подождать, пока модератор войдёт в комнату.</value>
@@ -2664,7 +2664,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>Разрешить вопросы</value>
   </string>
   <string id="880" name="room config">
-    <value>Выключите, чтобы чтобы пользователи в комнате вам не мешали.</value>
+    <value>Выключите, чтобы участники в комнате вам не мешали.</value>
   </string>
   <string id="881" name="room config">
     <value>Права</value>
@@ -3420,7 +3420,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>Пригласить польз-ля в комнату для конференций</value>
   </string>
   <string id="1132" name="chat invite user">
-    <value>Выбрать комнату для конференций. Приглашённый пользователь получит сообщение с вашим именем и ссылку на комнату.</value>
+    <value>Выбрать комнату для конференций. Приглашённый участник получит сообщение с вашим именем и ссылку на комнату.</value>
   </string>
   <string id="1133" name="chat user">
     <value>Присоединён с:</value>
@@ -3663,19 +3663,19 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>Включиите full fit и доска будет масштабироваться так, чтобы все документы становились видимыми в соответствии с разрешением экрана каждого участника.</value>
   </string>
   <string id="1213" name="user-list">
-    <value>Выгнать пользователя</value>
+    <value>Исключить участника</value>
   </string>
   <string id="1214" name="user-list">
-    <value>Вы не можете выгнать сами себя из комнаты!Если вы хотите покинуть её, закройте окно браузера или используйте кнопку Выход!</value>
+    <value>Вы не можете удалить сами себя из комнаты!Если вы хотите покинуть её, закройте окно браузера или используйте кнопку Выход!</value>
   </string>
   <string id="1215" name="kick-user">
-    <value>Вы действительно хотите выгнать этого пользователя из комнаты?</value>
+    <value>Вы действительно хотите исключить этого участника из комнаты?</value>
   </string>
   <string id="1216" name="kick-user">
     <value>Подтвердите действие ...</value>
   </string>
   <string id="1217" name="kick-user">
-    <value>Вы не можете выгнать супер-модератора из комнаты!</value>
+    <value>Вы не можете исключить супер-модератора из комнаты!</value>
   </string>
   <string id="1218" name="private message">
     <value>Зарезервировать комнату</value>
@@ -3942,10 +3942,10 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>Мои комнаты</value>
   </string>
   <string id="1306" name="my rooms">
-    <value>Моя комната для конференций(до 16 польз-лей)</value>
+    <value>Моя комната для конференций(до 16 участников)</value>
   </string>
   <string id="1307" name="my rooms">
-    <value>Моя комната для вебинаров (до 120 польз-лей)</value>
+    <value>Моя комната для вебинаров (до 120 участников)</value>
   </string>
   <string id="1308" name="room administration">
     <value>Id владельца</value>
@@ -3969,7 +3969,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>Загрузить на доску</value>
   </string>
   <string id="1315" name="recording flag">
-    <value>Не забудьте начать запись! 1 пользователь в комнате хочет начать её.</value>
+    <value>Не забудьте начать запись! 1 участник в комнате хочет начать её.</value>
   </string>
   <string id="1316" name="recording flag">
     <value>Начать запись</value>
@@ -4125,7 +4125,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>Не разрешено</value>
   </string>
   <string id="1367" name="user_left_act_msg">
-    <value>покинул комнату.</value>
+    <value>покидает комнату.</value>
   </string>
   <string id="1368" name="clipart icons">
     <value>Основные иконки</value>
@@ -4191,7 +4191,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>Выкл. микрофон глобально?</value>
   </string>
   <string id="1389" name="mute self confirm message message">
-    <value>Вы действительно хотите отключит микрофон? Другие пользователи не смогут вас слышать!</value>
+    <value>Вы действительно хотите отключит микрофон? Другие участники не смогут вас слышать!</value>
   </string>
   <string id="1390" name="mute others confirm message title">
     <value>Отключить микрофон локально?</value>
@@ -4203,7 +4203,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>Отключить микрофон глобально?</value>
   </string>
   <string id="1393" name="mute others moderator message">
-    <value>Вы действительно хотите отключить этого пользователя? Больше никто не будет слышать его!</value>
+    <value>Вы действительно хотите отключить этого участника? Больше никто не будет слышать его!</value>
   </string>
   <string id="1394" name="mute status icons">
     <value>Ваш звук включен. Нажмите сюда, чтобы послать модератору сообщение о выключении микрофона глобально (в заполненной комнате)!</value>
@@ -4230,7 +4230,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>Выключенный микрофон. Нажмите, чтобы включить его/её микрофон глобально!</value>
   </string>
   <string id="1402" name="mute self message">
-    <value>Этот пользователь глобально выключен модератором. Вы не можете включить его!</value>
+    <value>Этот участник глобально выключен модератором. Вы не можете включить его!</value>
   </string>
   <string id="1403" name="mute micro">
     <value>Выключить ваш микрофон глобально</value>
@@ -4251,7 +4251,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>Включить микрофон глобально</value>
   </string>
   <string id="1409" name="mute moderator message">
-    <value>Только модераторы могут включать или выключать польз-лей глобально! Чтобы выключить ваш микрофон, используйте иконку микрофона!</value>
+    <value>Только модераторы могут включать или выключать участников глобально! Чтобы выключить ваш микрофон, используйте иконку микрофона!</value>
   </string>
   <string id="1410" name="poll_name">
     <value>Название опроса</value>
@@ -4296,10 +4296,10 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>Разрешить/запретить права на эксклюзивный звук.</value>
   </string>
   <string id="1424" name="allow_exclusive_audio_permission">
-    <value>Позволить пользователю эксклюзивный звук</value>
+    <value>Позволить участнику эксклюзивный звук</value>
   </string>
   <string id="1425" name="deny_exclusive_audio_permission">
-    <value>Запретить эксклюзивный звук для пользователя</value>
+    <value>Запретить эксклюзивный звук для участника</value>
   </string>
   <string id="1426" name="excl_audio apply self on message">
     <value>хотел бы получить разрешение на эксклюзивный звук.</value>
@@ -4389,7 +4389,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>Управлять пользователями и правами</value>
   </string>
   <string id="1455" name="tooltip menu">
-    <value>Управлять связями и выгонять пользователей</value>
+    <value>Управлять связями и исключать участников</value>
   </string>
   <string id="1456" name="tooltip menu">
     <value>Управлять группами пользователей</value>
@@ -4641,6 +4641,6 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>Разрешить SIP транспорт в комнате</value>
   </string>
   <string id="1539" name="exclusive_audio_confirm">
-    <value>Вы действительно хотите дать слово этому пользователю?</value>
+    <value>Вы действительно хотите дать слово этому участнику?</value>
   </string>
 </language>
