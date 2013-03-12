@@ -294,8 +294,6 @@
                         parent.username.setAttribute('visible',false);
                         parent.n2.setAttribute('visible',false);
                         parent.userpass.setAttribute('visible',false);
-                        parent.n5.setAttribute('visible',false);
-                        parent.colors.setAttribute('visible',false);
                         parent._register.setAttribute('visible',false);
                         parent.b2.setAttribute('visible',false);
                         parent.testing.setAttribute('visible',false);
