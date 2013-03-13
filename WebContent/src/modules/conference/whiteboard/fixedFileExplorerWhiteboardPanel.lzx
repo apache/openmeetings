@@ -188,7 +188,7 @@
         <handler name="ondata" args="value">
             <![CDATA[
                 //The onResult-Handler will be called be the rtmpconnection
-                if ($debug) Debug.write("############## deleteWhiteboard : ",value);
+                if ($debug) Debug.write("############## deleteWhiteboard : ", value);
             ]]>
         </handler>   
     </netRemoteCallHib>       
@@ -292,7 +292,6 @@
       
     
     <whiteboardBarMenu name="_bar" height="20" y="21">
-    	
     	<attribute name="whiteboardId" value="-1" type="number" />
     	
     	<handler name="onsubview" args="newSub">
@@ -301,23 +300,6 @@
     	<handler name="onwidth" args="newSub">
             parent.addNewItemButton.updatePosition();
         </handler>
-        
-        <!-- 
-        <handler name="oninit">
-        	this.currentBtn = this._button1;
-        </handler>
-         -->
-    	
-    	<!--
-    	<whiteboardMiniButton name="_button1" isactive="true">
-    		<handler name="oninit">
-    			this.setAttribute("btnName",canvas.getLabelName(615)+" 1");
-    			this.objRef = parent.parent._whiteboard1;
-    			this.onmouseout.sendEvent(this);
-    		</handler>
-    	</whiteboardMiniButton>
-    	 -->
-    	
     </whiteboardBarMenu>
     
     <view name="addNewItemButton" y="24" 
@@ -359,11 +341,6 @@
     	  bgcolor="$once{ canvas.getThemeColor('basebgcolorizer') }">
     	<attribute name="whiteboardId" value="-1" type="number" />
     </view>
-    
-    <!--
-    <multiWhiteboardPanel name="_whiteboard1" whiteboardId="1" /> 
-     -->
-    
 </class>
 
 </library>

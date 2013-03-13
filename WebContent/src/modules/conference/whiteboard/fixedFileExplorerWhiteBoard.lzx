@@ -59,6 +59,11 @@
         if ($debug) Debug.info("Init Whiteboard ",this.restricted);
     </handler>
 
+    <handler name="ondestroy">
+		//if ($debug) Debug.write("############## fixedFileExplorerWhiteBoard::ondestroy : ", this);
+		this._drawareaMask._drawarea.clearRemote();
+    </handler>
+
     <method name="sendConfirmation" args="yesno,askagain" >
         
         ////Debug.write("clear yesno,askagain: ",yesno,askagain);
@@ -262,22 +267,6 @@
                 parent.parent.onsharedMessage.sendEvent(tempSendArray);
             </method>
             
-            <!--
-            <handler name="onopenWhiteBoard" >
-                var obj = new Array();
-                obj[0] = 'whiteboard';
-                obj[1] = 'initgetVars';
-                obj[2] = canvas.streamid;
-                
-                //Debug.write("Setting Message onopenWhiteBoard: ",canvas.moderatorStreamID,obj);
-                
-                this.parent.parent.sendObjectToClientID = canvas.moderatorStreamID;
-                this.parent.parent.sendObject = obj;
-                     
-                this.parent.parent.sendMessageWithClientById.doCall();
-            </handler>
-             -->
-             
             <handler name="onopenWhiteBoard" >
                 //parent.parent.getRoomItems.doCall();
             </handler>
@@ -336,11 +325,7 @@
             </method>
             
             <view name="_grid" x="-2" y="-2" height="${parent.height}" width="${parent.height}" 
-                  visibility="${ (parent.showGrid) ? 'visible' : 'hidden'}">
-            	<!-- resource="_grid" -->
-            
-            </view>
-            
+                  visibility="${ (parent.showGrid) ? 'visible' : 'hidden'}"/>
         </remoteWhiteboard>   
     	
     </view>
@@ -430,19 +415,6 @@
             </handler>   
         </netRemoteCallHib>     
     
-    <!-- 
-        <netRemoteCallHib name="getRoomItems" funcname="whiteboardservice.getRoomItems"
-            remotecontext="$once{ canvas.thishib }" >
-            <handler name="ondata" args="value">
-                <![CDATA[
-                    //The onResult-Handler will be called be the rtmpconnection
-                    if ($debug) Debug.write("############## getRoomItems : ",value);
-                    canvas._drawarea.loadObjectList(value);
-                ]]>
-            </handler>   
-        </netRemoteCallHib>  
-     -->  
-        
     <view name="panelArea" width="${ parent.parent.width }" 
           height="${ parent.parent.height-42-parent._propertyPanel.height }">
         
@@ -524,31 +496,12 @@
         <method name="getDocumentsToolbar">
             return parent._propertyPanel._content._documentsPanel;
         </method>
-        <!--
-        <method name="getDocumentsToolbar">
-            <![CDATA[
-                for (var i=0;i<this.subviews.length;i++) {
-                    if (this.subviews[i] instanceof lz.documentIconTopPanel
-                        || this.subviews[i] instanceof lz.documentIconLeftPanel) {
-                        //this.subviews[i].setAttribute('visibility','visible');
-                        return this.subviews[i]._inner;
-                    }
-                }
-            ]]>
-        </method>
-         -->
         
         <mainToolsTopPanel x="100" y="0" name="_mainToolsPanel" 
              visible="${ ((canvas.ismoderator) ? true : ((canvas.isAllowedToDraw) ? true : false )) }"/>
         
         <mainToolsLeftPanelPointer y="20" name="_mainToolsLeftPanelPointer" 
              visible="${ (parent.parent.restricted) ? false : (((canvas.ismoderator) ? false : ((canvas.isAllowedToDraw) ? false : true ))) }"/>
-        
-        <!--
-        <documentIconTopPanel x="100" valign="bottom" name="_documentPanel"
-             visible="${ ((canvas.ismoderator) ? true : ((canvas.isAllowedToDraw) ? true : false )) }" />
-         -->
-         
     </view> 
     
     <view name="zoombox" y="0" x="${ parent.parent.width-this.width-14 }" layout="axis:x;spacing:2"
@@ -621,20 +574,6 @@
             parent.panelArea.sendNewPropertyHeight(this);
         </handler>
     </propertyPanel>
-    
-    <!--
-    <view name="resetSize" x="${parent.width - 20}" width="10" height="10" >
-        <handler name="onclick">
-            this.parent.parent.setAttribute("width",this.parent.parent.initW); 
-            this.parent.parent.setAttribute("height",this.parent.parent.initH);
-            
-            this.parent.parent.onheight.sendEvent();
-            this.parent.parent.onwidth.sendEvent();
-            
-            this.setAttribute("x",this.parent.parent.initW - 20);
-        </handler>
-    </view>
-     -->
 </class>
 
 </library>

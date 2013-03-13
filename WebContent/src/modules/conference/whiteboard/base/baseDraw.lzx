@@ -144,29 +144,6 @@
 		this.baseactionobjectList = new Array();
 		this.baseredoactionobjectList = new Array();
 	</handler>
-	
-	<!--
-	<handler name="onkeydown" reference="lz.Keys" args="k">
-		if ($debug) Debug.write("onkeydown ",k,this,lz.Keys);
-	</handler>
-	<handler name="onkeyup" reference="lz.Keys" args="k">
-		if ($debug) Debug.debug("key %w %s", k, "up");
-    </handler>
-     -->
-	<!--
-        if (this.boundingref!=null) this.boundingref.removeIt();
-        while (this.subviews.length > 0) {
-            this.subviews[0].destroy();
-        }
-        while (this.basdrawredoView.subviews.length > 0) {
-            this.basdrawredoView.subviews[0].destroy();
-        }           
-        this.layers = new Array();
-        this.redolayers = new Array();
-        this.baseactionobjectList = new Array();
-        this.baseredoactionobjectList = new Array();    
-        this.checkStepLayers(); 
-     -->
       
     <method name="clearSlideOnly">
     	<![CDATA[

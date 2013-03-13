@@ -62,18 +62,18 @@
     </method>
     
     <method name="removeObjectSynced" args="btn">
+    <![CDATA[
     	var removeCurrent = false;
     	if (this.currentBtn == btn){
     		removeCurrent = true;
     	}
     	btn.objRef.destroy();
         btn.destroy();
-        if (this.subviews.length != 0) {
-	        if (removeCurrent) {
-	        	this.sendActiveWindowSynced(this.subviews[this.subviews.length-1]);
-	        }
+        if (this.subviews.length != 0 && removeCurrent) {
+        	this.sendActiveWindowSynced(this.subviews[this.subviews.length-1]);
         }
         parent.addNewItemButton.updatePosition();
+    ]]>
     </method>
 
     
