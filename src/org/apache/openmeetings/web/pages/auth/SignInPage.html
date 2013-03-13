@@ -26,9 +26,10 @@
 			#login .ui-dialog .ui-dialog-titlebar-close {
 				display: none;
 			}
-			#login input {
-				width: 100px;
+			#login input:not([type='checkbox']) {
+				width: 170px;
 			}
+			#login input:
 		</style>
 	</wicket:head>
 	<wicket:extend>
@@ -55,6 +56,10 @@
 					<tr>
 						<td><wicket:ommessage key="110" /></td>
 						<td><input wicket:id="pass" type="password" value="" /></td>
+					</tr>
+					<tr>
+						<td></td>
+						<td><input wicket:id="rememberMe" type="checkbox" /><label wicket:for="rememberMe"><wicket:ommessage key="288" /></label></td>
 					</tr>
 					<tr>
 						<td align="right" colspan="2"><input type="submit" wicket:ommessage="value:112"/></td>

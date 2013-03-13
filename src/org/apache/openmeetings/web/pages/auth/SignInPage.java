@@ -22,6 +22,8 @@ import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.pages.BasePage;
 import org.apache.wicket.RestartResponseException;
+import org.apache.wicket.authentication.IAuthenticationStrategy;
+import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.HiddenField;
 import org.apache.wicket.markup.html.form.PasswordTextField;
 import org.apache.wicket.markup.html.form.RequiredTextField;
@@ -38,9 +40,6 @@ public class SignInPage extends BasePage {
 	}
 	
 	public SignInPage() {
-		if (WebSession.get().isSignedIn()) {
-			throw new RestartResponseException(Application.get().getHomePage());
-		}
 		add(new SignInForm("signin"));
 	}
 	
@@ -49,23 +48,60 @@ public class SignInPage extends BasePage {
         private String password;
         private String login;
         private String area = "";
+        private boolean rememberMe = false;
 
 		public SignInForm(String id) {
 			super(id);
 			
+			if (WebSession.get().isSignedIn()) {
+				alreadyLoggedIn();
+			} else {
+				IAuthenticationStrategy strategy = getApplication().getSecuritySettings().getAuthenticationStrategy();
+				// get username and password from persistence store
+				String[] data = strategy.load();
+
+				if ((data != null) && (data.length > 1)) {
+					// try to sign in the user
+					if (WebSession.get().signIn(data[0], data[1])) {
+						login = data[0];
+						password = data[1];
+
+						alreadyLoggedIn();
+					} else {
+						// the loaded credentials are wrong. erase them.
+						strategy.remove();
+					}
+				}
+			}
 			add(new FeedbackPanel("feedback"));
 			add(new RequiredTextField<String>("login", new PropertyModel<String>(this, "login")));
 			add(new PasswordTextField("pass", new PropertyModel<String>(this, "password")).setResetPassword(true));
+			add(new CheckBox("rememberMe", new PropertyModel<Boolean>(this, "rememberMe")));
 			add(new HiddenField<String>("area", new PropertyModel<String>(this, "area"))
 					.setMarkupId("area")
 					.setOutputMarkupId(true));
 		}
+
+		private void alreadyLoggedIn() {
+			// logon successful. Continue to the original destination
+			continueToOriginalDestination();
+			// Ups, no original destination. Go to the home page
+			throw new RestartResponseException(Application.get().getHomePage());
+		}
 		
 		@Override
 		protected void onSubmit() {
+			IAuthenticationStrategy strategy = getApplication().getSecuritySettings().getAuthenticationStrategy();
 			if (WebSession.get().signIn(login, password)) {
 				WebSession.get().setArea(area);
 	 			setResponsePage(Application.get().getHomePage());
+				if (rememberMe) {
+					strategy.save(login, password);
+				} else {
+					strategy.remove();
+				}
+			} else {
+				strategy.remove();
 			}
 		}
 	}
