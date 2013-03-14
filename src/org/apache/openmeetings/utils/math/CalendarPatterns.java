@@ -175,7 +175,7 @@ public class CalendarPatterns {
     }
     
     public static String getTimeForStreamId(Date t){
-        SimpleDateFormat sdf = new SimpleDateFormat("dd_MM_yyyy_HH_mm_ss");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy_MM_dd_HH_mm_ss");
         Date dateOld = new Date();
         long timeAdv = t.getTime();
         dateOld.setTime(timeAdv);
