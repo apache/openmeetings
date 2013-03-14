@@ -5,12 +5,13 @@ See http://issues.apache.org/jira/browse/OPENMEETINGS-* (where * is the number o
 
 Release Notes - Openmeetings - Version 2.1 Apache Release
 ================================================================================================================
-** Sub-task
 
+** Sub-task
     * [OPENMEETINGS-448] - Test and fix latest trunk to be able to import all old download zip's
 
-** Bug
 
+
+** Bug
     * [OPENMEETINGS-34] - missing entries in XML language files
     * [OPENMEETINGS-49] - Synchronisation between Calendar and Dashboard
     * [OPENMEETINGS-92] - The documents are not deleted from the server after removing them from the system
@@ -33,13 +34,13 @@ Release Notes - Openmeetings - Version 2.1 Apache Release
     * [OPENMEETINGS-327] - Add Restart Save Mail-Queue
     * [OPENMEETINGS-328] - screen sharing is not closing automatically
     * [OPENMEETINGS-331] - tooltip for cmd_applyforWhiteBoard room action is not set
-    * [OPENMEETINGS-343] - OM crashes if Invite guest with screen sharing rights tries to start screen sharing
+    * [OPENMEETINGS-343] - OM crashes if Invited guest with screen sharing rights tries to start screen sharing
     * [OPENMEETINGS-346] - Screen Sharing does not end with end of meeting
     * [OPENMEETINGS-362] - Download of profile images broken
     * [OPENMEETINGS-363] - Some minor bugs in private chat
     * [OPENMEETINGS-364] - User is not removed from user list when he leaves the room
     * [OPENMEETINGS-366] - File upload does not show images as options when doing file upload
-    * [OPENMEETINGS-376] - “Notification type” text overflows the drop down data selection area and is partly covered
+    * [OPENMEETINGS-376] - "Notification type" text overflows the drop down data selection area and is partly covered
     * [OPENMEETINGS-378] - Update Calendar email notification rules to send notification only when data relevant to the users has been changed
     * [OPENMEETINGS-379] - The Calendar ics format email notification is incorrectly formed
     * [OPENMEETINGS-380] - Calendar "Add attendee" option has a second option of itself to "Add external" but adding an external attendee does not close this dialog
@@ -109,9 +110,14 @@ Release Notes - Openmeetings - Version 2.1 Apache Release
     * [OPENMEETINGS-531] - Error Missing[XXXX]
     * [OPENMEETINGS-536] - In upload dialog "Select file" does not work
     * [OPENMEETINGS-540] - Uploading of .odt files
+    * [OPENMEETINGS-552] - Release blocking UI issues
+    * [OPENMEETINGS-561] - Video is not removed on Whiteboard closing
+    * [OPENMEETINGS-563] - "Black box" is displayed on test audio/video setup dialog
+
+
+
 
 ** Improvement
-
     * [OPENMEETINGS-93] - Create Openmeetings plug-in
     * [OPENMEETINGS-119] - New users french manual
     * [OPENMEETINGS-299] - Language import should be improved to take less time
@@ -130,6 +136,7 @@ Release Notes - Openmeetings - Version 2.1 Apache Release
     * [OPENMEETINGS-399] - jitsi openmeetings plugin
     * [OPENMEETINGS-400] - Improve volume slider
     * [OPENMEETINGS-436] - Ability to moderate room chat should be added
+    * [OPENMEETINGS-470] - SIP meeting extensions
     * [OPENMEETINGS-477] - Possibility to copy invitation link to the clipboard should be added
     * [OPENMEETINGS-478] - It should be possible to enable auto videopod selection
     * [OPENMEETINGS-480] - It would be better to remove confirmation dialog when user turns micro on/off.
@@ -140,9 +147,9 @@ Release Notes - Openmeetings - Version 2.1 Apache Release
     * [OPENMEETINGS-529] - AEC should be utilized in OM
     * [OPENMEETINGS-535] - an update of the german language file
     * [OPENMEETINGS-541] - Updated version of French language file
+    * [OPENMEETINGS-562] - To import ppt presentation delete page
 
 ** New Feature
-
     * [OPENMEETINGS-111] - Command line admin need to be created
     * [OPENMEETINGS-342] - Private Chat should be available in the room
     * [OPENMEETINGS-350] - Hot key should be added to be able to "rearrange" video windows in the room
@@ -150,8 +157,12 @@ Release Notes - Openmeetings - Version 2.1 Apache Release
     * [OPENMEETINGS-354] - Volume slider
     * [OPENMEETINGS-383] - Plugin for Joomla should be added to Openmeetings
 
-** Task
 
+
+
+
+
+** Task
     * [OPENMEETINGS-41] - OM without private storage area
     * [OPENMEETINGS-107] - Unify database schema
     * [OPENMEETINGS-248] - Remove LGPL Icons from Symbol/Cliparts and Emoticons
@@ -162,9 +173,11 @@ Release Notes - Openmeetings - Version 2.1 Apache Release
     * [OPENMEETINGS-446] - Create a Master backup File for last versions (including all generated data)
     * [OPENMEETINGS-522] - add Redmine Plugin Link to HomePage
 
-** Test
 
+
+** Test
     * [OPENMEETINGS-50] - content of whiteboards
+
 
 ----------------------------------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------------------
@@ -268,7 +281,7 @@ Bug
     [OPENMEETINGS-214] - When calendar event invitation is sent, invitation_text_from value displays with the name of the person for whom the invitation is being sent to but should be showing the sender's name
     [OPENMEETINGS-215] - Created date is duplicated where restoring base from backup
     [OPENMEETINGS-216] - UI problem
-    [OPENMEETINGS-219] - ÇDeleteÈ button is not visible
+    [OPENMEETINGS-219] - ï¿½Deleteï¿½ button is not visible
     [OPENMEETINGS-225] - If object on whiteboard of type "freedraw" ("paint") is dragged/moved, the object is gone when you re-enter the room
     [OPENMEETINGS-229] - "Exit"button is not shown for inviting users from room
     [OPENMEETINGS-230] - Error in the field name on the form "Add external"

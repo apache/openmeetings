@@ -195,8 +195,8 @@
 					Send an email to the developer mailing list with the subject line:<br />
 					[VOTE] Apache OpenMeetings x.xx release<br />
 					An example for such an email:
-					<a
-						href="http://mail-archives.apache.org/mod_mbox/incubator-openmeetings-dev/201207.mbox/%3CCACeMiA9dXXMnxA3EhJVPGhpvO4z2cLNqHVP7uOhSHT8e_vHoFQ%40mail.gmail.com%3E">example Vote email</a>
+					<a href="http://s.apache.org/vote-2.1.0RC1">example Vote email</a>
+					<a href="http://s.apache.org/vote-2.0.0RC4">example Vote email (Incubator)</a>
 					<br />
 					Forward (Not CC) this Vote email to: private@openmeetings.apache.org<br />
 					<br />
@@ -208,11 +208,12 @@
 					<br />
 					Forward (Not CC) this RESULT VOTE email to: private@openmeetings.apache.org<br />
 					<br />
-					After the Vote was successful on the Developer mailing list, you
-					need organize a vote on the general list: general@incubator.apache.org<br />
-					The vote on the general list has the same process, first a VOTE email, then a RESULT email.<br />
-					You need at least 3 IPMC votes for the release. You can summarize
-					the IPMC votes from both votes (dev + general).
+					Votes on whether a package is ready to be released use majority approval -- i.e., at 
+					least three PMC members must vote affirmatively for release, and there must be more 
+					positive than negative votes. Releases may not be vetoed. Before voting +1 PMC members
+					are required to download the signed source code package, compile it as provided, and 
+					test the resulting executable on their own platform, along with also verifying that 
+					the package meets the requirements of the ASF policy on releases.
 				</p>
 			</subsection>
 
