@@ -123,7 +123,8 @@
 			<ul>
 				<li>Set up the cluster and loggin with two users, go to the same room (also check before room 
 				entering that the status page with the room list shows the correct number of participants before 
-				entering the room). Both users should be in the same room.
+				entering the room). You should login to the same server initially, the server will redirect you 
+				for the conference room to the appropriate server automatically. Both users should be in the same room.
 				</li>
 				<li>Do the same with only two users but go to _different_ rooms. The calculation should send 
 				both users to different servers, cause based on the calculation two different rooms on a cluster 
