@@ -76,7 +76,7 @@ public class SignInPage extends BasePage {
 			add(new FeedbackPanel("feedback"));
 			add(new RequiredTextField<String>("login", new PropertyModel<String>(this, "login")));
 			add(new PasswordTextField("pass", new PropertyModel<String>(this, "password")).setResetPassword(true));
-			add(new CheckBox("rememberMe", new PropertyModel<Boolean>(this, "rememberMe")));
+			add(new CheckBox("rememberMe", new PropertyModel<Boolean>(this, "rememberMe")).setOutputMarkupId(true));
 			add(new HiddenField<String>("area", new PropertyModel<String>(this, "area"))
 					.setMarkupId("area")
 					.setOutputMarkupId(true));
