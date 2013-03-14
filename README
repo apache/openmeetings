@@ -2,104 +2,72 @@ Apache OpenMeetings - README
 Licensed under Apache License 2.0 - http://www.apache.org/licenses/LICENSE-2.0
 --------------------------------------------------------------------------------
 
-
 About
 =====
-Apache Openmeetings provides video conferencing, instant messaging, white board, collaborative 
-document editing and other groupware tools using API functions of the Red5 Streaming 
-Server for Remoting and Streaming. 
+Apache Openmeetings provides video conferencing, instant messaging, white board,
+collaborative document editing and other groupware tools using API functions of 
+the Red5 Streaming Server for Remoting and Streaming. 
 
 
 Release Notes 2.1
 =============
-_Admin/Calendar HTML5 UI_
-Additional HTML5 Wicket based UI is added (fully customizable with CSS)
+see CHANGELOG file for detailed log
 
 _Integration with Asterisk_
-Integration with Asterisk was refactored. Confbridge is now used instead of Meetme.
-Basic support for video is added (unstable).
+SIP/VOIP integration with Asterisk was refactored. 
+Confbridge application is now used instead of Meetme for the conferences.
+Sound quality and SIP transport stability was significamtly improved.
+Basic support for video is added (is unstable and in beta version stage now).
+See also: http://openmeetings.apache.org/red5sip-integration_2.1.html
 
-_Using SWF11 for Video Components_
-All audio/video related components now use SWF11 for broadcasting and receiving 
-audio and video signals. Echo cancellation can be enabled in the config. H264 is now used
-as video codec to enable SIP video support.
+_Improving the sound and video quality_
+All the audio/video related components now use SWF11 for broadcasting and 
+receiving audio and video signals. 
+Echo cancellation can be enabled in the config. 
+H264 video codec is now used instead of H263 to enable SIP video support.
 
-_Cluster capabilities_
-OM can be configured in cluster environment
+_Private and moderated chat_
+Ability to send private chat messages in the room is added as well as the chat 
+moderation funmctionality.
 
-_Private Chat_
-Ability to send private chat messages in the room is added
+_SMS sending module_
+Possibility to send SMS message as a meeting reminder is added.
 
 _Network testing tool/script_
-Network testing *nix script is added and GUI network testing tools are added.
+Network testing tool is implemented and its link is added to the login page.
+See also: https://cwiki.apache.org/confluence/display/OPENMEETINGS/Connection+testing+tool
 
-_Emails Queue_
-Emails are now able to be resend in case of bad SMTP settings
+_Improvements in the mail sending process_
+Now e-mails are re-send again in case of unsuccessfull result at the first 
+attempt or OpenMeetings re-start before the sending. 
+SMTP setting updates now takes effect just after they saving whereas previously 
+they started to work after the OpenMeetings re-start only.
 
+_Calendar_
+Messages about the meeting updates are sent only when substantial changes were made. 
+Multiple external attendees can be added as one operation, it's now possible to 
+specify user name for external guests (user will appear with this name in the user 
+list in the room). 
 
-Release Notes 2.0
-=============
-see CHANGES file for detailed log
+_Room Interface_
+Possibility to get invitation link without sending an e-mail was added. 
+Confirmation dialog for exclusive audio no longer appears.
+Hot key is added to be able to "rearrange" video windows in the room. 
+Volume slider on the video pod toolbar was added.
 
-_Restyled UI_
-The UI has been re-factored to have a common look and fee. Additionally most 
-of the icons are now loaded at runtime. That means you can change colors and icons at 
-runtime without changing the source code. 
-More info: http://openmeetings.apache.org/themes-and-branding.html
+_Recordings and screen sharing improvements_
+Some improvements for the screen sharing and recordings quality and stability 
+were made.
 
-_New Calendar_
-The calendar was completely re-factored and got a new UI that was build from 
-scratch that also adds some new functions. For example it is possible now to password 
-protect invitations send via the calendar. Further the timezone handling has been 
-re-factored and there is now also a SOAP/REST API to handle calendar Events 
-( http://openmeetings.apache.org/SoapRestAPI.html )
+_Cluster capabilities_
+In the beta stage: OpenMeetings  can be configured in the cluster environment and 
+is ready for the testing, but development has not been fnished yet. 
+See also: http://openmeetings.apache.org/Clustering.html,
+https://cwiki.apache.org/confluence/display/OPENMEETINGS/Cluster+Master-Slave+overview
 
-_Integration with Asterisk_
-The application contains now modules to directly integrate OpenMeetings with Asterisk 
-for SIP/VoIP integration. It enables you to dial in as well as dial out of conference 
-room to SIP or landlane phones. 
-More info: http://openmeetings.apache.org/voip-sip-integration.html
-
-_Install/Backup/Import via command line_
- Additionally to the Web-Interface you can now do all basic operations via the console. 
- Just cd to your OpenMeetings installation directory and type “admin” and you will see 
- all options available (OpenMeetings service should be shut down while doing those operations)
-
-_Using SWF10 for Video Components_
-All audio/video related components now use SWF10 for broadcasting and receiving 
-audio and video signals. That makes it possible to use for example the echo cancellation 
-feature build in the SWF10 Flash Player.
-
-There are a lot more improvements for example to recording, screen sharing and new layout 
-options. To see the full list please review our Release Notes for Version 2.0:
-https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12312720&version=12319197
-
-There are also new Integration Plugins available!
-
-_Integration into Atlassian Jira_
-There is a plugin in our SVN that will be released soon 
-for integration with Atlassian Jira, you can watch a demo here: 
-https://blogs.apache.org/openmeetings/entry/jira_integration_apache_openmeetings_demo
-
-_Integration into Atlassian Confluence_
-Same for Atlassian Confluence Wiki, you can watch 
-a demo here: https://blogs.apache.org/openmeetings/entry/demo_video_about_upcoming_atlassian
-
-_Important Changes_
-OpenOffice service does not need any more to be started. But you have 
-to set the path to OpenOffice (or LibreOffice) and JODConverter tools in 
-OpenMeetings configuration. OpenMeetings (and JODConverter) will start and stop the 
-OpenOffice service when they need it.
-If you are using MySQL: MySQL driver is no more part of the distribution due to license restrictions. 
-You will need to download the JConnector Driver on your own, see:
-http://openmeetings.apache.org/MySQLConfig.html
-
-_Upgrading from Version 1.9 or prior_
-To update from an old version of OpenMeetings to 2.x 
-you should use the integrated Backup and Import tool that exists since around Version 1.3. 
-You should follow our documentation, 
-see: http://openmeetings.apache.org/Upgrade.html 
-
+_Admin/Calendar HTML5 UI_
+Additional HTML5 Wicket based UI (fully customizable with CSS) is added for 
+static screens as a proof of the concept.
 
 Getting Started
 ===============
@@ -132,6 +100,3 @@ To build from source code:
     
 For a detailed documentation on how to build from source and options see:
     http://openmeetings.apache.org/BuildInstructions.html
-    
-
-    
