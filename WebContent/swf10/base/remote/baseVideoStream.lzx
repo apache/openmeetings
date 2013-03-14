@@ -225,7 +225,7 @@
 			this.attachCamera(camReference);
 			
 			var h264Settings:H264VideoStreamSettings = new H264VideoStreamSettings();
-			h264Settings.setProfileLevel(H264Profile.BASELINE, H264Level.LEVEL_1_2);
+			h264Settings.setProfileLevel(H264Profile.BASELINE, H264Level.LEVEL_5_1);
 			h264Settings.setQuality(camReference.bandwidth, camReference.quality);
 			h264Settings.setKeyFrameInterval(camReference.keyFrameInterval);
 			h264Settings.setMode(camReference.width, camReference.height, camReference.fps);

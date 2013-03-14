@@ -88,7 +88,7 @@
 		if (!canvas.rtmpHost) {
 			canvas.rtmpHost = getBrowserHost();
 		}
-		canvas.setAttribute("rtmpPort", settingsPtr.xpathQuery("config/rtmpPort/text()"));
+		canvas.setAttribute("rtmpPort", settingsPtr.xpathQuery("config/rtmpport/text()"));
 		
 		canvas.setAttribute("httpProtocol", settingsPtr.xpathQuery("config/protocol/text()"));
 		canvas.setAttribute("httpHost", settingsPtr.xpathQuery("config/httphostlocal/text()"));
@@ -97,8 +97,8 @@
 		}
 		canvas.setAttribute("httpPort", settingsPtr.xpathQuery("config/red5httpport/text()"));
 
-		canvas.setAttribute("uriContext", settingsPtr.xpathQuery("config/uriContext/text()"));
-		canvas.setAttribute("rtmpUriPath", settingsPtr.xpathQuery("config/rtmpUriPath/text()"));
+		canvas.setAttribute("uriContext", settingsPtr.xpathQuery("config/httpRootKey/text()"));
+		canvas.setAttribute("rtmpUriPath", canvas.uriContext + "hibernate");
 	</method>
 
     <method name="showTests">
@@ -108,7 +108,7 @@
 
     <dataset type="http" name="settings" request="false" >
         <handler name="oninit">
-            this.setAttribute("src","networktesting-config.xml");
+            this.setAttribute("src","config.xml");
             this.doRequest();
         </handler>
         <handler name="ondata">
