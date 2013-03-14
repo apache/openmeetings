@@ -32,6 +32,7 @@ moderation funmctionality.
 
 _SMS sending module_
 Possibility to send SMS message as a meeting reminder is added.
+See also: https://cwiki.apache.org/confluence/display/OPENMEETINGS/SMS+Sending+Module
 
 _Network testing tool/script_
 Network testing tool is implemented and its link is added to the login page.
