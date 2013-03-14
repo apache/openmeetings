@@ -158,16 +158,16 @@
 			? hib.currentdomainObj.organisation_id : 1;
 		if ($debug) Debug.write("mainMethods::getScreenSharingUrl ", hib.userobject, hib.currentdomainObj);
 		
-		var downloadurl = canvas.getAppBaseUrl() + 'screen.upload?'
+		var appBase = canvas.getAppBaseUrl();
+		var downloadurl = appBase + 'screen.upload?'
 			+'rtmphostlocal=' + canvas.getHttpHost()
+			+'&baseurl=' + escape(appBase)
 			+'&domain=' + hib.conferencedomain
 			+'&organization_id=' + organisation_id
 			+'&sid=' + canvas.sessionId
-			+'&red5httpport=' + canvas.red5httpport
 			+'&connectionType=' + canvas.thishib.getProtocol()
 			+'&port=' + canvas.thishib.getPort()
 			+'&publicSID=' + canvas.publicSID
-			+'&httpRootKey=' + canvas.httpRootKey
 			+'&languageAsString=' + hib.userlang;
 		if ($debug) Debug.write("mainMethods::getScreenSharingUrl ", downloadurl); 
 		return downloadurl;

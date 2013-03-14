@@ -110,21 +110,11 @@ public class ScreenController {
 			if (rtmphostlocal == null) {
 				throw new Exception("rtmphostlocal is empty: " + rtmphostlocal);
 			}
-
-			String red5httpport = request.getParameter("red5httpport");
-			if (red5httpport == null) {
-				throw new Exception("red5httpport is empty: " + red5httpport);
+			
+			String baseURL = request.getParameter("baseurl");
+			if (baseURL == null) {
+				throw new Exception("baseurl is empty: " + baseURL);
 			}
-
-			String httpRootKey = request.getParameter("httpRootKey");
-			if (httpRootKey == null) {
-				throw new Exception("httpRootKey is empty could not start sharer");
-			}
-
-			String baseURL = request.getScheme() + "://" + rtmphostlocal + ":" + red5httpport
-					+ httpRootKey;
-
-			log.debug("httpRootKey " + httpRootKey);
 			log.debug("language_id :: " + language_id);
 			String label_sharer = "Sharer";
 
