@@ -509,8 +509,16 @@
         </handler>
     </resetCombobox>
 
+	<method name="attachCamera">
+		_video.content._publisher.setAttribute("visibility", "hidden");
+		_video.content._viewer.setAttribute("visibility", "visible");
+		var videoview = _video.content._viewer._chatvideoinner._videostream;
+		videoview._stop();
+		var _camera = getCam(availibleCams.getValue(), videoview);
+		videoview.attachCamera(_camera);
+	</method>
+	
     <labelText name="availibleCamsLabel" labelid="52" fontsize="11" x="10" y="140" width="$once{ parent.width-20 }" />
-
     <resetCombobox fontsize="11" name="availibleCams" x="10" y="160" width="280" editable="false">
         <switch>
             <when property="$as3">
@@ -551,6 +559,10 @@
 				}
             ]]>
         </handler>
+        
+		<handler name="onselect">
+			parent.attachCamera();
+		</handler>
     </resetCombobox>
 
     <labelText name="availibleMicsLabel" labelid="53" fontsize="11"
@@ -615,35 +627,35 @@
                 y="244" width="280" editable="false">
         <!--- @keywords private -->
         <attribute name="counter" value="0" />
-        <handler name="onselect" args="item">
-	        <![CDATA[
-	            if ($debug) Debug.write("onselect w ", item.cam_width);
-	            if ($debug) Debug.write("onselect h ", item.cam_height);
-	            parent.setAttribute("cam_default_width",item.cam_width);
-	            parent.setAttribute("cam_default_height",item.cam_height);
-	            
-	            if (item.cam_width > 240) {
-	            	var newWidth = 600 + item.cam_width - 240;
-	            	if (newWidth+parent.x+10 > canvas.width) {
-	            		newWidth = canvas.width - 10 - this.x;
-	            	}
-	            	parent.setAttribute("width",newWidth);
-	            } else {
-	            	parent.setAttribute("width",600);
-	            }
-	            
-	            if (item.cam_height > 180) {
-	            	var newHeight = 500 + item.cam_height - 180;
-	            	if (newHeight+parent.y+10 > canvas.height) {
-	            		newHeight = canvas.height - 10 - parent.y;
-	            	}
-	            	parent.setAttribute("height",newHeight);
-	            } else {
-	            	parent.setAttribute("height",500);
-	            }
-	            
-            ]]>
-        </handler>
+		<handler name="onselect" args="item">
+		<![CDATA[
+			if ($debug) Debug.write("onselect w ", item.cam_width);
+			if ($debug) Debug.write("onselect h ", item.cam_height);
+			parent.setAttribute("cam_default_width",item.cam_width);
+			parent.setAttribute("cam_default_height",item.cam_height);
+			
+			if (item.cam_width > 240) {
+				var newWidth = 600 + item.cam_width - 240;
+				if (newWidth+parent.x+10 > canvas.width) {
+					newWidth = canvas.width - 10 - this.x;
+				}
+				parent.setAttribute("width",newWidth);
+			} else {
+				parent.setAttribute("width",600);
+			}
+			
+			if (item.cam_height > 180) {
+				var newHeight = 500 + item.cam_height - 180;
+				if (newHeight+parent.y+10 > canvas.height) {
+					newHeight = canvas.height - 10 - parent.y;
+				}
+				parent.setAttribute("height",newHeight);
+			} else {
+				parent.setAttribute("height",500);
+			}
+			parent.attachCamera();
+		]]>
+		</handler>
         <textlistitem datapath="myConfigSet:/config/availableCameraResolutions/resolution" >
             <switch>
 	            <when property="$as3">

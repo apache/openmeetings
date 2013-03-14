@@ -37,6 +37,7 @@
     </passthrough>
 
     <attribute name="_sound" value="null"/>
+    <attribute name="__LZvideo" value="null"/>
 
 	<method name="init"><![CDATA[
         super.init();
@@ -67,11 +68,14 @@
     </handler>
 
 	<method name="_getflashvideo">
-		<![CDATA[
-            //Debug.write("_getflashvideo()");
-            return this.__LZvideo;
-        ]]>
-    </method>
+	<![CDATA[
+		if (__LZvideo == null) {
+			init();
+		}
+		//if ($debug) Debug.write("_getflashvideo()");
+		return this.__LZvideo;
+	]]>
+	</method>
 
     <method name="attachCamera" args="camera">
         var vid = this._getflashvideo();
@@ -84,12 +88,12 @@
     	vid.attachNetStream(video);
     </method>
 
-    <method name="clear">
-        var vid = this._getflashvideo();
-    	vid.attachNetStream(null);
+	<method name="clear">
+		var vid = this._getflashvideo();
+		vid.attachNetStream(null);
+		vid.attachCamera(null);
 		this.__LZvideo.clear();
 	</method>
-
 </class>
 
 
