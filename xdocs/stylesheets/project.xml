@@ -34,8 +34,8 @@
     <menu name="Installation and Upgrade">
     	<item name="Installation"           href="/installation.html"/>
     	<item name="Upgrade"           		href="/Upgrade.html"/>
-    	<item name="Tutorials"  href="http://cwiki.apache.org/confluence/display/OPENMEETINGS/Tutorials+related+to+OpenMeetings" />
-    	<item name="Command Line Admin"  href="/CommandLineAdmin.html" />
+    	<item name="Tutorials"				href="https://cwiki.apache.org/confluence/display/OPENMEETINGS/Tutorials+for+installing+OpenMeetings+and+Tools" />
+    	<item name="Command Line Admin"		href="/CommandLineAdmin.html" />
     </menu>
 
     <menu name="Community">
