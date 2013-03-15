@@ -38,6 +38,7 @@
     <switch>
         <when property="$as3">
             <passthrough>
+				import flash.events.StatusEvent;
                 import flash.media.Camera;
                 import flash.media.Microphone;
                 import flash.media.MicrophoneEnhancedMode;
@@ -509,13 +510,31 @@
         </handler>
     </resetCombobox>
 
+	<attribute name="cameraUnmuted" type="boolean" value="false"/>
 	<method name="attachCamera">
+		if (_video == undefined) return;
 		_video.content._publisher.setAttribute("visibility", "hidden");
 		_video.content._viewer.setAttribute("visibility", "visible");
 		var videoview = _video.content._viewer._chatvideoinner._videostream;
-		videoview._stop();
 		var _camera = getCam(availibleCams.getValue(), videoview);
-		videoview.attachCamera(_camera);
+		if (_camera != null) {
+			videoview._stop();
+			videoview.attachCamera(_camera);
+			if (_camera.muted) {
+				if (cameraUnmuted) {
+					_camera.removeEventListener(StatusEvent.STATUS, cameraStatusHandler);
+				} else {
+					_camera.addEventListener(StatusEvent.STATUS, cameraStatusHandler);
+				}
+			}
+		}
+	</method>
+	
+	<method name="cameraStatusHandler" args="stats">
+		if (stats.code == "Camera.Unmuted") {
+			cameraUnmuted = true;
+			attachCamera();
+		}
 	</method>
 	
     <labelText name="availibleCamsLabel" labelid="52" fontsize="11" x="10" y="140" width="$once{ parent.width-20 }" />
