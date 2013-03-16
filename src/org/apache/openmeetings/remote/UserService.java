@@ -144,8 +144,18 @@ public class UserService {
 	 * @return get the user bound to this session
 	 */
 	public User getUserSelf(String SID) {
-		Long users_id = sessiondataDao.checkSession(SID);
-		return usersDao.get(users_id);
+		try {
+			Long users_id = sessiondataDao.checkSession(SID);
+			User us = usersDao.get(users_id);
+			
+			//reset some objects that the client should not know
+			us.setSipUser(null);
+			
+			return us;
+		} catch (Exception err) {
+			log.error("[getUserSelf]", err);
+		}
+		return null;
 	}
 
 	public Long resetUserPwd(String SID, String email, String login,
@@ -593,7 +603,7 @@ public class UserService {
 				us.setUpdatetime(new Date());
 
 				userManager.updateUser(us);
-
+				
 				return us;
 
 			}

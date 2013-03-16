@@ -26,7 +26,7 @@
 	Description:
 	This Class shows a window where you can alter you Video-/Microphone- Input-Resources
 	and start to stream. The app could also use the default values for Cam/Mic but
-	must users don't know how to alter this (wether in System-Control-Panel or by Right Clicking
+	most users don't know how to alter this (weather in System-Control-Panel or by Right Clicking
 	on the Flash-Screen and *>Preferences>Camera* )
 	So I think it is better if Users are forced to choose something from this list
 	

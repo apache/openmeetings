@@ -165,6 +165,9 @@
 			var g = canvas.getUserData();
             g["showAudioVideoTest"] = parent.doShowTestWizzard.getValue();
             canvas.setUserData(g);
+            
+            this.parent.userObj.omTimeZone = null;
+            this.parent.userObj.organisation_users = null;
 			
             if ($debug) Debug.write("this.parent.userObj: ",this.parent.userObj);
             if ($debug) Debug.write("this.parent.userObj.adresses.states ",this.parent.userObj.adresses.states);
