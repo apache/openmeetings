@@ -221,6 +221,7 @@
 					'&sid='+canvas.sessionId;
             if ($debug) Debug.write("uploadurl: ",uploadurl);
 			parent.myFileUpload.upload(uploadurl);
+			this.setAttribute("enabled", false);
 			]]>
 		</handler>
 	</simpleLabelButton>
