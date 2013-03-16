@@ -119,34 +119,22 @@
 
 			canvas.videoComp_lc.client = {clb_getBroadCastId: this.clb_getBroadCastId, clb_setUserAVSettings: this.clb_setUserAVSettings};
 
-	        var t:SharedObject = SharedObject.getLocal('userdata');
-	        var g = t.data;
-	        var save = g["savecamdata"];
-	        if ($debug) Debug.write("save: ",save,g["cam"],g["mic"],this.isSyncUpdate);
-	        //In case its an Audio-Only Room this box should not close automatically
-            if ($debug) Debug.write("canvas.currentRoomObject: ", canvas.currentRoomObject);
-
-	        if (false) { // canvas.currentRoomObject.isAudioOnly
-	        	this._chooseDeviceAnimation.setAttribute('started', true);
-	        } else {
-	        	//In case the user presses the Sync Button this box should
-                //not close automatically and do the user-prefered values
-                if(save && !this.isSyncUpdate && this.checkLocalDataComplete()) {
-                    this.chosenCam = g["cam"];
-                    this.chosenMic = g["mic"];
-                    this.cam_default_width = g["width"];
-                    this.cam_default_height = g["height"];
-                    this.chosenSetting = g["avstored"];
-                    this.remoteMessage = new Array();
-                    this.remoteMessage[0] = 'avsettings';
-                    this.remoteMessage[2] = this.chosenSetting; 
-                    this.getBroadCastId.doCall();
-                } else {
-                    if (this.doDefaultAnimation && !canvas.isInterview) {
-                        this._chooseDeviceAnimation.setAttribute('started', true);
-                    }
+	        var sharedData = this.checkDeviceSettingsRememberStatus();
+            if(sharedData != null) {
+                this.chosenCam = sharedData["cam"];
+                this.chosenMic = sharedData["mic"];
+                this.cam_default_width = sharedData["width"];
+                this.cam_default_height = sharedData["height"];
+                this.chosenSetting = sharedData["avstored"];
+                this.remoteMessage = new Array();
+                this.remoteMessage[0] = 'avsettings';
+                this.remoteMessage[2] = this.chosenSetting; 
+                this.getBroadCastId.doCall();
+            } else {
+                if (this.doDefaultAnimation && !canvas.isInterview) {
+                    this._chooseDeviceAnimation.setAttribute('started', true);
                 }
-	        }
+            }
 	        
 	        if (canvas.isInterview) {
 	        	if ($debug) Debug.write("Is interview ",interviewPodId);
@@ -156,6 +144,31 @@
         ]]>
 	</handler>
 	
+	<!-- 
+	   If the remember check-box was true, this flag in the Flash Cookie (aka SharedObject)
+	   is true and the box will close without asking for device settings.
+	 -->
+	<method name="checkDeviceSettingsRememberStatus">
+	    <![CDATA[
+		var t:SharedObject = SharedObject.getLocal('userdata');
+		var g = t.data;
+		var save = g["savecamdata"];
+		if ($debug) Debug.write("save: ",save,g["cam"],g["mic"],this.isSyncUpdate);
+		//In case its an Audio-Only Room this box should not close automatically
+		if ($debug) Debug.write("canvas.currentRoomObject: ", canvas.currentRoomObject);
+		
+		//In case the user presses the Sync Button this box should
+        //not close automatically and do the user-prefered values
+		if(save && !this.isSyncUpdate && this.checkLocalDataComplete()) {
+		    return g;
+		}
+		return null;
+		]]>
+	</method>
+	
+	<!-- 
+	   Checks if all needed data in the shared object is available
+	 -->
 	<method name="checkLocalDataComplete">
         <![CDATA[
         	var t:SharedObject = SharedObject.getLocal('userdata');
@@ -512,22 +525,31 @@
 
 	<attribute name="cameraUnmuted" type="boolean" value="false"/>
 	<method name="attachCamera">
-		if (_video == undefined) return;
-		_video.content._publisher.setAttribute("visibility", "hidden");
-		_video.content._viewer.setAttribute("visibility", "visible");
-		var videoview = _video.content._viewer._chatvideoinner._videostream;
-		var _camera = getCam(availibleCams.getValue(), videoview);
-		if (_camera != null) {
-			videoview._stop();
-			videoview.attachCamera(_camera);
-			if (_camera.muted) {
-				if (cameraUnmuted) {
-					_camera.removeEventListener(StatusEvent.STATUS, cameraStatusHandler);
-				} else {
-					_camera.addEventListener(StatusEvent.STATUS, cameraStatusHandler);
+	    <![CDATA[
+		    //if the user has configured this box to auto-close, do not try to
+		    //attach the cam to the preview (black) box
+		    var sharedData = this.checkDeviceSettingsRememberStatus();
+	        if(sharedData != null) {
+	            return;
+	        }
+		
+			if (_video == undefined) return;
+			_video.content._publisher.setAttribute("visibility", "hidden");
+			_video.content._viewer.setAttribute("visibility", "visible");
+			var videoview = _video.content._viewer._chatvideoinner._videostream;
+			var _camera = getCam(availibleCams.getValue(), videoview);
+			if (_camera != null) {
+				videoview._stop();
+				videoview.attachCamera(_camera);
+				if (_camera.muted) {
+					if (cameraUnmuted) {
+						_camera.removeEventListener(StatusEvent.STATUS, cameraStatusHandler);
+					} else {
+						_camera.addEventListener(StatusEvent.STATUS, cameraStatusHandler);
+					}
 				}
 			}
-		}
+		]]>
 	</method>
 	
 	<method name="cameraStatusHandler" args="stats">
