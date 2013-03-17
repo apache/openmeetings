@@ -134,6 +134,7 @@
                 if (this.doDefaultAnimation && !canvas.isInterview) {
                     this._chooseDeviceAnimation.setAttribute('started', true);
                 }
+                this.initItemsAndDefaultAttachCamera();
             }
 	        
 	        if (canvas.isInterview) {
@@ -522,8 +523,55 @@
         	]]>
         </handler>
     </resetCombobox>
+    
+    <attribute name="executeAttachCamera" value="false" type="boolean" />
 
-	<attribute name="cameraUnmuted" type="boolean" value="false"/>
+    <!-- 
+        Initialize the default settings for cam and resolution and attach the camera 
+        after we have made sure the values are there one time
+     -->
+	<method name="initItemsAndDefaultAttachCamera">
+        <![CDATA[
+            //Initialize and get eventually stored camera
+            var t:SharedObject = SharedObject.getLocal('userdata');
+            var g = t.data;
+            var cam;
+            if (g != null){
+                cam = ""+g["cam"];
+            }
+        
+            //Get all availible Cam's
+            var tw = Camera.names;
+            var r = "";
+            var foundStoredCam = null;
+            for (var eg=0;eg<tw.length;eg++){
+                this.availibleCams.addItem(tw[eg],eg);
+                r=""+eg;
+                if (r == cam) {
+                    foundStoredCam = r;
+                }
+            }
+            
+            if (foundStoredCam != null) {
+                this.availibleCams.selectItem(foundStoredCam);
+            } else {
+                if (tw.length > 0) {
+                    this.availibleCams.selectItemAt(0);
+                }
+            }
+            
+            //Initialize and set default resolutions combobox
+            if ($debug) Debug.write("myConfigSet 1 ",canvas.myConfigSet);
+            if ($debug) Debug.write("myConfigSet 2 ",canvas.myConfigSet.getPointer().xpathQuery('config/availableCameraResolutions/resolution'));
+            if ($debug) Debug.write("myConfigSet 3 ",canvas.myConfigSet.getPointer().xpathQuery('config/availableCameraResolutions/resolution/'));
+            if ($debug) Debug.write("myConfigSet 4 ",canvas.myConfigSet.getPointer().xpathQuery('config/availableCameraResolutions/resolution/*'));
+            
+            this.executeAttachCamera = true;
+            
+            this.attachCamera();
+        ]]>
+    </method>
+	
 	<method name="attachCamera">
 	    <![CDATA[
 		    //if the user has configured this box to auto-close, do not try to
@@ -532,75 +580,43 @@
 	        if(sharedData != null) {
 	            return;
 	        }
+	        
+	        //Don't execute before combobox items are not initialized
+	        if (!this.executeAttachCamera) {
+	            if ($debug) Debug.write("Return, executeAttachCamera is false");
+                return;
+	        }
 		
-			if (_video == undefined) return;
-			_video.content._publisher.setAttribute("visibility", "hidden");
-			_video.content._viewer.setAttribute("visibility", "visible");
-			var videoview = _video.content._viewer._chatvideoinner._videostream;
+			if (_video == undefined)  {
+			    if ($debug) Debug.write("Return, video video not yet ready");
+                return;
+			}
+			_video.content._publisher.setAttribute("visibility", "visible");
+			_video.content._viewer.setAttribute("visibility", "hidden");
+			var videoview = this._video.content._publisher._chatvideoinner._videostream;
 			var _camera = getCam(availibleCams.getValue(), videoview);
 			if (_camera != null) {
+			    //stop will not call clear as there is no NetStream
 				videoview._stop();
+				videoview.clear();
 				videoview.attachCamera(_camera);
-				if (_camera.muted) {
-					if (cameraUnmuted) {
-						_camera.removeEventListener(StatusEvent.STATUS, cameraStatusHandler);
-					} else {
-						_camera.addEventListener(StatusEvent.STATUS, cameraStatusHandler);
-					}
-				}
 			}
 		]]>
 	</method>
 	
-	<method name="cameraStatusHandler" args="stats">
-		if (stats.code == "Camera.Unmuted") {
-			cameraUnmuted = true;
-			attachCamera();
-		}
+	<method name="cleanVideos">
+	   if (_video == undefined) return;
+	   //make sure stop and clear is called, as the _stop method does not work for all
+	   //videoviews in the device settings.
+	   _video.content._publisher._chatvideoinner._videostream._stop();
+       _video.content._viewer._chatvideoinner._videostream._stop();
+       _video.content._publisher._chatvideoinner._videostream.clear();
+       _video.content._viewer._chatvideoinner._videostream.clear();
+       if ($debug) Debug.write("Cleaned up videos and free resources");
 	</method>
 	
     <labelText name="availibleCamsLabel" labelid="52" fontsize="11" x="10" y="140" width="$once{ parent.width-20 }" />
     <resetCombobox fontsize="11" name="availibleCams" x="10" y="160" width="280" editable="false">
-        <switch>
-            <when property="$as3">
-                <passthrough>
-                    import flash.media.Camera;
-                    import flash.net.SharedObject;
-                </passthrough>
-            </when>
-        </switch>
-        <handler name="oninit">
-            <![CDATA[
-            	//Get eventually stored camera
-            	var t:SharedObject = SharedObject.getLocal('userdata');
-				var g = t.data;
-				var cam;
-                if (g != null){
-                    cam = ""+g["cam"];
-                }
-            
-				//Get all availible Cam's
-				var tw = Camera.names;
-				var r = "";
-				 var foundStoredCam = null;
-				for (var eg=0;eg<tw.length;eg++){
-					this.addItem(tw[eg],eg);
-					r=""+eg;
-					if (r == cam) {
-						foundStoredCam = r;
-					}
-				}
-				
-				if (foundStoredCam != null) {
-					this.selectItem(foundStoredCam);
-				} else {
-					if (tw.length > 0) {
-						this.selectItemAt(0);
-					}
-				}
-            ]]>
-        </handler>
-        
 		<handler name="onselect">
 			parent.attachCamera();
 		</handler>
@@ -705,9 +721,7 @@
 	                </passthrough>
 	            </when>
 	        </switch>
-            <!--- @keywords private -->
             <attribute name="cam_width" value="320" type="number" />
-            <!--- @keywords private -->
             <attribute name="cam_height" value="240" type="number" />
             <handler name="ondata">
                 <![CDATA[
@@ -723,12 +737,10 @@
                     var width = g["width"];
                     var height = g["height"];
                     if (width!=null && width > 0 && height!=null && height>0) {
-                        
                         if (width == this.cam_width && height == this.cam_height) {
                             parent.selectItemAt(parent.counter);
                             parent.onselect.sendEvent(this);
                         }
-                        
                     } else {
                         if (isDefault == "true") {
                             if ($debug) Debug.write("Found default one ",type);
@@ -859,6 +871,7 @@
     <simpleLabelButton fontsize="11" visibility="${ (canvas.isInterview) ? 'visible' : 'hidden' }"
                        labelid="54" x="${ parent.width-220 }" y="${ parent.height-50 }" width="100">
         <handler name="onclick">
+            parent.cleanVideos();
             this.parent.storelocaldata();
             this.parent.chosenCam = parent.availibleCams.getValue();
             this.parent.chosenMic = parent.availibleMics.getValue();
@@ -874,6 +887,7 @@
     <simpleLabelButton fontsize="11" visibility="${ (canvas.isInterview) ? 'visible' : 'hidden' }"
                        labelid="918" x="${ parent.width-110 }" y="${ parent.height-50 }" width="100">
         <handler name="onclick">
+            parent.cleanVideos();
             parent.close();
         </handler>
     </simpleLabelButton>
@@ -881,6 +895,7 @@
     <simpleLabelButton fontsize="11" visibility="${ (!canvas.isInterview) ? 'visible' : 'hidden' }"
     				   labelid="761" width="160" x="${ parent.width-170 }" y="${ parent.height-50 }" height="28">
         <handler name="onclick">
+            parent.cleanVideos();
         	this.parent.storelocaldata();
         	this.parent.chosenCam = parent.availibleCams.getValue();
         	this.parent.chosenMic = parent.availibleMics.getValue();

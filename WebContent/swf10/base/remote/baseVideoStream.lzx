@@ -282,6 +282,9 @@
             this._ns.close();
             this._ns = null;
         } else {
+            this.clear();
+            this._ns.close();
+            this._ns = null;
 			if ($debug) Debug.warn("Not known Mode: ",this.mode,this);
 		}
 	</method>

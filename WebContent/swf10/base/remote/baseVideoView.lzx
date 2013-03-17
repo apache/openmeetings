@@ -89,10 +89,12 @@
     </method>
 
 	<method name="clear">
+	    if ($debug) Debug.write("Select unattach :3");
 		var vid = this._getflashvideo();
 		vid.attachNetStream(null);
 		vid.attachCamera(null);
 		this.__LZvideo.clear();
+		if ($debug) Debug.write("Select unattach : 4");
 	</method>
 </class>
 
