@@ -41,7 +41,7 @@ import org.apache.openmeetings.persistence.beans.IDataProviderEntity;
 		, query = "SELECT m FROM MailMessage m WHERE m.status = :status ORDER BY m.updated, m.inserted")
 	, @NamedQuery(name = "countMailMessages", query = "SELECT COUNT(m) FROM MailMessage m WHERE m.status = :status")
 })
-@Table(name = "email")
+@Table(name = "email_queue")
 public class MailMessage implements IDataProviderEntity {
 	public enum Status {
 		NONE
@@ -83,9 +83,13 @@ public class MailMessage implements IDataProviderEntity {
 	@Column(name = "updated")
 	private Calendar updated;
 	
-	@Column(name = "errorCount", nullable = false)
+	@Column(name = "error_count", nullable = false)
 	private int errorCount = 0;
 	
+	@Lob
+	@Column(name = "last_error")
+	private String lastError;
+
 	public MailMessage(String recipients, String replyTo, String subject, String body) {
 		this(recipients, replyTo, subject, body, null);
 	}
@@ -176,5 +180,13 @@ public class MailMessage implements IDataProviderEntity {
 
 	public void setErrorCount(int errorCount) {
 		this.errorCount = errorCount;
+	}
+
+	public String getLastError() {
+		return lastError;
+	}
+
+	public void setLastError(String lastError) {
+		this.lastError = lastError;
 	}
 }

@@ -20,6 +20,8 @@ package org.apache.openmeetings.utils.mail;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -203,10 +205,16 @@ public class MailHandler {
 					// -- Send the message --
 					try {
 						Transport.send(getMimeMessage(m));
+						m.setLastError("");
 						m.setStatus(Status.DONE);
 					} catch (Exception e) {
 						log.error("Error while sending message", e);
 						m.setErrorCount(m.getErrorCount() + 1);
+						StringWriter sw = new StringWriter();
+						PrintWriter pw = new PrintWriter(sw);
+						e.printStackTrace(pw);
+						pw.close();
+						m.setLastError(sw.getBuffer().toString());
 						m.setStatus(m.getErrorCount() < MAXIMUM_ERROR_COUNT ? Status.NONE : Status.ERROR);
 					}
 					if (m.getId() != null) {
