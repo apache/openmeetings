@@ -90,6 +90,10 @@ public class MailMessage implements IDataProviderEntity {
 	@Column(name = "last_error")
 	private String lastError;
 
+	public MailMessage() {
+		this(null, null, null, null, null);
+	}
+	
 	public MailMessage(String recipients, String replyTo, String subject, String body) {
 		this(recipients, replyTo, subject, body, null);
 	}
