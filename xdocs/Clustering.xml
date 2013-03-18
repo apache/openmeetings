@@ -117,7 +117,7 @@
 					</div>
 				</li> 
 			</ul>
-			<img src="images/cluster1.png" alt="" width="852" height="603" />
+			<img src="images/cluster1.png" alt="" width="650" height="461" />
 		</section>
 		<section name="Ensure everything works as expected">
 			<ul>
@@ -133,7 +133,7 @@
 				and check in the column "servers" where they are located. They should be on different server.
 				</li>
 			</ul>
-			<img src="images/cluster2.png" alt="" width="852" height="603" />
+			<img src="images/cluster2.png" alt="" width="650" height="369" />
 		</section>
 	</body>
 </document>
