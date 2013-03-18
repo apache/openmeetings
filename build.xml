@@ -917,6 +917,12 @@
 			<fileset dir="${webcontent.src.dir}/jrebel" includes="red5-debug.*"/>
 		</copy>
 	</target>
+	<target name="-patch-red5-server-highperf-script">
+		<echo>Going to patch red5-highperf.bat</echo>
+		<copy todir="${red5.lib}" overwrite="true" force="true">
+			<fileset dir="${webcontent.src.dir}/red5" includes="red5-highperf.bat" />
+		</copy>
+	</target>
 	
 	<!-- Check for the Red5 server libraries -->
 	<target name="-retrieve-red5-server" unless="red5.installed" description="Retrieves the libraries if needed" depends="-ant-task">
@@ -966,6 +972,7 @@
 			<fileset dir="${red5.server.lib}" includes="jaudiotagger*.jar" />
 		</delete>
 		<antcall target="-patch-red5-server-start-script"/> 
+		<antcall target="-patch-red5-server-highperf-script"/> 
 	</target>
 	
 	<!-- Check for the Red5 client libraries -->
