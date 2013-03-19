@@ -113,7 +113,7 @@
 		</property>
 		<property name="concurrent" value="false" />
 	</bean>
-	<bean id="triggerSessionClear" class="org.springframework.scheduling.quartz.SimpleTriggerBean">
+	<bean id="triggerSessionClear" class="org.springframework.scheduling.quartz.SimpleTriggerFactoryBean">
 		<property name="jobDetail">
 			<!-- see the example of method invoking job above -->
 			<ref bean="sessionClearJob" />
@@ -138,7 +138,7 @@
 		</property>
 		<property name="concurrent" value="false" />
 	</bean>
-	<bean id="triggerMeetingReminder" class="org.springframework.scheduling.quartz.SimpleTriggerBean">
+	<bean id="triggerMeetingReminder" class="org.springframework.scheduling.quartz.SimpleTriggerFactoryBean">
 		<property name="jobDetail">
 			<!-- see the example of method invoking job above -->
 			<ref bean="meetingReminderClear" />
@@ -162,7 +162,7 @@
 		</property>
 		<property name="concurrent" value="false" />
 	</bean>
-	<bean id="triggerTestSetupCleanup" class="org.springframework.scheduling.quartz.SimpleTriggerBean">
+	<bean id="triggerTestSetupCleanup" class="org.springframework.scheduling.quartz.SimpleTriggerFactoryBean">
 		<property name="jobDetail">
 			<ref bean="testSetupCleanup" />
 		</property>
@@ -185,7 +185,7 @@
 		</property>
 		<property name="concurrent" value="false" />
 	</bean>
-	<bean id="triggerResetSendingMailStatus" class="org.springframework.scheduling.quartz.SimpleTriggerBean">
+	<bean id="triggerResetSendingMailStatus" class="org.springframework.scheduling.quartz.SimpleTriggerFactoryBean">
 		<property name="jobDetail">
 			<ref bean="resetSendingMailStatus" />
 		</property>
@@ -205,7 +205,7 @@
 		</property>
 		<property name="concurrent" value="false" />
 	</bean>
-	<bean id="triggerSendMails" class="org.springframework.scheduling.quartz.SimpleTriggerBean">
+	<bean id="triggerSendMails" class="org.springframework.scheduling.quartz.SimpleTriggerFactoryBean">
 		<property name="jobDetail">
 			<ref bean="sendMails" />
 		</property>

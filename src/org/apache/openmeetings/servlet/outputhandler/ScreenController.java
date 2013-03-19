@@ -40,6 +40,7 @@ import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
 import org.apache.velocity.context.Context;
 import org.apache.velocity.runtime.RuntimeConstants;
+import org.apache.velocity.runtime.log.Log4JLogChute;
 import org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -211,6 +212,7 @@ public class ScreenController {
 			VelocityEngine ve = new VelocityEngine();
 			ve.setProperty(RuntimeConstants.RESOURCE_LOADER, "classpath"); 
 			ve.setProperty("classpath.resource.loader.class", ClasspathResourceLoader.class.getName());
+			ve.setProperty(Log4JLogChute.RUNTIME_LOG_LOG4J_LOGGER, Log4JLogChute.class.getName()); 
 			
 			ve.mergeTemplate(
 				"screenshare.vm"

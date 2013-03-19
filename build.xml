@@ -17,6 +17,7 @@
 	xmlns="antlib:org.apache.tools.ant"
 	xmlns:rat="antlib:org.apache.rat.anttasks"
 	xmlns:ivy="antlib:org.apache.ivy.ant"
+	xmlns:artifact="antlib:org.apache.maven.artifact.ant"
 	>
 	<loadproperties srcFile="build.properties" />
 
@@ -106,6 +107,7 @@
 
 	<target name="prepare.mkdir" depends="-java6or7.check">
 		<mkdir dir="${red5.server.lib}" />
+		<mkdir dir="${red5.lib}/log" />
 		<mkdir dir="${red5.client.dir}/dist" />
 		<mkdir dir="${dist.dir}" />
 		<mkdir dir="${main.out.dir}" />
@@ -439,6 +441,7 @@
 		<copy todir="${screenshare.out.dir}">
 			<fileset dir="${screensharing.resources}" includes="*.jpg" />
 			<fileset dir="${red5.server.lib}" includes="commons-codec*.jar" />
+			<fileset dir="${red5.server.lib}" includes="commons-lang3*.jar" />
 			<fileset dir="${red5.server.lib}" includes="httpclient*.jar" />
 			<fileset dir="${red5.server.lib}" includes="httpcore*.jar" />
 			<fileset dir="${red5.server.lib}" includes="bcprov*.jar" />
@@ -447,7 +450,7 @@
 			<fileset dir="${red5.server.lib}" includes="slf4j-api*.jar" />
 			<fileset dir="${red5.server.lib}" includes="jcl-over-slf4j*.jar" />
 			<fileset dir="${red5.server.lib}" includes="commons-collections*.jar" />
-			<fileset dir="${red5.lib}" includes="red5.jar" />
+			<fileset dir="${red5.lib}" includes="red5-server*.jar" excludes="*bootstrap.jar" />
 			<fileset dir="${red5.server.lib}" includes="spring-context-3*.jar" />
 			<fileset dir="${red5.server.lib}" includes="spring-core-*.jar" />
 			<fileset dir="${red5.server.lib}" includes="spring-beans-*.jar" />
@@ -726,7 +729,7 @@
 	</path>
 
 	<target name="anakia" depends="-retrieve-mainlibs,-retrieve-om,-retrieve-anakia">
-		<taskdef name="anakia" classname="org.apache.velocity.anakia.AnakiaTask">
+		<taskdef name="anakia" classname="org.apache.anakia.AnakiaTask">
 			<classpath>
 				<path refid="anakia.classpath" />
 			</classpath>
@@ -917,36 +920,51 @@
 			<fileset dir="${webcontent.src.dir}/jrebel" includes="red5-debug.*"/>
 		</copy>
 	</target>
-	<target name="-patch-red5-server-highperf-script">
-		<echo>Going to patch red5-highperf.bat</echo>
-		<copy todir="${red5.lib}" overwrite="true" force="true">
-			<fileset dir="${webcontent.src.dir}/red5" includes="red5-highperf.bat" />
-		</copy>
+	
+	<target name="-maven-task" unless="maven.installed">
+		<antcall target="-retrieve" inheritAll="true" inheritRefs="true">
+			<param name="ivy.conf.name" value="mvn" />
+			<param name="ivy.lib.location" value="${project.lib.dir}" />
+		</antcall>
+		<path id="maven-ant-tasks.classpath">
+			<fileset dir="${project.lib.dir}" includes="maven-ant-tasks*.jar" />
+		</path>
+		<typedef resource="org/apache/maven/artifact/ant/antlib.xml"
+			uri="antlib:org.apache.maven.artifact.ant"
+			classpathref="maven-ant-tasks.classpath" />
+		
+		<property name="maven.installed" value="true" />
 	</target>
 	
 	<!-- Check for the Red5 server libraries -->
-	<target name="-retrieve-red5-server" unless="red5.installed" description="Retrieves the libraries if needed" depends="-ant-task">
+	<target name="-retrieve-red5-server" unless="red5.installed" description="Retrieves the libraries if needed" depends="-ant-task,-maven-task">
 		<svn refid="svn.settings">
 			<checkout url="http://red5.googlecode.com/svn/java/server/trunk/" revision="${red5.server.revision}" destPath="${red5.server.dir}" />
 		</svn>
+		<artifact:mvn pom="${red5.server.dir}/pom.xml" mavenVersion="${maven.version}" fork="true" dir="${red5.server.dir}">
+			<jvmarg value="-Dmaven.buildNumber.doUpdate=false" />
+			<!--jvmarg value="-Dassembly.skipAssembly=true" /-->
+			<arg value="clean"/>
+			<arg value="install"/>
+			<jvmarg value="-Dmaven.test.skip=true" />
+		</artifact:mvn>
+		<untar src="${red5.server.dir}/target/red5-server-${red5.server.version}-server.tar.gz" dest="${red5.server.dir}/target" compression="gzip"/>
+		<move todir="${red5.lib}">
+			<fileset dir="${red5.server.dir}/target/red5-server-${red5.server.version}">
+				<include name="**/*"/>
+			</fileset>
+		</move>
+		
 		<!-- START of Tomcat 7 patch -->
 		<delete>
-			<fileset dir="${red5.server.dir}/plugins" includes="*.jar" />
+			<fileset dir="${red5.lib}/plugins" includes="*.jar" />
 		</delete>
 		<antcall target="-retrieve" inheritAll="true" inheritRefs="true">
 			<param name="ivy.conf.name" value="tomcat7" />
-			<param name="ivy.lib.location" value="${red5.server.dir}/plugins" />
+			<param name="ivy.lib.location" value="${red5.lib}/plugins" />
 		</antcall>
-		<!-- END of Tomcat 7 patch -->
-		<xslt in="${red5.server.dir}/ivy.xml" out="${red5.server.dir}/ivy1.xml" style="build-red5_ivy.xsl" />
-		<move file="${red5.server.dir}/ivy1.xml" tofile="${red5.server.dir}/ivy.xml" />
-		<xslt in="${red5.server.dir}/ivysettings.xml" out="${red5.server.dir}/ivysettings1.xml" style="build-red5_ivysettings.xsl" />
-		<move file="${red5.server.dir}/ivysettings1.xml" tofile="${red5.server.dir}/ivysettings.xml" />
-		<subant target="dist">
-			<fileset dir="${red5.server.dir}" includes="build.xml" />
-		</subant>
-		<!-- START of Tomcat 7 patch -->
 		<delete file="${red5.lib}/lib/javaee-api-5.1.2.jar" />
+		<delete file="${red5.lib}/lib/servlet-api-2.5.jar" />
 		<!-- END of Tomcat 7 patch -->
 		<delete dir="${red5.lib}/webapps/installer" />
 		<delete dir="${red5.lib}/webapps/live" />
@@ -954,13 +972,13 @@
 		<copy todir="${red5.lib}/conf" overwrite="true" force="true">
 			<fileset dir="${webcontent.src.dir}/red5" includes="jee-container*.xml" />
 		</copy>
-		<copy file="${red5.server.dir}/src/conf/red5.properties" todir="${red5.lib}/conf" overwrite="true" force="true">
+		<!--copy file="${red5.server.dir}/src/conf/red5.properties" todir="${red5.lib}/conf" overwrite="true" force="true">
 			<filterchain>
 				<tokenfilter>
 					<replaceregex pattern="^[ \t]*rtmpt.target_reponse_size[ \t]*=.*$" replace="rtmpt.target_reponse_size=65536"/>
 				</tokenfilter>
 			</filterchain>
-		</copy>
+		</copy-->
 		<copy file="${webcontent.src.dir}/red5/index.html" todir="${red5.lib}/webapps/root" overwrite="true" force="true" />
 		<copy todir="${red5.lib}" overwrite="true" force="true">
 			<fileset dir="${webcontent.src.dir}/red5" includes="admin.*,network_test.sh" />
@@ -972,7 +990,6 @@
 			<fileset dir="${red5.server.lib}" includes="jaudiotagger*.jar" />
 		</delete>
 		<antcall target="-patch-red5-server-start-script"/> 
-		<antcall target="-patch-red5-server-highperf-script"/> 
 	</target>
 	
 	<!-- Check for the Red5 client libraries -->
@@ -980,15 +997,20 @@
 		<svn refid="svn.settings">
 			<checkout url="http://red5.googlecode.com/svn/java/client/trunk/" revision="${red5.client.revision}" destPath="${red5.client.dir}" />
 		</svn>
-		<copy file="${red5.lib}/red5.jar" todir="${red5.client.dir}/lib" overwrite="true" force="true" />
-		<xslt in="${red5.client.dir}/ivy.xml" out="${red5.client.dir}/ivy1.xml" style="build-red5_ivy.xsl" />
-		<move file="${red5.client.dir}/ivy1.xml" tofile="${red5.client.dir}/ivy.xml" />
-		<subant target="dist">
-			<fileset dir="${red5.client.dir}" includes="build.xml" />
-		</subant>
-		<!-- START of Tomcat 7 patch -->
-		<delete file="${red5.client.lib}/lib/javaee-api-5.1.2.jar" />
-		<!-- END of Tomcat 7 patch -->
+		<delete>
+			<fileset dir="${red5.client.dir}/lib" includes="red5-server*.jar" />
+		</delete>
+		<copy file="${red5.lib}/red5-server.jar" todir="${red5.client.dir}/lib" overwrite="true" force="true" />
+		<artifact:mvn pom="${red5.client.dir}/pom.xml" mavenVersion="${maven.version}" fork="true" dir="${red5.client.dir}">
+			<jvmarg value="-Dmaven.buildNumber.doUpdate=false" />
+			<!--jvmarg value="-Dassembly.skipAssembly=true" /-->
+			<arg value="clean"/>
+			<arg value="install"/>
+			<jvmarg value="-Dmaven.test.skip=true" />
+		</artifact:mvn>
+		<copy todir="${red5.client.lib}" overwrite="true" force="true">
+			<fileset dir="${red5.client.dir}/target" includes="red5-client-*.jar" excludes="*javadoc.jar,*sources.jar" />
+		</copy>
 		<echo message="Red5 Client build" />
 	</target>
 
