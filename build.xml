@@ -871,7 +871,7 @@
 	<target name="-availability-check" unless="red5.installed" description="Check which libraries need to be retrieved" depends="prepare.mkdir">
 		<available classpathref="check.classpath" classname="javax.persistence.spi.PersistenceProvider" property="mainlib.installed" />
 		<available classpathref="check.classpath" classname="org.apache.axis2.Version" property="om.installed" />
-		<available classpathref="check.classpath" classname="org.junit.Test" property="junit.installed" />
+		<available classpathref="check.classpath" classname="net.sf.antcontrib.AntContribVersion" property="junit.installed" />
 		<available classpathref="check.classpath" classname="com.thaiopensource.relaxng.translate.Driver" property="dtd-generator.installed" />
 		<available classpathref="check.classpath" classname="org.apache.commons.cli.CommandLine" property="cmdadmin.installed" />
 		<condition property="anakia.installed">
