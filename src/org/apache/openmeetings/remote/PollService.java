@@ -29,8 +29,8 @@ import org.apache.openmeetings.data.user.UserManager;
 import org.apache.openmeetings.persistence.beans.poll.PollType;
 import org.apache.openmeetings.persistence.beans.poll.RoomPoll;
 import org.apache.openmeetings.persistence.beans.poll.RoomPollAnswers;
-import org.apache.openmeetings.remote.red5.ScopeApplicationAdapter;
 import org.apache.openmeetings.persistence.beans.room.Client;
+import org.apache.openmeetings.remote.red5.ScopeApplicationAdapter;
 import org.apache.openmeetings.session.ISessionManager;
 import org.red5.logging.Red5LoggerFactory;
 import org.red5.server.api.IConnection;
@@ -152,7 +152,8 @@ public class PollService implements IPendingServiceCallback {
 								&& rcl.getIsScreenClient()) {
 							// continue;
 						} else {
-							if (rcl.getRoom_id() != null && rcl.getRoom_id().equals(rc.getRoom_id())) {
+							if (rcl.getRoom_id() != null && rcl.getRoom_id().equals(rc.getRoom_id())
+									&& userManager.getUserById(rcl.getUser_id())!=null) {
 								((IServiceCapableConnection) conn).invoke(
 										clientFunction, obj,
 										scopeApplicationAdapter);
@@ -186,6 +187,11 @@ public class PollService implements IPendingServiceCallback {
 			long roomId = rc.getRoom_id();
 			if (!pollManager.hasPoll(roomId)) {
 				log.error("POLL IS NULL for RoomId: " + rc.getRoom_id());
+				return -1;
+			}
+			
+			if(userManager.getUserById(rc.getUser_id())==null){
+				log.debug("vote: Invited users can not vote");
 				return -1;
 			}
 			if (pollManager.hasVoted(roomId, rc.getUser_id())) {
@@ -246,6 +252,10 @@ public class PollService implements IPendingServiceCallback {
 					.getClientByStreamId(streamid, null);
 
 			long roomId = rc.getRoom_id();
+			if(userManager.getUserById(rc.getUser_id())==null){
+				log.debug("checkHasVoted: Invited users can not vote");
+				return -1;
+			}
 			if (pollManager.hasPoll(roomId)) {
 				return pollManager.hasVoted(roomId, rc.getUser_id()) ? -1 : 1;
 			} else {
