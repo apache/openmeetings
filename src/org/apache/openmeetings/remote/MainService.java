@@ -52,8 +52,8 @@ import org.apache.openmeetings.persistence.beans.basic.SOAPLogin;
 import org.apache.openmeetings.persistence.beans.basic.Sessiondata;
 import org.apache.openmeetings.persistence.beans.room.Client;
 import org.apache.openmeetings.persistence.beans.user.State;
-import org.apache.openmeetings.persistence.beans.user.Userdata;
 import org.apache.openmeetings.persistence.beans.user.User;
+import org.apache.openmeetings.persistence.beans.user.Userdata;
 import org.apache.openmeetings.remote.red5.ScopeApplicationAdapter;
 import org.apache.openmeetings.remote.util.SessionVariablesUtil;
 import org.apache.openmeetings.rss.LoadAtomRssFeed;
@@ -808,7 +808,11 @@ public class MainService implements IPendingServiceCallback {
 			} else if (port.equals("443")) {
 				baseURL = "https://" + domain + webapp;
 			}
-
+			String tz = (String)regObject.get("jNameTimeZone");
+			if (tz == null || tz.length() == 0) {
+				//Empty tz
+				return -55L;
+			}
 			return userManager.registerUser(regObject.get("Username")
 					.toString(), regObject.get("Userpass").toString(),
 					regObject.get("lastname").toString(),
@@ -822,7 +826,7 @@ public class MainService implements IPendingServiceCallback {
 							.longValue(), regObject.get("town").toString(),
 					Long.valueOf(regObject.get("language_id").toString())
 							.longValue(), "", false, baseURL, true,
-					regObject.get("jNameTimeZone").toString());
+					tz);
 		} catch (Exception ex) {
 			log.error("registerUserByObject", ex);
 		}

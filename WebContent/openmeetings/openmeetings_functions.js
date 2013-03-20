@@ -40,12 +40,14 @@ function redirectToUrl(url) {
 	document.getElementById("lzapp").redirectToUrlCallback("ok");
 }
 
-function getTimeZoneOffset(){
-	var rightNow = new Date();
-            var jan1 = new Date(rightNow.getFullYear(), 0, 1, 0, 0, 0, 0);
-            var temp = jan1.toGMTString();
-            var jan2 = new Date(temp.substring(0, temp.lastIndexOf(" ")-1));
-            var std_time_offset = (jan1 - jan2) / (1000 * 60 * 60);
-            
+function getTimeZoneOffset() {
+	var rightNow = new Date(), std_time_offset = -rightNow.getTimezoneOffset() / 60;
+	for (var i = 0; i < 12; ++i) {
+		var d = new Date(rightNow.getFullYear(), i, 1, 0, 0, 0, 0), offset = -d.getTimezoneOffset() / 60;
+		if (offset < std_time_offset) {
+			std_time_offset = offset;
+			break;
+		}
+	}
     document.getElementById("lzapp").getTimeZoneOffsetCallback(std_time_offset);
 }

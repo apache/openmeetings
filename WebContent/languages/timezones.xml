@@ -48,6 +48,7 @@
 		For updating the JRE runtime with different tz-file, see:		
 		http://www.oracle.com/technetwork/java/javase/timezones-137583.html
 	 -->
+    <timezone orderId="0" name="Etc/GMT+13" label="Samoa" iCal="Pacific/Apia" />
 	<timezone orderId="1" name="Etc/GMT+12 (New Zealand)" label="New Zealand" iCal="Pacific/Auckland" />
     <timezone orderId="1" name="Etc/GMT+12" label="Kiribati (Gilbert Islands), Fiji, Russia (Kamchatka Krai)" iCal="Pacific/Fiji" />
     <timezone orderId="2" name="Etc/GMT+11" label="Vladivostok, Kamchatka, Solomon Islands, New Caledonia" iCal="Asia/Vladivostok" />
@@ -92,5 +93,4 @@
     <timezone orderId="28" name="Etc/GMT-9" label="Anchorage, Fairbanks, Juneau" iCal="America/Juneau" />
     <timezone orderId="28" name="Etc/GMT-9 (Alaska)" label="United States (most of Alaska)" iCal="US/Alaska" />
     <timezone orderId="29" name="Etc/GMT-10" label="Hawaii" iCal="Pacific/Honolulu" />
-    <timezone orderId="30" name="Etc/GMT-11" label="Samoa" iCal="Pacific/Apia" />
 </timezones>

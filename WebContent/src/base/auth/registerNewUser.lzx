@@ -108,7 +108,7 @@
                        fontsize="11" style="componentStyle">
             <labeldTextListItem datapath="timeZoneSet:/item" text="$path{ 'frontEndLabel/text()' }" 
                 value="$path{ 'jname/text()' }" />
-         </resetCombobox>         				
+         </resetCombobox>
          
     <labelText labelid="120" width="300" y="252" resize="false" x="2"/>  
 

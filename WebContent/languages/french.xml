@@ -4643,4 +4643,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
   <string id="1539" name="exclusive_audio_confirm">
     <value>Voulez-vous vraiment donner l'audio exclusif à cet utilisateur ?</value>
   </string>
+  <string id="1540" name="no_timezone">
+    <value>Please specify your timezone</value>
+  </string>
 </language>
