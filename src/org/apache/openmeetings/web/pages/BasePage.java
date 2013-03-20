@@ -50,7 +50,6 @@ public abstract class BasePage extends WebPage {
 	public void renderHead(IHeaderResponse response) {
 		response.render(JavaScriptHeaderItem.forReference(Application.get()
 				.getJavaScriptLibrarySettings().getJQueryReference()));
-		response.render(JavaScriptHeaderItem.forUrl("js/jquery-ui-1.9.0.custom.min.js", "jquery-ui"));
 		super.renderHead(response);
 	}
 }

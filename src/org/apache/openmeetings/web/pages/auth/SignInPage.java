@@ -32,6 +32,8 @@ import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
+import com.googlecode.wicket.jquery.ui.JQueryAbstractBehavior;
+
 public class SignInPage extends BasePage {
 	private static final long serialVersionUID = -3843571657066167592L;
 	
@@ -40,6 +42,14 @@ public class SignInPage extends BasePage {
 	}
 	
 	public SignInPage() {
+		add(new JQueryAbstractBehavior("name") {
+			private static final long serialVersionUID = -8915882511038880055L;
+
+			@Override
+			protected String $() {
+				return "";
+			}
+		});
 		add(new SignInForm("signin"));
 	}
 	

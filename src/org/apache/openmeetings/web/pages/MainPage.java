@@ -22,7 +22,7 @@ import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.components.ConfirmableAjaxLink;
 import org.apache.openmeetings.web.components.MenuPanel;
-import org.apache.openmeetings.web.components.user.AboutPanel;
+import org.apache.openmeetings.web.components.user.AboutDialog;
 import org.apache.openmeetings.web.components.user.ChatPanel;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -56,15 +56,16 @@ public class MainPage extends BasePage {
 				setResponsePage(Application.get().getSignInPageClass());
 			}
 		});
+		final AboutDialog about = new AboutDialog("aboutDialog");
 		add(new AjaxLink<Void>("about") {
 			private static final long serialVersionUID = 4065339709905366840L;
 
 			@Override
 			public void onClick(AjaxRequestTarget target) {
-				target.appendJavaScript("showAbout();");
+				about.open(target);
 			}
 		});
-		add(new AboutPanel("aboutDialog"));
+		add(about);
 		add(new ChatPanel("chatPanel"));
 		add(new WebSocketBehavior() {
 			private static final long serialVersionUID = -3311970325911992958L;

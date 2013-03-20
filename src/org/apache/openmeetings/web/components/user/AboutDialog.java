@@ -21,15 +21,20 @@ package org.apache.openmeetings.web.components.user;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.jar.Attributes;
 import java.util.jar.Manifest;
 
 import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
 import org.apache.openmeetings.web.app.Application;
-import org.apache.openmeetings.web.components.UserPanel;
+import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.basic.Label;
 
-public class AboutPanel extends UserPanel {
+import com.googlecode.wicket.jquery.ui.widget.dialog.AbstractDialog;
+import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
+
+public class AboutDialog extends AbstractDialog<String> {
 	private static final long serialVersionUID = 1400355222295594321L;
 	private static String version = null;
 	private static String revision = null;
@@ -73,10 +78,8 @@ public class AboutPanel extends UserPanel {
 		return buildDate;
 	}
 	
-	public AboutPanel(String id) {
-		super(id);
-		setOutputMarkupId(true);
-		setMarkupId(id);
+	public AboutDialog(String id) {
+		super(id, "About"); //FIXME hardcoded
 		
 		add(new Label("name", Application.getBean(ConfigurationDao.class).getConfValue(
 				"application.name"
@@ -85,5 +88,15 @@ public class AboutPanel extends UserPanel {
 		add(new Label("version", getVersion()));
 		add(new Label("revision", getRevision()));
 		add(new Label("buildDate", getBuildDate()));
+	}
+
+	@Override
+	protected List<DialogButton> getButtons() {
+		return new ArrayList<DialogButton>();
+	}
+	
+	@Override
+	protected void onClose(AjaxRequestTarget target, DialogButton button) {
+		//empty
 	}
 }
