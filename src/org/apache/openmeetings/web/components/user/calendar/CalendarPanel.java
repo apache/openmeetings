@@ -29,11 +29,11 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.Model;
 
+import com.googlecode.wicket.jquery.ui.JQueryAbstractBehavior;
 import com.googlecode.wicket.jquery.ui.Options;
 import com.googlecode.wicket.jquery.ui.calendar.Calendar;
 
 public class CalendarPanel extends UserPanel {
-
 	private static final long serialVersionUID = -6536379497642291437L;
 	
 	@Override
@@ -57,13 +57,31 @@ public class CalendarPanel extends UserPanel {
 		options.set("axisFormat", "'HH(:mm)'");
 		options.set("defaultEventMinutes", 60);
 		options.set("timeFormat", "{agenda: 'HH:mm{ - HH:mm}', '': 'HH(:mm)'}");
-		options.set("height", "function() {return getCalendarHeight();}");
-		//options.set("height", "getCalendarHeight()");
-		options.set("windowResize", "function() { this.option('height', getCalendarHeight()); }");
 		
-		Calendar calendar = new Calendar("calendar", new AppointmentModel(), options) {
+		final Calendar calendar = new Calendar("calendar", new AppointmentModel(), options) {
 			private static final long serialVersionUID = 8442068089963449950L;
+			
+			@Override
+			protected void onInitialize() {
+				super.onInitialize();
+				add(new JQueryAbstractBehavior("calendar-functions") {
+					private static final long serialVersionUID = -4154770823754288544L;
 
+					@Override
+					protected String $() {
+						return "$(function() { $(window).on('resize', setCalendarHeight); });\n"
+							+ "\n"
+							+ "function getCalendarHeight() { \n"
+							+  "\treturn $(window).height() - $('#" + getMarkupId() + "').position().top - 20;\n"
+							+ "}\n"
+							+ "function setCalendarHeight() { \n"
+							+  "\t$('#" + getMarkupId() + "').fullCalendar('option', 'height', getCalendarHeight());\n"
+							+ "}\n"
+							+ "setCalendarHeight();";
+					}
+				});
+			}
+			
 			@Override
 			protected boolean isSelectable() {
 				return true;
