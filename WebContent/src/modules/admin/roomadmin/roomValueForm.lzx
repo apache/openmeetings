@@ -102,7 +102,7 @@
     		this.rooms_id = obj.rooms_id;
     		
 			this.roomname.setAttribute('text',obj.name);
-			this.comment.setAttribute('text',obj.comment);
+			this.comment.setAttribute('text', canvas.getNotNullString(obj.comment));
 			this.ispublic.setValue(obj.ispublic);
             this.demoTime.setAttribute("enabled",true);
 			if ($debug) Debug.write("Appointment: ",obj.appointment);
@@ -150,7 +150,7 @@
                 this.isClosed.setValue(false);
             }
             
-            this.redirectURL.setAttribute("text",obj.redirectURL);
+            this.redirectURL.setAttribute("text", canvas.getNotNullString(obj.redirectURL));
                 
 			this.numberOfParticipants.selectItem(String(obj.numberOfPartizipants));
 			this.roomtype.selectItem(String(obj.roomtype.roomtypes_id));

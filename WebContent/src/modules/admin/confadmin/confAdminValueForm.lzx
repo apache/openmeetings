@@ -69,12 +69,8 @@
 			this.comment.setAttribute('text',obj.comment);
 			this.conf_key.setAttribute('text',obj.conf_key);
 			this.conf_value.setAttribute('text',obj.conf_value);
-			this.updatetime.setAttribute('text',obj.updatetime);
-            if(obj.users!=null){
-			    this.users_login.setAttribute('text',obj.user.login);
-            } else {
-                this.users_login.setAttribute('text','');
-            }
+			this.updatetime.setAttribute('text', canvas.getNotNullString(obj.updatetime));
+			this.users_login.setAttribute('text', canvas.getNotNullString(obj.user.login));
         ]]>
     </method>
 	

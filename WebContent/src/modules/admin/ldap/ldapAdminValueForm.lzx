@@ -101,7 +101,7 @@
             this.isActive.setValue(false);
         }
         
-        if (this.updated != null) {
+        if (obj.updated != null) {
             this.updated.setAttribute('text',obj.updated);
         } else {
         	this.updated.setAttribute('text','');
@@ -112,7 +112,7 @@
             this.updatedby.setAttribute('text','');
         }
         
-        if (this.inserted != null) {
+        if (obj.inserted != null) {
             this.inserted.setAttribute('text',obj.inserted);
         } else {
             this.inserted.setAttribute('text','');
