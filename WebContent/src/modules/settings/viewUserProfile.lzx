@@ -196,19 +196,19 @@
             ]]>
         </handler>
     </netRemoteCallHib> 
-	
+
 	<method name="showUserContactData">
 		<![CDATA[
 		
-            var tString = this.userObject.adresses.street + " " + this.userObject.adresses.additionalname + "<br/>";
-		    tString +=  this.userObject.adresses.zip + " " + this.userObject.adresses.town + "<br/>";
-		    tString +=  this.userObject.adresses.states.name + "<br/><br/>";
-            tString +=  this.userObject.adresses.email + "<br/>";
-            tString +=  this.userObject.adresses.phone + "<br/><br/>";
-            tString +=  this.userObject.adresses.comment + "<br/>";
-            
-            this.userContactData.setAttribute("text",tString);
-            
+			var tString = canvas.getNotNullString(this.userObject.adresses.street) + " " + canvas.getNotNullString(this.userObject.adresses.additionalname) + "<br/>";
+			tString += canvas.getNotNullString(this.userObject.adresses.zip) + " " + canvas.getNotNullString(this.userObject.adresses.town) + "<br/>";
+			tString += canvas.getNotNullString(this.userObject.adresses.states.name) + "<br/><br/>";
+			tString += canvas.getNotNullString(this.userObject.adresses.email) + "<br/>";
+			tString += canvas.getNotNullString(this.userObject.adresses.phone) + "<br/><br/>";
+			tString += canvas.getNotNullString(this.userObject.adresses.comment) + "<br/>";
+
+			this.userContactData.setAttribute("text",tString);
+
 		]]>
 	</method>
 	

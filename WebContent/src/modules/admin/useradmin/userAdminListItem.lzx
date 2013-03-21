@@ -30,8 +30,8 @@
 	
 	<turnOverTextItem text="$once{ parent.user_id }" width="60" />
 	<turnOverTextItem text="$once{ parent.login }" width="100" />
-	<turnOverTextItem text="$once{ parent.firstname }" width="132" />
-	<turnOverTextItem text="$once{ parent.lastname }" width="132" />
+	<turnOverTextItem text="$once{ canvas.getNotNullString(parent.firstname) }" width="132" />
+	<turnOverTextItem text="$once{ canvas.getNotNullString(parent.lastname) }" width="132" />
 	
 </class>
 

@@ -50,7 +50,7 @@
     <method name="sendRefresh">
     	this.getUserSelf.doCall();
     </method>    
-	
+
     <method name="initFields" args="obj">
     	<![CDATA[
             this.userObj = obj;
@@ -64,17 +64,17 @@
             }
 			
 			//this.username.setAttribute('text',obj.login);
-			this.firstname.setAttribute('text',obj.firstname);
-			this.lastname.setAttribute('text',obj.lastname);
-			this.email.setAttribute('text',obj.adresses.email);
-			this.phone.setAttribute('text', obj.adresses.phone);
+			this.firstname.setAttribute('text', canvas.getNotNullString(obj.firstname));
+			this.lastname.setAttribute('text', canvas.getNotNullString(obj.lastname));
+			this.email.setAttribute('text', canvas.getNotNullString(obj.adresses.email));
+			this.phone.setAttribute('text', canvas.getNotNullString(obj.adresses.phone));
 			this.age.setAttribute('text',parseDateToString(obj.age));
-			this.street.setAttribute('text',obj.adresses.street);
-			this.house.setAttribute('text',obj.adresses.additionalname);
-			this.zip.setAttribute('text',obj.adresses.zip);
-			this.town.setAttribute('text',obj.adresses.town);
-			this.state.addAndSelectItem(obj.adresses.states.name,String(obj.adresses.states.state_id));
-			this.adress_comment.setAttribute('text',obj.adresses.comment);
+			this.street.setAttribute('text', canvas.getNotNullString(obj.adresses.street));
+			this.house.setAttribute('text', canvas.getNotNullString(obj.adresses.additionalname));
+			this.zip.setAttribute('text', canvas.getNotNullString(obj.adresses.zip));
+			this.town.setAttribute('text', canvas.getNotNullString(obj.adresses.town));
+			this.state.addAndSelectItem(obj.adresses.states.name, String(obj.adresses.states.state_id));
+			this.adress_comment.setAttribute('text', canvas.getNotNullString(obj.adresses.comment));
 			this.salutation.selectItem(String(obj.salutations_id));
 			this._timeZone.selectItem(String(obj.omTimeZone.jname));
 			this.languages.selectItem(String(obj.language_id));
