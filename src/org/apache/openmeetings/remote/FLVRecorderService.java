@@ -19,12 +19,10 @@
 package org.apache.openmeetings.remote;
 
 import java.io.File;
-import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.data.basic.AuthLevelUtil;
@@ -175,109 +173,105 @@ public class FLVRecorderService implements IPendingServiceCallback {
 					.getId(), currentClient, false, null);
 
 			// get all stream and start recording them
-			Collection<Set<IConnection>> conCollection = current.getScope()
-					.getConnections();
-			for (Set<IConnection> conset : conCollection) {
-				for (IConnection conn : conset) {
-					if (conn != null) {
-						if (conn instanceof IServiceCapableConnection) {
-							Client rcl = this.sessionManager
-									.getClientByStreamId(conn.getClient()
-											.getId(), null);
+			for (IConnection conn : current.getScope().getClientConnections()) {
+				if (conn != null) {
+					if (conn instanceof IServiceCapableConnection) {
+						Client rcl = this.sessionManager
+								.getClientByStreamId(conn.getClient()
+										.getId(), null);
 
-							// Send every user a notification that the recording did start
-							if (!rcl.getIsAVClient()) {
-								((IServiceCapableConnection) conn).invoke(
-										"startedRecording",
-										new Object[] { currentClient }, this);
-							}
+						// Send every user a notification that the recording did start
+						if (!rcl.getIsAVClient()) {
+							((IServiceCapableConnection) conn).invoke(
+									"startedRecording",
+									new Object[] { currentClient }, this);
+						}
 
-							// If its the recording client we need another type
-							// of Meta Data
-							if (rcl.getIsScreenClient()) {
+						// If its the recording client we need another type
+						// of Meta Data
+						if (rcl.getIsScreenClient()) {
 
-								if (rcl.getFlvRecordingId() != null
-										&& rcl.isScreenPublishStarted()) {
+							if (rcl.getFlvRecordingId() != null
+									&& rcl.isScreenPublishStarted()) {
 
-									String streamName_Screen = generateFileName(
-											flvRecordingId, rcl
-													.getStreamPublishName()
-													.toString());
-
-									Long flvRecordingMetaDataId = this.flvRecordingMetaDataDao
-											.addFlvRecordingMetaData(
-													flvRecordingId,
-													rcl.getFirstname() + " "
-															+ rcl.getLastname(),
-													now, false, false, true,
-													streamName_Screen,
-													rcl.getInterviewPodId());
-
-									// Start FLV Recording
-									recordShow(conn,
-											rcl.getStreamPublishName(),
-											streamName_Screen,
-											flvRecordingMetaDataId, true,
-											isInterview);
-
-									// Add Meta Data
-									rcl.setFlvRecordingMetaDataId(flvRecordingMetaDataId);
-
-									this.sessionManager
-											.updateClientByStreamId(
-													rcl.getStreamid(), rcl, false, null);
-
-								}
-
-							} else if
-							// if the user does publish av, a, v
-							// But we only record av or a, video only is not
-							// interesting
-							(rcl.getIsAVClient() &&
-									(rcl.getAvsettings().equals("av")
-									|| rcl.getAvsettings().equals("a")
-									|| rcl.getAvsettings().equals("v"))) {
-
-								String streamName = generateFileName(
-										flvRecordingId,
-										String.valueOf(rcl.getBroadCastID())
+								String streamName_Screen = generateFileName(
+										flvRecordingId, rcl
+												.getStreamPublishName()
 												.toString());
-
-								// Add Meta Data
-								boolean isAudioOnly = false;
-								if (rcl.getAvsettings().equals("a")) {
-									isAudioOnly = true;
-								}
-
-								boolean isVideoOnly = false;
-								if (rcl.getAvsettings().equals("v")) {
-									isVideoOnly = true;
-								}
 
 								Long flvRecordingMetaDataId = this.flvRecordingMetaDataDao
 										.addFlvRecordingMetaData(
 												flvRecordingId,
 												rcl.getFirstname() + " "
 														+ rcl.getLastname(),
-												now, isAudioOnly, isVideoOnly,
-												false, streamName,
+												now, false, false, true,
+												streamName_Screen,
 												rcl.getInterviewPodId());
 
+								// Start FLV Recording
+								recordShow(conn,
+										rcl.getStreamPublishName(),
+										streamName_Screen,
+										flvRecordingMetaDataId, true,
+										isInterview);
+
+								// Add Meta Data
 								rcl.setFlvRecordingMetaDataId(flvRecordingMetaDataId);
 
-								this.sessionManager.updateClientByStreamId(
-										rcl.getStreamid(), rcl, false, null);
-
-								// Start FLV recording
-								recordShow(conn,
-										String.valueOf(rcl.getBroadCastID())
-												.toString(), streamName,
-										flvRecordingMetaDataId, false,
-										isInterview);
+								this.sessionManager
+										.updateClientByStreamId(
+												rcl.getStreamid(), rcl, false, null);
 
 							}
 
+						} else if
+						// if the user does publish av, a, v
+						// But we only record av or a, video only is not
+						// interesting
+						(rcl.getIsAVClient() &&
+								(rcl.getAvsettings().equals("av")
+								|| rcl.getAvsettings().equals("a")
+								|| rcl.getAvsettings().equals("v"))) {
+
+							String streamName = generateFileName(
+									flvRecordingId,
+									String.valueOf(rcl.getBroadCastID())
+											.toString());
+
+							// Add Meta Data
+							boolean isAudioOnly = false;
+							if (rcl.getAvsettings().equals("a")) {
+								isAudioOnly = true;
+							}
+
+							boolean isVideoOnly = false;
+							if (rcl.getAvsettings().equals("v")) {
+								isVideoOnly = true;
+							}
+
+							Long flvRecordingMetaDataId = this.flvRecordingMetaDataDao
+									.addFlvRecordingMetaData(
+											flvRecordingId,
+											rcl.getFirstname() + " "
+													+ rcl.getLastname(),
+											now, isAudioOnly, isVideoOnly,
+											false, streamName,
+											rcl.getInterviewPodId());
+
+							rcl.setFlvRecordingMetaDataId(flvRecordingMetaDataId);
+
+							this.sessionManager.updateClientByStreamId(
+									rcl.getStreamid(), rcl, false, null);
+
+							// Start FLV recording
+							recordShow(conn,
+									String.valueOf(rcl.getBroadCastID())
+											.toString(), streamName,
+									flvRecordingMetaDataId, false,
+									isInterview);
+
 						}
+
 					}
 				}
 			}
@@ -429,50 +423,31 @@ public class FLVRecorderService implements IPendingServiceCallback {
 					+ currentClient.getUserip());
 
 			// get all stream and stop recording them
-			Collection<Set<IConnection>> conCollection = scope.getConnections();
-			for (Set<IConnection> conset : conCollection) {
-				for (IConnection conn : conset) {
-					if (conn != null) {
-						if (conn instanceof IServiceCapableConnection) {
+			for (IConnection conn : scope.getClientConnections()) {
+				if (conn != null) {
+					if (conn instanceof IServiceCapableConnection) {
 
-							Client rcl = sessionManager.getClientByStreamId(
-											conn.getClient().getId(), null);
+						Client rcl = sessionManager.getClientByStreamId(
+										conn.getClient().getId(), null);
 
-							// FIXME: Check if this function is really in use at
-							// the moment
-							// if (!rcl.getIsScreenClient()) {
-							// ((IServiceCapableConnection)
-							// conn).invoke("stoppedRecording",new Object[] {
-							// currentClient }, this);
-							// }
+						// FIXME: Check if this function is really in use at
+						// the moment
+						// if (!rcl.getIsScreenClient()) {
+						// ((IServiceCapableConnection)
+						// conn).invoke("stoppedRecording",new Object[] {
+						// currentClient }, this);
+						// }
 
-							log.debug("is this users still alive? stop it :" + rcl);
+						log.debug("is this users still alive? stop it :" + rcl);
 
-							if (rcl.getIsScreenClient()) {
+						if (rcl.getIsScreenClient()) {
 
-								if (rcl.getFlvRecordingId() != null
-										&& rcl.isScreenPublishStarted()) {
+							if (rcl.getFlvRecordingId() != null
+									&& rcl.isScreenPublishStarted()) {
 
-									// Stop FLV Recording
-									stopRecordingShow(conn,
-											rcl.getStreamPublishName(),
-											rcl.getFlvRecordingMetaDataId());
-
-									// Update Meta Data
-									this.flvRecordingMetaDataDao
-											.updateFlvRecordingMetaDataEndDate(
-													rcl.getFlvRecordingMetaDataId(),
-													new Date());
-								}
-
-							} else if (rcl.getIsAVClient()
-									&& (rcl.getAvsettings().equals("av")
-									|| rcl.getAvsettings().equals("a")
-									|| rcl.getAvsettings().equals("v"))) {
-
+								// Stop FLV Recording
 								stopRecordingShow(conn,
-										String.valueOf(rcl.getBroadCastID())
-												.toString(),
+										rcl.getStreamPublishName(),
 										rcl.getFlvRecordingMetaDataId());
 
 								// Update Meta Data
@@ -480,10 +455,26 @@ public class FLVRecorderService implements IPendingServiceCallback {
 										.updateFlvRecordingMetaDataEndDate(
 												rcl.getFlvRecordingMetaDataId(),
 												new Date());
-
 							}
 
+						} else if (rcl.getIsAVClient()
+								&& (rcl.getAvsettings().equals("av")
+								|| rcl.getAvsettings().equals("a")
+								|| rcl.getAvsettings().equals("v"))) {
+
+							stopRecordingShow(conn,
+									String.valueOf(rcl.getBroadCastID())
+											.toString(),
+									rcl.getFlvRecordingMetaDataId());
+
+							// Update Meta Data
+							this.flvRecordingMetaDataDao
+									.updateFlvRecordingMetaDataEndDate(
+											rcl.getFlvRecordingMetaDataId(),
+											new Date());
+
 						}
+
 					}
 				}
 			}

@@ -20,11 +20,9 @@ package org.apache.openmeetings.remote;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 
 import org.apache.commons.transaction.util.FileHelper;
 import org.apache.openmeetings.OpenmeetingsVariables;
@@ -219,24 +217,20 @@ public class ConferenceLibrary implements IPendingServiceCallback {
 				sendObject.put("roomitems", roomItems);
 
 				// Notify all Clients of that Scope (Room)
-				Collection<Set<IConnection>> conCollection = current.getScope()
-						.getConnections();
-				for (Set<IConnection> conset : conCollection) {
-					for (IConnection conn : conset) {
-						if (conn != null) {
-							if (conn instanceof IServiceCapableConnection) {
-								Client rcl = this.sessionManager
-										.getClientByStreamId(conn.getClient()
-												.getId(), null);
-								if ((rcl == null)
-										|| (rcl.getIsScreenClient() != null && rcl
-												.getIsScreenClient())) {
-									continue;
-								} else {
-									((IServiceCapableConnection) conn).invoke(
-											"loadWmlToWhiteboardById",
-											new Object[] { sendObject }, this);
-								}
+				for (IConnection conn : current.getScope().getClientConnections()) {
+					if (conn != null) {
+						if (conn instanceof IServiceCapableConnection) {
+							Client rcl = this.sessionManager
+									.getClientByStreamId(conn.getClient()
+											.getId(), null);
+							if ((rcl == null)
+									|| (rcl.getIsScreenClient() != null && rcl
+											.getIsScreenClient())) {
+								continue;
+							} else {
+								((IServiceCapableConnection) conn).invoke(
+										"loadWmlToWhiteboardById",
+										new Object[] { sendObject }, this);
 							}
 						}
 					}

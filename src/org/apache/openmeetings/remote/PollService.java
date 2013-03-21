@@ -18,10 +18,8 @@
  */
 package org.apache.openmeetings.remote;
 
-import java.util.Collection;
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.data.conference.PollManager;
@@ -140,26 +138,22 @@ public class PollService implements IPendingServiceCallback {
 		// Notify all clients of the same scope (room)
 		Client rc = this.sessionManager.getClientByStreamId(current
 				.getClient().getId(), null);
-		Collection<Set<IConnection>> conCollection = current.getScope()
-				.getConnections();
-		for (Set<IConnection> conset : conCollection) {
-			for (IConnection conn : conset) {
-				if (conn != null) {
-					if (conn instanceof IServiceCapableConnection) {
-						Client rcl = this.sessionManager
-								.getClientByStreamId(conn.getClient().getId(), null);
-						if (rcl.getIsScreenClient() != null
-								&& rcl.getIsScreenClient()) {
-							// continue;
-						} else {
-							if (rcl.getRoom_id() != null && rcl.getRoom_id().equals(rc.getRoom_id())
-									&& userManager.getUserById(rcl.getUser_id())!=null) {
-								((IServiceCapableConnection) conn).invoke(
-										clientFunction, obj,
-										scopeApplicationAdapter);
-								log.debug("sending " + clientFunction + " to "
-										+ conn + " " + conn.getClient().getId());
-							}
+		for (IConnection conn : current.getScope().getClientConnections()) {
+			if (conn != null) {
+				if (conn instanceof IServiceCapableConnection) {
+					Client rcl = this.sessionManager
+							.getClientByStreamId(conn.getClient().getId(), null);
+					if (rcl.getIsScreenClient() != null
+							&& rcl.getIsScreenClient()) {
+						// continue;
+					} else {
+						if (rcl.getRoom_id() != null && rcl.getRoom_id().equals(rc.getRoom_id())
+								&& userManager.getUserById(rcl.getUser_id())!=null) {
+							((IServiceCapableConnection) conn).invoke(
+									clientFunction, obj,
+									scopeApplicationAdapter);
+							log.debug("sending " + clientFunction + " to "
+									+ conn + " " + conn.getClient().getId());
 						}
 					}
 				}

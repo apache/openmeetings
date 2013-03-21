@@ -20,14 +20,12 @@ package org.apache.openmeetings.remote;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.data.conference.RoomManager;
@@ -163,29 +161,26 @@ public class ChatService implements IPendingServiceCallback {
 			log.debug("SET CHATROOM: " + room_id);
 
 			//broadcast to everybody in the room/domain
-			Collection<Set<IConnection>> conCollection = current.getScope().getConnections();
-			for (Set<IConnection> conset : conCollection) {
-    			for (IConnection conn : conset) {
-    				if (conn != null) {
-    					if (conn instanceof IServiceCapableConnection) {
-    						
-    						Client rcl = this.sessionManager.getClientByStreamId(conn.getClient().getId(), null);
-    						
-    						if (rcl == null) {
-    							continue;
-    						}
-    						if (rcl.getIsAVClient()) {
-    							continue;
-    						}
-    						if (rcl.getIsScreenClient() != null && rcl.getIsScreenClient()) {
-	    						continue;
-	    					}
-    						if (needModeration && Boolean.TRUE != rcl.getIsMod() && Boolean.TRUE != rcl.getIsSuperModerator()) {
-    							continue;
-    						}
-							((IServiceCapableConnection) conn).invoke("sendVarsToMessageWithClient",new Object[] { hsm }, this);
-	    			 	}
-	    			}
+			for (IConnection conn : current.getScope().getClientConnections()) {
+				if (conn != null) {
+					if (conn instanceof IServiceCapableConnection) {
+						
+						Client rcl = this.sessionManager.getClientByStreamId(conn.getClient().getId(), null);
+						
+						if (rcl == null) {
+							continue;
+						}
+						if (rcl.getIsAVClient()) {
+							continue;
+						}
+						if (rcl.getIsScreenClient() != null && rcl.getIsScreenClient()) {
+    						continue;
+    					}
+						if (needModeration && Boolean.TRUE != rcl.getIsMod() && Boolean.TRUE != rcl.getIsSuperModerator()) {
+							continue;
+						}
+						((IServiceCapableConnection) conn).invoke("sendVarsToMessageWithClient",new Object[] { hsm }, this);
+    			 	}
     			}
 			}
 		} catch (Exception err) {
@@ -224,27 +219,24 @@ public class ChatService implements IPendingServiceCallback {
 			hsm.put("message", newMessage);
 
 			// broadcast to everybody in the room/domain
-			Collection<Set<IConnection>> conCollection = current.getScope().getConnections();
-			for (Set<IConnection> conset : conCollection) {
-				for (IConnection conn : conset) {
-					if (conn != null) {
-						if (conn instanceof IServiceCapableConnection) {
-    						IClient client = conn.getClient();
-							if (SessionVariablesUtil.isScreenClient(client)) {
-								// screen sharing clients do not receive events
-								continue;
-							} else if (SessionVariablesUtil.isAVClient(client)) {
-								// AVClients or potential AVClients do not receive events
-								continue;
-							}
+			for (IConnection conn : current.getScope().getClientConnections()) {
+				if (conn != null) {
+					if (conn instanceof IServiceCapableConnection) {
+						IClient client = conn.getClient();
+						if (SessionVariablesUtil.isScreenClient(client)) {
+							// screen sharing clients do not receive events
+							continue;
+						} else if (SessionVariablesUtil.isAVClient(client)) {
+							// AVClients or potential AVClients do not receive events
+							continue;
+						}
 
-							if (SessionVariablesUtil.getPublicSID(client).equals(publicSID)
-									|| SessionVariablesUtil.getPublicSID(client).equals(
-											currentClient.getPublicSID())) {
-								((IServiceCapableConnection) conn).invoke(
-									"sendVarsToMessageWithClient",
-										new Object[] { hsm }, this);
-							}
+						if (SessionVariablesUtil.getPublicSID(client).equals(publicSID)
+								|| SessionVariablesUtil.getPublicSID(client).equals(
+										currentClient.getPublicSID())) {
+							((IServiceCapableConnection) conn).invoke(
+								"sendVarsToMessageWithClient",
+									new Object[] { hsm }, this);
 						}
 					}
 				}
