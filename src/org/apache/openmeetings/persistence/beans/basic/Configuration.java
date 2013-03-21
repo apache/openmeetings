@@ -63,7 +63,7 @@ public class Configuration implements Serializable, IDataProviderEntity {
 	private Long configuration_id;
 
 	@Column(name = "conf_key")
-	@Element(name = "key", data = true)
+	@Element(name = "key", data = true, required = false)
 	private String conf_key;
 
 	@Column(name = "conf_value")

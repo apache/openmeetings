@@ -65,19 +65,19 @@ public class RoomPoll {
 	private Long roomPollId;
 	
 	@Column(name = "poll_name")
-	@Element(data=true)
+	@Element(name="pollname", data=true, required=false)
 	private String pollName;
 	
 	@Column(name = "poll_question")
-	@Element(name="pollquestion", data=true)
+	@Element(name="pollquestion", data=true, required=false)
 	private String pollQuestion;
 	
-	@Element(data=true)
 	@Column(name = "created")
+	@Element(data=true, required=false)
 	private Date created;
 	
 	@Column(name = "archived")
-	@Element(data=true)
+	@Element(data=true, required=false)
 	private boolean archived;
 	
 	@OneToOne(fetch = FetchType.EAGER)

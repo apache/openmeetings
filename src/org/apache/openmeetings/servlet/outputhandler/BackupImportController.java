@@ -97,6 +97,7 @@ import org.apache.openmeetings.persistence.beans.flvrecord.FlvRecording;
 import org.apache.openmeetings.persistence.beans.flvrecord.FlvRecordingMetaData;
 import org.apache.openmeetings.persistence.beans.poll.PollType;
 import org.apache.openmeetings.persistence.beans.poll.RoomPoll;
+import org.apache.openmeetings.persistence.beans.poll.RoomPollAnswers;
 import org.apache.openmeetings.persistence.beans.room.Room;
 import org.apache.openmeetings.persistence.beans.room.RoomModerator;
 import org.apache.openmeetings.persistence.beans.room.RoomOrganisation;
@@ -532,8 +533,10 @@ public class BackupImportController extends AbstractUploadController {
 		{
 			Registry registry = new Registry();
 			Strategy strategy = new RegistryStrategy(registry);
-			Serializer serializer = new Persister(strategy);
+			RegistryMatcher matcher = new RegistryMatcher(); //TODO need to be removed in the later versions
+			Serializer serializer = new Persister(strategy, matcher);
 	
+			matcher.bind(Integer.class, IntegerTransform.class);
 			registry.bind(User.class, new UserConverter(usersDao, usersMap));
 			registry.bind(Room.class, new RoomConverter(roomDao, roomsMap));
 			registry.bind(PollType.class, new PollTypeConverter(pollManager));
@@ -541,6 +544,18 @@ public class BackupImportController extends AbstractUploadController {
 			
 			List<RoomPoll> list = readList(serializer, f, "roompolls.xml", "roompolls", RoomPoll.class, true);
 			for (RoomPoll rp : list) {
+				if (rp.getRoom().getRooms_id() == null) {
+					//room was deleted
+					continue;
+				}
+				if (rp.getCreatedBy().getUser_id() == null) {
+					rp.setCreatedBy(null);
+				}
+				for (RoomPollAnswers rpa : rp.getRoomPollAnswerList()) {
+					if (rpa.getVotedUser().getUser_id() == null) {
+						rpa.setVotedUser(null);
+					}
+				}
 				pollManager.savePollBackup(rp);
 			}
 		}
@@ -561,6 +576,9 @@ public class BackupImportController extends AbstractUploadController {
 			
 			List<Configuration> list = readList(serializer, f, "configs.xml", "configs", Configuration.class, true);
 			for (Configuration c : list) {
+				if (c.getConf_key() == null) {
+					continue;
+				}
 				Configuration cfg = configurationDao.get(c.getConf_key());
 				c.setConfiguration_id(cfg == null ? null : cfg.getConfiguration_id());
 				if (c.getUser() != null && c.getUser().getUser_id() == null) {
