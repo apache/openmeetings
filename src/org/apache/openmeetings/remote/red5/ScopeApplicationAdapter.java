@@ -2710,16 +2710,21 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 	}
 	
 	private String getSipTransportLastname(Long roomId) {
-		Integer c = roomManager.getSipConferenceMembersNumber(roomId);
+		return getSipTransportLastname(roomId, roomManager.getSipConferenceMembersNumber(roomId));
+	}
+	
+	private String getSipTransportLastname(Long roomId, Integer c) {
 		return (c != null && c > 0) ? "(" + (c - 1) + ")" : "";
 	}
 	
-    public synchronized void updateSipTransport() {
+    public synchronized int updateSipTransport() {
 		log.debug("-----------  updateSipTransport");
         IConnection current = Red5.getConnectionLocal();
         String streamid = current.getClient().getId();
         Client client = sessionManager.getClientByStreamId(streamid, null);
-        String newNumber = getSipTransportLastname(client.getRoom_id());
+        Long roomId = client.getRoom_id();
+        Integer count = roomManager.getSipConferenceMembersNumber(roomId); 
+        String newNumber = getSipTransportLastname(roomId, count);
         log.debug("getSipConferenceMembersNumber: " + newNumber);
         if (!newNumber.equals(client.getLastname())) {
             client.setLastname(newNumber);
@@ -2728,6 +2733,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
                     client.getRoom_id(), client.getFirstname(), client.getLastname(), client.getAvsettings()});
             sendMessageWithClient(new String[]{"personal",client.getFirstname(),client.getLastname()});
         }
+        return count != null && count > 0 ? count - 1 : 0; 
     }
 
     /**
