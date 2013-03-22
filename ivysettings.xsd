@@ -62,6 +62,7 @@
         <xs:element maxOccurs="unbounded" ref="artifact"/>
       </xs:sequence>
       <xs:attribute name="name" use="required" type="xs:NCName"/>
+      <xs:attribute name="m2compatible" use="optional" type="xs:NCName"/>
     </xs:complexType>
   </xs:element>
   <xs:element name="artifact">
