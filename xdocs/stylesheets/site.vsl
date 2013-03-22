@@ -124,7 +124,7 @@ limitations under the License.
 #end
 
 #macro ( projectanchor $name $value )
-#if ($value.startsWith("http://"))
+#if ($value.startsWith("http://") || $value.startsWith("https://"))
     <a href="$value">$name</a>
 #elseif ($value.startsWith("/site"))
     <a href="http://jakarta.apache.org$value">$name</a>
