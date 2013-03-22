@@ -111,6 +111,7 @@ public class Appointment implements Serializable {
 	@Element(name="users_id", data=true, required=false)
 	private User userId;
 
+	// FIXME need to be renamed => inserted
 	@Column(name = "starttime")
 	private Date starttime;
 	

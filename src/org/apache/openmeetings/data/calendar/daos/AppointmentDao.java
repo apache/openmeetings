@@ -36,9 +36,11 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
+import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
 import org.apache.openmeetings.data.basic.dao.OmTimeZoneDao;
 import org.apache.openmeetings.data.calendar.management.MeetingMemberLogic;
 import org.apache.openmeetings.data.conference.InvitationManager;
+import org.apache.openmeetings.data.conference.dao.RoomDao;
 import org.apache.openmeetings.data.user.UserManager;
 import org.apache.openmeetings.data.user.dao.UsersDao;
 import org.apache.openmeetings.persistence.beans.basic.OmTimeZone;
@@ -74,6 +76,10 @@ public class AppointmentDao {
 	private MeetingMemberDao meetingMemberDao;
 	@Autowired
 	private UsersDao usersDao;
+	@Autowired
+	private RoomDao roomDao;
+	@Autowired
+	private ConfigurationDao cfgDao;
 	@Autowired
 	private InvitationManager invitationManager;
 	@Autowired
@@ -253,6 +259,25 @@ public class AppointmentDao {
 		return null;
 	}
 
+	public Appointment update(Appointment a, Long userId) {
+		a.setUserId(usersDao.get(userId));
+		Room r = a.getRoom();
+		if (r.getRooms_id() == null) {
+			r.setName(a.getAppointmentName());
+			r.setNumberOfPartizipants(cfgDao.getConfValue("calendar.conference.rooms.default.size", Long.class, "50"));
+		}
+		roomDao.update(r, userId);
+		//FIXME meeting members
+		if (a.getAppointmentId() == null) {
+			a.setStarttime(new Date());
+			em.persist(a);
+		} else {
+			a.setUpdatetime(new Date());
+			a =	em.merge(a);
+		}
+		return a;
+	}
+	
 	// ----------------------------------------------------------------------------------------------------------------------------
 
 	public Long updateAppointment(Appointment appointment) {

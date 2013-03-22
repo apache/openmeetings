@@ -1,8 +1,10 @@
 package org.apache.openmeetings.web.components.user.calendar;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
+import org.apache.openmeetings.data.calendar.daos.AppointmentDao;
 import org.apache.openmeetings.data.calendar.daos.AppointmentReminderTypDao;
 import org.apache.openmeetings.data.conference.RoomManager;
 import org.apache.openmeetings.data.conference.dao.RoomDao;
@@ -34,17 +36,31 @@ import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
 public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 	private static final long serialVersionUID = 7553035786264113827L;
 	private AppointmentForm form;
+	private DialogButton save = new DialogButton(WebSession.getString(813L));
+	private DialogButton cancel = new DialogButton(WebSession.getString(1130L));
+	private final CalendarPanel calendar;
 	
-	public AppointmentDialog(String id, String title, IModel<Appointment> model) {
+	@Override
+	public void setModelObject(Appointment object) {
+		form.setModelObject(object);
+		super.setModelObject(object);
+	}
+	
+	public AppointmentDialog(String id, String title, CalendarPanel calendar, IModel<Appointment> model) {
 		super(id, title, model, true);
+		this.calendar = calendar;
 		form = new AppointmentForm("appForm", new CompoundPropertyModel<Appointment>(this.getModel()));
 		add(form);
 	}
 
 	@Override
+	protected List<DialogButton> getButtons() {
+		return Arrays.asList(cancel, save);
+	}
+	
+	@Override
 	protected DialogButton getSubmitButton() {
-		// TODO Auto-generated method stub
-		return null;
+		return save;
 	}
 
 	@Override
@@ -59,20 +75,53 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 	
 	@Override
 	protected void onError(AjaxRequestTarget target) {
-		// TODO Auto-generated method stub
-		
+		// FIXME feedback
 	}
 
 	@Override
 	protected void onSubmit(AjaxRequestTarget target) {
-		// TODO Auto-generated method stub
-		
+		Application.getBean(AppointmentDao.class).update(form.getModelObject(), WebSession.getUserId());
+		// FIXME feedback
+		calendar.refresh(target);
 	}
 	
 	private class AppointmentForm extends Form<Appointment> {
 		private static final long serialVersionUID = -1764738237821487526L;
 		private boolean createRoom = true;
 
+		@Override
+		protected void onModelChanged() {
+			super.onModelChanged();
+			
+			Appointment a = getModelObject();
+			
+			List<AppointmentReminderTyps> remindTypes = getRemindTypes();
+			if (a.getRemind() == null && !remindTypes.isEmpty()) {
+				a.setRemind(remindTypes.get(0));
+			}
+			
+			List<RoomType> roomTypes = getRoomTypes();
+			if (a.getRoom() == null) {
+				Room r = new Room();
+				r.setAppointment(true);
+				a.setRoom(r);
+			}
+			if (a.getRoom().getRoomtype() == null && !roomTypes.isEmpty()) {
+				a.getRoom().setRoomtype(roomTypes.get(0));
+			}
+			if (a.getAppointmentId() == null) {
+				java.util.Calendar start = WebSession.getCalendar();
+				start.setTime(a.getAppointmentStarttime());
+				java.util.Calendar end = WebSession.getCalendar();
+				end.setTime(a.getAppointmentEndtime());
+				
+				if (start.equals(end)) {
+					end.add(java.util.Calendar.HOUR_OF_DAY, 1);
+					a.setAppointmentEndtime(end.getTime());
+				}
+			}
+		}
+		
 		public AppointmentForm(String id, IModel<Appointment> model) {
 			super(id, model);
 			setOutputMarkupId(true);
@@ -87,14 +136,16 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 			pwd.setOutputMarkupId(true);
 			add(pwd);
 			
+			List<AppointmentReminderTyps> remindTypes = getRemindTypes();
 			add(new DropDownChoice<AppointmentReminderTyps>(
 					"remind"
-					, Application.getBean(AppointmentReminderTypDao.class).getAppointmentReminderTypList()
+					, remindTypes
 					, new ChoiceRenderer<AppointmentReminderTyps>("name", "typId")));
 			
+			List<RoomType> roomTypes = getRoomTypes();
 			final DropDownChoice<RoomType> roomType = new DropDownChoice<RoomType>(
 					"room.roomtype"
-					, Application.getBean(RoomManager.class).getAllRoomTypes()
+					, roomTypes
 					, new ChoiceRenderer<RoomType>("name", "roomtypes_id"));
 			roomType.setEnabled(createRoom);
 			roomType.setOutputMarkupId(true);
@@ -130,6 +181,14 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 		
 		private boolean isPwdProtected() {
 			return Boolean.TRUE.equals(getModelObject().getIsPasswordProtected());
+		}
+		
+		private List<RoomType> getRoomTypes() {
+			return Application.getBean(RoomManager.class).getAllRoomTypes();
+		}
+		
+		private List<AppointmentReminderTyps> getRemindTypes() {
+			return Application.getBean(AppointmentReminderTypDao.class).getAppointmentReminderTypList();
 		}
 		
 		private List<Room> getRoomList() {

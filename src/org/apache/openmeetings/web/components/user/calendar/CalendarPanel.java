@@ -35,19 +35,28 @@ import com.googlecode.wicket.jquery.ui.calendar.Calendar;
 
 public class CalendarPanel extends UserPanel {
 	private static final long serialVersionUID = -6536379497642291437L;
+	private Calendar calendar;
 	
 	@Override
 	public void onMenuPanelLoad(AjaxRequestTarget target) {
 		target.appendJavaScript("calendarInit();");
 	}
 
+	private AppointmentDao getDao() {
+		return Application.getBean(AppointmentDao.class);
+	}
+	
+	public void refresh(AjaxRequestTarget target) {
+		calendar.refresh(target);
+	}
+	
 	public CalendarPanel(String id) {
 		super(id);
 		
 		final Form<Date> form = new Form<Date>("form");
 		add(form);
 		
-		final AppointmentDialog dialog = new AppointmentDialog("appointment", WebSession.getString(815), Model.of(new Appointment()));
+		final AppointmentDialog dialog = new AppointmentDialog("appointment", WebSession.getString(815), this, Model.of(new Appointment()));
 		add(dialog);
 		
 		Options options = new Options();
@@ -58,7 +67,7 @@ public class CalendarPanel extends UserPanel {
 		options.set("defaultEventMinutes", 60);
 		options.set("timeFormat", "{agenda: 'HH:mm{ - HH:mm}', '': 'HH(:mm)'}");
 		
-		final Calendar calendar = new Calendar("calendar", new AppointmentModel(), options) {
+		calendar = new Calendar("calendar", new AppointmentModel(), options) {
 			private static final long serialVersionUID = 8442068089963449950L;
 			
 			@Override
@@ -102,29 +111,26 @@ public class CalendarPanel extends UserPanel {
 				return true;
 			}
 			
-			@Override
-			protected void onDayClick(AjaxRequestTarget target, Date date) {
-				java.util.Calendar start = WebSession.getCalendar();
-				start.setTime(date);
-				java.util.Calendar end = WebSession.getCalendar();
-				end.setTime(date);
-				
-				if (start.equals(end)) {
-					end.add(java.util.Calendar.HOUR_OF_DAY, 1);
-				}
-				Appointment a = new Appointment();
-				a.setAppointmentStarttime(start.getTime());
-				a.setAppointmentEndtime(end.getTime());
-				dialog.setModelObject(a);
-				
-				dialog.open(target);
-			}
+			//no need to override onDayClick
 			
 			@Override
 			protected void onSelect(AjaxRequestTarget target, Date start, Date end, boolean allDay) {
 				Appointment a = new Appointment();
-				a.setAppointmentStarttime(start);
-				a.setAppointmentEndtime(end);
+				//FIXME seems like this check should be done for monthly view only
+				if (start.equals(end)) {
+					java.util.Calendar now = WebSession.getCalendar();
+					java.util.Calendar cal = WebSession.getCalendar();
+					cal.setTime(start);
+					cal.set(java.util.Calendar.HOUR, now.get(java.util.Calendar.HOUR));
+					cal.set(java.util.Calendar.MINUTE, now.get(java.util.Calendar.MINUTE));
+					cal.set(java.util.Calendar.SECOND, 0);
+					cal.set(java.util.Calendar.MILLISECOND, 0);
+					a.setAppointmentStarttime(cal.getTime());
+					a.setAppointmentEndtime(cal.getTime());
+				} else {
+					a.setAppointmentStarttime(start);
+					a.setAppointmentEndtime(end);
+				}
 				dialog.setModelObject(a);
 				
 				dialog.open(target);
@@ -132,7 +138,7 @@ public class CalendarPanel extends UserPanel {
 			
 			@Override
 			protected void onEventClick(AjaxRequestTarget target, int eventId) {
-				Appointment a = Application.getBean(AppointmentDao.class).getAppointmentById((long)eventId);
+				Appointment a = getDao().getAppointmentById((long)eventId);
 				dialog.setModelObject(a);
 				
 				dialog.open(target);
@@ -140,7 +146,7 @@ public class CalendarPanel extends UserPanel {
 			
 			@Override
 			protected void onEventDrop(AjaxRequestTarget target, int eventId, long delta, boolean allDay) {
-				AppointmentDao dao = Application.getBean(AppointmentDao.class);
+				AppointmentDao dao = getDao();
 				Appointment a = dao.getAppointmentById((long)eventId);
 				
 				java.util.Calendar cal = WebSession.getCalendar();
@@ -158,7 +164,7 @@ public class CalendarPanel extends UserPanel {
 			
 			@Override
 			protected void onEventResize(AjaxRequestTarget target, int eventId, long delta) {
-				AppointmentDao dao = Application.getBean(AppointmentDao.class);
+				AppointmentDao dao = getDao();
 				Appointment a = dao.getAppointmentById((long)eventId);
 				java.util.Calendar cal = WebSession.getCalendar();
 				cal.setTime(a.getAppointmentEndtime());
