@@ -31,8 +31,8 @@
 				<artifact pattern="http://openmeetings.googlecode.com/svn/repository/[artifact](-[revision]).[ext]" />
 				<artifact pattern="http://red5.googlecode.com/svn/repository/[organisation]/[artifact]/[revision]/[artifact](-[revision]).[ext]" />
 			</url>
-			<url name="smslib">
-				<artifact pattern="http://smslib.org/maven2/v3/org/smslib/[organisation]/[artifact]-[revision].[ext]" />
+			<url name="smslib" m2compatible="true">
+				<artifact pattern="http://smslib.org/maven2/v3/[organisation]/[artifact]/[revision]/[artifact]-[revision].[ext]" />
 			</url>
 		</chain>
 	</resolvers>

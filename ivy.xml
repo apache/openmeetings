@@ -269,7 +269,7 @@
 		<dependency org="com.googlecode.jsmpp" name="jsmpp" rev="2.1.0" conf="openmeetings->*" transitive="false">
 			<include type="jar" />
 		</dependency>
-		<dependency org="smslib/3.5.3" name="smslib" rev="3.5.3" conf="openmeetings->*" transitive="false">
+		<dependency org="org.smslib" name="smslib" rev="3.5.3" conf="openmeetings->*" transitive="false">
 			<include type="jar" />
 		</dependency>
 		<dependency org="org.asteriskjava" name="asterisk-java" rev="1.0.0.CI-20130102.214528-1134" conf="openmeetings->*" transitive="false">
