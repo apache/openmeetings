@@ -241,7 +241,7 @@
 		if ($debug) Debug.write("Entering getMic ...", valMic);
 		var _micro = null;
 		if (valMic != null) {
-			_micro = Microphone.getEnhancedMicrophone(valMic);
+			_micro = canvas.echoPath == 0 ? Microphone.getMicrophone(valMic) : Microphone.getEnhancedMicrophone(valMic);
 			
 			if (_micro != null && canvas.echoPath == 256) {
 				var options:MicrophoneEnhancedOptions = new MicrophoneEnhancedOptions();
@@ -251,8 +251,6 @@
 				_micro.enhancedOptions = options;
 				if ($debug) Debug.write("echoPath set to 256");
 				if ($debug) Debug.write(_micro.enhancedOptions);
-			} else if (_micro == null) {
-				_micro = Microphone.getMicrophone(valMic);
 			}
 			
 			if (_micro != null) {

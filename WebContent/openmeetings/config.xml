@@ -242,6 +242,7 @@ of the red5-servlet
 Specifies the echo path length (in milliseconds). A longer echo path means better 
 echo cancellation but also introduces longer delays and requires more processing power. 
 The default value is 128; the only other possible value is 256.
+To disable AEC please specify 0.
  -->
 <echoPath>128</echoPath>
 
