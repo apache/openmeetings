@@ -522,6 +522,9 @@ public class BackupImportController extends AbstractUploadController {
 				file.setFileExplorerItemId(0);
 				Long roomId = file.getRoom_id();
 				file.setRoom_id(roomsMap.containsKey(roomId) ? roomsMap.get(roomId) : null);
+				if (file.getOwnerId() != null) {
+					file.setOwnerId(usersMap.get(file.getOwnerId()));
+				}
 				fileExplorerItemDao.addFileExplorerItem(file);
 			}
 		}
