@@ -54,7 +54,7 @@ public abstract class AbstractOpenmeetingsSpringTest extends AbstractJUnit4Sprin
 	protected static final String userpass = "qweqwe";
 	private static final String orgname = "smoketest";
 	private static final String timeZone = "Europe/Berlin";
-	private static final String useremail = "junit@openmeetings.de";
+	private static final String useremail = "junit@openmeetings.apache.org";
 	
 	@Autowired
 	private AppointmentDao appointmentDao;

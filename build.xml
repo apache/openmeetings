@@ -125,7 +125,7 @@
 	</target>
 
 	<!-- build artefacts -->
-	<target name="dist-bin" description="pack binary distribution" depends="clean.all, dist">
+	<target name="dist-bin" description="pack binary distribution" depends="clean.all, dist, test">
 		<tstamp>
 			<format property="build.time" pattern="dd-MM-yyyy_HHmm" />
 		</tstamp>
@@ -394,7 +394,7 @@
 			</fileset>
 			<fileset file="${screensharing.resources}/logback.xml" />
 			<manifest>
-				<attribute name="Built-By" value="OpenMeetings - http://openmeetings.googlecode.com" />
+				<attribute name="Built-By" value="OpenMeetings - http://openmeetings.apache.org" />
 				<attribute name="Built-On" value="${build.TODAY}" />
 				<attribute name="Class-Path" value="conf/ ${jar2.classpath}" />
 			</manifest>
@@ -826,7 +826,8 @@
 		<mkdir dir="${junit.report.dir}" />
 		<!-- property name="myclsp" refid="junit.classpath" />
 		<echo message="${myclsp}" /-->
-		<junit maxmemory="1024m" printsummary="yes" dir="${junit.base.dir}" tempdir="${junit.base.dir}" fork="yes" forkmode="perBatch">
+		<junit maxmemory="1024m" printsummary="yes" dir="${junit.base.dir}" tempdir="${junit.base.dir}" fork="yes" 
+			forkmode="perBatch" failureproperty="junit.failed" errorproperty="junit.error">
 			<classpath refid="junit.classpath" />
 			<jvmarg value="-Dom.home=${basedir}/${om.dist.webapp}" />
 			<jvmarg value="-Dred5.root=${red5.root}" />
@@ -847,6 +848,14 @@
 			</fileset>
 			<report todir="${junit.report.dir}" />
 		</junitreport>
+		<fail message="Errors/failures in JUnit tests.">
+			<condition>
+				<or>
+					<isset property="junit.failed"/>
+					<isset property="junit.error"/>
+				</or>
+			</condition>
+		</fail>
 	</target>
 	<target name="smoke.test" depends="dist" description="Will run 'Smoke' subset of tests">
 		<antcall target="test">
