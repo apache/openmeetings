@@ -25,9 +25,11 @@ import org.apache.openmeetings.persistence.beans.calendar.Appointment;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.components.UserPanel;
+import org.apache.wicket.ajax.AbstractAjaxTimerBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.util.time.Duration;
 
 import com.googlecode.wicket.jquery.ui.JQueryAbstractBehavior;
 import com.googlecode.wicket.jquery.ui.Options;
@@ -176,5 +178,13 @@ public class CalendarPanel extends UserPanel {
 			}
 		};
 		form.add(calendar);
+		add(new AbstractAjaxTimerBehavior(Duration.seconds(10)) {
+			private static final long serialVersionUID = -4353305314396043476L;
+
+			@Override
+			protected void onTimer(AjaxRequestTarget target) {
+				refresh(target);
+			}
+		});
 	}
 }
