@@ -2606,7 +2606,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 			return true;
 
 		} catch (Exception err) {
-			log.debug("[startInterviewRecording]", err);
+			log.debug("[stopInterviewRecording]", err);
 		}
 		return null;
 	}

@@ -43,7 +43,7 @@ import org.simpleframework.xml.Root;
 	@NamedQuery(name = "deleteAllUserContacts", query = "delete from UserContact u where u.owner.user_id = :ownerId"),
 	@NamedQuery(name = "checkUserContacts", query = "select count(c.userContactId) from UserContact c " +
 			"where c.contact.user_id = :user_id AND c.owner.user_id = :ownerId "),
-	@NamedQuery(name = "getContactsByHash", query = "select c from UserContacts c " +
+	@NamedQuery(name = "getContactsByHash", query = "select c from UserContact c " +
 			"where c.hash like :hash "),
 	@NamedQuery(name = "getContactsByUserAndStatus", query = "select c from UserContact c " +
 			"where c.owner.user_id = :ownerId " +
