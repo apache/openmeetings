@@ -184,6 +184,12 @@ limitations under the License.
 					            	} 
 					            	
 					        				        							            					            	
+					            	else if (document.location.href.indexOf("/ManualTesting.html") > 0) {
+					            		currentLocation = "Development";
+					            		currentLink = "/ManualTesting.html".substr(1, "/ManualTesting.html".length);
+					            	} 
+					            	
+					        				        							            					            	
 					            	else if (document.location.href.indexOf("/ReleaseGuide.html") > 0) {
 					            		currentLocation = "Development";
 					            		currentLink = "/ReleaseGuide.html".substr(1, "/ReleaseGuide.html".length);
@@ -513,6 +519,8 @@ limitations under the License.
 	        		        	            	            	    <a href="./BuildInstructions.html">Build Instructions</a>
 <br/>
 	        		        	            	            	    <a href="./JUnitTesting.html">JUnit Testing</a>
+<br/>
+	        		        	            	            	    <a href="./ManualTesting.html">Manual Testing</a>
 <br/>
 	        		        	            	            	    <a href="./ReleaseGuide.html">Release Guide</a>
 <br/>
