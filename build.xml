@@ -430,7 +430,7 @@
 	<target name="signWebStartJars">
 		<delete file="${keystore.file}" />
 		<genkey alias="filetest" storepass="secret" keystore="${keystore.file}" verbose="true"
-			><!-- sigalg="MD5withRSA" keyalg="RSA" -->
+			sigalg="MD5withRSA" keyalg="RSA" >
 			<dname>
 				<param name="CN" value="Sebastian Wagner" />
 				<param name="OU" value="technology" />
@@ -460,7 +460,7 @@
 			<fileset dir="${red5.client.lib}" includes="red5-client*.jar" />
 		</copy>
 		<signjar alias="filetest" keystore="${keystore.file}" storepass="secret" lazy="false"
-			><!-- sigalg="MD5withRSA" digestalg="SHA1" -->
+			sigalg="MD5withRSA" digestalg="SHA1">
 			<path>
 				<fileset dir="${screenshare.out.dir}">
 					<include name="**/*.jar" />
