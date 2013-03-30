@@ -55,7 +55,7 @@ public class HashMapStore implements IClientPersistenceStore {
 	private LinkedHashMap<String, Client> clientsByStreamId = new LinkedHashMap<String, Client>();
 
 	public void clearCache() {
-		// Nothing todo here
+		clientsByStreamId = new LinkedHashMap<String, Client>();
 	}
 	
 	public void put(String streamId, Client rcl) {
