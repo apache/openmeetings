@@ -108,11 +108,7 @@
 
 		if (canvas.GIVE_EXCLUSIVE_AUDIO_KEY == keyCode) {
 			if (canvas.ismoderator || canvas.isAllowedToGiveExclusiveAudio) {
-				var obj = canvas._videocontainer._participants.getUserListItemByPublicSID(canvas.publicSID);
-				if (null != obj) {
-					obj._giveExclusiveAudioView._micButton.onclick.sendEvent();
-				}
-				return;
+				canvas.thishib.giveExclusiveAudio.setExclusiveAudio(canvas.publicSID);
 			} else {
 				new lz.rpcErrorDialog(canvas.main_content._content.inner,{errorid:-54});
 			}
