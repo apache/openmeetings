@@ -53,6 +53,12 @@
         
         canvas.currentBaseConferenceRoom = this;
         
+        canvas.currentRoomObj.hideScreenSharing = true;
+        new lz.moderationPanel(canvas._moderatormenu,{
+                    name:'_moderationPanel',align:'right',
+                    roomName:this.roomobj.name
+                });          
+        
     </handler>
     
     <handler name="ontabcontentleave">

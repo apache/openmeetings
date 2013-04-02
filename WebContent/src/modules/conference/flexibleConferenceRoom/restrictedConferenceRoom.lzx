@@ -27,7 +27,8 @@
         
         new lz.moderationPanel(canvas._conferencemenu,{
                     name:'_moderationPanel',align:'right',
-                    allowUserQuestions:this.roomobj.allowUserQuestions
+                    allowUserQuestions:this.roomobj.allowUserQuestions,
+                    roomName:this.roomobj.name
                 });  
                 
         canvas._conferencemenu.setAttribute('visibility','visible');
