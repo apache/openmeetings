@@ -2658,10 +2658,6 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 		return null;
 	}
 
-    public String getExclusiveAudioKeyCode() {
-		return configurationDao.getConfValue("exclusive.audio.keycode", String.class, null);
-    }
-
 	public synchronized IScope getRoomScope(String room) {
 		try {
 

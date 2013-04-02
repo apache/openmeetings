@@ -470,6 +470,7 @@ and some more references to temp-objects
 
 <attribute name="GIVE_EXCLUSIVE_AUDIO_KEY" value="123"/> <!-- F12 --> 
 <attribute name="ARRANGE_WINDOWS_KEY" value="119"/> <!-- F8 --> 
+<attribute name="MUTE_AUDIO_KEY" value="118"/> <!-- F7 --> 
 
 <!-- 
 	Indicates if the Red5 SIP Integration is enabled or not and 

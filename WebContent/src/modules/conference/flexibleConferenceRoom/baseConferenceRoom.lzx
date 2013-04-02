@@ -105,13 +105,17 @@
 			canvas.sendViaLocalConnection(canvas.vid_lc_name, "arrangeWindows", null);
 			return;
 		}
-
 		if (canvas.GIVE_EXCLUSIVE_AUDIO_KEY == keyCode) {
 			if (canvas.ismoderator || canvas.isAllowedToGiveExclusiveAudio) {
 				canvas.thishib.giveExclusiveAudio.setExclusiveAudio(canvas.publicSID);
 			} else {
 				new lz.rpcErrorDialog(canvas.main_content._content.inner,{errorid:-54});
 			}
+			return;
+		}
+		if (canvas.MUTE_AUDIO_KEY == keyCode) {
+			canvas._videocontainer._videoviewcontent.muteSound(canvas.publicSID, !canvas.micMuted);
+			return;
 		}
 	]]>
 	</handler>

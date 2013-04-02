@@ -463,7 +463,14 @@ public class ImportInitvalues {
 						"123",
 						null,
 						"A hot key code for the 'give exclusive audio' functionality. Keycode 123 is F12");
-
+		// mute/unmute audio key code
+		configurationDao
+				.addConfByKey(
+						"mute.keycode",
+						"118",
+						null,
+						"A hot key code for the 'mute/unmute audio' functionality. Keycode 118 is F7");
+		
 		// system-wide ldap params
 		configurationDao.addConfByKey("ldap_default_id", "0", null,
 				"Ldap domain selected by default in the login screen");

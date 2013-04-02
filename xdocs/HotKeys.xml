@@ -42,6 +42,12 @@
 					<td>
 					</td>
 				</tr>
+				<tr>
+					<td>F7 (code 118)</td>
+					<td>A hot key code for the 'mute/unmute audio' functionality.</td>
+					<td>Yes</td>
+					<td>mute.keycode</td>
+				</tr>
 			</table>
 		</section>
 	</body>

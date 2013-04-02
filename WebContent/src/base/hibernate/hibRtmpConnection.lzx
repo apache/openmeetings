@@ -668,34 +668,38 @@
             parent.getGeneralOptions.doCall();
         </handler>  
     </netRemoteCallHib>
-    
-    <netRemoteCallHib name="getGeneralOptions" funcname="xmlcrm.getGeneralOptions" >
-        <handler name="ondata" args="value">
-            <![CDATA[
-                if (canvas.thishib.loaderVar != null) {
-                  canvas.thishib.loaderVar.setProgress();
-                }
-                if ($debug) Debug.write("getGeneralOptions: ", value.length, value);
-                if (value != null) {
-                	if (value.length > 0) {
-	                    //if ($debug) Debug.write("Give exclusive audio keycode is: ", value[0].conf_value);
-	                    canvas.setAttribute('GIVE_EXCLUSIVE_AUDIO_KEY', value[0].conf_value);
-                    }
-					if (value.length > 1) {
-	                    if ($debug) Debug.write("red5sip.enable is: ", value[1].conf_value);
-	                    canvas.setAttribute('RED5_SIP_ENABLE', value[1].conf_value);
-                    }
-                    if (value.length > 2) {
-	                    if ($debug) Debug.write("max_upload_size is: ", value[2].conf_value);
-	                    canvas.setAttribute('MAX_UPLOAD_SIZE', value[2].conf_value);
-                    }
-                } else {
-                   if ($debug) Debug.warn("xmlcrm.getGeneralOptions empty!");
-                }
-                parent.getUserSalutations.doCall();
-            ]]>
-        </handler>
-    </netRemoteCallHib>
+
+	<netRemoteCallHib name="getGeneralOptions" funcname="xmlcrm.getGeneralOptions">
+		<handler name="ondata" args="value">
+		<![CDATA[
+			if (canvas.thishib.loaderVar != null) {
+				canvas.thishib.loaderVar.setProgress();
+			}
+			if ($debug) Debug.write("getGeneralOptions: ", value.length, value);
+			if (value != null) {
+				if (value.length > 0) {
+					//if ($debug) Debug.write("Give exclusive audio keycode is: ", value[0].conf_value);
+					canvas.setAttribute('GIVE_EXCLUSIVE_AUDIO_KEY', value[0].conf_value);
+				}
+				if (value.length > 1) {
+					if ($debug) Debug.write("red5sip.enable is: ", value[1].conf_value);
+					canvas.setAttribute('RED5_SIP_ENABLE', value[1].conf_value);
+				}
+				if (value.length > 2) {
+					if ($debug) Debug.write("max_upload_size is: ", value[2].conf_value);
+					canvas.setAttribute('MAX_UPLOAD_SIZE', value[2].conf_value);
+				}
+				if (value.length > 3) {
+					if ($debug) Debug.write("Mute/unmute keycode is: ", value[3].conf_value);
+					canvas.setAttribute('MUTE_AUDIO_KEY', value[3].conf_value);
+				}
+			} else {
+				if ($debug) Debug.warn("xmlcrm.getGeneralOptions empty!");
+			}
+			parent.getUserSalutations.doCall();
+		]]>
+		</handler>
+	</netRemoteCallHib>
     
     <netRemoteCallHib name="setCurrentUserOrganization" funcname="xmlcrm.setCurrentUserOrganization">
         <netparam><method name="getValue">return canvas.sessionId;</method></netparam>

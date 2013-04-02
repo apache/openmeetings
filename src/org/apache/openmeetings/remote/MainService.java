@@ -721,6 +721,7 @@ public class MainService implements IPendingServiceCallback {
 			cList.add(configurationDao.get("exclusive.audio.keycode"));
 			cList.add(configurationDao.get("red5sip.enable"));
 			cList.add(configurationDao.get("max_upload_size"));
+			cList.add(configurationDao.get("mute.keycode"));
 			
 			return cList;
 			
