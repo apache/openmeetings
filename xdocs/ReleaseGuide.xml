@@ -185,6 +185,7 @@
 					2.1/rc1/bin/apache-openmeetings-2.1.0.tar.gz.md5<br />
 					2.1/rc1/bin/apache-openmeetings-2.1.0.tar.gz.asc<br />
 					2.1/rc1/KEYS
+					2.1/rc1/CHANGELOG
 				</div>
 			</subsection>
 
@@ -220,32 +221,10 @@
 			<subsection name="Step3 - Distribute and announce">
 				<p>If VOTEs positive: Upload the release </p>
 				<div class="xmlcode">
-					The distribution upload location
-					(www.apache.org/dist)
-					for all Apache projects is the
-					/www/www.apache.org/dist directory on
-					people.apache.org. Each
-					project owns a directory within dist.
+					svn mv https://dist.apache.org/repos/dist/dev/openmeetings/2.1/rc3 \<br/>
+						https://dist.apache.org/repos/dist/release/openmeetings/2.1 \<br/>
+						-m "RC3 is released as 2.1"
 				</div>
-				<p>
-					Our distribution directory is:
-					<br />
-					/www/www.apache.org/dist/incubator/openmeetings
-					<br />
-					each version should have a subfolder within this directory matching
-					the name of the release:
-					<br />
-					for example 2.0
-					<br />
-					Make sure the the files/folders in the section
-					/www/www.apache.org/dist/incubator/openmeetings have the proper
-					rights,
-					see:
-					<a
-						href="http://incubator.apache.org/guides/releasemanagement.html#distribution-permissions"
-						target="_BLANK">http://incubator.apache.org/guides/releasemanagement.html#distribution-permissions
-					</a>
-				</p>
 				<p>
 					Wait 24 hours (until all Apache mirrors have synced the packages)
 					and send an announcement to the mailing list + blog and any other
@@ -254,21 +233,14 @@
 				<p>
 					Email announcements should have the subject line:
 					<br />
-					[ANNOUNCE] Apache OpenMeetings x.xx [Incubating] released
+					[ANNOUNCE] Apache OpenMeetings x.xx released
 				</p>
 				<p>
-					Add a section to
-					<a href="downloads.html">downloads</a>
-					website.
-					<br />
-					Make sure that the binary packages are linked using the mirror URL
-					as base path (
-					<b>not</b>
-					www.apache.org/dist):
-					<br />
-					Mirror URL:
-					<a href="http://www.apache.org/dyn/closer.cgi/incubator/openmeetings/">http://www.apache.org/dyn/closer.cgi/incubator/openmeetings/
-					</a>
+					Add a section to <a href="downloads.html">downloads</a> website.<br />
+					Make sure that the binary packages are linked using the mirror URL as base path (
+					<b>not</b>http://www.apache.org/dist):<br />
+					Mirror URL: 
+					<a href="http://www.apache.org/dyn/closer.cgi/openmeetings/">http://www.apache.org/dyn/closer.cgi/openmeetings/</a>
 				</p>
 			</subsection>
 
