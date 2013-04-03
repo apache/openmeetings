@@ -83,7 +83,7 @@
 				<blockquote>
 					<i>
 						sudo mkdir /usr/src/asterisk &amp;&amp; cd /usr/src/asterisk<br />
-						sudo wget http://downloads.asterisk.org/pub/telephony/asterisk/asterisk-11.2.1.tar.gz<br />
+						sudo wget http://downloads.asterisk.org/pub/telephony/asterisk/releases/asterisk-11.2.1.tar.gz<br />
 						sudo tar -xvzf asterisk-11.2.1.tar.gz<br />
 						cd ./asterisk-11.2.1<br />
 						sudo make clean<br />
