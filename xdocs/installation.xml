@@ -290,12 +290,12 @@
 				<li>
 					Use the Debug-Application: Enter in your browser
 					<a
-						href="http://$RED-HOST:$RED5-PORT/openmeetings/maindebug.lzx.lzr=swf8.swf"
-						rel="nofollow">http://$RED-HOST:$RED5-PORT/openmeetings/maindebug.lzx.lzr=maindebug.as3.swf11.swf
+						href="http://$RED-HOST:$RED5-PORT/openmeetings/?swf=maindebug.as3.swf11.swf"
+						rel="nofollow">http://$RED-HOST:$RED5-PORT/openmeetings/?swf=maindebug.as3.swf11.swf
 					</a>
 					for example
-					<a href="http://localhost:5080/openmeetings/maindebug.lzx.lzr=swf8.swf"
-						rel="nofollow">http://localhost:5080/openmeetings/maindebug.lzx.lzr=maindebug.as3.swf11.swf
+					<a href="http://localhost:5080/openmeetings/?swf=maindebug.as3.swf11.swf"
+						rel="nofollow">http://localhost:5080/openmeetings/?swf=maindebug.as3.swf11.swf
 					</a>
 				</li>
 				<li>If you have Problems with conversion-jobs check your Red5-Log
