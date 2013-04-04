@@ -4646,4 +4646,13 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
   <string id="1540" name="no_timezone">
     <value>Please specify your timezone</value>
   </string>
+  <string id="1541" name="conference_room_type">
+    <value>conference (1-25 users)</value>
+  </string>
+  <string id="1542" name="conference_room_type">
+    <value>restricted (1-150 users)</value>
+  </string>
+  <string id="1543" name="conference_room_type">
+    <value>interview (1:1 meeting with recording)</value>
+  </string>
 </language>

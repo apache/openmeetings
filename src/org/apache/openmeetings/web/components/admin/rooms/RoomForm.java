@@ -24,9 +24,9 @@ import java.util.List;
 import org.apache.openmeetings.data.conference.RoomManager;
 import org.apache.openmeetings.data.user.OrganisationManager;
 import org.apache.openmeetings.persistence.beans.domain.Organisation;
-import org.apache.openmeetings.persistence.beans.room.RoomType;
 import org.apache.openmeetings.persistence.beans.room.Room;
 import org.apache.openmeetings.persistence.beans.room.RoomOrganisation;
+import org.apache.openmeetings.persistence.beans.room.RoomType;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.components.admin.AdminBaseForm;
@@ -74,8 +74,8 @@ public class RoomForm extends AdminBaseForm<Room> {
 				}));
 
 		add(new DropDownChoice<RoomType>("roomtype", Application.getBean(
-				RoomManager.class).getAllRoomTypes(),
-				new ChoiceRenderer<RoomType>("name", "roomtypes_id")));
+				RoomManager.class).getAllRoomTypes(WebSession.getLanguage()),
+				new ChoiceRenderer<RoomType>("label", "roomtypes_id")));
 
 		add(new TextArea<String>("comment"));
 

@@ -33,6 +33,7 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import org.apache.openmeetings.data.basic.AuthLevelUtil;
+import org.apache.openmeetings.data.basic.FieldManager;
 import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
 import org.apache.openmeetings.data.beans.basic.SearchResult;
 import org.apache.openmeetings.data.conference.dao.RoomDao;
@@ -77,6 +78,8 @@ public class RoomManager {
 	private ISessionManager sessionManager;
     @Autowired
 	private ConfigurationDao configurationDao;
+	@Autowired
+	private FieldManager fieldManager;
     @Autowired
 	private RoomDao roomDao;
     @Autowired
@@ -88,12 +91,13 @@ public class RoomManager {
 	 * @param name
 	 * @return ID of new created roomtype or null
 	 */
-	public Long addRoomType(String name, boolean deleted) {
+	public Long addRoomType(String name, long fieldvalues_id, boolean deleted) {
 		try {
 			RoomType rtype = new RoomType();
 			rtype.setName(name);
 			rtype.setStarttime(new Date());
 			rtype.setDeleted(deleted);
+			rtype.setFieldvalues_id(fieldvalues_id);
 			rtype = em.merge(rtype);
 			long returnId = rtype.getRoomtypes_id();
 			return returnId;
@@ -108,12 +112,17 @@ public class RoomManager {
 	 * 
 	 * @return List of RoomTypes
 	 */
-	public List<RoomType> getAllRoomTypes() {
+	public List<RoomType> getAllRoomTypes(long language_id) {
 		try {
 			TypedQuery<RoomType> query = em
 					.createNamedQuery("getAllRoomTypes", RoomType.class);
 			query.setParameter("deleted", true);
-			return query.getResultList();
+			List<RoomType> ll = query.getResultList();
+			for (RoomType ti : ll) {
+				ti.setLabel(fieldManager.getFieldByIdAndLanguage(
+						ti.getFieldvalues_id(), language_id));
+			}
+			return ll;
 		} catch (Exception ex2) {
 			log.error("[getAllRoomTypes] ", ex2);
 		}

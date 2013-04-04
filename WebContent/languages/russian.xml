@@ -4644,6 +4644,15 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>Вы действительно хотите дать слово этому участнику?</value>
   </string>
   <string id="1540" name="no_timezone">
-    <value>Please specify your timezone</value>
+    <value>Укажите Ваш часовой пояс</value>
+  </string>
+  <string id="1541" name="conference_room_type">
+    <value>конференц зал (1-25 участников)</value>
+  </string>
+  <string id="1542" name="conference_room_type">
+    <value>ограниченная (1-150 участников)</value>
+  </string>
+  <string id="1543" name="conference_room_type">
+    <value>интервью (1:1 встреча с записью)</value>
   </string>
 </language>

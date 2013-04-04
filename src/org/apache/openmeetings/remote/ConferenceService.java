@@ -412,7 +412,8 @@ public class ConferenceService {
 		Long users_id = sessiondataDao.checkSession(SID);
 		Long user_level = userManager.getUserLevelByID(users_id);
 		if (authLevelUtil.checkUserLevel(user_level)) {
-			return roomManager.getAllRoomTypes();
+			User user = userManager.getUserById(users_id);
+			return roomManager.getAllRoomTypes(user.getLanguage_id());
 		}
 		return null;
 	}

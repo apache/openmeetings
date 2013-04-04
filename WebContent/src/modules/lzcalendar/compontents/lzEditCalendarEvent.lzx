@@ -316,7 +316,7 @@
 	        <handler name="oninit" >
 	            <![CDATA[
 	            for (var i=0;i<canvas.roomTypesInitValues.length;i++){
-	                this.addItem(canvas.roomTypesInitValues[i].name,canvas.roomTypesInitValues[i].roomtypes_id);
+	                this.addItem(canvas.roomTypesInitValues[i].label.value,canvas.roomTypesInitValues[i].roomtypes_id);
 	            }
 	            //this.selectItem(String(canvas.roomTypesInitValues[0].roomtypes_id));
 	            ]]>

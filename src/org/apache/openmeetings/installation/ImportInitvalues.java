@@ -496,23 +496,22 @@ public class ImportInitvalues {
 
 	public void loadRoomTypes() {
 		long conference_Id = roomManager.addRoomType(
-				"conference (1-25 users)", false);
+				"conference", 1541, false);
 		log.debug("conference_Id: " + conference_Id);
 
 		// Audience room type is not in use anymore
-		roomManager.addRoomType("audience (1-50 users)", true);
+		roomManager.addRoomType("audience", -1, true);
 
 		long restricted_Id = roomManager.addRoomType(
-				"restricted  (1-150 users)", false);
+				"restricted", 1542, false);
 		log.debug("restricted_Id: " + restricted_Id);
 
 		long interview_Id = roomManager.addRoomType(
-				"interview  (1:1 meeting with recording)", false);
+				"interview", 1543, false);
 		log.debug("interview_Id: " + interview_Id);
 
 		// Custom room type is not in use anymore
-		roomManager.addRoomType("custom (extension point for your plugin)",
-				true);
+		roomManager.addRoomType("custom", -2, true);
 		log.debug("RoomTypes ADDED");
 	}
 

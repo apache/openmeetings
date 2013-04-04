@@ -377,7 +377,7 @@
 	        <handler name="oninit" >
 	            <![CDATA[
 		            for (var i=0;i<canvas.roomTypesInitValues.length;i++){
-		                this.addItem(canvas.roomTypesInitValues[i].name,canvas.roomTypesInitValues[i].roomtypes_id);
+		                this.addItem(canvas.roomTypesInitValues[i].label.value,canvas.roomTypesInitValues[i].roomtypes_id);
 		            }
 		            this.selectItemAt(0);
 	            ]]>

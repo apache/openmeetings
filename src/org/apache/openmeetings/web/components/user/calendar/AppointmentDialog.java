@@ -184,7 +184,7 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 		}
 		
 		private List<RoomType> getRoomTypes() {
-			return Application.getBean(RoomManager.class).getAllRoomTypes();
+			return Application.getBean(RoomManager.class).getAllRoomTypes(WebSession.getLanguage());
 		}
 		
 		private List<AppointmentReminderTyps> getRemindTypes() {

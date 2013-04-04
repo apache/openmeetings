@@ -29,6 +29,10 @@ import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.persistence.Transient;
+
+import org.apache.openmeetings.persistence.beans.lang.Fieldlanguagesvalues;
+import org.simpleframework.xml.Element;
 
 @Entity
 @NamedQueries({
@@ -55,6 +59,13 @@ public class RoomType implements Serializable {
 	
 	@Column(name = "deleted")
 	private boolean deleted;
+	
+	@Column(name="fieldvalues_id")
+	@Element(data=true, required=false)
+	private Long fieldvalues_id;
+	
+	@Transient
+	private Fieldlanguagesvalues label;	
 
     
 	public String getName() {
@@ -91,5 +102,20 @@ public class RoomType implements Serializable {
 	public void setDeleted(boolean deleted) {
 		this.deleted = deleted;
 	}
+
+	public Long getFieldvalues_id() {
+		return fieldvalues_id;
+	}
+	public void setFieldvalues_id(Long fieldvalues_id) {
+		this.fieldvalues_id = fieldvalues_id;
+	}
+
+	public Fieldlanguagesvalues getLabel() {
+		return label;
+	}
+
+	public void setLabel(Fieldlanguagesvalues label) {
+		this.label = label;
+	}	
 
 }
