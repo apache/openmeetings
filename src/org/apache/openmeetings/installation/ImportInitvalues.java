@@ -568,7 +568,7 @@ public class ImportInitvalues {
 					false, // hideFilesExplorer
 					false, // hideActionsMenu
 					false, // hideScreenSharing
-					false, // hideWhiteboard
+					true, // hideWhiteboard
 					false, // showMicrophoneStatus
 					false, // chatModerated
 					false, // chatOpened
