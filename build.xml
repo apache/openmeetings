@@ -124,8 +124,11 @@
 		<echo file="${build.base.dir}/velocity.properties" append="false">runtime.log = ${build.base.dir}/velocity.log${line.separator}output.encoding=UTF-8${line.separator}</echo>
 	</target>
 
+	<!-- perform nightly build with tests -->
+	<target name="dist-bin-nightly" description="perform nightly build with tests" depends="dist-bin, test" />
+
 	<!-- build artefacts -->
-	<target name="dist-bin" description="pack binary distribution" depends="clean.all, dist, test">
+	<target name="dist-bin" description="pack binary distribution" depends="clean.all, dist">
 		<tstamp>
 			<format property="build.time" pattern="dd-MM-yyyy_HHmm" />
 		</tstamp>
