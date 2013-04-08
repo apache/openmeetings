@@ -70,7 +70,7 @@
 	
 </class>
 	
-<class name="contentSaveWindow" extends="baseErrorDialog">
+<class name="contentSaveWindow" extends="baseErrorDialog" labelid="936">
 	
     <attribute name="saveObj" value="null" />
     <attribute name="refObj" value="null" />
@@ -78,8 +78,11 @@
 	<attribute name="errorid" value="0" type="number" />
     
     <handler name="oninit">
+        this.setAttribute('errorid',1544);
+        this.setAttribute('errortext',canvas.getLabelName(1544));
         lz.ModeManager.makeModal(this);
-        if ($debug) Debug.write("contentsavewindow: ",errorid);
+        if ($debug) Debug.write("contentsavewindow_errorid: ",errorid);
+        if ($debug) Debug.write("contentsavewindow_errortext: ",errortext);
         this.startSave();
     </handler>
     

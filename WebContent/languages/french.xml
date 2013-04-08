@@ -4658,4 +4658,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
   <string id="1544" name="duplicate_key_error">
     <value>Configuration with given key already exists, please specify another key or edit existent configuration</value>
   </string>
+  <string id="1545" name="content_is_saving">
+    <value>Content is Saving, Please wait.</value>
+  </string>
 </language>
