@@ -18,6 +18,8 @@
  */
 package org.apache.openmeetings.data.basic.dao;
 
+import static org.apache.openmeetings.persistence.beans.basic.Configuration.CRYPT_KEY;
+
 import java.lang.reflect.Constructor;
 import java.util.Arrays;
 import java.util.Date;
@@ -27,7 +29,6 @@ import java.util.List;
 import javax.annotation.Resource;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.PersistenceException;
 import javax.persistence.TypedQuery;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
@@ -74,37 +75,26 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 	private String appName = null;
 
 	/**
+	 * Retrieves Configuration regardless of its deleted status
+	 * 
 	 * @param confKey
 	 * @return
 	 */
-	public Configuration get(String confKey) {
+	public Configuration forceGet(String confKey) {
 		try {
-			TypedQuery<Configuration> query = em.createNamedQuery(
-					"getConfigurationByKey", Configuration.class);
-			query.setParameter("conf_key", confKey);
-
-			List<Configuration> configs = query.getResultList();
-
-			if (configs != null && configs.size() > 0) {
-				return configs.get(0);
-			}
-		} catch (Exception ex2) {
-			log.error("[getConfKey]: ", ex2);
+			List<Configuration> list = em.createNamedQuery("forceGetConfigurationByKey", Configuration.class)
+					.setParameter("conf_key", confKey).getResultList();
+			return list.isEmpty() ? null : list.get(0);
+		} catch (Exception e) {
+			log.error("[getConfKey]: ", e);
 		}
 		return null;
 	}
 
-	public List<Configuration> getConfKeys(String... keys) {
-		try {
-			TypedQuery<Configuration> query = em.createNamedQuery(
-					"getConfigurationsByKeys", Configuration.class);
-			query.setParameter("conf_keys", Arrays.asList(keys));
-
-			return query.getResultList();
-		} catch (Exception ex2) {
-			log.error("[getConfKey]: ", ex2);
-		}
-		return null;
+	public List<Configuration> get(String... keys) {
+		return em.createNamedQuery("getConfigurationsByKeys", Configuration.class)
+				.setParameter("conf_keys", Arrays.asList(keys))
+				.getResultList();
 	}
 
 	/**
@@ -113,39 +103,37 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 	 * 
 	 * Example: Integer my_key = getConfValue("my_key", Integer.class, "15");
 	 * 
-	 * @param confKey
-	 * @param typeObject
+	 * @param key
+	 * @param type
 	 * @param defaultValue
 	 * @return
 	 */
-	public <T> T getConfValue(String confKey, Class<T> typeObject,
-			String defaultValue) {
+	public <T> T getConfValue(String key, Class<T> type, String defaultValue) {
 		try {
-			Configuration conf_reminder = get(confKey);
+			List<Configuration> list = get(key);
 
-			if (conf_reminder == null) {
-				log.warn("Could not find key in configuration CONF_KEY: " + confKey);
+			if (list == null || list.isEmpty()) {
+				log.warn("Could not find key in configuration CONF_KEY: " + key);
 				if (defaultValue == null) {
 					return null;
 				}
 			} else {
 				// Use the custom value as default value
-				defaultValue = conf_reminder.getConf_value();
+				defaultValue = list.get(0).getConf_value();
 			}
 
 			// Either this can be directly assigned or try to find a constructor
 			// that handles it
-			if (typeObject.isAssignableFrom(defaultValue.getClass())) {
-				return typeObject.cast(defaultValue);
+			if (type.isAssignableFrom(defaultValue.getClass())) {
+				return type.cast(defaultValue);
 			}
-			Constructor<T> c = typeObject.getConstructor(defaultValue
-					.getClass());
+			Constructor<T> c = type.getConstructor(defaultValue.getClass());
 			return c.newInstance(defaultValue);
 
 		} catch (Exception err) {
 			log.error(
 					"cannot be cast to return type, you have misconfigured your configuration CONF_KEY: "
-							+ confKey, err);
+							+ key, err);
 			return null;
 		}
 	}
@@ -193,44 +181,30 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 	/**
 	 * 
 	 * @return
+	 * @deprecated please use {@link ConfigurationDao#count()}
 	 */
 	public Long selectMaxFromConfigurations() {
 		try {
-			log.debug("selectMaxFromConfigurations ");
-			// get all users
-			TypedQuery<Long> query = em
-					.createQuery(
-							"select count(c.configuration_id) from Configuration c where c.deleted = false",
-							Long.class);
-			List<Long> ll = query.getResultList();
-			log.debug("selectMaxFromConfigurations" + ll.get(0));
-			return ll.get(0);
+			return count();
 		} catch (Exception ex2) {
 			log.error("[selectMaxFromConfigurations] ", ex2);
 		}
 		return null;
 	}
 
-	public String addConfByKey(String confKey, String confValue, Long userId,
-			String comment) {
-		String ret = "Add Configuration";
-		Configuration configuration = new Configuration();
-		configuration.setConf_key(confKey);
-		configuration.setConf_value(confValue);
-		configuration.setStarttime(new Date());
-		configuration.setDeleted(false);
-		configuration.setComment(comment);
-		if (userId != null)
-			configuration.setUser(usersDao.get(userId));
-		try {
-			configuration = em.merge(configuration);
-			ret = "Erfolgreich";
-		} catch (Exception ex2) {
-			log.error("[addConfByKey]: ", ex2);
-		}
-		return ret;
+	/**
+	 */
+	public Configuration add(String key, String value, Long userId, String comment) {
+		Configuration c = new Configuration();
+		c.setConf_key(key);
+		c.setConf_value(value);
+		c.setComment(comment);
+		return update(c, userId);
 	}
 
+	/**
+	 * @deprecated please use {@link ConfigurationDao#update(Configuration, Long)}
+	 */
 	public Long saveOrUpdateConfiguration(LinkedHashMap<String, ?> values,
 			Long userId) {
 		try {
@@ -259,6 +233,9 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 		return new Long(-1);
 	}
 
+	/**
+	 * @deprecated please use {@link ConfigurationDao#update(Configuration, Long)}
+	 */
 	public Long addConfig(Configuration conf) {
 		try {
 			conf = em.merge(conf);
@@ -270,6 +247,11 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 		return new Long(-1);
 	}
 
+	/**
+	 * @deprecated please use {@link ConfigurationDao#update(Configuration, Long)}
+	 * @param conf
+	 * @return
+	 */
 	public Long updateConfig(Configuration conf) {
 		try {
 			if (conf.getConfiguration_id() == null
@@ -281,7 +263,7 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 					conf = em.merge(conf);
 				}
 			}
-			if ("crypt_ClassName".equals(conf.getConf_key())) {
+			if (CRYPT_KEY.equals(conf.getConf_key())) {
 				ScopeApplicationAdapter.configKeyCryptClassName = conf
 						.getConf_value();
 			} else if ("show.whiteboard.draw.status".equals(conf.getConf_key())) {
@@ -295,6 +277,9 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 		return new Long(-1);
 	}
 
+	/**
+	 * @deprecated please use {@link ConfigurationDao#delete(Configuration, Long)}
+	 */
 	public Long deleteConfByConfiguration(LinkedHashMap<String, ?> values,
 			Long users_id) {
 		try {
@@ -329,26 +314,16 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 	}
 
 	public Configuration get(long id) {
-		try {
-			if (id <= 0) {
-				return null;
-			}
-			return em
-					.createNamedQuery("getConfigurationById",
-							Configuration.class)
-					.setParameter("configuration_id", id).getSingleResult();
-		} catch (PersistenceException ex) {
-			log.error("Could not find id " + id, ex);
+		if (id <= 0) {
+			return null;
 		}
-		return null;
+		return em.createNamedQuery("getConfigurationById", Configuration.class)
+				.setParameter("configuration_id", id).getSingleResult();
 	}
 
 	public List<Configuration> get(int start, int count) {
-		TypedQuery<Configuration> q = em.createNamedQuery(
-				"getNondeletedConfiguration", Configuration.class);
-		q.setFirstResult(start);
-		q.setMaxResults(count);
-		return q.getResultList();
+		return em.createNamedQuery("getNondeletedConfiguration", Configuration.class)
+				.setFirstResult(start).setMaxResults(count).getResultList();
 	}
 
 	public List<Configuration> get(String search, int start, int count, String sort) {
@@ -359,7 +334,7 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 	}
 	
 	public long count() {
-		return selectMaxFromConfigurations();
+		return em.createNamedQuery("countConfigurations", Long.class).getSingleResult();
 	}
 
 	public long count(String search) {
@@ -368,22 +343,25 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 	}
 	
 	public Configuration update(Configuration entity, Long userId) {
+		return update(entity, userId, false);
+	}
+	
+	public Configuration update(Configuration entity, Long userId, boolean deleted) {
 		String key = entity.getConf_key();
 		String value = entity.getConf_value();
-		if (entity.getConfiguration_id() == null
-				|| entity.getConfiguration_id() <= 0) {
+		if (entity.getConfiguration_id() == null || entity.getConfiguration_id() <= 0) {
 			entity.setStarttime(new Date());
-			entity.setDeleted(false);
-			this.updateConfig(entity);
+			entity.setDeleted(deleted);
+			em.persist(entity);
 		} else {
 			if (userId != null) {
 				entity.setUser(usersDao.get(userId));
 			}
-			entity.setDeleted(false);
+			entity.setDeleted(deleted);
 			entity.setUpdatetime(new Date());
-			this.updateConfig(entity);
+			entity = em.merge(entity);
 		}
-		if ("crypt_ClassName".equals(key)) {
+		if (CRYPT_KEY.equals(key)) {
 			ScopeApplicationAdapter.configKeyCryptClassName = value;
 		} else if ("show.whiteboard.draw.status".equals(key)) {
 			ScopeApplicationAdapter.whiteboardDrawStatus = "1".equals(value);
@@ -395,11 +373,7 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 	}
 
 	public void delete(Configuration entity, Long userId) {
-		if (userId != null) {
-			entity.setUser(usersDao.get(userId));
-		}
-		entity.setDeleted(true);
 		entity.setUpdatetime(new Date());
-		this.updateConfig(entity);
+		this.update(entity, userId, true);
 	}
 }

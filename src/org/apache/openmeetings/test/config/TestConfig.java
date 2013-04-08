@@ -32,47 +32,34 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class TestConfig extends AbstractOpenmeetingsSpringTest {
-	
-	private static final Logger log = LoggerFactory.getLogger(
-			TestAppointmentAddAppointment.class);
-	
+
+	private static final Logger log = LoggerFactory.getLogger(TestAppointmentAddAppointment.class);
+
 	@Autowired
 	private ConfigurationDao configurationDao;
 
-
 	@Test
 	public void getConfigKey() {
-		
-		try {
+		System.err.println("THIS");
 
-			System.err.println("THIS");
+		Configuration smtp_server = configurationDao.get("smtp_server").get(0);
 
-			Configuration smtp_server = configurationDao
-					.get(
-					"smtp_server");
-			
-			System.err.println("smtp_server " + smtp_server.getUser());
-			
-			assertEquals(null, smtp_server.getUser());
+		System.err.println("smtp_server " + smtp_server.getUser());
 
-		} catch (Exception err) {
-			log.error("[startConversion]", err);
-		}
-		
+		assertEquals(null, smtp_server.getUser());
 	}
 
 	@Test
 	public void getConfigs() {
-		
+
 		try {
 			List<Configuration> list = configurationDao.get(4, 6);
-			
+
 			for (Configuration conf : list) {
 				System.err.println("conf.getConf_key() " + conf.getConf_key());
 				System.err.println("conf.getUser() " + conf.getUser());
 				if (conf.getUser() != null) {
-					System.err.println("conf.getUsers() "
-							+ conf.getUser().getLogin());
+					System.err.println("conf.getUsers() " + conf.getUser().getLogin());
 				}
 			}
 
@@ -81,6 +68,6 @@ public class TestConfig extends AbstractOpenmeetingsSpringTest {
 		} catch (Exception err) {
 			log.error("[startConversion]", err);
 		}
-		
+
 	}
 }

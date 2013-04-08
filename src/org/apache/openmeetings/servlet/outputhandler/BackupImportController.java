@@ -19,6 +19,7 @@
 package org.apache.openmeetings.servlet.outputhandler;
 
 import static org.apache.commons.transaction.util.FileHelper.copyRec;
+import static org.apache.openmeetings.persistence.beans.basic.Configuration.CRYPT_KEY;
 import static org.apache.openmeetings.utils.OmFileHelper.getStreamsHibernateDir;
 import static org.apache.openmeetings.utils.OmFileHelper.getUploadDir;
 import static org.apache.openmeetings.utils.OmFileHelper.getUploadProfilesUserDir;
@@ -579,22 +580,25 @@ public class BackupImportController extends AbstractUploadController {
 			
 			List<Configuration> list = readList(serializer, f, "configs.xml", "configs", Configuration.class, true);
 			for (Configuration c : list) {
-				if (c.getConf_key() == null) {
+				if (c.getConf_key() == null || c.getDeleted()) {
 					continue;
 				}
-				Configuration cfg = configurationDao.get(c.getConf_key());
+				Configuration cfg = configurationDao.forceGet(c.getConf_key());
+				if (cfg != null && !cfg.getDeleted()) {
+					log.warn("Non deleted configuration with same key is found! old value: {}, new value: {}", cfg.getConf_value(), c.getConf_value());
+				}
 				c.setConfiguration_id(cfg == null ? null : cfg.getConfiguration_id());
 				if (c.getUser() != null && c.getUser().getUser_id() == null) {
 					c.setUser(null);
 				}
-				if ("crypt_ClassName".equals(c.getConf_key())) {
+				if (CRYPT_KEY.equals(c.getConf_key())) {
 					try {
 						Class.forName(c.getConf_value());
 					} catch (ClassNotFoundException e) {
 						c.setConf_value(MD5Implementation.class.getCanonicalName());
 					}
 				}
-				configurationDao.update(c, -1L);
+				configurationDao.update(c, null);
 			}
 		}
 

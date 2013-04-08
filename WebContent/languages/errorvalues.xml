@@ -460,4 +460,12 @@
       <field name="fieldvalues_id">1540</field>
       <field name="errortype_id">1</field>
     </row>
+    <row>
+      <field name="errorvalues_id">56</field>
+      <field name="starttime" />
+      <field name="updatetime" />
+      <field name="deleted">false</field>
+      <field name="fieldvalues_id">1544</field>
+      <field name="errortype_id">1</field>
+    </row>
 </ROOT>

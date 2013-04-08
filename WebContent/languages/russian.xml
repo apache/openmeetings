@@ -4655,4 +4655,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
   <string id="1543" name="conference_room_type">
     <value>интервью (1:1 встреча с записью)</value>
   </string>
+  <string id="1544" name="duplicate_key_error">
+    <value>Configuration with given key already exists, please specify another key or edit existent configuration</value>
+  </string>
 </language>

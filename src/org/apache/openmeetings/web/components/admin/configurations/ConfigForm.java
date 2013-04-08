@@ -33,6 +33,8 @@ import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.util.time.Duration;
+import org.apache.wicket.validation.IValidatable;
+import org.apache.wicket.validation.IValidator;
 
 /**
  * Handle {@link Configuration} items as list and form
@@ -45,11 +47,29 @@ public class ConfigForm extends AdminBaseForm<Configuration> {
 	private static final long serialVersionUID = 1L;
 	private final WebMarkupContainer listContainer;
 
+	private ConfigurationDao getConfigDao() {
+		return Application.getBean(ConfigurationDao.class);
+	}
+	
+	private void refresh(AjaxRequestTarget target) {
+		target.add(this);
+		target.appendJavaScript("omConfigPanelInit();");
+	}
+	
 	public ConfigForm(String id, WebMarkupContainer listContainer, final Configuration configuration) {
 		super(id, new CompoundPropertyModel<Configuration>(configuration));
 		setOutputMarkupId(true);
 		this.listContainer = listContainer;
-		add(new RequiredTextField<String>("conf_key"));
+		add(new RequiredTextField<String>("conf_key").add(new IValidator<String>(){
+			private static final long serialVersionUID = -3371792361118941958L;
+
+			public void validate(IValidatable<String> validatable) {
+				Configuration c = getConfigDao().forceGet(validatable.getValue());
+				if (c != null && !c.getConfiguration_id().equals(configuration.getConfiguration_id())) {
+					error(WebSession.getString(1544L));
+				}
+			}
+		}));
 		add(new RequiredTextField<String>("conf_value"));
 		add(DateLabel.forDatePattern("updatetime", "dd.MM.yyyy HH:mm:ss"));
 		add(new Label("user.login"));
@@ -64,33 +84,28 @@ public class ConfigForm extends AdminBaseForm<Configuration> {
 	
 	@Override
 	protected void onSaveSubmit(AjaxRequestTarget target, Form<?> form) {
-		Application.getBean(ConfigurationDao.class).update(getModelObject(), WebSession.getUserId());
-		Configuration conf = Application.getBean(ConfigurationDao.class).get(getModelObject().getConfiguration_id());
-		this.setModelObject(conf);
+		this.setModelObject(getConfigDao().update(getModelObject(), WebSession.getUserId()));
 		hideNewRecord();
-		target.add(this);
 		target.add(listContainer);
-		target.appendJavaScript("omConfigPanelInit();");
+		refresh(target);
 	}
 
 	@Override
 	protected void onNewSubmit(AjaxRequestTarget target, Form<?> form) {
 		this.setModelObject(new Configuration());
-		target.add(this);
-		target.appendJavaScript("omConfigPanelInit();");
+		refresh(target);
 	}
 	
 	@Override
 	protected void onRefreshSubmit(AjaxRequestTarget target, Form<?> form) {
 		Configuration conf = this.getModelObject();
 		if (conf.getConfiguration_id() != null) {
-			conf = Application.getBean(ConfigurationDao.class).get(conf.getConfiguration_id());
+			conf = getConfigDao().get(conf.getConfiguration_id());
 		} else {
 			conf = new Configuration();
 		}
 		this.setModelObject(conf);
-		target.add(this);
-		target.appendJavaScript("omConfigPanelInit();");
+		refresh(target);
 	}
 	
 	@Override
@@ -98,8 +113,6 @@ public class ConfigForm extends AdminBaseForm<Configuration> {
 		Application.getBean(ConfigurationDao.class).delete(this.getModelObject(), WebSession.getUserId());
 		this.setModelObject(new Configuration());
 		target.add(listContainer);
-		target.add(this);
-		target.appendJavaScript("omConfigPanelInit();");
+		refresh(target);
 	}
-	
 }

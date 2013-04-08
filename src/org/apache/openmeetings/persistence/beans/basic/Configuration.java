@@ -42,27 +42,29 @@ import org.simpleframework.xml.Root;
 
 @Entity
 @NamedQueries({
-		@NamedQuery(name = "getConfigurationByKey", query = "SELECT c FROM Configuration c " 
-				+ "WHERE c.conf_key LIKE :conf_key and c.deleted = false"),
+		@NamedQuery(name = "forceGetConfigurationByKey", query = "SELECT c FROM Configuration c " 
+				+ "WHERE c.conf_key LIKE :conf_key"),
 		@NamedQuery(name = "getConfigurationsByKeys", query = "SELECT c FROM Configuration c "
 				+ "WHERE c.conf_key IN :conf_keys and c.deleted = false"),
 		@NamedQuery(name = "getNondeletedConfiguration", query = "SELECT c FROM Configuration c  "
 				+ "LEFT JOIN FETCH c.user WHERE c.deleted = false"),
 		@NamedQuery(name = "getConfigurationById", query = "SELECT c FROM Configuration c "
 				+ "LEFT JOIN FETCH c.user "
-				+ "WHERE c.configuration_id = :configuration_id and c.deleted = false")
+				+ "WHERE c.configuration_id = :configuration_id and c.deleted = false"),
+		@NamedQuery(name = "countConfigurations", query = "SELECT COUNT(c) FROM Configuration c WHERE c.deleted = false")
 })
 @Table(name = "configuration")
 @Root(name = "config")
 public class Configuration implements Serializable, IDataProviderEntity {
 	private static final long serialVersionUID = -6129473946508963339L;
+	public static final String CRYPT_KEY = "crypt_ClassName";
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
 	@Element(name = "id", data = true)
 	private Long configuration_id;
 
-	@Column(name = "conf_key")
+	@Column(name = "conf_key", unique = true)
 	@Element(name = "key", data = true, required = false)
 	private String conf_key;
 

@@ -18,6 +18,8 @@
  */
 package org.apache.openmeetings.remote.red5;
 
+import static org.apache.openmeetings.persistence.beans.basic.Configuration.CRYPT_KEY;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -2644,7 +2646,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 		try {
 
 			if (ScopeApplicationAdapter.configKeyCryptClassName == null) {
-				String cryptClass = configurationDao.getConfValue("crypt_ClassName", String.class, null);
+				String cryptClass = configurationDao.getConfValue(CRYPT_KEY, String.class, null);
 
 				if (cryptClass != null) {
 					ScopeApplicationAdapter.configKeyCryptClassName = cryptClass;

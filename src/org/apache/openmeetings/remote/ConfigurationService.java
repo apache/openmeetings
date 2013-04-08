@@ -18,8 +18,6 @@
  */
 package org.apache.openmeetings.remote;
 
-import java.util.LinkedHashMap;
-
 import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.data.basic.AuthLevelUtil;
 import org.apache.openmeetings.data.basic.SessiondataDao;
@@ -92,15 +90,23 @@ public class ConfigurationService {
 	 * @param values
 	 * @return - id of configuration being updated, null otherwise
 	 */
-    public Long saveOrUpdateConfiguration(String SID, LinkedHashMap<String, ?> values){
+    public Long saveOrUpdateConfiguration(String SID, Long id, String key, String val, String comment){
         Long users_id = sessiondataDao.checkSession(SID);
 		Long user_level = userManager.getUserLevelByID(users_id);
 		if (authLevelUtil.checkAdminLevel(user_level)) {
-			return configurationDao.saveOrUpdateConfiguration(values,
-					users_id);
+			Configuration c = configurationDao.forceGet(key);
+			if (c != null && !c.getConfiguration_id().equals(id)) {
+				return -56L;
+			}
+			if (c == null) {
+				c = new Configuration();
+				c.setConf_key(key);
+			}
+			c.setComment(comment);
+			c.setConf_value(val);
+			return configurationDao.update(c, users_id).getConfiguration_id();
 		} else {
-			log.error("[getConfByConfigurationId] Permission denied "
-					+ user_level);
+			log.error("[saveOrUpdateConfiguration] Permission denied " + user_level);
 		}
 		return null;
     }
@@ -112,14 +118,17 @@ public class ConfigurationService {
 	 * @param values
 	 * @return - id of configuration being deleted in case of success, null otherwise
 	 */
-    public Long deleteConfiguration(String SID, LinkedHashMap<String, ?> values){
+    public Long deleteConfiguration(String SID, Long id){
         Long users_id = sessiondataDao.checkSession(SID);
 		Long user_level = userManager.getUserLevelByID(users_id);
 		if (authLevelUtil.checkAdminLevel(user_level)) {
-			return configurationDao.deleteConfByConfiguration(values,
-					users_id);
+			Configuration c = configurationDao.get(id);
+			if (c != null) {
+				configurationDao.delete(c, users_id);
+			}
+			return id;
 		} else {
-			log.error("[getConfByConfigurationId] Permission denied "
+			log.error("[deleteConfiguration] Permission denied "
 					+ user_level);
 		}
 		return null;

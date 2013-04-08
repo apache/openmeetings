@@ -18,6 +18,8 @@
  */
 package org.apache.openmeetings.installation;
 
+import static org.apache.openmeetings.persistence.beans.basic.Configuration.CRYPT_KEY;
+
 import java.io.File;
 import java.util.Arrays;
 import java.util.Date;
@@ -260,8 +262,8 @@ public class ImportInitvalues {
 
 	public void loadConfiguration(InstallationConfig cfg) {
 		configurationDao
-				.addConfByKey(
-						"crypt_ClassName",
+				.add(
+						CRYPT_KEY,
 						cfg.cryptClassName,
 						null,
 						"This Class is used for Authentification-Crypting. "
@@ -269,86 +271,86 @@ public class ImportInitvalues {
 								+ "running previous Pass of users will not be workign anymore! "
 								+ "for more Information see http://openmeetings.apache.org/CustomCryptMechanism.html");
 
-		configurationDao.addConfByKey("allow_frontend_register",
+		configurationDao.add("allow_frontend_register",
 				cfg.allowFrontendRegister, null, "");
 
-		configurationDao.addConfByKey("default_group_id", "1", null, "");
+		configurationDao.add("default_group_id", "1", null, "");
 
 		// this domain_id is the Organisation of users who register through the
 		// frontend
-		configurationDao.addConfByKey("default_domain_id", "1", null, "");
+		configurationDao.add("default_domain_id", "1", null, "");
 
 		// "smtp.xmlcrm.org"
-		configurationDao.addConfByKey("smtp_server", cfg.smtpServer, null,
+		configurationDao.add("smtp_server", cfg.smtpServer, null,
 				"this is the smtp server to send messages");
 		// 25
-		configurationDao.addConfByKey("smtp_port", cfg.smtpPort, null,
+		configurationDao.add("smtp_port", cfg.smtpPort, null,
 				"this is the smtp server port normally 25");
 		// "openmeetings@xmlcrm.org"
-		configurationDao.addConfByKey("system_email_addr", cfg.mailReferer,
+		configurationDao.add("system_email_addr", cfg.mailReferer,
 				null, "all send EMails by the system will have this address");
 		// "openmeetings@xmlcrm.org"
-		configurationDao.addConfByKey("email_username", cfg.mailAuthName,
+		configurationDao.add("email_username", cfg.mailAuthName,
 				null, "System auth email username");
 		//
-		configurationDao.addConfByKey("email_userpass", cfg.mailAuthPass,
+		configurationDao.add("email_userpass", cfg.mailAuthPass,
 				null, "System auth email password");
 
-		configurationDao.addConfByKey("mail.smtp.starttls.enable",
+		configurationDao.add("mail.smtp.starttls.enable",
 				cfg.mailUseTls, null, "Enable TLS 1=true, 0=false");
 
-		configurationDao.addConfByKey("application.name",
+		configurationDao.add("application.name",
 				ConfigurationDao.DEFAULT_APP_NAME, null,
 				"Name of the Browser Title window");
 
 		// "1" == "EN"
-		configurationDao.addConfByKey("default_lang_id", cfg.defaultLangId,
+		configurationDao.add("default_lang_id", cfg.defaultLangId,
 				null, "Default System Language ID see language.xml");
 
-		configurationDao.addConfByKey("swftools_zoom", cfg.swfZoom, null,
+		configurationDao.add("swftools_zoom", cfg.swfZoom, null,
 				"dpi for conversion of PDF to SWF");
 
-		configurationDao.addConfByKey("swftools_jpegquality",
+		configurationDao.add("swftools_jpegquality",
 				cfg.swfJpegQuality, null,
 				"compression quality for conversion of PDF to SWF");
 
-		configurationDao.addConfByKey("swftools_path", cfg.swfPath, null,
+		configurationDao.add("swftools_path", cfg.swfPath, null,
 				"Path To SWF-Tools");
 
-		configurationDao.addConfByKey("imagemagick_path",
+		configurationDao.add("imagemagick_path",
 				cfg.imageMagicPath, null, "Path to ImageMagick tools");
 
-		configurationDao.addConfByKey("sox_path", cfg.soxPath, null,
+		configurationDao.add("sox_path", cfg.soxPath, null,
 				"Path To SoX-Tools");
 
-		configurationDao.addConfByKey("ffmpeg_path", cfg.ffmpegPath, null,
+		configurationDao.add("ffmpeg_path", cfg.ffmpegPath, null,
 				"Path To FFMPEG");
 		configurationDao
-				.addConfByKey(
+				.add(
 						"office.path",
 						cfg.officePath,
 						null,
 						"The path to OpenOffice/LibreOffice (optional) please set this to the real path in case jodconverter is unable to find OpenOffice/LibreOffice installation automatically");
 		configurationDao
-				.addConfByKey(
+				.add(
 						"jod.path",
 						cfg.jodPath,
 						null,
 						"The path to JOD library (http://code.google.com/p/jodconverter), configure the path to point to the lib directory of JOD that contains also the jodconverter-core-version.jar");
 
-		configurationDao.addConfByKey("rss_feed1", cfg.urlFeed, null,
+		configurationDao.add("rss_feed1", cfg.urlFeed, null,
 				"Feed URL");
 
-		configurationDao.addConfByKey("rss_feed2", cfg.urlFeed2, null,
+		configurationDao.add("rss_feed2", cfg.urlFeed2, null,
 				"Feed URL 2");
 
 		configurationDao
-				.addConfByKey("sendEmailAtRegister", cfg.sendEmailAtRegister,
+				.add("sendEmailAtRegister", cfg.sendEmailAtRegister,
 						null,
 						"User get a EMail with their Account data. Values: 0(No) or 1(Yes)");
 
 		configurationDao
-				.addConfByKey(
+				.add(
 						"sendEmailWithVerficationCode",
 						cfg.sendEmailWithVerficationCode,
 						null,
@@ -358,14 +360,14 @@ public class ImportInitvalues {
 								+ "sendEmailAtRegister is 0(No) cause you need"
 								+ "to send a EMail.");
 		configurationDao
-				.addConfByKey(
+				.add(
 						"default_export_font",
 						cfg.defaultExportFont,
 						null,
 						"The Name of the Font used for exporting/render Images from Whiteboard"
 								+ "The Font has to exist on the Server which runs Red5");
 
-		configurationDao.addConfByKey("default.rpc.userid", "" + 1, null,
+		configurationDao.add("default.rpc.userid", "" + 1, null,
 				"The User-Id of the Control User in OpenMeetings");
 
 		// ***************************************
@@ -373,12 +375,12 @@ public class ImportInitvalues {
 		// red5SIP Integration Coniguration Values
 		// ***************************************
 
-		configurationDao.addConfByKey("red5sip.enable", cfg.red5SipEnable,
+		configurationDao.add("red5sip.enable", cfg.red5SipEnable,
 				null, "Enable to enable the red5SIP integration ");
-		configurationDao.addConfByKey("red5sip.room_prefix",
+		configurationDao.add("red5sip.room_prefix",
 				cfg.red5SipRoomPrefix, null,
 				"Numerical prefix for OM rooms created inside the SIP");
-		configurationDao.addConfByKey("red5sip.exten_context",
+		configurationDao.add("red5sip.exten_context",
 				cfg.red5SipExtenContext, null,
 				"Enable to enable the red5SIP integration ");
 
@@ -387,7 +389,7 @@ public class ImportInitvalues {
 		// Timezone settings
 		// ***************************************
 
-		configurationDao.addConfByKey("default.timezone",
+		configurationDao.add("default.timezone",
 				cfg.ical_timeZone, null,
 				"This is the default timezone if nothing is specified");
 
@@ -396,61 +398,61 @@ public class ImportInitvalues {
 		// additional settings
 		// ***************************************
 
-		configurationDao.addConfByKey("show.facebook.login", "" + 0, null,
+		configurationDao.add("show.facebook.login", "" + 0, null,
 				"Show Facebook Login");
 
 		configurationDao
-				.addConfByKey(
+				.add(
 						"default.quality.screensharing",
 						"1",
 						null,
 						"Default selection in ScreenSharing Quality:\n 0 - bigger frame rate, no resize\n 1 - no resize\n 2 - size == 1/2 of selected area\n 3 - size == 3/8 of selected area");
 
-		configurationDao.addConfByKey("default.dashboard.tab", "0", null,
+		configurationDao.add("default.dashboard.tab", "0", null,
 				"Default selection in Dashboard tabs as tab-index-id");
 
-		configurationDao.addConfByKey("dashboard.show.myrooms", "1", null,
+		configurationDao.add("dashboard.show.myrooms", "1", null,
 				"Show My Rooms Tab");
 
-		configurationDao.addConfByKey("dashboard.show.chat", "1", null,
+		configurationDao.add("dashboard.show.chat", "1", null,
 				"Show Chat Tab");
 
-		configurationDao.addConfByKey("dashboard.show.rssfeed", "0", null,
+		configurationDao.add("dashboard.show.rssfeed", "0", null,
 				"Show RSS Tab");
 
 		configurationDao
-				.addConfByKey(
+				.add(
 						"show.whiteboard.draw.status",
 						"0",
 						null,
 						"Display name of the user who draw the current object (User Name auto-disapper after 3 seconds.");
 
-		configurationDao.addConfByKey("max_upload_size", ""
+		configurationDao.add("max_upload_size", ""
 				+ ImportHelper.DEFAULT_MAX_UPLOAD_SIZE, null,
 				"Maximum size of upload file (bytes)"); // defaults to 1GB
 
 		configurationDao
-				.addConfByKey(
+				.add(
 						"number.minutes.reminder.send",
 						"15",
 						null,
 						"The number of minutes before reminder emails are send. Set to 0 to disable reminder emails");
 
-		configurationDao.addConfByKey("user.login.minimum.length", ""
+		configurationDao.add("user.login.minimum.length", ""
 				+ InstallationConfig.USER_LOGIN_MINIMUM_LENGTH, null,
 				"Number of chars needed in a user login");
 
-		configurationDao.addConfByKey("user.pass.minimum.length", ""
+		configurationDao.add("user.pass.minimum.length", ""
 				+ InstallationConfig.USER_PASSWORD_MINIMUM_LENGTH, null,
 				"Number of chars needed in a user login");
 
 		configurationDao
-				.addConfByKey("calendar.conference.rooms.default.size", "50",
+				.add("calendar.conference.rooms.default.size", "50",
 						null,
 						"Default number of participants conference room created via calendar");
 
 		configurationDao
-				.addConfByKey(
+				.add(
 						"use.old.style.ffmpeg.map.option",
 						"0",
 						null,
@@ -458,33 +460,33 @@ public class ImportInitvalues {
 
 		// give exclusive audio key code
 		configurationDao
-				.addConfByKey(
+				.add(
 						"exclusive.audio.keycode",
 						"123",
 						null,
 						"A hot key code for the 'give exclusive audio' functionality. Keycode 123 is F12");
 		// mute/unmute audio key code
 		configurationDao
-				.addConfByKey(
+				.add(
 						"mute.keycode",
 						"118",
 						null,
 						"A hot key code for the 'mute/unmute audio' functionality. Keycode 118 is F7");
 		
 		// system-wide ldap params
-		configurationDao.addConfByKey("ldap_default_id", "0", null,
+		configurationDao.add("ldap_default_id", "0", null,
 				"Ldap domain selected by default in the login screen");
 
 		// set inviter's email address as ReplyTo in email invitations
 		configurationDao
-				.addConfByKey(
+				.add(
 						"inviter.email.as.replyto",
 						cfg.replyToOrganizer,
 						null,
 						"Set inviter's email address as ReplyTo in email invitations (1 == set, 0 == NOT set)");
 
 		configurationDao
-				.addConfByKey(
+				.add(
 						"default.landing.zone",
 						"dashboard.rooms",
 						null,

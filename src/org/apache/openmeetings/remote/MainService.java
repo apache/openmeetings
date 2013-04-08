@@ -21,7 +21,6 @@ package org.apache.openmeetings.remote;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -710,21 +709,13 @@ public class MainService implements IPendingServiceCallback {
 	 * @return configuration with key "allow_frontend_register"
 	 */
 	public Configuration allowFrontendRegister(String SID) {
-		return configurationDao.get("allow_frontend_register");
+		return configurationDao.get("allow_frontend_register").get(0); //FIXME need to be removed
 	}
 	
 	public List<Configuration> getGeneralOptions(String SID) {
 		try {
-			
-			List<Configuration> cList = new LinkedList<Configuration>();
-			
-			cList.add(configurationDao.get("exclusive.audio.keycode"));
-			cList.add(configurationDao.get("red5sip.enable"));
-			cList.add(configurationDao.get("max_upload_size"));
-			cList.add(configurationDao.get("mute.keycode"));
-			
-			return cList;
-			
+			return configurationDao.get("exclusive.audio.keycode", "red5sip.enable", "max_upload_size",
+					"mute.keycode");
 		} catch (Exception err) {
 			log.error("[getLoginOptions]",err);
 		}
@@ -733,20 +724,9 @@ public class MainService implements IPendingServiceCallback {
 
 	public List<Configuration> getLoginOptions(String SID) {
 		try {
-
-			List<Configuration> cList = new LinkedList<Configuration>();
-			cList.add(configurationDao
-					.get("allow_frontend_register"));
-			cList.add(configurationDao.get("show.facebook.login"));
-			cList.add(configurationDao
-					.get("user.login.minimum.length"));
-			cList.add(configurationDao
-					.get("user.pass.minimum.length"));
-			cList.add(configurationDao
-					.get("user.pass.minimum.length"));
-			cList.add(configurationDao.get("ldap_default_id"));
-
-			return cList;
+			return configurationDao.get("allow_frontend_register", "show.facebook.login",
+					"user.login.minimum.length", "user.pass.minimum.length", "user.pass.minimum.length",
+					"ldap_default_id");
 		} catch (Exception err) {
 			log.error("[getLoginOptions]", err);
 		}
@@ -1001,12 +981,12 @@ public class MainService implements IPendingServiceCallback {
 			Long users_id = sessiondataDao.checkSession(SID);
 			Long user_level = userManager.getUserLevelByID(users_id);
 			if (authLevelUtil.checkUserLevel(user_level)) {
-				return configurationDao.getConfKeys(new String[] {
+				return configurationDao.get(
 						"dashboard.show.chat", //
 						"dashboard.show.myrooms", //
 						"dashboard.show.rssfeed", //
 						"default.dashboard.tab", //
-						"default.landing.zone" });
+						"default.landing.zone");
 			}
 		} catch (Exception err) {
 			log.error("[getDashboardConfiguration]", err);
