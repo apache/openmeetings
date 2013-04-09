@@ -78,8 +78,8 @@
 	<attribute name="errorid" value="0" type="number" />
     
     <handler name="oninit">
-        this.setAttribute('errorid',1544);
-        this.setAttribute('errortext',canvas.getLabelName(1544));
+        this.setAttribute('errorid',1545);
+        this.setAttribute('errortext',canvas.getLabelName(1545));
         lz.ModeManager.makeModal(this);
         if ($debug) Debug.write("contentsavewindow_errorid: ",errorid);
         if ($debug) Debug.write("contentsavewindow_errortext: ",errortext);
