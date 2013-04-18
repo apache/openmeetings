@@ -411,7 +411,7 @@
 				
 				var hour2 = tDate.getHours()+1;
 				if (hour2 < 10) {
-					hour2 = "0"+hour;
+					hour2 = "0"+hour2;
 				} else if (hour2 > 25) {
 					hour2 = 24;
 				}
