@@ -1075,22 +1075,21 @@ public class UserService {
 						// appointment as we created the
 						// room, the invitations always belong to the
 						// appointment of the meeting creator
-						if (to != null
-								&& !to.getUser_id().equals(from.getUser_id())) {
+						if (to != null && !to.getUser_id().equals(from.getUser_id())) {
 							this.addAppointmentToUser(subject, message, to,
 									recipients, room, appointmentstart,
 									appointmentend, false, true,
 									sendJNameTimeZone);
 						}
 
+						String username = to == null ? "" : to.getFirstname() + " " + to.getLastname();;
 						Invitations invitation = invitationManager
 								.addInvitationLink(
 										new Long(2), // userlevel
-										from.getFirstname() + " "
-												+ from.getLastname(), // username
+										username, // username
 										message,
 										baseURL, // baseURl
-										from.getAdresses().getEmail(), // email
+										email, // email
 										subject, // subject
 										room_id, // room_id
 										"public",
@@ -1103,8 +1102,8 @@ public class UserService {
 										baseURL, from.getUser_id(),
 										false, // really send mail sendMail
 										appointmentstart, appointmentend,
-										appointmentId, from.getFirstname()
-												+ " " + from.getLastname(),
+										appointmentId, 
+										from.getFirstname() + " " + from.getLastname(),
 										from.getOmTimeZone());
 
 						invitation_link = baseURL + "?invitationHash="
