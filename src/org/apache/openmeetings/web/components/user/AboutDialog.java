@@ -18,13 +18,12 @@
  */
 package org.apache.openmeetings.web.components.user;
 
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
+import static org.apache.openmeetings.Version.getBuildDate;
+import static org.apache.openmeetings.Version.getRevision;
+import static org.apache.openmeetings.Version.getVersion;
+
 import java.util.ArrayList;
 import java.util.List;
-import java.util.jar.Attributes;
-import java.util.jar.Manifest;
 
 import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
 import org.apache.openmeetings.web.app.Application;
@@ -36,48 +35,6 @@ import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
 
 public class AboutDialog extends AbstractDialog<String> {
 	private static final long serialVersionUID = 1400355222295594321L;
-	private static String version = null;
-	private static String revision = null;
-	private static String buildDate = null;
-	
-	private Attributes getAttributes() throws MalformedURLException, IOException {
-		String jarUrl = getClass().getResource(getClass().getSimpleName() + ".class").toString();
-		return new Manifest(new URL(jarUrl.substring(0, jarUrl.indexOf('!')) + "!/META-INF/MANIFEST.MF").openStream()).getMainAttributes();
-	}
-	
-	private String getVersion() {
-		if (version == null) {
-			try {
-				version = getAttributes().getValue("Product-Version");
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
-		return version;
-	}
-	
-	private String getRevision() {
-		if (revision == null) {
-			try {
-				revision = getAttributes().getValue("Svn-Revision");
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
-		return revision;
-	}
-	
-	private String getBuildDate() {
-		if (buildDate == null) {
-			try {
-				buildDate = getAttributes().getValue("Built-On");
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
-		return buildDate;
-	}
-	
 	public AboutDialog(String id) {
 		super(id, "About"); //FIXME hardcoded
 		

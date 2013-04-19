@@ -32,6 +32,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
+import org.apache.openmeetings.Version;
 import org.apache.openmeetings.data.basic.SessiondataDao;
 import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
 import org.apache.openmeetings.data.basic.dao.ServerDao;
@@ -149,13 +150,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 			}
 			
 			ScopeApplicationAdapter.initComplete = true;
-		    log.debug("\n" + 
-		    		"\t################################################\n" +
-		    		"\t#            Openmeetings is up                #\n" +
-		    		"\t#             and ready to use                 #\n" +
-		    		"\t################################################\n"
-		    		);
-
+		    Version.logOMStarted();
 		} catch (Exception err) {
 			log.error("[appStart]", err);
 		}
