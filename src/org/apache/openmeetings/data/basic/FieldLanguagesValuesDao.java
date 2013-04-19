@@ -18,6 +18,8 @@
  */
 package org.apache.openmeetings.data.basic;
 
+import static org.apache.openmeetings.persistence.beans.basic.Configuration.DEFAUT_LANG_KEY;
+
 import java.util.Date;
 import java.util.List;
 
@@ -52,8 +54,7 @@ public class FieldLanguagesValuesDao implements IDataProviderDao<Fieldlanguagesv
 	 * @see org.apache.openmeetings.data.OmDAO#get(int, int)
 	 */
 	public List<Fieldlanguagesvalues> get(int first, int count) {
-		return get(configurationDao.getConfValue("default_lang_id",
-				Long.class, "1"), first, count);
+		return get(configurationDao.getConfValue(DEFAUT_LANG_KEY, Long.class, "1"), first, count);
 	}
 
 	public List<Fieldlanguagesvalues> get(String search, int start, int count, String sort) {

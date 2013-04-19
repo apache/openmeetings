@@ -73,7 +73,7 @@ public class Version {
 	}
 
 	private static void getLine(StringBuilder sb, String text, char fill) {
-		sb.append('#');
+		sb.append("\t#");
 		int l = text.length();
 		int headLength = (startedStringLength - l) / 2;
 		for (int i = 0; i < headLength; ++i) {

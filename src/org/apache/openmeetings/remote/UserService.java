@@ -18,6 +18,8 @@
  */
 package org.apache.openmeetings.remote;
 
+import static org.apache.openmeetings.persistence.beans.basic.Configuration.DEFAUT_LANG_KEY;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -670,7 +672,7 @@ public class UserService {
 
 				Long language_id = userToAdd.getLanguage_id();
 				if (language_id == null) {
-					language_id = configurationDao.getConfValue("default_lang_id", Long.class, "1");
+					language_id = configurationDao.getConfValue(DEFAUT_LANG_KEY, Long.class, "1");
 				}
 
 				String message = "";
@@ -898,7 +900,7 @@ public class UserService {
 
 						Long language_id = user.getLanguage_id();
 						if (language_id == null) {
-							language_id = configurationDao.getConfValue("default_lang_id", Long.class, "1");
+							language_id = configurationDao.getConfValue(DEFAUT_LANG_KEY, Long.class, "1");
 						}
 
 						String message = "";
@@ -1063,7 +1065,7 @@ public class UserService {
 
 					Long language_id = from.getLanguage_id();
 					if (language_id == null) {
-						language_id = configurationDao.getConfValue("default_lang_id", Long.class, "1");
+						language_id = configurationDao.getConfValue(DEFAUT_LANG_KEY, Long.class, "1");
 					}
 					String invitation_link = null;
 					User to = userManager.getUserByEmail(email);

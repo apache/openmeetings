@@ -18,6 +18,8 @@
  */
 package org.apache.openmeetings.data.user;
 
+import static org.apache.openmeetings.persistence.beans.basic.Configuration.DEFAUT_LANG_KEY;
+
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
@@ -73,7 +75,7 @@ public class EmailManager {
 
 		if (sendEmailAtRegister == 1) {
 
-			Long default_lang_id = configurationDao.getConfValue("default_lang_id", Long.class, "1");
+			Long default_lang_id = configurationDao.getConfValue(DEFAUT_LANG_KEY, Long.class, "1");
 
 			String template = null;
 			if (sendEmailWithVerficationCode) {

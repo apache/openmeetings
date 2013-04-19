@@ -18,6 +18,8 @@
  */
 package org.apache.openmeetings.servlet.outputhandler;
 
+import static org.apache.openmeetings.persistence.beans.basic.Configuration.DEFAUT_LANG_KEY;
+
 import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
@@ -52,7 +54,7 @@ public class ActivateUser extends BaseVelocityViewServlet {
 			String loginURL = OpenmeetingsVariables.webAppRootPath;
 
 			Long default_lang_id = getBean(ConfigurationDao.class)
-					.getConfValue("default_lang_id", Long.class, "1");
+					.getConfValue(DEFAUT_LANG_KEY, Long.class, "1");
 			ctx.put("APP_NAME", getBean(ConfigurationDao.class).getAppName());
 			if (hash == null) {
 				// No hash

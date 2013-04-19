@@ -18,6 +18,8 @@
  */
 package org.apache.openmeetings.data.conference;
 
+import static org.apache.openmeetings.persistence.beans.basic.Configuration.DEFAUT_LANG_KEY;
+
 import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.data.basic.FieldManager;
 import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
@@ -42,8 +44,7 @@ public class FeedbackManager {
 
 	public String sendFeedback(String username, String email, String message) {
 		try {
-			Long default_lang_id = configurationDao.getConfValue(
-					"default_lang_id", Long.class, "1");
+			Long default_lang_id = configurationDao.getConfValue(DEFAUT_LANG_KEY, Long.class, "1");
 
 			String template = feedbackTemplate.getFeedBackTemplate(username,
 					email, message, default_lang_id);

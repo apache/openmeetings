@@ -19,6 +19,7 @@
 package org.apache.openmeetings.installation;
 
 import static org.apache.openmeetings.persistence.beans.basic.Configuration.CRYPT_KEY;
+import static org.apache.openmeetings.persistence.beans.basic.Configuration.DEFAUT_LANG_KEY;
 
 import java.io.File;
 import java.util.Arrays;
@@ -304,7 +305,7 @@ public class ImportInitvalues {
 				"Name of the Browser Title window");
 
 		// "1" == "EN"
-		configurationDao.add("default_lang_id", cfg.defaultLangId,
+		configurationDao.add(DEFAUT_LANG_KEY, cfg.defaultLangId,
 				null, "Default System Language ID see language.xml");
 
 		configurationDao.add("swftools_zoom", cfg.swfZoom, null,

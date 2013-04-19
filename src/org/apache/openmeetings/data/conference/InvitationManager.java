@@ -18,6 +18,8 @@
  */
 package org.apache.openmeetings.data.conference;
 
+import static org.apache.openmeetings.persistence.beans.basic.Configuration.DEFAUT_LANG_KEY;
+
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -624,9 +626,6 @@ public class InvitationManager {
                 invitation_link += "&language=" + language_id.toString();
             }
 
-			// Long default_lang_id = Long.valueOf(cfgManagement.
-			// getConfKey(3,"default_lang_id").getConf_value()).longValue();
-
 			String template = invitationTemplate.getRegisterInvitationTemplate(
 					fromUserField, message, invitation_link, language_id, dStart,
 					dEnd);
@@ -866,8 +865,6 @@ public class InvitationManager {
                 invitation_link += "&language=" + language_id.toString();
             }
 
-			// Long default_lang_id = Long.valueOf(cfgManagement.
-			// getConfKey(3,"default_lang_id").getConf_value()).longValue();
 			String template = invitationTemplate.getRegisterInvitationTemplate(
 					fromUserField, message, invitation_link, language_id, starttime,
 					endtime);
@@ -946,7 +943,7 @@ public class InvitationManager {
 						+ "&room=" + room + "&roomtype=" + roomtype + "&email="
 						+ email + "&roomid=" + room_id;
 
-				Long default_lang_id = configurationDao.getConfValue("default_lang_id", Long.class, "1");
+				Long default_lang_id = configurationDao.getConfValue(DEFAUT_LANG_KEY, Long.class, "1");
 
 				String template = invitationTemplate
 						.getRegisterInvitationTemplate(username, message,

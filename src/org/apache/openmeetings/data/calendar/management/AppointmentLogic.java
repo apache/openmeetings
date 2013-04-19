@@ -18,6 +18,8 @@
  */
 package org.apache.openmeetings.data.calendar.management;
 
+import static org.apache.openmeetings.persistence.beans.basic.Configuration.DEFAUT_LANG_KEY;
+
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -424,7 +426,7 @@ public class AppointmentLogic {
 			return;
 		}
 
-		Long language_id = configurationDao.getConfValue("default_lang_id", Long.class, "1");
+		Long language_id = configurationDao.getConfValue(DEFAUT_LANG_KEY, Long.class, "1");
 
 		// Get the required labels one time for all meeting members. The
 		// Language of the email will be the system default language

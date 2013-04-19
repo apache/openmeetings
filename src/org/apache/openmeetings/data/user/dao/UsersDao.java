@@ -18,6 +18,8 @@
  */
 package org.apache.openmeetings.data.user.dao;
 
+import static org.apache.openmeetings.persistence.beans.basic.Configuration.DEFAUT_LANG_KEY;
+
 import java.util.Date;
 import java.util.List;
 
@@ -82,8 +84,7 @@ public class UsersDao implements IDataProviderDao<User> {
 		user.setSalutations_id(1L); // TODO: Fix default selection to be
 									// configurable
 		user.setLevel_id(1L);
-		user.setLanguage_id(configurationDao.getConfValue(
-				"default_lang_id", Long.class, "1"));
+		user.setLanguage_id(configurationDao.getConfValue(DEFAUT_LANG_KEY, Long.class, "1"));
 		user.setOmTimeZone(omTimeZoneDaoImpl.getDefaultOmTimeZone(currentUser));
 		user.setForceTimeZoneCheck(false);
 		user.setSendSMS(false);

@@ -18,6 +18,8 @@
  */
 package org.apache.openmeetings.web.app;
 
+import static org.apache.openmeetings.persistence.beans.basic.Configuration.DEFAUT_LANG_KEY;
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -113,7 +115,7 @@ public class WebSession extends AbstractAuthenticatedWebSession {
 		if (session.isSignedIn()) {
 			return Application.getBean(UsersDao.class).get(session.userId).getLanguage_id();
 		} else {
-			return Application.getBean(ConfigurationDao.class).getConfValue("default_lang_id", Long.class, "1");
+			return Application.getBean(ConfigurationDao.class).getConfValue(DEFAUT_LANG_KEY, Long.class, "1");
 		}
 	}
 	

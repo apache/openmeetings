@@ -18,6 +18,8 @@
  */
 package org.apache.openmeetings.ldap;
 
+import static org.apache.openmeetings.persistence.beans.basic.Configuration.DEFAUT_LANG_KEY;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -703,8 +705,7 @@ public class LdapLoginManagement {
 					new java.util.Date(), //age
 					street,
 					additionalname, fax, zip, state_id, town, 
-					configurationDao.getConfValue("default_lang_id",
-							Long.class, "0"), // language_id
+					configurationDao.getConfValue(DEFAUT_LANG_KEY, Long.class, "1"), // language_id
 					false, // sendWelcomeMessage
 					Arrays.asList(configurationDao.getConfValue(
 							"default_domain_id", Long.class, null)), // organozation

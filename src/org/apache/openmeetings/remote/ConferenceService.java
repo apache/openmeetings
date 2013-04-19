@@ -18,6 +18,8 @@
  */
 package org.apache.openmeetings.remote;
 
+import static org.apache.openmeetings.persistence.beans.basic.Configuration.DEFAUT_LANG_KEY;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -31,6 +33,7 @@ import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.cluster.beans.ServerDTO;
 import org.apache.openmeetings.data.basic.AuthLevelUtil;
 import org.apache.openmeetings.data.basic.SessiondataDao;
+import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
 import org.apache.openmeetings.data.basic.dao.ServerDao;
 import org.apache.openmeetings.data.beans.basic.SearchResult;
 import org.apache.openmeetings.data.calendar.management.AppointmentLogic;
@@ -85,6 +88,8 @@ public class ConferenceService {
 	private ISessionManager sessionManager = null;
 	@Autowired
 	private ServerDao serverDao;
+	@Autowired
+	private ConfigurationDao cfgDao;
 
 	/**
 	 * ( get a List of all available Rooms of this organization
@@ -413,7 +418,8 @@ public class ConferenceService {
 		Long user_level = userManager.getUserLevelByID(users_id);
 		if (authLevelUtil.checkUserLevel(user_level)) {
 			User user = userManager.getUserById(users_id);
-			return roomManager.getAllRoomTypes(user.getLanguage_id());
+			return roomManager.getAllRoomTypes(user == null
+					? cfgDao.getConfValue(DEFAUT_LANG_KEY, Long.class, "1") : user.getLanguage_id());
 		}
 		return null;
 	}

@@ -18,6 +18,8 @@
  */
 package org.apache.openmeetings.data.user;
 
+import static org.apache.openmeetings.persistence.beans.basic.Configuration.DEFAUT_LANG_KEY;
+
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
@@ -1293,7 +1295,7 @@ public class UserManager {
 
 		String email = us.getAdresses().getEmail();
 
-		Long default_lang_id = configurationDao.getConfValue("default_lang_id", Long.class, "1");
+		Long default_lang_id = configurationDao.getConfValue(DEFAUT_LANG_KEY, Long.class, "1");
 
 		String template = resetPasswordTemplate.getResetPasswordTemplate(
 				reset_link, default_lang_id);

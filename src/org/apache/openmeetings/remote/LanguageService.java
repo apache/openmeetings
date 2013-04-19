@@ -18,6 +18,8 @@
  */
 package org.apache.openmeetings.remote;
 
+import static org.apache.openmeetings.persistence.beans.basic.Configuration.DEFAUT_LANG_KEY;
+
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -81,7 +83,7 @@ public class LanguageService {
 	}
 
 	public Integer getDefaultLanguage() {
-		return configurationDao.getConfValue("default_lang_id", Integer.class, "1");
+		return configurationDao.getConfValue(DEFAUT_LANG_KEY, Integer.class, "1");
 	}
 
 	/**
