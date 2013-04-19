@@ -41,9 +41,21 @@
     </method>
 
     <method name="drawPointerWhiteBoardFinal" args="newName,x,y,width,height" >
+    	var displayedName = canvas.currentuser;
+    	if (canvas.firstName.length > 0) {
+    		displayedName = canvas.firstName;
+    	}
+    	if (canvas.lastName.length > 0) {
+    		if (canvas.firstName.length > 0) {
+    			displayedName += " " + canvas.lastName;
+    		} else {
+    			displayedName = canvas.lastName;
+    		}
+    	}
+    	
         var actionObject = new Array();
         actionObject[0] = 'pointerWhiteBoard';
-        actionObject[1] = canvas.currentuser;
+        actionObject[1] = displayedName;
         actionObject[2] = this.counter;//-6
         actionObject[3] = x;//-5
         actionObject[4] = y;//-4
