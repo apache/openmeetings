@@ -20,8 +20,10 @@ package org.apache.openmeetings.web.app;
 
 import org.apache.openmeetings.remote.red5.ScopeApplicationAdapter;
 import org.apache.openmeetings.web.pages.MainPage;
+import org.apache.openmeetings.web.pages.NotInitedPage;
 import org.apache.openmeetings.web.pages.auth.SignInPage;
 import org.apache.wicket.Page;
+import org.apache.wicket.RestartResponseException;
 import org.apache.wicket.authroles.authentication.AbstractAuthenticatedWebSession;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebApplication;
 import org.apache.wicket.core.request.handler.ListenerInterfaceRequestHandler;
@@ -62,6 +64,7 @@ public class Application extends AuthenticatedWebApplication {
 		super.init();
 		
 		mountPage("signin", getSignInPageClass());
+		mountPage("notinited", NotInitedPage.class);
 
 		getRootRequestMapperAsCompound().add(new HomePageMapper(getHomePage()) {
 			@Override
@@ -103,7 +106,8 @@ public class Application extends AuthenticatedWebApplication {
 		if (ScopeApplicationAdapter.initComplete) {
 			ApplicationContext context = WebApplicationContextUtils.getWebApplicationContext(get().getServletContext());
 			return context.getBean(clazz);
+		} else {
+			throw new RestartResponseException(NotInitedPage.class);
 		}
-		return null;
 	}
 }

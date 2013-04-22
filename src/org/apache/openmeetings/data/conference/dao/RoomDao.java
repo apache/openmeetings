@@ -85,12 +85,7 @@ public class RoomDao implements IDataProviderDao<Room> {
 	}
 
 	public List<Room> getOrganisationRooms(long orgId) {
-		TypedQuery<Room> q = em.createQuery(
-				"SELECT DISTINCT c.room FROM RoomOrganisation c LEFT JOIN FETCH c.room "
-				+ "WHERE c.organisation.organisation_id = :orgId "
-				+ "AND c.deleted = false AND c.room.deleted = false AND c.room.appointment = false "
-				+ "AND c.organisation.deleted = false "
-				+ "ORDER BY c.room.name ASC", Room.class);
+		TypedQuery<Room> q = em.createNamedQuery("getOrganisationRooms", Room.class);
 		q.setParameter("orgId", orgId);
 		return q.getResultList();
 	}

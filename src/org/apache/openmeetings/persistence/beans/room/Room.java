@@ -74,6 +74,9 @@ import org.simpleframework.xml.Root;
 	@NamedQuery(name = "countRooms", query = "SELECT COUNT(r) FROM Room r WHERE r.deleted = false"),
 	@NamedQuery(name = "getBackupRooms", query = "SELECT r FROM Room r LEFT JOIN FETCH r.moderators WHERE r.deleted = false "),
 	@NamedQuery(name = "getRoomsCapacityByIds", query = "SELECT SUM(r.numberOfPartizipants) FROM Room r WHERE r.deleted = false AND r.rooms_id IN :ids")
+	, @NamedQuery(name = "getOrganisationRooms", query = "SELECT DISTINCT c.room FROM RoomOrganisation c LEFT JOIN FETCH c.room "
+				+ "WHERE c.organisation.organisation_id = :orgId AND c.deleted = false AND c.room.deleted = false AND c.room.appointment = false "
+				+ "AND c.organisation.deleted = false ORDER BY c.room.name ASC")
 })
 @Table(name = "room")
 @Root(name = "room")

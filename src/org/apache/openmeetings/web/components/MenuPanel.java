@@ -32,7 +32,7 @@ import org.apache.openmeetings.web.components.admin.rooms.RoomsPanel;
 import org.apache.openmeetings.web.components.admin.servers.ServersPanel;
 import org.apache.openmeetings.web.components.admin.users.UsersPanel;
 import org.apache.openmeetings.web.components.user.calendar.CalendarPanel;
-import org.apache.openmeetings.web.components.user.rooms.UserRoomsPanel;
+import org.apache.openmeetings.web.components.user.room.RoomsSelectorPanel;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
@@ -124,7 +124,7 @@ public class MenuPanel extends BasePanel {
 									case recordModule:
 										break;
 									case conferenceModuleRoomList:
-										basePanel = new UserRoomsPanel("child", params);
+										basePanel = new RoomsSelectorPanel("child", params);
 										break;
 									case eventModuleRoomList:
 										break;
