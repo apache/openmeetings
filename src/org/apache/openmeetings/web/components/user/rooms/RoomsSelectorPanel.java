@@ -37,8 +37,7 @@ public class RoomsSelectorPanel extends UserPanel {
 			case myTabButton:
 				title = 781L;
 				desc = 782L;
-				//FIXME 2 !!!! fake rooms;
-				add(new RoomsPanel("rooms", roomDao.getAppointedRoomsByUser(WebSession.getUserId())));
+				add(new RoomsPanel("rooms", getMyRooms()));
 				break;
 			case privateTabButton:
 				title = 779L;

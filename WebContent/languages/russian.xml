@@ -4661,4 +4661,10 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
   <string id="1545" name="content_is_saving">
     <value>Сохранение данных, подождите пожалуйста.</value>
   </string>
+  <string id="1546" name="widget_welcome">
+    <value>Welcome</value>
+  </string>
+  <string id="1547" name="widget_welcome_desc">
+    <value>Widget displaying basic user info and support links</value>
+  </string>
 </language>

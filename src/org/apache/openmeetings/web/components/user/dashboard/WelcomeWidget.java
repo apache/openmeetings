@@ -26,17 +26,17 @@ import ro.fortsoft.wicket.dashboard.Widget;
 import ro.fortsoft.wicket.dashboard.WidgetLocation;
 import ro.fortsoft.wicket.dashboard.web.WidgetView;
 
-public class PrivateRoomsWidget extends AbstractWidget {
-	private static final long serialVersionUID = 1769428980617610979L;
+public class WelcomeWidget extends AbstractWidget {
+	private static final long serialVersionUID = 8866852061674736808L;
 
-	public PrivateRoomsWidget(String id) {
+	public WelcomeWidget(String id) {
 		super();
 		setId(id);
-		title = WebSession.getString(781L);
-		location = new WidgetLocation(0, 1);
+		title = WebSession.getString(1546L);
+		location = new WidgetLocation(0, 0);
 	}
 	
 	public WidgetView createView(String viewId) {
-		return new PrivateRoomsWidgetView(viewId, new Model<Widget>(this));
+		return new WelcomeWidgetView(viewId, new Model<Widget>(this));
 	}
 }

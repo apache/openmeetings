@@ -19,24 +19,26 @@
 package org.apache.openmeetings.web.components.user.dashboard;
 
 import org.apache.openmeetings.web.app.WebSession;
-import org.apache.wicket.model.Model;
 
-import ro.fortsoft.wicket.dashboard.AbstractWidget;
-import ro.fortsoft.wicket.dashboard.Widget;
-import ro.fortsoft.wicket.dashboard.WidgetLocation;
-import ro.fortsoft.wicket.dashboard.web.WidgetView;
+import ro.fortsoft.wicket.dashboard.WidgetDescriptor;
 
-public class PrivateRoomsWidget extends AbstractWidget {
-	private static final long serialVersionUID = 1769428980617610979L;
+public class WelcomeWidgetDescriptor implements WidgetDescriptor {
+	private static final long serialVersionUID = 7835392425157215242L;
 
-	public PrivateRoomsWidget(String id) {
-		super();
-		setId(id);
-		title = WebSession.getString(781L);
-		location = new WidgetLocation(0, 1);
+	public String getName() {
+		return WebSession.getString(1546L);
 	}
-	
-	public WidgetView createView(String viewId) {
-		return new PrivateRoomsWidgetView(viewId, new Model<Widget>(this));
+
+	public String getProvider() {
+		return "Apache Openmeetings";
 	}
+
+	public String getDescription() {
+		return WebSession.getString(1547L);
+	}
+
+	public String getWidgetClassName() {
+		return WelcomeWidget.class.getName();
+	}
+
 }

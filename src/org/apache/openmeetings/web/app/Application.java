@@ -20,6 +20,7 @@ package org.apache.openmeetings.web.app;
 
 import org.apache.openmeetings.remote.red5.ScopeApplicationAdapter;
 import org.apache.openmeetings.web.components.user.dashboard.PrivateRoomsWidgetDescriptor;
+import org.apache.openmeetings.web.components.user.dashboard.WelcomeWidgetDescriptor;
 import org.apache.openmeetings.web.pages.MainPage;
 import org.apache.openmeetings.web.pages.NotInitedPage;
 import org.apache.openmeetings.web.pages.auth.SignInPage;
@@ -43,7 +44,6 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import ro.fortsoft.wicket.dashboard.Dashboard;
 import ro.fortsoft.wicket.dashboard.DefaultDashboard;
-import ro.fortsoft.wicket.dashboard.Widget;
 import ro.fortsoft.wicket.dashboard.WidgetFactory;
 import ro.fortsoft.wicket.dashboard.WidgetRegistry;
 import ro.fortsoft.wicket.dashboard.web.DashboardContext;
@@ -78,6 +78,7 @@ public class Application extends AuthenticatedWebApplication {
 		dashboardContext = new DashboardContext();
 		WidgetRegistry widgetRegistry = dashboardContext.getWidgetRegistry();
 		widgetRegistry.registerWidget(new PrivateRoomsWidgetDescriptor());
+		widgetRegistry.registerWidget(new WelcomeWidgetDescriptor());
 		// add dashboard context injector
 		DashboardContextInjector dashboardContextInjector = new DashboardContextInjector(dashboardContext);
 		getComponentInstantiationListeners().add(dashboardContextInjector);
@@ -146,8 +147,8 @@ public class Application extends AuthenticatedWebApplication {
 			dashboard = new DefaultDashboard("default", "Default");
 		}
 		WidgetFactory widgetFactory = dashboardContext.getWidgetFactory();
-		Widget widget = widgetFactory.createWidget(new PrivateRoomsWidgetDescriptor());
 		dashboard.getWidgets().clear(); //FIXME hack somehow Dashboard loaded with 7! PrivateRoomsWidgets
-		dashboard.addWidget(widget);
+		dashboard.addWidget(widgetFactory.createWidget(new WelcomeWidgetDescriptor()));
+		dashboard.addWidget(widgetFactory.createWidget(new PrivateRoomsWidgetDescriptor()));
 	}
 }
