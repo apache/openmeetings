@@ -268,6 +268,11 @@
 		<dependency org="com.google.code.gson" name="gson" rev="2.2.3" conf="openmeetings->*" transitive="false">
 			<include type="jar" />
 		</dependency>
+		<!-- TODO need to be uncommented to implement file drad-n-drop to whiteboard
+		<dependency org="com.github.svenmeier.wicket-dnd" name="wicket-dnd" rev="0.6.0" conf="openmeetings->*" transitive="false">
+			<include type="jar" />
+		</dependency>
+		-->
 		
 		<!-- iCal4j seems to need this JAR -->
 		<dependency org="edu.emory.mathcs" name="backport-util-concurrent" rev="3.1" conf="openmeetings->*"/>
