@@ -42,16 +42,12 @@ import org.apache.wicket.settings.IPageSettings;
 import org.springframework.context.ApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
-import ro.fortsoft.wicket.dashboard.Dashboard;
-import ro.fortsoft.wicket.dashboard.DefaultDashboard;
-import ro.fortsoft.wicket.dashboard.WidgetFactory;
 import ro.fortsoft.wicket.dashboard.WidgetRegistry;
 import ro.fortsoft.wicket.dashboard.web.DashboardContext;
 import ro.fortsoft.wicket.dashboard.web.DashboardContextInjector;
 
 public class Application extends AuthenticatedWebApplication {
 	private DashboardContext dashboardContext;
-	private Dashboard dashboard;
 	
 	@Override
 	protected void init() {
@@ -122,6 +118,10 @@ public class Application extends AuthenticatedWebApplication {
 		return (Application) WebApplication.get();
 	}
 	
+	public static DashboardContext getDashboardContext() {
+		return get().dashboardContext;
+	}
+	
 	public static <T> T getBean(Class<T> clazz) {
 		if (ScopeApplicationAdapter.initComplete) {
 			ApplicationContext context = WebApplicationContextUtils.getWebApplicationContext(get().getServletContext());
@@ -129,26 +129,5 @@ public class Application extends AuthenticatedWebApplication {
 		} else {
 			throw new RestartResponseException(NotInitedPage.class);
 		}
-	}
-	
-	public static Dashboard getDashboard() {
-		Dashboard d = get().dashboard;
-		if (d == null) {
-			get().initDashboard();
-			d = get().dashboard;
-		}
-		return d;
-	}
-	
-	private void initDashboard() {
-		//FIXME check title etc.
-		dashboard = dashboardContext.getDashboardPersiter().load();
-		if (dashboard == null) {
-			dashboard = new DefaultDashboard("default", "Default");
-		}
-		WidgetFactory widgetFactory = dashboardContext.getWidgetFactory();
-		dashboard.getWidgets().clear(); //FIXME hack somehow Dashboard loaded with 7! PrivateRoomsWidgets
-		dashboard.addWidget(widgetFactory.createWidget(new WelcomeWidgetDescriptor()));
-		dashboard.addWidget(widgetFactory.createWidget(new PrivateRoomsWidgetDescriptor()));
 	}
 }

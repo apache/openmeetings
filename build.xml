@@ -899,7 +899,7 @@
 		<available classpathref="check.classpath" classname="org.apache.derby.jdbc.ClientDriver" property="derby.installed" />
 		<available file="${laszlo.home}/WEB-INF/lib" type="dir" property="laszlo.installed" />
 		<available file="${laszlo46.home}/WEB-INF/lib" type="dir" property="laszlo46.installed" />
-		<available file="${red5.lib}/red5.sh" type="file" property="red5.installed" />
+		<available file="${red5.lib}/red5.sh" type="file" property="red5.server.installed" />
 		<available classpathref="check.classpath" classname="org.red5.client.net.rtmp.RTMPClient" property="red5.client.installed" />
 	</target>
 
@@ -949,9 +949,9 @@
 	</target>
 	
 	<!-- Check for the Red5 server libraries -->
-	<target name="-retrieve-red5-server" unless="red5.installed" description="Retrieves the libraries if needed" depends="-ant-task,-maven-task">
+	<target name="-retrieve-red5-server" unless="red5.server.installed" description="Retrieves the libraries if needed" depends="-ant-task,-maven-task">
 		<svn refid="svn.settings">
-			<checkout url="http://red5.googlecode.com/svn/java/server/trunk/" revision="${red5.server.revision}" destPath="${red5.server.dir}" />
+			<checkout url="https://red5.googlecode.com/svn/java/server/trunk/" revision="${red5.server.revision}" destPath="${red5.server.dir}" />
 		</svn>
 		<artifact:mvn pom="${red5.server.dir}/pom.xml" mavenVersion="${maven.version}" fork="true" dir="${red5.server.dir}">
 			<jvmarg value="-Dmaven.buildNumber.doUpdate=false" />
@@ -1007,7 +1007,7 @@
 	<!-- Check for the Red5 client libraries -->
 	<target name="-retrieve-red5-client" unless="red5.client.installed" description="Retrieves the libraries if needed" depends="-retrieve-red5-server">
 		<svn refid="svn.settings">
-			<checkout url="http://red5.googlecode.com/svn/java/client/trunk/" revision="${red5.client.revision}" destPath="${red5.client.dir}" />
+			<checkout url="https://red5.googlecode.com/svn/java/client/trunk/" revision="${red5.client.revision}" destPath="${red5.client.dir}" />
 		</svn>
 		<delete>
 			<fileset dir="${red5.client.dir}/lib" includes="red5-server*.jar" />

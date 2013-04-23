@@ -18,7 +18,7 @@
  */
 package org.apache.openmeetings.web.components.user.dashboard;
 
-import org.apache.openmeetings.web.app.Application;
+import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.components.UserPanel;
 import org.apache.wicket.model.Model;
 
@@ -31,6 +31,6 @@ public class OmDashboardPanel extends UserPanel {
 	public OmDashboardPanel(String id) {
 		super(id);
 
-		add(new DashboardPanel("dashboard", new Model<Dashboard>(Application.getDashboard())));
+		add(new DashboardPanel("dashboard", new Model<Dashboard>(WebSession.getDashboard())));
 	}
 }

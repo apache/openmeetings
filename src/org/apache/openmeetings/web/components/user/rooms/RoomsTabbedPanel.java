@@ -33,7 +33,7 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.Model;
 
-import com.googlecode.wicket.jquery.ui.JQueryBehavior;
+import com.googlecode.wicket.jquery.core.JQueryBehavior;
 
 public class RoomsTabbedPanel extends UserPanel {
 	private static final long serialVersionUID = 3642004664480074881L;

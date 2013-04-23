@@ -22,14 +22,14 @@
 			<url name="mavencentral">
 				<artifact pattern="http://repo1.maven.org/maven2/[organisation]/[artifact]-[revision].[ext]" />
 			</url>
-			<url name="sonatype">
-				<artifact pattern="http://oss.sonatype.org/content/repositories/sourceforge-releases/[organisation]/[artifact]-[revision].[ext]" />
-				<artifact pattern="http://oss.sonatype.org/content/repositories/central/[artifact]/[artifact]/[revision]/[artifact]-[revision].[ext]" />
+			<url name="sonatype" m2compatible="true">
+				<artifact pattern="https://oss.sonatype.org/content/repositories/sourceforge-releases/[organisation]/[artifact]-[revision].[ext]" />
+				<artifact pattern="https://oss.sonatype.org/content/repositories/central/[artifact]/[artifact]/[revision]/[artifact]-[revision].[ext]" />
 			</url>
 			<url name="googlecode">
-				<artifact pattern="http://openlaszlo-openmeetings-integration.googlecode.com/svn/repository/[artifact](-[revision]).[ext]" />
-				<artifact pattern="http://openmeetings.googlecode.com/svn/repository/[artifact](-[revision]).[ext]" />
-				<artifact pattern="http://red5.googlecode.com/svn/repository/[organisation]/[artifact]/[revision]/[artifact](-[revision]).[ext]" />
+				<artifact pattern="https://openlaszlo-openmeetings-integration.googlecode.com/svn/repository/[artifact](-[revision]).[ext]" />
+				<artifact pattern="https://openmeetings.googlecode.com/svn/repository/[artifact](-[revision]).[ext]" />
+				<artifact pattern="https://red5.googlecode.com/svn/repository/[organisation]/[artifact]/[revision]/[artifact](-[revision]).[ext]" />
 			</url>
 			<url name="smslib" m2compatible="true">
 				<artifact pattern="http://smslib.org/maven2/v3/[organisation]/[artifact]/[revision]/[artifact]-[revision].[ext]" />

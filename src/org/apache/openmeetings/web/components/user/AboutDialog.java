@@ -51,9 +51,7 @@ public class AboutDialog extends AbstractDialog<String> {
 	protected List<DialogButton> getButtons() {
 		return new ArrayList<DialogButton>();
 	}
-	
-	@Override
-	protected void onClose(AjaxRequestTarget target, DialogButton button) {
-		//empty
+
+	public void onClose(AjaxRequestTarget arg0, DialogButton arg1) {
 	}
 }

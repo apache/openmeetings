@@ -31,9 +31,10 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.util.time.Duration;
 
-import com.googlecode.wicket.jquery.ui.JQueryAbstractBehavior;
-import com.googlecode.wicket.jquery.ui.Options;
+import com.googlecode.wicket.jquery.core.JQueryAbstractBehavior;
+import com.googlecode.wicket.jquery.core.Options;
 import com.googlecode.wicket.jquery.ui.calendar.Calendar;
+import com.googlecode.wicket.jquery.ui.calendar.CalendarView;
 
 public class CalendarPanel extends UserPanel {
 	private static final long serialVersionUID = -6536379497642291437L;
@@ -94,32 +95,31 @@ public class CalendarPanel extends UserPanel {
 			}
 			
 			@Override
-			protected boolean isSelectable() {
+			public boolean isSelectable() {
 				return true;
 			}
 			
 			@Override
-			protected boolean isEditable() {
+			public boolean isEditable() {
 				return true;
 			}
 			
 			@Override
-			protected boolean isEventDropEnabled() {
+			public boolean isEventDropEnabled() {
 				return true;
 			}
 			
 			@Override
-			protected boolean isEventResizeEnabled() {
+			public boolean isEventResizeEnabled() {
 				return true;
 			}
 			
 			//no need to override onDayClick
 			
 			@Override
-			protected void onSelect(AjaxRequestTarget target, Date start, Date end, boolean allDay) {
+			public void onSelect(AjaxRequestTarget target, CalendarView view, Date start, Date end, boolean allDay) {
 				Appointment a = new Appointment();
-				//FIXME seems like this check should be done for monthly view only
-				if (start.equals(end)) {
+				if (CalendarView.month == view && start.equals(end)) {
 					java.util.Calendar now = WebSession.getCalendar();
 					java.util.Calendar cal = WebSession.getCalendar();
 					cal.setTime(start);
@@ -139,7 +139,7 @@ public class CalendarPanel extends UserPanel {
 			}
 			
 			@Override
-			protected void onEventClick(AjaxRequestTarget target, int eventId) {
+			public void onEventClick(AjaxRequestTarget target, CalendarView view, int eventId) {
 				Appointment a = getDao().getAppointmentById((long)eventId);
 				dialog.setModelObject(a);
 				
@@ -147,7 +147,7 @@ public class CalendarPanel extends UserPanel {
 			}
 			
 			@Override
-			protected void onEventDrop(AjaxRequestTarget target, int eventId, long delta, boolean allDay) {
+			public void onEventDrop(AjaxRequestTarget target, int eventId, long delta, boolean allDay) {
 				AppointmentDao dao = getDao();
 				Appointment a = dao.getAppointmentById((long)eventId);
 				
@@ -165,7 +165,7 @@ public class CalendarPanel extends UserPanel {
 			}
 			
 			@Override
-			protected void onEventResize(AjaxRequestTarget target, int eventId, long delta) {
+			public void onEventResize(AjaxRequestTarget target, int eventId, long delta) {
 				AppointmentDao dao = getDao();
 				Appointment a = dao.getAppointmentById((long)eventId);
 				java.util.Calendar cal = WebSession.getCalendar();

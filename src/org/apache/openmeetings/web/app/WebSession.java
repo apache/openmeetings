@@ -35,9 +35,16 @@ import org.apache.openmeetings.data.user.dao.UsersDao;
 import org.apache.openmeetings.persistence.beans.basic.Sessiondata;
 import org.apache.openmeetings.persistence.beans.lang.FieldLanguage;
 import org.apache.openmeetings.persistence.beans.user.User;
+import org.apache.openmeetings.web.components.user.dashboard.PrivateRoomsWidgetDescriptor;
+import org.apache.openmeetings.web.components.user.dashboard.WelcomeWidgetDescriptor;
 import org.apache.wicket.authroles.authentication.AbstractAuthenticatedWebSession;
 import org.apache.wicket.authroles.authorization.strategies.role.Roles;
 import org.apache.wicket.request.Request;
+
+import ro.fortsoft.wicket.dashboard.Dashboard;
+import ro.fortsoft.wicket.dashboard.DefaultDashboard;
+import ro.fortsoft.wicket.dashboard.WidgetFactory;
+import ro.fortsoft.wicket.dashboard.web.DashboardContext;
 
 public class WebSession extends AbstractAuthenticatedWebSession {
 	private static final long serialVersionUID = 1123393236459095315L;
@@ -47,6 +54,7 @@ public class WebSession extends AbstractAuthenticatedWebSession {
 	private String area = null;
 	private TimeZone tz;
 	private SimpleDateFormat ISO8601FORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
+	private Dashboard dashboard;
 	
 	public WebSession(Request request) {
 		super(request);
@@ -150,5 +158,28 @@ public class WebSession extends AbstractAuthenticatedWebSession {
 
 	public void setArea(String area) {
 		this.area = area;
+	}
+
+	
+	public static Dashboard getDashboard() {
+		Dashboard d = get().dashboard;
+		if (d == null) {
+			get().initDashboard();
+			d = get().dashboard;
+		}
+		return d;
+	}
+	
+	private void initDashboard() {
+		DashboardContext dashboardContext = Application.getDashboardContext();
+		//FIXME check title etc.
+		dashboard = dashboardContext.getDashboardPersiter().load();
+		if (dashboard == null) {
+			dashboard = new DefaultDashboard("default", "Default");
+		}
+		WidgetFactory widgetFactory = dashboardContext.getWidgetFactory();
+		dashboard.getWidgets().clear(); //FIXME hack somehow Dashboard loaded with 7! PrivateRoomsWidgets
+		dashboard.addWidget(widgetFactory.createWidget(new WelcomeWidgetDescriptor()));
+		dashboard.addWidget(widgetFactory.createWidget(new PrivateRoomsWidgetDescriptor()));
 	}
 }
