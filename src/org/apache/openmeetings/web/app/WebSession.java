@@ -36,6 +36,7 @@ import org.apache.openmeetings.persistence.beans.basic.Sessiondata;
 import org.apache.openmeetings.persistence.beans.lang.FieldLanguage;
 import org.apache.openmeetings.persistence.beans.user.User;
 import org.apache.openmeetings.web.components.user.dashboard.PrivateRoomsWidgetDescriptor;
+import org.apache.openmeetings.web.components.user.dashboard.StartWidgetDescriptor;
 import org.apache.openmeetings.web.components.user.dashboard.WelcomeWidgetDescriptor;
 import org.apache.wicket.authroles.authentication.AbstractAuthenticatedWebSession;
 import org.apache.wicket.authroles.authorization.strategies.role.Roles;
@@ -180,6 +181,7 @@ public class WebSession extends AbstractAuthenticatedWebSession {
 		WidgetFactory widgetFactory = dashboardContext.getWidgetFactory();
 		dashboard.getWidgets().clear(); //FIXME hack somehow Dashboard loaded with 7! PrivateRoomsWidgets
 		dashboard.addWidget(widgetFactory.createWidget(new WelcomeWidgetDescriptor()));
+		dashboard.addWidget(widgetFactory.createWidget(new StartWidgetDescriptor())); 
 		dashboard.addWidget(widgetFactory.createWidget(new PrivateRoomsWidgetDescriptor()));
 	}
 }
