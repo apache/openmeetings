@@ -18,6 +18,8 @@
  */
 package org.apache.openmeetings.data.file;
 
+import static org.apache.openmeetings.utils.OmFileHelper.thumbImagePrefix;
+
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -51,8 +53,7 @@ public class FileUtils {
 					fileSize += tFile.length();
 				}
 
-				File thumbFile = new File(base, "_thumb_"
-						+ fileExplorerItem.getFileHash());
+				File thumbFile = new File(base, thumbImagePrefix + fileExplorerItem.getFileHash());
 				if (thumbFile.exists()) {
 					fileSize += thumbFile.length();
 				}

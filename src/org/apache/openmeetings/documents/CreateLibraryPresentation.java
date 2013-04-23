@@ -18,6 +18,8 @@
  */
 package org.apache.openmeetings.documents;
 
+import static org.apache.openmeetings.utils.OmFileHelper.thumbImagePrefix;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FilenameFilter;
@@ -77,7 +79,7 @@ public class CreateLibraryPresentation {
 				Arrays.sort(allfiles);
 				for(int i=0; i<allfiles.length; i++){
 					File thumbfile = new File(targetDirectory, allfiles[i]);
-					if (allfiles[i].startsWith("_thumb_")){
+					if (allfiles[i].startsWith(thumbImagePrefix)){
 						thumbs.addElement( "thumb" )
 							.addAttribute("lastmod", (new Long(thumbfile.lastModified())).toString())
 							.addAttribute("size", (new Long(thumbfile.length())).toString())

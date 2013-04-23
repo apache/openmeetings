@@ -18,9 +18,10 @@
  */
 package org.apache.openmeetings.web.components.user;
 
+import static org.apache.openmeetings.OpenmeetingsVariables.webAppRootKey;
+
 import java.util.Date;
 
-import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.data.chat.ChatDao;
 import org.apache.openmeetings.data.user.dao.UsersDao;
 import org.apache.openmeetings.persistence.beans.chat.ChatMessage;
@@ -45,9 +46,8 @@ import org.apache.wicket.protocol.ws.api.IWebSocketConnection;
 import org.apache.wicket.protocol.ws.api.IWebSocketConnectionRegistry;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
-
 public class ChatPanel extends UserPanel {
-	private static final Logger log = Red5LoggerFactory.getLogger(ChatPanel.class, OpenmeetingsVariables.webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(ChatPanel.class, webAppRootKey);
 	private static final long serialVersionUID = -9144707674886211557L;
 	private String message;
 	

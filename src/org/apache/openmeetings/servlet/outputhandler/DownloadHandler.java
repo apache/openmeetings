@@ -18,6 +18,11 @@
  */
 package org.apache.openmeetings.servlet.outputhandler;
 
+import static org.apache.openmeetings.utils.OmFileHelper.bigImagePrefix;
+import static org.apache.openmeetings.utils.OmFileHelper.chatImagePrefix;
+import static org.apache.openmeetings.utils.OmFileHelper.defaultProfileImageName;
+import static org.apache.openmeetings.utils.OmFileHelper.profileImagePrefix;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -46,9 +51,8 @@ public class DownloadHandler extends BaseHttpServlet {
 			DownloadHandler.class, OpenmeetingsVariables.webAppRootKey);
 
 	private static final String defaultImageName = "deleted.jpg";
-	private static final String defaultProfileImageName = "profile_pic.jpg";
-	private static final String defaultProfileImageNameBig = "_big_profile_pic.jpg";
-	private static final String defaultChatImageName = "_chat_profile_pic.jpg";
+	private static final String defaultProfileImageNameBig = profileImagePrefix + defaultProfileImageName;
+	private static final String defaultChatImageName = chatImagePrefix + defaultProfileImageName;
 	private static final String defaultSWFName = "deleted.swf";
 
 	private void logNonExistentFolder(File f) {
@@ -193,20 +197,20 @@ public class DownloadHandler extends BaseHttpServlet {
 
 							log.debug("LOG moduleName: " + moduleName);
 
-							requestedFile = DownloadHandler.defaultImageName;
+							requestedFile = defaultImageName;
 							if (moduleName.equals("remoteuserprofile")) {
-								requestedFile = DownloadHandler.defaultProfileImageName;
+								requestedFile = defaultProfileImageName;
 							} else if (moduleName.equals("remoteuserprofilebig")) {
-								requestedFile = DownloadHandler.defaultProfileImageNameBig;
+								requestedFile = defaultProfileImageNameBig;
 							} else if (moduleName.equals("userprofile")) {
-								requestedFile = DownloadHandler.defaultProfileImageName;
+								requestedFile = defaultProfileImageName;
 							} else if (moduleName.equals("chat")) {
-								requestedFile = DownloadHandler.defaultChatImageName;
+								requestedFile = defaultChatImageName;
 							}
 						} else if (requestedFile.endsWith(".swf")) {
-							requestedFile = DownloadHandler.defaultSWFName;
+							requestedFile = defaultSWFName;
 						} else {
-							requestedFile = DownloadHandler.defaultImageName;
+							requestedFile = defaultImageName;
 						}
 						full_path = new File(OmFileHelper.getDefaultDir(), requestedFile);
 					}
@@ -312,7 +316,7 @@ public class DownloadHandler extends BaseHttpServlet {
 			String filesString[] = f.list();
 			for (int i = 0; i < filesString.length; i++) {
 				String fileName = filesString[i];
-				if (fileName.startsWith("_chat_"))
+				if (fileName.startsWith(chatImagePrefix))
 					return fileName;
 			}
 		}
@@ -324,7 +328,7 @@ public class DownloadHandler extends BaseHttpServlet {
 			String filesString[] = f.list();
 			for (int i = 0; i < filesString.length; i++) {
 				String fileName = filesString[i];
-				if (fileName.startsWith("_big_"))
+				if (fileName.startsWith(bigImagePrefix))
 					return fileName;
 			}
 		}

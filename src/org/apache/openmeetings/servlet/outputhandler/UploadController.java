@@ -18,6 +18,11 @@
  */
 package org.apache.openmeetings.servlet.outputhandler;
 
+import static org.apache.openmeetings.utils.OmFileHelper.bigImagePrefix;
+import static org.apache.openmeetings.utils.OmFileHelper.chatImagePrefix;
+import static org.apache.openmeetings.utils.OmFileHelper.profileImagePrefix;
+import static org.apache.openmeetings.utils.OmFileHelper.thumbImagePrefix;
+
 import java.io.File;
 import java.io.InputStream;
 
@@ -290,11 +295,11 @@ public class UploadController extends AbstractUploadController {
 				this.deleteUserProfileFiles(userId);
 				// is UserProfile Picture
 				returnError.addItem("processThumb1", generateThumbs
-						.generateThumb("_chat_", completeName, 40));
+						.generateThumb(chatImagePrefix, completeName, 40));
 				returnError.addItem("processThumb2", generateThumbs
-						.generateThumb("_profile_", completeName, 126));
+						.generateThumb(profileImagePrefix, completeName, 126));
 				returnError.addItem("processThumb3", generateThumbs
-						.generateThumb("_big_", completeName, 240));
+						.generateThumb(bigImagePrefix, completeName, 240));
 
 				String pictureuri = completeName.getName();
 				User us = usersDao.get(userId);
@@ -305,7 +310,7 @@ public class UploadController extends AbstractUploadController {
 				//FIXME: After updating the picture url all other users should refresh
 			} else {
 				returnError.addItem("processThumb", generateThumbs
-						.generateThumb("_thumb_", completeName, 50));
+						.generateThumb(thumbImagePrefix, completeName, 50));
 			}
 		}
 

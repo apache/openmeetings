@@ -46,6 +46,7 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
 import ro.fortsoft.wicket.dashboard.WidgetRegistry;
 import ro.fortsoft.wicket.dashboard.web.DashboardContext;
 import ro.fortsoft.wicket.dashboard.web.DashboardContextInjector;
+import ro.fortsoft.wicket.dashboard.web.DashboardSettings;
 
 public class Application extends AuthenticatedWebApplication {
 	private DashboardContext dashboardContext;
@@ -80,6 +81,9 @@ public class Application extends AuthenticatedWebApplication {
 		// add dashboard context injector
 		DashboardContextInjector dashboardContextInjector = new DashboardContextInjector(dashboardContext);
 		getComponentInstantiationListeners().add(dashboardContextInjector);
+		DashboardSettings dashboardSettings = DashboardSettings.get();
+		dashboardSettings.setIncludeJQuery(false);
+		dashboardSettings.setIncludeJQueryUI(false);
 		
 		mountPage("signin", getSignInPageClass());
 		mountPage("notinited", NotInitedPage.class);

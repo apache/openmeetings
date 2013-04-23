@@ -18,6 +18,8 @@
  */
 package org.apache.openmeetings.data.file;
 
+import static org.apache.openmeetings.utils.OmFileHelper.thumbImagePrefix;
+
 import java.io.File;
 import java.io.InputStream;
 import java.util.Date;
@@ -156,7 +158,7 @@ public class FileProcessor {
             returnError = generateImage.convertImage(newFileSystemName, newFileExtDot, "files",
                     newFileSystemName, false);
         } else if (isAsIs) {
-        	ConverterProcessResult processThumb = generateThumbs.generateThumb("_thumb_", completeName, 50);
+        	ConverterProcessResult processThumb = generateThumbs.generateThumb(thumbImagePrefix, completeName, 50);
             returnError.addItem("processThumb", processThumb);
         } else if (isVideo) {
         	List<ConverterProcessResult> returnList = flvExplorerConverter.startConversion(fileExplorerItemId, completeName.getCanonicalPath());

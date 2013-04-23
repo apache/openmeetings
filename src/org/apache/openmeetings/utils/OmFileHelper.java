@@ -61,6 +61,11 @@ public class OmFileHelper {
 	public static final String nameOfTimeZoneFile = "timezones.xml";
 	public static final String nameOfErrorFile = "errorvalues.xml";
 	public static final String libraryFileName = "library.xml";
+	public static final String defaultProfileImageName = "profile_pic.jpg";
+	public static final String profileImagePrefix = "_profile_";
+	public static final String chatImagePrefix = "_chat_";
+	public static final String bigImagePrefix = "_big_";
+	public static final String thumbImagePrefix = "_thumb_";
 
 	public static void setOmHome(File omHome) {
 		OmFileHelper.OM_HOME = omHome;
@@ -99,12 +104,24 @@ public class OmFileHelper {
 		return getDir(getUploadDir(), PROFILES_DIR);
 	}
 	
-	public static File getUploadProfilesUserDir(Long users_id) {
-		return getDir(getUploadProfilesDir(), OmFileHelper.profilesPrefix + users_id);
+	public static File getUploadProfilesUserDir(Long userId) {
+		return getDir(getUploadProfilesDir(), profilesPrefix + userId);
 	}
 	
 	public static File getUploadProfilesUserDir(String users_id) {
-		return getDir(getUploadProfilesDir(), OmFileHelper.profilesPrefix + users_id);
+		return getDir(getUploadProfilesDir(), profilesPrefix + users_id);
+	}
+	
+	public static File getDefaultProfilePicture() {
+		return new File(getDefaultDir(), profileImagePrefix + defaultProfileImageName);
+	}
+	
+	public static File getUserProfilePicture(Long userId, String uri) {
+		File img = new File(getUploadProfilesUserDir(userId), profileImagePrefix + uri);
+		if (!img.exists()) {
+			img = getDefaultProfilePicture();
+		}
+		return img;
 	}
 	
 	public static File getUploadImportDir() {

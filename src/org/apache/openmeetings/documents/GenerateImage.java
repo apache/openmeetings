@@ -18,6 +18,11 @@
  */
 package org.apache.openmeetings.documents;
 
+import static org.apache.openmeetings.utils.OmFileHelper.bigImagePrefix;
+import static org.apache.openmeetings.utils.OmFileHelper.chatImagePrefix;
+import static org.apache.openmeetings.utils.OmFileHelper.profileImagePrefix;
+import static org.apache.openmeetings.utils.OmFileHelper.thumbImagePrefix;
+
 import java.io.File;
 import java.io.IOException;
 
@@ -58,7 +63,7 @@ public class GenerateImage extends BaseConverter {
 		ConverterProcessResult processJPG = this.convertSingleJpg(
 				fileFullPath.getCanonicalPath(), destinationFile);
 		ConverterProcessResult processThumb = generateThumbs.generateThumb(
-				"_thumb_", destinationFile, 50);
+				thumbImagePrefix, destinationFile, 50);
 
 		returnMap.addItem("processJPG", processJPG);
 		returnMap.addItem("processThumb", processThumb);
@@ -83,11 +88,11 @@ public class GenerateImage extends BaseConverter {
 				fileFullPath, destinationFile);
 
 		ConverterProcessResult processThumb1 = generateThumbs.generateThumb(
-				"_chat_", destinationFile, 40);
+				chatImagePrefix, destinationFile, 40);
 		ConverterProcessResult processThumb2 = generateThumbs.generateThumb(
-				"_profile_", destinationFile, 126);
+				profileImagePrefix, destinationFile, 126);
 		ConverterProcessResult processThumb3 = generateThumbs.generateThumb(
-				"_big_", destinationFile, 240);
+				bigImagePrefix, destinationFile, 240);
 
 		returnMap.addItem("processJPG", processJPG);
 		returnMap.addItem("processThumb1", processThumb1);
