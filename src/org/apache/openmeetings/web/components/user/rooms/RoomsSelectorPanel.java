@@ -16,12 +16,9 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.web.components.user.room;
-
-import java.util.ArrayList;
+package org.apache.openmeetings.web.components.user.rooms;
 
 import org.apache.openmeetings.data.conference.dao.RoomDao;
-import org.apache.openmeetings.persistence.beans.room.Room;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.components.MenuPanel.MenuParams;
@@ -40,9 +37,8 @@ public class RoomsSelectorPanel extends UserPanel {
 			case myTabButton:
 				title = 781L;
 				desc = 782L;
-				//rooms = Application.getBean(RoomDao.class).getPublicRooms();
-				//FIXME 2 !!!! fake rooms appointmentLogic.getTodaysAppointmentsForUser(users_id);
-				add(new RoomsPanel("rooms", new ArrayList<Room>()));
+				//FIXME 2 !!!! fake rooms;
+				add(new RoomsPanel("rooms", roomDao.getAppointedRoomsByUser(WebSession.getUserId())));
 				break;
 			case privateTabButton:
 				title = 779L;

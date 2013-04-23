@@ -18,7 +18,8 @@
  */
 package org.apache.openmeetings.remote;
 
-import org.apache.openmeetings.OpenmeetingsVariables;
+import static org.apache.openmeetings.OpenmeetingsVariables.webAppRootKey;
+
 import org.apache.openmeetings.data.basic.AuthLevelUtil;
 import org.apache.openmeetings.data.basic.SessiondataDao;
 import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
@@ -36,9 +37,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  * 
  */
 public class ConfigurationService {
-
-	private static final Logger log = Red5LoggerFactory.getLogger(
-			ConfigurationService.class, OpenmeetingsVariables.webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(ConfigurationService.class, webAppRootKey);
 
 	@Autowired
 	private AuthLevelUtil authLevelUtil;
@@ -83,13 +82,16 @@ public class ConfigurationService {
 		return null;
     }
     
-	/**
+    /**
 	 * Save or update a configuration
-	 * 
-	 * @param SID
-	 * @param values
+     * 
+     * @param SID
+     * @param id
+     * @param key
+     * @param val
+     * @param comment
 	 * @return - id of configuration being updated, null otherwise
-	 */
+     */
     public Long saveOrUpdateConfiguration(String SID, Long id, String key, String val, String comment){
         Long users_id = sessiondataDao.checkSession(SID);
 		Long user_level = userManager.getUserLevelByID(users_id);
@@ -111,13 +113,13 @@ public class ConfigurationService {
 		return null;
     }
     
-	/**
+    /**
 	 * delete a configuration
-	 * 
-	 * @param SID
-	 * @param values
+     * 
+     * @param SID
+     * @param id
 	 * @return - id of configuration being deleted in case of success, null otherwise
-	 */
+     */
     public Long deleteConfiguration(String SID, Long id){
         Long users_id = sessiondataDao.checkSession(SID);
 		Long user_level = userManager.getUserLevelByID(users_id);

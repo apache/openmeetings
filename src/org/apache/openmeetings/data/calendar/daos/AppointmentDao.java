@@ -18,6 +18,8 @@
  */
 package org.apache.openmeetings.data.calendar.daos;
 
+import static org.apache.openmeetings.OpenmeetingsVariables.webAppRootKey;
+
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -35,7 +37,6 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
-import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
 import org.apache.openmeetings.data.basic.dao.OmTimeZoneDao;
 import org.apache.openmeetings.data.calendar.management.MeetingMemberLogic;
@@ -59,9 +60,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
 public class AppointmentDao {
-
-	private static final Logger log = Red5LoggerFactory.getLogger(
-			AppointmentDao.class, OpenmeetingsVariables.webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(AppointmentDao.class, webAppRootKey);
 	@PersistenceContext
 	private EntityManager em;
 	@Autowired
@@ -868,17 +867,6 @@ public class AppointmentDao {
 	public List<Appointment> getTodaysAppointmentsbyRangeAndMember(Long userId) {
 		log.debug("getAppoitmentbyRangeAndMember : UserID - " + userId);
 
-		//this query returns duplicates if the user books an appointment with
-		//his own user as second meeting-member, swagner 19.02.2012
-		
-		String hql = "SELECT app from MeetingMember mm "
-				+ "JOIN mm.appointment as app "
-				+ "WHERE mm.userid.user_id= :userId "
-				+ "AND mm.deleted <> :mm_deleted "
-				+ "AND app.deleted <> :app_deleted " + "AND  "
-				+ "app.appointmentStarttime between :starttime " + "AND "
-				+ " :endtime";
-		
 		TimeZone timeZone = timezoneUtil.getTimezoneByUser(usersDao.get(userId));
 
 		Calendar startCal = Calendar.getInstance(timeZone);
@@ -891,23 +879,15 @@ public class AppointmentDao {
 		endCal.set(Calendar.HOUR, 59);
 		endCal.set(Calendar.SECOND, 59);
 
-		try {
-			TypedQuery<Appointment> query = em.createQuery(hql,
-					Appointment.class);
+		TypedQuery<Appointment> query = em.createNamedQuery("appointmentsInRangeByUser", Appointment.class);
 
-			query.setParameter("mm_deleted", true);
-			query.setParameter("app_deleted", true);
-			query.setParameter("userId", userId);
+		query.setParameter("userId", userId);
 
-			query.setParameter("starttime", startCal.getTime());
-			query.setParameter("endtime", endCal.getTime());
+		query.setParameter("starttime", startCal.getTime());
+		query.setParameter("endtime", endCal.getTime());
 
-			List<Appointment> listAppoints = query.getResultList();
-			return listAppoints;
-		} catch (Exception e) {
-			log.error("Error in getTodaysAppoitmentsbyRangeAndMember : ", e);
-			return null;
-		}
+		List<Appointment> listAppoints = query.getResultList();
+		return listAppoints;
 	}
 
 	/**

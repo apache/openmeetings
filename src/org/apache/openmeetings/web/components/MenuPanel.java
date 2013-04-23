@@ -32,7 +32,7 @@ import org.apache.openmeetings.web.components.admin.rooms.RoomsPanel;
 import org.apache.openmeetings.web.components.admin.servers.ServersPanel;
 import org.apache.openmeetings.web.components.admin.users.UsersPanel;
 import org.apache.openmeetings.web.components.user.calendar.CalendarPanel;
-import org.apache.openmeetings.web.components.user.room.RoomsSelectorPanel;
+import org.apache.openmeetings.web.components.user.rooms.RoomsSelectorPanel;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;

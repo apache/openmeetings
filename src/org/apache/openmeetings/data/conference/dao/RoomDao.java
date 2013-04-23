@@ -18,8 +18,12 @@
  */
 package org.apache.openmeetings.data.conference.dao;
 
+import static org.apache.openmeetings.OpenmeetingsVariables.webAppRootKey;
+
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -27,13 +31,18 @@ import javax.persistence.TypedQuery;
 
 import org.apache.openmeetings.data.IDataProviderDao;
 import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
+import org.apache.openmeetings.data.user.dao.UsersDao;
 import org.apache.openmeetings.persistence.beans.room.Room;
 import org.apache.openmeetings.utils.DaoHelper;
+import org.apache.openmeetings.utils.math.TimezoneUtil;
+import org.red5.logging.Red5LoggerFactory;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
 public class RoomDao implements IDataProviderDao<Room> {
+	private static final Logger log = Red5LoggerFactory.getLogger(RoomDao.class, webAppRootKey);
 	public final static String[] searchFields = {"name"};
 	
 	@PersistenceContext
@@ -42,6 +51,10 @@ public class RoomDao implements IDataProviderDao<Room> {
 	private ConfigurationDao cfgDao;
     @Autowired
     private SipDao sipDao;
+	@Autowired
+	private UsersDao usersDao;
+	@Autowired
+	private TimezoneUtil timezoneUtil;
 
 	public Room get(long id) {
 		TypedQuery<Room> q = em.createNamedQuery("getRoomById", Room.class);
@@ -90,6 +103,29 @@ public class RoomDao implements IDataProviderDao<Room> {
 		return q.getResultList();
 	}
 
+	public List<Room> getAppointedRoomsByUser(long userId) {
+		//TODO generalize with AppointmentDao
+		log.debug("getAppointedRoomsByUser : UserID - " + userId);
+
+		TimeZone timeZone = timezoneUtil.getTimezoneByUser(usersDao.get(userId));
+
+		Calendar startCal = Calendar.getInstance(timeZone);
+		startCal.set(Calendar.MINUTE, 0);
+		startCal.set(Calendar.HOUR, 0);
+		startCal.set(Calendar.SECOND, 1);
+
+		Calendar endCal = Calendar.getInstance(timeZone);
+		endCal.set(Calendar.MINUTE, 23);
+		endCal.set(Calendar.HOUR, 59);
+		endCal.set(Calendar.SECOND, 59);
+
+		return em.createNamedQuery("appointedRoomsInRangeByUser", Room.class)
+				.setParameter("userId", userId)
+				.setParameter("starttime", startCal.getTime())
+				.setParameter("endtime", endCal.getTime())
+				.getResultList();
+	}
+	
 	public Long getRoomsCapacityByIds(List<Long> ids) {
 		return ids == null || ids.isEmpty() ? 0
 			: em.createNamedQuery("getRoomsCapacityByIds", Long.class).setParameter("ids", ids).getSingleResult();
@@ -133,5 +169,4 @@ public class RoomDao implements IDataProviderDao<Room> {
 		entity.setSipEnabled(false);
 		update(entity, userId);
 	}
-
 }

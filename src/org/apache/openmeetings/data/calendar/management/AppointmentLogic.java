@@ -89,15 +89,15 @@ public class AppointmentLogic {
 	}
 
 	public List<Appointment> getTodaysAppointmentsForUser(Long userId) {
-		log.debug("getTodaysAppointmentsForUser");
-
-		List<Appointment> points = appointmentDao
-				.getTodaysAppointmentsbyRangeAndMember(userId);
-
-		log.debug("Count Appointments for Today : " + points.size());
-
-		return points;
-
+		try {
+			log.debug("getTodaysAppointmentsForUser");
+			List<Appointment> points = appointmentDao.getTodaysAppointmentsbyRangeAndMember(userId);
+			log.debug("Count Appointments for Today : " + points.size());
+			return points;
+		} catch (Exception err) {
+			log.error("[getTodaysAppointmentsForUser]", err);
+		}
+		return null;
 	}
 
 	/**

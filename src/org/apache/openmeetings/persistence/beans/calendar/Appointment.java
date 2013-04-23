@@ -68,6 +68,26 @@ import org.simpleframework.xml.Root;
 			+ "		OR (a.appointmentStarttime < :starttime AND a.appointmentEndtime > :endtime) "
 			+ "	)"
 	)
+	//TODO this query returns duplicates if the user books an appointment with
+	//his own user as second meeting-member, swagner 19.02.2012
+    , @NamedQuery(name="appointmentsInRangeByUser",
+	query="SELECT a FROM MeetingMember mm, IN(mm.appointment) a "
+		+ "WHERE mm.deleted <> true AND mm.invitor <> true AND mm.userid.user_id = :userId "
+		+ "	AND ( "
+		+ "		(a.appointmentStarttime BETWEEN :starttime AND :endtime) "
+		+ "		OR (a.appointmentEndtime BETWEEN :starttime AND :endtime) "
+		+ "		OR (a.appointmentStarttime < :starttime AND a.appointmentEndtime > :endtime) "
+		+ "	)"
+    )
+    , @NamedQuery(name="appointedRoomsInRangeByUser",
+	query="SELECT a.room FROM MeetingMember mm, IN(mm.appointment) a "
+		+ "WHERE mm.deleted <> true AND mm.invitor <> true AND mm.userid.user_id = :userId "
+		+ "	AND ( "
+		+ "		(a.appointmentStarttime BETWEEN :starttime AND :endtime) "
+		+ "		OR (a.appointmentEndtime BETWEEN :starttime AND :endtime) "
+		+ "		OR (a.appointmentStarttime < :starttime AND a.appointmentEndtime > :endtime) "
+		+ "	)"
+    )
 })
 @Root(name="appointment")
 public class Appointment implements Serializable {
