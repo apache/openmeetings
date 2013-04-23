@@ -24,6 +24,7 @@ import org.apache.openmeetings.web.components.ConfirmableAjaxLink;
 import org.apache.openmeetings.web.components.MenuPanel;
 import org.apache.openmeetings.web.components.user.AboutDialog;
 import org.apache.openmeetings.web.components.user.ChatPanel;
+import org.apache.openmeetings.web.components.user.dashboard.OmDashboardPanel;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
@@ -43,7 +44,8 @@ public class MainPage extends BasePage {
 	
 	public MainPage() {
 		MarkupContainer contents = new WebMarkupContainer("contents");
-		contents.add(new WebMarkupContainer("child")).setOutputMarkupId(true).setMarkupId("contents");
+		//FIXME need to be generalized with MenuPanel
+		contents.add(new OmDashboardPanel("child")).setOutputMarkupId(true).setMarkupId("contents");
 		add(contents);
 		menu = new MenuPanel("menu", contents);
 		add(menu);

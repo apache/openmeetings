@@ -32,6 +32,7 @@ import org.apache.openmeetings.web.components.admin.rooms.RoomsPanel;
 import org.apache.openmeetings.web.components.admin.servers.ServersPanel;
 import org.apache.openmeetings.web.components.admin.users.UsersPanel;
 import org.apache.openmeetings.web.components.user.calendar.CalendarPanel;
+import org.apache.openmeetings.web.components.user.dashboard.OmDashboardPanel;
 import org.apache.openmeetings.web.components.user.rooms.RoomsSelectorPanel;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
@@ -116,8 +117,6 @@ public class MenuPanel extends BasePanel {
 								BasePanel basePanel = null;
 								
 								switch(action) {
-									case dashboardModuleStartScreen:
-										break;
 									case dashboardModuleCalendar:
 										basePanel = new CalendarPanel("child");
 										break;
@@ -157,6 +156,10 @@ public class MenuPanel extends BasePanel {
 										break;
 									case adminModuleServers:
 										basePanel = new ServersPanel("child");
+										break;
+									case dashboardModuleStartScreen:
+									default:
+										basePanel = new OmDashboardPanel("child");
 										break;
 								}
 								

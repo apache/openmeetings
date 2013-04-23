@@ -19,6 +19,7 @@
 package org.apache.openmeetings.web.app;
 
 import org.apache.openmeetings.remote.red5.ScopeApplicationAdapter;
+import org.apache.openmeetings.web.components.user.dashboard.PrivateRoomsWidgetDescriptor;
 import org.apache.openmeetings.web.pages.MainPage;
 import org.apache.openmeetings.web.pages.NotInitedPage;
 import org.apache.openmeetings.web.pages.auth.SignInPage;
@@ -40,7 +41,17 @@ import org.apache.wicket.settings.IPageSettings;
 import org.springframework.context.ApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
+import ro.fortsoft.wicket.dashboard.Dashboard;
+import ro.fortsoft.wicket.dashboard.DefaultDashboard;
+import ro.fortsoft.wicket.dashboard.Widget;
+import ro.fortsoft.wicket.dashboard.WidgetFactory;
+import ro.fortsoft.wicket.dashboard.WidgetRegistry;
+import ro.fortsoft.wicket.dashboard.web.DashboardContext;
+import ro.fortsoft.wicket.dashboard.web.DashboardContextInjector;
+
 public class Application extends AuthenticatedWebApplication {
+	private DashboardContext dashboardContext;
+	private Dashboard dashboard;
 	
 	@Override
 	protected void init() {
@@ -62,6 +73,14 @@ public class Application extends AuthenticatedWebApplication {
 		getResourceSettings().getStringResourceLoaders().add(0, new LabelResourceLoader());
 		
 		super.init();
+		
+		// register some widgets
+		dashboardContext = new DashboardContext();
+		WidgetRegistry widgetRegistry = dashboardContext.getWidgetRegistry();
+		widgetRegistry.registerWidget(new PrivateRoomsWidgetDescriptor());
+		// add dashboard context injector
+		DashboardContextInjector dashboardContextInjector = new DashboardContextInjector(dashboardContext);
+		getComponentInstantiationListeners().add(dashboardContextInjector);
 		
 		mountPage("signin", getSignInPageClass());
 		mountPage("notinited", NotInitedPage.class);
@@ -109,5 +128,26 @@ public class Application extends AuthenticatedWebApplication {
 		} else {
 			throw new RestartResponseException(NotInitedPage.class);
 		}
+	}
+	
+	public static Dashboard getDashboard() {
+		Dashboard d = get().dashboard;
+		if (d == null) {
+			get().initDashboard();
+			d = get().dashboard;
+		}
+		return d;
+	}
+	
+	private void initDashboard() {
+		//FIXME check title etc.
+		dashboard = dashboardContext.getDashboardPersiter().load();
+		if (dashboard == null) {
+			dashboard = new DefaultDashboard("default", "Default");
+		}
+		WidgetFactory widgetFactory = dashboardContext.getWidgetFactory();
+		Widget widget = widgetFactory.createWidget(new PrivateRoomsWidgetDescriptor());
+		dashboard.getWidgets().clear(); //FIXME hack somehow Dashboard loaded with 7! PrivateRoomsWidgets
+		dashboard.addWidget(widget);
 	}
 }
