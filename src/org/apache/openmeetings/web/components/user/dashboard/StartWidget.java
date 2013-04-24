@@ -29,9 +29,8 @@ import ro.fortsoft.wicket.dashboard.web.WidgetView;
 public class StartWidget extends AbstractWidget {
 	private static final long serialVersionUID = 9060237325733825899L;
 
-	public StartWidget(String id) {
+	public StartWidget() {
 		super();
-		setId(id);
 		title = WebSession.getString(774L);
 		location = new WidgetLocation(1, 0);
 	}

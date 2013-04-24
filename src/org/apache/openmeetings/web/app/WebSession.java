@@ -179,7 +179,6 @@ public class WebSession extends AbstractAuthenticatedWebSession {
 			dashboard = new DefaultDashboard("default", "Default");
 		}
 		WidgetFactory widgetFactory = dashboardContext.getWidgetFactory();
-		dashboard.getWidgets().clear(); //FIXME hack somehow Dashboard loaded with 7! PrivateRoomsWidgets
 		dashboard.addWidget(widgetFactory.createWidget(new WelcomeWidgetDescriptor()));
 		dashboard.addWidget(widgetFactory.createWidget(new StartWidgetDescriptor())); 
 		dashboard.addWidget(widgetFactory.createWidget(new PrivateRoomsWidgetDescriptor()));

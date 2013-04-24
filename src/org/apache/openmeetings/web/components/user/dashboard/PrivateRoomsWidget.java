@@ -29,9 +29,8 @@ import ro.fortsoft.wicket.dashboard.web.WidgetView;
 public class PrivateRoomsWidget extends AbstractWidget {
 	private static final long serialVersionUID = 1769428980617610979L;
 
-	public PrivateRoomsWidget(String id) {
+	public PrivateRoomsWidget() {
 		super();
-		setId(id);
 		title = WebSession.getString(781L);
 		location = new WidgetLocation(0, 1);
 	}
