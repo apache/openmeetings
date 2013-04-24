@@ -533,3 +533,24 @@ div.tableWrapper {
 	bottom: 16px;
 	z-index:999;
 }
+.start_step1, .start_step2, .start_step3, .start_step4  {
+	padding-left: 30px;
+	margin: 5px 0px 5px 0px; 
+	background-size: contain;
+	background-repeat: no-repeat;
+}
+.start_step1 {
+	background-image: url(../public/themes/basic-theme/dashboard/wizzard_button_1.png);
+}
+.start_step2 {
+	background-image: url(../public/themes/basic-theme/dashboard/wizzard_button_2.png);
+	margin-left: 20px;
+}
+.start_step3 {
+	background-image: url(../public/themes/basic-theme/dashboard/wizzard_button_3.png);
+	margin-left: 40px;
+}
+.start_step4 {
+	background-image: url(../public/themes/basic-theme/dashboard/wizzard_button_4.png);
+	margin-left: 60px;
+}

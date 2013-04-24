@@ -18,10 +18,12 @@
  */
 package org.apache.openmeetings.web.components.user.dashboard;
 
+import static org.apache.openmeetings.web.app.WebSession.getUserId;
+
+import org.apache.openmeetings.data.user.dao.PrivateMessagesDao;
 import org.apache.openmeetings.data.user.dao.UsersDao;
 import org.apache.openmeetings.persistence.beans.user.User;
 import org.apache.openmeetings.web.app.Application;
-import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.components.ProfileImagePanel;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
@@ -37,13 +39,21 @@ public class WelcomeWidgetView extends WidgetView {
 	public WelcomeWidgetView(String id, Model<Widget> model) {
 		super(id, model);
 
-		User u = Application.getBean(UsersDao.class).get(WebSession.getUserId());
-		add(new ProfileImagePanel("img", WebSession.getUserId()));
+		User u = Application.getBean(UsersDao.class).get(getUserId());
+		add(new ProfileImagePanel("img", getUserId()));
 		 //FIXME this need to be aligned according to Locale
 		add(new Label("firstname", Model.of(u.getFirstname())));
 		add(new Label("lastname", Model.of(u.getLastname())));
 		add(new Label("tz", Model.of(u.getOmTimeZone().getIcal())));
-		add(new Label("unread", Model.of("0")));//FIXME need to have valid number + link
+		add(new AjaxLink<Void>("openUnread") {
+			private static final long serialVersionUID = -1847619557485964386L;
+
+			@Override
+			public void onClick(AjaxRequestTarget target) {
+				//FIXME should have action
+			}
+		}.add(new Label("unread", Model.of("" + Application.getBean(PrivateMessagesDao.class)
+				.getNumberMessages(getUserId(), 0L, false)))));
 		add(new AjaxLink<Void>("editProfile") {
 			private static final long serialVersionUID = -1847619557485964386L;
 
