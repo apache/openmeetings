@@ -177,10 +177,12 @@ public class WebSession extends AbstractAuthenticatedWebSession {
 		dashboard = dashboardContext.getDashboardPersiter().load();
 		if (dashboard == null) {
 			dashboard = new DefaultDashboard("default", "Default");
+			
+			WidgetFactory widgetFactory = dashboardContext.getWidgetFactory();
+			dashboard.addWidget(widgetFactory.createWidget(new WelcomeWidgetDescriptor()));
+			dashboard.addWidget(widgetFactory.createWidget(new StartWidgetDescriptor())); 
+			dashboard.addWidget(widgetFactory.createWidget(new PrivateRoomsWidgetDescriptor()));
+			dashboardContext.getDashboardPersiter().save(dashboard);
 		}
-		WidgetFactory widgetFactory = dashboardContext.getWidgetFactory();
-		dashboard.addWidget(widgetFactory.createWidget(new WelcomeWidgetDescriptor()));
-		dashboard.addWidget(widgetFactory.createWidget(new StartWidgetDescriptor())); 
-		dashboard.addWidget(widgetFactory.createWidget(new PrivateRoomsWidgetDescriptor()));
 	}
 }

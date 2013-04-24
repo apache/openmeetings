@@ -78,8 +78,7 @@ public class UserForm extends AdminBaseForm<User> {
 	private User user;
 
 	private final List<Salutation> saluationList = Application.getBean(
-			SalutationDao.class).getUserSalutations(
-			WebSession.getLanguage());
+			SalutationDao.class).getUserSalutations(WebSession.getLanguage());
 	private final List<FieldLanguage> languageList = Application.getBean(
 			FieldLanguageDao.class).getLanguages();
 

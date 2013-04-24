@@ -38,7 +38,7 @@ public class WelcomeWidgetView extends WidgetView {
 		super(id, model);
 
 		User u = Application.getBean(UsersDao.class).get(WebSession.getUserId());
-		add(new ProfileImagePanel("img", WebSession.getUserId()));//FIXME
+		add(new ProfileImagePanel("img", WebSession.getUserId()));
 		 //FIXME this need to be aligned according to Locale
 		add(new Label("firstname", Model.of(u.getFirstname())));
 		add(new Label("lastname", Model.of(u.getLastname())));

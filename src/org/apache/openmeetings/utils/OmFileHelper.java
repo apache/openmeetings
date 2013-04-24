@@ -66,6 +66,7 @@ public class OmFileHelper {
 	public static final String chatImagePrefix = "_chat_";
 	public static final String bigImagePrefix = "_big_";
 	public static final String thumbImagePrefix = "_thumb_";
+	public static final String dashboardFile = "dashboard.xml";
 
 	public static void setOmHome(File omHome) {
 		OmFileHelper.OM_HOME = omHome;
@@ -122,6 +123,10 @@ public class OmFileHelper {
 			img = getDefaultProfilePicture();
 		}
 		return img;
+	}
+	
+	public static File getUserDashboard(Long userId) {
+		return new File(getUploadProfilesUserDir(userId), dashboardFile);
 	}
 	
 	public static File getUploadImportDir() {

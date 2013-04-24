@@ -25,6 +25,7 @@ import org.apache.openmeetings.web.components.user.dashboard.WelcomeWidgetDescri
 import org.apache.openmeetings.web.pages.MainPage;
 import org.apache.openmeetings.web.pages.NotInitedPage;
 import org.apache.openmeetings.web.pages.auth.SignInPage;
+import org.apache.openmeetings.web.util.UserDashboardPersister;
 import org.apache.wicket.Page;
 import org.apache.wicket.RestartResponseException;
 import org.apache.wicket.authroles.authentication.AbstractAuthenticatedWebSession;
@@ -74,6 +75,7 @@ public class Application extends AuthenticatedWebApplication {
 		
 		// register some widgets
 		dashboardContext = new DashboardContext();
+		dashboardContext.setDashboardPersiter(new UserDashboardPersister());
 		WidgetRegistry widgetRegistry = dashboardContext.getWidgetRegistry();
 		widgetRegistry.registerWidget(new PrivateRoomsWidgetDescriptor());
 		widgetRegistry.registerWidget(new WelcomeWidgetDescriptor());
