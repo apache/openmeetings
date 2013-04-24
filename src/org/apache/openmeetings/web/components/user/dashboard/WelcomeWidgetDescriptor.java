@@ -41,4 +41,7 @@ public class WelcomeWidgetDescriptor implements WidgetDescriptor {
 		return WelcomeWidget.class.getName();
 	}
 
+	public String getTypeName() {
+		return "om.widget.welcome";
+	}
 }

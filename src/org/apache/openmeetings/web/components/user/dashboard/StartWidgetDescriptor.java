@@ -41,4 +41,7 @@ public class StartWidgetDescriptor implements WidgetDescriptor {
 		return StartWidget.class.getName();
 	}
 
+	public String getTypeName() {
+		return "om.widget.start";
+	}
 }

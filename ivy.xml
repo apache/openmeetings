@@ -262,7 +262,7 @@
 		<dependency org="com.googlecode.wicket-jquery-ui" name="wicket-jquery-ui-calendar" rev="6.7.0" conf="openmeetings->*" transitive="false">
 			<include type="jar" />
 		</dependency>
-		<dependency org="ro.fortsoft.wicket.dashboard" name="wicket-dashboard-core" rev="0.6" conf="openmeetings->*" transitive="false">
+		<dependency org="ro.fortsoft.wicket.dashboard" name="wicket-dashboard-core" rev="0.7" conf="openmeetings->*" transitive="false">
 			<include type="jar" />
 		</dependency>
 		<dependency org="com.google.code.gson" name="gson" rev="2.2.3" conf="openmeetings->*" transitive="false">
@@ -292,7 +292,7 @@
 
 		<!-- include type="bundle" / FIXME unable to get openjpa without  sources -->
 		<dependency org="org.mnode.ical4j" name="ical4j" rev="1.0.3" conf="openmeetings.ext->*" transitive="false"/>
-		<dependency org="org.apache.openjpa" name="openjpa" rev="2.2.1" conf="openmeetings.ext->*" transitive="false"/>
+		<dependency org="org.apache.openjpa" name="openjpa" rev="2.2.2" conf="openmeetings.ext->*" transitive="false"/>
 		
 		<dependency org="org.apache.ws.commons.axiom" name="axiom-impl" rev="1.2.14" conf="openmeetings.axis2->*" transitive="true">
 			<exclude name='commons-io' />

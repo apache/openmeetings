@@ -41,4 +41,7 @@ public class PrivateRoomsWidgetDescriptor implements WidgetDescriptor {
 		return PrivateRoomsWidget.class.getName();
 	}
 
+	public String getTypeName() {
+		return "om.widget.privaterooms";
+	}
 }

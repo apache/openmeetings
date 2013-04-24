@@ -40,7 +40,7 @@ public class DatabaseStore implements IClientPersistenceStore {
 	
 	public void clearCache() {
 		
-		List<Server> serverList = serverDao.getActiveServers();
+		//List<Server> serverList = serverDao.getActiveServers();
 		
 		//clientDao.cleanUpClientsWithoutReference();
 	}
