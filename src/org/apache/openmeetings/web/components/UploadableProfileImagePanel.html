@@ -19,7 +19,9 @@
   
 -->
 <html xmlns:wicket="http://wicket.apache.org">
-	<wicket:panel>
-		<div class="profile" wicket:id="profile"><img wicket:id="img"/><wicket:child/></div>
-	</wicket:panel>
+	<wicket:extend>
+		<form wicket:id="form"><div 
+			class="uploadtext"><wicket:ommessage key="379"/></div><div class="upload"><input type="file" 
+			wicket:id="image"/><span wicket:id="progress">[progressbar]</span></div></form>
+	</wicket:extend>
 </html>

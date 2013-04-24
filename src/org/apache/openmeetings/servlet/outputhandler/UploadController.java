@@ -278,11 +278,8 @@ public class UploadController extends AbstractUploadController {
 			log.debug("##### isImage! userProfilePic: " + userProfile);
 
 			if (userProfile) {
-				// User Profile Update
-				this.deleteUserProfileFiles(userId);
 				// convert it to JPG
-				returnError = generateImage.convertImageUserProfile(
-					newFileName, newFileExtDot, userId, newFileName, false);
+				returnError = generateImage.convertImageUserProfile(completeName, userId, true);
 			} else {
 				// convert it to JPG
 				log.debug("##### convert it to JPG: " + userProfile);

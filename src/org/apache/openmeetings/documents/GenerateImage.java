@@ -18,15 +18,20 @@
  */
 package org.apache.openmeetings.documents;
 
+import static org.apache.openmeetings.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.openmeetings.utils.OmFileHelper.bigImagePrefix;
 import static org.apache.openmeetings.utils.OmFileHelper.chatImagePrefix;
+import static org.apache.openmeetings.utils.OmFileHelper.getUploadProfilesUserDir;
+import static org.apache.openmeetings.utils.OmFileHelper.profileFileExt;
+import static org.apache.openmeetings.utils.OmFileHelper.profileFileName;
 import static org.apache.openmeetings.utils.OmFileHelper.profileImagePrefix;
 import static org.apache.openmeetings.utils.OmFileHelper.thumbImagePrefix;
 
 import java.io.File;
+import java.io.FileFilter;
 import java.io.IOException;
 
-import org.apache.openmeetings.OpenmeetingsVariables;
+import org.apache.commons.transaction.util.FileHelper;
 import org.apache.openmeetings.data.flvrecord.converter.BaseConverter;
 import org.apache.openmeetings.data.user.dao.UsersDao;
 import org.apache.openmeetings.documents.beans.ConverterProcessResult;
@@ -40,8 +45,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 public class GenerateImage extends BaseConverter {
 
-	private static final Logger log = Red5LoggerFactory.getLogger(
-			GenerateImage.class, OpenmeetingsVariables.webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(GenerateImage.class, webAppRootKey);
 
 	@Autowired
 	private UsersDao usersDao;
@@ -74,34 +78,32 @@ public class GenerateImage extends BaseConverter {
 		return returnMap;
 	}
 
-	public ConverterProcessResultList convertImageUserProfile(String fileName, String fileExt, Long users_id,
-			String fileNameShort, boolean fullProcessing) throws Exception {
-
+	public ConverterProcessResultList convertImageUserProfile(File file, Long users_id, boolean skipConvertion) throws Exception {
 		ConverterProcessResultList returnMap = new ConverterProcessResultList();
+		
+		// User Profile Update
+		for (File f : getUploadProfilesUserDir(users_id).listFiles(new FileFilter() {
+			public boolean accept(File pathname) {
+				return pathname.getName().endsWith(profileFileExt);
+			}
+		})) {
+			FileHelper.removeRec(f);
+		}
+		
+		File destinationFile = OmFileHelper.getNewFile(getUploadProfilesUserDir(users_id), profileFileName, profileFileExt);
+		if (!skipConvertion) {
+			returnMap.addItem("processJPG", convertSingleJpg(file.getCanonicalPath(), destinationFile));
+		} else {
+			FileHelper.copy(file, destinationFile);
+		}
+		returnMap.addItem("processThumb1", generateThumbs.generateThumb(chatImagePrefix, destinationFile, 40));
+		returnMap.addItem("processThumb2", generateThumbs.generateThumb(profileImagePrefix, destinationFile, 126));
+		returnMap.addItem("processThumb3", generateThumbs.generateThumb(bigImagePrefix, destinationFile, 240));
 
-		File working_pptdir = OmFileHelper.getUploadTempProfilesUserDir(users_id);
-
-		String fileFullPath = new File(working_pptdir, fileName + fileExt).getCanonicalPath();
-
-		File destinationFile = OmFileHelper.getNewFile(OmFileHelper.getUploadProfilesUserDir(users_id), fileName, ".jpg");
-		ConverterProcessResult processJPG = this.convertSingleJpg(
-				fileFullPath, destinationFile);
-
-		ConverterProcessResult processThumb1 = generateThumbs.generateThumb(
-				chatImagePrefix, destinationFile, 40);
-		ConverterProcessResult processThumb2 = generateThumbs.generateThumb(
-				profileImagePrefix, destinationFile, 126);
-		ConverterProcessResult processThumb3 = generateThumbs.generateThumb(
-				bigImagePrefix, destinationFile, 240);
-
-		returnMap.addItem("processJPG", processJPG);
-		returnMap.addItem("processThumb1", processThumb1);
-		returnMap.addItem("processThumb2", processThumb2);
-		returnMap.addItem("processThumb3", processThumb3);
-
-		// Delete old one
-		File fToDelete = new File(fileFullPath);
-		fToDelete.delete();
+		if (!skipConvertion) {
+			// Delete old one
+			file.delete();
+		}
 
 		String pictureuri = destinationFile.getName();
 		User us = usersDao.get(users_id);

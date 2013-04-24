@@ -18,6 +18,8 @@
  */
 package org.apache.openmeetings.remote;
 
+import static org.apache.openmeetings.persistence.beans.basic.Configuration.MAX_UPLOAD_SIZE_KEY;
+
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -714,7 +716,7 @@ public class MainService implements IPendingServiceCallback {
 	
 	public List<Configuration> getGeneralOptions(String SID) {
 		try {
-			return configurationDao.get("exclusive.audio.keycode", "red5sip.enable", "max_upload_size",
+			return configurationDao.get("exclusive.audio.keycode", "red5sip.enable", MAX_UPLOAD_SIZE_KEY,
 					"mute.keycode");
 		} catch (Exception err) {
 			log.error("[getLoginOptions]",err);

@@ -56,6 +56,12 @@ public class StoredFile {
     private final String name;
 	private final String ext;
 
+    public StoredFile(String fullname) {
+    	int idx = fullname.lastIndexOf('.');
+    	name = idx < 0 ? fullname : fullname.substring(0, idx);
+    	ext = idx < 0 ? "" : fullname.substring(idx + 1);
+    }
+    
     public StoredFile(String name, String ext) {
         this.name = name;
         this.ext = ext;

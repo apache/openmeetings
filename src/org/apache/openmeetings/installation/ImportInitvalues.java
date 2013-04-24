@@ -20,6 +20,7 @@ package org.apache.openmeetings.installation;
 
 import static org.apache.openmeetings.persistence.beans.basic.Configuration.CRYPT_KEY;
 import static org.apache.openmeetings.persistence.beans.basic.Configuration.DEFAUT_LANG_KEY;
+import static org.apache.openmeetings.persistence.beans.basic.Configuration.MAX_UPLOAD_SIZE_KEY;
 
 import java.io.File;
 import java.util.Arrays;
@@ -428,7 +429,7 @@ public class ImportInitvalues {
 						null,
 						"Display name of the user who draw the current object (User Name auto-disapper after 3 seconds.");
 
-		configurationDao.add("max_upload_size", ""
+		configurationDao.add(MAX_UPLOAD_SIZE_KEY, ""
 				+ ImportHelper.DEFAULT_MAX_UPLOAD_SIZE, null,
 				"Maximum size of upload file (bytes)"); // defaults to 1GB
 

@@ -62,6 +62,8 @@ public class OmFileHelper {
 	public static final String nameOfErrorFile = "errorvalues.xml";
 	public static final String libraryFileName = "library.xml";
 	public static final String defaultProfileImageName = "profile_pic.jpg";
+	public static final String profileFileName = "profile";
+	public static final String profileFileExt = ".jpg";
 	public static final String profileImagePrefix = "_profile_";
 	public static final String chatImagePrefix = "_chat_";
 	public static final String bigImagePrefix = "_big_";

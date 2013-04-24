@@ -59,6 +59,7 @@ public class Configuration implements Serializable, IDataProviderEntity {
 	private static final long serialVersionUID = -6129473946508963339L;
 	public static final String CRYPT_KEY = "crypt_ClassName";
 	public static final String DEFAUT_LANG_KEY = "default_lang_id";
+	public static final String MAX_UPLOAD_SIZE_KEY = "max_upload_size";
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

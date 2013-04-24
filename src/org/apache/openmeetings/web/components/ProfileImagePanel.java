@@ -19,6 +19,7 @@
 package org.apache.openmeetings.web.components;
 
 import static org.apache.openmeetings.OpenmeetingsVariables.webAppRootKey;
+import static org.apache.openmeetings.web.app.Application.getBean;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -26,9 +27,9 @@ import java.net.URI;
 
 import org.apache.openmeetings.data.user.dao.UsersDao;
 import org.apache.openmeetings.utils.OmFileHelper;
-import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.markup.html.TransparentWebMarkupContainer;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.image.Image;
 import org.apache.wicket.request.resource.ByteArrayResource;
@@ -39,11 +40,13 @@ import org.slf4j.Logger;
 public class ProfileImagePanel extends BasePanel {
 	private static final long serialVersionUID = 1119719397241677937L;
 	private static final Logger log = Red5LoggerFactory.getLogger(ProfileImagePanel.class, webAppRootKey);
-
+	protected final WebMarkupContainer profile;
+	
 	public ProfileImagePanel(String id, final long userId) {
 		super(id);
-		WebMarkupContainer profile = new WebMarkupContainer("profile");
-		final String uri = Application.getBean(UsersDao.class).get(userId).getPictureuri();
+		
+		profile = new TransparentWebMarkupContainer("profile");
+		final String uri = getBean(UsersDao.class).get(userId).getPictureuri();
 		boolean absolute = false;
 		try {
 			absolute = URI.create(uri).isAbsolute();
@@ -75,6 +78,6 @@ public class ProfileImagePanel extends BasePanel {
 				}
 			}));
 		}
-		add(profile);
+		add(profile.setOutputMarkupId(true));
 	}
 }

@@ -24,7 +24,7 @@ import org.apache.openmeetings.data.user.dao.PrivateMessagesDao;
 import org.apache.openmeetings.data.user.dao.UsersDao;
 import org.apache.openmeetings.persistence.beans.user.User;
 import org.apache.openmeetings.web.app.Application;
-import org.apache.openmeetings.web.components.ProfileImagePanel;
+import org.apache.openmeetings.web.components.UploadableProfileImagePanel;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.basic.Label;
@@ -40,7 +40,7 @@ public class WelcomeWidgetView extends WidgetView {
 		super(id, model);
 
 		User u = Application.getBean(UsersDao.class).get(getUserId());
-		add(new ProfileImagePanel("img", getUserId()));
+		add(new UploadableProfileImagePanel("img", getUserId()));
 		 //FIXME this need to be aligned according to Locale
 		add(new Label("firstname", Model.of(u.getFirstname())));
 		add(new Label("lastname", Model.of(u.getLastname())));

@@ -18,11 +18,13 @@
  */
 package org.apache.openmeetings.utils;
 
+import static org.apache.openmeetings.OpenmeetingsVariables.webAppRootKey;
+import static org.apache.openmeetings.persistence.beans.basic.Configuration.MAX_UPLOAD_SIZE_KEY;
+
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
 import org.apache.openmeetings.persistence.beans.basic.OmTimeZone;
 import org.red5.logging.Red5LoggerFactory;
@@ -36,8 +38,7 @@ import org.slf4j.Logger;
  * 
  */
 public class ImportHelper {
-	private static final Logger log = Red5LoggerFactory.getLogger(
-			ImportHelper.class, OpenmeetingsVariables.webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(ImportHelper.class, webAppRootKey);
 	public static final long DEFAULT_MAX_UPLOAD_SIZE = 1024 * 1024 * 1024; // 1GB
 
 	/**
@@ -46,10 +47,9 @@ public class ImportHelper {
 	 * @param configurationDao
 	 * @return
 	 */
-	public static final long getMaxUploadSize(
-			ConfigurationDao configurationDao) {
+	public static final long getMaxUploadSize(ConfigurationDao configurationDao) {
 		try {
-			return configurationDao.getConfValue("max_upload_size",
+			return configurationDao.getConfValue(MAX_UPLOAD_SIZE_KEY,
 					Long.class, "" + DEFAULT_MAX_UPLOAD_SIZE);
 		} catch (Exception e) {
 			log.error("Invalid value saved for max_upload_size conf key: ", e);
