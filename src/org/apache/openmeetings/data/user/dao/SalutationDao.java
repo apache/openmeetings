@@ -23,10 +23,6 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.TypedQuery;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.data.basic.FieldManager;
@@ -76,29 +72,31 @@ public class SalutationDao {
 	}
 
 	/**
+	 * get a Salutation by given id
+	 * 
+	 * @param language_id
+	 * @return
+	 */
+	public Salutation get(long id, long language_id) {
+		List<Salutation> ll = em.createNamedQuery("getSalutationById", Salutation.class)
+				.setParameter("id", id).getResultList();
+		for (Salutation ti : ll) {
+			ti.setLabel(fieldManager.getFieldByIdAndLanguage(ti.getFieldvalues_id(), language_id));
+		}
+		return ll.get(0);
+	}
+	
+	/**
 	 * get a list of all availible Salutations
 	 * 
-	 * @param user_level
+	 * @param language_id
 	 * @return
 	 */
 	public List<Salutation> getUserSalutations(long language_id) {
-		try {
-			CriteriaBuilder cb = em.getCriteriaBuilder();
-			CriteriaQuery<Salutation> cq = cb.createQuery(Salutation.class);
-			Root<Salutation> from = cq.from(Salutation.class);
-			CriteriaQuery<Salutation> select = cq.select(from);
-			TypedQuery<Salutation> q = em.createQuery(select);
-			List<Salutation> ll = q.getResultList();
-			for (Salutation ti : ll) {
-				ti.setLabel(fieldManager.getFieldByIdAndLanguage(
-						ti.getFieldvalues_id(), language_id));
-			}
-
-			return ll;
-		} catch (Exception ex2) {
-			log.error("[addUserSalutation]", ex2);
+		List<Salutation> ll = em.createNamedQuery("getSalutations", Salutation.class).getResultList();
+		for (Salutation ti : ll) {
+			ti.setLabel(fieldManager.getFieldByIdAndLanguage(ti.getFieldvalues_id(), language_id));
 		}
-		return null;
+		return ll;
 	}
-
 }

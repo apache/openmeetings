@@ -28,9 +28,9 @@ import org.apache.wicket.model.Model;
 
 import com.googlecode.wicket.jquery.core.JQueryBehavior;
 
-public class ProfilePanel extends UserPanel {
+public class SettingsPanel extends UserPanel {
 	private static final long serialVersionUID = -830146821166434373L;
-
+	public static final String DASHBOARD_TAB_ID = "tab1";
 
 	private void addTab(RepeatingView tabs, String name, String id) {
 		WebMarkupContainer tab = new WebMarkupContainer(tabs.newChildId());
@@ -46,13 +46,13 @@ public class ProfilePanel extends UserPanel {
 		panels.add(tab);
 	}
 	
-	public ProfilePanel(String id) {
+	public SettingsPanel(String id) {
 		super(id);
 		RepeatingView tabs = new RepeatingView("tabs");
-		addTab(tabs, "Widgets", "tab1"); //FIXME localize, inteligentId
+		addTab(tabs, "[Widgets]", DASHBOARD_TAB_ID); //FIXME localize
 		
 		RepeatingView panels = new RepeatingView("panels");
-		addPanel(panels, "tab1", new WidgetsPanel("tab"));
+		addPanel(panels, DASHBOARD_TAB_ID, new WidgetsPanel("tab"));
 		
 		add(new JQueryBehavior("#tabs", "tabs"));
 		add(tabs, panels);

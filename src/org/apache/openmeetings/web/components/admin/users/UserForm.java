@@ -18,49 +18,30 @@
  */
 package org.apache.openmeetings.web.components.admin.users;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import static org.apache.openmeetings.web.app.Application.getBean;
+import static org.apache.openmeetings.web.app.WebSession.getUserId;
 
-import org.apache.openmeetings.data.basic.FieldLanguageDao;
+import java.util.Arrays;
+
 import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
-import org.apache.openmeetings.data.basic.dao.OmTimeZoneDao;
-import org.apache.openmeetings.data.user.OrganisationManager;
-import org.apache.openmeetings.data.user.dao.SalutationDao;
-import org.apache.openmeetings.data.user.dao.StateDao;
 import org.apache.openmeetings.data.user.dao.UsersDao;
-import org.apache.openmeetings.persistence.beans.basic.OmTimeZone;
-import org.apache.openmeetings.persistence.beans.domain.Organisation;
-import org.apache.openmeetings.persistence.beans.domain.Organisation_Users;
-import org.apache.openmeetings.persistence.beans.lang.FieldLanguage;
-import org.apache.openmeetings.persistence.beans.user.Salutation;
-import org.apache.openmeetings.persistence.beans.user.State;
 import org.apache.openmeetings.persistence.beans.user.User;
 import org.apache.openmeetings.utils.crypt.ManageCryptStyle;
-import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
+import org.apache.openmeetings.web.components.ComunityUserForm;
+import org.apache.openmeetings.web.components.GeneralUserForm;
 import org.apache.openmeetings.web.components.admin.AdminBaseForm;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormValidatingBehavior;
 import org.apache.wicket.datetime.markup.html.basic.DateLabel;
-import org.apache.wicket.extensions.markup.html.form.DateTextField;
-import org.apache.wicket.extensions.yui.calendar.DatePicker;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.CheckBox;
-import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
-import org.apache.wicket.markup.html.form.ListMultipleChoice;
-import org.apache.wicket.markup.html.form.PasswordTextField;
-import org.apache.wicket.markup.html.form.RadioChoice;
 import org.apache.wicket.markup.html.form.RequiredTextField;
-import org.apache.wicket.markup.html.form.TextArea;
-import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.CompoundPropertyModel;
-import org.apache.wicket.model.IModel;
 import org.apache.wicket.util.time.Duration;
-import org.apache.wicket.validation.validator.EmailAddressValidator;
 import org.apache.wicket.validation.validator.StringValidator;
 
 /**
@@ -70,92 +51,21 @@ import org.apache.wicket.validation.validator.StringValidator;
  * 
  */
 public class UserForm extends AdminBaseForm<User> {
-
 	private static final long serialVersionUID = 1L;
-
 	private WebMarkupContainer listContainer;
+	private GeneralUserForm generalForm;
 
-	private User user;
-
-	private final List<Salutation> saluationList = Application.getBean(
-			SalutationDao.class).getUserSalutations(WebSession.getLanguage());
-	private final List<FieldLanguage> languageList = Application.getBean(
-			FieldLanguageDao.class).getLanguages();
-
-	private PasswordTextField passwordField;
-
-	/**
-	 * Get id list of {@link Salutation}
-	 * 
-	 * @return
-	 */
-	private List<Long> getSalutationsIds() {
-		ArrayList<Long> saluationIdList = new ArrayList<Long>(
-				saluationList.size());
-		for (Salutation saluation : saluationList) {
-			saluationIdList.add(saluation.getSalutations_id());
-		}
-		return saluationIdList;
-	}
-
-	/**
-	 * Get a name for a given id of {@link Salutation}
-	 * 
-	 * @param id
-	 * @return
-	 */
-	private String getSaluationLabelById(Long id) {
-		for (Salutation saluation : saluationList) {
-			if (id.equals(saluation.getSalutations_id())) {
-				return saluation.getLabel().getValue();
-			}
-		}
-		throw new RuntimeException("Could not find Salutations for id " + id);
-	}
-
-	/**
-	 * Id list of {@link FieldLanguage}
-	 * 
-	 * @return
-	 */
-	private List<Long> getFieldLanguageIds() {
-		ArrayList<Long> languageIdList = new ArrayList<Long>(
-				languageList.size());
-		for (FieldLanguage language : languageList) {
-			languageIdList.add(language.getLanguage_id());
-		}
-		return languageIdList;
-	}
-
-	/**
-	 * Get name of {@link FieldLanguage} by its id
-	 * 
-	 * @param id
-	 * @return
-	 */
-	private String getFieldLanguageLabelById(Long id) {
-		for (FieldLanguage language : languageList) {
-			if (id.equals(language.getLanguage_id())) {
-				return language.getName();
-			}
-		}
-		throw new RuntimeException("Could not find FieldLanguage for id " + id);
-	}
-
-	public UserForm(String id, WebMarkupContainer listContainer,
-			final User user) {
+	public UserForm(String id, WebMarkupContainer listContainer, final User user) {
 		super(id, new CompoundPropertyModel<User>(user));
 		setOutputMarkupId(true);
 		this.listContainer = listContainer;
-		this.user = user;
 
 		// Add form fields
 		addFormFields();
 
 		// attach an ajax validation behavior to all form component's keydown
 		// event and throttle it down to once per second
-		AjaxFormValidatingBehavior.addToAllFormComponents(this, "keydown",
-				Duration.ONE_SECOND);
+		AjaxFormValidatingBehavior.addToAllFormComponents(this, "keydown", Duration.ONE_SECOND);
 
 	}
 
@@ -167,16 +77,13 @@ public class UserForm extends AdminBaseForm<User> {
 		// different mechanism to protect the password from being read
 		// sebawagner, 01.10.2012
 		try {
-			String pass = passwordField.getConvertedInput();
-			if (pass != null&& !pass.isEmpty()) {
-				u.updatePassword(
-					Application.getBean(ManageCryptStyle.class)
-					, Application.getBean(ConfigurationDao.class)
-					, passwordField.getConvertedInput());
+			String pass = generalForm.getPasswordField().getConvertedInput();
+			if (pass != null && !pass.isEmpty()) {
+				u.updatePassword(getBean(ManageCryptStyle.class), getBean(ConfigurationDao.class), pass);
 			}
-			Application.getBean(UsersDao.class).update(u, WebSession.getUserId());
+			getBean(UsersDao.class).update(u, getUserId());
 		} catch (Exception e) {
-			//FIXME update feedback with the error details
+			// FIXME update feedback with the error details
 		}
 		setModelObject(u);
 		hideNewRecord();
@@ -187,9 +94,8 @@ public class UserForm extends AdminBaseForm<User> {
 
 	@Override
 	protected void onNewSubmit(AjaxRequestTarget target, Form<?> form) {
-		UsersDao usersDaoImpl = Application.getBean(UsersDao.class);
-		setModelObject(usersDaoImpl.getNewUserInstance(usersDaoImpl
-				.get(WebSession.getUserId())));
+		UsersDao usersDaoImpl = getBean(UsersDao.class);
+		setModelObject(usersDaoImpl.getNewUserInstance(usersDaoImpl.get(getUserId())));
 		target.add(this);
 		target.appendJavaScript("omUserPanelInit();");
 	}
@@ -198,8 +104,7 @@ public class UserForm extends AdminBaseForm<User> {
 	protected void onRefreshSubmit(AjaxRequestTarget target, Form<?> form) {
 		User user = getModelObject();
 		if (user.getUser_id() <= 0) {
-			user = Application.getBean(UsersDao.class).get(
-					user.getUser_id());
+			user = getBean(UsersDao.class).get(user.getUser_id());
 		} else {
 			user = new User();
 		}
@@ -210,11 +115,9 @@ public class UserForm extends AdminBaseForm<User> {
 
 	@Override
 	protected void onDeleteSubmit(AjaxRequestTarget target, Form<?> form) {
-		UsersDao usersDaoImpl = Application.getBean(UsersDao.class);
-		usersDaoImpl.delete(this.getModelObject(),
-				WebSession.getUserId());
-		this.setModelObject(usersDaoImpl.getNewUserInstance(usersDaoImpl
-				.get(WebSession.getUserId())));
+		UsersDao usersDaoImpl = getBean(UsersDao.class);
+		usersDaoImpl.delete(this.getModelObject(), getUserId());
+		this.setModelObject(usersDaoImpl.getNewUserInstance(usersDaoImpl.get(getUserId())));
 		target.add(listContainer);
 		target.add(this);
 		target.appendJavaScript("omUserPanelInit();");
@@ -230,188 +133,55 @@ public class UserForm extends AdminBaseForm<User> {
 		// login.setLabel(new Model<String>("testname"));
 		add(login);
 
-		passwordField = new PasswordTextField("password");
-		add(passwordField);
-		passwordField.setRequired(false);
-
-		add(new DropDownChoice<Long>("salutations_id", getSalutationsIds(),
-				new IChoiceRenderer<Long>() {
-					private static final long serialVersionUID = 1L;
-
-					public Object getDisplayValue(Long id) {
-						return getSaluationLabelById(id);
-					}
-
-					public String getIdValue(Long id, int index) {
-						return "" + id;
-					}
-
-				}));
-
-		add(new TextField<String>("firstname"));
-		add(new TextField<String>("lastname"));
-
-		add(new DropDownChoice<OmTimeZone>("omTimeZone", Application.getBean(
-				OmTimeZoneDao.class).getOmTimeZones(),
-				new ChoiceRenderer<OmTimeZone>("frontEndLabel", "jname")));
-
-		add(new DropDownChoice<Long>("language_id", getFieldLanguageIds(),
-				new IChoiceRenderer<Long>() {
-					private static final long serialVersionUID = 1L;
-
-					public Object getDisplayValue(Long id) {
-						return getFieldLanguageLabelById(id);
-					}
-
-					public String getIdValue(Long id, int index) {
-						return "" + id;
-					}
-
-				}));
+		add(generalForm = new GeneralUserForm("general", getModel()));
 
 		add(DateLabel.forDatePattern("starttime", "dd.MM.yyyy HH:mm:ss"));
 		add(DateLabel.forDatePattern("updatetime", "dd.MM.yyyy HH:mm:ss"));
 
 		add(new CheckBox("forceTimeZoneCheck"));
-		RequiredTextField<String> email = new RequiredTextField<String>(
-				"adresses.email");
-		// email.setLabel(new Model<String>("testemail"));
-		email.add(EmailAddressValidator.getInstance());
-		add(email);
-		add(new TextField<String>("adresses.phone"));
-		add(new CheckBox("sendSMS"));
-		DateTextField age = new DateTextField("age");
-		DatePicker datePicker = new DatePicker() {
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			protected String getAdditionalJavaScript() {
-				return "${calendar}.cfg.setProperty(\"navigator\",true,false); ${calendar}.render();";
-			}
-		};
-		datePicker.setShowOnFieldClick(true);
-		datePicker.setAutoHide(true);
-		age.add(datePicker);
-		add(age);
-		add(new TextField<String>("adresses.street"));
-		add(new TextField<String>("adresses.additionalname"));
-		add(new TextField<String>("adresses.zip"));
-		add(new TextField<String>("adresses.town"));
-		add(new DropDownChoice<State>("adresses.states", Application.getBean(
-				StateDao.class).getStates(), new ChoiceRenderer<State>(
-				"name", "state_id")));
 
 		final String field159 = WebSession.getString(159);
 		final String field160 = WebSession.getString(160);
 
-		add(new DropDownChoice<Integer>("status", Arrays.asList(0, 1),
-				new IChoiceRenderer<Integer>() {
+		add(new DropDownChoice<Integer>("status", Arrays.asList(0, 1), new IChoiceRenderer<Integer>() {
 
-					private static final long serialVersionUID = 1L;
+			private static final long serialVersionUID = 1L;
 
-					public Object getDisplayValue(Integer id) {
-						if (id.equals(0)) {
-							return field159;
-						} else if (id.equals(1)) {
-							return field160;
-						}
-						return null;
-					}
+			public Object getDisplayValue(Integer id) {
+				if (id.equals(0)) {
+					return field159;
+				} else if (id.equals(1)) {
+					return field160;
+				}
+				return null;
+			}
 
-					public String getIdValue(Integer id, int index) {
-						return "" + id;
-					}
+			public String getIdValue(Integer id, int index) {
+				return "" + id;
+			}
 
-				}));
+		}));
 
 		final String field166 = WebSession.getString(166);
 		final String field167 = WebSession.getString(167);
 		final String field168 = WebSession.getString(168);
 		final String field1311 = WebSession.getString(1311);
 
-		add(new DropDownChoice<Long>("level_id", Arrays.asList(1L, 2L, 3L, 4L),
-				new IChoiceRenderer<Long>() {
+		add(new DropDownChoice<Long>("level_id", Arrays.asList(1L, 2L, 3L, 4L), new IChoiceRenderer<Long>() {
 
-					private static final long serialVersionUID = 1L;
-
-					public Object getDisplayValue(Long id) {
-						if (id.equals(1L)) {
-							return field166;
-						} else if (id.equals(2L)) {
-							return field167;
-						} else if (id.equals(3L)) {
-							return field168;
-						} else if (id.equals(4L)) {
-							return field1311;
-						}
-						return null;
-					}
-
-					public String getIdValue(Long id, int index) {
-						return "" + id;
-					}
-
-				}));
-
-		add(new TextArea<String>("adresses.comment"));
-
-		List<Organisation> orgList = Application.getBean(
-				OrganisationManager.class).getOrganisations(3L);
-		List<Organisation_Users> orgUsers = new ArrayList<Organisation_Users>(
-				orgList.size());
-		for (Organisation org : orgList) {
-			orgUsers.add(new Organisation_Users(org));
-		}
-		ListMultipleChoice<Organisation_Users> orgChoiceList = new ListMultipleChoice<Organisation_Users>(
-				"organisation_users", orgUsers,
-				new ChoiceRenderer<Organisation_Users>("organisation.name",
-						"organisation.organisation_id"));
-		add(orgChoiceList);
-
-		final String field1160 = WebSession.getString(1160); // 1160 everybody
-		final String field1168 = WebSession.getString(1168); // 1168 contact
-		final String field1169 = WebSession.getString(1169); // 1169 nobody
-
-		add(new RadioChoice<Long>("community_settings", new IModel<Long>() {
-			private static final long serialVersionUID = 1L;
-
-			public Long getObject() {
-				if (user.getShowContactData() != null
-						&& user.getShowContactData()) {
-					return 1L;
-				} else if (user.getShowContactDataToContacts() != null
-						&& user.getShowContactDataToContacts()) {
-					return 2L;
-				}
-				return 3L;
-			}
-
-			public void setObject(Long choice) {
-				if (choice.equals(1L)) {
-					user.setShowContactData(true);
-					user.setShowContactDataToContacts(false);
-				} else if (choice.equals(2L)) {
-					user.setShowContactData(false);
-					user.setShowContactDataToContacts(true);
-				} else {
-					user.setShowContactData(false);
-					user.setShowContactDataToContacts(false);
-				}
-			}
-
-			public void detach() {
-			}
-		}, Arrays.asList(1L, 2L, 3L), new IChoiceRenderer<Long>() {
 			private static final long serialVersionUID = 1L;
 
 			public Object getDisplayValue(Long id) {
 				if (id.equals(1L)) {
-					return field1160;
+					return field166;
 				} else if (id.equals(2L)) {
-					return field1168;
-				} else {
-					return field1169;
+					return field167;
+				} else if (id.equals(3L)) {
+					return field168;
+				} else if (id.equals(4L)) {
+					return field1311;
 				}
+				return null;
 			}
 
 			public String getIdValue(Long id, int index) {
@@ -419,9 +189,7 @@ public class UserForm extends AdminBaseForm<User> {
 			}
 
 		}));
-
-		add(new TextArea<String>("userOffers"));
-		add(new TextArea<String>("userSearchs"));
+		add(new ComunityUserForm("comunity", getModel()));
 	}
-	
+
 }

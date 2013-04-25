@@ -25,7 +25,7 @@ import org.apache.openmeetings.web.components.MenuPanel;
 import org.apache.openmeetings.web.components.user.AboutDialog;
 import org.apache.openmeetings.web.components.user.ChatPanel;
 import org.apache.openmeetings.web.components.user.dashboard.OmDashboardPanel;
-import org.apache.openmeetings.web.components.user.profile.ProfilePanel;
+import org.apache.openmeetings.web.components.user.profile.SettingsPanel;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
@@ -65,7 +65,7 @@ public class MainPage extends BasePage {
 
 			@Override
 			public void onClick(AjaxRequestTarget target) {
-				target.add(contents.replace(new ProfilePanel("child")));
+				target.add(contents.replace(new SettingsPanel("child")));
 			}
 		});
 		final AboutDialog about = new AboutDialog("aboutDialog");

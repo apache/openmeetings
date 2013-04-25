@@ -26,6 +26,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
@@ -35,6 +37,10 @@ import org.simpleframework.xml.Root;
 
 @Entity
 @Table(name = "salutation")
+@NamedQueries({
+	@NamedQuery(name = "getSalutationById", query = "SELECT s FROM Salutation AS s WHERE s.salutations_id = :id")
+	, @NamedQuery(name = "getSalutations", query = "SELECT s FROM Salutation AS s")
+})
 @Root
 public class Salutation implements Serializable {
 	private static final long serialVersionUID = -5806449519074435223L;
