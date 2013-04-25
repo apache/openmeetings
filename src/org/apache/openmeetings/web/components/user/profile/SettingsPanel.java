@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.web.components.user.profile;
 
+import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.components.UserPanel;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -50,7 +51,7 @@ public class SettingsPanel extends UserPanel {
 	public SettingsPanel(String id) {
 		super(id);
 		RepeatingView tabs = new RepeatingView("tabs");
-		addTab(tabs, "[Profile]", PROFILE_TAB_ID); //FIXME localize
+		addTab(tabs, WebSession.getString(1170), PROFILE_TAB_ID);
 		addTab(tabs, "[Widgets]", DASHBOARD_TAB_ID); //FIXME localize
 		
 		RepeatingView panels = new RepeatingView("panels");
