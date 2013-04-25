@@ -42,7 +42,6 @@ public class CalendarPanel extends UserPanel {
 	
 	@Override
 	public void onMenuPanelLoad(AjaxRequestTarget target) {
-		target.appendJavaScript("calendarInit();");
 	}
 
 	private AppointmentDao getDao() {
