@@ -21,6 +21,8 @@ package org.apache.openmeetings.web.components;
 import static org.apache.openmeetings.utils.ImportHelper.getMaxUploadSize;
 import static org.apache.openmeetings.web.app.Application.getBean;
 
+import java.util.List;
+
 import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
 import org.apache.openmeetings.documents.GenerateImage;
 import org.apache.openmeetings.utils.StoredFile;
@@ -30,6 +32,7 @@ import org.apache.wicket.extensions.ajax.markup.html.form.upload.UploadProgressB
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.markup.html.form.upload.FileUploadField;
+import org.apache.wicket.model.IModel;
 import org.apache.wicket.util.lang.Bytes;
 
 public class UploadableProfileImagePanel extends ProfileImagePanel {
@@ -41,7 +44,20 @@ public class UploadableProfileImagePanel extends ProfileImagePanel {
 		Form<Void> form = new Form<Void>("form");
 		form.setMultiPart(true);
 		form.setMaxSize(Bytes.bytes(getMaxUploadSize(getBean(ConfigurationDao.class))));
-		form.add(fileUploadField = new FileUploadField("image"));
+		form.add(fileUploadField = new FileUploadField("image", new IModel<List<FileUpload>>() {
+			private static final long serialVersionUID = -8514518605278263956L;
+
+			//FIXME this need to be eliminated
+			public void detach() {
+			}
+			
+			public void setObject(List<FileUpload> object) {
+			}
+			
+			public List<FileUpload> getObject() {
+				return null;
+			}
+		}));
 		form.add(new UploadProgressBar("progress", form, fileUploadField));
 		fileUploadField.add(new AjaxFormSubmitBehavior(form, "onchange") {
 			private static final long serialVersionUID = 2160216679027859231L;

@@ -19,36 +19,13 @@
   
 -->
 <html xmlns:wicket="http://wicket.apache.org">
-<wicket:panel>
-	<form wicket:id="form" class="adminForm">
-		<div wicket:id="buttons"></div>
-		<table style="width: 100%; height: 100%">
-			<tr>
-				<td rowspan="2">
-					<fieldset>
-						<legend>
-							<wicket:ommessage key="143" />
-						</legend>
-						<form wicket:id="general">
-							Confirm password
-						</form>
-					</fieldset>
-				</td>
-				<td>
-					<div wicket:id="img"></div>
-				</td>
-			</tr>
-			<tr>
-				<td>
-					<fieldset>
-						<legend>
-							<wicket:ommessage key="1159" />
-						</legend>
-						<form wicket:id="comunity"></form>
-					</fieldset>
-				</td>
-			</tr>
-		</table>
-	</form>
-</wicket:panel>
+	<wicket:extend>
+		<div class="formNewButton">
+			<input type="submit" value="" wicket:id="ajax-new-button" wicket:ommessage="title:155" />
+		</div>
+		<div class="formCancelButton">
+			<input type="submit" value="" wicket:id="ajax-cancel-button" wicket:ommessage="title:157" />
+		</div>
+		<span wicket:id="newRecord"></span>
+	</wicket:extend>
 </html>

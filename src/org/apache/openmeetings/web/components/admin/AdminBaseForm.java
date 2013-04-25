@@ -32,11 +32,12 @@ import org.apache.wicket.model.IModel;
  */
 public class AdminBaseForm<T> extends Form<T> {
 	private static final long serialVersionUID = 1L;
-	private AdminBaseFormPanel<T> basePanel;
+	private AdminSavePanel<T> savePanel;
 
 	public AdminBaseForm(String id, IModel<T> object) {
 		super(id, object);
-		basePanel = new AdminBaseFormPanel<T>("buttons", this) {
+		
+		savePanel = new AdminSavePanel<T>("buttons", this) {
 			private static final long serialVersionUID = -5833647470067891270L;
 
 			@Override
@@ -80,7 +81,7 @@ public class AdminBaseForm<T> extends Form<T> {
 			}
 			
 		};
-		add(basePanel);
+		add(savePanel);
 
 
 	}
@@ -89,14 +90,14 @@ public class AdminBaseForm<T> extends Form<T> {
 	 * @see AdminBaseForm#hideNewRecord()
 	 */
 	public void hideNewRecord() {
-		basePanel.hideNewRecord();
+		savePanel.hideNewRecord();
 	}
 	
 	/**
 	 * @see AdminBaseForm#showNewRecord()
 	 */
 	public void showNewRecord() {
-		basePanel.showNewRecord();
+		savePanel.showNewRecord();
 	}
 
 	/**

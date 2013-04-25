@@ -103,7 +103,7 @@ public class UserForm extends AdminBaseForm<User> {
 	@Override
 	protected void onRefreshSubmit(AjaxRequestTarget target, Form<?> form) {
 		User user = getModelObject();
-		if (user.getUser_id() <= 0) {
+		if (user.getUser_id() != null) {
 			user = getBean(UsersDao.class).get(user.getUser_id());
 		} else {
 			user = new User();
