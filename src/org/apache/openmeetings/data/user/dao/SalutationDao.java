@@ -54,6 +54,8 @@ public class SalutationDao {
 	 * Adds a new Salutation to the table Titles
 	 * 
 	 * @param titelname
+	 * @param fieldvalues_id
+	 * @return
 	 */
 	public Long addUserSalutation(String titelname, long fieldvalues_id) {
 		try {
@@ -74,6 +76,7 @@ public class SalutationDao {
 	/**
 	 * get a Salutation by given id
 	 * 
+	 * @param id
 	 * @param language_id
 	 * @return
 	 */
