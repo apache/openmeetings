@@ -1527,7 +1527,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>$APP_NAME - Invitation</value>
   </string>
   <string id="501" name="invitation_text_from">
-    <value>Message pour :</value>
+    <value>Message de :</value>
   </string>
   <string id="502" name="invitation_text_message">
     <value>Message :</value>
