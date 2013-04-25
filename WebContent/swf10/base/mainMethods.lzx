@@ -32,6 +32,7 @@
         
         //Audio-Video-Settings
         this.setAttribute('loudnessAcitviation',canvas.myConfigSet.getPointer().xpathQuery('config/loudnessAcitviation/text()'));
+        this.setAttribute('codecType',canvas.myConfigSet.getPointer().xpathQuery('config/codecType/text()'));
         this.setAttribute('framesPerSecond',Number(canvas.myConfigSet.getPointer().xpathQuery('config/framesPerSecond/text()')));  
         this.setAttribute('bandwidthNeededNormal',Number(canvas.myConfigSet.getPointer().xpathQuery('config/bandwidthNeededNormal/text()')));  
         this.setAttribute('bandwidthNeededBest',Number(canvas.myConfigSet.getPointer().xpathQuery('config/bandwidthNeededBest/text()')));  
@@ -39,6 +40,7 @@
         this.setAttribute('camQualityBest',Number(canvas.myConfigSet.getPointer().xpathQuery('config/camQualityBest/text()')));  
         this.setAttribute('microphoneRateBest',Number(canvas.myConfigSet.getPointer().xpathQuery('config/microphoneRateBest/text()')));  
         this.setAttribute('echoPath',Number(canvas.myConfigSet.getPointer().xpathQuery('config/echoPath/text()')));
+        this.setAttribute('echoSuppression',canvas.myConfigSet.getPointer().xpathQuery('config/echoSuppression/text()'));
         
         //httphostlocal variable is loaded from the SWF8 application, cause it needs value, SWF10 app
         //knows nothing about the rtmphostlocal, and we don't want to parse the URL from the browser

@@ -187,7 +187,16 @@ of the red5-servlet
     http://code.google.com/p/openmeetings/wiki/AudioVideoTestingApplication
     #############################################################################
  -->
-    
+ 
+<!-- Camera Settings for codecType
+
+    codecType possible values:
+    h263
+    h264
+    If you want to use red5sip, set value to "h264"
+ -->
+<codecType>h264</codecType>
+ 
 <!-- Camera Settings for the FramesPerSecond
     
     fps:Number [optional] - The requested rate at which the camera should capture 
@@ -245,6 +254,11 @@ The default value is 128; the only other possible value is 256.
 To disable AEC please specify 0.
  -->
 <echoPath>128</echoPath>
+
+<!--
+    Set "true" or "false" to enable/disable microphone echo suppression
+ -->
+<echoSuppression>true</echoSuppression>
 
 <!--
     The Size of the Whiteboard

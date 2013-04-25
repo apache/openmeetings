@@ -41,6 +41,7 @@
         <xs:element ref="showWindowEffect"/>
         <xs:element ref="showRecording"/>
         <xs:element ref="firstdayinweek"/>
+	<xs:element ref="codecType"/>
         <xs:element ref="framesPerSecond"/>
         <xs:element ref="bandwidthNeededNormal"/>
         <xs:element ref="bandwidthNeededBest"/>
@@ -48,6 +49,7 @@
         <xs:element ref="camQualityBest"/>
         <xs:element ref="microphoneRateBest"/>
         <xs:element ref="echoPath" />
+	<xs:element ref="echoSuppression" />
         <xs:element ref="defaultWhiteboardWidth"/>
         <xs:element ref="defaultWhiteboardHeight"/>
         <xs:element ref="availableCameraResolutions"/>
@@ -131,12 +133,14 @@
   <xs:element name="showWindowEffect" type="xs:NCName"/>
   <xs:element name="showRecording" type="xs:NCName"/>
   <xs:element name="firstdayinweek" type="xs:integer"/>
+  <xs:element name="codecType" type="xs:string"/>
   <xs:element name="framesPerSecond" type="xs:integer"/>
   <xs:element name="bandwidthNeededNormal" type="xs:integer"/>
   <xs:element name="bandwidthNeededBest" type="xs:integer"/>
   <xs:element name="camQualityNormal" type="xs:integer"/>
   <xs:element name="camQualityBest" type="xs:integer"/>
   <xs:element name="microphoneRateBest" type="xs:integer"/>
+  <xs:element name="echoSuppression" type="xs:string"/>
   <xs:element name="echoPath">
     <xs:annotation>
         <xs:documentation>

@@ -215,6 +215,7 @@
         //this.setAttribute('showmodernWhiteBoard',canvas.myConfigSet.getPointer().xpathQuery('config/showmodernWhiteBoard/text()'));
         
         //Audio-Video-Settings
+        this.setAttribute('codecType',canvas.myConfigSet.getPointer().xpathQuery('config/codecType/text()'));
         this.setAttribute('framesPerSecond',Number(canvas.myConfigSet.getPointer().xpathQuery('config/framesPerSecond/text()')));  
         this.setAttribute('bandwidthNeededNormal',Number(canvas.myConfigSet.getPointer().xpathQuery('config/bandwidthNeededNormal/text()')));  
         this.setAttribute('bandwidthNeededBest',Number(canvas.myConfigSet.getPointer().xpathQuery('config/bandwidthNeededBest/text()')));  

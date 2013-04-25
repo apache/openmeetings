@@ -262,7 +262,9 @@
 				_micro.gain = 50;
 				// this has no effect if enhanced microphone is obtained
 				//Microphone setUseEchoSupression(bool)
-				_micro.setUseEchoSuppression(true);
+				var enableEchoSupression = !(canvas.echoSuppression === "false");
+				if ($debug) Debug.write("canvas.echoSuppression: ",canvas.echoSuppression);
+				_micro.setUseEchoSuppression(enableEchoSupression);
 			}
 		}
 		if ($debug) Debug.write("... getMic DONE", _micro);

@@ -265,6 +265,7 @@ the LAST RoomClient Object that has been changed the giveExclusiveAudio status
 <!--- Audio-Video Quality Settings
     overwritten by values from the config.xml 
  -->
+<attribute name="codecType" value="h264" type="string" />
 <attribute name="framesPerSecond" value="30" type="number" />
 <attribute name="bandwidthNeededNormal" value="16384" type="number" />
 <attribute name="bandwidthNeededBest" value="32768" type="number" />

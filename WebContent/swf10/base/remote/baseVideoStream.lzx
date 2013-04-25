@@ -224,12 +224,18 @@
 			//invokes Method in baseVideoView which shows the cam
 			this.attachCamera(camReference);
 			
-			var h264Settings:H264VideoStreamSettings = new H264VideoStreamSettings();
-			h264Settings.setProfileLevel(H264Profile.BASELINE, H264Level.LEVEL_5_1);
-			h264Settings.setQuality(camReference.bandwidth, camReference.quality);
-			h264Settings.setKeyFrameInterval(camReference.keyFrameInterval);
-			h264Settings.setMode(camReference.width, camReference.height, camReference.fps);
-			this._ns.videoStreamSettings = h264Settings;
+			var videoStreamSettings = null;
+			if ($debug) Debug.write("codecType=" + canvas.codecType);
+			if (canvas.codecType === "h264") {
+				videoStreamSettings = new H264VideoStreamSettings();
+				videoStreamSettings.setProfileLevel(H264Profile.BASELINE, H264Level.LEVEL_5_1);
+			} else {
+				videoStreamSettings = new VideoStreamSettings();
+			}
+			videoStreamSettings.setQuality(camReference.bandwidth, camReference.quality);
+			videoStreamSettings.setKeyFrameInterval(camReference.keyFrameInterval);
+			videoStreamSettings.setMode(camReference.width, camReference.height, camReference.fps);
+			this._ns.videoStreamSettings = videoStreamSettings;
 		}
 		if (micReference != null) {
 			this.setAttribute('micro', micReference);
