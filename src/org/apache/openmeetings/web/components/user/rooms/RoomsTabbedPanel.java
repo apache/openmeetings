@@ -18,13 +18,14 @@
  */
 package org.apache.openmeetings.web.components.user.rooms;
 
+import static org.apache.openmeetings.web.app.Application.getBean;
+import static org.apache.openmeetings.web.app.WebSession.getUserId;
+
 import org.apache.openmeetings.data.conference.dao.RoomDao;
 import org.apache.openmeetings.data.user.dao.UsersDao;
 import org.apache.openmeetings.persistence.beans.domain.Organisation;
 import org.apache.openmeetings.persistence.beans.domain.Organisation_Users;
 import org.apache.openmeetings.persistence.beans.user.User;
-import org.apache.openmeetings.web.app.Application;
-import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.components.UserPanel;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -41,7 +42,7 @@ public class RoomsTabbedPanel extends UserPanel {
 	public RoomsTabbedPanel(String id) {
 		super(id);
 		
-		User u = Application.getBean(UsersDao.class).get(WebSession.getUserId());
+		User u = getBean(UsersDao.class).get(getUserId());
 		add(new ListView<Organisation_Users>("orgTabs", u.getOrganisation_users()) {
 			private static final long serialVersionUID = -145637079945252731L;
 
@@ -60,7 +61,7 @@ public class RoomsTabbedPanel extends UserPanel {
 			protected void populateItem(ListItem<Organisation_Users> item) {
 				Organisation org = item.getModelObject().getOrganisation();
 				item.add(new RoomsPanel("rooms"
-					, Application.getBean(RoomDao.class).getOrganisationRooms(org.getOrganisation_id()))
+					, getBean(RoomDao.class).getOrganisationRooms(org.getOrganisation_id()))
 					.setMarkupId("org" + org.getOrganisation_id())).setRenderBodyOnly(true);
 			}
 		});

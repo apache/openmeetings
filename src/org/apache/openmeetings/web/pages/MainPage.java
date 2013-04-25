@@ -25,6 +25,7 @@ import org.apache.openmeetings.web.components.MenuPanel;
 import org.apache.openmeetings.web.components.user.AboutDialog;
 import org.apache.openmeetings.web.components.user.ChatPanel;
 import org.apache.openmeetings.web.components.user.dashboard.OmDashboardPanel;
+import org.apache.openmeetings.web.components.user.profile.ProfilePanel;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
@@ -41,9 +42,10 @@ public class MainPage extends BasePage {
 	private static final long serialVersionUID = 6421960759218157999L;
 	private static final Logger log = Red5LoggerFactory.getLogger(MainPage.class, OpenmeetingsVariables.webAppRootKey);
 	private final MenuPanel menu;
+	private final MarkupContainer contents;
 	
 	public MainPage() {
-		MarkupContainer contents = new WebMarkupContainer("contents");
+		contents = new WebMarkupContainer("contents");
 		//FIXME need to be generalized with MenuPanel
 		contents.add(new OmDashboardPanel("child")).setOutputMarkupId(true).setMarkupId("contents");
 		add(contents);
@@ -56,6 +58,14 @@ public class MainPage extends BasePage {
 			public void onClick(AjaxRequestTarget target) {
 				getSession().invalidate();
 				setResponsePage(Application.get().getSignInPageClass());
+			}
+		});
+		add(new AjaxLink<Void>("profile") {
+			private static final long serialVersionUID = 4065339709905366840L;
+
+			@Override
+			public void onClick(AjaxRequestTarget target) {
+				target.add(contents.replace(new ProfilePanel("child")));
 			}
 		});
 		final AboutDialog about = new AboutDialog("aboutDialog");
@@ -84,5 +94,9 @@ public class MainPage extends BasePage {
 				log.debug("WebSocketBehavior::onClose");
 			}
 		});
+	}
+	
+	public MarkupContainer getContents() {
+		return contents;
 	}
 }

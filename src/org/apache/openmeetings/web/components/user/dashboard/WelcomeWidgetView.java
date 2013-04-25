@@ -25,6 +25,8 @@ import org.apache.openmeetings.data.user.dao.UsersDao;
 import org.apache.openmeetings.persistence.beans.user.User;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.components.UploadableProfileImagePanel;
+import org.apache.openmeetings.web.components.user.profile.ProfilePanel;
+import org.apache.openmeetings.web.pages.MainPage;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.basic.Label;
@@ -50,7 +52,8 @@ public class WelcomeWidgetView extends WidgetView {
 
 			@Override
 			public void onClick(AjaxRequestTarget target) {
-				//FIXME should have action
+				//FIXME active id !!!!!
+				target.add(((MainPage)getPage()).getContents().replace(new ProfilePanel("child")));
 			}
 		}.add(new Label("unread", Model.of("" + Application.getBean(PrivateMessagesDao.class)
 				.getNumberMessages(getUserId(), 0L, false)))));
@@ -59,7 +62,8 @@ public class WelcomeWidgetView extends WidgetView {
 
 			@Override
 			public void onClick(AjaxRequestTarget target) {
-				//FIXME should have action
+				//FIXME active id !!!!!
+				target.add(((MainPage)getPage()).getContents().replace(new ProfilePanel("child")));
 			}
 		});
 	}

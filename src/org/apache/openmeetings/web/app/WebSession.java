@@ -19,6 +19,8 @@
 package org.apache.openmeetings.web.app;
 
 import static org.apache.openmeetings.persistence.beans.basic.Configuration.DEFAUT_LANG_KEY;
+import static org.apache.openmeetings.web.app.Application.getBean;
+import static org.apache.openmeetings.web.app.Application.getDashboardContext;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -73,8 +75,8 @@ public class WebSession extends AbstractAuthenticatedWebSession {
 	public Roles getRoles() {
 		Roles r = null;
 		if (isSignedIn()) {
-			userLevel = Application.getBean(UserManager.class).getUserLevelByID(userId);
-			AuthLevelUtil authLevel = Application.getBean(AuthLevelUtil.class);
+			userLevel = getBean(UserManager.class).getUserLevelByID(userId);
+			AuthLevelUtil authLevel = getBean(AuthLevelUtil.class);
 			r = new Roles(Roles.USER);
 			if (authLevel.checkUserLevel(userLevel)) {
 				r.add(Roles.USER);
@@ -92,9 +94,9 @@ public class WebSession extends AbstractAuthenticatedWebSession {
 	}
 
 	public boolean signIn(String login, String password) {
-		Sessiondata sessData = Application.getBean(SessiondataDao.class).startsession();
+		Sessiondata sessData = getBean(SessiondataDao.class).startsession();
 		SID = sessData.getSession_id();
-		Object u = Application.getBean(UserManager.class).loginUser(SID, login, password,
+		Object u = getBean(UserManager.class).loginUser(SID, login, password,
 				null, null, false);
 		
 		if (u instanceof User) {
@@ -115,7 +117,7 @@ public class WebSession extends AbstractAuthenticatedWebSession {
 	}
 	
 	public static String getString(long id) {
-		FieldManager fieldManager = Application.getBean(FieldManager.class);
+		FieldManager fieldManager = getBean(FieldManager.class);
 		String s = fieldManager.getString(id, getLanguage());
 		return s == null ? "[Missing]" : s;
 	}
@@ -123,14 +125,14 @@ public class WebSession extends AbstractAuthenticatedWebSession {
 	public static long getLanguage() {
 		WebSession session = get();
 		if (session.isSignedIn()) {
-			return Application.getBean(UsersDao.class).get(session.userId).getLanguage_id();
+			return getBean(UsersDao.class).get(session.userId).getLanguage_id();
 		} else {
-			return Application.getBean(ConfigurationDao.class).getConfValue(DEFAUT_LANG_KEY, Long.class, "1");
+			return getBean(ConfigurationDao.class).getConfValue(DEFAUT_LANG_KEY, Long.class, "1");
 		}
 	}
 	
 	public static FieldLanguage getLanguageObj() {
-		return Application.getBean(FieldLanguageDao.class).getFieldLanguageById(getLanguage());
+		return getBean(FieldLanguageDao.class).getFieldLanguageById(getLanguage());
 	}
 	
 	public static String getSid() {
@@ -172,7 +174,7 @@ public class WebSession extends AbstractAuthenticatedWebSession {
 	}
 	
 	private void initDashboard() {
-		DashboardContext dashboardContext = Application.getDashboardContext();
+		DashboardContext dashboardContext = getDashboardContext();
 		//FIXME check title etc.
 		dashboard = dashboardContext.getDashboardPersiter().load();
 		if (dashboard == null) {

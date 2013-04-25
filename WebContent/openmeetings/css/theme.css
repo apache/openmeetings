@@ -582,3 +582,9 @@ div.tableWrapper {
 	width: 100%;
 	cursor: pointer;
 }
+.widget {
+	width: 100%;
+}
+.widget td {
+	min-width: 150px;
+}
