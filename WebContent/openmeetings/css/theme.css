@@ -17,7 +17,12 @@
  * under the License.
  */
 #header {
-	
+	font-size: 28px;
+	line-height: 40px;
+	font-weight: bold;
+	background-image: url(../public/themes/basic-theme/general/logo.png);
+	background-repeat: no-repeat;
+	padding-left: 150px;
 }
 #topLinks {
 	position: absolute;
