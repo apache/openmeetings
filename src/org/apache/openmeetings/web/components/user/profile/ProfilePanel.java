@@ -21,8 +21,10 @@ package org.apache.openmeetings.web.components.user.profile;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 
+import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
 import org.apache.openmeetings.data.user.dao.UsersDao;
 import org.apache.openmeetings.persistence.beans.user.User;
+import org.apache.openmeetings.utils.crypt.ManageCryptStyle;
 import org.apache.openmeetings.web.components.ComunityUserForm;
 import org.apache.openmeetings.web.components.FormSaveRefreshPanel;
 import org.apache.openmeetings.web.components.UploadableProfileImagePanel;
@@ -38,9 +40,11 @@ public class ProfilePanel extends UserPanel {
 
 	public ProfilePanel(String id) {
 		super(id);
+		setOutputMarkupId(true);
 		
 		Form<User> form = new Form<User>("form", new CompoundPropertyModel<User>(getBean(UsersDao.class).get(getUserId()))) {
 			private static final long serialVersionUID = -4968428244553170528L;
+			private final UserForm userForm;
 
 			{
 				add(new FormSaveRefreshPanel<User>("buttons", this) {
@@ -48,29 +52,43 @@ public class ProfilePanel extends UserPanel {
 
 					@Override
 					protected void onSaveSubmit(AjaxRequestTarget target, Form<?> form) {
-						// TODO Auto-generated method stub
-						
+						User u = getModelObject();
+						try {
+							String pass = userForm.getPasswordField().getConvertedInput();
+							if (pass != null && !pass.isEmpty()) {
+								u.updatePassword(getBean(ManageCryptStyle.class), getBean(ConfigurationDao.class), pass);
+							}
+							getBean(UsersDao.class).update(u, getUserId());
+						} catch (Exception e) {
+							// FIXME update feedback with the error details
+						}
+						setModelObject(u);
+						target.add(ProfilePanel.this);
 					}
 
 					@Override
 					protected void onSaveError(AjaxRequestTarget target, Form<?> form) {
-						// TODO Auto-generated method stub
-						
+						// FIXME update feedback with the error details
 					}
 
 					@Override
 					protected void onRefreshSubmit(AjaxRequestTarget target, Form<?> form) {
-						// TODO Auto-generated method stub
-						
+						User user = getModelObject();
+						if (user.getUser_id() != null) {
+							user = getBean(UsersDao.class).get(user.getUser_id());
+						} else {
+							user = new User();
+						}
+						setModelObject(user);
+						target.add(ProfilePanel.this);
 					}
 
 					@Override
 					protected void onRefreshError(AjaxRequestTarget target, Form<?> form) {
-						// TODO Auto-generated method stub
-						
+						// FIXME update feedback with the error details
 					}
 				});
-				add(new UserForm("general", getModel()));
+				add(userForm = new UserForm("general", getModel()));
 				add(new UploadableProfileImagePanel("img", getUserId()));
 				add(new ComunityUserForm("comunity", getModel()));
 				

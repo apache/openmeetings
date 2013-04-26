@@ -18,6 +18,8 @@
  */
 package org.apache.openmeetings.web.components.user.profile;
 
+import static org.apache.openmeetings.web.app.WebSession.getUserId;
+
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.components.UserPanel;
 import org.apache.wicket.AttributeModifier;
@@ -28,12 +30,20 @@ import org.apache.wicket.markup.repeater.RepeatingView;
 import org.apache.wicket.model.Model;
 
 import com.googlecode.wicket.jquery.core.JQueryBehavior;
+import com.googlecode.wicket.jquery.core.Options;
 
 public class SettingsPanel extends UserPanel {
 	private static final long serialVersionUID = -830146821166434373L;
-	public static final String DASHBOARD_TAB_ID = "tab1";
-	public static final String PROFILE_TAB_ID = "tab2";
+	public static final int PROFILE_TAB_ID = 0;
+	public static final int MESSAGES_TAB_ID = 1;
+	public static final int EDIT_PROFILE_TAB_ID = 2;
+	public static final int SEARCH_TAB_ID = 1;
+	public static final int DASHBOARD_TAB_ID = 4;
 
+	private String getTabId(int idx) {
+		return "tab" + idx;
+	}
+	
 	private void addTab(RepeatingView tabs, String name, String id) {
 		WebMarkupContainer tab = new WebMarkupContainer(tabs.newChildId());
 		tab.add(new WebMarkupContainer("link")
@@ -48,17 +58,19 @@ public class SettingsPanel extends UserPanel {
 		panels.add(tab);
 	}
 	
-	public SettingsPanel(String id) {
+	public SettingsPanel(String id, int active) {
 		super(id);
 		RepeatingView tabs = new RepeatingView("tabs");
-		addTab(tabs, WebSession.getString(1170), PROFILE_TAB_ID);
-		addTab(tabs, "[Widgets]", DASHBOARD_TAB_ID); //FIXME localize
+		addTab(tabs, WebSession.getString(1170), getTabId(PROFILE_TAB_ID));
+		addTab(tabs, WebSession.getString(1171), getTabId(EDIT_PROFILE_TAB_ID));
+		addTab(tabs, "[Widgets]", getTabId(DASHBOARD_TAB_ID)); //FIXME localize
 		
 		RepeatingView panels = new RepeatingView("panels");
-		addPanel(panels, PROFILE_TAB_ID, new ProfilePanel("tab"));
-		addPanel(panels, DASHBOARD_TAB_ID, new WidgetsPanel("tab"));
+		addPanel(panels, getTabId(PROFILE_TAB_ID), new UserProfilePanel("tab", getUserId()));
+		addPanel(panels, getTabId(EDIT_PROFILE_TAB_ID), new ProfilePanel("tab"));
+		addPanel(panels, getTabId(DASHBOARD_TAB_ID), new WidgetsPanel("tab"));
 		
-		add(new JQueryBehavior("#tabs", "tabs"/*, new Options("active", 1)*/));
+		add(new JQueryBehavior("#tabs", "tabs", new Options("active", active)));
 		add(tabs, panels);
 	}
 }

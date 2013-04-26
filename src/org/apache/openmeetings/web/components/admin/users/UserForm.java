@@ -133,7 +133,7 @@ public class UserForm extends AdminBaseForm<User> {
 		// login.setLabel(new Model<String>("testname"));
 		add(login);
 
-		add(generalForm = new GeneralUserForm("general", getModel()));
+		add(generalForm = new GeneralUserForm("general", getModel(), true));
 
 		add(DateLabel.forDatePattern("starttime", "dd.MM.yyyy HH:mm:ss"));
 		add(DateLabel.forDatePattern("updatetime", "dd.MM.yyyy HH:mm:ss"));

@@ -78,9 +78,6 @@ public class WebSession extends AbstractAuthenticatedWebSession {
 			userLevel = getBean(UserManager.class).getUserLevelByID(userId);
 			AuthLevelUtil authLevel = getBean(AuthLevelUtil.class);
 			r = new Roles(Roles.USER);
-			if (authLevel.checkUserLevel(userLevel)) {
-				r.add(Roles.USER);
-			}
 			if (authLevel.checkAdminLevel(userLevel)) {
 				r.add(Roles.ADMIN);
 			}

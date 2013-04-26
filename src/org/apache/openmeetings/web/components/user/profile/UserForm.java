@@ -30,7 +30,7 @@ public class UserForm extends GeneralUserForm {
 	private final PasswordTextField confirmPassword;
 	
 	public UserForm(String id, IModel<User> model) {
-		super(id, model);
+		super(id, model, false);
 		add(confirmPassword = new PasswordTextField("confirmPassword", new Model<String>()));
 		confirmPassword.setRequired(false);
 	}

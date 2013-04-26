@@ -18,6 +18,9 @@
  */
 package org.apache.openmeetings.web.pages;
 
+import static org.apache.openmeetings.web.components.user.profile.SettingsPanel.MESSAGES_TAB_ID;
+import static org.apache.openmeetings.web.components.user.profile.SettingsPanel.PROFILE_TAB_ID;
+
 import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.components.ConfirmableAjaxLink;
@@ -31,6 +34,7 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.protocol.ws.api.WebSocketBehavior;
 import org.apache.wicket.protocol.ws.api.message.ClosedMessage;
 import org.apache.wicket.protocol.ws.api.message.ConnectedMessage;
@@ -51,6 +55,14 @@ public class MainPage extends BasePage {
 		add(contents);
 		menu = new MenuPanel("menu", contents);
 		add(menu);
+		add(new AjaxLink<Void>("messages") {
+			private static final long serialVersionUID = 4065339709905366840L;
+
+			@Override
+			public void onClick(AjaxRequestTarget target) {
+				target.add(contents.replace(new SettingsPanel("child", MESSAGES_TAB_ID)));
+			}
+		});
 		add(new ConfirmableAjaxLink("logout", 634L) {
 			private static final long serialVersionUID = -2994610981053570537L;
 
@@ -65,7 +77,7 @@ public class MainPage extends BasePage {
 
 			@Override
 			public void onClick(AjaxRequestTarget target) {
-				target.add(contents.replace(new SettingsPanel("child")));
+				target.add(contents.replace(new SettingsPanel("child", PROFILE_TAB_ID)));
 			}
 		});
 		final AboutDialog about = new AboutDialog("aboutDialog");
@@ -78,6 +90,8 @@ public class MainPage extends BasePage {
 			}
 		});
 		add(about);
+		add(new ExternalLink("bug", "https://issues.apache.org/jira/browse/OPENMEETINGS"));//FIXME hardcoded
+		
 		add(new ChatPanel("chatPanel"));
 		add(new WebSocketBehavior() {
 			private static final long serialVersionUID = -3311970325911992958L;

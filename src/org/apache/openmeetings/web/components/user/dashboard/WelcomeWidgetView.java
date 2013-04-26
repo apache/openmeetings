@@ -19,6 +19,8 @@
 package org.apache.openmeetings.web.components.user.dashboard;
 
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
+import static org.apache.openmeetings.web.components.user.profile.SettingsPanel.EDIT_PROFILE_TAB_ID;
+import static org.apache.openmeetings.web.components.user.profile.SettingsPanel.MESSAGES_TAB_ID;
 
 import org.apache.openmeetings.data.user.dao.PrivateMessagesDao;
 import org.apache.openmeetings.data.user.dao.UsersDao;
@@ -52,8 +54,7 @@ public class WelcomeWidgetView extends WidgetView {
 
 			@Override
 			public void onClick(AjaxRequestTarget target) {
-				//FIXME active id !!!!!
-				target.add(((MainPage)getPage()).getContents().replace(new SettingsPanel("child")));
+				target.add(((MainPage)getPage()).getContents().replace(new SettingsPanel("child", MESSAGES_TAB_ID)));
 			}
 		}.add(new Label("unread", Model.of("" + Application.getBean(PrivateMessagesDao.class)
 				.getNumberMessages(getUserId(), 0L, false)))));
@@ -62,8 +63,7 @@ public class WelcomeWidgetView extends WidgetView {
 
 			@Override
 			public void onClick(AjaxRequestTarget target) {
-				//FIXME active id !!!!!
-				target.add(((MainPage)getPage()).getContents().replace(new SettingsPanel("child")));
+				target.add(((MainPage)getPage()).getContents().replace(new SettingsPanel("child", EDIT_PROFILE_TAB_ID)));
 			}
 		});
 	}

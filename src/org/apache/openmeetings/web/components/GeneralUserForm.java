@@ -52,6 +52,7 @@ import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.IMarkupSourcingStrategy;
 import org.apache.wicket.markup.html.panel.PanelMarkupSourcingStrategy;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.validation.validator.EmailAddressValidator;
 
@@ -61,10 +62,11 @@ public class GeneralUserForm extends Form<User> {
 	private FieldLanguage lang;
 	private PasswordTextField passwordField;
 
-	public GeneralUserForm(String id, IModel<User> model) {
+	public GeneralUserForm(String id, IModel<User> model, boolean isAdminForm) {
 		super(id, model);
 
-		add(passwordField = new PasswordTextField("password"));
+		//TODO should throw exception if non admin User edit somebody else (or make all fields read-only)
+		add(passwordField = new PasswordTextField("password", new Model<String>()));
 		passwordField.setRequired(false);
 
 		SalutationDao salutDao = getBean(SalutationDao.class);
@@ -126,15 +128,20 @@ public class GeneralUserForm extends Form<User> {
 				, new ChoiceRenderer<State>("name", "state_id")));
 		add(new TextArea<String>("adresses.comment"));
 
-		List<Organisation> orgList = getBean(OrganisationManager.class).getOrganisations(3L);
-		List<Organisation_Users> orgUsers = new ArrayList<Organisation_Users>(orgList.size());
-		for (Organisation org : orgList) {
-			orgUsers.add(new Organisation_Users(org));
+		List<Organisation_Users> orgUsers;
+		if (isAdminForm) {
+			List<Organisation> orgList = getBean(OrganisationManager.class).getOrganisations(3L);
+			orgUsers = new ArrayList<Organisation_Users>(orgList.size());
+			for (Organisation org : orgList) {
+				orgUsers.add(new Organisation_Users(org));
+			}
+		} else {
+			orgUsers = getModelObject().getOrganisation_users();
 		}
 		ListMultipleChoice<Organisation_Users> orgChoiceList = new ListMultipleChoice<Organisation_Users>(
 				"organisation_users", orgUsers,
 				new ChoiceRenderer<Organisation_Users>("organisation.name", "organisation.organisation_id"));
-		add(orgChoiceList);
+		add(orgChoiceList.setEnabled(isAdminForm));
 	}
 	
 	public PasswordTextField getPasswordField() {
