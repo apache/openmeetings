@@ -25,12 +25,13 @@ import org.apache.openmeetings.data.user.dao.UsersDao;
 import org.apache.openmeetings.persistence.beans.user.User;
 import org.apache.openmeetings.web.components.ComunityUserForm;
 import org.apache.openmeetings.web.components.FormSaveRefreshPanel;
-import org.apache.openmeetings.web.components.GeneralUserForm;
 import org.apache.openmeetings.web.components.UploadableProfileImagePanel;
 import org.apache.openmeetings.web.components.UserPanel;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.form.AjaxFormValidatingBehavior;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.CompoundPropertyModel;
+import org.apache.wicket.util.time.Duration;
 
 public class ProfilePanel extends UserPanel {
 	private static final long serialVersionUID = -5837090230776586182L;
@@ -69,9 +70,13 @@ public class ProfilePanel extends UserPanel {
 						
 					}
 				});
-				add(new GeneralUserForm("general", getModel()));
+				add(new UserForm("general", getModel()));
 				add(new UploadableProfileImagePanel("img", getUserId()));
 				add(new ComunityUserForm("comunity", getModel()));
+				
+				// attach an ajax validation behavior to all form component's keydown
+				// event and throttle it down to once per second
+				AjaxFormValidatingBehavior.addToAllFormComponents(this, "keydown", Duration.ONE_SECOND);
 			}
 		};
 		add(form);
