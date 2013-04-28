@@ -262,7 +262,7 @@
 		<dependency org="com.googlecode.wicket-jquery-ui" name="wicket-jquery-ui-calendar" rev="6.7.0" conf="openmeetings->*" transitive="false">
 			<include type="jar" />
 		</dependency>
-		<dependency org="ro.fortsoft.wicket.dashboard" name="wicket-dashboard-core" rev="0.7" conf="openmeetings->*" transitive="false">
+		<dependency org="ro.fortsoft.wicket.dashboard" name="wicket-dashboard-core" rev="0.8" conf="openmeetings->*" transitive="false">
 			<include type="jar" />
 		</dependency>
 		<dependency org="com.google.code.gson" name="gson" rev="2.2.3" conf="openmeetings->*" transitive="false">
