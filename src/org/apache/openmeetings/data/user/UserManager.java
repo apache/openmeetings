@@ -1611,342 +1611,60 @@ public class UserManager {
 		return null;
 	}
 
-	public List<User> searchUserProfile(String searchTxt, String userOffers,
-			String userSearchs, String orderBy, int start, int max, boolean asc) {
-		try {
-
-			String hql = "select c from User c "
-					+ "where c.deleted = false ";
-
-			if (searchTxt.length() != 0 && userOffers.length() != 0
-					&& userSearchs.length() != 0) {
-
-				hql += "AND " + "(" + "(" + "lower(c.login) LIKE :search "
-						+ "OR lower(c.firstname) LIKE :search "
-						+ "OR lower(c.lastname) LIKE :search "
-						+ "OR lower(c.adresses.email) LIKE :search "
-						+ "OR lower(c.adresses.town) LIKE :search " + ")"
-						+ "AND" + "(" + "lower(c.userOffers) LIKE :userOffers "
-						+ ")" + "AND" + "("
-						+ "lower(c.userSearchs) LIKE :userSearchs " + ")" + ")";
-
-			} else if (searchTxt.length() != 0 && userOffers.length() != 0) {
-
-				hql += "AND " + "(" + "(" + "lower(c.login) LIKE :search "
-						+ "OR lower(c.firstname) LIKE :search "
-						+ "OR lower(c.lastname) LIKE :search "
-						+ "OR lower(c.adresses.email) LIKE :search "
-						+ "OR lower(c.adresses.town) LIKE :search " + ")"
-						+ "AND" + "(" + "lower(c.userOffers) LIKE :userOffers "
-						+ ")" + ")";
-
-			} else if (searchTxt.length() != 0 && userSearchs.length() != 0) {
-
-				hql += "AND " + "(" + "(" + "lower(c.login) LIKE :search "
-						+ "OR lower(c.firstname) LIKE :search "
-						+ "OR lower(c.lastname) LIKE :search "
-						+ "OR lower(c.adresses.email) LIKE :search "
-						+ "OR lower(c.adresses.town) LIKE :search " + ")"
-						+ "AND" + "("
-						+ "lower(c.userSearchs) LIKE :userSearchs " + ")" + ")";
-
-			} else if (userOffers.length() != 0 && userSearchs.length() != 0) {
-
-				hql += "AND " + "(" + "("
-						+ "lower(c.userOffers) LIKE :userOffers " + ")" + "AND"
-						+ "(" + "lower(c.userSearchs) LIKE :userSearchs " + ")"
-						+ ")";
-
-			} else if (searchTxt.length() != 0) {
-
-				hql += "AND " + "(" + "(" + "lower(c.login) LIKE :search "
-						+ "OR lower(c.firstname) LIKE :search "
-						+ "OR lower(c.lastname) LIKE :search "
-						+ "OR lower(c.adresses.email) LIKE :search "
-						+ "OR lower(c.adresses.town) LIKE :search " + ")" + ")";
-
-			} else if (userOffers.length() != 0) {
-
-				hql += "AND " + "(" + "("
-						+ "lower(c.userOffers) LIKE :userOffers " + ")" + ")";
-
-			} else if (userSearchs.length() != 0) {
-
-				hql += "AND " + "(" + "("
-						+ "lower(c.userSearchs) LIKE :userSearchs " + ")" + ")";
-
-			}
-
-			hql += " ORDER BY " + orderBy;
-
-			if (asc) {
-				hql += " ASC";
-			} else {
-				hql += " DESC";
-			}
-
-			if (searchTxt.length() != 0) {
-				searchTxt = "%" + searchTxt + "%";
-			}
-
-			if (userOffers.length() != 0) {
-				userOffers = "%" + userOffers + "%";
-			}
-
-			if (userSearchs.length() != 0) {
-				userSearchs = "%" + userSearchs + "%";
-			}
-
-			log.debug("hql :: " + hql);
-
-			// get all users
-			TypedQuery<User> query = em.createQuery(hql, User.class);
-
-			if (searchTxt.length() != 0 && userOffers.length() != 0
-					&& userSearchs.length() != 0) {
-
-				query.setParameter("search", StringUtils.lowerCase(searchTxt));
-				query.setParameter("userOffers",
-						StringUtils.lowerCase(userOffers));
-				query.setParameter("userSearchs",
-						StringUtils.lowerCase(userSearchs));
-
-			} else if (searchTxt.length() != 0 && userOffers.length() != 0) {
-
-				query.setParameter("search", StringUtils.lowerCase(searchTxt));
-				query.setParameter("userOffers",
-						StringUtils.lowerCase(userOffers));
-
-			} else if (searchTxt.length() != 0 && userSearchs.length() != 0) {
-
-				query.setParameter("search", StringUtils.lowerCase(searchTxt));
-				query.setParameter("userSearchs",
-						StringUtils.lowerCase(userSearchs));
-
-			} else if (userOffers.length() != 0 && userSearchs.length() != 0) {
-
-				query.setParameter("userOffers",
-						StringUtils.lowerCase(userOffers));
-				query.setParameter("userSearchs",
-						StringUtils.lowerCase(userSearchs));
-
-			} else if (searchTxt.length() != 0) {
-
-				query.setParameter("search", StringUtils.lowerCase(searchTxt));
-
-			} else if (userOffers.length() != 0) {
-
-				query.setParameter("userOffers",
-						StringUtils.lowerCase(userOffers));
-
-			} else if (userSearchs.length() != 0) {
-
-				query.setParameter("userSearchs",
-						StringUtils.lowerCase(userSearchs));
-
-			}
-
-			query.setMaxResults(max);
-			query.setFirstResult(start);
-
-			List<User> userList = query.getResultList();
-
-			return userList;
-
-		} catch (Exception ex2) {
-			log.error("[getUsersList] ", ex2);
+	private StringBuilder getUserProfileQuery(boolean count, String text, String offers, String search) {
+		StringBuilder sb = new StringBuilder("SELECT ");
+		sb.append(count ? "COUNT(" : "").append("u").append(count ? ") " : " ")
+			.append("FROM User u WHERE u.deleted = false ");
+		if (offers != null && offers.length() != 0) {
+			sb.append("AND (LOWER(u.userOffers) LIKE :userOffers) ");
 		}
+		if (search != null && search.length() != 0) {
+			sb.append("AND (LOWER(u.userSearchs) LIKE :userSearchs) ");
+		}
+		if (text != null && text.length() != 0) {
+			sb.append("AND (LOWER(u.login) LIKE :search ")
+				.append("OR LOWER(u.firstname) LIKE :search ")
+				.append("OR LOWER(u.lastname) LIKE :search ")
+				.append("OR LOWER(u.adresses.email) LIKE :search ")
+				.append("OR LOWER(u.adresses.town) LIKE :search " + ") ");
+		}
+		return sb;
+	}
+	
+	public List<User> searchUserProfile(String text, String offers, String search, String orderBy, int start, int max, boolean asc) {
+		StringBuilder sb = getUserProfileQuery(false, text, offers, search);
+		sb.append(" ORDER BY ").append(orderBy).append(asc ? " ASC" : " DESC");
 
-		return null;
+		log.debug("hql :: " + sb.toString());
+		TypedQuery<User> query = em.createQuery(sb.toString(), User.class);
+
+		if (text != null && text.length() != 0) {
+			query.setParameter("search", StringUtils.lowerCase("%" + text + "%"));
+		}
+		if (offers != null && offers.length() != 0) {
+			query.setParameter("userOffers", StringUtils.lowerCase("%" + offers + "%"));
+		}
+		if (search != null && search.length() != 0) {
+			query.setParameter("userSearchs", StringUtils.lowerCase("%" + search + "%"));
+		}
+		return query.setFirstResult(start).setMaxResults(max).getResultList();
 	}
 
-	public Long searchCountUserProfile(String searchTxt, String userOffers,
-			String userSearchs) {
-		try {
-
-			String hql = "select count(c.user_id) from User c "
-					+ "where c.deleted = false ";
-
-			if (searchTxt.length() != 0 && userOffers.length() != 0
-					&& userSearchs.length() != 0) {
-
-				hql += "AND " + "(" + "(" + "lower(c.login) LIKE :search "
-						+ "OR lower(c.firstname) LIKE :search "
-						+ "OR lower(c.lastname) LIKE :search "
-						+ "OR lower(c.adresses.email) LIKE :search "
-						+ "OR lower(c.adresses.town) LIKE :search " + ")"
-						+ "AND" + "(" + "lower(c.userOffers) LIKE :userOffers "
-						+ ")" + "AND" + "("
-						+ "lower(c.userSearchs) LIKE :userSearchs " + ")" + ")";
-
-			} else if (searchTxt.length() != 0 && userOffers.length() != 0) {
-
-				hql += "AND " + "(" + "(" + "lower(c.login) LIKE :search "
-						+ "OR lower(c.firstname) LIKE :search "
-						+ "OR lower(c.lastname) LIKE :search) "
-						+ "OR lower(c.adresses.email) LIKE :search "
-						+ "OR lower(c.adresses.town) LIKE :search " + ")"
-						+ "AND" + "(" + "lower(c.userOffers) LIKE :userOffers "
-						+ ")" + ")";
-
-			} else if (searchTxt.length() != 0 && userSearchs.length() != 0) {
-
-				hql += "AND " + "(" + "(" + "lower(c.login) LIKE :search "
-						+ "OR lower(c.firstname) LIKE :search "
-						+ "OR lower(c.lastname) LIKE :search "
-						+ "OR lower(c.adresses.email) LIKE :search "
-						+ "OR lower(c.adresses.town) LIKE :search " + ")"
-						+ "AND" + "("
-						+ "lower(c.userSearchs) LIKE :userSearchs " + ")" + ")";
-
-			} else if (userOffers.length() != 0 && userSearchs.length() != 0) {
-
-				hql += "AND " + "(" + "("
-						+ "lower(c.userOffers) LIKE :userOffers " + ")" + "AND"
-						+ "(" + "lower(c.userSearchs) LIKE :userSearchs " + ")"
-						+ ")";
-
-			} else if (searchTxt.length() != 0) {
-
-				hql += "AND " + "(" + "(" + "lower(c.login) LIKE :search "
-						+ "OR lower(c.firstname) LIKE :search "
-						+ "OR lower(c.lastname) LIKE :search "
-						+ "OR lower(c.adresses.email) LIKE :search "
-						+ "OR lower(c.adresses.town) LIKE :search " + ")" + ")";
-
-			} else if (userOffers.length() != 0) {
-
-				hql += "AND " + "(" + "("
-						+ "lower(c.userOffers) LIKE :userOffers " + ")" + ")";
-
-			} else if (userSearchs.length() != 0) {
-
-				hql += "AND " + "(" + "("
-						+ "lower(c.userSearchs) LIKE :userSearchs " + ")" + ")";
-
-			}
-
-			if (searchTxt.length() != 0) {
-				searchTxt = "%" + searchTxt + "%";
-			}
-
-			if (userOffers.length() != 0) {
-				userOffers = "%" + userOffers + "%";
-			}
-
-			if (userSearchs.length() != 0) {
-				userSearchs = "%" + userSearchs + "%";
-			}
-
-			log.debug("hql :: " + hql);
-
-			// get all users
-			TypedQuery<Long> query = em.createQuery(hql, Long.class);
-
-			if (searchTxt.length() != 0 && userOffers.length() != 0
-					&& userSearchs.length() != 0) {
-
-				query.setParameter("search", StringUtils.lowerCase(searchTxt));
-				query.setParameter("userOffers",
-						StringUtils.lowerCase(userOffers));
-				query.setParameter("userSearchs",
-						StringUtils.lowerCase(userSearchs));
-
-			} else if (searchTxt.length() != 0 && userOffers.length() != 0) {
-
-				query.setParameter("search", StringUtils.lowerCase(searchTxt));
-				query.setParameter("userOffers",
-						StringUtils.lowerCase(userOffers));
-
-			} else if (searchTxt.length() != 0 && userSearchs.length() != 0) {
-
-				query.setParameter("search", StringUtils.lowerCase(searchTxt));
-				query.setParameter("userSearchs",
-						StringUtils.lowerCase(userSearchs));
-
-			} else if (userOffers.length() != 0 && userSearchs.length() != 0) {
-
-				query.setParameter("userOffers",
-						StringUtils.lowerCase(userOffers));
-				query.setParameter("userSearchs",
-						StringUtils.lowerCase(userSearchs));
-
-			} else if (searchTxt.length() != 0) {
-
-				query.setParameter("search", StringUtils.lowerCase(searchTxt));
-
-			} else if (userOffers.length() != 0) {
-
-				query.setParameter("userOffers",
-						StringUtils.lowerCase(userOffers));
-
-			} else if (userSearchs.length() != 0) {
-
-				query.setParameter("userSearchs",
-						StringUtils.lowerCase(userSearchs));
-
-			}
-
-			List<Long> userList = query.getResultList();
-
-			return userList.get(0);
-
-		} catch (Exception ex2) {
-			log.error("[getUsersList] ", ex2);
+	public Long searchCountUserProfile(String text, String offers, String search) {
+		StringBuilder sb = getUserProfileQuery(true, text, offers, search);
+		
+		log.debug("hql :: " + sb.toString());
+		TypedQuery<Long> query = em.createQuery(sb.toString(), Long.class);
+		
+		if (text != null && text.length() != 0) {
+			query.setParameter("search", StringUtils.lowerCase("%" + text + "%"));
 		}
-
-		return null;
-	}
-
-	public Long searchMaxUserProfile(String searchTxt, String userOffers,
-			String userSearchs) {
-		try {
-
-			String hql = "select count(c.user_id) from User c "
-					+ "where c.deleted = false " + "AND " + "(" + "("
-					+ "lower(c.login) LIKE :search "
-					+ "OR lower(c.firstname) LIKE :search "
-					+ "OR lower(c.lastname) LIKE :search "
-					+ "OR lower(c.adresses.email) LIKE :search "
-					+ "OR lower(c.adresses.town) LIKE :search " + ")" + "OR"
-					+ "(" + "lower(c.userOffers) LIKE :userOffers " + ")"
-					+ "OR" + "(" + "lower(c.userSearchs) LIKE :userSearchs "
-					+ ")" + ")";
-
-			if (searchTxt.length() == 0) {
-				searchTxt = "%";
-			} else {
-				searchTxt = "%" + searchTxt + "%";
-			}
-
-			if (userOffers.length() == 0) {
-				userOffers = "%";
-			} else {
-				userOffers = "%" + userOffers + "%";
-			}
-
-			if (userSearchs.length() == 0) {
-				userSearchs = "%";
-			} else {
-				userSearchs = "%" + userSearchs + "%";
-			}
-
-			// get all users
-			TypedQuery<Long> query = em.createQuery(hql, Long.class);
-			query.setParameter("search", StringUtils.lowerCase(searchTxt));
-			query.setParameter("userOffers", StringUtils.lowerCase(userOffers));
-			query.setParameter("userSearchs",
-					StringUtils.lowerCase(userSearchs));
-
-			List<Long> ll = query.getResultList();
-
-			return ll.get(0);
-
-		} catch (Exception ex2) {
-			log.error("[searchMaxUserProfile] " + ex2);
+		if (offers != null && offers.length() != 0) {
+			query.setParameter("userOffers", StringUtils.lowerCase("%" + offers + "%"));
 		}
-
-		return null;
+		if (search != null && search.length() != 0) {
+			query.setParameter("userSearchs", StringUtils.lowerCase("%" + search + "%"));
+		}
+		return query.getSingleResult();
 	}
-
 }

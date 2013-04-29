@@ -35,10 +35,14 @@ public class UserProfilePanel extends UserPanel {
 
 	private String getAddress(User u) {
 		String result = "";
-		if (getUserId() == u.getUser_id() || u.getShowContactData()) {
+		if (getUserId() == u.getUser_id() || Boolean.TRUE.equals(u.getShowContactData())) {
 			//FIXME, more details should be added
-			result = u.getAdresses().getStreet();
-		} else if (u.getShowContactDataToContacts()) {
+			if (u.getAdresses() != null) {
+				result = u.getAdresses().getStreet();
+			} else {
+				result = "[address]"; //FIXME
+			}
+		} else if (Boolean.TRUE.equals(u.getShowContactDataToContacts())) {
 			result = WebSession.getString(1269);
 		} else {
 			result = WebSession.getString(1268);

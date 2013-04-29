@@ -37,7 +37,7 @@ public class SettingsPanel extends UserPanel {
 	public static final int PROFILE_TAB_ID = 0;
 	public static final int MESSAGES_TAB_ID = 1;
 	public static final int EDIT_PROFILE_TAB_ID = 2;
-	public static final int SEARCH_TAB_ID = 1;
+	public static final int SEARCH_TAB_ID = 3;
 	public static final int DASHBOARD_TAB_ID = 4;
 
 	private String getTabId(int idx) {
@@ -63,11 +63,13 @@ public class SettingsPanel extends UserPanel {
 		RepeatingView tabs = new RepeatingView("tabs");
 		addTab(tabs, WebSession.getString(1170), getTabId(PROFILE_TAB_ID));
 		addTab(tabs, WebSession.getString(1171), getTabId(EDIT_PROFILE_TAB_ID));
+		addTab(tabs, WebSession.getString(1172), getTabId(SEARCH_TAB_ID));
 		addTab(tabs, "[Widgets]", getTabId(DASHBOARD_TAB_ID)); //FIXME localize
 		
 		RepeatingView panels = new RepeatingView("panels");
 		addPanel(panels, getTabId(PROFILE_TAB_ID), new UserProfilePanel("tab", getUserId()));
 		addPanel(panels, getTabId(EDIT_PROFILE_TAB_ID), new ProfilePanel("tab"));
+		addPanel(panels, getTabId(SEARCH_TAB_ID), new UserSearchPanel("tab"));
 		addPanel(panels, getTabId(DASHBOARD_TAB_ID), new WidgetsPanel("tab"));
 		
 		add(new JQueryBehavior("#tabs", "tabs", new Options("active", active)));

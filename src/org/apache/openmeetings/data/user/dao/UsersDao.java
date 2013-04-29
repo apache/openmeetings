@@ -56,7 +56,7 @@ public class UsersDao implements IDataProviderDao<User> {
 	private static final Logger log = Red5LoggerFactory.getLogger(
 			UsersDao.class, OpenmeetingsVariables.webAppRootKey);
 
-	public final static String[] searchFields = {"lastname", "firstname", "login", "adresses.email"};
+	public final static String[] searchFields = {"lastname", "firstname", "login", "adresses.email", "adresses.town"};
 
 	@PersistenceContext
 	private EntityManager em;
