@@ -115,11 +115,9 @@ public class UserSearchPanel extends UserPanel {
 
 					@Override
 					protected void onEvent(AjaxRequestTarget target) {
-						/* FIXME need to be uncommented
-						d.replace(new UserProfilePanel("body", userId));
+						d.getContainer().replace(new UserProfilePanel("body", userId));
+						target.add(d.getContainer());
 						d.open(target);
-						target.add(container);
-						*/
 					}
 				}));
 				//item.add(new TooltipBehavior(new Options("content", "TODO:: Picture will be displayed"))); //FIXME 
@@ -135,9 +133,7 @@ public class UserSearchPanel extends UserPanel {
 				target.add(container);
 			}
 		});
-		add(container.add(dw
-				, itemsPP
-				, d
+		add(d, container.add(dw, itemsPP
 				, new AjaxPagingNavigator("navigator", dw)).setOutputMarkupId(true));
 	}
 	
