@@ -56,7 +56,7 @@ public class ConfigForm extends AdminBaseForm<Configuration> {
 		target.appendJavaScript("omConfigPanelInit();");
 	}
 	
-	public ConfigForm(String id, WebMarkupContainer listContainer, final Configuration configuration) {
+	public ConfigForm(String id, WebMarkupContainer listContainer, Configuration configuration) {
 		super(id, new CompoundPropertyModel<Configuration>(configuration));
 		setOutputMarkupId(true);
 		this.listContainer = listContainer;
@@ -65,7 +65,7 @@ public class ConfigForm extends AdminBaseForm<Configuration> {
 
 			public void validate(IValidatable<String> validatable) {
 				Configuration c = getConfigDao().forceGet(validatable.getValue());
-				if (c != null && !c.getConfiguration_id().equals(configuration.getConfiguration_id())) {
+				if (c != null && !c.getConfiguration_id().equals(ConfigForm.this.getModelObject().getConfiguration_id())) {
 					error(WebSession.getString(1544L));
 				}
 			}
