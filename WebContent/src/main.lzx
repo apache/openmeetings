@@ -51,6 +51,7 @@
 
 <!-- main colors: 264269 -->
 <handler name="oninit">
+	flash.external.ExternalInterface.call("loadingComplete");
 	doDebugInit();
     var cmenu = new LzContextMenu();
     canvas.setDefaultContextMenu(cmenu);

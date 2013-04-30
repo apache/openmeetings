@@ -40,6 +40,13 @@ function redirectToUrl(url) {
 	document.getElementById("lzapp").redirectToUrlCallback("ok");
 }
 
+function loadingComplete() {
+	document.getElementById("loading").style.display = 'none';
+	var lzApp = document.getElementById("lzappContainer");
+	lzApp.style.width = '100%';
+	lzApp.style.height = '100%';
+}
+
 function getTimeZoneOffset() {
 	var rightNow = new Date(), std_time_offset = -rightNow.getTimezoneOffset() / 60;
 	for (var i = 0; i < 12; ++i) {
