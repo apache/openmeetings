@@ -383,7 +383,7 @@ return "http";break;
 
 }},__getCSSValue:function($1){
 if($1&&$1.length&&$1.indexOf("%")!=-1){
-return "100%"
+return "1px"
 }else{
 return $1+"px"
 }},write:function($1,$2){
