@@ -42,6 +42,7 @@
     
     <include href="testsView.lzx" />
     <handler name="oninit"><![CDATA[
+    	flash.external.ExternalInterface.call("loadingComplete");
 		doDebugInit();
 	]]></handler>
 	
