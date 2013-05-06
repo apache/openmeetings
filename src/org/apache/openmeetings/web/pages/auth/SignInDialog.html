@@ -19,21 +19,27 @@
   
 -->
 <html xmlns:wicket="http://wicket.apache.org">
-	<wicket:head>
-		<link media="screen" type="text/css" rel="stylesheet" href="css/theme.css"/>
-		<link media="screen" type="text/css" rel="stylesheet" href="css/jquery-ui-1.10.2.custom.min.css"/>
-		<style>
-			#login input:not([type='checkbox']) {
-				width: 170px;
-			}
-		</style>
-	</wicket:head>
-	<wicket:extend>
-		<script type="text/javascript">
-			$(function(){
-				$('#area').val(location.hash);
-			});
-		</script>
-		<div wicket:id="signin"></div>
-	</wicket:extend>
+<wicket:panel>
+	<div id="login">
+		<form wicket:id="signin">
+			<table>
+				<tr>
+					<td><wicket:ommessage key="109" /></td>
+					<td><input wicket:id="login" type="text" value="" /></td>
+				</tr>
+				<tr>
+					<td><wicket:ommessage key="110" /></td>
+					<td><input wicket:id="pass" type="password" value="" /></td>
+				</tr>
+				<tr>
+					<td></td>
+					<td><input wicket:id="rememberMe" type="checkbox" /><label wicket:for="rememberMe"><wicket:ommessage key="288" /></label></td>
+				</tr>
+			</table>
+			<span wicket:id="feedback"></span>
+			<input wicket:id="area" type="hidden" value="" />
+			<input type="submit" wicket:id="submit" style="position: absolute; top: -9999px; width: 1px; height: 1px;"/>
+		</form>
+	</div>
+</wicket:panel>
 </html>
