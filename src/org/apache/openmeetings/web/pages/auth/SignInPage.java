@@ -18,6 +18,10 @@
  */
 package org.apache.openmeetings.web.pages.auth;
 
+import static org.apache.openmeetings.persistence.beans.basic.Configuration.FRONTEND_REGISTER_KEY;
+import static org.apache.openmeetings.web.app.Application.getBean;
+
+import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
 import org.apache.openmeetings.web.pages.BasePage;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
@@ -26,6 +30,10 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 public class SignInPage extends BasePage {
 	private static final long serialVersionUID = -3843571657066167592L;
 	private SignInDialog d;
+	
+	static boolean allowRegister() {
+		return "1".equals(getBean(ConfigurationDao.class).getConfValue(FRONTEND_REGISTER_KEY, String.class, "0"));
+	}
 	
 	public SignInPage(PageParameters p) {
 		this();
@@ -36,7 +44,7 @@ public class SignInPage extends BasePage {
 		d = new SignInDialog("signin");
 		d.setRegisterDialog(r);
 		r.setSignInDialog(d);
-		add(d, r);
+		add(d, r.setVisible(allowRegister()));
 	}
 	
 	@Override

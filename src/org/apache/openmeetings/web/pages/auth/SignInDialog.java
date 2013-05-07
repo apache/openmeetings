@@ -18,13 +18,11 @@
  */
 package org.apache.openmeetings.web.pages.auth;
 
-import static org.apache.openmeetings.persistence.beans.basic.Configuration.FRONTEND_REGISTER_KEY;
-import static org.apache.openmeetings.web.app.Application.getBean;
+import static org.apache.openmeetings.web.pages.auth.SignInPage.allowRegister;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.wicket.RestartResponseException;
@@ -96,7 +94,7 @@ public class SignInDialog extends AbstractFormDialog<String> {
 	@Override
 	protected List<DialogButton> getButtons() {
 		List<DialogButton> list = new ArrayList<DialogButton>();
-		if ("1".equals(getBean(ConfigurationDao.class).getConfValue(FRONTEND_REGISTER_KEY, String.class, "0"))) {
+		if (allowRegister()) {
 			list.add(registerBtn);
 		}
 		list.add(loginBtn);
