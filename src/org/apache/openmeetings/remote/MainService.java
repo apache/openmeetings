@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.remote;
 
+import static org.apache.openmeetings.persistence.beans.basic.Configuration.FRONTEND_REGISTER_KEY;
 import static org.apache.openmeetings.persistence.beans.basic.Configuration.MAX_UPLOAD_SIZE_KEY;
 
 import java.util.Date;
@@ -711,7 +712,7 @@ public class MainService implements IPendingServiceCallback {
 	 * @return configuration with key "allow_frontend_register"
 	 */
 	public Configuration allowFrontendRegister(String SID) {
-		return configurationDao.get("allow_frontend_register").get(0); //FIXME need to be removed
+		return configurationDao.get(FRONTEND_REGISTER_KEY).get(0); //FIXME need to be removed
 	}
 	
 	public List<Configuration> getGeneralOptions(String SID) {
@@ -726,7 +727,7 @@ public class MainService implements IPendingServiceCallback {
 
 	public List<Configuration> getLoginOptions(String SID) {
 		try {
-			return configurationDao.get("allow_frontend_register", "show.facebook.login",
+			return configurationDao.get(FRONTEND_REGISTER_KEY, "show.facebook.login",
 					"user.login.minimum.length", "user.pass.minimum.length", "user.pass.minimum.length",
 					"ldap_default_id");
 		} catch (Exception err) {

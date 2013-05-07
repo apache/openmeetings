@@ -20,23 +20,46 @@
 -->
 <html xmlns:wicket="http://wicket.apache.org">
 <wicket:panel>
-	<form wicket:id="signin">
+	<form wicket:id="form">
 		<table>
 			<tr>
-				<td><wicket:ommessage key="109" /></td>
+				<td><wicket:ommessage key="117" /></td>
+				<td><input wicket:id="firstName" type="text" value="" /></td>
+			</tr>
+			<tr>
+				<td><wicket:ommessage key="118" /></td>
+				<td><input wicket:id="lastName" type="text" value="" /></td>
+			</tr>
+			<tr>
+				<td><wicket:ommessage key="114" /></td>
 				<td><input wicket:id="login" type="text" value="" /></td>
 			</tr>
 			<tr>
-				<td><wicket:ommessage key="110" /></td>
-				<td><input wicket:id="pass" type="password" value="" /></td>
+				<td><wicket:ommessage key="115" /></td>
+				<td><input wicket:id="password" type="password" value="" /></td>
 			</tr>
 			<tr>
-				<td></td>
-				<td><input wicket:id="rememberMe" type="checkbox" /><label wicket:for="rememberMe"><wicket:ommessage key="288" /></label></td>
+				<td><wicket:ommessage key="116" /></td>
+				<td><input wicket:id="repassword" type="password" value="" /></td>
+			</tr>
+			<tr>
+				<td><wicket:ommessage key="119" /></td>
+				<td><input wicket:id="email" type="text" value="" /></td>
+			</tr>
+			<tr>
+				<td><wicket:ommessage key="1143" /></td>
+				<td><select wicket:id="tz"></select></td>
+			</tr>
+			<tr>
+				<td><wicket:ommessage key="120" /></td>
+				<td><select wicket:id="state"></select></td>
+			</tr>
+			<tr>
+				<td><wicket:ommessage key="111" /></td>
+				<td><select wicket:id="lang"></select></td>
 			</tr>
 		</table>
 		<span wicket:id="feedback"></span>
-		<input wicket:id="area" type="hidden" value="" />
 		<input type="submit" wicket:id="submit" style="position: absolute; top: -9999px; width: 1px; height: 1px;"/>
 	</form>
 </wicket:panel>

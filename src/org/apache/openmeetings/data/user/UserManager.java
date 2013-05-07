@@ -19,6 +19,7 @@
 package org.apache.openmeetings.data.user;
 
 import static org.apache.openmeetings.persistence.beans.basic.Configuration.DEFAUT_LANG_KEY;
+import static org.apache.openmeetings.persistence.beans.basic.Configuration.FRONTEND_REGISTER_KEY;
 
 import java.util.Arrays;
 import java.util.Date;
@@ -748,7 +749,7 @@ public class UserManager {
 		try {
 			// Checks if FrontEndUsers can register
 			if ("1".equals(configurationDao.getConfValue(
-					"allow_frontend_register", String.class, "0"))) {
+					FRONTEND_REGISTER_KEY, String.class, "0"))) {
 				
 				// TODO: Read and generate SIP-Data via RPC-Interface Issue 1098
 

@@ -20,6 +20,7 @@ package org.apache.openmeetings.installation;
 
 import static org.apache.openmeetings.persistence.beans.basic.Configuration.CRYPT_KEY;
 import static org.apache.openmeetings.persistence.beans.basic.Configuration.DEFAUT_LANG_KEY;
+import static org.apache.openmeetings.persistence.beans.basic.Configuration.FRONTEND_REGISTER_KEY;
 import static org.apache.openmeetings.persistence.beans.basic.Configuration.MAX_UPLOAD_SIZE_KEY;
 
 import java.io.File;
@@ -273,7 +274,7 @@ public class ImportInitvalues {
 								+ "running previous Pass of users will not be workign anymore! "
 								+ "for more Information see http://openmeetings.apache.org/CustomCryptMechanism.html");
 
-		configurationDao.add("allow_frontend_register",
+		configurationDao.add(FRONTEND_REGISTER_KEY,
 				cfg.allowFrontendRegister, null, "");
 
 		configurationDao.add("default_group_id", "1", null, "");

@@ -18,9 +18,13 @@
  */
 package org.apache.openmeetings.web.pages.auth;
 
-import java.util.Arrays;
+import static org.apache.openmeetings.persistence.beans.basic.Configuration.FRONTEND_REGISTER_KEY;
+import static org.apache.openmeetings.web.app.Application.getBean;
+
+import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.wicket.RestartResponseException;
@@ -45,16 +49,22 @@ public class SignInDialog extends AbstractFormDialog<String> {
 	private static final long serialVersionUID = 7746996016261051947L;
 	private Form<String> form;
 	private DialogButton loginBtn = new DialogButton(WebSession.getString(112));
+	private DialogButton registerBtn = new DialogButton(WebSession.getString(123));
     private String password;
     private String login;
     private String area = "";
     private boolean rememberMe = false;
+    private RegisterDialog r;
 	
 	public SignInDialog(String id) {
 		super(id, WebSession.getString(108));
 		add(form = new SignInForm("signin"));
 	}
 
+	public void setRegisterDialog(RegisterDialog r) {
+		this.r = r;
+	}
+	
 	//TODO need to be removed
 	@Override
 	public DialogBehavior newWidgetBehavior(String selector) {
@@ -73,13 +83,26 @@ public class SignInDialog extends AbstractFormDialog<String> {
 	
 	@Override
 	public int getWidth() {
-		return 400;
+		return 450;
+	}
+	
+	@Override
+	public void onClose(AjaxRequestTarget target, DialogButton button) {
+		if (button.equals(registerBtn)) {
+			r.open(target);
+		}
 	}
 	
 	@Override
 	protected List<DialogButton> getButtons() {
-		return Arrays.asList(loginBtn);
+		List<DialogButton> list = new ArrayList<DialogButton>();
+		if ("1".equals(getBean(ConfigurationDao.class).getConfValue(FRONTEND_REGISTER_KEY, String.class, "0"))) {
+			list.add(registerBtn);
+		}
+		list.add(loginBtn);
+		return list;
 	}
+	
 	@Override
 	protected DialogButton getSubmitButton() {
 		return loginBtn;
@@ -97,7 +120,7 @@ public class SignInDialog extends AbstractFormDialog<String> {
 	
 	@Override
 	public void onClick(AjaxRequestTarget target, DialogButton button) {
-		if (WebSession.get().isSignedIn()) {
+		if (button.equals(registerBtn) || WebSession.get().isSignedIn()) {
 			super.onClick(target, button);
 		}
 	}
