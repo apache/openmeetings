@@ -18,6 +18,8 @@
  */
 package org.apache.openmeetings.web.app;
 
+import static org.apache.openmeetings.persistence.beans.basic.Configuration.DASHBOARD_SHOW_MYROOMS_KEY;
+import static org.apache.openmeetings.persistence.beans.basic.Configuration.DASHBOARD_SHOW_RSS_KEY;
 import static org.apache.openmeetings.persistence.beans.basic.Configuration.DEFAUT_LANG_KEY;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.Application.getDashboardContext;
@@ -38,6 +40,7 @@ import org.apache.openmeetings.persistence.beans.basic.Sessiondata;
 import org.apache.openmeetings.persistence.beans.lang.FieldLanguage;
 import org.apache.openmeetings.persistence.beans.user.User;
 import org.apache.openmeetings.web.components.user.dashboard.PrivateRoomsWidgetDescriptor;
+import org.apache.openmeetings.web.components.user.dashboard.RssWidgetDescriptor;
 import org.apache.openmeetings.web.components.user.dashboard.StartWidgetDescriptor;
 import org.apache.openmeetings.web.components.user.dashboard.WelcomeWidgetDescriptor;
 import org.apache.wicket.authroles.authentication.AbstractAuthenticatedWebSession;
@@ -179,8 +182,14 @@ public class WebSession extends AbstractAuthenticatedWebSession {
 			
 			WidgetFactory widgetFactory = dashboardContext.getWidgetFactory();
 			dashboard.addWidget(widgetFactory.createWidget(new WelcomeWidgetDescriptor()));
-			dashboard.addWidget(widgetFactory.createWidget(new StartWidgetDescriptor())); 
-			dashboard.addWidget(widgetFactory.createWidget(new PrivateRoomsWidgetDescriptor()));
+			dashboard.addWidget(widgetFactory.createWidget(new StartWidgetDescriptor()));
+			ConfigurationDao cfgDao = getBean(ConfigurationDao.class);
+			if ("1".equals(cfgDao.getConfValue(DASHBOARD_SHOW_MYROOMS_KEY, Integer.class, "0"))) {
+				dashboard.addWidget(widgetFactory.createWidget(new PrivateRoomsWidgetDescriptor()));
+			}
+			if ("1".equals(cfgDao.getConfValue(DASHBOARD_SHOW_RSS_KEY, Integer.class, "0"))) {
+				dashboard.addWidget(widgetFactory.createWidget(new RssWidgetDescriptor()));
+			}
 			dashboardContext.getDashboardPersiter().save(dashboard);
 		}
 	}

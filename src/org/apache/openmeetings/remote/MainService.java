@@ -18,6 +18,8 @@
  */
 package org.apache.openmeetings.remote;
 
+import static org.apache.openmeetings.persistence.beans.basic.Configuration.DASHBOARD_SHOW_MYROOMS_KEY;
+import static org.apache.openmeetings.persistence.beans.basic.Configuration.DASHBOARD_SHOW_RSS_KEY;
 import static org.apache.openmeetings.persistence.beans.basic.Configuration.FRONTEND_REGISTER_KEY;
 import static org.apache.openmeetings.persistence.beans.basic.Configuration.MAX_UPLOAD_SIZE_KEY;
 
@@ -986,8 +988,8 @@ public class MainService implements IPendingServiceCallback {
 			if (authLevelUtil.checkUserLevel(user_level)) {
 				return configurationDao.get(
 						"dashboard.show.chat", //
-						"dashboard.show.myrooms", //
-						"dashboard.show.rssfeed", //
+						DASHBOARD_SHOW_MYROOMS_KEY, //
+						DASHBOARD_SHOW_RSS_KEY, //
 						"default.dashboard.tab", //
 						"default.landing.zone");
 			}

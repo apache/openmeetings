@@ -19,6 +19,8 @@
 package org.apache.openmeetings.installation;
 
 import static org.apache.openmeetings.persistence.beans.basic.Configuration.CRYPT_KEY;
+import static org.apache.openmeetings.persistence.beans.basic.Configuration.DASHBOARD_SHOW_MYROOMS_KEY;
+import static org.apache.openmeetings.persistence.beans.basic.Configuration.DASHBOARD_SHOW_RSS_KEY;
 import static org.apache.openmeetings.persistence.beans.basic.Configuration.DEFAUT_LANG_KEY;
 import static org.apache.openmeetings.persistence.beans.basic.Configuration.FRONTEND_REGISTER_KEY;
 import static org.apache.openmeetings.persistence.beans.basic.Configuration.MAX_UPLOAD_SIZE_KEY;
@@ -414,14 +416,11 @@ public class ImportInitvalues {
 		configurationDao.add("default.dashboard.tab", "0", null,
 				"Default selection in Dashboard tabs as tab-index-id");
 
-		configurationDao.add("dashboard.show.myrooms", "1", null,
-				"Show My Rooms Tab");
+		configurationDao.add(DASHBOARD_SHOW_MYROOMS_KEY, "1", null, "Show My Rooms Tab");
 
-		configurationDao.add("dashboard.show.chat", "1", null,
-				"Show Chat Tab");
+		configurationDao.add("dashboard.show.chat", "1", null, "Show Chat Tab");
 
-		configurationDao.add("dashboard.show.rssfeed", "0", null,
-				"Show RSS Tab");
+		configurationDao.add(DASHBOARD_SHOW_RSS_KEY, "0", null, "Show RSS Tab");
 
 		configurationDao
 				.add(

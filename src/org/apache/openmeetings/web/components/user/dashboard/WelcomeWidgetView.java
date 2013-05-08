@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.web.components.user.dashboard;
 
+import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import static org.apache.openmeetings.web.components.user.profile.SettingsPanel.EDIT_PROFILE_TAB_ID;
 import static org.apache.openmeetings.web.components.user.profile.SettingsPanel.MESSAGES_TAB_ID;
@@ -25,7 +26,6 @@ import static org.apache.openmeetings.web.components.user.profile.SettingsPanel.
 import org.apache.openmeetings.data.user.dao.PrivateMessagesDao;
 import org.apache.openmeetings.data.user.dao.UsersDao;
 import org.apache.openmeetings.persistence.beans.user.User;
-import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.components.UploadableProfileImagePanel;
 import org.apache.openmeetings.web.components.user.profile.SettingsPanel;
 import org.apache.openmeetings.web.pages.MainPage;
@@ -43,7 +43,7 @@ public class WelcomeWidgetView extends WidgetView {
 	public WelcomeWidgetView(String id, Model<Widget> model) {
 		super(id, model);
 
-		User u = Application.getBean(UsersDao.class).get(getUserId());
+		User u = getBean(UsersDao.class).get(getUserId());
 		add(new UploadableProfileImagePanel("img", getUserId()));
 		 //FIXME this need to be aligned according to Locale
 		add(new Label("firstname", Model.of(u.getFirstname())));
@@ -56,7 +56,7 @@ public class WelcomeWidgetView extends WidgetView {
 			public void onClick(AjaxRequestTarget target) {
 				target.add(((MainPage)getPage()).getContents().replace(new SettingsPanel("child", MESSAGES_TAB_ID)));
 			}
-		}.add(new Label("unread", Model.of("" + Application.getBean(PrivateMessagesDao.class)
+		}.add(new Label("unread", Model.of("" + getBean(PrivateMessagesDao.class)
 				.getNumberMessages(getUserId(), 0L, false)))));
 		add(new AjaxLink<Void>("editProfile") {
 			private static final long serialVersionUID = -1847619557485964386L;

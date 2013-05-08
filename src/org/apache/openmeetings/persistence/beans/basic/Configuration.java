@@ -60,6 +60,10 @@ public class Configuration implements Serializable, IDataProviderEntity {
 	public static final String CRYPT_KEY = "crypt_ClassName";
 	public static final String DEFAUT_LANG_KEY = "default_lang_id";
 	public static final String MAX_UPLOAD_SIZE_KEY = "max_upload_size";
+	public static final String DASHBOARD_SHOW_MYROOMS_KEY = "dashboard.show.myrooms";
+	public static final String DASHBOARD_SHOW_RSS_KEY = "dashboard.show.rssfeed";
+	public static final String RSS_FEED1_KEY = "rss_feed1";
+	public static final String RSS_FEED2_KEY = "rss_feed2";
 	public static final String FRONTEND_REGISTER_KEY = "allow_frontend_register";
 
 	@Id

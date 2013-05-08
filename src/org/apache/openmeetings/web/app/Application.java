@@ -20,6 +20,7 @@ package org.apache.openmeetings.web.app;
 
 import org.apache.openmeetings.remote.red5.ScopeApplicationAdapter;
 import org.apache.openmeetings.web.components.user.dashboard.PrivateRoomsWidgetDescriptor;
+import org.apache.openmeetings.web.components.user.dashboard.RssWidgetDescriptor;
 import org.apache.openmeetings.web.components.user.dashboard.StartWidgetDescriptor;
 import org.apache.openmeetings.web.components.user.dashboard.WelcomeWidgetDescriptor;
 import org.apache.openmeetings.web.pages.MainPage;
@@ -80,6 +81,7 @@ public class Application extends AuthenticatedWebApplication {
 		widgetRegistry.registerWidget(new PrivateRoomsWidgetDescriptor());
 		widgetRegistry.registerWidget(new WelcomeWidgetDescriptor());
 		widgetRegistry.registerWidget(new StartWidgetDescriptor());
+		widgetRegistry.registerWidget(new RssWidgetDescriptor());
 		// add dashboard context injector
 		DashboardContextInjector dashboardContextInjector = new DashboardContextInjector(dashboardContext);
 		getComponentInstantiationListeners().add(dashboardContextInjector);

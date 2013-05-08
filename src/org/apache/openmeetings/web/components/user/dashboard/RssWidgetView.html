@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<html xmlns:wicket="http://wicket.apache.org">
+<wicket:head>
+	<script type="text/javascript">
+		function getItems(url) {
+			$.ajax({
+				url: url
+				, type: 'GET'
+			    , crossDomain: true
+				, dataType: 'xml'
+				, success: function(data, status, xhr) {
+					var $xml = $(data);
+					$xml.find("item").each(function() {
+						var $this = $(this), item = {
+							title : $this.find("title").text(),
+							link : $this.find("link").text(),
+							description : $this.find("description").text(),
+							pubDate : $this.find("pubDate").text(),
+							author : $this.find("author").text()
+						}
+						addItem(item);
+					});
+					$xml.find("entry").each(function() {
+						var $this = $(this), item = {
+							title : $this.find("title").text(),
+							link : $this.find("link").text(),
+							description : $this.find("summary").text(),
+							pubDate : $this.find("published").text(),
+							author : $this.find("author").text()
+						}
+						addItem(item);
+					});
+				}
+			});
+		}
+		
+		function addItem(item) {
+			$('#feeds').append('<div class="item"><div class="title">' + item.title + '</div><div class="desc">' + item.description
+					+ '</div></div>');
+		}
+	</script>
+</wicket:head>
+<wicket:panel>
+	<div id="feeds"></div>
+</wicket:panel>
+</html>
