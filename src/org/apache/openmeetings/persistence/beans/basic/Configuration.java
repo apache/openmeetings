@@ -65,6 +65,7 @@ public class Configuration implements Serializable, IDataProviderEntity {
 	public static final String RSS_FEED1_KEY = "rss_feed1";
 	public static final String RSS_FEED2_KEY = "rss_feed2";
 	public static final String FRONTEND_REGISTER_KEY = "allow_frontend_register";
+	public static final String PASS_MIN_LENGTH_KEY = "user.pass.minimum.length";
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

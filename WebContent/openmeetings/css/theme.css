@@ -596,3 +596,7 @@ div.tableWrapper {
 .widget td {
 	min-width: 150px;
 }
+#feedcontainer {
+	height: 300px;
+	overflow: auto;
+}

@@ -22,6 +22,7 @@ import static org.apache.openmeetings.persistence.beans.basic.Configuration.DASH
 import static org.apache.openmeetings.persistence.beans.basic.Configuration.DASHBOARD_SHOW_RSS_KEY;
 import static org.apache.openmeetings.persistence.beans.basic.Configuration.FRONTEND_REGISTER_KEY;
 import static org.apache.openmeetings.persistence.beans.basic.Configuration.MAX_UPLOAD_SIZE_KEY;
+import static org.apache.openmeetings.persistence.beans.basic.Configuration.PASS_MIN_LENGTH_KEY;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -730,7 +731,7 @@ public class MainService implements IPendingServiceCallback {
 	public List<Configuration> getLoginOptions(String SID) {
 		try {
 			return configurationDao.get(FRONTEND_REGISTER_KEY, "show.facebook.login",
-					"user.login.minimum.length", "user.pass.minimum.length", "user.pass.minimum.length",
+					"user.login.minimum.length", PASS_MIN_LENGTH_KEY, PASS_MIN_LENGTH_KEY,
 					"ldap_default_id");
 		} catch (Exception err) {
 			log.error("[getLoginOptions]", err);

@@ -18,6 +18,8 @@
  */
 package org.apache.openmeetings.persistence.beans.user;
 
+import static org.apache.openmeetings.utils.UserHelper.invalidPassword;
+
 import java.io.Serializable;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
@@ -369,12 +371,7 @@ public class User implements Serializable, IDataProviderEntity {
 	
 	public void updatePassword(ManageCryptStyle crypt, ConfigurationDao configDao, String pass, boolean empty) throws NoSuchAlgorithmException {
 		if (!empty) {
-			Integer userPassMinimumLength = configDao.getConfValue("user.pass.minimum.length", Integer.class, "4");
-	
-			if (userPassMinimumLength == null) {
-				throw new RuntimeException("user.pass.minimum.length problem");
-			}
-			if (pass == null || pass.length() < userPassMinimumLength) {
+			if (invalidPassword(pass, configDao)) {
 				throw new RuntimeException("Password of invalid length is provided");
 			}
 		}

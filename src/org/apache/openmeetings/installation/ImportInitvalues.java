@@ -18,12 +18,16 @@
  */
 package org.apache.openmeetings.installation;
 
+import static org.apache.openmeetings.installation.InstallationConfig.USER_PASSWORD_MINIMUM_LENGTH;
 import static org.apache.openmeetings.persistence.beans.basic.Configuration.CRYPT_KEY;
 import static org.apache.openmeetings.persistence.beans.basic.Configuration.DASHBOARD_SHOW_MYROOMS_KEY;
 import static org.apache.openmeetings.persistence.beans.basic.Configuration.DASHBOARD_SHOW_RSS_KEY;
 import static org.apache.openmeetings.persistence.beans.basic.Configuration.DEFAUT_LANG_KEY;
 import static org.apache.openmeetings.persistence.beans.basic.Configuration.FRONTEND_REGISTER_KEY;
 import static org.apache.openmeetings.persistence.beans.basic.Configuration.MAX_UPLOAD_SIZE_KEY;
+import static org.apache.openmeetings.persistence.beans.basic.Configuration.PASS_MIN_LENGTH_KEY;
+import static org.apache.openmeetings.persistence.beans.basic.Configuration.RSS_FEED1_KEY;
+import static org.apache.openmeetings.persistence.beans.basic.Configuration.RSS_FEED2_KEY;
 
 import java.io.File;
 import java.util.Arrays;
@@ -343,10 +347,10 @@ public class ImportInitvalues {
 						null,
 						"The path to JOD library (http://code.google.com/p/jodconverter), configure the path to point to the lib directory of JOD that contains also the jodconverter-core-version.jar");
 
-		configurationDao.add("rss_feed1", cfg.urlFeed, null,
+		configurationDao.add(RSS_FEED1_KEY, cfg.urlFeed, null,
 				"Feed URL");
 
-		configurationDao.add("rss_feed2", cfg.urlFeed2, null,
+		configurationDao.add(RSS_FEED2_KEY, cfg.urlFeed2, null,
 				"Feed URL 2");
 
 		configurationDao
@@ -444,8 +448,8 @@ public class ImportInitvalues {
 				+ InstallationConfig.USER_LOGIN_MINIMUM_LENGTH, null,
 				"Number of chars needed in a user login");
 
-		configurationDao.add("user.pass.minimum.length", ""
-				+ InstallationConfig.USER_PASSWORD_MINIMUM_LENGTH, null,
+		configurationDao.add(PASS_MIN_LENGTH_KEY, ""
+				+ USER_PASSWORD_MINIMUM_LENGTH, null,
 				"Number of chars needed in a user login");
 
 		configurationDao

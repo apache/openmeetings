@@ -108,6 +108,7 @@ public class RegisterDialog extends AbstractFormDialog<String> {
 	
 	class RegisterForm extends StatelessForm<String> {
 		private static final long serialVersionUID = 1701373326213602431L;
+	    private PasswordTextField confirmPassword;
 
 		public RegisterForm(String id) {
 			super(id);
@@ -116,7 +117,7 @@ public class RegisterDialog extends AbstractFormDialog<String> {
 			add(new RequiredTextField<String>("lastName", new PropertyModel<String>(RegisterDialog.this, "lastName")));
 			add(new RequiredTextField<String>("login", new PropertyModel<String>(RegisterDialog.this, "login")));
 			add(new PasswordTextField("password", new PropertyModel<String>(RegisterDialog.this, "password")).setResetPassword(true));
-			add(new PasswordTextField("repassword", new Model<String>()).setResetPassword(true));
+			add(confirmPassword = new PasswordTextField("confirmPassword", new Model<String>()).setResetPassword(true));
 			add(new RequiredTextField<String>("email", new PropertyModel<String>(RegisterDialog.this, "email")));
 			add(new DropDownChoice<FieldLanguage>("lang"
 					, new PropertyModel<FieldLanguage>(RegisterDialog.this, "lang")
@@ -145,6 +146,12 @@ public class RegisterDialog extends AbstractFormDialog<String> {
 					RegisterDialog.this.onError(target);
 				}
 			});
+		}
+		
+		@Override
+		protected void onValidate() {
+			// TODO Auto-generated method stub
+			super.onValidate();
 		}
 	}
 }

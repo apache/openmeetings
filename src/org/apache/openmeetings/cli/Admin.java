@@ -18,6 +18,9 @@
  */
 package org.apache.openmeetings.cli;
 
+import static org.apache.openmeetings.utils.UserHelper.getMinPasswdLength;
+import static org.apache.openmeetings.utils.UserHelper.invalidPassword;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -37,6 +40,7 @@ import org.apache.commons.cli.Parser;
 import org.apache.commons.cli.PosixParser;
 import org.apache.commons.transaction.util.FileHelper;
 import org.apache.openjpa.jdbc.meta.MappingTool;
+import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
 import org.apache.openmeetings.data.file.dao.FileExplorerItemDao;
 import org.apache.openmeetings.data.flvrecord.FlvRecordingDao;
 import org.apache.openmeetings.data.user.dao.UsersDao;
@@ -94,7 +98,7 @@ public class Admin {
 		options.addOption(new OmOption("i", "email", null, true, "Email of the default user (mutually exclusive with 'file')"));
 		options.addOption(new OmOption("i", "group", null, true, "The name of the default user group (mutually exclusive with 'file')"));
 		options.addOption(new OmOption("i", "tz", null, true, "Default server time zone, and time zone for the selected user (mutually exclusive with 'file')"));
-		options.addOption(new OmOption("i", null, "password", true, "Password of the default user, minimum " + InstallationConfig.USER_LOGIN_MINIMUM_LENGTH + " characters (will be prompted if not set)", true));
+		options.addOption(new OmOption("i", null, "password", true, "Password of the default user, minimum " + InstallationConfig.USER_PASSWORD_MINIMUM_LENGTH + " characters (will be prompted if not set)", true));
 		options.addOption(new OmOption("i", null, "system-email-address", true, "System e-mail address [default: " + cfg.mailReferer + "]", true));
 		options.addOption(new OmOption("i", null, "smtp-server", true, "SMTP server for outgoing e-mails [default: " + cfg.smtpServer + "]", true));
 		options.addOption(new OmOption("i", null, "smtp-port", true, "SMTP server for outgoing e-mails [default: " + cfg.smtpPort + "]", true));
@@ -545,11 +549,12 @@ public class Admin {
 			System.exit(1);
 		}
 		admin.pass = cmdl.getOptionValue("password");
-		if (checkPassword(admin.pass)) {
+		ConfigurationDao cfgDao = getApplicationContext(ctxName).getBean(ConfigurationDao.class);
+		if (invalidPassword(admin.pass, cfgDao)) {
 			System.out.print("Please enter password for the user '" + admin.login + "':");
 			admin.pass = new BufferedReader(new InputStreamReader(System.in)).readLine();
-			if (checkPassword(admin.pass)) {
-				System.out.println("Password was not provided, or too short, should be at least " + InstallationConfig.USER_PASSWORD_MINIMUM_LENGTH + " character long.");
+			if (invalidPassword(admin.pass, cfgDao)) {
+				System.out.println("Password was not provided, or too short, should be at least " + getMinPasswdLength(cfgDao) + " character long.");
 				System.exit(1);
 			}
 		}
@@ -569,10 +574,6 @@ public class Admin {
 			System.exit(1);
 		}
 		return admin;
-	}
-	
-	private boolean checkPassword(String pass) {
-		return (pass == null || pass.length() < InstallationConfig.USER_PASSWORD_MINIMUM_LENGTH);
 	}
 	
 	public static void dropDB() throws Exception {

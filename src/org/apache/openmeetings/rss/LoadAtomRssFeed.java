@@ -18,6 +18,10 @@
  */
 package org.apache.openmeetings.rss;
 
+import static org.apache.openmeetings.persistence.beans.basic.Configuration.RSS_FEED1_KEY;
+import static org.apache.openmeetings.persistence.beans.basic.Configuration.RSS_FEED2_KEY;
+
+import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Iterator;
@@ -49,10 +53,10 @@ public class LoadAtomRssFeed {
 			if (authLevelmanagement.checkUserLevel(user_level)) {
 				LinkedHashMap<String, LinkedHashMap<String, LinkedHashMap<String, LinkedHashMap<String, Object>>>> returnMap = new LinkedHashMap<String, LinkedHashMap<String, LinkedHashMap<String, LinkedHashMap<String, Object>>>>();
 
-				String url1 = configurationDao.getConfValue("rss_feed1", String.class, "");
+				String url1 = configurationDao.getConfValue(RSS_FEED1_KEY, String.class, "");
 				returnMap.put("feed1", this.parseRssFeed(url1));
 
-				String url2 = configurationDao.getConfValue("rss_feed2", String.class, "");
+				String url2 = configurationDao.getConfValue(RSS_FEED2_KEY, String.class, "");
 				returnMap.put("feed2", this.parseRssFeed(url2));
 
 				return returnMap;
@@ -66,6 +70,18 @@ public class LoadAtomRssFeed {
 		return null;
 	}
 
+	public static HttpURLConnection getFeedConnection(String _url) throws IOException {
+		URL url = new URL(_url);
+
+		HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+
+		conn.setDoOutput(true);
+		conn.setDoInput(true);
+		conn.setRequestProperty("user-agent", "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; .NET CLR 1.1.4322)");
+		conn.setRequestProperty("Referer", "http://openmeetings.apache.org/");
+		return conn;
+	}
+	
 	public LinkedHashMap<String, LinkedHashMap<String, LinkedHashMap<String, Object>>> parseRssFeed(
 			String urlEndPoint) {
 		try {
