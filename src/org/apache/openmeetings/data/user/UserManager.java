@@ -20,6 +20,7 @@ package org.apache.openmeetings.data.user;
 
 import static org.apache.openmeetings.persistence.beans.basic.Configuration.DEFAUT_LANG_KEY;
 import static org.apache.openmeetings.persistence.beans.basic.Configuration.FRONTEND_REGISTER_KEY;
+import static org.apache.openmeetings.persistence.beans.basic.Configuration.LOGIN_MIN_LENGTH_KEY;
 
 import java.util.Arrays;
 import java.util.Date;
@@ -871,7 +872,7 @@ public class UserManager {
 		if (authLevelUtil.checkModLevel(user_level)) {
 
 			Integer userLoginMinimumLength = configurationDao.getConfValue(
-					"user.login.minimum.length", Integer.class, "4");
+					LOGIN_MIN_LENGTH_KEY, Integer.class, "4");
 			if (userLoginMinimumLength == null) {
 				throw new Exception(
 						"user.login.minimum.length problem");

@@ -21,6 +21,7 @@ package org.apache.openmeetings.remote;
 import static org.apache.openmeetings.persistence.beans.basic.Configuration.DASHBOARD_SHOW_MYROOMS_KEY;
 import static org.apache.openmeetings.persistence.beans.basic.Configuration.DASHBOARD_SHOW_RSS_KEY;
 import static org.apache.openmeetings.persistence.beans.basic.Configuration.FRONTEND_REGISTER_KEY;
+import static org.apache.openmeetings.persistence.beans.basic.Configuration.LOGIN_MIN_LENGTH_KEY;
 import static org.apache.openmeetings.persistence.beans.basic.Configuration.MAX_UPLOAD_SIZE_KEY;
 import static org.apache.openmeetings.persistence.beans.basic.Configuration.PASS_MIN_LENGTH_KEY;
 
@@ -731,7 +732,7 @@ public class MainService implements IPendingServiceCallback {
 	public List<Configuration> getLoginOptions(String SID) {
 		try {
 			return configurationDao.get(FRONTEND_REGISTER_KEY, "show.facebook.login",
-					"user.login.minimum.length", PASS_MIN_LENGTH_KEY, PASS_MIN_LENGTH_KEY,
+					LOGIN_MIN_LENGTH_KEY, PASS_MIN_LENGTH_KEY, PASS_MIN_LENGTH_KEY,
 					"ldap_default_id");
 		} catch (Exception err) {
 			log.error("[getLoginOptions]", err);

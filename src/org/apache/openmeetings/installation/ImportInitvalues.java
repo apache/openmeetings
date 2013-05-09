@@ -24,6 +24,7 @@ import static org.apache.openmeetings.persistence.beans.basic.Configuration.DASH
 import static org.apache.openmeetings.persistence.beans.basic.Configuration.DASHBOARD_SHOW_RSS_KEY;
 import static org.apache.openmeetings.persistence.beans.basic.Configuration.DEFAUT_LANG_KEY;
 import static org.apache.openmeetings.persistence.beans.basic.Configuration.FRONTEND_REGISTER_KEY;
+import static org.apache.openmeetings.persistence.beans.basic.Configuration.LOGIN_MIN_LENGTH_KEY;
 import static org.apache.openmeetings.persistence.beans.basic.Configuration.MAX_UPLOAD_SIZE_KEY;
 import static org.apache.openmeetings.persistence.beans.basic.Configuration.PASS_MIN_LENGTH_KEY;
 import static org.apache.openmeetings.persistence.beans.basic.Configuration.RSS_FEED1_KEY;
@@ -444,7 +445,7 @@ public class ImportInitvalues {
 						null,
 						"The number of minutes before reminder emails are send. Set to 0 to disable reminder emails");
 
-		configurationDao.add("user.login.minimum.length", ""
+		configurationDao.add(LOGIN_MIN_LENGTH_KEY, ""
 				+ InstallationConfig.USER_LOGIN_MINIMUM_LENGTH, null,
 				"Number of chars needed in a user login");
 

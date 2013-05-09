@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.web.components;
 
+import static org.apache.openmeetings.utils.UserHelper.getMinPasswdLength;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.getLanguage;
 
@@ -25,7 +26,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.openmeetings.data.basic.FieldLanguageDao;
+import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
 import org.apache.openmeetings.data.basic.dao.OmTimeZoneDao;
+import org.apache.openmeetings.data.user.EmailManager;
 import org.apache.openmeetings.data.user.OrganisationManager;
 import org.apache.openmeetings.data.user.dao.SalutationDao;
 import org.apache.openmeetings.data.user.dao.StateDao;
@@ -36,9 +39,11 @@ import org.apache.openmeetings.persistence.beans.lang.FieldLanguage;
 import org.apache.openmeetings.persistence.beans.user.Salutation;
 import org.apache.openmeetings.persistence.beans.user.State;
 import org.apache.openmeetings.persistence.beans.user.User;
+import org.apache.openmeetings.web.app.WebSession;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.extensions.markup.html.form.DateTextField;
+import org.apache.wicket.extensions.validation.validator.RfcCompliantEmailAddressValidator;
 import org.apache.wicket.extensions.yui.calendar.DatePicker;
 import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
@@ -54,7 +59,7 @@ import org.apache.wicket.markup.html.panel.PanelMarkupSourcingStrategy;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
-import org.apache.wicket.validation.validator.EmailAddressValidator;
+import org.apache.wicket.validation.validator.StringValidator;
 
 public class GeneralUserForm extends Form<User> {
 	private static final long serialVersionUID = 5360667099083510234L;
@@ -67,7 +72,8 @@ public class GeneralUserForm extends Form<User> {
 
 		//TODO should throw exception if non admin User edit somebody else (or make all fields read-only)
 		add(passwordField = new PasswordTextField("password", new Model<String>()));
-		passwordField.setRequired(false);
+		ConfigurationDao cfgDao = getBean(ConfigurationDao.class);
+		passwordField.setRequired(false).add(StringValidator.minimumLength(getMinPasswdLength(cfgDao)));
 
 		SalutationDao salutDao = getBean(SalutationDao.class);
 		FieldLanguageDao langDao = getBean(FieldLanguageDao.class);
@@ -104,7 +110,7 @@ public class GeneralUserForm extends Form<User> {
 				}
 			}));
 
-		add(new RequiredTextField<String>("adresses.email").add(EmailAddressValidator.getInstance()));
+		add(new RequiredTextField<String>("adresses.email").add(RfcCompliantEmailAddressValidator.getInstance()));
 		add(new TextField<String>("adresses.phone"));
 		add(new CheckBox("sendSMS"));
 		DateTextField age = new DateTextField("age");
@@ -142,6 +148,14 @@ public class GeneralUserForm extends Form<User> {
 				"organisation_users", orgUsers,
 				new ChoiceRenderer<Organisation_Users>("organisation.name", "organisation.organisation_id"));
 		add(orgChoiceList.setEnabled(isAdminForm));
+	}
+
+	@Override
+	protected void onValidate() {
+		if(getBean(EmailManager.class).checkUserEMail(getModelObject().getAdresses().getEmail())) {
+			error(WebSession.getString(1000));
+		}
+		super.onValidate();
 	}
 	
 	public PasswordTextField getPasswordField() {

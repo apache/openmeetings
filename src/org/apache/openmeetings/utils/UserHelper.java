@@ -18,12 +18,18 @@
  */
 package org.apache.openmeetings.utils;
 
+import static org.apache.openmeetings.installation.InstallationConfig.USER_LOGIN_MINIMUM_LENGTH;
 import static org.apache.openmeetings.installation.InstallationConfig.USER_PASSWORD_MINIMUM_LENGTH;
+import static org.apache.openmeetings.persistence.beans.basic.Configuration.LOGIN_MIN_LENGTH_KEY;
 import static org.apache.openmeetings.persistence.beans.basic.Configuration.PASS_MIN_LENGTH_KEY;
 
 import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
 
 public class UserHelper {
+	public static int getMinLoginLength(ConfigurationDao cfgDao) {
+		return cfgDao.getConfValue(LOGIN_MIN_LENGTH_KEY, Integer.class, "" + USER_LOGIN_MINIMUM_LENGTH);
+	}
+	
 	public static int getMinPasswdLength(ConfigurationDao cfgDao) {
 		return cfgDao.getConfValue(PASS_MIN_LENGTH_KEY, Integer.class, "" + USER_PASSWORD_MINIMUM_LENGTH);
 	}

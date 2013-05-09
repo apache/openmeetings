@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.web.components.admin.users;
 
+import static org.apache.openmeetings.utils.UserHelper.getMinLoginLength;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 
@@ -127,11 +128,10 @@ public class UserForm extends AdminBaseForm<User> {
 	 * Add the fields to the form
 	 */
 	private void addFormFields() {
-
+		ConfigurationDao cfgDao = getBean(ConfigurationDao.class);
 		RequiredTextField<String> login = new RequiredTextField<String>("login");
-		login.add(new StringValidator(4, null));
 		// login.setLabel(new Model<String>("testname"));
-		add(login);
+		add(login.add(StringValidator.minimumLength(getMinLoginLength(cfgDao))));
 
 		add(generalForm = new GeneralUserForm("general", getModel(), true));
 
@@ -192,4 +192,10 @@ public class UserForm extends AdminBaseForm<User> {
 		add(new ComunityUserForm("comunity", getModel()));
 	}
 
+	@Override
+	protected void onValidate() {
+		if(getBean(UsersDao.class).checkUserLogin(getModelObject().getLogin())) {
+			error(WebSession.getString(105));
+		}
+	}
 }
