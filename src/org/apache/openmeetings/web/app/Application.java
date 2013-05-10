@@ -18,6 +18,8 @@
  */
 package org.apache.openmeetings.web.app;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.openmeetings.remote.red5.ScopeApplicationAdapter;
 import org.apache.openmeetings.web.components.user.dashboard.PrivateRoomsWidgetDescriptor;
 import org.apache.openmeetings.web.components.user.dashboard.RssWidgetDescriptor;
@@ -37,9 +39,12 @@ import org.apache.wicket.markup.MarkupFactory;
 import org.apache.wicket.markup.MarkupParser;
 import org.apache.wicket.markup.MarkupResourceStream;
 import org.apache.wicket.markup.html.WebPage;
+import org.apache.wicket.protocol.http.RequestUtils;
 import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.request.IRequestHandler;
 import org.apache.wicket.request.Url;
+import org.apache.wicket.request.cycle.RequestCycle;
+import org.apache.wicket.request.http.WebRequest;
 import org.apache.wicket.request.mapper.info.PageComponentInfo;
 import org.apache.wicket.settings.IPageSettings;
 import org.springframework.context.ApplicationContext;
@@ -109,6 +114,20 @@ public class Application extends AuthenticatedWebApplication {
 		});
 	}
 	
+	public final static String toAbsolutePath(final String relativePagePath) {
+	       HttpServletRequest req = (HttpServletRequest)((WebRequest)RequestCycle.get().getRequest()).getContainerRequest();
+	       return RequestUtils.toAbsolutePath(req.getRequestURL().toString(), relativePagePath);
+	}
+	
+	public final static String getBasePath() {
+		return toAbsolutePath("");
+	}
+
+	public final static String getBaseSwfPath() {
+		//TODO add proxy handling
+		return toAbsolutePath("../");
+	}
+
 	@Override
 	public Class<? extends Page> getHomePage() {
 		return MainPage.class;

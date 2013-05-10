@@ -20,6 +20,7 @@ package org.apache.openmeetings.web.pages.auth;
 
 import static org.apache.openmeetings.utils.UserHelper.getMinLoginLength;
 import static org.apache.openmeetings.utils.UserHelper.getMinPasswdLength;
+import static org.apache.openmeetings.web.app.Application.getBaseSwfPath;
 import static org.apache.openmeetings.web.app.Application.getBean;
 
 import java.util.Arrays;
@@ -113,7 +114,7 @@ public class RegisterDialog extends AbstractFormDialog<String> {
 		getBean(UserManager.class).registerUser(login, password, lastName
 				, firstName, email, null, ""/*street*/, ""/*additionalname*/, ""/*fax*/, ""/*zip*/
 				, state.getState_id(), ""/*town*/, lang.getLanguage_id(), ""/*phone*/, false/*sendSMS*/
-				, ""/*baseURL FIXME*/, false, tz.getJname());
+				, getBaseSwfPath(), false, tz.getJname());
 	}
 	
 	class RegisterForm extends StatelessForm<String> {

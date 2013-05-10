@@ -41,10 +41,13 @@ public class SignInPage extends BasePage {
 	
 	public SignInPage() {
 		RegisterDialog r = new RegisterDialog("register");
+		ForgetPasswordDialog f = new ForgetPasswordDialog("forget");
 		d = new SignInDialog("signin");
 		d.setRegisterDialog(r);
+		d.setForgetPasswordDialog(f);
 		r.setSignInDialog(d);
-		add(d, r.setVisible(allowRegister()));
+		f.setSignInDialog(d);
+		add(d, r.setVisible(allowRegister()), f);
 	}
 	
 	@Override

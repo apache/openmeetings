@@ -27,6 +27,7 @@ import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.wicket.RestartResponseException;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.authentication.IAuthenticationStrategy;
 import org.apache.wicket.markup.html.form.CheckBox;
@@ -53,6 +54,7 @@ public class SignInDialog extends AbstractFormDialog<String> {
     private String area = "";
     private boolean rememberMe = false;
     private RegisterDialog r;
+    private ForgetPasswordDialog f;
 	
 	public SignInDialog(String id) {
 		super(id, WebSession.getString(108));
@@ -61,6 +63,10 @@ public class SignInDialog extends AbstractFormDialog<String> {
 
 	public void setRegisterDialog(RegisterDialog r) {
 		this.r = r;
+	}
+
+	public void setForgetPasswordDialog(ForgetPasswordDialog f) {
+		this.f = f;
 	}
 	
 	//TODO need to be removed
@@ -86,7 +92,7 @@ public class SignInDialog extends AbstractFormDialog<String> {
 	
 	@Override
 	public void onClose(AjaxRequestTarget target, DialogButton button) {
-		if (button.equals(registerBtn)) {
+		if (registerBtn.equals(button)) {
 			r.open(target);
 		}
 	}
@@ -190,6 +196,15 @@ public class SignInDialog extends AbstractFormDialog<String> {
 				protected void onError(AjaxRequestTarget target, Form<?> form) {
 					// TODO Auto-generated method stub
 					SignInDialog.this.onError(target);
+				}
+			});
+			add(new AjaxLink<Void>("forget") {
+				private static final long serialVersionUID = -7497568829491287604L;
+
+				@Override
+				public void onClick(AjaxRequestTarget target) {
+					SignInDialog.this.close(target, null);
+					f.open(target);
 				}
 			});
 		}

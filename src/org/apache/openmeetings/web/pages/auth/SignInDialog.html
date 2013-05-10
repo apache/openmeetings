@@ -23,16 +23,21 @@
 	<form wicket:id="signin">
 		<table>
 			<tr>
-				<td><wicket:ommessage key="109" /></td>
+				<td class="desc"><wicket:ommessage key="109" /></td>
 				<td><input wicket:id="login" type="text" value="" /></td>
 			</tr>
 			<tr>
-				<td><wicket:ommessage key="110" /></td>
+				<td class="desc"><wicket:ommessage key="110" /></td>
 				<td><input wicket:id="pass" type="password" value="" /></td>
 			</tr>
 			<tr>
 				<td></td>
-				<td><input wicket:id="rememberMe" type="checkbox" /><label wicket:for="rememberMe"><wicket:ommessage key="288" /></label></td>
+				<td style="white-space: nowrap;"><input wicket:id="rememberMe" 
+					type="checkbox" /><label wicket:for="rememberMe"><wicket:ommessage key="288" /></label></td>
+			</tr>
+			<tr>
+				<td><a wicket:id="forget"><wicket:ommessage key="311"/></a></td>
+				<td></td>
 			</tr>
 		</table>
 		<span wicket:id="feedback"></span>
