@@ -18,11 +18,14 @@
  */
 package org.apache.openmeetings.web.pages.auth;
 
+import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.pages.auth.SignInPage.allowRegister;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.openmeetings.persistence.beans.basic.LdapConfig;
+import org.apache.openmeetings.remote.LdapConfigService;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.wicket.RestartResponseException;
@@ -30,7 +33,10 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.authentication.IAuthenticationStrategy;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.CheckBox;
+import org.apache.wicket.markup.html.form.ChoiceRenderer;
+import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.HiddenField;
 import org.apache.wicket.markup.html.form.PasswordTextField;
@@ -55,6 +61,7 @@ public class SignInDialog extends AbstractFormDialog<String> {
     private boolean rememberMe = false;
     private RegisterDialog r;
     private ForgetPasswordDialog f;
+    private LdapConfig domain;
 	
 	public SignInDialog(String id) {
 		super(id, WebSession.getString(108));
@@ -137,6 +144,10 @@ public class SignInDialog extends AbstractFormDialog<String> {
 	@Override
 	protected void onSubmit(AjaxRequestTarget target) {
 		IAuthenticationStrategy strategy = getApplication().getSecuritySettings().getAuthenticationStrategy();
+		//TODO add LDAP, separate login from other parts:
+		//	LdapLoginManagement.doLdapLogin(String user, String passwd, Client currentClient
+		//		, IClient client, String SID, String domain)
+		//
 		if (WebSession.get().signIn(login, password)) {
 			WebSession.get().setArea(area);
  			setResponsePage(Application.get().getHomePage());
@@ -180,6 +191,11 @@ public class SignInDialog extends AbstractFormDialog<String> {
 			add(new FeedbackPanel("feedback"));
 			add(new RequiredTextField<String>("login", new PropertyModel<String>(SignInDialog.this, "login")));
 			add(new PasswordTextField("pass", new PropertyModel<String>(SignInDialog.this, "password")).setResetPassword(true));
+			List<LdapConfig> ldaps = getBean(LdapConfigService.class).getActiveLdapConfigs();
+			domain = ldaps.get(0);
+			add(new WebMarkupContainer("ldap")
+				.add(new DropDownChoice<LdapConfig>("domain", new PropertyModel<LdapConfig>(SignInDialog.this, "domain")
+						, ldaps, new ChoiceRenderer<LdapConfig>("name", "ldapConfigId"))).setVisible(ldaps.size() > 1));
 			add(new CheckBox("rememberMe", new PropertyModel<Boolean>(SignInDialog.this, "rememberMe")).setOutputMarkupId(true));
 			add(new HiddenField<String>("area", new PropertyModel<String>(SignInDialog.this, "area"))
 					.setMarkupId("area")
