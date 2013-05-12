@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.web.pages.auth;
 
+import static org.apache.openmeetings.web.app.Application.getAuthenticationStrategy;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.pages.auth.SignInPage.allowRegister;
 
@@ -27,6 +28,7 @@ import java.util.List;
 import org.apache.openmeetings.persistence.beans.basic.LdapConfig;
 import org.apache.openmeetings.remote.LdapConfigService;
 import org.apache.openmeetings.web.app.Application;
+import org.apache.openmeetings.web.app.OmAuthenticationStrategy;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.wicket.RestartResponseException;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -62,6 +64,7 @@ public class SignInDialog extends AbstractFormDialog<String> {
     private RegisterDialog r;
     private ForgetPasswordDialog f;
     private LdapConfig domain;
+    private String ldapConfigFileName;
 	
 	public SignInDialog(String id) {
 		super(id, WebSession.getString(108));
@@ -143,16 +146,13 @@ public class SignInDialog extends AbstractFormDialog<String> {
 
 	@Override
 	protected void onSubmit(AjaxRequestTarget target) {
-		IAuthenticationStrategy strategy = getApplication().getSecuritySettings().getAuthenticationStrategy();
-		//TODO add LDAP, separate login from other parts:
-		//	LdapLoginManagement.doLdapLogin(String user, String passwd, Client currentClient
-		//		, IClient client, String SID, String domain)
-		//
-		if (WebSession.get().signIn(login, password)) {
+		ldapConfigFileName = domain.getConfigFileName() == null ? "" : domain.getConfigFileName();
+		OmAuthenticationStrategy strategy = getAuthenticationStrategy();
+		if (WebSession.get().signIn(login, password, ldapConfigFileName)) {
 			WebSession.get().setArea(area);
  			setResponsePage(Application.get().getHomePage());
 			if (rememberMe) {
-				strategy.save(login, password);
+				strategy.save(login, password, ldapConfigFileName);
 			} else {
 				strategy.remove();
 			}
@@ -171,15 +171,16 @@ public class SignInDialog extends AbstractFormDialog<String> {
 			if (WebSession.get().isSignedIn()) {
 				alreadyLoggedIn();
 			} else {
-				IAuthenticationStrategy strategy = getApplication().getSecuritySettings().getAuthenticationStrategy();
+				IAuthenticationStrategy strategy = getAuthenticationStrategy();
 				// get username and password from persistence store
 				String[] data = strategy.load();
 
-				if ((data != null) && (data.length > 1)) {
+				if ((data != null) && (data.length > 2)) {
 					// try to sign in the user
-					if (WebSession.get().signIn(data[0], data[1])) {
+					if (WebSession.get().signIn(data[0], data[1], data[2])) {
 						login = data[0];
 						password = data[1];
+						ldapConfigFileName = data[2];
 
 						alreadyLoggedIn();
 					} else {

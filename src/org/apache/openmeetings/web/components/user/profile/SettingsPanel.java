@@ -62,12 +62,14 @@ public class SettingsPanel extends UserPanel {
 		super(id);
 		RepeatingView tabs = new RepeatingView("tabs");
 		addTab(tabs, WebSession.getString(1170), getTabId(PROFILE_TAB_ID));
+		addTab(tabs, WebSession.getString(1188), getTabId(MESSAGES_TAB_ID));
 		addTab(tabs, WebSession.getString(1171), getTabId(EDIT_PROFILE_TAB_ID));
 		addTab(tabs, WebSession.getString(1172), getTabId(SEARCH_TAB_ID));
-		addTab(tabs, "[Widgets]", getTabId(DASHBOARD_TAB_ID)); //FIXME localize
+		addTab(tabs, WebSession.getString(1548), getTabId(DASHBOARD_TAB_ID));
 		
 		RepeatingView panels = new RepeatingView("panels");
 		addPanel(panels, getTabId(PROFILE_TAB_ID), new UserProfilePanel("tab", getUserId()));
+		addPanel(panels, getTabId(MESSAGES_TAB_ID), new MessagesContactsPanel("tab"));
 		addPanel(panels, getTabId(EDIT_PROFILE_TAB_ID), new ProfilePanel("tab"));
 		addPanel(panels, getTabId(SEARCH_TAB_ID), new UserSearchPanel("tab"));
 		addPanel(panels, getTabId(DASHBOARD_TAB_ID), new WidgetsPanel("tab"));

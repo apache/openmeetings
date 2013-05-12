@@ -4667,4 +4667,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
   <string id="1547" name="widget_welcome_desc">
     <value>Widget displaying basic user info and support links</value>
   </string>
+  <string id="1548" name="widgets_tab">
+    <value>Widgets</value>
+  </string>
 </language>

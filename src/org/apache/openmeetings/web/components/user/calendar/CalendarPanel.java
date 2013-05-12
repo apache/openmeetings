@@ -63,7 +63,7 @@ public class CalendarPanel extends UserPanel {
 		
 		Options options = new Options();
 		//options.set("theme", true);
-		options.set("header", "{left: 'prev,next today', center: 'title', right: 'month,agendaWeek,agendaDay'}");
+		options.set("header", "{left: 'prevYear,prev,next,nextYear today', center: 'title', right: 'month,agendaWeek,agendaDay'}");
 		options.set("allDaySlot", false);
 		options.set("axisFormat", "'HH(:mm)'");
 		options.set("defaultEventMinutes", 60);

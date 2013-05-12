@@ -36,6 +36,7 @@ import org.apache.openmeetings.data.basic.SessiondataDao;
 import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
 import org.apache.openmeetings.data.user.UserManager;
 import org.apache.openmeetings.data.user.dao.UsersDao;
+import org.apache.openmeetings.ldap.LdapLoginManagement;
 import org.apache.openmeetings.persistence.beans.basic.Sessiondata;
 import org.apache.openmeetings.persistence.beans.lang.FieldLanguage;
 import org.apache.openmeetings.persistence.beans.user.User;
@@ -46,6 +47,7 @@ import org.apache.openmeetings.web.components.user.dashboard.WelcomeWidgetDescri
 import org.apache.wicket.authroles.authentication.AbstractAuthenticatedWebSession;
 import org.apache.wicket.authroles.authorization.strategies.role.Roles;
 import org.apache.wicket.request.Request;
+import org.apache.wicket.util.string.Strings;
 
 import ro.fortsoft.wicket.dashboard.Dashboard;
 import ro.fortsoft.wicket.dashboard.DefaultDashboard;
@@ -93,11 +95,12 @@ public class WebSession extends AbstractAuthenticatedWebSession {
 		return (userId > -1);
 	}
 
-	public boolean signIn(String login, String password) {
+	public boolean signIn(String login, String password, String ldapConfigFileName) {
 		Sessiondata sessData = getBean(SessiondataDao.class).startsession();
 		SID = sessData.getSession_id();
-		Object u = getBean(UserManager.class).loginUser(SID, login, password,
-				null, null, false);
+		Object u = Strings.isEmpty(ldapConfigFileName)
+				? getBean(UserManager.class).loginUser(SID, login, password, null, null, false)
+				: getBean(LdapLoginManagement.class).doLdapLogin(login, password, null, null, SID, ldapConfigFileName);
 		
 		if (u instanceof User) {
 			User user = (User)u;

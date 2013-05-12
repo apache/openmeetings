@@ -60,6 +60,7 @@ public class Application extends AuthenticatedWebApplication {
 	
 	@Override
 	protected void init() {
+		getSecuritySettings().setAuthenticationStrategy(new OmAuthenticationStrategy());
 		IPageSettings pageSettings = getPageSettings();
 		pageSettings.addComponentResolver(new MessageResolver());
 		pageSettings.addComponentResolver(new MessageTagHandler());
@@ -112,6 +113,10 @@ public class Application extends AuthenticatedWebApplication {
 				}
 			}
 		});
+	}
+	
+	public static OmAuthenticationStrategy getAuthenticationStrategy() {
+		return (OmAuthenticationStrategy)get().getSecuritySettings().getAuthenticationStrategy();
 	}
 	
 	public final static String toAbsolutePath(final String relativePagePath) {

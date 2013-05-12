@@ -75,7 +75,7 @@ public class RoomForm extends AdminBaseForm<Room> {
 
 		add(new DropDownChoice<RoomType>("roomtype", Application.getBean(
 				RoomManager.class).getAllRoomTypes(WebSession.getLanguage()),
-				new ChoiceRenderer<RoomType>("label", "roomtypes_id")));
+				new ChoiceRenderer<RoomType>("label.value", "roomtypes_id")));
 
 		add(new TextArea<String>("comment"));
 

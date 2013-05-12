@@ -18,10 +18,10 @@
  */
 package org.apache.openmeetings.web.pages;
 
+import static org.apache.openmeetings.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.openmeetings.web.components.user.profile.SettingsPanel.MESSAGES_TAB_ID;
 import static org.apache.openmeetings.web.components.user.profile.SettingsPanel.PROFILE_TAB_ID;
 
-import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.components.ConfirmableAjaxLink;
 import org.apache.openmeetings.web.components.MenuPanel;
@@ -44,7 +44,7 @@ import org.slf4j.Logger;
 @AuthorizeInstantiation("USER")
 public class MainPage extends BasePage {
 	private static final long serialVersionUID = 6421960759218157999L;
-	private static final Logger log = Red5LoggerFactory.getLogger(MainPage.class, OpenmeetingsVariables.webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(MainPage.class, webAppRootKey);
 	private final MenuPanel menu;
 	private final MarkupContainer contents;
 	

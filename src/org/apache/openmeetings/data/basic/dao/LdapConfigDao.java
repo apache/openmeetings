@@ -242,24 +242,18 @@ public class LdapConfigDao implements IDataProviderDao<LdapConfig> {
 	}
 
 	public List<LdapConfig> getActiveLdapConfigs() {
-		try {
-			log.debug("selectMaxFromConfigurations ");
+		log.debug("selectMaxFromConfigurations ");
 
-			String hql = "select c from LdapConfig c "
-					+ "where c.deleted = false "
-					+ "AND c.isActive = :isActive ";
+		String hql = "select c from LdapConfig c "
+				+ "where c.deleted = false "
+				+ "AND c.isActive = :isActive ";
 
-			// get all users
-			TypedQuery<LdapConfig> query = em
-					.createQuery(hql, LdapConfig.class);
-			query.setParameter("isActive", true);
-			List<LdapConfig> ll = query.getResultList();
+		// get all users
+		TypedQuery<LdapConfig> query = em
+				.createQuery(hql, LdapConfig.class);
+		query.setParameter("isActive", true);
 
-			return ll;
-		} catch (Exception ex2) {
-			log.error("[getActiveLdapConfigs] ", ex2);
-		}
-		return null;
+		return query.getResultList();
 	}
 
 	public List<LdapConfig> getLdapConfigs() {

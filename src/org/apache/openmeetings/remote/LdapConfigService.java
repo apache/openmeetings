@@ -18,8 +18,8 @@
  */
 package org.apache.openmeetings.remote;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
-import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
@@ -80,15 +80,11 @@ public class LdapConfigService {
 			ldapConfig.setName("local DB [internal]");
 			ldapConfig.setLdapConfigId(-1);
 			
-			List<LdapConfig> returnldapConfigs = new LinkedList<LdapConfig>();
+			List<LdapConfig> returnldapConfigs = new ArrayList<LdapConfig>();
 			returnldapConfigs.add(ldapConfig);
-			
-			for (LdapConfig ldapConfigStored : ldapConfigs) {
-				returnldapConfigs.add(ldapConfigStored);
-			}
+			returnldapConfigs.addAll(ldapConfigs);
 			
 	        return returnldapConfigs;
-	        
 		} catch (Exception err) {
 			log.error("[getActiveLdapConfigs]",err);
 		}
