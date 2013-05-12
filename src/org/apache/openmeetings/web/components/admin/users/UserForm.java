@@ -195,7 +195,7 @@ public class UserForm extends AdminBaseForm<User> {
 
 	@Override
 	protected void onValidate() {
-		if(getBean(UsersDao.class).checkUserLogin(login.getConvertedInput())) {
+		if(!getBean(UsersDao.class).checkUserLogin(login.getConvertedInput())) {
 			error(WebSession.getString(105));
 		}
 	}

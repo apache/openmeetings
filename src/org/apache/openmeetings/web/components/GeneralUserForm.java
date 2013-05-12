@@ -66,6 +66,7 @@ public class GeneralUserForm extends Form<User> {
 	private Salutation salutation;
 	private FieldLanguage lang;
 	private PasswordTextField passwordField;
+	private RequiredTextField<String> email;
 
 	public GeneralUserForm(String id, IModel<User> model, boolean isAdminForm) {
 		super(id, model);
@@ -110,7 +111,8 @@ public class GeneralUserForm extends Form<User> {
 				}
 			}));
 
-		add(new RequiredTextField<String>("adresses.email").add(RfcCompliantEmailAddressValidator.getInstance()));
+		add(email = new RequiredTextField<String>("adresses.email"));
+		email.add(RfcCompliantEmailAddressValidator.getInstance());
 		add(new TextField<String>("adresses.phone"));
 		add(new CheckBox("sendSMS"));
 		DateTextField age = new DateTextField("age");
@@ -152,7 +154,7 @@ public class GeneralUserForm extends Form<User> {
 
 	@Override
 	protected void onValidate() {
-		if(getBean(EmailManager.class).checkUserEMail(getModelObject().getAdresses().getEmail())) {
+		if(!getBean(EmailManager.class).checkUserEMail(email.getConvertedInput())) {
 			error(WebSession.getString(1000));
 		}
 		super.onValidate();
