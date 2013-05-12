@@ -55,6 +55,7 @@ public class UserForm extends AdminBaseForm<User> {
 	private static final long serialVersionUID = 1L;
 	private WebMarkupContainer listContainer;
 	private GeneralUserForm generalForm;
+	private RequiredTextField<String> login;
 
 	public UserForm(String id, WebMarkupContainer listContainer, final User user) {
 		super(id, new CompoundPropertyModel<User>(user));
@@ -129,7 +130,7 @@ public class UserForm extends AdminBaseForm<User> {
 	 */
 	private void addFormFields() {
 		ConfigurationDao cfgDao = getBean(ConfigurationDao.class);
-		RequiredTextField<String> login = new RequiredTextField<String>("login");
+		login = new RequiredTextField<String>("login");
 		// login.setLabel(new Model<String>("testname"));
 		add(login.add(StringValidator.minimumLength(getMinLoginLength(cfgDao))));
 
@@ -194,7 +195,7 @@ public class UserForm extends AdminBaseForm<User> {
 
 	@Override
 	protected void onValidate() {
-		if(getBean(UsersDao.class).checkUserLogin(getModelObject().getLogin())) {
+		if(getBean(UsersDao.class).checkUserLogin(login.getConvertedInput())) {
 			error(WebSession.getString(105));
 		}
 	}
