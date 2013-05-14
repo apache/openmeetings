@@ -23,26 +23,12 @@ import org.apache.openmeetings.persistence.beans.basic.Naviglobal;
 import org.apache.openmeetings.persistence.beans.basic.Navimain;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
-import org.apache.openmeetings.web.components.admin.backup.BackupPanel;
-import org.apache.openmeetings.web.components.admin.configurations.ConfigsPanel;
-import org.apache.openmeetings.web.components.admin.groups.GroupsPanel;
-import org.apache.openmeetings.web.components.admin.labels.LangPanel;
-import org.apache.openmeetings.web.components.admin.ldaps.LdapsPanel;
-import org.apache.openmeetings.web.components.admin.rooms.RoomsPanel;
-import org.apache.openmeetings.web.components.admin.servers.ServersPanel;
-import org.apache.openmeetings.web.components.admin.users.UsersPanel;
-import org.apache.openmeetings.web.components.user.calendar.CalendarPanel;
-import org.apache.openmeetings.web.components.user.dashboard.OmDashboardPanel;
-import org.apache.openmeetings.web.components.user.rooms.RoomsSelectorPanel;
-import org.apache.wicket.AttributeModifier;
-import org.apache.wicket.Component;
-import org.apache.wicket.MarkupContainer;
+import org.apache.openmeetings.web.pages.MainPage;
+import org.apache.openmeetings.web.util.UrlFragment;
+import org.apache.openmeetings.web.util.UrlFragment.MenuActions;
+import org.apache.openmeetings.web.util.UrlFragment.MenuParams;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
-import org.apache.wicket.behavior.Behavior;
-import org.apache.wicket.core.util.string.JavaScriptUtils;
-import org.apache.wicket.markup.head.IHeaderResponse;
-import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
@@ -56,32 +42,7 @@ import org.apache.wicket.markup.html.list.ListView;
 public class MenuPanel extends BasePanel {
 	private static final long serialVersionUID = 6626039612808753514L;
 
-	private enum MenuActions {
-		dashboardModuleStartScreen
-		, dashboardModuleCalendar
-		, recordModule
-		, conferenceModuleRoomList
-		, eventModuleRoomList
-		, moderatorModuleUser
-		, moderatorModuleRoom
-		, adminModuleUser
-		, adminModuleConnections
-		, adminModuleOrg
-		, adminModuleRoom
-		, adminModuleConfiguration
-		, adminModuleLanguages
-		, adminModuleLDAP
-		, adminModuleBackup
-		, adminModuleServers
-	}
-
-	public enum MenuParams {
-		publicTabButton
-		, privateTabButton
-		, myTabButton
-	}
-	
-	public MenuPanel(String id, final MarkupContainer contents) {
+	public MenuPanel(String id) {
 		super(id);
 		setMarkupId(id);
 		
@@ -104,7 +65,6 @@ public class MenuPanel extends BasePanel {
 						final String desc = m.getTooltip().getValue();
 						final MenuActions action = MenuActions.valueOf(m.getAction());
 						final MenuParams params = m.getParams() != null ? MenuParams.valueOf(m.getParams()) : MenuParams.publicTabButton;
-						final String hash = getHash(action, params);
 						item.add(new AjaxLink<Void>("link") {
 							private static final long serialVersionUID = 5632618935550133709L;
 							{
@@ -113,144 +73,12 @@ public class MenuPanel extends BasePanel {
 							}
 							
 							public void onClick(AjaxRequestTarget target) {
-								
-								BasePanel basePanel = null;
-								
-								switch(action) {
-									case dashboardModuleCalendar:
-										basePanel = new CalendarPanel("child");
-										break;
-									case recordModule:
-										break;
-									case conferenceModuleRoomList:
-										basePanel = new RoomsSelectorPanel("child", params);
-										break;
-									case eventModuleRoomList:
-										break;
-									case moderatorModuleUser:
-										break;
-									case moderatorModuleRoom:
-										break;
-									case adminModuleUser:
-										basePanel = new UsersPanel("child");
-										break;
-									case adminModuleConnections:
-										break;
-									case adminModuleOrg:
-										basePanel = new GroupsPanel("child");
-										break;
-									case adminModuleRoom:
-										basePanel = new RoomsPanel("child");
-										break;
-									case adminModuleConfiguration:
-										basePanel = new ConfigsPanel("child");
-										break;
-									case adminModuleLanguages:
-										basePanel = new LangPanel("child");
-										break;
-									case adminModuleLDAP:
-										basePanel = new LdapsPanel("child");
-										break;
-									case adminModuleBackup:
-										basePanel = new BackupPanel("child");
-										break;
-									case adminModuleServers:
-										basePanel = new ServersPanel("child");
-										break;
-									case dashboardModuleStartScreen:
-									default:
-										basePanel = new OmDashboardPanel("child");
-										break;
-								}
-								
-								if (basePanel != null) {
-									target.add(contents.replace(basePanel));
-									basePanel.onMenuPanelLoad(target);
-								}
-								
-								target.appendJavaScript("location.hash = '" + JavaScriptUtils.escapeQuotes(hash) + "';");
-							};
-						}.add(AttributeModifier.replace("href", hash)));
+								((MainPage)getPage()).updateContents(new UrlFragment(action, params), target);
+							}
+						});
 					}
 				}.setReuseItems(true));
 			}
 		}.setReuseItems(true));
-
-		add(new Behavior() {
-			private static final long serialVersionUID = 9067610794087880297L;
-
-			@Override
-			public void renderHead(Component component, IHeaderResponse response) {
-				String area = WebSession.get().getArea();
-				if (area != null) { //hash passed from signin
-					response.render(OnDomReadyHeaderItem.forScript("$(\"a[href='" + JavaScriptUtils.escapeQuotes(area) + "']\").click();"));
-					WebSession.get().setArea(null);
-				} else {
-					response.render(OnDomReadyHeaderItem.forScript("$(\"a[href='\" + location.hash + \"']\").click();"));
-				}
-				super.renderHead(component, response);
-			}
-		});
-	}
-	
-	private String getHash(MenuActions action, MenuParams params) {
-		String hash = "#";
-		switch(action) {
-			case dashboardModuleStartScreen:
-				break;
-			case dashboardModuleCalendar:
-				hash = "#calendar";
-				break;
-			case recordModule:
-				break;
-			case conferenceModuleRoomList:
-				String zone = "public";
-				switch (params) {
-					case myTabButton:
-						zone = "my";
-						break;
-					case privateTabButton:
-						zone = "group";
-						break;
-					case publicTabButton:
-					default:
-						break;
-				}
-				hash = "#rooms/" + zone;
-				break;
-			case eventModuleRoomList:
-				break;
-			case moderatorModuleUser:
-				break;
-			case moderatorModuleRoom:
-				break;
-			case adminModuleUser:
-				hash = "#admin/users";
-				break;
-			case adminModuleConnections:
-				break;
-			case adminModuleOrg:
-				hash = "#admin/groups";
-				break;
-			case adminModuleRoom:
-				hash = "#admin/rooms";
-				break;
-			case adminModuleConfiguration:
-				hash = "#admin/configs";
-				break;
-			case adminModuleLanguages:
-				hash = "#admin/lang";
-				break;
-			case adminModuleLDAP:
-				hash = "#admin/ldaps";
-				break;
-			case adminModuleBackup:
-				hash = "#admin/backup";
-				break;
-			case adminModuleServers:
-				hash = "#admin/servers";
-				break;
-		}
-		return hash;
 	}
 }

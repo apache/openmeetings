@@ -21,8 +21,8 @@ package org.apache.openmeetings.web.components.user.rooms;
 import org.apache.openmeetings.data.conference.dao.RoomDao;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
-import org.apache.openmeetings.web.components.MenuPanel.MenuParams;
 import org.apache.openmeetings.web.components.UserPanel;
+import org.apache.openmeetings.web.util.UrlFragment.MenuParams;
 import org.apache.wicket.markup.html.basic.Label;
 
 public class RoomsSelectorPanel extends UserPanel {

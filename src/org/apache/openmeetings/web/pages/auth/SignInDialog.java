@@ -40,7 +40,6 @@ import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.form.HiddenField;
 import org.apache.wicket.markup.html.form.PasswordTextField;
 import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.form.StatelessForm;
@@ -59,7 +58,6 @@ public class SignInDialog extends AbstractFormDialog<String> {
 	private DialogButton registerBtn = new DialogButton(WebSession.getString(123));
     private String password;
     private String login;
-    private String area = "";
     private boolean rememberMe = false;
     private RegisterDialog r;
     private ForgetPasswordDialog f;
@@ -149,7 +147,6 @@ public class SignInDialog extends AbstractFormDialog<String> {
 		ldapConfigFileName = domain.getConfigFileName() == null ? "" : domain.getConfigFileName();
 		OmAuthenticationStrategy strategy = getAuthenticationStrategy();
 		if (WebSession.get().signIn(login, password, ldapConfigFileName)) {
-			WebSession.get().setArea(area);
  			setResponsePage(Application.get().getHomePage());
 			if (rememberMe) {
 				strategy.save(login, password, ldapConfigFileName);
@@ -198,9 +195,6 @@ public class SignInDialog extends AbstractFormDialog<String> {
 				.add(new DropDownChoice<LdapConfig>("domain", new PropertyModel<LdapConfig>(SignInDialog.this, "domain")
 						, ldaps, new ChoiceRenderer<LdapConfig>("name", "ldapConfigId"))).setVisible(ldaps.size() > 1));
 			add(new CheckBox("rememberMe", new PropertyModel<Boolean>(SignInDialog.this, "rememberMe")).setOutputMarkupId(true));
-			add(new HiddenField<String>("area", new PropertyModel<String>(SignInDialog.this, "area"))
-					.setMarkupId("area")
-					.setOutputMarkupId(true));
 			add(new AjaxButton("submit") { //FAKE button so "submit-on-enter" works as expected
 				private static final long serialVersionUID = -3612671587183668912L;
 

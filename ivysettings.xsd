@@ -36,14 +36,14 @@
   <xs:element name="resolvers">
     <xs:complexType>
       <xs:sequence>
-        <xs:element ref="chain"/>
+        <xs:element ref="chain" maxOccurs="unbounded"/>
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="chain">
     <xs:complexType>
       <xs:sequence>
-        <xs:element maxOccurs="unbounded" ref="ibiblio"/>
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="ibiblio"/>
         <xs:element maxOccurs="unbounded" ref="url"/>
       </xs:sequence>
       <xs:attribute name="name" use="required" type="xs:NCName"/>
@@ -63,6 +63,7 @@
       </xs:sequence>
       <xs:attribute name="name" use="required" type="xs:NCName"/>
       <xs:attribute name="m2compatible" use="optional" type="xs:NCName"/>
+      <xs:attribute name="checksums" use="optional" type="xs:string"/>
     </xs:complexType>
   </xs:element>
   <xs:element name="artifact">

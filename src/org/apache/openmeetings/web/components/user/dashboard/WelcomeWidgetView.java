@@ -20,14 +20,13 @@ package org.apache.openmeetings.web.components.user.dashboard;
 
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
-import static org.apache.openmeetings.web.components.user.profile.SettingsPanel.EDIT_PROFILE_TAB_ID;
-import static org.apache.openmeetings.web.components.user.profile.SettingsPanel.MESSAGES_TAB_ID;
+import static org.apache.openmeetings.web.util.UrlFragment.PROFILE_EDIT;
+import static org.apache.openmeetings.web.util.UrlFragment.PROFILE_MESSAGES;
 
 import org.apache.openmeetings.data.user.dao.PrivateMessagesDao;
 import org.apache.openmeetings.data.user.dao.UsersDao;
 import org.apache.openmeetings.persistence.beans.user.User;
 import org.apache.openmeetings.web.components.UploadableProfileImagePanel;
-import org.apache.openmeetings.web.components.user.profile.SettingsPanel;
 import org.apache.openmeetings.web.pages.MainPage;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
@@ -54,7 +53,7 @@ public class WelcomeWidgetView extends WidgetView {
 
 			@Override
 			public void onClick(AjaxRequestTarget target) {
-				target.add(((MainPage)getPage()).getContents().replace(new SettingsPanel("child", MESSAGES_TAB_ID)));
+				((MainPage)getPage()).updateContents(PROFILE_MESSAGES, target);
 			}
 		}.add(new Label("unread", Model.of("" + getBean(PrivateMessagesDao.class)
 				.getNumberMessages(getUserId(), 0L, false)))));
@@ -63,7 +62,7 @@ public class WelcomeWidgetView extends WidgetView {
 
 			@Override
 			public void onClick(AjaxRequestTarget target) {
-				target.add(((MainPage)getPage()).getContents().replace(new SettingsPanel("child", EDIT_PROFILE_TAB_ID)));
+				((MainPage)getPage()).updateContents(PROFILE_EDIT, target);
 			}
 		});
 	}

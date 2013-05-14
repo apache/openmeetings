@@ -22,9 +22,12 @@ import static org.apache.openmeetings.persistence.beans.basic.Configuration.FRON
 import static org.apache.openmeetings.web.app.Application.getBean;
 
 import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
+import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.pages.BasePage;
+import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
+import org.apache.wicket.request.IRequestParameters;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 public class SignInPage extends BasePage {
@@ -55,5 +58,10 @@ public class SignInPage extends BasePage {
 		super.renderHead(response);
 		//TODO need to be removed if autoOen will be enabled
 		response.render(OnDomReadyHeaderItem.forScript("$('#" + d.getMarkupId() + "').dialog('open');"));
+	}
+
+	@Override
+	protected void onParameterArrival(IRequestParameters params, AjaxRequestTarget arg1) {
+		WebSession.get().setArea(getUrlFragment(params));
 	}
 }

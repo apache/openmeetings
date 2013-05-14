@@ -38,5 +38,4 @@ public abstract class BasePanel extends Panel {
 	public void onMenuPanelLoad(AjaxRequestTarget target) {
 
 	}
-
 }

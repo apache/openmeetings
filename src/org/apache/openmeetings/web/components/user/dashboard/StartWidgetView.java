@@ -18,9 +18,9 @@
  */
 package org.apache.openmeetings.web.components.user.dashboard;
 
-import org.apache.openmeetings.web.components.user.calendar.CalendarPanel;
+import static org.apache.openmeetings.web.util.UrlFragment.CALENDAR;
+
 import org.apache.openmeetings.web.pages.MainPage;
-import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.form.Button;
@@ -39,8 +39,7 @@ public class StartWidgetView extends WidgetView {
 
 			@Override
 			protected void onEvent(AjaxRequestTarget target) {
-				MarkupContainer contents = ((MainPage)getPage()).getContents();
-				target.add(contents.replace(new CalendarPanel("child")));
+				((MainPage)getPage()).updateContents(CALENDAR, target);
 			}
 		}));
 	}

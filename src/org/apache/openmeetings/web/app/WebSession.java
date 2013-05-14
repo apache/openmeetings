@@ -44,6 +44,7 @@ import org.apache.openmeetings.web.components.user.dashboard.PrivateRoomsWidgetD
 import org.apache.openmeetings.web.components.user.dashboard.RssWidgetDescriptor;
 import org.apache.openmeetings.web.components.user.dashboard.StartWidgetDescriptor;
 import org.apache.openmeetings.web.components.user.dashboard.WelcomeWidgetDescriptor;
+import org.apache.openmeetings.web.util.UrlFragment;
 import org.apache.wicket.authroles.authentication.AbstractAuthenticatedWebSession;
 import org.apache.wicket.authroles.authorization.strategies.role.Roles;
 import org.apache.wicket.request.Request;
@@ -59,7 +60,7 @@ public class WebSession extends AbstractAuthenticatedWebSession {
 	private long userId = -1;
 	private long userLevel = -1;
 	private String SID = null;
-	private String area = null;
+	private UrlFragment area = null;
 	private TimeZone tz;
 	private SimpleDateFormat ISO8601FORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
 	private Dashboard dashboard;
@@ -158,11 +159,11 @@ public class WebSession extends AbstractAuthenticatedWebSession {
 		return get().userLevel;
 	}
 
-	public String getArea() {
+	public UrlFragment getArea() {
 		return area;
 	}
 
-	public void setArea(String area) {
+	public void setArea(UrlFragment area) {
 		this.area = area;
 	}
 

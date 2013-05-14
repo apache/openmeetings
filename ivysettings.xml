@@ -34,6 +34,9 @@
 			<url name="smslib" m2compatible="true">
 				<artifact pattern="http://smslib.org/maven2/v3/[organisation]/[artifact]/[revision]/[artifact]-[revision].[ext]" />
 			</url>
+			<url name="urlfragment" m2compatible="false" checksums=""> <!-- FIXME need to be removed in favor of wicketstuff -->
+				<artifact pattern="https://github.com/Horsed/WicketUrlFragment/raw/master/[artifact]-[revision].[ext]" />
+			</url>
 		</chain>
 	</resolvers>
 	<triggers>

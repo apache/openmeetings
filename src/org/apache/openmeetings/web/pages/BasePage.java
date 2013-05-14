@@ -18,22 +18,33 @@
  */
 package org.apache.openmeetings.web.pages;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
 import org.apache.openmeetings.persistence.beans.lang.FieldLanguage;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.components.HeaderPanel;
+import org.apache.openmeetings.web.util.UrlFragment;
+import org.apache.openmeetings.web.util.UrlFragment.AreaKeys;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.html.TransparentWebMarkupContainer;
-import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.request.IRequestParameters;
+import org.apache.wicket.util.string.StringValue;
+import org.wicketstuff.urlfragment.AsyncUrlFragmentAwarePage;
 
-public abstract class BasePage extends WebPage {
+public abstract class BasePage extends AsyncUrlFragmentAwarePage {
 	private static final long serialVersionUID = -6237917782433412496L;
+	private final Map<String, String> options;
 
 	public BasePage() {
+		options = new HashMap<String, String>();
+		options.put("fragmentIdentifierSuffix", "");
+		options.put("keyValueDelimiter", "/");
 		String appName = Application.getBean(ConfigurationDao.class).getAppName();
 
 		FieldLanguage lang = WebSession.getLanguageObj();
@@ -44,6 +55,21 @@ public abstract class BasePage extends WebPage {
 	    	.add(new AttributeModifier("dir", Boolean.TRUE.equals(lang.getRtl()) ? "rtl" : "ltr"))); 
 		add(new Label("pageTitle", appName));
 		add(new HeaderPanel("header", appName));
+	}
+	
+	protected UrlFragment getUrlFragment(IRequestParameters params) {
+		for (AreaKeys key : AreaKeys.values()) {
+			StringValue type = params.getParameterValue(key.name());
+			if (!type.isEmpty()) {
+				return new UrlFragment(key, type.toString());
+			}
+		}
+		return null;
+	}
+	
+	@Override
+	protected Map<String, String> getOptions() {
+		return options;
 	}
 	
 	@Override
