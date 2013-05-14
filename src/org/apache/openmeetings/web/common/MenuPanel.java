@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.web.components;
+package org.apache.openmeetings.web.common;
 
 import org.apache.openmeetings.data.basic.NaviBuilder;
 import org.apache.openmeetings.persistence.beans.basic.Naviglobal;

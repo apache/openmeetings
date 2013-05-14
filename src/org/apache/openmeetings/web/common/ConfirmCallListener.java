@@ -16,26 +16,22 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.web.components;
+package org.apache.openmeetings.web.common;
 
-import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.openmeetings.web.app.WebSession;
+import org.apache.wicket.ajax.attributes.AjaxCallListener;
+import org.apache.wicket.core.util.string.JavaScriptUtils;
 
-public abstract class BasePanel extends Panel {
-	private static final long serialVersionUID = 8663740955529405678L;
+public class ConfirmCallListener extends AjaxCallListener {
+	private static final long serialVersionUID = 7355235720213137963L;
 
-	public BasePanel(String id) {
-		super(id);
-		setOutputMarkupId(true);
+	public ConfirmCallListener(long id) {
+		this(id, "");
 	}
-
-	/**
-	 * Overwrite this method to execute Java code after Panel is loaded by the
-	 * {@link MenuPanel}
-	 * 
-	 * @param target
-	 */
-	public void onMenuPanelLoad(AjaxRequestTarget target) {
-
+	
+	//TODO confirm need to be replaced with jQuery modal dialog
+	public ConfirmCallListener(long id, String js) {
+		onPrecondition("if (!confirm('" + JavaScriptUtils.escapeQuotes(WebSession.getString(id)) + "')) {" 
+				+ js + "; hideBusyIndicator(); return false;}");
 	}
 }
