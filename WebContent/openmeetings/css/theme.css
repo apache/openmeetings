@@ -428,9 +428,6 @@ div.tableWrapper {
 	margin-top: 2px;
 }
 
-/* .adminForm select {
-    max-width: 200px;
-} */
 .sort-icon {
 	display: inline-block !important;
 	text-indent: 0px !important;
@@ -599,4 +596,60 @@ div.tableWrapper {
 #feedcontainer {
 	height: 300px;
 	overflow: auto;
+}
+.recording {
+	width: 100%;
+}
+.recording .files {
+	width: 250px;
+}
+.recording .files .trees {
+	min-height: 400px;
+}
+.recording .files .sizes table, .recording .files .info table {
+	width: 100%;
+}
+.recording .video {
+}
+.align-left {
+	float: left;
+}
+.align-right {
+	float: right;
+}
+.clear {
+	clear: both;
+}
+.refresh-icon {
+	background: url(../images/refresh.gif) no-repeat;
+	cursor: default;
+	width: 18px;
+	height: 18px;
+	border: none;
+	margin-left: 2px;
+	margin-top: 2px;
+}
+.trash-icon {
+	background: url(images/trash.png) no-repeat;
+	cursor: default;
+	width: 18px;
+	height: 18px;
+	border: none;
+	margin-left: 2px;
+	margin-top: 2px;
+}
+.folder-create-icon {
+	background: url(images/folder_add.png) no-repeat;
+	cursor: default;
+	width: 18px;
+	height: 18px;
+	border: none;
+	margin-left: 2px;
+	margin-top: 2px;
+}
+.recording-icon {
+	padding-left: 18px;
+	background-image: url(images/film.png);
+	/*background-position: 0px 50%;*/
+	background-repeat: no-repeat;
 }
