@@ -18,24 +18,25 @@
  */
 package org.apache.openmeetings.web.util;
 
-import static org.apache.openmeetings.web.components.user.profile.SettingsPanel.EDIT_PROFILE_TAB_ID;
-import static org.apache.openmeetings.web.components.user.profile.SettingsPanel.MESSAGES_TAB_ID;
+import static org.apache.openmeetings.web.user.profile.SettingsPanel.EDIT_PROFILE_TAB_ID;
+import static org.apache.openmeetings.web.user.profile.SettingsPanel.MESSAGES_TAB_ID;
 
 import java.io.Serializable;
 
-import org.apache.openmeetings.web.components.BasePanel;
-import org.apache.openmeetings.web.components.admin.backup.BackupPanel;
-import org.apache.openmeetings.web.components.admin.configurations.ConfigsPanel;
-import org.apache.openmeetings.web.components.admin.groups.GroupsPanel;
-import org.apache.openmeetings.web.components.admin.labels.LangPanel;
-import org.apache.openmeetings.web.components.admin.ldaps.LdapsPanel;
-import org.apache.openmeetings.web.components.admin.rooms.RoomsPanel;
-import org.apache.openmeetings.web.components.admin.servers.ServersPanel;
-import org.apache.openmeetings.web.components.admin.users.UsersPanel;
-import org.apache.openmeetings.web.components.user.calendar.CalendarPanel;
-import org.apache.openmeetings.web.components.user.dashboard.OmDashboardPanel;
-import org.apache.openmeetings.web.components.user.profile.SettingsPanel;
-import org.apache.openmeetings.web.components.user.rooms.RoomsSelectorPanel;
+import org.apache.openmeetings.web.admin.backup.BackupPanel;
+import org.apache.openmeetings.web.admin.configurations.ConfigsPanel;
+import org.apache.openmeetings.web.admin.groups.GroupsPanel;
+import org.apache.openmeetings.web.admin.labels.LangPanel;
+import org.apache.openmeetings.web.admin.ldaps.LdapsPanel;
+import org.apache.openmeetings.web.admin.rooms.RoomsPanel;
+import org.apache.openmeetings.web.admin.servers.ServersPanel;
+import org.apache.openmeetings.web.admin.users.UsersPanel;
+import org.apache.openmeetings.web.common.BasePanel;
+import org.apache.openmeetings.web.user.calendar.CalendarPanel;
+import org.apache.openmeetings.web.user.dashboard.OmDashboardPanel;
+import org.apache.openmeetings.web.user.profile.SettingsPanel;
+import org.apache.openmeetings.web.user.record.RecordingsPanel;
+import org.apache.openmeetings.web.user.rooms.RoomsSelectorPanel;
 
 public class UrlFragment implements Serializable {
 	private static final long serialVersionUID = 7382435810352033914L;
@@ -236,7 +237,7 @@ public class UrlFragment implements Serializable {
 				if (TYPE_CALENDAR.equals(type)) {
 					basePanel = new CalendarPanel(CHILD_ID);
 				} else if (TYPE_RECORDINGS.equals(type)) {
-					//
+					basePanel = new RecordingsPanel(CHILD_ID);
 				} else {
 					basePanel = new OmDashboardPanel(CHILD_ID);
 				}
