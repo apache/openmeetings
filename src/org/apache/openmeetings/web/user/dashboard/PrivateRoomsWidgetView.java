@@ -16,26 +16,22 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.web.data;
+package org.apache.openmeetings.web.user.dashboard;
 
-import java.io.Serializable;
+import static org.apache.openmeetings.web.common.UserPanel.getMyRooms;
 
-import org.apache.openmeetings.persistence.beans.IDataProviderEntity;
-import org.apache.openmeetings.web.admin.SearchableDataView;
-import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.openmeetings.web.user.rooms.RoomsPanel;
+import org.apache.wicket.model.Model;
 
-public class DataViewContainer<T extends IDataProviderEntity> implements Serializable {
-	private static final long serialVersionUID = -1027478954223527890L;
-	public WebMarkupContainer container;
-	public SearchableDataView<T> view;
-	public OrderByBorder<T>[] orderLinks;
-	
-	public DataViewContainer(WebMarkupContainer container, SearchableDataView<T> view) {
-		this.container = container;
-		this.view = view;
-	}
-	
-	public void setLinks(OrderByBorder<T>... orderLinks) {
-		this.orderLinks = orderLinks;
+import ro.fortsoft.wicket.dashboard.Widget;
+import ro.fortsoft.wicket.dashboard.web.WidgetView;
+
+public class PrivateRoomsWidgetView extends WidgetView {
+	private static final long serialVersionUID = 6950427893821991173L;
+
+	public PrivateRoomsWidgetView(String id, Model<Widget> model) {
+		super(id, model);
+		
+		add(new RoomsPanel("rooms", getMyRooms()));
 	}
 }

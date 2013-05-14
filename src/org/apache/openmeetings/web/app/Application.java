@@ -21,13 +21,13 @@ package org.apache.openmeetings.web.app;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.openmeetings.remote.red5.ScopeApplicationAdapter;
-import org.apache.openmeetings.web.components.user.dashboard.PrivateRoomsWidgetDescriptor;
-import org.apache.openmeetings.web.components.user.dashboard.RssWidgetDescriptor;
-import org.apache.openmeetings.web.components.user.dashboard.StartWidgetDescriptor;
-import org.apache.openmeetings.web.components.user.dashboard.WelcomeWidgetDescriptor;
 import org.apache.openmeetings.web.pages.MainPage;
 import org.apache.openmeetings.web.pages.NotInitedPage;
 import org.apache.openmeetings.web.pages.auth.SignInPage;
+import org.apache.openmeetings.web.user.dashboard.PrivateRoomsWidgetDescriptor;
+import org.apache.openmeetings.web.user.dashboard.RssWidgetDescriptor;
+import org.apache.openmeetings.web.user.dashboard.StartWidgetDescriptor;
+import org.apache.openmeetings.web.user.dashboard.WelcomeWidgetDescriptor;
 import org.apache.openmeetings.web.util.UserDashboardPersister;
 import org.apache.wicket.Page;
 import org.apache.wicket.RestartResponseException;

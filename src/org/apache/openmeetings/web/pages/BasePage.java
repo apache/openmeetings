@@ -25,7 +25,7 @@ import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
 import org.apache.openmeetings.persistence.beans.lang.FieldLanguage;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
-import org.apache.openmeetings.web.components.HeaderPanel;
+import org.apache.openmeetings.web.common.HeaderPanel;
 import org.apache.openmeetings.web.util.UrlFragment;
 import org.apache.openmeetings.web.util.UrlFragment.AreaKeys;
 import org.apache.wicket.AttributeModifier;

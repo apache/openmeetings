@@ -27,11 +27,11 @@ import static org.apache.openmeetings.web.util.UrlFragment.getPanel;
 
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
-import org.apache.openmeetings.web.components.BasePanel;
-import org.apache.openmeetings.web.components.ConfirmableAjaxLink;
-import org.apache.openmeetings.web.components.MenuPanel;
-import org.apache.openmeetings.web.components.user.AboutDialog;
-import org.apache.openmeetings.web.components.user.ChatPanel;
+import org.apache.openmeetings.web.common.BasePanel;
+import org.apache.openmeetings.web.common.ConfirmableAjaxLink;
+import org.apache.openmeetings.web.common.MenuPanel;
+import org.apache.openmeetings.web.user.AboutDialog;
+import org.apache.openmeetings.web.user.ChatPanel;
 import org.apache.openmeetings.web.util.UrlFragment;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AbstractAjaxTimerBehavior;
@@ -55,6 +55,7 @@ public class MainPage extends BasePage {
 	private static final Logger log = Red5LoggerFactory.getLogger(MainPage.class, webAppRootKey);
 	private final MenuPanel menu;
 	private final MarkupContainer contents;
+	private final AbstractAjaxTimerBehavior areaBehavior;
 	
 	public MainPage() {
 		contents = new WebMarkupContainer("contents");
@@ -115,7 +116,7 @@ public class MainPage extends BasePage {
 			}
 		});
 		//load preselected content
-		add(new AbstractAjaxTimerBehavior(Duration.ONE_SECOND) {
+		add(areaBehavior = new AbstractAjaxTimerBehavior(Duration.ONE_SECOND) {
 			private static final long serialVersionUID = -1551197896975384329L;
 
 			@Override
@@ -123,6 +124,7 @@ public class MainPage extends BasePage {
 				UrlFragment area = WebSession.get().getArea();
 				updateContents(area == null ? DASHBOARD : area, target);
 				stop(target);
+				WebSession.get().setArea(null);
 			}
 		});
 	}
@@ -141,6 +143,7 @@ public class MainPage extends BasePage {
 	protected void onParameterArrival(IRequestParameters params, AjaxRequestTarget target) {
 		UrlFragment uf = getUrlFragment(params);
 		if (uf != null) {
+			areaBehavior.stop(target);
 			updateContents(uf, target);
 		}
 	}

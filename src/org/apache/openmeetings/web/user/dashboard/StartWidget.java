@@ -16,26 +16,26 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.web.data;
+package org.apache.openmeetings.web.user.dashboard;
 
-import java.io.Serializable;
+import org.apache.openmeetings.web.app.WebSession;
+import org.apache.wicket.model.Model;
 
-import org.apache.openmeetings.persistence.beans.IDataProviderEntity;
-import org.apache.openmeetings.web.admin.SearchableDataView;
-import org.apache.wicket.markup.html.WebMarkupContainer;
+import ro.fortsoft.wicket.dashboard.AbstractWidget;
+import ro.fortsoft.wicket.dashboard.Widget;
+import ro.fortsoft.wicket.dashboard.WidgetLocation;
+import ro.fortsoft.wicket.dashboard.web.WidgetView;
 
-public class DataViewContainer<T extends IDataProviderEntity> implements Serializable {
-	private static final long serialVersionUID = -1027478954223527890L;
-	public WebMarkupContainer container;
-	public SearchableDataView<T> view;
-	public OrderByBorder<T>[] orderLinks;
-	
-	public DataViewContainer(WebMarkupContainer container, SearchableDataView<T> view) {
-		this.container = container;
-		this.view = view;
+public class StartWidget extends AbstractWidget {
+	private static final long serialVersionUID = 9060237325733825899L;
+
+	public StartWidget() {
+		super();
+		title = WebSession.getString(774L);
+		location = new WidgetLocation(1, 0);
 	}
 	
-	public void setLinks(OrderByBorder<T>... orderLinks) {
-		this.orderLinks = orderLinks;
+	public WidgetView createView(String viewId) {
+		return new StartWidgetView(viewId, new Model<Widget>(this));
 	}
 }

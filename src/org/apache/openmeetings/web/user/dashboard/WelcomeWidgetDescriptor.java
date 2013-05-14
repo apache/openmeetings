@@ -16,26 +16,32 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.web.data;
+package org.apache.openmeetings.web.user.dashboard;
 
-import java.io.Serializable;
+import org.apache.openmeetings.web.app.WebSession;
 
-import org.apache.openmeetings.persistence.beans.IDataProviderEntity;
-import org.apache.openmeetings.web.admin.SearchableDataView;
-import org.apache.wicket.markup.html.WebMarkupContainer;
+import ro.fortsoft.wicket.dashboard.WidgetDescriptor;
 
-public class DataViewContainer<T extends IDataProviderEntity> implements Serializable {
-	private static final long serialVersionUID = -1027478954223527890L;
-	public WebMarkupContainer container;
-	public SearchableDataView<T> view;
-	public OrderByBorder<T>[] orderLinks;
-	
-	public DataViewContainer(WebMarkupContainer container, SearchableDataView<T> view) {
-		this.container = container;
-		this.view = view;
+public class WelcomeWidgetDescriptor implements WidgetDescriptor {
+	private static final long serialVersionUID = 7835392425157215242L;
+
+	public String getName() {
+		return WebSession.getString(1546L);
 	}
-	
-	public void setLinks(OrderByBorder<T>... orderLinks) {
-		this.orderLinks = orderLinks;
+
+	public String getProvider() {
+		return "Apache Openmeetings";
+	}
+
+	public String getDescription() {
+		return WebSession.getString(1547L);
+	}
+
+	public String getWidgetClassName() {
+		return WelcomeWidget.class.getName();
+	}
+
+	public String getTypeName() {
+		return "om.widget.welcome";
 	}
 }
