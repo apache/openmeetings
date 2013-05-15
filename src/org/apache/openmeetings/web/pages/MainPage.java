@@ -135,7 +135,7 @@ public class MainPage extends BasePage {
 			//FIXME need to resolve name conflict
 			//FIXME need to implement 1 call instead of 2
 			org.wicketstuff.urlfragment.UrlFragment uf = new org.wicketstuff.urlfragment.UrlFragment(target);
-			uf.set("");
+			//uf.set("");
 			uf.setParameter(f.getArea().name(), f.getType());
 			panel.onMenuPanelLoad(target);
 		}
