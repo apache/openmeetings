@@ -24,9 +24,9 @@ import org.apache.openmeetings.persistence.beans.basic.Navimain;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.pages.MainPage;
-import org.apache.openmeetings.web.util.UrlFragment;
-import org.apache.openmeetings.web.util.UrlFragment.MenuActions;
-import org.apache.openmeetings.web.util.UrlFragment.MenuParams;
+import org.apache.openmeetings.web.util.OmUrlFragment;
+import org.apache.openmeetings.web.util.OmUrlFragment.MenuActions;
+import org.apache.openmeetings.web.util.OmUrlFragment.MenuParams;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.basic.Label;
@@ -73,7 +73,7 @@ public class MenuPanel extends BasePanel {
 							}
 							
 							public void onClick(AjaxRequestTarget target) {
-								((MainPage)getPage()).updateContents(new UrlFragment(action, params), target);
+								((MainPage)getPage()).updateContents(new OmUrlFragment(action, params), target);
 							}
 						});
 					}

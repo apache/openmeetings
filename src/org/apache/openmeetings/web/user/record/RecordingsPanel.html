@@ -24,12 +24,12 @@
 		<tr>
 			<td class="files">
 				<div class="icons clear">
-					<span class="folder-create-icon align-left"></span>
-					<span class="refresh-icon align-left"></span>
+					<span wicket:id="create" class="folder-create-icon align-left clickable"></span>
+					<span wicket:id="refresh" class="refresh-icon align-left clickable"></span>
 					<span class="trash-icon align-right"></span>
 					<div class="clear"></div>
 				</div>
-				<div class="trees">
+				<div wicket:id="trees" class="trees">
 					<div wicket:id="myrecordings"></div>
 					<div wicket:id="publicrecordings"></div>
 				</div>
@@ -47,7 +47,7 @@
 						</tr>
 					</table>
 				</div>
-				<div class="info">
+				<div wicket:id="info" class="info">
 					<table>
 						<tr>
 							<td>Shift</td>
@@ -59,19 +59,19 @@
 						</tr>
 						<tr>
 							<td><wicket:ommessage key="863"/></td>
-							<td><span wicket:id="name"></span></td>
+							<td><span wicket:id="fileName"></span></td>
 						</tr>
 						<tr>
 							<td><wicket:ommessage key="864"/></td>
-							<td><span wicket:id="length"></span></td>
+							<td><span wicket:id="fileSize"></span></td>
 						</tr>
 						<tr>
 							<td><wicket:ommessage key="865"/></td>
-							<td><span wicket:id="date"></span></td>
+							<td><span wicket:id="recordEnd"></span></td>
 						</tr>
 						<tr>
 							<td><wicket:ommessage key="874"/></td>
-							<td><span wicket:id="room"></span></td>
+							<td><span wicket:id="room_id"></span></td>
 						</tr>
 						<tr>
 							<td><input type="button" wicket:ommessage="value:884"/></td>

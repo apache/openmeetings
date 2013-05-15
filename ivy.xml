@@ -273,7 +273,7 @@
 			<include type="jar" />
 		</dependency>
 		-->
-		<dependency org="org.wicketstuff" name="wicketstuff-urlfragment" rev="6.0-20130515.002826-2" conf="openmeetings->*" transitive="false">
+		<dependency org="org.wicketstuff" name="wicketstuff-urlfragment" rev="6.0-20130515.164331-3" conf="openmeetings->*" transitive="false">
 			<include type="jar" />
 		</dependency>
 		

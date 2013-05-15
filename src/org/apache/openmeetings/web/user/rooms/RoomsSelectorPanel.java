@@ -22,7 +22,7 @@ import org.apache.openmeetings.data.conference.dao.RoomDao;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.UserPanel;
-import org.apache.openmeetings.web.util.UrlFragment.MenuParams;
+import org.apache.openmeetings.web.util.OmUrlFragment.MenuParams;
 import org.apache.wicket.markup.html.basic.Label;
 
 public class RoomsSelectorPanel extends UserPanel {

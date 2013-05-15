@@ -26,8 +26,8 @@ import org.apache.openmeetings.persistence.beans.lang.FieldLanguage;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.HeaderPanel;
-import org.apache.openmeetings.web.util.UrlFragment;
-import org.apache.openmeetings.web.util.UrlFragment.AreaKeys;
+import org.apache.openmeetings.web.util.OmUrlFragment;
+import org.apache.openmeetings.web.util.OmUrlFragment.AreaKeys;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
@@ -57,11 +57,11 @@ public abstract class BasePage extends AsyncUrlFragmentAwarePage {
 		add(new HeaderPanel("header", appName));
 	}
 	
-	protected UrlFragment getUrlFragment(IRequestParameters params) {
+	protected OmUrlFragment getUrlFragment(IRequestParameters params) {
 		for (AreaKeys key : AreaKeys.values()) {
 			StringValue type = params.getParameterValue(key.name());
 			if (!type.isEmpty()) {
-				return new UrlFragment(key, type.toString());
+				return new OmUrlFragment(key, type.toString());
 			}
 		}
 		return null;

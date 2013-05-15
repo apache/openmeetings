@@ -281,6 +281,13 @@
 			</fileset>
 		</copy>
 	</target>
+
+	<!-- TODO remove copy/paste clean-up targets -->
+	<target name="web.only" depends="jar.web.only">
+		<copy todir="${dist.webapps.dir}" overwrite="true" force="true">
+			<fileset dir="${webcontent.src.dir}/openmeetings" />
+		</copy>
+	</target>
 	
 	<target name="jar.web.only" depends="enhance.only.norefresh, current_revision">
 		<tstamp prefix="build">

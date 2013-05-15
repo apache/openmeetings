@@ -18,7 +18,7 @@
  */
 package org.apache.openmeetings.web.user.dashboard;
 
-import static org.apache.openmeetings.web.util.UrlFragment.CALENDAR;
+import static org.apache.openmeetings.web.util.OmUrlFragment.CALENDAR;
 
 import org.apache.openmeetings.web.pages.MainPage;
 import org.apache.wicket.ajax.AjaxEventBehavior;

@@ -20,8 +20,8 @@ package org.apache.openmeetings.web.user.dashboard;
 
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
-import static org.apache.openmeetings.web.util.UrlFragment.PROFILE_EDIT;
-import static org.apache.openmeetings.web.util.UrlFragment.PROFILE_MESSAGES;
+import static org.apache.openmeetings.web.util.OmUrlFragment.PROFILE_EDIT;
+import static org.apache.openmeetings.web.util.OmUrlFragment.PROFILE_MESSAGES;
 
 import org.apache.openmeetings.data.user.dao.PrivateMessagesDao;
 import org.apache.openmeetings.data.user.dao.UsersDao;

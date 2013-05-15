@@ -38,7 +38,7 @@ import org.apache.openmeetings.web.user.profile.SettingsPanel;
 import org.apache.openmeetings.web.user.record.RecordingsPanel;
 import org.apache.openmeetings.web.user.rooms.RoomsSelectorPanel;
 
-public class UrlFragment implements Serializable {
+public class OmUrlFragment implements Serializable {
 	private static final long serialVersionUID = 7382435810352033914L;
 	private AreaKeys area = AreaKeys.user;
 	private String type = "";
@@ -58,10 +58,10 @@ public class UrlFragment implements Serializable {
 	public static final String TYPE_LDAP = "ldap";
 	public static final String TYPE_BACKUP = "backup";
 	public static final String TYPE_SERVER = "server";
-	public static final UrlFragment DASHBOARD = new UrlFragment(AreaKeys.user, "");
-	public static final UrlFragment PROFILE_EDIT = new UrlFragment(AreaKeys.profile, TYPE_EDIT);
-	public static final UrlFragment PROFILE_MESSAGES = new UrlFragment(AreaKeys.profile, TYPE_MESSAGES);
-	public static final UrlFragment CALENDAR = new UrlFragment(AreaKeys.user, TYPE_CALENDAR);
+	public static final OmUrlFragment DASHBOARD = new OmUrlFragment(AreaKeys.user, "");
+	public static final OmUrlFragment PROFILE_EDIT = new OmUrlFragment(AreaKeys.profile, TYPE_EDIT);
+	public static final OmUrlFragment PROFILE_MESSAGES = new OmUrlFragment(AreaKeys.profile, TYPE_MESSAGES);
+	public static final OmUrlFragment CALENDAR = new OmUrlFragment(AreaKeys.user, TYPE_CALENDAR);
 	
 	public enum AreaKeys {
 		user
@@ -96,16 +96,16 @@ public class UrlFragment implements Serializable {
 		, myTabButton
 	}
 	
-	public UrlFragment(AreaKeys area, String type) {
+	public OmUrlFragment(AreaKeys area, String type) {
 		this.setArea(area);
 		this.setType(type);
 	}
 	
-	public UrlFragment(MenuActions action) {
+	public OmUrlFragment(MenuActions action) {
 		this(action, MenuParams.myTabButton);
 	}
 	
-	public UrlFragment(MenuActions action, MenuParams params) {
+	public OmUrlFragment(MenuActions action, MenuParams params) {
 		switch(action) {
 			case dashboardModuleStartScreen:
 				break;

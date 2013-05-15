@@ -19,11 +19,11 @@
 package org.apache.openmeetings.web.pages;
 
 import static org.apache.openmeetings.OpenmeetingsVariables.webAppRootKey;
-import static org.apache.openmeetings.web.util.UrlFragment.CHILD_ID;
-import static org.apache.openmeetings.web.util.UrlFragment.DASHBOARD;
-import static org.apache.openmeetings.web.util.UrlFragment.PROFILE_EDIT;
-import static org.apache.openmeetings.web.util.UrlFragment.PROFILE_MESSAGES;
-import static org.apache.openmeetings.web.util.UrlFragment.getPanel;
+import static org.apache.openmeetings.web.util.OmUrlFragment.CHILD_ID;
+import static org.apache.openmeetings.web.util.OmUrlFragment.DASHBOARD;
+import static org.apache.openmeetings.web.util.OmUrlFragment.PROFILE_EDIT;
+import static org.apache.openmeetings.web.util.OmUrlFragment.PROFILE_MESSAGES;
+import static org.apache.openmeetings.web.util.OmUrlFragment.getPanel;
 
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
@@ -32,7 +32,7 @@ import org.apache.openmeetings.web.common.ConfirmableAjaxLink;
 import org.apache.openmeetings.web.common.MenuPanel;
 import org.apache.openmeetings.web.user.AboutDialog;
 import org.apache.openmeetings.web.user.ChatPanel;
-import org.apache.openmeetings.web.util.UrlFragment;
+import org.apache.openmeetings.web.util.OmUrlFragment;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AbstractAjaxTimerBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -47,6 +47,7 @@ import org.apache.wicket.request.IRequestParameters;
 import org.apache.wicket.util.time.Duration;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
+import org.wicketstuff.urlfragment.UrlFragment;
 
 @AuthorizeInstantiation("USER")
 public class MainPage extends BasePage {
@@ -120,7 +121,7 @@ public class MainPage extends BasePage {
 
 			@Override
 			protected void onTimer(AjaxRequestTarget target) {
-				UrlFragment area = WebSession.get().getArea();
+				OmUrlFragment area = WebSession.get().getArea();
 				updateContents(area == null ? DASHBOARD : area, target);
 				stop(target);
 				WebSession.get().setArea(null);
@@ -128,22 +129,19 @@ public class MainPage extends BasePage {
 		});
 	}
 	
-	public void updateContents(UrlFragment f, AjaxRequestTarget target) {
+	public void updateContents(OmUrlFragment f, AjaxRequestTarget target) {
 		BasePanel panel = getPanel(f.getArea(), f.getType());
 		if (panel != null) {
 			target.add(contents.replace(panel));
-			//FIXME need to resolve name conflict
-			//FIXME need to implement 1 call instead of 2
-			org.wicketstuff.urlfragment.UrlFragment uf = new org.wicketstuff.urlfragment.UrlFragment(target);
-			//uf.set("");
-			uf.setParameter(f.getArea().name(), f.getType());
+			UrlFragment uf = new UrlFragment(target);
+			uf.set(f.getArea().name(), f.getType());
 			panel.onMenuPanelLoad(target);
 		}
 	}
 	
 	@Override
 	protected void onParameterArrival(IRequestParameters params, AjaxRequestTarget target) {
-		UrlFragment uf = getUrlFragment(params);
+		OmUrlFragment uf = getUrlFragment(params);
 		if (uf != null) {
 			areaBehavior.stop(target);
 			updateContents(uf, target);

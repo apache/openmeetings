@@ -602,12 +602,18 @@ div.tableWrapper {
 }
 .recording .files {
 	width: 250px;
+	border: 1px solid #ccc;
 }
 .recording .files .trees {
 	min-height: 400px;
 }
 .recording .files .sizes table, .recording .files .info table {
 	width: 100%;
+}
+.recording .files .info input {
+	width: 100%;
+	padding-right: 5px;
+	padding-left: 5px;
 }
 .recording .video {
 }
@@ -622,7 +628,6 @@ div.tableWrapper {
 }
 .refresh-icon {
 	background: url(../images/refresh.gif) no-repeat;
-	cursor: default;
 	width: 18px;
 	height: 18px;
 	border: none;
@@ -631,7 +636,6 @@ div.tableWrapper {
 }
 .trash-icon {
 	background: url(images/trash.png) no-repeat;
-	cursor: default;
 	width: 18px;
 	height: 18px;
 	border: none;
@@ -640,7 +644,6 @@ div.tableWrapper {
 }
 .folder-create-icon {
 	background: url(images/folder_add.png) no-repeat;
-	cursor: default;
 	width: 18px;
 	height: 18px;
 	border: none;
