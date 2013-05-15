@@ -47,7 +47,6 @@ import org.apache.wicket.request.IRequestParameters;
 import org.apache.wicket.util.time.Duration;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
-import org.wicketstuff.urlfragment.UrlParametersReceivingBehavior;
 
 @AuthorizeInstantiation("USER")
 public class MainPage extends BasePage {
@@ -133,8 +132,11 @@ public class MainPage extends BasePage {
 		BasePanel panel = getPanel(f.getArea(), f.getType());
 		if (panel != null) {
 			target.add(contents.replace(panel));
-			//FIXME need to be uncommented later UrlParametersReceivingBehavior.setFragment(target, f.getArea().name(), f.getType());
-			UrlParametersReceivingBehavior.setFragmentParameter(target, f.getArea().name(), f.getType());
+			//FIXME need to resolve name conflict
+			//FIXME need to implement 1 call instead of 2
+			org.wicketstuff.urlfragment.UrlFragment uf = new org.wicketstuff.urlfragment.UrlFragment(target);
+			uf.set("");
+			uf.setParameter(f.getArea().name(), f.getType());
 			panel.onMenuPanelLoad(target);
 		}
 	}
