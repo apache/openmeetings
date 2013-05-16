@@ -155,7 +155,7 @@
 	<view name="_searchUserResult" x="130" height="$once{ parent.height }">
 		
 		<turnOverListOrderedPaged name="_table" showTopBar="true" x="0" height="$once{ parent.height }" 
-             y="0" itemHeight="40" listLabelId="1184" headerHeight="22" step="1000" orderby="c.lastname"
+             y="0" itemHeight="40" listLabelId="1184" headerHeight="22" step="1000" orderby="u.lastname"
              listItemName="searchUserProfileListItem" menuBarXIndent="100"
              multiselect="false" width="$once{ canvas.width - 130 }">
 			
@@ -201,8 +201,8 @@
 			
 			<handler name="oninit">
 	        	//addHeaderItemOrdered" args="labelid,width,orderBy,asc,isSelected
-	            this.addHeaderItemOrdered(1180,200,"c.lastname",false,true);
-	            this.addHeaderItemOrdered(1181,100,"c.omTimeZone.omTimeZoneId",false,false);
+	            this.addHeaderItemOrdered(1180,200,"u.lastname",false,true);
+	            this.addHeaderItemOrdered(1181,100,"u.omTimeZone.omTimeZoneId",false,false);
 	            this.addHeaderItem(1182,250);
 	            this.addHeaderItem(1183,this.width-250-60-100-200-16);
 	            this.addHeaderItem(1185,60);
