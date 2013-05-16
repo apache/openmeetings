@@ -297,6 +297,8 @@
                         parent._register.setAttribute('visible',false);
                         parent.b2.setAttribute('visible',false);
                         parent.testing.setAttribute('visible',false);
+                        parent.testingNetwork.setAttribute('visible',false);
+                        parent.forgotPassword.setAttribute('visible',false);
                         parent.organisation_label_info.setAttribute('visible',true);
                         parent.organisation_label.setAttribute('visible',true);
                         parent.organisation.setAttribute('visible',true);
@@ -366,7 +368,7 @@
 	    </method>    
     </labelText>
 
-    <labelText align="right" resize="true" valign="bottom" >
+    <labelText name="testingNetwork" align="right" resize="true" valign="bottom" >
         <handler name="oninit">
             <![CDATA[
                 this.setAttribute('text',"<u><FONT color='#0000CC'>" + canvas.getLabelName(1373) + " "+ canvas.currentappname +"</FONT></u>");
@@ -377,7 +379,7 @@
         </handler>        
     </labelText>
     
-    <labelText align="left" resize="true" valign="bottom">
+    <labelText name="forgotPassword" align="left" resize="true" valign="bottom">
         <handler name="oninit">
             <![CDATA[
                 this.setAttribute('text',"<u><FONT color='#0000CC'>"+ canvas.getLabelName(311) +"</FONT></u>");
