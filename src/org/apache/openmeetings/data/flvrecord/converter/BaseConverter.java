@@ -317,12 +317,12 @@ public abstract class BaseConverter {
 		String[] argv = new String[] {
 				getPathToFFMPEG(), //
 				"-i", path,
-				"-vcodec", "libx264",
-				"-b", "250k",
-				"-bt", "50k",
-				"-acodec", "libfaac",
-				"-ab", "56k",
-				"-ac", "2",
+				"-c:v", "libx264",
+				"-crf", "24",
+				"-pix_fmt", "yuv420p",
+				"-preset", "medium",
+				"-profile:v", "baseline",
+				"-c:a", "libfaac",
 				"-s", r.getFlvWidth() + "x" + r.getFlvHeight(), //
 				mp4path
 				};
