@@ -18,12 +18,17 @@
  */
 package org.apache.openmeetings.web.user.calendar;
 
+import static org.apache.openmeetings.web.app.Application.getBean;
+import static org.apache.openmeetings.web.app.WebSession.getLanguage;
+import static org.apache.openmeetings.web.app.WebSession.getUserId;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import org.apache.openmeetings.data.calendar.daos.AppointmentDao;
 import org.apache.openmeetings.data.calendar.daos.AppointmentReminderTypDao;
+import org.apache.openmeetings.data.calendar.management.AppointmentLogic;
 import org.apache.openmeetings.data.conference.RoomManager;
 import org.apache.openmeetings.data.conference.dao.RoomDao;
 import org.apache.openmeetings.data.user.dao.UsersDao;
@@ -32,7 +37,6 @@ import org.apache.openmeetings.persistence.beans.calendar.AppointmentReminderTyp
 import org.apache.openmeetings.persistence.beans.domain.Organisation_Users;
 import org.apache.openmeetings.persistence.beans.room.Room;
 import org.apache.openmeetings.persistence.beans.room.RoomType;
-import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxCheckBox;
@@ -54,8 +58,9 @@ import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
 public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 	private static final long serialVersionUID = 7553035786264113827L;
 	private AppointmentForm form;
-	private DialogButton save = new DialogButton(WebSession.getString(813L));
-	private DialogButton cancel = new DialogButton(WebSession.getString(1130L));
+	private DialogButton save = new DialogButton(WebSession.getString(813));
+	private DialogButton cancel = new DialogButton(WebSession.getString(1130));
+	private DialogButton delete = new DialogButton(WebSession.getString(814));
 	private final CalendarPanel calendar;
 	
 	@Override
@@ -73,7 +78,7 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 
 	@Override
 	protected List<DialogButton> getButtons() {
-		return Arrays.asList(cancel, save);
+		return Arrays.asList(cancel, delete, save);
 	}
 	
 	@Override
@@ -92,13 +97,21 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 	}
 	
 	@Override
+	public void onClose(AjaxRequestTarget target, DialogButton button) {
+		if (delete.equals(button)) {
+			getBean(AppointmentLogic.class).deleteAppointment(getModelObject().getAppointmentId(), getUserId(), getLanguage());
+			calendar.refresh(target);
+		}
+	}
+	
+	@Override
 	protected void onError(AjaxRequestTarget target) {
 		// FIXME feedback
 	}
 
 	@Override
 	protected void onSubmit(AjaxRequestTarget target) {
-		Application.getBean(AppointmentDao.class).update(form.getModelObject(), WebSession.getUserId());
+		getBean(AppointmentDao.class).update(form.getModelObject(), getUserId());
 		// FIXME feedback
 		calendar.refresh(target);
 	}
@@ -202,19 +215,19 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 		}
 		
 		private List<RoomType> getRoomTypes() {
-			return Application.getBean(RoomManager.class).getAllRoomTypes(WebSession.getLanguage());
+			return getBean(RoomManager.class).getAllRoomTypes(getLanguage());
 		}
 		
 		private List<AppointmentReminderTyps> getRemindTypes() {
-			return Application.getBean(AppointmentReminderTypDao.class).getAppointmentReminderTypList();
+			return getBean(AppointmentReminderTypDao.class).getAppointmentReminderTypList();
 		}
 		
 		private List<Room> getRoomList() {
 			//FIXME need to be reviewed
 			List<Room> result = new ArrayList<Room>();
-			RoomDao dao = Application.getBean(RoomDao.class);
+			RoomDao dao = getBean(RoomDao.class);
 			result.addAll(dao.getPublicRooms());
-			for (Organisation_Users ou : Application.getBean(UsersDao.class).get(WebSession.getUserId()).getOrganisation_users()) {
+			for (Organisation_Users ou : getBean(UsersDao.class).get(getUserId()).getOrganisation_users()) {
 				result.addAll(dao.getOrganisationRooms(ou.getOrganisation().getOrganisation_id()));
 			}
 			if (getModelObject().getRoom() != null && getModelObject().getRoom().getAppointment()) { //FIXME review
