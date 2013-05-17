@@ -67,7 +67,7 @@ public class MainPage extends BasePage {
 
 			@Override
 			public void onClick(AjaxRequestTarget target) {
-				updateContents(PROFILE_EDIT, target);
+				updateContents(PROFILE_MESSAGES, target);
 			}
 		});
 		add(new ConfirmableAjaxLink("logout", 634L) {
@@ -84,7 +84,7 @@ public class MainPage extends BasePage {
 
 			@Override
 			public void onClick(AjaxRequestTarget target) {
-				updateContents(PROFILE_MESSAGES, target);
+				updateContents(PROFILE_EDIT, target);
 			}
 		});
 		final AboutDialog about = new AboutDialog("aboutDialog");
