@@ -48,8 +48,10 @@ import org.apache.wicket.markup.html.form.PasswordTextField;
 import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.form.TextField;
+import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 
 import com.googlecode.wicket.jquery.ui.widget.dialog.AbstractFormDialog;
@@ -62,6 +64,7 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 	private DialogButton cancel = new DialogButton(WebSession.getString(1130));
 	private DialogButton delete = new DialogButton(WebSession.getString(814));
 	private final CalendarPanel calendar;
+	protected final FeedbackPanel feedback;
 	
 	@Override
 	public void setModelObject(Appointment object) {
@@ -72,6 +75,8 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 	public AppointmentDialog(String id, String title, CalendarPanel calendar, IModel<Appointment> model) {
 		super(id, title, model, true);
 		this.calendar = calendar;
+		setOutputMarkupId(true);
+		feedback = new FeedbackPanel("feedback");
 		form = new AppointmentForm("appForm", new CompoundPropertyModel<Appointment>(this.getModel()));
 		add(form);
 	}
@@ -106,13 +111,13 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 	
 	@Override
 	protected void onError(AjaxRequestTarget target) {
-		// FIXME feedback
+		target.add(feedback);
 	}
 
 	@Override
 	protected void onSubmit(AjaxRequestTarget target) {
 		getBean(AppointmentDao.class).update(form.getModelObject(), getUserId());
-		// FIXME feedback
+		target.add(feedback);
 		calendar.refresh(target);
 	}
 	
@@ -157,7 +162,8 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 			super(id, model);
 			setOutputMarkupId(true);
 			
-			add(new RequiredTextField<String>("appointmentName"));
+			add(feedback.setOutputMarkupId(true));
+			add(new RequiredTextField<String>("appointmentName").setLabel(Model.of(WebSession.getString(572))));
 			add(new TextArea<String>("appointmentDescription"));
 			add(new TextField<String>("appointmentLocation"));
 			add(new DateTimeField("appointmentStarttime"));
