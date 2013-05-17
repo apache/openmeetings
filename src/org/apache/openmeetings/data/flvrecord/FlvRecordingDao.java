@@ -228,7 +228,7 @@ public class FlvRecordingDao {
 			
 			return flvRecordingList;
 		} catch (Exception ex2) {
-			log.error("[getFlvRecordingByOwner]: ",ex2);
+			log.error("[getFlvRecordingRootByPublic]: ",ex2);
 		}
 		return null;
 	}

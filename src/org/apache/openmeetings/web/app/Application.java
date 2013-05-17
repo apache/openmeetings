@@ -97,6 +97,9 @@ public class Application extends AuthenticatedWebApplication {
 		
 		mountPage("signin", getSignInPageClass());
 		mountPage("notinited", NotInitedPage.class);
+		//TODO uncomment this and create faster solution for checking rights
+		//mountResource("/recordings/mp4/${id}", new Mp4RecordingResourceReference());
+		//mountResource("/recordings/ogg/${id}", new OggRecordingResourceReference());
 
 		getRootRequestMapperAsCompound().add(new HomePageMapper(getHomePage()) {
 			@Override

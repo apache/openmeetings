@@ -58,18 +58,18 @@ public class AjaxDownload extends AbstractAjaxBehavior {
 		}
 
 		// the timeout is needed to let Wicket release the channel
-		target.appendJavaScript("setTimeout(\"window.location.href='" + url
-				+ "'\", 100);");
+		target.appendJavaScript("setTimeout(\"window.location.href='" + url + "'\", 100);");
 	}
 
 	public void onRequest() {
-		ResourceStreamRequestHandler handler = new ResourceStreamRequestHandler(
-				getResourceStream(), getFileName());
-		handler.setContentDisposition(ContentDisposition.ATTACHMENT);
-		getComponent().getRequestCycle().scheduleRequestHandlerAfterCurrent(
-				handler);
+		ResourceStreamRequestHandler handler = new ResourceStreamRequestHandler(getResourceStream(), getFileName());
+		handler.setContentDisposition(getContentDisposition());
+		getComponent().getRequestCycle().scheduleRequestHandlerAfterCurrent(handler);
 	}
 
+	protected ContentDisposition getContentDisposition() {
+		return ContentDisposition.ATTACHMENT;
+	}
 	/**
 	 * Override this method for a file name which will let the browser prompt
 	 * with a save/open dialog.

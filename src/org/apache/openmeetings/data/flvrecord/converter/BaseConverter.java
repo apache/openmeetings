@@ -18,7 +18,11 @@
  */
 package org.apache.openmeetings.data.flvrecord.converter;
 
+import static org.apache.openmeetings.utils.OmFileHelper.MP4_EXTENSION;
+import static org.apache.openmeetings.utils.OmFileHelper.OGG_EXTENSION;
+
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
@@ -56,7 +60,7 @@ public abstract class BaseConverter {
 		return path;
 	}
 	
-	protected String getPathToFFMPEG() {
+	public String getPathToFFMPEG() {
 		return getPath("ffmpeg_path", "ffmpeg");
 	}
 
@@ -299,5 +303,60 @@ public abstract class BaseConverter {
 		} catch (Exception err) {
 			log.error("[stripAudioFromFLVs]", err);
 		}
+	}
+	
+	public void convertToMp4(FlvRecording r, List<ConverterProcessResult> returnLog) throws IOException {
+		//TODO add faststart, move filepaths to helpers
+		File file = OmFileHelper.getRecording(r.getFileName());
+		if (!file.exists()) {
+			return;
+		}
+		String path = file.getCanonicalPath();
+		String mp4path = path + MP4_EXTENSION;
+		// ffmpeg -i video_source_file.ext -vcodec libx264 -b 250k -bt 50k -acodec libfaac -ab 56k -ac 2 -s 480x320 video_out_file.mp4
+		String[] argv = new String[] {
+				getPathToFFMPEG(), //
+				"-i", path,
+				"-vcodec", "libx264",
+				"-b", "250k",
+				"-bt", "50k",
+				"-acodec", "libfaac",
+				"-ab", "56k",
+				"-ac", "2",
+				"-s", r.getFlvWidth() + "x" + r.getFlvHeight(), //
+				mp4path
+				};
+
+		if (log.isDebugEnabled()) {
+			log.debug("START generate MP4 ################# ");
+			String tString = "";
+			for (int i = 0; i < argv.length; i++) {
+				tString += argv[i] + " ";
+				// log.debug(" i " + i + " argv-i " + argv_fullFLV[i]);
+			}
+			log.debug(tString);
+			log.debug("END generate MP4 ################# ");
+		}
+		returnLog.add(ProcessHelper.executeScript("generate MP4", argv));
+		
+		argv = new String[] {
+				getPathToFFMPEG(), //
+				"-i", mp4path,
+				"-vcodec", "libtheora",
+				"-acodec", "libvorbis",
+				path + OGG_EXTENSION
+				};
+
+		if (log.isDebugEnabled()) {
+			log.debug("START generate MP4 ################# ");
+			String tString = "";
+			for (int i = 0; i < argv.length; i++) {
+				tString += argv[i] + " ";
+				// log.debug(" i " + i + " argv-i " + argv_fullFLV[i]);
+			}
+			log.debug(tString);
+			log.debug("END generate MP4 ################# ");
+		}
+		returnLog.add(ProcessHelper.executeScript("generate MP4", argv));
 	}
 }

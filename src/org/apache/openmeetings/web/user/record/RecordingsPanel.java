@@ -18,6 +18,10 @@
  */
 package org.apache.openmeetings.web.user.record;
 
+import static org.apache.openmeetings.utils.OmFileHelper.MP4_EXTENSION;
+import static org.apache.openmeetings.utils.OmFileHelper.OGG_EXTENSION;
+import static org.apache.openmeetings.utils.OmFileHelper.getMp4Recording;
+import static org.apache.openmeetings.utils.OmFileHelper.getOggRecording;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 
@@ -33,6 +37,8 @@ import org.apache.openmeetings.persistence.beans.domain.Organisation_Users;
 import org.apache.openmeetings.persistence.beans.flvrecord.FlvRecording;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.UserPanel;
+import org.apache.openmeetings.web.util.AjaxDownload;
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -45,12 +51,23 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.request.resource.ContentDisposition;
+import org.apache.wicket.util.resource.FileResourceStream;
+import org.apache.wicket.util.resource.IResourceStream;
 
 public class RecordingsPanel extends UserPanel {
 	private static final long serialVersionUID = 1321258690447136958L;
-	WebMarkupContainer info = new WebMarkupContainer("info");
-	WebMarkupContainer trees = new WebMarkupContainer("trees");
+	private WebMarkupContainer info = new WebMarkupContainer("info");
+	private WebMarkupContainer trees = new WebMarkupContainer("trees");
+	private WebMarkupContainer video = new WebMarkupContainer("video");
+	private WebMarkupContainer wait = new WebMarkupContainer("wait");
+	private WebMarkupContainer player = new WebMarkupContainer("player");
+	private WebMarkupContainer mp4stream = new WebMarkupContainer("mp4stream");
+	private WebMarkupContainer oggStream = new WebMarkupContainer("oggStream");
+	private final AjaxDownload mp4download;
+	private final AjaxDownload oggDownload;
 	private IModel<FlvRecording> rm = new CompoundPropertyModel<FlvRecording>(new FlvRecording());
+	boolean sourceSrcSet = false;
 
 	public RecordingsPanel(String id) {
 		super(id);
@@ -96,8 +113,60 @@ public class RecordingsPanel extends UserPanel {
 			.add(new Label("room_id"))
 			.setOutputMarkupId(true)
 			);
+		add(video.add(wait.setVisible(false), player.add(mp4stream, oggStream).setVisible(false)).setOutputMarkupId(true));
+		add(mp4download = new AjaxDownload() {
+			private static final long serialVersionUID = 3964935286359801781L;
+
+			@Override
+			protected String getFileName() {
+				return rm.getObject().getFileHash() + MP4_EXTENSION;
+			}
+			
+			@Override
+			protected ContentDisposition getContentDisposition() {
+				return ContentDisposition.INLINE;
+			}
+			
+			@Override
+			protected IResourceStream getResourceStream() {
+				return new FileResourceStream(getMp4Recording(rm.getObject().getFileHash())) {
+					private static final long serialVersionUID = -6932595565356990873L;
+
+					@Override
+					public String getContentType() {
+						return "video/mp4";
+					}
+				};
+			}
+		});
+		add(oggDownload = new AjaxDownload() {
+			private static final long serialVersionUID = 1455929706119733507L;
+
+			@Override
+			protected String getFileName() {
+				return rm.getObject().getFileHash() + OGG_EXTENSION;
+			}
+			
+			@Override
+			protected ContentDisposition getContentDisposition() {
+				return ContentDisposition.INLINE;
+			}
+			
+			@Override
+			protected IResourceStream getResourceStream() {
+				return new FileResourceStream(getOggRecording(rm.getObject().getFileHash())) {
+					private static final long serialVersionUID = -1374855048096998543L;
+
+					@Override
+					public String getContentType() {
+						return "video/ogg";
+					}
+				};
+			}
+		});
 	}
-	
+
+	//FIXME need to be generalized to use as Room files explorer
 	class RecordingTree extends DefaultNestedTree<FlvRecording> {
 		private static final long serialVersionUID = 2527395034256868022L;
 
@@ -140,13 +209,61 @@ public class RecordingsPanel extends UserPanel {
 					if (r.getIsFolder() == null || r.getIsFolder()) {
 						super.onClick(target);
 					} else {
-						target.add(info);
+						boolean videoExists = getMp4Recording(r.getFileHash()).exists();
+						if (!sourceSrcSet && videoExists) {
+							//CharSequence mp4Url = getRequestCycle().urlFor(new Mp4RecordingResourceReference(), new PageParameters().add("id", r.getFlvRecordingId()));
+							//CharSequence oggUrl = getRequestCycle().urlFor(new OggRecordingResourceReference(), new PageParameters().add("id", r.getFlvRecordingId()));
+							mp4stream.add(AttributeModifier.replace("src", Model.of("" + mp4download.getCallbackUrl())));
+							//mp4stream.add(AttributeModifier.replace("src", Model.of("" + mp4Url)));
+							oggStream.add(AttributeModifier.replace("src", Model.of("" + oggDownload.getCallbackUrl())));
+							//oggStream.add(AttributeModifier.replace("src", Model.of("" + oggUrl)));
+							sourceSrcSet = true;
+						}
+						player.setVisible(videoExists);
+						target.add(video, info);
 					}
 				}
 				
 				@Override
 				protected String getOtherStyleClass(FlvRecording t) {
-					return t.getIsFolder() ? super.getOtherStyleClass(t) : "recording-icon";
+					String style;
+					if (t.getFlvRecordingId() == -2) {
+						style = "my-recordings-icon";
+					} else if (t.getFlvRecordingId() == -1) {
+						style = "public-recordings-icon";
+					} else {
+						style = t.getIsFolder() ? super.getOtherStyleClass(t)
+								: (getMp4Recording(t.getFileHash()).exists() ? "recording-icon" : "broken-recording-icon");
+					}
+					return style;
+				}
+				
+				@Override
+				protected String getOpenStyleClass() {
+					String style;
+					FlvRecording r = getModelObject();
+					if (r.getFlvRecordingId() == -2) {
+						style = "my-recordings-icon";
+					} else if (r.getFlvRecordingId() == -1) {
+						style = "public-recordings-icon";
+					} else {
+						style = super.getOpenStyleClass();
+					}
+					return style;
+				}
+				
+				@Override
+				protected String getClosedStyleClass() {
+					String style;
+					FlvRecording r = getModelObject();
+					if (r.getFlvRecordingId() == -2) {
+						style = "my-recordings-icon";
+					} else if (r.getFlvRecordingId() == -1) {
+						style = "public-recordings-icon";
+					} else {
+						style = super.getOpenStyleClass();
+					}
+					return style;
 				}
 				
 				@Override
@@ -170,11 +287,7 @@ public class RecordingsPanel extends UserPanel {
 		
 		public Iterator<? extends FlvRecording> getChildren(FlvRecording node) {
 			if (node.getFlvRecordingId() < 0) {
-				List<FlvRecording> roots = new ArrayList<FlvRecording>();
-				for (Organisation_Users ou : getBean(UsersDao.class).get(getUserId()).getOrganisation_users()) {
-					roots.addAll(getBean(FlvRecordingDao.class).getFlvRecordingRootByOwner(ou.getOrganisation().getOrganisation_id()));
-				}
-				return roots.iterator();
+				return getBean(FlvRecordingDao.class).getFlvRecordingRootByOwner(getUserId()).iterator();
 			} else {
 				return super.getChildren(node);
 			}
@@ -193,7 +306,11 @@ public class RecordingsPanel extends UserPanel {
 		
 		public Iterator<? extends FlvRecording> getChildren(FlvRecording node) {
 			if (node.getFlvRecordingId() < 0) {
-				return getBean(FlvRecordingDao.class).getFlvRecordingRootByPublic(getUserId()).iterator();
+				List<FlvRecording> roots = new ArrayList<FlvRecording>();
+				for (Organisation_Users ou : getBean(UsersDao.class).get(getUserId()).getOrganisation_users()) {
+					roots.addAll(getBean(FlvRecordingDao.class).getFlvRecordingRootByPublic(ou.getOrganisation().getOrganisation_id()));
+				}
+				return roots.iterator();
 			} else {
 				return super.getChildren(node);
 			}

@@ -606,6 +606,8 @@ div.tableWrapper {
 }
 .recording .files .trees {
 	min-height: 400px;
+	overflow-x: hidden;
+	overflow-y: auto;
 }
 .recording .files .sizes table, .recording .files .info table {
 	width: 100%;
@@ -615,7 +617,13 @@ div.tableWrapper {
 	padding-right: 5px;
 	padding-left: 5px;
 }
-.recording .video {
+.recording .video .player {
+	width: 100%;
+	display: inline-block;
+	box-shadow: 0 0 10px 1px rgba(74, 137, 151, 0.5);
+}
+.recording .video .player video {
+	width: 100%;
 }
 .align-left {
 	float: left;
@@ -653,6 +661,20 @@ div.tableWrapper {
 .recording-icon {
 	padding-left: 18px;
 	background-image: url(images/film.png);
-	/*background-position: 0px 50%;*/
+	background-repeat: no-repeat;
+}
+.broken-recording-icon {
+	padding-left: 18px;
+	background-image: url(images/film_error.png);
+	background-repeat: no-repeat;
+}
+.my-recordings-icon {
+	padding-left: 18px;
+	background-image: url(images/house_link.png);
+	background-repeat: no-repeat;
+}
+.public-recordings-icon {
+	padding-left: 18px;
+	background-image: url(images/world_link.png);
 	background-repeat: no-repeat;
 }

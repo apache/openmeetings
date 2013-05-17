@@ -69,6 +69,8 @@ public class OmFileHelper {
 	public static final String bigImagePrefix = "_big_";
 	public static final String thumbImagePrefix = "_thumb_";
 	public static final String dashboardFile = "dashboard.xml";
+	public static final String MP4_EXTENSION = ".mp4";
+	public static final String OGG_EXTENSION = ".ogg";
 
 	public static void setOmHome(File omHome) {
 		OmFileHelper.OM_HOME = omHome;
@@ -173,6 +175,18 @@ public class OmFileHelper {
 	
 	public static File getStreamsHibernateDir() {
 		return getDir(getStreamsDir(), HIBERNATE_DIR);
+	}
+	
+	public static File getRecording(String name) {
+		return new File(getDir(getStreamsDir(), HIBERNATE_DIR), name);
+	}
+	
+	public static File getMp4Recording(String name) {
+		return new File(getDir(getStreamsDir(), HIBERNATE_DIR), name + MP4_EXTENSION);
+	}
+	
+	public static File getOggRecording(String name) {
+		return new File(getDir(getStreamsDir(), HIBERNATE_DIR), name + OGG_EXTENSION);
 	}
 	
 	public static File getStreamsSubDir(Long id) {

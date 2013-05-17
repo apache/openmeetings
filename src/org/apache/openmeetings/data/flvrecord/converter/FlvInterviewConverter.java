@@ -452,7 +452,7 @@ public class FlvInterviewConverter extends BaseConverter {
 			flvRecording.setFlvHeight(flvHeight);
 
 			String[] argv_fullFLV = new String[] {
-					this.getPathToFFMPEG(), //
+					getPathToFFMPEG(), //
 					"-i", inputScreenFullFlv, "-i", outputFullWav,
 					"-ar",
 					"22050", //
@@ -535,6 +535,7 @@ public class FlvInterviewConverter extends BaseConverter {
 			flvRecording.setAlternateDownload(alternateDownloadName);
 
 			flvRecordingDaoImpl.updateFlvRecording(flvRecording);
+			convertToMp4(flvRecording, returnLog);
 
 			flvRecordingLogDaoImpl
 					.deleteFLVRecordingLogByRecordingId(flvRecording

@@ -294,7 +294,8 @@ public class FlvRecorderConverter extends BaseConverter {
 			flvRecording.setAlternateDownload(alternateDownloadName);
 
 			this.flvRecordingDaoImpl.updateFlvRecording(flvRecording);
-
+			convertToMp4(flvRecording, returnLog);
+			
 			for (ConverterProcessResult returnMap : returnLog) {
 				this.flvRecordingLogDaoImpl.addFLVRecordingLog(
 						"generateFFMPEG", flvRecording, returnMap);

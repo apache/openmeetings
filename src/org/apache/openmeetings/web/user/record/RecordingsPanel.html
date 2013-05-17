@@ -50,14 +50,6 @@
 				<div wicket:id="info" class="info">
 					<table>
 						<tr>
-							<td>Shift</td>
-							<td></td>
-						</tr>
-						<tr>
-							<td>Loudness</td>
-							<td></td>
-						</tr>
-						<tr>
 							<td><wicket:ommessage key="863"/></td>
 							<td><span wicket:id="fileName"></span></td>
 						</tr>
@@ -73,6 +65,8 @@
 							<td><wicket:ommessage key="874"/></td>
 							<td><span wicket:id="room_id"></span></td>
 						</tr>
+					</table>
+					<table>
 						<tr>
 							<td><input type="button" wicket:ommessage="value:884"/></td>
 							<td><input type="button" wicket:ommessage="value:883"/></td>
@@ -80,7 +74,16 @@
 					</table>
 				</div>
 			</td>
-			<td class="video"></td>
+			<td class="video" wicket:id="video">
+				<div wicket:id="wait"></div>
+				<div wicket:id="player" class="player">
+					<video controls>
+						<source wicket:id="mp4stream" type="video/mp4"/>
+						<source wicket:id="oggStream" type="video/ogg"/>
+						Your browser does not support HTML5 video. <!-- FIXME hardcoded -->
+					</video>
+				</div>
+			</td>
 		</tr>
 	</table>
 </wicket:panel>
