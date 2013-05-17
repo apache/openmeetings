@@ -35,6 +35,8 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.authentication.IAuthenticationStrategy;
+import org.apache.wicket.markup.head.CssContentHeaderItem;
+import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
@@ -46,9 +48,10 @@ import org.apache.wicket.markup.html.form.StatelessForm;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.PropertyModel;
 
+import com.googlecode.wicket.jquery.core.JQueryBehavior;
+import com.googlecode.wicket.jquery.core.Options;
 import com.googlecode.wicket.jquery.ui.effect.JQueryEffectBehavior;
 import com.googlecode.wicket.jquery.ui.widget.dialog.AbstractFormDialog;
-import com.googlecode.wicket.jquery.ui.widget.dialog.DialogBehavior;
 import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
 
 public class SignInDialog extends AbstractFormDialog<String> {
@@ -77,15 +80,34 @@ public class SignInDialog extends AbstractFormDialog<String> {
 		this.f = f;
 	}
 	
-	//TODO need to be removed
 	@Override
-	public DialogBehavior newWidgetBehavior(String selector) {
-		DialogBehavior db = super.newWidgetBehavior(selector);
-		db.setOption("autoOpen", true);
-		db.setOption("closeOnEscape", false);
-		db.setOption("resizable", false);
-		db.setOption("open", "function(event, ui) {$('.ui-dialog-titlebar-close').hide();}");
-		return db;
+	public void renderHead(IHeaderResponse response) {
+		super.renderHead(response);
+		//to remove upper-right close button
+		response.render(new CssContentHeaderItem(".no-close .ui-dialog-titlebar-close { display: none; }", "dialog-noclose", ""));
+	}
+	
+	@Override
+	protected void onInitialize() {
+		super.onInitialize();
+		add(new JQueryBehavior(JQueryWidget.getSelector(this), "dialog") {
+			private static final long serialVersionUID = -249782023133645704L;
+
+			@Override
+            protected String $()
+            {
+                return this.$(Options.asString("open"));
+            }
+        });
+	}
+	
+	@Override
+	protected void onConfigure(JQueryBehavior behavior) {
+		super.onConfigure(behavior);
+		//behavior.setOption("autoOpen", true); //TODO need to be updated as soon as API will be added
+		behavior.setOption("closeOnEscape", false);
+        behavior.setOption("dialogClass", Options.asString("no-close"));
+        behavior.setOption("resizable", false);
 	}
 	
 	@Override

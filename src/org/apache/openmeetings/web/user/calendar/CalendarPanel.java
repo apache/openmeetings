@@ -31,7 +31,6 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.util.time.Duration;
 
-import com.googlecode.wicket.jquery.core.JQueryAbstractBehavior;
 import com.googlecode.wicket.jquery.core.Options;
 import com.googlecode.wicket.jquery.ui.calendar.Calendar;
 import com.googlecode.wicket.jquery.ui.calendar.CalendarView;
@@ -75,22 +74,7 @@ public class CalendarPanel extends UserPanel {
 			@Override
 			protected void onInitialize() {
 				super.onInitialize();
-				add(new JQueryAbstractBehavior("calendar-functions") {
-					private static final long serialVersionUID = -4154770823754288544L;
-
-					@Override
-					protected String $() {
-						return "$(function() { $(window).on('resize', setCalendarHeight); });\n"
-							+ "\n"
-							+ "function getCalendarHeight() { \n"
-							+  "\treturn $(window).height() - $('#" + getMarkupId() + "').position().top - 20;\n"
-							+ "}\n"
-							+ "function setCalendarHeight() { \n"
-							+  "\t$('#" + getMarkupId() + "').fullCalendar('option', 'height', getCalendarHeight());\n"
-							+ "}\n"
-							+ "setCalendarHeight();";
-					}
-				});
+				add(new CalendarFunctionsBehavior(getMarkupId()));
 			}
 			
 			@Override
