@@ -28,6 +28,8 @@ import org.apache.openmeetings.web.user.dashboard.PrivateRoomsWidgetDescriptor;
 import org.apache.openmeetings.web.user.dashboard.RssWidgetDescriptor;
 import org.apache.openmeetings.web.user.dashboard.StartWidgetDescriptor;
 import org.apache.openmeetings.web.user.dashboard.WelcomeWidgetDescriptor;
+import org.apache.openmeetings.web.util.Mp4RecordingResourceReference;
+import org.apache.openmeetings.web.util.OggRecordingResourceReference;
 import org.apache.openmeetings.web.util.UserDashboardPersister;
 import org.apache.wicket.Page;
 import org.apache.wicket.RestartResponseException;
@@ -97,9 +99,8 @@ public class Application extends AuthenticatedWebApplication {
 		
 		mountPage("signin", getSignInPageClass());
 		mountPage("notinited", NotInitedPage.class);
-		//TODO uncomment this and create faster solution for checking rights
-		//mountResource("/recordings/mp4/${id}", new Mp4RecordingResourceReference());
-		//mountResource("/recordings/ogg/${id}", new OggRecordingResourceReference());
+		mountResource("/recordings/mp4/${id}", new Mp4RecordingResourceReference());
+		mountResource("/recordings/ogg/${id}", new OggRecordingResourceReference());
 
 		getRootRequestMapperAsCompound().add(new HomePageMapper(getHomePage()) {
 			@Override

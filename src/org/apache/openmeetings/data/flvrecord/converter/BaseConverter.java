@@ -307,7 +307,7 @@ public abstract class BaseConverter {
 	
 	public void convertToMp4(FlvRecording r, List<ConverterProcessResult> returnLog) throws IOException {
 		//TODO add faststart, move filepaths to helpers
-		File file = OmFileHelper.getRecording(r.getFileName());
+		File file = OmFileHelper.getRecording(r.getFileHash());
 		if (!file.exists()) {
 			return;
 		}

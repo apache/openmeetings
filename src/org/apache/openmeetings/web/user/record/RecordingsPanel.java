@@ -18,10 +18,7 @@
  */
 package org.apache.openmeetings.web.user.record;
 
-import static org.apache.openmeetings.utils.OmFileHelper.MP4_EXTENSION;
-import static org.apache.openmeetings.utils.OmFileHelper.OGG_EXTENSION;
 import static org.apache.openmeetings.utils.OmFileHelper.getMp4Recording;
-import static org.apache.openmeetings.utils.OmFileHelper.getOggRecording;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 
@@ -37,8 +34,8 @@ import org.apache.openmeetings.persistence.beans.domain.Organisation_Users;
 import org.apache.openmeetings.persistence.beans.flvrecord.FlvRecording;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.UserPanel;
-import org.apache.openmeetings.web.util.AjaxDownload;
-import org.apache.wicket.AttributeModifier;
+import org.apache.openmeetings.web.util.Mp4RecordingResourceReference;
+import org.apache.openmeetings.web.util.OggRecordingResourceReference;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -51,9 +48,10 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
-import org.apache.wicket.request.resource.ContentDisposition;
-import org.apache.wicket.util.resource.FileResourceStream;
-import org.apache.wicket.util.resource.IResourceStream;
+import org.apache.wicket.model.util.ListModel;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.wicketstuff.html5.media.MediaSource;
+import org.wicketstuff.html5.media.video.Html5Video;
 
 public class RecordingsPanel extends UserPanel {
 	private static final long serialVersionUID = 1321258690447136958L;
@@ -61,13 +59,11 @@ public class RecordingsPanel extends UserPanel {
 	private WebMarkupContainer trees = new WebMarkupContainer("trees");
 	private WebMarkupContainer video = new WebMarkupContainer("video");
 	private WebMarkupContainer wait = new WebMarkupContainer("wait");
-	private WebMarkupContainer player = new WebMarkupContainer("player");
-	private WebMarkupContainer mp4stream = new WebMarkupContainer("mp4stream");
-	private WebMarkupContainer oggStream = new WebMarkupContainer("oggStream");
-	private final AjaxDownload mp4download;
-	private final AjaxDownload oggDownload;
+	private final Mp4RecordingResourceReference mp4res = new Mp4RecordingResourceReference();
+	private final OggRecordingResourceReference oggres = new OggRecordingResourceReference();
+	private final WebMarkupContainer player;
+	private final IModel<List<MediaSource>> playerModel = new ListModel<MediaSource>(new ArrayList<MediaSource>()); 
 	private IModel<FlvRecording> rm = new CompoundPropertyModel<FlvRecording>(new FlvRecording());
-	boolean sourceSrcSet = false;
 
 	public RecordingsPanel(String id) {
 		super(id);
@@ -113,57 +109,20 @@ public class RecordingsPanel extends UserPanel {
 			.add(new Label("room_id"))
 			.setOutputMarkupId(true)
 			);
-		add(video.add(wait.setVisible(false), player.add(mp4stream, oggStream).setVisible(false)).setOutputMarkupId(true));
-		add(mp4download = new AjaxDownload() {
-			private static final long serialVersionUID = 3964935286359801781L;
+		player = new Html5Video("player", playerModel) {
+			private static final long serialVersionUID = -6058309447222765121L;
 
 			@Override
-			protected String getFileName() {
-				return rm.getObject().getFileHash() + MP4_EXTENSION;
+			protected boolean isAutoPlay() {
+				return false;
 			}
 			
 			@Override
-			protected ContentDisposition getContentDisposition() {
-				return ContentDisposition.INLINE;
+			protected boolean isControls() {
+				return true;
 			}
-			
-			@Override
-			protected IResourceStream getResourceStream() {
-				return new FileResourceStream(getMp4Recording(rm.getObject().getFileHash())) {
-					private static final long serialVersionUID = -6932595565356990873L;
-
-					@Override
-					public String getContentType() {
-						return "video/mp4";
-					}
-				};
-			}
-		});
-		add(oggDownload = new AjaxDownload() {
-			private static final long serialVersionUID = 1455929706119733507L;
-
-			@Override
-			protected String getFileName() {
-				return rm.getObject().getFileHash() + OGG_EXTENSION;
-			}
-			
-			@Override
-			protected ContentDisposition getContentDisposition() {
-				return ContentDisposition.INLINE;
-			}
-			
-			@Override
-			protected IResourceStream getResourceStream() {
-				return new FileResourceStream(getOggRecording(rm.getObject().getFileHash())) {
-					private static final long serialVersionUID = -1374855048096998543L;
-
-					@Override
-					public String getContentType() {
-						return "video/ogg";
-					}
-				};
-			}
-		});
+		};
+		add(video.add(wait.setVisible(false), player.setVisible(false)).setOutputMarkupId(true));
 	}
 
 	//FIXME need to be generalized to use as Room files explorer
@@ -210,14 +169,11 @@ public class RecordingsPanel extends UserPanel {
 						super.onClick(target);
 					} else {
 						boolean videoExists = getMp4Recording(r.getFileHash()).exists();
-						if (!sourceSrcSet && videoExists) {
-							//CharSequence mp4Url = getRequestCycle().urlFor(new Mp4RecordingResourceReference(), new PageParameters().add("id", r.getFlvRecordingId()));
-							//CharSequence oggUrl = getRequestCycle().urlFor(new OggRecordingResourceReference(), new PageParameters().add("id", r.getFlvRecordingId()));
-							mp4stream.add(AttributeModifier.replace("src", Model.of("" + mp4download.getCallbackUrl())));
-							//mp4stream.add(AttributeModifier.replace("src", Model.of("" + mp4Url)));
-							oggStream.add(AttributeModifier.replace("src", Model.of("" + oggDownload.getCallbackUrl())));
-							//oggStream.add(AttributeModifier.replace("src", Model.of("" + oggUrl)));
-							sourceSrcSet = true;
+						if (videoExists) {
+							PageParameters pp = new PageParameters().add("id", r.getFlvRecordingId());
+							playerModel.setObject(Arrays.asList(
+									new MediaSource("" + getRequestCycle().urlFor(mp4res, pp), "video/mp4")
+									, new MediaSource("" + getRequestCycle().urlFor(oggres, pp), "video/ogg")));
 						}
 						player.setVisible(videoExists);
 						target.add(video, info);

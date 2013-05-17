@@ -38,7 +38,6 @@ import org.apache.wicket.util.string.StringValue;
 
 public abstract class RecordingResourceReference extends ResourceReference {
 	private static final long serialVersionUID = -7420364030290560099L;
-	private File file;
 
 	public RecordingResourceReference(Class<? extends RecordingResourceReference> clazz) {
 		super(clazz, "recordings");
@@ -46,42 +45,47 @@ public abstract class RecordingResourceReference extends ResourceReference {
 
 	@Override
 	public IResource getResource() {
-		
 		return new ResourceStreamResource() {
 			private static final long serialVersionUID = -961779297961218109L;
+			private File file;
 			
 			@Override
 			protected IResourceStream getResourceStream() {
 				return file == null ? null : new FileResourceStream(file) {
-					private static final long serialVersionUID = -6932595565356990873L;
-					
+					private static final long serialVersionUID = 2546785247219805747L;
+
 					@Override
 					public String getContentType() {
 						return RecordingResourceReference.this.getContentType();
 					}
 				};
-
 			}
 			
 			@Override
 			protected ResourceResponse newResourceResponse(Attributes attributes) {
+				ResourceResponse rr = new ResourceResponse();
 				FlvRecording r = getRecording(attributes);
 				if (r != null) {
-					setFileName(r.getFileHash());
 					file = getFile(r);
+					rr.setFileName(getFileName(r));
+					rr.setContentType(RecordingResourceReference.this.getContentType());
+					rr = super.newResourceResponse(attributes);
+				} else {
+					rr.setError(404);
 				}
-				return super.newResourceResponse(attributes);
+				return rr;
 			}
 		};
 	}
 	
 	abstract String getContentType();
+	abstract String getFileName(FlvRecording r);
 	abstract File getFile(FlvRecording r);
 	
 	private FlvRecording getRecording(Attributes attributes) {
 		PageParameters params = attributes.getParameters();
 		StringValue id = params.get("id");
-		if (!id.isEmpty()) {
+		if (getUserId() > 0 && !id.isEmpty()) {
 			FlvRecording r = getBean(FlvRecordingDao.class).getFlvRecordingById(id.toLongObject());
 			if (r.getOwnerId() == null || getUserId() == r.getOwnerId()) {
 				return r;

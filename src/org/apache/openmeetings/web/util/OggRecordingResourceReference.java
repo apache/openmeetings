@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.web.util;
 
+import static org.apache.openmeetings.utils.OmFileHelper.OGG_EXTENSION;
 import static org.apache.openmeetings.utils.OmFileHelper.getOggRecording;
 
 import java.io.File;
@@ -34,6 +35,11 @@ public class OggRecordingResourceReference extends RecordingResourceReference {
 	@Override
 	public String getContentType() {
 		return "video/ogg";
+	}
+	
+	@Override
+	String getFileName(FlvRecording r) {
+		return r.getFileHash() + OGG_EXTENSION;
 	}
 	
 	@Override
