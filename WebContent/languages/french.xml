@@ -525,7 +525,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>Utilisateur</value>
   </string>
   <string id="167" name="uservalue_levelid2">
-    <value>Mode</value>
+    <value>Modérateur</value>
   </string>
   <string id="168" name="uservalue_levelid3">
     <value>Admin</value>
@@ -3480,7 +3480,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>Nouvelle conférence $APP_NAME :</value>
   </string>
   <string id="1152" name="calendar invitation message">
-    <value>Détails :&lt;br/&gt;</value>
+    <value>Détails :</value>
   </string>
   <string id="1153" name="calendar invitation message">
     <value>Début :</value>
@@ -4143,7 +4143,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>Domaine</value>
   </string>
   <string id="1373" name="login_screen">
-    <value>visitez</value>
+    <value>Aller à</value>
   </string>
   <string id="1374" name="login_screen">
     <value>rouge-orange</value>
@@ -4539,7 +4539,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>Publier. Utilisateur :</value>
   </string>
   <string id="1505" name="cmd_line_admin">
-    <value>Pour économiser du temps et de la bande passante vous pouvez utiliser la ligne de commande pour sauvegarder/restaurer/mettre à niveau votre système :\n 1) Aller dans le répertoire d'installation d'OM (par ex. /opt/red5) \n 2) Arrêter OM (par ex. ./red5-shutdown.sh)\n 3) ./admin.sh -b -file ~/nom_du_backup.zip (créer la sauvegarde d'OM)\n 4) télécharger la nouvelle version d'OM\n 5) mv /opt/red5 /opt.red5.bak (déplacer la version d'OM qui fonctionne par sécurité.)\n 6) extraire la nouvelle version d'OM dans /opt/red5\n 7) ./admin.sh -i -file ~/today_om_backup.zip (ou './admin.sh -i -file ~/today_om_backup.zip --db-type mysql --db-user om_user --db-pass om_user_pass' dans le cas d'une BD qui n'est pas celle par défaut )\n 8) Démarrer OM\n</value>
+    <value>Pour économiser du temps et de la bande passante vous pouvez utiliser la ligne de commande pour sauvegarder/restaurer/mettre à niveau votre système :&lt;br&gt; 1) Aller dans le répertoire d'installation d'OM (par ex. /opt/red5)&lt;br&gt; 2) Arrêter OM (par ex. ./red5-shutdown.sh)&lt;br&gt; 3) ./admin.sh -b -file ~/nom_du_backup.zip (créer la sauvegarde d'OM)&lt;br&gt; 4) télécharger la nouvelle version d'OM&lt;br&gt; 5) mv /opt/red5 /opt.red5.bak (déplacer la version d'OM qui fonctionne par sécurité.)&lt;br&gt; 6) extraire la nouvelle version d'OM dans /opt/red5&lt;br&gt; 7) ./admin.sh -i -file ~/today_om_backup.zip (ou './admin.sh -i -file ~/today_om_backup.zip --db-type mysql --db-user om_user --db-pass om_user_pass' dans le cas d'une BD qui n'est pas celle par défaut )&lt;br&gt; 8) Démarrer OM</value>
   </string>
   <string id="1506" name="public_room_tooltip">
     <value>Salles pour tous les utilisateurs</value>
@@ -4644,28 +4644,28 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>Voulez-vous vraiment donner l'audio exclusif à cet utilisateur ?</value>
   </string>
   <string id="1540" name="no_timezone">
-    <value>Please specify your timezone</value>
+    <value>Veuillez spécifier votre fuseau horaire</value>
   </string>
   <string id="1541" name="conference_room_type">
-    <value>conference (1-25 users)</value>
+    <value>conférence (1-25 utilisateurs)</value>
   </string>
   <string id="1542" name="conference_room_type">
-    <value>restricted (1-150 users)</value>
+    <value>restreint (1-150 utilisateurs)</value>
   </string>
   <string id="1543" name="conference_room_type">
-    <value>interview (1:1 meeting with recording)</value>
+    <value>interview (1:1 réunion avec enregistrement)</value>
   </string>
   <string id="1544" name="duplicate_key_error">
-    <value>Configuration with given key already exists, please specify another key or edit existent configuration</value>
+    <value>Une configuration avec cette clé existe déjà, veuillez spécifier une autre clé ou éditer la configuration existante</value>
   </string>
   <string id="1545" name="content_is_saving">
-    <value>Content is Saving, Please wait.</value>
+    <value>Sauvegarde, veuillez patienter.</value>
   </string>
   <string id="1546" name="widget_welcome">
-    <value>Welcome</value>
+    <value>Bienvenue</value>
   </string>
   <string id="1547" name="widget_welcome_desc">
-    <value>Widget displaying basic user info and support links</value>
+    <value>Widget affichant les infos de base des utilisateurs et les liens pour le support</value>
   </string>
   <string id="1548" name="widgets_tab">
     <value>Widgets</value>
