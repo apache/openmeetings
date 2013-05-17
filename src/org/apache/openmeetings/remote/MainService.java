@@ -329,8 +329,7 @@ public class MainService implements IPendingServiceCallback {
 				LdapConfig ldapConfig = ldapConfigDao.get(ldapConfigId);
 
 				String ldapLogin = usernameOrEmail;
-				if (ldapConfig.getAddDomainToUserName() != null
-						&& ldapConfig.getAddDomainToUserName()) {
+				if (ldapConfig.getAddDomainToUserName()) {
 					ldapLogin = usernameOrEmail + "@" + ldapConfig.getDomain();
 				}
 

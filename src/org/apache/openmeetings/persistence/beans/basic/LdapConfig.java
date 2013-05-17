@@ -63,7 +63,7 @@ public class LdapConfig implements Serializable, IDataProviderEntity {
 	
 	@Column(name="add_domain_to_user_name")
 	@Element(data=true)
-	public Boolean addDomainToUserName;
+	public boolean addDomainToUserName;
 	
 	@Column(name="domain")
 	@Element(data=true)
@@ -71,7 +71,7 @@ public class LdapConfig implements Serializable, IDataProviderEntity {
 	
 	@Column(name="is_active")
 	@Element(data=true)
-	public Boolean isActive;
+	public boolean isActive;
 	
 	@Column(name="inserted")
 	public Date inserted;
@@ -118,10 +118,10 @@ public class LdapConfig implements Serializable, IDataProviderEntity {
 		this.configFileName = configFileName;
 	}
     
-	public Boolean getAddDomainToUserName() {
+	public boolean getAddDomainToUserName() {
 		return addDomainToUserName;
 	}
-	public void setAddDomainToUserName(Boolean addDomainToUserName) {
+	public void setAddDomainToUserName(boolean addDomainToUserName) {
 		this.addDomainToUserName = addDomainToUserName;
 	}
     
@@ -132,10 +132,10 @@ public class LdapConfig implements Serializable, IDataProviderEntity {
 		this.domain = domain;
 	}
     
-	public Boolean getIsActive() {
+	public boolean getIsActive() {
 		return isActive;
 	}
-	public void setIsActive(Boolean isActive) {
+	public void setIsActive(boolean isActive) {
 		this.isActive = isActive;
 	}
 	
@@ -181,5 +181,4 @@ public class LdapConfig implements Serializable, IDataProviderEntity {
 	public void setComment(String comment) {
 		this.comment = comment;
 	}
-	
 }

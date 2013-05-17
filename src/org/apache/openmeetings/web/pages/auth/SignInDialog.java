@@ -167,6 +167,9 @@ public class SignInDialog extends AbstractFormDialog<String> {
 	@Override
 	protected void onSubmit(AjaxRequestTarget target) {
 		ldapConfigFileName = domain.getConfigFileName() == null ? "" : domain.getConfigFileName();
+		if (domain.getAddDomainToUserName()) {
+			login = login + "@" + domain.getDomain();
+		}
 		OmAuthenticationStrategy strategy = getAuthenticationStrategy();
 		if (WebSession.get().signIn(login, password, ldapConfigFileName)) {
  			setResponsePage(Application.get().getHomePage());

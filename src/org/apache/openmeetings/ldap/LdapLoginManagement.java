@@ -308,19 +308,14 @@ public class LdapLoginManagement {
 		 ***/
 
 		// Get custom Ldap attributes mapping
-		String ldap_user_attr_lastname = configData
-				.get(CONFIGKEY_LDAP_KEY_LASTNAME);
-		String ldap_user_attr_firstname = configData
-				.get(CONFIGKEY_LDAP_KEY_FIRSTNAME);
+		String ldap_user_attr_lastname = configData.get(CONFIGKEY_LDAP_KEY_LASTNAME);
+		String ldap_user_attr_firstname = configData.get(CONFIGKEY_LDAP_KEY_FIRSTNAME);
 		String ldap_user_attr_mail = configData.get(CONFIGKEY_LDAP_KEY_MAIL);
-		String ldap_user_attr_street = configData
-				.get(CONFIGKEY_LDAP_KEY_STREET);
-		String ldap_user_attr_additional_name = configData
-				.get(CONFIGKEY_LDAP_KEY_ADDITIONAL_NAME);
+		String ldap_user_attr_street = configData.get(CONFIGKEY_LDAP_KEY_STREET);
+		String ldap_user_attr_additional_name = configData.get(CONFIGKEY_LDAP_KEY_ADDITIONAL_NAME);
 		String ldap_user_attr_fax = configData.get(CONFIGKEY_LDAP_KEY_FAX);
 		String ldap_user_attr_zip = configData.get(CONFIGKEY_LDAP_KEY_ZIP);
-		String ldap_user_attr_country = configData
-				.get(CONFIGKEY_LDAP_KEY_COUNTRY);
+		String ldap_user_attr_country = configData.get(CONFIGKEY_LDAP_KEY_COUNTRY);
 		String ldap_user_attr_town = configData.get(CONFIGKEY_LDAP_KEY_TOWN);
 		String ldap_user_attr_phone = configData.get(CONFIGKEY_LDAP_KEY_PHONE);
 		String ldap_user_attr_timezone = configData.get(CONFIGKEY_LDAP_TIMEZONE_NAME);
@@ -372,8 +367,9 @@ public class LdapLoginManagement {
 		// Auth Type
 		String ldap_auth_type = configData.get(CONFIGKEY_LDAP_AUTH_TYPE);
 
-		if (ldap_auth_type == null)
+		if (ldap_auth_type == null) {
 			ldap_auth_type = "";
+		}
 
 		if (!isValidAuthType(ldap_auth_type)) {
 			log.error("ConfigKey in Ldap Config contains invalid auth type : '"
@@ -383,19 +379,16 @@ public class LdapLoginManagement {
 		}
 
 		// Filter for Search of UserData
-		String ldap_search_filter = "(" + ldap_fieldname_user_principal + "="
-				+ user + ")";
+		String ldap_search_filter = "(" + ldap_fieldname_user_principal + "=" + user + ")";
 
-		log.debug("Searching userdata with LDAP Search Filter :"
-				+ ldap_search_filter);
+		log.debug("Searching userdata with LDAP Search Filter :" + ldap_search_filter);
 
 		// replace : -> in config = are replaced by : to be able to build valid
 		// key=value pairs
 		ldap_search_scope = ldap_search_scope.replaceAll(":", "=");
 		ldap_admin_dn = ldap_admin_dn.replaceAll(":", "=");
 
-		LdapAuthBase lAuth = new LdapAuthBase(ldap_url, ldap_admin_dn,
-				ldap_passwd, ldap_auth_type);
+		LdapAuthBase lAuth = new LdapAuthBase(ldap_url, ldap_admin_dn, ldap_passwd, ldap_auth_type);
 
 		log.debug("authenticating admin...");
 		lAuth.authenticateUser(ldap_admin_dn, ldap_passwd);
@@ -409,8 +402,7 @@ public class LdapLoginManagement {
 			HashMap<String, String> uidCnDictionary = lAuth.getUidCnHashMap(
 					ldap_search_scope, ldap_search_filter, ldap_fieldname_user_principal);
 			if (uidCnDictionary.get(user) != null) {
-				ldapUserDN = uidCnDictionary.get(user) + ","
-						+ ldap_search_scope;
+				ldapUserDN = uidCnDictionary.get(user) + "," + ldap_search_scope;
 				log.debug("Authentication with DN: " + ldapUserDN);
 			}
 			try {
@@ -424,8 +416,9 @@ public class LdapLoginManagement {
 			}
 		} else {
 			try {
-				if (!lAuth.authenticateUser(user, passwd))
+				if (!lAuth.authenticateUser(user, passwd)) {
 					return new Long(-11);
+				}
 			} catch (Exception e) {
 				log.error("Error on LdapAuth : " + e.getMessage());
 				return null;
@@ -438,7 +431,6 @@ public class LdapLoginManagement {
 
 		try {
 			u = userManager.getUserByLogin(user);
-
 		} catch (Exception e) {
 			log.error("Error retrieving Userdata : " + e.getMessage());
 		}
