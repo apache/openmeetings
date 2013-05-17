@@ -102,6 +102,7 @@ public class CalendarPanel extends UserPanel {
 			@Override
 			public void onSelect(AjaxRequestTarget target, CalendarView view, Date start, Date end, boolean allDay) {
 				Appointment a = new Appointment();
+				a.setAppointmentName(WebSession.getString(1444));
 				if (CalendarView.month == view && start.equals(end)) {
 					java.util.Calendar now = WebSession.getCalendar();
 					java.util.Calendar cal = WebSession.getCalendar();
