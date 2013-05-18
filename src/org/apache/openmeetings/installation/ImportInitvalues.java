@@ -315,7 +315,7 @@ public class ImportInitvalues {
 
 		// "1" == "EN"
 		configurationDao.add(DEFAUT_LANG_KEY, cfg.defaultLangId,
-				null, "Default System Language ID see language.xml");
+				null, "Default System Language ID see languages.xml");
 
 		configurationDao.add("swftools_zoom", cfg.swfZoom, null,
 				"dpi for conversion of PDF to SWF");
