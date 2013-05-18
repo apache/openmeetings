@@ -28,6 +28,5 @@ function setCalendarHeight() {
 }
 
 $(function() {
-    //$(window).on('resize', setCalendarHeight);
     $(window).load(function() { setCalendarHeight(); } );
 });

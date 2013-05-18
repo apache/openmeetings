@@ -61,12 +61,12 @@ public class CalendarPanel extends UserPanel {
 		add(dialog);
 		
 		Options options = new Options();
-		//options.set("theme", true);
 		options.set("header", "{left: 'prevYear,prev,next,nextYear today', center: 'title', right: 'month,agendaWeek,agendaDay'}");
 		options.set("allDaySlot", false);
 		options.set("axisFormat", "'HH(:mm)'");
 		options.set("defaultEventMinutes", 60);
 		options.set("timeFormat", "{agenda: 'HH:mm{ - HH:mm}', '': 'HH(:mm)'}");
+		options.set("windowResize", "function(view){setCalendarHeight();}");
 		
 		calendar = new Calendar("calendar", new AppointmentModel(), options) {
 			private static final long serialVersionUID = 8442068089963449950L;
