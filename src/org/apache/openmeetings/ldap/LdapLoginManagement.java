@@ -360,9 +360,6 @@ public class LdapLoginManagement {
 		if (ldap_user_attr_timezone == null) {
 			ldap_user_attr_timezone = LDAP_KEY_TIMEZONE;
 		}
-		if (ldap_user_picture_uri == null) {
-			ldap_user_picture_uri = LDAP_KEY_PICTURE_URI;
-		}
 
 		// Auth Type
 		String ldap_auth_type = configData.get(CONFIGKEY_LDAP_AUTH_TYPE);
@@ -448,7 +445,9 @@ public class LdapLoginManagement {
 		attributes.add(ldap_user_attr_town); // Town
 		attributes.add(ldap_user_attr_phone); // Phone
 		attributes.add(ldap_user_attr_timezone); // timezone
-		attributes.add(ldap_user_picture_uri); //picture uri
+		if (ldap_user_picture_uri != null) {
+			attributes.add(ldap_user_picture_uri); //picture uri
+		}
 		
 		HashMap<String, String> ldapAttrs = new HashMap<String, String>();
 		ldapAttrs.put("lastnameAttr", ldap_user_attr_lastname);
@@ -462,7 +461,9 @@ public class LdapLoginManagement {
 		ldapAttrs.put("townAttr", ldap_user_attr_town);
 		ldapAttrs.put("phoneAttr", ldap_user_attr_phone);
 		ldapAttrs.put("timezoneAttr", ldap_user_attr_timezone);
-		ldapAttrs.put("pictureUri", ldap_user_picture_uri);
+		if (ldap_user_picture_uri != null) {
+			ldapAttrs.put("pictureUri", ldap_user_picture_uri);
+		}
 
 		Vector<HashMap<String, String>> result = lAuth.getData(
 				ldap_search_scope, ldap_search_filter, attributes);
@@ -473,8 +474,7 @@ public class LdapLoginManagement {
 		}
 		
 		if (result.size() > 1) {
-			log.error("Error on Ldap request - more than one result for user "
-					+ user);
+			log.error("Error on Ldap request - more than one result for user " + user);
 			return null;
 		}
 		
@@ -494,12 +494,10 @@ public class LdapLoginManagement {
 					String token = Long.toString(Math.abs(r.nextLong()), 36);
 					log.debug("Synching Ldap user to OM DB with RANDOM password: "
 							+ token);
-					userid = createUserFromLdapData(userData, token, user,
-							ldapAttrs);
+					userid = createUserFromLdapData(userData, token, user, ldapAttrs);
 				} else {
 					log.debug("Synching Ldap user to OM DB with password");
-					userid = createUserFromLdapData(userData, passwd, user,
-							ldapAttrs);
+					userid = createUserFromLdapData(userData, passwd, user, ldapAttrs);
 				}
 				log.debug("New User ID : " + userid);
 
