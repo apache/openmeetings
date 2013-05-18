@@ -44,13 +44,19 @@
 	background-color: #AFCBFB;
 	margin-top: 10px;
 }
-
+.ui-menubar .ui-menu {
+	width: 250px;
+}
+.ui-menu .ui-menu-item a {
+	line-height: 1.2em !important;
+	padding-bottom: 5px !importsnat;
+}
 .menuName {
 	font-weight: bold;
 }
-
 .menuDesc {
 	font-size: smaller;
+	line-height: 1em !importsnat;
 }
 
 #busy_indicator {

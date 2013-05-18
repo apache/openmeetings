@@ -19,23 +19,24 @@
 package org.apache.openmeetings.web.user.record;
 
 import static org.apache.openmeetings.utils.OmFileHelper.getMp4Recording;
+import static org.apache.openmeetings.utils.OmFileHelper.getRecording;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 
 import org.apache.openmeetings.data.flvrecord.FlvRecordingDao;
 import org.apache.openmeetings.data.user.dao.UsersDao;
 import org.apache.openmeetings.persistence.beans.domain.Organisation_Users;
 import org.apache.openmeetings.persistence.beans.flvrecord.FlvRecording;
 import org.apache.openmeetings.web.app.WebSession;
+import org.apache.openmeetings.web.common.ConfirmableAjaxLink;
 import org.apache.openmeetings.web.common.UserPanel;
+import org.apache.openmeetings.web.util.AjaxDownload;
 import org.apache.openmeetings.web.util.Mp4RecordingResourceReference;
 import org.apache.openmeetings.web.util.OggRecordingResourceReference;
 import org.apache.wicket.Component;
@@ -47,13 +48,14 @@ import org.apache.wicket.extensions.markup.html.repeater.tree.ITreeProvider;
 import org.apache.wicket.extensions.markup.html.repeater.tree.content.Folder;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.repeater.ReuseIfModelsEqualStrategy;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.util.ListModel;
-import org.apache.wicket.model.util.SetModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.apache.wicket.util.resource.FileResourceStream;
 import org.wicketstuff.html5.media.MediaSource;
 import org.wicketstuff.html5.media.video.Html5Video;
 
@@ -67,9 +69,12 @@ public class RecordingsPanel extends UserPanel {
 	private final OggRecordingResourceReference oggres = new OggRecordingResourceReference();
 	private final WebMarkupContainer player;
 	private final IModel<List<MediaSource>> playerModel = new ListModel<MediaSource>(new ArrayList<MediaSource>());
-	private final IModel<Set<FlvRecording>> myTreeModel = new SetModel<FlvRecording>(new HashSet<FlvRecording>());
+	private RecordingTree myTree;
 	private IModel<FlvRecording> rm = new CompoundPropertyModel<FlvRecording>(new FlvRecording());
 	private RecordingTree selected;
+	private Button dAVI = new Button("dAVI");
+	private Button dFLV = new Button("dFLV");
+	private AjaxDownload download = new AjaxDownload();
 
 	public RecordingsPanel(String id) {
 		super(id);
@@ -101,21 +106,35 @@ public class RecordingsPanel extends UserPanel {
 			@Override
 			protected void onEvent(AjaxRequestTarget target) {
 				target.add(trees);
+				for (FlvRecording r : myTree.getModelObject()) {
+					myTree.expand(r);
+				}
 			}
 		}));
+		add(new ConfirmableAjaxLink("trash", 713) {
+			private static final long serialVersionUID = 4145757350556878550L;
+
+			@Override
+			public void onClick(AjaxRequestTarget target) {
+				long id = rm.getObject().getFlvRecordingId();
+				if (id > 0) {
+					getBean(FlvRecordingDao.class).deleteFlvRecording(id);
+				}
+				target.add(trees);
+			}
+		});
 		add(trees
-			.add(new RecordingTree("myrecordings", new MyRecordingTreeProvider(), myTreeModel))
-			.add(new RecordingTree("publicrecordings", new PublicRecordingTreeProvider(), null))
+			.add(myTree = new RecordingTree("myrecordings", new MyRecordingTreeProvider()))
+			.add(new RecordingTree("publicrecordings", new PublicRecordingTreeProvider()))
 			.setOutputMarkupId(true)
 			);
 		add(new Label("homeSize", ""));
 		add(new Label("publicSize", ""));
-		add(info.setDefaultModel(rm)
-			.add(new Label("fileName"))
-			.add(new Label("fileSize"))
-			.add(new Label("recordEnd"))
-			.add(new Label("room_id"))
-			.setOutputMarkupId(true)
+		add(info.setDefaultModel(rm).add(
+				new Label("fileName"), new Label("fileSize")
+				, new Label("recordEnd"), new Label("room_id")
+				, dFLV.setEnabled(false).setOutputMarkupId(true), dAVI.setEnabled(false).setOutputMarkupId(true)
+				).setOutputMarkupId(true)
 			);
 		player = new Html5Video("player", playerModel) {
 			private static final long serialVersionUID = -6058309447222765121L;
@@ -130,15 +149,36 @@ public class RecordingsPanel extends UserPanel {
 				return true;
 			}
 		};
+		dAVI.add(new AjaxEventBehavior("click"){
+			private static final long serialVersionUID = 5487675326677710761L;
+
+			@Override
+			protected void onEvent(AjaxRequestTarget target) {
+				download.setFileName(rm.getObject().getAlternateDownload());
+				download.setResourceStream(new FileResourceStream(getRecording(rm.getObject().getAlternateDownload())));
+				download.initiate(target);
+			}
+		});
+		dFLV.add(new AjaxEventBehavior("click"){
+			private static final long serialVersionUID = 8630730552169483717L;
+
+			@Override
+			protected void onEvent(AjaxRequestTarget target) {
+				download.setFileName(rm.getObject().getFileHash());
+				download.setResourceStream(new FileResourceStream(getRecording(rm.getObject().getFileHash())));
+				download.initiate(target);
+			}
+		});
 		add(video.add(wait.setVisible(false), player.setVisible(false)).setOutputMarkupId(true));
+		add(download);
 	}
 
 	//FIXME need to be generalized to use as Room files explorer
 	class RecordingTree extends DefaultNestedTree<FlvRecording> {
 		private static final long serialVersionUID = 2527395034256868022L;
 
-		public RecordingTree(String id, ITreeProvider<FlvRecording> tp, IModel<Set<FlvRecording>> model) {
-			super(id, tp, model);
+		public RecordingTree(String id, ITreeProvider<FlvRecording> tp) {
+			super(id, tp);
 			setItemReuseStrategy(new ReuseIfModelsEqualStrategy());
 		}
 		
@@ -188,14 +228,19 @@ public class RecordingsPanel extends UserPanel {
 				protected void onClick(AjaxRequestTarget target) {
 					FlvRecording r = getModelObject();
 					FlvRecording _prev = rm.getObject();
-					rm.setObject(r);
+					if (r.getFlvRecordingId() > 0) {
+						rm.setObject(r);
+					}
 					if (selected != null && _prev != null) {
 						selected.updateBranch(_prev, target);
 						selected.updateNode(_prev, target);
 					}
  					selected = RecordingTree.this;
 					if (r.getIsFolder() == null || r.getIsFolder()) {
-						super.onClick(target);
+						if (getState(r) == State.COLLAPSED) {
+							super.onClick(target);
+						}
+						updateBranch(r, target);
 					} else {
 						boolean videoExists = getMp4Recording(r.getFileHash()).exists();
 						if (videoExists) {
@@ -205,7 +250,9 @@ public class RecordingsPanel extends UserPanel {
 									, new MediaSource("" + getRequestCycle().urlFor(oggres, pp), "video/ogg")));
 						}
 						player.setVisible(videoExists);
-						target.add(video, info);
+						target.add(video, info, dAVI.setEnabled(getRecording(r.getAlternateDownload()).exists()));
+						target.add(video, info, dFLV.setEnabled(getRecording(r.getFileHash()).exists()));
+						updateNode(r, target);
 					}
 				}
 				
@@ -219,6 +266,9 @@ public class RecordingsPanel extends UserPanel {
 					} else {
 						style = t.getIsFolder() ? super.getOtherStyleClass(t)
 								: (getMp4Recording(t.getFileHash()).exists() ? "recording-icon" : "broken-recording-icon");
+					}
+					if (isSelected()) {
+						style += " selected";
 					}
 					return style;
 				}

@@ -28,6 +28,7 @@ public abstract class ConfirmableAjaxLink extends AjaxLink<Void> {
 	public ConfirmableAjaxLink(String id, long confirmId) {
 		super(id);
 		this.confirmId = confirmId;
+		setOutputMarkupId(true);
 	}
 
 	@Override
