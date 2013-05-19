@@ -424,6 +424,12 @@
             hib.userScope = scopeRoomId;
         }
         
+        var wicketsid = lz.Browser.getInitArg('wicketsid');
+        var wicketroomid = lz.Browser.getInitArg('wicketroomid');
+        if (wicketsid != undefined && wicketroomid != undefined && !isNaN(wicketroomid)) {
+        	canvas.setAttribute('wicketsid', wicketsid);
+        	canvas.setAttribute('wicketroomid', Number(wicketroomid));
+        }
         this.setBaseColors();
     
         //Debug.write("rtmphostlocal,rtmphost: ",canvas.rtmphostlocal,canvas.rtmphost); 

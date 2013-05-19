@@ -21,19 +21,12 @@ package org.apache.openmeetings.web.pages;
 import static org.apache.openmeetings.web.app.Application.getBean;
 
 import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
-import org.apache.wicket.markup.head.IHeaderResponse;
-import org.apache.wicket.markup.head.JavaScriptHeaderItem;
-import org.apache.wicket.markup.html.WebPage;
+import org.apache.openmeetings.web.user.rooms.RoomPanel;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.request.Url;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.apache.wicket.request.mapper.parameter.PageParametersEncoder;
-import org.apache.wicket.util.string.StringValue;
 
-public class SwfPage extends WebPage {
+public class SwfPage extends BaseNotInitedPage {
 	private static final long serialVersionUID = 6492618860620779445L;
-	private final String swf;
-	private final Url url;
 
 	public SwfPage() {
 		this(new PageParameters());
@@ -41,14 +34,7 @@ public class SwfPage extends WebPage {
 
 	public SwfPage(PageParameters pp) {
 		add(new Label("titleAppName", getBean(ConfigurationDao.class).getAppName()));
-		StringValue swfVal = pp.get("swf");
-		swf = swfVal.isEmpty() ? "main.as3.swf11.swf" : swfVal.toString();
-		url = new PageParametersEncoder().encodePageParameters(pp);
+		add(new RoomPanel("room", pp));
 	}
 	
-	@Override
-	public void renderHead(IHeaderResponse response) {
-		super.renderHead(response);
-		response.render(JavaScriptHeaderItem.forScript(String.format("var swfurl = \"%1$s?%2$s\";", swf, url), "swfurl"));
-	}
 }

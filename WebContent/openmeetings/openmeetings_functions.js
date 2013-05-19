@@ -41,7 +41,7 @@ function redirectToUrl(url) {
 }
 
 function loadingComplete() {
-	document.getElementById("loading").style.display = 'none';
+	document.getElementById("swfloading").style.display = 'none';
 	var lzApp = document.getElementById("lzappContainer");
 	lzApp.style.width = '100%';
 	lzApp.style.height = '100%';

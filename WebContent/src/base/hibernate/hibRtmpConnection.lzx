@@ -177,6 +177,11 @@
             canvas.thishib.reconnectedRoomInstance.destroy();
             this.overwritePublicSID.doCall();
             this.setUsernameReconnect.doCall();
+        } else if (canvas.wicketsid != null) {
+            canvas.sessionId = canvas.wicketsid;
+			canvas.sendViaLocalConnection(canvas.vid_lc_name, "setSessionId", [canvas.sessionId]);
+            canvas.thishib.loaderVar.setProgress();
+            this.getPublicSID.doCall();
         } else {
             this.refreshDelegate = new LzDelegate( this, "refreshSessionMeth" );
             //lz.Timer.addTimer( this.refreshDelegate, 60000 );
@@ -530,6 +535,9 @@
                         var obj = new Array();
                         obj["action"] = "recordModule";
                         loadContent(obj,null,null);
+                    } else if (canvas.wicketroomid > 0) {
+                    	canvas.initroomid = canvas.wicketroomid;
+                        parent.getRoomById.doCall();
                     } else {
                         canvas.thishib.loaderVar.close();
                         parent.getRoomById.doCall();
@@ -547,6 +555,9 @@
                 //The onResult-Handler will be called be the rtmpconnection
                 if ($debug) Debug.write("getRoomById: ",value);
                 if (value!=null){
+                	if (canvas.wicketsid != null) {
+                		canvas.thishib.loaderVar.close();
+                	}
                     if (canvas.directUserLogin) {
                         canvas.directRoomObj = value;
                         canvas.thishib.loaderVar.close();
@@ -720,7 +731,9 @@
             //Debug.write("getUserSalutations ",value);
             canvas.salutationsInitValues = value;
             //check for password reset
-            if (canvas.isResetUsername){
+            if (canvas.wicketsid != null) {
+            	parent.loginWicket.doCall();
+            } else if (canvas.isResetUsername){
                 if (canvas.thishib.loaderVar != null) {
                   canvas.thishib.loaderVar.close();
                 }
@@ -762,6 +775,56 @@
         </handler>  
     </netRemoteCallHib>
     
+	<netRemoteCallHib name="loginWicket" funcname="xmlcrm.loginWicket" >
+		<netparam><method name="getValue">return canvas.sessionId;</method></netparam>
+		<netparam><method name="getValue">return canvas.wicketsid;</method></netparam>
+		<handler name="ondata" args="value">
+		<![CDATA[
+			if ($debug) Debug.write("!!!!!!!!!!! loginWicket", value);
+			if (value != null) {
+				canvas.setAttribute('user_id',value.user_id);
+				canvas.setAttribute('firstName',value.firstname);
+				canvas.setAttribute('lastName',value.lastname);
+				canvas.setAttribute('mail','');
+				canvas.setAttribute('lastLogin','');
+				canvas.setAttribute('official_code','');
+				canvas.setAttribute('picture_uri','');
+				canvas.setAttribute('language','');
+				canvas.setAttribute('currentuser',value.login);
+				if (value.omTimeZone != null) {
+					canvas.setAttribute('jNameTimeZone',value.omTimeZone.jname);
+					canvas.timeZoneId = value.omTimeZone.omtimezoneId;
+				}
+				canvas.becomemoderator = value.level_id >= 2;
+				if (value.sessionData == null) {
+					if ($debug) Debug.write("No Language Found to assign");
+					new lz.checkLoginData(canvas.main_content._content.inner);
+					return;
+				}
+				var found = false;
+				for (var i=0;i<value.organisation_users.length;i++) {
+					if (value.organisation_users[i].organisation.organisation_id == value.sessionData.organization_id) {
+						found = true;
+						hib.currentdomain = value.organisation_users[i].organisation.name;
+						hib.currentdomainObj = value.organisation_users[i].organisation;
+						break;
+					}
+				}
+				parent.getCurrentRoomClient.doCall();
+				/*
+				if (found) {
+					hib.getLanguageByIdAndMax.start = 0;
+					hib.getLanguageByIdAndMax.doCall();
+					canvas.focusOnItem = null;
+				} else {
+					if ($debug) Debug.write("No Organization Found to assign");
+					new lz.checkLoginData(canvas.main_content._content.inner);
+				}*/
+			}
+		]]>
+		</handler>
+	</netRemoteCallHib>
+    
     <netRemoteCallHib name="loginByRemember" funcname="xmlcrm.loginByRemember" >
         <attribute name="currentHashSession" value="" type="string"/>
         <attribute name="sipLoader" value="null"/>   
@@ -790,11 +853,7 @@
                         new lz.labelerrorPopup(canvas,{errorlabelid:1150});
                     }
                     
-                    if (value.level_id >= 2) {
-                        canvas.becomemoderator = true;
-                    } else {
-                        canvas.becomemoderator = false;
-                    }
+                    canvas.becomemoderator = value.level_id >= 2;
                     
                     if (value.sessionData == null) {
                         if ($debug) Debug.write("No Language Found to assign");

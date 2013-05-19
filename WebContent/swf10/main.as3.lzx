@@ -95,7 +95,9 @@
     <handler name="oninit"><![CDATA[
 		doDebugInit();
     
-        var tInitArgsArry = new Array('secureHash','invitationHash','sid','roomid','directRoomId','language','hash','cuser','tAccept','moodleRoom','becomemoderator','wwwroot','user_id','picture','scopeRoomId');
+        var tInitArgsArry = new Array('secureHash','invitationHash','sid','roomid','directRoomId'
+        	,'language','hash','cuser','tAccept','moodleRoom','becomemoderator','wwwroot','user_id'
+        	,'picture','scopeRoomId', 'wicketsid', 'wicketroomid');
     
         this.setAttribute('lc_SID', this.getLCSID());
         this.setAttribute('vid_lc_name', lc_SID + '__videoLC');

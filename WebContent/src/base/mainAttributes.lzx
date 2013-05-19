@@ -326,6 +326,10 @@ the LAST RoomClient Object that has been changed the giveExclusiveAudio status
 <attribute name="secureRemoteUserLogin" value="false" type="boolean" />
 <attribute name="secureHash" value="" type="string" />
 
+<!-- Attributes for wicket login (since it hard not to break anything)-->
+<attribute name="wicketsid" type="string" />
+<attribute name="wicketroomid" value="0" type="number" />
+
 <!--- skip loading of Language -->
 <attribute name="language_id" value="0" type="number" />
 <!--- application default language -->

@@ -220,6 +220,29 @@ public class MainService implements IPendingServiceCallback {
 		return -1L;
 	}
 
+	public User loginWicket(String SID, String wicketSID) {
+		Long userId = sessiondataDao.checkSession(wicketSID);
+		User u = userId == null ? null : usersDao.get(userId);
+		if (u != null) {
+			IConnection current = Red5.getConnectionLocal();
+			Client currentClient = sessionManager.getClientByStreamId(current.getClient().getId(), null);
+			
+			if (!u.getOrganisation_users().isEmpty()) {
+				u.setSessionData(sessiondataDao.getSessionByHash(wicketSID));
+				currentClient.setUser_id(u.getUser_id());
+				SessionVariablesUtil.setUserId(current.getClient(), u.getUser_id());
+			
+				currentClient.setFirstname(u.getFirstname());
+				currentClient.setLastname(u.getLastname());
+				
+				scopeApplicationAdapter.syncMessageToCurrentScope("roomConnect", currentClient, false);
+				
+				return u;
+			}
+		}
+		return null;
+	}
+	
 	public User loginByRemember(String SID, String remoteHashId) {
 		try {
 

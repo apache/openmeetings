@@ -48,6 +48,7 @@ public class RoomsPanel extends UserPanel {
 				final Label curUsers = new Label("curUsers", curUsersModel);
 				item.add(curUsers.setOutputMarkupId(true));
 				item.add(new Label("totalUsers", r.getNumberOfPartizipants()));
+				item.add(new RoomEnterButton("enter", r.getRooms_id()));
 				item.add(new AjaxLink<Void>("refresh") {
 					private static final long serialVersionUID = -3426813755917489787L;
 

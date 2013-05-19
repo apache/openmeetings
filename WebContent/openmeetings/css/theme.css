@@ -16,6 +16,9 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+body {
+	margin: 0;
+}
 #header {
 	font-size: 28px;
 	line-height: 40px;

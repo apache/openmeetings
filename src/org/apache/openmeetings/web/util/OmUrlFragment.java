@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.web.util;
 
+import static org.apache.openmeetings.web.app.WebSession.getSid;
 import static org.apache.openmeetings.web.user.profile.SettingsPanel.EDIT_PROFILE_TAB_ID;
 import static org.apache.openmeetings.web.user.profile.SettingsPanel.MESSAGES_TAB_ID;
 
@@ -36,7 +37,9 @@ import org.apache.openmeetings.web.user.calendar.CalendarPanel;
 import org.apache.openmeetings.web.user.dashboard.OmDashboardPanel;
 import org.apache.openmeetings.web.user.profile.SettingsPanel;
 import org.apache.openmeetings.web.user.record.RecordingsPanel;
+import org.apache.openmeetings.web.user.rooms.RoomPanel;
 import org.apache.openmeetings.web.user.rooms.RoomsSelectorPanel;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 public class OmUrlFragment implements Serializable {
 	private static final long serialVersionUID = 7382435810352033914L;
@@ -223,6 +226,17 @@ public class OmUrlFragment implements Serializable {
 				}
 				break;
 			case room:
+				try {
+					Long roomId = Long.parseLong(type);
+					if (roomId != null) {
+						PageParameters pp = new PageParameters();
+						pp.add("wicketsid", getSid());
+						pp.add("wicketroomid", roomId);
+						basePanel = new RoomPanel(CHILD_ID, pp);
+					}
+				} catch(NumberFormatException ne) {
+					//skipit, bad roomid passed
+				}
 				break;
 			case rooms:
 				MenuParams params = MenuParams.publicTabButton;
