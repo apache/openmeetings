@@ -21,15 +21,15 @@
 <html xmlns:wicket="http://wicket.apache.org">
 	<wicket:panel>
 		<h3><wicket:ommessage key="774"/></h3>
-		<div class="start_step1"><wicket:ommessage key="768"/></div>
-		<div class="start_step2"><wicket:ommessage key="771"/></div>
-		<div class="start_step3"><wicket:ommessage key="772"/></div>
-		<div class="start_step4"><wicket:ommessage key="773"/></div>
+		<div><div wicket:id="step1" class="clickable start_step1"><wicket:ommessage key="768"/></div></div>
+		<div><div wicket:id="step2" class="clickable start_step2"><wicket:ommessage key="771"/></div></div>
+		<div><div wicket:id="step3" class="clickable start_step3"><wicket:ommessage key="772"/></div></div>
+		<div><div wicket:id="step4" class="clickable start_step4"><wicket:ommessage key="773"/></div></div>
 		<table>
 			<tr>
 				<td><wicket:ommessage key="804"/></td>
 				<td>
-					<input type="button" wicket:ommessage="value:788"/><br/>
+					<input wicket:id="start" type="button" wicket:ommessage="value:788"/><br/>
 					<input wicket:id="calendar" type="button" wicket:ommessage="value:291"/>
 				</td>
 			</tr>

@@ -111,6 +111,11 @@
 	 -->
 	<attribute name="currentToolTip" value="null" />
 	
+	<!-- Attributes for wicket login (since it hard not to break anything)-->
+	<attribute name="wicketsid" type="string" />
+	<attribute name="wicketroomid" value="0" type="number" />
+	
+	
 	<method name="registerToolTip" args="viewInstance">
 		if (this.currentToolTip != null) {
 			this.currentToolTip.cleanHolder();

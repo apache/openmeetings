@@ -27,6 +27,7 @@
         <when property="$as3">
             <passthrough>
                 import flash.net.LocalConnection;
+                import flash.external.ExternalInterface;
             </passthrough>
         </when>
     </switch>
@@ -491,6 +492,9 @@
 
 	<method name="immediateExitRoom" args="bool,ctx">
 		canvas.videoComp_lc.send(canvas.videoComp_lc_name, 'exitRoom', bool);
+		if (canvas.wicketsid != null) {
+			flash.external.ExternalInterface.call("roomExit");
+		}
 	</method>
 
 	<method name="updateFirstLastName" args="publicSID,first,last">

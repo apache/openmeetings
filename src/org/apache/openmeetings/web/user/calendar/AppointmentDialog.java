@@ -67,6 +67,11 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 	protected final FeedbackPanel feedback;
 	
 	@Override
+	public int getWidth() {
+		return 550;
+	}
+	
+	@Override
 	public void setModelObject(Appointment object) {
 		form.setModelObject(object);
 		super.setModelObject(object);

@@ -26,6 +26,7 @@ import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.common.UserPanel;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
@@ -48,7 +49,7 @@ public class RoomsPanel extends UserPanel {
 				final Label curUsers = new Label("curUsers", curUsersModel);
 				item.add(curUsers.setOutputMarkupId(true));
 				item.add(new Label("totalUsers", r.getNumberOfPartizipants()));
-				item.add(new RoomEnterButton("enter", r.getRooms_id()));
+				item.add(new WebMarkupContainer("enter").add(new RoomEnterBehavior(r.getRooms_id())));
 				item.add(new AjaxLink<Void>("refresh") {
 					private static final long serialVersionUID = -3426813755917489787L;
 

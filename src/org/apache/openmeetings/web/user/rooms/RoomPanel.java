@@ -18,26 +18,19 @@
  */
 package org.apache.openmeetings.web.user.rooms;
 
-import java.util.Map;
-
 import org.apache.openmeetings.web.common.BasePanel;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.head.PriorityHeaderItem;
-import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
-import org.apache.wicket.request.Url;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.mapper.parameter.PageParametersEncoder;
+import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.apache.wicket.request.resource.ResourceReference;
-import org.apache.wicket.resource.TextTemplateResourceReference;
-import org.apache.wicket.util.collections.MicroMap;
 import org.apache.wicket.util.string.StringValue;
 
 public class RoomPanel extends BasePanel {
 	private static final long serialVersionUID = 2308988314987829510L;
-	private final String swf;
-	private final PageParameters pp;
 	
 	public RoomPanel(String id) {
 		this(id, new PageParameters());
@@ -45,18 +38,15 @@ public class RoomPanel extends BasePanel {
 	
 	public RoomPanel(String id, PageParameters pp) {
 		super(id);
-		this.pp = pp;
+
 		StringValue swfVal = pp.get("swf");
-		swf = swfVal.isEmpty() ? "maindebug.as3.swf11.swf" : swfVal.toString(); //FIXME
+		String swf = (swfVal.isEmpty() ? "main.as3.swf11.swf" : swfVal.toString())
+				+ new PageParametersEncoder().encodePageParameters(pp);
+		add(new Label("init", String.format("initSwf('%s');", swf)).setEscapeModelStrings(false));
 	}
 
-	private IModel<Map<String, Object>> newResourceModel() {
-		Url url = new PageParametersEncoder().encodePageParameters(pp);
-		return Model.ofMap(new MicroMap<String, Object>("swfurl", swf + url));
-	}
-	
 	private ResourceReference newResourceReference() {
-		return new TextTemplateResourceReference(RoomPanel.class, "swf-functions.js", this.newResourceModel());
+		return new JavaScriptResourceReference(RoomPanel.class, "swf-functions.js");
 	}
 	
 	@Override

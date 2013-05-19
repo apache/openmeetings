@@ -110,11 +110,14 @@
         this.setAttribute('videoComp_lc',videoComp_lc_cback);
         
         var tqueryString = "";
-        for (var i=0;i<tInitArgsArry.length;i++) {
+        for (var i = 0; i < tInitArgsArry.length; ++i) {
             // if ($debug) Debug.write(tInitArgsArry[i],lz.Browser.getInitArg(tInitArgsArry[i]));
             var tValue = lz.Browser.getInitArg(tInitArgsArry[i]);
             if (tValue != undefined) {
-                tqueryString += "&"+tInitArgsArry[i]+"="+tValue;
+                tqueryString += "&" + tInitArgsArry[i] + "=" + tValue;
+                if (tInitArgsArry[i].startsWith('wicket')) {
+                	canvas.setAttribute(tInitArgsArry[i], tValue);
+                }
             }
         }
         

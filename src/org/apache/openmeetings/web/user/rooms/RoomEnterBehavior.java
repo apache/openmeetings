@@ -23,21 +23,18 @@ import org.apache.openmeetings.web.util.OmUrlFragment;
 import org.apache.openmeetings.web.util.OmUrlFragment.AreaKeys;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.markup.html.form.Button;
 
-public class RoomEnterButton extends Button {
-	private static final long serialVersionUID = 2595652041789240294L;
+public class RoomEnterBehavior extends AjaxEventBehavior {
+	private static final long serialVersionUID = -5195740583653865055L;
+	private final long roomid;
+	
+	public RoomEnterBehavior(long roomid) {
+		super("click");
+		this.roomid = roomid;
+	}
 
-	public RoomEnterButton(String id, final long roomid) {
-		super(id);
-		
-		add(new AjaxEventBehavior("click"){
-			private static final long serialVersionUID = -5195740583653865055L;
-
-			@Override
-			protected void onEvent(AjaxRequestTarget target) {
-				((MainPage)getPage()).updateContents(new OmUrlFragment(AreaKeys.room, "" + roomid), target);
-			}
-		});
+	@Override
+	protected void onEvent(AjaxRequestTarget target) {
+		((MainPage)getComponent().getPage()).updateContents(new OmUrlFragment(AreaKeys.room, "" + roomid), target);
 	}
 }

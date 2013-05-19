@@ -18,13 +18,15 @@
  */
 package org.apache.openmeetings.web.common;
 
+import static org.apache.openmeetings.web.app.Application.getBean;
+import static org.apache.openmeetings.web.app.WebSession.getUserId;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.openmeetings.data.conference.RoomManager;
 import org.apache.openmeetings.data.conference.dao.RoomDao;
 import org.apache.openmeetings.persistence.beans.room.Room;
-import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 
@@ -36,22 +38,11 @@ public abstract class UserPanel extends BasePanel {
 		super(id);
 	}
 	
-	//FIXME need to be handled somehow differently
 	public static List<Room> getMyRooms() {
 		List<Room> result = new ArrayList<Room>();
-		Room r1 = new Room();
-		r1.setIspublic(true);
-		r1.setName(WebSession.getString(1306L));
-		//FIXME need to be DAO !!!!
-		r1.setRoomtype(Application.getBean(RoomManager.class).getRoomTypesById(1L));
-		result.add(r1);
-		Room r2 = new Room();
-		r2.setIspublic(true); //TODO weird
-		r2.setName(WebSession.getString(1307L));
-		//FIXME need to be DAO !!!!
-		r2.setRoomtype(Application.getBean(RoomManager.class).getRoomTypesById(3L));
-		result.add(r2);
-		result.addAll(Application.getBean(RoomDao.class).getAppointedRoomsByUser(WebSession.getUserId()));
+		result.add(getBean(RoomManager.class).getRoomByOwnerAndTypeId(getUserId(), 1L, WebSession.getString(1306L)));
+		result.add(getBean(RoomManager.class).getRoomByOwnerAndTypeId(getUserId(), 3L, WebSession.getString(1307L)));
+		result.addAll(getBean(RoomDao.class).getAppointedRoomsByUser(getUserId()));
 		return result;
 	}
 }

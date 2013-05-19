@@ -1498,8 +1498,7 @@ public class RoomManager {
 	 * @param rooms_id
 	 * @return Rooms-Object or NULL
 	 */
-	public Room getRoomByOwnerAndTypeId(Long ownerId, Long roomtypesId,
-			String roomName) {
+	public Room getRoomByOwnerAndTypeId(Long ownerId, Long roomtypesId, String roomName) {
 		try {
 
 			if (roomtypesId == null || roomtypesId == 0) {
@@ -1520,8 +1519,7 @@ public class RoomManager {
 			if (room != null) {
 				return room;
 			} else {
-				log.debug("Could not find room " + ownerId + " || "
-						+ roomtypesId);
+				log.debug("Could not find room " + ownerId + " || " + roomtypesId);
 				
 				Long rooms_id = this.addRoom(3L, roomName, roomtypesId,
 						"My Rooms of ownerId " + ownerId,

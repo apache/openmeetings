@@ -20,16 +20,16 @@ function getAppletStatus() {
 	return false;
 }
 
-function initSwf() {
+function initSwf(swfurl) {
 	var general = {
-			url : "${swfurl}",
+			url : swfurl,
 			bgcolor : '#ffffff',
 			width : '100%',
 			height : '100%',
 			id : 'lzapp',
 			__lzminimumversion : 8
 		};
-	var options = $.extend(general, {allowfullscreen : 'true'});
+	var options = $.extend({}, general, {allowfullscreen : 'true'});
 	$('#header, #topLinks, #menu').hide();
 	var embed = $('<embed>').attr('quality', 'high').attr('bgcolor', options.bgcolor)
 		.attr('src', options.url)
@@ -41,4 +41,10 @@ function initSwf() {
 		.attr('allowscriptaccess', 'sameDomain').attr('type', 'application/x-shockwave-flash')
 		.attr('pluginspage', 'http://www.macromedia.com/go/getflashplayer');
 	$('#swfloading').after($('<div id="lzappContainer">').append(embed)).width('1px').height('1px');
+}
+
+function roomExit() {
+	$('#header, #topLinks, #menu').show();
+	window.location.hash = "#rooms/public";
+	$('#lzappContainer').remove();
 }
