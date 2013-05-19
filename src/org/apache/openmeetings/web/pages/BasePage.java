@@ -21,10 +21,8 @@ package org.apache.openmeetings.web.pages;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
 import org.apache.openmeetings.persistence.beans.lang.FieldLanguage;
 import org.apache.openmeetings.web.app.Application;
-import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.HeaderPanel;
 import org.apache.openmeetings.web.util.OmUrlFragment;
 import org.apache.openmeetings.web.util.OmUrlFragment.AreaKeys;
@@ -41,13 +39,16 @@ public abstract class BasePage extends AsyncUrlFragmentAwarePage {
 	private static final long serialVersionUID = -6237917782433412496L;
 	private final Map<String, String> options;
 
+	protected abstract FieldLanguage getLanguage();
+	protected abstract String getApplicationName();
+	
 	public BasePage() {
 		options = new HashMap<String, String>();
 		options.put("fragmentIdentifierSuffix", "");
 		options.put("keyValueDelimiter", "/");
-		String appName = Application.getBean(ConfigurationDao.class).getAppName();
+		String appName = getApplicationName();
 
-		FieldLanguage lang = WebSession.getLanguageObj();
+		FieldLanguage lang = getLanguage();
 		String code = lang.getCode();
 		add(new TransparentWebMarkupContainer("html")
 	    	.add(new AttributeModifier("xml:lang", code))

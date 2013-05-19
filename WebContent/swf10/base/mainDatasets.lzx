@@ -24,7 +24,7 @@
 <library>
 
 <!-- get values from config.xml -->
-<dataset type="http" name="myConfigSet" request="false" ondata="parent.mainTheme.loadTheme()">
+<dataset type="http" name="myConfigSet" request="false" ondata="parent.mainTheme.loadTheme()" proxied="false">
     <handler name="oninit">
         var d = new Date();
         this.setAttribute("src","config.xml?random="+d.getTime());
@@ -46,7 +46,7 @@
 </method>
 
 <!-- get values from config.xml -->
-<dataset type="http" name="mainTheme" request="false" ondata="canvas.myinit()">
+<dataset type="http" name="mainTheme" request="false" ondata="canvas.myinit()" proxied="false">
     <method name="loadTheme">
         var d = new Date();
         this.setAttribute("src","default-theme.xml?random="+d.getTime());

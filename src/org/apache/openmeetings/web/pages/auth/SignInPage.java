@@ -23,14 +23,14 @@ import static org.apache.openmeetings.web.app.Application.getBean;
 
 import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
 import org.apache.openmeetings.web.app.WebSession;
-import org.apache.openmeetings.web.pages.BasePage;
+import org.apache.openmeetings.web.pages.BaseInitedPage;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 import org.apache.wicket.request.IRequestParameters;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
-public class SignInPage extends BasePage {
+public class SignInPage extends BaseInitedPage {
 	private static final long serialVersionUID = -3843571657066167592L;
 	private SignInDialog d;
 	

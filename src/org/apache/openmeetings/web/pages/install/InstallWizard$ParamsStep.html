@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<html xmlns:wicket="http://wicket.apache.org">
+<wicket:panel>
+	<fieldset id="userData">
+
+		<legend>Userdata</legend>
+		<ul>
+			<li><label wicket:for="cfg.username">Username</label>
+				<input wicket:id="cfg.username" title="Enter a username" type="text" />
+			</li>
+			<li><label wicket:for="cfg.password">Userpass</label>
+				<input wicket:id="cfg.password" title="Enter a password" type="password" />
+			</li>
+			<li><label wicket:for="cfg.email">EMail</label>
+				<input wicket:id="cfg.email" title="Enter a EMail" type="text" />
+			</li>
+			<li><label wicket:for="ical_timeZone">User Time Zone</label>
+				<select wicket:id="ical_timeZone"></select>
+			</li>
+		</ul>
+	</fieldset>
+
+	<fieldset id="userOrga">
+
+		<legend>Organisation(Domains)</legend>
+		<ul>
+			<li><label wicket:for="cfg.group">Name</label>
+				<input wicket:id="cfg.group" title="Enter a default Organisation" type="text" /></li>
+		</ul>
+	</fieldset>
+
+	<fieldset id="userConf">
+		<legend>Configuration</legend>
+		<ul>
+			<li><label for="configdefault">Allow self-registering (allow_frontend_register)</label>
+				<select wicket:id="allowFrontendRegister"></select>
+			</li>
+			<li><label wicket:for="sendEmailAtRegister">Send Email to new registered Users (sendEmailAtRegister)</label>
+				<select wicket:id="sendEmailAtRegister"></select>
+			</li>
+			<li><label wicket:for="sendEmailWithVerficationCode">New Users need to verify their EMail (sendEmailWithVerficationCode)</label>
+				<select wicket:id="sendEmailWithVerficationCode"></select>
+			</li>
+			<li><label wicket:for="createDefaultRooms">Default Rooms of all types will be created</label>
+				<select wicket:id="createDefaultRooms"></select>
+			</li>
+			<li><label wicket:for="cfg.mailReferer">Mail-Referer (system_email_addr)</label>
+				<input wicket:id="cfg.mailReferer" title="Enter a Referer" type="text" />
+			</li>
+			<li><label wicket:for="cfg.smtpServer">SMTP-Server (smtp_server)</label>
+				<input wicket:id="cfg.smtpServer" title="Enter a SMTP-Server" type="text" />
+			</li>
+			<li><label wicket:for="cfg.smtpPort">SMTP-Server Port(default Smtp-Server Port is 25) (smtp_port)</label>
+				<input wicket:id="cfg.smtpPort" title="Enter a SMTP-Server.Port normally 25" type="text" />
+			</li>
+			<li><label wicket:for="cfg.mailAuthName">SMTP-Username (email_userpass)</label>
+				<input wicket:id="cfg.mailAuthName" title="Enter the mail-username" type="text" />
+			</li>
+			<li><label wicket:for="cfg.mailAuthPass">SMTP-Userpass (email_userpass)</label>
+				<input wicket:id="cfg.mailAuthPass" title="Enter the mail-userpass" type="password" />
+			</li>
+			<li><label wicket:for="mailUseTls">Enable TLS in Mail Server Auth</label>
+				<select wicket:id="mailUseTls"></select>
+			</li>
+			<li><label wicket:for="replyToOrganizer">Set inviter's email
+					address as ReplyTo in email invitations (inviter.email.as.replyto)</label>
+				<select wicket:id="replyToOrganizer"></select>
+			</li>
+			<li><label wicket:for="defaultLangId">Default Language</label>
+				<select wicket:id="defaultLangId"></select>
+			</li>
+			<li><label wicket:for="cfg.defaultExportFont">Default Font for Export [default_export_font]</label>
+				<select wicket:id="cfg.defaultExportFont"></select>
+			</li>
+		</ul>
+	</fieldset>
+
+	<fieldset id="userConf1">
+		<legend>Converters</legend>
+		<ul>
+			<li><label wicket:for="cfg.swfZoom">SWFTools Zoom</label>
+			<input wicket:id="cfg.swfZoom" title="Enter the dpi that swftools will use for PDF to SWF conversion"
+				type="text" />
+				<p>
+					<i>You can test if swftools is installed into system path by
+						opening a shell or cmd-prompt and type pdf2swf Enter the dpi
+						that swftools will use for PDF to SWF conversion. Default is 72
+						dpi. see also <a
+						href="http://openmeetings.apache.org/installation.html"
+						target="_blank">Installation</a>
+					</i>
+				</p></li>
+			<li><label wicket:for="cfg.swfJpegQuality">SWFTools JPEG Quality</label>
+				<input wicket:id="cfg.swfJpegQuality" 
+				title="Enter the quality of embedded jpeg pictures to quality. 0 is worst (small), 100 is best (big). (default:85)"
+				type="text" />
+				<p>
+					<i>You can test if swftools is installed into system path by
+						opening a shell or cmd-prompt and type pdf2swf Enter the
+						quality of embedded jpeg pictures to quality. 0 is worst (small),
+						100 is best (big). (default:85) see also <a
+						href="http://openmeetings.apache.org/installation.html"
+						target="_blank">Installation</a>
+					</i>
+				</p>
+			</li>
+			<li><label wicket:for="cfg.swfPath">SWFTools Path</label>
+				<input wicket:id="cfg.swfPath" 
+				title="Enter the path to swftools for example C:/swftools (Windows) or leave blank if swftools is a known to your system path"
+				type="text" />
+				<p>
+					<i>You can test if swftools is installed into system path by
+						opening a shell or cmd-prompt and type pdf2swf If this shows
+						a list of options leave this field blank otherwise you have to
+						specify the path to pdf2swf on your system see also <a
+						href="http://openmeetings.apache.org/installation.html"
+						target="_blank">Installation</a>
+					</i>
+				</p></li>
+			<li><label wicket:for="cfg.imageMagicPath">ImageMagick Path</label>
+				<input wicket:id="cfg.imageMagicPath" 
+				title="Enter the path to ImageMagick, leave blank if ImageMagick is successfully installed to system-path"
+				type="text" />
+				<p>
+					<i>see also <a
+						href="http://openmeetings.apache.org/installation.html"
+						target="_blank">Installation</a></i>
+				</p></li>
+			<li><label wicket:for="cfg.ffmpegPath">FFMPEG Path</label>
+				<input wicket:id="cfg.ffmpegPath" 
+				title="Enter the path to FFMPEG, leave blank if FFMPEG is successfully installed to system-path"
+				type="text" />
+				<p>
+					<i>see also <a
+						href="http://openmeetings.apache.org/installation.html"
+						target="_blank">Installation</a></i>
+				</p></li>
+			<li><label wicket:for="cfg.soxPath">SoX Path</label>
+				<input wicket:id="cfg.soxPath" 
+				title="Enter the path to SoX, leave blank if SoX is successfully installed to system-path"
+				type="text" />
+				<p>
+					<i>see also <a
+						href="http://openmeetings.apache.org/installation.html"
+						target="_blank">Installation</a></i>
+				</p></li>
+			<li><label wicket:for="cfg.jodPath">JOD Path</label>
+				<input wicket:id="cfg.jodPath"
+				title="The path to JOD library (http://code.google.com/p/jodconverter), configure the path to point to the lib directory of JOD that contains also the jodconverter-core-version.jar"
+				type="text" />
+				<p>
+					<i>see also <a
+						href="http://openmeetings.apache.org/installation.html"
+						target="_blank">Installation</a></i>
+				</p></li>
+			<li><label wicket:for="cfg.officePath">OpenOffice/LibreOffice Path for jodconverter</label>
+				<input wicket:id="cfg.officePath"
+				title="The path to OpenOffice/LibreOffice (optional) please set this to the real path in case jodconverter is unable to find OpenOffice/LibreOffice installation automatically"
+				type="text" />
+				<p>The path to OpenOffice/LibreOffice (optional) please set this
+					to the real path in case jodconverter is unable to find
+					OpenOffice/LibreOffice installation</p></li>
+		</ul>
+	</fieldset>
+
+	<fieldset id="userConf2">
+
+		<legend>Crypt Type</legend>
+		<ul>
+			<li><label wicket:for="cfg.cryptClassName">Crypt Class</label>
+				<input wicket:id="cfg.cryptClassName"  type="text"
+				title="Enter the Class name of the Encryption Class. DO NOT ALTER THIS IF YOU ARE NOT SURE" />
+				<p>
+					<i> You can use this default crypt type which is equal to
+						PHP-MD5 function or BSD-Style encryption by using:<b>org.apache.openmeetings.utils.crypt.MD5CryptImplementation</b>
+						for more information or to write your own Crypt-Style see: <a
+						href="http://openmeetings.apache.org/CustomCryptMechanism.html"
+						target="_blank">Custom Crypt Mechanism</a> You can edit this
+						value later BUT previous created Users and Sessions might be not
+						usable anymore
+					</i>
+				</p></li>
+		</ul>
+	</fieldset>
+
+	<fieldset id="red5sip">
+		<legend>red5SIP Configuration</legend>
+		<ul>
+			<li><label wicket:for="red5SipEnable">Enable SIP</label>
+				<select wicket:id="red5SipEnable"></select>
+				<p>
+					<i> Enable red5SIP integration </i>
+				</p> </li>
+
+			<li><label wicket:for="cfg.red5SipRoomPrefix">SIP rooms prefix</label>
+				<input wicket:id="cfg.red5SipRoomPrefix" type="text" />
+				<p>
+					<i>Prefix for phone number of conference rooms</i>
+				</p></li>
+
+			<li><label wicket:for="cfg.red5SipExtenContext">SIP extensions context</label>
+				<input wicket:id="cfg.red5SipExtenContext" type="text" />
+				<p>
+					<i>Context of Asterisk extensions</i>
+				</p></li>
+		</ul>
+	</fieldset>
+</wicket:panel>
+</html>

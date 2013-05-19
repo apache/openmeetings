@@ -20,7 +20,6 @@ package org.apache.openmeetings.web.pages.auth;
 
 import static org.apache.openmeetings.utils.UserHelper.getMinLoginLength;
 import static org.apache.openmeetings.utils.UserHelper.getMinPasswdLength;
-import static org.apache.openmeetings.web.app.Application.getBaseSwfPath;
 import static org.apache.openmeetings.web.app.Application.getBean;
 
 import java.util.Arrays;
@@ -37,6 +36,7 @@ import org.apache.openmeetings.persistence.beans.basic.OmTimeZone;
 import org.apache.openmeetings.persistence.beans.lang.FieldLanguage;
 import org.apache.openmeetings.persistence.beans.user.State;
 import org.apache.openmeetings.web.app.WebSession;
+import org.apache.openmeetings.web.pages.SwfPage;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.extensions.validation.validator.RfcCompliantEmailAddressValidator;
@@ -49,6 +49,7 @@ import org.apache.wicket.markup.html.form.StatelessForm;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.validation.validator.StringValidator;
 
 import com.googlecode.wicket.jquery.ui.widget.dialog.AbstractFormDialog;
@@ -110,11 +111,11 @@ public class RegisterDialog extends AbstractFormDialog<String> {
 
 	@Override
 	protected void onSubmit(AjaxRequestTarget target) {
-		//FIXME need to be refactored
+		//FIXME need to be refactored to be handled by Wicket
 		getBean(UserManager.class).registerUser(login, password, lastName
 				, firstName, email, null, ""/*street*/, ""/*additionalname*/, ""/*fax*/, ""/*zip*/
 				, state.getState_id(), ""/*town*/, lang.getLanguage_id(), ""/*phone*/, false/*sendSMS*/
-				, getBaseSwfPath(), false, tz.getJname());
+				, "" + getRequestCycle().urlFor(SwfPage.class, new PageParameters()), false, tz.getJname());
 	}
 	
 	class RegisterForm extends StatelessForm<String> {

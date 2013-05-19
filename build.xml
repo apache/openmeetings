@@ -217,28 +217,37 @@
 		</delete>
 	</target>
 	
+	<target name="web.copy">
+		<copy todir="${dist.webapps.dir}" overwrite="true" force="true">
+			<fileset dir="${webcontent.src.dir}/openmeetings" />
+		</copy>
+		<filter token="wicket.mode" value="${wicket.mode}" />
+		<copy todir="${dist.webapps.dir}/WEB-INF" filtering="true" overwrite="true" force="true">
+			<fileset dir="${webcontent.src.dir}/WEB-INF">
+				<include name="*.xml" />
+				<include name="*.properties" />
+				<exclude name="root-*.xml" />
+			</fileset>
+		</copy>
+		<copy todir="${dist.webapps.dir}/languages" overwrite="true" force="true">
+			<fileset dir="${webcontent.src.dir}/languages" />
+		</copy>
+		<copy todir="${dist.webapps.dir}/conf" overwrite="true" force="true">
+			<fileset dir="${webcontent.src.dir}/conf" />
+		</copy>
+	</target>
+	
 	<!-- Check timestamp on files -->
-	<target name="prepare" depends="prepare.mkdir">
+	<target name="prepare" depends="prepare.mkdir,web.copy">
 		<copy todir="${red5.root}">
 			<fileset dir="${red5.lib}">
 				<exclude name="**/*.fla" />
 			</fileset>
 		</copy>
-		<copy todir="${dist.webapps.dir}">
-			<fileset dir="${webcontent.src.dir}/openmeetings" />
-		</copy>
 
 		<copy todir="${dist.webapps.dir}">
 			<fileset dir="${webcontent.src.dir}">
 				<include name="*.html" />
-			</fileset>
-		</copy>
-		<filter token="wicket.mode" value="${wicket.mode}" />
-		<copy todir="${dist.webapps.dir}/WEB-INF" filtering="true">
-			<fileset dir="${webcontent.src.dir}/WEB-INF">
-				<include name="*.xml" />
-				<include name="*.properties" />
-				<exclude name="root-*.xml" />
 			</fileset>
 		</copy>
 		<antcall target="-cleanup-jrebel" />
@@ -249,14 +258,6 @@
 			<fileset file="src/META-INF/*.xml">
 				<exclude name="services.xml" />
 			</fileset>
-		</copy>
-
-		<!-- add language files from .war version -->
-		<copy todir="${dist.webapps.dir}/languages">
-			<fileset dir="${webcontent.src.dir}/languages" />
-		</copy>
-		<copy todir="${dist.webapps.dir}/conf">
-			<fileset dir="${webcontent.src.dir}/conf" />
 		</copy>
 		<tstamp />
 	</target>
@@ -282,12 +283,7 @@
 		</copy>
 	</target>
 
-	<!-- TODO remove copy/paste clean-up targets -->
-	<target name="web.only" depends="jar.web.only">
-		<copy todir="${dist.webapps.dir}" overwrite="true" force="true">
-			<fileset dir="${webcontent.src.dir}/openmeetings" />
-		</copy>
-	</target>
+	<target name="web.only" depends="jar.web.only, web.copy"/>
 	
 	<target name="jar.web.only" depends="enhance.only.norefresh, current_revision">
 		<tstamp prefix="build">

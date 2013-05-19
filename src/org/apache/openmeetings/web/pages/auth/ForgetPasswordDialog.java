@@ -18,7 +18,6 @@
  */
 package org.apache.openmeetings.web.pages.auth;
 
-import static org.apache.openmeetings.web.app.Application.getBaseSwfPath;
 import static org.apache.openmeetings.web.app.Application.getBean;
 
 import java.util.Arrays;
@@ -27,6 +26,7 @@ import java.util.List;
 import org.apache.openmeetings.data.user.UserManager;
 import org.apache.openmeetings.data.user.dao.UsersDao;
 import org.apache.openmeetings.web.app.WebSession;
+import org.apache.openmeetings.web.pages.SwfPage;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormChoiceComponentUpdatingBehavior;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
@@ -39,6 +39,7 @@ import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import com.googlecode.wicket.jquery.ui.widget.dialog.AbstractFormDialog;
 import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
@@ -143,7 +144,8 @@ public class ForgetPasswordDialog extends AbstractFormDialog<String> {
 
 	@Override
 	protected void onSubmit(AjaxRequestTarget target) {
-		getBean(UserManager.class).resetUser(
-			type == Type.email ? name : "", type == Type.login ? name : "", getBaseSwfPath());
+		//FIXME forgot password should be handled be Wicket
+		getBean(UserManager.class).resetUser(type == Type.email ? name : "", type == Type.login ? name : ""
+			, "" + getRequestCycle().urlFor(SwfPage.class, new PageParameters()));
 	}
 }

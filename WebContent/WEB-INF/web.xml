@@ -25,14 +25,6 @@
         <param-value>default</param-value>
     </context-param>
     
-	<welcome-file-list>
-		<welcome-file>sipindex.html</welcome-file>
-		<welcome-file>login.html</welcome-file>
-		<welcome-file>index.html</welcome-file>
-		<welcome-file>index.htm</welcome-file>
-		<welcome-file>networktesting.swf10.swf</welcome-file>
-	</welcome-file-list>
-    
     <!-- Custom logging like described in Paul Gregoire Patch: 
     http://gregoire.org/2008/09/18/logging-work-around/
     THIS WILL NOT WORK for us as we can hardly rewrite all logging statements of hibernate
@@ -66,7 +58,7 @@
 	</filter>
 	<filter-mapping>
 		<filter-name>OpenmeetingsApplication</filter-name>
-		<url-pattern>/html/*</url-pattern>
+		<url-pattern>/*</url-pattern>
 	</filter-mapping>
 	 
     <context-param>
@@ -96,10 +88,6 @@
         <servlet-class>org.apache.openmeetings.servlet.outputhandler.DownloadHandler</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>Install</servlet-name>
-        <servlet-class>org.apache.openmeetings.servlet.outputhandler.Install</servlet-class>
-    </servlet>
-    <servlet>
         <servlet-name>LangExport</servlet-name>
         <servlet-class>org.apache.openmeetings.servlet.outputhandler.LangExport</servlet-class>
     </servlet>
@@ -121,22 +109,6 @@
         <servlet-class>org.apache.axis2.transport.http.AxisServlet</servlet-class>
         <load-on-startup>1</load-on-startup>
     </servlet>
-    <servlet>
-		<servlet-name>Calendar</servlet-name>
-		<servlet-class>org.apache.openmeetings.servlet.outputhandler.CalendarServlet</servlet-class>
-	</servlet>
-    <servlet>
-        <description>DefaultIndex</description>
-        <display-name>DefaultIndex</display-name>
-        <servlet-name>DefaultIndex</servlet-name>
-        <servlet-class>org.apache.openmeetings.servlet.outputhandler.DefaultIndex</servlet-class>
-    </servlet> 
-    <servlet>
-        <description>BackupExport</description>
-        <display-name>BackupExport</display-name>
-        <servlet-name>BackupExport</servlet-name>
-        <servlet-class>org.apache.openmeetings.servlet.outputhandler.BackupExportFacade</servlet-class>
-    </servlet>
 	
 	<servlet-mapping>
 		<servlet-name>spring-mvc</servlet-name>
@@ -145,14 +117,6 @@
     <servlet-mapping>
         <servlet-name>DownloadHandler</servlet-name>
         <url-pattern>/DownloadHandler</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>Install</servlet-name>
-        <url-pattern>/Install</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>Install</servlet-name>
-        <url-pattern>/install</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>LangExport</servlet-name>
@@ -174,18 +138,6 @@
     <servlet-mapping>
         <servlet-name>AxisServlet</servlet-name>
         <url-pattern>/services/*</url-pattern>
-    </servlet-mapping>
-	<servlet-mapping>
-		<servlet-name>Calendar</servlet-name>
-		<url-pattern>/Calendar</url-pattern>
-	</servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>DefaultIndex</servlet-name>
-        <url-pattern>/sipindex.html</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>BackupExport</servlet-name>
-        <url-pattern>/BackupExport</url-pattern>
     </servlet-mapping>
     <mime-mapping>
         <extension>inc</extension>

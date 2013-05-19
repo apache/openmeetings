@@ -21,9 +21,8 @@ package org.apache.openmeetings.web.pages;
 import org.apache.openmeetings.remote.red5.ScopeApplicationAdapter;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.wicket.RestartResponseException;
-import org.apache.wicket.markup.html.WebPage;
 
-public class NotInitedPage extends WebPage {
+public class NotInitedPage extends BaseNotInitedPage {
 	private static final long serialVersionUID = 5002281516467955607L;
 	
 	public NotInitedPage() {

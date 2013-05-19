@@ -107,9 +107,9 @@
         tests.testAll();
     </method>
 
-    <dataset type="http" name="settings" request="false" >
+    <dataset type="http" name="settings" request="false" proxied="false">
         <handler name="oninit">
-            this.setAttribute("src","config.xml");
+            this.setAttribute("src", "config.xml");
             this.doRequest();
         </handler>
         <handler name="ondata">
@@ -118,7 +118,7 @@
             canvas.showTests();
         </handler>
         <handler name="onerror" args="e">
-            if ($debug) Debug.write("Settings error", e);
+            if ($debug) Debug.write("Settings error [" + this.src + "]", e);
         </handler>
         <handler name="ontimeout" args="e">
             if ($debug) Debug.write("Settings timeout error", e);

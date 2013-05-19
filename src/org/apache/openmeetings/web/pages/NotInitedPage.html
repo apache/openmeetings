@@ -19,16 +19,12 @@
   
 -->
 <html xmlns:wicket="http://wicket.apache.org">
-	<head>
-		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
-		<meta http-equiv='Content-Type' content='text/html; charset=utf-8' />
-	</head>
-	<body>
-		<!-- FIXME localized versions of this file need to be created -->
-		<b>OpenMeetings - Loading ...</b><br />
-		The server is not yet completely initialized. Please try again in a couple of seconds.<br/>
-		If this message persists for several minutes contact your Sys-Administration.<br/>
-		If that message stays forever you should check the logs located in 
-		<pre>openmeetings_install_dir/log</pre> folder, probably your database user/pwd/host is wrong!
-	</body>
+<wicket:extend>
+	<!-- FIXME localized versions of this file need to be created -->
+	<b>OpenMeetings - Loading ...</b><br />
+	The server is not yet completely initialized. Please try again in a couple of seconds.<br/>
+	If this message persists for several minutes contact your Sys-Administration.<br/>
+	If that message stays forever you should check the logs located in 
+	<pre>openmeetings_install_dir/log</pre> folder, probably your database user/pwd/host is wrong!
+</wicket:extend>
 </html>

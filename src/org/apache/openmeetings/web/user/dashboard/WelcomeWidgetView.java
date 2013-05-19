@@ -28,10 +28,13 @@ import org.apache.openmeetings.data.user.dao.UsersDao;
 import org.apache.openmeetings.persistence.beans.user.User;
 import org.apache.openmeetings.web.common.UploadableProfileImagePanel;
 import org.apache.openmeetings.web.pages.MainPage;
+import org.apache.openmeetings.web.pages.SwfPage;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import ro.fortsoft.wicket.dashboard.Widget;
 import ro.fortsoft.wicket.dashboard.web.WidgetView;
@@ -63,6 +66,16 @@ public class WelcomeWidgetView extends WidgetView {
 			@Override
 			public void onClick(AjaxRequestTarget target) {
 				((MainPage)getPage()).updateContents(PROFILE_EDIT, target);
+			}
+		});
+		add(new Link<Void>("netTest") {
+			private static final long serialVersionUID = -9055312659797800331L;
+
+			@Override
+			public void onClick() {
+				PageParameters pp = new PageParameters();
+				pp.add("swf", "networktesting.swf10.swf");
+				setResponsePage(SwfPage.class, pp);
 			}
 		});
 	}

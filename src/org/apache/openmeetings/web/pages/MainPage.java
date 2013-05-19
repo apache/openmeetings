@@ -50,7 +50,7 @@ import org.slf4j.Logger;
 import org.wicketstuff.urlfragment.UrlFragment;
 
 @AuthorizeInstantiation("USER")
-public class MainPage extends BasePage {
+public class MainPage extends BaseInitedPage {
 	private static final long serialVersionUID = 6421960759218157999L;
 	private static final Logger log = Red5LoggerFactory.getLogger(MainPage.class, webAppRootKey);
 	private final MenuPanel menu;

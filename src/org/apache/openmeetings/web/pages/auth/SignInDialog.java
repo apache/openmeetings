@@ -30,6 +30,7 @@ import org.apache.openmeetings.remote.LdapConfigService;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.OmAuthenticationStrategy;
 import org.apache.openmeetings.web.app.WebSession;
+import org.apache.openmeetings.web.pages.SwfPage;
 import org.apache.wicket.RestartResponseException;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
@@ -45,8 +46,10 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.PasswordTextField;
 import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.form.StatelessForm;
+import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import com.googlecode.wicket.jquery.core.JQueryBehavior;
 import com.googlecode.wicket.jquery.core.Options;
@@ -241,6 +244,16 @@ public class SignInDialog extends AbstractFormDialog<String> {
 				public void onClick(AjaxRequestTarget target) {
 					SignInDialog.this.close(target, null);
 					f.open(target);
+				}
+			});
+			add(new Link<Void>("netTest") {
+				private static final long serialVersionUID = -9055312659797800331L;
+
+				@Override
+				public void onClick() {
+					PageParameters pp = new PageParameters();
+					pp.add("swf", "networktesting.swf10.swf");
+					setResponsePage(SwfPage.class, pp);
 				}
 			});
 		}

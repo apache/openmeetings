@@ -18,12 +18,16 @@
  */
 package org.apache.openmeetings.web.app;
 
-import javax.servlet.http.HttpServletRequest;
+import static org.springframework.web.context.support.WebApplicationContextUtils.getWebApplicationContext;
 
+import org.apache.openmeetings.data.basic.FieldLanguagesValuesDao;
+import org.apache.openmeetings.data.user.dao.UsersDao;
 import org.apache.openmeetings.remote.red5.ScopeApplicationAdapter;
 import org.apache.openmeetings.web.pages.MainPage;
 import org.apache.openmeetings.web.pages.NotInitedPage;
+import org.apache.openmeetings.web.pages.SwfPage;
 import org.apache.openmeetings.web.pages.auth.SignInPage;
+import org.apache.openmeetings.web.pages.install.InstallWizardPage;
 import org.apache.openmeetings.web.user.dashboard.PrivateRoomsWidgetDescriptor;
 import org.apache.openmeetings.web.user.dashboard.RssWidgetDescriptor;
 import org.apache.openmeetings.web.user.dashboard.StartWidgetDescriptor;
@@ -41,16 +45,11 @@ import org.apache.wicket.markup.MarkupFactory;
 import org.apache.wicket.markup.MarkupParser;
 import org.apache.wicket.markup.MarkupResourceStream;
 import org.apache.wicket.markup.html.WebPage;
-import org.apache.wicket.protocol.http.RequestUtils;
 import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.request.IRequestHandler;
 import org.apache.wicket.request.Url;
-import org.apache.wicket.request.cycle.RequestCycle;
-import org.apache.wicket.request.http.WebRequest;
 import org.apache.wicket.request.mapper.info.PageComponentInfo;
 import org.apache.wicket.settings.IPageSettings;
-import org.springframework.context.ApplicationContext;
-import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import ro.fortsoft.wicket.dashboard.WidgetRegistry;
 import ro.fortsoft.wicket.dashboard.web.DashboardContext;
@@ -59,6 +58,7 @@ import ro.fortsoft.wicket.dashboard.web.DashboardSettings;
 
 public class Application extends AuthenticatedWebApplication {
 	private DashboardContext dashboardContext;
+	private static boolean isInstalled;
 	
 	@Override
 	protected void init() {
@@ -97,6 +97,8 @@ public class Application extends AuthenticatedWebApplication {
 		dashboardSettings.setIncludeJQuery(false);
 		dashboardSettings.setIncludeJQueryUI(false);
 		
+		mountPage("swf", SwfPage.class);
+		mountPage("install", InstallWizardPage.class);
 		mountPage("signin", getSignInPageClass());
 		mountPage("notinited", NotInitedPage.class);
 		mountResource("/recordings/mp4/${id}", new Mp4RecordingResourceReference());
@@ -123,20 +125,6 @@ public class Application extends AuthenticatedWebApplication {
 		return (OmAuthenticationStrategy)get().getSecuritySettings().getAuthenticationStrategy();
 	}
 	
-	public final static String toAbsolutePath(final String relativePagePath) {
-	       HttpServletRequest req = (HttpServletRequest)((WebRequest)RequestCycle.get().getRequest()).getContainerRequest();
-	       return RequestUtils.toAbsolutePath(req.getRequestURL().toString(), relativePagePath);
-	}
-	
-	public final static String getBasePath() {
-		return toAbsolutePath("");
-	}
-
-	public final static String getBaseSwfPath() {
-		//TODO add proxy handling
-		return toAbsolutePath("../");
-	}
-
 	@Override
 	public Class<? extends Page> getHomePage() {
 		return MainPage.class;
@@ -160,10 +148,26 @@ public class Application extends AuthenticatedWebApplication {
 		return get().dashboardContext;
 	}
 	
+	private static <T> T _getBean(Class<T> clazz) {
+		return getWebApplicationContext(get().getServletContext()).getBean(clazz);
+	}
+	
+	public static boolean isInstalled() {
+		boolean result = isInstalled;
+		if (!isInstalled) {
+			if (ScopeApplicationAdapter.initComplete) {
+				result = _getBean(UsersDao.class).count() > 0 && _getBean(FieldLanguagesValuesDao.class).count() > 0;
+			}
+		}
+		return result;
+	}
+	
 	public static <T> T getBean(Class<T> clazz) {
 		if (ScopeApplicationAdapter.initComplete) {
-			ApplicationContext context = WebApplicationContextUtils.getWebApplicationContext(get().getServletContext());
-			return context.getBean(clazz);
+			if (!isInstalled()) {
+				throw new RestartResponseException(InstallWizardPage.class);
+			}
+			return _getBean(clazz);
 		} else {
 			throw new RestartResponseException(NotInitedPage.class);
 		}
