@@ -33,6 +33,7 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
+import org.apache.openmeetings.persistence.beans.IDataProviderEntity;
 import org.apache.openmeetings.persistence.beans.basic.Server;
 import org.apache.openmeetings.utils.math.CalendarPatterns;
 
@@ -61,7 +62,7 @@ import org.apache.openmeetings.utils.math.CalendarPatterns;
 	@NamedQuery(name = "getRoomsIdsByServer", query = "SELECT c.room_id FROM Client c WHERE c.server = :server GROUP BY c.room_id")
 })
 @Table(name = "client")
-public class Client implements Serializable {
+public class Client implements IDataProviderEntity, Serializable {
 
 	/**
 	 * 	

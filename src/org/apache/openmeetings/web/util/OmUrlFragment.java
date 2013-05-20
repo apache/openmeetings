@@ -26,6 +26,7 @@ import java.io.Serializable;
 
 import org.apache.openmeetings.web.admin.backup.BackupPanel;
 import org.apache.openmeetings.web.admin.configurations.ConfigsPanel;
+import org.apache.openmeetings.web.admin.connection.ConnectionsPanel;
 import org.apache.openmeetings.web.admin.groups.GroupsPanel;
 import org.apache.openmeetings.web.admin.labels.LangPanel;
 import org.apache.openmeetings.web.admin.ldaps.LdapsPanel;
@@ -203,6 +204,7 @@ public class OmUrlFragment implements Serializable {
 				if (TYPE_USER.equals(type)) {
 					basePanel = new UsersPanel(CHILD_ID);
 				} else if (TYPE_CONNECTION.equals(type)) {
+					basePanel = new ConnectionsPanel(CHILD_ID);
 				} else if (TYPE_GROUP.equals(type)) {
 					basePanel = new GroupsPanel(CHILD_ID);
 				} else if (TYPE_ROOM.equals(type)) {

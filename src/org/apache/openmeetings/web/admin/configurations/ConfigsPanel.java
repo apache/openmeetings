@@ -24,8 +24,8 @@ import org.apache.openmeetings.web.admin.AdminPanel;
 import org.apache.openmeetings.web.admin.PagedEntityListPanel;
 import org.apache.openmeetings.web.admin.SearchableDataView;
 import org.apache.openmeetings.web.data.DataViewContainer;
-import org.apache.openmeetings.web.data.SearchableDataProvider;
 import org.apache.openmeetings.web.data.OrderByBorder;
+import org.apache.openmeetings.web.data.SearchableDataProvider;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -40,7 +40,6 @@ import org.apache.wicket.markup.repeater.Item;
  * 
  */
 public class ConfigsPanel extends AdminPanel {
-	
 	private static final long serialVersionUID = -1L;
 	private ConfigForm form;
 	
