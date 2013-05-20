@@ -801,6 +801,7 @@
 					new lz.checkLoginData(canvas.main_content._content.inner);
 					return;
 				}
+				hib.userobject = value;
 				var found = false;
 				for (var i=0;i<value.organisation_users.length;i++) {
 					if (value.organisation_users[i].organisation.organisation_id == value.sessionData.organization_id) {
@@ -811,15 +812,6 @@
 					}
 				}
 				parent.getCurrentRoomClient.doCall();
-				/*
-				if (found) {
-					hib.getLanguageByIdAndMax.start = 0;
-					hib.getLanguageByIdAndMax.doCall();
-					canvas.focusOnItem = null;
-				} else {
-					if ($debug) Debug.write("No Organization Found to assign");
-					new lz.checkLoginData(canvas.main_content._content.inner);
-				}*/
 			}
 		]]>
 		</handler>
