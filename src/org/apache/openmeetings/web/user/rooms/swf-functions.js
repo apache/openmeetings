@@ -31,6 +31,7 @@ function initSwf(swfurl) {
 		};
 	var options = $.extend({}, general, {allowfullscreen : 'true'});
 	$('#header, #topLinks, #menu').hide();
+	$('div[id="contents"], div[id="contents"] > div').css('height', '100%');
 	var embed = $('<embed>').attr('quality', 'high').attr('bgcolor', options.bgcolor)
 		.attr('src', options.url)
 		.attr('wmode', 'window').attr('allowfullscreen', true)
@@ -45,6 +46,7 @@ function initSwf(swfurl) {
 
 function roomExit() {
 	$('#header, #topLinks, #menu').show();
+	$('div[id="contents"], div[id="contents"] > div').css('height', 'auto');
 	window.location.hash = "#rooms/public";
 	$('#lzappContainer').remove();
 }
