@@ -140,7 +140,15 @@ public class UploadController extends AbstractUploadController {
 			throw new ServletException(e);
     	}
     }
-
+    
+    @RequestMapping(value = "/remotelog.upload", method = RequestMethod.POST)
+    public void handleRemoteLog(HttpServletRequest request, HttpServletResponse response) throws ServletException {
+    	String message = request.getParameter("message");
+    	if (message != null) {
+    		log.debug("[CLIENT MESSAGE] " + message);
+    	}
+    }
+    
     @RequestMapping(value = "/upload.upload", method = RequestMethod.POST)
     public void handleFormUpload(HttpServletRequest request, HttpServletResponse response) throws ServletException {
 		try {
