@@ -40,7 +40,7 @@ public class RoomPanel extends BasePanel {
 		super(id);
 
 		StringValue swfVal = pp.get("swf");
-		String swf = (swfVal.isEmpty() ? "maindebug.as3.swf11.swf" : swfVal.toString())
+		String swf = (swfVal.isEmpty() ? "main.as3.swf11.swf" : swfVal.toString())
 				+ new PageParametersEncoder().encodePageParameters(pp);
 		add(new Label("init", String.format("initSwf('%s');", swf)).setEscapeModelStrings(false));
 	}
