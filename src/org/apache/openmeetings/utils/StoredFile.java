@@ -59,12 +59,12 @@ public class StoredFile {
     public StoredFile(String fullname) {
     	int idx = fullname.lastIndexOf('.');
     	name = idx < 0 ? fullname : fullname.substring(0, idx);
-    	ext = idx < 0 ? "" : fullname.substring(idx + 1);
+    	ext = idx < 0 ? "" : fullname.substring(idx + 1).toLowerCase();
     }
     
     public StoredFile(String name, String ext) {
         this.name = name;
-        this.ext = ext;
+        this.ext = ext != null ? ext.toLowerCase() : "";
     }
     
     public static String[] getExtensions(){

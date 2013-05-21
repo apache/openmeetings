@@ -41,7 +41,7 @@ public class UploadableProfileImagePanel extends ProfileImagePanel {
 	
 	public UploadableProfileImagePanel(String id, final long userId) {
 		super(id, userId);
-		Form<Void> form = new Form<Void>("form");
+		final Form<Void> form = new Form<Void>("form");
 		form.setMultiPart(true);
 		form.setMaxSize(Bytes.bytes(getMaxUploadSize(getBean(ConfigurationDao.class))));
 		form.add(fileUploadField = new FileUploadField("image", new IModel<List<FileUpload>>() {
@@ -73,7 +73,6 @@ public class UploadableProfileImagePanel extends ProfileImagePanel {
 							//FIXME need to work with InputStream !!!
 							getBean(GenerateImage.class)
 								.convertImageUserProfile(fu.writeToTempFile(), userId, asIs);
-							target.add(profile);
 						} catch (Exception e) {
 							// TODO display error
 							e.printStackTrace();
@@ -82,8 +81,9 @@ public class UploadableProfileImagePanel extends ProfileImagePanel {
 						//TODO display error
 					}
 				}
+				target.add(profile, form);
 			}
 		});
-		add(form);
+		add(form.setOutputMarkupId(true));
 	}
 }

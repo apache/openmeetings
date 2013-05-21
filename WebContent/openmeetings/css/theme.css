@@ -583,6 +583,10 @@ div.tableWrapper {
 	width: 100%;
 	padding: 5px;
 	z-index: 50;
+	font-size: 14px;
+	font-family: Arial;
+	font-weight: bold;
+	color: blue;
 }
 .profile .upload {
 	z-index: 100;
