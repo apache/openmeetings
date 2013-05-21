@@ -4670,4 +4670,19 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
   <string id="1548" name="widgets_tab">
     <value>Widgets</value>
   </string>
+  <string id="1549" name="about_title">
+    <value>About</value>
+  </string>
+  <string id="1550" name="about_name">
+    <value>Name</value>
+  </string>
+  <string id="1551" name="about_version">
+    <value>Version</value>
+  </string>
+  <string id="1552" name="about_revision">
+    <value>Revision</value>
+  </string>
+  <string id="1553" name="about_build_date">
+    <value>Build date</value>
+  </string>
 </language>

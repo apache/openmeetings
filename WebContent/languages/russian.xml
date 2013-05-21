@@ -4116,7 +4116,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>Активность и действия</value>
   </string>
   <string id="1364" name="whiteboard">
-    <value>Удалённая доска</value>
+    <value>Удалить доску</value>
   </string>
   <string id="1365" name="whiteboard">
     <value>Вы должны быть модератором или иметь права на рисование на доске, чтобы удалить доску!</value>
@@ -4662,12 +4662,27 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>Сохранение данных, подождите пожалуйста.</value>
   </string>
   <string id="1546" name="widget_welcome">
-    <value>Welcome</value>
+    <value>Добро пожаловать</value>
   </string>
   <string id="1547" name="widget_welcome_desc">
-    <value>Widget displaying basic user info and support links</value>
+    <value>Виджет, содержащий основную информацию о пользователе и ссылки на сайты поддержки</value>
   </string>
   <string id="1548" name="widgets_tab">
-    <value>Widgets</value>
+    <value>Виджеты</value>
+  </string>
+  <string id="1549" name="about_title">
+    <value>О программе</value>
+  </string>
+  <string id="1550" name="about_name">
+    <value>Наименование</value>
+  </string>
+  <string id="1551" name="about_version">
+    <value>Версия</value>
+  </string>
+  <string id="1552" name="about_revision">
+    <value>Ревизия</value>
+  </string>
+  <string id="1553" name="about_build_date">
+    <value>Дата билда</value>
   </string>
 </language>

@@ -27,6 +27,7 @@ import java.util.List;
 
 import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
 import org.apache.openmeetings.web.app.Application;
+import org.apache.openmeetings.web.app.WebSession;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.basic.Label;
 
@@ -36,7 +37,7 @@ import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
 public class AboutDialog extends AbstractDialog<String> {
 	private static final long serialVersionUID = 1400355222295594321L;
 	public AboutDialog(String id) {
-		super(id, "About"); //FIXME hardcoded
+		super(id, WebSession.getString(1549));
 		
 		add(new Label("name", Application.getBean(ConfigurationDao.class).getConfValue(
 				"application.name"
