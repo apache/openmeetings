@@ -140,6 +140,7 @@
                             	
     	tWhiteboardBtn.onmouseout.sendEvent(null);
         this.addNewItemButton.updatePosition();
+        canvas.whiteboardCount++;
         return whiteboard;
     </method>
     
@@ -175,6 +176,7 @@
     		this.objMessage[0] = "removeWindow";
     		this.objMessage[1] = whiteboardId;
     		this.sendMessageToMembers.doCall();
+	        canvas.whiteboardCount--;
     	}
     </method>
     

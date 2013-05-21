@@ -253,6 +253,7 @@ the LAST RoomClient Object that has been changed the giveExclusiveAudio status
 <attribute name="currentlanguage" value="english" type="string" />
 
 <attribute name="objWhiteboard" value="null" />
+<attribute name="whiteboardCount" value="0" type="number" />
 <attribute name="objMessage" value="null" />
 <attribute name="VarsModeratorGeneral" value="null" />
 

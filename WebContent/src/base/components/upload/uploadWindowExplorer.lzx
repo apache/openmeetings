@@ -226,12 +226,6 @@
 		</handler>
 	</simpleLabelButton>
     
-    <!--
-    <labelText labelid="592" name="progress2" visibility="hidden" x="10" y="140" 
-    		   width="250" multiline="true">
-    	
-    </labelText>
-     -->
     <view name="progress2" x="10" y="158" width="250" visibility="hidden" height="10" bgcolor="#C6CEDF">
         <attribute name="isStarted" value="false" type="boolean" />
         <method name="startShowing">
@@ -280,7 +274,7 @@
 	</view>
 	
 	<labelCheckbox name="_loadToWhiteboard" x="4" y="184" fontsize="11" 
-				   labelid="1312" value="true" />
+		labelid="1312" value="${ canvas.whiteboardCount &gt; 0 }" enabled="${ canvas.whiteboardCount &gt; 0 }" />
 	
 	<simpleLabelButton name="_close" x="100" y="204" labelid="595" width="160" height="20">
 		<handler name="onclick">
