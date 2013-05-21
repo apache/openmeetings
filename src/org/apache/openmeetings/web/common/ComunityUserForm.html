@@ -21,9 +21,20 @@
 <html xmlns:wicket="http://wicket.apache.org">
 <wicket:panel>
 	<div class="formelementradiobox">
-		<span wicket:id="community_settings"> <input type="radio" />
-			<input type="radio" /> <input type="radio" />
-		</span>
+		<div wicket:id="community_settings">
+			<div>
+				<input wicket:id="everybody" type="radio" /><label wicket:for="everybody"><wicket:ommessage key="1160"/></label>
+				<div class="clear"></div>
+			</div>
+			<div>
+				<input wicket:id="contact" type="radio" /><label wicket:for="contact"><wicket:ommessage key="1168"/></label>
+				<div class="clear"></div>
+			</div>
+			<div>
+				<input wicket:id="nobody" type="radio" /><label wicket:for="nobody"><wicket:ommessage key="1169"/></label>
+				<div class="clear"></div>
+			</div>
+		</div>
 	</div>
 	<div class="formelement">
 		<label><wicket:ommessage key="1162" /></label>

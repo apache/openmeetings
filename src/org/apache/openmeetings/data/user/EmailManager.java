@@ -108,7 +108,7 @@ public class EmailManager {
 	 */
 	public boolean checkUserEMail(String email) {
 		try {
-			if (email.length() == 0)
+			if (email == null || email.length() == 0)
 				return true;
 			log.debug("checkUserMail: " + email);
 			TypedQuery<Address> query = em

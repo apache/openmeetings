@@ -23,7 +23,6 @@
 				<artifact pattern="http://repo1.maven.org/maven2/[organisation]/[artifact]-[revision].[ext]" />
 			</url>
 			<url name="sonatype" m2compatible="true">
-				<artifact pattern="https://oss.sonatype.org/content/repositories/sourceforge-releases/[organisation]/[artifact]-[revision].[ext]" />
 				<artifact pattern="https://oss.sonatype.org/content/repositories/central/[artifact]/[artifact]/[revision]/[artifact]-[revision].[ext]" />
 			</url>
 			<url name="googlecode">

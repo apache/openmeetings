@@ -18,28 +18,23 @@
  */
 package org.apache.openmeetings.web.common;
 
-import java.util.Arrays;
-
 import org.apache.openmeetings.persistence.beans.user.User;
-import org.apache.openmeetings.web.app.WebSession;
 import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.form.IChoiceRenderer;
-import org.apache.wicket.markup.html.form.RadioChoice;
+import org.apache.wicket.markup.html.form.Radio;
+import org.apache.wicket.markup.html.form.RadioGroup;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.panel.IMarkupSourcingStrategy;
 import org.apache.wicket.markup.html.panel.PanelMarkupSourcingStrategy;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 
 public class ComunityUserForm extends Form<User> {
 	private static final long serialVersionUID = -4487619335283747717L;
 
 	public ComunityUserForm(String id, IModel<User> model) {
 		super(id, model);
-		final String field1160 = WebSession.getString(1160); // 1160 everybody
-		final String field1168 = WebSession.getString(1168); // 1168 contact
-		final String field1169 = WebSession.getString(1169); // 1169 nobody
 
-		add(new RadioChoice<Long>("community_settings", new IModel<Long>() {
+		RadioGroup<Long> rg = new RadioGroup<Long>("community_settings", new IModel<Long>() {
 			private static final long serialVersionUID = 1L;
 
 			public Long getObject() {
@@ -68,24 +63,10 @@ public class ComunityUserForm extends Form<User> {
 
 			public void detach() {
 			}
-		}, Arrays.asList(1L, 2L, 3L), new IChoiceRenderer<Long>() {
-			private static final long serialVersionUID = 1L;
-
-			public Object getDisplayValue(Long id) {
-				if (id.equals(1L)) {
-					return field1160;
-				} else if (id.equals(2L)) {
-					return field1168;
-				} else {
-					return field1169;
-				}
-			}
-
-			public String getIdValue(Long id, int index) {
-				return "" + id;
-			}
-
-		}));
+		});
+		add(rg.add(new Radio<Long>("everybody", Model.of(1L)), new Radio<Long>("contact", Model.of(2L))
+			, new Radio<Long>("nobody", Model.of(3L))).setOutputMarkupId(true).setRenderBodyOnly(false)
+			);
 
 		add(new TextArea<String>("userOffers"));
 		add(new TextArea<String>("userSearchs"));
