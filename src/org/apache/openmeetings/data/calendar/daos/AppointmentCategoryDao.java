@@ -18,6 +18,8 @@
  */
 package org.apache.openmeetings.data.calendar.daos;
 
+import static org.apache.openmeetings.OpenmeetingsVariables.webAppRootKey;
+
 import java.util.Date;
 import java.util.List;
 
@@ -26,8 +28,6 @@ import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
-import org.apache.openmeetings.OpenmeetingsVariables;
-import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
 import org.apache.openmeetings.data.user.dao.UsersDao;
 import org.apache.openmeetings.persistence.beans.calendar.AppointmentCategory;
 import org.red5.logging.Red5LoggerFactory;
@@ -37,10 +37,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
 public class AppointmentCategoryDao {
-
-	private static final Logger log = Red5LoggerFactory.getLogger(
-			ConfigurationDao.class,
-			OpenmeetingsVariables.webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(AppointmentCategoryDao.class, webAppRootKey);
 
 	@PersistenceContext
 	private EntityManager em;

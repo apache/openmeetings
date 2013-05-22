@@ -16,25 +16,29 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.web.pages.install;
+package org.apache.openmeetings.web.common;
 
-import org.apache.openmeetings.web.app.Application;
-import org.apache.wicket.markup.html.link.Link;
+import static org.apache.openmeetings.OpenmeetingsVariables.webAppRootKey;
+
+import java.io.PrintWriter;
+
+import org.apache.commons.io.output.StringBuilderWriter;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.Panel;
+import org.red5.logging.Red5LoggerFactory;
+import org.slf4j.Logger;
 
-public class CongradulationsPanel extends Panel {
+public class ErrorMessagePanel extends Panel {
+	private static final Logger log = Red5LoggerFactory.getLogger(ErrorMessagePanel.class, webAppRootKey);
 	private static final long serialVersionUID = 1L;
 
-	public CongradulationsPanel(String id) {
+	public ErrorMessagePanel(String id, String msg, Throwable err) {
 		super(id);
 		
-		add(new Link<Void>("url") {
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public void onClick() {
-				setResponsePage(Application.get().getHomePage());
-			}
-		});
+		log.error(msg, err);
+		add(new Label("msg", msg));
+		StringBuilderWriter sw = new StringBuilderWriter();
+		err.printStackTrace(new PrintWriter(sw));
+		add(new Label("err", sw.toString()));
 	}
 }

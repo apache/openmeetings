@@ -21,6 +21,7 @@ package org.apache.openmeetings.web.pages.auth;
 import static org.apache.openmeetings.utils.UserHelper.getMinLoginLength;
 import static org.apache.openmeetings.utils.UserHelper.getMinPasswdLength;
 import static org.apache.openmeetings.web.app.Application.getBean;
+import static org.apache.wicket.validation.validator.StringValidator.minimumLength;
 
 import java.util.Arrays;
 import java.util.List;
@@ -49,7 +50,6 @@ import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.apache.wicket.validation.validator.StringValidator;
 
 import com.googlecode.wicket.jquery.ui.widget.dialog.AbstractFormDialog;
 import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
@@ -131,9 +131,9 @@ public class RegisterDialog extends AbstractFormDialog<String> {
 			add(new RequiredTextField<String>("firstName", new PropertyModel<String>(RegisterDialog.this, "firstName")));
 			add(new RequiredTextField<String>("lastName", new PropertyModel<String>(RegisterDialog.this, "lastName")));
 			add(loginField = new RequiredTextField<String>("login", new PropertyModel<String>(RegisterDialog.this, "login")));
-			loginField.add(StringValidator.minimumLength(getMinLoginLength(cfgDao)));
+			loginField.add(minimumLength(getMinLoginLength(cfgDao)));
 			add(passwordField = new PasswordTextField("password", new PropertyModel<String>(RegisterDialog.this, "password")));
-			passwordField.setResetPassword(true).add(StringValidator.minimumLength(getMinPasswdLength(cfgDao)));
+			passwordField.setResetPassword(true).add(minimumLength(getMinPasswdLength(cfgDao)));
 			add(confirmPassword = new PasswordTextField("confirmPassword", new Model<String>()).setResetPassword(true));
 			add(emailField = new RequiredTextField<String>("email", new PropertyModel<String>(RegisterDialog.this, "email")));
 			emailField.add(RfcCompliantEmailAddressValidator.getInstance());

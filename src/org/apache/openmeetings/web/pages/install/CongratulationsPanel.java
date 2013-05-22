@@ -19,24 +19,22 @@
 package org.apache.openmeetings.web.pages.install;
 
 import org.apache.openmeetings.web.app.Application;
-import org.apache.openmeetings.web.common.ErrorMessagePanel;
-import org.apache.openmeetings.web.pages.BaseNotInitedPage;
-import org.apache.wicket.RestartResponseException;
+import org.apache.wicket.markup.html.link.Link;
+import org.apache.wicket.markup.html.panel.Panel;
 
-public class InstallWizardPage extends BaseNotInitedPage {
-	private static final long serialVersionUID = -438388395397826138L;
+public class CongratulationsPanel extends Panel {
+	private static final long serialVersionUID = 1L;
 
-	public InstallWizardPage() {
-		if (Application.isInstalled()) {
-			throw new RestartResponseException(Application.get().getHomePage());
-		}
-		try {
-			add(new InstallWizard("wizard"));
-		} catch (RestartResponseException re) {
-			throw re;
-		} catch (Exception e) {
-			//TODO localization
-			add(new ErrorMessagePanel("wizard", "Error while running installer, please check your installation", e));
-		}
+	public CongratulationsPanel(String id) {
+		super(id);
+		
+		add(new Link<Void>("url") {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void onClick() {
+				setResponsePage(Application.get().getHomePage());
+			}
+		});
 	}
 }

@@ -20,6 +20,10 @@
 -->
 <html xmlns:wicket="http://wicket.apache.org">
 <wicket:panel>
-	Install
+	<p wicket:id="desc">Please click "Finish" button to start installation!</p>
+	<div wicket:id="container" style="margin: 20px;">
+		<div wicket:id="progress"><!-- div><span wicket:id="value"></span>%</div--></div>
+		<div wicket:id="status"></div>
+	</div>
 </wicket:panel>
 </html>

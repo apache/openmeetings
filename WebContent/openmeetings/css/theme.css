@@ -580,7 +580,7 @@ div.tableWrapper {
 	bottom: -20px;
 	left: 0px;
 	opacity: .7;
-	width: 100%;
+	width: 130px;
 	padding: 5px;
 	z-index: 50;
 	font-size: 14px;
@@ -692,4 +692,19 @@ div.tableWrapper {
 	padding-left: 18px;
 	background-image: url(images/world_link.png);
 	background-repeat: no-repeat;
+}
+.error {
+	color: red;
+}
+.message {
+    margin: 50px;
+    border: 1px solid black;
+    padding: 15px;
+    -webkit-border-radius: 8px;
+    border-radius: 8px;
+}
+.ui-progressbar div { 
+	text-align: center;
+	padding-top: 7px;
+	font-weight: bold;
 }

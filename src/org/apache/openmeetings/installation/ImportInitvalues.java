@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.installation;
 
+import static org.apache.openmeetings.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.openmeetings.installation.InstallationConfig.USER_PASSWORD_MINIMUM_LENGTH;
 import static org.apache.openmeetings.persistence.beans.basic.Configuration.CRYPT_KEY;
 import static org.apache.openmeetings.persistence.beans.basic.Configuration.DASHBOARD_SHOW_MYROOMS_KEY;
@@ -40,7 +41,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.data.basic.FieldLanguageDao;
 import org.apache.openmeetings.data.basic.FieldManager;
 import org.apache.openmeetings.data.basic.NaviBuilder;
@@ -71,9 +71,7 @@ import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class ImportInitvalues {
-
-	private static final Logger log = Red5LoggerFactory.getLogger(
-			ImportInitvalues.class, OpenmeetingsVariables.webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(ImportInitvalues.class, webAppRootKey);
 
 	@Autowired
 	private ConfigurationDao configurationDao;
@@ -107,15 +105,21 @@ public class ImportInitvalues {
 	private PollManager pollManager;
 	@Autowired
 	private SipDao sipDao;
+	private int progress = 0;
 
-	public void loadMainMenu() {
-
+	public int getProgress() {
+		return progress;
+	}
+	
+	public void loadUserLevels() {
 		userManager.addUserLevel("User", 1);
 		userManager.addUserLevel("Moderator", 2);
 		userManager.addUserLevel("Admin", 3);
 		userManager.addUserLevel("Web-Service (only access via SOAP)", 4);
 		log.debug("UserLevels ADDED");
-
+	}
+	
+	public void loadMainMenu() {
 		/*
 		 * ######################## Dashboard Menu Points
 		 */
@@ -215,14 +219,15 @@ public class ImportInitvalues {
 		navimanagement.addMainStructure("adminModuleServers", null, 22, 1498,
 				true, false, 3, "Administration of Servers", 6, false, 1499L);
 		log.debug("MainMenu ADDED");
-
+	}
+	
+	public void loadErrorTypes() {
 		errorManagement.addErrorType(new Long(1), new Long(322));
 		errorManagement.addErrorType(new Long(2), new Long(323));
 		log.debug("Error types ADDED");
 	}
 
 	public void loadErrorMappingsFromXML() throws Exception {
-
 		SAXReader reader = new SAXReader();
 		Document document = reader.read(new File(
 				OmFileHelper.getLanguagesDir(), OmFileHelper.nameOfErrorFile));
@@ -500,7 +505,7 @@ public class ImportInitvalues {
 						"Area to be shown to the user after login. Possible values are: "
 								+ "dashboard.rooms, dashboard.chat, calendar, rooms.public, rooms.private, rooms.user");
 
-		log.debug("Configuration ADDED");
+		log.debug("Configurations ADDED");
 	}
 
 	public void loadRoomTypes() {
@@ -680,38 +685,30 @@ public class ImportInitvalues {
 		}
 	}
 
-	public void loadInitUserAndOrganisation(String username, String userpass,
-			String email, String defaultOrganisationName, String ical_timeZone,
-			String configdefaultLang) {
-		// Add user
-		try {
+	public void loadInitUserAndOrganisation(InstallationConfig cfg) throws Exception {
+		Long default_lang_id = Long.parseLong(cfg.defaultLangId);
+		if (default_lang_id == null) {
+			default_lang_id = 1L;
+		}
 
-			Long default_lang_id = Long.parseLong(configdefaultLang);
-			if (default_lang_id == null)
-				default_lang_id = 1L;
+		// Add default group
+		Long organisation_id = organisationManager.addOrganisation(cfg.group, 1);
 
-			// Add default group
-			Long organisation_id = organisationManager.addOrganisation(
-					defaultOrganisationName, 1);
+		// BaseUrl as param is empty as we do not send an EMAIL here
+		Long user_id = userManager.registerUserInit(new Long(3), 3, 1,
+				1, cfg.username, cfg.password, "lastname", "firstname", cfg.email,
+				new java.util.Date(), "street", "no", "fax", "zip", 1,
+				"town", default_lang_id, false,
+				Arrays.asList(organisation_id), "phone", false, "", false,
+				omTimeZoneDaoImpl.getOmTimeZoneByIcal(cfg.ical_timeZone),
+				false, "", "", false, true);
 
-			// BaseUrl as param is empty as we do not send an EMAIL here
-			Long user_id = userManager.registerUserInit(new Long(3), 3, 1,
-					1, username, userpass, "lastname", "firstname", email,
-					new java.util.Date(), "street", "no", "fax", "zip", 1,
-					"town", default_lang_id, false,
-					Arrays.asList(organisation_id), "phone", false, "", false,
-					omTimeZoneDaoImpl.getOmTimeZoneByIcal(ical_timeZone),
-					false, "", "", false, true);
+		log.debug("Installation - User Added user-Id " + user_id);
 
-			log.debug("Installation - User Added user-Id " + user_id);
-
-			if (user_id < 0) {
-				throw new Exception(
-						"Could not add user user returns a negative error message: "
-								+ user_id);
-			}
-		} catch (Exception e) {
-			log.error("[loadInitUserAndOrganisation] ", e);
+		if (user_id < 0) {
+			throw new Exception(
+					"Could not add user user returns a negative error message: "
+							+ user_id);
 		}
 	}
 
@@ -762,7 +759,7 @@ public class ImportInitvalues {
 		log.debug("TimeZones ADDED");
 	}
 
-	public List<OmTimeZone> getTimeZones() throws Exception {
+	public static List<OmTimeZone> getTimeZones() throws Exception {
 		log.debug(":: getTimeZones ::");
 
 		List<OmTimeZone> omTimeZones = new LinkedList<OmTimeZone>();
@@ -802,7 +799,7 @@ public class ImportInitvalues {
 	 * @return
 	 * @throws Exception
 	 */
-	public LinkedHashMap<Integer, LinkedHashMap<String, Object>> getLanguageFiles()
+	public static LinkedHashMap<Integer, LinkedHashMap<String, Object>> getLanguageFiles()
 			throws Exception {
 
 		LinkedHashMap<Integer, LinkedHashMap<String, Object>> languages = new LinkedHashMap<Integer, LinkedHashMap<String, Object>>();
@@ -843,14 +840,8 @@ public class ImportInitvalues {
 	public void loadInitAppointmentCategories() {
 		log.debug("ImportInitValues.loadInitAppointmentCategories");
 
-		try {
-			appointmentCategoryDaoImpl.addAppointmentCategory(new Long(-1),
-					"default", "default");
-		} catch (Exception e) {
-			log.error("Could not create AppointMentcategories");
-			return;
-		}
-
+		appointmentCategoryDaoImpl.addAppointmentCategory(new Long(-1),
+				"default", "default");
 	}
 
 	// ------------------------------------------------------------------------------
@@ -860,21 +851,14 @@ public class ImportInitvalues {
 	 */
 	// ------------------------------------------------------------------------------
 	public void loadInitAppointmentReminderTypes() {
-
 		log.debug("ImportInitValues.loadInitAppointmentReminderTypes");
 
-		try {
-			appointmentReminderTypDaoImpl.addAppointmentReminderTyps(-1L,
-					"do not send notification");
-			appointmentReminderTypDaoImpl.addAppointmentReminderTyps(-1L,
-					"simple email");
-			appointmentReminderTypDaoImpl.addAppointmentReminderTyps(-1L,
-					"iCal email");
-
-		} catch (Exception e) {
-			log.error("Could not create ReminderType");
-			return;
-		}
+		appointmentReminderTypDaoImpl.addAppointmentReminderTyps(-1L,
+				"do not send notification");
+		appointmentReminderTypDaoImpl.addAppointmentReminderTyps(-1L,
+				"simple email");
+		appointmentReminderTypDaoImpl.addAppointmentReminderTyps(-1L,
+				"iCal email");
 	}
 
 	public void loadLanguagesFile(int langId) throws Exception {
@@ -987,18 +971,6 @@ public class ImportInitvalues {
 	 * Loading initial Language from xml Files into database
 	 */
 	// ------------------------------------------------------------------------------
-	public void loadInitLanguages() throws Exception {
-		loadCountriesFiles();
-		loadTimeZoneFiles();
-		loadLanguagesFiles();
-	}
-
-	// ------------------------------------------------------------------------------
-
-	/**
-	 * Loading initial Language from xml Files into database
-	 */
-	// ------------------------------------------------------------------------------
 	public void loadPollTypes() {
 		pollManager.addPollType(26L, false);
 		pollManager.addPollType(27L, true);
@@ -1006,40 +978,56 @@ public class ImportInitvalues {
 
 	// ------------------------------------------------------------------------------
 
-	public void loadSystem(InstallationConfig cfg, boolean force)
-			throws Exception {
+	public void loadSystem(InstallationConfig cfg, boolean force) throws Exception {
 		// FIXME dummy check if installation was performed before
-		if (!force && usersDao.getAllUsers().size() > 0) {
+		if (!force && usersDao.count() > 0) {
 			log.debug("System contains users, no need to install data one more time.");
 		}
 		sipDao.delete();
+		progress = 6;
+		loadUserLevels();
+		progress = 13;
 		loadMainMenu();
+		progress = 19;
+		loadErrorTypes();
+		progress = 25;
 		loadErrorMappingsFromXML();
-		loadInitLanguages();
+		progress = 31;
+		loadCountriesFiles();
+		progress = 38;
+		loadTimeZoneFiles();
+		progress = 44;
+		loadLanguagesFiles();
+		progress = 50;
 		loadSalutations();
+		progress = 56;
 		// AppointMent Categories
 		loadInitAppointmentCategories();
+		progress = 63;
 		// Appointment Reminder types
 		loadInitAppointmentReminderTypes();
+		progress = 69;
 		// Appointment poll types
 		loadPollTypes();
+		progress = 75;
 		loadRoomTypes();
+		progress = 81;
 
 		loadConfiguration(cfg);
+		progress = 88;
 	}
 
-	public void loadAll(InstallationConfig cfg, String username,
-			String userpass, String useremail, String groupame,
-			String timeZone, boolean force) throws Exception {
+	public void loadAll(InstallationConfig cfg, boolean force) throws Exception {
 		// FIXME dummy check if installation was performed before
-		if (!force && usersDao.getAllUsers().size() > 0) {
+		if (!force && usersDao.count() > 0) {
 			log.debug("System contains users, no need to install data one more time.");
 			return;
 		}
 		loadSystem(cfg, force);
-		loadInitUserAndOrganisation(username, userpass, useremail, groupame,
-				timeZone, cfg.defaultLangId);
+		loadInitUserAndOrganisation(cfg);
+		progress = 94;
 
 		loadDefaultRooms("1".equals(cfg.createDefaultRooms));
+		progress = 100;
 	}
 }

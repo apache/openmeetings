@@ -21,6 +21,7 @@ package org.apache.openmeetings.web.admin.users;
 import static org.apache.openmeetings.utils.UserHelper.getMinLoginLength;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
+import static org.apache.wicket.validation.validator.StringValidator.minimumLength;
 
 import java.util.Arrays;
 
@@ -43,7 +44,6 @@ import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.util.time.Duration;
-import org.apache.wicket.validation.validator.StringValidator;
 
 /**
  * CRUD operations in form for {@link User}
@@ -132,7 +132,7 @@ public class UserForm extends AdminBaseForm<User> {
 		ConfigurationDao cfgDao = getBean(ConfigurationDao.class);
 		login = new RequiredTextField<String>("login");
 		// login.setLabel(new Model<String>("testname"));
-		add(login.add(StringValidator.minimumLength(getMinLoginLength(cfgDao))));
+		add(login.add(minimumLength(getMinLoginLength(cfgDao))));
 
 		add(generalForm = new GeneralUserForm("general", getModel(), true));
 

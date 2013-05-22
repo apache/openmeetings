@@ -265,11 +265,11 @@ public class Admin {
 						importInit.loadSystem(cfg, force); 
 						restoreOm(ctxName, backup);
 					} else {
-						AdminUserDetails admin = checkAdminDetails(ctxName);
+						checkAdminDetails(ctxName);
 						dropDB(connectionProperties);
 						
 						ImportInitvalues importInit = getApplicationContext(ctxName).getBean(ImportInitvalues.class);
-						importInit.loadAll(cfg, admin.login, admin.pass, admin.email, admin.group, admin.tz, force);
+						importInit.loadAll(cfg, force);
 					}					
 					
 					InstallationDocumentHandler.createDocument(3);
@@ -517,55 +517,46 @@ public class Admin {
 		return result;
 	}
 	
-	private class AdminUserDetails {
-		String login = null;
-		String email = null;
-		String group = null;
-		String pass = null;
-		String tz = null;
-	}
-	
-	private AdminUserDetails checkAdminDetails(String ctxName) throws Exception {
-		AdminUserDetails admin = new AdminUserDetails();
-		admin.login = cmdl.getOptionValue("user");
-		admin.email = cmdl.getOptionValue("email");
-		admin.group = cmdl.getOptionValue("group");
-		if (admin.login == null || admin.login.length() < InstallationConfig.USER_LOGIN_MINIMUM_LENGTH) {
+	private void checkAdminDetails(String ctxName) throws Exception {
+		cfg.username = cmdl.getOptionValue("user");
+		cfg.email = cmdl.getOptionValue("email");
+		cfg.group = cmdl.getOptionValue("group");
+		if (cfg.username == null || cfg.username.length() < InstallationConfig.USER_LOGIN_MINIMUM_LENGTH) {
 			System.out.println("User login was not provided, or too short, should be at least " + InstallationConfig.USER_LOGIN_MINIMUM_LENGTH + " character long.");
 			System.exit(1);
 		}
 		
 		try {
-			if (!MailUtil.matches(admin.email)) {
+			if (!MailUtil.matches(cfg.email)) {
 			    throw new AddressException("Invalid address");
 			}
-			new InternetAddress(admin.email, true);
+			new InternetAddress(cfg.email, true);
 		} catch (AddressException ae) {
-			System.out.println("Please provide non-empty valid email: '" + admin.email + "' is not valid.");
+			System.out.println("Please provide non-empty valid email: '" + cfg.email + "' is not valid.");
 			System.exit(1);
 		}
-		if (admin.group == null || admin.group.length() < 1) {
-			System.out.println("User group was not provided, or too short, should be at least 1 character long: " + admin.group);
+		if (cfg.group == null || cfg.group.length() < 1) {
+			System.out.println("User group was not provided, or too short, should be at least 1 character long: " + cfg.group);
 			System.exit(1);
 		}
-		admin.pass = cmdl.getOptionValue("password");
+		cfg.password = cmdl.getOptionValue("password");
 		ConfigurationDao cfgDao = getApplicationContext(ctxName).getBean(ConfigurationDao.class);
-		if (invalidPassword(admin.pass, cfgDao)) {
-			System.out.print("Please enter password for the user '" + admin.login + "':");
-			admin.pass = new BufferedReader(new InputStreamReader(System.in)).readLine();
-			if (invalidPassword(admin.pass, cfgDao)) {
+		if (invalidPassword(cfg.password, cfgDao)) {
+			System.out.print("Please enter password for the user '" + cfg.username + "':");
+			cfg.password = new BufferedReader(new InputStreamReader(System.in)).readLine();
+			if (invalidPassword(cfg.password, cfgDao)) {
 				System.out.println("Password was not provided, or too short, should be at least " + getMinPasswdLength(cfgDao) + " character long.");
 				System.exit(1);
 			}
 		}
 		ImportInitvalues importInit = getApplicationContext(ctxName).getBean(ImportInitvalues.class);
 		Map<String, String> tzMap = ImportHelper.getAllTimeZones(importInit.getTimeZones());
-		admin.tz = null;
+		cfg.ical_timeZone = null;
 		if (cmdl.hasOption("tz")) {
-			admin.tz = cmdl.getOptionValue("tz");
-			admin.tz = tzMap.containsKey(admin.tz) ? admin.tz : null;
+			cfg.ical_timeZone = cmdl.getOptionValue("tz");
+			cfg.ical_timeZone = tzMap.containsKey(cfg.ical_timeZone) ? cfg.ical_timeZone : null;
 		}
-		if (admin.tz == null) {
+		if (cfg.ical_timeZone == null) {
 			System.out.println("Please enter timezone, Possible timezones are:");
 			
 			for (String tzIcal : tzMap.keySet()) {
@@ -573,7 +564,6 @@ public class Admin {
 			}
 			System.exit(1);
 		}
-		return admin;
 	}
 	
 	public static void dropDB() throws Exception {

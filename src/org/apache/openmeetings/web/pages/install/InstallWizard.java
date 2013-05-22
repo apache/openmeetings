@@ -20,8 +20,7 @@ package org.apache.openmeetings.web.pages.install;
 
 import static org.apache.openmeetings.installation.InstallationConfig.USER_LOGIN_MINIMUM_LENGTH;
 import static org.apache.openmeetings.installation.InstallationConfig.USER_PASSWORD_MINIMUM_LENGTH;
-import static org.apache.openmeetings.web.app.Application.getBean;
-import static org.apache.wicket.validation.validator.RangeValidator.minimum;
+import static org.apache.wicket.validation.validator.StringValidator.minimumLength;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -32,7 +31,10 @@ import java.util.List;
 import org.apache.openmeetings.installation.ImportInitvalues;
 import org.apache.openmeetings.installation.InstallationConfig;
 import org.apache.openmeetings.persistence.beans.basic.OmTimeZone;
+import org.apache.openmeetings.web.app.Application;
+import org.apache.openmeetings.web.common.ErrorMessagePanel;
 import org.apache.wicket.Component;
+import org.apache.wicket.ajax.AbstractAjaxTimerBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.extensions.validation.validator.RfcCompliantEmailAddressValidator;
@@ -41,6 +43,7 @@ import org.apache.wicket.extensions.wizard.Wizard;
 import org.apache.wicket.extensions.wizard.dynamic.DynamicWizardModel;
 import org.apache.wicket.extensions.wizard.dynamic.DynamicWizardStep;
 import org.apache.wicket.extensions.wizard.dynamic.IDynamicWizardStep;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
@@ -55,6 +58,9 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.ResourceModel;
+import org.apache.wicket.util.time.Duration;
+
+import com.googlecode.wicket.jquery.ui.widget.progressbar.ProgressBar;
 
 //TODO maybe JQ wizard should be used
 public class InstallWizard extends Wizard {
@@ -68,7 +74,8 @@ public class InstallWizard extends Wizard {
 	private final IDynamicWizardStep paramsStep2;
 	private final IDynamicWizardStep paramsStep3;
 	private final IDynamicWizardStep paramsStep4;
-	private final IDynamicWizardStep installStep;
+	private final InstallStep installStep;
+	private Throwable th = null;
 	
 	//onInit, applyState
 	public InstallWizard(String id) throws Exception {
@@ -92,7 +99,7 @@ public class InstallWizard extends Wizard {
 	
 	@Override
 	protected Component newButtonBar(String id) {
-		Panel bBar = (Panel)super.newButtonBar(id);
+		final Panel bBar = (Panel)super.newButtonBar(id);
 		AjaxButton finish = new AjaxButton("finish", new ResourceModel("org.apache.wicket.extensions.wizard.finish")) {
 			private static final long serialVersionUID = 1L;
 
@@ -103,27 +110,31 @@ public class InstallWizard extends Wizard {
 			
 			@Override
 			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-				// TODO Auto-generated method stub
-				super.onSubmit(target, form);
+				installStep.startInstallation(target);
+				target.add(bBar.setEnabled(false));
 			}
 		};
-		return bBar.replace(finish);
+		return bBar.replace(finish).setOutputMarkupId(true);
 	}
 	
-	@Override
-	public void onFinish() {
-		super.onFinish();
+	private abstract class BaseStep extends DynamicWizardStep {
+		private static final long serialVersionUID = 1L;
+
+		public BaseStep(IDynamicWizardStep prev) {
+			super(prev);
+			//TODO localize
+			setTitleModel(Model.of(cfg.appName + " - Installation"));
+            setSummaryModel(Model.of(""));
+		}
 	}
 	
-	private final class WelcomeStep extends DynamicWizardStep {
+	private final class WelcomeStep extends BaseStep {
 		private static final long serialVersionUID = 1L;
 
 		public WelcomeStep() {
 			super(null);
 			//TODO localize
 			//TODO add check for DB connection
-			setTitleModel(Model.of(cfg.appName + " - Installation"));
-            setSummaryModel(Model.of(""));
             add(new Label("app", cfg.appName));
 		}
 
@@ -136,16 +147,14 @@ public class InstallWizard extends Wizard {
 		}
 	}
 
-	private final class ParamsStep1 extends DynamicWizardStep {
+	private final class ParamsStep1 extends BaseStep {
 		private static final long serialVersionUID = 1L;
 
 		public ParamsStep1() throws Exception {
 			super(welcomeStep);
 			//TODO localize
-			setTitleModel(Model.of(cfg.appName + " - Installation"));
-            setSummaryModel(Model.of(""));
-            add(new RequiredTextField<String>("cfg.username").add(minimum(USER_LOGIN_MINIMUM_LENGTH)));
-            add(new PasswordTextField("cfg.password").add(minimum(USER_PASSWORD_MINIMUM_LENGTH)));
+            add(new RequiredTextField<String>("cfg.username").add(minimumLength(USER_LOGIN_MINIMUM_LENGTH)));
+            add(new PasswordTextField("cfg.password").add(minimumLength(USER_PASSWORD_MINIMUM_LENGTH)));
             add(new RequiredTextField<String>("cfg.email").add(RfcCompliantEmailAddressValidator.getInstance()));
             add(new TzDropDown("ical_timeZone"));
             add(new RequiredTextField<String>("cfg.group"));
@@ -170,15 +179,13 @@ public class InstallWizard extends Wizard {
 		}
 	}
 	
-	private final class ParamsStep2 extends DynamicWizardStep {
+	private final class ParamsStep2 extends BaseStep {
 		private static final long serialVersionUID = 1L;
 
 		public ParamsStep2() throws Exception {
 			super(paramsStep1);
 			//TODO localize
 			//TODO validation
-			setTitleModel(Model.of(cfg.appName + " - Installation"));
-            setSummaryModel(Model.of(""));
             add(new YesNoDropDown("allowFrontendRegister"));
             add(new YesNoDropDown("sendEmailAtRegister"));
             add(new YesNoDropDown("sendEmailWithVerficationCode"));
@@ -214,7 +221,7 @@ public class InstallWizard extends Wizard {
 		}
 	}
 	
-	private final class ParamsStep3 extends DynamicWizardStep {
+	private final class ParamsStep3 extends BaseStep {
 		private static final long serialVersionUID = 1L;
 
 		public ParamsStep3() {
@@ -249,7 +256,7 @@ public class InstallWizard extends Wizard {
 		}
 	}
 	
-	private final class ParamsStep4 extends DynamicWizardStep {
+	private final class ParamsStep4 extends BaseStep {
 		private static final long serialVersionUID = 1L;
 
 		public ParamsStep4() {
@@ -281,12 +288,73 @@ public class InstallWizard extends Wizard {
 		}
 }
 	
-	private final class InstallStep extends DynamicWizardStep {
+	private final class InstallStep extends BaseStep {
 		private static final long serialVersionUID = 1L;
-
+		private final CongratulationsPanel congrat;
+		private WebMarkupContainer container = new WebMarkupContainer("container");
+		private AbstractAjaxTimerBehavior timer;
+		private ProgressBar progressBar;
+		private WebMarkupContainer desc = new WebMarkupContainer("desc");
+		private Label value;
+		private boolean started = false;
+		
+		public void startInstallation(AjaxRequestTarget target) {
+			started = true;
+			timer.restart(target);
+			new Thread(new InstallProcess(Application.get()._getBean(ImportInitvalues.class))
+				, "Openmeetings - Installation").start(); //TODO remove hardcoded
+			//progressBar.setVisible(true);
+			target.add(container);
+		}
+		
 		public InstallStep() {
 			super(paramsStep4);
 			
+			add(desc.setOutputMarkupId(true));
+			// Timer //
+			container.add(timer = new AbstractAjaxTimerBehavior(Duration.ONE_SECOND) {
+				private static final long serialVersionUID = 1L;
+
+				@Override
+				protected void onTimer(AjaxRequestTarget target) {
+					if (!started) {
+						timer.stop(target);
+						return;
+					}
+					if (th != null) {
+						timer.stop(target);
+						//TODO change text, localize
+						progressBar.setVisible(false);
+						target.add(container.replace(new ErrorMessagePanel("status", "Installation is failed", th))
+							, desc.setVisible(false)
+							);
+					} else {
+						progressBar.setModelObject(Application.get()._getBean(ImportInitvalues.class).getProgress());
+						progressBar.respond(target);
+						//TODO uncomment later target.add(value);
+						//TODO add current step result as info
+					}
+				}
+			});
+			container.add(progressBar = new ProgressBar("progress", new Model<Integer>(0)) {
+				private static final long serialVersionUID = 1L;
+
+				@Override
+				protected void onComplete(AjaxRequestTarget target) {
+					timer.stop(target);
+					progressBar.setVisible(false);
+					congrat.setVisible(true);
+					target.add(container, desc.setVisible(false));
+				}
+			});
+			//TODO uncomment later progressBar.add(value = new Label("value", progressBar.getModel()));
+			//TODO uncomment later value.setOutputMarkupId(true);
+			//progressBar.setVisible(false);
+			
+			container.add(congrat = new CongratulationsPanel("status"));
+			congrat.setVisible(false);
+			
+			add(container.setOutputMarkupId(true));
 		}
 
 		public boolean isLastStep() {
@@ -295,6 +363,23 @@ public class InstallWizard extends Wizard {
 
 		public IDynamicWizardStep next() {
 			return null;
+		}
+	}
+	
+	private class InstallProcess implements Runnable {
+		private ImportInitvalues installer;
+		
+		public InstallProcess(ImportInitvalues installer) {
+			this.installer = installer;
+			th = null;
+		}
+		
+		public void run() {
+			try {
+				installer.loadAll(cfg, true);
+			} catch (Exception e) {
+				th = e;
+			}
 		}
 	}
 	
@@ -329,7 +414,7 @@ public class InstallWizard extends Wizard {
 
 		public TzDropDown(String id) throws Exception {
 			super(id);
-            List<OmTimeZone> tzList = getBean(ImportInitvalues.class).getTimeZones();
+            List<OmTimeZone> tzList = ImportInitvalues.getTimeZones();
 			setChoices(tzList);
 			setChoiceRenderer(new IChoiceRenderer<OmTimeZone>() {
 				private static final long serialVersionUID = 1L;
@@ -391,7 +476,7 @@ public class InstallWizard extends Wizard {
 		public LangDropDown(String id) throws Exception {
 			super(id);
 			LinkedHashMap<Integer, LinkedHashMap<String, Object>> allLanguagesAll
-				= getBean(ImportInitvalues.class).getLanguageFiles();
+				= ImportInitvalues.getLanguageFiles();
 			
 			List<SelectOption> list = new ArrayList<SelectOption>();
 			

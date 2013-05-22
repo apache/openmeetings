@@ -21,6 +21,7 @@ package org.apache.openmeetings.web.common;
 import static org.apache.openmeetings.utils.UserHelper.getMinPasswdLength;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.getLanguage;
+import static org.apache.wicket.validation.validator.StringValidator.minimumLength;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -59,7 +60,6 @@ import org.apache.wicket.markup.html.panel.PanelMarkupSourcingStrategy;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
-import org.apache.wicket.validation.validator.StringValidator;
 
 public class GeneralUserForm extends Form<User> {
 	private static final long serialVersionUID = 5360667099083510234L;
@@ -74,7 +74,7 @@ public class GeneralUserForm extends Form<User> {
 		//TODO should throw exception if non admin User edit somebody else (or make all fields read-only)
 		add(passwordField = new PasswordTextField("password", new Model<String>()));
 		ConfigurationDao cfgDao = getBean(ConfigurationDao.class);
-		passwordField.setRequired(false).add(StringValidator.minimumLength(getMinPasswdLength(cfgDao)));
+		passwordField.setRequired(false).add(minimumLength(getMinPasswdLength(cfgDao)));
 
 		SalutationDao salutDao = getBean(SalutationDao.class);
 		FieldLanguageDao langDao = getBean(FieldLanguageDao.class);

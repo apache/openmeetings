@@ -148,15 +148,18 @@ public class Application extends AuthenticatedWebApplication {
 		return get().dashboardContext;
 	}
 	
-	private static <T> T _getBean(Class<T> clazz) {
-		return getWebApplicationContext(get().getServletContext()).getBean(clazz);
+	//TODO need more safe way FIXME
+	public <T> T _getBean(Class<T> clazz) {
+		return getWebApplicationContext(getServletContext()).getBean(clazz);
 	}
 	
 	public static boolean isInstalled() {
 		boolean result = isInstalled;
 		if (!isInstalled) {
 			if (ScopeApplicationAdapter.initComplete) {
-				result = _getBean(UsersDao.class).count() > 0 && _getBean(FieldLanguagesValuesDao.class).count() > 0;
+				//TODO can also check crypt class here
+				result = get()._getBean(UsersDao.class).count() > 0
+						&& get()._getBean(FieldLanguagesValuesDao.class).count() > 0;
 			}
 		}
 		return result;
@@ -167,7 +170,7 @@ public class Application extends AuthenticatedWebApplication {
 			if (!isInstalled()) {
 				throw new RestartResponseException(InstallWizardPage.class);
 			}
-			return _getBean(clazz);
+			return get()._getBean(clazz);
 		} else {
 			throw new RestartResponseException(NotInitedPage.class);
 		}
