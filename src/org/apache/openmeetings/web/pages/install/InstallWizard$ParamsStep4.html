@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<html xmlns:wicket="http://wicket.apache.org">
+<wicket:panel>
+	<fieldset id="userConf2">
+
+		<legend>Crypt Type</legend>
+		<ul>
+			<li><label wicket:for="cfg.cryptClassName">Crypt Class</label>
+				<input wicket:id="cfg.cryptClassName"  type="text"
+				title="Enter the Class name of the Encryption Class. DO NOT ALTER THIS IF YOU ARE NOT SURE" />
+				<p>
+					<i> You can use this default crypt type which is equal to
+						PHP-MD5 function or BSD-Style encryption by using:<b>org.apache.openmeetings.utils.crypt.MD5CryptImplementation</b>
+						for more information or to write your own Crypt-Style see: <a
+						href="http://openmeetings.apache.org/CustomCryptMechanism.html"
+						target="_blank">Custom Crypt Mechanism</a> You can edit this
+						value later BUT previous created Users and Sessions might be not
+						usable anymore
+					</i>
+				</p></li>
+		</ul>
+	</fieldset>
+
+	<fieldset id="red5sip">
+		<legend>red5SIP Configuration</legend>
+		<ul>
+			<li><label wicket:for="red5SipEnable">Enable SIP</label>
+				<select wicket:id="red5SipEnable"></select>
+				<p>
+					<i> Enable red5SIP integration </i>
+				</p> </li>
+
+			<li><label wicket:for="cfg.red5SipRoomPrefix">SIP rooms prefix</label>
+				<input wicket:id="cfg.red5SipRoomPrefix" type="text" />
+				<p>
+					<i>Prefix for phone number of conference rooms</i>
+				</p></li>
+
+			<li><label wicket:for="cfg.red5SipExtenContext">SIP extensions context</label>
+				<input wicket:id="cfg.red5SipExtenContext" type="text" />
+				<p>
+					<i>Context of Asterisk extensions</i>
+				</p></li>
+		</ul>
+	</fieldset>
+</wicket:panel>
+</html>

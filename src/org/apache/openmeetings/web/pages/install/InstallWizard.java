@@ -18,8 +18,10 @@
  */
 package org.apache.openmeetings.web.pages.install;
 
-import static org.apache.openmeetings.OpenmeetingsVariables.webAppRootKey;
+import static org.apache.openmeetings.installation.InstallationConfig.USER_LOGIN_MINIMUM_LENGTH;
+import static org.apache.openmeetings.installation.InstallationConfig.USER_PASSWORD_MINIMUM_LENGTH;
 import static org.apache.openmeetings.web.app.Application.getBean;
+import static org.apache.wicket.validation.validator.RangeValidator.minimum;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -30,60 +32,153 @@ import java.util.List;
 import org.apache.openmeetings.installation.ImportInitvalues;
 import org.apache.openmeetings.installation.InstallationConfig;
 import org.apache.openmeetings.persistence.beans.basic.OmTimeZone;
-import org.apache.openmeetings.web.app.Application;
+import org.apache.wicket.Component;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.form.AjaxButton;
+import org.apache.wicket.extensions.validation.validator.RfcCompliantEmailAddressValidator;
+import org.apache.wicket.extensions.wizard.IWizardStep;
 import org.apache.wicket.extensions.wizard.Wizard;
-import org.apache.wicket.extensions.wizard.WizardModel;
-import org.apache.wicket.extensions.wizard.WizardStep;
+import org.apache.wicket.extensions.wizard.dynamic.DynamicWizardModel;
+import org.apache.wicket.extensions.wizard.dynamic.DynamicWizardStep;
+import org.apache.wicket.extensions.wizard.dynamic.IDynamicWizardStep;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
+import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.form.PasswordTextField;
 import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.form.TextField;
-import org.apache.wicket.markup.html.link.Link;
+import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
-import org.red5.logging.Red5LoggerFactory;
-import org.slf4j.Logger;
+import org.apache.wicket.model.ResourceModel;
 
 //TODO maybe JQ wizard should be used
 public class InstallWizard extends Wizard {
-	private static final Logger log = Red5LoggerFactory.getLogger(InstallWizard.class, webAppRootKey);
-	private static final long serialVersionUID = -8460835123671633121L;
+	private static final long serialVersionUID = 1L;
 	private InstallationConfig cfg;
 	private CompoundPropertyModel<InstallWizard> model;
 	private final static List<SelectOption> yesNoList = Arrays.asList(SelectOption.NO, SelectOption.YES);
 	private final static List<String> allFonts = Arrays.asList("TimesNewRoman", "Verdana", "Arial");
+	private final IDynamicWizardStep welcomeStep;
+	private final IDynamicWizardStep paramsStep1;
+	private final IDynamicWizardStep paramsStep2;
+	private final IDynamicWizardStep paramsStep3;
+	private final IDynamicWizardStep paramsStep4;
+	private final IDynamicWizardStep installStep;
 	
-	private final class WelcomeStep extends WizardStep {
-		private static final long serialVersionUID = 323088743806847666L;
+	//onInit, applyState
+	public InstallWizard(String id) throws Exception {
+		super(id);
+		//TODO enable install after first params
+		cfg = new InstallationConfig();
+		setDefaultModel(model = new CompoundPropertyModel<InstallWizard>(this));
+		welcomeStep = new WelcomeStep();
+		paramsStep1 = new ParamsStep1();
+		paramsStep2 = new ParamsStep2();
+		paramsStep3 = new ParamsStep3();
+		paramsStep4 = new ParamsStep4();
+		//TODO add install/progress step
+		installStep = new InstallStep();
+
+		DynamicWizardModel wmodel = new DynamicWizardModel(welcomeStep);
+		wmodel.setCancelVisible(false);
+		wmodel.setLastVisible(true);
+		init(wmodel);
+	}
+	
+	@Override
+	protected Component newButtonBar(String id) {
+		Panel bBar = (Panel)super.newButtonBar(id);
+		AjaxButton finish = new AjaxButton("finish", new ResourceModel("org.apache.wicket.extensions.wizard.finish")) {
+			private static final long serialVersionUID = 1L;
+
+			public boolean isEnabled() {
+				IWizardStep activeStep = getWizardModel().getActiveStep();
+				return ((activeStep != null) && getWizardModel().isLastStep(activeStep));
+			}
+			
+			@Override
+			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+				// TODO Auto-generated method stub
+				super.onSubmit(target, form);
+			}
+		};
+		return bBar.replace(finish);
+	}
+	
+	@Override
+	public void onFinish() {
+		super.onFinish();
+	}
+	
+	private final class WelcomeStep extends DynamicWizardStep {
+		private static final long serialVersionUID = 1L;
 
 		public WelcomeStep() {
+			super(null);
 			//TODO localize
 			//TODO add check for DB connection
 			setTitleModel(Model.of(cfg.appName + " - Installation"));
             setSummaryModel(Model.of(""));
             add(new Label("app", cfg.appName));
 		}
+
+		public boolean isLastStep() {
+			return false;
+		}
+
+		public IDynamicWizardStep next() {
+			return paramsStep1;
+		}
 	}
 
-	private final class ParamsStep extends WizardStep {
-		private static final long serialVersionUID = -2420496234328471542L;
+	private final class ParamsStep1 extends DynamicWizardStep {
+		private static final long serialVersionUID = 1L;
+
+		public ParamsStep1() throws Exception {
+			super(welcomeStep);
+			//TODO localize
+			setTitleModel(Model.of(cfg.appName + " - Installation"));
+            setSummaryModel(Model.of(""));
+            add(new RequiredTextField<String>("cfg.username").add(minimum(USER_LOGIN_MINIMUM_LENGTH)));
+            add(new PasswordTextField("cfg.password").add(minimum(USER_PASSWORD_MINIMUM_LENGTH)));
+            add(new RequiredTextField<String>("cfg.email").add(RfcCompliantEmailAddressValidator.getInstance()));
+            add(new TzDropDown("ical_timeZone"));
+            add(new RequiredTextField<String>("cfg.group"));
+		}
+
+		public boolean isLastStep() {
+			return false;
+		}
+
+		public IDynamicWizardStep next() {
+			return paramsStep2;
+		}
 		
-		//TODO separate to separate steps
-		public ParamsStep() throws Exception {
+		@Override
+		public boolean isLastAvailable() {
+			return true;
+		}
+		
+		@Override
+		public IDynamicWizardStep last() {
+			return installStep;
+		}
+	}
+	
+	private final class ParamsStep2 extends DynamicWizardStep {
+		private static final long serialVersionUID = 1L;
+
+		public ParamsStep2() throws Exception {
+			super(paramsStep1);
 			//TODO localize
 			//TODO validation
 			setTitleModel(Model.of(cfg.appName + " - Installation"));
             setSummaryModel(Model.of(""));
-            add(new RequiredTextField<String>("cfg.username"));
-            add(new PasswordTextField("cfg.password"));
-            add(new RequiredTextField<String>("cfg.email"));
-            add(new TzDropDown("ical_timeZone"));
-            add(new RequiredTextField<String>("cfg.group"));
             add(new YesNoDropDown("allowFrontendRegister"));
             add(new YesNoDropDown("sendEmailAtRegister"));
             add(new YesNoDropDown("sendEmailWithVerficationCode"));
@@ -98,6 +193,33 @@ public class InstallWizard extends Wizard {
             add(new YesNoDropDown("replyToOrganizer"));
             add(new LangDropDown("defaultLangId"));
             add(new DropDownChoice<String>("cfg.defaultExportFont", allFonts));
+		}
+
+		public boolean isLastStep() {
+			return false;
+		}
+
+		public IDynamicWizardStep next() {
+			return paramsStep3;
+		}
+		
+		@Override
+		public boolean isLastAvailable() {
+			return true;
+		}
+		
+		@Override
+		public IDynamicWizardStep last() {
+			return installStep;
+		}
+	}
+	
+	private final class ParamsStep3 extends DynamicWizardStep {
+		private static final long serialVersionUID = 1L;
+
+		public ParamsStep3() {
+			super(paramsStep2);
+			
             add(new TextField<String>("cfg.swfZoom"));
             add(new TextField<String>("cfg.swfJpegQuality"));
             add(new TextField<String>("cfg.swfPath"));
@@ -106,6 +228,32 @@ public class InstallWizard extends Wizard {
             add(new TextField<String>("cfg.soxPath"));
             add(new TextField<String>("cfg.jodPath"));
             add(new TextField<String>("cfg.officePath"));
+		}
+
+		public boolean isLastStep() {
+			return false;
+		}
+
+		public IDynamicWizardStep next() {
+			return paramsStep4;
+		}
+		
+		@Override
+		public boolean isLastAvailable() {
+			return true;
+		}
+		
+		@Override
+		public IDynamicWizardStep last() {
+			return installStep;
+		}
+	}
+	
+	private final class ParamsStep4 extends DynamicWizardStep {
+		private static final long serialVersionUID = 1L;
+
+		public ParamsStep4() {
+			super(paramsStep3);
             add(new RequiredTextField<String>("cfg.cryptClassName")); //Validate class
             
             //TODO add check for red5sip connection
@@ -113,50 +261,41 @@ public class InstallWizard extends Wizard {
             add(new TextField<String>("cfg.red5SipRoomPrefix"));
             add(new TextField<String>("cfg.red5SipExtenContext"));
 		}
+
+		public boolean isLastStep() {
+			return false;
+		}
+
+		public IDynamicWizardStep next() {
+			return installStep;
+		}
 		
 		@Override
-		public void applyState() {
-			// TODO Auto-generated method stub
-			super.applyState();
+		public boolean isLastAvailable() {
+			return true;
 		}
-	}
-	
-	private final class CongradulationsStep extends WizardStep {
-		private static final long serialVersionUID = 630278992275373536L;
-
-		public CongradulationsStep() {
-			add(new Link<Void>("url") {
-				private static final long serialVersionUID = -8589303259501551418L;
-
-				@Override
-				public void onClick() {
-					setResponsePage(Application.get().getHomePage());
-				}
-			});
-		}
-	}
-	
-	//onInit, applyState
-	public InstallWizard(String id) {
-		super(id);
 		
-		cfg = new InstallationConfig();
-		setDefaultModel(model = new CompoundPropertyModel<InstallWizard>(this));
-		WizardModel wmodel = new WizardModel();
-		try {
-			wmodel.add(new WelcomeStep());
-			wmodel.add(new ParamsStep());
-			//TODO add install/progress step
-			wmodel.add(new CongradulationsStep());
-		} catch (Exception e) {
-			log.error("Error while creating Wizard!", e);
+		@Override
+		public IDynamicWizardStep last() {
+			return installStep;
 		}
-		init(wmodel);
-	}
+}
 	
-	@Override
-	public void onCancel() {
-		setResponsePage(Application.isInstalled() ? Application.get().getHomePage() : InstallWizardPage.class);
+	private final class InstallStep extends DynamicWizardStep {
+		private static final long serialVersionUID = 1L;
+
+		public InstallStep() {
+			super(paramsStep4);
+			
+		}
+
+		public boolean isLastStep() {
+			return true;
+		}
+
+		public IDynamicWizardStep next() {
+			return null;
+		}
 	}
 	
 	private static class SelectOption implements Serializable {

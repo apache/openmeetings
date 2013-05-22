@@ -18,17 +18,29 @@
  */
 package org.apache.openmeetings.web.pages.install;
 
+import static org.apache.openmeetings.OpenmeetingsVariables.webAppRootKey;
+
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.pages.BaseNotInitedPage;
 import org.apache.wicket.RestartResponseException;
+import org.apache.wicket.markup.html.basic.Label;
+import org.red5.logging.Red5LoggerFactory;
+import org.slf4j.Logger;
 
 public class InstallWizardPage extends BaseNotInitedPage {
+	private static final Logger log = Red5LoggerFactory.getLogger(InstallWizard.class, webAppRootKey);
 	private static final long serialVersionUID = -438388395397826138L;
 
 	public InstallWizardPage() {
 		if (Application.isInstalled()) {
 			throw new RestartResponseException(Application.get().getHomePage());
 		}
-		add(new InstallWizard("wizard"));
+		try {
+			add(new InstallWizard("wizard"));
+		} catch (Exception e) {
+			//TODO add correct error handling
+			log.error("Error while initing wizard, please check your installation", e);//FIXME
+			add(new Label("wizard", "Error while initing wizard, please check your installation"));//FIXME
+		}
 	}
 }
