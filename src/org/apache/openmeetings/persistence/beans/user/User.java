@@ -70,14 +70,13 @@ import org.simpleframework.xml.Root;
  * 
  */
 @Entity
-@FetchGroups({
- @FetchGroup(name = "backupexport",
-		 attributes = { @FetchAttribute(name = "password")
- })
-})
+@FetchGroups({ @FetchGroup(name = "backupexport", attributes = { @FetchAttribute(name = "password") }) })
 @NamedQueries({
 	@NamedQuery(name = "getUserById", query = "select c from User as c where c.user_id = :user_id"),
-	@NamedQuery(name = "checkUserLogin", query = "select c from User as c where c.login = :DataValue AND c.deleted <> :deleted"),
+	@NamedQuery(name = "checkUserLogin", query = "SELECT COUNT(u) FROM User AS u WHERE ((:id > 0 AND u.user_id <> :id) OR (:id = 0)) "
+			+ "AND u.login = :login AND u.deleted = false"),
+	@NamedQuery(name = "checkUserEmail", query = "SELECT COUNT(u) FROM User u WHERE ((:id > 0 AND u.user_id <> :id) OR (:id = 0)) "
+			+ "AND u.adresses.email = :email AND u.deleted = false"),
 	@NamedQuery(name = "getUserByName", query = "SELECT u FROM User as u "
 			+ " where u.login = :login" + " AND u.deleted <> :deleted"),
 	@NamedQuery(name = "getUserByEmail", query = "SELECT u FROM User as u "
@@ -96,9 +95,7 @@ import org.simpleframework.xml.Root;
 			+ "where c.deleted = false " //
 			+ "AND c.user_id = :userId " //
 			+ "AND c.password LIKE :password"), //
-	@NamedQuery(name = "updatePassword", query = "UPDATE User u " //
-			+ "SET u.password = :password " //
-			+ "WHERE u.user_id = :userId"), //
+	@NamedQuery(name = "updatePassword", query = "UPDATE User u SET u.password = :password WHERE u.user_id = :userId"), //
 	@NamedQuery(name = "getNondeletedUsers", query = "SELECT u FROM User u WHERE u.deleted = false"),
 	@NamedQuery(name = "countNondeletedUsers", query = "SELECT COUNT(u) FROM User u WHERE u.deleted = false"),
 	@NamedQuery(name = "getUsersByOrganisationId", query = "SELECT u FROM User u WHERE u.deleted = false AND u.organisation_users.organisation.organisation_id = :organisation_id") 

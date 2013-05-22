@@ -30,7 +30,7 @@ import org.apache.openmeetings.persistence.beans.room.RoomType;
 import org.apache.openmeetings.web.admin.AdminBaseForm;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
-import org.apache.wicket.ajax.form.AjaxFormValidatingBehavior;
+import org.apache.openmeetings.web.common.OmAjaxFormValidatingBehavior;
 import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
@@ -127,7 +127,6 @@ public class RoomForm extends AdminBaseForm<Room> {
 
 		// attach an ajax validation behavior to all form component's keydown
 		// event and throttle it down to once per second
-		AjaxFormValidatingBehavior.addToAllFormComponents(this, "keydown",
-				Duration.ONE_SECOND);
+		OmAjaxFormValidatingBehavior.addToAllFormComponents(this, "keydown", Duration.ONE_SECOND);
 	}
 }

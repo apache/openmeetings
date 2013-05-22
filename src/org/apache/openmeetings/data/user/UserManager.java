@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.data.user;
 
+import static org.apache.openmeetings.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.openmeetings.persistence.beans.basic.Configuration.DEFAUT_LANG_KEY;
 import static org.apache.openmeetings.persistence.beans.basic.Configuration.FRONTEND_REGISTER_KEY;
 import static org.apache.openmeetings.persistence.beans.basic.Configuration.LOGIN_MIN_LENGTH_KEY;
@@ -41,7 +42,6 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.data.basic.AuthLevelUtil;
 import org.apache.openmeetings.data.basic.FieldManager;
 import org.apache.openmeetings.data.basic.SessiondataDao;
@@ -81,9 +81,7 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Transactional
 public class UserManager {
-
-	private static final Logger log = Red5LoggerFactory.getLogger(
-			UserManager.class, OpenmeetingsVariables.webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(UserManager.class, webAppRootKey);
 
 	@PersistenceContext
 	private EntityManager em;
@@ -448,7 +446,7 @@ public class UserManager {
 				boolean checkName = true;
 
 				if (!login.equals(us.getLogin())) {
-					checkName = usersDao.checkUserLogin(login);
+					checkName = usersDao.checkUserLogin(login, user_id);
 				}
 				boolean checkEmail = true;
 
@@ -457,7 +455,7 @@ public class UserManager {
 
 					// Its a new one - check, whether another user already uses
 					// that one...
-					checkEmail = emailManagement.checkUserEMail(email);
+					checkEmail = usersDao.checkUserEMail(email, user_id);
 				}
 
 				if (checkName && checkEmail) {
@@ -881,8 +879,8 @@ public class UserManager {
 			// Check for required data
 			if (login.length() >= userLoginMinimumLength.intValue()) {
 				// Check for duplicates
-				boolean checkName = usersDao.checkUserLogin(login);
-				boolean checkEmail = emailManagement.checkUserEMail(email);
+				boolean checkName = usersDao.checkUserLogin(login, null);
+				boolean checkEmail = usersDao.checkUserEMail(email, null);
 				if (checkName && checkEmail) {
 
 					String hash = cryptManager
@@ -1184,8 +1182,7 @@ public class UserManager {
 					String email = values.get("email").toString();
 
 					if (!email.equals(savedUser.getAdresses().getEmail())) {
-						boolean checkEmail = emailManagement
-								.checkUserEMail(email);
+						boolean checkEmail = usersDao.checkUserEMail(email, user_id);
 						if (!checkEmail) {
 							// mail already used by another user!
 							returnLong = new Long(-11);

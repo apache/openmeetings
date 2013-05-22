@@ -23,8 +23,8 @@ import org.apache.openmeetings.persistence.beans.basic.Configuration;
 import org.apache.openmeetings.web.admin.AdminBaseForm;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
+import org.apache.openmeetings.web.common.OmAjaxFormValidatingBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.form.AjaxFormValidatingBehavior;
 import org.apache.wicket.datetime.markup.html.basic.DateLabel;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
@@ -77,8 +77,7 @@ public class ConfigForm extends AdminBaseForm<Configuration> {
 		
 		// attach an ajax validation behavior to all form component's keydown
 		// event and throttle it down to once per second
-		AjaxFormValidatingBehavior.addToAllFormComponents(this, "keydown",
-				Duration.ONE_SECOND);
+		OmAjaxFormValidatingBehavior.addToAllFormComponents(this, "keydown", Duration.ONE_SECOND);
 
 	}
 	

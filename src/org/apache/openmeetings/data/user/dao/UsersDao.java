@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.data.user.dao;
 
+import static org.apache.openmeetings.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.openmeetings.persistence.beans.basic.Configuration.DEFAUT_LANG_KEY;
 
 import java.util.Date;
@@ -31,7 +32,6 @@ import javax.persistence.TypedQuery;
 import org.apache.commons.lang.StringUtils;
 import org.apache.openjpa.persistence.OpenJPAPersistence;
 import org.apache.openjpa.persistence.OpenJPAQuery;
-import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.data.IDataProviderDao;
 import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
 import org.apache.openmeetings.data.basic.dao.OmTimeZoneDao;
@@ -52,9 +52,7 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Transactional
 public class UsersDao implements IDataProviderDao<User> {
-
-	private static final Logger log = Red5LoggerFactory.getLogger(
-			UsersDao.class, OpenmeetingsVariables.webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(UsersDao.class, webAppRootKey);
 
 	public final static String[] searchFields = {"lastname", "firstname", "login", "adresses.email", "adresses.town"};
 
@@ -223,23 +221,35 @@ public class UsersDao implements IDataProviderDao<User> {
 	 * @param DataValue
 	 * @return
 	 */
-	public boolean checkUserLogin(String DataValue) {
-		try {
-			TypedQuery<User> query = em
-					.createNamedQuery("checkUserLogin", User.class);
-			query.setParameter("DataValue", DataValue);
-			query.setParameter("deleted", true);
-			int count = query.getResultList().size();
-
-			if (count != 0) {
-				return false;
-			}
-		} catch (Exception ex2) {
-			log.error("[checkUserData]", ex2);
-		}
-		return true;
+	public boolean checkUserLogin(String login, Long id) {
+		log.debug("checkUserLogin: email = {}, id = {}", login, id);
+		long count = em.createNamedQuery("checkUserLogin", Long.class)
+				.setParameter("login", login)
+				.setParameter("id", id == null ? 0 : id)
+				.getSingleResult();
+		return count == 0;
 	}
 
+	/**
+	 * Checks if a mail is already taken by someone else
+	 * 
+	 * @param email
+	 * @return
+	 */
+	public boolean checkUserEMail(String email, Long id) {
+		log.debug("checkUserMail: email = {}, id = {}", email, id);
+		if (email == null || email.length() == 0) {
+			return true;
+		}
+		long count = em.createNamedQuery("checkUserEmail", Long.class)
+			.setParameter("email", email)
+			.setParameter("id", id == null ? 0 : id)
+			.getSingleResult();
+		log.debug("size: " + count);
+
+		return count == 0;
+	}
+	
 	public User getUserByName(String login) {
 		try {
 			TypedQuery<User> query = em.createNamedQuery("getUserByName", User.class);

@@ -32,8 +32,8 @@ import org.apache.openmeetings.web.admin.AdminBaseForm;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.ComunityUserForm;
 import org.apache.openmeetings.web.common.GeneralUserForm;
+import org.apache.openmeetings.web.common.OmAjaxFormValidatingBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.form.AjaxFormValidatingBehavior;
 import org.apache.wicket.datetime.markup.html.basic.DateLabel;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.CheckBox;
@@ -67,7 +67,7 @@ public class UserForm extends AdminBaseForm<User> {
 
 		// attach an ajax validation behavior to all form component's keydown
 		// event and throttle it down to once per second
-		AjaxFormValidatingBehavior.addToAllFormComponents(this, "keydown", Duration.ONE_SECOND);
+		OmAjaxFormValidatingBehavior.addToAllFormComponents(this, "keydown", Duration.ONE_SECOND);
 
 	}
 
@@ -195,7 +195,7 @@ public class UserForm extends AdminBaseForm<User> {
 
 	@Override
 	protected void onValidate() {
-		if(!getBean(UsersDao.class).checkUserLogin(login.getConvertedInput())) {
+		if(!getBean(UsersDao.class).checkUserLogin(login.getConvertedInput(), getModelObject().getUser_id())) {
 			error(WebSession.getString(105));
 		}
 	}

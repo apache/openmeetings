@@ -18,16 +18,14 @@
  */
 package org.apache.openmeetings.data.user;
 
+import static org.apache.openmeetings.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.openmeetings.persistence.beans.basic.Configuration.DEFAUT_LANG_KEY;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.TypedQuery;
 
-import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.data.basic.FieldManager;
 import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
-import org.apache.openmeetings.persistence.beans.user.Address;
 import org.apache.openmeetings.templates.RegisterUserTemplate;
 import org.apache.openmeetings.utils.mail.MailHandler;
 import org.red5.logging.Red5LoggerFactory;
@@ -43,9 +41,7 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Transactional
 public class EmailManager {
-
-	private static final Logger log = Red5LoggerFactory.getLogger(
-			EmailManager.class, OpenmeetingsVariables.webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(EmailManager.class, webAppRootKey);
 
 	@PersistenceContext
 	private EntityManager em;
@@ -70,7 +66,7 @@ public class EmailManager {
 	 */
 	public String sendMail(String Username, String Userpass, String EMail,
 			String link, Boolean sendEmailWithVerficationCode) {
-
+		log.debug("sendMail:: username = {}, email = {}", Username, EMail);
 		Integer sendEmailAtRegister = configurationDao.getConfValue("sendEmailAtRegister", Integer.class, "0");
 
 		if (sendEmailAtRegister == 1) {
@@ -98,32 +94,5 @@ public class EmailManager {
 	public String addEmailCon(String EMail, int CONTACT_ID) {
 		String succ = "invalid email";
 		return succ;
-	}
-
-	/**
-	 * Checks if a mail is already taken by someone else
-	 * 
-	 * @param email
-	 * @return
-	 */
-	public boolean checkUserEMail(String email) {
-		try {
-			if (email == null || email.length() == 0)
-				return true;
-			log.debug("checkUserMail: " + email);
-			TypedQuery<Address> query = em
-					.createQuery("select c from Address as c where c.email LIKE :email AND c.deleted <> :deleted", Address.class);
-			query.setParameter("email", email);
-			query.setParameter("deleted", true);
-			int count = query.getResultList().size();
-			log.debug("size: " + count);
-
-			if (count > 0) {
-				return false;
-			}
-		} catch (Exception ex2) {
-			log.error("checkUserEMail: ", ex2);
-		}
-		return true;
 	}
 }

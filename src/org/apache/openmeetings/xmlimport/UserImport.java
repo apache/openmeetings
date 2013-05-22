@@ -18,10 +18,10 @@
  */
 package org.apache.openmeetings.xmlimport;
 
+import static org.apache.openmeetings.OpenmeetingsVariables.webAppRootKey;
+
 import java.io.InputStream;
 
-import org.apache.openmeetings.OpenmeetingsVariables;
-import org.apache.openmeetings.data.user.EmailManager;
 import org.apache.openmeetings.data.user.UserManager;
 import org.apache.openmeetings.data.user.dao.UsersDao;
 import org.apache.openmeetings.persistence.beans.user.User;
@@ -31,13 +31,9 @@ import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class UserImport {
-
-	private static final Logger log = Red5LoggerFactory.getLogger(
-			UserImport.class, OpenmeetingsVariables.webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(UserImport.class, webAppRootKey);
 	@Autowired
 	private UserManager userManager;
-	@Autowired
-	private EmailManager emailManagement;
 	@Autowired
 	private UsersDao usersDao;
 	@Autowired
@@ -48,13 +44,13 @@ public class UserImport {
 			
 			boolean mailCheck = true;
 
-			if (!emailManagement.checkUserEMail(us.getAdresses().getEmail())) {
+			if (!usersDao.checkUserEMail(us.getAdresses().getEmail(), us.getUser_id())) {
 				mailCheck = false;
 				log.info("mailCheck = " + mailCheck);
 			}
 
 			// check for duplicate Login or mail:
-			if (usersDao.checkUserLogin(us.getLogin()) && mailCheck) {
+			if (usersDao.checkUserLogin(us.getLogin(), us.getUser_id()) && mailCheck) {
 				userManager.addUser(us);
 			}
 		}
