@@ -23,7 +23,7 @@
 				<artifact pattern="http://repo1.maven.org/maven2/[organisation]/[artifact]-[revision].[ext]" />
 			</url>
 			<url name="sonatype" m2compatible="true">
-				<artifact pattern="https://oss.sonatype.org/content/repositories/central/[artifact]/[artifact]/[revision]/[artifact]-[revision].[ext]" />
+				<artifact pattern="https://oss.sonatype.org/content/repositories/releases/[organisation]/[artifact]/[revision]/[artifact]-[revision].[ext]" />
 			</url>
 			<url name="googlecode">
 				<artifact pattern="https://openlaszlo-openmeetings-integration.googlecode.com/svn/repository/[artifact](-[revision]).[ext]" />
@@ -32,9 +32,6 @@
 			</url>
 			<url name="smslib" m2compatible="true">
 				<artifact pattern="http://smslib.org/maven2/v3/[organisation]/[artifact]/[revision]/[artifact]-[revision].[ext]" />
-			</url>
-			<url name="urlfragment" m2compatible="true"> <!-- FIXME need to be removed as soon wicketstuff will be released -->
-				<artifact pattern="https://oss.sonatype.org/content/repositories/snapshots/[organisation]/[artifact]/6.0-SNAPSHOT/[artifact]-[revision].[ext]" />
 			</url>
 		</chain>
 	</resolvers>

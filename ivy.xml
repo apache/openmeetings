@@ -273,15 +273,15 @@
 			<include type="jar" />
 		</dependency>
 		-->
-		<dependency org="org.wicketstuff" name="wicketstuff-urlfragment" rev="6.0-20130515.164331-3" conf="openmeetings->*" transitive="false">
+		<dependency org="org.wicketstuff" name="wicketstuff-urlfragment" rev="6.8.0" conf="openmeetings->*" transitive="false">
 			<include type="jar" />
 		</dependency>
-		<dependency org="org.wicketstuff" name="wicketstuff-html5" rev="6.7.0" conf="openmeetings->*" transitive="false">
+		<dependency org="org.wicketstuff" name="wicketstuff-html5" rev="6.8.0" conf="openmeetings->*" transitive="false">
 			<include type="jar" />
 		</dependency>
 		
 		<!-- iCal4j seems to need this JAR -->
-		<dependency org="edu.emory.mathcs" name="backport-util-concurrent" rev="3.1" conf="openmeetings->*"/>
+		<dependency org="backport-util-concurrent" name="backport-util-concurrent" rev="3.1" conf="openmeetings->*"/>
 
 		<dependency org="commons-net" name="commons-net" rev="3.1" conf="openmeetings->*" transitive="false">
 			<include type="jar" />
