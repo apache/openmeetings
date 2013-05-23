@@ -18,6 +18,8 @@
  */
 package org.apache.openmeetings.data.user.dao;
 
+import static org.apache.openmeetings.OpenmeetingsVariables.webAppRootKey;
+
 import java.util.Date;
 import java.util.List;
 
@@ -28,7 +30,6 @@ import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.persistence.beans.room.Room;
 import org.apache.openmeetings.persistence.beans.user.PrivateMessage;
 import org.apache.openmeetings.persistence.beans.user.User;
@@ -38,8 +39,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
 public class PrivateMessagesDao {
-
-	private static final Logger log = Red5LoggerFactory.getLogger(PrivateMessagesDao.class, OpenmeetingsVariables.webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(PrivateMessagesDao.class, webAppRootKey);
 	@PersistenceContext
 	private EntityManager em;
 	
@@ -87,46 +87,32 @@ public class PrivateMessagesDao {
 		return null;
 	}
 	
-	public List<PrivateMessage> getPrivateMessages() {
-		try {
-			TypedQuery<PrivateMessage> query = em.createNamedQuery("getPrivateMessages", PrivateMessage.class); 
-			return query.getResultList();
-		} catch (Exception e) {
-			log.error("[getPrivateMessages]",e);
-		}
-		return null;
+	public List<PrivateMessage> get(int first, int count) {
+		return em.createNamedQuery("getPrivateMessages", PrivateMessage.class)
+				.setFirstResult(first).setMaxResults(count)
+				.getResultList();
 	}
 	
-	public PrivateMessage getPrivateMessagesById(Long privateMessageId) {
+	public PrivateMessage get(long privateMessageId) {
+		TypedQuery<PrivateMessage> query = em.createNamedQuery("getPrivateMessagesById", PrivateMessage.class); 
+		query.setParameter("privateMessageId", privateMessageId);
+		PrivateMessage privateMessage = null;
 		try {
-			TypedQuery<PrivateMessage> query = em.createNamedQuery("getPrivateMessagesById", PrivateMessage.class); 
-			query.setParameter("privateMessageId", privateMessageId);
-			PrivateMessage privateMessage = null;
-			try {
-				privateMessage = query.getSingleResult();
-		    } catch (NoResultException ex) {
+			privateMessage = query.getSingleResult();
+	    } catch (NoResultException ex) {
+	    }
+		return privateMessage;
+	}
+	
+	public PrivateMessage update(PrivateMessage privateMessage, Long userId) {
+		if (privateMessage.getPrivateMessageFolderId() == null) {
+			em.persist(privateMessage);
+	    } else {
+	    	if (!em.contains(privateMessage)) {
+	    		privateMessage = em.merge(privateMessage);
 		    }
-			return privateMessage;
-		} catch (Exception e) {
-			log.error("[countPrivateMessagesByUser]",e);
 		}
-		return null;
-	}
-	
-	public void updatePrivateMessages(PrivateMessage privateMessage) {
-		try {
-			
-			if (privateMessage.getPrivateMessageFolderId() == null) {
-				em.persist(privateMessage);
-		    } else {
-		    	if (!em.contains(privateMessage)) {
-		    		em.merge(privateMessage);
-			    }
-			}
-			
-		} catch (Exception e) {
-			log.error("[updatePrivateMessages]",e);
-		}
+		return privateMessage;
 	}
 	
 	public Long countPrivateMessagesByUser(Long toUserId, String search, Long privateMessageFolderId) {
@@ -165,18 +151,13 @@ public class PrivateMessagesDao {
 		return null;
 	}
 	
-	public Long getNumberMessages(Long toUserId, Long privateMessageFolderId, boolean isRead) {
-		try {
-			TypedQuery<Long> query = em.createNamedQuery("getNumberMessages", Long.class); 
-			query.setParameter("toUserId", toUserId);
-			query.setParameter("isTrash", false);
-			query.setParameter("isRead", false);
-			query.setParameter("privateMessageFolderId", privateMessageFolderId);
-			return query.getSingleResult();
-		} catch (Exception e) {
-			log.error("[getNumberMessages]",e);
-		}
-		return null;
+	public long count(Long toUserId, Long folderId, Boolean isRead, boolean isTrash) {
+		TypedQuery<Long> query = em.createNamedQuery("getNumberMessages", Long.class); 
+		query.setParameter("toUserId", toUserId);
+		query.setParameter("isTrash", isTrash);
+		query.setParameter("isRead", isRead);
+		query.setParameter("folderId", folderId);
+		return query.getSingleResult();
 	}
 	
 	public List<PrivateMessage> getPrivateMessagesByUser(Long toUserId, String search,
@@ -568,5 +549,4 @@ public class PrivateMessagesDao {
 		}
 		return null;
 	}
-
 }

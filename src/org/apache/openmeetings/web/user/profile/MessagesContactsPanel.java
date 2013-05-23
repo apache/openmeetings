@@ -18,12 +18,78 @@
  */
 package org.apache.openmeetings.web.user.profile;
 
+import static org.apache.openmeetings.web.app.Application.getBean;
+import static org.apache.openmeetings.web.app.WebSession.getUserId;
+
+import org.apache.openmeetings.data.user.dao.PrivateMessageFolderDao;
+import org.apache.openmeetings.data.user.dao.PrivateMessagesDao;
+import org.apache.openmeetings.persistence.beans.user.PrivateMessageFolder;
 import org.apache.openmeetings.web.common.UserPanel;
+import org.apache.wicket.ajax.AjaxEventBehavior;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.list.ListItem;
+import org.apache.wicket.markup.html.list.ListView;
+import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 
 public class MessagesContactsPanel extends UserPanel {
 	private static final long serialVersionUID = 8098087441571734957L;
+	private final WebMarkupContainer container = new WebMarkupContainer("container");
+	private final IModel<Long> unreadModel = Model.of(0L);
 
 	public MessagesContactsPanel(String id) {
 		super(id);
+		
+		add(new WebMarkupContainer("new").add(new AjaxEventBehavior("click") {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void onEvent(AjaxRequestTarget target) {
+			}
+		}));
+		add(new WebMarkupContainer("inbox").add(new AjaxEventBehavior("click") {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void onEvent(AjaxRequestTarget target) {
+			}
+		}));
+		add(new WebMarkupContainer("sent").add(new AjaxEventBehavior("click") {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void onEvent(AjaxRequestTarget target) {
+			}
+		}));
+		add(new WebMarkupContainer("trash").add(new AjaxEventBehavior("click") {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void onEvent(AjaxRequestTarget target) {
+			}
+		}));
+		add(new WebMarkupContainer("newdir").add(new AjaxEventBehavior("click") {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void onEvent(AjaxRequestTarget target) {
+			}
+		}));
+		add(new ListView<PrivateMessageFolder>("folder", getBean(PrivateMessageFolderDao.class).get(0, Integer.MAX_VALUE)) {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void populateItem(ListItem<PrivateMessageFolder> item) {
+				item.add(new Label("name", item.getModelObject().getFolderName()));
+				item.add(new WebMarkupContainer("delete"));
+			}
+		});
+		unreadModel.setObject(getBean(PrivateMessagesDao.class).count(getUserId(), null, false, false));
+		container.add(new Label("unread", unreadModel));
+		
+		add(container.setOutputMarkupId(true));
 	}
+	
 }

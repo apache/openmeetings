@@ -18,6 +18,8 @@
  */
 package org.apache.openmeetings.data.user.dao;
 
+import static org.apache.openmeetings.OpenmeetingsVariables.webAppRootKey;
+
 import java.util.Date;
 import java.util.List;
 
@@ -26,16 +28,15 @@ import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
-import org.apache.openmeetings.OpenmeetingsVariables;
+import org.apache.openmeetings.data.IDataProviderDao;
 import org.apache.openmeetings.persistence.beans.user.PrivateMessageFolder;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
-public class PrivateMessageFolderDao {
-	
-	private static final Logger log = Red5LoggerFactory.getLogger(PrivateMessageFolderDao.class, OpenmeetingsVariables.webAppRootKey);
+public class PrivateMessageFolderDao implements IDataProviderDao<PrivateMessageFolder> {
+	private static final Logger log = Red5LoggerFactory.getLogger(PrivateMessageFolderDao.class, webAppRootKey);
 	@PersistenceContext
 	private EntityManager em;
 	
@@ -70,7 +71,7 @@ public class PrivateMessageFolderDao {
 		return null;
 	}
 	
-	public PrivateMessageFolder getPrivateMessageFolderById(Long privateMessageFolderId) {
+	public PrivateMessageFolder get(long privateMessageFolderId) {
 		try {
 			String hql = "select c from PrivateMessageFolder c " +
 						"where c.privateMessageFolderId = :privateMessageFolderId ";
@@ -91,35 +92,22 @@ public class PrivateMessageFolderDao {
 		return null;
 	}
 
-	public List<PrivateMessageFolder> getPrivateMessageFolders() {
-		try {
-			String hql = "select c from PrivateMessageFolder c ";
-
-			TypedQuery<PrivateMessageFolder> query = em.createQuery(hql, PrivateMessageFolder.class); 
-			
-			List<PrivateMessageFolder> privateMessageFolders = query.getResultList();
-			
-			return privateMessageFolders;
-		} catch (Exception e) {
-			log.error("[getPrivateMessageFolderById]",e);
-		}
-		return null;
+	public List<PrivateMessageFolder> get(int start, int count) {
+		String hql = "select c from PrivateMessageFolder c ";
+		return em.createQuery(hql, PrivateMessageFolder.class)
+				.setFirstResult(start).setMaxResults(count)
+				.getResultList();
 	}
 
-	public void updatePrivateMessages(PrivateMessageFolder privateMessageFolder) {
-		try {
-			
-			if (privateMessageFolder.getPrivateMessageFolderId() == 0) {
-				em.persist(privateMessageFolder);
-		    } else {
-		    	if (!em.contains(privateMessageFolder)) {
-		    		em.merge(privateMessageFolder);
-			    }
-			}
-			
-		} catch (Exception e) {
-			log.error("[updatePrivateMessages]",e);
+	public PrivateMessageFolder update(PrivateMessageFolder privateMessageFolder, Long userId) {
+		if (privateMessageFolder.getPrivateMessageFolderId() == 0) {
+			em.persist(privateMessageFolder);
+	    } else {
+	    	if (!em.contains(privateMessageFolder)) {
+	    		privateMessageFolder = em.merge(privateMessageFolder);
+		    }
 		}
+		return privateMessageFolder;
 	}
 	
 	public List<PrivateMessageFolder> getPrivateMessageFolderByUserId(Long userId) {
@@ -139,15 +127,24 @@ public class PrivateMessageFolderDao {
 		return null;
 	}
 
-	public void deletePrivateMessages(PrivateMessageFolder privateMessageFolder) {
-		try {
-			
-			privateMessageFolder = em.find(PrivateMessageFolder.class, privateMessageFolder.getPrivateMessageFolderId());
-			em.remove(privateMessageFolder);
-			
-		} catch (Exception e) {
-			log.error("[deletePrivateMessages]",e);
-		}
-	}	
-	
+	public void delete(PrivateMessageFolder privateMessageFolder, Long userId) {
+		privateMessageFolder = em.find(PrivateMessageFolder.class, privateMessageFolder.getPrivateMessageFolderId());
+		em.remove(privateMessageFolder);
+	}
+
+	public List<PrivateMessageFolder> get(String search, int start, int count, String order) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public long count() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	public long count(String search) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
 }

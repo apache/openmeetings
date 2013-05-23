@@ -20,5 +20,44 @@
 -->
 <html xmlns:wicket="http://wicket.apache.org">
 <wicket:panel>
+	<!-- TODO design should be changed in the future -->
+	<table style="width: 100%">
+		<tr>
+			<td style="width: 150px; overflow-x: hidden">
+				<div class="email new clickable" wicket:id="new" wicket:ommessage="title:1208"><wicket:ommessage key="1207"/></div>
+				<div class="email inbox clickable" wicket:id="inbox"><wicket:ommessage key="1222"/></div>
+				<div class="email sent clickable" wicket:id="sent"><wicket:ommessage key="1223"/></div>
+				<div class="email trash clickable" wicket:id="trash"><wicket:ommessage key="1224"/></div>
+				<div class="email newdir clickable" wicket:id="newdir" wicket:ommessage="title:1259"><wicket:ommessage key="1258"/></div>
+				<div>
+					<div wicket:id="folder"><div wicket:id="name"></div><div wicket:id="delete"></div></div>
+				</div>
+			</td>
+			<td>
+				<div wicket:id="container">
+					<div><b><wicket:ommessage key="1206"/>&nbsp;(<span wicket:id="unread"></span>)</b></div>
+					<div wicket:id="navigator"></div>
+					<table>
+						<tr>
+							<th><wicket:message key="1205"/></th>
+							<th><wicket:message key="1202"/></th>
+							<th><wicket:message key="1203"/></th>
+							<th><wicket:message key="1204"/></th>
+						</tr>
+					</table>
+				</div>
+			</td>
+			<td style="width: 150px; overflow-x: hidden">
+				<div><b><wicket:ommessage key="1189"/>&nbsp;(<span wicket:id="pendingContacts"></span>)</b></div>
+				<div><b><wicket:ommessage key="1188"/>&nbsp;(<span wicket:id="na1"></span>)</b></div>
+				<table>
+					<tr>
+						<th><wicket:message key="1180"/></th>
+						<th><wicket:message key="1186"/></th>
+					</tr>
+				</table>
+			</td>
+		</tr>
+	</table>
 </wicket:panel>
 </html>

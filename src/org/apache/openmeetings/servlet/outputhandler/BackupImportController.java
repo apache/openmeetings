@@ -432,8 +432,7 @@ public class BackupImportController extends AbstractUploadController {
 				, "privatemessagefolders", PrivateMessageFolder.class, true);
 			for (PrivateMessageFolder p : list) {
 				Long folderId = p.getPrivateMessageFolderId();
-				PrivateMessageFolder storedFolder = privateMessageFolderDao
-						.getPrivateMessageFolderById(folderId);
+				PrivateMessageFolder storedFolder = privateMessageFolderDao.get(folderId);
 				if (storedFolder == null) {
 					p.setPrivateMessageFolderId(0);
 					Long newFolderId = privateMessageFolderDao

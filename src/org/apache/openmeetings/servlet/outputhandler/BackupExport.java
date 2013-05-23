@@ -235,7 +235,7 @@ public class BackupExport {
 		 * ##################### Private Messages
 		 */
 		{
-			List<PrivateMessage> list = privateMessagesDao.getPrivateMessages();
+			List<PrivateMessage> list = privateMessagesDao.get(0, Integer.MAX_VALUE);
 			Registry registry = new Registry();
 			Strategy strategy = new RegistryStrategy(registry);
 			Serializer serializer = new Persister(strategy);
@@ -254,7 +254,7 @@ public class BackupExport {
 		 * ##################### Private Message Folders
 		 */
 		writeList(simpleSerializer, backup_dir, "privateMessageFolder.xml",
-				"privatemessagefolders", privateMessageFolderDao.getPrivateMessageFolders());
+				"privatemessagefolders", privateMessageFolderDao.get(0, Integer.MAX_VALUE));
 
 		/*
 		 * ##################### User Contacts

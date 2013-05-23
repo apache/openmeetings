@@ -35,6 +35,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
 import org.apache.openjpa.persistence.jdbc.ForeignKey;
+import org.apache.openmeetings.persistence.beans.IDataProviderEntity;
 import org.apache.openmeetings.persistence.beans.room.Room;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
@@ -48,8 +49,8 @@ import org.simpleframework.xml.Root;
 			"where c.to.user_id = :toUserId " +
 			"AND c.isTrash = :isTrash " +
 			"AND c.owner.user_id = :toUserId " +
-			"AND c.isRead = :isRead " +
-			"AND c.privateMessageFolderId = :privateMessageFolderId "),
+			"AND (:isRead IS NULL OR c.isRead = :isRead) " +
+			"AND (:folderId IS NULL OR c.privateMessageFolderId = :folderId) "),
 	@NamedQuery(name = "updatePrivateMessagesToTrash", query = "UPDATE PrivateMessage c " +
 			"SET c.isTrash = :isTrash,c.privateMessageFolderId = :privateMessageFolderId " +
 			"where c.privateMessageId IN (:privateMessageIds) "),
@@ -66,7 +67,7 @@ import org.simpleframework.xml.Root;
 })
 @Table(name = "private_message")
 @Root(name="privatemessage")
-public class PrivateMessage implements Serializable {
+public class PrivateMessage implements Serializable, IDataProviderEntity {
 	private static final long serialVersionUID = 7541117437029707792L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -121,11 +122,11 @@ public class PrivateMessage implements Serializable {
 	
 	@Column(name="is_read")
 	@Element(data=true)
-	private Boolean isRead;
+	private boolean isRead;
 	
 	@Column(name="is_trash")
 	@Element(data=true)
-	private Boolean isTrash;
+	private boolean isTrash;
 	
 	@Column(name="parent_message_id")
 	@Element(data=true)
@@ -137,7 +138,7 @@ public class PrivateMessage implements Serializable {
 	
 	@Column(name="is_contact_request")
 	@Element(data=true)
-	private Boolean isContactRequest;
+	private boolean isContactRequest;
 	
 	@Column(name="user_contact_id")
 	@Element(data=true)

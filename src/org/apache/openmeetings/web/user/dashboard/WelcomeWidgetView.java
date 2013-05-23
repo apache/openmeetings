@@ -58,8 +58,7 @@ public class WelcomeWidgetView extends WidgetView {
 			public void onClick(AjaxRequestTarget target) {
 				((MainPage)getPage()).updateContents(PROFILE_MESSAGES, target);
 			}
-		}.add(new Label("unread", Model.of("" + getBean(PrivateMessagesDao.class)
-				.getNumberMessages(getUserId(), 0L, false)))));
+		}.add(new Label("unread", Model.of("" + getBean(PrivateMessagesDao.class).count(getUserId(), null, false, false)))));
 		add(new AjaxLink<Void>("editProfile") {
 			private static final long serialVersionUID = -1847619557485964386L;
 

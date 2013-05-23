@@ -1248,8 +1248,7 @@ public class UserService {
 
 				SearchResult<PrivateMessage> searchResult = new SearchResult<PrivateMessage>();
 				searchResult.setObjectName(User.class.getName());
-				return privateMessagesDao
-						.getNumberMessages(users_id, 0L, false);
+				return privateMessagesDao.count(users_id, null, false, false);
 
 			}
 		} catch (Exception err) {
@@ -1462,8 +1461,7 @@ public class UserService {
 		return -1;
 	}
 
-	public Integer deletePrivateMessages(String SID,
-			@SuppressWarnings("rawtypes") List privateMessageIntsIds) {
+	public Integer deletePrivateMessages(String SID, List<?> privateMessageIntsIds) {
 		try {
 			Long users_id = sessiondataDao.checkSession(SID);
 			Long user_level = userManager.getUserLevelByID(users_id);
@@ -1473,12 +1471,10 @@ public class UserService {
 				List<Long> privateMessageIds = new LinkedList<Long>();
 
 				for (Object pMessageId : privateMessageIntsIds) {
-					privateMessageIds.add(Long.valueOf(pMessageId.toString())
-							.longValue());
+					privateMessageIds.add(Long.valueOf(pMessageId.toString()));
 				}
 
-				return privateMessagesDao
-						.deletePrivateMessages(privateMessageIds);
+				return privateMessagesDao.deletePrivateMessages(privateMessageIds);
 
 			}
 		} catch (Exception err) {
@@ -1638,14 +1634,12 @@ public class UserService {
 			// users only
 			if (authLevelUtil.checkUserLevel(user_level)) {
 
-				PrivateMessageFolder privateMessageFolder = privateMessageFolderDao
-						.getPrivateMessageFolderById(privateMessageFolderId);
+				PrivateMessageFolder privateMessageFolder = privateMessageFolderDao.get(privateMessageFolderId);
 
 				privateMessageFolder.setFolderName(folderName);
 				privateMessageFolder.setUpdated(new Date());
 
-				privateMessageFolderDao
-						.updatePrivateMessages(privateMessageFolder);
+				privateMessageFolderDao.update(privateMessageFolder, users_id);
 
 				return privateMessageFolderId;
 
@@ -1665,11 +1659,9 @@ public class UserService {
 			// users only
 			if (authLevelUtil.checkUserLevel(user_level)) {
 
-				PrivateMessageFolder privateMessageFolder = privateMessageFolderDao
-						.getPrivateMessageFolderById(privateMessageFolderId);
+				PrivateMessageFolder privateMessageFolder = privateMessageFolderDao.get(privateMessageFolderId);
 
-				privateMessageFolderDao
-						.deletePrivateMessages(privateMessageFolder);
+				privateMessageFolderDao.delete(privateMessageFolder, users_id);
 
 			}
 
