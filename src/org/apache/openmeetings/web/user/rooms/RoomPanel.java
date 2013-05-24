@@ -18,7 +18,9 @@
  */
 package org.apache.openmeetings.web.user.rooms;
 
+
 import org.apache.openmeetings.web.common.BasePanel;
+import org.apache.wicket.RuntimeConfigurationType;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.head.PriorityHeaderItem;
@@ -36,11 +38,16 @@ public class RoomPanel extends BasePanel {
 		this(id, new PageParameters());
 	}
 	
+	private String getFlashFile() {
+		return RuntimeConfigurationType.DEVELOPMENT == getApplication().getConfigurationType()
+				? "maindebug.as3.swf11.swf" : "main.as3.swf11.swf";
+	}
+	
 	public RoomPanel(String id, PageParameters pp) {
 		super(id);
 
 		StringValue swfVal = pp.get("swf");
-		String swf = (swfVal.isEmpty() ? "main.as3.swf11.swf" : swfVal.toString())
+		String swf = (swfVal.isEmpty() ? getFlashFile() : swfVal.toString())
 				+ new PageParametersEncoder().encodePageParameters(pp);
 		add(new Label("init", String.format("initSwf('%s');", swf)).setEscapeModelStrings(false));
 	}
