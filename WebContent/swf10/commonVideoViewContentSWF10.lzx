@@ -140,7 +140,7 @@
                     vidContainer.setVideouserProfilePic(object);
                     if ($debug) Debug.warn("start play");
                     vidContainer._chatvideoinner._videostream.playStream(broadcastId,-1);
-                    vidContainer.setAttribute("visibility","visible");
+                    vidContainer.setAttribute("visibility","hidden");
                 } else if (avsettings=="v" || avsettings=="av") {
                     //this means avsettings is either: "v" or "av"
                 	vidContainer.setDefaultVideoSize(object.VWidth,object.VHeight);
