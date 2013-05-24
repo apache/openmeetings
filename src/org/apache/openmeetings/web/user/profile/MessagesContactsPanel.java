@@ -88,6 +88,9 @@ public class MessagesContactsPanel extends UserPanel {
 		});
 		unreadModel.setObject(getBean(PrivateMessagesDao.class).count(getUserId(), null, false, false));
 		container.add(new Label("unread", unreadModel));
+		container.add(new WebMarkupContainer("navigator"));//FIXME
+		add(new WebMarkupContainer("pendingContacts"));//FIXME
+		add(new WebMarkupContainer("na1"));//FIXME
 		
 		add(container.setOutputMarkupId(true));
 	}
