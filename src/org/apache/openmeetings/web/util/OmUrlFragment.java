@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.web.util;
 
+import static org.apache.openmeetings.web.app.WebSession.getLanguage;
 import static org.apache.openmeetings.web.app.WebSession.getSid;
 import static org.apache.openmeetings.web.user.profile.SettingsPanel.EDIT_PROFILE_TAB_ID;
 import static org.apache.openmeetings.web.user.profile.SettingsPanel.MESSAGES_TAB_ID;
@@ -235,6 +236,7 @@ public class OmUrlFragment implements Serializable {
 						PageParameters pp = new PageParameters();
 						pp.add("wicketsid", getSid());
 						pp.add("wicketroomid", roomId);
+						pp.add("language", getLanguage());
 						basePanel = new RoomPanel(CHILD_ID, pp);
 					}
 				} catch(NumberFormatException ne) {
