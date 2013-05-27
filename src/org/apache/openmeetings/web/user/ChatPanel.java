@@ -46,9 +46,12 @@ import org.apache.wicket.protocol.ws.api.IWebSocketConnection;
 import org.apache.wicket.protocol.ws.api.IWebSocketConnectionRegistry;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
+
+import com.googlecode.wicket.jquery.ui.plugins.emoticons.EmoticonsBehavior;
 public class ChatPanel extends UserPanel {
 	private static final Logger log = Red5LoggerFactory.getLogger(ChatPanel.class, webAppRootKey);
 	private static final long serialVersionUID = -9144707674886211557L;
+	private static final String MESSAGE_AREA_ID = "messageArea";
 	private String message;
 	
 	private JSONObject getMessage(ChatMessage m) throws JSONException {
@@ -65,6 +68,7 @@ public class ChatPanel extends UserPanel {
 		setOutputMarkupId(true);
 		setMarkupId(id);
 
+		//TODO script should be moved from the html to parameterized file!
 		add(new Behavior() {
 			private static final long serialVersionUID = -2205036360048419129L;
 
@@ -74,9 +78,10 @@ public class ChatPanel extends UserPanel {
 				try {				
 					StringBuilder sb = new StringBuilder();
 					for (ChatMessage m : dao.get(0, Integer.MAX_VALUE)) {
-						sb.append("addChatMessage(").append(getMessage(m).toString()).append(");");
+						sb.append("addChatMessageInternal(").append(getMessage(m).toString()).append(");");
 					}
 					if (sb.length() > 0) {
+						sb.append("$('#").append(MESSAGE_AREA_ID).append("').emoticonize();");
 						response.render(OnDomReadyHeaderItem.forScript(sb.toString()));
 					}
 				} catch (JSONException e) {
@@ -85,7 +90,8 @@ public class ChatPanel extends UserPanel {
 				super.renderHead(component, response);
 			}
 		});
-		add(new WebMarkupContainer("messages").setMarkupId("messageArea"));
+		add(new EmoticonsBehavior("#" + MESSAGE_AREA_ID));
+		add(new WebMarkupContainer("messages").setMarkupId(MESSAGE_AREA_ID));
 		final Form<Void> f = new Form<Void>("sendForm");
 		f.add(new TextArea<String>("message", new PropertyModel<String>(ChatPanel.this, "message")).setOutputMarkupId(true));
 		f.add(new Button("send").add(new AjaxFormSubmitBehavior("onclick"){

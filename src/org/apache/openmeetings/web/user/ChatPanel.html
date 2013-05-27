@@ -28,9 +28,15 @@
 					.addClass('ui-icon-carat-1-' + (chat.height() < 20 ? 's' : 'n'));
 				chat.animate({ height: chat.height() < 20 ? "300px" : "16px" }, 1000);
 			}
-			function addChatMessage(m) {
+			function addChatMessageInternal(m) {
 				if (m && m.type == "chat") {
 					$('#messageArea').append('<div>' + m.msg.message + '</div>');
+				}
+			}
+			function addChatMessage(m) {
+				if (m && m.type == "chat") {
+					addChatMessageInternal(m)
+					$('#messageArea').emoticonize();
 				}
 			}
 			Wicket.Event.subscribe("/websocket/message", function(jqEvent, msg) {
@@ -40,6 +46,7 @@
 	</wicket:head>
 	<wicket:panel>
 		<div id="chat">
+			<!--  FIXME select emotion button is required! -->
 			<div id="controlBlock" onclick="toggleChat();"><div id="control" class="ui-icon ui-icon-carat-1-n sort-icon"></div></div>
 			<div wicket:id="messages"></div>
 			<form wicket:id="sendForm">
