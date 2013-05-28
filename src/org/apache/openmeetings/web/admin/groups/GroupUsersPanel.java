@@ -53,16 +53,18 @@ public class GroupUsersPanel extends Panel {
 		SearchableDataView<Organisation_Users> dataView = new SearchableDataView<Organisation_Users>("userList", new SearchableDataProvider<Organisation_Users>(OrganisationUserDao.class){
 			private static final long serialVersionUID = 1L;
 
+			protected OrganisationUserDao getDao() {
+				return (OrganisationUserDao)super.getDao();
+			}
+			
 			public long size() {
-				return search == null
-						? Application.getBean(OrganisationUserDao.class).count(organisationId)
-						: Application.getBean(OrganisationUserDao.class).count(organisationId, search);
+				return search == null ? getDao().count(organisationId) : getDao().count(organisationId, search);
 			}
 			
 			public java.util.Iterator<? extends Organisation_Users> iterator(long first, long count) {
 				return (search == null && getSort() == null
-						? Application.getBean(OrganisationUserDao.class).get(organisationId, (int)first, (int)count)
-						: Application.getBean(OrganisationUserDao.class).get(organisationId, search, (int)first, (int)count, getSortStr())).iterator();
+						? getDao().get(organisationId, (int)first, (int)count)
+						: getDao().get(organisationId, search, (int)first, (int)count, getSortStr())).iterator();
 			}
 		}) {
 			private static final long serialVersionUID = 8715559628755439596L;

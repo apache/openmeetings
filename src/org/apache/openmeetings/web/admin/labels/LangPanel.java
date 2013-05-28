@@ -30,8 +30,8 @@ import org.apache.openmeetings.web.admin.SearchableDataView;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.common.PagedEntityListPanel;
 import org.apache.openmeetings.web.data.DataViewContainer;
-import org.apache.openmeetings.web.data.SearchableDataProvider;
 import org.apache.openmeetings.web.data.OrderByBorder;
+import org.apache.openmeetings.web.data.SearchableDataProvider;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -77,16 +77,19 @@ public class LangPanel extends AdminPanel {
 					private static final long serialVersionUID = -6822789354860988626L;
 
 					@Override
+					protected FieldValueDao getDao() {
+						return (FieldValueDao)super.getDao();
+					}
+					
+					@Override
 					public long size() {
-						return search == null
-								? Application.getBean(FieldValueDao.class).count()
-								: Application.getBean(FieldValueDao.class).count(language.getLanguage_id(), search);
+						return search == null ? getDao().count() : getDao().count(language.getLanguage_id(), search);
 					}
 					
 					public Iterator<? extends Fieldvalues> iterator(long first, long count) {
 						return (search == null && getSort() == null
-								? Application.getBean(FieldValueDao.class).get(language.getLanguage_id(), (int)first, (int)count)
-								: Application.getBean(FieldValueDao.class).get(language.getLanguage_id(), search, (int)first, (int)count, getSortStr())).iterator();
+								? getDao().get(language.getLanguage_id(), (int)first, (int)count)
+								: getDao().get(language.getLanguage_id(), search, (int)first, (int)count, getSortStr())).iterator();
 					}
 				}) {
 			private static final long serialVersionUID = 8715559628755439596L;
