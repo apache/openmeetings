@@ -30,7 +30,7 @@ import org.apache.wicket.model.IModel;
  * 
  * @param <T>
  */
-public class AdminBaseForm<T> extends Form<T> {
+public abstract class AdminBaseForm<T> extends Form<T> {
 	private static final long serialVersionUID = 1L;
 	private AdminSavePanel<T> savePanel;
 
@@ -106,8 +106,7 @@ public class AdminBaseForm<T> extends Form<T> {
 	 * @param target
 	 * @param form
 	 */
-	protected void onSaveSubmit(AjaxRequestTarget target, Form<?> form) {
-	}
+	protected abstract void onSaveSubmit(AjaxRequestTarget target, Form<?> form);
 	
 	/**
 	 * invoked when save has error
@@ -115,8 +114,7 @@ public class AdminBaseForm<T> extends Form<T> {
 	 * @param target
 	 * @param form
 	 */
-	protected void onSaveError(AjaxRequestTarget target, Form<?> form) {
-	}
+	protected abstract void onSaveError(AjaxRequestTarget target, Form<?> form);
 	
 	/**
 	 * invoked when new button is pressed
@@ -124,8 +122,7 @@ public class AdminBaseForm<T> extends Form<T> {
 	 * @param target
 	 * @param form
 	 */
-	protected void onNewSubmit(AjaxRequestTarget target, Form<?> form) {
-	}
+	protected abstract void onNewSubmit(AjaxRequestTarget target, Form<?> form);
 	
 	/**
 	 * invoked if new has error
@@ -133,8 +130,7 @@ public class AdminBaseForm<T> extends Form<T> {
 	 * @param target
 	 * @param form
 	 */
-	protected void onNewError(AjaxRequestTarget target, Form<?> form) {
-	}
+	protected abstract void onNewError(AjaxRequestTarget target, Form<?> form);
 	
 	/**
 	 * invoked when refresh button is pressed
@@ -142,8 +138,7 @@ public class AdminBaseForm<T> extends Form<T> {
 	 * @param target
 	 * @param form
 	 */
-	protected void onRefreshSubmit(AjaxRequestTarget target, Form<?> form) {
-	}
+	protected abstract void onRefreshSubmit(AjaxRequestTarget target, Form<?> form);
 	
 	/**
 	 * invoked when refresh has error
@@ -151,8 +146,7 @@ public class AdminBaseForm<T> extends Form<T> {
 	 * @param target
 	 * @param form
 	 */
-	protected void onRefreshError(AjaxRequestTarget target, Form<?> form) {
-	}
+	protected abstract void onRefreshError(AjaxRequestTarget target, Form<?> form);
 	
 	/**
 	 * invoked when delete button is pressed
@@ -160,8 +154,7 @@ public class AdminBaseForm<T> extends Form<T> {
 	 * @param target
 	 * @param form
 	 */
-	protected void onDeleteSubmit(AjaxRequestTarget target, Form<?> form) {
-	}
+	protected abstract void onDeleteSubmit(AjaxRequestTarget target, Form<?> form);
 	
 	/**
 	 * invoked when delete has error
@@ -169,7 +162,6 @@ public class AdminBaseForm<T> extends Form<T> {
 	 * @param target
 	 * @param form
 	 */
-	protected void onDeleteError(AjaxRequestTarget target, Form<?> form) {
-	}
+	protected abstract void onDeleteError(AjaxRequestTarget target, Form<?> form);
 	
 }

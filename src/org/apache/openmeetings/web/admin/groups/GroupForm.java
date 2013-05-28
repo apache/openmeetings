@@ -18,11 +18,12 @@
  */
 package org.apache.openmeetings.web.admin.groups;
 
+import static org.apache.openmeetings.web.app.Application.getBean;
+import static org.apache.openmeetings.web.app.WebSession.getUserId;
+
 import org.apache.openmeetings.data.user.dao.OrganisationDao;
 import org.apache.openmeetings.persistence.beans.domain.Organisation;
 import org.apache.openmeetings.web.admin.AdminBaseForm;
-import org.apache.openmeetings.web.app.Application;
-import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.OmAjaxFormValidatingBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -70,7 +71,7 @@ public class GroupForm extends AdminBaseForm<Organisation> {
 	protected void onRefreshSubmit(AjaxRequestTarget target, Form<?> form) {
 		Organisation org = getModelObject();
 		if (org.getOrganisation_id() != null) {
-			org = Application.getBean(OrganisationDao.class).get(org.getOrganisation_id());
+			org = getBean(OrganisationDao.class).get(org.getOrganisation_id());
 		} else {
 			org = new Organisation();
 		}
@@ -80,16 +81,36 @@ public class GroupForm extends AdminBaseForm<Organisation> {
 	
 	@Override
 	protected void onDeleteSubmit(AjaxRequestTarget target, Form<?> form) {
-		Application.getBean(OrganisationDao.class).delete(getModelObject(), WebSession.getUserId());
+		getBean(OrganisationDao.class).delete(getModelObject(), getUserId());
 		target.add(groupList);
 		target.appendJavaScript("groupsInit();");
 	}
 	
 	@Override
 	protected void onSaveSubmit(AjaxRequestTarget target, Form<?> form) {
-		Application.getBean(OrganisationDao.class).update(getModelObject(), WebSession.getUserId());
+		getBean(OrganisationDao.class).update(getModelObject(), getUserId());
 		hideNewRecord();
 		target.add(groupList);
 		target.appendJavaScript("groupsInit();");
+	}
+
+	@Override
+	protected void onSaveError(AjaxRequestTarget target, Form<?> form) {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	protected void onNewError(AjaxRequestTarget target, Form<?> form) {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	protected void onRefreshError(AjaxRequestTarget target, Form<?> form) {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	protected void onDeleteError(AjaxRequestTarget target, Form<?> form) {
+		// TODO Auto-generated method stub
 	}
 }

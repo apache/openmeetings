@@ -24,8 +24,8 @@ import org.apache.openmeetings.web.admin.AdminPanel;
 import org.apache.openmeetings.web.admin.SearchableDataView;
 import org.apache.openmeetings.web.common.PagedEntityListPanel;
 import org.apache.openmeetings.web.data.DataViewContainer;
-import org.apache.openmeetings.web.data.SearchableDataProvider;
 import org.apache.openmeetings.web.data.OrderByBorder;
+import org.apache.openmeetings.web.data.SearchableDataProvider;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -85,7 +85,7 @@ public class RoomsPanel extends AdminPanel {
 			}
 		});
 		
-		form = new RoomForm("form", new Room());
+		form = new RoomForm("form", listContainer, new Room());
 		form.showNewRecord();
         add(form);
 		

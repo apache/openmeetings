@@ -113,4 +113,23 @@ public class LdapForm extends AdminBaseForm<LdapConfig> {
 		target.appendJavaScript("omLdapPanelInit();");
 	}
 
+	@Override
+	protected void onSaveError(AjaxRequestTarget target, Form<?> form) {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	protected void onNewError(AjaxRequestTarget target, Form<?> form) {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	protected void onRefreshError(AjaxRequestTarget target, Form<?> form) {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	protected void onDeleteError(AjaxRequestTarget target, Form<?> form) {
+		// TODO Auto-generated method stub
+	}
 }

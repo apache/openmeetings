@@ -18,10 +18,15 @@
  */
 package org.apache.openmeetings.web.admin.rooms;
 
+import static org.apache.openmeetings.web.app.Application.getBean;
+import static org.apache.openmeetings.web.app.WebSession.getUserId;
+
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.apache.openmeetings.data.conference.RoomManager;
+import org.apache.openmeetings.data.conference.dao.RoomDao;
 import org.apache.openmeetings.data.user.OrganisationManager;
 import org.apache.openmeetings.persistence.beans.domain.Organisation;
 import org.apache.openmeetings.persistence.beans.room.Room;
@@ -31,9 +36,12 @@ import org.apache.openmeetings.web.admin.AdminBaseForm;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.OmAjaxFormValidatingBehavior;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
+import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.form.ListMultipleChoice;
 import org.apache.wicket.markup.html.form.RequiredTextField;
@@ -43,19 +51,15 @@ import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.util.time.Duration;
 
-import edu.emory.mathcs.backport.java.util.Arrays;
-
 public class RoomForm extends AdminBaseForm<Room> {
-
 	private static final long serialVersionUID = 1L;
+	private final static List<Long> DROPDOWN_NUMBER_OF_PARTICIPANTS = Arrays.asList(2L, 4L, 6L, 8L, 10L, 12L, 14L, 16L, 20L, 25L, 32L, 50L,
+			100L, 150L, 200L, 500L, 1000L);
+	private final WebMarkupContainer roomList;
 
-	Object[] array = { 2L, 4L, 6L, 8L, 10L, 12L, 14L, 16L, 20L, 25L, 32L, 50L,
-			100L, 150L, 200L, 500L, 1000L };
-	@SuppressWarnings("unchecked")
-	List<Long> DROPDOWN_NUMBER_OF_PARTICIPANTS = Arrays.asList(array);
-
-	public RoomForm(String id, final Room room) {
+	public RoomForm(String id, WebMarkupContainer roomList, final Room room) {
 		super(id, new CompoundPropertyModel<Room>(room));
+		this.roomList = roomList;
 		setOutputMarkupId(true);
 		RequiredTextField<String> name = new RequiredTextField<String>("name");
 		name.setLabel(new Model<String>(WebSession.getString(193)));
@@ -128,5 +132,63 @@ public class RoomForm extends AdminBaseForm<Room> {
 		// attach an ajax validation behavior to all form component's keydown
 		// event and throttle it down to once per second
 		OmAjaxFormValidatingBehavior.addToAllFormComponents(this, "keydown", Duration.ONE_SECOND);
+	}
+
+	private void updateView(AjaxRequestTarget target) {
+		target.add(this);
+		target.add(roomList);
+		target.appendJavaScript("omRoomPanelInit();");
+	}
+	
+	@Override
+	protected void onSaveSubmit(AjaxRequestTarget target, Form<?> form) {
+		getBean(RoomDao.class).update(getModelObject(), getUserId());
+		hideNewRecord();
+		updateView(target);
+	}
+
+	@Override
+	protected void onSaveError(AjaxRequestTarget target, Form<?> form) {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	protected void onNewSubmit(AjaxRequestTarget target, Form<?> form) {
+		setModelObject(new Room());
+		updateView(target);
+	}
+
+	@Override
+	protected void onNewError(AjaxRequestTarget target, Form<?> form) {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	protected void onRefreshSubmit(AjaxRequestTarget target, Form<?> form) {
+		Room r = getModelObject();
+		if (r.getRooms_id() != null) {
+			r = getBean(RoomDao.class).get(r.getRooms_id());
+		} else {
+			r = new Room();
+		}
+		setModelObject(r);
+		updateView(target);
+	}
+
+	@Override
+	protected void onRefreshError(AjaxRequestTarget target, Form<?> form) {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	protected void onDeleteSubmit(AjaxRequestTarget target, Form<?> form) {
+		getBean(RoomDao.class).delete(getModelObject(), getUserId());
+		target.add(roomList);
+		updateView(target);
+	}
+
+	@Override
+	protected void onDeleteError(AjaxRequestTarget target, Form<?> form) {
+		// TODO Auto-generated method stub
 	}
 }
