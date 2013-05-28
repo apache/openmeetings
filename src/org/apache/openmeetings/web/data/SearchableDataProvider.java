@@ -18,11 +18,12 @@
  */
 package org.apache.openmeetings.web.data;
 
+import static org.apache.openmeetings.web.app.Application.getBean;
+
 import java.util.Iterator;
 
 import org.apache.openmeetings.data.IDataProviderDao;
 import org.apache.openmeetings.persistence.beans.IDataProviderEntity;
-import org.apache.openmeetings.web.app.Application;
 import org.apache.wicket.extensions.markup.html.repeater.util.SortableDataProvider;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
@@ -47,6 +48,10 @@ public class SearchableDataProvider<T extends IDataProviderEntity> extends Sorta
 		// does nothing
 	}
 
+	protected IDataProviderDao<T> getDao() {
+		return getBean(clazz);
+	}
+	
 	protected String getSortStr() {
 		String result = null;
 		if (getSort() != null) {
@@ -57,14 +62,12 @@ public class SearchableDataProvider<T extends IDataProviderEntity> extends Sorta
 	
 	public Iterator<? extends T> iterator(long first, long count) {
 		return (search == null && getSort() == null
-			? Application.getBean(clazz).get((int)first, (int)count)
-			: Application.getBean(clazz).get(search, (int)first, (int)count, getSortStr())).iterator();
+			? getDao().get((int)first, (int)count)
+			: getDao().get(search, (int)first, (int)count, getSortStr())).iterator();
 	}
 
 	public long size() {
-		return search == null
-				? Application.getBean(clazz).count()
-				: Application.getBean(clazz).count(search);
+		return search == null ? getDao().count() : getDao().count(search);
 	}
 
 	public IModel<T> model(T object) {

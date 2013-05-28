@@ -30,6 +30,7 @@ import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.openmeetings.data.IDataProviderDao;
 import org.apache.openmeetings.persistence.beans.room.Room;
 import org.apache.openmeetings.persistence.beans.user.PrivateMessage;
 import org.apache.openmeetings.persistence.beans.user.User;
@@ -38,7 +39,7 @@ import org.slf4j.Logger;
 import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
-public class PrivateMessagesDao {
+public class PrivateMessagesDao implements IDataProviderDao<PrivateMessage> {
 	private static final Logger log = Red5LoggerFactory.getLogger(PrivateMessagesDao.class, webAppRootKey);
 	@PersistenceContext
 	private EntityManager em;
@@ -548,5 +549,25 @@ public class PrivateMessagesDao {
 			log.error("[getPrivateMessagesByRoom]",e);
 		}
 		return null;
+	}
+
+	public List<PrivateMessage> get(String search, int start, int count, String order) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public long count() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	public long count(String search) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	public void delete(PrivateMessage entity, Long userId) {
+		// TODO Auto-generated method stub
+		
 	}
 }

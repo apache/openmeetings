@@ -35,6 +35,7 @@ public class DataViewContainer<T extends IDataProviderEntity> implements Seriali
 		this.view = view;
 	}
 	
+	//TODO refactor to remove warnings
 	public void setLinks(OrderByBorder<T>... orderLinks) {
 		this.orderLinks = orderLinks;
 	}

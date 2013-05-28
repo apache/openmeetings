@@ -21,33 +21,39 @@
 <html xmlns:wicket="http://wicket.apache.org">
 <wicket:panel>
 	<!-- TODO design should be changed in the future -->
-	<table style="width: 100%">
+	<table class="messages">
 		<tr>
-			<td style="width: 150px; overflow-x: hidden">
-				<div class="email new clickable" wicket:id="new" wicket:ommessage="title:1208"><wicket:ommessage key="1207"/></div>
+			<td class="side left">
+				<div class="email new clickable ui-widget-header ui-corner-all" wicket:id="new" wicket:ommessage="title:1208"><wicket:ommessage key="1207"/></div>
 				<div class="email inbox clickable" wicket:id="inbox"><wicket:ommessage key="1222"/></div>
 				<div class="email sent clickable" wicket:id="sent"><wicket:ommessage key="1223"/></div>
 				<div class="email trash clickable" wicket:id="trash"><wicket:ommessage key="1224"/></div>
-				<div class="email newdir clickable" wicket:id="newdir" wicket:ommessage="title:1259"><wicket:ommessage key="1258"/></div>
+				<div class="email newdir clickable ui-widget-header ui-corner-all" wicket:id="newdir" wicket:ommessage="title:1259"><wicket:ommessage key="1258"/></div>
 				<div>
 					<div wicket:id="folder"><div wicket:id="name"></div><div wicket:id="delete"></div></div>
 				</div>
 			</td>
-			<td>
+			<td class="main">
 				<div wicket:id="container">
 					<div><b><wicket:ommessage key="1206"/>&nbsp;(<span wicket:id="unread"></span>)</b></div>
 					<div wicket:id="navigator"></div>
-					<table>
+					<table style="width: 100%;">
 						<tr>
-							<th><wicket:ommessage key="1205"/></th>
-							<th><wicket:ommessage key="1202"/></th>
-							<th><wicket:ommessage key="1203"/></th>
-							<th><wicket:ommessage key="1204"/></th>
+							<th><span wicket:id="orderById"></span><wicket:ommessage key="1205"/></th>
+							<th><span wicket:id="orderByFrom"></span><wicket:ommessage key="1202"/></th>
+							<th><span wicket:id="orderBySubject"></span><wicket:ommessage key="1203"/></th>
+							<th><span wicket:id="orderBySend"></span><wicket:ommessage key="1204"/></th>
+						</tr>
+						<tr wicket:id="messages">
+							<td wicket:id="id"></td>
+							<td wicket:id="from"></td>
+							<td wicket:id="subject"></td>
+							<td wicket:id="send"></td>
 						</tr>
 					</table>
 				</div>
 			</td>
-			<td style="width: 150px; overflow-x: hidden">
+			<td class="side right">
 				<div><b><wicket:ommessage key="1189"/>&nbsp;(<span wicket:id="pendingContacts"></span>)</b></div>
 				<div><b><wicket:ommessage key="1188"/>&nbsp;(<span wicket:id="na1"></span>)</b></div>
 				<table>

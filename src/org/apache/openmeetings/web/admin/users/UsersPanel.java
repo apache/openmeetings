@@ -18,16 +18,17 @@
  */
 package org.apache.openmeetings.web.admin.users;
 
+import static org.apache.openmeetings.web.app.Application.getBean;
+import static org.apache.openmeetings.web.app.WebSession.getUserId;
+
 import org.apache.openmeetings.data.user.dao.UsersDao;
 import org.apache.openmeetings.persistence.beans.user.User;
 import org.apache.openmeetings.web.admin.AdminPanel;
-import org.apache.openmeetings.web.admin.PagedEntityListPanel;
 import org.apache.openmeetings.web.admin.SearchableDataView;
-import org.apache.openmeetings.web.app.Application;
-import org.apache.openmeetings.web.app.WebSession;
+import org.apache.openmeetings.web.common.PagedEntityListPanel;
 import org.apache.openmeetings.web.data.DataViewContainer;
-import org.apache.openmeetings.web.data.SearchableDataProvider;
 import org.apache.openmeetings.web.data.OrderByBorder;
+import org.apache.openmeetings.web.data.SearchableDataProvider;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -76,8 +77,7 @@ public class UsersPanel extends AdminPanel {
 				});
 			}
 		};
-		final WebMarkupContainer listContainer = new WebMarkupContainer(
-				"listContainer");
+		final WebMarkupContainer listContainer = new WebMarkupContainer("listContainer");
 		add(listContainer.add(dataView).setOutputMarkupId(true));
 		DataViewContainer<User> container = new DataViewContainer<User>(listContainer, dataView);
 		container.setLinks(new OrderByBorder<User>("orderById", "user_id", container)
@@ -94,10 +94,8 @@ public class UsersPanel extends AdminPanel {
 			}
 		});
 
-		UsersDao usersDaoImpl = Application.getBean(UsersDao.class);
-		form = new UserForm("form", listContainer,
-				usersDaoImpl.getNewUserInstance(usersDaoImpl.get(WebSession
-						.getUserId())));
+		UsersDao usersDaoImpl = getBean(UsersDao.class);
+		form = new UserForm("form", listContainer, usersDaoImpl.getNewUserInstance(usersDaoImpl.get(getUserId())));
 		form.showNewRecord();
 		add(form);
 	}

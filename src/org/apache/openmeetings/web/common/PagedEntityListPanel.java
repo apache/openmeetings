@@ -16,12 +16,14 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.web.admin;
+package org.apache.openmeetings.web.common;
 
 import java.util.Arrays;
 import java.util.List;
 
 import org.apache.openmeetings.persistence.beans.IDataProviderEntity;
+import org.apache.openmeetings.web.admin.AdminPagingNavigator;
+import org.apache.openmeetings.web.admin.SearchableDataView;
 import org.apache.openmeetings.web.data.SearchableDataProvider;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
@@ -31,7 +33,7 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.PropertyModel;
 
-public abstract class PagedEntityListPanel extends AdminPanel {
+public abstract class PagedEntityListPanel extends BasePanel {
 	private static final long serialVersionUID = -4280843184916302671L;
 	private int entitiesPerPage = 50;
 	private List<Integer> numbers = Arrays.asList(10, 25, 50, 75, 100, 200);

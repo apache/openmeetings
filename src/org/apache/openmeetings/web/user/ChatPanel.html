@@ -30,7 +30,7 @@
 			}
 			function addChatMessageInternal(m) {
 				if (m && m.type == "chat") {
-					$('#messageArea').append('<div>' + m.msg.message + '</div>');
+					$('#messageArea').append('<div><span class="date">' + m.msg.sent + '</span>' + m.msg.message + '</div>');
 				}
 			}
 			function addChatMessage(m) {

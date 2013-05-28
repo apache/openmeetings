@@ -42,8 +42,8 @@ import org.simpleframework.xml.Root;
 @Entity
 @NamedQueries({
 	@NamedQuery(name = "getChatMessageById", query = "SELECT c FROM ChatMessage c WHERE c.id = :id")
-	, @NamedQuery(name = "getChatMessagesByUser", query = "SELECT DISTINCT c FROM ChatMessage c WHERE c.fromUser.user_id = :userId OR c.toUser.user_id = :userId ORDER BY c.sent DESC")
-	, @NamedQuery(name = "getGlobalChatMessages", query = "SELECT DISTINCT c FROM ChatMessage c WHERE c.toUser IS NULL ORDER BY c.sent DESC")
+	, @NamedQuery(name = "getChatMessagesByUser", query = "SELECT DISTINCT c FROM ChatMessage c WHERE c.fromUser.user_id = :userId OR c.toUser.user_id = :userId ORDER BY c.sent ASC")
+	, @NamedQuery(name = "getGlobalChatMessages", query = "SELECT DISTINCT c FROM ChatMessage c WHERE c.toUser IS NULL ORDER BY c.sent ASC")
 })@Table(name = "chat")
 @Root(name = "ChatMessage")
 public class ChatMessage implements Serializable, IDataProviderEntity {

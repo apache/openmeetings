@@ -100,6 +100,11 @@ html, body {
 	margin-left: 50%;
 	margin-right: 50%;
 }
+#chatPanel #chat #messageArea .date {
+    margin-right: 5px;
+    font-style: italic;
+    font-size: smaller;
+}
 /* 
     ################################
     Column layout admin section
@@ -707,4 +712,46 @@ div.tableWrapper {
 	text-align: center;
 	padding-top: 7px;
 	font-weight: bold;
+}
+table.messages {
+	width: 100%;
+	min-height: 500px;
+}
+table.messages td.side, table.messages td.main {
+	vertical-align: top;
+}
+table.messages td.side.left {
+	min-width: 150px;
+	overflow-x: hidden;
+}
+table.messages td.side.right {
+	min-width: 200px;
+	overflow-x: hidden;
+}
+table.messages td.main {
+	width: 100%;
+}
+.email {
+	padding-left: 25px;
+	background-repeat: no-repeat;
+	background-position-x: 5px;
+	padding-top: 2px;
+	background-position-y: 3px;
+}
+.email.new {
+	background-image: url(images/email_add.png);
+	font-weight: normal;
+}
+.email.inbox {
+	background-image: url(images/basket_put.png);
+}
+.email.sent {
+	background-image: url(images/email_go.png);
+}
+.email.trash {
+	background-image: url(images/email_delete.png);
+}
+.email.newdir {
+	background-image: url(images/folder_add.png);
+	font-weight: normal;
 }

@@ -20,6 +20,7 @@ package org.apache.openmeetings.web.user;
 
 import static org.apache.openmeetings.OpenmeetingsVariables.webAppRootKey;
 
+import java.text.DateFormat;
 import java.util.Date;
 
 import org.apache.openmeetings.data.chat.ChatDao;
@@ -52,6 +53,7 @@ public class ChatPanel extends UserPanel {
 	private static final Logger log = Red5LoggerFactory.getLogger(ChatPanel.class, webAppRootKey);
 	private static final long serialVersionUID = -9144707674886211557L;
 	private static final String MESSAGE_AREA_ID = "messageArea";
+	private final DateFormat sdf;
 	private String message;
 	
 	private JSONObject getMessage(ChatMessage m) throws JSONException {
@@ -60,11 +62,13 @@ public class ChatPanel extends UserPanel {
 			.put("msg", new JSONObject()
 				.put("id", m.getId())
 				.put("message", m.getMessage())
+				.put("sent", sdf.format(m.getSent()))
 			);
 	}
 
 	public ChatPanel(String id) {
 		super(id);
+		sdf = DateFormat.getDateInstance(DateFormat.MEDIUM, getSession().getLocale());
 		setOutputMarkupId(true);
 		setMarkupId(id);
 
@@ -77,7 +81,8 @@ public class ChatPanel extends UserPanel {
 				ChatDao dao = Application.getBean(ChatDao.class);
 				try {				
 					StringBuilder sb = new StringBuilder();
-					for (ChatMessage m : dao.get(0, Integer.MAX_VALUE)) {
+					//FIXME limited count should be loaded with "earlier" link
+					for (ChatMessage m : dao.get(0, 30)) {
 						sb.append("addChatMessageInternal(").append(getMessage(m).toString()).append(");");
 					}
 					if (sb.length() > 0) {
