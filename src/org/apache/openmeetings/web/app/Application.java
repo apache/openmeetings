@@ -40,7 +40,7 @@ import org.apache.wicket.RestartResponseException;
 import org.apache.wicket.authroles.authentication.AbstractAuthenticatedWebSession;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebApplication;
 import org.apache.wicket.core.request.handler.ListenerInterfaceRequestHandler;
-import org.apache.wicket.core.request.mapper.HomePageMapper;
+import org.apache.wicket.core.request.mapper.MountedMapper;
 import org.apache.wicket.markup.MarkupFactory;
 import org.apache.wicket.markup.MarkupParser;
 import org.apache.wicket.markup.MarkupResourceStream;
@@ -48,7 +48,9 @@ import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.request.IRequestHandler;
 import org.apache.wicket.request.Url;
+import org.apache.wicket.request.component.IRequestablePage;
 import org.apache.wicket.request.mapper.info.PageComponentInfo;
+import org.apache.wicket.request.mapper.parameter.PageParametersEncoder;
 import org.apache.wicket.settings.IPageSettings;
 
 import ro.fortsoft.wicket.dashboard.WidgetRegistry;
@@ -100,25 +102,35 @@ public class Application extends AuthenticatedWebApplication {
 		mountPage("swf", SwfPage.class);
 		mountPage("install", InstallWizardPage.class);
 		mountPage("signin", getSignInPageClass());
-		mountPage("notinited", NotInitedPage.class);
 		mountResource("/recordings/mp4/${id}", new Mp4RecordingResourceReference());
 		mountResource("/recordings/ogg/${id}", new OggRecordingResourceReference());
 
-		getRootRequestMapperAsCompound().add(new HomePageMapper(getHomePage()) {
-			@Override
-			protected void encodePageComponentInfo(Url url, PageComponentInfo info) {
-				//Does nothing
+		getRootRequestMapperAsCompound().add(new NoVersionMapper(getHomePage()));
+		getRootRequestMapperAsCompound().add(new NoVersionMapper("notinited", NotInitedPage.class));
+	}
+	
+	private static class NoVersionMapper extends MountedMapper {
+		public NoVersionMapper(final Class<? extends IRequestablePage> pageClass) {
+			this("/", pageClass);
+		}
+		
+		public NoVersionMapper(String mountPath, final Class<? extends IRequestablePage> pageClass) {
+			super(mountPath, pageClass, new PageParametersEncoder());
+		}
+
+		@Override
+		protected void encodePageComponentInfo(Url url, PageComponentInfo info) {
+			//Does nothing
+		}
+		
+		@Override
+		public Url mapHandler(IRequestHandler requestHandler) {
+			if (requestHandler instanceof ListenerInterfaceRequestHandler) {
+				return null;
+			} else {
+				return super.mapHandler(requestHandler);
 			}
-			
-			@Override
-			public Url mapHandler(IRequestHandler requestHandler) {
-				if (requestHandler instanceof ListenerInterfaceRequestHandler) {
-					return null;
-				} else {
-					return super.mapHandler(requestHandler);
-				}
-			}
-		});
+		}
 	}
 	
 	public static OmAuthenticationStrategy getAuthenticationStrategy() {

@@ -29,7 +29,7 @@
 				<div class="email sent clickable" wicket:id="sent"><wicket:ommessage key="1223"/></div>
 				<div class="email trash clickable" wicket:id="trash"><wicket:ommessage key="1224"/></div>
 				<div class="email newdir clickable ui-widget-header ui-corner-all" wicket:id="newdir" wicket:ommessage="title:1259"><wicket:ommessage key="1258"/></div>
-				<div>
+				<div wicket:id="folders">
 					<div wicket:id="folder"><div wicket:id="name"></div><div wicket:id="delete"></div></div>
 				</div>
 			</td>
@@ -65,5 +65,6 @@
 			</td>
 		</tr>
 	</table>
+	<div wicket:id="addFolder"></div>
 </wicket:panel>
 </html>

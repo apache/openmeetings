@@ -34,6 +34,7 @@ import org.apache.openmeetings.data.user.dao.UsersDao;
 import org.apache.openmeetings.persistence.beans.domain.Organisation_Users;
 import org.apache.openmeetings.persistence.beans.flvrecord.FlvRecording;
 import org.apache.openmeetings.web.app.WebSession;
+import org.apache.openmeetings.web.common.AddFolderDialog;
 import org.apache.openmeetings.web.common.ConfirmableAjaxLink;
 import org.apache.openmeetings.web.common.UserPanel;
 import org.apache.openmeetings.web.util.AjaxDownload;
@@ -80,13 +81,13 @@ public class RecordingsPanel extends UserPanel {
 		super(id);
 		rm.getObject().setFlvRecordingId(-3);
 		rm.getObject().setOwnerId(getUserId());
-		add(new WebMarkupContainer("create").add(new AjaxEventBehavior("onclick") {
-			private static final long serialVersionUID = -110084769805785972L;
+		final AddFolderDialog addFolder = new AddFolderDialog("addFolder", WebSession.getString(712)) {
+			private static final long serialVersionUID = 1L;
 
 			@Override
-			protected void onEvent(AjaxRequestTarget target) {
+			protected void onSubmit(AjaxRequestTarget target) {
 				FlvRecording f = new FlvRecording();
-				f.setFileName(WebSession.getString(712));
+				f.setFileName(getModelObject());
 				f.setInsertedBy(getUserId());
 				f.setInserted(new Date());
 				f.setIsFolder(true);
@@ -98,6 +99,15 @@ public class RecordingsPanel extends UserPanel {
 				f.setOwnerId(rm.getObject().getOwnerId());
 				getBean(FlvRecordingDao.class).updateFlvRecording(f);
 				target.add(trees);
+			}
+		};
+		add(addFolder);
+		add(new WebMarkupContainer("create").add(new AjaxEventBehavior("onclick") {
+			private static final long serialVersionUID = -110084769805785972L;
+
+			@Override
+			protected void onEvent(AjaxRequestTarget target) {
+				addFolder.open(target);
 			}
 		}));
 		add(new WebMarkupContainer("refresh").add(new AjaxEventBehavior("onclick") {

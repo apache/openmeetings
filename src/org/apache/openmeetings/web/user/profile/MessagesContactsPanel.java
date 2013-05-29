@@ -23,12 +23,14 @@ import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import static org.apache.wicket.util.time.Duration.seconds;
 
 import java.util.Iterator;
+import java.util.List;
 
 import org.apache.openmeetings.data.user.dao.PrivateMessageFolderDao;
 import org.apache.openmeetings.data.user.dao.PrivateMessagesDao;
 import org.apache.openmeetings.persistence.beans.user.PrivateMessage;
 import org.apache.openmeetings.persistence.beans.user.PrivateMessageFolder;
 import org.apache.openmeetings.web.admin.SearchableDataView;
+import org.apache.openmeetings.web.common.AddFolderDialog;
 import org.apache.openmeetings.web.common.PagedEntityListPanel;
 import org.apache.openmeetings.web.common.UserPanel;
 import org.apache.openmeetings.web.data.DataViewContainer;
@@ -48,16 +50,31 @@ import org.apache.wicket.model.Model;
 public class MessagesContactsPanel extends UserPanel {
 	private static final long serialVersionUID = 8098087441571734957L;
 	private final WebMarkupContainer container = new WebMarkupContainer("container");
+	private final WebMarkupContainer folders = new WebMarkupContainer("folders");
 	private final IModel<Long> unreadModel = Model.of(0L);
 	private final static long INBOX_FOLDER_ID = -1;
 	private final static long SENT_FOLDER_ID = -2;
 	private final static long TRASH_FOLDER_ID = -3;
 	private final IModel<Long> selectedModel = Model.of(INBOX_FOLDER_ID);
+	private final IModel<List<? extends PrivateMessageFolder>> foldersModel;
 	
 	@SuppressWarnings("unchecked")
 	public MessagesContactsPanel(String id) {
 		super(id);
+		foldersModel = Model.ofList(getBean(PrivateMessageFolderDao.class).get(0, Integer.MAX_VALUE));
 		
+		final AddFolderDialog addFolder = new AddFolderDialog("addFolder") {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void onSubmit(AjaxRequestTarget target) {
+				PrivateMessageFolderDao fDao = getBean(PrivateMessageFolderDao.class);
+				fDao.addPrivateMessageFolder(getModelObject(), getUserId());
+				foldersModel.setObject(fDao.get(0, Integer.MAX_VALUE));
+				target.add(folders);
+			}
+		};
+		add(addFolder);
 		add(new WebMarkupContainer("new").add(new AjaxEventBehavior("click") {
 			private static final long serialVersionUID = 1L;
 
@@ -97,9 +114,10 @@ public class MessagesContactsPanel extends UserPanel {
 
 			@Override
 			protected void onEvent(AjaxRequestTarget target) {
+				addFolder.open(target);
 			}
 		}));
-		add(new ListView<PrivateMessageFolder>("folder", getBean(PrivateMessageFolderDao.class).get(0, Integer.MAX_VALUE)) {
+		add(folders.add(new ListView<PrivateMessageFolder>("folder", foldersModel) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -107,7 +125,7 @@ public class MessagesContactsPanel extends UserPanel {
 				item.add(new Label("name", item.getModelObject().getFolderName()));
 				item.add(new WebMarkupContainer("delete"));
 			}
-		});
+		}).setOutputMarkupId(true));
 		unreadModel.setObject(getBean(PrivateMessagesDao.class).count(getUserId(), null, false, false));
 		
 		SearchableDataProvider<PrivateMessage> sdp = new SearchableDataProvider<PrivateMessage>(PrivateMessagesDao.class) {
