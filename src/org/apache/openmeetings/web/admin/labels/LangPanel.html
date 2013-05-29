@@ -20,6 +20,9 @@
 -->
 <html xmlns:wicket="http://wicket.apache.org">
 	<wicket:panel>
+					<div>
+				        <span wicket:id="importFeedback"/>
+				     </div>
 		<script type="text/javascript">
 			function labelsInit() {
 				$('#addLanguage').dialog({
@@ -35,10 +38,29 @@
 		<div class="adminPanel">
 			<div class="adminPanelColumnTable">
 				<form wicket:id="langForm" class="addLanguagePanel">
-					<div class="formNewButton" wicket:ommessage="title:362" 
-						onclick="$('#addLanguage :text').val(''); $('#addLanguage').dialog('open');"><input type="button" title=""/></div>
-					<div wicket:id="deleteLangBtn" class="formCancelButton" wicket:ommessage="title:363"><input type="button" title=""/></div>
-					<select wicket:id="language"></select>
+					<table>
+						<tr>
+							<td>
+								<div class="formNewButton" wicket:ommessage="title:362" 
+									onclick="$('#addLanguage :text').val(''); $('#addLanguage').dialog('open');"><input type="button" title=""/></div>
+							</td>
+							<td>
+								<div wicket:id="deleteLangBtn" class="formCancelButton" wicket:ommessage="title:363"><input type="button" title=""/></div>
+							</td>
+							<td>
+								<select wicket:id="language"></select>
+							</td>
+							<td>
+								<input wicket:id="export" type="button" wicket:ommessage="value:360"/>
+							</td>
+							<td class="profile">
+								<div 
+									class="uploadtext"><wicket:ommessage key="387"/></div><div class="upload"><input type="file"
+										accept="text/xml" wicket:id="fileInput"/><span wicket:id="progress">[progressbar]</span>
+								</div>
+							</td>
+						</tr>
+					</table>
 				</form>
 				<span wicket:id="navigator">[dataview navigator]</span>
 				<table class="adminListTable">

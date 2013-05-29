@@ -62,7 +62,7 @@ public class LanguageImport {
 					itemObject.attribute("id").getText()).longValue();
 			String fieldName = itemObject.attribute("name").getText();
 			String value = itemObject.element("value").getText();
-			log.error("CHECK " + language_id + "," + fieldvalues_id + ","
+			log.info("CHECK " + language_id + "," + fieldvalues_id + ","
 					+ fieldName + "," + value);
 			this.addFieldValueById(language_id, fieldvalues_id, fieldName,
 					value);

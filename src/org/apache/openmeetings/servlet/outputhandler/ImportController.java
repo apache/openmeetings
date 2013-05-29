@@ -101,4 +101,15 @@ public class ImportController extends AbstractUploadController {
 		}
 	}
 
+    public void importLanguage(Long language_id, InputStream is) {
+    	try {
+			languageImport.addLanguageByDocument(
+					language_id, is);
+    		
+		} catch (Exception er) {
+			log.error("ERROR importing:", er);
+		}
+    	
+    }
+
 }

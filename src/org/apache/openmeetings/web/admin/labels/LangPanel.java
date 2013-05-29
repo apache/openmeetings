@@ -18,26 +18,50 @@
  */
 package org.apache.openmeetings.web.admin.labels;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.Iterator;
+import java.util.List;
 
+import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.data.basic.FieldLanguageDao;
+import org.apache.openmeetings.data.basic.FieldManager;
 import org.apache.openmeetings.data.basic.FieldValueDao;
 import org.apache.openmeetings.persistence.beans.lang.FieldLanguage;
 import org.apache.openmeetings.persistence.beans.lang.Fieldlanguagesvalues;
 import org.apache.openmeetings.persistence.beans.lang.Fieldvalues;
+import org.apache.openmeetings.servlet.outputhandler.ImportController;
+import org.apache.openmeetings.servlet.outputhandler.LangExport;
 import org.apache.openmeetings.web.admin.AdminPanel;
 import org.apache.openmeetings.web.admin.SearchableDataView;
+import org.apache.openmeetings.web.admin.backup.BackupPanel;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.common.PagedEntityListPanel;
 import org.apache.openmeetings.web.data.DataViewContainer;
 import org.apache.openmeetings.web.data.OrderByBorder;
 import org.apache.openmeetings.web.data.SearchableDataProvider;
+import org.apache.openmeetings.web.util.AjaxDownload;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.form.AjaxFormSubmitBehavior;
+import org.apache.wicket.extensions.ajax.markup.html.form.upload.UploadProgressBar;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.upload.FileUpload;
+import org.apache.wicket.markup.html.form.upload.FileUploadField;
+import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.repeater.Item;
+import org.apache.wicket.model.IModel;
+import org.apache.wicket.util.resource.FileResourceStream;
+import org.dom4j.Document;
+import org.red5.logging.Red5LoggerFactory;
+import org.slf4j.Logger;
+
+import com.googlecode.wicket.jquery.ui.form.button.AjaxButton;
 
 /**
  * Language Editor, add/insert/update {@link Fieldlanguagesvalues} and
@@ -47,11 +71,17 @@ import org.apache.wicket.markup.repeater.Item;
  * 
  */
 public class LangPanel extends AdminPanel {
+	private static final Logger log = Red5LoggerFactory.getLogger(
+			BackupPanel.class, OpenmeetingsVariables.webAppRootKey);
+	
 	private static final long serialVersionUID = 5904180813198016592L;
 
 	FieldLanguage language;
 	final WebMarkupContainer listContainer;
 	private LangForm langForm;
+	private FileUploadField fileUploadField;
+	// Create feedback panels
+	final FeedbackPanel importFeedback;
 	
 	@Override
 	public void onMenuPanelLoad(AjaxRequestTarget target) {
@@ -61,6 +91,10 @@ public class LangPanel extends AdminPanel {
 	@SuppressWarnings("unchecked")
 	public LangPanel(String id) {
 		super(id);
+		// Create feedback panels
+		importFeedback = new FeedbackPanel("importFeedback");
+		importFeedback.setOutputMarkupId(true);
+		add(importFeedback);
 		FieldLanguageDao langDao = Application
 				.getBean(FieldLanguageDao.class);
 		language = langDao.getFieldLanguageById(1L);
@@ -132,6 +166,98 @@ public class LangPanel extends AdminPanel {
 			}
 		});
 		langForm = new LangForm("langForm", listContainer, this);
+		fileUploadField = new FileUploadField("fileInput", new IModel<List<FileUpload>>() {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 2862135442385825549L;
+
+			public void detach() {
+			}
+			
+			public void setObject(List<FileUpload> object) {
+			}
+			
+			public List<FileUpload> getObject() {
+				return null;
+			}
+		});
+		langForm.add(fileUploadField);
+		langForm.add(new UploadProgressBar("progress", langForm, fileUploadField));
+		fileUploadField.add(new AjaxFormSubmitBehavior(langForm, "onchange") {
+			private static final long serialVersionUID = 2160216679027859231L;
+
+			@Override
+			protected void onSubmit(AjaxRequestTarget target) {
+				FileUpload download = fileUploadField.getFileUpload();
+				try {
+					if (download == null || download.getInputStream() == null) {
+						importFeedback.error("File is empty");
+						return;
+					}
+					Application.getBean(ImportController.class).importLanguage(language.getLanguage_id(), download.getInputStream());
+				} catch (IOException e) {
+					log.error("IOException on panel language editor import ", e);
+					importFeedback.error(e);
+				} catch (Exception e) {
+					log.error("Exception on panel language editor import ", e);
+					importFeedback.error(e);
+				}
+
+				// repaint the feedback panel so that it is hidden
+				target.add(importFeedback);
+			}
+		});
+
+		// Add a component to download a file without page refresh
+		final AjaxDownload download = new AjaxDownload();
+		langForm.add(download);
+
+		langForm.add(new AjaxButton("export"){
+			private static final long serialVersionUID = -2845639751469777460L;
+
+			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+
+				try {
+					List<Fieldlanguagesvalues> flvList = Application.getBean(FieldManager.class).getMixedFieldValuesList(language.getLanguage_id());
+
+					FieldLanguage fl = Application.getBean(FieldLanguageDao.class)
+							.getFieldLanguageById(language.getLanguage_id());
+					if (fl != null && flvList != null) {
+						Document doc = LangExport.createDocument(flvList, Application.getBean(FieldManager.class).getUntranslatedFieldValuesList(language.getLanguage_id()));
+
+						String requestedFile = fl.getName() + ".xml";
+						OutputStream out = new FileOutputStream(requestedFile);
+
+						LangExport.serializetoXML(out, "UTF-8", doc);
+
+						out.flush();
+						out.close();
+						
+						download.setFileName(requestedFile);
+						download.setResourceStream(new FileResourceStream(new File(requestedFile)));
+						download.initiate(target);
+					}
+				} catch (IOException e) {
+					log.error("IOException on panel language editor import ", e);
+					importFeedback.error(e);
+				} catch (Exception e) {
+					log.error("Exception on panel language editor import ", e);
+					importFeedback.error(e);
+				}
+				
+				// repaint the feedback panel so that it is hidden
+				target.add(importFeedback);
+			}
+			
+			@Override
+			protected void onError(AjaxRequestTarget target, Form<?> form) {
+				// repaint the feedback panel so errors are shown
+				target.add(importFeedback);
+			}
+			
+		});
+		
 		add(langForm);
 		add(new AddLanguageForm("addLangForm", this));
 	}

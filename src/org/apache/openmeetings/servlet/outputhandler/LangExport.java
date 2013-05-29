@@ -176,7 +176,7 @@ public class LangExport extends BaseHttpServlet {
 		return root;
 	}
 	
-	public Document createDocument(List<Fieldlanguagesvalues> flvList, List<Fieldlanguagesvalues> untranslatedList) throws Exception {
+	public static Document createDocument(List<Fieldlanguagesvalues> flvList, List<Fieldlanguagesvalues> untranslatedList) throws Exception {
 		Document document = createDocument();
 		Element root = createRoot(document);
 
