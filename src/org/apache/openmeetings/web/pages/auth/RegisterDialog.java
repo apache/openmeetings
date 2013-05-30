@@ -123,19 +123,27 @@ public class RegisterDialog extends AbstractFormDialog<String> {
 		private PasswordTextField passwordField;
 		private RequiredTextField<String> emailField;
 		private RequiredTextField<String> loginField;
+		private RequiredTextField<String> firstNameField;
+		private RequiredTextField<String> lastNameField;
 
 		public RegisterForm(String id) {
 			super(id);
 			add(feedback.setOutputMarkupId(true));
 			ConfigurationDao cfgDao = getBean(ConfigurationDao.class);
-			add(new RequiredTextField<String>("firstName", new PropertyModel<String>(RegisterDialog.this, "firstName")));
-			add(new RequiredTextField<String>("lastName", new PropertyModel<String>(RegisterDialog.this, "lastName")));
+			add(firstNameField = new RequiredTextField<String>("firstName", new PropertyModel<String>(RegisterDialog.this, "firstName")));
+			firstNameField.setLabel(Model.of(WebSession.getString(117)));
+			add(lastNameField = new RequiredTextField<String>("lastName", new PropertyModel<String>(RegisterDialog.this, "lastName")));
+			lastNameField.setLabel(Model.of(WebSession.getString(118)));
 			add(loginField = new RequiredTextField<String>("login", new PropertyModel<String>(RegisterDialog.this, "login")));
+			loginField.setLabel(Model.of(WebSession.getString(114)));
 			loginField.add(minimumLength(getMinLoginLength(cfgDao)));
 			add(passwordField = new PasswordTextField("password", new PropertyModel<String>(RegisterDialog.this, "password")));
+			passwordField.setLabel(Model.of(WebSession.getString(115)));
 			passwordField.setResetPassword(true).add(minimumLength(getMinPasswdLength(cfgDao)));
 			add(confirmPassword = new PasswordTextField("confirmPassword", new Model<String>()).setResetPassword(true));
+			confirmPassword.setLabel(Model.of(WebSession.getString(116)));
 			add(emailField = new RequiredTextField<String>("email", new PropertyModel<String>(RegisterDialog.this, "email")));
+			emailField.setLabel(Model.of(WebSession.getString(119)));
 			emailField.add(RfcCompliantEmailAddressValidator.getInstance());
 			add(new DropDownChoice<FieldLanguage>("lang"
 					, new PropertyModel<FieldLanguage>(RegisterDialog.this, "lang")

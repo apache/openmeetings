@@ -112,6 +112,7 @@ public class GeneralUserForm extends Form<User> {
 			}));
 
 		add(email = new RequiredTextField<String>("adresses.email"));
+		email.setLabel(Model.of(WebSession.getString(137)));
 		email.add(RfcCompliantEmailAddressValidator.getInstance());
 		add(new TextField<String>("adresses.phone"));
 		add(new CheckBox("sendSMS"));

@@ -24,12 +24,14 @@ import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import org.apache.openmeetings.data.user.dao.OrganisationDao;
 import org.apache.openmeetings.persistence.beans.domain.Organisation;
 import org.apache.openmeetings.web.admin.AdminBaseForm;
+import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.OmAjaxFormValidatingBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.model.CompoundPropertyModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.util.time.Duration;
 
 public class GroupForm extends AdminBaseForm<Organisation> {
@@ -42,7 +44,7 @@ public class GroupForm extends AdminBaseForm<Organisation> {
 		this.groupList = groupList;
 		setOutputMarkupId(true);
 		
-		add(new RequiredTextField<String>("name"));
+		add(new RequiredTextField<String>("name").setLabel(Model.of(WebSession.getString(165))));
 		usersPanel = new GroupUsersPanel("users", getOrgId());
 		add(usersPanel);
 

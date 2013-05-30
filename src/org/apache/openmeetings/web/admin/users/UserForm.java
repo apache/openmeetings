@@ -43,6 +43,7 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.model.CompoundPropertyModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.util.time.Duration;
 
 /**
@@ -131,7 +132,7 @@ public class UserForm extends AdminBaseForm<User> {
 	private void addFormFields() {
 		ConfigurationDao cfgDao = getBean(ConfigurationDao.class);
 		login = new RequiredTextField<String>("login");
-		// login.setLabel(new Model<String>("testname"));
+		login.setLabel(Model.of(WebSession.getString(132)));
 		add(login.add(minimumLength(getMinLoginLength(cfgDao))));
 
 		add(generalForm = new GeneralUserForm("general", getModel(), true));

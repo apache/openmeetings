@@ -837,7 +837,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>Описание:</value>
   </string>
   <string id="271" name="confadminform_labelkey">
-    <value>Значение</value>
+    <value>Значение:</value>
   </string>
   <string id="272" name="turnoverlist_maxresults">
     <value>из</value>
@@ -2523,7 +2523,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>Вы уверены?</value>
   </string>
   <string id="833" name="confirm delete">
-    <value>Вы действительно хотите удалить запись? Чтобы запомнить изменения, нажмите кнопку сохранения</value>
+    <value>Вы действительно хотите удалить запись?</value>
   </string>
   <string id="834" name="user choose error">
     <value>Пользователь не выбран. Пожалуйста, выберите пользователя</value>

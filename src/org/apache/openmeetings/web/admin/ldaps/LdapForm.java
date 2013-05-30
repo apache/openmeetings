@@ -34,6 +34,7 @@ import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.CompoundPropertyModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.util.time.Duration;
 
 /**
@@ -53,13 +54,13 @@ public class LdapForm extends AdminBaseForm<LdapConfig> {
 		setOutputMarkupId(true);
 		this.listContainer = listContainer;
 		
-		add(new RequiredTextField<String>("name"));
+		add(new RequiredTextField<String>("name").setLabel(Model.of(WebSession.getString(1108))));
 		add(new CheckBox("isActive"));
 		add(DateLabel.forDatePattern("inserted", "dd.MM.yyyy HH:mm:ss"));
 		add(new Label("insertedby.login"));
 		add(DateLabel.forDatePattern("updated", "dd.MM.yyyy HH:mm:ss"));
 		add(new Label("updatedby.login"));
-		add(new RequiredTextField<String>("configFileName"));
+		add(new RequiredTextField<String>("configFileName").setLabel(Model.of(WebSession.getString(1115))));
 		add(new CheckBox("addDomainToUserName"));
 		add(new TextField<String>("domain"));
 		add(new TextArea<String>("comment"));

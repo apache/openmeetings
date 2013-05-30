@@ -38,6 +38,7 @@ public abstract class AddFolderDialog extends AbstractFormDialog<String> {
 	private final Form<String> form;
 	private final FeedbackPanel feedback = new FeedbackPanel("feedback");
 	private final String name;
+	private RequiredTextField<String> title;
 
 	public AddFolderDialog(String id) {
 		this(id, null);
@@ -49,7 +50,8 @@ public abstract class AddFolderDialog extends AbstractFormDialog<String> {
 		form = new Form<String>("form", getModel()) {
 			private static final long serialVersionUID = 1L;
 			{
-				add(new RequiredTextField<String>("title", getModel()));
+				add(title = new RequiredTextField<String>("title", getModel()));
+				title.setLabel(Model.of(WebSession.getString(572)));
 				add(feedback.setOutputMarkupId(true));
 			}
 		};

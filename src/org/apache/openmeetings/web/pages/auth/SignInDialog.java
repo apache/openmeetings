@@ -48,6 +48,7 @@ import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.form.StatelessForm;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
@@ -189,6 +190,8 @@ public class SignInDialog extends AbstractFormDialog<String> {
 	
 	class SignInForm extends StatelessForm<String> {
 		private static final long serialVersionUID = 4079939497154278822L;
+		private PasswordTextField passField;
+		private RequiredTextField<String> loginField;
 
 		public SignInForm(String id) {
 			super(id);
@@ -215,8 +218,10 @@ public class SignInDialog extends AbstractFormDialog<String> {
 				}
 			}
 			add(new FeedbackPanel("feedback"));
-			add(new RequiredTextField<String>("login", new PropertyModel<String>(SignInDialog.this, "login")));
-			add(new PasswordTextField("pass", new PropertyModel<String>(SignInDialog.this, "password")).setResetPassword(true));
+			add(loginField = new RequiredTextField<String>("login", new PropertyModel<String>(SignInDialog.this, "login")));
+			loginField.setLabel(Model.of(WebSession.getString(114)));
+			add(passField = new PasswordTextField("pass", new PropertyModel<String>(SignInDialog.this, "password")).setResetPassword(true));
+			passField.setLabel(Model.of(WebSession.getString(115)));
 			List<LdapConfig> ldaps = getBean(LdapConfigService.class).getActiveLdapConfigs();
 			domain = ldaps.get(0);
 			add(new WebMarkupContainer("ldap")

@@ -70,6 +70,8 @@ public class ForgetPasswordDialog extends AbstractFormDialog<String> {
 			{
 				add(feedback.setOutputMarkupId(true));
 				add(label.setOutputMarkupId(true));
+				add(nameField = new RequiredTextField<String>("name", new PropertyModel<String>(ForgetPasswordDialog.this, "name")));
+				nameField.setLabel(Model.of(WebSession.getString(type == Type.email ? 315 : 316)));
 				RadioGroup<Type> rg = new RadioGroup<Type>("type", new PropertyModel<Type>(ForgetPasswordDialog.this, "type"));
 				add(rg.add(new Radio<Type>("email", Model.of(Type.email)).setOutputMarkupId(true))
 						.add(new Radio<Type>("login", Model.of(Type.login)).setOutputMarkupId(true))
@@ -80,10 +82,10 @@ public class ForgetPasswordDialog extends AbstractFormDialog<String> {
 					@Override
 					protected void onUpdate(AjaxRequestTarget target) {
 						lblModel.setObject(WebSession.getString(type == Type.email ? 315 : 316));
+						nameField.setLabel(Model.of(WebSession.getString(type == Type.email ? 315 : 316)));
 						target.add(label);
 					}
 				});
-				add(nameField = new RequiredTextField<String>("name", new PropertyModel<String>(ForgetPasswordDialog.this, "name")));
 				add(new AjaxButton("submit") { //FAKE button so "submit-on-enter" works as expected
 					private static final long serialVersionUID = 5257502637636428620L;
 

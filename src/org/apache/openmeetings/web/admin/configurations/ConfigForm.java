@@ -32,6 +32,7 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.model.CompoundPropertyModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.util.time.Duration;
 import org.apache.wicket.validation.IValidatable;
 import org.apache.wicket.validation.IValidator;
@@ -60,7 +61,7 @@ public class ConfigForm extends AdminBaseForm<Configuration> {
 		super(id, new CompoundPropertyModel<Configuration>(configuration));
 		setOutputMarkupId(true);
 		this.listContainer = listContainer;
-		add(new RequiredTextField<String>("conf_key").add(new IValidator<String>(){
+		add(new RequiredTextField<String>("conf_key").setLabel(Model.of(WebSession.getString(267))).add(new IValidator<String>(){
 			private static final long serialVersionUID = -3371792361118941958L;
 
 			public void validate(IValidatable<String> validatable) {
@@ -70,7 +71,7 @@ public class ConfigForm extends AdminBaseForm<Configuration> {
 				}
 			}
 		}));
-		add(new RequiredTextField<String>("conf_value"));
+		add(new RequiredTextField<String>("conf_value").setLabel(Model.of(WebSession.getString(271))));
 		add(DateLabel.forDatePattern("updatetime", "dd.MM.yyyy HH:mm:ss"));
 		add(new Label("user.login"));
 		add(new TextArea<String>("comment"));
