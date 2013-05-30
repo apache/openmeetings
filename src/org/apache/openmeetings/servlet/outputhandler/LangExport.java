@@ -20,6 +20,7 @@ package org.apache.openmeetings.servlet.outputhandler;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.Writer;
 import java.util.Date;
 import java.util.List;
 
@@ -203,8 +204,15 @@ public class LangExport extends BaseHttpServlet {
 		return document;
 	}
 
-	public static void serializetoXML(OutputStream out, String aEncodingScheme,
-			Document doc) throws Exception {
+	public static void serializetoXML(Writer out, String aEncodingScheme, Document doc) throws Exception {
+		OutputFormat outformat = OutputFormat.createPrettyPrint();
+		outformat.setEncoding(aEncodingScheme);
+		XMLWriter writer = new XMLWriter(out, outformat);
+		writer.write(doc);
+		writer.flush();
+	}
+	
+	public static void serializetoXML(OutputStream out, String aEncodingScheme, Document doc) throws Exception {
 		OutputFormat outformat = OutputFormat.createPrettyPrint();
 		outformat.setEncoding(aEncodingScheme);
 		XMLWriter writer = new XMLWriter(out, outformat);

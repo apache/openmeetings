@@ -18,14 +18,16 @@
  */
 package org.apache.openmeetings.web.admin.labels;
 
-import java.io.File;
-import java.io.FileOutputStream;
+import static org.apache.openmeetings.OpenmeetingsVariables.webAppRootKey;
+import static org.apache.openmeetings.web.app.Application.getBean;
+
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.OutputStream;
+import java.io.InputStream;
+import java.io.StringWriter;
 import java.util.Iterator;
 import java.util.List;
 
-import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.data.basic.FieldLanguageDao;
 import org.apache.openmeetings.data.basic.FieldManager;
 import org.apache.openmeetings.data.basic.FieldValueDao;
@@ -36,8 +38,6 @@ import org.apache.openmeetings.servlet.outputhandler.ImportController;
 import org.apache.openmeetings.servlet.outputhandler.LangExport;
 import org.apache.openmeetings.web.admin.AdminPanel;
 import org.apache.openmeetings.web.admin.SearchableDataView;
-import org.apache.openmeetings.web.admin.backup.BackupPanel;
-import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.common.PagedEntityListPanel;
 import org.apache.openmeetings.web.data.DataViewContainer;
 import org.apache.openmeetings.web.data.OrderByBorder;
@@ -55,8 +55,8 @@ import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.markup.html.form.upload.FileUploadField;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.repeater.Item;
-import org.apache.wicket.model.IModel;
-import org.apache.wicket.util.resource.FileResourceStream;
+import org.apache.wicket.util.resource.AbstractResourceStream;
+import org.apache.wicket.util.resource.ResourceStreamNotFoundException;
 import org.dom4j.Document;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -71,8 +71,7 @@ import com.googlecode.wicket.jquery.ui.form.button.AjaxButton;
  * 
  */
 public class LangPanel extends AdminPanel {
-	private static final Logger log = Red5LoggerFactory.getLogger(
-			BackupPanel.class, OpenmeetingsVariables.webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(LangPanel.class, webAppRootKey);
 	
 	private static final long serialVersionUID = 5904180813198016592L;
 
@@ -81,7 +80,7 @@ public class LangPanel extends AdminPanel {
 	private LangForm langForm;
 	private FileUploadField fileUploadField;
 	// Create feedback panels
-	final FeedbackPanel importFeedback;
+	private final FeedbackPanel importFeedback = new FeedbackPanel("importFeedback");
 	
 	@Override
 	public void onMenuPanelLoad(AjaxRequestTarget target) {
@@ -92,11 +91,8 @@ public class LangPanel extends AdminPanel {
 	public LangPanel(String id) {
 		super(id);
 		// Create feedback panels
-		importFeedback = new FeedbackPanel("importFeedback");
-		importFeedback.setOutputMarkupId(true);
-		add(importFeedback);
-		FieldLanguageDao langDao = Application
-				.getBean(FieldLanguageDao.class);
+		add(importFeedback.setOutputMarkupId(true));
+		FieldLanguageDao langDao = getBean(FieldLanguageDao.class);
 		language = langDao.getFieldLanguageById(1L);
 
 		Fieldlanguagesvalues flv = new Fieldlanguagesvalues();
@@ -166,22 +162,7 @@ public class LangPanel extends AdminPanel {
 			}
 		});
 		langForm = new LangForm("langForm", listContainer, this);
-		fileUploadField = new FileUploadField("fileInput", new IModel<List<FileUpload>>() {
-			/**
-			 * 
-			 */
-			private static final long serialVersionUID = 2862135442385825549L;
-
-			public void detach() {
-			}
-			
-			public void setObject(List<FileUpload> object) {
-			}
-			
-			public List<FileUpload> getObject() {
-				return null;
-			}
-		});
+		fileUploadField = new FileUploadField("fileInput");
 		langForm.add(fileUploadField);
 		langForm.add(new UploadProgressBar("progress", langForm, fileUploadField));
 		fileUploadField.add(new AjaxFormSubmitBehavior(langForm, "onchange") {
@@ -195,7 +176,7 @@ public class LangPanel extends AdminPanel {
 						importFeedback.error("File is empty");
 						return;
 					}
-					Application.getBean(ImportController.class).importLanguage(language.getLanguage_id(), download.getInputStream());
+					getBean(ImportController.class).importLanguage(language.getLanguage_id(), download.getInputStream());
 				} catch (IOException e) {
 					log.error("IOException on panel language editor import ", e);
 					importFeedback.error(e);
@@ -218,32 +199,37 @@ public class LangPanel extends AdminPanel {
 
 			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
 
-				try {
-					List<Fieldlanguagesvalues> flvList = Application.getBean(FieldManager.class).getMixedFieldValuesList(language.getLanguage_id());
+				final List<Fieldlanguagesvalues> flvList = getBean(FieldManager.class).getMixedFieldValuesList(language.getLanguage_id());
 
-					FieldLanguage fl = Application.getBean(FieldLanguageDao.class)
-							.getFieldLanguageById(language.getLanguage_id());
-					if (fl != null && flvList != null) {
-						Document doc = LangExport.createDocument(flvList, Application.getBean(FieldManager.class).getUntranslatedFieldValuesList(language.getLanguage_id()));
-
-						String requestedFile = fl.getName() + ".xml";
-						OutputStream out = new FileOutputStream(requestedFile);
-
-						LangExport.serializetoXML(out, "UTF-8", doc);
-
-						out.flush();
-						out.close();
+				FieldLanguage fl = getBean(FieldLanguageDao.class).getFieldLanguageById(language.getLanguage_id());
+				if (fl != null && flvList != null) {
+					download.setFileName(fl.getName() + ".xml");
+					download.setResourceStream(new AbstractResourceStream() {
+						private static final long serialVersionUID = 1L;
+						private StringWriter sw;
+						private InputStream is;
 						
-						download.setFileName(requestedFile);
-						download.setResourceStream(new FileResourceStream(new File(requestedFile)));
-						download.initiate(target);
-					}
-				} catch (IOException e) {
-					log.error("IOException on panel language editor import ", e);
-					importFeedback.error(e);
-				} catch (Exception e) {
-					log.error("Exception on panel language editor import ", e);
-					importFeedback.error(e);
+						public InputStream getInputStream() throws ResourceStreamNotFoundException {
+							try {
+								Document doc = LangExport.createDocument(flvList, getBean(FieldManager.class).getUntranslatedFieldValuesList(language.getLanguage_id()));
+								sw = new StringWriter();
+								LangExport.serializetoXML(sw, "UTF-8", doc);
+								is = new ByteArrayInputStream(sw.toString().getBytes());
+								return is;
+							} catch (Exception e) {
+								throw new ResourceStreamNotFoundException(e);
+							}
+						}
+						
+						public void close() throws IOException {
+							if (is != null) {
+								is.close();
+								is = null;
+							}
+							sw = null;
+						}
+					});//new FileResourceStream(new File(requestedFile)));
+					download.initiate(target);
 				}
 				
 				// repaint the feedback panel so that it is hidden

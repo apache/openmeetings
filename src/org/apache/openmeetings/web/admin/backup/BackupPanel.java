@@ -18,12 +18,14 @@
  */
 package org.apache.openmeetings.web.admin.backup;
 
+import static org.apache.openmeetings.OpenmeetingsVariables.webAppRootKey;
+import static org.apache.openmeetings.web.app.Application.getBean;
+
 import java.io.File;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.Date;
 
-import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
 import org.apache.openmeetings.servlet.outputhandler.BackupExport;
 import org.apache.openmeetings.servlet.outputhandler.BackupImportController;
@@ -31,7 +33,6 @@ import org.apache.openmeetings.utils.ImportHelper;
 import org.apache.openmeetings.utils.OmFileHelper;
 import org.apache.openmeetings.utils.math.CalendarPatterns;
 import org.apache.openmeetings.web.admin.AdminPanel;
-import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.util.AjaxDownload;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
@@ -55,9 +56,7 @@ import org.slf4j.Logger;
  * 
  */
 public class BackupPanel extends AdminPanel {
-
-	private static final Logger log = Red5LoggerFactory.getLogger(
-			BackupPanel.class, OpenmeetingsVariables.webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(BackupPanel.class, webAppRootKey);
 
 	private static final long serialVersionUID = -1L;
 
@@ -84,8 +83,7 @@ public class BackupPanel extends AdminPanel {
 			setMultiPart(true);
 
 			// set max upload size in form as info text
-			Long maxBytes = ImportHelper.getMaxUploadSize(Application
-					.getBean(ConfigurationDao.class));
+			Long maxBytes = ImportHelper.getMaxUploadSize(getBean(ConfigurationDao.class));
 			double megaBytes = maxBytes.doubleValue() / 1024 / 1024;
 			DecimalFormat formatter = new DecimalFormat("#,###.00");
 			add(new Label("MaxUploadSize", formatter.format(megaBytes)));
@@ -99,8 +97,7 @@ public class BackupPanel extends AdminPanel {
 			add(includeFilesInBackup);
 
 			// Set maximum size controlled by configuration
-			setMaxSize(Bytes.bytes(ImportHelper.getMaxUploadSize(Application
-					.getBean(ConfigurationDao.class))));
+			setMaxSize(Bytes.bytes(ImportHelper.getMaxUploadSize(getBean(ConfigurationDao.class))));
 
 			// Add a component to download a file without page refresh
 			final AjaxDownload download = new AjaxDownload();
@@ -121,7 +118,7 @@ public class BackupPanel extends AdminPanel {
 					File backupFile = new File(backup_dir, dateString + ".zip");
 
 					try {
-						Application.getBean(BackupExport.class).performExport(
+						getBean(BackupExport.class).performExport(
 								backupFile,
 								backup_dir,
 								includeFilesInBackup.getConvertedInput()
@@ -159,8 +156,7 @@ public class BackupPanel extends AdminPanel {
 							uploadFeedback.error("File is empty");
 							return;
 						}
-						Application.getBean(BackupImportController.class)
-								.performImport(upload.getInputStream());
+						getBean(BackupImportController.class).performImport(upload.getInputStream());
 					} catch (IOException e) {
 						log.error("IOException on panel backup upload ", e);
 						uploadFeedback.error(e);
