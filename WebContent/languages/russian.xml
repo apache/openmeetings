@@ -3348,7 +3348,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>Конфигурация Ldap</value>
   </string>
   <string id="1108" name="ldap config">
-    <value>название</value>
+    <value>Название</value>
   </string>
   <string id="1109" name="ldap config">
     <value>Включено</value>
@@ -4684,5 +4684,8 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
   </string>
   <string id="1553" name="about_build_date">
     <value>Дата билда</value>
+  </string>
+  <string id="1554" name="about_build_date">
+    <value>Загрузка ...</value>
   </string>
 </language>

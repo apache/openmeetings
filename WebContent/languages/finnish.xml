@@ -4685,4 +4685,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
   <string id="1553" name="about_build_date">
     <value>Build date</value>
   </string>
+  <string id="1554" name="about_build_date">
+    <value>Loading ...</value>
+  </string>
 </language>
