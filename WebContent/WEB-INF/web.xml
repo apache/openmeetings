@@ -57,7 +57,7 @@
 		</init-param>
 		<init-param>
 			<param-name>ignorePaths</param-name>
-			<param-value>conf,css,default,docs,images,js,persistence,public,screensharing,streams,upload,uploadtemp</param-value>
+			<param-value>conf,css,default,docs,images,js,persistence,public,screensharing,streams,upload,uploadtemp,services</param-value>
 		</init-param>
 	</filter>
 	<filter-mapping>
