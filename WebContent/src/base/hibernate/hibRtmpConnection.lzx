@@ -803,13 +803,17 @@
 				}
 				hib.userobject = value;
 				var found = false;
-				for (var i=0;i<value.organisation_users.length;i++) {
+				for (var i = 0; i < value.organisation_users.length; ++i) {
 					if (value.organisation_users[i].organisation.organisation_id == value.sessionData.organization_id) {
 						found = true;
 						hib.currentdomain = value.organisation_users[i].organisation.name;
 						hib.currentdomainObj = value.organisation_users[i].organisation;
 						break;
 					}
+				}
+				if (!found && value.organisation_users.length > 0) {
+					hib.currentdomain = value.organisation_users[0].organisation.name;
+					hib.currentdomainObj = value.organisation_users[0].organisation;
 				}
 				parent.getCurrentRoomClient.doCall();
 			}

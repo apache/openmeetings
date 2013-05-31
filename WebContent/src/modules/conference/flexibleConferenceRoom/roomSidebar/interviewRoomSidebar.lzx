@@ -43,20 +43,6 @@
         ]]>
     </method>
     
-    <method name="toggleStatus">
-        if (this.isOpen) {
-            this._doClose.setAttribute('started', true);
-            this.isOpen = false;
-            this._minimizeSidebar._icon.setAttribute("frame",2);
-            this._minimizeSidebar._icon._labelTooltip.setAttribute("labelid",857);
-        } else {
-            this._doOpen.setAttribute('started', true);
-            this.isOpen = true;
-            this._minimizeSidebar._icon.setAttribute("frame",1);
-            this._minimizeSidebar._icon._labelTooltip.setAttribute("labelid",856);
-        }
-    </method>
-    
     <view name="borderBarTop" y="0"
     			width="${ parent.width }" bgcolor="$once{ canvas.getThemeColor('mainBorderColor') }" height="1" />
    	<view name="_tabbarBg" width="${ parent.width }" height="32" y="1" bgcolor="0xFAFAFA" />
@@ -85,30 +71,12 @@
     <activityList name="_activityList" />
     
     <view name="_minimizeSidebar" x="${ parent.width - 10 }" width="10" y="1"
-          				bgcolor="0xE0E1EB" height="${ parent.height-1 }">
-        <handler name="onclick">
-            parent.toggleStatus();
-        </handler>
+    	bgcolor="0xE0E1EB" height="${ parent.height-1 }">
         
         <view width="${ parent.width }" height="$once{ parent.height }" 
                bgcolor="0xE0E1EB" >
         </view>
-            
-        <view name="_icon" resource="sidebar_tab_btn" y="0">
-             <handler name="onclick">
-	            parent.parent.toggleStatus();
-	         </handler>
-	         <labelTooltip name="_labelTooltip" labelid="856" />
-        </view>
-        
     </view>
-    
-    <animator name="_doOpen" attribute="width" to="$once{ parent.width }" 
-              duration="750" started="false" />
-              
-    <animator name="_doClose" attribute="width" to="10" 
-              duration="750" started="false" />
-    
 </class>
 
 </library>

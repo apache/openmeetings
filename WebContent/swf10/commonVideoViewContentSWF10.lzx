@@ -108,9 +108,11 @@
         if ($debug) Debug.write("Is interview ? ",canvas.isInterview);
         if (canvas.isInterview) {
         	if ($debug) Debug.write("Is interview ",interviewPodId,"x",canvas["interviewPod"+interviewPodId+"_x"]);
-        	vidContainer.setAttribute("interviewPodId", interviewPodId);
-        	vidContainer.setAttribute("x",canvas["interviewPod"+interviewPodId+"_x"]);
-            vidContainer.setAttribute("y",canvas["interviewPod"+interviewPodId+"_y"]);
+			if (interviewPodId != null) {
+				vidContainer.setAttribute("interviewPodId", interviewPodId);
+				vidContainer.setAttribute("x",canvas["interviewPod"+interviewPodId+"_x"]);
+				vidContainer.setAttribute("y",canvas["interviewPod"+interviewPodId+"_y"]);
+			}
             vidContainer.setAttribute("width",322);
             vidContainer.setAttribute("height",281);
         }
