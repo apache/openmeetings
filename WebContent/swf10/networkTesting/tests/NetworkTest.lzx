@@ -121,6 +121,11 @@
         if ($debug) Debug.write(str);
     </method>
 
+    <method name="getBaseUrl">
+    	var hostUrl = protocol + "://" + host + ":" + port + canvas.uriContext;
+    	return hostUrl + (hostUrl.slice(-1) == '/' ? '' : '/');
+    </method>
+
 </class>
 
 </library>

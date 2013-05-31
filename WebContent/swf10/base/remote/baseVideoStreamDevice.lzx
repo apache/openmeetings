@@ -44,7 +44,7 @@
 		<!--- Message to send to Clients -->
 		<attribute name="objMessage" value="null" />
 		<!--- indicates if the message should be send, you can change the notification 
-			level by changing the loudnessAcitviation in the config.xml -->
+			level by changing the loudnessAcitviation in the public/config.xml -->
 		<attribute name="isgreater" value="false" type="boolean" />
 
 		<attribute name="doSendNotification" value="true" type="boolean" />

@@ -24,7 +24,7 @@
 <library>
 <!-- 
 ##########################################################
-these properties will be overwritten by config.xml -->  
+these properties will be overwritten by public/config.xml -->  
 
 <attribute name="vid_lc_name" value="" type="string"/>
 
@@ -110,15 +110,15 @@ Attributes needed for clustering -->
 
 <attribute name="isSlaveHosted" value="false" type="boolean" />
 
-<!-- server object's address (not loaded from config.xml cause this variable is empty by default) -->
+<!-- server object's address (not loaded from public/config.xml cause this variable is empty by default) -->
 <attribute name="slaveRtmphostlocal" value="" type="string" />
-<!-- rtmpport from slave's config.xml  --> 
+<!-- rtmpport from slave's public/config.xml  --> 
 <attribute name="slaveRtmpport" value="5080" type="string" />
-<!-- rtmpTunnelport from slave's config.xml -->
+<!-- rtmpTunnelport from slave's public/config.xml -->
 <attribute name="slaveRtmpTunnelport" value="8088" type="string" />
-<!-- rtmpsslport from slave's config.xml -->
+<!-- rtmpsslport from slave's public/config.xml -->
 <attribute name="slaveRtmpsslport" value="443" type="string" />
-<!-- from slave's config.xml -->
+<!-- from slave's public/config.xml -->
 <attribute name="slaveWebAppRootKey" value="" type="string" /> 
 
 <!--
@@ -146,7 +146,7 @@ Attributes needed for clustering -->
 <attribute name="defaultWhiteboardWidth" value="2400" type="number" />
 <attribute name="defaultWhiteboardHeight" value="1200" type="number" />
 
-<!-- END OF config.xml attributes
+<!-- END OF public/config.xml attributes
 ##########################################################
  -->
 
@@ -264,7 +264,7 @@ the LAST RoomClient Object that has been changed the giveExclusiveAudio status
 <attribute name="roomTypesInitValues" value="null" />
 
 <!--- Audio-Video Quality Settings
-    overwritten by values from the config.xml 
+    overwritten by values from the public/config.xml 
  -->
 <attribute name="codecType" value="h264" type="string" />
 <attribute name="framesPerSecond" value="30" type="number" />

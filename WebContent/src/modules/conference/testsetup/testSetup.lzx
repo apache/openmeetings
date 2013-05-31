@@ -62,13 +62,13 @@ RTMP-host, RTMP/RTMPT-port for the session
 			if ($debug) Debug.write("getServerForSession ",value);
 			//if return value is null, everything stays the same, session is on the current host
 			if (value != null){
-				//is not loaded from config.xml from slave as this is variable is empty by default!
+				//is not loaded from public/config.xml from slave as this is variable is empty by default!
 				canvas.slaveRtmphostlocal = value.address;
 				
 				var slaveUrl = value.protocol + "://" + value.address + ":" + value.port + "/" + value.webapp + "/";
 				
 				var d = new Date();
-		        parent.myConfigSet.setAttribute("src", slaveUrl + "config.xml?random="+d.getTime());
+		        parent.myConfigSet.setAttribute("src", slaveUrl + "public/config.xml?random="+d.getTime());
 		        parent.myConfigSet.doRequest();
 				
 			} else {
@@ -79,7 +79,7 @@ RTMP-host, RTMP/RTMPT-port for the session
 		</handler>
 	</netRemoteCallHib>	
 	
-	<!-- get values from config.xml from slave -->
+	<!-- get values from public/config.xml from slave -->
 	<dataset type="http" name="myConfigSet" request="false" ondata="parent.parseResultsToSlaveClusterConfig()">
 	    <handler name="ondata">
 	        if ($debug) Debug.write("ondata");

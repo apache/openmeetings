@@ -63,7 +63,7 @@
 	<property name="main.out.dir" value="${build.base.dir}/classes/openmeetings" />
 
 	<!-- LPS Properties -->
-	<property name="out.dir.swf" value="${basedir}/${dist.webapps.dir}/" />
+	<property name="out.dir.swf" value="${basedir}/${dist.webapps.dir}/public" />
 	<property name="laszlo.as3.src.dir" value="${webcontent.src.dir}/swf10" />
 	<property name="laszlo.src.dir" value="${webcontent.src.dir}/src" />
 
@@ -969,6 +969,11 @@
 				<include name="**/*"/>
 			</fileset>
 		</move>
+		<!-- FIXME !!!!!! UNCOMMENT
+		<delete>
+			<fileset dir="${red5.lib}/lib" includes="red5-client*.jar" />
+		</delete>
+		-->
 		
 		<!-- START of Tomcat 7 patch -->
 		<delete>

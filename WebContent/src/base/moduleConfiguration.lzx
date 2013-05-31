@@ -22,7 +22,7 @@
 <library>
 <!-- 
 ##########################################################
-these properties can be overwritten by config.xml -->  
+these properties can be overwritten by public/config.xml -->  
    
    
 <!-- #############################################

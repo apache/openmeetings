@@ -137,7 +137,7 @@
 				</li>
 			
 				<li>
-					Edit red5/webapps/openmeetings/config.xml and set
+					Edit red5/webapps/openmeetings/public/config.xml and set
 					<tt>&lt;rtmpsslport&gt;5443&lt;/rtmpsslport&gt;</tt>
 					,
 					<tt>&lt;useSSL&gt;yes&lt;/useSSL&gt;</tt>
@@ -167,11 +167,11 @@
 					file to <tt>red5/conf/jee-container.xml</tt>
 				</li>
 				<li>
-					Edit red5/webapps/openmeetings/config.xml and set
+					Edit red5/webapps/openmeetings/public/config.xml and set
 					<tt>&lt;protocol&gt;https&lt;/protocol&gt;</tt>
 				</li>
 				<li>
-					Edit red5/webapps/openmeetings/config.xml and set
+					Edit red5/webapps/openmeetings/public/config.xml and set
 					<tt>red5httpport</tt> to <tt>https</tt> port
 				</li>
 				<li>In webapps/openmeetings/WEB-INF/conf/axis2.xml add (below the existing http transportReceiver (around line 225))

@@ -25,7 +25,7 @@
 	
 	<!--- 
 	   Audio-Video Quality Settings
-		overwritten by values from the config.xml 
+		overwritten by values from the public/config.xml 
 	 -->
 	<attribute name="codecType" value="h264" type="string" />
 	<attribute name="framesPerSecond" value="30" type="number" />

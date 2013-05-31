@@ -48,7 +48,7 @@
 		<section
 			name="Changing first day in week for calendar from Sunday to Monday">
 
-			<p>in the config.xml change the key: </p>
+			<p>in the public/config.xml change the key: </p>
 			<div class="xmlcode">
 				&lt;!--
 				<br />

@@ -92,6 +92,20 @@
         return "" + Math.floor(999999*Math.random());
     </method>
 
+	<method name="getAppBaseUrlWithoutSwfSuffix">
+	<![CDATA[
+		var urlObject = lz.Browser.getBaseURL();
+		//If Port is Null or undefinied use port 80
+		var port = (urlObject.port != null && urlObject.port != undefined) ? urlObject.port : 80;
+		//if($debug) Debug.write("getBaseUrl:: [urlObject, port]", urlObject, port);
+		var url = "" + urlObject.protocol + "://" + urlObject.host + (port != 80 ? ":" + port : "") + urlObject.path;
+		//if($debug) Debug.write("!!!!!!! getBaseUrl:: [urlObject, port, url]", urlObject, port, url);
+		url = url + (url.slice(-1) == '/' ? '' : '/');
+		//if($debug) Debug.write("!!!!!!! getBaseUrl:: [last, url]", url.slice(-1), url);
+		return url;
+	]]>
+	</method>
+
     <handler name="oninit"><![CDATA[
 		doDebugInit();
     
@@ -121,7 +135,7 @@
             }
         }
         
-        var tSWFURL = "main" + ($debug ? "debug" : "") + ".swf8.swf?lzproxied=solo&lc_SID="+lc_SID+tqueryString;
+        var tSWFURL = getAppBaseUrlWithoutSwfSuffix() + "main" + ($debug ? "debug" : "") + ".swf8.swf?lzproxied=solo&lc_SID="+lc_SID+tqueryString;
         
         if ($debug) Debug.write("tSWFURL :: ",tSWFURL);
         
@@ -133,6 +147,7 @@
         new lz.commonVideoViewContentSWF10(this, {name:'_videoComponent'});
         new lz.hibAdapter(this);
 
+        if ($debug) Debug.write("main::init DONE");
     ]]></handler>
 
     <view name="inner"></view>

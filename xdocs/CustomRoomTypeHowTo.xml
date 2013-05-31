@@ -61,9 +61,9 @@
 					<tt>src/base/moduleConfiguration.lzx</tt>, 
 				here you need to add a default class name for your room type </li>
 				
-				<li>Add your room type in the real configuration: config.xml, add a new entry.
+				<li>Add your room type in the real configuration: public/config.xml, add a new entry.
 					<br/>
-					You should fix also the file <tt>openmeetings-config.xsd</tt> that is the Schema file for the config.xml.
+					You should fix also the file <tt>public/config.xsd</tt> that is the Schema file for the public/config.xml.
 				</li>
         		
 				<li>Add a parser entry to modify the room type mapping: 

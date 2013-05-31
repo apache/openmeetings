@@ -49,7 +49,7 @@
     <attribute name="loader" value="null" />
 
     <method name="initLoader">
-        hostUrl = protocol + "://" + host + ":" + port + canvas.uriContext + "/networktest.upload?testType=" + testTypeParameter;
+        hostUrl = getBaseUrl() + "networktest.upload?testType=" + testTypeParameter;
         request = new URLRequest(hostUrl);
 
         loader = new URLLoader();

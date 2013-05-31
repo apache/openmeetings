@@ -47,7 +47,7 @@
 	]]></handler>
 	
     <!--
-        These attributes are rewritten by values from "config.xml"
+        These attributes are rewritten by values from "public/config.xml"
     -->
     <attribute name="rtmpProtocol" type="string" value="rtmp" />
     <attribute name="rtmpHost" type="string" value="" />

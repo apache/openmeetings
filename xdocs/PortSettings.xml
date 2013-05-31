@@ -44,7 +44,7 @@
 					need to restart the red5-service so that changes are online.
 				</li>
 				<li>Client-Side configuration:
-					$RED5_HOME/webapps/openmeetings/config.xml, you need to clear your
+					$RED5_HOME/webapps/openmeetings/public/config.xml, you need to clear your
 					browser cache after changing the file.
 				</li>
 				<li>
@@ -59,7 +59,7 @@
 					<th style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> Config-Name </th>
 					<th style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> Default-value </th>
 					<th style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> Name in red5.properties </th>
-					<th style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> Name in config.xml </th>
+					<th style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> Name in public/config.xml </th>
 				</tr>
 				<tr>
 					<td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> HTTP </td>

@@ -118,7 +118,7 @@
     	if ($debug) Debug.write(message);
     	var remoteLog = new lz.dataset();
     	remoteLog.setQueryType("POST");
-    	remoteLog.setAttribute("src", canvas.getUrl() + "/remotelog.upload");
+    	remoteLog.setAttribute("src", canvas.getUrl() + "remotelog.upload");
     	remoteLog.setQueryParam("message", message);
     	remoteLog.doRequest();
     </method>
@@ -152,7 +152,7 @@
 	</method>
 
 	<method name="getAppBaseUrlWithoutSwfSuffix">
-		<![CDATA[
+	<![CDATA[
 		var urlObject = lz.Browser.getBaseURL();
 		//If Port is Null or undefinied use port 80
 		var port = (urlObject.port != null && urlObject.port != undefined) ? urlObject.port : 80;
@@ -179,7 +179,7 @@
 		
 		var appBase = canvas.getAppBaseUrlWithoutSwfSuffix();
 		Debug.write("appBase=" + appBase);
-		var downloadurl = appBase + 'screen.upload?'
+		var downloadurl = appBase + '../screen.upload?'
 			+'rtmphostlocal=' + canvas.getHttpHost()
 			+'&baseurl=' + escape(appBase)
 			+'&domain=' + hib.conferencedomain
@@ -208,7 +208,7 @@
         
         if($debug) Debug.write("main.lzx/config.xml ondata",this);
         
-        //Set Config-values by config.xml, see comments on config.xml
+        //Set Config-values by public/config.xml, see comments on public/config.xml
         this.setAttribute('rtmphostlocal',canvas.myConfigSet.getPointer().xpathQuery('config/rtmphostlocal/text()'));   
         this.setAttribute('rtmpport',Number(canvas.myConfigSet.getPointer().xpathQuery('config/rtmpport/text()')));  
         this.setAttribute('rtmpTunnelport',Number(canvas.myConfigSet.getPointer().xpathQuery('config/rtmpTunnelport/text()'))); 

@@ -32,8 +32,8 @@ public class GenerateConfigXsd {
 		try {
 			
 			String[] args = { 
-						"WebContent"+File.separatorChar+"openmeetings"+File.separatorChar+"config.xml",
-						"WebContent"+File.separatorChar+"openmeetings"+File.separatorChar+"openmeetings-config.xsd"
+				"WebContent"+File.separatorChar+"openmeetings"+File.separatorChar+"public"+File.separatorChar+"config.xml",
+				"WebContent"+File.separatorChar+"openmeetings"+File.separatorChar+"public"+File.separatorChar+"config.xsd"
 			};
 			
 			Driver.main(args);
