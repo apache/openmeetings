@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.web.app;
 
+import static java.text.DateFormat.SHORT;
 import static org.apache.openmeetings.persistence.beans.basic.Configuration.DASHBOARD_SHOW_MYROOMS_KEY;
 import static org.apache.openmeetings.persistence.beans.basic.Configuration.DASHBOARD_SHOW_RSS_KEY;
 import static org.apache.openmeetings.persistence.beans.basic.Configuration.DEFAUT_LANG_KEY;
@@ -57,12 +58,14 @@ import ro.fortsoft.wicket.dashboard.web.DashboardContext;
 
 public class WebSession extends AbstractAuthenticatedWebSession {
 	private static final long serialVersionUID = 1123393236459095315L;
+	//private static final Map<String, Locale> LNG_TO_LOCALE_MAP = new HashMap<String, Locale> ();
 	private long userId = -1;
 	private long userLevel = -1;
 	private String SID = null;
 	private OmUrlFragment area = null;
 	private TimeZone tz;
 	private SimpleDateFormat ISO8601FORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
+	private DateFormat sdf;
 	private Dashboard dashboard;
 	
 	public WebSession(Request request) {
@@ -75,6 +78,7 @@ public class WebSession extends AbstractAuthenticatedWebSession {
 		userId = -1;
 		userLevel = -1;
 		SID = null;
+		sdf = null;
 	}
 	
 	@Override
@@ -108,6 +112,8 @@ public class WebSession extends AbstractAuthenticatedWebSession {
 			userId = user.getUser_id();
 			tz = TimeZone.getTimeZone(user.getOmTimeZone().getIcal());
 			ISO8601FORMAT.setTimeZone(tz);
+			//FIXMW locale need to be set by User language first
+			sdf = DateFormat.getDateTimeInstance(SHORT, SHORT, getLocale());
 			if (null == getId()) {
 				bind();
 			}
@@ -151,10 +157,14 @@ public class WebSession extends AbstractAuthenticatedWebSession {
 		return Calendar.getInstance(get().tz);
 	}
 
-	public static DateFormat getDateFormat() {
+	public static DateFormat getIsoDateFormat() {
 		return get().ISO8601FORMAT;
 	}
-
+	
+	public static DateFormat getDateFormat() {
+		return get().sdf;
+	}
+	
 	public static long getUserLevel() {
 		return get().userLevel;
 	}

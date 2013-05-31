@@ -238,7 +238,6 @@ public class SignInDialog extends AbstractFormDialog<String> {
 				
 				@Override
 				protected void onError(AjaxRequestTarget target, Form<?> form) {
-					// TODO Auto-generated method stub
 					SignInDialog.this.onError(target);
 				}
 			});

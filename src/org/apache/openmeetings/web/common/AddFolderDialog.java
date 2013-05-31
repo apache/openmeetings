@@ -23,6 +23,7 @@ import java.util.List;
 
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
@@ -53,6 +54,19 @@ public abstract class AddFolderDialog extends AbstractFormDialog<String> {
 				add(title = new RequiredTextField<String>("title", getModel()));
 				title.setLabel(Model.of(WebSession.getString(572)));
 				add(feedback.setOutputMarkupId(true));
+				add(new AjaxButton("submit") { //FAKE button so "submit-on-enter" works as expected
+					private static final long serialVersionUID = -3612671587183668912L;
+
+					@Override
+					protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+						AddFolderDialog.this.onSubmit(target);
+					}
+					
+					@Override
+					protected void onError(AjaxRequestTarget target, Form<?> form) {
+						AddFolderDialog.this.onError(target);
+					}
+				});
 			}
 		};
 		add(form);
@@ -64,6 +78,11 @@ public abstract class AddFolderDialog extends AbstractFormDialog<String> {
 		
 		setModelObject(name);
 		getFeedbackMessages().clear();
+	}
+
+	@Override
+	protected void onSubmit(AjaxRequestTarget target) {
+		close(target, getSubmitButton());
 	}
 	
 	@Override

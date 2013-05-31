@@ -19,15 +19,15 @@
 package org.apache.openmeetings.web.user;
 
 import static org.apache.openmeetings.OpenmeetingsVariables.webAppRootKey;
+import static org.apache.openmeetings.web.app.Application.getBean;
+import static org.apache.openmeetings.web.app.WebSession.getDateFormat;
+import static org.apache.openmeetings.web.app.WebSession.getUserId;
 
-import java.text.DateFormat;
 import java.util.Date;
 
 import org.apache.openmeetings.data.chat.ChatDao;
 import org.apache.openmeetings.data.user.dao.UsersDao;
 import org.apache.openmeetings.persistence.beans.chat.ChatMessage;
-import org.apache.openmeetings.web.app.Application;
-import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.UserPanel;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -49,11 +49,11 @@ import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 
 import com.googlecode.wicket.jquery.ui.plugins.emoticons.EmoticonsBehavior;
+
 public class ChatPanel extends UserPanel {
 	private static final Logger log = Red5LoggerFactory.getLogger(ChatPanel.class, webAppRootKey);
 	private static final long serialVersionUID = -9144707674886211557L;
 	private static final String MESSAGE_AREA_ID = "messageArea";
-	private final DateFormat sdf;
 	private String message;
 	
 	private JSONObject getMessage(ChatMessage m) throws JSONException {
@@ -62,13 +62,12 @@ public class ChatPanel extends UserPanel {
 			.put("msg", new JSONObject()
 				.put("id", m.getId())
 				.put("message", m.getMessage())
-				.put("sent", sdf.format(m.getSent()))
+				.put("sent", getDateFormat().format(m.getSent()))
 			);
 	}
 
 	public ChatPanel(String id) {
 		super(id);
-		sdf = DateFormat.getDateInstance(DateFormat.MEDIUM, getSession().getLocale());
 		setOutputMarkupId(true);
 		setMarkupId(id);
 
@@ -78,7 +77,7 @@ public class ChatPanel extends UserPanel {
 
 			@Override
 			public void renderHead(Component component, IHeaderResponse response) {
-				ChatDao dao = Application.getBean(ChatDao.class);
+				ChatDao dao = getBean(ChatDao.class);
 				try {				
 					StringBuilder sb = new StringBuilder();
 					//FIXME limited count should be loaded with "earlier" link
@@ -103,11 +102,11 @@ public class ChatPanel extends UserPanel {
 			private static final long serialVersionUID = -3746739738826501331L;
 			
 			protected void onSubmit(AjaxRequestTarget target) {
-				ChatDao dao = Application.getBean(ChatDao.class);
+				ChatDao dao = getBean(ChatDao.class);
 				ChatMessage m = new ChatMessage();
 				m.setMessage(message);
 				m.setSent(new Date());
-				m.setFromUser(Application.getBean(UsersDao.class).get(WebSession.getUserId()));
+				m.setFromUser(getBean(UsersDao.class).get(getUserId()));
 				dao.update(m);
 				IWebSocketConnectionRegistry reg = IWebSocketSettings.Holder.get(getApplication()).getConnectionRegistry();
 				for (IWebSocketConnection c : reg.getConnections(getApplication())) {

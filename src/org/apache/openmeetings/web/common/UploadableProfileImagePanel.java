@@ -44,7 +44,7 @@ public class UploadableProfileImagePanel extends ProfileImagePanel {
 		final Form<Void> form = new Form<Void>("form");
 		form.setMultiPart(true);
 		form.setMaxSize(Bytes.bytes(getMaxUploadSize(getBean(ConfigurationDao.class))));
-		//Model is necessary here to avoidwriting image to the User object
+		// Model is necessary here to avoid writing image to the User object
 		form.add(fileUploadField = new FileUploadField("image", new IModel<List<FileUpload>>() {
 			private static final long serialVersionUID = -8514518605278263956L;
 

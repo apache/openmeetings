@@ -182,12 +182,14 @@ public class PrivateMessagesDao implements IDataProviderDao<PrivateMessage> {
 				hql += " ) ";
 			}
 			
-			hql += "ORDER BY "+orderBy;
-			
-			if (asc) {
-				hql += " ASC";
-			} else {
-				hql += " DESC";
+			if (orderBy != null && orderBy.length() > 0) {
+				hql += "ORDER BY "+orderBy;
+				
+				if (asc) {
+					hql += " ASC";
+				} else {
+					hql += " DESC";
+				}
 			}
 
 			TypedQuery<PrivateMessage> query = em.createQuery(hql, PrivateMessage.class); 
@@ -246,6 +248,7 @@ public class PrivateMessagesDao implements IDataProviderDao<PrivateMessage> {
 		return null;
 	}
 	
+	//FIXME need to be rewritten
 	public List<PrivateMessage> getTrashPrivateMessagesByUser(Long user_id, String search, 
 			String orderBy, int start, Boolean asc, int max) {
 		try {
@@ -265,12 +268,14 @@ public class PrivateMessagesDao implements IDataProviderDao<PrivateMessage> {
 				hql += " ) ";
 			}
 			
-			hql += "ORDER BY "+orderBy;
-			
-			if (asc) {
-				hql += " ASC";
-			} else {
-				hql += " DESC";
+			if (orderBy != null && orderBy.length() > 0) {
+				hql += "ORDER BY "+orderBy;
+				
+				if (asc) {
+					hql += " ASC";
+				} else {
+					hql += " DESC";
+				}
 			}
 
 			TypedQuery<PrivateMessage> query = em.createQuery(hql, PrivateMessage.class); 
@@ -321,7 +326,8 @@ public class PrivateMessagesDao implements IDataProviderDao<PrivateMessage> {
 		}
 		return null;
 	}
-	
+
+	//FIXME need to be rewritten
 	public List<PrivateMessage> getSendPrivateMessagesByUser(Long toUserId, String search, 
 			String orderBy, int start, Boolean asc, Long privateMessageFolderId, int max) {
 		try {
@@ -343,14 +349,15 @@ public class PrivateMessagesDao implements IDataProviderDao<PrivateMessage> {
 				hql += " ) ";
 			}
 			
-			hql += "ORDER BY "+orderBy;
-			
-			if (asc) {
-				hql += " ASC";
-			} else {
-				hql += " DESC";
+			if (orderBy != null && orderBy.length() > 0) {
+				hql += "ORDER BY "+orderBy;
+				
+				if (asc) {
+					hql += " ASC";
+				} else {
+					hql += " DESC";
+				}
 			}
-
 			TypedQuery<PrivateMessage> query = em.createQuery(hql, PrivateMessage.class); 
 			query.setParameter("toUserId", toUserId);
 			query.setParameter("privateMessageFolderId", privateMessageFolderId);
@@ -404,6 +411,7 @@ public class PrivateMessagesDao implements IDataProviderDao<PrivateMessage> {
 		return null;
 	}
 	
+	//FIXME need to be rewritten
 	public List<PrivateMessage> getFolderPrivateMessagesByUser(Long toUserId, String search, String orderBy, 
 			int start, Boolean asc, Long privateMessageFolderId, int max) {
 		try {
@@ -424,12 +432,14 @@ public class PrivateMessagesDao implements IDataProviderDao<PrivateMessage> {
 				hql += " ) ";
 			}
 			
-			hql += "ORDER BY "+orderBy;
-			
-			if (asc) {
-				hql += " ASC";
-			} else {
-				hql += " DESC";
+			if (orderBy != null && orderBy.length() > 0) {
+				hql += "ORDER BY "+orderBy;
+				
+				if (asc) {
+					hql += " ASC";
+				} else {
+					hql += " DESC";
+				}
 			}
 			
 			log.debug("HQL "+hql);

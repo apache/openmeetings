@@ -24,13 +24,16 @@
 	<table class="messages">
 		<tr>
 			<td class="side left">
-				<div class="email new clickable ui-widget-header ui-corner-all" wicket:id="new" wicket:ommessage="title:1208"><wicket:ommessage key="1207"/></div>
-				<div class="email inbox clickable" wicket:id="inbox"><wicket:ommessage key="1222"/></div>
-				<div class="email sent clickable" wicket:id="sent"><wicket:ommessage key="1223"/></div>
-				<div class="email trash clickable" wicket:id="trash"><wicket:ommessage key="1224"/></div>
-				<div class="email newdir clickable ui-widget-header ui-corner-all" wicket:id="newdir" wicket:ommessage="title:1259"><wicket:ommessage key="1258"/></div>
+				<div class="email new" wicket:id="new" wicket:ommessage="title:1208"><wicket:ommessage key="1207"/></div>
 				<div wicket:id="folders">
-					<div wicket:id="folder"><div wicket:id="name"></div><div wicket:id="delete"></div></div>
+					<div wicket:id="inbox"><wicket:ommessage key="1222"/></div>
+					<div wicket:id="sent"><wicket:ommessage key="1223"/></div>
+					<div wicket:id="trash"><wicket:ommessage key="1224"/></div>
+					<div class="email newdir" wicket:id="newdir" wicket:ommessage="title:1259"><wicket:ommessage key="1258"/></div>
+					<div wicket:id="folder">
+						<div wicket:id="name"></div>
+						<div class="delete" wicket:id="delete" wicket:ommessage="title:1262"></div>
+					</div>
 				</div>
 			</td>
 			<td class="main">

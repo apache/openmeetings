@@ -733,14 +733,19 @@ table.messages td.main {
 }
 .email {
 	padding-left: 25px;
-	background-repeat: no-repeat;
-	background-position-x: 5px;
+	background-repeat: no-repeat !important;
+	background-position-x: 5px !important;
 	padding-top: 2px;
-	background-position-y: 3px;
+	background-position-y: 3px !important;
+	display: block;
+	text-align:left;
 }
 .email.new {
 	background-image: url(images/email_add.png);
 	font-weight: normal;
+}
+.email.new .ui-button-text, .email.newdir .ui-button-text {
+	padding: 0;
 }
 .email.inbox {
 	background-image: url(images/basket_put.png);
@@ -754,4 +759,21 @@ table.messages td.main {
 .email.newdir {
 	background-image: url(images/folder_add.png);
 	font-weight: normal;
+}
+.email.folder {
+	background-image: url(images/folder.png);
+	font-weight: normal;
+	position: relative;
+}
+.email.folder .delete {
+	position:absolute;
+	right: 2px;
+	top: 2px;
+	background-image: url(images/cross.png);
+	font-weight: normal;
+	padding: 0;
+	display: inline-block;
+	background-position: 0;
+	width: 18px;
+	height: 18px;
 }

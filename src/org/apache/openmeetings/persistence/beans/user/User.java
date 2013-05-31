@@ -103,8 +103,14 @@ import org.simpleframework.xml.Root;
 @Table(name = "om_user")
 @Root(name = "user")
 public class User implements Serializable, IDataProviderEntity {
-
 	private static final long serialVersionUID = -2265479712596674065L;
+	
+	public enum Type {
+		user
+		, ldap //should we add it???
+		, external
+		, contact
+	}
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -255,6 +261,10 @@ public class User implements Serializable, IDataProviderEntity {
 	@Element(data = true, required = false)
 	private Boolean showContactDataToContacts;
 
+	@Column(name = "type")
+	@Element(data = true, required = false)
+	private Type type = Type.user;
+	
 	public Long getUser_id() {
 		return user_id;
 	}
@@ -598,4 +608,11 @@ public class User implements Serializable, IDataProviderEntity {
 		return getSendSMS() ? getAdresses().getPhone() : "";
 	}
 
+	public Type getType() {
+		return type;
+	}
+
+	public void setType(Type type) {
+		this.type = type;
+	}
 }

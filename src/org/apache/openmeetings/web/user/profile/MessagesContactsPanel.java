@@ -19,6 +19,7 @@
 package org.apache.openmeetings.web.user.profile;
 
 import static org.apache.openmeetings.web.app.Application.getBean;
+import static org.apache.openmeetings.web.app.WebSession.getDateFormat;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import static org.apache.wicket.util.time.Duration.seconds;
 
@@ -29,7 +30,9 @@ import org.apache.openmeetings.data.user.dao.PrivateMessageFolderDao;
 import org.apache.openmeetings.data.user.dao.PrivateMessagesDao;
 import org.apache.openmeetings.persistence.beans.user.PrivateMessage;
 import org.apache.openmeetings.persistence.beans.user.PrivateMessageFolder;
+import org.apache.openmeetings.persistence.beans.user.User;
 import org.apache.openmeetings.web.admin.SearchableDataView;
+import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.AddFolderDialog;
 import org.apache.openmeetings.web.common.PagedEntityListPanel;
 import org.apache.openmeetings.web.common.UserPanel;
@@ -39,6 +42,8 @@ import org.apache.openmeetings.web.data.SearchableDataProvider;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.AjaxSelfUpdatingTimerBehavior;
+import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
+import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListItem;
@@ -46,6 +51,10 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+
+import ro.fortsoft.wicket.dashboard.web.util.ConfirmAjaxCallListener;
+
+import com.googlecode.wicket.jquery.core.JQueryBehavior;
 
 public class MessagesContactsPanel extends UserPanel {
 	private static final long serialVersionUID = 8098087441571734957L;
@@ -57,6 +66,42 @@ public class MessagesContactsPanel extends UserPanel {
 	private final static long TRASH_FOLDER_ID = -3;
 	private final IModel<Long> selectedModel = Model.of(INBOX_FOLDER_ID);
 	private final IModel<List<? extends PrivateMessageFolder>> foldersModel;
+	private final WebMarkupContainer inbox = new WebMarkupContainer("inbox");
+	private final WebMarkupContainer sent = new WebMarkupContainer("sent");
+	private final WebMarkupContainer trash = new WebMarkupContainer("trash");
+	
+	private void setDefaultFolderClass() {
+		inbox.add(AttributeAppender.replace("class", "email inbox clickable"));
+		sent.add(AttributeAppender.replace("class", "email sent clickable"));
+		trash.add(AttributeAppender.replace("class", "email trash clickable"));
+	}
+	
+	private void selectFolder(WebMarkupContainer folder) {
+		folder.add(AttributeAppender.append("class", "ui-widget-header ui-corner-all"));
+	}
+	
+	private void setFolderClass(ListItem<PrivateMessageFolder> folder) {
+		folder.add(AttributeAppender.replace("class", "email folder clickable"));
+		if (folder.getModelObject().getPrivateMessageFolderId() == selectedModel.getObject()) {
+			selectFolder(folder);
+		}
+	}
+	
+	private void selectFolder(WebMarkupContainer folder, long id, AjaxRequestTarget target) {
+		selectedModel.setObject(id);
+		setDefaultFolderClass();
+		selectFolder(folder);
+		if (target != null) {
+			target.add(folders, container);
+		}
+	}
+	
+	private String getDisplayName(User u) {
+		return new StringBuilder().append(u.getFirstname()).append(" ")
+				.append(u.getLastname()).append(" ")
+				.append("<").append(u.getAdresses().getEmail()).append(">")
+				.toString();
+	}
 	
 	@SuppressWarnings("unchecked")
 	public MessagesContactsPanel(String id) {
@@ -68,6 +113,7 @@ public class MessagesContactsPanel extends UserPanel {
 
 			@Override
 			protected void onSubmit(AjaxRequestTarget target) {
+				super.onSubmit(target);
 				PrivateMessageFolderDao fDao = getBean(PrivateMessageFolderDao.class);
 				fDao.addPrivateMessageFolder(getModelObject(), getUserId());
 				foldersModel.setObject(fDao.get(0, Integer.MAX_VALUE));
@@ -81,49 +127,71 @@ public class MessagesContactsPanel extends UserPanel {
 			@Override
 			protected void onEvent(AjaxRequestTarget target) {
 			}
-		}));
-		add(new WebMarkupContainer("inbox").add(new AjaxEventBehavior("click") {
+		}).add(new JQueryBehavior(".email.new", "button")));
+		folders.add(inbox.add(new AjaxEventBehavior("click") {
 			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected void onEvent(AjaxRequestTarget target) {
-				selectedModel.setObject(INBOX_FOLDER_ID);
-				target.add(container);
+				selectFolder(inbox, INBOX_FOLDER_ID, target);
 			}
 		}));
-		add(new WebMarkupContainer("sent").add(new AjaxEventBehavior("click") {
+		folders.add(sent.add(new AjaxEventBehavior("click") {
 			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected void onEvent(AjaxRequestTarget target) {
-				selectedModel.setObject(SENT_FOLDER_ID);
-				target.add(container);
+				selectFolder(sent, SENT_FOLDER_ID, target);
 			}
 		}));
-		add(new WebMarkupContainer("trash").add(new AjaxEventBehavior("click") {
+		folders.add(trash.add(new AjaxEventBehavior("click") {
 			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected void onEvent(AjaxRequestTarget target) {
-				selectedModel.setObject(TRASH_FOLDER_ID);
-				target.add(container);
+				selectFolder(trash, TRASH_FOLDER_ID, target);
 			}
 		}));
-		add(new WebMarkupContainer("newdir").add(new AjaxEventBehavior("click") {
+		folders.add(new WebMarkupContainer("newdir").add(new AjaxEventBehavior("click") {
 			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected void onEvent(AjaxRequestTarget target) {
 				addFolder.open(target);
 			}
-		}));
+		}).add(new JQueryBehavior(".email.newdir", "button")));
 		add(folders.add(new ListView<PrivateMessageFolder>("folder", foldersModel) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			protected void populateItem(ListItem<PrivateMessageFolder> item) {
+			protected void populateItem(final ListItem<PrivateMessageFolder> item) {
 				item.add(new Label("name", item.getModelObject().getFolderName()));
-				item.add(new WebMarkupContainer("delete"));
+				item.add(new WebMarkupContainer("delete").add(new AjaxEventBehavior("click") {
+					private static final long serialVersionUID = 1L;
+
+					@Override
+					protected void onEvent(AjaxRequestTarget target) {
+						PrivateMessageFolderDao fDao = getBean(PrivateMessageFolderDao.class);
+						fDao.delete(item.getModelObject(), getUserId());
+						foldersModel.setObject(fDao.get(0, Integer.MAX_VALUE));
+						target.add(folders);
+					}
+					
+					@Override
+					protected void updateAjaxAttributes(AjaxRequestAttributes attributes) {
+						super.updateAjaxAttributes(attributes);
+						attributes.getAjaxCallListeners().add(new ConfirmAjaxCallListener(WebSession.getString(713)));
+					}
+				}));
+				item.add(new AjaxEventBehavior("click") {
+					private static final long serialVersionUID = 1L;
+
+					@Override
+					protected void onEvent(AjaxRequestTarget target) {
+						selectFolder(item, item.getModelObject().getPrivateMessageFolderId(), target);
+					}
+				});
+				setFolderClass(item);
 			}
 		}).setOutputMarkupId(true));
 		unreadModel.setObject(getBean(PrivateMessagesDao.class).count(getUserId(), null, false, false));
@@ -173,9 +241,9 @@ public class MessagesContactsPanel extends UserPanel {
 			protected void populateItem(Item<PrivateMessage> item) {
 				PrivateMessage m = item.getModelObject();
 				item.add(new Label("id", m.getPrivateMessageId()));
-				item.add(new Label("from", m.getFrom()));
+				item.add(new Label("from", getDisplayName(m.getFrom())));
 				item.add(new Label("subject", m.getSubject()));
-				item.add(new Label("send", m.getInserted()));
+				item.add(new Label("send", getDateFormat().format(m.getInserted())));
 			}
 		};
 		DataViewContainer<PrivateMessage> dataContainer = new DataViewContainer<PrivateMessage>(container, dv);
@@ -193,6 +261,7 @@ public class MessagesContactsPanel extends UserPanel {
 			}
 		});
 		
+		selectFolder(inbox, INBOX_FOLDER_ID, null);
 		container.add(new Label("unread", unreadModel));
 		add(new WebMarkupContainer("pendingContacts"));//FIXME
 		add(new WebMarkupContainer("na1"));//FIXME
