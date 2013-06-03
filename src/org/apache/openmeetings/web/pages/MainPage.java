@@ -38,8 +38,10 @@ import org.apache.wicket.ajax.AbstractAjaxTimerBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
+import org.apache.wicket.devutils.debugbar.DebugBar;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.link.ExternalLink;
+import org.apache.wicket.markup.html.panel.EmptyPanel;
 import org.apache.wicket.protocol.ws.api.WebSocketBehavior;
 import org.apache.wicket.protocol.ws.api.message.ClosedMessage;
 import org.apache.wicket.protocol.ws.api.message.ConnectedMessage;
@@ -56,6 +58,7 @@ public class MainPage extends BaseInitedPage {
 	private final MenuPanel menu;
 	private final MarkupContainer contents;
 	private final AbstractAjaxTimerBehavior areaBehavior;
+	private DebugBar dev = null;
 	
 	public MainPage() {
 		contents = new WebMarkupContainer("contents");
@@ -97,6 +100,12 @@ public class MainPage extends BaseInitedPage {
 			}
 		});
 		add(about);
+		if (getApplication().getDebugSettings().isDevelopmentUtilitiesEnabled()) {
+		    add(dev = new DebugBar("dev"));
+		    dev.setOutputMarkupId(true);
+		} else {
+		    add(new EmptyPanel("dev").setVisible(false));
+		}		
 		add(new ExternalLink("bug", "https://issues.apache.org/jira/browse/OPENMEETINGS"));//FIXME hardcoded
 		
 		add(new ChatPanel("chatPanel"));
@@ -136,6 +145,9 @@ public class MainPage extends BaseInitedPage {
 			UrlFragment uf = new UrlFragment(target);
 			uf.set(f.getArea().name(), f.getType());
 			panel.onMenuPanelLoad(target);
+		}
+		if (dev != null){
+			target.add(dev);
 		}
 	}
 	
