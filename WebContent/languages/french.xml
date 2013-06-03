@@ -4688,4 +4688,43 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
   <string id="1554" name="about_build_date">
     <value>Loading ...</value>
   </string>
+  <string id="1555" name="calendar_today">
+    <value>today</value>
+  </string>
+  <string id="1556" name="calendar_shortmonthnames">
+    <value>Jan</value>
+  </string>
+  <string id="1557" name="calendar_shortmonthnames">
+    <value>Feb</value>
+  </string>
+  <string id="1558" name="calendar_shortmonthnames">
+    <value>Mar</value>
+  </string>
+  <string id="1559" name="calendar_shortmonthnames">
+    <value>Apr</value>
+  </string>
+  <string id="1560" name="calendar_shortmonthnames">
+    <value>May</value>
+  </string>
+  <string id="1561" name="calendar_shortmonthnames">
+    <value>Jun</value>
+  </string>
+  <string id="1562" name="calendar_shortmonthnames">
+    <value>Jul</value>
+  </string>
+  <string id="1563" name="calendar_shortmonthnames">
+    <value>Aug</value>
+  </string>
+  <string id="1564" name="calendar_shortmonthnames">
+    <value>Sep</value>
+  </string>
+  <string id="1565" name="calendar_shortmonthnames">
+    <value>Oct</value>
+  </string>
+  <string id="1566" name="calendar_shortmonthnames">
+    <value>Nov</value>
+  </string>
+  <string id="1567" name="calendar_shortmonthnames">
+    <value>Dec</value>
+  </string>
 </language>

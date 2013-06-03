@@ -67,6 +67,34 @@ public class CalendarPanel extends UserPanel {
 		options.set("defaultEventMinutes", 60);
 		options.set("timeFormat", "{agenda: 'HH:mm{ - HH:mm}', '': 'HH(:mm)'}");
 		options.set("windowResize", "function(view){setCalendarHeight();}");
+
+		options.set("buttonText", "{month: '" + WebSession.getString(801) +
+								"', week: '" + WebSession.getString(800) + 
+								"', day: '"  + WebSession.getString(799) + 
+								"', today: '"  + WebSession.getString(1555) + 
+								"'}");
+		String monthes = "[";
+		String shortMonthes = "[";
+		for (int i=0; i < 12; i++){
+			monthes +=  "'" + WebSession.getString(469 + i) + (i < 11 ? "'," : "'");
+			shortMonthes +=  "'" + WebSession.getString(1556 + i) + (i < 11 ? "'," : "'");
+		}
+		monthes += "]";
+		shortMonthes += "]";
+		options.set("monthNames", monthes);
+		options.set("monthNamesShort", shortMonthes);
+		
+		String days = "[";
+		String shortDays = "[";
+		for (int i=0; i < 7; i++){
+			days +=  "'" + WebSession.getString(460 + i) + (i < 6 ? "'," : "'");
+			shortDays +=  "'" + WebSession.getString(453 + i) + (i < 6 ? "'," : "'");
+		}
+		days += "]";
+		shortDays += "]";
+		options.set("dayNames", days);
+		options.set("dayNamesShort", shortDays);
+		
 		
 		calendar = new Calendar("calendar", new AppointmentModel(), options) {
 			private static final long serialVersionUID = 8442068089963449950L;

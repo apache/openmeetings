@@ -2421,13 +2421,13 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>Добавить событие</value>
   </string>
   <string id="799" name="calendar">
-    <value>день</value>
+    <value>День</value>
   </string>
   <string id="800" name="calendar">
-    <value>неделя</value>
+    <value>Неделя</value>
   </string>
   <string id="801" name="calendar">
-    <value>месяц</value>
+    <value>Месяц</value>
   </string>
   <string id="802" name="calendar">
     <value>Описание</value>
@@ -4685,7 +4685,46 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
   <string id="1553" name="about_build_date">
     <value>Дата билда</value>
   </string>
-  <string id="1554" name="about_build_date">
+  <string id="1554" name="main_loading">
     <value>Загрузка ...</value>
+  </string>
+  <string id="1555" name="calendar_today">
+    <value>сегодня</value>
+  </string>
+  <string id="1556" name="calendar_shortmonthnames">
+    <value>Янв</value>
+  </string>
+  <string id="1557" name="calendar_shortmonthnames">
+    <value>Фев</value>
+  </string>
+  <string id="1558" name="calendar_shortmonthnames">
+    <value>Март</value>
+  </string>
+  <string id="1559" name="calendar_shortmonthnames">
+    <value>Апр</value>
+  </string>
+  <string id="1560" name="calendar_shortmonthnames">
+    <value>Май</value>
+  </string>
+  <string id="1561" name="calendar_shortmonthnames">
+    <value>Июнь</value>
+  </string>
+  <string id="1562" name="calendar_shortmonthnames">
+    <value>Июль</value>
+  </string>
+  <string id="1563" name="calendar_shortmonthnames">
+    <value>Авг</value>
+  </string>
+  <string id="1564" name="calendar_shortmonthnames">
+    <value>Сен</value>
+  </string>
+  <string id="1565" name="calendar_shortmonthnames">
+    <value>Окт</value>
+  </string>
+  <string id="1566" name="calendar_shortmonthnames">
+    <value>Ноя</value>
+  </string>
+  <string id="1567" name="calendar_shortmonthnames">
+    <value>Дек</value>
   </string>
 </language>
