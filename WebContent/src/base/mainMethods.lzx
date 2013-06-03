@@ -161,7 +161,7 @@
 		//if($debug) Debug.write("!!!!!!! getBaseUrl:: [urlObject, port, url]", urlObject, port, url);
 		url = url + (url.slice(-1) == '/' ? '' : '/');
 		//if($debug) Debug.write("!!!!!!! getBaseUrl:: [last, url]", url.slice(-1), url);
-		return url;
+		return url.substring(0, url.length - 7); // the length of "public/"
 	]]>
 	</method>
 
@@ -178,8 +178,8 @@
 		if ($debug) Debug.write("mainMethods::getScreenSharingUrl ", hib.userobject, hib.currentdomainObj);
 		
 		var appBase = canvas.getAppBaseUrlWithoutSwfSuffix();
-		Debug.write("appBase=" + appBase);
-		var downloadurl = appBase + '../screen.upload?'
+		if ($debug) Debug.write("appBase=" + appBase);
+		var downloadurl = appBase + 'screen.upload?'
 			+'rtmphostlocal=' + canvas.getHttpHost()
 			+'&baseurl=' + escape(appBase)
 			+'&domain=' + hib.conferencedomain

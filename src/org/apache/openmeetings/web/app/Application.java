@@ -99,14 +99,13 @@ public class Application extends AuthenticatedWebApplication {
 		dashboardSettings.setIncludeJQuery(false);
 		dashboardSettings.setIncludeJQueryUI(false);
 		
+		getRootRequestMapperAsCompound().add(new NoVersionMapper(getHomePage()));
+		getRootRequestMapperAsCompound().add(new NoVersionMapper("notinited", NotInitedPage.class));
 		mountPage("swf", SwfPage.class);
 		mountPage("install", InstallWizardPage.class);
 		mountPage("signin", getSignInPageClass());
 		mountResource("/recordings/mp4/${id}", new Mp4RecordingResourceReference());
 		mountResource("/recordings/ogg/${id}", new OggRecordingResourceReference());
-
-		getRootRequestMapperAsCompound().add(new NoVersionMapper(getHomePage()));
-		getRootRequestMapperAsCompound().add(new NoVersionMapper("notinited", NotInitedPage.class));
 	}
 	
 	private static class NoVersionMapper extends MountedMapper {
