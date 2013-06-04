@@ -27,6 +27,7 @@ import org.apache.openmeetings.data.user.dao.UsersDao;
 import org.apache.openmeetings.persistence.beans.user.PrivateMessage;
 import org.apache.openmeetings.persistence.beans.user.User;
 import org.apache.openmeetings.web.app.WebSession;
+import org.apache.openmeetings.web.util.RoomTypeDropDown;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -47,8 +48,14 @@ public class MessageDialog extends AbstractFormDialog<PrivateMessage> {
 	private final Form<PrivateMessage> form;
 	private DialogButton send = new DialogButton(WebSession.getString(218));
 	private DialogButton cancel = new DialogButton(WebSession.getString(219));
+	private final WebMarkupContainer roomParamsBlock = new WebMarkupContainer("roomParamsBlock");
 	private final WebMarkupContainer roomParams = new WebMarkupContainer("roomParams");
 
+	@Override
+	public int getWidth() {
+		return 650;
+	}
+	
 	public MessageDialog(String id, IModel<PrivateMessage> model) {
 		super(id, WebSession.getString(1209), model);
 		form = new Form<PrivateMessage>("form", getModel());
@@ -63,17 +70,19 @@ public class MessageDialog extends AbstractFormDialog<PrivateMessage> {
 		});
 		form.add(new TextField<String>("subject"));
 		form.add(new TextArea<String>("message"));
-		form.add(roomParams.setOutputMarkupId(true));
+		form.add(roomParamsBlock.setOutputMarkupId(true));
 		form.add(new CheckBox("room", Model.of(getModelObject().getRoom() != null)).add(new AjaxEventBehavior("click") {
 			private static final long serialVersionUID = 1L;
 			boolean val = false;
 			
 			@Override
 			protected void onEvent(AjaxRequestTarget target) {
-				target.add(roomParams.setVisible(val = !val));
+				roomParams.setVisible(val = !val);
+				target.add(roomParamsBlock);
 			}
 		}));
-		roomParams.add(new WebMarkupContainer("roomType"));
+		roomParamsBlock.add(roomParams);
+		roomParams.add(new RoomTypeDropDown("roomType"));
 		roomParams.add(new WebMarkupContainer("start"));
 		roomParams.add(new WebMarkupContainer("end"));
 		add(form);

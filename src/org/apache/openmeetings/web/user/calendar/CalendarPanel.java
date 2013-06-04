@@ -28,7 +28,7 @@ import org.apache.openmeetings.web.common.UserPanel;
 import org.apache.wicket.ajax.AbstractAjaxTimerBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.model.Model;
+import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.util.time.Duration;
 
 import com.googlecode.wicket.jquery.core.Options;
@@ -57,7 +57,8 @@ public class CalendarPanel extends UserPanel {
 		final Form<Date> form = new Form<Date>("form");
 		add(form);
 		
-		final AppointmentDialog dialog = new AppointmentDialog("appointment", WebSession.getString(815), this, Model.of(new Appointment()));
+		final AppointmentDialog dialog = new AppointmentDialog("appointment", WebSession.getString(815)
+				, this, new CompoundPropertyModel<Appointment>(new Appointment()));
 		add(dialog);
 		
 		Options options = new Options();

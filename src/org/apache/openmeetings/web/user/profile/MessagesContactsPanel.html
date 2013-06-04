@@ -41,18 +41,22 @@
 					<div><b><wicket:ommessage key="1206"/>&nbsp;(<span wicket:id="unread"></span>)</b></div>
 					<div wicket:id="navigator"></div>
 					<table style="width: 100%;">
+						<thead>
 						<tr>
 							<th><span wicket:id="orderById"></span><wicket:ommessage key="1205"/></th>
 							<th><span wicket:id="orderByFrom"></span><wicket:ommessage key="1202"/></th>
 							<th><span wicket:id="orderBySubject"></span><wicket:ommessage key="1203"/></th>
 							<th><span wicket:id="orderBySend"></span><wicket:ommessage key="1204"/></th>
 						</tr>
+						</thead>
+						<tbody style="background-color: white;">
 						<tr wicket:id="messages">
 							<td wicket:id="id"></td>
 							<td wicket:id="from"></td>
 							<td wicket:id="subject"></td>
 							<td wicket:id="send"></td>
 						</tr>
+						</tbody>
 					</table>
 				</div>
 			</td>

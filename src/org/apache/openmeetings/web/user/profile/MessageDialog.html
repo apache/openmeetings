@@ -19,32 +19,39 @@
   
 -->
 <html xmlns:wicket="http://wicket.apache.org">
+<wicket:head>
+	<style type="text/css">
+		.ui-autocomplete {
+			z-index: 999 !important;
+		}
+	</style>
+</wicket:head>
 <wicket:panel>
 	<form wicket:id="form">
 		<table style="width: 100%;">
 			<tr>
-				<td><wicket:ommessage key="1210"/></td>
-				<td><input type="text" wicket:id="to"/></td>
+				<td class="messages column label"><wicket:ommessage key="1210"/></td>
+				<td><input class="messages text" type="text" wicket:id="to"/></td>
 			</tr>
 			<tr>
-				<td><wicket:ommessage key="1211"/></td>
-				<td><input type="text" wicket:id="subject"/></td>
+				<td class="messages column label"><wicket:ommessage key="1211"/></td>
+				<td><input class="messages text" type="text" wicket:id="subject"/></td>
 			</tr>
 			<tr>
-				<td colspan="2"><textarea wicket:id="message" style="width: 100%; height: 300px;"></textarea></td>
+				<td colspan="2"><textarea class="messages body" wicket:id="message" ></textarea></td>
 			</tr>
 			<tr>
 				<td colspan="2"><input type="checkbox" wicket:id="room" /><label wicket:for="room"><wicket:ommessage key="1218"/></label></td>
 			</tr>
-			<tr wicket:id="roomParams">
-				<td colspan="2">
+			<tr wicket:id="roomParamsBlock">
+				<td colspan="2" wicket:id="roomParams">
 					<table style="width: 100%">
 						<tr>
 							<td style="width: 70px;">
 								<table>
 									<tr>
 										<td><wicket:ommessage key="194"/></td>
-										<td><select wicket:id="roomType"></select></td>
+										<td><select class="messages selector" wicket:id="roomType"></select></td>
 									</tr>
 									<tr>
 										<td><wicket:ommessage key="570" /></td>
@@ -56,7 +63,7 @@
 									</tr>
 								</table>
 							</td>
-							<td><div class="info-icon"></div><span style="font-style: italic;"><wicket:ommessage key="1221" /></span></td>
+							<td><div class="info-text"><wicket:ommessage key="1221" /></div></td>
 						</tr>
 					</table>
 				</td>

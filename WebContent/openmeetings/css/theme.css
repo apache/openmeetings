@@ -432,17 +432,6 @@ div.tableWrapper {
 	box-shadow: 3px 3px 4px #000;
 }
 
-.info-icon {
-	background: url(images/information.png) no-repeat;
-	float: left;
-	cursor: default;
-	width: 18px;
-	height: 18px;
-	border: none;
-	margin-left: 2px;
-	margin-top: 2px;
-}
-
 .sort-icon {
 	display: inline-block !important;
 	text-indent: 0px !important;
@@ -776,4 +765,32 @@ table.messages td.main {
 	background-position: 0;
 	width: 18px;
 	height: 18px;
+}
+.messages.column.label {
+	width: 10px;
+}
+input[type="text"].messages.text {
+	width: 100%;
+}
+textarea.messages.body {
+	width: 100%;
+	height: 300px;
+}
+select.messages.selector {
+	width: 120px;
+}
+.info-text {
+	background-image: url(images/information.png);
+	background-repeat: no-repeat;
+	background-position: 2px 2px;
+	cursor: default;
+	border: none;
+	padding-left: 20px;
+	font-style: italic;
+}
+.invisible-form-component {
+	position: absolute;
+	top: -9999px;
+	width: 1px;
+	height: 1px;
 }

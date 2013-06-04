@@ -21,6 +21,7 @@ package org.apache.openmeetings.web.user.calendar;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.getLanguage;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
+import static org.apache.openmeetings.web.util.RoomTypeDropDown.getRoomTypes;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -29,7 +30,6 @@ import java.util.List;
 import org.apache.openmeetings.data.calendar.daos.AppointmentDao;
 import org.apache.openmeetings.data.calendar.daos.AppointmentReminderTypDao;
 import org.apache.openmeetings.data.calendar.management.AppointmentLogic;
-import org.apache.openmeetings.data.conference.RoomManager;
 import org.apache.openmeetings.data.conference.dao.RoomDao;
 import org.apache.openmeetings.data.user.dao.UsersDao;
 import org.apache.openmeetings.persistence.beans.calendar.Appointment;
@@ -38,6 +38,7 @@ import org.apache.openmeetings.persistence.beans.domain.Organisation_Users;
 import org.apache.openmeetings.persistence.beans.room.Room;
 import org.apache.openmeetings.persistence.beans.room.RoomType;
 import org.apache.openmeetings.web.app.WebSession;
+import org.apache.openmeetings.web.util.RoomTypeDropDown;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxCheckBox;
 import org.apache.wicket.extensions.yui.calendar.DateTimeField;
@@ -49,11 +50,11 @@ import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
-import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 
+//import com.googlecode.wicket.jquery.ui.plugins.wysiwyg.WysiwygEditor;
 import com.googlecode.wicket.jquery.ui.widget.dialog.AbstractFormDialog;
 import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
 
@@ -82,7 +83,7 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 		this.calendar = calendar;
 		setOutputMarkupId(true);
 		feedback = new FeedbackPanel("feedback");
-		form = new AppointmentForm("appForm", new CompoundPropertyModel<Appointment>(this.getModel()));
+		form = new AppointmentForm("appForm", model);
 		add(form);
 	}
 
@@ -169,6 +170,7 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 			
 			add(feedback.setOutputMarkupId(true));
 			add(new RequiredTextField<String>("appointmentName").setLabel(Model.of(WebSession.getString(572))));
+			//add(new WysiwygEditor("appointmentDescription"));
 			add(new TextArea<String>("appointmentDescription"));
 			add(new TextField<String>("appointmentLocation"));
 			add(new DateTimeField("appointmentStarttime"));
@@ -184,11 +186,7 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 					, remindTypes
 					, new ChoiceRenderer<AppointmentReminderTyps>("name", "typId")));
 			
-			List<RoomType> roomTypes = getRoomTypes();
-			final DropDownChoice<RoomType> roomType = new DropDownChoice<RoomType>(
-					"room.roomtype"
-					, roomTypes
-					, new ChoiceRenderer<RoomType>("label.value", "roomtypes_id"));
+			final DropDownChoice<RoomType> roomType = new RoomTypeDropDown("room.roomtype");
 			roomType.setEnabled(createRoom);
 			roomType.setOutputMarkupId(true);
 			add(roomType);
@@ -221,12 +219,13 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 			});
 		}
 		
-		private boolean isPwdProtected() {
-			return Boolean.TRUE.equals(getModelObject().getIsPasswordProtected());
+		@Override
+		protected void onSubmit() {
+			super.onSubmit();
 		}
 		
-		private List<RoomType> getRoomTypes() {
-			return getBean(RoomManager.class).getAllRoomTypes(getLanguage());
+		private boolean isPwdProtected() {
+			return Boolean.TRUE.equals(getModelObject().getIsPasswordProtected());
 		}
 		
 		private List<AppointmentReminderTyps> getRemindTypes() {
