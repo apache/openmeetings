@@ -188,7 +188,7 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 			final DropDownChoice<RoomType> roomType = new DropDownChoice<RoomType>(
 					"room.roomtype"
 					, roomTypes
-					, new ChoiceRenderer<RoomType>("name", "roomtypes_id"));
+					, new ChoiceRenderer<RoomType>("label.value", "roomtypes_id"));
 			roomType.setEnabled(createRoom);
 			roomType.setOutputMarkupId(true);
 			add(roomType);
