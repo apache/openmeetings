@@ -69,6 +69,7 @@ public class MessagesContactsPanel extends UserPanel {
 	private final WebMarkupContainer inbox = new WebMarkupContainer("inbox");
 	private final WebMarkupContainer sent = new WebMarkupContainer("sent");
 	private final WebMarkupContainer trash = new WebMarkupContainer("trash");
+	private final MessageDialog newMessage = new MessageDialog("newMessage", Model.of(new PrivateMessage()));
 	
 	private void setDefaultFolderClass() {
 		inbox.add(AttributeAppender.replace("class", "email inbox clickable"));
@@ -126,6 +127,8 @@ public class MessagesContactsPanel extends UserPanel {
 
 			@Override
 			protected void onEvent(AjaxRequestTarget target) {
+				newMessage.setModelObject(new PrivateMessage());
+				newMessage.open(target);
 			}
 		}).add(new JQueryBehavior(".email.new", "button")));
 		folders.add(inbox.add(new AjaxEventBehavior("click") {
@@ -268,6 +271,6 @@ public class MessagesContactsPanel extends UserPanel {
 		
 		add(container.add(dv).setOutputMarkupId(true));
 		container.add(new AjaxSelfUpdatingTimerBehavior(seconds(15)));
+		add(newMessage);
 	}
-	
 }

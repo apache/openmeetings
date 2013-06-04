@@ -25,6 +25,7 @@ public class DaoHelper {
 	public static String getSearchQuery(String table, String alias, String search, boolean filterDeleted, boolean count, String sort, String... fields) {
 		return getSearchQuery(table, alias, search, filterDeleted, count, null, sort, fields);
 	}
+	
 	public static String getSearchQuery(String table, String alias, String search, boolean filterDeleted, boolean count, String additionalWhere, String sort, String... fields) {
 		StringBuilder sb = new StringBuilder("SELECT ");
 		if (count) {
