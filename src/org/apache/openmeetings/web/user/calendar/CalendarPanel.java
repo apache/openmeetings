@@ -134,9 +134,10 @@ public class CalendarPanel extends UserPanel {
 				if (CalendarView.month == view && start.equals(end)) {
 					java.util.Calendar now = WebSession.getCalendar();
 					java.util.Calendar cal = WebSession.getCalendar();
-					cal.setTime(start);
-					cal.set(java.util.Calendar.HOUR, now.get(java.util.Calendar.HOUR));
-					cal.set(java.util.Calendar.MINUTE, now.get(java.util.Calendar.MINUTE));
+					now.setTime(start);
+					cal.set(java.util.Calendar.YEAR, now.get(java.util.Calendar.YEAR));
+					cal.set(java.util.Calendar.MONTH, now.get(java.util.Calendar.MONTH));
+					cal.set(java.util.Calendar.DATE, now.get(java.util.Calendar.DATE));
 					cal.set(java.util.Calendar.SECOND, 0);
 					cal.set(java.util.Calendar.MILLISECOND, 0);
 					a.setAppointmentStarttime(cal.getTime());
