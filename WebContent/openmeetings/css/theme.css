@@ -723,9 +723,8 @@ table.messages td.main {
 .email {
 	padding-left: 25px;
 	background-repeat: no-repeat !important;
-	background-position-x: 5px !important;
+	background-position: 5px 3px !important;
 	padding-top: 2px;
-	background-position-y: 3px !important;
 	display: block;
 	text-align:left;
 }
