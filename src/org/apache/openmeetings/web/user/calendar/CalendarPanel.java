@@ -27,6 +27,8 @@ import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.UserPanel;
 import org.apache.wicket.ajax.AbstractAjaxTimerBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.json.JSONArray;
+import org.apache.wicket.ajax.json.JSONException;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.util.time.Duration;
@@ -74,27 +76,28 @@ public class CalendarPanel extends UserPanel {
 								"', day: '"  + WebSession.getString(799) + 
 								"', today: '"  + WebSession.getString(1555) + 
 								"'}");
-		String monthes = "[";
-		String shortMonthes = "[";
+
+		JSONArray monthes = new JSONArray();
+		JSONArray shortMonthes = new JSONArray();
+		JSONArray days = new JSONArray();
+		JSONArray shortDays = new JSONArray();
 		for (int i=0; i < 12; i++){
-			monthes +=  "'" + WebSession.getString(469 + i) + (i < 11 ? "'," : "'");
-			shortMonthes +=  "'" + WebSession.getString(1556 + i) + (i < 11 ? "'," : "'");
+			try {
+				monthes.put(i, WebSession.getString(469 + i));
+				shortMonthes.put(i, WebSession.getString(1556 + i));
+				if (i < 7){
+					days.put(i, WebSession.getString(460 + i));
+					shortDays.put(i, WebSession.getString(453 + i));					
+				}
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
-		monthes += "]";
-		shortMonthes += "]";
-		options.set("monthNames", monthes);
-		options.set("monthNamesShort", shortMonthes);
-		
-		String days = "[";
-		String shortDays = "[";
-		for (int i=0; i < 7; i++){
-			days +=  "'" + WebSession.getString(460 + i) + (i < 6 ? "'," : "'");
-			shortDays +=  "'" + WebSession.getString(453 + i) + (i < 6 ? "'," : "'");
-		}
-		days += "]";
-		shortDays += "]";
-		options.set("dayNames", days);
-		options.set("dayNamesShort", shortDays);
+		options.set("monthNames", monthes.toString());
+		options.set("monthNamesShort", shortMonthes.toString());
+		options.set("dayNames", days.toString());
+		options.set("dayNamesShort", shortDays.toString());
 		
 		
 		calendar = new Calendar("calendar", new AppointmentModel(), options) {
