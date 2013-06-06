@@ -4727,4 +4727,13 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
   <string id="1567" name="calendar_shortmonthnames">
     <value>Дек</value>
   </string>
+  <string id="1568" name="remindertype_no_email">
+    <value>не посылать уведомление</value>
+  </string>
+  <string id="1569" name="remindertype_simple_email">
+    <value>обычный e-майл</value>
+  </string>
+  <string id="1570" name="remindertype_iCal_email">
+    <value>iCal e-майл</value>
+  </string>
 </language>

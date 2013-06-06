@@ -49,9 +49,9 @@ public class TestDatabaseStructureAppointmentReminderTyp extends AbstractOpenmee
 			cal.getTime();
 
 			appointmentReminderTypDaoImpl.addAppointmentReminderTyps(1L,
-					"test 5 min");
+					"test 5 min", -1);
 			List<AppointmentReminderTyps> listAppoints = appointmentReminderTypDaoImpl
-					.getAppointmentReminderTypList();
+					.getAppointmentReminderTypList(1);
 
 			log.debug("Anzahl: " + listAppoints.size());
 

@@ -54,9 +54,9 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 
-//import com.googlecode.wicket.jquery.ui.plugins.wysiwyg.WysiwygEditor;
 import com.googlecode.wicket.jquery.ui.widget.dialog.AbstractFormDialog;
 import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
+//import com.googlecode.wicket.jquery.ui.plugins.wysiwyg.WysiwygEditor;
 
 public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 	private static final long serialVersionUID = 7553035786264113827L;
@@ -184,7 +184,7 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 			add(new DropDownChoice<AppointmentReminderTyps>(
 					"remind"
 					, remindTypes
-					, new ChoiceRenderer<AppointmentReminderTyps>("name", "typId")));
+					, new ChoiceRenderer<AppointmentReminderTyps>("label.value", "typId")));
 			
 			final DropDownChoice<RoomType> roomType = new RoomTypeDropDown("room.roomtype");
 			roomType.setEnabled(createRoom);
@@ -229,7 +229,7 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 		}
 		
 		private List<AppointmentReminderTyps> getRemindTypes() {
-			return getBean(AppointmentReminderTypDao.class).getAppointmentReminderTypList();
+			return getBean(AppointmentReminderTypDao.class).getAppointmentReminderTypList(getLanguage());
 		}
 		
 		private List<Room> getRoomList() {

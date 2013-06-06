@@ -854,11 +854,11 @@ public class ImportInitvalues {
 		log.debug("ImportInitValues.loadInitAppointmentReminderTypes");
 
 		appointmentReminderTypDaoImpl.addAppointmentReminderTyps(-1L,
-				"do not send notification");
+				"do not send notification", 1568);
 		appointmentReminderTypDaoImpl.addAppointmentReminderTyps(-1L,
-				"simple email");
+				"simple email", 1569);
 		appointmentReminderTypDaoImpl.addAppointmentReminderTyps(-1L,
-				"iCal email");
+				"iCal email", 1570);
 	}
 
 	public void loadLanguagesFile(int langId) throws Exception {

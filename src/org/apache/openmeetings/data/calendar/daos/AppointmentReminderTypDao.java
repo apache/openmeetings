@@ -27,6 +27,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
+import org.apache.openmeetings.data.basic.FieldLanguagesValuesDao;
 import org.apache.openmeetings.data.user.dao.UsersDao;
 import org.apache.openmeetings.persistence.beans.calendar.AppointmentReminderTyps;
 import org.red5.logging.Red5LoggerFactory;
@@ -45,6 +46,8 @@ public class AppointmentReminderTypDao {
 	private EntityManager em;
 	@Autowired
 	private UsersDao usersDao;
+	@Autowired
+	private FieldLanguagesValuesDao fieldLanguagesValuesDao;
 
 	public AppointmentReminderTyps getAppointmentReminderTypById(Long typId) {
 		try {
@@ -95,7 +98,7 @@ public class AppointmentReminderTypDao {
 		return null;
 	}
 
-	public Long addAppointmentReminderTyps(Long user_id, String name) {
+	public Long addAppointmentReminderTyps(Long user_id, String name, long fieldvalues_id) {
 		try {
 
 			AppointmentReminderTyps ac = new AppointmentReminderTyps();
@@ -104,6 +107,7 @@ public class AppointmentReminderTypDao {
 			ac.setStarttime(new Date());
 			ac.setDeleted(false);
 			ac.setUser(usersDao.get(user_id));
+			ac.setFieldvalues_id(fieldvalues_id);
 
 			ac = em.merge(ac);
 			Long category_id = ac.getTypId();
@@ -145,7 +149,7 @@ public class AppointmentReminderTypDao {
 		return null;
 	}
 
-	public List<AppointmentReminderTyps> getAppointmentReminderTypList() {
+	public List<AppointmentReminderTyps> getAppointmentReminderTypList(long language_id) {
 		log.debug("getAppointmenetReminderTypList");
 
 		try {
@@ -158,6 +162,10 @@ public class AppointmentReminderTypDao {
 
 			List<AppointmentReminderTyps> listAppointmentReminderTyp = query
 					.getResultList();
+			for (AppointmentReminderTyps ti : listAppointmentReminderTyp) {
+				ti.setLabel(fieldLanguagesValuesDao.get(
+						ti.getFieldvalues_id(), language_id));
+			}
 
 			return listAppointmentReminderTyp;
 		} catch (Exception ex2) {

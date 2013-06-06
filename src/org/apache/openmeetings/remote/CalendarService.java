@@ -388,8 +388,10 @@ public class CalendarService {
 			Long user_level = userManager.getUserLevelByID(users_id);
 			if (authLevelUtil.checkUserLevel(user_level)) {
 
+				User user = userManager.getUserById(users_id);
+				long language_id = (user == null) ? 1 : user.getLanguage_id();
 				List<AppointmentReminderTyps> res = appointmentReminderTypDaoImpl
-						.getAppointmentReminderTypList();
+						.getAppointmentReminderTypList(language_id);
 
 				if (res == null || res.size() < 1) {
 					log.debug("no remindertyps found!");

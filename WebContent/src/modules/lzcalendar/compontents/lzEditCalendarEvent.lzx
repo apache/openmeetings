@@ -285,7 +285,7 @@
 			    }
 			</handler>
 			<textlistitem datapath="local:classroot.getAppointmentReminderTypList:/getAppointmentReminderTypListResponse/return"
-				text="$path{'name/text()'}" value="$path{'typId/text()'}" />
+				text="$path{'label/value/text()'}" value="$path{'typId/text()'}" />
 	 	</resetCombobox>
 	 	
 	 	<!-- New/Existent room selector -->

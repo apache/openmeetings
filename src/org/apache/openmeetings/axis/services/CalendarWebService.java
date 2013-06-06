@@ -44,10 +44,10 @@ import org.apache.openmeetings.data.user.dao.UserContactsDao;
 import org.apache.openmeetings.persistence.beans.calendar.Appointment;
 import org.apache.openmeetings.persistence.beans.calendar.AppointmentCategory;
 import org.apache.openmeetings.persistence.beans.calendar.AppointmentReminderTyps;
-import org.apache.openmeetings.persistence.beans.room.RoomType;
 import org.apache.openmeetings.persistence.beans.room.Room;
-import org.apache.openmeetings.persistence.beans.user.UserContact;
+import org.apache.openmeetings.persistence.beans.room.RoomType;
 import org.apache.openmeetings.persistence.beans.user.User;
+import org.apache.openmeetings.persistence.beans.user.UserContact;
 import org.apache.openmeetings.utils.math.TimezoneUtil;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -646,8 +646,10 @@ public class CalendarWebService {
 			Long user_level = userManager.getUserLevelByID(users_id);
 			if (authLevelUtil.checkUserLevel(user_level)) {
 
+				User user = userManager.getUserById(users_id);
+				long language_id = (user == null) ? 1 : user.getLanguage_id();
 				List<AppointmentReminderTyps> res = appointmentReminderTypDaoImpl
-						.getAppointmentReminderTypList();
+						.getAppointmentReminderTypList(language_id);
 
 				if (res == null || res.size() < 1) {
 					log.debug("no remindertyps found!");
