@@ -26,6 +26,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.input.BoundedInputStream;
 import org.apache.openmeetings.data.flvrecord.FlvRecordingDao;
@@ -33,10 +34,11 @@ import org.apache.openmeetings.data.user.dao.UsersDao;
 import org.apache.openmeetings.persistence.beans.domain.Organisation_Users;
 import org.apache.openmeetings.persistence.beans.flvrecord.FlvRecording;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.apache.wicket.request.resource.AbstractResource;
+import org.apache.wicket.request.resource.ContentDisposition;
 import org.apache.wicket.request.resource.IResource;
 import org.apache.wicket.request.resource.IResource.Attributes;
 import org.apache.wicket.request.resource.ResourceReference;
-import org.apache.wicket.request.resource.ResourceStreamResource;
 import org.apache.wicket.util.lang.Bytes;
 import org.apache.wicket.util.resource.FileResourceStream;
 import org.apache.wicket.util.resource.IResourceStream;
@@ -52,8 +54,8 @@ public abstract class RecordingResourceReference extends ResourceReference {
 
 	@Override
 	public IResource getResource() {
-		return new ResourceStreamResource() {
-			private static final long serialVersionUID = -961779297961218109L;
+		return new AbstractResource() {
+			private static final long serialVersionUID = 1L;
 			private final static String ACCEPT_RANGES_HEADER = "Accept-Ranges";
 			private final static String RANGE_HEADER = "Range";
 			private final static String CONTENT_RANGE_HEADER = "Content-Range";
@@ -63,8 +65,7 @@ public abstract class RecordingResourceReference extends ResourceReference {
 			private int start = 0;
 			private int end = 0;
 			
-			@Override
-			protected IResourceStream getResourceStream() {
+			private IResourceStream getResourceStream() {
 				return file == null ? null : new FileResourceStream(file) {
 					private static final long serialVersionUID = 2546785247219805747L;
 					private transient BoundedInputStream bi;
@@ -111,6 +112,8 @@ public abstract class RecordingResourceReference extends ResourceReference {
 					file = getFile(r);
 					rr.setFileName(getFileName(r));
 					rr.setContentType(RecordingResourceReference.this.getContentType());
+					rr.setContentDisposition(ContentDisposition.INLINE);
+					rr.getHeaders().addHeader(ACCEPT_RANGES_HEADER, RANGES_BYTES);
 					String range = ((HttpServletRequest)attributes.getRequest().getContainerRequest()).getHeader(RANGE_HEADER);
 					if (range != null && range.startsWith(RANGES_BYTES)) {
 						String[] bounds = range.substring(RANGES_BYTES.length() + 1).split("-"); //TODO open ranges !!
@@ -118,17 +121,32 @@ public abstract class RecordingResourceReference extends ResourceReference {
 							isRange = true;
 							start = Integer.parseInt(bounds[0]);
 							end = Integer.parseInt(bounds[1]);
+							//Content-Range: bytes 229376-232468/232469
+							rr.getHeaders().addHeader(CONTENT_RANGE_HEADER, String.format("%s %d-%d/%d", RANGES_BYTES, start, end, file.length()));
 						}
 					}
-					
-					rr = super.newResourceResponse(attributes);
-					rr.getHeaders().addHeader(ACCEPT_RANGES_HEADER, RANGES_BYTES);
-					if (isRange) {
-						//Content-Range: bytes 229376-232468/232469
-						rr.getHeaders().addHeader(CONTENT_RANGE_HEADER, String.format("%s %d-%d/%d", RANGES_BYTES, start, end, file.length()));
+					final IResourceStream rStream = getResourceStream();
+					rr.setContentLength(rStream.length().bytes());
+					try {
+						final InputStream  s = rStream.getInputStream();
+						rr.setWriteCallback(new WriteCallback() {
+							
+							@Override
+							public void writeData(Attributes attributes) throws IOException {
+								try {
+									writeStream(attributes, s);
+								} catch (Exception e) {
+									e.printStackTrace();
+								} finally {
+									rStream.close();
+								}
+							}
+						});
+					} catch (ResourceStreamNotFoundException e1) {
+						rr.setError(HttpServletResponse.SC_NOT_FOUND);
 					}
 				} else {
-					rr.setError(404);
+					rr.setError(HttpServletResponse.SC_NOT_FOUND);
 				}
 				return rr;
 			}
