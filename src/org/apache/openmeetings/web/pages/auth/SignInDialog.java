@@ -35,7 +35,6 @@ import org.apache.wicket.RestartResponseException;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
-import org.apache.wicket.authentication.IAuthenticationStrategy;
 import org.apache.wicket.markup.head.CssContentHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -198,24 +197,6 @@ public class SignInDialog extends AbstractFormDialog<String> {
 			
 			if (WebSession.get().isSignedIn()) {
 				alreadyLoggedIn();
-			} else {
-				IAuthenticationStrategy strategy = getAuthenticationStrategy();
-				// get username and password from persistence store
-				String[] data = strategy.load();
-
-				if ((data != null) && (data.length > 2)) {
-					// try to sign in the user
-					if (WebSession.get().signIn(data[0], data[1], data[2])) {
-						login = data[0];
-						password = data[1];
-						ldapConfigFileName = data[2];
-
-						alreadyLoggedIn();
-					} else {
-						// the loaded credentials are wrong. erase them.
-						strategy.remove();
-					}
-				}
 			}
 			add(new FeedbackPanel("feedback"));
 			add(loginField = new RequiredTextField<String>("login", new PropertyModel<String>(SignInDialog.this, "login")));

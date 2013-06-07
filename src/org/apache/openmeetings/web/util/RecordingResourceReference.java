@@ -18,8 +18,10 @@
  */
 package org.apache.openmeetings.web.util;
 
+import static org.apache.openmeetings.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
+import static org.red5.logging.Red5LoggerFactory.getLogger;
 
 import java.io.File;
 import java.io.IOException;
@@ -33,6 +35,8 @@ import org.apache.openmeetings.data.flvrecord.FlvRecordingDao;
 import org.apache.openmeetings.data.user.dao.UsersDao;
 import org.apache.openmeetings.persistence.beans.domain.Organisation_Users;
 import org.apache.openmeetings.persistence.beans.flvrecord.FlvRecording;
+import org.apache.openmeetings.web.app.WebSession;
+import org.apache.wicket.protocol.http.servlet.ResponseIOException;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.AbstractResource;
 import org.apache.wicket.request.resource.ContentDisposition;
@@ -44,9 +48,11 @@ import org.apache.wicket.util.resource.FileResourceStream;
 import org.apache.wicket.util.resource.IResourceStream;
 import org.apache.wicket.util.resource.ResourceStreamNotFoundException;
 import org.apache.wicket.util.string.StringValue;
+import org.slf4j.Logger;
 
 public abstract class RecordingResourceReference extends ResourceReference {
-	private static final long serialVersionUID = -7420364030290560099L;
+	private static final long serialVersionUID = 1L;
+	private static final Logger log = getLogger(RecordingResourceReference.class, webAppRootKey);
 
 	public RecordingResourceReference(Class<? extends RecordingResourceReference> clazz) {
 		super(clazz, "recordings");
@@ -130,13 +136,15 @@ public abstract class RecordingResourceReference extends ResourceReference {
 					try {
 						final InputStream  s = rStream.getInputStream();
 						rr.setWriteCallback(new WriteCallback() {
-							
 							@Override
 							public void writeData(Attributes attributes) throws IOException {
 								try {
 									writeStream(attributes, s);
-								} catch (Exception e) {
-									e.printStackTrace();
+								} catch (ResponseIOException e) {
+									if (!isRange) {
+										log.error("Error while playing the stream", e);
+									}
+									// in case of range operations we expecting such exceptions 
 								} finally {
 									rStream.close();
 								}
@@ -160,7 +168,7 @@ public abstract class RecordingResourceReference extends ResourceReference {
 	private FlvRecording getRecording(Attributes attributes) {
 		PageParameters params = attributes.getParameters();
 		StringValue id = params.get("id");
-		if (getUserId() > 0 && !id.isEmpty()) {
+		if (WebSession.get().isSignedIn() && !id.isEmpty()) {
 			FlvRecording r = getBean(FlvRecordingDao.class).getFlvRecordingById(id.toLongObject());
 			if (r.getOwnerId() == null || getUserId() == r.getOwnerId()) {
 				return r;

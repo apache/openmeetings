@@ -22,6 +22,7 @@ import static java.text.DateFormat.SHORT;
 import static org.apache.openmeetings.persistence.beans.basic.Configuration.DASHBOARD_SHOW_MYROOMS_KEY;
 import static org.apache.openmeetings.persistence.beans.basic.Configuration.DASHBOARD_SHOW_RSS_KEY;
 import static org.apache.openmeetings.persistence.beans.basic.Configuration.DEFAUT_LANG_KEY;
+import static org.apache.openmeetings.web.app.Application.getAuthenticationStrategy;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.Application.getDashboardContext;
 
@@ -46,6 +47,7 @@ import org.apache.openmeetings.web.user.dashboard.RssWidgetDescriptor;
 import org.apache.openmeetings.web.user.dashboard.StartWidgetDescriptor;
 import org.apache.openmeetings.web.user.dashboard.WelcomeWidgetDescriptor;
 import org.apache.openmeetings.web.util.OmUrlFragment;
+import org.apache.wicket.authentication.IAuthenticationStrategy;
 import org.apache.wicket.authroles.authentication.AbstractAuthenticatedWebSession;
 import org.apache.wicket.authroles.authorization.strategies.role.Roles;
 import org.apache.wicket.request.Request;
@@ -60,7 +62,8 @@ public class WebSession extends AbstractAuthenticatedWebSession {
 	private static final long serialVersionUID = 1123393236459095315L;
 	//private static final Map<String, Locale> LNG_TO_LOCALE_MAP = new HashMap<String, Locale> ();
 	private long userId = -1;
-	private long userLevel = -1;
+	private long userLevel = -1; //TODO renew somehow on user edit !!!!
+	private long languageId = -1; //TODO renew somehow on user edit !!!!
 	private String SID = null;
 	private OmUrlFragment area = null;
 	private TimeZone tz;
@@ -97,7 +100,19 @@ public class WebSession extends AbstractAuthenticatedWebSession {
 
 	@Override
 	public boolean isSignedIn() {
-		return (userId > -1);
+		if (userId < 1) {
+			IAuthenticationStrategy strategy = getAuthenticationStrategy();
+			// get username and password from persistence store
+			String[] data = strategy.load();
+			if ((data != null) && (data.length > 2)) {
+				// try to sign in the user
+				if (!signIn(data[0], data[1], data[2])) {
+					// the loaded credentials are wrong. erase them.
+					strategy.remove();
+				}
+			}
+		}
+		return userId > -1;
 	}
 
 	public boolean signIn(String login, String password, String ldapConfigFileName) {
@@ -110,6 +125,7 @@ public class WebSession extends AbstractAuthenticatedWebSession {
 		if (u instanceof User) {
 			User user = (User)u;
 			userId = user.getUser_id();
+			languageId = user.getLanguage_id();
 			tz = TimeZone.getTimeZone(user.getOmTimeZone().getIcal());
 			ISO8601FORMAT.setTimeZone(tz);
 			//FIXMW locale need to be set by User language first
@@ -134,11 +150,14 @@ public class WebSession extends AbstractAuthenticatedWebSession {
 	
 	public static long getLanguage() {
 		WebSession session = get();
-		if (session.isSignedIn()) {
-			return getBean(UsersDao.class).get(session.userId).getLanguage_id();
-		} else {
-			return getBean(ConfigurationDao.class).getConfValue(DEFAUT_LANG_KEY, Long.class, "1");
+		if (session.languageId < 0) {
+			if (session.isSignedIn()) {
+				session.languageId = getBean(UsersDao.class).get(session.userId).getLanguage_id();
+			} else {
+				session.languageId = getBean(ConfigurationDao.class).getConfValue(DEFAUT_LANG_KEY, Long.class, "1");
+			}
 		}
+		return session.languageId;
 	}
 	
 	public static FieldLanguage getLanguageObj() {

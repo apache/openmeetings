@@ -219,11 +219,6 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 			});
 		}
 		
-		@Override
-		protected void onSubmit() {
-			super.onSubmit();
-		}
-		
 		private boolean isPwdProtected() {
 			return Boolean.TRUE.equals(getModelObject().getIsPasswordProtected());
 		}
