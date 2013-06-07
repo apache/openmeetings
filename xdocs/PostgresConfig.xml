@@ -39,6 +39,11 @@
 						the file $red5/webapps/openmeetings/conf/install.xml and then run
 						the web based installer again
 					</li>
+					<li><span style="font-size: larger; color: blue;">IMPORTANT</span> According to
+						<a href="http://markmail.org/message/opymlab2e6wygb7p">this</a> thread you need to ensure:<br/>
+						<tt>standard_conforming_strings</tt> is set to <tt><b>on</b></tt> and <br/>
+						<tt>escape_string_warning</tt> is set to <tt><b>off</b></tt>
+					</li>
 				</ul>
 			</subsection>
 
