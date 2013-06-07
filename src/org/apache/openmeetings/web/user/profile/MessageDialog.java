@@ -18,28 +18,29 @@
  */
 package org.apache.openmeetings.web.user.profile;
 
-import static org.apache.openmeetings.web.app.Application.getBean;
+import static org.apache.openmeetings.web.util.RoomTypeDropDown.getRoomTypes;
 
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
-import org.apache.openmeetings.data.user.dao.UsersDao;
+import org.apache.openmeetings.persistence.beans.room.Room;
 import org.apache.openmeetings.persistence.beans.user.PrivateMessage;
-import org.apache.openmeetings.persistence.beans.user.User;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.util.RoomTypeDropDown;
+import org.apache.openmeetings.web.util.UserAutoCompleteTextField;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.extensions.yui.calendar.DateTimeField;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.form.TextField;
+import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
-import com.googlecode.wicket.jquery.core.renderer.ITextRenderer;
-import com.googlecode.wicket.jquery.ui.form.autocomplete.AutoCompleteTextField;
 import com.googlecode.wicket.jquery.ui.widget.dialog.AbstractFormDialog;
 import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
 
@@ -50,42 +51,55 @@ public class MessageDialog extends AbstractFormDialog<PrivateMessage> {
 	private DialogButton cancel = new DialogButton(WebSession.getString(219));
 	private final WebMarkupContainer roomParamsBlock = new WebMarkupContainer("roomParamsBlock");
 	private final WebMarkupContainer roomParams = new WebMarkupContainer("roomParams");
+	private final IModel<Date> modelStart = Model.of(new Date());
+	private final IModel<Date> modelEnd = Model.of(new Date());
 
 	@Override
 	public int getWidth() {
 		return 650;
 	}
 	
-	public MessageDialog(String id, IModel<PrivateMessage> model) {
+	@Override
+	protected void onOpen(AjaxRequestTarget target) {
+		modelStart.setObject(new Date());
+		modelEnd.setObject(new Date()); //TODO should we add 1 hour or generalize with Calendar???
+		PrivateMessage p = new PrivateMessage();
+		Room r = new Room();
+		r.setAppointment(true);
+		r.setRoomtype(getRoomTypes().get(0));
+		p.setRoom(r);
+		setModelObject(p);
+		roomParams.setVisible(getModelObject().isBookedRoom());
+		form.setModelObject(p);
+		target.add(form);
+		super.onOpen(target);
+	}
+	
+	public MessageDialog(String id, CompoundPropertyModel<PrivateMessage> model) {
 		super(id, WebSession.getString(1209), model);
 		form = new Form<PrivateMessage>("form", getModel());
 		
-		form.add(new AutoCompleteTextField<User>("to", new UserTextRenderer()) {
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			protected List<User> getChoices(String input) {
-				return getBean(UsersDao.class).get(input, 0, 10, null);
-			}
-		});
+		form.add(new UserAutoCompleteTextField("to"));
 		form.add(new TextField<String>("subject"));
 		form.add(new TextArea<String>("message"));
 		form.add(roomParamsBlock.setOutputMarkupId(true));
-		form.add(new CheckBox("room", Model.of(getModelObject().getRoom() != null)).add(new AjaxEventBehavior("click") {
+		final CheckBox bookedRoom = new CheckBox("bookedRoom");
+		form.add(bookedRoom.setOutputMarkupId(true).add(new AjaxEventBehavior("click") {
 			private static final long serialVersionUID = 1L;
-			boolean val = false;
 			
 			@Override
 			protected void onEvent(AjaxRequestTarget target) {
-				roomParams.setVisible(val = !val);
-				target.add(roomParamsBlock);
+				PrivateMessage p = MessageDialog.this.getModelObject();
+				p.setBookedRoom(!p.isBookedRoom());
+				roomParams.setVisible(p.isBookedRoom());
+				target.add(bookedRoom, roomParamsBlock);
 			}
 		}));
 		roomParamsBlock.add(roomParams);
-		roomParams.add(new RoomTypeDropDown("roomType"));
-		roomParams.add(new WebMarkupContainer("start"));
-		roomParams.add(new WebMarkupContainer("end"));
-		add(form);
+		roomParams.add(new RoomTypeDropDown("room.roomtype"));
+		roomParams.add(new DateTimeField("start", modelStart));
+		roomParams.add(new DateTimeField("end", modelEnd));
+		add(form.setOutputMarkupId(true));
 	}
 
 	@Override
@@ -113,17 +127,5 @@ public class MessageDialog extends AbstractFormDialog<PrivateMessage> {
 	protected void onSubmit(AjaxRequestTarget target) {
 		// TODO Auto-generated method stub
 
-	}
-
-	private static class UserTextRenderer implements ITextRenderer<User> {
-		private static final long serialVersionUID = 1L;
-
-		public String getText(User u) {
-			return u == null ? "" : String.format("%s %s <%s>", u.getFirstname(), u.getLastname(), u.getAdresses().getEmail());
-		}
-		
-		public String getText(User u, String expression) {
-			return getText(u);
-		}
 	}
 }

@@ -112,7 +112,7 @@ public class PrivateMessage implements Serializable, IDataProviderEntity {
 		
 	@Column(name="booked_room")
 	@Element(data=true)
-	private Boolean bookedRoom;
+	private boolean bookedRoom;
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name="rooms_id")
@@ -193,13 +193,13 @@ public class PrivateMessage implements Serializable, IDataProviderEntity {
 		this.owner = owner;
 	}
 	
-	public Boolean getBookedRoom() {
+	public boolean isBookedRoom() {
 		return bookedRoom;
 	}
-	public void setBookedRoom(Boolean bookedRoom) {
+	public void setBookedRoom(boolean bookedRoom) {
 		this.bookedRoom = bookedRoom;
 	}
-
+	
 	public Room getRoom() {
 		return room;
 	}

@@ -55,7 +55,7 @@ public class PrivateMessagesDao implements IDataProviderDao<PrivateMessage> {
 			privateMessage.setFrom(from);
 			privateMessage.setTo(to);
 			privateMessage.setOwner(owner);
-			privateMessage.setBookedRoom(bookedRoom);
+			privateMessage.setBookedRoom(Boolean.TRUE.equals(bookedRoom));
 			privateMessage.setRoom(room);
 			privateMessage.setParentMessage(parentMessageId);
 			privateMessage.setIsTrash(false);

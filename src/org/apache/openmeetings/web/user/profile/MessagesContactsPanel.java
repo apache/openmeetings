@@ -49,12 +49,14 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.repeater.Item;
+import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
 import ro.fortsoft.wicket.dashboard.web.util.ConfirmAjaxCallListener;
 
 import com.googlecode.wicket.jquery.core.JQueryBehavior;
+//TODO not released yet import com.googlecode.wicket.jquery.ui.plugins.fixedheadertable.FixedHeaderTableBehavior;
 
 public class MessagesContactsPanel extends UserPanel {
 	private static final long serialVersionUID = 8098087441571734957L;
@@ -69,7 +71,7 @@ public class MessagesContactsPanel extends UserPanel {
 	private final WebMarkupContainer inbox = new WebMarkupContainer("inbox");
 	private final WebMarkupContainer sent = new WebMarkupContainer("sent");
 	private final WebMarkupContainer trash = new WebMarkupContainer("trash");
-	private final MessageDialog newMessage = new MessageDialog("newMessage", Model.of(new PrivateMessage()));
+	private final MessageDialog newMessage = new MessageDialog("newMessage", new CompoundPropertyModel<PrivateMessage>(new PrivateMessage()));
 	
 	private void setDefaultFolderClass() {
 		inbox.add(AttributeAppender.replace("class", "email inbox clickable"));
@@ -92,6 +94,7 @@ public class MessagesContactsPanel extends UserPanel {
 		selectedModel.setObject(id);
 		setDefaultFolderClass();
 		selectFolder(folder);
+		//TODO not released yet container.add(new FixedHeaderTableBehavior("#messagesTable", new Options("height", 100)));
 		if (target != null) {
 			target.add(folders, container);
 		}
@@ -127,7 +130,6 @@ public class MessagesContactsPanel extends UserPanel {
 
 			@Override
 			protected void onEvent(AjaxRequestTarget target) {
-				newMessage.setModelObject(new PrivateMessage());
 				newMessage.open(target);
 			}
 		}).add(new JQueryBehavior(".email.new", "button")));
