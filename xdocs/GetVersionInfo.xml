@@ -22,8 +22,25 @@
 	</properties>
 
 	<body>
-
-		<section name="How to check which Openmeetings version running">
+		<section name="How to check which Openmeetings version running (3.0.0 - )">
+			<p>Use Top Menu -&gt; About</p>
+		</section>
+		<section name="How to check which Openmeetings version running (2.1.1 - )">
+			<p>The version is printed into openmeetings.log file</p>
+			<p>
+				Run openmeetings<br/>
+				Open OM_HOME/log/openmeetings.log
+			</p>
+			<p>You get something like this: </p>
+			<div class="xmlcode"><pre>
+	##################################################
+	#               Openmeetings is up               #
+	#       2.1.1-RELEASE 1490720 7-June-2013        #
+	#                and ready to use                #
+	##################################################
+			</pre></div>
+		</section>
+		<section name="How to check which Openmeetings version running (1.8.0 - 2.1.0)">
 			<p>If you need to know what version of OpenMeetings you are running,
 				you can check that by the file: openmeetings-*.jar
 			</p>
