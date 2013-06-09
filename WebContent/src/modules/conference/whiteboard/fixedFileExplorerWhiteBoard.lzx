@@ -217,6 +217,7 @@
                 if ($debug) Debug.write("# height",h);
                 //this.dragger.drag_min_x = parent.width - w;
                 parent.parent.scrollContainer.calcScrollContent();
+                parent.parent.zoombox.sendUpdate(null);
             </handler>
             
             <handler name="onwidth" args="w">
@@ -511,12 +512,13 @@
         
         <handler name="onx" args="x">
         	if (this._fullFit.getValue()) {
-        		if ($debug) Debug.write("on x ",x);
+        		if ($debug) Debug.write("on x sendUpdate ",x);
         		lz.Timer.addTimer( new LzDelegate( this, "sendUpdate" ), 100 );
         	}
         </handler>
         
         <method name="sendUpdate" args="refObj">
+            if ($debug) Debug.write("fixedFileExplorer sendUpdate ",refObj);
         	parent._drawareaMask._drawarea.doFullFit(true);
         </method>
         
@@ -547,7 +549,7 @@
             <labelTooltip labelid="1212" multiline="true" />
         </labelCheckbox>
         
-        <changeWidthSlider name="_zoom" initialNumberInit="50" 
+        <changeWidthSlider name="_zoom" initialNumberInit="50" labelid="1328"
               boxPosition="down" initialNumber="50" maximum="200">
             <handler name="oninitialNumber" args="i">
                 if (parent.ignoreUpdates) {

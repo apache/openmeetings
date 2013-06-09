@@ -37,6 +37,10 @@
           height="${ (this.parent.parent.switchaxis) ? 
         (parent.parent._vslidertrack.height - parent.parent._sliderthumb.y-1) : 
         parent.parent._sliderthumb.y }" />
+      <handler name="onclick">
+        var newy = parent.getMouse("y");
+        parent._sliderthumb.setNewYFromTrack(newy);
+      </handler>
   </class>
 	  
 	<class name="vsliderThumb" extends="button" bgcolor="0x999999" height="10" width="20" 
@@ -45,6 +49,20 @@
         <attribute name="drag_min" value="0" type="number" />
         <attribute name="showvalue" type="boolean" value="true" />
         <attribute name="drag_max" value="0" type="number" />
+        
+        <method name="setNewYFromTrack" args="y">
+            <![CDATA[
+                if (y > drag_max) {
+                    this.setAttribute("y",this.drag_max);
+                    return;
+                }
+                if (y < drag_min) {
+                    this.setAttribute("y",this.drag_min);
+                    return;
+                }
+                this.setAttribute("y",y);
+            ]]>
+        </method>
         
         <handler name="oninit">
             //Setting the initVal

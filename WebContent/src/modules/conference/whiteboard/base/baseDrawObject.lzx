@@ -130,7 +130,7 @@
     
     <method name="doFullFit" args="v">
         <![CDATA[
-        	if ($debug) Debug.write("Do Full Fit ?");
+        	if ($debug) Debug.write("Do Full Fit ? doFullFit: ", v);
         	if ($debug) Debug.write(this.ObjectByName);
         
         	this.fullFit = v;
