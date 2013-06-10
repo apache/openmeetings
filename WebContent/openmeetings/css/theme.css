@@ -53,14 +53,14 @@ html, body {
 }
 .ui-menu .ui-menu-item a {
 	line-height: 1.2em !important;
-	padding-bottom: 5px !importsnat;
+	padding-bottom: 5px !important;
 }
 .menuName {
 	font-weight: bold;
 }
 .menuDesc {
 	font-size: smaller;
-	line-height: 1em !importsnat;
+	line-height: 1em !important;
 }
 
 #busy_indicator {
