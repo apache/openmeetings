@@ -281,6 +281,12 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 		return null;
 	}
 
+	/**
+	 * 
+	 * @param map
+	 * @return returns key,value Map with multiple return values or null in case of exception
+	 * 
+	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public synchronized Map setConnectionAsSharingClient(Map map) {
 		try {

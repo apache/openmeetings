@@ -718,7 +718,7 @@ public class MainService implements IPendingServiceCallback {
 	}
 
 	/**
-	 * get a list of all states, needs no authentification to load
+	 * get a list of all states, needs no authentication to load
 	 * 
 	 * @return List of State-Objects or null
 	 */
