@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<html xmlns:wicket="http://wicket.apache.org">
+<wicket:panel>
+	<ol>
+		<li>
+			<h4>
+				<a id="Recommendation_for_production_environment"></a>Рекомендации
+				для настроек продукта<a target="_blank"
+					href="#Recommendation_for_production_environment"
+					class="section_anchor"></a>
+			</h4>
+		<blockquote>
+			По умолчанию в <span wicket:id="app"></span> используется интегрированная с Apache база данных Derby. Для 
+			данного продукта Вы так же можите использовать  <a target="_blank"
+				href="http://openmeetings.apache.org/MySQLConfig.html">MySQL</a>, <a
+				target="_blank"
+				href="http://openmeetings.apache.org/PostgresConfig.html">Postgres</a>
+			или например <a target="_blank"
+				href="http://openmeetings.apache.org/IBMDB2Config.html">IBM DB2</a>
+			или <a href="http://openmeetings.apache.org/OracleConfig.html"
+				target="_blank">Oracle</a>
+		</blockquote>
+		</li>
+		<li><h4>
+				<a id="Enabling_Image_Upload_and_import_to_whiteboard"></a>Для возможности
+				загрузки и импорта изображений на доску<a
+					href="#Enabling_Image_Upload_and_import_to_whiteboard"
+					class="section_anchor"></a>
+			</h4>
+			<ul>
+				<li>Установите <strong>ImageMagick</strong> на Ваш сервер, более
+					подробную информацию касающуюся установки можно посмотреть тут <a target="_blank"
+					href="http://www.imagemagick.org" rel="nofollow">http://www.imagemagick.org</a>
+					Инструкцию по установке Вы можите найте здесь
+					<a target="_blank"
+					href="http://www.imagemagick.org/script/binary-releases.php"
+					rel="nofollow">http://www.imagemagick.org/script/binary-releases.php</a>,
+					однако в большинстве Линукс систем Вы можите установить это через Ваш 
+					менеджер пакетов (apt-get it)
+				</li>
+			</ul>
+		</li>
+		<li><h4>
+				<a id="Enabling_import_of_PDFs_into_whiteboard"></a>Для возможности
+				импорта PDF файлов на доску<a
+					href="#Enabling_import_of_PDFs_into_whiteboard"
+					class="section_anchor"></a>
+			</h4>
+			<ul>
+				<li>Установите <strong>GhostScript</strong> на ваш сервер, более подробную
+					ниформацию вы можите посмотреть на сайте <a target="_blank"
+					href="http://pages.cs.wisc.edu/%7Eghost/" rel="nofollow">http://pages.cs.wisc.edu/~ghost/</a>
+					Инструкции по установке Вы можите
+					найти здесь, однако в большинстве Линукс систем Вы можите установить это через Ваш 
+					менеджер пакетов (apt-get it).
+				</li>
+				<li>Установите <strong>SWFTools</strong> на Ваш, более подробную информацию
+					можно найти на сайте <a target="_blank"
+					href="http://www.swftools.org/" rel="nofollow">http://www.swftools.org/</a>
+					Некоторые Линукс дистрибутивы уже включили его
+					в свои менеджеры пакетов, посмотреть можно здесь <a target="_blank"
+					href="http://packages.debian.org/unstable/utils/swftools"
+					rel="nofollow">http://packages.debian.org/unstable/utils/swftools</a>),
+					для установки рекомендуется <strong>SWFTools</strong> версии 0.9 так как 
+					предыдущая версия содержит баг который приводил к ошибке отображения размеров объкета 
+					на доске
+				</li>
+		</ul>
+		</li>
+		<li><h4>
+				<a
+					id="Enabling_import_of_.doc,_.docx,_.ppt,_.pptx,_..._all_Office_Docu"></a>Для возможности
+				импорта файлов .doc, .docx, .ppt, .pptx, ... всех документов на
+				доску<a
+					href="#Enabling_import_of_.doc,_.docx,_.ppt,_.pptx,_..._all_Office_Docu"
+					class="section_anchor"></a>
+			</h4>
+			<ul>
+				<li><strong>OpenOffice-Service</strong> запускается и слушает
+					порт 8100, подробности можно посмотреть здесь <a target="_blank"
+					href="http://openmeetings.apache.org/OpenOfficeConverter.html">OpenOfficeConverter</a>
+					</li>
+			</ul>
+		</li>
+		<li><h4>
+				<a
+					id="Enabling_Recording_and_import_of_.avi,_.flv,_.mov_and_.mp4_into"></a>Для возможности
+				Записи и импорта файлоф .avi, .flv, .mov и .mp4 на доску<a
+					href="#Enabling_Recording_and_import_of_.avi,_.flv,_.mov_and_.mp4_into"
+					class="section_anchor"></a>
+			</h4>
+			<ul>
+				<li>Установите <strong>FFMpeg</strong>. Вы должны взять последнюю версию
+					FFMPEG! Для Windows Вы можите скачать программу с этого
+					сайта <a target="_blank" href="http://ffmpeg.arrozcru.org/builds/"
+					rel="nofollow">http://ffmpeg.arrozcru.org/builds/</a> Пользователи Linux 
+					или OSx должен быть в состоянии использовать одну из различных Инсталляционных
+					Инструкций в Сети. Вы должны установить libmp3lame!
+				</li>
+				<li>Установите <strong>SoX</strong> <a
+					href="http://sox.sourceforge.net/" target="_BLANK">http://sox.sourceforge.net/</a>.
+					Вы должны установить последнюю версию SoX! SoX 12.xx не будет
+					работать!
+				</li>
+			</ul>
+		</li>
+	</ol>
+
+	<br />
+	<b> <span style="font-size: 1.2em">Если у Вас остались
+			вопросы или Вы нуждаетесть в поддержке при установке или хостинге:</span></b>
+	<br />
+	<br />
+
+	<b> <span style="font-size: 1.2em">Коммерческая-поддержка:</span></b>
+	<br />
+	<br />
+
+	<span style="font-size: 1.1em"><b>По телефону</b></span>
+	<br />
+	<span style="font-size: 1.1em">+49 721 467 27327</span>
+	<br />
+	<span style="font-size: 1.1em"><b>По электронной почте</b></span>
+	<br />
+	<span style="font-size: 1.1em"><a
+		href="mailto:service@openmeetings.de">service@openmeetings.de</a></span>
+	<br />
+	<br />
+	<br />
+	<b><span style="font-size: 1.2em">Общественная-поддержка:</span></b>
+	<br />
+	<br />
+	<span style="font-size: 1.1em"><a
+		href="http://openmeetings.apache.org/mail-lists.html"
+		target="_blank">Список рассылки</a></span>
+	<br />
+</wicket:panel>
+</html>

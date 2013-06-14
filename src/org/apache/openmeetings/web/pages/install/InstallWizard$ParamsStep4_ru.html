@@ -1,0 +1,66 @@
+<!DOCTYPE html>7
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<html xmlns:wicket="http://wicket.apache.org">
+<wicket:panel>
+	<fieldset id="userConf2">
+
+		<legend>Тип шифрования</legend>
+		<ul>
+			<li><label wicket:for="cfg.cryptClassName">Crypt Класс</label>
+				<input wicket:id="cfg.cryptClassName"  type="text"
+				title="Укажите имя класса для шифрования. НЕ ИЗМЕНЯЙТЕ УКАЗАННЫЙ КЛАСС ЕСЛИ ВЫ В ЭТОМ НЕ УВЕРЕНЫ" />
+				<p>
+					<i> Вы можите использовать заданный по умолчанию тип шифрования, который соответствует
+						функционалу PHP-MD5 или BSD-Style шифрованию, используя:<b>org.apache.openmeetings.utils.crypt.MD5CryptImplementation</b>
+						дополнительную информацию или описание создания собственного класса шифрования смотрите тут: <a
+						href="http://openmeetings.apache.org/CustomCryptMechanism.html"
+						target="_blank">Пользовательский механизм шифрования</a> Вы можите изменить это
+						значение позже, НО созданные ранее Пользователи и Сессии могут быть
+						не доступны в дальнейшем
+					</i>
+				</p></li>
+		</ul>
+	</fieldset>
+
+	<fieldset id="red5sip">
+		<legend>Конфигурация red5SIP</legend>
+		<ul>
+			<li><label wicket:for="red5SipEnable">Разрешить SIP</label>
+				<select wicket:id="red5SipEnable"></select>
+				<p>
+					<i> Разрешить интеграцию с red5SIP </i>
+				</p> </li>
+
+			<li><label wicket:for="cfg.red5SipRoomPrefix">Префикс дла комнат SIP</label>
+				<input wicket:id="cfg.red5SipRoomPrefix" type="text" />
+				<p>
+					<i>Префикс для номеров телефонов для входа в комнаты</i>
+				</p></li>
+
+			<li><label wicket:for="cfg.red5SipExtenContext">Окружение расширений SIP</label>
+				<input wicket:id="cfg.red5SipExtenContext" type="text" />
+				<p>
+					<i>Окружение расширений Asterisk</i>
+				</p></li>
+		</ul>
+	</fieldset>
+</wicket:panel>
+</html>
