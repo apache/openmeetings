@@ -195,12 +195,18 @@
 						[red5sip_user]<br />
 						type=user<br />
 						marked=yes<br />
+						dsp_drop_silence=yes<br />
+						denoise=true<br />
+						jitterbuffer=yes<br />
 						<br />
 						[sip_user]<br />
 						type=user<br />
 						end_marked=yes<br />
 						wait_marked=yes<br />
 						music_on_hold_when_empty=yes<br />
+						dsp_drop_silence=yes<br />
+						denoise=true<br />
+						jitterbuffer=yes<br />
 						<br />
 						[default_bridge]<br />
 						type=bridge<br />
