@@ -39,7 +39,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>設定</value>
   </string>
   <string id="5" name="benutzer">
-    <value>ユーザ</value>
+    <value>ユーザー</value>
   </string>
   <string id="6" name="admin">
     <value>管理</value>
@@ -57,7 +57,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>講師による録画</value>
   </string>
   <string id="11" name="connectedusers">
-    <value>接続済みユーザ:</value>
+    <value>接続済みユーザー:</value>
   </string>
   <string id="12" name="startconf">
     <value>会議開始</value>
@@ -213,7 +213,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>ホワイトボードのクリア</value>
   </string>
   <string id="63" name="clearwhiteboardquestion">
-    <value>ホワイトボードをクリアしますか?</value>
+    <value>ホワイトボードをクリア</value>
   </string>
   <string id="64" name="dontaskagain">
     <value>次回から入力を省略</value>
@@ -228,7 +228,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>ホワイトボードをクリアする前に確認を要求</value>
   </string>
   <string id="68" name="userinfo">
-    <value>ユーザ情報</value>
+    <value>ユーザー情報</value>
   </string>
   <string id="69" name="cleardrawarea">
     <value>描画領域のクリア</value>
@@ -291,7 +291,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>待機中</value>
   </string>
   <string id="89" name="applyMessage">
-    <value>司会者希望のユーザ:</value>
+    <value>司会者希望のユーザー:</value>
   </string>
   <string id="90" name="accept">
     <value>許可</value>
@@ -303,7 +303,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>キャンセル</value>
   </string>
   <string id="93" name="sendmodrequestmessage">
-    <value>次のユーザにリクエストを送信</value>
+    <value>次のユーザーにリクエストを送信</value>
   </string>
   <string id="94" name="accept">
     <value>許可されました</value>
@@ -333,13 +333,13 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>入力データエラー</value>
   </string>
   <string id="103" name="min4username">
-    <value>ユーザ名は最低4文字以上必要です</value>
+    <value>ユーザー名は最低4文字以上必要です</value>
   </string>
   <string id="104" name="min4pass">
     <value>パスワードは最低4文字以上必要です</value>
   </string>
   <string id="105" name="usernametaken">
-    <value>そのユーザ名は既に使われています</value>
+    <value>そのユーザー名は既に使われています</value>
   </string>
   <string id="106" name="emailtaken">
     <value>そのメールアドレスは既に登録されています</value>
@@ -351,7 +351,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>ログイン</value>
   </string>
   <string id="109" name="Authuser">
-    <value>ユーザ:</value>
+    <value>ユーザー:</value>
   </string>
   <string id="110" name="Authpass">
     <value>パスワード:</value>
@@ -366,7 +366,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>サインアップ</value>
   </string>
   <string id="114" name="regformuser">
-    <value>ユーザ:</value>
+    <value>ユーザー:</value>
   </string>
   <string id="115" name="regformpass">
     <value>パスワード:</value>
@@ -399,7 +399,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>ホーム</value>
   </string>
   <string id="125" name="useradmin">
-    <value>ユーザ管理</value>
+    <value>ユーザー管理</value>
   </string>
   <string id="126" name="groupadmin">
     <value>グループ</value>
@@ -453,7 +453,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>その他情報</value>
   </string>
   <string id="143" name="useralterself_header">
-    <value>ユーザプロフィール</value>
+    <value>ユーザープロフィール</value>
   </string>
   <string id="144" name="savemenubar_savelabel">
     <value>保存</value>
@@ -462,7 +462,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>保存</value>
   </string>
   <string id="146" name="admin_userlist_user_id">
-    <value>ユーザID</value>
+    <value>ユーザーID</value>
   </string>
   <string id="147" name="admin_userlist_login">
     <value>ログイン名</value>
@@ -522,7 +522,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>名前</value>
   </string>
   <string id="166" name="uservalue_levelid1">
-    <value>ユーザ</value>
+    <value>ユーザー</value>
   </string>
   <string id="167" name="uservalue_levelid2">
     <value>司会者</value>
@@ -531,7 +531,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>管理者</value>
   </string>
   <string id="169" name="uservalue_levellabel">
-    <value>ユーザレベル</value>
+    <value>ユーザーレベル</value>
   </string>
   <string id="170" name="orgvalue_header">
     <value>組織</value>
@@ -555,25 +555,25 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>組織の削除</value>
   </string>
   <string id="177" name="orgvalue_userlist">
-    <value>ユーザ</value>
+    <value>ユーザー</value>
   </string>
   <string id="178" name="orgvalue_userlistadd">
-    <value>ユーザ追加</value>
+    <value>ユーザー追加</value>
   </string>
   <string id="179" name="orgvalue_userlistdelete">
-    <value>ユーザ削除</value>
+    <value>ユーザー削除</value>
   </string>
   <string id="180" name="orgvalue_userwinheader">
-    <value>ユーザ追加</value>
+    <value>ユーザー追加</value>
   </string>
   <string id="181" name="orgvalue_userwinsearchfield">
-    <value>ユーザ検索</value>
+    <value>ユーザー検索</value>
   </string>
   <string id="182" name="orgvalue_userwinsearchbtn">
     <value>検索</value>
   </string>
   <string id="183" name="orgvalue_userwinsearchresult">
-    <value>ユーザ</value>
+    <value>ユーザー</value>
   </string>
   <string id="184" name="loginwin_chooseorganisation">
     <value>組織</value>
@@ -687,7 +687,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>発言</value>
   </string>
   <string id="221" name="invited_userwin_header">
-    <value>ユーザデータ</value>
+    <value>ユーザーデータ</value>
   </string>
   <string id="222" name="invited_userwin_subject">
     <value>この会議の別名</value>
@@ -843,16 +843,16 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>/</value>
   </string>
   <string id="273" name="organisation_usersheader">
-    <value>ユーザ</value>
+    <value>ユーザー</value>
   </string>
   <string id="274" name="organisation_usersicondelete">
-    <value>組織からユーザを削除</value>
+    <value>組織からユーザーを削除</value>
   </string>
   <string id="275" name="organisation_usersdeletedhead">
     <value>削除</value>
   </string>
   <string id="276" name="organisation_usersalreadadded">
-    <value>このユーザは既にこの組織のメンバーです。</value>
+    <value>このユーザーは既にこの組織のメンバーです。</value>
   </string>
   <string id="277" name="dashboard_newsheader">
     <value>ニュース</value>
@@ -885,7 +885,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>プロジェクトWebサイト</value>
   </string>
   <string id="287" name="dashboard_quicklinkmailinglistlabel">
-    <value>ユーザメーリングリスト</value>
+    <value>ユーザーメーリングリスト</value>
   </string>
   <string id="288" name="login_rememberuser">
     <value>次回から入力を省略</value>
@@ -894,10 +894,10 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>コンテンツ</value>
   </string>
   <string id="290" name="subnavi">
-    <value>マイページ</value>
+    <value>ダッシュボード</value>
   </string>
   <string id="291" name="subnavi">
-    <value>スケジュール済み会議</value>
+    <value>カレンダー</value>
   </string>
   <string id="292" name="subnavi">
     <value>スケジュール済みイベント</value>
@@ -981,10 +981,10 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>指定されたメール・アドレスが見つかりません。アカウント作成時に指定したメール・アドレスを指定してください。</value>
   </string>
   <string id="319" name="loginwindow">
-    <value>メール・アドレスまたはユーザ名を入力してください。</value>
+    <value>メール・アドレスまたはユーザー名を入力してください。</value>
   </string>
   <string id="320" name="loginwindow">
-    <value>このユーザ名で接続するユーザはありません。</value>
+    <value>このユーザー名で接続するユーザーはありません。</value>
   </string>
   <string id="321" name="loginwindow">
     <value>専用リンクを含むメールをあなたのメール・アドレスに対して送信しました。メール受信箱をご確認ください。もし受信できない場合は、スパムとして除外されている可能性があります。その場合はスパム設定を見直し、再度、確認メールを送信してください。</value>
@@ -996,7 +996,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>メッセージ</value>
   </string>
   <string id="324" name="resetpass">
-    <value>ハッシュ値が不正です。ユーザが見つかりません。</value>
+    <value>ハッシュ値が不正です。ユーザーが見つかりません。</value>
   </string>
   <string id="325" name="resetpass">
     <value>パスワードのリセット</value>
@@ -1029,7 +1029,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>未知のエラーです。管理者に報告してください。</value>
   </string>
   <string id="335" name="loginwindow">
-    <value>ユーザ名が見つかりません。</value>
+    <value>ユーザー名が見つかりません。</value>
   </string>
   <string id="336" name="loginwindow">
     <value>パスワードが無効です。</value>
@@ -1053,7 +1053,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>アドレスが保存できませんでした。</value>
   </string>
   <string id="343" name="useradmin">
-    <value>ユーザは追加されました。このユーザは少なくとも一つの組織に所属させる必要があります。</value>
+    <value>ユーザーは追加されました。このユーザーは少なくとも一つの組織に所属させる必要があります。</value>
   </string>
   <string id="344" name="adminforms">
     <value>新規作成</value>
@@ -1140,7 +1140,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>最後へ</value>
   </string>
   <string id="372" name="videobox">
-    <value>ユーザが話し中 (By clicking here you can give exclusive audio / mute the microphone of others)</value>
+    <value>ユーザーが話し中（マイク権の与奪をするにはここをクリック）</value>
   </string>
   <string id="373" name="videobox">
     <value>音声オン/オフ</value>
@@ -1152,7 +1152,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>設定</value>
   </string>
   <string id="376" name="dashboard">
-    <value>ユーザ:</value>
+    <value>ユーザー:</value>
   </string>
   <string id="377" name="dashboard">
     <value>プロフィール編集</value>
@@ -1164,22 +1164,22 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>画像アップロード</value>
   </string>
   <string id="380" name="backuppanel">
-    <value>ユーザのエクスポート</value>
+    <value>ユーザーのエクスポート</value>
   </string>
   <string id="381" name="backuppanel">
-    <value>すべてのユーザをエクスポートします。</value>
+    <value>すべてのユーザーをエクスポートします。</value>
   </string>
   <string id="382" name="backuppanel">
-    <value>全ユーザエクスポート</value>
+    <value>全ユーザーエクスポート</value>
   </string>
   <string id="383" name="backuppanel">
-    <value>ユーザを組織ごとにエクスポートします:</value>
+    <value>ユーザーを組織ごとにエクスポートします:</value>
   </string>
   <string id="384" name="backuppanel">
-    <value>組織別ユーザのエクスポート</value>
+    <value>組織別ユーザーのエクスポート</value>
   </string>
   <string id="385" name="backuppanel">
-    <value>ユーザのインポート</value>
+    <value>ユーザーのインポート</value>
   </string>
   <string id="386" name="backuppanel">
     <value>インポートファイル(users.xml)の選択</value>
@@ -1227,7 +1227,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>会議室リスト</value>
   </string>
   <string id="401" name="roomslist">
-    <value>会議室内のユーザ:</value>
+    <value>会議室内のユーザー:</value>
   </string>
   <string id="402" name="roomslist">
     <value>更新</value>
@@ -1239,13 +1239,13 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>詳細表示</value>
   </string>
   <string id="405" name="roomslist">
-    <value>会議室内のユーザとチャット:</value>
+    <value>会議室内のユーザーとチャット:</value>
   </string>
   <string id="406" name="roomslist">
     <value>会議室:</value>
   </string>
   <string id="407" name="roomslist">
-    <value>会議室にいるユーザ:</value>
+    <value>会議室にいるユーザー:</value>
   </string>
   <string id="408" name="roomslist">
     <value>入室時刻:</value>
@@ -1281,7 +1281,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>現在、他の人が録画中です。</value>
   </string>
   <string id="419" name="record_message">
-    <value>録画中です。実行ユーザは:</value>
+    <value>録画中です。実行ユーザーは:</value>
   </string>
   <string id="420" name="record_cancel">
     <value>キャンセル</value>
@@ -1380,7 +1380,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>音声/映像なし(静止画像)</value>
   </string>
   <string id="452" name="choose_video_settings_info_text">
-    <value>このPCから音声も映像も送信されません。代わりにユーザプロフィールの画像が表示されます。 このオプションは、ネットワーク帯域に問題がある場合や、インターネット接続が著しく遅い場合に選択してください。</value>
+    <value>このPCから音声も映像も送信されません。代わりにユーザープロフィールの画像が表示されます。 このオプションは、ネットワーク帯域に問題がある場合や、インターネット接続が著しく遅い場合に選択してください。</value>
   </string>
   <string id="453" name="calendar_dayname_monday">
     <value>月</value>
@@ -1527,7 +1527,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>$APP_NAME - 会議参加依頼</value>
   </string>
   <string id="501" name="invitation_text_from">
-    <value>宛先ユーザ:</value>
+    <value>宛先ユーザー:</value>
   </string>
   <string id="502" name="invitation_text_message">
     <value>メッセージ:</value>
@@ -1701,7 +1701,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>同期しています</value>
   </string>
   <string id="559" name="Synchronizing message">
-    <value>ユーザを同期しています。しばらくお待ちください。</value>
+    <value>ユーザーを同期しています。しばらくお待ちください。</value>
   </string>
   <string id="560" name="exportToSVG">
     <value>&lt;u&gt;SVGとしてダウンロード&lt;/u&gt;</value>
@@ -1758,7 +1758,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>毎年</value>
   </string>
   <string id="578" name="alert">
-    <value>Appointment-end is after of appointment-start!</value>
+    <value>開始時刻は終了時刻よりも前でなければなりません。</value>
   </string>
   <string id="579" name="alert">
     <value>タイトルを入力してください!</value>
@@ -1782,10 +1782,10 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>イベント - 最大200名までの会議&lt;br/&gt;司会者だけが音声/ビデオを利用できます</value>
   </string>
   <string id="586" name="tooltip main-menu">
-    <value>ユーザ、会議室、組織を作成する&lt;br/&gt; + 構成を変更する</value>
+    <value>ユーザー、会議室、組織を作成する&lt;br/&gt; + 構成を変更する</value>
   </string>
   <string id="587" name="room Administration roomclients list">
-    <value>この会議室に入室中のユーザ</value>
+    <value>この会議室に入室中のユーザー</value>
   </string>
   <string id="588" name="room Administration roomclients list">
     <value>ID</value>
@@ -1821,7 +1821,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>値</value>
   </string>
   <string id="599" name="connection administration panel">
-    <value>Streamid</value>
+    <value>ストリームID</value>
   </string>
   <string id="600" name="connection administration panel">
     <value>ログイン</value>
@@ -1833,13 +1833,13 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>会議室 / スコープ</value>
   </string>
   <string id="603" name="connection administration panel">
-    <value>ユーザを追い出す</value>
+    <value>ユーザー追放</value>
   </string>
   <string id="604" name="kick user confirmation dialog">
-    <value>ユーザを追い出す</value>
+    <value>ユーザーを追放</value>
   </string>
   <string id="605" name="kick user confirmation dialog">
-    <value>転倒にこのクライアントを追い出してよろしいですか?&lt;br/&gt; 追い出すと、クライアントは単にこの会議室から追い出されるだけです。クライアントは、再度ログインしてくるかもしれません。</value>
+    <value>本当にこのユーザーを追い出してよろしいですか?&lt;br/&gt; 追い出したとしても、ユーザーは単にこの会議室から追い出されるだけです。ユーザーは、再度ログインすることができます。</value>
   </string>
   <string id="606" name="kick user message dialog">
     <value>管理者または司会者によって、セッションが切断されました。</value>
@@ -1863,7 +1863,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>ホワイトボードの利用を禁止する</value>
   </string>
   <string id="613" name="conferencePanels">
-    <value>ユーザ</value>
+    <value>ユーザー</value>
   </string>
   <string id="614" name="conferencePanels">
     <value>ファイル</value>
@@ -1908,10 +1908,10 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>リンクが機能しない場合は、下記URLをブラウザにコピー・ペーストしてください:</value>
   </string>
   <string id="628" name="btn_search_intern">
-    <value>search intern</value>
+    <value>内部ユーザー検索</value>
   </string>
   <string id="629" name="btn_search_extern">
-    <value>外部ユーザ</value>
+    <value>外部ユーザー</value>
   </string>
   <string id="630" name="lbl_prename">
     <value>名</value>
@@ -1941,7 +1941,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>Meeting Timer</value>
   </string>
   <string id="639" name="meeting Timer">
-    <value>This Room is a Demo Room. To disable this warning you either should get a private meeting room for your personal usage or set up an own Server. You will be automatically logged off in:</value>
+    <value>この会議室は、デモ用です。この警告を非表示にするためには、個人使用向けにプライベート会議室を用意するか、新たにミーティング・サーバーを設置する必要があります。自動的に退室します:</value>
   </string>
   <string id="640" name="meeting room administration">
     <value>司会権保持者が仕切る</value>
@@ -1974,7 +1974,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>管理</value>
   </string>
   <string id="650" name="menu moderation">
-    <value>ユーザ管理</value>
+    <value>ユーザー管理</value>
   </string>
   <string id="651" name="menu moderation">
     <value>会議室管理</value>
@@ -1983,7 +1983,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>M</value>
   </string>
   <string id="653" name="confirm moderation">
-    <value>このユーザを所属組織の司会者に設定してよろしいですか？</value>
+    <value>このユーザーを所属組織の司会者に設定してよろしいですか？</value>
   </string>
   <string id="654" name="error message">
     <value>所属組織を指定してください。</value>
@@ -1992,25 +1992,25 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>組織 - 司会者</value>
   </string>
   <string id="656" name="moderator org users">
-    <value>このユーザを所属組織から除外してよろしいですか？</value>
+    <value>このユーザーを所属組織から除外してよろしいですか？</value>
   </string>
   <string id="657" name="org moderation">
-    <value>このユーザは司会者です</value>
+    <value>このユーザーは司会者です</value>
   </string>
   <string id="658" name="org moderation">
-    <value>このユーザは司会者ではありません</value>
+    <value>このユーザーは司会者ではありません</value>
   </string>
   <string id="659" name="error message moderation">
-    <value>このユーザを所属組織の司会者から除外してよろしいですか？</value>
+    <value>このユーザーを所属組織の司会者から除外してよろしいですか？</value>
   </string>
   <string id="660" name="moderation">
-    <value>所属組織内にユーザまたは会議室を追加・削除する</value>
+    <value>所属組織内にユーザーまたは会議室を追加・削除する</value>
   </string>
   <string id="661" name="delete confirm question">
     <value>削除してよろしいですか？</value>
   </string>
   <string id="662" name="delete confirm question user moderation">
-    <value>このユーザをあなたの所属組織から除外してよろしいですか？この操作は、ユーザを所属する組織から除外するだけです。このユーザをシステムから削除するためには、管理者パネルにログインする必要があります。</value>
+    <value>このユーザーをあなたの所属組織から除外してよろしいですか？この操作は、ユーザーを所属する組織から除外するだけです。このユーザーをシステムから削除するためには、管理者パネルにログインする必要があります。</value>
   </string>
   <string id="663" name="error message self deleting">
     <value>あなた自身を削除することはできません!</value>
@@ -2019,10 +2019,10 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>管理者でなければ実行できません!</value>
   </string>
   <string id="665" name="error message SOAP">
-    <value>There was no Session associated with this ID.</value>
+    <value>このIDに紐付くセッションがありませんでした。</value>
   </string>
   <string id="666" name="error message moderation">
-    <value>このユーザは管理者、または司会者アカウントです。このアカウントは、管理者パネル上でしか変更できません。</value>
+    <value>このユーザーは管理者、または司会者アカウントです。このアカウントは、管理者パネル上でしか変更できません。</value>
   </string>
   <string id="667" name="email verification">
     <value>登録を完了するためには、下記のリンクをクリックしてください。あるいは下記URLをブラウザにコピー・ペーストしてください。</value>
@@ -2034,7 +2034,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>No user was found for this Hash.</value>
   </string>
   <string id="670" name="errorMessage_UserActivationServlet [ActivateUser]">
-    <value>ユーザは既に有効化されています!</value>
+    <value>ユーザーは既に有効化されています!</value>
   </string>
   <string id="671" name="errorMessage_UserActivationServlet [ActivateUser]">
     <value>アカウントの有効化が完了しました。</value>
@@ -2055,7 +2055,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>司会者権限を付与する</value>
   </string>
   <string id="677" name="event user list">
-    <value>ユーザ</value>
+    <value>ユーザー</value>
   </string>
   <string id="678" name="event user list">
     <value>ホワイトボード・アクセス</value>
@@ -2064,10 +2064,10 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>司会者</value>
   </string>
   <string id="680" name="event user list">
-    <value>ホワイトボード使用権限、司会者権限、ビデオ共有権限を付与するユーザを選択してください。</value>
+    <value>ホワイトボード使用権限、司会者権限、ビデオ共有権限を付与するユーザーを選択してください。</value>
   </string>
   <string id="681" name="event user list">
-    <value>このユーザは既に司会者権限を有するため、ホワイトボード使用権限を有しています。</value>
+    <value>このユーザーは既に司会者権限を有するため、ホワイトボード使用権限を有しています。</value>
   </string>
   <string id="682" name="event user list error">
     <value>自分自身から司会者権限を剥奪することはできません。</value>
@@ -2103,13 +2103,13 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value></value>
   </string>
   <string id="693" name="apply for mod message">
-    <value>さんが、司会者(話者)権限を要求しています。ユーザ一覧のユーザ名右側にあるステータス・アイコンを使って司会者権限の与奪を行います。</value>
+    <value>さんが、司会者(話者)権限を要求しています。ユーザー一覧のユーザー名右側にあるステータス・アイコンを使って司会者権限の与奪を行います。</value>
   </string>
   <string id="694" name="apply for whiteboard">
-    <value>さんが、ホワイトボードの使用を要求しています。ユーザ一覧のユーザ名右側にあるステータス・アイコンを使ってホワイトボード使用権限の与奪を行います。</value>
+    <value>さんが、ホワイトボードの使用を要求しています。ユーザー一覧のユーザー名右側にあるステータス・アイコンを使ってホワイトボード使用権限の与奪を行います。</value>
   </string>
   <string id="695" name="695">
-    <value>さんが、ビデオ・音声の共有を要求しています。ユーザ一覧のユーザ名右側にあるステータス・アイコンを使ってビデオ共有権限の与奪を行います。</value>
+    <value>さんが、ビデオ・音声の共有を要求しています。ユーザー一覧のユーザー名右側にあるステータス・アイコンを使ってビデオ共有権限の与奪を行います。</value>
   </string>
   <string id="696" name="moderation message">
     <value>司会者が入室するまでしばらくお待ちください。</value>
@@ -2196,7 +2196,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>クライアントを開始 (HTTP)</value>
   </string>
   <string id="724" name="sharing session">
-    <value>ユーザがデスクトップ共有を提供しています。画面を閲覧しますか？</value>
+    <value>ユーザーがデスクトップ共有を提供しています。画面を閲覧しますか？</value>
   </string>
   <string id="725" name="sharing session">
     <value>現在、あなたのデスクトップは共有されています。デスクトップ共有を停止する際は、共有クライアント上の停止ボタンを押してください。</value>
@@ -2232,7 +2232,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>幅を変更する</value>
   </string>
   <string id="736" name="sharing client">
-    <value>The Sharer has finished this session!</value>
+    <value>画面共有提供者がセッションを終了しました。</value>
   </string>
   <string id="737" name="sharing client">
     <value>高さを変更する</value>
@@ -2448,7 +2448,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>お困りですか?</value>
   </string>
   <string id="808" name="lzcalendar">
-    <value>帯域制限付会議室</value>
+    <value>大人数向け会議室</value>
   </string>
   <string id="809" name="lzcalender">
     <value>検索</value>
@@ -2457,7 +2457,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>追加</value>
   </string>
   <string id="811" name="lzcalendar">
-    <value>There is no User selected. Please select an item from the list first and then hit add.</value>
+    <value>ユーザーが選択されていません。一覧から選択して「追加」を押してください。</value>
   </string>
   <string id="812" name="lzcalendar">
     <value>参加者を追加</value>
@@ -2493,22 +2493,22 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>は特権司会者です</value>
   </string>
   <string id="823" name="room admin">
-    <value>この項目が選択されている場合、司会進行権保持者(または管理者)は入室によって自動的に司会者権限を与えられます。会議の際、特定のユーザを司会者に指定したい場合は、この項目を選択しないでください。</value>
+    <value>この項目が選択されている場合、司会進行権保持者(または管理者)は入室によって自動的に司会者権限を与えられます。会議の際、特定のユーザーを司会者に指定したい場合は、この項目を選択しないでください。</value>
   </string>
   <string id="824" name="room admin">
-    <value>特別司会進行権保持者は、入室によって自動的に司会者権限を与えられます(他のユーザがこのユーザから司会者権限を奪い取ることはできません)。</value>
+    <value>特別司会進行権保持者は、入室によって自動的に司会者権限を与えられます(他のユーザーがこのユーザーから司会者権限を奪い取ることはできません)。</value>
   </string>
   <string id="825" name="room admin">
-    <value>このユーザに特別司会進行権を付与する</value>
+    <value>このユーザーに特別司会進行権を付与する</value>
   </string>
   <string id="826" name="room admin">
-    <value>このユーザの特別司会進行権を剥奪する</value>
+    <value>このユーザーの特別司会進行権を剥奪する</value>
   </string>
   <string id="827" name="room admin">
     <value>D</value>
   </string>
   <string id="828" name="room admin">
-    <value>組織を会議室に登録すると、登録された組織に所属するユーザのみがその会議室に入室することができます。(「公開」が選択されていない場合(つまり非公開の場合)のみ適用)</value>
+    <value>組織を会議室に登録すると、登録された組織に所属するユーザーのみがその会議室に入室することができます。(「公開」が選択されていない場合(つまり非公開の場合)のみ適用)</value>
   </string>
   <string id="829" name="room admin">
     <value>司会進行</value>
@@ -2526,16 +2526,16 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>選択された項目を削除してよろしいですか？変更した内容は、保存する必要があります。続いて保存ボタンを押してください。</value>
   </string>
   <string id="834" name="user choose error">
-    <value>ユーザが選択されていません。追加するユーザを選択してください。</value>
+    <value>ユーザーが選択されていません。追加するユーザーを選択してください。</value>
   </string>
   <string id="835" name="room admin">
     <value>司会者を追加する</value>
   </string>
   <string id="836" name="room admin">
-    <value>このユーザに特別司会進行権を付与しますか？特別司会進行権保持者は、会議室の司会者になることができます(他のユーザは特別司会進行権保持者から司会権限を奪い取ることはできません)。変更した内容は、保存する必要があります。続いて保存ボタンを押してください。</value>
+    <value>このユーザーに特別司会進行権を付与しますか？特別司会進行権保持者は、会議室の司会者になることができます(他のユーザーは特別司会進行権保持者から司会権限を奪い取ることはできません)。変更した内容は、保存する必要があります。続いて保存ボタンを押してください。</value>
   </string>
   <string id="837" name="room admin">
-    <value>このユーザの特別司会進行権を剥奪しますか？変更した内容は、保存する必要があります。続いて保存ボタンを押してください。</value>
+    <value>このユーザーの特別司会進行権を剥奪しますか？変更した内容は、保存する必要があります。続いて保存ボタンを押してください。</value>
   </string>
   <string id="838" name="super moderator">
     <value>この参加者は、特別司会進行権を付与されています。あなたは、特別司会進行権保持者から当該権利を剥奪することはできません。</value>
@@ -2571,7 +2571,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>デスクトップを表示する</value>
   </string>
   <string id="849" name="screen share">
-    <value>ユーザ「</value>
+    <value>ユーザー「</value>
   </string>
   <string id="850" name="screen share">
     <value>」さんがデスクトップ共有を要求してます。表示しますか?</value>
@@ -2583,7 +2583,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>ズーム</value>
   </string>
   <string id="853" name="screen sharer">
-    <value>画面が共有ユーザによって閉じられました!</value>
+    <value>画面が共有ユーザーによって閉じられました!</value>
   </string>
   <string id="854" name="screen sharer">
     <value>一時停止</value>
@@ -2634,7 +2634,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>録画</value>
   </string>
   <string id="870" name="screen share">
-    <value>デスクトップ共有と同時に録画もできます。デスクトップを公開するためには「共有を開始する」ボタンを押してください。録画をする(共有無し)ためには「録画を開始する」をクリックしてください。</value>
+    <value>デスクトップの共有だけでなく録画もできます。デスクトップを公開するためには「共有を開始する」ボタンを押してください。録画をするためには「録画を開始する」をクリックしてください。</value>
   </string>
   <string id="871" name="screen share">
     <value>録画を開始する</value>
@@ -2706,10 +2706,10 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>SIP アカウント設定</value>
   </string>
   <string id="894" name="user administration">
-    <value>ユーザ毎にSIPを設定します。</value>
+    <value>ユーザー毎にSIPを設定します。</value>
   </string>
   <string id="895" name="user administration">
-    <value>SIP ユーザ</value>
+    <value>SIP ユーザー</value>
   </string>
   <string id="896" name="user administration">
     <value>Sip パスワード</value>
@@ -2718,7 +2718,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>Sip 認証ID</value>
   </string>
   <string id="898" name="sip status message">
-    <value>SIPゲートウェイにログインできませんでした。SIPプロバイダの認証情報、および各ユーザのSIPアカウント情報を確認してください。管理者でログインして、構成を確認してください。(一般ユーザはブロックされます)</value>
+    <value>SIPゲートウェイにログインできませんでした。SIPプロバイダの認証情報、および各ユーザーのSIPアカウント情報を確認してください。管理者でログインして、構成を確認してください。(一般ユーザーはブロックされます)</value>
   </string>
   <string id="899" name="sip status message">
     <value>SIPゲートウェイにログインできませんでした。サービス管理者にお問い合わせください。</value>
@@ -2745,16 +2745,16 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>司会者になる</value>
   </string>
   <string id="907" name="lzcalendar">
-    <value>アポイントメントの変更を保存する</value>
+    <value>予定の変更を保存する</value>
   </string>
   <string id="908" name="lzcalendar">
-    <value>アポイントメントが変更されました。変更を保存しますか？</value>
+    <value>予定が変更されました。変更を保存しますか？</value>
   </string>
   <string id="909" name="flv recorder error message">
     <value>他の録画を見るためには、$APP_NAMEにログインする必要があります。</value>
   </string>
   <string id="910" name="interview video pod">
-    <value>ビデオ表示するユーザを選択</value>
+    <value>ビデオ表示するユーザーを選択</value>
   </string>
   <string id="911" name="interview video choose user">
     <value>Available Users for this Pod</value>
@@ -2802,7 +2802,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>License Settings</value>
   </string>
   <string id="926" name="user-admin">
-    <value>各ユーザにライセンスを付与する際、使用期限を設定するか、最大使用量制限(分で指定)を設定することができます。</value>
+    <value>各ユーザーにライセンスを付与する際、使用期限を設定するか、最大使用量制限(分で指定)を設定することができます。</value>
   </string>
   <string id="927" name="user-admin">
     <value>ライセンスを検証する</value>
@@ -2829,7 +2829,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>Time Left on your account:</value>
   </string>
   <string id="935" name="user-license">
-    <value>ユーザ・ライセンス情報</value>
+    <value>ユーザー・ライセンス情報</value>
   </string>
   <string id="936" name="user-license">
     <value>情報</value>
@@ -2844,124 +2844,124 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>ライセンス設定</value>
   </string>
   <string id="940" name="user-license">
-    <value>You can either buy minutes to make Web-Conferencing (Pay-per-minute).&lt;br/&gt;&lt;br/&gt; Or you buy a volume flatrate about 3-12 months.&lt;br/&gt;&lt;br/&gt;Sending invitations (direct links into Conference Rooms) or creating conference Rooms via the Calendar with external Users is only allowed with a volume flatrate!</value>
+    <value>分単位でウェブ会議の利用権を購入することが出来ます。&lt;br/&gt;&lt;br/&gt; または、3～12ヶ月の定額利用権を購入することが出来ます。&lt;br/&gt;&lt;br/&gt;招待状（会議室に直接入室可能なリンク）の送付、および外部の参加者をともなう、カレンダーからの会議室作成機能は、定額利用権でのみ提供されます。</value>
   </string>
   <string id="941" name="user-license">
-    <value>Buy 60 Minutes 9,99 EURO (16 Cent per Minute)</value>
+    <value>60分利用権 9.99€（分当り16セント）を購入</value>
   </string>
   <string id="942" name="user-license">
-    <value>Buy 5 hours 19,99 EURO (6 Cent per minute)</value>
+    <value>5時間利用権 19.99€（分当り6セント）を購入</value>
   </string>
   <string id="943" name="user-license">
-    <value>Buy 3 month for 29,99 EURO (9,99 Euro per Month)</value>
+    <value>3ヶ月利用権 29.99€（月当り9.99セント）を購入</value>
   </string>
   <string id="944" name="user-license">
-    <value>Buy 6 month for 39,99 EURO (6,66 Euro per month)</value>
+    <value>6ヶ月利用権 39.99€（月当り6.66セント）を購入</value>
   </string>
   <string id="945" name="user-license">
-    <value>Pay-per-minute</value>
+    <value>分単位利用権</value>
   </string>
   <string id="946" name="user-license">
-    <value>Volume flatrate</value>
+    <value>定額利用権</value>
   </string>
   <string id="947" name="user-license">
-    <value>You have unlimited License</value>
+    <value>無制限ライセンス</value>
   </string>
   <string id="948" name="user-license">
-    <value>Your license will expire at:</value>
+    <value>ライセンス有効期限：</value>
   </string>
   <string id="949" name="user-license">
-    <value>You bought Pay-per-minute. You still have:</value>
+    <value>分単位利用権を購入済みです。残り：</value>
   </string>
   <string id="950" name="user-license">
-    <value>Buy new credit!</value>
+    <value>新しいライセンスを購入してください。</value>
   </string>
   <string id="951" name="user-license">
-    <value>Want your own Server?</value>
+    <value>専用ミーティング・サーバーをお考えですか？</value>
   </string>
   <string id="952" name="user-license">
-    <value>You would like to have $APP_NAME installed on your Server or integrated into your Moodle, SugarCRM, Website or Intranet? Prizings start at 500 Euro per Installation!</value>
+    <value>$APP_NAMEのインストール、あるいはMoodle／SugraCRM、ウェブサイトやイントラネットとの統合をお考えなら、Prizingsへご相談を！インストール当り500ユーロから承ります。</value>
   </string>
   <string id="953" name="user-license">
-    <value>Or send us a message</value>
+    <value>メッセージを送信</value>
   </string>
   <string id="954" name="user-license">
-    <value>Answer to:</value>
+    <value>返信先：</value>
   </string>
   <string id="955" name="user-license">
-    <value>Message:</value>
+    <value>メッセージ：</value>
   </string>
   <string id="956" name="user-license">
-    <value>Send</value>
+    <value>送信</value>
   </string>
   <string id="957" name="user-license">
-    <value>Click here to get contact Info and Prizings</value>
+    <value>Prizings コンタクト先はこちら。</value>
   </string>
   <string id="958" name="payment-form">
-    <value>Credit Card Details</value>
+    <value>クレジットカード詳細</value>
   </string>
   <string id="959" name="payment-form">
-    <value>Firstname</value>
+    <value>名</value>
   </string>
   <string id="960" name="payment-form">
-    <value>Lastname</value>
+    <value>姓</value>
   </string>
   <string id="961" name="payment-form">
-    <value>Credit Card Type</value>
+    <value>クレジットカードタイプ</value>
   </string>
   <string id="962" name="payment-form">
-    <value>VISA Card</value>
+    <value>VISAカード</value>
   </string>
   <string id="963" name="payment-form">
-    <value>MasterCard</value>
+    <value>マスターカード</value>
   </string>
   <string id="964" name="payment-form">
-    <value>Discover</value>
+    <value>ディスカバーカード</value>
   </string>
   <string id="965" name="payment-form">
-    <value>American Express</value>
+    <value>アメリカン・エクスプレス</value>
   </string>
   <string id="966" name="payment-form">
-    <value>Credit Card Number</value>
+    <value>クレジットカード番号</value>
   </string>
   <string id="967" name="payment-form">
-    <value>Expiration Date</value>
+    <value>有効期限</value>
   </string>
   <string id="968" name="payment-form">
-    <value>Card Verification Number</value>
+    <value>カード確認番号</value>
   </string>
   <string id="969" name="payment-form">
-    <value>Billing Address</value>
+    <value>請求先</value>
   </string>
   <string id="970" name="payment-form">
-    <value>Address</value>
+    <value>住所</value>
   </string>
   <string id="971" name="payment-form">
     <value></value>
   </string>
   <string id="972" name="payment-form">
-    <value>City</value>
+    <value>市区町村</value>
   </string>
   <string id="973" name="payment-form">
-    <value>Country</value>
+    <value>国</value>
   </string>
   <string id="974" name="payment-form">
-    <value>State (Only US)</value>
+    <value>州 (米国のみ)</value>
   </string>
   <string id="975" name="payment-form">
-    <value>ZIP</value>
+    <value>郵便番号</value>
   </string>
   <string id="976" name="payment-form">
-    <value>Amount</value>
+    <value>数量</value>
   </string>
   <string id="977" name="payment-form">
-    <value>Submit</value>
+    <value>送信</value>
   </string>
   <string id="978" name="payment-form">
-    <value>Step 1: $APP_NAME - Payment Form</value>
+    <value>ステップ１： $APP_NAME - 支払いフォーム</value>
   </string>
   <string id="979" name="payment-form">
-    <value>EMail</value>
+    <value>Eメール</value>
   </string>
   <string id="980" name="payment-form">
     <value>Click "Check out with Paypal" to pay.&lt;br/&gt; Paypal accepts VISA, MasterCard, Discover or American Express. &lt;br/&gt;It does not require to sign up with Paypal. &lt;br/&gt;Citizens from Germany can also pay with direct debit (Per Lastschrift-Einzug).</value>
@@ -2970,16 +2970,16 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>Thank you for buying $APP_NAME. &lt;br/&gt; &lt;br/&gt; As soon as we received the payment your account will be updated.&lt;br/&gt; You will receive an EMail with your invoice as PDF.&lt;br/&gt;You can also check current and past transactions in your profile settings.&lt;br/&gt;&lt;br/&gt;&lt;br/&gt;You can close this browser window/tab now and return to $APP_NAME.</value>
   </string>
   <string id="982" name="payment-form">
-    <value>Submit and Buy!</value>
+    <value>送信して購入</value>
   </string>
   <string id="983" name="payment-from">
-    <value>Click and Buy!</value>
+    <value>クリックして購入</value>
   </string>
   <string id="984" name="payment-from">
-    <value>Step 3: $APP_NAME Payment - Check order and buy!</value>
+    <value>ステップ３：$APP_NAME 支払い - 内容をご確認ください</value>
   </string>
   <string id="985" name="payment-from">
-    <value>Name</value>
+    <value>お名前</value>
   </string>
   <string id="986" name="payment-mail">
     <value>Payment received!</value>
@@ -3003,13 +3003,13 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>Transcation Hash</value>
   </string>
   <string id="993" name="user-settings">
-    <value>Minutes</value>
+    <value>分</value>
   </string>
   <string id="994" name="user-settings">
-    <value>Months</value>
+    <value>月</value>
   </string>
   <string id="995" name="user-settings">
-    <value>EUR</value>
+    <value>ユーロ</value>
   </string>
   <string id="996" name="user-settings">
     <value>状態</value>
@@ -3024,7 +3024,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>You need to buy a volume flatrate to be able to send invitations or create meetings via the calendar. With Pay-per-minute it is only possible for you to access $APP_NAME. You cannot allow 3th Parties to access a Meeting.</value>
   </string>
   <string id="1000" name="error user">
-    <value>このメール・アドレスは既に他のユーザに使用されています。</value>
+    <value>このメール・アドレスは既に他のユーザーに使用されています。</value>
   </string>
   <string id="1001" name="room-admin">
     <value>SIP設定</value>
@@ -3048,13 +3048,13 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>チーム・ルームの作成 [Breakout session]</value>
   </string>
   <string id="1008" name="team-split">
-    <value>作成するチーム・ルームに所属させるユーザを選択してください。</value>
+    <value>作成するチーム・ルームに所属させるユーザーを選択してください。</value>
   </string>
   <string id="1009" name="team-split">
     <value>メンバーを指定して、新しい小会議室 (チーム・ルーム) に移動することができます。指定されたメンバーは、強制的にチーム・ルームに移動させられるか、あるいは、通知メッセージが送信されます。また、チーム・ルーム室長(管理者)には、加えて、管理下のチーム・ルーム一覧が表示され、室長は必要に応じて各チーム・ルームの応援に駆けつけることができます。</value>
   </string>
   <string id="1010" name="team-split">
-    <value>ユーザ名</value>
+    <value>ユーザー名</value>
   </string>
   <string id="1011" name="team-split">
     <value>ログイン</value>
@@ -3063,7 +3063,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value></value>
   </string>
   <string id="1013" name="team-split">
-    <value>ユーザ一覧 チーム・ルーム:</value>
+    <value>ユーザー一覧 チーム・ルーム:</value>
   </string>
   <string id="1014" name="team-split">
     <value>チーム・ルームを作成する</value>
@@ -3072,16 +3072,16 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>キャンセル</value>
   </string>
   <string id="1016" name="team-split">
-    <value>最低ひとり以上のユーザをチームに登録する必要があります。</value>
+    <value>最低ひとり以上のユーザーをチームに登録する必要があります。</value>
   </string>
   <string id="1017" name="team-split">
-    <value>ユーザをチームに追加する</value>
+    <value>ユーザーをチームに追加する</value>
   </string>
   <string id="1018" name="team-split">
-    <value>ユーザをチームから削除する</value>
+    <value>ユーザーをチームから削除する</value>
   </string>
   <string id="1019" name="team-split">
-    <value>ユーザは、チーム・ルーム室長です。(室長は、チーム・ルームの管理者です。メンバーはいつでも室長をチーム・ルームに呼び出すことができます)</value>
+    <value>ユーザーは、チーム・ルーム室長です。(室長は、チーム・ルームの管理者です。メンバーはいつでも室長をチーム・ルームに呼び出すことができます)</value>
   </string>
   <string id="1020" name="team-split">
     <value>ルーム・タイプ</value>
@@ -3219,19 +3219,19 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>あなたは現在、どのチーム・ルームにも入室していませんが、過去に入室したことのあるチーム・ルームに入室することができます。</value>
   </string>
   <string id="1065" name="backupContent">
-    <value>システムをバックアップします。バックアップには、ユーザが生成した、あらゆるデータが含まれます。サーバ設定、および各言語ラベルはバックアップされません。システムをより新しいバージョンにアップデートする場合は、(1)まずバックアップ・ファイルにエクスポートし、(2)新規に作成したデータベース上にアプリケーションを再インストールし、(3)バックアップ・ファイルをインポート、してください。バックアップ・ファイルのインポートは、新システム上で最初に行う必要があります。</value>
+    <value>システムをバックアップします。バックアップには、ユーザーが生成した、あらゆるデータが含まれます。サーバ設定、および各言語ラベルはバックアップされません。システムをより新しいバージョンにアップデートする場合は、&lt;br&gt;(1)まずバックアップ・ファイルにエクスポートし、&lt;br&gt;(2)新規に作成したデータベース上にアプリケーションを再インストールし、&lt;br&gt;(3)バックアップ・ファイルをインポート、してください。バックアップ・ファイルのインポートは、新システム上で最初に行う必要があります。</value>
   </string>
   <string id="1066" name="backupContent">
     <value>システム･バックアップ</value>
   </string>
   <string id="1067" name="user-list">
-    <value>ユーザに対し画面共有/録画を許可する</value>
+    <value>ユーザーに対し画面共有/録画を許可する</value>
   </string>
   <string id="1068" name="user-list">
-    <value>ユーザに対し画面共有/録画を拒否する</value>
+    <value>ユーザーに対し画面共有/録画を拒否する</value>
   </string>
   <string id="1069" name="user-list">
-    <value>このユーザは司会者であるため全ての権限を与えられています!</value>
+    <value>このユーザーは司会者であるため全ての権限を与えられています!</value>
   </string>
   <string id="1070" name="apply for screen/recording">
     <value>さんが画面の共有/録画を要求しています。</value>
@@ -3255,7 +3255,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>音声のみの会議室</value>
   </string>
   <string id="1077" name="room administration">
-    <value>このフラッグをオンにすると、ユーザは会議室で音声のみ使用できるようになります(ビデオ無し)。これにより、ネットワーク帯域を節約することができます。</value>
+    <value>このフラッグをオンにすると、ユーザーは会議室で音声のみ使用できるようになります(ビデオ無し)。これにより、ネットワーク帯域を節約することができます。</value>
   </string>
   <string id="1078" name="user list">
     <value>リモート制御を許可 (デスクトップ共有中)</value>
@@ -3273,7 +3273,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>さんがリモート画面の制御権限を要求しています。</value>
   </string>
   <string id="1083" name="user list">
-    <value>ユーザは司会者です。司会者はすべてのアクションを行うことができます! [リモート・デスクトップ制御]</value>
+    <value>ユーザーは司会者です。司会者はすべてのアクションを行うことができます! [リモート・デスクトップ制御]</value>
   </string>
   <string id="1084" name="user list">
     <value>デスクトップ共有中のリモート・コントロールを許可/拒否する</value>
@@ -3330,7 +3330,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>閉鎖設定</value>
   </string>
   <string id="1102" name="room config">
-    <value>会議室を閉鎖すると、ユーザは終了URLにリダイレクトされます。</value>
+    <value>会議室を閉鎖すると、ユーザーは終了URLにリダイレクトされます。</value>
   </string>
   <string id="1103" name="ldap config">
     <value>LDAP</value>
@@ -3366,16 +3366,16 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>更新者</value>
   </string>
   <string id="1114" name="ldap config">
-    <value>設定ファイルは、フォルダ 'openmeetings/red5/webapps/openmeetings/conf' に置かれている必要があります。前もって手動アップロードしておいてください。設定ファイルに対する変更は逐次オンライン反映されます。</value>
+    <value>設定ファイルは、フォルダ 'webapps/openmeetings/conf' に置かれている必要があります。前もって手動アップロードしておいてください。設定ファイルに対する変更は逐次オンライン反映されます。</value>
   </string>
   <string id="1115" name="ldap config">
     <value>設定ファイル名</value>
   </string>
   <string id="1116" name="ldap config">
-    <value>「ドメインをユーザ名に付加する」を選択すると、指定したドメインが、ログイン画面で指定したログイン名に自動的に付加されます。もしLDAPに、ドメイン名付きのログイン名が保存されている場合に利用してください。例: ログイン名「hans」、ドメイン名「localhost.com」の場合、「hans@localhost.com」でLDAP認証を行います。</value>
+    <value>「ドメインをユーザー名に付加する」を選択すると、指定したドメインが、ログイン画面で指定したログイン名に自動的に付加されます。もしLDAPに、ドメイン名付きのログイン名が保存されている場合に利用してください。例: ログイン名「hans」、ドメイン名「localhost.com」の場合、「hans@localhost.com」でLDAP認証を行います。</value>
   </string>
   <string id="1117" name="ldap config">
-    <value>ドメインをユーザ名に付加する</value>
+    <value>ドメインをユーザー名に付加する</value>
   </string>
   <string id="1118" name="ldap config">
     <value>ドメイン</value>
@@ -3417,10 +3417,10 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>キャンセル</value>
   </string>
   <string id="1131" name="chat invite user">
-    <value>ユーザを会議室に招待する</value>
+    <value>ユーザーを会議室に招待する</value>
   </string>
   <string id="1132" name="chat invite user">
-    <value>会議室を選択してください。参加依頼を受けるユーザには、あなたの名前、メッセージとともに会議室へのリンクが発行されます。</value>
+    <value>会議室を選択してください。参加依頼を受けるユーザーには、あなたの名前、メッセージとともに会議室へのリンクが発行されます。</value>
   </string>
   <string id="1133" name="chat user">
     <value>ログイン日時:</value>
@@ -3474,7 +3474,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>次回ログイン時にタイムゾーン設定を行うことを進めるメッセージを表示する場合にチェックを入れてください。</value>
   </string>
   <string id="1150" name="time zone update message">
-    <value>ユーザ・プロフィールのタイムゾーン設定を確認してください。</value>
+    <value>ユーザー・プロフィールのタイムゾーン設定を確認してください。</value>
   </string>
   <string id="1151" name="calendar invitation message">
     <value>$APP_NAME会議が設定されました:</value>
@@ -3540,16 +3540,16 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>設定</value>
   </string>
   <string id="1172" name="user settings">
-    <value>ユーザ検索</value>
+    <value>ユーザー検索</value>
   </string>
   <string id="1173" name="user settings">
-    <value>他のユーザが見るのと同じ表示形態であなたのプロフィールを表示します</value>
+    <value>他のユーザーが見るのと同じ表示形態であなたのプロフィールを表示します</value>
   </string>
   <string id="1174" name="user settings">
-    <value>プロフィールを設定します。関心事項を設定して他のユーザが検索できるようにできます</value>
+    <value>プロフィールを設定します。関心事項を設定して他のユーザーが検索できるようにできます</value>
   </string>
   <string id="1175" name="user settings">
-    <value>ユーザを検索して、あなたのネットワークを広げましょう</value>
+    <value>ユーザーを検索して、あなたのネットワークを広げましょう</value>
   </string>
   <string id="1176" name="user search">
     <value>検索</value>
@@ -3558,7 +3558,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>お勧め</value>
   </string>
   <string id="1178" name="user search">
-    <value>ユーザ名</value>
+    <value>ユーザー名</value>
   </string>
   <string id="1179" name="user search">
     <value>検索テキスト</value>
@@ -3609,7 +3609,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>$APP_NAMEのコンタクト要求を確認するか、承認/拒否のリンクのいずれかをクリックしてください。</value>
   </string>
   <string id="1195" name="add user contact">
-    <value>このユーザは既にコンタクト・リストに登録済みか、未回答のコンタクト追加要請メッセージを受信済みです。</value>
+    <value>このユーザーは既にコンタクト・リストに登録済みか、未回答のコンタクト追加要請メッセージを受信済みです。</value>
   </string>
   <string id="1196" name="user contact mail">
     <value>コンタクト・リスト</value>
@@ -3660,16 +3660,16 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>件名:</value>
   </string>
   <string id="1212" name="whiteboard full-fit">
-    <value>各ユーザの画面解像度に合うようにホワイトボードとドキュメントのサイズを変更する。</value>
+    <value>各ユーザーの画面解像度に合うようにホワイトボードとドキュメントのサイズを変更する。</value>
   </string>
   <string id="1213" name="user-list">
-    <value>ユーザを追い出す</value>
+    <value>ユーザーを追い出す</value>
   </string>
   <string id="1214" name="user-list">
     <value>あなた自身を会議室から追い出すことはできません! 退出する場合は、終了ボタンをクリックするかブラウザを閉じてください!</value>
   </string>
   <string id="1215" name="kick-user">
-    <value>このユーザを会議室から切断してよろしいですか?</value>
+    <value>このユーザーを会議室から切断してよろしいですか?</value>
   </string>
   <string id="1216" name="kick-user">
     <value>アクションの確認 ...</value>
@@ -3702,10 +3702,10 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>あなた自身をコンタクトに加えることはできません。</value>
   </string>
   <string id="1226" name="user contacts">
-    <value>ユーザは既に拒否されています!</value>
+    <value>ユーザーは既に拒否されています!</value>
   </string>
   <string id="1227" name="user contacts">
-    <value>ユーザは既に承認されています!</value>
+    <value>ユーザーは既に承認されています!</value>
   </string>
   <string id="1228" name="user contacts">
     <value>コンタクト・ハッシュが不正です!</value>
@@ -3714,7 +3714,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>コンタクト・リストに追加されました!</value>
   </string>
   <string id="1230" name="user contacts">
-    <value>ユーザは拒否されました。承認待ちリストからも削除されました。</value>
+    <value>ユーザーは拒否されました。承認待ちリストからも削除されました。</value>
   </string>
   <string id="1231" name="user contacts">
     <value>該当するコンタクトがありません!</value>
@@ -3729,10 +3729,10 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>コンタクトを一覧から削除する</value>
   </string>
   <string id="1235" name="user profile">
-    <value>ユーザ・プロフィール</value>
+    <value>ユーザー・プロフィール</value>
   </string>
   <string id="1236" name="user profile">
-    <value>ユーザ・プロフィールを表示する</value>
+    <value>ユーザー・プロフィールを表示する</value>
   </string>
   <string id="1237" name="private message">
     <value>メッセージ</value>
@@ -3822,16 +3822,16 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>フォルダを削除してよろしいですか? 削除されたフォルダは復元できないことにご注意ください。</value>
   </string>
   <string id="1266" name="user contacts">
-    <value>承認依頼が送信されました。承認されたユーザのみがコンタクト・リストに追加されます。</value>
+    <value>承認依頼が送信されました。承認されたユーザーのみがコンタクト・リストに追加されます。</value>
   </string>
   <string id="1267" name="user contacts">
     <value>メッセージ</value>
   </string>
   <string id="1268" name="user view profile">
-    <value>ユーザは個人コンタクト・データを共有していません。</value>
+    <value>ユーザーは個人コンタクト・データを共有していません。</value>
   </string>
   <string id="1269" name="user view profile">
-    <value>ユーザは個人コンタクト・データをコンタクトとのみ共有しています。</value>
+    <value>ユーザーは個人コンタクト・データをコンタクトとのみ共有しています。</value>
   </string>
   <string id="1270" name="user view profile">
     <value>住所 &amp; 電話番号</value>
@@ -3840,7 +3840,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>参加依頼コードが無効です。参加依頼コードは一定期間のみ有効です。</value>
   </string>
   <string id="1272" name="user calendar">
-    <value>このイベントは他のユーザのカレンダーにリンクしています。イベントを更新すると、他のユーザのカレンダーにも更新が反映されます。イベントを更新してよろしいですか?</value>
+    <value>このイベントは他のユーザーのカレンダーにリンクしています。イベントを更新すると、他のユーザーのカレンダーにも更新が反映されます。イベントを更新してよろしいですか?</value>
   </string>
   <string id="1273" name="user calendar">
     <value>更新の確認</value>
@@ -3858,13 +3858,13 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>コンタクトのカレンダーを見るためには、コンタクトの承認が必要です。</value>
   </string>
   <string id="1278" name="user contacts">
-    <value>他のユーザのカレンダーからイベントを削除/保存することはできません!</value>
+    <value>他のユーザーのカレンダーからイベントを削除/保存することはできません!</value>
   </string>
   <string id="1279" name="user contacts">
     <value>カレンダーを再表示する!</value>
   </string>
   <string id="1280" name="user calendar">
-    <value>このイベントは他のユーザのカレンダーにリンクしています。イベントを削除すると、他のユーザのカレンダーからも削除されます。イベントを削除してよろしいですか?</value>
+    <value>このイベントは他のユーザーのカレンダーにリンクしています。イベントを削除すると、他のユーザーのカレンダーからも削除されます。イベントを削除してよろしいですか?</value>
   </string>
   <string id="1281" name="user calendar">
     <value>アクションの確認</value>
@@ -3942,10 +3942,10 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>私の会議室</value>
   </string>
   <string id="1306" name="my rooms">
-    <value>私の会議室 (ユーザ数 1-16 向け)</value>
+    <value>私の会議室 (ユーザー数 1-16 向け)</value>
   </string>
   <string id="1307" name="my rooms">
-    <value>ウェビナー (ユーザ数 1-120 向け)</value>
+    <value>ウェビナー (ユーザー数 1-120 向け)</value>
   </string>
   <string id="1308" name="room administration">
     <value>会議室の管理者(室長)</value>
@@ -3954,7 +3954,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>パスワードを入力してください</value>
   </string>
   <string id="1310" name="login error">
-    <value>ユーザ・レベル、司会者、または管理者権限を有するアカウントが必要です。</value>
+    <value>ユーザー・レベル、司会者、または管理者権限を有するアカウントが必要です。</value>
   </string>
   <string id="1311" name="user administration">
     <value>ウェブ・サービス (SOAPでのみ適用)</value>
@@ -4074,10 +4074,10 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>メール使用</value>
   </string>
   <string id="1350" name="invite attendee">
-    <value>ユーザは司会者です</value>
+    <value>ユーザーは司会者です</value>
   </string>
   <string id="1351" name="invite attendee">
-    <value>ユーザはウェブカメラをオンラインにしました</value>
+    <value>ユーザーはウェブカメラをオンラインにしました</value>
   </string>
   <string id="1352" name="fill_option">
     <value>塗りつぶしを無効にする</value>
@@ -4104,7 +4104,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>表示中のスライドの内容を削除してよろしいですか？</value>
   </string>
   <string id="1360" name="activity_window">
-    <value>ユーザ権限を許可する</value>
+    <value>ユーザー権限を許可する</value>
   </string>
   <string id="1361" name="activity_window">
     <value>メッセージを拒否して削除する</value>
@@ -4164,7 +4164,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>銀白色</value>
   </string>
   <string id="1380" name="login_screen">
-    <value>ユーザ定義</value>
+    <value>ユーザー定義</value>
   </string>
   <string id="1381" name="login_screen">
     <value>最高</value>
@@ -4326,414 +4326,414 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>あなたは、自分自身の手で単独話者になることができます。単独話者になるには、ここをクリックしてください。(または、あなたのビデオ画面でクリック、あるいはF12押下でも可能です)</value>
   </string>
   <string id="1434" name="micro is on">
-    <value>Microphone is on!</value>
+    <value>マイクは有効です!</value>
   </string>
   <string id="1435" name="micro is off">
-    <value>Microphone is muted</value>
+    <value>マイクは消音（無効）です</value>
   </string>
   <string id="1436" name="hide_chat">
-    <value>Hide chat</value>
+    <value>チャットを隠す</value>
   </string>
   <string id="1437" name="hide_activities_and_actions">
-    <value>Hide activities</value>
+    <value>アクティビティを隠す</value>
   </string>
   <string id="1438" name="hide_files_explorer">
-    <value>Hide files explorer</value>
+    <value>ファイル・エクスプローラを隠す</value>
   </string>
   <string id="1439" name="hide_actions_menu">
-    <value>Hide actions menu</value>
+    <value>アクション･メニューを隠す</value>
   </string>
   <string id="1440" name="hide_screen_sharing">
-    <value>Hide screen sharing</value>
+    <value>画面共有を隠す</value>
   </string>
   <string id="1441" name="hide_whiteboard">
-    <value>Hide whiteboard</value>
+    <value>ホワイトボードを隠す</value>
   </string>
   <string id="1442" name="show microphone status">
-    <value>Show micro status in video</value>
+    <value>ビデオにマイク状態を表示する</value>
   </string>
   <string id="1443" name="layout_options">
-    <value>Layout options</value>
+    <value>レイアウト・オプション</value>
   </string>
   <string id="1444" name="calendar new button">
-    <value>New Event</value>
+    <value>新規イベント</value>
   </string>
   <string id="1445" name="calendar password info text">
-    <value>Password protected are the links to the conference that are send to the participents when you save the calendar event, not the room! That means if you save the event multiple times but with different passwords every participent receives a new link that has a different password. But old links still work once send!</value>
+    <value>カレンダー・イベントを保存時にパスワードを設定する場合、パスワードは、参加者に対して送付される会議室リンクに対して設定されます。会議室にパスワードが設定されるわけではありません。したがって、一つのイベントを、異なるパスワードで複数回保存したような場合、参加者は、異なるパスワードの会議室リンクを受け取ることになります。また、一旦送付されたリンクは、古いパスワードの会議室リンクであっても有効のまま残ります。</value>
   </string>
   <string id="1446" name="calendar edit button">
-    <value>Edit details</value>
+    <value>詳細を編集</value>
   </string>
   <string id="1447" name="sip show dialer">
-    <value>Show sip dialer</value>
+    <value>SIPダイアラーを表示</value>
   </string>
   <string id="1448" name="sip call">
-    <value>Call</value>
+    <value>発呼</value>
   </string>
   <string id="1449" name="calendar contact list">
-    <value>Show calendar events of contact</value>
+    <value>コンタクトのカレンダー・イベントを表示する</value>
   </string>
   <string id="1450" name="tooltip menu">
-    <value>Your home!</value>
+    <value>あなたのホーム!</value>
   </string>
   <string id="1451" name="tooltip menu">
-    <value>Plan your meetings</value>
+    <value>会議予定を作成する</value>
   </string>
   <string id="1452" name="tooltip menu">
-    <value>Watch recording and interviews</value>
+    <value>録画を視聴する</value>
   </string>
   <string id="1453" name="tooltip menu">
-    <value>Choose and start a web-conference</value>
+    <value>ウェブ会議を選択・開始する</value>
   </string>
   <string id="1454" name="tooltip menu">
-    <value>Manage users and rights</value>
+    <value>ユーザーと権限を管理する</value>
   </string>
   <string id="1455" name="tooltip menu">
-    <value>Manage connections and kick users</value>
+    <value>接続を管理する／ユーザーを追い出す</value>
   </string>
   <string id="1456" name="tooltip menu">
-    <value>Manage usergroups</value>
+    <value>ユーザー・グループを管理する</value>
   </string>
   <string id="1457" name="tooltip menu">
-    <value>Manage conference rooms</value>
+    <value>会議室を管理する</value>
   </string>
   <string id="1458" name="tooltip menu">
-    <value>Manage system settings</value>
+    <value>システム設定を管理する</value>
   </string>
   <string id="1459" name="tooltip menu">
-    <value>Manage labels and wording</value>
+    <value>画面上のラベルを管理する</value>
   </string>
   <string id="1460" name="tooltip menu">
-    <value>Manage LDAP and ADS configurations</value>
+    <value>LDAP/ADS構成を管理する</value>
   </string>
   <string id="1461" name="tooltip menu">
-    <value>Export/Import System Backups</value>
+    <value>システム・バックアップをエクスポート／インポートする</value>
   </string>
   <string id="1462" name="file explorer">
-    <value>You need moderation or the right to draw on whiteboard to upload, add, delete or load files and folders.</value>
+    <value>ファイル／フォルダのアップロード／追加／削除／ロードを行うためには、司会者であるか、あるいはホワイトボード描画権限が必要です。</value>
   </string>
   <string id="1463" name="whiteboard">
-    <value>Edit text</value>
+    <value>テキストを編集</value>
   </string>
   <string id="1464" name="salutation">
-    <value>Prof</value>
+    <value>教授</value>
   </string>
   <string id="1465" name="sharing client">
-    <value>Publish</value>
+    <value>共有画面公開</value>
   </string>
   <string id="1466" name="sharing client">
-    <value>Start Publish</value>
+    <value>共有画面を公開開始</value>
   </string>
   <string id="1467" name="sharing client">
-    <value>Stop Publish</value>
+    <value>共有画面を公開終了</value>
   </string>
   <string id="1468" name="sharing client">
-    <value>Host</value>
+    <value>ホスト</value>
   </string>
   <string id="1469" name="sharing client">
-    <value>Publish App</value>
+    <value>公開アプリ</value>
   </string>
   <string id="1470" name="sharing client">
-    <value>Publish Id</value>
+    <value>公開ID</value>
   </string>
   <string id="1471" name="sharing client">
-    <value>Reduce the width of the SharingScreen before you try to move it left</value>
+    <value>共有画面を左に移動するには、共有画面幅を縮小してください。</value>
   </string>
   <string id="1472" name="sharing client">
-    <value>Reduce the height of the SharingScreen before you try to move it bottom</value>
+    <value>共有画面を下に移動するには、共有画面高を縮小してください。</value>
   </string>
   <string id="1473" name="sharing client">
-    <value>Reduce the x of the SharingScreen before you try to make it wider</value>
+    <value>共有画面の幅を拡大するためには、共有画面を左に移動してください。</value>
   </string>
   <string id="1474" name="sharing client">
-    <value>Reduce the y of the SharingScreen before you try to make it higher</value>
+    <value>共有画面の高さを拡大するためには、共有画面を上に移動してください。</value>
   </string>
   <string id="1475" name="sharing client">
-    <value>Fill these settings stream your screen data to 3th party providers like justin.tv</value>
+    <value>外部プロバイダー向けストリーミングのための設定を行ってください。</value>
   </string>
   <string id="1476" name="sharing client">
-    <value>Please start Screen sharing to be able to publish it</value>
+    <value>画面を公開するには、画面共有を開始してください。</value>
   </string>
   <string id="1477" name="sharing client">
-    <value>Moderator permission required to start recording</value>
+    <value>録画を開始するには、司会者権限が必要です。</value>
   </string>
   <string id="1478" name="no right for exclusive audio">
-    <value>You don't have permission to apply exclusive audio to any participant. You need moderation role or the right for exclusive audio to make any microphone exclusive turned on..</value>
+    <value>単独話者権限がありません。司会者権限または単独話者権限が必要です。</value>
   </string>
   <string id="1479" name="conference menu">
-    <value>Upload new file to file explorer</value>
+    <value>ファイルをファイル・エクスプローラにアップロード</value>
   </string>
   <string id="1480" name="conference menu">
-    <value>Open new dialog with sharing settings</value>
+    <value>共有設定画面を開く</value>
   </string>
   <string id="1481" name="conference menu">
-    <value>An existing moderator must approve it</value>
+    <value>司会者による許可が必要</value>
   </string>
   <string id="1482" name="conference menu">
-    <value>Ask moderator to share your webcam/micro</value>
+    <value>カメラ／マイクの共有を司会者に要求</value>
   </string>
   <string id="1483" name="conference menu">
-    <value>Gather feedback by creating a poll</value>
+    <value>投票によるフィードバック収集</value>
   </string>
   <string id="1484" name="conference menu">
-    <value>Past and current poll results as charts</value>
+    <value>投票結果のチャート表示</value>
   </string>
   <string id="1485" name="conference menu">
-    <value>Vote if there is a poll for this conference room</value>
+    <value>この会議室に投票にあれば投票する</value>
   </string>
   <string id="1486" name="conference menu">
-    <value>Edit cam and mic settings</value>
+    <value>カメラ／マイクを設定する</value>
   </string>
   <string id="1487" name="conference menu">
-    <value>Confirm and leave the room</value>
+    <value>退室する</value>
   </string>
   <string id="1488" name="conference menu">
-    <value>Call external people via VoIP/SIP</value>
+    <value>外部参加者をVoIP/SIP経由で招待する</value>
   </string>
   <string id="1489" name="conference menu">
-    <value>Send an email with a direct link to this room</value>
+    <value>この会議室へのリンクをEメールで送信する</value>
   </string>
   <string id="1490" name="conference menu">
-    <value>Change your whiteboard settings</value>
+    <value>ホワイトボードを設定する</value>
   </string>
   <string id="1491" name="backup admin">
-    <value>Max upload size</value>
+    <value>最大アップロード・サイズ</value>
   </string>
   <string id="1492" name="conference menu">
-    <value>Ask moderator to share your whiteboard</value>
+    <value>ホワイトボードの共有を司会者に要求する</value>
   </string>
   <string id="1493" name="private chat">
-    <value>Start Private Chat</value>
+    <value>プライベート・チャットを開始する</value>
   </string>
   <string id="1494" name="all_private_chat">
-    <value>All</value>
+    <value>すべて</value>
   </string>
   <string id="1495" name="private chat">
-    <value>You cannot start a private chat with yourself.</value>
+    <value>自分自身とのプライベート・チャットを開始することは出来ません。</value>
   </string>
   <string id="1496" name="private chat">
-    <value>You've already started a private chat with this participant.</value>
+    <value>指定された参加者とのプライベート・チャットは既に開始されています。</value>
   </string>
   <string id="1497" name="private chat">
-    <value>Do you really want to delete this private chat?</value>
+    <value>このプライベート・チャットを削除してよろしいですか？</value>
   </string>
   <string id="1498" name="Servers">
-    <value>Servers</value>
+    <value>サーバー</value>
   </string>
   <string id="1499" name="Servers">
-    <value>Servers participating in cluster</value>
+    <value>クラスター参加済みサーバー</value>
   </string>
   <string id="1500" name="Server name">
-    <value>Server Name</value>
+    <value>サーバー名</value>
   </string>
   <string id="1501" name="Server Address">
-    <value>Server Address</value>
+    <value>サーバー・アドレス</value>
   </string>
   <string id="1502" name="Server details">
-    <value>Server details</value>
+    <value>サーバー詳細</value>
   </string>
   <string id="1503" name="Send SMS">
-    <value>Send SMS</value>
+    <value>SMSを送信</value>
   </string>
   <string id="1504" name="publishing_message">
-    <value>Publishing. User:</value>
+    <value>公開中。ユーザー：</value>
   </string>
   <string id="1505" name="cmd_line_admin">
-    <value>To save time and internet traffic you can use command line admin to backup/restore/upgrade:\n 1) go to OM install dir (for ex. /opt/red5) \n 2) stop OM (for ex. ./red5-shutdown.sh)\n 3) ./admin.sh -b -file ~/today_om_backup.zip (create backup of current OM)\n 4) download archive with new OM\n 5) mv /opt/red5 /opt.red5.bak (move working version of OM just in case :))\n 6) extract downloaded OM to the /opt/red5\n 7) ./admin.sh -i -file ~/today_om_backup.zip (or './admin.sh -i -file ~/today_om_backup.zip --db-type mysql --db-user om_user --db-pass om_user_pass' in case of you are using non-default DB )\n 8) start OM\n</value>
+    <value>バックアップ／リストア／アップグレードを行なう際にコマンドライン・ツールを利用すると、時間とインターネット・トラフィックを節約することができます:&lt;br&gt; 1) オープンミーティングスのインストール・ディレクトリに移動する (例：/opt/red5)&lt;br&gt; 2) オープン・ミーティングスを停止する(例： ./red5-shutdown.sh)&lt;br&gt; 3) ./admin.sh -b -file ~/today_om_backup.zip (オープン・ミーティングスの現状バックアップを作成する)&lt;br&gt; 4) オープン・ミーティングスの最新アーカイブをダウンロードする&lt;br&gt; 5) mv /opt/red5 /opt.red5.bak (必要に応じて、現環境を移動しておく)&lt;br&gt; 6) /opt/red5 にダウンロードしたアーカイブを展開する&lt;br&gt; 7) ./admin.sh -i -file ~/today_om_backup.zip&lt;br&gt;(デフォルトのデータベースを使用していない場合は './admin.sh -i -file ~/today_om_backup.zip --db-type mysql --db-user om_user --db-pass om_user_pass')&lt;br&gt; 8) オープン・ミーティングスを起動する</value>
   </string>
   <string id="1506" name="public_room_tooltip">
-    <value>Rooms common to all user</value>
+    <value>全ユーザーに供用される会議室</value>
   </string>
   <string id="1507" name="private_room_tooltip">
-    <value>Rooms common to the current user group</value>
+    <value>現ユーザー・グループに供用される会議室</value>
   </string>
   <string id="1508" name="my_room_tooltip">
-    <value>Rooms of the current user</value>
+    <value>現ユーザーの会議室</value>
   </string>
   <string id="1509" name="create_new_room">
-    <value>Create/Modify appointment special room</value>
+    <value>イベント専用会議室を作成／編集する</value>
   </string>
   <string id="1510" name="multiple_addresses">
-    <value>You can enter multiple addresses in the format: firstname1 lastname1 &lt;email1&gt;,"firstname2 lastname2" &lt;email2&gt;,'firstname3 lastname3' &lt;email3&gt;, ...</value>
+    <value>複数のアドレスを書式に含めることができます: firstname1 lastname1 &lt;email1&gt;,"firstname2 lastname2" &lt;email2&gt;,'firstname3 lastname3' &lt;email3&gt;, ...</value>
   </string>
   <string id="1511" name="stream_volume">
-    <value>Adjust stream volume</value>
+    <value>ストリーミング音量を調整する</value>
   </string>
   <string id="1512" name="microphone_volume">
-    <value>Adjust microphone volume</value>
+    <value>マイク音量を調整する</value>
   </string>
   <string id="1513" name="chat_moderated">
-    <value>Is chat moderated</value>
+    <value>チャットを制限</value>
   </string>
   <string id="1514" name="chat_moderated">
-    <value>Allow message</value>
+    <value>メッセージを許可</value>
   </string>
   <string id="1515" name="chat_opened">
-    <value>Chat panel opened by default</value>
+    <value>チャット画面をデフォルトで表示</value>
   </string>
   <string id="1516" name="files_opened">
-    <value>Files panel opened by default</value>
+    <value>ファイル画面をデフォルトで表示</value>
   </string>
   <string id="1517" name="server admin section lastping">
-    <value>Last ping</value>
+    <value>最終ピング</value>
   </string>
   <string id="1518" name="server admin section lastping info">
-    <value>Every slave sends a ping to the master every 3 seconds (configurable). Slave lastPing must be smaller then 1 minute so that the master uses the slave.</value>
+    <value>全スレーブは3秒毎(設定可)にピング信号を送信します。マスターがスレーブを利用するためには、最終ピング値は1分未満である必要があります。</value>
   </string>
   <string id="1519" name="server admin port">
-    <value>HTTP Port</value>
+    <value>HTTP ポート</value>
   </string>
   <string id="1520" name="server admin user">
-    <value>User (SOAP-Access)</value>
+    <value>ユーザー(SOAP経由)</value>
   </string>
   <string id="1521" name="server admin password">
-    <value>Password</value>
+    <value>パスワード</value>
   </string>
   <string id="1522" name="server admin webapp path">
-    <value>Webapp path</value>
+    <value>ウェブ・アプリ・パス</value>
   </string>
   <string id="1523" name="server admin protocol">
-    <value>Protocol</value>
+    <value>プロトコル</value>
   </string>
   <string id="1524" name="server admin ping running">
-    <value>Ping running</value>
+    <value>ピング実行中</value>
   </string>
   <string id="1525" name="server admin active">
-    <value>Active</value>
+    <value>アクティブ</value>
   </string>
   <string id="1526" name="generate_hash">
-    <value>Generate URL</value>
+    <value>URLを生成</value>
   </string>
   <string id="1527" name="network testing link">
-    <value>Network testing</value>
+    <value>ネットワーク・テスト</value>
   </string>
   <string id="1528" name="room_options">
-    <value>Auto select interview video pod</value>
+    <value>インタビュー用ビデオ・カメラを自動選択</value>
   </string>
   <string id="1529" name="font_underline">
-    <value>Underline</value>
+    <value>下線</value>
   </string>
   <string id="1530" name="font_style">
-    <value>Font style</value>
+    <value>フォント・スタイル</value>
   </string>
   <string id="1531" name="allow_font_styles">
-    <value>Allow font styles</value>
+    <value>フォント・スタイルを許可</value>
   </string>
   <string id="1532" name="font_color">
-    <value>Font color</value>
+    <value>フォント色</value>
   </string>
   <string id="1533" name="hyperlink">
-    <value>Hyperlink</value>
+    <value>ハイパーリンク</value>
   </string>
   <string id="1534" name="connection admin">
-    <value>Show session statistics</value>
+    <value>セッション統計を表示</value>
   </string>
   <string id="1535" name="connection admin">
-    <value>Session details</value>
+    <value>セッション詳細</value>
   </string>
   <string id="1536" name="system_import">
-    <value>System import</value>
+    <value>システム・インポート</value>
   </string>
   <string id="1537" name="include_into_backup">
-    <value>Include uploaded files and recordings in backup</value>
+    <value>バックアップにアップロード済みファイルと録音・録画を含める</value>
   </string>
   <string id="1538" name="room_admin_sip">
-    <value>Enable SIP transport in the room</value>
+    <value>会議室のSIPトランスポートを有効にする</value>
   </string>
   <string id="1539" name="exclusive_audio_confirm">
-    <value>Do you really want to provide this user an exclusive audio?</value>
+    <value>このユーザーに単独話者権限を付与してよろしいですか？</value>
   </string>
   <string id="1540" name="no_timezone">
-    <value>Please specify your timezone</value>
+    <value>タイムゾーンを指定してください</value>
   </string>
   <string id="1541" name="conference_room_type">
-    <value>conference (1-25 users)</value>
+    <value>会議(ユーザー数:1〜25)</value>
   </string>
   <string id="1542" name="conference_room_type">
-    <value>restricted (1-150 users)</value>
+    <value>大人数向け会議(ユーザー数:1〜150)</value>
   </string>
   <string id="1543" name="conference_room_type">
-    <value>interview (1:1 meeting with recording)</value>
+    <value>インタビュー(1対1のミーティング；録画付き)</value>
   </string>
   <string id="1544" name="duplicate_key_error">
-    <value>Configuration with given key already exists, please specify another key or edit existent configuration</value>
+    <value>指定されたキーの構成は既に存在しています。別のキーを指定するか、既存の構成を編集してください。</value>
   </string>
   <string id="1545" name="content_is_saving">
-    <value>Content is Saving, Please wait.</value>
+    <value>保存中です。しばらくお待ちください。</value>
   </string>
   <string id="1546" name="widget_welcome">
-    <value>Welcome</value>
+    <value>ようこそ</value>
   </string>
   <string id="1547" name="widget_welcome_desc">
-    <value>Widget displaying basic user info and support links</value>
+    <value>ユーザー基本情報／サポート・リンク ウィジェット</value>
   </string>
   <string id="1548" name="widgets_tab">
-    <value>Widgets</value>
+    <value>ウィジェット</value>
   </string>
   <string id="1549" name="about_title">
-    <value>About</value>
+    <value>$APP_NAME について</value>
   </string>
   <string id="1550" name="about_name">
-    <value>Name</value>
+    <value>名称</value>
   </string>
   <string id="1551" name="about_version">
-    <value>Version</value>
+    <value>バージョン</value>
   </string>
   <string id="1552" name="about_revision">
-    <value>Revision</value>
+    <value>リビジョン</value>
   </string>
   <string id="1553" name="about_build_date">
-    <value>Build date</value>
+    <value>ビルド日時</value>
   </string>
   <string id="1554" name="about_build_date">
-    <value>Loading ...</value>
+    <value>ロード中 ...</value>
   </string>
   <string id="1555" name="calendar_today">
-    <value>today</value>
+    <value>今日</value>
   </string>
   <string id="1556" name="calendar_shortmonthnames">
-    <value>Jan</value>
+    <value>1月</value>
   </string>
   <string id="1557" name="calendar_shortmonthnames">
-    <value>Feb</value>
+    <value>2月</value>
   </string>
   <string id="1558" name="calendar_shortmonthnames">
-    <value>Mar</value>
+    <value>3月</value>
   </string>
   <string id="1559" name="calendar_shortmonthnames">
-    <value>Apr</value>
+    <value>4月</value>
   </string>
   <string id="1560" name="calendar_shortmonthnames">
-    <value>May</value>
+    <value>5月</value>
   </string>
   <string id="1561" name="calendar_shortmonthnames">
-    <value>Jun</value>
+    <value>6月</value>
   </string>
   <string id="1562" name="calendar_shortmonthnames">
-    <value>Jul</value>
+    <value>7月</value>
   </string>
   <string id="1563" name="calendar_shortmonthnames">
-    <value>Aug</value>
+    <value>8月</value>
   </string>
   <string id="1564" name="calendar_shortmonthnames">
-    <value>Sep</value>
+    <value>9月</value>
   </string>
   <string id="1565" name="calendar_shortmonthnames">
-    <value>Oct</value>
+    <value>10月</value>
   </string>
   <string id="1566" name="calendar_shortmonthnames">
-    <value>Nov</value>
+    <value>11月</value>
   </string>
   <string id="1567" name="calendar_shortmonthnames">
-    <value>Dec</value>
+    <value>12月</value>
   </string>
   <string id="1568" name="remindertype_no_email">
-    <value>do not send notification</value>
+    <value>リマインダーを送信しない</value>
   </string>
   <string id="1569" name="remindertype_simple_email">
-    <value>simple email</value>
+    <value>Eメール</value>
   </string>
   <string id="1570" name="remindertype_iCal_email">
-    <value>iCal email</value>
+    <value>iCal Eメール</value>
   </string>
 </language>
