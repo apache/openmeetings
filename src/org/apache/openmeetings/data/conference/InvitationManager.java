@@ -662,7 +662,7 @@ public class InvitationManager {
 					, null
 					, subject
 					, message + "<br/><a href='" + invitation_link + "'>"
-							+ fieldManager.getFieldByIdAndLanguage(626L, langId) + "</a>"), true);
+							+ fieldManager.getFieldByIdAndLanguage(626L, langId).getValue() + "</a>"), true);
 			
 			return "success";
 		} catch (Exception e) {
