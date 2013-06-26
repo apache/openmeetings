@@ -300,6 +300,9 @@
     	canvas.videoComp_lc.regExpResult = function(tId,tResult) {
       		t.regExpResult(tId,tResult);
         }
+        canvas.videoComp_lc.remoteLogWrite = function(message) {
+        	canvas.remoteLogWrite(message);
+        }
         canvas.videoComp_lc.exitRoom = function(confirm) {
             if ($debug) Debug.write("confirm exitRoom:", confirm);
             if (confirm) {

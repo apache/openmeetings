@@ -25,6 +25,7 @@
             <passthrough>
                 import flash.net.*;
                 import flash.display.*;
+                import flash.events.*;
             </passthrough>
         </when>
     </switch>

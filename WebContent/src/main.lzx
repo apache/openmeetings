@@ -60,6 +60,9 @@
     canvas.lc = new LocalConnection();
 </handler>
 
+<handler name="onerror" args="errmsg">
+	canvas.remoteLogWrite("error " + errmsg);
+</handler>
 
 <!-- View for Contents. All Windows will be loaded on this view. -->
 <view name="main_content" y="${ canvas.naviHeightDelta }" width="${canvas.width}" 

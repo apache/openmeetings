@@ -23,8 +23,15 @@
 
 <library>
     
+    <method name="onError" args="errorEvent">
+		canvas.videoComp_lc.send(canvas.videoComp_lc_name, 'remoteLogWrite', "error " + errorEvent);
+	</method>
+    
     <method name="myinit">
         <![CDATA[
+        // Add listener to all uncaught flash errors
+        this.getDisplayObject().loaderInfo.addEventListener(UncaughtErrorEvent.UNCAUGHT_ERROR, onError);
+        
         canvas.mediaerrortimeout = 30000;
         canvas.medialoadtimeout = 30000;
         
