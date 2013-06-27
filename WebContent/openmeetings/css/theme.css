@@ -125,6 +125,11 @@ table.adminListTable th {
 	color: #ffffff;
 }
 
+table.adminListTableSmall th {
+	background: #AFCBFB;
+	color: #ffffff;
+}
+
 table.adminListTable th.two_column_layout_column1 {
 	width: 136px;
 }
@@ -163,6 +168,24 @@ table.adminListTable th.three_column_layout_column3 {
 	width: 244px;
 }
 
+table.adminListTableSmall th.three_column_layout_column1 {
+	width: 50px;
+}
+
+table.adminListTableSmall th.three_column_layout_column2 {
+	width: 50px;
+}
+
+table.adminListTableSmall th.three_column_layout_column3 {
+	width: 218px;
+}
+table.adminListTableSmall th.three_column_layout_column4 {
+	width: 150px;
+}
+table.adminListTableSmall th.three_column_layout_column5 {
+	width: 50px;
+}
+
 table.adminListTable td.three_column_layout_column1 {
 	width: 96px;
 }
@@ -173,6 +196,24 @@ table.adminListTable td.three_column_layout_column2 {
 
 table.adminListTable td.three_column_layout_column3 {
 	width: 244px;
+}
+
+table.adminListTableSmall td.three_column_layout_column1 {
+	width: 50px;
+}
+
+table.adminListTableSmall td.three_column_layout_column2 {
+	width: 50px;
+}
+
+table.adminListTableSmall td.three_column_layout_column3 {
+	width: 218px;
+}
+table.adminListTableSmall td.three_column_layout_column4 {
+	width: 150px;
+}
+table.adminListTableSmall td.three_column_layout_column5 {
+	width: 50px;
 }
 
 table.adminListTable td div.three_column_layout_divcolumn1 {
@@ -188,6 +229,26 @@ table.adminListTable td div.three_column_layout_divcolumn2 {
 table.adminListTable td div.three_column_layout_divcolumn3 {
 	word-wrap: break-word;
 	width: 244px;
+}
+
+table.adminListTableSmall td div.three_column_layout_divcolumn1 {
+	width: 50px;
+}
+
+table.adminListTableSmall td div.three_column_layout_divcolumn2 {
+	width: 50px;
+}
+
+table.adminListTableSmall td div.three_column_layout_divcolumn3 {
+	width: 218px;
+}
+
+table.adminListTableSmall td div.three_column_layout_divcolumn4 {
+	width: 150px;
+}
+
+table.adminListTableSmall td div.three_column_layout_divcolumn5 {
+	width: 50px;
 }
 
 table.adminListTable th.four_column_layout_column1 {
@@ -246,7 +307,15 @@ table.adminListTable tr.even {
 	background-color: #EDF2FF;
 }
 
+table.adminListTableSmall tr.even {
+	background-color: #EDF2FF;
+}
+
 table.adminListTable tr.odd {
+	background-color: #F2FAFF;
+}
+
+table.adminListTableSmall tr.odd {
 	background-color: #F2FAFF;
 }
 
@@ -263,6 +332,14 @@ div.tableWrapper {
 	border: solid 1px #aacfe4;
 	width: 536px;
 	height: 500px;
+	overflow-y: scroll;
+}
+
+div.tableWrapperSmall {
+	background-color: #FFFFFF;
+	border: solid 1px #aacfe4;
+	width: 536px;
+	height: 100px;
 	overflow-y: scroll;
 }
 

@@ -21,9 +21,15 @@ package org.apache.openmeetings.web.admin.groups;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 
+import java.util.List;
+
 import org.apache.openmeetings.data.user.dao.OrganisationDao;
+import org.apache.openmeetings.data.user.dao.UsersDao;
 import org.apache.openmeetings.persistence.beans.domain.Organisation;
-import org.apache.openmeetings.web.admin.AdminBaseForm;
+import org.apache.openmeetings.persistence.beans.domain.Organisation_Users;
+import org.apache.openmeetings.persistence.beans.user.User;
+import org.apache.openmeetings.web.admin.AdminCommonUserForm;
+import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.OmAjaxFormValidatingBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -34,7 +40,7 @@ import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.util.time.Duration;
 
-public class GroupForm extends AdminBaseForm<Organisation> {
+public class GroupForm extends AdminCommonUserForm<Organisation> {
 	private static final long serialVersionUID = -1720731686053912700L;
 	private GroupUsersPanel usersPanel;
 	private WebMarkupContainer groupList;
@@ -53,10 +59,35 @@ public class GroupForm extends AdminBaseForm<Organisation> {
 		OmAjaxFormValidatingBehavior.addToAllFormComponents(this, "keydown", Duration.ONE_SECOND);
 	}
 	
-	void updateView(AjaxRequestTarget target) {
+	@Override
+	public void updateView(AjaxRequestTarget target) {
 		usersPanel.update(getOrgId());
 		target.add(this);
 		target.appendJavaScript("groupsInit();");
+	}
+
+	@Override
+	public void submitView(AjaxRequestTarget target, List<User> usersToAdd) {
+		// TODO Auto-generated method stub
+		UsersDao userDao = Application.getBean(UsersDao.class);
+		Organisation organisation = getModelObject();
+		for (User u : usersToAdd) {
+			List<Organisation_Users> orgUsers = u.getOrganisation_users();
+			boolean found = false;
+			for (Organisation_Users ou : orgUsers) {
+				if (ou.getOrganisation().getOrganisation_id().equals(organisation.getOrganisation_id())) {
+					found = true;
+					break;
+				}
+			}
+			if (!found) {
+				Organisation_Users orgUser = new Organisation_Users(organisation);
+				orgUser.setDeleted(false);
+				orgUsers.add(orgUser);
+				userDao.update(u, WebSession.getUserId());
+			}
+		}
+		target.appendJavaScript("$('#addUsers').dialog('close');");
 	}
 	
 	private long getOrgId() {

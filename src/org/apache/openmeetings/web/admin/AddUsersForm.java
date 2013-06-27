@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.web.admin.groups;
+package org.apache.openmeetings.web.admin;
 
 import static org.apache.openmeetings.web.admin.groups.GroupUsersPanel.getUser;
 
@@ -24,8 +24,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.openmeetings.data.user.dao.UsersDao;
-import org.apache.openmeetings.persistence.beans.domain.Organisation;
-import org.apache.openmeetings.persistence.beans.domain.Organisation_Users;
 import org.apache.openmeetings.persistence.beans.user.User;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
@@ -41,12 +39,11 @@ import org.apache.wicket.model.PropertyModel;
 
 public class AddUsersForm extends Form<Void> {
 	private static final long serialVersionUID = -2458265250684437277L;
-	private Organisation organisation;
 	private String userSearchText;
 	private List<User> usersInList = new ArrayList<User>();
 	private List<User> usersToAdd = new ArrayList<User>();
 	
-	public AddUsersForm(String id, final GroupForm groupForm) {
+	public AddUsersForm(String id, final AdminCommonUserForm<?> commonForm) {
 		super(id);
 		
 		IModel<List<User>> listUsersModel = new PropertyModel<List<User>>(AddUsersForm.this, "usersInList");
@@ -81,25 +78,8 @@ public class AddUsersForm extends Form<Void> {
 			private static final long serialVersionUID = 5553555064487161840L;
 
 			protected void onAfterSubmit(AjaxRequestTarget target, Form<?> form) {
-				UsersDao userDao = Application.getBean(UsersDao.class);
-				for (User u : usersToAdd) {
-					List<Organisation_Users> orgUsers = u.getOrganisation_users();
-					boolean found = false;
-					for (Organisation_Users ou : orgUsers) {
-						if (ou.getOrganisation().getOrganisation_id().equals(organisation.getOrganisation_id())) {
-							found = true;
-							break;
-						}
-					}
-					if (!found) {
-						Organisation_Users orgUser = new Organisation_Users(organisation);
-						orgUser.setDeleted(false);
-						orgUsers.add(orgUser);
-						userDao.update(u, WebSession.getUserId());
-					}
-				}
-				target.appendJavaScript("$('#addUsers').dialog('close');");
-				groupForm.updateView(target);
+				commonForm.submitView(target, usersToAdd);
+				commonForm.updateView(target);
 			}
 		});
 	}
@@ -109,7 +89,4 @@ public class AddUsersForm extends Form<Void> {
 		usersInList.clear();
 	}
 	
-	public void setOrganisation(Organisation org) {
-		organisation = org;
-	}
 }

@@ -23,21 +23,30 @@ import static org.apache.openmeetings.web.app.WebSession.getUserId;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.openmeetings.data.conference.RoomManager;
 import org.apache.openmeetings.data.conference.dao.RoomDao;
+import org.apache.openmeetings.data.conference.dao.RoomModeratorsDao;
 import org.apache.openmeetings.data.user.OrganisationManager;
 import org.apache.openmeetings.persistence.beans.domain.Organisation;
 import org.apache.openmeetings.persistence.beans.room.Room;
+import org.apache.openmeetings.persistence.beans.room.RoomModerator;
 import org.apache.openmeetings.persistence.beans.room.RoomOrganisation;
 import org.apache.openmeetings.persistence.beans.room.RoomType;
-import org.apache.openmeetings.web.admin.AdminBaseForm;
+import org.apache.openmeetings.persistence.beans.user.User;
+import org.apache.openmeetings.web.admin.AdminCommonUserForm;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
+import org.apache.openmeetings.web.common.ConfirmCallListener;
 import org.apache.openmeetings.web.common.OmAjaxFormValidatingBehavior;
+import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
 import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
@@ -47,16 +56,22 @@ import org.apache.wicket.markup.html.form.ListMultipleChoice;
 import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.form.TextField;
+import org.apache.wicket.markup.html.list.ListItem;
+import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.util.time.Duration;
 
-public class RoomForm extends AdminBaseForm<Room> {
+public class RoomForm extends AdminCommonUserForm<Room> {
 	private static final long serialVersionUID = 1L;
 	private final static List<Long> DROPDOWN_NUMBER_OF_PARTICIPANTS = Arrays.asList(2L, 4L, 6L, 8L, 10L, 12L, 14L, 16L, 20L, 25L, 32L, 50L,
 			100L, 150L, 200L, 500L, 1000L);
 	private final WebMarkupContainer roomList;
-
+	private final TextField<String> confno;
+	private final CheckBox sipEnabled;
+	final WebMarkupContainer moderatorContainer;
+	final ListView<RoomModerator> moderators;
+	List<RoomModerator> result = null;
 	public RoomForm(String id, WebMarkupContainer roomList, final Room room) {
 		super(id, new CompoundPropertyModel<Room>(room));
 		this.roomList = roomList;
@@ -106,6 +121,7 @@ public class RoomForm extends AdminBaseForm<Room> {
 		add(demoTime);
 		add(new CheckBox("allowUserQuestions"));
 		add(new CheckBox("isAudioOnly"));
+		add(new CheckBox("allowFontStyles"));
 		add(new CheckBox("isClosed"));
 		add(new TextField<String>("redirectURL"));
 		add(new CheckBox("waitForRecording"));
@@ -122,22 +138,76 @@ public class RoomForm extends AdminBaseForm<Room> {
 		add(new CheckBox("chatModerated"));
 		add(new CheckBox("chatOpened"));
 		add(new CheckBox("filesOpened"));
-		add(new CheckBox("autoVideoSelect"));
+		add(new CheckBox("autoVideoSelect"));	
 		
+		moderators =	new ListView<RoomModerator>("moderators", result) {
+			private static final long serialVersionUID = -7935197812421549677L;
+
+			@Override
+			protected void populateItem(final ListItem<RoomModerator> item) {
+				final RoomModerator moderator = item.getModelObject();
+				item.add(new Label("isSuperModerator", "" + moderator.getIsSuperModerator()))
+					.add(new Label("userId", "" + moderator.getUser().getUser_id()))
+					.add(new Label("uName", "" + moderator.getUser().getFirstname() + " " + moderator.getUser().getLastname()))
+					.add(new Label("email", ""+ moderator.getUser().getAdresses().getEmail()))
+					.add(new WebMarkupContainer("delete").add(new AjaxEventBehavior("onclick"){
+					private static final long serialVersionUID = 1L;
+
+					@Override
+					protected void updateAjaxAttributes(AjaxRequestAttributes attributes) {
+						super.updateAjaxAttributes(attributes);
+						attributes.getAjaxCallListeners().add(new ConfirmCallListener(833L));
+					}
+					
+					@Override
+					protected void onEvent(AjaxRequestTarget target) {
+						Application.getBean(RoomModeratorsDao.class).removeRoomModeratorByUserId(moderator.getRoomModeratorsId());
+						updateModerators(target);
+					}
+				})); 
+
+				item.add(AttributeModifier.replace("class", (item.getIndex() % 2 == 1) ? "even" : "odd"));
+			}
+		};
+
 		// FIXME: Room user moderator list
+		CheckBox isModeratedRoom = new CheckBox("isModeratedRoom");
+        add(isModeratedRoom.setOutputMarkupId(true));
 
-		add(new CheckBox("isModeratedRoom"));
 		
+		moderatorContainer = new WebMarkupContainer("moderatorContainer");
+		
+		add(moderatorContainer.add(moderators).setOutputMarkupId(true));
+		
+		confno = new TextField<String>("confno");
+		add(confno);
+		add(new TextField<String>("pin"));
+		add(new TextField<String>("ownerId"));
+		sipEnabled = new CheckBox("sipEnabled");
+		add(sipEnabled.setOutputMarkupId(true).add(new AjaxEventBehavior("onclick") {
+			private static final long serialVersionUID = -1206667381066917517L;
 
+			@Override
+			protected void onEvent(AjaxRequestTarget target) {
+				sipEnabled.setModelObject(!sipEnabled.getModelObject());
+				if (sipEnabled.getModelObject() && confno.getModelObject() == null){
+					getBean(RoomDao.class).update(getModelObject(), getUserId());
+				}
+				updateView(target);				
+			}
+		}));
+		
 		// attach an ajax validation behavior to all form component's keydown
 		// event and throttle it down to once per second
 		OmAjaxFormValidatingBehavior.addToAllFormComponents(this, "keydown", Duration.ONE_SECOND);
 	}
 
-	private void updateView(AjaxRequestTarget target) {
-		target.add(this);
-		target.add(roomList);
-		target.appendJavaScript("omRoomPanelInit();");
+	public void updateModerators(AjaxRequestTarget target) {
+		long roomId = (getModelObject().getRooms_id() != null ? getModelObject().getRooms_id() : 0);  
+		RoomModeratorsDao moderatorsDao = getBean(RoomModeratorsDao.class);
+		final List<RoomModerator> result = moderatorsDao.getRoomModeratorByRoomId(roomId);
+		moderators.setDefaultModelObject(result);
+		target.add(moderatorContainer);
 	}
 	
 	@Override
@@ -190,5 +260,44 @@ public class RoomForm extends AdminBaseForm<Room> {
 	@Override
 	protected void onDeleteError(AjaxRequestTarget target, Form<?> form) {
 		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void updateView(AjaxRequestTarget target) {
+		target.add(this);
+		target.add(roomList);
+		confno.setEnabled(sipEnabled.getModelObject());
+		target.add(confno);
+		updateModerators(target);
+		target.appendJavaScript("omRoomPanelInit();");
+	}
+
+	@Override
+	public void submitView(AjaxRequestTarget target, List<User> usersToAdd) {
+		// TODO Auto-generated method stub
+		long roomId = getModelObject().getRooms_id();
+		RoomModeratorsDao moderatorsDao = getBean(RoomModeratorsDao.class);
+		List<RoomModerator> moderators = moderatorsDao.getRoomModeratorByRoomId(roomId);
+		result = (result == null) ? new ArrayList<RoomModerator>() : result;
+		for (User u : usersToAdd) {
+			boolean found = false;
+			for ( RoomModerator rm : moderators) {
+				if (rm.getUser().getUser_id().equals(u.getUser_id())) {
+					found = true;
+					break;
+				}
+			}
+			if (!found) {
+				RoomModerator rModerator = new RoomModerator();
+				rModerator.setUser(u);
+				rModerator.setIsSuperModerator(false);
+				rModerator.setStarttime(new Date());
+				rModerator.setDeleted(false);
+				rModerator.setRoomId(roomId);
+				result.add(rModerator);
+				moderatorsDao.addRoomModeratorByUserId(u, false, roomId);
+			}
+		}
+		target.appendJavaScript("$('#addModerators').dialog('close');");
 	}
 }

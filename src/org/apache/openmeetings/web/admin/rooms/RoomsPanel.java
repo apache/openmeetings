@@ -20,6 +20,7 @@ package org.apache.openmeetings.web.admin.rooms;
 
 import org.apache.openmeetings.data.conference.dao.RoomDao;
 import org.apache.openmeetings.persistence.beans.room.Room;
+import org.apache.openmeetings.web.admin.AddUsersForm;
 import org.apache.openmeetings.web.admin.AdminPanel;
 import org.apache.openmeetings.web.admin.SearchableDataView;
 import org.apache.openmeetings.web.common.PagedEntityListPanel;
@@ -36,6 +37,7 @@ import org.apache.wicket.markup.repeater.Item;
 public class RoomsPanel extends AdminPanel {
 
 	private static final long serialVersionUID = -1L;
+	private AddUsersForm addModeratorsForm;
 	private RoomForm form;
 	
 	@Override
@@ -59,8 +61,9 @@ public class RoomsPanel extends AdminPanel {
 					private static final long serialVersionUID = -8069413566800571061L;
 
 					protected void onEvent(AjaxRequestTarget target) {
-						form.setModelObject(room);
 						form.hideNewRecord();
+						form.setModelObject(room);
+						form.updateView(target);
 						target.add(form);
 						target.appendJavaScript("omRoomPanelInit();");
 					}
@@ -84,10 +87,42 @@ public class RoomsPanel extends AdminPanel {
 				target.add(listContainer);
 			}
 		});
+
+		final WebMarkupContainer addModerator = new WebMarkupContainer("addModerator");
+		addModerator.add(new AjaxEventBehavior("onclick") {
+			private static final long serialVersionUID = 1818116963707864134L;
+
+			protected void onEvent(AjaxRequestTarget target) {
+        		addModeratorsForm.clear();
+        		target.add(addModeratorsForm);
+        		target.appendJavaScript("addModerators();");
+        	}
+        });
 		
-		form = new RoomForm("form", listContainer, new Room());
-		form.showNewRecord();
-        add(form);
+		form = new RoomForm("form", listContainer, new Room()){
+			private static final long serialVersionUID = 3186201157375166657L;
+
+			@Override
+			protected void onModelChanged() {
+				super.onModelChanged();
+				boolean roomEmpty = (getModelObject() == null || getModelObject().getRooms_id() == null);
+				if (roomEmpty) {
+					addModerator.add(AttributeModifier.replace("class", "formNewButton disabled"));
+				} else {
+					addModerator.add(AttributeModifier.replace("class", "formNewButton"));
+				}
+				addModerator.setEnabled(!roomEmpty);
+			}
+			
+			/*@Override
+			public void updateView(AjaxRequestTarget target) {
+				super.updateView(target);
+				target.add(addModerator);
+			}*/
+		};
 		
+        add(form.add(addModerator.setOutputMarkupId(true)));
+        addModeratorsForm = new AddUsersForm("addModerators", form);
+		add(addModeratorsForm);
 	}
 }

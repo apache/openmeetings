@@ -21,12 +21,13 @@ package org.apache.openmeetings.web.admin.groups;
 import org.apache.openmeetings.data.user.dao.OrganisationDao;
 import org.apache.openmeetings.persistence.beans.domain.Organisation;
 import org.apache.openmeetings.persistence.beans.domain.Organisation_Users;
+import org.apache.openmeetings.web.admin.AddUsersForm;
 import org.apache.openmeetings.web.admin.AdminPanel;
 import org.apache.openmeetings.web.admin.SearchableDataView;
 import org.apache.openmeetings.web.common.PagedEntityListPanel;
 import org.apache.openmeetings.web.data.DataViewContainer;
-import org.apache.openmeetings.web.data.SearchableDataProvider;
 import org.apache.openmeetings.web.data.OrderByBorder;
+import org.apache.openmeetings.web.data.SearchableDataProvider;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -80,11 +81,10 @@ public class GroupsPanel extends AdminPanel {
 					addUsersBtn.add(AttributeModifier.replace("class", "formNewButton"));
 				}
 				addUsersBtn.setEnabled(!orgEmpty);
-				addUsersForm.setOrganisation(getModelObject());
 			}
 			
 			@Override
-			void updateView(AjaxRequestTarget target) {
+			public void updateView(AjaxRequestTarget target) {
 				super.updateView(target);
 				target.add(addUsersBtn);
 			}
