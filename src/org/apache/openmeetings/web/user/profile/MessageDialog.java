@@ -18,12 +18,17 @@
  */
 package org.apache.openmeetings.web.user.profile;
 
+import static org.apache.openmeetings.web.app.Application.getBean;
+import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import static org.apache.openmeetings.web.util.RoomTypeDropDown.getRoomTypes;
 
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.openmeetings.data.conference.dao.RoomDao;
+import org.apache.openmeetings.data.user.dao.PrivateMessagesDao;
+import org.apache.openmeetings.data.user.dao.UsersDao;
 import org.apache.openmeetings.persistence.beans.room.Room;
 import org.apache.openmeetings.persistence.beans.user.PrivateMessage;
 import org.apache.openmeetings.web.app.WebSession;
@@ -37,6 +42,7 @@ import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.form.TextField;
+import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
@@ -47,7 +53,8 @@ import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
 public class MessageDialog extends AbstractFormDialog<PrivateMessage> {
 	private static final long serialVersionUID = 1L;
 	private final Form<PrivateMessage> form;
-	private DialogButton send = new DialogButton(WebSession.getString(218));
+	private FeedbackPanel feedback = new FeedbackPanel("feedback");
+	DialogButton send = new DialogButton(WebSession.getString(218));
 	private DialogButton cancel = new DialogButton(WebSession.getString(219));
 	private final WebMarkupContainer roomParamsBlock = new WebMarkupContainer("roomParamsBlock");
 	private final WebMarkupContainer roomParams = new WebMarkupContainer("roomParams");
@@ -64,6 +71,11 @@ public class MessageDialog extends AbstractFormDialog<PrivateMessage> {
 		modelStart.setObject(new Date());
 		modelEnd.setObject(new Date()); //TODO should we add 1 hour or generalize with Calendar???
 		PrivateMessage p = new PrivateMessage();
+		p.setFrom(getBean(UsersDao.class).get(getUserId()));
+		p.setOwner(p.getFrom());
+		p.setIsTrash(false);
+		p.setIsRead(false);
+		p.setPrivateMessageFolderId(0L);
 		Room r = new Room();
 		r.setAppointment(true);
 		r.setRoomtype(getRoomTypes().get(0));
@@ -79,7 +91,8 @@ public class MessageDialog extends AbstractFormDialog<PrivateMessage> {
 		super(id, WebSession.getString(1209), model);
 		form = new Form<PrivateMessage>("form", getModel());
 		
-		form.add(new UserAutoCompleteTextField("to"));
+		form.add(feedback.setOutputMarkupId(true));
+		form.add(new UserAutoCompleteTextField("to").setRequired(true));
 		form.add(new TextField<String>("subject"));
 		form.add(new TextArea<String>("message"));
 		form.add(roomParamsBlock.setOutputMarkupId(true));
@@ -119,13 +132,28 @@ public class MessageDialog extends AbstractFormDialog<PrivateMessage> {
 
 	@Override
 	protected void onError(AjaxRequestTarget target) {
-		// TODO Auto-generated method stub
-
+		target.add(feedback);
 	}
 
 	@Override
 	protected void onSubmit(AjaxRequestTarget target) {
-		// TODO Auto-generated method stub
-
+		PrivateMessage p = getModelObject();
+		p.setInserted(new Date());
+		if (p.isBookedRoom()) {
+			Room r = p.getRoom();
+			r.setName(p.getSubject());
+			r.setComment("");
+			r.setNumberOfPartizipants(100L);
+			r.setAppointment(true);
+			r.setAllowUserQuestions(true);
+			r.setAllowFontStyles(true);
+			getBean(RoomDao.class).update(r, getUserId());
+		} else {
+			p.setRoom(null);
+		}
+		if (p.getTo().getUser_id() == null) {
+			getBean(UsersDao.class).update(p.getTo(), getUserId());
+		}
+		getBean(PrivateMessagesDao.class).update(p, getUserId());
 	}
 }

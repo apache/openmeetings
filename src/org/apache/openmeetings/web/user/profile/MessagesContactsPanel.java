@@ -57,6 +57,7 @@ import ro.fortsoft.wicket.dashboard.web.util.ConfirmAjaxCallListener;
 
 import com.googlecode.wicket.jquery.core.JQueryBehavior;
 //TODO not released yet import com.googlecode.wicket.jquery.ui.plugins.fixedheadertable.FixedHeaderTableBehavior;
+import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
 
 public class MessagesContactsPanel extends UserPanel {
 	private static final long serialVersionUID = 8098087441571734957L;
@@ -71,7 +72,7 @@ public class MessagesContactsPanel extends UserPanel {
 	private final WebMarkupContainer inbox = new WebMarkupContainer("inbox");
 	private final WebMarkupContainer sent = new WebMarkupContainer("sent");
 	private final WebMarkupContainer trash = new WebMarkupContainer("trash");
-	private final MessageDialog newMessage = new MessageDialog("newMessage", new CompoundPropertyModel<PrivateMessage>(new PrivateMessage()));
+	private final MessageDialog newMessage;
 	
 	private void setDefaultFolderClass() {
 		inbox.add(AttributeAppender.replace("class", "email inbox clickable"));
@@ -111,6 +112,16 @@ public class MessagesContactsPanel extends UserPanel {
 	public MessagesContactsPanel(String id) {
 		super(id);
 		foldersModel = Model.ofList(getBean(PrivateMessageFolderDao.class).get(0, Integer.MAX_VALUE));
+		newMessage = new MessageDialog("newMessage", new CompoundPropertyModel<PrivateMessage>(new PrivateMessage())) {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void onClose(AjaxRequestTarget target, DialogButton button) {
+				if (button.equals(send)) {
+					target.add(container);
+				}
+			}
+		};
 		
 		final AddFolderDialog addFolder = new AddFolderDialog("addFolder") {
 			private static final long serialVersionUID = 1L;

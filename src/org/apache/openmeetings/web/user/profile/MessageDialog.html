@@ -30,6 +30,9 @@
 	<form wicket:id="form">
 		<table style="width: 100%;">
 			<tr>
+				<td colspan="2" wicket:id="feedback"></td>
+			</tr>
+			<tr>
 				<td class="messages column label"><wicket:ommessage key="1210"/></td>
 				<td><input class="messages text" type="text" wicket:id="to"/></td>
 			</tr>
@@ -55,11 +58,11 @@
 									</tr>
 									<tr>
 										<td><wicket:ommessage key="570" /></td>
-										<td><span type="text" wicket:id="start"></span></td>
+										<td><span wicket:id="start"></span></td>
 									</tr>
 									<tr>
 										<td><wicket:ommessage key="571" /></td>
-										<td><span type="text" wicket:id="end"></span></td>
+										<td><span wicket:id="end"></span></td>
 									</tr>
 								</table>
 							</td>
