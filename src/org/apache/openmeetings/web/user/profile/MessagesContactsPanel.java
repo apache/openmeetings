@@ -224,14 +224,17 @@ public class MessagesContactsPanel extends UserPanel {
 			public Iterator<? extends PrivateMessage> iterator(long first, long count) {
 				//FIXME need to be refactored + sort + search
 				long folder = selectedModel.getObject();
+				String sort = getSort() == null ? "" : getSort().getProperty();
+				boolean isAsc = getSort() == null ? true : getSort().isAscending();
+				String _search = search == null ? "" : "c." + search; //FIXME need to be refactored
 				if (INBOX_FOLDER_ID == folder) {
-					return getDao().getPrivateMessagesByUser(getUserId(), "", "", (int)first, true, 0L, (int)count).iterator();
+					return getDao().getPrivateMessagesByUser(getUserId(), _search, sort, (int)first, isAsc, 0L, (int)count).iterator();
 				} else if (SENT_FOLDER_ID == folder) {
-					return getDao().getSendPrivateMessagesByUser(getUserId(), "", "", (int)first, true, 0L, (int)count).iterator();
+					return getDao().getSendPrivateMessagesByUser(getUserId(), _search, sort, (int)first, isAsc, 0L, (int)count).iterator();
 				} else if (TRASH_FOLDER_ID == folder) {
-					return getDao().getTrashPrivateMessagesByUser(getUserId(), "", "", (int)first, true, (int)count).iterator();
+					return getDao().getTrashPrivateMessagesByUser(getUserId(), _search, sort, (int)first, isAsc, (int)count).iterator();
 				} else {
-					return getDao().getPrivateMessagesByUser(getUserId(), "", "", (int)first, true, folder, (int)count).iterator();
+					return getDao().getPrivateMessagesByUser(getUserId(), _search, sort, (int)first, isAsc, folder, (int)count).iterator();
 				}
 			}
 			
