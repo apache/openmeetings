@@ -191,6 +191,27 @@
 						
 						<!-- Users in this Room -->
 						<fieldset>
+							<legend><wicket:ommessage key="587" /></legend>
+							<table class="adminListTable">
+								<thead>
+									<tr>
+										<th class="three_column_layout_column1"><wicket:ommessage key="588" /></th>
+										<th class="three_column_layout_column2"><wicket:ommessage key="589" /></th>
+										<th class="three_column_layout_column3"><wicket:ommessage key="590" /></th>
+									</tr>	
+								</thead>
+							</table>
+							<div class="tableWrapperSmall" id="adminTableSmall">
+								<table class="adminListTable">
+									<tbody wicket:id="clientsContainer">		
+							    		<tr wicket:id="clients">
+											<td class="three_column_layout_column1"><div class="three_column_layout_divcolumn1"><span wicket:id="clientId"></span></div></td>
+											<td class="three_column_layout_column2"><div class="three_column_layout_divcolumn2"><span wicket:id="clientLogin"></span></div></td>
+											<td class="three_column_layout_column3"><div class="formCancelButton" wicket:id="clientDelete" wicket:ommessage="title:604"><input/></div></td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
 						</fieldset>
 						
 						<!-- Default moderators -->

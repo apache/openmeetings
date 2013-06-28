@@ -19,6 +19,7 @@
 package org.apache.openmeetings.web.admin.rooms;
 
 import static org.apache.openmeetings.web.app.Application.getBean;
+import static org.apache.openmeetings.web.app.WebSession.getSid;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 
 import java.util.ArrayList;
@@ -31,11 +32,14 @@ import org.apache.openmeetings.data.conference.dao.RoomDao;
 import org.apache.openmeetings.data.conference.dao.RoomModeratorsDao;
 import org.apache.openmeetings.data.user.OrganisationManager;
 import org.apache.openmeetings.persistence.beans.domain.Organisation;
+import org.apache.openmeetings.persistence.beans.room.Client;
 import org.apache.openmeetings.persistence.beans.room.Room;
 import org.apache.openmeetings.persistence.beans.room.RoomModerator;
 import org.apache.openmeetings.persistence.beans.room.RoomOrganisation;
 import org.apache.openmeetings.persistence.beans.room.RoomType;
 import org.apache.openmeetings.persistence.beans.user.User;
+import org.apache.openmeetings.remote.UserService;
+import org.apache.openmeetings.session.SessionManager;
 import org.apache.openmeetings.web.admin.AdminCommonUserForm;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
@@ -70,8 +74,11 @@ public class RoomForm extends AdminCommonUserForm<Room> {
 	private final TextField<String> confno;
 	private final CheckBox sipEnabled;
 	final WebMarkupContainer moderatorContainer;
+	final WebMarkupContainer clientsContainer;
 	final ListView<RoomModerator> moderators;
-	List<RoomModerator> result = null;
+	final ListView<Client> clients;
+	List<RoomModerator> moderatorsInRoom = null;
+	List<Client> clientsInRoom = null;
 	public RoomForm(String id, WebMarkupContainer roomList, final Room room) {
 		super(id, new CompoundPropertyModel<Room>(room));
 		this.roomList = roomList;
@@ -140,7 +147,41 @@ public class RoomForm extends AdminCommonUserForm<Room> {
 		add(new CheckBox("filesOpened"));
 		add(new CheckBox("autoVideoSelect"));	
 		
-		moderators =	new ListView<RoomModerator>("moderators", result) {
+		// Users in this Room 
+		clientsContainer = new WebMarkupContainer("clientsContainer");
+		clients = new ListView<Client>("clients", clientsInRoom){
+			private static final long serialVersionUID = 8542589945574690054L;
+
+			@Override
+			protected void populateItem(final ListItem<Client> item) {
+				Client client = item.getModelObject();
+				item.add(new Label("clientId", "" + client.getId()))
+					.add(new Label("clientLogin", "" + client.getUsername()))
+					.add(new WebMarkupContainer("clientDelete").add(new AjaxEventBehavior("onclick"){
+
+					private static final long serialVersionUID = 1L;
+
+					@Override
+					protected void updateAjaxAttributes(AjaxRequestAttributes attributes) {
+						super.updateAjaxAttributes(attributes);
+						attributes.getAjaxCallListeners().add(new ConfirmCallListener(833L));
+					}
+					
+					@Override
+					protected void onEvent(AjaxRequestTarget target) {
+						Client c = item.getModelObject();
+						getBean(UserService.class).kickUserByStreamId(getSid(), c.getStreamid()
+								, c.getServer() == null ? 0 : c.getServer().getId());
+						
+						updatClients(target);
+					}
+				}));
+			}
+		};
+		add(clientsContainer.add(clients.setOutputMarkupId(true)).setOutputMarkupId(true));
+		
+		// Moderators
+		moderators =	new ListView<RoomModerator>("moderators", moderatorsInRoom) {
 			private static final long serialVersionUID = -7935197812421549677L;
 
 			@Override
@@ -202,12 +243,18 @@ public class RoomForm extends AdminCommonUserForm<Room> {
 		OmAjaxFormValidatingBehavior.addToAllFormComponents(this, "keydown", Duration.ONE_SECOND);
 	}
 
-	public void updateModerators(AjaxRequestTarget target) {
+	void updateModerators(AjaxRequestTarget target) {
 		long roomId = (getModelObject().getRooms_id() != null ? getModelObject().getRooms_id() : 0);  
 		RoomModeratorsDao moderatorsDao = getBean(RoomModeratorsDao.class);
-		final List<RoomModerator> result = moderatorsDao.getRoomModeratorByRoomId(roomId);
-		moderators.setDefaultModelObject(result);
+		final List<RoomModerator> moderatorsInRoom = moderatorsDao.getRoomModeratorByRoomId(roomId);
+		moderators.setDefaultModelObject(moderatorsInRoom);
 		target.add(moderatorContainer);
+	}
+	void updatClients(AjaxRequestTarget target) {
+		long roomId = (getModelObject().getRooms_id() != null ? getModelObject().getRooms_id() : 0);  
+		final List<Client> clientsInRoom = Application.getBean(SessionManager.class).getClientListByRoom(roomId);
+		clients.setDefaultModelObject(clientsInRoom);
+		target.add(clientsContainer);
 	}
 	
 	@Override
@@ -269,6 +316,7 @@ public class RoomForm extends AdminCommonUserForm<Room> {
 		confno.setEnabled(sipEnabled.getModelObject());
 		target.add(confno);
 		updateModerators(target);
+		updatClients(target);
 		target.appendJavaScript("omRoomPanelInit();");
 	}
 
@@ -278,7 +326,7 @@ public class RoomForm extends AdminCommonUserForm<Room> {
 		long roomId = getModelObject().getRooms_id();
 		RoomModeratorsDao moderatorsDao = getBean(RoomModeratorsDao.class);
 		List<RoomModerator> moderators = moderatorsDao.getRoomModeratorByRoomId(roomId);
-		result = (result == null) ? new ArrayList<RoomModerator>() : result;
+		moderatorsInRoom = (moderatorsInRoom == null) ? new ArrayList<RoomModerator>() : moderatorsInRoom;
 		for (User u : usersToAdd) {
 			boolean found = false;
 			for ( RoomModerator rm : moderators) {
@@ -294,7 +342,7 @@ public class RoomForm extends AdminCommonUserForm<Room> {
 				rModerator.setStarttime(new Date());
 				rModerator.setDeleted(false);
 				rModerator.setRoomId(roomId);
-				result.add(rModerator);
+				moderatorsInRoom.add(rModerator);
 				moderatorsDao.addRoomModeratorByUserId(u, false, roomId);
 			}
 		}
