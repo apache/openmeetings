@@ -71,6 +71,8 @@
 
     <!--- Default mic gain -->
     <attribute name="micGain" value="50" type="number"/>
+    
+    <attribute name="micMuted" value="false" />
 
 	<event name="onMetaDataEvent" />
 	<event name="onPlayStatusEvent" />
@@ -240,6 +242,7 @@
 		if (micReference != null) {
 			this.setAttribute('micro', micReference);
 			this._ns.attachAudio(micReference);
+			muteMicro(this.micMuted);
 		}
 		
 		this._ns.publish(streamName, (mode == "broadcast") ? "live" : mode);
@@ -324,6 +327,7 @@
 
 	<method name="muteMicro" args="mute">
 		if ($debug) Debug.write(":: muteMicro ", mute, parent.parent.publicSID);
+		this.micMuted = mute;
 		if(this.micro != null) {
 			if(mute) {
 				if (this.micro.gain == 0) {
