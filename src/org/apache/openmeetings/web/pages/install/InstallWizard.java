@@ -295,7 +295,7 @@ public class InstallWizard extends Wizard {
 		private AbstractAjaxTimerBehavior timer;
 		private ProgressBar progressBar;
 		private WebMarkupContainer desc = new WebMarkupContainer("desc");
-		private Label value;
+		//private Label value;
 		private boolean started = false;
 		
 		public void startInstallation(AjaxRequestTarget target) {
