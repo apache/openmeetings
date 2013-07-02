@@ -31,8 +31,8 @@ import org.apache.openmeetings.persistence.beans.user.User;
 import org.apache.openmeetings.web.admin.AdminCommonUserForm;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
-import org.apache.openmeetings.web.common.OmAjaxFormValidatingBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.form.AjaxFormValidatingBehavior;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.RequiredTextField;
@@ -56,7 +56,7 @@ public class GroupForm extends AdminCommonUserForm<Organisation> {
 
 		// attach an ajax validation behavior to all form component's keydown
 		// event and throttle it down to once per second
-		OmAjaxFormValidatingBehavior.addToAllFormComponents(this, "keydown", Duration.ONE_SECOND);
+		AjaxFormValidatingBehavior.addToAllFormComponents(this, "keydown", Duration.ONE_SECOND);
 	}
 	
 	@Override

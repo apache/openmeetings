@@ -18,9 +18,11 @@
  */
 package org.apache.openmeetings.web.admin.users;
 
+import static org.apache.openmeetings.OpenmeetingsVariables.WEB_DATE_PATTERN;
 import static org.apache.openmeetings.utils.UserHelper.getMinLoginLength;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
+import static org.apache.wicket.datetime.markup.html.basic.DateLabel.forDatePattern;
 import static org.apache.wicket.validation.validator.StringValidator.minimumLength;
 
 import java.util.Arrays;
@@ -33,9 +35,8 @@ import org.apache.openmeetings.web.admin.AdminBaseForm;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.ComunityUserForm;
 import org.apache.openmeetings.web.common.GeneralUserForm;
-import org.apache.openmeetings.web.common.OmAjaxFormValidatingBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.datetime.markup.html.basic.DateLabel;
+import org.apache.wicket.ajax.form.AjaxFormValidatingBehavior;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.DropDownChoice;
@@ -68,8 +69,7 @@ public class UserForm extends AdminBaseForm<User> {
 
 		// attach an ajax validation behavior to all form component's keydown
 		// event and throttle it down to once per second
-		OmAjaxFormValidatingBehavior.addToAllFormComponents(this, "keydown", Duration.ONE_SECOND);
-
+		AjaxFormValidatingBehavior.addToAllFormComponents(this, "keydown", Duration.ONE_SECOND);
 	}
 
 	@Override
@@ -137,8 +137,8 @@ public class UserForm extends AdminBaseForm<User> {
 
 		add(generalForm = new GeneralUserForm("general", getModel(), true));
 
-		add(DateLabel.forDatePattern("starttime", "dd.MM.yyyy HH:mm:ss"));
-		add(DateLabel.forDatePattern("updatetime", "dd.MM.yyyy HH:mm:ss"));
+		add(forDatePattern("starttime", WEB_DATE_PATTERN));
+		add(forDatePattern("updatetime", WEB_DATE_PATTERN));
 
 		add(new CheckBox("forceTimeZoneCheck"));
 

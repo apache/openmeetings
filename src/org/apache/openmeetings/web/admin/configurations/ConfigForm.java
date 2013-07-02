@@ -18,14 +18,16 @@
  */
 package org.apache.openmeetings.web.admin.configurations;
 
+import static org.apache.openmeetings.OpenmeetingsVariables.WEB_DATE_PATTERN;
+import static org.apache.wicket.datetime.markup.html.basic.DateLabel.forDatePattern;
+
 import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
 import org.apache.openmeetings.persistence.beans.basic.Configuration;
 import org.apache.openmeetings.web.admin.AdminBaseForm;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
-import org.apache.openmeetings.web.common.OmAjaxFormValidatingBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.datetime.markup.html.basic.DateLabel;
+import org.apache.wicket.ajax.form.AjaxFormValidatingBehavior;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
@@ -72,14 +74,13 @@ public class ConfigForm extends AdminBaseForm<Configuration> {
 			}
 		}));
 		add(new RequiredTextField<String>("conf_value").setLabel(Model.of(WebSession.getString(271))));
-		add(DateLabel.forDatePattern("updatetime", "dd.MM.yyyy HH:mm:ss"));
+		add(forDatePattern("updatetime", WEB_DATE_PATTERN));
 		add(new Label("user.login"));
 		add(new TextArea<String>("comment"));
 		
 		// attach an ajax validation behavior to all form component's keydown
 		// event and throttle it down to once per second
-		OmAjaxFormValidatingBehavior.addToAllFormComponents(this, "keydown", Duration.ONE_SECOND);
-
+		AjaxFormValidatingBehavior.addToAllFormComponents(this, "keydown", Duration.ONE_SECOND);
 	}
 	
 	@Override

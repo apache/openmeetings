@@ -96,7 +96,7 @@ public class UserAutoCompleteTextField extends AutoCompleteTextField<User> {
 
 	public UserAutoCompleteTextField(String id) {
 		super(id, new UserTextRenderer());
-		this.renderer = new UserTextRenderer(); //FIXME ugly
+		this.renderer = (UserTextRenderer)getRenderer();
 	}
 
 	@SuppressWarnings("unchecked")

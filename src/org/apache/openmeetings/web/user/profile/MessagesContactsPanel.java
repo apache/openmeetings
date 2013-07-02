@@ -56,7 +56,8 @@ import org.apache.wicket.model.Model;
 import ro.fortsoft.wicket.dashboard.web.util.ConfirmAjaxCallListener;
 
 import com.googlecode.wicket.jquery.core.JQueryBehavior;
-//TODO not released yet import com.googlecode.wicket.jquery.ui.plugins.fixedheadertable.FixedHeaderTableBehavior;
+import com.googlecode.wicket.jquery.core.Options;
+import com.googlecode.wicket.jquery.ui.plugins.fixedheadertable.FixedHeaderTableBehavior;
 import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
 
 public class MessagesContactsPanel extends UserPanel {
@@ -95,7 +96,7 @@ public class MessagesContactsPanel extends UserPanel {
 		selectedModel.setObject(id);
 		setDefaultFolderClass();
 		selectFolder(folder);
-		//TODO not released yet container.add(new FixedHeaderTableBehavior("#messagesTable", new Options("height", 100)));
+		container.add(new FixedHeaderTableBehavior("#messagesTable", new Options("height", 100)));
 		if (target != null) {
 			target.add(folders, container);
 		}

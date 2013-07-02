@@ -18,14 +18,16 @@
  */
 package org.apache.openmeetings.web.admin.ldaps;
 
+import static org.apache.openmeetings.OpenmeetingsVariables.WEB_DATE_PATTERN;
+import static org.apache.wicket.datetime.markup.html.basic.DateLabel.forDatePattern;
+
 import org.apache.openmeetings.data.basic.dao.LdapConfigDao;
 import org.apache.openmeetings.persistence.beans.basic.LdapConfig;
 import org.apache.openmeetings.web.admin.AdminBaseForm;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
-import org.apache.openmeetings.web.common.OmAjaxFormValidatingBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.datetime.markup.html.basic.DateLabel;
+import org.apache.wicket.ajax.form.AjaxFormValidatingBehavior;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.CheckBox;
@@ -56,9 +58,9 @@ public class LdapForm extends AdminBaseForm<LdapConfig> {
 		
 		add(new RequiredTextField<String>("name").setLabel(Model.of(WebSession.getString(1108))));
 		add(new CheckBox("isActive"));
-		add(DateLabel.forDatePattern("inserted", "dd.MM.yyyy HH:mm:ss"));
+		add(forDatePattern("inserted", WEB_DATE_PATTERN));
 		add(new Label("insertedby.login"));
-		add(DateLabel.forDatePattern("updated", "dd.MM.yyyy HH:mm:ss"));
+		add(forDatePattern("updated", WEB_DATE_PATTERN));
 		add(new Label("updatedby.login"));
 		add(new RequiredTextField<String>("configFileName").setLabel(Model.of(WebSession.getString(1115))));
 		add(new CheckBox("addDomainToUserName"));
@@ -67,7 +69,7 @@ public class LdapForm extends AdminBaseForm<LdapConfig> {
 
 		// attach an ajax validation behavior to all form component's keydown
 		// event and throttle it down to once per second
-		OmAjaxFormValidatingBehavior.addToAllFormComponents(this, "keydown", Duration.ONE_SECOND);
+		AjaxFormValidatingBehavior.addToAllFormComponents(this, "keydown", Duration.ONE_SECOND);
 	}
 
 	@Override

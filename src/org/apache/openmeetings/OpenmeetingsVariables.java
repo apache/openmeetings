@@ -19,6 +19,7 @@
 package org.apache.openmeetings;
 
 public class OpenmeetingsVariables {
+	public static final String WEB_DATE_PATTERN = "dd.MM.yyyy HH:mm:ss"; //FIXME need to be made locale based
 	public static String webAppRootKey = null;
 	public static String webAppRootPath = null;
 }
