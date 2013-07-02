@@ -241,7 +241,10 @@
 		<dependency org="org.apache.wicket" name="wicket-extensions" rev="6.9.0" conf="openmeetings->*" transitive="false">
 			<include type="jar" />
 		</dependency>
-		<dependency org="org.apache.wicket" name="wicket-datetime" rev="6.8.0" conf="openmeetings->*" transitive="false">
+		<dependency org="org.apache.wicket" name="wicket-datetime" rev="6.9.0" conf="openmeetings->*" transitive="false">
+			<include type="jar" />
+		</dependency>
+		<dependency org="joda-time" name="joda-time" rev="2.2" conf="openmeetings->*" transitive="false">
 			<include type="jar" />
 		</dependency>
 		<dependency org="org.apache.wicket" name="wicket-devutils" rev="6.9.0" conf="openmeetings->*" transitive="false">
