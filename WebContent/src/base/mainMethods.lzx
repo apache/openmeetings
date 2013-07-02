@@ -120,6 +120,7 @@
     	remoteLog.setQueryType("POST");
     	remoteLog.setAttribute("src", canvas.getUrl() + "remotelog.upload");
     	remoteLog.setQueryParam("message", message);
+    	remoteLog.setQueryParam("sid", canvas.sessionId);
     	remoteLog.doRequest();
     </method>
     

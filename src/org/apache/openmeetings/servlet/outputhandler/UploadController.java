@@ -144,7 +144,10 @@ public class UploadController extends AbstractUploadController {
     @RequestMapping(value = "/remotelog.upload", method = RequestMethod.POST)
     public void handleRemoteLog(HttpServletRequest request, HttpServletResponse response) throws ServletException {
     	String message = request.getParameter("message");
-    	if (message != null) {
+    	String sid = request.getParameter("sid");
+    	if (sid == null || message == null) return;
+    	Long userId = sessiondataDao.checkSession(sid);
+    	if (userId != null && userId != 0) {
     		log.debug("[CLIENT MESSAGE] " + message);
     	}
     }
