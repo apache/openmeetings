@@ -25,7 +25,7 @@ import org.apache.openmeetings.web.admin.AdminPanel;
 import org.apache.openmeetings.web.admin.SearchableDataView;
 import org.apache.openmeetings.web.common.PagedEntityListPanel;
 import org.apache.openmeetings.web.data.DataViewContainer;
-import org.apache.openmeetings.web.data.OrderByBorder;
+import org.apache.openmeetings.web.data.OmOrderByBorder;
 import org.apache.openmeetings.web.data.SearchableDataProvider;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxEventBehavior;
@@ -74,19 +74,20 @@ public class RoomsPanel extends AdminPanel {
 		
 		final WebMarkupContainer listContainer = new WebMarkupContainer("listContainer");
 		add(listContainer.add(dataView).setOutputMarkupId(true));
-		DataViewContainer<Room> container = new DataViewContainer<Room>(listContainer, dataView);
-		container.setLinks(new OrderByBorder<Room>("orderById", "rooms_id", container)
-				, new OrderByBorder<Room>("orderByName", "name", container)
-				, new OrderByBorder<Room>("orderByPublic", "ispublic", container));
-		add(container.orderLinks);
-		add(new PagedEntityListPanel("navigator", dataView) {
+		PagedEntityListPanel navigator = new PagedEntityListPanel("navigator", dataView) {
 			private static final long serialVersionUID = -1L;
 
 			@Override
 			protected void onEvent(AjaxRequestTarget target) {
 				target.add(listContainer);
 			}
-		});
+		};
+		DataViewContainer<Room> container = new DataViewContainer<Room>(listContainer, dataView, navigator);
+		container.setLinks(new OmOrderByBorder<Room>("orderById", "rooms_id", container)
+				, new OmOrderByBorder<Room>("orderByName", "name", container)
+				, new OmOrderByBorder<Room>("orderByPublic", "ispublic", container));
+		add(container.orderLinks);
+		add(navigator);
 
 		final WebMarkupContainer addModerator = new WebMarkupContainer("addModerator");
 		addModerator.add(new AjaxEventBehavior("onclick") {

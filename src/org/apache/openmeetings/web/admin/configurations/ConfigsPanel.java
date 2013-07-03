@@ -24,7 +24,7 @@ import org.apache.openmeetings.web.admin.AdminPanel;
 import org.apache.openmeetings.web.admin.SearchableDataView;
 import org.apache.openmeetings.web.common.PagedEntityListPanel;
 import org.apache.openmeetings.web.data.DataViewContainer;
-import org.apache.openmeetings.web.data.OrderByBorder;
+import org.apache.openmeetings.web.data.OmOrderByBorder;
 import org.apache.openmeetings.web.data.SearchableDataProvider;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxEventBehavior;
@@ -78,19 +78,20 @@ public class ConfigsPanel extends AdminPanel {
 		};
 		final WebMarkupContainer listContainer = new WebMarkupContainer("listContainer");
 		add(listContainer.add(dataView).setOutputMarkupId(true));
-		DataViewContainer<Configuration> container = new DataViewContainer<Configuration>(listContainer, dataView);
-		container.setLinks(new OrderByBorder<Configuration>("orderById", "configuration_id", container)
-				, new OrderByBorder<Configuration>("orderByKey", "conf_key", container)
-				, new OrderByBorder<Configuration>("orderByValue", "conf_value", container));
-		add(container.orderLinks);
-		add(new PagedEntityListPanel("navigator", dataView) {
+		PagedEntityListPanel navigator = new PagedEntityListPanel("navigator", dataView) {
 			private static final long serialVersionUID = 5097048616003411362L;
 
 			@Override
 			protected void onEvent(AjaxRequestTarget target) {
 				target.add(listContainer);
 			}
-		});
+		};
+		DataViewContainer<Configuration> container = new DataViewContainer<Configuration>(listContainer, dataView, navigator);
+		container.setLinks(new OmOrderByBorder<Configuration>("orderById", "configuration_id", container)
+				, new OmOrderByBorder<Configuration>("orderByKey", "conf_key", container)
+				, new OmOrderByBorder<Configuration>("orderByValue", "conf_value", container));
+		add(container.orderLinks);
+		add(navigator);
 		
 		form = new ConfigForm("form", listContainer, new Configuration());
 		form.showNewRecord();

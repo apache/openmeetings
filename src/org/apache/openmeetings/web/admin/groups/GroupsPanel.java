@@ -26,7 +26,7 @@ import org.apache.openmeetings.web.admin.AdminPanel;
 import org.apache.openmeetings.web.admin.SearchableDataView;
 import org.apache.openmeetings.web.common.PagedEntityListPanel;
 import org.apache.openmeetings.web.data.DataViewContainer;
-import org.apache.openmeetings.web.data.OrderByBorder;
+import org.apache.openmeetings.web.data.OmOrderByBorder;
 import org.apache.openmeetings.web.data.SearchableDataProvider;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxEventBehavior;
@@ -118,17 +118,18 @@ public class GroupsPanel extends AdminPanel {
 
 		//Paging
 		add(listContainer.add(dataView).setOutputMarkupId(true));
-		DataViewContainer<Organisation> container = new DataViewContainer<Organisation>(listContainer, dataView);
-		container.setLinks(new OrderByBorder<Organisation>("orderById", "organisation_id", container)
-				, new OrderByBorder<Organisation>("orderByName", "name", container));
-		add(container.orderLinks);
-		add(new PagedEntityListPanel("navigator", dataView) {
+		PagedEntityListPanel navigator = new PagedEntityListPanel("navigator", dataView) {
 			private static final long serialVersionUID = 5097048616003411362L;
 
 			@Override
 			protected void onEvent(AjaxRequestTarget target) {
 				target.add(listContainer);
 			}
-		});
+		};
+		DataViewContainer<Organisation> container = new DataViewContainer<Organisation>(listContainer, dataView, navigator);
+		container.setLinks(new OmOrderByBorder<Organisation>("orderById", "organisation_id", container)
+				, new OmOrderByBorder<Organisation>("orderByName", "name", container));
+		add(container.orderLinks);
+		add(navigator);
 	}
 }

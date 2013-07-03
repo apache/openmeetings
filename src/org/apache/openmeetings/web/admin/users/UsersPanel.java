@@ -27,7 +27,7 @@ import org.apache.openmeetings.web.admin.AdminPanel;
 import org.apache.openmeetings.web.admin.SearchableDataView;
 import org.apache.openmeetings.web.common.PagedEntityListPanel;
 import org.apache.openmeetings.web.data.DataViewContainer;
-import org.apache.openmeetings.web.data.OrderByBorder;
+import org.apache.openmeetings.web.data.OmOrderByBorder;
 import org.apache.openmeetings.web.data.SearchableDataProvider;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxEventBehavior;
@@ -79,20 +79,21 @@ public class UsersPanel extends AdminPanel {
 		};
 		final WebMarkupContainer listContainer = new WebMarkupContainer("listContainer");
 		add(listContainer.add(dataView).setOutputMarkupId(true));
-		DataViewContainer<User> container = new DataViewContainer<User>(listContainer, dataView);
-		container.setLinks(new OrderByBorder<User>("orderById", "user_id", container)
-				, new OrderByBorder<User>("orderByLogin", "login", container)
-				, new OrderByBorder<User>("orderByFirstName", "firstname", container)
-				, new OrderByBorder<User>("orderByLastName", "lastname", container));
-		add(container.orderLinks);
-		add(new PagedEntityListPanel("navigator", dataView) {
+		PagedEntityListPanel navigator = new PagedEntityListPanel("navigator", dataView) {
 			private static final long serialVersionUID = 5097048616003411362L;
 
 			@Override
 			protected void onEvent(AjaxRequestTarget target) {
 				target.add(listContainer);
 			}
-		});
+		};
+		DataViewContainer<User> container = new DataViewContainer<User>(listContainer, dataView, navigator);
+		container.setLinks(new OmOrderByBorder<User>("orderById", "user_id", container)
+				, new OmOrderByBorder<User>("orderByLogin", "login", container)
+				, new OmOrderByBorder<User>("orderByFirstName", "firstname", container)
+				, new OmOrderByBorder<User>("orderByLastName", "lastname", container));
+		add(container.orderLinks);
+		add(navigator);
 
 		UsersDao usersDaoImpl = getBean(UsersDao.class);
 		form = new UserForm("form", listContainer, usersDaoImpl.getNewUserInstance(usersDaoImpl.get(getUserId())));

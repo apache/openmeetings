@@ -843,7 +843,8 @@ table.messages td.main {
 	height: 18px;
 }
 .messages.column.label {
-	width: 10px;
+	width: 20px;
+	min-height: inherit;
 }
 input[type="text"].messages.text {
 	width: 100%;

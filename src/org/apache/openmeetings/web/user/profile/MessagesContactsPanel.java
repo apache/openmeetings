@@ -21,7 +21,6 @@ package org.apache.openmeetings.web.user.profile;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.getDateFormat;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
-import static org.apache.wicket.util.time.Duration.seconds;
 
 import java.util.Iterator;
 import java.util.List;
@@ -37,11 +36,10 @@ import org.apache.openmeetings.web.common.AddFolderDialog;
 import org.apache.openmeetings.web.common.PagedEntityListPanel;
 import org.apache.openmeetings.web.common.UserPanel;
 import org.apache.openmeetings.web.data.DataViewContainer;
-import org.apache.openmeetings.web.data.OrderByBorder;
+import org.apache.openmeetings.web.data.OmOrderByBorder;
 import org.apache.openmeetings.web.data.SearchableDataProvider;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.AjaxSelfUpdatingTimerBehavior;
 import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -64,7 +62,7 @@ public class MessagesContactsPanel extends UserPanel {
 	private static final long serialVersionUID = 8098087441571734957L;
 	private final WebMarkupContainer container = new WebMarkupContainer("container");
 	private final WebMarkupContainer folders = new WebMarkupContainer("folders");
-	private final IModel<Long> unreadModel = Model.of(0L);
+	private final Label unread = new Label("unread", Model.of(0L));
 	private final static long INBOX_FOLDER_ID = -1;
 	private final static long SENT_FOLDER_ID = -2;
 	private final static long TRASH_FOLDER_ID = -3;
@@ -74,6 +72,7 @@ public class MessagesContactsPanel extends UserPanel {
 	private final WebMarkupContainer sent = new WebMarkupContainer("sent");
 	private final WebMarkupContainer trash = new WebMarkupContainer("trash");
 	private final MessageDialog newMessage;
+	private final DataViewContainer<PrivateMessage> dataContainer;
 	
 	private void setDefaultFolderClass() {
 		inbox.add(AttributeAppender.replace("class", "email inbox clickable"));
@@ -97,8 +96,11 @@ public class MessagesContactsPanel extends UserPanel {
 		setDefaultFolderClass();
 		selectFolder(folder);
 		container.add(new FixedHeaderTableBehavior("#messagesTable", new Options("height", 100)));
+		unread.setDefaultModelObject(getBean(PrivateMessagesDao.class).count(getUserId(), null, false, false));
 		if (target != null) {
-			target.add(folders, container);
+			target.add(folders, container, unread);
+			target.add(dataContainer.container, dataContainer.navigator);
+			target.add(dataContainer.orderLinks);
 		}
 	}
 	
@@ -211,7 +213,6 @@ public class MessagesContactsPanel extends UserPanel {
 				setFolderClass(item);
 			}
 		}).setOutputMarkupId(true));
-		unreadModel.setObject(getBean(PrivateMessagesDao.class).count(getUserId(), null, false, false));
 		
 		SearchableDataProvider<PrivateMessage> sdp = new SearchableDataProvider<PrivateMessage>(PrivateMessagesDao.class) {
 			private static final long serialVersionUID = 1L;
@@ -225,7 +226,7 @@ public class MessagesContactsPanel extends UserPanel {
 			public Iterator<? extends PrivateMessage> iterator(long first, long count) {
 				//FIXME need to be refactored + sort + search
 				long folder = selectedModel.getObject();
-				String sort = getSort() == null ? "" : getSort().getProperty();
+				String sort = getSort() == null ? "" : "c." + getSort().getProperty();
 				boolean isAsc = getSort() == null ? true : getSort().isAscending();
 				String _search = search == null ? "" : "c." + search; //FIXME need to be refactored
 				if (INBOX_FOLDER_ID == folder) {
@@ -266,28 +267,29 @@ public class MessagesContactsPanel extends UserPanel {
 				item.add(new Label("send", getDateFormat().format(m.getInserted())));
 			}
 		};
-		DataViewContainer<PrivateMessage> dataContainer = new DataViewContainer<PrivateMessage>(container, dv);
-		dataContainer.setLinks(new OrderByBorder<PrivateMessage>("orderById", "privateMessageId", dataContainer)
-				, new OrderByBorder<PrivateMessage>("orderByFrom", "from.lastname", dataContainer)
-				, new OrderByBorder<PrivateMessage>("orderBySubject", "subject", dataContainer)
-				, new OrderByBorder<PrivateMessage>("orderBySend", "inserted", dataContainer));
-		container.add(dataContainer.orderLinks);
-		container.add(new PagedEntityListPanel("navigator", dv) {
+		PagedEntityListPanel navigator = new PagedEntityListPanel("navigator", dv) {
 			private static final long serialVersionUID = 5097048616003411362L;
 
 			@Override
 			protected void onEvent(AjaxRequestTarget target) {
 				target.add(container);
 			}
-		});
+		};
+		dataContainer = new DataViewContainer<PrivateMessage>(container, dv, navigator);
+		dataContainer.setLinks(new OmOrderByBorder<PrivateMessage>("orderById", "privateMessageId", dataContainer)
+				, new OmOrderByBorder<PrivateMessage>("orderByFrom", "from.lastname", dataContainer)
+				, new OmOrderByBorder<PrivateMessage>("orderBySubject", "subject", dataContainer)
+				, new OmOrderByBorder<PrivateMessage>("orderBySend", "inserted", dataContainer));
+		add(dataContainer.orderLinks);
+		add(navigator);
 		
 		selectFolder(inbox, INBOX_FOLDER_ID, null);
-		container.add(new Label("unread", unreadModel));
+		add(unread.setOutputMarkupId(true));
 		add(new WebMarkupContainer("pendingContacts"));//FIXME
 		add(new WebMarkupContainer("na1"));//FIXME
 		
 		add(container.add(dv).setOutputMarkupId(true));
-		container.add(new AjaxSelfUpdatingTimerBehavior(seconds(15)));
+		//TODO add valid autoupdate add(new AjaxSelfUpdatingTimerBehavior(seconds(15)));
 		add(newMessage);
 	}
 }

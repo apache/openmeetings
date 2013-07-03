@@ -22,21 +22,24 @@ import java.io.Serializable;
 
 import org.apache.openmeetings.persistence.beans.IDataProviderEntity;
 import org.apache.openmeetings.web.admin.SearchableDataView;
+import org.apache.openmeetings.web.common.PagedEntityListPanel;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 
 public class DataViewContainer<T extends IDataProviderEntity> implements Serializable {
 	private static final long serialVersionUID = -1027478954223527890L;
 	public WebMarkupContainer container;
 	public SearchableDataView<T> view;
-	public OrderByBorder<T>[] orderLinks;
+	public PagedEntityListPanel navigator;
+	public OmOrderByBorder<T>[] orderLinks;
 	
-	public DataViewContainer(WebMarkupContainer container, SearchableDataView<T> view) {
+	public DataViewContainer(WebMarkupContainer container, SearchableDataView<T> view, PagedEntityListPanel navigator) {
 		this.container = container;
 		this.view = view;
+		this.navigator = navigator;
 	}
 	
 	//TODO refactor to remove warnings
-	public void setLinks(OrderByBorder<T>... orderLinks) {
+	public void setLinks(OmOrderByBorder<T>... orderLinks) {
 		this.orderLinks = orderLinks;
 	}
 }

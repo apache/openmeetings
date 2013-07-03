@@ -40,7 +40,7 @@ import org.apache.openmeetings.web.admin.AdminPanel;
 import org.apache.openmeetings.web.admin.SearchableDataView;
 import org.apache.openmeetings.web.common.PagedEntityListPanel;
 import org.apache.openmeetings.web.data.DataViewContainer;
-import org.apache.openmeetings.web.data.OrderByBorder;
+import org.apache.openmeetings.web.data.OmOrderByBorder;
 import org.apache.openmeetings.web.data.SearchableDataProvider;
 import org.apache.openmeetings.web.util.AjaxDownload;
 import org.apache.wicket.AttributeModifier;
@@ -147,12 +147,7 @@ public class LangPanel extends AdminPanel {
 
 		listContainer = new WebMarkupContainer("listContainer");
 		add(listContainer.add(dataView).setOutputMarkupId(true));
-		DataViewContainer<Fieldvalues> container = new DataViewContainer<Fieldvalues>(listContainer, dataView);
-		container.setLinks(new OrderByBorder<Fieldvalues>("orderById", "fieldvalues.fieldvalues_id", container)
-				, new OrderByBorder<Fieldvalues>("orderByName", "fieldvalues.name", container)
-				, new OrderByBorder<Fieldvalues>("orderByValue", "value", container));
-		add(container.orderLinks);
-		add(new PagedEntityListPanel("navigator", dataView) {
+		PagedEntityListPanel navigator = new PagedEntityListPanel("navigator", dataView) {
 			private static final long serialVersionUID = 5097048616003411362L;
 
 			@Override
@@ -160,7 +155,13 @@ public class LangPanel extends AdminPanel {
 				dataView.modelChanging();
 				target.add(listContainer);
 			}
-		});
+		};
+		DataViewContainer<Fieldvalues> container = new DataViewContainer<Fieldvalues>(listContainer, dataView, navigator);
+		container.setLinks(new OmOrderByBorder<Fieldvalues>("orderById", "fieldvalues.fieldvalues_id", container)
+				, new OmOrderByBorder<Fieldvalues>("orderByName", "fieldvalues.name", container)
+				, new OmOrderByBorder<Fieldvalues>("orderByValue", "value", container));
+		add(container.orderLinks);
+		add(navigator);
 		langForm = new LangForm("langForm", listContainer, this);
 		fileUploadField = new FileUploadField("fileInput");
 		langForm.add(fileUploadField);
