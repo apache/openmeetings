@@ -44,8 +44,8 @@ public class InstallationConfig implements Serializable {
 	public String mailReferer = "noreply@openmeetings.apache.org";
 	public String mailUseTls = "0";
 	//paths
-	public String swfZoom = "";
-	public String swfJpegQuality = "";
+	public String swfZoom = "100";
+	public String swfJpegQuality = "85";
 	public String swfPath = "";
 	public String imageMagicPath = "";
 	public String ffmpegPath = "";

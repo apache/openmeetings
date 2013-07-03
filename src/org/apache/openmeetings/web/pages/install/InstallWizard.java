@@ -20,6 +20,7 @@ package org.apache.openmeetings.web.pages.install;
 
 import static org.apache.openmeetings.installation.InstallationConfig.USER_LOGIN_MINIMUM_LENGTH;
 import static org.apache.openmeetings.installation.InstallationConfig.USER_PASSWORD_MINIMUM_LENGTH;
+import static org.apache.wicket.validation.validator.RangeValidator.range;
 import static org.apache.wicket.validation.validator.StringValidator.minimumLength;
 
 import java.io.Serializable;
@@ -227,8 +228,8 @@ public class InstallWizard extends Wizard {
 		public ParamsStep3() {
 			super(paramsStep2);
 			
-            add(new TextField<String>("cfg.swfZoom"));
-            add(new TextField<String>("cfg.swfJpegQuality"));
+            add(new TextField<String>("cfg.swfZoom").add(range(50, 600)));
+            add(new TextField<String>("cfg.swfJpegQuality").add(range(1, 100)));
             add(new TextField<String>("cfg.swfPath"));
             add(new TextField<String>("cfg.imageMagicPath"));
             add(new TextField<String>("cfg.ffmpegPath"));
