@@ -46,7 +46,7 @@ public class ProfileImagePanel extends BasePanel {
 		super(id);
 		
 		profile = new TransparentWebMarkupContainer("profile");
-		final String uri = getBean(UsersDao.class).get(userId).getPictureuri();
+		String uri = getBean(UsersDao.class).get(userId).getPictureuri();
 		boolean absolute = false;
 		try {
 			absolute = URI.create(uri).isAbsolute();
@@ -68,6 +68,7 @@ public class ProfileImagePanel extends BasePanel {
 				
 				@Override
 				protected byte[] getData(Attributes attributes) {
+					String uri = getBean(UsersDao.class).get(userId).getPictureuri();
 					File img = OmFileHelper.getUserProfilePicture(userId, uri);
 					try {
 						return IOUtils.toByteArray(new FileInputStream(img));
