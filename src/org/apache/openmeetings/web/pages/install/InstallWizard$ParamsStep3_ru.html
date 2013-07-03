@@ -21,90 +21,90 @@
 <html xmlns:wicket="http://wicket.apache.org">
 <wicket:panel>
 	<fieldset id="userConf1">
-		<legend>Конвертеры</legend>
+		<legend>РљРѕРЅРІРµСЂС‚РµСЂС‹</legend>
 		<ul>
-			<li><label wicket:for="cfg.swfZoom">SWFTools масштабирование</label>
-			<input wicket:id="cfg.swfZoom" title="Укажите разрешение (dpi), которое вы будите использовать для конвертации PDF в SWF"
+			<li><label wicket:for="cfg.swfZoom">SWFTools РјР°СЃС€С‚Р°Р±РёСЂРѕРІР°РЅРёРµ</label>
+			<input wicket:id="cfg.swfZoom" title="РЈРєР°Р¶РёС‚Рµ СЂР°Р·СЂРµС€РµРЅРёРµ (dpi), РєРѕС‚РѕСЂРѕРµ РІС‹ Р±СѓРґРёС‚Рµ РёСЃРїРѕР»СЊР·РѕРІР°С‚СЊ РґР»СЏ РєРѕРЅРІРµСЂС‚Р°С†РёРё PDF РІ SWF"
 				type="text" />
 				<p>
-					<i>Вы можите проверить настроен ли запуск swftools на Вашей системе
-						с помошью командной строки или shell или cmd-prompt набрав команду pdf2swf и указав разрешение (dpi),
-						которое swftools будет использовать для конвертации PDF в SWF. По умолчанию 72
-						dpi. Смотрите так же <a
+					<i>Р’С‹ РјРѕР¶РёС‚Рµ РїСЂРѕРІРµСЂРёС‚СЊ РЅР°СЃС‚СЂРѕРµРЅ Р»Рё Р·Р°РїСѓСЃРє swftools РЅР° Р’Р°С€РµР№ СЃРёСЃС‚РµРјРµ
+						СЃ РїРѕРјРѕС€СЊСЋ РєРѕРјР°РЅРґРЅРѕР№ СЃС‚СЂРѕРєРё РёР»Рё shell РёР»Рё cmd-prompt РЅР°Р±СЂР°РІ РєРѕРјР°РЅРґСѓ pdf2swf Рё СѓРєР°Р·Р°РІ СЂР°Р·СЂРµС€РµРЅРёРµ (dpi),
+						РєРѕС‚РѕСЂРѕРµ swftools Р±СѓРґРµС‚ РёСЃРїРѕР»СЊР·РѕРІР°С‚СЊ РґР»СЏ РєРѕРЅРІРµСЂС‚Р°С†РёРё PDF РІ SWF. РџРѕ СѓРјРѕР»С‡Р°РЅРёСЋ 72
+						dpi. РЎРјРѕС‚СЂРёС‚Рµ С‚Р°Рє Р¶Рµ <a
 						href="http://openmeetings.apache.org/installation.html"
-						target="_blank">Установка</a>
+						target="_blank">РЈСЃС‚Р°РЅРѕРІРєР°</a>
 					</i>
 				</p></li>
-			<li><label wicket:for="cfg.swfJpegQuality">SWFTools JPEG Качество</label>
+			<li><label wicket:for="cfg.swfJpegQuality">SWFTools JPEG РљР°С‡РµСЃС‚РІРѕ</label>
 				<input wicket:id="cfg.swfJpegQuality" 
-				title="Укажите качество встроенного jpeg изображения. 0 плохое (маленькое), 100 высокое (большое). (по умолчанию:85)"
+				title="РЈРєР°Р¶РёС‚Рµ РєР°С‡РµСЃС‚РІРѕ РІСЃС‚СЂРѕРµРЅРЅРѕРіРѕ jpeg РёР·РѕР±СЂР°Р¶РµРЅРёСЏ. 0 РїР»РѕС…РѕРµ (РјР°Р»РµРЅСЊРєРѕРµ), 100 РІС‹СЃРѕРєРѕРµ (Р±РѕР»СЊС€РѕРµ). (РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ:85)"
 				type="text" />
 				<p>
-					<i>Вы можите проверить настроен ли запуск swftools на Вашей системе
-						с помошью командной строки или shell или cmd-prompt набрав команду pdf2swf и указав
-						качество встроенного jpeg изображения. 0 плохое (маленькое),
-						100 высокое (большое). (по умолчанию:85) смотрите так же <a
+					<i>Р’С‹ РјРѕР¶РёС‚Рµ РїСЂРѕРІРµСЂРёС‚СЊ РЅР°СЃС‚СЂРѕРµРЅ Р»Рё Р·Р°РїСѓСЃРє swftools РЅР° Р’Р°С€РµР№ СЃРёСЃС‚РµРјРµ
+						СЃ РїРѕРјРѕС€СЊСЋ РєРѕРјР°РЅРґРЅРѕР№ СЃС‚СЂРѕРєРё РёР»Рё shell РёР»Рё cmd-prompt РЅР°Р±СЂР°РІ РєРѕРјР°РЅРґСѓ pdf2swf Рё СѓРєР°Р·Р°РІ
+						РєР°С‡РµСЃС‚РІРѕ РІСЃС‚СЂРѕРµРЅРЅРѕРіРѕ jpeg РёР·РѕР±СЂР°Р¶РµРЅРёСЏ. 0 РїР»РѕС…РѕРµ (РјР°Р»РµРЅСЊРєРѕРµ),
+						100 РІС‹СЃРѕРєРѕРµ (Р±РѕР»СЊС€РѕРµ). (РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ:85) СЃРјРѕС‚СЂРёС‚Рµ С‚Р°Рє Р¶Рµ <a
 						href="http://openmeetings.apache.org/installation.html"
-						target="_blank">Установка</a>
+						target="_blank">РЈСЃС‚Р°РЅРѕРІРєР°</a>
 					</i>
 				</p>
 			</li>
-			<li><label wicket:for="cfg.swfPath">SWFTools Путь</label>
+			<li><label wicket:for="cfg.swfPath">SWFTools РџСѓС‚СЊ</label>
 				<input wicket:id="cfg.swfPath" 
-				title="Укажите путь к swftools например C:/swftools (Windows) или или не заполняйте данное поле если путь к swftools задан вистемных путях"
+				title="РЈРєР°Р¶РёС‚Рµ РїСѓС‚СЊ Рє swftools РЅР°РїСЂРёРјРµСЂ C:/swftools (Windows) РёР»Рё РёР»Рё РЅРµ Р·Р°РїРѕР»РЅСЏР№С‚Рµ РґР°РЅРЅРѕРµ РїРѕР»Рµ РµСЃР»Рё РїСѓС‚СЊ Рє swftools Р·Р°РґР°РЅ РІРёСЃС‚РµРјРЅС‹С… РїСѓС‚СЏС…"
 				type="text" />
 				<p>
-					<i>Вы можите проверить настроен ли запуск swftools на Вашей системе
-						с помошью командной строки или shell или cmd-prompt набрав команду pdf2swf. Если будет показан
-						список опций оставте это поле пустым, в противном случае вы должны
-						указать путь к pdf2swf на Вашей системе, так же смотрите <a
+					<i>Р’С‹ РјРѕР¶РёС‚Рµ РїСЂРѕРІРµСЂРёС‚СЊ РЅР°СЃС‚СЂРѕРµРЅ Р»Рё Р·Р°РїСѓСЃРє swftools РЅР° Р’Р°С€РµР№ СЃРёСЃС‚РµРјРµ
+						СЃ РїРѕРјРѕС€СЊСЋ РєРѕРјР°РЅРґРЅРѕР№ СЃС‚СЂРѕРєРё РёР»Рё shell РёР»Рё cmd-prompt РЅР°Р±СЂР°РІ РєРѕРјР°РЅРґСѓ pdf2swf. Р•СЃР»Рё Р±СѓРґРµС‚ РїРѕРєР°Р·Р°РЅ
+						СЃРїРёСЃРѕРє РѕРїС†РёР№ РѕСЃС‚Р°РІС‚Рµ СЌС‚Рѕ РїРѕР»Рµ РїСѓСЃС‚С‹Рј, РІ РїСЂРѕС‚РёРІРЅРѕРј СЃР»СѓС‡Р°Рµ РІС‹ РґРѕР»Р¶РЅС‹
+						СѓРєР°Р·Р°С‚СЊ РїСѓС‚СЊ Рє pdf2swf РЅР° Р’Р°С€РµР№ СЃРёСЃС‚РµРјРµ, С‚Р°Рє Р¶Рµ СЃРјРѕС‚СЂРёС‚Рµ <a
 						href="http://openmeetings.apache.org/installation.html"
-						target="_blank">Установка</a>
+						target="_blank">РЈСЃС‚Р°РЅРѕРІРєР°</a>
 					</i>
 				</p></li>
-			<li><label wicket:for="cfg.imageMagicPath">ImageMagick Путь</label>
+			<li><label wicket:for="cfg.imageMagicPath">ImageMagick РџСѓС‚СЊ</label>
 				<input wicket:id="cfg.imageMagicPath" 
-				title="Укажите путь к ImageMagick, или не заполняйте данное поле если ImageMagick установлен в путях Вашей системы"
+				title="РЈРєР°Р¶РёС‚Рµ РїСѓС‚СЊ Рє ImageMagick, РёР»Рё РЅРµ Р·Р°РїРѕР»РЅСЏР№С‚Рµ РґР°РЅРЅРѕРµ РїРѕР»Рµ РµСЃР»Рё ImageMagick СѓСЃС‚Р°РЅРѕРІР»РµРЅ РІ РїСѓС‚СЏС… Р’Р°С€РµР№ СЃРёСЃС‚РµРјС‹"
 				type="text" />
 				<p>
-					<i>так же смотрите <a
+					<i>С‚Р°Рє Р¶Рµ СЃРјРѕС‚СЂРёС‚Рµ <a
 						href="http://openmeetings.apache.org/installation.html"
-						target="_blank">Установка</a></i>
+						target="_blank">РЈСЃС‚Р°РЅРѕРІРєР°</a></i>
 				</p></li>
-			<li><label wicket:for="cfg.ffmpegPath">FFMPEG Путь</label>
+			<li><label wicket:for="cfg.ffmpegPath">FFMPEG РџСѓС‚СЊ</label>
 				<input wicket:id="cfg.ffmpegPath" 
-				title="Укажите путь к FFMPEG, или не заполняйте данное поле если FFMPEG установлен в путях Вашей системы"
+				title="РЈРєР°Р¶РёС‚Рµ РїСѓС‚СЊ Рє FFMPEG, РёР»Рё РЅРµ Р·Р°РїРѕР»РЅСЏР№С‚Рµ РґР°РЅРЅРѕРµ РїРѕР»Рµ РµСЃР»Рё FFMPEG СѓСЃС‚Р°РЅРѕРІР»РµРЅ РІ РїСѓС‚СЏС… Р’Р°С€РµР№ СЃРёСЃС‚РµРјС‹"
 				type="text" />
 				<p>
-					<i>так же смотрите <a
+					<i>С‚Р°Рє Р¶Рµ СЃРјРѕС‚СЂРёС‚Рµ <a
 						href="http://openmeetings.apache.org/installation.html"
-						target="_blank">Установка</a></i>
+						target="_blank">РЈСЃС‚Р°РЅРѕРІРєР°</a></i>
 				</p></li>
-			<li><label wicket:for="cfg.soxPath">SoX Путь</label>
+			<li><label wicket:for="cfg.soxPath">SoX РџСѓС‚СЊ</label>
 				<input wicket:id="cfg.soxPath" 
-				title="Укажите путь к SoX, или не заполняйте данное поле если SoX установлен в путях Вашей системы"
+				title="РЈРєР°Р¶РёС‚Рµ РїСѓС‚СЊ Рє SoX, РёР»Рё РЅРµ Р·Р°РїРѕР»РЅСЏР№С‚Рµ РґР°РЅРЅРѕРµ РїРѕР»Рµ РµСЃР»Рё SoX СѓСЃС‚Р°РЅРѕРІР»РµРЅ РІ РїСѓС‚СЏС… Р’Р°С€РµР№ СЃРёСЃС‚РµРјС‹"
 				type="text" />
 				<p>
-					<i>так же смотрите <a
+					<i>С‚Р°Рє Р¶Рµ СЃРјРѕС‚СЂРёС‚Рµ <a
 						href="http://openmeetings.apache.org/installation.html"
-						target="_blank">Установка</a></i>
+						target="_blank">РЈСЃС‚Р°РЅРѕРІРєР°</a></i>
 				</p></li>
-			<li><label wicket:for="cfg.jodPath">JOD Путь</label>
+			<li><label wicket:for="cfg.jodPath">JOD РџСѓС‚СЊ</label>
 				<input wicket:id="cfg.jodPath"
-				title="Путь к библиотеке JOD (http://code.google.com/p/jodconverter), сконфигурируйте путь, указываюший на папку библиотеки JOD, которая содержит jodconverter-core-version.jar файл"
+				title="РџСѓС‚СЊ Рє Р±РёР±Р»РёРѕС‚РµРєРµ JOD (http://code.google.com/p/jodconverter), СЃРєРѕРЅС„РёРіСѓСЂРёСЂСѓР№С‚Рµ РїСѓС‚СЊ, СѓРєР°Р·С‹РІР°СЋС€РёР№ РЅР° РїР°РїРєСѓ Р±РёР±Р»РёРѕС‚РµРєРё JOD, РєРѕС‚РѕСЂР°СЏ СЃРѕРґРµСЂР¶РёС‚ jodconverter-core-version.jar С„Р°Р№Р»"
 				type="text" />
 				<p>
-					<i>так же смотрите <a
+					<i>С‚Р°Рє Р¶Рµ СЃРјРѕС‚СЂРёС‚Рµ <a
 						href="http://openmeetings.apache.org/installation.html"
-						target="_blank">Установка</a></i>
+						target="_blank">РЈСЃС‚Р°РЅРѕРІРєР°</a></i>
 				</p></li>
-			<li><label wicket:for="cfg.officePath">OpenOffice/LibreOffice Путь для jodconverter</label>
+			<li><label wicket:for="cfg.officePath">OpenOffice/LibreOffice РџСѓС‚СЊ РґР»СЏ jodconverter</label>
 				<input wicket:id="cfg.officePath"
-				title="Путь к OpenOffice/LibreOffice (не обязательный) пожалуйста установите этот путь в случае когда jodconverter не в состоянии найти автоматически путь к  установленному OpenOffice/LibreOffice"
+				title="РџСѓС‚СЊ Рє OpenOffice/LibreOffice (РЅРµ РѕР±СЏР·Р°С‚РµР»СЊРЅС‹Р№) РїРѕР¶Р°Р»СѓР№СЃС‚Р° СѓСЃС‚Р°РЅРѕРІРёС‚Рµ СЌС‚РѕС‚ РїСѓС‚СЊ РІ СЃР»СѓС‡Р°Рµ РєРѕРіРґР° jodconverter РЅРµ РІ СЃРѕСЃС‚РѕСЏРЅРёРё РЅР°Р№С‚Рё Р°РІС‚РѕРјР°С‚РёС‡РµСЃРєРё РїСѓС‚СЊ Рє  СѓСЃС‚Р°РЅРѕРІР»РµРЅРЅРѕРјСѓ OpenOffice/LibreOffice"
 				type="text" />
-				<p>Путь к OpenOffice/LibreOffice (не обязательный) пожалуйста установите этот пут
-					в случае когда jodconverter не в состоянии найти
-					путь к установленному OpenOffice/LibreOffice</p></li>
+				<p>РџСѓС‚СЊ Рє OpenOffice/LibreOffice (РЅРµ РѕР±СЏР·Р°С‚РµР»СЊРЅС‹Р№) РїРѕР¶Р°Р»СѓР№СЃС‚Р° СѓСЃС‚Р°РЅРѕРІРёС‚Рµ СЌС‚РѕС‚ РїСѓС‚
+					РІ СЃР»СѓС‡Р°Рµ РєРѕРіРґР° jodconverter РЅРµ РІ СЃРѕСЃС‚РѕСЏРЅРёРё РЅР°Р№С‚Рё
+					РїСѓС‚СЊ Рє СѓСЃС‚Р°РЅРѕРІР»РµРЅРЅРѕРјСѓ OpenOffice/LibreOffice</p></li>
 		</ul>
 	</fieldset>
 </wicket:panel>

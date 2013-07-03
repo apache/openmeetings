@@ -21,46 +21,46 @@
 <html xmlns:wicket="http://wicket.apache.org">
 <wicket:panel>
 	<fieldset id="userConf">
-		<legend>Конфигурация</legend>
+		<legend>РљРѕРЅС„РёРіСѓСЂР°С†РёСЏ</legend>
 		<ul>
-			<li><label for="configdefault">Разрешить саморегистрацию (allow_frontend_register)</label>
+			<li><label for="configdefault">Р Р°Р·СЂРµС€РёС‚СЊ СЃР°РјРѕСЂРµРіРёСЃС‚СЂР°С†РёСЋ (allow_frontend_register)</label>
 				<select wicket:id="allowFrontendRegister"></select>
 			</li>
-			<li><label wicket:for="sendEmailAtRegister">Посылать сообщения новым пользователям (sendEmailAtRegister)</label>
+			<li><label wicket:for="sendEmailAtRegister">РџРѕСЃС‹Р»Р°С‚СЊ СЃРѕРѕР±С‰РµРЅРёСЏ РЅРѕРІС‹Рј РїРѕР»СЊР·РѕРІР°С‚РµР»СЏРј (sendEmailAtRegister)</label>
 				<select wicket:id="sendEmailAtRegister"></select>
 			</li>
-			<li><label wicket:for="sendEmailWithVerficationCode">Проверять электронную почту вновь добавленым пользователям (sendEmailWithVerficationCode)</label>
+			<li><label wicket:for="sendEmailWithVerficationCode">РџСЂРѕРІРµСЂСЏС‚СЊ СЌР»РµРєС‚СЂРѕРЅРЅСѓСЋ РїРѕС‡С‚Сѓ РІРЅРѕРІСЊ РґРѕР±Р°РІР»РµРЅС‹Рј РїРѕР»СЊР·РѕРІР°С‚РµР»СЏРј (sendEmailWithVerficationCode)</label>
 				<select wicket:id="sendEmailWithVerficationCode"></select>
 			</li>
-			<li><label wicket:for="createDefaultRooms">Создавать комнаты по умолчанию для всех типов комнат</label>
+			<li><label wicket:for="createDefaultRooms">РЎРѕР·РґР°РІР°С‚СЊ РєРѕРјРЅР°С‚С‹ РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ РґР»СЏ РІСЃРµС… С‚РёРїРѕРІ РєРѕРјРЅР°С‚</label>
 				<select wicket:id="createDefaultRooms"></select>
 			</li>
-			<li><label wicket:for="cfg.mailReferer">Электронная почта рассылки (system_email_addr)</label>
-				<input wicket:id="cfg.mailReferer" title="Введите адрес электронной почты с которой будет рассылаться информация" type="text" />
+			<li><label wicket:for="cfg.mailReferer">Р­Р»РµРєС‚СЂРѕРЅРЅР°СЏ РїРѕС‡С‚Р° СЂР°СЃСЃС‹Р»РєРё (system_email_addr)</label>
+				<input wicket:id="cfg.mailReferer" title="Р’РІРµРґРёС‚Рµ Р°РґСЂРµСЃ СЌР»РµРєС‚СЂРѕРЅРЅРѕР№ РїРѕС‡С‚С‹ СЃ РєРѕС‚РѕСЂРѕР№ Р±СѓРґРµС‚ СЂР°СЃСЃС‹Р»Р°С‚СЊСЃСЏ РёРЅС„РѕСЂРјР°С†РёСЏ" type="text" />
 			</li>
-			<li><label wicket:for="cfg.smtpServer">SMTP-Сервер (smtp_server)</label>
-				<input wicket:id="cfg.smtpServer" title="Введите адрес SMTP-Сервера" type="text" />
+			<li><label wicket:for="cfg.smtpServer">SMTP-РЎРµСЂРІРµСЂ (smtp_server)</label>
+				<input wicket:id="cfg.smtpServer" title="Р’РІРµРґРёС‚Рµ Р°РґСЂРµСЃ SMTP-РЎРµСЂРІРµСЂР°" type="text" />
 			</li>
-			<li><label wicket:for="cfg.smtpPort">SMTP-Сервер порт (по умолчению SMPT-Сервер порт 25) (smtp_port)</label>
-				<input wicket:id="cfg.smtpPort" title="Введите SMTP-Сервер порт, обычно 25" type="text" />
+			<li><label wicket:for="cfg.smtpPort">SMTP-РЎРµСЂРІРµСЂ РїРѕСЂС‚ (РїРѕ СѓРјРѕР»С‡РµРЅРёСЋ SMPT-РЎРµСЂРІРµСЂ РїРѕСЂС‚ 25) (smtp_port)</label>
+				<input wicket:id="cfg.smtpPort" title="Р’РІРµРґРёС‚Рµ SMTP-РЎРµСЂРІРµСЂ РїРѕСЂС‚, РѕР±С‹С‡РЅРѕ 25" type="text" />
 			</li>
-			<li><label wicket:for="cfg.mailAuthName">SMTP-Пользователь (email_username)</label>
-				<input wicket:id="cfg.mailAuthName" title="Введите логин для электроннуой почты" type="text" />
+			<li><label wicket:for="cfg.mailAuthName">SMTP-РџРѕР»СЊР·РѕРІР°С‚РµР»СЊ (email_username)</label>
+				<input wicket:id="cfg.mailAuthName" title="Р’РІРµРґРёС‚Рµ Р»РѕРіРёРЅ РґР»СЏ СЌР»РµРєС‚СЂРѕРЅРЅСѓРѕР№ РїРѕС‡С‚С‹" type="text" />
 			</li>
-			<li><label wicket:for="cfg.mailAuthPass">SMTP-Пароль пользователя (email_userpass)</label>
-				<input wicket:id="cfg.mailAuthPass" title="Введите пароль для электроннуой почты" type="password" />
+			<li><label wicket:for="cfg.mailAuthPass">SMTP-РџР°СЂРѕР»СЊ РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ (email_userpass)</label>
+				<input wicket:id="cfg.mailAuthPass" title="Р’РІРµРґРёС‚Рµ РїР°СЂРѕР»СЊ РґР»СЏ СЌР»РµРєС‚СЂРѕРЅРЅСѓРѕР№ РїРѕС‡С‚С‹" type="password" />
 			</li>
-			<li><label wicket:for="mailUseTls">Включить проверку TLS на почтовом сервере</label>
+			<li><label wicket:for="mailUseTls">Р’РєР»СЋС‡РёС‚СЊ РїСЂРѕРІРµСЂРєСѓ TLS РЅР° РїРѕС‡С‚РѕРІРѕРј СЃРµСЂРІРµСЂРµ</label>
 				<select wicket:id="mailUseTls"></select>
 			</li>
-			<li><label wicket:for="replyToOrganizer">Устанавливать адрес электронной
-					почты организатора, как адрес ответа на приглашения  (inviter.email.as.replyto)</label>
+			<li><label wicket:for="replyToOrganizer">РЈСЃС‚Р°РЅР°РІР»РёРІР°С‚СЊ Р°РґСЂРµСЃ СЌР»РµРєС‚СЂРѕРЅРЅРѕР№
+					РїРѕС‡С‚С‹ РѕСЂРіР°РЅРёР·Р°С‚РѕСЂР°, РєР°Рє Р°РґСЂРµСЃ РѕС‚РІРµС‚Р° РЅР° РїСЂРёРіР»Р°С€РµРЅРёСЏ  (inviter.email.as.replyto)</label>
 				<select wicket:id="replyToOrganizer"></select>
 			</li>
-			<li><label wicket:for="defaultLangId">Язык по умолчанию</label>
+			<li><label wicket:for="defaultLangId">РЇР·С‹Рє РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ</label>
 				<select wicket:id="defaultLangId"></select>
 			</li>
-			<li><label wicket:for="cfg.defaultExportFont">Шрифт для экспорта по умолчанию [default_export_font]</label>
+			<li><label wicket:for="cfg.defaultExportFont">РЁСЂРёС„С‚ РґР»СЏ СЌРєСЃРїРѕСЂС‚Р° РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ [default_export_font]</label>
 				<select wicket:id="cfg.defaultExportFont"></select>
 			</li>
 		</ul>

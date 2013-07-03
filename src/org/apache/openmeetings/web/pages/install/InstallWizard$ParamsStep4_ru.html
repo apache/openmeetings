@@ -22,43 +22,43 @@
 <wicket:panel>
 	<fieldset id="userConf2">
 
-		<legend>Тип шифрования</legend>
+		<legend>РўРёРї С€РёС„СЂРѕРІР°РЅРёСЏ</legend>
 		<ul>
-			<li><label wicket:for="cfg.cryptClassName">Crypt Класс</label>
+			<li><label wicket:for="cfg.cryptClassName">Crypt РљР»Р°СЃСЃ</label>
 				<input wicket:id="cfg.cryptClassName"  type="text"
-				title="Укажите имя класса для шифрования. НЕ ИЗМЕНЯЙТЕ УКАЗАННЫЙ КЛАСС ЕСЛИ ВЫ В ЭТОМ НЕ УВЕРЕНЫ" />
+				title="РЈРєР°Р¶РёС‚Рµ РёРјСЏ РєР»Р°СЃСЃР° РґР»СЏ С€РёС„СЂРѕРІР°РЅРёСЏ. РќР• РР—РњР•РќРЇР™РўР• РЈРљРђР—РђРќРќР«Р™ РљР›РђРЎРЎ Р•РЎР›Р Р’Р« Р’ Р­РўРћРњ РќР• РЈР’Р•Р Р•РќР«" />
 				<p>
-					<i> Вы можите использовать заданный по умолчанию тип шифрования, который соответствует
-						функционалу PHP-MD5 или BSD-Style шифрованию, используя:<b>org.apache.openmeetings.utils.crypt.MD5CryptImplementation</b>
-						дополнительную информацию или описание создания собственного класса шифрования смотрите тут: <a
+					<i> Р’С‹ РјРѕР¶РёС‚Рµ РёСЃРїРѕР»СЊР·РѕРІР°С‚СЊ Р·Р°РґР°РЅРЅС‹Р№ РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ С‚РёРї С€РёС„СЂРѕРІР°РЅРёСЏ, РєРѕС‚РѕСЂС‹Р№ СЃРѕРѕС‚РІРµС‚СЃС‚РІСѓРµС‚
+						С„СѓРЅРєС†РёРѕРЅР°Р»Сѓ PHP-MD5 РёР»Рё BSD-Style С€РёС„СЂРѕРІР°РЅРёСЋ, РёСЃРїРѕР»СЊР·СѓСЏ:<b>org.apache.openmeetings.utils.crypt.MD5CryptImplementation</b>
+						РґРѕРїРѕР»РЅРёС‚РµР»СЊРЅСѓСЋ РёРЅС„РѕСЂРјР°С†РёСЋ РёР»Рё РѕРїРёСЃР°РЅРёРµ СЃРѕР·РґР°РЅРёСЏ СЃРѕР±СЃС‚РІРµРЅРЅРѕРіРѕ РєР»Р°СЃСЃР° С€РёС„СЂРѕРІР°РЅРёСЏ СЃРјРѕС‚СЂРёС‚Рµ С‚СѓС‚: <a
 						href="http://openmeetings.apache.org/CustomCryptMechanism.html"
-						target="_blank">Пользовательский механизм шифрования</a> Вы можите изменить это
-						значение позже, НО созданные ранее Пользователи и Сессии могут быть
-						не доступны в дальнейшем
+						target="_blank">РџРѕР»СЊР·РѕРІР°С‚РµР»СЊСЃРєРёР№ РјРµС…Р°РЅРёР·Рј С€РёС„СЂРѕРІР°РЅРёСЏ</a> Р’С‹ РјРѕР¶РёС‚Рµ РёР·РјРµРЅРёС‚СЊ СЌС‚Рѕ
+						Р·РЅР°С‡РµРЅРёРµ РїРѕР·Р¶Рµ, РќРћ СЃРѕР·РґР°РЅРЅС‹Рµ СЂР°РЅРµРµ РџРѕР»СЊР·РѕРІР°С‚РµР»Рё Рё РЎРµСЃСЃРёРё РјРѕРіСѓС‚ Р±С‹С‚СЊ
+						РЅРµ РґРѕСЃС‚СѓРїРЅС‹ РІ РґР°Р»СЊРЅРµР№С€РµРј
 					</i>
 				</p></li>
 		</ul>
 	</fieldset>
 
 	<fieldset id="red5sip">
-		<legend>Конфигурация red5SIP</legend>
+		<legend>РљРѕРЅС„РёРіСѓСЂР°С†РёСЏ red5SIP</legend>
 		<ul>
-			<li><label wicket:for="red5SipEnable">Разрешить SIP</label>
+			<li><label wicket:for="red5SipEnable">Р Р°Р·СЂРµС€РёС‚СЊ SIP</label>
 				<select wicket:id="red5SipEnable"></select>
 				<p>
-					<i> Разрешить интеграцию с red5SIP </i>
+					<i> Р Р°Р·СЂРµС€РёС‚СЊ РёРЅС‚РµРіСЂР°С†РёСЋ СЃ red5SIP </i>
 				</p> </li>
 
-			<li><label wicket:for="cfg.red5SipRoomPrefix">Префикс дла комнат SIP</label>
+			<li><label wicket:for="cfg.red5SipRoomPrefix">РџСЂРµС„РёРєСЃ РґР»Р° РєРѕРјРЅР°С‚ SIP</label>
 				<input wicket:id="cfg.red5SipRoomPrefix" type="text" />
 				<p>
-					<i>Префикс для номеров телефонов для входа в комнаты</i>
+					<i>РџСЂРµС„РёРєСЃ РґР»СЏ РЅРѕРјРµСЂРѕРІ С‚РµР»РµС„РѕРЅРѕРІ РґР»СЏ РІС…РѕРґР° РІ РєРѕРјРЅР°С‚С‹</i>
 				</p></li>
 
-			<li><label wicket:for="cfg.red5SipExtenContext">Окружение расширений SIP</label>
+			<li><label wicket:for="cfg.red5SipExtenContext">РћРєСЂСѓР¶РµРЅРёРµ СЂР°СЃС€РёСЂРµРЅРёР№ SIP</label>
 				<input wicket:id="cfg.red5SipExtenContext" type="text" />
 				<p>
-					<i>Окружение расширений Asterisk</i>
+					<i>РћРєСЂСѓР¶РµРЅРёРµ СЂР°СЃС€РёСЂРµРЅРёР№ Asterisk</i>
 				</p></li>
 		</ul>
 	</fieldset>
