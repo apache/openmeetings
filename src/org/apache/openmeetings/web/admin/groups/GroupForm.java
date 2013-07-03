@@ -87,7 +87,7 @@ public class GroupForm extends AdminCommonUserForm<Organisation> {
 				userDao.update(u, WebSession.getUserId());
 			}
 		}
-		target.appendJavaScript("$('#addUsers').dialog('close');");
+		target.add(usersPanel);
 	}
 	
 	private long getOrgId() {

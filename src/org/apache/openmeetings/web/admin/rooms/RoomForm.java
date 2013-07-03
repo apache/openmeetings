@@ -250,6 +250,7 @@ public class RoomForm extends AdminCommonUserForm<Room> {
 		moderators.setDefaultModelObject(moderatorsInRoom);
 		target.add(moderatorContainer);
 	}
+	
 	void updatClients(AjaxRequestTarget target) {
 		long roomId = (getModelObject().getRooms_id() != null ? getModelObject().getRooms_id() : 0);  
 		final List<Client> clientsInRoom = Application.getBean(SessionManager.class).getClientListByRoom(roomId);
@@ -346,6 +347,6 @@ public class RoomForm extends AdminCommonUserForm<Room> {
 				moderatorsDao.addRoomModeratorByUserId(u, false, roomId);
 			}
 		}
-		target.appendJavaScript("$('#addModerators').dialog('close');");
+		updateModerators(target);
 	}
 }

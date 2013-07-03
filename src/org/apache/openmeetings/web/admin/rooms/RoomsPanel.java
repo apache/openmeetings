@@ -20,9 +20,10 @@ package org.apache.openmeetings.web.admin.rooms;
 
 import org.apache.openmeetings.data.conference.dao.RoomDao;
 import org.apache.openmeetings.persistence.beans.room.Room;
-import org.apache.openmeetings.web.admin.AddUsersForm;
+import org.apache.openmeetings.web.admin.AddUsersDialog;
 import org.apache.openmeetings.web.admin.AdminPanel;
 import org.apache.openmeetings.web.admin.SearchableDataView;
+import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.PagedEntityListPanel;
 import org.apache.openmeetings.web.data.DataViewContainer;
 import org.apache.openmeetings.web.data.OmOrderByBorder;
@@ -37,7 +38,7 @@ import org.apache.wicket.markup.repeater.Item;
 public class RoomsPanel extends AdminPanel {
 
 	private static final long serialVersionUID = -1L;
-	private AddUsersForm addModeratorsForm;
+	private final AddUsersDialog addModeratorsDialog;
 	private RoomForm form;
 	
 	@Override
@@ -91,12 +92,11 @@ public class RoomsPanel extends AdminPanel {
 
 		final WebMarkupContainer addModerator = new WebMarkupContainer("addModerator");
 		addModerator.add(new AjaxEventBehavior("onclick") {
+
 			private static final long serialVersionUID = 1818116963707864134L;
 
 			protected void onEvent(AjaxRequestTarget target) {
-        		addModeratorsForm.clear();
-        		target.add(addModeratorsForm);
-        		target.appendJavaScript("addModerators();");
+        		addModeratorsDialog.open(target);
         	}
         });
 		
@@ -115,15 +115,9 @@ public class RoomsPanel extends AdminPanel {
 				addModerator.setEnabled(!roomEmpty);
 			}
 			
-			/*@Override
-			public void updateView(AjaxRequestTarget target) {
-				super.updateView(target);
-				target.add(addModerator);
-			}*/
 		};
 		
         add(form.add(addModerator.setOutputMarkupId(true)));
-        addModeratorsForm = new AddUsersForm("addModerators", form);
-		add(addModeratorsForm);
+        add(addModeratorsDialog = new AddUsersDialog("addModerators", WebSession.getString(821), form));
 	}
 }

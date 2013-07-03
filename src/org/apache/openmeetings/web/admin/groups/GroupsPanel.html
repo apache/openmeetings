@@ -22,21 +22,9 @@
 	<wicket:head>
 		<script type="text/javascript">
 			function groupsInit() {
-				$('#addUsers').dialog({
-					closeOnEscape: true
-					, autoOpen: false
-					, resizable: false
-					, width: 400
-					, modal: true
-				});
 				var documentHeight = $(document).height();
                 $('#adminForm').height(documentHeight-114);
                 $('#adminTable').height(documentHeight-144);
-			};
-			
-			function addUsers() {
-				$('#addUsers :text').val('');
-				$('#addUsers').dialog('open');
 			};
 		</script>
 	</wicket:head>
@@ -82,25 +70,7 @@
 				</form>
 			</div>
 		</div>
-		<div id="addUsers" wicket:ommessage="title:180" style="display: none;">
-			<form wicket:id="addUsers">
-				<table>
-					<tr>
-						<td><wicket:ommessage key="181" /></td>
-						<td><input type="text" wicket:id="searchText" /></td>
-					</tr>
-					<tr>
-						<td style="text-align: right"><input type="button" wicket:id="search" /></td>
-					</tr>
-					<tr>
-						<td><wicket:ommessage key="183" /></td>
-						<td><select wicket:id="users" style="width: 200px; height: 300px;"></select></td>
-					</tr>
-					<tr>
-						<td colspan="2" style="text-align: right"><input type="button" wicket:id="add" /></td>
-					</tr>
-				</table>
-			</form>
+		<div wicket:id="addUsers">
 		</div>
 	</wicket:panel>
 </html>

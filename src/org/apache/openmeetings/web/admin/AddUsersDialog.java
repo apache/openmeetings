@@ -16,11 +16,13 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+
 package org.apache.openmeetings.web.admin;
 
 import static org.apache.openmeetings.web.admin.groups.GroupUsersPanel.getUser;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.apache.openmeetings.data.user.dao.UsersDao;
@@ -33,21 +35,36 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.form.ListMultipleChoice;
 import org.apache.wicket.markup.html.form.TextField;
+import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 
-public class AddUsersForm extends Form<Void> {
-	private static final long serialVersionUID = -2458265250684437277L;
+import com.googlecode.wicket.jquery.ui.widget.dialog.AbstractFormDialog;
+import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
+
+public class AddUsersDialog extends AbstractFormDialog<User> {
+
+	private static final long serialVersionUID = 1L;
+	private final Form<User> formUsers;
+	private FeedbackPanel feedbackDialog = new FeedbackPanel("feedbackDialog");
+	private final AdminCommonUserForm<?> commonForm;
 	private String userSearchText;
 	private List<User> usersInList = new ArrayList<User>();
-	private List<User> usersToAdd = new ArrayList<User>();
+	private final List<User> usersToAdd = new ArrayList<User>();
+	DialogButton send = new DialogButton(WebSession.getString(175));
+	private DialogButton cancel = new DialogButton(WebSession.getString(219));
+
 	
-	public AddUsersForm(String id, final AdminCommonUserForm<?> commonForm) {
-		super(id);
-		
-		IModel<List<User>> listUsersModel = new PropertyModel<List<User>>(AddUsersForm.this, "usersInList");
-		IModel<List<User>> selectedUsersModel = new PropertyModel<List<User>>(AddUsersForm.this, "usersToAdd");
+	public AddUsersDialog(String id, String title, AdminCommonUserForm<?> commonForm)
+	{
+		super(id, title, true);
+		formUsers = new Form<User>("formUsers", getModel());
+		this.commonForm = commonForm;
+		formUsers.add(feedbackDialog.setOutputMarkupId(true));
+
+		IModel<List<User>> listUsersModel = new PropertyModel<List<User>>(AddUsersDialog.this, "usersInList");
+		IModel<List<User>> selectedUsersModel = new PropertyModel<List<User>>(AddUsersDialog.this, "usersToAdd");
 		final ListMultipleChoice<User> users = new ListMultipleChoice<User>("users"
 				, selectedUsersModel
 				, listUsersModel
@@ -63,30 +80,46 @@ public class AddUsersForm extends Form<Void> {
 			}
 		});
 		
-		add(new TextField<String>("searchText", new PropertyModel<String>(AddUsersForm.this, "userSearchText")));
-		add(new AjaxButton("search", Model.of(WebSession.getString(182L))) {
+		formUsers.add(new TextField<String>("searchText", new PropertyModel<String>(AddUsersDialog.this, "userSearchText")));
+		formUsers.add(new AjaxButton("search", Model.of(WebSession.getString(182L))) {
 			private static final long serialVersionUID = -4752180617634945030L;
 
 			protected void onAfterSubmit(AjaxRequestTarget target, Form<?> form) {
-				clear();
+				usersToAdd.clear();
+				usersInList.clear();
 				usersInList.addAll(Application.getBean(UsersDao.class).get(userSearchText));
 				target.add(users);
 			}
 		});
-		add(users.setOutputMarkupId(true));
-		add(new AjaxButton("add", Model.of(WebSession.getString(175L))) {
-			private static final long serialVersionUID = 5553555064487161840L;
+		formUsers.add(users.setOutputMarkupId(true));
+		add(formUsers.setOutputMarkupId(true));
+}
 
-			protected void onAfterSubmit(AjaxRequestTarget target, Form<?> form) {
-				commonForm.submitView(target, usersToAdd);
-				commonForm.updateView(target);
-			}
-		});
-	}
-
-	public void clear() {
-		usersToAdd.clear();
-		usersInList.clear();
+	
+	@Override
+	protected List<DialogButton> getButtons() {
+		return Arrays.asList(send, cancel);
 	}
 	
+	@Override
+	protected DialogButton getSubmitButton() {
+		return send;
+	}
+
+	@Override
+	public Form<?> getForm() {
+		return formUsers;
+	}
+
+	@Override
+	protected void onError(AjaxRequestTarget target) {
+		target.add(feedbackDialog);
+		
+	}
+
+	@Override
+	protected void onSubmit(AjaxRequestTarget target) {
+		commonForm.submitView(target, usersToAdd);
+	}
+
 }

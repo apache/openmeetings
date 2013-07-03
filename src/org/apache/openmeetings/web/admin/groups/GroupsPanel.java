@@ -21,9 +21,10 @@ package org.apache.openmeetings.web.admin.groups;
 import org.apache.openmeetings.data.user.dao.OrganisationDao;
 import org.apache.openmeetings.persistence.beans.domain.Organisation;
 import org.apache.openmeetings.persistence.beans.domain.Organisation_Users;
-import org.apache.openmeetings.web.admin.AddUsersForm;
+import org.apache.openmeetings.web.admin.AddUsersDialog;
 import org.apache.openmeetings.web.admin.AdminPanel;
 import org.apache.openmeetings.web.admin.SearchableDataView;
+import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.PagedEntityListPanel;
 import org.apache.openmeetings.web.data.DataViewContainer;
 import org.apache.openmeetings.web.data.OmOrderByBorder;
@@ -44,7 +45,7 @@ import org.apache.wicket.markup.repeater.Item;
  */
 public class GroupsPanel extends AdminPanel {
 	private static final long serialVersionUID = -5170400556006464830L;
-	private AddUsersForm addUsersForm;
+	private AddUsersDialog addUsersDialog;
 	private GroupForm form;
 	
 	@Override
@@ -61,9 +62,7 @@ public class GroupsPanel extends AdminPanel {
 			private static final long serialVersionUID = 6037994365235148885L;
 
 			protected void onEvent(AjaxRequestTarget target) {
-        		addUsersForm.clear();
-        		target.add(addUsersForm);
-        		target.appendJavaScript("addUsers();");
+				addUsersDialog.open(target);
         	}
         });
         
@@ -90,8 +89,8 @@ public class GroupsPanel extends AdminPanel {
 			}
 		};
         add(form.add(addUsersBtn.setOutputMarkupId(true)));
-        addUsersForm = new AddUsersForm("addUsers", form);
-		add(addUsersForm);
+        addUsersDialog = new AddUsersDialog("addUsers",WebSession.getString(180), form);
+		add(addUsersDialog.setOutputMarkupId(true));
 
         //List view
         SearchableDataView<Organisation> dataView = new SearchableDataView<Organisation>("groupList", new SearchableDataProvider<Organisation>(OrganisationDao.class)) {

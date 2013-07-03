@@ -22,22 +22,10 @@
 	<wicket:head>
 	   <script type="text/javascript">
            function omRoomPanelInit() {
-				$('#addModerators').dialog({
-					closeOnEscape: true
-					, autoOpen: false
-					, resizable: false
-					, width: 400
-					, modal: true
-				});
                var documentHeight = $(document).height();
                $('#adminForm').height(documentHeight-114);
                $('#adminTable').height(documentHeight-144);
            }
-			
-			function addModerators() {
-				$('#addModerators :text').val('');
-				$('#addModerators').dialog('open');
-			};
        </script>
     </wicket:head>
 	<wicket:panel>
@@ -261,10 +249,10 @@
 				                <label><wicket:ommessage key="1003" /></label><input type="text" wicket:id="confno" />
 							</div>
 				            <div class="formelement">
-				                <label><wicket:ommessage key="1004" /></label><input type="text" wicket:id="pin" />
+				                <label><wicket:ommessage key="1004" /></label><input type="text" disabled="disabled" wicket:id="pin" />
 							</div>
 				            <div class="formelement">
-				                <label><wicket:ommessage key="1308" /></label><input type="text" wicket:id="ownerId" />
+				                <label><wicket:ommessage key="1308" /></label><input type="text" disabled="disabled" wicket:id="ownerId" />
 							</div>
 				            <div class="formelement">
 				                <label><wicket:ommessage key="1538" /></label><input type="checkbox" class="formcheckbox" wicket:id="sipEnabled" />
@@ -274,25 +262,6 @@
 				</form>
 			</div>
 		</div>
-		<div id="addModerators" wicket:ommessage="title:821" style="display: none;">
-			<form wicket:id="addModerators">
-				<table>
-					<tr>
-						<td><wicket:ommessage key="181" /></td>
-						<td><input type="text" wicket:id="searchText" /></td>
-					</tr>
-					<tr>
-						<td style="text-align: right"><input type="button" wicket:id="search" /></td>
-					</tr>
-					<tr>
-						<td><wicket:ommessage key="183" /></td>
-						<td><select wicket:id="users" style="width: 200px; height: 300px;"></select></td>
-					</tr>
-					<tr>
-						<td colspan="2" style="text-align: right"><input type="button" wicket:id="add" /></td>
-					</tr>
-				</table>
-			</form>
-		</div>
+		<div wicket:id="addModerators"></div>
 	</wicket:panel>
 </html>
