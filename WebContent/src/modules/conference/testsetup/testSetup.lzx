@@ -99,11 +99,10 @@ RTMP-host, RTMP/RTMPT-port for the session
 	<method name="parseResultsToSlaveClusterConfig">
 		
         canvas.slaveRtmpport = Number(this.myConfigSet.getPointer().xpathQuery('config/rtmpport/text()'));  
-        canvas.slaveRtmpTunnelport = Number(this.myConfigSet.getPointer().xpathQuery('config/rtmpTunnelport/text()')); 
         canvas.slaveRtmpsslport = Number(this.myConfigSet.getPointer().xpathQuery('config/rtmpsslport/text()')); 
         canvas.slaveWebAppRootKey = this.myConfigSet.getPointer().xpathQuery('config/webAppRootKey/text()'); 
 		
-		if ($debug) Debug.write("parseResults: ",canvas.slaveRtmphostlocal,canvas.slaveRtmpport,canvas.slaveRtmpTunnelport,canvas.slaveRtmpsslport,canvas.slaveWebAppRootKey);
+		if ($debug) Debug.write("parseResults: ",canvas.slaveRtmphostlocal,canvas.slaveRtmpport,canvas.slaveRtmpsslport,canvas.slaveWebAppRootKey);
 		
 		//Hosted on slave
 		canvas.isSlaveHosted = true;

@@ -127,9 +127,9 @@
         }
     	if (this.useRTMPT) {
     		if (canvas.isSlaveHosted) {
-    			return canvas.slaveRtmpTunnelport;
+    			return canvas.red5httpport; //TODO probably slave equivalent need to be added (or maybe this is not used)
     		}
-    		return canvas.rtmpTunnelport;
+    		return canvas.red5httpport;
     	}
     	if (canvas.isSlaveHosted) {
     		return canvas.slaveRtmpport;

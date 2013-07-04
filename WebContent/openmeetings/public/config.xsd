@@ -25,7 +25,6 @@
         <xs:element ref="rtmphostlocal"/>
         <xs:element ref="httphostlocal"/>
         <xs:element ref="rtmpport"/>
-        <xs:element ref="rtmpTunnelport"/>
         <xs:element ref="rtmpsslport"/>
         <xs:element ref="useSSL"/>
         <xs:element ref="red5httpport"/>

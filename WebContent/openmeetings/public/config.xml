@@ -49,13 +49,6 @@ You can find all this configuration in your red5-Config in: $RED5_HOME/conf/red5
  -->
 <rtmpport>1935</rtmpport>
 
-<!-- 
-Port to use for the Server
-To this port the fallback is done once the default rtmport failed
-this should workaround 99% of all firewalls
- -->
-<rtmpTunnelport>8088</rtmpTunnelport>
-
 <rtmpsslport>443</rtmpsslport>
 <!--
 Wether it should try to connect to rtmps first or not

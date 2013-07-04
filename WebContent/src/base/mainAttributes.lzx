@@ -68,13 +68,6 @@ these properties will be overwritten by public/config.xml -->
 
 <!--- 
     Port to use for the Server
-    To this port the fallback is done once the default rtmport failed
-    this should workaround 99% of all firewalls
- -->
-<attribute name="rtmpTunnelport" value="8088" type="string" />
-
-<!--- 
-    Port to use for the Server
     This port is used to connect to the HTTP-Servlet
     of the Red5-Servlet
  -->
@@ -114,8 +107,6 @@ Attributes needed for clustering -->
 <attribute name="slaveRtmphostlocal" value="" type="string" />
 <!-- rtmpport from slave's public/config.xml  --> 
 <attribute name="slaveRtmpport" value="5080" type="string" />
-<!-- rtmpTunnelport from slave's public/config.xml -->
-<attribute name="slaveRtmpTunnelport" value="8088" type="string" />
 <!-- rtmpsslport from slave's public/config.xml -->
 <attribute name="slaveRtmpsslport" value="443" type="string" />
 <!-- from slave's public/config.xml -->

@@ -964,14 +964,11 @@
 				<include name="**/*"/>
 			</fileset>
 		</move>
-		
-		<delete file="${red5.lib}/lib/servlet-api-2.5.jar" />
+	
+		<delete file="${red5.lib}/lib/servlet-api-2.5.jar" />	
 		<delete dir="${red5.lib}/webapps/installer" />
 		<delete dir="${red5.lib}/webapps/live" />
 		<delete dir="${red5.lib}/webapps/vod" />
-		<copy todir="${red5.lib}/conf" overwrite="true" force="true">
-			<fileset dir="${webcontent.src.dir}/red5" includes="jee-container*.xml" />
-		</copy>
 		<copy file="${webcontent.src.dir}/red5/index.html" todir="${red5.lib}/webapps/root" overwrite="true" force="true" />
 		<copy todir="${red5.lib}" overwrite="true" force="true">
 			<fileset dir="${webcontent.src.dir}/red5" includes="admin.*,network_test.sh" />

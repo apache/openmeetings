@@ -73,12 +73,6 @@
 					<td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> rtmp.port </td>
 					<td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> rtmpport </td>
 				</tr>
-				<tr>
-					<td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> RTMPT </td>
-					<td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> 8088 </td>
-					<td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> rtmpt.host </td>
-					<td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> rtmpTunnelport </td>
-				</tr>
 			</table>
 
 		</section>

@@ -212,7 +212,6 @@
         //Set Config-values by public/config.xml, see comments on public/config.xml
         this.setAttribute('rtmphostlocal',canvas.myConfigSet.getPointer().xpathQuery('config/rtmphostlocal/text()'));   
         this.setAttribute('rtmpport',Number(canvas.myConfigSet.getPointer().xpathQuery('config/rtmpport/text()')));  
-        this.setAttribute('rtmpTunnelport',Number(canvas.myConfigSet.getPointer().xpathQuery('config/rtmpTunnelport/text()'))); 
         this.setAttribute('rtmpsslport',Number(canvas.myConfigSet.getPointer().xpathQuery('config/rtmpsslport/text()'))); 
         
         var userSSLString = canvas.myConfigSet.getPointer().xpathQuery('config/useSSL/text()');

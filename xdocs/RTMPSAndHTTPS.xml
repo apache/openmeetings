@@ -165,7 +165,6 @@
 				<li>
 					Edit <tt>red5/conf/jee-container.xml</tt> file:<br/>
 					Comment <tt>Tomcat without SSL enabled</tt> section<br/>
-					Comment <tt>RTMPT (dedicated server)</tt> section<br/>
 					UNComment <tt>Tomcat with SSL enabled</tt> section
 				</li>
 				<li>
