@@ -965,17 +965,7 @@
 			</fileset>
 		</move>
 		
-		<!-- START of Tomcat 7 patch -->
-		<delete>
-			<fileset dir="${red5.lib}/plugins" includes="*.jar" />
-		</delete>
-		<antcall target="-retrieve" inheritAll="true" inheritRefs="true">
-			<param name="ivy.conf.name" value="tomcat7" />
-			<param name="ivy.lib.location" value="${red5.lib}/plugins" />
-		</antcall>
-		<delete file="${red5.lib}/lib/javaee-api-5.1.2.jar" />
 		<delete file="${red5.lib}/lib/servlet-api-2.5.jar" />
-		<!-- END of Tomcat 7 patch -->
 		<delete dir="${red5.lib}/webapps/installer" />
 		<delete dir="${red5.lib}/webapps/live" />
 		<delete dir="${red5.lib}/webapps/vod" />
