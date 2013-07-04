@@ -642,7 +642,6 @@ div.tableWrapperSmall {
 	margin-left: 60px;
 }
 .profile {
-	display: inline-block;
 	position: relative;
 }
 .profile .upload, .profile .uploadtext {
@@ -659,6 +658,13 @@ div.tableWrapperSmall {
 	font-weight: bold;
 	color: blue;
 }
+
+.profile .uploadlang {
+	text-align: center;
+	font-size: 16px;
+	padding: 0.4em 1em;
+}
+
 .profile .upload {
 	z-index: 100;
 	cursor: pointer;
