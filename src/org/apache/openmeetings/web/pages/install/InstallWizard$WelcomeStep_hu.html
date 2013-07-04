@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<!-- 
+
+ Hungaryan translate
+ Created 03-07-2013
+ Translate this Balazs Varga - joinfok@gmail.com	
+
+ -->
+<html xmlns:wicket="http://wicket.apache.org">
+<wicket:panel>
+	<ol>
+		<li>
+			<h4>
+				<a id="Recommendation_for_production_environment"></a>Ajánlott környezeti beállítások<a target="_blank"
+					href="#Recommendation_for_production_environment"
+					class="section_anchor"></a>
+			</h4>
+		<blockquote>
+			Az <span wicket:id="app"></span> alapértelmezette a beépített Apache Derby adatbázist használja. 
+			További lehetőségként használható a <a target="_blank"
+				href="http://openmeetings.apache.org/MySQLConfig.html">MySQL</a>, <a
+				target="_blank"
+				href="http://openmeetings.apache.org/PostgresConfig.html">Postgres</a>
+			vagy a minta alapján<a target="_blank"
+				href="http://openmeetings.apache.org/IBMDB2Config.html">IBM DB2</a>
+			vagy <a href="http://openmeetings.apache.org/OracleConfig.html"
+				target="_blank">Oracle</a>
+		</blockquote>
+		</li>
+		<li><h4>
+				<a id="Enabling_Image_Upload_and_import_to_whiteboard"></a>Képek feltöltése/importálása a prezentációs területbe<a
+					href="#Enabling_Image_Upload_and_import_to_whiteboard"
+					class="section_anchor"></a>
+			</h4>
+			<ul>
+				<li>Telepítse a <strong>ImageMagick</strong> program csomagot a szerverre. Telepítési útmutató és további információk itt 
+				<a target="_blank" href="http://www.imagemagick.org" rel="nofollow">http://www.imagemagick.org</a>
+				<a target="_blank"
+					href="http://www.imagemagick.org/script/binary-releases.php"
+					rel="nofollow">http://www.imagemagick.org/script/binary-releases.php</a>,
+					Linux operációs rendszerben használja a beépített csomagkezelőt (apt-get it).
+				</li>
+			</ul>
+		</li>
+		<li><h4>
+				<a id="Enabling_import_of_PDFs_into_whiteboard"></a>PDF fileok feltöltése a prezentációs területbe<a
+					href="#Enabling_import_of_PDFs_into_whiteboard"
+					class="section_anchor"></a>
+			</h4>
+			<ul>
+				<li>Telepítse a  <strong>GhostScript</strong> program csomagot a szerverre. Telepítési útmutató és további információk itt <a target="_blank"
+					href="http://pages.cs.wisc.edu/%7Eghost/" rel="nofollow">http://pages.cs.wisc.edu/~ghost/</a>
+					Linux operációs rendszerben használja a beépített csomagkezelőt (apt-get it).
+				</li>
+				<li>Telepítse a <strong>SWFTools</strong> program csomagot a szerverre. Telepítési útmutató és további információk itt  <a target="_blank"
+					href="http://www.swftools.org/" rel="nofollow">http://www.swftools.org/</a>
+					Több linux disztribúció csomagkezelőjében megtalálható <a target="_blank"
+					href="http://packages.debian.org/unstable/utils/swftools"
+					rel="nofollow">http://packages.debian.org/unstable/utils/swftools</a>),
+					ajánlott verzió a <strong>SWFTools</strong> 0.9 egyéb verzió bugja miatt hibát okozhat a prezentációkban. 
+				</li>
+		</ul>
+		</li>
+		<li><h4>
+				<a
+					id="Enabling_import_of_.doc,_.docx,_.ppt,_.pptx,_..._all_Office_Docu"></a>Dokumentumok importálása a prezentációs területrbe
+				.doc, .docx, .ppt, .pptx, ... stb (OpenOfice kompatibilis).<a
+					href="#Enabling_import_of_.doc,_.docx,_.ppt,_.pptx,_..._all_Office_Docu"
+					class="section_anchor"></a>
+			</h4>
+			<ul>
+				<li>Telepítse az <strong>OpenOffice / LibreOffice</strong> program csomagot a szerverre. Telepítési útmutató és további információk itt  <a target="_blank"
+					href="http://www.openoffice.org/" rel="nofollow">http://www.openoffice.org/</a>
+					<a target="_blank"
+					href="http://www.libreoffice.org/" rel="nofollow">http://www.libreffice.org/</a>
+					LibreOffice program csomag használata esetén rendelje hozzá szimbólikus linkként az OpenOffice könyvtárat.
+					<br />
+					ln -s /opt/libreoffice /opt/openoffice 
+				</li>
+				<li><strong>OpenOffice-Service</strong> automatikusan indul és elérhető a
+					8100 porton. Bővebb információ itt <a target="_blank"
+					href="http://openmeetings.apache.org/OpenOfficeConverter.html">OpenOfficeConverter</a>
+				</li>
+			</ul>
+		</li>
+		<li><h4>
+				<a
+					id="Enabling_Recording_and_import_of_.avi,_.flv,_.mov_and_.mp4_into"></a>Videó felvétele és importálása .avi, .flv, .mov and .mp4 formátumokban a prezentációs területbe<a
+					href="#Enabling_Recording_and_import_of_.avi,_.flv,_.mov_and_.mp4_into"
+					class="section_anchor"></a>
+			</h4>
+			<ul>
+				<li>Telepítse az <strong>FFMpeg</strong> programcsomagot. Használja az FFMPEG aktuális, friss verzióját.
+				 	Windows rendszerekhez kiadások itt <a target="_blank" href="http://ffmpeg.arrozcru.org/builds/"
+					rel="nofollow">http://ffmpeg.arrozcru.org/builds/</a> Linux, OSX rendszerkhez
+					többféle lehetőség érhető el, keresse meg a megfelelőt az interneten. 
+					Szükséges a libmp3lame kóder engedélyezése/implementálása!
+				</li>
+				<li>Telepítse a <strong>SoX</strong> programot innen: <a
+					href="http://sox.sourceforge.net/" target="_BLANK">http://sox.sourceforge.net/</a>.
+					A SoX friss verzióit használja! SoX 12.xx nem/hibásan működik!
+				</li>
+			</ul>
+		</li>
+	</ol>
+
+	<br />
+	<b> <span style="font-size: 1.2em">Kérdése van, vagy segítségre van szüksége:</span></b>
+	<br />
+	<br />
+
+	<b> <span style="font-size: 1.2em">Üzleti-támogatás:</span></b>
+	<br />
+	<br />
+
+	<span style="font-size: 1.1em"><b>Telefonon</b></span>
+	<br />
+	<span style="font-size: 1.1em">++49 721 467 27327</span>
+	<br />
+	<span style="font-size: 1.1em"><b>e-mailben</b></span>
+	<br />
+	<span style="font-size: 1.1em"><a
+		href="mailto:service@openmeetings.de">service@openmeetings.de</a></span>
+	<br />
+	<br />
+	<br />
+	<b><span style="font-size: 1.2em">Közösségi-támogatás:</span></b>
+	<br />
+	<br />
+	<span style="font-size: 1.1em"><a
+		href="http://openmeetings.apache.org/mail-lists.html"
+		target="_blank">Levelező lista</a></span>
+	<br />
+</wicket:panel>
+</html>
