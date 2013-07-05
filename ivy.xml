@@ -278,10 +278,10 @@
 			<include type="jar" />
 		</dependency>
 		-->
-		<dependency org="org.wicketstuff" name="wicketstuff-urlfragment" rev="6.8.0" conf="openmeetings->*" transitive="false">
+		<dependency org="org.wicketstuff" name="wicketstuff-urlfragment" rev="6.9.0" conf="openmeetings->*" transitive="false">
 			<include type="jar" />
 		</dependency>
-		<dependency org="org.wicketstuff" name="wicketstuff-html5" rev="6.8.0" conf="openmeetings->*" transitive="false">
+		<dependency org="org.wicketstuff" name="wicketstuff-html5" rev="6.9.0" conf="openmeetings->*" transitive="false">
 			<include type="jar" />
 		</dependency>
 		
