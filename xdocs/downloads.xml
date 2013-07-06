@@ -26,7 +26,7 @@
 		<section name="Downloads">
 			<div>
 				All downloads can be verified using the Apache OpenMeetings code
-				signing <a href="http://www.apache.org/dyn/closer.cgi/openmeetings/2.1.0/KEYS">KEYS</a>.
+				signing <a href="https://www.apache.org/dist/openmeetings/2.1.1/KEYS">KEYS</a>.
 			</div>
 			<p>
 				All are available for download as source and binary.
@@ -41,14 +41,14 @@
 						Binaries:
 						<ul>
 							<li>
-								<a href="http://www.apache.org/dyn/closer.cgi/openmeetings/2.1.0/bin/apache-openmeetings-2.1.0.zip">apache-openmeetings-2.1.0.zip</a>
-								<a href="http://www.apache.org/dist/openmeetings/2.1.0/bin/apache-openmeetings-2.1.0.zip.asc">[SIG]</a>
-								<a href="http://www.apache.org/dist/openmeetings/2.1.0/bin/apache-openmeetings-2.1.0.zip.md5">[MD5]</a>
+								<a href="http://www.apache.org/dyn/closer.cgi/openmeetings/2.1.1/bin/apache-openmeetings-2.1.1.zip">apache-openmeetings-2.1.0.zip</a>
+								<a href="http://www.apache.org/dist/openmeetings/2.1.1/bin/apache-openmeetings-2.1.1.zip.asc">[SIG]</a>
+								<a href="http://www.apache.org/dist/openmeetings/2.1.1/bin/apache-openmeetings-2.1.1.zip.md5">[MD5]</a>
 							</li>
 							<li>
-								<a href="http://www.apache.org/dyn/closer.cgi/openmeetings/2.1.0/bin/apache-openmeetings-2.1.0.tar.gz">apache-openmeetings-2.1.0.tar.gz</a>
-								<a href="http://www.apache.org/dist/openmeetings/2.1.0/bin/apache-openmeetings-2.1.0.tar.gz.asc">[SIG]</a>
-								<a href="http://www.apache.org/dist/openmeetings/2.1.0/bin/apache-openmeetings-2.1.0.tar.gz.md5">[MD5]</a>
+								<a href="http://www.apache.org/dyn/closer.cgi/openmeetings/2.1.1/bin/apache-openmeetings-2.1.1.tar.gz">apache-openmeetings-2.1.0.tar.gz</a>
+								<a href="http://www.apache.org/dist/openmeetings/2.1.1/bin/apache-openmeetings-2.1.0.tar.gz.asc">[SIG]</a>
+								<a href="http://www.apache.org/dist/openmeetings/2.1.1/bin/apache-openmeetings-2.1.0.tar.gz.md5">[MD5]</a>
 							</li>
 						</ul>
 					</li>
@@ -56,14 +56,14 @@
 						Sources:
 						<ul>
 							<li>
-								<a href="http://www.apache.org/dyn/closer.cgi/openmeetings/2.1.0/src/apache-openmeetings-2.1.0-src.zip">apache-openmeetings-2.1.0-src.zip</a>
-								<a href="http://www.apache.org/dist/openmeetings/2.1.0/src/apache-openmeetings-2.1.0-src.zip.asc">[SIG]</a>
-								<a href="http://www.apache.org/dist/openmeetings/2.1.0/src/apache-openmeetings-2.1.0-src.zip.md5">[MD5]</a>
+								<a href="http://www.apache.org/dyn/closer.cgi/openmeetings/2.1.1/src/apache-openmeetings-2.1.1-src.zip">apache-openmeetings-2.1.0-src.zip</a>
+								<a href="http://www.apache.org/dist/openmeetings/2.1.1/src/apache-openmeetings-2.1.0-src.zip.asc">[SIG]</a>
+								<a href="http://www.apache.org/dist/openmeetings/2.1.1/src/apache-openmeetings-2.1.0-src.zip.md5">[MD5]</a>
 							</li>
 							<li>
-								<a href="http://www.apache.org/dyn/closer.cgi/openmeetings/2.1.0/src/apache-openmeetings-2.1.0-src.tar.gz">apache-openmeetings-2.1.0-src.tar.gz</a>
-								<a href="http://www.apache.org/dist/openmeetings/2.1.0/src/apache-openmeetings-2.1.0-src.tar.gz.asc">[SIG]</a>
-								<a href="http://www.apache.org/dist/openmeetings/2.1.0/src/apache-openmeetings-2.1.0-src.tar.gz.md5">[MD5]</a>
+								<a href="http://www.apache.org/dyn/closer.cgi/openmeetings/2.1.1/src/apache-openmeetings-2.1.1-src.tar.gz">apache-openmeetings-2.1.0-src.tar.gz</a>
+								<a href="http://www.apache.org/dist/openmeetings/2.1.1/src/apache-openmeetings-2.1.1-src.tar.gz.asc">[SIG]</a>
+								<a href="http://www.apache.org/dist/openmeetings/2.1.1/src/apache-openmeetings-2.1.1-src.tar.gz.md5">[MD5]</a>
 							</li>
 						</ul>
 					</li>
@@ -72,6 +72,10 @@
 			</subsection>
 
 			<subsection name="Previous Official Releases">
+				<p>
+					Apache Openmeetings releases available here:
+					<a href="http://archive.apache.org/dist/openmeetings/">http://archive.apache.org/dist/openmeetings/</a>
+				</p>
 				<p>
 					Apache Openmeetings Incubating 2.0 is available here:
 					<a href="http://archive.apache.org/dist/incubator/openmeetings/2.0-incubating/">http://archive.apache.org/dist/incubator/openmeetings/2.0-incubating</a>
