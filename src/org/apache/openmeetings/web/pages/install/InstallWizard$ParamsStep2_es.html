@@ -1,0 +1,68 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<html xmlns:wicket="http://wicket.apache.org">
+<wicket:panel>
+	<fieldset id="userConf">
+		<legend>Configuración</legend>
+		<ul>
+			<li><label for="configdefault">Permitir auto-registro (allow_frontend_register)</label>
+				<select wicket:id="allowFrontendRegister"></select>
+			</li>
+			<li><label wicket:for="sendEmailAtRegister">Enviar Correo a los nuevos Usuarios registrados (sendEmailAtRegister)</label>
+				<select wicket:id="sendEmailAtRegister"></select>
+			</li>
+			<li><label wicket:for="sendEmailWithVerficationCode">Los Nuevos Usuarios necesitan verificarse con sus Correos (sendEmailWithVerficationCode)</label>
+				<select wicket:id="sendEmailWithVerficationCode"></select>
+			</li>
+			<li><label wicket:for="createDefaultRooms">Salas Preconfiguradas de todo tipo serán creadas</label>
+				<select wicket:id="createDefaultRooms"></select>
+			</li>
+			<li><label wicket:for="cfg.mailReferer">Correo de Referencia (system_email_addr)</label>
+				<input wicket:id="cfg.mailReferer" title="Enter a Referer" type="text" />
+			</li>
+			<li><label wicket:for="cfg.smtpServer">Servidor SMTP (smtp_server)</label>
+				<input wicket:id="cfg.smtpServer" title="Enter a SMTP-Server" type="text" />
+			</li>
+			<li><label wicket:for="cfg.smtpPort">Puerto del Servidor (el Puerto clásico del Servidor-Smtp es el 25) (smtp_port)</label>
+				<input wicket:id="cfg.smtpPort" title="Enter a SMTP-Server.Port normally 25" type="text" />
+			</li>
+			<li><label wicket:for="cfg.mailAuthName">Nombre de Usuario de correo SMTP (email_username)</label>
+				<input wicket:id="cfg.mailAuthName" title="Enter the mail-username" type="text" />
+			</li>
+			<li><label wicket:for="cfg.mailAuthPass">Contraseña del usuario de correo SMTP (email_userpass)</label>
+				<input wicket:id="cfg.mailAuthPass" title="Enter the mail-userpass" type="password" />
+			</li>
+			<li><label wicket:for="mailUseTls">Activar TLS en el Servidor de Correo Autentificado</label>
+				<select wicket:id="mailUseTls"></select>
+			</li>
+			<li><label wicket:for="replyToOrganizer">Poner la dirección de correo electrónico como ReplyTo en los correos de invitaciónes (inviter.email.as.replyto)</label>
+				<select wicket:id="replyToOrganizer"></select>
+			</li>
+			<li><label wicket:for="defaultLangId">Idioma preferido</label>
+				<select wicket:id="defaultLangId"></select>
+			</li>
+			<li><label wicket:for="cfg.defaultExportFont">Fuente Preferida para Exportar [default_export_font]</label>
+				<select wicket:id="cfg.defaultExportFont"></select>
+			</li>
+		</ul>
+	</fieldset>
+</wicket:panel>
+</html>
