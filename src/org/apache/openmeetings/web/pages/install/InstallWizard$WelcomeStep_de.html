@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<html xmlns:wicket="http://wicket.apache.org">
+<wicket:panel>
+	<ol>
+		<li>
+			<h4>
+				<a id="Recommendation_for_production_environment"></a>Empfehlung 
+					f&uuml;r Produktivumgebungen<a target="_blank"
+					href="#Recommendation_for_production_environment"
+					class="section_anchor"></a>
+			</h4>
+		<blockquote>
+			Standardm&auml;&szlig;ig verwendet <span wicket:id="app"></span> die integrierte 
+			Apache Derby Datenbank. In Produktivumgebungen wird jedoch der Einsatz von 
+			<a target="_blank"
+				href="http://openmeetings.apache.org/MySQLConfig.html">MySQL</a>, <a
+				target="_blank"
+				href="http://openmeetings.apache.org/PostgresConfig.html">Postgres</a>, <a 
+				target="_blank"
+				href="http://openmeetings.apache.org/IBMDB2Config.html">IBM DB2</a> 
+			oder <a href="http://openmeetings.apache.org/OracleConfig.html"
+				target="_blank">Oracle</a> empfohlen.
+		</blockquote>
+		</li>
+		<li><h4>
+				<a id="Enabling_Image_Upload_and_import_to_whiteboard"></a>Import von Bildern auf 
+					das Whiteboard erm&ouml;glichen<a
+					href="#Enabling_Image_Upload_and_import_to_whiteboard"
+					class="section_anchor"></a>
+			</h4>
+			<ul>
+				<li>Installieren Sie <strong>ImageMagick</strong> auf dem Server. Weitere
+					Informationen unter <a target="_blank"
+					href="http://www.imagemagick.org" rel="nofollow">http://www.imagemagick.org</a>.
+					Anleitungen f&uuml;r die Installation finden Sie unter <a target="_blank"
+					href="http://www.imagemagick.org/script/binary-releases.php"
+					rel="nofollow">http://www.imagemagick.org/script/binary-releases.php</a>, in den
+					meisten Linux-Distributionen l&auml;sst es sich jedoch bequem per Paketmanager
+					(z.B. apt-get) installieren.
+				</li>
+			</ul>
+		</li>
+		<li><h4>
+				<a id="Enabling_import_of_PDFs_into_whiteboard"></a>Import von PDF-Dateien auf das
+					Whiteboard erm&ouml;glichen<a
+					href="#Enabling_import_of_PDFs_into_whiteboard"
+					class="section_anchor"></a>
+			</h4>
+			<ul>
+				<li>Installieren Sie <strong>GhostScript</strong> auf dem Server. Weitere
+					Informationen (Installationsanleitungen etc.) finden Sie unter <a target="_blank"
+					href="http://pages.cs.wisc.edu/%7Eghost/" rel="nofollow">http://pages.cs.wisc.edu/~ghost/</a>. 
+					In den meisten Linux-Distributionen l&auml;sst es sich bequem per Paketmanager
+					(z.B. apt-get) installieren.
+				</li>
+				<li>Installieren Sie <strong>SWFTools</strong> auf dem Server. Weitere 
+					Informationen (Installationsanleitungen etc.) finden Sie unter <a target="_blank"
+					href="http://www.swftools.org/" rel="nofollow">http://www.swftools.org/</a>. 
+					Einige Linux-Distributionen haben es bereits in ihre Paketquellen aufgenommen (siehe 
+					<a target="_blank"
+					href="http://packages.debian.org/unstable/utils/swftools"
+					rel="nofollow">http://packages.debian.org/unstable/utils/swftools</a>).
+					Die empfohlene Version von <strong>SWFTools</strong> ist 0.9 - fr&uuml;here Versionen
+					enthalten einen Bug, welcher zu falschen Objektausdehnungen auf dem Whiteboard 
+					f&uuml;hrt.
+				</li>
+		</ul>
+		</li>
+		<li><h4>
+				<a
+					id="Enabling_import_of_.doc,_.docx,_.ppt,_.pptx,_..._all_Office_Docu"></a>Import von 
+					Office-Dokumenten (.doc, .docx, .ppt, .pptx, etc.) auf das Whiteboard erm&ouml;glichen
+					<a
+					href="#Enabling_import_of_.doc,_.docx,_.ppt,_.pptx,_..._all_Office_Docu"
+					class="section_anchor"></a>
+			</h4>
+			<ul>
+				<li><strong>OpenOffice-Service</strong> muss gestartet worden sein und auf Port 8100 lauschen, 
+					siehe <a target="_blank"
+					href="http://openmeetings.apache.org/OpenOfficeConverter.html">OpenOfficeConverter</a>.</li>
+			</ul>
+		</li>
+		<li><h4>
+				<a
+					id="Enabling_Recording_and_import_of_.avi,_.flv,_.mov_and_.mp4_into"></a>Aufzeichnung und 
+					Import von Videos (.avi, .flv, .mov und .mp4) auf das Whiteboard erm&ouml;glichen<a
+					href="#Enabling_Recording_and_import_of_.avi,_.flv,_.mov_and_.mp4_into"
+					class="section_anchor"></a>
+			</h4>
+			<ul>
+				<li>Installieren Sie <strong>FFmpeg</strong>. Sie sollten die neueste Version verwenden! 
+					Windows-Binaries finden Sie z.B. unter 
+					<a target="_blank" href="http://ffmpeg.arrozcru.org/builds/"
+					rel="nofollow">http://ffmpeg.arrozcru.org/builds/</a>. Linux- oder OSx-Nutzer sollten 
+					eine der zahlreichen Installationsanleitungen im Web zu Rate ziehen. libmp3lame muss 
+					aktiviert sein!
+				</li>
+				<li>Installieren Sie <strong>SoX</strong> <a
+					href="http://sox.sourceforge.net/" target="_BLANK">http://sox.sourceforge.net/</a>.
+					Sie sollten die neueste Version verwenden! SoX 12.xx wird NICHT funktionieren!
+				</li>
+			</ul>
+		</li>
+	</ol>
+
+	<br />
+	<b> <span style="font-size: 1.2em">Falls Sie weitere Fragen haben oder Support bei Installation und Hosting 
+			ben&ouml;tigen:</span></b>
+	<br />
+	<br />
+
+	<b> <span style="font-size: 1.2em">Kommerzieller Support:</span></b>
+	<br />
+	<br />
+
+	<span style="font-size: 1.1em"><b>Telefonisch</b></span>
+	<br />
+	<span style="font-size: 1.1em">++49 721 467 27327</span>
+	<br />
+	<span style="font-size: 1.1em"><b>Per E-Mail</b></span>
+	<br />
+	<span style="font-size: 1.1em"><a
+		href="mailto:service@openmeetings.de">service@openmeetings.de</a></span>
+	<br />
+	<br />
+	<br />
+	<b><span style="font-size: 1.2em">Support durch die OpenMeetings-Community:</span></b>
+	<br />
+	<br />
+	<span style="font-size: 1.1em"><a
+		href="http://openmeetings.apache.org/mail-lists.html"
+		target="_blank">Mailinglisten</a></span>
+	<br />
+</wicket:panel>
+</html>
