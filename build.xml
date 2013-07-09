@@ -46,8 +46,10 @@
 	<property name="docs.src" value="xdocs" />
 
 	<property name="red5.server.dir" value="${build.base.dir}/red5/server" />
+	<property name="red5.client.dir" value="${build.base.dir}/red5/client" />
 	<property name="red5.lib" value="${red5.server.dir}/dist" />
 	<property name="red5.server.lib" value="${red5.lib}/lib" />
+	<property name="red5.client.lib" value="${red5.client.dir}/dist" />
 	<property name="red5.root" value="${dist.dir}/red5" />
 	<property name="dist.webapps.dir" value="${red5.root}/webapps/${project.distname}" />
 	<property name="dist.persistence.dir" value="${dist.webapps.dir}/WEB-INF/classes/META-INF/" />
@@ -86,6 +88,7 @@
 	<!-- compile classpath -->
 	<path id="check.classpath">
 		<fileset dir="${red5.server.lib}" includes="*.jar" />
+		<fileset dir="${red5.client.lib}" includes="*.jar" />
 		<fileset dir="${red5.lib}" includes="*.jar" />
 		<fileset dir="${mainlibs.lib.dir}" includes="*.jar" />
 		<fileset dir="${om.lib.dir}" includes="*.jar" />
@@ -95,6 +98,7 @@
 	</path>
 	<path id="compile.classpath">
 		<fileset dir="${red5.lib}/plugins" includes="*.jar" />
+		<fileset dir="${red5.server.dir}/target/lib" includes="junit*.jar" />
 		<path refid="check.classpath"/>
 	</path>
 
@@ -105,6 +109,7 @@
 	<target name="prepare.mkdir" depends="-java6or7.check">
 		<mkdir dir="${red5.server.lib}" />
 		<mkdir dir="${red5.lib}/log" />
+		<mkdir dir="${red5.client.dir}/dist" />
 		<mkdir dir="${dist.dir}" />
 		<mkdir dir="${main.out.dir}" />
 		<mkdir dir="${mainlibs.lib.dir}" />
@@ -187,6 +192,7 @@
 	<!-- build webapp -->
 	<target name="-copy-libraries" description="All jars downloaded by ivy copied to appropriate places">
 		<copy todir="${red5.root}/lib">
+			<fileset dir="${red5.client.lib}" includes="red5-client*.jar" />
 			<fileset dir="${mainlibs.lib.dir}" includes="*.jar" />
 		</copy>
 		<copy todir="${dist.webapps.dir}/WEB-INF/lib">
@@ -458,7 +464,7 @@
 			<fileset dir="${red5.server.lib}" includes="logback*.jar" />
 			<fileset dir="${red5.server.lib}" includes="mina-core*.jar" />
 			<fileset dir="${red5.server.lib}" includes="com.springsource.slf4j.api*.jar" />
-			<fileset dir="${red5.server.lib}" includes="red5-client*.jar" />
+			<fileset dir="${red5.client.lib}" includes="red5-client*.jar" />
 		</copy>
 		<signjar alias="filetest" keystore="${keystore.file}" storepass="secret" lazy="false"
 			sigalg="MD5withRSA" digestalg="SHA1">
@@ -796,6 +802,7 @@
 
 	<path id="junit.classpath">
 		<fileset dir="${junit.lib.dir}" includes="*.jar" />
+		<fileset dir="${red5.server.dir}/target/lib" includes="junit*.jar" />
 		<fileset dir="${om.dist.webapp}/WEB-INF/lib">
 			<include name="*.jar" />
 			<exclude name="openmeetings*.jar" />
@@ -964,6 +971,9 @@
 				<include name="**/*"/>
 			</fileset>
 		</move>
+		<delete>
+			<fileset dir="${red5.lib}/lib" includes="red5-client*.jar" />
+		</delete>
 	
 		<delete file="${red5.lib}/lib/servlet-api-2.5.jar" />	
 		<delete dir="${red5.lib}/webapps/installer" />
@@ -982,8 +992,30 @@
 		<antcall target="-patch-red5-server-start-script"/> 
 	</target>
 	
+	<!-- Check for the Red5 client libraries -->
+	<target name="-retrieve-red5-client" unless="red5.client.installed" description="Retrieves the libraries if needed" depends="-retrieve-red5-server">
+		<svn refid="svn.settings">
+			<checkout url="https://red5.googlecode.com/svn/java/client/trunk/" revision="${red5.client.revision}" destPath="${red5.client.dir}" />
+		</svn>
+		<delete>
+			<fileset dir="${red5.client.dir}/lib" includes="red5-server*.jar" />
+		</delete>
+		<copy file="${red5.lib}/red5-server.jar" todir="${red5.client.dir}/lib" overwrite="true" force="true" />
+		<artifact:mvn pom="${red5.client.dir}/pom.xml" mavenVersion="${maven.version}" fork="true" dir="${red5.client.dir}">
+			<jvmarg value="-Dmaven.buildNumber.doUpdate=false" />
+			<!--jvmarg value="-Dassembly.skipAssembly=true" /-->
+			<arg value="clean"/>
+			<arg value="install"/>
+			<jvmarg value="-Dmaven.test.skip=true" />
+		</artifact:mvn>
+		<copy todir="${red5.client.lib}" overwrite="true" force="true">
+			<fileset dir="${red5.client.dir}/target" includes="red5-client-*.jar" excludes="*javadoc.jar,*sources.jar" />
+		</copy>
+		<echo message="Red5 Client build" />
+	</target>
+
 	<!-- Check for the Top level libraries -->
-	<target name="-retrieve-mainlibs" unless="mainlib.installed" description="Retrieves the libraries if needed" depends="-retrieve-red5-server">
+	<target name="-retrieve-mainlibs" unless="mainlib.installed" description="Retrieves the libraries if needed" depends="-retrieve-red5-client">
 		<!-- Ivy configuration - http://ant.apache.org/ivy/history/trunk/ant.html -->
 		<antcall target="-retrieve" inheritAll="true" inheritRefs="true">
 			<param name="ivy.conf.name" value="mainlib" />
@@ -1164,6 +1196,7 @@
 		<antcall target="-retrieve-openlaszlo" inheritAll="true" inheritRefs="true" />
 		<antcall target="-retrieve-openlaszlo46" inheritAll="true" inheritRefs="true" />
 		<antcall target="-retrieve-cmdadmin" inheritAll="true" inheritRefs="true" />
+		<antcall target="-retrieve-anakia" inheritAll="true" inheritRefs="true" />
 		<antcall target="-process-db" inheritAll="true" inheritRefs="true" />
 	</target>
 	
