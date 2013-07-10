@@ -22,8 +22,10 @@ import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.getDateFormat;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.openmeetings.data.user.dao.PrivateMessageFolderDao;
 import org.apache.openmeetings.data.user.dao.PrivateMessagesDao;
@@ -38,6 +40,7 @@ import org.apache.openmeetings.web.common.UserPanel;
 import org.apache.openmeetings.web.data.DataViewContainer;
 import org.apache.openmeetings.web.data.OmOrderByBorder;
 import org.apache.openmeetings.web.data.SearchableDataProvider;
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
@@ -71,8 +74,10 @@ public class MessagesContactsPanel extends UserPanel {
 	private final WebMarkupContainer inbox = new WebMarkupContainer("inbox");
 	private final WebMarkupContainer sent = new WebMarkupContainer("sent");
 	private final WebMarkupContainer trash = new WebMarkupContainer("trash");
+	private final WebMarkupContainer selectedMessage = new WebMarkupContainer("selectedMessage");
 	private final MessageDialog newMessage;
 	private final DataViewContainer<PrivateMessage> dataContainer;
+	private final Set<Long> selectedMessages = new HashSet<Long>();
 	
 	private void setDefaultFolderClass() {
 		inbox.add(AttributeAppender.replace("class", "email inbox clickable"));
@@ -88,6 +93,17 @@ public class MessagesContactsPanel extends UserPanel {
 		folder.add(AttributeAppender.replace("class", "email folder clickable"));
 		if (folder.getModelObject().getPrivateMessageFolderId() == selectedModel.getObject()) {
 			selectFolder(folder);
+		}
+	}
+	
+	private void selectMessage(long id, AjaxRequestTarget target) {
+		PrivateMessage msg = getBean(PrivateMessagesDao.class).get(id);
+		selectedMessage.addOrReplace(new Label("from", msg == null ? "" : msg.getFrom().getAdresses().getEmail()));
+		selectedMessage.addOrReplace(new Label("to", msg == null ? "" : msg.getTo().getAdresses().getEmail()));
+		selectedMessage.addOrReplace(new Label("subj", msg == null ? "" : msg.getSubject()));
+		selectedMessage.addOrReplace(new Label("body", msg == null ? "" : msg.getMessage()));
+		if (target != null) {
+			target.add(selectedMessage);
 		}
 	}
 	
@@ -261,10 +277,28 @@ public class MessagesContactsPanel extends UserPanel {
 			@Override
 			protected void populateItem(Item<PrivateMessage> item) {
 				PrivateMessage m = item.getModelObject();
+				final long id = m.getPrivateMessageId();
 				item.add(new Label("id", m.getPrivateMessageId()));
 				item.add(new Label("from", getDisplayName(m.getFrom())));
 				item.add(new Label("subject", m.getSubject()));
 				item.add(new Label("send", getDateFormat().format(m.getInserted())));
+				item.add(new AjaxEventBehavior("click") {
+					private static final long serialVersionUID = 1L;
+
+					@Override
+					protected void onEvent(AjaxRequestTarget target) {
+						long selected = id;
+						if (selectedMessages.contains(id)) {
+							selectedMessages.remove(id);
+							selected = selectedMessages.isEmpty() ? -1 : selectedMessages.iterator().next();
+						} else {
+							selectedMessages.add(id);
+						}
+						selectMessage(selected, target);
+						target.add(container);
+					}
+				});
+				item.add(AttributeModifier.replace("class", selectedMessages.contains(id) ? "selected" : ""));
 			}
 		};
 		PagedEntityListPanel navigator = new PagedEntityListPanel("navigator", dv) {
@@ -272,6 +306,8 @@ public class MessagesContactsPanel extends UserPanel {
 
 			@Override
 			protected void onEvent(AjaxRequestTarget target) {
+				selectedMessages.clear();
+				selectMessage(-1, target);
 				target.add(container);
 			}
 		};
@@ -291,5 +327,7 @@ public class MessagesContactsPanel extends UserPanel {
 		add(container.add(dv).setOutputMarkupId(true));
 		//TODO add valid autoupdate add(new AjaxSelfUpdatingTimerBehavior(seconds(15)));
 		add(newMessage);
+		selectMessage(-1, null);
+		add(selectedMessage.setOutputMarkupId(true));
 	}
 }

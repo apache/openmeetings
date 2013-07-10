@@ -37,16 +37,15 @@
 				</div>
 			</td>
 			<td class="main">
-				<div>
 				<div><b><wicket:ommessage key="1206"/>&nbsp;(<span wicket:id="unread"></span>)</b></div>
 				<div wicket:id="navigator"></div>
 				<table id="messagesTable" style="width: 100%;">
 					<thead>
 					<tr>
-						<th><span wicket:id="orderById"></span><wicket:ommessage key="1205"/></th>
-						<th><span wicket:id="orderByFrom"></span><wicket:ommessage key="1202"/></th>
-						<th><span wicket:id="orderBySubject"></span><wicket:ommessage key="1203"/></th>
-						<th><span wicket:id="orderBySend"></span><wicket:ommessage key="1204"/></th>
+						<th align="left"><span wicket:id="orderById"></span><wicket:ommessage key="1205"/></th>
+						<th align="left"><span wicket:id="orderByFrom"></span><wicket:ommessage key="1202"/></th>
+						<th align="left"><span wicket:id="orderBySubject"></span><wicket:ommessage key="1203"/></th>
+						<th align="left"><span wicket:id="orderBySend"></span><wicket:ommessage key="1204"/></th>
 					</tr>
 					</thead>
 					<tbody wicket:id="container" style="background-color: white;">
@@ -58,6 +57,29 @@
 					</tr>
 					</tbody>
 				</table>
+				<div>
+					<select><option>[stab]select</option></select>
+					<input type="button" wicket:ommessage="value:1245"/>
+					<input type="button" wicket:ommessage="value:1248"/>
+					<input type="button" wicket:ommessage="value:1247"/>
+					<select><option>[stab]move</option></select>
+				</div>
+				<div wicket:id="selectedMessage">
+					<table style="width: 100%">
+						<tr>
+							<td style="width: 10px; padding-right: 20px;"><wicket:ommessage key="1202"/></td>
+							<td wicket:id="from"></td>
+						</tr>
+						<tr>
+							<td style="width: 10px; padding-right: 20px;"><wicket:ommessage key="1210"/></td>
+							<td wicket:id="to"></td>
+						</tr>
+						<tr>
+							<td style="width: 10px; padding-right: 20px;"><wicket:ommessage key="1211"/></td>
+							<td wicket:id="subj"></td>
+						</tr>
+					</table>
+					<div style="background-color: white;min-height: 300px;" wicket:id="body"></div>
 				</div>
 			</td>
 			<td class="side right">

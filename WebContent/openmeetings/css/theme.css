@@ -877,3 +877,6 @@ select.messages.selector {
 	width: 1px;
 	height: 1px;
 }
+#messagesTable tr.selected {
+	background-color: #d7ebf9;
+}
