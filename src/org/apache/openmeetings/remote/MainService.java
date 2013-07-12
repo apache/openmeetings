@@ -133,10 +133,9 @@ public class MainService implements IPendingServiceCallback {
 	public List<Naviglobal> getNavi(String SID, long language_id, Long organisation_id) {
 		try {
 			Long user_id = sessiondataDao.checkSession(SID);
-			// log.error("getNavi 1: "+users_id);
-			Long user_level = userManager.getUserLevelByIdAndOrg(user_id,
-					organisation_id);
-			// log.error("getNavi 2: "+user_level);
+			log.debug("getNavi 1: " + user_id);
+			Long user_level = userManager.getUserLevelByIdAndOrg(user_id, organisation_id);
+			log.debug("getNavi 2: " + user_level);
 			return navimanagement.getMainMenu(1, user_id, language_id); //Hardcoded to user level to disable admin menu in flash version
 		} catch (Exception err) {
 			log.error("[getNavi] ", err);

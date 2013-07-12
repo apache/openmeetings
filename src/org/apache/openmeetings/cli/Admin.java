@@ -549,8 +549,7 @@ public class Admin {
 				System.exit(1);
 			}
 		}
-		ImportInitvalues importInit = getApplicationContext(ctxName).getBean(ImportInitvalues.class);
-		Map<String, String> tzMap = ImportHelper.getAllTimeZones(importInit.getTimeZones());
+		Map<String, String> tzMap = ImportHelper.getAllTimeZones(ImportInitvalues.getTimeZones());
 		cfg.ical_timeZone = null;
 		if (cmdl.hasOption("tz")) {
 			cfg.ical_timeZone = cmdl.getOptionValue("tz");

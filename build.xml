@@ -218,7 +218,7 @@
 		</delete>
 	</target>
 	
-	<target name="web.copy">
+	<target name="web.copy" depends="-process-db">
 		<copy todir="${dist.webapps.dir}" overwrite="true" force="true">
 			<fileset dir="${webcontent.src.dir}/openmeetings" />
 		</copy>
@@ -235,6 +235,11 @@
 		</copy>
 		<copy todir="${dist.webapps.dir}/conf" overwrite="true" force="true">
 			<fileset dir="${webcontent.src.dir}/conf" />
+		</copy>
+		<copy todir="${dist.persistence.dir}">
+			<fileset file="src/META-INF/*.xml">
+				<exclude name="services.xml" />
+			</fileset>
 		</copy>
 	</target>
 	
@@ -253,13 +258,6 @@
 		</copy>
 		<antcall target="-cleanup-jrebel" />
 		<chmod dir="${red5.root}" perm="755" includes="**/*.sh" />
-
-		<antcall target="-process-db" inheritAll="true" inheritRefs="true" />
-		<copy todir="${dist.persistence.dir}">
-			<fileset file="src/META-INF/*.xml">
-				<exclude name="services.xml" />
-			</fileset>
-		</copy>
 		<tstamp />
 	</target>
 

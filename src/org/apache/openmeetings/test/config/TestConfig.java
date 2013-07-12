@@ -18,7 +18,8 @@
  */
 package org.apache.openmeetings.test.config;
 
-import static junit.framework.Assert.assertEquals;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 import java.util.List;
 
@@ -46,7 +47,7 @@ public class TestConfig extends AbstractOpenmeetingsSpringTest {
 
 		System.err.println("smtp_server " + smtp_server.getUser());
 
-		assertEquals(null, smtp_server.getUser());
+		assertNull(smtp_server.getUser());
 	}
 
 	@Test

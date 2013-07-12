@@ -111,6 +111,8 @@ public class MessagesContactsPanel extends UserPanel {
 		selectedModel.setObject(id);
 		setDefaultFolderClass();
 		selectFolder(folder);
+		selectedMessages.clear();
+		selectMessage(-1, target);
 		container.add(new FixedHeaderTableBehavior("#messagesTable", new Options("height", 100)));
 		unread.setDefaultModelObject(getBean(PrivateMessagesDao.class).count(getUserId(), null, false, false));
 		if (target != null) {

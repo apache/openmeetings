@@ -18,7 +18,7 @@
  */
 package org.apache.openmeetings.test.smoke;
 
-import static junit.framework.Assert.assertNotNull;
+import static org.junit.Assert.assertNotNull;
 
 import org.apache.openmeetings.data.user.UserManager;
 import org.apache.openmeetings.test.AbstractOpenmeetingsSpringTest;
