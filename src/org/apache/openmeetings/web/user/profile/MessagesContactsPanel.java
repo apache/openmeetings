@@ -79,7 +79,9 @@ public class MessagesContactsPanel extends UserPanel {
 	private final MessageDialog newMessage;
 	private final DataViewContainer<PrivateMessage> dataContainer;
 	private final Set<Long> selectedMessages = new HashSet<Long>();
-	private final Button deleteBtn = new Button("delete");
+	private final Button deleteBtn = new Button("deleteBtn");
+	private final Button readBtn = new Button("readBtn");
+	private final Button unreadBtn = new Button("unreadBtn");
 	
 	private void setDefaultFolderClass() {
 		inbox.add(AttributeAppender.replace("class", "email inbox clickable"));
@@ -105,7 +107,9 @@ public class MessagesContactsPanel extends UserPanel {
 		selectedMessage.addOrReplace(new Label("subj", msg == null ? "" : msg.getSubject()));
 		selectedMessage.addOrReplace(new Label("body", msg == null ? "" : msg.getMessage()));
 		if (target != null) {
-			target.add(selectedMessage, deleteBtn.setEnabled(!selectedMessages.isEmpty()));
+			target.add(selectedMessage, deleteBtn.setEnabled(!selectedMessages.isEmpty())
+				, readBtn.setEnabled(TRASH_FOLDER_ID != selectedModel.getObject() && !selectedMessages.isEmpty())
+				, unreadBtn.setEnabled(TRASH_FOLDER_ID != selectedModel.getObject() && !selectedMessages.isEmpty()));
 		}
 	}
 	
@@ -115,8 +119,11 @@ public class MessagesContactsPanel extends UserPanel {
 		selectFolder(folder);
 		emptySelection(target);
 		deleteBtn.add(AttributeModifier.replace("value", WebSession.getString(TRASH_FOLDER_ID == id ? 1256 : 1245)));
+		readBtn.setEnabled(false);
+		unreadBtn.setEnabled(false);
 		container.add(new FixedHeaderTableBehavior("#messagesTable", new Options("height", 100)));
-		unread.setDefaultModelObject(getBean(PrivateMessagesDao.class).count(getUserId(), null, false, false));
+		//FIXME it is not working! (at least for the SENT folder)
+		unread.setDefaultModelObject(getBean(PrivateMessagesDao.class).count(getUserId(), id > 0 ? id : null, false, TRASH_FOLDER_ID == id));
 		if (target != null) {
 			target.add(folders, container, unread);
 			target.add(dataContainer.container, dataContainer.navigator);
@@ -307,7 +314,14 @@ public class MessagesContactsPanel extends UserPanel {
 						target.add(container);
 					}
 				});
-				item.add(AttributeModifier.replace("class", selectedMessages.contains(id) ? "selected" : ""));
+				StringBuilder cssClass = new StringBuilder(Boolean.TRUE.equals(m.getIsRead()) ? "unread" : "");
+				if (selectedMessages.contains(id)) {
+					if (cssClass.length() > 0) {
+						cssClass.append(" ");
+					}
+					cssClass.append("selected");
+				}
+				item.add(AttributeModifier.replace("class", cssClass.toString()));
 			}
 		};
 		PagedEntityListPanel navigator = new PagedEntityListPanel("navigator", dv) {
@@ -343,6 +357,28 @@ public class MessagesContactsPanel extends UserPanel {
 					} else {
 						getBean(PrivateMessagesDao.class).updatePrivateMessagesToTrash(selectedMessages, true, 0L);
 					}
+					emptySelection(target);
+					target.add(container);
+				}
+			}));
+		add(readBtn.setOutputMarkupId(true).setEnabled(!selectedMessages.isEmpty())
+			.add(new AjaxEventBehavior("click") {
+				private static final long serialVersionUID = 1L;
+				
+				@Override
+				protected void onEvent(AjaxRequestTarget target) {
+					getBean(PrivateMessagesDao.class).updatePrivateMessagesReadStatus(selectedMessages, false);
+					emptySelection(target);
+					target.add(container);
+				}
+			}));
+		add(unreadBtn.setOutputMarkupId(true).setEnabled(!selectedMessages.isEmpty())
+			.add(new AjaxEventBehavior("click") {
+				private static final long serialVersionUID = 1L;
+				
+				@Override
+				protected void onEvent(AjaxRequestTarget target) {
+					getBean(PrivateMessagesDao.class).updatePrivateMessagesReadStatus(selectedMessages, true);
 					emptySelection(target);
 					target.add(container);
 				}

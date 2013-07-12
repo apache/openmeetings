@@ -880,3 +880,6 @@ select.messages.selector {
 #messagesTable tr.selected {
 	background-color: #d7ebf9;
 }
+#messagesTable tr.unread {
+	font-weight: bold;
+}

@@ -492,7 +492,7 @@ public class PrivateMessagesDao implements IDataProviderDao<PrivateMessage> {
 		return -1;
 	}
 	
-	public int updatePrivateMessagesReadStatus(List<Long> privateMessageIds, Boolean isRead) {
+	public int updatePrivateMessagesReadStatus(Collection<Long> privateMessageIds, Boolean isRead) {
 		try {
 			Query query = em.createNamedQuery("updatePrivateMessagesReadStatus"); 
 			query.setParameter("isRead", isRead);
