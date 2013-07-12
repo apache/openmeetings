@@ -47,6 +47,7 @@ import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.repeater.Item;
@@ -78,6 +79,7 @@ public class MessagesContactsPanel extends UserPanel {
 	private final MessageDialog newMessage;
 	private final DataViewContainer<PrivateMessage> dataContainer;
 	private final Set<Long> selectedMessages = new HashSet<Long>();
+	private final Button deleteBtn = new Button("delete");
 	
 	private void setDefaultFolderClass() {
 		inbox.add(AttributeAppender.replace("class", "email inbox clickable"));
@@ -103,7 +105,7 @@ public class MessagesContactsPanel extends UserPanel {
 		selectedMessage.addOrReplace(new Label("subj", msg == null ? "" : msg.getSubject()));
 		selectedMessage.addOrReplace(new Label("body", msg == null ? "" : msg.getMessage()));
 		if (target != null) {
-			target.add(selectedMessage);
+			target.add(selectedMessage, deleteBtn.setEnabled(!selectedMessages.isEmpty()));
 		}
 	}
 	
@@ -111,8 +113,8 @@ public class MessagesContactsPanel extends UserPanel {
 		selectedModel.setObject(id);
 		setDefaultFolderClass();
 		selectFolder(folder);
-		selectedMessages.clear();
-		selectMessage(-1, target);
+		emptySelection(target);
+		deleteBtn.add(AttributeModifier.replace("value", WebSession.getString(TRASH_FOLDER_ID == id ? 1256 : 1245)));
 		container.add(new FixedHeaderTableBehavior("#messagesTable", new Options("height", 100)));
 		unread.setDefaultModelObject(getBean(PrivateMessagesDao.class).count(getUserId(), null, false, false));
 		if (target != null) {
@@ -120,6 +122,11 @@ public class MessagesContactsPanel extends UserPanel {
 			target.add(dataContainer.container, dataContainer.navigator);
 			target.add(dataContainer.orderLinks);
 		}
+	}
+	
+	private void emptySelection(AjaxRequestTarget target) {
+		selectedMessages.clear();
+		selectMessage(-1, target);
 	}
 	
 	private String getDisplayName(User u) {
@@ -308,8 +315,7 @@ public class MessagesContactsPanel extends UserPanel {
 
 			@Override
 			protected void onEvent(AjaxRequestTarget target) {
-				selectedMessages.clear();
-				selectMessage(-1, target);
+				emptySelection(target);
 				target.add(container);
 			}
 		};
@@ -326,6 +332,21 @@ public class MessagesContactsPanel extends UserPanel {
 		add(new WebMarkupContainer("pendingContacts"));//FIXME
 		add(new WebMarkupContainer("na1"));//FIXME
 		
+		add(deleteBtn.setOutputMarkupId(true).setEnabled(!selectedMessages.isEmpty())
+			.add(new AjaxEventBehavior("click") {
+				private static final long serialVersionUID = 1L;
+	
+				@Override
+				protected void onEvent(AjaxRequestTarget target) {
+					if (TRASH_FOLDER_ID == selectedModel.getObject()) {
+						getBean(PrivateMessagesDao.class).deletePrivateMessages(selectedMessages);
+					} else {
+						getBean(PrivateMessagesDao.class).updatePrivateMessagesToTrash(selectedMessages, true, 0L);
+					}
+					emptySelection(target);
+					target.add(container);
+				}
+			}));
 		add(container.add(dv).setOutputMarkupId(true));
 		//TODO add valid autoupdate add(new AjaxSelfUpdatingTimerBehavior(seconds(15)));
 		add(newMessage);

@@ -20,6 +20,7 @@ package org.apache.openmeetings.data.user.dao;
 
 import static org.apache.openmeetings.OpenmeetingsVariables.webAppRootKey;
 
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
@@ -465,7 +466,7 @@ public class PrivateMessagesDao implements IDataProviderDao<PrivateMessage> {
 		return null;
 	}
 
-	public int updatePrivateMessagesToTrash(List<Long> privateMessageIds, Boolean isTrash, Long privateMessageFolderId) {
+	public int updatePrivateMessagesToTrash(Collection<Long> privateMessageIds, Boolean isTrash, Long privateMessageFolderId) {
 		try {
 			Query query = em.createNamedQuery("updatePrivateMessagesToTrash"); 
 			query.setParameter("isTrash", isTrash);
@@ -539,7 +540,7 @@ public class PrivateMessagesDao implements IDataProviderDao<PrivateMessage> {
 		return -1;
 	}
 	
-	public int deletePrivateMessages(List<Long> privateMessageIds) {
+	public int deletePrivateMessages(Collection<Long> privateMessageIds) {
 		try {
 			Query query = em.createNamedQuery("deletePrivateMessages"); 
 			query.setParameter("privateMessageIds", privateMessageIds);
