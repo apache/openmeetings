@@ -55,7 +55,7 @@
 		}
 	</script>
 </head>
-<body align="center" valign="middle" align="center" onLoad="focusSWF()">
+<body onLoad="focusSWF()">
 
 
 	<div id="flashcontent">

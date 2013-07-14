@@ -34,7 +34,6 @@ import javax.persistence.criteria.Root;
 
 import org.apache.openmeetings.data.basic.AuthLevelUtil;
 import org.apache.openmeetings.data.basic.FieldManager;
-import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
 import org.apache.openmeetings.data.beans.basic.SearchResult;
 import org.apache.openmeetings.data.conference.dao.RoomDao;
 import org.apache.openmeetings.data.conference.dao.RoomModeratorsDao;
@@ -76,8 +75,6 @@ public class RoomManager {
 	private AuthLevelUtil authLevelUtil;
 	@Autowired
 	private ISessionManager sessionManager;
-    @Autowired
-	private ConfigurationDao configurationDao;
 	@Autowired
 	private FieldManager fieldManager;
     @Autowired

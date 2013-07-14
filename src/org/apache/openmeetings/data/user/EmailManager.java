@@ -21,9 +21,6 @@ package org.apache.openmeetings.data.user;
 import static org.apache.openmeetings.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.openmeetings.persistence.beans.basic.Configuration.DEFAUT_LANG_KEY;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-
 import org.apache.openmeetings.data.basic.FieldManager;
 import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
 import org.apache.openmeetings.templates.RegisterUserTemplate;
@@ -42,9 +39,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class EmailManager {
 	private static final Logger log = Red5LoggerFactory.getLogger(EmailManager.class, webAppRootKey);
-
-	@PersistenceContext
-	private EntityManager em;
 
 	@Autowired
 	private ConfigurationDao configurationDao;

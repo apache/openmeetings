@@ -24,7 +24,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.openmeetings.data.basic.dao.ServerDao;
 import org.apache.openmeetings.data.conference.dao.ClientDao;
 import org.apache.openmeetings.persistence.beans.basic.Server;
 import org.apache.openmeetings.persistence.beans.room.Client;
@@ -34,9 +33,6 @@ public class DatabaseStore implements IClientPersistenceStore {
 	
 	@Autowired
 	private ClientDao clientDao;
-	
-	@Autowired
-	private ServerDao serverDao;
 	
 	public void clearCache() {
 		
