@@ -16,6 +16,7 @@
   KIND, either express or implied.  See the License for the
   specific language governing permissions and limitations
   under the License.
+  
 -->
 <projectDescription>
 	<name>Openmeetings</name>
@@ -72,7 +73,7 @@
 	</natures>
 	<filteredResources>
 		<filter>
-			<id>1373768366576</id>
+			<id>1373769575676</id>
 			<name></name>
 			<type>26</type>
 			<matcher>
@@ -81,7 +82,7 @@
 			</matcher>
 		</filter>
 		<filter>
-			<id>1373768366583</id>
+			<id>1373769575677</id>
 			<name></name>
 			<type>10</type>
 			<matcher>
@@ -90,7 +91,7 @@
 			</matcher>
 		</filter>
 		<filter>
-			<id>1373768366591</id>
+			<id>1373769575687</id>
 			<name></name>
 			<type>26</type>
 			<matcher>
@@ -99,7 +100,7 @@
 			</matcher>
 		</filter>
 		<filter>
-			<id>1373768366597</id>
+			<id>1373769575695</id>
 			<name></name>
 			<type>26</type>
 			<matcher>
@@ -108,7 +109,7 @@
 			</matcher>
 		</filter>
 		<filter>
-			<id>1373768366606</id>
+			<id>1373769576236</id>
 			<name></name>
 			<type>6</type>
 			<matcher>
@@ -117,7 +118,7 @@
 			</matcher>
 		</filter>
 		<filter>
-			<id>1373768366614</id>
+			<id>1373769576238</id>
 			<name></name>
 			<type>30</type>
 			<matcher>
@@ -126,7 +127,7 @@
 			</matcher>
 		</filter>
 		<filter>
-			<id>1373768366621</id>
+			<id>1373769576249</id>
 			<name></name>
 			<type>30</type>
 			<matcher>
@@ -135,7 +136,7 @@
 			</matcher>
 		</filter>
 		<filter>
-			<id>1373768366628</id>
+			<id>1373769576258</id>
 			<name></name>
 			<type>30</type>
 			<matcher>
@@ -144,12 +145,21 @@
 			</matcher>
 		</filter>
 		<filter>
-			<id>1373768366639</id>
+			<id>1373769576269</id>
 			<name></name>
 			<type>30</type>
 			<matcher>
 				<id>org.eclipse.ui.ide.multiFilter</id>
 				<arguments>1.0-projectRelativePath-matches-false-false-build/red5/server/dist/webapps</arguments>
+			</matcher>
+		</filter>
+		<filter>
+			<id>1373769576283</id>
+			<name></name>
+			<type>30</type>
+			<matcher>
+				<id>org.eclipse.ui.ide.multiFilter</id>
+				<arguments>1.0-projectRelativePath-matches-false-false-build/red5/server/src/main/server</arguments>
 			</matcher>
 		</filter>
 	</filteredResources>
