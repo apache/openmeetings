@@ -748,12 +748,12 @@ limitations under the License.
                                                 <p>
 					Create a TAG of the SVN tree that you would like to release<br />
 					Example:
-					<div class="xmlcode">
-						svn copy -r1453158 https://svn.apache.org/repos/asf/openmeetings/trunk/singlewebapp \<br />
-							https://svn.apache.org/repos/asf/openmeetings/tags/2.1RC1 \<br />
-							-m "Release candidate 1"
-					</div>
 				</p>
+                                                <div class="xmlcode">
+					svn copy -r1453158 https://svn.apache.org/repos/asf/openmeetings/trunk/singlewebapp \<br />
+						https://svn.apache.org/repos/asf/openmeetings/tags/2.1RC1 \<br />
+						-m "Release candidate 1"
+				</div>
                                                 <p>Get the source from your TAG: </p>
                                                 <div class="xmlcode">
 					svn checkout https://svn.apache.org/repos/asf/openmeetings/tags/$BRANCHORTAG/<br />
