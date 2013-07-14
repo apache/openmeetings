@@ -1,17 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-   Licensed under the Apache License, Version 2.0 (the "License");
-   you may not use this file except in compliance with the License.
-   You may obtain a copy of the License at
-
-       http://www.apache.org/licenses/LICENSE-2.0
-
-   Unless required by applicable law or agreed to in writing, software
-   distributed under the License is distributed on an "AS IS" BASIS,
-   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-   See the License for the specific language governing permissions and
-   limitations under the License.
- -->
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+-->
 <projectDescription>
 	<name>Openmeetings</name>
 	<comment></comment>
@@ -67,7 +72,7 @@
 	</natures>
 	<filteredResources>
 		<filter>
-			<id>1361089169002</id>
+			<id>1373768366576</id>
 			<name></name>
 			<type>26</type>
 			<matcher>
@@ -76,7 +81,7 @@
 			</matcher>
 		</filter>
 		<filter>
-			<id>1361089169005</id>
+			<id>1373768366583</id>
 			<name></name>
 			<type>10</type>
 			<matcher>
@@ -85,7 +90,7 @@
 			</matcher>
 		</filter>
 		<filter>
-			<id>1361089169008</id>
+			<id>1373768366591</id>
 			<name></name>
 			<type>26</type>
 			<matcher>
@@ -94,7 +99,7 @@
 			</matcher>
 		</filter>
 		<filter>
-			<id>1361089169010</id>
+			<id>1373768366597</id>
 			<name></name>
 			<type>26</type>
 			<matcher>
@@ -103,30 +108,48 @@
 			</matcher>
 		</filter>
 		<filter>
-			<id>1361089169013</id>
-			<name></name>
-			<type>30</type>
-			<matcher>
-				<id>org.eclipse.ui.ide.multiFilter</id>
-				<arguments>1.0-projectRelativePath-matches-false-false-build/red5/server/bin</arguments>
-			</matcher>
-		</filter>
-		<filter>
-			<id>1361089169024</id>
-			<name></name>
-			<type>30</type>
-			<matcher>
-				<id>org.eclipse.ui.ide.multiFilter</id>
-				<arguments>1.0-projectRelativePath-matches-false-false-build/red5/client/bin</arguments>
-			</matcher>
-		</filter>
-		<filter>
-			<id>1361089169027</id>
+			<id>1373768366606</id>
 			<name></name>
 			<type>6</type>
 			<matcher>
 				<id>org.eclipse.ui.ide.multiFilter</id>
 				<arguments>1.0-name-matches-false-false-.ant-targets-build.xml</arguments>
+			</matcher>
+		</filter>
+		<filter>
+			<id>1373768366614</id>
+			<name></name>
+			<type>30</type>
+			<matcher>
+				<id>org.eclipse.ui.ide.multiFilter</id>
+				<arguments>1.0-projectRelativePath-matches-false-false-build/red5/server/target</arguments>
+			</matcher>
+		</filter>
+		<filter>
+			<id>1373768366621</id>
+			<name></name>
+			<type>30</type>
+			<matcher>
+				<id>org.eclipse.ui.ide.multiFilter</id>
+				<arguments>1.0-projectRelativePath-matches-false-false-build/red5/client/target</arguments>
+			</matcher>
+		</filter>
+		<filter>
+			<id>1373768366628</id>
+			<name></name>
+			<type>30</type>
+			<matcher>
+				<id>org.eclipse.ui.ide.multiFilter</id>
+				<arguments>1.0-projectRelativePath-matches-false-false-build/api</arguments>
+			</matcher>
+		</filter>
+		<filter>
+			<id>1373768366639</id>
+			<name></name>
+			<type>30</type>
+			<matcher>
+				<id>org.eclipse.ui.ide.multiFilter</id>
+				<arguments>1.0-projectRelativePath-matches-false-false-build/red5/server/dist/webapps</arguments>
 			</matcher>
 		</filter>
 	</filteredResources>
