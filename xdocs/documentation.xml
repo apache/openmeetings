@@ -18,7 +18,7 @@
 -->
 
 
-<document>
+<document xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="website.xsd">
 
 <properties>
 <title>Documentation</title>

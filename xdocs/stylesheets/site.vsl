@@ -58,7 +58,6 @@ limitations under the License.
 				</td>
 				<td>
 					#foreach ( $items in $feature.getChildren() )
-						<div>
 						#if ($items.getName().equals("text"))
 							$items.getChildren()
 						#end
