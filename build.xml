@@ -52,7 +52,8 @@
 	<property name="red5.client.lib" value="${red5.client.dir}/dist" />
 	<property name="red5.root" value="${dist.dir}/red5" />
 	<property name="dist.webapps.dir" value="${red5.root}/webapps/${project.distname}" />
-	<property name="dist.persistence.dir" value="${dist.webapps.dir}/WEB-INF/classes/META-INF/" />
+	<property name="dist.classes.dir" value="${dist.webapps.dir}/WEB-INF/classes" />
+	<property name="dist.persistence.dir" value="${dist.classes.dir}/META-INF/" />
 
 	<property name="laszlo.home" value="${build.base.dir}/openlaszlo" />
 	<property name="laszlo46.home" value="${build.base.dir}/openlaszlo46" />
@@ -71,6 +72,9 @@
 
 	<property name="junit.base.dir" value="${build.base.dir}/junit" />
 	<property name="junit.report.dir" value="${junit.base.dir}/report" />
+	<tstamp prefix="build">
+		<format property="TODAY" pattern="d-MMMM-yyyy" locale="en" />
+	</tstamp>
 
 	<path id="laszlo.lib">
 		<!-- swf8 -->
@@ -214,7 +218,7 @@
 
 	<target name="-cleanup-jrebel" unless="jrebel.enabled">
 		<delete>
-			<fileset dir="${dist.webapps.dir}/WEB-INF/classes" includes="rebel*.xml" />
+			<fileset dir="${dist.classes.dir}" includes="rebel*.xml" />
 		</delete>
 	</target>
 	
@@ -239,6 +243,11 @@
 		<copy todir="${dist.persistence.dir}">
 			<fileset file="src/META-INF/*.xml">
 				<exclude name="services.xml" />
+			</fileset>
+		</copy>
+		<copy todir="${dist.classes.dir}">
+			<fileset dir="${main.out.dir}">
+				<include name="**/*.html" />
 			</fileset>
 		</copy>
 	</target>
@@ -285,9 +294,6 @@
 	<target name="web.only" depends="jar.web.only, web.copy"/>
 	
 	<target name="jar.web.only" depends="enhance.only.norefresh, current_revision">
-		<tstamp prefix="build">
-			<format property="TODAY" pattern="d-MMMM-yyyy" locale="en" />
-		</tstamp>
 		<manifestclasspath property="jar.classpath" jarfile="${project.distname}-${jar.suffix}.jar">
 			<classpath refid="compile.classpath" />
 		</manifestclasspath>
@@ -300,6 +306,7 @@
 				<exclude name="org/apache/openmeetings/doc/**" />
 				<exclude name="**/client/**" />
 				<exclude name="**/*.png" />
+				<exclude name="**/*.html" />
 				<exclude name="**/*.vm" />
 				<exclude name="META-INF/*.xml" />
 				<exclude name="log4j.properties" />
@@ -314,34 +321,7 @@
 		</jar>
 	</target>
 
-	<target name="jar.only" depends="buildJavaDocs, enhance.only, current_revision">
-		<tstamp prefix="build">
-			<format property="TODAY" pattern="d-MMMM-yyyy" locale="en" />
-		</tstamp>
-		<manifestclasspath property="jar.classpath" jarfile="${project.distname}-${jar.suffix}.jar">
-			<classpath refid="compile.classpath" />
-		</manifestclasspath>
-		<jar destfile="${dist.webapps.dir}/WEB-INF/lib/${project.distname}-${jar.suffix}.jar">
-			<fileset dir="${main.out.dir}">
-				<include name="**" />
-				<exclude name="**/test/**" />
-				<exclude name="**/axis/**" />
-				<exclude name="org/apache/openmeetings/screen/**" />
-				<exclude name="org/apache/openmeetings/doc/**" />
-				<exclude name="**/client/**" />
-				<exclude name="**/*.png" />
-				<exclude name="**/*.vm" />
-				<exclude name="META-INF/*.xml" />
-				<exclude name="log4j.properties" />
-			</fileset>
-			<manifest>
-				<attribute name="Built-By" value="OpenMeetings - http://openmeetings.apache.org" />
-				<attribute name="Built-On" value="${build.TODAY}" />
-				<attribute name="Class-Path" value="conf/ ${jar.classpath}" />
-				<attribute name="Svn-Revision" value="${svn.info.rev}" />
-				<attribute name="Product-Version" value="${project.version}-${project.status}" />
-			</manifest>
-		</jar>
+	<target name="jar.only" depends="buildJavaDocs, enhance.only, jar.web.only">
 		<jar destfile="${dist.webapps.dir}/WEB-INF/lib/${project.distname}-templates-${jar.suffix}.jar">
 			<fileset dir="${main.out.dir}">
 				<include name="**" />
@@ -809,7 +789,7 @@
 		<fileset dir="${red5.root}/lib" includes="*.jar" />
 		<fileset dir="${red5.root}/plugins" includes="*.jar" />
 		<pathelement path="${om.dist.webapp}/WEB-INF" />
-		<pathelement path="${om.dist.webapp}/WEB-INF/classes" />
+		<pathelement path="${dist.classes.dir}" />
 		<pathelement path="${main.out.dir}" />
 	</path>
 	<target name="test" depends="-dist-test-no-clean" description="Will run all tests unless -Dtestcases=_file_name_pattern_ will be passed">
