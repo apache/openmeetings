@@ -28,6 +28,7 @@ import org.apache.openmeetings.persistence.beans.user.Address;
 import org.apache.openmeetings.persistence.beans.user.User;
 import org.apache.openmeetings.persistence.beans.user.User.Type;
 import org.apache.wicket.extensions.validation.validator.RfcCompliantEmailAddressValidator;
+import org.apache.wicket.model.IModel;
 import org.apache.wicket.util.convert.IConverter;
 import org.apache.wicket.validation.IValidationError;
 import org.apache.wicket.validation.Validatable;
@@ -94,9 +95,13 @@ public class UserAutoCompleteTextField extends AutoCompleteTextField<User> {
 		}
 	};
 
-	public UserAutoCompleteTextField(String id) {
-		super(id, new UserTextRenderer());
+	public UserAutoCompleteTextField(String id, IModel<User> model) {
+		super(id, model, new UserTextRenderer());
 		this.renderer = (UserTextRenderer)getRenderer();
+	}
+	
+	public UserAutoCompleteTextField(String id) {
+		this(id, null);
 	}
 
 	@SuppressWarnings("unchecked")
