@@ -22,6 +22,7 @@ import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.getDateFormat;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -48,6 +49,8 @@ import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Button;
+import org.apache.wicket.markup.html.form.DropDownChoice;
+import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.repeater.Item;
@@ -76,12 +79,26 @@ public class MessagesContactsPanel extends UserPanel {
 	private final WebMarkupContainer sent = new WebMarkupContainer("sent");
 	private final WebMarkupContainer trash = new WebMarkupContainer("trash");
 	private final WebMarkupContainer selectedMessage = new WebMarkupContainer("selectedMessage");
+	private final WebMarkupContainer buttons = new WebMarkupContainer("buttons");
 	private final MessageDialog newMessage;
 	private final DataViewContainer<PrivateMessage> dataContainer;
 	private final Set<Long> selectedMessages = new HashSet<Long>();
+	private final Button toInboxBtn = new Button("toInboxBtn");
 	private final Button deleteBtn = new Button("deleteBtn");
 	private final Button readBtn = new Button("readBtn");
 	private final Button unreadBtn = new Button("unreadBtn");
+	private final FixedHeaderTableBehavior fixedTable = new FixedHeaderTableBehavior("#messagesTable", new Options("height", 100));
+	private final DropDownChoice<Long> selectDropDown = new DropDownChoice<Long>("msgSelect", Model.of(1252L), Arrays.asList(1252L, 1239L, 1240L, 1241L, 1242L), new IChoiceRenderer<Long>() {
+		private static final long serialVersionUID = 1L;
+
+		public Object getDisplayValue(Long object) {
+			return WebSession.getString(object);
+		}
+		
+		public String getIdValue(Long object, int index) {
+			return "" + object;
+		}
+	});
 	
 	private void setDefaultFolderClass() {
 		inbox.add(AttributeAppender.replace("class", "email inbox clickable"));
@@ -100,6 +117,14 @@ public class MessagesContactsPanel extends UserPanel {
 		}
 	}
 	
+	private void updateControls(AjaxRequestTarget target) {
+		deleteBtn.setEnabled(!selectedMessages.isEmpty());
+		readBtn.setEnabled(TRASH_FOLDER_ID != selectedModel.getObject() && !selectedMessages.isEmpty());
+		unreadBtn.setEnabled(TRASH_FOLDER_ID != selectedModel.getObject() && !selectedMessages.isEmpty());
+		toInboxBtn.setVisible(INBOX_FOLDER_ID != selectedModel.getObject() && SENT_FOLDER_ID != selectedModel.getObject() && !selectedMessages.isEmpty());
+		target.add(buttons);
+	}
+	
 	private void selectMessage(long id, AjaxRequestTarget target) {
 		PrivateMessage msg = getBean(PrivateMessagesDao.class).get(id);
 		selectedMessage.addOrReplace(new Label("from", msg == null ? "" : msg.getFrom().getAdresses().getEmail()));
@@ -107,9 +132,15 @@ public class MessagesContactsPanel extends UserPanel {
 		selectedMessage.addOrReplace(new Label("subj", msg == null ? "" : msg.getSubject()));
 		selectedMessage.addOrReplace(new Label("body", msg == null ? "" : msg.getMessage()));
 		if (target != null) {
-			target.add(selectedMessage, deleteBtn.setEnabled(!selectedMessages.isEmpty())
-				, readBtn.setEnabled(TRASH_FOLDER_ID != selectedModel.getObject() && !selectedMessages.isEmpty())
-				, unreadBtn.setEnabled(TRASH_FOLDER_ID != selectedModel.getObject() && !selectedMessages.isEmpty()));
+			target.add(selectedMessage);
+			updateControls(target);
+		}
+	}
+	
+	void updateTable(AjaxRequestTarget target) {
+		container.add(fixedTable);
+		if (target != null) {
+			target.add(container);
 		}
 	}
 	
@@ -121,11 +152,11 @@ public class MessagesContactsPanel extends UserPanel {
 		deleteBtn.add(AttributeModifier.replace("value", WebSession.getString(TRASH_FOLDER_ID == id ? 1256 : 1245)));
 		readBtn.setEnabled(false);
 		unreadBtn.setEnabled(false);
-		container.add(new FixedHeaderTableBehavior("#messagesTable", new Options("height", 100)));
 		//FIXME it is not working! (at least for the SENT folder)
 		unread.setDefaultModelObject(getBean(PrivateMessagesDao.class).count(getUserId(), id > 0 ? id : null, false, TRASH_FOLDER_ID == id));
 		if (target != null) {
-			target.add(folders, container, unread);
+			updateTable(target);
+			target.add(folders, unread);
 			target.add(dataContainer.container, dataContainer.navigator);
 			target.add(dataContainer.orderLinks);
 		}
@@ -346,8 +377,9 @@ public class MessagesContactsPanel extends UserPanel {
 		add(new WebMarkupContainer("pendingContacts"));//FIXME
 		add(new WebMarkupContainer("na1"));//FIXME
 		
-		add(deleteBtn.setOutputMarkupId(true).setEnabled(!selectedMessages.isEmpty())
-			.add(new AjaxEventBehavior("click") {
+		add(buttons.setOutputMarkupId(true));
+		buttons.add(toInboxBtn);
+		buttons.add(deleteBtn.add(new AjaxEventBehavior("click") {
 				private static final long serialVersionUID = 1L;
 	
 				@Override
@@ -361,8 +393,7 @@ public class MessagesContactsPanel extends UserPanel {
 					target.add(container);
 				}
 			}));
-		add(readBtn.setOutputMarkupId(true).setEnabled(!selectedMessages.isEmpty())
-			.add(new AjaxEventBehavior("click") {
+		buttons.add(readBtn.add(new AjaxEventBehavior("click") {
 				private static final long serialVersionUID = 1L;
 				
 				@Override
@@ -372,8 +403,7 @@ public class MessagesContactsPanel extends UserPanel {
 					target.add(container);
 				}
 			}));
-		add(unreadBtn.setOutputMarkupId(true).setEnabled(!selectedMessages.isEmpty())
-			.add(new AjaxEventBehavior("click") {
+		buttons.add(unreadBtn.add(new AjaxEventBehavior("click") {
 				private static final long serialVersionUID = 1L;
 				
 				@Override
@@ -383,6 +413,8 @@ public class MessagesContactsPanel extends UserPanel {
 					target.add(container);
 				}
 			}));
+		buttons.add(selectDropDown.setOutputMarkupId(true));
+		
 		add(container.add(dv).setOutputMarkupId(true));
 		//TODO add valid autoupdate add(new AjaxSelfUpdatingTimerBehavior(seconds(15)));
 		add(newMessage);
