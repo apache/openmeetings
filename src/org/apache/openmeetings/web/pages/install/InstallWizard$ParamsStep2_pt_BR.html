@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<html xmlns:wicket="http://wicket.apache.org">
+<wicket:panel>
+	<fieldset id="userConf">
+		<legend>Configuration</legend>
+		<ul>
+			<li><label for="configdefault">Permitir auto-cadastro (allow_frontend_register)</label>
+				<select wicket:id="allowFrontendRegister"></select>
+			</li>
+			<li><label wicket:for="sendEmailAtRegister">Enviar e-mail para novos Usu&aacute;rios cadastrados (sendEmailAtRegister)</label>
+				<select wicket:id="sendEmailAtRegister"></select>
+			</li>
+			<li><label wicket:for="sendEmailWithVerficationCode">Novos Usu&aacute;rios precisam validar seus e-mails (sendEmailWithVerficationCode)</label>
+				<select wicket:id="sendEmailWithVerficationCode"></select>
+			</li>
+			<li><label wicket:for="createDefaultRooms">Todos os tipos de Salas padr&atilde;o ser&atildeo criadas</label>
+				<select wicket:id="createDefaultRooms"></select>
+			</li>
+			<li><label wicket:for="cfg.mailReferer">E-mail do sistema (system_email_addr)</label>
+				<input wicket:id="cfg.mailReferer" title="Digite um e-mail" type="text" />
+			</li>
+			<li><label wicket:for="cfg.smtpServer">Servidor SMTP (smtp_server)</label>
+				<input wicket:id="cfg.smtpServer" title="Digite um servidor SMTP" type="text" />
+			</li>
+			<li><label wicket:for="cfg.smtpPort">Porta SMTP (a porta SMTP padr&atilde;o &eacute; 25) (smtp_port)</label>
+				<input wicket:id="cfg.smtpPort" title="Digite a porta do servi&ccedil;o SMTP. Padr&atilde;o &eacute; normalmente a porta 25" type="text" />
+			</li>
+			<li><label wicket:for="cfg.mailAuthName">Usu&aacute;rio SMTP (email_username)</label>
+				<input wicket:id="cfg.mailAuthName" title="Digite o usu&aacute;rio do e-mail" type="text" />
+			</li>
+			<li><label wicket:for="cfg.mailAuthPass">Senha SMTP (email_userpass)</label>
+				<input wicket:id="cfg.mailAuthPass" title="Digite a senha do e-mail" type="password" />
+			</li>
+			<li><label wicket:for="mailUseTls">Habilitar TLS na autentica&ccedil;&atilde;o do e-mail</label>
+				<select wicket:id="mailUseTls"></select>
+			</li>
+			<li><label wicket:for="replyToOrganizer">Marcar endere&ccedil;o de e-mail do convidador no campo ReplyTo do e-mail enviado ao convidado (inviter.email.as.replyto)</label>
+				<select wicket:id="replyToOrganizer"></select>
+			</li>
+			<li><label wicket:for="defaultLangId">Linguagem padr&atilde;o</label>
+				<select wicket:id="defaultLangId"></select>
+			</li>
+			<li><label wicket:for="cfg.defaultExportFont">Fonte padr&atilde;o para exporta&ccedil;&atilde;o [default_export_font]</label>
+				<select wicket:id="cfg.defaultExportFont"></select>
+			</li>
+		</ul>
+	</fieldset>
+</wicket:panel>
+</html>

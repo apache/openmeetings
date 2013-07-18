@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<html xmlns:wicket="http://wicket.apache.org">
+<wicket:panel>
+	<fieldset id="userConf1">
+		<legend>Conversores</legend>
+		<ul>
+			<li><label wicket:for="cfg.swfZoom">SWFTools Zoom</label>
+			<input wicket:id="cfg.swfZoom" title="Digite o dpi que o swftools usar&aacute; para a convers&atilde;o do PDF para SWF"
+				type="text" />
+				<p>
+					<i>Voc&ecirc; pode testar se o swftools está instalado no caminho do sistema
+						abrindo o shell ou prompt de comando e digitando pdf2swf. Digite o dpi 
+						que o swftools usar&aacute; para a convers&atilde;o do PDF para SWF. Padr&atilde;o 
+						&eacute; 72 dpi. Veja mais em <a
+						href="http://openmeetings.apache.org/installation.html"
+						target="_blank">Instala&ccedil;&atilde;o</a>
+					</i>
+				</p></li>
+			<li><label wicket:for="cfg.swfJpegQuality">Qualidade JPEG no SWFTools</label>
+				<input wicket:id="cfg.swfJpegQuality" 
+				title="Digite a qualidade das imagens jpeg incorporadas. 0 &eacute; a pior (menor), 100 &eacute; a melhor (maior). (padr&atilde;o:85)"
+				type="text" />
+				<p>
+					<i>Voc&ecirc; pode testar se o swftools está instalado no caminho do sistema
+						abrindo o shell ou prompt de comando e digitando pdf2swf. Digite a qualidade das 							imagens jpeg incorporadas. 0 &eacute; a pior (menor), 100 &eacute; a melhor (maior). 
+						(padr&atilde;o:85). Veja mais em <a
+						href="http://openmeetings.apache.org/installation.html"
+						target="_blank">Instala&ccedil;&atilde;o</a>
+					</i>
+				</p>
+			</li>
+			<li><label wicket:for="cfg.swfPath">Diret&oacute;rio do SWFTools</label>
+				<input wicket:id="cfg.swfPath" 
+				title="Digite o caminho do diret&oacute;rio para o swftools, por exemplo C:/swftools, ou deixe em branco se o swftools estiver localizado em um diret&oacute;rio contido no caminho do sistema (system path)"
+				type="text" />
+				<p>
+					<i>Voc&ecirc; pode testar se o swftools está instalado no caminho do sistema
+						abrindo o shell ou prompt de comando e digitando pdf2swf. Se isso mostrar 
+						uma lista de op&ccedil;&otilde;es deixe este campo em branco, caso contr&aacute;rio 							voc&ecirc; dever&aacute; especificar o diret&oacute;rio 
+						do pdf2swf no seu sistema. Veja mais em <a
+						href="http://openmeetings.apache.org/installation.html"
+						target="_blank">Instala&ccedil;&atilde;o</a>
+					</i>
+				</p></li>
+			<li><label wicket:for="cfg.imageMagicPath">Diret&oacute;rio do ImageMagick</label>
+				<input wicket:id="cfg.imageMagicPath" 
+				title="Digite o caminho do diret&oacute;rio para o ImageMagick, deixe em branco se o ImageMagick estiver localizado em um diret&oatilde;rio contido no caminho do sistema (system path)"
+				type="text" />
+				<p>
+					<i>Veja mais em <a
+						href="http://openmeetings.apache.org/installation.html"
+						target="_blank">Instala&ccedil;&atilde;o</a></i>
+				</p></li>
+			<li><label wicket:for="cfg.ffmpegPath">Diret&oacute;rio do FFMPEG</label>
+				<input wicket:id="cfg.ffmpegPath" 
+				title="Digite o caminho do diret&oacute;rio do para o FFMPEG, deixe em branco se o FFMPEG estiver localizado em um diret&oatilde;rio contido no caminho do sistema (system path)"
+				type="text" />
+				<p>
+					<i>Veja mais em <a
+						href="http://openmeetings.apache.org/installation.html"
+						target="_blank">Instala&ccedil;&atilde;o</a></i>
+				</p></li>
+			<li><label wicket:for="cfg.soxPath">Diret&oacute;rio do SoX</label>
+				<input wicket:id="cfg.soxPath" 
+				title="Digite o caminho do diret&oacute;rio do para o SoX, deixe em branco se o SoX estiver localizado em um diret&oatilde;rio contido no caminho do sistema (system path)"
+				type="text" />
+				<p>
+					<i>Veja mais em <a
+						href="http://openmeetings.apache.org/installation.html"
+						target="_blank">Instala&ccedil;&atilde;o</a></i>
+				</p></li>
+			<li><label wicket:for="cfg.jodPath">Diret&oacute;rio do JOD</label>
+				<input wicket:id="cfg.jodPath"
+				title="O diret&oacute;rio da biblioteca JOD (http://code.google.com/p/jodconverter), configure o mesmo para o ponto onde o diret&oacute;rio lib do JOD que também contenha o arquivo jodconverter-core-version.jar"
+				type="text" />
+				<p>
+					<i>Veja mais em <a
+						href="http://openmeetings.apache.org/installation.html"
+						target="_blank">Instala&ccedil;&atilde;o</a></i>
+				</p></li>
+			<li><label wicket:for="cfg.officePath">Diret&oacute;rio do OpenOffice/LibreOffice para jodconverter</label>
+				<input wicket:id="cfg.officePath"
+				title="O diret&oacute;rio do OpenOffice/LibreOffice (opcional). Por favor configure este com o caminho real caso o jodconverter não encontre a instala&ccedil;&atilde;o do OpenOffice/LibreOffice automaticamente"
+				type="text" />
+				<p>O diret&oacute;rio do OpenOffice/LibreOffice (opcional). 
+					Por favor configure este campo com o caminho real caso o jodconverter 
+					não encontre a instala&ccedil;&atilde;o do OpenOffice/LibreOffice automaticamente</p></li>
+		</ul>
+	</fieldset>
+</wicket:panel>
+</html>

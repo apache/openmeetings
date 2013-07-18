@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+    	  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  
+-->
+<html xmlns:wicket="http://wicket.apache.org">
+<wicket:panel>
+	<fieldset id="userConf2">
+
+		<legend>Crypt Type</legend>
+		<ul>
+			<li><label wicket:for="cfg.cryptClassName">Classe Crypt</label>
+				<input wicket:id="cfg.cryptClassName"  type="text"
+				title="Digite o nome da Classe de Criptografia. N&Atilde;O ALTERE ISTO SE VOC&Ecirc; N&Atilde;O TIVER CERTEZA" />
+				<p>
+					<i> Voc&ecirc; pode usar este tipo padr&atilde;o de criptografia que &eacute; igual a 
+						fun&ccedil;&atilde;o PHP-MD5 ou a criptografia BSD-Style 
+						utilizando: <b>org.apache.openmeetings.utils.crypt.MD5CryptImplementation</b>
+						para maiores informa&ccedil;&otilde;es ou para escrever seu pr&oacute;prio Crypt-Style 
+						veja: <a
+						href="http://openmeetings.apache.org/CustomCryptMechanism.html"
+						target="_blank">Mecanismo de Criptografia personalizado</a>
+						Voc&ecirc; pode editar este valor mais tarde MAS Usu&aacute;rios e Sess&otilde;es 							criadas podem n&atilde;o mais estarem acess&iacute;veis
+					</i>
+				</p></li>
+		</ul>
+	</fieldset>
+
+	<fieldset id="red5sip">
+		<legend>Configura&ccedil;&atilde;o red5SIP</legend>
+		<ul>
+			<li><label wicket:for="red5SipEnable">Habilitar SIP</label>
+				<select wicket:id="red5SipEnable"></select>
+				<p>
+					<i> Habilitar integra&ccedil;&atilde;o red5SIP </i>
+				</p> </li>
+
+			<li><label wicket:for="cfg.red5SipRoomPrefix">Prefixo de salas SIP</label>
+				<input wicket:id="cfg.red5SipRoomPrefix" type="text" />
+				<p>
+					<i>Prefixo de n&uacute;mero de telefone das salas de conferencia</i>
+				</p></li>
+
+			<li><label wicket:for="cfg.red5SipExtenContext">Contexto de extens&otilde;s SIP</label>
+				<input wicket:id="cfg.red5SipExtenContext" type="text" />
+				<p>
+					<i>Contexto de extens&otilde;es Asterisk</i>
+				</p></li>
+		</ul>
+	</fieldset>
+</wicket:panel>
+</html>
