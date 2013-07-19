@@ -975,10 +975,6 @@
 		<svn refid="svn.settings">
 			<checkout url="https://red5.googlecode.com/svn/java/client/trunk/" revision="${red5.client.revision}" destPath="${red5.client.dir}" />
 		</svn>
-		<delete>
-			<fileset dir="${red5.client.dir}/lib" includes="red5-server*.jar" />
-		</delete>
-		<copy file="${red5.lib}/red5-server.jar" todir="${red5.client.dir}/lib" overwrite="true" force="true" />
 		<artifact:mvn pom="${red5.client.dir}/pom.xml" mavenVersion="${maven.version}" fork="true" dir="${red5.client.dir}">
 			<jvmarg value="-Dmaven.buildNumber.doUpdate=false" />
 			<!--jvmarg value="-Dassembly.skipAssembly=true" /-->

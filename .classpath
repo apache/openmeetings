@@ -47,6 +47,7 @@
 	<classpathentry kind="lib" path="build/red5/server/dist/lib/spring-aop-3.1.1.RELEASE.jar"/>
 	<classpathentry kind="lib" path="build/red5/server/dist/lib/spring-test-3.1.1.RELEASE.jar"/>
 	<classpathentry kind="lib" path="build/red5/server/dist/lib/commons-pool-1.5.6.jar"/>
+	<classpathentry kind="lib" path="build/red5/server/dist/lib/ehcache-core-2.5.0.jar"/>
 	<classpathentry kind="lib" path="build/red5/client/dist/red5-client-1.0.2-RC1.jar" sourcepath="build/red5/client/src/main/java"/>
 	<classpathentry kind="lib" path="build/red5/server/dist/plugins/tomcat-embed-core-7.0.41.jar"/>
 	<classpathentry kind="lib" path="build/red5/server/dist/lib/bcprov-jdk15on-1.47.jar"/>
