@@ -193,7 +193,7 @@ public class InstallWizard extends Wizard {
             add(new YesNoDropDown("createDefaultRooms"));
             add(new TextField<String>("cfg.mailReferer"));
             add(new TextField<String>("cfg.smtpServer"));
-            add(new TextField<Integer>("cfg.smtpPort"));
+            add(new TextField<Integer>("cfg.smtpPort").setRequired(true));
             add(new TextField<String>("cfg.mailAuthName"));
             add(new PasswordTextField("cfg.mailAuthPass").setRequired(false));
             add(new YesNoDropDown("mailUseTls"));
@@ -228,8 +228,8 @@ public class InstallWizard extends Wizard {
 		public ParamsStep3() {
 			super(paramsStep2);
 			
-            add(new TextField<Integer>("cfg.swfZoom").add(range(50, 600)));
-            add(new TextField<Integer>("cfg.swfJpegQuality").add(range(1, 100)));
+            add(new TextField<Integer>("cfg.swfZoom").setRequired(true).add(range(50, 600)));
+            add(new TextField<Integer>("cfg.swfJpegQuality").setRequired(true).add(range(1, 100)));
             add(new TextField<String>("cfg.swfPath"));
             add(new TextField<String>("cfg.imageMagicPath"));
             add(new TextField<String>("cfg.ffmpegPath"));
