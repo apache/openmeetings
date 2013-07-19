@@ -42,10 +42,15 @@ import org.apache.openmeetings.web.data.DataViewContainer;
 import org.apache.openmeetings.web.data.OmOrderByBorder;
 import org.apache.openmeetings.web.data.SearchableDataProvider;
 import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.Component;
+import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
+import org.apache.wicket.ajax.form.OnChangeAjaxBehavior;
 import org.apache.wicket.behavior.AttributeAppender;
+import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Button;
@@ -67,6 +72,11 @@ import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
 
 public class MessagesContactsPanel extends UserPanel {
 	private static final long serialVersionUID = 8098087441571734957L;
+	private final static int SELECT_CHOOSE = 1252;
+	private final static int SELECT_ALL = 1239;
+	private final static int SELECT_NONE = 1240;
+	private final static int SELECT_UNREAD = 1241;
+	private final static int SELECT_READ = 1242;
 	private final WebMarkupContainer container = new WebMarkupContainer("container");
 	private final WebMarkupContainer folders = new WebMarkupContainer("folders");
 	private final Label unread = new Label("unread", Model.of(0L));
@@ -88,17 +98,20 @@ public class MessagesContactsPanel extends UserPanel {
 	private final Button readBtn = new Button("readBtn");
 	private final Button unreadBtn = new Button("unreadBtn");
 	private final FixedHeaderTableBehavior fixedTable = new FixedHeaderTableBehavior("#messagesTable", new Options("height", 100));
-	private final DropDownChoice<Long> selectDropDown = new DropDownChoice<Long>("msgSelect", Model.of(1252L), Arrays.asList(1252L, 1239L, 1240L, 1241L, 1242L), new IChoiceRenderer<Long>() {
-		private static final long serialVersionUID = 1L;
-
-		public Object getDisplayValue(Long object) {
-			return WebSession.getString(object);
-		}
-		
-		public String getIdValue(Long object, int index) {
-			return "" + object;
-		}
-	});
+	private final DropDownChoice<Integer> selectDropDown = new DropDownChoice<Integer>(
+		"msgSelect", Model.of(SELECT_CHOOSE)
+		, Arrays.asList(SELECT_CHOOSE, SELECT_ALL, SELECT_NONE, SELECT_UNREAD, SELECT_READ)
+		, new IChoiceRenderer<Integer>() {
+			private static final long serialVersionUID = 1L;
+	
+			public Object getDisplayValue(Integer object) {
+				return WebSession.getString(object);
+			}
+			
+			public String getIdValue(Integer object, int index) {
+				return "" + object;
+			}
+		});
 	
 	private void setDefaultFolderClass() {
 		inbox.add(AttributeAppender.replace("class", "email inbox clickable"));
@@ -372,7 +385,6 @@ public class MessagesContactsPanel extends UserPanel {
 		add(dataContainer.orderLinks);
 		add(navigator);
 		
-		selectFolder(inbox, INBOX_FOLDER_ID, null);
 		add(unread.setOutputMarkupId(true));
 		add(new WebMarkupContainer("pendingContacts"));//FIXME
 		add(new WebMarkupContainer("na1"));//FIXME
@@ -413,12 +425,47 @@ public class MessagesContactsPanel extends UserPanel {
 					target.add(container);
 				}
 			}));
-		buttons.add(selectDropDown.setOutputMarkupId(true));
+		buttons.add(selectDropDown.setOutputMarkupId(true).add(new OnChangeAjaxBehavior() {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void onUpdate(AjaxRequestTarget target) {
+				switch (selectDropDown.getModelObject()) {
+					case SELECT_CHOOSE:
+						break;
+					case SELECT_ALL:
+						break;
+					case SELECT_NONE:
+						break;
+					case SELECT_UNREAD:
+						break;
+					case SELECT_READ:
+						break;
+				}
+			}
+		}));
 		
+		selectMessage(-1, null);
 		add(container.add(dv).setOutputMarkupId(true));
 		//TODO add valid autoupdate add(new AjaxSelfUpdatingTimerBehavior(seconds(15)));
 		add(newMessage);
-		selectMessage(-1, null);
 		add(selectedMessage.setOutputMarkupId(true));
+		
+		//hack to add FixedHeaderTable after Tabs.
+		add(new AbstractDefaultAjaxBehavior() {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void respond(AjaxRequestTarget target) {
+				selectFolder(inbox, INBOX_FOLDER_ID, target);
+				selectMessage(-1, target);
+			}
+			
+			@Override
+			public void renderHead(Component component, IHeaderResponse response) {
+				super.renderHead(component, response);
+				response.render(OnDomReadyHeaderItem.forScript(getCallbackScript()));
+			}
+		});
 	}
 }
