@@ -81,24 +81,26 @@ public class CalendarPanel extends UserPanel {
 		JSONArray shortMonthes = new JSONArray();
 		JSONArray days = new JSONArray();
 		JSONArray shortDays = new JSONArray();
-		for (int i=0; i < 12; i++){
-			try {
+		try {
+			// first week day must be Sunday
+			days.put(0, WebSession.getString(466));
+			shortDays.put(0, WebSession.getString(459));
+			for (int i=0; i < 12; i++){
 				monthes.put(i, WebSession.getString(469 + i));
 				shortMonthes.put(i, WebSession.getString(1556 + i));
-				if (i < 7){
-					days.put(i, WebSession.getString(460 + i));
-					shortDays.put(i, WebSession.getString(453 + i));					
+				if (i+1 < 7){
+					days.put(i+1, WebSession.getString(460 + i));
+					shortDays.put(i+1, WebSession.getString(453 + i));					
 				}
-			} catch (JSONException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
 			}
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		options.set("monthNames", monthes.toString());
 		options.set("monthNamesShort", shortMonthes.toString());
 		options.set("dayNames", days.toString());
 		options.set("dayNamesShort", shortDays.toString());
-		
 		
 		calendar = new Calendar("calendar", new AppointmentModel(), options) {
 			private static final long serialVersionUID = 8442068089963449950L;

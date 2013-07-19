@@ -34,14 +34,18 @@ import org.apache.openmeetings.data.conference.dao.RoomDao;
 import org.apache.openmeetings.data.user.dao.UsersDao;
 import org.apache.openmeetings.persistence.beans.calendar.Appointment;
 import org.apache.openmeetings.persistence.beans.calendar.AppointmentReminderTyps;
+import org.apache.openmeetings.persistence.beans.calendar.MeetingMember;
 import org.apache.openmeetings.persistence.beans.domain.Organisation_Users;
 import org.apache.openmeetings.persistence.beans.room.Room;
 import org.apache.openmeetings.persistence.beans.room.RoomType;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.util.RoomTypeDropDown;
+import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxCheckBox;
 import org.apache.wicket.extensions.yui.calendar.DateTimeField;
+import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
@@ -49,6 +53,8 @@ import org.apache.wicket.markup.html.form.PasswordTextField;
 import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.form.TextField;
+import org.apache.wicket.markup.html.list.ListItem;
+import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
@@ -66,6 +72,7 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 	private DialogButton delete = new DialogButton(WebSession.getString(814));
 	private final CalendarPanel calendar;
 	protected final FeedbackPanel feedback;
+	final MeetingMemberDialog addAttendees;
 	
 	@Override
 	public int getWidth() {
@@ -85,6 +92,8 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 		feedback = new FeedbackPanel("feedback");
 		form = new AppointmentForm("appForm", model);
 		add(form);
+		addAttendees = new MeetingMemberDialog("addAttendees", WebSession.getString(812), getModel(), this);
+		add(addAttendees);
 	}
 
 	@Override
@@ -217,6 +226,41 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 					target.add(pwd);
 				}
 			});
+			
+			final WebMarkupContainer addMeetingMember = new WebMarkupContainer("addMeetingMember");
+			addMeetingMember.add(new AjaxEventBehavior("onclick") {
+				private static final long serialVersionUID = 7016550192188649714L;
+
+				protected void onEvent(AjaxRequestTarget target) {
+					addAttendees.open(target);
+	        	}
+	        });
+			add(addMeetingMember);
+			
+			final WebMarkupContainer attendeeContainer = new WebMarkupContainer("attendeeContainer");
+			attendeeContainer.add(new ListView<MeetingMember>("meetingMember"){
+
+				private static final long serialVersionUID = -2609044181991754097L;
+
+				@Override
+				protected void populateItem(final ListItem<MeetingMember> item) {
+					MeetingMember mm = item.getModelObject();
+					item.add(new Label("attendeeName", mm.getFirstname() + " " + mm.getLastname()));
+					item.add(new Label("attendeeEmail", mm.getEmail()));
+					item.add(new WebMarkupContainer("attendeeDelete").add(new AjaxEventBehavior("onclick"){
+						private static final long serialVersionUID = 1L;
+
+						@Override
+						protected void onEvent(AjaxRequestTarget target) {
+							MeetingMember mm = item.getModelObject();
+							AppointmentForm.this.getModelObject().getMeetingMember().remove(mm);
+							target.add(attendeeContainer);
+						}
+					})); 
+				}
+			});
+			add(attendeeContainer.setOutputMarkupId(true));
+
 		}
 		
 		private boolean isPwdProtected() {

@@ -39,6 +39,7 @@ import com.googlecode.wicket.jquery.ui.form.autocomplete.AutoCompleteTextField;
 public class UserAutoCompleteTextField extends AutoCompleteTextField<User> {
 	private static final long serialVersionUID = 1L;
 	private UserTextRenderer renderer;
+	private String inputValue = null;
 	private IConverter<User> converter = new IConverter<User>() {
 		private static final long serialVersionUID = 1L;
 
@@ -80,7 +81,7 @@ public class UserAutoCompleteTextField extends AutoCompleteTextField<User> {
 					u.setFirstname(fName);
 					u.setLastname(lName);
 					u.setAdresses(new Address());
-					u.getAdresses().setEmail(value);
+					u.getAdresses().setEmail(email);
 				} else {
 					for (IValidationError err : valEmail.getErrors()) {
 						UserAutoCompleteTextField.this.error(err);
@@ -93,6 +94,7 @@ public class UserAutoCompleteTextField extends AutoCompleteTextField<User> {
 		public String convertToString(User value, Locale locale) {
 			return UserAutoCompleteTextField.this.renderer.getText(value);
 		}
+
 	};
 
 	public UserAutoCompleteTextField(String id, IModel<User> model) {
@@ -104,6 +106,10 @@ public class UserAutoCompleteTextField extends AutoCompleteTextField<User> {
 		this(id, null);
 	}
 
+	public String inputToString() {
+		return inputValue;
+	}
+	
 	@SuppressWarnings("unchecked")
 	@Override
 	public <C> IConverter<C> getConverter(Class<C> type) {
@@ -116,6 +122,7 @@ public class UserAutoCompleteTextField extends AutoCompleteTextField<User> {
 	
 	@Override
 	protected List<User> getChoices(String input) {
+		inputValue = input;
 		return getBean(UsersDao.class).get(input, 0, 10, null);
 	}
 	

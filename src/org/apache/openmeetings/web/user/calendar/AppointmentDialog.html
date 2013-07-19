@@ -60,11 +60,27 @@
 				<tr>
 					<td colspan="2" style="font-size: smaller;"><wicket:ommessage key="1445" /></td>
 				</tr>
-				<!-- 
+				<tr>
+					<td>
+	                    <div wicket:id="addMeetingMember" class="formNewButton" wicket:ommessage="title:812"><input/></div>
+                    </td>
+				</tr>
 				<tr>
 					<td><wicket:ommessage key="803" /></td>
-					<td><select wicket:id="meetingMember" ></select></td>
-				</tr -->
+					<td >
+						<div style="background-color: #FFFFFF; border: solid 1px #aacfe4; width: 350px; height: 150px; overflow-x: scroll">
+							<table>
+								<tbody wicket:id="attendeeContainer">		
+						    		<tr wicket:id="meetingMember">
+										<td style="width: 100px;" ><div style="width: 150px;"><span wicket:id="attendeeName"></span></div></td>
+										<td style="width: 100px;"><div style="width: 150px;"><span wicket:id="attendeeEmail"></span></div></td>
+										<td style="width: 20px;"><div class="formCancelButton" wicket:id="attendeeDelete" wicket:ommessage="title:814"><input/></div></td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</td>
+				</tr>
 				<tr>
 					<td><wicket:ommessage key="569" /></td>
 					<td><input type="text" wicket:id="appointmentLocation" /></td>
@@ -75,5 +91,6 @@
 				</tr>
 			</table>
 		</form>
+		<div wicket:id="addAttendees"></div>
 	</wicket:panel>
 </html>
