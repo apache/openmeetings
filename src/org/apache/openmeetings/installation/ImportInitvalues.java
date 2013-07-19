@@ -299,7 +299,7 @@ public class ImportInitvalues {
 		configurationDao.add("smtp_server", cfg.smtpServer, null,
 				"this is the smtp server to send messages");
 		// 25
-		configurationDao.add("smtp_port", cfg.smtpPort, null,
+		configurationDao.add("smtp_port", "" + cfg.smtpPort, null,
 				"this is the smtp server port normally 25");
 		// "openmeetings@xmlcrm.org"
 		configurationDao.add("system_email_addr", cfg.mailReferer,
@@ -322,11 +322,11 @@ public class ImportInitvalues {
 		configurationDao.add(DEFAUT_LANG_KEY, cfg.defaultLangId,
 				null, "Default System Language ID see languages.xml");
 
-		configurationDao.add("swftools_zoom", cfg.swfZoom, null,
+		configurationDao.add("swftools_zoom", "" + cfg.swfZoom, null,
 				"dpi for conversion of PDF to SWF (should be an integer between 50 and  600 with a default value of 100 dpi)");
 
 		configurationDao.add("swftools_jpegquality",
-				cfg.swfJpegQuality, null,
+				"" + cfg.swfJpegQuality, null,
 				"compression quality for conversion of PDF to SWF (should be an integer between 1 and 100, with a default value of 85)");
 
 		configurationDao.add("swftools_path", cfg.swfPath, null,

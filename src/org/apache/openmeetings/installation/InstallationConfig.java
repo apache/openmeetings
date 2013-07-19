@@ -37,15 +37,15 @@ public class InstallationConfig implements Serializable {
 	
 	public String cryptClassName = MD5Implementation.class.getCanonicalName();
 	//email
-	public String smtpPort = "25";
+	public Integer smtpPort = 25;
 	public String smtpServer = "localhost";
 	public String mailAuthName = "";
 	public String mailAuthPass = "";
 	public String mailReferer = "noreply@openmeetings.apache.org";
 	public String mailUseTls = "0";
 	//paths
-	public String swfZoom = "100";
-	public String swfJpegQuality = "85";
+	public Integer swfZoom = 100;
+	public Integer swfJpegQuality = 85;
 	public String swfPath = "";
 	public String imageMagicPath = "";
 	public String ffmpegPath = "";

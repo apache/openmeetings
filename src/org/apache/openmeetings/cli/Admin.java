@@ -227,7 +227,7 @@ public class Admin {
 						cfg.smtpServer = cmdl.getOptionValue("smtp-server");
 					}
 					if (cmdl.hasOption("smtp-port")) {
-						cfg.smtpPort = cmdl.getOptionValue("smtp-port");
+						cfg.smtpPort = Integer.valueOf(cmdl.getOptionValue("smtp-port"));
 					}
 					if (cmdl.hasOption("email-auth-user")) {
 						cfg.mailAuthName = cmdl.getOptionValue("email-auth-user");
