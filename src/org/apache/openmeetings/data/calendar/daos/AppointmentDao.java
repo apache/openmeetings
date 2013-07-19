@@ -267,15 +267,17 @@ public class AppointmentDao {
 			r.setNumberOfPartizipants(cfgDao.getConfValue("calendar.conference.rooms.default.size", Long.class, "50"));
 		}
 		roomDao.update(r, userId);
-		for (MeetingMember mm : a.getMeetingMember()){
-			if (mm.getMeetingMemberId() == null){
-				if (mm.getUserid().getUser_id() == null){
-					User u = mm.getUserid();
-					em.persist(u);
+		if (a.getMeetingMember() != null){
+			for (MeetingMember mm : a.getMeetingMember()){
+				if (mm.getMeetingMemberId() == null){
+					if (mm.getUserid().getUser_id() == null){
+						User u = mm.getUserid();
+						em.persist(u);
+					}
+					em.persist(mm);
+				} else {
+					em.merge(mm);
 				}
-				em.persist(mm);
-			} else {
-				em.merge(mm);
 			}
 		}
 		if (a.getAppointmentId() == null) {
