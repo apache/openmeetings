@@ -23,135 +23,132 @@
 	<ol>
 		<li>
 			<h4>
-				<a id="Recommendation_for_production_environment"></a>Recommendation
-				for production environment<a target="_blank"
+				<a id="Recommendation_for_production_environment"></a>Recomenda&ccedil;&otilde;es 
+				para o ambiente de produ&ccedil;&atilde;o<a target="_blank"
 					href="#Recommendation_for_production_environment"
 					class="section_anchor"></a>
 			</h4>
 		<blockquote>
-			By default <span wicket:id="app"></span> uses the integrated Apache Derby database. For
-			production environment you should consider using <a target="_blank"
+			Por padr&atilde;o <span wicket:id="app"></span> o banco de dados Apache Derby integrado ao sistema &eacute; 
+			utilizado. Para o ambiente de produ&ccedil;&atilde;o voc&ecirc; deve considerar o uso do <a target="_blank"
 				href="http://openmeetings.apache.org/MySQLConfig.html">MySQL</a>, <a
 				target="_blank"
 				href="http://openmeetings.apache.org/PostgresConfig.html">Postgres</a>
-			or for example <a target="_blank"
+			ou, por exemplo, <a target="_blank"
 				href="http://openmeetings.apache.org/IBMDB2Config.html">IBM DB2</a>
-			or <a href="http://openmeetings.apache.org/OracleConfig.html"
+			ou <a href="http://openmeetings.apache.org/OracleConfig.html"
 				target="_blank">Oracle</a>
 		</blockquote>
 		</li>
 		<li><h4>
-				<a id="Enabling_Image_Upload_and_import_to_whiteboard"></a>Enabling
-				Image Upload and import to whiteboard<a
+				<a id="Enabling_Image_Upload_and_import_to_whiteboard"></a>Habilitando envio e 
+					importa&ccedil;&atilde;o de imagens para a lousa<a
 					href="#Enabling_Image_Upload_and_import_to_whiteboard"
 					class="section_anchor"></a>
 			</h4>
 			<ul>
-				<li>Install <strong>ImageMagick</strong> on the server, you can
-					get more information on <a target="_blank"
-					href="http://www.imagemagick.org" rel="nofollow">http://www.imagemagick.org</a>
-					regarding installation. The instructions for installation can be
-					found there <a target="_blank"
+				<li>Instale <strong>ImageMagick</strong> no servidor, voc&ecirc; pode
+					obter maiores informa&ccedil;&otilde;es em <a target="_blank"
+					href="http://www.imagemagick.org" rel="nofollow">http://www.imagemagick.org</a>, inclusive 
+					sobre a instala&ccedil;&atilde;o. As instru&ccedil;&otilde;es sobre a instala&ccedil;&atilde;o
+					podem ser encontradas aqui <a target="_blank"
 					href="http://www.imagemagick.org/script/binary-releases.php"
 					rel="nofollow">http://www.imagemagick.org/script/binary-releases.php</a>,
-					however on most linux systems you can get it via your favorite
-					package managers (apt-get it)
+					entretanto na maioria dos sistemas Linux voc&ecirc; poder&aacute; instal&aacute;-lo pelo seu 						gerenciador de pacotes favorito (ex.: apt-get)
 				</li>
 			</ul>
 		</li>
 		<li><h4>
-				<a id="Enabling_import_of_PDFs_into_whiteboard"></a>Enabling
-				import of PDFs into whiteboard<a
+				<a id="Enabling_import_of_PDFs_into_whiteboard"></a>Habilitando 
+				importa&ccedil;&atilde;o de PDFs na lousa<a
 					href="#Enabling_import_of_PDFs_into_whiteboard"
 					class="section_anchor"></a>
 			</h4>
 			<ul>
-				<li>Install <strong>GhostScript</strong> on the server, you can
-					get more information on <a target="_blank"
-					href="http://pages.cs.wisc.edu/%7Eghost/" rel="nofollow">http://pages.cs.wisc.edu/~ghost/</a>
-					regarding installation. The instructions for installation can be
-					found there, however on most linux systems you can get it via your
-					favorite package managers (apt-get it).
+				<li>Instale <strong>GhostScript</strong> no servidor, voc&ecirc; pode
+					obter maiores informa&ccedil;&otilde;es em <a target="_blank"
+					href="http://pages.cs.wisc.edu/%7Eghost/" rel="nofollow">http://pages.cs.wisc.edu/~ghost/</a>,
+					inclusive sobre a instala&ccedil;&atilde;o. As instru&ccedil;&otilde;s sobre a 						instala&ccedil;&atilde;o podem ser encontradas neste mesmo link, entretanto na maioria dos 						sistemas Linux voc&ecirc; poder&aacute; instal&aacute;-lo pelo seu gerenciador 
+					de pacotes favorito (ex.: apt-get)
 				</li>
-				<li>Install <strong>SWFTools</strong> on the server, you can get
-					more information on <a target="_blank"
-					href="http://www.swftools.org/" rel="nofollow">http://www.swftools.org/</a>
-					regarding installation. Some of the Linux distributions already have
-					it in there package manager see <a target="_blank"
+				<li>Instale <strong>SWFTools</strong> no servidor, voc&ecirc; pode
+					obter maiores informa&ccedil;&otilde;es em <a target="_blank"
+					href="http://www.swftools.org/" rel="nofollow">http://www.swftools.org/</a>, inclusive
+					sobre a instala&ccedil;&atilde;o. Algumas distribui&ccedil;&otilde;es de Linux j&aacute; o 
+					possui em seus gerenciadores de pacote, veja <a target="_blank"
 					href="http://packages.debian.org/unstable/utils/swftools"
-					rel="nofollow">http://packages.debian.org/unstable/utils/swftools</a>),
-					the recommended version of <strong>SWFTools</strong> is 0.9 as prior
-					version have a bug that does lead to wrong object dimensions in the
-					Whiteboard
+					rel="nofollow">http://packages.debian.org/unstable/utils/swftools</a>.
+					A vers&atilde;o recomendada do <strong>SWFTools</strong> &eacute; 0.9, pois a vers&atilde;o 
+					anterior possui um bug que coloca o objeto na lousa com dimens&otilde;es incorretas	
 				</li>
 		</ul>
 		</li>
 		<li><h4>
 				<a
-					id="Enabling_import_of_.doc,_.docx,_.ppt,_.pptx,_..._all_Office_Docu"></a>Enabling
-				import of .doc, .docx, .ppt, .pptx, ... all Office Documents into
-				whitebaord<a
+					id="Enabling_import_of_.doc,_.docx,_.ppt,_.pptx,_..._all_Office_Docu"></a>Habilitando
+				importa&ccedil;&atilde;o de todos os documentos Office como .doc, .docx, .ppt, .pptx, (...) na lousa
+				<a
 					href="#Enabling_import_of_.doc,_.docx,_.ppt,_.pptx,_..._all_Office_Docu"
 					class="section_anchor"></a>
 			</h4>
 			<ul>
-				<li><strong>OpenOffice-Service</strong> started and listening on
-					port 8100, see <a target="_blank"
+				<li><strong>OpenOffice-Service</strong> iniciado e executando na 
+					porta 8100, veja <a target="_blank"
 					href="http://openmeetings.apache.org/OpenOfficeConverter.html">OpenOfficeConverter</a>
-					for details</li>
+					para detalhes</li>
 			</ul>
 		</li>
 		<li><h4>
 				<a
-					id="Enabling_Recording_and_import_of_.avi,_.flv,_.mov_and_.mp4_into"></a>Enabling
-				Recording and import of .avi, .flv, .mov and .mp4 into whiteboard<a
+					id="Enabling_Recording_and_import_of_.avi,_.flv,_.mov_and_.mp4_into"></a>Habilitando
+				Grava&ccedil;&otilde;es e importa&ccedil;&atilde;o de arquivos .avi, .flv, .mov e .mp4 na lousa<a
 					href="#Enabling_Recording_and_import_of_.avi,_.flv,_.mov_and_.mp4_into"
 					class="section_anchor"></a>
 			</h4>
 			<ul>
-				<li>Install <strong>FFMpeg</strong>. You should get FFMPEG in an
-					up to date copy! For Windows you can download a Build for example
-					from <a target="_blank" href="http://ffmpeg.arrozcru.org/builds/"
-					rel="nofollow">http://ffmpeg.arrozcru.org/builds/</a> Linux or OSx
-					Users should be able to use one of the various Installation
-					Instructions on the Web. You need to enable libmp3lame!
+				<li>Instale <strong>FFMpeg</strong>. Voc&ecirc; deve obter a vers&atilde;o mais atual do FFMPEG!
+					Para Windows voc&ecirc; pode baixar a versão compilada, por exemplo, 
+					de <a target="_blank" href="http://ffmpeg.arrozcru.org/builds/"
+					rel="nofollow">http://ffmpeg.arrozcru.org/builds/</a> Usu&aacute;rios Linux ou OSx
+					dever&atilde;o usar uma das diversas instru&ccedil;&otilde;es de instala&ccedil;&atilde;o 
+					existentes na Web. Voc&ecirc; precisa habilitar o libmp3lame!
 				</li>
-				<li>Install <strong>SoX</strong> <a
+				<li>Instale <strong>SoX</strong> <a
 					href="http://sox.sourceforge.net/" target="_BLANK">http://sox.sourceforge.net/</a>.
-					You should install SoX in a up to date copy! SoX 12.xx will NOT
-					work!
+					Voc&ecirc; deve instalar a vers&atilde;o mais recente do SoX! 
+					SoX 12.xx N&Atilde;O funcionar&aacute;!
 				</li>
 			</ul>
 		</li>
 	</ol>
 
 	<br />
-	<b> <span style="font-size: 1.2em">If you have further
-			questions or need support in installation or hosting:</span></b>
+	<b> <span style="font-size: 1.2em">Se voc&ecirc; tiver outras d&uacute;vidas ou precisar de suporte para a 
+		instala&ccedil;&atilde;o ou hospedagem:</span></b>
 	<br />
 	<br />
 
-	<b> <span style="font-size: 1.2em">Commercial-Support:</span></b>
+	<b> <span style="font-size: 1.2em">Suporte comercial:</span></b>
 	<br />
 	<br />
 
-	<span style="font-size: 1.1em"><b>By phone</b></span>
+	<span style="font-size: 1.1em"><b>Por telefone</b></span>
 	<br />
 	<span style="font-size: 1.1em">++49 721 467 27327</span>
 	<br />
-	<span style="font-size: 1.1em"><b>By email</b></span>
+	<span style="font-size: 1.1em"><b>Por e-mail</b></span>
 	<br />
 	<span style="font-size: 1.1em"><a
 		href="mailto:service@openmeetings.de">service@openmeetings.de</a></span>
 	<br />
 	<br />
 	<br />
-	<b><span style="font-size: 1.2em">Community-Support:</span></b>
+	<b><span style="font-size: 1.2em">Suporte da comunidade:</span></b>
 	<br />
 	<br />
 	<span style="font-size: 1.1em"><a
 		href="http://openmeetings.apache.org/mail-lists.html"
-		target="_blank">Mailing lists</a></span>
+		target="_blank">Lista de discuss&atilde;o</a></span>
 	<br />
 </wicket:panel>
 </html>
