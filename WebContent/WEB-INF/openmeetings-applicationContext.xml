@@ -210,10 +210,10 @@
 			<ref bean="sendMails" />
 		</property>
 		<property name="startDelay">
-			<value>180000</value> <!-- 3 minute -->
+			<value>60000</value> <!-- 1 minute -->
 		</property>
 		<property name="repeatInterval">
-			<value>180000</value> <!-- 3 minutes -->
+			<value>60000</value> <!-- 1 minute -->
 		</property>
 	</bean>
 	

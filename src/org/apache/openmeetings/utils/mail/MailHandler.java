@@ -50,9 +50,14 @@ import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.task.TaskExecutor;
 
+import com.sun.mail.util.MailSSLSocketFactory;
+
 /**
  * 
  * @author swagner
+ * 
+ * For a documentation about Javax mail please see fro example:
+ * http://connector.sourceforge.net/doc-files/Properties.html
  * 
  */
 public class MailHandler {
@@ -74,6 +79,8 @@ public class MailHandler {
 	private String mailAuthPass;
 	private boolean mailTls;
 	private boolean mailAddReplyTo;
+	private int smtpConnectionTimeOut;
+	private int smtpTimeOut;
 
 	private void init() {
 		smtpServer = cfgDao.getConfValue("smtp_server", String.class, null);
@@ -83,6 +90,8 @@ public class MailHandler {
 		mailAuthPass = cfgDao.getConfValue("email_userpass", String.class, null);
 		mailTls = "1".equals(cfgDao.getConfValue("mail.smtp.starttls.enable", String.class, "0"));
 		mailAddReplyTo = "1".equals(cfgDao.getConfValue("inviter.email.as.replyto", String.class, "1"));
+		smtpConnectionTimeOut = cfgDao.getConfValue("mail.smtp.connection.timeout", Integer.class, "30000");
+		smtpTimeOut = cfgDao.getConfValue("mail.smtp.timeout", Integer.class, "30000");
 	}
 	
 	protected MimeMessage appendIcsBody(MimeMessage msg, MailMessage m) throws Exception {
@@ -138,9 +147,15 @@ public class MailHandler {
 
 		props.put("mail.smtp.host", smtpServer);
 		props.put("mail.smtp.port", smtpPort);
+		
+		props.put("mail.smtp.connectiontimeout", smtpConnectionTimeOut); 
+		props.put("mail.smtp.timeout", smtpTimeOut);
 
 		if (mailTls) {
 			props.put("mail.smtp.starttls.enable", "true");
+			MailSSLSocketFactory sf = new MailSSLSocketFactory();
+		    sf.setTrustAllHosts(true);
+		    props.put("mail.smtp.ssl.socketFactory", sf);
 		}
 
 		// Check for Authentication
@@ -240,6 +255,7 @@ public class MailHandler {
 		init();
 		log.debug("sendMails enter ...");
 		List<MailMessage> list = mailMessageDao.get(0, 1);
+		log.debug("Numebr of emails in init queue " + list.size());
 		while (!list.isEmpty()) {
 			send(list.get(0), true);
 			list = mailMessageDao.get(0, 1);

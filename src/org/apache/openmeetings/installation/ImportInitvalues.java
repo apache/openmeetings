@@ -295,24 +295,30 @@ public class ImportInitvalues {
 		// frontend
 		configurationDao.add("default_domain_id", "1", null, "");
 
-		// "smtp.xmlcrm.org"
+
 		configurationDao.add("smtp_server", cfg.smtpServer, null,
 				"this is the smtp server to send messages");
-		// 25
+
 		configurationDao.add("smtp_port", "" + cfg.smtpPort, null,
 				"this is the smtp server port normally 25");
-		// "openmeetings@xmlcrm.org"
+
 		configurationDao.add("system_email_addr", cfg.mailReferer,
 				null, "all send EMails by the system will have this address");
-		// "openmeetings@xmlcrm.org"
+
 		configurationDao.add("email_username", cfg.mailAuthName,
 				null, "System auth email username");
-		//
+
 		configurationDao.add("email_userpass", cfg.mailAuthPass,
 				null, "System auth email password");
 
 		configurationDao.add("mail.smtp.starttls.enable",
 				cfg.mailUseTls, null, "Enable TLS 1=true, 0=false");
+		
+		configurationDao.add("mail.smtp.connection.timeout", "30000", null,
+				"Socket connection timeout value in milliseconds. Default is infinite timeout.");
+		
+		configurationDao.add("mail.smtp.timeout", "30000", null,
+				"Socket I/O timeout value in milliseconds. Default is infinite timeout.");
 
 		configurationDao.add("application.name",
 				ConfigurationDao.DEFAULT_APP_NAME, null,
