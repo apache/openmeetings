@@ -409,7 +409,7 @@ limitations under the License.
         </head>
 
         <body bgcolor="$bodybg" text="$bodyfg" link="$bodylink" vlink="$bodylink" alink="#000000">  
-        	<div class="mainbody" style="width: 100%;">
+        	<div class="mainbody" style="width: 94%;">
         	<div class="superbody" style="width: 100%;">
             <table border="0" width="100%" cellspacing="0">
                 <!-- TOP IMAGE -->
