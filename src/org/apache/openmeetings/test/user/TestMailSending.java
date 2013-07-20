@@ -18,6 +18,8 @@
  */
 package org.apache.openmeetings.test.user;
 
+import static org.junit.Assert.assertTrue;
+
 import java.io.IOException;
 import java.util.Date;
 import java.util.Properties;
@@ -32,6 +34,7 @@ import javax.mail.internet.MimeMessage;
 import javax.mail.util.ByteArrayDataSource;
 
 import org.apache.openmeetings.utils.mail.SmtpAuthenticator;
+import org.junit.Test;
 
 import com.sun.mail.util.MailSSLSocketFactory;
 
@@ -53,10 +56,11 @@ public class TestMailSending {
 	/**
 	 * @Test
 	 * 
-	 * We don't want this test to be executed in every test suite, it is more for manual testing
-	 * handy to check your server and the JavaMail setting properties
+	 * It does not make a lot of send to test this in every test suite, it is more for manual testing.
+	 * Handy to check your server and the JavaMail setting properties
 	 * 
 	 */
+	@Test
 	public void doTestSendEmail() {
 		try{
 			
@@ -65,7 +69,7 @@ public class TestMailSending {
 		} catch (Exception err) {
 			err.printStackTrace();
 		}
-		
+		assertTrue(true);
 	}
 	
 	private MimeMessage getMimeMessage() throws Exception {
