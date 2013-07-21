@@ -85,9 +85,15 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 		return 650;
 	}
 	
-	@Override
-	public void setModelObject(Appointment object) {
+	//@Override
+	public void setModelObjectWithAjaxTarget(Appointment object, AjaxRequestTarget target) {
 		form.setModelObject(object);
+		log.debug(" -- setModelObjectWithAjaxTarget -- Current model " + object);
+		if (object.getAppointmentId() != null) {
+			delete.setVisible(true, target);
+		} else {
+			delete.setVisible(false, target);
+		}
 		super.setModelObject(object);
 	}
 	
@@ -105,11 +111,6 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 
 	@Override
 	protected List<DialogButton> getButtons() {
-		log.debug(" -- getButtons -- Current model " + getModel().getObject());
-		if (getModel().getObject().getAppointmentId() != null) {
-			//TODO: This code does not work
-			return Arrays.asList(save, delete, cancel);
-		}
 		return Arrays.asList(save, delete, cancel);
 	}
 	

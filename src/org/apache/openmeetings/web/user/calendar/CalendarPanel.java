@@ -164,7 +164,7 @@ public class CalendarPanel extends UserPanel {
 					a.setAppointmentStarttime(start);
 					a.setAppointmentEndtime(end);
 				}
-				dialog.setModelObject(a);
+				dialog.setModelObjectWithAjaxTarget(a, target);
 				
 				dialog.open(target);
 			}
@@ -172,7 +172,7 @@ public class CalendarPanel extends UserPanel {
 			@Override
 			public void onEventClick(AjaxRequestTarget target, CalendarView view, int eventId) {
 				Appointment a = getDao().getAppointmentById((long)eventId);
-				dialog.setModelObject(a);
+				dialog.setModelObjectWithAjaxTarget(a, target);
 				
 				dialog.open(target);
 
