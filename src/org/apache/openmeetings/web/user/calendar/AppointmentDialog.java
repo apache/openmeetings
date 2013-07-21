@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.web.user.calendar;
 
+import static org.apache.openmeetings.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.getLanguage;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
@@ -59,11 +60,16 @@ import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+import org.red5.logging.Red5LoggerFactory;
+import org.slf4j.Logger;
 
 import com.googlecode.wicket.jquery.ui.widget.dialog.AbstractFormDialog;
 import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
 
 public class AppointmentDialog extends AbstractFormDialog<Appointment> {
+	
+	private static final Logger log = Red5LoggerFactory.getLogger(AppointmentDialog.class, webAppRootKey);
+	
 	private static final long serialVersionUID = 7553035786264113827L;
 	private AppointmentForm form;
 	private DialogButton save = new DialogButton(WebSession.getString(813));
@@ -86,6 +92,7 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 	
 	public AppointmentDialog(String id, String title, CalendarPanel calendar, IModel<Appointment> model) {
 		super(id, title, model, true);
+		log.debug(" -- AppointmentDialog -- Current model " + getModel().getObject());
 		this.calendar = calendar;
 		setOutputMarkupId(true);
 		feedback = new FeedbackPanel("feedback");
@@ -97,6 +104,11 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 
 	@Override
 	protected List<DialogButton> getButtons() {
+		log.debug(" -- getButtons -- Current model " + getModel().getObject());
+		if (getModel().getObject().getAppointmentId() != null) {
+			//TODO: This code does not work
+			return Arrays.asList(save, delete, cancel);
+		}
 		return Arrays.asList(save, delete, cancel);
 	}
 	

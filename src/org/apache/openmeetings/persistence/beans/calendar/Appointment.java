@@ -399,5 +399,10 @@ public class Appointment implements Serializable {
 	public void setIsReminderEmailSend(Boolean isReminderEmailSend) {
 		this.isReminderEmailSend = isReminderEmailSend;
 	}
+	
+	@Override 
+	public String toString() {
+		return "" + super.toString() + " Appointment ID: " + this.getAppointmentId();
+	}
 
 }

@@ -18,6 +18,8 @@
  */
 package org.apache.openmeetings.web.user.calendar;
 
+import static org.apache.openmeetings.OpenmeetingsVariables.webAppRootKey;
+
 import java.util.Date;
 
 import org.apache.openmeetings.data.calendar.daos.AppointmentDao;
@@ -33,12 +35,16 @@ import org.apache.wicket.ajax.json.JSONException;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.util.time.Duration;
+import org.red5.logging.Red5LoggerFactory;
+import org.slf4j.Logger;
 
 import com.googlecode.wicket.jquery.core.Options;
 import com.googlecode.wicket.jquery.ui.calendar.Calendar;
 import com.googlecode.wicket.jquery.ui.calendar.CalendarView;
 
 public class CalendarPanel extends UserPanel {
+	
+	private static final Logger log = Red5LoggerFactory.getLogger(CalendarPanel.class, webAppRootKey);
 	
 	private static final long serialVersionUID = -6536379497642291437L;
 	
@@ -218,6 +224,7 @@ public class CalendarPanel extends UserPanel {
 		a.setRemind(getAppointmentReminderTypDao()
 				.getAppointmentReminderTypById(3L)); //TODO: Make configurable
 		a.setAppointmentName(WebSession.getString(1444));
+		log.debug(" -- getDefault -- Current model " + a);
 		return a;
 	}
 }
