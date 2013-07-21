@@ -44,6 +44,7 @@ import org.apache.openmeetings.web.util.RoomTypeDropDown;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxCheckBox;
+import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.extensions.yui.calendar.DateTimeField;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
@@ -187,8 +188,7 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 		public AppointmentForm(String id, IModel<Appointment> model) {
 			super(id, model);
 			setOutputMarkupId(true);
-			//this will only work if there is only a single instance of this element on the screen! (sebawagner, 21-07-2013)
-			setMarkupId("appointmentPopUp");
+			add(new AttributeAppender("class", new Model<String>("appointmentPopUp"), " "));
 			
 			add(feedback.setOutputMarkupId(true));
 			add(new RequiredTextField<String>("appointmentName").setLabel(Model.of(WebSession.getString(572))));

@@ -402,7 +402,11 @@ public class Appointment implements Serializable {
 	
 	@Override 
 	public String toString() {
-		return "" + super.toString() + " Appointment ID: " + this.getAppointmentId();
+		return "" + super.toString() 
+				+ " Appointment ID: " + getAppointmentId()
+				+ " Starttime: " + getAppointmentStarttime()
+				+ " Endtime: " + getAppointmentEndtime()
+				+ " Name: " + getAppointmentName();
 	}
 
 }

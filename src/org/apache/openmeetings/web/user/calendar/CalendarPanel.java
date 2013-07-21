@@ -175,6 +175,7 @@ public class CalendarPanel extends UserPanel {
 				dialog.setModelObject(a);
 				
 				dialog.open(target);
+
 			}
 			
 			@Override

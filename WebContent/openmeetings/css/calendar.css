@@ -16,44 +16,44 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-#appointmentPopUp td {
+.appointmentPopUp td {
 	vertical-align: top;
 }
 
-#appointmentPopUp input[name="appointmentName"] {
+.appointmentPopUp input[name="appointmentName"] {
 	width: 420px;
 }
 
-#appointmentPopUp input[name="password"] {
+.appointmentPopUp input[name="password"] {
 	width: 420px;
 }
 
-#appointmentPopUp input[name="appointmentLocation"] {
+.appointmentPopUp input[name="appointmentLocation"] {
 	width: 420px;
 }
 
-#appointmentPopUp textarea[name="appointmentDescription"] {
+.appointmentPopUp textarea[name="appointmentDescription"] {
 	width: 424px;
 	height: 80px;
 }
 
-#appointmentPopUp select[name="remind"] {
+.appointmentPopUp select[name="remind"] {
 	width: 426px;
 }
 
-#appointmentPopUp select[name="room.roomtype"] {
+.appointmentPopUp select[name="room.roomtype"] {
 	width: 426px;
 }
 
-#appointmentPopUp select[name="room"] {
+.appointmentPopUp select[name="room"] {
 	width: 426px;
 }
 
-#appointmentPopUp .formNewButton {
+.appointmentPopUp .formNewButton {
 	float: left;
 }
 
-#appointmentPopUp .attendeeContainer {
+.appointmentPopUp .attendeeContainer {
 	background-color: #FFFFFF;
 	border: solid 1px #aacfe4;
 	width: 424px;
@@ -62,20 +62,20 @@
 	float: left;
 }
 
-#appointmentPopUp .attendeeContainer table td:FIRST-CHILD div {
+.appointmentPopUp .attendeeContainer table td:FIRST-CHILD div {
 	width: 130px;
 	overflow: hidden;
 	text-overflow: ellipsis;
 	white-space: nowrap;
 }
 
-#appointmentPopUp .attendeeContainer table td:nth-child(2) div {
+.appointmentPopUp .attendeeContainer table td:nth-child(2) div {
 	width: 260px;
 	overflow: hidden;
 	text-overflow: ellipsis;
 	white-space: nowrap;
 }
 
-#appointmentPopUp .attendeeContainer table td:nth-child(3) div {
+.appointmentPopUp .attendeeContainer table td:nth-child(3) div {
 	width: 20px;
 }
