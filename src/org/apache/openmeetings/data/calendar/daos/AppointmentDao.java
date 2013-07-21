@@ -70,7 +70,7 @@ public class AppointmentDao {
 	@Autowired
 	private AppointmentCategoryDao appointmentCategoryDaoImpl;
 	@Autowired
-	private AppointmentReminderTypDao appointmentReminderTypDaoImpl;
+	private AppointmentReminderTypDao appointmentReminderTypDao;
 	@Autowired
 	private MeetingMemberDao meetingMemberDao;
 	@Autowired
@@ -218,7 +218,7 @@ public class AppointmentDao {
 			ap.setAppointmentStarttime(appointmentstart);
 			ap.setAppointmentEndtime(appointmentend);
 			ap.setAppointmentDescription(appointmentDescription);
-			ap.setRemind(appointmentReminderTypDaoImpl
+			ap.setRemind(appointmentReminderTypDao
 					.getAppointmentReminderTypById(remind));
 			ap.setStarttime(new Date());
 			ap.setIsReminderEmailSend(false);
@@ -452,7 +452,7 @@ public class AppointmentDao {
 
 			Appointment ap = this.getAppointmentById(appointmentId);
 
-			AppointmentReminderTyps appointmentReminderTyps = appointmentReminderTypDaoImpl
+			AppointmentReminderTyps appointmentReminderTyps = appointmentReminderTypDao
 					.getAppointmentReminderTypById(remind);
 			AppointmentCategory appointmentCategory = appointmentCategoryDaoImpl
 					.getAppointmentCategoryById(categoryId);

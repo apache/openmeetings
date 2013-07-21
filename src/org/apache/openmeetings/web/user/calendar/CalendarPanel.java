@@ -21,6 +21,7 @@ package org.apache.openmeetings.web.user.calendar;
 import java.util.Date;
 
 import org.apache.openmeetings.data.calendar.daos.AppointmentDao;
+import org.apache.openmeetings.data.calendar.daos.AppointmentReminderTypDao;
 import org.apache.openmeetings.persistence.beans.calendar.Appointment;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
@@ -38,7 +39,9 @@ import com.googlecode.wicket.jquery.ui.calendar.Calendar;
 import com.googlecode.wicket.jquery.ui.calendar.CalendarView;
 
 public class CalendarPanel extends UserPanel {
+	
 	private static final long serialVersionUID = -6536379497642291437L;
+	
 	private Calendar calendar;
 	
 	@Override
@@ -47,6 +50,10 @@ public class CalendarPanel extends UserPanel {
 
 	private AppointmentDao getDao() {
 		return Application.getBean(AppointmentDao.class);
+	}
+	
+	private AppointmentReminderTypDao getAppointmentReminderTypDao() {
+		return Application.getBean(AppointmentReminderTypDao.class);
 	}
 	
 	public void refresh(AjaxRequestTarget target) {
@@ -60,7 +67,7 @@ public class CalendarPanel extends UserPanel {
 		add(form);
 		
 		final AppointmentDialog dialog = new AppointmentDialog("appointment", WebSession.getString(815)
-				, this, new CompoundPropertyModel<Appointment>(new Appointment()));
+				, this, new CompoundPropertyModel<Appointment>(getDefault()));
 		add(dialog);
 		
 		Options options = new Options();
@@ -135,8 +142,7 @@ public class CalendarPanel extends UserPanel {
 			
 			@Override
 			public void onSelect(AjaxRequestTarget target, CalendarView view, Date start, Date end, boolean allDay) {
-				Appointment a = new Appointment();
-				a.setAppointmentName(WebSession.getString(1444));
+				Appointment a = getDefault();
 				if (CalendarView.month == view && start.equals(end)) {
 					java.util.Calendar now = WebSession.getCalendar();
 					java.util.Calendar cal = WebSession.getCalendar();
@@ -205,5 +211,13 @@ public class CalendarPanel extends UserPanel {
 				refresh(target);
 			}
 		});
+	}
+	
+	private Appointment getDefault() {
+		Appointment a = new Appointment();
+		a.setRemind(getAppointmentReminderTypDao()
+				.getAppointmentReminderTypById(3L)); //TODO: Make configurable
+		a.setAppointmentName(WebSession.getString(1444));
+		return a;
 	}
 }

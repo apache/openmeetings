@@ -75,7 +75,7 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 	
 	@Override
 	public int getWidth() {
-		return 550;
+		return 650;
 	}
 	
 	@Override
@@ -175,6 +175,8 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 		public AppointmentForm(String id, IModel<Appointment> model) {
 			super(id, model);
 			setOutputMarkupId(true);
+			//this will only work if there is only a single instance of this element on the screen! (sebawagner, 21-07-2013)
+			setMarkupId("appointmentPopUp");
 			
 			add(feedback.setOutputMarkupId(true));
 			add(new RequiredTextField<String>("appointmentName").setLabel(Model.of(WebSession.getString(572))));

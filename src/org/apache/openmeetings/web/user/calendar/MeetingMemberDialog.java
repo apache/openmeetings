@@ -58,7 +58,7 @@ public class MeetingMemberDialog extends AbstractFormDialog<Appointment> {
 	DialogButton send = new DialogButton(WebSession.getString(175));
 	private DialogButton cancel = new DialogButton(WebSession.getString(219));
 	private AppointmentDialog appDialog;
-	private User userBeingSearched = null;
+	private User userBeingSearched = null; //What is the meaning of this variable? sebawagner (21-07-2013)
 
 	@Override
 	public int getWidth() {
