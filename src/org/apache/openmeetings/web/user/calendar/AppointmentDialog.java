@@ -62,7 +62,6 @@ import org.apache.wicket.model.PropertyModel;
 
 import com.googlecode.wicket.jquery.ui.widget.dialog.AbstractFormDialog;
 import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
-//import com.googlecode.wicket.jquery.ui.plugins.wysiwyg.WysiwygEditor;
 
 public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 	private static final long serialVersionUID = 7553035786264113827L;
@@ -98,7 +97,7 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 
 	@Override
 	protected List<DialogButton> getButtons() {
-		return Arrays.asList(cancel, delete, save);
+		return Arrays.asList(save, delete, cancel);
 	}
 	
 	@Override
