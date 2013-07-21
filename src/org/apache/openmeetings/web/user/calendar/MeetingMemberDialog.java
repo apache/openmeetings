@@ -58,7 +58,8 @@ public class MeetingMemberDialog extends AbstractFormDialog<Appointment> {
 	DialogButton send = new DialogButton(WebSession.getString(175));
 	private DialogButton cancel = new DialogButton(WebSession.getString(219));
 	private AppointmentDialog appDialog;
-	private User userBeingSearched = null; //What is the meaning of this variable? sebawagner (21-07-2013)
+	@SuppressWarnings("unused")
+	private User userBeingSearched = null; //Model object for UserAutoCompleteTextField, accessible via PropertyModel
 
 	@Override
 	public int getWidth() {
