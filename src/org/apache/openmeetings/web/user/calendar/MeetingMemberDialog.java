@@ -32,6 +32,7 @@ import org.apache.openmeetings.persistence.beans.user.User.Type;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.util.UserAutoCompleteTextField;
+import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.markup.html.form.Form;
@@ -57,7 +58,7 @@ public class MeetingMemberDialog extends AbstractFormDialog<Appointment> {
 	private final List<User> attendeesToRemove = new ArrayList<User>();
 	DialogButton send = new DialogButton(WebSession.getString(175));
 	private DialogButton cancel = new DialogButton(WebSession.getString(219));
-	private AppointmentDialog appDialog;
+	private Component attendeeContainer;
 	@SuppressWarnings("unused")
 	private User userBeingSearched = null; //Model object for UserAutoCompleteTextField, accessible via PropertyModel
 
@@ -66,9 +67,9 @@ public class MeetingMemberDialog extends AbstractFormDialog<Appointment> {
 		return 500;
 	}
 	
-	public MeetingMemberDialog(String id, String string, IModel<Appointment> model, AppointmentDialog appDialog ) {
+	public MeetingMemberDialog(String id, String string, IModel<Appointment> model, Component attendeeContainer ) {
 		super(id, string, model);
-		this.appDialog = appDialog;
+		this.attendeeContainer = attendeeContainer;
 		formUsers = new Form<User>("formUsers");
 		formUsers.add(feedbackDialog.setOutputMarkupId(true));
 
@@ -211,6 +212,7 @@ public class MeetingMemberDialog extends AbstractFormDialog<Appointment> {
 				mm.setDeleted(false);
 				if (u.getType() == Type.contact){
 					mm.setInvitor(false);
+					u.setLanguage_id(WebSession.getLanguage());
 				} else {
 					boolean invitor = (WebSession.getUserId() == u.getUser_id() ? true : false);
 					mm.setInvitor(invitor);
@@ -222,6 +224,6 @@ public class MeetingMemberDialog extends AbstractFormDialog<Appointment> {
 			}
 		}
 		app.setMeetingMember(meetingMembers);
-		target.add(appDialog.getForm());
+		target.add(attendeeContainer);
 	}
 }

@@ -191,7 +191,122 @@ public class MeetingMemberLogic {
 		}
 		return null;
 	}
+	
 
+	/**
+	 * @author vasya
+	 * @param meetingMember
+	 * @param appointment
+	 * @param baseUrl
+	 * @param meeting_organizer
+	 * @param timezone
+	 * @param jNameInternalTimeZone
+	 * @param invitorName
+	 * @return
+	 */
+	public Long addMeetingMemberInvitation(MeetingMember member,
+			Appointment appointment,  String baseUrl, Long meeting_organizer,
+			TimeZone timezone, OmTimeZone omTimeZone, String invitorName) {
+
+		try {
+			Boolean isInvitor = member.getInvitor();
+
+			Long invitationId = null;
+
+			if (appointment.getRemind() == null) {
+				log.error("Appointment has no assigned ReminderType!");
+				return null;
+			}
+
+			log.debug(":::: addMeetingMemberInvitation ..... "
+					+ appointment.getRemind().getTypId());
+
+			String subject = formatSubject(member.getUserid().getLanguage_id(), appointment, timezone);
+
+			String message = formatMessage(member.getUserid().getLanguage_id(), appointment, timezone,
+					invitorName);
+
+			// appointment.getRemind().getTypId() == 1 will not receive emails
+
+			if (appointment.getRemind().getTypId() == 2) {
+				log.debug("Invitation for Appointment : simple email");
+
+				Invitations invitation = invitationManager
+						.addInvitationLink(
+								new Long(2), // userlevel
+								member.getFirstname() + " " + member.getLastname(), // username
+								message,
+								baseUrl, // baseURl
+								member.getUserid().getAdresses().getEmail(), // email
+								subject, // subject
+								appointment.getRoom().getRooms_id(), // room_id
+								"public",
+								appointment.getIsPasswordProtected(), // passwordprotected
+								appointment.getPassword(), // invitationpass
+								2, // valid type
+								appointment.getAppointmentStarttime(), // valid from
+								appointment.getAppointmentEndtime(), // valid to
+								meeting_organizer, // created by
+								baseUrl,
+								member.getUserid().getLanguage_id(),
+								true, // really send mail sendMail
+								appointment.getAppointmentStarttime(),
+								appointment.getAppointmentEndtime(),
+								appointment.getAppointmentId(),
+								invitorName,
+								omTimeZone);
+
+				invitationId = invitation.getInvitations_id();
+
+			} else if (appointment.getRemind().getTypId() == 3) {
+				log.debug("Reminder for Appointment : iCal mail");
+
+				System.out.println("### SENDING iCAL EMAIL");
+
+				invitationId = invitationManager
+						.addInvitationIcalLink(
+								new Long(2), // userlevel
+								member.getFirstname() + " " + member.getLastname(), // username
+								message,
+								baseUrl, // baseURl
+								member.getUserid().getAdresses().getEmail(), // email
+								subject, // subject
+								appointment.getRoom().getRooms_id(), // room_id
+								"public",
+								appointment.getIsPasswordProtected(), // passwordprotected
+								appointment.getPassword(), // invitationpass
+								2, // valid
+								appointment.getAppointmentStarttime(), // valid from
+								appointment.getAppointmentEndtime(), // valid to
+								meeting_organizer, // created by
+								appointment.getAppointmentId(), isInvitor,
+								member.getUserid().getLanguage_id(), timezone,
+								appointment.getAppointmentId(),
+								invitorName);
+
+			}
+
+			// Setting InvitationId within MeetingMember
+
+			if (invitationId != null) {
+				Invitations invi = invitationManager
+						.getInvitationbyId(invitationId);
+
+				member.setInvitation(invi);
+
+				updateMeetingMember(member);
+
+			}
+
+			return invitationId;
+
+		} catch (Exception err) {
+			log.error("[addMeetingMember]", err);
+		}
+		return null;
+	}
+
+	
 	private String formatSubject(Long language_id, Appointment point,
 			TimeZone timezone) {
 		try {

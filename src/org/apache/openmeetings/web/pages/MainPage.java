@@ -142,6 +142,7 @@ public class MainPage extends BaseInitedPage {
 				WebSession.get().setArea(null);
 			}
 		});
+		// This code is required to detect OM proxy url
 		add(new AbstractDefaultAjaxBehavior() {
 			private static final long serialVersionUID = 1L;
 
@@ -154,6 +155,7 @@ public class MainPage extends BaseInitedPage {
 			@Override
 			protected void respond(AjaxRequestTarget target) {
 				StringValue baseUrl = getRequestCycle().getRequest().getRequestParameters().getParameterValue("baseUrl");
+				WebSession.get().setBaseUrl(baseUrl.toString());
 			}
 		});
 	}

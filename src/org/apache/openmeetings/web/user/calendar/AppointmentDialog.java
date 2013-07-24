@@ -105,7 +105,7 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 		feedback = new FeedbackPanel("feedback");
 		form = new AppointmentForm("appForm", model);
 		add(form);
-		addAttendees = new MeetingMemberDialog("addAttendees", WebSession.getString(812), getModel(), this);
+		addAttendees = new MeetingMemberDialog("addAttendees", WebSession.getString(812), model, form.get("attendeeContainer"));
 		add(addAttendees);
 	}
 

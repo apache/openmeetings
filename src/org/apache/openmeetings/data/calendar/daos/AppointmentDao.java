@@ -51,8 +51,10 @@ import org.apache.openmeetings.persistence.beans.calendar.AppointmentReminderTyp
 import org.apache.openmeetings.persistence.beans.calendar.MeetingMember;
 import org.apache.openmeetings.persistence.beans.room.Room;
 import org.apache.openmeetings.persistence.beans.user.User;
+import org.apache.openmeetings.persistence.beans.user.User.Type;
 import org.apache.openmeetings.utils.math.CalendarPatterns;
 import org.apache.openmeetings.utils.math.TimezoneUtil;
+import org.apache.openmeetings.web.app.WebSession;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -260,32 +262,43 @@ public class AppointmentDao {
 	}
 
 	public Appointment update(Appointment a, Long userId) {
-		a.setUserId(usersDao.get(userId));
+		User u = usersDao.get(userId);
+		a.setUserId(u);
 		Room r = a.getRoom();
 		if (r.getRooms_id() == null) {
 			r.setName(a.getAppointmentName());
 			r.setNumberOfPartizipants(cfgDao.getConfValue("calendar.conference.rooms.default.size", Long.class, "50"));
 		}
 		roomDao.update(r, userId);
-		if (a.getMeetingMember() != null){
-			for (MeetingMember mm : a.getMeetingMember()){
-				if (mm.getMeetingMemberId() == null){
-					if (mm.getUserid().getUser_id() == null){
-						User u = mm.getUserid();
-						em.persist(u);
-					}
-					em.persist(mm);
-				} else {
-					em.merge(mm);
-				}
-			}
-		}
 		if (a.getAppointmentId() == null) {
 			a.setStarttime(new Date());
 			em.persist(a);
 		} else {
 			a.setUpdatetime(new Date());
 			a =	em.merge(a);
+		}
+		// update meeting members
+		List<MeetingMember> mmList = a.getMeetingMember();
+		if ( mmList != null){
+			for (MeetingMember mm : mmList){
+				Long usrId = mm.getUserid().getUser_id();
+				if (usrId == null){
+					usrId = userManager.addUser(mm.getUserid());
+				}
+				//TODO base url should be changed
+				String urlPostfix = "";
+				if (mm.getUserid().getType() == Type.contact) {
+					urlPostfix = "swf";
+				} else {
+					urlPostfix = "#room/" + r.getRooms_id();
+				}
+					
+				meetingMemberLogic.addMeetingMemberInvitation(
+							mm, a, WebSession.get().getBaseUrl() + urlPostfix,
+							u.getUser_id(), timezoneUtil.getTimezoneByUser(u), u.getOmTimeZone(),
+							u.getFirstname() + " " + u.getLastname() 
+						);
+			}
 		}
 		return a;
 	}

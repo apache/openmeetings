@@ -24,6 +24,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -174,7 +175,7 @@ public class Appointment implements Serializable {
 	@Element(data=true, required=false)
 	private String icalId;
 
-	@OneToMany(fetch = FetchType.LAZY)
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "appointment_id")
 	private List<MeetingMember> meetingMember;
 	

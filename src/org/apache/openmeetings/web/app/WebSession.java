@@ -70,6 +70,7 @@ public class WebSession extends AbstractAuthenticatedWebSession {
 	private SimpleDateFormat ISO8601FORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
 	private DateFormat sdf;
 	private Dashboard dashboard;
+	private String baseUrl = null;
 	
 	public WebSession(Request request) {
 		super(request);
@@ -204,6 +205,14 @@ public class WebSession extends AbstractAuthenticatedWebSession {
 			d = get().dashboard;
 		}
 		return d;
+	}
+	
+	public String getBaseUrl() {
+		return baseUrl;
+	}
+	
+	public void setBaseUrl(String baseUrl){
+		this.baseUrl = baseUrl;
 	}
 	
 	private void initDashboard() {

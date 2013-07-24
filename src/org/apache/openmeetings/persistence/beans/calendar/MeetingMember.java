@@ -21,6 +21,7 @@ package org.apache.openmeetings.persistence.beans.calendar;
 import java.io.Serializable;
 import java.util.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -50,7 +51,7 @@ public class MeetingMember implements Serializable {
 	@Element(data=true)
 	private Long meetingMemberId;
 	
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinColumn(name="user_id", nullable=true)
 	@ForeignKey(enabled = true)
 	@Element(name="userid", data=true, required=false)
