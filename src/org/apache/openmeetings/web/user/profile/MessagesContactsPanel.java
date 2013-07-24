@@ -22,6 +22,7 @@ import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.getDateFormat;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -72,6 +73,7 @@ import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
 
 public class MessagesContactsPanel extends UserPanel {
 	private static final long serialVersionUID = 8098087441571734957L;
+	private final static long MOVE_CHOOSE = -1;
 	private final static int SELECT_CHOOSE = 1252;
 	private final static int SELECT_ALL = 1239;
 	private final static int SELECT_NONE = 1240;
@@ -113,6 +115,24 @@ public class MessagesContactsPanel extends UserPanel {
 			
 			public String getIdValue(Integer object, int index) {
 				return "" + object;
+			}
+		});
+	private static PrivateMessageFolder NOT_MOVE_FOLDER = new PrivateMessageFolder();
+	static {
+		NOT_MOVE_FOLDER.setPrivateMessageFolderId(MOVE_CHOOSE);
+		NOT_MOVE_FOLDER.setFolderName(WebSession.getString(1243));
+	}
+	private final DropDownChoice<PrivateMessageFolder> moveDropDown = new DropDownChoice<PrivateMessageFolder>("msgMove", Model.of(NOT_MOVE_FOLDER)
+		, Arrays.asList(NOT_MOVE_FOLDER)
+		, new IChoiceRenderer<PrivateMessageFolder>() {
+			private static final long serialVersionUID = 1L;
+
+			public Object getDisplayValue(PrivateMessageFolder object) {
+				return object.getFolderName();
+			}
+
+			public String getIdValue(PrivateMessageFolder object, int index) {
+				return "" + object.getPrivateMessageFolderId();
 			}
 		});
 	
@@ -191,10 +211,18 @@ public class MessagesContactsPanel extends UserPanel {
 				.toString();
 	}
 	
+	private void updateMoveModel() {
+		List<PrivateMessageFolder> list = new ArrayList<PrivateMessageFolder>();
+		list.add(NOT_MOVE_FOLDER);
+		list.addAll(foldersModel.getObject());
+		moveDropDown.setChoices(list);
+	}
+	
 	@SuppressWarnings("unchecked")
 	public MessagesContactsPanel(String id) {
 		super(id);
 		foldersModel = Model.ofList(getBean(PrivateMessageFolderDao.class).get(0, Integer.MAX_VALUE));
+		updateMoveModel();
 		newMessage = new MessageDialog("newMessage", new CompoundPropertyModel<PrivateMessage>(new PrivateMessage())) {
 			private static final long serialVersionUID = 1L;
 
@@ -215,6 +243,7 @@ public class MessagesContactsPanel extends UserPanel {
 				PrivateMessageFolderDao fDao = getBean(PrivateMessageFolderDao.class);
 				fDao.addPrivateMessageFolder(getModelObject(), getUserId());
 				foldersModel.setObject(fDao.get(0, Integer.MAX_VALUE));
+				updateMoveModel();
 				target.add(folders);
 			}
 		};
@@ -403,7 +432,15 @@ public class MessagesContactsPanel extends UserPanel {
 		add(new WebMarkupContainer("na1"));//FIXME
 		
 		add(buttons.setOutputMarkupId(true));
-		buttons.add(toInboxBtn);
+		buttons.add(toInboxBtn.add(new AjaxEventBehavior("click") {
+			private static final long serialVersionUID = 1L;
+			
+			@Override
+			protected void onEvent(AjaxRequestTarget target) {
+				//TODO weird, need to be reviewed
+				getBean(PrivateMessagesDao.class).updatePrivateMessagesToTrash(selectedMessages, false, 0L);
+			}
+		}));
 		buttons.add(deleteBtn.add(new AjaxEventBehavior("click") {
 				private static final long serialVersionUID = 1L;
 	
@@ -463,6 +500,14 @@ public class MessagesContactsPanel extends UserPanel {
 						break;
 				}
 				target.add(container);
+			}
+		}));
+		buttons.add(moveDropDown.setOutputMarkupId(true).add(new OnChangeAjaxBehavior() {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void onUpdate(AjaxRequestTarget target) {
+				
 			}
 		}));
 		
