@@ -93,6 +93,9 @@ public class MessagesContactsPanel extends UserPanel {
 	private final MessageDialog newMessage;
 	private final DataViewContainer<PrivateMessage> dataContainer;
 	private final Set<Long> selectedMessages = new HashSet<Long>();
+	private final Set<Long> allMessages = new HashSet<Long>();
+	private final Set<Long> readMessages = new HashSet<Long>();
+	private final Set<Long> unreadMessages = new HashSet<Long>();
 	private final Button toInboxBtn = new Button("toInboxBtn");
 	private final Button deleteBtn = new Button("deleteBtn");
 	private final Button readBtn = new Button("readBtn");
@@ -162,6 +165,7 @@ public class MessagesContactsPanel extends UserPanel {
 		setDefaultFolderClass();
 		selectFolder(folder);
 		emptySelection(target);
+		selectDropDown.setModelObject(SELECT_CHOOSE);
 		deleteBtn.add(AttributeModifier.replace("value", WebSession.getString(TRASH_FOLDER_ID == id ? 1256 : 1245)));
 		readBtn.setEnabled(false);
 		unreadBtn.setEnabled(false);
@@ -169,7 +173,7 @@ public class MessagesContactsPanel extends UserPanel {
 		unread.setDefaultModelObject(getBean(PrivateMessagesDao.class).count(getUserId(), id > 0 ? id : null, false, TRASH_FOLDER_ID == id));
 		if (target != null) {
 			updateTable(target);
-			target.add(folders, unread);
+			target.add(folders, unread, selectDropDown);
 			target.add(dataContainer.container, dataContainer.navigator);
 			target.add(dataContainer.orderLinks);
 		}
@@ -301,6 +305,9 @@ public class MessagesContactsPanel extends UserPanel {
 			@Override
 			public Iterator<? extends PrivateMessage> iterator(long first, long count) {
 				//FIXME need to be refactored + sort + search
+				allMessages.clear();
+				readMessages.clear();
+				unreadMessages.clear();
 				long folder = selectedModel.getObject();
 				String sort = getSort() == null ? "" : "c." + getSort().getProperty();
 				boolean isAsc = getSort() == null ? true : getSort().isAscending();
@@ -338,6 +345,12 @@ public class MessagesContactsPanel extends UserPanel {
 			protected void populateItem(Item<PrivateMessage> item) {
 				PrivateMessage m = item.getModelObject();
 				final long id = m.getPrivateMessageId();
+				allMessages.add(id);
+				if (m.getIsRead()) {
+					readMessages.add(id);
+				} else {
+					unreadMessages.add(id);
+				}
 				item.add(new Label("id", m.getPrivateMessageId()));
 				item.add(new Label("from", getDisplayName(m.getFrom())));
 				item.add(new Label("subject", m.getSubject()));
@@ -434,14 +447,22 @@ public class MessagesContactsPanel extends UserPanel {
 					case SELECT_CHOOSE:
 						break;
 					case SELECT_ALL:
+						selectedMessages.clear();
+						selectedMessages.addAll(allMessages);
 						break;
 					case SELECT_NONE:
+						selectedMessages.clear();
 						break;
 					case SELECT_UNREAD:
+						selectedMessages.clear();
+						selectedMessages.addAll(unreadMessages);
 						break;
 					case SELECT_READ:
+						selectedMessages.clear();
+						selectedMessages.addAll(readMessages);
 						break;
 				}
+				target.add(container);
 			}
 		}));
 		
