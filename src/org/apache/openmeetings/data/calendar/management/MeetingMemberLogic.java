@@ -31,6 +31,7 @@ import org.apache.openmeetings.persistence.beans.calendar.MeetingMember;
 import org.apache.openmeetings.persistence.beans.invitation.Invitations;
 import org.apache.openmeetings.persistence.beans.user.User;
 import org.apache.openmeetings.utils.math.CalendarPatterns;
+import org.apache.openmeetings.utils.math.TimezoneUtil;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,6 +51,8 @@ public class MeetingMemberLogic {
 	private InvitationManager invitationManager;
 	@Autowired
 	private MeetingMemberDao meetingMemberDao;
+	@Autowired
+	private TimezoneUtil timezoneUtil;
 
 	/**
 	 * This can be either an internal or an external user, internal users have a
@@ -198,19 +201,16 @@ public class MeetingMemberLogic {
 	 * @param meetingMember
 	 * @param appointment
 	 * @param baseUrl
-	 * @param meeting_organizer
+	 * @param organizer
 	 * @param timezone
 	 * @param jNameInternalTimeZone
 	 * @param invitorName
 	 * @return
 	 */
 	public Long addMeetingMemberInvitation(MeetingMember member,
-			Appointment appointment,  String baseUrl, Long meeting_organizer,
-			TimeZone timezone, OmTimeZone omTimeZone, String invitorName) {
+			Appointment appointment,  String baseUrl, User organizer) {
 
 		try {
-			Boolean isInvitor = member.getInvitor();
-
 			Long invitationId = null;
 
 			if (appointment.getRemind() == null) {
@@ -221,9 +221,10 @@ public class MeetingMemberLogic {
 			log.debug(":::: addMeetingMemberInvitation ..... "
 					+ appointment.getRemind().getTypId());
 
-			String subject = formatSubject(member.getUserid().getLanguage_id(), appointment, timezone);
+			String subject = formatSubject(member.getUserid().getLanguage_id(), appointment, timezoneUtil.getTimezoneByUser(organizer));
 
-			String message = formatMessage(member.getUserid().getLanguage_id(), appointment, timezone,
+			String invitorName = organizer.getFirstname() + " " + organizer.getLastname();
+			String message = formatMessage(member.getUserid().getLanguage_id(), appointment, timezoneUtil.getTimezoneByUser(organizer),
 					invitorName);
 
 			// appointment.getRemind().getTypId() == 1 will not receive emails
@@ -233,28 +234,14 @@ public class MeetingMemberLogic {
 
 				Invitations invitation = invitationManager
 						.addInvitationLink(
-								new Long(2), // userlevel
-								member.getFirstname() + " " + member.getLastname(), // username
+								member,
+								appointment,
 								message,
 								baseUrl, // baseURl
-								member.getUserid().getAdresses().getEmail(), // email
 								subject, // subject
-								appointment.getRoom().getRooms_id(), // room_id
 								"public",
-								appointment.getIsPasswordProtected(), // passwordprotected
-								appointment.getPassword(), // invitationpass
 								2, // valid type
-								appointment.getAppointmentStarttime(), // valid from
-								appointment.getAppointmentEndtime(), // valid to
-								meeting_organizer, // created by
-								baseUrl,
-								member.getUserid().getLanguage_id(),
-								true, // really send mail sendMail
-								appointment.getAppointmentStarttime(),
-								appointment.getAppointmentEndtime(),
-								appointment.getAppointmentId(),
-								invitorName,
-								omTimeZone);
+								organizer);
 
 				invitationId = invitation.getInvitations_id();
 
@@ -264,25 +251,15 @@ public class MeetingMemberLogic {
 				System.out.println("### SENDING iCAL EMAIL");
 
 				invitationId = invitationManager
-						.addInvitationIcalLink(
-								new Long(2), // userlevel
-								member.getFirstname() + " " + member.getLastname(), // username
+						.addInvitationIcalLink(member,
+								appointment,
 								message,
 								baseUrl, // baseURl
-								member.getUserid().getAdresses().getEmail(), // email
 								subject, // subject
-								appointment.getRoom().getRooms_id(), // room_id
-								"public",
-								appointment.getIsPasswordProtected(), // passwordprotected
-								appointment.getPassword(), // invitationpass
+								"public",	// conference domain
 								2, // valid
-								appointment.getAppointmentStarttime(), // valid from
-								appointment.getAppointmentEndtime(), // valid to
-								meeting_organizer, // created by
-								appointment.getAppointmentId(), isInvitor,
-								member.getUserid().getLanguage_id(), timezone,
-								appointment.getAppointmentId(),
-								invitorName);
+								organizer // created by
+								);
 
 			}
 
@@ -335,7 +312,8 @@ public class MeetingMemberLogic {
 			String message = fieldManager.getString(1151L, language_id) + " "
 					+ point.getAppointmentName();
 
-			if (point.getAppointmentDescription().length() != 0) {
+			if (point.getAppointmentDescription() != null && 
+					point.getAppointmentDescription().length() != 0) {
 				message += fieldManager.getString(1152L, language_id)
 						+ point.getAppointmentDescription();
 			}

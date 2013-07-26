@@ -49,6 +49,7 @@ import org.apache.openmeetings.persistence.beans.calendar.MeetingMember;
 import org.apache.openmeetings.persistence.beans.invitation.Invitations;
 import org.apache.openmeetings.persistence.beans.lang.Fieldlanguagesvalues;
 import org.apache.openmeetings.persistence.beans.user.User;
+import org.apache.openmeetings.persistence.beans.user.User.Type;
 import org.apache.openmeetings.templates.InvitationTemplate;
 import org.apache.openmeetings.utils.crypt.MD5;
 import org.apache.openmeetings.utils.crypt.ManageCryptStyle;
@@ -210,6 +211,101 @@ public class InvitationManager {
 		return null;
 	}
 
+
+	/**
+	 * @author vasya
+	 * 
+	 * @param meetingMember
+	 * @param appointment
+	 * @param message
+	 * @param baseurl
+	 * @param subject
+	 * @param conferencedomain
+	 * @param valid
+	 * @param createdBy
+	 * @return
+	 */
+	// ---------------------------------------------------------------------------------------------------------
+	public Invitations addInvitationLink(MeetingMember meetingMember,
+			Appointment appointment,
+			String message, String baseUrl, String subject,
+			String conferencedomain,
+			Integer valid,
+			User createdBy) {
+		try {
+			Invitations invitation = new Invitations();
+			invitation.setIsPasswordProtected(appointment.getIsPasswordProtected());
+			if (appointment.getIsPasswordProtected()) {
+				invitation.setInvitationpass(manageCryptStyle
+						.getInstanceOfCrypt().createPassPhrase(
+								appointment.getPassword()));
+			}
+
+			invitation.setInvitationWasUsed(false);
+			log.debug(baseUrl);
+			invitation.setBaseUrl(baseUrl);
+			invitation.setOmTimeZone(createdBy.getOmTimeZone());
+
+			// valid period of Invitation
+			if (valid == 1) {
+				// endless
+				invitation.setIsValidByTime(false);
+				invitation.setCanBeUsedOnlyOneTime(false);
+			} else if (valid == 2) {
+				// period
+				invitation.setIsValidByTime(true);
+				invitation.setCanBeUsedOnlyOneTime(false);
+
+				Date gmtTimeStartShifted = new Date(appointment.getAppointmentStarttime().getTime()
+						- (5 * 60 * 1000));
+
+				invitation.setValidFrom(gmtTimeStartShifted);
+				invitation.setValidTo(appointment.getAppointmentEndtime());
+
+			} else {
+				// one-time
+				invitation.setIsValidByTime(false);
+				invitation.setCanBeUsedOnlyOneTime(true);
+				invitation.setInvitationWasUsed(false);
+			}
+
+			invitation.setDeleted(false);
+
+			String hashRaw = "HASH" + (System.currentTimeMillis());
+			invitation.setHash(MD5.do_checksum(hashRaw));
+
+			invitation.setInvitedBy(createdBy);
+			String userName = meetingMember.getFirstname() + " " + meetingMember.getLastname();
+			invitation.setInvitedname(userName);
+			invitation.setInvitedEMail(meetingMember.getEmail());
+			invitation.setRoom(appointment.getRoom());
+			invitation.setConferencedomain(conferencedomain);
+			invitation.setStarttime(new Date());
+			invitation.setAppointmentId(appointment.getAppointmentId());
+
+			invitation = em.merge(invitation);
+			long invitationId = invitation.getInvitations_id();
+
+			invitation.setInvitations_id(invitationId);
+
+			if (invitationId > 0) {
+
+				this.sendInvitionLink(createdBy,
+						meetingMember,
+						appointment,
+						message,
+						baseUrl,
+						subject,
+						invitation.getHash());
+
+				return invitation;
+			}
+		} catch (Exception err) {
+			log.error("addInvitationLink", err);
+		}
+		return null;
+	}
+	
 	// ----------------------------------------------------------------------------------------------------------------
 
 	/**
@@ -312,7 +408,8 @@ public class InvitationManager {
 			String message = fieldManager.getString(1157L, language_id)
 					+ appointment.getAppointmentName();
 
-			if (appointment.getAppointmentDescription().length() != 0) {
+			if (appointment.getAppointmentDescription() != null &&
+					appointment.getAppointmentDescription().length() != 0) {
 
 				Fieldlanguagesvalues labelid1152 = fieldManager
 						.getFieldByIdAndLanguage(new Long(1152), language_id);
@@ -583,7 +680,7 @@ public class InvitationManager {
 				if (invitationId > 0) {
 					this.sendInvitionIcalLink(username, message, baseurl,
 							email, subject, invitation.getHash(),
-							appointMentId, createdBy, invitor, language_id,
+							appointMentId, us, invitor, language_id,
 							validFrom, validTo, timezone, fromUserField);
 					return invitationId;
 				}
@@ -594,6 +691,93 @@ public class InvitationManager {
 		return null;
 	}
 
+	// -----------------------------------------------------------------------------------------------
+
+	/**
+	 * @author vasya
+	 * @param meetingMember
+	 * @param appointment
+	 * @param message
+	 * @param baseurl
+	 * @param subject
+	 * @param conferencedomain
+	 * @param valid
+	 * @param createdBy
+	 * @return
+	 */
+	// ---------------------------------------------------------------------------------------------------------
+	public Long addInvitationIcalLink(MeetingMember meetingMember, Appointment appointment,
+			String message, String baseurl, String subject,
+			String conferencedomain, Integer valid, User createdBy) {
+		log.debug("addInvitationIcalLink");
+
+		try {
+			Invitations invitation = new Invitations();
+			invitation.setIsPasswordProtected(appointment.getIsPasswordProtected());
+			if (appointment.getIsPasswordProtected()) {
+				invitation.setInvitationpass(manageCryptStyle
+						.getInstanceOfCrypt().createPassPhrase(
+								appointment.getPassword()));
+			}
+
+			String username = meetingMember.getFirstname() + " " + meetingMember.getLastname();
+			invitation.setInvitationWasUsed(false);
+
+			// valid period of Invitation
+			if (valid == 1) {
+				// endless
+				invitation.setIsValidByTime(false);
+				invitation.setCanBeUsedOnlyOneTime(false);
+			} else if (valid == 2) {
+				// period
+				invitation.setIsValidByTime(true);
+				invitation.setCanBeUsedOnlyOneTime(false);
+				invitation.setValidFrom(appointment.getAppointmentStarttime());
+				invitation.setValidTo(appointment.getAppointmentEndtime());
+			} else {
+				// one-time
+				invitation.setIsValidByTime(false);
+				invitation.setCanBeUsedOnlyOneTime(true);
+				invitation.setInvitationWasUsed(false);
+			}
+
+			invitation.setDeleted(false);
+
+			if (meetingMember.getUserid().getType() == Type.contact) {
+				String hashRaw = "InvitationHash"
+						+ (System.currentTimeMillis());
+				log.debug("addInvitationIcalLink : rawHash = " + hashRaw);
+				invitation.setHash(MD5.do_checksum(hashRaw));
+			} else {
+				invitation.setHash("");
+			}
+
+			invitation.setInvitedBy(createdBy);
+			invitation.setBaseUrl(baseurl);
+			invitation.setInvitedname(username);
+			invitation.setInvitedEMail(meetingMember.getEmail());
+			invitation.setRoom(appointment.getRoom());
+			invitation.setConferencedomain(conferencedomain);
+			invitation.setStarttime(new Date());
+			invitation.setAppointmentId(appointment.getAppointmentId());
+
+			invitation = em.merge(invitation);
+			long invitationId = invitation.getInvitations_id();
+
+			if (invitationId > 0) {
+				this.sendInvitionIcalLink(username, message, baseurl,
+						meetingMember.getEmail(), subject, invitation.getHash(),
+						appointment.getAppointmentId(), createdBy, meetingMember.getInvitor(), meetingMember.getUserid().getLanguage_id(),
+						appointment.getAppointmentStarttime(), appointment.getAppointmentEndtime(),
+						timezoneUtil.getTimezoneByUser(createdBy), createdBy.getFirstname() + " " + createdBy.getLastname());
+				return invitationId;
+			}
+		} catch (Exception err) {
+			log.error("addInvitationIcalLink", err);
+		}
+		return null;
+	}
+	
 	// ---------------------------------------------------------------------------------------------------------
 	public String sendInvitionLink(User us, Invitations inv, String message, String baseurl, String subject, Long language_id) {
 		return sendInvitionLink(us != null ? us.getAdresses().getEmail() : inv.getInvitedEMail()
@@ -631,6 +815,48 @@ public class InvitationManager {
 					dEnd);
 
 			mailHandler.send(email, replyTo, subject, template);
+			return "success";
+		} catch (Exception err) {
+			log.error("sendInvitationLink", err);
+		}
+		return null;
+	}
+
+
+	/**
+	 * @author vasya
+	 * 
+     * @param invitor
+     * @param meetingMember
+     * @param appointment
+     * @param message
+     * @param baseurl
+     * @param subject
+     * @param invitationsHash
+	 */
+	private String sendInvitionLink(User invitor, MeetingMember meetingMember,
+			Appointment appointment,
+			String message,
+			String baseurl, String subject,
+			String invitationsHash) {
+		try {
+
+			String invitation_link = baseurl;
+			if (meetingMember.getUserid().getType() == Type.contact) {
+				invitation_link += "?invitationHash="
+					+ invitationsHash;
+
+	            if (invitor.getLanguage_id() > 0) {
+	                invitation_link += "&language=" + invitor.getLanguage_id().toString();
+	            }
+			}
+
+			String template = invitationTemplate.getRegisterInvitationTemplate(
+					invitor.getFirstname() + " " + invitor.getLastname(), message, invitation_link, invitor.getLanguage_id(),
+					appointment.getAppointmentStarttime(),
+					appointment.getAppointmentEndtime());
+
+			mailHandler.send(meetingMember.getEmail(), invitor.getAdresses().getEmail(), subject, template);
 			return "success";
 		} catch (Exception err) {
 			log.error("sendInvitationLink", err);
@@ -853,17 +1079,20 @@ public class InvitationManager {
 	 */
 	public String sendInvitionIcalLink(String username, String message,
 			String baseurl, String email, String subject,
-			String invitationsHash, Long appointMentId, Long organizer_userId,
+			String invitationsHash, Long appointMentId, User organizer,
 			Boolean invitor, Long language_id, Date starttime, Date endtime,
 			TimeZone timezone, String fromUserField) {
 		try {
 
-			String invitation_link = baseurl + "?invitationHash="
+			String invitation_link = baseurl;
+			if (invitationsHash.length() > 0) {
+				invitation_link += "?invitationHash="
 					+ invitationsHash;
 
-            if (language_id > 0) {
-                invitation_link += "&language=" + language_id.toString();
-            }
+	            if (language_id > 0) {
+	                invitation_link += "&language=" + language_id.toString();
+	            }
+			}
 
 			String template = invitationTemplate.getRegisterInvitationTemplate(
 					fromUserField, message, invitation_link, language_id, starttime,
@@ -884,14 +1113,13 @@ public class InvitationManager {
 			atts.add(attendeeList);
 
 			// Defining Organizer
-			User user = userManager.getUserById(organizer_userId);
 
 			HashMap<String, String> organizerAttendee = handler
 					.getAttendeeData(email, username, invitor);
 			String replyToEmail = null;
-			if (user != null) {
-				replyToEmail = user.getAdresses().getEmail();
-				organizerAttendee = handler.getAttendeeData(replyToEmail, user.getLogin(), invitor);
+			if (organizer != null) {
+				replyToEmail = organizer.getAdresses().getEmail();
+				organizerAttendee = handler.getAttendeeData(replyToEmail, organizer.getLogin(), invitor);
 			}
 
 			// Create ICal Message

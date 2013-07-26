@@ -293,11 +293,8 @@ public class AppointmentDao {
 					urlPostfix = "#room/" + r.getRooms_id();
 				}
 					
-				meetingMemberLogic.addMeetingMemberInvitation(
-							mm, a, WebSession.get().getBaseUrl() + urlPostfix,
-							u.getUser_id(), timezoneUtil.getTimezoneByUser(u), u.getOmTimeZone(),
-							u.getFirstname() + " " + u.getLastname() 
-						);
+				meetingMemberLogic.addMeetingMemberInvitation(mm, a,
+						WebSession.get().getBaseUrl() + urlPostfix,	u);
 			}
 		}
 		return a;

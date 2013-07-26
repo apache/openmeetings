@@ -154,7 +154,11 @@ public class MainPage extends BaseInitedPage {
 			
 			@Override
 			protected void respond(AjaxRequestTarget target) {
-				StringValue baseUrl = getRequestCycle().getRequest().getRequestParameters().getParameterValue("baseUrl");
+				StringValue url = getRequestCycle().getRequest().getRequestParameters().getParameterValue("baseUrl");
+				String baseUrl = url.toString(); 
+				if (baseUrl.indexOf('#') > 0){
+					baseUrl = baseUrl.substring(0, baseUrl.indexOf('#'));
+				}
 				WebSession.get().setBaseUrl(baseUrl.toString());
 			}
 		});
