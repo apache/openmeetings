@@ -66,6 +66,10 @@ import org.slf4j.Logger;
 
 import com.googlecode.wicket.jquery.ui.widget.dialog.AbstractFormDialog;
 import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
+import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButtons;
+import com.googlecode.wicket.jquery.ui.widget.dialog.DialogIcon;
+import com.googlecode.wicket.jquery.ui.widget.dialog.MessageDialog;
+
 
 public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 	
@@ -79,6 +83,7 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 	private final CalendarPanel calendar;
 	protected final FeedbackPanel feedback;
 	final MeetingMemberDialog addAttendees;
+	final MessageDialog confirmDelete;
 	
 	@Override
 	public int getWidth() {
@@ -107,6 +112,23 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 		add(form);
 		addAttendees = new MeetingMemberDialog("addAttendees", WebSession.getString(812), model, form.get("attendeeContainer"));
 		add(addAttendees);
+		confirmDelete = new MessageDialog("confirmDelete", WebSession.getString(814), WebSession.getString(833), DialogButtons.OK_CANCEL, DialogIcon.WARN){
+			private static final long serialVersionUID = 1L;
+
+			public void onClose(AjaxRequestTarget target, DialogButton button)
+			{
+				if (button.equals(DialogButtons.OK)){
+					deleteAppointment(target);
+				}
+			}
+			
+		};
+		add(confirmDelete);
+	}
+
+	protected void deleteAppointment(AjaxRequestTarget target) {
+		getBean(AppointmentLogic.class).deleteAppointment(getModelObject().getAppointmentId(), getUserId(), getLanguage());
+		calendar.refresh(target);		
 	}
 
 	@Override
@@ -132,8 +154,7 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 	@Override
 	public void onClose(AjaxRequestTarget target, DialogButton button) {
 		if (delete.equals(button)) {
-			getBean(AppointmentLogic.class).deleteAppointment(getModelObject().getAppointmentId(), getUserId(), getLanguage());
-			calendar.refresh(target);
+			confirmDelete.open(target);
 		}
 	}
 	
