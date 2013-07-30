@@ -516,7 +516,7 @@ public class PrivateMessagesDao implements IDataProviderDao<PrivateMessage> {
 		return -1;
 	}
 
-	public Integer moveMailsToFolder(List<Long> privateMessageIds, Long privateMessageFolderId) {
+	public Integer moveMailsToFolder(Collection<Long> privateMessageIds, Long privateMessageFolderId) {
 		try {
 			Query query = em.createNamedQuery("moveMailsToFolder"); 
 			query.setParameter("privateMessageFolderId", privateMessageFolderId);

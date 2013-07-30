@@ -135,6 +135,7 @@ public class MessagesContactsPanel extends UserPanel {
 				return "" + object.getPrivateMessageFolderId();
 			}
 		});
+	private WebMarkupContainer selectedFolder;
 	
 	private void setDefaultFolderClass() {
 		inbox.add(AttributeAppender.replace("class", "email inbox clickable"));
@@ -161,10 +162,14 @@ public class MessagesContactsPanel extends UserPanel {
 		target.add(buttons);
 	}
 	
+	private String getEmail(User u) {
+		return u == null || u.getAdresses() == null ? "" : u.getAdresses().getEmail();
+	}
+	
 	private void selectMessage(long id, AjaxRequestTarget target) {
 		PrivateMessage msg = getBean(PrivateMessagesDao.class).get(id);
-		selectedMessage.addOrReplace(new Label("from", msg == null ? "" : msg.getFrom().getAdresses().getEmail()));
-		selectedMessage.addOrReplace(new Label("to", msg == null ? "" : msg.getTo().getAdresses().getEmail()));
+		selectedMessage.addOrReplace(new Label("from", msg == null ? "" : getEmail(msg.getFrom())));
+		selectedMessage.addOrReplace(new Label("to", msg == null ? "" : getEmail(msg.getTo())));
 		selectedMessage.addOrReplace(new Label("subj", msg == null ? "" : msg.getSubject()));
 		selectedMessage.addOrReplace(new Label("body", msg == null ? "" : msg.getMessage()));
 		if (target != null) {
@@ -181,11 +186,13 @@ public class MessagesContactsPanel extends UserPanel {
 	}
 	
 	private void selectFolder(WebMarkupContainer folder, long id, AjaxRequestTarget target) {
+		selectedFolder = folder;
 		selectedModel.setObject(id);
 		setDefaultFolderClass();
 		selectFolder(folder);
 		emptySelection(target);
 		selectDropDown.setModelObject(SELECT_CHOOSE);
+		moveDropDown.setModelObject(NOT_MOVE_FOLDER);
 		deleteBtn.add(AttributeModifier.replace("value", WebSession.getString(TRASH_FOLDER_ID == id ? 1256 : 1245)));
 		readBtn.setEnabled(false);
 		unreadBtn.setEnabled(false);
@@ -193,7 +200,7 @@ public class MessagesContactsPanel extends UserPanel {
 		unread.setDefaultModelObject(getBean(PrivateMessagesDao.class).count(getUserId(), id > 0 ? id : null, false, TRASH_FOLDER_ID == id));
 		if (target != null) {
 			updateTable(target);
-			target.add(folders, unread, selectDropDown);
+			target.add(folders, unread, selectDropDown, moveDropDown);
 			target.add(dataContainer.container, dataContainer.navigator);
 			target.add(dataContainer.orderLinks);
 		}
@@ -207,7 +214,7 @@ public class MessagesContactsPanel extends UserPanel {
 	private String getDisplayName(User u) {
 		return new StringBuilder().append(u.getFirstname()).append(" ")
 				.append(u.getLastname()).append(" ")
-				.append("<").append(u.getAdresses().getEmail()).append(">")
+				.append("<").append(getEmail(u)).append(">")
 				.toString();
 	}
 	
@@ -439,6 +446,7 @@ public class MessagesContactsPanel extends UserPanel {
 			protected void onEvent(AjaxRequestTarget target) {
 				//TODO weird, need to be reviewed
 				getBean(PrivateMessagesDao.class).updatePrivateMessagesToTrash(selectedMessages, false, 0L);
+				selectFolder(selectedFolder, selectedModel.getObject(), target);
 			}
 		}));
 		buttons.add(deleteBtn.add(new AjaxEventBehavior("click") {
@@ -507,7 +515,11 @@ public class MessagesContactsPanel extends UserPanel {
 
 			@Override
 			protected void onUpdate(AjaxRequestTarget target) {
-				
+				long folderId = moveDropDown.getModelObject().getPrivateMessageFolderId();
+				if (folderId != MOVE_CHOOSE) {
+					getBean(PrivateMessagesDao.class).moveMailsToFolder(selectedMessages, folderId);
+				}
+				selectFolder(selectedFolder, selectedModel.getObject(), target);
 			}
 		}));
 		
