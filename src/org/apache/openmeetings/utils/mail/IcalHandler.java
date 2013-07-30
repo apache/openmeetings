@@ -73,7 +73,7 @@ public class IcalHandler {
 	public final static Method ICAL_METHOD_REFRESH = Method.REFRESH;
 
 	/**
-	 * Konstruktor with DefaultTimeZone
+	 * Constructor with DefaultTimeZone
 	 * 
 	 * @param method
 	 *            (@see IcalHandler Constants)
@@ -81,6 +81,8 @@ public class IcalHandler {
 	 */
 	public IcalHandler(Method method) {
 		log.debug("Icalhandler method type : " + method);
+		
+		System.setProperty("net.fortuna.ical4j.timezone.update.enabled", "false");
 		
 		icsCalendar = new net.fortuna.ical4j.model.Calendar();
 
