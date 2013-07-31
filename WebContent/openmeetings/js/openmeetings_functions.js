@@ -47,7 +47,7 @@ function loadingComplete() {
 	lzApp.style.height = '100%';
 }
 
-function getTimeZoneOffset() {
+function getTimeZoneOffsetHours() {
 	var rightNow = new Date(), std_time_offset = -rightNow.getTimezoneOffset() / 60;
 	for (var i = 0; i < 12; ++i) {
 		var d = new Date(rightNow.getFullYear(), i, 1, 0, 0, 0, 0), offset = -d.getTimezoneOffset() / 60;
@@ -56,5 +56,9 @@ function getTimeZoneOffset() {
 			break;
 		}
 	}
-    document.getElementById("lzapp").getTimeZoneOffsetCallback(std_time_offset);
+    return std_time_offset;
+}
+
+function getTimeZoneOffset() {
+    document.getElementById("lzapp").getTimeZoneOffsetCallback(getTimeZoneOffsetHours());
 }

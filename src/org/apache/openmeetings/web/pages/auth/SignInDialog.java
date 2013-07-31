@@ -21,6 +21,7 @@ package org.apache.openmeetings.web.pages.auth;
 import static org.apache.openmeetings.web.app.Application.getAuthenticationStrategy;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.pages.auth.SignInPage.allowRegister;
+import static org.apache.wicket.ajax.attributes.CallbackParameter.resolved;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,17 +32,21 @@ import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.OmAuthenticationStrategy;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.pages.SwfPage;
+import org.apache.wicket.Component;
 import org.apache.wicket.RestartResponseException;
+import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.markup.head.CssContentHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.HiddenField;
 import org.apache.wicket.markup.html.form.PasswordTextField;
 import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.form.StatelessForm;
@@ -50,6 +55,7 @@ import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.apache.wicket.util.string.StringValue;
 
 import com.googlecode.wicket.jquery.core.JQueryBehavior;
 import com.googlecode.wicket.jquery.core.Options;
@@ -69,10 +75,30 @@ public class SignInDialog extends AbstractFormDialog<String> {
     private ForgetPasswordDialog f;
     private LdapConfig domain;
     private String ldapConfigFileName;
+	private HiddenField<Integer> browserTZOffset;
 	
 	public SignInDialog(String id) {
 		super(id, WebSession.getString(108));
 		add(form = new SignInForm("signin"));
+		browserTZOffset = new HiddenField<Integer>("tzOffset", Model.of(new Integer(0)));
+		add(browserTZOffset);
+
+		// This code is required to detect time zone offset
+		add(new AbstractDefaultAjaxBehavior() {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void renderHead(Component component, IHeaderResponse response) {
+				super.renderHead(component, response);
+				response.render(JavaScriptHeaderItem.forScript(getCallbackFunctionBody(resolved("tzOffset", "getTimeZoneOffsetHours()")), "getTzOffset"));
+			}
+			
+			@Override
+			protected void respond(AjaxRequestTarget target) {
+				StringValue offset = getRequestCycle().getRequest().getRequestParameters().getParameterValue("tzOffset");
+				browserTZOffset.setModelObject(offset.toInteger()); 
+			}
+		});
 	}
 
 	public void setRegisterDialog(RegisterDialog r) {
@@ -126,6 +152,7 @@ public class SignInDialog extends AbstractFormDialog<String> {
 	@Override
 	public void onClose(AjaxRequestTarget target, DialogButton button) {
 		if (registerBtn.equals(button)) {
+			r.setBrowserTZOffset(target, browserTZOffset.getModelObject());
 			r.open(target);
 		}
 	}

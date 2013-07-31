@@ -19,6 +19,13 @@
   
 -->
 <html xmlns:wicket="http://wicket.apache.org">
+<wicket:head>
+	<script type="text/javascript" src="js/openmeetings_functions.js" >
+		$(function(){
+			$('#tzOffset').val(getTimeZoneOffsetHours());
+		});
+	</script>
+</wicket:head>
 <wicket:panel>
 	<form wicket:id="signin">
 		<table>
@@ -47,5 +54,6 @@
 		<span wicket:id="feedback"></span>
 		<input type="submit" wicket:id="submit" class="invisible-form-component"/>
 	</form>
+	<input type="hidden" wicket:id="tzOffset" id="tzOffset"/>
 </wicket:panel>
 </html>

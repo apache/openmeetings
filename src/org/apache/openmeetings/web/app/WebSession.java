@@ -29,6 +29,8 @@ import static org.apache.openmeetings.web.app.Application.getDashboardContext;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.List;
+import java.util.Locale;
 import java.util.TimeZone;
 
 import org.apache.openmeetings.data.basic.AuthLevelUtil;
@@ -36,11 +38,15 @@ import org.apache.openmeetings.data.basic.FieldLanguageDao;
 import org.apache.openmeetings.data.basic.FieldManager;
 import org.apache.openmeetings.data.basic.SessiondataDao;
 import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
+import org.apache.openmeetings.data.basic.dao.OmTimeZoneDao;
 import org.apache.openmeetings.data.user.UserManager;
+import org.apache.openmeetings.data.user.dao.StateDao;
 import org.apache.openmeetings.data.user.dao.UsersDao;
 import org.apache.openmeetings.ldap.LdapLoginManagement;
+import org.apache.openmeetings.persistence.beans.basic.OmTimeZone;
 import org.apache.openmeetings.persistence.beans.basic.Sessiondata;
 import org.apache.openmeetings.persistence.beans.lang.FieldLanguage;
+import org.apache.openmeetings.persistence.beans.user.State;
 import org.apache.openmeetings.persistence.beans.user.User;
 import org.apache.openmeetings.web.user.dashboard.PrivateRoomsWidgetDescriptor;
 import org.apache.openmeetings.web.user.dashboard.RssWidgetDescriptor;
@@ -71,9 +77,11 @@ public class WebSession extends AbstractAuthenticatedWebSession {
 	private DateFormat sdf;
 	private Dashboard dashboard;
 	private String baseUrl = null;
+	private Locale browserLocale = null;
 	
 	public WebSession(Request request) {
 		super(request);
+		browserLocale = getLocale();
 	}
 
 	@Override
@@ -213,6 +221,46 @@ public class WebSession extends AbstractAuthenticatedWebSession {
 	
 	public void setBaseUrl(String baseUrl){
 		this.baseUrl = baseUrl;
+	}
+	
+	public Locale getBrowserLocale(){
+		return browserLocale;
+	}
+
+	public FieldLanguage getLanguageByBrowserLocale() {
+		List<FieldLanguage> languages = getBean(FieldLanguageDao.class).getLanguages();
+		for (FieldLanguage l : languages) {
+			if (getBrowserLocale().getLanguage().equals(new Locale(l.getCode()).getLanguage())){
+				return l;
+			}
+		}
+		return languages.get(0);
+	}
+
+	public State getCountryByBrowserLocale() {
+		List<State> states = getBean(StateDao.class).getStates();
+		String code = getBrowserLocale().getISO3Country().toUpperCase();
+		for (State s : states) {
+			if (s.getShortName().toUpperCase().equals(code)){
+				return s;
+			}
+		}
+		return states.get(0);
+	}
+
+	public OmTimeZone getOmTimeZoneByBrowserLocale(int offset){
+		TimeZone tz = Calendar.getInstance(getBrowserLocale()).getTimeZone();
+		OmTimeZone omTZ = getBean(OmTimeZoneDao.class).getOmTimeZoneByIcal(tz.getID());
+		if (omTZ == null){
+			List<OmTimeZone> omTimeZones = getBean(OmTimeZoneDao.class).getOmTimeZones();
+			for (OmTimeZone timeZone : omTimeZones){
+				long tzOffset = TimeZone.getTimeZone(timeZone.getIcal()).getRawOffset() / 3600000;
+				if (tzOffset ==  offset){
+					return timeZone;  
+				}
+			}
+		}
+		return omTZ != null ? omTZ : getBean(OmTimeZoneDao.class).getOmTimeZones().get(0);
 	}
 	
 	private void initDashboard() {

@@ -40,6 +40,8 @@ import org.apache.openmeetings.web.pages.SwfPage;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.extensions.validation.validator.RfcCompliantEmailAddressValidator;
+import org.apache.wicket.markup.head.CssContentHeaderItem;
+import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
@@ -47,6 +49,7 @@ import org.apache.wicket.markup.html.form.PasswordTextField;
 import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.form.StatelessForm;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
+import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
@@ -59,6 +62,11 @@ public class RegisterDialog extends AbstractFormDialog<String> {
 	private DialogButton cancelBtn = new DialogButton(WebSession.getString(122));
 	private DialogButton registerBtn = new DialogButton(WebSession.getString(121));
 	private FeedbackPanel feedback = new FeedbackPanel("feedback");
+	private final IModel<OmTimeZone> tzModel = Model.of(WebSession.get().getOmTimeZoneByBrowserLocale(0));
+	private final DropDownChoice<OmTimeZone> tzDropDown = new DropDownChoice<OmTimeZone>("tz"
+			, tzModel
+			, getBean(OmTimeZoneDao.class).getOmTimeZones()
+			, new ChoiceRenderer<OmTimeZone>("frontEndLabel", "jname"));
 	private Form<String> form;
 	private SignInDialog s;
     private String firstName;
@@ -66,17 +74,31 @@ public class RegisterDialog extends AbstractFormDialog<String> {
     private String login;
     private String password;
     private String email;
-    private OmTimeZone tz;
     private State state;
     private FieldLanguage lang;
 
 	public RegisterDialog(String id) {
 		super(id, WebSession.getString(113));
 		add(form = new RegisterForm("form"));
+		lang = WebSession.get().getLanguageByBrowserLocale();
+		state = WebSession.get().getCountryByBrowserLocale();
+		tzDropDown.setOutputMarkupId(true);
 	}
 
+	@Override
+	public void renderHead(IHeaderResponse response) {
+		super.renderHead(response);
+		//to remove upper-right close button
+		response.render(new CssContentHeaderItem(".no-close .ui-dialog-titlebar-close { display: none; }", "dialog-noclose", ""));
+	}
+	
 	public void setSignInDialog(SignInDialog s) {
 		this.s = s;
+	}
+
+	public void setBrowserTZOffset(AjaxRequestTarget target, int browserTZOffset) {
+		tzModel.setObject(WebSession.get().getOmTimeZoneByBrowserLocale(browserTZOffset));
+		target.add(tzDropDown);
 	}
 	
 	@Override
@@ -114,7 +136,8 @@ public class RegisterDialog extends AbstractFormDialog<String> {
 		getBean(UserManager.class).registerUser(login, password, lastName
 				, firstName, email, null, ""/*street*/, ""/*additionalname*/, ""/*fax*/, ""/*zip*/
 				, state.getState_id(), ""/*town*/, lang.getLanguage_id(), ""/*phone*/, false/*sendSMS*/
-				, "" + getRequestCycle().urlFor(SwfPage.class, new PageParameters()), false, tz.getJname());
+				, "" + getRequestCycle().urlFor(SwfPage.class, new PageParameters()), false
+				, tzModel.getObject().getJname());
 	}
 	
 	class RegisterForm extends StatelessForm<String> {
@@ -150,11 +173,7 @@ public class RegisterDialog extends AbstractFormDialog<String> {
 					, getBean(FieldLanguageDao.class).getLanguages()
 					, new ChoiceRenderer<FieldLanguage>("name", "language_id"))
 				.setRequired(true).setLabel(Model.of(WebSession.getString(111))));
-			add(new DropDownChoice<OmTimeZone>("tz"
-					, new PropertyModel<OmTimeZone>(RegisterDialog.this, "tz")
-					, getBean(OmTimeZoneDao.class).getOmTimeZones()
-					, new ChoiceRenderer<OmTimeZone>("frontEndLabel", "jname"))
-				.setRequired(true).setLabel(Model.of(WebSession.getString(1143))));
+			add(tzDropDown.setRequired(true).setLabel(Model.of(WebSession.getString(1143))));
 			add(new DropDownChoice<State>("state"
 					, new PropertyModel<State>(RegisterDialog.this, "state")
 					, getBean(StateDao.class).getStates()
