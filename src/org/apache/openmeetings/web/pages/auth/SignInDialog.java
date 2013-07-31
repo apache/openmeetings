@@ -75,12 +75,12 @@ public class SignInDialog extends AbstractFormDialog<String> {
     private ForgetPasswordDialog f;
     private LdapConfig domain;
     private String ldapConfigFileName;
-	private HiddenField<Integer> browserTZOffset;
+	private HiddenField<Double> browserTZOffset;
 	
 	public SignInDialog(String id) {
 		super(id, WebSession.getString(108));
 		add(form = new SignInForm("signin"));
-		browserTZOffset = new HiddenField<Integer>("tzOffset", Model.of(new Integer(0)));
+		browserTZOffset = new HiddenField<Double>("tzOffset", Model.of(new Double(0)));
 		add(browserTZOffset);
 
 		// This code is required to detect time zone offset
@@ -96,7 +96,9 @@ public class SignInDialog extends AbstractFormDialog<String> {
 			@Override
 			protected void respond(AjaxRequestTarget target) {
 				StringValue offset = getRequestCycle().getRequest().getRequestParameters().getParameterValue("tzOffset");
-				browserTZOffset.setModelObject(offset.toInteger()); 
+				try {
+					browserTZOffset.setModelObject(Double.parseDouble(offset.toString()));
+				} catch (NumberFormatException ex) { }
 			}
 		});
 	}

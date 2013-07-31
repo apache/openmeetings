@@ -96,7 +96,7 @@ public class RegisterDialog extends AbstractFormDialog<String> {
 		this.s = s;
 	}
 
-	public void setBrowserTZOffset(AjaxRequestTarget target, int browserTZOffset) {
+	public void setBrowserTZOffset(AjaxRequestTarget target, double browserTZOffset) {
 		tzModel.setObject(WebSession.get().getOmTimeZoneByBrowserLocale(browserTZOffset));
 		target.add(tzDropDown);
 	}
