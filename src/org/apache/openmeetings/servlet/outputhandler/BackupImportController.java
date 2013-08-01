@@ -225,6 +225,44 @@ public class BackupImportController extends AbstractUploadController {
 		zipinputstream.close();
 
 		/*
+		 * ##################### Import Configs
+		 */
+		{
+			Registry registry = new Registry();
+			Strategy strategy = new RegistryStrategy(registry);
+			RegistryMatcher matcher = new RegistryMatcher(); //TODO need to be removed in the later versions
+			Serializer serializer = new Persister(strategy, matcher);
+
+			matcher.bind(Long.class, LongTransform.class);
+			registry.bind(Date.class, DateConverter.class);
+			registry.bind(User.class, new UserConverter(usersDao, usersMap));
+			
+			List<Configuration> list = readList(serializer, f, "configs.xml", "configs", Configuration.class, true);
+			for (Configuration c : list) {
+				if (c.getConf_key() == null || c.getDeleted()) {
+					continue;
+				}
+				Configuration cfg = configurationDao.forceGet(c.getConf_key());
+				if (cfg != null && !cfg.getDeleted()) {
+					log.warn("Non deleted configuration with same key is found! old value: {}, new value: {}", cfg.getConf_value(), c.getConf_value());
+				}
+				c.setConfiguration_id(cfg == null ? null : cfg.getConfiguration_id());
+				if (c.getUser() != null && c.getUser().getUser_id() == null) {
+					c.setUser(null);
+				}
+				if (CRYPT_KEY.equals(c.getConf_key())) {
+					try {
+						Class.forName(c.getConf_value());
+					} catch (ClassNotFoundException e) {
+						c.setConf_value(MD5Implementation.class.getCanonicalName());
+					}
+				}
+				configurationDao.update(c, null);
+			}
+		}
+
+		log.info("Configs import complete, starting organization import");
+		/*
 		 * ##################### Import Organizations
 		 */
 		Serializer simpleSerializer = new Persister();
@@ -563,45 +601,7 @@ public class BackupImportController extends AbstractUploadController {
 			}
 		}
 		
-		log.info("Poll import complete, starting configs import");
-		/*
-		 * ##################### Import Configs
-		 */
-		{
-			Registry registry = new Registry();
-			Strategy strategy = new RegistryStrategy(registry);
-			RegistryMatcher matcher = new RegistryMatcher(); //TODO need to be removed in the later versions
-			Serializer serializer = new Persister(strategy, matcher);
-
-			matcher.bind(Long.class, LongTransform.class);
-			registry.bind(Date.class, DateConverter.class);
-			registry.bind(User.class, new UserConverter(usersDao, usersMap));
-			
-			List<Configuration> list = readList(serializer, f, "configs.xml", "configs", Configuration.class, true);
-			for (Configuration c : list) {
-				if (c.getConf_key() == null || c.getDeleted()) {
-					continue;
-				}
-				Configuration cfg = configurationDao.forceGet(c.getConf_key());
-				if (cfg != null && !cfg.getDeleted()) {
-					log.warn("Non deleted configuration with same key is found! old value: {}, new value: {}", cfg.getConf_value(), c.getConf_value());
-				}
-				c.setConfiguration_id(cfg == null ? null : cfg.getConfiguration_id());
-				if (c.getUser() != null && c.getUser().getUser_id() == null) {
-					c.setUser(null);
-				}
-				if (CRYPT_KEY.equals(c.getConf_key())) {
-					try {
-						Class.forName(c.getConf_value());
-					} catch (ClassNotFoundException e) {
-						c.setConf_value(MD5Implementation.class.getCanonicalName());
-					}
-				}
-				configurationDao.update(c, null);
-			}
-		}
-
-		log.info("Configs import complete, starting copy of files and folders");
+		log.info("Poll import complete, starting copy of files and folders");
 		/*
 		 * ##################### Import real files and folders
 		 */
