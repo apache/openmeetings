@@ -373,7 +373,7 @@ public class Client implements IDataProviderEntity, Serializable {
 	 * @see Client#getAllowRecording()
 	 */
 	@Column(name = "allow_recording")
-    private Boolean allowRecording = true;
+    private boolean allowRecording = true;
 	
     /**
 	 * @see Client#getZombieCheckFlag()
@@ -830,11 +830,11 @@ public class Client implements IDataProviderEntity, Serializable {
 		this.canGiveAudio = canGiveAudio;
 	}
 
-	public Boolean getAllowRecording() {
+	public boolean getAllowRecording() {
 		return allowRecording;
 	}
 
-	public void setAllowRecording(Boolean allowRecording) {
+	public void setAllowRecording(boolean allowRecording) {
 		this.allowRecording = allowRecording;
 	}
 
@@ -876,6 +876,7 @@ public class Client implements IDataProviderEntity, Serializable {
 				+ " StreamId: " + this.getStreamid() //
 				+ " PublicSID: " + this.getPublicSID() //
 				+ " UserId: " + this.getUser_id() //
+				+ " RoomId: " + this.room_id //
 				+ " isScreenClient: " + this.getIsScreenClient() //
 				+ " flvRecordingId: " + this.getFlvRecordingId() //
 				+ " screenPublishStarted: " + this.isScreenPublishStarted() //

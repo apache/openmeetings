@@ -175,13 +175,14 @@ public class ScreenController {
 			}
 			Client rc = sessionManager.getClientByPublicSID(publicSID, false, null);
 			if (rc == null) {
-				throw new Exception("port is empty: ");
+				throw new Exception("Port is empty");
 			}
 			Long roomId = rc.getRoom_id();
-			boolean allowRecording = rc.getAllowRecording()
-				&& (0 == sessionManager.getRecordingCount(roomId));
-			boolean allowPublishing = (0 == sessionManager
-					.getPublishingCount(roomId));
+			if (roomId == null) {
+				throw new Exception("Client has no room");
+			}
+			boolean allowRecording = rc.getAllowRecording() && (0 == sessionManager.getRecordingCount(roomId));
+			boolean allowPublishing = (0 == sessionManager.getPublishingCount(roomId));
 			
 			Context ctx = new VelocityContext();
 			ctx.put("APP_NAME", configurationDao.getAppName());
