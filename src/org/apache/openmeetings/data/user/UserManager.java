@@ -815,7 +815,7 @@ public class UserManager {
 				sendConfirmation,
 				omTimeZoneDaoImpl.getOmTimeZone(jname_timezone), forceTimeZoneCheck,
 				userOffers, userSearchs, showContactData,
-				showContactDataToContacts);
+				showContactDataToContacts, null);
 	}
 	
 	/**
@@ -862,7 +862,7 @@ public class UserManager {
 			Boolean sendConfirmation,
 			OmTimeZone timezone, Boolean forceTimeZoneCheck,
 			String userOffers, String userSearchs, Boolean showContactData,
-			Boolean showContactDataToContacts) throws Exception {
+			Boolean showContactDataToContacts, String activatedHash) throws Exception {
 		// TODO: make phone number persistent
 		// User Level must be at least Admin
 		// Moderators will get a temp update of there UserLevel to add Users to
@@ -883,13 +883,17 @@ public class UserManager {
 				boolean checkEmail = usersDao.checkUserEMail(email, null);
 				if (checkName && checkEmail) {
 
-					String hash = cryptManager
-							.getInstanceOfCrypt()
-							.createPassPhrase(
-									login
-											+ CalendarPatterns
-													.getDateWithTimeByMiliSeconds(new Date()));
-					String link = baseURL + "activateUser?u=" + hash;
+					String link = baseURL;
+					String hash = activatedHash;
+					if (hash == null){
+						hash = cryptManager
+								.getInstanceOfCrypt()
+								.createPassPhrase(
+										login
+												+ CalendarPatterns
+														.getDateWithTimeByMiliSeconds(new Date()));
+						link += baseURL + "activateUser?u=" + hash;
+					}
 
 					if (sendWelcomeMessage && email.length() != 0) {
 						// We need to pass the baseURL to check if this is

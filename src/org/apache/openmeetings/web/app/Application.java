@@ -23,6 +23,7 @@ import static org.springframework.web.context.support.WebApplicationContextUtils
 import org.apache.openmeetings.data.basic.FieldLanguagesValuesDao;
 import org.apache.openmeetings.data.user.dao.UsersDao;
 import org.apache.openmeetings.remote.red5.ScopeApplicationAdapter;
+import org.apache.openmeetings.web.pages.ActivatePage;
 import org.apache.openmeetings.web.pages.MainPage;
 import org.apache.openmeetings.web.pages.NotInitedPage;
 import org.apache.openmeetings.web.pages.SwfPage;
@@ -104,6 +105,7 @@ public class Application extends AuthenticatedWebApplication {
 		mountPage("swf", SwfPage.class);
 		mountPage("install", InstallWizardPage.class);
 		mountPage("signin", getSignInPageClass());
+		mountPage("activate", ActivatePage.class);
 		mountResource("/recordings/mp4/${id}", new Mp4RecordingResourceReference());
 		mountResource("/recordings/ogg/${id}", new OggRecordingResourceReference());
 	}

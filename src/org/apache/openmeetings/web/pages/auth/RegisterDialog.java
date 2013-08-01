@@ -18,12 +18,14 @@
  */
 package org.apache.openmeetings.web.pages.auth;
 
+import static org.apache.openmeetings.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.openmeetings.utils.UserHelper.getMinLoginLength;
 import static org.apache.openmeetings.utils.UserHelper.getMinPasswdLength;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.wicket.validation.validator.StringValidator.minimumLength;
 
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.openmeetings.data.basic.FieldLanguageDao;
@@ -35,8 +37,11 @@ import org.apache.openmeetings.data.user.dao.UsersDao;
 import org.apache.openmeetings.persistence.beans.basic.OmTimeZone;
 import org.apache.openmeetings.persistence.beans.lang.FieldLanguage;
 import org.apache.openmeetings.persistence.beans.user.State;
+import org.apache.openmeetings.utils.crypt.ManageCryptStyle;
+import org.apache.openmeetings.utils.math.CalendarPatterns;
 import org.apache.openmeetings.web.app.WebSession;
-import org.apache.openmeetings.web.pages.SwfPage;
+import org.apache.openmeetings.web.pages.ActivatePage;
+import org.apache.openmeetings.web.pages.MainPage;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.extensions.validation.validator.RfcCompliantEmailAddressValidator;
@@ -53,12 +58,15 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.red5.logging.Red5LoggerFactory;
+import org.slf4j.Logger;
 
 import com.googlecode.wicket.jquery.ui.widget.dialog.AbstractFormDialog;
 import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
 
 public class RegisterDialog extends AbstractFormDialog<String> {
 	private static final long serialVersionUID = -8333305491376538792L;
+	private static final Logger log = Red5LoggerFactory.getLogger(MainPage.class, webAppRootKey);
 	private DialogButton cancelBtn = new DialogButton(WebSession.getString(122));
 	private DialogButton registerBtn = new DialogButton(WebSession.getString(121));
 	private FeedbackPanel feedback = new FeedbackPanel("feedback");
@@ -132,12 +140,37 @@ public class RegisterDialog extends AbstractFormDialog<String> {
 
 	@Override
 	protected void onSubmit(AjaxRequestTarget target) {
-		//FIXME need to be refactored to be handled by Wicket
-		getBean(UserManager.class).registerUser(login, password, lastName
-				, firstName, email, null, ""/*street*/, ""/*additionalname*/, ""/*fax*/, ""/*zip*/
-				, state.getState_id(), ""/*town*/, lang.getLanguage_id(), ""/*phone*/, false/*sendSMS*/
-				, "" + getRequestCycle().urlFor(SwfPage.class, new PageParameters()), false
-				, tzModel.getObject().getJname());
+		String hash = getBean(ManageCryptStyle.class).getInstanceOfCrypt()
+				.createPassPhrase(login + CalendarPatterns.getDateWithTimeByMiliSeconds(new Date()));
+
+		String redirectPage = getRequestCycle().urlFor(ActivatePage.class, new PageParameters().add("u", hash)).toString().substring(1);
+		String baseURL = WebSession.get().getBaseUrl() + redirectPage;
+		
+		boolean sendConfirmation = baseURL != null
+				&& !baseURL.isEmpty()
+				&& 1 == getBean(ConfigurationDao.class).getConfValue(
+						"sendEmailWithVerficationCode", Integer.class, "0");
+
+		try {
+			getBean(UserManager.class).registerUserInit(3, 1, 0, 1,
+					login, password, lastName,
+					firstName, email, new Date(), "" /*street*/,
+					"" /*additionalname*/, "" /*fax*/, "" /*zip*/,
+					state.getState_id(),
+					"" /*town*/, lang.getLanguage_id(), true /*sendWelcomeMessage*/,
+					Arrays.asList(getBean(ConfigurationDao.class).getConfValue("default_domain_id", Long.class, null)),
+					"" /*phone*/, false, baseURL,
+					sendConfirmation,
+					getBean(OmTimeZoneDao.class).getOmTimeZone(tzModel.getObject().getJname()),
+					false /*forceTimeZoneCheck*/,
+					"" /*userOffers*/, "" /*userSearchs*/,
+					false /*showContactData*/,
+					true /*showContactDataToContacts*/, hash);
+			
+		} catch (Exception e) {
+			log.error("[registerUser]", e);
+		}
+
 	}
 	
 	class RegisterForm extends StatelessForm<String> {

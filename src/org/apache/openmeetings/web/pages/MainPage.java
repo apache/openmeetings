@@ -24,7 +24,6 @@ import static org.apache.openmeetings.web.util.OmUrlFragment.DASHBOARD;
 import static org.apache.openmeetings.web.util.OmUrlFragment.PROFILE_EDIT;
 import static org.apache.openmeetings.web.util.OmUrlFragment.PROFILE_MESSAGES;
 import static org.apache.openmeetings.web.util.OmUrlFragment.getPanel;
-import static org.apache.wicket.ajax.attributes.CallbackParameter.resolved;
 
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
@@ -33,17 +32,14 @@ import org.apache.openmeetings.web.common.ConfirmableAjaxLink;
 import org.apache.openmeetings.web.common.MenuPanel;
 import org.apache.openmeetings.web.user.AboutDialog;
 import org.apache.openmeetings.web.user.ChatPanel;
+import org.apache.openmeetings.web.util.BaseUrlAjaxBehavior;
 import org.apache.openmeetings.web.util.OmUrlFragment;
-import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AbstractAjaxTimerBehavior;
-import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.devutils.debugbar.DebugBar;
-import org.apache.wicket.markup.head.IHeaderResponse;
-import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.html.panel.EmptyPanel;
@@ -51,7 +47,6 @@ import org.apache.wicket.protocol.ws.api.WebSocketBehavior;
 import org.apache.wicket.protocol.ws.api.message.ClosedMessage;
 import org.apache.wicket.protocol.ws.api.message.ConnectedMessage;
 import org.apache.wicket.request.IRequestParameters;
-import org.apache.wicket.util.string.StringValue;
 import org.apache.wicket.util.time.Duration;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -142,26 +137,8 @@ public class MainPage extends BaseInitedPage {
 				WebSession.get().setArea(null);
 			}
 		});
-		// This code is required to detect OM proxy url
-		add(new AbstractDefaultAjaxBehavior() {
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public void renderHead(Component component, IHeaderResponse response) {
-				super.renderHead(component, response);
-				response.render(JavaScriptHeaderItem.forScript(getCallbackFunctionBody(resolved("baseUrl", "window.location.href")), "getBaseUrl"));
-			}
-			
-			@Override
-			protected void respond(AjaxRequestTarget target) {
-				StringValue url = getRequestCycle().getRequest().getRequestParameters().getParameterValue("baseUrl");
-				String baseUrl = url.toString(); 
-				if (baseUrl.indexOf('#') > 0){
-					baseUrl = baseUrl.substring(0, baseUrl.indexOf('#'));
-				}
-				WebSession.get().setBaseUrl(baseUrl.toString());
-			}
-		});
+		
+		add(new BaseUrlAjaxBehavior());
 	}
 	
 	public void updateContents(OmUrlFragment f, AjaxRequestTarget target) {

@@ -32,6 +32,7 @@ import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.OmAuthenticationStrategy;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.pages.SwfPage;
+import org.apache.openmeetings.web.util.BaseUrlAjaxBehavior;
 import org.apache.wicket.Component;
 import org.apache.wicket.RestartResponseException;
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
@@ -101,6 +102,7 @@ public class SignInDialog extends AbstractFormDialog<String> {
 				} catch (NumberFormatException ex) { }
 			}
 		});
+		add(new BaseUrlAjaxBehavior());
 	}
 
 	public void setRegisterDialog(RegisterDialog r) {

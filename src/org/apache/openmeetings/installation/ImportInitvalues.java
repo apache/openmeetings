@@ -707,7 +707,7 @@ public class ImportInitvalues {
 				"town", default_lang_id, false,
 				Arrays.asList(organisation_id), "phone", false, "", false,
 				omTimeZoneDaoImpl.getOmTimeZoneByIcal(cfg.ical_timeZone),
-				false, "", "", false, true);
+				false, "", "", false, true, null);
 
 		log.debug("Installation - User Added user-Id " + user_id);
 
