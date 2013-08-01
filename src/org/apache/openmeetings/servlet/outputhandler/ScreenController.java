@@ -179,7 +179,7 @@ public class ScreenController {
 			}
 			Long roomId = rc.getRoom_id();
 			if (roomId == null) {
-				throw new Exception("Client has no room");
+				throw new Exception("Client has no room " + rc);
 			}
 			boolean allowRecording = rc.getAllowRecording() && (0 == sessionManager.getRecordingCount(roomId));
 			boolean allowPublishing = (0 == sessionManager.getPublishingCount(roomId));
