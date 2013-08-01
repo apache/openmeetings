@@ -248,14 +248,14 @@ public class WebSession extends AbstractAuthenticatedWebSession {
 		return states.get(0);
 	}
 
-	public OmTimeZone getOmTimeZoneByBrowserLocale(double offset){
+	public OmTimeZone getOmTimeZoneByBrowserLocale(int offsetByMinutes){
 		TimeZone tz = Calendar.getInstance(getBrowserLocale()).getTimeZone();
 		OmTimeZone omTZ = getBean(OmTimeZoneDao.class).getOmTimeZoneByIcal(tz.getID());
 		if (omTZ == null){
 			List<OmTimeZone> omTimeZones = getBean(OmTimeZoneDao.class).getOmTimeZones();
 			for (OmTimeZone timeZone : omTimeZones){
-				double tzOffset = TimeZone.getTimeZone(timeZone.getIcal()).getRawOffset() / 3600000;
-				if (tzOffset ==  offset){
+				int tzOffsetByMinutes = TimeZone.getTimeZone(timeZone.getIcal()).getRawOffset() / 60000;
+				if (tzOffsetByMinutes ==  offsetByMinutes){
 					return timeZone;  
 				}
 			}
