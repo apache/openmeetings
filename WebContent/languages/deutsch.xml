@@ -2523,7 +2523,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>Sind Sie sicher?</value>
   </string>
   <string id="833" name="confirm delete">
-    <value>Wollen Sie den Wert wirklich löschen? Mit dem Speichern-Button ändern Sie die Einträge!</value>
+    <value>Wirklich löschen? Diese Aktion kann nicht wiederufen werden.</value>
   </string>
   <string id="834" name="user choose error">
     <value>Es wurde kein Nutzer ausgewählt. Bitte erst auswählen, um ihn hinzuzufügen!</value>
