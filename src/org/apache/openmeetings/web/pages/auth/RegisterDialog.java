@@ -45,8 +45,6 @@ import org.apache.openmeetings.web.pages.MainPage;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.extensions.validation.validator.RfcCompliantEmailAddressValidator;
-import org.apache.wicket.markup.head.CssContentHeaderItem;
-import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
@@ -61,6 +59,8 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 
+import com.googlecode.wicket.jquery.core.JQueryBehavior;
+import com.googlecode.wicket.jquery.core.Options;
 import com.googlecode.wicket.jquery.ui.widget.dialog.AbstractFormDialog;
 import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
 import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButtons;
@@ -97,22 +97,27 @@ public class RegisterDialog extends AbstractFormDialog<String> {
 		state = WebSession.get().getCountryByBrowserLocale();
 		tzDropDown.setOutputMarkupId(true);
 		confirmRegistration = new MessageDialog("confirmRegistration", WebSession.getString(235), WebSession.getString(674), DialogButtons.OK, DialogIcon.INFO){
-
 			private static final long serialVersionUID = 1L;
 
+			@Override
+			protected void onConfigure(JQueryBehavior behavior) {
+				super.onConfigure(behavior);
+		        behavior.setOption("dialogClass", Options.asString("no-close"));
+				behavior.setOption("closeOnEscape", false);
+			}
+			
 			public void onClose(AjaxRequestTarget target, DialogButton button) {
 				s.open(target);
 			}
-			
 		};
 		add(confirmRegistration);
 }
 
 	@Override
-	public void renderHead(IHeaderResponse response) {
-		super.renderHead(response);
-		//to remove upper-right close button
-		response.render(new CssContentHeaderItem(".no-close .ui-dialog-titlebar-close { display: none; }", "dialog-noclose", ""));
+	protected void onConfigure(JQueryBehavior behavior) {
+		super.onConfigure(behavior);
+        behavior.setOption("dialogClass", Options.asString("no-close"));
+		behavior.setOption("closeOnEscape", false);
 	}
 	
 	public void setSignInDialog(SignInDialog s) {

@@ -25,6 +25,7 @@ import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.pages.BaseInitedPage;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.markup.head.CssContentHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 import org.apache.wicket.request.IRequestParameters;
@@ -58,8 +59,9 @@ public class SignInPage extends BaseInitedPage {
 		super.renderHead(response);
 		//TODO need to be removed if autoOen will be enabled
 		response.render(OnDomReadyHeaderItem.forScript("$('#" + d.getMarkupId() + "').dialog('open');"));
+		response.render(new CssContentHeaderItem(".no-close .ui-dialog-titlebar-close { display: none; }", "dialog-noclose", ""));
 	}
-
+	
 	@Override
 	protected void onParameterArrival(IRequestParameters params, AjaxRequestTarget arg1) {
 		WebSession.get().setArea(getUrlFragment(params));
