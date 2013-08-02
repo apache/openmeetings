@@ -89,7 +89,8 @@ public class RegisterDialog extends AbstractFormDialog<String> {
     private FieldLanguage lang;
 
     final MessageDialog confirmRegistration;
-
+    private boolean sendConfirmation = false;
+    
 	public RegisterDialog(String id) {
 		super(id, WebSession.getString(113));
 		add(form = new RegisterForm("form"));
@@ -104,6 +105,10 @@ public class RegisterDialog extends AbstractFormDialog<String> {
 				super.onConfigure(behavior);
 		        behavior.setOption("dialogClass", Options.asString("no-close"));
 				behavior.setOption("closeOnEscape", false);
+			}
+			
+			public void onOpen(AjaxRequestTarget target) {
+				this.setTitle(Model.of(sendConfirmation ? WebSession.getString(674) : WebSession.getString(236)));
 			}
 			
 			public void onClose(AjaxRequestTarget target, DialogButton button) {
@@ -166,7 +171,7 @@ public class RegisterDialog extends AbstractFormDialog<String> {
 		String redirectPage = getRequestCycle().urlFor(ActivatePage.class, new PageParameters().add("u", hash)).toString().substring(1);
 		String baseURL = WebSession.get().getBaseUrl() + redirectPage;
 		
-		boolean sendConfirmation = baseURL != null
+		sendConfirmation = baseURL != null
 				&& !baseURL.isEmpty()
 				&& 1 == getBean(ConfigurationDao.class).getConfValue(
 						"sendEmailWithVerficationCode", Integer.class, "0");
