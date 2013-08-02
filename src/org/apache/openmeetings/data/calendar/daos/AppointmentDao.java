@@ -279,22 +279,12 @@ public class AppointmentDao {
 		}
 		// update meeting members
 		List<MeetingMember> mmList = a.getMeetingMember();
-		if ( mmList != null){
+		if (mmList != null){
 			for (MeetingMember mm : mmList){
-				Long usrId = mm.getUserid().getUser_id();
-				if (usrId == null){
-					usrId = userManager.addUser(mm.getUserid());
-				}
-				//TODO base url should be changed
-				String urlPostfix = "";
-				if (mm.getUserid().getType() == Type.contact) {
-					urlPostfix = "swf";
-				} else {
-					urlPostfix = "#room/" + r.getRooms_id();
-				}
+				String urlPostfix = (mm.getUserid().getType() == Type.contact) ? "" : "#room/" + r.getRooms_id();
 					
 				meetingMemberLogic.addMeetingMemberInvitation(mm, a,
-						WebSession.get().getBaseUrl() + urlPostfix,	u);
+						WebSession.get().getBaseUrl() + urlPostfix, u);
 			}
 		}
 		return a;
@@ -474,7 +464,7 @@ public class AppointmentDao {
 					!ap.getAppointmentEndtime().equals(appointmentend);
 			
 			// change connected events of other participants
-			if (ap.getIsConnectedEvent() != null && ap.getIsConnectedEvent()) {
+			if (ap.getIsConnectedEvent()) {
 				this.updateConnectedEvents(ap, appointmentName,
 						appointmentDescription, appointmentstart,
 						appointmentend, isDaily, isWeekly, isMonthly, isYearly,
@@ -682,7 +672,7 @@ public class AppointmentDao {
 					!ap.getAppointmentEndtime().equals(appointmentend)) {
 
 			// change connected events of other participants
-			if (ap.getIsConnectedEvent() != null && ap.getIsConnectedEvent()) {
+			if (ap.getIsConnectedEvent()) {
 				this.updateConnectedEventsTimeOnly(ap, appointmentstart,
 						appointmentend);
 			}
@@ -750,16 +740,14 @@ public class AppointmentDao {
 		return null;
 	}
 
-	public List<Appointment> getAppointmentsByRange(Long userId,
-			Date starttime, Date endtime) {
+	public List<Appointment> getAppointmentsByRange(Long userId, Date start, Date end) {
 		try {
-
 			Calendar calstart = Calendar.getInstance();
-			calstart.setTime(starttime);
+			calstart.setTime(start);
 			calstart.set(Calendar.HOUR, 0);
 
 			Calendar calend = Calendar.getInstance();
-			calend.setTime(endtime);
+			calend.setTime(end);
 			calend.set(Calendar.HOUR, 23);
 			calend.set(Calendar.MINUTE, 59);
 			

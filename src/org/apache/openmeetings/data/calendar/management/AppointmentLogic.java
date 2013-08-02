@@ -319,7 +319,6 @@ public class AppointmentLogic {
 		log.debug("deleteAppointment : " + appointmentId);
 
 		try {
-
 			Appointment point = getAppointMentById(appointmentId);
 			
 			if (point == null) {
@@ -327,39 +326,29 @@ public class AppointmentLogic {
 				return null;
 			}
 
-			if (point.getIsConnectedEvent() != null
-					&& point.getIsConnectedEvent()) {
-				List<Appointment> appointments = appointmentDao
-						.getAppointmentsByRoomId(point.getRoom().getRooms_id());
+			if (point.getIsConnectedEvent()) {
+				List<Appointment> appointments = appointmentDao.getAppointmentsByRoomId(point.getRoom().getRooms_id());
 
 				for (Appointment appointment : appointments) {
-
 					if (!appointment.getAppointmentId().equals(appointmentId)) {
-
-						appointmentDao.deleteAppointement(appointment
-								.getAppointmentId());
-
+						appointmentDao.deleteAppointement(appointment.getAppointmentId());
 					}
-
 				}
-
 			}
 
 			Room room = point.getRoom();
 
 			// Deleting/Notifing Meetingmembers
-			List<MeetingMember> members = meetingMemberDao
-					.getMeetingMemberByAppointmentId(appointmentId);
+			List<MeetingMember> members = meetingMemberDao.getMeetingMemberByAppointmentId(appointmentId);
 
-			if (members == null)
-				log.debug("Appointment " + point.getAppointmentName()
-						+ " has no meeting members");
+			if (members == null) {
+				log.debug("Appointment " + point.getAppointmentName() + " has no meeting members");
+			}
 
 			if (members != null) {
 				for (int i = 0; i < members.size(); i++) {
 					log.debug("deleting member " + members.get(i).getEmail());
-					meetingMemberLogic.deleteMeetingMember(members.get(i)
-							.getMeetingMemberId(), users_id, language_id);
+					meetingMemberLogic.deleteMeetingMember(members.get(i).getMeetingMemberId(), users_id, language_id);
 				}
 			}
 
@@ -373,13 +362,10 @@ public class AppointmentLogic {
 			}
 
 			return appointmentId;
-
 		} catch (Exception err) {
 			log.error("[deleteAppointment]", err);
 		}
-
 		return null;
-
 	}
 
 	// -------------------------------------------------------------------------------------

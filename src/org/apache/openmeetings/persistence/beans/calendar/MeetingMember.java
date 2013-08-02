@@ -39,7 +39,6 @@ import org.apache.openmeetings.persistence.beans.user.User;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
 
-
 @Entity
 @Table(name = "meeting_members")
 @Root(name="meetingmember")
@@ -98,7 +97,7 @@ public class MeetingMember implements Serializable {
 	
 	@Column(name="invitor")
 	@Element(data=true)
-	private Boolean invitor;
+	private boolean invitor;
 	
 	
 	@ManyToOne(fetch = FetchType.EAGER)
@@ -111,7 +110,7 @@ public class MeetingMember implements Serializable {
 	private OmTimeZone omTimeZone;
 	
 	@Column(name="is_connected_event")
-	private Boolean isConnectedEvent;
+	private boolean isConnectedEvent;
 	
 	public Long getMeetingMemberId() {
 		return meetingMemberId;
@@ -205,10 +204,10 @@ public class MeetingMember implements Serializable {
 		this.deleted = deleted;
 	}
 	
-	public Boolean getInvitor() {
+	public boolean getInvitor() {
 		return invitor;
 	}
-	public void setInvitor(Boolean invitor) {
+	public void setInvitor(boolean invitor) {
 		this.invitor = invitor;
 	}
 
@@ -219,12 +218,10 @@ public class MeetingMember implements Serializable {
 		this.omTimeZone = omTimeZone;
 	}
 	
-	public Boolean getIsConnectedEvent() {
+	public boolean getIsConnectedEvent() {
 		return isConnectedEvent;
 	}
-	public void setIsConnectedEvent(Boolean isConnectedEvent) {
+	public void setIsConnectedEvent(boolean isConnectedEvent) {
 		this.isConnectedEvent = isConnectedEvent;
 	}
-	
-	
 }

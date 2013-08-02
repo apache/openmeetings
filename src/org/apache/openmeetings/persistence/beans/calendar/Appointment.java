@@ -192,7 +192,7 @@ public class Appointment implements Serializable {
 	private String password;
 
 	@Column(name = "is_connected_event")
-	private Boolean isConnectedEvent;
+	private boolean isConnectedEvent;
 
 	@Column(name = "is_reminder_email_send")
 	private Boolean isReminderEmailSend = false; //default to false
@@ -385,11 +385,11 @@ public class Appointment implements Serializable {
 		this.password = password;
 	}
 
-	public Boolean getIsConnectedEvent() {
+	public boolean getIsConnectedEvent() {
 		return isConnectedEvent;
 	}
 
-	public void setIsConnectedEvent(Boolean isConnectedEvent) {
+	public void setIsConnectedEvent(boolean isConnectedEvent) {
 		this.isConnectedEvent = isConnectedEvent;
 	}
 

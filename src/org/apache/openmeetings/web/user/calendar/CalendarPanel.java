@@ -43,11 +43,8 @@ import com.googlecode.wicket.jquery.ui.calendar.Calendar;
 import com.googlecode.wicket.jquery.ui.calendar.CalendarView;
 
 public class CalendarPanel extends UserPanel {
-	
 	private static final Logger log = Red5LoggerFactory.getLogger(CalendarPanel.class, webAppRootKey);
-	
-	private static final long serialVersionUID = -6536379497642291437L;
-	
+	private static final long serialVersionUID = 1L;
 	private Calendar calendar;
 	
 	@Override
@@ -107,8 +104,7 @@ public class CalendarPanel extends UserPanel {
 				}
 			}
 		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.error("Unexpected error while creating label lists", e);
 		}
 		options.set("monthNames", monthes.toString());
 		options.set("monthNamesShort", shortMonthes.toString());
@@ -175,7 +171,6 @@ public class CalendarPanel extends UserPanel {
 				dialog.setModelObjectWithAjaxTarget(a, target);
 				
 				dialog.open(target);
-
 			}
 			
 			@Override
