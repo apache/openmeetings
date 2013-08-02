@@ -63,6 +63,9 @@ import org.slf4j.Logger;
 
 import com.googlecode.wicket.jquery.ui.widget.dialog.AbstractFormDialog;
 import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
+import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButtons;
+import com.googlecode.wicket.jquery.ui.widget.dialog.DialogIcon;
+import com.googlecode.wicket.jquery.ui.widget.dialog.MessageDialog;
 
 public class RegisterDialog extends AbstractFormDialog<String> {
 	private static final long serialVersionUID = -8333305491376538792L;
@@ -85,13 +88,25 @@ public class RegisterDialog extends AbstractFormDialog<String> {
     private State state;
     private FieldLanguage lang;
 
+    final MessageDialog confirmRegistration;
+
 	public RegisterDialog(String id) {
 		super(id, WebSession.getString(113));
 		add(form = new RegisterForm("form"));
 		lang = WebSession.get().getLanguageByBrowserLocale();
 		state = WebSession.get().getCountryByBrowserLocale();
 		tzDropDown.setOutputMarkupId(true);
-	}
+		confirmRegistration = new MessageDialog("confirmRegistration", WebSession.getString(235), WebSession.getString(674), DialogButtons.OK, DialogIcon.INFO){
+
+			private static final long serialVersionUID = 1L;
+
+			public void onClose(AjaxRequestTarget target, DialogButton button) {
+				s.open(target);
+			}
+			
+		};
+		add(confirmRegistration);
+}
 
 	@Override
 	public void renderHead(IHeaderResponse response) {
@@ -120,7 +135,7 @@ public class RegisterDialog extends AbstractFormDialog<String> {
 	}
 	
 	public void onClose(AjaxRequestTarget target, DialogButton button) {
-		s.open(target);
+		confirmRegistration.open(target);
 	}
 
 	@Override
