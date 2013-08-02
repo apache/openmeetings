@@ -41,9 +41,14 @@ public class BaseUrlAjaxBehavior extends AbstractDefaultAjaxBehavior {
 	@Override
 	protected void respond(AjaxRequestTarget target) {
 		StringValue url = getComponent().getRequestCycle().getRequest().getRequestParameters().getParameterValue("baseUrl");
-		String baseUrl = url.toString(); 
-		if (baseUrl.indexOf('#') > 0 || baseUrl.indexOf('?') > 0) {
-			baseUrl = baseUrl.substring(0, baseUrl.lastIndexOf('/'));
+		String baseUrl = url.toString();
+		int index =  baseUrl.indexOf('#');
+		if (index > 0){
+			baseUrl = baseUrl.substring(0, index);
+		}
+		index = baseUrl.indexOf('?');
+		if (index > 0) {
+			baseUrl = baseUrl.substring(0, baseUrl.lastIndexOf('/') + 1);
 		}
 		WebSession.get().setBaseUrl(baseUrl);
 	}

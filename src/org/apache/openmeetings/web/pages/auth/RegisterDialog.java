@@ -168,7 +168,7 @@ public class RegisterDialog extends AbstractFormDialog<String> {
 		String hash = getBean(ManageCryptStyle.class).getInstanceOfCrypt()
 				.createPassPhrase(login + CalendarPatterns.getDateWithTimeByMiliSeconds(new Date()));
 
-		String redirectPage = getRequestCycle().urlFor(ActivatePage.class, new PageParameters().add("u", hash)).toString().substring(1);
+		String redirectPage = getRequestCycle().urlFor(ActivatePage.class, new PageParameters().add("u", hash)).toString().substring(2);
 		String baseURL = WebSession.get().getBaseUrl() + redirectPage;
 		
 		sendConfirmation = baseURL != null
