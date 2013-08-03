@@ -180,6 +180,10 @@ public class WebSession extends AbstractAuthenticatedWebSession {
 	public static long getUserId() {
 		return get().userId;
 	}
+	
+	public static TimeZone getUserTimeZone() {
+		return get().tz;
+	}
 
 	public static Calendar getCalendar() {
 		return Calendar.getInstance(get().tz);
