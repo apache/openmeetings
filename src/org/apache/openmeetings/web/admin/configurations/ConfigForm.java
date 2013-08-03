@@ -33,6 +33,7 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.form.TextArea;
+import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.util.time.Duration;
@@ -73,7 +74,7 @@ public class ConfigForm extends AdminBaseForm<Configuration> {
 				}
 			}
 		}));
-		add(new RequiredTextField<String>("conf_value").setLabel(Model.of(WebSession.getString(271))));
+		add(new TextField<String>("conf_value").setLabel(Model.of(WebSession.getString(271))));
 		add(forDatePattern("updatetime", WEB_DATE_PATTERN));
 		add(new Label("user.login"));
 		add(new TextArea<String>("comment"));

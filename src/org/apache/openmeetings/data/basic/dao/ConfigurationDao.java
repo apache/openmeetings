@@ -114,14 +114,14 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 
 			if (list == null || list.isEmpty()) {
 				log.warn("Could not find key in configuration CONF_KEY: " + key);
-				if (defaultValue == null) {
-					return null;
-				}
 			} else {
 				// Use the custom value as default value
 				defaultValue = list.get(0).getConf_value();
 			}
 
+			if (defaultValue == null) {
+				return null;
+			}
 			// Either this can be directly assigned or try to find a constructor
 			// that handles it
 			if (type.isAssignableFrom(defaultValue.getClass())) {

@@ -59,9 +59,9 @@ public class ConfigsPanel extends AdminPanel {
 			@Override
 			protected void populateItem(final Item<Configuration> item) {
 				final Configuration configuration = item.getModelObject();
-				item.add(new Label("configuration_id", "" + configuration.getConfiguration_id()));
-				item.add(new Label("conf_key", "" + configuration.getConf_key()));
-				item.add(new Label("conf_value", "" + configuration.getConf_value()));
+				item.add(new Label("configuration_id", configuration.getConfiguration_id()));
+				item.add(new Label("conf_key", configuration.getConf_key()));
+				item.add(new Label("conf_value", configuration.getConf_value()));
 				item.add(new AjaxEventBehavior("onclick") {
 					private static final long serialVersionUID = -8069413566800571061L;
 
