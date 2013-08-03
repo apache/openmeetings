@@ -52,7 +52,9 @@ public class CalendarPanel extends UserPanel {
 	
 	/**
 	 * This constant is needed to adjust the calendar by default to the needed browser height
-	 * after loading it in the div.
+	 * after loading it in the div. If the method "setCalendarHeight()" is fixed to be working 
+	 * correctly (does not apply correctly height on second initialization of UI), it can be changed 
+	 * to use that.
 	 */
 	private static int MENU_BAR_HEIGHT = 110;
 	
