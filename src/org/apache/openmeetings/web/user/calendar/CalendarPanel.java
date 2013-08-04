@@ -45,18 +45,10 @@ import com.googlecode.wicket.jquery.ui.calendar.Calendar;
 import com.googlecode.wicket.jquery.ui.calendar.CalendarView;
 
 public class CalendarPanel extends UserPanel {
-	
 	private static final Logger log = Red5LoggerFactory.getLogger(CalendarPanel.class, webAppRootKey);
 	private static final long serialVersionUID = 1L;
+	private static final String javaScriptMarkup = "setCalendarHeight();";
 	private Calendar calendar;
-	
-	/**
-	 * This constant is needed to adjust the calendar by default to the needed browser height
-	 * after loading it in the div. If the method "setCalendarHeight()" is fixed to be working 
-	 * correctly (does not apply correctly height on second initialization of UI), it can be changed 
-	 * to use that.
-	 */
-	private static int MENU_BAR_HEIGHT = 110;
 	
 	@Override
 	public void onMenuPanelLoad(AjaxRequestTarget target) {
@@ -77,9 +69,6 @@ public class CalendarPanel extends UserPanel {
 	@Override
 	public void renderHead(IHeaderResponse response) {
 		super.renderHead(response);
-
-		String javaScriptMarkup = "$('#" + calendar.getMarkupId() + "')."
-				+ "fullCalendar('option', 'height', $(window).height()-" + MENU_BAR_HEIGHT + " );";
 
 		AjaxRequestTarget target = getRequestCycle().find(AjaxRequestTarget.class);
 		if (target != null) {
