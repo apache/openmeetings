@@ -24,9 +24,13 @@ function getCalendarHeight() {
 }
 
 function setCalendarHeight() {
-    $('#${markupId}').fullCalendar('option', 'height', getCalendarHeight());
+	var cal = $('#${markupId}');
+	if (cal.length) {
+    	cal.fullCalendar('option', 'height', getCalendarHeight());
+	}
 }
 
 $(function() {
     $(window).load(function() { setCalendarHeight(); } );
+    $(window).resize(function() { setCalendarHeight(); } );
 });

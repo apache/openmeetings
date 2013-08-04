@@ -105,7 +105,6 @@ public class CalendarPanel extends UserPanel {
 		options.set("axisFormat", "'HH(:mm)'");
 		options.set("defaultEventMinutes", 60);
 		options.set("timeFormat", "{agenda: 'HH:mm{ - HH:mm}', '': 'HH(:mm)'}");
-		options.set("windowResize", "function(view){setCalendarHeight();}");
 
 		options.set("buttonText", "{month: '" + WebSession.getString(801) +
 								"', week: '" + WebSession.getString(800) + 
