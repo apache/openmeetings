@@ -101,7 +101,7 @@ public class RegisterDialog extends AbstractFormDialog<String> {
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			protected void onConfigure(JQueryBehavior behavior) {
+			public void onConfigure(JQueryBehavior behavior) {
 				super.onConfigure(behavior);
 		        behavior.setOption("dialogClass", Options.asString("no-close"));
 				behavior.setOption("closeOnEscape", false);
@@ -119,7 +119,7 @@ public class RegisterDialog extends AbstractFormDialog<String> {
 }
 
 	@Override
-	protected void onConfigure(JQueryBehavior behavior) {
+	public void onConfigure(JQueryBehavior behavior) {
 		super.onConfigure(behavior);
         behavior.setOption("dialogClass", Options.asString("no-close"));
 		behavior.setOption("closeOnEscape", false);

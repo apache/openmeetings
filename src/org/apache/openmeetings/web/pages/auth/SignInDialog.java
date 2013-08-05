@@ -127,7 +127,7 @@ public class SignInDialog extends AbstractFormDialog<String> {
 	}
 	
 	@Override
-	protected void onConfigure(JQueryBehavior behavior) {
+	public void onConfigure(JQueryBehavior behavior) {
 		super.onConfigure(behavior);
 		//behavior.setOption("autoOpen", true); //TODO need to be updated as soon as API will be added
 		behavior.setOption("closeOnEscape", false);
