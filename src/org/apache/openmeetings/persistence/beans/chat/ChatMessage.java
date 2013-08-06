@@ -61,15 +61,6 @@ public class ChatMessage implements Serializable, IDataProviderEntity {
 	@ForeignKey(enabled = true)
 	private User fromUser;
 	
-	// necessary to hold messages from external guests enters by invitation hash
-	@Column(name = "from_email")
-	@Element(name = "fromEmail", data = true, required = false)
-	private String fromEmail;
-	
-	@Column(name = "from_name")
-	@Element(name = "fromName", data = true, required = false)
-	private String fromName;
-	
 	@ManyToOne
 	@JoinColumn(name = "to_room_id")
 	@Element(name = "toRoomId", data = true, required = false)
@@ -82,15 +73,6 @@ public class ChatMessage implements Serializable, IDataProviderEntity {
 	@ForeignKey(enabled = true)
 	private User toUser;
 
-	// necessary to hold messages to external guests enters by invitation hash
-	@Column(name = "to_email")
-	@Element(name = "toEmail", data = true, required = false)
-	private String toEmail;
-
-	@Column(name = "to_name")
-	@Element(name = "toName", data = true, required = false)
-	private String toName;
-	
 	@Column(name = "message")
 	@Element(name = "message", data = true, required = false)
 	private String message;
@@ -115,22 +97,6 @@ public class ChatMessage implements Serializable, IDataProviderEntity {
 		this.fromUser = fromUser;
 	}
 
-	public String getFromEmail() {
-		return fromEmail;
-	}
-
-	public void setFromEmail(String fromEmail) {
-		this.fromEmail = fromEmail;
-	}
-
-	public String getFromName() {
-		return fromName;
-	}
-
-	public void setFromName(String fromName) {
-		this.fromName = fromName;
-	}
-
 	public Room getToRoom() {
 		return toRoom;
 	}
@@ -145,22 +111,6 @@ public class ChatMessage implements Serializable, IDataProviderEntity {
 
 	public void setToUser(User toUser) {
 		this.toUser = toUser;
-	}
-
-	public String getToEmail() {
-		return toEmail;
-	}
-
-	public void setToEmail(String toEmail) {
-		this.toEmail = toEmail;
-	}
-
-	public String getToName() {
-		return toName;
-	}
-
-	public void setToName(String toName) {
-		this.toName = toName;
 	}
 
 	public String getMessage() {
