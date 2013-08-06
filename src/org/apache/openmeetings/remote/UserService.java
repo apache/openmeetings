@@ -642,6 +642,7 @@ public class UserService {
 		return null;
 	}
 
+	@Deprecated
 	public Long requestUserToContactList(String SID, Long userToAdd_id,
 			String domain, String port, String webapp) {
 		try {
@@ -657,11 +658,8 @@ public class UserService {
 					return -45L;
 				}
 
-				String hash = cryptManager
-						.getInstanceOfCrypt()
-						.createPassPhrase(
-								CalendarPatterns
-										.getDateWithTimeByMiliSeconds(new Date()));
+				String hash = cryptManager.getInstanceOfCrypt()
+						.createPassPhrase(CalendarPatterns.getDateWithTimeByMiliSeconds(new Date()));
 
 				Long userContactId = userContactsDao.addUserContact(
 						userToAdd_id, users_id, true, hash);
@@ -677,22 +675,17 @@ public class UserService {
 
 				String message = "";
 
-				Fieldlanguagesvalues fValue1192 = fieldManager
-						.getFieldByIdAndLanguage(1192L, language_id);
-				Fieldlanguagesvalues fValue1193 = fieldManager
-						.getFieldByIdAndLanguage(1193L, language_id);
-				Fieldlanguagesvalues fValue1190 = fieldManager
-						.getFieldByIdAndLanguage(1190L, language_id);
-				Fieldlanguagesvalues fValue1191 = fieldManager
-						.getFieldByIdAndLanguage(1191L, language_id);
-				Fieldlanguagesvalues fValue1196 = fieldManager
-						.getFieldByIdAndLanguage(1196L, language_id);
+				String fValue1192 = fieldManager.getString(1192L, language_id);
+				String fValue1193 = fieldManager.getString(1193L, language_id);
+				String fValue1190 = fieldManager.getString(1190L, language_id);
+				String fValue1191 = fieldManager.getString(1191L, language_id);
+				String fValue1196 = fieldManager.getString(1196L, language_id);
 
-				message += fValue1192.getValue() + " "
+				message += fValue1192 + " "
 						+ userToAdd.getFirstname() + " "
 						+ userToAdd.getLastname() + "<br/><br/>";
 				message += user.getFirstname() + " " + user.getLastname() + " "
-						+ fValue1193.getValue() + "<br/>";
+						+ fValue1193 + "<br/>";
 				message += fieldManager.getString(1194L, language_id)
 						+ "<br/>";
 
@@ -706,7 +699,7 @@ public class UserService {
 				privateMessagesDao
 						.addPrivateMessage(
 								user.getFirstname() + " " + user.getLastname()
-										+ " " + fValue1193.getValue(), message,
+										+ " " + fValue1193, message,
 								0L, user, userToAdd, userToAdd, false, null,
 								true, userContactId, userToAdd.getAdresses()
 										.getEmail());
@@ -717,11 +710,11 @@ public class UserService {
 				String deny_link = link + "&tAccept=no";
 
 				String aLinkHTML = "<a href='" + accept_link + "'>"
-						+ fValue1190.getValue() + "</a><br/>";
+						+ fValue1190 + "</a><br/>";
 				String denyLinkHTML = "<a href='" + deny_link + "'>"
-						+ fValue1191.getValue() + "</a><br/>";
+						+ fValue1191 + "</a><br/>";
 				String profileLinkHTML = "<a href='" + link + "'>"
-						+ fValue1196.getValue() + "</a><br/>";
+						+ fValue1196 + "</a><br/>";
 
 				String template = requestContactTemplate
 						.getRequestContactTemplate(message, aLinkHTML,
@@ -730,7 +723,7 @@ public class UserService {
 				if (userToAdd.getAdresses() != null) {
 					mailHandler.send(userToAdd.getAdresses().getEmail(),
 							user.getFirstname() + " " + user.getLastname()
-									+ " " + fValue1193.getValue(), template);
+									+ " " + fValue1193, template);
 				}
 
 				return userContactId;

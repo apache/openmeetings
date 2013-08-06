@@ -140,6 +140,20 @@ public class UserContactsDao {
 		return null;
 	}
 	
+	public List<UserContact> get(long ownerId, int first, int count) {
+		TypedQuery<UserContact> q = em.createNamedQuery("getContactsByUser", UserContact.class);
+		q.setParameter("user_id", ownerId);
+		q.setFirstResult(first);
+		q.setMaxResults(count);
+		return q.getResultList();
+	}
+	
+	public long count(long ownerId) {
+		TypedQuery<Long> q = em.createNamedQuery("countContactsByUser", Long.class);
+		q.setParameter("user_id", ownerId);
+		return q.getSingleResult();
+	}
+	
 	public List<UserContact> getContactsByUserAndStatus(Long ownerId, Boolean pending) {
 		try {
 			TypedQuery<UserContact> query = em.createNamedQuery("getContactsByUserAndStatus", UserContact.class);

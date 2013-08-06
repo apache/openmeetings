@@ -19,6 +19,7 @@
 package org.apache.openmeetings.web.user.profile;
 
 import static org.apache.openmeetings.web.app.Application.getBean;
+import static org.apache.openmeetings.web.app.WebSession.getUserId;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -26,7 +27,10 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.apache.openmeetings.data.user.UserManager;
+import org.apache.openmeetings.data.user.dao.UserContactsDao;
+import org.apache.openmeetings.persistence.beans.user.PrivateMessage;
 import org.apache.openmeetings.persistence.beans.user.User;
+import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.UserPanel;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -45,6 +49,8 @@ import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 
+import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
+
 public class UserSearchPanel extends UserPanel {
 	private static final long serialVersionUID = -3604291982438458598L;
 	private final static List<Integer> itemsPerPage = Arrays.asList(10, 25, 50, 75, 100, 200, 500, 1000, 2500, 5000);
@@ -55,6 +61,7 @@ public class UserSearchPanel extends UserPanel {
 	private boolean asc = true;
 	private boolean searched = false;
 	private int items = 1000;
+	private final MessageDialog newMessage;
 
 	public UserSearchPanel(String id) {
 		super(id);
@@ -77,6 +84,16 @@ public class UserSearchPanel extends UserPanel {
 				});
 			}
 		});
+		add(newMessage = new MessageDialog("newMessage", new CompoundPropertyModel<PrivateMessage>(new PrivateMessage())) {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void onClose(AjaxRequestTarget target, DialogButton button) {
+				if (button.equals(send)) {
+					target.add(container);
+				}
+			}
+		});
 		IDataProvider<User> dp = new IDataProvider<User>() {
 			private static final long serialVersionUID = -1757645522251197822L;
 
@@ -97,27 +114,41 @@ public class UserSearchPanel extends UserPanel {
 			}
 			
 		};
-		final UserInfoDialog d = new UserInfoDialog("infoDialog");
+		final UserInfoDialog d = new UserInfoDialog("infoDialog", newMessage);
 		final DataView<User> dw = new DataView<User>("users", dp) {
 			private static final long serialVersionUID = -3314136686941736574L;
 
 			@Override
 			protected void populateItem(Item<User> item) {
+				final UserContactsDao contactsDao = getBean(UserContactsDao.class);
 				User u = item.getModelObject();
 				final long userId = u.getUser_id();
 				item.add(new Label("name", getName(u)));
 				item.add(new Label("tz", getTz(u)));
 				item.add(new Label("offer", u.getUserOffers()));
 				item.add(new Label("search", u.getUserSearchs()));
-				//TODO add actions
 				item.add(new WebMarkupContainer("view").add(new AjaxEventBehavior("onclick") {
 					private static final long serialVersionUID = 7223188816617664993L;
 
 					@Override
 					protected void onEvent(AjaxRequestTarget target) {
-						d.getContainer().replace(new UserProfilePanel("body", userId));
-						target.add(d.getContainer());
-						d.open(target);
+						d.open(target, userId);
+					}
+				}));
+				item.add(new WebMarkupContainer("add").add(new AjaxEventBehavior("onclick") {
+					private static final long serialVersionUID = 1L;
+
+					@Override
+					protected void onEvent(AjaxRequestTarget target) {
+						WebSession.addUserToContactList(userId);
+					}
+				}).setVisible(userId != getUserId() && 0 == contactsDao.checkUserContacts(userId, getUserId())));
+				item.add(new WebMarkupContainer("message").add(new AjaxEventBehavior("onclick") {
+					private static final long serialVersionUID = 1L;
+
+					@Override
+					protected void onEvent(AjaxRequestTarget target) {
+						newMessage.reset().open(target, userId);
 					}
 				}));
 				//item.add(new TooltipBehavior(new Options("content", "TODO:: Picture will be displayed"))); //FIXME 
@@ -142,6 +173,6 @@ public class UserSearchPanel extends UserPanel {
 	}
 
 	private String getTz(User u) {
-		return u.getOmTimeZone().getJname() + "(" + u.getOmTimeZone().getIcal() + ")";
+		return u.getOmTimeZone() == null ? "" : u.getOmTimeZone().getJname() + "(" + u.getOmTimeZone().getIcal() + ")";
 	}
 }

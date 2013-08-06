@@ -31,9 +31,11 @@ import java.util.Set;
 
 import org.apache.openmeetings.data.user.dao.PrivateMessageFolderDao;
 import org.apache.openmeetings.data.user.dao.PrivateMessagesDao;
+import org.apache.openmeetings.data.user.dao.UserContactsDao;
 import org.apache.openmeetings.persistence.beans.user.PrivateMessage;
 import org.apache.openmeetings.persistence.beans.user.PrivateMessageFolder;
 import org.apache.openmeetings.persistence.beans.user.User;
+import org.apache.openmeetings.persistence.beans.user.UserContact;
 import org.apache.openmeetings.web.admin.SearchableDataView;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.AddFolderDialog;
@@ -60,6 +62,8 @@ import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.repeater.Item;
+import org.apache.wicket.markup.repeater.data.DataView;
+import org.apache.wicket.markup.repeater.data.IDataProvider;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
@@ -82,6 +86,8 @@ public class MessagesContactsPanel extends UserPanel {
 	private final WebMarkupContainer container = new WebMarkupContainer("container");
 	private final WebMarkupContainer folders = new WebMarkupContainer("folders");
 	private final Label unread = new Label("unread", Model.of(0L));
+	private final Label pendingContacts = new Label("pendingContacts", Model.of(0L));
+	private final Label allContacts = new Label("allContacts", Model.of(0L));
 	private final static long INBOX_FOLDER_ID = -1;
 	private final static long SENT_FOLDER_ID = -2;
 	private final static long TRASH_FOLDER_ID = -3;
@@ -171,7 +177,7 @@ public class MessagesContactsPanel extends UserPanel {
 		selectedMessage.addOrReplace(new Label("from", msg == null ? "" : getEmail(msg.getFrom())));
 		selectedMessage.addOrReplace(new Label("to", msg == null ? "" : getEmail(msg.getTo())));
 		selectedMessage.addOrReplace(new Label("subj", msg == null ? "" : msg.getSubject()));
-		selectedMessage.addOrReplace(new Label("body", msg == null ? "" : msg.getMessage()));
+		selectedMessage.addOrReplace(new Label("body", msg == null ? "" : msg.getMessage()).setEscapeModelStrings(false));
 		if (target != null) {
 			target.add(selectedMessage);
 			updateControls(target);
@@ -230,7 +236,7 @@ public class MessagesContactsPanel extends UserPanel {
 		super(id);
 		foldersModel = Model.ofList(getBean(PrivateMessageFolderDao.class).get(0, Integer.MAX_VALUE));
 		updateMoveModel();
-		newMessage = new MessageDialog("newMessage", new CompoundPropertyModel<PrivateMessage>(new PrivateMessage())) {
+		add(newMessage = new MessageDialog("newMessage", new CompoundPropertyModel<PrivateMessage>(new PrivateMessage())) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -239,7 +245,7 @@ public class MessagesContactsPanel extends UserPanel {
 					target.add(container);
 				}
 			}
-		};
+		});
 		
 		final AddFolderDialog addFolder = new AddFolderDialog("addFolder") {
 			private static final long serialVersionUID = 1L;
@@ -260,7 +266,7 @@ public class MessagesContactsPanel extends UserPanel {
 
 			@Override
 			protected void onEvent(AjaxRequestTarget target) {
-				newMessage.open(target);
+				newMessage.reset().open(target);
 			}
 		}).add(new JQueryBehavior(".email.new", "button")));
 		folders.add(inbox.add(new AjaxEventBehavior("click") {
@@ -435,8 +441,10 @@ public class MessagesContactsPanel extends UserPanel {
 		add(navigator);
 		
 		add(unread.setOutputMarkupId(true));
-		add(new WebMarkupContainer("pendingContacts"));//FIXME
-		add(new WebMarkupContainer("na1"));//FIXME
+		//TODO add method to handle this
+		pendingContacts.setDefaultModelObject(getBean(UserContactsDao.class).getContactRequestsByUserAndStatus(getUserId(), true).size());
+		allContacts.setDefaultModelObject(getBean(UserContactsDao.class).getContactsByUserAndStatus(getUserId(), false).size());
+		add(pendingContacts.setOutputMarkupId(true), allContacts.setOutputMarkupId(true));
 		
 		add(buttons.setOutputMarkupId(true));
 		buttons.add(toInboxBtn.add(new AjaxEventBehavior("click") {
@@ -526,8 +534,57 @@ public class MessagesContactsPanel extends UserPanel {
 		selectMessage(-1, null);
 		add(container.add(dv).setOutputMarkupId(true));
 		//TODO add valid autoupdate add(new AjaxSelfUpdatingTimerBehavior(seconds(15)));
-		add(newMessage);
 		add(selectedMessage.setOutputMarkupId(true));
+		
+		IDataProvider<UserContact> dp = new IDataProvider<UserContact>() {
+			private static final long serialVersionUID = 1L;
+
+			public void detach() {
+			}
+
+			public Iterator<? extends UserContact> iterator(long first, long count) {
+				return getBean(UserContactsDao.class).get(getUserId(), (int)first, (int)count).iterator();
+			}
+
+			public long size() {
+				return getBean(UserContactsDao.class).count(getUserId());
+			}
+
+			public IModel<UserContact> model(UserContact object) {
+				return Model.of(object);
+			}
+		};
+		final DataView<UserContact> dw = new DataView<UserContact>("users", dp) {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void populateItem(Item<UserContact> item) {
+				UserContact uc = item.getModelObject();
+				item.add(new Label("name", uc.getContact().getFirstname() + " " + uc.getContact().getLastname())); //FIXME salutation	
+				item.add(new WebMarkupContainer("accept").add(new AjaxEventBehavior("onclick") {
+					private static final long serialVersionUID = 7223188816617664993L;
+
+					@Override
+					protected void onEvent(AjaxRequestTarget target) {
+					}
+				}));
+				item.add(new WebMarkupContainer("decline").add(new AjaxEventBehavior("onclick") {
+					private static final long serialVersionUID = 1L;
+
+					@Override
+					protected void onEvent(AjaxRequestTarget target) {
+					}
+				}));
+				item.add(new WebMarkupContainer("view").add(new AjaxEventBehavior("onclick") {
+					private static final long serialVersionUID = 1L;
+
+					@Override
+					protected void onEvent(AjaxRequestTarget target) {
+					}
+				}));
+			}
+		};
+		add(dw);//TODO update
 		
 		//hack to add FixedHeaderTable after Tabs.
 		add(new AbstractDefaultAjaxBehavior() {

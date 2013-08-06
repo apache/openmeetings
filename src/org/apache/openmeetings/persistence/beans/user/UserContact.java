@@ -62,6 +62,12 @@ import org.simpleframework.xml.Root;
 			"where c.contact.user_id = :user_id " +
 			"AND c.pending = :pending " +
 			"AND c.contact.deleted <> true"),
+	@NamedQuery(name = "getContactsByUser", query = "select c from UserContact c " +
+			"where c.contact.user_id = :user_id " +
+			"AND c.contact.deleted <> true"),
+	@NamedQuery(name = "countContactsByUser", query = "select COUNT(c) from UserContact c " +
+			"where c.contact.user_id = :user_id " +
+			"AND c.contact.deleted <> true"),
 	@NamedQuery(name = "getUserContactsById", query = "select c from UserContact c " +
 			"where c.userContactId = :userContactId"),
 	@NamedQuery(name = "getUserContacts", query = "select c from UserContact c")

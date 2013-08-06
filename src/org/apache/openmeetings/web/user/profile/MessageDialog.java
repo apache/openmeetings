@@ -66,8 +66,12 @@ public class MessageDialog extends AbstractFormDialog<PrivateMessage> {
 		return 650;
 	}
 	
-	@Override
-	protected void onOpen(AjaxRequestTarget target) {
+	public void open(AjaxRequestTarget target, long userId) {
+		getModelObject().setTo(getBean(UsersDao.class).get(userId));
+		open(target);
+	}
+	
+	public MessageDialog reset() {
 		modelStart.setObject(new Date());
 		modelEnd.setObject(new Date()); //TODO should we add 1 hour or generalize with Calendar???
 		PrivateMessage p = new PrivateMessage();
@@ -83,6 +87,11 @@ public class MessageDialog extends AbstractFormDialog<PrivateMessage> {
 		setModelObject(p);
 		roomParams.setVisible(getModelObject().isBookedRoom());
 		form.setModelObject(p);
+		return this;
+	}
+	
+	@Override
+	protected void onOpen(AjaxRequestTarget target) {
 		target.add(form);
 		super.onOpen(target);
 	}

@@ -18,9 +18,13 @@
  */
 package org.apache.openmeetings.web.user.profile;
 
+import static org.apache.openmeetings.web.app.Application.getBean;
+import static org.apache.openmeetings.web.app.WebSession.getUserId;
+
 import java.util.Arrays;
 import java.util.List;
 
+import org.apache.openmeetings.data.user.dao.UserContactsDao;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -34,13 +38,23 @@ public class UserInfoDialog extends AbstractDialog<String> {
 	private DialogButton cancel = new DialogButton(WebSession.getString(61));
 	private DialogButton message = new DialogButton(WebSession.getString(1253));
 	private DialogButton contacts = new DialogButton(WebSession.getString(1186));
+	private MessageDialog newMessage;
+	private long userId;
 	
-	public UserInfoDialog(String id) {
+	public UserInfoDialog(String id, MessageDialog newMessage) {
 		super(id, WebSession.getString(1235));
 		setOutputMarkupId(true);
 		
 		add(container = new WebMarkupContainer("container"));
 		container.add(new WebMarkupContainer("body")).setOutputMarkupId(true);
+		this.newMessage = newMessage;
+	}
+
+	public void open(AjaxRequestTarget target, long userId) {
+		this.userId = userId;
+		container.replace(new UserProfilePanel("body", userId));
+		target.add(container);
+		open(target);
 	}
 	
 	public WebMarkupContainer getContainer() {
@@ -54,14 +68,15 @@ public class UserInfoDialog extends AbstractDialog<String> {
 	
 	@Override
 	protected List<DialogButton> getButtons() {
-		return Arrays.asList(contacts, message, cancel);
+		return userId != getUserId() && 0 == getBean(UserContactsDao.class).checkUserContacts(userId, getUserId())
+				? Arrays.asList(message, cancel) : Arrays.asList(contacts, message, cancel);
 	}
 	
 	public void onClose(AjaxRequestTarget target, DialogButton button) {
 		if (button.equals(message)) {
-			//TODO add code
+			newMessage.reset().open(target, userId);
 		} else if (button.equals(contacts)) {
-			//TODO add code
+			WebSession.addUserToContactList(userId);
 		}
 	}
 }

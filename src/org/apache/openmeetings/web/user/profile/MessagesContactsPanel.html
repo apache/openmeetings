@@ -85,11 +85,17 @@
 			</td>
 			<td class="side right">
 				<div><b><wicket:ommessage key="1189"/>&nbsp;(<span wicket:id="pendingContacts"></span>)</b></div>
-				<div><b><wicket:ommessage key="1188"/>&nbsp;(<span wicket:id="na1"></span>)</b></div>
-				<table>
+				<div><b><wicket:ommessage key="1188"/>&nbsp;(<span wicket:id="allContacts"></span>)</b></div>
+				<table style="width: 100%">
 					<tr>
 						<th><wicket:ommessage key="1180"/></th>
 						<th><wicket:ommessage key="1185"/></th>
+					</tr>
+					<tr wicket:id="users">
+						<td wicket:id="name"></td> <!-- FIXME overflow -->
+						<td><div wicket:id="accept" class="tick-icon clickable" wicket:ommessage="title:1190"
+							></div><div wicket:id="decline" class="cross-icon clickable" wicket:ommessage="title:1191"
+							></div><div wicket:id="view" class="user-icon clickable" wicket:ommessage="title:1236"></div></td>
 					</tr>
 				</table>
 			</td>

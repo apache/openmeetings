@@ -55,7 +55,9 @@
 							<td wicket:id="tz"></td>
 							<td wicket:id="offer"></td>
 							<td wicket:id="search"></td>
-							<td><img src="../images/user.png" wicket:id="view"/></td><!-- FIXME move to CSS -->
+							<td><div wicket:id="add" class="add-icon clickable" wicket:ommessage="title:1186"
+								></div><div wicket:id="message" class="new-email-icon clickable" wicket:ommessage="title:1253"
+								></div><div wicket:id="view" class="user-icon clickable" wicket:ommessage="title:1236"></div></td>
 						</tr>
 					</table>
 				</div>
@@ -63,5 +65,6 @@
 		</tr>
 	</table>
 	<div wicket:id="infoDialog"></div>
+	<div wicket:id="newMessage"></div>
 </wicket:panel>
 </html>

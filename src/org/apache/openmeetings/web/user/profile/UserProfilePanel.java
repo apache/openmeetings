@@ -60,8 +60,8 @@ public class UserProfilePanel extends UserPanel {
 		add(new Label("tz", u.getOmTimeZone().getJname()));
 		add(new Label("tzname", u.getOmTimeZone().getIcal()));
 		add(new Label("created", u.getRegdate()));
-		add(new TextArea<String>("offer", Model.of(u.getUserOffers())));
-		add(new TextArea<String>("interest", Model.of(u.getUserSearchs())));
+		add(new TextArea<String>("offer", Model.of(u.getUserOffers())).setEnabled(userId == getUserId()));
+		add(new TextArea<String>("interest", Model.of(u.getUserSearchs())).setEnabled(userId == getUserId()));
 		add(new Label("address", getAddress(u)));
 	}
 }

@@ -726,29 +726,38 @@ div.tableWrapperSmall {
 .clear {
 	clear: both;
 }
-.refresh-icon {
-	background: url(../images/refresh.gif) no-repeat;
+.om-icon, .add-icon, .new-email-icon, .user-icon, .refresh-icon, .folder-create-icon, .tick-icon, .cross-icon {
+	background-repeat: no-repeat;
 	width: 18px;
 	height: 18px;
 	border: none;
 	margin-left: 2px;
 	margin-top: 2px;
+	display: inline-block !important;
+}
+.cross-icon {
+	background-image: url(images/cross.png);
+}
+.tick-icon {
+	background-image: url(images/tick.png);
+}
+.add-icon {
+	background-image: url(images/add.png);
+}
+.new-email-icon {
+	background-image: url(images/email_add.png);
+}
+.user-icon {
+	background: url(images/user.png) no-repeat;
+}
+.refresh-icon {
+	background: url(images/refresh.gif) no-repeat;
 }
 .trash-icon {
 	background: url(images/trash.png) no-repeat;
-	width: 18px;
-	height: 18px;
-	border: none;
-	margin-left: 2px;
-	margin-top: 2px;
 }
 .folder-create-icon {
 	background: url(images/folder_add.png) no-repeat;
-	width: 18px;
-	height: 18px;
-	border: none;
-	margin-left: 2px;
-	margin-top: 2px;
 }
 .recording-icon {
 	padding-left: 18px;
