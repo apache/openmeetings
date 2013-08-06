@@ -23,14 +23,8 @@ import static org.apache.openmeetings.persistence.beans.basic.Configuration.DEFA
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.TimeZone;
 import java.util.Vector;
-
-import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
-import javax.persistence.PersistenceContext;
-import javax.persistence.TypedQuery;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.data.basic.AuthLevelUtil;
@@ -39,6 +33,7 @@ import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
 import org.apache.openmeetings.data.basic.dao.OmTimeZoneDao;
 import org.apache.openmeetings.data.calendar.daos.AppointmentDao;
 import org.apache.openmeetings.data.calendar.management.AppointmentLogic;
+import org.apache.openmeetings.data.conference.dao.InvitationDao;
 import org.apache.openmeetings.data.conference.dao.RoomDao;
 import org.apache.openmeetings.data.user.UserManager;
 import org.apache.openmeetings.data.user.dao.UsersDao;
@@ -74,8 +69,8 @@ public class InvitationManager {
 	private static final Logger log = Red5LoggerFactory.getLogger(
 			InvitationManager.class, OpenmeetingsVariables.webAppRootKey);
 
-	@PersistenceContext
-	private EntityManager em;
+	@Autowired
+	private InvitationDao invitationDao;
 	@Autowired
 	private AppointmentLogic appointmentLogic;
 	@Autowired
@@ -187,7 +182,7 @@ public class InvitationManager {
 				invitation.setStarttime(new Date());
 				invitation.setAppointmentId(appointmentId);
 
-				invitation = em.merge(invitation);
+				invitation = invitationDao.updateInvitation(invitation);
 				long invitationId = invitation.getInvitations_id();
 
 				invitation.setInvitations_id(invitationId);
@@ -283,7 +278,7 @@ public class InvitationManager {
 			invitation.setStarttime(new Date());
 			invitation.setAppointmentId(appointment.getAppointmentId());
 
-			invitation = em.merge(invitation);
+			invitation = invitationDao.updateInvitation(invitation);
 			long invitationId = invitation.getInvitations_id();
 
 			invitation.setInvitations_id(invitationId);
@@ -315,7 +310,7 @@ public class InvitationManager {
 	 */
 	// -----------------------------------------------------------------------------------------------
 	public void cancelInvitation(Appointment appointment, MeetingMember member,
-			Long canceling_user_id, Long language_id) {
+			Long canceling_user_id, Long language_id) throws Exception {
 
 		log.debug("cancelInvitation");
 
@@ -377,7 +372,8 @@ public class InvitationManager {
 
 		if (inv != null) {
 			inv.setDeleted(true);
-			updateInvitation(inv);
+			//updateInvitation(inv);
+			invitationDao.updateInvitation(inv);
 		}
 
 	}
@@ -674,7 +670,7 @@ public class InvitationManager {
 				invitation.setStarttime(new Date());
 				invitation.setAppointmentId(appointmentId);
 
-				invitation = em.merge(invitation);
+				invitation = invitationDao.updateInvitation(invitation);
 				long invitationId = invitation.getInvitations_id();
 
 				if (invitationId > 0) {
@@ -761,7 +757,7 @@ public class InvitationManager {
 			invitation.setStarttime(new Date());
 			invitation.setAppointmentId(appointment.getAppointmentId());
 
-			invitation = em.merge(invitation);
+			invitation = invitationDao.updateInvitation(invitation);
 			long invitationId = invitation.getInvitations_id();
 
 			if (invitationId > 0) {
@@ -1187,60 +1183,6 @@ public class InvitationManager {
 		return null;
 	}
 
-	/**
-	 * @author becherer
-	 * @param invId
-	 * 
-	 */
-	public Invitations getInvitationbyId(Long invId) {
-		log.debug("getInvitationbyId");
-
-		try {
-			String hql = "select invi from Invitations invi "
-					+ "WHERE invi.deleted <> :deleted "
-					+ "AND invi.invitations_id = :invid";
-
-			TypedQuery<Invitations> query = em.createQuery(hql, Invitations.class);
-			query.setParameter("deleted", true);
-			query.setParameter("invid", invId);
-
-			Invitations inv = null;
-			try {
-				inv = query.getSingleResult();
-			} catch (NoResultException ex) {
-			}
-
-			return inv;
-		} catch (Exception e) {
-			log.error("getInvitationsbyId : ", e);
-			return null;
-		}
-	}
-
-	public Invitations getInvitationbyAppointementId(Long invId) {
-		log.debug("getInvitationbyId");
-
-		try {
-			String hql = "select invi from Invitations invi "
-					+ "WHERE invi.deleted <> :deleted "
-					+ "AND invi.invitations_id = :invid";
-
-			TypedQuery<Invitations> query = em.createQuery(hql, Invitations.class);
-			query.setParameter("deleted", true);
-			query.setParameter("invid", invId);
-
-			Invitations inv = null;
-			try {
-				inv = query.getSingleResult();
-			} catch (NoResultException ex) {
-			}
-
-			return inv;
-		} catch (Exception e) {
-			log.error("getInvitationsbyId : ", e);
-			return null;
-		}
-	}
 
 	/**
 	 * 
@@ -1250,17 +1192,7 @@ public class InvitationManager {
 	 */
 	public Object getInvitationByHashCode(String hashCode, boolean hidePass) {
 		try {
-			String hql = "select c from Invitations as c "
-					+ "where c.hash LIKE :hashCode "
-					+ "AND c.deleted = :deleted";
-			TypedQuery<Invitations> query = em.createQuery(hql, Invitations.class);
-			query.setParameter("hashCode", hashCode);
-			query.setParameter("deleted", false);
-			Invitations invitation = null;
-			try {
-				invitation = query.getSingleResult();
-			} catch (NoResultException ex) {
-			}
+			Invitations invitation = invitationDao.getInvitationByHashCode(hashCode, hidePass);
 
 			if (invitation == null) {
 				// already deleted or does not exist
@@ -1280,7 +1212,7 @@ public class InvitationManager {
 							// set to true if this is the first time / a normal
 							// getInvitation-Query
 							invitation.setInvitationWasUsed(true);
-							this.updateInvitation(invitation);
+							invitationDao.updateInvitation(invitation);
 							// invitation.setInvitationpass(null);
 							invitation.setAllowEntry(true);
 							return invitation;
@@ -1301,7 +1233,7 @@ public class InvitationManager {
 					Calendar end = Calendar.getInstance(TimeZone.getTimeZone(tz.getIcal()));
 					end.setTime(invitation.getValidTo());
 					if (now.after(start) && now.before(end)) {
-						this.updateInvitation(invitation);
+						invitationDao.updateInvitation(invitation);
 						// invitation.setInvitationpass(null);
 						invitation.setAllowEntry(true);
 						return invitation;
@@ -1318,7 +1250,7 @@ public class InvitationManager {
 					}
 				} else {
 					// Invitation is not limited, neither time nor single-usage
-					this.updateInvitation(invitation);
+					invitationDao.updateInvitation(invitation);
 
 					invitation.setAllowEntry(true);
 					// invitation.setInvitationpass(null);
@@ -1330,25 +1262,6 @@ public class InvitationManager {
 			log.error("[getInvitationByHashCode]", err);
 		}
 		return new Long(-1);
-	}
-
-	/**
-	 * 
-	 * @param invitation
-	 */
-	public void updateInvitation(Invitations invitation) {
-		try {
-			invitation.setUpdatetime(new Date());
-			if (invitation.getInvitations_id() == null) {
-				em.persist(invitation);
-			} else {
-				if (!em.contains(invitation)) {
-					em.merge(invitation);
-				}
-			}
-		} catch (Exception ex2) {
-			log.error("[selectMaxFromUsers] ", ex2);
-		}
 	}
 
 	/**
@@ -1383,35 +1296,5 @@ public class InvitationManager {
 		return new Long(-1);
 	}
 
-	public void updateInvitationByAppointment(Long appointmentId,
-			Date appointmentstart, Date appointmentend) {
-		try {
-
-			Date gmtTimeStartShifted = new Date(appointmentstart.getTime()
-					- (5 * 60 * 1000));
-
-			String hql = "select a from Invitations a "
-					+ "WHERE a.appointmentId = :appointmentId  ";
-
-			TypedQuery<Invitations> query = em.createQuery(hql, Invitations.class);
-			query.setParameter("appointmentId", appointmentId);
-
-			List<Invitations> listInvitations = query.getResultList();
-
-			for (Invitations inv : listInvitations) {
-				inv.setValidFrom(gmtTimeStartShifted);
-				inv.setValidTo(appointmentend);
-				if (inv.getInvitations_id() == null) {
-					em.persist(inv);
-				} else {
-					if (!em.contains(inv)) {
-						em.merge(inv);
-					}
-				}
-			}
-
-		} catch (Exception err) {
-
-		}
-	}
+	
 }

@@ -243,6 +243,7 @@
 		<constructor-arg><value>12345</value></constructor-arg>
 	 -->
 	</bean>
+	<bean id="invitationDao" class="org.apache.openmeetings.data.conference.dao.InvitationDao" />
 	<bean id="organisationmanagement" class="org.apache.openmeetings.data.user.OrganisationManager" />
 	<bean id="organisationDao" class="org.apache.openmeetings.data.user.dao.OrganisationDao" />
 	<bean id="organisationUserDao" class="org.apache.openmeetings.data.user.dao.OrganisationUserDao" />

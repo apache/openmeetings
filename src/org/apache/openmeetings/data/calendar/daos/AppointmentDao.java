@@ -41,6 +41,7 @@ import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
 import org.apache.openmeetings.data.basic.dao.OmTimeZoneDao;
 import org.apache.openmeetings.data.calendar.management.MeetingMemberLogic;
 import org.apache.openmeetings.data.conference.InvitationManager;
+import org.apache.openmeetings.data.conference.dao.InvitationDao;
 import org.apache.openmeetings.data.conference.dao.RoomDao;
 import org.apache.openmeetings.data.user.UserManager;
 import org.apache.openmeetings.data.user.dao.UsersDao;
@@ -87,6 +88,8 @@ public class AppointmentDao {
 	private MeetingMemberLogic meetingMemberLogic;
 	@Autowired
 	private TimezoneUtil timezoneUtil;
+	@Autowired
+	private InvitationDao invitationDao;
 
 	/*
 	 * insert, update, delete, select
@@ -474,7 +477,7 @@ public class AppointmentDao {
 			}
 
 			// Update Invitation hash to new time
-			invitationManager.updateInvitationByAppointment(appointmentId,
+			invitationDao.updateInvitationByAppointment(appointmentId,
 					appointmentstart, appointmentend);
 
 			ap.setAppointmentName(appointmentName);
@@ -678,7 +681,7 @@ public class AppointmentDao {
 			}
 
 			// Update Invitation hash to new time
-			invitationManager.updateInvitationByAppointment(appointmentId,
+			invitationDao.updateInvitationByAppointment(appointmentId,
 					appointmentstart, appointmentend);
 
 			ap.setAppointmentStarttime(appointmentstart);

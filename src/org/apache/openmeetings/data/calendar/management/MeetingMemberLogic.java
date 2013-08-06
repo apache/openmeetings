@@ -24,6 +24,7 @@ import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.data.basic.FieldManager;
 import org.apache.openmeetings.data.calendar.daos.MeetingMemberDao;
 import org.apache.openmeetings.data.conference.InvitationManager;
+import org.apache.openmeetings.data.conference.dao.InvitationDao;
 import org.apache.openmeetings.data.user.UserManager;
 import org.apache.openmeetings.persistence.beans.basic.OmTimeZone;
 import org.apache.openmeetings.persistence.beans.calendar.Appointment;
@@ -53,6 +54,8 @@ public class MeetingMemberLogic {
 	private MeetingMemberDao meetingMemberDao;
 	@Autowired
 	private TimezoneUtil timezoneUtil;
+	@Autowired
+	private InvitationDao invitationDao;
 
 	/**
 	 * This can be either an internal or an external user, internal users have a
@@ -178,7 +181,7 @@ public class MeetingMemberLogic {
 			// Setting InvitationId within MeetingMember
 
 			if (invitationId != null) {
-				Invitations invi = invitationManager
+				Invitations invi = invitationDao
 						.getInvitationbyId(invitationId);
 
 				member.setInvitation(invi);
@@ -266,7 +269,7 @@ public class MeetingMemberLogic {
 			// Setting InvitationId within MeetingMember
 
 			if (invitationId != null) {
-				Invitations invi = invitationManager
+				Invitations invi = invitationDao
 						.getInvitationbyId(invitationId);
 
 				member.setInvitation(invi);

@@ -32,6 +32,7 @@ import org.apache.openmeetings.data.calendar.daos.AppointmentDao;
 import org.apache.openmeetings.data.calendar.daos.MeetingMemberDao;
 import org.apache.openmeetings.data.conference.InvitationManager;
 import org.apache.openmeetings.data.conference.RoomManager;
+import org.apache.openmeetings.data.conference.dao.InvitationDao;
 import org.apache.openmeetings.data.conference.dao.RoomDao;
 import org.apache.openmeetings.data.user.UserManager;
 import org.apache.openmeetings.persistence.beans.basic.OmTimeZone;
@@ -74,6 +75,8 @@ public class AppointmentLogic {
 	private MeetingMemberLogic meetingMemberLogic;
 	@Autowired
 	private TimezoneUtil timezoneUtil;
+	@Autowired
+	private InvitationDao invitationDao;
 
 	private static int DEFAULT_MINUTES_REMINDER_SEND = 15;
 
@@ -493,7 +496,7 @@ public class AppointmentLogic {
 
 					invitationManager.sendInvitationReminderSMS(mm.getPhone(), smsSubject, language_id);
 					inv.setUpdatetime(new Date());
-					invitationManager.updateInvitation(inv);
+					invitationDao.updateInvitation(inv);
 				}
 			}
 		}

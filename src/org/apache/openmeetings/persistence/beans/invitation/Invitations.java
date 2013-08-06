@@ -29,6 +29,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
 import org.apache.openjpa.persistence.jdbc.ForeignKey;
@@ -37,6 +39,16 @@ import org.apache.openmeetings.persistence.beans.room.Room;
 import org.apache.openmeetings.persistence.beans.user.User;
 
 @Entity
+@NamedQueries({
+	@NamedQuery(name = "getInvitationbyId", query = "select invi from Invitations invi "
+					+ "WHERE invi.deleted <> :deleted "
+					+ "AND invi.invitations_id = :invid"),
+	@NamedQuery(name = "getInvitationByHashCode", query = "select c from Invitations as c "
+					+ "where c.hash LIKE :hashCode "
+					+ "AND c.deleted = :deleted"),
+	@NamedQuery(name = "getInvitationByAppointment", query = "select a from Invitations a "
+					+ "WHERE a.appointmentId = :appointmentId  ")
+})
 @Table(name = "invitations")
 public class Invitations implements Serializable {
 	private static final long serialVersionUID = 1153321347974705506L;
