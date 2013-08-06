@@ -50,7 +50,7 @@ import org.simpleframework.xml.Root;
 			"AND c.isTrash = :isTrash " +
 			"AND c.owner.user_id = :toUserId " +
 			"AND (:isRead IS NULL OR c.isRead = :isRead) " +
-			"AND (:folderId IS NULL OR c.privateMessageFolderId = :folderId) "),
+			"AND ((:folderId IS NULL AND c.privateMessageFolderId IS NULL) OR c.privateMessageFolderId = :folderId) "),
 	@NamedQuery(name = "updatePrivateMessagesToTrash", query = "UPDATE PrivateMessage c " +
 			"SET c.isTrash = :isTrash,c.privateMessageFolderId = :privateMessageFolderId " +
 			"where c.privateMessageId IN (:privateMessageIds) "),

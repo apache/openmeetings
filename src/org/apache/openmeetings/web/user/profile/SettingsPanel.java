@@ -23,6 +23,9 @@ import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.UserPanel;
 import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.JavaScriptHeaderItem;
+import org.apache.wicket.markup.head.PriorityHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.Panel;
@@ -74,7 +77,14 @@ public class SettingsPanel extends UserPanel {
 		addPanel(panels, getTabId(SEARCH_TAB_ID), new UserSearchPanel("tab"));
 		addPanel(panels, getTabId(DASHBOARD_TAB_ID), new WidgetsPanel("tab"));
 		
-		add(new JQueryBehavior("#tabs", "tabs", new Options("active", active)));
+		add(new JQueryBehavior("#tabs", "tabs", new Options("active", active)) {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void renderScript(JavaScriptHeaderItem script, IHeaderResponse response) {
+				response.render(new PriorityHeaderItem(script));
+			}
+		});
 		add(tabs, panels);
 	}
 }

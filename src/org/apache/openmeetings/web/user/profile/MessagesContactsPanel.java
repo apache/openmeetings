@@ -196,8 +196,6 @@ public class MessagesContactsPanel extends UserPanel {
 		deleteBtn.add(AttributeModifier.replace("value", WebSession.getString(TRASH_FOLDER_ID == id ? 1256 : 1245)));
 		readBtn.setEnabled(false);
 		unreadBtn.setEnabled(false);
-		//FIXME it is not working! (at least for the SENT folder)
-		unread.setDefaultModelObject(getBean(PrivateMessagesDao.class).count(getUserId(), id > 0 ? id : null, false, TRASH_FOLDER_ID == id));
 		if (target != null) {
 			updateTable(target);
 			target.add(folders, unread, selectDropDown, moveDropDown);
@@ -209,6 +207,8 @@ public class MessagesContactsPanel extends UserPanel {
 	private void emptySelection(AjaxRequestTarget target) {
 		selectedMessages.clear();
 		selectMessage(-1, target);
+		long id = selectedModel.getObject();
+		unread.setDefaultModelObject(getBean(PrivateMessagesDao.class).count(getUserId(), id > 0 ? id : null, false, TRASH_FOLDER_ID == id));
 	}
 	
 	private String getDisplayName(User u) {
@@ -407,7 +407,7 @@ public class MessagesContactsPanel extends UserPanel {
 						target.add(container);
 					}
 				});
-				StringBuilder cssClass = new StringBuilder(Boolean.TRUE.equals(m.getIsRead()) ? "unread" : "");
+				StringBuilder cssClass = new StringBuilder(Boolean.FALSE.equals(m.getIsRead()) ? "unread" : "");
 				if (selectedMessages.contains(id)) {
 					if (cssClass.length() > 0) {
 						cssClass.append(" ");
@@ -468,9 +468,9 @@ public class MessagesContactsPanel extends UserPanel {
 				
 				@Override
 				protected void onEvent(AjaxRequestTarget target) {
-					getBean(PrivateMessagesDao.class).updatePrivateMessagesReadStatus(selectedMessages, false);
+					getBean(PrivateMessagesDao.class).updatePrivateMessagesReadStatus(selectedMessages, true);
 					emptySelection(target);
-					target.add(container);
+					target.add(container, unread);
 				}
 			}));
 		buttons.add(unreadBtn.add(new AjaxEventBehavior("click") {
@@ -478,7 +478,7 @@ public class MessagesContactsPanel extends UserPanel {
 				
 				@Override
 				protected void onEvent(AjaxRequestTarget target) {
-					getBean(PrivateMessagesDao.class).updatePrivateMessagesReadStatus(selectedMessages, true);
+					getBean(PrivateMessagesDao.class).updatePrivateMessagesReadStatus(selectedMessages, false);
 					emptySelection(target);
 					target.add(container);
 				}
