@@ -25,6 +25,7 @@ import org.apache.openmeetings.data.user.dao.UsersDao;
 import org.apache.openmeetings.persistence.beans.user.User;
 import org.apache.openmeetings.web.admin.AdminPanel;
 import org.apache.openmeetings.web.admin.SearchableDataView;
+import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.PagedEntityListPanel;
 import org.apache.openmeetings.web.data.DataViewContainer;
 import org.apache.openmeetings.web.data.OmOrderByBorder;
@@ -36,9 +37,19 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.repeater.Item;
 
-public class UsersPanel extends AdminPanel {
+import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
+import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButtons;
+import com.googlecode.wicket.jquery.ui.widget.dialog.DialogIcon;
+import com.googlecode.wicket.jquery.ui.widget.dialog.MessageDialog;
 
+public class UsersPanel extends AdminPanel {
 	private static final long serialVersionUID = -4463107742579790120L;
+	private final MessageDialog warning = new MessageDialog("warning", WebSession.getString(797), WebSession.getString(343), DialogButtons.OK, DialogIcon.WARN) {
+		private static final long serialVersionUID = 1L;
+
+		public void onClose(AjaxRequestTarget target, DialogButton button) {
+		}
+	};
 
 	@Override
 	public void onMenuPanelLoad(AjaxRequestTarget target) {
@@ -96,8 +107,8 @@ public class UsersPanel extends AdminPanel {
 		add(navigator);
 
 		UsersDao usersDaoImpl = getBean(UsersDao.class);
-		form = new UserForm("form", listContainer, usersDaoImpl.getNewUserInstance(usersDaoImpl.get(getUserId())));
+		form = new UserForm("form", listContainer, usersDaoImpl.getNewUserInstance(usersDaoImpl.get(getUserId())), warning);
 		form.showNewRecord();
-		add(form);
+		add(form, warning);
 	}
 }

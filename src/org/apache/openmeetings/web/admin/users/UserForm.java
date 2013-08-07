@@ -47,6 +47,8 @@ import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.util.time.Duration;
 
+import com.googlecode.wicket.jquery.ui.widget.dialog.MessageDialog;
+
 /**
  * CRUD operations in form for {@link User}
  * 
@@ -58,12 +60,13 @@ public class UserForm extends AdminBaseForm<User> {
 	private WebMarkupContainer listContainer;
 	private GeneralUserForm generalForm;
 	private RequiredTextField<String> login;
+	private MessageDialog warning;
 
-	public UserForm(String id, WebMarkupContainer listContainer, final User user) {
+	public UserForm(String id, WebMarkupContainer listContainer, final User user, MessageDialog warning) {
 		super(id, new CompoundPropertyModel<User>(user));
 		setOutputMarkupId(true);
 		this.listContainer = listContainer;
-
+		this.warning = warning;
 		// Add form fields
 		addFormFields();
 
@@ -93,6 +96,9 @@ public class UserForm extends AdminBaseForm<User> {
 		target.add(this);
 		target.add(listContainer);
 		target.appendJavaScript("omUserPanelInit();");
+		if (u.getOrganisation_users().isEmpty()) {
+			warning.open(target);
+		}
 	}
 
 	@Override
