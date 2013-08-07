@@ -62,9 +62,9 @@ import org.simpleframework.xml.Root;
 			"where c.contact.user_id = :user_id " +
 			"AND c.pending = :pending " +
 			"AND c.contact.deleted <> true"),
-	@NamedQuery(name = "getContactsByUser", query = "select c from UserContact c " +
-			"where c.contact.user_id = :user_id " +
-			"AND c.contact.deleted <> true"),
+	@NamedQuery(name = "getContactsByUser", query = "SELECT c FROM UserContact c " +
+			"WHERE c.contact.user_id = :user_id " +
+			"AND c.contact.deleted <> true ORDER BY c.pending DESC"),
 	@NamedQuery(name = "countContactsByUser", query = "select COUNT(c) from UserContact c " +
 			"where c.contact.user_id = :user_id " +
 			"AND c.contact.deleted <> true"),
@@ -95,7 +95,7 @@ public class UserContact implements Serializable {
 	
 	@Column(name="pending")
 	@Element(data=true)
-	private Boolean pending;
+	private boolean pending;
 	
 	@Column(name="hash")
 	@Element(data=true, required = false)
@@ -109,7 +109,7 @@ public class UserContact implements Serializable {
 	
 	@Column(name="share_calendar")
 	@Element(data=true, required=false)
-	private Boolean shareCalendar;
+	private boolean shareCalendar;
 	
 	public long getUserContactId() {
 		return userContactId;
@@ -132,10 +132,10 @@ public class UserContact implements Serializable {
 		this.owner = owner;
 	}
 	
-	public Boolean getPending() {
+	public boolean getPending() {
 		return pending;
 	}
-	public void setPending(Boolean pending) {
+	public void setPending(boolean pending) {
 		this.pending = pending;
 	}
 	
@@ -160,10 +160,10 @@ public class UserContact implements Serializable {
 		this.hash = hash;
 	}
 	
-	public Boolean getShareCalendar() {
+	public boolean getShareCalendar() {
 		return shareCalendar;
 	}
-	public void setShareCalendar(Boolean shareCalendar) {
+	public void setShareCalendar(boolean shareCalendar) {
 		this.shareCalendar = shareCalendar;
 	}
 	

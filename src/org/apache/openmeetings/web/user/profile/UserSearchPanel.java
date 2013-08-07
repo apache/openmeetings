@@ -31,15 +31,13 @@ import org.apache.openmeetings.data.user.dao.UserContactsDao;
 import org.apache.openmeetings.persistence.beans.user.PrivateMessage;
 import org.apache.openmeetings.persistence.beans.user.User;
 import org.apache.openmeetings.web.app.WebSession;
+import org.apache.openmeetings.web.common.PagingNavigatorPanel;
 import org.apache.openmeetings.web.common.UserPanel;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormSubmitBehavior;
-import org.apache.wicket.ajax.form.OnChangeAjaxBehavior;
-import org.apache.wicket.ajax.markup.html.navigation.paging.AjaxPagingNavigator;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.repeater.Item;
@@ -49,6 +47,8 @@ import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 
+import com.googlecode.wicket.jquery.core.Options;
+import com.googlecode.wicket.jquery.ui.plugins.fixedheadertable.FixedHeaderTableBehavior;
 import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
 
 public class UserSearchPanel extends UserPanel {
@@ -60,13 +60,17 @@ public class UserSearchPanel extends UserPanel {
 	private String orderBy = "u.firstname";
 	private boolean asc = true;
 	private boolean searched = false;
-	private int items = 1000;
 	private final MessageDialog newMessage;
+	private final WebMarkupContainer container = new WebMarkupContainer("container");
+	private final FixedHeaderTableBehavior fixedHeader = new FixedHeaderTableBehavior("#searchUsersTable", new Options("height", 400));
 
+	private void refresh(AjaxRequestTarget target) {
+		target.add(container.add(fixedHeader));
+	}
+	
 	public UserSearchPanel(String id) {
 		super(id);
 		
-		final WebMarkupContainer container = new WebMarkupContainer("container");
 		add(new Form<Void>("form") {
 			private static final long serialVersionUID = 3171252669473438834L;
 			{
@@ -79,7 +83,7 @@ public class UserSearchPanel extends UserPanel {
 					@Override
 					protected void onSubmit(AjaxRequestTarget target) {
 						searched = true;
-						target.add(container);
+						refresh(target);
 					}
 				});
 			}
@@ -90,7 +94,7 @@ public class UserSearchPanel extends UserPanel {
 			@Override
 			public void onClose(AjaxRequestTarget target, DialogButton button) {
 				if (button.equals(send)) {
-					target.add(container);
+					refresh(target);
 				}
 			}
 		});
@@ -115,7 +119,7 @@ public class UserSearchPanel extends UserPanel {
 			
 		};
 		final UserInfoDialog d = new UserInfoDialog("infoDialog", newMessage);
-		final DataView<User> dw = new DataView<User>("users", dp) {
+		final DataView<User> dv = new DataView<User>("users", dp) {
 			private static final long serialVersionUID = -3314136686941736574L;
 
 			@Override
@@ -141,6 +145,7 @@ public class UserSearchPanel extends UserPanel {
 					@Override
 					protected void onEvent(AjaxRequestTarget target) {
 						WebSession.addUserToContactList(userId);
+						refresh(target);
 					}
 				}).setVisible(userId != getUserId() && 0 == contactsDao.checkUserContacts(userId, getUserId())));
 				item.add(new WebMarkupContainer("message").add(new AjaxEventBehavior("onclick") {
@@ -154,18 +159,17 @@ public class UserSearchPanel extends UserPanel {
 				//item.add(new TooltipBehavior(new Options("content", "TODO:: Picture will be displayed"))); //FIXME 
 			}
 		};
-		DropDownChoice<Integer> itemsPP = new DropDownChoice<Integer>("items", new PropertyModel<Integer>(this, "items"), itemsPerPage);
-		itemsPP.add(new OnChangeAjaxBehavior() {
-			private static final long serialVersionUID = -3787928869045330486L;
+		final PagingNavigatorPanel navPanel = new PagingNavigatorPanel("navigator", dv, itemsPerPage) {
+			private static final long serialVersionUID = 1L;
 
 			@Override
-			protected void onUpdate(AjaxRequestTarget target) {
-				dw.setItemsPerPage(items);
-				target.add(container);
+			protected void onEvent(AjaxRequestTarget target) {
+				refresh(target);
 			}
-		});
-		add(d, container.add(dw, itemsPP
-				, new AjaxPagingNavigator("navigator", dw)).setOutputMarkupId(true));
+		};
+		navPanel.setEntitiesPerPage(1000);
+
+		add(d, container.add(dv, navPanel).setOutputMarkupId(true));
 	}
 	
 	private String getName(User u) {

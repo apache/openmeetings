@@ -554,37 +554,62 @@ public class MessagesContactsPanel extends UserPanel {
 				return Model.of(object);
 			}
 		};
+		final UserInfoDialog d = new UserInfoDialog("infoDialog", newMessage);
 		final DataView<UserContact> dw = new DataView<UserContact>("users", dp) {
 			private static final long serialVersionUID = 1L;
 
+			private String getName(UserContact uc) {
+				return uc.getOwner().getFirstname() + " " + uc.getOwner().getLastname(); //FIXME salutation
+			}
+			
 			@Override
 			protected void populateItem(Item<UserContact> item) {
 				UserContact uc = item.getModelObject();
-				item.add(new Label("name", uc.getContact().getFirstname() + " " + uc.getContact().getLastname())); //FIXME salutation	
+				final long userId = uc.getOwner().getUser_id();
+				if (uc.getPending()) {
+					item.add(AttributeModifier.append("class", "unread"));
+				}
+				item.add(new Label("name", getName(uc)));	
 				item.add(new WebMarkupContainer("accept").add(new AjaxEventBehavior("onclick") {
 					private static final long serialVersionUID = 7223188816617664993L;
 
 					@Override
 					protected void onEvent(AjaxRequestTarget target) {
 					}
-				}));
+				}).setVisible(uc.getPending()));
 				item.add(new WebMarkupContainer("decline").add(new AjaxEventBehavior("onclick") {
 					private static final long serialVersionUID = 1L;
 
 					@Override
 					protected void onEvent(AjaxRequestTarget target) {
 					}
-				}));
+				}).setVisible(uc.getPending()));
 				item.add(new WebMarkupContainer("view").add(new AjaxEventBehavior("onclick") {
 					private static final long serialVersionUID = 1L;
 
 					@Override
 					protected void onEvent(AjaxRequestTarget target) {
+						d.open(target, userId);
 					}
 				}));
+				item.add(new WebMarkupContainer("message").add(new AjaxEventBehavior("onclick") {
+					private static final long serialVersionUID = 1L;
+
+					@Override
+					protected void onEvent(AjaxRequestTarget target) {
+						newMessage.reset().open(target, userId);
+					}
+				}).setVisible(!uc.getPending()));
+				item.add(new WebMarkupContainer("delete").add(new AjaxEventBehavior("onclick") {
+					private static final long serialVersionUID = 1L;
+
+					@Override
+					protected void onEvent(AjaxRequestTarget target) {
+					}
+				}).setVisible(!uc.getPending()));
 			}
 		};
-		add(dw);//TODO update
+		add(d, dw);//TODO update
 		
 		//hack to add FixedHeaderTable after Tabs.
 		add(new AbstractDefaultAjaxBehavior() {

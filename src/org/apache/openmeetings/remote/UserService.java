@@ -814,15 +814,13 @@ public class UserService {
 			// users only
 			if (authLevelUtil.checkUserLevel(user_level)) {
 
-				UserContact userContacts = userContactsDao
-						.getUserContacts(userContactId);
+				UserContact userContacts = userContactsDao.getUserContacts(userContactId);
 
 				if (userContacts == null) {
 					return -46L;
 				}
 
-				if (userContacts.getPending() != null
-						&& !userContacts.getPending()) {
+				if (!userContacts.getPending()) {
 					return -47L;
 				}
 
@@ -865,15 +863,13 @@ public class UserService {
 			// users only
 			if (authLevelUtil.checkUserLevel(user_level)) {
 
-				UserContact userContacts = userContactsDao
-						.getUserContacts(userContactId);
+				UserContact userContacts = userContactsDao.getUserContacts(userContactId);
 
 				if (userContacts == null) {
 					return -46L;
 				}
 
-				if (userContacts.getPending() != null
-						&& !userContacts.getPending()) {
+				if (!userContacts.getPending()) {
 					return -47L;
 				}
 

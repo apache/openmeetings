@@ -22,42 +22,30 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.apache.openmeetings.persistence.beans.IDataProviderEntity;
-import org.apache.openmeetings.web.admin.AdminPagingNavigator;
 import org.apache.openmeetings.web.admin.SearchableDataView;
 import org.apache.openmeetings.web.data.SearchableDataProvider;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
-import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.PropertyModel;
 
 public abstract class PagedEntityListPanel extends BasePanel {
 	private static final long serialVersionUID = -4280843184916302671L;
-	private int entitiesPerPage = 50;
 	private List<Integer> numbers = Arrays.asList(10, 25, 50, 75, 100, 200);
 	
 	public PagedEntityListPanel(String id, final SearchableDataView<? extends IDataProviderEntity> dataView) {
 		super(id);
-		
-		dataView.setItemsPerPage(entitiesPerPage);
-		final Form<Void> f = new Form<Void>("pagingForm");
 
-		f.add(new AdminPagingNavigator("navigator", dataView).setOutputMarkupId(true))
-			.add(new DropDownChoice<Integer>("entitiesPerPage", new PropertyModel<Integer>(this, "entitiesPerPage"), numbers)
-				.add(new AjaxFormComponentUpdatingBehavior("onchange") {
-					private static final long serialVersionUID = -7754441983330112248L;
+		final PagingNavigatorPanel navPanel = new PagingNavigatorPanel("pagedPanel", dataView, numbers) {
+			private static final long serialVersionUID = 1L;
 
-					@Override
-					protected void onUpdate(AjaxRequestTarget target) {
-						long newPage = dataView.getCurrentPage() * dataView.getItemsPerPage() / entitiesPerPage;
-						dataView.setItemsPerPage(entitiesPerPage);
-						dataView.setCurrentPage(newPage);
-						target.add(f);
-						PagedEntityListPanel.this.onEvent(target);
-					}
-				}));
+			@Override
+			protected void onEvent(AjaxRequestTarget target) {
+				PagedEntityListPanel.this.onEvent(target);
+			}
+		};
+		dataView.setItemsPerPage(navPanel.getEntitiesPerPage());
 		
 		final SearchableDataProvider<? extends IDataProviderEntity> dp = dataView.getDataProvider();
 		Form<Void> searchForm = new Form<Void>("searchForm");
@@ -68,11 +56,11 @@ public abstract class PagedEntityListPanel extends BasePanel {
 
 			@Override
 			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-				target.add(f);
+				target.add(navPanel);
 				PagedEntityListPanel.this.onEvent(target);
 			}
 		});
-		add(f.setOutputMarkupId(true));
+		add(navPanel);
 	}
 
 	protected abstract void onEvent(AjaxRequestTarget target);

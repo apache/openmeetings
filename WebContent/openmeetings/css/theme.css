@@ -480,7 +480,7 @@ div.tableWrapperSmall {
 .pagedEntityListPanel select {
 	padding: 0px 0px;
 	border: solid 1px #aacfe4;
-	width: 40px;
+	width: 60px;
 	font-size: 12px;
 	display: inline;
 	float: none;
@@ -889,7 +889,7 @@ select.messages.selector {
 #messagesTable tr.selected {
 	background-color: #d7ebf9;
 }
-#messagesTable tr.unread {
+tr.unread {
 	font-weight: bold;
 }
 .fht-tbody {

@@ -16,16 +16,16 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.web.admin;
+package org.apache.openmeetings.web.common;
 
 import org.apache.wicket.ajax.markup.html.navigation.paging.AjaxPagingNavigator;
 import org.apache.wicket.markup.html.navigation.paging.IPageable;
 
-public class AdminPagingNavigator extends AjaxPagingNavigator {
+public class OmPagingNavigator extends AjaxPagingNavigator {
 
 	private static final long serialVersionUID = 1L;
 	
-	public AdminPagingNavigator(String id, IPageable pageable) {
+	public OmPagingNavigator(String id, IPageable pageable) {
 		super(id, pageable);
 	}
 

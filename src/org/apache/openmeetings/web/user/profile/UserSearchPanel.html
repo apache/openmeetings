@@ -36,29 +36,29 @@
 				</form>
 			</td>
 			<td valign="top">
-				<!-- FIXME scroll -->
-				<div wicket:id="container" style="height: 100%; overflow-y: scroll; min-height: 400px;">
-					<table style="width: 100%;">
-						<tr>
-							<td colspan="3"><wicket:ommessage key="1184"/></td>
-							<td colspan="2" align="right"><span wicket:id="navigator"></span><select wicket:id="items"></select></td>
-						</tr>
-						<tr>
-							<th><wicket:ommessage key="1180"/></th>
-							<th><wicket:ommessage key="1181"/></th>
-							<th><wicket:ommessage key="1182"/></th>
-							<th><wicket:ommessage key="1183"/></th>
-							<th><wicket:ommessage key="1185"/></th>
-						</tr>
-						<tr wicket:id="users">
-							<td wicket:id="name"></td>
-							<td wicket:id="tz"></td>
-							<td wicket:id="offer"></td>
-							<td wicket:id="search"></td>
-							<td><div wicket:id="add" class="add-icon clickable" wicket:ommessage="title:1186"
-								></div><div wicket:id="message" class="new-email-icon clickable" wicket:ommessage="title:1253"
-								></div><div wicket:id="view" class="user-icon clickable" wicket:ommessage="title:1236"></div></td>
-						</tr>
+				<div wicket:id="container" style="height: 100%; min-height: 400px;">
+					<div><strong><wicket:ommessage key="1184"/></strong>&nbsp;&nbsp;&nbsp;<span wicket:id="navigator"></span></div>
+					<table id="searchUsersTable" style="width: 100%;">
+						<thead>
+							<tr>
+								<th><wicket:ommessage key="1180"/></th>
+								<th><wicket:ommessage key="1181"/></th>
+								<th><wicket:ommessage key="1182"/></th>
+								<th><wicket:ommessage key="1183"/></th>
+								<th><wicket:ommessage key="1185"/></th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr wicket:id="users">
+								<td wicket:id="name"></td>
+								<td wicket:id="tz"></td>
+								<td wicket:id="offer"></td>
+								<td wicket:id="search"></td>
+								<td style="white-space: nowrap;"><div wicket:id="add" class="add-icon clickable" wicket:ommessage="title:1186"
+									></div><div wicket:id="message" class="new-email-icon clickable" wicket:ommessage="title:1253"
+									></div><div wicket:id="view" class="user-icon clickable" wicket:ommessage="title:1236"></div></td>
+							</tr>
+						</tbody>
 					</table>
 				</div>
 			</td>
