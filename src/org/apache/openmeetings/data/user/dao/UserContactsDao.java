@@ -208,10 +208,10 @@ public class UserContactsDao {
 		return null;
 	}
 	
-	public UserContact getUserContacts(Long userContactId) {
+	public UserContact get(Long id) {
 		try {
 			TypedQuery<UserContact> query = em.createNamedQuery("getUserContactsById", UserContact.class); 
-			query.setParameter("userContactId", userContactId);
+			query.setParameter("userContactId", id);
 			UserContact userContacts = null;
 			try {
 				userContacts = query.getSingleResult();
@@ -237,7 +237,7 @@ public class UserContactsDao {
 	public Long updateContactStatus(Long userContactId, Boolean pending) {
 		try {
 			
-			UserContact userContacts = this.getUserContacts(userContactId);
+			UserContact userContacts = this.get(userContactId);
 			
 			if (userContacts == null) {
 				return null;

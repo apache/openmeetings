@@ -26,6 +26,7 @@ import java.util.List;
 
 import org.apache.openmeetings.data.user.dao.UserContactsDao;
 import org.apache.openmeetings.web.app.WebSession;
+import org.apache.openmeetings.web.util.ContactsHelper;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 
@@ -76,7 +77,7 @@ public class UserInfoDialog extends AbstractDialog<String> {
 		if (button.equals(message)) {
 			newMessage.reset().open(target, userId);
 		} else if (button.equals(contacts)) {
-			WebSession.addUserToContactList(userId);
+			ContactsHelper.addUserToContactList(userId);
 		}
 	}
 }

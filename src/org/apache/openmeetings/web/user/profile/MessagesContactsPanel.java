@@ -44,6 +44,7 @@ import org.apache.openmeetings.web.common.UserPanel;
 import org.apache.openmeetings.web.data.DataViewContainer;
 import org.apache.openmeetings.web.data.OmOrderByBorder;
 import org.apache.openmeetings.web.data.SearchableDataProvider;
+import org.apache.openmeetings.web.util.ContactsHelper;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
@@ -98,6 +99,7 @@ public class MessagesContactsPanel extends UserPanel {
 	private final WebMarkupContainer trash = new WebMarkupContainer("trash");
 	private final WebMarkupContainer selectedMessage = new WebMarkupContainer("selectedMessage");
 	private final WebMarkupContainer buttons = new WebMarkupContainer("buttons");
+	private final WebMarkupContainer contacts = new WebMarkupContainer("contacts");
 	private final MessageDialog newMessage;
 	private final DataViewContainer<PrivateMessage> dataContainer;
 	private final Set<Long> selectedMessages = new HashSet<Long>();
@@ -229,6 +231,14 @@ public class MessagesContactsPanel extends UserPanel {
 		list.add(NOT_MOVE_FOLDER);
 		list.addAll(foldersModel.getObject());
 		moveDropDown.setChoices(list);
+	}
+	
+	private void updateContacts(AjaxRequestTarget target) {
+		pendingContacts.setDefaultModelObject(getBean(UserContactsDao.class).getContactRequestsByUserAndStatus(getUserId(), true).size());
+		allContacts.setDefaultModelObject(getBean(UserContactsDao.class).getContactsByUserAndStatus(getUserId(), false).size());
+		if (target != null) {
+			target.add(contacts);
+		}
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -441,10 +451,6 @@ public class MessagesContactsPanel extends UserPanel {
 		add(navigator);
 		
 		add(unread.setOutputMarkupId(true));
-		//TODO add method to handle this
-		pendingContacts.setDefaultModelObject(getBean(UserContactsDao.class).getContactRequestsByUserAndStatus(getUserId(), true).size());
-		allContacts.setDefaultModelObject(getBean(UserContactsDao.class).getContactsByUserAndStatus(getUserId(), false).size());
-		add(pendingContacts.setOutputMarkupId(true), allContacts.setOutputMarkupId(true));
 		
 		add(buttons.setOutputMarkupId(true));
 		buttons.add(toInboxBtn.add(new AjaxEventBehavior("click") {
@@ -565,6 +571,7 @@ public class MessagesContactsPanel extends UserPanel {
 			@Override
 			protected void populateItem(Item<UserContact> item) {
 				UserContact uc = item.getModelObject();
+				final long contactId = uc.getUserContactId();
 				final long userId = uc.getOwner().getUser_id();
 				if (uc.getPending()) {
 					item.add(AttributeModifier.append("class", "unread"));
@@ -575,6 +582,8 @@ public class MessagesContactsPanel extends UserPanel {
 
 					@Override
 					protected void onEvent(AjaxRequestTarget target) {
+						ContactsHelper.acceptUserContact(contactId);
+						updateContacts(target);
 					}
 				}).setVisible(uc.getPending()));
 				item.add(new WebMarkupContainer("decline").add(new AjaxEventBehavior("onclick") {
@@ -582,6 +591,8 @@ public class MessagesContactsPanel extends UserPanel {
 
 					@Override
 					protected void onEvent(AjaxRequestTarget target) {
+						getBean(UserContactsDao.class).deleteUserContact(contactId);
+						updateContacts(target);
 					}
 				}).setVisible(uc.getPending()));
 				item.add(new WebMarkupContainer("view").add(new AjaxEventBehavior("onclick") {
@@ -605,11 +616,14 @@ public class MessagesContactsPanel extends UserPanel {
 
 					@Override
 					protected void onEvent(AjaxRequestTarget target) {
+						getBean(UserContactsDao.class).deleteUserContact(contactId);
+						updateContacts(target);
 					}
 				}).setVisible(!uc.getPending()));
 			}
 		};
-		add(d, dw);//TODO update
+		updateContacts(null);
+		add(d, contacts.add(dw, pendingContacts, allContacts).setOutputMarkupId(true));//TODO update
 		
 		//hack to add FixedHeaderTable after Tabs.
 		add(new AbstractDefaultAjaxBehavior() {
@@ -628,4 +642,5 @@ public class MessagesContactsPanel extends UserPanel {
 			}
 		});
 	}
+
 }

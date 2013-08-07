@@ -29,7 +29,6 @@ import static org.apache.openmeetings.web.app.Application.getDashboardContext;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
@@ -41,9 +40,7 @@ import org.apache.openmeetings.data.basic.SessiondataDao;
 import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
 import org.apache.openmeetings.data.basic.dao.OmTimeZoneDao;
 import org.apache.openmeetings.data.user.UserManager;
-import org.apache.openmeetings.data.user.dao.PrivateMessagesDao;
 import org.apache.openmeetings.data.user.dao.StateDao;
-import org.apache.openmeetings.data.user.dao.UserContactsDao;
 import org.apache.openmeetings.data.user.dao.UsersDao;
 import org.apache.openmeetings.ldap.LdapLoginManagement;
 import org.apache.openmeetings.persistence.beans.basic.OmTimeZone;
@@ -51,10 +48,6 @@ import org.apache.openmeetings.persistence.beans.basic.Sessiondata;
 import org.apache.openmeetings.persistence.beans.lang.FieldLanguage;
 import org.apache.openmeetings.persistence.beans.user.State;
 import org.apache.openmeetings.persistence.beans.user.User;
-import org.apache.openmeetings.templates.RequestContactTemplate;
-import org.apache.openmeetings.utils.crypt.ManageCryptStyle;
-import org.apache.openmeetings.utils.mail.MailHandler;
-import org.apache.openmeetings.utils.math.CalendarPatterns;
 import org.apache.openmeetings.web.user.dashboard.PrivateRoomsWidgetDescriptor;
 import org.apache.openmeetings.web.user.dashboard.RssWidgetDescriptor;
 import org.apache.openmeetings.web.user.dashboard.StartWidgetDescriptor;
@@ -293,54 +286,4 @@ public class WebSession extends AbstractAuthenticatedWebSession {
 			dashboardContext.getDashboardPersiter().save(dashboard);
 		}
 	}
-
-	public static long addUserToContactList(long userIdToAdd) {
-		//FIXME !!!!! modify links
-		String hash = getBean(ManageCryptStyle.class).getInstanceOfCrypt()
-			.createPassPhrase(CalendarPatterns.getDateWithTimeByMiliSeconds(new Date()));
-
-		Long userContactId = getBean(UserContactsDao.class).addUserContact(userIdToAdd, getUserId(), true, hash);
-
-		User user = getBean(UsersDao.class).get(getUserId());
-		User userToAdd = getBean(UsersDao.class).get(userIdToAdd);
-
-		String fValue1192 = getString(1192);
-		String fValue1193 = getString(1193);
-		String fValue1190 = getString(1190);
-		String fValue1191 = getString(1191);
-		String fValue1196 = getString(1196);
-
-		StringBuilder message = new StringBuilder();
-		message.append(fValue1192).append(" ")
-			.append(userToAdd.getFirstname()).append(" ")
-			.append(userToAdd.getLastname()).append("<br/><br/>")
-			.append(user.getFirstname()).append(" ").append(user.getLastname())
-			.append(" ").append(fValue1193).append("<br/>")
-			.append(getString(1194)).append("<br/>");
-
-		getBean(PrivateMessagesDao.class).addPrivateMessage(
-			user.getFirstname() + " " + user.getLastname() + " " + fValue1193
-			, message.toString(), 0L, user, userToAdd, userToAdd, false, null
-			, true, userContactId, userToAdd.getAdresses().getEmail());
-
-		String link = get().getBaseUrl() + "?cuser=" + hash;
-
-		String accept_link = link + "&tAccept=yes";
-		String deny_link = link + "&tAccept=no";
-
-		String aLinkHTML = "<a href='" + accept_link + "'>" + fValue1190 + "</a><br/>";
-		String denyLinkHTML = "<a href='" + deny_link + "'>" + fValue1191 + "</a><br/>";
-		String profileLinkHTML = "<a href='" + link + "'>" + fValue1196 + "</a><br/>";
-
-		String template = getBean(RequestContactTemplate.class)
-				.getRequestContactTemplate(message.toString(), aLinkHTML, denyLinkHTML, profileLinkHTML);
-
-		if (userToAdd.getAdresses() != null) {
-			getBean(MailHandler.class).send(userToAdd.getAdresses().getEmail(),
-					user.getFirstname() + " " + user.getLastname() + " " + fValue1193, template);
-		}
-
-		return userContactId;
-	}
-	
 }

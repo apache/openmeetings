@@ -494,7 +494,7 @@ public class BackupImportController extends AbstractUploadController {
 			List<UserContact> list = readList(serializer, f, "userContacts.xml", "usercontacts", UserContact.class, true);
 			for (UserContact uc : list) {
 				Long ucId = uc.getUserContactId();
-				UserContact storedUC = userContactsDao.getUserContacts(ucId);
+				UserContact storedUC = userContactsDao.get(ucId);
 
 				if (storedUC == null && uc.getContact() != null && uc.getContact().getUser_id() != null) {
 					uc.setUserContactId(0);

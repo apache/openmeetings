@@ -814,7 +814,7 @@ public class UserService {
 			// users only
 			if (authLevelUtil.checkUserLevel(user_level)) {
 
-				UserContact userContacts = userContactsDao.getUserContacts(userContactId);
+				UserContact userContacts = userContactsDao.get(userContactId);
 
 				if (userContacts == null) {
 					return -46L;
@@ -840,7 +840,7 @@ public class UserService {
 			if (authLevelUtil.checkUserLevel(user_level)) {
 
 				UserContact userContacts = userContactsDao
-						.getUserContacts(userContactId);
+						.get(userContactId);
 
 				if (userContacts == null) {
 					return -49;
@@ -863,7 +863,7 @@ public class UserService {
 			// users only
 			if (authLevelUtil.checkUserLevel(user_level)) {
 
-				UserContact userContacts = userContactsDao.getUserContacts(userContactId);
+				UserContact userContacts = userContactsDao.get(userContactId);
 
 				if (userContacts == null) {
 					return -46L;
@@ -878,7 +878,7 @@ public class UserService {
 					userContactsDao.updateContactStatus(userContactId, false);
 
 					userContacts = userContactsDao
-							.getUserContacts(userContactId);
+							.get(userContactId);
 
 					userContactsDao.addUserContact(userContacts.getOwner()
 							.getUser_id(), users_id, false, "");
@@ -1602,7 +1602,7 @@ public class UserService {
 			if (authLevelUtil.checkUserLevel(user_level)) {
 
 				UserContact userContacts = userContactsDao
-						.getUserContacts(userContactId);
+						.get(userContactId);
 
 				userContacts.setShareCalendar(shareCalendar);
 
