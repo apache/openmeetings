@@ -93,6 +93,7 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 	//@Override
 	public void setModelObjectWithAjaxTarget(Appointment object, AjaxRequestTarget target) {
 		form.setModelObject(object);
+		form.setEnabled(object.getUserId() == null || getUserId() == object.getUserId().getUser_id());
 		log.debug(" -- setModelObjectWithAjaxTarget -- Current model " + object);
 		if (object.getAppointmentId() != null) {
 			delete.setVisible(true, target);
@@ -115,13 +116,11 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 		confirmDelete = new MessageDialog("confirmDelete", WebSession.getString(814), WebSession.getString(833), DialogButtons.OK_CANCEL, DialogIcon.WARN){
 			private static final long serialVersionUID = 1L;
 
-			public void onClose(AjaxRequestTarget target, DialogButton button)
-			{
+			public void onClose(AjaxRequestTarget target, DialogButton button) {
 				if (button.equals(DialogButtons.OK)){
 					deleteAppointment(target);
 				}
 			}
-			
 		};
 		add(confirmDelete);
 	}
@@ -179,7 +178,6 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 			super.onModelChanged();
 			
 			Appointment a = getModelObject();
-			
 			List<AppointmentReminderTyps> remindTypes = getRemindTypes();
 			if (a.getRemind() == null && !remindTypes.isEmpty()) {
 				a.setRemind(remindTypes.get(0));
