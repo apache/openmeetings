@@ -20,6 +20,7 @@ package org.apache.openmeetings.web.user.calendar;
 
 import static org.apache.openmeetings.OpenmeetingsVariables.webAppRootKey;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import org.apache.openmeetings.data.calendar.daos.AppointmentDao;
@@ -48,6 +49,7 @@ public class CalendarPanel extends UserPanel {
 	private static final Logger log = Red5LoggerFactory.getLogger(CalendarPanel.class, webAppRootKey);
 	private static final long serialVersionUID = 1L;
 	private static final String javaScriptMarkup = "setCalendarHeight();";
+	private static final String javaScriptAddDatepicker = "addCalButton('left', 'Datepicker', 'datepicker');";
 	private Calendar calendar;
 	
 	@Override
@@ -73,6 +75,7 @@ public class CalendarPanel extends UserPanel {
 		AjaxRequestTarget target = getRequestCycle().find(AjaxRequestTarget.class);
 		if (target != null) {
 			target.appendJavaScript(javaScriptMarkup);
+			target.appendJavaScript(javaScriptAddDatepicker);
 		} else {
 			response.render(JavaScriptHeaderItem.forScript(javaScriptMarkup, this.getId()));
 		}
@@ -158,6 +161,9 @@ public class CalendarPanel extends UserPanel {
 			
 			@Override
 			public void onSelect(AjaxRequestTarget target, CalendarView view, Date start, Date end, boolean allDay) {
+				SimpleDateFormat formatDateJava = new SimpleDateFormat("MM/dd/yy");
+				String date = formatDateJava.format(start);
+				target.appendJavaScript("setDatepickerDate('datepicker','" +  date + "');");
 				Appointment a = getDefault();
 				if (CalendarView.month == view && start.equals(end)) {
 					java.util.Calendar now = WebSession.getCalendar();

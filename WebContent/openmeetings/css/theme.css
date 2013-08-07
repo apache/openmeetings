@@ -895,3 +895,6 @@ tr.unread {
 .fht-tbody {
 	background-color: white;
 }
+#ui-datepicker-div{
+    z-index: 100 !important;
+}

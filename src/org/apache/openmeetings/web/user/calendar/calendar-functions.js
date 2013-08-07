@@ -34,3 +34,40 @@ $(function() {
     $(window).load(function() { setCalendarHeight(); } );
     $(window).resize(function() { setCalendarHeight(); } );
 });
+
+function addCalButton(where, text, id) {
+	var my_button = '<span class="fc-header-space"></span>' +
+		'<span class="fc-button fc-button-nextYear fc-state-default fc-corner-right" unselectable="on">' +
+		'<input type="text" id="' + id + '" value="' + text +'" /></span>';
+	$("td.fc-header-" + where).append(my_button);
+	 
+	var dp = $("#"+id);
+	dp.datepicker({
+		showOn: "button",
+		buttonImage: "images/calendar.gif",
+		buttonImageOnly: true,
+		changeMonth: true,
+		changeYear: true,
+		changeDay: true,
+		onChangeMonthYear: function(year, month, inst) {
+		     var date = new Date();
+		     $('#${markupId}').fullCalendar('gotoDate', year, month-1, date.getDate());
+		},
+		onSelect: function(dateText, inst) {
+		     var date = new Date(dateText);
+		     $('#${markupId}').fullCalendar('gotoDate', date.getFullYear(), date.getMonth(), date.getDate());
+		}
+	});
+	
+	dp.datepicker("option", "dayNames", $('#${markupId}').fullCalendar("option","dayNames"));
+	dp.datepicker("option", "dayNamesShort", $('#${markupId}').fullCalendar("option","dayNamesShort"));
+	dp.datepicker("option", "dayNamesMin", $('#${markupId}').fullCalendar("option","dayNamesShort"));
+	dp.datepicker("option", "monthNames", $('#${markupId}').fullCalendar("option","monthNames"));
+	dp.datepicker("option", "monthNamesShort", $('#${markupId}').fullCalendar("option","monthNamesShort"));
+	
+	dp.hide();
+}
+ 
+function setDatepickerDate(id, date) {
+	$("#"+id).datepicker('setDate', date);
+}
