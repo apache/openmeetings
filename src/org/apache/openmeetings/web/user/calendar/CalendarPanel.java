@@ -50,6 +50,7 @@ public class CalendarPanel extends UserPanel {
 	private static final long serialVersionUID = 1L;
 	private static final String javaScriptMarkup = "setCalendarHeight();";
 	private static final String javaScriptAddDatepicker = "addCalButton('left', 'Datepicker', 'datepicker');";
+	private static final SimpleDateFormat formatDateJava = new SimpleDateFormat("MM/dd/yy");
 	private Calendar calendar;
 	
 	@Override
@@ -161,9 +162,7 @@ public class CalendarPanel extends UserPanel {
 			
 			@Override
 			public void onSelect(AjaxRequestTarget target, CalendarView view, Date start, Date end, boolean allDay) {
-				SimpleDateFormat formatDateJava = new SimpleDateFormat("MM/dd/yy");
-				String date = formatDateJava.format(start);
-				target.appendJavaScript("setDatepickerDate('datepicker','" +  date + "');");
+				target.appendJavaScript("setDatepickerDate('datepicker','" +  formatDateJava.format(start) + "');");
 				Appointment a = getDefault();
 				if (CalendarView.month == view && start.equals(end)) {
 					java.util.Calendar now = WebSession.getCalendar();
