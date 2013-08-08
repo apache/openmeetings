@@ -139,12 +139,17 @@ public class UsersDao implements IDataProviderDao<User> {
 		return u;
 	}
 	
+	// TODO: Why the password field is not set via the Model is because its
+	// FetchType is Lazy, this extra hook here might be not needed with a
+	// different mechanism to protect the password from being read
+	// sebawagner, 01.10.2012
 	public User update(User user, String password, long updatedBy) throws NoSuchAlgorithmException {
 		User u = update(user, updatedBy);
 		if (password != null && !password.isEmpty()) {
-			u = get(u.getUser_id(), true);
-			u.updatePassword(cryptManager, configurationDao, password);
-			u = update(u, updatedBy);
+			//OpenJPA is not allowing to set fields not being fetched before
+			User u1 = get(u.getUser_id(), true);
+			u1.updatePassword(cryptManager, configurationDao, password);
+			update(u1, updatedBy);
 		}
 		return u;
 	}

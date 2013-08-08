@@ -77,10 +77,6 @@ public class UserForm extends AdminBaseForm<User> {
 	@Override
 	protected void onSaveSubmit(AjaxRequestTarget target, Form<?> form) {
 		User u = getModelObject();
-		// TODO: Why the password field is not set via the Model is because its
-		// FetchType is Lazy, this extra hook here might be not needed with a
-		// different mechanism to protect the password from being read
-		// sebawagner, 01.10.2012
 		try {
 			u = getBean(UsersDao.class).update(u, generalForm.getPasswordField().getConvertedInput(), getUserId());
 		} catch (Exception e) {
