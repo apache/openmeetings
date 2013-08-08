@@ -20,13 +20,16 @@ package org.apache.openmeetings.web.pages.auth;
 
 import static org.apache.openmeetings.web.app.Application.getAuthenticationStrategy;
 import static org.apache.openmeetings.web.app.Application.getBean;
+import static org.apache.openmeetings.web.pages.auth.SignInPage.allowOAuthLogin;
 import static org.apache.openmeetings.web.pages.auth.SignInPage.allowRegister;
 import static org.apache.wicket.ajax.attributes.CallbackParameter.resolved;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.openmeetings.data.oauth.OAuth2Dao;
 import org.apache.openmeetings.persistence.beans.basic.LdapConfig;
+import org.apache.openmeetings.persistence.beans.user.oauth.OAuthServer;
 import org.apache.openmeetings.remote.LdapConfigService;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.OmAuthenticationStrategy;
@@ -62,6 +65,9 @@ import com.googlecode.wicket.jquery.core.Options;
 import com.googlecode.wicket.jquery.ui.effect.JQueryEffectBehavior;
 import com.googlecode.wicket.jquery.ui.widget.dialog.AbstractFormDialog;
 import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
+import com.googlecode.wicket.jquery.ui.widget.menu.IMenuItem;
+import com.googlecode.wicket.jquery.ui.widget.menu.Menu;
+import com.googlecode.wicket.jquery.ui.widget.menu.MenuItem;
 
 public class SignInDialog extends AbstractFormDialog<String> {
 	private static final long serialVersionUID = 7746996016261051947L;
@@ -142,7 +148,7 @@ public class SignInDialog extends AbstractFormDialog<String> {
 	
 	@Override
 	public int getWidth() {
-		return 450;
+		return allowOAuthLogin()? 550: 450;
 	}
 	
 	@Override
@@ -264,8 +270,32 @@ public class SignInDialog extends AbstractFormDialog<String> {
 					setResponsePage(SwfPage.class, pp);
 				}
 			});
+			add(new WebMarkupContainer("oauthlist").add(createOAuthMenu()).setVisible(allowOAuthLogin()));
 		}
 
+		private Menu createOAuthMenu() {
+			List<IMenuItem> items = new ArrayList<IMenuItem>();
+			OAuth2Dao oAuth2Dao = getBean(OAuth2Dao.class);
+			for (final OAuthServer server: oAuth2Dao.getEnabledOAuthServers()) {
+				MenuItem menuItem = new MenuItem(server.getName()) {
+
+					private static final long serialVersionUID = 5558961674358450012L;
+
+					@Override
+					public void onClick(AjaxRequestTarget target) {
+						PageParameters parameters = new PageParameters();
+						parameters.add("oauthid", server.getId());
+						setResponsePage(SignInPage.class, parameters);
+					}
+					
+				};
+				items.add(menuItem);
+			}
+			Menu result = new Menu("oauthMenu", items);
+			result.setVisible(allowOAuthLogin());
+			return result;
+		}
+		
 		private void alreadyLoggedIn() {
 			// logon successful. Continue to the original destination
 			continueToOriginalDestination();

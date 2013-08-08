@@ -284,6 +284,7 @@
 	<bean id="chatDao" class="org.apache.openmeetings.data.chat.ChatDao" />
 	<bean id="clientDao" class="org.apache.openmeetings.data.conference.dao.ClientDao" />
 	<bean id="mailMessageDao" class="org.apache.openmeetings.data.basic.dao.MailMessageDao" />
+	<bean id="oauth2Dao" class="org.apache.openmeetings.data.oauth.OAuth2Dao" />
 
 	<!-- No Interface -->
 	<bean id="manageCryptStyle" class="org.apache.openmeetings.utils.crypt.ManageCryptStyle" />

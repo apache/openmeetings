@@ -52,6 +52,7 @@ import org.apache.openmeetings.data.calendar.daos.AppointmentReminderTypDao;
 import org.apache.openmeetings.data.conference.PollManager;
 import org.apache.openmeetings.data.conference.RoomManager;
 import org.apache.openmeetings.data.conference.dao.SipDao;
+import org.apache.openmeetings.data.oauth.OAuth2Dao;
 import org.apache.openmeetings.data.user.OrganisationManager;
 import org.apache.openmeetings.data.user.UserManager;
 import org.apache.openmeetings.data.user.dao.SalutationDao;
@@ -61,6 +62,8 @@ import org.apache.openmeetings.persistence.beans.basic.OmTimeZone;
 import org.apache.openmeetings.persistence.beans.lang.FieldLanguage;
 import org.apache.openmeetings.persistence.beans.lang.Fieldlanguagesvalues;
 import org.apache.openmeetings.persistence.beans.lang.Fieldvalues;
+import org.apache.openmeetings.persistence.beans.user.oauth.OAuthServer;
+import org.apache.openmeetings.persistence.beans.user.oauth.OAuthServer.RequestMethod;
 import org.apache.openmeetings.utils.ImportHelper;
 import org.apache.openmeetings.utils.OmFileHelper;
 import org.dom4j.Document;
@@ -105,6 +108,8 @@ public class ImportInitvalues {
 	private PollManager pollManager;
 	@Autowired
 	private SipDao sipDao;
+	@Autowired
+	private OAuth2Dao oauthDao;
 	private int progress = 0;
 
 	public int getProgress() {
@@ -213,10 +218,13 @@ public class ImportInitvalues {
 				true, false, 3, "Administration of LDAP Configs", 6, false,
 				1460L);
 
-		navimanagement.addMainStructure("adminModuleBackup", null, 21, 367,
+		navimanagement.addMainStructure("adminModuleOAuth", null, 21, 1571, 
+				true, false, 3, "Administration of OAuth2 servers", 6, false, 1572L);
+
+		navimanagement.addMainStructure("adminModuleBackup", null, 22, 367,
 				true, false, 3, "Administration of Backups", 6, false, 1461L);
 
-		navimanagement.addMainStructure("adminModuleServers", null, 22, 1498,
+		navimanagement.addMainStructure("adminModuleServers", null, 23, 1498,
 				true, false, 3, "Administration of Servers", 6, false, 1499L);
 		log.debug("MainMenu ADDED");
 	}
@@ -971,6 +979,41 @@ public class ImportInitvalues {
 		log.debug("All languages are imported");
 	}
 
+	public void loadInitialOAuthServers() throws Exception {
+		// Yandex
+		OAuthServer yandexServer = new OAuthServer();
+		yandexServer.setName("Yandex");
+		yandexServer.setClientId("<put your client_id>");
+		yandexServer.setClientSecret("<put your client_secret>");
+		yandexServer.setEmailParamName("default_email");
+		yandexServer.setEnabled(false);
+		yandexServer.setLoginParamName("default_email");
+		yandexServer.setRequestInfoUrl("https://login.yandex.ru/info?format=json&oauth_token={$access_token}");
+		yandexServer.setRequestTokenUrl("https://oauth.yandex.ru/token");
+		yandexServer.setRequestKeyUrl("https://oauth.yandex.ru/authorize?response_type=code&client_id={$client_id}");
+		yandexServer.setRequestTokenAttributes("grant_type=authorization_code&code={$code}&client_id={$client_id}&client_secret={$client_secret}");
+		yandexServer.setRequestTokenMethod(RequestMethod.POST);
+		oauthDao.update(yandexServer, null);
+		
+		// Google
+		OAuthServer googleServer = new OAuthServer();
+		googleServer.setName("Google");
+		googleServer.setEnabled(false);
+		googleServer.setClientId("<put your client_id>");
+		googleServer.setClientSecret("<put your client_secret>");
+		googleServer.setRequestKeyUrl("https://accounts.google.com/o/oauth2/auth?redirect_uri={$redirect_uri}&response_type=code&client_id={$client_id}"
+				+ "&scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile");
+		googleServer.setRequestTokenUrl("https://accounts.google.com/o/oauth2/token");
+		googleServer.setRequestTokenMethod(RequestMethod.POST);
+		googleServer.setRequestTokenAttributes("code={$code}&client_id={$client_id}&client_secret={$client_secret}&redirect_uri={$redirect_uri}&grant_type=authorization_code");
+		googleServer.setRequestInfoUrl("https://www.googleapis.com/oauth2/v1/userinfo?access_token={$access_token}");
+		googleServer.setLoginParamName("email");
+		googleServer.setEmailParamName("email");
+		googleServer.setFirstnameParamName("given_name");
+		googleServer.setLastnameParamName("family_name");
+		oauthDao.update(googleServer, null);
+	}
+	
 	// ------------------------------------------------------------------------------
 
 	/**
@@ -1021,6 +1064,8 @@ public class ImportInitvalues {
 
 		loadConfiguration(cfg);
 		progress = 88;
+		loadInitialOAuthServers();
+		progress = 91;
 	}
 
 	public void loadAll(InstallationConfig cfg, boolean force) throws Exception {

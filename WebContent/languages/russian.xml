@@ -4736,4 +4736,55 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
   <string id="1570" name="remindertype_iCal_email">
     <value>iCal e-майл</value>
   </string>
+  <string id="1571" name="oauth2">
+    <value>OAuth2</value>
+  </string>
+  <string id="1572" name="oauth2">
+    <value>Конфигурировать OAuth2</value>
+  </string>
+  <string id="1573" name="oauth2">
+    <value>Название</value>
+  </string>
+  <string id="1574" name="oauth2">
+    <value>Активен</value>
+  </string>
+  <string id="1575" name="oauth2">
+    <value>URL значка</value>
+  </string>
+  <string id="1576" name="oauth2">
+    <value>client_id</value>
+  </string>
+  <string id="1577" name="oauth2">
+    <value>client_secret</value>
+  </string>
+  <string id="1578" name="oauth2">
+    <value>URL запроса ключа</value>
+  </string>
+  <string id="1579" name="oauth2">
+    <value>URL запроса токена</value>
+  </string>
+  <string id="1580" name="oauth2">
+    <value>URL запроса данных</value>
+  </string>
+  <string id="1581" name="oauth2">
+    <value>Настройка OAuth2</value>
+  </string>
+  <string id="1582" name="oauth2">
+    <value>Имя пар-ра "логин"</value>
+  </string>
+  <string id="1583" name="oauth2">
+    <value>Имя пар-ра "email"</value>
+  </string>
+  <string id="1584" name="oauth2">
+    <value>Имя параметра "имя"</value>
+  </string>
+  <string id="1585" name="oauth2">
+    <value>Имя пар-ра "фамилия"</value>
+  </string>
+  <string id="1586" name="oauth2">
+    <value>Атрибуты запроса токена</value>
+  </string>
+  <string id="1587" name="oauth2">
+    <value>Uri возврата</value>
+  </string>
 </language>

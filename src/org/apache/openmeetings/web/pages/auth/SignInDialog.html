@@ -30,25 +30,34 @@
 	<form wicket:id="signin">
 		<table>
 			<tr>
-				<td class="desc"><wicket:ommessage key="109" /></td>
-				<td><input wicket:id="login" type="text" value="" /></td>
-			</tr>
-			<tr>
-				<td class="desc"><wicket:ommessage key="110" /></td>
-				<td><input wicket:id="pass" type="password" value="" /></td>
-			</tr>
-			<tr wicket:id="ldap">
-				<td class="desc"><wicket:ommessage key="1372" /></td>
-				<td><select wicket:id="domain"></select></td>
-			</tr>
-			<tr>
-				<td></td>
-				<td style="white-space: nowrap;"><input wicket:id="rememberMe" 
-					type="checkbox" /><label wicket:for="rememberMe"><wicket:ommessage key="288" /></label></td>
-			</tr>
-			<tr>
-				<td><a wicket:id="forget"><wicket:ommessage key="311"/></a></td>
-				<td><a wicket:id="netTest" target="_blank"><wicket:ommessage key="1527"/></a></td>
+				<td>
+					<table>
+						<tr>
+							<td class="desc"><wicket:ommessage key="109" /></td>
+							<td><input wicket:id="login" type="text" value="" /></td>
+						</tr>
+						<tr>
+							<td class="desc"><wicket:ommessage key="110" /></td>
+							<td><input wicket:id="pass" type="password" value="" /></td>
+						</tr>
+						<tr wicket:id="ldap">
+							<td class="desc"><wicket:ommessage key="1372" /></td>
+							<td><select wicket:id="domain"></select></td>
+						</tr>
+						<tr>
+							<td></td>
+							<td style="white-space: nowrap;"><input wicket:id="rememberMe" 
+								type="checkbox" /><label wicket:for="rememberMe"><wicket:ommessage key="288" /></label></td>
+						</tr>
+						<tr>
+							<td><a wicket:id="forget"><wicket:ommessage key="311"/></a></td>
+							<td><a wicket:id="netTest" target="_blank"><wicket:ommessage key="1527"/></a></td>
+						</tr>
+					</table>
+				</td>
+				<td wicket:id="oauthlist" style="border-left: 2px dotted;">
+					<div wicket:id="oauthMenu"/>
+				</td>
 			</tr>
 		</table>
 		<span wicket:id="feedback"></span>
