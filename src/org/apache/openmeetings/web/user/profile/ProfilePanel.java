@@ -52,11 +52,7 @@ public class ProfilePanel extends UserPanel {
 					protected void onSaveSubmit(AjaxRequestTarget target, Form<?> form) {
 						User u = getModelObject();
 						try {
-							getBean(UsersDao.class).update(u, getUserId());
-							String pass = userForm.getPasswordField().getConvertedInput();
-							if (pass != null && !pass.isEmpty()) {
-								u = getBean(UsersDao.class).updatePassword(u.getUser_id(), pass, getUserId());
-							}
+							u = getBean(UsersDao.class).update(u, userForm.getPasswordField().getConvertedInput(), getUserId());
 						} catch (Exception e) {
 							// FIXME update feedback with the error details
 						}

@@ -82,11 +82,7 @@ public class UserForm extends AdminBaseForm<User> {
 		// different mechanism to protect the password from being read
 		// sebawagner, 01.10.2012
 		try {
-			getBean(UsersDao.class).update(u, getUserId());
-			String pass = generalForm.getPasswordField().getConvertedInput();
-			if (pass != null && !pass.isEmpty()) {
-				u = getBean(UsersDao.class).updatePassword(u.getUser_id(), pass, getUserId());
-			}
+			u = getBean(UsersDao.class).update(u, generalForm.getPasswordField().getConvertedInput(), getUserId());
 		} catch (Exception e) {
 			// FIXME update feedback with the error details
 		}

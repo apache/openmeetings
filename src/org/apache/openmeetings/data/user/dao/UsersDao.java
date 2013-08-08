@@ -139,6 +139,16 @@ public class UsersDao implements IDataProviderDao<User> {
 		return u;
 	}
 	
+	public User update(User user, String password, long updatedBy) throws NoSuchAlgorithmException {
+		User u = update(user, updatedBy);
+		if (password != null && !password.isEmpty()) {
+			u = get(u.getUser_id(), true);
+			u.updatePassword(cryptManager, configurationDao, password);
+			u = update(u, updatedBy);
+		}
+		return u;
+	}
+	
 	public void delete(User u, Long userId) {
 		deleteUserID(u.getUser_id());
 	}
@@ -172,12 +182,6 @@ public class UsersDao implements IDataProviderDao<User> {
 		return null;
 	}
 
-	public User updatePassword(long userId, String password, long updateBy) throws NoSuchAlgorithmException {
-		User u = get(userId, true);
-		u.updatePassword(cryptManager, configurationDao, password);
-		return update(u, updateBy);
-	}
-	
 	public Long deleteUserID(long userId) {
 		try {
 			if (userId != 0) {
