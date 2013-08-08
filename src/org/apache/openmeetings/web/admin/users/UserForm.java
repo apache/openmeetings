@@ -30,7 +30,6 @@ import java.util.Arrays;
 import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
 import org.apache.openmeetings.data.user.dao.UsersDao;
 import org.apache.openmeetings.persistence.beans.user.User;
-import org.apache.openmeetings.utils.crypt.ManageCryptStyle;
 import org.apache.openmeetings.web.admin.AdminBaseForm;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.ComunityUserForm;
@@ -83,11 +82,11 @@ public class UserForm extends AdminBaseForm<User> {
 		// different mechanism to protect the password from being read
 		// sebawagner, 01.10.2012
 		try {
+			getBean(UsersDao.class).update(u, getUserId());
 			String pass = generalForm.getPasswordField().getConvertedInput();
 			if (pass != null && !pass.isEmpty()) {
-				u.updatePassword(getBean(ManageCryptStyle.class), getBean(ConfigurationDao.class), pass);
+				u = getBean(UsersDao.class).updatePassword(u.getUser_id(), pass, getUserId());
 			}
-			getBean(UsersDao.class).update(u, getUserId());
 		} catch (Exception e) {
 			// FIXME update feedback with the error details
 		}

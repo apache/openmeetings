@@ -21,6 +21,7 @@ package org.apache.openmeetings.data.user.dao;
 import static org.apache.openmeetings.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.openmeetings.persistence.beans.basic.Configuration.DEFAUT_LANG_KEY;
 
+import java.security.NoSuchAlgorithmException;
 import java.util.Date;
 import java.util.List;
 
@@ -143,27 +144,40 @@ public class UsersDao implements IDataProviderDao<User> {
 	}
 
 	public User get(long user_id) {
+		return get(user_id, false);
+	}
+	
+	private User get(long user_id, boolean force) {
 		if (user_id > 0) {
-			try {
-				TypedQuery<User> query = em.createNamedQuery("getUserById",
-						User.class);
-				query.setParameter("user_id", user_id);
+			TypedQuery<User> query = em.createNamedQuery("getUserById",
+					User.class);
+			query.setParameter("user_id", user_id);
 
-				User users = null;
-				try {
+			User users = null;
+			try {
+				if (force) {
+					@SuppressWarnings("unchecked")
+					OpenJPAQuery<User> kq = OpenJPAPersistence.cast(query);
+					kq.getFetchPlan().addFetchGroup("backupexport");
+					users = kq.getSingleResult();
+				} else {
 					users = query.getSingleResult();
-				} catch (NoResultException ex) {
 				}
-				return users;
-			} catch (Exception ex2) {
-				log.error("getUser", ex2);
+			} catch (NoResultException ex) {
 			}
+			return users;
 		} else {
 			log.info("[getUser] " + "Info: No USER_ID given");
 		}
 		return null;
 	}
 
+	public User updatePassword(long userId, String password, long updateBy) throws NoSuchAlgorithmException {
+		User u = get(userId, true);
+		u.updatePassword(cryptManager, configurationDao, password);
+		return update(u, updateBy);
+	}
+	
 	public Long deleteUserID(long userId) {
 		try {
 			if (userId != 0) {

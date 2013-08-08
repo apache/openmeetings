@@ -21,10 +21,8 @@ package org.apache.openmeetings.web.user.profile;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 
-import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
 import org.apache.openmeetings.data.user.dao.UsersDao;
 import org.apache.openmeetings.persistence.beans.user.User;
-import org.apache.openmeetings.utils.crypt.ManageCryptStyle;
 import org.apache.openmeetings.web.common.ComunityUserForm;
 import org.apache.openmeetings.web.common.FormSaveRefreshPanel;
 import org.apache.openmeetings.web.common.UploadableProfileImagePanel;
@@ -56,7 +54,7 @@ public class ProfilePanel extends UserPanel {
 						try {
 							String pass = userForm.getPasswordField().getConvertedInput();
 							if (pass != null && !pass.isEmpty()) {
-								u.updatePassword(getBean(ManageCryptStyle.class), getBean(ConfigurationDao.class), pass);
+								u = getBean(UsersDao.class).updatePassword(u.getUser_id(), pass, getUserId());
 							}
 							getBean(UsersDao.class).update(u, getUserId());
 						} catch (Exception e) {
