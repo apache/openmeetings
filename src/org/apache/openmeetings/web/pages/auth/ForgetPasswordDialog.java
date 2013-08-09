@@ -171,7 +171,6 @@ public class ForgetPasswordDialog extends AbstractFormDialog<String> {
 
 	@Override
 	protected void onSubmit(AjaxRequestTarget target) {
-		//FIXME forgot password should be handled be Wicket
 		getBean(UserManager.class).resetUser(type == Type.email ? name : "", type == Type.login ? name : ""
 			, WebSession.get().getBaseUrl() + getRequestCycle().urlFor(ResetPage.class, new PageParameters()).toString().substring(2));
 	}

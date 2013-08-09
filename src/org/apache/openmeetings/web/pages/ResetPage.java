@@ -34,6 +34,8 @@ public class ResetPage extends BaseNotInitedPage {
 			Object user = Application.getBean(UsersDao.class).getUserByHash(resetHash);
 			if (user instanceof User){
 				add(new ResetPasswordDialog("resetPassword", (User)user));
+			}else {
+				setResponsePage(Application.get().getSignInPageClass());		
 			}
 		} else {
 			setResponsePage(Application.get().getSignInPageClass());		
