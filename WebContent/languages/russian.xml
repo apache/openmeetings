@@ -1011,7 +1011,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>новый пароль</value>
   </string>
   <string id="329" name="resetpass">
-    <value>еще раз введите пароль</value>
+    <value>повторите пароль</value>
   </string>
   <string id="330" name="resetpass">
     <value>Вы ввели неидентичные пароли.</value>

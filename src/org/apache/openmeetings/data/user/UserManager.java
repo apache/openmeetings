@@ -1293,7 +1293,7 @@ public class UserManager {
 		us.setResethash(cryptManager.getInstanceOfCrypt().createPassPhrase(
 				loginData));
 		usersDao.update(us, -1L);
-		String reset_link = appLink + "?lzproxied=solo&hash="
+		String reset_link = appLink + "?hash="
 				+ us.getResethash();
 
 		String email = us.getAdresses().getEmail();

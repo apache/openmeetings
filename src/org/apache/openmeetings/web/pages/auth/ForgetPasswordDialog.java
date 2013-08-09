@@ -26,7 +26,7 @@ import java.util.List;
 import org.apache.openmeetings.data.user.UserManager;
 import org.apache.openmeetings.data.user.dao.UsersDao;
 import org.apache.openmeetings.web.app.WebSession;
-import org.apache.openmeetings.web.pages.SwfPage;
+import org.apache.openmeetings.web.pages.ResetPage;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormChoiceComponentUpdatingBehavior;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
@@ -41,8 +41,13 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
+import com.googlecode.wicket.jquery.core.JQueryBehavior;
+import com.googlecode.wicket.jquery.core.Options;
 import com.googlecode.wicket.jquery.ui.widget.dialog.AbstractFormDialog;
 import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
+import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButtons;
+import com.googlecode.wicket.jquery.ui.widget.dialog.DialogIcon;
+import com.googlecode.wicket.jquery.ui.widget.dialog.MessageDialog;
 
 public class ForgetPasswordDialog extends AbstractFormDialog<String> {
 	private static final long serialVersionUID = 8494008571497363018L;
@@ -54,6 +59,7 @@ public class ForgetPasswordDialog extends AbstractFormDialog<String> {
 	private SignInDialog s;
 	private String name;
 	private Type type = Type.email;
+    final MessageDialog confirmDialog;
 	
 	enum Type {
 		email
@@ -114,10 +120,29 @@ public class ForgetPasswordDialog extends AbstractFormDialog<String> {
 				}
 			}
 		});
+		confirmDialog = new MessageDialog("confirmDialog", WebSession.getString(312), WebSession.getString(321), DialogButtons.OK, DialogIcon.INFO){
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void onConfigure(JQueryBehavior behavior) {
+				super.onConfigure(behavior);
+		        behavior.setOption("dialogClass", Options.asString("no-close"));
+				behavior.setOption("closeOnEscape", false);
+			}
+			
+			public void onClose(AjaxRequestTarget target, DialogButton button) {
+				s.open(target);
+			}
+		};
+		add(confirmDialog);
 	}
 
 	public void onClose(AjaxRequestTarget target, DialogButton button) {
-		s.open(target);
+		if (button.equals(send)){
+			confirmDialog.open(target);
+		} else {
+			s.open(target);
+		}
 	}
 
 	public void setSignInDialog(SignInDialog s) {
@@ -148,6 +173,6 @@ public class ForgetPasswordDialog extends AbstractFormDialog<String> {
 	protected void onSubmit(AjaxRequestTarget target) {
 		//FIXME forgot password should be handled be Wicket
 		getBean(UserManager.class).resetUser(type == Type.email ? name : "", type == Type.login ? name : ""
-			, "" + getRequestCycle().urlFor(SwfPage.class, new PageParameters()));
+			, WebSession.get().getBaseUrl() + getRequestCycle().urlFor(ResetPage.class, new PageParameters()).toString().substring(2));
 	}
 }

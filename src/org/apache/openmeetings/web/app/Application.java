@@ -26,6 +26,7 @@ import org.apache.openmeetings.remote.red5.ScopeApplicationAdapter;
 import org.apache.openmeetings.web.pages.ActivatePage;
 import org.apache.openmeetings.web.pages.MainPage;
 import org.apache.openmeetings.web.pages.NotInitedPage;
+import org.apache.openmeetings.web.pages.ResetPage;
 import org.apache.openmeetings.web.pages.SwfPage;
 import org.apache.openmeetings.web.pages.auth.SignInPage;
 import org.apache.openmeetings.web.pages.install.InstallWizardPage;
@@ -106,6 +107,7 @@ public class Application extends AuthenticatedWebApplication {
 		mountPage("install", InstallWizardPage.class);
 		mountPage("signin", getSignInPageClass());
 		mountPage("activate", ActivatePage.class);
+		mountPage("reset", ResetPage.class);
 		mountResource("/recordings/mp4/${id}", new Mp4RecordingResourceReference());
 		mountResource("/recordings/ogg/${id}", new OggRecordingResourceReference());
 	}
