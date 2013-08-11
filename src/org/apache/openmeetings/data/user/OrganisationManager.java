@@ -73,26 +73,6 @@ public class OrganisationManager {
 	private AuthLevelUtil authLevelUtil;
 
 	/**
-	 * adds a new organisation if userlevel is admin
-	 * 
-	 * @param user_level
-	 * @param orgname
-	 * @param user_id
-	 * @return
-	 */
-	public Long addOrganisation(Long user_level, String orgname, long user_id) {
-		try {
-			if (authLevelUtil.checkAdminLevel(user_level)) {
-				Long orgId = this.addOrganisation(orgname, user_id);
-				return orgId;
-			}
-		} catch (Exception err) {
-			log.error("addOrganisation", err);
-		}
-		return null;
-	}
-
-	/**
 	 * adds a new organisation to the table organisation
 	 * 
 	 * @param titelname
@@ -127,63 +107,6 @@ public class OrganisationManager {
 		return null;
 	}
 
-	/**
-	 * 
-	 * @param user_level
-	 * @param start
-	 * @param max
-	 * @param orderby
-	 * @return
-	 */
-	public SearchResult<Organisation> getOrganisations(long user_level, int start, int max,
-			String orderby, boolean asc) {
-		try {
-			if (authLevelUtil.checkAdminLevel(user_level)) {
-				SearchResult<Organisation> sresult = new SearchResult<Organisation>();
-				sresult.setObjectName(Organisation.class.getName());
-				sresult.setRecords(orgDao.count());
-				sresult.setResult(this.getOrganisations(start, max, orderby,
-						asc));
-				return sresult;
-			} else {
-				log.error("[getOrganisations] noPremission");
-			}
-		} catch (Exception ex2) {
-			log.error("[getOrganisations]", ex2);
-		}
-		return null;
-	}
-
-	/**
-	 * 
-	 * @param user_level
-	 * @return
-	 */
-	public List<Organisation> getOrganisations(int start, int max,
-			String orderby, boolean asc) {
-		try {
-			CriteriaBuilder cb = em.getCriteriaBuilder();
-			CriteriaQuery<Organisation> cq = cb.createQuery(Organisation.class);
-			Root<Organisation> c = cq.from(Organisation.class);
-			Predicate condition = cb.equal(c.get("deleted"), false);
-			cq.where(condition);
-			cq.distinct(asc);
-			if (asc) {
-				cq.orderBy(cb.asc(c.get(orderby)));
-			} else {
-				cq.orderBy(cb.desc(c.get(orderby)));
-			}
-			TypedQuery<Organisation> q = em.createQuery(cq);
-			q.setFirstResult(start);
-			q.setMaxResults(max);
-			List<Organisation> ll = q.getResultList();
-			return ll;
-		} catch (Exception ex2) {
-			log.error("[getOrganisations]", ex2);
-		}
-		return null;
-	}
-
 	public List<Organisation> getOrganisations(Long user_level) {
 		try {
 			if (authLevelUtil.checkAdminLevel(user_level)) {
@@ -201,33 +124,6 @@ public class OrganisationManager {
 			}
 		} catch (Exception ex2) {
 			log.error("[getOrganisations]", ex2);
-		}
-		return null;
-	}
-
-	/**
-	 * updates an organisation if user_level is admin
-	 * 
-	 * @param user_level
-	 * @param organisation_id
-	 * @param orgname
-	 * @param users_id
-	 * @return
-	 */
-	public Long updateOrganisation(Long user_level, long organisation_id,
-			String orgname, long users_id) {
-		try {
-
-			Organisation org = orgDao.get(organisation_id);
-			org.setName(orgname);
-			org.setUpdatedby(users_id);
-			org.setUpdatetime(new Date());
-
-			em.merge(org);
-
-			return org.getOrganisation_id();
-		} catch (Exception err) {
-			log.error("updateOrganisation", err);
 		}
 		return null;
 	}
@@ -330,27 +226,6 @@ public class OrganisationManager {
 	}
 
 	/**
-	 * get an organisation by id and only as admin
-	 * 
-	 * @param user_level
-	 * @param organisation_id
-	 * @return
-	 */
-	public Organisation getOrganisationById(long user_level,
-			long organisation_id) {
-		try {
-			if (authLevelUtil.checkAdminLevel(user_level)) {
-				return orgDao.get(organisation_id);
-			} else {
-				log.error("[getOrganisationById] authorization required");
-			}
-		} catch (Exception ex2) {
-			log.error("[getOrganisationById]", ex2);
-		}
-		return null;
-	}
-
-	/**
 	 * Gets an organisation by its id
 	 * 
 	 * @param organisation_id
@@ -379,33 +254,6 @@ public class OrganisationManager {
 
 	public Organisation getOrganisationByIdAndDeleted(long organisation_id) {
 		return getOrganisationByIdBackup(organisation_id);
-	}
-
-	public Long deleteOrganisation(long user_level, long organisation_id,
-			long updatedby) {
-		try {
-			if (authLevelUtil.checkAdminLevel(user_level)) {
-				return this.deleteOrganisation(organisation_id, updatedby);
-			}
-		} catch (Exception ex2) {
-			log.error("[deleteOrganisation]", ex2);
-		}
-		return null;
-	}
-
-	/**
-	 * 
-	 * @param organisation_id
-	 * @param updatedby
-	 * @return
-	 */
-	public Long deleteOrganisation(long organisation_id, long updatedby) {
-		try {
-			orgDao.delete(orgDao.get(organisation_id), updatedby);
-		} catch (Exception ex2) {
-			log.error("[deleteOrganisation]", ex2);
-		}
-		return organisation_id;
 	}
 
 	/**

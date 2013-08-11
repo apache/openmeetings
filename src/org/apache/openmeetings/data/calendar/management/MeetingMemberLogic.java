@@ -26,7 +26,6 @@ import org.apache.openmeetings.data.calendar.daos.MeetingMemberDao;
 import org.apache.openmeetings.data.conference.InvitationManager;
 import org.apache.openmeetings.data.conference.dao.InvitationDao;
 import org.apache.openmeetings.data.user.UserManager;
-import org.apache.openmeetings.persistence.beans.basic.OmTimeZone;
 import org.apache.openmeetings.persistence.beans.calendar.Appointment;
 import org.apache.openmeetings.persistence.beans.calendar.MeetingMember;
 import org.apache.openmeetings.persistence.beans.invitation.Invitations;
@@ -61,10 +60,8 @@ public class MeetingMemberLogic {
 	 * This can be either an internal or an external user, internal users have a
 	 * user id != null && > 0
 	 * 
-	 * jNameInternalTimeZone is needed for the mapping of the timezones
-	 * available
-	 * 
 	 * @author obecherer,seba.wagner
+	 * 
 	 * @param firstname
 	 * @param lastname
 	 * @param memberStatus
@@ -79,7 +76,6 @@ public class MeetingMemberLogic {
 	 * @param isPasswordProtected
 	 * @param password
 	 * @param timezone
-	 * @param jNameInternalTimeZone
 	 * @param invitorName
 	 *            can be different from the current firstname/lastname of course
 	 * @return
@@ -88,13 +84,14 @@ public class MeetingMemberLogic {
 			String memberStatus, String appointmentStatus, Long appointmentId,
 			Long userid, String email, String phone, String baseUrl, Long meeting_organizer,
 			Boolean invitor, Long language_id, Boolean isPasswordProtected,
-			String password, TimeZone timezone, OmTimeZone omTimeZone,
+			String password, TimeZone timezone,
 			String invitorName) {
 
 		try {
+			
 			Long memberId = meetingMemberDao.addMeetingMember(firstname,
 					lastname, memberStatus, appointmentStatus, appointmentId,
-					userid, email, phone, invitor, omTimeZone, false);
+					userid, email, phone, invitor, timezone, false); 
 
 			// DefaultInvitation
 			Appointment point = appointmentLogic
@@ -146,7 +143,8 @@ public class MeetingMemberLogic {
 								point.getAppointmentEndtime(),
 								point.getAppointmentId(),
 								invitorName,
-								omTimeZone);
+								timezone
+								);
 
 				invitationId = invitation.getInvitations_id();
 

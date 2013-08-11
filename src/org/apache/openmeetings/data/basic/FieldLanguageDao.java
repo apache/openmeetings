@@ -87,24 +87,6 @@ public class FieldLanguageDao implements Serializable {
 		}
 	}
 
-	public Long updateFieldLanguage(Long language_id, String langName,
-			String code, boolean deleted) {
-		try {
-			FieldLanguage fl = this.getFieldLanguageById(language_id);
-			fl.setUpdatetime(new Date());
-			if (langName.length() > 0)
-				fl.setName(langName);
-			if (code.length() > 0)
-				fl.setCode(code);
-			fl.setDeleted(deleted);
-			this.updateLanguage(fl);
-			return language_id;
-		} catch (Exception ex2) {
-			log.error("[updateLanguage]: ", ex2);
-		}
-		return new Long(-1);
-	}
-
 	public void delete(FieldLanguage fl) {
 		fl.setUpdatetime(new Date());
 		fl.setDeleted(true);

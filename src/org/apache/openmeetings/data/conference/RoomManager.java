@@ -1132,56 +1132,6 @@ public class RoomManager {
 		return null;
 	}
 
-	/**
-	 * Update a Record in the rooms table
-	 * @param rooms_id
-	 * @param roomtypes_id
-	 * @param name
-	 * @param ispublic
-	 * @param comment
-	 * @param hideActivitiesAndActions TODO
-	 * @param hideFilesExplorer TODO
-	 * @param hideActionsMenu TODO
-	 * @param hideScreenSharing TODO
-	 * @param hideWhiteboard TODO
-	 * @return
-	 */
-	public Long updateRoom(long user_level, long rooms_id, long roomtypes_id,
-			String name, boolean ispublic, String comment,
-			Long numberOfPartizipants, List<Integer> organisations,
-			Boolean appointment, Boolean isDemoRoom, Integer demoTime,
-			Boolean isModeratedRoom, List<Map<String, Object>> roomModerators,
-			Boolean allowUserQuestions, Boolean isAudioOnly, Boolean allowFontStyles, Boolean isClosed,
-			String redirectURL, String conferencePin,
-			Long ownerId, Boolean waitForRecording, Boolean allowRecording,
-			Boolean hideTopBar, Boolean hideChat, Boolean hideActivitiesAndActions, 
-			Boolean hideFilesExplorer, Boolean hideActionsMenu, Boolean hideScreenSharing, Boolean hideWhiteboard,
-			Boolean showMicrophoneStatus, Boolean chatModerated, boolean chatOpened, boolean filesOpened
-			, boolean autoVideoSelect, boolean sipEnabled) {
-		try {
-
-			log.debug("*** updateRoom numberOfPartizipants: "
-					+ numberOfPartizipants);
-			if (authLevelUtil.checkAdminLevel(user_level)) {
-
-				return this.updateRoomInternal(rooms_id, roomtypes_id, name,
-						ispublic, comment, numberOfPartizipants, organisations,
-						appointment, isDemoRoom, demoTime, isModeratedRoom,
-						roomModerators, allowUserQuestions, isAudioOnly, allowFontStyles,
-						isClosed, redirectURL, conferencePin,
-						ownerId, waitForRecording, allowRecording, hideTopBar, hideChat, 
-						hideActivitiesAndActions, hideFilesExplorer, hideActionsMenu, 
-						hideScreenSharing, hideWhiteboard, showMicrophoneStatus, chatModerated
-						, chatOpened, filesOpened, autoVideoSelect, sipEnabled);
-
-			}
-
-		} catch (Exception ex2) {
-			log.error("[updateRoom] ", ex2);
-		}
-		return null;
-	}
-
 	public Long updateRoomInternal(long rooms_id, long roomtypes_id,
 			String name, boolean ispublic, String comment,
 			Long numberOfPartizipants, List<Integer> organisations,

@@ -70,6 +70,5 @@
     
     <include href="viewUserProfile.lzx" />
     <include href="userSettings.lzx" />
-    <include href="editUserProfile.lzx" />
 
 </library>

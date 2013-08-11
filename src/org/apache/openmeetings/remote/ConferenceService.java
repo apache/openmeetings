@@ -24,7 +24,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TimeZone;
@@ -490,139 +489,6 @@ public class ConferenceService {
 				orderby, asc);
 	}
 
-	/**
-	 * get all Organisations of a room
-	 * 
-	 * @param SID
-	 * @param rooms_id
-	 * @return - all Organisations of a room
-	 */
-	public List<RoomOrganisation> getOrganisationByRoom(String SID,
-			long rooms_id) {
-		Long users_id = sessiondataDao.checkSession(SID);
-		Long user_level = userManager.getUserLevelByID(users_id);
-		return roomManager.getOrganisationsByRoom(user_level, rooms_id);
-	}
-
-	/**
-	 * 
-	 * @param SID
-	 * @param argObject
-	 * @return - id of the room being saved, null in case of the error
-	 */
-	public Long saveOrUpdateRoom(String SID, Object argObject) {
-		try {
-			Long users_id = sessiondataDao.checkSession(SID);
-			long User_level = userManager.getUserLevelByID(users_id);
-			log.debug("argObject: 1 - " + argObject.getClass().getName());
-			@SuppressWarnings("unchecked")
-			LinkedHashMap<String, Object> argObjectMap = (LinkedHashMap<String, Object>) argObject;
-			log.debug("argObject: 2 - "
-					+ argObjectMap.get("organisations").getClass().getName());
-			@SuppressWarnings("unchecked")
-			List<Integer> organisations = (List<Integer>) argObjectMap
-					.get("organisations");
-			Long rooms_id = Long.valueOf(
-					argObjectMap.get("rooms_id").toString()).longValue();
-			log.debug("rooms_id " + rooms_id);
-
-			@SuppressWarnings("unchecked")
-			List<Map<String, Object>> roomModerators = (List<Map<String, Object>>) argObjectMap
-					.get("roomModerators");
-
-			Integer demoTime = null;
-			if (argObjectMap.get("demoTime").toString() != null
-					&& argObjectMap.get("demoTime").toString().length() > 0) {
-				demoTime = Integer.valueOf(
-						argObjectMap.get("demoTime").toString()).intValue();
-			}
-
-			long roomId = -1;
-			if (rooms_id == 0) {
-				roomId = roomManager.addRoom(
-						User_level
-						, argObjectMap.get("name").toString()
-						, Long.valueOf(argObjectMap.get("roomtypes_id").toString()).longValue()
-						, argObjectMap.get("comment").toString()
-						, Long.valueOf(argObjectMap.get("numberOfPartizipants").toString()).longValue()
-						, Boolean.valueOf(argObjectMap.get("ispublic").toString())
-						, organisations
-						, Boolean.valueOf(argObjectMap.get("appointment").toString())
-						, Boolean.valueOf(argObjectMap.get("isDemoRoom").toString())
-						, demoTime
-						, Boolean.valueOf(argObjectMap.get("isModeratedRoom").toString())
-						, roomModerators
-						, Boolean.valueOf(argObjectMap.get("allowUserQuestions").toString())
-						, Boolean.valueOf(argObjectMap.get("isAudioOnly").toString())
-						, Boolean.valueOf(argObjectMap.get("allowFontStyles").toString())
-						, Boolean.valueOf(argObjectMap.get("isClosed").toString())
-						, argObjectMap.get("redirectURL").toString()
-						, argObjectMap.get("conferencePin").toString()
-						, Long.valueOf(argObjectMap.get("ownerId").toString()).longValue()
-						, Boolean.valueOf(argObjectMap.get("waitForRecording").toString())
-						, Boolean.valueOf(argObjectMap.get("allowRecording").toString())
-						, Boolean.valueOf(argObjectMap.get("hideTopBar").toString())
-						, Boolean.valueOf(argObjectMap.get("hideChat").toString())
-						, Boolean.valueOf(argObjectMap.get("hideActivitiesAndActions").toString())
-						, Boolean.valueOf(argObjectMap.get("hideFilesExplorer").toString())
-						, Boolean.valueOf(argObjectMap.get("hideActionsMenu").toString())
-						, Boolean.valueOf(argObjectMap.get("hideScreenSharing").toString())
-						, Boolean.valueOf(argObjectMap.get("hideWhiteboard").toString())
-						, Boolean.valueOf(argObjectMap.get("showMicrophoneStatus").toString())
-						, Boolean.valueOf(argObjectMap.get("chatModerated").toString())
-						, Boolean.valueOf(argObjectMap.get("chatOpened").toString())
-						, Boolean.valueOf(argObjectMap.get("filesOpened").toString())
-						, Boolean.valueOf(argObjectMap.get("autoVideoSelect").toString())
-						, Boolean.valueOf(argObjectMap.get("sipEnabled").toString())
-						);
-			} else if (rooms_id > 0) {
-				roomId = roomManager.updateRoom(
-						User_level
-						, rooms_id
-						, Long.valueOf(argObjectMap.get("roomtypes_id").toString()).longValue()
-						, argObjectMap.get("name").toString()
-						, Boolean.valueOf(argObjectMap.get("ispublic").toString())
-						, argObjectMap.get("comment").toString()
-						, Long.valueOf(argObjectMap.get("numberOfPartizipants").toString()).longValue()
-						, organisations
-						, Boolean.valueOf(argObjectMap.get("appointment").toString())
-						, Boolean.valueOf(argObjectMap.get("isDemoRoom").toString())
-						, demoTime
-						, Boolean.valueOf(argObjectMap.get("isModeratedRoom").toString())
-						, roomModerators
-						, Boolean.valueOf(argObjectMap.get("allowUserQuestions").toString())
-						, Boolean.valueOf(argObjectMap.get("isAudioOnly").toString())
-						, Boolean.valueOf(argObjectMap.get("allowFontStyles").toString())
-						, Boolean.valueOf(argObjectMap.get("isClosed").toString())
-						, argObjectMap.get("redirectURL").toString()
-						, argObjectMap.get("conferencePin").toString()
-						, Long.valueOf(argObjectMap.get("ownerId").toString()).longValue()
-						, Boolean.valueOf(argObjectMap.get("waitForRecording").toString())
-						, Boolean.valueOf(argObjectMap.get("allowRecording").toString())
-						, Boolean.valueOf(argObjectMap.get("hideTopBar").toString())
-						, Boolean.valueOf(argObjectMap.get("hideChat").toString())
-						, Boolean.valueOf(argObjectMap.get("hideActivitiesAndActions").toString())
-						, Boolean.valueOf(argObjectMap.get("hideFilesExplorer").toString())
-						, Boolean.valueOf(argObjectMap.get("hideActionsMenu").toString())
-						, Boolean.valueOf(argObjectMap.get("hideScreenSharing").toString())
-						, Boolean.valueOf(argObjectMap.get("hideWhiteboard").toString())
-						, Boolean.valueOf(argObjectMap.get("showMicrophoneStatus").toString())
-						, Boolean.valueOf(argObjectMap.get("chatModerated").toString())
-						, Boolean.valueOf(argObjectMap.get("chatOpened").toString())
-						, Boolean.valueOf(argObjectMap.get("filesOpened").toString())
-						, Boolean.valueOf(argObjectMap.get("autoVideoSelect").toString())
-						, Boolean.valueOf(argObjectMap.get("sipEnabled").toString())
-						);
-			}
-			
-			return roomId;
-
-		} catch (Exception e) {
-			log.error("saveOrUpdateRoom", e);
-		}
-		return null;
-	}
-
 	public List<RoomModerator> getRoomModeratorsByRoomId(String SID,
 			Long roomId) {
 		try {
@@ -686,50 +552,6 @@ public class ConferenceService {
 	 */
 	public List<Client> getRoomClientsListByRoomId(Long room_id) {
 		return sessionManager.getClientListByRoom(room_id);
-	}
-
-	/**
-	 * invoked in the admin interface to show the connections currently open
-	 * 
-	 * @param SID
-	 * @param start
-	 * @param max
-	 * @param orderby
-	 * @param asc
-	 * @return - list of the connections currently open
-	 */
-	public SearchResult<Client> getRoomClientsMap(String SID, int start, int max,
-			String orderby, boolean asc) {
-		try {
-			Long users_id = sessiondataDao.checkSession(SID);
-			Long user_level = userManager.getUserLevelByID(users_id);
-			if (authLevelUtil.checkAdminLevel(user_level)) {
-				return this.sessionManager.getListByStartAndMax(start, max,
-						orderby, asc);
-			}
-		} catch (Exception err) {
-			log.error("[getRoomClientsMap]", err);
-		}
-		return null;
-	}
-	
-	/**
-	 * Get some statistics about the current sessions handled by this instance
-	 * 
-	 * @param SID
-	 * @return - session statistics as String
-	 */
-	public String getSessionStatistics(String SID) {
-		try {
-			Long users_id = sessiondataDao.checkSession(SID);
-			Long user_level = userManager.getUserLevelByID(users_id);
-			if (authLevelUtil.checkAdminLevel(user_level)) {
-				return this.sessionManager.getSessionStatistics();
-			}
-		} catch (Exception err) {
-			log.error("[getRoomClientsMap]", err);
-		}
-		return null;
 	}
 
 	public List<Room> getRoomsWithCurrentUsersByList(String SID, int start,

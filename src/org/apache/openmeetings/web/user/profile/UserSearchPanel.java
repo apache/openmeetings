@@ -30,6 +30,7 @@ import org.apache.openmeetings.data.user.UserManager;
 import org.apache.openmeetings.data.user.dao.UserContactsDao;
 import org.apache.openmeetings.persistence.beans.user.PrivateMessage;
 import org.apache.openmeetings.persistence.beans.user.User;
+import org.apache.openmeetings.utils.math.TimezoneUtil;
 import org.apache.openmeetings.web.common.PagingNavigatorPanel;
 import org.apache.openmeetings.web.common.UserPanel;
 import org.apache.openmeetings.web.util.ContactsHelper;
@@ -128,7 +129,7 @@ public class UserSearchPanel extends UserPanel {
 				User u = item.getModelObject();
 				final long userId = u.getUser_id();
 				item.add(new Label("name", getName(u)));
-				item.add(new Label("tz", getTz(u)));
+				item.add(new Label("tz", getBean(TimezoneUtil.class).getTimezoneByUser(u)));
 				item.add(new Label("offer", u.getUserOffers()));
 				item.add(new Label("search", u.getUserSearchs()));
 				item.add(new WebMarkupContainer("view").add(new AjaxEventBehavior("onclick") {
@@ -176,7 +177,4 @@ public class UserSearchPanel extends UserPanel {
 		return "" + u.getFirstname() + " " + u.getLastname() + " [" + u.getLogin() + "]"; //FIXME salutation
 	}
 
-	private String getTz(User u) {
-		return u.getOmTimeZone() == null ? "" : u.getOmTimeZone().getJname() + "(" + u.getOmTimeZone().getIcal() + ")";
-	}
 }

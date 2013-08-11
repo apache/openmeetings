@@ -33,7 +33,6 @@ import javax.persistence.TypedQuery;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.data.IDataProviderDao;
-import org.apache.openmeetings.data.beans.basic.SearchResult;
 import org.apache.openmeetings.data.user.dao.UsersDao;
 import org.apache.openmeetings.persistence.beans.basic.Configuration;
 import org.apache.openmeetings.remote.red5.ScopeApplicationAdapter;
@@ -138,20 +137,6 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 		}
 	}
 
-	public SearchResult<Configuration> getAllConf(int start, int max,
-			String orderby, boolean asc) {
-		try {
-			SearchResult<Configuration> sresult = new SearchResult<Configuration>();
-			sresult.setRecords(this.selectMaxFromConfigurations());
-			sresult.setResult(this.getConfigurations(start, max, orderby, asc));
-			sresult.setObjectName(Configuration.class.getName());
-			return sresult;
-		} catch (Exception ex2) {
-			log.error("[getAllConf]: ", ex2);
-		}
-		return null;
-	}
-
 	public List<Configuration> getConfigurations(int start, int max,
 			String orderby, boolean asc) {
 		try {
@@ -174,20 +159,6 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 			return q.getResultList();
 		} catch (Exception ex2) {
 			log.error("[getConfigurations]", ex2);
-		}
-		return null;
-	}
-
-	/**
-	 * 
-	 * @return
-	 * @deprecated please use {@link ConfigurationDao#count()}
-	 */
-	public Long selectMaxFromConfigurations() {
-		try {
-			return count();
-		} catch (Exception ex2) {
-			log.error("[selectMaxFromConfigurations] ", ex2);
 		}
 		return null;
 	}

@@ -38,7 +38,6 @@ import org.apache.openmeetings.data.conference.dao.RoomDao;
 import org.apache.openmeetings.data.user.UserManager;
 import org.apache.openmeetings.data.user.dao.UsersDao;
 import org.apache.openmeetings.persistence.beans.basic.MailMessage;
-import org.apache.openmeetings.persistence.beans.basic.OmTimeZone;
 import org.apache.openmeetings.persistence.beans.calendar.Appointment;
 import org.apache.openmeetings.persistence.beans.calendar.MeetingMember;
 import org.apache.openmeetings.persistence.beans.invitation.Invitations;
@@ -126,7 +125,7 @@ public class InvitationManager {
 			Boolean isPasswordProtected, String invitationpass, Integer valid,
 			Date validFrom, Date validTo, Long createdBy, String baseUrl,
 			Long language_id, Boolean sendMail, Date gmtTimeStart,
-			Date gmtTimeEnd, Long appointmentId, String fromUserField, OmTimeZone omTimeZone) {
+			Date gmtTimeEnd, Long appointmentId, String fromUserField, TimeZone timeZone) {
 		try {
 			if (authLevelUtil.checkUserLevel(user_level)) {
 
@@ -141,7 +140,7 @@ public class InvitationManager {
 				invitation.setInvitationWasUsed(false);
 				log.debug(baseUrl);
 				invitation.setBaseUrl(baseUrl);
-				invitation.setOmTimeZone(omTimeZone);
+				invitation.setTimeZoneId(timeZone.getID());
 
 				// valid period of Invitation
 				if (valid == 1) {
@@ -239,7 +238,7 @@ public class InvitationManager {
 			invitation.setInvitationWasUsed(false);
 			log.debug(baseUrl);
 			invitation.setBaseUrl(baseUrl);
-			invitation.setOmTimeZone(createdBy.getOmTimeZone());
+			invitation.setTimeZoneId(timezoneUtil.getTimezoneByUser(createdBy).getID());
 
 			// valid period of Invitation
 			if (valid == 1) {
@@ -336,8 +335,7 @@ public class InvitationManager {
 		if (us != null) {
 			timezone = timezoneUtil.getTimezoneByUser(us);
 		} else {
-			timezone = timezoneUtil.getTimezoneByInternalJName(member
-					.getOmTimeZone().getJname());
+			timezone = timezoneUtil.getTimeZone(member.getTimeZoneId());
 		}
 
 		String subject = formatCancelSubject(language_id, appointment, user,
@@ -480,8 +478,7 @@ public class InvitationManager {
 		if (us != null) {
 			timezone = timezoneUtil.getTimezoneByUser(us);
 		} else {
-			timezone = timezoneUtil.getTimezoneByInternalJName(member
-					.getOmTimeZone().getJname());
+			timezone = timezoneUtil.getTimeZone(member.getTimeZoneId());
 		}
 
 		// Get text messages
@@ -1223,14 +1220,12 @@ public class InvitationManager {
 					}
 
 				} else if (invitation.getIsValidByTime()) {
-					OmTimeZone tz = invitation.getOmTimeZone() == null 
-							? omTimeZoneDaoImpl.getOmTimeZone(configurationDao.getConfValue("default.timezone", String.class, "Europe/Berlin"))
-							: invitation.getOmTimeZone();
-					Calendar now = Calendar.getInstance(TimeZone.getTimeZone(tz.getIcal()));
-					Calendar start = Calendar.getInstance(TimeZone.getTimeZone(tz.getIcal()));
+							
+					Calendar now = Calendar.getInstance(timezoneUtil.getTimeZone(invitation.getTimeZoneId()));
+					Calendar start = Calendar.getInstance(timezoneUtil.getTimeZone(invitation.getTimeZoneId()));
 					start.setTime(invitation.getValidFrom());
 
-					Calendar end = Calendar.getInstance(TimeZone.getTimeZone(tz.getIcal()));
+					Calendar end = Calendar.getInstance(timezoneUtil.getTimeZone(invitation.getTimeZoneId()));
 					end.setTime(invitation.getValidTo());
 					if (now.after(start) && now.before(end)) {
 						invitationDao.updateInvitation(invitation);

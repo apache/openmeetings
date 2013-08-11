@@ -50,7 +50,7 @@ public class WelcomeWidgetView extends WidgetView {
 		 //FIXME this need to be aligned according to Locale
 		add(new Label("firstname", Model.of(u.getFirstname())));
 		add(new Label("lastname", Model.of(u.getLastname())));
-		add(new Label("tz", Model.of(u.getOmTimeZone().getIcal())));
+		add(new Label("tz", Model.of(u.getTimeZoneId())));
 		add(new AjaxLink<Void>("openUnread") {
 			private static final long serialVersionUID = -1847619557485964386L;
 

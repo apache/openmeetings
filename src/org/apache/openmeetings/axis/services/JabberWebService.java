@@ -33,6 +33,7 @@ import org.apache.openmeetings.persistence.beans.room.Room;
 import org.apache.openmeetings.persistence.beans.room.RoomOrganisation;
 import org.apache.openmeetings.persistence.beans.user.User;
 import org.apache.openmeetings.remote.ConferenceService;
+import org.apache.openmeetings.utils.math.TimezoneUtil;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,6 +63,8 @@ public class JabberWebService {
 	private OmTimeZoneDao omTimeZoneDaoImpl;
 	@Autowired
 	private ConfigurationDao configurationDao;
+	@Autowired
+	private TimezoneUtil timezoneUtil;
 
 	/**
 	 * Get List&lt;Rooms&gt; of all rooms available to the user.
@@ -133,8 +136,8 @@ public class JabberWebService {
 				user_level, username, username, username, username, username,
 				room_id, "", Boolean.valueOf(false), null, Integer.valueOf(3),
 				null, null, users_id, "", Long.valueOf(1L),
-				Boolean.valueOf(false), null, null, null, username
-				, omTimeZoneDaoImpl.getOmTimeZone(configurationDao.getConfValue("default.timezone", String.class, "Europe/Berlin")));
+				Boolean.valueOf(false), null, null, null, username, 
+				timezoneUtil.getDefaultTimeZone());
 
 		return ((invitation == null) ? null : invitation.getHash());
 	}

@@ -26,29 +26,6 @@ these properties can be overwritten by public/config.xml -->
    
    
 <!-- #############################################
-    Admin Modules
-  -->   
-    
-<attribute name="adminModuleUser" value="userAdmin" type="string" />
-
-<attribute name="adminModuleRoom" value="roomAdmin" type="string" />
-
-<attribute name="adminModuleOrg" value="orgAdmin" type="string" />
-
-<attribute name="adminModuleLanguages" value="languagesEditor" type="string" />
-
-<attribute name="adminModuleConnections" value="roomClient" type="string" />
-
-<attribute name="adminModuleConfiguration" value="confAdmin" type="string" />
-
-<attribute name="adminModuleLDAP" value="ldapAdmin" type="string" />
-
-<attribute name="adminModuleBackup" value="backupContent" type="string" />
-
-<attribute name="adminModuleServers" value="serversAdmin" type="string" />
-
-
-<!-- #############################################
     Moderator Modules
  -->
 

@@ -26,10 +26,6 @@ import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
 import javax.persistence.TypedQuery;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.data.IDataProviderDao;
@@ -173,70 +169,7 @@ public class LdapConfigDao implements IDataProviderDao<LdapConfig> {
 			return ldapConfig;
 
 		} catch (Exception ex2) {
-			log.error("[getLdapConfigById]: ", ex2);
-		}
-		return null;
-	}
-
-	public List<LdapConfig> getLdapConfigs(int start, int max, String orderby,
-			boolean asc) {
-		try {
-			CriteriaBuilder cb = em.getCriteriaBuilder();
-			CriteriaQuery<LdapConfig> cq = cb.createQuery(LdapConfig.class);
-			Root<LdapConfig> c = cq.from(LdapConfig.class);
-			Predicate condition = cb.equal(c.get("deleted"), false);
-			cq.where(condition);
-			cq.distinct(asc);
-			if (asc) {
-				cq.orderBy(cb.asc(c.get(orderby)));
-			} else {
-				cq.orderBy(cb.desc(c.get(orderby)));
-			}
-			TypedQuery<LdapConfig> q = em.createQuery(cq);
-			q.setFirstResult(start);
-			q.setMaxResults(max);
-			List<LdapConfig> ll = q.getResultList();
-			return ll;
-		} catch (Exception ex2) {
-			log.error("[getLdapConfigs]", ex2);
-		}
-		return null;
-	}
-
-	public Long selectMaxFromLdapConfig() {
-		try {
-			log.debug("selectMaxFromConfigurations ");
-			// get all users
-			TypedQuery<Long> query = em
-					.createQuery(
-							"select count(c.ldapConfigId) from LdapConfig c where c.deleted = false",
-							Long.class);
-			List<Long> ll = query.getResultList();
-			log.debug("selectMaxFromLdapConfig" + ll.get(0));
-			return ll.get(0);
-		} catch (Exception ex2) {
-			log.error("[selectMaxFromLdapConfig] ", ex2);
-		}
-		return null;
-	}
-
-	public Long deleteLdapConfigById(Long ldapConfigId) {
-		try {
-
-			LdapConfig ldapConfig = this.get(ldapConfigId);
-
-			if (ldapConfig == null) {
-				return null;
-			}
-
-			ldapConfig = em
-					.find(LdapConfig.class, ldapConfig.getLdapConfigId());
-			em.remove(ldapConfig);
-
-			return ldapConfigId;
-
-		} catch (Exception ex2) {
-			log.error("[deleteLdapConfigById]: ", ex2);
+			log.error("[get]: ", ex2);
 		}
 		return null;
 	}
@@ -291,7 +224,18 @@ public class LdapConfigDao implements IDataProviderDao<LdapConfig> {
 	}
 	
 	public long count() {
-		return selectMaxFromLdapConfig();
+		try {
+			TypedQuery<Long> query = em
+					.createQuery(
+							"select count(c.ldapConfigId) from LdapConfig c where c.deleted = false",
+							Long.class);
+			List<Long> ll = query.getResultList();
+			log.debug("selectMaxFromLdapConfig" + ll.get(0));
+			return ll.get(0);
+		} catch (Exception ex2) {
+			log.error("[selectMaxFromLdapConfig] ", ex2);
+		}
+		return 0L;
 	}
 
 	public long count(String search) {

@@ -40,6 +40,7 @@ import org.apache.openmeetings.persistence.beans.user.Address;
 import org.apache.openmeetings.persistence.beans.user.User;
 import org.apache.openmeetings.utils.DaoHelper;
 import org.apache.openmeetings.utils.crypt.ManageCryptStyle;
+import org.apache.openmeetings.utils.math.TimezoneUtil;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -68,6 +69,8 @@ public class UsersDao implements IDataProviderDao<User> {
 	private OmTimeZoneDao omTimeZoneDaoImpl;
 	@Autowired
 	private StateDao stateDaoImpl;
+	@Autowired
+	private TimezoneUtil timezoneUtil;
 
 	/**
 	 * Get a new instance of the {@link User} entity, with all default values
@@ -84,7 +87,7 @@ public class UsersDao implements IDataProviderDao<User> {
 									// configurable
 		user.setLevel_id(1L);
 		user.setLanguage_id(configurationDao.getConfValue(DEFAUT_LANG_KEY, Long.class, "1"));
-		user.setOmTimeZone(omTimeZoneDaoImpl.getDefaultOmTimeZone(currentUser));
+		user.setTimeZoneId(timezoneUtil.getTimezoneByUser(currentUser).getID());
 		user.setForceTimeZoneCheck(false);
 		user.setSendSMS(false);
 		user.setAge(new Date());

@@ -66,6 +66,7 @@ import org.apache.openmeetings.persistence.beans.user.oauth.OAuthServer;
 import org.apache.openmeetings.persistence.beans.user.oauth.OAuthServer.RequestMethod;
 import org.apache.openmeetings.utils.ImportHelper;
 import org.apache.openmeetings.utils.OmFileHelper;
+import org.apache.openmeetings.utils.math.TimezoneUtil;
 import org.dom4j.Document;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
@@ -110,6 +111,10 @@ public class ImportInitvalues {
 	private SipDao sipDao;
 	@Autowired
 	private OAuth2Dao oauthDao;
+	@Autowired
+	private TimezoneUtil timezoneUtil;
+	
+	
 	private int progress = 0;
 
 	public int getProgress() {
@@ -714,7 +719,7 @@ public class ImportInitvalues {
 				new java.util.Date(), "street", "no", "fax", "zip", 1,
 				"town", default_lang_id, false,
 				Arrays.asList(organisation_id), "phone", false, "", false,
-				omTimeZoneDaoImpl.getOmTimeZoneByIcal(cfg.ical_timeZone),
+				timezoneUtil.getTimezoneByInternalJName(cfg.ical_timeZone),
 				false, "", "", false, true, null);
 
 		log.debug("Installation - User Added user-Id " + user_id);

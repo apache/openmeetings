@@ -38,13 +38,13 @@ import org.apache.openmeetings.data.user.dao.StateDao;
 import org.apache.openmeetings.data.user.dao.UsersDao;
 import org.apache.openmeetings.ldap.config.ConfigReader;
 import org.apache.openmeetings.persistence.beans.basic.LdapConfig;
-import org.apache.openmeetings.persistence.beans.basic.OmTimeZone;
 import org.apache.openmeetings.persistence.beans.room.Client;
 import org.apache.openmeetings.persistence.beans.user.State;
 import org.apache.openmeetings.persistence.beans.user.User;
 import org.apache.openmeetings.remote.util.SessionVariablesUtil;
 import org.apache.openmeetings.utils.OmFileHelper;
 import org.apache.openmeetings.utils.crypt.ManageCryptStyle;
+import org.apache.openmeetings.utils.math.TimezoneUtil;
 import org.red5.logging.Red5LoggerFactory;
 import org.red5.server.api.IClient;
 import org.slf4j.Logger;
@@ -76,6 +76,8 @@ public class LdapLoginManagement {
 	private ManageCryptStyle cryptManager;
 	@Autowired
 	private UsersDao usersDao;
+	@Autowired
+	private TimezoneUtil timezoneUtil;
 
 	// External User Types
 	public static final String EXTERNAL_USER_TYPE_LDAP = "LDAP";
@@ -823,13 +825,9 @@ public class LdapLoginManagement {
 	
 		String jName_timeZone = "";
 		if (userdata.containsKey(ldapAttrs.get("timezoneAttr"))
-				&& userdata.get(ldapAttrs.get("timezoneAttr")) != null)
+				&& userdata.get(ldapAttrs.get("timezoneAttr")) != null) {
 			jName_timeZone = userdata.get(ldapAttrs.get("timezoneAttr"));
-		
-		//only change the timezone if there can be found some in the OpenMeetings database
-		OmTimeZone omTimeZone = omTimeZoneDaoImpl.getOmTimeZone(jName_timeZone);
-		if (omTimeZone != null) {
-			user.setOmTimeZone(omTimeZone);
+			user.setTimeZoneId(timezoneUtil.getTimezoneByInternalJName(jName_timeZone).getID());
 		}
 	
 	}

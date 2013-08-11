@@ -52,7 +52,6 @@ import org.apache.openjpa.persistence.LoadFetchGroup;
 import org.apache.openjpa.persistence.jdbc.ForeignKey;
 import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
 import org.apache.openmeetings.persistence.beans.IDataProviderEntity;
-import org.apache.openmeetings.persistence.beans.basic.OmTimeZone;
 import org.apache.openmeetings.persistence.beans.basic.Sessiondata;
 import org.apache.openmeetings.persistence.beans.domain.Organisation_Users;
 import org.apache.openmeetings.persistence.beans.sip.asterisk.AsteriskSipUser;
@@ -228,11 +227,12 @@ public class User implements Serializable, IDataProviderEntity {
 	@Element(data = true, required = false)
 	private String externalUserType;
 
-	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "omtimezoneId", insertable = true, updatable = true)
-	@ForeignKey(enabled = true)
+	/**
+	 * java.util.TimeZone Id
+	 */
+	@Column(name = "time_zone_id")
 	@Element(data = true, required = false)
-	private OmTimeZone omTimeZone; // In UTC +/- hours
+	private String timeZoneId;
 
 	@Transient
 	private Sessiondata sessionData;
@@ -548,12 +548,11 @@ public class User implements Serializable, IDataProviderEntity {
 		this.sipUser = sipUser;
 	}
 
-	public OmTimeZone getOmTimeZone() {
-		return omTimeZone;
+	public String getTimeZoneId() {
+		return timeZoneId;
 	}
-
-	public void setOmTimeZone(OmTimeZone omTimeZone) {
-		this.omTimeZone = omTimeZone;
+	public void setTimeZoneId(String timeZoneId) {
+		this.timeZoneId = timeZoneId;
 	}
 
 	public Boolean getForceTimeZoneCheck() {

@@ -33,7 +33,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import org.apache.openjpa.persistence.jdbc.ForeignKey;
-import org.apache.openmeetings.persistence.beans.basic.OmTimeZone;
 import org.apache.openmeetings.persistence.beans.invitation.Invitations;
 import org.apache.openmeetings.persistence.beans.user.User;
 import org.simpleframework.xml.Element;
@@ -104,10 +103,13 @@ public class MeetingMember implements Serializable {
 	@JoinColumn(name="invitation", nullable=true, insertable=false)
 	@ForeignKey(enabled = true)
 	private Invitations invitation;
-	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name="omtimezoneId", nullable=true, insertable=true)
-	@ForeignKey(enabled = true)
-	private OmTimeZone omTimeZone;
+	
+	/**
+	 * java.util.TimeZone Id
+	 */
+	@Column(name = "time_zone_id")
+	@Element(data=true, required=false)
+	private String timeZoneId;
 	
 	@Column(name="is_connected_event")
 	private boolean isConnectedEvent;
@@ -211,17 +213,18 @@ public class MeetingMember implements Serializable {
 		this.invitor = invitor;
 	}
 
-	public OmTimeZone getOmTimeZone() {
-		return omTimeZone;
-	}
-	public void setOmTimeZone(OmTimeZone omTimeZone) {
-		this.omTimeZone = omTimeZone;
-	}
-	
 	public boolean getIsConnectedEvent() {
 		return isConnectedEvent;
 	}
 	public void setIsConnectedEvent(boolean isConnectedEvent) {
 		this.isConnectedEvent = isConnectedEvent;
 	}
+	
+	public String getTimeZoneId() {
+		return timeZoneId;
+	}
+	public void setTimeZoneId(String timeZoneId) {
+		this.timeZoneId = timeZoneId;
+	}
+	
 }

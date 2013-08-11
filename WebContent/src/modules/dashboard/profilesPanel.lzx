@@ -139,27 +139,15 @@
     
     <view name="_langAndCountry" layout="axis:x;spacing:2" y="20" x="140">
     	<labelText name="_town" fgcolor="0x0000CC">
-	    	<handler name="onclick">
-	        	canvas.userSettingsModuleOpt = "userProfile";
-	            quicklinkAct("userSettingsModule");
-	        </handler>
 	    </labelText>
 	    <labelText labelid="1143" />
 	    <labelText name="_timeZone" fgcolor="0x0000CC">
-	    	<handler name="onclick">
-	        	canvas.userSettingsModuleOpt = "userProfile";
-	            quicklinkAct("userSettingsModule");
-	        </handler>
 	    </labelText>
     </view>
     
     <view name="_newmessages" layout="axis:x;spacing:2" y="40" x="140">
 	    <labelText name="_label" labelid="378" />
 	    <labelText name="_text" fgcolor="0x0000CC">
-	    	<handler name="onclick">
-	        	canvas.userSettingsModuleOpt = "contactMessages";
-	            quicklinkAct("userSettingsModule");
-	        </handler>
 	    </labelText>
     </view>
     
@@ -169,10 +157,6 @@
 				this.setAttribute("text","<u>..."+canvas.getLabelName(377)+"</u>");
 	        ]]>
     	</handler>
-    	<handler name="onclick">
-        	canvas.userSettingsModuleOpt = "userProfile";
-            quicklinkAct("userSettingsModule");
-        </handler>
     </labelText>
              
     <labelText name="help" fontstyle="bold" x="2"

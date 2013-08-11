@@ -20,6 +20,7 @@ package org.apache.openmeetings.data.calendar.daos;
 
 import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -28,7 +29,6 @@ import javax.persistence.TypedQuery;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.data.user.dao.UsersDao;
-import org.apache.openmeetings.persistence.beans.basic.OmTimeZone;
 import org.apache.openmeetings.persistence.beans.calendar.MeetingMember;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -177,7 +177,7 @@ public class MeetingMemberDao {
 
 	public Long addMeetingMember(String firstname, String lastname,
 			String memberStatus, String appointmentStatus, Long appointmentId,
-			Long userid, String email, String phone, Boolean moderator, OmTimeZone omTimeZone,
+			Long userid, String email, String phone, Boolean moderator, TimeZone timeZone,
 			Boolean isConnectedEvent) {
 		try {
 
@@ -197,7 +197,7 @@ public class MeetingMemberDao {
 			gm.setInvitor(moderator);
 			gm.setIsConnectedEvent(isConnectedEvent);
 			
-			gm.setOmTimeZone(omTimeZone);
+			gm.setTimeZoneId(timeZone.getID());
 
 			gm = em.merge(gm);
 			Long group_member_id = gm.getMeetingMemberId();

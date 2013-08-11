@@ -29,9 +29,9 @@ import org.apache.openmeetings.data.basic.dao.OmTimeZoneDao;
 import org.apache.openmeetings.data.conference.InvitationManager;
 import org.apache.openmeetings.data.user.UserManager;
 import org.apache.openmeetings.data.user.dao.UsersDao;
-import org.apache.openmeetings.persistence.beans.basic.OmTimeZone;
 import org.apache.openmeetings.persistence.beans.invitation.Invitations;
 import org.apache.openmeetings.persistence.beans.user.User;
+import org.apache.openmeetings.utils.math.TimezoneUtil;
 import org.red5.logging.Red5LoggerFactory;
 import org.red5.server.api.service.IPendingServiceCall;
 import org.red5.server.api.service.IPendingServiceCallback;
@@ -54,6 +54,8 @@ public class InvitationService implements IPendingServiceCallback {
 	private OmTimeZoneDao omTimeZoneDaoImpl;
 	@Autowired
 	private InvitationManager invitationManager;
+	@Autowired
+	private TimezoneUtil timezoneUtil;
 
 	public void resultReceived(IPendingServiceCall arg0) {
 		// TODO Auto-generated method stub
@@ -108,19 +110,12 @@ public class InvitationService implements IPendingServiceCallback {
 			Long users_id = sessiondataDao.checkSession(SID);
 			Long user_level = userManager.getUserLevelByID(users_id);
 
-			OmTimeZone omTimeZone = omTimeZoneDaoImpl
-					.getOmTimeZone(jNameTimeZone);
-
-			// If everything fails
-			if (omTimeZone == null) {
-				omTimeZone = omTimeZoneDaoImpl.getOmTimeZone(configurationDao.getConfValue("default.timezone", String.class, "Europe/Berlin"));
-			}
-
 			Calendar date = Calendar.getInstance();
 			date.setTime(validFromDate);
 			
-			String timeZoneName = omTimeZone.getIcal();
-			Calendar calFrom = Calendar.getInstance(TimeZone.getTimeZone(timeZoneName));
+			TimeZone timeZone = timezoneUtil.getTimezoneByInternalJName(jNameTimeZone);
+			
+			Calendar calFrom = Calendar.getInstance(timeZone);
 			calFrom.set(Calendar.YEAR, date.get(Calendar.YEAR));
 			calFrom.set(Calendar.MONTH, date.get(Calendar.MONTH));
 			calFrom.set(Calendar.DAY_OF_MONTH, date.get(Calendar.DAY_OF_MONTH));
@@ -129,7 +124,7 @@ public class InvitationService implements IPendingServiceCallback {
 			calFrom.set(Calendar.SECOND, 0);
 
 			date.setTime(validToDate);
-			Calendar calTo = Calendar.getInstance(TimeZone.getTimeZone(timeZoneName));
+			Calendar calTo = Calendar.getInstance(timeZone);
 			calTo.set(Calendar.YEAR, date.get(Calendar.YEAR));
 			calTo.set(Calendar.MONTH, date.get(Calendar.MONTH));
 			calTo.set(Calendar.DAY_OF_MONTH, date.get(Calendar.DAY_OF_MONTH));
@@ -145,7 +140,7 @@ public class InvitationService implements IPendingServiceCallback {
 							email, subject, room_id, conferencedomain,
 							isPasswordProtected, invitationpass, valid, dFrom,
 							dTo, users_id, baseurl, language_id, sendMail,
-							dFrom, dTo, null, username, omTimeZone);
+							dFrom, dTo, null, username, timeZone);
 
 			if (invitation != null) {
 				return invitation;

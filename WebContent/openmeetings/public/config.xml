@@ -283,27 +283,6 @@ To disable AEC please specify 0.
  
 <!-- Module Configuration -->
 <!-- #############################################
-    Admin Modules
-  -->   
-    
-<adminModuleUser>userAdmin</adminModuleUser>
-
-<adminModuleRoom>roomAdmin</adminModuleRoom>
-
-<adminModuleOrg>orgAdmin</adminModuleOrg>
-
-<adminModuleLanguages>languagesEditor</adminModuleLanguages>
-
-<adminModuleConnections>roomClient</adminModuleConnections>
-
-<adminModuleConfiguration>confAdmin</adminModuleConfiguration>
-
-<adminModuleBackup>backupContent</adminModuleBackup>
-
-<adminModuleLDAP>ldapAdmin</adminModuleLDAP>
-
-<adminModuleServers>serversAdmin</adminModuleServers>
-<!-- #############################################
     Moderator Modules
  -->
 

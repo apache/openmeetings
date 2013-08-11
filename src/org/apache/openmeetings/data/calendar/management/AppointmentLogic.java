@@ -35,7 +35,6 @@ import org.apache.openmeetings.data.conference.RoomManager;
 import org.apache.openmeetings.data.conference.dao.InvitationDao;
 import org.apache.openmeetings.data.conference.dao.RoomDao;
 import org.apache.openmeetings.data.user.UserManager;
-import org.apache.openmeetings.persistence.beans.basic.OmTimeZone;
 import org.apache.openmeetings.persistence.beans.calendar.Appointment;
 import org.apache.openmeetings.persistence.beans.calendar.MeetingMember;
 import org.apache.openmeetings.persistence.beans.invitation.Invitations;
@@ -213,7 +212,7 @@ public class AppointmentLogic {
 					userId, appointmentLocation, appointmentDescription,
 					appointmentstart, appointmentend, isDaily, isWeekly,
 					isMonthly, isYearly, categoryId, remind, room, language_id,
-					isPasswordProtected, password, false, user.getOmTimeZone().getJname());
+					isPasswordProtected, password, false);
 
 			String invitorName = user.getFirstname() + " " + user.getLastname()
 					+ " [" + user.getAdresses().getEmail() + "]";
@@ -222,7 +221,7 @@ public class AppointmentLogic {
 			meetingMemberLogic.addMeetingMember(user.getFirstname(), user
 					.getLastname(), "", "", appointmentId, userId, user
 					.getAdresses().getEmail(), user.getPhoneForSMS(), baseUrl, userId, true,
-					language_id, isPasswordProtected, password, timezone, user.getOmTimeZone(),
+					language_id, isPasswordProtected, password, timezone,
 					invitorName);
 
 			// iterate through all members of this meeting and add them to the
@@ -250,7 +249,6 @@ public class AppointmentLogic {
 					// and Java around 600++
 					Long sendToUserId = 0L;
 					TimeZone timezoneMember = null;
-					OmTimeZone omTimeZone = null;
 					if (clientMember.get("userId") != null) {
 						sendToUserId = Long.valueOf(
 								clientMember.get("userId").toString())
@@ -267,7 +265,6 @@ public class AppointmentLogic {
 						phone = interalUser.getPhoneForSMS();
 						timezoneMember = timezoneUtil
 								.getTimezoneByUser(interalUser);
-						omTimeZone = interalUser.getOmTimeZone();
 					} else {
 						// Get the internal-name of the timezone set in the
 						// client object and convert it to a real one
@@ -276,8 +273,6 @@ public class AppointmentLogic {
 							log.error("jNameTimeZone not set in user object variable");
 							jName = "";
 						}
-						omTimeZone = omTimeZoneDaoImpl.getOmTimeZone(jName
-								.toString());
 						timezoneMember = timezoneUtil
 								.getTimezoneByInternalJName(jName.toString());
 					}
@@ -299,7 +294,7 @@ public class AppointmentLogic {
 							language_id, //language_id
 							isPasswordProtected, // isPasswordProtected
 							password, // password
-							timezoneMember, omTimeZone, invitorName);
+							timezoneMember, invitorName);
 
 				}
 			}
@@ -475,14 +470,7 @@ public class AppointmentLogic {
 						continue;
 					}
 
-					TimeZone tZone = null;
-
-					if (mm.getOmTimeZone() != null) {
-						tZone = timezoneUtil.getTimezoneByOmTimeZoneId(mm
-								.getOmTimeZone().getOmtimezoneId());
-					} else {
-						tZone = TimeZone.getDefault();
-					}
+					TimeZone tZone = timezoneUtil.getTimeZone(mm.getTimeZoneId());
 
 					String subject = generateSubject(labelid1158, ment, tZone);
 					String smsSubject = generateSMSSubject(labelid1158, ment);

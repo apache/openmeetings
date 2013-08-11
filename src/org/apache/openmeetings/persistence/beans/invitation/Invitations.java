@@ -34,7 +34,6 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
 import org.apache.openjpa.persistence.jdbc.ForeignKey;
-import org.apache.openmeetings.persistence.beans.basic.OmTimeZone;
 import org.apache.openmeetings.persistence.beans.room.Room;
 import org.apache.openmeetings.persistence.beans.user.User;
 
@@ -125,10 +124,11 @@ public class Invitations implements Serializable {
 	@Column(name = "baseUrl")
 	private String baseUrl;
 	
-	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "omtimezoneId", insertable = true, updatable = true)
-	@ForeignKey(enabled = true)
-	private OmTimeZone omTimeZone; // In UTC +/- hours
+	/**
+	 * java.util.TimeZone Id
+	 */
+	@Column(name = "time_zone_id")
+	private String timeZoneId; // 
 	
 	private boolean allowEntry = true;
 
@@ -296,11 +296,12 @@ public class Invitations implements Serializable {
 		this.allowEntry = allowEntry;
 	}
 
-	public OmTimeZone getOmTimeZone() {
-		return omTimeZone;
+	public String getTimeZoneId() {
+		return timeZoneId;
 	}
 
-	public void setOmTimeZone(OmTimeZone omTimeZone) {
-		this.omTimeZone = omTimeZone;
+	public void setTimeZoneId(String timeZoneId) {
+		this.timeZoneId = timeZoneId;
 	}
+
 }

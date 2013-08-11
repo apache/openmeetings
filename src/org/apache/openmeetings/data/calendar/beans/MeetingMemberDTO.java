@@ -40,8 +40,7 @@ public class MeetingMemberDTO {
 		lastname = meetingMemberItem.getLastname();
 		userid = (meetingMemberItem.getUserid() != null) ? meetingMemberItem
 				.getUserid().getUser_id() : 0;
-		jNameTimeZone = (meetingMemberItem.getOmTimeZone() != null) ? meetingMemberItem
-				.getOmTimeZone().getJname() : "";
+		jNameTimeZone = meetingMemberItem.getTimeZoneId();
 	}
 
 	public long getMeetingMemberId() {

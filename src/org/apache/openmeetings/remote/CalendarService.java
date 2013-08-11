@@ -206,11 +206,9 @@ public class CalendarService {
 				appointmentLogic
 						.getAppointMentById(appointmentId);
 
-				User user = userManager.getUserById(users_id);
-				
 				return appointmentDao.updateAppointmentByTime(appointmentId,
 						appointmentstart, appointmentend, users_id, baseurl,
-						language_id, user.getOmTimeZone().getIcal());
+						language_id);
 
 			}
 		} catch (Exception err) {
@@ -280,8 +278,8 @@ public class CalendarService {
 						appointmentName, appointmentDescription,
 						appointmentstart, appointmentend, isDaily, isWeekly,
 						isMonthly, isYearly, categoryId, remind, mmClient,
-						users_id, baseUrl, language_id, isPasswordProtected, password, user
-								.getOmTimeZone().getIcal(), appointmentLocation);
+						users_id, baseUrl, language_id, isPasswordProtected, password, 
+						appointmentLocation);
 			}
 		} catch (Exception err) {
 			log.error("[updateAppointment]", err);

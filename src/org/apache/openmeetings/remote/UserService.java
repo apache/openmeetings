@@ -20,11 +20,9 @@ package org.apache.openmeetings.remote;
 
 import static org.apache.openmeetings.persistence.beans.basic.Configuration.DEFAUT_LANG_KEY;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.TimeZone;
@@ -69,7 +67,6 @@ import org.apache.openmeetings.utils.crypt.ManageCryptStyle;
 import org.apache.openmeetings.utils.mail.MailHandler;
 import org.apache.openmeetings.utils.math.CalendarPatterns;
 import org.apache.openmeetings.utils.math.TimezoneUtil;
-import org.red5.io.utils.ObjectMap;
 import org.red5.logging.Red5LoggerFactory;
 import org.red5.server.api.scope.IScope;
 import org.slf4j.Logger;
@@ -177,19 +174,6 @@ public class UserService {
 	}
 
 	/**
-	 * get user by id, admin only
-	 * 
-	 * @param SID
-	 * @param user_id
-	 * @return User with the id given
-	 */
-	public User getUserById(String SID, long user_id) {
-		Long users_id = sessiondataDao.checkSession(SID);
-		Long user_level = userManager.getUserLevelByID(users_id);
-		return userManager.checkAdmingetUserById(user_level, user_id);
-	}
-
-	/**
 	 * refreshes the current SID
 	 * 
 	 * @param SID
@@ -213,27 +197,6 @@ public class UserService {
 	 */
 	public List<Salutation> getUserSalutations(String SID, long language_id) {
 		return salutationmanagement.getUserSalutations(language_id);
-	}
-
-	/**
-	 * 
-	 * @param SID
-	 * @param searchcriteria
-	 *            login,lastname,firstname,user_id
-	 * @param searchstring
-	 * @param max
-	 * @param start
-	 * @param orderby
-	 *            login,lastname,firstname,user_id
-	 * @param asc
-	 * @return List of the users found
-	 */
-	public List<User> searchUser(String SID, String searchcriteria,
-			String searchstring, int max, int start, String orderby, boolean asc) {
-		Long users_id = sessiondataDao.checkSession(SID);
-		Long user_level = userManager.getUserLevelByID(users_id);
-		return userManager.searchUser(user_level, searchcriteria,
-				searchstring, max, start, orderby, asc);
 	}
 
 	/**
@@ -314,14 +277,6 @@ public class UserService {
 				.getUsersList(user_level, start, max, orderby, asc);
 	}
 
-	public SearchResult<User> getUserListWithSearch(String SID, int start,
-			int max, String orderby, boolean asc, String search) {
-		Long users_id = sessiondataDao.checkSession(SID);
-		Long user_level = userManager.getUserLevelByID(users_id);
-		return userManager.getUsersListWithSearch(user_level, start, max,
-				orderby, asc, search);
-	}
-
 	/**
 	 * gets a user-list by search criteria
 	 * 
@@ -336,197 +291,6 @@ public class UserService {
 			String search, int start, int max, String orderby, boolean asc) {
 		return userManager.getAllUserByRange(search, start, max, orderby,
 				asc);
-	}
-
-	/**
-	 * updates the user profile, every user can update his own profile
-	 * 
-	 * @param SID
-	 * @param values
-	 * @return user_id or NULL or negativ value (error_id)
-	 */
-	public Long updateUserSelfSmall(String SID,
-			@SuppressWarnings("rawtypes") ObjectMap values) {
-		try {
-			Long users_id = sessiondataDao.checkSession(SID);
-			Long user_level = userManager.getUserLevelByID(users_id);
-			if (user_level != null && user_level >= 1) {
-				return userManager.saveOrUpdateUser(new Long(3), values,
-						users_id);
-			} else {
-				return new Long(-2);
-			}
-		} catch (Exception err) {
-			log.error("[updateUserSelfSmall] " + err);
-			return new Long(-1);
-		}
-	}
-
-	/**
-	 * 
-	 * @param SID
-	 * @param regObjectObj
-	 * @return - id of the user updated in case of success, null otherwise
-	 */
-	@SuppressWarnings({ "rawtypes" })
-	public Long saveOrUpdateUser(String SID, Object regObjectObj) {
-		try {
-			LinkedHashMap argObjectMap = (LinkedHashMap) regObjectObj;
-			Long user_idClient = null;
-			if (argObjectMap.get("user_idClient") != null) {
-				user_idClient = Long.valueOf(
-						argObjectMap.get("user_idClient").toString())
-						.longValue();
-			}
-			Long users_id = sessiondataDao.checkSession(SID);
-			Long user_level = userManager.getUserLevelByID(users_id);
-
-			List<?> orgO = (List<?>) argObjectMap.get("organisations");
-			List<Long> orgIds = new ArrayList<Long>(orgO.size());
-			for (Object o : orgO) {
-				orgIds.add(Long.valueOf((Integer) o));
-			}
-			Date age = null;
-			if (argObjectMap.get("userage") instanceof Date) {
-				age = (Date) argObjectMap.get("userage");
-			}
-
-			log.debug("Mail : " + argObjectMap.get("email").toString());
-			log.debug("Phone : " + argObjectMap.get("phone").toString());
-
-			long userId;
-			if (user_idClient == null || user_idClient == 0) {
-				userId = userManager.registerUserInit(
-						user_level,
-						Long.valueOf(argObjectMap.get("level_id").toString())
-								.longValue(),
-						Integer.valueOf(
-								argObjectMap.get("availible").toString())
-								.intValue(),
-						Integer.valueOf(argObjectMap.get("status").toString())
-								.intValue(),
-						argObjectMap.get("login").toString(),
-						argObjectMap.get("password").toString(),
-						argObjectMap.get("lastname").toString(),
-						argObjectMap.get("firstname").toString(),
-						argObjectMap.get("email").toString(),
-						age,
-						argObjectMap.get("street").toString(),
-						argObjectMap.get("additionalname").toString(),
-						argObjectMap.get("fax").toString(),
-						argObjectMap.get("zip").toString(),
-						Long.valueOf(argObjectMap.get("states_id").toString())
-								.longValue(),
-						argObjectMap.get("town").toString(),
-						new Long(argObjectMap.get("language_id").toString()),
-						true,
-						orgIds,
-						argObjectMap.get("phone").toString(),
-						Boolean.valueOf(argObjectMap.get("sendSMS").toString())
-								.booleanValue(),
-						"",
-						false,
-						argObjectMap.get("jNameTimeZone").toString(),
-						Boolean.valueOf(
-								argObjectMap.get("forceTimeZoneCheck")
-										.toString()).booleanValue(),
-						argObjectMap.get("userOffers").toString(),
-						argObjectMap.get("userSearchs").toString(),
-						Boolean.valueOf(
-								argObjectMap.get("showContactData").toString())
-								.booleanValue(),
-						Boolean.valueOf(
-								argObjectMap.get("showContactDataToContacts")
-										.toString()).booleanValue());
-			} else {
-				userId = userManager.updateUser(
-						user_level,
-						user_idClient,
-						Long.valueOf(argObjectMap.get("level_id").toString())
-								.longValue(),
-						argObjectMap.get("login").toString(),
-						argObjectMap.get("password").toString(),
-						argObjectMap.get("lastname").toString(),
-						argObjectMap.get("firstname").toString(),
-						age,
-						argObjectMap.get("street").toString(),
-						argObjectMap.get("additionalname").toString(),
-						argObjectMap.get("zip").toString(),
-						Long.valueOf(argObjectMap.get("states_id").toString())
-								.longValue(),
-						argObjectMap.get("town").toString(),
-						new Long(argObjectMap.get("language_id").toString()),
-						Integer.valueOf(
-								argObjectMap.get("availible").toString())
-								.intValue(),
-						argObjectMap.get("telefon").toString(),
-						argObjectMap.get("fax").toString(),
-						argObjectMap.get("mobil").toString(),
-						argObjectMap.get("email").toString(),
-						argObjectMap.get("comment").toString(),
-						Integer.valueOf(argObjectMap.get("status").toString())
-								.intValue(),
-						orgIds,
-						Integer.valueOf(
-								argObjectMap.get("salutations_id").toString())
-								.intValue(),
-						argObjectMap.get("phone").toString(),
-						Boolean.valueOf(argObjectMap.get("sendSMS").toString())
-								.booleanValue(),
-						argObjectMap.get("jNameTimeZone").toString(),
-						Boolean.valueOf(
-								argObjectMap.get("forceTimeZoneCheck")
-										.toString()).booleanValue(),
-						argObjectMap.get("userOffers").toString(),
-						argObjectMap.get("userSearchs").toString(),
-						Boolean.valueOf(
-								argObjectMap.get("showContactData").toString())
-								.booleanValue(),
-						Boolean.valueOf(
-								argObjectMap.get("showContactDataToContacts")
-										.toString()).booleanValue());
-			}
-
-			return userId;
-			
-		} catch (Exception ex) {
-			log.error("[saveOrUpdateUser]: ", ex);
-		}
-		return null;
-	}
-
-	/**
-	 * deletes a user
-	 * 
-	 * @param SID
-	 * @param user_idClient
-	 * @return - id of the user deleted in case of success, error code otherwise
-	 */
-	public Long deleteUserAdmin(String SID, Long user_idClient) {
-		log.debug("deleteUserAdmin");
-		try {
-			Long users_id = sessiondataDao.checkSession(SID);
-			Long user_level = userManager.getUserLevelByID(users_id);
-
-			// admins only
-			if (authLevelUtil.checkAdminLevel(user_level)) {
-				// no self destruction ;-)
-				if (!users_id.equals(user_idClient)) {
-
-					// Setting user deleted
-					Long userId = usersDao.deleteUserID(user_idClient);
-
-					return userId;
-				} else {
-					return new Long(-38);
-				}
-			} else {
-				return new Long(-11);
-			}
-		} catch (Exception err) {
-			log.error("[deleteUserAdmin]", err);
-		}
-		return null;
 	}
 
 	/**
@@ -600,7 +364,7 @@ public class UserService {
 
 				User us = userManager.getUserById(users_id);
 
-				us.setOmTimeZone(omTimeZoneDaoImpl.getOmTimeZone(jname));
+				us.setTimeZoneId(timezoneUtil.getTimezoneByInternalJName(jname).getID());
 				us.setForceTimeZoneCheck(false);
 				us.setUpdatetime(new Date());
 
@@ -1032,7 +796,7 @@ public class UserService {
 
 					room = roomDao.get(room_id);
 
-					String sendJNameTimeZone = from.getOmTimeZone().getJname();
+					String sendJNameTimeZone = from.getTimeZoneId();
 
 					appointmentId = this.addAppointmentToUser(subject, message,
 							from, recipients, room, appointmentstart,
@@ -1042,7 +806,7 @@ public class UserService {
 
 				recipients.add(from.getAdresses().getEmail());
 
-				String sendJNameTimeZone = from.getOmTimeZone().getJname();
+				String sendJNameTimeZone = from.getTimeZoneId();
 
 				String profile_link = baseURL + "?cuser=1";
 
@@ -1095,7 +859,7 @@ public class UserService {
 										appointmentstart, appointmentend,
 										appointmentId, 
 										from.getFirstname() + " " + from.getLastname(),
-										from.getOmTimeZone());
+										timezoneUtil.getTimezoneByUser(from));
 
 						invitation_link = baseURL + "?invitationHash="
 								+ invitation.getHash();
@@ -1197,7 +961,7 @@ public class UserService {
 		Long appointmentId = appointmentDao.addAppointment(subject,
 				to.getUser_id(), "", message, appointmentstart, appointmentend,
 				false, false, false, false, 1L, 2L, room, to.getLanguage_id(),
-				false, "", isConnectedEvent, sendJNameTimeZone);
+				false, "", isConnectedEvent);
 
 		for (String email : recipients) {
 
@@ -1211,13 +975,13 @@ public class UserService {
 				meetingMemberDao.addMeetingMember(firstname, lastname, "0",
 						"0", appointmentId, meetingMember.getUser_id(), email,
 						meetingMember.getPhoneForSMS(), invitor,
-						meetingMember.getOmTimeZone(), isConnectedEvent);
+						timezoneUtil.getTimezoneByUser(meetingMember), isConnectedEvent);
 
 			} else {
 
 				meetingMemberDao.addMeetingMember("", "", "0", "0",
 						appointmentId, null, email, "", invitor,
-						omTimeZoneDaoImpl.getOmTimeZone(sendJNameTimeZone),
+						timezoneUtil.getTimezoneByInternalJName(sendJNameTimeZone),
 						isConnectedEvent);
 
 			}

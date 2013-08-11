@@ -329,10 +329,6 @@
 		    			this.setAttribute("text","<u>"+canvas.jNameTimeZone+"</u>");
 		    		]]>
 		    	</handler>
-		    	<handler name="onclick">
-		    		canvas.userSettingsModuleOpt = "editUserProfile";
-            		quicklinkAct("userSettingsModule");
-		    	</handler>
 		    </labelText>
 		    
 		    

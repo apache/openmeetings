@@ -358,15 +358,11 @@ public class CalendarWebService {
 			Long user_level = userManager.getUserLevelByID(users_id);
 			if (authLevelUtil.checkUserLevel(user_level)) {
 
-				log.debug("appointmentId " + appointmentId);
-
 				appointmentLogic.getAppointMentById(appointmentId);
-
-				User user = userManager.getUserById(users_id);
 
 				return appointmentDao.updateAppointmentByTime(appointmentId,
 						appointmentstart, appointmentend, users_id, baseurl,
-						languageId, user.getOmTimeZone().getIcal());
+						languageId);
 			}
 		} catch (Exception err) {
 			log.error("[updateAppointment]", err);
@@ -489,14 +485,12 @@ public class CalendarWebService {
 				roomDao.update(room, users_id);
 			}
 
-			User user = userManager.getUserById(users_id);
-
 			return appointmentDao.updateAppointment(appointmentId,
 					appointmentName, appointmentDescription, appointmentstart
 							.getTime(), appointmentend.getTime(), isDaily,
 					isWeekly, isMonthly, isYearly, categoryId, remind, newList,
 					users_id, baseurl, languageId, isPasswordProtected,
-					password, user.getOmTimeZone().getIcal(),
+					password,
 					appointmentLocation);
 
 		} catch (Exception err) {

@@ -28,6 +28,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.TimeZone;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -36,8 +37,6 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Expression;
-import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
@@ -50,7 +49,6 @@ import org.apache.openmeetings.data.basic.dao.OmTimeZoneDao;
 import org.apache.openmeetings.data.beans.basic.SearchResult;
 import org.apache.openmeetings.data.user.dao.StateDao;
 import org.apache.openmeetings.data.user.dao.UsersDao;
-import org.apache.openmeetings.persistence.beans.basic.OmTimeZone;
 import org.apache.openmeetings.persistence.beans.basic.Sessiondata;
 import org.apache.openmeetings.persistence.beans.domain.Organisation_Users;
 import org.apache.openmeetings.persistence.beans.room.Client;
@@ -66,7 +64,7 @@ import org.apache.openmeetings.utils.DaoHelper;
 import org.apache.openmeetings.utils.crypt.ManageCryptStyle;
 import org.apache.openmeetings.utils.mail.MailHandler;
 import org.apache.openmeetings.utils.math.CalendarPatterns;
-import org.red5.io.utils.ObjectMap;
+import org.apache.openmeetings.utils.math.TimezoneUtil;
 import org.red5.logging.Red5LoggerFactory;
 import org.red5.server.api.IClient;
 import org.red5.server.api.scope.IScope;
@@ -114,6 +112,8 @@ public class UserManager {
 	private AuthLevelUtil authLevelUtil;
 	@Autowired
 	private ISessionManager sessionManager;
+	@Autowired
+	private TimezoneUtil timezoneUtil;
 
 	/**
 	 * query for a list of users
@@ -351,45 +351,6 @@ public class UserManager {
 		}
 	}
 
-	/**
-	 * suche eines Bentzers
-	 * 
-	 * @param user_level
-	 * @param searchstring
-	 * @param max
-	 * @param start
-	 * @return
-	 */
-	public List<User> searchUser(long user_level, String searchcriteria,
-			String searchstring, int max, int start, String orderby, boolean asc) {
-		if (authLevelUtil.checkAdminLevel(user_level)) {
-			try {
-				CriteriaBuilder cb = em.getCriteriaBuilder();
-				CriteriaQuery<User> cq = cb.createQuery(User.class);
-				Root<User> c = cq.from(User.class);
-				Expression<String> literal = cb.literal("%" + searchstring + "%");
-				Path<String> path = c.get(searchcriteria);
-				Predicate predicate = cb.like(path, literal);
-				Predicate condition = cb.notEqual(c.get("deleted"), true);
-				cq.where(condition, predicate);
-				cq.distinct(asc);
-				if (asc) {
-					cq.orderBy(cb.asc(c.get(orderby)));
-				} else {
-					cq.orderBy(cb.desc(c.get(orderby)));
-				}
-				TypedQuery<User> q = em.createQuery(cq);
-				q.setFirstResult(start);
-				q.setMaxResults(max);
-				List<User> contactsZ = q.getResultList();
-				return contactsZ;
-			} catch (Exception ex2) {
-				log.error("searchUser", ex2);
-			}
-		}
-		return null;
-	}
-
 	public List<Userdata> getUserdataDashBoard(Long user_id) {
 		if (user_id.longValue() > 0) {
 			try {
@@ -426,99 +387,6 @@ public class UserManager {
 			userdata.setComment("Error: No USER_ID given");
 		}
 		return userdata;
-	}
-
-	public Long updateUser(long user_level, Long user_id, Long level_id,
-			String login, String password, String lastname, String firstname,
-			Date age, String street, String additionalname, String zip,
-			long states_id, String town, Long language_id, int availible,
-			String telefon, String fax, String mobil, String email,
-			String comment, int status, List<Long> organisations, int salutations_id,
-			String phone, boolean sendSMS, String jNameTimeZone,
-			Boolean forceTimeZoneCheck, String userOffers, String userSearchs,
-			Boolean showContactData, Boolean showContactDataToContacts) {
-
-		if (authLevelUtil.checkUserLevel(user_level) && user_id != 0) {
-			try {
-				User us = usersDao.get(user_id);
-
-				// Check for duplicates
-				boolean checkName = true;
-
-				if (!login.equals(us.getLogin())) {
-					checkName = usersDao.checkUserLogin(login, user_id);
-				}
-				boolean checkEmail = true;
-
-				// Compare old address with new address
-				if (!email.equals(us.getAdresses().getEmail())) {
-
-					// Its a new one - check, whether another user already uses
-					// that one...
-					checkEmail = usersDao.checkUserEMail(email, user_id);
-				}
-
-				if (checkName && checkEmail) {
-					// log.info("user_id " + user_id);
-
-					// add or delete organisations from this user
-					if (organisations != null) {
-						organisationManager.updateUserOrganisationsByUser(
-								us, organisations);
-					}
-					us = usersDao.get(user_id);
-
-					us.setLastname(lastname);
-					us.setFirstname(firstname);
-					us.setAge(age);
-					us.setLogin(login);
-					us.setUpdatetime(new Date());
-					us.setAvailible(availible);
-					us.setStatus(status);
-					us.setSalutations_id((long)salutations_id);
-					us.setOmTimeZone(omTimeZoneDaoImpl
-							.getOmTimeZone(jNameTimeZone));
-					us.setLanguage_id(language_id);
-					us.setForceTimeZoneCheck(forceTimeZoneCheck);
-
-					us.setSendSMS(sendSMS);
-					us.setUserOffers(userOffers);
-					us.setUserSearchs(userSearchs);
-					us.setShowContactData(showContactData);
-					us.setShowContactDataToContacts(showContactDataToContacts);
-
-					if (level_id != 0) {
-						us.setLevel_id(level_id);
-					}
-					if (password.length() != 0) {
-						try {
-							us.updatePassword(cryptManager, configurationDao, password);
-						} catch (Exception e) {
-							return new Long(-7);
-						}
-					}
-					us.setAdresses(street, zip, town, statemanagement.getStateById(states_id),
-							additionalname, comment, fax, phone, email);
-
-					em.merge(us);
-
-					return us.getUser_id();
-
-				} else {
-					if (!checkName) {
-						return new Long(-15);
-					} else if (!checkEmail) {
-						return new Long(-17);
-					}
-				}
-			} catch (Exception ex2) {
-				log.error("[updateUser]", ex2);
-			}
-		} else {
-			log.error("Error: Permission denied");
-			return new Long(-1);
-		}
-		return new Long(-1);
 	}
 
 	public String updateUserdata(int DATA_ID, long USER_ID, String DATA_KEY,
@@ -813,7 +681,8 @@ public class UserManager {
 				town, language_id, sendWelcomeMessage,
 				organisations, phone, sendSMS, baseURL,
 				sendConfirmation,
-				omTimeZoneDaoImpl.getOmTimeZone(jname_timezone), forceTimeZoneCheck,
+				timezoneUtil.getTimezoneByInternalJName(jname_timezone), 
+				forceTimeZoneCheck,
 				userOffers, userSearchs, showContactData,
 				showContactDataToContacts, null);
 	}
@@ -860,7 +729,7 @@ public class UserManager {
 			String town, long language_id, boolean sendWelcomeMessage,
 			List<Long> organisations, String phone, boolean sendSMS, String baseURL,
 			Boolean sendConfirmation,
-			OmTimeZone timezone, Boolean forceTimeZoneCheck,
+			TimeZone timezone, Boolean forceTimeZoneCheck,
 			String userOffers, String userSearchs, Boolean showContactData,
 			Boolean showContactDataToContacts, String activatedHash) throws Exception {
 		// TODO: make phone number persistent
@@ -977,7 +846,7 @@ public class UserManager {
 	public Long addUser(long level_id, int availible, int status,
 			String firstname, String login, String lastname, long language_id,
 			String userpass, Address adress, boolean sendSMS, Date age, String hash,
-			OmTimeZone timezone,
+			TimeZone timezone,
 			Boolean forceTimeZoneCheck, String userOffers, String userSearchs,
 			Boolean showContactData, Boolean showContactDataToContacts, List<Long> orgIds) {
 		try {
@@ -997,7 +866,7 @@ public class UserManager {
 			users.setSalutations_id(1L);
 			users.setStarttime(new Date());
 			users.setActivatehash(hash);
-			users.setOmTimeZone(timezone);
+			users.setTimeZoneId(timezone.getID());
 			users.setForceTimeZoneCheck(forceTimeZoneCheck);
 
 			users.setUserOffers(userOffers);
@@ -1087,7 +956,7 @@ public class UserManager {
 			users.setStarttime(new Date());
 			users.setActivatehash(hash);
 			users.setPictureuri(pictureuri);
-			users.setOmTimeZone(omTimeZoneDaoImpl.getOmTimeZone(jNameTimeZone));
+			users.setTimeZoneId(timezoneUtil.getTimezoneByInternalJName(jNameTimeZone).getID());
 
 			users.setExternalUserId(externalUserId);
 			users.setExternalUserType(externalUserType);
@@ -1143,108 +1012,6 @@ public class UserManager {
 		} catch (Exception ex2) {
 			log.error("[addUserLevel]", ex2);
 		}
-	}
-
-	/**
-	 * Update User by Object
-	 * 
-	 * @param user_level
-	 * @param values
-	 * @param users_id
-	 * @return
-	 */
-
-	public Long saveOrUpdateUser(Long user_level, ObjectMap<?, ?> values,
-			Long users_id) {
-		try {
-			if (authLevelUtil.checkAdminLevel(user_level)) {
-				Long returnLong = null;
-
-				Long user_id = Long.parseLong(values.get("user_id").toString());
-
-				if (user_id != null && user_id > 0) {
-
-					returnLong = user_id;
-					User savedUser = usersDao.get(user_id);
-					savedUser.setAge((Date) values.get("age"));
-					savedUser.setFirstname(values.get("firstname").toString());
-					savedUser.setLastname(values.get("lastname").toString());
-					savedUser.setSalutations_id(Long.parseLong(values.get(
-							"salutations_id").toString()));
-
-					savedUser.setLanguage_id(Long.parseLong(values.get(
-							"languages_id").toString()));
-					savedUser.setOmTimeZone(omTimeZoneDaoImpl
-							.getOmTimeZone((values.get("jnameTimeZone")
-									.toString())));
-
-					String password = values.get("password").toString();
-					if (password != null && !password.isEmpty()) {
-						savedUser.updatePassword(cryptManager, configurationDao, password);
-					}
-
-					String email = values.get("email").toString();
-
-					if (!email.equals(savedUser.getAdresses().getEmail())) {
-						boolean checkEmail = usersDao.checkUserEMail(email, user_id);
-						if (!checkEmail) {
-							// mail already used by another user!
-							returnLong = new Long(-11);
-						} else {
-							savedUser.getAdresses().setEmail(email);
-						}
-					}
-
-					String phone = values.get("phone").toString();
-					savedUser.getAdresses().setPhone(phone);
-					savedUser.getAdresses().setComment(
-							values.get("comment").toString());
-					savedUser.getAdresses().setStreet(
-							values.get("street").toString());
-					savedUser.getAdresses().setTown(
-							values.get("town").toString());
-					savedUser.getAdresses().setAdditionalname(
-							values.get("additionalname").toString());
-					savedUser.getAdresses()
-							.setZip(values.get("zip").toString());
-					savedUser.setSendSMS(false);
-					savedUser.setForceTimeZoneCheck(false);
-					savedUser.getAdresses().setStates(
-							statemanagement.getStateById(Long.parseLong(values
-									.get("state_id").toString())));
-
-					savedUser.setShowContactData(Boolean.valueOf(values.get(
-							"showContactData").toString()));
-					savedUser.setShowContactDataToContacts(Boolean
-							.valueOf(values.get("showContactDataToContacts")
-									.toString()));
-					savedUser
-							.setUserOffers(values.get("userOffers").toString());
-					savedUser.setUserSearchs(values.get("userSearchs")
-							.toString());
-
-					// savedUser.setAdresses(addressmanagement.getAdressbyId(user.getAdresses().getAdresses_id()));
-
-					if (savedUser.getUser_id() == null) {
-						em.persist(savedUser);
-					} else {
-						if (!em.contains(savedUser)) {
-							em.merge(savedUser);
-						}
-					}
-
-					return returnLong;
-				}
-
-			} else {
-				log.error("[saveOrUpdateUser] invalid auth " + users_id + " "
-						+ new Date());
-			}
-		} catch (Exception ex) {
-			log.error("[saveOrUpdateUser]", ex);
-		}
-
-		return null;
 	}
 
 	/**
@@ -1552,66 +1319,6 @@ public class UserManager {
 
 	public void updateUser(User user) {
 		usersDao.update(user, null);
-	}
-
-	/**
-	 * @param user_level
-	 * @param start
-	 * @param max
-	 * @param orderby
-	 * @param asc
-	 * @param search
-	 * @return
-	 */
-	public SearchResult<User> getUsersListWithSearch(Long user_level, int start,
-			int max, String orderby, boolean asc, String search) {
-		try {
-			if (authLevelUtil.checkAdminLevel(user_level)) {
-
-				String hql = "select c from User c "
-						+ "where c.deleted = false " + "AND ("
-						+ "lower(c.login) LIKE :search "
-						+ "OR lower(c.firstname) LIKE :search "
-						+ "OR lower(c.lastname) LIKE :search " + ")";
-
-				if (orderby.startsWith("c.")) {
-					hql += "ORDER BY " + orderby;
-				} else {
-					hql += "ORDER BY " + "c." + orderby;
-				}
-
-				if (asc) {
-					hql += " ASC";
-				} else {
-					hql += " DESC";
-				}
-
-				if (search.length() == 0) {
-					search = "%";
-				} else {
-					search = "%" + search + "%";
-				}
-				log.debug("getUsersList search: " + search);
-
-				SearchResult<User> sresult = new SearchResult<User>();
-				sresult.setObjectName(User.class.getName());
-				sresult.setRecords(usersDao
-						.selectMaxFromUsersWithSearch(search));
-
-				// get all users
-				TypedQuery<User> query = em.createQuery(hql, User.class);
-				query.setParameter("search", StringUtils.lowerCase(search));
-				query.setMaxResults(max);
-				query.setFirstResult(start);
-
-				sresult.setResult(query.getResultList());
-
-				return sresult;
-			}
-		} catch (Exception ex2) {
-			log.error("[getUsersList] " + ex2);
-		}
-		return null;
 	}
 
 	private StringBuilder getUserProfileQuery(boolean count, String text, String offers, String search) {

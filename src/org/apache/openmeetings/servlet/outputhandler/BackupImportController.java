@@ -283,12 +283,15 @@ public class BackupImportController extends AbstractUploadController {
 		{
 			List<User> list = readUserList(f, "users.xml", "users");
 			for (User u : list) {
-				OmTimeZone tz = u.getOmTimeZone();
-				if (tz == null || tz.getJname() == null) {
+				
+				//FIXME: OPENMEETINGS-750
+				//Convert old Backups with OmTimeZone to new schema
+				
+				String tz = u.getTimeZoneId();
+				if (tz == null) {
 					String jNameTimeZone = configurationDao.getConfValue(
 							"default.timezone", String.class, "Europe/Berlin");
-					OmTimeZone omTimeZone = omTimeZoneDaoImpl.getOmTimeZone(jNameTimeZone);
-					u.setOmTimeZone(omTimeZone);
+					u.setTimeZoneId(jNameTimeZone);
 					u.setForceTimeZoneCheck(true);
 				} else {
 					u.setForceTimeZoneCheck(false);

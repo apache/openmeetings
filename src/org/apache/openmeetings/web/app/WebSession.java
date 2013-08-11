@@ -48,6 +48,7 @@ import org.apache.openmeetings.persistence.beans.basic.Sessiondata;
 import org.apache.openmeetings.persistence.beans.lang.FieldLanguage;
 import org.apache.openmeetings.persistence.beans.user.State;
 import org.apache.openmeetings.persistence.beans.user.User;
+import org.apache.openmeetings.utils.math.TimezoneUtil;
 import org.apache.openmeetings.web.user.dashboard.PrivateRoomsWidgetDescriptor;
 import org.apache.openmeetings.web.user.dashboard.RssWidgetDescriptor;
 import org.apache.openmeetings.web.user.dashboard.StartWidgetDescriptor;
@@ -135,7 +136,7 @@ public class WebSession extends AbstractAuthenticatedWebSession {
 			User user = (User)u;
 			userId = user.getUser_id();
 			languageId = user.getLanguage_id();
-			tz = TimeZone.getTimeZone(user.getOmTimeZone().getIcal());
+			tz = getBean(TimezoneUtil.class).getTimezoneByUser(user);
 			ISO8601FORMAT.setTimeZone(tz);
 			//FIXMW locale need to be set by User language first
 			sdf = DateFormat.getDateTimeInstance(SHORT, SHORT, getLocale());

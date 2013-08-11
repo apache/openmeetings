@@ -80,7 +80,6 @@
 	<bean id="xmlcrm.service" class="org.apache.openmeetings.remote.MainService" />
 	<bean id="printservice.service" class="org.apache.openmeetings.remote.PrintService" />
 	<bean id="pollservice.service" class="org.apache.openmeetings.remote.PollService" />
-	<bean id="organisationservice.service" class="org.apache.openmeetings.remote.OrganisationService" />
 	<bean id="meetingmemberservice.service" class="org.apache.openmeetings.remote.MeetingMemberService" />
 	<bean id="languageservice.service" class="org.apache.openmeetings.remote.LanguageService" />
 	<bean id="invitationservice.service" class="org.apache.openmeetings.remote.InvitationService" />
@@ -92,7 +91,6 @@
 	<bean id="openmeetings.FlvExplorerConverter" class="org.apache.openmeetings.data.flvrecord.converter.FlvExplorerConverter" />
 	<bean id="errorservice.service" class="org.apache.openmeetings.remote.ErrorService" />
 	<bean id="conferenceservice.service" class="org.apache.openmeetings.remote.ConferenceService" />
-	<bean id="configservice.service" class="org.apache.openmeetings.remote.ConfigurationService" />
 	<bean id="chatservice.service" class="org.apache.openmeetings.remote.ChatService" />
 	<bean id="calendarservice.service" class="org.apache.openmeetings.remote.CalendarService" />
 	<bean id="flvrecorderservice.service" class="org.apache.openmeetings.remote.FLVRecorderService" />

@@ -40,6 +40,58 @@ public class TimezoneUtil {
 	private ConfigurationDao configurationDao;
 	@Autowired
 	private OmTimeZoneDao omTimeZoneDaoImpl;
+	
+	/**
+	 * Parameters:
+	 * ID - the ID for a TimeZone, either an abbreviation such as "PST", a full name such as "America/Los_Angeles", or 
+	 * a custom ID such as "GMT-8:00". Note that the support of abbreviations is for JDK 1.1.x compatibility only and 
+	 * full names should be used.
+	 * 
+	 * Returns:
+	 * the specified TimeZone, or the GMT zone if the given ID cannot be understood.
+	 * <br/>
+	 * <br/>
+	 * TODO: Fall-back mechanism and maybe a log output if the given timeZoneId is not found in the 
+	 * list of available TimeZones of the current java.util.TimeZone package of the Java SDK
+	 * the the user is running
+	 * <br/>
+	 * @param timeZoneId
+	 * @return
+	 */
+	
+	public TimeZone getTimeZone(String timeZoneId) {
+		
+		if (timeZoneId == null || timeZoneId.equals("")) {
+			return getDefaultTimeZone();
+		}
+		
+		//see TODO in comments
+		
+		return TimeZone.getTimeZone(timeZoneId);
+	}
+
+	/**
+	 * @return The current server configured time zone in the table
+	 *         configuration key: "default.timezone"
+	 */
+	public TimeZone getDefaultTimeZone() {
+		
+		String defaultTzName = configurationDao.getConfValue("default.timezone", String.class, "Europe/Berlin");
+
+		OmTimeZone omTimeZoneDefault = omTimeZoneDaoImpl.getOmTimeZone(defaultTzName);
+
+		TimeZone timeZoneByOmTimeZone = TimeZone
+				.getTimeZone(omTimeZoneDefault.getIcal());
+
+		if (timeZoneByOmTimeZone != null) {
+			return timeZoneByOmTimeZone;
+		}
+
+		// If everything fails take the servers default one
+		log.error("There is no correct time zone set in the configuration of OpenMeetings for the key default.timezone or key is missing in table, using default locale!");
+		return TimeZone.getDefault();
+		
+	}
 
 	/**
 	 * Returns the timezone based on the user profile, if not return the
@@ -50,10 +102,9 @@ public class TimezoneUtil {
 	 */
 	public TimeZone getTimezoneByUser(User user) {
 
-		if (user != null && user.getOmTimeZone() != null) {
+		if (user != null && user.getTimeZoneId() != null) {
 
-			TimeZone timeZone = TimeZone.getTimeZone(user.getOmTimeZone()
-					.getIcal());
+			TimeZone timeZone = TimeZone.getTimeZone(user.getTimeZoneId());
 
 			if (timeZone != null) {
 				return timeZone;

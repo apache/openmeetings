@@ -33,7 +33,6 @@ import javax.persistence.TypedQuery;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
-import org.apache.openmeetings.data.beans.basic.SearchResult;
 import org.apache.openmeetings.persistence.beans.lang.FieldLanguage;
 import org.apache.openmeetings.persistence.beans.lang.Fieldlanguagesvalues;
 import org.apache.openmeetings.persistence.beans.lang.Fieldvalues;
@@ -158,23 +157,6 @@ public class FieldManager {
 			log.error("[getFieldByIdAndLanguage]: ", ex2);
 		}
 		return null;
-	}
-
-	public Long deleteFieldlanguagesvaluesById(Long fieldlanguagesvalues_id) {
-		try {
-			Fieldlanguagesvalues flv = this
-					.getFieldlanguagesvaluesById(fieldlanguagesvalues_id);
-			if (flv == null) {
-				return new Long(-27);
-			}
-
-			flv = em.find(Fieldlanguagesvalues.class, fieldlanguagesvalues_id);
-
-			return new Long(-28);
-		} catch (Exception ex2) {
-			log.error("[getFieldByIdAndLanguage]: ", ex2);
-		}
-		return new Long(-1);
 	}
 
 	public List<Fieldlanguagesvalues> getAllFieldsByLanguage(Long language_id) {
@@ -398,168 +380,10 @@ public class FieldManager {
 		return q1.getResultList();
 	}
 
-	public Fieldvalues getFieldvaluesById(Long fieldvalues_id, Long language_id) {
-		try {
-			// log.error("Long fieldvalues_id, Long language_id "+fieldvalues_id+" || "+language_id);
-			Fieldvalues fv = this.getFieldvaluesById(fieldvalues_id);
-			fv.setFieldlanguagesvalue(this.getFieldByIdAndLanguage(
-					fieldvalues_id, language_id));
-			return fv;
-		} catch (Exception e) {
-			log.error("[getFieldvaluesById] ", e);
-		}
-		return null;
-	}
-
-	/**
-	 * update given Field and its Label by IDs
-	 * 
-	 * @param fieldvalues_id
-	 * @param name
-	 * @param fieldlanguagesvalues_id
-	 * @param value
-	 * @return
-	 */
-	public Long updateLabel(Long fieldvalues_id, String name,
-			Long fieldlanguagesvalues_id, String value) {
-		try {
-			Fieldvalues fv = this.getFieldvaluesById(fieldvalues_id);
-			if (fv == null) {
-				return new Long(-24);
-			} else {
-				fv.setName(name);
-				fv.setUpdatetime(new Date());
-				this.updateField(fv);
-			}
-			Fieldlanguagesvalues flv = this
-					.getFieldlanguagesvaluesById(fieldlanguagesvalues_id);
-			if (flv == null) {
-				return new Long(-25);
-			} else {
-				flv.setUpdatetime(new Date());
-				flv.setValue(value);
-				this.updateFieldLanguagesLabel(flv);
-			}
-			return fieldvalues_id;
-		} catch (Exception ex2) {
-			log.error("[updateFieldLanguagesLabel]: ", ex2);
-		}
-		return new Long(-1);
-	}
-
-	public Long addAndUpdateLabel(Long fieldvalues_id, String name,
-			String value, Long language_id) {
-		try {
-			Fieldvalues fv = this.getFieldvaluesById(fieldvalues_id);
-			if (fv == null) {
-				return new Long(-24);
-			} else {
-				fv.setName(name);
-				fv.setUpdatetime(new Date());
-				this.updateField(fv);
-			}
-			this.addFieldValueByFieldAndLanguage(fv, language_id,
-					value);
-			return fieldvalues_id;
-		} catch (Exception ex2) {
-			log.error("[updateFieldLanguagesLabel]: ", ex2);
-		}
-		return new Long(-1);
-	}
-
 	public long getNextFieldvaluesId() {
 		return fieldLanguagesValuesDAO.count() + 1;
 	}
 	
-	public Long addFieldAndLabel(String name, String value, Long language_id) {
-		try {
-			Fieldvalues fv = addFieldById(name, getNextFieldvaluesId());
-			if (fv.getFieldvalues_id() > 0) {
-				this.addFieldValueByFieldAndLanguage(fv,
-						language_id, value);
-				return fv.getFieldvalues_id();
-			} else {
-				return -1L;
-			}
-		} catch (Exception ex2) {
-			log.error("[updateFieldLanguagesLabel]: ", ex2);
-		}
-		return -1L;
-	}
-
-	public SearchResult<Fieldvalues> getFieldsByLanguage(int start, int max, String orderby,
-			boolean asc, Long language_id, String search) {
-		try {
-			SearchResult<Fieldvalues> sresult = new SearchResult<Fieldvalues>();
-			sresult.setObjectName(Fieldlanguagesvalues.class.getName());
-			sresult.setRecords(this.selectMaxFromFieldsValues(search));
-			sresult.setResult(this.getMixedFieldValuesList(start, max, orderby,
-					asc, language_id, search));
-			return sresult;
-		} catch (Exception ex2) {
-			log.error("[getFieldsByLanguage]: ", ex2);
-		}
-		return null;
-	}
-
-	private Long selectMaxFromFieldsValues(String search) throws Exception {
-		String queryLanguage = "select count(c.fieldvalues_id) from Fieldvalues c where c.deleted = false";
-		if (search.length()>0) {
-			queryLanguage += " AND (c.name LIKE :searchStr " +
-							"OR c.fieldvalues_id = :fieldvalues_id)";
-		}
-		TypedQuery<Long> query = em
-				.createQuery(queryLanguage, Long.class);
-		if (search.length()>0) {
-			query.setParameter("searchStr", "%"+search+"%");
-			long idNumber = 0;
-			try {
-				idNumber = Long.parseLong(search);
-			} catch (NumberFormatException nfe) {
-			}
-			query.setParameter("fieldvalues_id", idNumber);
-		}
-		return query.getResultList().get(0);
-	}
-
-	private List<Fieldvalues> getMixedFieldValuesList(int start, int max,
-			String orderby, boolean asc, Long language_id, String search) throws Exception {
-		List<Fieldvalues> fvList = this.getFieldsValues(start, max, orderby, asc, search);
-		for (Fieldvalues fv : fvList) {
-			fv.setFieldlanguagesvalue(this.getFieldByIdAndLanguage(
-					fv.getFieldvalues_id(), language_id));
-		}
-		return fvList;
-	}
-
-	private List<Fieldvalues> getFieldsValues(int start, int max,
-			String orderby, boolean asc, String search) throws Exception {
-		String queryLanguage = "select c from Fieldvalues c where c.deleted = false";
-		if (search.length()>0) {
-			queryLanguage += " AND (c.name LIKE :searchStr " +
-							"OR c.fieldvalues_id = :fieldvalues_id)";
-		}
-		if (asc) {
-			queryLanguage += " ORDER BY "+orderby+ " ASC";
-		} else {
-			queryLanguage += " ORDER BY "+orderby + "DESC";
-		}
-		TypedQuery<Fieldvalues> q = em
-				.createQuery(queryLanguage, Fieldvalues.class);
-		if (search.length()>0) {
-			q.setParameter("searchStr", "%"+search+"%");
-			long idNumber = 0;
-			try {
-				idNumber = Long.parseLong(search);
-			} catch (NumberFormatException nfe) {
-			}
-			q.setParameter("fieldvalues_id", idNumber);
-		}
-		q.setFirstResult(start);
-		q.setMaxResults(max);
-		return  q.getResultList();
-	}
-
 	public Fieldvalues getFieldvaluesById(Long fieldvalues_id) {
 		String hql = "select f from Fieldvalues f WHERE f.fieldvalues_id = :fieldvalues_id ";
 		TypedQuery<Fieldvalues> query = em.createQuery(hql, Fieldvalues.class);
@@ -572,11 +396,6 @@ public class FieldManager {
 		return fv;
 	}
 
-	private Fieldlanguagesvalues getFieldlanguagesvaluesById(
-			Long fieldlanguagesvalues_id) throws Exception {
-		return performReplace(fieldLanguagesValuesDAO.get(fieldlanguagesvalues_id));
-	}
-	
 	private Fieldlanguagesvalues performReplace(Fieldlanguagesvalues f) {
 		String appName = configurationDaoImpl.getAppName();
 		return performReplace(f, appName);
@@ -607,25 +426,4 @@ public class FieldManager {
 		return flv;
 	}
 	
-	private void updateField(Fieldvalues fv) throws Exception {
-		if (fv.getFieldvalues_id() == null) {
-			em.persist(fv);
-		} else {
-			if (!em.contains(fv)) {
-				em.merge(fv);
-			}
-		}
-	}
-
-	private void updateFieldLanguagesLabel(Fieldlanguagesvalues flv)
-			throws Exception {
-		if (flv.getFieldlanguagesvalues_id() == null) {
-			em.persist(flv);
-		} else {
-			if (!em.contains(flv)) {
-				em.merge(flv);
-			}
-		}
-	}
-
 }

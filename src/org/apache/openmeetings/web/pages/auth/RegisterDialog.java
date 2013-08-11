@@ -39,6 +39,7 @@ import org.apache.openmeetings.persistence.beans.lang.FieldLanguage;
 import org.apache.openmeetings.persistence.beans.user.State;
 import org.apache.openmeetings.utils.crypt.ManageCryptStyle;
 import org.apache.openmeetings.utils.math.CalendarPatterns;
+import org.apache.openmeetings.utils.math.TimezoneUtil;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.pages.ActivatePage;
 import org.apache.openmeetings.web.pages.MainPage;
@@ -190,7 +191,7 @@ public class RegisterDialog extends AbstractFormDialog<String> {
 					Arrays.asList(getBean(ConfigurationDao.class).getConfValue("default_domain_id", Long.class, null)),
 					"" /*phone*/, false, baseURL,
 					sendConfirmation,
-					getBean(OmTimeZoneDao.class).getOmTimeZone(tzModel.getObject().getJname()),
+					getBean(TimezoneUtil.class).getTimezoneByInternalJName(tzModel.getObject().getJname()),
 					false /*forceTimeZoneCheck*/,
 					"" /*userOffers*/, "" /*userSearchs*/,
 					false /*showContactData*/,

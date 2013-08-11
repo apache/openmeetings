@@ -52,15 +52,6 @@
         <xs:element ref="defaultWhiteboardWidth"/>
         <xs:element ref="defaultWhiteboardHeight"/>
         <xs:element ref="availableCameraResolutions"/>
-        <xs:element ref="adminModuleUser"/>
-        <xs:element ref="adminModuleRoom"/>
-        <xs:element ref="adminModuleOrg"/>
-        <xs:element ref="adminModuleLanguages"/>
-        <xs:element ref="adminModuleConnections"/>
-        <xs:element ref="adminModuleConfiguration"/>
-        <xs:element ref="adminModuleBackup"/>
-        <xs:element ref="adminModuleLDAP"/>
-        <xs:element ref="adminModuleServers"/>
         <xs:element ref="moderatorModuleUser"/>
         <xs:element ref="moderatorModuleRoom"/>
         <xs:element ref="dashboardModuleStartScreen"/>
@@ -173,15 +164,6 @@
       <xs:attribute name="width" use="required" type="xs:integer"/>
     </xs:complexType>
   </xs:element>
-  <xs:element name="adminModuleUser" type="xs:NCName"/>
-  <xs:element name="adminModuleRoom" type="xs:NCName"/>
-  <xs:element name="adminModuleOrg" type="xs:NCName"/>
-  <xs:element name="adminModuleLanguages" type="xs:NCName"/>
-  <xs:element name="adminModuleConnections" type="xs:NCName"/>
-  <xs:element name="adminModuleConfiguration" type="xs:NCName"/>
-  <xs:element name="adminModuleBackup" type="xs:NCName"/>
-  <xs:element name="adminModuleLDAP" type="xs:NCName"/>
-  <xs:element name="adminModuleServers" type="xs:NCName"/>
   <xs:element name="moderatorModuleUser" type="xs:NCName"/>
   <xs:element name="moderatorModuleRoom" type="xs:NCName"/>
   <xs:element name="dashboardModuleStartScreen" type="xs:NCName"/>
