@@ -26,10 +26,8 @@
 	<include href="settings/" />
 	 -->
 	<include href="invitation/" />
-    <include href="lzrecordcontent/" />
 	<include href="dashboard/" />
 	<include href="meetings/" />
     <include href="sipintegration/" />
-    <include href="lzcalendar/" />
 
 </library>

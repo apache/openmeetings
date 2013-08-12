@@ -967,10 +967,6 @@
                 if (canvas.currentActivityList != null) {
                     canvas.currentActivityList.addMessageRequest(value, canvas.getLabelName(1367), new Date().getTime());
                 }
-                if (canvas._overallchatcontent!=null){
-                    var parentObj = canvas._overallchatcontent.parent.parent.parent._chatparticipants;
-                    parentObj.removeItemById(value.user_id);
-                }
                 parent.roomDisconnectUser(value, value.publicSID);
             ]]>
             </handler>   
@@ -1377,8 +1373,6 @@
                         canvas.startBrowser(value);
                     } else if(value[0]=='closeBrowserURL'){
                         canvas.closeBrowser(value);
-                    } else if(value[0]=='clearOverallChatHistory'){
-                        canvas._overallchatcontent.clear();
                     }
                     
                 ]]>
@@ -1715,22 +1709,9 @@
         </handler>
     </netRemoteCallHib>
     
-    <!-- notifications for Overall-Chat -->
-    <netRemoteCallHib name="sendVarsToOverallChat" funcname="sendVarsToOverallChat" >      
-        <handler name="ondata" args="value">
-            if ($debug) Debug.write("sendVarsToOverallChat: ",value);
-            if (canvas._overallchatcontent!=null){
-                canvas._overallchatcontent.addChatHistory(value.message,value.client);
-            }
-        </handler>
-    </netRemoteCallHib>
-
     <netRemoteCallHib name="roomConnect" funcname="roomConnect" >      
         <handler name="ondata" args="value">
             if ($debug) Debug.write("roomConnect: ",value);
-            if (canvas._overallchatcontent != null){
-                canvas._overallchatcontent.parent.parent.parent._chatparticipants.addItem(value);
-            }
         </handler>
     </netRemoteCallHib>
     

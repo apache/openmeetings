@@ -137,27 +137,6 @@ public class UserService {
 	private SlaveHTTPConnectionManager slaveHTTPConnectionManager;
 
 	/**
-	 * get your own user-object
-	 * 
-	 * @param SID
-	 * @return get the user bound to this session
-	 */
-	public User getUserSelf(String SID) {
-		try {
-			Long users_id = sessiondataDao.checkSession(SID);
-			User us = usersDao.get(users_id);
-			
-			//reset some objects that the client should not know
-			us.setSipUser(null);
-			
-			return us;
-		} catch (Exception err) {
-			log.error("[getUserSelf]", err);
-		}
-		return null;
-	}
-
-	/**
 	 * refreshes the current SID
 	 * 
 	 * @param SID
@@ -259,22 +238,6 @@ public class UserService {
 		Long user_level = userManager.getUserLevelByID(users_id);
 		return userManager
 				.getUsersList(user_level, start, max, orderby, asc);
-	}
-
-	/**
-	 * gets a user-list by search criteria
-	 * 
-	 * @param SID
-	 * @param search
-	 * @param start
-	 * @param max
-	 * @param orderby
-	 * @return user-list by search criteria
-	 */
-	public SearchResult<User> getAllUserBySearchRange(String SID,
-			String search, int start, int max, String orderby, boolean asc) {
-		return userManager.getAllUserByRange(search, start, max, orderby,
-				asc);
 	}
 
 	/**
@@ -855,25 +818,6 @@ public class UserService {
 
 	}
 
-	public Long getNumberUnreadMessages(String SID) {
-		try {
-
-			Long users_id = sessiondataDao.checkSession(SID);
-			Long user_level = userManager.getUserLevelByID(users_id);
-			// users only
-			if (authLevelUtil.checkUserLevel(user_level)) {
-
-				SearchResult<PrivateMessage> searchResult = new SearchResult<PrivateMessage>();
-				searchResult.setObjectName(User.class.getName());
-				return privateMessagesDao.count(users_id, null, false, false);
-
-			}
-		} catch (Exception err) {
-			log.error("[getNumberUnreadMessages]", err);
-		}
-		return null;
-	}
-
 	public SearchResult<PrivateMessage> getInbox(String SID, String search,
 			String orderBy, int start, Boolean asc, Integer max) {
 		try {
@@ -1284,24 +1228,6 @@ public class UserService {
 
 		} catch (Exception err) {
 			log.error("[deletePrivateMessageFolder]", err);
-		}
-		return null;
-	}
-
-	public List<UserContact> getUserContactsWithShareCalendar(String SID) {
-		try {
-			Long users_id = sessiondataDao.checkSession(SID);
-			Long user_level = userManager.getUserLevelByID(users_id);
-			// users only
-			if (authLevelUtil.checkUserLevel(user_level)) {
-
-				return userContactsDao.getContactsByShareCalendar(users_id,
-						true);
-
-			}
-
-		} catch (Exception err) {
-			log.error("[getContactsByShareCalendar]", err);
 		}
 		return null;
 	}

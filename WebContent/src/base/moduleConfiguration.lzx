@@ -38,8 +38,6 @@ these properties can be overwritten by public/config.xml -->
     Dashboard Modules
  -->
 
-<attribute name="dashboardModuleStartScreen" value="mainDashboard" type="string" />
-
 <attribute name="dashboardModuleCalendar" value="myScheduledMeetings" type="string" />
 
 

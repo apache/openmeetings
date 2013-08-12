@@ -32,7 +32,4 @@
 <!--- chat modules: chat content -->
 <attribute name="_currentChatPanel" value="null" />
 
-<!--- chat modules: overall chat content -->
-<attribute name="_overallchatcontent" value="null" />
-
 </library>

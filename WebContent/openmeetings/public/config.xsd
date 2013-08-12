@@ -54,13 +54,10 @@
         <xs:element ref="availableCameraResolutions"/>
         <xs:element ref="moderatorModuleUser"/>
         <xs:element ref="moderatorModuleRoom"/>
-        <xs:element ref="dashboardModuleStartScreen"/>
-        <xs:element ref="dashboardModuleCalendar"/>
         <xs:element ref="conferenceModuleRoomList"/>
         <xs:element ref="conferenceRoomModule"/>
         <xs:element ref="restrictedRoomModule"/>
         <xs:element ref="interviewRoomModule"/>
-        <xs:element ref="recordModule"/>
         <xs:element ref="userSettingsModule"/>
       </xs:sequence>
     </xs:complexType>
@@ -166,12 +163,9 @@
   </xs:element>
   <xs:element name="moderatorModuleUser" type="xs:NCName"/>
   <xs:element name="moderatorModuleRoom" type="xs:NCName"/>
-  <xs:element name="dashboardModuleStartScreen" type="xs:NCName"/>
-  <xs:element name="dashboardModuleCalendar" type="xs:NCName"/>
   <xs:element name="conferenceModuleRoomList" type="xs:NCName"/>
   <xs:element name="conferenceRoomModule" type="xs:NCName"/>
   <xs:element name="restrictedRoomModule" type="xs:NCName"/>
   <xs:element name="interviewRoomModule" type="xs:NCName"/>
-  <xs:element name="recordModule" type="xs:NCName"/>
   <xs:element name="userSettingsModule" type="xs:NCName"/>
 </xs:schema>

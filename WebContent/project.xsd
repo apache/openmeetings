@@ -76,16 +76,6 @@
   </xs:extension>
   </xs:complexContent>
   </xs:complexType>
-<xs:element name="labeledTabpane" type="project:labeledTabpane" >
-</xs:element>
-  <xs:complexType name="labeledTabpane" mixed="true">
-  <xs:complexContent>
-  <xs:extension base="lzx:tabpane">
-      <xs:attribute name="labelid" type="lzx:number" >
-</xs:attribute>
-  </xs:extension>
-  </xs:complexContent>
-  </xs:complexType>
 <xs:element name="editRecordStream" type="project:editRecordStream" >
 </xs:element>
   <xs:complexType name="editRecordStream" mixed="true">
@@ -722,18 +712,6 @@ This is used in the conference.
   </xs:extension>
   </xs:complexContent>
   </xs:complexType>
-<xs:element name="overAllChatOutput" type="project:overAllChatOutput" >
-<xs:annotation>
-<xs:documentation xml:lang="en">
- chat output area. It shows chat history on-init.  </xs:documentation>
-</xs:annotation>
-</xs:element>
-  <xs:complexType name="overAllChatOutput" mixed="true">
-  <xs:complexContent>
-  <xs:extension base="lzx:view">
-  </xs:extension>
-  </xs:complexContent>
-  </xs:complexType>
 <xs:element name="answerPoll" type="project:answerPoll" >
 </xs:element>
   <xs:complexType name="answerPoll" mixed="true">
@@ -943,26 +921,6 @@ This is used in the conference.
       <xs:attribute name="dragItemResource" type="xs:string" default="" >
 </xs:attribute>
       <xs:attribute name="alreadySent" type="lzx:boolean" default="false" >
-</xs:attribute>
-  </xs:extension>
-  </xs:complexContent>
-  </xs:complexType>
-<xs:element name="attendeeListItem" type="project:attendeeListItem" >
-</xs:element>
-  <xs:complexType name="attendeeListItem" mixed="true">
-  <xs:complexContent>
-  <xs:extension base="lzx:view">
-      <xs:attribute name="userId" type="lzx:number" default="0" >
-</xs:attribute>
-      <xs:attribute name="memberId" type="lzx:number" default="0" >
-</xs:attribute>
-      <xs:attribute name="lastName" type="xs:string" default="" >
-</xs:attribute>
-      <xs:attribute name="jNameTimeZone" type="xs:string" default="" >
-</xs:attribute>
-      <xs:attribute name="firstName" type="xs:string" default="" >
-</xs:attribute>
-      <xs:attribute name="email" type="xs:string" default="" >
 </xs:attribute>
   </xs:extension>
   </xs:complexContent>
@@ -1267,18 +1225,6 @@ This is used in the conference.
   </xs:extension>
   </xs:complexContent>
   </xs:complexType>
-<xs:element name="messageRecordingWin" type="project:messageRecordingWin" >
-</xs:element>
-  <xs:complexType name="messageRecordingWin" mixed="true">
-  <xs:complexContent>
-  <xs:extension base="project:guiPresenter">
-      <xs:attribute name="labelTitleId" type="lzx:number" default="0" >
-</xs:attribute>
-      <xs:attribute name="error" type="xs:string" default="" >
-</xs:attribute>
-  </xs:extension>
-  </xs:complexContent>
-  </xs:complexType>
 <xs:element name="chatOutputRoomsList" type="project:chatOutputRoomsList" >
 </xs:element>
   <xs:complexType name="chatOutputRoomsList" mixed="true">
@@ -1440,26 +1386,6 @@ This is used in the conference.
   <xs:complexType name="innerlistView" mixed="true">
   <xs:complexContent>
   <xs:extension base="lzx:view">
-  </xs:extension>
-  </xs:complexContent>
-  </xs:complexType>
-<xs:element name="addExternalAttendee" type="project:addExternalAttendee" >
-</xs:element>
-  <xs:complexType name="addExternalAttendee" mixed="true">
-  <xs:complexContent>
-  <xs:extension base="project:labelExplorerBox">
-      <xs:attribute name="selectionActive" type="lzx:boolean" default="false" >
-</xs:attribute>
-      <xs:attribute name="refObj" type="xs:string" default="null" >
-</xs:attribute>
-  </xs:extension>
-  </xs:complexContent>
-  </xs:complexType>
-<xs:element name="loginWeb" type="project:loginWeb" >
-</xs:element>
-  <xs:complexType name="loginWeb" mixed="true">
-  <xs:complexContent>
-  <xs:extension base="project:explorerBox">
   </xs:extension>
   </xs:complexContent>
   </xs:complexType>
@@ -1654,14 +1580,6 @@ This is used in the conference.
   </xs:extension>
   </xs:complexContent>
   </xs:complexType>
-<xs:element name="rootFLVExplorerItem" type="project:rootFLVExplorerItem" >
-</xs:element>
-  <xs:complexType name="rootFLVExplorerItem" mixed="true">
-  <xs:complexContent>
-  <xs:extension base="project:baseFLVExplorerItem">
-  </xs:extension>
-  </xs:complexContent>
-  </xs:complexType>
 <xs:element name="rootFileExplorerItem" type="project:rootFileExplorerItem" >
 </xs:element>
   <xs:complexType name="rootFileExplorerItem" mixed="true">
@@ -1690,54 +1608,6 @@ This is used in the conference.
       <xs:attribute name="ondblclickedItem" type="xs:string" >
 </xs:attribute>
       <xs:attribute name="mainBgColor" type="xs:string" default="0xEEF0EB" >
-</xs:attribute>
-  </xs:extension>
-  </xs:complexContent>
-  </xs:complexType>
-<xs:element name="lzRecordingsViewMain" type="project:lzRecordingsViewMain" >
-<xs:annotation>
-<xs:documentation xml:lang="en">
-
-	View for recorded contents list.
-	When you select 'Recordings' on the top menu, this class shows the list.
-</xs:documentation>
-</xs:annotation>
-</xs:element>
-  <xs:complexType name="lzRecordingsViewMain" mixed="true">
-  <xs:complexContent>
-  <xs:extension base="project:conferenceBox">
-      <xs:attribute name="timerDelegateStarted" type="lzx:boolean" default="false" >
-</xs:attribute>
-      <xs:attribute name="timerDelegate" type="xs:string" default="null" >
-</xs:attribute>
-      <xs:attribute name="rightTime" type="lzx:number" default="0" >
-</xs:attribute>
-      <xs:attribute name="right" type="lzx:number" default="0" >
-</xs:attribute>
-      <xs:attribute name="recordingName" type="xs:string" default="" >
-<xs:annotation>
-<xs:documentation xml:lang="en">
-
-	View for recorded contents list.
-	When you select 'Recordings' on the top menu, this class shows the list.
-</xs:documentation>
-</xs:annotation>
-</xs:attribute>
-      <xs:attribute name="recordingLog" type="xs:string" default="" >
-</xs:attribute>
-      <xs:attribute name="leftTime" type="lzx:number" default="0" >
-</xs:attribute>
-      <xs:attribute name="left" type="lzx:number" default="0" >
-</xs:attribute>
-      <xs:attribute name="isPaused" type="lzx:boolean" default="false" >
-</xs:attribute>
-      <xs:attribute name="initW" type="lzx:number" default="640" >
-</xs:attribute>
-      <xs:attribute name="initH" type="lzx:number" default="480" >
-</xs:attribute>
-      <xs:attribute name="flvRecordingId" type="lzx:number" default="0" >
-</xs:attribute>
-      <xs:attribute name="deltaInSeconds" type="lzx:number" default="0" >
 </xs:attribute>
   </xs:extension>
   </xs:complexContent>
@@ -1920,21 +1790,6 @@ This is used in the conference.
   </xs:extension>
   </xs:complexContent>
   </xs:complexType>
-<xs:element name="lzRecordContent" type="project:lzRecordContent" >
-<xs:annotation>
-<xs:documentation xml:lang="en">
-
-	View for recorded contents list.
-	When you select 'Recordings' on the top menu, this class shows the list.
-</xs:documentation>
-</xs:annotation>
-</xs:element>
-  <xs:complexType name="lzRecordContent" mixed="true">
-  <xs:complexContent>
-  <xs:extension base="project:baseContentView">
-  </xs:extension>
-  </xs:complexContent>
-  </xs:complexType>
 <xs:element name="subMenuIconToolsToUpload" type="project:subMenuIconToolsToUpload" >
 </xs:element>
   <xs:complexType name="subMenuIconToolsToUpload" mixed="true">
@@ -2080,14 +1935,6 @@ This is used in the conference.
   <xs:extension base="project:listPresentationFilePDFExplorer">
       <xs:attribute name="originalName" type="xs:string" default="" >
 </xs:attribute>
-  </xs:extension>
-  </xs:complexContent>
-  </xs:complexType>
-<xs:element name="folderFLVExplorerItem" type="project:folderFLVExplorerItem" >
-</xs:element>
-  <xs:complexType name="folderFLVExplorerItem" mixed="true">
-  <xs:complexContent>
-  <xs:extension base="project:baseFLVExplorerItem">
   </xs:extension>
   </xs:complexContent>
   </xs:complexType>
@@ -2395,20 +2242,6 @@ This is used in the conference.
   </xs:extension>
   </xs:complexContent>
   </xs:complexType>
-<xs:element name="baseChooseIconFLVView" type="project:baseChooseIconFLVView" >
-</xs:element>
-  <xs:complexType name="baseChooseIconFLVView" mixed="true">
-  <xs:complexContent>
-  <xs:extension base="lzx:view">
-      <xs:attribute name="resourceN" type="xs:string" default="" >
-</xs:attribute>
-      <xs:attribute name="labelid" type="lzx:number" default="0" >
-</xs:attribute>
-      <xs:attribute name="isselected" type="lzx:boolean" default="false" >
-</xs:attribute>
-  </xs:extension>
-  </xs:complexContent>
-  </xs:complexType>
 <xs:element name="menuListItemUserProfile" type="project:menuListItemUserProfile" >
 </xs:element>
   <xs:complexType name="menuListItemUserProfile" mixed="true">
@@ -2519,50 +2352,6 @@ This is used in the conference.
   <xs:complexContent>
   <xs:extension base="project:borderedInputtext">
       <xs:attribute name="posName" type="xs:string" default="" >
-</xs:attribute>
-  </xs:extension>
-  </xs:complexContent>
-  </xs:complexType>
-<xs:element name="baseFLVExplorerItem" type="project:baseFLVExplorerItem" >
-</xs:element>
-  <xs:complexType name="baseFLVExplorerItem" mixed="true">
-  <xs:complexContent>
-  <xs:extension base="lzx:view">
-      <xs:attribute name="singleClickStarted" type="lzx:boolean" default="false" >
-</xs:attribute>
-      <xs:attribute name="singleClickDelegate" type="xs:string" default="null" >
-</xs:attribute>
-      <xs:attribute name="selected" type="lzx:boolean" default="false" >
-</xs:attribute>
-      <xs:attribute name="refObjListRoot" type="xs:string" default="null" >
-</xs:attribute>
-      <xs:attribute name="open" type="lzx:boolean" default="false" >
-</xs:attribute>
-      <xs:attribute name="mouseDownClickUsed" type="lzx:boolean" default="false" >
-</xs:attribute>
-      <xs:attribute name="mouseDownClickDelegate" type="xs:string" default="null" >
-</xs:attribute>
-      <xs:attribute name="isTrashCan" type="lzx:boolean" default="false" >
-</xs:attribute>
-      <xs:attribute name="isRoot" type="lzx:boolean" default="false" >
-</xs:attribute>
-      <xs:attribute name="isPresentation" type="lzx:boolean" default="false" >
-</xs:attribute>
-      <xs:attribute name="isOwner" type="lzx:boolean" default="false" >
-</xs:attribute>
-      <xs:attribute name="isMouseDownDragAction" type="lzx:boolean" default="false" >
-</xs:attribute>
-      <xs:attribute name="isImage" type="lzx:boolean" default="false" >
-</xs:attribute>
-      <xs:attribute name="isFolder" type="lzx:boolean" default="true" >
-</xs:attribute>
-      <xs:attribute name="fileName" type="xs:string" default="" >
-</xs:attribute>
-      <xs:attribute name="fileIcon" type="xs:string" default="string" >
-</xs:attribute>
-      <xs:attribute name="fileHash" type="xs:string" default="" >
-</xs:attribute>
-      <xs:attribute name="fileExplorerItemId" type="lzx:number" default="0" >
 </xs:attribute>
   </xs:extension>
   </xs:complexContent>
@@ -2703,14 +2492,6 @@ This is used in the conference.
   </xs:extension>
   </xs:complexContent>
   </xs:complexType>
-<xs:element name="flvExplorerItem" type="project:flvExplorerItem" >
-</xs:element>
-  <xs:complexType name="flvExplorerItem" mixed="true">
-  <xs:complexContent>
-  <xs:extension base="project:baseFLVExplorerItem">
-  </xs:extension>
-  </xs:complexContent>
-  </xs:complexType>
 <xs:element name="pendingUserStatus" type="project:pendingUserStatus" >
 </xs:element>
   <xs:complexType name="pendingUserStatus" mixed="true">
@@ -2721,16 +2502,6 @@ This is used in the conference.
       <xs:attribute name="pending" type="lzx:boolean" default="true" >
 </xs:attribute>
       <xs:attribute name="message" type="xs:string" default="" >
-</xs:attribute>
-  </xs:extension>
-  </xs:complexContent>
-  </xs:complexType>
-<xs:element name="userActivityItem" type="project:userActivityItem" >
-</xs:element>
-  <xs:complexType name="userActivityItem" mixed="true">
-  <xs:complexContent>
-  <xs:extension base="lzx:view">
-      <xs:attribute name="userText" type="xs:string" default="" >
 </xs:attribute>
   </xs:extension>
   </xs:complexContent>
@@ -2857,33 +2628,11 @@ This is used in the conference.
   </xs:extension>
   </xs:complexContent>
   </xs:complexType>
-<xs:element name="userActivityDevider" type="project:userActivityDevider" >
-</xs:element>
-  <xs:complexType name="userActivityDevider" mixed="true">
-  <xs:complexContent>
-  <xs:extension base="lzx:view">
-      <xs:attribute name="deviderText" type="xs:string" default="" >
-</xs:attribute>
-  </xs:extension>
-  </xs:complexContent>
-  </xs:complexType>
 <xs:element name="paintToolsPalette" type="project:paintToolsPalette" >
 </xs:element>
   <xs:complexType name="paintToolsPalette" mixed="true">
   <xs:complexContent>
   <xs:extension base="lzx:view">
-  </xs:extension>
-  </xs:complexContent>
-  </xs:complexType>
-<xs:element name="addAttendee" type="project:addAttendee" >
-</xs:element>
-  <xs:complexType name="addAttendee" mixed="true">
-  <xs:complexContent>
-  <xs:extension base="project:labelExplorerBox">
-      <xs:attribute name="refObj" type="xs:string" default="null" >
-</xs:attribute>
-      <xs:attribute name="isSuperModerator" type="lzx:boolean" default="false" >
-</xs:attribute>
   </xs:extension>
   </xs:complexContent>
   </xs:complexType>
@@ -3553,26 +3302,6 @@ This is used in the conference.
   </xs:extension>
   </xs:complexContent>
   </xs:complexType>
-<xs:element name="attendeItemListItem" type="project:attendeItemListItem" >
-</xs:element>
-  <xs:complexType name="attendeItemListItem" mixed="true">
-  <xs:complexContent>
-  <xs:extension base="project:baseContentListItem">
-      <xs:attribute name="userId" type="lzx:number" default="0" >
-</xs:attribute>
-      <xs:attribute name="omTimeZone" type="xs:string" default="null" >
-</xs:attribute>
-      <xs:attribute name="login" type="xs:string" default="" >
-</xs:attribute>
-      <xs:attribute name="lastname" type="xs:string" default="" >
-</xs:attribute>
-      <xs:attribute name="firstname" type="xs:string" default="" >
-</xs:attribute>
-      <xs:attribute name="email" type="xs:string" default="" >
-</xs:attribute>
-  </xs:extension>
-  </xs:complexContent>
-  </xs:complexType>
 <xs:element name="calendarWeekView" type="project:calendarWeekView" >
 </xs:element>
   <xs:complexType name="calendarWeekView" mixed="true">
@@ -3728,34 +3457,6 @@ This is used in the conference.
   <xs:complexType name="interviewWhiteboard" mixed="true">
   <xs:complexContent>
   <xs:extension base="lzx:view">
-  </xs:extension>
-  </xs:complexContent>
-  </xs:complexType>
-<xs:element name="lzRecordingsViewBottom" type="project:lzRecordingsViewBottom" >
-<xs:annotation>
-<xs:documentation xml:lang="en">
-
-	View for recorded contents list.
-	When you select 'Recordings' on the top menu, this class shows the list.
-</xs:documentation>
-</xs:annotation>
-</xs:element>
-  <xs:complexType name="lzRecordingsViewBottom" mixed="true">
-  <xs:complexContent>
-  <xs:extension base="project:conferenceBox">
-      <xs:attribute name="pixelFactor" type="lzx:number" default="5" >
-<xs:annotation>
-<xs:documentation xml:lang="en">
-
-	View for recorded contents list.
-	When you select 'Recordings' on the top menu, this class shows the list.
-</xs:documentation>
-</xs:annotation>
-</xs:attribute>
-      <xs:attribute name="deltaInSeconds" type="lzx:number" default="0" >
-</xs:attribute>
-      <xs:attribute name="currentRecording" type="xs:string" default="null" >
-</xs:attribute>
   </xs:extension>
   </xs:complexContent>
   </xs:complexType>
@@ -4716,18 +4417,6 @@ This is used in the conference.
   </xs:extension>
   </xs:complexContent>
   </xs:complexType>
-<xs:element name="mainDashboardSponsored" type="project:mainDashboardSponsored" >
-<xs:annotation>
-<xs:documentation xml:lang="en">
-  modules:dashboard </xs:documentation>
-</xs:annotation>
-</xs:element>
-  <xs:complexType name="mainDashboardSponsored" mixed="true">
-  <xs:complexContent>
-  <xs:extension base="project:baseContentView">
-  </xs:extension>
-  </xs:complexContent>
-  </xs:complexType>
 <xs:element name="debugPinCode" type="project:debugPinCode" >
 </xs:element>
   <xs:complexType name="debugPinCode" mixed="true">
@@ -5381,20 +5070,6 @@ This is used in the conference.
   </xs:extension>
   </xs:complexContent>
   </xs:complexType>
-<xs:element name="profilesPanel" type="project:profilesPanel" >
-<xs:annotation>
-<xs:documentation xml:lang="en">
- Logged-in User Profile Panel on the dashboard </xs:documentation>
-</xs:annotation>
-</xs:element>
-  <xs:complexType name="profilesPanel" mixed="true">
-  <xs:complexContent>
-  <xs:extension base="project:guiPresenter">
-      <xs:attribute name="link" type="xs:string" default="" >
-</xs:attribute>
-  </xs:extension>
-  </xs:complexContent>
-  </xs:complexType>
 <xs:element name="fillColorChoose" type="project:fillColorChoose" >
 </xs:element>
   <xs:complexType name="fillColorChoose" mixed="true">
@@ -5511,16 +5186,6 @@ This is used in the conference.
       <xs:attribute name="modLoaded" type="lzx:boolean" default="false" >
 </xs:attribute>
       <xs:attribute name="allUsers" type="xs:string" default="null" >
-</xs:attribute>
-  </xs:extension>
-  </xs:complexContent>
-  </xs:complexType>
-<xs:element name="flvMetaInfoContentArea" type="project:flvMetaInfoContentArea" >
-</xs:element>
-  <xs:complexType name="flvMetaInfoContentArea" mixed="true">
-  <xs:complexContent>
-  <xs:extension base="lzx:view">
-      <xs:attribute name="baseWidthForPointer" type="lzx:number" default="0" >
 </xs:attribute>
   </xs:extension>
   </xs:complexContent>
@@ -5776,14 +5441,6 @@ This is used in the conference.
 </xs:attribute>
       <xs:attribute name="conferenceRoomName" type="xs:string" default="" >
 </xs:attribute>
-  </xs:extension>
-  </xs:complexContent>
-  </xs:complexType>
-<xs:element name="lzCalendar" type="project:lzCalendar" >
-</xs:element>
-  <xs:complexType name="lzCalendar" mixed="true">
-  <xs:complexContent>
-  <xs:extension base="project:baseContentView">
   </xs:extension>
   </xs:complexContent>
   </xs:complexType>
@@ -6421,28 +6078,6 @@ This is used in the conference.
   </xs:extension>
   </xs:complexContent>
   </xs:complexType>
-<xs:element name="lzCalendarContent" type="project:lzCalendarContent" >
-</xs:element>
-  <xs:complexType name="lzCalendarContent" mixed="true">
-  <xs:complexContent>
-  <xs:extension base="lzx:view">
-      <xs:attribute name="viewstyle" type="xs:string" default="month" >
-</xs:attribute>
-      <xs:attribute name="viewmode" type="xs:string" default="month" >
-</xs:attribute>
-      <xs:attribute name="selectionActive" type="lzx:boolean" default="false" >
-</xs:attribute>
-      <xs:attribute name="keepinfoopen" type="lzx:boolean" default="false" >
-</xs:attribute>
-      <xs:attribute name="jName" type="xs:string" default="" >
-</xs:attribute>
-      <xs:attribute name="isloaded" type="lzx:boolean" default="false" >
-</xs:attribute>
-      <xs:attribute name="firstDay" type="xs:string" default="null" >
-</xs:attribute>
-  </xs:extension>
-  </xs:complexContent>
-  </xs:complexType>
 <xs:element name="confirmationBox" type="project:confirmationBox" >
 </xs:element>
   <xs:complexType name="confirmationBox" mixed="true">
@@ -6493,22 +6128,6 @@ This is used in the conference.
       <xs:attribute name="selectedColor" type="lzx:number" default="0x00aeef" >
 </xs:attribute>
       <xs:attribute name="btnRef" type="xs:string" default="null" >
-</xs:attribute>
-  </xs:extension>
-  </xs:complexContent>
-  </xs:complexType>
-<xs:element name="overAllChatTabBottom" type="project:overAllChatTabBottom" >
-<xs:annotation>
-<xs:documentation xml:lang="en">
- View of the buttom area of chat. It contains buttons of message,emoticons,clear. </xs:documentation>
-</xs:annotation>
-</xs:element>
-  <xs:complexType name="overAllChatTabBottom" mixed="true">
-  <xs:complexContent>
-  <xs:extension base="lzx:view">
-      <xs:attribute name="objMessage" type="xs:string" default="null" >
-</xs:attribute>
-      <xs:attribute name="doUpdate" type="lzx:boolean" default="false" >
 </xs:attribute>
   </xs:extension>
   </xs:complexContent>
@@ -7737,42 +7356,6 @@ This is used in the conference.
       <xs:attribute name="ontabcontentleave" type="xs:string" >
 </xs:attribute>
       <xs:attribute name="destroyByMethod" type="lzx:boolean" default="false" >
-</xs:attribute>
-  </xs:extension>
-  </xs:complexContent>
-  </xs:complexType>
-<xs:element name="overAllChat" type="project:overAllChat" >
-<xs:annotation>
-<xs:documentation xml:lang="en">
- Chat module of the dashboard. The fixed size is 810x280 </xs:documentation>
-</xs:annotation>
-</xs:element>
-  <xs:complexType name="overAllChat" mixed="true">
-  <xs:complexContent>
-  <xs:extension base="lzx:view">
-  </xs:extension>
-  </xs:complexContent>
-  </xs:complexType>
-<xs:element name="mainDashboard" type="project:mainDashboard" >
-<xs:annotation>
-<xs:documentation xml:lang="en">
-  modules:dashboard </xs:documentation>
-</xs:annotation>
-</xs:element>
-  <xs:complexType name="mainDashboard" mixed="true">
-  <xs:complexContent>
-  <xs:extension base="project:baseContentView">
-      <xs:attribute name="refObjItem" type="xs:string" default="null" >
-<xs:annotation>
-<xs:documentation xml:lang="en">
- Chat module of the dashboard. The fixed size is 810x280
-    &lt;class name="overAllChat" extends="guiPresenter" resizeable="false"
-        width="${ canvas.width-20 }" height="${ canvas.height-360 }" 
-        y="240" x="10" closable="true" labelid="443" 
-        isdragable="false" minimizable="false" 
-                 maximizable="false" closable="false"&gt;
-     </xs:documentation>
-</xs:annotation>
 </xs:attribute>
   </xs:extension>
   </xs:complexContent>

@@ -291,15 +291,6 @@ To disable AEC please specify 0.
 <moderatorModuleRoom>roomModerate</moderatorModuleRoom>
 
 
-<!-- #############################################
-    Dashboard Modules
- -->
-
-<dashboardModuleStartScreen>mainDashboard</dashboardModuleStartScreen>
-
-<dashboardModuleCalendar>lzCalendar</dashboardModuleCalendar>
-
-
 <!-- Conference Room Modules -->
 
 <conferenceModuleRoomList>allmeetings</conferenceModuleRoomList>
@@ -330,8 +321,6 @@ To disable AEC please specify 0.
 <!-- #############################################
     Event Room Modules
  -->
-
-<recordModule>lzRecordContent</recordModule>
 
 <!-- #############################################
     Profiles Panel Modules

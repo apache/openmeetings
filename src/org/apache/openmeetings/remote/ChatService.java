@@ -25,7 +25,6 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.data.conference.RoomManager;
@@ -65,9 +64,6 @@ public class ChatService implements IPendingServiceCallback {
 	private RoomManager roomManager;
 	@Autowired
 	private UserManager userManager;
-	
-	//the overall chat room is just another room
-	private static final Long overallChatRoomName = new Long(-1);
 	
 	//number of items in the chat room history
 	private static final int chatRoomHistory = 50;
@@ -332,98 +328,6 @@ public class ChatService implements IPendingServiceCallback {
 		log.error("resultReceived ChatService "+arg0);
 	}
 	
-	/**
-	 * sends a message to all connected users
-	 * 
-	 * @param newMessage
-	 * @return - 1 in case of success, -1 otherwise
-	 */
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public int sendMessageToOverallChat(Object newMessage) {
-		try {
-			IConnection current = Red5.getConnectionLocal();
-			Client currentClient = this.sessionManager.getClientByStreamId(current.getClient().getId(), null);
-			
-			//log.error(newMessage.getClass().getName());
-			ArrayList messageMap = (ArrayList) newMessage;
-			//adding delimiter space, cause otherwise an emoticon in the last string would not be found
-			String messageText = messageMap.get(4).toString()+" ";
-			//log.error("messageText"+messageText);
-			//add server time
-			messageMap.set(1,parseDateAsTimeString());
-			LinkedList<String[]> parsedStringObjects = ChatString.parseChatString(messageText, emoticonsManager.getEmotfilesList(), true);
-			//log.error("parsedStringObjects"+parsedStringObjects.size());
-			log.debug("size:" + messageMap.size());
-			messageMap.add(parsedStringObjects);
-			newMessage = messageMap;
-			
-			
-			HashMap<String,Object> hsm = new HashMap<String,Object>();
-			hsm.put("client", currentClient);
-			hsm.put("message", newMessage);
-			
-			List<HashMap<String,Object>> myChatList = myChats.get(overallChatRoomName);
-			if (myChatList==null) myChatList = new LinkedList<HashMap<String,Object>>();
-			
-			if (myChatList.size()==chatRoomHistory) myChatList.remove(0);
-			myChatList.add(hsm);
-			myChats.put(overallChatRoomName,myChatList);
-			
-			log.debug("SET CHATROOM: "+overallChatRoomName);
-			
-			scopeApplicationAdapter.syncMessageToCurrentScope("sendVarsToOverallChat", hsm, true);
-			
-		} catch (Exception err) {
-			log.error("[ChatService sendMessageToOverallChat] ",err);
-			return -1;
-		}
-		return 1;
-	}
-	
-	
-	/**
-	 * gets the chat history of overallChat
-	 * 
-	 * @return - overall chat history
-	 */
-	public List<HashMap<String,Object>> getOverallChatHistory() {
-		try {
-			
-			List<HashMap<String,Object>> myChatList = myChats.get(overallChatRoomName);
-			if (myChatList==null) myChatList = new LinkedList<HashMap<String,Object>>();	
-			
-			return myChatList;
-		} catch (Exception err) {
-			log.error("[getRoomChatHistory] ",err);
-			return null;
-		}
-	}	
-	
-	/**
-	 * clear the overallChat history
-	 * @return - all messages being cleaned, null in case of error
-	 */
-	public List<HashMap<String,Object>> clearOverallChat() {
-		try {
-			
-			List<HashMap<String,Object>> myChatList = myChats.get(overallChatRoomName);
-			myChatList = new LinkedList<HashMap<String,Object>>();
-			
-			myChats.put(overallChatRoomName,myChatList);
-			
-			//Send event to clear to all participants
-			Map<Integer,String> newMessage = new HashMap<Integer,String>();
-			newMessage.put(0, "clearOverallChatHistory");
-			scopeApplicationAdapter.sendMessageToMembers(newMessage);
-			
-			return myChatList;
-			
-		} catch (Exception err) {
-			log.error("[clearChat] ",err);
-			return null;
-		}
-	}	
-	
 	public LinkedList<LinkedList<String>> getAllPublicEmoticons(){
 		try {
 			LinkedList<LinkedList<String>> publicemotes = new LinkedList<LinkedList<String>>();
@@ -450,29 +354,6 @@ public class ChatService implements IPendingServiceCallback {
 			log.error("[getAllPublicEmoticons] ",err);
 			return null;
 		}
-	}
-	
-	public LinkedHashMap<String,LinkedList<Client>> getChatOverallUsers(){
-		try {
-			LinkedHashMap<String,LinkedList<Client>> clientList = new LinkedHashMap<String,LinkedList<Client>>();
-			LinkedList<Client> guestList = new LinkedList<Client>();
-			LinkedList<Client> overallList = new LinkedList<Client>();
-			
-			for (Client rcl : sessionManager.getClients()) {
-				if (rcl.getUser_id()==null || rcl.getUser_id()<=0) {
-					guestList.add(rcl);
-				} else {
-					overallList.add(rcl);
-				}
-			}
-			
-			clientList.put("guestList", guestList); 
-			clientList.put("overallList", overallList); 
-			return clientList;
-		} catch (Exception err) {
-			log.error("[getChatOverallUsers]",err);
-		}
-		return null;
 	}
 	
 }
