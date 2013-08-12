@@ -129,7 +129,7 @@ public class UserSearchPanel extends UserPanel {
 				User u = item.getModelObject();
 				final long userId = u.getUser_id();
 				item.add(new Label("name", getName(u)));
-				item.add(new Label("tz", getBean(TimezoneUtil.class).getTimezoneByUser(u)));
+				item.add(new Label("tz", getBean(TimezoneUtil.class).getTimezoneByUser(u).getID()));
 				item.add(new Label("offer", u.getUserOffers()));
 				item.add(new Label("search", u.getUserSearchs()));
 				item.add(new WebMarkupContainer("view").add(new AjaxEventBehavior("onclick") {
