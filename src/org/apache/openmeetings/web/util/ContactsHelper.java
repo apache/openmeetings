@@ -63,7 +63,7 @@ public class ContactsHelper {
 			, message.toString(), 0L, user, userToAdd, userToAdd, false, null
 			, true, userContactId, userToAdd.getAdresses().getEmail());
 
-		String link = WebSession.get().getBaseUrl() + "#" + PROFILE_MESSAGES.getArea().name() + "/" + PROFILE_MESSAGES.getType();
+		String link = getLink();
 
 		String profileLinkHTML = "<a href='" + link + "'>" + fValue1196 + "</a><br/>";
 
@@ -120,5 +120,9 @@ public class ContactsHelper {
 
 		}
 		return userContactId;
+	}
+	
+	public static String getLink() {
+		return WebSession.get().getBaseUrl() + "#" + PROFILE_MESSAGES.getArea().name() + "/" + PROFILE_MESSAGES.getType();		
 	}
 }

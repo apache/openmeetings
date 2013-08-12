@@ -31,7 +31,9 @@ import org.apache.openmeetings.data.user.dao.PrivateMessagesDao;
 import org.apache.openmeetings.data.user.dao.UsersDao;
 import org.apache.openmeetings.persistence.beans.room.Room;
 import org.apache.openmeetings.persistence.beans.user.PrivateMessage;
+import org.apache.openmeetings.utils.mail.MailHandler;
 import org.apache.openmeetings.web.app.WebSession;
+import org.apache.openmeetings.web.util.ContactsHelper;
 import org.apache.openmeetings.web.util.RoomTypeDropDown;
 import org.apache.openmeetings.web.util.UserAutoCompleteTextField;
 import org.apache.wicket.ajax.AjaxEventBehavior;
@@ -60,6 +62,7 @@ public class MessageDialog extends AbstractFormDialog<PrivateMessage> {
 	private final WebMarkupContainer roomParams = new WebMarkupContainer("roomParams");
 	private final IModel<Date> modelStart = Model.of(new Date());
 	private final IModel<Date> modelEnd = Model.of(new Date());
+	private boolean isPrivate = false; 
 
 	@Override
 	public int getWidth() {
@@ -71,7 +74,7 @@ public class MessageDialog extends AbstractFormDialog<PrivateMessage> {
 		open(target);
 	}
 	
-	public MessageDialog reset() {
+	public MessageDialog reset(boolean isPrivate) {
 		modelStart.setObject(new Date());
 		modelEnd.setObject(new Date()); //TODO should we add 1 hour or generalize with Calendar???
 		PrivateMessage p = new PrivateMessage();
@@ -87,6 +90,7 @@ public class MessageDialog extends AbstractFormDialog<PrivateMessage> {
 		setModelObject(p);
 		roomParams.setVisible(getModelObject().isBookedRoom());
 		form.setModelObject(p);
+		this.isPrivate = isPrivate;
 		return this;
 	}
 	
@@ -96,7 +100,7 @@ public class MessageDialog extends AbstractFormDialog<PrivateMessage> {
 		super.onOpen(target);
 	}
 	
-	public MessageDialog(String id, CompoundPropertyModel<PrivateMessage> model) {
+	public MessageDialog(String id, CompoundPropertyModel<PrivateMessage> model ) {
 		super(id, WebSession.getString(1209), model);
 		form = new Form<PrivateMessage>("form", getModel());
 		
@@ -163,6 +167,19 @@ public class MessageDialog extends AbstractFormDialog<PrivateMessage> {
 		if (p.getTo().getUser_id() == null) {
 			getBean(UsersDao.class).update(p.getTo(), getUserId());
 		}
+		//to send
 		getBean(PrivateMessagesDao.class).update(p, getUserId());
+		//to inbox
+		p.setPrivateMessageId(0);
+		p.setOwner(p.getTo());
+		getBean(PrivateMessagesDao.class).update(p, getUserId());
+		if (p.getTo().getAdresses() != null) {
+			String aLinkHTML = 	isPrivate ? "<br/><br/>" + "<a href='" + ContactsHelper.getLink() + "'>"
+						+ WebSession.getString(1302) + "</a><br/>" : "";
+			
+			getBean(MailHandler.class).send(p.getTo().getAdresses().getEmail(),
+					WebSession.getString(1301) + p.getSubject(),
+					p.getMessage().replaceAll("\\<.*?>", "") + aLinkHTML);
+		}
 	}
 }

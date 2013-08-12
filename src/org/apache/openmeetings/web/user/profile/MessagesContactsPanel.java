@@ -276,7 +276,7 @@ public class MessagesContactsPanel extends UserPanel {
 
 			@Override
 			protected void onEvent(AjaxRequestTarget target) {
-				newMessage.reset().open(target);
+				newMessage.reset(false).open(target);
 			}
 		}).add(new JQueryBehavior(".email.new", "button")));
 		folders.add(inbox.add(new AjaxEventBehavior("click") {
@@ -608,7 +608,7 @@ public class MessagesContactsPanel extends UserPanel {
 
 					@Override
 					protected void onEvent(AjaxRequestTarget target) {
-						newMessage.reset().open(target, userId);
+						newMessage.reset(true).open(target, userId);
 					}
 				}).setVisible(!uc.getPending()));
 				item.add(new WebMarkupContainer("delete").add(new AjaxEventBehavior("onclick") {

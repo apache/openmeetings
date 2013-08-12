@@ -154,7 +154,7 @@ public class UserSearchPanel extends UserPanel {
 
 					@Override
 					protected void onEvent(AjaxRequestTarget target) {
-						newMessage.reset().open(target, userId);
+						newMessage.reset(true).open(target, userId);
 					}
 				}));
 				//item.add(new TooltipBehavior(new Options("content", "TODO:: Picture will be displayed"))); //FIXME 
