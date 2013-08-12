@@ -842,28 +842,6 @@ This is used in the conference.
   </xs:extension>
   </xs:complexContent>
   </xs:complexType>
-<xs:element name="confAdminListItem" type="project:confAdminListItem" >
-<xs:annotation>
-<xs:documentation xml:lang="en">
- Configuration list. It shows ID-KEY pairs. </xs:documentation>
-</xs:annotation>
-</xs:element>
-  <xs:complexType name="confAdminListItem" mixed="true">
-  <xs:complexContent>
-  <xs:extension base="project:baseContentListItem">
-      <xs:attribute name="configuration_id" type="lzx:number" default="0" >
-<xs:annotation>
-<xs:documentation xml:lang="en">
- Configuration list. It shows ID-KEY pairs. </xs:documentation>
-</xs:annotation>
-</xs:attribute>
-      <xs:attribute name="conf_value" type="xs:string" default="" >
-</xs:attribute>
-      <xs:attribute name="conf_key" type="xs:string" default="" >
-</xs:attribute>
-  </xs:extension>
-  </xs:complexContent>
-  </xs:complexType>
 <xs:element name="baseVideoStreamDevice" type="project:baseVideoStreamDevice" >
 <xs:annotation>
 <xs:documentation xml:lang="en">
@@ -1389,18 +1367,6 @@ This is used in the conference.
   </xs:extension>
   </xs:complexContent>
   </xs:complexType>
-<xs:element name="backupContent" type="project:backupContent" >
-<xs:annotation>
-<xs:documentation xml:lang="en">
- Backup module for admin. It can export or import user account data as xml-file. </xs:documentation>
-</xs:annotation>
-</xs:element>
-  <xs:complexType name="backupContent" mixed="true">
-  <xs:complexContent>
-  <xs:extension base="project:baseContentView">
-  </xs:extension>
-  </xs:complexContent>
-  </xs:complexType>
 <xs:element name="iframeView" type="project:iframeView" >
 </xs:element>
   <xs:complexType name="iframeView" mixed="true">
@@ -1422,18 +1388,6 @@ This is used in the conference.
 </xs:attribute>
       <xs:attribute name="callbackTimerDelay" type="lzx:number" default="100" >
 </xs:attribute>
-  </xs:extension>
-  </xs:complexContent>
-  </xs:complexType>
-<xs:element name="confAdmin" type="project:confAdmin" >
-<xs:annotation>
-<xs:documentation xml:lang="en">
- Configuration module for ADMIN </xs:documentation>
-</xs:annotation>
-</xs:element>
-  <xs:complexType name="confAdmin" mixed="true">
-  <xs:complexContent>
-  <xs:extension base="project:baseContentView">
   </xs:extension>
   </xs:complexContent>
   </xs:complexType>
@@ -1642,18 +1596,6 @@ This is used in the conference.
   </xs:extension>
   </xs:complexContent>
   </xs:complexType>
-<xs:element name="roomClient" type="project:roomClient" >
-<xs:annotation>
-<xs:documentation xml:lang="en">
- Admin module to configure the Conference or Audience room.</xs:documentation>
-</xs:annotation>
-</xs:element>
-  <xs:complexType name="roomClient" mixed="true">
-  <xs:complexContent>
-  <xs:extension base="project:baseContentView">
-  </xs:extension>
-  </xs:complexContent>
-  </xs:complexType>
 <xs:element name="questionCheckbox" type="project:questionCheckbox" >
 </xs:element>
   <xs:complexType name="questionCheckbox" mixed="true">
@@ -1800,28 +1742,6 @@ This is used in the conference.
   </xs:extension>
   </xs:complexContent>
   </xs:complexType>
-<xs:element name="roomValueForm" type="project:roomValueForm" >
-<xs:annotation>
-<xs:documentation xml:lang="en">
- configure value for roomadmin module </xs:documentation>
-</xs:annotation>
-</xs:element>
-  <xs:complexType name="roomValueForm" mixed="true">
-  <xs:complexContent>
-  <xs:extension base="project:baseContentSaveView">
-      <xs:attribute name="sendObject" type="xs:string" default="null" >
-</xs:attribute>
-      <xs:attribute name="rooms_id" type="lzx:number" default="0" >
-<xs:annotation>
-<xs:documentation xml:lang="en">
- configure value for roomadmin module </xs:documentation>
-</xs:annotation>
-</xs:attribute>
-      <xs:attribute name="roomsObj" type="xs:string" default="null" >
-</xs:attribute>
-  </xs:extension>
-  </xs:complexContent>
-  </xs:complexType>
 <xs:element name="dateSelectorMonth" type="project:dateSelectorMonth" >
 </xs:element>
   <xs:complexType name="dateSelectorMonth" mixed="true">
@@ -1846,30 +1766,6 @@ This is used in the conference.
       <xs:attribute name="mycolor" type="lzx:color" default="0x000000" >
 </xs:attribute>
       <xs:attribute name="listener" type="xs:string" >
-</xs:attribute>
-  </xs:extension>
-  </xs:complexContent>
-  </xs:complexType>
-<xs:element name="userAdminListItem" type="project:userAdminListItem" >
-<xs:annotation>
-<xs:documentation xml:lang="en">
- Existing user list. used by userAdmin only </xs:documentation>
-</xs:annotation>
-</xs:element>
-  <xs:complexType name="userAdminListItem" mixed="true">
-  <xs:complexContent>
-  <xs:extension base="project:baseContentListItem">
-      <xs:attribute name="user_id" type="lzx:number" default="0" >
-<xs:annotation>
-<xs:documentation xml:lang="en">
- Existing user list. used by userAdmin only </xs:documentation>
-</xs:annotation>
-</xs:attribute>
-      <xs:attribute name="login" type="xs:string" default="" >
-</xs:attribute>
-      <xs:attribute name="lastname" type="xs:string" default="" >
-</xs:attribute>
-      <xs:attribute name="firstname" type="xs:string" default="" >
 </xs:attribute>
   </xs:extension>
   </xs:complexContent>
@@ -2577,24 +2473,6 @@ This is used in the conference.
   </xs:extension>
   </xs:complexContent>
   </xs:complexType>
-<xs:element name="orgAdminChooseUserWindow" type="project:orgAdminChooseUserWindow" >
-</xs:element>
-  <xs:complexType name="orgAdminChooseUserWindow" mixed="true">
-  <xs:complexContent>
-  <xs:extension base="project:labelExplorerBox">
-      <xs:attribute name="usersId" type="lzx:number" default="0" >
-</xs:attribute>
-      <xs:attribute name="refObjectDialog" type="xs:string" default="null" >
-</xs:attribute>
-      <xs:attribute name="refObj" type="xs:string" default="null" >
-</xs:attribute>
-      <xs:attribute name="organisation_id" type="lzx:number" default="0" >
-</xs:attribute>
-      <xs:attribute name="isOrgUserAddForm" type="lzx:boolean" default="false" >
-</xs:attribute>
-  </xs:extension>
-  </xs:complexContent>
-  </xs:complexType>
 <xs:element name="conferenceRoomSidebarTabButton" type="project:conferenceRoomSidebarTabButton" >
 </xs:element>
   <xs:complexType name="conferenceRoomSidebarTabButton" mixed="true">
@@ -3077,22 +2955,6 @@ This is used in the conference.
   </xs:extension>
   </xs:complexContent>
   </xs:complexType>
-<xs:element name="rssFeedListItem" type="project:rssFeedListItem" >
-</xs:element>
-  <xs:complexType name="rssFeedListItem" mixed="true">
-  <xs:complexContent>
-  <xs:extension base="lzx:view">
-      <xs:attribute name="updated" type="xs:string" default="" >
-</xs:attribute>
-      <xs:attribute name="titel" type="xs:string" default="" >
-</xs:attribute>
-      <xs:attribute name="summary" type="xs:string" default="" >
-</xs:attribute>
-      <xs:attribute name="link" type="xs:string" default="" >
-</xs:attribute>
-  </xs:extension>
-  </xs:complexContent>
-  </xs:complexType>
 <xs:element name="listPresentationThumb" type="project:listPresentationThumb" >
 </xs:element>
   <xs:complexType name="listPresentationThumb" mixed="true">
@@ -3353,18 +3215,6 @@ This is used in the conference.
 <xs:documentation xml:lang="en">
  common TurnOverList view class. </xs:documentation>
 </xs:annotation>
-</xs:attribute>
-  </xs:extension>
-  </xs:complexContent>
-  </xs:complexType>
-<xs:element name="iconStepButtonWizzard" type="project:iconStepButtonWizzard" >
-</xs:element>
-  <xs:complexType name="iconStepButtonWizzard" mixed="true">
-  <xs:complexContent>
-  <xs:extension base="lzx:view">
-      <xs:attribute name="resourceViewName" type="xs:string" default="" >
-</xs:attribute>
-      <xs:attribute name="labelid" type="lzx:number" default="0" >
 </xs:attribute>
   </xs:extension>
   </xs:complexContent>
@@ -3731,26 +3581,6 @@ This is used in the conference.
   </xs:extension>
   </xs:complexContent>
   </xs:complexType>
-<xs:element name="infosPanel" type="project:infosPanel" >
-<xs:annotation>
-<xs:documentation xml:lang="en">
- "System" panel on the dashboard </xs:documentation>
-</xs:annotation>
-</xs:element>
-  <xs:complexType name="infosPanel" mixed="true">
-  <xs:complexContent>
-  <xs:extension base="project:guiPresenter">
-  </xs:extension>
-  </xs:complexContent>
-  </xs:complexType>
-<xs:element name="helpAndBugs2" type="project:helpAndBugs2" >
-</xs:element>
-  <xs:complexType name="helpAndBugs2" mixed="true">
-  <xs:complexContent>
-  <xs:extension base="lzx:view">
-  </xs:extension>
-  </xs:complexContent>
-  </xs:complexType>
 <xs:element name="vsliderThumb" type="project:vsliderThumb" >
 </xs:element>
   <xs:complexType name="vsliderThumb" mixed="true">
@@ -3925,28 +3755,6 @@ This is used in the conference.
       <xs:attribute name="deltaInSeconds" type="lzx:number" default="0" >
 </xs:attribute>
       <xs:attribute name="currentRecording" type="xs:string" default="null" >
-</xs:attribute>
-  </xs:extension>
-  </xs:complexContent>
-  </xs:complexType>
-<xs:element name="ldapAdminListItem" type="project:ldapAdminListItem" >
-<xs:annotation>
-<xs:documentation xml:lang="en">
- Existing organization list. used by orgAdmin only </xs:documentation>
-</xs:annotation>
-</xs:element>
-  <xs:complexType name="ldapAdminListItem" mixed="true">
-  <xs:complexContent>
-  <xs:extension base="project:baseContentListItem">
-      <xs:attribute name="tName" type="xs:string" default="" >
-</xs:attribute>
-      <xs:attribute name="ldapConfigId" type="lzx:number" default="0" >
-<xs:annotation>
-<xs:documentation xml:lang="en">
- Existing organization list. used by orgAdmin only </xs:documentation>
-</xs:annotation>
-</xs:attribute>
-      <xs:attribute name="configFileName" type="xs:string" default="" >
 </xs:attribute>
   </xs:extension>
   </xs:complexContent>
@@ -4295,18 +4103,6 @@ This is used in the conference.
 </xs:attribute>
       <xs:attribute name="no" type="xs:string" default="" >
 </xs:attribute>
-  </xs:extension>
-  </xs:complexContent>
-  </xs:complexType>
-<xs:element name="roomAdmin" type="project:roomAdmin" >
-<xs:annotation>
-<xs:documentation xml:lang="en">
- Admin module to configure the Conference or Audience room.</xs:documentation>
-</xs:annotation>
-</xs:element>
-  <xs:complexType name="roomAdmin" mixed="true">
-  <xs:complexContent>
-  <xs:extension base="project:baseContentView">
   </xs:extension>
   </xs:complexContent>
   </xs:complexType>
@@ -4818,24 +4614,6 @@ This is used in the conference.
       <xs:attribute name="isHidden" type="lzx:boolean" default="false" >
 </xs:attribute>
       <xs:attribute name="btnName" type="xs:string" default="" >
-</xs:attribute>
-  </xs:extension>
-  </xs:complexContent>
-  </xs:complexType>
-<xs:element name="orgUsersRecordValueList" type="project:orgUsersRecordValueList" >
-<xs:annotation>
-<xs:documentation xml:lang="en">
- Existing organization list. used by orgAdmin only </xs:documentation>
-</xs:annotation>
-</xs:element>
-  <xs:complexType name="orgUsersRecordValueList" mixed="true">
-  <xs:complexContent>
-  <xs:extension base="project:recordValueList">
-      <xs:attribute name="usersId" type="lzx:number" default="0" >
-<xs:annotation>
-<xs:documentation xml:lang="en">
- Existing organization list. used by orgAdmin only </xs:documentation>
-</xs:annotation>
 </xs:attribute>
   </xs:extension>
   </xs:complexContent>
@@ -5561,18 +5339,6 @@ This is used in the conference.
   </xs:extension>
   </xs:complexContent>
   </xs:complexType>
-<xs:element name="userAdmin" type="project:userAdmin" >
-<xs:annotation>
-<xs:documentation xml:lang="en">
- User administration module for ADMIN.</xs:documentation>
-</xs:annotation>
-</xs:element>
-  <xs:complexType name="userAdmin" mixed="true">
-  <xs:complexContent>
-  <xs:extension base="project:baseContentView">
-  </xs:extension>
-  </xs:complexContent>
-  </xs:complexType>
 <xs:element name="drawClipArtWhiteBoard" type="project:drawClipArtWhiteBoard" >
 </xs:element>
   <xs:complexType name="drawClipArtWhiteBoard" mixed="true">
@@ -6039,18 +5805,6 @@ This is used in the conference.
   </xs:extension>
   </xs:complexContent>
   </xs:complexType>
-<xs:element name="orgAdmin" type="project:orgAdmin" >
-<xs:annotation>
-<xs:documentation xml:lang="en">
- Organization administration module for ADMIN.</xs:documentation>
-</xs:annotation>
-</xs:element>
-  <xs:complexType name="orgAdmin" mixed="true">
-  <xs:complexContent>
-  <xs:extension base="project:baseContentView">
-  </xs:extension>
-  </xs:complexContent>
-  </xs:complexType>
 <xs:element name="interviewUserList" type="project:interviewUserList" >
 </xs:element>
   <xs:complexType name="interviewUserList" mixed="true">
@@ -6453,40 +6207,6 @@ This is used in the conference.
   </xs:extension>
   </xs:complexContent>
   </xs:complexType>
-<xs:element name="confAdminValueForm" type="project:confAdminValueForm" >
-<xs:annotation>
-<xs:documentation xml:lang="en">
- configuration edit panel. </xs:documentation>
-</xs:annotation>
-</xs:element>
-  <xs:complexType name="confAdminValueForm" mixed="true">
-  <xs:complexContent>
-  <xs:extension base="project:baseContentSaveView">
-      <xs:attribute name="sendObject" type="xs:string" default="null" >
-</xs:attribute>
-      <xs:attribute name="confobj" type="xs:string" default="null" >
-</xs:attribute>
-      <xs:attribute name="configuration_id" type="lzx:number" default="0" >
-<xs:annotation>
-<xs:documentation xml:lang="en">
- configuration edit panel. </xs:documentation>
-</xs:annotation>
-</xs:attribute>
-  </xs:extension>
-  </xs:complexContent>
-  </xs:complexType>
-<xs:element name="ldapAdmin" type="project:ldapAdmin" >
-<xs:annotation>
-<xs:documentation xml:lang="en">
- Organization administration module for ADMIN.</xs:documentation>
-</xs:annotation>
-</xs:element>
-  <xs:complexType name="ldapAdmin" mixed="true">
-  <xs:complexContent>
-  <xs:extension base="project:baseContentView">
-  </xs:extension>
-  </xs:complexContent>
-  </xs:complexType>
 <xs:element name="dateSelectorWeekNumberHeader" type="project:dateSelectorWeekNumberHeader" >
 </xs:element>
   <xs:complexType name="dateSelectorWeekNumberHeader" mixed="true">
@@ -6691,48 +6411,12 @@ This is used in the conference.
   </xs:extension>
   </xs:complexContent>
   </xs:complexType>
-<xs:element name="ldapAdminValueForm" type="project:ldapAdminValueForm" >
-</xs:element>
-  <xs:complexType name="ldapAdminValueForm" mixed="true">
-  <xs:complexContent>
-  <xs:extension base="project:baseContentSaveView">
-      <xs:attribute name="sendObject" type="xs:string" default="null" >
-</xs:attribute>
-      <xs:attribute name="ldapConfigId" type="lzx:number" default="0" >
-<xs:annotation>
-<xs:documentation xml:lang="en">
- recordContent id </xs:documentation>
-</xs:annotation>
-</xs:attribute>
-  </xs:extension>
-  </xs:complexContent>
-  </xs:complexType>
 <xs:element name="dtmfButton" type="project:dtmfButton" >
 </xs:element>
   <xs:complexType name="dtmfButton" mixed="true">
   <xs:complexContent>
   <xs:extension base="lzx:button">
       <xs:attribute name="dtmf" type="xs:string" default="" >
-</xs:attribute>
-  </xs:extension>
-  </xs:complexContent>
-  </xs:complexType>
-<xs:element name="roomAdminOrgListItem" type="project:roomAdminOrgListItem" >
-<xs:annotation>
-<xs:documentation xml:lang="en">
- list of conference/audience rooms </xs:documentation>
-</xs:annotation>
-</xs:element>
-  <xs:complexType name="roomAdminOrgListItem" mixed="true">
-  <xs:complexContent>
-  <xs:extension base="project:baseContentListItem">
-      <xs:attribute name="orgName" type="xs:string" default="" >
-</xs:attribute>
-      <xs:attribute name="orgId" type="lzx:number" default="0" >
-<xs:annotation>
-<xs:documentation xml:lang="en">
- list of conference/audience rooms </xs:documentation>
-</xs:annotation>
 </xs:attribute>
   </xs:extension>
   </xs:complexContent>
@@ -6779,22 +6463,6 @@ This is used in the conference.
   <xs:complexContent>
   <xs:extension base="project:errorDialog">
       <xs:attribute name="callBackObject" type="xs:string" default="null" >
-</xs:attribute>
-  </xs:extension>
-  </xs:complexContent>
-  </xs:complexType>
-<xs:element name="orgAdminValueForm" type="project:orgAdminValueForm" >
-</xs:element>
-  <xs:complexType name="orgAdminValueForm" mixed="true">
-  <xs:complexContent>
-  <xs:extension base="project:baseContentSaveView">
-      <xs:attribute name="sendObject" type="xs:string" default="null" >
-</xs:attribute>
-      <xs:attribute name="organisation_id" type="lzx:number" default="0" >
-<xs:annotation>
-<xs:documentation xml:lang="en">
- recordContent id </xs:documentation>
-</xs:annotation>
 </xs:attribute>
   </xs:extension>
   </xs:complexContent>
@@ -7637,14 +7305,6 @@ This is used in the conference.
   </xs:extension>
   </xs:complexContent>
   </xs:complexType>
-<xs:element name="xmlCrmUserAdmin" type="project:xmlCrmUserAdmin" >
-</xs:element>
-  <xs:complexType name="xmlCrmUserAdmin" mixed="true">
-  <xs:complexContent>
-  <xs:extension base="project:labelExplorerBox">
-  </xs:extension>
-  </xs:complexContent>
-  </xs:complexType>
 <xs:element name="moderationMiniIconRestricted" type="project:moderationMiniIconRestricted" >
 </xs:element>
   <xs:complexType name="moderationMiniIconRestricted" mixed="true">
@@ -8117,28 +7777,6 @@ This is used in the conference.
   </xs:extension>
   </xs:complexContent>
   </xs:complexType>
-<xs:element name="mainMenuMeetingsItem" type="project:mainMenuMeetingsItem" >
-</xs:element>
-  <xs:complexType name="mainMenuMeetingsItem" mixed="true">
-  <xs:complexContent>
-  <xs:extension base="lzx:view">
-      <xs:attribute name="textvalue" type="xs:string" default="null" >
-</xs:attribute>
-      <xs:attribute name="textToolTip" type="xs:string" default="" >
-</xs:attribute>
-      <xs:attribute name="selected" type="lzx:boolean" default="false" >
-</xs:attribute>
-      <xs:attribute name="list" type="xs:string" default="null" >
-</xs:attribute>
-      <xs:attribute name="isopen" type="lzx:boolean" default="false" >
-</xs:attribute>
-      <xs:attribute name="isleaf" type="lzx:boolean" default="false" >
-</xs:attribute>
-      <xs:attribute name="action" type="xs:string" default="" >
-</xs:attribute>
-  </xs:extension>
-  </xs:complexContent>
-  </xs:complexType>
 <xs:element name="innerlistViewEventUserListTable" type="project:innerlistViewEventUserListTable" >
 </xs:element>
   <xs:complexType name="innerlistViewEventUserListTable" mixed="true">
@@ -8215,24 +7853,6 @@ This is used in the conference.
 </xs:annotation>
 </xs:attribute>
       <xs:attribute name="baseUrl" type="xs:string" default="http://www.denic.de" >
-</xs:attribute>
-  </xs:extension>
-  </xs:complexContent>
-  </xs:complexType>
-<xs:element name="mainNavi" type="project:mainNavi" >
-</xs:element>
-  <xs:complexType name="mainNavi" mixed="true">
-  <xs:complexContent>
-  <xs:extension base="lzx:view">
-      <xs:attribute name="pending" type="lzx:boolean" default="true" >
-</xs:attribute>
-      <xs:attribute name="naviObject" type="xs:string" default="null" >
-</xs:attribute>
-      <xs:attribute name="currentmenu" type="xs:string" default="null" >
-</xs:attribute>
-      <xs:attribute name="currentSubmenu" type="xs:string" default="null" >
-</xs:attribute>
-      <xs:attribute name="currentMainmenu" type="xs:string" default="null" >
 </xs:attribute>
   </xs:extension>
   </xs:complexContent>
@@ -8764,26 +8384,6 @@ This is used in the conference.
   </xs:extension>
   </xs:complexContent>
   </xs:complexType>
-<xs:element name="orgAdminListItem" type="project:orgAdminListItem" >
-<xs:annotation>
-<xs:documentation xml:lang="en">
- Existing organization list. used by orgAdmin only </xs:documentation>
-</xs:annotation>
-</xs:element>
-  <xs:complexType name="orgAdminListItem" mixed="true">
-  <xs:complexContent>
-  <xs:extension base="project:baseContentListItem">
-      <xs:attribute name="orgname" type="xs:string" default="" >
-</xs:attribute>
-      <xs:attribute name="organisation_id" type="lzx:number" default="0" >
-<xs:annotation>
-<xs:documentation xml:lang="en">
- Existing organization list. used by orgAdmin only </xs:documentation>
-</xs:annotation>
-</xs:attribute>
-  </xs:extension>
-  </xs:complexContent>
-  </xs:complexType>
 <xs:element name="baseVideoObject" type="project:baseVideoObject" >
 <xs:annotation>
 <xs:documentation xml:lang="en">
@@ -9203,14 +8803,6 @@ This is used in the conference.
   </xs:extension>
   </xs:complexContent>
   </xs:complexType>
-<xs:element name="rssPanel" type="project:rssPanel" >
-</xs:element>
-  <xs:complexType name="rssPanel" mixed="true">
-  <xs:complexContent>
-  <xs:extension base="project:guiPresenter">
-  </xs:extension>
-  </xs:complexContent>
-  </xs:complexType>
 <xs:element name="drawDocumentPanelItem" type="project:drawDocumentPanelItem" >
 </xs:element>
   <xs:complexType name="drawDocumentPanelItem" mixed="true">
@@ -9355,14 +8947,6 @@ This is used in the conference.
   </xs:extension>
   </xs:complexContent>
   </xs:complexType>
-<xs:element name="userListAdmin" type="project:userListAdmin" >
-</xs:element>
-  <xs:complexType name="userListAdmin" mixed="true">
-  <xs:complexContent>
-  <xs:extension base="lzx:view">
-  </xs:extension>
-  </xs:complexContent>
-  </xs:complexType>
 <xs:element name="baseDrawULine" type="project:baseDrawULine" >
 </xs:element>
   <xs:complexType name="baseDrawULine" mixed="true">
@@ -9400,28 +8984,6 @@ This is used in the conference.
       <xs:attribute name="recordedFileToDelete" type="lzx:number" default="0" >
 </xs:attribute>
       <xs:attribute name="preButton" type="xs:string" default="null" >
-</xs:attribute>
-  </xs:extension>
-  </xs:complexContent>
-  </xs:complexType>
-<xs:element name="roomAdminRoomClientListItem" type="project:roomAdminRoomClientListItem" >
-<xs:annotation>
-<xs:documentation xml:lang="en">
- list of conference/audience rooms </xs:documentation>
-</xs:annotation>
-</xs:element>
-  <xs:complexType name="roomAdminRoomClientListItem" mixed="true">
-  <xs:complexContent>
-  <xs:extension base="project:baseContentListItem">
-      <xs:attribute name="red5_id" type="lzx:number" default="0" >
-<xs:annotation>
-<xs:documentation xml:lang="en">
- list of conference/audience rooms </xs:documentation>
-</xs:annotation>
-</xs:attribute>
-      <xs:attribute name="login" type="xs:string" default="" >
-</xs:attribute>
-      <xs:attribute name="ispublic" type="xs:string" default="" >
 </xs:attribute>
   </xs:extension>
   </xs:complexContent>
@@ -9508,26 +9070,6 @@ This is used in the conference.
   </xs:extension>
   </xs:complexContent>
   </xs:complexType>
-<xs:element name="userAdminValueForm" type="project:userAdminValueForm" >
-<xs:annotation>
-<xs:documentation xml:lang="en">
- User Profile edit panel in the useradmin leftblock. Private class only for useradmin </xs:documentation>
-</xs:annotation>
-</xs:element>
-  <xs:complexType name="userAdminValueForm" mixed="true">
-  <xs:complexContent>
-  <xs:extension base="project:baseContentSaveView">
-      <xs:attribute name="user_id" type="lzx:number" default="0" >
-<xs:annotation>
-<xs:documentation xml:lang="en">
- recordContent-id </xs:documentation>
-</xs:annotation>
-</xs:attribute>
-      <xs:attribute name="sendObject" type="xs:string" default="null" >
-</xs:attribute>
-  </xs:extension>
-  </xs:complexContent>
-  </xs:complexType>
 <xs:element name="activityListRestrictedRoomWhiteboard" type="project:activityListRestrictedRoomWhiteboard" >
 </xs:element>
   <xs:complexType name="activityListRestrictedRoomWhiteboard" mixed="true">
@@ -9598,36 +9140,6 @@ This is used in the conference.
       <xs:attribute name="initialNumber" type="lzx:number" default="12" >
 </xs:attribute>
       <xs:attribute name="btnRef" type="xs:string" default="null" >
-</xs:attribute>
-  </xs:extension>
-  </xs:complexContent>
-  </xs:complexType>
-<xs:element name="helpAndBugs" type="project:helpAndBugs" >
-</xs:element>
-  <xs:complexType name="helpAndBugs" mixed="true">
-  <xs:complexContent>
-  <xs:extension base="lzx:view">
-  </xs:extension>
-  </xs:complexContent>
-  </xs:complexType>
-<xs:element name="roomAdminListItem" type="project:roomAdminListItem" >
-<xs:annotation>
-<xs:documentation xml:lang="en">
- list of conference/audience rooms </xs:documentation>
-</xs:annotation>
-</xs:element>
-  <xs:complexType name="roomAdminListItem" mixed="true">
-  <xs:complexContent>
-  <xs:extension base="project:baseContentListItem">
-      <xs:attribute name="rooms_id" type="lzx:number" default="0" >
-<xs:annotation>
-<xs:documentation xml:lang="en">
- list of conference/audience rooms </xs:documentation>
-</xs:annotation>
-</xs:attribute>
-      <xs:attribute name="roomname" type="xs:string" default="" >
-</xs:attribute>
-      <xs:attribute name="ispublic" type="xs:string" default="" >
 </xs:attribute>
   </xs:extension>
   </xs:complexContent>

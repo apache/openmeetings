@@ -126,20 +126,6 @@ public class UserContactsDao {
 		return null;
 	}
 	
-	public UserContact getContactsByHash(String hash) {
-		try {
-			TypedQuery<UserContact> query = em.createNamedQuery("getContactsByHash", UserContact.class); 
-			query.setParameter("hash", hash);
-			List<UserContact> ll = query.getResultList();
-			if (ll.size() > 0) {
-				return ll.get(0);
-			}
-		} catch (Exception e) {
-			log.error("[getContactsByHash]",e);
-		}
-		return null;
-	}
-	
 	public List<UserContact> get(long ownerId, int first, int count) {
 		TypedQuery<UserContact> q = em.createNamedQuery("getContactsByUser", UserContact.class);
 		q.setParameter("user_id", ownerId);

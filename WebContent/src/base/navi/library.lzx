@@ -28,7 +28,6 @@
     	<frame src="resources/bullet_arrow_down_dark.png" /> 
     </resource>
     
-    <include href="helpAndBugs.lzx" />
     <include href="mainNavi.lzx" />
 
 </library>

@@ -21,9 +21,7 @@
 <library>
 	
 	<include href="tabButtonMain.lzx" />
-	<include href="infosPanel.lzx" />
 	<include href="profilesPanel.lzx" />
-	<include href="rssPanel.lzx" />
 	<include href="mainDashboard.lzx" />
 
 </library>

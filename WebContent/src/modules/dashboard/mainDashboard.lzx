@@ -132,8 +132,6 @@
 	
 	<view height="240" x="516" width="1" bgcolor="$once{ canvas.getThemeColor('secondBorderColor') }" />
 	
-	<infosPanel x="520" />
-
     <view name="_bottomArea" y="240" x="0"
             width="${ canvas.width }" height="${ canvas.height-240-84 }" visibility="hidden">
     	
@@ -275,9 +273,6 @@
             
             <overAllChat name="_overallchat" visibility="hidden" />
             
-            <rssBox name="feed1" visibility="hidden" width="${ parent.width-4 }" 
-                            height="${ parent.height }" y="0" x="2" />
-
     	</view>        
     	
     </view>

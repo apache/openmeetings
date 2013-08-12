@@ -294,7 +294,6 @@
 	<bean id="languageImport" class="org.apache.openmeetings.xmlimport.LanguageImport" />
 	<bean id="userImport" class="org.apache.openmeetings.xmlimport.UserImport" />
 	<bean id="libraryWmlLoader" class="org.apache.openmeetings.documents.LibraryWmlLoader" />
-	<bean id="loadAtomRssFeed" class="org.apache.openmeetings.rss.LoadAtomRssFeed" />
 	<bean id="authLevelManagement" class="org.apache.openmeetings.data.basic.AuthLevelUtil" />
 	<bean id="generateSWF" class="org.apache.openmeetings.documents.GenerateSWF" />
 	<bean id="fileUtils" class="org.apache.openmeetings.data.file.FileUtils" />

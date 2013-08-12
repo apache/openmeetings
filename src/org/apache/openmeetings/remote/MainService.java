@@ -18,8 +18,6 @@
  */
 package org.apache.openmeetings.remote;
 
-import static org.apache.openmeetings.persistence.beans.basic.Configuration.DASHBOARD_SHOW_MYROOMS_KEY;
-import static org.apache.openmeetings.persistence.beans.basic.Configuration.DASHBOARD_SHOW_RSS_KEY;
 import static org.apache.openmeetings.persistence.beans.basic.Configuration.FRONTEND_REGISTER_KEY;
 import static org.apache.openmeetings.persistence.beans.basic.Configuration.MAX_UPLOAD_SIZE_KEY;
 
@@ -31,7 +29,6 @@ import java.util.Map;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.data.basic.AuthLevelUtil;
-import org.apache.openmeetings.data.basic.NaviBuilder;
 import org.apache.openmeetings.data.basic.SessiondataDao;
 import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
 import org.apache.openmeetings.data.basic.dao.LdapConfigDao;
@@ -46,7 +43,6 @@ import org.apache.openmeetings.data.user.dao.StateDao;
 import org.apache.openmeetings.data.user.dao.UsersDao;
 import org.apache.openmeetings.ldap.LdapLoginManagement;
 import org.apache.openmeetings.persistence.beans.basic.Configuration;
-import org.apache.openmeetings.persistence.beans.basic.Naviglobal;
 import org.apache.openmeetings.persistence.beans.basic.OmTimeZone;
 import org.apache.openmeetings.persistence.beans.basic.RemoteSessionObject;
 import org.apache.openmeetings.persistence.beans.basic.SOAPLogin;
@@ -57,7 +53,6 @@ import org.apache.openmeetings.persistence.beans.user.User;
 import org.apache.openmeetings.persistence.beans.user.Userdata;
 import org.apache.openmeetings.remote.red5.ScopeApplicationAdapter;
 import org.apache.openmeetings.remote.util.SessionVariablesUtil;
-import org.apache.openmeetings.rss.LoadAtomRssFeed;
 import org.apache.openmeetings.session.ISessionManager;
 import org.red5.logging.Red5LoggerFactory;
 import org.red5.server.api.IConnection;
@@ -94,8 +89,6 @@ public class MainService implements IPendingServiceCallback {
 	@Autowired
 	private OmTimeZoneDao omTimeZoneDaoImpl;
 	@Autowired
-	private NaviBuilder navimanagement;
-	@Autowired
 	private RoomManager roomManager;
 	@Autowired
 	private ConferenceLogDao conferenceLogDao;
@@ -112,32 +105,11 @@ public class MainService implements IPendingServiceCallback {
 	@Autowired
 	private AuthLevelUtil authLevelUtil;
 	@Autowired
-	private LoadAtomRssFeed loadAtomRssFeed;
-	@Autowired
 	private LdapLoginManagement ldapLoginManagement;
 
 	// External User Types
 	public static final String EXTERNAL_USER_TYPE_LDAP = "LDAP";
 
-	/**
-	 * get Navigation
-	 * 
-	 * @param SID
-	 * @param language_id
-	 * @return - list of global navigation menus
-	 */
-	public List<Naviglobal> getNavi(String SID, long language_id, Long organisation_id) {
-		try {
-			Long user_id = sessiondataDao.checkSession(SID);
-			log.debug("getNavi 1: " + user_id);
-			Long user_level = userManager.getUserLevelByIdAndOrg(user_id, organisation_id);
-			log.debug("getNavi 2: " + user_level);
-			return navimanagement.getMainMenu(1, user_id, language_id); //Hardcoded to user level to disable admin menu in flash version
-		} catch (Exception err) {
-			log.error("[getNavi] ", err);
-		}
-		return null;
-	}
 
 	/**
 	 * gets a user by its SID
@@ -619,36 +591,6 @@ public class MainService implements IPendingServiceCallback {
 	}
 
 	/**
-	 * @deprecated
-	 * @param SID
-	 * @return - map of rss messages
-	 */
-	@Deprecated
-	public LinkedHashMap<String, LinkedHashMap<String, LinkedHashMap<String, LinkedHashMap<String, Object>>>> getRssFeeds(
-			String SID) {
-		Long users_id = sessiondataDao.checkSession(SID);
-		Long user_level = userManager.getUserLevelByID(users_id);
-		return loadAtomRssFeed.getRssFeeds(user_level);
-	}
-
-	/**
-	 * 
-	 * @param SID
-	 * @param urlEndPoint
-	 * @return - map of rss messages
-	 */
-	public LinkedHashMap<String, LinkedHashMap<String, LinkedHashMap<String, Object>>> getRssFeedByURL(
-			String SID, String urlEndPoint) {
-		Long users_id = sessiondataDao.checkSession(SID);
-		Long user_level = userManager.getUserLevelByID(users_id);
-		if (authLevelUtil.checkUserLevel(user_level)) {
-			return loadAtomRssFeed.parseRssFeed(urlEndPoint);
-		} else {
-			return null;
-		}
-	}
-
-	/**
 	 * TODO: Is this function in usage?
 	 * 
 	 * @deprecated
@@ -706,23 +648,5 @@ public class MainService implements IPendingServiceCallback {
 
 	public void resultReceived(IPendingServiceCall arg0) {
 		log.debug("[resultReceived]" + arg0);
-	}
-
-	public List<Configuration> getDashboardConfiguration(String SID) {
-		try {
-			Long users_id = sessiondataDao.checkSession(SID);
-			Long user_level = userManager.getUserLevelByID(users_id);
-			if (authLevelUtil.checkUserLevel(user_level)) {
-				return configurationDao.get(
-						"dashboard.show.chat", //
-						DASHBOARD_SHOW_MYROOMS_KEY, //
-						DASHBOARD_SHOW_RSS_KEY, //
-						"default.dashboard.tab", //
-						"default.landing.zone");
-			}
-		} catch (Exception err) {
-			log.error("[getDashboardConfiguration]", err);
-		}
-		return null;
 	}
 }

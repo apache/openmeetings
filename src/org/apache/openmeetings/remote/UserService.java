@@ -501,41 +501,6 @@ public class UserService {
 		return null;
 	}
 
-	public Object changeUserContactByHash(String SID, String hash,
-			Boolean status) {
-		try {
-			Long users_id = sessiondataDao.checkSession(SID);
-			Long user_level = userManager.getUserLevelByID(users_id);
-			// users only
-			if (authLevelUtil.checkUserLevel(user_level)) {
-
-				UserContact userContact = userContactsDao
-						.getContactsByHash(hash);
-
-				if (userContact == null) {
-
-					log.error("changeUserContactByHash " + hash);
-
-					return -48L;
-				}
-
-				if (userContact.getContact().getUser_id().equals(users_id)) {
-
-					return this.changePendingStatusUserContacts(SID,
-							userContact.getUserContactId(), status);
-
-				} else {
-					return -48L;
-				}
-
-			}
-
-		} catch (Exception err) {
-			log.error("[changeUserContactByHash]", err);
-		}
-		return null;
-	}
-
 	public List<UserContact> getUserContacts(String SID) {
 		try {
 			Long users_id = sessiondataDao.checkSession(SID);
@@ -599,91 +564,6 @@ public class UserService {
 			}
 		} catch (Exception err) {
 			log.error("[removeContactUser]", err);
-		}
-		return null;
-	}
-
-	public Long changePendingStatusUserContacts(String SID, Long userContactId,
-			Boolean pending) {
-		try {
-			Long users_id = sessiondataDao.checkSession(SID);
-			Long user_level = userManager.getUserLevelByID(users_id);
-			// users only
-			if (authLevelUtil.checkUserLevel(user_level)) {
-
-				UserContact userContacts = userContactsDao.get(userContactId);
-
-				if (userContacts == null) {
-					return -46L;
-				}
-
-				if (!userContacts.getPending()) {
-					return -47L;
-				}
-
-				if (pending) {
-
-					userContactsDao.updateContactStatus(userContactId, false);
-
-					userContacts = userContactsDao
-							.get(userContactId);
-
-					userContactsDao.addUserContact(userContacts.getOwner()
-							.getUser_id(), users_id, false, "");
-
-					User user = userContacts.getOwner();
-
-					if (user.getAdresses() != null) {
-
-						Long language_id = user.getLanguage_id();
-						if (language_id == null) {
-							language_id = configurationDao.getConfValue(DEFAUT_LANG_KEY, Long.class, "1");
-						}
-
-						String message = "";
-
-						Fieldlanguagesvalues fValue1192 = fieldManager
-								.getFieldByIdAndLanguage(1192L, language_id);
-						Fieldlanguagesvalues fValue1198 = fieldManager
-								.getFieldByIdAndLanguage(1198L, language_id);
-
-						message += fValue1192.getValue() + " "
-								+ user.getFirstname() + " "
-								+ user.getLastname() + "<br/><br/>";
-						message += userContacts.getContact().getFirstname()
-								+ " " + userContacts.getContact().getLastname()
-								+ " " + fValue1198.getValue();
-
-						String template = requestContactConfirmTemplate
-								.getRequestContactTemplate(message);
-
-						privateMessagesDao.addPrivateMessage(
-								user.getFirstname() + " " + user.getLastname()
-										+ " " + fValue1198.getValue(), message,
-								0L, userContacts.getContact(), user, user,
-								false, null, false, 0L, user.getAdresses()
-										.getEmail());
-
-						mailHandler.send(user.getAdresses().getEmail(),
-								userContacts.getContact().getFirstname()
-										+ " "
-										+ userContacts.getContact()
-												.getLastname() + " "
-										+ fValue1198.getValue(), template);
-
-					}
-
-				} else {
-
-					userContactsDao.deleteUserContact(userContactId);
-
-				}
-
-				return userContactId;
-			}
-
-		} catch (Exception err) {
-			log.error("[getPendingUserContact]", err);
 		}
 		return null;
 	}
