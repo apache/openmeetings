@@ -120,32 +120,6 @@ public class CalendarService {
 
 	}
 
-	public Appointment getAppointmentByRoomId(String SID, Long room_id) {
-		try {
-
-			Long users_id = sessiondataDao.checkSession(SID);
-			Long user_level = userManager.getUserLevelByID(users_id);
-			if (authLevelUtil.checkUserLevel(user_level)) {
-
-				Appointment appointment = new Appointment();
-
-				Appointment appStored = appointmentDao.getAppointmentByRoomId(
-						users_id, room_id);
-
-				appointment.setAppointmentStarttime(appStored
-						.getAppointmentStarttime());
-				appointment.setAppointmentEndtime(appStored
-						.getAppointmentEndtime());
-
-				return appointment;
-			}
-
-		} catch (Exception err) {
-			log.error("[getAppointmentByRoomId]", err);
-		}
-		return null;
-	}
-	
 	public List<AppointmentCategory> getAppointmentCategoryList(String SID) {
 		log.debug("AppointmenetCategoryService.getAppointmentCategoryList SID : "
 				+ SID);

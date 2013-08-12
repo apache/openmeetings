@@ -34,13 +34,6 @@ these properties can be overwritten by public/config.xml -->
 <attribute name="moderatorModuleRoom" value="roomModerate" type="string" />
 
 
-<!-- #############################################
-    Dashboard Modules
- -->
-
-<attribute name="dashboardModuleCalendar" value="myScheduledMeetings" type="string" />
-
-
 <!-- Conference Room Modules -->
 
 <attribute name="conferenceModuleRoomList" value="allmeetings" type="string" />
@@ -72,17 +65,5 @@ these properties can be overwritten by public/config.xml -->
     Room Layouts: interviewConferenceRoom
  -->
 <attribute name="interviewRoomModule" value="interviewConferenceRoom" type="string" />
-
-<!-- #############################################
-    Event Room Modules
- -->
-
-<attribute name="recordModule" value="recordContent" type="string" />
-
-<!-- #############################################
-    Profiles Panel Modules
- -->
-
-<attribute name="userSettingsModule" value="userSettings" type="string" />
 
 </library>

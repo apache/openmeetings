@@ -404,8 +404,6 @@ and some more references to temp-objects
 
 <attribute name="roomJumpId" value="0" type="number" />
 
-<attribute name="userContacts" value="null" />
-
 <!--
     Loads a User profile page directly instead of loading the Dashboard
     cuser is a hash that can be found in the UserContacts Table
@@ -416,15 +414,6 @@ and some more references to temp-objects
     Indicates if the user does accept or deny a user contact request
  -->    
 <attribute name="cuserStatus" value="none" type="string"/>
-
-<!--
-    Attributes to handle the click search on linked user-keywords
- -->
-<attribute name="userSettingsModuleOpt" value="userProfile" type="string"/>
-
-<attribute name="userSettingsSearchType" value="" type="string"/>
-<attribute name="userSettingsSearchPhrase" value="" type="string"/>
-<attribute name="userSettingsSearchRef" value="null"/>
 
 <!--
     Attribute to load a custom user calendar instead of the own one

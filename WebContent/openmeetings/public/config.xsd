@@ -58,7 +58,6 @@
         <xs:element ref="conferenceRoomModule"/>
         <xs:element ref="restrictedRoomModule"/>
         <xs:element ref="interviewRoomModule"/>
-        <xs:element ref="userSettingsModule"/>
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -167,5 +166,4 @@
   <xs:element name="conferenceRoomModule" type="xs:NCName"/>
   <xs:element name="restrictedRoomModule" type="xs:NCName"/>
   <xs:element name="interviewRoomModule" type="xs:NCName"/>
-  <xs:element name="userSettingsModule" type="xs:NCName"/>
 </xs:schema>

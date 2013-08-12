@@ -317,15 +317,5 @@ To disable AEC please specify 0.
     Room Layouts: interviewConferenceRoom
  -->
 <interviewRoomModule>interviewConferenceRoom</interviewRoomModule>
-
-<!-- #############################################
-    Event Room Modules
- -->
-
-<!-- #############################################
-    Profiles Panel Modules
- -->
-
-<userSettingsModule>userSettings</userSettingsModule>
         
 </config>

@@ -20,14 +20,6 @@
 -->
 <library>
 	
-	
     <include href="newPrivateMessage.lzx" />
-    <include href="newPrivateMessageFolder.lzx" />
-    <include href="privateMessageFolder.lzx" />
-    <include href="privateMessagItem.lzx" />
-    <include href="privateMessages.lzx" />
-    <include href="roomAccessMessage.lzx" />
-    <include href="pendingUserStatus.lzx" />
-
 
 </library>

@@ -20,11 +20,6 @@
 -->
 <library>
 	
-	
-    <include href="contactsListItem.lzx" />
-    <include href="pendingContactsListItem.lzx" />
     <include href="userContacts.lzx" />
-    <include href="editUserContacts.lzx" />
-    
 
 </library>

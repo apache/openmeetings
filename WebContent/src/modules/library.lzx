@@ -22,9 +22,7 @@
 	
 	<include href="conference/" />
 	<include href="chat/" />
-	<!-- 
 	<include href="settings/" />
-	 -->
 	<include href="invitation/" />
 	<include href="dashboard/" />
 	<include href="meetings/" />

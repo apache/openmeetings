@@ -23,7 +23,6 @@ import static org.apache.openmeetings.persistence.beans.basic.Configuration.DEFA
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.TimeZone;
 
@@ -54,8 +53,6 @@ import org.apache.openmeetings.persistence.beans.invitation.Invitations;
 import org.apache.openmeetings.persistence.beans.lang.Fieldlanguagesvalues;
 import org.apache.openmeetings.persistence.beans.room.Client;
 import org.apache.openmeetings.persistence.beans.room.Room;
-import org.apache.openmeetings.persistence.beans.user.PrivateMessage;
-import org.apache.openmeetings.persistence.beans.user.PrivateMessageFolder;
 import org.apache.openmeetings.persistence.beans.user.Salutation;
 import org.apache.openmeetings.persistence.beans.user.User;
 import org.apache.openmeetings.persistence.beans.user.UserContact;
@@ -135,6 +132,19 @@ public class UserService {
 	private ServerDao serverDao;
 	@Autowired
 	private SlaveHTTPConnectionManager slaveHTTPConnectionManager;
+
+	/**
+	 * get user by id, admin only
+	 * 
+	 * @param SID
+	 * @param user_id
+	 * @return User with the id given
+	 */
+	public User getUserById(String SID, long user_id) {
+		Long users_id = sessiondataDao.checkSession(SID);
+		Long user_level = userManager.getUserLevelByID(users_id);
+		return userManager.checkAdmingetUserById(user_level, user_id);
+	}
 
 	/**
 	 * refreshes the current SID
@@ -326,33 +336,6 @@ public class UserService {
 		return null;
 	}
 
-	public SearchResult<User> searchUserProfile(String SID, String searchTxt,
-			String userOffers, String userSearchs, String orderBy, int start,
-			int max, boolean asc) {
-		try {
-			Long users_id = sessiondataDao.checkSession(SID);
-			Long user_level = userManager.getUserLevelByID(users_id);
-			// users only
-			if (authLevelUtil.checkUserLevel(user_level)) {
-
-				SearchResult<User> searchResult = new SearchResult<User>();
-				searchResult.setObjectName(User.class.getName());
-				List<User> userList = userManager.searchUserProfile(
-						searchTxt, userOffers, userSearchs, orderBy, start,
-						max, asc);
-				searchResult.setResult(userList);
-				Long resultInt = userManager.searchCountUserProfile(
-						searchTxt, userOffers, userSearchs);
-				searchResult.setRecords(resultInt);
-
-				return searchResult;
-			}
-		} catch (Exception err) {
-			log.error("[searchUserProfile]", err);
-		}
-		return null;
-	}
-
 	@Deprecated
 	public Long requestUserToContactList(String SID, Long userToAdd_id,
 			String domain, String port, String webapp) {
@@ -479,31 +462,6 @@ public class UserService {
 
 		} catch (Exception err) {
 			log.error("[getPendingUserContact]", err);
-		}
-		return null;
-	}
-
-	public Long checkPendingStatus(String SID, Long userContactId) {
-		try {
-			Long users_id = sessiondataDao.checkSession(SID);
-			Long user_level = userManager.getUserLevelByID(users_id);
-			// users only
-			if (authLevelUtil.checkUserLevel(user_level)) {
-
-				UserContact userContacts = userContactsDao.get(userContactId);
-
-				if (userContacts == null) {
-					return -46L;
-				}
-
-				if (!userContacts.getPending()) {
-					return -47L;
-				}
-
-				return userContactId;
-			}
-		} catch (Exception err) {
-			log.error("[checkPendingStatus]", err);
 		}
 		return null;
 	}
@@ -818,324 +776,6 @@ public class UserService {
 
 	}
 
-	public SearchResult<PrivateMessage> getInbox(String SID, String search,
-			String orderBy, int start, Boolean asc, Integer max) {
-		try {
-
-			Long users_id = sessiondataDao.checkSession(SID);
-			Long user_level = userManager.getUserLevelByID(users_id);
-			// users only
-			if (authLevelUtil.checkUserLevel(user_level)) {
-
-				SearchResult<PrivateMessage> searchResult = new SearchResult<PrivateMessage>();
-				searchResult.setObjectName(User.class.getName());
-				List<PrivateMessage> userList = privateMessagesDao
-						.getPrivateMessagesByUser(users_id, search, orderBy,
-								start, asc, 0L, max);
-
-				searchResult.setResult(userList);
-
-				Long resultInt = privateMessagesDao.countPrivateMessagesByUser(
-						users_id, search, 0L);
-
-				searchResult.setRecords(resultInt);
-
-				return searchResult;
-
-			}
-
-		} catch (Exception err) {
-			log.error("[getInbox]", err);
-		}
-		return null;
-	}
-
-	public SearchResult<PrivateMessage> getSend(String SID, String search,
-			String orderBy, Integer start, Boolean asc, Integer max) {
-		try {
-
-			Long users_id = sessiondataDao.checkSession(SID);
-			Long user_level = userManager.getUserLevelByID(users_id);
-			// users only
-			if (authLevelUtil.checkUserLevel(user_level)) {
-
-				SearchResult<PrivateMessage> searchResult = new SearchResult<PrivateMessage>();
-				searchResult.setObjectName(User.class.getName());
-				List<PrivateMessage> userList = privateMessagesDao
-						.getSendPrivateMessagesByUser(users_id, search,
-								orderBy, start, asc, 0L, max);
-
-				searchResult.setResult(userList);
-
-				Long resultInt = privateMessagesDao
-						.countSendPrivateMessagesByUser(users_id, search, 0L);
-
-				searchResult.setRecords(resultInt);
-
-				return searchResult;
-
-			}
-
-		} catch (Exception err) {
-			log.error("[getInbox]", err);
-		}
-		return null;
-	}
-
-	public SearchResult<PrivateMessage> getTrash(String SID, String search,
-			String orderBy, Integer start, Boolean asc, Integer max) {
-		try {
-
-			Long users_id = sessiondataDao.checkSession(SID);
-			Long user_level = userManager.getUserLevelByID(users_id);
-			// users only
-			if (authLevelUtil.checkUserLevel(user_level)) {
-
-				SearchResult<PrivateMessage> searchResult = new SearchResult<PrivateMessage>();
-				searchResult.setObjectName(User.class.getName());
-				List<PrivateMessage> userList = privateMessagesDao
-						.getTrashPrivateMessagesByUser(users_id, search,
-								orderBy, start, asc, max);
-
-				searchResult.setResult(userList);
-
-				Long resultInt = privateMessagesDao
-						.countTrashPrivateMessagesByUser(users_id, search);
-
-				searchResult.setRecords(resultInt);
-
-				return searchResult;
-
-			}
-
-		} catch (Exception err) {
-			log.error("[getInbox]", err);
-		}
-		return null;
-	}
-
-	public SearchResult<PrivateMessage> getFolder(String SID,
-			Long privateMessageFolderId, String search, String orderBy,
-			Integer start, Boolean asc, Integer max) {
-		try {
-
-			Long users_id = sessiondataDao.checkSession(SID);
-			Long user_level = userManager.getUserLevelByID(users_id);
-			// users only
-			if (authLevelUtil.checkUserLevel(user_level)) {
-
-				SearchResult<PrivateMessage> searchResult = new SearchResult<PrivateMessage>();
-				searchResult.setObjectName(User.class.getName());
-				List<PrivateMessage> userList = privateMessagesDao
-						.getFolderPrivateMessagesByUser(users_id, search,
-								orderBy, start, asc, privateMessageFolderId,
-								max);
-
-				searchResult.setResult(userList);
-
-				Long resultInt = privateMessagesDao
-						.countFolderPrivateMessagesByUser(users_id,
-								privateMessageFolderId, search);
-
-				searchResult.setRecords(resultInt);
-
-				return searchResult;
-
-			}
-
-		} catch (Exception err) {
-			log.error("[getInbox]", err);
-		}
-		return null;
-	}
-
-	public Long getFolderCount(String SID, Long privateMessageFolderId) {
-		try {
-
-			Long users_id = sessiondataDao.checkSession(SID);
-			Long user_level = userManager.getUserLevelByID(users_id);
-			// users only
-			if (authLevelUtil.checkUserLevel(user_level)) {
-
-				return privateMessagesDao.countFolderPrivateMessagesByUser(
-						users_id, privateMessageFolderId, "");
-
-			}
-
-		} catch (Exception err) {
-			log.error("[getInbox]", err);
-		}
-		return null;
-	}
-
-	public Integer moveMailsToFolder(String SID,
-			@SuppressWarnings("rawtypes") List privateMessageIntsIds,
-			Long newFolderId) {
-		try {
-			Long users_id = sessiondataDao.checkSession(SID);
-			Long user_level = userManager.getUserLevelByID(users_id);
-			// users only
-			if (authLevelUtil.checkUserLevel(user_level)) {
-
-				List<Long> privateMessageIds = new LinkedList<Long>();
-
-				for (Object pMessageId : privateMessageIntsIds) {
-					privateMessageIds.add(Long.valueOf(pMessageId.toString())
-							.longValue());
-				}
-
-				return privateMessagesDao.moveMailsToFolder(privateMessageIds,
-						newFolderId);
-
-			}
-		} catch (Exception err) {
-			log.error("[moveMailsToFolder]", err);
-		}
-		return null;
-	}
-
-	public Integer moveMailsToTrash(String SID,
-			@SuppressWarnings("rawtypes") List privateMessageIntsIds,
-			Boolean isTrash) {
-		try {
-			Long users_id = sessiondataDao.checkSession(SID);
-			Long user_level = userManager.getUserLevelByID(users_id);
-			// users only
-			if (authLevelUtil.checkUserLevel(user_level)) {
-
-				List<Long> privateMessageIds = new LinkedList<Long>();
-
-				for (Object pMessageId : privateMessageIntsIds) {
-					privateMessageIds.add(Long.valueOf(pMessageId.toString())
-							.longValue());
-				}
-
-				log.debug("moveMailsToTrash :: " + isTrash);
-
-				return privateMessagesDao.updatePrivateMessagesToTrash(
-						privateMessageIds, isTrash, 0L);
-
-			}
-		} catch (Exception err) {
-			log.error("[moveMailsToTrash]", err);
-		}
-		return -1;
-	}
-
-	public Integer deletePrivateMessages(String SID, List<?> privateMessageIntsIds) {
-		try {
-			Long users_id = sessiondataDao.checkSession(SID);
-			Long user_level = userManager.getUserLevelByID(users_id);
-			// users only
-			if (authLevelUtil.checkUserLevel(user_level)) {
-
-				List<Long> privateMessageIds = new LinkedList<Long>();
-
-				for (Object pMessageId : privateMessageIntsIds) {
-					privateMessageIds.add(Long.valueOf(pMessageId.toString()));
-				}
-
-				return privateMessagesDao.deletePrivateMessages(privateMessageIds);
-
-			}
-		} catch (Exception err) {
-			log.error("[markReadStatusMails]", err);
-		}
-		return -1;
-	}
-
-	public Integer markReadStatusMails(String SID,
-			@SuppressWarnings("rawtypes") List privateMessageIntsIds,
-			Boolean isRead) {
-		try {
-			Long users_id = sessiondataDao.checkSession(SID);
-			Long user_level = userManager.getUserLevelByID(users_id);
-			// users only
-			if (authLevelUtil.checkUserLevel(user_level)) {
-
-				List<Long> privateMessageIds = new LinkedList<Long>();
-
-				for (Object pMessageId : privateMessageIntsIds) {
-					privateMessageIds.add(Long.valueOf(pMessageId.toString())
-							.longValue());
-				}
-
-				log.debug("markReadStatusMails :: " + isRead);
-
-				return privateMessagesDao.updatePrivateMessagesReadStatus(
-						privateMessageIds, isRead);
-
-			}
-		} catch (Exception err) {
-			log.error("[markReadStatusMails]", err);
-		}
-		return -1;
-	}
-
-	public Integer markReadStatusMail(String SID, Long privateMessageId,
-			Boolean isRead) {
-		try {
-			Long users_id = sessiondataDao.checkSession(SID);
-			Long user_level = userManager.getUserLevelByID(users_id);
-			// users only
-			if (authLevelUtil.checkUserLevel(user_level)) {
-
-				List<Long> privateMessageIds = new LinkedList<Long>();
-				privateMessageIds.add(privateMessageId);
-
-				return privateMessagesDao.updatePrivateMessagesReadStatus(
-						privateMessageIds, isRead);
-
-				// PrivateMessages privateMessage =
-				// privateMessagesDao.getPrivateMessagesById(privateMessageId);
-				//
-				// privateMessage.setIsRead(isRead);
-				//
-				// privateMessagesDao.updatePrivateMessages(privateMessage);
-
-			}
-		} catch (Exception err) {
-			log.error("[markReadStatusMail]", err);
-		}
-		return null;
-	}
-
-	public List<PrivateMessageFolder> getPrivateMessageFoldersByUser(String SID) {
-		try {
-			Long users_id = sessiondataDao.checkSession(SID);
-			Long user_level = userManager.getUserLevelByID(users_id);
-			// users only
-			if (authLevelUtil.checkUserLevel(user_level)) {
-
-				return privateMessageFolderDao
-						.getPrivateMessageFolderByUserId(users_id);
-
-			}
-
-		} catch (Exception err) {
-			log.error("[getPrivateMessageFolderByUser]", err);
-		}
-		return null;
-	}
-
-	public Long addPrivateMessageFolder(String SID, String folderName) {
-		try {
-			Long users_id = sessiondataDao.checkSession(SID);
-			Long user_level = userManager.getUserLevelByID(users_id);
-			// users only
-			if (authLevelUtil.checkUserLevel(user_level)) {
-
-				privateMessageFolderDao.addPrivateMessageFolder(folderName,
-						users_id);
-
-			}
-
-		} catch (Exception err) {
-			log.error("[addPrivateMessageFolder]", err);
-		}
-		return null;
-	}
-
 	public Boolean checkUserIsInContactList(String SID, Long user_id) {
 		try {
 			Long users_id = sessiondataDao.checkSession(SID);
@@ -1185,51 +825,6 @@ public class UserService {
 		} catch (Exception err) {
 			log.error("[shareCalendarUserContact]", err);
 		}
-	}
-
-	public Long updatePrivateMessageFolder(String SID,
-			Long privateMessageFolderId, String folderName) {
-		try {
-			Long users_id = sessiondataDao.checkSession(SID);
-			Long user_level = userManager.getUserLevelByID(users_id);
-			// users only
-			if (authLevelUtil.checkUserLevel(user_level)) {
-
-				PrivateMessageFolder privateMessageFolder = privateMessageFolderDao.get(privateMessageFolderId);
-
-				privateMessageFolder.setFolderName(folderName);
-				privateMessageFolder.setUpdated(new Date());
-
-				privateMessageFolderDao.update(privateMessageFolder, users_id);
-
-				return privateMessageFolderId;
-
-			}
-
-		} catch (Exception err) {
-			log.error("[updatePrivateMessageFolder]", err);
-		}
-		return null;
-	}
-
-	public Long deletePrivateMessageFolder(String SID,
-			Long privateMessageFolderId) {
-		try {
-			Long users_id = sessiondataDao.checkSession(SID);
-			Long user_level = userManager.getUserLevelByID(users_id);
-			// users only
-			if (authLevelUtil.checkUserLevel(user_level)) {
-
-				PrivateMessageFolder privateMessageFolder = privateMessageFolderDao.get(privateMessageFolderId);
-
-				privateMessageFolderDao.delete(privateMessageFolder, users_id);
-
-			}
-
-		} catch (Exception err) {
-			log.error("[deletePrivateMessageFolder]", err);
-		}
-		return null;
 	}
 
 	/**

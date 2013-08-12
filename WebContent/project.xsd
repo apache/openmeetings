@@ -1113,20 +1113,6 @@ This is used in the conference.
   </xs:extension>
   </xs:complexContent>
   </xs:complexType>
-<xs:element name="searchUserProfile" type="project:searchUserProfile" >
-<xs:annotation>
-<xs:documentation xml:lang="en">
-  modules:dashboard </xs:documentation>
-</xs:annotation>
-</xs:element>
-  <xs:complexType name="searchUserProfile" mixed="true">
-  <xs:complexContent>
-  <xs:extension base="lzx:view">
-      <xs:attribute name="newMessageActive" type="lzx:boolean" default="false" >
-</xs:attribute>
-  </xs:extension>
-  </xs:complexContent>
-  </xs:complexType>
 <xs:element name="miniIconSmybolExtraIcons" type="project:miniIconSmybolExtraIcons" >
 </xs:element>
   <xs:complexType name="miniIconSmybolExtraIcons" mixed="true">
@@ -1488,16 +1474,6 @@ This is used in the conference.
   </xs:extension>
   </xs:complexContent>
   </xs:complexType>
-<xs:element name="editUserContacts" type="project:editUserContacts" >
-</xs:element>
-  <xs:complexType name="editUserContacts" mixed="true">
-  <xs:complexContent>
-  <xs:extension base="lzx:view">
-      <xs:attribute name="contactContent" type="xs:string" default="null" >
-</xs:attribute>
-  </xs:extension>
-  </xs:complexContent>
-  </xs:complexType>
 <xs:element name="parentResultPollBalk" type="project:parentResultPollBalk" >
 </xs:element>
   <xs:complexType name="parentResultPollBalk" mixed="true">
@@ -1810,32 +1786,6 @@ This is used in the conference.
   <xs:complexContent>
   <xs:extension base="project:explorerBox">
       <xs:attribute name="labelid" type="lzx:number" >
-</xs:attribute>
-  </xs:extension>
-  </xs:complexContent>
-  </xs:complexType>
-<xs:element name="userSettings" type="project:userSettings" >
-<xs:annotation>
-<xs:documentation xml:lang="en">
- User Profile Setting Panel </xs:documentation>
-</xs:annotation>
-</xs:element>
-  <xs:complexType name="userSettings" mixed="true">
-  <xs:complexContent>
-  <xs:extension base="project:baseContentView">
-      <xs:attribute name="currentSelected" type="xs:string" default="null" >
-</xs:attribute>
-  </xs:extension>
-  </xs:complexContent>
-  </xs:complexType>
-<xs:element name="pendingContactsListItem" type="project:pendingContactsListItem" >
-</xs:element>
-  <xs:complexType name="pendingContactsListItem" mixed="true">
-  <xs:complexContent>
-  <xs:extension base="project:basePagingListItem">
-      <xs:attribute name="username" type="xs:string" default="" >
-</xs:attribute>
-      <xs:attribute name="searchUserProfileImage" type="xs:string" default="null" >
 </xs:attribute>
   </xs:extension>
   </xs:complexContent>
@@ -2242,32 +2192,6 @@ This is used in the conference.
   </xs:extension>
   </xs:complexContent>
   </xs:complexType>
-<xs:element name="menuListItemUserProfile" type="project:menuListItemUserProfile" >
-</xs:element>
-  <xs:complexType name="menuListItemUserProfile" mixed="true">
-  <xs:complexContent>
-  <xs:extension base="lzx:view">
-      <xs:attribute name="textvalue" type="xs:string" default="null" >
-</xs:attribute>
-      <xs:attribute name="textLabel" type="xs:string" default="" >
-</xs:attribute>
-      <xs:attribute name="selected" type="lzx:boolean" default="false" >
-</xs:attribute>
-      <xs:attribute name="list" type="xs:string" default="null" >
-</xs:attribute>
-      <xs:attribute name="labelid" type="lzx:number" >
-</xs:attribute>
-      <xs:attribute name="labelLabelid" type="lzx:number" default="-1" >
-</xs:attribute>
-      <xs:attribute name="isopen" type="lzx:boolean" default="false" >
-</xs:attribute>
-      <xs:attribute name="isleaf" type="lzx:boolean" default="false" >
-</xs:attribute>
-      <xs:attribute name="action" type="xs:string" default="" >
-</xs:attribute>
-  </xs:extension>
-  </xs:complexContent>
-  </xs:complexType>
 <xs:element name="chatParticipantsInviteConference" type="project:chatParticipantsInviteConference" >
 </xs:element>
   <xs:complexType name="chatParticipantsInviteConference" mixed="true">
@@ -2316,18 +2240,6 @@ This is used in the conference.
       <xs:attribute name="labelid" type="lzx:number" default="0" >
 </xs:attribute>
       <xs:attribute name="currentIconRsc" type="xs:string" default="" >
-</xs:attribute>
-  </xs:extension>
-  </xs:complexContent>
-  </xs:complexType>
-<xs:element name="newPrivateMessageFolder" type="project:newPrivateMessageFolder" >
-</xs:element>
-  <xs:complexType name="newPrivateMessageFolder" mixed="true">
-  <xs:complexContent>
-  <xs:extension base="project:guiPresenter">
-      <xs:attribute name="refObj" type="xs:string" default="null" >
-</xs:attribute>
-      <xs:attribute name="folderName" type="xs:string" default="" >
 </xs:attribute>
   </xs:extension>
   </xs:complexContent>
@@ -2488,20 +2400,6 @@ This is used in the conference.
       <xs:attribute name="text" type="xs:string" default="" >
 </xs:attribute>
       <xs:attribute name="holder" type="xs:string" default="null" >
-</xs:attribute>
-  </xs:extension>
-  </xs:complexContent>
-  </xs:complexType>
-<xs:element name="pendingUserStatus" type="project:pendingUserStatus" >
-</xs:element>
-  <xs:complexType name="pendingUserStatus" mixed="true">
-  <xs:complexContent>
-  <xs:extension base="lzx:view">
-      <xs:attribute name="userContactId" type="lzx:number" default="0" >
-</xs:attribute>
-      <xs:attribute name="pending" type="lzx:boolean" default="true" >
-</xs:attribute>
-      <xs:attribute name="message" type="xs:string" default="" >
 </xs:attribute>
   </xs:extension>
   </xs:complexContent>
@@ -2760,24 +2658,6 @@ This is used in the conference.
 </xs:annotation>
 </xs:attribute>
       <xs:attribute name="applyDefaultModeration" type="lzx:boolean" default="false" >
-</xs:attribute>
-  </xs:extension>
-  </xs:complexContent>
-  </xs:complexType>
-<xs:element name="privateMessagItem" type="project:privateMessagItem" >
-</xs:element>
-  <xs:complexType name="privateMessagItem" mixed="true">
-  <xs:complexContent>
-  <xs:extension base="project:basePagingListItem">
-      <xs:attribute name="subject" type="xs:string" default="" >
-</xs:attribute>
-      <xs:attribute name="strTime" type="xs:string" default="" >
-</xs:attribute>
-      <xs:attribute name="itemSelected" type="lzx:boolean" default="false" >
-</xs:attribute>
-      <xs:attribute name="isRead" type="lzx:boolean" default="false" >
-</xs:attribute>
-      <xs:attribute name="from" type="xs:string" default="" >
 </xs:attribute>
   </xs:extension>
   </xs:complexContent>
@@ -3849,16 +3729,6 @@ This is used in the conference.
       <xs:attribute name="fileHash" type="xs:string" default="" >
 </xs:attribute>
       <xs:attribute name="fileExplorerItemId" type="lzx:number" default="0" >
-</xs:attribute>
-  </xs:extension>
-  </xs:complexContent>
-  </xs:complexType>
-<xs:element name="searchUserProfileImage" type="project:searchUserProfileImage" >
-</xs:element>
-  <xs:complexType name="searchUserProfileImage" mixed="true">
-  <xs:complexContent>
-  <xs:extension base="lzx:view">
-      <xs:attribute name="profileUrl" type="xs:string" default="" >
 </xs:attribute>
   </xs:extension>
   </xs:complexContent>
@@ -5284,16 +5154,6 @@ This is used in the conference.
   </xs:extension>
   </xs:complexContent>
   </xs:complexType>
-<xs:element name="roomAccessMessage" type="project:roomAccessMessage" >
-</xs:element>
-  <xs:complexType name="roomAccessMessage" mixed="true">
-  <xs:complexContent>
-  <xs:extension base="lzx:view">
-      <xs:attribute name="rooms_id" type="lzx:number" default="0" >
-</xs:attribute>
-  </xs:extension>
-  </xs:complexContent>
-  </xs:complexType>
 <xs:element name="simpleLabelRoundButton" type="project:simpleLabelRoundButton" >
 </xs:element>
   <xs:complexType name="simpleLabelRoundButton" mixed="true">
@@ -5832,20 +5692,6 @@ This is used in the conference.
   </xs:extension>
   </xs:complexContent>
   </xs:complexType>
-<xs:element name="userContacts" type="project:userContacts" >
-</xs:element>
-  <xs:complexType name="userContacts" mixed="true">
-  <xs:complexContent>
-  <xs:extension base="lzx:view">
-      <xs:attribute name="userContactId" type="lzx:number" default="0" >
-</xs:attribute>
-      <xs:attribute name="pending" type="lzx:boolean" default="true" >
-</xs:attribute>
-      <xs:attribute name="doShare" type="lzx:boolean" default="true" >
-</xs:attribute>
-  </xs:extension>
-  </xs:complexContent>
-  </xs:complexType>
 <xs:element name="copiedTextPopup" type="project:copiedTextPopup" >
 </xs:element>
   <xs:complexType name="copiedTextPopup" mixed="true">
@@ -6027,20 +5873,6 @@ This is used in the conference.
   <xs:complexType name="drawUlineTools" mixed="true">
   <xs:complexContent>
   <xs:extension base="lzx:view">
-  </xs:extension>
-  </xs:complexContent>
-  </xs:complexType>
-<xs:element name="privateMessageFolder" type="project:privateMessageFolder" >
-</xs:element>
-  <xs:complexType name="privateMessageFolder" mixed="true">
-  <xs:complexContent>
-  <xs:extension base="lzx:view">
-      <xs:attribute name="selected" type="lzx:boolean" default="false" >
-</xs:attribute>
-      <xs:attribute name="privateMessageFolderId" type="lzx:number" default="0" >
-</xs:attribute>
-      <xs:attribute name="folderName" type="xs:string" default="" >
-</xs:attribute>
   </xs:extension>
   </xs:complexContent>
   </xs:complexType>
@@ -6359,20 +6191,6 @@ This is used in the conference.
       <xs:attribute name="fieldvalue" type="xs:string" default="" >
 </xs:attribute>
       <xs:attribute name="fieldname" type="xs:string" default="" >
-</xs:attribute>
-  </xs:extension>
-  </xs:complexContent>
-  </xs:complexType>
-<xs:element name="editPrivateMessageFolder" type="project:editPrivateMessageFolder" >
-</xs:element>
-  <xs:complexType name="editPrivateMessageFolder" mixed="true">
-  <xs:complexContent>
-  <xs:extension base="project:customInputtext">
-      <xs:attribute name="refObj" type="xs:string" default="null" >
-</xs:attribute>
-      <xs:attribute name="privateMessageFolderId" type="lzx:number" default="0" >
-</xs:attribute>
-      <xs:attribute name="folderName" type="xs:string" default="" >
 </xs:attribute>
   </xs:extension>
   </xs:complexContent>
@@ -7440,26 +7258,6 @@ This is used in the conference.
   </xs:extension>
   </xs:complexContent>
   </xs:complexType>
-<xs:element name="searchUserProfileListItem" type="project:searchUserProfileListItem" >
-</xs:element>
-  <xs:complexType name="searchUserProfileListItem" mixed="true">
-  <xs:complexContent>
-  <xs:extension base="project:basePagingListItem">
-      <xs:attribute name="username" type="xs:string" default="" >
-</xs:attribute>
-      <xs:attribute name="timezone" type="xs:string" default="" >
-</xs:attribute>
-      <xs:attribute name="searchUserProfileImage" type="xs:string" default="null" >
-</xs:attribute>
-      <xs:attribute name="searchSearchs" type="xs:string" default="" >
-</xs:attribute>
-      <xs:attribute name="searchOffers" type="xs:string" default="" >
-</xs:attribute>
-      <xs:attribute name="pending" type="lzx:boolean" default="false" >
-</xs:attribute>
-  </xs:extension>
-  </xs:complexContent>
-  </xs:complexType>
 <xs:element name="resultPieCharPoll" type="project:resultPieCharPoll" >
 </xs:element>
   <xs:complexType name="resultPieCharPoll" mixed="true">
@@ -8088,20 +7886,6 @@ This is used in the conference.
   </xs:extension>
   </xs:complexContent>
   </xs:complexType>
-<xs:element name="contactsListItem" type="project:contactsListItem" >
-</xs:element>
-  <xs:complexType name="contactsListItem" mixed="true">
-  <xs:complexContent>
-  <xs:extension base="project:basePagingListItem">
-      <xs:attribute name="username" type="xs:string" default="" >
-</xs:attribute>
-      <xs:attribute name="shareCalendar" type="lzx:boolean" default="false" >
-</xs:attribute>
-      <xs:attribute name="searchUserProfileImage" type="xs:string" default="null" >
-</xs:attribute>
-  </xs:extension>
-  </xs:complexContent>
-  </xs:complexType>
 <xs:element name="comoboxListItemNoHeaders" type="project:comoboxListItemNoHeaders" >
 </xs:element>
   <xs:complexType name="comoboxListItemNoHeaders" mixed="true">
@@ -8476,52 +8260,6 @@ This is used in the conference.
   </xs:extension>
   </xs:complexContent>
   </xs:complexType>
-<xs:element name="privateMessages" type="project:privateMessages" >
-</xs:element>
-  <xs:complexType name="privateMessages" mixed="true">
-  <xs:complexContent>
-  <xs:extension base="lzx:view">
-      <xs:attribute name="userContactId" type="lzx:number" default="0" >
-</xs:attribute>
-      <xs:attribute name="senderuserId" type="lzx:number" default="0" >
-</xs:attribute>
-      <xs:attribute name="sendEventToReload" type="lzx:boolean" default="false" >
-</xs:attribute>
-      <xs:attribute name="selectedRefObjIds" type="xs:string" default="null" >
-</xs:attribute>
-      <xs:attribute name="selected" type="lzx:boolean" default="false" >
-</xs:attribute>
-      <xs:attribute name="selectMenuItemObj" type="xs:string" default="null" >
-</xs:attribute>
-      <xs:attribute name="roomObjectRef" type="xs:string" default="null" >
-</xs:attribute>
-      <xs:attribute name="privateMessageId" type="lzx:number" default="0" >
-</xs:attribute>
-      <xs:attribute name="privateMessageFolderId" type="lzx:number" default="0" >
-</xs:attribute>
-      <xs:attribute name="pendingUserStatusRef" type="xs:string" default="null" >
-</xs:attribute>
-      <xs:attribute name="onlyUpdateDropDown" type="lzx:boolean" default="false" >
-</xs:attribute>
-      <xs:attribute name="newMessageActive" type="lzx:boolean" default="false" >
-</xs:attribute>
-      <xs:attribute name="newFolderId" type="lzx:number" default="0" >
-</xs:attribute>
-      <xs:attribute name="isTrash" type="lzx:boolean" default="false" >
-</xs:attribute>
-      <xs:attribute name="isSend" type="lzx:boolean" default="false" >
-</xs:attribute>
-      <xs:attribute name="isRead" type="lzx:boolean" default="false" >
-</xs:attribute>
-      <xs:attribute name="isInbox" type="lzx:boolean" default="false" >
-</xs:attribute>
-      <xs:attribute name="isFolder" type="lzx:boolean" default="false" >
-</xs:attribute>
-      <xs:attribute name="countUnRead" type="lzx:number" default="0" >
-</xs:attribute>
-  </xs:extension>
-  </xs:complexContent>
-  </xs:complexType>
 <xs:element name="screenSharingContainer" type="project:screenSharingContainer" >
 </xs:element>
   <xs:complexType name="screenSharingContainer" mixed="true">
@@ -8547,33 +8285,6 @@ This is used in the conference.
 <xs:element name="liste" type="project:liste" >
 </xs:element>
   <xs:complexType name="liste" mixed="true">
-  <xs:complexContent>
-  <xs:extension base="lzx:view">
-  </xs:extension>
-  </xs:complexContent>
-  </xs:complexType>
-<xs:element name="recordContent" type="project:recordContent" >
-<xs:annotation>
-<xs:documentation xml:lang="en">
-
-		View for recorded contents list.
-		When you select 'Recordings' on the top menu, this class shows the list.
-	</xs:documentation>
-</xs:annotation>
-</xs:element>
-  <xs:complexType name="recordContent" mixed="true">
-  <xs:complexContent>
-  <xs:extension base="project:baseContentView">
-      <xs:attribute name="recordedFileToDelete" type="lzx:number" default="0" >
-</xs:attribute>
-      <xs:attribute name="preButton" type="xs:string" default="null" >
-</xs:attribute>
-  </xs:extension>
-  </xs:complexContent>
-  </xs:complexType>
-<xs:element name="editUserContactsContent" type="project:editUserContactsContent" >
-</xs:element>
-  <xs:complexType name="editUserContactsContent" mixed="true">
   <xs:complexContent>
   <xs:extension base="lzx:view">
   </xs:extension>
