@@ -38,12 +38,10 @@ import org.apache.openmeetings.data.basic.FieldLanguageDao;
 import org.apache.openmeetings.data.basic.FieldManager;
 import org.apache.openmeetings.data.basic.SessiondataDao;
 import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
-import org.apache.openmeetings.data.basic.dao.OmTimeZoneDao;
 import org.apache.openmeetings.data.user.UserManager;
 import org.apache.openmeetings.data.user.dao.StateDao;
 import org.apache.openmeetings.data.user.dao.UsersDao;
 import org.apache.openmeetings.ldap.LdapLoginManagement;
-import org.apache.openmeetings.persistence.beans.basic.OmTimeZone;
 import org.apache.openmeetings.persistence.beans.basic.Sessiondata;
 import org.apache.openmeetings.persistence.beans.lang.FieldLanguage;
 import org.apache.openmeetings.persistence.beans.user.State;
@@ -64,9 +62,11 @@ import ro.fortsoft.wicket.dashboard.Dashboard;
 import ro.fortsoft.wicket.dashboard.DefaultDashboard;
 import ro.fortsoft.wicket.dashboard.WidgetFactory;
 import ro.fortsoft.wicket.dashboard.web.DashboardContext;
+import edu.emory.mathcs.backport.java.util.Arrays;
 
 public class WebSession extends AbstractAuthenticatedWebSession {
 	private static final long serialVersionUID = 1123393236459095315L;
+	public static int MILLIS_IN_MINUTE = 60000;
 	//private static final Map<String, Locale> LNG_TO_LOCALE_MAP = new HashMap<String, Locale> ();
 	private long userId = -1;
 	private long userLevel = -1; //TODO renew somehow on user edit !!!!
@@ -252,19 +252,24 @@ public class WebSession extends AbstractAuthenticatedWebSession {
 		return states.get(0);
 	}
 
-	public OmTimeZone getOmTimeZoneByBrowserLocale(int offsetByMinutes){
+	@SuppressWarnings("unchecked")
+	public static List<String> getAvailableTimezones() {
+		return Arrays.asList(TimeZone.getAvailableIDs());
+	}
+	
+	private boolean checkTimezone(TimeZone tz, int offsetByMinutes) {
+		return offsetByMinutes == (tz.getRawOffset() / MILLIS_IN_MINUTE);
+	}
+	
+	public String getTimeZoneByBrowserLocale(int offsetByMinutes){
 		TimeZone tz = Calendar.getInstance(getBrowserLocale()).getTimeZone();
-		OmTimeZone omTZ = getBean(OmTimeZoneDao.class).getOmTimeZoneByIcal(tz.getID());
-		if (omTZ == null){
-			List<OmTimeZone> omTimeZones = getBean(OmTimeZoneDao.class).getOmTimeZones();
-			for (OmTimeZone timeZone : omTimeZones){
-				int tzOffsetByMinutes = TimeZone.getTimeZone(timeZone.getIcal()).getRawOffset() / 60000;
-				if (tzOffsetByMinutes ==  offsetByMinutes){
-					return timeZone;  
-				}
+		if (!checkTimezone(tz, offsetByMinutes)){
+			String[] tzIds = TimeZone.getAvailableIDs(MILLIS_IN_MINUTE * offsetByMinutes);
+			if (tzIds != null && tzIds.length > 0) {
+				return tzIds[0];
 			}
 		}
-		return omTZ != null ? omTZ : getBean(OmTimeZoneDao.class).getOmTimeZones().get(0);
+		return tz.getID();
 	}
 	
 	private void initDashboard() {

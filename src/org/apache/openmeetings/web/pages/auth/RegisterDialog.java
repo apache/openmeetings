@@ -27,19 +27,17 @@ import static org.apache.wicket.validation.validator.StringValidator.minimumLeng
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 import org.apache.openmeetings.data.basic.FieldLanguageDao;
 import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
-import org.apache.openmeetings.data.basic.dao.OmTimeZoneDao;
 import org.apache.openmeetings.data.user.UserManager;
 import org.apache.openmeetings.data.user.dao.StateDao;
 import org.apache.openmeetings.data.user.dao.UsersDao;
-import org.apache.openmeetings.persistence.beans.basic.OmTimeZone;
 import org.apache.openmeetings.persistence.beans.lang.FieldLanguage;
 import org.apache.openmeetings.persistence.beans.user.State;
 import org.apache.openmeetings.utils.crypt.ManageCryptStyle;
 import org.apache.openmeetings.utils.math.CalendarPatterns;
-import org.apache.openmeetings.utils.math.TimezoneUtil;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.pages.ActivatePage;
 import org.apache.openmeetings.web.pages.MainPage;
@@ -74,11 +72,10 @@ public class RegisterDialog extends AbstractFormDialog<String> {
 	private DialogButton cancelBtn = new DialogButton(WebSession.getString(122));
 	private DialogButton registerBtn = new DialogButton(WebSession.getString(121));
 	private FeedbackPanel feedback = new FeedbackPanel("feedback");
-	private final IModel<OmTimeZone> tzModel = Model.of(WebSession.get().getOmTimeZoneByBrowserLocale(0));
-	private final DropDownChoice<OmTimeZone> tzDropDown = new DropDownChoice<OmTimeZone>("tz"
+	private final IModel<String> tzModel = Model.of(WebSession.get().getTimeZoneByBrowserLocale(0));
+	private final DropDownChoice<String> tzDropDown = new DropDownChoice<String>("tz"
 			, tzModel
-			, getBean(OmTimeZoneDao.class).getOmTimeZones()
-			, new ChoiceRenderer<OmTimeZone>("frontEndLabel", "jname"));
+			, WebSession.getAvailableTimezones());
 	private Form<String> form;
 	private SignInDialog s;
     private String firstName;
@@ -131,7 +128,7 @@ public class RegisterDialog extends AbstractFormDialog<String> {
 	}
 
 	public void setBrowserTZOffset(AjaxRequestTarget target, int browserTZOffset) {
-		tzModel.setObject(WebSession.get().getOmTimeZoneByBrowserLocale(browserTZOffset));
+		tzModel.setObject(WebSession.get().getTimeZoneByBrowserLocale(browserTZOffset));
 		target.add(tzDropDown);
 	}
 	
@@ -191,7 +188,7 @@ public class RegisterDialog extends AbstractFormDialog<String> {
 					Arrays.asList(getBean(ConfigurationDao.class).getConfValue("default_domain_id", Long.class, null)),
 					"" /*phone*/, false, baseURL,
 					sendConfirmation,
-					getBean(TimezoneUtil.class).getTimezoneByInternalJName(tzModel.getObject().getJname()),
+					TimeZone.getTimeZone(tzModel.getObject()),
 					false /*forceTimeZoneCheck*/,
 					"" /*userOffers*/, "" /*userSearchs*/,
 					false /*showContactData*/,

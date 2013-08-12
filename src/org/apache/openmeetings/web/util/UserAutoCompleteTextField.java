@@ -79,6 +79,7 @@ public class UserAutoCompleteTextField extends AutoCompleteTextField<User> {
 					u = new User();
 					u.setType(Type.contact);
 					u.setFirstname(fName);
+					u.setLogin(email);
 					u.setLastname(lName);
 					u.setAdresses(new Address());
 					u.getAdresses().setEmail(email);

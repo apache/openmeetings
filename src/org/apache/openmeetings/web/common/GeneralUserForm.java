@@ -28,12 +28,10 @@ import java.util.List;
 
 import org.apache.openmeetings.data.basic.FieldLanguageDao;
 import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
-import org.apache.openmeetings.data.basic.dao.OmTimeZoneDao;
 import org.apache.openmeetings.data.user.OrganisationManager;
 import org.apache.openmeetings.data.user.dao.SalutationDao;
 import org.apache.openmeetings.data.user.dao.StateDao;
 import org.apache.openmeetings.data.user.dao.UsersDao;
-import org.apache.openmeetings.persistence.beans.basic.OmTimeZone;
 import org.apache.openmeetings.persistence.beans.domain.Organisation;
 import org.apache.openmeetings.persistence.beans.domain.Organisation_Users;
 import org.apache.openmeetings.persistence.beans.lang.FieldLanguage;
@@ -95,8 +93,7 @@ public class GeneralUserForm extends Form<User> {
 		add(new TextField<String>("firstname"));
 		add(new TextField<String>("lastname"));
 		
-		add(new DropDownChoice<OmTimeZone>("omTimeZone", getBean(OmTimeZoneDao.class).getOmTimeZones(),
-				new ChoiceRenderer<OmTimeZone>("frontEndLabel", "jname")));
+		add(new DropDownChoice<String>("timeZoneId", WebSession.getAvailableTimezones()));
 
 		add(new DropDownChoice<FieldLanguage>("language"
 				, new PropertyModel<FieldLanguage>(this, "lang")
