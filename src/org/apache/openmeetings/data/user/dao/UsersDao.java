@@ -333,24 +333,6 @@ public class UsersDao implements IDataProviderDao<User> {
 		return new Long(-1);
 	}
 
-	public Object resetPassByHash(String hash, String pass) {
-		try {
-			Object u = this.getUserByHash(hash);
-			if (u instanceof User) {
-				User us = (User) u;
-				us.updatePassword(cryptManager, configurationDao, pass);
-				us.setResethash("");
-				update(us, -1L);
-				return new Long(-8);
-			} else {
-				return u;
-			}
-		} catch (Exception e) {
-			log.error("[getUserByAdressesId]", e);
-		}
-		return new Long(-1);
-	}
-
 	/**
 	 * @param search
 	 * @return

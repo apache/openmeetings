@@ -21,9 +21,7 @@ package org.apache.openmeetings.remote;
 import static org.apache.openmeetings.persistence.beans.basic.Configuration.DASHBOARD_SHOW_MYROOMS_KEY;
 import static org.apache.openmeetings.persistence.beans.basic.Configuration.DASHBOARD_SHOW_RSS_KEY;
 import static org.apache.openmeetings.persistence.beans.basic.Configuration.FRONTEND_REGISTER_KEY;
-import static org.apache.openmeetings.persistence.beans.basic.Configuration.LOGIN_MIN_LENGTH_KEY;
 import static org.apache.openmeetings.persistence.beans.basic.Configuration.MAX_UPLOAD_SIZE_KEY;
-import static org.apache.openmeetings.persistence.beans.basic.Configuration.PASS_MIN_LENGTH_KEY;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -48,7 +46,6 @@ import org.apache.openmeetings.data.user.dao.StateDao;
 import org.apache.openmeetings.data.user.dao.UsersDao;
 import org.apache.openmeetings.ldap.LdapLoginManagement;
 import org.apache.openmeetings.persistence.beans.basic.Configuration;
-import org.apache.openmeetings.persistence.beans.basic.LdapConfig;
 import org.apache.openmeetings.persistence.beans.basic.Naviglobal;
 import org.apache.openmeetings.persistence.beans.basic.OmTimeZone;
 import org.apache.openmeetings.persistence.beans.basic.RemoteSessionObject;
@@ -67,7 +64,6 @@ import org.red5.server.api.IConnection;
 import org.red5.server.api.Red5;
 import org.red5.server.api.service.IPendingServiceCall;
 import org.red5.server.api.service.IPendingServiceCallback;
-import org.red5.server.api.service.IServiceCapableConnection;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -180,27 +176,6 @@ public class MainService implements IPendingServiceCallback {
 	}
 
 	/**
-	 * This Method is just for testing you can find the corresponding Client
-	 * Function in xmlcrm/auth/checkLoginData.lzx
-	 * 
-	 * @param myObject2
-	 * @return - the size of the map passed, or -1 in case of error
-	 */
-	public int testObject(Object myObject2) {
-		try {
-			@SuppressWarnings("rawtypes")
-			LinkedHashMap myObject = (LinkedHashMap) myObject2;
-			log.debug("testObject " + myObject.size());
-			log.debug("testObject " + myObject.get(1));
-			log.debug("testObject " + myObject.get("stringObj"));
-			return myObject.size();
-		} catch (Exception e) {
-			log.error("ex: ", e);
-		}
-		return -1;
-	}
-
-	/**
 	 * load this session id before doing anything else
 	 * 
 	 * @return a unique session identifier
@@ -242,181 +217,6 @@ public class MainService implements IPendingServiceCallback {
 		return null;
 	}
 	
-	public User loginByRemember(String SID, String remoteHashId) {
-		try {
-
-			Client currentClient;
-			IConnection current = Red5.getConnectionLocal();
-
-			User o = null;
-
-			currentClient = sessionManager.getClientByStreamId(current
-					.getClient().getId(), null);
-
-			o = userManager.loginUserByRemoteHash(SID, remoteHashId);
-
-			if (o == null)
-				return null;
-
-			if (o.getOrganisation_users().isEmpty()) {
-				throw new Exception("Users has no organization assigned");
-			}
-
-			o.setSessionData(sessiondataDao.getSessionByHash(remoteHashId));
-			currentClient.setUser_id(o.getUser_id());
-			SessionVariablesUtil.setUserId(current.getClient(), o.getUser_id());
-			
-			if (currentClient.getUser_id() != null
-					&& currentClient.getUser_id() > 0) {
-
-				currentClient.setFirstname(o.getFirstname());
-				currentClient.setLastname(o.getLastname());
-				
-				scopeApplicationAdapter.syncMessageToCurrentScope("roomConnect", currentClient, false);
-
-			}
-
-			return o;
-
-		} catch (Exception err) {
-			log.error("[loginByRemember]", err);
-		}
-		return null;
-	}
-
-	public Object webLoginUser(String SID, String usernameOrEmail,
-			String Userpass, Boolean storePermanent, Long language_id,
-			Long ldapConfigId) {
-
-		Object returnValue = this.loginUser(SID, usernameOrEmail, Userpass,
-				storePermanent, language_id, ldapConfigId);
-
-		if (returnValue instanceof Long) {
-			return returnValue;
-		} else if (returnValue instanceof User) {
-			User us = (User) returnValue;
-			if (authLevelUtil.checkUserLevel(
-					us.getLevel_id())) {
-				return us;
-			} else {
-				return -52L;
-			}
-		}
-
-		return returnValue;
-
-	}
-
-	/**
-	 * auth function, use the SID you get by getsessiondata
-	 * 
-	 * @param SID
-	 * @param usernameOrEmail
-	 * @param Userpass
-	 * @param storePermanent
-	 * @param language_id
-	 * @param ldapConfigId
-	 * @return a valid user account or an empty user with an error message and
-	 *         level -1
-	 */
-	public Object loginUser(String SID, String usernameOrEmail,
-			String Userpass, Boolean storePermanent, Long language_id,
-			Long ldapConfigId) {
-
-		boolean withLdap = false;
-
-		if (ldapConfigId > 0) {
-			withLdap = true;
-		}
-
-		try {
-			log.warn("loginUser: " + SID + " " + usernameOrEmail);
-
-			Client currentClient;
-			IConnection current = Red5.getConnectionLocal();
-
-			if (current == null)
-				return null;
-			
-			Object o;
-
-			if (withLdap) {
-				log.debug("Ldap Login");
-
-				currentClient = sessionManager
-						.getClientByStreamId(current.getClient().getId(), null);
-
-				// LDAP Loggedin Users cannot use the permanent Login Flag
-
-				LdapConfig ldapConfig = ldapConfigDao.get(ldapConfigId);
-
-				String ldapLogin = usernameOrEmail;
-				if (ldapConfig.getAddDomainToUserName()) {
-					ldapLogin = usernameOrEmail + "@" + ldapConfig.getDomain();
-				}
-
-				o = ldapLoginManagement.doLdapLogin(ldapLogin,
-						Userpass, currentClient, current.getClient(), SID,
-						ldapConfig.getConfigFileName());
-			} else {
-
-				currentClient = sessionManager.getClientByStreamId(current.getClient().getId(), null);
-
-				o = userManager.loginUser(SID, usernameOrEmail, Userpass,
-						currentClient, current.getClient(), storePermanent);
-			}
-
-			if (o == null)
-				return null;
-
-			if (!o.getClass().isAssignableFrom(User.class))
-				return o;
-
-			if (currentClient.getUser_id() != null
-					&& currentClient.getUser_id() > 0) {
-
-				User u = (User) o;
-				currentClient.setFirstname(u.getFirstname());
-				currentClient.setLastname(u.getLastname());
-
-				for (IConnection cons : current.getScope().getClientConnections()) {
-					if (cons != null) {
-						Client rcl = this.sessionManager
-								.getClientByStreamId(cons.getClient()
-										.getId(), null);
-						if (rcl != null && rcl.getIsScreenClient() != null
-								&& rcl.getIsScreenClient()) {
-							// continue;
-						} else {
-							if (cons instanceof IServiceCapableConnection) {
-								if (!cons.equals(current)) {
-									// log.error("sending roomDisconnect to "
-									// + cons);
-									// RoomClient rcl =
-									// this.sessionManager.getClientByStreamId(cons.getClient().getId());
-									// Send to all connected users
-									((IServiceCapableConnection) cons)
-											.invoke("roomConnect",
-													new Object[] { currentClient },
-													this);
-									// log.error("sending roomDisconnect to "
-									// + cons);
-								}
-							}
-						}
-					}
-				}
-			}
-
-			return o;
-
-		} catch (Exception err) {
-			log.error("loginUser : ", err);
-		}
-
-		return null;
-	}
-
 	public Object secureLoginByRemote(String SID, String secureHash) {
 		try {
 
@@ -748,102 +548,6 @@ public class MainService implements IPendingServiceCallback {
 			log.error("[getLoginOptions]",err);
 		}
 		return null;
-	}
-
-	public List<Configuration> getLoginOptions(String SID) {
-		try {
-			return configurationDao.get(FRONTEND_REGISTER_KEY, "show.facebook.login",
-					LOGIN_MIN_LENGTH_KEY, PASS_MIN_LENGTH_KEY, PASS_MIN_LENGTH_KEY,
-					"ldap_default_id");
-		} catch (Exception err) {
-			log.error("[getLoginOptions]", err);
-		}
-		return null;
-
-	}
-
-	/**
-	 * Add a user register by an Object see [registerUser] for the index of the
-	 * Object To allow the registering the config_key *allow_frontend_register*
-	 * has to be the value 1 otherwise the user will get an error code
-	 * 
-	 * @param regObjectObj
-	 * @return new users_id OR null if an exception, -1 if an error, -4 if mail
-	 *         already taken, -5 if username already taken, -3 if login or pass
-	 *         or mail is empty
-	 */
-	public Long registerUserByObject(Object regObjectObj) {
-		try {
-			@SuppressWarnings("unchecked")
-			Map<?, ?> regObject = (Map<Object, Object>) regObjectObj;
-
-			String domain = regObject.get("domain").toString();
-			String port = regObject.get("port").toString();
-			String webapp = regObject.get("webapp").toString();
-
-			String baseURL = "http://" + domain + ":" + port + webapp;
-			if (port.equals("80")) {
-				baseURL = "http://" + domain + webapp;
-			} else if (port.equals("443")) {
-				baseURL = "https://" + domain + webapp;
-			}
-			String tz = (String)regObject.get("jNameTimeZone");
-			if (tz == null || tz.length() == 0) {
-				//Empty tz
-				return -55L;
-			}
-			return userManager.registerUser(regObject.get("Username")
-					.toString(), regObject.get("Userpass").toString(),
-					regObject.get("lastname").toString(),
-					regObject.get("firstname").toString(),
-					regObject.get("email").toString(), new Date(), regObject
-							.get("street").toString(),
-					regObject.get("additionalname").toString(),
-					regObject.get("fax").toString(), regObject.get("zip")
-							.toString(),
-					Long.valueOf(regObject.get("states_id").toString())
-							.longValue(), regObject.get("town").toString(),
-					Long.valueOf(regObject.get("language_id").toString())
-							.longValue(), "", false, baseURL, true,
-					tz);
-		} catch (Exception ex) {
-			log.error("registerUserByObject", ex);
-		}
-		return new Long(-1);
-	}
-
-	/**
-	 * Register a new User To allow the registering the config_key
-	 * *allow_frontend_register* has to be the value 1 otherwise the user will
-	 * get an error code
-	 * 
-	 * @deprecated use registerUserByObject instead
-	 * @param SID
-	 * @param Username
-	 * @param Userpass
-	 * @param lastname
-	 * @param firstname
-	 * @param email
-	 * @param age
-	 * @param street
-	 * @param additionalname
-	 * @param fax
-	 * @param zip
-	 * @param states_id
-	 * @param town
-	 * @param language_id
-	 * @return new users_id OR null if an exception, -1 if an error, -4 if mail
-	 *         already taken, -5 if username already taken, -3 if login or pass
-	 *         or mail is empty
-	 */
-	@Deprecated
-	public Long registerUser(String SID, String Username, String Userpass,
-			String lastname, String firstname, String email, Date age,
-			String street, String additionalname, String fax, String zip,
-			long states_id, String town, long language_id, String phone) {
-		return userManager.registerUser(Username, Userpass, lastname,
-				firstname, email, age, street, additionalname, fax, zip,
-				states_id, town, language_id, phone, false, "", true, "");
 	}
 
 	/**

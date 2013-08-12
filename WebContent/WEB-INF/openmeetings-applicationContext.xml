@@ -83,7 +83,6 @@
 	<bean id="meetingmemberservice.service" class="org.apache.openmeetings.remote.MeetingMemberService" />
 	<bean id="languageservice.service" class="org.apache.openmeetings.remote.LanguageService" />
 	<bean id="invitationservice.service" class="org.apache.openmeetings.remote.InvitationService" />
-	<bean id="ldapconfigservice.service" class="org.apache.openmeetings.remote.LdapConfigService" />
 	<bean id="whiteboardservice.service" class="org.apache.openmeetings.remote.WhiteBoardService" />
 	<bean id="userservice.service" class="org.apache.openmeetings.remote.UserService" />
 	<bean id="fileservice.service" class="org.apache.openmeetings.remote.ConferenceLibrary" />

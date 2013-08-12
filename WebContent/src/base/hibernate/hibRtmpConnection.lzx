@@ -733,11 +733,6 @@
             //check for password reset
             if (canvas.wicketsid != null) {
             	parent.loginWicket.doCall();
-            } else if (canvas.isResetUsername){
-                if (canvas.thishib.loaderVar != null) {
-                  canvas.thishib.loaderVar.close();
-                }
-                new lz.resetPassword(canvas.main_content._content.inner);
             } else { 
                 if (canvas.thishib.loaderVar != null) {
                    canvas.thishib.loaderVar.close();
@@ -746,7 +741,6 @@
                 if (parent.testAppLoading){ 
                     canvas.loadNextStepTestApp();
                 } else {
-                    
                     if (canvas.isinitRoomDirect || canvas.remoteUserLogin 
                                 || canvas.directUserLogin || canvas.secureRemoteUserLogin){
                         if (canvas.thishib.loaderVar != null) {
@@ -754,22 +748,7 @@
                         }
                         if($debug) Debug.write("isinitRoomDirect or remoteUserLogin is true");
                         parent.markSessionAsLogedIn.doCall();
-                    } else {
-                        if (canvas.thishib.loaderVar != null) {
-                          canvas.thishib.loaderVar.setProgress();
-                        }
-                
-                        //Check if user is auto-logged in by session
-                        var g = canvas.getUserData();
-                        if($debug) Debug.write("checkLoginData/g: ",g);
-                        var storedSession = g["storedSession"];
-                        if($debug) Debug.write("checkLoginData/save: ",storedSession);
-                        
-                        parent.loginByRemember.currentHashSession = storedSession;
-                        parent.loginByRemember.doCall();
-                
                     }
-                    
                 }
             }
         </handler>  
@@ -798,7 +777,6 @@
 				canvas.becomemoderator = value.level_id >= 2;
 				if (value.sessionData == null) {
 					if ($debug) Debug.write("No Language Found to assign");
-					new lz.checkLoginData(canvas.main_content._content.inner);
 					return;
 				}
 				hib.userobject = value;
@@ -820,79 +798,7 @@
 		]]>
 		</handler>
 	</netRemoteCallHib>
-    
-    <netRemoteCallHib name="loginByRemember" funcname="xmlcrm.loginByRemember" >
-        <attribute name="currentHashSession" value="" type="string"/>
-        <attribute name="sipLoader" value="null"/>   
-        <netparam><method name="getValue">return canvas.sessionId;</method></netparam>
-        <netparam><method name="getValue">return parent.currentHashSession;</method></netparam> 
-        <handler name="ondata" args="value">
-            <![CDATA[
-               if ($debug) Debug.write("loginByRemember",value);
-               if (value != null){
-                  
-                    canvas.setAttribute('user_id',value.user_id);
-                    canvas.setAttribute('firstName',value.firstname);
-                    canvas.setAttribute('lastName',value.lastname);
-                    canvas.setAttribute('mail','');
-                    canvas.setAttribute('lastLogin','');
-                    canvas.setAttribute('official_code','');
-                    canvas.setAttribute('picture_uri','');
-                    canvas.setAttribute('language','');
-                    canvas.setAttribute('currentuser',value.login);
-                    if (value.omTimeZone != null) {
-                        canvas.setAttribute('jNameTimeZone',value.omTimeZone.jname);
-                        canvas.timeZoneId = value.omTimeZone.omtimezoneId;
-                    }
-                    
-                    if (value.forceTimeZoneCheck) {
-                        new lz.labelerrorPopup(canvas,{errorlabelid:1150});
-                    }
-                    
-                    canvas.becomemoderator = value.level_id >= 2;
-                    
-                    if (value.sessionData == null) {
-                        if ($debug) Debug.write("No Language Found to assign");
-                        new lz.checkLoginData(canvas.main_content._content.inner);
-                        return;
-                    }
-                    
-                    if ($debug) Debug.write("value.sessionData: ", value.sessionData);
-                    hib.userlang = isNaN(value.sessionData.language_id) ? 1 :  Number(value.sessionData.language_id);
-                    canvas.setAttribute('userlang', hib.userlang);
-                    canvas.setAttribute('language_id', hib.userlang);
-                    hib.userobject = value;
-                    
-                    var found = false;
-                    
-                    for (var i=0;i<value.organisation_users.length;i++) {
-                        if (value.organisation_users[i].organisation.organisation_id == value.sessionData.organization_id) {
-                            found = true;
-                            hib.currentdomain = value.organisation_users[i].organisation.name;
-                            hib.currentdomainObj = value.organisation_users[i].organisation;
-                            break;
-                        }
-                    }
-                   
-                    if (found) {
-                        hib.getLanguageByIdAndMax.start = 0;
-                        
-                        hib.getLanguageByIdAndMax.doCall();
-                        canvas.focusOnItem = null;
-                    } else {
-                        if ($debug) Debug.write("No Organization Found to assign");
-                        new lz.checkLoginData(canvas.main_content._content.inner);
-                    }
-                  
-               } else {
-                   if ($debug) Debug.write("No RPC-Sesion Found to assign");
-                   new lz.checkLoginData(canvas.main_content._content.inner);
-               }
-            ]]>
-        </handler>
-    </netRemoteCallHib>
-    
-    
+	
     <netRemoteCallHib name="getRoomTypes" funcname="conferenceservice.getRoomTypes" >
         <netparam><method name="getValue">return canvas.sessionId;</method></netparam>
         <handler name="ondata" args="value">

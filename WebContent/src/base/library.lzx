@@ -26,8 +26,6 @@
     <include href="contentviews/" />
     <include href="navi/" />
 
-    <include href="auth/" />
-
 	<!-- for main.lzx -->
 	<include href="externalJavaScript.lzx" />
     <include href="functions.lzx" />

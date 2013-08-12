@@ -27,10 +27,10 @@ import static org.apache.wicket.ajax.attributes.CallbackParameter.resolved;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.openmeetings.data.basic.dao.LdapConfigDao;
 import org.apache.openmeetings.data.oauth.OAuth2Dao;
 import org.apache.openmeetings.persistence.beans.basic.LdapConfig;
 import org.apache.openmeetings.persistence.beans.user.oauth.OAuthServer;
-import org.apache.openmeetings.remote.LdapConfigService;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.OmAuthenticationStrategy;
 import org.apache.openmeetings.web.app.WebSession;
@@ -232,7 +232,7 @@ public class SignInDialog extends AbstractFormDialog<String> {
 			loginField.setLabel(Model.of(WebSession.getString(114)));
 			add(passField = new PasswordTextField("pass", new PropertyModel<String>(SignInDialog.this, "password")).setResetPassword(true));
 			passField.setLabel(Model.of(WebSession.getString(115)));
-			List<LdapConfig> ldaps = getBean(LdapConfigService.class).getActiveLdapConfigs();
+			List<LdapConfig> ldaps = getBean(LdapConfigDao.class).getLdapConfigs();
 			domain = ldaps.get(0);
 			add(new WebMarkupContainer("ldap")
 				.add(new DropDownChoice<LdapConfig>("domain", new PropertyModel<LdapConfig>(SignInDialog.this, "domain")

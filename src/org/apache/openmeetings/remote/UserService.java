@@ -157,22 +157,6 @@ public class UserService {
 		return null;
 	}
 
-	public Long resetUserPwd(String SID, String email, String login,
-			String applink) {
-		sessiondataDao.checkSession(SID);
-		return userManager.resetUser(email, login, applink);
-	}
-
-	public Object getUserByHash(String SID, String hash) {
-		sessiondataDao.checkSession(SID);
-		return usersDao.getUserByHash(hash);
-	}
-
-	public Object resetPassByHash(String SID, String hash, String pass) {
-		sessiondataDao.checkSession(SID);
-		return usersDao.resetPassByHash(hash, pass);
-	}
-
 	/**
 	 * refreshes the current SID
 	 * 

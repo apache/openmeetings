@@ -3531,22 +3531,6 @@ This is used in the conference.
   </xs:extension>
   </xs:complexContent>
   </xs:complexType>
-<xs:element name="registerNewUser" type="project:registerNewUser" >
-</xs:element>
-  <xs:complexType name="registerNewUser" mixed="true">
-  <xs:complexContent>
-  <xs:extension base="project:labelExplorerBox">
-      <xs:attribute name="user_pass_minimum_length" type="lzx:number" default="4" >
-</xs:attribute>
-      <xs:attribute name="user_login_minimum_length" type="lzx:number" default="4" >
-</xs:attribute>
-      <xs:attribute name="regObject" type="xs:string" default="null" >
-</xs:attribute>
-      <xs:attribute name="refObj" type="xs:string" default="null" >
-</xs:attribute>
-  </xs:extension>
-  </xs:complexContent>
-  </xs:complexType>
 <xs:element name="baseDrawSelect" type="project:baseDrawSelect" >
 </xs:element>
   <xs:complexType name="baseDrawSelect" mixed="true">
@@ -3914,40 +3898,6 @@ This is used in the conference.
   <xs:complexType name="interviewWhiteboard" mixed="true">
   <xs:complexContent>
   <xs:extension base="lzx:view">
-  </xs:extension>
-  </xs:complexContent>
-  </xs:complexType>
-<xs:element name="checkLoginData" type="project:checkLoginData" >
-<xs:annotation>
-<xs:documentation xml:lang="en">
- LOGIN panel window </xs:documentation>
-</xs:annotation>
-</xs:element>
-  <xs:complexType name="checkLoginData" mixed="true">
-  <xs:complexContent>
-  <xs:extension base="project:labelExplorerBox">
-      <xs:attribute name="user_pass_minimum_length" type="lzx:number" default="4" >
-</xs:attribute>
-      <xs:attribute name="user_login_minimum_length" type="lzx:number" default="4" >
-<xs:annotation>
-<xs:documentation xml:lang="en">
- LOGIN panel window </xs:documentation>
-</xs:annotation>
-</xs:attribute>
-      <xs:attribute name="sipLoader" type="xs:string" default="null" >
-</xs:attribute>
-      <xs:attribute name="showResetBox" type="lzx:boolean" default="false" >
-</xs:attribute>
-      <xs:attribute name="refObj" type="xs:string" default="null" >
-</xs:attribute>
-      <xs:attribute name="labeliderror" type="lzx:number" default="0" >
-</xs:attribute>
-      <xs:attribute name="initselect" type="lzx:boolean" default="true" >
-</xs:attribute>
-      <xs:attribute name="enterPressed" type="lzx:boolean" default="false" >
-</xs:attribute>
-      <xs:attribute name="childObj" type="xs:string" default="null" >
-</xs:attribute>
   </xs:extension>
   </xs:complexContent>
   </xs:complexType>
@@ -5623,18 +5573,6 @@ This is used in the conference.
   </xs:extension>
   </xs:complexContent>
   </xs:complexType>
-<xs:element name="resetForm" type="project:resetForm" >
-</xs:element>
-  <xs:complexType name="resetForm" mixed="true">
-  <xs:complexContent>
-  <xs:extension base="lzx:view">
-      <xs:attribute name="showResetBox" type="lzx:boolean" default="false" >
-</xs:attribute>
-      <xs:attribute name="baseUrl" type="xs:string" default="" >
-</xs:attribute>
-  </xs:extension>
-  </xs:complexContent>
-  </xs:complexType>
 <xs:element name="drawClipArtWhiteBoard" type="project:drawClipArtWhiteBoard" >
 </xs:element>
   <xs:complexType name="drawClipArtWhiteBoard" mixed="true">
@@ -6573,16 +6511,6 @@ This is used in the conference.
       <xs:attribute name="fieldvalues_id" type="lzx:number" default="0" >
 </xs:attribute>
       <xs:attribute name="fieldlanguagesvalues_id" type="lzx:number" default="0" >
-</xs:attribute>
-  </xs:extension>
-  </xs:complexContent>
-  </xs:complexType>
-<xs:element name="resetPassword" type="project:resetPassword" >
-</xs:element>
-  <xs:complexType name="resetPassword" mixed="true">
-  <xs:complexContent>
-  <xs:extension base="project:labelExplorerBox">
-      <xs:attribute name="tempValue" type="lzx:number" default="0" >
 </xs:attribute>
   </xs:extension>
   </xs:complexContent>

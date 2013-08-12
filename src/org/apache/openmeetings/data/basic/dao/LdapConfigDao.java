@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.data.basic.dao;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -175,42 +176,30 @@ public class LdapConfigDao implements IDataProviderDao<LdapConfig> {
 	}
 
 	public List<LdapConfig> getActiveLdapConfigs() {
-		log.debug("selectMaxFromConfigurations ");
-
-		String hql = "select c from LdapConfig c "
-				+ "where c.deleted = false "
-				+ "AND c.isActive = :isActive ";
+		log.debug("getActiveLdapConfigs");
 
 		// get all users
-		TypedQuery<LdapConfig> query = em
-				.createQuery(hql, LdapConfig.class);
+		TypedQuery<LdapConfig> query =  em.createNamedQuery("getActiveLdapConfigs", LdapConfig.class);
 		query.setParameter("isActive", true);
 
 		return query.getResultList();
 	}
 
 	public List<LdapConfig> getLdapConfigs() {
-		try {
-			log.debug("selectMaxFromConfigurations ");
+		//Add localhost Domain
+		LdapConfig ldapConfig = new LdapConfig();
+		
+		ldapConfig.setName("local DB [internal]");
+		ldapConfig.setLdapConfigId(-1);
 
-			String hql = "select c from LdapConfig c "
-					+ "where c.deleted = false ";
-
-			// get all users
-			TypedQuery<LdapConfig> query = em
-					.createQuery(hql, LdapConfig.class);
-			List<LdapConfig> ll = query.getResultList();
-
-			return ll;
-		} catch (Exception ex2) {
-			log.error("[getActiveLdapConfigs] ", ex2);
-		}
-		return null;
+		List<LdapConfig> result = new ArrayList<LdapConfig>();
+		result.add(ldapConfig);
+		result.addAll(getActiveLdapConfigs());
+		return result;
 	}
 
 	public List<LdapConfig> get(int start, int count) {
-		TypedQuery<LdapConfig> q = em.createNamedQuery(
-				"getNondeletedLdapConfigs", LdapConfig.class);
+		TypedQuery<LdapConfig> q = em.createNamedQuery("getNondeletedLdapConfigs", LdapConfig.class);
 		q.setFirstResult(start);
 		q.setMaxResults(count);
 		return q.getResultList();
