@@ -205,7 +205,7 @@ public class UserForm extends AdminBaseForm<User> {
 
 	@Override
 	protected void onNewError(AjaxRequestTarget target, Form<?> form) {
-		// TODO Auto-generated method stub
+		onNewSubmit(target, form);
 	}
 
 	@Override
