@@ -30,7 +30,7 @@ import org.apache.openmeetings.data.user.UserManager;
 import org.apache.openmeetings.data.user.dao.UsersDao;
 import org.apache.openmeetings.persistence.beans.invitation.Invitations;
 import org.apache.openmeetings.persistence.beans.user.User;
-import org.apache.openmeetings.utils.math.TimezoneUtil;
+import org.apache.openmeetings.utils.TimezoneUtil;
 import org.red5.logging.Red5LoggerFactory;
 import org.red5.server.api.service.IPendingServiceCall;
 import org.red5.server.api.service.IPendingServiceCallback;

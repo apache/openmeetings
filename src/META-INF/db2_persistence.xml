@@ -31,7 +31,6 @@
 		<class>org.apache.openmeetings.persistence.beans.basic.MailMessage</class>
 		<class>org.apache.openmeetings.persistence.beans.basic.Naviglobal</class>
 		<class>org.apache.openmeetings.persistence.beans.basic.Navimain</class>
-		<class>org.apache.openmeetings.persistence.beans.basic.OmTimeZone</class>
 		<class>org.apache.openmeetings.persistence.beans.basic.Sessiondata</class>
 		<class>org.apache.openmeetings.persistence.beans.basic.SOAPLogin</class>
 		<class>org.apache.openmeetings.persistence.beans.basic.Server</class>

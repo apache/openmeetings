@@ -22,11 +22,9 @@ import static org.apache.openmeetings.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.openmeetings.persistence.beans.basic.Configuration.MAX_UPLOAD_SIZE_KEY;
 
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
-import org.apache.openmeetings.persistence.beans.basic.OmTimeZone;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 
@@ -63,13 +61,11 @@ public class ImportHelper {
 	 * @param tzList
 	 * @return
 	 */
-	public static Map<String, String> getAllTimeZones(List<OmTimeZone> tzList) {
+	public static Map<String, String> getAllTimeZones(String ... tzList) {
 		Map<String, String> result = new LinkedHashMap<String, String>();
 
-		for (OmTimeZone omTimeZone : tzList) {
-			String labelName = omTimeZone.getLabel() + " ("
-					+ omTimeZone.getJname() + ")";
-			result.put(omTimeZone.getIcal(), labelName);
+		for (String omTimeZone : tzList) {
+			result.put(omTimeZone, omTimeZone);
 		}
 
 		return result;

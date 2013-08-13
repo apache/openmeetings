@@ -105,7 +105,6 @@ import org.apache.openmeetings.persistence.beans.user.UserContact;
 import org.apache.openmeetings.remote.red5.ScopeApplicationAdapter;
 import org.apache.openmeetings.utils.crypt.MD5Implementation;
 import org.apache.openmeetings.utils.math.CalendarPatterns;
-import org.apache.openmeetings.utils.math.TimezoneUtil;
 import org.red5.logging.Red5LoggerFactory;
 import org.simpleframework.xml.Serializer;
 import org.simpleframework.xml.convert.Registry;

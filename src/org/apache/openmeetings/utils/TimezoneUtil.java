@@ -16,33 +16,60 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.utils.math;
+package org.apache.openmeetings.utils;
 
+import static org.apache.openmeetings.OpenmeetingsVariables.webAppRootKey;
+import static org.apache.openmeetings.utils.OmFileHelper.getLanguagesDir;
+import static org.apache.openmeetings.utils.OmFileHelper.nameOfTimeZoneFile;
+
+import java.io.File;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.Map;
 import java.util.TimeZone;
 
-import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
-import org.apache.openmeetings.data.basic.dao.OmTimeZoneDao;
-import org.apache.openmeetings.persistence.beans.basic.OmTimeZone;
 import org.apache.openmeetings.persistence.beans.user.User;
+import org.apache.openmeetings.utils.math.CalendarPatterns;
+import org.dom4j.Document;
+import org.dom4j.DocumentException;
+import org.dom4j.Element;
+import org.dom4j.io.SAXReader;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
-/*
- FIXME this class should be completely refactored and used in backup import only
- */
 public class TimezoneUtil {
+	private static final Logger log = Red5LoggerFactory.getLogger(TimezoneUtil.class, webAppRootKey);
+	private static final Map<String, String> ICAL_TZ_MAP = new Hashtable<String, String>();
+	private static final Map<Long, String> ID_TZ_MAP = new Hashtable<Long, String>();
+	static {
+		SAXReader reader = new SAXReader();
+		Document document;
+		try {
+			document = reader.read(new File(getLanguagesDir(), nameOfTimeZoneFile));
 
-	private static final Logger log = Red5LoggerFactory.getLogger(
-			TimezoneUtil.class, OpenmeetingsVariables.webAppRootKey);
-
+			Element root = document.getRootElement();
+			
+			//HACK based on the fact timezones are not changed
+			long id = 1;
+			for (@SuppressWarnings("rawtypes")
+			Iterator it = root.elementIterator("timezone"); it.hasNext();) {
+				Element item = (Element) it.next();
+				String timeZoneName = item.attributeValue("name");
+				String iCal = item.attributeValue("iCal");
+				ICAL_TZ_MAP.put(timeZoneName, iCal);
+				ID_TZ_MAP.put(id++, iCal);
+			}
+		} catch (DocumentException e) {
+			log.error("Unexpected error while reading old time zone list", e);
+		}
+	}
+	
 	@Autowired
 	private ConfigurationDao configurationDao;
-	@Autowired
-	private OmTimeZoneDao omTimeZoneDaoImpl;
 	
 	/**
 	 * Parameters:
@@ -81,10 +108,9 @@ public class TimezoneUtil {
 		
 		String defaultTzName = configurationDao.getConfValue("default.timezone", String.class, "Europe/Berlin");
 
-		OmTimeZone omTimeZoneDefault = omTimeZoneDaoImpl.getOmTimeZone(defaultTzName);
+		String omTimeZoneDefault = ICAL_TZ_MAP.get(defaultTzName);
 
-		TimeZone timeZoneByOmTimeZone = TimeZone
-				.getTimeZone(omTimeZoneDefault.getIcal());
+		TimeZone timeZoneByOmTimeZone = TimeZone.getTimeZone(omTimeZoneDefault);
 
 		if (timeZoneByOmTimeZone != null) {
 			return timeZoneByOmTimeZone;
@@ -116,21 +142,7 @@ public class TimezoneUtil {
 		}
 
 		// if user has not time zone get one from the server configuration
-
-		String defaultTzName = configurationDao.getConfValue("default.timezone", String.class, "Europe/Berlin");
-
-		OmTimeZone omTimeZone = omTimeZoneDaoImpl.getOmTimeZone(defaultTzName);
-
-		TimeZone timeZoneByOmTimeZone = TimeZone.getTimeZone(omTimeZone
-				.getIcal());
-
-		if (timeZoneByOmTimeZone != null) {
-			return timeZoneByOmTimeZone;
-		}
-
-		// If everything fails take the servers default one
-		log.error("There is no correct time zone set in the configuration of OpenMeetings for the key default.timezone or key is missing in table, using default locale!");
-		return TimeZone.getDefault();
+		return getDefaultTimeZone();
 	}
 
 	/**
@@ -141,35 +153,21 @@ public class TimezoneUtil {
 	 */
 	public TimeZone getTimezoneByInternalJName(String jName) {
 
-		OmTimeZone omTimeZone = omTimeZoneDaoImpl.getOmTimeZone(jName);
+		String omTimeZone = ICAL_TZ_MAP.get(jName);
 		
 		if (omTimeZone == null) {
 			log.error("There is not omTimeZone for this jName: "+jName);
 			throw new RuntimeException("There is not omTimeZone for this jName: "+jName);
 		}
 
-		TimeZone timeZone = TimeZone.getTimeZone(omTimeZone.getIcal());
+		TimeZone timeZone = TimeZone.getTimeZone(omTimeZone);
 
 		if (timeZone != null) {
 			return timeZone;
 		}
 
 		// if user has not time zone get one from the server configuration
-
-		String defaultTzName = configurationDao.getConfValue("default.timezone", String.class, "Europe/Berlin");
-
-		OmTimeZone omTimeZoneDefault = omTimeZoneDaoImpl.getOmTimeZone(defaultTzName);
-
-		TimeZone timeZoneByOmTimeZone = TimeZone
-				.getTimeZone(omTimeZoneDefault.getIcal());
-
-		if (timeZoneByOmTimeZone != null) {
-			return timeZoneByOmTimeZone;
-		}
-
-		// If everything fails take the servers default one
-		log.error("There is no correct time zone set in the configuration of OpenMeetings for the key default.timezone or key is missing in table, using default locale!");
-		return TimeZone.getDefault();
+		return getDefaultTimeZone();
 	}
 
 	/**
@@ -179,32 +177,16 @@ public class TimezoneUtil {
 	 * @return
 	 */
 	public TimeZone getTimezoneByOmTimeZoneId(Long omtimezoneId) {
+		String omTimeZone = ID_TZ_MAP.get(omtimezoneId);
 
-		OmTimeZone omTimeZone = omTimeZoneDaoImpl
-				.getOmTimeZoneById(omtimezoneId);
-
-		TimeZone timeZone = TimeZone.getTimeZone(omTimeZone.getIcal());
+		TimeZone timeZone = TimeZone.getTimeZone(omTimeZone);
 
 		if (timeZone != null) {
 			return timeZone;
 		}
 
 		// if user has not time zone get one from the server configuration
-
-		String defaultTzName = configurationDao.getConfValue("default.timezone", String.class, "Europe/Berlin");
-
-		OmTimeZone omTimeZoneDefault = omTimeZoneDaoImpl.getOmTimeZone(defaultTzName);
-
-		TimeZone timeZoneByOmTimeZone = TimeZone
-				.getTimeZone(omTimeZoneDefault.getIcal());
-
-		if (timeZoneByOmTimeZone != null) {
-			return timeZoneByOmTimeZone;
-		}
-
-		// If everything fails take the servers default one
-		log.error("There is no correct time zone set in the configuration of OpenMeetings for the key default.timezone or key is missing in table, using default locale!");
-		return TimeZone.getDefault();
+		return getDefaultTimeZone();
 	}
 	
 	/**

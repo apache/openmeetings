@@ -34,7 +34,7 @@ import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
 import org.apache.openmeetings.data.user.dao.UsersDao;
 import org.apache.openmeetings.persistence.beans.room.Room;
 import org.apache.openmeetings.utils.DaoHelper;
-import org.apache.openmeetings.utils.math.TimezoneUtil;
+import org.apache.openmeetings.utils.TimezoneUtil;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;

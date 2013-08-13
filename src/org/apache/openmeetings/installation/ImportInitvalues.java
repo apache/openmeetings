@@ -37,8 +37,6 @@ import java.util.Date;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 
 import org.apache.openmeetings.data.basic.FieldLanguageDao;
@@ -46,7 +44,6 @@ import org.apache.openmeetings.data.basic.FieldManager;
 import org.apache.openmeetings.data.basic.NaviBuilder;
 import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
 import org.apache.openmeetings.data.basic.dao.ErrorDao;
-import org.apache.openmeetings.data.basic.dao.OmTimeZoneDao;
 import org.apache.openmeetings.data.calendar.daos.AppointmentCategoryDao;
 import org.apache.openmeetings.data.calendar.daos.AppointmentReminderTypDao;
 import org.apache.openmeetings.data.conference.PollManager;
@@ -58,7 +55,6 @@ import org.apache.openmeetings.data.user.UserManager;
 import org.apache.openmeetings.data.user.dao.SalutationDao;
 import org.apache.openmeetings.data.user.dao.StateDao;
 import org.apache.openmeetings.data.user.dao.UsersDao;
-import org.apache.openmeetings.persistence.beans.basic.OmTimeZone;
 import org.apache.openmeetings.persistence.beans.lang.FieldLanguage;
 import org.apache.openmeetings.persistence.beans.lang.Fieldlanguagesvalues;
 import org.apache.openmeetings.persistence.beans.lang.Fieldvalues;
@@ -66,7 +62,7 @@ import org.apache.openmeetings.persistence.beans.user.oauth.OAuthServer;
 import org.apache.openmeetings.persistence.beans.user.oauth.OAuthServer.RequestMethod;
 import org.apache.openmeetings.utils.ImportHelper;
 import org.apache.openmeetings.utils.OmFileHelper;
-import org.apache.openmeetings.utils.math.TimezoneUtil;
+import org.apache.openmeetings.utils.TimezoneUtil;
 import org.dom4j.Document;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
@@ -89,8 +85,6 @@ public class ImportInitvalues {
 	private FieldLanguageDao fieldLanguageDaoImpl;
 	@Autowired
 	private StateDao statemanagement;
-	@Autowired
-	private OmTimeZoneDao omTimeZoneDaoImpl;
 	@Autowired
 	private NaviBuilder navimanagement;
 	@Autowired
@@ -756,60 +750,6 @@ public class ImportInitvalues {
 		log.debug("Countries ADDED");
 	}
 
-	private void loadTimeZoneFiles() throws Exception {
-		SAXReader reader = new SAXReader();
-		Document document = reader
-				.read(new File(OmFileHelper.getLanguagesDir(),
-						OmFileHelper.nameOfTimeZoneFile));
-
-		Element root = document.getRootElement();
-
-		for (@SuppressWarnings("rawtypes")
-		Iterator it = root.elementIterator("timezone"); it.hasNext();) {
-			Element item = (Element) it.next();
-			String timeZoneName = item.attributeValue("name");
-			String timeZoneLabel = item.attributeValue("label");
-			String iCal = item.attributeValue("iCal");
-			Integer orderId = Integer.valueOf(item.attributeValue("orderId"));
-
-			omTimeZoneDaoImpl.addOmTimeZone(timeZoneName, timeZoneLabel, iCal,
-					orderId);
-		}
-		log.debug("TimeZones ADDED");
-	}
-
-	public static List<OmTimeZone> getTimeZones() throws Exception {
-		log.debug(":: getTimeZones ::");
-
-		List<OmTimeZone> omTimeZones = new LinkedList<OmTimeZone>();
-
-		SAXReader reader = new SAXReader();
-		Document document = reader
-				.read(new File(OmFileHelper.getLanguagesDir(),
-						OmFileHelper.nameOfTimeZoneFile));
-
-		Element root = document.getRootElement();
-
-		for (@SuppressWarnings("rawtypes")
-		Iterator it = root.elementIterator("timezone"); it.hasNext();) {
-			Element item = (Element) it.next();
-			String timeZoneName = item.attributeValue("name");
-			String timeZoneLabel = item.attributeValue("label");
-			Integer orderId = Integer.valueOf(item.attributeValue("orderId"));
-			String iCal = item.attributeValue("iCal");
-
-			OmTimeZone omTimeZone = new OmTimeZone();
-			omTimeZone.setIcal(iCal);
-			omTimeZone.setJname(timeZoneName);
-			omTimeZone.setLabel(timeZoneLabel);
-			omTimeZone.setOrderId(orderId);
-
-			omTimeZones.add(omTimeZone);
-		}
-
-		return omTimeZones;
-	}
-
 	/**
 	 * load all availible languages File names and language name's from the
 	 * config file
@@ -1065,8 +1005,6 @@ public class ImportInitvalues {
 		loadErrorMappingsFromXML();
 		progress = 31;
 		loadCountriesFiles();
-		progress = 38;
-		loadTimeZoneFiles();
 		progress = 44;
 		loadLanguagesFiles();
 		progress = 50;

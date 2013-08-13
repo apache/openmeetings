@@ -246,7 +246,6 @@
 	<bean id="errorManagement" class="org.apache.openmeetings.data.basic.dao.ErrorDao" />
 	<bean id="navimanagement" class="org.apache.openmeetings.data.basic.NaviBuilder" />
 	<bean id="pollManagement" class="org.apache.openmeetings.data.conference.PollManager" />
-	<bean id="omTimeZoneDaoImpl" class="org.apache.openmeetings.data.basic.dao.OmTimeZoneDao" />
 	<bean id="statemanagement" class="org.apache.openmeetings.data.user.dao.StateDao" />
 	<bean id="fieldLanguageDaoImpl" class="org.apache.openmeetings.data.basic.FieldLanguageDao" />
 	<bean id="fieldValueDaoImpl" class="org.apache.openmeetings.data.basic.FieldValueDao" />
@@ -295,7 +294,7 @@
 	<bean id="generateSWF" class="org.apache.openmeetings.documents.GenerateSWF" />
 	<bean id="fileUtils" class="org.apache.openmeetings.data.file.FileUtils" />
 	<bean id="ldapLoginManagement" class="org.apache.openmeetings.ldap.LdapLoginManagement" />
-	<bean id="timezoneUtil" class="org.apache.openmeetings.utils.math.TimezoneUtil" />
+	<bean id="timezoneUtil" class="org.apache.openmeetings.utils.TimezoneUtil" />
 	<bean id="whiteboardManagement" class="org.apache.openmeetings.data.whiteboard.WhiteboardManager" />
 
 	<!-- Templates -->

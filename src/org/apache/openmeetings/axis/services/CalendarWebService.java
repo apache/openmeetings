@@ -48,7 +48,7 @@ import org.apache.openmeetings.persistence.beans.room.Room;
 import org.apache.openmeetings.persistence.beans.room.RoomType;
 import org.apache.openmeetings.persistence.beans.user.User;
 import org.apache.openmeetings.persistence.beans.user.UserContact;
-import org.apache.openmeetings.utils.math.TimezoneUtil;
+import org.apache.openmeetings.utils.TimezoneUtil;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -718,8 +718,7 @@ public class CalendarWebService {
 				}
 
 				if (omTimeZoneId > 0) {
-					timezone = timezoneUtil
-							.getTimezoneByOmTimeZoneId(omTimeZoneId);
+					timezone = timezoneUtil.getTimezoneByOmTimeZoneId(omTimeZoneId);
 				}
 				
 				if (timezone == null) {

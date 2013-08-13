@@ -30,7 +30,7 @@ import org.apache.openmeetings.data.user.UserManager;
 import org.apache.openmeetings.data.user.dao.UserContactsDao;
 import org.apache.openmeetings.persistence.beans.user.PrivateMessage;
 import org.apache.openmeetings.persistence.beans.user.User;
-import org.apache.openmeetings.utils.math.TimezoneUtil;
+import org.apache.openmeetings.utils.TimezoneUtil;
 import org.apache.openmeetings.web.common.PagingNavigatorPanel;
 import org.apache.openmeetings.web.common.UserPanel;
 import org.apache.openmeetings.web.util.ContactsHelper;

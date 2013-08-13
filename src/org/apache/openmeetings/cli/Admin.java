@@ -27,6 +27,7 @@ import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.util.Date;
 import java.util.Map;
+import java.util.TimeZone;
 
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
@@ -549,7 +550,7 @@ public class Admin {
 				System.exit(1);
 			}
 		}
-		Map<String, String> tzMap = ImportHelper.getAllTimeZones(ImportInitvalues.getTimeZones());
+		Map<String, String> tzMap = ImportHelper.getAllTimeZones(TimeZone.getAvailableIDs());
 		cfg.ical_timeZone = null;
 		if (cmdl.hasOption("tz")) {
 			cfg.ical_timeZone = cmdl.getOptionValue("tz");
