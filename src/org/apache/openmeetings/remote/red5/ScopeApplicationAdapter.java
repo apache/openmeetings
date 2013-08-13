@@ -59,6 +59,7 @@ import org.apache.openmeetings.remote.WhiteBoardService;
 import org.apache.openmeetings.remote.util.SessionVariablesUtil;
 import org.apache.openmeetings.session.ISessionManager;
 import org.apache.openmeetings.utils.OmFileHelper;
+import org.apache.openmeetings.utils.TimezoneUtil;
 import org.apache.openmeetings.utils.math.CalendarPatterns;
 import org.red5.logging.Red5LoggerFactory;
 import org.red5.server.adapter.ApplicationAdapter;
@@ -129,6 +130,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 	public synchronized boolean appStart(IScope scope) {
 		try {
 			OmFileHelper.setOmHome(scope.getResource("/").getFile());
+			TimezoneUtil.initTimeZones();
 
 			log.debug("webAppPath : " + OmFileHelper.getOmHome());
 

@@ -296,6 +296,8 @@
 	<bean id="ldapLoginManagement" class="org.apache.openmeetings.ldap.LdapLoginManagement" />
 	<bean id="timezoneUtil" class="org.apache.openmeetings.utils.TimezoneUtil" />
 	<bean id="whiteboardManagement" class="org.apache.openmeetings.data.whiteboard.WhiteboardManager" />
+	<bean id="backupExport" class="org.apache.openmeetings.utils.BackupExport" />
+	<bean id="backupImport" class="org.apache.openmeetings.utils.BackupImport" />
 
 	<!-- Templates -->
 	<bean id="registerUserTemplate" class="org.apache.openmeetings.templates.RegisterUserTemplate" />
@@ -319,6 +321,4 @@
 	<bean id="calendarWebService" class="org.apache.openmeetings.axis.services.CalendarWebService" />
 	<bean id="jabberWebService" class="org.apache.openmeetings.axis.services.JabberWebService" />
 	<bean id="serverWebService" class="org.apache.openmeetings.axis.services.ServerWebService" />
-	<!-- Servlet Facade Beans -->
-	<bean id="backupExport" class="org.apache.openmeetings.utils.BackupExport" />
 </beans>

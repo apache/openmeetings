@@ -699,24 +699,29 @@ public class BackupImport {
 		if (listNodeName.equals(listNode.getName())) {
 			InputNode item = listNode.getNext();
 			InputNode item1 = listNode1.getNext(); //HACK to handle Address inside user
-			InputNode item2 = listNode1.getNext(); //HACK to handle old om_time_zone
+			InputNode item2 = listNode2.getNext(); //HACK to handle old om_time_zone
 			while (item != null) {
 				User u = ser.read(User.class, item, false);
 				
+				boolean needToSkip1 = true;
 				//HACK to handle Address inside user
 				if (u.getAdresses() == null) {
 					Address a = ser.read(Address.class, item1, false);
 					u.setAdresses(a);
+					needToSkip1 = false;
+				}
+				if (needToSkip1) {
+					do {
+						item1 = listNode1.getNext(); //HACK to handle Address inside user
+					} while (item1 != null && !"user".equals(item1.getName()));
 				}
 				do {
-					item1 = listNode1.getNext(); //HACK to handle Address inside user
-				} while (item != null && !"user".equals(item1.getName()));
-				do {
 					if (u.getTimeZoneId() == null && "omTimeZone".equals(item2.getName())) {
-						u.setTimeZoneId(tzUtil.getTimezoneByInternalJName(item2.getValue()).getID());
+						String jName = item2.getValue();
+						u.setTimeZoneId(jName == null ? null : tzUtil.getTimezoneByInternalJName(jName).getID());
 					}
 					item2 = listNode2.getNext(); //HACK to handle old om_time_zone
-				} while (item != null && !"user".equals(item2.getName()));
+				} while (item2 != null && !"user".equals(item2.getName()));
 				list.add(u);
 				item = listNode.getNext();
 			}

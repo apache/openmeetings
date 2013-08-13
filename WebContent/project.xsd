@@ -3122,22 +3122,6 @@ This is used in the conference.
   </xs:extension>
   </xs:complexContent>
   </xs:complexType>
-<xs:element name="importWindow" type="project:importWindow" >
-</xs:element>
-  <xs:complexType name="importWindow" mixed="true">
-  <xs:complexContent>
-  <xs:extension base="project:labelExplorerBox">
-      <xs:attribute name="winobj" type="xs:string" default="null" >
-</xs:attribute>
-      <xs:attribute name="uploadmodule" type="xs:string" default="users" >
-</xs:attribute>
-      <xs:attribute name="sessionid" type="xs:string" default="" >
-</xs:attribute>
-      <xs:attribute name="secondid" type="lzx:number" default="0" >
-</xs:attribute>
-  </xs:extension>
-  </xs:complexContent>
-  </xs:complexType>
 <xs:element name="recordValueList" type="project:recordValueList" >
 </xs:element>
   <xs:complexType name="recordValueList" mixed="true">
@@ -7551,22 +7535,6 @@ This is used in the conference.
   </xs:extension>
   </xs:complexContent>
   </xs:complexType>
-<xs:element name="backupImportWindow" type="project:backupImportWindow" >
-</xs:element>
-  <xs:complexType name="backupImportWindow" mixed="true">
-  <xs:complexContent>
-  <xs:extension base="project:labelExplorerBox">
-      <xs:attribute name="winobj" type="xs:string" default="null" >
-</xs:attribute>
-      <xs:attribute name="uploadmodule" type="xs:string" default="users" >
-</xs:attribute>
-      <xs:attribute name="sessionid" type="xs:string" default="" >
-</xs:attribute>
-      <xs:attribute name="secondid" type="lzx:number" default="0" >
-</xs:attribute>
-  </xs:extension>
-  </xs:complexContent>
-  </xs:complexType>
 <xs:element name="syncWin" type="project:syncWin" >
 </xs:element>
   <xs:complexType name="syncWin" mixed="true">
@@ -8377,40 +8345,6 @@ This is used in the conference.
   <xs:complexType name="subitemsListContainter" mixed="true">
   <xs:complexContent>
   <xs:extension base="lzx:view">
-  </xs:extension>
-  </xs:complexContent>
-  </xs:complexType>
-<xs:element name="uploadWindow" type="project:uploadWindow" >
-</xs:element>
-  <xs:complexType name="uploadWindow" mixed="true">
-  <xs:complexContent>
-  <xs:extension base="project:labelExplorerBox">
-      <xs:attribute name="winobj" type="xs:string" default="null" >
-</xs:attribute>
-      <xs:attribute name="usersid" type="xs:string" default="" >
-</xs:attribute>
-      <xs:attribute name="uploadmodule" type="xs:string" default="videoconf1" >
-</xs:attribute>
-      <xs:attribute name="singleslidesmodule_id" type="xs:string" default="" >
-</xs:attribute>
-      <xs:attribute name="sessionid" type="xs:string" default="" >
-</xs:attribute>
-      <xs:attribute name="servletName" type="xs:string" default="UploadHandler" >
-</xs:attribute>
-      <xs:attribute name="returnObj" type="lzx:boolean" default="true" >
-</xs:attribute>
-      <xs:attribute name="parentFolderId" type="lzx:number" default="0" >
-</xs:attribute>
-      <xs:attribute name="isdefaultreturn" type="lzx:boolean" default="true" >
-</xs:attribute>
-      <xs:attribute name="isOnlyXml" type="lzx:boolean" default="false" >
-</xs:attribute>
-      <xs:attribute name="isOnlyProfile" type="lzx:boolean" default="false" >
-</xs:attribute>
-      <xs:attribute name="isOnlyPpt" type="lzx:boolean" default="false" >
-</xs:attribute>
-      <xs:attribute name="isOnlyImage" type="lzx:boolean" default="false" >
-</xs:attribute>
   </xs:extension>
   </xs:complexContent>
   </xs:complexType>

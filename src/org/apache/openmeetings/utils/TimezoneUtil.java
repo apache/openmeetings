@@ -45,10 +45,13 @@ public class TimezoneUtil {
 	private static final Logger log = Red5LoggerFactory.getLogger(TimezoneUtil.class, webAppRootKey);
 	private static final Map<String, String> ICAL_TZ_MAP = new Hashtable<String, String>();
 	private static final Map<Long, String> ID_TZ_MAP = new Hashtable<Long, String>();
-	static {
+	
+	public static void initTimeZones() {
 		SAXReader reader = new SAXReader();
 		Document document;
 		try {
+			ICAL_TZ_MAP.clear();
+			ID_TZ_MAP.clear();
 			document = reader.read(new File(getLanguagesDir(), nameOfTimeZoneFile));
 
 			Element root = document.getRootElement();
@@ -108,9 +111,7 @@ public class TimezoneUtil {
 		
 		String defaultTzName = configurationDao.getConfValue("default.timezone", String.class, "Europe/Berlin");
 
-		String omTimeZoneDefault = ICAL_TZ_MAP.get(defaultTzName);
-
-		TimeZone timeZoneByOmTimeZone = TimeZone.getTimeZone(omTimeZoneDefault);
+		TimeZone timeZoneByOmTimeZone = TimeZone.getTimeZone(defaultTzName);
 
 		if (timeZoneByOmTimeZone != null) {
 			return timeZoneByOmTimeZone;
