@@ -16,7 +16,7 @@
 
 	<properties>
 		<title>Confluence Plugin</title>
-		<author email="eugen.schwert@gmail.com">
+		<author email="eschwert@apache.org">
 			OpenMeetings Team
 		</author>
 	</properties>
