@@ -22,7 +22,6 @@ import static org.apache.openmeetings.web.app.Application.getAuthenticationStrat
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.pages.auth.SignInPage.allowOAuthLogin;
 import static org.apache.openmeetings.web.pages.auth.SignInPage.allowRegister;
-import static org.apache.wicket.ajax.attributes.CallbackParameter.resolved;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,14 +35,11 @@ import org.apache.openmeetings.web.app.OmAuthenticationStrategy;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.pages.SwfPage;
 import org.apache.openmeetings.web.util.BaseUrlAjaxBehavior;
-import org.apache.wicket.Component;
+import org.apache.openmeetings.web.util.TimeZoneOffsetAjaxBehavior;
 import org.apache.wicket.RestartResponseException;
-import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
-import org.apache.wicket.markup.head.IHeaderResponse;
-import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
@@ -58,7 +54,6 @@ import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.apache.wicket.util.string.StringValue;
 
 import com.googlecode.wicket.jquery.core.JQueryBehavior;
 import com.googlecode.wicket.jquery.core.Options;
@@ -90,22 +85,14 @@ public class SignInDialog extends AbstractFormDialog<String> {
 		add(browserTZOffset);
 
 		// This code is required to detect time zone offset
-		add(new AbstractDefaultAjaxBehavior() {
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public void renderHead(Component component, IHeaderResponse response) {
-				super.renderHead(component, response);
-				response.render(JavaScriptHeaderItem.forScript(getCallbackFunctionBody(resolved("tzOffset", "getTimeZoneOffsetMinutes()")), "getTzOffset"));
-			}
+		add(new TimeZoneOffsetAjaxBehavior() {
+			private static final long serialVersionUID = 2954455885345860021L;
 			
 			@Override
-			protected void respond(AjaxRequestTarget target) {
-				StringValue offset = getRequestCycle().getRequest().getRequestParameters().getParameterValue("tzOffset");
-				try {
-					browserTZOffset.setModelObject(offset.toInteger());
-				} catch (NumberFormatException ex) { }
+			protected void customFunction(){		
+				browserTZOffset.setModelObject(WebSession.get().getBrowserTimeZoneOffset());
 			}
+			
 		});
 		add(new BaseUrlAjaxBehavior());
 	}

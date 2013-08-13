@@ -79,6 +79,7 @@ public class WebSession extends AbstractAuthenticatedWebSession {
 	private Dashboard dashboard;
 	private String baseUrl = null;
 	private Locale browserLocale = null;
+	private int browserTZOffset = Integer.MIN_VALUE;
 	
 	public WebSession(Request request) {
 		super(request);
@@ -231,6 +232,14 @@ public class WebSession extends AbstractAuthenticatedWebSession {
 		return browserLocale;
 	}
 
+	public void setBrowserTimeZoneOffset(int browserTZOffset){
+		this.browserTZOffset = browserTZOffset;
+	}
+	
+	public int getBrowserTimeZoneOffset(){
+		return browserTZOffset;
+	}
+	
 	public FieldLanguage getLanguageByBrowserLocale() {
 		List<FieldLanguage> languages = getBean(FieldLanguageDao.class).getLanguages();
 		for (FieldLanguage l : languages) {

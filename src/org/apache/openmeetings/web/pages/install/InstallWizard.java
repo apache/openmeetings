@@ -31,8 +31,8 @@ import java.util.List;
 
 import org.apache.openmeetings.installation.ImportInitvalues;
 import org.apache.openmeetings.installation.InstallationConfig;
-import org.apache.openmeetings.persistence.beans.basic.OmTimeZone;
 import org.apache.openmeetings.web.app.Application;
+import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.ErrorMessagePanel;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AbstractAjaxTimerBehavior;
@@ -71,12 +71,24 @@ public class InstallWizard extends Wizard {
 	private final static List<SelectOption> yesNoList = Arrays.asList(SelectOption.NO, SelectOption.YES);
 	private final static List<String> allFonts = Arrays.asList("TimesNewRoman", "Verdana", "Arial");
 	private final IDynamicWizardStep welcomeStep;
-	private final IDynamicWizardStep paramsStep1;
+	private final ParamsStep1 paramsStep1;
 	private final IDynamicWizardStep paramsStep2;
 	private final IDynamicWizardStep paramsStep3;
 	private final IDynamicWizardStep paramsStep4;
 	private final InstallStep installStep;
 	private Throwable th = null;
+	
+	public void initTzDropDown(int browserTZOffset){
+        List<String> tzList = WebSession.getAvailableTimezones();
+        paramsStep1.tzDropDown.option = tzList.get(0); 
+		String tzId = WebSession.get().getTimeZoneByBrowserLocale(browserTZOffset);
+		for (String tz : tzList) {
+			if (tz.equals(tzId)) {
+				paramsStep1.tzDropDown.option = tz;
+				break;
+			}
+		}
+	}
 	
 	//onInit, applyState
 	public InstallWizard(String id) throws Exception {
@@ -150,6 +162,7 @@ public class InstallWizard extends Wizard {
 
 	private final class ParamsStep1 extends BaseStep {
 		private static final long serialVersionUID = 1L;
+		private final TzDropDown tzDropDown;
 
 		public ParamsStep1() throws Exception {
 			super(welcomeStep);
@@ -157,7 +170,7 @@ public class InstallWizard extends Wizard {
             add(new RequiredTextField<String>("cfg.username").add(minimumLength(USER_LOGIN_MINIMUM_LENGTH)));
             add(new PasswordTextField("cfg.password").add(minimumLength(USER_PASSWORD_MINIMUM_LENGTH)));
             add(new RequiredTextField<String>("cfg.email").add(RfcCompliantEmailAddressValidator.getInstance()));
-            add(new TzDropDown("ical_timeZone"));
+            add(tzDropDown = new TzDropDown("ical_timeZone"));
             add(new RequiredTextField<String>("cfg.group"));
 		}
 
@@ -410,26 +423,27 @@ public class InstallWizard extends Wizard {
 		}
 	}
 	
-	private final class TzDropDown extends WizardDropDown<OmTimeZone> {
+	private final class TzDropDown extends WizardDropDown<String> {
 		private static final long serialVersionUID = 6084349711073918837L;
 
 		public TzDropDown(String id) throws Exception {
 			super(id);
-            List<OmTimeZone> tzList = ImportInitvalues.getTimeZones();
+            List<String> tzList = WebSession.getAvailableTimezones();
 			setChoices(tzList);
-			setChoiceRenderer(new IChoiceRenderer<OmTimeZone>() {
+			setChoiceRenderer(new IChoiceRenderer<String>() {
 				private static final long serialVersionUID = 1L;
 				
-				public Object getDisplayValue(OmTimeZone object) {
-    				return object.getLabel() + " (" + object.getJname() + ")";
+				public Object getDisplayValue(String object) {
+    				return object.toString();
     			}
-    			public String getIdValue(OmTimeZone object, int index) {
-    				return object.getIcal();
-    			}
+				public String getIdValue(String object, int index) {
+					return object.toString();
+				}
 			});
 			option = tzList.get(0);
-			for (OmTimeZone tz : tzList) {
-				if (tz.getIcal().equals(propModel.getObject())) {
+			String tzId = WebSession.get().getTimeZoneByBrowserLocale(WebSession.get().getBrowserTimeZoneOffset());
+			for (String tz : tzList) {
+				if (tz.equals(tzId)) {
 					option = tz;
 					break;
 				}
@@ -439,7 +453,7 @@ public class InstallWizard extends Wizard {
 		@Override
 		protected void onModelChanged() {
 			if (propModel != null && option != null) {
-				propModel.setObject(option.getIcal());
+				propModel.setObject(option);
 			}
 		}
 	}

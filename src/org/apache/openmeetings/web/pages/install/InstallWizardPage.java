@@ -19,19 +19,32 @@
 package org.apache.openmeetings.web.pages.install;
 
 import org.apache.openmeetings.web.app.Application;
+import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.ErrorMessagePanel;
 import org.apache.openmeetings.web.pages.BaseNotInitedPage;
+import org.apache.openmeetings.web.util.TimeZoneOffsetAjaxBehavior;
 import org.apache.wicket.RestartResponseException;
 
 public class InstallWizardPage extends BaseNotInitedPage {
 	private static final long serialVersionUID = -438388395397826138L;
+	private InstallWizard wizard = null;
 
 	public InstallWizardPage() {
 		if (Application.isInstalled()) {
 			throw new RestartResponseException(Application.get().getHomePage());
 		}
 		try {
-			add(new InstallWizard("wizard"));
+			add(wizard = new InstallWizard("wizard"));
+			// This code is required to detect time zone offset
+			add(new TimeZoneOffsetAjaxBehavior() {
+				private static final long serialVersionUID = 2558971671370041214L;
+				
+				@Override
+				protected void customFunction(){
+					wizard.initTzDropDown(WebSession.get().getBrowserTimeZoneOffset());
+				}
+
+			});
 		} catch (RestartResponseException re) {
 			throw re;
 		} catch (Exception e) {
