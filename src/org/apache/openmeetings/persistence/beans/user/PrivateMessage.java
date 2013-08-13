@@ -129,7 +129,7 @@ public class PrivateMessage implements Serializable, IDataProviderEntity {
 	private boolean isTrash;
 	
 	@Column(name="parent_message_id")
-	@Element(data=true)
+	@Element(data=true, required = false)
 	private Long parentMessage;
 	
 	@Column(name="private_message_folder_id")
@@ -141,7 +141,7 @@ public class PrivateMessage implements Serializable, IDataProviderEntity {
 	private boolean isContactRequest;
 	
 	@Column(name="user_contact_id")
-	@Element(data=true)
+	@Element(data=true, required = false)
 	private Long userContactId;
 
 	public long getPrivateMessageId() {

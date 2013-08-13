@@ -50,8 +50,8 @@ import org.apache.openmeetings.installation.InstallationConfig;
 import org.apache.openmeetings.persistence.beans.files.FileExplorerItem;
 import org.apache.openmeetings.persistence.beans.flvrecord.FlvRecording;
 import org.apache.openmeetings.persistence.beans.user.User;
-import org.apache.openmeetings.servlet.outputhandler.BackupExport;
-import org.apache.openmeetings.servlet.outputhandler.BackupImportController;
+import org.apache.openmeetings.utils.BackupExport;
+import org.apache.openmeetings.utils.BackupImport;
 import org.apache.openmeetings.utils.ImportHelper;
 import org.apache.openmeetings.utils.OMContextListener;
 import org.apache.openmeetings.utils.OmFileHelper;
@@ -602,7 +602,7 @@ public class Admin {
 	
 	private void restoreOm(String ctxName, File backup) {
 		try {
-			BackupImportController importCtrl = getApplicationContext(ctxName).getBean(BackupImportController.class);
+			BackupImport importCtrl = getApplicationContext(ctxName).getBean(BackupImport.class);
 			importCtrl.performImport(new FileInputStream(backup));
 		} catch (Exception e) {
 			handleError("Restore failed", e);

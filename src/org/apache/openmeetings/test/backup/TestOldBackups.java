@@ -31,8 +31,8 @@ import org.apache.openmeetings.data.conference.RoomManager;
 import org.apache.openmeetings.data.conference.dao.RoomDao;
 import org.apache.openmeetings.data.user.dao.OrganisationDao;
 import org.apache.openmeetings.data.user.dao.UsersDao;
-import org.apache.openmeetings.servlet.outputhandler.BackupImportController;
 import org.apache.openmeetings.test.AbstractOpenmeetingsSpringTest;
+import org.apache.openmeetings.utils.BackupImport;
 import org.junit.Test;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -43,7 +43,7 @@ public class TestOldBackups extends AbstractOpenmeetingsSpringTest {
 			TestOldBackups.class, OpenmeetingsVariables.webAppRootKey);
 	
 	@Autowired
-	private BackupImportController backupController;
+	private BackupImport backupController;
 	@Autowired
 	private OrganisationDao organisationDao;
 	@Autowired

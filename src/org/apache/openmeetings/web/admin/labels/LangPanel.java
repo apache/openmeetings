@@ -34,8 +34,7 @@ import org.apache.openmeetings.data.basic.FieldValueDao;
 import org.apache.openmeetings.persistence.beans.lang.FieldLanguage;
 import org.apache.openmeetings.persistence.beans.lang.Fieldlanguagesvalues;
 import org.apache.openmeetings.persistence.beans.lang.Fieldvalues;
-import org.apache.openmeetings.servlet.outputhandler.ImportController;
-import org.apache.openmeetings.servlet.outputhandler.LangExport;
+import org.apache.openmeetings.utils.LangExport;
 import org.apache.openmeetings.web.admin.AdminPanel;
 import org.apache.openmeetings.web.admin.SearchableDataView;
 import org.apache.openmeetings.web.common.PagedEntityListPanel;
@@ -43,6 +42,7 @@ import org.apache.openmeetings.web.data.DataViewContainer;
 import org.apache.openmeetings.web.data.OmOrderByBorder;
 import org.apache.openmeetings.web.data.SearchableDataProvider;
 import org.apache.openmeetings.web.util.AjaxDownload;
+import org.apache.openmeetings.xmlimport.LanguageImport;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -177,7 +177,7 @@ public class LangPanel extends AdminPanel {
 						importFeedback.error("File is empty");
 						return;
 					}
-					getBean(ImportController.class).importLanguage(language.getLanguage_id(), download.getInputStream());
+					getBean(LanguageImport.class).addLanguageByDocument(language.getLanguage_id(), download.getInputStream());
 				} catch (IOException e) {
 					log.error("IOException on panel language editor import ", e);
 					importFeedback.error(e);

@@ -80,7 +80,6 @@
 	<bean id="xmlcrm.service" class="org.apache.openmeetings.remote.MainService" />
 	<bean id="printservice.service" class="org.apache.openmeetings.remote.PrintService" />
 	<bean id="pollservice.service" class="org.apache.openmeetings.remote.PollService" />
-	<bean id="meetingmemberservice.service" class="org.apache.openmeetings.remote.MeetingMemberService" />
 	<bean id="languageservice.service" class="org.apache.openmeetings.remote.LanguageService" />
 	<bean id="invitationservice.service" class="org.apache.openmeetings.remote.InvitationService" />
 	<bean id="whiteboardservice.service" class="org.apache.openmeetings.remote.WhiteBoardService" />
@@ -91,7 +90,6 @@
 	<bean id="errorservice.service" class="org.apache.openmeetings.remote.ErrorService" />
 	<bean id="conferenceservice.service" class="org.apache.openmeetings.remote.ConferenceService" />
 	<bean id="chatservice.service" class="org.apache.openmeetings.remote.ChatService" />
-	<bean id="calendarservice.service" class="org.apache.openmeetings.remote.CalendarService" />
 	<bean id="flvrecorderservice.service" class="org.apache.openmeetings.remote.FLVRecorderService" />
 	<bean id="openmeetings.FlvRecorderConverterTask" class="org.apache.openmeetings.data.flvrecord.converter.FlvRecorderConverterTask" />
 	<bean id="openmeetings.FlvInterviewConverterTask" class="org.apache.openmeetings.data.flvrecord.converter.FlvInterviewConverterTask" />
@@ -292,7 +290,6 @@
 	<bean id="feedbackManagement" class="org.apache.openmeetings.data.conference.FeedbackManager" />
 	<bean id="importInitvalues" class="org.apache.openmeetings.installation.ImportInitvalues" />
 	<bean id="languageImport" class="org.apache.openmeetings.xmlimport.LanguageImport" />
-	<bean id="userImport" class="org.apache.openmeetings.xmlimport.UserImport" />
 	<bean id="libraryWmlLoader" class="org.apache.openmeetings.documents.LibraryWmlLoader" />
 	<bean id="authLevelManagement" class="org.apache.openmeetings.data.basic.AuthLevelUtil" />
 	<bean id="generateSWF" class="org.apache.openmeetings.documents.GenerateSWF" />
@@ -323,7 +320,6 @@
 	<bean id="calendarWebService" class="org.apache.openmeetings.axis.services.CalendarWebService" />
 	<bean id="jabberWebService" class="org.apache.openmeetings.axis.services.JabberWebService" />
 	<bean id="serverWebService" class="org.apache.openmeetings.axis.services.ServerWebService" />
-
 	<!-- Servlet Facade Beans -->
-	<bean id="backupExport" class="org.apache.openmeetings.servlet.outputhandler.BackupExport" />
+	<bean id="backupExport" class="org.apache.openmeetings.utils.BackupExport" />
 </beans>

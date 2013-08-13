@@ -59,7 +59,7 @@ public class LdapConfig implements Serializable, IDataProviderEntity {
 	public String name;
 	
 	@Column(name="config_file_name")
-	@Element(data=true)
+	@Element(data=true, required = false)
 	public String configFileName;
 	
 	@Column(name="add_domain_to_user_name")
@@ -67,7 +67,7 @@ public class LdapConfig implements Serializable, IDataProviderEntity {
 	public boolean addDomainToUserName;
 	
 	@Column(name="domain")
-	@Element(data=true)
+	@Element(data=true, required = false)
 	public String domain;
 	
 	@Column(name="is_active")

@@ -29,7 +29,7 @@ import java.util.Map.Entry;
 
 import org.apache.openmeetings.persistence.beans.lang.Fieldlanguagesvalues;
 import org.apache.openmeetings.persistence.beans.lang.Fieldvalues;
-import org.apache.openmeetings.servlet.outputhandler.LangExport;
+import org.apache.openmeetings.utils.LangExport;
 import org.apache.openmeetings.utils.OmFileHelper;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;

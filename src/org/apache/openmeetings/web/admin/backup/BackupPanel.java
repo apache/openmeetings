@@ -27,8 +27,8 @@ import java.text.DecimalFormat;
 import java.util.Date;
 
 import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
-import org.apache.openmeetings.servlet.outputhandler.BackupExport;
-import org.apache.openmeetings.servlet.outputhandler.BackupImportController;
+import org.apache.openmeetings.utils.BackupExport;
+import org.apache.openmeetings.utils.BackupImport;
 import org.apache.openmeetings.utils.ImportHelper;
 import org.apache.openmeetings.utils.OmFileHelper;
 import org.apache.openmeetings.utils.math.CalendarPatterns;
@@ -156,7 +156,7 @@ public class BackupPanel extends AdminPanel {
 							uploadFeedback.error("File is empty");
 							return;
 						}
-						getBean(BackupImportController.class).performImport(upload.getInputStream());
+						getBean(BackupImport.class).performImport(upload.getInputStream());
 					} catch (IOException e) {
 						log.error("IOException on panel backup upload ", e);
 						uploadFeedback.error(e);

@@ -92,20 +92,8 @@
         <servlet-class>org.apache.openmeetings.servlet.outputhandler.DownloadHandler</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>LangExport</servlet-name>
-        <servlet-class>org.apache.openmeetings.servlet.outputhandler.LangExport</servlet-class>
-    </servlet>
-    <servlet>
-        <servlet-name>Export</servlet-name>
-        <servlet-class>org.apache.openmeetings.servlet.outputhandler.Export</servlet-class>
-    </servlet>
-    <servlet>
         <servlet-name>ExportToImage</servlet-name>
         <servlet-class>org.apache.openmeetings.servlet.outputhandler.ExportToImage</servlet-class>
-    </servlet>
-    <servlet>
-        <servlet-name>ActivateUser</servlet-name>
-        <servlet-class>org.apache.openmeetings.servlet.outputhandler.ActivateUser</servlet-class>
     </servlet>
     <!-- Axis2 Settings -->
     <servlet>
@@ -123,20 +111,8 @@
         <url-pattern>/DownloadHandler</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>LangExport</servlet-name>
-        <url-pattern>/LangExport</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>Export</servlet-name>
-        <url-pattern>/Export</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
         <servlet-name>ExportToImage</servlet-name>
         <url-pattern>/ExportToImage</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>ActivateUser</servlet-name>
-        <url-pattern>/activateUser</url-pattern>
     </servlet-mapping>
     <!-- Axis2 -->
     <servlet-mapping>

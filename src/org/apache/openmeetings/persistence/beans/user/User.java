@@ -118,7 +118,7 @@ public class User implements Serializable, IDataProviderEntity {
 	private Long user_id;
 
 	@Column(name = "age")
-	@Element(data = true)
+	@Element(data = true, required = false)
 	private Date age;
 
 	@Column(name = "availible")
@@ -145,7 +145,7 @@ public class User implements Serializable, IDataProviderEntity {
 	private Long level_id;
 
 	@Column(name = "login")
-	@Element(data = true)
+	@Element(data = true, required = false)
 	private String login;
 
 	@Basic(fetch = FetchType.LAZY)
@@ -155,7 +155,7 @@ public class User implements Serializable, IDataProviderEntity {
 	private String password;
 
 	@Column(name = "regdate")
-	@Element(data = true)
+	@Element(data = true, required = false)
 	private Date regdate;
 
 	@Column(name = "status")

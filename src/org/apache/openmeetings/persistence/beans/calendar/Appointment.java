@@ -150,19 +150,19 @@ public class Appointment implements Serializable {
 	private AppointmentReminderTyps remind;
 
 	@Column(name = "isdaily")
-	@Element(data=true)
+	@Element(data=true, required = false)
 	private Boolean isDaily;
 	
 	@Column(name = "isweekly")
-	@Element(data=true)
+	@Element(data=true, required = false)
 	private Boolean isWeekly;
 	
 	@Column(name = "ismonthly")
-	@Element(data=true)
+	@Element(data=true, required = false)
 	private Boolean isMonthly;
 	
 	@Column(name = "isyearly")
-	@Element(data=true)
+	@Element(data=true, required = false)
 	private Boolean isYearly;
 
 	@ManyToOne(fetch = FetchType.EAGER)

@@ -16,9 +16,10 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.servlet.outputhandler;
+package org.apache.openmeetings.utils;
 
 import static org.apache.commons.transaction.util.FileHelper.copyRec;
+import static org.apache.openmeetings.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.openmeetings.persistence.beans.basic.Configuration.CRYPT_KEY;
 import static org.apache.openmeetings.utils.OmFileHelper.getStreamsHibernateDir;
 import static org.apache.openmeetings.utils.OmFileHelper.getUploadDir;
@@ -40,9 +41,6 @@ import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.Transformer;
@@ -51,7 +49,6 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
 import org.apache.commons.transaction.util.FileHelper;
-import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.backup.AppointmentCategoryConverter;
 import org.apache.openmeetings.backup.AppointmentConverter;
 import org.apache.openmeetings.backup.AppointmentReminderTypeConverter;
@@ -84,7 +81,6 @@ import org.apache.openmeetings.data.user.dao.PrivateMessagesDao;
 import org.apache.openmeetings.data.user.dao.StateDao;
 import org.apache.openmeetings.data.user.dao.UserContactsDao;
 import org.apache.openmeetings.data.user.dao.UsersDao;
-import org.apache.openmeetings.documents.beans.UploadCompleteMessage;
 import org.apache.openmeetings.persistence.beans.basic.Configuration;
 import org.apache.openmeetings.persistence.beans.basic.LdapConfig;
 import org.apache.openmeetings.persistence.beans.basic.OmTimeZone;
@@ -110,7 +106,6 @@ import org.apache.openmeetings.persistence.beans.user.State;
 import org.apache.openmeetings.persistence.beans.user.User;
 import org.apache.openmeetings.persistence.beans.user.UserContact;
 import org.apache.openmeetings.remote.red5.ScopeApplicationAdapter;
-import org.apache.openmeetings.utils.OmFileHelper;
 import org.apache.openmeetings.utils.crypt.MD5Implementation;
 import org.apache.openmeetings.utils.math.CalendarPatterns;
 import org.red5.logging.Red5LoggerFactory;
@@ -124,20 +119,14 @@ import org.simpleframework.xml.stream.NodeBuilder;
 import org.simpleframework.xml.transform.RegistryMatcher;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.multipart.MultipartFile;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
-@Controller
-public class BackupImportController extends AbstractUploadController {
+public class BackupImport {
 
-	private static final Logger log = Red5LoggerFactory.getLogger(
-			BackupImportController.class, OpenmeetingsVariables.webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(BackupImport.class, webAppRootKey);
 
 	@Autowired
 	private AppointmentDao appointmentDao;
@@ -283,7 +272,9 @@ public class BackupImportController extends AbstractUploadController {
 		{
 			List<User> list = readUserList(f, "users.xml", "users");
 			for (User u : list) {
-				
+				if (u.getLogin() == null) {
+					continue;
+				}
 				//FIXME: OPENMEETINGS-750
 				//Convert old Backups with OmTimeZone to new schema
 				
@@ -615,38 +606,6 @@ public class BackupImportController extends AbstractUploadController {
 		FileHelper.removeRec(f);
 	}
 	
-	@RequestMapping(value = "/backup.upload", method = RequestMethod.POST)
-	public void service(HttpServletRequest request,
-			HttpServletResponse httpServletResponse)
-			throws ServletException, IOException {
-
-    	UploadInfo info = validate(request, true);
-    	try {
-			MultipartFile multipartFile = info.file;
-			InputStream is = multipartFile.getInputStream();
-			performImport(is);
-
-			UploadCompleteMessage uploadCompleteMessage = new UploadCompleteMessage(
-						info.userId,
-						"library", //message
-						"import", //action
-						"", //error
-						info.filename);
-			
-			scopeApplicationAdapter.sendUploadCompletMessageByPublicSID(
-					uploadCompleteMessage, info.publicSID);
-
-		} catch (Exception e) {
-
-			log.error("[ImportExport]", e);
-
-			e.printStackTrace();
-			throw new ServletException(e);
-		}
-
-		return;
-	}
-
 	private <T> List<T> readList(Serializer ser, File baseDir, String fileName, String listNodeName, Class<T> clazz) throws Exception {
 		return readList(ser, baseDir, fileName, listNodeName, clazz, false);
 	}

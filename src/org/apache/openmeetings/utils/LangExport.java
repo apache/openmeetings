@@ -16,47 +16,26 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.servlet.outputhandler;
+package org.apache.openmeetings.utils;
 
-import java.io.IOException;
 import java.io.OutputStream;
 import java.io.Writer;
-import java.util.Date;
 import java.util.List;
 
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.apache.openmeetings.OpenmeetingsVariables;
-import org.apache.openmeetings.data.basic.FieldLanguageDao;
-import org.apache.openmeetings.data.basic.FieldManager;
-import org.apache.openmeetings.data.basic.SessiondataDao;
-import org.apache.openmeetings.data.user.UserManager;
-import org.apache.openmeetings.persistence.beans.lang.FieldLanguage;
 import org.apache.openmeetings.persistence.beans.lang.Fieldlanguagesvalues;
-import org.apache.openmeetings.servlet.BaseHttpServlet;
 import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 import org.dom4j.Namespace;
 import org.dom4j.io.OutputFormat;
 import org.dom4j.io.XMLWriter;
-import org.red5.logging.Red5LoggerFactory;
-import org.slf4j.Logger;
 
 /**
  * 
  * @author sebastianwagner
  * 
  */
-public class LangExport extends BaseHttpServlet {
-	
-	private static final long serialVersionUID = 243294279856160463L;
-	
-	private static final Logger log = Red5LoggerFactory.getLogger(
-			LangExport.class, OpenmeetingsVariables.webAppRootKey);
-	
+public class LangExport {
 	public static final String FILE_COMMENT = ""
 			+ "\n"
 			+ "  Licensed to the Apache Software Foundation (ASF) under one\n"
@@ -83,84 +62,6 @@ public class LangExport extends BaseHttpServlet {
 			+ "to add new Languages or modify/customize it use the LanguageEditor \n"
 			+ "see http://openmeetings.apache.org/LanguageEditor.html for Details \n"
 			+ "###############################################";
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * javax.servlet.http.HttpServlet#doPost(javax.servlet.http.HttpServletRequest
-	 * , javax.servlet.http.HttpServletResponse)
-	 */
-	@Override
-	protected void service(HttpServletRequest httpServletRequest,
-			HttpServletResponse httpServletResponse) throws ServletException,
-			IOException {
-
-		try {
-
-			if (getBean(UserManager.class) == null
-					|| getBean(FieldLanguageDao.class) == null
-					|| getBean(FieldManager.class) == null
-					|| getBean(SessiondataDao.class) == null) {
-				return;
-			}
-
-			String sid = httpServletRequest.getParameter("sid");
-			if (sid == null) {
-				sid = "default";
-			}
-			log.debug("sid: " + sid);
-
-			String language = httpServletRequest.getParameter("language");
-			if (language == null) {
-				language = "0";
-			}
-			Long language_id = Long.valueOf(language).longValue();
-			log.debug("language_id: " + language_id);
-
-			Long users_id = getBean(SessiondataDao.class).checkSession(sid);
-			Long user_level = getBean(UserManager.class).getUserLevelByID(users_id);
-
-			log.debug("users_id: " + users_id);
-			log.debug("user_level: " + user_level);
-
-			if (user_level != null && user_level > 0) {
-				FieldLanguage fl = getBean(FieldLanguageDao.class)
-						.getFieldLanguageById(language_id);
-
-				List<Fieldlanguagesvalues> flvList = getBean(FieldManager.class).getMixedFieldValuesList(language_id);
-
-				if (fl != null && flvList != null) {
-					Document doc = createDocument(flvList, getBean(FieldManager.class).getUntranslatedFieldValuesList(language_id));
-
-					String requestedFile = fl.getName() + ".xml";
-
-					httpServletResponse.reset();
-					httpServletResponse.resetBuffer();
-					OutputStream out = httpServletResponse.getOutputStream();
-					httpServletResponse
-							.setContentType("APPLICATION/OCTET-STREAM");
-					httpServletResponse.setHeader("Content-Disposition",
-							"attachment; filename=\"" + requestedFile + "\"");
-					// httpServletResponse.setHeader("Content-Length", ""+
-					// rf.length());
-
-					serializetoXML(out, "UTF-8", doc);
-
-					out.flush();
-					out.close();
-				}
-			} else {
-				log.debug("ERROR LangExport: not authorized FileDownload "
-						+ (new Date()));
-			}
-
-		} catch (Exception er) {
-			log.error("ERROR ", er);
-			System.out.println("Error exporting: " + er);
-			er.printStackTrace();
-		}
-	}
 
 	public static Document createDocument() {
 		Document document = DocumentHelper.createDocument();
