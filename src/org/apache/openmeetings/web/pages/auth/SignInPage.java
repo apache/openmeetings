@@ -53,7 +53,6 @@ import org.apache.openmeetings.data.user.UserManager;
 import org.apache.openmeetings.data.user.dao.UsersDao;
 import org.apache.openmeetings.persistence.beans.user.User;
 import org.apache.openmeetings.persistence.beans.user.oauth.OAuthServer;
-import org.apache.openmeetings.utils.crypt.ManageCryptStyle;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.pages.BaseInitedPage;
@@ -106,7 +105,7 @@ public class SignInPage extends BaseInitedPage {
 					 	log.debug("OAuthInfo=" + authInfo);
 					 	Map<String, String> authParams = getAuthParams(authInfo.accessToken, code, server);
 					 	if (authParams != null) {
-					 		loginViaOAuth2(authParams);
+					 		loginViaOAuth2(authParams, serverId);
 					 	}
 					} else { // redirect to get code
 						String redirectUrl = prepareUrlParams(server.getRequestKeyUrl(), server.getClientId(), 
@@ -259,12 +258,31 @@ public class SignInPage extends BaseInitedPage {
 				result.expiresIn = jsonResult.getLong("expires_in");
 			}
 		} catch (JSONException e) {
-			log.error("Couldn't parse json response " + sourceJson.toString(), e);
+			// try to parse as canonical
+			Map<String, String> parsedMap = parseCanonicalResponse(sourceJson.toString());
+			result.accessToken = parsedMap.get("access_token");
+			result.refreshToken = parsedMap.get("refresh_token");
+			result.tokenType = parsedMap.get("token_type");
+			try {
+				result.expiresIn = Long.valueOf(parsedMap.get("expires_in"));
+			} catch (NumberFormatException nfe) {}
 		}
 		// access token must be specified
 		if (result.accessToken == null) {
 			log.error("Response doesn't contain access_token field:\n" + sourceJson.toString());
 			return null;
+		}
+		return result;
+	}
+	
+	private Map<String, String> parseCanonicalResponse(String response) {
+		String[] parts = response.split("&");
+		Map<String, String> result = new HashMap<String, String>();
+		for (String part: parts) {
+			String pair[] = part.split("=");
+			if (pair.length > 1) {
+				result.put(pair[0], pair[1]);
+			}
 		}
 		return result;
 	}
@@ -284,18 +302,18 @@ public class SignInPage extends BaseInitedPage {
 		prepareConnection(connection);
 		BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
 		String inputLine = null;
-		StringBuilder sourceJson = new StringBuilder();
+		StringBuilder sourceResponse = new StringBuilder();
 		while ((inputLine = in.readLine()) != null) {
-			if (sourceJson.length() > 0) {
-				sourceJson.append("\n");
+			if (sourceResponse.length() > 0) {
+				sourceResponse.append("\n");
 			}
-			sourceJson.append(inputLine);
+			sourceResponse.append(inputLine);
 		}
         in.close();
         // parse json result
         Map<String, String> result = new HashMap<String, String>();
         try {
-			JSONObject parsedJson = new JSONObject(sourceJson.toString());
+			JSONObject parsedJson = new JSONObject(sourceResponse.toString());
 			result.put("login", parsedJson.getString(loginAttributeName));
 			result.put("email", parsedJson.getString(emailAttributeName));
 			if (parsedJson.has(firstname)) {
@@ -305,17 +323,24 @@ public class SignInPage extends BaseInitedPage {
 				result.put("lastname", parsedJson.getString(lastname));
 			}
 		} catch (JSONException e) {
-			log.error("Couldn't parse json response:\n" + sourceJson.toString(), e);
-			return null;
+			// try to parse response as canonical
+			Map<String, String> parsedMap = parseCanonicalResponse(sourceResponse.toString());
+			result.put("login", parsedMap.get(loginAttributeName));
+			result.put("email", parsedMap.get(emailAttributeName));
+			if (parsedMap.containsKey(firstname)) {
+				result.put("firstname", parsedMap.get(firstname));
+			}
+			if (parsedMap.containsKey(lastname)) {
+				result.put("lastname", parsedMap.get(lastname));
+			}
 		}
 		return result;
 	}
 	
-	private void loginViaOAuth2(Map<String, String> params) throws IOException, NoSuchAlgorithmException {
+	private void loginViaOAuth2(Map<String, String> params, long serverId) throws IOException, NoSuchAlgorithmException {
 		UsersDao userDao = getBean(UsersDao.class);
 		UserManager userManager = getBean(UserManager.class); 
 		ConfigurationDao configurationDao = getBean(ConfigurationDao.class);
-		ManageCryptStyle manageCryptStyle = getBean(ManageCryptStyle.class);
 		String login = params.get("login");
 		String email = params.get("email");
 		String lastname = params.get("lastname");
@@ -334,11 +359,21 @@ public class SignInPage extends BaseInitedPage {
 		if (user == null) {
 			Integer defaultlangId = Integer.valueOf(configurationDao.getConfValue("default_lang_id", String.class, "1"));
 			String defaultTimezone = configurationDao.getConfValue("default.timezone", String.class, "");		
-			userManager.registerUserNoEmail(login, pass, lastname, firstname, email, null, null, 
+			Long res = userManager.registerUserNoEmail(login, pass, lastname, firstname, email, null, null, 
 					null, null, null, 0, null, defaultlangId, null, false, true, defaultTimezone);
-		} else { // just change password
-			user.updatePassword(manageCryptStyle, configurationDao, pass);
+			if (res == null || res < 0) {
+				throw new RuntimeException("Couldn't register new oauth user");
+			}
+			user = userDao.get(res);
+			user.setExternalUserType("oauth2." + serverId);
 			userDao.update(user, null);
+		} else { // just change password
+			// check user type before changing password, it must be match oauthServerId
+			if (!("oauth2." + serverId).equals(user.getExternalUserType())) {
+				log.error("User already registered!");
+				return;
+			}
+			user = userDao.update(user, pass, -1);
 		}
 		
 		if (WebSession.get().signIn(login, pass, null)) {

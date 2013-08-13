@@ -1017,6 +1017,23 @@ public class ImportInitvalues {
 		googleServer.setFirstnameParamName("given_name");
 		googleServer.setLastnameParamName("family_name");
 		oauthDao.update(googleServer, null);
+		
+		// Facebook
+		OAuthServer facebookServer = new OAuthServer();
+		facebookServer.setName("Facebook");
+		facebookServer.setEnabled(false);
+		facebookServer.setClientId("<put your client_id>");
+		facebookServer.setClientSecret("<put your client_secret>");
+		facebookServer.setRequestKeyUrl("https://www.facebook.com/dialog/oauth?client_id={$client_id}&redirect_uri={$redirect_uri}&scope=email");
+		facebookServer.setRequestTokenUrl("https://graph.facebook.com/oauth/access_token");
+		facebookServer.setRequestTokenMethod(RequestMethod.POST);
+		facebookServer.setRequestTokenAttributes("client_id={$client_id}&redirect_uri={$redirect_uri}&client_secret={$client_secret}&code={$code}");
+		facebookServer.setRequestInfoUrl("https://graph.facebook.com/me?access_token={$access_token}&fields=username,first_name,last_name,email");
+		facebookServer.setLoginParamName("username");
+		facebookServer.setEmailParamName("email");
+		facebookServer.setFirstnameParamName("first_name");
+		facebookServer.setLastnameParamName("last_name");
+		oauthDao.update(facebookServer, null);
 	}
 	
 	// ------------------------------------------------------------------------------
