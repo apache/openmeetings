@@ -24,7 +24,6 @@ import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.data.basic.AuthLevelUtil;
 import org.apache.openmeetings.data.basic.SessiondataDao;
 import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
-import org.apache.openmeetings.data.basic.dao.OmTimeZoneDao;
 import org.apache.openmeetings.data.conference.InvitationManager;
 import org.apache.openmeetings.data.user.UserManager;
 import org.apache.openmeetings.persistence.beans.domain.Organisation_Users;
@@ -59,8 +58,6 @@ public class JabberWebService {
 	private ConferenceService conferenceService;
 	@Autowired
 	private InvitationManager invitationManager;
-	@Autowired
-	private OmTimeZoneDao omTimeZoneDaoImpl;
 	@Autowired
 	private ConfigurationDao configurationDao;
 	@Autowired

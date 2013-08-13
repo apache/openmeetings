@@ -26,13 +26,13 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TimeZone;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.data.basic.AuthLevelUtil;
 import org.apache.openmeetings.data.basic.SessiondataDao;
 import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
 import org.apache.openmeetings.data.basic.dao.LdapConfigDao;
-import org.apache.openmeetings.data.basic.dao.OmTimeZoneDao;
 import org.apache.openmeetings.data.basic.dao.SOAPLoginDao;
 import org.apache.openmeetings.data.conference.FeedbackManager;
 import org.apache.openmeetings.data.conference.InvitationManager;
@@ -43,7 +43,6 @@ import org.apache.openmeetings.data.user.dao.StateDao;
 import org.apache.openmeetings.data.user.dao.UsersDao;
 import org.apache.openmeetings.ldap.LdapLoginManagement;
 import org.apache.openmeetings.persistence.beans.basic.Configuration;
-import org.apache.openmeetings.persistence.beans.basic.OmTimeZone;
 import org.apache.openmeetings.persistence.beans.basic.RemoteSessionObject;
 import org.apache.openmeetings.persistence.beans.basic.SOAPLogin;
 import org.apache.openmeetings.persistence.beans.basic.Sessiondata;
@@ -64,6 +63,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.DomDriver;
+
+import edu.emory.mathcs.backport.java.util.Arrays;
 
 /**
  * 
@@ -86,8 +87,6 @@ public class MainService implements IPendingServiceCallback {
 	private UserManager userManager;
 	@Autowired
 	private StateDao statemanagement;
-	@Autowired
-	private OmTimeZoneDao omTimeZoneDaoImpl;
 	@Autowired
 	private RoomManager roomManager;
 	@Autowired
@@ -497,8 +496,9 @@ public class MainService implements IPendingServiceCallback {
 		return statemanagement.getStates();
 	}
 
-	public List<OmTimeZone> getTimeZones() {
-		return omTimeZoneDaoImpl.getOmTimeZones();
+	@SuppressWarnings("unchecked")
+	public List<String> getTimeZones() {
+		return Arrays.asList(TimeZone.getAvailableIDs());
 	}
 
 	/**

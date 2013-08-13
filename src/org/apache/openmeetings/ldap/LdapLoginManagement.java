@@ -32,7 +32,6 @@ import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.data.basic.SessiondataDao;
 import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
 import org.apache.openmeetings.data.basic.dao.LdapConfigDao;
-import org.apache.openmeetings.data.basic.dao.OmTimeZoneDao;
 import org.apache.openmeetings.data.user.UserManager;
 import org.apache.openmeetings.data.user.dao.StateDao;
 import org.apache.openmeetings.data.user.dao.UsersDao;
@@ -70,8 +69,6 @@ public class LdapLoginManagement {
 	private StateDao statemanagement;
 	@Autowired
 	private LdapConfigDao ldapConfigDao;
-	@Autowired
-	private OmTimeZoneDao omTimeZoneDaoImpl;
 	@Autowired
 	private ManageCryptStyle cryptManager;
 	@Autowired
@@ -670,7 +667,7 @@ public class LdapLoginManagement {
 				&& userdata.get(ldapAttrs.get("timezoneAttr")) != null)
 			jName_timeZone = userdata.get(ldapAttrs.get("timezoneAttr"));
 		
-		if (omTimeZoneDaoImpl.getOmTimeZone(jName_timeZone) == null) {
+		if (timezoneUtil.getTimezoneByInternalJName(jName_timeZone) == null) {
 			jName_timeZone = configurationDao.getConfValue(
 					"default.timezone", String.class, "Europe/Berlin");
 		}

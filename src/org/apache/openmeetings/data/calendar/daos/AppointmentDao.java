@@ -38,7 +38,6 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
-import org.apache.openmeetings.data.basic.dao.OmTimeZoneDao;
 import org.apache.openmeetings.data.calendar.management.MeetingMemberLogic;
 import org.apache.openmeetings.data.conference.InvitationManager;
 import org.apache.openmeetings.data.conference.dao.InvitationDao;
@@ -67,8 +66,6 @@ public class AppointmentDao {
 	private EntityManager em;
 	@Autowired
 	private UserManager userManager;
-	@Autowired
-	private OmTimeZoneDao omTimeZoneDaoImpl;
 	@Autowired
 	private AppointmentCategoryDao appointmentCategoryDaoImpl;
 	@Autowired

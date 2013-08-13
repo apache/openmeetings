@@ -41,7 +41,6 @@ import org.apache.openmeetings.backup.AppointmentCategoryConverter;
 import org.apache.openmeetings.backup.AppointmentConverter;
 import org.apache.openmeetings.backup.AppointmentReminderTypeConverter;
 import org.apache.openmeetings.backup.DateConverter;
-import org.apache.openmeetings.backup.OmTimeZoneConverter;
 import org.apache.openmeetings.backup.OrganisationConverter;
 import org.apache.openmeetings.backup.PollTypeConverter;
 import org.apache.openmeetings.backup.RoomConverter;
@@ -65,7 +64,6 @@ import org.apache.openmeetings.data.user.dao.PrivateMessagesDao;
 import org.apache.openmeetings.data.user.dao.UserContactsDao;
 import org.apache.openmeetings.data.user.dao.UsersDao;
 import org.apache.openmeetings.persistence.beans.basic.Configuration;
-import org.apache.openmeetings.persistence.beans.basic.OmTimeZone;
 import org.apache.openmeetings.persistence.beans.calendar.Appointment;
 import org.apache.openmeetings.persistence.beans.calendar.AppointmentCategory;
 import org.apache.openmeetings.persistence.beans.calendar.AppointmentReminderTyps;
@@ -328,7 +326,6 @@ public class BackupExport {
 			List<Configuration> list = configurationDao.getConfigurations(
 					0, Integer.MAX_VALUE, "c.configuration_id", true);
 			Registry registry = new Registry();
-			registry.bind(OmTimeZone.class, OmTimeZoneConverter.class);
 			registry.bind(State.class, StateConverter.class);
 			registry.bind(User.class, UserConverter.class);
 			Strategy strategy = new RegistryStrategy(registry);
@@ -422,7 +419,6 @@ public class BackupExport {
 		Serializer serializer = new Persister(strategy);
 
 		registry.bind(Organisation.class, OrganisationConverter.class);
-		registry.bind(OmTimeZone.class, OmTimeZoneConverter.class);
 		registry.bind(State.class, StateConverter.class);
 		if (list != null && list.size() > 0) {
 			registry.bind(list.get(0).getRegdate().getClass(), DateConverter.class);

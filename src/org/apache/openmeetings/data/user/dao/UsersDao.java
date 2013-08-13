@@ -35,7 +35,6 @@ import org.apache.openjpa.persistence.OpenJPAPersistence;
 import org.apache.openjpa.persistence.OpenJPAQuery;
 import org.apache.openmeetings.data.IDataProviderDao;
 import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
-import org.apache.openmeetings.data.basic.dao.OmTimeZoneDao;
 import org.apache.openmeetings.persistence.beans.user.Address;
 import org.apache.openmeetings.persistence.beans.user.User;
 import org.apache.openmeetings.utils.DaoHelper;
@@ -65,8 +64,6 @@ public class UsersDao implements IDataProviderDao<User> {
 	private ManageCryptStyle cryptManager;
 	@Autowired
 	private ConfigurationDao configurationDao;
-	@Autowired
-	private OmTimeZoneDao omTimeZoneDaoImpl;
 	@Autowired
 	private StateDao stateDaoImpl;
 	@Autowired

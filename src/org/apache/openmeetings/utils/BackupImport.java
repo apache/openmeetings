@@ -55,7 +55,6 @@ import org.apache.openmeetings.backup.AppointmentReminderTypeConverter;
 import org.apache.openmeetings.backup.DateConverter;
 import org.apache.openmeetings.backup.IntegerTransform;
 import org.apache.openmeetings.backup.LongTransform;
-import org.apache.openmeetings.backup.OmTimeZoneConverter;
 import org.apache.openmeetings.backup.OrganisationConverter;
 import org.apache.openmeetings.backup.PollTypeConverter;
 import org.apache.openmeetings.backup.RoomConverter;
@@ -64,7 +63,6 @@ import org.apache.openmeetings.backup.StateConverter;
 import org.apache.openmeetings.backup.UserConverter;
 import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
 import org.apache.openmeetings.data.basic.dao.LdapConfigDao;
-import org.apache.openmeetings.data.basic.dao.OmTimeZoneDao;
 import org.apache.openmeetings.data.calendar.daos.AppointmentCategoryDao;
 import org.apache.openmeetings.data.calendar.daos.AppointmentDao;
 import org.apache.openmeetings.data.calendar.daos.AppointmentReminderTypDao;
@@ -83,7 +81,6 @@ import org.apache.openmeetings.data.user.dao.UserContactsDao;
 import org.apache.openmeetings.data.user.dao.UsersDao;
 import org.apache.openmeetings.persistence.beans.basic.Configuration;
 import org.apache.openmeetings.persistence.beans.basic.LdapConfig;
-import org.apache.openmeetings.persistence.beans.basic.OmTimeZone;
 import org.apache.openmeetings.persistence.beans.calendar.Appointment;
 import org.apache.openmeetings.persistence.beans.calendar.AppointmentCategory;
 import org.apache.openmeetings.persistence.beans.calendar.AppointmentReminderTyps;
@@ -108,6 +105,7 @@ import org.apache.openmeetings.persistence.beans.user.UserContact;
 import org.apache.openmeetings.remote.red5.ScopeApplicationAdapter;
 import org.apache.openmeetings.utils.crypt.MD5Implementation;
 import org.apache.openmeetings.utils.math.CalendarPatterns;
+import org.apache.openmeetings.utils.math.TimezoneUtil;
 import org.red5.logging.Red5LoggerFactory;
 import org.simpleframework.xml.Serializer;
 import org.simpleframework.xml.convert.Registry;
@@ -132,8 +130,6 @@ public class BackupImport {
 	private AppointmentDao appointmentDao;
 	@Autowired
 	private StateDao statemanagement;
-	@Autowired
-	private OmTimeZoneDao omTimeZoneDaoImpl;
 	@Autowired
 	private OrganisationManager organisationManager;
 	@Autowired
@@ -168,6 +164,8 @@ public class BackupImport {
 	private PollManager pollManager;
 	@Autowired
 	private ConfigurationDao configurationDao;
+	@Autowired
+	private TimezoneUtil tzUtil;
 
 	private final HashMap<Long, Long> usersMap = new HashMap<Long, Long>();
 	private final HashMap<Long, Long> organisationsMap = new HashMap<Long, Long>();
@@ -666,7 +664,6 @@ public class BackupImport {
 		Serializer ser = new Persister(strategy);
 
 		registry.bind(Organisation.class, new OrganisationConverter(orgDao, organisationsMap));
-		registry.bind(OmTimeZone.class, new OmTimeZoneConverter(omTimeZoneDaoImpl));
 		registry.bind(State.class, new StateConverter(statemanagement));
 		registry.bind(Date.class, DateConverter.class);
 
@@ -696,11 +693,14 @@ public class BackupImport {
 		List<User> list = new ArrayList<User>();
 		InputNode root = NodeBuilder.read(new StringReader(sw.toString()));
 		InputNode root1 = NodeBuilder.read(new StringReader(sw.toString())); //HACK to handle Address inside user
+		InputNode root2 = NodeBuilder.read(new StringReader(sw.toString())); //HACK to handle old om_time_zone
 		InputNode listNode = root.getNext();
 		InputNode listNode1 = root1.getNext(); //HACK to handle Address inside user
+		InputNode listNode2 = root2.getNext(); //HACK to handle old om_time_zone
 		if (listNodeName.equals(listNode.getName())) {
 			InputNode item = listNode.getNext();
 			InputNode item1 = listNode1.getNext(); //HACK to handle Address inside user
+			InputNode item2 = listNode1.getNext(); //HACK to handle old om_time_zone
 			while (item != null) {
 				User u = ser.read(User.class, item, false);
 				
@@ -709,11 +709,17 @@ public class BackupImport {
 					Address a = ser.read(Address.class, item1, false);
 					u.setAdresses(a);
 				}
-				list.add(u);
-				item = listNode.getNext();
 				do {
 					item1 = listNode1.getNext(); //HACK to handle Address inside user
 				} while (item != null && !"user".equals(item1.getName()));
+				do {
+					if (u.getTimeZoneId() == null && "omTimeZone".equals(item2.getName())) {
+						u.setTimeZoneId(tzUtil.getTimezoneByInternalJName(item2.getValue()).getID());
+					}
+					item2 = listNode2.getNext(); //HACK to handle old om_time_zone
+				} while (item != null && !"user".equals(item2.getName()));
+				list.add(u);
+				item = listNode.getNext();
 			}
 		}
 		return list;

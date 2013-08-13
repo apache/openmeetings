@@ -27,7 +27,6 @@ import java.util.TimeZone;
 
 import org.apache.openmeetings.data.basic.FieldManager;
 import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
-import org.apache.openmeetings.data.basic.dao.OmTimeZoneDao;
 import org.apache.openmeetings.data.calendar.daos.AppointmentDao;
 import org.apache.openmeetings.data.calendar.daos.MeetingMemberDao;
 import org.apache.openmeetings.data.conference.InvitationManager;
@@ -60,8 +59,6 @@ public class AppointmentLogic {
 	private UserManager userManager;
 	@Autowired
 	private FieldManager fieldManager;
-	@Autowired
-	private OmTimeZoneDao omTimeZoneDaoImpl;
 	@Autowired
 	private RoomManager roomManager;
 	@Autowired

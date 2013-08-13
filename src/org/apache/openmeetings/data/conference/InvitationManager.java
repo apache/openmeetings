@@ -30,7 +30,6 @@ import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.data.basic.AuthLevelUtil;
 import org.apache.openmeetings.data.basic.FieldManager;
 import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
-import org.apache.openmeetings.data.basic.dao.OmTimeZoneDao;
 import org.apache.openmeetings.data.calendar.daos.AppointmentDao;
 import org.apache.openmeetings.data.calendar.management.AppointmentLogic;
 import org.apache.openmeetings.data.conference.dao.InvitationDao;
@@ -96,8 +95,6 @@ public class InvitationManager {
 	private TimezoneUtil timezoneUtil;
 	@Autowired
 	private AppointmentDao appointmentDaoImpl;
-	@Autowired
-	private OmTimeZoneDao omTimeZoneDaoImpl;
 
 	/**
 	 * Sending invitation within plain mail
@@ -977,8 +974,6 @@ public class InvitationManager {
 		User user = userManager.getUserById(organizer_userId);
 
 		// TODO: Check time zone handling in iCal Mail
-		// OmTimeZone omTimeZone = omTimeZoneDaoImpl.getOmTimeZone(jNameTimeZone);
-
 		IcalHandler handler = new IcalHandler(IcalHandler.ICAL_METHOD_CANCEL);
 
 		// refresh appointment

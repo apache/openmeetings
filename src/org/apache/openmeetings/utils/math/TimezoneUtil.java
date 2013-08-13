@@ -31,6 +31,9 @@ import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
+/*
+ FIXME this class should be completely refactored and used in backup import only
+ */
 public class TimezoneUtil {
 
 	private static final Logger log = Red5LoggerFactory.getLogger(
