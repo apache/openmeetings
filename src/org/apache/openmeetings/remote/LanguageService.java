@@ -23,17 +23,11 @@ import static org.apache.openmeetings.persistence.beans.basic.Configuration.DEFA
 import java.util.List;
 import java.util.Map;
 
-import org.apache.openmeetings.OpenmeetingsVariables;
-import org.apache.openmeetings.data.basic.AuthLevelUtil;
 import org.apache.openmeetings.data.basic.FieldLanguageDao;
 import org.apache.openmeetings.data.basic.FieldManager;
-import org.apache.openmeetings.data.basic.SessiondataDao;
 import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
-import org.apache.openmeetings.data.user.UserManager;
 import org.apache.openmeetings.persistence.beans.lang.FieldLanguage;
 import org.apache.openmeetings.persistence.beans.lang.Fieldlanguagesvalues;
-import org.red5.logging.Red5LoggerFactory;
-import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
@@ -42,21 +36,12 @@ import org.springframework.beans.factory.annotation.Autowired;
  * 
  */
 public class LanguageService {
-
-	private static final Logger log = Red5LoggerFactory.getLogger(
-			LanguageService.class, OpenmeetingsVariables.webAppRootKey);
-	@Autowired
-	private SessiondataDao sessiondataDao;
 	@Autowired
 	private ConfigurationDao configurationDao;
-	@Autowired
-	private UserManager userManager;
 	@Autowired
 	private FieldManager fieldManager;
 	@Autowired
 	private FieldLanguageDao fieldLanguageDaoImpl;
-	@Autowired
-	private AuthLevelUtil authLevelUtil;
 
 	/**
 	 * @return - List of all available Languages
@@ -91,6 +76,4 @@ public class LanguageService {
 			int start, int max) {
 		return fieldManager.getLabelsByLanguage(language_id, start, max);
 	}
-
-
 }

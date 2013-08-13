@@ -177,13 +177,17 @@
         } else if (canvas.wicketsid != null) {
             canvas.sessionId = canvas.wicketsid;
 			canvas.sendViaLocalConnection(canvas.vid_lc_name, "setSessionId", [canvas.sessionId]);
-            canvas.thishib.loaderVar.setProgress();
+			if (canvas.thishib.loaderVar != null) {
+            	canvas.thishib.loaderVar.setProgress();
+            }
             this.getPublicSID.doCall();
         } else {
             this.refreshDelegate = new LzDelegate( this, "refreshSessionMeth" );
             //lz.Timer.addTimer( this.refreshDelegate, 60000 );
             lz.Timer.addTimer( this.refreshDelegate, canvas.refreshSession );
-            canvas.thishib.loaderVar.setProgress();
+            if (canvas.thishib.loaderVar != null) {
+            	canvas.thishib.loaderVar.setProgress();
+            }
             
             //Load Session Data
             this.getsessiondata.callRPC();    
@@ -229,15 +233,21 @@
                 if (this.counterror<3){
                     this.counterror++;
                     //Debug.write("try ",this.counterror,"one");
-                    canvas.thishib.loaderVar.error.setAttribute('text',"try "+this.counterror);
+                    if (canvas.thishib.loaderVar != null) {
+                    	canvas.thishib.loaderVar.error.setAttribute('text',"try "+this.counterror);
+                    }
                     this.connect();
                 } else {
                     //Debug.write("connection failed");
-                    canvas.thishib.loaderVar.error.setAttribute('text',this.status);
+                    if (canvas.thishib.loaderVar != null) {
+                    	canvas.thishib.loaderVar.error.setAttribute('text',this.status);
+                    }
                     canvas.setAttribute('loadingmessage','connection failed');
                     new lz.labelerrorPopup(canvas,{errorlabelid:556});
                 }
-                canvas.thishib.loaderVar._src.setAttribute('text',src);
+                if (canvas.thishib.loaderVar != null) {
+                	canvas.thishib.loaderVar._src.setAttribute('text',src);
+                }
             }
         ]]>
     </handler>    
@@ -262,7 +272,9 @@
             canvas.sessionObject = value;
             canvas.sessionId = value.session_id;
 			canvas.sendViaLocalConnection(canvas.vid_lc_name, "setSessionId", [canvas.sessionId]);
-            canvas.thishib.loaderVar.setProgress();
+			if (canvas.thishib.loaderVar != null) {
+            	canvas.thishib.loaderVar.setProgress();
+            }
             parent.getPublicSID.doCall();
         </handler>  
     </netRemoteCallHib>

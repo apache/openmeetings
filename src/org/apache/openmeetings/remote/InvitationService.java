@@ -78,7 +78,7 @@ public class InvitationService implements IPendingServiceCallback {
 	 * @param validToDate
 	 * @param validToTime
 	 * @param language_id
-     * @param jNameTimeZone
+     * @param iCalTz
 	 * @return - invitation object in case of success, "Sys - Error" string or null in case of error
 	 */
 	public Object sendInvitationHash(String SID, String username,
@@ -86,7 +86,7 @@ public class InvitationService implements IPendingServiceCallback {
 			Long room_id, String conferencedomain, Boolean isPasswordProtected,
 			String invitationpass, Integer valid, Date validFromDate,
 			String validFromTime, Date validToDate, String validToTime,
-			Long language_id, String jNameTimeZone, boolean sendMail) {
+			Long language_id, String iCalTz, boolean sendMail) {
 
 		try {
 			log.debug("sendInvitationHash: ");
@@ -110,7 +110,7 @@ public class InvitationService implements IPendingServiceCallback {
 			Calendar date = Calendar.getInstance();
 			date.setTime(validFromDate);
 			
-			TimeZone timeZone = timezoneUtil.getTimezoneByInternalJName(jNameTimeZone);
+			TimeZone timeZone = timezoneUtil.getTimeZone(iCalTz);
 			
 			Calendar calFrom = Calendar.getInstance(timeZone);
 			calFrom.set(Calendar.YEAR, date.get(Calendar.YEAR));

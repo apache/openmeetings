@@ -36,8 +36,6 @@
 		<handler name="oninit">
 		<![CDATA[
 			lz.ModeManager.makeModal(this);
-			var pressEnter = new LzDelegate(this, "register");
-			lz.Keys.callOnKeyCombo(pressEnter, ["enter"]);
 			
 			getTimeZoneOffset(this);
 			
@@ -57,28 +55,27 @@
             this.setOffset(std_time_offset);
         </method>
         
-        <method name="setOffset" args="std_time_offset">
-            <![CDATA[
-            std_time_offset = Math.round(std_time_offset);
-            var timeZoneJavaFormat = "Etc/GMT";
-            if (std_time_offset > 0) {
-                timeZoneJavaFormat += "+"+std_time_offset;
-            } else {
-                timeZoneJavaFormat += "-"+std_time_offset;
-            }
-            
-            if ($debug) Debug.write("timeZoneJavaFormat :: ",timeZoneJavaFormat);
-            
-            var tItem =  this._timeZone.getItem(timeZoneJavaFormat);
-            
-            if (tItem != null) {
-            	this._timeZone.selectItem(timeZoneJavaFormat);
-            } else {
-            	this._timeZone.selectItemAt(0);
-            }
-            
-            ]]>
-        </method> 
+		<method name="setOffset" args="std_time_offset">
+		<![CDATA[
+			std_time_offset = Math.round(std_time_offset);
+			var timeZoneJavaFormat = "Etc/GMT";
+			if (std_time_offset > 0) {
+				timeZoneJavaFormat += "+"+std_time_offset;
+			} else {
+				timeZoneJavaFormat += "-"+std_time_offset;
+			}
+			
+			if ($debug) Debug.write("timeZoneJavaFormat :: ",timeZoneJavaFormat);
+			
+			var tItem =  this._timeZone.getItem(timeZoneJavaFormat);
+			if (tItem != null) {
+				this._timeZone.selectItem(timeZoneJavaFormat);
+			} else {
+				this._timeZone.selectItemAt(0);
+			}
+			this._languages.selectItem(canvas.language_id);
+		]]>
+		</method> 
         
     	<handler name="onclose">
     		lz.ModeManager.release(this);
@@ -137,28 +134,13 @@
         <resetCombobox name="_timeZone" editable="false" y="344" width="270" x="120"
          			   enabled="${ ((parent._valid.value==2) ? true : false ) }"
          			   fontsize="11" style="componentStyle">
-            <labeldTextListItem datapath="timeZoneSet:/item" text="$path{ 'frontEndLabel/text()' }" 
-                value="$path{ 'jname/text()' }" />
+            <labeldTextListItem datapath="timeZoneSet:/item" text="$path{ 'text()' }" value="$path{ 'text()' }"/>
         </resetCombobox>
          
 		<labelText labelid="59" width="200" y="374" x="4" />
         <resetCombobox name="_languages" editable="false" y="374" width="270" x="120"
          			   fontsize="11" style="componentStyle">
-            <netRemoteCallHib name="getLanguages" funcname="languageservice.getLanguages" remotecontext="$once{ canvas.thishib }" >
-                <handler name="oninit">
-                    this.doCall();
-                </handler>
-
-                <handler name="ondata" args="value">
-                    //The onResult-Handler will be called be the rtmpconnection
-                    <![CDATA[
-                        for (var i=0; i<value.length; i++) {
-                            parent.addItem(value[i].name,value[i].language_id);
-                        }
-                        parent.selectItem(canvas.language_id);
-                    ]]>
-                </handler>
-            </netRemoteCallHib>
+            <labeldTextListItem datapath="languagesSet:/item" text="$path{ 'name/text()' }" value="$path{ 'language_id/text()' }"/>
         </resetCombobox>
 
 		<customEdittext name="_url" enabled="false" width="$once{ parent.width - 10 }" x="5" y="405" text=""/>
