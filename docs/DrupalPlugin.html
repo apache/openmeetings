@@ -222,6 +222,12 @@ limitations under the License.
 					            	} 
 					            	
 					        				        							            					            	
+					            	else if (document.location.href.indexOf("/oauth2.html") > 0) {
+					            		currentLocation = "Integration";
+					            		currentLink = "/oauth2.html".substr(1, "/oauth2.html".length);
+					            	} 
+					            	
+					        				        							            					            	
 					            	else if (document.location.href.indexOf("/voip-sip-integration.html") > 0) {
 					            		currentLocation = "Integration";
 					            		currentLink = "/voip-sip-integration.html".substr(1, "/voip-sip-integration.html".length);
@@ -536,6 +542,8 @@ limitations under the License.
 	        		        	            	            	    <a href="./RestAPISample.html">REST API Sample</a>
 <br/>
 	        		        	            	            	    <a href="./LdapAndADS.html">Ldap and ADS</a>
+<br/>
+	        		        	            	            	    <a href="./oauth2.html">OAuth2</a>
 <br/>
 	        		        	            	            	    <a href="./voip-sip-integration.html">VoIP and SIP</a>
 <br/>
