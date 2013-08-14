@@ -34,7 +34,6 @@ import org.apache.openmeetings.data.basic.SessiondataDao;
 import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
 import org.apache.openmeetings.data.basic.dao.LdapConfigDao;
 import org.apache.openmeetings.data.basic.dao.SOAPLoginDao;
-import org.apache.openmeetings.data.conference.FeedbackManager;
 import org.apache.openmeetings.data.conference.InvitationManager;
 import org.apache.openmeetings.data.conference.RoomManager;
 import org.apache.openmeetings.data.logs.ConferenceLogDao;
@@ -53,6 +52,7 @@ import org.apache.openmeetings.persistence.beans.user.Userdata;
 import org.apache.openmeetings.remote.red5.ScopeApplicationAdapter;
 import org.apache.openmeetings.remote.util.SessionVariablesUtil;
 import org.apache.openmeetings.session.ISessionManager;
+import org.apache.openmeetings.utils.mail.MailHandler;
 import org.red5.logging.Red5LoggerFactory;
 import org.red5.server.api.IConnection;
 import org.red5.server.api.Red5;
@@ -100,11 +100,11 @@ public class MainService implements IPendingServiceCallback {
 	@Autowired
 	private InvitationManager invitationManager;
 	@Autowired
-	private FeedbackManager feedbackManager;
-	@Autowired
 	private AuthLevelUtil authLevelUtil;
 	@Autowired
 	private LdapLoginManagement ldapLoginManagement;
+	@Autowired
+	private MailHandler mailHandler;
 
 	// External User Types
 	public static final String EXTERNAL_USER_TYPE_LDAP = "LDAP";
@@ -564,21 +564,6 @@ public class MainService implements IPendingServiceCallback {
 		return invitationManager.sendInvitionLink(user_level,
 				username, message, domain, room, roomtype, baseurl, email,
 				usersDao.get(users_id).getAdresses().getEmail(), subject, room_id, null, null);
-	}
-
-	/**
-	 * send some feedback, this will only work for the online demo-version
-	 * 
-	 * @param SID
-	 * @param username
-	 * @param message
-	 * @param email
-	 * @return - "success" string in case of success, error message of null otherwise
-	 */
-	public String sendFeedback(String SID, String username, String message,
-			String email) {
-		return feedbackManager.sendFeedback(username, email,
-				message);
 	}
 
 	public List<Userdata> getUserdata(String SID) {

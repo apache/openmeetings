@@ -205,6 +205,7 @@ public class UserForm extends AdminBaseForm<User> {
 
 	@Override
 	protected void onNewError(AjaxRequestTarget target, Form<?> form) {
+		//ignore validation errors
 		onNewSubmit(target, form);
 	}
 
@@ -215,6 +216,7 @@ public class UserForm extends AdminBaseForm<User> {
 
 	@Override
 	protected void onDeleteError(AjaxRequestTarget target, Form<?> form) {
-		// TODO Auto-generated method stub
+		//ignore validation errors
+		onDeleteSubmit(target, form);
 	}
 }

@@ -19,7 +19,6 @@
 package org.apache.openmeetings.data.user;
 
 import static org.apache.openmeetings.OpenmeetingsVariables.webAppRootKey;
-import static org.apache.openmeetings.persistence.beans.basic.Configuration.DEFAUT_LANG_KEY;
 import static org.apache.openmeetings.persistence.beans.basic.Configuration.FRONTEND_REGISTER_KEY;
 import static org.apache.openmeetings.persistence.beans.basic.Configuration.LOGIN_MIN_LENGTH_KEY;
 
@@ -58,12 +57,13 @@ import org.apache.openmeetings.persistence.beans.user.Userlevel;
 import org.apache.openmeetings.remote.red5.ScopeApplicationAdapter;
 import org.apache.openmeetings.remote.util.SessionVariablesUtil;
 import org.apache.openmeetings.session.ISessionManager;
-import org.apache.openmeetings.templates.ResetPasswordTemplate;
 import org.apache.openmeetings.utils.DaoHelper;
 import org.apache.openmeetings.utils.TimezoneUtil;
 import org.apache.openmeetings.utils.crypt.ManageCryptStyle;
 import org.apache.openmeetings.utils.mail.MailHandler;
 import org.apache.openmeetings.utils.math.CalendarPatterns;
+import org.apache.openmeetings.web.app.WebSession;
+import org.apache.openmeetings.web.mail.template.ResetPasswordTemplate;
 import org.red5.logging.Red5LoggerFactory;
 import org.red5.server.api.IClient;
 import org.red5.server.api.scope.IScope;
@@ -103,8 +103,6 @@ public class UserManager {
 	private ScopeApplicationAdapter scopeApplicationAdapter;
 	@Autowired
 	private MailHandler mailHandler;
-	@Autowired
-	private ResetPasswordTemplate resetPasswordTemplate;
 	@Autowired
 	private AuthLevelUtil authLevelUtil;
 	@Autowired
@@ -1057,17 +1055,13 @@ public class UserManager {
 		us.setResethash(cryptManager.getInstanceOfCrypt().createPassPhrase(
 				loginData));
 		usersDao.update(us, -1L);
-		String reset_link = appLink + "?hash="
-				+ us.getResethash();
+		String reset_link = appLink + "?hash=" + us.getResethash();
 
 		String email = us.getAdresses().getEmail();
 
-		Long default_lang_id = configurationDao.getConfValue(DEFAUT_LANG_KEY, Long.class, "1");
+		String template = ResetPasswordTemplate.getEmail(reset_link);
 
-		String template = resetPasswordTemplate.getResetPasswordTemplate(
-				reset_link, default_lang_id);
-
-		mailHandler.send(email, fieldManager.getString(517L, default_lang_id), template);
+		mailHandler.send(email, WebSession.getString(517), template);
 	}
 
 	/**

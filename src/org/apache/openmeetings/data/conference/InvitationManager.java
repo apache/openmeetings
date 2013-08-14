@@ -18,8 +18,6 @@
  */
 package org.apache.openmeetings.data.conference;
 
-import static org.apache.openmeetings.persistence.beans.basic.Configuration.DEFAUT_LANG_KEY;
-
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -43,7 +41,6 @@ import org.apache.openmeetings.persistence.beans.invitation.Invitations;
 import org.apache.openmeetings.persistence.beans.lang.Fieldlanguagesvalues;
 import org.apache.openmeetings.persistence.beans.user.User;
 import org.apache.openmeetings.persistence.beans.user.User.Type;
-import org.apache.openmeetings.templates.InvitationTemplate;
 import org.apache.openmeetings.utils.TimezoneUtil;
 import org.apache.openmeetings.utils.crypt.MD5;
 import org.apache.openmeetings.utils.crypt.ManageCryptStyle;
@@ -51,6 +48,7 @@ import org.apache.openmeetings.utils.mail.IcalHandler;
 import org.apache.openmeetings.utils.mail.MailHandler;
 import org.apache.openmeetings.utils.math.CalendarPatterns;
 import org.apache.openmeetings.utils.sms.SMSHandler;
+import org.apache.openmeetings.web.mail.template.InvitationTemplate;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -87,8 +85,6 @@ public class InvitationManager {
 	private MailHandler mailHandler;
 	@Autowired
 	private SMSHandler smsHandler;
-	@Autowired
-	private InvitationTemplate invitationTemplate;
 	@Autowired
 	private AuthLevelUtil authLevelUtil;
 	@Autowired
@@ -800,9 +796,7 @@ public class InvitationManager {
                 invitation_link += "&language=" + language_id.toString();
             }
 
-			String template = invitationTemplate.getRegisterInvitationTemplate(
-					fromUserField, message, invitation_link, language_id, dStart,
-					dEnd);
+			String template = InvitationTemplate.getEmail(fromUserField, message, invitation_link);
 
 			mailHandler.send(email, replyTo, subject, template);
 			return "success";
@@ -841,10 +835,7 @@ public class InvitationManager {
 	            }
 			}
 
-			String template = invitationTemplate.getRegisterInvitationTemplate(
-					invitor.getFirstname() + " " + invitor.getLastname(), message, invitation_link, invitor.getLanguage_id(),
-					appointment.getAppointmentStarttime(),
-					appointment.getAppointmentEndtime());
+			String template = InvitationTemplate.getEmail(invitor.getFirstname() + " " + invitor.getLastname(), message, invitation_link);
 
 			mailHandler.send(meetingMember.getEmail(), invitor.getAdresses().getEmail(), subject, template);
 			return "success";
@@ -1082,20 +1073,15 @@ public class InvitationManager {
 	            }
 			}
 
-			String template = invitationTemplate.getRegisterInvitationTemplate(
-					fromUserField, message, invitation_link, language_id, starttime,
-					endtime);
+			String template = InvitationTemplate.getEmail(fromUserField, message, invitation_link);
 
-			IcalHandler handler = new IcalHandler(
-					IcalHandler.ICAL_METHOD_REQUEST);
+			IcalHandler handler = new IcalHandler(IcalHandler.ICAL_METHOD_REQUEST);
 
-			Appointment point = appointmentLogic
-					.getAppointMentById(appointMentId);
+			Appointment point = appointmentLogic.getAppointMentById(appointMentId);
 
 			// Transforming Meeting Members
 
-			HashMap<String, String> attendeeList = handler.getAttendeeData(
-					email, username, invitor);
+			HashMap<String, String> attendeeList = handler.getAttendeeData(email, username, invitor);
 
 			Vector<HashMap<String, String>> atts = new Vector<HashMap<String, String>>();
 			atts.add(attendeeList);
@@ -1159,12 +1145,7 @@ public class InvitationManager {
 						+ "&room=" + room + "&roomtype=" + roomtype + "&email="
 						+ email + "&roomid=" + room_id;
 
-				Long default_lang_id = configurationDao.getConfValue(DEFAUT_LANG_KEY, Long.class, "1");
-
-				String template = invitationTemplate
-						.getRegisterInvitationTemplate(username, message,
-								invitation_link, default_lang_id, starttime,
-								endtime);
+				String template = InvitationTemplate.getEmail(username, message, invitation_link);
 
 				mailHandler.send(email, replyTo, subject, template);
 				return "success";

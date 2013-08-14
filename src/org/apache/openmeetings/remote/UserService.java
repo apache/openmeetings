@@ -57,12 +57,11 @@ import org.apache.openmeetings.persistence.beans.user.User;
 import org.apache.openmeetings.persistence.beans.user.UserContact;
 import org.apache.openmeetings.remote.red5.ScopeApplicationAdapter;
 import org.apache.openmeetings.session.ISessionManager;
-import org.apache.openmeetings.templates.RequestContactConfirmTemplate;
-import org.apache.openmeetings.templates.RequestContactTemplate;
 import org.apache.openmeetings.utils.TimezoneUtil;
 import org.apache.openmeetings.utils.crypt.ManageCryptStyle;
 import org.apache.openmeetings.utils.mail.MailHandler;
 import org.apache.openmeetings.utils.math.CalendarPatterns;
+import org.apache.openmeetings.web.util.ContactsHelper;
 import org.red5.logging.Red5LoggerFactory;
 import org.red5.server.api.scope.IScope;
 import org.slf4j.Logger;
@@ -115,10 +114,6 @@ public class UserService {
 	private UserContactsDao userContactsDao;
 	@Autowired
 	private MailHandler mailHandler;
-	@Autowired
-	private RequestContactTemplate requestContactTemplate;
-	@Autowired
-	private RequestContactConfirmTemplate requestContactConfirmTemplate;
 	@Autowired
 	private AuthLevelUtil authLevelUtil;
 	@Autowired
@@ -341,83 +336,7 @@ public class UserService {
 			Long user_level = userManager.getUserLevelByID(users_id);
 			// users only
 			if (authLevelUtil.checkUserLevel(user_level)) {
-
-				Long countContacts = userContactsDao.checkUserContacts(
-						userToAdd_id, users_id);
-
-				if (countContacts != null && countContacts > 0) {
-					return -45L;
-				}
-
-				String hash = cryptManager.getInstanceOfCrypt()
-						.createPassPhrase(CalendarPatterns.getDateWithTimeByMiliSeconds(new Date()));
-
-				Long userContactId = userContactsDao.addUserContact(
-						userToAdd_id, users_id, true, hash);
-
-				User user = userManager.getUserById(users_id);
-
-				User userToAdd = userManager.getUserById(userToAdd_id);
-
-				Long language_id = userToAdd.getLanguage_id();
-				if (language_id == null) {
-					language_id = configurationDao.getConfValue(DEFAUT_LANG_KEY, Long.class, "1");
-				}
-
-				String message = "";
-
-				String fValue1192 = fieldManager.getString(1192L, language_id);
-				String fValue1193 = fieldManager.getString(1193L, language_id);
-				String fValue1190 = fieldManager.getString(1190L, language_id);
-				String fValue1191 = fieldManager.getString(1191L, language_id);
-				String fValue1196 = fieldManager.getString(1196L, language_id);
-
-				message += fValue1192 + " "
-						+ userToAdd.getFirstname() + " "
-						+ userToAdd.getLastname() + "<br/><br/>";
-				message += user.getFirstname() + " " + user.getLastname() + " "
-						+ fValue1193 + "<br/>";
-				message += fieldManager.getString(1194L, language_id)
-						+ "<br/>";
-
-				String baseURL = "http://" + domain + ":" + port + webapp;
-				if (port.equals("80")) {
-					baseURL = "http://" + domain + webapp;
-				} else if (port.equals("443")) {
-					baseURL = "https://" + domain + webapp;
-				}
-
-				privateMessagesDao
-						.addPrivateMessage(
-								user.getFirstname() + " " + user.getLastname()
-										+ " " + fValue1193, message,
-								0L, user, userToAdd, userToAdd, false, null,
-								true, userContactId, userToAdd.getAdresses()
-										.getEmail());
-
-				String link = baseURL + "?cuser=" + hash;
-
-				String accept_link = link + "&tAccept=yes";
-				String deny_link = link + "&tAccept=no";
-
-				String aLinkHTML = "<a href='" + accept_link + "'>"
-						+ fValue1190 + "</a><br/>";
-				String denyLinkHTML = "<a href='" + deny_link + "'>"
-						+ fValue1191 + "</a><br/>";
-				String profileLinkHTML = "<a href='" + link + "'>"
-						+ fValue1196 + "</a><br/>";
-
-				String template = requestContactTemplate
-						.getRequestContactTemplate(message, aLinkHTML,
-								denyLinkHTML, profileLinkHTML);
-
-				if (userToAdd.getAdresses() != null) {
-					mailHandler.send(userToAdd.getAdresses().getEmail(),
-							user.getFirstname() + " " + user.getLastname()
-									+ " " + fValue1193, template);
-				}
-
-				return userContactId;
+				return ContactsHelper.addUserToContactList(userToAdd_id);
 			}
 		} catch (Exception err) {
 			log.error("[requestuserToContactList]", err);

@@ -19,12 +19,12 @@
 package org.apache.openmeetings.data.user;
 
 import static org.apache.openmeetings.OpenmeetingsVariables.webAppRootKey;
-import static org.apache.openmeetings.persistence.beans.basic.Configuration.DEFAUT_LANG_KEY;
 
-import org.apache.openmeetings.data.basic.FieldManager;
 import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
-import org.apache.openmeetings.templates.RegisterUserTemplate;
 import org.apache.openmeetings.utils.mail.MailHandler;
+import org.apache.openmeetings.web.app.WebSession;
+import org.apache.openmeetings.web.mail.template.FeedbackTemplate;
+import org.apache.openmeetings.web.mail.template.RegisterUserTemplate;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,48 +43,33 @@ public class EmailManager {
 	@Autowired
 	private ConfigurationDao configurationDao;
 	@Autowired
-	private FieldManager fieldManager;
-	@Autowired
 	private MailHandler mailHandler;
-	@Autowired
-	private RegisterUserTemplate registerUserTemplate;
 
 	/**
 	 * sends a mail adress to the user with his account data
 	 * 
-	 * @param Username
-	 * @param Userpass
-	 * @param EMail
+	 * @param username
+	 * @param userpass
+	 * @param email
 	 * @return
 	 * @throws Exception
 	 */
-	public String sendMail(String Username, String Userpass, String EMail,
-			String link, Boolean sendEmailWithVerficationCode) {
-		log.debug("sendMail:: username = {}, email = {}", Username, EMail);
+	public String sendMail(String username, String userpass, String email, String link, Boolean sendEmailWithVerficationCode) {
+		log.debug("sendMail:: username = {}, email = {}", username, email);
 		Integer sendEmailAtRegister = configurationDao.getConfValue("sendEmailAtRegister", Integer.class, "0");
 
 		if (sendEmailAtRegister == 1) {
-
-			Long default_lang_id = configurationDao.getConfValue(DEFAUT_LANG_KEY, Long.class, "1");
-
-			String template = null;
-			if (sendEmailWithVerficationCode) {
-				String verification_url = link;
-
-				template = registerUserTemplate
-						.getRegisterUserWithVerificationTemplate(Username,
-								Userpass, EMail, default_lang_id,
-								verification_url);
-			} else {
-				template = registerUserTemplate
-						.getRegisterUserTemplate(Username, Userpass, EMail,
-								default_lang_id);
-			}
-			mailHandler.send(EMail, fieldManager.getString(512L, default_lang_id), template);
+			mailHandler.send(email, WebSession.getString(512)
+				, RegisterUserTemplate.getEmail(username, userpass, email, sendEmailWithVerficationCode ? link : null));
 		}
 		return "success";
 	}
 
+	//FIXME, seems to be not used
+	public void sendFeedback(String username, String email, String message) {
+		mailHandler.send("user@openmeetings.apache.org", WebSession.getString(499), FeedbackTemplate.getEmail(username, email, message));
+	}
+	
 	public String addEmailCon(String EMail, int CONTACT_ID) {
 		String succ = "invalid email";
 		return succ;
