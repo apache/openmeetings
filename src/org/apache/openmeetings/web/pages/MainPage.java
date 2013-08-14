@@ -47,6 +47,7 @@ import org.apache.wicket.protocol.ws.api.WebSocketBehavior;
 import org.apache.wicket.protocol.ws.api.message.ClosedMessage;
 import org.apache.wicket.protocol.ws.api.message.ConnectedMessage;
 import org.apache.wicket.request.IRequestParameters;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.time.Duration;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -62,6 +63,11 @@ public class MainPage extends BaseInitedPage {
 	private DebugBar dev = null;
 	
 	public MainPage() {
+		this(null);
+	}
+	
+	public MainPage(PageParameters pp) {
+		super(pp);
 		contents = new WebMarkupContainer("contents");
 		add(contents.add(new WebMarkupContainer(CHILD_ID)).setOutputMarkupId(true).setMarkupId("contents"));
 		menu = new MenuPanel("menu");

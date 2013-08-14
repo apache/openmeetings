@@ -379,7 +379,7 @@ public class MainService implements IPendingServiceCallback {
 								userObject.getExternalUserType());
 
 						if (user == null) {
-							String jName_timeZone = configurationDao.getConfValue("default.timezone", String.class, "");
+							String iCalTz = configurationDao.getConfValue("default.timezone", String.class, "");
 
 							long userId = userManager
 									.addUserWithExternalKey(1, 0, 0,
@@ -391,7 +391,7 @@ public class MainService implements IPendingServiceCallback {
 											userObject.getExternalUserId(),
 											userObject.getExternalUserType(),
 											true, userObject.getEmail(),
-											jName_timeZone,
+											iCalTz,
 											userObject.getPictureUrl());
 
 							currentClient.setUser_id(userId);

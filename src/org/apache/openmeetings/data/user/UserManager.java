@@ -928,7 +928,7 @@ public class UserManager {
 			int status, String firstname, String login, String lastname,
 			long language_id, boolean emptyPass, String userpass, Address address, Date age,
 			String hash, String externalUserId, String externalUserType,
-			boolean generateSipUserData, String email, String jNameTimeZone,
+			boolean generateSipUserData, String email, String iCalTz,
 			String pictureuri) {
 		try {
 			User users = new User();
@@ -953,7 +953,7 @@ public class UserManager {
 			users.setStarttime(new Date());
 			users.setActivatehash(hash);
 			users.setPictureuri(pictureuri);
-			users.setTimeZoneId(timezoneUtil.getTimezoneByInternalJName(jNameTimeZone).getID());
+			users.setTimeZoneId(timezoneUtil.getTimeZone(iCalTz).getID());
 
 			users.setExternalUserId(externalUserId);
 			users.setExternalUserType(externalUserType);

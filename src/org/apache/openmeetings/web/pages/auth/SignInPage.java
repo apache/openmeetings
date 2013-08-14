@@ -86,6 +86,7 @@ public class SignInPage extends BaseInitedPage {
 	}
 	
 	public SignInPage(PageParameters p) {
+		super(p);
 		if (p != null) {
 			if (p.get("oauthid").toString() != null) { // oauth2 login
 				try {
