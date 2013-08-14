@@ -46,7 +46,7 @@ public class TimezoneUtil {
 	private static final Map<String, String> ICAL_TZ_MAP = new Hashtable<String, String>();
 	private static final Map<Long, String> ID_TZ_MAP = new Hashtable<Long, String>();
 	
-	public static void initTimeZones() {
+	private static void initTimeZones() {
 		SAXReader reader = new SAXReader();
 		Document document;
 		try {
@@ -153,7 +153,9 @@ public class TimezoneUtil {
 	 * @return
 	 */
 	public TimeZone getTimezoneByInternalJName(String jName) {
-
+		if (ICAL_TZ_MAP.isEmpty()) {
+			initTimeZones();
+		}
 		String omTimeZone = ICAL_TZ_MAP.get(jName);
 		
 		if (omTimeZone == null) {
@@ -178,6 +180,9 @@ public class TimezoneUtil {
 	 * @return
 	 */
 	public TimeZone getTimezoneByOmTimeZoneId(Long omtimezoneId) {
+		if (ID_TZ_MAP.isEmpty()) {
+			initTimeZones();
+		}
 		String omTimeZone = ID_TZ_MAP.get(omtimezoneId);
 
 		TimeZone timeZone = TimeZone.getTimeZone(omTimeZone);

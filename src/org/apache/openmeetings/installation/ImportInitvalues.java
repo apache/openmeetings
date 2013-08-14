@@ -713,7 +713,7 @@ public class ImportInitvalues {
 				new java.util.Date(), "street", "no", "fax", "zip", 1,
 				"town", default_lang_id, false,
 				Arrays.asList(organisation_id), "phone", false, "", false,
-				timezoneUtil.getTimezoneByInternalJName(cfg.ical_timeZone),
+				timezoneUtil.getTimeZone(cfg.ical_timeZone),
 				false, "", "", false, true, null);
 
 		log.debug("Installation - User Added user-Id " + user_id);
