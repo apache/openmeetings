@@ -40,7 +40,11 @@ import org.apache.commons.cli.ParseException;
 import org.apache.commons.cli.Parser;
 import org.apache.commons.cli.PosixParser;
 import org.apache.commons.transaction.util.FileHelper;
-import org.apache.openjpa.jdbc.meta.MappingTool;
+import org.apache.openjpa.jdbc.conf.JDBCConfiguration;
+import org.apache.openjpa.jdbc.conf.JDBCConfigurationImpl;
+import org.apache.openjpa.jdbc.schema.SchemaTool;
+import org.apache.openjpa.lib.log.Log;
+import org.apache.openjpa.lib.log.LogFactoryImpl.LogImpl;
 import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
 import org.apache.openmeetings.data.file.dao.FileExplorerItemDao;
 import org.apache.openmeetings.data.flvrecord.FlvRecordingDao;
@@ -244,7 +248,7 @@ public class Admin {
 					if (!conf.exists() || cmdl.hasOption("db-type") || cmdl.hasOption("db-host") || cmdl.hasOption("db-port") || cmdl.hasOption("db-name") || cmdl.hasOption("db-user") || cmdl.hasOption("db-pass")) {
 						String dbType = cmdl.getOptionValue("db-type", "derby");
 						File srcConf = new File(OmFileHelper.getWebinfDir(), "classes/META-INF/" + dbType + "_persistence.xml");
-						ConnectionPropertiesPatcher.getPatcher(dbType).patch(
+						ConnectionPropertiesPatcher.getPatcher(dbType, connectionProperties).patch(
 								srcConf
 								, conf
 								, cmdl.getOptionValue("db-host", "localhost")
@@ -252,7 +256,6 @@ public class Admin {
 								, cmdl.getOptionValue("db-name", null)
 								, cmdl.getOptionValue("db-user", null)
 								, cmdl.getOptionValue("db-pass", null)
-								, connectionProperties
 								);
 					} else {
 						//get properties from existent persistence.xml
@@ -578,18 +581,31 @@ public class Admin {
 		}
 	}
 	
-	private static void immediateDropDB(ConnectionProperties props) throws Exception {
-		String[] args = {
-				"-schemaAction", "retain,drop"
-				, "-properties", new File(OmFileHelper.getWebinfDir(), PERSISTENCE_NAME).getCanonicalPath()
-				, "-connectionDriverName", props.getDriver()
-				, "-connectionURL", props.getURL()
-				, "-connectionUserName", props.getLogin()
-				, "-connectionPassword", props.getPassword()
-				, "-ignoreErrors", "true"};
-		MappingTool.main(args);
+	private static LogImpl getLogImpl(JDBCConfiguration conf) {
+		return (LogImpl)conf.getLog(JDBCConfiguration.LOG_SCHEMA);
 	}
-	
+
+	private static void immediateDropDB(ConnectionProperties props) throws Exception {
+    	JDBCConfigurationImpl conf = new JDBCConfigurationImpl();
+        try {
+        	conf.setPropertiesFile(new File(OmFileHelper.getWebinfDir(), PERSISTENCE_NAME));
+        	conf.setConnectionDriverName(props.getDriver());
+        	conf.setConnectionURL(props.getURL());
+        	conf.setConnectionUserName(props.getLogin());
+        	conf.setConnectionPassword(props.getPassword());
+    		//HACK to suppress all warnings
+    		getLogImpl(conf).setLevel(Log.INFO);
+    		SchemaTool st = new SchemaTool(conf, SchemaTool.ACTION_DROPDB);
+    		st.setIgnoreErrors(true);
+    		st.setOpenJPATables(true);
+    		st.setIndexes(false);
+    		st.setPrimaryKeys(false);
+    		st.run();
+        } finally {
+            conf.close();
+        }
+	}
+
 	private File checkRestoreFile(String file) {
 		File backup = new File(file);
 		if (!cmdl.hasOption("file") || !backup.exists() || !backup.isFile()) {

@@ -19,11 +19,19 @@
 package org.apache.openmeetings.cli;
 
 public class ConnectionProperties {
+	public enum DbType {
+		db2
+		, derby
+		, mysql
+		, oracle
+		, postgresql
+	}
 
 	private String driver = "org.apache.derby.jdbc.ClientDriver";
 	private String url = "jdbc:derby:openmeetings";
 	private String login = "user";
 	private String password = "secret";
+	private DbType dbType = DbType.derby;
 
 	public String getDriver() {
 		return driver;
@@ -57,9 +65,17 @@ public class ConnectionProperties {
 		this.password = connectionPass;
 	}
 
+	public DbType getDbType() {
+		return dbType;
+	}
+
+	public void setDbType(DbType dbType) {
+		this.dbType = dbType;
+	}
+	
 	@Override
 	public String toString() {
-		return "ConnectionProperties [driver=" + driver + ", url=" + url
+		return "ConnectionProperties [type=" + dbType + ", driver=" + driver + ", url=" + url
 				+ ", login=" + login + ", password=" + password + "]";
 	}
 }

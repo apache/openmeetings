@@ -33,6 +33,7 @@ import javax.xml.xpath.XPathFactory;
 
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.openmeetings.cli.ConnectionProperties.DbType;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -41,16 +42,8 @@ public abstract class ConnectionPropertiesPatcher {
 	protected static final String URL_PREFIX = "Url=";
 	protected ConnectionProperties connectionProperties;
 	
-	public enum PatcherType {
-		db2
-		, derby
-		, mysql
-		, oracle
-		, postgres
-	}
-	
-	static ConnectionPropertiesPatcher getPatcher(String _dbType) {
-		PatcherType dbType = PatcherType.valueOf(_dbType);
+	static ConnectionPropertiesPatcher getPatcher(String _dbType, ConnectionProperties connectionProperties) {
+		DbType dbType = DbType.valueOf(_dbType);
 		ConnectionPropertiesPatcher patcher = null;
 		switch (dbType) {
 			case db2:
@@ -62,7 +55,7 @@ public abstract class ConnectionPropertiesPatcher {
 			case oracle:
 				patcher = new OraclePatcher();
 				break;
-			case postgres:
+			case postgresql:
 				patcher = new PostgresPatcher();
 				break;
 			case derby:
@@ -70,6 +63,7 @@ public abstract class ConnectionPropertiesPatcher {
 				patcher = new DerbyPatcher();
 				break;
 		}
+		patcher.connectionProperties = connectionProperties;
 		return patcher;
 	}
 	
@@ -98,8 +92,7 @@ public abstract class ConnectionPropertiesPatcher {
 		return element.getAttributeNode("value");
 	}
 	
-	public void patch(File srcXml, File destXml, String host, String port, String db, String user, String pass, ConnectionProperties connectionProperties) throws Exception {
-		this.connectionProperties = connectionProperties;
+	public void patch(File srcXml, File destXml, String host, String port, String db, String user, String pass) throws Exception {
 		Document doc = getDocument(srcXml);
 		
 		Attr val = getConnectionProperties(doc);
@@ -157,6 +150,13 @@ public abstract class ConnectionPropertiesPatcher {
 			}
 			prop = getPropFromPersistence(tokens, i, "Url");
 			if (prop != null) {
+				try {
+					//will try to "guess" dbType
+					String[] parts = prop.split(":");
+					connectionProperties.setDbType(DbType.valueOf(parts[1]));
+				} catch (Exception e) {
+					//ignore
+				}
 				connectionProperties.setURL(prop);
 			}
 		}
