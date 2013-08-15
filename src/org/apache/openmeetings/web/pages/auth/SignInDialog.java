@@ -37,10 +37,12 @@ import org.apache.openmeetings.web.pages.SwfPage;
 import org.apache.openmeetings.web.util.BaseUrlAjaxBehavior;
 import org.apache.openmeetings.web.util.TimeZoneOffsetAjaxBehavior;
 import org.apache.wicket.RestartResponseException;
+import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
@@ -50,6 +52,8 @@ import org.apache.wicket.markup.html.form.PasswordTextField;
 import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.form.StatelessForm;
 import org.apache.wicket.markup.html.link.Link;
+import org.apache.wicket.markup.html.list.ListItem;
+import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
@@ -58,11 +62,9 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import com.googlecode.wicket.jquery.core.JQueryBehavior;
 import com.googlecode.wicket.jquery.core.Options;
 import com.googlecode.wicket.jquery.ui.effect.JQueryEffectBehavior;
+import com.googlecode.wicket.jquery.ui.form.button.Button;
 import com.googlecode.wicket.jquery.ui.widget.dialog.AbstractFormDialog;
 import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
-import com.googlecode.wicket.jquery.ui.widget.menu.IMenuItem;
-import com.googlecode.wicket.jquery.ui.widget.menu.Menu;
-import com.googlecode.wicket.jquery.ui.widget.menu.MenuItem;
 
 public class SignInDialog extends AbstractFormDialog<String> {
 	private static final long serialVersionUID = 7746996016261051947L;
@@ -165,7 +167,8 @@ public class SignInDialog extends AbstractFormDialog<String> {
 	public Form<String> getForm() {
 		return form;
 	}
-
+	// TODO Auto-generated method stub
+	
 	private void shake(AjaxRequestTarget target) {
 		JQueryEffectBehavior shake = new JQueryEffectBehavior("#" + getMarkupId(), "shake");
 		target.appendJavaScript(shake.toString());
@@ -257,32 +260,28 @@ public class SignInDialog extends AbstractFormDialog<String> {
 					setResponsePage(SwfPage.class, pp);
 				}
 			});
-			add(new WebMarkupContainer("oauthlist").add(createOAuthMenu()).setVisible(allowOAuthLogin()));
-		}
-
-		private Menu createOAuthMenu() {
-			List<IMenuItem> items = new ArrayList<IMenuItem>();
-			OAuth2Dao oAuth2Dao = getBean(OAuth2Dao.class);
-			for (final OAuthServer server: oAuth2Dao.getEnabledOAuthServers()) {
-				MenuItem menuItem = new MenuItem(server.getName()) {
-
-					private static final long serialVersionUID = 5558961674358450012L;
+			add(new WebMarkupContainer("oauthContainer").add(
+				new ListView<OAuthServer>("oauthList", getBean(OAuth2Dao.class).getEnabledOAuthServers()) {
+					private static final long serialVersionUID = 1L;
 
 					@Override
-					public void onClick(AjaxRequestTarget target) {
-						PageParameters parameters = new PageParameters();
-						parameters.add("oauthid", server.getId());
-						setResponsePage(SignInPage.class, parameters);
+					protected void populateItem(final ListItem<OAuthServer> item) {
+						item.add(new Button("oauthBtn")
+							.add(new Label("label", item.getModelObject().getName()))
+							.add(new AjaxEventBehavior("click") {
+								private static final long serialVersionUID = 1L;
+								
+								@Override
+								protected void onEvent(AjaxRequestTarget target) {
+									PageParameters parameters = new PageParameters();
+									parameters.add("oauthid", item.getModelObject().getId());
+									setResponsePage(SignInPage.class, parameters);
+								}
+							}));
 					}
-					
-				};
-				items.add(menuItem);
-			}
-			Menu result = new Menu("oauthMenu", items);
-			result.setVisible(allowOAuthLogin());
-			return result;
+				}).setVisible(allowOAuthLogin()));
 		}
-		
+
 		private void alreadyLoggedIn() {
 			// logon successful. Continue to the original destination
 			continueToOriginalDestination();
