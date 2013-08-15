@@ -63,6 +63,7 @@ import org.apache.openmeetings.persistence.beans.user.oauth.OAuthServer.RequestM
 import org.apache.openmeetings.utils.ImportHelper;
 import org.apache.openmeetings.utils.OmFileHelper;
 import org.apache.openmeetings.utils.TimezoneUtil;
+import org.apache.openmeetings.web.pages.auth.SignInPage;
 import org.dom4j.Document;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
@@ -517,6 +518,14 @@ public class ImportInitvalues {
 						null,
 						"Area to be shown to the user after login. Possible values are: "
 								+ "dashboard.rooms, dashboard.chat, calendar, rooms.public, rooms.private, rooms.user");
+		
+		// oauth2 params
+		configurationDao
+				.add(
+						SignInPage.CONF_IGNORE_BAD_SSL,
+						"no", 
+						null, 
+						"Set \"yes\" or \"no\" to enable/disable ssl certifications checking for OAuth2");
 
 		log.debug("Configurations ADDED");
 	}
@@ -928,6 +937,7 @@ public class ImportInitvalues {
 		// Yandex
 		OAuthServer yandexServer = new OAuthServer();
 		yandexServer.setName("Yandex");
+		yandexServer.setIconUrl("http://yandex.st/morda-logo/i/favicon.ico");
 		yandexServer.setClientId("<put your client_id>");
 		yandexServer.setClientSecret("<put your client_secret>");
 		yandexServer.setEmailParamName("default_email");
@@ -943,6 +953,7 @@ public class ImportInitvalues {
 		// Google
 		OAuthServer googleServer = new OAuthServer();
 		googleServer.setName("Google");
+		googleServer.setIconUrl("https://www.google.ru/images/google_favicon_128.png");
 		googleServer.setEnabled(false);
 		googleServer.setClientId("<put your client_id>");
 		googleServer.setClientSecret("<put your client_secret>");
@@ -961,6 +972,7 @@ public class ImportInitvalues {
 		// Facebook
 		OAuthServer facebookServer = new OAuthServer();
 		facebookServer.setName("Facebook");
+		facebookServer.setIconUrl("https://www.facebook.com/images/fb_icon_325x325.png");
 		facebookServer.setEnabled(false);
 		facebookServer.setClientId("<put your client_id>");
 		facebookServer.setClientSecret("<put your client_secret>");

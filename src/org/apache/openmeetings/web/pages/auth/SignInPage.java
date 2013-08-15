@@ -22,11 +22,8 @@ import static org.apache.openmeetings.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.openmeetings.persistence.beans.basic.Configuration.FRONTEND_REGISTER_KEY;
 import static org.apache.openmeetings.web.app.Application.getBean;
 
-import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -47,6 +44,7 @@ import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
 import org.apache.openmeetings.data.oauth.OAuth2Dao;
 import org.apache.openmeetings.data.user.UserManager;
@@ -229,23 +227,11 @@ public class SignInPage extends BaseInitedPage {
 		DataOutputStream paramsOutputStream = new DataOutputStream(urlConnection.getOutputStream());
 		paramsOutputStream.writeBytes(requestTokenParams);
 		paramsOutputStream.flush();
-		InputStream resultInputStream = urlConnection.getInputStream();
-		BufferedReader resultReader = new BufferedReader(new InputStreamReader(resultInputStream));
-		String inputLine = null;
-		// read response
-		StringBuilder sourceJson = new StringBuilder();
-		while ((inputLine = resultReader.readLine()) != null) {
-			if (sourceJson.length() > 0) {
-				sourceJson.append("\n");
-			}
-			sourceJson.append(inputLine);
-		}
-		resultReader.close();
-		paramsOutputStream.close();
+		String sourceResponse = IOUtils.toString(urlConnection.getInputStream(), "utf-8");
 		// parse json result
 		AuthInfo result = new AuthInfo();
 		try {
-			JSONObject jsonResult = new JSONObject(sourceJson.toString());
+			JSONObject jsonResult = new JSONObject(sourceResponse.toString());
 			if (jsonResult.has("access_token")) {
 				result.accessToken = jsonResult.getString("access_token");
 			}
@@ -260,7 +246,7 @@ public class SignInPage extends BaseInitedPage {
 			}
 		} catch (JSONException e) {
 			// try to parse as canonical
-			Map<String, String> parsedMap = parseCanonicalResponse(sourceJson.toString());
+			Map<String, String> parsedMap = parseCanonicalResponse(sourceResponse.toString());
 			result.accessToken = parsedMap.get("access_token");
 			result.refreshToken = parsedMap.get("refresh_token");
 			result.tokenType = parsedMap.get("token_type");
@@ -270,7 +256,7 @@ public class SignInPage extends BaseInitedPage {
 		}
 		// access token must be specified
 		if (result.accessToken == null) {
-			log.error("Response doesn't contain access_token field:\n" + sourceJson.toString());
+			log.error("Response doesn't contain access_token field:\n" + sourceResponse.toString());
 			return null;
 		}
 		return result;
@@ -301,20 +287,11 @@ public class SignInPage extends BaseInitedPage {
 		// send request
 		URLConnection connection = new URL(requestInfoUrl).openConnection();
 		prepareConnection(connection);
-		BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-		String inputLine = null;
-		StringBuilder sourceResponse = new StringBuilder();
-		while ((inputLine = in.readLine()) != null) {
-			if (sourceResponse.length() > 0) {
-				sourceResponse.append("\n");
-			}
-			sourceResponse.append(inputLine);
-		}
-        in.close();
+		String sourceResponse = IOUtils.toString(connection.getInputStream(), "utf-8");
         // parse json result
         Map<String, String> result = new HashMap<String, String>();
         try {
-			JSONObject parsedJson = new JSONObject(sourceResponse.toString());
+			JSONObject parsedJson = new JSONObject(sourceResponse);
 			result.put("login", parsedJson.getString(loginAttributeName));
 			result.put("email", parsedJson.getString(emailAttributeName));
 			if (parsedJson.has(firstname)) {
@@ -325,7 +302,7 @@ public class SignInPage extends BaseInitedPage {
 			}
 		} catch (JSONException e) {
 			// try to parse response as canonical
-			Map<String, String> parsedMap = parseCanonicalResponse(sourceResponse.toString());
+			Map<String, String> parsedMap = parseCanonicalResponse(sourceResponse);
 			result.put("login", parsedMap.get(loginAttributeName));
 			result.put("email", parsedMap.get(emailAttributeName));
 			if (parsedMap.containsKey(firstname)) {

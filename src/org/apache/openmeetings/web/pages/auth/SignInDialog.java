@@ -36,6 +36,7 @@ import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.pages.SwfPage;
 import org.apache.openmeetings.web.util.BaseUrlAjaxBehavior;
 import org.apache.openmeetings.web.util.TimeZoneOffsetAjaxBehavior;
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.RestartResponseException;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -51,10 +52,12 @@ import org.apache.wicket.markup.html.form.HiddenField;
 import org.apache.wicket.markup.html.form.PasswordTextField;
 import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.form.StatelessForm;
+import org.apache.wicket.markup.html.image.Image;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
+import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
@@ -266,18 +269,33 @@ public class SignInDialog extends AbstractFormDialog<String> {
 
 					@Override
 					protected void populateItem(final ListItem<OAuthServer> item) {
-						item.add(new Button("oauthBtn")
-							.add(new Label("label", item.getModelObject().getName()))
-							.add(new AjaxEventBehavior("click") {
-								private static final long serialVersionUID = 1L;
-								
-								@Override
-								protected void onEvent(AjaxRequestTarget target) {
-									PageParameters parameters = new PageParameters();
-									parameters.add("oauthid", item.getModelObject().getId());
-									setResponsePage(SignInPage.class, parameters);
-								}
-							}));
+						Button btn = new Button("oauthBtn");
+						Image icon = new Image("icon", new Model<String>());
+						icon.setVisible(item.getModelObject().getIconUrl() != null && 
+								!"".equals(item.getModelObject().getIconUrl()));
+						icon.add(new AttributeModifier("src", new AbstractReadOnlyModel<String>() {
+
+							private static final long serialVersionUID = 7257002837120721882L;
+
+							@Override
+							public String getObject() {
+								return item.getModelObject().getIconUrl();
+							}
+							
+						}));
+						btn.add(icon);
+						btn.add(new Label("label", item.getModelObject().getName()))
+						.add(new AjaxEventBehavior("click") {
+							private static final long serialVersionUID = 1L;
+							
+							@Override
+							protected void onEvent(AjaxRequestTarget target) {
+								PageParameters parameters = new PageParameters();
+								parameters.add("oauthid", item.getModelObject().getId());
+								setResponsePage(SignInPage.class, parameters);
+							}
+						});
+						item.add(btn);
 					}
 				}).setVisible(allowOAuthLogin()));
 		}
