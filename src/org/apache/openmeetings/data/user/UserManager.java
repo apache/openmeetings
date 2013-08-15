@@ -666,7 +666,7 @@ public class UserManager {
 			String additionalname, String fax, String zip, long states_id,
 			String town, long language_id, boolean sendWelcomeMessage,
 			List<Long> organisations, String phone, boolean sendSMS, String baseURL,
-			Boolean sendConfirmation, String jname_timezone, Boolean forceTimeZoneCheck,
+			Boolean sendConfirmation, String iCalTz, Boolean forceTimeZoneCheck,
 			String userOffers, String userSearchs, Boolean showContactData,
 			Boolean showContactDataToContacts) throws Exception {
 		return registerUserInit(user_level, level_id, availible,
@@ -676,7 +676,7 @@ public class UserManager {
 				town, language_id, sendWelcomeMessage,
 				organisations, phone, sendSMS, baseURL,
 				sendConfirmation,
-				timezoneUtil.getTimezoneByInternalJName(jname_timezone), 
+				timezoneUtil.getTimeZone(iCalTz), 
 				forceTimeZoneCheck,
 				userOffers, userSearchs, showContactData,
 				showContactDataToContacts, null);
