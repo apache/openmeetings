@@ -24,15 +24,15 @@
 
 		<legend>Тип шифрования</legend>
 		<ul>
-			<li><label wicket:for="cfg.cryptClassName">Crypt Класс</label>
+			<li><label wicket:for="cfg.cryptClassName">Класс шифрования</label>
 				<input wicket:id="cfg.cryptClassName"  type="text"
 				title="Укажите имя класса для шифрования. НЕ ИЗМЕНЯЙТЕ УКАЗАННЫЙ КЛАСС ЕСЛИ ВЫ В ЭТОМ НЕ УВЕРЕНЫ" />
 				<p>
-					<i> Вы можите использовать заданный по умолчанию тип шифрования, который соответствует
-						функционалу PHP-MD5 или BSD-Style шифрованию, используя:<b>org.apache.openmeetings.utils.crypt.MD5CryptImplementation</b>
-						дополнительную информацию или описание создания собственного класса шифрования смотрите тут: <a
+					<i> Вы можете использовать заданный по умолчанию тип шифрования, который соответствует
+						функционалу PHP-MD5 или BSD-Style шифрованию, используя:<b>org.apache.openmeetings.utils.crypt.MD5CryptImplementation</b>.
+						Дополнительную информацию или описание создания собственного класса шифрования смотрите тут: <a
 						href="http://openmeetings.apache.org/CustomCryptMechanism.html"
-						target="_blank">Пользовательский механизм шифрования</a> Вы можите изменить это
+						target="_blank">Пользовательский механизм шифрования</a> Вы можете изменить это
 						значение позже, НО созданные ранее Пользователи и Сессии могут быть
 						не доступны в дальнейшем
 					</i>

@@ -29,26 +29,26 @@
 			<li><label wicket:for="sendEmailAtRegister">Посылать сообщения новым пользователям (sendEmailAtRegister)</label>
 				<select wicket:id="sendEmailAtRegister"></select>
 			</li>
-			<li><label wicket:for="sendEmailWithVerficationCode">Проверять электронную почту вновь добавленым пользователям (sendEmailWithVerficationCode)</label>
+			<li><label wicket:for="sendEmailWithVerficationCode">Новые пользователи должны подтвердить свой Email (sendEmailWithVerficationCode)</label>
 				<select wicket:id="sendEmailWithVerficationCode"></select>
 			</li>
-			<li><label wicket:for="createDefaultRooms">Создавать комнаты по умолчанию для всех типов комнат</label>
+			<li><label wicket:for="createDefaultRooms">По умолчанию создать комнаты всех типов</label>
 				<select wicket:id="createDefaultRooms"></select>
 			</li>
 			<li><label wicket:for="cfg.mailReferer">Электронная почта рассылки (system_email_addr)</label>
-				<input wicket:id="cfg.mailReferer" title="Введите адрес электронной почты с которой будет рассылаться информация" type="text" />
+				<input wicket:id="cfg.mailReferer" title="Введите адрес электронной почты с которой будет отправляться информация" type="text" />
 			</li>
 			<li><label wicket:for="cfg.smtpServer">SMTP-Сервер (smtp_server)</label>
 				<input wicket:id="cfg.smtpServer" title="Введите адрес SMTP-Сервера" type="text" />
 			</li>
-			<li><label wicket:for="cfg.smtpPort">SMTP-Сервер порт (по умолчению SMPT-Сервер порт 25) (smtp_port)</label>
-				<input wicket:id="cfg.smtpPort" title="Введите SMTP-Сервер порт, обычно 25" type="text" />
+			<li><label wicket:for="cfg.smtpPort">Порт SMTP-сервера (по умолчению 25) (smtp_port)</label>
+				<input wicket:id="cfg.smtpPort" title="Введите порт SMTP-Сервера, обычно 25" type="text" />
 			</li>
 			<li><label wicket:for="cfg.mailAuthName">SMTP-Пользователь (email_username)</label>
-				<input wicket:id="cfg.mailAuthName" title="Введите логин для электроннуой почты" type="text" />
+				<input wicket:id="cfg.mailAuthName" title="Введите логин для электронной почты" type="text" />
 			</li>
 			<li><label wicket:for="cfg.mailAuthPass">SMTP-Пароль пользователя (email_userpass)</label>
-				<input wicket:id="cfg.mailAuthPass" title="Введите пароль для электроннуой почты" type="password" />
+				<input wicket:id="cfg.mailAuthPass" title="Введите пароль для электронной почты" type="password" />
 			</li>
 			<li><label wicket:for="mailUseTls">Включить проверку TLS на почтовом сервере</label>
 				<select wicket:id="mailUseTls"></select>
