@@ -669,22 +669,8 @@ public class UserService {
 			User meetingMember = userManager.getUserByEmail(email);
 
 			if (meetingMember != null) {
-
-				String firstname = meetingMember.getFirstname();
-				String lastname = meetingMember.getLastname();
-
-				meetingMemberDao.addMeetingMember(firstname, lastname, "0",
-						"0", appointmentId, meetingMember.getUser_id(), email,
-						meetingMember.getPhoneForSMS(), invitor,
+				meetingMemberDao.addMeetingMember("", appointmentId, meetingMember.getUser_id(), 
 						timezoneUtil.getTimezoneByUser(meetingMember), isConnectedEvent);
-
-			} else {
-
-				meetingMemberDao.addMeetingMember("", "", "0", "0",
-						appointmentId, null, email, "", invitor,
-						timezoneUtil.getTimezoneByInternalJName(sendJNameTimeZone),
-						isConnectedEvent);
-
 			}
 		}
 

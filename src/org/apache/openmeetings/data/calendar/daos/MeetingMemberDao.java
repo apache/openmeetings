@@ -136,9 +136,8 @@ public class MeetingMemberDao {
 
 	// -------------------------------------------------------------------------------
 
-	public Long updateMeetingMember(Long meetingMemberId, String firstname,
-			String lastname, String memberStatus, String appointmentStatus,
-			Long appointmentId, Long userid, String email, String phone) {
+	public Long updateMeetingMember(Long meetingMemberId, String appointmentStatus,
+			Long appointmentId, Long userid) {
 		try {
 
 			MeetingMember gm = this.getMeetingMemberById(meetingMemberId);
@@ -147,18 +146,11 @@ public class MeetingMemberDao {
 			 * MeetingMemberId +" does not exist yet"); return null; }
 			 */
 
-			gm.setFirstname(firstname);
-			gm.setLastname(lastname);
-
-			// gm.setLanguageId(Languagemanagement.getInstance().getFieldLanguageById(languageId));
-			gm.setMemberStatus(memberStatus);
 			gm.setAppointmentStatus(appointmentStatus);
 			gm.setAppointment(appointmentDao.getAppointmentById(appointmentId));
 			gm.setDeleted(false);
 			gm.setUpdatetime(new Date());
 			gm.setUserid(usersDao.get(userid));
-			gm.setEmail(email);
-			gm.setPhone(phone);
 
 			if (gm.getMeetingMemberId() == null) {
 				em.persist(gm);
@@ -175,26 +167,18 @@ public class MeetingMemberDao {
 		return null;
 	}
 
-	public Long addMeetingMember(String firstname, String lastname,
-			String memberStatus, String appointmentStatus, Long appointmentId,
-			Long userid, String email, String phone, Boolean moderator, TimeZone timeZone,
-			Boolean isConnectedEvent) {
+	public Long addMeetingMember(String appointmentStatus, Long appointmentId,
+			Long userid, TimeZone timeZone, Boolean isConnectedEvent) {
 		try {
 
 			MeetingMember gm = new MeetingMember();
 
-			gm.setFirstname(firstname);
-			gm.setLastname(lastname);
-			gm.setMemberStatus(memberStatus);
 			gm.setAppointmentStatus(appointmentStatus);
 			gm.setAppointment(appointmentDao.getAppointmentById(appointmentId));
 			gm.setUserid(userid == null ? null : usersDao.get(userid));
-			gm.setEmail(email);
-			gm.setPhone(phone);
 
 			gm.setStarttime(new Date());
 			gm.setDeleted(false);
-			gm.setInvitor(moderator);
 			gm.setIsConnectedEvent(isConnectedEvent);
 			
 			gm.setTimeZoneId(timeZone.getID());

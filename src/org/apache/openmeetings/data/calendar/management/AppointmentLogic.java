@@ -342,7 +342,7 @@ public class AppointmentLogic {
 
 			if (members != null) {
 				for (int i = 0; i < members.size(); i++) {
-					log.debug("deleting member " + members.get(i).getEmail());
+					log.debug("deleting member " + members.get(i).getUserid().getAdresses().getEmail());
 					meetingMemberLogic.deleteMeetingMember(members.get(i).getMeetingMemberId(), users_id, language_id);
 				}
 			}
@@ -449,13 +449,13 @@ public class AppointmentLogic {
 				for (MeetingMember mm : members) {
 
 					log.debug("doScheduledMeetingReminder : Member "
-							+ mm.getEmail());
+							+ mm.getUserid().getAdresses().getEmail());
 
 					Invitations inv = mm.getInvitation();
 
 					if (inv == null) {
 						log.error("Error retrieving Invitation for member "
-								+ mm.getEmail() + " in Appointment "
+								+ mm.getUserid().getAdresses().getEmail() + " in Appointment "
 								+ ment.getAppointmentName());
 						continue;
 					}
@@ -476,10 +476,10 @@ public class AppointmentLogic {
 							language_id, labelid1153, labelid1154, tZone);
 
 					invitationManager.sendInvitationReminderLink(language_id, message,
-							inv.getBaseUrl(), mm.getEmail(), subject,
+							inv.getBaseUrl(), mm.getUserid().getAdresses().getEmail(), subject,
 							inv.getHash());
 
-					invitationManager.sendInvitationReminderSMS(mm.getPhone(), smsSubject, language_id);
+					invitationManager.sendInvitationReminderSMS(mm.getUserid().getAdresses().getPhone(), smsSubject, language_id);
 					inv.setUpdatetime(new Date());
 					invitationDao.updateInvitation(inv);
 				}

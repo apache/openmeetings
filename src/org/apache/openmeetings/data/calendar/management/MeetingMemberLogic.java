@@ -89,16 +89,15 @@ public class MeetingMemberLogic {
 
 		try {
 			
-			Long memberId = meetingMemberDao.addMeetingMember(firstname,
-					lastname, memberStatus, appointmentStatus, appointmentId,
-					userid, email, phone, invitor, timezone, false); 
+			Long memberId = meetingMemberDao.addMeetingMember(appointmentStatus, appointmentId,
+					userid, timezone, false); 
 
 			// DefaultInvitation
 			Appointment point = appointmentLogic
 					.getAppointMentById(appointmentId);
 
 			MeetingMember member = getMemberById(memberId);
-			Boolean isInvitor = member.getInvitor();
+			boolean isInvitor = member.getUserid().getUser_id() == point.getUserId().getUser_id();
 
 			Long invitationId = null;
 
@@ -363,8 +362,7 @@ public class MeetingMemberLogic {
 
 		try {
 			return meetingMemberDao.updateMeetingMember(meetingMemberId,
-					firstname, lastname, memberStatus, appointmentStatus,
-					appointmentId, userid, email, phone);
+					appointmentStatus, appointmentId, userid);
 		} catch (Exception err) {
 			log.error("[updateMeetingMember]", err);
 		}

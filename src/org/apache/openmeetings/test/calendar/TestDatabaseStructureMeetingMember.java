@@ -19,7 +19,6 @@
 package org.apache.openmeetings.test.calendar;
 
 
-import org.apache.log4j.Logger;
 import org.apache.openmeetings.data.calendar.daos.MeetingMemberDao;
 import org.apache.openmeetings.test.AbstractOpenmeetingsSpringTest;
 import org.junit.Test;
@@ -27,37 +26,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 
 public class TestDatabaseStructureMeetingMember extends AbstractOpenmeetingsSpringTest {
-
-	private static final Logger log = Logger.getLogger(TestDatabaseStructureMeetingMember.class);
 	@Autowired
 	private MeetingMemberDao meetingMemberDao;
 
 	@Test
-	public void testAddingGroup(){
-
-		try {
-			
-			
-			//MeetingMemberDaoImpl.getInstance().addMeetingMember("Adddd", "dir", "1", "2", 1L, 1L, "test");	
-			//MeetingMemberDaoImpl.getInstance().addMeetingMember(firstname, lastname, memberStatus, appointmentStatus, appointmentId, userid, email)
-			
-			
-			//MeetingMemberDaoImpl.getInstance().getMeetingMemberById(1L);
-			//MeetingMemberDaoImpl.getInstance().deleteMeetingMember(2L);
-			meetingMemberDao.updateMeetingMember(1l,"bbbbbb", "dir", "1", "2", 1L, 1L, "test", ""); 
-		} catch (Exception err) {
-
-			log.error("[testAddingMeeting]",err);
-
-		}
-
+	public void testUpdateMeetingMember(){
+		//FIXME need to be refactored !!!!
 		
-
+		//MeetingMemberDaoImpl.getInstance().addMeetingMember("Adddd", "dir", "1", "2", 1L, 1L, "test");	
+		//MeetingMemberDaoImpl.getInstance().addMeetingMember(firstname, lastname, memberStatus, appointmentStatus, appointmentId, userid, email)
 		
-
+		
+		//MeetingMemberDaoImpl.getInstance().getMeetingMemberById(1L);
+		//MeetingMemberDaoImpl.getInstance().deleteMeetingMember(2L);
+		
+		//meetingMemberDao.updateMeetingMember(1l,"bbbbbb", "dir", "1", "2", 1L, 1L, "test", ""); 
 	}
-
-
-
 }
-

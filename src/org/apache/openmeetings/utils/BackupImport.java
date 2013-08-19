@@ -101,6 +101,7 @@ import org.apache.openmeetings.persistence.beans.user.PrivateMessage;
 import org.apache.openmeetings.persistence.beans.user.PrivateMessageFolder;
 import org.apache.openmeetings.persistence.beans.user.State;
 import org.apache.openmeetings.persistence.beans.user.User;
+import org.apache.openmeetings.persistence.beans.user.User.Type;
 import org.apache.openmeetings.persistence.beans.user.UserContact;
 import org.apache.openmeetings.remote.red5.ScopeApplicationAdapter;
 import org.apache.openmeetings.utils.crypt.MD5Implementation;
@@ -388,23 +389,9 @@ public class BackupImport {
 		 * Reminder Invitations will be NOT send!
 		 */
 		{
-			Registry registry = new Registry();
-			Strategy strategy = new RegistryStrategy(registry);
-			Serializer serializer = new Persister(strategy);
-	
-			registry.bind(User.class, new UserConverter(usersDao, usersMap));
-			registry.bind(Appointment.class, new AppointmentConverter(appointmentDao, appointmentsMap));
-			
-			List<MeetingMember> list = readList(serializer, f, "meetingmembers.xml", "meetingmembers", MeetingMember.class);
+			List<MeetingMember> list = readMeetingMemberList(f, "meetingmembers.xml", "meetingmembers");
 			for (MeetingMember ma : list) {
-				if (ma.getUserid() != null && ma.getUserid().getUser_id() == null) {
-					ma.setUserid(null);
-				}
-				if (!ma.getDeleted()) {
-					// We need to reset this as openJPA reject to store them otherwise
-					ma.setMeetingMemberId(null);
-					meetingMemberDao.addMeetingMemberByObject(ma);
-				}
+				meetingMemberDao.addMeetingMemberByObject(ma);
 			}
 		}
 
@@ -656,6 +643,89 @@ public class BackupImport {
 		return readUserList(new InputSource(xml.toURI().toASCIIString()), listNodeName);
 	}
 	
+	//FIXME (need to be removed in later versions) HACK to add external attendees previously stored in MeetingMember structure
+	private List<MeetingMember> readMeetingMemberList(File baseDir, String filename, String listNodeName) throws Exception {
+		Registry registry = new Registry();
+		Strategy strategy = new RegistryStrategy(registry);
+		Serializer ser = new Persister(strategy);
+
+		registry.bind(User.class, new UserConverter(usersDao, usersMap));
+		registry.bind(Appointment.class, new AppointmentConverter(appointmentDao, appointmentsMap));
+		
+		File xml = new File(baseDir, filename);
+		if (!xml.exists()) {
+			throw new Exception(filename + " missing");
+		}
+		
+		DocumentBuilder dBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+		Document doc = dBuilder.parse(new InputSource(xml.toURI().toASCIIString()));
+		
+		StringWriter sw = new StringWriter();
+		Transformer xformer = TransformerFactory.newInstance().newTransformer();
+        xformer.transform(new DOMSource(doc), new StreamResult(sw));
+        
+		List<MeetingMember> list = new ArrayList<MeetingMember>();
+		InputNode root = NodeBuilder.read(new StringReader(sw.toString()));
+		InputNode root1 = NodeBuilder.read(new StringReader(sw.toString())); //HACK to handle external attendee's firstname, lastname, email
+		InputNode listNode = root.getNext();
+		InputNode listNode1 = root1.getNext(); //HACK to handle external attendee's firstname, lastname, email
+		if (listNodeName.equals(listNode.getName())) {
+			InputNode item = listNode.getNext();
+			InputNode item1 = listNode1.getNext(); //HACK to handle external attendee's firstname, lastname, email
+			while (item != null) {
+				MeetingMember mm = ser.read(MeetingMember.class, item, false);
+
+				boolean needToSkip1 = true;
+				if (mm.getUserid() == null) {
+					mm.setUserid(new User());
+				}
+				if (mm.getUserid().getUser_id() == null) {
+					//HACK to handle external attendee's firstname, lastname, email
+					boolean contactValid = false;
+					do {
+						if ("firstname".equals(item1.getName())) {
+							mm.getUserid().setFirstname(item1.getValue());
+						}
+						if ("lastname".equals(item1.getName())) {
+							mm.getUserid().setLastname(item1.getValue());
+						}
+						if ("email".equals(item1.getName())) {
+							if (mm.getUserid().getAdresses() == null) {
+								mm.getUserid().setAdresses(new Address());
+							}
+							String email = item1.getValue();
+							User u = usersDao.getUserByEmail(email);
+							if (u != null) {
+								mm.setUserid(u);
+							} else {
+								mm.getUserid().setType(Type.contact);
+								mm.getUserid().getAdresses().setEmail(email);
+								mm.getUserid().setLogin(mm.getAppointment().getUserId().getUser_id() + "_" + email);
+							}
+							contactValid = true;
+						}
+						item1 = listNode1.getNext(); //HACK to handle old om_time_zone
+					} while (item1 != null && !"meetingmember".equals(item1.getName()));
+					if (!contactValid) {
+						mm = null;
+					}
+					needToSkip1 = false;
+				}
+				if (needToSkip1) {
+					do {
+						item1 = listNode1.getNext(); //HACK to handle Address inside user
+					} while (item1 != null && !"meetingmember".equals(item1.getName()));
+				}
+				item = listNode.getNext();
+				if (mm != null && !mm.getDeleted() && mm.getUserid() != null && mm.getAppointment() != null && mm.getAppointment().getAppointmentId() != null) {
+					mm.setMeetingMemberId(null);
+					list.add(mm);
+				}
+			}
+		}
+		return list;
+	}
+	
 	//FIXME (need to be removed in later versions) HACK to fix 2 deleted nodes in users.xml and inline Adresses and sipData
 	private List<User> readUserList(InputSource xml, String listNodeName) throws Exception {
 		Registry registry = new Registry();
@@ -669,6 +739,7 @@ public class BackupImport {
 		DocumentBuilder dBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
 		Document doc = dBuilder.parse(xml);
 		NodeList nl = getNode(getNode(doc, "root"), listNodeName).getChildNodes();
+		// one of the old OM version created 2 nodes "deleted" this code block handles this
 		for (int i = 0; i < nl.getLength(); ++i) {
 			Node user = nl.item(i);
 			NodeList nl1 = user.getChildNodes();

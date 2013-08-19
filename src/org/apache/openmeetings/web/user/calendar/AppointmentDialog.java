@@ -278,8 +278,8 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 				@Override
 				protected void populateItem(final ListItem<MeetingMember> item) {
 					MeetingMember mm = item.getModelObject();
-					item.add(new Label("attendeeName", mm.getFirstname() + " " + mm.getLastname()));
-					item.add(new Label("attendeeEmail", mm.getEmail()));
+					item.add(new Label("attendeeName", mm.getUserid().getFirstname() + " " + mm.getUserid().getLastname()));
+					item.add(new Label("attendeeEmail", mm.getUserid().getAdresses().getEmail()));
 					item.add(new WebMarkupContainer("attendeeDelete").add(new AjaxEventBehavior("onclick"){
 						private static final long serialVersionUID = 1L;
 

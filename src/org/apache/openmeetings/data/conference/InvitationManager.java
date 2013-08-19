@@ -262,9 +262,9 @@ public class InvitationManager {
 			invitation.setHash(MD5.do_checksum(hashRaw));
 
 			invitation.setInvitedBy(createdBy);
-			String userName = meetingMember.getFirstname() + " " + meetingMember.getLastname();
+			String userName = meetingMember.getUserid().getFirstname() + " " + meetingMember.getUserid().getLastname();
 			invitation.setInvitedname(userName);
-			invitation.setInvitedEMail(meetingMember.getEmail());
+			invitation.setInvitedEMail(meetingMember.getUserid().getAdresses().getEmail());
 			invitation.setRoom(appointment.getRoom());
 			invitation.setConferencedomain(conferencedomain);
 			invitation.setStarttime(new Date());
@@ -341,20 +341,20 @@ public class InvitationManager {
 			log.debug("no remindertype defined -> no cancel of invitation");
 		} else if (appointment.getRemind().getTypId() == 2) {
 			log.debug("ReminderType simple mail -> sending simple mail...");
-			sendInvitationCancelMail(member.getEmail(),
+			sendInvitationCancelMail(member.getUserid().getAdresses().getEmail(),
 					member.getAppointment(), user.getAdresses().getEmail(),
 					subject, message);
 		} else if (appointment.getRemind().getTypId() == 3) {
 			try {
-				sendInvitationIcalCancelMail(member.getEmail(),
-						member.getFirstname() + " " + member.getLastname(),
-						appointment, canceling_user_id, member.getInvitor(),
+				sendInvitationIcalCancelMail(member.getUserid().getAdresses().getEmail(),
+						member.getUserid().getFirstname() + " " + member.getUserid().getLastname(),
+						appointment, canceling_user_id, (appointment.getUserId().getUser_id() == member.getUserid().getUser_id()),
 						appointment.getAppointmentStarttime(),
 						appointment.getAppointmentEndtime(), timezone, subject,
 						message);
 			} catch (Exception e) {
 				log.error("Error sending IcalCancelMail for User "
-						+ member.getEmail() + " : " + e.getMessage());
+						+ member.getUserid().getAdresses().getEmail() + " : " + e.getMessage());
 			}
 		}
 
@@ -485,19 +485,19 @@ public class InvitationManager {
 		// nothing
 		if (sendMail) {
 		if (appointment.getRemind().getTypId() == 2) {
-			sendInvitationUpdateMail(member.getEmail(), appointment, user
+			sendInvitationUpdateMail(member.getUserid().getAdresses().getEmail(), appointment, user
 					.getAdresses().getEmail(), subject, message);
 		} else if (appointment.getRemind().getTypId() == 3) {
 			try {
-				sendInvitationIcalUpdateMail(member.getEmail(),
-						member.getFirstname() + " " + member.getLastname(),
-						appointment, canceling_user_id, member.getInvitor(),
+				sendInvitationIcalUpdateMail(member.getUserid().getAdresses().getEmail(),
+						member.getUserid().getFirstname() + " " + member.getUserid().getLastname(),
+						appointment, canceling_user_id, (appointment.getUserId().getUser_id() == member.getUserid().getUser_id()),
 						language_id, appointment.getAppointmentStarttime(),
 						appointment.getAppointmentEndtime(), timezone, subject,
 						message);
 			} catch (Exception e) {
 				log.error("Error sending IcalUpdateMail for User "
-						+ member.getEmail() + " : " + e.getMessage());
+						+ member.getUserid().getAdresses().getEmail() + " : " + e.getMessage());
 			}
 		}
 		}
@@ -706,7 +706,7 @@ public class InvitationManager {
 								appointment.getPassword()));
 			}
 
-			String username = meetingMember.getFirstname() + " " + meetingMember.getLastname();
+			String username = meetingMember.getUserid().getFirstname() + " " + meetingMember.getUserid().getLastname();
 			invitation.setInvitationWasUsed(false);
 
 			// valid period of Invitation
@@ -741,7 +741,7 @@ public class InvitationManager {
 			invitation.setInvitedBy(createdBy);
 			invitation.setBaseUrl(baseurl);
 			invitation.setInvitedname(username);
-			invitation.setInvitedEMail(meetingMember.getEmail());
+			invitation.setInvitedEMail(meetingMember.getUserid().getAdresses().getEmail());
 			invitation.setRoom(appointment.getRoom());
 			invitation.setConferencedomain(conferencedomain);
 			invitation.setStarttime(new Date());
@@ -752,8 +752,9 @@ public class InvitationManager {
 
 			if (invitationId > 0) {
 				this.sendInvitionIcalLink(username, message, baseurl,
-						meetingMember.getEmail(), subject, invitation.getHash(),
-						appointment.getAppointmentId(), createdBy, meetingMember.getInvitor(), meetingMember.getUserid().getLanguage_id(),
+						meetingMember.getUserid().getAdresses().getEmail(), subject, invitation.getHash(),
+						appointment.getAppointmentId(), createdBy, (appointment.getUserId().getUser_id() == meetingMember.getUserid().getUser_id())
+						, meetingMember.getUserid().getLanguage_id(),
 						appointment.getAppointmentStarttime(), appointment.getAppointmentEndtime(),
 						timezoneUtil.getTimezoneByUser(createdBy), createdBy.getFirstname() + " " + createdBy.getLastname());
 				return invitationId;
@@ -837,7 +838,7 @@ public class InvitationManager {
 
 			String template = InvitationTemplate.getEmail(invitor.getFirstname() + " " + invitor.getLastname(), message, invitation_link);
 
-			mailHandler.send(meetingMember.getEmail(), invitor.getAdresses().getEmail(), subject, template);
+			mailHandler.send(meetingMember.getUserid().getAdresses().getEmail(), invitor.getAdresses().getEmail(), subject, template);
 			return "success";
 		} catch (Exception err) {
 			log.error("sendInvitationLink", err);

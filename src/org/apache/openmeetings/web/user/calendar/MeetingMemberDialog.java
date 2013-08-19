@@ -204,18 +204,10 @@ public class MeetingMemberDialog extends AbstractFormDialog<Appointment> {
 			}
 			if (!found){
 				MeetingMember mm = new MeetingMember();
-				mm.setFirstname(u.getFirstname());
-				mm.setLastname(u.getLastname());
 				mm.setUserid(u);
-				mm.setEmail(u.getAdresses().getEmail());
-				mm.setPhone(u.getAdresses().getPhone());
 				mm.setDeleted(false);
 				if (u.getType() == Type.contact){
-					mm.setInvitor(false);
 					u.setLanguage_id(WebSession.getLanguage());
-				} else {
-					boolean invitor = (WebSession.getUserId() == u.getUser_id() ? true : false);
-					mm.setInvitor(invitor);
 				}
 				mm.setStarttime(app.getStarttime());
 				mm.setUpdatetime(app.getUpdatetime());

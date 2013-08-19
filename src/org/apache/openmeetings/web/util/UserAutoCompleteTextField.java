@@ -19,6 +19,7 @@
 package org.apache.openmeetings.web.util;
 
 import static org.apache.openmeetings.web.app.Application.getBean;
+import static org.apache.openmeetings.web.app.WebSession.getUserId;
 
 import java.util.List;
 import java.util.Locale;
@@ -79,7 +80,7 @@ public class UserAutoCompleteTextField extends AutoCompleteTextField<User> {
 					u = new User();
 					u.setType(Type.contact);
 					u.setFirstname(fName);
-					u.setLogin(email);
+					u.setLogin(getUserId() + "_" + email); //UserId prefix is used to ensure unique login
 					u.setLastname(lName);
 					u.setAdresses(new Address());
 					u.getAdresses().setEmail(email);

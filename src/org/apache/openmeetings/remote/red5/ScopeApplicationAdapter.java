@@ -1547,15 +1547,14 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 					// only persistent users can schedule a meeting
 					// user-id is only set for registered users
 					if (member.getUserid() != null) {
-						log.debug("checking user " + member.getFirstname()
+						log.debug("checking user " + member.getUserid().getFirstname()
 								+ " for moderator role - ID : "
 								+ member.getUserid().getUser_id());
 
-						if (member.getUserid().getUser_id()
-								.equals(userIdInRoomClient)) {
+						if (member.getUserid().getUser_id().equals(userIdInRoomClient)) {
 							found = true;
 
-							if (member.getInvitor()) {
+							if (ment.getUserId().getUser_id() == member.getUserid().getUser_id()) {
 								log.debug("User "
 										+ userIdInRoomClient
 										+ " is moderator due to flag in MeetingMember record");
@@ -1588,13 +1587,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 										streamid, currentClient, false, null);
 								break;
 							}
-						} else {
-							if (member.getInvitor())
-								moderator_set = true;
 						}
-					} else {
-						if (member.getInvitor())
-							moderator_set = true;
 					}
 
 				}
