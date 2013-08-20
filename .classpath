@@ -27,18 +27,18 @@
 	<classpathentry kind="lib" path="build/lib/java_16_tools.jar"/>
 	<classpathentry kind="lib" path="WebContent/screensharing"/>
 	<classpathentry kind="lib" path="build/red5/server/dist/red5-server.jar" sourcepath="build/red5/server/src/main/java"/>
-	<classpathentry kind="lib" path="build/red5/server/dist/lib/slf4j-api-1.7.5.jar"/>
+	<classpathentry kind="lib" path="build/red5/server/dist/lib/slf4j-api-1.7.2.jar"/>
 	<classpathentry kind="lib" path="build/red5/server/dist/lib/spring-core-3.1.1.RELEASE.jar"/>
 	<classpathentry kind="lib" path="build/red5/server/dist/lib/spring-beans-3.1.1.RELEASE.jar"/>
 	<classpathentry kind="lib" path="build/red5/server/dist/lib/mina-core-2.0.7.jar"/>
 	<classpathentry kind="lib" path="build/red5/server/dist/lib/quartz-2.1.6.jar"/>
-	<classpathentry kind="lib" path="build/red5/server/dist/lib/log4j-over-slf4j-1.7.5.jar"/>
+	<classpathentry kind="lib" path="build/red5/server/dist/lib/log4j-over-slf4j-1.7.2.jar"/>
 	<classpathentry kind="lib" path="build/red5/server/dist/lib/commons-collections-20040616.jar"/>
 	<classpathentry kind="lib" path="build/red5/server/dist/lib/spring-web-3.1.1.RELEASE.jar"/>
 	<classpathentry kind="lib" path="build/red5/server/dist/lib/commons-beanutils-1.8.3.jar"/>
 	<classpathentry kind="lib" path="build/red5/server/dist/lib/commons-lang3-3.1.jar"/>
-	<classpathentry kind="lib" path="build/red5/server/dist/lib/logback-core-1.0.13.jar"/>
-	<classpathentry kind="lib" path="build/red5/server/dist/lib/logback-classic-1.0.13.jar"/>
+	<classpathentry kind="lib" path="build/red5/server/dist/lib/logback-core-1.0.9.jar"/>
+	<classpathentry kind="lib" path="build/red5/server/dist/lib/logback-classic-1.0.9.jar"/>
 	<classpathentry kind="lib" path="build/red5/server/dist/lib/spring-asm-3.1.1.RELEASE.jar"/>
 	<classpathentry kind="lib" path="build/red5/server/dist/lib/spring-expression-3.1.1.RELEASE.jar"/>
 	<classpathentry kind="lib" path="build/red5/server/dist/lib/spring-context-3.1.1.RELEASE.jar"/>
@@ -48,8 +48,8 @@
 	<classpathentry kind="lib" path="build/red5/server/dist/lib/spring-test-3.1.1.RELEASE.jar"/>
 	<classpathentry kind="lib" path="build/red5/server/dist/lib/commons-pool-1.5.6.jar"/>
 	<classpathentry kind="lib" path="build/red5/server/dist/lib/ehcache-core-2.5.0.jar"/>
-	<classpathentry kind="lib" path="build/red5/client/dist/red5-client-1.0.2-RC1.jar" sourcepath="build/red5/client/src/main/java"/>
-	<classpathentry kind="lib" path="build/red5/server/dist/plugins/tomcat-embed-core-7.0.41.jar"/>
+	<classpathentry kind="lib" path="build/red5/client/dist/red5-client-1.0.2-SNAPSHOT.jar" sourcepath="build/red5/client/src/main/java"/>
+	<classpathentry kind="lib" path="build/red5/server/dist/plugins/tomcat-embed-core-jar-7.0.41.jar"/>
 	<classpathentry kind="lib" path="build/red5/server/dist/lib/bcprov-jdk15on-1.47.jar"/>
 	<classpathentry kind="output" path="build/classes/eclipse"/>
 </classpath>

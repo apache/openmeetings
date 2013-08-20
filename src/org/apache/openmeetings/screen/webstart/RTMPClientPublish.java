@@ -23,9 +23,9 @@ import org.red5.client.net.rtmp.INetStreamEventHandler;
 import org.red5.client.net.rtmp.RTMPClient;
 import org.red5.server.api.service.IPendingServiceCall;
 import org.red5.server.api.service.IPendingServiceCallback;
-import org.red5.server.net.ICommand;
 import org.red5.server.net.rtmp.Channel;
 import org.red5.server.net.rtmp.RTMPConnection;
+import org.red5.server.net.rtmp.codec.RTMP;
 import org.red5.server.net.rtmp.event.Notify;
 import org.red5.server.net.rtmp.message.Header;
 import org.slf4j.Logger;
@@ -53,14 +53,14 @@ class RTMPClientPublish extends RTMPClient implements IPendingServiceCallback, I
 	}
 
 	@Override
-	public void connectionOpened(RTMPConnection conn) {
-		super.connectionOpened(conn);
+	public void connectionOpened(RTMPConnection conn, RTMP rtmp) {
+		super.connectionOpened(conn, rtmp);
 		createStream(this);
 	}
 	
 	@Override
-	public void connectionClosed(RTMPConnection conn) {
-		super.connectionClosed(conn);
+	public void connectionClosed(RTMPConnection conn, RTMP rtmp) {
+		super.connectionClosed(conn, rtmp);
 		connectionClosed();
 	}
 	
@@ -71,8 +71,8 @@ class RTMPClientPublish extends RTMPClient implements IPendingServiceCallback, I
 	}
 	
 	@Override
-	protected void onCommand(RTMPConnection arg0, Channel arg1, Header arg2, ICommand arg3) {
-		super.onCommand(arg0, arg1, arg2, arg3);
+	protected void onInvoke(RTMPConnection conn, Channel channel, Header source, Notify invoke, RTMP rtmp) {
+		super.onInvoke(conn, channel, source, invoke, rtmp);
 	}
 	
 	public void resultReceived(IPendingServiceCall call) {
