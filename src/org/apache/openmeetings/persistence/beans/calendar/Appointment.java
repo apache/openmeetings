@@ -60,7 +60,7 @@ import org.simpleframework.xml.Root;
     	)
     , @NamedQuery(name="joinedAppointmentsInRange",
     	query="SELECT a FROM MeetingMember mm, IN(mm.appointment) a "
-			+ "WHERE mm.deleted <> true AND mm.invitor <> true AND mm.userid.user_id = :userId "
+			+ "WHERE mm.deleted <> true AND mm.userid.user_id <> a.userId.user_id AND mm.userid.user_id = :userId "
 			+ "	AND a.appointmentId NOT IN (SELECT a.appointmentId FROM Appointment a WHERE a.userId.user_id = :userId)"
 			+ "	AND mm.isConnectedEvent <> true " //TODO review: isConnectedEvent is set for the MeetingMember if event is created from "Private Messages", it is weird
 			+ "	AND ( "
@@ -73,7 +73,7 @@ import org.simpleframework.xml.Root;
 	//his own user as second meeting-member, swagner 19.02.2012
     , @NamedQuery(name="appointmentsInRangeByUser",
 	query="SELECT a FROM MeetingMember mm, IN(mm.appointment) a "
-		+ "WHERE mm.deleted <> true AND mm.invitor <> true AND mm.userid.user_id = :userId "
+		+ "WHERE mm.deleted <> true AND mm.userid.user_id <> a.userId.user_id AND mm.userid.user_id = :userId "
 		+ "	AND ( "
 		+ "		(a.appointmentStarttime BETWEEN :starttime AND :endtime) "
 		+ "		OR (a.appointmentEndtime BETWEEN :starttime AND :endtime) "
@@ -82,7 +82,7 @@ import org.simpleframework.xml.Root;
     )
     , @NamedQuery(name="appointedRoomsInRangeByUser",
 	query="SELECT a.room FROM MeetingMember mm, IN(mm.appointment) a "
-		+ "WHERE mm.deleted <> true AND mm.invitor <> true AND mm.userid.user_id = :userId "
+		+ "WHERE mm.deleted <> true AND mm.userid.user_id <> a.userId.user_id AND mm.userid.user_id = :userId "
 		+ "	AND ( "
 		+ "		(a.appointmentStarttime BETWEEN :starttime AND :endtime) "
 		+ "		OR (a.appointmentEndtime BETWEEN :starttime AND :endtime) "
