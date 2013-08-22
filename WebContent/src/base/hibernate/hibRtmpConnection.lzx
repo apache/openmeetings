@@ -286,7 +286,6 @@
     </netRemoteCallHib>
      
     <netRemoteCallHib name="getPublicSID" funcname="getPublicSID" >      
-        <netparam><method name="getValue"> return canvas.wicketsid;</method></netparam>
         <handler name="ondata" args="value">
             //The onResult-Handler will be called be the rtmpconnection
             if ($debug) Debug.write("hibRtmpConnection/getPublicSID [",value,"]");
@@ -792,7 +791,10 @@
 				canvas.setAttribute('picture_uri','');
 				canvas.setAttribute('language','');
 				canvas.setAttribute('currentuser',value.login);
-				canvas.becomemoderator = value.level_id >= 2;
+				if (value.timeZoneId != null) {
+					canvas.timeZoneId = value.timeZoneId;
+				}
+ 				canvas.becomemoderator = value.level_id >= 2;
 				if (value.sessionData == null) {
 					if ($debug) Debug.write("No Language Found to assign");
 					return;
