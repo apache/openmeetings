@@ -165,7 +165,7 @@ public class MainService implements IPendingServiceCallback {
 		return -1L;
 	}
 
-	public User loginWicket(String SID, String wicketSID) {
+	public User loginWicket(String SID, String wicketSID, Long wicketroomid) {
 		Long userId = sessiondataDao.checkSession(wicketSID);
 		User u = userId == null ? null : usersDao.get(userId);
 		if (u != null) {
@@ -175,6 +175,7 @@ public class MainService implements IPendingServiceCallback {
 			if (!u.getOrganisation_users().isEmpty()) {
 				u.setSessionData(sessiondataDao.getSessionByHash(wicketSID));
 				currentClient.setUser_id(u.getUser_id());
+				currentClient.setRoom_id(wicketroomid);
 				SessionVariablesUtil.setUserId(current.getClient(), u.getUser_id());
 			
 				currentClient.setFirstname(u.getFirstname());

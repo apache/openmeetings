@@ -458,7 +458,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 	 * 
 	 * @return publicSID of current client
 	 */
-	public synchronized String getPublicSID() {
+	public synchronized String getPublicSID(String wicketSid) {
 		log.debug("-----------  getPublicSID");
 		IConnection current = Red5.getConnectionLocal();
 		Client currentClient = this.sessionManager

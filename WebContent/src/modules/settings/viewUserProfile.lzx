@@ -126,8 +126,6 @@
     	
     		this.username.setAttribute("text",tUserName);
     		
-    		this.timezone.setAttribute("text",this.userObject.omTimeZone.jname + ' (' + this.userObject.omTimeZone.ical + ')');
-    		
     		this.memberSince.setAttribute("text",parseDateToString(this.userObject.starttime));
     		
     		var aOfferings = obj.userOffers.split(",");

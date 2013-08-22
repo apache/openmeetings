@@ -41,10 +41,14 @@
         
         if (canvas.thishib.src != src) {
             canvas.thishib.setAttribute('src',src);
-            
-            canvas.thishib.reconnectionAction = true;
-            canvas.thishib.reconnectObjRef = this;
-            canvas.thishib.disconnect();
+
+			if (canvas.wicketsid == null){            
+	            canvas.thishib.reconnectionAction = true;
+	            canvas.thishib.reconnectObjRef = this;
+	            canvas.thishib.disconnect();
+            } else {
+            	this.reconnectSuccess();
+            }
         } else {
             //The user is already in the correct Scope
             this.reconnectSuccess();

@@ -167,8 +167,14 @@
      <handler name="onconnect">
         if($debug) Debug.write("hibRtmpConnection/onconnect");
         if (this.reconnectionAction){
-            this.overwritePublicSID.doCall();
-            this.setUsernameReconnect.doCall();
+        	if (canvas.wicketsid == null) {
+            	this.overwritePublicSID.doCall();
+	            this.setUsernameReconnect.doCall();
+            } else {
+	            canvas.sessionId = canvas.wicketsid;
+				canvas.sendViaLocalConnection(canvas.vid_lc_name, "setSessionId", [canvas.sessionId]);
+	            this.getPublicSID.doCall();
+            }
         } else if (this.reconnectAfterRoomleft) {
             //Return to content after reconnect
             canvas.thishib.reconnectedRoomInstance.destroy();
@@ -280,11 +286,14 @@
     </netRemoteCallHib>
      
     <netRemoteCallHib name="getPublicSID" funcname="getPublicSID" >      
+        <netparam><method name="getValue"> return canvas.wicketsid;</method></netparam>
         <handler name="ondata" args="value">
             //The onResult-Handler will be called be the rtmpconnection
             if ($debug) Debug.write("hibRtmpConnection/getPublicSID [",value,"]");
             canvas.publicSID = value;     
-            canvas.thishib.loaderVar.setProgress();
+			if (canvas.thishib.loaderVar != null) {
+            	canvas.thishib.loaderVar.setProgress();
+            }
 			parent.getLanguages.doCall();
         </handler>  
     </netRemoteCallHib>
@@ -302,7 +311,9 @@
         <handler name="ondata" args="value">
             //The onResult-Handler will be called be the rtmpconnection
             //Debug.write("getLanguages: ",value);
-            canvas.thishib.loaderVar.setProgress();
+			if (canvas.thishib.loaderVar != null) {
+            	canvas.thishib.loaderVar.setProgress();
+            }
             parent.getDefaultLanguage.doCall();
         </handler>  
     </netRemoteCallHib>    
@@ -672,7 +683,9 @@
             //The onResult-Handler will be called be the rtmpconnection
             if ($debug) Debug.write("getStates: ",value);
             canvas.statesInitValues = value;
-            canvas.thishib.loaderVar.setProgress();
+			if (canvas.thishib.loaderVar != null) {
+            	canvas.thishib.loaderVar.setProgress();
+            }
             parent.getTimeZones.doCall();
         </handler>  
     </netRemoteCallHib>  
@@ -681,7 +694,9 @@
         <handler name="ondata" args="value">
             //The onResult-Handler will be called be the rtmpconnection
             if ($debug) Debug.write("getTimeZones: ",value);
-            canvas.thishib.loaderVar.setProgress();
+			if (canvas.thishib.loaderVar != null) {
+            	canvas.thishib.loaderVar.setProgress();
+            }
             parent.getGeneralOptions.doCall();
         </handler>  
     </netRemoteCallHib>
@@ -763,6 +778,7 @@
 	<netRemoteCallHib name="loginWicket" funcname="xmlcrm.loginWicket" >
 		<netparam><method name="getValue">return canvas.sessionId;</method></netparam>
 		<netparam><method name="getValue">return canvas.wicketsid;</method></netparam>
+		<netparam><method name="getValue">return canvas.wicketroomid;</method></netparam>
 		<handler name="ondata" args="value">
 		<![CDATA[
 			if ($debug) Debug.write("!!!!!!!!!!! loginWicket", value);
@@ -776,10 +792,6 @@
 				canvas.setAttribute('picture_uri','');
 				canvas.setAttribute('language','');
 				canvas.setAttribute('currentuser',value.login);
-				if (value.omTimeZone != null) {
-					canvas.setAttribute('jNameTimeZone',value.omTimeZone.jname);
-					canvas.timeZoneId = value.omTimeZone.omtimezoneId;
-				}
 				canvas.becomemoderator = value.level_id >= 2;
 				if (value.sessionData == null) {
 					if ($debug) Debug.write("No Language Found to assign");
@@ -812,7 +824,9 @@
             //Debug.write("getRoomTypes ",value);
             canvas.roomTypesInitValues = value;
             canvas.sendViaLocalConnection(canvas.rtmp_lc_name, "getRoomTypes", [value]);
-            canvas.thishib.loaderVar.setProgress();
+			if (canvas.thishib.loaderVar != null) {
+            	canvas.thishib.loaderVar.setProgress();
+            }
             parent.setUsernameAndSession.doCall();
         </handler>  
     </netRemoteCallHib>      
@@ -905,7 +919,7 @@
             <handler name="ondata" args="value">
                 //The onResult-Handler will be called be the rtmpconnection
                 if ($debug) Debug.write("newStream: ",value);
-                if (value.isScreenClient) {
+                if (value == null || value.isScreenClient) {
                     return;
                 }
                 canvas._videocontainer.startStream(value.publicSID,value.broadCastID,value.firstname,value.lastname,value.interviewPodId,value.VWidth,value.VHeight); 
@@ -916,6 +930,9 @@
             <handler name="ondata" args="value">
                 //The onResult-Handler will be called be the rtmpconnection
                 if ($debug) Debug.write("**** closeStream: ",value);
+                if (value == null) {
+                	return;
+                }
                 if (value.isScreenClient) {
                     if ($debug) Debug.write(" ondata closeStream: ",value.streamPublishName); 
                     canvas.currentBaseConferenceRoom._screenSharingAdapter.closeScreenSharing(value);
@@ -966,7 +983,7 @@
             <![CDATA[
                 //The onResult-Handler will be called be the rtmpconnection
                 if ($debug) Debug.write("roomDisconnect: ",value);
-                if (value.isScreenClient) {
+                if (value == null || value.isScreenClient) {
                     return;
                 }
                 if ($debug) Debug.write("canvas.currentBaseConferenceRoom._chatPanelStrict: ", canvas.currentBaseConferenceRoom._chatPanelStrict);

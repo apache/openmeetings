@@ -106,7 +106,7 @@
     
     <miniIconsNew name="_doShare" y="6" innerResource="start_screensharing_rsc" width="16" height="16" 
     			showhandcursor="true"
-               visible="${canvas.currentRoomObj.hideScreenSharing ? false : ((canvas.ismoderator) ? true : ((canvas.isAllowedToScreenShare) ? true : false )) }" >
+               visible="${canvas.currentRoomObj.hideScreenSharing ? false : ((canvas.becomemoderator) ? true : ((canvas.isAllowedToScreenShare) ? true : false )) }" >
         <handler name="onclick">
             this.parent.checkForApplyScreen("no");
         </handler>
