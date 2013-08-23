@@ -223,9 +223,12 @@
 	</target>
 	
 	<target name="web.copy" depends="-process-db">
-		<filter token="wicket.mode" value="${wicket.mode}" />
-		<copy todir="${dist.webapps.dir}" filtering="true" overwrite="true" force="true">
+		<copy todir="${dist.webapps.dir}" overwrite="true" force="true">
 			<fileset dir="${webapp.dir}" />
+		</copy>
+		<filter token="wicket.mode" value="${wicket.mode}" />
+		<copy todir="${dist.webapps.dir}/WEB-INF" filtering="true" overwrite="true" force="true">
+			<fileset file="${webapp.dir}/WEB-INF/web.xml" />
 		</copy>
 		<copy todir="${dist.classes.dir}">
 			<fileset dir="${main.out.dir}">
