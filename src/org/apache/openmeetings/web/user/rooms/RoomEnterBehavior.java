@@ -28,6 +28,10 @@ public class RoomEnterBehavior extends AjaxEventBehavior {
 	private static final long serialVersionUID = -5195740583653865055L;
 	private final long roomid;
 	
+	public static void roomEnter(MainPage page, AjaxRequestTarget target, long roomId) {
+		page.updateContents(new OmUrlFragment(AreaKeys.room, "" + roomId), target);
+	}
+	
 	public RoomEnterBehavior(long roomid) {
 		super("click");
 		this.roomid = roomid;
@@ -35,6 +39,6 @@ public class RoomEnterBehavior extends AjaxEventBehavior {
 
 	@Override
 	protected void onEvent(AjaxRequestTarget target) {
-		((MainPage)getComponent().getPage()).updateContents(new OmUrlFragment(AreaKeys.room, "" + roomid), target);
+		roomEnter((MainPage)getComponent().getPage(), target, roomid);
 	}
 }
