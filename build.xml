@@ -21,11 +21,10 @@
 	>
 	<loadproperties srcFile="build.properties" />
 
-	<property name="project.distname" value="openmeetings" />
 	<property name="jar.suffix" value="${project.version}-${project.status}" />
 	<property environment="env" />
 
-	<property name="main.src.dir" value="${basedir}/src" />
+	<property name="src.base.dir" value="${basedir}/src" />
 
 	<property name="dist.dir" value="dist" />
 
@@ -35,8 +34,9 @@
 	<property name="mainlibs.lib.dir" value="${project.lib.dir}/mainlibs" />
 	<property name="om.lib.dir" value="${project.lib.dir}/om" />
 	<property name="anakia.lib.dir" value="${project.lib.dir}/anakia" />
-	<property name="webcontent.src.dir" value="${basedir}/WebContent" />
-	<property name="screensharing.resources" value="${webcontent.src.dir}/screensharing" />
+	<property name="webcontent.base.dir" value="${basedir}/WebContent" />
+	<property name="resources.dir" value="${src.base.dir}/main/resources" />
+	<property name="webapp.dir" value="${src.base.dir}/main/webapp" />
 	<property name="junit.lib.dir" value="${project.lib.dir}/junit" />
 	<property name="junit.backups.dir" value="${junit.lib.dir}/backups" />
 	<property name="rat.lib.dir" value="${project.lib.dir}/rat" />
@@ -65,8 +65,8 @@
 
 	<!-- LPS Properties -->
 	<property name="out.dir.swf" value="${basedir}/${dist.webapps.dir}/public" />
-	<property name="laszlo.as3.src.dir" value="${webcontent.src.dir}/swf10" />
-	<property name="laszlo.src.dir" value="${webcontent.src.dir}/src" />
+	<property name="laszlo.as3.src.dir" value="${webcontent.base.dir}/swf10" />
+	<property name="laszlo.src.dir" value="${webcontent.base.dir}/src" />
 
 	<property name="keystore.file" value="${build.base.dir}/filetest.keystore" />
 
@@ -223,27 +223,9 @@
 	</target>
 	
 	<target name="web.copy" depends="-process-db">
-		<copy todir="${dist.webapps.dir}" overwrite="true" force="true">
-			<fileset dir="${webcontent.src.dir}/openmeetings" />
-		</copy>
 		<filter token="wicket.mode" value="${wicket.mode}" />
-		<copy todir="${dist.webapps.dir}/WEB-INF" filtering="true" overwrite="true" force="true">
-			<fileset dir="${webcontent.src.dir}/WEB-INF">
-				<include name="*.xml" />
-				<include name="*.properties" />
-				<exclude name="root-*.xml" />
-			</fileset>
-		</copy>
-		<copy todir="${dist.webapps.dir}/languages" overwrite="true" force="true">
-			<fileset dir="${webcontent.src.dir}/languages" />
-		</copy>
-		<copy todir="${dist.webapps.dir}/conf" overwrite="true" force="true">
-			<fileset dir="${webcontent.src.dir}/conf" />
-		</copy>
-		<copy todir="${dist.persistence.dir}">
-			<fileset file="src/META-INF/*.xml">
-				<exclude name="services.xml" />
-			</fileset>
+		<copy todir="${dist.webapps.dir}" filtering="true" overwrite="true" force="true">
+			<fileset dir="${webapp.dir}" />
 		</copy>
 		<copy todir="${dist.classes.dir}">
 			<fileset dir="${main.out.dir}">
@@ -260,11 +242,6 @@
 			</fileset>
 		</copy>
 
-		<copy todir="${dist.webapps.dir}">
-			<fileset dir="${webcontent.src.dir}">
-				<include name="*.html" />
-			</fileset>
-		</copy>
 		<antcall target="-cleanup-jrebel" />
 		<chmod dir="${red5.root}" perm="755" includes="**/*.sh" />
 		<tstamp />
@@ -285,7 +262,7 @@
 
 		<!-- Main Applications -->
 		<copy todir="${main.out.dir}" includeEmptyDirs="yes">
-			<fileset dir="${main.src.dir}">
+			<fileset dir="${src.base.dir}">
 				<patternset refid="resources" />
 			</fileset>
 		</copy>
@@ -343,12 +320,8 @@
 		<property name="om_aar_name" value="${project.distname}-${jar.suffix}.aar"/>
 		<property name="om_aar_folder" value="${dist.webapps.dir}/WEB-INF/services"/>
 		<jar destfile="${om_aar_folder}/${om_aar_name}">
-			<fileset dir="src/">
-				<include name="META-INF/services.xml" />
-			</fileset>
 			<fileset dir="${main.out.dir}">
-				<include name="META-INF/LICENSE" />
-				<include name="META-INF/NOTICE" />
+				<include name="META-INF/*" />
 			</fileset>
 		</jar>
 		<echo file="${om_aar_folder}/services.list" append="false">${om_aar_name}${line.separator}version.aar${line.separator}</echo>
@@ -377,7 +350,7 @@
 				<include name="META-INF/LICENSE" />
 				<include name="META-INF/NOTICE" />
 			</fileset>
-			<fileset file="${screensharing.resources}/logback.xml" />
+			<fileset file="${resources.dir}/logback.xml" />
 			<manifest>
 				<attribute name="Built-By" value="OpenMeetings - http://openmeetings.apache.org" />
 				<attribute name="Built-On" value="${build.TODAY}" />
@@ -391,7 +364,7 @@
 			<format property="TODAY_YEAR" pattern="yyyy" locale="en" />
 		</tstamp>
 	    <javadoc packagenames="org.apache.openmeetings.remote.*"
-	           sourcepath="src"
+	           sourcepath="${src.base.dir}/main/java"
 	           excludepackagenames="org.apache.openmeetings.test.*"
 	           defaultexcludes="yes"
 	           destdir="build/api"
@@ -424,7 +397,6 @@
 			</dname>
 		</genkey>
 		<copy todir="${screenshare.out.dir}">
-			<fileset dir="${screensharing.resources}" includes="*.jpg" />
 			<fileset dir="${red5.server.lib}" includes="commons-codec*.jar" />
 			<fileset dir="${red5.server.lib}" includes="commons-lang3*.jar" />
 			<fileset dir="${red5.server.lib}" includes="httpclient*.jar" />
@@ -566,40 +538,26 @@
 
 	<target name="compile" depends="compile.only, prepare" />
 
-	<target name="compile.only" depends="clean.classes, -retrieve-mainlibs,-retrieve-om,-retrieve-dtd-generator,-retrieve-junit, -retrieve-cmdadmin, -retrieve-tools.jar, resources">
-		<echo message="Compile main to ${main.out.dir}" />
-		<javac debug="on" debuglevel="lines,vars,source" destdir="${main.out.dir}" includeantruntime="false"
-			source="1.6" target="1.6">
-			<src path="${main.src.dir}" />
-			<classpath refid="compile.classpath" />
-			<compilerarg value="-Aopenjpa.metamodel=true" />
-			<!-- compilerarg value="-Xlint:deprecation"/ -->
-		</javac>
-		<copy todir="${main.out.dir}">
-			<fileset dir="${main.src.dir}">
-				<include name="**/*.*" />
-				<exclude name="**/*.java" />
-			</fileset>
-		</copy>
-		<copy file="LICENSE" tofile="${main.out.dir}/META-INF/LICENSE" overwrite="true" />
-		<copy file="NOTICE" tofile="${main.out.dir}/META-INF/NOTICE" overwrite="true" />
-	</target>
+	<target name="compile.only"
+		depends="-retrieve-mainlibs,-retrieve-om,-retrieve-dtd-generator,-retrieve-junit,-retrieve-cmdadmin,-retrieve-tools.jar,resources,compile.only.nocheck"/>
 	
 	<target name="compile.only.nocheck" depends="clean.classes, prepare.mkdir">
 		<echo message="Compile main to ${main.out.dir}" />
 		<javac debug="on" debuglevel="lines,vars,source" destdir="${main.out.dir}" includeantruntime="false"
 			source="1.6" target="1.6">
-			<src path="${main.src.dir}" />
+			<src path="${src.base.dir}/main/java" />
+			<src path="${src.base.dir}/test/java" />
 			<classpath refid="compile.classpath" />
 			<compilerarg value="-Aopenjpa.metamodel=true" />
 			<!-- compilerarg value="-Xlint:deprecation"/ -->
 		</javac>
 		<copy todir="${main.out.dir}">
-			<fileset dir="${main.src.dir}">
+			<fileset dir="${src.base.dir}/main/java">
 				<include name="**/*.*" />
 				<exclude name="**/*.java" />
 			</fileset>
 		</copy>
+		<copy file="${resources.dir}/services.xml" tofile="${main.out.dir}/META-INF/services.xml" overwrite="true" />
 		<copy file="LICENSE" tofile="${main.out.dir}/META-INF/LICENSE" overwrite="true" />
 		<copy file="NOTICE" tofile="${main.out.dir}/META-INF/NOTICE" overwrite="true" />
 	</target>
@@ -677,8 +635,8 @@
 		</taskdef>
 
 		<rat:report>
-			<fileset dir="${main.src.dir}" />
-			<fileset dir="${webcontent.src.dir}" excludes="**/*.swf" />
+			<fileset dir="${src.base.dir}" />
+			<fileset dir="${webcontent.base.dir}" excludes="**/*.swf" />
 			<fileset dir="${docs.src}" />
 		</rat:report>
 	</target>
@@ -720,7 +678,7 @@
 			</classpath>
 		</taskdef>
 
-		<xslt in="${webcontent.src.dir}/languages/errorvalues.xml" out="${docs.src}/ErrorsTable.xml" style="${docs.src}/stylesheets/errortable.xsl" />
+		<xslt in="${webapp.dir}/languages/errorvalues.xml" out="${docs.src}/ErrorsTable.xml" style="${docs.src}/stylesheets/errortable.xsl" />
 		<anakia basedir="${docs.src}" destdir="${docs.dest}/" extension=".html" style="./site.vsl" projectFile="stylesheets/project.xml" excludes="**/stylesheets/** empty.xml" includes="**/*.xml" lastModifiedCheck="true" templatePath="xdocs/stylesheets" velocityPropertiesFile="${build.base.dir}/velocity.properties" />
 		<copy todir="${docs.dest}/images">
 			<fileset dir="${docs.src}/images">
@@ -737,7 +695,7 @@
 
 	<target name="build.only.webservice.doc" depends="anakia">
 		<javadoc classpathref="build.webservice.classpath" useexternalfile="true">
-			<fileset dir="src/org/apache/openmeetings/axis/services">
+			<fileset dir="${src.base.dir}/main/java/org/apache/openmeetings/axis/services">
 				<include name="*WebService.java" />
 				<exclude name="BaseWebService.java" />
 			</fileset>
@@ -912,7 +870,7 @@
 		<filter token="jrebel.home" value="${jrebel.home}" />
 		<filter token="project.home" value="${user.dir}" />
 		<copy todir="${red5.lib}" filtering="true" overwrite="true" force="true">
-			<fileset dir="${webcontent.src.dir}/jrebel" includes="red5-debug.*"/>
+			<fileset dir="${webcontent.base.dir}/jrebel" includes="red5-debug.*"/>
 		</copy>
 	</target>
 	
@@ -967,10 +925,10 @@
 		<delete dir="${red5.lib}/webapps/installer" />
 		<delete dir="${red5.lib}/webapps/live" />
 		<delete dir="${red5.lib}/webapps/vod" />
-		<copy file="${webcontent.src.dir}/red5/index.html" todir="${red5.lib}/webapps/root" overwrite="true" force="true" />
-		<copy file="${webcontent.src.dir}/red5/jee-container.xml" todir="${red5.lib}/conf" overwrite="true" force="true" />
+		<copy file="${webcontent.base.dir}/red5/index.html" todir="${red5.lib}/webapps/root" overwrite="true" force="true" />
+		<copy file="${webcontent.base.dir}/red5/jee-container.xml" todir="${red5.lib}/conf" overwrite="true" force="true" />
 		<copy todir="${red5.lib}" overwrite="true" force="true">
-			<fileset dir="${webcontent.src.dir}/red5" includes="admin.*,network_test.sh" />
+			<fileset dir="${webcontent.base.dir}/red5" includes="admin.*,network_test.sh" />
 		</copy>
 		<!-- FIXME need to be removed as soon as JAudioTagger (will be officially Dual Licensed) -->
 		<xslt in="${red5.lib}/conf/red5-common.xml" out="${red5.lib}/conf/red5-common1.xml" style="build-jaudiotagger.xsl" />
@@ -1145,7 +1103,7 @@
 	<target name="-process-db" description="performs DB related tasks based on passed DB type">
 		<echo message="db.provider == ${db}" />
 		<antcall target="-retrieve-${db}" inheritAll="true" inheritRefs="true" />
-		<copy file="src/META-INF/${db}_persistence.xml" tofile="src/META-INF/persistence.xml" overwrite="true" />
+		<copy file="${webapp.dir}/WEB-INF/classes/META-INF/${db}_persistence.xml" tofile="${webapp.dir}/WEB-INF/classes/META-INF/persistence.xml" overwrite="true" />
 	</target>
 
 	<!-- Clean targets -->
@@ -1209,12 +1167,7 @@
 			<include name="*.jar" />
 			<exclude name="openmeetings*.jar" />
 		</fileset>
-		<!--
-		<filelist>
-			<file name="${basedir}/WebContent/screensharing/logback.xml"/>
-		</filelist>
-		 -->
-		<pathelement path="${basedir}/WebContent/screensharing" />
+		<pathelement path="${resources.dir}" />
 		<pathelement path="${main.out.dir}" />
 	</path>
 	

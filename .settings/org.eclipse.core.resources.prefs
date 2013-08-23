@@ -10,5 +10,5 @@
 #   See the License for the specific language governing permissions and
 #   limitations under the License.
 eclipse.preferences.version=1
-encoding//WebContent/openmeetings/WEB-INF/classes/rebel-remote.xml=UTF-8
-encoding//WebContent/openmeetings/WEB-INF/classes/rebel.xml=UTF-8
+encoding//src/main/webapp/WEB-INF/classes/rebel-remote.xml=UTF-8
+encoding//src/main/webapp/WEB-INF/classes/rebel.xml=UTF-8

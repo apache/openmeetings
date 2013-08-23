@@ -19,9 +19,9 @@
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/screenviewer"/>
 		<wb-resource deploy-path="/WEB-INF/classes" source-path="/screensharing"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/server"/>
-        <wb-resource deploy-path="/WEB-INF/classes" source-path="/WebContent/WEB-INF"/>
-        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/WebContent/openmeetings/WEB-INF/classes"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/java"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/test/java"/>
         <property name="java-output-path"/>
         <property name="context-root" value="/"/>
     </wb-module>

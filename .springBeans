@@ -20,7 +20,7 @@
 	</configSuffixes>
 	<enableImports><![CDATA[false]]></enableImports>
 	<configs>
-		<config>WebContent/WEB-INF/openmeetings-applicationContext.xml</config>
+		<config>src/main/webapp/WEB-INF/openmeetings-applicationContext.xml</config>
 	</configs>
 	<configSets>
 		<configSet>
@@ -28,7 +28,7 @@
 			<allowBeanDefinitionOverriding>true</allowBeanDefinitionOverriding>
 			<incomplete>false</incomplete>
 			<configs>
-				<config>WebContent/WEB-INF/openmeetings-applicationContext.xml</config>
+				<config>src/main/webapp/WEB-INF/openmeetings-applicationContext.xml</config>
 			</configs>
 			<profiles>
 			</profiles>

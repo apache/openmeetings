@@ -39,8 +39,8 @@
 			<p>You can find the default theme in the SVN: </p>
 			<p>
 				<a
-					href="https://svn.apache.org/repos/asf/openmeetings/trunk/singlewebapp/WebContent/openmeetings/public/theme.xml"
-					target="_BLANK" rel="nofollow">https://svn.apache.org/repos/asf/openmeetings/trunk/singlewebapp/WebContent/openmeetings/public/theme.xml
+					href="https://svn.apache.org/repos/asf/openmeetings/trunk/singlewebapp/src/main/webapp/openmeetings/public/theme.xml"
+					target="_BLANK" rel="nofollow">https://svn.apache.org/repos/asf/openmeetings/trunk/singlewebapp/src/main/webapp/openmeetings/public/theme.xml
 				</a>
 			</p>
 			<p>

@@ -27,8 +27,8 @@
 			<p>
 				List of default Timezones:
 				<a
-					href="http://openmeetings.googlecode.com/svn/trunk/singlewebapp/WebContent/languages/timezones.xml"
-					rel="nofollow">http://openmeetings.googlecode.com/svn/trunk/singlewebapp/WebContent/languages/timezones.xml
+					href="http://openmeetings.googlecode.com/svn/trunk/singlewebapp/src/main/webapp/languages/timezones.xml"
+					rel="nofollow">http://openmeetings.googlecode.com/svn/trunk/singlewebapp/src/main/webapp/languages/timezones.xml
 				</a>
 			</p>
 			<p>
