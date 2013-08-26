@@ -50,7 +50,9 @@
 			<div id="controlBlock" onclick="toggleChat();"><div id="control" class="ui-icon ui-icon-carat-1-n sort-icon"></div></div>
 			<div wicket:id="messages"></div>
 			<form wicket:id="sendForm">
-				<textarea wicket:id="message"></textarea><input type="submit" wicket:id="send"/>
+				<div wicket:id="toolbarContainer"></div>
+				<div wicket:id="message"></div>
+				<input type="submit" wicket:id="send"/>
 			</form>
 		</div>
 	</wicket:panel>

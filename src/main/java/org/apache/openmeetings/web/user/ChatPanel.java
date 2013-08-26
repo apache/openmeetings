@@ -40,7 +40,6 @@ import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.protocol.ws.IWebSocketSettings;
 import org.apache.wicket.protocol.ws.api.IWebSocketConnection;
@@ -49,6 +48,8 @@ import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 
 import com.googlecode.wicket.jquery.ui.plugins.emoticons.EmoticonsBehavior;
+import com.googlecode.wicket.jquery.ui.plugins.wysiwyg.WysiwygEditor;
+import com.googlecode.wicket.jquery.ui.plugins.wysiwyg.toolbar.DefaultWysiwygToolbar;
 
 public class ChatPanel extends UserPanel {
 	private static final Logger log = Red5LoggerFactory.getLogger(ChatPanel.class, webAppRootKey);
@@ -97,7 +98,9 @@ public class ChatPanel extends UserPanel {
 		add(new EmoticonsBehavior("#" + MESSAGE_AREA_ID));
 		add(new WebMarkupContainer("messages").setMarkupId(MESSAGE_AREA_ID));
 		final Form<Void> f = new Form<Void>("sendForm");
-		f.add(new TextArea<String>("message", new PropertyModel<String>(ChatPanel.this, "message")).setOutputMarkupId(true));
+		DefaultWysiwygToolbar toolbar = new DefaultWysiwygToolbar("toolbarContainer");
+		f.add(toolbar);
+		f.add(new WysiwygEditor("message", new PropertyModel<String>(ChatPanel.this, "message"), toolbar).setOutputMarkupId(true));
 		f.add(new Button("send").add(new AjaxFormSubmitBehavior("onclick"){
 			private static final long serialVersionUID = -3746739738826501331L;
 			

@@ -53,7 +53,6 @@ import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.PasswordTextField;
 import org.apache.wicket.markup.html.form.RequiredTextField;
-import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
@@ -64,6 +63,8 @@ import org.apache.wicket.model.PropertyModel;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 
+import com.googlecode.wicket.jquery.ui.plugins.wysiwyg.WysiwygEditor;
+import com.googlecode.wicket.jquery.ui.plugins.wysiwyg.toolbar.DefaultWysiwygToolbar;
 import com.googlecode.wicket.jquery.ui.widget.dialog.AbstractFormDialog;
 import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
 import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButtons;
@@ -212,8 +213,9 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 			
 			add(feedback.setOutputMarkupId(true));
 			add(new RequiredTextField<String>("appointmentName").setLabel(Model.of(WebSession.getString(572))));
-			//add(new WysiwygEditor("appointmentDescription"));
-			add(new TextArea<String>("appointmentDescription"));
+			DefaultWysiwygToolbar toolbar = new DefaultWysiwygToolbar("toolbarContainer");
+			add(toolbar);
+			add(new WysiwygEditor("appointmentDescription", toolbar));
 			add(new TextField<String>("appointmentLocation"));
 			add(new DateTimeField("appointmentStarttime"));
 			add(new DateTimeField("appointmentEndtime"));

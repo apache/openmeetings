@@ -42,13 +42,14 @@ import org.apache.wicket.extensions.yui.calendar.DateTimeField;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
+import com.googlecode.wicket.jquery.ui.plugins.wysiwyg.WysiwygEditor;
+import com.googlecode.wicket.jquery.ui.plugins.wysiwyg.toolbar.DefaultWysiwygToolbar;
 import com.googlecode.wicket.jquery.ui.widget.dialog.AbstractFormDialog;
 import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
 
@@ -107,7 +108,9 @@ public class MessageDialog extends AbstractFormDialog<PrivateMessage> {
 		form.add(feedback.setOutputMarkupId(true));
 		form.add(new UserAutoCompleteTextField("to").setRequired(true));
 		form.add(new TextField<String>("subject"));
-		form.add(new TextArea<String>("message"));
+		DefaultWysiwygToolbar toolbar = new DefaultWysiwygToolbar("toolbarContainer");
+		form.add(toolbar);
+		form.add(new WysiwygEditor("message", toolbar));
 		form.add(roomParamsBlock.setOutputMarkupId(true));
 		final CheckBox bookedRoom = new CheckBox("bookedRoom");
 		form.add(bookedRoom.setOutputMarkupId(true).add(new AjaxEventBehavior("click") {

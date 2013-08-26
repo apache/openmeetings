@@ -41,7 +41,10 @@
 				<td><input class="messages text" type="text" wicket:id="subject"/></td>
 			</tr>
 			<tr>
-				<td colspan="2"><textarea class="messages body" wicket:id="message" ></textarea></td>
+				<td colspan="2">
+					<div wicket:id="toolbarContainer"></div>
+					<div wicket:id="message"></div>
+				</td>
 			</tr>
 			<tr>
 				<td colspan="2"><input type="checkbox" wicket:id="bookedRoom" /><label wicket:for="bookedRoom"><wicket:ommessage key="1218"/></label></td>
