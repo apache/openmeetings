@@ -726,7 +726,7 @@ div.tableWrapperSmall {
 .clear {
 	clear: both;
 }
-.om-icon, .add-icon, .new-email-icon, .user-icon, .refresh-icon, .folder-create-icon, .tick-icon, .cross-icon {
+.om-icon, .add-icon, .new-email-icon, .user-icon, .refresh-icon, .folder-create-icon, .tick-icon, .cross-icon, .trash-icon {
 	background-repeat: no-repeat;
 	width: 18px;
 	height: 18px;
