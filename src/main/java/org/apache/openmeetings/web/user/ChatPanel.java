@@ -49,7 +49,6 @@ import org.slf4j.Logger;
 
 import com.googlecode.wicket.jquery.ui.plugins.emoticons.EmoticonsBehavior;
 import com.googlecode.wicket.jquery.ui.plugins.wysiwyg.WysiwygEditor;
-import com.googlecode.wicket.jquery.ui.plugins.wysiwyg.toolbar.DefaultWysiwygToolbar;
 
 public class ChatPanel extends UserPanel {
 	private static final Logger log = Red5LoggerFactory.getLogger(ChatPanel.class, webAppRootKey);
@@ -98,7 +97,7 @@ public class ChatPanel extends UserPanel {
 		add(new EmoticonsBehavior("#" + MESSAGE_AREA_ID));
 		add(new WebMarkupContainer("messages").setMarkupId(MESSAGE_AREA_ID));
 		final Form<Void> f = new Form<Void>("sendForm");
-		DefaultWysiwygToolbar toolbar = new DefaultWysiwygToolbar("toolbarContainer");
+		ChatToolbar toolbar = new ChatToolbar("toolbarContainer");
 		f.add(toolbar);
 		f.add(new WysiwygEditor("message", new PropertyModel<String>(ChatPanel.this, "message"), toolbar).setOutputMarkupId(true));
 		f.add(new Button("send").add(new AjaxFormSubmitBehavior("onclick"){
