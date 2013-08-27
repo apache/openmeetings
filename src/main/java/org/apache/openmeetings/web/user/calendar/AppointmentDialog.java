@@ -40,6 +40,8 @@ import org.apache.openmeetings.persistence.beans.domain.Organisation_Users;
 import org.apache.openmeetings.persistence.beans.room.Room;
 import org.apache.openmeetings.persistence.beans.room.RoomType;
 import org.apache.openmeetings.web.app.WebSession;
+import org.apache.openmeetings.web.pages.MainPage;
+import org.apache.openmeetings.web.user.rooms.RoomEnterBehavior;
 import org.apache.openmeetings.web.util.RoomTypeDropDown;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -73,14 +75,14 @@ import com.googlecode.wicket.jquery.ui.widget.dialog.MessageDialog;
 
 
 public class AppointmentDialog extends AbstractFormDialog<Appointment> {
-	
+	private static final long serialVersionUID = 1L;
 	private static final Logger log = Red5LoggerFactory.getLogger(AppointmentDialog.class, webAppRootKey);
 	
-	private static final long serialVersionUID = 7553035786264113827L;
 	private AppointmentForm form;
 	private DialogButton save = new DialogButton(WebSession.getString(813));
 	private DialogButton cancel = new DialogButton(WebSession.getString(1130));
 	private DialogButton delete = new DialogButton(WebSession.getString(814));
+	private DialogButton enterRoom = new DialogButton(WebSession.getString(1282));
 	private final CalendarPanel calendar;
 	protected final FeedbackPanel feedback;
 	final MeetingMemberDialog addAttendees;
@@ -98,8 +100,10 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 		log.debug(" -- setModelObjectWithAjaxTarget -- Current model " + object);
 		if (object.getAppointmentId() != null) {
 			delete.setVisible(true, target);
+			enterRoom.setVisible(object.getRoom() != null, target);
 		} else {
 			delete.setVisible(false, target);
+			enterRoom.setVisible(false, target);
 		}
 		super.setModelObject(object);
 	}
@@ -133,7 +137,7 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 
 	@Override
 	protected List<DialogButton> getButtons() {
-		return Arrays.asList(save, delete, cancel);
+		return Arrays.asList(enterRoom, save, delete, cancel);
 	}
 	
 	@Override
@@ -155,6 +159,8 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 	public void onClose(AjaxRequestTarget target, DialogButton button) {
 		if (delete.equals(button)) {
 			confirmDelete.open(target);
+		} else if (enterRoom.equals(button)) {
+			RoomEnterBehavior.roomEnter((MainPage)getPage(), target, getModelObject().getRoom().getRooms_id());
 		}
 	}
 	
