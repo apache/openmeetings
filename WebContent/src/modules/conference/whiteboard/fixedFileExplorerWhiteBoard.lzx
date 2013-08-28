@@ -209,7 +209,9 @@
             <handler name="ony" args="y">
                 if (this.sendUpdate) {
                     if ($debug) Debug.write("# y",y);
-                    parent.parent.scrollContainer.calcScrollContent();
+                    if (parent.parent.scrollContainer != null) {
+                    	parent.parent.scrollContainer.calcScrollContent();
+                    }
                 }
             </handler>
             
@@ -544,7 +546,9 @@
                 }
                 if ($debug) Debug.warn("onvalue Full Fit ",v);
                 
-                parent.parent._drawareaMask._drawarea.doUpdateFullFit(v,parent._zoom.initialNumber);
+                if (parent._zoom != null) {
+                	parent.parent._drawareaMask._drawarea.doUpdateFullFit(v,parent._zoom.initialNumber);
+                }
             </handler>
             <labelTooltip labelid="1212" multiline="true" />
         </labelCheckbox>

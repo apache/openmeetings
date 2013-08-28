@@ -29,7 +29,9 @@
     <handler name="onsharedMessage" args="obj">
         //Debug.write("send: ",obj);
         this.objWhiteboard = obj;
-        this.sendVarsByWhiteboardId.doCall();
+        if (this.sendVarsByWhiteboardId != null){
+        	this.sendVarsByWhiteboardId.doCall();
+        }
     </handler>
     
     <netRemoteCallHib name="sendVarsByWhiteboardId" funcname="sendVarsByWhiteboardId" 
