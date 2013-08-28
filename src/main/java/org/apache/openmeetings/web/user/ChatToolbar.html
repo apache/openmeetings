@@ -19,39 +19,49 @@
 
 -->
 <html xmlns:wicket="http://wicket.apache.org">
-
-<wicket:panel>
+<wicket:head>
+	<style>
+		.emt {
+			font-size: 10pt;
+		}
+		.chat.btn{
+			font-weight: bold;
+		}
+		.chat.dropdown-menu {
+			left: -50px;
+		}
+	</style>
 	<script type="text/javascript">
-    function emtClick(emoticon) {
-        var editor = $('#chatMessage');
-        editor.html(editor.html() + ' ' + emoticon + ' ');
-    }
-	$(function() {
-		 var emots = [":-)", ":)", ":o)", ":c)", ":^)", ":-D", ":-(", ":-9", ";-)", ":-P", ":-p", ":-Þ", ":-b"
-		 	, ":-O", ":-/", ":-X", ":-#", ":'(", "B-)", "8-)", ":-\\", ";*(", ":-*", ":]", ":>", "=]", "=)", "8)"
-		 	, ":}", ":D", "8D", "XD", "xD", "=D", ":(", ":<", ":[", ":{", "=(", ";)", ";]", ";D", ":P", ":p"
-		 	, "=P", "=p", ":b", ":Þ", ":O", "8O", ":/", "=/", ":S", ":#", ":X", "B)", "O:)", "<3", ";(", ">:)"
-		 	, ">;)", ">:(", "O_o", "O_O", "o_o", "0_o", "T_T", "^_^", "?-)"];
-		 var emotMenuList = $('#emotMenuList');
-		 var rowSize = 15;
-		 var row = $('<tr></tr>');
-		 for (var i = 0; i < emots.length; ++i) {
-		 	row.append('<td><div class="emt" onclick="emtClick(\'' + emots[i] + '\');" style="font-size: 10pt">'
-		 		+ emots[i] + '</div></td>');
-		 	if (i != 0 && i % rowSize == 0) {
-		 		emotMenuList.append(row);
-		 		row = $('<tr></tr>');
-		 	}
-		 }
-		 $('.emt').emoticonize();
-	});
+	    function emtClick(emoticon) {
+	        var editor = $('#chatMessage');
+	        editor.html(editor.html() + ' ' + emoticon + ' ');
+	    }
+		$(function() {
+			 var emots = [":-)", ":)", ":o)", ":c)", ":^)", ":-D", ":-(", ":-9", ";-)", ":-P", ":-p", ":-Þ", ":-b"
+			 	, ":-O", ":-/", ":-X", ":-#", ":'(", "B-)", "8-)", ":-\\", ";*(", ":-*", ":]", ":>", "=]", "=)", "8)"
+			 	, ":}", ":D", "8D", "XD", "xD", "=D", ":(", ":<", ":[", ":{", "=(", ";)", ";]", ";D", ":P", ":p"
+			 	, "=P", "=p", ":b", ":Þ", ":O", "8O", ":/", "=/", ":S", ":#", ":X", "B)", "O:)", "<3", ";(", ">:)"
+			 	, ">;)", ">:(", "O_o", "O_O", "o_o", "0_o", "T_T", "^_^", "?-)"];
+			 var emotMenuList = $('#emotMenuList');
+			 var rowSize = 15;
+			 var row = $('<tr></tr>');
+			 for (var i = 0; i < emots.length; ++i) {
+			 	row.append('<td><div class="emt" onclick="emtClick(\'' + emots[i] + '\');">'
+			 		+ emots[i] + '</div></td>');
+			 	if (i != 0 && i % rowSize == 0) {
+			 		emotMenuList.append(row);
+			 		row = $('<tr></tr>');
+			 	}
+			 }
+			 $('.emt').emoticonize();
+		});
 	</script>
+</wicket:head>
+<wicket:panel>
 	<div wicket:id="toolbar" class="btn-toolbar" data-role="editor-toolbar">
 		<div class="btn-group">
-			<a id="emoticons" class="btn dropdown-toggle" data-toggle="dropdown" title="Emoticons">
-				<span class="emt" style="font-weight: bold;"> :) <b class="caret"></b></span>
-			</a>
-			<ul class="dropdown-menu" >
+			<a id="emoticons" class="chat btn emt dropdown-toggle" data-toggle="dropdown" title="Emoticons"> :) <b class="caret"></b></a>
+			<ul class="chat dropdown-menu" >
 				<li>
 					<table id="emotMenuList">
 					</table>
@@ -59,16 +69,16 @@
 			</ul>
 		</div>
 		<div class="btn-group">
-			<a id="fontSize" class="btn dropdown-toggle" data-toggle="dropdown" title="Font Size" style="font-weight: bold;"> A <b class="caret"></b></a>
+			<a id="fontSize" class="chat btn dropdown-toggle" data-toggle="dropdown" title="Font Size"> A <b class="caret"></b></a>
 			<ul class="dropdown-menu">
 				<li><a data-edit="fontSize 5"><font size="3">Huge</font></a></li>
 				<li><a data-edit="fontSize 3"><font size="2">Normal</font></a></li>
 				<li><a data-edit="fontSize 1"><font size="1">Small</font></a></li>
 			</ul>
-			<a id="bold" class="btn" data-edit="bold" title="Bold (Ctrl/Cmd+B)" style="font-weight: bold;"> B
-			</a> <a id="italic" class="btn" data-edit="italic" title="Italic (Ctrl/Cmd+I)" style="font-style: italic;"> I
-			</a> <a id="strikethrough" class="btn" data-edit="strikethrough" title="Strikethrough" style="text-decoration: line-through;"> S
-			</a> <a id="underline" class="btn" data-edit="underline" title="Underline (Ctrl/Cmd+U)" style="text-decoration: underline;"> U
+			<a id="bold" class="chat btn" data-edit="bold" title="Bold (Ctrl/Cmd+B)"> B
+			</a> <a id="italic" class="chat btn" data-edit="italic" title="Italic (Ctrl/Cmd+I)" style="font-style: italic;"> I
+			</a> <a id="strikethrough" class="chat btn" data-edit="strikethrough" title="Strikethrough" style="text-decoration: line-through;"> S
+			</a> <a id="underline" class="chat btn" data-edit="underline" title="Underline (Ctrl/Cmd+U)" style="text-decoration: underline;"> U
 			</a>
 		</div>
 	</div>

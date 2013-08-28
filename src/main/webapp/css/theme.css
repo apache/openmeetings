@@ -105,6 +105,14 @@ html, body {
     font-style: italic;
     font-size: smaller;
 }
+#messageArea {
+	height: 140px;
+	overflow-y: auto;
+}
+#chatMessage .wysiwyg-editor {
+	height: 50px;
+	max-height: 50px;
+}
 /* 
     ################################
     Column layout admin section
