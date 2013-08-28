@@ -270,12 +270,12 @@ public class RecordingsPanel extends UserPanel {
 				protected String getOtherStyleClass(FlvRecording t) {
 					String style;
 					if (t.getFlvRecordingId() == -2) {
-						style = "my-recordings-icon";
+						style = "my-recordings om-icon";
 					} else if (t.getFlvRecordingId() == -1) {
-						style = "public-recordings-icon";
+						style = "public-recordings om-icon";
 					} else {
 						style = t.getIsFolder() ? super.getOtherStyleClass(t)
-								: (getMp4Recording(t.getFileHash()).exists() ? "recording-icon" : "broken-recording-icon");
+								: (getMp4Recording(t.getFileHash()).exists() ? "recording om-icon" : "broken-recording om-icon");
 					}
 					if (isSelected()) {
 						style += " selected";
@@ -288,9 +288,9 @@ public class RecordingsPanel extends UserPanel {
 					String style;
 					FlvRecording r = getModelObject();
 					if (r.getFlvRecordingId() == -2) {
-						style = "my-recordings-icon";
+						style = "my-recordings om-icon";
 					} else if (r.getFlvRecordingId() == -1) {
-						style = "public-recordings-icon";
+						style = "public-recordings om-icon";
 					} else {
 						style = super.getOpenStyleClass();
 					}
@@ -302,9 +302,9 @@ public class RecordingsPanel extends UserPanel {
 					String style;
 					FlvRecording r = getModelObject();
 					if (r.getFlvRecordingId() == -2) {
-						style = "my-recordings-icon";
+						style = "my-recordings om-icon";
 					} else if (r.getFlvRecordingId() == -1) {
-						style = "public-recordings-icon";
+						style = "public-recordings om-icon";
 					} else {
 						style = super.getClosedStyleClass();
 					}
