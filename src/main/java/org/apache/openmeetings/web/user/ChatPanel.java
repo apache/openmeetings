@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.web.user;
 
+import static org.apache.commons.lang3.StringEscapeUtils.unescapeXml;
 import static org.apache.openmeetings.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.getDateFormat;
@@ -106,7 +107,7 @@ public class ChatPanel extends UserPanel {
 					protected void onSubmit(AjaxRequestTarget target) {
 						ChatDao dao = getBean(ChatDao.class);
 						ChatMessage m = new ChatMessage();
-						m.setMessage(chatMessage.getDefaultModelObjectAsString());
+						m.setMessage(unescapeXml(chatMessage.getDefaultModelObjectAsString()));
 						m.setSent(new Date());
 						m.setFromUser(getBean(UsersDao.class).get(getUserId()));
 						dao.update(m);
