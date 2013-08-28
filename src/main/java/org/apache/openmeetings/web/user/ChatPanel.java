@@ -40,7 +40,8 @@ import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.protocol.ws.IWebSocketSettings;
 import org.apache.wicket.protocol.ws.api.IWebSocketConnection;
 import org.apache.wicket.protocol.ws.api.IWebSocketConnectionRegistry;
@@ -54,7 +55,7 @@ public class ChatPanel extends UserPanel {
 	private static final Logger log = Red5LoggerFactory.getLogger(ChatPanel.class, webAppRootKey);
 	private static final long serialVersionUID = -9144707674886211557L;
 	private static final String MESSAGE_AREA_ID = "messageArea";
-	private String message;
+	private IModel<String> messageModel = Model.of("");
 	
 	private JSONObject getMessage(ChatMessage m) throws JSONException {
 		return new JSONObject()
@@ -99,14 +100,15 @@ public class ChatPanel extends UserPanel {
 		final Form<Void> f = new Form<Void>("sendForm");
 		ChatToolbar toolbar = new ChatToolbar("toolbarContainer");
 		f.add(toolbar);
-		f.add(new WysiwygEditor("message", new PropertyModel<String>(ChatPanel.this, "message"), toolbar).setOutputMarkupId(true));
+		final WysiwygEditor chatMessage = new WysiwygEditor("chatMessage", messageModel, toolbar);
+		f.add(chatMessage);
 		f.add(new Button("send").add(new AjaxFormSubmitBehavior("onclick"){
 			private static final long serialVersionUID = -3746739738826501331L;
 			
 			protected void onSubmit(AjaxRequestTarget target) {
 				ChatDao dao = getBean(ChatDao.class);
 				ChatMessage m = new ChatMessage();
-				m.setMessage(message);
+				m.setMessage(messageModel.getObject());
 				m.setSent(new Date());
 				m.setFromUser(getBean(UsersDao.class).get(getUserId()));
 				dao.update(m);
@@ -118,11 +120,11 @@ public class ChatPanel extends UserPanel {
 						log.error("Error while sending message", e);
 					}
 				}
-				ChatPanel.this.message = "";
+				messageModel = Model.of(""); //HACK need to be fixed in WysiwygEditor
+				chatMessage.setDefaultModel(messageModel);
 				target.add(f);
 			};
 		}));
 		add(f.setOutputMarkupId(true));
 	}
-
 }

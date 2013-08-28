@@ -30,7 +30,9 @@
 			}
 			function addChatMessageInternal(m) {
 				if (m && m.type == "chat") {
-					$('#messageArea').append('<div><span class="date">' + m.msg.sent + '</span>' + m.msg.message + '</div>');
+					var msg = $('<div><span class="date">' + m.msg.sent + '</span>' + m.msg.message + '</div>');
+					$('#messageArea').append(msg);
+					msg[0].scrollIntoView();
 				}
 			}
 			function addChatMessage(m) {
@@ -46,12 +48,11 @@
 	</wicket:head>
 	<wicket:panel>
 		<div id="chat">
-			<!--  FIXME select emotion button is required! -->
 			<div id="controlBlock" onclick="toggleChat();"><div id="control" class="ui-icon ui-icon-carat-1-n sort-icon"></div></div>
 			<div wicket:id="messages"></div>
 			<form wicket:id="sendForm">
 				<div wicket:id="toolbarContainer"></div>
-				<div wicket:id="message"></div>
+				<div id="chatMessage" wicket:id="chatMessage"></div>
 				<input type="submit" wicket:id="send"/>
 			</form>
 		</div>

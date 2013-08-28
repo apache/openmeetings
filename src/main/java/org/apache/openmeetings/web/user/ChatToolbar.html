@@ -23,7 +23,7 @@
 <wicket:panel>
 	<script type="text/javascript">
     function emtClick(emoticon) {
-        var editor = $($('#bToolbar').attr('data-target'));
+        var editor = $('#chatMessage');
         editor.html(editor.html() + ' ' + emoticon + ' ');
     }
 	$(function() {
