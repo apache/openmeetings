@@ -36,9 +36,9 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.repeater.Item;
 
 public class RoomsPanel extends AdminPanel {
-
 	private static final long serialVersionUID = -1L;
 	private final AddUsersDialog addModeratorsDialog;
+	final WebMarkupContainer listContainer = new WebMarkupContainer("listContainer");
 	private RoomForm form;
 	
 	@Override
@@ -65,15 +65,16 @@ public class RoomsPanel extends AdminPanel {
 						form.hideNewRecord();
 						form.setModelObject(room);
 						form.updateView(target);
-						target.add(form);
+						target.add(form, listContainer);
 						target.appendJavaScript("omRoomPanelInit();");
 					}
 				});
-				item.add(AttributeModifier.replace("class", (item.getIndex() % 2 == 1) ? "even" : "odd"));
+				item.add(AttributeModifier.replace("class", "clickable "
+						+ (item.getIndex() % 2 == 1 ? "even" : "odd")
+						+ (room.getRooms_id().equals(form.getModelObject().getRooms_id()) ? " selected" : "")));
 			}
 		};
 		
-		final WebMarkupContainer listContainer = new WebMarkupContainer("listContainer");
 		add(listContainer.add(dataView).setOutputMarkupId(true));
 		PagedEntityListPanel navigator = new PagedEntityListPanel("navigator", dataView) {
 			private static final long serialVersionUID = -1L;

@@ -42,6 +42,7 @@ import org.apache.wicket.markup.repeater.Item;
 public class ConfigsPanel extends AdminPanel {
 	private static final long serialVersionUID = -1L;
 	private ConfigForm form;
+	final WebMarkupContainer listContainer = new WebMarkupContainer("listContainer");
 	
 	@Override
 	public void onMenuPanelLoad(AjaxRequestTarget target) {
@@ -58,25 +59,25 @@ public class ConfigsPanel extends AdminPanel {
 
 			@Override
 			protected void populateItem(final Item<Configuration> item) {
-				final Configuration configuration = item.getModelObject();
-				item.add(new Label("configuration_id", configuration.getConfiguration_id()));
-				item.add(new Label("conf_key", configuration.getConf_key()));
-				item.add(new Label("conf_value", configuration.getConf_value()));
+				final Configuration c = item.getModelObject();
+				item.add(new Label("configuration_id", c.getConfiguration_id()));
+				item.add(new Label("conf_key", c.getConf_key()));
+				item.add(new Label("conf_value", c.getConf_value()));
 				item.add(new AjaxEventBehavior("onclick") {
 					private static final long serialVersionUID = -8069413566800571061L;
 
 					protected void onEvent(AjaxRequestTarget target) {
 						form.hideNewRecord();
-						form.setModelObject(configuration);
-						target.add(form);
+						form.setModelObject(c);
+						target.add(form, listContainer);
 						target.appendJavaScript("omConfigPanelInit();");
 					}
 				});
 				item.add(AttributeModifier.replace("class", "clickable "
-						+ ((item.getIndex() % 2 == 1) ? "even" : "odd")));
+						+ (item.getIndex() % 2 == 1 ? "even" : "odd")
+						+ (c.getConfiguration_id().equals(form.getModelObject().getConfiguration_id()) ? " selected" : "")));
 			}
 		};
-		final WebMarkupContainer listContainer = new WebMarkupContainer("listContainer");
 		add(listContainer.add(dataView).setOutputMarkupId(true));
 		PagedEntityListPanel navigator = new PagedEntityListPanel("navigator", dataView) {
 			private static final long serialVersionUID = 5097048616003411362L;

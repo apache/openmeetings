@@ -44,6 +44,7 @@ import com.googlecode.wicket.jquery.ui.widget.dialog.MessageDialog;
 
 public class UsersPanel extends AdminPanel {
 	private static final long serialVersionUID = -4463107742579790120L;
+	final WebMarkupContainer listContainer = new WebMarkupContainer("listContainer");
 	private final MessageDialog warning = new MessageDialog("warning", WebSession.getString(797), WebSession.getString(343), DialogButtons.OK, DialogIcon.WARN) {
 		private static final long serialVersionUID = 1L;
 
@@ -73,22 +74,22 @@ public class UsersPanel extends AdminPanel {
 				item.add(new Label("login", u.getLogin()));
 				item.add(new Label("firstName", u.getFirstname()));
 				item.add(new Label("lastName", u.getLastname()));
-				item.add(AttributeModifier.append("class", "clickable "
-						+ ((item.getIndex() % 2 == 1) ? "even" : "odd")));
 				item.add(new AjaxEventBehavior("onclick") {
 					private static final long serialVersionUID = -8069413566800571061L;
 
 					protected void onEvent(AjaxRequestTarget target) {
 						form.setModelObject(u);
 						form.hideNewRecord();
-						target.add(form);
+						target.add(form, listContainer);
 						//re-initialize height
 						target.appendJavaScript("omUserPanelInit();");
 					}
 				});
+				item.add(AttributeModifier.append("class", "clickable "
+						+ (item.getIndex() % 2 == 1 ? "even" : "odd")
+						+ (u.getUser_id().equals(form.getModelObject().getUser_id()) ? " selected" : "")));
 			}
 		};
-		final WebMarkupContainer listContainer = new WebMarkupContainer("listContainer");
 		add(listContainer.add(dataView).setOutputMarkupId(true));
 		PagedEntityListPanel navigator = new PagedEntityListPanel("navigator", dataView) {
 			private static final long serialVersionUID = 5097048616003411362L;

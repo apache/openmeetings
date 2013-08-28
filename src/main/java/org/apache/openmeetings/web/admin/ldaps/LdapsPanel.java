@@ -41,6 +41,7 @@ import org.apache.wicket.markup.repeater.Item;
  */
 public class LdapsPanel extends AdminPanel {
 	private static final long serialVersionUID = -1L;
+	final WebMarkupContainer listContainer = new WebMarkupContainer("listContainer");
 	private LdapForm form;
 	
 	@Override
@@ -57,24 +58,25 @@ public class LdapsPanel extends AdminPanel {
 
 			@Override
 			protected void populateItem(final Item<LdapConfig> item) {
-				final LdapConfig ldapConfig = item.getModelObject();
-				item.add(new Label("ldapConfigId", "" + ldapConfig.getLdapConfigId()));
-				item.add(new Label("name", "" + ldapConfig.getName()));
-				item.add(new Label("configFileName", "" + ldapConfig.getConfigFileName()));
+				final LdapConfig lc = item.getModelObject();
+				item.add(new Label("ldapConfigId", "" + lc.getLdapConfigId()));
+				item.add(new Label("name", "" + lc.getName()));
+				item.add(new Label("configFileName", "" + lc.getConfigFileName()));
 				item.add(new AjaxEventBehavior("onclick") {
 					private static final long serialVersionUID = -8069413566800571061L;
 
 					protected void onEvent(AjaxRequestTarget target) {
-						form.setModelObject(ldapConfig);
+						form.setModelObject(lc);
 						form.hideNewRecord();
-						target.add(form);
+						target.add(form, listContainer);
 						target.appendJavaScript("omLdapPanelInit();");
 					}
 				});
-				item.add(AttributeModifier.replace("class", (item.getIndex() % 2 == 1) ? "even" : "odd"));
+				item.add(AttributeModifier.replace("class", "clickable "
+						+ ((item.getIndex() % 2 == 1) ? "even" : "odd")
+						+ (lc.getLdapConfigId() == form.getModelObject().getLdapConfigId() ? " selected" : "")));
 			}
 		};
-		final WebMarkupContainer listContainer = new WebMarkupContainer("listContainer");
 		add(listContainer.add(dataView).setOutputMarkupId(true));
 		PagedEntityListPanel navigator = new PagedEntityListPanel("navigator", dataView) {
 			private static final long serialVersionUID = -1L;

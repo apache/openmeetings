@@ -41,6 +41,7 @@ import org.apache.wicket.markup.repeater.Item;
  */
 public class ServersPanel extends AdminPanel {
 	private static final long serialVersionUID = -2197334608577346569L;
+	final WebMarkupContainer listContainer = new WebMarkupContainer("listContainer");
 	private ServerForm form;
 	
 	@Override
@@ -57,25 +58,26 @@ public class ServersPanel extends AdminPanel {
 
 			@Override
 			protected void populateItem(final Item<Server> item) {
-				final Server Server = item.getModelObject();
-				item.add(new Label("id", "" + Server.getId()));
-				item.add(new Label("name", "" + Server.getName()));
-				item.add(new Label("address", "" + Server.getAddress()));
+				final Server server = item.getModelObject();
+				item.add(new Label("id", "" + server.getId()));
+				item.add(new Label("name", "" + server.getName()));
+				item.add(new Label("address", "" + server.getAddress()));
 				item.add(new AjaxEventBehavior("onclick") {
 					private static final long serialVersionUID = -8069413566800571061L;
 
 					protected void onEvent(AjaxRequestTarget target) {
-						form.setModelObject(Server);
+						form.setModelObject(server);
 						form.hideNewRecord();
-						target.add(form);
+						target.add(form, listContainer);
 						target.appendJavaScript("omServerPanelInit();");
 					}
 				});
-				item.add(AttributeModifier.replace("class", (item.getIndex() % 2 == 1) ? "even" : "odd"));
+				item.add(AttributeModifier.replace("class", "clickable "
+						+ (item.getIndex() % 2 == 1 ? "even" : "odd")
+						+ (server.getId().equals(form.getModelObject().getId()) ? " selected" : "")));
 			}
 		};
 		
-		final WebMarkupContainer listContainer = new WebMarkupContainer("listContainer");
 		add(listContainer.add(dataView).setOutputMarkupId(true));
 		PagedEntityListPanel navigator = new PagedEntityListPanel("navigator", dataView) {
 			private static final long serialVersionUID = 5097048616003411362L;

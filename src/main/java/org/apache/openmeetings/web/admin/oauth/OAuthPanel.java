@@ -34,8 +34,8 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.repeater.Item;
 
 public class OAuthPanel extends AdminPanel {
-
 	private static final long serialVersionUID = -1L;
+	final WebMarkupContainer listContainer = new WebMarkupContainer("listContainer");
 	private OAuthForm form;
 
 	@SuppressWarnings("unchecked")
@@ -59,16 +59,17 @@ public class OAuthPanel extends AdminPanel {
 					protected void onEvent(AjaxRequestTarget target) {
 						form.setModelObject(server);
 						form.hideNewRecord();
-						target.add(form);
+						target.add(form, listContainer);
 						target.appendJavaScript("oauthPanelInit();");
 					}
 				});
-				item.add(AttributeModifier.replace("class", (item.getIndex() % 2 == 1) ? "even" : "odd"));
+				item.add(AttributeModifier.replace("class", "clickable "
+						+ (item.getIndex() % 2 == 1 ? "even" : "odd")
+						+ (server.getId().equals(form.getModelObject().getId()) ? " selected" : "")));
 			}
 			
 		};
 		
-		final WebMarkupContainer listContainer = new WebMarkupContainer("listContainer");
 		add(listContainer.add(dataView).setOutputMarkupId(true));
 		PagedEntityListPanel navigator = new PagedEntityListPanel("navigator", dataView) {
 			private static final long serialVersionUID = -1L;

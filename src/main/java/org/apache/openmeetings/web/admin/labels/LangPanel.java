@@ -136,12 +136,13 @@ public class LangPanel extends AdminPanel {
 					protected void onEvent(AjaxRequestTarget target) {
 						form.setModelObject(fv.getFieldlanguagesvalue());
 						form.hideNewRecord();
-						target.add(form);
+						target.add(form, listContainer);
 						target.appendJavaScript("labelsInit();");
 					}
 				});
 				item.add(AttributeModifier.append("class", "clickable "
-						+ ((item.getIndex() % 2 == 1) ? "even" : "odd")));
+						+ (item.getIndex() % 2 == 1 ? "even" : "odd")
+						+ (fv.getFieldvalues_id().equals(form.getModelObject().getFieldvalues_id()) ? " selected" : "")));
 			}
 		};
 

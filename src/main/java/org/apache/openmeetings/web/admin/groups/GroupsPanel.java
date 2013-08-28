@@ -98,20 +98,23 @@ public class GroupsPanel extends AdminPanel {
 
 			@Override
 			protected void populateItem(Item<Organisation> item) {
-				final Organisation organisation = item.getModelObject();
-				item.add(new Label("organisation_id", "" + organisation.getOrganisation_id()));
-				item.add(new Label("name", "" + organisation.getName()));
+				final Organisation o = item.getModelObject();
+				item.add(new Label("organisation_id", "" + o.getOrganisation_id()));
+				item.add(new Label("name", "" + o.getName()));
 				item.add(new AjaxEventBehavior("onclick") {
 					private static final long serialVersionUID = -8069413566800571061L;
 
 					protected void onEvent(AjaxRequestTarget target) {
 						form.hideNewRecord();
-						form.setModelObject(organisation);
+						form.setModelObject(o);
 						form.updateView(target);
+						target.add(listContainer);
 						target.appendJavaScript("groupsInit();");
 					}
 				});
-				item.add(AttributeModifier.append("class", "clickable " + ((item.getIndex() % 2 == 1) ? "even" : "odd")));
+				item.add(AttributeModifier.append("class", "clickable "
+						+ (item.getIndex() % 2 == 1 ? "even" : "odd")
+						+ (o.getOrganisation_id().equals(form.getModelObject().getOrganisation_id()) ? " selected" : "")));
 			}
 		};
 
