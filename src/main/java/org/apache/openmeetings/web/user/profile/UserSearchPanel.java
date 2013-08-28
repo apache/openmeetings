@@ -19,6 +19,7 @@
 package org.apache.openmeetings.web.user.profile;
 
 import static org.apache.openmeetings.web.app.Application.getBean;
+import static org.apache.openmeetings.web.app.Application.isUserOnline;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 
 import java.util.ArrayList;
@@ -30,7 +31,6 @@ import org.apache.openmeetings.data.user.UserManager;
 import org.apache.openmeetings.data.user.dao.UserContactsDao;
 import org.apache.openmeetings.persistence.beans.user.PrivateMessage;
 import org.apache.openmeetings.persistence.beans.user.User;
-import org.apache.openmeetings.session.SessionManager;
 import org.apache.openmeetings.utils.TimezoneUtil;
 import org.apache.openmeetings.web.common.PagingNavigatorPanel;
 import org.apache.openmeetings.web.common.UserPanel;
@@ -130,8 +130,7 @@ public class UserSearchPanel extends UserPanel {
 				final UserContactsDao contactsDao = getBean(UserContactsDao.class);
 				User u = item.getModelObject();
 				final long userId = u.getUser_id();
-				item.add(new WebMarkupContainer("status").add(AttributeModifier.append("class"
-					, getBean(SessionManager.class).getClientByUserId(userId) == null ? "offline" : "online")));
+				item.add(new WebMarkupContainer("status").add(AttributeModifier.append("class", isUserOnline(userId) ? "online" : "offline")));
 				item.add(new Label("name", getName(u)));
 				item.add(new Label("tz", getBean(TimezoneUtil.class).getTimezoneByUser(u).getID()));
 				item.add(new Label("offer", u.getUserOffers()));

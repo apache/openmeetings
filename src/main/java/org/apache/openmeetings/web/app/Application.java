@@ -20,6 +20,10 @@ package org.apache.openmeetings.web.app;
 
 import static org.springframework.web.context.support.WebApplicationContextUtils.getWebApplicationContext;
 
+import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+
 import org.apache.openmeetings.data.basic.FieldLanguagesValuesDao;
 import org.apache.openmeetings.data.user.dao.UsersDao;
 import org.apache.openmeetings.remote.red5.ScopeApplicationAdapter;
@@ -54,6 +58,7 @@ import org.apache.wicket.request.component.IRequestablePage;
 import org.apache.wicket.request.mapper.info.PageComponentInfo;
 import org.apache.wicket.request.mapper.parameter.PageParametersEncoder;
 import org.apache.wicket.settings.IPageSettings;
+import org.apache.wicket.util.collections.ConcurrentHashSet;
 
 import ro.fortsoft.wicket.dashboard.WidgetRegistry;
 import ro.fortsoft.wicket.dashboard.web.DashboardContext;
@@ -63,6 +68,7 @@ import ro.fortsoft.wicket.dashboard.web.DashboardSettings;
 public class Application extends AuthenticatedWebApplication {
 	private DashboardContext dashboardContext;
 	private static boolean isInstalled;
+	private static Map<Long, Set<String>> ONLINE_USERS = new ConcurrentHashMap<Long, Set<String>>();
 	
 	@Override
 	protected void init() {
@@ -161,6 +167,32 @@ public class Application extends AuthenticatedWebApplication {
 	
 	public static DashboardContext getDashboardContext() {
 		return get().dashboardContext;
+	}
+	
+	public static void addOnlineUser(long userId, String sessionId) {
+		if (!ONLINE_USERS.containsKey(userId)) {
+			ONLINE_USERS.put(userId, new ConcurrentHashSet<String>());
+		}
+		ONLINE_USERS.get(userId).add(sessionId);
+	}
+	
+	public static void removeOnlineUser(long userId, String sessionId) {
+		if (ONLINE_USERS.containsKey(userId)) {
+			Set<String> sessions = ONLINE_USERS.get(userId);
+			if (sessions.isEmpty()) {
+				ONLINE_USERS.remove(userId);
+			} else if (sessions.contains(sessionId)) {
+				if (sessions.size() > 1) {
+					sessions.remove(sessionId);
+				} else {
+					ONLINE_USERS.remove(userId);
+				}
+			}
+		}
+	}
+	
+	public static boolean isUserOnline(long userId) {
+		return ONLINE_USERS.containsKey(userId);
 	}
 	
 	//TODO need more safe way FIXME

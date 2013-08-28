@@ -19,6 +19,9 @@
 package org.apache.openmeetings.web.pages;
 
 import static org.apache.openmeetings.OpenmeetingsVariables.webAppRootKey;
+import static org.apache.openmeetings.web.app.Application.addOnlineUser;
+import static org.apache.openmeetings.web.app.Application.removeOnlineUser;
+import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import static org.apache.openmeetings.web.util.OmUrlFragment.CHILD_ID;
 import static org.apache.openmeetings.web.util.OmUrlFragment.DASHBOARD;
 import static org.apache.openmeetings.web.util.OmUrlFragment.PROFILE_EDIT;
@@ -122,12 +125,14 @@ public class MainPage extends BaseInitedPage {
 			@Override
 			protected void onConnect(ConnectedMessage message) {
 				super.onConnect(message);
+				addOnlineUser(getUserId(), WebSession.get().getId());
 				log.debug("WebSocketBehavior::onConnect");
 			}
 			
 			@Override
 			protected void onClose(ClosedMessage message) {
 				super.onClose(message);
+				removeOnlineUser(getUserId(), WebSession.get().getId());
 				log.debug("WebSocketBehavior::onClose");
 			}
 		});
