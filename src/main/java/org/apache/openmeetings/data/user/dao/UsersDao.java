@@ -35,6 +35,7 @@ import org.apache.openjpa.persistence.OpenJPAPersistence;
 import org.apache.openjpa.persistence.OpenJPAQuery;
 import org.apache.openmeetings.data.IDataProviderDao;
 import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
+import org.apache.openmeetings.persistence.beans.domain.Organisation_Users;
 import org.apache.openmeetings.persistence.beans.user.Address;
 import org.apache.openmeetings.persistence.beans.user.User;
 import org.apache.openmeetings.utils.DaoHelper;
@@ -191,6 +192,10 @@ public class UsersDao implements IDataProviderDao<User> {
 		try {
 			if (userId != 0) {
 				User us = get(userId);
+				for (Organisation_Users ou : us.getOrganisation_users()){
+					em.remove(ou);
+				}
+				us.setOrganisation_users(null);
 				us.setDeleted(true);
 				us.setUpdatetime(new Date());
 				us.setSipUser(null);
