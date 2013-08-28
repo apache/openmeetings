@@ -95,33 +95,32 @@ public class ChatPanel extends UserPanel {
 		});
 		add(new EmoticonsBehavior("#" + MESSAGE_AREA_ID));
 		add(new WebMarkupContainer("messages").setMarkupId(MESSAGE_AREA_ID));
-		final Form<Void> f = new Form<Void>("sendForm");
 		ChatToolbar toolbar = new ChatToolbar("toolbarContainer");
-		f.add(toolbar);
 		final WysiwygEditor chatMessage = new WysiwygEditor("chatMessage", Model.of(""), toolbar);
-		f.add(chatMessage);
-		f.add(new Button("send").add(new AjaxFormSubmitBehavior("onclick"){
-			private static final long serialVersionUID = -3746739738826501331L;
-			
-			protected void onSubmit(AjaxRequestTarget target) {
-				ChatDao dao = getBean(ChatDao.class);
-				ChatMessage m = new ChatMessage();
-				m.setMessage(chatMessage.getDefaultModelObjectAsString());
-				m.setSent(new Date());
-				m.setFromUser(getBean(UsersDao.class).get(getUserId()));
-				dao.update(m);
-				IWebSocketConnectionRegistry reg = IWebSocketSettings.Holder.get(getApplication()).getConnectionRegistry();
-				for (IWebSocketConnection c : reg.getConnections(getApplication())) {
-					try {
-						c.sendMessage(getMessage(m).toString());
-					} catch(Exception e) {
-						log.error("Error while sending message", e);
-					}
-				}
-				chatMessage.setDefaultModelObject("");
-				target.add(f);
-			};
-		}));
-		add(f.setOutputMarkupId(true));
+		add(new Form<Void>("sendForm").add(
+				toolbar
+				, chatMessage.setOutputMarkupId(true)
+				, new Button("send").add(new AjaxFormSubmitBehavior("onclick"){
+					private static final long serialVersionUID = -3746739738826501331L;
+					
+					protected void onSubmit(AjaxRequestTarget target) {
+						ChatDao dao = getBean(ChatDao.class);
+						ChatMessage m = new ChatMessage();
+						m.setMessage(chatMessage.getDefaultModelObjectAsString());
+						m.setSent(new Date());
+						m.setFromUser(getBean(UsersDao.class).get(getUserId()));
+						dao.update(m);
+						IWebSocketConnectionRegistry reg = IWebSocketSettings.Holder.get(getApplication()).getConnectionRegistry();
+						for (IWebSocketConnection c : reg.getConnections(getApplication())) {
+							try {
+								c.sendMessage(getMessage(m).toString());
+							} catch(Exception e) {
+								log.error("Error while sending message", e);
+							}
+						}
+						chatMessage.setDefaultModelObject("");
+						target.add(chatMessage);
+					};
+				})));
 	}
 }
