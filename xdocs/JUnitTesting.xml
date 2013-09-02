@@ -90,7 +90,7 @@
 				<li>Add the following code to the VM section
 					<div class="xmlcode">
 						-javaagent:${workspace_loc:Openmeetings}/build/lib/om/openjpa-bundle-2.2.2.jar
-						-Dwebapps.root=${workspace_loc:Openmeetings}/dist/red5/webapps/openmeetings
+						-Dom.home=${workspace_loc:Openmeetings}/src/main/webapp
 					</div>
 				</li>
 				<li>To avoid temporary files being created in OM root, modify
