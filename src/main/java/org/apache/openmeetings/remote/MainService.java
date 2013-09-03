@@ -38,8 +38,8 @@ import org.apache.openmeetings.data.conference.InvitationManager;
 import org.apache.openmeetings.data.conference.RoomManager;
 import org.apache.openmeetings.data.logs.ConferenceLogDao;
 import org.apache.openmeetings.data.user.UserManager;
+import org.apache.openmeetings.data.user.dao.AdminUserDao;
 import org.apache.openmeetings.data.user.dao.StateDao;
-import org.apache.openmeetings.data.user.dao.UsersDao;
 import org.apache.openmeetings.ldap.LdapLoginManagement;
 import org.apache.openmeetings.persistence.beans.basic.Configuration;
 import org.apache.openmeetings.persistence.beans.basic.RemoteSessionObject;
@@ -92,7 +92,7 @@ public class MainService implements IPendingServiceCallback {
 	@Autowired
 	private ConferenceLogDao conferenceLogDao;
 	@Autowired
-	private UsersDao usersDao;
+	private AdminUserDao usersDao;
 	@Autowired
 	private LdapConfigDao ldapConfigDao;
 	@Autowired

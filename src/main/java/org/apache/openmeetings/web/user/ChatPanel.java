@@ -27,7 +27,7 @@ import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import java.util.Date;
 
 import org.apache.openmeetings.data.chat.ChatDao;
-import org.apache.openmeetings.data.user.dao.UsersDao;
+import org.apache.openmeetings.data.user.dao.UserDao;
 import org.apache.openmeetings.persistence.beans.chat.ChatMessage;
 import org.apache.openmeetings.web.common.UserPanel;
 import org.apache.wicket.Component;
@@ -109,7 +109,7 @@ public class ChatPanel extends UserPanel {
 						ChatMessage m = new ChatMessage();
 						m.setMessage(unescapeXml(chatMessage.getDefaultModelObjectAsString()));
 						m.setSent(new Date());
-						m.setFromUser(getBean(UsersDao.class).get(getUserId()));
+						m.setFromUser(getBean(UserDao.class).get(getUserId()));
 						dao.update(m);
 						IWebSocketConnectionRegistry reg = IWebSocketSettings.Holder.get(getApplication()).getConnectionRegistry();
 						for (IWebSocketConnection c : reg.getConnections(getApplication())) {

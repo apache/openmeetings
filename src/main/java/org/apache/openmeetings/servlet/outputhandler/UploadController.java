@@ -36,7 +36,7 @@ import org.apache.commons.transaction.util.FileHelper;
 import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.data.file.FileProcessor;
 import org.apache.openmeetings.data.file.dao.FileExplorerItemDao;
-import org.apache.openmeetings.data.user.dao.UsersDao;
+import org.apache.openmeetings.data.user.dao.UserDao;
 import org.apache.openmeetings.documents.GenerateImage;
 import org.apache.openmeetings.documents.GeneratePDF;
 import org.apache.openmeetings.documents.GenerateThumbs;
@@ -61,7 +61,7 @@ public class UploadController extends AbstractUploadController {
 			UploadController.class, OpenmeetingsVariables.webAppRootKey);
 	
 	@Autowired
-	private UsersDao usersDao;
+	private UserDao usersDao;
 	@Autowired
 	private ScopeApplicationAdapter scopeApplicationAdapter;
 	@Autowired

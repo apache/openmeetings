@@ -29,8 +29,8 @@ import org.apache.openmeetings.data.calendar.daos.AppointmentDao;
 import org.apache.openmeetings.data.calendar.daos.MeetingMemberDao;
 import org.apache.openmeetings.data.conference.RoomManager;
 import org.apache.openmeetings.data.conference.dao.RoomDao;
+import org.apache.openmeetings.data.user.dao.AdminUserDao;
 import org.apache.openmeetings.data.user.dao.OrganisationDao;
-import org.apache.openmeetings.data.user.dao.UsersDao;
 import org.apache.openmeetings.test.AbstractOpenmeetingsSpringTest;
 import org.apache.openmeetings.utils.BackupImport;
 import org.junit.Test;
@@ -47,7 +47,7 @@ public class TestOldBackups extends AbstractOpenmeetingsSpringTest {
 	@Autowired
 	private OrganisationDao organisationDao;
 	@Autowired
-	private UsersDao usersDao;
+	private AdminUserDao usersDao;
 	@Autowired
 	private RoomDao roomDao;
 	@Autowired

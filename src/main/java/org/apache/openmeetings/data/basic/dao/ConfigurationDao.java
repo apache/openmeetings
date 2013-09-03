@@ -33,7 +33,7 @@ import javax.persistence.TypedQuery;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.data.IDataProviderDao;
-import org.apache.openmeetings.data.user.dao.UsersDao;
+import org.apache.openmeetings.data.user.dao.AdminUserDao;
 import org.apache.openmeetings.persistence.beans.basic.Configuration;
 import org.apache.openmeetings.remote.red5.ScopeApplicationAdapter;
 import org.apache.openmeetings.utils.DaoHelper;
@@ -63,8 +63,8 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 	@PersistenceContext
 	private EntityManager em;
 
-	@Resource(name = "usersDao")
-	private UsersDao usersDao;
+	@Resource(name = "adminUserDao")
+	private AdminUserDao adminUserDao;
 
 	/**
 	 * @deprecated Dao's are not the place to store session variables, also
@@ -193,7 +193,7 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 				conf2.setComment(conf.getComment());
 				conf2.setConf_key(conf.getConf_key());
 				conf2.setConf_value(conf.getConf_value());
-				conf2.setUser(usersDao.get(userId));
+				conf2.setUser(adminUserDao.get(userId));
 				conf2.setDeleted(false);
 				conf2.setUpdatetime(new Date());
 				return this.updateConfig(conf2);
@@ -256,7 +256,7 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 		try {
 			Configuration conf = (Configuration) CastMapToObject.getInstance()
 					.castByGivenObject(values, Configuration.class);
-			conf.setUser(usersDao.get(users_id));
+			conf.setUser(adminUserDao.get(users_id));
 			conf.setUpdatetime(new Date());
 			conf.setDeleted(true);
 
@@ -264,7 +264,7 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 			conf2.setComment(conf.getComment());
 			conf2.setConf_key(conf.getConf_key());
 			conf2.setConf_value(conf.getConf_value());
-			conf2.setUser(usersDao.get(users_id));
+			conf2.setUser(adminUserDao.get(users_id));
 			conf2.setDeleted(true);
 			conf2.setUpdatetime(new Date());
 
@@ -326,7 +326,7 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 			em.persist(entity);
 		} else {
 			if (userId != null) {
-				entity.setUser(usersDao.get(userId));
+				entity.setUser(adminUserDao.get(userId));
 			}
 			entity.setDeleted(deleted);
 			entity.setUpdatetime(new Date());

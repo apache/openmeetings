@@ -48,7 +48,7 @@ import org.apache.commons.io.IOUtils;
 import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
 import org.apache.openmeetings.data.oauth.OAuth2Dao;
 import org.apache.openmeetings.data.user.UserManager;
-import org.apache.openmeetings.data.user.dao.UsersDao;
+import org.apache.openmeetings.data.user.dao.AdminUserDao;
 import org.apache.openmeetings.persistence.beans.user.User;
 import org.apache.openmeetings.persistence.beans.user.oauth.OAuthServer;
 import org.apache.openmeetings.web.app.Application;
@@ -316,7 +316,7 @@ public class SignInPage extends BaseInitedPage {
 	}
 	
 	private void loginViaOAuth2(Map<String, String> params, long serverId) throws IOException, NoSuchAlgorithmException {
-		UsersDao userDao = getBean(UsersDao.class);
+		AdminUserDao userDao = getBean(AdminUserDao.class);
 		UserManager userManager = getBean(UserManager.class); 
 		ConfigurationDao configurationDao = getBean(ConfigurationDao.class);
 		String login = params.get("login");

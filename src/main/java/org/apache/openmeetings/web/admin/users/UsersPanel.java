@@ -21,7 +21,7 @@ package org.apache.openmeetings.web.admin.users;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 
-import org.apache.openmeetings.data.user.dao.UsersDao;
+import org.apache.openmeetings.data.user.dao.AdminUserDao;
 import org.apache.openmeetings.persistence.beans.user.User;
 import org.apache.openmeetings.web.admin.AdminPanel;
 import org.apache.openmeetings.web.admin.SearchableDataView;
@@ -64,7 +64,7 @@ public class UsersPanel extends AdminPanel {
 		super(id);
 
 		final SearchableDataView<User> dataView = new SearchableDataView<User>("userList"
-				, new SearchableDataProvider<User>(UsersDao.class)) {
+				, new SearchableDataProvider<User>(AdminUserDao.class)) {
 			private static final long serialVersionUID = 8715559628755439596L;
 
 			@Override
@@ -107,7 +107,7 @@ public class UsersPanel extends AdminPanel {
 		add(container.orderLinks);
 		add(navigator);
 
-		UsersDao usersDaoImpl = getBean(UsersDao.class);
+		AdminUserDao usersDaoImpl = getBean(AdminUserDao.class);
 		form = new UserForm("form", listContainer, usersDaoImpl.getNewUserInstance(usersDaoImpl.get(getUserId())), warning);
 		form.showNewRecord();
 		add(form, warning);

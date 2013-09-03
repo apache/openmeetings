@@ -73,12 +73,12 @@ import org.apache.openmeetings.data.conference.dao.RoomDao;
 import org.apache.openmeetings.data.file.dao.FileExplorerItemDao;
 import org.apache.openmeetings.data.flvrecord.FlvRecordingDao;
 import org.apache.openmeetings.data.user.OrganisationManager;
+import org.apache.openmeetings.data.user.dao.AdminUserDao;
 import org.apache.openmeetings.data.user.dao.OrganisationDao;
 import org.apache.openmeetings.data.user.dao.PrivateMessageFolderDao;
 import org.apache.openmeetings.data.user.dao.PrivateMessagesDao;
 import org.apache.openmeetings.data.user.dao.StateDao;
 import org.apache.openmeetings.data.user.dao.UserContactsDao;
-import org.apache.openmeetings.data.user.dao.UsersDao;
 import org.apache.openmeetings.persistence.beans.basic.Configuration;
 import org.apache.openmeetings.persistence.beans.basic.LdapConfig;
 import org.apache.openmeetings.persistence.beans.calendar.Appointment;
@@ -143,7 +143,7 @@ public class BackupImport {
 	@Autowired
 	private AppointmentReminderTypDao appointmentReminderTypDaoImpl;
 	@Autowired
-	private UsersDao usersDao;
+	private AdminUserDao usersDao;
 	@Autowired
 	private FlvRecordingDao flvRecordingDao;
 	@Autowired

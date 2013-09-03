@@ -32,7 +32,7 @@ import org.apache.openmeetings.data.beans.basic.ErrorResult;
 import org.apache.openmeetings.data.beans.basic.SearchResult;
 import org.apache.openmeetings.data.user.OrganisationManager;
 import org.apache.openmeetings.data.user.UserManager;
-import org.apache.openmeetings.data.user.dao.UsersDao;
+import org.apache.openmeetings.data.user.dao.AdminUserDao;
 import org.apache.openmeetings.persistence.beans.basic.ErrorValue;
 import org.apache.openmeetings.persistence.beans.basic.RemoteSessionObject;
 import org.apache.openmeetings.persistence.beans.basic.Sessiondata;
@@ -75,7 +75,7 @@ public class UserWebService {
 	@Autowired
 	private SOAPLoginDao soapLoginDao;
 	@Autowired
-	private UsersDao usersDao;
+	private AdminUserDao usersDao;
 	@Autowired
 	private MainService mainService;
 	@Autowired

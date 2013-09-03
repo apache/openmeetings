@@ -36,7 +36,7 @@ public class OrganisationUserDao implements IDataProviderDao<Organisation_Users>
 	@PersistenceContext
 	private EntityManager em;
 	@Autowired
-	private UsersDao usersDao;
+	private UserDao usersDao;
 	public final static String[] searchFields = {"user.lastname", "user.firstname", "user.login", "user.adresses.email"};
 
 	public Organisation_Users get(long id) {

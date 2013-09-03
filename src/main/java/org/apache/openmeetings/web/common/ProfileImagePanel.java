@@ -25,7 +25,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.net.URI;
 
-import org.apache.openmeetings.data.user.dao.UsersDao;
+import org.apache.openmeetings.data.user.dao.UserDao;
 import org.apache.openmeetings.utils.OmFileHelper;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.wicket.AttributeModifier;
@@ -46,7 +46,7 @@ public class ProfileImagePanel extends BasePanel {
 		super(id);
 		
 		profile = new TransparentWebMarkupContainer("profile");
-		String uri = getBean(UsersDao.class).get(userId).getPictureuri();
+		String uri = getBean(UserDao.class).get(userId).getPictureuri();
 		boolean absolute = false;
 		try {
 			absolute = URI.create(uri).isAbsolute();
@@ -68,7 +68,7 @@ public class ProfileImagePanel extends BasePanel {
 				
 				@Override
 				protected byte[] getData(Attributes attributes) {
-					String uri = getBean(UsersDao.class).get(userId).getPictureuri();
+					String uri = getBean(UserDao.class).get(userId).getPictureuri();
 					File img = OmFileHelper.getUserProfilePicture(userId, uri);
 					try {
 						return IOUtils.toByteArray(new FileInputStream(img));

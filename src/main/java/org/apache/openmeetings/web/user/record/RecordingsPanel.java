@@ -30,7 +30,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.apache.openmeetings.data.flvrecord.FlvRecordingDao;
-import org.apache.openmeetings.data.user.dao.UsersDao;
+import org.apache.openmeetings.data.user.dao.UserDao;
 import org.apache.openmeetings.persistence.beans.domain.Organisation_Users;
 import org.apache.openmeetings.persistence.beans.flvrecord.FlvRecording;
 import org.apache.openmeetings.web.app.WebSession;
@@ -352,7 +352,7 @@ public class RecordingsPanel extends UserPanel {
 		public Iterator<? extends FlvRecording> getChildren(FlvRecording node) {
 			if (node.getFlvRecordingId() < 0) {
 				List<FlvRecording> roots = new ArrayList<FlvRecording>();
-				for (Organisation_Users ou : getBean(UsersDao.class).get(getUserId()).getOrganisation_users()) {
+				for (Organisation_Users ou : getBean(UserDao.class).get(getUserId()).getOrganisation_users()) {
 					roots.addAll(getBean(FlvRecordingDao.class).getFlvRecordingRootByPublic(ou.getOrganisation().getOrganisation_id()));
 				}
 				return roots.iterator();

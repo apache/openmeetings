@@ -28,7 +28,7 @@ import javax.persistence.TypedQuery;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.data.basic.FieldLanguagesValuesDao;
-import org.apache.openmeetings.data.user.dao.UsersDao;
+import org.apache.openmeetings.data.user.dao.UserDao;
 import org.apache.openmeetings.persistence.beans.calendar.AppointmentReminderTyps;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -45,7 +45,7 @@ public class AppointmentReminderTypDao {
 	@PersistenceContext
 	private EntityManager em;
 	@Autowired
-	private UsersDao usersDao;
+	private UserDao usersDao;
 	@Autowired
 	private FieldLanguagesValuesDao fieldLanguagesValuesDao;
 

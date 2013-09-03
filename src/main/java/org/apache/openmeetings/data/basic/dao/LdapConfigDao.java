@@ -30,7 +30,7 @@ import javax.persistence.TypedQuery;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.data.IDataProviderDao;
-import org.apache.openmeetings.data.user.dao.UsersDao;
+import org.apache.openmeetings.data.user.dao.AdminUserDao;
 import org.apache.openmeetings.persistence.beans.basic.LdapConfig;
 import org.apache.openmeetings.utils.DaoHelper;
 import org.red5.logging.Red5LoggerFactory;
@@ -55,7 +55,7 @@ public class LdapConfigDao implements IDataProviderDao<LdapConfig> {
 	private EntityManager em;
 
 	@Autowired
-	private UsersDao usersDao;
+	private AdminUserDao usersDao;
 
 	public Long addLdapConfig(String name, Boolean addDomainToUserName,
 			String configFileName, String domain, Long insertedby,

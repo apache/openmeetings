@@ -31,7 +31,7 @@ import javax.persistence.TypedQuery;
 
 import org.apache.openmeetings.data.IDataProviderDao;
 import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
-import org.apache.openmeetings.data.user.dao.UsersDao;
+import org.apache.openmeetings.data.user.dao.UserDao;
 import org.apache.openmeetings.persistence.beans.room.Room;
 import org.apache.openmeetings.utils.DaoHelper;
 import org.apache.openmeetings.utils.TimezoneUtil;
@@ -52,7 +52,7 @@ public class RoomDao implements IDataProviderDao<Room> {
     @Autowired
     private SipDao sipDao;
 	@Autowired
-	private UsersDao usersDao;
+	private UserDao usersDao;
 	@Autowired
 	private TimezoneUtil timezoneUtil;
 

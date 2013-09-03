@@ -28,7 +28,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
-import org.apache.openmeetings.data.user.dao.UsersDao;
+import org.apache.openmeetings.data.user.dao.UserDao;
 import org.apache.openmeetings.persistence.beans.calendar.MeetingMember;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -45,7 +45,7 @@ public class MeetingMemberDao {
 	@Autowired
 	private AppointmentDao appointmentDao;
 	@Autowired
-	private UsersDao usersDao;
+	private UserDao usersDao;
 
 	public MeetingMember getMeetingMemberById(Long meetingMemberId) {
 		try {

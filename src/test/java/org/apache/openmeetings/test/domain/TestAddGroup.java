@@ -20,7 +20,7 @@ package org.apache.openmeetings.test.domain;
 
 import org.apache.log4j.Logger;
 import org.apache.openmeetings.data.user.OrganisationManager;
-import org.apache.openmeetings.data.user.dao.UsersDao;
+import org.apache.openmeetings.data.user.dao.UserDao;
 import org.apache.openmeetings.persistence.beans.user.User;
 import org.apache.openmeetings.test.AbstractOpenmeetingsSpringTest;
 import org.junit.Test;
@@ -31,7 +31,7 @@ public class TestAddGroup extends AbstractOpenmeetingsSpringTest {
 	@Autowired
 	private OrganisationManager organisationManager;
 	@Autowired
-	private UsersDao usersDao;
+	private UserDao usersDao;
 
 	private static final Logger log = Logger.getLogger(TestAddGroup.class);
 

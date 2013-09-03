@@ -32,7 +32,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.input.BoundedInputStream;
 import org.apache.openmeetings.data.flvrecord.FlvRecordingDao;
-import org.apache.openmeetings.data.user.dao.UsersDao;
+import org.apache.openmeetings.data.user.dao.UserDao;
 import org.apache.openmeetings.persistence.beans.domain.Organisation_Users;
 import org.apache.openmeetings.persistence.beans.flvrecord.FlvRecording;
 import org.apache.openmeetings.web.app.WebSession;
@@ -174,7 +174,7 @@ public abstract class RecordingResourceReference extends ResourceReference {
 				return r;
 			}
 			//FIXME UGLY need to be optimized
-			for (Organisation_Users ou : getBean(UsersDao.class).get(getUserId()).getOrganisation_users()) {
+			for (Organisation_Users ou : getBean(UserDao.class).get(getUserId()).getOrganisation_users()) {
 				if (ou.getOrganisation().getOrganisation_id().equals(r.getOrganization_id())) {
 					return r;
 				}

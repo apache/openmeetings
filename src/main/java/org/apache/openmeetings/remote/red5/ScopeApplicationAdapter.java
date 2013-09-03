@@ -42,7 +42,7 @@ import org.apache.openmeetings.data.conference.RoomManager;
 import org.apache.openmeetings.data.conference.dao.RoomDao;
 import org.apache.openmeetings.data.logs.ConferenceLogDao;
 import org.apache.openmeetings.data.user.UserManager;
-import org.apache.openmeetings.data.user.dao.UsersDao;
+import org.apache.openmeetings.data.user.dao.UserDao;
 import org.apache.openmeetings.data.whiteboard.EmoticonsManager;
 import org.apache.openmeetings.data.whiteboard.WhiteboardManager;
 import org.apache.openmeetings.data.whiteboard.dto.BrowserStatus;
@@ -105,7 +105,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 	@Autowired
 	private ConferenceLogDao conferenceLogDao;
 	@Autowired
-	private UsersDao usersDao;
+	private UserDao usersDao;
 	@Autowired
 	private RoomDao roomDao;
 	@Autowired

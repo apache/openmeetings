@@ -33,7 +33,7 @@ import org.apache.openmeetings.data.calendar.management.AppointmentLogic;
 import org.apache.openmeetings.data.conference.dao.InvitationDao;
 import org.apache.openmeetings.data.conference.dao.RoomDao;
 import org.apache.openmeetings.data.user.UserManager;
-import org.apache.openmeetings.data.user.dao.UsersDao;
+import org.apache.openmeetings.data.user.dao.UserDao;
 import org.apache.openmeetings.persistence.beans.basic.MailMessage;
 import org.apache.openmeetings.persistence.beans.calendar.Appointment;
 import org.apache.openmeetings.persistence.beans.calendar.MeetingMember;
@@ -80,7 +80,7 @@ public class InvitationManager {
 	@Autowired
 	private RoomDao roomDao;
 	@Autowired
-	private UsersDao usersDao;
+	private UserDao usersDao;
 	@Autowired
 	private MailHandler mailHandler;
 	@Autowired

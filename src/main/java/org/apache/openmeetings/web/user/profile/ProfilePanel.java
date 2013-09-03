@@ -21,7 +21,7 @@ package org.apache.openmeetings.web.user.profile;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 
-import org.apache.openmeetings.data.user.dao.UsersDao;
+import org.apache.openmeetings.data.user.dao.UserDao;
 import org.apache.openmeetings.persistence.beans.user.User;
 import org.apache.openmeetings.web.common.ComunityUserForm;
 import org.apache.openmeetings.web.common.FormSaveRefreshPanel;
@@ -40,7 +40,7 @@ public class ProfilePanel extends UserPanel {
 		super(id);
 		setOutputMarkupId(true);
 		
-		Form<User> form = new Form<User>("form", new CompoundPropertyModel<User>(getBean(UsersDao.class).get(getUserId()))) {
+		Form<User> form = new Form<User>("form", new CompoundPropertyModel<User>(getBean(UserDao.class).get(getUserId()))) {
 			private static final long serialVersionUID = -4968428244553170528L;
 			private final UserForm userForm;
 
@@ -52,7 +52,7 @@ public class ProfilePanel extends UserPanel {
 					protected void onSaveSubmit(AjaxRequestTarget target, Form<?> form) {
 						User u = getModelObject();
 						try {
-							u = getBean(UsersDao.class).update(u, userForm.getPasswordField().getConvertedInput(), getUserId());
+							u = getBean(UserDao.class).update(u, userForm.getPasswordField().getConvertedInput(), getUserId());
 						} catch (Exception e) {
 							// FIXME update feedback with the error details
 						}
@@ -69,7 +69,7 @@ public class ProfilePanel extends UserPanel {
 					protected void onRefreshSubmit(AjaxRequestTarget target, Form<?> form) {
 						User user = getModelObject();
 						if (user.getUser_id() != null) {
-							user = getBean(UsersDao.class).get(user.getUser_id());
+							user = getBean(UserDao.class).get(user.getUser_id());
 						} else {
 							user = new User();
 						}

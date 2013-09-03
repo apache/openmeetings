@@ -26,7 +26,7 @@ import java.util.Date;
 
 import org.apache.openmeetings.data.user.dao.PrivateMessagesDao;
 import org.apache.openmeetings.data.user.dao.UserContactsDao;
-import org.apache.openmeetings.data.user.dao.UsersDao;
+import org.apache.openmeetings.data.user.dao.UserDao;
 import org.apache.openmeetings.persistence.beans.user.User;
 import org.apache.openmeetings.persistence.beans.user.UserContact;
 import org.apache.openmeetings.utils.crypt.ManageCryptStyle;
@@ -48,8 +48,8 @@ public class ContactsHelper {
 
 		Long userContactId = getBean(UserContactsDao.class).addUserContact(userIdToAdd, getUserId(), true, hash);
 
-		User user = getBean(UsersDao.class).get(getUserId());
-		User userToAdd = getBean(UsersDao.class).get(userIdToAdd);
+		User user = getBean(UserDao.class).get(getUserId());
+		User userToAdd = getBean(UserDao.class).get(userIdToAdd);
 
 		String subj = user.getFirstname() + " " + user.getLastname() + " " + WebSession.getString(1193);
 		String message = RequestContactTemplate.getEmail(userToAdd, user);

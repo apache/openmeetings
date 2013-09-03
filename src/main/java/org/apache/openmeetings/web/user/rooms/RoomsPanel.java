@@ -23,7 +23,7 @@ import java.io.FileInputStream;
 import java.util.List;
 
 import org.apache.openmeetings.data.conference.dao.RoomDao;
-import org.apache.openmeetings.data.user.dao.UsersDao;
+import org.apache.openmeetings.data.user.dao.UserDao;
 import org.apache.openmeetings.persistence.beans.room.Client;
 import org.apache.openmeetings.persistence.beans.room.Room;
 import org.apache.openmeetings.session.SessionManager;
@@ -112,7 +112,7 @@ public class RoomsPanel extends UserPanel {
 					
 					@Override
 					protected byte[] getData(Attributes attributes) {
-						String uri = Application.getBean(UsersDao.class).get(userId).getPictureuri();
+						String uri = Application.getBean(UserDao.class).get(userId).getPictureuri();
 						File img = OmFileHelper.getUserProfilePicture(userId, uri);
 						try {
 							return IOUtils.toByteArray(new FileInputStream(img));

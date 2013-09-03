@@ -26,7 +26,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
-import org.apache.openmeetings.data.user.dao.UsersDao;
+import org.apache.openmeetings.data.user.dao.AdminUserDao;
 import org.apache.openmeetings.persistence.beans.user.User;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
@@ -155,7 +155,7 @@ public class ResetPasswordDialog extends AbstractFormDialog<String> {
 	@Override
 	protected void onSubmit(AjaxRequestTarget target) {
 		try {
-			getBean(UsersDao.class).update(user, password.getConvertedInput(), user.getUser_id());
+			getBean(AdminUserDao.class).update(user, password.getConvertedInput(), user.getUser_id());
 		} catch (Exception e) {
 			error(e.getMessage());
 		}

@@ -45,8 +45,8 @@ import org.apache.openmeetings.data.basic.FieldManager;
 import org.apache.openmeetings.data.basic.SessiondataDao;
 import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
 import org.apache.openmeetings.data.beans.basic.SearchResult;
+import org.apache.openmeetings.data.user.dao.AdminUserDao;
 import org.apache.openmeetings.data.user.dao.StateDao;
-import org.apache.openmeetings.data.user.dao.UsersDao;
 import org.apache.openmeetings.persistence.beans.basic.Sessiondata;
 import org.apache.openmeetings.persistence.beans.domain.Organisation_Users;
 import org.apache.openmeetings.persistence.beans.room.Client;
@@ -96,7 +96,7 @@ public class UserManager {
 	@Autowired
 	private ManageCryptStyle cryptManager;
 	@Autowired
-	private UsersDao usersDao;
+	private AdminUserDao usersDao;
 	@Autowired
 	private EmailManager emailManagement;
 	@Autowired
@@ -169,7 +169,7 @@ public class UserManager {
 			} else {
 				sort += " DESC ";
 			}
-			String hql = DaoHelper.getSearchQuery("User", "u", search, true, false, sort, UsersDao.searchFields);
+			String hql = DaoHelper.getSearchQuery("User", "u", search, true, false, sort, AdminUserDao.searchFields);
 
 			log.debug("Show HQL: " + hql);
 

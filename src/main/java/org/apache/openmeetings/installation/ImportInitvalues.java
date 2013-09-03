@@ -52,9 +52,9 @@ import org.apache.openmeetings.data.conference.dao.SipDao;
 import org.apache.openmeetings.data.oauth.OAuth2Dao;
 import org.apache.openmeetings.data.user.OrganisationManager;
 import org.apache.openmeetings.data.user.UserManager;
+import org.apache.openmeetings.data.user.dao.AdminUserDao;
 import org.apache.openmeetings.data.user.dao.SalutationDao;
 import org.apache.openmeetings.data.user.dao.StateDao;
-import org.apache.openmeetings.data.user.dao.UsersDao;
 import org.apache.openmeetings.persistence.beans.lang.FieldLanguage;
 import org.apache.openmeetings.persistence.beans.lang.Fieldlanguagesvalues;
 import org.apache.openmeetings.persistence.beans.lang.Fieldvalues;
@@ -79,7 +79,7 @@ public class ImportInitvalues {
 	@Autowired
 	private UserManager userManager;
 	@Autowired
-	private UsersDao usersDao;
+	private AdminUserDao usersDao;
 	@Autowired
 	private FieldManager fieldManager;
 	@Autowired

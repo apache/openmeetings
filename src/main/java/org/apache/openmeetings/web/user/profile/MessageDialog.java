@@ -28,7 +28,7 @@ import java.util.List;
 
 import org.apache.openmeetings.data.conference.dao.RoomDao;
 import org.apache.openmeetings.data.user.dao.PrivateMessagesDao;
-import org.apache.openmeetings.data.user.dao.UsersDao;
+import org.apache.openmeetings.data.user.dao.UserDao;
 import org.apache.openmeetings.persistence.beans.room.Room;
 import org.apache.openmeetings.persistence.beans.user.PrivateMessage;
 import org.apache.openmeetings.utils.mail.MailHandler;
@@ -71,7 +71,7 @@ public class MessageDialog extends AbstractFormDialog<PrivateMessage> {
 	}
 	
 	public void open(AjaxRequestTarget target, long userId) {
-		getModelObject().setTo(getBean(UsersDao.class).get(userId));
+		getModelObject().setTo(getBean(UserDao.class).get(userId));
 		open(target);
 	}
 	
@@ -79,7 +79,7 @@ public class MessageDialog extends AbstractFormDialog<PrivateMessage> {
 		modelStart.setObject(new Date());
 		modelEnd.setObject(new Date()); //TODO should we add 1 hour or generalize with Calendar???
 		PrivateMessage p = new PrivateMessage();
-		p.setFrom(getBean(UsersDao.class).get(getUserId()));
+		p.setFrom(getBean(UserDao.class).get(getUserId()));
 		p.setOwner(p.getFrom());
 		p.setIsTrash(false);
 		p.setIsRead(false);
@@ -168,7 +168,7 @@ public class MessageDialog extends AbstractFormDialog<PrivateMessage> {
 			p.setRoom(null);
 		}
 		if (p.getTo().getUser_id() == null) {
-			getBean(UsersDao.class).update(p.getTo(), getUserId());
+			getBean(UserDao.class).update(p.getTo(), getUserId());
 		}
 		//to send
 		getBean(PrivateMessagesDao.class).update(p, getUserId());

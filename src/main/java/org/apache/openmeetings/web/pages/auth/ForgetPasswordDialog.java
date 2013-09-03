@@ -24,7 +24,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.apache.openmeetings.data.user.UserManager;
-import org.apache.openmeetings.data.user.dao.UsersDao;
+import org.apache.openmeetings.data.user.dao.AdminUserDao;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.pages.ResetPage;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -110,7 +110,7 @@ public class ForgetPasswordDialog extends AbstractFormDialog<String> {
 			
 			@Override
 			protected void onValidate() {
-				UsersDao dao = getBean(UsersDao.class);
+				AdminUserDao dao = getBean(AdminUserDao.class);
 				String n = nameField.getConvertedInput();
 				if (type == Type.email && null == dao.getUserByEmail(n)) {
 					error(WebSession.getString(318));

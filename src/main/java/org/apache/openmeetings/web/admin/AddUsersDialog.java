@@ -25,7 +25,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.apache.openmeetings.data.user.dao.UsersDao;
+import org.apache.openmeetings.data.user.dao.AdminUserDao;
 import org.apache.openmeetings.persistence.beans.user.User;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
@@ -87,7 +87,7 @@ public class AddUsersDialog extends AbstractFormDialog<User> {
 			protected void onAfterSubmit(AjaxRequestTarget target, Form<?> form) {
 				usersToAdd.clear();
 				usersInList.clear();
-				usersInList.addAll(Application.getBean(UsersDao.class).get(userSearchText));
+				usersInList.addAll(Application.getBean(AdminUserDao.class).get(userSearchText));
 				target.add(users);
 			}
 		});

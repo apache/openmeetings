@@ -32,7 +32,7 @@ import org.apache.openmeetings.data.calendar.daos.AppointmentDao;
 import org.apache.openmeetings.data.calendar.daos.AppointmentReminderTypDao;
 import org.apache.openmeetings.data.calendar.management.AppointmentLogic;
 import org.apache.openmeetings.data.conference.dao.RoomDao;
-import org.apache.openmeetings.data.user.dao.UsersDao;
+import org.apache.openmeetings.data.user.dao.UserDao;
 import org.apache.openmeetings.persistence.beans.calendar.Appointment;
 import org.apache.openmeetings.persistence.beans.calendar.AppointmentReminderTyps;
 import org.apache.openmeetings.persistence.beans.calendar.MeetingMember;
@@ -317,7 +317,7 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 			List<Room> result = new ArrayList<Room>();
 			RoomDao dao = getBean(RoomDao.class);
 			result.addAll(dao.getPublicRooms());
-			for (Organisation_Users ou : getBean(UsersDao.class).get(getUserId()).getOrganisation_users()) {
+			for (Organisation_Users ou : getBean(UserDao.class).get(getUserId()).getOrganisation_users()) {
 				result.addAll(dao.getOrganisationRooms(ou.getOrganisation().getOrganisation_id()));
 			}
 			if (getModelObject().getRoom() != null && getModelObject().getRoom().getAppointment()) { //FIXME review

@@ -27,7 +27,7 @@ import org.apache.openmeetings.data.basic.SessiondataDao;
 import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
 import org.apache.openmeetings.data.conference.InvitationManager;
 import org.apache.openmeetings.data.user.UserManager;
-import org.apache.openmeetings.data.user.dao.UsersDao;
+import org.apache.openmeetings.data.user.dao.UserDao;
 import org.apache.openmeetings.persistence.beans.invitation.Invitations;
 import org.apache.openmeetings.persistence.beans.user.User;
 import org.apache.openmeetings.utils.TimezoneUtil;
@@ -46,7 +46,7 @@ public class InvitationService implements IPendingServiceCallback {
 	@Autowired
 	private ConfigurationDao configurationDao;
 	@Autowired
-	private UsersDao userDAO;
+	private UserDao userDAO;
 	@Autowired
 	private UserManager userManager;
 	@Autowired

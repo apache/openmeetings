@@ -40,7 +40,7 @@ import org.apache.openmeetings.data.basic.AuthLevelUtil;
 import org.apache.openmeetings.data.beans.basic.SearchResult;
 import org.apache.openmeetings.data.user.dao.OrganisationDao;
 import org.apache.openmeetings.data.user.dao.OrganisationUserDao;
-import org.apache.openmeetings.data.user.dao.UsersDao;
+import org.apache.openmeetings.data.user.dao.UserDao;
 import org.apache.openmeetings.persistence.beans.domain.Organisation;
 import org.apache.openmeetings.persistence.beans.domain.Organisation_Users;
 import org.apache.openmeetings.persistence.beans.user.User;
@@ -64,7 +64,7 @@ public class OrganisationManager {
 	@PersistenceContext
 	private EntityManager em;
 	@Autowired
-	private UsersDao usersDao;
+	private UserDao usersDao;
 	@Autowired
 	private OrganisationDao orgDao;
 	@Autowired

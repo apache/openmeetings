@@ -37,7 +37,7 @@ import org.apache.openmeetings.data.flvrecord.listener.BaseStreamListener;
 import org.apache.openmeetings.data.flvrecord.listener.StreamAudioListener;
 import org.apache.openmeetings.data.flvrecord.listener.StreamVideoListener;
 import org.apache.openmeetings.data.user.UserManager;
-import org.apache.openmeetings.data.user.dao.UsersDao;
+import org.apache.openmeetings.data.user.dao.UserDao;
 import org.apache.openmeetings.persistence.beans.flvrecord.FlvRecording;
 import org.apache.openmeetings.persistence.beans.flvrecord.FlvRecordingMetaData;
 import org.apache.openmeetings.persistence.beans.room.Client;
@@ -79,7 +79,7 @@ public class FLVRecorderService implements IPendingServiceCallback {
 	@Autowired
 	private FlvRecordingMetaDataDao flvRecordingMetaDataDao;
 	@Autowired
-	private UsersDao usersDaoImpl;
+	private UserDao usersDaoImpl;
 	@Autowired
 	private RoomDao roomDao;
 	@Autowired

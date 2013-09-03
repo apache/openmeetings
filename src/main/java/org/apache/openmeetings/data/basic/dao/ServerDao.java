@@ -28,7 +28,7 @@ import javax.persistence.TypedQuery;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.data.IDataProviderDao;
-import org.apache.openmeetings.data.user.dao.UsersDao;
+import org.apache.openmeetings.data.user.dao.AdminUserDao;
 import org.apache.openmeetings.persistence.beans.basic.Server;
 import org.apache.openmeetings.utils.DaoHelper;
 import org.red5.logging.Red5LoggerFactory;
@@ -53,7 +53,7 @@ public class ServerDao implements IDataProviderDao<Server> {
 	private EntityManager em;
 
 	@Autowired
-	private UsersDao usersDao;
+	private AdminUserDao usersDao;
 	
 	/**
 	 * Get a list of all available servers

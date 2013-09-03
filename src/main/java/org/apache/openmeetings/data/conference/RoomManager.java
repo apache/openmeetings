@@ -39,7 +39,7 @@ import org.apache.openmeetings.data.conference.dao.RoomDao;
 import org.apache.openmeetings.data.conference.dao.RoomModeratorsDao;
 import org.apache.openmeetings.data.conference.dao.SipDao;
 import org.apache.openmeetings.data.user.OrganisationManager;
-import org.apache.openmeetings.data.user.dao.UsersDao;
+import org.apache.openmeetings.data.user.dao.UserDao;
 import org.apache.openmeetings.persistence.beans.domain.Organisation_Users;
 import org.apache.openmeetings.persistence.beans.room.Room;
 import org.apache.openmeetings.persistence.beans.room.RoomOrganisation;
@@ -70,7 +70,7 @@ public class RoomManager {
 	@Autowired
 	private RoomModeratorsDao roomModeratorsDao;
 	@Autowired
-	private UsersDao usersDao;
+	private UserDao usersDao;
 	@Autowired
 	private AuthLevelUtil authLevelUtil;
 	@Autowired

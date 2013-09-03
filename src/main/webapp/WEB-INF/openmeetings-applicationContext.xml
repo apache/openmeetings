@@ -273,7 +273,9 @@
 	<bean id="privateMessagesDao" class="org.apache.openmeetings.data.user.dao.PrivateMessagesDao" />
 	<bean id="soapLoginDao" class="org.apache.openmeetings.data.basic.dao.SOAPLoginDao" />
 	<bean id="userContactsDao" class="org.apache.openmeetings.data.user.dao.UserContactsDao" />
-	<bean id="usersDao" class="org.apache.openmeetings.data.user.dao.UsersDao" />
+	<bean id="dao" class="org.apache.openmeetings.data.user.dao.AbstractUserDao" />
+	<bean id="usersDao" class="org.apache.openmeetings.data.user.dao.UserDao" />
+	<bean id="adminUserDao" class="org.apache.openmeetings.data.user.dao.AdminUserDao" />
 	<bean id="serverDao" class="org.apache.openmeetings.data.basic.dao.ServerDao" />
 	<bean id="chatDao" class="org.apache.openmeetings.data.chat.ChatDao" />
 	<bean id="clientDao" class="org.apache.openmeetings.data.conference.dao.ClientDao" />

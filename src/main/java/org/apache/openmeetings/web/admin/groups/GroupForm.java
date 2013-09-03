@@ -23,8 +23,8 @@ import static org.apache.openmeetings.web.app.WebSession.getUserId;
 
 import java.util.List;
 
+import org.apache.openmeetings.data.user.dao.AdminUserDao;
 import org.apache.openmeetings.data.user.dao.OrganisationDao;
-import org.apache.openmeetings.data.user.dao.UsersDao;
 import org.apache.openmeetings.persistence.beans.domain.Organisation;
 import org.apache.openmeetings.persistence.beans.domain.Organisation_Users;
 import org.apache.openmeetings.persistence.beans.user.User;
@@ -69,7 +69,7 @@ public class GroupForm extends AdminCommonUserForm<Organisation> {
 	@Override
 	public void submitView(AjaxRequestTarget target, List<User> usersToAdd) {
 		// TODO Auto-generated method stub
-		UsersDao userDao = Application.getBean(UsersDao.class);
+		AdminUserDao userDao = Application.getBean(AdminUserDao.class);
 		Organisation organisation = getModelObject();
 		for (User u : usersToAdd) {
 			List<Organisation_Users> orgUsers = u.getOrganisation_users();

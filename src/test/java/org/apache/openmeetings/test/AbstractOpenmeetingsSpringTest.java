@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.test;
 
+import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
@@ -27,11 +28,13 @@ import java.util.Date;
 import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
 import org.apache.openmeetings.data.calendar.daos.AppointmentDao;
 import org.apache.openmeetings.data.user.UserManager;
-import org.apache.openmeetings.data.user.dao.UsersDao;
+import org.apache.openmeetings.data.user.dao.UserDao;
 import org.apache.openmeetings.installation.ImportInitvalues;
 import org.apache.openmeetings.installation.InstallationConfig;
 import org.apache.openmeetings.persistence.beans.calendar.Appointment;
+import org.apache.openmeetings.persistence.beans.user.Address;
 import org.apache.openmeetings.persistence.beans.user.User;
+import org.apache.openmeetings.persistence.beans.user.User.Type;
 import org.apache.openmeetings.utils.OmFileHelper;
 import org.apache.openmeetings.utils.crypt.ManageCryptStyle;
 import org.junit.Before;
@@ -61,7 +64,7 @@ public abstract class AbstractOpenmeetingsSpringTest extends AbstractJUnit4Sprin
 	@Autowired
 	private UserManager userManager;
 	@Autowired
-	private UsersDao usersDao;
+	private UserDao usersDao;
 	@Autowired
 	private ImportInitvalues importInitvalues;
 	@Autowired
@@ -143,4 +146,21 @@ public abstract class AbstractOpenmeetingsSpringTest extends AbstractJUnit4Sprin
 		cfg.ical_timeZone = timeZone;
 		importInitvalues.loadAll(cfg, false);
 	}
+
+	public User createUserContact(int rnd, Long ownerId) throws Exception {
+		User user = new User();
+		// add user as contact
+		user.setFirstname("firstname" + rnd);
+		user.setLastname("lastname" + rnd);
+		user.setLogin(getUserId() + "_" + "email" + rnd);
+		user.setLanguage_id(1L);
+		user.setType(Type.contact);
+		user.setOwner_id(ownerId);
+		user.setAdresses(new Address());
+		user.getAdresses().setEmail("email" + rnd);
+		user = usersDao.update(user, ownerId);
+		assertNotNull("Cann't add user", user);
+		return user;
+	}
+
 }

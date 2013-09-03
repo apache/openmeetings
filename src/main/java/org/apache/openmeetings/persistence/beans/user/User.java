@@ -77,7 +77,7 @@ import org.simpleframework.xml.Root;
 	@NamedQuery(name = "checkUserLogin", query = "SELECT COUNT(u) FROM User AS u WHERE ((:id > 0 AND u.user_id <> :id) OR (:id = 0)) "
 			+ "AND u.login = :login AND u.deleted = false"),
 	@NamedQuery(name = "checkUserEmail", query = "SELECT COUNT(u) FROM User u WHERE ((:id > 0 AND u.user_id <> :id) OR (:id = 0)) "
-			+ "AND u.adresses.email = :email AND u.deleted = false"),
+			+ "AND u.adresses.email = :email AND u.deleted = false AND u.type <> :type"),
 	@NamedQuery(name = "getUserByName", query = "SELECT u FROM User as u "
 			+ " where u.login = :login" + " AND u.deleted <> :deleted"),
 	@NamedQuery(name = "getUserByEmail", query = "SELECT u FROM User as u "
@@ -267,6 +267,10 @@ public class User implements Serializable, IDataProviderEntity {
 	@Element(data = true, required = false)
 	@Enumerated(EnumType.STRING)
 	private Type type = Type.user;
+
+	@Column(name = "ownerId")
+	@Element(data = true, required = false)
+	private Long owner_id;
 	
 	public Long getUser_id() {
 		return user_id;
@@ -616,5 +620,13 @@ public class User implements Serializable, IDataProviderEntity {
 
 	public void setType(Type type) {
 		this.type = type;
+	}
+	
+	public Long getOwner_id(){
+		return owner_id;
+	}
+	
+	public void setOwner_id(Long owner_id){
+		this.owner_id = owner_id;
 	}
 }

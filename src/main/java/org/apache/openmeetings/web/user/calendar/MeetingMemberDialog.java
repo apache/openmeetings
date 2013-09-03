@@ -19,12 +19,14 @@
 package org.apache.openmeetings.web.user.calendar;
 
 import static org.apache.openmeetings.web.admin.groups.GroupUsersPanel.getUser;
+import static org.apache.openmeetings.web.app.WebSession.getLanguage;
+import static org.apache.openmeetings.web.app.WebSession.getUserId;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.apache.openmeetings.data.user.dao.UsersDao;
+import org.apache.openmeetings.data.user.dao.UserDao;
 import org.apache.openmeetings.persistence.beans.calendar.Appointment;
 import org.apache.openmeetings.persistence.beans.calendar.MeetingMember;
 import org.apache.openmeetings.persistence.beans.user.User;
@@ -97,7 +99,7 @@ public class MeetingMemberDialog extends AbstractFormDialog<Appointment> {
 			protected void onAfterSubmit(AjaxRequestTarget target, Form<?> form) {
 				usersToAdd.clear();
 				usersInList.clear();
-				usersInList.addAll(Application.getBean(UsersDao.class).get(searchUser.inputToString()));
+				usersInList.addAll(Application.getBean(UserDao.class).get(searchUser.inputToString()));
 				target.add(users);
 			}
 		});
@@ -196,19 +198,20 @@ public class MeetingMemberDialog extends AbstractFormDialog<Appointment> {
 		final List<MeetingMember> meetingMembers = app.getMeetingMember() == null ? new ArrayList<MeetingMember>() : app.getMeetingMember();
 		for (User u : attendeesInList) {
 			boolean found = false;
-			for (MeetingMember m : meetingMembers){
-				if (u == m.getUserid()){
+			for (MeetingMember m : meetingMembers) {
+				if (u.getAdresses().getEmail().equals(m.getUserid().getAdresses().getEmail())) {
 					found = true;
 					break;
 				}
 			}
-			if (!found){
+			if (!found) {
 				MeetingMember mm = new MeetingMember();
+				if (u.getType() == Type.contact) {
+					u.setOwner_id(getUserId());
+					u.setLanguage_id(getLanguage());
+				}
 				mm.setUserid(u);
 				mm.setDeleted(false);
-				if (u.getType() == Type.contact){
-					u.setLanguage_id(WebSession.getLanguage());
-				}
 				mm.setStarttime(app.getStarttime());
 				mm.setUpdatetime(app.getUpdatetime());
 				mm.setAppointment(app);

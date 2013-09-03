@@ -22,7 +22,7 @@ import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 
 import org.apache.openmeetings.data.conference.dao.RoomDao;
-import org.apache.openmeetings.data.user.dao.UsersDao;
+import org.apache.openmeetings.data.user.dao.UserDao;
 import org.apache.openmeetings.persistence.beans.domain.Organisation;
 import org.apache.openmeetings.persistence.beans.domain.Organisation_Users;
 import org.apache.openmeetings.persistence.beans.user.User;
@@ -42,7 +42,7 @@ public class RoomsTabbedPanel extends UserPanel {
 	public RoomsTabbedPanel(String id) {
 		super(id);
 		
-		User u = getBean(UsersDao.class).get(getUserId());
+		User u = getBean(UserDao.class).get(getUserId());
 		add(new ListView<Organisation_Users>("orgTabs", u.getOrganisation_users()) {
 			private static final long serialVersionUID = -145637079945252731L;
 

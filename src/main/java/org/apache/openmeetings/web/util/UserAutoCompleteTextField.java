@@ -24,7 +24,7 @@ import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import java.util.List;
 import java.util.Locale;
 
-import org.apache.openmeetings.data.user.dao.UsersDao;
+import org.apache.openmeetings.data.user.dao.UserDao;
 import org.apache.openmeetings.persistence.beans.user.Address;
 import org.apache.openmeetings.persistence.beans.user.User;
 import org.apache.openmeetings.persistence.beans.user.User.Type;
@@ -125,7 +125,7 @@ public class UserAutoCompleteTextField extends AutoCompleteTextField<User> {
 	@Override
 	protected List<User> getChoices(String input) {
 		inputValue = input;
-		return getBean(UsersDao.class).get(input, 0, 10, null);
+		return getBean(UserDao.class).get(input, 0, 10, null);
 	}
 	
 	private static class UserTextRenderer implements ITextRenderer<User> {

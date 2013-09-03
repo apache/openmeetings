@@ -40,7 +40,7 @@ import org.apache.openmeetings.data.basic.SessiondataDao;
 import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
 import org.apache.openmeetings.data.user.UserManager;
 import org.apache.openmeetings.data.user.dao.StateDao;
-import org.apache.openmeetings.data.user.dao.UsersDao;
+import org.apache.openmeetings.data.user.dao.UserDao;
 import org.apache.openmeetings.ldap.LdapLoginManagement;
 import org.apache.openmeetings.persistence.beans.basic.Sessiondata;
 import org.apache.openmeetings.persistence.beans.lang.FieldLanguage;
@@ -162,7 +162,7 @@ public class WebSession extends AbstractAuthenticatedWebSession {
 		WebSession session = get();
 		if (session.languageId < 0) {
 			if (session.isSignedIn()) {
-				session.languageId = getBean(UsersDao.class).get(session.userId).getLanguage_id();
+				session.languageId = getBean(UserDao.class).get(session.userId).getLanguage_id();
 			} else {
 				session.languageId = getBean(ConfigurationDao.class).getConfValue(DEFAUT_LANG_KEY, Long.class, "1");
 			}

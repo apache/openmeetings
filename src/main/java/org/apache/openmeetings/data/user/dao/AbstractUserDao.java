@@ -33,14 +33,15 @@ import javax.persistence.TypedQuery;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.openjpa.persistence.OpenJPAPersistence;
 import org.apache.openjpa.persistence.OpenJPAQuery;
-import org.apache.openmeetings.data.IDataProviderDao;
 import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
 import org.apache.openmeetings.persistence.beans.domain.Organisation_Users;
 import org.apache.openmeetings.persistence.beans.user.Address;
 import org.apache.openmeetings.persistence.beans.user.User;
+import org.apache.openmeetings.persistence.beans.user.User.Type;
 import org.apache.openmeetings.utils.DaoHelper;
 import org.apache.openmeetings.utils.TimezoneUtil;
 import org.apache.openmeetings.utils.crypt.ManageCryptStyle;
+import org.apache.openmeetings.web.app.WebSession;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,12 +50,12 @@ import org.springframework.transaction.annotation.Transactional;
 /**
  * CRUD operations for {@link User}
  * 
- * @author swagner, solomax
+ * @author swagner, solomax, vasya
  * 
  */
 @Transactional
-public class UsersDao implements IDataProviderDao<User> {
-	private static final Logger log = Red5LoggerFactory.getLogger(UsersDao.class, webAppRootKey);
+public class AbstractUserDao  {
+	private static final Logger log = Red5LoggerFactory.getLogger(AbstractUserDao.class, webAppRootKey);
 
 	public final static String[] searchFields = {"lastname", "firstname", "login", "adresses.email", "adresses.town"};
 
@@ -105,11 +106,23 @@ public class UsersDao implements IDataProviderDao<User> {
 		q.setMaxResults(count);
 		return q.getResultList();
 	}
+	
+	private String getAdditionalWhire(boolean isAdmin){
+		return isAdmin ? null : "u.type <> :contact OR (u.type = :contact AND u.owner_id = :ownerId)";
+	}
+	
+	private void setAdditionalParams(TypedQuery<?> q, boolean isAdmin){
+		if (!isAdmin) {
+			q.setParameter("ownerId", WebSession.getUserId());
+			q.setParameter("contact", Type.contact);
+		}
+	}
 
-	public List<User> get(String search, int start, int count, String sort) {
-		TypedQuery<User> q = em.createQuery(DaoHelper.getSearchQuery("User", "u", search, true, false, sort, searchFields), User.class);
+	public List<User> get(String search, int start, int count, String sort, boolean isAdmin) {
+		TypedQuery<User> q = em.createQuery(DaoHelper.getSearchQuery("User", "u", search, true, false, getAdditionalWhire(isAdmin), sort, searchFields), User.class);
 		q.setFirstResult(start);
 		q.setMaxResults(count);
+		setAdditionalParams(q, isAdmin);
 		return q.getResultList();
 	}
 	
@@ -119,13 +132,18 @@ public class UsersDao implements IDataProviderDao<User> {
 		return q.getSingleResult();
 	}
 
-	public long count(String search) {
-		TypedQuery<Long> q = em.createQuery(DaoHelper.getSearchQuery("User", "u", search, true, true, null, searchFields), Long.class);
+	public long count(String search, boolean isAdmin) {
+		TypedQuery<Long> q = em.createQuery(DaoHelper.getSearchQuery("User", "u", search, true, true, getAdditionalWhire(isAdmin), null, searchFields), Long.class);
+		setAdditionalParams(q, isAdmin);
 		return q.getSingleResult();
 	}
 	
-	public List<User> get(String search) {
-		TypedQuery<User> q = em.createQuery(DaoHelper.getSearchQuery("User", "u", search, true, false, null, searchFields), User.class);
+	public List<User> get(String search, boolean isAdmin) {
+		TypedQuery<User> q = em.createQuery(DaoHelper.getSearchQuery("User", "u", search, true, false, getAdditionalWhire(isAdmin), null, searchFields), User.class);
+		if (!isAdmin) {
+			q.setParameter("ownerId", WebSession.getUserId());
+			q.setParameter("contact", Type.contact);
+		}
 		return q.getResultList();
 	}
 
@@ -272,6 +290,7 @@ public class UsersDao implements IDataProviderDao<User> {
 		long count = em.createNamedQuery("checkUserEmail", Long.class)
 			.setParameter("email", email)
 			.setParameter("id", id == null ? 0 : id)
+			.setParameter("type", Type.contact)
 			.getSingleResult();
 		log.debug("size: " + count);
 
@@ -369,4 +388,5 @@ public class UsersDao implements IDataProviderDao<User> {
 		return query.getResultList().get(0) == 1;
 
 	}
+
 }

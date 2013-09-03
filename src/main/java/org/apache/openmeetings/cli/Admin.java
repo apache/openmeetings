@@ -48,7 +48,7 @@ import org.apache.openjpa.lib.log.LogFactoryImpl.LogImpl;
 import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
 import org.apache.openmeetings.data.file.dao.FileExplorerItemDao;
 import org.apache.openmeetings.data.flvrecord.FlvRecordingDao;
-import org.apache.openmeetings.data.user.dao.UsersDao;
+import org.apache.openmeetings.data.user.dao.AdminUserDao;
 import org.apache.openmeetings.documents.InstallationDocumentHandler;
 import org.apache.openmeetings.installation.ImportInitvalues;
 import org.apache.openmeetings.installation.InstallationConfig;
@@ -347,7 +347,7 @@ public class Admin {
 						long invalid = 0;
 						long deleted = 0;
 						ClassPathXmlApplicationContext ctx = getApplicationContext(ctxName);
-						UsersDao udao = ctx.getBean(UsersDao.class);
+						AdminUserDao udao = ctx.getBean(AdminUserDao.class);
 						for (File profile : profiles.listFiles()) {
 							long pSize = OmFileHelper.getSize(profile);
 							long userId = getUserIdByProfile(profile.getName());

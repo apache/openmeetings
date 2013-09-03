@@ -33,7 +33,7 @@ import java.io.IOException;
 
 import org.apache.commons.transaction.util.FileHelper;
 import org.apache.openmeetings.data.flvrecord.converter.BaseConverter;
-import org.apache.openmeetings.data.user.dao.UsersDao;
+import org.apache.openmeetings.data.user.dao.UserDao;
 import org.apache.openmeetings.documents.beans.ConverterProcessResult;
 import org.apache.openmeetings.documents.beans.ConverterProcessResultList;
 import org.apache.openmeetings.persistence.beans.user.User;
@@ -48,7 +48,7 @@ public class GenerateImage extends BaseConverter {
 	private static final Logger log = Red5LoggerFactory.getLogger(GenerateImage.class, webAppRootKey);
 
 	@Autowired
-	private UsersDao usersDao;
+	private UserDao usersDao;
 	@Autowired
 	private GenerateThumbs generateThumbs;
 

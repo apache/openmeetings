@@ -29,9 +29,9 @@ import java.util.List;
 import org.apache.openmeetings.data.basic.FieldLanguageDao;
 import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
 import org.apache.openmeetings.data.user.OrganisationManager;
+import org.apache.openmeetings.data.user.dao.AdminUserDao;
 import org.apache.openmeetings.data.user.dao.SalutationDao;
 import org.apache.openmeetings.data.user.dao.StateDao;
-import org.apache.openmeetings.data.user.dao.UsersDao;
 import org.apache.openmeetings.persistence.beans.domain.Organisation;
 import org.apache.openmeetings.persistence.beans.domain.Organisation_Users;
 import org.apache.openmeetings.persistence.beans.lang.FieldLanguage;
@@ -152,7 +152,7 @@ public class GeneralUserForm extends Form<User> {
 
 	@Override
 	protected void onValidate() {
-		if(!getBean(UsersDao.class).checkUserEMail(email.getConvertedInput(), getModelObject().getUser_id())) {
+		if(!getBean(AdminUserDao.class).checkUserEMail(email.getConvertedInput(), getModelObject().getUser_id())) {
 			error(WebSession.getString(1000));
 		}
 		super.onValidate();

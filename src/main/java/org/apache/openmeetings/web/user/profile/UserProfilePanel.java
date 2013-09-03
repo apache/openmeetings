@@ -21,7 +21,7 @@ package org.apache.openmeetings.web.user.profile;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 
-import org.apache.openmeetings.data.user.dao.UsersDao;
+import org.apache.openmeetings.data.user.dao.UserDao;
 import org.apache.openmeetings.persistence.beans.user.User;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.ProfileImagePanel;
@@ -53,7 +53,7 @@ public class UserProfilePanel extends UserPanel {
 	public UserProfilePanel(String id, long userId) {
 		super(id);
 
-		User u = getBean(UsersDao.class).get(userId);
+		User u = getBean(UserDao.class).get(userId);
 		add(new ProfileImagePanel("img", userId));
 		add(new Label("firstname", u.getFirstname()));
 		add(new Label("lastname", u.getLastname()));
