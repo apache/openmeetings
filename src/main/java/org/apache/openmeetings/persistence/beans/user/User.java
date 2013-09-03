@@ -30,6 +30,8 @@ import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -263,6 +265,7 @@ public class User implements Serializable, IDataProviderEntity {
 
 	@Column(name = "type")
 	@Element(data = true, required = false)
+	@Enumerated(EnumType.STRING)
 	private Type type = Type.user;
 	
 	public Long getUser_id() {
