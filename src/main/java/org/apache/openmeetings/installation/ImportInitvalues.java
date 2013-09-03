@@ -843,9 +843,7 @@ public class ImportInitvalues {
 		}
 	}
 
-	public void loadLanguagesFile(
-			Map<Integer, Map<String, Object>> listlanguages,
-			Map<Long, Fieldvalues> fieldCache, int langId)
+	public void loadLanguagesFile(Map<Integer, Map<String, Object>> listlanguages, Map<Long, Fieldvalues> fieldCache, int langId)
 			throws Exception {
 		Map<String, Object> langMap = listlanguages.get(langId);
 		log.debug("loadInitLanguages lang: " + langMap);

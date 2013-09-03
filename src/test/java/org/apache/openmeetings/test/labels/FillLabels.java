@@ -18,6 +18,8 @@
  */
 package org.apache.openmeetings.test.labels;
 
+import static org.junit.Assert.assertEquals;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -27,8 +29,12 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.apache.openmeetings.data.basic.FieldLanguageDao;
+import org.apache.openmeetings.data.basic.FieldValueDao;
+import org.apache.openmeetings.persistence.beans.lang.FieldLanguage;
 import org.apache.openmeetings.persistence.beans.lang.Fieldlanguagesvalues;
 import org.apache.openmeetings.persistence.beans.lang.Fieldvalues;
+import org.apache.openmeetings.test.AbstractOpenmeetingsSpringTest;
 import org.apache.openmeetings.utils.LangExport;
 import org.apache.openmeetings.utils.OmFileHelper;
 import org.dom4j.Document;
@@ -36,6 +42,7 @@ import org.dom4j.DocumentException;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * Syncs all labels from a given master language file to all language files You
@@ -57,15 +64,16 @@ import org.junit.Test;
  * @author sebawagner
  * 
  */
-public class FillLabels {
-
+public class FillLabels extends AbstractOpenmeetingsSpringTest {
 	private final String basePath = "languages/";
-
 	private final String masterLangFile = "english.xml";
-
 	private final String[] excludeFiles = { "errorvalues.xml",
 			"countries.xml", "timezones.xml", "languages.xml" };
-
+	@Autowired
+	private FieldLanguageDao fieldLanguageDao;
+	@Autowired
+	private FieldValueDao fieldValueDao;
+	
 	/**
 	 * those labels will be overwritten from the master to all language files,
 	 * other label-id's will be only filled up if missing at the end of the
@@ -76,10 +84,26 @@ public class FillLabels {
 	private Map<Long, Fieldlanguagesvalues> masterLabels;
 
 	@Test
+	public void testCount() throws Exception {
+		FieldLanguage prevLanguage = null;
+		long prevCount = -1;
+		for (FieldLanguage l : fieldLanguageDao.getLanguages()) {
+			long count = fieldValueDao.count(l.getLanguage_id(), null);
+			if (prevLanguage != null) {
+				assertEquals(String.format("Language: %s contains %d labels while %s contains %d labels"
+						, prevLanguage.getCode(), prevCount, l.getCode(), count), prevCount, count);
+			}
+			prevLanguage = l;
+			prevCount = count;
+		}
+	}
+	
+	@Test
 	public void test() throws Exception {
+		String languagesFolder = System.getProperty("languages.home", null);
 		OmFileHelper.setOmHome(System.getProperty("om.home", "."));
 		// Read master file
-		File base = new File(OmFileHelper.getOmHome(), basePath);
+		File base = null == languagesFolder ? new File(OmFileHelper.getOmHome(), basePath) : new File(languagesFolder);
 		masterLabels = parseToLabelsArray(new File(base, masterLangFile));
 
 		File langFolder = new File(OmFileHelper.getOmHome(), basePath);

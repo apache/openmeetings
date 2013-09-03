@@ -18,13 +18,13 @@
  */
 package org.apache.openmeetings.test.backup;
 
+import static org.apache.openmeetings.OpenmeetingsVariables.webAppRootKey;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.io.File;
 import java.io.FileInputStream;
 
-import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.data.calendar.daos.AppointmentDao;
 import org.apache.openmeetings.data.calendar.daos.MeetingMemberDao;
 import org.apache.openmeetings.data.conference.RoomManager;
@@ -39,8 +39,7 @@ import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class TestOldBackups extends AbstractOpenmeetingsSpringTest {
-	private static final Logger log = Red5LoggerFactory.getLogger(
-			TestOldBackups.class, OpenmeetingsVariables.webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(TestOldBackups.class, webAppRootKey);
 	
 	@Autowired
 	private BackupImport backupController;

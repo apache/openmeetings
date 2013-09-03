@@ -130,4 +130,10 @@ public class FieldLanguage implements Serializable, IDataProviderEntity {
 		}
 		return result;
 	}
+	
+	@Override
+	public String toString() {
+		return "FieldLanguage [id=" + language_id + ", name=" + name + ", deleted=" + deleted + ", rtl=" + rtl + ", code=" + code
+				+ "]";
+	}
 }
