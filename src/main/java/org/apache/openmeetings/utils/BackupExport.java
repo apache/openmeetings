@@ -53,6 +53,7 @@ import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
 import org.apache.openmeetings.data.basic.dao.LdapConfigDao;
 import org.apache.openmeetings.data.calendar.daos.AppointmentDao;
 import org.apache.openmeetings.data.calendar.daos.MeetingMemberDao;
+import org.apache.openmeetings.data.chat.ChatDao;
 import org.apache.openmeetings.data.conference.PollManager;
 import org.apache.openmeetings.data.conference.RoomManager;
 import org.apache.openmeetings.data.file.dao.FileExplorerItemDao;
@@ -67,6 +68,7 @@ import org.apache.openmeetings.persistence.beans.basic.Configuration;
 import org.apache.openmeetings.persistence.beans.calendar.Appointment;
 import org.apache.openmeetings.persistence.beans.calendar.AppointmentCategory;
 import org.apache.openmeetings.persistence.beans.calendar.AppointmentReminderTyps;
+import org.apache.openmeetings.persistence.beans.chat.ChatMessage;
 import org.apache.openmeetings.persistence.beans.domain.Organisation;
 import org.apache.openmeetings.persistence.beans.files.FileExplorerItem;
 import org.apache.openmeetings.persistence.beans.flvrecord.FlvRecording;
@@ -136,6 +138,8 @@ public class BackupExport {
 	private PollManager pollManager;
 	@Autowired
 	private ConfigurationDao configurationDao;
+	@Autowired
+	private ChatDao chatDao;
 
 	public void performExport(File filePath, File backup_dir,
 			boolean includeFiles) throws Exception {
@@ -338,6 +342,23 @@ public class BackupExport {
 			writeList(serializer, backup_dir, "configs.xml", "configs", list);
 		}
 		
+		/*
+		 * ##################### Chat
+		 */
+		{
+			Registry registry = new Registry();
+			Strategy strategy = new RegistryStrategy(registry);
+			Serializer serializer = new Persister(strategy);
+	
+			registry.bind(User.class, UserConverter.class);
+			registry.bind(Room.class, RoomConverter.class);
+			List<ChatMessage> list = chatDao.get(0, Integer.MAX_VALUE);
+			if (list != null && list.size() > 0) {
+				registry.bind(list.get(0).getSent().getClass(), DateConverter.class);
+			}
+			
+			writeList(serializer, backup_dir, "chat_messages.xml", "chat_messages", list);
+		}
 		if (includeFiles) {
 			/*
 			 * ##################### Backup Room Files

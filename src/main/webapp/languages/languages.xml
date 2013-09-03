@@ -18,8 +18,7 @@
   under the License.
   
 -->
-<language xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-    xsi:noNamespaceSchemaLocation="languages.xsd">
+<language xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="languages.xsd">
 	<lang id="1" rightToLeft="false" code="en">english</lang>
 	<lang id="2" rightToLeft="false" code="de">deutsch</lang>
 	<lang id="3" rightToLeft="false" code="de-StudIP">deutsch (studIP)</lang>
@@ -37,19 +36,19 @@
 	<lang id="15" rightToLeft="false" code="ja">japanese</lang>
 	<lang id="16" rightToLeft="false" code="id">indonesian</lang>
 	<lang id="17" rightToLeft="false" code="hu">hungarian</lang>
-    <lang id="18" rightToLeft="false" code="tr">turkish</lang>
-    <lang id="19" rightToLeft="false" code="uk">ukrainian</lang>
-    <lang id="20" rightToLeft="false" code="th">thai</lang>
-    <lang id="21" rightToLeft="false" code="fa">persian</lang>
-    <lang id="22" rightToLeft="false" code="cs">czech</lang>
-    <lang id="23" rightToLeft="false" code="gl">galician</lang>
-    <lang id="24" rightToLeft="false" code="fi">finnish</lang>
-    <lang id="25" rightToLeft="false" code="pl">polish</lang>
-    <lang id="26" rightToLeft="false" code="el">greek</lang>
-    <lang id="27" rightToLeft="false" code="nl">dutch</lang>
-    <lang id="28" rightToLeft="true" code="he">hebrew</lang>
-    <lang id="29" rightToLeft="false" code="ca">catalan</lang>
-    <lang id="30" rightToLeft="false" code="bg">bulgarian</lang>
-    <lang id="31" rightToLeft="false" code="da">danish</lang>
-    <lang id="32" rightToLeft="false" code="sk">slovak</lang>
+	<lang id="18" rightToLeft="false" code="tr">turkish</lang>
+	<lang id="19" rightToLeft="false" code="uk">ukrainian</lang>
+	<lang id="20" rightToLeft="false" code="th">thai</lang>
+	<lang id="21" rightToLeft="false" code="fa">persian</lang>
+	<lang id="22" rightToLeft="false" code="cs">czech</lang>
+	<lang id="23" rightToLeft="false" code="gl">galician</lang>
+	<lang id="24" rightToLeft="false" code="fi">finnish</lang>
+	<lang id="25" rightToLeft="false" code="pl">polish</lang>
+	<lang id="26" rightToLeft="false" code="el">greek</lang>
+	<lang id="27" rightToLeft="false" code="nl">dutch</lang>
+	<lang id="28" rightToLeft="true" code="he">hebrew</lang>
+	<lang id="29" rightToLeft="false" code="ca">catalan</lang>
+	<lang id="30" rightToLeft="false" code="bg">bulgarian</lang>
+	<lang id="31" rightToLeft="false" code="da">danish</lang>
+	<lang id="32" rightToLeft="false" code="sk">slovak</lang>
 </language>

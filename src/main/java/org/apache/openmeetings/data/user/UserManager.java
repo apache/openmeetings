@@ -872,7 +872,7 @@ public class UserManager {
 			// this is needed cause the language is not a needed data at
 			// registering
 			if (language_id != 0) {
-				users.setLanguage_id(new Long(language_id));
+				users.setLanguage_id(language_id);
 			} else {
 				users.setLanguage_id(null);
 			}

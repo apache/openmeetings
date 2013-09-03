@@ -29,6 +29,7 @@ import org.dom4j.Element;
 import org.dom4j.Namespace;
 import org.dom4j.io.OutputFormat;
 import org.dom4j.io.XMLWriter;
+import org.dom4j.tree.FlyweightAttribute;
 
 /**
  * 
@@ -72,9 +73,9 @@ public class LangExport {
 	
 	public static Element createRoot(Document document) {
 		Element root = document.addElement("language");
-		root.add(new Namespace("xsi",
-				"http://www.w3.org/2001/XMLSchema-instance"));
-		root.add(new Namespace("noNamespaceSchemaLocation", "language.xsd"));
+		Namespace xsi = new Namespace("xsi", "http://www.w3.org/2001/XMLSchema-instance");
+		root.add(xsi);
+		root.add(new FlyweightAttribute("noNamespaceSchemaLocation", "language.xsd", xsi));
 		return root;
 	}
 	

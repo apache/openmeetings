@@ -64,65 +64,6 @@ public class FieldManager {
 	@Autowired
 	private ConfigurationDao configurationDaoImpl;
 	
-	// Reflect the Reverse Order!!
-	public Fieldlanguagesvalues getFieldByIdAndLanguageByNavi(
-			Long fieldvalues_id, Long language_id) {
-		try {
-			if (fieldvalues_id == null) {
-				return null;
-			}
-
-			TypedQuery<Fieldlanguagesvalues> query = em
-					.createQuery("select f from Fieldlanguagesvalues f WHERE f.language_id = :language_id AND f.fieldvalues_id = :fieldvalues_id", Fieldlanguagesvalues.class);
-			query.setParameter("fieldvalues_id", fieldvalues_id);
-			query.setParameter("language_id", language_id);
-			Fieldlanguagesvalues flv = null;
-			try {
-				flv = performReplace(query.getSingleResult());
-			} catch (NoResultException ex) {
-			}
-
-			FieldLanguage fieldLanguage = fieldLanguageDaoImpl
-					.getFieldLanguageById(language_id);
-
-			log.debug("Getting FieldById for Language "
-					+ fieldLanguage.getName());
-
-			// Check for Right To Left Languages
-			if (fieldLanguage.getRtl()) {
-
-				log.debug("Language requieres RTL");
-
-				Fieldlanguagesvalues remote = flv;
-				Fieldlanguagesvalues toAdd = new Fieldlanguagesvalues();
-				toAdd.setFieldlanguagesvalues_id(remote
-						.getFieldlanguagesvalues_id());
-				toAdd.setFieldvalues_id(remote.getFieldvalues_id());
-				toAdd.setLanguage_id(remote.getLanguage_id());
-
-				String[] splitted = remote.getValue().split(" ");
-				String reverseOrder = "";
-				for (int i = splitted.length - 1; i >= 0; i--) {
-					reverseOrder += splitted[i];
-					if (splitted.length != 1) {
-						reverseOrder += " ";
-					}
-				}
-				toAdd.setValue(reverseOrder);
-
-				return toAdd;
-			} else {
-				log.debug("Language doesnt requiere RTL");
-
-				return flv;
-			}
-
-		} catch (Exception ex2) {
-			log.error("[getFieldByIdAndLanguage]: ", ex2);
-		}
-		return null;
-	}
-
 	public String getString(Long fieldvalues_id, Long language_id) {
 		String result = null;
 		Fieldlanguagesvalues flv = getFieldByIdAndLanguage(fieldvalues_id, language_id);

@@ -67,6 +67,7 @@ import org.apache.openmeetings.data.calendar.daos.AppointmentCategoryDao;
 import org.apache.openmeetings.data.calendar.daos.AppointmentDao;
 import org.apache.openmeetings.data.calendar.daos.AppointmentReminderTypDao;
 import org.apache.openmeetings.data.calendar.daos.MeetingMemberDao;
+import org.apache.openmeetings.data.chat.ChatDao;
 import org.apache.openmeetings.data.conference.PollManager;
 import org.apache.openmeetings.data.conference.RoomManager;
 import org.apache.openmeetings.data.conference.dao.RoomDao;
@@ -85,6 +86,7 @@ import org.apache.openmeetings.persistence.beans.calendar.Appointment;
 import org.apache.openmeetings.persistence.beans.calendar.AppointmentCategory;
 import org.apache.openmeetings.persistence.beans.calendar.AppointmentReminderTyps;
 import org.apache.openmeetings.persistence.beans.calendar.MeetingMember;
+import org.apache.openmeetings.persistence.beans.chat.ChatMessage;
 import org.apache.openmeetings.persistence.beans.domain.Organisation;
 import org.apache.openmeetings.persistence.beans.files.FileExplorerItem;
 import org.apache.openmeetings.persistence.beans.flvrecord.FlvRecording;
@@ -166,6 +168,8 @@ public class BackupImport {
 	private ConfigurationDao configurationDao;
 	@Autowired
 	private TimezoneUtil tzUtil;
+	@Autowired
+	private ChatDao chatDao;
 
 	private final HashMap<Long, Long> usersMap = new HashMap<Long, Long>();
 	private final HashMap<Long, Long> organisationsMap = new HashMap<Long, Long>();
@@ -268,6 +272,7 @@ public class BackupImport {
 		 * ##################### Import Users
 		 */
 		{
+			String jNameTimeZone = configurationDao.getConfValue("default.timezone", String.class, "Europe/Berlin");
 			List<User> list = readUserList(f, "users.xml", "users");
 			for (User u : list) {
 				if (u.getLogin() == null) {
@@ -278,8 +283,6 @@ public class BackupImport {
 				
 				String tz = u.getTimeZoneId();
 				if (tz == null) {
-					String jNameTimeZone = configurationDao.getConfValue(
-							"default.timezone", String.class, "Europe/Berlin");
 					u.setTimeZoneId(jNameTimeZone);
 					u.setForceTimeZoneCheck(true);
 				} else {
@@ -353,7 +356,25 @@ public class BackupImport {
 			}
 		}
 
-		log.info("Room organizations import complete, starting appointement import");
+		log.info("Room organizations import complete, starting chat messages import");
+		/*
+		 * ##################### Import Chat messages
+		 */
+		{
+			Registry registry = new Registry();
+			Strategy strategy = new RegistryStrategy(registry);
+			Serializer serializer = new Persister(strategy);
+	
+			registry.bind(User.class, new UserConverter(usersDao, usersMap));
+			registry.bind(Room.class, new RoomConverter(roomDao, roomsMap));
+			
+			List<ChatMessage> list = readList(serializer, f, "chat_messages.xml", "chat_messages", ChatMessage.class, true);
+			for (ChatMessage m : list) {
+				chatDao.update(m);
+			}
+		}
+		
+		log.info("Chat messages import complete, starting appointement import");
 		/*
 		 * ##################### Import Appointements
 		 */

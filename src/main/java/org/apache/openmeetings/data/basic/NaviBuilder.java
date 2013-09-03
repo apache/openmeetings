@@ -37,14 +37,13 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class NaviBuilder {
 
-	private static final Logger log = Red5LoggerFactory.getLogger(
-			NaviBuilder.class, OpenmeetingsVariables.webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(NaviBuilder.class, OpenmeetingsVariables.webAppRootKey);
 
 	@PersistenceContext
 	private EntityManager em;
 
 	@Autowired
-	private FieldManager fieldManager;
+	private FieldLanguagesValuesDao labelDao;
 
 	public Naviglobal getGlobalMenuEntry(long globalId) {
 		try {
@@ -55,21 +54,17 @@ public class NaviBuilder {
 			log.error("getGlobalMenuEntry", ex2);
 		}
 		return null;
-		
+
 	}
-	
+
 	public List<Naviglobal> getMainMenu(long user_level, long USER_ID, long language_id) {
 		List<Naviglobal> ll = getMainMenu(user_level, USER_ID);
 		for (Naviglobal navigl : ll) {
-			navigl.setLabel(fieldManager.getFieldByIdAndLanguageByNavi(
-					navigl.getFieldvalues_id(), language_id));
-			navigl.setTooltip(fieldManager.getFieldByIdAndLanguageByNavi(
-					navigl.getTooltip_fieldvalues_id(), language_id));
+			navigl.setLabel(labelDao.get(navigl.getFieldvalues_id(), language_id));
+			navigl.setTooltip(labelDao.get(navigl.getTooltip_fieldvalues_id(), language_id));
 			for (Navimain navim : navigl.getMainnavi()) {
-				navim.setLabel(fieldManager.getFieldByIdAndLanguageByNavi(
-						navim.getFieldvalues_id(), language_id));
-				navim.setTooltip(fieldManager.getFieldByIdAndLanguageByNavi(
-						navim.getTooltip_fieldvalues_id(), language_id));
+				navim.setLabel(labelDao.get(navim.getFieldvalues_id(), language_id));
+				navim.setTooltip(labelDao.get(navim.getTooltip_fieldvalues_id(), language_id));
 			}
 		}
 		return ll;
@@ -87,8 +82,7 @@ public class NaviBuilder {
 		return null;
 	}
 
-	public void addGlobalStructure(String action, int naviorder,
-			long fieldvalues_id, boolean isleaf, boolean isopen, long level_id,
+	public void addGlobalStructure(String action, int naviorder, long fieldvalues_id, boolean isleaf, boolean isopen, long level_id,
 			String name, boolean deleted, Long tooltip_fieldvalues_id) {
 		try {
 			Naviglobal ng = new Naviglobal();
@@ -113,15 +107,13 @@ public class NaviBuilder {
 		}
 	}
 
-	public void addMainStructure(String action, String params, int naviorder,
-			long fieldvalues_id, boolean isleaf, boolean isopen, long level_id,
-			String name, long global_id, boolean deleted,
-			Long tooltip_fieldvalues_id) {
+	public void addMainStructure(String action, String params, int naviorder, long fieldvalues_id, boolean isleaf, boolean isopen,
+			long level_id, String name, long global_id, boolean deleted, Long tooltip_fieldvalues_id) {
 		try {
 			Naviglobal ng = getGlobalMenuEntry(global_id);
 			List<Navimain> mainEntries = ng.getMainnavi();
 			mainEntries = (mainEntries == null) ? new ArrayList<Navimain>() : mainEntries;
-			
+
 			Navimain nm = new Navimain();
 			nm.setAction(action);
 			nm.setParams(params);
@@ -137,10 +129,10 @@ public class NaviBuilder {
 			nm.setGlobal_id(global_id);
 			nm.setStarttime(new Date());
 			nm.setTooltip_fieldvalues_id(tooltip_fieldvalues_id);
-			
+
 			mainEntries.add(nm);
 			ng.setMainnavi(mainEntries);
-			
+
 			em.merge(ng);
 
 		} catch (Exception ex2) {

@@ -767,10 +767,8 @@ public class ImportInitvalues {
 	 * @return
 	 * @throws Exception
 	 */
-	public static LinkedHashMap<Integer, LinkedHashMap<String, Object>> getLanguageFiles()
-			throws Exception {
-
-		LinkedHashMap<Integer, LinkedHashMap<String, Object>> languages = new LinkedHashMap<Integer, LinkedHashMap<String, Object>>();
+	public static Map<Integer, Map<String, Object>> getLanguageFiles() throws Exception {
+		Map<Integer, Map<String, Object>> languages = new LinkedHashMap<Integer, Map<String, Object>>();
 
 		SAXReader reader = new SAXReader();
 		Document document = reader
@@ -830,28 +828,26 @@ public class ImportInitvalues {
 	}
 
 	public void loadLanguagesFile(int langId) throws Exception {
-		LinkedHashMap<Integer, LinkedHashMap<String, Object>> listlanguages = getLanguageFiles();
-		loadLanguagesFile(listlanguages,
-				new Hashtable<Long, Fieldvalues>(3000), langId);
+		Map<Integer, Map<String, Object>> listlanguages = getLanguageFiles();
+		loadLanguagesFile(listlanguages, new Hashtable<Long, Fieldvalues>(3000), langId);
 	}
 
 	public void loadLanguagesFile(String langName) throws Exception {
-		LinkedHashMap<Integer, LinkedHashMap<String, Object>> listlanguages = getLanguageFiles();
+		Map<Integer, Map<String, Object>> listlanguages = getLanguageFiles();
 		for (int langId : listlanguages.keySet()) {
-			LinkedHashMap<String, Object> langMap = listlanguages.get(langId);
+			Map<String, Object> langMap = listlanguages.get(langId);
 			if (langName.equals(langMap.get("name"))) {
-				loadLanguagesFile(listlanguages,
-						new Hashtable<Long, Fieldvalues>(3000), langId);
+				loadLanguagesFile(listlanguages, new Hashtable<Long, Fieldvalues>(3000), langId);
 				break;
 			}
 		}
 	}
 
 	public void loadLanguagesFile(
-			LinkedHashMap<Integer, LinkedHashMap<String, Object>> listlanguages,
-			Hashtable<Long, Fieldvalues> fieldCache, int langId)
+			Map<Integer, Map<String, Object>> listlanguages,
+			Map<Long, Fieldvalues> fieldCache, int langId)
 			throws Exception {
-		LinkedHashMap<String, Object> langMap = listlanguages.get(langId);
+		Map<String, Object> langMap = listlanguages.get(langId);
 		log.debug("loadInitLanguages lang: " + langMap);
 
 		String langName = (String) langMap.get("name");
@@ -922,10 +918,9 @@ public class ImportInitvalues {
 	}
 
 	public void loadLanguagesFiles() throws Exception {
-		LinkedHashMap<Integer, LinkedHashMap<String, Object>> listlanguages = getLanguageFiles();
+		Map<Integer, Map<String, Object>> listlanguages = getLanguageFiles();
 
-		Hashtable<Long, Fieldvalues> fieldCache = new Hashtable<Long, Fieldvalues>(
-				3000);
+		Map<Long, Fieldvalues> fieldCache = new Hashtable<Long, Fieldvalues>(3000);
 		/** Read all languages files */
 		for (int langId : listlanguages.keySet()) {
 			loadLanguagesFile(listlanguages, fieldCache, langId);

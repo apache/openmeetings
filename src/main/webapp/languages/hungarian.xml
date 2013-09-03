@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
 <!--
   Licensed to the Apache Software Foundation (ASF) under one
   or more contributor license agreements.  See the NOTICE file
@@ -25,7 +26,7 @@ to add new Languages or modify/customize it use the LanguageEditor
 see http://openmeetings.apache.org/LanguageEditor.html for Details 
 ###############################################-->
 <language xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="language.xsd">
-    <string id="1" name="conference">
+  <string id="1" name="conference">
     <value>Konferencia</value>
   </string>
   <string id="2" name="meeting">
@@ -923,7 +924,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>Személyes tartalmak</value>
   </string>
   <string id="300" name="subnavi">
-	<value></value>
+    <value></value>
   </string>
   <string id="301" name="conferencebar">
     <value>Moderálás</value>
@@ -2084,7 +2085,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>Hozzáférést kérek a táblához</value>
   </string>
   <string id="687" name="event user list">
-    <value>Audio/Video hozzáférést kérek</value> 
+    <value>Audio/Video hozzáférést kérek</value>
   </string>
   <string id="688" name="event user list">
     <value>Moderátori jogot kaptál</value>
@@ -2108,7 +2109,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>tábla használatához. Kattintson a névre és a rajztábla ikonra a tábla használatának hozzáadásához, visszavételéhez.</value>
   </string>
   <string id="695" name="695">
-    <value>Audio/Video hozzáféréséhez. Kattintson a nevére és a Mikrofon/Kamera ikonra a  hozzászólás engedélyezéséhez, visszavételéhez.</value>
+    <value>Audio/Video hozzáféréséhez. Kattintson a nevére és a Mikrofon/Kamera ikonra a hozzászólás engedélyezéséhez, visszavételéhez.</value>
   </string>
   <string id="696" name="moderation message">
     <value>Várjon amég a Moderátor belép a terembe.</value>
@@ -2843,7 +2844,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>Licenc beállítások</value>
   </string>
   <string id="940" name="user-license">
-    <value>Vásároljon időhosszabbítást a konferenciához (Pay-per-minute).&lt;br/&gt;&lt;br/&gt;  vagy vásároljon feltöltést 3-12 hónapot.&lt;br/&gt;&lt;br/&gt;Küldjön meghívókat (direkt linkek a konferencia teremből) vagy készítsen webkonferenciákat a naptárral együtt a külső felhasználók csak előfizetéssel férhetnek hozzá!</value>
+    <value>Vásároljon időhosszabbítást a konferenciához (Pay-per-minute).&lt;br/&gt;&lt;br/&gt; vagy vásároljon feltöltést 3-12 hónapot.&lt;br/&gt;&lt;br/&gt;Küldjön meghívókat (direkt linkek a konferencia teremből) vagy készítsen webkonferenciákat a naptárral együtt a külső felhasználók csak előfizetéssel férhetnek hozzá!</value>
   </string>
   <string id="941" name="user-license">
     <value>60 perc vásárlása 9,99 EURO (16 Cent per Minute)</value>
@@ -3029,7 +3030,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>SIP-Beállítások</value>
   </string>
   <string id="1002" name="room-admin">
-    <value>A konferencia száma és PIN  kódja automatikusan létrehozva az OpenXG RPC-Átjáróval</value>
+    <value>A konferencia száma és PIN kódja automatikusan létrehozva az OpenXG RPC-Átjáróval</value>
   </string>
   <string id="1003" name="room-admin">
     <value>SIP Azonosító</value>
@@ -3317,7 +3318,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>Előadás lezárása!</value>
   </string>
   <string id="1098" name="keyboard-input">
-    <value>Ez az előadás lezárásra került, átirányítás. </value>
+    <value>Ez az előadás lezárásra került, átirányítás.</value>
   </string>
   <string id="1099" name="room config">
     <value>Szoba lezárása</value>
@@ -3488,7 +3489,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>Vége:</value>
   </string>
   <string id="1155" name="calendar invitation message">
-    <value>Változás $APP_NAME  konferencia:</value>
+    <value>Változás $APP_NAME konferencia:</value>
   </string>
   <string id="1156" name="calendar invitation message">
     <value>Szervezet:</value>
@@ -3515,7 +3516,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>Érdeklődésem</value>
   </string>
   <string id="1164" name="user settings">
-<value>Név</value>
+    <value>Név</value>
   </string>
   <string id="1165" name="user settings">
     <value>Időzóna</value>
@@ -3623,7 +3624,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value></value>
   </string>
   <string id="1200" name="chat log icon">
-    <value>Chat napló Mutat / Másol </value>
+    <value>Chat napló Mutat / Másol</value>
   </string>
   <string id="1201" name="chat log window">
     <value>Chat napló</value>
@@ -3899,7 +3900,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>Ok</value>
   </string>
   <string id="1292" name="nick name">
-    <value>Legalább 4 karakter szükséges! Esetleg a  vezeték és keresztnév.</value>
+    <value>Legalább 4 karakter szükséges! Esetleg a vezeték és keresztnév.</value>
   </string>
   <string id="1293" name="nick name">
     <value>Érvényes e-mail címet adjon meg!</value>

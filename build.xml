@@ -544,7 +544,8 @@
 	<target name="compile.only"
 		depends="-retrieve-mainlibs,-retrieve-om,-retrieve-dtd-generator,-retrieve-junit,-retrieve-cmdadmin,-retrieve-tools.jar,resources,compile.only.nocheck"/>
 	
-	<target name="compile.only.nocheck" depends="clean.classes, prepare.mkdir">
+	<target name="compile.only.nocheck" depends="clean.classes">
+		<antcall target="prepare.mkdir" inheritAll="true" inheritRefs="true"/>
 		<echo message="Compile main to ${main.out.dir}" />
 		<javac debug="on" debuglevel="lines,vars,source" destdir="${main.out.dir}" includeantruntime="false"
 			source="1.6" target="1.6">
@@ -776,7 +777,7 @@
 		<junit maxmemory="1024m" printsummary="yes" dir="${junit.base.dir}" tempdir="${junit.base.dir}" fork="yes" 
 			forkmode="perBatch" failureproperty="junit.failed" errorproperty="junit.error">
 			<classpath refid="junit.classpath" />
-			<jvmarg value="-Dom.home=${basedir}/${om.dist.webapp}" />
+			<jvmarg value="-Dom.home=${webapp.dir}" />
 			<jvmarg value="-Dred5.root=${red5.root}" />
 			<jvmarg value="-Dbasedir=${basedir}" />
 			<jvmarg value="-Dred5.config_root=${red5.root}/conf" />

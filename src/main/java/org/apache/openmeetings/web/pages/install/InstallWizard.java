@@ -26,8 +26,8 @@ import static org.apache.wicket.validation.validator.StringValidator.minimumLeng
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.openmeetings.installation.ImportInitvalues;
 import org.apache.openmeetings.installation.InstallationConfig;
@@ -490,8 +490,7 @@ public class InstallWizard extends Wizard {
 
 		public LangDropDown(String id) throws Exception {
 			super(id);
-			LinkedHashMap<Integer, LinkedHashMap<String, Object>> allLanguagesAll
-				= ImportInitvalues.getLanguageFiles();
+			Map<Integer, Map<String, Object>> allLanguagesAll = ImportInitvalues.getLanguageFiles();
 			
 			List<SelectOption> list = new ArrayList<SelectOption>();
 			

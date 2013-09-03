@@ -41,13 +41,9 @@ import org.apache.openmeetings.persistence.beans.lang.Fieldlanguagesvalues;
 
 @Entity
 @NamedQueries({
-		@NamedQuery(name = "getNavigation", query = "SELECT DISTINCT ng from Naviglobal ng "
-				+ "LEFT JOIN ng.mainnavi nm "
-				+ "WHERE nm.deleted = false "
-				+ "AND ng.level_id <= :level_id "
-				+ "AND nm.level_id <= :level_id "
-				+ "AND ng.deleted = false "
-				+ "order by ng.naviorder, nm.naviorder"),
+		@NamedQuery(name = "getNavigation", query = "SELECT DISTINCT ng from Naviglobal ng " + "LEFT JOIN ng.mainnavi nm "
+				+ "WHERE nm.deleted = false " + "AND ng.level_id <= :level_id " + "AND nm.level_id <= :level_id "
+				+ "AND ng.deleted = false " + "order by ng.naviorder, nm.naviorder"),
 		@NamedQuery(name = "getNavigationById", query = "SELECT ng from Naviglobal ng WHERE ng.global_id = :global_id") })
 @Table(name = "naviglobal")
 public class Naviglobal implements Serializable {
@@ -57,54 +53,54 @@ public class Naviglobal implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
 	private Long global_id;
-	
+
 	@Column(name = "name")
 	private String name;
-	
+
 	@Column(name = "icon")
 	private String icon;
-	
+
 	@Column(name = "isleaf")
 	private Boolean isleaf;
-	
+
 	@Column(name = "isopen")
 	private Boolean isopen;
-	
+
 	@Column(name = "action")
 	private String action;
-	
+
 	@Column(name = "updatetime")
 	private Date updatetime;
-	
+
 	@Column(name = "starttime")
 	private Date starttime;
-	
+
 	@Column(name = "comment_field")
 	private String comment;
-	
+
 	@Column(name = "naviorder")
 	private Integer naviorder;
-	
+
 	@Column(name = "level_id")
 	private Long level_id;
-	
+
 	@Column(name = "deleted")
 	private boolean deleted;
-	
+
 	@Column(name = "fieldvalues_id")
 	private Long fieldvalues_id;
-	
+
 	@Column(name = "tooltip_fieldvalues_id")
 	private Long tooltip_fieldvalues_id;
-	
+
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "global_id")
 	@ForeignKey(enabled = true)
 	private List<Navimain> mainnavi;
-	
+
 	@Transient
 	private Fieldlanguagesvalues label;
-	
+
 	@Transient
 	private Fieldlanguagesvalues tooltip;
 
@@ -242,6 +238,12 @@ public class Naviglobal implements Serializable {
 
 	public void setTooltip(Fieldlanguagesvalues tooltip) {
 		this.tooltip = tooltip;
+	}
+
+	@Override
+	public String toString() {
+		return "Naviglobal [global_id=" + global_id + ", name=" + name + ", action=" + action + ", naviorder=" + naviorder + ", deleted="
+				+ deleted + ", fieldvalues_id=" + fieldvalues_id + ", tooltip_fieldvalues_id=" + tooltip_fieldvalues_id + "]";
 	}
 
 }

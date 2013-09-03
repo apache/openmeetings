@@ -37,155 +37,160 @@ public class Navimain implements Serializable {
 	private static final long serialVersionUID = 1691787896183701877L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name="id")
-    private Long main_id;
-	
-	@Column(name="global_id")
-    private Long global_id;
-	
-	@Column(name="name")
-    private String name;
-	
-	@Column(name="icon")
-    private String icon;
-	
-	@Column(name="isleaf")
-    private Boolean isleaf;
-	
-	@Column(name="isopen")
-    private Boolean isopen;
-	
-	@Column(name="action")
-    private String action;
-	
-	@Column(name="params")
-    private String params;
-	
-	@Column(name="updatetime")
-    private Date updatetime;
-	
-	@Column(name="starttime")
-    private Date starttime;
-	
-	@Column(name="comment_field")
-    private String comment;
-	
-	@Column(name="naviorder")
-    private Integer naviorder;
-	
-	@Column(name="level_id")
+	@Column(name = "id")
+	private Long main_id;
+
+	@Column(name = "global_id")
+	private Long global_id;
+
+	@Column(name = "name")
+	private String name;
+
+	@Column(name = "icon")
+	private String icon;
+
+	@Column(name = "isleaf")
+	private Boolean isleaf;
+
+	@Column(name = "isopen")
+	private Boolean isopen;
+
+	@Column(name = "action")
+	private String action;
+
+	@Column(name = "params")
+	private String params;
+
+	@Column(name = "updatetime")
+	private Date updatetime;
+
+	@Column(name = "starttime")
+	private Date starttime;
+
+	@Column(name = "comment_field")
+	private String comment;
+
+	@Column(name = "naviorder")
+	private Integer naviorder;
+
+	@Column(name = "level_id")
 	private Long level_id;
-	
-	@Column(name="fieldvalues_id")
+
+	@Column(name = "fieldvalues_id")
 	private Long fieldvalues_id;
-	
-	@Column(name="deleted")
+
+	@Column(name = "deleted")
 	private boolean deleted;
-	
+
 	@Transient
 	private Fieldlanguagesvalues label;
-	
+
 	@Transient
 	private Fieldlanguagesvalues tooltip;
-	
-	@Column(name="tooltip_fieldvalues_id")
+
+	@Column(name = "tooltip_fieldvalues_id")
 	private Long tooltip_fieldvalues_id;
 
-    public String getAction() {
-        return action;
-    }
+	public String getAction() {
+		return action;
+	}
 
-    public void setAction(String action) {
-        this.action = action;
-    }
-	
+	public void setAction(String action) {
+		this.action = action;
+	}
+
 	public Long getLevel_id() {
 		return level_id;
 	}
+
 	public void setLevel_id(Long level_id) {
 		this.level_id = level_id;
 	}
-	
+
 	public Long getGlobal_id() {
 		return global_id;
 	}
+
 	public void setGlobal_id(Long global_id) {
 		this.global_id = global_id;
 	}
-    
-    public String getComment() {
-        return comment;
-    }
 
-    public void setComment(String comment) {
-        this.comment = comment;
-    }
-    
-    public Long getMain_id() {
-        return main_id;
-    }
+	public String getComment() {
+		return comment;
+	}
 
-    public void setMain_id(Long main_id) {
-        this.main_id = main_id;
-    }
-    
-    public String getIcon() {
-        return icon;
-    }
+	public void setComment(String comment) {
+		this.comment = comment;
+	}
 
-    public void setIcon(String icon) {
-        this.icon = icon;
-    }
-    
-    public Boolean getIsleaf() {
-        return isleaf;
-    }
+	public Long getMain_id() {
+		return main_id;
+	}
 
-    public void setIsleaf(Boolean isleaf) {
-        this.isleaf = isleaf;
-    }
-    
-    public Boolean getIsopen() {
-        return isopen;
-    }
+	public void setMain_id(Long main_id) {
+		this.main_id = main_id;
+	}
 
-    public void setIsopen(Boolean isopen) {
-        this.isopen = isopen;
-    }
-    
+	public String getIcon() {
+		return icon;
+	}
+
+	public void setIcon(String icon) {
+		this.icon = icon;
+	}
+
+	public Boolean getIsleaf() {
+		return isleaf;
+	}
+
+	public void setIsleaf(Boolean isleaf) {
+		this.isleaf = isleaf;
+	}
+
+	public Boolean getIsopen() {
+		return isopen;
+	}
+
+	public void setIsopen(Boolean isopen) {
+		this.isopen = isopen;
+	}
+
 	public Date getStarttime() {
 		return starttime;
 	}
+
 	public void setStarttime(Date starttime) {
 		this.starttime = starttime;
 	}
-    
+
 	public Date getUpdatetime() {
 		return updatetime;
 	}
+
 	public void setUpdatetime(Date updatetime) {
 		this.updatetime = updatetime;
 	}
-	
+
 	public boolean getDeleted() {
 		return deleted;
 	}
+
 	public void setDeleted(boolean deleted) {
 		this.deleted = deleted;
 	}
-    
-    public String getName() {
-        return name;
-    }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-    
-    
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
 	public Integer getNaviorder() {
 		return naviorder;
 	}
+
 	public void setNaviorder(Integer naviorder) {
 		this.naviorder = naviorder;
 	}
@@ -193,6 +198,7 @@ public class Navimain implements Serializable {
 	public Long getFieldvalues_id() {
 		return fieldvalues_id;
 	}
+
 	public void setFieldvalues_id(Long fieldvalues_id) {
 		this.fieldvalues_id = fieldvalues_id;
 	}
@@ -200,13 +206,15 @@ public class Navimain implements Serializable {
 	public Fieldlanguagesvalues getLabel() {
 		return label;
 	}
+
 	public void setLabel(Fieldlanguagesvalues label) {
 		this.label = label;
-	}	
+	}
 
 	public Long getTooltip_fieldvalues_id() {
 		return tooltip_fieldvalues_id;
 	}
+
 	public void setTooltip_fieldvalues_id(Long tooltip_fieldvalues_id) {
 		this.tooltip_fieldvalues_id = tooltip_fieldvalues_id;
 	}
@@ -214,6 +222,7 @@ public class Navimain implements Serializable {
 	public Fieldlanguagesvalues getTooltip() {
 		return tooltip;
 	}
+
 	public void setTooltip(Fieldlanguagesvalues tooltip) {
 		this.tooltip = tooltip;
 	}
@@ -225,5 +234,11 @@ public class Navimain implements Serializable {
 	public void setParams(String params) {
 		this.params = params;
 	}
-		
+
+	@Override
+	public String toString() {
+		return "Navimain [main_id=" + main_id + ", global_id=" + global_id + ", name=" + name + ", action=" + action + ", params=" + params
+				+ ", naviorder=" + naviorder + ", fieldvalues_id=" + fieldvalues_id + ", deleted=" + deleted + ", tooltip_fieldvalues_id="
+				+ tooltip_fieldvalues_id + "]";
+	}
 }
