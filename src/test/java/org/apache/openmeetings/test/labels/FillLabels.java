@@ -59,7 +59,7 @@ import org.junit.Test;
  */
 public class FillLabels {
 
-	private final String basePath = "src/main/webapp/languages/";
+	private final String basePath = "languages/";
 
 	private final String masterLangFile = "english.xml";
 
