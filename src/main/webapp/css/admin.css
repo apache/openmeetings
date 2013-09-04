@@ -251,7 +251,6 @@ table.adminListTable tr:hover {
 .adminForm {
 	
 }
-
 .adminForm input {
 	display: block;
 	float: left;
@@ -262,7 +261,9 @@ table.adminListTable tr:hover {
 	height: 20px;
 	margin: 2px 2px;
 }
-
+.adminForm input[type=checkbox], .adminForm input[type=radio] {
+	width: auto;
+}
 .adminForm input.formcheckbox {
 	display: block;
 	float: left;
