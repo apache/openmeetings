@@ -93,4 +93,5 @@
     <timezone orderId="28" name="Etc/GMT-9" label="Anchorage, Fairbanks, Juneau" iCal="America/Juneau" />
     <timezone orderId="28" name="Etc/GMT-9 (Alaska)" label="United States (most of Alaska)" iCal="US/Alaska" />
     <timezone orderId="29" name="Etc/GMT-10" label="Hawaii" iCal="Pacific/Honolulu" />
+    <timezone orderId="30" name="Etc/GMT-11" label="Samoa" iCal="Pacific/Apia" />    
 </timezones>

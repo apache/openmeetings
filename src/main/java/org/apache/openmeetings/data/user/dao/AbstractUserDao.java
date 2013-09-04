@@ -326,7 +326,7 @@ public class AbstractUserDao  {
 			}
 			return us;
 		} catch (Exception e) {
-			log.error("[getUserByAdressesId]", e);
+			log.error("[getUserByEmail] " + email, e);
 		}
 		return null;
 	}
@@ -349,7 +349,7 @@ public class AbstractUserDao  {
 				return new Long(-5);
 			}
 		} catch (Exception e) {
-			log.error("[getUserByAdressesId]", e);
+			log.error("[getUserByHash]", e);
 		}
 		return new Long(-1);
 	}

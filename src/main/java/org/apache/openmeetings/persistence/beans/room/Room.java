@@ -89,7 +89,7 @@ public class Room implements Serializable, IDataProviderEntity {
 	private Long rooms_id;
 
 	@Column(name = "name")
-	@Element(data = true)
+	@Element(data = true, required=false)
 	private String name;
 
 	@Lob

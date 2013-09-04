@@ -179,7 +179,7 @@ public class User implements Serializable, IDataProviderEntity {
 	private String pictureuri;
 
 	@Column(name = "deleted")
-	@Element(data = true)
+	@Element(data = true, required = false)
 	private boolean deleted;
 
 	@Column(name = "language_id")
@@ -203,15 +203,9 @@ public class User implements Serializable, IDataProviderEntity {
 	@Transient
 	private Userlevel userlevel;
 
-	@Transient
-	private Userdata rechnungsaddressen;
-
-	@Transient
-	private Userdata lieferadressen;
-
 	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinColumn(name = "user_id", insertable = true, updatable = true)
-	@ElementList(name = "organisations")
+	@ElementList(name = "organisations", required = false)
 	@ElementDependent
 	private List<Organisation_Users> organisation_users = new ArrayList<Organisation_Users>();
 
@@ -363,14 +357,6 @@ public class User implements Serializable, IDataProviderEntity {
 		this.level_id = level_id;
 	}
 
-	public Userdata getLieferadressen() {
-		return lieferadressen;
-	}
-
-	public void setLieferadressen(Userdata lieferadressen) {
-		this.lieferadressen = lieferadressen;
-	}
-
 	public String getLogin() {
 		return login;
 	}
@@ -414,14 +400,6 @@ public class User implements Serializable, IDataProviderEntity {
 	@Deprecated //should not be used directly (for bean usage only)
 	public void setPassword(String password) {
 		this.password = password;
-	}
-
-	public Userdata getRechnungsaddressen() {
-		return rechnungsaddressen;
-	}
-
-	public void setRechnungsaddressen(Userdata rechnungsaddressen) {
-		this.rechnungsaddressen = rechnungsaddressen;
 	}
 
 	public Date getRegdate() {

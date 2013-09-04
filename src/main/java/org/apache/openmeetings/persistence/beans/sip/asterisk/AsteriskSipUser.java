@@ -86,9 +86,9 @@ public class AsteriskSipUser implements Serializable {
 	@Element(data=true, required = false)
 	private String defaultuser; //	Varchar 128
 	
-	@Column(name = "fullcontact", length=128)
+	@Column(name = "fullcontact", length=512)
 	@Element(data=true, required = false)
-	private String fullcontact; //	Varchar 128
+	private String fullcontact;
 	
 	@Column(name = "regserver", nullable = true, length=128)
 	@Element(data=true, required = false)
