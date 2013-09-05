@@ -97,7 +97,7 @@ public class MeetingMemberLogic {
 					.getAppointMentById(appointmentId);
 
 			MeetingMember member = getMemberById(memberId);
-			boolean isInvitor = member.getUserid().getUser_id() == point.getUserId().getUser_id();
+			boolean isInvitor = member.getUser().getUser_id() == point.getOwner().getUser_id();
 
 			Long invitationId = null;
 
@@ -132,15 +132,15 @@ public class MeetingMemberLogic {
 								isPasswordProtected, // passwordprotected
 								password, // invitationpass
 								2, // valid type
-								point.getAppointmentStarttime(), // valid from
-								point.getAppointmentEndtime(), // valid to
+								point.getStart(), // valid from
+								point.end(), // valid to
 								meeting_organizer, // created by
 								baseUrl,
 								language_id,
 								true, // really send mail sendMail
-								point.getAppointmentStarttime(),
-								point.getAppointmentEndtime(),
-								point.getAppointmentId(),
+								point.getStart(),
+								point.end(),
+								point.getId(),
 								invitorName,
 								timezone
 								);
@@ -165,12 +165,12 @@ public class MeetingMemberLogic {
 								isPasswordProtected, // passwordprotected
 								password, // invitationpass
 								2, // valid
-								point.getAppointmentStarttime(), // valid from
-								point.getAppointmentEndtime(), // valid to
+								point.getStart(), // valid from
+								point.end(), // valid to
 								meeting_organizer, // created by
-								point.getAppointmentId(), isInvitor,
+								point.getId(), isInvitor,
 								language_id, timezone,
-								point.getAppointmentId(),
+								point.getId(),
 								invitorName);
 
 			}
@@ -221,10 +221,10 @@ public class MeetingMemberLogic {
 			log.debug(":::: addMeetingMemberInvitation ..... "
 					+ appointment.getRemind().getTypId());
 
-			String subject = formatSubject(member.getUserid().getLanguage_id(), appointment, timezoneUtil.getTimezoneByUser(organizer));
+			String subject = formatSubject(member.getUser().getLanguage_id(), appointment, timezoneUtil.getTimezoneByUser(organizer));
 
 			String invitorName = organizer.getFirstname() + " " + organizer.getLastname();
-			String message = formatMessage(member.getUserid().getLanguage_id(), appointment, timezoneUtil.getTimezoneByUser(organizer),
+			String message = formatMessage(member.getUser().getLanguage_id(), appointment, timezoneUtil.getTimezoneByUser(organizer),
 					invitorName);
 
 			// appointment.getRemind().getTypId() == 1 will not receive emails
@@ -288,15 +288,15 @@ public class MeetingMemberLogic {
 			TimeZone timezone) {
 		try {
 			String message = fieldManager.getString(1151L, language_id) + " "
-					+ point.getAppointmentName();
+					+ point.getTitle();
 
 			message += " "
 					+ CalendarPatterns.getDateWithTimeByMiliSecondsAndTimeZone(
-							point.getAppointmentStarttime(), timezone);
+							point.getStart(), timezone);
 
 			message += " - "
 					+ CalendarPatterns.getDateWithTimeByMiliSecondsAndTimeZone(
-							point.getAppointmentEndtime(), timezone);
+							point.end(), timezone);
 
 			return message;
 		} catch (Exception err) {
@@ -310,25 +310,25 @@ public class MeetingMemberLogic {
 			TimeZone timezone, String invitorName) {
 		try {
 			String message = fieldManager.getString(1151L, language_id) + " "
-					+ point.getAppointmentName();
+					+ point.getTitle();
 
-			if (point.getAppointmentDescription() != null && 
-					point.getAppointmentDescription().length() != 0) {
+			if (point.getDescription() != null && 
+					point.getDescription().length() != 0) {
 				message += fieldManager.getString(1152L, language_id)
-						+ point.getAppointmentDescription();
+						+ point.getDescription();
 			}
 
 			message += "<br/>"
 					+ fieldManager.getString(1153L, language_id)
 					+ ' '
 					+ CalendarPatterns.getDateWithTimeByMiliSecondsAndTimeZone(
-							point.getAppointmentStarttime(), timezone)
+							point.getStart(), timezone)
 					+ "<br/>";
 
 			message += fieldManager.getString(1154L, language_id)
 					+ ' '
 					+ CalendarPatterns.getDateWithTimeByMiliSecondsAndTimeZone(
-							point.getAppointmentEndtime(), timezone) + "<br/>";
+							point.end(), timezone) + "<br/>";
 
 			message += fieldManager.getString(1156L, language_id) + invitorName + "<br/>";
 
@@ -353,7 +353,7 @@ public class MeetingMemberLogic {
 		log.debug("MeetingMemberLogic.updateMeetingMember");
 
 		MeetingMember member = meetingMemberDao
-				.getMeetingMemberById(meetingMemberId);
+				.get(meetingMemberId);
 
 		if (member == null) {
 			log.error("Couldnt retrieve Member for ID " + meetingMemberId);
@@ -380,8 +380,8 @@ public class MeetingMemberLogic {
 	public Long updateMeetingMember(MeetingMember member) {
 		log.debug("updateMeetingMember");
 
-		return meetingMemberDao.updateMeetingMember(member)
-				.getMeetingMemberId();
+		return meetingMemberDao.update(member)
+				.getId();
 	}
 
 	// --------------------------------------------------------------------------------------------
@@ -394,7 +394,7 @@ public class MeetingMemberLogic {
 	public MeetingMember getMemberById(Long memberId) {
 		log.debug("getMemberById");
 
-		return meetingMemberDao.getMeetingMemberById(memberId);
+		return meetingMemberDao.get(memberId);
 	}
 
 	// --------------------------------------------------------------------------------------------
@@ -413,7 +413,7 @@ public class MeetingMemberLogic {
 		try {
 
 			MeetingMember member = meetingMemberDao
-					.getMeetingMemberById(meetingMemberId);
+					.get(meetingMemberId);
 
 			if (member == null) {
 				log.error("could not find meeting member!");
@@ -422,7 +422,7 @@ public class MeetingMemberLogic {
 
 			Appointment point = member.getAppointment();
 			point = appointmentLogic.getAppointMentById(point
-					.getAppointmentId());
+					.getId());
 
 			if (point == null) {
 				log.error("could not retrieve appointment!");

@@ -393,12 +393,12 @@ public class BackupImport {
 			
 			List<Appointment> list = readList(serializer, f, "appointements.xml", "appointments", Appointment.class);
 			for (Appointment a : list) {
-				Long appId = a.getAppointmentId();
+				Long appId = a.getId();
 
 				// We need to reset this as openJPA reject to store them otherwise
-				a.setAppointmentId(null);
-				if (a.getUserId() != null && a.getUserId().getUser_id() == null) {
-					a.setUserId(null);
+				a.setId(null);
+				if (a.getOwner() != null && a.getOwner().getUser_id() == null) {
+					a.setOwner(null);
 				}
 				Long newAppId = appointmentDao.addAppointmentObj(a);
 				appointmentsMap.put(appId, newAppId);
@@ -414,7 +414,7 @@ public class BackupImport {
 		{
 			List<MeetingMember> list = readMeetingMemberList(f, "meetingmembers.xml", "meetingmembers");
 			for (MeetingMember ma : list) {
-				meetingMemberDao.addMeetingMemberByObject(ma);
+				meetingMemberDao.update(ma);
 			}
 		}
 
@@ -699,32 +699,32 @@ public class BackupImport {
 				MeetingMember mm = ser.read(MeetingMember.class, item, false);
 
 				boolean needToSkip1 = true;
-				if (mm.getUserid() == null) {
-					mm.setUserid(new User());
+				if (mm.getUser() == null) {
+					mm.setUser(new User());
 				}
-				if (mm.getUserid().getUser_id() == null) {
+				if (mm.getUser().getUser_id() == null) {
 					//HACK to handle external attendee's firstname, lastname, email
 					boolean contactValid = false;
 					do {
 						if ("firstname".equals(item1.getName())) {
-							mm.getUserid().setFirstname(item1.getValue());
+							mm.getUser().setFirstname(item1.getValue());
 						}
 						if ("lastname".equals(item1.getName())) {
-							mm.getUserid().setLastname(item1.getValue());
+							mm.getUser().setLastname(item1.getValue());
 						}
 						if ("email".equals(item1.getName())) {
-							if (mm.getUserid().getAdresses() == null) {
-								mm.getUserid().setAdresses(new Address());
+							if (mm.getUser().getAdresses() == null) {
+								mm.getUser().setAdresses(new Address());
 							}
 							String email = item1.getValue();
 							User u = usersDao.getUserByEmail(email);
 							if (u != null) {
-								mm.setUserid(u);
-							} else if (mm.getAppointment() != null && mm.getAppointment().getUserId() != null) {
-								mm.getUserid().setType(Type.contact);
-								mm.getUserid().getAdresses().setEmail(email);
-								mm.getUserid().setLogin(mm.getAppointment().getUserId().getUser_id() + "_" + email);
-								mm.getUserid().setOwner_id(mm.getAppointment().getUserId().getUser_id());
+								mm.setUser(u);
+							} else if (mm.getAppointment() != null && mm.getAppointment().getOwner() != null) {
+								mm.getUser().setType(Type.contact);
+								mm.getUser().getAdresses().setEmail(email);
+								mm.getUser().setLogin(mm.getAppointment().getOwner().getUser_id() + "_" + email);
+								mm.getUser().setOwner_id(mm.getAppointment().getOwner().getUser_id());
 							}
 							contactValid = true;
 						}
@@ -741,8 +741,8 @@ public class BackupImport {
 					} while (item1 != null && !"meetingmember".equals(item1.getName()));
 				}
 				item = listNode.getNext();
-				if (mm != null && !mm.getDeleted() && mm.getUserid() != null && mm.getAppointment() != null && mm.getAppointment().getAppointmentId() != null) {
-					mm.setMeetingMemberId(null);
+				if (mm != null && !mm.isDeleted() && mm.getUser() != null && mm.getAppointment() != null && mm.getAppointment().getId() != null) {
+					mm.setId(null);
 					list.add(mm);
 				}
 			}

@@ -89,26 +89,26 @@ public abstract class AbstractOpenmeetingsSpringTest extends AbstractJUnit4Sprin
 		// add new appointment
 		Appointment ap = new Appointment();
 
-		ap.setAppointmentName("appointmentName");
-		ap.setAppointmentLocation("appointmentLocation");
+		ap.setTitle("appointmentName");
+		ap.setLocation("appointmentLocation");
 
 		Date appointmentstart = new Date();
 		Date appointmentend = new Date();
 		appointmentend.setTime(appointmentstart.getTime() + 3600);
 
-		ap.setAppointmentStarttime(appointmentstart);
-		ap.setAppointmentEndtime(appointmentend);
-		ap.setAppointmentDescription("appointmentDescription");
-		ap.setStarttime(new Date());
+		ap.setStart(appointmentstart);
+		ap.setEnd(appointmentend);
+		ap.setDescription("appointmentDescription");
+		ap.setInserted(new Date());
 		ap.setDeleted(false);
 		ap.setIsDaily(false);
 		ap.setIsWeekly(false);
 		ap.setIsMonthly(false);
 		ap.setIsYearly(false);
-		ap.setIsPasswordProtected(false);
+		ap.setPasswordProtected(false);
 
-		ap.setUserId(usersDao.get(1L));
-		ap.setIsConnectedEvent(false);
+		ap.setOwner(usersDao.get(1L));
+		ap.setConnectedEvent(false);
 		Long id = appointmentDao.addAppointmentObj(ap);
 		assertNotNull("Cann't add appointment", id);
 		return ap;

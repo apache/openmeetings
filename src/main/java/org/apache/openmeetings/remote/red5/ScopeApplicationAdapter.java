@@ -1533,7 +1533,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 
 				List<MeetingMember> members = meetingMemberDao
 						.getMeetingMemberByAppointmentId(ment
-								.getAppointmentId());
+								.getId());
 
 				Long userIdInRoomClient = currentClient.getUser_id();
 
@@ -1546,15 +1546,15 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 
 					// only persistent users can schedule a meeting
 					// user-id is only set for registered users
-					if (member.getUserid() != null) {
-						log.debug("checking user " + member.getUserid().getFirstname()
+					if (member.getUser() != null) {
+						log.debug("checking user " + member.getUser().getFirstname()
 								+ " for moderator role - ID : "
-								+ member.getUserid().getUser_id());
+								+ member.getUser().getUser_id());
 
-						if (member.getUserid().getUser_id().equals(userIdInRoomClient)) {
+						if (member.getUser().getUser_id().equals(userIdInRoomClient)) {
 							found = true;
 
-							if (ment.getUserId().getUser_id() == member.getUserid().getUser_id()) {
+							if (ment.getOwner().getUser_id() == member.getUser().getUser_id()) {
 								log.debug("User "
 										+ userIdInRoomClient
 										+ " is moderator due to flag in MeetingMember record");

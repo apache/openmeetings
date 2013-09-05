@@ -96,9 +96,9 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 	//@Override
 	public void setModelObjectWithAjaxTarget(Appointment object, AjaxRequestTarget target) {
 		form.setModelObject(object);
-		form.setEnabled(object.getUserId() == null || getUserId() == object.getUserId().getUser_id());
+		form.setEnabled(object.getOwner() == null || getUserId() == object.getOwner().getUser_id());
 		log.debug(" -- setModelObjectWithAjaxTarget -- Current model " + object);
-		if (object.getAppointmentId() != null) {
+		if (object.getId() != null) {
 			delete.setVisible(true, target);
 			enterRoom.setVisible(object.getRoom() != null, target);
 		} else {
@@ -131,7 +131,7 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 	}
 
 	protected void deleteAppointment(AjaxRequestTarget target) {
-		getBean(AppointmentLogic.class).deleteAppointment(getModelObject().getAppointmentId(), getUserId(), getLanguage());
+		getBean(AppointmentLogic.class).deleteAppointment(getModelObject().getId(), getUserId(), getLanguage());
 		calendar.refresh(target);		
 	}
 
@@ -199,15 +199,15 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 			if (a.getRoom().getRoomtype() == null && !roomTypes.isEmpty()) {
 				a.getRoom().setRoomtype(roomTypes.get(0));
 			}
-			if (a.getAppointmentId() == null) {
+			if (a.getId() == null) {
 				java.util.Calendar start = WebSession.getCalendar();
-				start.setTime(a.getAppointmentStarttime());
+				start.setTime(a.getStart());
 				java.util.Calendar end = WebSession.getCalendar();
-				end.setTime(a.getAppointmentEndtime());
+				end.setTime(a.end());
 				
 				if (start.equals(end)) {
 					end.add(java.util.Calendar.HOUR_OF_DAY, 1);
-					a.setAppointmentEndtime(end.getTime());
+					a.setEnd(end.getTime());
 				}
 			}
 		}
@@ -218,15 +218,15 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 			add(new AttributeAppender("class", new Model<String>("appointmentPopUp"), " "));
 			
 			add(feedback.setOutputMarkupId(true));
-			add(new RequiredTextField<String>("appointmentName").setLabel(Model.of(WebSession.getString(572))));
+			add(new RequiredTextField<String>("title").setLabel(Model.of(WebSession.getString(572))));
 			DefaultWysiwygToolbar toolbar = new DefaultWysiwygToolbar("toolbarContainer");
 			add(toolbar);
-			add(new WysiwygEditor("appointmentDescription", toolbar));
-			add(new TextField<String>("appointmentLocation"));
-			add(new DateTimeField("appointmentStarttime"));
-			add(new DateTimeField("appointmentEndtime"));
+			add(new WysiwygEditor("description", toolbar));
+			add(new TextField<String>("location"));
+			add(new DateTimeField("start"));
+			add(new DateTimeField("end"));
 			final PasswordTextField pwd = new PasswordTextField("password");
-			pwd.setEnabled(isPwdProtected());
+			pwd.setEnabled(getModelObject().isPasswordProtected());
 			pwd.setOutputMarkupId(true);
 			add(pwd);
 			
@@ -257,13 +257,13 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 					target.add(roomType.setEnabled(createRoom), room.setEnabled(!createRoom));
 				}
 			});
-			add(new AjaxCheckBox("isPasswordProtected") {
+			add(new AjaxCheckBox("passwordProtected") {
 				private static final long serialVersionUID = 6041200584296439976L;
 
 				@Override
 				protected void onUpdate(AjaxRequestTarget target) {
-					AppointmentForm.this.getModelObject().setIsPasswordProtected(getConvertedInput());
-					pwd.setEnabled(isPwdProtected());
+					AppointmentForm.this.getModelObject().setPasswordProtected(getConvertedInput());
+					pwd.setEnabled(AppointmentForm.this.getModelObject().isPasswordProtected());
 					target.add(pwd);
 				}
 			});
@@ -279,22 +279,22 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 			add(addMeetingMember);
 			
 			final WebMarkupContainer attendeeContainer = new WebMarkupContainer("attendeeContainer");
-			attendeeContainer.add(new ListView<MeetingMember>("meetingMember"){
+			attendeeContainer.add(new ListView<MeetingMember>("meetingMembers"){
 
 				private static final long serialVersionUID = -2609044181991754097L;
 
 				@Override
 				protected void populateItem(final ListItem<MeetingMember> item) {
 					MeetingMember mm = item.getModelObject();
-					item.add(new Label("attendeeName", mm.getUserid().getFirstname() + " " + mm.getUserid().getLastname()));
-					item.add(new Label("attendeeEmail", mm.getUserid().getAdresses().getEmail()));
+					item.add(new Label("attendeeName", mm.getUser().getFirstname() + " " + mm.getUser().getLastname()));
+					item.add(new Label("attendeeEmail", mm.getUser().getAdresses().getEmail()));
 					item.add(new WebMarkupContainer("attendeeDelete").add(new AjaxEventBehavior("onclick"){
 						private static final long serialVersionUID = 1L;
 
 						@Override
 						protected void onEvent(AjaxRequestTarget target) {
 							MeetingMember mm = item.getModelObject();
-							AppointmentForm.this.getModelObject().getMeetingMember().remove(mm);
+							AppointmentForm.this.getModelObject().getMeetingMembers().remove(mm);
 							target.add(attendeeContainer);
 						}
 					})); 
@@ -302,10 +302,6 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 			});
 			add(attendeeContainer.setOutputMarkupId(true));
 
-		}
-		
-		private boolean isPwdProtected() {
-			return Boolean.TRUE.equals(getModelObject().getIsPasswordProtected());
 		}
 		
 		private List<AppointmentReminderTyps> getRemindTypes() {

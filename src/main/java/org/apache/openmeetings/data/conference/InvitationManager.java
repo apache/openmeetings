@@ -221,8 +221,8 @@ public class InvitationManager {
 			User createdBy) {
 		try {
 			Invitations invitation = new Invitations();
-			invitation.setIsPasswordProtected(appointment.getIsPasswordProtected());
-			if (appointment.getIsPasswordProtected()) {
+			invitation.setIsPasswordProtected(appointment.isPasswordProtected());
+			if (appointment.isPasswordProtected()) {
 				invitation.setInvitationpass(manageCryptStyle
 						.getInstanceOfCrypt().createPassPhrase(
 								appointment.getPassword()));
@@ -243,11 +243,11 @@ public class InvitationManager {
 				invitation.setIsValidByTime(true);
 				invitation.setCanBeUsedOnlyOneTime(false);
 
-				Date gmtTimeStartShifted = new Date(appointment.getAppointmentStarttime().getTime()
+				Date gmtTimeStartShifted = new Date(appointment.getStart().getTime()
 						- (5 * 60 * 1000));
 
 				invitation.setValidFrom(gmtTimeStartShifted);
-				invitation.setValidTo(appointment.getAppointmentEndtime());
+				invitation.setValidTo(appointment.end());
 
 			} else {
 				// one-time
@@ -262,13 +262,13 @@ public class InvitationManager {
 			invitation.setHash(MD5.do_checksum(hashRaw));
 
 			invitation.setInvitedBy(createdBy);
-			String userName = meetingMember.getUserid().getFirstname() + " " + meetingMember.getUserid().getLastname();
+			String userName = meetingMember.getUser().getFirstname() + " " + meetingMember.getUser().getLastname();
 			invitation.setInvitedname(userName);
-			invitation.setInvitedEMail(meetingMember.getUserid().getAdresses().getEmail());
+			invitation.setInvitedEMail(meetingMember.getUser().getAdresses().getEmail());
 			invitation.setRoom(appointment.getRoom());
 			invitation.setConferencedomain(conferencedomain);
 			invitation.setStarttime(new Date());
-			invitation.setAppointmentId(appointment.getAppointmentId());
+			invitation.setAppointmentId(appointment.getId());
 
 			invitation = invitationDao.updateInvitation(invitation);
 			long invitationId = invitation.getInvitations_id();
@@ -316,12 +316,12 @@ public class InvitationManager {
 		}
 
 		if (appointment.getRemind() == null) {
-			log.error("Appointment " + appointment.getAppointmentName()
+			log.error("Appointment " + appointment.getTitle()
 					+ " has no ReminderType!");
 			return;
 		}
 
-		User us = member.getUserid();
+		User us = member.getUser();
 		TimeZone timezone = null;
 		// external users have no user object stored so we will need to get the
 		// timezone from the stored string
@@ -341,20 +341,20 @@ public class InvitationManager {
 			log.debug("no remindertype defined -> no cancel of invitation");
 		} else if (appointment.getRemind().getTypId() == 2) {
 			log.debug("ReminderType simple mail -> sending simple mail...");
-			sendInvitationCancelMail(member.getUserid().getAdresses().getEmail(),
+			sendInvitationCancelMail(member.getUser().getAdresses().getEmail(),
 					member.getAppointment(), user.getAdresses().getEmail(),
 					subject, message);
 		} else if (appointment.getRemind().getTypId() == 3) {
 			try {
-				sendInvitationIcalCancelMail(member.getUserid().getAdresses().getEmail(),
-						member.getUserid().getFirstname() + " " + member.getUserid().getLastname(),
-						appointment, canceling_user_id, (appointment.getUserId().getUser_id() == member.getUserid().getUser_id()),
-						appointment.getAppointmentStarttime(),
-						appointment.getAppointmentEndtime(), timezone, subject,
+				sendInvitationIcalCancelMail(member.getUser().getAdresses().getEmail(),
+						member.getUser().getFirstname() + " " + member.getUser().getLastname(),
+						appointment, canceling_user_id, (appointment.getOwner().getUser_id() == member.getUser().getUser_id()),
+						appointment.getStart(),
+						appointment.end(), timezone, subject,
 						message);
 			} catch (Exception e) {
 				log.error("Error sending IcalCancelMail for User "
-						+ member.getUserid().getAdresses().getEmail() + " : " + e.getMessage());
+						+ member.getUser().getAdresses().getEmail() + " : " + e.getMessage());
 			}
 		}
 
@@ -373,14 +373,14 @@ public class InvitationManager {
 			Appointment appointment, User user, TimeZone timezone) {
 		try {
 			String message = fieldManager.getString(1157L, language_id)
-					+ appointment.getAppointmentName();
+					+ appointment.getTitle();
 
 			message += " "
 					+ CalendarPatterns.getDateWithTimeByMiliSecondsAndTimeZone(
-							appointment.getAppointmentStarttime(), timezone)
+							appointment.getStart(), timezone)
 					+ " - "
 					+ CalendarPatterns.getDateWithTimeByMiliSecondsAndTimeZone(
-							appointment.getAppointmentEndtime(), timezone);
+							appointment.end(), timezone);
 
 			return message;
 		} catch (Exception err) {
@@ -393,15 +393,15 @@ public class InvitationManager {
 			Appointment appointment, User user, TimeZone timezone) {
 		try {
 			String message = fieldManager.getString(1157L, language_id)
-					+ appointment.getAppointmentName();
+					+ appointment.getTitle();
 
-			if (appointment.getAppointmentDescription() != null &&
-					appointment.getAppointmentDescription().length() != 0) {
+			if (appointment.getDescription() != null &&
+					appointment.getDescription().length() != 0) {
 
 				Fieldlanguagesvalues labelid1152 = fieldManager
 						.getFieldByIdAndLanguage(new Long(1152), language_id);
 				message += labelid1152.getValue()
-						+ appointment.getAppointmentDescription();
+						+ appointment.getDescription();
 
 			}
 
@@ -414,13 +414,13 @@ public class InvitationManager {
 					+ labelid1153.getValue()
 					+ ' '
 					+ CalendarPatterns.getDateWithTimeByMiliSecondsAndTimeZone(
-							appointment.getAppointmentStarttime(), timezone)
+							appointment.getStart(), timezone)
 					+ "<br/>";
 
 			message += labelid1154.getValue()
 					+ ' '
 					+ CalendarPatterns.getDateWithTimeByMiliSecondsAndTimeZone(
-							appointment.getAppointmentEndtime(), timezone)
+							appointment.end(), timezone)
 					+ "<br/>";
 
 			String invitorName = user.getFirstname() + " " + user.getLastname()
@@ -457,14 +457,14 @@ public class InvitationManager {
 		}
 
 		if (appointment.getRemind() == null) {
-			log.error("Appointment " + appointment.getAppointmentName()
+			log.error("Appointment " + appointment.getTitle()
 					+ " has no ReminderType!");
 			return;
 		}
 
 		log.debug("Remindertype : " + appointment.getRemind().getTypId());
 
-		User us = member.getUserid();
+		User us = member.getUser();
 		TimeZone timezone = null;
 		// external users have no user object stored so we will need to get the
 		// timezone from the stored string
@@ -485,19 +485,19 @@ public class InvitationManager {
 		// nothing
 		if (sendMail) {
 		if (appointment.getRemind().getTypId() == 2) {
-			sendInvitationUpdateMail(member.getUserid().getAdresses().getEmail(), appointment, user
+			sendInvitationUpdateMail(member.getUser().getAdresses().getEmail(), appointment, user
 					.getAdresses().getEmail(), subject, message);
 		} else if (appointment.getRemind().getTypId() == 3) {
 			try {
-				sendInvitationIcalUpdateMail(member.getUserid().getAdresses().getEmail(),
-						member.getUserid().getFirstname() + " " + member.getUserid().getLastname(),
-						appointment, canceling_user_id, (appointment.getUserId().getUser_id() == member.getUserid().getUser_id()),
-						language_id, appointment.getAppointmentStarttime(),
-						appointment.getAppointmentEndtime(), timezone, subject,
+				sendInvitationIcalUpdateMail(member.getUser().getAdresses().getEmail(),
+						member.getUser().getFirstname() + " " + member.getUser().getLastname(),
+						appointment, canceling_user_id, (appointment.getOwner().getUser_id() == member.getUser().getUser_id()),
+						language_id, appointment.getStart(),
+						appointment.end(), timezone, subject,
 						message);
 			} catch (Exception e) {
 				log.error("Error sending IcalUpdateMail for User "
-						+ member.getUserid().getAdresses().getEmail() + " : " + e.getMessage());
+						+ member.getUser().getAdresses().getEmail() + " : " + e.getMessage());
 			}
 		}
 		}
@@ -509,23 +509,23 @@ public class InvitationManager {
 		try {
 
 			String message = fieldManager.getString(1155L, language_id) + " "
-					+ appointment.getAppointmentName();
+					+ appointment.getTitle();
 
-			if (appointment.getAppointmentDescription().length() != 0) {
+			if (appointment.getDescription().length() != 0) {
 
 				Fieldlanguagesvalues labelid1152 = fieldManager
 						.getFieldByIdAndLanguage(new Long(1152), language_id);
 				message += labelid1152.getValue()
-						+ appointment.getAppointmentDescription();
+						+ appointment.getDescription();
 
 			}
 
 			message += " "
 					+ CalendarPatterns.getDateWithTimeByMiliSecondsAndTimeZone(
-							appointment.getAppointmentStarttime(), timezone)
+							appointment.getStart(), timezone)
 					+ " - "
 					+ CalendarPatterns.getDateWithTimeByMiliSecondsAndTimeZone(
-							appointment.getAppointmentEndtime(), timezone);
+							appointment.end(), timezone);
 
 			return message;
 
@@ -541,14 +541,14 @@ public class InvitationManager {
 		try {
 
 			String message = fieldManager.getString(1155L, language_id) + " "
-					+ appointment.getAppointmentName();
+					+ appointment.getTitle();
 
-			if (appointment.getAppointmentDescription().length() != 0) {
+			if (appointment.getDescription().length() != 0) {
 
 				Fieldlanguagesvalues labelid1152 = fieldManager
 						.getFieldByIdAndLanguage(new Long(1152), language_id);
 				message += labelid1152.getValue()
-						+ appointment.getAppointmentDescription();
+						+ appointment.getDescription();
 
 			}
 
@@ -561,13 +561,13 @@ public class InvitationManager {
 					+ labelid1153.getValue()
 					+ ' '
 					+ CalendarPatterns.getDateWithTimeByMiliSecondsAndTimeZone(
-							appointment.getAppointmentStarttime(), timezone)
+							appointment.getStart(), timezone)
 					+ "<br/>";
 
 			message += labelid1154.getValue()
 					+ ' '
 					+ CalendarPatterns.getDateWithTimeByMiliSecondsAndTimeZone(
-							appointment.getAppointmentEndtime(), timezone)
+							appointment.end(), timezone)
 					+ "<br/>";
 
 			Fieldlanguagesvalues labelid1156 = fieldManager
@@ -699,14 +699,14 @@ public class InvitationManager {
 
 		try {
 			Invitations invitation = new Invitations();
-			invitation.setIsPasswordProtected(appointment.getIsPasswordProtected());
-			if (appointment.getIsPasswordProtected()) {
+			invitation.setIsPasswordProtected(appointment.isPasswordProtected());
+			if (appointment.isPasswordProtected()) {
 				invitation.setInvitationpass(manageCryptStyle
 						.getInstanceOfCrypt().createPassPhrase(
 								appointment.getPassword()));
 			}
 
-			String username = meetingMember.getUserid().getFirstname() + " " + meetingMember.getUserid().getLastname();
+			String username = meetingMember.getUser().getFirstname() + " " + meetingMember.getUser().getLastname();
 			invitation.setInvitationWasUsed(false);
 
 			// valid period of Invitation
@@ -718,8 +718,8 @@ public class InvitationManager {
 				// period
 				invitation.setIsValidByTime(true);
 				invitation.setCanBeUsedOnlyOneTime(false);
-				invitation.setValidFrom(appointment.getAppointmentStarttime());
-				invitation.setValidTo(appointment.getAppointmentEndtime());
+				invitation.setValidFrom(appointment.getStart());
+				invitation.setValidTo(appointment.end());
 			} else {
 				// one-time
 				invitation.setIsValidByTime(false);
@@ -729,7 +729,7 @@ public class InvitationManager {
 
 			invitation.setDeleted(false);
 
-			if (meetingMember.getUserid().getType() == Type.contact) {
+			if (meetingMember.getUser().getType() == Type.contact) {
 				String hashRaw = "InvitationHash"
 						+ (System.currentTimeMillis());
 				log.debug("addInvitationIcalLink : rawHash = " + hashRaw);
@@ -741,21 +741,21 @@ public class InvitationManager {
 			invitation.setInvitedBy(createdBy);
 			invitation.setBaseUrl(baseurl);
 			invitation.setInvitedname(username);
-			invitation.setInvitedEMail(meetingMember.getUserid().getAdresses().getEmail());
+			invitation.setInvitedEMail(meetingMember.getUser().getAdresses().getEmail());
 			invitation.setRoom(appointment.getRoom());
 			invitation.setConferencedomain(conferencedomain);
 			invitation.setStarttime(new Date());
-			invitation.setAppointmentId(appointment.getAppointmentId());
+			invitation.setAppointmentId(appointment.getId());
 
 			invitation = invitationDao.updateInvitation(invitation);
 			long invitationId = invitation.getInvitations_id();
 
 			if (invitationId > 0) {
 				this.sendInvitionIcalLink(username, message, baseurl,
-						meetingMember.getUserid().getAdresses().getEmail(), subject, invitation.getHash(),
-						appointment.getAppointmentId(), createdBy, (appointment.getUserId().getUser_id() == meetingMember.getUserid().getUser_id())
-						, meetingMember.getUserid().getLanguage_id(),
-						appointment.getAppointmentStarttime(), appointment.getAppointmentEndtime(),
+						meetingMember.getUser().getAdresses().getEmail(), subject, invitation.getHash(),
+						appointment.getId(), createdBy, (appointment.getOwner().getUser_id() == meetingMember.getUser().getUser_id())
+						, meetingMember.getUser().getLanguage_id(),
+						appointment.getStart(), appointment.end(),
 						timezoneUtil.getTimezoneByUser(createdBy), createdBy.getFirstname() + " " + createdBy.getLastname());
 				return invitationId;
 			}
@@ -827,7 +827,7 @@ public class InvitationManager {
 		try {
 
 			String invitation_link = baseurl;
-			if (meetingMember.getUserid().getType() == Type.contact) {
+			if (meetingMember.getUser().getType() == Type.contact) {
 				invitation_link += "?invitationHash="
 					+ invitationsHash;
 
@@ -838,7 +838,7 @@ public class InvitationManager {
 
 			String template = InvitationTemplate.getEmail(invitor.getFirstname() + " " + invitor.getLastname(), message, invitation_link);
 
-			mailHandler.send(meetingMember.getUserid().getAdresses().getEmail(), invitor.getAdresses().getEmail(), subject, template);
+			mailHandler.send(meetingMember.getUser().getAdresses().getEmail(), invitor.getAdresses().getEmail(), subject, template);
 			return "success";
 		} catch (Exception err) {
 			log.error("sendInvitationLink", err);
@@ -969,7 +969,7 @@ public class InvitationManager {
 		IcalHandler handler = new IcalHandler(IcalHandler.ICAL_METHOD_CANCEL);
 
 		// refresh appointment
-		point = appointmentLogic.getAppointMentById(point.getAppointmentId());
+		point = appointmentLogic.getAppointMentById(point.getId());
 
 		// Transforming Meeting Members
 
@@ -983,7 +983,7 @@ public class InvitationManager {
 				.getAdresses().getEmail(), user.getLogin(), invitor);
 
 		handler.addNewMeeting(startdate, enddate, 
-				point.getAppointmentName(), atts,
+				point.getTitle(), atts,
 				subject, organizer, point.getIcalId(), timezone);
 
 		log.debug(handler.getICalDataAsString());
@@ -1015,7 +1015,7 @@ public class InvitationManager {
 		IcalHandler handler = new IcalHandler(IcalHandler.ICAL_METHOD_REQUEST);
 
 		// refresh appointment
-		point = appointmentLogic.getAppointMentById(point.getAppointmentId());
+		point = appointmentLogic.getAppointMentById(point.getId());
 
 		// Transforming Meeting Members
 
@@ -1028,7 +1028,7 @@ public class InvitationManager {
 		HashMap<String, String> organizer = handler.getAttendeeData(user
 				.getAdresses().getEmail(), user.getLogin(), invitor);
 
-		handler.addNewMeeting(starttime, endtime, point.getAppointmentName(), atts,
+		handler.addNewMeeting(starttime, endtime, point.getTitle(), atts,
 				subject, organizer, point.getIcalId(), timeZone);
 
 		log.debug(handler.getICalDataAsString());
@@ -1099,7 +1099,7 @@ public class InvitationManager {
 
 			// Create ICal Message
 			String meetingId = handler.addNewMeeting(starttime, endtime,
-					point.getAppointmentName(), atts, invitation_link,
+					point.getTitle(), atts, invitation_link,
 					organizerAttendee, point.getIcalId(), timezone);
 
 			// Writing back meetingUid

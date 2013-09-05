@@ -27,9 +27,9 @@ public class MeetingMemberDTO {
 	private String jNameTimeZone;
 
 	public MeetingMemberDTO(MeetingMember meetingMemberItem) {
-		meetingMemberId = meetingMemberItem.getMeetingMemberId();
-		userid = (meetingMemberItem.getUserid() != null) ? meetingMemberItem
-				.getUserid().getUser_id() : 0;
+		meetingMemberId = meetingMemberItem.getId();
+		userid = (meetingMemberItem.getUser() != null) ? meetingMemberItem
+				.getUser().getUser_id() : 0;
 		jNameTimeZone = meetingMemberItem.getTimeZoneId();
 	}
 

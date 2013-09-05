@@ -48,6 +48,6 @@ public class AppointmentConverter extends OmConverter<Appointment> {
 
 	public void write(OutputNode node, Appointment value) throws Exception {
 		node.setData(true);
-		node.setValue(value == null ? "0" : "" + value.getAppointmentId());
+		node.setValue(value == null ? "0" : "" + value.getId());
 	}
 }

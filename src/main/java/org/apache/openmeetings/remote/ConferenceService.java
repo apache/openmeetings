@@ -315,11 +315,11 @@ public class ConferenceService {
 			returnMap.put(
 					"start",
 					CalendarPatterns.getDateWithTimeByMiliSeconds(
-							appointment.getAppointmentStarttime(), timezone));
+							appointment.getStart(), timezone));
 			returnMap.put(
 					"end",
 					CalendarPatterns.getDateWithTimeByMiliSeconds(
-							appointment.getAppointmentEndtime(), timezone));
+							appointment.end(), timezone));
 			returnMap.put("timeZone", timezone.getDisplayName());
 
 			return returnMap;

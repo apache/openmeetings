@@ -195,11 +195,11 @@ public class MeetingMemberDialog extends AbstractFormDialog<Appointment> {
 	@Override
 	protected void onSubmit(AjaxRequestTarget target) {
 		Appointment app = getModelObject();
-		final List<MeetingMember> meetingMembers = app.getMeetingMember() == null ? new ArrayList<MeetingMember>() : app.getMeetingMember();
+		final List<MeetingMember> meetingMembers = app.getMeetingMembers() == null ? new ArrayList<MeetingMember>() : app.getMeetingMembers();
 		for (User u : attendeesInList) {
 			boolean found = false;
 			for (MeetingMember m : meetingMembers) {
-				if (u.getAdresses().getEmail().equals(m.getUserid().getAdresses().getEmail())) {
+				if (u.getAdresses().getEmail().equals(m.getUser().getAdresses().getEmail())) {
 					found = true;
 					break;
 				}
@@ -210,15 +210,15 @@ public class MeetingMemberDialog extends AbstractFormDialog<Appointment> {
 					u.setOwner_id(getUserId());
 					u.setLanguage_id(getLanguage());
 				}
-				mm.setUserid(u);
+				mm.setUser(u);
 				mm.setDeleted(false);
-				mm.setStarttime(app.getStarttime());
-				mm.setUpdatetime(app.getUpdatetime());
+				mm.setInserted(app.getInserted());
+				mm.setUpdated(app.getUpdated());
 				mm.setAppointment(app);
 				meetingMembers.add(mm);
 			}
 		}
-		app.setMeetingMember(meetingMembers);
+		app.setMeetingMembers(meetingMembers);
 		target.add(attendeeContainer);
 	}
 }

@@ -48,45 +48,47 @@ import org.simpleframework.xml.Root;
 @Entity
 @Table(name = "appointments")
 @NamedQueries({
-    @NamedQuery(name="appointmentsInRange",
-        	query="SELECT a FROM Appointment a "
-    			+ "WHERE a.deleted <> :deleted "
+    @NamedQuery(name="getAppointmentById", query="SELECT a FROM Appointment a LEFT JOIN FETCH a.meetingMembers"
+    		+ " WHERE a.deleted = false AND a.id = :id")
+    , @NamedQuery(name="appointmentsInRange",
+        	query="SELECT a FROM Appointment a LEFT JOIN FETCH a.meetingMembers "
+    			+ "WHERE a.deleted = false "
     			+ "	AND ( "
-    			+ "		(a.appointmentStarttime BETWEEN :starttime AND :endtime) "
-    			+ "		OR (a.appointmentEndtime BETWEEN :starttime AND :endtime) "
-    			+ "		OR (a.appointmentStarttime < :starttime AND a.appointmentEndtime > :endtime) "
+    			+ "		(a.start BETWEEN :starttime AND :endtime) "
+    			+ "		OR (a.end BETWEEN :starttime AND :endtime) "
+    			+ "		OR (a.start < :starttime AND a.end > :endtime) "
     			+ "	)"
-    			+ "	AND a.userId.user_id = :userId"
+    			+ "	AND a.owner.user_id = :userId"
     	)
     , @NamedQuery(name="joinedAppointmentsInRange",
-    	query="SELECT a FROM MeetingMember mm, IN(mm.appointment) a "
-			+ "WHERE mm.deleted <> true AND mm.userid.user_id <> a.userId.user_id AND mm.userid.user_id = :userId "
-			+ "	AND a.appointmentId NOT IN (SELECT a.appointmentId FROM Appointment a WHERE a.userId.user_id = :userId)"
-			+ "	AND mm.isConnectedEvent <> true " //TODO review: isConnectedEvent is set for the MeetingMember if event is created from "Private Messages", it is weird
-			+ "	AND ( "
-			+ "		(a.appointmentStarttime BETWEEN :starttime AND :endtime) "
-			+ "		OR (a.appointmentEndtime BETWEEN :starttime AND :endtime) "
-			+ "		OR (a.appointmentStarttime < :starttime AND a.appointmentEndtime > :endtime) "
-			+ "	)"
-	)
+	query="SELECT a FROM MeetingMember mm INNER JOIN mm.appointment a LEFT JOIN FETCH a.meetingMembers "
+		+ "WHERE mm.deleted = false AND mm.user.user_id <> a.owner.user_id AND mm.user.user_id = :userId "
+		+ "	AND a.id NOT IN (SELECT a.id FROM Appointment a WHERE a.owner.user_id = :userId)"
+		+ "	AND mm.connectedEvent = false " //TODO review: isConnectedEvent is set for the MeetingMember if event is created from "Private Messages", it is weird
+		+ "	AND ( "
+		+ "		(a.start BETWEEN :starttime AND :endtime) "
+		+ "		OR (a.end BETWEEN :starttime AND :endtime) "
+		+ "		OR (a.start < :starttime AND a.end > :endtime) "
+		+ "	)"
+)
 	//TODO this query returns duplicates if the user books an appointment with
 	//his own user as second meeting-member, swagner 19.02.2012
     , @NamedQuery(name="appointmentsInRangeByUser",
 	query="SELECT a FROM MeetingMember mm, IN(mm.appointment) a "
-		+ "WHERE mm.deleted <> true AND mm.userid.user_id <> a.userId.user_id AND mm.userid.user_id = :userId "
+		+ "WHERE mm.deleted = false AND mm.user.user_id <> a.owner.user_id AND mm.user.user_id = :userId "
 		+ "	AND ( "
-		+ "		(a.appointmentStarttime BETWEEN :starttime AND :endtime) "
-		+ "		OR (a.appointmentEndtime BETWEEN :starttime AND :endtime) "
-		+ "		OR (a.appointmentStarttime < :starttime AND a.appointmentEndtime > :endtime) "
+		+ "		(a.start BETWEEN :starttime AND :endtime) "
+		+ "		OR (a.end BETWEEN :starttime AND :endtime) "
+		+ "		OR (a.start < :starttime AND a.end > :endtime) "
 		+ "	)"
     )
     , @NamedQuery(name="appointedRoomsInRangeByUser",
 	query="SELECT a.room FROM MeetingMember mm, IN(mm.appointment) a "
-		+ "WHERE mm.deleted <> true AND mm.userid.user_id <> a.userId.user_id AND mm.userid.user_id = :userId "
+		+ "WHERE mm.deleted <> true AND mm.user.user_id <> a.owner.user_id AND mm.user.user_id = :userId "
 		+ "	AND ( "
-		+ "		(a.appointmentStarttime BETWEEN :starttime AND :endtime) "
-		+ "		OR (a.appointmentEndtime BETWEEN :starttime AND :endtime) "
-		+ "		OR (a.appointmentStarttime < :starttime AND a.appointmentEndtime > :endtime) "
+		+ "		(a.start BETWEEN :starttime AND :endtime) "
+		+ "		OR (a.end BETWEEN :starttime AND :endtime) "
+		+ "		OR (a.start < :starttime AND a.end > :endtime) "
 		+ "	)"
     )
 })
@@ -97,47 +99,48 @@ public class Appointment implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
 	@Element(data=true)
-	private Long appointmentId;
+	private Long id;
 	
 	@Column(name = "appointmentname")
 	@Element(data=true, required=false)
-	private String appointmentName;
+	private String title;
 	
 	@Column(name = "location")
 	@Element(data=true, required=false)
-	private String appointmentLocation;
+	private String location;
 	
 	@Column(name = "appointment_starttime")
 	@Element(data=true)
-	private Date appointmentStarttime;
+	private Date start;
 	
 	@Column(name = "appointment_endtime")
 	@Element(data=true)
-	private Date appointmentEndtime;
+	private Date end;
 	
 	@Lob 
 	@Column(name = "description", length=2048)
 	@Element(data=true, required=false)
-	private String appointmentDescription;
+	private String description;
 	
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "category_id", nullable = true)
 	@ForeignKey(enabled = true)
 	@Element(name="categoryId", data=true, required=false)
-	private AppointmentCategory appointmentCategory;
+	private AppointmentCategory category;
 	
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "user_id", nullable = true)
 	@ForeignKey(enabled = true)
 	@Element(name="users_id", data=true, required=false)
-	private User userId;
+	private User owner;
 
-	// FIXME need to be renamed => inserted
 	@Column(name = "starttime")
-	private Date starttime;
+	@Element(name="inserted", data=true, required=false)
+	private Date inserted;
 	
 	@Column(name = "updatetime")
-	private Date updatetime;
+	@Element(name="updated", data=true, required=false)
+	private Date updated;
 	
 	@Column(name = "deleted")
 	@Element(data=true)
@@ -177,7 +180,7 @@ public class Appointment implements Serializable {
 
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "appointment_id")
-	private List<MeetingMember> meetingMember;
+	private List<MeetingMember> meetingMembers;
 	
 	@Column(name = "language_id")
 	@Element(data=true, required=false)
@@ -185,92 +188,92 @@ public class Appointment implements Serializable {
 	
 	@Column(name = "is_password_protected")
 	@Element(data=true, required=false)
-	private Boolean isPasswordProtected;
+	private boolean passwordProtected;
 	
 	@Column(name = "password")
 	@Element(data=true, required=false)
 	private String password;
 
 	@Column(name = "is_connected_event")
-	private boolean isConnectedEvent;
+	private boolean connectedEvent;
 
 	@Column(name = "is_reminder_email_send")
-	private Boolean isReminderEmailSend = false; //default to false
+	private boolean reminderEmailSend;
 
-	public Long getAppointmentId() {
-		return appointmentId;
+	public Long getId() {
+		return id;
 	}
 
-	public void setAppointmentId(Long appointmentId) {
-		this.appointmentId = appointmentId;
+	public void setId(Long id) {
+		this.id = id;
 	}
 
-	public User getUserId() {
-		return userId;
+	public User getOwner() {
+		return owner;
 	}
 
-	public void setUserId(User userId) {
-		this.userId = userId;
+	public void setOwner(User owner) {
+		this.owner = owner;
 	}
 
-	public String getAppointmentName() {
-		return appointmentName;
+	public String getTitle() {
+		return title;
 	}
 
-	public void setAppointmentName(String appointmentName) {
-		this.appointmentName = appointmentName;
+	public void setTitle(String title) {
+		this.title = title;
 	}
 
-	public String getAppointmentLocation() {
-		return appointmentLocation;
+	public String getLocation() {
+		return location;
 	}
 
-	public void setAppointmentLocation(String appointmentLocation) {
-		this.appointmentLocation = appointmentLocation;
+	public void setLocation(String location) {
+		this.location = location;
 	}
 
-	public Date getAppointmentStarttime() {
-		return appointmentStarttime;
+	public Date getStart() {
+		return start;
 	}
 
-	public Calendar appointmentStartAsCalendar(TimeZone timeZone) {
+	public Calendar startCalendar(TimeZone timeZone) {
 		Calendar cal = Calendar.getInstance(timeZone);
-		cal.setTime(appointmentStarttime);
+		cal.setTime(start);
 		return cal;
 	}
 
-	public void setAppointmentStarttime(Date appointmentStarttime) {
-		this.appointmentStarttime = appointmentStarttime;
+	public void setStart(Date start) {
+		this.start = start;
 	}
 
-	public Date getAppointmentEndtime() {
-		return appointmentEndtime;
+	public Date end() {
+		return end;
 	}
 
-	public Calendar appointmentEndAsCalendar(TimeZone timeZone) {
+	public Calendar endCalendar(TimeZone timeZone) {
 		Calendar cal = Calendar.getInstance(timeZone);
-		cal.setTime(appointmentEndtime);
+		cal.setTime(end);
 		return cal;
 	}
 
-	public void setAppointmentEndtime(Date appointmentEndtime) {
-		this.appointmentEndtime = appointmentEndtime;
+	public void setEnd(Date end) {
+		this.end = end;
 	}
 
-	public String getAppointmentDescription() {
-		return appointmentDescription;
+	public String getDescription() {
+		return description;
 	}
 
-	public void setAppointmentDescription(String appointmentDescription) {
-		this.appointmentDescription = appointmentDescription;
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
-	public AppointmentCategory getAppointmentCategory() {
-		return appointmentCategory;
+	public AppointmentCategory getCategory() {
+		return category;
 	}
 
-	public void setAppointmentCategory(AppointmentCategory appointmentCategory) {
-		this.appointmentCategory = appointmentCategory;
+	public void setCategory(AppointmentCategory category) {
+		this.category = category;
 	}
 
 	public AppointmentReminderTyps getRemind() {
@@ -281,23 +284,23 @@ public class Appointment implements Serializable {
 		this.remind = remind;
 	}
 
-	public Date getStarttime() {
-		return starttime;
+	public Date getInserted() {
+		return inserted;
 	}
 
-	public void setStarttime(Date starttime) {
-		this.starttime = starttime;
+	public void setInserted(Date inserted) {
+		this.inserted = inserted;
 	}
 
-	public Date getUpdatetime() {
-		return updatetime;
+	public Date getUpdated() {
+		return updated;
 	}
 
-	public void setUpdatetime(Date updatetime) {
-		this.updatetime = updatetime;
+	public void setUpdated(Date updated) {
+		this.updated = updated;
 	}
 
-	public boolean getDeleted() {
+	public boolean isDeleted() {
 		return deleted;
 	}
 
@@ -337,12 +340,12 @@ public class Appointment implements Serializable {
 		this.isDaily = isDaily;
 	}
 
-	public List<MeetingMember> getMeetingMember() {
-		return meetingMember;
+	public List<MeetingMember> getMeetingMembers() {
+		return meetingMembers;
 	}
 
-	public void setMeetingMember(List<MeetingMember> meetingMember) {
-		this.meetingMember = meetingMember;
+	public void setMeetingMembers(List<MeetingMember> meetingMembers) {
+		this.meetingMembers = meetingMembers;
 	}
 
 	public Room getRoom() {
@@ -369,12 +372,12 @@ public class Appointment implements Serializable {
 		language_id = languageId;
 	}
 
-	public Boolean getIsPasswordProtected() {
-		return isPasswordProtected;
+	public boolean isPasswordProtected() {
+		return passwordProtected;
 	}
 
-	public void setIsPasswordProtected(Boolean isPasswordProtected) {
-		this.isPasswordProtected = isPasswordProtected;
+	public void setPasswordProtected(boolean isPasswordProtected) {
+		this.passwordProtected = isPasswordProtected;
 	}
 
 	public String getPassword() {
@@ -385,29 +388,26 @@ public class Appointment implements Serializable {
 		this.password = password;
 	}
 
-	public boolean getIsConnectedEvent() {
-		return isConnectedEvent;
+	public boolean isConnectedEvent() {
+		return connectedEvent;
 	}
 
-	public void setIsConnectedEvent(boolean isConnectedEvent) {
-		this.isConnectedEvent = isConnectedEvent;
+	public void setConnectedEvent(boolean isConnectedEvent) {
+		this.connectedEvent = isConnectedEvent;
 	}
 
-	public Boolean getIsReminderEmailSend() {
-		return isReminderEmailSend;
+	public boolean isReminderEmailSend() {
+		return reminderEmailSend;
 	}
 
-	public void setIsReminderEmailSend(Boolean isReminderEmailSend) {
-		this.isReminderEmailSend = isReminderEmailSend;
+	public void setReminderEmailSend(boolean isReminderEmailSend) {
+		this.reminderEmailSend = isReminderEmailSend;
+	}
+
+	@Override
+	public String toString() {
+		return "Appointment [id=" + id + ", title=" + title + ", start=" + start + ", end=" + end + ", owner=" + owner
+				+ ", deleted=" + deleted + ", icalId=" + icalId + "]";
 	}
 	
-	@Override 
-	public String toString() {
-		return "" + super.toString() 
-				+ " Appointment ID: " + getAppointmentId()
-				+ " Starttime: " + getAppointmentStarttime()
-				+ " Endtime: " + getAppointmentEndtime()
-				+ " Name: " + getAppointmentName();
-	}
-
 }

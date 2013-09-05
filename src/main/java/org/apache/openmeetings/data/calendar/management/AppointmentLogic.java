@@ -321,12 +321,12 @@ public class AppointmentLogic {
 				return null;
 			}
 
-			if (point.getIsConnectedEvent()) {
+			if (point.isConnectedEvent()) {
 				List<Appointment> appointments = appointmentDao.getAppointmentsByRoomId(point.getRoom().getRooms_id());
 
 				for (Appointment appointment : appointments) {
-					if (!appointment.getAppointmentId().equals(appointmentId)) {
-						appointmentDao.deleteAppointement(appointment.getAppointmentId());
+					if (!appointment.getId().equals(appointmentId)) {
+						appointmentDao.deleteAppointement(appointment.getId());
 					}
 				}
 			}
@@ -337,13 +337,13 @@ public class AppointmentLogic {
 			List<MeetingMember> members = meetingMemberDao.getMeetingMemberByAppointmentId(appointmentId);
 
 			if (members == null) {
-				log.debug("Appointment " + point.getAppointmentName() + " has no meeting members");
+				log.debug("Appointment " + point.getTitle() + " has no meeting members");
 			}
 
 			if (members != null) {
 				for (int i = 0; i < members.size(); i++) {
-					log.debug("deleting member " + members.get(i).getUserid().getAdresses().getEmail());
-					meetingMemberLogic.deleteMeetingMember(members.get(i).getMeetingMemberId(), users_id, language_id);
+					log.debug("deleting member " + members.get(i).getUser().getAdresses().getEmail());
+					meetingMemberLogic.deleteMeetingMember(members.get(i).getId(), users_id, language_id);
 				}
 			}
 
@@ -372,7 +372,7 @@ public class AppointmentLogic {
 	public Appointment getAppointMentById(Long appointment) {
 		log.debug("getAppointMentById");
 
-		return appointmentDao.getAppointmentById(appointment);
+		return appointmentDao.get(appointment);
 	}
 
 	// ----------------------------------------------------------------------------------------------
@@ -422,8 +422,7 @@ public class AppointmentLogic {
 
 			// Prevent email from being send twice, even if the cycle takes
 			// very long to send each
-			if (ment.getIsReminderEmailSend() != null
-					&& ment.getIsReminderEmailSend()) {
+			if (ment.isReminderEmailSend()) {
 				continue;
 			}
 
@@ -433,12 +432,10 @@ public class AppointmentLogic {
 					|| ment.getRemind().getTypId() == 3) {
 
 				// Update Appointment to not send invitation twice
-				ment.setIsReminderEmailSend(true);
+				ment.setReminderEmailSend(true);
 				appointmentDao.updateAppointment(ment);
 
-				List<MeetingMember> members = meetingMemberDao
-						.getMeetingMemberByAppointmentId(ment
-								.getAppointmentId());
+				List<MeetingMember> members = meetingMemberDao.getMeetingMemberByAppointmentId(ment.getId());
 
 				if (members == null) {
 					log.debug("doScheduledMeetingReminder : no members in meeting!");
@@ -449,14 +446,14 @@ public class AppointmentLogic {
 				for (MeetingMember mm : members) {
 
 					log.debug("doScheduledMeetingReminder : Member "
-							+ mm.getUserid().getAdresses().getEmail());
+							+ mm.getUser().getAdresses().getEmail());
 
 					Invitations inv = mm.getInvitation();
 
 					if (inv == null) {
 						log.error("Error retrieving Invitation for member "
-								+ mm.getUserid().getAdresses().getEmail() + " in Appointment "
-								+ ment.getAppointmentName());
+								+ mm.getUser().getAdresses().getEmail() + " in Appointment "
+								+ ment.getTitle());
 						continue;
 					}
 
@@ -476,10 +473,10 @@ public class AppointmentLogic {
 							language_id, labelid1153, labelid1154, tZone);
 
 					invitationManager.sendInvitationReminderLink(language_id, message,
-							inv.getBaseUrl(), mm.getUserid().getAdresses().getEmail(), subject,
+							inv.getBaseUrl(), mm.getUser().getAdresses().getEmail(), subject,
 							inv.getHash());
 
-					invitationManager.sendInvitationReminderSMS(mm.getUserid().getAdresses().getPhone(), smsSubject, language_id);
+					invitationManager.sendInvitationReminderSMS(mm.getUser().getAdresses().getPhone(), smsSubject, language_id);
 					inv.setUpdatetime(new Date());
 					invitationDao.updateInvitation(inv);
 				}
@@ -491,15 +488,15 @@ public class AppointmentLogic {
 			Appointment ment, TimeZone timezone) {
 
 		String message = labelid1158 + " "
-				+ ment.getAppointmentName();
+				+ ment.getTitle();
 
 		message += ' ' + CalendarPatterns
 				.getDateWithTimeByMiliSecondsAndTimeZone(
-						ment.getAppointmentStarttime(), timezone);
+						ment.getStart(), timezone);
 
 		message += " - "
 				+ CalendarPatterns.getDateWithTimeByMiliSecondsAndTimeZone(
-						ment.getAppointmentEndtime(), timezone);
+						ment.end(), timezone);
 
 		return message;
 
@@ -508,7 +505,7 @@ public class AppointmentLogic {
 	private String generateSMSSubject(String labelid1158, Appointment ment) {
 		String subj = configurationDao.getConfValue("sms.subject", String.class, null);
 		return subj == null || subj.length() == 0 ? 
-				labelid1158 + " " + ment.getAppointmentName() : subj;
+				labelid1158 + " " + ment.getTitle() : subj;
 	}
 	
 	/**
@@ -529,14 +526,14 @@ public class AppointmentLogic {
 			TimeZone timezone) {
 
 		String message = labelid1158 + " "
-				+ ment.getAppointmentName();
+				+ ment.getTitle();
 
-		if (ment.getAppointmentDescription().length() != 0) {
+		if (ment.getDescription().length() != 0) {
 
 			Fieldlanguagesvalues labelid1152 = fieldManager
 					.getFieldByIdAndLanguage(new Long(1152), language_id);
 			message += labelid1152.getValue()
-					+ ment.getAppointmentDescription();
+					+ ment.getDescription();
 
 		}
 
@@ -544,12 +541,12 @@ public class AppointmentLogic {
 				+ labelid1153.getValue()
 				+ ' '
 				+ CalendarPatterns.getDateWithTimeByMiliSecondsAndTimeZone(
-						ment.getAppointmentStarttime(), timezone) + "<br/>";
+						ment.getStart(), timezone) + "<br/>";
 
 		message += labelid1154.getValue()
 				+ ' '
 				+ CalendarPatterns.getDateWithTimeByMiliSecondsAndTimeZone(
-						ment.getAppointmentEndtime(), timezone) + "<br/>";
+						ment.end(), timezone) + "<br/>";
 
 		return message;
 	}

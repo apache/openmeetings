@@ -47,13 +47,13 @@ public class MeetingMember implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
 	@Element(data = true)
-	private Long meetingMemberId;
+	private Long id;
 
 	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinColumn(name = "user_id", nullable = true)
 	@ForeignKey(enabled = true)
 	@Element(name = "userid", data = true, required = false)
-	private User userid;
+	private User user;
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "appointment_id", nullable = true)
@@ -66,10 +66,10 @@ public class MeetingMember implements Serializable {
 	private String appointmentStatus; // status of the appointment denial, acceptance, wait.
 
 	@Column(name = "starttime")
-	private Date starttime;
+	private Date inserted;
 
 	@Column(name = "updatetime")
-	private Date updatetime;
+	private Date updated;
 
 	@Column(name = "deleted")
 	@Element(data = true)
@@ -88,22 +88,22 @@ public class MeetingMember implements Serializable {
 	private String timeZoneId;
 
 	@Column(name = "is_connected_event")
-	private boolean isConnectedEvent;
+	private boolean connectedEvent;
 
-	public Long getMeetingMemberId() {
-		return meetingMemberId;
+	public Long getId() {
+		return id;
 	}
 
-	public void setMeetingMemberId(Long groupMemberId) {
-		this.meetingMemberId = groupMemberId;
+	public void setId(Long id) {
+		this.id = id;
 	}
 
-	public User getUserid() {
-		return userid;
+	public User getUser() {
+		return user;
 	}
 
-	public void setUserid(User userid) {
-		this.userid = userid;
+	public void setUser(User user) {
+		this.user = user;
 	}
 
 	public String getAppointmentStatus() {
@@ -131,22 +131,22 @@ public class MeetingMember implements Serializable {
 	}
 
 	public Date getStarttime() {
-		return starttime;
+		return inserted;
 	}
 
-	public void setStarttime(Date starttime) {
-		this.starttime = starttime;
+	public void setInserted(Date inserted) {
+		this.inserted = inserted;
 	}
 
-	public Date getUpdatetime() {
-		return updatetime;
+	public Date getUpdated() {
+		return updated;
 	}
 
-	public void setUpdatetime(Date updatetime) {
-		this.updatetime = updatetime;
+	public void setUpdated(Date updated) {
+		this.updated = updated;
 	}
 
-	public boolean getDeleted() {
+	public boolean isDeleted() {
 		return deleted;
 	}
 
@@ -154,12 +154,12 @@ public class MeetingMember implements Serializable {
 		this.deleted = deleted;
 	}
 
-	public boolean getIsConnectedEvent() {
-		return isConnectedEvent;
+	public boolean isConnectedEvent() {
+		return connectedEvent;
 	}
 
-	public void setIsConnectedEvent(boolean isConnectedEvent) {
-		this.isConnectedEvent = isConnectedEvent;
+	public void setConnectedEvent(boolean connectedEvent) {
+		this.connectedEvent = connectedEvent;
 	}
 
 	public String getTimeZoneId() {

@@ -43,9 +43,9 @@ public class AppointmentDTO {
 	private Long organizerId;
 
 	public AppointmentDTO(Appointment appointment, TimeZone timezone) {
-		appointmentId = appointment.getAppointmentId();
-		categoryId = (appointment.getAppointmentCategory() != null) ? appointment
-				.getAppointmentCategory().getCategoryId() : null;
+		appointmentId = appointment.getId();
+		categoryId = (appointment.getCategory() != null) ? appointment
+				.getCategory().getCategoryId() : null;
 		reminderId = (appointment.getRemind() != null) ? appointment
 				.getRemind().getTypId() : null;
 		roomId = (appointment.getRoom() != null) ? appointment.getRoom()
@@ -53,14 +53,14 @@ public class AppointmentDTO {
 		roomTypeId = (roomId != null && appointment.getRoom().getRoomtype() != null) ? appointment
 				.getRoom().getRoomtype().getRoomtypes_id()
 				: null;
-		title = appointment.getAppointmentName();
-		location = appointment.getAppointmentLocation();
-		comment = appointment.getAppointmentDescription();
-		start = appointment.appointmentStartAsCalendar(timezone);
-		end = appointment.appointmentEndAsCalendar(timezone);
-		isPasswordProtected = appointment.getIsPasswordProtected();
-		organizerId = appointment.getUserId().getUser_id();
-		for (MeetingMember meetingMemberItem : appointment.getMeetingMember()) {
+		title = appointment.getTitle();
+		location = appointment.getLocation();
+		comment = appointment.getDescription();
+		start = appointment.startCalendar(timezone);
+		end = appointment.endCalendar(timezone);
+		isPasswordProtected = appointment.isPasswordProtected();
+		organizerId = appointment.getOwner().getUser_id();
+		for (MeetingMember meetingMemberItem : appointment.getMeetingMembers()) {
 			meetingMember.add(new MeetingMemberDTO(meetingMemberItem));
 		}
 	}

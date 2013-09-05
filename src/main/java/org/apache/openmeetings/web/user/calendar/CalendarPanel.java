@@ -173,11 +173,11 @@ public class CalendarPanel extends UserPanel {
 					cal.set(java.util.Calendar.DATE, now.get(java.util.Calendar.DATE));
 					cal.set(java.util.Calendar.SECOND, 0);
 					cal.set(java.util.Calendar.MILLISECOND, 0);
-					a.setAppointmentStarttime(cal.getTime());
-					a.setAppointmentEndtime(cal.getTime());
+					a.setStart(cal.getTime());
+					a.setEnd(cal.getTime());
 				} else {
-					a.setAppointmentStarttime(start);
-					a.setAppointmentEndtime(end);
+					a.setStart(start);
+					a.setEnd(end);
 				}
 				dialog.setModelObjectWithAjaxTarget(a, target);
 				
@@ -186,7 +186,7 @@ public class CalendarPanel extends UserPanel {
 			
 			@Override
 			public void onEventClick(AjaxRequestTarget target, CalendarView view, int eventId) {
-				Appointment a = getDao().getAppointmentById((long)eventId);
+				Appointment a = getDao().get((long)eventId);
 				dialog.setModelObjectWithAjaxTarget(a, target);
 				
 				dialog.open(target);
@@ -195,16 +195,16 @@ public class CalendarPanel extends UserPanel {
 			@Override
 			public void onEventDrop(AjaxRequestTarget target, int eventId, long delta, boolean allDay) {
 				AppointmentDao dao = getDao();
-				Appointment a = dao.getAppointmentById((long)eventId);
+				Appointment a = dao.get((long)eventId);
 				
 				java.util.Calendar cal = WebSession.getCalendar();
-				cal.setTime(a.getAppointmentStarttime());
+				cal.setTime(a.getStart());
 				cal.add(java.util.Calendar.MILLISECOND, (int)delta); //FIXME?
-				a.setAppointmentStarttime(cal.getTime());
+				a.setStart(cal.getTime());
 				
-				cal.setTime(a.getAppointmentEndtime());
+				cal.setTime(a.end());
 				cal.add(java.util.Calendar.MILLISECOND, (int)delta); //FIXME?
-				a.setAppointmentEndtime(cal.getTime());
+				a.setEnd(cal.getTime());
 				
 				dao.updateAppointment(a);
 				//FIXME add feedback info
@@ -213,11 +213,11 @@ public class CalendarPanel extends UserPanel {
 			@Override
 			public void onEventResize(AjaxRequestTarget target, int eventId, long delta) {
 				AppointmentDao dao = getDao();
-				Appointment a = dao.getAppointmentById((long)eventId);
+				Appointment a = dao.get((long)eventId);
 				java.util.Calendar cal = WebSession.getCalendar();
-				cal.setTime(a.getAppointmentEndtime());
+				cal.setTime(a.end());
 				cal.add(java.util.Calendar.MILLISECOND, (int)delta); //FIXME?
-				a.setAppointmentEndtime(cal.getTime());
+				a.setEnd(cal.getTime());
 				
 				dao.updateAppointment(a);
 				//FIXME add feedback info
@@ -239,7 +239,7 @@ public class CalendarPanel extends UserPanel {
 		Appointment a = new Appointment();
 		a.setRemind(getAppointmentReminderTypDao()
 				.getAppointmentReminderTypById(3L)); //TODO: Make configurable
-		a.setAppointmentName(WebSession.getString(1444));
+		a.setTitle(WebSession.getString(1444));
 		log.debug(" -- getDefault -- Current model " + a);
 		return a;
 	}

@@ -32,10 +32,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
 
 import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
 import org.apache.openmeetings.data.calendar.management.MeetingMemberLogic;
@@ -117,64 +113,37 @@ public class AppointmentDao {
 
 	// -----------------------------------------------------------------------------------------------
 
-	public Appointment getAppointmentById(Long appointmentId) {
+	public Appointment get(Long id) {
+		TypedQuery<Appointment> query = em.createNamedQuery("getAppointmentById", Appointment.class);
+		query.setParameter("id", id);
+
+		Appointment appoint = null;
 		try {
-
-			String hql = "select a from Appointment a "
-					+ "WHERE a.deleted <> :deleted "
-					+ "AND a.appointmentId = :appointmentId ";
-
-			TypedQuery<Appointment> query = em.createQuery(hql, Appointment.class);
-			query.setParameter("deleted", true);
-			query.setParameter("appointmentId", appointmentId);
-
-			Appointment appoint = null;
-			try {
-				appoint = query.getSingleResult();
-			} catch (NoResultException ex) {
-			}
-			appoint.setMeetingMember(meetingMemberDao.getMeetingMemberByAppointmentId(appointmentId));
-			return appoint;
-		} catch (Exception ex2) {
-			log.error("[getAppointmentById]: ", ex2);
+			appoint = query.getSingleResult();
+		} catch (NoResultException ex) {
 		}
-		return null;
+		return appoint;
 	}
 
 	public Appointment getAppointmentByIdBackup(Long appointmentId) {
+		String hql = "select a from Appointment a WHERE a.id = :id ";
+
+		TypedQuery<Appointment> query = em.createQuery(hql, Appointment.class);
+		query.setParameter("appointmentId", appointmentId);
+
+		Appointment appoint = null;
 		try {
-
-			String hql = "select a from Appointment a "
-					+ "WHERE a.appointmentId = :appointmentId ";
-
-			TypedQuery<Appointment> query = em.createQuery(hql, Appointment.class);
-			query.setParameter("appointmentId", appointmentId);
-
-			Appointment appoint = null;
-			try {
-				appoint = query.getSingleResult();
-			} catch (NoResultException ex) {
-			}
-
-			return appoint;
-		} catch (Exception ex2) {
-			log.error("[getAppointmentById]: ", ex2);
+			appoint = query.getSingleResult();
+		} catch (NoResultException ex) {
 		}
-		return null;
+
+		return appoint;
 	}
 
 	public List<Appointment> getAppointments() {
-		try {
-			TypedQuery<Appointment> query = em.createQuery(
-				"SELECT a FROM Appointment a LEFT JOIN FETCH a.meetingMember WHERE a.deleted <> :deleted "
-				, Appointment.class);
-			query.setParameter("deleted", true);
-
-			return query.getResultList();
-		} catch (Exception ex2) {
-			log.error("[getAppointmentById]: ", ex2);
-		}
-		return null;
+		return em.createQuery(
+				"SELECT a FROM Appointment a LEFT JOIN FETCH a.meetingMembers WHERE a.deleted = false "
+				, Appointment.class).getResultList();
 	}
 
 	/**
@@ -206,8 +175,8 @@ public class AppointmentDao {
 
 			Appointment ap = new Appointment();
 
-			ap.setAppointmentName(appointmentName);
-			ap.setAppointmentLocation(appointmentLocation);
+			ap.setTitle(appointmentName);
+			ap.setLocation(appointmentLocation);
 
 			log.debug("addAppointment appointmentstart :1: "
 					+ CalendarPatterns
@@ -216,30 +185,30 @@ public class AppointmentDao {
 					+ CalendarPatterns
 							.getDateWithTimeByMiliSecondsWithZone(appointmentend));
 
-			ap.setAppointmentStarttime(appointmentstart);
-			ap.setAppointmentEndtime(appointmentend);
-			ap.setAppointmentDescription(appointmentDescription);
+			ap.setStart(appointmentstart);
+			ap.setEnd(appointmentend);
+			ap.setDescription(appointmentDescription);
 			ap.setRemind(appointmentReminderTypDao
 					.getAppointmentReminderTypById(remind));
-			ap.setStarttime(new Date());
-			ap.setIsReminderEmailSend(false);
+			ap.setInserted(new Date());
+			ap.setReminderEmailSend(false);
 			ap.setDeleted(false);
 			ap.setIsDaily(isDaily);
 			ap.setIsWeekly(isWeekly);
 			ap.setIsMonthly(isMonthly);
 			ap.setIsYearly(isYearly);
 			ap.setLanguage_id(language_id);
-			ap.setIsPasswordProtected(isPasswordProtected);
+			ap.setPasswordProtected(isPasswordProtected);
 			ap.setPassword(password);
-			ap.setUserId(usersDao.get(userId));
-			ap.setAppointmentCategory(appointmentCategoryDaoImpl
+			ap.setOwner(usersDao.get(userId));
+			ap.setCategory(appointmentCategoryDaoImpl
 					.getAppointmentCategoryById(categoryId));
 			ap.setRoom(room);
-			ap.setIsConnectedEvent(isConnectedEvent);
+			ap.setConnectedEvent(isConnectedEvent);
 
 			ap = em.merge(ap);
 
-			return ap.getAppointmentId();
+			return ap.getId();
 		} catch (Exception ex2) {
 			log.error("[addAppointment]: ", ex2);
 		}
@@ -249,11 +218,11 @@ public class AppointmentDao {
 	public Long addAppointmentObj(Appointment ap) {
 		try {
 
-			ap.setStarttime(new Date());
+			ap.setInserted(new Date());
 
 			ap = em.merge(ap);
 
-			return ap.getAppointmentId();
+			return ap.getId();
 		} catch (Exception ex2) {
 			log.error("[addAppointmentObj]: ", ex2);
 		}
@@ -262,28 +231,25 @@ public class AppointmentDao {
 
 	public Appointment update(Appointment a, Long userId) {
 		User u = usersDao.get(userId);
-		a.setUserId(u);
+		a.setOwner(u);
 		Room r = a.getRoom();
 		if (r.getRooms_id() == null) {
-			r.setName(a.getAppointmentName());
+			r.setName(a.getTitle());
 			r.setNumberOfPartizipants(cfgDao.getConfValue("calendar.conference.rooms.default.size", Long.class, "50"));
 		}
 		roomDao.update(r, userId);
-		if (a.getAppointmentId() == null) {
-			a.setStarttime(new Date());
+		if (a.getId() == null) {
+			a.setInserted(new Date());
 			em.persist(a);
 		} else {
-			a.setUpdatetime(new Date());
+			a.setUpdated(new Date());
 			a =	em.merge(a);
 		}
 		// update meeting members
-		List<MeetingMember> mmList = a.getMeetingMember();
+		List<MeetingMember> mmList = a.getMeetingMembers();
 		if (mmList != null){
-			
-			
-			
 			for (MeetingMember mm : mmList){
-				String urlPostfix = (mm.getUserid().getType() == Type.contact) ? "" : "#room/" + r.getRooms_id();
+				String urlPostfix = (mm.getUser().getType() == Type.contact) ? "" : "#room/" + r.getRooms_id();
 					
 				meetingMemberLogic.addMeetingMemberInvitation(mm, a,
 						WebSession.get().getBaseUrl() + urlPostfix, u);
@@ -295,16 +261,16 @@ public class AppointmentDao {
 	// ----------------------------------------------------------------------------------------------------------------------------
 
 	public Long updateAppointment(Appointment appointment) {
-		if (appointment.getAppointmentId() > 0) {
+		if (appointment.getId() > 0) {
 			try {
-				if (appointment.getAppointmentId() == null) {
+				if (appointment.getId() == null) {
 					em.persist(appointment);
 				} else {
 					if (!em.contains(appointment)) {
 						em.merge(appointment);
 					}
 				}
-				return appointment.getAppointmentId();
+				return appointment.getId();
 			} catch (Exception ex2) {
 				log.error("[updateAppointment] ", ex2);
 			}
@@ -345,13 +311,13 @@ public class AppointmentDao {
 
 			for (Appointment appointment : appointments) {
 
-				if (!ap.getAppointmentId().equals(
-						appointment.getAppointmentId())) {
+				if (!ap.getId().equals(
+						appointment.getId())) {
 
-					ap.setAppointmentStarttime(appointmentstart);
-					ap.setAppointmentEndtime(appointmentend);
-					ap.setUpdatetime(new Date());
-					if (ap.getAppointmentId() == null) {
+					ap.setStart(appointmentstart);
+					ap.setEnd(appointmentend);
+					ap.setUpdated(new Date());
+					if (ap.getId() == null) {
 						em.persist(ap);
 					} else {
 						if (!em.contains(ap)) {
@@ -387,27 +353,27 @@ public class AppointmentDao {
 
 			for (Appointment appointment : appointments) {
 
-				if (!ap.getAppointmentId().equals(
-						appointment.getAppointmentId())) {
+				if (!ap.getId().equals(
+						appointment.getId())) {
 
-					appointment.setAppointmentName(appointmentName);
-					appointment.setAppointmentStarttime(appointmentstart);
-					appointment.setAppointmentEndtime(appointmentend);
+					appointment.setTitle(appointmentName);
+					appointment.setStart(appointmentstart);
+					appointment.setEnd(appointmentend);
 					appointment
-							.setAppointmentDescription(appointmentDescription);
-					appointment.setUpdatetime(new Date());
+							.setDescription(appointmentDescription);
+					appointment.setUpdated(new Date());
 					appointment.setRemind(appointmentReminderTyps);
 					appointment.setIsDaily(isDaily);
 					appointment.setIsWeekly(isWeekly);
 					appointment.setIsMonthly(isMonthly);
 					appointment.setIsYearly(isYearly);
 					appointment.setLanguage_id(language_id);
-					appointment.setIsPasswordProtected(isPasswordProtected);
+					appointment.setPasswordProtected(isPasswordProtected);
 					appointment.setPassword(password);
 					// ap.setUserId(usersDao.getUser(userId));
-					appointment.setAppointmentCategory(appointmentCategory);
+					appointment.setCategory(appointmentCategory);
 
-					if (appointment.getAppointmentId() == null) {
+					if (appointment.getId() == null) {
 						em.persist(appointment);
 					} else {
 						if (!em.contains(appointment)) {
@@ -452,21 +418,21 @@ public class AppointmentDao {
 		log.debug("AppointmentDAOImpl.updateAppointment");
 		try {
 
-			Appointment ap = this.getAppointmentById(appointmentId);
+			Appointment ap = this.get(appointmentId);
 
 			AppointmentReminderTyps appointmentReminderTyps = appointmentReminderTypDao
 					.getAppointmentReminderTypById(remind);
 			AppointmentCategory appointmentCategory = appointmentCategoryDaoImpl
 					.getAppointmentCategoryById(categoryId);
 
-			boolean sendMail = !ap.getAppointmentName().equals(appointmentName) ||
-					!ap.getAppointmentDescription().equals(appointmentDescription) ||
-					!ap.getAppointmentLocation().equals(appointmentLocation) ||
-					!ap.getAppointmentStarttime().equals(appointmentstart) ||
-					!ap.getAppointmentEndtime().equals(appointmentend);
+			boolean sendMail = !ap.getTitle().equals(appointmentName) ||
+					!ap.getDescription().equals(appointmentDescription) ||
+					!ap.getLocation().equals(appointmentLocation) ||
+					!ap.getStart().equals(appointmentstart) ||
+					!ap.end().equals(appointmentend);
 			
 			// change connected events of other participants
-			if (ap.getIsConnectedEvent()) {
+			if (ap.isConnectedEvent()) {
 				this.updateConnectedEvents(ap, appointmentName,
 						appointmentDescription, appointmentstart,
 						appointmentend, isDaily, isWeekly, isMonthly, isYearly,
@@ -479,24 +445,24 @@ public class AppointmentDao {
 			invitationDao.updateInvitationByAppointment(appointmentId,
 					appointmentstart, appointmentend);
 
-			ap.setAppointmentName(appointmentName);
-			ap.setAppointmentLocation(appointmentLocation);
-			ap.setAppointmentStarttime(appointmentstart);
-			ap.setAppointmentEndtime(appointmentend);
-			ap.setAppointmentDescription(appointmentDescription);
-			ap.setUpdatetime(new Date());
+			ap.setTitle(appointmentName);
+			ap.setLocation(appointmentLocation);
+			ap.setStart(appointmentstart);
+			ap.setEnd(appointmentend);
+			ap.setDescription(appointmentDescription);
+			ap.setUpdated(new Date());
 			ap.setRemind(appointmentReminderTyps);
 			ap.setIsDaily(isDaily);
 			ap.setIsWeekly(isWeekly);
 			ap.setIsMonthly(isMonthly);
 			ap.setIsYearly(isYearly);
 			ap.setLanguage_id(language_id);
-			ap.setIsPasswordProtected(isPasswordProtected);
+			ap.setPasswordProtected(isPasswordProtected);
 			ap.setPassword(password);
 			// ap.setUserId(usersDao.getUser(userId));
-			ap.setAppointmentCategory(appointmentCategory);
+			ap.setCategory(appointmentCategory);
 
-			if (ap.getAppointmentId() == null) {
+			if (ap.getId() == null) {
 				em.persist(ap);
 			} else {
 				if (!em.contains(ap)) {
@@ -511,7 +477,7 @@ public class AppointmentDao {
 					+ " [" + user.getAdresses().getEmail() + "]";
 
 			List<MeetingMember> meetingsRemoteMembers = meetingMemberDao
-					.getMeetingMemberByAppointmentId(ap.getAppointmentId());
+					.getMeetingMemberByAppointmentId(ap.getId());
 
 			// to remove
 			for (MeetingMember memberRemote : meetingsRemoteMembers) {
@@ -528,9 +494,9 @@ public class AppointmentDao {
 										clientMemeber.get("meetingMemberId")
 												.toString()).longValue();
 						
-						log.debug("DELETE newly CHECK meetingMemberId: {} VS {} -- ", meetingMemberId, memberRemote.getMeetingMemberId());
+						log.debug("DELETE newly CHECK meetingMemberId: {} VS {} -- ", meetingMemberId, memberRemote.getId());
 
-						if (memberRemote.getMeetingMemberId().equals(
+						if (memberRemote.getId().equals(
 								meetingMemberId)) {
 							log.debug("AppointMentDAOImpl.updateAppointment  - member "
 									+ meetingMemberId + " is to be removed!");
@@ -544,11 +510,11 @@ public class AppointmentDao {
 
 				if (!found) {
 					
-					log.debug("DELETE getMeetingMemberId: {} -- ", memberRemote.getMeetingMemberId());
+					log.debug("DELETE getMeetingMemberId: {} -- ", memberRemote.getId());
 
 					// Not in List in client delete it
 					meetingMemberLogic.deleteMeetingMember(
-							memberRemote.getMeetingMemberId(), users_id,
+							memberRemote.getId(), users_id,
 							language_id);
 					// meetingMemberDao.deleteMeetingMember(memberRemote.getMeetingMemberId());
 				} else {
@@ -574,7 +540,7 @@ public class AppointmentDao {
 					boolean found = false;
 
 					for (MeetingMember memberRemote : meetingsRemoteMembers) {
-						if (memberRemote.getMeetingMemberId().equals(
+						if (memberRemote.getId().equals(
 								meetingMemberId)) {
 							found = true;
 						}
@@ -665,13 +631,13 @@ public class AppointmentDao {
 		log.debug("AppointmentDAOImpl.updateAppointment");
 		try {
 
-			Appointment ap = this.getAppointmentById(appointmentId);
+			Appointment ap = get(appointmentId);
 
-			if (!ap.getStarttime().equals(appointmentstart) ||
-					!ap.getAppointmentEndtime().equals(appointmentend)) {
+			if (!ap.getInserted().equals(appointmentstart) ||
+					!ap.end().equals(appointmentend)) {
 
 			// change connected events of other participants
-			if (ap.getIsConnectedEvent()) {
+			if (ap.isConnectedEvent()) {
 				this.updateConnectedEventsTimeOnly(ap, appointmentstart,
 						appointmentend);
 			}
@@ -680,18 +646,18 @@ public class AppointmentDao {
 			invitationDao.updateInvitationByAppointment(appointmentId,
 					appointmentstart, appointmentend);
 
-			ap.setAppointmentStarttime(appointmentstart);
-			ap.setAppointmentEndtime(appointmentend);
-			ap.setUpdatetime(new Date());
+			ap.setStart(appointmentstart);
+			ap.setEnd(appointmentend);
+			ap.setUpdated(new Date());
 
-			if (ap.getAppointmentId() == null) {
+			if (ap.getId() == null) {
 				em.persist(ap);
 				} else if (!em.contains(ap)) {
 					em.merge(ap);
 				}
 
 			List<MeetingMember> meetingsRemoteMembers = meetingMemberDao
-					.getMeetingMemberByAppointmentId(ap.getAppointmentId());
+					.getMeetingMemberByAppointmentId(ap.getId());
 
 			// Adding Invitor Name
 			User user = userManager.getUserById(users_id);
@@ -721,11 +687,11 @@ public class AppointmentDao {
 		log.debug("deleteAppointMent");
 		try {
 
-			Appointment app = this.getAppointmentById(appointmentId);
-			app.setUpdatetime(new Date());
+			Appointment app = get(appointmentId);
+			app.setUpdated(new Date());
 			app.setDeleted(true);
 
-			if (app.getAppointmentId() == null) {
+			if (app.getId() == null) {
 				em.persist(app);
 			} else {
 				if (!em.contains(app)) {
@@ -740,82 +706,47 @@ public class AppointmentDao {
 	}
 
 	public List<Appointment> getAppointmentsByRange(Long userId, Date start, Date end) {
-		try {
-			Calendar calstart = Calendar.getInstance();
-			calstart.setTime(start);
-			calstart.set(Calendar.HOUR, 0);
+		Calendar calstart = Calendar.getInstance();
+		calstart.setTime(start);
+		calstart.set(Calendar.HOUR, 0);
 
-			Calendar calend = Calendar.getInstance();
-			calend.setTime(end);
-			calend.set(Calendar.HOUR, 23);
-			calend.set(Calendar.MINUTE, 59);
-			
-			log.debug("Start " + calstart.getTime() + " End " + calend.getTime());
+		Calendar calend = Calendar.getInstance();
+		calend.setTime(end);
+		calend.set(Calendar.HOUR, 23);
+		calend.set(Calendar.MINUTE, 59);
+		
+		log.debug("Start " + calstart.getTime() + " End " + calend.getTime());
 
-			TypedQuery<Appointment> query = em.createNamedQuery("appointmentsInRange", Appointment.class);
-			query.setParameter("deleted", true);
-			query.setParameter("starttime", calstart.getTime());
-			query.setParameter("endtime", calend.getTime());
-			query.setParameter("userId", userId);
-			
-			List<Appointment> listAppoints = new ArrayList<Appointment>(query.getResultList()); 
-			TypedQuery<Appointment> q1 = em.createNamedQuery("joinedAppointmentsInRange", Appointment.class);
-			q1.setParameter("starttime", calstart.getTime());
-			q1.setParameter("endtime", calend.getTime());
-			q1.setParameter("userId", userId);
-			for (Appointment a : q1.getResultList()) {
-				a.setIsConnectedEvent(true); //TODO need to be reviewed
-				listAppoints.add(a);
-			}
-			
-			for (Appointment appointment : listAppoints) {
-				log.debug("" + appointment);
-
-				appointment.setMeetingMember(meetingMemberDao
-						.getMeetingMemberByAppointmentId(appointment
-								.getAppointmentId()));
-
-			}
-
-			return listAppoints;
-		} catch (Exception ex2) {
-			log.error("[getAppointmentsByRange]: ", ex2);
+		TypedQuery<Appointment> query = em.createNamedQuery("appointmentsInRange", Appointment.class);
+		query.setParameter("starttime", calstart.getTime());
+		query.setParameter("endtime", calend.getTime());
+		query.setParameter("userId", userId);
+		
+		List<Appointment> listAppoints = new ArrayList<Appointment>(query.getResultList()); 
+		TypedQuery<Appointment> q1 = em.createNamedQuery("joinedAppointmentsInRange", Appointment.class);
+		q1.setParameter("starttime", calstart.getTime());
+		q1.setParameter("endtime", calend.getTime());
+		q1.setParameter("userId", userId);
+		for (Appointment a : q1.getResultList()) {
+			a.setConnectedEvent(true); //TODO need to be reviewed
+			listAppoints.add(a);
 		}
-		return null;
+
+		return listAppoints;
 	}
 
 	public List<Appointment> getAppointmentsByCat(Long categoryId) {
 		try {
 
 			String hql = "select a from Appointments a "
-					+ "WHERE a.deleted <> :deleted "
+					+ "WHERE a.deleted false "
 					+ "AND a.appointmentCategory.categoryId = :categoryId";
 
 			TypedQuery<Appointment> query = em.createQuery(hql,
 					Appointment.class);
-			query.setParameter("deleted", true);
 			query.setParameter("categoryId", categoryId);
 
 			List<Appointment> listAppoints = query.getResultList();
-			return listAppoints;
-		} catch (Exception ex2) {
-			log.error("[getAppointements]: ", ex2);
-		}
-		return null;
-	}
-
-	public List<Appointment> getAppointmentsByCritAndCat(Long cat_id) {
-		try {
-
-			CriteriaBuilder cb = em.getCriteriaBuilder();
-			CriteriaQuery<Appointment> cq = cb.createQuery(Appointment.class);
-			Root<Appointment> c = cq.from(Appointment.class);
-			Predicate condition = cb.equal(c.get("deleted"), false);
-			Predicate subCondition = cb.equal(c.get("categoryId"), cat_id);
-			cq.where(condition, subCondition);
-			TypedQuery<Appointment> q = em.createQuery(cq);
-			List<Appointment> listAppoints = q.getResultList();
-
 			return listAppoints;
 		} catch (Exception ex2) {
 			log.error("[getAppointements]: ", ex2);
@@ -828,11 +759,10 @@ public class AppointmentDao {
 		try {
 
 			String hql = "select a from Appointment a "
-					+ "WHERE a.deleted <> :deleted "
-					+ "AND a.appointmentStarttime > :appointmentStarttime ";
+					+ "WHERE a.deleted false "
+					+ "AND a.start > :appointmentStarttime ";
 
 			TypedQuery<Appointment> query = em.createQuery(hql, Appointment.class);
-			query.setParameter("deleted", true);
 			query.setParameter("appointmentStarttime", appointmentStarttime);
 
 			Appointment appoint = null;
@@ -852,12 +782,11 @@ public class AppointmentDao {
 		try {
 
 			String hql = "select a from Appointment a "
-					+ "WHERE a.deleted <> :deleted "
-					+ "AND a.appointmentName LIKE :appointmentName";
+					+ "WHERE a.deleted false "
+					+ "AND a.title LIKE :appointmentName";
 
 			TypedQuery<Appointment> query = em.createQuery(hql,
 					Appointment.class);
-			query.setParameter("deleted", true);
 			query.setParameter("appointmentName", name);
 
 			List<Appointment> listAppoints = query.getResultList();
@@ -920,10 +849,10 @@ public class AppointmentDao {
 					+ "JOIN mm.appointment as app "
 					+ "WHERE mm.deleted <> :mm_deleted "
 					+ "AND app.deleted <> :app_deleted "
-					+ "AND app.appointmentStarttime between :starttime AND :endtime ";
+					+ "AND app.start between :starttime AND :endtime ";
 
 			if (isReminderEmailSend != null) {
-				hql += "AND ( app.isReminderEmailSend IS NULL OR app.isReminderEmailSend = :isReminderEmailSend ) ";
+				hql += "AND (app.reminderEmailSend = :isReminderEmailSend) ";
 			}
 
 			Calendar startCal = Calendar.getInstance();
@@ -968,7 +897,7 @@ public class AppointmentDao {
 
 			String hql = "select a from Appointment a "
 					+ "WHERE a.deleted <> :deleted "
-					+ "AND a.userId.user_id = :user_id "
+					+ "AND a.owner.user_id = :user_id "
 					+ "AND a.room.rooms_id = :rooms_id ";
 
 			TypedQuery<Appointment> query = em.createQuery(hql,

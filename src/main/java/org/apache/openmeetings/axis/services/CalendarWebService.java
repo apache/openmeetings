@@ -443,7 +443,7 @@ public class CalendarWebService {
 				// check if the appointment belongs to the current user
 				Appointment appointment = appointmentLogic
 						.getAppointMentById(appointmentId);
-				if (!appointment.getUserId().getUser_id().equals(users_id)) {
+				if (!appointment.getOwner().getUser_id().equals(users_id)) {
 					throw new AxisFault(
 							"The Appointment cannot be updated by the given user");
 				}
@@ -534,7 +534,7 @@ public class CalendarWebService {
 				Appointment appointment = appointmentLogic
 						.getAppointMentById(appointmentId);
 
-				if (!appointment.getUserId().getUser_id().equals(users_id)) {
+				if (!appointment.getOwner().getUser_id().equals(users_id)) {
 					throw new AxisFault(
 							"The Appointment cannot be deleted by the given user");
 				}
@@ -571,10 +571,10 @@ public class CalendarWebService {
 				Appointment appStored = appointmentDao.getAppointmentByRoomId(
 						users_id, room_id);
 
-				appointment.setAppointmentStarttime(appStored
-						.getAppointmentStarttime());
-				appointment.setAppointmentEndtime(appStored
-						.getAppointmentEndtime());
+				appointment.setStart(appStored
+						.getStart());
+				appointment.setEnd(appStored
+						.end());
 
 				return appointment;
 			}
@@ -795,10 +795,10 @@ public class CalendarWebService {
 						
 						for (Appointment appointment : appointments) {
 							if (appointment
-									.appointmentStartAsCalendar(timezone).get(
+									.startCalendar(timezone).get(
 											Calendar.MONTH) == tCal
 									.get(Calendar.MONTH)
-									&& appointment.appointmentStartAsCalendar(
+									&& appointment.startCalendar(
 											timezone).get(Calendar.DATE) == tCal
 											.get(Calendar.DATE)) {
 								day.getAppointments().add(

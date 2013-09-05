@@ -99,9 +99,9 @@
 		    	
 		    	if(value!=null){
 		    		
-		    		if ($debug) Debug.write("Appointment Name : " + value.appointmentName);
-		    		parent.bdatum.setAttribute('text',""+value.appointmentStarttime);
-		    		parent.edatum.setAttribute('text',""+value.appointmentEndtime);
+		    		if ($debug) Debug.write("Appointment Name : " + value.title);
+		    		parent.bdatum.setAttribute('text',""+value.start);
+		    		parent.edatum.setAttribute('text',""+value.end);
 		    		
 		    		
 		    		parent.bdatum.setAttribute("visibility","visible");
@@ -109,8 +109,8 @@
 		    		parent.l_bdatum.setAttribute("visibility","visible");
 		    		parent.l_edatum.setAttribute("visibility","visible");
 		    		
-		    		if ($debug) Debug.write("Appointment Start : " + value.appointmentStarttime);
-		    		if ($debug) Debug.write("Appointment End : " + value.appointmentEndtime);
+		    		if ($debug) Debug.write("Appointment Start : " + value.start);
+		    		if ($debug) Debug.write("Appointment End : " + value.end);
 		    		
 		    	} else{
 		    		

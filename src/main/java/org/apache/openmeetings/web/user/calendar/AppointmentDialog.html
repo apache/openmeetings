@@ -25,15 +25,15 @@
 			<table>
 				<tr>
 					<td><wicket:ommessage key="572" /></td>
-					<td><input type="text" wicket:id="appointmentName" /></td>
+					<td><input type="text" wicket:id="title" /></td>
 				</tr>
 				<tr>
 					<td><wicket:ommessage key="570" /></td>
-					<td><span wicket:id="appointmentStarttime"></span></td>
+					<td><span wicket:id="start"></span></td>
 				</tr>
 				<tr>
 					<td><wicket:ommessage key="571" /></td>
-					<td><span wicket:id="appointmentEndtime"></span></td>
+					<td><span wicket:id="end"></span></td>
 				</tr>
 				<tr>
 					<td><wicket:ommessage key="565" /></td>
@@ -51,7 +51,7 @@
 					<td><select wicket:id="room" ></select></td>
 				</tr>
 				<tr>
-					<td colspan="2"><input type="checkbox" wicket:id="isPasswordProtected" /><wicket:ommessage key="524" /></td>
+					<td colspan="2"><input type="checkbox" wicket:id="passwordProtected" /><wicket:ommessage key="524" /></td>
 				</tr>
 				<tr>
 					<td><wicket:ommessage key="525" /></td>
@@ -67,7 +67,7 @@
 							<div class="attendeeContainer">
 								<table>
 									<tbody wicket:id="attendeeContainer">		
-							    		<tr wicket:id="meetingMember">
+							    		<tr wicket:id="meetingMembers">
 											<td><div><span wicket:id="attendeeName"></span></div></td>
 											<td><div><span wicket:id="attendeeEmail"></span></div></td>
 											<td><div class="formCancelButton" wicket:id="attendeeDelete" wicket:ommessage="title:814"><input/></div></td>
@@ -81,13 +81,13 @@
 				</tr>
 				<tr>
 					<td><wicket:ommessage key="569" /></td>
-					<td><input type="text" wicket:id="appointmentLocation" /></td>
+					<td><input type="text" wicket:id="location" /></td>
 				</tr>
 				<tr>
 					<td><wicket:ommessage key="573" /></td>
 					<td>
 						<div wicket:id="toolbarContainer"></div>
-						<div wicket:id="appointmentDescription"></div>
+						<div wicket:id="description"></div>
 					</td>
 				</tr>
 			</table>

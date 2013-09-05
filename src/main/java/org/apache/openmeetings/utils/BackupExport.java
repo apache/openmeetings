@@ -204,7 +204,7 @@ public class BackupExport {
 			registry.bind(AppointmentReminderTyps.class, AppointmentReminderTypeConverter.class);
 			registry.bind(Room.class, RoomConverter.class);
 			if (list != null && list.size() > 0) {
-				registry.bind(list.get(0).getAppointmentStarttime().getClass(), DateConverter.class);
+				registry.bind(list.get(0).getStart().getClass(), DateConverter.class);
 			}
 			
 			writeList(serializer, backup_dir, "appointements.xml", "appointments", list);

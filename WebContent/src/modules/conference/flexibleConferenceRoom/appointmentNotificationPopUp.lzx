@@ -45,13 +45,11 @@
 		    		parent._append.setAttribute('text',value.end);
 		    		parent._timeZone.setAttribute('text',value.timeZone);
 		    		
-		    		parent._appName.setAttribute('text',value.appointment.appointmentName);
-		    		parent._appDescr._appDescr.setAttribute('text',value.appointment.appointmentDescription);
+		    		parent._appName.setAttribute('text',value.appointment.title);
+		    		parent._appDescr._appDescr.setAttribute('text',value.appointment.description);
 		    	
-		    		parent._createdby.setAttribute('text',value.appointment.userId.firstname + ' ' + value.appointment.userId.lastname );
-		    		
+		    		parent._createdby.setAttribute('text',value.appointment.owner.firstname + ' ' + value.appointment.owner.lastname );
 		    	}
-		    	
 		    ]]>	        	          				
 		</handler>	
 	</netRemoteCallHib> 

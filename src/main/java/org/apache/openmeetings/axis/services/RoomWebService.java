@@ -2355,7 +2355,7 @@ public class RoomWebService {
 				}
 				// Not In Remote List available - extern user
 				Long memberId = meetingMemberLogic.addMeetingMember(firstname,
-						lastname, "0", "0", appointment.getAppointmentId(),
+						lastname, "0", "0", appointment.getId(),
 						null, email, null, baseUrl, null, new Boolean(false),
 						language_id, false, "", null, "");
 
@@ -2419,7 +2419,7 @@ public class RoomWebService {
 
 				// Not In Remote List available - extern user
 				Long memberId = meetingMemberLogic.addMeetingMember(firstname,
-						lastname, "0", "0", appointment.getAppointmentId(),
+						lastname, "0", "0", appointment.getId(),
 						null, email, "", baseUrl, null, new Boolean(false),
 						language_id, false, "", null, invitorName);
 
@@ -2496,7 +2496,7 @@ public class RoomWebService {
 	 * @return 1 in case of success, -2 if permissions are insufficient
 	 * @throws AxisFault if any error occurred
 	 */
-	public int modifyRoomParameter(String SID, Long room_id, String paramName, String paramValue)
+	public int modifyRoomParameter(String SID, Long room_id, String paramName, Object paramValue)
 			throws AxisFault {
 		try {
 			Long users_id = sessiondataDao.checkSession(SID);
