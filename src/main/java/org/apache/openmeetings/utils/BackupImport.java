@@ -38,6 +38,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -171,13 +172,13 @@ public class BackupImport {
 	@Autowired
 	private ChatDao chatDao;
 
-	private final HashMap<Long, Long> usersMap = new HashMap<Long, Long>();
-	private final HashMap<Long, Long> organisationsMap = new HashMap<Long, Long>();
-	private final HashMap<Long, Long> appointmentsMap = new HashMap<Long, Long>();
-	private final HashMap<Long, Long> roomsMap = new HashMap<Long, Long>();
-	private final HashMap<Long, Long> messageFoldersMap = new HashMap<Long, Long>();
-	private final HashMap<Long, Long> userContactsMap = new HashMap<Long, Long>();
-	private final HashMap<String, Integer> userEmailMap = new HashMap<String, Integer>();
+	private final Map<Long, Long> usersMap = new HashMap<Long, Long>();
+	private final Map<Long, Long> organisationsMap = new HashMap<Long, Long>();
+	private final Map<Long, Long> appointmentsMap = new HashMap<Long, Long>();
+	private final Map<Long, Long> roomsMap = new HashMap<Long, Long>();
+	private final Map<Long, Long> messageFoldersMap = new HashMap<Long, Long>();
+	private final Map<Long, Long> userContactsMap = new HashMap<Long, Long>();
+	private final Map<String, Integer> userEmailMap = new HashMap<String, Integer>();
 
 	private enum Maps {
 		USERS, ORGANISATIONS, APPOINTMENTS, ROOMS, MESSAGEFOLDERS, USERCONTACTS
@@ -828,7 +829,7 @@ public class BackupImport {
 				// check that email is unique
 				if (u.getAdresses() != null && u.getAdresses().getEmail() != null) {
 					if (userEmailMap.containsKey(u.getAdresses().getEmail())) {
-						log.info("Email is dublicated for user " + u.toString());
+						log.warn("Email is dublicated for user " + u.toString());
 						String updateEmail = "modified_by_import_<" + list.size() + ">" + u.getAdresses().getEmail();
 						u.getAdresses().setEmail(updateEmail);
 					}
