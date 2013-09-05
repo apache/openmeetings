@@ -198,4 +198,11 @@ public class Address implements Serializable {
 		this.phone = phone;
 	}
 
+	@Override
+	public String toString() {
+		return "Address [adresses_id=" + adresses_id + ", states=" + states
+				+ ", street=" + street + ", town=" + town + ", zip=" + zip
+				+ ", deleted=" + deleted + ", email=" + email + ", phone="
+				+ phone + "]";
+	}
 }

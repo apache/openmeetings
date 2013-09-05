@@ -177,6 +177,7 @@ public class BackupImport {
 	private final HashMap<Long, Long> roomsMap = new HashMap<Long, Long>();
 	private final HashMap<Long, Long> messageFoldersMap = new HashMap<Long, Long>();
 	private final HashMap<Long, Long> userContactsMap = new HashMap<Long, Long>();
+	private final HashMap<String, Integer> userEmailMap = new HashMap<String, Integer>();
 
 	private enum Maps {
 		USERS, ORGANISATIONS, APPOINTMENTS, ROOMS, MESSAGEFOLDERS, USERCONTACTS
@@ -584,15 +585,15 @@ public class BackupImport {
 			
 			List<RoomPoll> list = readList(serializer, f, "roompolls.xml", "roompolls", RoomPoll.class, true);
 			for (RoomPoll rp : list) {
-				if (rp.getRoom().getRooms_id() == null) {
+				if (rp.getRoom() == null || rp.getRoom().getRooms_id() == null) {
 					//room was deleted
 					continue;
 				}
-				if (rp.getCreatedBy().getUser_id() == null) {
+				if (rp.getCreatedBy() == null || rp.getCreatedBy().getUser_id() == null) {
 					rp.setCreatedBy(null);
 				}
 				for (RoomPollAnswers rpa : rp.getRoomPollAnswerList()) {
-					if (rpa.getVotedUser().getUser_id() == null) {
+					if (rpa.getVotedUser() == null || rpa.getVotedUser().getUser_id() == null) {
 						rpa.setVotedUser(null);
 					}
 				}
@@ -718,10 +719,11 @@ public class BackupImport {
 							User u = usersDao.getUserByEmail(email);
 							if (u != null) {
 								mm.setUserid(u);
-							} else {
+							} else if (mm.getAppointment() != null && mm.getAppointment().getUserId() != null) {
 								mm.getUserid().setType(Type.contact);
 								mm.getUserid().getAdresses().setEmail(email);
 								mm.getUserid().setLogin(mm.getAppointment().getUserId().getUser_id() + "_" + email);
+								mm.getUserid().setOwner_id(mm.getAppointment().getUserId().getUser_id());
 							}
 							contactValid = true;
 						}
@@ -760,6 +762,15 @@ public class BackupImport {
 		DocumentBuilder dBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
 		Document doc = dBuilder.parse(xml);
 		NodeList nl = getNode(getNode(doc, "root"), listNodeName).getChildNodes();
+		userEmailMap.clear();
+		//add existence email from database
+		List<User>  users = usersDao.getAllUsers();
+		for (User u : users){
+			if (u.getAdresses() == null || u.getAdresses().getEmail() == null) {
+				continue;
+			}
+			userEmailMap.put(u.getAdresses().getEmail(), -1);
+		}
 		// one of the old OM version created 2 nodes "deleted" this code block handles this
 		for (int i = 0; i < nl.getLength(); ++i) {
 			Node user = nl.item(i);
@@ -814,6 +825,15 @@ public class BackupImport {
 					}
 					item2 = listNode2.getNext(); //HACK to handle old om_time_zone
 				} while (item2 != null && !"user".equals(item2.getName()));
+				// check that email is unique
+				if (u.getAdresses() != null && u.getAdresses().getEmail() != null) {
+					if (userEmailMap.containsKey(u.getAdresses().getEmail())) {
+						log.info("Email is dublicated for user " + u.toString());
+						String updateEmail = "modified_by_import_<" + list.size() + ">" + u.getAdresses().getEmail();
+						u.getAdresses().setEmail(updateEmail);
+					}
+					userEmailMap.put(u.getAdresses().getEmail(), list.size());
+				}
 				list.add(u);
 				item = listNode.getNext();
 			}

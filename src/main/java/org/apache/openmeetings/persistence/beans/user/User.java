@@ -607,4 +607,14 @@ public class User implements Serializable, IDataProviderEntity {
 	public void setOwner_id(Long owner_id){
 		this.owner_id = owner_id;
 	}
+
+	@Override
+	public String toString() {
+		return "User [user_id=" + user_id + ", firstname=" + firstname
+				+ ", lastname=" + lastname + ", login=" + login
+				+ ", pictureuri=" + pictureuri + ", deleted=" + deleted
+				+ ", language_id=" + language_id + ", adresses=" + adresses
+				+ ", externalUserId=" + externalUserId + ", externalUserType="
+				+ externalUserType + ", type=" + type + "]";
+	}
 }
