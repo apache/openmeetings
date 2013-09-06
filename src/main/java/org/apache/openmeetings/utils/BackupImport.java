@@ -833,7 +833,7 @@ public class BackupImport {
 						String updateEmail = "modified_by_import_<" + list.size() + ">" + u.getAdresses().getEmail();
 						u.getAdresses().setEmail(updateEmail);
 					}
-					userEmailMap.put(u.getAdresses().getEmail(), list.size());
+					userEmailMap.put(u.getAdresses().getEmail(), userEmailMap.size());
 				}
 				list.add(u);
 				item = listNode.getNext();
