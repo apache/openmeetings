@@ -914,14 +914,31 @@ public class ImportInitvalues {
 		log.debug("Lang ADDED: " + lang + "; seconds passed: "
 				+ (System.currentTimeMillis() - ticks) / 1000);
 	}
+	
+	public static void main(String... args) {
+		int pr = 22;
+		int progressDelta = 50 - pr;
+		
+		double deltaProgressPerLanguageFile = new Double(progressDelta)/new Double(34);
+		
+		pr += (2 * deltaProgressPerLanguageFile);
+		
+		System.err.println("deltaProgressPerLanguageFile: "+deltaProgressPerLanguageFile +" "+ pr);
+	}
 
 	public void loadLanguagesFiles() throws Exception {
 		Map<Integer, Map<String, Object>> listlanguages = getLanguageFiles();
 
 		Map<Long, Fieldvalues> fieldCache = new Hashtable<Long, Fieldvalues>(3000);
+		
+		int initProgress = progress;
+		int progressDelta = 76 - progress;
+		double deltaProgressPerLanguageFile = new Double(progressDelta)/new Double(listlanguages.size());
+		
 		/** Read all languages files */
 		for (int langId : listlanguages.keySet()) {
 			loadLanguagesFile(listlanguages, fieldCache, langId);
+			progress = (int) (initProgress + Math.round( new Double(langId) * deltaProgressPerLanguageFile ));
 		}
 		log.debug("All languages are imported");
 	}
@@ -1000,32 +1017,32 @@ public class ImportInitvalues {
 			log.debug("System contains users, no need to install data one more time.");
 		}
 		sipDao.delete();
-		progress = 6;
+		progress = 3;
 		loadUserLevels();
-		progress = 13;
+		progress = 6;
 		loadMainMenu();
-		progress = 19;
+		progress = 9;
 		loadErrorTypes();
-		progress = 25;
+		progress = 12;
 		loadErrorMappingsFromXML();
-		progress = 31;
+		progress = 15;
 		loadCountriesFiles();
-		progress = 44;
+		progress = 22;
 		loadLanguagesFiles();
-		progress = 50;
+		progress = 76;
 		loadSalutations();
-		progress = 56;
+		progress = 78;
 		// AppointMent Categories
 		loadInitAppointmentCategories();
-		progress = 63;
+		progress = 80;
 		// Appointment Reminder types
 		loadInitAppointmentReminderTypes();
-		progress = 69;
+		progress = 82;
 		// Appointment poll types
 		loadPollTypes();
-		progress = 75;
+		progress = 84;
 		loadRoomTypes();
-		progress = 81;
+		progress = 86;
 
 		loadConfiguration(cfg);
 		progress = 88;
