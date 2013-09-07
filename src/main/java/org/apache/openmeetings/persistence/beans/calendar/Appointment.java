@@ -98,28 +98,28 @@ public class Appointment implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
-	@Element(data=true)
+	@Element(name = "appointmentId", data = true)
 	private Long id;
 	
 	@Column(name = "appointmentname")
-	@Element(data=true, required=false)
+	@Element(name="appointmentName", data=true, required=false)
 	private String title;
 	
 	@Column(name = "location")
-	@Element(data=true, required=false)
+	@Element(name="appointmentLocation", data=true, required=false)
 	private String location;
 	
 	@Column(name = "appointment_starttime")
-	@Element(data=true)
+	@Element(name="appointmentStarttime", data=true)
 	private Date start;
 	
 	@Column(name = "appointment_endtime")
-	@Element(data=true)
+	@Element(name="appointmentEndtime", data=true)
 	private Date end;
 	
 	@Lob 
 	@Column(name = "description", length=2048)
-	@Element(data=true, required=false)
+	@Element(name="appointmentDescription", data=true, required=false)
 	private String description;
 	
 	@ManyToOne(fetch = FetchType.EAGER)
@@ -183,11 +183,11 @@ public class Appointment implements Serializable {
 	private List<MeetingMember> meetingMembers;
 	
 	@Column(name = "language_id")
-	@Element(data=true, required=false)
-	private Long language_id;
+	@Element(name="language_id", data=true, required=false)
+	private Long languageId;
 	
 	@Column(name = "is_password_protected")
-	@Element(data=true, required=false)
+	@Element(name="isPasswordProtected", data=true, required=false)
 	private boolean passwordProtected;
 	
 	@Column(name = "password")
@@ -364,12 +364,12 @@ public class Appointment implements Serializable {
 		this.icalId = icalId;
 	}
 
-	public Long getLanguage_id() {
-		return language_id;
+	public Long getLanguageId() {
+		return languageId;
 	}
 
-	public void setLanguage_id(Long languageId) {
-		language_id = languageId;
+	public void setLanguageId(Long languageId) {
+		this.languageId = languageId;
 	}
 
 	public boolean isPasswordProtected() {

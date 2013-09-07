@@ -129,7 +129,7 @@ public class AppointmentDao {
 		String hql = "select a from Appointment a WHERE a.id = :id ";
 
 		TypedQuery<Appointment> query = em.createQuery(hql, Appointment.class);
-		query.setParameter("appointmentId", appointmentId);
+		query.setParameter("id", appointmentId);
 
 		Appointment appoint = null;
 		try {
@@ -197,7 +197,7 @@ public class AppointmentDao {
 			ap.setIsWeekly(isWeekly);
 			ap.setIsMonthly(isMonthly);
 			ap.setIsYearly(isYearly);
-			ap.setLanguage_id(language_id);
+			ap.setLanguageId(language_id);
 			ap.setPasswordProtected(isPasswordProtected);
 			ap.setPassword(password);
 			ap.setOwner(usersDao.get(userId));
@@ -367,7 +367,7 @@ public class AppointmentDao {
 					appointment.setIsWeekly(isWeekly);
 					appointment.setIsMonthly(isMonthly);
 					appointment.setIsYearly(isYearly);
-					appointment.setLanguage_id(language_id);
+					appointment.setLanguageId(language_id);
 					appointment.setPasswordProtected(isPasswordProtected);
 					appointment.setPassword(password);
 					// ap.setUserId(usersDao.getUser(userId));
@@ -456,7 +456,7 @@ public class AppointmentDao {
 			ap.setIsWeekly(isWeekly);
 			ap.setIsMonthly(isMonthly);
 			ap.setIsYearly(isYearly);
-			ap.setLanguage_id(language_id);
+			ap.setLanguageId(language_id);
 			ap.setPasswordProtected(isPasswordProtected);
 			ap.setPassword(password);
 			// ap.setUserId(usersDao.getUser(userId));

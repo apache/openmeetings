@@ -46,7 +46,7 @@ public class MeetingMember implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
-	@Element(data = true)
+	@Element(name = "meetingMemberId", data = true)
 	private Long id;
 
 	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
