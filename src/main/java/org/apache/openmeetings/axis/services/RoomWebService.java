@@ -18,6 +18,8 @@
  */
 package org.apache.openmeetings.axis.services;
 
+import static org.apache.openmeetings.OpenmeetingsVariables.webAppRootKey;
+
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -27,8 +29,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.axis2.AxisFault;
-import org.apache.commons.beanutils.PropertyUtils;
-import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.data.basic.AuthLevelUtil;
 import org.apache.openmeetings.data.basic.SessiondataDao;
 import org.apache.openmeetings.data.beans.basic.SearchResult;
@@ -52,6 +52,8 @@ import org.apache.openmeetings.utils.TimezoneUtil;
 import org.apache.openmeetings.utils.math.CalendarPatterns;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
+import org.springframework.beans.BeanWrapper;
+import org.springframework.beans.BeanWrapperImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
@@ -62,9 +64,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  * 
  */
 public class RoomWebService {
-
-	private static final Logger log = Red5LoggerFactory.getLogger(
-			RoomWebService.class, OpenmeetingsVariables.webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(RoomWebService.class, webAppRootKey);
 
 	@Autowired
 	private AppointmentDao appointmentDao;
@@ -2502,9 +2502,10 @@ public class RoomWebService {
 			Long users_id = sessiondataDao.checkSession(SID);
 			Long user_level = userManager.getUserLevelByID(users_id);
 			if (authLevelUtil.checkWebServiceLevel(user_level)) {
-				log.debug("closeRoom 1 " + room_id);
+				log.debug(String.format("modifyRoomParameter[%s]: %s = %s", room_id, paramName, paramValue));
 				Room r = roomDao.get(room_id);
-				PropertyUtils.setSimpleProperty(r, paramName, paramValue);
+				BeanWrapper rw = new BeanWrapperImpl(r);
+				rw.setPropertyValue(paramName, paramValue);
 				roomDao.update(r, users_id);
 			} else {
 				return -2;
