@@ -19,6 +19,7 @@
 package org.apache.openmeetings.web.util;
 
 import static org.apache.openmeetings.web.app.Application.getBean;
+import static org.apache.openmeetings.web.app.WebSession.getBaseUrl;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import static org.apache.openmeetings.web.util.OmUrlFragment.PROFILE_MESSAGES;
 
@@ -100,6 +101,6 @@ public class ContactsHelper {
 	}
 	
 	public static String getLink() {
-		return WebSession.get().getBaseUrl() + "#" + PROFILE_MESSAGES.getArea().name() + "/" + PROFILE_MESSAGES.getType();		
+		return getBaseUrl() + "#" + PROFILE_MESSAGES.getArea().name() + "/" + PROFILE_MESSAGES.getType();		
 	}
 }

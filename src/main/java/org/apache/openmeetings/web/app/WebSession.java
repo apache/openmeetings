@@ -220,8 +220,8 @@ public class WebSession extends AbstractAuthenticatedWebSession {
 		return d;
 	}
 	
-	public String getBaseUrl() {
-		return baseUrl;
+	public static String getBaseUrl() {
+		return get().baseUrl;
 	}
 	
 	public void setBaseUrl(String baseUrl){

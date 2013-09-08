@@ -19,6 +19,7 @@
 package org.apache.openmeetings.data.calendar.daos;
 
 import static org.apache.openmeetings.OpenmeetingsVariables.webAppRootKey;
+import static org.apache.openmeetings.web.app.WebSession.getBaseUrl;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -49,7 +50,6 @@ import org.apache.openmeetings.persistence.beans.user.User;
 import org.apache.openmeetings.persistence.beans.user.User.Type;
 import org.apache.openmeetings.utils.TimezoneUtil;
 import org.apache.openmeetings.utils.math.CalendarPatterns;
-import org.apache.openmeetings.web.app.WebSession;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -94,12 +94,9 @@ public class AppointmentDao {
 	public Appointment getAppointmentByRoom(Long room_id) throws Exception {
 		log.debug("AppointMentDaoImpl.getAppointmentByRoom");
 
-		String hql = "select a from Appointment a "
-				+ "WHERE a.deleted <> :deleted "
-				+ "AND a.room.rooms_id = :room_id ";
+		String hql = "select a from Appointment a WHERE a.deleted = false AND a.room.rooms_id = :room_id ";
 
 		TypedQuery<Appointment> query = em.createQuery(hql, Appointment.class);
-		query.setParameter("deleted", true);
 		query.setParameter("room_id", room_id);
 
 		List<Appointment> appoint = query.getResultList();
@@ -251,8 +248,8 @@ public class AppointmentDao {
 			for (MeetingMember mm : mmList){
 				String urlPostfix = (mm.getUser().getType() == Type.contact) ? "" : "#room/" + r.getRooms_id();
 					
-				meetingMemberLogic.addMeetingMemberInvitation(mm, a,
-						WebSession.get().getBaseUrl() + urlPostfix, u);
+				//FIXME !!! existent invitations should be updated, not readded
+				meetingMemberLogic.addMeetingMemberInvitation(mm, a, getBaseUrl() + urlPostfix, u);
 			}
 		}
 		return a;

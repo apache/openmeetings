@@ -22,6 +22,8 @@ import static org.apache.openmeetings.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.openmeetings.utils.UserHelper.getMinLoginLength;
 import static org.apache.openmeetings.utils.UserHelper.getMinPasswdLength;
 import static org.apache.openmeetings.web.app.Application.getBean;
+import static org.apache.openmeetings.web.app.WebSession.getAvailableTimezones;
+import static org.apache.openmeetings.web.app.WebSession.getBaseUrl;
 import static org.apache.wicket.validation.validator.StringValidator.minimumLength;
 
 import java.util.Arrays;
@@ -73,9 +75,7 @@ public class RegisterDialog extends AbstractFormDialog<String> {
 	private DialogButton registerBtn = new DialogButton(WebSession.getString(121));
 	private FeedbackPanel feedback = new FeedbackPanel("feedback");
 	private final IModel<String> tzModel = Model.of(WebSession.get().getTimeZoneByBrowserLocale(0));
-	private final DropDownChoice<String> tzDropDown = new DropDownChoice<String>("tz"
-			, tzModel
-			, WebSession.getAvailableTimezones());
+	private final DropDownChoice<String> tzDropDown = new DropDownChoice<String>("tz", tzModel, getAvailableTimezones());
 	private Form<String> form;
 	private SignInDialog s;
     private String firstName;
@@ -96,7 +96,7 @@ public class RegisterDialog extends AbstractFormDialog<String> {
 		lang = WebSession.get().getLanguageByBrowserLocale();
 		state = WebSession.get().getCountryByBrowserLocale();
 		tzDropDown.setOutputMarkupId(true);
-		String baseURL = WebSession.get().getBaseUrl();
+		String baseURL = getBaseUrl();
 		
 		sendEmailAtRegister = 1 == getBean(ConfigurationDao.class).getConfValue("sendEmailAtRegister", Integer.class, "0");
 		sendConfirmation = baseURL != null
@@ -179,7 +179,7 @@ public class RegisterDialog extends AbstractFormDialog<String> {
 				.createPassPhrase(login + CalendarPatterns.getDateWithTimeByMiliSeconds(new Date()));
 
 		String redirectPage = getRequestCycle().urlFor(ActivatePage.class, new PageParameters().add("u", hash)).toString().substring(2);
-		String baseURL = WebSession.get().getBaseUrl() + redirectPage;
+		String baseURL = getBaseUrl() + redirectPage;
 		try {
 			getBean(UserManager.class).registerUserInit(3, 1, 0, 1,
 					login, password, lastName,
