@@ -88,6 +88,7 @@ public class RegisterDialog extends AbstractFormDialog<String> {
 
     final MessageDialog confirmRegistration;
     private boolean sendConfirmation = false;
+    private boolean sendEmailAtRegister = false;
     
 	public RegisterDialog(String id) {
 		super(id, WebSession.getString(113));
@@ -95,6 +96,13 @@ public class RegisterDialog extends AbstractFormDialog<String> {
 		lang = WebSession.get().getLanguageByBrowserLocale();
 		state = WebSession.get().getCountryByBrowserLocale();
 		tzDropDown.setOutputMarkupId(true);
+		String baseURL = WebSession.get().getBaseUrl();
+		
+		sendEmailAtRegister = 1 == getBean(ConfigurationDao.class).getConfValue("sendEmailAtRegister", Integer.class, "0");
+		sendConfirmation = baseURL != null
+				&& !baseURL.isEmpty()
+				&& 1 == getBean(ConfigurationDao.class).getConfValue("sendEmailWithVerficationCode", Integer.class, "0");
+
 		confirmRegistration = new MessageDialog("confirmRegistration", WebSession.getString(235), WebSession.getString(674), DialogButtons.OK, DialogIcon.INFO){
 			private static final long serialVersionUID = 1L;
 
@@ -106,7 +114,7 @@ public class RegisterDialog extends AbstractFormDialog<String> {
 			}
 			
 			public void onOpen(AjaxRequestTarget target) {
-				this.setTitle(Model.of(sendConfirmation ? WebSession.getString(674) : WebSession.getString(236)));
+				this.setTitle(Model.of(sendConfirmation && sendEmailAtRegister ? WebSession.getString(674) : WebSession.getString(236)));
 			}
 			
 			public void onClose(AjaxRequestTarget target, DialogButton button) {
@@ -172,12 +180,6 @@ public class RegisterDialog extends AbstractFormDialog<String> {
 
 		String redirectPage = getRequestCycle().urlFor(ActivatePage.class, new PageParameters().add("u", hash)).toString().substring(2);
 		String baseURL = WebSession.get().getBaseUrl() + redirectPage;
-		
-		sendConfirmation = baseURL != null
-				&& !baseURL.isEmpty()
-				&& 1 == getBean(ConfigurationDao.class).getConfValue(
-						"sendEmailWithVerficationCode", Integer.class, "0");
-
 		try {
 			getBean(UserManager.class).registerUserInit(3, 1, 0, 1,
 					login, password, lastName,
