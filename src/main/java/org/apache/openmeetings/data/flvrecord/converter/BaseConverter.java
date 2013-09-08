@@ -53,6 +53,9 @@ public abstract class BaseConverter {
 
 	private String getPath(String key, String app) {
 		String path = configurationDao.getConfValue(key, String.class, "");
+		if (null == path) {
+			path = "";
+		}
 		if (!path.equals("") && !path.endsWith(File.separator)) {
 			path += File.separator;
 		}
