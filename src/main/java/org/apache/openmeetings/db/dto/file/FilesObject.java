@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.data.beans.files;
+package org.apache.openmeetings.db.dto.file;
 
 /**
  * This Object will represent a File on the File-System
