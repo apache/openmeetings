@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0"?>
 <!--
   Licensed to the Apache Software Foundation (ASF) under one
   or more contributor license agreements.  See the NOTICE file
@@ -18,17 +18,14 @@
   under the License.
   
 -->
+<?xml version="1.0" encoding="UTF-8"?>
 <project-modules id="moduleCoreId" project-version="1.5.0">
     <wb-module deploy-name="ROOT">
         <wb-resource deploy-path="/" source-path="/WebContent"/>
-        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/client"/>
-        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/screenviewer"/>
-		<wb-resource deploy-path="/WEB-INF/classes" source-path="/screensharing"/>
-        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/server"/>
-        <wb-resource deploy-path="/WEB-INF/classes" source-path="/WebContent/openmeetings/WEB-INF/classes"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/java"/>
-        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/test/java"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/webapp/WEB-INF/classes"/>
+        <wb-resource deploy-path="/" source-path="/src/main/webapp" tag="defaultRootSource"/>
+        <wb-resource deploy-path="/" source-path="/src/main/webapp/WEB-INF"/>
         <property name="java-output-path"/>
         <property name="context-root" value="/"/>
     </wb-module>
