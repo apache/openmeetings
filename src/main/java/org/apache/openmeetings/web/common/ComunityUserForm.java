@@ -18,7 +18,7 @@
  */
 package org.apache.openmeetings.web.common;
 
-import org.apache.openmeetings.persistence.beans.user.User;
+import org.apache.openmeetings.db.entity.user.User;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.Radio;
 import org.apache.wicket.markup.html.form.RadioGroup;

@@ -23,10 +23,10 @@ import java.util.Date;
 
 import org.apache.mina.core.buffer.IoBuffer;
 import org.apache.openmeetings.OpenmeetingsVariables;
-import org.apache.openmeetings.data.flvrecord.FlvRecordingMetaDataDao;
-import org.apache.openmeetings.data.flvrecord.FlvRecordingMetaDeltaDao;
-import org.apache.openmeetings.persistence.beans.flvrecord.FlvRecordingMetaData;
-import org.apache.openmeetings.persistence.beans.flvrecord.FlvRecordingMetaDelta;
+import org.apache.openmeetings.db.dao.record.FlvRecordingMetaDataDao;
+import org.apache.openmeetings.db.dao.record.FlvRecordingMetaDeltaDao;
+import org.apache.openmeetings.db.entity.record.FlvRecordingMetaData;
+import org.apache.openmeetings.db.entity.record.FlvRecordingMetaDelta;
 import org.red5.io.ITag;
 import org.red5.io.flv.impl.Tag;
 import org.red5.logging.Red5LoggerFactory;

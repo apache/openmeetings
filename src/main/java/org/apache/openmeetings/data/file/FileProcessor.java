@@ -27,14 +27,14 @@ import java.util.List;
 
 import org.apache.commons.transaction.util.FileHelper;
 import org.apache.openmeetings.OpenmeetingsVariables;
-import org.apache.openmeetings.data.file.dao.FileExplorerItemDao;
 import org.apache.openmeetings.data.flvrecord.converter.FlvExplorerConverter;
+import org.apache.openmeetings.db.dao.file.FileExplorerItemDao;
+import org.apache.openmeetings.db.entity.file.FileExplorerItem;
 import org.apache.openmeetings.documents.GenerateImage;
 import org.apache.openmeetings.documents.GeneratePDF;
 import org.apache.openmeetings.documents.GenerateThumbs;
 import org.apache.openmeetings.documents.beans.ConverterProcessResult;
 import org.apache.openmeetings.documents.beans.ConverterProcessResultList;
-import org.apache.openmeetings.persistence.beans.files.FileExplorerItem;
 import org.apache.openmeetings.utils.OmFileHelper;
 import org.apache.openmeetings.utils.StoredFile;
 import org.apache.openmeetings.utils.crypt.MD5;

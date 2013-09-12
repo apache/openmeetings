@@ -25,7 +25,7 @@ import static org.apache.openmeetings.Version.getVersion;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
+import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.wicket.ajax.AjaxRequestTarget;

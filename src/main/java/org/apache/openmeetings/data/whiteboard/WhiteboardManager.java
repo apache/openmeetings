@@ -24,7 +24,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
-import org.apache.openmeetings.data.whiteboard.dto.WhiteboardObject;
+import org.apache.openmeetings.db.dto.room.WhiteboardObject;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;

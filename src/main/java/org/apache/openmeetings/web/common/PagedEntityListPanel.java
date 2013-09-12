@@ -21,7 +21,7 @@ package org.apache.openmeetings.web.common;
 import java.util.Arrays;
 import java.util.List;
 
-import org.apache.openmeetings.persistence.beans.IDataProviderEntity;
+import org.apache.openmeetings.db.entity.IDataProviderEntity;
 import org.apache.openmeetings.web.admin.SearchableDataView;
 import org.apache.openmeetings.web.data.SearchableDataProvider;
 import org.apache.wicket.ajax.AjaxRequestTarget;

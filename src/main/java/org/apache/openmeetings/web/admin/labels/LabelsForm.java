@@ -18,10 +18,10 @@
  */
 package org.apache.openmeetings.web.admin.labels;
 
-import org.apache.openmeetings.data.basic.FieldLanguagesValuesDao;
-import org.apache.openmeetings.data.basic.FieldValueDao;
-import org.apache.openmeetings.persistence.beans.lang.Fieldlanguagesvalues;
-import org.apache.openmeetings.persistence.beans.lang.Fieldvalues;
+import org.apache.openmeetings.db.dao.label.FieldLanguagesValuesDao;
+import org.apache.openmeetings.db.dao.label.FieldValueDao;
+import org.apache.openmeetings.db.entity.label.Fieldlanguagesvalues;
+import org.apache.openmeetings.db.entity.label.Fieldvalues;
 import org.apache.openmeetings.web.admin.AdminBaseForm;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;

@@ -26,8 +26,8 @@ import java.util.Date;
 import java.util.Locale;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
-import org.apache.openmeetings.data.file.dao.FileExplorerItemDao;
-import org.apache.openmeetings.persistence.beans.files.FileExplorerItem;
+import org.apache.openmeetings.db.dao.file.FileExplorerItemDao;
+import org.apache.openmeetings.db.entity.file.FileExplorerItem;
 import org.apache.openmeetings.utils.OmFileHelper;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;

@@ -24,12 +24,12 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
-import org.apache.openmeetings.data.flvrecord.FlvRecordingDao;
-import org.apache.openmeetings.data.flvrecord.FlvRecordingLogDao;
-import org.apache.openmeetings.data.flvrecord.FlvRecordingMetaDataDao;
+import org.apache.openmeetings.db.dao.record.FlvRecordingDao;
+import org.apache.openmeetings.db.dao.record.FlvRecordingLogDao;
+import org.apache.openmeetings.db.dao.record.FlvRecordingMetaDataDao;
+import org.apache.openmeetings.db.entity.record.FlvRecording;
+import org.apache.openmeetings.db.entity.record.FlvRecordingMetaData;
 import org.apache.openmeetings.documents.beans.ConverterProcessResult;
-import org.apache.openmeetings.persistence.beans.flvrecord.FlvRecording;
-import org.apache.openmeetings.persistence.beans.flvrecord.FlvRecordingMetaData;
 import org.apache.openmeetings.utils.ProcessHelper;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;

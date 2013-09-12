@@ -23,9 +23,9 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.Calendar;
 
-import org.apache.openmeetings.data.calendar.daos.AppointmentDao;
 import org.apache.openmeetings.data.calendar.management.AppointmentLogic;
-import org.apache.openmeetings.persistence.beans.calendar.Appointment;
+import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
+import org.apache.openmeetings.db.entity.calendar.Appointment;
 import org.apache.openmeetings.test.AbstractOpenmeetingsSpringTest;
 import org.junit.Test;
 import org.red5.logging.Red5LoggerFactory;

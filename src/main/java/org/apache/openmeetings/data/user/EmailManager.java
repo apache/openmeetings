@@ -20,7 +20,7 @@ package org.apache.openmeetings.data.user;
 
 import static org.apache.openmeetings.OpenmeetingsVariables.webAppRootKey;
 
-import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
+import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.utils.mail.MailHandler;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.mail.template.FeedbackTemplate;
@@ -36,7 +36,6 @@ import org.springframework.transaction.annotation.Transactional;
  * @author swagner
  *
  */
-@Transactional
 public class EmailManager {
 	private static final Logger log = Red5LoggerFactory.getLogger(EmailManager.class, webAppRootKey);
 

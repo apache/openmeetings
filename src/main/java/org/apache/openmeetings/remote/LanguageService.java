@@ -18,16 +18,16 @@
  */
 package org.apache.openmeetings.remote;
 
-import static org.apache.openmeetings.persistence.beans.basic.Configuration.DEFAUT_LANG_KEY;
+import static org.apache.openmeetings.db.entity.basic.Configuration.DEFAUT_LANG_KEY;
 
 import java.util.List;
 import java.util.Map;
 
-import org.apache.openmeetings.data.basic.FieldLanguageDao;
 import org.apache.openmeetings.data.basic.FieldManager;
-import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
-import org.apache.openmeetings.persistence.beans.lang.FieldLanguage;
-import org.apache.openmeetings.persistence.beans.lang.Fieldlanguagesvalues;
+import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
+import org.apache.openmeetings.db.dao.label.FieldLanguageDao;
+import org.apache.openmeetings.db.entity.label.FieldLanguage;
+import org.apache.openmeetings.db.entity.label.Fieldlanguagesvalues;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**

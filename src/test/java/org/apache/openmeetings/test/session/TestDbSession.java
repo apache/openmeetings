@@ -23,10 +23,10 @@ import static org.junit.Assert.assertEquals;
 import java.util.List;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
-import org.apache.openmeetings.data.basic.dao.ServerDao;
-import org.apache.openmeetings.data.conference.dao.ClientDao;
-import org.apache.openmeetings.persistence.beans.basic.Server;
-import org.apache.openmeetings.persistence.beans.room.Client;
+import org.apache.openmeetings.db.dao.room.ClientDao;
+import org.apache.openmeetings.db.dao.server.ServerDao;
+import org.apache.openmeetings.db.entity.room.Client;
+import org.apache.openmeetings.db.entity.server.Server;
 import org.apache.openmeetings.test.AbstractOpenmeetingsSpringTest;
 import org.junit.Test;
 import org.red5.logging.Red5LoggerFactory;

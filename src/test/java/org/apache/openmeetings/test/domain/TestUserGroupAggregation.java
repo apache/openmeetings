@@ -24,7 +24,7 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.apache.openmeetings.data.user.OrganisationManager;
-import org.apache.openmeetings.persistence.beans.domain.Organisation;
+import org.apache.openmeetings.db.entity.user.Organisation;
 import org.apache.openmeetings.test.AbstractOpenmeetingsSpringTest;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;

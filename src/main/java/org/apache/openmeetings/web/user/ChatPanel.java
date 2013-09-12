@@ -26,9 +26,9 @@ import static org.apache.openmeetings.web.app.WebSession.getUserId;
 
 import java.util.Date;
 
-import org.apache.openmeetings.data.chat.ChatDao;
-import org.apache.openmeetings.data.user.dao.UserDao;
-import org.apache.openmeetings.persistence.beans.chat.ChatMessage;
+import org.apache.openmeetings.db.dao.basic.ChatDao;
+import org.apache.openmeetings.db.dao.user.UserDao;
+import org.apache.openmeetings.db.entity.basic.ChatMessage;
 import org.apache.openmeetings.web.common.UserPanel;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;

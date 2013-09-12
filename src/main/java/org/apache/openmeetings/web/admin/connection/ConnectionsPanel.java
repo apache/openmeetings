@@ -28,7 +28,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.apache.openmeetings.persistence.beans.room.Client;
+import org.apache.openmeetings.db.entity.room.Client;
 import org.apache.openmeetings.remote.UserService;
 import org.apache.openmeetings.session.SessionManager;
 import org.apache.openmeetings.web.admin.AdminPanel;

@@ -18,7 +18,7 @@
  */
 package org.apache.openmeetings.session;
 
-import org.apache.openmeetings.persistence.beans.room.Client;
+import org.apache.openmeetings.db.entity.room.Client;
 
 
 public class ClientSessionInfo {

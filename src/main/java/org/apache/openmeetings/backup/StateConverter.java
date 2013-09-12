@@ -18,8 +18,8 @@
  */
 package org.apache.openmeetings.backup;
 
-import org.apache.openmeetings.data.user.dao.StateDao;
-import org.apache.openmeetings.persistence.beans.user.State;
+import org.apache.openmeetings.db.dao.user.StateDao;
+import org.apache.openmeetings.db.entity.user.State;
 import org.simpleframework.xml.stream.InputNode;
 import org.simpleframework.xml.stream.OutputNode;
 

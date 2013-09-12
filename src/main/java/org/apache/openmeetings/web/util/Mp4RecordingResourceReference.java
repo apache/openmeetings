@@ -23,7 +23,7 @@ import static org.apache.openmeetings.utils.OmFileHelper.getMp4Recording;
 
 import java.io.File;
 
-import org.apache.openmeetings.persistence.beans.flvrecord.FlvRecording;
+import org.apache.openmeetings.db.entity.record.FlvRecording;
 
 public class Mp4RecordingResourceReference extends RecordingResourceReference {
 	private static final long serialVersionUID = 6181482949621024822L;

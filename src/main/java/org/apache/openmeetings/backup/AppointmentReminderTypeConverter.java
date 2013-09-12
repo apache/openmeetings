@@ -18,8 +18,8 @@
  */
 package org.apache.openmeetings.backup;
 
-import org.apache.openmeetings.data.calendar.daos.AppointmentReminderTypDao;
-import org.apache.openmeetings.persistence.beans.calendar.AppointmentReminderTyps;
+import org.apache.openmeetings.db.dao.calendar.AppointmentReminderTypDao;
+import org.apache.openmeetings.db.entity.calendar.AppointmentReminderTyps;
 import org.simpleframework.xml.stream.InputNode;
 import org.simpleframework.xml.stream.OutputNode;
 

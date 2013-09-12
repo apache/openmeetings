@@ -22,7 +22,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
-import org.apache.openmeetings.data.whiteboard.dto.WhiteboardSyncLockObject;
+import org.apache.openmeetings.db.dto.room.WhiteboardSyncLockObject;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 

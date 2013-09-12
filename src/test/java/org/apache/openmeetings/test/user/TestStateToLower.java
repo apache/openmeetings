@@ -20,8 +20,8 @@ package org.apache.openmeetings.test.user;
 
 import static org.junit.Assert.assertTrue;
 
-import org.apache.openmeetings.data.user.dao.StateDao;
-import org.apache.openmeetings.persistence.beans.user.State;
+import org.apache.openmeetings.db.dao.user.StateDao;
+import org.apache.openmeetings.db.entity.user.State;
 import org.apache.openmeetings.test.AbstractOpenmeetingsSpringTest;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -18,8 +18,8 @@
  */
 package org.apache.openmeetings.remote;
 
-import static org.apache.openmeetings.persistence.beans.basic.Configuration.FRONTEND_REGISTER_KEY;
-import static org.apache.openmeetings.persistence.beans.basic.Configuration.MAX_UPLOAD_SIZE_KEY;
+import static org.apache.openmeetings.db.entity.basic.Configuration.FRONTEND_REGISTER_KEY;
+import static org.apache.openmeetings.db.entity.basic.Configuration.MAX_UPLOAD_SIZE_KEY;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -30,25 +30,25 @@ import java.util.TimeZone;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.data.basic.AuthLevelUtil;
-import org.apache.openmeetings.data.basic.SessiondataDao;
-import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
-import org.apache.openmeetings.data.basic.dao.LdapConfigDao;
-import org.apache.openmeetings.data.basic.dao.SOAPLoginDao;
 import org.apache.openmeetings.data.conference.InvitationManager;
 import org.apache.openmeetings.data.conference.RoomManager;
-import org.apache.openmeetings.data.logs.ConferenceLogDao;
 import org.apache.openmeetings.data.user.UserManager;
-import org.apache.openmeetings.data.user.dao.AdminUserDao;
-import org.apache.openmeetings.data.user.dao.StateDao;
+import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
+import org.apache.openmeetings.db.dao.log.ConferenceLogDao;
+import org.apache.openmeetings.db.dao.server.LdapConfigDao;
+import org.apache.openmeetings.db.dao.server.SOAPLoginDao;
+import org.apache.openmeetings.db.dao.server.SessiondataDao;
+import org.apache.openmeetings.db.dao.user.AdminUserDao;
+import org.apache.openmeetings.db.dao.user.StateDao;
+import org.apache.openmeetings.db.entity.basic.Configuration;
+import org.apache.openmeetings.db.entity.room.Client;
+import org.apache.openmeetings.db.entity.server.RemoteSessionObject;
+import org.apache.openmeetings.db.entity.server.SOAPLogin;
+import org.apache.openmeetings.db.entity.server.Sessiondata;
+import org.apache.openmeetings.db.entity.user.State;
+import org.apache.openmeetings.db.entity.user.User;
+import org.apache.openmeetings.db.entity.user.Userdata;
 import org.apache.openmeetings.ldap.LdapLoginManagement;
-import org.apache.openmeetings.persistence.beans.basic.Configuration;
-import org.apache.openmeetings.persistence.beans.basic.RemoteSessionObject;
-import org.apache.openmeetings.persistence.beans.basic.SOAPLogin;
-import org.apache.openmeetings.persistence.beans.basic.Sessiondata;
-import org.apache.openmeetings.persistence.beans.room.Client;
-import org.apache.openmeetings.persistence.beans.user.State;
-import org.apache.openmeetings.persistence.beans.user.User;
-import org.apache.openmeetings.persistence.beans.user.Userdata;
 import org.apache.openmeetings.remote.red5.ScopeApplicationAdapter;
 import org.apache.openmeetings.remote.util.SessionVariablesUtil;
 import org.apache.openmeetings.session.ISessionManager;

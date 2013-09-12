@@ -18,8 +18,8 @@
  */
 package org.apache.openmeetings.web.pages;
 
+import org.apache.openmeetings.db.entity.label.FieldLanguage;
 import org.apache.openmeetings.installation.InstallationConfig;
-import org.apache.openmeetings.persistence.beans.lang.FieldLanguage;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.request.IRequestParameters;
 

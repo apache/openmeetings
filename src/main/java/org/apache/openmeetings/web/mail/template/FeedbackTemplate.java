@@ -20,7 +20,7 @@ package org.apache.openmeetings.web.mail.template;
 
 import static org.apache.openmeetings.web.app.Application.getBean;
 
-import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
+import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.ExternalLink;
 

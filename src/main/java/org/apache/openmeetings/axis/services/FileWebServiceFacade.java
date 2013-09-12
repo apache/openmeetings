@@ -19,9 +19,9 @@
 package org.apache.openmeetings.axis.services;
 
 import org.apache.axis2.AxisFault;
-import org.apache.openmeetings.data.file.dto.FileExplorerObject;
-import org.apache.openmeetings.data.file.dto.LibraryPresentation;
-import org.apache.openmeetings.persistence.beans.files.FileExplorerItem;
+import org.apache.openmeetings.db.dto.file.FileExplorerObject;
+import org.apache.openmeetings.db.dto.file.LibraryPresentation;
+import org.apache.openmeetings.db.entity.file.FileExplorerItem;
 
 public class FileWebServiceFacade extends BaseWebService {
 

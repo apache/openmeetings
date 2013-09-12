@@ -23,9 +23,9 @@ import static org.junit.Assert.assertNotNull;
 
 import java.util.List;
 
-import org.apache.openmeetings.data.basic.NaviBuilder;
-import org.apache.openmeetings.persistence.beans.basic.Naviglobal;
-import org.apache.openmeetings.persistence.beans.basic.Navimain;
+import org.apache.openmeetings.db.dao.basic.NavigationDao;
+import org.apache.openmeetings.db.entity.basic.Naviglobal;
+import org.apache.openmeetings.db.entity.basic.Navimain;
 import org.apache.openmeetings.test.AbstractOpenmeetingsSpringTest;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +33,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class TestNavi extends AbstractOpenmeetingsSpringTest {
 	
 	@Autowired
-	private NaviBuilder navimanagement;
+	private NavigationDao navimanagement;
 	
 	@Test
 	public void testGetNavi(){

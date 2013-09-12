@@ -26,7 +26,7 @@ import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.Date;
 
-import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
+import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.utils.BackupExport;
 import org.apache.openmeetings.utils.BackupImport;
 import org.apache.openmeetings.utils.ImportHelper;

@@ -18,8 +18,8 @@
  */
 package org.apache.openmeetings.web.admin.ldaps;
 
-import org.apache.openmeetings.data.basic.dao.LdapConfigDao;
-import org.apache.openmeetings.persistence.beans.basic.LdapConfig;
+import org.apache.openmeetings.db.dao.server.LdapConfigDao;
+import org.apache.openmeetings.db.entity.server.LdapConfig;
 import org.apache.openmeetings.web.admin.AdminPanel;
 import org.apache.openmeetings.web.admin.SearchableDataView;
 import org.apache.openmeetings.web.common.PagedEntityListPanel;

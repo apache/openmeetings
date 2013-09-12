@@ -18,7 +18,7 @@
  */
 package org.apache.openmeetings.ldap;
 
-import static org.apache.openmeetings.persistence.beans.basic.Configuration.DEFAUT_LANG_KEY;
+import static org.apache.openmeetings.db.entity.basic.Configuration.DEFAUT_LANG_KEY;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -29,17 +29,17 @@ import java.util.Random;
 import java.util.Vector;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
-import org.apache.openmeetings.data.basic.SessiondataDao;
-import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
-import org.apache.openmeetings.data.basic.dao.LdapConfigDao;
 import org.apache.openmeetings.data.user.UserManager;
-import org.apache.openmeetings.data.user.dao.StateDao;
-import org.apache.openmeetings.data.user.dao.UserDao;
+import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
+import org.apache.openmeetings.db.dao.server.LdapConfigDao;
+import org.apache.openmeetings.db.dao.server.SessiondataDao;
+import org.apache.openmeetings.db.dao.user.StateDao;
+import org.apache.openmeetings.db.dao.user.UserDao;
+import org.apache.openmeetings.db.entity.room.Client;
+import org.apache.openmeetings.db.entity.server.LdapConfig;
+import org.apache.openmeetings.db.entity.user.State;
+import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.ldap.config.ConfigReader;
-import org.apache.openmeetings.persistence.beans.basic.LdapConfig;
-import org.apache.openmeetings.persistence.beans.room.Client;
-import org.apache.openmeetings.persistence.beans.user.State;
-import org.apache.openmeetings.persistence.beans.user.User;
 import org.apache.openmeetings.remote.util.SessionVariablesUtil;
 import org.apache.openmeetings.utils.OmFileHelper;
 import org.apache.openmeetings.utils.TimezoneUtil;

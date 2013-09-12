@@ -22,10 +22,10 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.util.List;
 
-import org.apache.openmeetings.data.conference.dao.RoomDao;
-import org.apache.openmeetings.data.user.dao.UserDao;
-import org.apache.openmeetings.persistence.beans.room.Client;
-import org.apache.openmeetings.persistence.beans.room.Room;
+import org.apache.openmeetings.db.dao.room.RoomDao;
+import org.apache.openmeetings.db.dao.user.UserDao;
+import org.apache.openmeetings.db.entity.room.Client;
+import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.session.SessionManager;
 import org.apache.openmeetings.utils.OmFileHelper;
 import org.apache.openmeetings.web.app.Application;

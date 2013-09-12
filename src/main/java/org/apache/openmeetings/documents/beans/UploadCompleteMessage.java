@@ -18,7 +18,7 @@
  */
 package org.apache.openmeetings.documents.beans;
 
-import org.apache.openmeetings.persistence.beans.files.FileExplorerItem;
+import org.apache.openmeetings.db.entity.file.FileExplorerItem;
 
 
 /**

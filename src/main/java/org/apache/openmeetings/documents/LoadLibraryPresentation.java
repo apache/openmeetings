@@ -23,10 +23,10 @@ import java.io.FileInputStream;
 import java.util.Iterator;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
-import org.apache.openmeetings.data.file.dto.LibraryPresenationThumbs;
-import org.apache.openmeetings.data.file.dto.LibraryPresentation;
-import org.apache.openmeetings.data.file.dto.LibraryPresentationFile;
-import org.apache.openmeetings.data.file.dto.LibraryPresentationThumb;
+import org.apache.openmeetings.db.dto.file.LibraryPresenationThumbs;
+import org.apache.openmeetings.db.dto.file.LibraryPresentation;
+import org.apache.openmeetings.db.dto.file.LibraryPresentationFile;
+import org.apache.openmeetings.db.dto.file.LibraryPresentationThumb;
 import org.dom4j.Document;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;

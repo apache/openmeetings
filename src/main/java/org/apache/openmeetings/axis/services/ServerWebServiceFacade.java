@@ -19,7 +19,7 @@
 package org.apache.openmeetings.axis.services;
 
 import org.apache.axis2.AxisFault;
-import org.apache.openmeetings.persistence.beans.basic.Server;
+import org.apache.openmeetings.db.entity.server.Server;
 
 public class ServerWebServiceFacade extends BaseWebService {
 

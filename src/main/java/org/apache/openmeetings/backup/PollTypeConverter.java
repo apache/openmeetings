@@ -18,19 +18,19 @@
  */
 package org.apache.openmeetings.backup;
 
-import org.apache.openmeetings.data.conference.PollManager;
-import org.apache.openmeetings.persistence.beans.poll.PollType;
+import org.apache.openmeetings.db.dao.room.PollDao;
+import org.apache.openmeetings.db.entity.room.PollType;
 import org.simpleframework.xml.stream.InputNode;
 import org.simpleframework.xml.stream.OutputNode;
 
 public class PollTypeConverter extends OmConverter<PollType> {
-	private PollManager pollManager;
+	private PollDao pollManager;
 	
 	public PollTypeConverter() {
 		//default constructor is for export
 	}
 	
-	public PollTypeConverter(PollManager pollManagement) {
+	public PollTypeConverter(PollDao pollManagement) {
 		this.pollManager = pollManagement;
 	}
 	

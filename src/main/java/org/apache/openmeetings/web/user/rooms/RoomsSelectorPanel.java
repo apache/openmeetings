@@ -18,7 +18,7 @@
  */
 package org.apache.openmeetings.web.user.rooms;
 
-import org.apache.openmeetings.data.conference.dao.RoomDao;
+import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.UserPanel;

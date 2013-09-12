@@ -19,7 +19,7 @@
 package org.apache.openmeetings.test.calendar;
 
 import org.apache.log4j.Logger;
-import org.apache.openmeetings.data.user.dao.UserDao;
+import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.test.AbstractOpenmeetingsSpringTest;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;

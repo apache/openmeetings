@@ -25,7 +25,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.apache.openmeetings.data.user.UserManager;
-import org.apache.openmeetings.data.user.dao.AdminUserDao;
+import org.apache.openmeetings.db.dao.user.AdminUserDao;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.pages.ResetPage;
 import org.apache.wicket.ajax.AjaxRequestTarget;

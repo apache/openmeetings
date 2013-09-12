@@ -21,8 +21,8 @@ package org.apache.openmeetings.test.invitiation;
 import java.util.Date;
 
 import org.apache.openmeetings.data.user.UserManager;
-import org.apache.openmeetings.persistence.beans.basic.Sessiondata;
-import org.apache.openmeetings.persistence.beans.user.User;
+import org.apache.openmeetings.db.entity.server.Sessiondata;
+import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.remote.InvitationService;
 import org.apache.openmeetings.remote.MainService;
 import org.apache.openmeetings.test.AbstractOpenmeetingsSpringTest;

@@ -20,8 +20,8 @@ package org.apache.openmeetings.backup;
 
 import java.util.Map;
 
-import org.apache.openmeetings.data.user.dao.AdminUserDao;
-import org.apache.openmeetings.persistence.beans.user.User;
+import org.apache.openmeetings.db.dao.user.AdminUserDao;
+import org.apache.openmeetings.db.entity.user.User;
 import org.simpleframework.xml.stream.InputNode;
 import org.simpleframework.xml.stream.OutputNode;
 

@@ -20,7 +20,7 @@ package org.apache.openmeetings.axis.services;
 
 import java.util.Date;
 
-import org.apache.openmeetings.persistence.beans.flvrecord.FlvRecording;
+import org.apache.openmeetings.db.entity.record.FlvRecording;
 
 
 public class FLVRecordingReturn {

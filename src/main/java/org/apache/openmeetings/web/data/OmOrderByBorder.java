@@ -18,7 +18,7 @@
  */
 package org.apache.openmeetings.web.data;
 
-import org.apache.openmeetings.persistence.beans.IDataProviderEntity;
+import org.apache.openmeetings.db.entity.IDataProviderEntity;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.extensions.ajax.markup.html.repeater.data.sort.AjaxFallbackOrderByBorder;
 import org.apache.wicket.extensions.markup.html.repeater.data.sort.OrderByLink.CssProvider;

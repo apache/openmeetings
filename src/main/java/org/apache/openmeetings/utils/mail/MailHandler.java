@@ -41,10 +41,10 @@ import javax.mail.internet.MimeMultipart;
 import javax.mail.util.ByteArrayDataSource;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
-import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
-import org.apache.openmeetings.data.basic.dao.MailMessageDao;
-import org.apache.openmeetings.persistence.beans.basic.MailMessage;
-import org.apache.openmeetings.persistence.beans.basic.MailMessage.Status;
+import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
+import org.apache.openmeetings.db.dao.basic.MailMessageDao;
+import org.apache.openmeetings.db.entity.basic.MailMessage;
+import org.apache.openmeetings.db.entity.basic.MailMessage.Status;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -18,7 +18,7 @@
  */
 package org.apache.openmeetings.data.beans.rooms;
 
-import org.apache.openmeetings.persistence.beans.room.Room;
+import org.apache.openmeetings.db.entity.room.Room;
 
 public class RoomsList {
 	

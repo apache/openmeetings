@@ -23,9 +23,9 @@ import java.util.Date;
 import java.util.List;
 
 import org.apache.axis2.AxisFault;
-import org.apache.openmeetings.persistence.beans.calendar.Appointment;
-import org.apache.openmeetings.persistence.beans.calendar.AppointmentCategory;
-import org.apache.openmeetings.persistence.beans.calendar.AppointmentReminderTyps;
+import org.apache.openmeetings.db.entity.calendar.Appointment;
+import org.apache.openmeetings.db.entity.calendar.AppointmentCategory;
+import org.apache.openmeetings.db.entity.calendar.AppointmentReminderTyps;
 
 public class CalendarWebServiceFacade extends BaseWebService {
 	

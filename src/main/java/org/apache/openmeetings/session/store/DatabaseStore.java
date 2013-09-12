@@ -24,9 +24,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.openmeetings.data.conference.dao.ClientDao;
-import org.apache.openmeetings.persistence.beans.basic.Server;
-import org.apache.openmeetings.persistence.beans.room.Client;
+import org.apache.openmeetings.db.dao.room.ClientDao;
+import org.apache.openmeetings.db.entity.room.Client;
+import org.apache.openmeetings.db.entity.server.Server;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class DatabaseStore implements IClientPersistenceStore {

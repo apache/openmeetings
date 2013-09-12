@@ -21,7 +21,7 @@ package org.apache.openmeetings.web.admin;
 
 import java.util.List;
 
-import org.apache.openmeetings.persistence.beans.user.User;
+import org.apache.openmeetings.db.entity.user.User;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.model.IModel;
 

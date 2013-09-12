@@ -18,7 +18,7 @@
  */
 package org.apache.openmeetings.remote;
 
-import static org.apache.openmeetings.persistence.beans.basic.Configuration.DEFAUT_LANG_KEY;
+import static org.apache.openmeetings.db.entity.basic.Configuration.DEFAUT_LANG_KEY;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -29,25 +29,25 @@ import java.util.Map;
 import java.util.TimeZone;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
-import org.apache.openmeetings.cluster.beans.ServerDTO;
 import org.apache.openmeetings.data.basic.AuthLevelUtil;
-import org.apache.openmeetings.data.basic.SessiondataDao;
-import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
-import org.apache.openmeetings.data.basic.dao.ServerDao;
 import org.apache.openmeetings.data.beans.basic.SearchResult;
 import org.apache.openmeetings.data.calendar.management.AppointmentLogic;
 import org.apache.openmeetings.data.conference.RoomManager;
-import org.apache.openmeetings.data.conference.dao.RoomDao;
-import org.apache.openmeetings.data.conference.dao.RoomModeratorsDao;
 import org.apache.openmeetings.data.user.UserManager;
-import org.apache.openmeetings.persistence.beans.basic.Server;
-import org.apache.openmeetings.persistence.beans.calendar.Appointment;
-import org.apache.openmeetings.persistence.beans.room.Client;
-import org.apache.openmeetings.persistence.beans.room.Room;
-import org.apache.openmeetings.persistence.beans.room.RoomModerator;
-import org.apache.openmeetings.persistence.beans.room.RoomOrganisation;
-import org.apache.openmeetings.persistence.beans.room.RoomType;
-import org.apache.openmeetings.persistence.beans.user.User;
+import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
+import org.apache.openmeetings.db.dao.room.RoomDao;
+import org.apache.openmeetings.db.dao.room.RoomModeratorsDao;
+import org.apache.openmeetings.db.dao.server.ServerDao;
+import org.apache.openmeetings.db.dao.server.SessiondataDao;
+import org.apache.openmeetings.db.dto.server.ServerDTO;
+import org.apache.openmeetings.db.entity.calendar.Appointment;
+import org.apache.openmeetings.db.entity.room.Client;
+import org.apache.openmeetings.db.entity.room.Room;
+import org.apache.openmeetings.db.entity.room.RoomModerator;
+import org.apache.openmeetings.db.entity.room.RoomOrganisation;
+import org.apache.openmeetings.db.entity.room.RoomType;
+import org.apache.openmeetings.db.entity.server.Server;
+import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.session.ISessionManager;
 import org.apache.openmeetings.utils.TimezoneUtil;
 import org.apache.openmeetings.utils.math.CalendarPatterns;

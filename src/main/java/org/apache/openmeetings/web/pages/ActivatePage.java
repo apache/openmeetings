@@ -21,7 +21,7 @@ package org.apache.openmeetings.web.pages;
 import java.util.Date;
 
 import org.apache.openmeetings.data.user.UserManager;
-import org.apache.openmeetings.persistence.beans.user.User;
+import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 

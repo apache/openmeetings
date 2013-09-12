@@ -26,10 +26,10 @@ import static org.apache.openmeetings.web.pages.auth.SignInPage.allowRegister;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.openmeetings.data.basic.dao.LdapConfigDao;
-import org.apache.openmeetings.data.oauth.OAuth2Dao;
-import org.apache.openmeetings.persistence.beans.basic.LdapConfig;
-import org.apache.openmeetings.persistence.beans.user.oauth.OAuthServer;
+import org.apache.openmeetings.db.dao.server.LdapConfigDao;
+import org.apache.openmeetings.db.dao.server.OAuth2Dao;
+import org.apache.openmeetings.db.entity.server.LdapConfig;
+import org.apache.openmeetings.db.entity.server.OAuthServer;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.OmAuthenticationStrategy;
 import org.apache.openmeetings.web.app.WebSession;

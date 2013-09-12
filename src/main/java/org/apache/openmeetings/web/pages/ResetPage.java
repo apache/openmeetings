@@ -18,8 +18,8 @@
  */
 package org.apache.openmeetings.web.pages;
 
-import org.apache.openmeetings.data.user.dao.AdminUserDao;
-import org.apache.openmeetings.persistence.beans.user.User;
+import org.apache.openmeetings.db.dao.user.AdminUserDao;
+import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.pages.auth.ResetPasswordDialog;
 import org.apache.wicket.request.mapper.parameter.PageParameters;

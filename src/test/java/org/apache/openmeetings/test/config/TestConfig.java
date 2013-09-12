@@ -23,8 +23,8 @@ import static org.junit.Assert.assertNull;
 
 import java.util.List;
 
-import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
-import org.apache.openmeetings.persistence.beans.basic.Configuration;
+import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
+import org.apache.openmeetings.db.entity.basic.Configuration;
 import org.apache.openmeetings.test.AbstractOpenmeetingsSpringTest;
 import org.apache.openmeetings.test.calendar.TestAppointmentAddAppointment;
 import org.junit.Test;

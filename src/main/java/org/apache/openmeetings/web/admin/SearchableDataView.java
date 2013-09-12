@@ -18,7 +18,7 @@
  */
 package org.apache.openmeetings.web.admin;
 
-import org.apache.openmeetings.persistence.beans.IDataProviderEntity;
+import org.apache.openmeetings.db.entity.IDataProviderEntity;
 import org.apache.openmeetings.web.data.SearchableDataProvider;
 import org.apache.wicket.markup.repeater.data.DataView;
 

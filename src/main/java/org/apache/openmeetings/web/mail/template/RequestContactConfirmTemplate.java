@@ -18,8 +18,8 @@
  */
 package org.apache.openmeetings.web.mail.template;
 
-import org.apache.openmeetings.persistence.beans.user.User;
-import org.apache.openmeetings.persistence.beans.user.UserContact;
+import org.apache.openmeetings.db.entity.user.User;
+import org.apache.openmeetings.db.entity.user.UserContact;
 import org.apache.wicket.markup.html.basic.Label;
 
 public class RequestContactConfirmTemplate extends AbstractTemplatePanel {

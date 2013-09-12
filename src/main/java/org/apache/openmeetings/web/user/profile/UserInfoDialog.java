@@ -24,7 +24,7 @@ import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import java.util.Arrays;
 import java.util.List;
 
-import org.apache.openmeetings.data.user.dao.UserContactsDao;
+import org.apache.openmeetings.db.dao.user.UserContactsDao;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.util.ContactsHelper;
 import org.apache.wicket.ajax.AjaxRequestTarget;

@@ -23,7 +23,7 @@ import static org.apache.openmeetings.web.app.Application.getBean;
 
 import java.util.List;
 
-import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
+import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.documents.GenerateImage;
 import org.apache.openmeetings.utils.StoredFile;
 import org.apache.wicket.ajax.AjaxRequestTarget;

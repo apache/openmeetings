@@ -18,8 +18,8 @@
  */
 package org.apache.openmeetings.web.admin.labels;
 
-import org.apache.openmeetings.data.basic.FieldLanguageDao;
-import org.apache.openmeetings.persistence.beans.lang.FieldLanguage;
+import org.apache.openmeetings.db.dao.label.FieldLanguageDao;
+import org.apache.openmeetings.db.entity.label.FieldLanguage;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.common.ConfirmCallListener;
 import org.apache.wicket.ajax.AjaxEventBehavior;

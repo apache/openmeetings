@@ -30,8 +30,8 @@ import java.util.Random;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.data.beans.basic.SearchResult;
-import org.apache.openmeetings.persistence.beans.basic.Server;
-import org.apache.openmeetings.persistence.beans.room.Client;
+import org.apache.openmeetings.db.entity.room.Client;
+import org.apache.openmeetings.db.entity.server.Server;
 import org.apache.openmeetings.session.store.IClientPersistenceStore;
 import org.apache.openmeetings.utils.crypt.ManageCryptStyle;
 import org.red5.logging.Red5LoggerFactory;

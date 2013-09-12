@@ -226,11 +226,11 @@
 	<!-- End of Services -->
 
 	<!-- Interface Transactional -->
-	<bean id="appointmentReminderTypDaoImpl" class="org.apache.openmeetings.data.calendar.daos.AppointmentReminderTypDao" />
-	<bean id="appointmentCategoryDaoImpl" class="org.apache.openmeetings.data.calendar.daos.AppointmentCategoryDao" />
+	<bean id="appointmentReminderTypDaoImpl" class="org.apache.openmeetings.db.dao.calendar.AppointmentReminderTypDao" />
+	<bean id="appointmentCategoryDaoImpl" class="org.apache.openmeetings.db.dao.calendar.AppointmentCategoryDao" />
 	<bean id="roommanagement" class="org.apache.openmeetings.data.conference.RoomManager" />
-	<bean id="roomDao" class="org.apache.openmeetings.data.conference.dao.RoomDao"/>
-	<bean id="sipDao" class="org.apache.openmeetings.data.conference.dao.SipDao">
+	<bean id="roomDao" class="org.apache.openmeetings.db.dao.room.RoomDao"/>
+	<bean id="sipDao" class="org.apache.openmeetings.db.dao.room.SipDao">
 	<!--  Should be uncommented and updated with real values for Asterisk
 		<constructor-arg><value>127.0.0.1</value></constructor-arg>
 		<constructor-arg><value>5038</value></constructor-arg>
@@ -238,48 +238,48 @@
 		<constructor-arg><value>12345</value></constructor-arg>
 	 -->
 	</bean>
-	<bean id="invitationDao" class="org.apache.openmeetings.data.conference.dao.InvitationDao" />
+	<bean id="invitationDao" class="org.apache.openmeetings.db.dao.room.InvitationDao" />
 	<bean id="organisationmanagement" class="org.apache.openmeetings.data.user.OrganisationManager" />
-	<bean id="organisationDao" class="org.apache.openmeetings.data.user.dao.OrganisationDao" />
-	<bean id="organisationUserDao" class="org.apache.openmeetings.data.user.dao.OrganisationUserDao" />
-	<bean id="salutationmanagement" class="org.apache.openmeetings.data.user.dao.SalutationDao" />
-	<bean id="errorManagement" class="org.apache.openmeetings.data.basic.dao.ErrorDao" />
-	<bean id="navimanagement" class="org.apache.openmeetings.data.basic.NaviBuilder" />
-	<bean id="pollManagement" class="org.apache.openmeetings.data.conference.PollManager" />
-	<bean id="statemanagement" class="org.apache.openmeetings.data.user.dao.StateDao" />
-	<bean id="fieldLanguageDaoImpl" class="org.apache.openmeetings.data.basic.FieldLanguageDao" />
-	<bean id="fieldValueDaoImpl" class="org.apache.openmeetings.data.basic.FieldValueDao" />
-	<bean id="fieldLanguagesValuesDAO" class="org.apache.openmeetings.data.basic.FieldLanguagesValuesDao" />
+	<bean id="organisationDao" class="org.apache.openmeetings.db.dao.user.OrganisationDao" />
+	<bean id="organisationUserDao" class="org.apache.openmeetings.db.dao.user.OrganisationUserDao" />
+	<bean id="salutationmanagement" class="org.apache.openmeetings.db.dao.user.SalutationDao" />
+	<bean id="errorManagement" class="org.apache.openmeetings.db.dao.basic.ErrorDao" />
+	<bean id="navimanagement" class="org.apache.openmeetings.db.dao.basic.NavigationDao" />
+	<bean id="pollManagement" class="org.apache.openmeetings.db.dao.room.PollDao" />
+	<bean id="statemanagement" class="org.apache.openmeetings.db.dao.user.StateDao" />
+	<bean id="fieldLanguageDaoImpl" class="org.apache.openmeetings.db.dao.label.FieldLanguageDao" />
+	<bean id="fieldValueDaoImpl" class="org.apache.openmeetings.db.dao.label.FieldValueDao" />
+	<bean id="fieldLanguagesValuesDAO" class="org.apache.openmeetings.db.dao.label.FieldLanguagesValuesDao" />
 	<bean id="fieldmanagment" class="org.apache.openmeetings.data.basic.FieldManager" />
-	<bean id="configurationDaoImpl" class="org.apache.openmeetings.data.basic.dao.ConfigurationDao" />
-	<bean id="appointmentDao" class="org.apache.openmeetings.data.calendar.daos.AppointmentDao" />
+	<bean id="configurationDaoImpl" class="org.apache.openmeetings.db.dao.basic.ConfigurationDao" />
+	<bean id="appointmentDao" class="org.apache.openmeetings.db.dao.calendar.AppointmentDao" />
 	<bean id="appointmentLogic" class="org.apache.openmeetings.data.calendar.management.AppointmentLogic" />
-	<bean id="sessionManagement" class="org.apache.openmeetings.data.basic.SessiondataDao" />
+	<bean id="sessionManagement" class="org.apache.openmeetings.db.dao.server.SessiondataDao" />
 	<bean id="userManagement" class="org.apache.openmeetings.data.user.UserManager" />
-	<bean id="roomModeratorsDao" class="org.apache.openmeetings.data.conference.dao.RoomModeratorsDao" />
-	<bean id="conferenceLogDao" class="org.apache.openmeetings.data.logs.ConferenceLogDao" />
-	<bean id="conferenceLogTypeDao" class="org.apache.openmeetings.data.logs.ConferenceLogTypeDao" />
+	<bean id="roomModeratorsDao" class="org.apache.openmeetings.db.dao.room.RoomModeratorsDao" />
+	<bean id="conferenceLogDao" class="org.apache.openmeetings.db.dao.log.ConferenceLogDao" />
+	<bean id="conferenceLogTypeDao" class="org.apache.openmeetings.db.dao.log.ConferenceLogTypeDao" />
 	<bean id="emailManagement" class="org.apache.openmeetings.data.user.EmailManager" />
-	<bean id="fileExplorerItemDao" class="org.apache.openmeetings.data.file.dao.FileExplorerItemDao" />
-	<bean id="flvRecordingDao" class="org.apache.openmeetings.data.flvrecord.FlvRecordingDao" />
-	<bean id="flvRecordingLogDao" class="org.apache.openmeetings.data.flvrecord.FlvRecordingLogDao" />
-	<bean id="flvRecordingMetaDataDao" class="org.apache.openmeetings.data.flvrecord.FlvRecordingMetaDataDao" />
-	<bean id="flvRecordingMetaDeltaDao" class="org.apache.openmeetings.data.flvrecord.FlvRecordingMetaDeltaDao" />
-	<bean id="ldapConfigDao" class="org.apache.openmeetings.data.basic.dao.LdapConfigDao" />
+	<bean id="fileExplorerItemDao" class="org.apache.openmeetings.db.dao.file.FileExplorerItemDao" />
+	<bean id="flvRecordingDao" class="org.apache.openmeetings.db.dao.record.FlvRecordingDao" />
+	<bean id="flvRecordingLogDao" class="org.apache.openmeetings.db.dao.record.FlvRecordingLogDao" />
+	<bean id="flvRecordingMetaDataDao" class="org.apache.openmeetings.db.dao.record.FlvRecordingMetaDataDao" />
+	<bean id="flvRecordingMetaDeltaDao" class="org.apache.openmeetings.db.dao.record.FlvRecordingMetaDeltaDao" />
+	<bean id="ldapConfigDao" class="org.apache.openmeetings.db.dao.server.LdapConfigDao" />
 	<bean id="invitationManagement" class="org.apache.openmeetings.data.conference.InvitationManager" />
-	<bean id="meetingMemberDao" class="org.apache.openmeetings.data.calendar.daos.MeetingMemberDao" />
-	<bean id="privateMessageFolderDao" class="org.apache.openmeetings.data.user.dao.PrivateMessageFolderDao" />
-	<bean id="privateMessagesDao" class="org.apache.openmeetings.data.user.dao.PrivateMessagesDao" />
-	<bean id="soapLoginDao" class="org.apache.openmeetings.data.basic.dao.SOAPLoginDao" />
-	<bean id="userContactsDao" class="org.apache.openmeetings.data.user.dao.UserContactsDao" />
-	<bean id="dao" class="org.apache.openmeetings.data.user.dao.AbstractUserDao" />
-	<bean id="usersDao" class="org.apache.openmeetings.data.user.dao.UserDao" />
-	<bean id="adminUserDao" class="org.apache.openmeetings.data.user.dao.AdminUserDao" />
-	<bean id="serverDao" class="org.apache.openmeetings.data.basic.dao.ServerDao" />
-	<bean id="chatDao" class="org.apache.openmeetings.data.chat.ChatDao" />
-	<bean id="clientDao" class="org.apache.openmeetings.data.conference.dao.ClientDao" />
-	<bean id="mailMessageDao" class="org.apache.openmeetings.data.basic.dao.MailMessageDao" />
-	<bean id="oauth2Dao" class="org.apache.openmeetings.data.oauth.OAuth2Dao" />
+	<bean id="meetingMemberDao" class="org.apache.openmeetings.db.dao.calendar.MeetingMemberDao" />
+	<bean id="privateMessageFolderDao" class="org.apache.openmeetings.db.dao.user.PrivateMessageFolderDao" />
+	<bean id="privateMessagesDao" class="org.apache.openmeetings.db.dao.user.PrivateMessagesDao" />
+	<bean id="soapLoginDao" class="org.apache.openmeetings.db.dao.server.SOAPLoginDao" />
+	<bean id="userContactsDao" class="org.apache.openmeetings.db.dao.user.UserContactsDao" />
+	<bean id="dao" class="org.apache.openmeetings.db.dao.user.AbstractUserDao" />
+	<bean id="usersDao" class="org.apache.openmeetings.db.dao.user.UserDao" />
+	<bean id="adminUserDao" class="org.apache.openmeetings.db.dao.user.AdminUserDao" />
+	<bean id="serverDao" class="org.apache.openmeetings.db.dao.server.ServerDao" />
+	<bean id="chatDao" class="org.apache.openmeetings.db.dao.basic.ChatDao" />
+	<bean id="clientDao" class="org.apache.openmeetings.db.dao.room.ClientDao" />
+	<bean id="mailMessageDao" class="org.apache.openmeetings.db.dao.basic.MailMessageDao" />
+	<bean id="oauth2Dao" class="org.apache.openmeetings.db.dao.server.OAuth2Dao" />
 
 	<!-- No Interface -->
 	<bean id="manageCryptStyle" class="org.apache.openmeetings.utils.crypt.ManageCryptStyle" />

@@ -19,8 +19,8 @@
 package org.apache.openmeetings.session;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
-import org.apache.openmeetings.data.basic.dao.ServerDao;
-import org.apache.openmeetings.persistence.beans.basic.Server;
+import org.apache.openmeetings.db.dao.server.ServerDao;
+import org.apache.openmeetings.db.entity.server.Server;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;

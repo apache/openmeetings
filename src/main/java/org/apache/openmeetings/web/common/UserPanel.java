@@ -25,8 +25,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.openmeetings.data.conference.RoomManager;
-import org.apache.openmeetings.data.conference.dao.RoomDao;
-import org.apache.openmeetings.persistence.beans.room.Room;
+import org.apache.openmeetings.db.dao.room.RoomDao;
+import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 

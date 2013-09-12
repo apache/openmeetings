@@ -18,16 +18,17 @@
  */
 package org.apache.openmeetings.test.poll;
 
-import org.apache.openmeetings.data.conference.PollManager;
-import org.apache.openmeetings.persistence.beans.poll.PollType;
+import org.apache.openmeetings.db.dao.room.PollDao;
+import org.apache.openmeetings.db.entity.room.PollType;
 import org.apache.openmeetings.test.AbstractOpenmeetingsSpringTest;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+
 import static org.junit.Assert.*;
 
 public class TestPollManagement extends AbstractOpenmeetingsSpringTest {
 	@Autowired
-	private PollManager pollManager;
+	private PollDao pollManager;
 	
 	@Test
 	public void addPollType() {

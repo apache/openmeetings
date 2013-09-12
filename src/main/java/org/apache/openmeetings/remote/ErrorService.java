@@ -20,10 +20,10 @@ package org.apache.openmeetings.remote;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.data.basic.FieldManager;
-import org.apache.openmeetings.data.basic.dao.ErrorDao;
 import org.apache.openmeetings.data.beans.basic.ErrorResult;
-import org.apache.openmeetings.persistence.beans.basic.ErrorValue;
-import org.apache.openmeetings.persistence.beans.lang.Fieldlanguagesvalues;
+import org.apache.openmeetings.db.dao.basic.ErrorDao;
+import org.apache.openmeetings.db.entity.basic.ErrorValue;
+import org.apache.openmeetings.db.entity.label.Fieldlanguagesvalues;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;

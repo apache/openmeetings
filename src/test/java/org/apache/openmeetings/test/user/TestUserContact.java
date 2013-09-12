@@ -26,9 +26,9 @@ import static org.junit.Assert.assertTrue;
 import java.util.List;
 import java.util.Random;
 
-import org.apache.openmeetings.data.user.dao.AdminUserDao;
-import org.apache.openmeetings.data.user.dao.UserDao;
-import org.apache.openmeetings.persistence.beans.user.User;
+import org.apache.openmeetings.db.dao.user.AdminUserDao;
+import org.apache.openmeetings.db.dao.user.UserDao;
+import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.test.AbstractWiketTester;
 import org.apache.openmeetings.web.app.WebSession;
 import org.junit.Test;

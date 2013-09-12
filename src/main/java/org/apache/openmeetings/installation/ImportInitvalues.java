@@ -19,17 +19,17 @@
 package org.apache.openmeetings.installation;
 
 import static org.apache.openmeetings.OpenmeetingsVariables.webAppRootKey;
+import static org.apache.openmeetings.db.entity.basic.Configuration.CRYPT_KEY;
+import static org.apache.openmeetings.db.entity.basic.Configuration.DASHBOARD_SHOW_MYROOMS_KEY;
+import static org.apache.openmeetings.db.entity.basic.Configuration.DASHBOARD_SHOW_RSS_KEY;
+import static org.apache.openmeetings.db.entity.basic.Configuration.DEFAUT_LANG_KEY;
+import static org.apache.openmeetings.db.entity.basic.Configuration.FRONTEND_REGISTER_KEY;
+import static org.apache.openmeetings.db.entity.basic.Configuration.LOGIN_MIN_LENGTH_KEY;
+import static org.apache.openmeetings.db.entity.basic.Configuration.MAX_UPLOAD_SIZE_KEY;
+import static org.apache.openmeetings.db.entity.basic.Configuration.PASS_MIN_LENGTH_KEY;
+import static org.apache.openmeetings.db.entity.basic.Configuration.RSS_FEED1_KEY;
+import static org.apache.openmeetings.db.entity.basic.Configuration.RSS_FEED2_KEY;
 import static org.apache.openmeetings.installation.InstallationConfig.USER_PASSWORD_MINIMUM_LENGTH;
-import static org.apache.openmeetings.persistence.beans.basic.Configuration.CRYPT_KEY;
-import static org.apache.openmeetings.persistence.beans.basic.Configuration.DASHBOARD_SHOW_MYROOMS_KEY;
-import static org.apache.openmeetings.persistence.beans.basic.Configuration.DASHBOARD_SHOW_RSS_KEY;
-import static org.apache.openmeetings.persistence.beans.basic.Configuration.DEFAUT_LANG_KEY;
-import static org.apache.openmeetings.persistence.beans.basic.Configuration.FRONTEND_REGISTER_KEY;
-import static org.apache.openmeetings.persistence.beans.basic.Configuration.LOGIN_MIN_LENGTH_KEY;
-import static org.apache.openmeetings.persistence.beans.basic.Configuration.MAX_UPLOAD_SIZE_KEY;
-import static org.apache.openmeetings.persistence.beans.basic.Configuration.PASS_MIN_LENGTH_KEY;
-import static org.apache.openmeetings.persistence.beans.basic.Configuration.RSS_FEED1_KEY;
-import static org.apache.openmeetings.persistence.beans.basic.Configuration.RSS_FEED2_KEY;
 
 import java.io.File;
 import java.util.Arrays;
@@ -39,27 +39,27 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import org.apache.openmeetings.data.basic.FieldLanguageDao;
 import org.apache.openmeetings.data.basic.FieldManager;
-import org.apache.openmeetings.data.basic.NaviBuilder;
-import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
-import org.apache.openmeetings.data.basic.dao.ErrorDao;
-import org.apache.openmeetings.data.calendar.daos.AppointmentCategoryDao;
-import org.apache.openmeetings.data.calendar.daos.AppointmentReminderTypDao;
-import org.apache.openmeetings.data.conference.PollManager;
 import org.apache.openmeetings.data.conference.RoomManager;
-import org.apache.openmeetings.data.conference.dao.SipDao;
-import org.apache.openmeetings.data.oauth.OAuth2Dao;
 import org.apache.openmeetings.data.user.OrganisationManager;
 import org.apache.openmeetings.data.user.UserManager;
-import org.apache.openmeetings.data.user.dao.AdminUserDao;
-import org.apache.openmeetings.data.user.dao.SalutationDao;
-import org.apache.openmeetings.data.user.dao.StateDao;
-import org.apache.openmeetings.persistence.beans.lang.FieldLanguage;
-import org.apache.openmeetings.persistence.beans.lang.Fieldlanguagesvalues;
-import org.apache.openmeetings.persistence.beans.lang.Fieldvalues;
-import org.apache.openmeetings.persistence.beans.user.oauth.OAuthServer;
-import org.apache.openmeetings.persistence.beans.user.oauth.OAuthServer.RequestMethod;
+import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
+import org.apache.openmeetings.db.dao.basic.ErrorDao;
+import org.apache.openmeetings.db.dao.basic.NavigationDao;
+import org.apache.openmeetings.db.dao.calendar.AppointmentCategoryDao;
+import org.apache.openmeetings.db.dao.calendar.AppointmentReminderTypDao;
+import org.apache.openmeetings.db.dao.label.FieldLanguageDao;
+import org.apache.openmeetings.db.dao.room.PollDao;
+import org.apache.openmeetings.db.dao.room.SipDao;
+import org.apache.openmeetings.db.dao.server.OAuth2Dao;
+import org.apache.openmeetings.db.dao.user.AdminUserDao;
+import org.apache.openmeetings.db.dao.user.SalutationDao;
+import org.apache.openmeetings.db.dao.user.StateDao;
+import org.apache.openmeetings.db.entity.label.FieldLanguage;
+import org.apache.openmeetings.db.entity.label.Fieldlanguagesvalues;
+import org.apache.openmeetings.db.entity.label.Fieldvalues;
+import org.apache.openmeetings.db.entity.server.OAuthServer;
+import org.apache.openmeetings.db.entity.server.OAuthServer.RequestMethod;
 import org.apache.openmeetings.utils.ImportHelper;
 import org.apache.openmeetings.utils.OmFileHelper;
 import org.apache.openmeetings.utils.TimezoneUtil;
@@ -87,7 +87,7 @@ public class ImportInitvalues {
 	@Autowired
 	private StateDao statemanagement;
 	@Autowired
-	private NaviBuilder navimanagement;
+	private NavigationDao navimanagement;
 	@Autowired
 	private ErrorDao errorManagement;
 	@Autowired
@@ -101,7 +101,7 @@ public class ImportInitvalues {
 	@Autowired
 	private AppointmentReminderTypDao appointmentReminderTypDaoImpl;
 	@Autowired
-	private PollManager pollManager;
+	private PollDao pollManager;
 	@Autowired
 	private SipDao sipDao;
 	@Autowired

@@ -24,7 +24,7 @@ import java.util.ArrayList;
 
 import org.apache.commons.transaction.util.FileHelper;
 import org.apache.openmeetings.OpenmeetingsVariables;
-import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
+import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.documents.beans.ConverterProcessResult;
 import org.apache.openmeetings.documents.beans.ConverterProcessResultList;
 import org.apache.openmeetings.utils.OmFileHelper;

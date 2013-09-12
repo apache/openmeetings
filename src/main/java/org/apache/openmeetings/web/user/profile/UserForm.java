@@ -18,7 +18,7 @@
  */
 package org.apache.openmeetings.web.user.profile;
 
-import org.apache.openmeetings.persistence.beans.user.User;
+import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.GeneralUserForm;
 import org.apache.wicket.markup.html.form.PasswordTextField;

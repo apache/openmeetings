@@ -19,7 +19,7 @@
 package org.apache.openmeetings.backup;
 
 import org.apache.openmeetings.data.conference.RoomManager;
-import org.apache.openmeetings.persistence.beans.room.RoomType;
+import org.apache.openmeetings.db.entity.room.RoomType;
 import org.simpleframework.xml.stream.InputNode;
 import org.simpleframework.xml.stream.OutputNode;
 

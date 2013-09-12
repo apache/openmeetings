@@ -22,12 +22,12 @@ import java.util.Date;
 import java.util.List;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
-import org.apache.openmeetings.data.conference.PollManager;
 import org.apache.openmeetings.data.user.UserManager;
-import org.apache.openmeetings.persistence.beans.poll.PollType;
-import org.apache.openmeetings.persistence.beans.poll.RoomPoll;
-import org.apache.openmeetings.persistence.beans.poll.RoomPollAnswers;
-import org.apache.openmeetings.persistence.beans.room.Client;
+import org.apache.openmeetings.db.dao.room.PollDao;
+import org.apache.openmeetings.db.entity.room.Client;
+import org.apache.openmeetings.db.entity.room.PollType;
+import org.apache.openmeetings.db.entity.room.RoomPoll;
+import org.apache.openmeetings.db.entity.room.RoomPollAnswers;
 import org.apache.openmeetings.remote.red5.ScopeApplicationAdapter;
 import org.apache.openmeetings.session.ISessionManager;
 import org.red5.logging.Red5LoggerFactory;
@@ -56,7 +56,7 @@ public class PollService implements IPendingServiceCallback {
 	@Autowired
 	private ScopeApplicationAdapter scopeApplicationAdapter;
 	@Autowired
-	private PollManager pollManager;
+	private PollDao pollManager;
 
 	public String createPoll(String pollName, String pollQuestion, int pollTypeId) {
 		String returnValue = "";

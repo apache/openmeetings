@@ -22,7 +22,7 @@ import java.io.OutputStream;
 import java.io.Writer;
 import java.util.List;
 
-import org.apache.openmeetings.persistence.beans.lang.Fieldlanguagesvalues;
+import org.apache.openmeetings.db.entity.label.Fieldlanguagesvalues;
 import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;

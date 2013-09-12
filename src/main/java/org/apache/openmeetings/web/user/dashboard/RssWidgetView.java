@@ -18,8 +18,8 @@
  */
 package org.apache.openmeetings.web.user.dashboard;
 
-import static org.apache.openmeetings.persistence.beans.basic.Configuration.RSS_FEED1_KEY;
-import static org.apache.openmeetings.persistence.beans.basic.Configuration.RSS_FEED2_KEY;
+import static org.apache.openmeetings.db.entity.basic.Configuration.RSS_FEED1_KEY;
+import static org.apache.openmeetings.db.entity.basic.Configuration.RSS_FEED2_KEY;
 import static org.apache.openmeetings.rss.LoadAtomRssFeed.getFeedConnection;
 import static org.apache.openmeetings.web.app.Application.getBean;
 
@@ -27,7 +27,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 
-import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
+import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.wicket.behavior.AbstractAjaxBehavior;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.OnDomReadyHeaderItem;

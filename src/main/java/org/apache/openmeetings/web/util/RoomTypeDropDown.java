@@ -24,7 +24,7 @@ import static org.apache.openmeetings.web.app.WebSession.getLanguage;
 import java.util.List;
 
 import org.apache.openmeetings.data.conference.RoomManager;
-import org.apache.openmeetings.persistence.beans.room.RoomType;
+import org.apache.openmeetings.db.entity.room.RoomType;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 

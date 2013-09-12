@@ -24,8 +24,8 @@ import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import java.util.List;
 import java.util.Locale;
 
-import org.apache.openmeetings.data.user.dao.UserDao;
-import org.apache.openmeetings.persistence.beans.user.User;
+import org.apache.openmeetings.db.dao.user.UserDao;
+import org.apache.openmeetings.db.entity.user.User;
 import org.apache.wicket.extensions.validation.validator.RfcCompliantEmailAddressValidator;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.util.convert.IConverter;

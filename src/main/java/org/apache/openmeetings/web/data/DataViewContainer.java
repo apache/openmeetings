@@ -20,7 +20,7 @@ package org.apache.openmeetings.web.data;
 
 import java.io.Serializable;
 
-import org.apache.openmeetings.persistence.beans.IDataProviderEntity;
+import org.apache.openmeetings.db.entity.IDataProviderEntity;
 import org.apache.openmeetings.web.admin.SearchableDataView;
 import org.apache.openmeetings.web.common.PagedEntityListPanel;
 import org.apache.wicket.markup.html.WebMarkupContainer;

@@ -25,12 +25,12 @@ import static org.junit.Assert.fail;
 import java.io.File;
 import java.io.FileInputStream;
 
-import org.apache.openmeetings.data.calendar.daos.AppointmentDao;
-import org.apache.openmeetings.data.calendar.daos.MeetingMemberDao;
 import org.apache.openmeetings.data.conference.RoomManager;
-import org.apache.openmeetings.data.conference.dao.RoomDao;
-import org.apache.openmeetings.data.user.dao.AdminUserDao;
-import org.apache.openmeetings.data.user.dao.OrganisationDao;
+import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
+import org.apache.openmeetings.db.dao.calendar.MeetingMemberDao;
+import org.apache.openmeetings.db.dao.room.RoomDao;
+import org.apache.openmeetings.db.dao.user.AdminUserDao;
+import org.apache.openmeetings.db.dao.user.OrganisationDao;
 import org.apache.openmeetings.test.AbstractOpenmeetingsSpringTest;
 import org.apache.openmeetings.utils.BackupImport;
 import org.junit.Test;

@@ -21,7 +21,7 @@ package org.apache.openmeetings.test.calendar;
 import org.apache.log4j.Logger;
 import org.apache.openmeetings.data.beans.basic.SearchResult;
 import org.apache.openmeetings.data.user.UserManager;
-import org.apache.openmeetings.persistence.beans.user.User;
+import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.test.AbstractOpenmeetingsSpringTest;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;

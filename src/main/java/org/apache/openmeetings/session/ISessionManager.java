@@ -22,8 +22,8 @@ import java.util.Collection;
 import java.util.List;
 
 import org.apache.openmeetings.data.beans.basic.SearchResult;
-import org.apache.openmeetings.persistence.beans.basic.Server;
-import org.apache.openmeetings.persistence.beans.room.Client;
+import org.apache.openmeetings.db.entity.room.Client;
+import org.apache.openmeetings.db.entity.server.Server;
 import org.apache.openmeetings.remote.red5.ScopeApplicationAdapter;
 
 /**

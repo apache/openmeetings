@@ -26,7 +26,7 @@ import java.util.Date;
 import java.util.Random;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
-import org.apache.openmeetings.persistence.beans.room.Client;
+import org.apache.openmeetings.db.entity.room.Client;
 import org.apache.openmeetings.session.store.HashMapStore;
 import org.apache.openmeetings.session.store.IClientPersistenceStore;
 import org.apache.openmeetings.test.AbstractOpenmeetingsSpringTest;

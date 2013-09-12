@@ -21,8 +21,8 @@ package org.apache.openmeetings.web.user.calendar;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.openmeetings.data.calendar.daos.AppointmentDao;
-import org.apache.openmeetings.persistence.beans.calendar.Appointment;
+import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
+import org.apache.openmeetings.db.entity.calendar.Appointment;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
 

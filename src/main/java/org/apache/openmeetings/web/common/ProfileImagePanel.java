@@ -25,7 +25,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.net.URI;
 
-import org.apache.openmeetings.data.user.dao.UserDao;
+import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.utils.OmFileHelper;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.wicket.AttributeModifier;

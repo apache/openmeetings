@@ -18,7 +18,7 @@
  */
 package org.apache.openmeetings.web.mail.template;
 
-import org.apache.openmeetings.persistence.beans.user.User;
+import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.web.util.ContactsHelper;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.ExternalLink;

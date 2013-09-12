@@ -18,8 +18,8 @@
  */
 package org.apache.openmeetings.backup;
 
-import org.apache.openmeetings.data.calendar.daos.AppointmentCategoryDao;
-import org.apache.openmeetings.persistence.beans.calendar.AppointmentCategory;
+import org.apache.openmeetings.db.dao.calendar.AppointmentCategoryDao;
+import org.apache.openmeetings.db.entity.calendar.AppointmentCategory;
 import org.simpleframework.xml.stream.InputNode;
 import org.simpleframework.xml.stream.OutputNode;
 

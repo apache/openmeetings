@@ -21,9 +21,9 @@ package org.apache.openmeetings.data.flvrecord.listener;
 import java.util.Date;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
-import org.apache.openmeetings.data.flvrecord.FlvRecordingMetaDataDao;
 import org.apache.openmeetings.data.flvrecord.listener.async.CachedEvent;
 import org.apache.openmeetings.data.flvrecord.listener.async.StreamVideoWriter;
+import org.apache.openmeetings.db.dao.record.FlvRecordingMetaDataDao;
 import org.red5.logging.Red5LoggerFactory;
 import org.red5.server.api.scope.IScope;
 import org.red5.server.api.stream.IBroadcastStream;

@@ -19,7 +19,7 @@
 package org.apache.openmeetings.axis.services;
 
 import org.apache.axis2.AxisFault;
-import org.apache.openmeetings.persistence.beans.room.Room;
+import org.apache.openmeetings.db.entity.room.Room;
 
 /**
  * This class provides method entry points necessary for OM to Jabber integration.

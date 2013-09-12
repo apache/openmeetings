@@ -20,8 +20,8 @@ package org.apache.openmeetings.data.whiteboard;
 
 import java.util.HashMap;
 
-import org.apache.openmeetings.data.whiteboard.dto.WhiteboardObject;
-import org.apache.openmeetings.data.whiteboard.dto.WhiteboardObjectList;
+import org.apache.openmeetings.db.dto.room.WhiteboardObject;
+import org.apache.openmeetings.db.dto.room.WhiteboardObjectList;
 
 /**
  * Memory based cache, configured as singleton in spring configuration

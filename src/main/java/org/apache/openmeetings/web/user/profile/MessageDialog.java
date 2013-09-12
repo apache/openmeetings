@@ -26,11 +26,11 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
-import org.apache.openmeetings.data.conference.dao.RoomDao;
-import org.apache.openmeetings.data.user.dao.PrivateMessagesDao;
-import org.apache.openmeetings.data.user.dao.UserDao;
-import org.apache.openmeetings.persistence.beans.room.Room;
-import org.apache.openmeetings.persistence.beans.user.PrivateMessage;
+import org.apache.openmeetings.db.dao.room.RoomDao;
+import org.apache.openmeetings.db.dao.user.PrivateMessagesDao;
+import org.apache.openmeetings.db.dao.user.UserDao;
+import org.apache.openmeetings.db.entity.room.Room;
+import org.apache.openmeetings.db.entity.user.PrivateMessage;
 import org.apache.openmeetings.utils.mail.MailHandler;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.util.ContactsHelper;

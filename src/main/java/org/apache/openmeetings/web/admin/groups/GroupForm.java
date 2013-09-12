@@ -23,11 +23,11 @@ import static org.apache.openmeetings.web.app.WebSession.getUserId;
 
 import java.util.List;
 
-import org.apache.openmeetings.data.user.dao.AdminUserDao;
-import org.apache.openmeetings.data.user.dao.OrganisationDao;
-import org.apache.openmeetings.persistence.beans.domain.Organisation;
-import org.apache.openmeetings.persistence.beans.domain.Organisation_Users;
-import org.apache.openmeetings.persistence.beans.user.User;
+import org.apache.openmeetings.db.dao.user.AdminUserDao;
+import org.apache.openmeetings.db.dao.user.OrganisationDao;
+import org.apache.openmeetings.db.entity.user.Organisation;
+import org.apache.openmeetings.db.entity.user.Organisation_Users;
+import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.web.admin.AdminCommonUserForm;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;

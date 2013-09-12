@@ -21,8 +21,8 @@ package org.apache.openmeetings.web.admin.servers;
 import static org.apache.openmeetings.OpenmeetingsVariables.WEB_DATE_PATTERN;
 import static org.apache.wicket.datetime.markup.html.basic.DateLabel.forDatePattern;
 
-import org.apache.openmeetings.data.basic.dao.ServerDao;
-import org.apache.openmeetings.persistence.beans.basic.Server;
+import org.apache.openmeetings.db.dao.server.ServerDao;
+import org.apache.openmeetings.db.entity.server.Server;
 import org.apache.openmeetings.web.admin.AdminBaseForm;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;

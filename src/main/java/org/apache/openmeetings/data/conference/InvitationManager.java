@@ -29,16 +29,16 @@ import java.util.TimeZone;
 import java.util.Vector;
 
 import org.apache.openmeetings.data.basic.FieldManager;
-import org.apache.openmeetings.data.conference.dao.InvitationDao;
-import org.apache.openmeetings.persistence.beans.basic.MailMessage;
-import org.apache.openmeetings.persistence.beans.calendar.Appointment;
-import org.apache.openmeetings.persistence.beans.calendar.MeetingMember;
-import org.apache.openmeetings.persistence.beans.invitation.Invitation;
-import org.apache.openmeetings.persistence.beans.invitation.Invitation.Valid;
-import org.apache.openmeetings.persistence.beans.lang.Fieldlanguagesvalues;
-import org.apache.openmeetings.persistence.beans.room.Room;
-import org.apache.openmeetings.persistence.beans.user.User;
-import org.apache.openmeetings.persistence.beans.user.User.Type;
+import org.apache.openmeetings.db.dao.room.InvitationDao;
+import org.apache.openmeetings.db.entity.basic.MailMessage;
+import org.apache.openmeetings.db.entity.calendar.Appointment;
+import org.apache.openmeetings.db.entity.calendar.MeetingMember;
+import org.apache.openmeetings.db.entity.label.Fieldlanguagesvalues;
+import org.apache.openmeetings.db.entity.room.Invitation;
+import org.apache.openmeetings.db.entity.room.Room;
+import org.apache.openmeetings.db.entity.room.Invitation.Valid;
+import org.apache.openmeetings.db.entity.user.User;
+import org.apache.openmeetings.db.entity.user.User.Type;
 import org.apache.openmeetings.utils.TimezoneUtil;
 import org.apache.openmeetings.utils.crypt.MD5;
 import org.apache.openmeetings.utils.crypt.ManageCryptStyle;
@@ -50,14 +50,12 @@ import org.apache.openmeetings.web.mail.template.InvitationTemplate;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
  * 
  * @author swagner
  * 
  */
-@Transactional
 public class InvitationManager {
 	private static final Logger log = Red5LoggerFactory.getLogger(InvitationManager.class, webAppRootKey);
 	public enum MessageType {

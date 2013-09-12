@@ -18,8 +18,8 @@
  */
 package org.apache.openmeetings.web.admin.servers;
 
-import org.apache.openmeetings.data.basic.dao.ServerDao;
-import org.apache.openmeetings.persistence.beans.basic.Server;
+import org.apache.openmeetings.db.dao.server.ServerDao;
+import org.apache.openmeetings.db.entity.server.Server;
 import org.apache.openmeetings.web.admin.AdminPanel;
 import org.apache.openmeetings.web.admin.SearchableDataView;
 import org.apache.openmeetings.web.common.PagedEntityListPanel;

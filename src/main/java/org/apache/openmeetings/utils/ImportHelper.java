@@ -19,12 +19,12 @@
 package org.apache.openmeetings.utils;
 
 import static org.apache.openmeetings.OpenmeetingsVariables.webAppRootKey;
-import static org.apache.openmeetings.persistence.beans.basic.Configuration.MAX_UPLOAD_SIZE_KEY;
+import static org.apache.openmeetings.db.entity.basic.Configuration.MAX_UPLOAD_SIZE_KEY;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
+import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 

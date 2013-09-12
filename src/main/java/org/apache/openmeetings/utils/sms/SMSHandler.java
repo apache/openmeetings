@@ -19,7 +19,7 @@
 package org.apache.openmeetings.utils.sms;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
-import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
+import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.smslib.Message.MessageEncodings;

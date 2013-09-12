@@ -30,8 +30,8 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.TimeZone;
 
-import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
-import org.apache.openmeetings.persistence.beans.user.User;
+import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
+import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.utils.math.CalendarPatterns;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;

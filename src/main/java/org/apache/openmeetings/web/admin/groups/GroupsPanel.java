@@ -18,9 +18,9 @@
  */
 package org.apache.openmeetings.web.admin.groups;
 
-import org.apache.openmeetings.data.user.dao.OrganisationDao;
-import org.apache.openmeetings.persistence.beans.domain.Organisation;
-import org.apache.openmeetings.persistence.beans.domain.Organisation_Users;
+import org.apache.openmeetings.db.dao.user.OrganisationDao;
+import org.apache.openmeetings.db.entity.user.Organisation;
+import org.apache.openmeetings.db.entity.user.Organisation_Users;
 import org.apache.openmeetings.web.admin.AddUsersDialog;
 import org.apache.openmeetings.web.admin.AdminPanel;
 import org.apache.openmeetings.web.admin.SearchableDataView;

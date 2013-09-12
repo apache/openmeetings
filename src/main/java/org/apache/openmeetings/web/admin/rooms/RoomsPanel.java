@@ -18,8 +18,8 @@
  */
 package org.apache.openmeetings.web.admin.rooms;
 
-import org.apache.openmeetings.data.conference.dao.RoomDao;
-import org.apache.openmeetings.persistence.beans.room.Room;
+import org.apache.openmeetings.db.dao.room.RoomDao;
+import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.web.admin.AddUsersDialog;
 import org.apache.openmeetings.web.admin.AdminPanel;
 import org.apache.openmeetings.web.admin.SearchableDataView;

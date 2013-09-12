@@ -23,9 +23,9 @@ import java.util.List;
 
 import org.apache.axis2.AxisFault;
 import org.apache.openmeetings.data.beans.basic.SearchResult;
-import org.apache.openmeetings.persistence.beans.flvrecord.FlvRecording;
-import org.apache.openmeetings.persistence.beans.room.Room;
-import org.apache.openmeetings.persistence.beans.room.RoomType;
+import org.apache.openmeetings.db.entity.record.FlvRecording;
+import org.apache.openmeetings.db.entity.room.Room;
+import org.apache.openmeetings.db.entity.room.RoomType;
 
 public class RoomWebServiceFacade extends BaseWebService {
 

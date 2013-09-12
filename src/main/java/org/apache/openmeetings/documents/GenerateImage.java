@@ -33,10 +33,10 @@ import java.io.IOException;
 
 import org.apache.commons.transaction.util.FileHelper;
 import org.apache.openmeetings.data.flvrecord.converter.BaseConverter;
-import org.apache.openmeetings.data.user.dao.UserDao;
+import org.apache.openmeetings.db.dao.user.UserDao;
+import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.documents.beans.ConverterProcessResult;
 import org.apache.openmeetings.documents.beans.ConverterProcessResultList;
-import org.apache.openmeetings.persistence.beans.user.User;
 import org.apache.openmeetings.utils.OmFileHelper;
 import org.apache.openmeetings.utils.ProcessHelper;
 import org.red5.logging.Red5LoggerFactory;

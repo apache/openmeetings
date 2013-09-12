@@ -18,7 +18,7 @@
  */
 package org.apache.openmeetings.remote.red5;
 
-import static org.apache.openmeetings.persistence.beans.basic.Configuration.CRYPT_KEY;
+import static org.apache.openmeetings.db.entity.basic.Configuration.CRYPT_KEY;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -33,27 +33,27 @@ import java.util.Set;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.Version;
-import org.apache.openmeetings.data.basic.SessiondataDao;
-import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
-import org.apache.openmeetings.data.basic.dao.ServerDao;
-import org.apache.openmeetings.data.calendar.daos.MeetingMemberDao;
 import org.apache.openmeetings.data.calendar.management.AppointmentLogic;
 import org.apache.openmeetings.data.conference.RoomManager;
-import org.apache.openmeetings.data.conference.dao.RoomDao;
-import org.apache.openmeetings.data.logs.ConferenceLogDao;
 import org.apache.openmeetings.data.user.UserManager;
-import org.apache.openmeetings.data.user.dao.UserDao;
 import org.apache.openmeetings.data.whiteboard.EmoticonsManager;
 import org.apache.openmeetings.data.whiteboard.WhiteboardManager;
-import org.apache.openmeetings.data.whiteboard.dto.BrowserStatus;
-import org.apache.openmeetings.data.whiteboard.dto.RoomStatus;
+import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
+import org.apache.openmeetings.db.dao.calendar.MeetingMemberDao;
+import org.apache.openmeetings.db.dao.log.ConferenceLogDao;
+import org.apache.openmeetings.db.dao.room.RoomDao;
+import org.apache.openmeetings.db.dao.server.ServerDao;
+import org.apache.openmeetings.db.dao.server.SessiondataDao;
+import org.apache.openmeetings.db.dao.user.UserDao;
+import org.apache.openmeetings.db.dto.room.BrowserStatus;
+import org.apache.openmeetings.db.dto.room.RoomStatus;
+import org.apache.openmeetings.db.entity.calendar.Appointment;
+import org.apache.openmeetings.db.entity.calendar.MeetingMember;
+import org.apache.openmeetings.db.entity.room.Client;
+import org.apache.openmeetings.db.entity.room.Room;
+import org.apache.openmeetings.db.entity.server.Server;
+import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.documents.beans.UploadCompleteMessage;
-import org.apache.openmeetings.persistence.beans.basic.Server;
-import org.apache.openmeetings.persistence.beans.calendar.Appointment;
-import org.apache.openmeetings.persistence.beans.calendar.MeetingMember;
-import org.apache.openmeetings.persistence.beans.room.Client;
-import org.apache.openmeetings.persistence.beans.room.Room;
-import org.apache.openmeetings.persistence.beans.user.User;
 import org.apache.openmeetings.remote.FLVRecorderService;
 import org.apache.openmeetings.remote.WhiteBoardService;
 import org.apache.openmeetings.remote.util.SessionVariablesUtil;

@@ -22,8 +22,8 @@ import static org.apache.openmeetings.web.app.Application.getBean;
 
 import java.util.Iterator;
 
-import org.apache.openmeetings.data.IDataProviderDao;
-import org.apache.openmeetings.persistence.beans.IDataProviderEntity;
+import org.apache.openmeetings.db.dao.IDataProviderDao;
+import org.apache.openmeetings.db.entity.IDataProviderEntity;
 import org.apache.wicket.extensions.markup.html.repeater.util.SortableDataProvider;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;

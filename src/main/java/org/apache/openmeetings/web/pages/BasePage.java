@@ -21,7 +21,7 @@ package org.apache.openmeetings.web.pages;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.openmeetings.persistence.beans.lang.FieldLanguage;
+import org.apache.openmeetings.db.entity.label.FieldLanguage;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.common.HeaderPanel;
 import org.apache.openmeetings.web.util.OmUrlFragment;

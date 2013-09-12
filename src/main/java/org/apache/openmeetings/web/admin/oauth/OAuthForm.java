@@ -18,8 +18,8 @@
  */
 package org.apache.openmeetings.web.admin.oauth;
 
-import org.apache.openmeetings.data.oauth.OAuth2Dao;
-import org.apache.openmeetings.persistence.beans.user.oauth.OAuthServer;
+import org.apache.openmeetings.db.dao.server.OAuth2Dao;
+import org.apache.openmeetings.db.entity.server.OAuthServer;
 import org.apache.openmeetings.web.admin.AdminBaseForm;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
