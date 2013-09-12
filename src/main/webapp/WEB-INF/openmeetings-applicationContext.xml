@@ -254,7 +254,6 @@
 	<bean id="configurationDaoImpl" class="org.apache.openmeetings.data.basic.dao.ConfigurationDao" />
 	<bean id="appointmentDao" class="org.apache.openmeetings.data.calendar.daos.AppointmentDao" />
 	<bean id="appointmentLogic" class="org.apache.openmeetings.data.calendar.management.AppointmentLogic" />
-	<bean id="meetingMemberLogic" class="org.apache.openmeetings.data.calendar.management.MeetingMemberLogic" />
 	<bean id="sessionManagement" class="org.apache.openmeetings.data.basic.SessiondataDao" />
 	<bean id="userManagement" class="org.apache.openmeetings.data.user.UserManager" />
 	<bean id="roomModeratorsDao" class="org.apache.openmeetings.data.conference.dao.RoomModeratorsDao" />

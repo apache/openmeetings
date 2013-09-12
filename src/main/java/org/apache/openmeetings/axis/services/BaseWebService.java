@@ -32,8 +32,7 @@ public abstract class BaseWebService {
 	private ServletContext getServletContext() throws AxisFault {
 		try {
 			MessageContext mc = MessageContext.getCurrentMessageContext();
-			return (ServletContext) mc
-					.getProperty(HTTPConstants.MC_HTTP_SERVLETCONTEXT);
+			return (ServletContext) mc.getProperty(HTTPConstants.MC_HTTP_SERVLETCONTEXT);
 		} catch (Exception err) {
 			throw new AxisFault("Servlet context is not available yet, retry in couple of seconds");
 		}

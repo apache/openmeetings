@@ -207,7 +207,7 @@ public class MeetingMemberDialog extends AbstractFormDialog<Appointment> {
 			if (!found) {
 				MeetingMember mm = new MeetingMember();
 				if (u.getType() == Type.contact) {
-					u.setOwner_id(getUserId());
+					u.setOwnerId(getUserId());
 					u.setLanguage_id(getLanguage());
 				}
 				mm.setUser(u);

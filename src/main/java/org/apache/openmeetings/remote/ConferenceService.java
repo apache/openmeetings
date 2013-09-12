@@ -308,7 +308,7 @@ public class ConferenceService {
 			returnMap.put("appointment", appointment);
 
 			User us = userManager.getUserById(currentClient.getUser_id());
-			TimeZone timezone = timezoneUtil.getTimezoneByUser(us);
+			TimeZone timezone = timezoneUtil.getTimeZone(us);
 
 			returnMap.put("appointment", appointment);
 
@@ -319,7 +319,7 @@ public class ConferenceService {
 			returnMap.put(
 					"end",
 					CalendarPatterns.getDateWithTimeByMiliSeconds(
-							appointment.end(), timezone));
+							appointment.getEnd(), timezone));
 			returnMap.put("timeZone", timezone.getDisplayName());
 
 			return returnMap;

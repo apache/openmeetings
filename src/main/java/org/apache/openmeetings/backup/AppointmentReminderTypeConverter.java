@@ -35,7 +35,7 @@ public class AppointmentReminderTypeConverter extends OmConverter<AppointmentRem
 	}
 	
 	public AppointmentReminderTyps read(InputNode node) throws Exception {
-		return appointmentReminderTypDaoImpl.getAppointmentReminderTypById(getlongValue(node));
+		return appointmentReminderTypDaoImpl.get(getlongValue(node));
 	}
 
 	public void write(OutputNode node, AppointmentReminderTyps value) throws Exception {

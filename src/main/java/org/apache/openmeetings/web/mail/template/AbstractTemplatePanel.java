@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.web.mail.template;
 
+import org.apache.openmeetings.web.app.Application;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.markup.IMarkupResourceStreamProvider;
 import org.apache.wicket.markup.html.WebPage;
@@ -27,9 +28,11 @@ import org.apache.wicket.request.Response;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.util.resource.IResourceStream;
 import org.apache.wicket.util.resource.StringResourceStream;
+import org.apache.wicket.util.tester.WicketTester;
 
 public abstract class AbstractTemplatePanel extends Panel {
 	private static final long serialVersionUID = 1L;
+	private static WicketTester wicketTest = null;
 	
 	public AbstractTemplatePanel(String id) {
 		super(id);
@@ -68,6 +71,17 @@ public abstract class AbstractTemplatePanel extends Panel {
 
 		public IResourceStream getMarkupResourceStream(MarkupContainer container, Class<?> containerClass) {
 			return new StringResourceStream("<wicket:container wicket:id='" + COMP_ID + "'></wicket:container>");
+		}
+	}
+	
+	static void ensureApplication() {
+		try {
+			Application.get();
+		} catch (Exception e) {
+			if (wicketTest == null) {
+				//FIXME not working since there is no ServletContext
+				wicketTest = new WicketTester(new Application());
+			}
 		}
 	}
 }

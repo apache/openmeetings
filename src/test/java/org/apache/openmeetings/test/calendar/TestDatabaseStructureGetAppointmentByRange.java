@@ -19,53 +19,27 @@
 package org.apache.openmeetings.test.calendar;
 
 import java.util.Calendar;
-import java.util.Iterator;
 import java.util.List;
 
 import org.apache.log4j.Logger;
-import org.apache.openmeetings.data.calendar.management.AppointmentLogic;
+import org.apache.openmeetings.data.calendar.daos.AppointmentDao;
 import org.apache.openmeetings.persistence.beans.calendar.Appointment;
 import org.apache.openmeetings.test.AbstractOpenmeetingsSpringTest;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-
-
 public class TestDatabaseStructureGetAppointmentByRange extends AbstractOpenmeetingsSpringTest {
-
 	private static final Logger log = Logger.getLogger(TestDatabaseStructureGetAppointmentByRange.class);
 	@Autowired
-	private AppointmentLogic appointmentLogic;
-	
+	private AppointmentDao appointmentDao;
+
 	@Test
-	public void testAddingGroup(){
+	public void test() {
+		List<Appointment> listAppoints = appointmentDao.getAppointmentsByRange(1L,
+				Calendar.getInstance().getTime(), Calendar.getInstance().getTime());
 
-		try {
-			List<Appointment> listAppoints = appointmentLogic.getAppointmentByRange(1L, Calendar.getInstance().getTime(), Calendar.getInstance().getTime());  
-
-			//List<Appointment> listAppoints = AppointmentDaoImpl.getInstance().getAppointmentsByRange(Calendar.getInstance().getTime(), Calendar.getInstance().getTime());
-			
-			for (Appointment appoints : listAppoints) {
-				log.debug(""+appoints);
-			}
-			
-			for (Iterator<Appointment> iter = listAppoints.iterator();iter.hasNext();) {
-				log.debug(""+iter.next());
-			}
-
-		} catch (Exception err) {
-
-			log.error("[testAddingGroup]",err);
-
+		for (Appointment appoints : listAppoints) {
+			log.debug("" + appoints);
 		}
-
-		
-
-		
-
 	}
-
-
-
 }
-

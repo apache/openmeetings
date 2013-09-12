@@ -18,17 +18,22 @@
  */
 package org.apache.openmeetings.remote;
 
+import static org.apache.openmeetings.OpenmeetingsVariables.webAppRootKey;
+
 import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
 
-import org.apache.openmeetings.OpenmeetingsVariables;
+import org.apache.openmeetings.data.basic.AuthLevelUtil;
 import org.apache.openmeetings.data.basic.SessiondataDao;
 import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
 import org.apache.openmeetings.data.conference.InvitationManager;
+import org.apache.openmeetings.data.conference.InvitationManager.MessageType;
+import org.apache.openmeetings.data.conference.dao.RoomDao;
 import org.apache.openmeetings.data.user.UserManager;
 import org.apache.openmeetings.data.user.dao.UserDao;
-import org.apache.openmeetings.persistence.beans.invitation.Invitations;
+import org.apache.openmeetings.persistence.beans.invitation.Invitation;
+import org.apache.openmeetings.persistence.beans.invitation.Invitation.Valid;
 import org.apache.openmeetings.persistence.beans.user.User;
 import org.apache.openmeetings.utils.TimezoneUtil;
 import org.red5.logging.Red5LoggerFactory;
@@ -38,27 +43,40 @@ import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class InvitationService implements IPendingServiceCallback {
-
-	private static final Logger log = Red5LoggerFactory.getLogger(
-			InvitationService.class, OpenmeetingsVariables.webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(InvitationService.class, webAppRootKey);
 	@Autowired
 	private SessiondataDao sessiondataDao;
 	@Autowired
 	private ConfigurationDao configurationDao;
 	@Autowired
-	private UserDao userDAO;
+	private UserDao userDao;
 	@Autowired
 	private UserManager userManager;
 	@Autowired
 	private InvitationManager invitationManager;
 	@Autowired
 	private TimezoneUtil timezoneUtil;
+	@Autowired
+	private AuthLevelUtil authLevelUtil;
+	@Autowired
+	private RoomDao roomDao;
 
 	public void resultReceived(IPendingServiceCall arg0) {
 		// TODO Auto-generated method stub
 		log.debug("InvitationService resultReceived" + arg0);
 	}
 
+	private String getBaseUrl(String baseUrl) {
+		String url = null;
+		if (baseUrl != null) {
+			url = baseUrl.toLowerCase();
+			if (url.endsWith("swf")) {
+				url = url.substring(0, url.length() - 4);
+			}
+		}	
+		return url;
+	}
+	
 	/**
 	 * send an invitation to another user by Mail
 	 * 
@@ -89,61 +107,69 @@ public class InvitationService implements IPendingServiceCallback {
 			Long language_id, String iCalTz, boolean sendMail) {
 
 		try {
-			log.debug("sendInvitationHash: ");
-
-			Integer validFromHour = Integer.valueOf(
-					validFromTime.substring(0, 2)).intValue();
-			Integer validFromMinute = Integer.valueOf(
-					validFromTime.substring(3, 5)).intValue();
-
-			Integer validToHour = Integer.valueOf(validToTime.substring(0, 2))
-					.intValue();
-			Integer validToMinute = Integer
-					.valueOf(validToTime.substring(3, 5)).intValue();
-
-			log.info("validFromHour: " + validFromHour);
-			log.info("validFromMinute: " + validFromMinute);
-
 			Long users_id = sessiondataDao.checkSession(SID);
 			Long user_level = userManager.getUserLevelByID(users_id);
 
-			Calendar date = Calendar.getInstance();
-			date.setTime(validFromDate);
-			
-			TimeZone timeZone = timezoneUtil.getTimeZone(iCalTz);
-			
-			Calendar calFrom = Calendar.getInstance(timeZone);
-			calFrom.set(Calendar.YEAR, date.get(Calendar.YEAR));
-			calFrom.set(Calendar.MONTH, date.get(Calendar.MONTH));
-			calFrom.set(Calendar.DAY_OF_MONTH, date.get(Calendar.DAY_OF_MONTH));
-			calFrom.set(Calendar.HOUR_OF_DAY, validFromHour);
-			calFrom.set(Calendar.MINUTE, validFromMinute);
-			calFrom.set(Calendar.SECOND, 0);
+			if (authLevelUtil.checkUserLevel(user_level)) {
+				log.debug("sendInvitationHash: ");
+	
+				Integer validFromHour = Integer.valueOf(
+						validFromTime.substring(0, 2)).intValue();
+				Integer validFromMinute = Integer.valueOf(
+						validFromTime.substring(3, 5)).intValue();
+	
+				Integer validToHour = Integer.valueOf(validToTime.substring(0, 2))
+						.intValue();
+				Integer validToMinute = Integer
+						.valueOf(validToTime.substring(3, 5)).intValue();
+	
+				log.info("validFromHour: " + validFromHour);
+				log.info("validFromMinute: " + validFromMinute);
+	
+				Calendar date = Calendar.getInstance();
+				date.setTime(validFromDate);
+				
+				TimeZone timeZone = timezoneUtil.getTimeZone(iCalTz);
+				
+				Calendar calFrom = Calendar.getInstance(timeZone);
+				calFrom.set(Calendar.YEAR, date.get(Calendar.YEAR));
+				calFrom.set(Calendar.MONTH, date.get(Calendar.MONTH));
+				calFrom.set(Calendar.DAY_OF_MONTH, date.get(Calendar.DAY_OF_MONTH));
+				calFrom.set(Calendar.HOUR_OF_DAY, validFromHour);
+				calFrom.set(Calendar.MINUTE, validFromMinute);
+				calFrom.set(Calendar.SECOND, 0);
+	
+				date.setTime(validToDate);
+				Calendar calTo = Calendar.getInstance(timeZone);
+				calTo.set(Calendar.YEAR, date.get(Calendar.YEAR));
+				calTo.set(Calendar.MONTH, date.get(Calendar.MONTH));
+				calTo.set(Calendar.DAY_OF_MONTH, date.get(Calendar.DAY_OF_MONTH));
+				calTo.set(Calendar.HOUR_OF_DAY, validToHour);
+				calTo.set(Calendar.MINUTE, validToMinute);
+				calTo.set(Calendar.SECOND, 0);
+	
+				Date dFrom = calFrom.getTime();
+				Date dTo = calTo.getTime();
+	
+				User invitee = userDao.getContact(email, users_id);
+				Invitation invitation = invitationManager.getInvitation(invitee, roomDao.get(room_id),
+								isPasswordProtected, invitationpass, Valid.fromInt(valid)
+								, userDao.get(users_id), getBaseUrl(baseurl), language_id,
+								dFrom, dTo, null);
 
-			date.setTime(validToDate);
-			Calendar calTo = Calendar.getInstance(timeZone);
-			calTo.set(Calendar.YEAR, date.get(Calendar.YEAR));
-			calTo.set(Calendar.MONTH, date.get(Calendar.MONTH));
-			calTo.set(Calendar.DAY_OF_MONTH, date.get(Calendar.DAY_OF_MONTH));
-			calTo.set(Calendar.HOUR_OF_DAY, validToHour);
-			calTo.set(Calendar.MINUTE, validToMinute);
-			calTo.set(Calendar.SECOND, 0);
+				if (invitation != null) {
+					if (sendMail) {
+						invitationManager.sendInvitionLink(invitation, MessageType.Create, subject, message, false);
+					}
 
-			Date dFrom = calFrom.getTime();
-			Date dTo = calTo.getTime();
-
-			Invitations invitation = invitationManager
-					.addInvitationLink(user_level, username, message, baseurl,
-							email, subject, room_id, conferencedomain,
-							isPasswordProtected, invitationpass, valid, dFrom,
-							dTo, users_id, baseurl, language_id, sendMail,
-							dFrom, dTo, null, username, timeZone);
-
-			if (invitation != null) {
-				return invitation;
+					return invitation;
+				} else {
+					return "Sys - Error";
+				}
 			} else {
-				return "Sys - Error";
+				return "Need User Privileges to perfom the Action";
 			}
+
 		} catch (Exception err) {
 			log.error("[sendInvitationHash]", err);
 		}
@@ -151,10 +177,20 @@ public class InvitationService implements IPendingServiceCallback {
 		return null;
 	}
 
-	public String sendInvitationByHash(String SID, String invitationHash, String message, String baseurl, String subject, Long language_id) {
-		User us = userDAO.get(sessiondataDao.checkSession(SID));
-		Invitations inv = (Invitations)invitationManager.getInvitationByHashCode(invitationHash, true);
-		return invitationManager.sendInvitionLink(us, inv, message, baseurl, subject, language_id);
+	public String sendInvitationByHash(String SID, String invitationHash, String message, String baseurl, String subject
+			, Long language_id) throws Exception {
+		Long users_id = sessiondataDao.checkSession(SID);
+		Long user_level = userManager.getUserLevelByID(users_id);
+
+		if (authLevelUtil.checkUserLevel(user_level)) {
+			Invitation inv = (Invitation)invitationManager.getInvitationByHashCode(invitationHash, true);
+			inv.setBaseUrl(getBaseUrl(baseurl));
+			inv.getInvitee().setLanguage_id(language_id);
+			invitationManager.sendInvitionLink(inv, MessageType.Create, subject, message, false);
+		} else {
+			return "Need User Privileges to perfom the Action";
+		}
+		return "Success";
 	}
 	
 	public Object getInvitationByHash(String hashCode) {
@@ -163,7 +199,6 @@ public class InvitationService implements IPendingServiceCallback {
 	}
 
 	public Object checkInvitationPass(String hashCode, String pass) {
-		return invitationManager.checkInvitationPass(hashCode,
-				pass);
+		return invitationManager.checkInvitationPass(hashCode, pass);
 	}
 }

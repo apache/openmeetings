@@ -19,6 +19,8 @@
 package org.apache.openmeetings.web.user.calendar;
 
 import static org.apache.openmeetings.OpenmeetingsVariables.webAppRootKey;
+import static org.apache.openmeetings.web.app.Application.getBean;
+import static org.apache.openmeetings.web.app.WebSession.getBaseUrl;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 
 import java.text.SimpleDateFormat;
@@ -26,8 +28,8 @@ import java.util.Date;
 
 import org.apache.openmeetings.data.calendar.daos.AppointmentDao;
 import org.apache.openmeetings.data.calendar.daos.AppointmentReminderTypDao;
+import org.apache.openmeetings.data.user.dao.UserDao;
 import org.apache.openmeetings.persistence.beans.calendar.Appointment;
-import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.UserPanel;
 import org.apache.wicket.ajax.AbstractAjaxTimerBehavior;
@@ -52,18 +54,31 @@ public class CalendarPanel extends UserPanel {
 	private static final String javaScriptMarkup = "setCalendarHeight();";
 	private static final String javaScriptAddDatepicker = "addCalButton('left', 'Datepicker', 'datepicker');";
 	private static final SimpleDateFormat formatDateJava = new SimpleDateFormat("MM/dd/yy");
+	private AbstractAjaxTimerBehavior refreshTimer = new AbstractAjaxTimerBehavior(Duration.seconds(10)) {
+		private static final long serialVersionUID = -4353305314396043476L;
+
+		@Override
+		protected void onTimer(AjaxRequestTarget target) {
+			refresh(target);
+		}
+	};
 	private Calendar calendar;
 	
 	@Override
 	public void onMenuPanelLoad(AjaxRequestTarget target) {
 	}
 
+	@Override
+	public void cleanup(AjaxRequestTarget target) {
+		refreshTimer.stop(target);
+	}
+	
 	private AppointmentDao getDao() {
-		return Application.getBean(AppointmentDao.class);
+		return getBean(AppointmentDao.class);
 	}
 	
 	private AppointmentReminderTypDao getAppointmentReminderTypDao() {
-		return Application.getBean(AppointmentReminderTypDao.class);
+		return getBean(AppointmentReminderTypDao.class);
 	}
 	
 	public void refresh(AjaxRequestTarget target) {
@@ -203,11 +218,11 @@ public class CalendarPanel extends UserPanel {
 				cal.add(java.util.Calendar.MILLISECOND, (int)delta); //FIXME?
 				a.setStart(cal.getTime());
 				
-				cal.setTime(a.end());
+				cal.setTime(a.getEnd());
 				cal.add(java.util.Calendar.MILLISECOND, (int)delta); //FIXME?
 				a.setEnd(cal.getTime());
 				
-				dao.update(a, getUserId());
+				dao.update(a, getBaseUrl(), getUserId());
 				//FIXME add feedback info
 			}
 			
@@ -216,30 +231,23 @@ public class CalendarPanel extends UserPanel {
 				AppointmentDao dao = getDao();
 				Appointment a = dao.get((long)eventId);
 				java.util.Calendar cal = WebSession.getCalendar();
-				cal.setTime(a.end());
+				cal.setTime(a.getEnd());
 				cal.add(java.util.Calendar.MILLISECOND, (int)delta); //FIXME?
 				a.setEnd(cal.getTime());
 				
-				dao.update(a, getUserId());
+				dao.update(a, getBaseUrl(), getUserId());
 				//FIXME add feedback info
 			}
 		};
 		
 		form.add(calendar);
-		add(new AbstractAjaxTimerBehavior(Duration.seconds(10)) {
-			private static final long serialVersionUID = -4353305314396043476L;
-
-			@Override
-			protected void onTimer(AjaxRequestTarget target) {
-				refresh(target);
-			}
-		});
+		add(refreshTimer);
 	}
 	
 	private Appointment getDefault() {
 		Appointment a = new Appointment();
-		a.setRemind(getAppointmentReminderTypDao()
-				.getAppointmentReminderTypById(3L)); //TODO: Make configurable
+		a.setRemind(getAppointmentReminderTypDao().get(3L)); //TODO: Make configurable
+		a.setOwner(getBean(UserDao.class).get(getUserId()));
 		a.setTitle(WebSession.getString(1444));
 		log.debug(" -- getDefault -- Current model " + a);
 		return a;

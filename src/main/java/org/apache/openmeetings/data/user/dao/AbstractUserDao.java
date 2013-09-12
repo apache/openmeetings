@@ -86,7 +86,7 @@ public class AbstractUserDao  {
 									// configurable
 		user.setLevel_id(1L);
 		user.setLanguage_id(configurationDao.getConfValue(DEFAUT_LANG_KEY, Long.class, "1"));
-		user.setTimeZoneId(timezoneUtil.getTimezoneByUser(currentUser).getID());
+		user.setTimeZoneId(timezoneUtil.getTimeZone(currentUser).getID());
 		user.setForceTimeZoneCheck(false);
 		user.setSendSMS(false);
 		user.setAge(new Date());
@@ -107,7 +107,7 @@ public class AbstractUserDao  {
 		return q.getResultList();
 	}
 	
-	private String getAdditionalWhire(boolean isAdmin){
+	private String getAdditionalWhere(boolean isAdmin){
 		return isAdmin ? null : "u.type <> :contact OR (u.type = :contact AND u.owner_id = :ownerId)";
 	}
 	
@@ -119,7 +119,7 @@ public class AbstractUserDao  {
 	}
 
 	public List<User> get(String search, int start, int count, String sort, boolean isAdmin) {
-		TypedQuery<User> q = em.createQuery(DaoHelper.getSearchQuery("User", "u", search, true, false, getAdditionalWhire(isAdmin), sort, searchFields), User.class);
+		TypedQuery<User> q = em.createQuery(DaoHelper.getSearchQuery("User", "u", search, true, false, getAdditionalWhere(isAdmin), sort, searchFields), User.class);
 		q.setFirstResult(start);
 		q.setMaxResults(count);
 		setAdditionalParams(q, isAdmin);
@@ -133,13 +133,13 @@ public class AbstractUserDao  {
 	}
 
 	public long count(String search, boolean isAdmin) {
-		TypedQuery<Long> q = em.createQuery(DaoHelper.getSearchQuery("User", "u", search, true, true, getAdditionalWhire(isAdmin), null, searchFields), Long.class);
+		TypedQuery<Long> q = em.createQuery(DaoHelper.getSearchQuery("User", "u", search, true, true, getAdditionalWhere(isAdmin), null, searchFields), Long.class);
 		setAdditionalParams(q, isAdmin);
 		return q.getSingleResult();
 	}
 	
 	public List<User> get(String search, boolean isAdmin) {
-		TypedQuery<User> q = em.createQuery(DaoHelper.getSearchQuery("User", "u", search, true, false, getAdditionalWhire(isAdmin), null, searchFields), User.class);
+		TypedQuery<User> q = em.createQuery(DaoHelper.getSearchQuery("User", "u", search, true, false, getAdditionalWhere(isAdmin), null, searchFields), User.class);
 		if (!isAdmin) {
 			q.setParameter("ownerId", WebSession.getUserId());
 			q.setParameter("contact", Type.contact);
@@ -315,20 +315,15 @@ public class AbstractUserDao  {
 	}
 
 	public User getUserByEmail(String email) {
+		TypedQuery<User> query = em.createNamedQuery("getUserByEmail", User.class);
+		query.setParameter("email", email);
+		query.setParameter("deleted", true);
+		User us = null;
 		try {
-			TypedQuery<User> query = em.createNamedQuery("getUserByEmail", User.class);
-			query.setParameter("email", email);
-			query.setParameter("deleted", true);
-			User us = null;
-			try {
-				us = query.getSingleResult();
-			} catch (NoResultException ex) {
-			}
-			return us;
-		} catch (Exception e) {
-			log.error("[getUserByEmail] " + email, e);
+			us = query.getSingleResult();
+		} catch (NoResultException ex) {
 		}
-		return null;
+		return us;
 	}
 
 	public Object getUserByHash(String hash) {
@@ -389,4 +384,32 @@ public class AbstractUserDao  {
 
 	}
 
+	public User getContact(String email, long ownerId) {
+		return getContact(email, "", "", ownerId);
+	}
+	
+	public User getContact(String email, User owner) {
+		return getContact(email, "", "", null, null, owner);
+	}
+	
+	public User getContact(String email, String firstName, String lastName, long ownerId) {
+		return getContact(email, firstName, lastName, null, null, get(ownerId));
+	}
+	
+	public User getContact(String email, String firstName, String lastName, Long langId, String tzId, User owner) {
+		User to = getUserByEmail(email);
+		if (to == null) {
+			to = new User();
+			to.setType(Type.contact);
+			to.setLogin(owner.getUser_id() + "_" + email); //UserId prefix is used to ensure unique login
+			to.setFirstname(firstName);
+			to.setLastname(lastName);
+			to.setLanguage_id(null == langId ? owner.getLanguage_id() : langId);
+			to.setOwnerId(owner.getUser_id());
+			to.setAdresses(new Address());
+			to.getAdresses().setEmail(email);
+			to.setTimeZoneId(null == tzId ? owner.getTimeZoneId() : tzId);
+		}
+		return to;
+	}
 }

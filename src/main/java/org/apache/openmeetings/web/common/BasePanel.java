@@ -36,6 +36,13 @@ public abstract class BasePanel extends Panel {
 	 * @param target
 	 */
 	public void onMenuPanelLoad(AjaxRequestTarget target) {
+	}
 
+	/**
+	 * This method should be overridden to perform necessary cleanup: remove timers etc.
+	 * 
+	 * @param target
+	 */
+	public void cleanup(AjaxRequestTarget target) {
 	}
 }

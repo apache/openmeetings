@@ -66,7 +66,7 @@ public class TestDatabaseStructureAppointment extends AbstractOpenmeetingsSpring
 			
 			
 			for (Appointment appoints : listAppoints) {
-				log.debug("Termin: "+appoints.getTitle()+" startDate: "+appoints.getStart()+ " endDate: "+appoints.end());
+				log.debug("Termin: "+appoints.getTitle()+" startDate: "+appoints.getStart()+ " endDate: "+appoints.getEnd());
 				log.debug("MeetingMembers: "+appoints.getMeetingMembers().size());
 			}
 			

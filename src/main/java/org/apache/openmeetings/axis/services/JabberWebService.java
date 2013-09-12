@@ -25,9 +25,12 @@ import org.apache.openmeetings.data.basic.AuthLevelUtil;
 import org.apache.openmeetings.data.basic.SessiondataDao;
 import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
 import org.apache.openmeetings.data.conference.InvitationManager;
+import org.apache.openmeetings.data.conference.dao.RoomDao;
 import org.apache.openmeetings.data.user.UserManager;
+import org.apache.openmeetings.data.user.dao.AdminUserDao;
 import org.apache.openmeetings.persistence.beans.domain.Organisation_Users;
-import org.apache.openmeetings.persistence.beans.invitation.Invitations;
+import org.apache.openmeetings.persistence.beans.invitation.Invitation;
+import org.apache.openmeetings.persistence.beans.invitation.Invitation.Valid;
 import org.apache.openmeetings.persistence.beans.room.Room;
 import org.apache.openmeetings.persistence.beans.room.RoomOrganisation;
 import org.apache.openmeetings.persistence.beans.user.User;
@@ -53,6 +56,8 @@ public class JabberWebService {
 	@Autowired
 	private UserManager userManager;
 	@Autowired
+	private AdminUserDao userDao;
+	@Autowired
 	private SessiondataDao sessiondataDao;
 	@Autowired
 	private ConferenceService conferenceService;
@@ -62,6 +67,8 @@ public class JabberWebService {
 	private ConfigurationDao configurationDao;
 	@Autowired
 	private TimezoneUtil timezoneUtil;
+	@Autowired
+	private RoomDao roomDao;
 
 	/**
 	 * Get List&lt;Rooms&gt; of all rooms available to the user.
@@ -129,13 +136,17 @@ public class JabberWebService {
 	public String getInvitationHash(String SID, String username, Long room_id) {
 		Long users_id = this.sessiondataDao.checkSession(SID);
 		Long user_level = this.userManager.getUserLevelByID(users_id);
-		Invitations invitation = this.invitationManager.addInvitationLink(
-				user_level, username, username, username, username, username,
-				room_id, "", Boolean.valueOf(false), null, Integer.valueOf(3),
-				null, null, users_id, "", Long.valueOf(1L),
-				Boolean.valueOf(false), null, null, null, username, 
-				timezoneUtil.getDefaultTimeZone());
-
-		return ((invitation == null) ? null : invitation.getHash());
+		
+		if (authLevelUtil.checkUserLevel(user_level)) {
+			User invitee = userDao.getContact(username, username, username, users_id);
+			Invitation invitation = invitationManager.getInvitation(invitee, roomDao.get(room_id),
+							false, "", Valid.OneTime
+							, userDao.get(users_id), "", 1L,
+							null, null, null);
+	
+			return ((invitation == null) ? null : invitation.getHash());
+		} else {
+			return "Need Admin Privileges to perfom the Action";
+		}
 	}
 }

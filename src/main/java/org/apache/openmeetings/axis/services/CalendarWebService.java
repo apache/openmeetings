@@ -18,37 +18,34 @@
  */
 package org.apache.openmeetings.axis.services;
 
+import static org.apache.openmeetings.OpenmeetingsVariables.webAppRootKey;
+import static org.apache.openmeetings.web.app.WebSession.getBaseUrl;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.TimeZone;
 
 import org.apache.axis2.AxisFault;
-import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.data.basic.AuthLevelUtil;
 import org.apache.openmeetings.data.basic.SessiondataDao;
-import org.apache.openmeetings.data.calendar.beans.AppointmentDTO;
-import org.apache.openmeetings.data.calendar.beans.Day;
-import org.apache.openmeetings.data.calendar.beans.Week;
 import org.apache.openmeetings.data.calendar.daos.AppointmentCategoryDao;
 import org.apache.openmeetings.data.calendar.daos.AppointmentDao;
 import org.apache.openmeetings.data.calendar.daos.AppointmentReminderTypDao;
+import org.apache.openmeetings.data.calendar.daos.MeetingMemberDao;
 import org.apache.openmeetings.data.calendar.management.AppointmentLogic;
 import org.apache.openmeetings.data.conference.RoomManager;
 import org.apache.openmeetings.data.conference.dao.RoomDao;
 import org.apache.openmeetings.data.user.UserManager;
-import org.apache.openmeetings.data.user.dao.UserContactsDao;
+import org.apache.openmeetings.data.user.dao.AdminUserDao;
 import org.apache.openmeetings.persistence.beans.calendar.Appointment;
 import org.apache.openmeetings.persistence.beans.calendar.AppointmentCategory;
 import org.apache.openmeetings.persistence.beans.calendar.AppointmentReminderTyps;
+import org.apache.openmeetings.persistence.beans.calendar.MeetingMember;
 import org.apache.openmeetings.persistence.beans.room.Room;
-import org.apache.openmeetings.persistence.beans.room.RoomType;
 import org.apache.openmeetings.persistence.beans.user.User;
-import org.apache.openmeetings.persistence.beans.user.UserContact;
 import org.apache.openmeetings.utils.TimezoneUtil;
+import org.apache.openmeetings.web.app.WebSession;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,9 +58,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  * 
  */
 public class CalendarWebService {
-
-	private static final Logger log = Red5LoggerFactory.getLogger(
-			CalendarWebService.class, OpenmeetingsVariables.webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(CalendarWebService.class, webAppRootKey);
 
 	@Autowired
 	private AppointmentDao appointmentDao;
@@ -74,19 +69,21 @@ public class CalendarWebService {
 	@Autowired
 	private UserManager userManager;
 	@Autowired
+	private AdminUserDao userDao;
+	@Autowired
 	private RoomManager roomManager;
 	@Autowired
 	private RoomDao roomDao;
 	@Autowired
 	private AuthLevelUtil authLevelUtil;
 	@Autowired
-	private AppointmentCategoryDao appointmentCategoryDaoImpl;
+	private AppointmentCategoryDao appointmentCategoryDao;
 	@Autowired
-	private AppointmentReminderTypDao appointmentReminderTypDaoImpl;
+	private AppointmentReminderTypDao appointmentReminderTypDao;
 	@Autowired
 	private TimezoneUtil timezoneUtil;
 	@Autowired
-	private UserContactsDao userContactsDaoImpl;
+	private MeetingMemberDao meetingMemberDao;
 
 	/**
 	 * Load appointments by a start / end range for the current SID
@@ -109,8 +106,7 @@ public class CalendarWebService {
 			Long user_level = userManager.getUserLevelByID(users_id);
 			if (authLevelUtil.checkUserLevel(user_level)) {
 
-				return appointmentLogic.getAppointmentByRange(users_id,
-						starttime, endtime);
+				return appointmentDao.getAppointmentsByRange(users_id, starttime, endtime);
 			}
 		} catch (Exception err) {
 			log.error("[getAppointmentByRange]", err);
@@ -141,8 +137,7 @@ public class CalendarWebService {
 			Long user_level = userManager.getUserLevelByID(users_id);
 			if (authLevelUtil.checkWebServiceLevel(user_level)) {
 
-				return appointmentLogic.getAppointmentByRange(userId,
-						starttime, endtime);
+				return appointmentDao.getAppointmentsByRange(userId, starttime, endtime);
 			}
 		} catch (Exception err) {
 			log.error("[getAppointmentByRangeForUserId]", err);
@@ -228,6 +223,63 @@ public class CalendarWebService {
 
 	}
 
+	private MeetingMember getMeetingMember(Long userId, Long langId, String str) {
+		String[] params = str.split(",");
+		
+		try {
+			return meetingMemberDao.get(Long.valueOf(params[0]));
+		} catch (Exception e) {
+			//no-op
+		}
+		MeetingMember mm = new MeetingMember();
+		try {
+			mm.setUser(userDao.get(Long.valueOf(params[4])));
+		} catch (Exception e) {
+			//no-op
+		}
+		if (mm.getUser() == null) {
+			mm.setUser(userDao.getContact(params[3], params[1], params[2], langId, params[5], userId));
+		}
+		
+		return mm;
+	}
+	
+	public Appointment getAppointment(String appointmentName,
+			String appointmentLocation, String appointmentDescription,
+			Calendar appointmentstart, Calendar appointmentend,
+			Boolean isDaily, Boolean isWeekly, Boolean isMonthly,
+			Boolean isYearly, Long categoryId, Long remind, String[] mmClient,
+			Long roomType, String baseUrl, Long languageId,
+			Boolean isPasswordProtected, String password, long roomId, Long users_id) {
+		Appointment a = new Appointment();
+		a.setTitle(appointmentName);
+		a.setLocation(appointmentLocation);
+		a.setDescription(appointmentDescription);
+		a.setStart(appointmentstart.getTime());
+		a.setEnd(appointmentend.getTime());
+		a.setIsDaily(isDaily);
+		a.setIsWeekly(isWeekly);
+		a.setIsMonthly(isMonthly);
+		a.setIsYearly(isYearly);
+		a.setCategory(appointmentCategoryDao.get(categoryId));
+		a.setRemind(appointmentReminderTypDao.get(remind));
+		WebSession.get().setBaseUrl(baseUrl); //TODO verify !!!!!
+		a.setRoom(new Room());
+		a.getRoom().setComment(appointmentDescription);
+		a.getRoom().setName(appointmentName);
+		a.getRoom().setRooms_id(roomId);
+		a.getRoom().setRoomtype(roomManager.getRoomTypesById(roomType));
+		a.setOwner(userDao.get(users_id));
+		a.setPasswordProtected(isPasswordProtected);
+		a.setPassword(password);
+		a.setMeetingMembers(new ArrayList<MeetingMember>());
+		for (String singleClient : mmClient) {
+			MeetingMember mm = getMeetingMember(users_id, languageId, singleClient);
+			mm.setAppointment(a);
+			a.getMeetingMembers().add(mm);
+		}
+		return a;
+	}
 	/**
 	 * Save an appointment
 	 * 
@@ -288,7 +340,7 @@ public class CalendarWebService {
 			Boolean isYearly, Long categoryId, Long remind, String[] mmClient,
 			Long roomType, String baseUrl, Long languageId,
 			Boolean isPasswordProtected, String password, long roomId) {
-
+		//Seems to be create
 		log.debug("saveAppointMent SID:" + SID + ", baseUrl : " + baseUrl);
 
 		try {
@@ -298,29 +350,10 @@ public class CalendarWebService {
 			Long user_level = userManager.getUserLevelByID(users_id);
 
 			if (authLevelUtil.checkUserLevel(user_level)) {
-
-				List<Map<String, String>> newList = new ArrayList<Map<String, String>>();
-
-				for (String singleClient : mmClient) {
-					String[] params = singleClient.split(",");
-					Map<String, String> map = new HashMap<String, String>();
-					map.put("meetingMemberId", params[0]);
-					map.put("firstname", params[1]);
-					map.put("lastname", params[2]);
-					map.put("email", params[3]);
-					map.put("userId", params[4]);
-					map.put("jNameTimeZone", params[5]);
-					newList.add(map);
-				}
-
-				Long id = appointmentLogic.saveAppointment(appointmentName,
-						users_id, appointmentLocation, appointmentDescription,
-						appointmentstart.getTime(), appointmentend.getTime(),
-						isDaily, isWeekly, isMonthly, isYearly, categoryId,
-						remind, newList, roomType, baseUrl, languageId,
-						isPasswordProtected, password, roomId);
-
-				return id;
+				Appointment a = getAppointment(appointmentName, appointmentLocation, appointmentDescription,
+						appointmentstart, appointmentend, isDaily, isWeekly, isMonthly, isYearly, categoryId, remind,
+						mmClient, roomType, baseUrl, languageId, isPasswordProtected, password, roomId, users_id);
+				return appointmentDao.update(a, baseUrl, users_id).getId();
 			} else {
 				log.error("saveAppointment : wrong user level");
 			}
@@ -358,11 +391,17 @@ public class CalendarWebService {
 			Long user_level = userManager.getUserLevelByID(users_id);
 			if (authLevelUtil.checkUserLevel(user_level)) {
 
-				appointmentLogic.getAppointMentById(appointmentId);
-
-				return appointmentDao.updateAppointmentByTime(appointmentId,
-						appointmentstart, appointmentend, users_id, baseurl,
-						languageId);
+				Appointment a = appointmentDao.get(appointmentId);
+				if (!authLevelUtil.checkAdminLevel(user_level) && !a.getOwner().getUser_id().equals(users_id)) {
+					throw new AxisFault("The Appointment cannot be updated by the given user");
+				}
+				if (!a.getStart().equals(appointmentstart) || !a.getEnd().equals(appointmentend)) {
+					a.setStart(appointmentstart);
+					a.setEnd(appointmentend);
+					WebSession.get().setBaseUrl(baseurl); //TODO verify !!!!!
+					//FIXME this might change the owner!!!!!
+					return appointmentDao.update(a, baseurl, users_id).getId();
+				}					
 			}
 		} catch (Exception err) {
 			log.error("[updateAppointment]", err);
@@ -439,60 +478,44 @@ public class CalendarWebService {
 			Long users_id = sessiondataDao.checkSession(SID);
 			Long user_level = userManager.getUserLevelByID(users_id);
 
-			if (authLevelUtil.checkUserLevel(user_level)) {
-				// check if the appointment belongs to the current user
-				Appointment appointment = appointmentLogic
-						.getAppointMentById(appointmentId);
-				if (!appointment.getOwner().getUser_id().equals(users_id)) {
-					throw new AxisFault(
-							"The Appointment cannot be updated by the given user");
-				}
-			} else if (authLevelUtil.checkUserLevel(user_level)) {
+			if (authLevelUtil.checkWebServiceLevel(user_level) || authLevelUtil.checkAdminLevel(user_level)) {
 				// fine
+			} else if (authLevelUtil.checkUserLevel(user_level)) {
+				// check if the appointment belongs to the current user
+				Appointment a = appointmentDao.get(appointmentId);
+				if (!a.getOwner().getUser_id().equals(users_id)) {
+					throw new AxisFault("The Appointment cannot be updated by the given user");
+				}
 			} else {
-				throw new AxisFault(
-						"Not allowed to preform that action, Authenticate the SID first");
+				throw new AxisFault("Not allowed to preform that action, Authenticate the SID first");
 			}
 
-			List<Map<String, String>> newList = new ArrayList<Map<String, String>>();
-
+			Appointment a = appointmentDao.get(appointmentId);
+			a.setTitle(appointmentName);
+			a.setLocation(appointmentLocation);
+			a.setDescription(appointmentDescription);
+			a.setStart(appointmentstart.getTime());
+			a.setEnd(appointmentend.getTime());
+			a.setIsDaily(isDaily);
+			a.setIsWeekly(isWeekly);
+			a.setIsMonthly(isMonthly);
+			a.setIsYearly(isYearly);
+			a.setCategory(appointmentCategoryDao.get(categoryId));
+			a.setRemind(appointmentReminderTypDao.get(remind));
+			WebSession.get().setBaseUrl(baseurl); //TODO verify !!!!!
+			a.getRoom().setComment(appointmentDescription);
+			a.getRoom().setName(appointmentName);
+			a.getRoom().setRoomtype(roomManager.getRoomTypesById(roomType));
+			a.setOwner(userDao.get(users_id));
+			a.setPasswordProtected(isPasswordProtected);
+			a.setPassword(password);
+			a.setMeetingMembers(new ArrayList<MeetingMember>());
 			for (String singleClient : mmClient) {
-				String[] params = singleClient.split(",");
-				Map<String, String> map = new HashMap<String, String>();
-				map.put("meetingMemberId", params[0]);
-				map.put("firstname", params[1]);
-				map.put("lastname", params[2]);
-				map.put("email", params[3]);
-				map.put("userId", params[4]);
-				map.put("jNameTimeZone", params[5]);
-				newList.add(map);
+				MeetingMember mm = getMeetingMember(users_id, languageId, singleClient);
+				mm.setAppointment(a);
+				a.getMeetingMembers().add(mm);
 			}
-
-			log.debug("updateAppointment");
-
-			RoomType rt = roomManager.getRoomTypesById(roomType);
-
-			Appointment app = appointmentLogic
-					.getAppointMentById(appointmentId);
-
-			Room room = app.getRoom();
-			if (room != null) {
-
-				room.setComment(appointmentDescription);
-				room.setName(appointmentName);
-				room.setRoomtype(rt);
-
-				roomDao.update(room, users_id);
-			}
-
-			return appointmentDao.updateAppointment(appointmentId,
-					appointmentName, appointmentDescription, appointmentstart
-							.getTime(), appointmentend.getTime(), isDaily,
-					isWeekly, isMonthly, isYearly, categoryId, remind, newList,
-					users_id, baseurl, languageId, isPasswordProtected,
-					password,
-					appointmentLocation);
-
+			return appointmentDao.update(a, baseurl, users_id).getId();
 		} catch (Exception err) {
 			log.error("[updateAppointment]", err);
 			throw new AxisFault(err.getMessage());
@@ -517,38 +540,28 @@ public class CalendarWebService {
 	 *            appointment are send
 	 * @return - id of appointment deleted
 	 */
-	public Long deleteAppointment(String SID, Long appointmentId,
-			Long language_id) throws AxisFault {
+	public Long deleteAppointment(String SID, Long appointmentId, Long language_id) throws AxisFault {
 		try {
-
 			Long users_id = sessiondataDao.checkSession(SID);
 			Long user_level = userManager.getUserLevelByID(users_id);
 
-			if (authLevelUtil.checkWebServiceLevel(user_level)) {
-
-				return appointmentLogic.deleteAppointment(appointmentId,
-						users_id, language_id);
-
+			Appointment a = appointmentDao.get(appointmentId);
+			if (authLevelUtil.checkWebServiceLevel(user_level) || authLevelUtil.checkAdminLevel(user_level)) {
+				// fine
 			} else if (authLevelUtil.checkUserLevel(user_level)) {
-
-				Appointment appointment = appointmentLogic
-						.getAppointMentById(appointmentId);
-
-				if (!appointment.getOwner().getUser_id().equals(users_id)) {
-					throw new AxisFault(
-							"The Appointment cannot be deleted by the given user");
+				// check if the appointment belongs to the current user
+				if (!a.getOwner().getUser_id().equals(users_id)) {
+					throw new AxisFault("The Appointment cannot be updated by the given user");
 				}
-
-				return appointmentLogic.deleteAppointment(appointmentId,
-						users_id, language_id);
-
+			} else {
+				throw new AxisFault("Not allowed to preform that action, Authenticate the SID first");
 			}
-
+			appointmentDao.delete(a, getBaseUrl(), users_id); //FIXME check this !!!!
+			return a.getId();
 		} catch (Exception err) {
 			log.error("[deleteAppointment]", err);
 			throw new AxisFault(err.getMessage());
 		}
-		return null;
 	}
 
 	/**
@@ -574,7 +587,7 @@ public class CalendarWebService {
 				appointment.setStart(appStored
 						.getStart());
 				appointment.setEnd(appStored
-						.end());
+						.getEnd());
 
 				return appointment;
 			}
@@ -602,7 +615,7 @@ public class CalendarWebService {
 
 			if (authLevelUtil.checkUserLevel(user_level)) {
 
-				List<AppointmentCategory> res = appointmentCategoryDaoImpl
+				List<AppointmentCategory> res = appointmentCategoryDao
 						.getAppointmentCategoryList();
 
 				if (res == null || res.size() < 1)
@@ -642,7 +655,7 @@ public class CalendarWebService {
 
 				User user = userManager.getUserById(users_id);
 				long language_id = (user == null) ? 1 : user.getLanguage_id();
-				List<AppointmentReminderTyps> res = appointmentReminderTypDaoImpl
+				List<AppointmentReminderTyps> res = appointmentReminderTypDao
 						.getAppointmentReminderTypList(language_id);
 
 				if (res == null || res.size() < 1) {
@@ -661,168 +674,4 @@ public class CalendarWebService {
 		}
 		return null;
 	}
-
-	/**
-	 * Get the appointments (calendar events) for the given requestUserId <br/>
-	 * The TimeZone can be either given by the Id of the timezone in the table
-	 * "om_timezone" with the param timeZoneIdA <br/>
-	 * Or with the java name of the TimeZone in the param javaTimeZoneName
-	 * 
-	 * @param SID
-	 *            a valid user id
-	 * @param firstDayInWeek
-	 *            the first dayin week, 0=Sunday, 1=Monday, ...
-	 * @param startDate
-	 *            the date it should start with
-	 * @param requestUserId
-	 *            the user id the calendar events are requested, if it is not
-	 *            the user id of the SID then the SID's user needs to have the
-	 *            right to watch those events
-	 * @param omTimeZoneId
-	 *            the id of the timezone (alternativly use javaTimeZoneName)
-	 * @param javaTimeZoneName
-	 *            the name of the java time zone, see <a
-	 *            href="http://en.wikipedia.org/wiki/Time_zone#Java"
-	 *            target="_blank"
-	 *            >http://en.wikipedia.org/wiki/Time_zone#Java</a>
-	 *            
-	 * @return - appointments grouped by weeks
-	 * @throws AxisFault
-	 */
-	public List<Week> getAppointmentsByWeekCalendar(String SID,
-			int firstDayInWeek, Date startDate, Long requestUserId,
-			Long omTimeZoneId, String javaTimeZoneName) throws AxisFault {
-		try {
-
-			Long users_id = sessiondataDao.checkSession(SID);
-			Long user_level = userManager.getUserLevelByID(users_id);
-			if (authLevelUtil.checkUserLevel(user_level)) {
-				
-				if (!requestUserId.equals(users_id)) {
-					UserContact userContacts = userContactsDaoImpl
-							.getUserContactByShareCalendar(requestUserId, true,
-									users_id);
-					if (userContacts == null) {
-						throw new Exception(
-								"Your are not allowed to see this calendar");
-					}
-				}
-
-				TimeZone timezone = null;
-
-				if (javaTimeZoneName != null && !javaTimeZoneName.isEmpty()) {
-					timezone = TimeZone.getTimeZone(javaTimeZoneName);
-					if (timezone == null) {
-						throw new Exception("Invalid javaTimeZoneName given");
-					}
-				}
-
-				if (omTimeZoneId > 0) {
-					timezone = timezoneUtil.getTimezoneByOmTimeZoneId(omTimeZoneId);
-				}
-				
-				if (timezone == null) {
-					throw new Exception("No timeZone given");
-				}
-
-				// Calculate the first day of a calendar based on the first
-				// showing day of the week
-				List<Week> weeks = new ArrayList<Week>(6);
-				Calendar currentDate = Calendar.getInstance();
-				currentDate.setTime(startDate);
-				currentDate.set(Calendar.HOUR_OF_DAY, 12); // set to 12 to prevent timezone issues
-				currentDate.set(Calendar.DATE, 1);
-
-				int currentWeekDay = currentDate.get(Calendar.DAY_OF_WEEK);
-
-				Calendar startWeekDay = Calendar.getInstance();
-
-				log.debug("currentWeekDay -- " + currentWeekDay);
-				log.debug("firstDayInWeek -- " + firstDayInWeek);
-
-				if (currentWeekDay == firstDayInWeek) {
-
-					log.debug("ARE equal currentWeekDay -- ");
-
-					startWeekDay.setTime(currentDate.getTime());
-
-				} else {
-
-					startWeekDay
-							.setTimeInMillis((currentDate.getTimeInMillis() - ((currentWeekDay - 1) * 86400000)));
-
-					if (currentWeekDay > firstDayInWeek) {
-						startWeekDay.setTimeInMillis(startWeekDay
-								.getTimeInMillis()
-								+ (firstDayInWeek * 86400000));
-					} else {
-						startWeekDay.setTimeInMillis(startWeekDay
-								.getTimeInMillis()
-								- (firstDayInWeek * 86400000));
-					}
-
-				}
-
-				Calendar calStart = Calendar.getInstance(timezone);
-				calStart.setTime(startWeekDay.getTime());
-
-				Calendar calEnd = Calendar.getInstance(timezone);
-				// every month page in our calendar shows 42 days
-				calEnd.setTime(new Date(startWeekDay.getTime().getTime()
-						+ (42L * 86400000L)));
-
-				List<Appointment> appointments = appointmentDao
-						.getAppointmentsByRange(requestUserId,
-								calStart.getTime(), calEnd.getTime());
-
-				log.debug("startWeekDay 2" + startWeekDay.getTime());
-				log.debug("startWeekDay Number of appointments "
-						+ appointments.size());
-
-				long z = 0;
-
-				for (int k = 0; k < 6; k++) { // 6 weeks per monthly summary
-
-					Week week = new Week();
-
-					for (int i = 0; i < 7; i++) { // 7 days a week
-
-						Calendar tCal = Calendar.getInstance(timezone);
-						tCal.setTimeInMillis(startWeekDay.getTimeInMillis()
-								+ (z * 86400000L));
-						
-						Day day = new Day(tCal.getTime());
-						
-						for (Appointment appointment : appointments) {
-							if (appointment
-									.startCalendar(timezone).get(
-											Calendar.MONTH) == tCal
-									.get(Calendar.MONTH)
-									&& appointment.startCalendar(
-											timezone).get(Calendar.DATE) == tCal
-											.get(Calendar.DATE)) {
-								day.getAppointments().add(
-										new AppointmentDTO(appointment,
-												timezone));
-							}
-						}
-
-						week.getDays().add(day);
-						z++;
-					}
-
-					weeks.add(week);
-				}
-
-				return weeks;
-
-			}
-
-		} catch (Exception err) {
-			log.error("[getAppointmentReminderTypList]", err);
-			throw new AxisFault(err.getMessage());
-		}
-		return null;
-	}
-
 }

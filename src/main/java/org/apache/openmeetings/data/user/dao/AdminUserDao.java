@@ -108,5 +108,20 @@ public class AdminUserDao implements IDataProviderDao<User> {
 	public Object getUserByHash(String hash) {
 		return dao.getUserByHash(hash);
 	}
-
+	
+	public User getContact(String email, User owner) {
+		return dao.getContact(email, owner);
+	}
+	
+	public User getContact(String email, long ownerId) {
+		return dao.getContact(email, ownerId);
+	}
+	
+	public User getContact(String email, String firstName, String lastName, long ownerId) {
+		return dao.getContact(email, firstName, lastName, ownerId);
+	}
+	
+	public User getContact(String email, String firstName, String lastName, Long langId, String tzId, long ownerId) {
+		return dao.getContact(email, firstName, lastName, langId, tzId, dao.get(ownerId));
+	}
 }

@@ -26,7 +26,6 @@ import org.apache.openmeetings.persistence.beans.user.User;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class UserDao implements IDataProviderDao<User> {
-	
 	@Autowired
 	private AbstractUserDao dao;
 
@@ -65,5 +64,12 @@ public class UserDao implements IDataProviderDao<User> {
 	public void delete(User entity, Long userId) {
 		dao.delete(entity, userId);
 	}
-
+	
+	public User getContact(String email, long ownerId) {
+		return dao.getContact(email, ownerId);
+	}
+	
+	public User getContact(String email, String firstName, String lastName, long ownerId) {
+		return dao.getContact(email, firstName, lastName, ownerId);
+	}
 }

@@ -20,6 +20,7 @@ package org.apache.openmeetings.web.user.calendar;
 
 import static org.apache.openmeetings.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.openmeetings.web.app.Application.getBean;
+import static org.apache.openmeetings.web.app.WebSession.getBaseUrl;
 import static org.apache.openmeetings.web.app.WebSession.getLanguage;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import static org.apache.openmeetings.web.util.RoomTypeDropDown.getRoomTypes;
@@ -30,7 +31,6 @@ import java.util.List;
 
 import org.apache.openmeetings.data.calendar.daos.AppointmentDao;
 import org.apache.openmeetings.data.calendar.daos.AppointmentReminderTypDao;
-import org.apache.openmeetings.data.calendar.management.AppointmentLogic;
 import org.apache.openmeetings.data.conference.dao.RoomDao;
 import org.apache.openmeetings.data.user.dao.UserDao;
 import org.apache.openmeetings.persistence.beans.calendar.Appointment;
@@ -72,7 +72,6 @@ import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
 import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButtons;
 import com.googlecode.wicket.jquery.ui.widget.dialog.DialogIcon;
 import com.googlecode.wicket.jquery.ui.widget.dialog.MessageDialog;
-
 
 public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 	private static final long serialVersionUID = 1L;
@@ -131,7 +130,7 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 	}
 
 	protected void deleteAppointment(AjaxRequestTarget target) {
-		getBean(AppointmentLogic.class).deleteAppointment(getModelObject().getId(), getUserId(), getLanguage());
+		getBean(AppointmentDao.class).delete(getModelObject(), getBaseUrl(), getUserId());
 		calendar.refresh(target);		
 	}
 
@@ -171,7 +170,7 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 
 	@Override
 	protected void onSubmit(AjaxRequestTarget target) {
-		getBean(AppointmentDao.class).update(form.getModelObject(), getUserId());
+		getBean(AppointmentDao.class).update(form.getModelObject(), getBaseUrl(), getUserId());
 		target.add(feedback);
 		calendar.refresh(target);
 	}
@@ -203,7 +202,7 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 				java.util.Calendar start = WebSession.getCalendar();
 				start.setTime(a.getStart());
 				java.util.Calendar end = WebSession.getCalendar();
-				end.setTime(a.end());
+				end.setTime(a.getEnd());
 				
 				if (start.equals(end)) {
 					end.add(java.util.Calendar.HOUR_OF_DAY, 1);

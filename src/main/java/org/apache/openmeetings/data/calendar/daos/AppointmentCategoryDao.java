@@ -44,7 +44,7 @@ public class AppointmentCategoryDao {
 	@Autowired
 	private UserDao usersDao;
 
-	public AppointmentCategory getAppointmentCategoryById(Long categoryId) {
+	public AppointmentCategory get(Long categoryId) {
 		try {
 			log.debug("getAppointmentCategoryById: " + categoryId);
 
@@ -73,7 +73,7 @@ public class AppointmentCategoryDao {
 		try {
 
 			AppointmentCategory ac = this
-					.getAppointmentCategoryById(categoryId);
+					.get(categoryId);
 
 			ac.setName(name);
 			ac.setUpdatetime(new Date());
@@ -118,7 +118,7 @@ public class AppointmentCategoryDao {
 		try {
 
 			AppointmentCategory ac = this
-					.getAppointmentCategoryById(categoryId);
+					.get(categoryId);
 
 			log.debug("ac: " + ac);
 

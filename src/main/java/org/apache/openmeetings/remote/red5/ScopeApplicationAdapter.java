@@ -1528,12 +1528,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 				// If this is an Appointment then the Moderator will be set to
 				// the Invitor
 
-				Appointment ment = appointmentLogic
-						.getAppointmentByRoom(room_id);
-
-				List<MeetingMember> members = meetingMemberDao
-						.getMeetingMemberByAppointmentId(ment
-								.getId());
+				Appointment ment = appointmentLogic.getAppointmentByRoom(room_id);
 
 				Long userIdInRoomClient = currentClient.getUser_id();
 
@@ -1541,8 +1536,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 				boolean moderator_set = false;
 
 				// Check if current user is set to moderator
-				for (int i = 0; i < members.size(); i++) {
-					MeetingMember member = members.get(i);
+				for (MeetingMember member : ment.getMeetingMembers()) {
 
 					// only persistent users can schedule a meeting
 					// user-id is only set for registered users
@@ -1561,8 +1555,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 								currentClient.setIsMod(true);
 
 								// Update the Client List
-								this.sessionManager.updateClientByStreamId(
-										streamid, currentClient, false, null);
+								sessionManager.updateClientByStreamId(streamid, currentClient, false, null);
 
 								List<Client> modRoomList = this.sessionManager
 										.getCurrentModeratorByRoom(currentClient
@@ -1597,8 +1590,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 							+ userIdInRoomClient
 							+ " could not be found as MeetingMember -> definitely no moderator");
 					currentClient.setIsMod(false);
-					this.sessionManager.updateClientByStreamId(streamid,
-							currentClient, false, null);
+					sessionManager.updateClientByStreamId(streamid, currentClient, false, null);
 				} else {
 					// if current user is part of the member list, but moderator
 					// couldn't be retrieved : first come, first draw!
@@ -1607,8 +1599,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 						currentClient.setIsMod(true);
 
 						// Update the Client List
-						this.sessionManager.updateClientByStreamId(streamid,
-								currentClient, false, null);
+						sessionManager.updateClientByStreamId(streamid, currentClient, false, null);
 
 						List<Client> modRoomList = this.sessionManager
 								.getCurrentModeratorByRoom(currentClient

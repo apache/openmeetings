@@ -540,33 +540,6 @@ public class MainService implements IPendingServiceCallback {
 		}
 	}
 
-	/**
-	 * send an invitation to another user by Mail
-	 * 
-	 * @deprecated
-	 * @param SID
-	 * @param username
-	 * @param message
-	 * @param domain
-	 * @param room
-	 * @param roomtype
-	 * @param baseurl
-	 * @param email
-	 * @param subject
-	 * @param room_id
-	 * @return - "success" string in case of success, error message of null otherwise
-	 */
-	@Deprecated
-	public String sendInvitation(String SID, String username, String message,
-			String domain, String room, String roomtype, String baseurl,
-			String email, String subject, Long room_id) {
-		Long users_id = sessiondataDao.checkSession(SID);
-		Long user_level = userManager.getUserLevelByID(users_id);
-		return invitationManager.sendInvitionLink(user_level,
-				username, message, domain, room, roomtype, baseurl, email,
-				usersDao.get(users_id).getAdresses().getEmail(), subject, room_id, null, null);
-	}
-
 	public List<Userdata> getUserdata(String SID) {
 		Long users_id = sessiondataDao.checkSession(SID);
 		Long user_level = userManager.getUserLevelByID(users_id);

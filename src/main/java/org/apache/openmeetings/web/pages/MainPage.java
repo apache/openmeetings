@@ -37,6 +37,7 @@ import org.apache.openmeetings.web.user.AboutDialog;
 import org.apache.openmeetings.web.user.ChatPanel;
 import org.apache.openmeetings.web.util.BaseUrlAjaxBehavior;
 import org.apache.openmeetings.web.util.OmUrlFragment;
+import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AbstractAjaxTimerBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -155,6 +156,10 @@ public class MainPage extends BaseInitedPage {
 	public void updateContents(OmUrlFragment f, AjaxRequestTarget target) {
 		BasePanel panel = getPanel(f.getArea(), f.getType());
 		if (panel != null) {
+			Component prev = contents.get(CHILD_ID);
+			if (prev != null && prev instanceof BasePanel) {
+				((BasePanel)prev).cleanup(target);
+			}
 			target.add(contents.replace(panel));
 			UrlFragment uf = new UrlFragment(target);
 			uf.set(f.getArea().name(), f.getType());

@@ -25,9 +25,7 @@ import java.util.List;
 import java.util.Locale;
 
 import org.apache.openmeetings.data.user.dao.UserDao;
-import org.apache.openmeetings.persistence.beans.user.Address;
 import org.apache.openmeetings.persistence.beans.user.User;
-import org.apache.openmeetings.persistence.beans.user.User.Type;
 import org.apache.wicket.extensions.validation.validator.RfcCompliantEmailAddressValidator;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.util.convert.IConverter;
@@ -77,13 +75,7 @@ public class UserAutoCompleteTextField extends AutoCompleteTextField<User> {
 				Validatable<String> valEmail = new Validatable<String>(email);
 				RfcCompliantEmailAddressValidator.getInstance().validate(valEmail);
 				if (valEmail.isValid()) {
-					u = new User();
-					u.setType(Type.contact);
-					u.setFirstname(fName);
-					u.setLogin(getUserId() + "_" + email); //UserId prefix is used to ensure unique login
-					u.setLastname(lName);
-					u.setAdresses(new Address());
-					u.getAdresses().setEmail(email);
+					u = getBean(UserDao.class).getContact(email, fName, lName, getUserId());
 				} else {
 					for (IValidationError err : valEmail.getErrors()) {
 						UserAutoCompleteTextField.this.error(err);

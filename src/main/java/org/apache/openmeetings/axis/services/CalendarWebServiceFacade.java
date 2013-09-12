@@ -23,7 +23,6 @@ import java.util.Date;
 import java.util.List;
 
 import org.apache.axis2.AxisFault;
-import org.apache.openmeetings.data.calendar.beans.Week;
 import org.apache.openmeetings.persistence.beans.calendar.Appointment;
 import org.apache.openmeetings.persistence.beans.calendar.AppointmentCategory;
 import org.apache.openmeetings.persistence.beans.calendar.AppointmentReminderTyps;
@@ -114,13 +113,4 @@ public class CalendarWebServiceFacade extends BaseWebService {
 			String SID) throws AxisFault {
 		return getBean(CalendarWebService.class).getAppointmentReminderTypList(SID);
 	}
-
-	public List<Week> getAppointmentsByWeekCalendar(String SID,
-			int firstDayInWeek, Date startDate, Long requestUserId,
-			Long omTimeZoneId, String javaTimeZoneName) throws AxisFault {
-		return getBean(CalendarWebService.class).getAppointmentsByWeekCalendar(SID,
-				firstDayInWeek, startDate, requestUserId, omTimeZoneId,
-				javaTimeZoneName);
-	}
-
 }

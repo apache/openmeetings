@@ -33,6 +33,7 @@ public class InvitationTemplate extends AbstractTemplatePanel {
 	}
 	
 	public static String getEmail(String user, String message, String link) {
+		ensureApplication();
 		return renderPanel(new InvitationTemplate(TemplatePage.COMP_ID, user, message, link)).toString();
 	}
 }

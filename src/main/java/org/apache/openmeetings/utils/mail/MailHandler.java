@@ -255,7 +255,7 @@ public class MailHandler {
 		init();
 		log.debug("sendMails enter ...");
 		List<MailMessage> list = mailMessageDao.get(0, 1);
-		log.debug("Numebr of emails in init queue " + list.size());
+		log.debug("Number of emails in init queue " + list.size());
 		while (!list.isEmpty()) {
 			send(list.get(0), true);
 			list = mailMessageDao.get(0, 1);

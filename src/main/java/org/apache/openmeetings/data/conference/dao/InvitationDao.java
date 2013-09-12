@@ -19,7 +19,6 @@
 package org.apache.openmeetings.data.conference.dao;
 
 import java.util.Date;
-import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -27,7 +26,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
-import org.apache.openmeetings.persistence.beans.invitation.Invitations;
+import org.apache.openmeetings.persistence.beans.invitation.Invitation;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.transaction.annotation.Transactional;
@@ -41,9 +40,9 @@ public class InvitationDao {
 	@PersistenceContext
 	private EntityManager em;
 	
-	public Invitations updateInvitation(Invitations invitation) throws Exception {
-		invitation.setUpdatetime(new Date());
-		if (invitation.getInvitations_id() == null) {
+	public Invitation update(Invitation invitation) {
+		invitation.setUpdated(new Date());
+		if (invitation.getId() == null) {
 			em.persist(invitation);
 			return invitation;
 		} else {
@@ -54,10 +53,10 @@ public class InvitationDao {
 		return null;
 	}
 	
-	public Invitations getInvitationbyId(Long invId) {
+	public Invitation get(Long invId) {
 		try {
 			
-			TypedQuery<Invitations> query = em.createNamedQuery("getInvitationbyId", Invitations.class);
+			TypedQuery<Invitation> query = em.createNamedQuery("getInvitationbyId", Invitation.class);
 			query.setParameter("deleted", true);
 			query.setParameter("invid", invId);
 			
@@ -72,10 +71,10 @@ public class InvitationDao {
 		return null;
 	}
 	
-	public Invitations getInvitationByHashCode(String hashCode, boolean hidePass) {
+	public Invitation getInvitationByHashCode(String hashCode, boolean hidePass) {
 		try {
 			
-			TypedQuery<Invitations> query = em.createNamedQuery("getInvitationByHashCode", Invitations.class);
+			TypedQuery<Invitation> query = em.createNamedQuery("getInvitationByHashCode", Invitation.class);
 			query.setParameter("hashCode", hashCode);
 			query.setParameter("deleted", false);
 			
@@ -88,34 +87,5 @@ public class InvitationDao {
 			log.error("getInvitationbyAppointementId : ", e);
 		}
 		return null;
-	}
-	
-	public void updateInvitationByAppointment(Long appointmentId,
-			Date appointmentstart, Date appointmentend) {
-		try {
-
-			Date gmtTimeStartShifted = new Date(appointmentstart.getTime()
-					- (5 * 60 * 1000));
-
-			TypedQuery<Invitations> query = em.createNamedQuery("getInvitationByAppointment", Invitations.class);
-			query.setParameter("appointmentId", appointmentId);
-
-			List<Invitations> listInvitations = query.getResultList();
-
-			for (Invitations inv : listInvitations) {
-				inv.setValidFrom(gmtTimeStartShifted);
-				inv.setValidTo(appointmentend);
-				if (inv.getInvitations_id() == null) {
-					em.persist(inv);
-				} else {
-					if (!em.contains(inv)) {
-						em.merge(inv);
-					}
-				}
-			}
-
-		} catch (Exception err) {
-			log.error("updateInvitationByAppointment : ", err);
-		}
 	}
 }

@@ -49,7 +49,7 @@ public class AppointmentReminderTypDao {
 	@Autowired
 	private FieldLanguagesValuesDao fieldLanguagesValuesDao;
 
-	public AppointmentReminderTyps getAppointmentReminderTypById(Long typId) {
+	public AppointmentReminderTyps get(Long typId) {
 		try {
 			log.debug("AppointmentReminderTypById: " + typId);
 
@@ -78,7 +78,7 @@ public class AppointmentReminderTypDao {
 		try {
 
 			AppointmentReminderTyps ac = this
-					.getAppointmentReminderTypById(typId);
+					.get(typId);
 
 			ac.setName(name);
 			ac.setUpdatetime(new Date());
@@ -123,7 +123,7 @@ public class AppointmentReminderTypDao {
 		try {
 
 			AppointmentReminderTyps ac = this
-					.getAppointmentReminderTypById(typId);
+					.get(typId);
 
 			log.debug("ac: " + ac);
 

@@ -21,8 +21,11 @@ package org.apache.openmeetings.persistence.beans.invitation;
 import java.io.Serializable;
 import java.util.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -34,6 +37,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
 import org.apache.openjpa.persistence.jdbc.ForeignKey;
+import org.apache.openmeetings.persistence.beans.calendar.Appointment;
 import org.apache.openmeetings.persistence.beans.room.Room;
 import org.apache.openmeetings.persistence.beans.user.User;
 
@@ -49,30 +53,40 @@ import org.apache.openmeetings.persistence.beans.user.User;
 					+ "WHERE a.appointmentId = :appointmentId  ")
 })
 @Table(name = "invitations")
-public class Invitations implements Serializable {
+public class Invitation implements Serializable {
 	private static final long serialVersionUID = 1153321347974705506L;
 
+	public enum Valid {
+		OneTime
+		, Period
+		, Endless;
+		
+		public static Valid fromInt(int valid) {
+			return valid == 1 ? Endless : (valid == 2 ? Period : OneTime);
+		}
+	}
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
-	private Long invitations_id;
+	private Long id;
 
 	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "invitedBy", nullable = true)
+	@JoinColumn(name = "invited_by", nullable = true)
 	@ForeignKey(enabled = true)
 	private User invitedBy;
 	
-	@Column(name = "starttime")
-	private Date starttime;
+	@Column(name = "inserted")
+	private Date inserted;
 	
-	@Column(name = "updatetime")
-	private Date updatetime;
+	@Column(name = "updated")
+	private Date updated;
 	
 	@Column(name = "deleted")
 	private boolean deleted;
 
 	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "roomid", nullable = true)
+	@JoinColumn(name = "room_id", nullable = true)
 	@ForeignKey(enabled = true)
 	private Room room;
 
@@ -80,68 +94,51 @@ public class Invitations implements Serializable {
 	@Column(name = "hash")
 	private String hash;
 	
-	@Column(name = "invitedname")
-	private String invitedname;
-	
-	@Column(name = "invitedEMail")
-	private String invitedEMail;
-	
-	@Column(name = "ispasswordprotected")
-	private Boolean isPasswordProtected;
-	
-	@Column(name = "invitationpass")
-	private String invitationpass;
+	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@JoinColumn(name = "invitee_id", nullable = true)
+	@ForeignKey(enabled = true)
+	private User invitee;
 
-	// this is necessary as a room can be shared between multiple domains
-	// is either *public* or an organisation_ID
-	@Column(name = "conferencedomain")
-	private String conferencedomain;
+	@Column(name = "password_protected")
+	private boolean passwordProtected;
+	
+	@Column(name = "password")
+	private String password;
 
 	// Invitations by Time are only valid between the validFrom validTo
 	// TimeStamp
-	@Column(name = "isValidByTime")
-	private Boolean isValidByTime = false;
+	@Column(name = "valid")
+	@Enumerated(EnumType.STRING)
+	private Valid valid = Valid.Period;
 	
-	@Column(name = "validFrom")
+	@Column(name = "valid_from")
 	private Date validFrom;
 	
-	@Column(name = "validTo")
+	@Column(name = "valid_to")
 	private Date validTo;
-	// An invitation which is canBeUsedOnlyOneTime = true can be only used
-	// one-time
-	@Column(name = "canBeUsedOnlyOneTime")
-	private Boolean canBeUsedOnlyOneTime = false;
 	
-	@Column(name = "invitationWasUsed")
-	private Boolean invitationWasUsed = false;
+	@Column(name = "was_used")
+	private boolean used;
 	
-
-	@Column(name = "appointment_id")
-	private Long appointmentId;
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "appointment_id", nullable = true)
+	@ForeignKey(enabled = true)
+	private Appointment appointment;
 
 	// BaseuRL defined at creation of InvitationLink - used for chronological
 	// reminders on serverside (updates)
-	@Column(name = "baseUrl")
+	@Column(name = "base_url")
 	private String baseUrl;
 	
-	/**
-	 * java.util.TimeZone Id
-	 */
-	@Column(name = "time_zone_id")
-	private String timeZoneId; // 
-	
+	//variable used in Flash
 	private boolean allowEntry = true;
-
-	public Invitations() {
-		super();
+	
+	public Long getId() {
+		return id;
 	}
 
-	public Long getInvitations_id() {
-		return invitations_id;
-	}
-
-	public void setInvitations_id(Long invitations_id) {
-		this.invitations_id = invitations_id;
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public Room getRoom() {
@@ -160,20 +157,20 @@ public class Invitations implements Serializable {
 		this.invitedBy = invitedBy;
 	}
 
-	public Date getStarttime() {
-		return starttime;
+	public Date getInserted() {
+		return inserted;
 	}
 
-	public void setStarttime(Date starttime) {
-		this.starttime = starttime;
+	public void setInserted(Date inserted) {
+		this.inserted = inserted;
 	}
 
-	public Date getUpdatetime() {
-		return updatetime;
+	public Date getUpdated() {
+		return updated;
 	}
 
-	public void setUpdatetime(Date updatetime) {
-		this.updatetime = updatetime;
+	public void setUpdated(Date updated) {
+		this.updated = updated;
 	}
 
 	public boolean getDeleted() {
@@ -192,44 +189,28 @@ public class Invitations implements Serializable {
 		this.hash = hash;
 	}
 
-	public String getInvitedname() {
-		return invitedname;
+	public User getInvitee() {
+		return invitee;
 	}
 
-	public void setInvitedname(String invitedname) {
-		this.invitedname = invitedname;
+	public void setInvitee(User invitee) {
+		this.invitee = invitee;
 	}
 
-	public String getInvitedEMail() {
-		return invitedEMail;
+	public boolean isPasswordProtected() {
+		return passwordProtected;
 	}
 
-	public void setInvitedEMail(String invitedEMail) {
-		this.invitedEMail = invitedEMail;
+	public void setPasswordProtected(boolean passwordProtected) {
+		this.passwordProtected = passwordProtected;
 	}
 
-	public Boolean getIsPasswordProtected() {
-		return isPasswordProtected;
+	public String getPassword() {
+		return password;
 	}
 
-	public void setIsPasswordProtected(Boolean isPasswordProtected) {
-		this.isPasswordProtected = isPasswordProtected;
-	}
-
-	public String getInvitationpass() {
-		return invitationpass;
-	}
-
-	public void setInvitationpass(String invitationpass) {
-		this.invitationpass = invitationpass;
-	}
-
-	public String getConferencedomain() {
-		return conferencedomain;
-	}
-
-	public void setConferencedomain(String conferencedomain) {
-		this.conferencedomain = conferencedomain;
+	public void setPassword(String password) {
+		this.password = password;
 	}
 
 	public Date getValidFrom() {
@@ -248,28 +229,12 @@ public class Invitations implements Serializable {
 		this.validTo = validTo;
 	}
 
-	public Boolean getCanBeUsedOnlyOneTime() {
-		return canBeUsedOnlyOneTime;
+	public boolean isUsed() {
+		return used;
 	}
 
-	public void setCanBeUsedOnlyOneTime(Boolean canBeUsedOnlyOneTime) {
-		this.canBeUsedOnlyOneTime = canBeUsedOnlyOneTime;
-	}
-
-	public Boolean getInvitationWasUsed() {
-		return invitationWasUsed;
-	}
-
-	public void setInvitationWasUsed(Boolean invitationWasUsed) {
-		this.invitationWasUsed = invitationWasUsed;
-	}
-
-	public Boolean getIsValidByTime() {
-		return isValidByTime;
-	}
-
-	public void setIsValidByTime(Boolean isValidByTime) {
-		this.isValidByTime = isValidByTime;
+	public void setUsed(boolean used) {
+		this.used = used;
 	}
 
 	public String getBaseUrl() {
@@ -280,14 +245,22 @@ public class Invitations implements Serializable {
 		this.baseUrl = baseUrl;
 	}
 
-	public Long getAppointmentId() {
-		return appointmentId;
+	public Appointment getAppointment() {
+		return appointment;
 	}
 
-	public void setAppointmentId(Long appointmentId) {
-		this.appointmentId = appointmentId;
+	public void setAppointment(Appointment appointment) {
+		this.appointment = appointment;
 	}
 
+	public Valid getValid() {
+		return valid;
+	}
+
+	public void setValid(Valid valid) {
+		this.valid = valid;
+	}
+	
 	public boolean isAllowEntry() {
 		return allowEntry;
 	}
@@ -295,13 +268,4 @@ public class Invitations implements Serializable {
 	public void setAllowEntry(boolean allowEntry) {
 		this.allowEntry = allowEntry;
 	}
-
-	public String getTimeZoneId() {
-		return timeZoneId;
-	}
-
-	public void setTimeZoneId(String timeZoneId) {
-		this.timeZoneId = timeZoneId;
-	}
-
 }

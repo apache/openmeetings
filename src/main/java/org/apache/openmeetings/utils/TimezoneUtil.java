@@ -130,7 +130,7 @@ public class TimezoneUtil {
 	 * @param user
 	 * @return
 	 */
-	public TimeZone getTimezoneByUser(User user) {
+	public TimeZone getTimeZone(User user) {
 
 		if (user != null && user.getTimeZoneId() != null) {
 

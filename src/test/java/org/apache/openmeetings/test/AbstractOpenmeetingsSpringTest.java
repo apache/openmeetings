@@ -18,7 +18,6 @@
  */
 package org.apache.openmeetings.test;
 
-import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
@@ -32,9 +31,7 @@ import org.apache.openmeetings.data.user.dao.UserDao;
 import org.apache.openmeetings.installation.ImportInitvalues;
 import org.apache.openmeetings.installation.InstallationConfig;
 import org.apache.openmeetings.persistence.beans.calendar.Appointment;
-import org.apache.openmeetings.persistence.beans.user.Address;
 import org.apache.openmeetings.persistence.beans.user.User;
-import org.apache.openmeetings.persistence.beans.user.User.Type;
 import org.apache.openmeetings.utils.OmFileHelper;
 import org.apache.openmeetings.utils.crypt.ManageCryptStyle;
 import org.junit.Before;
@@ -64,7 +61,7 @@ public abstract class AbstractOpenmeetingsSpringTest extends AbstractJUnit4Sprin
 	@Autowired
 	private UserManager userManager;
 	@Autowired
-	private UserDao usersDao;
+	private UserDao userDao;
 	@Autowired
 	private ImportInitvalues importInitvalues;
 	@Autowired
@@ -75,7 +72,7 @@ public abstract class AbstractOpenmeetingsSpringTest extends AbstractJUnit4Sprin
 	@Before
 	public void setUp() throws Exception {
 		setOmHome();
-        if (usersDao.count() < 1) {
+        if (userDao.count() < 1) {
             makeDefaultScheme();
             log.info("Default scheme created successfully");
         } else {
@@ -107,7 +104,7 @@ public abstract class AbstractOpenmeetingsSpringTest extends AbstractJUnit4Sprin
 		ap.setIsYearly(false);
 		ap.setPasswordProtected(false);
 
-		ap.setOwner(usersDao.get(1L));
+		ap.setOwner(userDao.get(1L));
 		ap.setConnectedEvent(false);
 		Long id = appointmentDao.addAppointmentObj(ap);
 		assertNotNull("Cann't add appointment", id);
@@ -148,17 +145,8 @@ public abstract class AbstractOpenmeetingsSpringTest extends AbstractJUnit4Sprin
 	}
 
 	public User createUserContact(int rnd, Long ownerId) throws Exception {
-		User user = new User();
-		// add user as contact
-		user.setFirstname("firstname" + rnd);
-		user.setLastname("lastname" + rnd);
-		user.setLogin(getUserId() + "_" + "email" + rnd);
-		user.setLanguage_id(1L);
-		user.setType(Type.contact);
-		user.setOwner_id(ownerId);
-		user.setAdresses(new Address());
-		user.getAdresses().setEmail("email" + rnd);
-		user = usersDao.update(user, ownerId);
+		User user = userDao.getContact("email" + rnd, "firstname" + rnd, "lastname" + rnd, ownerId);
+		user = userDao.update(user, ownerId);
 		assertNotNull("Cann't add user", user);
 		return user;
 	}

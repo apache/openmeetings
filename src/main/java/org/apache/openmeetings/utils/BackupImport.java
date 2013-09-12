@@ -706,25 +706,16 @@ public class BackupImport {
 					//HACK to handle external attendee's firstname, lastname, email
 					boolean contactValid = false;
 					do {
-						if ("firstname".equals(item1.getName())) {
+						if (Type.contact == mm.getUser().getType() && "firstname".equals(item1.getName())) {
 							mm.getUser().setFirstname(item1.getValue());
 						}
-						if ("lastname".equals(item1.getName())) {
+						if (Type.contact == mm.getUser().getType() && "lastname".equals(item1.getName())) {
 							mm.getUser().setLastname(item1.getValue());
 						}
 						if ("email".equals(item1.getName())) {
-							if (mm.getUser().getAdresses() == null) {
-								mm.getUser().setAdresses(new Address());
-							}
 							String email = item1.getValue();
-							User u = usersDao.getUserByEmail(email);
-							if (u != null) {
-								mm.setUser(u);
-							} else if (mm.getAppointment() != null && mm.getAppointment().getOwner() != null) {
-								mm.getUser().setType(Type.contact);
-								mm.getUser().getAdresses().setEmail(email);
-								mm.getUser().setLogin(mm.getAppointment().getOwner().getUser_id() + "_" + email);
-								mm.getUser().setOwner_id(mm.getAppointment().getOwner().getUser_id());
+							if (mm.getAppointment() != null && mm.getAppointment().getOwner() != null) {
+								mm.setUser(usersDao.getContact(email, mm.getAppointment().getOwner()));
 							}
 							contactValid = true;
 						}

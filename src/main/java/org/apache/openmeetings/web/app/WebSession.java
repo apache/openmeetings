@@ -137,7 +137,7 @@ public class WebSession extends AbstractAuthenticatedWebSession {
 			User user = (User)u;
 			userId = user.getUser_id();
 			languageId = user.getLanguage_id();
-			tz = getBean(TimezoneUtil.class).getTimezoneByUser(user);
+			tz = getBean(TimezoneUtil.class).getTimeZone(user);
 			ISO8601FORMAT.setTimeZone(tz);
 			//FIXMW locale need to be set by User language first
 			sdf = DateFormat.getDateTimeInstance(SHORT, SHORT, getLocale());

@@ -20,14 +20,13 @@ package org.apache.openmeetings.data.calendar.daos;
 
 import static org.apache.openmeetings.OpenmeetingsVariables.webAppRootKey;
 
-import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
-import java.util.TimeZone;
+import java.util.Set;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
-import javax.persistence.TypedQuery;
 
 import org.apache.openmeetings.data.user.dao.UserDao;
 import org.apache.openmeetings.persistence.beans.calendar.MeetingMember;
@@ -49,8 +48,7 @@ public class MeetingMemberDao {
 	public MeetingMember get(Long meetingMemberId) {
 		MeetingMember meetingMember = null;
 		try {
-			meetingMember = em.createQuery("SELECT app FROM MeetingMember app "
-					+ "WHERE app.deleted = false AND app.id = :id", MeetingMember.class)
+			meetingMember = em.createNamedQuery("getMeetingMemberById", MeetingMember.class)
 					.setParameter("id", meetingMemberId).getSingleResult();
 		} catch (NoResultException ex) {
 		}
@@ -59,30 +57,17 @@ public class MeetingMemberDao {
 	}
 
 	public List<MeetingMember> getMeetingMembers() {
-		return em.createQuery("select app from MeetingMember app", MeetingMember.class).getResultList();
+		return em.createNamedQuery("getMeetingMembers", MeetingMember.class).getResultList();
 	}
 
-	public List<MeetingMember> getMeetingMemberByAppointmentId(
-			Long appointmentId) {
-		try {
-			log.debug("getMeetingMemberByAppointmentId: " + appointmentId);
+	public Set<Long> getMeetingMemberIdsByAppointment(Long appointmentId) {
+		log.debug("getMeetingMemberIdsByAppointment: " + appointmentId);
 
-			String hql = "select app from MeetingMember app "
-					+ "WHERE app.deleted = false "
-					+ "AND app.appointment.id = :id";
-
-			TypedQuery<MeetingMember> query = em.createQuery(hql, MeetingMember.class);
-			query.setParameter("id", appointmentId);
-
-			List<MeetingMember> listmeetingMember = query.getResultList();
-
-			return listmeetingMember;
-		} catch (Exception ex2) {
-			log.error("[getMeetingMemberByAppointmentId]: ", ex2);
-		}
-		return null;
+		return new HashSet<Long>(em.createNamedQuery("getMeetingMemberIdsByAppointment", Long.class)
+				.setParameter("id", appointmentId)
+				.getResultList());
 	}
-
+	
 	/**
 	 * Updating MeetingMember
 	 */
@@ -97,96 +82,4 @@ public class MeetingMemberDao {
 		}
 		return meetingMember;
 	}
-
-	// -------------------------------------------------------------------------------
-
-	public Long updateMeetingMember(Long meetingMemberId, String appointmentStatus,
-			Long appointmentId, Long userid) {
-		try {
-
-			MeetingMember gm = this.get(meetingMemberId);
-			/*
-			 * if (gm == null) { log.debug("ALERT Object with ID: "+
-			 * MeetingMemberId +" does not exist yet"); return null; }
-			 */
-
-			gm.setAppointmentStatus(appointmentStatus);
-			gm.setAppointment(appointmentDao.get(appointmentId));
-			gm.setDeleted(false);
-			gm.setUpdated(new Date());
-			gm.setUser(usersDao.get(userid));
-
-			if (gm.getId() == null) {
-				em.persist(gm);
-			} else {
-				if (!em.contains(gm)) {
-					gm = em.merge(gm);
-				}
-			}
-			meetingMemberId = gm.getId();
-			return meetingMemberId;
-		} catch (Exception ex2) {
-			log.error("[updateMeetingMember]: ", ex2);
-		}
-		return null;
-	}
-
-	public Long addMeetingMember(String appointmentStatus, Long appointmentId,
-			Long userid, TimeZone timeZone, Boolean isConnectedEvent) {
-		try {
-
-			MeetingMember gm = new MeetingMember();
-
-			gm.setAppointmentStatus(appointmentStatus);
-			gm.setAppointment(appointmentDao.get(appointmentId));
-			gm.setUser(userid == null ? null : usersDao.get(userid));
-
-			gm.setInserted(new Date());
-			gm.setDeleted(false);
-			gm.setConnectedEvent(isConnectedEvent);
-			
-			gm.setTimeZoneId(timeZone.getID());
-
-			gm = em.merge(gm);
-			Long group_member_id = gm.getId();
-
-			return group_member_id;
-		} catch (Exception ex2) {
-			log.error("[addMeetingMember]: ", ex2);
-		}
-		return null;
-	}
-
-	public Long deleteMeetingMember(Long meetingMemberId) {
-		log.debug("MeetingMemnerDAoImpl.deleteMeetingMember : "
-				+ meetingMemberId);
-
-		try {
-
-			MeetingMember gm = this.get(meetingMemberId);
-
-			log.debug("ac: " + gm);
-
-			if (gm == null) {
-				log.debug("Already deleted / Could not find: "
-						+ meetingMemberId);
-				return null;
-			}
-			gm.setUpdated(new Date());
-			gm.setDeleted(true);
-
-			if (gm.getId() == null) {
-				em.persist(gm);
-			} else {
-				if (!em.contains(gm)) {
-					em.merge(gm);
-				}
-			}
-			return meetingMemberId;
-		} catch (Exception ex2) {
-			log.error("[deleteMeetingMember]: ", ex2);
-		}
-		return null;
-	}
-
 }

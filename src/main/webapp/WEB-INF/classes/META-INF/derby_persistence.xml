@@ -45,7 +45,7 @@
 		<class>org.apache.openmeetings.persistence.beans.flvrecord.FlvRecordingLog</class>
 		<class>org.apache.openmeetings.persistence.beans.flvrecord.FlvRecordingMetaData</class>
 		<class>org.apache.openmeetings.persistence.beans.flvrecord.FlvRecordingMetaDelta</class>
-		<class>org.apache.openmeetings.persistence.beans.invitation.Invitations</class>
+		<class>org.apache.openmeetings.persistence.beans.invitation.Invitation</class>
 		<class>org.apache.openmeetings.persistence.beans.lang.FieldLanguage</class>
 		<class>org.apache.openmeetings.persistence.beans.lang.Fieldlanguagesvalues</class>
 		<class>org.apache.openmeetings.persistence.beans.lang.Fieldvalues</class>

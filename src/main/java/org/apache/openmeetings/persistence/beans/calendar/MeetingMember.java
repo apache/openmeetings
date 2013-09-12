@@ -30,16 +30,25 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
 import org.apache.openjpa.persistence.jdbc.ForeignKey;
-import org.apache.openmeetings.persistence.beans.invitation.Invitations;
+import org.apache.openmeetings.persistence.beans.invitation.Invitation;
 import org.apache.openmeetings.persistence.beans.user.User;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
 
 @Entity
 @Table(name = "meeting_members")
+@NamedQueries({
+    @NamedQuery(name="getMeetingMemberById"
+    		, query="SELECT mm FROM MeetingMember mm WHERE mm.deleted = false AND mm.id = :id")
+    , @NamedQuery(name="getMeetingMembers", query="SELECT mm FROM MeetingMember mm")
+    , @NamedQuery(name="getMeetingMemberIdsByAppointment"
+    		, query="SELECT mm.id FROM MeetingMember mm WHERE mm.deleted = false AND app.appointment.id = :id")
+})
 @Root(name = "meetingmember")
 public class MeetingMember implements Serializable {
 	private static final long serialVersionUID = -3864571325368787524L;
@@ -75,10 +84,10 @@ public class MeetingMember implements Serializable {
 	@Element(data = true)
 	private boolean deleted;
 
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinColumn(name = "invitation", nullable = true, insertable = false)
 	@ForeignKey(enabled = true)
-	private Invitations invitation;
+	private Invitation invitation;
 
 	/**
 	 * java.util.TimeZone Id
@@ -122,11 +131,11 @@ public class MeetingMember implements Serializable {
 		this.appointment = appointment;
 	}
 
-	public Invitations getInvitation() {
+	public Invitation getInvitation() {
 		return invitation;
 	}
 
-	public void setInvitation(Invitations invitation) {
+	public void setInvitation(Invitation invitation) {
 		this.invitation = invitation;
 	}
 

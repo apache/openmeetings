@@ -107,7 +107,7 @@ public class RoomDao implements IDataProviderDao<Room> {
 		//TODO generalize with AppointmentDao
 		log.debug("getAppointedRoomsByUser : UserID - " + userId);
 
-		TimeZone timeZone = timezoneUtil.getTimezoneByUser(usersDao.get(userId));
+		TimeZone timeZone = timezoneUtil.getTimeZone(usersDao.get(userId));
 
 		Calendar startCal = Calendar.getInstance(timeZone);
 		startCal.set(Calendar.MINUTE, 0);

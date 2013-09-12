@@ -262,9 +262,9 @@ public class User implements Serializable, IDataProviderEntity {
 	@Enumerated(EnumType.STRING)
 	private Type type = Type.user;
 
-	@Column(name = "ownerId")
+	@Column(name = "owner_id")
 	@Element(data = true, required = false)
-	private Long owner_id;
+	private Long ownerId;
 	
 	public Long getUser_id() {
 		return user_id;
@@ -600,12 +600,12 @@ public class User implements Serializable, IDataProviderEntity {
 		this.type = type;
 	}
 	
-	public Long getOwner_id(){
-		return owner_id;
+	public Long getOwnerId(){
+		return ownerId;
 	}
 	
-	public void setOwner_id(Long owner_id){
-		this.owner_id = owner_id;
+	public void setOwnerId(Long ownerId){
+		this.ownerId = ownerId;
 	}
 
 	@Override

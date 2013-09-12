@@ -1175,30 +1175,6 @@ public class UserManager {
 
 	}
 
-	public User getUserByEmail(String userOrEmail) throws Exception {
-		log.debug("Usermanagement.getUserByEmail : " + userOrEmail);
-
-		String hql = "SELECT c from User AS c " + "WHERE "
-				+ "c.adresses.email LIKE :userOrEmail";
-
-		TypedQuery<User> query = em.createQuery(hql, User.class);
-		query.setParameter("userOrEmail", userOrEmail);
-
-		List<User> ll = query.getResultList();
-
-		if (ll.size() > 1) {
-			log.error("ALERT :: There are two users in the database that have same Email ");
-			return ll.get(0);
-			// throw new
-			// Exception("ALERT :: There are two users in the database that have either same login or Email ");
-		} else if (ll.size() == 1) {
-			return ll.get(0);
-		} else {
-			return null;
-		}
-
-	}
-
 	// -----------------------------------------------------------------------------------------------------
 
 	/**

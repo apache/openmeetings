@@ -19,6 +19,7 @@
 package org.apache.openmeetings.axis.services;
 
 import static org.apache.openmeetings.OpenmeetingsVariables.webAppRootKey;
+import static org.apache.openmeetings.web.app.WebSession.getBaseUrl;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -32,19 +33,26 @@ import org.apache.axis2.AxisFault;
 import org.apache.openmeetings.data.basic.AuthLevelUtil;
 import org.apache.openmeetings.data.basic.SessiondataDao;
 import org.apache.openmeetings.data.beans.basic.SearchResult;
+import org.apache.openmeetings.data.calendar.daos.AppointmentCategoryDao;
 import org.apache.openmeetings.data.calendar.daos.AppointmentDao;
-import org.apache.openmeetings.data.calendar.management.MeetingMemberLogic;
+import org.apache.openmeetings.data.calendar.daos.AppointmentReminderTypDao;
+import org.apache.openmeetings.data.calendar.management.AppointmentLogic;
 import org.apache.openmeetings.data.conference.InvitationManager;
+import org.apache.openmeetings.data.conference.InvitationManager.MessageType;
 import org.apache.openmeetings.data.conference.RoomManager;
 import org.apache.openmeetings.data.conference.dao.RoomDao;
 import org.apache.openmeetings.data.flvrecord.FlvRecordingDao;
 import org.apache.openmeetings.data.user.UserManager;
+import org.apache.openmeetings.data.user.dao.AdminUserDao;
 import org.apache.openmeetings.persistence.beans.calendar.Appointment;
+import org.apache.openmeetings.persistence.beans.calendar.MeetingMember;
 import org.apache.openmeetings.persistence.beans.flvrecord.FlvRecording;
-import org.apache.openmeetings.persistence.beans.invitation.Invitations;
+import org.apache.openmeetings.persistence.beans.invitation.Invitation;
+import org.apache.openmeetings.persistence.beans.invitation.Invitation.Valid;
 import org.apache.openmeetings.persistence.beans.room.Client;
 import org.apache.openmeetings.persistence.beans.room.Room;
 import org.apache.openmeetings.persistence.beans.room.RoomType;
+import org.apache.openmeetings.persistence.beans.user.User;
 import org.apache.openmeetings.remote.ConferenceService;
 import org.apache.openmeetings.remote.red5.ScopeApplicationAdapter;
 import org.apache.openmeetings.session.ISessionManager;
@@ -69,9 +77,17 @@ public class RoomWebService {
 	@Autowired
 	private AppointmentDao appointmentDao;
 	@Autowired
+	private AppointmentCategoryDao appointmentCategoryDao;
+	@Autowired
+	private AppointmentReminderTypDao appointmentReminderTypDao;
+	@Autowired
+	private AppointmentLogic appointmentLogic;
+	@Autowired
 	private SessiondataDao sessiondataDao;
 	@Autowired
 	private UserManager userManager;
+	@Autowired
+	private AdminUserDao userDao;
 	@Autowired
 	private RoomManager roomManager;
 	@Autowired
@@ -86,8 +102,6 @@ public class RoomWebService {
 	private ConferenceService conferenceService;
 	@Autowired
 	private ISessionManager sessionManager;
-	@Autowired
-	private MeetingMemberLogic meetingMemberLogic;
 	@Autowired
 	private RoomDao roomDao;
 	@Autowired
@@ -1374,7 +1388,7 @@ public class RoomWebService {
 						);
 			}
 		} catch (Exception err) {
-			log.error("[updateRoomWithModerationAndQuestions] ", err);
+			log.error("[updateRoomWithModerationQuestionsAudioTypeAndHideOptions] ", err);
 		}
 		return new Long(-1);
 	}
@@ -1470,7 +1484,7 @@ public class RoomWebService {
 						false, true, false);
 			}
 		} catch (Exception err) {
-			log.error("[addRoomWithModeration] ", err);
+			log.error("[addRoomWithModerationAndExternalType] ", err);
 		}
 		return new Long(-1);
 	}
@@ -1531,7 +1545,7 @@ public class RoomWebService {
 						isAudioOnly, true, false, "", false, true, false);
 			}
 		} catch (Exception err) {
-			log.error("[addRoomWithModeration] ", err);
+			log.error("[addRoomWithModerationExternalTypeAndAudioType] ", err);
 		}
 		return new Long(-1);
 	}
@@ -1600,7 +1614,7 @@ public class RoomWebService {
 				return -26L;
 			}
 		} catch (Exception err) {
-			log.error("[addRoomWithModeration] ", err);
+			log.error("[addRoomWithModerationAndRecordingFlags] ", err);
 		}
 		return new Long(-1);
 	}
@@ -1671,7 +1685,7 @@ public class RoomWebService {
 						allowRecording, hideTopBar);
 			}
 		} catch (Exception err) {
-			log.error("[addRoomWithModeration] ", err);
+			log.error("[addRoomWithModerationExternalTypeAndTopBarOption] ", err);
 		}
 		return new Long(-1);
 	}
@@ -1767,28 +1781,20 @@ public class RoomWebService {
 							+ CalendarPatterns
 									.getDateWithTimeByMiliSeconds(dTo));
 				}
-				Invitations invitation = invitationManager
-						.addInvitationLink(user_level, username, username,
-								username, username, username, room_id, "",
-								isPasswordProtected, invitationpass, valid,
-								dFrom, dTo, users_id, "", 1L, false, dFrom,
-								dTo, null, username, 
-								timezoneUtil.getTimezoneByUser(userManager.getUserById(users_id)));
+				User invitee = userDao.getContact(username, username, username, users_id);
+				Invitation invitation = invitationManager.getInvitation(invitee, roomDao.get(room_id),
+								isPasswordProtected, invitationpass, Valid.fromInt(valid)
+								, userDao.get(users_id), "", 1L,
+								dFrom, dTo, null);
 
 				if (invitation != null) {
-
 					return invitation.getHash();
-
 				} else {
-
 					return "Sys - Error";
-
 				}
-
 			} else {
 				return "Need Admin Privileges to perfom the Action";
 			}
-
 		} catch (Exception err) {
 			log.error("[sendInvitationHash] ", err);
 			throw new AxisFault(err.getMessage());
@@ -1907,24 +1913,21 @@ public class RoomWebService {
 									.getDateWithTimeByMiliSeconds(dTo));
 				}
 
-				Invitations invitation = invitationManager
-						.addInvitationLink(user_level, username, message,
-								baseurl, email, subject, room_id, "",
-								isPasswordProtected, invitationpass, valid,
-								dFrom, dTo, users_id, baseurl, language_id,
-								sendMail, dFrom, dTo, null, username, 
-								timezoneUtil.getTimezoneByUser(userManager.getUserById(users_id)));
+				User invitee = userDao.getContact(email, users_id);
+				Invitation invitation = invitationManager.getInvitation(invitee, roomDao.get(room_id),
+								isPasswordProtected, invitationpass, Valid.fromInt(valid)
+								, userDao.get(users_id), baseurl, language_id,
+								dFrom, dTo, null);
 
 				if (invitation != null) {
+					if (sendMail) {
+						invitationManager.sendInvitionLink(invitation, MessageType.Create, subject, message, false);
+					}
 
 					return invitation.getHash();
-
 				} else {
-
 					return "Sys - Error";
-
 				}
-
 			} else {
 				return "Need Admin Privileges to perfom the Action";
 			}
@@ -2009,28 +2012,24 @@ public class RoomWebService {
 				log.info("validToDate: "
 						+ CalendarPatterns.getDateWithTimeByMiliSeconds(dTo));
 
-				Invitations invitation = invitationManager
-						.addInvitationLink(user_level, username, message,
-								baseurl, email, subject, room_id, "",
-								isPasswordProtected, invitationpass, valid,
-								dFrom, dTo, users_id, baseurl, language_id,
-								sendMail, dFrom, dTo, null, username, 
-								timezoneUtil.getTimezoneByUser(userManager.getUserById(users_id)));
+				User invitee = userDao.getContact(email, users_id);
+				Invitation invitation = invitationManager.getInvitation(invitee, roomDao.get(room_id),
+								isPasswordProtected, invitationpass, Valid.fromInt(valid)
+								, userDao.get(users_id), baseurl, language_id,
+								dFrom, dTo, null);
 
 				if (invitation != null) {
+					if (sendMail) {
+						invitationManager.sendInvitionLink(invitation, MessageType.Create, subject, message, false);
+					}
 
 					return invitation.getHash();
-
 				} else {
-
 					return "Sys - Error";
-
 				}
-
 			} else {
 				return "Need Admin Privileges to perfom the Action";
 			}
-
 		} catch (Exception err) {
 			log.error("[sendInvitationHash] ", err);
 			throw new AxisFault(err.getMessage());
@@ -2233,27 +2232,17 @@ public class RoomWebService {
 			Long user_level = userManager.getUserLevelByID(users_id);
 
 			if (authLevelUtil.checkWebServiceLevel(user_level)) {
+				int validFromHour = Integer.valueOf(validFromTime.substring(0, 2)).intValue();
+				int validFromMinute = Integer.valueOf(validFromTime.substring(3, 5)).intValue();
 
-				Date dFrom = null;
-				Date dTo = null;
-
-				Integer validFromHour = Integer.valueOf(
-						validFromTime.substring(0, 2)).intValue();
-				Integer validFromMinute = Integer.valueOf(
-						validFromTime.substring(3, 5)).intValue();
-
-				Integer validToHour = Integer.valueOf(
-						validToTime.substring(0, 2)).intValue();
-				Integer validToMinute = Integer.valueOf(
-						validToTime.substring(3, 5)).intValue();
+				int validToHour = Integer.valueOf(validToTime.substring(0, 2)).intValue();
+				int validToMinute = Integer.valueOf(validToTime.substring(3, 5)).intValue();
 
 				log.info("validFromHour: " + validFromHour);
 				log.info("validFromMinute: " + validFromMinute);
 
-				Date fromDate = CalendarPatterns
-						.parseDateBySeparator(validFromDate); // dd.MM.yyyy
-				Date toDate = CalendarPatterns
-						.parseDateBySeparator(validToDate); // dd.MM.yyyy
+				Date fromDate = CalendarPatterns.parseDateBySeparator(validFromDate); // dd.MM.yyyy
+				Date toDate = CalendarPatterns.parseDateBySeparator(validToDate); // dd.MM.yyyy
 
 				Calendar calFrom = Calendar.getInstance();
 				calFrom.setTime(fromDate);
@@ -2267,13 +2256,11 @@ public class RoomWebService {
 				calTo.set(calTo.get(Calendar.YEAR), calTo.get(Calendar.MONTH),
 						calTo.get(Calendar.DATE), validToHour, validToMinute, 0);
 
-				dFrom = calFrom.getTime();
-				dTo = calTo.getTime();
+				Date dFrom = calFrom.getTime();
+				Date dTo = calTo.getTime();
 
-				log.info("validFromDate: "
-						+ CalendarPatterns.getDateWithTimeByMiliSeconds(dFrom));
-				log.info("validToDate: "
-						+ CalendarPatterns.getDateWithTimeByMiliSeconds(dTo));
+				log.info("validFromDate: " + CalendarPatterns.getDateWithTimeByMiliSeconds(dFrom));
+				log.info("validToDate: " + CalendarPatterns.getDateWithTimeByMiliSeconds(dTo));
 
 				Long rooms_id = roomManager.addExternalRoom(name,
 						roomtypes_id, comment, numberOfPartizipants, ispublic,
@@ -2288,17 +2275,20 @@ public class RoomWebService {
 					return rooms_id;
 				}
 
-				appointmentDao.addAppointment("appointmentName", users_id,
-						"appointmentLocation", "appointmentDescription", dFrom,
-						dTo, // appointmentstart, appointmentend,
-						false, false, false, false, // isDaily, isWeekly,
-													// isMonthly, isYearly,
-						1L, // categoryId
-						reminderTypeId, // 1=none, 2=simple mail, 3=ICAL
-						roomDao.get(rooms_id), 1L, // language_id
-						isPasswordProtected, // isPasswordProtected
-						password, // password
-						false);
+				Appointment a = new Appointment();
+				a.setTitle("appointmentName");
+				a.setOwner(userDao.get(users_id));
+				a.setLocation("appointmentLocation");
+				a.setDescription("appointmentDescription");
+				a.setStart(dFrom);
+				a.setEnd(dTo);
+				a.setCategory(appointmentCategoryDao.get(1L));
+				a.setRemind(appointmentReminderTypDao.get(reminderTypeId));
+				a.setRoom(roomDao.get(rooms_id));
+				a.setPasswordProtected(isPasswordProtected);
+				a.setPassword(password);
+				a.setLanguageId(1L); //TODO check
+				appointmentDao.update(a, getBaseUrl(), users_id); //FIXME verify !!!
 
 				return rooms_id;
 
@@ -2341,35 +2331,7 @@ public class RoomWebService {
 	public Long addMeetingMemberRemindToRoom(String SID, Long room_id,
 			String firstname, String lastname, String email, String baseUrl,
 			Long language_id) throws AxisFault {
-		try {
-			Long users_id = sessiondataDao.checkSession(SID);
-			Long user_level = userManager.getUserLevelByID(users_id);
-
-			if (authLevelUtil.checkWebServiceLevel(user_level)) {
-
-				Appointment appointment = appointmentDao
-						.getAppointmentByRoom(room_id);
-
-				if (appointment == null) {
-					return -1L;
-				}
-				// Not In Remote List available - extern user
-				Long memberId = meetingMemberLogic.addMeetingMember(firstname,
-						lastname, "0", "0", appointment.getId(),
-						null, email, null, baseUrl, null, new Boolean(false),
-						language_id, false, "", null, "");
-
-				return memberId;
-
-			} else {
-				return -2L;
-			}
-		} catch (Exception err) {
-			log.error("[addRoomWithModeration] ", err);
-
-			throw new AxisFault(err.getMessage());
-		}
-
+		return addExternalMeetingMemberRemindToRoom(SID, room_id, firstname, lastname, email, baseUrl, language_id, null, null);
 	}
 
 	/**
@@ -2409,22 +2371,23 @@ public class RoomWebService {
 			Long user_level = userManager.getUserLevelByID(users_id);
 
 			if (authLevelUtil.checkWebServiceLevel(user_level)) {
+				Appointment a = appointmentLogic.getAppointmentByRoom(room_id);
 
-				Appointment appointment = appointmentDao
-						.getAppointmentByRoom(room_id);
-
-				if (appointment == null) {
+				if (email == null || a == null) {
 					return -1L;
 				}
+				for (MeetingMember mm : a.getMeetingMembers()) {
+					if (email.equals(mm.getUser().getAdresses().getEmail())) {
+						return mm.getId();
+					}
+				}
+				MeetingMember mm = new MeetingMember();
+				mm.setAppointment(a);
+				mm.setUser(userDao.getContact(email, firstname, lastname, language_id, jNameTimeZone, users_id));
+				a.getMeetingMembers().add(mm);
+				appointmentDao.update(a, baseUrl, users_id);
 
-				// Not In Remote List available - extern user
-				Long memberId = meetingMemberLogic.addMeetingMember(firstname,
-						lastname, "0", "0", appointment.getId(),
-						null, email, "", baseUrl, null, new Boolean(false),
-						language_id, false, "", null, invitorName);
-
-				return memberId;
-
+				return mm.getId(); //FIXME check to return ID
 			} else {
 				return -2L;
 			}
@@ -2433,7 +2396,6 @@ public class RoomWebService {
 
 			throw new AxisFault(err.getMessage());
 		}
-
 	}
 
 	/**
