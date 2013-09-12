@@ -32,7 +32,6 @@ import org.apache.openmeetings.data.basic.SessiondataDao;
 import org.apache.openmeetings.data.calendar.daos.AppointmentCategoryDao;
 import org.apache.openmeetings.data.calendar.daos.AppointmentDao;
 import org.apache.openmeetings.data.calendar.daos.AppointmentReminderTypDao;
-import org.apache.openmeetings.data.calendar.daos.MeetingMemberDao;
 import org.apache.openmeetings.data.calendar.management.AppointmentLogic;
 import org.apache.openmeetings.data.conference.RoomManager;
 import org.apache.openmeetings.data.conference.dao.RoomDao;
@@ -42,7 +41,6 @@ import org.apache.openmeetings.persistence.beans.calendar.Appointment;
 import org.apache.openmeetings.persistence.beans.calendar.AppointmentCategory;
 import org.apache.openmeetings.persistence.beans.calendar.AppointmentReminderTyps;
 import org.apache.openmeetings.persistence.beans.calendar.MeetingMember;
-import org.apache.openmeetings.persistence.beans.room.Room;
 import org.apache.openmeetings.persistence.beans.user.User;
 import org.apache.openmeetings.utils.TimezoneUtil;
 import org.apache.openmeetings.web.app.WebSession;
@@ -82,8 +80,6 @@ public class CalendarWebService {
 	private AppointmentReminderTypDao appointmentReminderTypDao;
 	@Autowired
 	private TimezoneUtil timezoneUtil;
-	@Autowired
-	private MeetingMemberDao meetingMemberDao;
 
 	/**
 	 * Load appointments by a start / end range for the current SID
@@ -223,63 +219,6 @@ public class CalendarWebService {
 
 	}
 
-	private MeetingMember getMeetingMember(Long userId, Long langId, String str) {
-		String[] params = str.split(",");
-		
-		try {
-			return meetingMemberDao.get(Long.valueOf(params[0]));
-		} catch (Exception e) {
-			//no-op
-		}
-		MeetingMember mm = new MeetingMember();
-		try {
-			mm.setUser(userDao.get(Long.valueOf(params[4])));
-		} catch (Exception e) {
-			//no-op
-		}
-		if (mm.getUser() == null) {
-			mm.setUser(userDao.getContact(params[3], params[1], params[2], langId, params[5], userId));
-		}
-		
-		return mm;
-	}
-	
-	public Appointment getAppointment(String appointmentName,
-			String appointmentLocation, String appointmentDescription,
-			Calendar appointmentstart, Calendar appointmentend,
-			Boolean isDaily, Boolean isWeekly, Boolean isMonthly,
-			Boolean isYearly, Long categoryId, Long remind, String[] mmClient,
-			Long roomType, String baseUrl, Long languageId,
-			Boolean isPasswordProtected, String password, long roomId, Long users_id) {
-		Appointment a = new Appointment();
-		a.setTitle(appointmentName);
-		a.setLocation(appointmentLocation);
-		a.setDescription(appointmentDescription);
-		a.setStart(appointmentstart.getTime());
-		a.setEnd(appointmentend.getTime());
-		a.setIsDaily(isDaily);
-		a.setIsWeekly(isWeekly);
-		a.setIsMonthly(isMonthly);
-		a.setIsYearly(isYearly);
-		a.setCategory(appointmentCategoryDao.get(categoryId));
-		a.setRemind(appointmentReminderTypDao.get(remind));
-		WebSession.get().setBaseUrl(baseUrl); //TODO verify !!!!!
-		a.setRoom(new Room());
-		a.getRoom().setComment(appointmentDescription);
-		a.getRoom().setName(appointmentName);
-		a.getRoom().setRooms_id(roomId);
-		a.getRoom().setRoomtype(roomManager.getRoomTypesById(roomType));
-		a.setOwner(userDao.get(users_id));
-		a.setPasswordProtected(isPasswordProtected);
-		a.setPassword(password);
-		a.setMeetingMembers(new ArrayList<MeetingMember>());
-		for (String singleClient : mmClient) {
-			MeetingMember mm = getMeetingMember(users_id, languageId, singleClient);
-			mm.setAppointment(a);
-			a.getMeetingMembers().add(mm);
-		}
-		return a;
-	}
 	/**
 	 * Save an appointment
 	 * 
@@ -350,7 +289,7 @@ public class CalendarWebService {
 			Long user_level = userManager.getUserLevelByID(users_id);
 
 			if (authLevelUtil.checkUserLevel(user_level)) {
-				Appointment a = getAppointment(appointmentName, appointmentLocation, appointmentDescription,
+				Appointment a = appointmentLogic.getAppointment(appointmentName, appointmentLocation, appointmentDescription,
 						appointmentstart, appointmentend, isDaily, isWeekly, isMonthly, isYearly, categoryId, remind,
 						mmClient, roomType, baseUrl, languageId, isPasswordProtected, password, roomId, users_id);
 				return appointmentDao.update(a, baseUrl, users_id).getId();
@@ -511,7 +450,7 @@ public class CalendarWebService {
 			a.setPassword(password);
 			a.setMeetingMembers(new ArrayList<MeetingMember>());
 			for (String singleClient : mmClient) {
-				MeetingMember mm = getMeetingMember(users_id, languageId, singleClient);
+				MeetingMember mm = appointmentLogic.getMeetingMember(users_id, languageId, singleClient);
 				mm.setAppointment(a);
 				a.getMeetingMembers().add(mm);
 			}

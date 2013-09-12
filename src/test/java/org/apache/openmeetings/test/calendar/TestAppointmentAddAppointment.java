@@ -23,7 +23,6 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.Calendar;
 
-import org.apache.openmeetings.axis.services.CalendarWebService;
 import org.apache.openmeetings.data.calendar.daos.AppointmentDao;
 import org.apache.openmeetings.data.calendar.management.AppointmentLogic;
 import org.apache.openmeetings.persistence.beans.calendar.Appointment;
@@ -35,8 +34,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class TestAppointmentAddAppointment extends AbstractOpenmeetingsSpringTest {
 	private static final Logger log = Red5LoggerFactory.getLogger(TestAppointmentAddAppointment.class, webAppRootKey);
 
-	@Autowired
-	private CalendarWebService calendarWebService;
 	@Autowired
 	private AppointmentLogic appointmentLogic;
 	@Autowired
@@ -72,7 +69,7 @@ public class TestAppointmentAddAppointment extends AbstractOpenmeetingsSpringTes
 		String baseUrl = "http://localhost:5080/openmeetings/";
 		Long roomType = 1L;
 
-		Appointment a = calendarWebService.getAppointment(appointmentName,
+		Appointment a = appointmentLogic.getAppointment(appointmentName,
 				appointmentLocation, appointmentDescription,
 				start, end, isDaily, isWeekly,
 				isMonthly, isYearly, categoryId, remind, mmClient,

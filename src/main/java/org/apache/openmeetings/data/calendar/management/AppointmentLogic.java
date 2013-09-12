@@ -20,6 +20,7 @@ package org.apache.openmeetings.data.calendar.management;
 
 import static org.apache.openmeetings.OpenmeetingsVariables.webAppRootKey;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -27,16 +28,22 @@ import java.util.TimeZone;
 
 import org.apache.openmeetings.data.basic.FieldManager;
 import org.apache.openmeetings.data.basic.dao.ConfigurationDao;
+import org.apache.openmeetings.data.calendar.daos.AppointmentCategoryDao;
 import org.apache.openmeetings.data.calendar.daos.AppointmentDao;
+import org.apache.openmeetings.data.calendar.daos.AppointmentReminderTypDao;
+import org.apache.openmeetings.data.calendar.daos.MeetingMemberDao;
 import org.apache.openmeetings.data.conference.InvitationManager;
+import org.apache.openmeetings.data.conference.RoomManager;
 import org.apache.openmeetings.data.conference.dao.InvitationDao;
 import org.apache.openmeetings.data.conference.dao.RoomDao;
+import org.apache.openmeetings.data.user.dao.AdminUserDao;
 import org.apache.openmeetings.persistence.beans.calendar.Appointment;
 import org.apache.openmeetings.persistence.beans.calendar.MeetingMember;
 import org.apache.openmeetings.persistence.beans.invitation.Invitation;
 import org.apache.openmeetings.persistence.beans.room.Room;
 import org.apache.openmeetings.utils.TimezoneUtil;
 import org.apache.openmeetings.utils.math.CalendarPatterns;
+import org.apache.openmeetings.web.app.WebSession;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,6 +53,10 @@ public class AppointmentLogic {
 
 	@Autowired
 	private AppointmentDao appointmentDao;
+	@Autowired
+	private AppointmentCategoryDao appointmentCategoryDao;
+	@Autowired
+	private AppointmentReminderTypDao appointmentReminderTypDao;
 	@Autowired
 	private ConfigurationDao configurationDao;
 	@Autowired
@@ -58,6 +69,12 @@ public class AppointmentLogic {
 	private TimezoneUtil timezoneUtil;
 	@Autowired
 	private InvitationDao invitationDao;
+	@Autowired
+	private RoomManager roomManager;
+	@Autowired
+	private AdminUserDao userDao;
+	@Autowired
+	private MeetingMemberDao meetingMemberDao;
 
 	private static int DEFAULT_MINUTES_REMINDER_SEND = 15;
 
@@ -252,5 +269,63 @@ public class AppointmentLogic {
 			.append("<br/>");
 
 		return message.toString();
+	}
+
+	public Appointment getAppointment(String appointmentName,
+			String appointmentLocation, String appointmentDescription,
+			Calendar appointmentstart, Calendar appointmentend,
+			Boolean isDaily, Boolean isWeekly, Boolean isMonthly,
+			Boolean isYearly, Long categoryId, Long remind, String[] mmClient,
+			Long roomType, String baseUrl, Long languageId,
+			Boolean isPasswordProtected, String password, long roomId, Long users_id) {
+		Appointment a = new Appointment();
+		a.setTitle(appointmentName);
+		a.setLocation(appointmentLocation);
+		a.setDescription(appointmentDescription);
+		a.setStart(appointmentstart.getTime());
+		a.setEnd(appointmentend.getTime());
+		a.setIsDaily(isDaily);
+		a.setIsWeekly(isWeekly);
+		a.setIsMonthly(isMonthly);
+		a.setIsYearly(isYearly);
+		a.setCategory(appointmentCategoryDao.get(categoryId));
+		a.setRemind(appointmentReminderTypDao.get(remind));
+		WebSession.get().setBaseUrl(baseUrl); //TODO verify !!!!!
+		a.setRoom(new Room());
+		a.getRoom().setComment(appointmentDescription);
+		a.getRoom().setName(appointmentName);
+		a.getRoom().setRooms_id(roomId);
+		a.getRoom().setRoomtype(roomManager.getRoomTypesById(roomType));
+		a.setOwner(userDao.get(users_id));
+		a.setPasswordProtected(isPasswordProtected);
+		a.setPassword(password);
+		a.setMeetingMembers(new ArrayList<MeetingMember>());
+		for (String singleClient : mmClient) {
+			MeetingMember mm = getMeetingMember(users_id, languageId, singleClient);
+			mm.setAppointment(a);
+			a.getMeetingMembers().add(mm);
+		}
+		return a;
+	}
+
+	public MeetingMember getMeetingMember(Long userId, Long langId, String str) {
+		String[] params = str.split(",");
+		
+		try {
+			return meetingMemberDao.get(Long.valueOf(params[0]));
+		} catch (Exception e) {
+			//no-op
+		}
+		MeetingMember mm = new MeetingMember();
+		try {
+			mm.setUser(userDao.get(Long.valueOf(params[4])));
+		} catch (Exception e) {
+			//no-op
+		}
+		if (mm.getUser() == null) {
+			mm.setUser(userDao.getContact(params[3], params[1], params[2], langId, params[5], userId));
+		}
+		
+		return mm;
 	}
 }
