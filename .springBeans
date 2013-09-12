@@ -30,14 +30,5 @@
 		<config>src/main/webapp/WEB-INF/classes/openmeetings-applicationContext.xml</config>
 	</configs>
 	<configSets>
-		<configSet>
-			<name><![CDATA[openmeetings_config]]></name>
-			<allowBeanDefinitionOverriding>true</allowBeanDefinitionOverriding>
-			<incomplete>false</incomplete>
-			<configs>
-			</configs>
-			<profiles>
-			</profiles>
-		</configSet>
 	</configSets>
 </beansProjectDescription>
