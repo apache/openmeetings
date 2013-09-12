@@ -21,7 +21,6 @@
 <classpath>
 	<classpathentry kind="src" path="src/main/java"/>
 	<classpathentry kind="src" path="src/test/java"/>
-	<classpathentry excluding="classes/|conf/|services/|classes/" kind="src" path="src/main/webapp/WEB-INF"/>
 	<classpathentry kind="src" path="src/main/webapp/WEB-INF/classes"/>
 	<classpathentry exported="true" kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4">

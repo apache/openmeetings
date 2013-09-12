@@ -440,7 +440,7 @@ public class InvitationManager {
 		User owner = i.getInvitedBy();
 		
 		String invitorName = owner.getFirstname() + " " + owner.getLastname();
-		String template = InvitationTemplate.getEmail(invitorName, message, invitation_link);
+		String template = InvitationTemplate.getEmail(i.getInvitee().getLanguage_id(), invitorName, message, invitation_link);
 		String email = i.getInvitee().getAdresses().getEmail();
 		String replyToEmail = owner.getAdresses().getEmail();
 		
@@ -469,6 +469,7 @@ public class InvitationManager {
 			// Writing back meetingUid
 			if (a.getIcalId() == null || a.getIcalId().length() < 1) {
 				a.setIcalId(meetingId);
+				// TODO should it be saved ???
 			}
 
 			log.debug(handler.getICalDataAsString());
@@ -476,40 +477,6 @@ public class InvitationManager {
 		} else {
 			mailHandler.send(email, replyToEmail, subject, template);
 		}
-	}
-
-	/**
-	 * @author o.becherer
-	 * @param userName
-	 * @param message
-	 * @param baseUrl
-	 * @param email
-	 * @param subject
-	 * @param invitationHash
-	 * @return
-	 */
-	// ----------------------------------------------------------------------------------------------------
-	public String sendInvitationReminderLink(long langId, String message, String baseUrl,
-			String email, String subject, String invitationHash) {
-		log.debug("sendInvitationReminderLink");
-
-		try {
-			String invitation_link = baseUrl + "?invitationHash="
-					+ invitationHash;
-
-			mailHandler.send(new MailMessage(
-					email
-					, null
-					, subject
-					, message + "<br/><a href='" + invitation_link + "'>"
-							+ fieldManager.getFieldByIdAndLanguage(626L, langId).getValue() + "</a>"), true);
-			
-			return "success";
-		} catch (Exception e) {
-			log.error("sendInvitationReminderLink", e);
-		}
-
-		return null;
 	}
 
 	/**

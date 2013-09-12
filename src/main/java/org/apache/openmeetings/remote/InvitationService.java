@@ -62,7 +62,6 @@ public class InvitationService implements IPendingServiceCallback {
 	private RoomDao roomDao;
 
 	public void resultReceived(IPendingServiceCall arg0) {
-		// TODO Auto-generated method stub
 		log.debug("InvitationService resultReceived" + arg0);
 	}
 

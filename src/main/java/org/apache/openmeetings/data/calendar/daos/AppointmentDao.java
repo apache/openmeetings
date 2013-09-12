@@ -159,18 +159,16 @@ public class AppointmentDao {
 		// update meeting members
 		List<MeetingMember> mmList = a.getMeetingMembers();
 		if (mmList != null){
+			Appointment a0 = a.getId() == null ? null : get(a.getId());
 			for (MeetingMember mm : mmList) {
 				if (mm.getId() != null && !mmIds.contains(mm.getId())) {
 					invitationManager.processInvitation(a, mm, MessageType.Create, baseUrl);
 				} else {
-					Appointment a0 = get(a.getId());
-					
-					boolean sendMail = !a0.getTitle().equals(a.getTitle()) ||
+					boolean sendMail = a0 == null || !a0.getTitle().equals(a.getTitle()) ||
 						!a0.getDescription().equals(a.getDescription()) ||
 						!a0.getLocation().equals(a.getLocation()) ||
 						!a0.getStart().equals(a.getStart()) ||
 						!a0.getEnd().equals(a.getEnd());
-					
 					mmIds.remove(mm.getId());
 					invitationManager.processInvitation(a, mm, MessageType.Update, baseUrl, sendMail);
 				}

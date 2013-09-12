@@ -158,6 +158,10 @@ public class WebSession extends AbstractAuthenticatedWebSession {
 		return s == null ? "[Missing]" : s;
 	}
 	
+	void setLanguage(long languageId) {
+		this.languageId = languageId;
+	}
+	
 	public static long getLanguage() {
 		WebSession session = get();
 		if (session.languageId < 0) {

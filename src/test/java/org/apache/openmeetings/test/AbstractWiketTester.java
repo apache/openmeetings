@@ -18,18 +18,13 @@
  */
 package org.apache.openmeetings.test;
 
+import static org.apache.openmeetings.web.app.Application.getWicketTester;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
-import javax.servlet.ServletContext;
-
-import org.apache.openmeetings.remote.red5.ScopeApplicationAdapter;
-import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.wicket.util.tester.WicketTester;
 import org.junit.After;
-import org.springframework.web.context.WebApplicationContext;
-import org.springframework.web.context.support.XmlWebApplicationContext;
 
 public class AbstractWiketTester extends AbstractOpenmeetingsSpringTest {
 
@@ -38,17 +33,8 @@ public class AbstractWiketTester extends AbstractOpenmeetingsSpringTest {
 	@Override
 	public void setUp() throws Exception {
 		super.setUp();
-		Application app = new Application();
-        
-        tester = new WicketTester(app);
-		ServletContext sc = app.getServletContext();
-        XmlWebApplicationContext  applicationContext = new XmlWebApplicationContext();
-        applicationContext.setConfigLocation("classpath:openmeetings-applicationContext.xml");
-        applicationContext.setServletContext(sc);
-        applicationContext.refresh();
-        sc.setAttribute(WebApplicationContext.ROOT_WEB_APPLICATION_CONTEXT_ATTRIBUTE, applicationContext);
+        tester = getWicketTester();
         assertNotNull("Web session should not be null", WebSession.get());
-		ScopeApplicationAdapter.initComplete = true;
 	}
 
 	public void login(String login, String password) {

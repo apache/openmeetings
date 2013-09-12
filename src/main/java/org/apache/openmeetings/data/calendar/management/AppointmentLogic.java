@@ -33,6 +33,7 @@ import org.apache.openmeetings.data.calendar.daos.AppointmentDao;
 import org.apache.openmeetings.data.calendar.daos.AppointmentReminderTypDao;
 import org.apache.openmeetings.data.calendar.daos.MeetingMemberDao;
 import org.apache.openmeetings.data.conference.InvitationManager;
+import org.apache.openmeetings.data.conference.InvitationManager.MessageType;
 import org.apache.openmeetings.data.conference.RoomManager;
 import org.apache.openmeetings.data.conference.dao.InvitationDao;
 import org.apache.openmeetings.data.conference.dao.RoomDao;
@@ -43,7 +44,6 @@ import org.apache.openmeetings.persistence.beans.invitation.Invitation;
 import org.apache.openmeetings.persistence.beans.room.Room;
 import org.apache.openmeetings.utils.TimezoneUtil;
 import org.apache.openmeetings.utils.math.CalendarPatterns;
-import org.apache.openmeetings.web.app.WebSession;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -211,12 +211,9 @@ public class AppointmentLogic {
 				String subject = generateSubject(labelid1158, a, tZone);
 				String smsSubject = generateSMSSubject(labelid1158, a);
 
-				String message = generateMessage(labelid1158, a,
-						language_id, labelid1153, labelid1154, tZone);
+				String message = generateMessage(labelid1158, a, language_id, labelid1153, labelid1154, tZone);
 
-				invitationManager.sendInvitationReminderLink(language_id, message,
-						inv.getBaseUrl(), mm.getUser().getAdresses().getEmail(), subject,
-						inv.getHash());
+				invitationManager.sendInvitionLink(inv, MessageType.Create, subject, message, false);
 
 				invitationManager.sendInvitationReminderSMS(mm.getUser().getAdresses().getPhone(), smsSubject, language_id);
 				inv.setUpdated(new Date());
@@ -290,12 +287,14 @@ public class AppointmentLogic {
 		a.setIsYearly(isYearly);
 		a.setCategory(appointmentCategoryDao.get(categoryId));
 		a.setRemind(appointmentReminderTypDao.get(remind));
-		WebSession.get().setBaseUrl(baseUrl); //TODO verify !!!!!
-		a.setRoom(new Room());
-		a.getRoom().setComment(appointmentDescription);
-		a.getRoom().setName(appointmentName);
-		a.getRoom().setRooms_id(roomId);
-		a.getRoom().setRoomtype(roomManager.getRoomTypesById(roomType));
+		if (roomId > 0) {
+			a.setRoom(roomDao.get(roomId));
+		} else {
+			a.setRoom(new Room());
+			a.getRoom().setComment(appointmentDescription);
+			a.getRoom().setName(appointmentName);
+			a.getRoom().setRoomtype(roomManager.getRoomTypesById(roomType));
+		}
 		a.setOwner(userDao.get(users_id));
 		a.setPasswordProtected(isPasswordProtected);
 		a.setPassword(password);

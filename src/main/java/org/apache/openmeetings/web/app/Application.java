@@ -24,6 +24,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
+import javax.servlet.ServletContext;
+
 import org.apache.openmeetings.data.basic.FieldLanguagesValuesDao;
 import org.apache.openmeetings.data.user.dao.AdminUserDao;
 import org.apache.openmeetings.remote.red5.ScopeApplicationAdapter;
@@ -59,6 +61,9 @@ import org.apache.wicket.request.mapper.info.PageComponentInfo;
 import org.apache.wicket.request.mapper.parameter.PageParametersEncoder;
 import org.apache.wicket.settings.IPageSettings;
 import org.apache.wicket.util.collections.ConcurrentHashSet;
+import org.apache.wicket.util.tester.WicketTester;
+import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.context.support.XmlWebApplicationContext;
 
 import ro.fortsoft.wicket.dashboard.WidgetRegistry;
 import ro.fortsoft.wicket.dashboard.web.DashboardContext;
@@ -221,5 +226,26 @@ public class Application extends AuthenticatedWebApplication {
 		} else {
 			throw new RestartResponseException(NotInitedPage.class);
 		}
+	}
+	
+	public static WicketTester getWicketTester() {
+		return getWicketTester(-1);
+	}
+	
+	public static WicketTester getWicketTester(long langId) {
+		Application app = new Application();
+        
+		WicketTester tester = new WicketTester(app);
+		ServletContext sc = app.getServletContext();
+        XmlWebApplicationContext  applicationContext = new XmlWebApplicationContext();
+        applicationContext.setConfigLocation("classpath:openmeetings-applicationContext.xml");
+        applicationContext.setServletContext(sc);
+        applicationContext.refresh();
+        sc.setAttribute(WebApplicationContext.ROOT_WEB_APPLICATION_CONTEXT_ATTRIBUTE, applicationContext);
+        if (langId > 0) {
+        	WebSession.get().setLanguage(langId);
+        }
+		ScopeApplicationAdapter.initComplete = true;
+        return tester;
 	}
 }

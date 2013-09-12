@@ -46,7 +46,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @TestExecutionListeners({})
-@ContextConfiguration(locations={"classpath:/openmeetings-applicationContext.xml"}, inheritLocations = true)
+@ContextConfiguration(locations={"classpath:openmeetings-applicationContext.xml"}, inheritLocations = true)
 public abstract class AbstractOpenmeetingsSpringTest extends AbstractJUnit4SpringContextTests {
 	private static final Logger log = Red5LoggerFactory.getLogger(AbstractOpenmeetingsSpringTest.class);
 	

@@ -750,7 +750,6 @@
 		<fileset dir="${red5.root}" includes="*.jar" />
 		<fileset dir="${red5.root}/lib" includes="*.jar" />
 		<fileset dir="${red5.root}/plugins" includes="*.jar" />
-		<pathelement path="${om.dist.webapp}/WEB-INF" />
 		<pathelement path="${dist.classes.dir}" />
 		<pathelement path="${main.out.dir}" />
 	</path>
