@@ -30,7 +30,6 @@ import org.apache.openmeetings.db.dao.user.AdminUserDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.test.AbstractWiketTester;
-import org.apache.openmeetings.web.app.WebSession;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -43,9 +42,7 @@ public class TestUserContact extends AbstractWiketTester {
 	
 	@Test
 	public void addContactByOwner() throws Exception {
-
-		
-		login(null, null);
+		login("admin", "12345");
 		
 		List<User> users = adminUserDao.getAllUsers();
 		assertNotNull("Users list should not be null ", users);
@@ -67,12 +64,13 @@ public class TestUserContact extends AbstractWiketTester {
 		l = adminUserDao.get(email);
 		assertTrue("Contacts list should be empty", l.isEmpty());
 
-		contact = createUserContact(random.nextInt(), -1L);		
+		User u = createUser(random.nextInt());
+		contact = createUserContact(random.nextInt(), u.getUser_id());		
 		// check that contact is not visible for user that is not owner of this contact
 		l = usersDao.get(contact.getAdresses().getEmail());
-		assertTrue("Contacts list should not be empty for admin ", !l.isEmpty());
+		assertTrue("Contacts list should be empty for admin ", !l.isEmpty());
 		//delete contact
-		adminUserDao.delete(contact, WebSession.getUserId());
+		adminUserDao.delete(contact, getUserId());
 		l = adminUserDao.get(email);
 		assertTrue("Contacts list should be empty", l.isEmpty());
 	}

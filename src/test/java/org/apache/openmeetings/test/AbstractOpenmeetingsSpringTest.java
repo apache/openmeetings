@@ -112,18 +112,18 @@ public abstract class AbstractOpenmeetingsSpringTest extends AbstractJUnit4Sprin
 	}
 
 	public User createUser(int rnd) throws Exception {
-		User users = new User();
+		User u = new User();
 		// add user
-		users.setFirstname("firstname" + rnd);
-		users.setLastname("lastname" + rnd);
-		users.setLogin("login");
-		users.updatePassword(cryptManager, configurationDao, "pass" + rnd);
-		users.setLanguage_id(1L);
-		Long user_id = userManager.addUser(users);
+		u.setFirstname("firstname" + rnd);
+		u.setLastname("lastname" + rnd);
+		u.setLogin("login");
+		u.updatePassword(cryptManager, configurationDao, "pass" + rnd);
+		u.setLanguage_id(1L);
+		Long user_id = userManager.addUser(u);
 		assertTrue("Cann't add user", user_id > 0);
-		users = userManager.getUserByIdAndDeleted(user_id);
-		assertNotNull("User should not be null", users);
-		return users;
+		u = userManager.getUserByIdAndDeleted(user_id);
+		assertNotNull("User should not be null", u);
+		return u;
 	}
 
 	protected void setOmHome() {
