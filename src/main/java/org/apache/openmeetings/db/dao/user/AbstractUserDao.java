@@ -108,7 +108,7 @@ public class AbstractUserDao  {
 	}
 	
 	private String getAdditionalWhere(boolean isAdmin){
-		return isAdmin ? null : "u.type <> :contact OR (u.type = :contact AND u.owner_id = :ownerId)";
+		return isAdmin ? null : "u.type <> :contact OR (u.type = :contact AND u.ownerId = :ownerId)";
 	}
 	
 	private void setAdditionalParams(TypedQuery<?> q, boolean isAdmin){
