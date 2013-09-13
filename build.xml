@@ -639,6 +639,14 @@
 		</taskdef>
 
 		<rat:report>
+			<rat:substringMatcher licenseFamilyCategory="JQUERY_MIT" licenseFamilyName="jQuery UI CSS MIT">
+				<pattern substring="Copyright 2013 jQuery Foundation and other contributors Licensed MIT"/>
+			</rat:substringMatcher>
+			<rat:substringMatcher licenseFamilyCategory="JQUERY_MIT" licenseFamilyName="jQuery UI Menubar MIT">
+				<pattern substring="Dual licensed under the MIT or GPL Version 2"/>
+			</rat:substringMatcher>
+			<rat:approvedLicense familyName="jQuery UI CSS MIT"/>
+			<rat:approvedLicense familyName="jQuery UI Menubar MIT"/>
 			<fileset dir="${src.base.dir}" />
 			<fileset dir="${webcontent.base.dir}" excludes="**/*.swf" />
 			<fileset dir="${docs.src}" />
