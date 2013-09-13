@@ -303,7 +303,7 @@
 		</dependency>
 
 		<!-- include type="bundle" / FIXME unable to get openjpa without  sources -->
-		<dependency org="org.mnode.ical4j" name="ical4j" rev="1.0.4" conf="openmeetings.ext->*" transitive="false"/>
+		<dependency org="org.mnode.ical4j" name="ical4j" rev="1.0.5" conf="openmeetings.ext->*" transitive="false"/>
 		<dependency org="org.apache.openjpa" name="openjpa" rev="2.2.2" conf="openmeetings.ext->*" transitive="false"/>
 		<dependency org="commons-lang" name="commons-lang" rev="2.4" conf="openmeetings.ext->*" transitive="false"/> <!-- required by PCEnchancer -->
 		
