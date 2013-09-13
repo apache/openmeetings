@@ -42,7 +42,7 @@ public class TestUserContact extends AbstractWiketTester {
 	
 	@Test
 	public void addContactByOwner() throws Exception {
-		login("admin", "12345");
+		login(null, null);
 		
 		List<User> users = adminUserDao.getAllUsers();
 		assertNotNull("Users list should not be null ", users);
