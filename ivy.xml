@@ -34,6 +34,7 @@
 		<conf name="mysql" description="MySQL JDBC driver" />
 		<conf name="mvn" description="Maven Ant task to build Red5" />
 		<conf name="tomcat7" description="Libraries necessary for patching Red5 to use Tomcat7" />
+		<conf name="selenium" description="Selenium dependencies" />
 	</configurations>
 	<dependencies>
 		<!--  START OF mainlib -->
@@ -399,6 +400,11 @@
 			<include type="jar" />
 		</dependency>
 		<dependency org="tomcatplugin" name="tomcatplugin" rev="1.4" conf="tomcat7->*" transitive="false">
+			<include type="jar" />
+		</dependency>
+		
+		<!-- Selenium -->
+		<dependency org="org.seleniumhq.selenium" name="selenium-java" conf="selenium->*" rev="2.35.0" >
 			<include type="jar" />
 		</dependency>
 
