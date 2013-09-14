@@ -29,11 +29,11 @@ import java.util.Random;
 import org.apache.openmeetings.db.dao.user.AdminUserDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.user.User;
-import org.apache.openmeetings.test.AbstractWiketTester;
+import org.apache.openmeetings.test.AbstractWicketTester;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-public class TestUserContact extends AbstractWiketTester {
+public class TestUserContact extends AbstractWicketTester {
 	@Autowired
 	private AdminUserDao adminUserDao;
 

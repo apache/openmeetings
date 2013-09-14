@@ -26,7 +26,7 @@ import org.apache.openmeetings.web.app.WebSession;
 import org.apache.wicket.util.tester.WicketTester;
 import org.junit.After;
 
-public class AbstractWiketTester extends AbstractOpenmeetingsSpringTest {
+public class AbstractWicketTester extends AbstractOpenmeetingsSpringTest {
 
 	protected WicketTester tester;
 	 	
