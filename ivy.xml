@@ -34,7 +34,6 @@
 		<conf name="mysql" description="MySQL JDBC driver" />
 		<conf name="mvn" description="Maven Ant task to build Red5" />
 		<conf name="tomcat7" description="Libraries necessary for patching Red5 to use Tomcat7" />
-		<conf name="selenium" description="Selenium dependencies" />
 	</configurations>
 	<dependencies>
 		<!--  START OF mainlib -->
@@ -302,6 +301,10 @@
 		<dependency org="org.asteriskjava" name="asterisk-java" rev="1.0.0.CI-20130102.214528-1134" conf="openmeetings->*" transitive="false">
 			<include type="jar" />
 		</dependency>
+		<!-- Selenium -->
+		<dependency org="org.seleniumhq.selenium" name="selenium-java" conf="openmeetings->*" rev="2.35.0" >
+			<include type="jar" />
+		</dependency>
 
 		<!-- include type="bundle" / FIXME unable to get openjpa without  sources -->
 		<dependency org="org.mnode.ical4j" name="ical4j" rev="1.0.5" conf="openmeetings.ext->*" transitive="false"/>
@@ -403,11 +406,6 @@
 			<include type="jar" />
 		</dependency>
 		
-		<!-- Selenium -->
-		<dependency org="org.seleniumhq.selenium" name="selenium-java" conf="selenium->*" rev="2.35.0" >
-			<include type="jar" />
-		</dependency>
-
 		<exclude org="javax.servlet" module="servlet-api" type="*" ext="*" conf="*" matcher="exact"/>		
 	</dependencies>
 </ivy-module>
