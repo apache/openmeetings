@@ -35,8 +35,8 @@ import org.apache.openmeetings.db.entity.calendar.Appointment;
 import org.apache.openmeetings.db.entity.calendar.MeetingMember;
 import org.apache.openmeetings.db.entity.label.Fieldlanguagesvalues;
 import org.apache.openmeetings.db.entity.room.Invitation;
-import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.room.Invitation.Valid;
+import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Type;
 import org.apache.openmeetings.utils.TimezoneUtil;
@@ -311,33 +311,17 @@ public class InvitationManager {
 	}
 
 	private String formatUpdateSubject(Long language_id, Appointment appointment, TimeZone timezone) {
-		try {
+		String message = fieldManager.getString(1155L, language_id) + " "
+				+ appointment.getTitle();
 
-			String message = fieldManager.getString(1155L, language_id) + " "
-					+ appointment.getTitle();
+		message += " "
+				+ CalendarPatterns.getDateWithTimeByMiliSecondsAndTimeZone(
+						appointment.getStart(), timezone)
+				+ " - "
+				+ CalendarPatterns.getDateWithTimeByMiliSecondsAndTimeZone(
+						appointment.getEnd(), timezone);
 
-			if (appointment.getDescription().length() != 0) {
-
-				Fieldlanguagesvalues labelid1152 = fieldManager
-						.getFieldByIdAndLanguage(new Long(1152), language_id);
-				message += labelid1152.getValue()
-						+ appointment.getDescription();
-
-			}
-
-			message += " "
-					+ CalendarPatterns.getDateWithTimeByMiliSecondsAndTimeZone(
-							appointment.getStart(), timezone)
-					+ " - "
-					+ CalendarPatterns.getDateWithTimeByMiliSecondsAndTimeZone(
-							appointment.getEnd(), timezone);
-
-			return message;
-
-		} catch (Exception err) {
-			log.error("Could not format update subject");
-			return "Error formatUpdateSubject";
-		}
+		return message;
 	}
 
 	private String formatUpdateMessage(Long language_id,

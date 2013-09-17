@@ -47,7 +47,7 @@ import org.simpleframework.xml.Root;
     		, query="SELECT mm FROM MeetingMember mm WHERE mm.deleted = false AND mm.id = :id")
     , @NamedQuery(name="getMeetingMembers", query="SELECT mm FROM MeetingMember mm")
     , @NamedQuery(name="getMeetingMemberIdsByAppointment"
-    		, query="SELECT mm.id FROM MeetingMember mm WHERE mm.deleted = false AND app.appointment.id = :id")
+    		, query="SELECT mm.id FROM MeetingMember mm WHERE mm.deleted = false AND mm.appointment.id = :id")
 })
 @Root(name = "meetingmember")
 public class MeetingMember implements Serializable {

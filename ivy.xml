@@ -64,9 +64,6 @@
 		<dependency org="org.springframework" name="spring-context-support" rev="3.1.1.RELEASE" transitive="false">
 			<include type="jar" />
 		</dependency>
-		<dependency org="cglib" name="cglib" rev="2.2.2" transitive="false">
-			<include type="jar" />
-		</dependency>
 		<!-- include type="bundle" / FIXME unable to get openjpa without  sources -->
 		<dependency org="org.apache.geronimo.specs" name="geronimo-jpa_2.0_spec" rev="1.1" conf="mainlib.ext->*" transitive="false"/>
 		<!--  END OF mainlib -->
@@ -407,6 +404,7 @@
 		</dependency>
 		
 		<exclude org="javax.servlet" module="servlet-api" type="*" ext="*" conf="*" matcher="exact"/>		
+		<exclude org="cglib" module="cglib-nodep" type="*" ext="*" conf="*" matcher="exact"/>		
 	</dependencies>
 </ivy-module>
 
