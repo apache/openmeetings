@@ -69,6 +69,7 @@ public class InstallWizard extends Wizard {
 	private InstallationConfig cfg;
 	private CompoundPropertyModel<InstallWizard> model;
 	private final static List<SelectOption> yesNoList = Arrays.asList(SelectOption.NO, SelectOption.YES);
+	private final static List<SelectOption> yesNoTextList = Arrays.asList(SelectOption.NO_TEXT, SelectOption.YES_TEXT);
 	private final static List<String> allFonts = Arrays.asList("TimesNewRoman", "Verdana", "Arial");
 	private final IDynamicWizardStep welcomeStep;
 	private final ParamsStep1 paramsStep1;
@@ -278,7 +279,7 @@ public class InstallWizard extends Wizard {
             add(new RequiredTextField<String>("cfg.cryptClassName")); //Validate class
             
             //TODO add check for red5sip connection
-            add(new YesNoDropDown("red5SipEnable"));
+            add(new YesNoTextDropDown("red5SipEnable"));
             add(new TextField<String>("cfg.red5SipRoomPrefix"));
             add(new TextField<String>("cfg.red5SipExtenContext"));
 		}
@@ -400,7 +401,9 @@ public class InstallWizard extends Wizard {
 	private static class SelectOption implements Serializable {
 		private static final long serialVersionUID = 2559982745410615390L;
 		private static SelectOption NO = new SelectOption("0", "No");
+		private static SelectOption NO_TEXT = new SelectOption("no", "No");
 		private static SelectOption YES = new SelectOption("1", "Yes");
+		private static SelectOption YES_TEXT = new SelectOption("yes", "Yes");
 		public String key;
 		@SuppressWarnings("unused")
 		public String value;
@@ -474,6 +477,7 @@ public class InstallWizard extends Wizard {
 		}
 		
 	}
+	
 	private final class YesNoDropDown extends SelectOptionDropDown {
 		private static final long serialVersionUID = 578375825530725477L;
 		
@@ -482,6 +486,17 @@ public class InstallWizard extends Wizard {
 			setChoices(yesNoList);
 			this.option = SelectOption.NO.key.equals(propModel.getObject()) ?
 					SelectOption.NO : SelectOption.YES;
+		}
+	}
+	
+	private final class YesNoTextDropDown extends SelectOptionDropDown {
+		private static final long serialVersionUID = 578375825530725477L;
+		
+		YesNoTextDropDown(String id) {
+			super(id);
+			setChoices(yesNoTextList);
+			this.option = SelectOption.NO_TEXT.key.equals(propModel.getObject()) ?
+					SelectOption.NO_TEXT : SelectOption.YES_TEXT;
 		}
 	}
 	
