@@ -442,6 +442,7 @@
         if (wicketsid != undefined && wicketroomid != undefined && !isNaN(wicketroomid)) {
         	canvas.setAttribute('wicketsid', wicketsid);
         	canvas.setAttribute('wicketroomid', Number(wicketroomid));
+        	hib.userScope = wicketroomid;
         }
         this.setBaseColors();
     
