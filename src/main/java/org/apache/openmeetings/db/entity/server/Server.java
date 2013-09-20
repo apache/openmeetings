@@ -109,7 +109,7 @@ public class Server implements Serializable, IDataProviderEntity {
 	@Element(data = true, required = false)
 	private String webapp;
 
-	@Column(name = "user", nullable = true)
+	@Column(name = "login", nullable = true)
 	@Element(data = true, required = false)
 	private String user;
 

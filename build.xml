@@ -1093,6 +1093,10 @@
 		<!-- empty -->
 	</target>
 
+	<target name="-retrieve-mssql" unless="mssql.installed" description="Retrieves the libraries if needed" depends="-availability-check">
+		<!-- empty -->
+	</target>
+		
 	<target name="-retrieve-derby" unless="derby.installed" description="Retrieves the libraries if needed" depends="-availability-check">
 		<!-- retrieved automatically, added for compatibility -->
 	</target>

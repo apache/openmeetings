@@ -84,6 +84,7 @@
     		<subitem name="Oracle" href="/OracleConfig.html" />
     		<subitem name="MySQL" href="/MySQLConfig.html" />
     		<subitem name="Postgres" href="/PostgresConfig.html" />
+    		<subitem name="MSSQL" href="/MSSQLConfig.html" />
     	</item>
     	<item name="Localization and languages" >
     		<subitem name="Internationalisation" href="/Internationalisation.html" />
