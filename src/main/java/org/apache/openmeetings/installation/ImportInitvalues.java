@@ -933,12 +933,12 @@ public class ImportInitvalues {
 		
 		int initProgress = progress;
 		int progressDelta = 76 - progress;
-		double deltaProgressPerLanguageFile = new Double(progressDelta)/new Double(listlanguages.size());
+		double deltaProgressPerLanguageFile = ((double)progressDelta) / listlanguages.size();
 		
 		/** Read all languages files */
 		for (int langId : listlanguages.keySet()) {
 			loadLanguagesFile(listlanguages, fieldCache, langId);
-			progress = (int) (initProgress + Math.round( new Double(langId) * deltaProgressPerLanguageFile ));
+			progress = (int)(initProgress + Math.round(deltaProgressPerLanguageFile * langId));
 		}
 		log.debug("All languages are imported");
 	}

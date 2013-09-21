@@ -18,12 +18,13 @@
  */
 package org.apache.openmeetings.documents;
 
+import static org.apache.openmeetings.OpenmeetingsVariables.webAppRootKey;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
-import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.documents.beans.ConverterProcessResult;
 import org.apache.openmeetings.utils.ProcessHelper;
@@ -33,44 +34,38 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 public class GenerateSWF {
 
-	public static final Logger log = Red5LoggerFactory
-			.getLogger(GenerateSWF.class, OpenmeetingsVariables.webAppRootKey);
+	public static final Logger log = Red5LoggerFactory.getLogger(GenerateSWF.class, webAppRootKey);
 
 	@Autowired
 	private ConfigurationDao configurationDao;
 
-	public final static boolean isPosix = System.getProperty("os.name")
-			.toUpperCase().indexOf("WINDOWS") == -1;
+	public final static boolean isPosix = System.getProperty("os.name").toUpperCase().indexOf("WINDOWS") == -1;
 
 	public final static String execExt = isPosix ? "" : ".exe";
 
 	private String getPathToSwfTools() {
-		String pathToSWFTools = configurationDao.getConfValue(
-				"swftools_path", String.class, "");
+		String pathToSWFTools = configurationDao.getConfValue("swftools_path", String.class, "");
 		// If SWFTools Path is not blank a File.separator at the end of the path
 		// is needed
-		if (!pathToSWFTools.equals("")
-				&& !pathToSWFTools.endsWith(File.separator)) {
+		if (!"".equals(pathToSWFTools) && !pathToSWFTools.endsWith(File.separator)) {
 			pathToSWFTools = pathToSWFTools + File.separator;
 		}
 		return pathToSWFTools;
 	}
 
 	private String getSwfZoom() {
-		String valueForSwfZoom = configurationDao.getConfValue(
-				"swftools_zoom", String.class, "");
+		String valueForSwfZoom = configurationDao.getConfValue("swftools_zoom", String.class, "");
 		// WARNING CODE NOT COMPLETE: If SWFTools zoom (dpi) should be an integer between 50 and  600 with a default value of 100 dpi
-		if (valueForSwfZoom.equals("")) {
+		if ("".equals(valueForSwfZoom)) {
 			valueForSwfZoom = "72";
 		}
 		return valueForSwfZoom;
 	}
 
 	private String getSwfJpegQuality() {
-		String valueForSwfJpegQuality = configurationDao.getConfValue(
-				"swftools_jpegquality", String.class, "");
+		String valueForSwfJpegQuality = configurationDao.getConfValue("swftools_jpegquality", String.class, "");
 		// WARNING CODE NOT COMPLETE: If SWFTools JPEG Quality should be an integer between 1 and 100, with a default value of 85
-		if (valueForSwfJpegQuality.equals("")) {
+		if ("".equals(valueForSwfJpegQuality)) {
 			valueForSwfJpegQuality = "85";
 		}
 		return valueForSwfJpegQuality;
@@ -95,31 +90,27 @@ public class GenerateSWF {
 	/**
 	 * Generates an SWF from the list of files.
 	 */
-	public ConverterProcessResult generateSwfByImages(List<String> images,
-			String outputfile, int fps) {
+	public ConverterProcessResult generateSwfByImages(List<String> images, String outputfile, int fps) {
 		List<String> argvList = Arrays.asList(new String[] {
 				getPathToSwfTools() + "png2swf" + execExt, "-s", 
 				"insertstop", // Insert Stop command into every frame
 				"-o", outputfile, "-r", Integer.toString(fps), "-z" });
 
 		argvList.addAll(images);
-		return ProcessHelper.executeScript("generateSwfByImages",
-				argvList.toArray(new String[0]));
+		return ProcessHelper.executeScript("generateSwfByImages", argvList.toArray(new String[0]));
 	}
 
 	/**
 	 * Combines a bunch of SWFs into one SWF by concatenate.
 	 */
-	public ConverterProcessResult generateSWFByCombine(List<String> swfs,
-			String outputswf, int fps) {
+	public ConverterProcessResult generateSWFByCombine(List<String> swfs, String outputswf, int fps) {
 		List<String> argvList = Arrays.asList(new String[] {
 				getPathToSwfTools() + "swfcombine" + execExt, "-s",
 				"insertstop", // Insert Stop command into every frame
 				"-o", outputswf, "-r", Integer.toString(fps), "-z", "-a" });
 
 		argvList.addAll(swfs);
-		return ProcessHelper.executeScript("generateSwfByImages",
-				argvList.toArray(new String[0]));
+		return ProcessHelper.executeScript("generateSWFByCombine", argvList.toArray(new String[0]));
 	}
 
 	public ConverterProcessResult generateSWFByFFMpeg(String inputWildCard,

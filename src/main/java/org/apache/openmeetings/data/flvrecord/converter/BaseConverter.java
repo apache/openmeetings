@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.data.flvrecord.converter;
 
+import static org.apache.openmeetings.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.openmeetings.utils.OmFileHelper.MP4_EXTENSION;
 import static org.apache.openmeetings.utils.OmFileHelper.OGG_EXTENSION;
 
@@ -25,7 +26,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
-import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.record.FlvRecordingMetaDataDao;
 import org.apache.openmeetings.db.dao.record.FlvRecordingMetaDeltaDao;
@@ -41,8 +41,7 @@ import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public abstract class BaseConverter {
-	private static final Logger log = Red5LoggerFactory.getLogger(
-			BaseConverter.class, OpenmeetingsVariables.webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(BaseConverter.class, webAppRootKey);
 
 	@Autowired
 	private ConfigurationDao configurationDao;
@@ -53,10 +52,7 @@ public abstract class BaseConverter {
 
 	private String getPath(String key, String app) {
 		String path = configurationDao.getConfValue(key, String.class, "");
-		if (null == path) {
-			path = "";
-		}
-		if (!path.equals("") && !path.endsWith(File.separator)) {
+		if (!"".equals(path) && !path.endsWith(File.separator)) {
 			path += File.separator;
 		}
 		path += app;

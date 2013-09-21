@@ -98,7 +98,7 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 
 	/**
 	 * Return a object using a custom type and a default value if the key is not
-	 * present
+	 * present, or value is not set
 	 * 
 	 * Example: Integer my_key = getConfValue("my_key", Integer.class, "15");
 	 * 
@@ -114,8 +114,11 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 			if (list == null || list.isEmpty()) {
 				log.warn("Could not find key in configuration CONF_KEY: " + key);
 			} else {
+				String val = list.get(0).getConf_value();
 				// Use the custom value as default value
-				defaultValue = list.get(0).getConf_value();
+				if (val != null) {
+					defaultValue = val;
+				}
 			}
 
 			if (defaultValue == null) {
