@@ -22,11 +22,11 @@ import org.apache.openmeetings.test.AbstractWicketTester;
 import org.apache.openmeetings.web.pages.MainPage;
 import org.apache.openmeetings.web.pages.auth.SignInPage;
 import org.apache.wicket.util.tester.FormTester;
-import org.junit.Test;
 
-public class TestLoginUI extends AbstractWicketTester {
+public class LoginUI extends AbstractWicketTester {
 
-	@Test
+        //@Test Needs to much memory to start this test, and there is nothing useful here inside other then some basic
+        //proof of concept (basically the concept failed)
 	public void testLoginUi() {
 		
 		tester.startPage(MainPage.class);

@@ -18,9 +18,16 @@
  */
 package org.apache.openmeetings.test.selenium;
 
+import java.io.File;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.By;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
@@ -31,14 +38,30 @@ public class SeleniumUtils {
 	// we need to sleep to make sure Ajax could complete whatever it does
 	static long defaultSleepInterval = 1000;
 
-	public static void inputText(WebDriver driver, String search, String inputText) throws Exception {
-		WebElement element = SeleniumUtils.findElement(driver, search);
+	public static void inputText(WebDriver driver, String search,
+			String inputText) throws Exception {
+		WebElement element = SeleniumUtils.findElement(driver, search, true);
 
 		// Would make send to check if this element is really an input text
 		element.sendKeys(inputText);
 	}
 
-	public static WebElement findElement(WebDriver driver, String search) throws Exception {
+	public static void click(WebDriver driver, String search) throws Exception {
+		WebElement element = SeleniumUtils.findElement(driver, search, true);
+		element.click();
+	}
+
+	/**
+	 * 
+	 * @param driver
+	 * @param search
+	 * @param throwException
+	 *            under some circumstance you do't want to exit the test here
+	 * @return
+	 * @throws Exception
+	 */
+	public static WebElement findElement(WebDriver driver, String search,
+			boolean throwException) throws Exception {
 		for (int i = 0; i < numberOfRetries; i++) {
 			WebElement element = _findElement(driver, search);
 			if (element != null) {
@@ -48,11 +71,22 @@ public class SeleniumUtils {
 			Thread.sleep(defaultSleepInterval);
 		}
 
-		throw new Exception("Could not find element with specified path " + search);
+		if (throwException) {
+			throw new Exception("Could not find element with specified path "
+					+ search);
+		}
+
+		return null;
 	}
 
 	private static By[] _getSearchArray(String search) {
-		return new By[] { By.id(search), By.name(search), By.className(search), By.tagName(search), By.xpath(search) };
+		//If xpath we have to use it, if xpath is used with By.className(...) there will be an exception
+		if (search.startsWith("//")) {
+			return new By[] { By.xpath(search) };
+		} else {
+			return new By[] { By.id(search), By.name(search), By.className(search),
+					By.tagName(search), By.xpath(search) };
+		}
 	}
 
 	private static WebElement _findElement(WebDriver driver, String search) {
@@ -69,7 +103,8 @@ public class SeleniumUtils {
 		return null;
 	}
 
-	public static void elementExists(WebDriver driver, String search, boolean shouldExist) throws Exception {
+	public static void elementExists(WebDriver driver, String search,
+			boolean shouldExist) throws Exception {
 		Thread.sleep(defaultSleepInterval);
 
 		boolean doesExist = !shouldExist;
@@ -104,5 +139,44 @@ public class SeleniumUtils {
 			}
 		}
 		return false;
+	}
+
+	public static void makeScreenShot(String testName, Exception e,
+			WebDriver driver) {
+		try {
+			DateFormat df = new SimpleDateFormat("MM-dd-yyyy_HH-mm-ss");
+			String fileName = e.getMessage().replace(" ", "_");
+			fileName = fileName.replaceAll("(\r\n|\n)", "");
+			fileName = fileName.replaceAll("/", "");
+
+			if (fileName.length() > 100) {
+				fileName = fileName.substring(0, 100);
+			}
+
+			fileName = fileName + "_" + df.format(new Date()) + ".png";
+			File screenShotFile = ((TakesScreenshot) driver)
+					.getScreenshotAs(OutputType.FILE);
+
+			String path = "." + File.separatorChar + "build"
+					+ File.separatorChar + "screenshots" + File.separatorChar
+					+ testName;
+
+			File screenshotFolder = new File(path);
+			if (!screenshotFolder.exists()) {
+				screenshotFolder.mkdirs();
+			}
+
+			System.out.println("screenshot copy from: "
+					+ screenShotFile.getAbsolutePath());
+			System.out.println("Length Filename: " + fileName.length()
+					+ " - Writing screenshot to: " + path + File.separatorChar
+					+ fileName);
+
+			FileUtils.moveFile(screenShotFile, new File(path
+					+ File.separatorChar + fileName));
+		} catch (Exception err) {
+			err.printStackTrace();
+		}
+
 	}
 }

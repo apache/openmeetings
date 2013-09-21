@@ -60,6 +60,10 @@
 
 	<!-- screenshare.out.dir -->
 	<property name="screenshare.out.dir" value="${dist.webapps.dir}/screensharing" />
+	
+	<condition property="junit.run.selenium" value="true" else="false">
+		<isset property="selenium" />
+	</condition>
 
 	<property name="main.out.dir" value="${build.base.dir}/classes/openmeetings" />
 
@@ -736,6 +740,117 @@
 			</fileset>
 		</copy>
 	</target>
+	
+	<!-- 
+		Prepare selenium tests by starting up an OpenMeetings instance
+		
+		makes a stop command before starting up to make sure no other is running
+	 -->
+	
+	<target name="prepare-selenium-start-openmeetings" description="Prepare selenium tests by starting up an OpenMeetings instance" 
+		depends="prepare-selenium-stop-openmeetings, -prepare-selenium-port-properties" >
+		<exec dir="${dist.dir}/testred5" executable="red5-highperf.bat" osfamily="windows" output="${dist.dir}/testred5/red5_system.log">
+		</exec>
+		<!--this does only make sense if the unix executable is run obviously, however we do it for all -->
+		<chmod dir="${dist.dir}/testred5" perm="755" includes="**/*.sh" />
+		<exec dir="${dist.dir}/testred5" executable="/bin/bash" osfamily="unix" output="${dist.dir}/testred5/red5_system.log">
+			<arg value="red5-highperf.sh"/> 
+		</exec>
+		<!-- start up does take some time -->
+		<sleep seconds="30" />
+	</target>
+	
+	<target name="prepare-selenium-stop-openmeetings" description="Prepare selenium tests by starting up an OpenMeetings instance" >
+		<exec dir="${dist.dir}/testred5" executable="red5-shutdown.bat" osfamily="windows" output="${dist.dir}/testred5/red5_system.log">
+		</exec>
+		<!--this does only make sense if executed on unix(Linux or OSX are both unix style) is run obviously, 
+			however we do it for all for now -->
+		<chmod dir="${dist.dir}/testred5" perm="755" includes="**/*.sh" />
+		<exec dir="${dist.dir}/testred5" executable="/bin/bash" osfamily="unix" output="${dist.dir}/testred5/red5_system.log">
+			<arg value="red5-shutdown.sh"/> 
+		</exec>
+		<!-- stop up does take a bit of time -->
+		<sleep seconds="10" />
+	</target>
+	
+	<target name="-prepare-selenium-copy-test-instance" description="Prepare selenium tests by starting up an OpenMeetings instance">
+		<copy todir="${dist.dir}/testred5">
+			<fileset dir="${dist.dir}/red5">
+			</fileset>
+		</copy>
+	</target>
+	
+	<target name="-prepare-selenium-port-properties" description="Set the http port to some exotic numbers so that we don't conflict with anything" 
+			depends="-prepare-selenium-copy-test-instance">
+		<replace dir="${dist.dir}/testred5/conf" value="http.port=20080">
+		  <include name="**/red5.properties"/>
+		  <replacetoken>http.port=5080</replacetoken>
+		</replace>
+		<replace dir="${dist.dir}/testred5/conf" value="https.port=20443">
+		  <include name="**/red5.properties"/>
+		  <replacetoken>https.port=5443</replacetoken>
+		</replace>
+		<replace dir="${dist.dir}/testred5/conf" value="rtmp.port=20935">
+		  <include name="**/red5.properties"/>
+		  <replacetoken>rtmp.port=1935</replacetoken>
+		</replace>
+		<replace dir="${dist.dir}/testred5/conf" value="rtmps.port=20443">
+		  <include name="**/red5.properties"/>
+		  <replacetoken>rtmps.port=8443</replacetoken>
+		</replace>
+		<replace dir="${dist.dir}/testred5/conf" value="rtmpt.port=20088">
+		  <include name="**/red5.properties"/>
+		  <replacetoken>rtmpt.port=8088</replacetoken>
+		</replace>
+	</target>
+	
+	<target name="run-selenium" depends="-dist-test-no-clean, -run-selenium-junit">
+	</target>
+	
+	<target name="-run-selenium" if="${junit.run.selenium}" >
+		<antcall target="-run-selenium-junit"></antcall>
+	</target>
+	
+	<target name="-run-selenium-junit" depends="prepare-selenium-start-openmeetings" 
+			description="Will run all selenium tests unless -Dtestcases=_file_name_pattern_ will be passed">
+		<taskdef resource="net/sf/antcontrib/antlib.xml">
+			<classpath refid="junit.classpath" />
+		</taskdef>
+		<mkdir dir="${junit.report.dir}" />
+		
+		<junit maxmemory="1024m" printsummary="yes" dir="${junit.base.dir}" tempdir="${junit.base.dir}" fork="yes" 
+			forkmode="perBatch" failureproperty="junit.failed" errorproperty="junit.error">
+			<classpath refid="junit.classpath" />
+			<jvmarg value="-Dom.home=${basedir}/${om.dist.webapp}" />
+			<jvmarg value="-Dlanguages.home=${webapp.dir}/languages" />
+			<jvmarg value="-Dred5.root=${red5.root}" />
+			<jvmarg value="-Dbasedir=${basedir}" />
+			<jvmarg value="-Dred5.config_root=${red5.root}/conf" />
+			<jvmarg value="-Dbackups.dir=${junit.backups.dir}" />
+			<formatter type="${junit.test.formatter}" />
+			<batchtest todir="${junit.report.dir}">
+				<fileset dir="${main.out.dir}">
+					<include name="org/apache/openmeetings/test/selenium/${junit.test.pattern}.class" />
+					<exclude name="**/*$$*.class" />
+				</fileset>
+			</batchtest>
+		</junit>
+		
+		<junitreport todir="${junit.report.dir}">
+			<fileset dir="${junit.report.dir}">
+				<include name="TEST-*.xml" />
+			</fileset>
+			<report todir="${junit.report.dir}" />
+		</junitreport>
+		<fail message="Errors/failures in JUnit tests.">
+			<condition>
+				<or>
+					<isset property="junit.failed"/>
+					<isset property="junit.error"/>
+				</or>
+			</condition>
+		</fail>
+	</target>
 
 	<!-- Unit Tests -->
 	<property name="om.dist.webapp" value="${red5.root}/webapps/${project.distname}" />
@@ -743,7 +858,7 @@
 	<condition property="junit.test.pattern" value="${testcases}" else="Test*">
 		<isset property="testcases" />
 	</condition>
-
+	
 	<condition property="junit.test.formatter" value="${test.formatter}" else="xml">
 		<isset property="test.formatter" />
 	</condition>
@@ -761,7 +876,10 @@
 		<pathelement path="${dist.classes.dir}" />
 		<pathelement path="${main.out.dir}" />
 	</path>
-	<target name="test" depends="-dist-test-no-clean" description="Will run all tests unless -Dtestcases=_file_name_pattern_ will be passed">
+	
+	
+	<target name="test" depends="-dist-test-no-clean, -run-selenium" 
+			description="Will run all tests except selenium unless -Dtestcases=_file_name_pattern_ will be passed">
 		<taskdef resource="net/sf/antcontrib/antlib.xml">
 			<classpath refid="junit.classpath" />
 		</taskdef>
@@ -794,10 +912,12 @@
 			<batchtest todir="${junit.report.dir}">
 				<fileset dir="${main.out.dir}">
 					<include name="org/apache/openmeetings/test/**/${junit.test.pattern}.class" />
+					<exclude name="org/apache/openmeetings/test/selenium/${junit.test.pattern}.class" />
 					<exclude name="**/*$$*.class" />
 				</fileset>
 			</batchtest>
 		</junit>
+		
 		<junitreport todir="${junit.report.dir}">
 			<fileset dir="${junit.report.dir}">
 				<include name="TEST-*.xml" />
