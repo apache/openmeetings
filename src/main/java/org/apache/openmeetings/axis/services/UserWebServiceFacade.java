@@ -20,9 +20,8 @@ package org.apache.openmeetings.axis.services;
 
 import org.apache.axis2.AxisFault;
 import org.apache.openmeetings.data.beans.basic.ErrorResult;
-import org.apache.openmeetings.data.beans.basic.SearchResult;
+import org.apache.openmeetings.data.beans.basic.UserSearchResult;
 import org.apache.openmeetings.db.entity.server.Sessiondata;
-import org.apache.openmeetings.db.entity.user.User;
 
 public class UserWebServiceFacade extends BaseWebService {
 
@@ -270,11 +269,10 @@ public class UserWebServiceFacade extends BaseWebService {
 				organisation_id, insertedby);
 	}
 
-	public SearchResult<User> getUsersByOrganisation(String SID,
-			long organisation_id, int start, int max, String orderby,
+	public UserSearchResult getUsersByOrganisation(String SID, long organisation_id, int start, int max, String orderby,
 			boolean asc) throws AxisFault {
-		return getBean(UserWebService.class).getUsersByOrganisation(SID,
-				organisation_id, start, max, orderby, asc);
+		return new UserSearchResult(getBean(UserWebService.class)
+				.getUsersByOrganisation(SID, organisation_id, start, max, orderby, asc));
 	}
 
 	public Boolean kickUserByPublicSID(String SID, String publicSID)

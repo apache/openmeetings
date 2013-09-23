@@ -22,7 +22,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.apache.axis2.AxisFault;
-import org.apache.openmeetings.data.beans.basic.SearchResult;
+import org.apache.openmeetings.data.beans.basic.RoomSearchResult;
 import org.apache.openmeetings.db.entity.record.FlvRecording;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.room.RoomType;
@@ -124,16 +124,14 @@ public class RoomWebServiceFacade extends BaseWebService {
 				rooms_id);
 	}
 
-	public SearchResult<Room> getRooms(String SID, int start, int max,
-			String orderby, boolean asc) throws AxisFault {
-		return getBean(RoomWebService.class).getRooms(SID, start, max, orderby,
-				asc);
+	public RoomSearchResult getRooms(String SID, int start, int max, String orderby, boolean asc) throws AxisFault {
+		return new RoomSearchResult(getBean(RoomWebService.class).getRooms(SID, start, max, orderby, asc));
 	}
 
-	public SearchResult<Room> getRoomsWithCurrentUsers(String SID, int start,
-			int max, String orderby, boolean asc) throws AxisFault {
-		return getBean(RoomWebService.class).getRoomsWithCurrentUsers(SID, start,
-				max, orderby, asc);
+	public RoomSearchResult getRoomsWithCurrentUsers(String SID, int start, int max, String orderby
+			, boolean asc) throws AxisFault {
+		return new RoomSearchResult(getBean(RoomWebService.class).getRoomsWithCurrentUsers(SID, start,
+				max, orderby, asc));
 	}
 
 	/**
