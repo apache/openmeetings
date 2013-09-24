@@ -104,8 +104,8 @@ import org.apache.openmeetings.db.entity.user.PrivateMessage;
 import org.apache.openmeetings.db.entity.user.PrivateMessageFolder;
 import org.apache.openmeetings.db.entity.user.State;
 import org.apache.openmeetings.db.entity.user.User;
-import org.apache.openmeetings.db.entity.user.UserContact;
 import org.apache.openmeetings.db.entity.user.User.Type;
+import org.apache.openmeetings.db.entity.user.UserContact;
 import org.apache.openmeetings.remote.red5.ScopeApplicationAdapter;
 import org.apache.openmeetings.utils.crypt.MD5Implementation;
 import org.apache.openmeetings.utils.math.CalendarPatterns;
@@ -813,7 +813,7 @@ public class BackupImport {
 				do {
 					if (u.getTimeZoneId() == null && "omTimeZone".equals(item2.getName())) {
 						String jName = item2.getValue();
-						u.setTimeZoneId(jName == null ? null : tzUtil.getTimezoneByInternalJName(jName).getID());
+						u.setTimeZoneId(jName == null ? null : tzUtil.getTimezoneByInternalJName(jName, true).getID());
 					}
 					item2 = listNode2.getNext(); //HACK to handle old om_time_zone
 				} while (item2 != null && !"user".equals(item2.getName()));
