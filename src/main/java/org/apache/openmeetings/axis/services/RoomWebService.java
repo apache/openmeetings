@@ -49,9 +49,9 @@ import org.apache.openmeetings.db.entity.calendar.MeetingMember;
 import org.apache.openmeetings.db.entity.record.FlvRecording;
 import org.apache.openmeetings.db.entity.room.Client;
 import org.apache.openmeetings.db.entity.room.Invitation;
+import org.apache.openmeetings.db.entity.room.Invitation.Valid;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.room.RoomType;
-import org.apache.openmeetings.db.entity.room.Invitation.Valid;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.remote.ConferenceService;
 import org.apache.openmeetings.remote.red5.ScopeApplicationAdapter;
@@ -1375,7 +1375,7 @@ public class RoomWebService {
 				return roomManager.updateRoomInternal(room_id, roomtypes_id,
 						name, ispublic, comment, numberOfPartizipants, null,
 						appointment, isDemoRoom, demoTime, isModeratedRoom,
-						null, allowUserQuestions, true, true, false, "", "",
+						null, allowUserQuestions, isAudioOnly, true, false, "", "",
 						null, null, null, hideTopBar, hideChat,
 						hideActivitiesAndActions, hideFilesExplorer,
 						hideActionsMenu, hideScreenSharing, hideWhiteboard,
