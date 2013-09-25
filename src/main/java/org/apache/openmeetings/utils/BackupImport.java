@@ -75,6 +75,8 @@ import org.apache.openmeetings.db.dao.record.FlvRecordingDao;
 import org.apache.openmeetings.db.dao.room.PollDao;
 import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.dao.server.LdapConfigDao;
+import org.apache.openmeetings.db.dao.server.OAuth2Dao;
+import org.apache.openmeetings.db.dao.server.ServerDao;
 import org.apache.openmeetings.db.dao.user.AdminUserDao;
 import org.apache.openmeetings.db.dao.user.OrganisationDao;
 import org.apache.openmeetings.db.dao.user.PrivateMessageFolderDao;
@@ -98,6 +100,8 @@ import org.apache.openmeetings.db.entity.room.RoomPoll;
 import org.apache.openmeetings.db.entity.room.RoomPollAnswers;
 import org.apache.openmeetings.db.entity.room.RoomType;
 import org.apache.openmeetings.db.entity.server.LdapConfig;
+import org.apache.openmeetings.db.entity.server.OAuthServer;
+import org.apache.openmeetings.db.entity.server.Server;
 import org.apache.openmeetings.db.entity.user.Address;
 import org.apache.openmeetings.db.entity.user.Organisation;
 import org.apache.openmeetings.db.entity.user.PrivateMessage;
@@ -171,6 +175,10 @@ public class BackupImport {
 	private TimezoneUtil tzUtil;
 	@Autowired
 	private ChatDao chatDao;
+	@Autowired
+	private ServerDao serverDao;
+	@Autowired
+	private OAuth2Dao auth2Dao;
 
 	private final Map<Long, Long> usersMap = new HashMap<Long, Long>();
 	private final Map<Long, Long> organisationsMap = new HashMap<Long, Long>();
@@ -429,7 +437,29 @@ public class BackupImport {
 			}
 		}
 
-		log.info("Ldap config import complete, starting recordings import");
+		log.info("Ldap config import complete, starting cluster servers import");
+		/*
+		 * ##################### Cluster servers
+		 */
+		{
+			List<Server> list = readList(simpleSerializer, f, "servers.xml", "servers", Server.class, true);
+			for (Server s : list) {
+				serverDao.update(s, null);
+			}
+		}
+
+		log.info("Cluster servers import complete, starting OAuth2 servers import");
+		/*
+		 * ##################### OAuth2 servers
+		 */
+		{
+			List<OAuthServer> list = readList(simpleSerializer, f, "oauth2servers.xml", "oauth2servers", OAuthServer.class, true);
+			for (OAuthServer s : list) {
+				auth2Dao.update(s, null);
+			}
+		}
+
+		log.info("OAuth2 servers import complete, starting recordings import");
 		/*
 		 * ##################### Import Recordings
 		 */

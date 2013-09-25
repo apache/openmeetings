@@ -30,54 +30,87 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
 import org.apache.openmeetings.db.entity.IDataProviderEntity;
+import org.simpleframework.xml.Element;
+import org.simpleframework.xml.Root;
 
 @Entity
 @Table(name = "oauth_servers")
 @NamedQueries({
-	@NamedQuery(name = "getEnabledOAuthServers", query = "select s from OAuthServer as s where s.enabled = true and s.deleted = false"),
-	@NamedQuery(name = "getOAuthServerById", query = "select s from OAuthServer as s where s.id = :id"),
-	@NamedQuery(name = "getAllOAuthServers", query = "select s from OAuthServer as s where s.deleted = false"),
-	@NamedQuery(name = "countOAuthServers", query = "select count(s) from OAuthServer s WHERE s.deleted = false")
-})
+		@NamedQuery(name = "getEnabledOAuthServers", query = "select s from OAuthServer as s where s.enabled = true and s.deleted = false"),
+		@NamedQuery(name = "getOAuthServerById", query = "select s from OAuthServer as s where s.id = :id"),
+		@NamedQuery(name = "getAllOAuthServers", query = "select s from OAuthServer as s where s.deleted = false"),
+		@NamedQuery(name = "countOAuthServers", query = "select count(s) from OAuthServer s WHERE s.deleted = false") })
+@Root
 public class OAuthServer implements Serializable, IDataProviderEntity {
-	
+
 	private static final long serialVersionUID = -9034438721147720175L;
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
+	@Element(data = true)
 	private Long id;
-	@Column(name = "name")
-	private String name;
-	@Column(name = "icon_url")
-	private String iconUrl;
-	@Column(name = "enabled")
-	private Boolean enabled;
-	@Column(name = "client_id")
-	private String clientId;
-	@Column(name = "client_secret")
-	private String clientSecret;
-	@Column(name = "request_key_url")
-	private String requestKeyUrl;
-	@Column(name = "request_token_url")
-	private String requestTokenUrl;
-	@Column(name = "request_token_attributes")
-	private String requestTokenAttributes;
-	@Column(name = "request_method")
-	private RequestMethod requestTokenMethod;
-	@Column(name = "request_info_url")
-	private String requestInfoUrl;
-	@Column(name = "login_param_name")
-	private String loginParamName;
-	@Column(name = "email_param_name")
-	private String emailParamName;
-	@Column(name = "firstname_param_name")
-	private String firstnameParamName;
-	@Column(name = "lastname_param_name")
-	private String lastnameParamName;
-	@Column(name = "deleted")
-	private boolean deleted;
 	
+	@Column(name = "name")
+	@Element(data = true)
+	private String name;
+	
+	@Column(name = "icon_url")
+	@Element(data = true)
+	private String iconUrl;
+	
+	@Column(name = "enabled")
+	@Element(data = true)
+	private boolean enabled;
+	
+	@Column(name = "client_id")
+	@Element(data = true)
+	private String clientId;
+	
+	@Column(name = "client_secret")
+	@Element(data = true)
+	private String clientSecret;
+	
+	@Column(name = "request_key_url")
+	@Element(data = true)
+	private String requestKeyUrl;
+	
+	@Column(name = "request_token_url")
+	@Element(data = true)
+	private String requestTokenUrl;
+	
+	@Column(name = "request_token_attributes")
+	@Element(data = true)
+	private String requestTokenAttributes;
+	
+	@Column(name = "request_method")
+	@Element(data = true)
+	private RequestMethod requestTokenMethod;
+	
+	@Column(name = "request_info_url")
+	@Element(data = true)
+	private String requestInfoUrl;
+	
+	@Column(name = "login_param_name")
+	@Element(data = true)
+	private String loginParamName;
+	
+	@Column(name = "email_param_name")
+	@Element(data = true)
+	private String emailParamName;
+	
+	@Column(name = "firstname_param_name")
+	@Element(data = true)
+	private String firstnameParamName;
+	
+	@Column(name = "lastname_param_name")
+	@Element(data = true)
+	private String lastnameParamName;
+	
+	@Column(name = "deleted")
+	@Element(data = true)
+	private boolean deleted;
+
 	public Long getId() {
 		return id;
 	}
@@ -102,11 +135,11 @@ public class OAuthServer implements Serializable, IDataProviderEntity {
 		this.iconUrl = iconUrl;
 	}
 
-	public Boolean isEnabled() {
+	public boolean isEnabled() {
 		return enabled;
 	}
 
-	public void setEnabled(Boolean enabled) {
+	public void setEnabled(boolean enabled) {
 		this.enabled = enabled;
 	}
 
@@ -198,7 +231,7 @@ public class OAuthServer implements Serializable, IDataProviderEntity {
 		this.lastnameParamName = lastnameParamName;
 	}
 
-	public boolean getDeleted() {
+	public boolean isDeleted() {
 		return deleted;
 	}
 
@@ -206,29 +239,19 @@ public class OAuthServer implements Serializable, IDataProviderEntity {
 		this.deleted = deleted;
 	}
 
-	public Boolean getEnabled() {
-		return enabled;
-	}
-
 	@Override
 	public String toString() {
-		return "OAuthServer [id=" + id + ", name=" + name + ", iconUrl="
-				+ iconUrl + ", enabled=" + enabled + ", clientId=" + clientId
-				+ ", clientSecret=" + clientSecret + ", requestKeyUrl="
-				+ requestKeyUrl + ", requestTokenUrl=" + requestTokenUrl
-				+ ", requestTokenAttributes=" + requestTokenAttributes
-				+ ", requestTokenMethod=" + requestTokenMethod
-				+ ", requestInfoUrl=" + requestInfoUrl + ", loginParamName="
-				+ loginParamName + ", emailParamName=" + emailParamName
-				+ ", firstnameParamName=" + firstnameParamName
-				+ ", lastnameParamName=" + lastnameParamName + ", deleted="
-				+ deleted + "]";
+		return "OAuthServer [id=" + id + ", name=" + name + ", iconUrl=" + iconUrl + ", enabled=" + enabled
+				+ ", clientId=" + clientId + ", clientSecret=" + clientSecret + ", requestKeyUrl=" + requestKeyUrl
+				+ ", requestTokenUrl=" + requestTokenUrl + ", requestTokenAttributes=" + requestTokenAttributes
+				+ ", requestTokenMethod=" + requestTokenMethod + ", requestInfoUrl=" + requestInfoUrl
+				+ ", loginParamName=" + loginParamName + ", emailParamName=" + emailParamName + ", firstnameParamName="
+				+ firstnameParamName + ", lastnameParamName=" + lastnameParamName + ", deleted=" + deleted + "]";
 	}
 
 	public enum RequestMethod {
-		POST("post"),
-		GET("get");
-		
+		POST("post"), GET("get");
+
 		private String name;
 
 		private RequestMethod(String name) {
@@ -240,5 +263,5 @@ public class OAuthServer implements Serializable, IDataProviderEntity {
 			return name;
 		}
 	}
-	
+
 }

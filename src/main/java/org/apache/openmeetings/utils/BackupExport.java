@@ -59,6 +59,8 @@ import org.apache.openmeetings.db.dao.file.FileExplorerItemDao;
 import org.apache.openmeetings.db.dao.record.FlvRecordingDao;
 import org.apache.openmeetings.db.dao.room.PollDao;
 import org.apache.openmeetings.db.dao.server.LdapConfigDao;
+import org.apache.openmeetings.db.dao.server.OAuth2Dao;
+import org.apache.openmeetings.db.dao.server.ServerDao;
 import org.apache.openmeetings.db.dao.server.SessiondataDao;
 import org.apache.openmeetings.db.dao.user.AdminUserDao;
 import org.apache.openmeetings.db.dao.user.PrivateMessageFolderDao;
@@ -140,6 +142,10 @@ public class BackupExport {
 	private ConfigurationDao configurationDao;
 	@Autowired
 	private ChatDao chatDao;
+	@Autowired
+	private OAuth2Dao auth2Dao;
+	@Autowired
+	private ServerDao serverDao;
 
 	public void performExport(File filePath, File backup_dir,
 			boolean includeFiles) throws Exception {
@@ -230,6 +236,16 @@ public class BackupExport {
 		 */
 		writeList(simpleSerializer, backup_dir, "ldapconfigs.xml",
 				"ldapconfigs", ldapConfigDao.getLdapConfigs());
+
+		/*
+		 * ##################### Cluster servers
+		 */
+		writeList(simpleSerializer, backup_dir, "servers.xml", "servers", serverDao.get(0, Integer.MAX_VALUE));
+
+		/*
+		 * ##################### OAuth2 servers
+		 */
+		writeList(simpleSerializer, backup_dir, "oauth2servers.xml", "oauth2servers", auth2Dao.get(0, Integer.MAX_VALUE));
 
 		/*
 		 * ##################### Private Messages
