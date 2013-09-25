@@ -662,15 +662,12 @@ public class LdapLoginManagement {
 				&& userdata.get(ldapAttrs.get("pictureUri")) != null)
 			pictureUri = userdata.get(ldapAttrs.get("pictureUri"));
 
-		String jName_timeZone = "";
-		if (userdata.containsKey(ldapAttrs.get("timezoneAttr"))
-				&& userdata.get(ldapAttrs.get("timezoneAttr")) != null)
-			jName_timeZone = userdata.get(ldapAttrs.get("timezoneAttr"));
-		
-		if (timezoneUtil.getTimezoneByInternalJName(jName_timeZone) == null) {
-			jName_timeZone = configurationDao.getConfValue(
-					"default.timezone", String.class, "Europe/Berlin");
+		String iCalTz = "";
+		if (userdata.containsKey(ldapAttrs.get("timezoneAttr")) && userdata.get(ldapAttrs.get("timezoneAttr")) != null) {
+			iCalTz = userdata.get(ldapAttrs.get("timezoneAttr"));
 		}
+		
+		iCalTz = timezoneUtil.getTimeZone(iCalTz).getID();
 
 		String town = "town";
 		if (userdata.containsKey(ldapAttrs.get("townAttr"))
@@ -703,7 +700,7 @@ public class LdapLoginManagement {
 					false,
 					"",// BaseURL is empty as we do not send an Email here
 					false,// send verification code
-					jName_timeZone, 
+					iCalTz, 
 					false, // forceTimeZoneCheck
 					"", //userOffers
 					"", //userSearchs
@@ -820,13 +817,13 @@ public class LdapLoginManagement {
 			user.setPictureuri(userdata.get(ldapAttrs.get("pictureUri")));
 		}
 	
-		String jName_timeZone = "";
-		if (userdata.containsKey(ldapAttrs.get("timezoneAttr"))
-				&& userdata.get(ldapAttrs.get("timezoneAttr")) != null) {
-			jName_timeZone = userdata.get(ldapAttrs.get("timezoneAttr"));
-			user.setTimeZoneId(timezoneUtil.getTimezoneByInternalJName(jName_timeZone).getID());
+		String iCalTz = "";
+		if (userdata.containsKey(ldapAttrs.get("timezoneAttr")) && userdata.get(ldapAttrs.get("timezoneAttr")) != null) {
+			iCalTz = userdata.get(ldapAttrs.get("timezoneAttr"));
 		}
-	
+		
+		iCalTz = timezoneUtil.getTimeZone(iCalTz).getID();
+		user.setTimeZoneId(iCalTz);	
 	}
 	
 }

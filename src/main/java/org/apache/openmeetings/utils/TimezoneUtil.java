@@ -147,10 +147,6 @@ public class TimezoneUtil {
 	 * @return
 	 */
 	public TimeZone getTimezoneByInternalJName(String jName) {
-		return getTimezoneByInternalJName(jName, false);
-	}
-	
-	public TimeZone getTimezoneByInternalJName(String jName, boolean shouldThrow) {
 		if (ICAL_TZ_MAP.isEmpty()) {
 			initTimeZones();
 		}
@@ -159,17 +155,14 @@ public class TimezoneUtil {
 		if (omTimeZone == null) {
 			String err = String.format("There is not omTimeZone for this jName: '%s'", jName);
 			log.error(err);
-			if (shouldThrow) {
-				throw new RuntimeException(err);
-			}
+			throw new RuntimeException(err);
 		}
-
+		
 		TimeZone timeZone = TimeZone.getTimeZone(omTimeZone);
 
 		if (timeZone != null) {
 			return timeZone;
 		}
-
 		// if user has not time zone get one from the server configuration
 		return getDefaultTimeZone();
 	}

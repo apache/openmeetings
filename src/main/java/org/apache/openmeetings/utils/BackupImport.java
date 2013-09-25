@@ -813,7 +813,7 @@ public class BackupImport {
 				do {
 					if (u.getTimeZoneId() == null && "omTimeZone".equals(item2.getName())) {
 						String jName = item2.getValue();
-						u.setTimeZoneId(jName == null ? null : tzUtil.getTimezoneByInternalJName(jName, true).getID());
+						u.setTimeZoneId(jName == null ? null : tzUtil.getTimezoneByInternalJName(jName).getID());
 					}
 					item2 = listNode2.getNext(); //HACK to handle old om_time_zone
 				} while (item2 != null && !"user".equals(item2.getName()));
