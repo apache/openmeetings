@@ -30,6 +30,7 @@ import java.util.Arrays;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.user.AdminUserDao;
 import org.apache.openmeetings.db.entity.user.User;
+import org.apache.openmeetings.db.entity.user.User.Type;
 import org.apache.openmeetings.web.admin.AdminBaseForm;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.ComunityUserForm;
@@ -37,11 +38,14 @@ import org.apache.openmeetings.web.common.GeneralUserForm;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormValidatingBehavior;
 import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.form.RequiredTextField;
+import org.apache.wicket.markup.html.panel.IMarkupSourcingStrategy;
+import org.apache.wicket.markup.html.panel.PanelMarkupSourcingStrategy;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.util.time.Duration;
@@ -134,6 +138,8 @@ public class UserForm extends AdminBaseForm<User> {
 
 		add(generalForm = new GeneralUserForm("general", getModel(), true));
 
+		add(new DropDownChoice<Type>("type", Arrays.asList(Type.values())));
+		add(new Label("ownerId"));
 		add(forDatePattern("starttime", WEB_DATE_PATTERN));
 		add(forDatePattern("updatetime", WEB_DATE_PATTERN));
 
@@ -218,5 +224,10 @@ public class UserForm extends AdminBaseForm<User> {
 	protected void onDeleteError(AjaxRequestTarget target, Form<?> form) {
 		//ignore validation errors
 		onDeleteSubmit(target, form);
+	}
+
+	@Override
+	protected IMarkupSourcingStrategy newMarkupSourcingStrategy() {
+		return new PanelMarkupSourcingStrategy(false);
 	}
 }
