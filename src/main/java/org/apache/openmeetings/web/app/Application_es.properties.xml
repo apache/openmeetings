@@ -18,19 +18,20 @@
   under the License.
   
 -->
-<html xmlns:wicket="http://wicket.apache.org">
-<wicket:panel>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+	<entry key="install.wizard.welcome.panel"><![CDATA[
 	<ol>
 		<li>
 			<h4>
-				<a id="Recommendation_for_production_environment"></a>Recomendaci—n
-				para medios de producci—n<a target="_blank"
+				<a id="Recommendation_for_production_environment"></a>RecomendaciÂ—n
+				para medios de producciÂ—n<a target="_blank"
 					href="#Recommendation_for_production_environment"
 					class="section_anchor"></a>
 			</h4>
 		<blockquote>
-			Viene predeterminado <span wicket:id="app"></span> emplear la base de datos Apache Derby. Para
-			medios de producci—n considere emplear <a target="_blank"
+			Viene predeterminado {0} emplear la base de datos Apache Derby. Para
+			medios de producciÂ—n considere emplear <a target="_blank"
 				href="http://openmeetings.apache.org/MySQLConfig.html">MySQL</a>, <a
 				target="_blank"
 				href="http://openmeetings.apache.org/PostgresConfig.html">Postgres</a>
@@ -46,13 +47,13 @@
 					class="section_anchor"></a>
 			</h4>
 			<ul>
-				<li>Instalar <strong>ImageMagick</strong> en el servidor, puede obtener m‡s informaci—n en
+				<li>Instalar <strong>ImageMagick</strong> en el servidor, puede obtener mÂ‡s informaciÂ—n en
 				<a target="_blank" href="http://www.imagemagick.org" rel="nofollow">http://www.imagemagick.org</a>
-					observando instalaci—n. Las instrucciones para la misma puede encontrarlas aqu’
+					observando instalaciÂ—n. Las instrucciones para la misma puede encontrarlas aquÂ’
 					<a target="_blank" href="http://www.imagemagick.org/script/binary-releases.php"
 					rel="nofollow">http://www.imagemagick.org/script/binary-releases.php</a>,
-					de todos modos en la mayor’a de los sistemas linux puede conseguirlo via su favorito
-					paquete de administraci—n (apt-get it).
+					de todos modos en la mayorÂ’a de los sistemas linux puede conseguirlo via su favorito
+					paquete de administraciÂ—n (apt-get it).
 				</li>
 			</ul>
 		</li>
@@ -64,20 +65,20 @@
 			</h4>
 			<ul>
 				<li>Instale <strong>GhostScript</strong> en el servidor, puede tener
-					m‡s informaci—n en <a target="_blank" href="http://pages.cs.wisc.edu/%7Eghost/" rel="nofollow">http://pages.cs.wisc.edu/~ghost/</a>
-					mire instalaci—n. Las instrucciones para la instalaci—n se encuentran all‡, 
-					de todos modos en la mayor’a de los sistemas linux puede conseguirlo
-					via su favorito paquete de administraci—n (apt-get it)
+					mÂ‡s informaciÂ—n en <a target="_blank" href="http://pages.cs.wisc.edu/%7Eghost/" rel="nofollow">http://pages.cs.wisc.edu/~ghost/</a>
+					mire instalaciÂ—n. Las instrucciones para la instalaciÂ—n se encuentran allÂ‡, 
+					de todos modos en la mayorÂ’a de los sistemas linux puede conseguirlo
+					via su favorito paquete de administraciÂ—n (apt-get it)
 				</li>
 				<li>Instale <strong>SWFTools</strong> en el servidor, puede tener
-					m‡s informaci—n en <a target="_blank"
+					mÂ‡s informaciÂ—n en <a target="_blank"
 					href="http://www.swftools.org/" rel="nofollow">http://www.swftools.org/</a>
-					mire instalaci—n. Algunas de las distribuciones Linux ya lo tienen en el
+					mire instalaciÂ—n. Algunas de las distribuciones Linux ya lo tienen en el
 					administrador de paquetes, vea <a target="_blank"
 					href="http://packages.debian.org/unstable/utils/swftools"
 					rel="nofollow">http://packages.debian.org/unstable/utils/swftools</a>),
-					la versi— recomendada de <strong>SWFTools</strong> es 0.9 porque las versiones
-					anteriores tienen un bug que hace llevar unas dimensiones err—neas al objeto
+					la versiÂ— recomendada de <strong>SWFTools</strong> es 0.9 porque las versiones
+					anteriores tienen un bug que hace llevar unas dimensiones errÂ—neas al objeto
                      en la Pizarra.
 				</li>
 		</ul>
@@ -93,13 +94,13 @@
 				<li><strong>OpenOffice-Service</strong> lanzado y escuchando en el
 					puerto 8100, vea <a target="_blank"
 					href="http://openmeetings.apache.org/OpenOfficeConverter.html">OpenOfficeConverter</a>
-					para m‡s detalles.</li>
+					para mÂ‡s detalles.</li>
 			</ul>
 		</li>
 		<li><h4>
 				<a
 					id="Enabling_Recording_and_import_of_.avi,_.flv,_.mov_and_.mp4_into"></a>Activando
-				Grabaci—n e importaci—n de .avi, .flv, .mov and .mp4 a la pizarra<a
+				GrabaciÂ—n e importaciÂ—n de .avi, .flv, .mov and .mp4 a la pizarra<a
 					href="#Enabling_Recording_and_import_of_.avi,_.flv,_.mov_and_.mp4_into"
 					class="section_anchor"></a>
 			</h4>
@@ -108,19 +109,19 @@
 				    Para Windows puede descargar una Build, por ejemplo desde
 					<a target="_blank" href="http://ffmpeg.arrozcru.org/builds/"
 					rel="nofollow">http://ffmpeg.arrozcru.org/builds/</a> Los usuarios de Linux o OSx
-					pueden emplear una de las variadas Instrucciones de Instalaci—n que hay en la Web. 
+					pueden emplear una de las variadas Instrucciones de InstalaciÂ—n que hay en la Web. 
 					Es necesario activar libmp3lame!
 				</li>
 				<li>Instalar <strong>SoX</strong> <a
 					href="http://sox.sourceforge.net/" target="_BLANK">http://sox.sourceforge.net/</a>.
-					Instalar una copia de SOX actualizada! SOX 12.xx no funcionar‡!
+					Instalar una copia de SOX actualizada! SOX 12.xx no funcionarÂ‡!
 				</li>
 			</ul>
 		</li>
 	</ol>
 
 	<br />
-	<b> <span style="font-size: 1.2em">Si tiene otras cuestiones o necesita soporte para instalaci—n o hosting:</span></b>
+	<b> <span style="font-size: 1.2em">Si tiene otras cuestiones o necesita soporte para instalaciÂ—n o hosting:</span></b>
 	<br />
 	<br />
 
@@ -133,7 +134,7 @@
 		target="_blank">Listas de correo</a></span>
 	<br />
 	
-	<b> <span style="font-size: 1.4em">Hay algunas compa–ias
+	<b> <span style="font-size: 1.4em">Hay algunas compaÂ–ias
             que tambien ofrecen soporte comercial para Apache OpenMeetings:</span></b>
     <br />
     <br />
@@ -143,5 +144,5 @@
         href="http://openmeetings.apache.org/commercial-support.html"
         target="_blank">http://openmeetings.apache.org/commercial-support.html</a></span>
     <br />
-</wicket:panel>
-</html>
+    ]]></entry>
+</properties>

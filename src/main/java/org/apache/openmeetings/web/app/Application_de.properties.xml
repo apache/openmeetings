@@ -18,8 +18,9 @@
   under the License.
   
 -->
-<html xmlns:wicket="http://wicket.apache.org">
-<wicket:panel>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+	<entry key="install.wizard.welcome.panel"><![CDATA[
 	<ol>
 		<li>
 			<h4>
@@ -29,7 +30,7 @@
 					class="section_anchor"></a>
 			</h4>
 		<blockquote>
-			Standardm&auml;&szlig;ig verwendet <span wicket:id="app"></span> die integrierte 
+			Standardm&auml;&szlig;ig verwendet {0} die integrierte 
 			Apache Derby Datenbank. In Produktivumgebungen wird jedoch der Einsatz von 
 			<a target="_blank"
 				href="http://openmeetings.apache.org/MySQLConfig.html">MySQL</a>, <a
@@ -147,6 +148,5 @@
         href="http://openmeetings.apache.org/commercial-support.html"
         target="_blank">http://openmeetings.apache.org/commercial-support.html</a></span>
     <br />
-    
-</wicket:panel>
-</html>
+	]]></entry>
+</properties>

@@ -18,15 +18,9 @@
   under the License.
   
 -->
-<!-- 
-
- Hungaryan translate
- Created 03-07-2013
- Translate this Balazs Varga - joinfok@gmail.com	
-
- -->
-<html xmlns:wicket="http://wicket.apache.org">
-<wicket:panel>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+	<entry key="install.wizard.welcome.panel"><![CDATA[
 	<ol>
 		<li>
 			<h4>
@@ -35,7 +29,7 @@
 					class="section_anchor"></a>
 			</h4>
 		<blockquote>
-			Az <span wicket:id="app"></span> alapértelmezette a beépített Apache Derby adatbázist használja. 
+			Az {0} alapértelmezette a beépített Apache Derby adatbázist használja. 
 			További lehetőségként használható a <a target="_blank"
 				href="http://openmeetings.apache.org/MySQLConfig.html">MySQL</a>, <a
 				target="_blank"
@@ -140,5 +134,5 @@
 		href="http://openmeetings.apache.org/commercial-support.html"
 		target="_blank">http://openmeetings.apache.org/commercial-support.html</a></span>
 	<br />
-</wicket:panel>
-</html>
+	]]></entry>
+</properties>

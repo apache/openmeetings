@@ -34,6 +34,7 @@ import org.apache.openmeetings.installation.InstallationConfig;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.ErrorMessagePanel;
+import org.apache.openmeetings.web.common.OmLabel;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AbstractAjaxTimerBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -45,7 +46,6 @@ import org.apache.wicket.extensions.wizard.dynamic.DynamicWizardModel;
 import org.apache.wicket.extensions.wizard.dynamic.DynamicWizardStep;
 import org.apache.wicket.extensions.wizard.dynamic.IDynamicWizardStep;
 import org.apache.wicket.markup.html.WebMarkupContainer;
-import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
@@ -149,7 +149,7 @@ public class InstallWizard extends Wizard {
 			super(null);
 			//TODO localize
 			//TODO add check for DB connection
-            add(new Label("app", cfg.appName));
+            add(new OmLabel("step", "install.wizard.welcome.panel", cfg.appName).setEscapeModelStrings(false));
 		}
 
 		public boolean isLastStep() {
