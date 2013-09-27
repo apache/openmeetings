@@ -25,6 +25,9 @@
 			<url name="sonatype" m2compatible="true">
 				<artifact pattern="https://oss.sonatype.org/content/repositories/releases/[organisation]/[artifact]/[revision]/[artifact]-[revision].[ext]" />
 			</url>
+			<url name="svnkit" m2compatible="true">
+				<artifact pattern="http://maven.tmatesoft.com/content/repositories/releases/[organisation]/[artifact]/[revision]/[artifact]-[revision].[ext]" />
+			</url>
 			<url name="googlecode">
 				<artifact pattern="https://openlaszlo-openmeetings-integration.googlecode.com/svn/repository/[artifact](-[revision]).[ext]" />
 				<artifact pattern="https://openmeetings.googlecode.com/svn/repository/[artifact](-[revision]).[ext]" />
