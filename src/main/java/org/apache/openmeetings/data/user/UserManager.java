@@ -623,7 +623,7 @@ public class UserManager {
 						sendSMS, baseURL,
 						sendConfirmation, jNameTimeZone, false, "", "", false, true);
 
-				if (sendConfirmation) {
+				if (user_id > 0 && sendConfirmation) {
 					return new Long(-40);
 				}
 
@@ -733,11 +733,9 @@ public class UserManager {
 		// their Group
 		if (authLevelUtil.checkModLevel(user_level)) {
 
-			Integer userLoginMinimumLength = configurationDao.getConfValue(
-					LOGIN_MIN_LENGTH_KEY, Integer.class, "4");
+			Integer userLoginMinimumLength = configurationDao.getConfValue(LOGIN_MIN_LENGTH_KEY, Integer.class, "4");
 			if (userLoginMinimumLength == null) {
-				throw new Exception(
-						"user.login.minimum.length problem");
+				throw new Exception("user.login.minimum.length problem");
 			}
 
 			// Check for required data
