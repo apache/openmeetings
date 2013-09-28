@@ -18,17 +18,19 @@
  */
 package org.apache.openmeetings.test.selenium;
 
+import java.util.List;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
 
 public class TestSeleniumSmokeTest {
 
-	public static String BASE_URL = "http://localhost:20080/openmeetings";
+	public static String BASE_URL = "http://localhost:5080/openmeetings";
 	public static String username = "swagner";
 	public static String userpass = "qweqwe";
 	private static final String orgname = "seleniumtest";
@@ -86,9 +88,9 @@ public class TestSeleniumSmokeTest {
 	private void doInstallation() throws Exception {
 		Thread.sleep(3000L);
 		
-		WebElement buttons_next = SeleniumUtils.findElement(driver, "buttons:next", true);
+		List<WebElement> buttons_next = SeleniumUtils.findElements(driver, "buttons:next", true);
 		
-		((JavascriptExecutor) driver).executeScript("arguments[0].click();", buttons_next);
+		buttons_next.get(1).sendKeys(Keys.RETURN);
 		
 		Thread.sleep(1000L);
 		
@@ -97,39 +99,57 @@ public class TestSeleniumSmokeTest {
 		SeleniumUtils.inputText(driver, "view:cfg.email", email);
 		SeleniumUtils.inputText(driver, "view:cfg.group", orgname);
 		
-		buttons_next = SeleniumUtils.findElement(driver, "buttons:next", true);
+		buttons_next = SeleniumUtils.findElements(driver, "buttons:next", true);
 		
-		((JavascriptExecutor) driver).executeScript("arguments[0].click();", buttons_next);
-		
-		Thread.sleep(1000L);
-		
-		buttons_next = SeleniumUtils.findElement(driver, "buttons:next", true);
-		
-		((JavascriptExecutor) driver).executeScript("arguments[0].click();", buttons_next);
+		buttons_next.get(1).sendKeys(Keys.RETURN);
 		
 		Thread.sleep(1000L);
 		
-		buttons_next = SeleniumUtils.findElement(driver, "buttons:next", true);
+		buttons_next = SeleniumUtils.findElements(driver, "buttons:next", true);
 		
-		((JavascriptExecutor) driver).executeScript("arguments[0].click();", buttons_next);
-		
-		Thread.sleep(1000L);
-		
-		buttons_next = SeleniumUtils.findElement(driver, "buttons:next", true);
-		
-		((JavascriptExecutor) driver).executeScript("arguments[0].click();", buttons_next);
+		buttons_next.get(1).sendKeys(Keys.RETURN);
 		
 		Thread.sleep(1000L);
 		
-		WebElement buttons_finish = SeleniumUtils.findElement(driver, "buttons:finish", true);
+		buttons_next = SeleniumUtils.findElements(driver, "buttons:next", true);
 		
-		((JavascriptExecutor) driver).executeScript("arguments[0].click();", buttons_finish);
+		buttons_next.get(1).sendKeys(Keys.RETURN);
 		
-		//Installation takes a while
-		Thread.sleep(30000L);
+		Thread.sleep(1000L);
 		
-		//the ajax loading thing does not work, just goto the main page
-		driver.get(BASE_URL);
+		buttons_next = SeleniumUtils.findElements(driver, "buttons:next", true);
+		
+		buttons_next.get(1).sendKeys(Keys.RETURN);
+		
+		Thread.sleep(2000L);
+		
+		List<WebElement> elements = SeleniumUtils.findElements(driver, "buttons:finish", true);
+		
+		elements.get(1).sendKeys(Keys.RETURN);
+		
+		long maxMilliSecondsWait = 120000;
+		
+		while (maxMilliSecondsWait > 0) {
+			
+			//check if installation is complete by searching for the link on the success page
+			WebElement enterApplicationLink = SeleniumUtils.findElement(driver, 
+								"//a[contains(@href,'install')]", false);
+			
+			if (enterApplicationLink == null) {
+				System.out.println("Installation running - wait 3 more seconds and check again");
+				
+				Thread.sleep(3000L);
+				maxMilliSecondsWait -= 3000;
+			} else {
+				maxMilliSecondsWait = 0;
+				
+				enterApplicationLink.click();
+				
+				return;
+			}
+		}
+		
+		throw new Exception("Timeout during installation");
 	}
 
 	@After

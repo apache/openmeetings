@@ -50,6 +50,34 @@ public class SeleniumUtils {
 		WebElement element = SeleniumUtils.findElement(driver, search, true);
 		element.click();
 	}
+	
+	/**
+	 * 
+	 * @param driver
+	 * @param search
+	 * @param throwException
+	 *            under some circumstance you do't want to exit the test here
+	 * @return
+	 * @throws Exception
+	 */
+	public static List<WebElement> findElements(WebDriver driver, String search,
+			boolean throwException) throws Exception {
+		for (int i = 0; i < numberOfRetries; i++) {
+			List<WebElement> elements = _findElement(driver, search);
+			if (elements != null) {
+				return elements;
+			}
+
+			Thread.sleep(defaultSleepInterval);
+		}
+
+		if (throwException) {
+			throw new Exception("Could not find element with specified path "
+					+ search);
+		}
+
+		return null;
+	}
 
 	/**
 	 * 
@@ -63,9 +91,9 @@ public class SeleniumUtils {
 	public static WebElement findElement(WebDriver driver, String search,
 			boolean throwException) throws Exception {
 		for (int i = 0; i < numberOfRetries; i++) {
-			WebElement element = _findElement(driver, search);
-			if (element != null) {
-				return element;
+			List<WebElement> elements = _findElement(driver, search);
+			if (elements != null) {
+				return elements.get(0);
 			}
 
 			Thread.sleep(defaultSleepInterval);
@@ -89,12 +117,15 @@ public class SeleniumUtils {
 		}
 	}
 
-	private static WebElement _findElement(WebDriver driver, String search) {
+	private static List<WebElement> _findElement(WebDriver driver, String search) {
 		for (By by : _getSearchArray(search)) {
 			try {
-				WebElement element = driver.findElement(by);
-				if (element != null) {
-					return element;
+				
+				
+				
+				List<WebElement> elements = driver.findElements(by);
+				if (elements != null && elements.size() > 0) {
+					return elements;
 				}
 			} catch (Exception e) {
 				// Do not show any warnings
