@@ -130,4 +130,15 @@
 		target="_blank">Listes de diffusion</a></span>
 	<br />
 	]]></entry>
+	<entry key="install.wizard.params.step1.userdata">Données utilisateur</entry>
+	<entry key="install.wizard.params.step1.username">Nom d'utilisateur</entry>
+	<entry key="install.wizard.params.step1.username.title">Entrez un nom d'utilisateur</entry>
+	<entry key="install.wizard.params.step1.password">Mot de passe</entry>
+	<entry key="install.wizard.params.step1.password.title">Entrez un mot de passe</entry>
+	<entry key="install.wizard.params.step1.email">E-Mail</entry>
+	<entry key="install.wizard.params.step1.email.title">Entrez une adresse E-Mail</entry>
+	<entry key="install.wizard.params.step1.tz">Fuseau horaire</entry>
+	<entry key="install.wizard.params.step1.groupdata">Organisation(Domaines)</entry>
+	<entry key="install.wizard.params.step1.group">Nom</entry>
+	<entry key="install.wizard.params.step1.group.title">Entrez le nom de votre organisation</entry>
 </properties>

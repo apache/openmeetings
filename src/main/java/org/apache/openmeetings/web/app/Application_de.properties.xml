@@ -149,4 +149,15 @@
         target="_blank">http://openmeetings.apache.org/commercial-support.html</a></span>
     <br />
 	]]></entry>
+	<entry key="install.wizard.params.step1.userdata">Nutzerdaten</entry>
+	<entry key="install.wizard.params.step1.username">Nutzername</entry>
+	<entry key="install.wizard.params.step1.username.title">Geben Sie einen Nutzernamen ein</entry>
+	<entry key="install.wizard.params.step1.password">Nutzerpasswort</entry>
+	<entry key="install.wizard.params.step1.password.title">Geben Sie ein Passwort ein</entry>
+	<entry key="install.wizard.params.step1.email">E-Mail</entry>
+	<entry key="install.wizard.params.step1.email.title">Geben Sie eine E-Mail-Adresse ein</entry>
+	<entry key="install.wizard.params.step1.tz">Zeitzone</entry>
+	<entry key="install.wizard.params.step1.groupdata">Organisation(Domains)</entry>
+	<entry key="install.wizard.params.step1.group">Name</entry>
+	<entry key="install.wizard.params.step1.group.title">Geben Sie den Namen Ihrer Organisation ein</entry>
 </properties>

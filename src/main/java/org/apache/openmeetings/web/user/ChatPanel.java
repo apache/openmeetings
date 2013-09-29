@@ -71,7 +71,6 @@ public class ChatPanel extends UserPanel {
 		setOutputMarkupId(true);
 		setMarkupId(id);
 
-		//TODO script should be moved from the html to parameterized file!
 		add(new Behavior() {
 			private static final long serialVersionUID = -2205036360048419129L;
 

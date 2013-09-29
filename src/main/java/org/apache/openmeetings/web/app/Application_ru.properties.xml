@@ -151,4 +151,15 @@
 		target="_blank">http://openmeetings.apache.org/commercial-support.html</a></span>
 	<br />
 	]]></entry>
+	<entry key="install.wizard.params.step1.userdata">Пользовательские данные</entry>
+	<entry key="install.wizard.params.step1.username">Логин</entry>
+	<entry key="install.wizard.params.step1.username.title">Введите логин пользователя</entry>
+	<entry key="install.wizard.params.step1.password">Пароль</entry>
+	<entry key="install.wizard.params.step1.password.title">Введите пароль</entry>
+	<entry key="install.wizard.params.step1.email">Электронная почта</entry>
+	<entry key="install.wizard.params.step1.email.title">Введите адрес электронной почты</entry>
+	<entry key="install.wizard.params.step1.tz">Часовой пояс пользователя</entry>
+	<entry key="install.wizard.params.step1.groupdata">Организация(Домен)</entry>
+	<entry key="install.wizard.params.step1.group">Наименование</entry>
+	<entry key="install.wizard.params.step1.group.title">Введите организацию по умолчанию</entry>
 </properties>

@@ -155,4 +155,15 @@
 		target="_blank">Mailing lists</a></span>
 	<br />
 	]]></entry>
+	<entry key="install.wizard.params.step1.userdata">Userdata</entry>
+	<entry key="install.wizard.params.step1.username">Username</entry>
+	<entry key="install.wizard.params.step1.username.title">Enter a username</entry>
+	<entry key="install.wizard.params.step1.password">Userpass</entry>
+	<entry key="install.wizard.params.step1.password.title">Enter a password</entry>
+	<entry key="install.wizard.params.step1.email">EMail</entry>
+	<entry key="install.wizard.params.step1.email.title">Enter a EMail</entry>
+	<entry key="install.wizard.params.step1.tz">User Time Zone</entry>
+	<entry key="install.wizard.params.step1.groupdata">Organisation(Domains)</entry>
+	<entry key="install.wizard.params.step1.group">Name</entry>
+	<entry key="install.wizard.params.step1.group.title">Enter a default Organisation</entry>
 </properties>

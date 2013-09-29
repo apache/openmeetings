@@ -135,4 +135,15 @@
 		target="_blank">http://openmeetings.apache.org/commercial-support.html</a></span>
 	<br />
 	]]></entry>
+	<entry key="install.wizard.params.step1.userdata">Felhasználói adatok</entry>
+	<entry key="install.wizard.params.step1.username">Felhasználónév</entry>
+	<entry key="install.wizard.params.step1.username.title">Adja meg a felhasználói nevét</entry>
+	<entry key="install.wizard.params.step1.password">Jelszó</entry>
+	<entry key="install.wizard.params.step1.password.title">Adja meg a jelszavát</entry>
+	<entry key="install.wizard.params.step1.email">EMail</entry>
+	<entry key="install.wizard.params.step1.email.title">Adja meg az e-mail címét</entry>
+	<entry key="install.wizard.params.step1.tz">Időzóna kiválasztása</entry>
+	<entry key="install.wizard.params.step1.groupdata">Szervezeti egység (Domain)</entry>
+	<entry key="install.wizard.params.step1.group">Név (domain)</entry>
+	<entry key="install.wizard.params.step1.group.title">Adja meg a nevet (domain)</entry>
 </properties>
