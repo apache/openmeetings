@@ -21,17 +21,18 @@
 <html xmlns:wicket="http://wicket.apache.org">
 <wicket:panel>
 	<h2>
-		<a wicket:id="url">Enter the Application</a>
+		<a wicket:id="url"><wicket:message key="install.wizard.congrats.enter"/></a>
 	</h2>
 	<br />
 	<br />
-	If your Red5-Server runs on a different Port or on a different domain<br />
-	<a href="public/config.xml">alter the config values of the client</a>
+	<wicket:message key="install.wizard.congrats.port"/>
+	<br />
+	<a href="public/config.xml"><wicket:message key="install.wizard.congrats.config"/></a>
 	<br />
 	<br />
 	<br />
 
-	<b> <span style="font-size: 1.4em">Mailing list</span></b>
+	<b> <span style="font-size: 1.4em"><wicket:message key="install.wizard.congrats.mail"/></span></b>
 	<br />
 	<br />
 
@@ -41,8 +42,7 @@
 	<br />
 
 
-	<b> <span style="font-size: 1.4em">There are some companies
-			that also offer commercial support for Apache OpenMeetings:</span></b>
+	<b> <span style="font-size: 1.4em"><wicket:message key="install.wizard.congrats.commercial"/></span></b>
 	<br />
 	<br />
 

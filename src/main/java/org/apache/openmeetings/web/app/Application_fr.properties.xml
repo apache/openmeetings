@@ -141,4 +141,84 @@
 	<entry key="install.wizard.params.step1.groupdata">Organisation(Domaines)</entry>
 	<entry key="install.wizard.params.step1.group">Nom</entry>
 	<entry key="install.wizard.params.step1.group.title">Entrez le nom de votre organisation</entry>
+
+	<entry key="install.wizard.params.step2.configuration">Configuration</entry>
+	<entry key="install.wizard.params.step2.allowFrontendRegister">Autoriser les  nouveaux utilisateurs de s'enregistrer (allow_frontend_register)</entry>
+	<entry key="install.wizard.params.step2.sendEmailAtRegister">Envoyer un E-Mail aux nouveaux utilisateurs (sendEmailAtRegister)</entry>
+	<entry key="install.wizard.params.step2.sendEmailWithVerficationCode">Les nouveaux utilisateurs doivent vérifier leur adresse E-Mail (sendEmailWithVerficationCode)</entry>
+	<entry key="install.wizard.params.step2.createDefaultRooms">Installer toutes les salles par défaut</entry>
+	<entry key="install.wizard.params.step2.mailReferer">Adresse mail du système (system_email_addr)</entry>
+	<entry key="install.wizard.params.step2.mailReferer.title">Entrez l'adresse mail utilisaée par le système</entry>
+	<entry key="install.wizard.params.step2.smtpServer">SMTP (smtp_server)</entry>
+	<entry key="install.wizard.params.step2.smtpServer.title">Entrez un  serveur SMTP</entry>
+	<entry key="install.wizard.params.step2.smtpPort">Port du serveur SMTP (Le port standard est 25) (smtp_port)</entry>
+	<entry key="install.wizard.params.step2.smtpPort.title">Entrez le port du serveur SMTP Normalement 25</entry>
+	<entry key="install.wizard.params.step2.mailAuthName">Nom d'utilisateur système SMTP (email_username)</entry>
+	<entry key="install.wizard.params.step2.mailAuthName.title">Entrez le nom d'utilisateur mail du système</entry>
+	<entry key="install.wizard.params.step2.mailAuthPass">Mot de passe SMTP (email_userpass)</entry>
+	<entry key="install.wizard.params.step2.mailAuthPass.title">Entrez le mot de passe mail du système</entry>
+	<entry key="install.wizard.params.step2.mailUseTls">Activer TLS pour le serveur mail</entry>
+	<entry key="install.wizard.params.step2.replyToOrganizer">Inclure l'adresse mail de l'organisateur dans le champ des destinataires d'un E-Mail (inviter.email.as.replyto)</entry>
+	<entry key="install.wizard.params.step2.defaultLangId">Langue par défaut</entry>
+	<entry key="install.wizard.params.step2.defaultExportFont">Police par défaut pour l'export [default_export_font]</entry>
+
+	<entry key="install.wizard.params.step3.converters">Convertisseurs</entry>
+	<entry key="install.wizard.params.step3.seeAlso"> Voir</entry>
+	<entry key="install.wizard.params.step3.installation">Installation</entry>
+	<entry key="install.wizard.params.step3.swfZoom">SWFTools Zoom</entry>
+	<entry key="install.wizard.params.step3.swfZoom.title">Veuillez indiquer le nombre de dpi que swftools devra utiliser lors de la conversion de PDF vers SWF.</entry>
+	<entry key="install.wizard.params.step3.swfZoom.text">Vous pouvez vérifier que swftools se trouve dans votre chemin système en tapant pdf2swf dans une ligne de commande. Indiquez combien de dpi swtools devra utiliser pour les conversions PDF vers SWF. (Par défaut : 100 dpi).</entry>
+	<entry key="install.wizard.params.step3.swfJpegQuality">SWFTools Qualité JPEG</entry>
+	<entry key="install.wizard.params.step3.swfJpegQuality.title">Entrez la qualité des images jpec incorporées. 0 étant la moins bonne et 100 la meilleure (par défaut : 85).</entry>
+	<entry key="install.wizard.params.step3.swfJpegQuality.text">Vous pouvez vérifier que swftools se trouve dans votre chemin système en tapant pdf2swf dans une ligne de commande. 
+						Indiquez la qualité pour les images jpeg. 0 est la moins bonne (taille plus petite), 100 est la meilleure (taille plus grande) (par défaut : 85).</entry>
+	<entry key="install.wizard.params.step3.swfPath">Chemin vers SWFTools</entry>
+	<entry key="install.wizard.params.step3.swfPath.title">Indiquez le chemin vers swftools,  par ex. C:/swftools (Windows), ou laissez vide si swftools se trouve déjà dans le chemin système.</entry>
+	<entry key="install.wizard.params.step3.swfPath.text">
+		Vous pouvez vérifier que swftools se trouve dans votre chemin système en tapant pdf2swf dans une ligne de commande. Si le résultat de cette commande vous montre une liste d'options, laissez ce champ vide, dans le cas contraire veuillez indiquer le chemin vers swftools.
+	</entry>
+	<entry key="install.wizard.params.step3.imageMagicPath">Chemin vers ImageMagick</entry>
+	<entry key="install.wizard.params.step3.imageMagicPath.title">Indiquez le chemin vers ImageMagick dans le cas où ImageMagick ne se trouve pas dans le chemin système.</entry>
+	<entry key="install.wizard.params.step3.imageMagicPath.text"></entry>
+	<entry key="install.wizard.params.step3.ffmpegPath">Chemin vers FFMPEG</entry>
+	<entry key="install.wizard.params.step3.ffmpegPath.title">Indiquez le chemin vers FFMPEG dans le cas où FFMPEG ne se trouve pas dans le chemin système.</entry>
+	<entry key="install.wizard.params.step3.ffmpegPath"></entry>
+	<entry key="install.wizard.params.step3.soxPath">Chemin vers SoX</entry>
+	<entry key="install.wizard.params.step3.soxPath.title">Indiquez le chemin vers SoX dans le cas où SoX ne se trouve pas dans le chemin système.</entry>
+	<entry key="install.wizard.params.step3.soxPath.text"></entry>
+	<entry key="install.wizard.params.step3.jodPath">Chemin vers JOD</entry>
+	<entry key="install.wizard.params.step3.jodPath.title">Chemin vers la bibliothèque JOD (http://code.google.com/p/jodconverter). Configurez le chemin pour pointer vers le répertoire lib de JOD qui contient également le fichier jodconverter-core-version.jar.</entry>
+	<entry key="install.wizard.params.step3.jodPath.text"></entry>
+	<entry key="install.wizard.params.step3.officePath">Chemin vers OpenOffice-/LibreOffice pour jodconverter</entry>
+	<entry key="install.wizard.params.step3.officePath.title">Chemin vers OpenOffice/LibreOffice (optionnel). Indiquez le chemin réel dans le cas où jodconverter ne pourrait pas trouver l'installation de OpenOffice-/LibreOffice automatiquement.</entry>
+	<entry key="install.wizard.params.step3.officePath.text">Chemin vers OpenOffice/LibreOffice (optionnel). Indiquez le chemin réel dans le cas où jodconverter ne pourrait pas trouver l'installation de OpenOffice-/LibreOffice automatiquement.</entry>
+
+	<entry key="install.wizard.params.step4.crypt">Type de cryptage</entry>
+	<entry key="install.wizard.params.step4.cryptClassName">Classe de cryptage</entry>
+	<entry key="install.wizard.params.step4.cryptClassName.title">Indiquez le nom de la classe de cryptage. NE MODIFIEZ PAS CECI SI VOUS N'ETES PAS SUR !</entry>
+	<entry key="install.wizard.params.step4.cryptClassName.text"><![CDATA[
+		Vous pouvez utiliser ce cryptage par défaut qui est équivalent à la fonction MD5 de PHP ou style de cryptage BDS en utilisant : 
+		<b>org.apache.openmeetings.utils.crypt.MD5CryptImplementation</b>
+		Pour plus d'information ou pour écrire votre propre cryptage voir : <a
+		href="http://openmeetings.apache.org/CustomCryptMechanism.html"
+		target="_blank">Custom Crypt Mechanism</a>. Vous pouvez éditer cette valeur plus tard MAIS les utilisateurs créés précédemment pourraient ne plus être utilisables. 
+	]]></entry>
+	<entry key="install.wizard.params.step4.red5SIP">Configuration red5SIP</entry>
+	<entry key="install.wizard.params.step4.red5SipEnable">Activer SIP</entry>
+	<entry key="install.wizard.params.step4.red5SipEnable.text">Activer l'intégration red5SIP</entry>
+	<entry key="install.wizard.params.step4.red5SipRoomPrefix">Préfix pour les salles SIP</entry>
+	<entry key="install.wizard.params.step4.red5SipRoomPrefix.text">Préfix pour le num. de tél. des salles de conférence</entry>
+	<entry key="install.wizard.params.step4.red5SipExtenContext">Contexte des extensions SIP</entry>
+	<entry key="install.wizard.params.step4.red5SipExtenContext.text">Contexte des extensions Asterisk</entry>
+
+	<entry key="install.wizard.install.desc">Veuillez cliquer sur "Finish" pour commencer l'installation !</entry>
+	<entry key="install.wizard.install.started">Please wait, installation in progress</entry>
+	<entry key="install.wizard.install.failed">Installation is failed</entry>
+
+	<entry key="install.wizard.congrats.enter">Entrer dans l'application</entry>
+	<entry key="install.wizard.congrats.port">Si votre serveur Red5 tourne sur un port différent ou sur un domaine différent</entry>
+	<entry key="install.wizard.congrats.config">modifiez la config du client</entry>
+	<entry key="install.wizard.congrats.mail">Liste de diffusion</entry>
+	<entry key="install.wizard.congrats.commercial">Il existe des sociétés
+		qui offrent un support commercial pour Apache OpenMeetings :</entry>
 </properties>

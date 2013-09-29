@@ -21,46 +21,45 @@
 <html xmlns:wicket="http://wicket.apache.org">
 <wicket:panel>
 	<fieldset id="userConf">
-		<legend>Configuration</legend>
+		<legend><wicket:message key="install.wizard.params.step2.configuration"/></legend>
 		<ul>
-			<li><label for="configdefault">Allow self-registering (allow_frontend_register)</label>
+			<li><label wicket:for="allowFrontendRegister"><wicket:message key="install.wizard.params.step2.allowFrontendRegister"/></label>
 				<select wicket:id="allowFrontendRegister"></select>
 			</li>
-			<li><label wicket:for="sendEmailAtRegister">Send Email to new registered Users (sendEmailAtRegister)</label>
+			<li><label wicket:for="sendEmailAtRegister"><wicket:message key="install.wizard.params.step2.sendEmailAtRegister"/></label>
 				<select wicket:id="sendEmailAtRegister"></select>
 			</li>
-			<li><label wicket:for="sendEmailWithVerficationCode">New Users need to verify their EMail (sendEmailWithVerficationCode)</label>
+			<li><label wicket:for="sendEmailWithVerficationCode"><wicket:message key="install.wizard.params.step2.sendEmailWithVerficationCode"/></label>
 				<select wicket:id="sendEmailWithVerficationCode"></select>
 			</li>
-			<li><label wicket:for="createDefaultRooms">Default Rooms of all types will be created</label>
+			<li><label wicket:for="createDefaultRooms"><wicket:message key="install.wizard.params.step2.createDefaultRooms"/></label>
 				<select wicket:id="createDefaultRooms"></select>
 			</li>
-			<li><label wicket:for="cfg.mailReferer">Mail-Referer (system_email_addr)</label>
-				<input wicket:id="cfg.mailReferer" title="Enter a Referer" type="text" />
+			<li><label wicket:for="cfg.mailReferer"><wicket:message key="install.wizard.params.step2.mailReferer"/></label>
+				<input wicket:id="cfg.mailReferer" wicket:message="title:install.wizard.params.step2.mailReferer.title" type="text" />
 			</li>
-			<li><label wicket:for="cfg.smtpServer">SMTP-Server (smtp_server)</label>
-				<input wicket:id="cfg.smtpServer" title="Enter a SMTP-Server" type="text" />
+			<li><label wicket:for="cfg.smtpServer"><wicket:message key="install.wizard.params.step2.smtpServer"/></label>
+				<input wicket:id="cfg.smtpServer" wicket:message="title:install.wizard.params.step2.smtpServer.title" type="text" />
 			</li>
-			<li><label wicket:for="cfg.smtpPort">SMTP-Server Port(default Smtp-Server Port is 25) (smtp_port)</label>
-				<input wicket:id="cfg.smtpPort" title="Enter a SMTP-Server.Port normally 25" type="text" />
+			<li><label wicket:for="cfg.smtpPort"><wicket:message key="install.wizard.params.step2.smtpPort"/></label>
+				<input wicket:id="cfg.smtpPort" wicket:message="title:install.wizard.params.step2.smtpPort.title" type="text" />
 			</li>
-			<li><label wicket:for="cfg.mailAuthName">SMTP-Username (email_username)</label>
-				<input wicket:id="cfg.mailAuthName" title="Enter the mail-username" type="text" />
+			<li><label wicket:for="cfg.mailAuthName"><wicket:message key="install.wizard.params.step2.mailAuthName"/></label>
+				<input wicket:id="cfg.mailAuthName" wicket:message="title:install.wizard.params.step2.mailAuthName.title" type="text" />
 			</li>
-			<li><label wicket:for="cfg.mailAuthPass">SMTP-Userpass (email_userpass)</label>
-				<input wicket:id="cfg.mailAuthPass" title="Enter the mail-userpass" type="password" />
+			<li><label wicket:for="cfg.mailAuthPass"><wicket:message key="install.wizard.params.step2.mailAuthPass"/></label>
+				<input wicket:id="cfg.mailAuthPass" wicket:message="title:install.wizard.params.step2.mailAuthPass.title" type="password" />
 			</li>
-			<li><label wicket:for="mailUseTls">Enable TLS in Mail Server Auth</label>
+			<li><label wicket:for="mailUseTls"><wicket:message key="install.wizard.params.step2.mailUseTls"/></label>
 				<select wicket:id="mailUseTls"></select>
 			</li>
-			<li><label wicket:for="replyToOrganizer">Set inviter's email
-					address as ReplyTo in email invitations (inviter.email.as.replyto)</label>
+			<li><label wicket:for="replyToOrganizer"><wicket:message key="install.wizard.params.step2.replyToOrganizer"/></label>
 				<select wicket:id="replyToOrganizer"></select>
 			</li>
-			<li><label wicket:for="defaultLangId">Default Language</label>
+			<li><label wicket:for="defaultLangId"><wicket:message key="install.wizard.params.step2.defaultLangId"/></label>
 				<select wicket:id="defaultLangId"></select>
 			</li>
-			<li><label wicket:for="cfg.defaultExportFont">Default Font for Export [default_export_font]</label>
+			<li><label wicket:for="cfg.defaultExportFont"><wicket:message key="install.wizard.params.step2.defaultExportFont"/></label>
 				<select wicket:id="cfg.defaultExportFont"></select>
 			</li>
 		</ul>

@@ -158,4 +158,104 @@
 	<entry key="install.wizard.params.step1.groupdata"><![CDATA[Organização (Dom&iacute;nios)]]></entry>
 	<entry key="install.wizard.params.step1.group">Nome</entry>
 	<entry key="install.wizard.params.step1.group.title"><![CDATA[Digite a Organiza&ccedil;&atilde;o padr&atilde;o]]></entry>
+
+	<entry key="install.wizard.params.step2.configuration">Configuration</entry>
+	<entry key="install.wizard.params.step2.allowFrontendRegister">Permitir auto-cadastro (allow_frontend_register)</entry>
+	<entry key="install.wizard.params.step2.sendEmailAtRegister"><![CDATA[Enviar e-mail para novos Usu&aacute;rios cadastrados (sendEmailAtRegister)]]></entry>
+	<entry key="install.wizard.params.step2.sendEmailWithVerficationCode"><![CDATA[Novos Usu&aacute;rios precisam validar seus e-mails (sendEmailWithVerficationCode)]]></entry>
+	<entry key="install.wizard.params.step2.createDefaultRooms"><![CDATA[Todos os tipos de Salas padr&atilde;o ser&amp;atildeo criadas]]></entry>
+	<entry key="install.wizard.params.step2.mailReferer">E-mail do sistema (system_email_addr)</entry>
+	<entry key="install.wizard.params.step2.mailReferer.title">Digite um e-mail</entry>
+	<entry key="install.wizard.params.step2.smtpServer">Servidor SMTP (smtp_server)</entry>
+	<entry key="install.wizard.params.step2.smtpServer.title">Digite um servidor SMTP</entry>
+	<entry key="install.wizard.params.step2.smtpPort"><![CDATA[Porta SMTP (a porta SMTP padr&atilde;o &eacute; 25) (smtp_port)]]></entry>
+	<entry key="install.wizard.params.step2.smtpPort.title"><![CDATA[Digite a porta do servi&ccedil;o SMTP. Padr&atilde;o &eacute; normalmente a porta 25]]></entry>
+	<entry key="install.wizard.params.step2.mailAuthName"><![CDATA[Usu&aacute;rio SMTP (email_username)]]></entry>
+	<entry key="install.wizard.params.step2.mailAuthName.title"><![CDATA[Digite o usu&aacute;rio do e-mail]]></entry>
+	<entry key="install.wizard.params.step2.mailAuthPass">Senha SMTP (email_userpass)</entry>
+	<entry key="install.wizard.params.step2.mailAuthPass.title">Digite a senha do e-mail</entry>
+	<entry key="install.wizard.params.step2.mailUseTls"><![CDATA[Habilitar TLS na autentica&ccedil;&atilde;o do e-mail]]></entry>
+	<entry key="install.wizard.params.step2.replyToOrganizer"><![CDATA[Marcar endere&ccedil;o de e-mail do convidador no campo ReplyTo do e-mail enviado ao convidado (inviter.email.as.replyto)]]></entry>
+	<entry key="install.wizard.params.step2.defaultLangId"><![CDATA[Linguagem padr&atilde;o]]></entry>
+	<entry key="install.wizard.params.step2.defaultExportFont"><![CDATA[Fonte padr&atilde;o para exporta&ccedil;&atilde;o [default_export_font]]]></entry>
+
+	<entry key="install.wizard.params.step3.converters">Conversores</entry>
+	<entry key="install.wizard.params.step3.seeAlso"> Veja mais em</entry>
+	<entry key="install.wizard.params.step3.installation"><![CDATA[Instala&ccedil;&atilde;o]]></entry>
+	<entry key="install.wizard.params.step3.swfZoom">SWFTools Zoom</entry>
+	<entry key="install.wizard.params.step3.swfZoom.title"><![CDATA[Digite o dpi que o swftools usar&aacute; para a convers&atilde;o do PDF para SWF]]></entry>
+	<entry key="install.wizard.params.step3.swfZoom.text"><![CDATA[
+		Voc&ecirc; pode testar se o swftools está instalado no caminho do sistema
+		abrindo o shell ou prompt de comando e digitando pdf2swf. Digite o dpi 
+		que o swftools usar&aacute; para a convers&atilde;o do PDF para SWF. Padr&atilde;o 
+		&eacute; 100 dpi.
+	]]></entry>
+	<entry key="install.wizard.params.step3.swfJpegQuality">Qualidade JPEG no SWFTools</entry>
+	<entry key="install.wizard.params.step3.swfJpegQuality.title"><![CDATA[Digite a qualidade das imagens jpeg incorporadas. 0 &eacute; a pior (menor), 100 &eacute; a melhor (maior). (padr&atilde;o:85)]]></entry>
+	<entry key="install.wizard.params.step3.swfJpegQuality.text"><![CDATA[
+		Voc&ecirc; pode testar se o swftools está instalado no caminho do sistema
+		abrindo o shell ou prompt de comando e digitando pdf2swf. Digite a qualidade das 
+		imagens jpeg incorporadas. 0 &eacute; a pior (menor), 100 &eacute; a melhor (maior). 
+		(padr&atilde;o:85).
+	]]></entry>
+	<entry key="install.wizard.params.step3.swfPath"><![CDATA[Diret&oacute;rio do SWFTools]]></entry>
+	<entry key="install.wizard.params.step3.swfPath.title"><![CDATA[Digite o caminho do diret&oacute;rio para o swftools, por exemplo C:/swftools, ou deixe em branco se o swftools estiver localizado em um diret&oacute;rio contido no caminho do sistema (system path)]]></entry>
+	<entry key="install.wizard.params.step3.swfPath.text"><![CDATA[
+		Voc&ecirc; pode testar se o swftools está instalado no caminho do sistema
+		abrindo o shell ou prompt de comando e digitando pdf2swf. Se isso mostrar 
+		uma lista de op&ccedil;&otilde;es deixe este campo em branco, caso contr&aacute;rio 
+		voc&ecirc; dever&aacute; especificar o diret&oacute;rio 
+		do pdf2swf no seu sistema.
+	]]></entry>
+	<entry key="install.wizard.params.step3.imageMagicPath"><![CDATA[Diret&oacute;rio do ImageMagick]]></entry>
+	<entry key="install.wizard.params.step3.imageMagicPath.title"><![CDATA[Digite o caminho do diret&oacute;rio para o ImageMagick, deixe em branco se o ImageMagick estiver localizado em um diret&oatilde;rio contido no caminho do sistema (system path)]]></entry>
+	<entry key="install.wizard.params.step3.imageMagicPath.text"></entry>
+	<entry key="install.wizard.params.step3.ffmpegPath"><![CDATA[Diret&oacute;rio do FFMPEG]]></entry>
+	<entry key="install.wizard.params.step3.ffmpegPath.title"><![CDATA[Digite o caminho do diret&oacute;rio do para o FFMPEG, deixe em branco se o FFMPEG estiver localizado em um diret&oatilde;rio contido no caminho do sistema (system path)]]></entry>
+	<entry key="install.wizard.params.step3.ffmpegPath"></entry>
+	<entry key="install.wizard.params.step3.soxPath"><![CDATA[Diret&oacute;rio do SoX]]></entry>
+	<entry key="install.wizard.params.step3.soxPath.title"><![CDATA[Digite o caminho do diret&oacute;rio do para o SoX, deixe em branco se o SoX estiver localizado em um diret&oatilde;rio contido no caminho do sistema (system path)]]></entry>
+	<entry key="install.wizard.params.step3.soxPath.text"></entry>
+	<entry key="install.wizard.params.step3.jodPath"><![CDATA[Diret&oacute;rio do JOD]]></entry>
+	<entry key="install.wizard.params.step3.jodPath.title"><![CDATA[O diret&oacute;rio da biblioteca JOD (http://code.google.com/p/jodconverter), configure o mesmo para o ponto onde o diret&oacute;rio lib do JOD que também contenha o arquivo jodconverter-core-version.jar]]></entry>
+	<entry key="install.wizard.params.step3.jodPath.text"></entry>
+	<entry key="install.wizard.params.step3.officePath"><![CDATA[Diret&oacute;rio do OpenOffice/LibreOffice para jodconverter]]></entry>
+	<entry key="install.wizard.params.step3.officePath.title"><![CDATA[O diret&oacute;rio do OpenOffice/LibreOffice (opcional). Por favor configure este com o caminho real caso o jodconverter não encontre a instala&ccedil;&atilde;o do OpenOffice/LibreOffice automaticamente]]></entry>
+	<entry key="install.wizard.params.step3.officePath.text"><![CDATA[
+		O diret&oacute;rio do OpenOffice/LibreOffice (opcional). 
+		Por favor configure este campo com o caminho real caso o jodconverter 
+		não encontre a instala&ccedil;&atilde;o do OpenOffice/LibreOffice automaticamente
+	]]></entry>
+
+	<entry key="install.wizard.params.step4.crypt">Crypt Type</entry>
+	<entry key="install.wizard.params.step4.cryptClassName">Classe Crypt</entry>
+	<entry key="install.wizard.params.step4.cryptClassName.title"><![CDATA[Digite o nome da Classe de Criptografia. N&Atilde;O ALTERE ISTO SE VOC&Ecirc; N&Atilde;O TIVER CERTEZA]]></entry>
+	<entry key="install.wizard.params.step4.cryptClassName.text"><![CDATA[
+		Voc&ecirc; pode usar este tipo padr&atilde;o de criptografia que &eacute; igual a 
+		fun&ccedil;&atilde;o PHP-MD5 ou a criptografia BSD-Style 
+		utilizando: <b>org.apache.openmeetings.utils.crypt.MD5CryptImplementation</b>
+		para maiores informa&ccedil;&otilde;es ou para escrever seu pr&oacute;prio Crypt-Style 
+		veja: <a
+		href="http://openmeetings.apache.org/CustomCryptMechanism.html"
+		target="_blank">Mecanismo de Criptografia personalizado</a>
+		Voc&ecirc; pode editar este valor mais tarde MAS Usu&aacute;rios e Sess&otilde;es 
+		criadas podem n&atilde;o mais estarem acess&iacute;veis
+	]]></entry>
+	<entry key="install.wizard.params.step4.red5SIP"><![CDATA[Configura&ccedil;&atilde;o red5SIP]]></entry>
+	<entry key="install.wizard.params.step4.red5SipEnable">Habilitar SIP</entry>
+	<entry key="install.wizard.params.step4.red5SipEnable.text"><![CDATA[Habilitar integra&ccedil;&atilde;o red5SIP]]></entry>
+	<entry key="install.wizard.params.step4.red5SipRoomPrefix">Prefixo de salas SIP</entry>
+	<entry key="install.wizard.params.step4.red5SipRoomPrefix.text"><![CDATA[Prefixo de n&uacute;mero de telefone das salas de conferencia]]></entry>
+	<entry key="install.wizard.params.step4.red5SipExtenContext"><![CDATA[Contexto de extens&otilde;s SIP]]></entry>
+	<entry key="install.wizard.params.step4.red5SipExtenContext.text"><![CDATA[Contexto de extens&otilde;es Asterisk]]></entry>
+
+	<entry key="install.wizard.install.desc"><![CDATA[Por favor clique no bot&atilde;o "Finalizar" para inicar a instala&ccedil;&atilde;o!]]></entry>
+	<entry key="install.wizard.install.started">Please wait, installation in progress</entry>
+	<entry key="install.wizard.install.failed">Installation is failed</entry>
+
+	<entry key="install.wizard.congrats.enter">Digite o Aplicativo</entry>
+	<entry key="install.wizard.congrats.port"><![CDATA[Se seu servidor Red5 &eacute; executado em uma porta ou dom&iacute;nio diferente]]></entry>
+	<entry key="install.wizard.congrats.config"><![CDATA[altere os valores da configura&ccedil;&atilde;o do cliente]]></entry>
+	<entry key="install.wizard.congrats.mail"><![CDATA[Listas de discuss&atilde;o]]></entry>
+	<entry key="install.wizard.congrats.commercial"><![CDATA[Existem algumas empresas que tamb&eacute;m oferecem suporte comercial para o Apache OpenMeetings:]]></entry>
 </properties>

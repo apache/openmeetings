@@ -46,6 +46,7 @@ import org.apache.wicket.extensions.wizard.dynamic.DynamicWizardModel;
 import org.apache.wicket.extensions.wizard.dynamic.DynamicWizardStep;
 import org.apache.wicket.extensions.wizard.dynamic.IDynamicWizardStep;
 import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
@@ -309,17 +310,17 @@ public class InstallWizard extends Wizard {
 		private WebMarkupContainer container = new WebMarkupContainer("container");
 		private AbstractAjaxTimerBehavior timer;
 		private ProgressBar progressBar;
-		private WebMarkupContainer desc = new WebMarkupContainer("desc");
-		//private Label value;
+		private Label desc = new Label("desc", getString("install.wizard.install.desc"));
 		private boolean started = false;
 		
 		public void startInstallation(AjaxRequestTarget target) {
 			started = true;
 			timer.restart(target);
 			new Thread(new InstallProcess(Application.get()._getBean(ImportInitvalues.class))
-				, "Openmeetings - Installation").start(); //TODO remove hardcoded
+				, "Openmeetings - Installation").start();
 			//progressBar.setVisible(true);
-			target.add(container);
+			desc.setDefaultModelObject(getString("install.wizard.install.started"));
+			target.add(desc, container);
 		}
 		
 		public InstallStep() {
@@ -340,7 +341,7 @@ public class InstallWizard extends Wizard {
 						timer.stop(target);
 						//TODO change text, localize
 						progressBar.setVisible(false);
-						target.add(container.replace(new ErrorMessagePanel("status", "Installation is failed", th))
+						target.add(container.replace(new ErrorMessagePanel("status", getString("install.wizard.install.failed"), th))
 							, desc.setVisible(false)
 							);
 					} else {

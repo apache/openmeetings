@@ -21,45 +21,41 @@
 <html xmlns:wicket="http://wicket.apache.org">
 <wicket:panel>
 	<fieldset id="userConf2">
-
-		<legend>Crypt Type</legend>
+		<legend><wicket:message key="install.wizard.params.step4.crypt"/></legend>
 		<ul>
-			<li><label wicket:for="cfg.cryptClassName">Crypt Class</label>
-				<input wicket:id="cfg.cryptClassName"  type="text"
-				title="Enter the Class name of the Encryption Class. DO NOT ALTER THIS IF YOU ARE NOT SURE" />
+			<li><label wicket:for="cfg.cryptClassName"><wicket:message key="install.wizard.params.step4.cryptClassName"/></label>
+				<input wicket:id="cfg.cryptClassName" type="text"
+					wicket:message="title:install.wizard.params.step4.cryptClassName.title" />
 				<p>
-					<i> You can use this default crypt type which is equal to
-						PHP-MD5 function or BSD-Style encryption by using:<b>org.apache.openmeetings.utils.crypt.MD5CryptImplementation</b>
-						for more information or to write your own Crypt-Style see: <a
-						href="http://openmeetings.apache.org/CustomCryptMechanism.html"
-						target="_blank">Custom Crypt Mechanism</a> You can edit this
-						value later BUT previous created Users and Sessions might be not
-						usable anymore
+					<i>
+						<wicket:message key="install.wizard.params.step4.cryptClassName.text"/>
 					</i>
-				</p></li>
+				</p>
+			</li>
 		</ul>
 	</fieldset>
 
 	<fieldset id="red5sip">
-		<legend>red5SIP Configuration</legend>
+		<legend><wicket:message key="install.wizard.params.step4.red5SIP"/></legend>
 		<ul>
-			<li><label wicket:for="red5SipEnable">Enable SIP</label>
+			<li><label wicket:for="red5SipEnable"><wicket:message key="install.wizard.params.step4.red5SipEnable"/></label>
 				<select wicket:id="red5SipEnable"></select>
 				<p>
-					<i> Enable red5SIP integration </i>
-				</p> </li>
-
-			<li><label wicket:for="cfg.red5SipRoomPrefix">SIP rooms prefix</label>
+					<i><wicket:message key="install.wizard.params.step4.red5SipEnable.text"/></i>
+				</p>
+			</li>
+			<li><label wicket:for="cfg.red5SipRoomPrefix"><wicket:message key="install.wizard.params.step4.red5SipRoomPrefix"/></label>
 				<input wicket:id="cfg.red5SipRoomPrefix" type="text" />
 				<p>
-					<i>Prefix for phone number of conference rooms</i>
-				</p></li>
-
-			<li><label wicket:for="cfg.red5SipExtenContext">SIP extensions context</label>
+					<i><wicket:message key="install.wizard.params.step4.red5SipRoomPrefix.text"/></i>
+				</p>
+			</li>
+			<li><label wicket:for="cfg.red5SipExtenContext"><wicket:message key="install.wizard.params.step4.red5SipExtenContext"/></label>
 				<input wicket:id="cfg.red5SipExtenContext" type="text" />
 				<p>
-					<i>Context of Asterisk extensions</i>
-				</p></li>
+					<i><wicket:message key="install.wizard.params.step4.red5SipExtenContext.text"/></i>
+				</p>
+			</li>
 		</ul>
 	</fieldset>
 </wicket:panel>

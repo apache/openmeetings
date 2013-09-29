@@ -146,4 +146,96 @@
 	<entry key="install.wizard.params.step1.groupdata">Szervezeti egység (Domain)</entry>
 	<entry key="install.wizard.params.step1.group">Név (domain)</entry>
 	<entry key="install.wizard.params.step1.group.title">Adja meg a nevet (domain)</entry>
+
+	<entry key="install.wizard.params.step2.configuration">Beállítások</entry>
+	<entry key="install.wizard.params.step2.allowFrontendRegister">Előregisztráció engedélyezése (megjelenik a belépő panelen)</entry>
+	<entry key="install.wizard.params.step2.sendEmailAtRegister">Regisztrációs e-mail küldése</entry>
+	<entry key="install.wizard.params.step2.sendEmailWithVerficationCode">Regisztráció megerősítése e-mailben (megerősítő link küldése)</entry>
+	<entry key="install.wizard.params.step2.createDefaultRooms">Alapértelmezett típusú konferencia szobák létrehozása</entry>
+	<entry key="install.wizard.params.step2.mailReferer">Rendszer e-mail cím</entry>
+	<entry key="install.wizard.params.step2.mailReferer.title">Rendszer e-mail megadása</entry>
+	<entry key="install.wizard.params.step2.smtpServer">SMTP-Szerver (smtp_server)</entry>
+	<entry key="install.wizard.params.step2.smtpServer.title">Enter a SMTP-Server</entry>
+	<entry key="install.wizard.params.step2.smtpPort">SMTP-Szerver Port(alapértelmezett Smtp-Server Port 25) (smtp_port)</entry>
+	<entry key="install.wizard.params.step2.smtpPort.title">Enter a SMTP-Server.Port normally 25</entry>
+	<entry key="install.wizard.params.step2.mailAuthName">SMTP-Felhasználó név (email_username)</entry>
+	<entry key="install.wizard.params.step2.mailAuthName.title">Adja meg a felhasználó nevet</entry>
+	<entry key="install.wizard.params.step2.mailAuthPass">SMTP-Felhasználó jelszó (email_userpass)</entry>
+	<entry key="install.wizard.params.step2.mailAuthPass.title">Adja meg a jelszót</entry>
+	<entry key="install.wizard.params.step2.mailUseTls">TLS engedélyezése az authentikációhoz</entry>
+	<entry key="install.wizard.params.step2.replyToOrganizer">A meghívó e-mail címének küldése és beállítása a válasz küldéshez (reply-to) fejlécben(inviter.email.as.replyto)</entry>
+	<entry key="install.wizard.params.step2.defaultLangId">Alapértelmezett nyelv</entry>
+	<entry key="install.wizard.params.step2.defaultExportFont">Alapértelmezett betükészlet [default_export_font]</entry>
+
+	<entry key="install.wizard.params.step3.converters">Konverterek</entry>
+	<entry key="install.wizard.params.step3.seeAlso"> bővebben</entry>
+	<entry key="install.wizard.params.step3.installation">Telepítés</entry>
+	<entry key="install.wizard.params.step3.swfZoom">SWFTools Zoom</entry>
+	<entry key="install.wizard.params.step3.swfZoom.title">Adja meg az SWFTools felbontását (dpi) amit a PDF2SWF konverziónál használ</entry>
+	<entry key="install.wizard.params.step3.swfZoom.text">
+		Ellenőrizze az swftools telepítését és elérését a rendszerútvonalon.
+		Nyisson egy parancssort és futtassa: pdf2swf. Paraméterként megadhatja a felbontást.
+		Alapértelmezett felbontás 100 dpi.
+	</entry>
+	<entry key="install.wizard.params.step3.swfJpegQuality">SWFTools JPEG Minőség</entry>
+	<entry key="install.wizard.params.step3.swfJpegQuality.title">Adja meg a jpeg képek minőségi rátáját. 0 a gyengébb (kicsi), 100 a legjobb (nagy). (alapértelmezett:85)</entry>
+	<entry key="install.wizard.params.step3.swfJpegQuality.text">
+		Ellenőrizze az swftools telepítését és elérését a rendszerútvonalon.
+		Nyisson egy parancssort és futtassa: pdf2swf. Paraméterként megadhatja a 
+		a jpeg képek minőségét. 0 a gyengébb (kicsi),
+		100 a legjobb (nagy). (alapértelmezett:85).
+	</entry>
+	<entry key="install.wizard.params.step3.swfPath">SWFTools útvonala</entry>
+	<entry key="install.wizard.params.step3.swfPath.title">Adja meg az SWFTools elérési útvonalát C:/swftools (Windows) /usr/local/swftools (Linux) vagy hagyja üresen, ha elérhető a rendszerútvonalak közt</entry>
+	<entry key="install.wizard.params.step3.swfPath.text">
+		Ellenőrizze az swftools telepítését és elérését a rendszerútvonalon.
+		Nyisson egy parancssort és futtassa: pdf2swf. Hagyja üresen, ha nem ismeri, vagy ha elérhető a rendszerútvonalon. 
+	</entry>
+	<entry key="install.wizard.params.step3.imageMagicPath">ImageMagick útvonala</entry>
+	<entry key="install.wizard.params.step3.imageMagicPath.title">Adja meg a ImageMagick elérési útvonalát, hagyja üresen, ha az ImageMagick elérhető a rendszer útvonalak közt</entry>
+	<entry key="install.wizard.params.step3.imageMagicPath.text"></entry>
+	<entry key="install.wizard.params.step3.ffmpegPath">FFMPEG útvonala</entry>
+	<entry key="install.wizard.params.step3.ffmpegPath.title">Adja meg az FFMPEG alérési útvonalát, hagyja üresen, ha az FFMPEG elérhető a rendszer útvonalak közt</entry>
+	<entry key="install.wizard.params.step3.ffmpegPath"></entry>
+	<entry key="install.wizard.params.step3.soxPath">SoX útvonala</entry>
+	<entry key="install.wizard.params.step3.soxPath.title">Adja meg a SoX elérési útvonalát, hagyja üresen, ha a SoX elérhető a rendszer útvonalak közt</entry>
+	<entry key="install.wizard.params.step3.soxPath.text"></entry>
+	<entry key="install.wizard.params.step3.jodPath">JOD útvonala</entry>
+	<entry key="install.wizard.params.step3.jodPath.title">A JOD könyvtár útvonala (http://code.google.com/p/jodconverter), a JOD könyvtárban szükséges a jodconverter-core-version.jar</entry>
+	<entry key="install.wizard.params.step3.jodPath.text"></entry>
+	<entry key="install.wizard.params.step3.officePath">OpenOffice/LibreOffice útvonala a jodconverterhez</entry>
+	<entry key="install.wizard.params.step3.officePath.title">Adja meg az OpenOffice/LibreOffice (optional) valós útvonalát, a OpenOffice/LibreOffice nem keresi automatikusan a jodconverter</entry>
+	<entry key="install.wizard.params.step3.officePath.text">
+		Az OpenOffice/LibreOffice (optional) útvonalát a jodconverter nem találja autómatikusan, az abszolút elérési útvonal szükséges
+	</entry>
+
+	<entry key="install.wizard.params.step4.crypt">Titkosítás típusa</entry>
+	<entry key="install.wizard.params.step4.cryptClassName">Titkosító osztály</entry>
+	<entry key="install.wizard.params.step4.cryptClassName.title">Adja meg a titkosító osztály nevét (class). NE VÁLTOZTASSA, HA NEM BIZTOS BENNE!</entry>
+	<entry key="install.wizard.params.step4.cryptClassName.text"><![CDATA[
+		Az alapértelmezetten beállított kódolás megfelel a 
+		PHP-MD5 kódolónak, vagy BSD-Stílusú kódoláshoz használja a:<b>org.apache.openmeetings.utils.crypt.MD5CryptImplementation</b>
+		további kódolási/titkosítási eljárásokról itt olvashat bővebben: <a
+		href="http://openmeetings.apache.org/CustomCryptMechanism.html"
+		target="_blank">Egyedi titkosítási mechanizmus </a> Ha a későbbiekben módosítja ezt a beállítást,
+		az előzőleg létrehozott adatok elérhetetlenné válnak, ami működési hibát okozhat a régebbi munkamenetek elérésében 
+		(pl. jelszó, hash kezelés).
+	]]></entry>
+	<entry key="install.wizard.params.step4.red5SIP">Red5SIP Beállítása</entry>
+	<entry key="install.wizard.params.step4.red5SipEnable">SIP engedélyezése</entry>
+	<entry key="install.wizard.params.step4.red5SipEnable.text">Red5SIP integráció engedélyezése</entry>
+	<entry key="install.wizard.params.step4.red5SipRoomPrefix">SIP szoba prefix</entry>
+	<entry key="install.wizard.params.step4.red5SipRoomPrefix.text">Telefonszám prefixum beállítása a konferencia szobához</entry>
+	<entry key="install.wizard.params.step4.red5SipExtenContext">SIP kiterjesztés leírása</entry>
+	<entry key="install.wizard.params.step4.red5SipExtenContext.text">Leírás az Asterix konfigurálásához</entry>
+
+	<entry key="install.wizard.install.desc">Kattintson a "Befejezés" gombra a telepítés folytatásához</entry>
+	<entry key="install.wizard.install.started">Please wait, installation in progress</entry>
+	<entry key="install.wizard.install.failed">Installation is failed</entry>
+
+	<entry key="install.wizard.congrats.enter">Belépés az alkalmazásba</entry>
+	<entry key="install.wizard.congrats.port">Ha a Red5 szervert más porton, domainen, vagy más beállításokkal használja</entry>
+	<entry key="install.wizard.congrats.config">változtassa meg a kliens szükséges konfigurációit</entry>
+	<entry key="install.wizard.congrats.mail">Levelező lista</entry>
+	<entry key="install.wizard.congrats.commercial">Néhány cég, akik üzleti támogatást nyújthatnak Apache OpenMeetings:</entry>
 </properties>

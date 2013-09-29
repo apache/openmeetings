@@ -21,90 +21,110 @@
 <html xmlns:wicket="http://wicket.apache.org">
 <wicket:panel>
 	<fieldset id="userConf1">
-		<legend>Converters</legend>
+		<legend><wicket:message key="install.wizard.params.step3.converters"/></legend>
 		<ul>
-			<li><label wicket:for="cfg.swfZoom">SWFTools Zoom</label>
-			<input wicket:id="cfg.swfZoom" title="Enter the dpi that swftools will use for PDF to SWF conversion"
+			<li><label wicket:for="cfg.swfZoom"><wicket:message key="install.wizard.params.step3.swfZoom"/></label>
+				<input wicket:id="cfg.swfZoom" wicket:message="title:install.wizard.params.step3.swfZoom.title"
 				type="text" />
 				<p>
-					<i>You can test if swftools is installed into system path by
-						opening a shell or cmd-prompt and type pdf2swf Enter the dpi
-						that swftools will use for PDF to SWF conversion. Default is 72
-						dpi. see also <a
+					<i>
+						<wicket:message key="install.wizard.params.step3.swfZoom.text"/>
+						<wicket:message key="install.wizard.params.step3.seeAlso"/><a
 						href="http://openmeetings.apache.org/installation.html"
-						target="_blank">Installation</a>
-					</i>
-				</p></li>
-			<li><label wicket:for="cfg.swfJpegQuality">SWFTools JPEG Quality</label>
-				<input wicket:id="cfg.swfJpegQuality" 
-				title="Enter the quality of embedded jpeg pictures to quality. 0 is worst (small), 100 is best (big). (default:85)"
-				type="text" />
-				<p>
-					<i>You can test if swftools is installed into system path by
-						opening a shell or cmd-prompt and type pdf2swf Enter the
-						quality of embedded jpeg pictures to quality. 0 is worst (small),
-						100 is best (big). (default:85) see also <a
-						href="http://openmeetings.apache.org/installation.html"
-						target="_blank">Installation</a>
+						target="_blank"><wicket:message key="install.wizard.params.step3.installation"/></a>
 					</i>
 				</p>
 			</li>
-			<li><label wicket:for="cfg.swfPath">SWFTools Path</label>
-				<input wicket:id="cfg.swfPath" 
-				title="Enter the path to swftools for example C:/swftools (Windows) or leave blank if swftools is a known to your system path"
+			<li><label wicket:for="cfg.swfJpegQuality"><wicket:message key="install.wizard.params.step3.swfJpegQuality"/></label>
+				<input wicket:id="cfg.swfJpegQuality" 
+				wicket:message="title:install.wizard.params.step3.swfJpegQuality.title"
 				type="text" />
 				<p>
-					<i>You can test if swftools is installed into system path by
-						opening a shell or cmd-prompt and type pdf2swf If this shows
-						a list of options leave this field blank otherwise you have to
-						specify the path to pdf2swf on your system see also <a
+					<i>
+						<wicket:message key="install.wizard.params.step3.swfJpegQuality.text"/>
+						<wicket:message key="install.wizard.params.step3.seeAlso"/><a
 						href="http://openmeetings.apache.org/installation.html"
-						target="_blank">Installation</a>
+						target="_blank"><wicket:message key="install.wizard.params.step3.installation"/></a>
 					</i>
-				</p></li>
-			<li><label wicket:for="cfg.imageMagicPath">ImageMagick Path</label>
+				</p>
+			</li>
+			<li><label wicket:for="cfg.swfPath"><wicket:message key="install.wizard.params.step3.swfPath"/></label>
+				<input wicket:id="cfg.swfPath" 
+				wicket:message="title:install.wizard.params.step3.swfPath.title"
+				type="text" />
+				<p>
+					<i>
+						<wicket:message key="install.wizard.params.step3.swfPath.text"/>
+						<wicket:message key="install.wizard.params.step3.seeAlso"/><a
+						href="http://openmeetings.apache.org/installation.html"
+						target="_blank"><wicket:message key="install.wizard.params.step3.installation"/></a>
+					</i>
+				</p>
+			</li>
+			<li><label wicket:for="cfg.imageMagicPath"><wicket:message key="install.wizard.params.step3.imageMagicPath"/></label>
 				<input wicket:id="cfg.imageMagicPath" 
-				title="Enter the path to ImageMagick, leave blank if ImageMagick is successfully installed to system-path"
+				wicket:message="title:install.wizard.params.step3.imageMagicPath.title"
 				type="text" />
 				<p>
-					<i>see also <a
+					<i>
+						<wicket:message key="install.wizard.params.step3.imageMagicPath.text"/>
+						<wicket:message key="install.wizard.params.step3.seeAlso"/><a
 						href="http://openmeetings.apache.org/installation.html"
-						target="_blank">Installation</a></i>
-				</p></li>
-			<li><label wicket:for="cfg.ffmpegPath">FFMPEG Path</label>
+						target="_blank"><wicket:message key="install.wizard.params.step3.installation"/></a>
+					</i>
+				</p>
+			</li>
+			<li><label wicket:for="cfg.ffmpegPath"><wicket:message key="install.wizard.params.step3.ffmpegPath"/></label>
 				<input wicket:id="cfg.ffmpegPath" 
-				title="Enter the path to FFMPEG, leave blank if FFMPEG is successfully installed to system-path"
-				type="text" />
+				wicket:message="title:install.wizard.params.step3.ffmpegPath.title" type="text" />
 				<p>
-					<i>see also <a
+					<i>
+						<wicket:message key="install.wizard.params.step3.ffmpegPath.text"/>
+						<wicket:message key="install.wizard.params.step3.seeAlso"/><a
 						href="http://openmeetings.apache.org/installation.html"
-						target="_blank">Installation</a></i>
-				</p></li>
-			<li><label wicket:for="cfg.soxPath">SoX Path</label>
+						target="_blank"><wicket:message key="install.wizard.params.step3.installation"/></a>
+					</i>
+				</p>
+			</li>
+			<li><label wicket:for="cfg.soxPath"><wicket:message key="install.wizard.params.step3.soxPath"/></label>
 				<input wicket:id="cfg.soxPath" 
-				title="Enter the path to SoX, leave blank if SoX is successfully installed to system-path"
+				wicket:message="title:install.wizard.params.step3.soxPath.title"
 				type="text" />
 				<p>
-					<i>see also <a
+					<i>
+						<wicket:message key="install.wizard.params.step3.soxPath.text"/>
+						<wicket:message key="install.wizard.params.step3.seeAlso"/><a
 						href="http://openmeetings.apache.org/installation.html"
-						target="_blank">Installation</a></i>
-				</p></li>
-			<li><label wicket:for="cfg.jodPath">JOD Path</label>
+						target="_blank"><wicket:message key="install.wizard.params.step3.installation"/></a>
+					</i>
+				</p>
+			</li>
+			<li><label wicket:for="cfg.jodPath"><wicket:message key="install.wizard.params.step3.jodPath"/></label>
 				<input wicket:id="cfg.jodPath"
-				title="The path to JOD library (http://code.google.com/p/jodconverter), configure the path to point to the lib directory of JOD that contains also the jodconverter-core-version.jar"
+				wicket:message="title:install.wizard.params.step3.jodPath.title"
 				type="text" />
 				<p>
-					<i>see also <a
+					<i>
+						<wicket:message key="install.wizard.params.step3.jodPath.text"/>
+						<wicket:message key="install.wizard.params.step3.seeAlso"/><a
 						href="http://openmeetings.apache.org/installation.html"
-						target="_blank">Installation</a></i>
-				</p></li>
-			<li><label wicket:for="cfg.officePath">OpenOffice/LibreOffice Path for jodconverter</label>
+						target="_blank"><wicket:message key="install.wizard.params.step3.installation"/></a>
+					</i>
+				</p>
+			</li>
+			<li><label wicket:for="cfg.officePath"><wicket:message key="install.wizard.params.step3.officePath"/></label>
 				<input wicket:id="cfg.officePath"
-				title="The path to OpenOffice/LibreOffice (optional) please set this to the real path in case jodconverter is unable to find OpenOffice/LibreOffice installation automatically"
+				wicket:message="title:install.wizard.params.step3.officePath.title"
 				type="text" />
-				<p>The path to OpenOffice/LibreOffice (optional) please set this
-					to the real path in case jodconverter is unable to find
-					OpenOffice/LibreOffice installation</p></li>
+				<p>
+					<i>
+						<wicket:message key="install.wizard.params.step3.officePath.text"/>
+						<wicket:message key="install.wizard.params.step3.seeAlso"/><a
+						href="http://openmeetings.apache.org/installation.html"
+						target="_blank"><wicket:message key="install.wizard.params.step3.installation"/></a>
+					</i>
+				</p>
+			</li>
 		</ul>
 	</fieldset>
 </wicket:panel>
