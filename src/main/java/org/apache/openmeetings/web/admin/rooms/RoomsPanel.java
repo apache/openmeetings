@@ -57,7 +57,7 @@ public class RoomsPanel extends AdminPanel {
 				final Room room = item.getModelObject();
 				item.add(new Label("rooms_id", "" + room.getRooms_id()));
 				item.add(new Label("name", "" + room.getName()));
-				item.add(new Label("ispublic", ""+room.getIspublic()));
+				item.add(new Label("ispublic", "" + room.getIspublic()));
 				item.add(new AjaxEventBehavior("onclick") {
 					private static final long serialVersionUID = -8069413566800571061L;
 

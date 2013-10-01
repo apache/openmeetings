@@ -71,7 +71,7 @@ public class RoomDao implements IDataProviderDao<Room> {
 	}
 
 	public List<Room> get(String search, int start, int count, String sort) {
-		TypedQuery<Room> q = em.createQuery(DaoHelper.getSearchQuery("Rooms", "r", search, true, false, sort, searchFields), Room.class);
+		TypedQuery<Room> q = em.createQuery(DaoHelper.getSearchQuery("Room", "r", search, true, false, sort, searchFields), Room.class);
 		q.setFirstResult(start);
 		q.setMaxResults(count);
 		return q.getResultList();
@@ -83,7 +83,7 @@ public class RoomDao implements IDataProviderDao<Room> {
 	}
 
 	public long count(String search) {
-		TypedQuery<Long> q = em.createQuery(DaoHelper.getSearchQuery("Rooms", "r", search, true, true, null, searchFields), Long.class);
+		TypedQuery<Long> q = em.createQuery(DaoHelper.getSearchQuery("Room", "r", search, true, true, null, searchFields), Long.class);
 		return q.getSingleResult();
 	}
 

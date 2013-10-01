@@ -414,6 +414,12 @@ div.tableWrapperSmall {
 	margin-top: 2px;
 	display: inline-block !important;
 }
+.trees a.om-icon {
+	width: auto;
+}
+.trees a.om-icon span {
+	white-space: nowrap;
+}
 .cross.om-icon {
 	background-image: url(images/cross.png);
 }
