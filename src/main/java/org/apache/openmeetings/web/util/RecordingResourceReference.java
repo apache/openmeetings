@@ -169,7 +169,7 @@ public abstract class RecordingResourceReference extends ResourceReference {
 		PageParameters params = attributes.getParameters();
 		StringValue id = params.get("id");
 		if (WebSession.get().isSignedIn() && !id.isEmpty()) {
-			FlvRecording r = getBean(FlvRecordingDao.class).getFlvRecordingById(id.toLongObject());
+			FlvRecording r = getBean(FlvRecordingDao.class).get(id.toLongObject());
 			if (r.getOwnerId() == null || getUserId() == r.getOwnerId()) {
 				return r;
 			}

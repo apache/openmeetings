@@ -18,6 +18,8 @@
  */
 package org.apache.openmeetings.db.dao.record;
 
+import static org.apache.openmeetings.OpenmeetingsVariables.webAppRootKey;
+
 import java.util.Date;
 import java.util.List;
 
@@ -26,7 +28,6 @@ import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
-import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.db.entity.record.FlvRecordingMetaData;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -35,15 +36,14 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
 public class FlvRecordingMetaDataDao {
-
 	private static final Logger log = Red5LoggerFactory.getLogger(FlvRecordingMetaDataDao.class,
-			OpenmeetingsVariables.webAppRootKey);
+			webAppRootKey);
 	@PersistenceContext
 	private EntityManager em;
 	@Autowired
 	private FlvRecordingDao flvRecordingDao;
 	
-	public FlvRecordingMetaData getFlvRecordingMetaDataById(Long flvRecordingMetaDataId) {
+	public FlvRecordingMetaData get(Long flvRecordingMetaDataId) {
 		try { 
 			
 			String hql = "SELECT c FROM FlvRecordingMetaData c " +
@@ -142,7 +142,7 @@ public class FlvRecordingMetaDataDao {
 			
 			flvRecordingMetaData.setDeleted(false);
 			
-			flvRecordingMetaData.setFlvRecording(flvRecordingDao.getFlvRecordingById(flvRecordingId));
+			flvRecordingMetaData.setFlvRecording(flvRecordingDao.get(flvRecordingId));
 			flvRecordingMetaData.setFreeTextUserName(freeTextUserName);
 			flvRecordingMetaData.setInserted(new Date());
 			
@@ -185,14 +185,14 @@ public class FlvRecordingMetaDataDao {
 										Date recordEnd) {
 		try { 
 			
-			FlvRecordingMetaData flvRecordingMetaData = this.getFlvRecordingMetaDataById(flvRecordingMetaDataId);
+			FlvRecordingMetaData flvRecordingMetaData = get(flvRecordingMetaDataId);
 			
 			flvRecordingMetaData.setRecordEnd(recordEnd);
 			
 			log.debug("updateFlvRecordingMetaDataEndDate :: Start Date :"+flvRecordingMetaData.getRecordStart());
 			log.debug("updateFlvRecordingMetaDataEndDate :: End Date :"+flvRecordingMetaData.getRecordEnd());
 			
-			this.updateFlvRecordingMetaData(flvRecordingMetaData);
+			this.update(flvRecordingMetaData);
 			
 			return flvRecordingMetaDataId;
 			
@@ -206,11 +206,11 @@ public class FlvRecordingMetaDataDao {
 										long initalGap) {
 		try { 
 			
-			FlvRecordingMetaData flvRecordingMetaData = this.getFlvRecordingMetaDataById(flvRecordingMetaDataId);
+			FlvRecordingMetaData flvRecordingMetaData = get(flvRecordingMetaDataId);
 			
 			flvRecordingMetaData.setInitialGapSeconds(Long.valueOf(initalGap).intValue());
 			
-			this.updateFlvRecordingMetaData(flvRecordingMetaData);
+			this.update(flvRecordingMetaData);
 			
 			return flvRecordingMetaDataId;
 			
@@ -220,7 +220,7 @@ public class FlvRecordingMetaDataDao {
 		return null;
 	}
 
-	public Long updateFlvRecordingMetaData(FlvRecordingMetaData flvRecordingMetaData) {
+	public Long update(FlvRecordingMetaData flvRecordingMetaData) {
 		try { 
 			
 			if (flvRecordingMetaData.getFlvRecordingMetaDataId() == 0) {

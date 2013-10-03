@@ -18,56 +18,56 @@
  */
 package org.apache.openmeetings.data.flvrecord.listener;
 
+import static org.apache.openmeetings.OpenmeetingsVariables.webAppRootKey;
+
 import java.util.Date;
 
-import org.apache.openmeetings.OpenmeetingsVariables;
+import org.apache.openmeetings.data.flvrecord.listener.async.BaseStreamWriter;
 import org.apache.openmeetings.data.flvrecord.listener.async.CachedEvent;
 import org.apache.openmeetings.data.flvrecord.listener.async.StreamAudioWriter;
+import org.apache.openmeetings.data.flvrecord.listener.async.StreamVideoWriter;
 import org.apache.openmeetings.db.dao.record.FlvRecordingMetaDataDao;
 import org.apache.openmeetings.db.dao.record.FlvRecordingMetaDeltaDao;
 import org.red5.logging.Red5LoggerFactory;
 import org.red5.server.api.scope.IScope;
 import org.red5.server.api.stream.IBroadcastStream;
+import org.red5.server.api.stream.IStreamListener;
 import org.red5.server.api.stream.IStreamPacket;
+import org.red5.server.net.rtmp.event.VideoData;
 import org.slf4j.Logger;
 
-public class StreamAudioListener extends BaseStreamListener {
+public class StreamListener implements IStreamListener {
+	private static final Logger log = Red5LoggerFactory.getLogger(StreamListener.class, webAppRootKey);
 
-	private static final Logger log = Red5LoggerFactory.getLogger(
-			StreamAudioListener.class, OpenmeetingsVariables.webAppRootKey);
+	private final BaseStreamWriter streamWriter;
 
-	private final StreamAudioWriter streamAudioWriter;
-	
-	public StreamAudioListener(String streamName, IScope scope,
-			Long flvRecordingMetaDataId, boolean isScreenData,
-			boolean isInterview,
-			FlvRecordingMetaDeltaDao flvRecordingMetaDeltaDao,
-			FlvRecordingMetaDataDao flvRecordingMetaDataDao) {
-		streamAudioWriter = new StreamAudioWriter(streamName, scope,
-				flvRecordingMetaDataId, isScreenData, isInterview,
-				flvRecordingMetaDeltaDao, flvRecordingMetaDataDao);
+	public StreamListener(boolean isAudio, String streamName, IScope scope, Long flvRecordingMetaDataId,
+			boolean isScreenData, boolean isInterview, FlvRecordingMetaDataDao metaDataDao
+			, FlvRecordingMetaDeltaDao metaDeltaDao) {
+		streamWriter = isAudio
+			? new StreamAudioWriter(streamName, scope, flvRecordingMetaDataId, isScreenData, isInterview, metaDataDao
+					, metaDeltaDao)
+			: new StreamVideoWriter(streamName, scope, flvRecordingMetaDataId, isScreenData, isInterview, metaDataDao);
 	}
 
-	public void packetReceived(IBroadcastStream broadcastStream,
-			IStreamPacket streampacket) {
+	public void packetReceived(IBroadcastStream broadcastStream, IStreamPacket streampacket) {
 		try {
-
 			CachedEvent cachedEvent = new CachedEvent();
 			cachedEvent.setData(streampacket.getData().duplicate());
 			cachedEvent.setDataType(streampacket.getDataType());
 			cachedEvent.setTimestamp(streampacket.getTimestamp());
 			cachedEvent.setCurrentTime(new Date());
+			if (streampacket instanceof VideoData) {
+				cachedEvent.setFrameType(((VideoData) streampacket).getFrameType());
+			}
 
-			streamAudioWriter.append(cachedEvent);
-
+			streamWriter.append(cachedEvent);
 		} catch (Exception e) {
 			log.error("[packetReceived]", e);
 		}
 	}
 
-	@Override
 	public void closeStream() {
-		streamAudioWriter.stop();
+		streamWriter.stop();
 	}
-
 }

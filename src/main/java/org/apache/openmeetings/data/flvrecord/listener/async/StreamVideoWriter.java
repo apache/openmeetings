@@ -18,11 +18,12 @@
  */
 package org.apache.openmeetings.data.flvrecord.listener.async;
 
+import static org.apache.openmeetings.OpenmeetingsVariables.webAppRootKey;
+
 import java.io.IOException;
 import java.util.Date;
 
 import org.apache.mina.core.buffer.IoBuffer;
-import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.db.dao.record.FlvRecordingMetaDataDao;
 import org.apache.openmeetings.db.entity.record.FlvRecordingMetaData;
 import org.red5.io.ITag;
@@ -32,60 +33,38 @@ import org.red5.server.api.scope.IScope;
 import org.slf4j.Logger;
 
 public class StreamVideoWriter extends BaseStreamWriter {
-	
-	private int startTimeStamp = -1;
-
+	private static final Logger log = Red5LoggerFactory.getLogger(StreamVideoWriter.class, webAppRootKey);
 	private Date startedSessionScreenTimeDate = null;
 
-	private long initialDelta = 0;
-	
-	private final FlvRecordingMetaDataDao flvRecordingMetaDataDao;
+	private final FlvRecordingMetaDataDao metaDataDao;
 
-	private static final Logger log = Red5LoggerFactory.getLogger(
-			StreamVideoWriter.class, OpenmeetingsVariables.webAppRootKey);
-	
-	public StreamVideoWriter(String streamName, IScope scope,
-			Long flvRecordingMetaDataId, boolean isScreenData,
-			boolean isInterview,
-			FlvRecordingMetaDataDao flvRecordingMetaDataDao) {
-		
+	public StreamVideoWriter(String streamName, IScope scope, Long flvRecordingMetaDataId, boolean isScreenData,
+			boolean isInterview, FlvRecordingMetaDataDao metaDataDao) {
+
 		super(streamName, scope, flvRecordingMetaDataId, isScreenData);
-		
-		this.flvRecordingMetaDataDao = flvRecordingMetaDataDao;
-		
-		FlvRecordingMetaData flvRecordingMetaData = flvRecordingMetaDataDao.
-				getFlvRecordingMetaDataById(flvRecordingMetaDataId);
-		flvRecordingMetaData.setStreamReaderThreadComplete(false);
-		flvRecordingMetaDataDao.updateFlvRecordingMetaData(flvRecordingMetaData);
+
+		this.metaDataDao = metaDataDao;
+
+		FlvRecordingMetaData metaData = metaDataDao.get(flvRecordingMetaDataId);
+		metaData.setStreamReaderThreadComplete(false);
+		metaDataDao.update(metaData);
 	}
-	
+
 	@Override
 	public void packetReceived(CachedEvent streampacket) {
 		try {
-
-			// We only are concerned about video at this moment
-			// if (streampacket.getDataType() == 9) {
-			
 			int timeStamp = streampacket.getTimestamp();
 			Date virtualTime = streampacket.getCurrentTime();
 
-			if (this.startedSessionScreenTimeDate == null) {
+			if (startedSessionScreenTimeDate == null) {
+				startedSessionScreenTimeDate = virtualTime;
 
-				this.startedSessionScreenTimeDate = virtualTime;
+				// Calculate the delta between the initial start and the first packet data
+				initialDelta = startedSessionScreenTimeDate.getTime() - startedSessionTimeDate.getTime();
 
-				// Calculate the delta between the initial start and the first
-				// packet data
-
-				this.initialDelta = this.startedSessionScreenTimeDate.getTime()
-						- this.startedSessionTimeDate.getTime();
-
-				// This is important for the Interview Post Processing to get
-				// the time between starting the stream and the actual Access to
-				// the
-				// webcam by the Flash Security Dialog
-				flvRecordingMetaDataDao.updateFlvRecordingMetaDataInitialGap(
-						flvRecordingMetaDataId, this.initialDelta);
-
+				// This is important for the Interview Post Processing to get the time between starting the stream and
+				// the actual Access to the webcam by the Flash Security Dialog
+				metaDataDao.updateFlvRecordingMetaDataInitialGap(flvRecordingMetaDataId, initialDelta);
 			}
 
 			if (streampacket.getTimestamp() <= 0) {
@@ -109,21 +88,11 @@ public class StreamVideoWriter extends BaseStreamWriter {
 			ITag tag = new Tag();
 			tag.setDataType(streampacket.getDataType());
 
-			// log.debug("data.limit() :: "+data.limit());
 			tag.setBodySize(data.limit());
 			tag.setTimestamp(timeStamp);
 			tag.setBody(data);
 
-//			if (this.isInterview) {
-//				if (timeStamp <= 500) {
-//					// We will cut the first 0.5 seconds
-//					// The First seconds seem to break the Recording Video often
-//					return;
-//				}
-//			}
-			
 			writer.writeTag(tag);
-
 		} catch (IOException e) {
 			log.error("[packetReceived]", e);
 		} catch (Exception e) {
@@ -134,29 +103,19 @@ public class StreamVideoWriter extends BaseStreamWriter {
 	@Override
 	public void closeStream() {
 		try {
-			
 			writer.close();
 
-			// Add Delta in the beginning, this Delta is the Gap between the
-			// device chosen and when the User hits the button in the Flash
-			// Security Warning
-			FlvRecordingMetaData flvRecordingMetaData = flvRecordingMetaDataDao
-					.getFlvRecordingMetaDataById(this.flvRecordingMetaDataId);
+			// Add Delta in the beginning, this Delta is the Gap between the device chosen and when the User hits the
+			// button in the Flash Security Warning
+			FlvRecordingMetaData metaData = metaDataDao.get(flvRecordingMetaDataId);
 
-			flvRecordingMetaData.setRecordStart(new Date(
-					flvRecordingMetaData.getRecordStart().getTime()
-							+ this.initialDelta));
-			
-			flvRecordingMetaData.setStreamReaderThreadComplete(true);
-			
-			flvRecordingMetaDataDao
-					.updateFlvRecordingMetaData(flvRecordingMetaData);
-			
-			
+			metaData.setRecordStart(new Date(metaData.getRecordStart().getTime() + initialDelta));
 
+			metaData.setStreamReaderThreadComplete(true);
+
+			metaDataDao.update(metaData);
 		} catch (Exception err) {
 			log.error("[closeStream]", err);
 		}
 	}
-
 }

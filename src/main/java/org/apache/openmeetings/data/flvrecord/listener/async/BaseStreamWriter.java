@@ -18,6 +18,8 @@
  */
 package org.apache.openmeetings.data.flvrecord.listener.async;
 
+import static org.apache.openmeetings.OpenmeetingsVariables.webAppRootKey;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.Date;
@@ -25,7 +27,6 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
 
-import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.utils.OmFileHelper;
 import org.red5.io.IStreamableFile;
 import org.red5.io.IStreamableFileFactory;
@@ -38,9 +39,9 @@ import org.red5.server.util.ScopeUtils;
 import org.slf4j.Logger;
 
 public abstract class BaseStreamWriter implements Runnable {
-
-	private static final Logger log = Red5LoggerFactory.getLogger(
-			BaseStreamWriter.class, OpenmeetingsVariables.webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(BaseStreamWriter.class, webAppRootKey);
+	protected int startTimeStamp = -1;
+	protected long initialDelta = 0;
 
 	// thread is running
 	private boolean running = false;
@@ -63,12 +64,10 @@ public abstract class BaseStreamWriter implements Runnable {
 
 	protected String streamName = "";
 
-
 	private final BlockingQueue<CachedEvent> queue = new LinkedBlockingQueue<CachedEvent>();
 
-	public BaseStreamWriter(String streamName, IScope scope,
-			Long flvRecordingMetaDataId, boolean isScreenData) {
-		this.startedSessionTimeDate = new Date();
+	public BaseStreamWriter(String streamName, IScope scope, Long flvRecordingMetaDataId, boolean isScreenData) {
+		startedSessionTimeDate = new Date();
 		this.isScreenData = isScreenData;
 		this.streamName = streamName;
 		this.flvRecordingMetaDataId = flvRecordingMetaDataId;
@@ -76,7 +75,7 @@ public abstract class BaseStreamWriter implements Runnable {
 		try {
 			init();
 		} catch (IOException ex) {
-			log.error("[StreamAudioWriter] Could not start Thread", ex);
+			log.error("[BaseStreamWriter] Could not start Thread", ex);
 		}
 		open();
 	}
@@ -88,23 +87,22 @@ public abstract class BaseStreamWriter implements Runnable {
 	 *             I/O exception
 	 */
 	private void init() throws IOException {
-		file = new File(OmFileHelper.getStreamsSubDir(this.scope.getName()), this.streamName + ".flv");
+		file = new File(OmFileHelper.getStreamsSubDir(scope.getName()), streamName + ".flv");
 
-		IStreamableFileFactory factory = (IStreamableFileFactory) ScopeUtils
-				.getScopeService(this.scope, IStreamableFileFactory.class,
-						StreamableFileFactory.class);
+		IStreamableFileFactory factory = (IStreamableFileFactory) ScopeUtils.getScopeService(scope,
+				IStreamableFileFactory.class, StreamableFileFactory.class);
 
-		if (!this.file.isFile()) {
+		if (!file.isFile()) {
 			// Maybe the (previously existing) file has been deleted
-			this.file.createNewFile();
+			file.createNewFile();
 
 		} else if (!file.canWrite()) {
 			throw new IOException("The file is read-only");
 		}
 
-		IStreamableFileService service = factory.getService(this.file);
-		IStreamableFile flv = service.getStreamableFile(this.file);
-		this.writer = flv.getWriter();
+		IStreamableFileService service = factory.getService(file);
+		IStreamableFile flv = service.getStreamableFile(file);
+		writer = flv.getWriter();
 
 	}
 
@@ -139,8 +137,7 @@ public abstract class BaseStreamWriter implements Runnable {
 	}
 
 	/**
-	 * Write the actual packet data to the disk and do calculate any needed
-	 * additional information
+	 * Write the actual packet data to the disk and do calculate any needed additional information
 	 * 
 	 * @param streampacket
 	 */
@@ -153,8 +150,7 @@ public abstract class BaseStreamWriter implements Runnable {
 
 	public void append(CachedEvent streampacket) {
 		if (!running) {
-			throw new IllegalStateException(
-					"Append called before the Thread was started!");
+			throw new IllegalStateException("Append called before the Thread was started!");
 		}
 		try {
 			queue.put(streampacket);

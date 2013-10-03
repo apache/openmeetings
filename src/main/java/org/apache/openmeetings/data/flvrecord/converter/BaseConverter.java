@@ -168,7 +168,7 @@ public abstract class BaseConverter {
 						
 						log.debug("### Stream not yet written Thread Sleep - " + metaData.getFlvRecordingMetaDataId());
 						
-						metaData = flvRecordingMetaDataDaoImpl.getFlvRecordingMetaDataById(metaData.getFlvRecordingMetaDataId());
+						metaData = flvRecordingMetaDataDaoImpl.get(metaData.getFlvRecordingMetaDataId());
 						
 						if (metaData.getStreamReaderThreadComplete()) {
 							log.debug("### Stream now written Thread continue - " );
@@ -297,7 +297,7 @@ public abstract class BaseConverter {
 	
 				}
 	
-				flvRecordingMetaDataDaoImpl.updateFlvRecordingMetaData(metaData);
+				flvRecordingMetaDataDaoImpl.update(metaData);
 			}
 		} catch (Exception err) {
 			log.error("[stripAudioFromFLVs]", err);
