@@ -36,137 +36,128 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
 public class FlvRecordingMetaDataDao {
-	private static final Logger log = Red5LoggerFactory.getLogger(FlvRecordingMetaDataDao.class,
-			webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(FlvRecordingMetaDataDao.class, webAppRootKey);
 	@PersistenceContext
 	private EntityManager em;
 	@Autowired
 	private FlvRecordingDao flvRecordingDao;
-	
+
 	public FlvRecordingMetaData get(Long flvRecordingMetaDataId) {
-		try { 
-			
-			String hql = "SELECT c FROM FlvRecordingMetaData c " +
-					"WHERE c.flvRecordingMetaDataId = :flvRecordingMetaDataId";
-			
+		try {
+
+			String hql = "SELECT c FROM FlvRecordingMetaData c WHERE c.flvRecordingMetaDataId = :flvRecordingMetaDataId";
+
 			TypedQuery<FlvRecordingMetaData> query = em.createQuery(hql, FlvRecordingMetaData.class);
 			query.setParameter("flvRecordingMetaDataId", flvRecordingMetaDataId);
-			
+
 			FlvRecordingMetaData flvRecordingMetaData = null;
 			try {
 				flvRecordingMetaData = query.getSingleResult();
-		    } catch (NoResultException ex) {
-		    }
-			
+			} catch (NoResultException ex) {
+			}
+
 			return flvRecordingMetaData;
-			
+
 		} catch (Exception ex2) {
-			log.error("[getFlvRecordingMetaDataById]: ",ex2);
+			log.error("[getFlvRecordingMetaDataById]: ", ex2);
 		}
 		return null;
 	}
-	
+
 	public List<FlvRecordingMetaData> getFlvRecordingMetaDataByRecording(Long flvRecordingId) {
-		try { 
-			
-			String hql = "SELECT c FROM FlvRecordingMetaData c " +
-					"WHERE c.flvRecording.flvRecordingId = :flvRecordingId " +
-					"AND c.deleted <> :deleted ";
-			
+		try {
+
+			String hql = "SELECT c FROM FlvRecordingMetaData c " + "WHERE c.flvRecording.flvRecordingId = :flvRecordingId "
+					+ "AND c.deleted <> :deleted ";
+
 			TypedQuery<FlvRecordingMetaData> query = em.createQuery(hql, FlvRecordingMetaData.class);
 			query.setParameter("flvRecordingId", flvRecordingId);
 			query.setParameter("deleted", true);
-			
+
 			List<FlvRecordingMetaData> flvRecordingMetaDatas = query.getResultList();
-			
+
 			return flvRecordingMetaDatas;
-			
+
 		} catch (Exception ex2) {
-			log.error("[getFlvRecordingMetaDataByRecording]: ",ex2);
+			log.error("[getFlvRecordingMetaDataByRecording]: ", ex2);
 		}
 		return null;
 	}
-	
+
 	public List<FlvRecordingMetaData> getFlvRecordingMetaDataAudioFlvsByRecording(Long flvRecordingId) {
-		try { 
-			
-			String hql = "SELECT c FROM FlvRecordingMetaData c " +
-					"WHERE c.flvRecording.flvRecordingId = :flvRecordingId " +
-					"AND (" +
-						"(c.isScreenData = false) " +
-							" AND " +
-						"(c.isAudioOnly = true OR (c.isAudioOnly = false AND c.isVideoOnly = false))" +
-					")";
-			
+		try {
+
+			String hql = "SELECT c FROM FlvRecordingMetaData c " + "WHERE c.flvRecording.flvRecordingId = :flvRecordingId " + "AND ("
+					+ "(c.isScreenData = false) " + " AND " + "(c.isAudioOnly = true OR (c.isAudioOnly = false AND c.isVideoOnly = false))"
+					+ ")";
+
 			TypedQuery<FlvRecordingMetaData> query = em.createQuery(hql, FlvRecordingMetaData.class);
 			query.setParameter("flvRecordingId", flvRecordingId);
-			
+
 			List<FlvRecordingMetaData> flvRecordingMetaDatas = query.getResultList();
-			
+
 			return flvRecordingMetaDatas;
-			
+
 		} catch (Exception ex2) {
-			log.error("[getFlvRecordingMetaDataAudioFlvsByRecording]: ",ex2);
+			log.error("[getFlvRecordingMetaDataAudioFlvsByRecording]: ", ex2);
 		}
 		return null;
 	}
-	
+
 	public FlvRecordingMetaData getFlvRecordingMetaDataScreenFlvByRecording(Long flvRecordingId) {
-		try { 
-			
-			String hql = "SELECT c FROM FlvRecordingMetaData c " +
-					"WHERE c.flvRecording.flvRecordingId = :flvRecordingId " +
-					"AND c.isScreenData = true";
-			
+		try {
+
+			String hql = "SELECT c FROM FlvRecordingMetaData c " + "WHERE c.flvRecording.flvRecordingId = :flvRecordingId "
+					+ "AND c.isScreenData = true";
+
 			TypedQuery<FlvRecordingMetaData> query = em.createQuery(hql, FlvRecordingMetaData.class);
 			query.setParameter("flvRecordingId", flvRecordingId);
-			
+
 			List<FlvRecordingMetaData> flvRecordingMetaDatas = query.getResultList();
-			
+
 			if (flvRecordingMetaDatas.size() > 0) {
 				return flvRecordingMetaDatas.get(0);
 			}
-			
+
 		} catch (Exception ex2) {
-			log.error("[getFlvRecordingMetaDataScreenFlvByRecording]: ",ex2);
+			log.error("[getFlvRecordingMetaDataScreenFlvByRecording]: ", ex2);
 		}
 		return null;
 	}
-	
-	public Long addFlvRecordingMetaData(Long flvRecordingId, String freeTextUserName, 
-					Date recordStart, Boolean isAudioOnly, Boolean isVideoOnly, 
-					Boolean isScreenData, String streamName, Integer interiewPodId) {
-		try { 
-			
+
+	public Long addFlvRecordingMetaData(Long flvRecordingId, String freeTextUserName, Date recordStart, Boolean isAudioOnly,
+			Boolean isVideoOnly, Boolean isScreenData, String streamName, Integer interiewPodId) {
+		try {
+
 			FlvRecordingMetaData flvRecordingMetaData = new FlvRecordingMetaData();
-			
+
 			flvRecordingMetaData.setDeleted(false);
-			
+
 			flvRecordingMetaData.setFlvRecording(flvRecordingDao.get(flvRecordingId));
 			flvRecordingMetaData.setFreeTextUserName(freeTextUserName);
 			flvRecordingMetaData.setInserted(new Date());
-			
+
 			flvRecordingMetaData.setRecordStart(recordStart);
-			
+
 			flvRecordingMetaData.setIsAudioOnly(isAudioOnly);
 			flvRecordingMetaData.setIsVideoOnly(isVideoOnly);
 			flvRecordingMetaData.setIsScreenData(isScreenData);
-			
+
 			flvRecordingMetaData.setStreamName(streamName);
-			
+
 			flvRecordingMetaData.setInteriewPodId(interiewPodId);
-			
+
 			flvRecordingMetaData = em.merge(flvRecordingMetaData);
 			Long flvRecordingMetaDataId = flvRecordingMetaData.getFlvRecordingMetaDataId();
-			
+
 			return flvRecordingMetaDataId;
-			
+
 		} catch (Exception ex2) {
-			log.error("[addFlvRecordingMetaData]: ",ex2);
+			log.error("[addFlvRecordingMetaData]: ", ex2);
 		}
 		return null;
 	}
-	
+
 	public Long addFlvRecordingMetaDataObj(FlvRecordingMetaData flvRecordingMetaData) {
 		try {
 
@@ -181,12 +172,10 @@ public class FlvRecordingMetaDataDao {
 		return null;
 	}
 
-	public Long updateFlvRecordingMetaDataEndDate(Long flvRecordingMetaDataId, 
-										Date recordEnd) {
-		try { 
-			
+	public Long updateFlvRecordingMetaDataEndDate(Long flvRecordingMetaDataId, Date recordEnd) {
+		try {
 			FlvRecordingMetaData flvRecordingMetaData = get(flvRecordingMetaDataId);
-			
+
 			flvRecordingMetaData.setRecordEnd(recordEnd);
 			
 			log.debug("updateFlvRecordingMetaDataEndDate :: Start Date :"+flvRecordingMetaData.getRecordStart());
@@ -195,46 +184,37 @@ public class FlvRecordingMetaDataDao {
 			this.update(flvRecordingMetaData);
 			
 			return flvRecordingMetaDataId;
-			
 		} catch (Exception ex2) {
-			log.error("[updateFlvRecordingMetaDataEndDate]: ",ex2);
+			log.error("[updateFlvRecordingMetaDataEndDate]: ", ex2);
 		}
 		return null;
 	}
 
-	public Long updateFlvRecordingMetaDataInitialGap(Long flvRecordingMetaDataId, 
-										long initalGap) {
-		try { 
-			
+	public Long updateFlvRecordingMetaDataInitialGap(Long flvRecordingMetaDataId, long initalGap) {
+		try {
 			FlvRecordingMetaData flvRecordingMetaData = get(flvRecordingMetaDataId);
-			
+
 			flvRecordingMetaData.setInitialGapSeconds(Long.valueOf(initalGap).intValue());
-			
 			this.update(flvRecordingMetaData);
-			
 			return flvRecordingMetaDataId;
-			
 		} catch (Exception ex2) {
-			log.error("[updateFlvRecordingMetaDataEndDate]: ",ex2);
+			log.error("[updateFlvRecordingMetaDataEndDate]: ", ex2);
 		}
 		return null;
 	}
 
 	public Long update(FlvRecordingMetaData flvRecordingMetaData) {
-		try { 
-			
+		try {
 			if (flvRecordingMetaData.getFlvRecordingMetaDataId() == 0) {
 				em.persist(flvRecordingMetaData);
-		    } else {
-		    	if (!em.contains(flvRecordingMetaData)) {
-		    		em.merge(flvRecordingMetaData);
-			    }
+			} else {
+				if (!em.contains(flvRecordingMetaData)) {
+					em.merge(flvRecordingMetaData);
+				}
 			}
-			
 		} catch (Exception ex2) {
-			log.error("[updateFlvRecordingMetaData]: ",ex2);
+			log.error("[updateFlvRecordingMetaData]: ", ex2);
 		}
 		return null;
 	}
-	
 }

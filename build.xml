@@ -1,16 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-   Licensed under the Apache License, Version 2.0 (the "License");
-   you may not use this file except in compliance with the License.
-   You may obtain a copy of the License at
-
-       http://www.apache.org/licenses/LICENSE-2.0
-
-   Unless required by applicable law or agreed to in writing, software
-   distributed under the License is distributed on an "AS IS" BASIS,
-   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-   See the License for the specific language governing permissions and
-   limitations under the License.
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+          
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
  -->
 <!DOCTYPE project>
 <project name="openmeetings" basedir="./" default="dist"
@@ -95,9 +100,9 @@
 	
 	<!-- compile classpath -->
 	<path id="check.classpath">
+		<fileset dir="${red5.lib}" includes="*.jar" />
 		<fileset dir="${red5.server.lib}" includes="*.jar" />
 		<fileset dir="${red5.client.lib}" includes="*.jar" />
-		<fileset dir="${red5.lib}" includes="*.jar" />
 		<fileset dir="${mainlibs.lib.dir}" includes="*.jar" />
 		<fileset dir="${om.lib.dir}" includes="*.jar" />
 		<fileset dir="${junit.lib.dir}" includes="*.jar" />
@@ -405,7 +410,6 @@
 		</genkey>
 		<copy todir="${screenshare.out.dir}">
 			<fileset dir="${red5.server.lib}" includes="commons-codec*.jar" />
-			<fileset dir="${red5.server.lib}" includes="commons-lang3*.jar" />
 			<fileset dir="${red5.server.lib}" includes="httpclient*.jar" />
 			<fileset dir="${red5.server.lib}" includes="httpcore*.jar" />
 			<fileset dir="${red5.server.lib}" includes="bcprov*.jar" />
@@ -414,14 +418,13 @@
 			<fileset dir="${red5.server.lib}" includes="slf4j-api*.jar" />
 			<fileset dir="${red5.server.lib}" includes="jcl-over-slf4j*.jar" />
 			<fileset dir="${red5.server.lib}" includes="commons-collections*.jar" />
-			<fileset dir="${red5.lib}" includes="red5-server*.jar" excludes="*bootstrap.jar" />
 			<fileset dir="${red5.server.lib}" includes="spring-context-3*.jar" />
 			<fileset dir="${red5.server.lib}" includes="spring-core-*.jar" />
 			<fileset dir="${red5.server.lib}" includes="spring-beans-*.jar" />
 			<fileset dir="${red5.server.lib}" includes="logback*.jar" />
 			<fileset dir="${red5.server.lib}" includes="mina-core*.jar" />
 			<fileset dir="${red5.server.lib}" includes="com.springsource.slf4j.api*.jar" />
-			<fileset dir="${red5.client.lib}" includes="red5-client*.jar" />
+			<fileset dir="${red5.client.lib}" includes="red5*.jar" />
 		</copy>
 		<signjar alias="filetest" keystore="${keystore.file}" storepass="secret" lazy="false"
 			sigalg="MD5withRSA" digestalg="SHA1">
@@ -1045,15 +1048,7 @@
 		</delete>
 	
 		<!-- START of Tomcat 7 patch -->
-		<delete>
-			<fileset dir="${red5.lib}/plugins" includes="*.jar" />
-		</delete>
-		<antcall target="-retrieve" inheritAll="true" inheritRefs="true">
-			<param name="ivy.conf.name" value="tomcat7" />
-			<param name="ivy.lib.location" value="${red5.lib}/plugins" />
-		</antcall>
 		<delete file="${red5.lib}/lib/javaee-api-5.1.2.jar" />
- 		<delete file="${red5.lib}/lib/servlet-api-2.5.jar" />
 		<!-- END of Tomcat 7 patch -->
 		<delete dir="${red5.lib}/webapps/installer" />
 		<delete dir="${red5.lib}/webapps/live" />
@@ -1074,18 +1069,10 @@
 	
 	<!-- Check for the Red5 client libraries -->
 	<target name="-retrieve-red5-client" unless="red5.client.installed" description="Retrieves the libraries if needed" depends="-retrieve-red5-server">
-		<svn refid="svn.settings">
-			<checkout url="https://red5.googlecode.com/svn/java/client/trunk/" revision="${red5.client.revision}" destPath="${red5.client.dir}" />
-		</svn>
-		<artifact:mvn pom="${red5.client.dir}/pom.xml" mavenVersion="${maven.version}" fork="true" dir="${red5.client.dir}">
-			<jvmarg value="-Dmaven.buildNumber.doUpdate=false" />
-			<arg value="clean"/>
-			<arg value="install"/>
-			<jvmarg value="-Dmaven.test.skip=true" />
-		</artifact:mvn>
-		<copy todir="${red5.client.lib}" overwrite="true" force="true">
-			<fileset dir="${red5.client.dir}/target" includes="red5-client-*.jar" excludes="*javadoc.jar,*sources.jar" />
-		</copy>
+		<antcall target="-retrieve" inheritAll="true" inheritRefs="true">
+			<param name="ivy.conf.name" value="red5-client" />
+			<param name="ivy.lib.location" value="${red5.client.lib}" />
+		</antcall>
 		<echo message="Red5 Client build" />
 	</target>
 

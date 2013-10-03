@@ -102,10 +102,9 @@ public class FlvRecorderConverter extends BaseConverter {
 							+ flvRecordingMetaDataOfScreen.getFlvRecordingMetaDataId());
 
 					Thread.sleep(100L);
-
-					flvRecordingMetaDataOfScreen = flvRecordingMetaDataDaoImpl.get(flvRecordingMetaDataOfScreen
-							.getFlvRecordingMetaDataId());
-
+					
+					flvRecordingMetaDataOfScreen = flvRecordingMetaDataDaoImpl.get(flvRecordingMetaDataOfScreen.getFlvRecordingMetaDataId());
+					
 					if (flvRecordingMetaDataOfScreen.getStreamReaderThreadComplete()) {
 						log.debug("### Screen Stream now written Thread continue - ");
 						doStop = false;

@@ -35,7 +35,6 @@ import org.slf4j.Logger;
 public class StreamVideoWriter extends BaseStreamWriter {
 	private static final Logger log = Red5LoggerFactory.getLogger(StreamVideoWriter.class, webAppRootKey);
 	private Date startedSessionScreenTimeDate = null;
-
 	private final FlvRecordingMetaDataDao metaDataDao;
 
 	public StreamVideoWriter(String streamName, IScope scope, Long flvRecordingMetaDataId, boolean isScreenData,
@@ -58,7 +57,6 @@ public class StreamVideoWriter extends BaseStreamWriter {
 
 			if (startedSessionScreenTimeDate == null) {
 				startedSessionScreenTimeDate = virtualTime;
-
 				// Calculate the delta between the initial start and the first packet data
 				initialDelta = startedSessionScreenTimeDate.getTime() - startedSessionTimeDate.getTime();
 

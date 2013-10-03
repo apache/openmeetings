@@ -66,7 +66,6 @@ public class StreamAudioWriter extends BaseStreamWriter {
 		FlvRecordingMetaData metaData = metaDataDao.get(flvRecordingMetaDataId);
 		metaData.setStreamReaderThreadComplete(false);
 		metaDataDao.update(metaData);
-
 	}
 
 	@Override
