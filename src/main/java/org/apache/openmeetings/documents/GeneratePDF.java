@@ -24,11 +24,13 @@ import java.util.ArrayList;
 
 import org.apache.commons.transaction.util.FileHelper;
 import org.apache.openmeetings.OpenmeetingsVariables;
+import org.apache.openmeetings.converter.GenerateSWF;
+import org.apache.openmeetings.converter.GenerateThumbs;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
-import org.apache.openmeetings.documents.beans.ConverterProcessResult;
-import org.apache.openmeetings.documents.beans.ConverterProcessResultList;
-import org.apache.openmeetings.utils.OmFileHelper;
-import org.apache.openmeetings.utils.ProcessHelper;
+import org.apache.openmeetings.util.OmFileHelper;
+import org.apache.openmeetings.util.process.ConverterProcessResult;
+import org.apache.openmeetings.util.process.ConverterProcessResultList;
+import org.apache.openmeetings.util.process.ProcessHelper;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;

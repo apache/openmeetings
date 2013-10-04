@@ -24,18 +24,18 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
 
-import org.apache.openmeetings.data.basic.AuthLevelUtil;
 import org.apache.openmeetings.data.conference.InvitationManager;
-import org.apache.openmeetings.data.conference.InvitationManager.MessageType;
 import org.apache.openmeetings.data.user.UserManager;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
+import org.apache.openmeetings.db.dao.calendar.IInvitationManager.MessageType;
 import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.dao.server.SessiondataDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.room.Invitation;
 import org.apache.openmeetings.db.entity.room.Invitation.Valid;
 import org.apache.openmeetings.db.entity.user.User;
-import org.apache.openmeetings.utils.TimezoneUtil;
+import org.apache.openmeetings.db.util.TimezoneUtil;
+import org.apache.openmeetings.util.AuthLevelUtil;
 import org.red5.logging.Red5LoggerFactory;
 import org.red5.server.api.service.IPendingServiceCall;
 import org.red5.server.api.service.IPendingServiceCallback;
@@ -56,8 +56,6 @@ public class InvitationService implements IPendingServiceCallback {
 	private InvitationManager invitationManager;
 	@Autowired
 	private TimezoneUtil timezoneUtil;
-	@Autowired
-	private AuthLevelUtil authLevelUtil;
 	@Autowired
 	private RoomDao roomDao;
 
@@ -109,7 +107,7 @@ public class InvitationService implements IPendingServiceCallback {
 			Long users_id = sessiondataDao.checkSession(SID);
 			Long user_level = userManager.getUserLevelByID(users_id);
 
-			if (authLevelUtil.checkUserLevel(user_level)) {
+			if (AuthLevelUtil.checkUserLevel(user_level)) {
 				log.debug("sendInvitationHash: ");
 	
 				Integer validFromHour = Integer.valueOf(
@@ -181,7 +179,7 @@ public class InvitationService implements IPendingServiceCallback {
 		Long users_id = sessiondataDao.checkSession(SID);
 		Long user_level = userManager.getUserLevelByID(users_id);
 
-		if (authLevelUtil.checkUserLevel(user_level)) {
+		if (AuthLevelUtil.checkUserLevel(user_level)) {
 			Invitation inv = (Invitation)invitationManager.getInvitationByHashCode(invitationHash, true);
 			inv.setBaseUrl(getBaseUrl(baseurl));
 			inv.getInvitee().setLanguage_id(language_id);

@@ -24,8 +24,8 @@ import java.io.FileReader;
 import java.util.LinkedList;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
-import org.apache.openmeetings.utils.OmFileHelper;
-import org.apache.openmeetings.utils.stringhandlers.ChatString;
+import org.apache.openmeetings.util.OmFileHelper;
+import org.apache.openmeetings.util.stringhandlers.ChatString;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 

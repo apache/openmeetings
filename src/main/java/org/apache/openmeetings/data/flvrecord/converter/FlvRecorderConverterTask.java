@@ -19,6 +19,7 @@
 package org.apache.openmeetings.data.flvrecord.converter;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
+import org.apache.openmeetings.converter.FlvRecorderConverter;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;

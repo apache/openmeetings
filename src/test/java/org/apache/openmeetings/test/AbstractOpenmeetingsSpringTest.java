@@ -32,8 +32,7 @@ import org.apache.openmeetings.db.entity.calendar.Appointment;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.installation.ImportInitvalues;
 import org.apache.openmeetings.installation.InstallationConfig;
-import org.apache.openmeetings.utils.OmFileHelper;
-import org.apache.openmeetings.utils.crypt.ManageCryptStyle;
+import org.apache.openmeetings.util.OmFileHelper;
 import org.junit.Before;
 import org.junit.runner.RunWith;
 import org.red5.logging.Red5LoggerFactory;
@@ -66,8 +65,6 @@ public abstract class AbstractOpenmeetingsSpringTest extends AbstractJUnit4Sprin
 	private ImportInitvalues importInitvalues;
 	@Autowired
 	private ConfigurationDao configurationDao;
-	@Autowired
-	private ManageCryptStyle cryptManager;
 
 	@Before
 	public void setUp() throws Exception {
@@ -117,7 +114,7 @@ public abstract class AbstractOpenmeetingsSpringTest extends AbstractJUnit4Sprin
 		u.setFirstname("firstname" + rnd);
 		u.setLastname("lastname" + rnd);
 		u.setLogin("login");
-		u.updatePassword(cryptManager, configurationDao, "pass" + rnd);
+		u.updatePassword(configurationDao, "pass" + rnd);
 		u.setLanguage_id(1L);
 		Long user_id = userManager.addUser(u);
 		assertTrue("Cann't add user", user_id > 0);

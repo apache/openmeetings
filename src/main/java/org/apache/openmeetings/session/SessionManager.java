@@ -29,11 +29,13 @@ import java.util.Map.Entry;
 import java.util.Random;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
-import org.apache.openmeetings.data.beans.basic.SearchResult;
+import org.apache.openmeetings.db.dao.server.ISessionManager;
+import org.apache.openmeetings.db.dto.basic.SearchResult;
+import org.apache.openmeetings.db.dto.server.ClientSessionInfo;
 import org.apache.openmeetings.db.entity.room.Client;
 import org.apache.openmeetings.db.entity.server.Server;
 import org.apache.openmeetings.session.store.IClientPersistenceStore;
-import org.apache.openmeetings.utils.crypt.ManageCryptStyle;
+import org.apache.openmeetings.util.crypt.ManageCryptStyle;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,8 +55,6 @@ public class SessionManager implements ISessionManager {
 	
 	@Autowired
 	private ServerUtil serverUtil;
-	@Autowired
-	private ManageCryptStyle manageCryptStyle;
 	
 	/**
 	 * Injected via Spring, needs a getter/setter because it can be configured
@@ -85,7 +85,7 @@ public class SessionManager implements ISessionManager {
 				rcm.setScope(scopeName);
 				long random = System.currentTimeMillis() + new BigInteger(256, new Random()).longValue();
 				
-				rcm.setPublicSID(manageCryptStyle.getInstanceOfCrypt()
+				rcm.setPublicSID(ManageCryptStyle.getInstanceOfCrypt()
 						.createPassPhrase(String.valueOf(random).toString()));
 
 				rcm.setServer(server);

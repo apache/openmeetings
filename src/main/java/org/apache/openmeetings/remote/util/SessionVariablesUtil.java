@@ -18,15 +18,14 @@
  */
 package org.apache.openmeetings.remote.util;
 
-import org.apache.openmeetings.OpenmeetingsVariables;
+import static org.apache.openmeetings.OpenmeetingsVariables.webAppRootKey;
+
 import org.red5.logging.Red5LoggerFactory;
 import org.red5.server.api.IClient;
 import org.slf4j.Logger;
 
 public class SessionVariablesUtil {
-
-	private static final Logger log = Red5LoggerFactory.getLogger(
-			SessionVariablesUtil.class, OpenmeetingsVariables.webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(SessionVariablesUtil.class, webAppRootKey);
 
 	private enum SESSION_VARIABLES {
 		isAVClient, // if the client connection is a audio-video only connection
@@ -39,11 +38,11 @@ public class SessionVariablesUtil {
 		client.setAttribute(SESSION_VARIABLES.isAVClient.toString(), isAVClient);
 		client.setAttribute(SESSION_VARIABLES.PUBLIC_SID.toString(), publicSID);
 	}
-	
+
 	public static boolean isAVClient(IClient client) {
 		try {
 			if (client.getAttribute(SESSION_VARIABLES.isAVClient.toString()) == null) {
-				throw new Exception("Connection has no publicSID client: "+client);
+				throw new Exception("Connection has no publicSID client: " + client);
 			}
 			return (Boolean) client.getAttribute(SESSION_VARIABLES.isAVClient.toString());
 		} catch (Exception err) {
@@ -51,11 +50,11 @@ public class SessionVariablesUtil {
 		}
 		return false;
 	}
-	
+
 	public static String getPublicSID(IClient client) {
 		try {
 			if (client.getAttribute(SESSION_VARIABLES.PUBLIC_SID.toString()) == null) {
-				throw new Exception("Connection has no publicSID client: "+client);
+				throw new Exception("Connection has no publicSID client: " + client);
 			}
 			return (String) client.getAttribute(SESSION_VARIABLES.PUBLIC_SID.toString());
 		} catch (Exception err) {
@@ -70,12 +69,10 @@ public class SessionVariablesUtil {
 
 	public static boolean isScreenClient(IClient client) {
 		try {
-			if (client
-					.getAttribute(SESSION_VARIABLES.isScreenClient.toString()) == null) {
+			if (client.getAttribute(SESSION_VARIABLES.isScreenClient.toString()) == null) {
 				return false;
 			}
-			if ((Boolean) client.getAttribute(SESSION_VARIABLES.isScreenClient
-					.toString())) {
+			if ((Boolean) client.getAttribute(SESSION_VARIABLES.isScreenClient.toString())) {
 				return true;
 			}
 		} catch (Exception err) {
@@ -83,13 +80,14 @@ public class SessionVariablesUtil {
 		}
 		return false;
 	}
-	
+
 	public static void setUserId(IClient client, Long userId) {
 		client.setAttribute(SESSION_VARIABLES.USER_ID.toString(), userId);
 	}
 
 	/**
 	 * if there is no user id set, it will return Long.MIN_VALUE
+	 * 
 	 * @param client
 	 * @return - user id set or Long.MIN_VALUE or null if any exception happens
 	 */
@@ -98,12 +96,10 @@ public class SessionVariablesUtil {
 			if (client.getAttribute(SESSION_VARIABLES.USER_ID.toString()) == null) {
 				return Long.MIN_VALUE;
 			}
-			return (Long) client.getAttribute(SESSION_VARIABLES.USER_ID
-					.toString());
+			return (Long) client.getAttribute(SESSION_VARIABLES.USER_ID.toString());
 		} catch (Exception err) {
 			log.error("[getUserId]", err);
 		}
 		return null;
 	}
-	
 }

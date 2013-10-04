@@ -18,10 +18,10 @@
  */
 package org.apache.openmeetings.servlet.outputhandler;
 
-import static org.apache.openmeetings.utils.OmFileHelper.bigImagePrefix;
-import static org.apache.openmeetings.utils.OmFileHelper.chatImagePrefix;
-import static org.apache.openmeetings.utils.OmFileHelper.profileImagePrefix;
-import static org.apache.openmeetings.utils.OmFileHelper.thumbImagePrefix;
+import static org.apache.openmeetings.util.OmFileHelper.bigImagePrefix;
+import static org.apache.openmeetings.util.OmFileHelper.chatImagePrefix;
+import static org.apache.openmeetings.util.OmFileHelper.profileImagePrefix;
+import static org.apache.openmeetings.util.OmFileHelper.thumbImagePrefix;
 
 import java.io.File;
 import java.io.InputStream;
@@ -34,19 +34,20 @@ import javax.servlet.http.HttpSession;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.transaction.util.FileHelper;
 import org.apache.openmeetings.OpenmeetingsVariables;
+import org.apache.openmeetings.converter.GenerateImage;
+import org.apache.openmeetings.converter.GenerateThumbs;
 import org.apache.openmeetings.data.file.FileProcessor;
 import org.apache.openmeetings.db.dao.file.FileExplorerItemDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
+import org.apache.openmeetings.db.entity.file.FileExplorerItem;
 import org.apache.openmeetings.db.entity.user.User;
-import org.apache.openmeetings.documents.GenerateImage;
 import org.apache.openmeetings.documents.GeneratePDF;
-import org.apache.openmeetings.documents.GenerateThumbs;
-import org.apache.openmeetings.documents.beans.ConverterProcessResultList;
-import org.apache.openmeetings.documents.beans.UploadCompleteMessage;
 import org.apache.openmeetings.remote.red5.ScopeApplicationAdapter;
-import org.apache.openmeetings.utils.OmFileHelper;
-import org.apache.openmeetings.utils.StoredFile;
-import org.apache.openmeetings.utils.stringhandlers.StringComparer;
+import org.apache.openmeetings.util.OmFileHelper;
+import org.apache.openmeetings.util.StoredFile;
+import org.apache.openmeetings.util.process.ConverterProcessResultList;
+import org.apache.openmeetings.util.process.UploadCompleteMessage;
+import org.apache.openmeetings.util.stringhandlers.StringComparer;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -120,7 +121,7 @@ public class UploadController extends AbstractUploadController {
 	    	uploadCompleteMessage.setMessage("library");
 	    	uploadCompleteMessage.setAction("newFile");
 	    	
-	    	uploadCompleteMessage.setFileExplorerItem(
+	    	setFileExplorerItem(uploadCompleteMessage,
 					fileExplorerItemDao.getFileExplorerItemsById(
 							returnError.getFileExplorerItemId()));
 			
@@ -140,6 +141,20 @@ public class UploadController extends AbstractUploadController {
 			throw new ServletException(e);
     	}
     }
+    
+	public void setFileExplorerItem(UploadCompleteMessage msg, FileExplorerItem fileExplorerItem) {
+		if (fileExplorerItem.getIsImage() != null) {
+			msg.setIsImage(fileExplorerItem.getIsImage());
+		}
+		if (fileExplorerItem.getIsVideo() != null) {
+			msg.setIsVideo(fileExplorerItem.getIsVideo());
+		}
+		if (fileExplorerItem.getIsPresentation() != null) {
+			msg.setIsPresentation(fileExplorerItem.getIsPresentation());
+		}
+		msg.setFileSystemName(fileExplorerItem.getFileName());
+		msg.setFileHash(fileExplorerItem.getFileHash());
+	}
     
     @RequestMapping(value = "/remotelog.upload", method = RequestMethod.POST)
     public void handleRemoteLog(HttpServletRequest request, HttpServletResponse response) throws ServletException {

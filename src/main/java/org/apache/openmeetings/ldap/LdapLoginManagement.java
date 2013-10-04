@@ -18,7 +18,8 @@
  */
 package org.apache.openmeetings.ldap;
 
-import static org.apache.openmeetings.db.entity.basic.Configuration.DEFAUT_LANG_KEY;
+import static org.apache.openmeetings.OpenmeetingsVariables.CONFIG_DEFAUT_LANG_KEY;
+import static org.apache.openmeetings.OpenmeetingsVariables.webAppRootKey;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -28,22 +29,21 @@ import java.util.List;
 import java.util.Random;
 import java.util.Vector;
 
-import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.data.user.UserManager;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.server.LdapConfigDao;
 import org.apache.openmeetings.db.dao.server.SessiondataDao;
+import org.apache.openmeetings.db.dao.user.ILdapLoginManagement;
 import org.apache.openmeetings.db.dao.user.StateDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.room.Client;
 import org.apache.openmeetings.db.entity.server.LdapConfig;
 import org.apache.openmeetings.db.entity.user.State;
 import org.apache.openmeetings.db.entity.user.User;
+import org.apache.openmeetings.db.util.TimezoneUtil;
 import org.apache.openmeetings.ldap.config.ConfigReader;
 import org.apache.openmeetings.remote.util.SessionVariablesUtil;
-import org.apache.openmeetings.utils.OmFileHelper;
-import org.apache.openmeetings.utils.TimezoneUtil;
-import org.apache.openmeetings.utils.crypt.ManageCryptStyle;
+import org.apache.openmeetings.util.OmFileHelper;
 import org.red5.logging.Red5LoggerFactory;
 import org.red5.server.api.IClient;
 import org.slf4j.Logger;
@@ -55,9 +55,8 @@ import org.springframework.beans.factory.annotation.Autowired;
  * @author o.becherer
  * 
  */
-public class LdapLoginManagement {
-	private static final Logger log = Red5LoggerFactory.getLogger(
-			LdapLoginManagement.class, OpenmeetingsVariables.webAppRootKey);
+public class LdapLoginManagement implements ILdapLoginManagement {
+	private static final Logger log = Red5LoggerFactory.getLogger(LdapLoginManagement.class, webAppRootKey);
 
 	@Autowired
 	private SessiondataDao sessiondataDao;
@@ -69,8 +68,6 @@ public class LdapLoginManagement {
 	private StateDao statemanagement;
 	@Autowired
 	private LdapConfigDao ldapConfigDao;
-	@Autowired
-	private ManageCryptStyle cryptManager;
 	@Autowired
 	private UserDao usersDao;
 	@Autowired
@@ -563,7 +560,7 @@ public class LdapLoginManagement {
 			try {
 				// Update password (could have changed in LDAP)
 				if (ldap_sync_passwd_to_om) {
-					u.updatePassword(cryptManager, configurationDao, passwd);
+					u.updatePassword(configurationDao, passwd);
 				}
 				
 				//update all other attributes in case ldap provides some and the parameter is configured
@@ -691,7 +688,7 @@ public class LdapLoginManagement {
 					new java.util.Date(), //age
 					street,
 					additionalname, fax, zip, state_id, town, 
-					configurationDao.getConfValue(DEFAUT_LANG_KEY, Long.class, "1"), // language_id
+					configurationDao.getConfValue(CONFIG_DEFAUT_LANG_KEY, Long.class, "1"), // language_id
 					false, // sendWelcomeMessage
 					Arrays.asList(configurationDao.getConfValue(
 							"default_domain_id", Long.class, null)), // organozation

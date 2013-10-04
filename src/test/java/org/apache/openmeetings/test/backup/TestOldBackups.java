@@ -25,14 +25,15 @@ import static org.junit.Assert.fail;
 import java.io.File;
 import java.io.FileInputStream;
 
+import org.apache.openmeetings.backup.BackupImport;
 import org.apache.openmeetings.data.conference.RoomManager;
 import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
 import org.apache.openmeetings.db.dao.calendar.MeetingMemberDao;
 import org.apache.openmeetings.db.dao.room.RoomDao;
+import org.apache.openmeetings.db.dao.room.RoomOrganisationDao;
 import org.apache.openmeetings.db.dao.user.AdminUserDao;
 import org.apache.openmeetings.db.dao.user.OrganisationDao;
 import org.apache.openmeetings.test.AbstractOpenmeetingsSpringTest;
-import org.apache.openmeetings.utils.BackupImport;
 import org.junit.Test;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -55,6 +56,8 @@ public class TestOldBackups extends AbstractOpenmeetingsSpringTest {
 	private AppointmentDao appointmentDao;
 	@Autowired
 	private MeetingMemberDao meetingMemberDao;
+	@Autowired
+	private RoomOrganisationDao roomOrganisationDao;
 
 	@Test
 	public void importOldVersions() {
@@ -77,7 +80,7 @@ public class TestOldBackups extends AbstractOpenmeetingsSpringTest {
 				long newOrgCount = organisationDao.count();
 				long newUserCount = usersDao.count();
 				long newRoomCount = roomDao.count();
-				long newRoomOrgCount = roomManager.getRoomsOrganisations().size();
+				long newRoomOrgCount = roomOrganisationDao.get().size();
 				long newApptCount = appointmentDao.getAppointments().size();
 				long newMeetingMembersCount = meetingMemberDao.getMeetingMembers().size();
 				assertTrue("Zero organizations were imported", newOrgCount > orgCount);

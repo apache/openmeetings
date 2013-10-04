@@ -20,12 +20,12 @@ package org.apache.openmeetings.servlet;
 
 import javax.servlet.ServletContext;
 
-import org.apache.openmeetings.remote.red5.ScopeApplicationAdapter;
+import org.apache.openmeetings.InitializationContainer;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
 public class BeanUtil {
 	public <T> T getBean(Class<T> beanClass, ServletContext ctx) throws ServerNotInitializedException {
-		if (ScopeApplicationAdapter.initComplete) {
+		if (InitializationContainer.initComplete) {
 			return WebApplicationContextUtils.getWebApplicationContext(ctx).getBean(beanClass);
 		} else {
 			throw new ServerNotInitializedException("Server not yet initialized, retry in couple of seconds");

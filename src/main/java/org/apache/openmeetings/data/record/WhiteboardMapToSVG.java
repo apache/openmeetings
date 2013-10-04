@@ -29,8 +29,8 @@ import javax.imageio.ImageIO;
 
 import org.apache.batik.svggen.SVGGraphics2D;
 import org.apache.openmeetings.OpenmeetingsVariables;
-import org.apache.openmeetings.utils.OmFileHelper;
-import org.apache.openmeetings.utils.geom.GeomPoint;
+import org.apache.openmeetings.util.OmFileHelper;
+import org.apache.openmeetings.util.geom.GeomPoint;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 

@@ -21,13 +21,11 @@ package org.apache.openmeetings.test.userdata;
 import org.apache.openmeetings.db.entity.server.Sessiondata;
 import org.apache.openmeetings.remote.MainService;
 import org.apache.openmeetings.test.AbstractOpenmeetingsSpringTest;
-import org.apache.openmeetings.utils.crypt.ManageCryptStyle;
+import org.apache.openmeetings.util.crypt.ManageCryptStyle;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class TestAuth extends AbstractOpenmeetingsSpringTest {
-	@Autowired
-	private ManageCryptStyle manageCryptStyle;
 	@Autowired
 	private MainService mService;
 
@@ -37,8 +35,7 @@ public class TestAuth extends AbstractOpenmeetingsSpringTest {
 
 		System.out.println("sessionData: " + sessionData.getSession_id());
 
-		String tTemp = manageCryptStyle.getInstanceOfCrypt().createPassPhrase(
-				"test");
+		String tTemp = ManageCryptStyle.getInstanceOfCrypt().createPassPhrase("test");
 
 		System.out.println("tTemp: " + tTemp);
 

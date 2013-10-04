@@ -18,7 +18,7 @@
  */
 package org.apache.openmeetings.data.file;
 
-import static org.apache.openmeetings.utils.OmFileHelper.thumbImagePrefix;
+import static org.apache.openmeetings.util.OmFileHelper.thumbImagePrefix;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -28,7 +28,7 @@ import java.util.Locale;
 import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.db.dao.file.FileExplorerItemDao;
 import org.apache.openmeetings.db.entity.file.FileExplorerItem;
-import org.apache.openmeetings.utils.OmFileHelper;
+import org.apache.openmeetings.util.OmFileHelper;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;

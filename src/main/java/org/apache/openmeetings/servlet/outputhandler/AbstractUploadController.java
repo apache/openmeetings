@@ -22,11 +22,10 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
-import org.apache.openmeetings.data.basic.AuthLevelUtil;
 import org.apache.openmeetings.data.user.UserManager;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.server.SessiondataDao;
-import org.apache.openmeetings.utils.ImportHelper;
+import org.apache.openmeetings.util.AuthLevelUtil;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,8 +39,6 @@ public abstract class AbstractUploadController {
 	protected SessiondataDao sessiondataDao;
 	@Autowired
 	protected UserManager userManager;
-	@Autowired
-	protected AuthLevelUtil authLevelManagement;
 	@Autowired
 	protected ConfigurationDao configurationDao;
 	
@@ -69,7 +66,7 @@ public abstract class AbstractUploadController {
 			log.debug("userId = " + userId + ", userLevel = " + userLevel);
 			info.userId = userId;
 
-			if ((admin && !authLevelManagement.checkAdminLevel(userLevel))
+			if ((admin && !AuthLevelUtil.checkAdminLevel(userLevel))
 					|| (!admin && userLevel <= 0)) {
 				throw new ServletException("Insufficient permissions "
 						+ userLevel);
@@ -88,7 +85,7 @@ public abstract class AbstractUploadController {
 			//FIXME encoding HACK
 			info.filename = new String (multipartFile.getOriginalFilename().getBytes ("iso-8859-1"), "UTF-8");
 			long fileSize = multipartFile.getSize();
-			long maxSize = ImportHelper.getMaxUploadSize(configurationDao);
+			long maxSize = configurationDao.getMaxUploadSize();
 			log.debug("uploading " + fileSize + " bytes");
 			if (fileSize > maxSize) {
 				throw new ServletException("Maximum upload size: " + maxSize + " exceeded: " + fileSize);

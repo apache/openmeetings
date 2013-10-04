@@ -25,7 +25,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.openmeetings.data.basic.AuthLevelUtil;
 import org.apache.openmeetings.data.flvrecord.converter.FlvInterviewConverterTask;
 import org.apache.openmeetings.data.flvrecord.converter.FlvInterviewReConverterTask;
 import org.apache.openmeetings.data.flvrecord.converter.FlvRecorderConverterTask;
@@ -36,14 +35,15 @@ import org.apache.openmeetings.db.dao.record.FlvRecordingLogDao;
 import org.apache.openmeetings.db.dao.record.FlvRecordingMetaDataDao;
 import org.apache.openmeetings.db.dao.record.FlvRecordingMetaDeltaDao;
 import org.apache.openmeetings.db.dao.room.RoomDao;
+import org.apache.openmeetings.db.dao.server.ISessionManager;
 import org.apache.openmeetings.db.dao.server.SessiondataDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.record.FlvRecording;
 import org.apache.openmeetings.db.entity.record.FlvRecordingMetaData;
 import org.apache.openmeetings.db.entity.room.Client;
 import org.apache.openmeetings.remote.red5.ScopeApplicationAdapter;
-import org.apache.openmeetings.session.ISessionManager;
-import org.apache.openmeetings.utils.math.CalendarPatterns;
+import org.apache.openmeetings.util.AuthLevelUtil;
+import org.apache.openmeetings.util.CalendarPatterns;
 import org.red5.logging.Red5LoggerFactory;
 import org.red5.server.api.IConnection;
 import org.red5.server.api.Red5;
@@ -91,8 +91,6 @@ public class FLVRecorderService implements IPendingServiceCallback {
 	private UserManager userManager;
 	@Autowired
 	private ScopeApplicationAdapter scopeApplicationAdapter;
-	@Autowired
-	private AuthLevelUtil authLevelUtil;
 	@Autowired
 	private FlvRecordingMetaDeltaDao flvRecordingMetaDeltaDao;
 	@Autowired
@@ -531,7 +529,7 @@ public class FLVRecorderService implements IPendingServiceCallback {
 		try {
 			Long users_id = sessiondataDao.checkSession(SID);
 			Long user_level = userManager.getUserLevelByID(users_id);
-			if (authLevelUtil.checkUserLevel(user_level)) {
+			if (AuthLevelUtil.checkUserLevel(user_level)) {
 
 				log.debug("updateFileOrFolderName " + flvRecordingId);
 

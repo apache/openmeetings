@@ -31,7 +31,7 @@
     
     -->
     <listener>
-        <listener-class>org.apache.openmeetings.utils.OMContextListener</listener-class>
+        <listener-class>org.apache.openmeetings.util.OMContextListener</listener-class>
     </listener>
     
     <filter>

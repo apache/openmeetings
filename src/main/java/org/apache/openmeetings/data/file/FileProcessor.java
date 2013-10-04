@@ -18,7 +18,7 @@
  */
 package org.apache.openmeetings.data.file;
 
-import static org.apache.openmeetings.utils.OmFileHelper.thumbImagePrefix;
+import static org.apache.openmeetings.util.OmFileHelper.thumbImagePrefix;
 
 import java.io.File;
 import java.io.InputStream;
@@ -27,17 +27,17 @@ import java.util.List;
 
 import org.apache.commons.transaction.util.FileHelper;
 import org.apache.openmeetings.OpenmeetingsVariables;
-import org.apache.openmeetings.data.flvrecord.converter.FlvExplorerConverter;
+import org.apache.openmeetings.converter.FlvExplorerConverter;
+import org.apache.openmeetings.converter.GenerateImage;
+import org.apache.openmeetings.converter.GenerateThumbs;
 import org.apache.openmeetings.db.dao.file.FileExplorerItemDao;
 import org.apache.openmeetings.db.entity.file.FileExplorerItem;
-import org.apache.openmeetings.documents.GenerateImage;
 import org.apache.openmeetings.documents.GeneratePDF;
-import org.apache.openmeetings.documents.GenerateThumbs;
-import org.apache.openmeetings.documents.beans.ConverterProcessResult;
-import org.apache.openmeetings.documents.beans.ConverterProcessResultList;
-import org.apache.openmeetings.utils.OmFileHelper;
-import org.apache.openmeetings.utils.StoredFile;
-import org.apache.openmeetings.utils.crypt.MD5;
+import org.apache.openmeetings.util.OmFileHelper;
+import org.apache.openmeetings.util.StoredFile;
+import org.apache.openmeetings.util.crypt.MD5;
+import org.apache.openmeetings.util.process.ConverterProcessResult;
+import org.apache.openmeetings.util.process.ConverterProcessResultList;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;

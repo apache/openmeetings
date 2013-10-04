@@ -22,7 +22,7 @@ import static org.junit.Assert.assertNotNull;
 
 import java.util.Random;
 
-import org.apache.openmeetings.session.ISessionManager;
+import org.apache.openmeetings.db.dao.server.ISessionManager;
 import org.apache.openmeetings.test.AbstractOpenmeetingsSpringTest;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;

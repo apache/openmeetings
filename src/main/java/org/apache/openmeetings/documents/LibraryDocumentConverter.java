@@ -24,8 +24,8 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
-import org.apache.openmeetings.utils.OmFileHelper;
-import org.apache.openmeetings.utils.stringhandlers.StringComparer;
+import org.apache.openmeetings.util.OmFileHelper;
+import org.apache.openmeetings.util.stringhandlers.StringComparer;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 

@@ -18,8 +18,6 @@
  */
 package org.apache.openmeetings.remote;
 
-import static org.apache.openmeetings.web.app.Application.getBean;
-
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -28,9 +26,7 @@ import java.util.TimeZone;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.cluster.SlaveHTTPConnectionManager;
-import org.apache.openmeetings.data.basic.AuthLevelUtil;
 import org.apache.openmeetings.data.basic.FieldManager;
-import org.apache.openmeetings.data.beans.basic.SearchResult;
 import org.apache.openmeetings.data.conference.InvitationManager;
 import org.apache.openmeetings.data.conference.RoomManager;
 import org.apache.openmeetings.data.user.OrganisationManager;
@@ -39,14 +35,19 @@ import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.calendar.AppointmentCategoryDao;
 import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
 import org.apache.openmeetings.db.dao.calendar.MeetingMemberDao;
+import org.apache.openmeetings.db.dao.label.FieldLanguagesValuesDao;
 import org.apache.openmeetings.db.dao.room.RoomDao;
+import org.apache.openmeetings.db.dao.room.RoomTypeDao;
+import org.apache.openmeetings.db.dao.server.ISessionManager;
 import org.apache.openmeetings.db.dao.server.ServerDao;
 import org.apache.openmeetings.db.dao.server.SessiondataDao;
 import org.apache.openmeetings.db.dao.user.AdminUserDao;
+import org.apache.openmeetings.db.dao.user.IUserService;
 import org.apache.openmeetings.db.dao.user.PrivateMessageFolderDao;
 import org.apache.openmeetings.db.dao.user.PrivateMessagesDao;
 import org.apache.openmeetings.db.dao.user.SalutationDao;
 import org.apache.openmeetings.db.dao.user.UserContactsDao;
+import org.apache.openmeetings.db.dto.basic.SearchResult;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
 import org.apache.openmeetings.db.entity.calendar.MeetingMember;
 import org.apache.openmeetings.db.entity.room.Client;
@@ -56,13 +57,11 @@ import org.apache.openmeetings.db.entity.user.Organisation;
 import org.apache.openmeetings.db.entity.user.Salutation;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.UserContact;
+import org.apache.openmeetings.db.util.TimezoneUtil;
+import org.apache.openmeetings.mail.MailHandler;
 import org.apache.openmeetings.remote.red5.ScopeApplicationAdapter;
-import org.apache.openmeetings.session.ISessionManager;
-import org.apache.openmeetings.utils.TimezoneUtil;
-import org.apache.openmeetings.utils.crypt.ManageCryptStyle;
-import org.apache.openmeetings.utils.mail.MailHandler;
-import org.apache.openmeetings.utils.math.CalendarPatterns;
-import org.apache.openmeetings.web.app.WebSession;
+import org.apache.openmeetings.util.AuthLevelUtil;
+import org.apache.openmeetings.util.CalendarPatterns;
 import org.apache.openmeetings.web.util.ContactsHelper;
 import org.red5.logging.Red5LoggerFactory;
 import org.red5.server.api.scope.IScope;
@@ -75,7 +74,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  * @author sebawagner
  * 
  */
-public class UserService {
+public class UserService implements IUserService {
 
 	private static final Logger log = Red5LoggerFactory.getLogger(
 			UserService.class, OpenmeetingsVariables.webAppRootKey);
@@ -103,8 +102,6 @@ public class UserService {
 	@Autowired
 	private OrganisationManager organisationManager;
 	@Autowired
-	private ManageCryptStyle cryptManager;
-	@Autowired
 	private RoomManager roomManager;
 	@Autowired
 	private RoomDao roomDao;
@@ -121,8 +118,6 @@ public class UserService {
 	@Autowired
 	private MailHandler mailHandler;
 	@Autowired
-	private AuthLevelUtil authLevelUtil;
-	@Autowired
 	private TimezoneUtil timezoneUtil;
 	@Autowired
 	private InvitationManager invitationManager;
@@ -130,6 +125,10 @@ public class UserService {
 	private ServerDao serverDao;
 	@Autowired
 	private SlaveHTTPConnectionManager slaveHTTPConnectionManager;
+	@Autowired
+	private FieldLanguagesValuesDao fieldLanguagesValuesDao;
+	@Autowired
+	private RoomTypeDao roomTypeDao;
 
 	/**
 	 * get user by id, admin only
@@ -264,7 +263,7 @@ public class UserService {
 			Long users_id = sessiondataDao.checkSession(SID);
 			Long user_level = userManager.getUserLevelByID(users_id);
 			// admins only
-			if (authLevelUtil.checkAdminLevel(user_level)) {
+			if (AuthLevelUtil.checkAdminLevel(user_level)) {
 
 				if (serverId == 0) {
 
@@ -315,7 +314,7 @@ public class UserService {
 			Long users_id = sessiondataDao.checkSession(SID);
 			Long user_level = userManager.getUserLevelByID(users_id);
 			// users only
-			if (authLevelUtil.checkUserLevel(user_level)) {
+			if (AuthLevelUtil.checkUserLevel(user_level)) {
 
 				User us = userManager.getUserById(users_id);
 
@@ -341,7 +340,7 @@ public class UserService {
 			Long users_id = sessiondataDao.checkSession(SID);
 			Long user_level = userManager.getUserLevelByID(users_id);
 			// users only
-			if (authLevelUtil.checkUserLevel(user_level)) {
+			if (AuthLevelUtil.checkUserLevel(user_level)) {
 				return ContactsHelper.addUserToContactList(userToAdd_id);
 			}
 		} catch (Exception err) {
@@ -355,7 +354,7 @@ public class UserService {
 			Long users_id = sessiondataDao.checkSession(SID);
 			Long user_level = userManager.getUserLevelByID(users_id);
 			// users only
-			if (authLevelUtil.checkUserLevel(user_level)) {
+			if (AuthLevelUtil.checkUserLevel(user_level)) {
 
 				List<UserContact> uList = userContactsDao
 						.getContactRequestsByUserAndStatus(users_id, true);
@@ -374,7 +373,7 @@ public class UserService {
 			Long users_id = sessiondataDao.checkSession(SID);
 			Long user_level = userManager.getUserLevelByID(users_id);
 			// users only
-			if (authLevelUtil.checkUserLevel(user_level)) {
+			if (AuthLevelUtil.checkUserLevel(user_level)) {
 
 				List<UserContact> uList = userContactsDao
 						.getContactsByUserAndStatus(users_id, false);
@@ -393,7 +392,7 @@ public class UserService {
 			Long users_id = sessiondataDao.checkSession(SID);
 			Long user_level = userManager.getUserLevelByID(users_id);
 			// users only
-			if (authLevelUtil.checkUserLevel(user_level)) {
+			if (AuthLevelUtil.checkUserLevel(user_level)) {
 
 				UserContact userContacts = userContactsDao
 						.get(userContactId);
@@ -438,7 +437,7 @@ public class UserService {
 			Long users_id = sessiondataDao.checkSession(SID);
 			Long user_level = userManager.getUserLevelByID(users_id);
 			// users only
-			if (authLevelUtil.checkUserLevel(user_level)) {
+			if (AuthLevelUtil.checkUserLevel(user_level)) {
 				User from = userManager.getUserById(users_id);
 				TimeZone timezone = timezoneUtil.getTimeZone(from);
 
@@ -466,7 +465,7 @@ public class UserService {
 					a.setRoom(new Room());
 					a.getRoom().setAppointment(true);
 					a.getRoom().setName(subject);
-					a.getRoom().setRoomtype(roomManager.getRoomTypesById(roomtype_id));
+					a.getRoom().setRoomtype(roomTypeDao.get(roomtype_id));
 					a.getRoom().setNumberOfPartizipants(100L);
 					a.getRoom().setAllowUserQuestions(true);
 					a.getRoom().setAllowFontStyles(true);
@@ -504,10 +503,10 @@ public class UserService {
 
 					if (to.getAdresses() != null) {
 						String aLinkHTML = 	"<br/><br/>" + "<a href='" + ContactsHelper.getLink() + "'>"
-									+ WebSession.getString(1302) + "</a><br/>";
+									+  fieldLanguagesValuesDao.get(1302, from.getLanguage_id()) + "</a><br/>";
 						
-						getBean(MailHandler.class).send(to.getAdresses().getEmail(),
-								WebSession.getString(1301) + subject,
+						mailHandler.send(to.getAdresses().getEmail(),
+								fieldLanguagesValuesDao.get(1301, from.getLanguage_id()) + subject,
 								message.replaceAll("\\<.*?>", "") + aLinkHTML);
 					}
 				}
@@ -524,7 +523,7 @@ public class UserService {
 			Long users_id = sessiondataDao.checkSession(SID);
 			Long user_level = userManager.getUserLevelByID(users_id);
 			// users only
-			if (authLevelUtil.checkUserLevel(user_level)) {
+			if (AuthLevelUtil.checkUserLevel(user_level)) {
 
 				List<UserContact> uList = userContactsDao
 						.getContactsByUserAndStatus(users_id, false);
@@ -554,7 +553,7 @@ public class UserService {
 			Long user_level = userManager.getUserLevelByID(users_id);
 
 			// users only
-			if (authLevelUtil.checkUserLevel(user_level)) {
+			if (AuthLevelUtil.checkUserLevel(user_level)) {
 
 				UserContact userContacts = userContactsDao
 						.get(userContactId);
@@ -587,7 +586,7 @@ public class UserService {
 			Long users_id = sessiondataDao.checkSession(SID);
 			Long user_level = userManager.getUserLevelByID(users_id);
 			// users only
-			if (authLevelUtil.checkUserLevel(user_level)) {
+			if (AuthLevelUtil.checkUserLevel(user_level)) {
 
 				Client rcl = this.sessionManager.getClientByPublicSID(
 						publicSID, false, null);

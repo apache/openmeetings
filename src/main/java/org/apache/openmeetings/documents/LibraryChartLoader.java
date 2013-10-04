@@ -23,7 +23,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.util.ArrayList;
 
-import org.apache.openmeetings.utils.Logger;
+import org.apache.openmeetings.util.Logger;
 
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.XppDriver;

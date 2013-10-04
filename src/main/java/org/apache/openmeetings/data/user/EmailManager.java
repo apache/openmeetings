@@ -21,18 +21,15 @@ package org.apache.openmeetings.data.user;
 import static org.apache.openmeetings.OpenmeetingsVariables.webAppRootKey;
 
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
-import org.apache.openmeetings.utils.mail.MailHandler;
+import org.apache.openmeetings.mail.MailHandler;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.mail.template.FeedbackTemplate;
 import org.apache.openmeetings.web.mail.template.RegisterUserTemplate;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
- * FIXME: This class should be <i>not</i> {@link Transactional}
- * 
  * @author swagner
  *
  */

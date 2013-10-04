@@ -27,7 +27,7 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
 
-import org.apache.openmeetings.utils.OmFileHelper;
+import org.apache.openmeetings.util.OmFileHelper;
 import org.red5.io.IStreamableFile;
 import org.red5.io.ITagWriter;
 import org.red5.logging.Red5LoggerFactory;

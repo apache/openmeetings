@@ -30,7 +30,7 @@ import org.apache.openmeetings.db.entity.room.Client;
 import org.apache.openmeetings.session.store.HashMapStore;
 import org.apache.openmeetings.session.store.IClientPersistenceStore;
 import org.apache.openmeetings.test.AbstractOpenmeetingsSpringTest;
-import org.apache.openmeetings.utils.crypt.ManageCryptStyle;
+import org.apache.openmeetings.util.crypt.ManageCryptStyle;
 import org.junit.Test;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -43,9 +43,6 @@ public class TestHashMapSession extends AbstractOpenmeetingsSpringTest {
 	
 	@Autowired
 	private HashMapStore cache;
-	
-	@Autowired
-	private ManageCryptStyle manageCryptStyle;
 	
 	@Test
 	public void testHashMapSession() {
@@ -63,7 +60,7 @@ public class TestHashMapSession extends AbstractOpenmeetingsSpringTest {
 			rcm.setScope("scopeName");
 			long random = System.currentTimeMillis() + new BigInteger(256, new Random()).longValue();
 			
-			rcm.setPublicSID(manageCryptStyle.getInstanceOfCrypt()
+			rcm.setPublicSID(ManageCryptStyle.getInstanceOfCrypt()
 					.createPassPhrase(String.valueOf(random).toString()));
 
 			rcm.setUserport(0);

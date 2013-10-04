@@ -18,6 +18,8 @@
  */
 package org.apache.openmeetings.data.conference;
 
+import static org.apache.openmeetings.OpenmeetingsVariables.webAppRootKey;
+
 import java.util.Date;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -32,20 +34,21 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
-import org.apache.openmeetings.data.basic.AuthLevelUtil;
 import org.apache.openmeetings.data.basic.FieldManager;
-import org.apache.openmeetings.data.beans.basic.SearchResult;
 import org.apache.openmeetings.data.user.OrganisationManager;
+import org.apache.openmeetings.db.dao.room.IRoomManager;
 import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.dao.room.RoomModeratorsDao;
+import org.apache.openmeetings.db.dao.room.RoomTypeDao;
 import org.apache.openmeetings.db.dao.room.SipDao;
+import org.apache.openmeetings.db.dao.server.ISessionManager;
 import org.apache.openmeetings.db.dao.user.UserDao;
+import org.apache.openmeetings.db.dto.basic.SearchResult;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.room.RoomOrganisation;
-import org.apache.openmeetings.db.entity.room.RoomType;
 import org.apache.openmeetings.db.entity.user.Organisation_Users;
 import org.apache.openmeetings.db.entity.user.User;
-import org.apache.openmeetings.session.ISessionManager;
+import org.apache.openmeetings.util.AuthLevelUtil;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,10 +60,8 @@ import org.springframework.transaction.annotation.Transactional;
  * 
  */
 @Transactional
-public class RoomManager {
-
-	private static final Logger log = Red5LoggerFactory
-			.getLogger(RoomManager.class);
+public class RoomManager implements IRoomManager {
+	private static final Logger log = Red5LoggerFactory.getLogger(RoomManager.class, webAppRootKey);
 
 	@PersistenceContext
 	private EntityManager em;
@@ -72,8 +73,6 @@ public class RoomManager {
 	@Autowired
 	private UserDao usersDao;
 	@Autowired
-	private AuthLevelUtil authLevelUtil;
-	@Autowired
 	private ISessionManager sessionManager;
 	@Autowired
 	private FieldManager fieldManager;
@@ -81,72 +80,8 @@ public class RoomManager {
 	private RoomDao roomDao;
     @Autowired
 	private SipDao sipDao;
-
-	/**
-	 * add a new Record to the table roomtypes
-	 * 
-	 * @param name
-	 * @return ID of new created roomtype or null
-	 */
-	public Long addRoomType(String name, long fieldvalues_id, boolean deleted) {
-		try {
-			RoomType rtype = new RoomType();
-			rtype.setName(name);
-			rtype.setStarttime(new Date());
-			rtype.setDeleted(deleted);
-			rtype.setFieldvalues_id(fieldvalues_id);
-			rtype = em.merge(rtype);
-			long returnId = rtype.getRoomtypes_id();
-			return returnId;
-		} catch (Exception ex2) {
-			log.error("[addRoomType] ", ex2);
-		}
-		return null;
-	}
-
-	/**
-	 * get all availible RoomTypes
-	 * 
-	 * @return List of RoomTypes
-	 */
-	public List<RoomType> getAllRoomTypes(long language_id) {
-		try {
-			TypedQuery<RoomType> query = em
-					.createNamedQuery("getAllRoomTypes", RoomType.class);
-			query.setParameter("deleted", true);
-			List<RoomType> ll = query.getResultList();
-			for (RoomType ti : ll) {
-				ti.setLabel(fieldManager.getFieldByIdAndLanguage(
-						ti.getFieldvalues_id(), language_id));
-			}
-			return ll;
-		} catch (Exception ex2) {
-			log.error("[getAllRoomTypes] ", ex2);
-		}
-		return null;
-	}
-
-	/**
-	 * Get a RoomTypes-Object by its id
-	 * 
-	 * @param roomtypes_id
-	 * @return RoomTypes-Object or NULL
-	 */
-	public RoomType getRoomTypesById(long roomtypes_id) {
-		try {
-			TypedQuery<RoomType> query = em
-					.createNamedQuery("getRoomTypesById", RoomType.class);
-			query.setParameter("roomtypes_id", roomtypes_id);
-			query.setParameter("deleted", true);
-			List<?> ll = query.getResultList();
-			if (ll.size() > 0) {
-				return (RoomType) ll.get(0);
-			}
-		} catch (Exception ex2) {
-			log.error("[getRoomTypesById] ", ex2);
-		}
-		return null;
-	}
+    @Autowired
+	private RoomTypeDao roomTypeDao;
 
 	/**
 	 * get a room object if user level
@@ -157,7 +92,7 @@ public class RoomManager {
 	 */
 	public Room getRoomById(long user_level, long rooms_id) {
 		try {
-			if (authLevelUtil.checkUserLevel(user_level)) {
+			if (AuthLevelUtil.checkUserLevel(user_level)) {
 				return roomDao.get(rooms_id);
 			} else
 				log.error("getRoombyId : Userlevel" + user_level
@@ -170,7 +105,7 @@ public class RoomManager {
 
 	public Room getRoomWithCurrentUsersById(long user_level, long rooms_id) {
 		try {
-			if (authLevelUtil.checkUserLevel(user_level)) {
+			if (AuthLevelUtil.checkUserLevel(user_level)) {
 				Room room = roomDao.get(rooms_id);
 
 				if (room != null) {
@@ -216,7 +151,7 @@ public class RoomManager {
 	public Room getRoomByExternalId(long user_level, Long externalRoomId,
 			String externalRoomType, long roomtypes_id) {
 		try {
-			if (authLevelUtil.checkUserLevel(user_level)) {
+			if (AuthLevelUtil.checkUserLevel(user_level)) {
 				return this.getRoomByExternalId(externalRoomId,
 						externalRoomType, roomtypes_id);
 			} else
@@ -231,7 +166,7 @@ public class RoomManager {
 	public SearchResult<Room> getRooms(long user_level, int start, int max,
 			String orderby, boolean asc, String search) {
 		try {
-			if (authLevelUtil.checkAdminLevel(user_level)) {
+			if (AuthLevelUtil.checkAdminLevel(user_level)) {
 				SearchResult<Room> sResult = new SearchResult<Room>();
 				sResult.setRecords(this.selectMaxFromRooms(search));
 				sResult.setObjectName(Room.class.getName());
@@ -248,7 +183,7 @@ public class RoomManager {
 	public SearchResult<Room> getRoomsWithCurrentUsers(long user_level, int start,
 			int max, String orderby, boolean asc) {
 		try {
-			if (authLevelUtil.checkAdminLevel(user_level)) {
+			if (AuthLevelUtil.checkAdminLevel(user_level)) {
 				SearchResult<Room> sResult = new SearchResult<Room>();
 				sResult.setRecords(this.selectMaxFromRooms(""));
 				sResult.setObjectName(Room.class.getName());
@@ -272,7 +207,7 @@ public class RoomManager {
 	public List<Room> getRoomsWithCurrentUsersByList(long user_level,
 			int start, int max, String orderby, boolean asc) {
 		try {
-			if (authLevelUtil.checkAdminLevel(user_level)) {
+			if (AuthLevelUtil.checkAdminLevel(user_level)) {
 
 				List<Room> rooms = this.getRoomsInternatl(start, max, orderby,
 						asc);
@@ -294,7 +229,7 @@ public class RoomManager {
 			int start, int max, String orderby, boolean asc,
 			String externalRoomType) {
 		try {
-			if (authLevelUtil.checkAdminLevel(user_level)) {
+			if (AuthLevelUtil.checkAdminLevel(user_level)) {
 
 				List<Room> rooms = this.getRoomsInternatlbyType(start, max,
 						orderby, asc, externalRoomType);
@@ -466,7 +401,7 @@ public class RoomManager {
 	public List<RoomOrganisation> getOrganisationsByRoom(long user_level,
 			long rooms_id) {
 		try {
-			if (authLevelUtil.checkUserLevel(user_level)) {
+			if (AuthLevelUtil.checkUserLevel(user_level)) {
 				String hql = "select c from RoomOrganisation as c "
 						+ "where c.room.rooms_id = :rooms_id "
 						+ "AND c.deleted <> :deleted";
@@ -492,7 +427,7 @@ public class RoomManager {
 	 */
 	public List<Room> getPublicRooms(long user_level, long roomtypes_id) {
 		try {
-			if (authLevelUtil.checkUserLevel(user_level)) {
+			if (AuthLevelUtil.checkUserLevel(user_level)) {
 				TypedQuery<Room> q = em.createNamedQuery("getPublicRooms", Room.class);
 				q.setParameter("ispublic", true);
 				q.setParameter("deleted", false);
@@ -541,7 +476,7 @@ public class RoomManager {
 
 	public List<Room> getPublicRoomsWithoutType(long user_level) {
 		try {
-			if (authLevelUtil.checkUserLevel(user_level)) {
+			if (AuthLevelUtil.checkUserLevel(user_level)) {
 				TypedQuery<Room> q = em.createNamedQuery("getPublicRoomsWithoutType", Room.class);
 				q.setParameter("ispublic", true);
 				q.setParameter("deleted", true);
@@ -563,7 +498,7 @@ public class RoomManager {
 		log.debug("Roommanagement.getAppointedMeetings");
 
 		try {
-			if (authLevelUtil.checkUserLevel(user_level)) {
+			if (AuthLevelUtil.checkUserLevel(user_level)) {
 				TypedQuery<Room> q = em.createNamedQuery("getAppointedMeetings", Room.class);
 				q.setParameter("appointed", true);
 				q.setParameter("deleted", false);
@@ -614,14 +549,14 @@ public class RoomManager {
 			, boolean filesOpened, boolean autoVideoSelect, boolean sipEnabled) {
 
 		try {
-			if (authLevelUtil.checkAdminLevel(user_level)) {
+			if (AuthLevelUtil.checkAdminLevel(user_level)) {
 
 				Room r = new Room();
 				r.setName(name);
 				r.setComment(comment);
 				r.setStarttime(new Date());
 				r.setNumberOfPartizipants(numberOfPartizipants);
-				r.setRoomtype(this.getRoomTypesById(roomtypes_id));
+				r.setRoomtype(roomTypeDao.get(roomtypes_id));
 				r.setIspublic(ispublic);
 				r.setAllowUserQuestions(allowUserQuestions);
 				r.setIsAudioOnly(isAudioOnly);
@@ -689,13 +624,13 @@ public class RoomManager {
 		log.debug("addRoom");
 
 		try {
-			if (authLevelUtil.checkModLevel(user_level)) {
+			if (AuthLevelUtil.checkModLevel(user_level)) {
 				Room r = new Room();
 				r.setName(name);
 				r.setComment(comment);
 				r.setStarttime(new Date());
 				r.setNumberOfPartizipants(numberOfPartizipants);
-				r.setRoomtype(this.getRoomTypesById(roomtypes_id));
+				r.setRoomtype(roomTypeDao.get(roomtypes_id));
 				r.setIspublic(ispublic);
 
 				r.setAllowUserQuestions(allowUserQuestions);
@@ -750,7 +685,7 @@ public class RoomManager {
 			r.setComment(comment);
 			r.setStarttime(new Date());
 			r.setNumberOfPartizipants(numberOfPartizipants);
-			r.setRoomtype(this.getRoomTypesById(roomtypes_id));
+			r.setRoomtype(roomTypeDao.get(roomtypes_id));
 			r.setIspublic(ispublic);
 
 			r.setAllowUserQuestions(allowUserQuestions);
@@ -809,7 +744,7 @@ public class RoomManager {
 	public Long addRoomToOrganisation(long user_level, long rooms_id,
 			long organisation_id) {
 		try {
-			if (authLevelUtil.checkAdminLevel(user_level)) {
+			if (AuthLevelUtil.checkAdminLevel(user_level)) {
 				RoomOrganisation rOrganisation = new RoomOrganisation();
 				rOrganisation.setRoom(roomDao.get(rooms_id));
 				log.debug("addRoomToOrganisation rooms '"
@@ -825,21 +760,6 @@ public class RoomManager {
 			}
 		} catch (Exception ex2) {
 			log.error("[addRoomToOrganisation] ", ex2);
-		}
-		return null;
-	}
-
-	public Long addRoomOrganisation(RoomOrganisation rOrganisation) {
-		try {
-
-			rOrganisation.setStarttime(new Date());
-
-			rOrganisation = em.merge(rOrganisation);
-			long returnId = rOrganisation.getRooms_organisation_id();
-			return returnId;
-
-		} catch (Exception ex2) {
-			log.error("[addRoomOrganisation] ", ex2);
 		}
 		return null;
 	}
@@ -882,7 +802,7 @@ public class RoomManager {
 	public List<RoomOrganisation> getRoomsOrganisationByOrganisationIdAndRoomType(
 			long user_level, long organisation_id, long roomtypes_id) {
 		try {
-			if (authLevelUtil.checkUserLevel(user_level)) {
+			if (AuthLevelUtil.checkUserLevel(user_level)) {
 				TypedQuery<RoomOrganisation> q = em.
 						createNamedQuery("getRoomsOrganisationByOrganisationIdAndRoomType", RoomOrganisation.class);
 				q.setParameter("roomtypes_id", roomtypes_id);
@@ -907,7 +827,7 @@ public class RoomManager {
 	public List<RoomOrganisation> getRoomsOrganisationByOrganisationId(
 			long user_level, long organisation_id) {
 		try {
-			if (authLevelUtil.checkUserLevel(user_level)) {
+			if (AuthLevelUtil.checkUserLevel(user_level)) {
 
 				TypedQuery<RoomOrganisation> query = em.
 						createNamedQuery("getRoomsOrganisationByOrganisationId", RoomOrganisation.class);
@@ -932,7 +852,7 @@ public class RoomManager {
 			long organisation_id, int start, int max, String orderby,
 			boolean asc) {
 		try {
-			if (authLevelUtil.checkModLevel(user_level)) {
+			if (AuthLevelUtil.checkModLevel(user_level)) {
 
 				SearchResult<RoomOrganisation> sResult = new SearchResult<RoomOrganisation>();
 				sResult.setObjectName(RoomOrganisation.class.getName());
@@ -1043,21 +963,6 @@ public class RoomManager {
 		return null;
 	}
 
-	public List<RoomOrganisation> getRoomsOrganisations() {
-		try {
-			CriteriaBuilder cb = em.getCriteriaBuilder();
-			CriteriaQuery<RoomOrganisation> cq = cb
-					.createQuery(RoomOrganisation.class);
-			cq.from(RoomOrganisation.class);
-			TypedQuery<RoomOrganisation> q = em.createQuery(cq);
-			List<RoomOrganisation> ll = q.getResultList();
-			return ll;
-		} catch (Exception ex2) {
-			log.error("[getRoomsByOrganisation] ", ex2);
-		}
-		return null;
-	}
-
 	/**
 	 * 
 	 * @param user_id
@@ -1106,7 +1011,7 @@ public class RoomManager {
 	public Room updateRoomsSelf(long user_id, long user_level, long rooms_id,
 			long roomtypes_id, String name, boolean ispublic, String comment) {
 		try {
-			if (authLevelUtil.checkModLevel(user_level)) {
+			if (AuthLevelUtil.checkModLevel(user_level)) {
 
 				if (this.checkUserOrgRoom(user_id, rooms_id)) {
 
@@ -1114,7 +1019,7 @@ public class RoomManager {
 					r.setComment(comment);
 					r.setIspublic(ispublic);
 					r.setName(name);
-					r.setRoomtype(this.getRoomTypesById(roomtypes_id));
+					r.setRoomtype(roomTypeDao.get(roomtypes_id));
 					r.setUpdatetime(new Date());
 
 					if (r.getRooms_id() == null) {
@@ -1153,7 +1058,7 @@ public class RoomManager {
 			r.setIspublic(ispublic);
 			r.setNumberOfPartizipants(numberOfPartizipants);
 			r.setName(name);
-			r.setRoomtype(this.getRoomTypesById(roomtypes_id));
+			r.setRoomtype(roomTypeDao.get(roomtypes_id));
 			r.setUpdatetime(new Date());
 			r.setAllowUserQuestions(allowUserQuestions);
 			r.setIsAudioOnly(isAudioOnly);
@@ -1213,14 +1118,14 @@ public class RoomManager {
 		try {
 			log.debug("*** updateRoom numberOfPartizipants: "
 					+ numberOfPartizipants);
-			if (authLevelUtil.checkModLevel(user_level)) {
+			if (AuthLevelUtil.checkModLevel(user_level)) {
 				Room r = roomDao.get(rooms_id);
 				r.setComment(comment);
 
 				r.setIspublic(ispublic);
 				r.setNumberOfPartizipants(numberOfPartizipants);
 				r.setName(name);
-				r.setRoomtype(this.getRoomTypesById(roomtypes_id));
+				r.setRoomtype(roomTypeDao.get(roomtypes_id));
 				r.setUpdatetime(new Date());
 				r.setAllowUserQuestions(allowUserQuestions);
 
@@ -1323,7 +1228,7 @@ public class RoomManager {
 	 */
 	public Long deleteRoomById(long user_level, long rooms_id) {
 		try {
-			if (authLevelUtil.checkWebServiceLevel(user_level)) {
+			if (AuthLevelUtil.checkWebServiceLevel(user_level)) {
 				this.deleteAllRoomsOrganisationOfRoom(rooms_id);
 				roomDao.delete(roomDao.get(rooms_id), -1L);
 				return rooms_id;

@@ -18,7 +18,7 @@
  */
 package org.apache.openmeetings.remote;
 
-import static org.apache.openmeetings.db.entity.basic.Configuration.DEFAUT_LANG_KEY;
+import static org.apache.openmeetings.OpenmeetingsVariables.CONFIG_DEFAUT_LANG_KEY;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -29,16 +29,17 @@ import java.util.Map;
 import java.util.TimeZone;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
-import org.apache.openmeetings.data.basic.AuthLevelUtil;
-import org.apache.openmeetings.data.beans.basic.SearchResult;
 import org.apache.openmeetings.data.calendar.management.AppointmentLogic;
 import org.apache.openmeetings.data.conference.RoomManager;
 import org.apache.openmeetings.data.user.UserManager;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.dao.room.RoomModeratorsDao;
+import org.apache.openmeetings.db.dao.room.RoomTypeDao;
+import org.apache.openmeetings.db.dao.server.ISessionManager;
 import org.apache.openmeetings.db.dao.server.ServerDao;
 import org.apache.openmeetings.db.dao.server.SessiondataDao;
+import org.apache.openmeetings.db.dto.basic.SearchResult;
 import org.apache.openmeetings.db.dto.server.ServerDTO;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
 import org.apache.openmeetings.db.entity.room.Client;
@@ -48,9 +49,9 @@ import org.apache.openmeetings.db.entity.room.RoomOrganisation;
 import org.apache.openmeetings.db.entity.room.RoomType;
 import org.apache.openmeetings.db.entity.server.Server;
 import org.apache.openmeetings.db.entity.user.User;
-import org.apache.openmeetings.session.ISessionManager;
-import org.apache.openmeetings.utils.TimezoneUtil;
-import org.apache.openmeetings.utils.math.CalendarPatterns;
+import org.apache.openmeetings.db.util.TimezoneUtil;
+import org.apache.openmeetings.util.AuthLevelUtil;
+import org.apache.openmeetings.util.CalendarPatterns;
 import org.red5.logging.Red5LoggerFactory;
 import org.red5.server.api.IConnection;
 import org.red5.server.api.Red5;
@@ -78,9 +79,9 @@ public class ConferenceService {
 	@Autowired
 	private RoomDao roomDao;
 	@Autowired
-	private RoomModeratorsDao roomModeratorsDao;
+	private RoomTypeDao roomTypeDao;
 	@Autowired
-	private AuthLevelUtil authLevelUtil;
+	private RoomModeratorsDao roomModeratorsDao;
 	@Autowired
 	private TimezoneUtil timezoneUtil;
 	@Autowired
@@ -340,7 +341,7 @@ public class ConferenceService {
 		Long users_id = sessiondataDao.checkSession(SID);
 		Long user_level = userManager.getUserLevelByID(users_id);
 
-		if (authLevelUtil.checkUserLevel(user_level)) {
+		if (AuthLevelUtil.checkUserLevel(user_level)) {
 
 			List<Appointment> points = appointmentLogic
 					.getTodaysAppointmentsForUser(users_id);
@@ -380,7 +381,7 @@ public class ConferenceService {
 			Long users_id = sessiondataDao.checkSession(SID);
 			Long user_level = userManager.getUserLevelByID(users_id);
 
-			if (authLevelUtil.checkUserLevel(user_level)) {
+			if (AuthLevelUtil.checkUserLevel(user_level)) {
 				List<Appointment> appointments = appointmentLogic
 						.getTodaysAppointmentsForUser(users_id);
 				List<Room> result = new ArrayList<Room>();
@@ -415,10 +416,10 @@ public class ConferenceService {
 	public List<RoomType> getRoomTypes(String SID) {
 		Long users_id = sessiondataDao.checkSession(SID);
 		Long user_level = userManager.getUserLevelByID(users_id);
-		if (authLevelUtil.checkUserLevel(user_level)) {
+		if (AuthLevelUtil.checkUserLevel(user_level)) {
 			User user = userManager.getUserById(users_id);
-			return roomManager.getAllRoomTypes(user == null
-					? cfgDao.getConfValue(DEFAUT_LANG_KEY, Long.class, "1") : user.getLanguage_id());
+			return roomTypeDao.getAll(user == null
+					? cfgDao.getConfValue(CONFIG_DEFAUT_LANG_KEY, Long.class, "1") : user.getLanguage_id());
 		}
 		return null;
 	}
@@ -496,7 +497,7 @@ public class ConferenceService {
 			Long users_id = sessiondataDao.checkSession(SID);
 			long user_level = userManager.getUserLevelByID(users_id);
 
-			if (authLevelUtil.checkUserLevel(user_level)) {
+			if (AuthLevelUtil.checkUserLevel(user_level)) {
 
 				return roomModeratorsDao.getRoomModeratorByRoomId(roomId);
 
@@ -579,7 +580,7 @@ public class ConferenceService {
 			String roomName) {
 		Long users_id = sessiondataDao.checkSession(SID);
 		Long user_level = userManager.getUserLevelByID(users_id);
-		if (authLevelUtil.checkUserLevel(user_level)) {
+		if (AuthLevelUtil.checkUserLevel(user_level)) {
 			return roomManager.getRoomByOwnerAndTypeId(users_id,
 					roomtypesId, roomName);
 		}
@@ -597,7 +598,7 @@ public class ConferenceService {
 	public ServerDTO getServerForSession(String SID, long roomId) {
 		Long users_id = sessiondataDao.checkSession(SID);
 		Long user_level = userManager.getUserLevelByID(users_id);
-		if (authLevelUtil.checkUserLevel(user_level)) {
+		if (AuthLevelUtil.checkUserLevel(user_level)) {
 			List<Server> serverList = serverDao.getActiveServers();
 
 			long minimum = -1;

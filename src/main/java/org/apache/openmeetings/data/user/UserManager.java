@@ -18,9 +18,9 @@
  */
 package org.apache.openmeetings.data.user;
 
+import static org.apache.openmeetings.OpenmeetingsVariables.CONFIG_FRONTEND_REGISTER_KEY;
 import static org.apache.openmeetings.OpenmeetingsVariables.webAppRootKey;
-import static org.apache.openmeetings.db.entity.basic.Configuration.FRONTEND_REGISTER_KEY;
-import static org.apache.openmeetings.db.entity.basic.Configuration.LOGIN_MIN_LENGTH_KEY;
+import static org.apache.openmeetings.db.util.UserHelper.getMinLoginLength;
 
 import java.util.Arrays;
 import java.util.Date;
@@ -39,14 +39,14 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
-import org.apache.commons.lang3.StringUtils;
-import org.apache.openmeetings.data.basic.AuthLevelUtil;
 import org.apache.openmeetings.data.basic.FieldManager;
-import org.apache.openmeetings.data.beans.basic.SearchResult;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
+import org.apache.openmeetings.db.dao.server.ISessionManager;
 import org.apache.openmeetings.db.dao.server.SessiondataDao;
 import org.apache.openmeetings.db.dao.user.AdminUserDao;
+import org.apache.openmeetings.db.dao.user.IUserManager;
 import org.apache.openmeetings.db.dao.user.StateDao;
+import org.apache.openmeetings.db.dto.basic.SearchResult;
 import org.apache.openmeetings.db.entity.room.Client;
 import org.apache.openmeetings.db.entity.server.Sessiondata;
 import org.apache.openmeetings.db.entity.user.Address;
@@ -54,16 +54,14 @@ import org.apache.openmeetings.db.entity.user.Organisation_Users;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.Userdata;
 import org.apache.openmeetings.db.entity.user.Userlevel;
+import org.apache.openmeetings.db.util.TimezoneUtil;
+import org.apache.openmeetings.mail.MailHandler;
 import org.apache.openmeetings.remote.red5.ScopeApplicationAdapter;
 import org.apache.openmeetings.remote.util.SessionVariablesUtil;
-import org.apache.openmeetings.session.ISessionManager;
-import org.apache.openmeetings.utils.DaoHelper;
-import org.apache.openmeetings.utils.TimezoneUtil;
-import org.apache.openmeetings.utils.crypt.ManageCryptStyle;
-import org.apache.openmeetings.utils.mail.MailHandler;
-import org.apache.openmeetings.utils.math.CalendarPatterns;
-import org.apache.openmeetings.web.app.WebSession;
-import org.apache.openmeetings.web.mail.template.ResetPasswordTemplate;
+import org.apache.openmeetings.util.AuthLevelUtil;
+import org.apache.openmeetings.util.CalendarPatterns;
+import org.apache.openmeetings.util.DaoHelper;
+import org.apache.openmeetings.util.crypt.ManageCryptStyle;
 import org.red5.logging.Red5LoggerFactory;
 import org.red5.server.api.IClient;
 import org.red5.server.api.scope.IScope;
@@ -77,7 +75,7 @@ import org.springframework.transaction.annotation.Transactional;
  * 
  */
 @Transactional
-public class UserManager {
+public class UserManager implements IUserManager {
 	private static final Logger log = Red5LoggerFactory.getLogger(UserManager.class, webAppRootKey);
 
 	@PersistenceContext
@@ -94,8 +92,6 @@ public class UserManager {
 	@Autowired
 	private OrganisationManager organisationManager;
 	@Autowired
-	private ManageCryptStyle cryptManager;
-	@Autowired
 	private AdminUserDao usersDao;
 	@Autowired
 	private EmailManager emailManagement;
@@ -103,8 +99,6 @@ public class UserManager {
 	private ScopeApplicationAdapter scopeApplicationAdapter;
 	@Autowired
 	private MailHandler mailHandler;
-	@Autowired
-	private AuthLevelUtil authLevelUtil;
 	@Autowired
 	private ISessionManager sessionManager;
 	@Autowired
@@ -123,7 +117,7 @@ public class UserManager {
 	public SearchResult<User> getUsersList(long user_level, int start, int max,
 			String orderby, boolean asc) {
 		try {
-			if (authLevelUtil.checkAdminLevel(user_level)) {
+			if (AuthLevelUtil.checkAdminLevel(user_level)) {
 				SearchResult<User> sresult = new SearchResult<User>();
 				sresult.setObjectName(User.class.getName());
 				sresult.setRecords(usersDao.count());
@@ -203,7 +197,7 @@ public class UserManager {
 	public User checkAdmingetUserById(long user_level, long user_id) {
 		// FIXME: We have to check here for the User only cause the
 		// Org-Moderator otherwise cannot access it
-		if (authLevelUtil.checkUserLevel(user_level)) {
+		if (AuthLevelUtil.checkUserLevel(user_level)) {
 			return usersDao.get(user_id);
 		}
 		return null;
@@ -611,7 +605,7 @@ public class UserManager {
 		try {
 			// Checks if FrontEndUsers can register
 			if ("1".equals(configurationDao.getConfValue(
-					FRONTEND_REGISTER_KEY, String.class, "0"))) {
+					CONFIG_FRONTEND_REGISTER_KEY, String.class, "0"))) {
 				
 				// TODO: Read and generate SIP-Data via RPC-Interface Issue 1098
 
@@ -731,15 +725,9 @@ public class UserManager {
 		// User Level must be at least Admin
 		// Moderators will get a temp update of there UserLevel to add Users to
 		// their Group
-		if (authLevelUtil.checkModLevel(user_level)) {
-
-			Integer userLoginMinimumLength = configurationDao.getConfValue(LOGIN_MIN_LENGTH_KEY, Integer.class, "4");
-			if (userLoginMinimumLength == null) {
-				throw new Exception("user.login.minimum.length problem");
-			}
-
+		if (AuthLevelUtil.checkModLevel(user_level)) {
 			// Check for required data
-			if (login.length() >= userLoginMinimumLength.intValue()) {
+			if (login.length() >= getMinLoginLength(configurationDao)) {
 				// Check for duplicates
 				boolean checkName = usersDao.checkUserLogin(login, null);
 				boolean checkEmail = usersDao.checkUserEMail(email, null);
@@ -748,12 +736,8 @@ public class UserManager {
 					String link = baseURL;
 					String hash = activatedHash;
 					if (hash == null){
-						hash = cryptManager
-								.getInstanceOfCrypt()
-								.createPassPhrase(
-										login
-												+ CalendarPatterns
-														.getDateWithTimeByMiliSeconds(new Date()));
+						hash = ManageCryptStyle.getInstanceOfCrypt().createPassPhrase(login
+								+ CalendarPatterns.getDateWithTimeByMiliSeconds(new Date()));
 						link += baseURL + "activateUser?u=" + hash;
 					}
 
@@ -874,7 +858,7 @@ public class UserManager {
 			} else {
 				users.setLanguage_id(null);
 			}
-			users.updatePassword(cryptManager, configurationDao, userpass);
+			users.updatePassword(configurationDao, userpass);
 			users.setRegdate(new Date());
 			users.setDeleted(false);
 			
@@ -961,7 +945,7 @@ public class UserManager {
 			} else {
 				users.setLanguage_id(null);
 			}
-			users.updatePassword(cryptManager, configurationDao, userpass, emptyPass);
+			users.updatePassword(configurationDao, userpass, emptyPass);
 			users.setRegdate(new Date());
 			users.setDeleted(false);
 
@@ -992,74 +976,6 @@ public class UserManager {
 			log.error("[addUser]", ex2);
 		}
 		return null;
-	}
-
-	public void addUserLevel(String description, int myStatus) {
-		try {
-			Userlevel uslevel = new Userlevel();
-			uslevel.setStarttime(new Date());
-			uslevel.setDescription(description);
-			uslevel.setStatuscode(new Integer(myStatus));
-			uslevel.setDeleted(false);
-			em.merge(uslevel);
-		} catch (Exception ex2) {
-			log.error("[addUserLevel]", ex2);
-		}
-	}
-
-	/**
-	 * reset a username by a given mail oder login by sending a mail to the
-	 * registered EMail-Address
-	 * 
-	 * @param email
-	 * @param username
-	 * @param appLink
-	 * @return
-	 */
-	public Long resetUser(String email, String username, String appLink) {
-		try {
-
-			log.debug("resetUser " + email);
-
-			// check if Mail given
-			if (email.length() > 0) {
-				// log.debug("getAdresses_id "+addr_e.getAdresses_id());
-				User us = usersDao.getUserByEmail(email);
-				if (us != null) {
-					this.sendHashByUser(us, appLink);
-					return new Long(-4);
-				} else {
-					return new Long(-9);
-				}
-			} else if (username.length() > 0) {
-				User us = usersDao.getUserByName(username);
-				if (us != null) {
-					this.sendHashByUser(us, appLink);
-					return new Long(-4);
-				} else {
-					return new Long(-3);
-				}
-			}
-		} catch (Exception e) {
-			log.error("[resetUser]", e);
-			return new Long(-1);
-		}
-		return new Long(-2);
-	}
-
-	private void sendHashByUser(User us, String appLink) throws Exception {
-		String loginData = us.getLogin() + new Date();
-		log.debug("User: " + us.getLogin());
-		us.setResethash(cryptManager.getInstanceOfCrypt().createPassPhrase(
-				loginData));
-		usersDao.update(us, -1L);
-		String reset_link = appLink + "?hash=" + us.getResethash();
-
-		String email = us.getAdresses().getEmail();
-
-		String template = ResetPasswordTemplate.getEmail(reset_link);
-
-		mailHandler.send(email, WebSession.getString(517), template);
 	}
 
 	/**
@@ -1186,7 +1102,7 @@ public class UserManager {
 			Long user_level = getUserLevelByID(users_id);
 
 			// admins only
-			if (authLevelUtil.checkAdminLevel(user_level)) {
+			if (AuthLevelUtil.checkAdminLevel(user_level)) {
 
 				sessiondataDao.clearSessionByRoomId(room_id);
 
@@ -1224,7 +1140,7 @@ public class UserManager {
 			Long user_level = getUserLevelByID(users_id);
 
 			// admins only
-			if (authLevelUtil.checkWebServiceLevel(user_level)) {
+			if (AuthLevelUtil.checkWebServiceLevel(user_level)) {
 
 				Client rcl = sessionManager
 						.getClientByPublicSID(publicSID, false, null);
@@ -1256,90 +1172,7 @@ public class UserManager {
 		return null;
 	}
 
-	/**
-	 * @param hash
-	 * @return
-	 */
-	public User getUserByActivationHash(String hash) {
-		try {
-			String hql = "SELECT u FROM User as u "
-					+ " where u.activatehash = :activatehash"
-					+ " AND u.deleted <> :deleted";
-			TypedQuery<User> query = em.createQuery(hql, User.class);
-			query.setParameter("activatehash", hash);
-			query.setParameter("deleted", true);
-			User u = null;
-			try {
-				u = query.getSingleResult();
-			} catch (NoResultException e) {
-				// u=null}
-			}
-			return u;
-		} catch (Exception e) {
-			log.error("[getUserByActivationHash]", e);
-		}
-		return null;
-
-	}
-
 	public void updateUser(User user) {
 		usersDao.update(user, null);
-	}
-
-	private StringBuilder getUserProfileQuery(boolean count, String text, String offers, String search) {
-		StringBuilder sb = new StringBuilder("SELECT ");
-		sb.append(count ? "COUNT(" : "").append("u").append(count ? ") " : " ")
-			.append("FROM User u WHERE u.deleted = false ");
-		if (offers != null && offers.length() != 0) {
-			sb.append("AND (LOWER(u.userOffers) LIKE :userOffers) ");
-		}
-		if (search != null && search.length() != 0) {
-			sb.append("AND (LOWER(u.userSearchs) LIKE :userSearchs) ");
-		}
-		if (text != null && text.length() != 0) {
-			sb.append("AND (LOWER(u.login) LIKE :search ")
-				.append("OR LOWER(u.firstname) LIKE :search ")
-				.append("OR LOWER(u.lastname) LIKE :search ")
-				.append("OR LOWER(u.adresses.email) LIKE :search ")
-				.append("OR LOWER(u.adresses.town) LIKE :search " + ") ");
-		}
-		return sb;
-	}
-	
-	public List<User> searchUserProfile(String text, String offers, String search, String orderBy, int start, int max, boolean asc) {
-		StringBuilder sb = getUserProfileQuery(false, text, offers, search);
-		sb.append(" ORDER BY ").append(orderBy).append(asc ? " ASC" : " DESC");
-
-		log.debug("hql :: " + sb.toString());
-		TypedQuery<User> query = em.createQuery(sb.toString(), User.class);
-
-		if (text != null && text.length() != 0) {
-			query.setParameter("search", StringUtils.lowerCase("%" + text + "%"));
-		}
-		if (offers != null && offers.length() != 0) {
-			query.setParameter("userOffers", StringUtils.lowerCase("%" + offers + "%"));
-		}
-		if (search != null && search.length() != 0) {
-			query.setParameter("userSearchs", StringUtils.lowerCase("%" + search + "%"));
-		}
-		return query.setFirstResult(start).setMaxResults(max).getResultList();
-	}
-
-	public Long searchCountUserProfile(String text, String offers, String search) {
-		StringBuilder sb = getUserProfileQuery(true, text, offers, search);
-		
-		log.debug("hql :: " + sb.toString());
-		TypedQuery<Long> query = em.createQuery(sb.toString(), Long.class);
-		
-		if (text != null && text.length() != 0) {
-			query.setParameter("search", StringUtils.lowerCase("%" + text + "%"));
-		}
-		if (offers != null && offers.length() != 0) {
-			query.setParameter("userOffers", StringUtils.lowerCase("%" + offers + "%"));
-		}
-		if (search != null && search.length() != 0) {
-			query.setParameter("userSearchs", StringUtils.lowerCase("%" + search + "%"));
-		}
-		return query.getSingleResult();
 	}
 }

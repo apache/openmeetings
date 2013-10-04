@@ -19,9 +19,16 @@
   
 -->
 <classpath>
+	<classpathentry kind="src" path="src/axis/java"/>
+	<classpathentry kind="src" path="src/db/java"/>
+	<classpathentry kind="src" path="src/doc/java"/>
+	<classpathentry kind="src" path="src/install/java"/>
 	<classpathentry kind="src" path="src/main/java"/>
 	<classpathentry kind="src" path="src/test/java"/>
 	<classpathentry kind="src" path="src/main/webapp/WEB-INF/classes"/>
+	<classpathentry kind="src" path="src/screenshare/java"/>
+	<classpathentry kind="src" path="src/util/java"/>
+	<classpathentry kind="src" path="src/web/java"/>
 	<classpathentry exported="true" kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4">
 		<attributes>

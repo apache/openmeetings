@@ -18,10 +18,10 @@
  */
 package org.apache.openmeetings.servlet.outputhandler;
 
-import static org.apache.openmeetings.utils.OmFileHelper.bigImagePrefix;
-import static org.apache.openmeetings.utils.OmFileHelper.chatImagePrefix;
-import static org.apache.openmeetings.utils.OmFileHelper.defaultProfileImageName;
-import static org.apache.openmeetings.utils.OmFileHelper.profileImagePrefix;
+import static org.apache.openmeetings.util.OmFileHelper.bigImagePrefix;
+import static org.apache.openmeetings.util.OmFileHelper.chatImagePrefix;
+import static org.apache.openmeetings.util.OmFileHelper.defaultProfileImageName;
+import static org.apache.openmeetings.util.OmFileHelper.profileImagePrefix;
 
 import java.io.File;
 import java.io.IOException;
@@ -39,7 +39,7 @@ import org.apache.openmeetings.db.dao.server.SessiondataDao;
 import org.apache.openmeetings.db.entity.file.FileExplorerItem;
 import org.apache.openmeetings.servlet.BaseHttpServlet;
 import org.apache.openmeetings.servlet.ServerNotInitializedException;
-import org.apache.openmeetings.utils.OmFileHelper;
+import org.apache.openmeetings.util.OmFileHelper;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 

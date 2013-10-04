@@ -20,8 +20,8 @@ package org.apache.openmeetings.remote;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.data.basic.FieldManager;
-import org.apache.openmeetings.data.beans.basic.ErrorResult;
 import org.apache.openmeetings.db.dao.basic.ErrorDao;
+import org.apache.openmeetings.db.dto.basic.ErrorResult;
 import org.apache.openmeetings.db.entity.basic.ErrorValue;
 import org.apache.openmeetings.db.entity.label.Fieldlanguagesvalues;
 import org.red5.logging.Red5LoggerFactory;

@@ -18,7 +18,7 @@
  */
 package org.apache.openmeetings.remote.red5;
 
-import static org.apache.openmeetings.db.entity.basic.Configuration.CRYPT_KEY;
+import static org.apache.openmeetings.OpenmeetingsVariables.webAppRootKey;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -32,6 +32,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.openmeetings.InitializationContainer;
 import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.Version;
 import org.apache.openmeetings.data.calendar.management.AppointmentLogic;
@@ -43,6 +44,7 @@ import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.calendar.MeetingMemberDao;
 import org.apache.openmeetings.db.dao.log.ConferenceLogDao;
 import org.apache.openmeetings.db.dao.room.RoomDao;
+import org.apache.openmeetings.db.dao.server.ISessionManager;
 import org.apache.openmeetings.db.dao.server.ServerDao;
 import org.apache.openmeetings.db.dao.server.SessiondataDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
@@ -54,13 +56,12 @@ import org.apache.openmeetings.db.entity.room.Client;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.server.Server;
 import org.apache.openmeetings.db.entity.user.User;
-import org.apache.openmeetings.documents.beans.UploadCompleteMessage;
 import org.apache.openmeetings.remote.FLVRecorderService;
 import org.apache.openmeetings.remote.WhiteBoardService;
 import org.apache.openmeetings.remote.util.SessionVariablesUtil;
-import org.apache.openmeetings.session.ISessionManager;
-import org.apache.openmeetings.utils.OmFileHelper;
-import org.apache.openmeetings.utils.math.CalendarPatterns;
+import org.apache.openmeetings.util.CalendarPatterns;
+import org.apache.openmeetings.util.OmFileHelper;
+import org.apache.openmeetings.util.process.UploadCompleteMessage;
 import org.red5.logging.Red5LoggerFactory;
 import org.red5.server.adapter.ApplicationAdapter;
 import org.red5.server.api.IClient;
@@ -78,10 +79,7 @@ import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class ScopeApplicationAdapter extends ApplicationAdapter implements IPendingServiceCallback {
-
-	private static final Logger log = Red5LoggerFactory.getLogger(
-			ScopeApplicationAdapter.class,
-			OpenmeetingsVariables.webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(ScopeApplicationAdapter.class, webAppRootKey);
 
 	@Autowired
 	private ISessionManager sessionManager;
@@ -116,11 +114,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 
 	public static String lineSeperator = System.getProperty("line.separator");
 
-	public static String configKeyCryptClassName = null;
-	public static Boolean whiteboardDrawStatus = null;
-	
 	private static long broadCastCounter = 0;
-	public static boolean initComplete = false;
 
 	public synchronized void resultReceived(IPendingServiceCall arg0) {
 		// TODO Auto-generated method stub
@@ -150,7 +144,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 				log.debug("scopeName :: " + scopeName);
 			}
 			
-			ScopeApplicationAdapter.initComplete = true;
+			InitializationContainer.initComplete = true;
 		    Version.logOMStarted();
 		} catch (Exception err) {
 			log.error("[appStart]", err);
@@ -2649,30 +2643,11 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 	}
 
 	private boolean getWhiteboardDrawStatus() {
-		if (ScopeApplicationAdapter.whiteboardDrawStatus == null) {
-			String drawStatus = configurationDao.getConfValue(
-					"show.whiteboard.draw.status", String.class, "0");
-			ScopeApplicationAdapter.whiteboardDrawStatus = "1".equals(drawStatus);
-		}
-		return ScopeApplicationAdapter.whiteboardDrawStatus;
+		return configurationDao.getWhiteboardDrawStatus();
 	}
 	
 	public String getCryptKey() {
-		try {
-
-			if (ScopeApplicationAdapter.configKeyCryptClassName == null) {
-				String cryptClass = configurationDao.getConfValue(CRYPT_KEY, String.class, null);
-
-				if (cryptClass != null) {
-					ScopeApplicationAdapter.configKeyCryptClassName = cryptClass;
-				}
-			}
-
-			return ScopeApplicationAdapter.configKeyCryptClassName;
-		} catch (Exception err) {
-			log.error("[getCryptKey]", err);
-		}
-		return null;
+		return configurationDao.getCryptKey();
 	}
 
 	public synchronized IScope getRoomScope(String room) {

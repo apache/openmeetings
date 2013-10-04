@@ -28,22 +28,23 @@ import java.util.TimeZone;
 
 import org.apache.openmeetings.data.basic.FieldManager;
 import org.apache.openmeetings.data.conference.InvitationManager;
-import org.apache.openmeetings.data.conference.InvitationManager.MessageType;
 import org.apache.openmeetings.data.conference.RoomManager;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.calendar.AppointmentCategoryDao;
 import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
 import org.apache.openmeetings.db.dao.calendar.AppointmentReminderTypDao;
+import org.apache.openmeetings.db.dao.calendar.IInvitationManager.MessageType;
 import org.apache.openmeetings.db.dao.calendar.MeetingMemberDao;
 import org.apache.openmeetings.db.dao.room.InvitationDao;
 import org.apache.openmeetings.db.dao.room.RoomDao;
+import org.apache.openmeetings.db.dao.room.RoomTypeDao;
 import org.apache.openmeetings.db.dao.user.AdminUserDao;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
 import org.apache.openmeetings.db.entity.calendar.MeetingMember;
 import org.apache.openmeetings.db.entity.room.Invitation;
 import org.apache.openmeetings.db.entity.room.Room;
-import org.apache.openmeetings.utils.TimezoneUtil;
-import org.apache.openmeetings.utils.math.CalendarPatterns;
+import org.apache.openmeetings.db.util.TimezoneUtil;
+import org.apache.openmeetings.util.CalendarPatterns;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -75,6 +76,8 @@ public class AppointmentLogic {
 	private AdminUserDao userDao;
 	@Autowired
 	private MeetingMemberDao meetingMemberDao;
+	@Autowired
+	private RoomTypeDao roomTypeDao;
 
 	private static int DEFAULT_MINUTES_REMINDER_SEND = 15;
 
@@ -293,7 +296,7 @@ public class AppointmentLogic {
 			a.setRoom(new Room());
 			a.getRoom().setComment(appointmentDescription);
 			a.getRoom().setName(appointmentName);
-			a.getRoom().setRoomtype(roomManager.getRoomTypesById(roomType));
+			a.getRoom().setRoomtype(roomTypeDao.get(roomType));
 		}
 		a.setOwner(userDao.get(users_id));
 		a.setPasswordProtected(isPasswordProtected);

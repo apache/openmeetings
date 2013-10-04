@@ -33,7 +33,7 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import javax.mail.util.ByteArrayDataSource;
 
-import org.apache.openmeetings.utils.mail.SmtpAuthenticator;
+import org.apache.openmeetings.util.mail.SmtpAuthenticator;
 import org.junit.Test;
 
 import com.sun.mail.util.MailSSLSocketFactory;

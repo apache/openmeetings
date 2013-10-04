@@ -36,14 +36,14 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
-import org.apache.openmeetings.data.basic.AuthLevelUtil;
-import org.apache.openmeetings.data.beans.basic.SearchResult;
 import org.apache.openmeetings.db.dao.user.OrganisationDao;
 import org.apache.openmeetings.db.dao.user.OrganisationUserDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
+import org.apache.openmeetings.db.dto.basic.SearchResult;
 import org.apache.openmeetings.db.entity.user.Organisation;
 import org.apache.openmeetings.db.entity.user.Organisation_Users;
 import org.apache.openmeetings.db.entity.user.User;
+import org.apache.openmeetings.util.AuthLevelUtil;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -69,8 +69,6 @@ public class OrganisationManager {
 	private OrganisationDao orgDao;
 	@Autowired
 	private OrganisationUserDao orgUserDao;
-	@Autowired
-	private AuthLevelUtil authLevelUtil;
 
 	/**
 	 * adds a new organisation to the table organisation
@@ -109,7 +107,7 @@ public class OrganisationManager {
 
 	public List<Organisation> getOrganisations(Long user_level) {
 		try {
-			if (authLevelUtil.checkAdminLevel(user_level)) {
+			if (AuthLevelUtil.checkAdminLevel(user_level)) {
 				CriteriaBuilder cb = em.getCriteriaBuilder();
 				CriteriaQuery<Organisation> cq = cb
 						.createQuery(Organisation.class);
@@ -328,7 +326,7 @@ public class OrganisationManager {
 	public Long deleteUserFromOrganisation(Long user_level, long user_id,
 			long organisation_id) {
 		try {
-			if (authLevelUtil.checkAdminLevel(user_level)) {
+			if (AuthLevelUtil.checkAdminLevel(user_level)) {
 
 				log.error("deleteUserFromOrganisation " + user_id + "  "
 						+ organisation_id);
@@ -461,7 +459,7 @@ public class OrganisationManager {
 	public List<Organisation> getOrganisationsByUserId(long user_level,
 			long user_id, int start, int max, String orderby, boolean asc) {
 		try {
-			if (authLevelUtil.checkAdminLevel(user_level)) {
+			if (AuthLevelUtil.checkAdminLevel(user_level)) {
 				TypedQuery<Organisation> q = em.createNamedQuery("getOrganisationsByUserId", Organisation.class);
 				q.setParameter("user_id", user_id);
 				q.setFirstResult(start);
@@ -490,7 +488,7 @@ public class OrganisationManager {
 	public List<Organisation> getRestOrganisationsByUserId(long user_level,
 			long user_id, int start, int max, String orderby, boolean asc) {
 		try {
-			if (authLevelUtil.checkAdminLevel(user_level)) {
+			if (AuthLevelUtil.checkAdminLevel(user_level)) {
 				String qSQL =
 					"SELECT o FROM Organisation AS o "
 					+ "WHERE o.organisation_id NOT IN ("

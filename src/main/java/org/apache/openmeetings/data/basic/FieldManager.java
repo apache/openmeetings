@@ -303,26 +303,6 @@ public class FieldManager {
 		return null;
 	}
 
-	public List<Fieldlanguagesvalues> getMixedFieldValuesList(Long language_id) {
-		// all Fieldlanguagesvalues in current Language
-		TypedQuery<Fieldlanguagesvalues> q = em.createNamedQuery("allFieldLanguageValues", Fieldlanguagesvalues.class);
-		q.setParameter("language_id", language_id);
-		return q.getResultList();
-	}
-
-	public List<Fieldlanguagesvalues> getUntranslatedFieldValuesList(Long language_id) {
-		// all FieldValuesIds in current Language
-		TypedQuery<Long> q0 = em.createNamedQuery("allFieldValuesIds", Long.class);
-		q0.setParameter("language_id", language_id);
-		List<Long> translatedIds = q0.getResultList();
-		
-		// all not translated values from english
-		TypedQuery<Fieldlanguagesvalues> q1 = em.createNamedQuery("allNotTranslatedValues", Fieldlanguagesvalues.class);
-		q1.setParameter("id_list", translatedIds);
-
-		return q1.getResultList();
-	}
-
 	public long getNextFieldvaluesId() {
 		return fieldLanguagesValuesDAO.count() + 1;
 	}

@@ -18,15 +18,15 @@
  */
 package org.apache.openmeetings.documents;
 
-import static org.apache.openmeetings.utils.OmFileHelper.thumbImagePrefix;
+import static org.apache.openmeetings.util.OmFileHelper.thumbImagePrefix;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FilenameFilter;
 import java.util.Arrays;
 
-import org.apache.openmeetings.documents.beans.ConverterProcessResult;
-import org.apache.openmeetings.utils.OmFileHelper;
+import org.apache.openmeetings.util.OmFileHelper;
+import org.apache.openmeetings.util.process.ConverterProcessResult;
 import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;

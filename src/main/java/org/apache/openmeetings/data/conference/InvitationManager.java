@@ -29,6 +29,7 @@ import java.util.TimeZone;
 import java.util.Vector;
 
 import org.apache.openmeetings.data.basic.FieldManager;
+import org.apache.openmeetings.db.dao.calendar.IInvitationManager;
 import org.apache.openmeetings.db.dao.room.InvitationDao;
 import org.apache.openmeetings.db.entity.basic.MailMessage;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
@@ -39,13 +40,13 @@ import org.apache.openmeetings.db.entity.room.Invitation.Valid;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Type;
-import org.apache.openmeetings.utils.TimezoneUtil;
-import org.apache.openmeetings.utils.crypt.MD5;
-import org.apache.openmeetings.utils.crypt.ManageCryptStyle;
-import org.apache.openmeetings.utils.mail.IcalHandler;
-import org.apache.openmeetings.utils.mail.MailHandler;
-import org.apache.openmeetings.utils.math.CalendarPatterns;
-import org.apache.openmeetings.utils.sms.SMSHandler;
+import org.apache.openmeetings.db.util.TimezoneUtil;
+import org.apache.openmeetings.mail.MailHandler;
+import org.apache.openmeetings.mail.SMSHandler;
+import org.apache.openmeetings.util.CalendarPatterns;
+import org.apache.openmeetings.util.crypt.MD5;
+import org.apache.openmeetings.util.crypt.ManageCryptStyle;
+import org.apache.openmeetings.util.mail.IcalHandler;
 import org.apache.openmeetings.web.mail.template.InvitationTemplate;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -56,20 +57,13 @@ import org.springframework.beans.factory.annotation.Autowired;
  * @author swagner
  * 
  */
-public class InvitationManager {
+public class InvitationManager implements IInvitationManager {
 	private static final Logger log = Red5LoggerFactory.getLogger(InvitationManager.class, webAppRootKey);
-	public enum MessageType {
-		Create
-		, Update
-		, Cancel
-	}
 
 	@Autowired
 	private InvitationDao invitationDao;
 	@Autowired
 	private FieldManager fieldManager;
-	@Autowired
-	private ManageCryptStyle manageCryptStyle;
 	@Autowired
 	private MailHandler mailHandler;
 	@Autowired
@@ -127,9 +121,7 @@ public class InvitationManager {
 
 		invitation.setPasswordProtected(isPasswordProtected);
 		if (isPasswordProtected) {
-			invitation.setPassword(manageCryptStyle
-					.getInstanceOfCrypt().createPassPhrase(
-							invitationpass));
+			invitation.setPassword(ManageCryptStyle.getInstanceOfCrypt().createPassPhrase(invitationpass));
 		}
 
 		invitation.setUsed(false);
@@ -571,8 +563,7 @@ public class InvitationManager {
 				// log.debug("pass "+pass);
 				// log.debug("getInvitationpass "+invitation.getInvitationpass());
 
-				if (manageCryptStyle.getInstanceOfCrypt().verifyPassword(pass,
-						invitation.getPassword())) {
+				if (ManageCryptStyle.getInstanceOfCrypt().verifyPassword(pass, invitation.getPassword())) {
 					return new Long(1);
 				} else {
 					return new Long(-34);

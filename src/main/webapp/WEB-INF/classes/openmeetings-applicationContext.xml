@@ -86,7 +86,7 @@
 	<bean id="userservice.service" class="org.apache.openmeetings.remote.UserService" />
 	<bean id="fileservice.service" class="org.apache.openmeetings.remote.ConferenceLibrary" />
 	<bean id="openmeetings.FileProcessor" class="org.apache.openmeetings.data.file.FileProcessor" />
-	<bean id="openmeetings.FlvExplorerConverter" class="org.apache.openmeetings.data.flvrecord.converter.FlvExplorerConverter" />
+	<bean id="openmeetings.FlvExplorerConverter" class="org.apache.openmeetings.converter.FlvExplorerConverter" />
 	<bean id="errorservice.service" class="org.apache.openmeetings.remote.ErrorService" />
 	<bean id="conferenceservice.service" class="org.apache.openmeetings.remote.ConferenceService" />
 	<bean id="chatservice.service" class="org.apache.openmeetings.remote.ChatService" />
@@ -94,8 +94,8 @@
 	<bean id="openmeetings.FlvRecorderConverterTask" class="org.apache.openmeetings.data.flvrecord.converter.FlvRecorderConverterTask" />
 	<bean id="openmeetings.FlvInterviewConverterTask" class="org.apache.openmeetings.data.flvrecord.converter.FlvInterviewConverterTask" />
 	<bean id="openmeetings.FlvInterviewReConverterTask" class="org.apache.openmeetings.data.flvrecord.converter.FlvInterviewReConverterTask" />
-	<bean id="openmeetings.FlvInterviewConverter" class="org.apache.openmeetings.data.flvrecord.converter.FlvInterviewConverter" />
-	<bean id="openmeetings.FlvRecorderConverter" class="org.apache.openmeetings.data.flvrecord.converter.FlvRecorderConverter" />
+	<bean id="openmeetings.FlvInterviewConverter" class="org.apache.openmeetings.converter.FlvInterviewConverter" />
+	<bean id="openmeetings.FlvRecorderConverter" class="org.apache.openmeetings.converter.FlvRecorderConverter" />
 	<bean id="openmeetings.SlaveHTTPConnectionManager" class="org.apache.openmeetings.cluster.SlaveHTTPConnectionManager" />
 
 	<bean id="openmeetings.SessionClearJob" class="org.apache.openmeetings.quartz.scheduler.SessionClearJob" />
@@ -170,7 +170,7 @@
 	</bean>
 
 	<!-- Mail related jobs -->
-	<bean id="mailHandler" class="org.apache.openmeetings.utils.mail.MailHandler" />
+	<bean id="mailHandler" class="org.apache.openmeetings.mail.MailHandler" />
 	<bean id="resetSendingMailStatus" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
 		<property name="targetObject">
 			<ref bean="mailHandler" />
@@ -257,6 +257,8 @@
 	<bean id="sessionManagement" class="org.apache.openmeetings.db.dao.server.SessiondataDao" />
 	<bean id="userManagement" class="org.apache.openmeetings.data.user.UserManager" />
 	<bean id="roomModeratorsDao" class="org.apache.openmeetings.db.dao.room.RoomModeratorsDao" />
+	<bean id="roomOrganisationDao" class="org.apache.openmeetings.db.dao.room.RoomOrganisationDao"/>
+	<bean id="roomTypeDao" class="org.apache.openmeetings.db.dao.room.RoomTypeDao" />
 	<bean id="conferenceLogDao" class="org.apache.openmeetings.db.dao.log.ConferenceLogDao" />
 	<bean id="conferenceLogTypeDao" class="org.apache.openmeetings.db.dao.log.ConferenceLogTypeDao" />
 	<bean id="emailManagement" class="org.apache.openmeetings.data.user.EmailManager" />
@@ -275,6 +277,7 @@
 	<bean id="dao" class="org.apache.openmeetings.db.dao.user.AbstractUserDao" />
 	<bean id="usersDao" class="org.apache.openmeetings.db.dao.user.UserDao" />
 	<bean id="adminUserDao" class="org.apache.openmeetings.db.dao.user.AdminUserDao" />
+	<bean id="userLevelDao" class="org.apache.openmeetings.db.dao.user.UserLevelDao" />
 	<bean id="serverDao" class="org.apache.openmeetings.db.dao.server.ServerDao" />
 	<bean id="chatDao" class="org.apache.openmeetings.db.dao.basic.ChatDao" />
 	<bean id="clientDao" class="org.apache.openmeetings.db.dao.room.ClientDao" />
@@ -282,22 +285,20 @@
 	<bean id="oauth2Dao" class="org.apache.openmeetings.db.dao.server.OAuth2Dao" />
 
 	<!-- No Interface -->
-	<bean id="manageCryptStyle" class="org.apache.openmeetings.utils.crypt.ManageCryptStyle" />
-	<bean id="generateImage" class="org.apache.openmeetings.documents.GenerateImage" />
-	<bean id="generateThumbs" class="org.apache.openmeetings.documents.GenerateThumbs" />
+	<bean id="generateImage" class="org.apache.openmeetings.converter.GenerateImage" />
+	<bean id="generateThumbs" class="org.apache.openmeetings.converter.GenerateThumbs" />
 	<bean id="generatePDF" class="org.apache.openmeetings.documents.GeneratePDF" />
-	<bean id="smsHandler" class="org.apache.openmeetings.utils.sms.SMSHandler" />
+	<bean id="smsHandler" class="org.apache.openmeetings.mail.SMSHandler" />
 	<bean id="importInitvalues" class="org.apache.openmeetings.installation.ImportInitvalues" />
-	<bean id="languageImport" class="org.apache.openmeetings.xmlimport.LanguageImport" />
+	<bean id="languageImport" class="org.apache.openmeetings.backup.LanguageImport" />
 	<bean id="libraryWmlLoader" class="org.apache.openmeetings.documents.LibraryWmlLoader" />
-	<bean id="authLevelManagement" class="org.apache.openmeetings.data.basic.AuthLevelUtil" />
-	<bean id="generateSWF" class="org.apache.openmeetings.documents.GenerateSWF" />
+	<bean id="generateSWF" class="org.apache.openmeetings.converter.GenerateSWF" />
 	<bean id="fileUtils" class="org.apache.openmeetings.data.file.FileUtils" />
 	<bean id="ldapLoginManagement" class="org.apache.openmeetings.ldap.LdapLoginManagement" />
-	<bean id="timezoneUtil" class="org.apache.openmeetings.utils.TimezoneUtil" />
+	<bean id="timezoneUtil" class="org.apache.openmeetings.db.util.TimezoneUtil" />
 	<bean id="whiteboardManagement" class="org.apache.openmeetings.data.whiteboard.WhiteboardManager" />
-	<bean id="backupExport" class="org.apache.openmeetings.utils.BackupExport" />
-	<bean id="backupImport" class="org.apache.openmeetings.utils.BackupImport" />
+	<bean id="backupExport" class="org.apache.openmeetings.backup.BackupExport" />
+	<bean id="backupImport" class="org.apache.openmeetings.backup.BackupImport" />
 
 	<!-- Thread Executor -->
 	<bean id="taskExecutor" class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">

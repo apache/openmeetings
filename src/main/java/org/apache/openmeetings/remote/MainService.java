@@ -18,8 +18,8 @@
  */
 package org.apache.openmeetings.remote;
 
-import static org.apache.openmeetings.db.entity.basic.Configuration.FRONTEND_REGISTER_KEY;
-import static org.apache.openmeetings.db.entity.basic.Configuration.MAX_UPLOAD_SIZE_KEY;
+import static org.apache.openmeetings.OpenmeetingsVariables.CONFIG_FRONTEND_REGISTER_KEY;
+import static org.apache.openmeetings.OpenmeetingsVariables.CONFIG_MAX_UPLOAD_SIZE_KEY;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -29,12 +29,12 @@ import java.util.Map;
 import java.util.TimeZone;
 
 import org.apache.openmeetings.OpenmeetingsVariables;
-import org.apache.openmeetings.data.basic.AuthLevelUtil;
 import org.apache.openmeetings.data.conference.InvitationManager;
 import org.apache.openmeetings.data.conference.RoomManager;
 import org.apache.openmeetings.data.user.UserManager;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.log.ConferenceLogDao;
+import org.apache.openmeetings.db.dao.server.ISessionManager;
 import org.apache.openmeetings.db.dao.server.LdapConfigDao;
 import org.apache.openmeetings.db.dao.server.SOAPLoginDao;
 import org.apache.openmeetings.db.dao.server.SessiondataDao;
@@ -49,10 +49,10 @@ import org.apache.openmeetings.db.entity.user.State;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.Userdata;
 import org.apache.openmeetings.ldap.LdapLoginManagement;
+import org.apache.openmeetings.mail.MailHandler;
 import org.apache.openmeetings.remote.red5.ScopeApplicationAdapter;
 import org.apache.openmeetings.remote.util.SessionVariablesUtil;
-import org.apache.openmeetings.session.ISessionManager;
-import org.apache.openmeetings.utils.mail.MailHandler;
+import org.apache.openmeetings.util.AuthLevelUtil;
 import org.red5.logging.Red5LoggerFactory;
 import org.red5.server.api.IConnection;
 import org.red5.server.api.Red5;
@@ -99,8 +99,6 @@ public class MainService implements IPendingServiceCallback {
 	private SOAPLoginDao soapLoginDao;
 	@Autowired
 	private InvitationManager invitationManager;
-	@Autowired
-	private AuthLevelUtil authLevelUtil;
 	@Autowired
 	private LdapLoginManagement ldapLoginManagement;
 	@Autowired
@@ -334,7 +332,7 @@ public class MainService implements IPendingServiceCallback {
 		try {
 			Long users_id = sessiondataDao.checkSession(SID);
 			Long user_level = userManager.getUserLevelByID(users_id);
-			if (authLevelUtil.checkWebServiceLevel(
+			if (AuthLevelUtil.checkWebServiceLevel(
 					user_level)) {
 
 				Sessiondata sd = sessiondataDao.getSessionByHash(SID);
@@ -510,12 +508,12 @@ public class MainService implements IPendingServiceCallback {
 	 * @return configuration with key "allow_frontend_register"
 	 */
 	public Configuration allowFrontendRegister(String SID) {
-		return configurationDao.get(FRONTEND_REGISTER_KEY).get(0); //FIXME need to be removed
+		return configurationDao.get(CONFIG_FRONTEND_REGISTER_KEY).get(0); //FIXME need to be removed
 	}
 	
 	public List<Configuration> getGeneralOptions(String SID) {
 		try {
-			return configurationDao.get("exclusive.audio.keycode", "red5sip.enable", MAX_UPLOAD_SIZE_KEY,
+			return configurationDao.get("exclusive.audio.keycode", "red5sip.enable", CONFIG_MAX_UPLOAD_SIZE_KEY,
 					"mute.keycode");
 		} catch (Exception err) {
 			log.error("[getLoginOptions]",err);
@@ -543,7 +541,7 @@ public class MainService implements IPendingServiceCallback {
 	public List<Userdata> getUserdata(String SID) {
 		Long users_id = sessiondataDao.checkSession(SID);
 		Long user_level = userManager.getUserLevelByID(users_id);
-		if (authLevelUtil.checkUserLevel(user_level)) {
+		if (AuthLevelUtil.checkUserLevel(user_level)) {
 			return userManager.getUserdataDashBoard(users_id);
 		}
 		return null;
@@ -562,7 +560,7 @@ public class MainService implements IPendingServiceCallback {
 			String domain) {
 		Long users_id = sessiondataDao.checkSession(SID);
 		Long user_level = userManager.getUserLevelByID(users_id);
-		if (authLevelUtil.checkUserLevel(user_level)) {
+		if (AuthLevelUtil.checkUserLevel(user_level)) {
 			LinkedHashMap<Integer, Client> lMap = new LinkedHashMap<Integer, Client>();
 			// Integer counter = 0;
 			// for (Iterator<String> it =
@@ -583,7 +581,7 @@ public class MainService implements IPendingServiceCallback {
 		try {
 			Long users_id = sessiondataDao.checkSession(SID);
 			Long user_level = userManager.getUserLevelByID(users_id);
-			if (authLevelUtil.checkUserLevel(user_level)) {
+			if (AuthLevelUtil.checkUserLevel(user_level)) {
 
 				roomManager.closeRoom(room_id, status);
 
