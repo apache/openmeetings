@@ -40,6 +40,10 @@
 	<property name="om.lib.dir" value="${project.lib.dir}/om" />
 	<property name="anakia.lib.dir" value="${project.lib.dir}/anakia" />
 	<property name="webcontent.base.dir" value="${basedir}/WebContent" />
+	
+	<property name="screenshare.resources.dir" value="${src.base.dir}/screenshare/resources" />
+	<property name="axis.resources.dir" value="${src.base.dir}/axis/resources" />
+	
 	<property name="webapp.dir" value="${src.base.dir}/main/webapp" />
 	<property name="junit.lib.dir" value="${project.lib.dir}/junit" />
 	<property name="junit.backups.dir" value="${junit.lib.dir}/backups" />
@@ -58,32 +62,18 @@
 	<property name="dist.webapps.dir" value="${red5.root}/webapps/${project.distname}" />
 	<property name="dist.classes.dir" value="${dist.webapps.dir}/WEB-INF/classes" />
 	<property name="dist.persistence.dir" value="${dist.classes.dir}/META-INF/" />
-	<property name="dist.lib.dir" value="${dist.webapps.dir}/WEB-INF/lib" />
 
 	<property name="laszlo.home" value="${build.base.dir}/openlaszlo" />
 	<property name="laszlo46.home" value="${build.base.dir}/openlaszlo46" />
 
 	<!-- screenshare.out.dir -->
 	<property name="screenshare.out.dir" value="${dist.webapps.dir}/screensharing" />
-	<tstamp prefix="build">
-		<format property="TODAY" pattern="yyyy-MMMM-dd" locale="en" />
-	</tstamp>
 	
 	<condition property="junit.run.selenium" value="true" else="false">
 		<isset property="selenium" />
 	</condition>
 
-	<property name="classes.base.dir" value="${build.base.dir}/classes/openmeetings" />
-	<property name="classes.axis.dir" value="${classes.base.dir}/axis" />
-	<property name="classes.axis_aar.dir" value="${classes.base.dir}/axis_aar" />
-	<property name="classes.db.dir" value="${classes.base.dir}/db" />
-	<property name="classes.doc.dir" value="${classes.base.dir}/doc" />
-	<property name="classes.install.dir" value="${classes.base.dir}/install" />
-	<property name="classes.main.dir" value="${classes.base.dir}/main" />
-	<property name="classes.screen.dir" value="${classes.base.dir}/screen" />
-	<property name="classes.test.dir" value="${classes.base.dir}/test" />
-	<property name="classes.util.dir" value="${classes.base.dir}/util" />
-	<property name="classes.web.dir" value="${classes.base.dir}/web" />
+	<property name="main.out.dir" value="${build.base.dir}/classes/openmeetings" />
 
 	<!-- LPS Properties -->
 	<property name="out.dir.swf" value="${basedir}/${dist.webapps.dir}/public" />
@@ -98,7 +88,7 @@
 		<format property="TODAY" pattern="d-MMMM-yyyy" locale="en" />
 	</tstamp>
 
-	<path id="-laszlo-lib">
+	<path id="laszlo.lib">
 		<!-- swf8 -->
 		<fileset dir="${laszlo.home}/WEB-INF/lib" includes="saxon-6.5.3-lz-p1.jar jakarta-regexp-1.2.jar
 			commons-collections.jar jdom.jar log4j-1.2.6.jar lps-4.9.0.jar batik-all-flex.jar velocity-dep-1.4-flex.jar" />
@@ -112,7 +102,7 @@
 	</path>
 	
 	<!-- compile classpath -->
-	<path id="-check-classpath">
+	<path id="check.classpath">
 		<fileset dir="${red5.lib}" includes="*.jar" />
 		<fileset dir="${red5.server.lib}" includes="*.jar" />
 		<fileset dir="${red5.client.lib}" includes="*.jar" />
@@ -122,35 +112,22 @@
 		<fileset dir="${dtd-generator.lib.dir}" includes="*.jar" />
 		<fileset dir="${project.lib.dir}" includes="*.jar" />
 	</path>
-	<path id="-compile-classpath">
-		<fileset dir="${red5.root}" includes="*.jar" />
-		<fileset dir="${red5.root}/lib" includes="*.jar" />
-		<fileset dir="${red5.root}/plugins" includes="*.jar" />
-		<fileset dir="${dist.lib.dir}" includes="*.jar" />
+	<path id="compile.classpath">
+		<fileset dir="${red5.lib}/plugins" includes="*.jar" />
+		<fileset dir="${red5.server.dir}/target/lib" includes="junit*.jar" />
+		<path refid="check.classpath"/>
 	</path>
 
 	<target name="info" unless="java6.installed">
 		<echo>Ant version is ${ant.version}</echo> <!-- output Ant version -->
 	</target>
 
-	<target name="-prepare-classes" depends="-java6or7.check">
-		<mkdir dir="${classes.axis.dir}" />
-		<mkdir dir="${classes.axis_aar.dir}" />
-		<mkdir dir="${classes.db.dir}" />
-		<mkdir dir="${classes.doc.dir}" />
-		<mkdir dir="${classes.install.dir}" />
-		<mkdir dir="${classes.main.dir}" />
-		<mkdir dir="${classes.screen.dir}" />
-		<mkdir dir="${classes.test.dir}" />
-		<mkdir dir="${classes.util.dir}" />
-		<mkdir dir="${classes.web.dir}" />
-	</target>
-	
-	<target name="-prepare-mkdir" depends="-prepare-classes">
+	<target name="prepare.mkdir" depends="-java6or7.check">
 		<mkdir dir="${red5.server.lib}" />
 		<mkdir dir="${red5.lib}/log" />
 		<mkdir dir="${red5.client.dir}/dist" />
 		<mkdir dir="${dist.dir}" />
+		<mkdir dir="${main.out.dir}" />
 		<mkdir dir="${mainlibs.lib.dir}" />
 		<mkdir dir="${om.lib.dir}" />
 		<mkdir dir="${anakia.lib.dir}" />
@@ -163,204 +140,12 @@
 		<mkdir dir="${laszlo46.home}" />
 		<echo file="${build.base.dir}/velocity.properties" append="false">runtime.log = ${build.base.dir}/velocity.log${line.separator}output.encoding=UTF-8${line.separator}</echo>
 	</target>
-	
-	<target name="-compile-module">
-		<condition property="param-classpath-ref" value="-compile-classpath">
-			<not>
-				<isset property="param-classpath-ref" />
-			</not>
-		</condition>
-		<echo message="Compile ${param-src-dir} to ${param-classes-dir}" />
-		<javac debug="on" debuglevel="lines,vars,source" destdir="${param-classes-dir}" includeantruntime="false"
-			source="1.6" target="1.6">
-			<src path="${param-src-dir}" />
-			<classpath refid="${param-classpath-ref}"/>
-			<compilerarg value="-Aopenjpa.metamodel=true" />
-			<!-- compilerarg value="-Xlint:deprecation"/ -->
-		</javac>
-		<copy todir="${param-classes-dir}">
-			<fileset dir="${param-src-dir}">
-				<include name="**/*.*" />
-				<exclude name="**/*.java" />
-			</fileset>
-		</copy>
-		<copy file="LICENSE" tofile="${param-classes-dir}/META-INF/LICENSE" overwrite="true" />
-		<copy file="NOTICE" tofile="${param-classes-dir}/META-INF/NOTICE" overwrite="true" />
-	</target>
-	
-	<target name="-jar-module" depends="current-revision">
-		<manifestclasspath property="jar.classpath" jarfile="${param-jar-name}">
-			<classpath>
-				<fileset dir="${dist.lib.dir}" includes="*.jar" />
-				<path refid="-compile-classpath" />
-			</classpath>
-		</manifestclasspath>
-		<jar destfile="${param-jar-dir}/${param-jar-name}">
-			<fileset dir="${param-classes-dir}">
-				<include name="**" />
-			</fileset>
-			<manifest>
-				<attribute name="Built-By" value="OpenMeetings - http://openmeetings.apache.org" />
-				<attribute name="Built-On" value="${build.TODAY}" />
-				<attribute name="Class-Path" value="conf/ ${jar.classpath}" />
-				<attribute name="Svn-Revision" value="${svn.info.rev}" />
-				<attribute name="Product-Version" value="${project.version}-${project.status}" />
-			</manifest>
-		</jar>
-	</target>
-	
-	<path id="-screenshare-classpath">
-		<fileset dir="${screenshare.out.dir}" includes="*.jar" />
-	</path>
-	<target name="jar-screenshare" depends="-prepare-mkdir">
-		<copy todir="${screenshare.out.dir}">
-			<fileset dir="${red5.server.lib}" includes="commons-codec*.jar" />
-			<fileset dir="${red5.server.lib}" includes="httpclient*.jar" />
-			<fileset dir="${red5.server.lib}" includes="httpcore*.jar" />
-			<fileset dir="${red5.server.lib}" includes="bcprov*.jar" />
-			<fileset dir="${red5.server.lib}" includes="ehcache-core*.jar" />
-			<fileset dir="${red5.server.lib}" includes="commons-beanutils*.jar" />
-			<fileset dir="${red5.server.lib}" includes="slf4j-api*.jar" />
-			<fileset dir="${red5.server.lib}" includes="jcl-over-slf4j*.jar" />
-			<fileset dir="${red5.server.lib}" includes="commons-collections*.jar" />
-			<fileset dir="${red5.server.lib}" includes="spring-context-3*.jar" />
-			<fileset dir="${red5.server.lib}" includes="spring-core-*.jar" />
-			<fileset dir="${red5.server.lib}" includes="spring-beans-*.jar" />
-			<fileset dir="${red5.server.lib}" includes="logback*.jar" />
-			<fileset dir="${red5.server.lib}" includes="mina-core*.jar" />
-			<fileset dir="${red5.server.lib}" includes="com.springsource.slf4j.api*.jar" />
-			<fileset dir="${red5.client.lib}" includes="red5*.jar" />
-		</copy>
-		<antcall target="-compile-module" inheritAll="true" inheritRefs="true">
-			<param name="param-src-dir" value="${src.base.dir}/screenshare/java" />
-			<param name="param-classpath-ref" value="-screenshare-classpath" />
-			<param name="param-classes-dir" value="${classes.screen.dir}" />
-		</antcall>
-		<copy file="${src.base.dir}/screenshare/resources/logback.xml" todir="${classes.screen.dir}" overwrite="true" />
-		<antcall target="-jar-module" inheritAll="true" inheritRefs="true">
-			<param name="param-classes-dir" value="${classes.screen.dir}" />
-			<param name="param-jar-dir" value="${screenshare.out.dir}" />
-			<param name="param-jar-name" value="${project.distname}-screenshare-${jar.suffix}.jar" />
-		</antcall>
-	</target>
-	
-	<target name="jar-util" depends="-prepare-classes,-copy-libraries,-retrieve-mainlibs,-retrieve-om,-retrieve-dtd-generator,-retrieve-junit,-retrieve-cmdadmin,-retrieve-tools.jar">
-		<antcall target="-compile-module" inheritAll="true" inheritRefs="true">
-			<param name="param-src-dir" value="${src.base.dir}/util/java" />
-			<param name="param-classes-dir" value="${classes.util.dir}" />
-		</antcall>
-		<antcall target="-jar-module" inheritAll="true" inheritRefs="true">
-			<param name="param-classes-dir" value="${classes.util.dir}" />
-			<param name="param-jar-dir" value="${dist.lib.dir}" />
-			<param name="param-jar-name" value="${project.distname}-util-${jar.suffix}.jar" />
-		</antcall>
-	</target>
-	
-	<target name="jar-db" depends="jar-util">
-		<antcall target="-compile-module" inheritAll="true" inheritRefs="true">
-			<param name="param-src-dir" value="${src.base.dir}/db/java" />
-			<param name="param-classes-dir" value="${classes.db.dir}" />
-		</antcall>
-		<path id="jpa.enhancement.classpath">
-			<pathelement path="${classes.db.dir}" />
-			<path refid="-compile-classpath" />
-		</path>
 
-		<!-- define the openjpac task -->
-		<taskdef name="openjpac" classname="org.apache.openjpa.ant.PCEnhancerTask">
-			<classpath refid="jpa.enhancement.classpath" />
-		</taskdef>
-
-		<!-- invoke the enhancer -->
-		<openjpac>
-			<classpath refid="jpa.enhancement.classpath" />
-			<config propertiesFile="${dist.persistence.dir}/${db}_persistence.xml" />
-		</openjpac>
-		<echo message="Enhancing complete." />
-		<antcall target="-jar-module" inheritAll="true" inheritRefs="true">
-			<param name="param-classes-dir" value="${classes.db.dir}" />
-			<param name="param-jar-dir" value="${dist.lib.dir}" />
-			<param name="param-jar-name" value="${project.distname}-db-${jar.suffix}.jar" />
-		</antcall>
-	</target>
-	
-	<target name="jar-install" depends="jar-db">
-		<antcall target="-compile-module" inheritAll="true" inheritRefs="true">
-			<param name="param-src-dir" value="${src.base.dir}/install/java" />
-			<param name="param-classes-dir" value="${classes.install.dir}" />
-		</antcall>
-		<antcall target="-jar-module" inheritAll="true" inheritRefs="true">
-			<param name="param-classes-dir" value="${classes.install.dir}" />
-			<param name="param-jar-dir" value="${dist.lib.dir}" />
-			<param name="param-jar-name" value="${project.distname}-install-${jar.suffix}.jar" />
-		</antcall>
-	</target>
-	
-	<target name="jar-web" depends="jar-install">
-		<antcall target="-compile-module" inheritAll="true" inheritRefs="true">
-			<param name="param-src-dir" value="${src.base.dir}/web/java" />
-			<param name="param-classes-dir" value="${classes.web.dir}" />
-		</antcall>
-		<antcall target="-jar-module" inheritAll="true" inheritRefs="true">
-			<param name="param-classes-dir" value="${classes.web.dir}" />
-			<param name="param-jar-dir" value="${dist.lib.dir}" />
-			<param name="param-jar-name" value="${project.distname}-web-${jar.suffix}.jar" />
-		</antcall>
-	</target>
-	
-	<target name="jar-main" depends="jar-web">
-		<antcall target="-compile-module" inheritAll="true" inheritRefs="true">
-			<param name="param-src-dir" value="${src.base.dir}/main/java" />
-			<param name="param-classes-dir" value="${classes.main.dir}" />
-		</antcall>
-		<copy file="${src.base.dir}/screenshare.vm" todir="${classes.main.dir}" overwrite="true" />
-		<antcall target="-jar-module" inheritAll="true" inheritRefs="true">
-			<param name="param-classes-dir" value="${classes.main.dir}" />
-			<param name="param-jar-dir" value="${dist.lib.dir}" />
-			<param name="param-jar-name" value="${project.distname}-main-${jar.suffix}.jar" />
-		</antcall>
-	</target>
-	
-	<target name="jar-axis" depends="jar-main">
-		<antcall target="-compile-module" inheritAll="true" inheritRefs="true">
-			<param name="param-src-dir" value="${src.base.dir}/axis/java" />
-			<param name="param-classes-dir" value="${classes.axis.dir}" />
-		</antcall>
-		<antcall target="-jar-module" inheritAll="true" inheritRefs="true">
-			<param name="param-classes-dir" value="${classes.axis.dir}" />
-			<param name="param-jar-dir" value="${dist.lib.dir}" />
-			<param name="param-jar-name" value="${project.distname}-WebService-${jar.suffix}.jar" />
-		</antcall>
-
-		<!-- Build WebServices -->
-		<property name="om_aar_name" value="${project.distname}-${jar.suffix}.aar"/>
-		<property name="om_aar_folder" value="${dist.webapps.dir}/WEB-INF/services"/>
-		<copy file="${src.base.dir}/axis/resources/services.xml" todir="${classes.axis_aar.dir}/META-INF/" overwrite="true" />
-		<antcall target="-jar-module" inheritAll="true" inheritRefs="true">
-			<param name="param-classes-dir" value="${classes.axis_aar.dir}" />
-			<param name="param-jar-dir" value="${om_aar_folder}" />
-			<param name="param-jar-name" value="${om_aar_name}" />
-		</antcall>
-		<echo file="${om_aar_folder}/services.list" append="false">${om_aar_name}${line.separator}version.aar${line.separator}</echo>
-	</target>
-	
-	<target name="jar-test" depends="jar-axis">
-		<antcall target="-compile-module" inheritAll="true" inheritRefs="true">
-			<param name="param-src-dir" value="${src.base.dir}/test/java" />
-			<param name="param-classes-dir" value="${classes.test.dir}" />
-		</antcall>
-		<antcall target="-jar-module" inheritAll="true" inheritRefs="true">
-			<param name="param-classes-dir" value="${classes.test.dir}" />
-			<param name="param-jar-dir" value="${dist.lib.dir}" />
-			<param name="param-jar-name" value="${project.distname}-test-${jar.suffix}.jar" />
-		</antcall>
-	</target>
-	
 	<!-- perform nightly build with tests -->
 	<target name="dist-bin-nightly" description="perform nightly build with tests" depends="dist-bin, test" />
 
 	<!-- build artefacts -->
-	<target name="dist-bin" description="pack binary distribution" depends="clean-all, dist">
+	<target name="dist-bin" description="pack binary distribution" depends="clean.all, dist">
 		<tstamp>
 			<format property="build.time" pattern="dd-MM-yyyy_HHmm" />
 		</tstamp>
@@ -420,21 +205,28 @@
 		</zip>
 	</target>
 
-	<target name="dist" description="binary distribution of OpenMeetings" depends="clean,prepare,web-only,client-only,jar-screenshare,-sign-screensharing" />
-
-	<!-- compiles the sources only with laszlo debug client -->
-	<target name="dist-debug" description="binary distribution of OpenMeetings" depends="clean,prepare,web-only,client-debug-only,jar-screenshare,-sign-screensharing" />
-
 	<!-- build webapp -->
 	<target name="-copy-libraries" description="All jars downloaded by ivy copied to appropriate places">
 		<copy todir="${red5.root}/lib">
+			<fileset dir="${red5.client.lib}" includes="red5-client*.jar" />
 			<fileset dir="${mainlibs.lib.dir}" includes="*.jar" />
 		</copy>
-		<copy todir="${dist.lib.dir}">
+		<copy todir="${dist.webapps.dir}/WEB-INF/lib">
 			<fileset dir="${om.lib.dir}" includes="*.jar" />
 		</copy>
-		<chmod dir="${dist.lib.dir}" perm="755" includes="**/*.sh" />
+		<chmod dir="${dist.webapps.dir}/WEB-INF/lib" perm="755" includes="**/*.sh" />
 	</target>
+
+	<target name="dist" description="binary distribution of OpenMeetings" depends="clean, jar, client.only, enhance, -copy-libraries, signWebStartJars" />
+
+	<!-- compiles the sources without openlaszlo client -->
+	<target name="dist-test" description="binary distribution of OpenMeetings" depends="clean, -dist-test-no-clean, signWebStartJars" />
+
+	<!-- compiles the sources without openlaszlo client and clean -->
+	<target name="-dist-test-no-clean" description="binary distribution of OpenMeetings" depends="jar, -copy-libraries" />
+
+	<!-- compiles the sources only with laszlo debug client -->
+	<target name="dist-debug" description="binary distribution of OpenMeetings" depends="clean, jar, client.debug.only, -copy-libraries, signWebStartJars" />
 
 	<target name="-cleanup-jrebel" unless="jrebel.enabled">
 		<delete>
@@ -442,7 +234,7 @@
 		</delete>
 	</target>
 	
-	<target name="-web-copy" depends="-process-db">
+	<target name="web.copy" depends="-process-db">
 		<copy todir="${dist.webapps.dir}" overwrite="true" force="true">
 			<fileset dir="${webapp.dir}" />
 		</copy>
@@ -451,14 +243,15 @@
 			<fileset file="${webapp.dir}/WEB-INF/web.xml" />
 		</copy>
 		<copy todir="${dist.classes.dir}">
-			<fileset dir="${classes.web.dir}">
+			<fileset dir="${src.base.dir}/web/java">
 				<include name="**/*.html" />
+				<include name="**/*.xml" />
 			</fileset>
 		</copy>
 	</target>
 	
 	<!-- Check timestamp on files -->
-	<target name="prepare" depends="-prepare-mkdir,-web-copy">
+	<target name="prepare" depends="prepare.mkdir,web.copy">
 		<copy todir="${red5.root}">
 			<fileset dir="${red5.lib}">
 				<exclude name="**/*.fla" />
@@ -470,29 +263,145 @@
 		<tstamp />
 	</target>
 
-	<target name="web-only" depends="jar-axis, -web-copy"/>
-	
-	<target name="dist-screen-share" description="Make Screen Share Archive" depends="jar-screenshare, -sign-screensharing" />
+	<!-- Copy any resource or configuration files -->
+	<target name="resources">
+		<patternset id="xmlpng">
+			<include name="**/*.xml" />
+			<include name="**/*.png" />
+		</patternset>
+		<patternset id="resources">
+			<patternset refid="xmlpng" />
+			<include name="**/*.conf" />
+			<include name="**/*.properties" />
+			<include name="**/*.vm" />
+		</patternset>
 
+		<!-- Main Applications -->
+		<copy todir="${main.out.dir}" includeEmptyDirs="yes">
+			<fileset dir="${src.base.dir}">
+				<patternset refid="resources" />
+			</fileset>
+		</copy>
+	</target>
+
+	<target name="web.only" depends="jar.web.only, web.copy"/>
+	
+	<target name="jar.web.only" depends="enhance.only.norefresh, current_revision">
+		<manifestclasspath property="jar.classpath" jarfile="${project.distname}-${jar.suffix}.jar">
+			<classpath refid="compile.classpath" />
+		</manifestclasspath>
+		<jar destfile="${dist.webapps.dir}/WEB-INF/lib/${project.distname}-${jar.suffix}.jar">
+			<fileset dir="${main.out.dir}">
+				<include name="**" />
+				<exclude name="**/test/**" />
+				<exclude name="**/axis/**" />
+				<exclude name="org/apache/openmeetings/screen/**" />
+				<exclude name="org/apache/openmeetings/doc/**" />
+				<exclude name="**/client/**" />
+				<exclude name="**/*.png" />
+				<exclude name="**/*.html" />
+				<exclude name="**/*.vm" />
+				<exclude name="META-INF/*.xml" />
+				<exclude name="log4j.properties" />
+			</fileset>
+			<manifest>
+				<attribute name="Built-By" value="OpenMeetings - http://openmeetings.apache.org" />
+				<attribute name="Built-On" value="${build.TODAY}" />
+				<attribute name="Class-Path" value="conf/ ${jar.classpath}" />
+				<attribute name="Svn-Revision" value="${svn.info.rev}" />
+				<attribute name="Product-Version" value="${project.version}-${project.status}" />
+			</manifest>
+		</jar>
+
+		<!-- Build WebServices -->
+		<property name="om_aar_name" value="${project.distname}-${jar.suffix}.aar"/>
+		<property name="om_aar_folder" value="${dist.webapps.dir}/WEB-INF/services"/>
+		<jar destfile="${om_aar_folder}/${om_aar_name}">
+			<fileset dir="${main.out.dir}">
+				<include name="META-INF/*" />
+			</fileset>
+		</jar>
+		<echo file="${om_aar_folder}/services.list" append="false">${om_aar_name}${line.separator}version.aar${line.separator}</echo>
+		<jar destfile="${dist.webapps.dir}/WEB-INF/lib/${project.distname}-WebService-${jar.suffix}.jar">
+			<fileset dir="${main.out.dir}">
+				<include name="**/apache/openmeetings/axis/**" />
+				<include name="META-INF/LICENSE" />
+				<include name="META-INF/NOTICE" />
+			</fileset>
+		</jar>
+	</target>
+
+	<target name="jar.only" depends="buildJavaDocs, enhance.only, jar.web.only">
+		<jar destfile="${dist.webapps.dir}/WEB-INF/lib/${project.distname}-templates-${jar.suffix}.jar">
+			<fileset dir="${main.out.dir}">
+				<include name="**" />
+				<exclude name="**/org/**" />
+				<exclude name="**/*.png" />
+				<exclude name="**/*.properties" />
+				<exclude name="META-INF/*.xml" />
+			</fileset>
+			<manifest>
+				<attribute name="Built-By" value="OpenMeetings - http://openmeetings.apache.org" />
+				<attribute name="Built-On" value="${build.TODAY}" />
+				<attribute name="Class-Path" value="conf/ ${jar.classpath}" />
+				<attribute name="Svn-Revision" value="${svn.info.rev}" />
+				<attribute name="Product-Version" value="${project.version}-${project.status}" />
+			</manifest>
+		</jar>
+	</target>
+
+	<target name="dist.screen.share" description="Make Screen Share Archive" depends="jar.screen.share, signWebStartJars" />
+
+	<target name="jar.screen.share" description="Make Screen Share Archive" depends="compile.only">
+		<tstamp prefix="build">
+			<format property="TODAY" pattern="d-MMMM-yyyy" locale="en" />
+		</tstamp>
+		<manifestclasspath property="jar2.classpath" jarfile="${project.distname}.jar">
+			<classpath refid="compile.classpath" />
+		</manifestclasspath>
+		<!-- Screen Share -->
+		<jar destfile="${screenshare.out.dir}/${project.distname}-screenshare-${jar.suffix}.jar">
+			<fileset dir="${main.out.dir}">
+				<include name="org/apache/openmeetings/screen/**" />
+				<include name="META-INF/LICENSE" />
+				<include name="META-INF/NOTICE" />
+			</fileset>
+			<fileset file="${screenshare.resources.dir}/logback.xml" />
+			<manifest>
+				<attribute name="Built-By" value="OpenMeetings - http://openmeetings.apache.org" />
+				<attribute name="Built-On" value="${build.TODAY}" />
+				<attribute name="Class-Path" value="conf/ ${jar2.classpath}" />
+			</manifest>
+		</jar>
+	</target>
+	
 	<target name="buildJavaDocs">
 		<tstamp prefix="doc">
 			<format property="TODAY_YEAR" pattern="yyyy" locale="en" />
 		</tstamp>
 	    <javadoc packagenames="org.apache.openmeetings.remote.*"
 	           sourcepath="${src.base.dir}/main/java"
+	           excludepackagenames="org.apache.openmeetings.test.*"
 	           defaultexcludes="yes"
 	           destdir="build/api"
 	           author="true"
 	           version="true"
 	           use="true"
 	           windowtitle="Apache OpenMeetings API">
-	    	<classpath refid="-compile-classpath"></classpath>
+	    	<classpath refid="compile.classpath"></classpath>
 	        <doctitle><![CDATA[<h1>Apache OpenMeetings API</h1>]]></doctitle>
 	    	<bottom><![CDATA[<i>Copyright &copy; 2000-${doc.TODAY_YEAR} The Apache Software Foundation. All rights Reserved.</i>]]></bottom>
 	  	</javadoc>
 	</target>
 
-	<target name="-sign-screensharing">
+	<!-- Compile JAR -->
+	<target name="jar" description="Make Archive" depends="enhance, build.only.webservice.doc, jar.only, jar.screen.share">
+		<tstamp prefix="build">
+			<format property="TODAY" pattern="d-MMMM-yyyy" locale="en" />
+		</tstamp>
+	</target>
+
+	<target name="signWebStartJars">
 		<delete file="${keystore.file}" />
 		<genkey alias="filetest" storepass="secret" keystore="${keystore.file}" verbose="true"
 			sigalg="MD5withRSA" keyalg="RSA" >
@@ -503,6 +412,24 @@
 				<param name="C" value="DE" />
 			</dname>
 		</genkey>
+		<copy todir="${screenshare.out.dir}">
+			<fileset dir="${red5.server.lib}" includes="commons-codec*.jar" />
+			<fileset dir="${red5.server.lib}" includes="httpclient*.jar" />
+			<fileset dir="${red5.server.lib}" includes="httpcore*.jar" />
+			<fileset dir="${red5.server.lib}" includes="bcprov*.jar" />
+			<fileset dir="${red5.server.lib}" includes="ehcache-core*.jar" />
+			<fileset dir="${red5.server.lib}" includes="commons-beanutils*.jar" />
+			<fileset dir="${red5.server.lib}" includes="slf4j-api*.jar" />
+			<fileset dir="${red5.server.lib}" includes="jcl-over-slf4j*.jar" />
+			<fileset dir="${red5.server.lib}" includes="commons-collections*.jar" />
+			<fileset dir="${red5.server.lib}" includes="spring-context-3*.jar" />
+			<fileset dir="${red5.server.lib}" includes="spring-core-*.jar" />
+			<fileset dir="${red5.server.lib}" includes="spring-beans-*.jar" />
+			<fileset dir="${red5.server.lib}" includes="logback*.jar" />
+			<fileset dir="${red5.server.lib}" includes="mina-core*.jar" />
+			<fileset dir="${red5.server.lib}" includes="com.springsource.slf4j.api*.jar" />
+			<fileset dir="${red5.client.lib}" includes="red5*.jar" />
+		</copy>
 		<signjar alias="filetest" keystore="${keystore.file}" storepass="secret" lazy="false"
 			sigalg="MD5withRSA" digestalg="SHA1">
 			<path>
@@ -513,11 +440,11 @@
 		</signjar>
 	</target>
 
-	<target name="client-only" depends="compile.laszlo.main.as3,compile.laszlo.main,compile.laszlo.networktesting" />
+	<target name="client.only" depends="compile.laszlo.main.as3,compile.laszlo.main,compile.laszlo.networktesting" />
 
-	<target name="client-debug-only" depends="compile.laszlo.main.debug.as3,compile.laszlo.main.debug,compile.laszlo.networktesting.debug" />
+	<target name="client.debug.only" depends="compile.laszlo.main.debug.as3,compile.laszlo.main.debug,compile.laszlo.networktesting.debug" />
 
-	<target name="-compile-flash" description="compile flash application">
+	<target name="-compile.flash" description="compile flash application">
 		<!-- commented for now
 		<echo message="flash.src.dir == '${flash.src.dir}'" />
 		<echo message="classpathref == '${flash.classpath.ref}'" />
@@ -540,8 +467,8 @@
 	</target>
 
 	<target name="compile.laszlo.networktesting" depends="compile.laszlo.networktesting.debug">
-		<antcall target="-compile-flash" inheritAll="true" inheritRefs="true">
-			<param name="flash.classpath.ref" value="-laszlo-lib" />
+		<antcall target="-compile.flash" inheritAll="true" inheritRefs="true">
+			<param name="flash.classpath.ref" value="laszlo.lib" />
 			<param name="flash.src.dir" value="${laszlo.as3.src.dir}/networkTesting" />
 			<param name="flash.lps.home" value="${laszlo.home}" />
 			<param name="flash.runtime" value="swf10" />
@@ -552,8 +479,8 @@
 	</target>
 
 	<target name="compile.laszlo.networktesting.debug" depends="-retrieve-openlaszlo">
-		<antcall target="-compile-flash" inheritAll="true" inheritRefs="true">
-			<param name="flash.classpath.ref" value="-laszlo-lib" />
+		<antcall target="-compile.flash" inheritAll="true" inheritRefs="true">
+			<param name="flash.classpath.ref" value="laszlo.lib" />
 			<param name="flash.src.dir" value="${laszlo.as3.src.dir}/networkTesting" />
 			<param name="flash.lps.home" value="${laszlo.home}" />
 			<param name="flash.runtime" value="swf10" />
@@ -564,7 +491,7 @@
 	</target>
 	
 	<target name="compile.laszlo.testsetup.as3" depends="-retrieve-openlaszlo46">
-        <antcall target="-compile-flash" inheritAll="true" inheritRefs="true">
+        <antcall target="-compile.flash" inheritAll="true" inheritRefs="true">
             <param name="flash.classpath.ref" value="laszlo46.lib" />
             <param name="flash.src.dir" value="${laszlo.src.dir}" />
             <param name="flash.lps.home" value="${laszlo46.home}" />
@@ -576,7 +503,7 @@
     </target>
 
 	<target name="compile.laszlo.main.as3" depends="compile.laszlo.main.debug.as3">
-		<antcall target="-compile-flash" inheritAll="true" inheritRefs="true">
+		<antcall target="-compile.flash" inheritAll="true" inheritRefs="true">
 			<param name="flash.classpath.ref" value="laszlo46.lib" />
 			<param name="flash.src.dir" value="${laszlo.as3.src.dir}" />
 			<param name="flash.lps.home" value="${laszlo46.home}" />
@@ -588,7 +515,7 @@
 	</target>
 
 	<target name="compile.laszlo.main.debug.as3" depends="-retrieve-openlaszlo46">
-		<antcall target="-compile-flash" inheritAll="true" inheritRefs="true">
+		<antcall target="-compile.flash" inheritAll="true" inheritRefs="true">
 			<param name="flash.classpath.ref" value="laszlo46.lib" />
 			<param name="flash.src.dir" value="${laszlo.as3.src.dir}" />
 			<param name="flash.lps.home" value="${laszlo46.home}" />
@@ -600,8 +527,8 @@
 	</target>
 
 	<target name="compile.laszlo.main" depends="compile.laszlo.main.debug">
-		<antcall target="-compile-flash" inheritAll="true" inheritRefs="true">
-			<param name="flash.classpath.ref" value="-laszlo-lib" />
+		<antcall target="-compile.flash" inheritAll="true" inheritRefs="true">
+			<param name="flash.classpath.ref" value="laszlo.lib" />
 			<param name="flash.src.dir" value="${laszlo.src.dir}" />
 			<param name="flash.lps.home" value="${laszlo.home}" />
 			<param name="flash.runtime" value="swf8" />
@@ -612,8 +539,8 @@
 	</target>
 
 	<target name="compile.laszlo.main.debug" depends="-retrieve-openlaszlo">
-		<antcall target="-compile-flash" inheritAll="true" inheritRefs="true">
-			<param name="flash.classpath.ref" value="-laszlo-lib" />
+		<antcall target="-compile.flash" inheritAll="true" inheritRefs="true">
+			<param name="flash.classpath.ref" value="laszlo.lib" />
 			<param name="flash.src.dir" value="${laszlo.src.dir}" />
 			<param name="flash.lps.home" value="${laszlo.home}" />
 			<param name="flash.runtime" value="swf8" />
@@ -621,6 +548,75 @@
 			<param name="flash.out.file" value="maindebug.swf8.swf" />
 			<param name="flash.debug" value="--debug" />
 		</antcall>
+	</target>
+
+	<target name="compile" depends="compile.only, prepare" />
+
+	<target name="compile.only"
+		depends="-retrieve-mainlibs,-retrieve-om,-retrieve-dtd-generator,-retrieve-junit,-retrieve-cmdadmin,-retrieve-tools.jar,resources,compile.only.nocheck"/>
+	
+	<target name="compile.only.nocheck" depends="clean.classes">
+		<antcall target="prepare.mkdir" inheritAll="true" inheritRefs="true"/>
+		<echo message="Compile main to ${main.out.dir}" />
+		<javac debug="on" debuglevel="lines,vars,source" destdir="${main.out.dir}" includeantruntime="false"
+			source="1.6" target="1.6">
+			<src path="${src.base.dir}/axis/java" />
+			<src path="${src.base.dir}/db/java" />
+			<src path="${src.base.dir}/doc/java" />
+			<src path="${src.base.dir}/install/java" />
+			<src path="${src.base.dir}/main/java" />
+			<src path="${src.base.dir}/test/java" />
+			<src path="${src.base.dir}/screenshare/java" />
+			<src path="${src.base.dir}/util/java" />
+			<src path="${src.base.dir}/web/java" />
+			<classpath refid="compile.classpath" />
+			<compilerarg value="-Aopenjpa.metamodel=true" />
+			<!-- compilerarg value="-Xlint:deprecation"/ -->
+		</javac>
+		<copy todir="${main.out.dir}">
+			<fileset dir="${src.base.dir}/main/java">
+				<include name="**/*.*" />
+				<exclude name="**/*.java" />
+			</fileset>
+		</copy>
+		<copy file="${axis.resources.dir}/services.xml" tofile="${main.out.dir}/META-INF/services.xml" overwrite="true" />
+		<copy file="LICENSE" tofile="${main.out.dir}/META-INF/LICENSE" overwrite="true" />
+		<copy file="NOTICE" tofile="${main.out.dir}/META-INF/NOTICE" overwrite="true" />
+	</target>
+
+	<path id="jpa.enhancement.classpath">
+		<pathelement path="${main.out.dir}" />
+		<path refid="compile.classpath" />
+	</path>
+
+	<target name="enhance" depends="compile, enhance.only" />
+
+	<target name="enhance.only" depends="compile.only">
+		<!-- define the openjpac task -->
+		<taskdef name="openjpac" classname="org.apache.openjpa.ant.PCEnhancerTask">
+			<classpath refid="jpa.enhancement.classpath" />
+		</taskdef>
+
+		<!-- invoke the enhancer -->
+		<openjpac>
+			<classpath refid="jpa.enhancement.classpath" />
+			<config propertiesFile="${dist.persistence.dir}/${db}_persistence.xml" />
+		</openjpac>
+		<echo message="Enhancing complete." />
+	</target>
+	
+	<target name="enhance.only.norefresh" depends="compile.only.nocheck">
+		<!-- define the openjpac task -->
+		<taskdef name="openjpac" classname="org.apache.openjpa.ant.PCEnhancerTask">
+			<classpath refid="jpa.enhancement.classpath" />
+		</taskdef>
+
+		<!-- invoke the enhancer -->
+		<openjpac>
+			<classpath refid="jpa.enhancement.classpath" />
+			<config propertiesFile="${dist.persistence.dir}/${db}_persistence.xml" />
+		</openjpac>
+		<echo message="Enhancing complete." />
 	</target>
 
 	<path id="svntask.classpath">
@@ -635,19 +631,21 @@
 		<svnSetting svnkit="false" javahl="false" id="svn.settings" />
 		<!-- native svn in the path-->
 	</target>
-		
-	<target name="current-revision" depends="-ant-task" unless="svn.info.rev">
+	<target name="current_revision" depends="-ant-task" unless="svn.info.rev">
 		<svn refid="svn.settings">
 			<info target="." />
 		</svn>
 		<echo>Current revision: ${svn.info.rev}</echo>
 	</target>
 
+	<!-- Build entire project -->
+	<target name="build project" depends="clean, prepare, compile" />
+
 	<path id="check.rat.classpath">
 		<fileset dir="${rat.lib.dir}" includes="*.jar" />
 	</path>
 	<path id="rat.classpath">
-		<path refid="-compile-classpath" />
+		<path refid="compile.classpath" />
 		<path refid="check.rat.classpath" />
 	</path>
 	<target name="report_rat" depends="-retrieve-rat">
@@ -674,11 +672,11 @@
 	</target>
 
 	<path id="build.webservice.classpath">
-		<pathelement path="${classes.doc.dir}" />
-		<path refid="-compile-classpath" />
+		<pathelement path="${main.out.dir}" />
+		<path refid="compile.classpath" />
 	</path>
 
-	<target name="build-webservice-doc" depends="build-only-webservice-doc"/>
+	<target name="build.webservice.doc" depends="compile.only, build.only.webservice.doc"/>
 
 	<patternset id="images">
 		<include name="**/*.gif" />
@@ -699,7 +697,7 @@
 	</path>
 	
 	<path id="anakia.classpath">
-		<path refid="-compile-classpath" />
+		<path refid="compile.classpath" />
 		<path refid="check.anakia.classpath" />
 	</path>
 
@@ -725,11 +723,7 @@
 		</copy>
 	</target>
 
-	<target name="build-only-webservice-doc" depends="anakia">
-		<antcall target="-compile-module" inheritAll="true" inheritRefs="true">
-			<param name="param-src-dir" value="${src.base.dir}/doc/java" />
-			<param name="param-classes-dir" value="${classes.doc.dir}" />
-		</antcall>
+	<target name="build.only.webservice.doc" depends="anakia">
 		<javadoc classpathref="build.webservice.classpath" useexternalfile="true">
 			<fileset dir="${src.base.dir}/axis/java/org/apache/openmeetings/axis/services">
 				<include name="*WebService.java" />
@@ -825,7 +819,8 @@
 		</replace>
 	</target>
 	
-	<target name="run-selenium" depends="jar-test, -run-selenium-junit"/>
+	<target name="run-selenium" depends="-dist-test-no-clean, -run-selenium-junit">
+	</target>
 	
 	<target name="-run-selenium" if="${junit.run.selenium}" >
 		<antcall target="-run-selenium-junit"></antcall>
@@ -849,7 +844,7 @@
 			<jvmarg value="-Dbackups.dir=${junit.backups.dir}" />
 			<formatter type="${junit.test.formatter}" />
 			<batchtest todir="${junit.report.dir}">
-				<fileset dir="${classes.base.dir}">
+				<fileset dir="${main.out.dir}">
 					<include name="org/apache/openmeetings/test/selenium/${junit.test.pattern}.class" />
 					<exclude name="**/*$$*.class" />
 				</fileset>
@@ -894,11 +889,11 @@
 		<fileset dir="${red5.root}/lib" includes="*.jar" />
 		<fileset dir="${red5.root}/plugins" includes="*.jar" />
 		<pathelement path="${dist.classes.dir}" />
-		<pathelement path="${classes.base.dir}" />
+		<pathelement path="${main.out.dir}" />
 	</path>
 	
 	
-	<target name="test" depends="jar-test, -run-selenium" 
+	<target name="test" depends="-dist-test-no-clean, -run-selenium" 
 			description="Will run all tests except selenium unless -Dtestcases=_file_name_pattern_ will be passed">
 		<taskdef resource="net/sf/antcontrib/antlib.xml">
 			<classpath refid="junit.classpath" />
@@ -930,7 +925,7 @@
 			<jvmarg value="-Dbackups.dir=${junit.backups.dir}" />
 			<formatter type="${junit.test.formatter}" />
 			<batchtest todir="${junit.report.dir}">
-				<fileset dir="${classes.base.dir}">
+				<fileset dir="${main.out.dir}">
 					<include name="org/apache/openmeetings/test/**/${junit.test.pattern}.class" />
 					<exclude name="org/apache/openmeetings/test/selenium/${junit.test.pattern}.class" />
 					<exclude name="**/*$$*.class" />
@@ -973,12 +968,12 @@
 		<taskdef resource="org/apache/ivy/ant/antlib.xml" uri="antlib:org.apache.ivy.ant" classpath="${ivy.jar.path}"/>
 	</target>
 	
-	<target name="-availability-check" unless="red5.installed" description="Check which libraries need to be retrieved" depends="-prepare-mkdir">
-		<available classpathref="-check-classpath" classname="javax.persistence.spi.PersistenceProvider" property="mainlib.installed" />
-		<available classpathref="-check-classpath" classname="org.apache.axis2.Version" property="om.installed" />
-		<available classpathref="-check-classpath" classname="net.sf.antcontrib.AntContribVersion" property="junit.installed" />
-		<available classpathref="-check-classpath" classname="com.thaiopensource.relaxng.translate.Driver" property="dtd-generator.installed" />
-		<available classpathref="-check-classpath" classname="org.apache.commons.cli.CommandLine" property="cmdadmin.installed" />
+	<target name="-availability-check" unless="red5.installed" description="Check which libraries need to be retrieved" depends="prepare.mkdir">
+		<available classpathref="check.classpath" classname="javax.persistence.spi.PersistenceProvider" property="mainlib.installed" />
+		<available classpathref="check.classpath" classname="org.apache.axis2.Version" property="om.installed" />
+		<available classpathref="check.classpath" classname="net.sf.antcontrib.AntContribVersion" property="junit.installed" />
+		<available classpathref="check.classpath" classname="com.thaiopensource.relaxng.translate.Driver" property="dtd-generator.installed" />
+		<available classpathref="check.classpath" classname="org.apache.commons.cli.CommandLine" property="cmdadmin.installed" />
 		<condition property="anakia.installed">
 			<and>
 				<available classpathref="check.anakia.classpath" classname="org.apache.oro.text.GlobCompiler" />
@@ -988,12 +983,12 @@
 		<available classpathref="check.anakia.classpath" classname="org.apache.oro.text.GlobCompiler" property="anakia.installed" />
 		<available classpathref="check.rat.classpath" classname="org.apache.rat.Report" property="rat.installed" />
 		<available classpathref="svntask.classpath" classname="org.tmatesoft.svn.core.SVNCommitInfo" property="svntask.installed" />
-		<available classpathref="-check-classpath" classname="com.mysql.jdbc.Driver" property="mysql.installed" />
-		<available classpathref="-check-classpath" classname="org.apache.derby.jdbc.ClientDriver" property="derby.installed" />
+		<available classpathref="check.classpath" classname="com.mysql.jdbc.Driver" property="mysql.installed" />
+		<available classpathref="check.classpath" classname="org.apache.derby.jdbc.ClientDriver" property="derby.installed" />
 		<available file="${laszlo.home}/WEB-INF/lib" type="dir" property="laszlo.installed" />
 		<available file="${laszlo46.home}/WEB-INF/lib" type="dir" property="laszlo46.installed" />
 		<available file="${red5.lib}/red5.sh" type="file" property="red5.server.installed" />
-		<available classpathref="-check-classpath" classname="org.red5.client.net.rtmp.RTMPClient" property="red5.client.installed" />
+		<available classpathref="check.classpath" classname="org.red5.client.net.rtmp.RTMPClient" property="red5.client.installed" />
 	</target>
 
 	<target name="-retrieve" depends="-install-ivy" description="Retrieves the libraries if needed">
@@ -1248,24 +1243,24 @@
 
 	<!-- Clean targets -->
 	<!-- Remove classes directory for clean build -->
-	<target name="clean-classes" description="Clean Classes">
-		<delete includeemptydirs="true" dir="${classes.base.dir}" />
+	<target name="clean.classes" description="Clean Classes">
+		<delete includeemptydirs="true" dir="${main.out.dir}" />
 	</target>
 
-	<target name="clean-dist" description="Clean Dist dir">
+	<target name="clean.dist" description="Clean Dist dir">
 		<delete includeemptydirs="true" dir="${dist.dir}" />
 	</target>
 
-	<target name="clean" depends="clean-classes, clean-dist" description="Clean For Binary">
+	<target name="clean" depends="clean.classes, clean.dist" description="Clean For Binary">
 		<delete includeemptydirs="true" dir="${junit.base.dir}" />
 		<delete file="${keystore.file}" />
 	</target>
 
-	<target name="clean-all" depends="clean-dist" description="Clean All">
+	<target name="clean.all" depends="clean.dist" description="Clean All">
 		<delete includeemptydirs="true" dir="${build.base.dir}" />
 	</target>
 	
-	<target name="clean-ivy" depends="clean-all,-install-ivy" description="Clears out Ivy cache and build folder">
+	<target name="clean.ivy" depends="clean.all,-install-ivy" description="Clears out Ivy cache and build folder">
 		<ivy:cleancache />
 	</target>
 
@@ -1308,7 +1303,7 @@
 			<exclude name="openmeetings*.jar" />
 		</fileset>
 		<pathelement path="${resources.dir}" />
-		<pathelement path="${classes.base.dir}" />
+		<pathelement path="${main.out.dir}" />
 	</path>
 	
 	<property name="runTestHost" value="192.168.1.7" />
