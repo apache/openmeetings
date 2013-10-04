@@ -38,7 +38,7 @@ public class TestGetFieldValues extends AbstractOpenmeetingsSpringTest {
 
 	@Test
 	public void testCount() throws Exception {
-		Fieldvalues fv = fieldValueDao.get(1L, 1L);
+		Fieldvalues fv = fieldValueDao.get(1L);
 		
 		assertTrue("Fieldvalues should not be null", (fv != null));
 	}

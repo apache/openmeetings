@@ -52,13 +52,8 @@ public class FieldValueDao implements IDataProviderDao<Fieldvalues> {
 	}
 	
 	public Fieldvalues get(long id) {
-		return get(getDefaultLanguage(), id);
-	}
-
-	public Fieldvalues get(Long language_id, long id) {
 		TypedQuery<Fieldvalues> q = em.createNamedQuery("getFieldByIdAndLanguage", Fieldvalues.class);
 		q.setParameter("id", id);
-		q.setParameter("lang", language_id);
 		List<Fieldvalues> l = q.getResultList();
 		return l == null || l.isEmpty() ? null : l.get(0);
 	}

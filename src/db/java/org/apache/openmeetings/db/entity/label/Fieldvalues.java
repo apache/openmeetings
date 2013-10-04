@@ -39,8 +39,8 @@ import org.apache.openmeetings.db.entity.IDataProviderEntity;
 @NamedQueries({
 	@NamedQuery(name = "getFieldCount", query = "SELECT COUNT(fv) FROM Fieldvalues fv WHERE fv.deleted = false ")
 	, @NamedQuery(name = "getFieldByIdAndLanguage", query = "SELECT fv FROM Fieldvalues fv " +
-		"LEFT OUTER JOIN FETCH fv.fieldlanguagesvalues flv WHERE " +
-		"	fv.fieldvalues_id = :id AND fv.deleted = false AND flv.language_id = :lang")
+		"LEFT OUTER JOIN FETCH fv.fieldlanguagesvalues WHERE " +
+		"fv.fieldvalues_id = :id AND fv.deleted = false")
 	, @NamedQuery(name = "getFieldByLanguage", query = "SELECT fv FROM Fieldvalues fv WHERE fv.deleted = false") //FIXME no language yet
 })
 @Table(name = "fieldvalues")
