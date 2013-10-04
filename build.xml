@@ -293,6 +293,9 @@
 		<jar destfile="${dist.webapps.dir}/WEB-INF/lib/${project.distname}-${jar.suffix}.jar">
 			<fileset dir="${main.out.dir}">
 				<include name="**" />
+				<exclude name="screenshare/**" />
+				<exclude name="main/**" />
+				<exclude name="web/**" />
 				<exclude name="**/test/**" />
 				<exclude name="**/axis/**" />
 				<exclude name="org/apache/openmeetings/screen/**" />
@@ -332,22 +335,7 @@
 	</target>
 
 	<target name="jar.only" depends="buildJavaDocs, enhance.only, jar.web.only">
-		<jar destfile="${dist.webapps.dir}/WEB-INF/lib/${project.distname}-templates-${jar.suffix}.jar">
-			<fileset dir="${main.out.dir}">
-				<include name="**" />
-				<exclude name="**/org/**" />
-				<exclude name="**/*.png" />
-				<exclude name="**/*.properties" />
-				<exclude name="META-INF/*.xml" />
-			</fileset>
-			<manifest>
-				<attribute name="Built-By" value="OpenMeetings - http://openmeetings.apache.org" />
-				<attribute name="Built-On" value="${build.TODAY}" />
-				<attribute name="Class-Path" value="conf/ ${jar.classpath}" />
-				<attribute name="Svn-Revision" value="${svn.info.rev}" />
-				<attribute name="Product-Version" value="${project.version}-${project.status}" />
-			</manifest>
-		</jar>
+		
 	</target>
 
 	<target name="dist.screen.share" description="Make Screen Share Archive" depends="jar.screen.share, signWebStartJars" />
