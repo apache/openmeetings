@@ -380,7 +380,7 @@
 			<format property="TODAY_YEAR" pattern="yyyy" locale="en" />
 		</tstamp>
 	    <javadoc packagenames="org.apache.openmeetings.remote.*"
-	           sourcepath="${src.base.dir}/main/java"
+	           sourcepath="${src.base.dir}/axis/java:${src.base.dir}/db/java:${src.base.dir}/doc/java:${src.base.dir}/install/java:${src.base.dir}/main/java:${src.base.dir}/screenshare/java:${src.base.dir}/util/java:${src.base.dir}/web/java"
 	           excludepackagenames="org.apache.openmeetings.test.*"
 	           defaultexcludes="yes"
 	           destdir="build/api"
