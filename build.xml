@@ -290,22 +290,91 @@
 		<manifestclasspath property="jar.classpath" jarfile="${project.distname}-${jar.suffix}.jar">
 			<classpath refid="compile.classpath" />
 		</manifestclasspath>
-		<jar destfile="${dist.webapps.dir}/WEB-INF/lib/${project.distname}-${jar.suffix}.jar">
+		
+		<!-- Core/main -->
+		<jar destfile="${dist.webapps.dir}/WEB-INF/lib/${project.distname}-core-${jar.suffix}.jar">
 			<fileset dir="${main.out.dir}">
-				<include name="**" />
-				<exclude name="screenshare/**" />
-				<exclude name="main/**" />
-				<exclude name="web/**" />
-				<exclude name="**/test/**" />
-				<exclude name="**/axis/**" />
+				<include name="org/apache/openmeetings/**" />
+				<include name="META-INF/*" />
+				<exclude name="META-INF/*.xml" />
+				<exclude name="org/apache/openmeetings/util/**" />
+				<exclude name="org/apache/openmeetings/test/**" />
+				<exclude name="org/apache/openmeetings/axis/**" />
+				<exclude name="org/apache/openmeetings/db/**" />
+				<exclude name="org/apache/openmeetings/cli/**" />
+				<exclude name="org/apache/openmeetings/backup/**" />
+				<exclude name="org/apache/openmeetings/installation/**" />
 				<exclude name="org/apache/openmeetings/screen/**" />
 				<exclude name="org/apache/openmeetings/doc/**" />
-				<exclude name="**/client/**" />
-				<exclude name="**/*.png" />
-				<exclude name="**/*.html" />
-				<exclude name="**/*.vm" />
+				<exclude name="org/apache/openmeetings/web/**" />
+			</fileset>
+			<manifest>
+				<attribute name="Built-By" value="OpenMeetings - http://openmeetings.apache.org" />
+				<attribute name="Built-On" value="${build.TODAY}" />
+				<attribute name="Class-Path" value="conf/ ${jar.classpath}" />
+				<attribute name="Svn-Revision" value="${svn.info.rev}" />
+				<attribute name="Product-Version" value="${project.version}-${project.status}" />
+			</manifest>
+		</jar>
+		
+		<!-- DB package -->
+		<jar destfile="${dist.webapps.dir}/WEB-INF/lib/${project.distname}-db-${jar.suffix}.jar">
+			<fileset dir="${main.out.dir}">
+				<include name="org/apache/openmeetings/db/**" />
+				<include name="META-INF/*" />
 				<exclude name="META-INF/*.xml" />
-				<exclude name="log4j.properties" />
+			</fileset>
+			<manifest>
+				<attribute name="Built-By" value="OpenMeetings - http://openmeetings.apache.org" />
+				<attribute name="Built-On" value="${build.TODAY}" />
+				<attribute name="Class-Path" value="conf/ ${jar.classpath}" />
+				<attribute name="Svn-Revision" value="${svn.info.rev}" />
+				<attribute name="Product-Version" value="${project.version}-${project.status}" />
+			</manifest>
+		</jar>
+		
+		<!-- Install / CLI package -->
+		<jar destfile="${dist.webapps.dir}/WEB-INF/lib/${project.distname}-cli-${jar.suffix}.jar">
+			<fileset dir="${main.out.dir}">
+				<include name="org/apache/openmeetings/cli/**" />
+				<include name="org/apache/openmeetings/backup/**" />
+				<include name="org/apache/openmeetings/installation/**" />
+				<include name="META-INF/*" />
+				<exclude name="META-INF/*.xml" />
+			</fileset>
+			<manifest>
+				<attribute name="Built-By" value="OpenMeetings - http://openmeetings.apache.org" />
+				<attribute name="Built-On" value="${build.TODAY}" />
+				<attribute name="Class-Path" value="conf/ ${jar.classpath}" />
+				<attribute name="Svn-Revision" value="${svn.info.rev}" />
+				<attribute name="Product-Version" value="${project.version}-${project.status}" />
+			</manifest>
+		</jar>
+		
+		<!-- Util package -->
+		<jar destfile="${dist.webapps.dir}/WEB-INF/lib/${project.distname}-util-${jar.suffix}.jar">
+			<fileset dir="${main.out.dir}">
+				<include name="org/apache/openmeetings/util/**" />
+				<include name="META-INF/*" />
+				<exclude name="META-INF/*.xml" />
+			</fileset>
+			<manifest>
+				<attribute name="Built-By" value="OpenMeetings - http://openmeetings.apache.org" />
+				<attribute name="Built-On" value="${build.TODAY}" />
+				<attribute name="Class-Path" value="conf/ ${jar.classpath}" />
+				<attribute name="Svn-Revision" value="${svn.info.rev}" />
+				<attribute name="Product-Version" value="${project.version}-${project.status}" />
+			</manifest>
+		</jar>
+		
+		<!-- web package -->
+		<jar destfile="${dist.webapps.dir}/WEB-INF/lib/${project.distname}-web-${jar.suffix}.jar">
+			<fileset dir="${main.out.dir}">
+				<include name="org/apache/openmeetings/web/**" />
+				<exclude name="*.xml" />
+				<exclude name="*.html" />
+				<include name="META-INF/*" />
+				<exclude name="META-INF/*.xml" />
 			</fileset>
 			<manifest>
 				<attribute name="Built-By" value="OpenMeetings - http://openmeetings.apache.org" />
@@ -325,7 +394,7 @@
 			</fileset>
 		</jar>
 		<echo file="${om_aar_folder}/services.list" append="false">${om_aar_name}${line.separator}version.aar${line.separator}</echo>
-		<jar destfile="${dist.webapps.dir}/WEB-INF/lib/${project.distname}-WebService-${jar.suffix}.jar">
+		<jar destfile="${dist.webapps.dir}/WEB-INF/lib/${project.distname}-axis-${jar.suffix}.jar">
 			<fileset dir="${main.out.dir}">
 				<include name="**/apache/openmeetings/axis/**" />
 				<include name="META-INF/LICENSE" />
