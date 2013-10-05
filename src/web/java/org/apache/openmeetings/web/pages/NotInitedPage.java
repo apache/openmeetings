@@ -18,7 +18,7 @@
  */
 package org.apache.openmeetings.web.pages;
 
-import org.apache.openmeetings.InitializationContainer;
+import org.apache.openmeetings.util.InitializationContainer;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.wicket.RestartResponseException;
 

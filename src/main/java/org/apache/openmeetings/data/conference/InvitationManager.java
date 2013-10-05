@@ -18,7 +18,7 @@
  */
 package org.apache.openmeetings.data.conference;
 
-import static org.apache.openmeetings.OpenmeetingsVariables.webAppRootKey;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.openmeetings.web.user.rooms.RoomEnterBehavior.getRoomUrlFragment;
 
 import java.security.NoSuchAlgorithmException;

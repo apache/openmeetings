@@ -18,9 +18,9 @@
  */
 package org.apache.openmeetings.web.user;
 
-import static org.apache.openmeetings.Version.getBuildDate;
-import static org.apache.openmeetings.Version.getRevision;
-import static org.apache.openmeetings.Version.getVersion;
+import static org.apache.openmeetings.util.Version.getBuildDate;
+import static org.apache.openmeetings.util.Version.getRevision;
+import static org.apache.openmeetings.util.Version.getVersion;
 
 import java.util.ArrayList;
 import java.util.List;

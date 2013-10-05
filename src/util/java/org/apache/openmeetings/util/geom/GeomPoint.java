@@ -20,7 +20,7 @@ package org.apache.openmeetings.util.geom;
 
 import java.awt.Point;
 
-import org.apache.openmeetings.OpenmeetingsVariables;
+import org.apache.openmeetings.util.OpenmeetingsVariables;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 

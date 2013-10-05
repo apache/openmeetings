@@ -26,7 +26,6 @@ import java.net.URLConnection;
 import java.util.LinkedHashMap;
 
 import org.apache.axis2.AxisFault;
-import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.data.file.FileProcessor;
 import org.apache.openmeetings.data.file.FileUtils;
 import org.apache.openmeetings.data.user.UserManager;
@@ -39,6 +38,7 @@ import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.documents.LoadLibraryPresentation;
 import org.apache.openmeetings.util.AuthLevelUtil;
 import org.apache.openmeetings.util.OmFileHelper;
+import org.apache.openmeetings.util.OpenmeetingsVariables;
 import org.apache.openmeetings.util.StoredFile;
 import org.apache.openmeetings.util.process.ConverterProcessResultList;
 import org.apache.openmeetings.util.process.FileImportError;

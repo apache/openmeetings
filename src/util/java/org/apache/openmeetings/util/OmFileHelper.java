@@ -26,7 +26,6 @@ import java.io.OutputStream;
 import java.text.DecimalFormat;
 
 import org.apache.commons.transaction.util.FileHelper;
-import org.apache.openmeetings.OpenmeetingsVariables;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 

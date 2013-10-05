@@ -18,7 +18,7 @@
  */
 package org.apache.openmeetings.remote.red5;
 
-import static org.apache.openmeetings.OpenmeetingsVariables.webAppRootKey;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -32,9 +32,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.openmeetings.InitializationContainer;
-import org.apache.openmeetings.OpenmeetingsVariables;
-import org.apache.openmeetings.Version;
 import org.apache.openmeetings.data.calendar.management.AppointmentLogic;
 import org.apache.openmeetings.data.conference.RoomManager;
 import org.apache.openmeetings.data.user.UserManager;
@@ -60,7 +57,10 @@ import org.apache.openmeetings.remote.FLVRecorderService;
 import org.apache.openmeetings.remote.WhiteBoardService;
 import org.apache.openmeetings.remote.util.SessionVariablesUtil;
 import org.apache.openmeetings.util.CalendarPatterns;
+import org.apache.openmeetings.util.InitializationContainer;
 import org.apache.openmeetings.util.OmFileHelper;
+import org.apache.openmeetings.util.OpenmeetingsVariables;
+import org.apache.openmeetings.util.Version;
 import org.apache.openmeetings.util.process.UploadCompleteMessage;
 import org.red5.logging.Red5LoggerFactory;
 import org.red5.server.adapter.ApplicationAdapter;

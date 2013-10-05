@@ -18,21 +18,21 @@
  */
 package org.apache.openmeetings.installation;
 
-import static org.apache.openmeetings.OpenmeetingsVariables.CONFIG_CRYPT_KEY;
-import static org.apache.openmeetings.OpenmeetingsVariables.CONFIG_DASHBOARD_SHOW_MYROOMS_KEY;
-import static org.apache.openmeetings.OpenmeetingsVariables.CONFIG_DASHBOARD_SHOW_RSS_KEY;
-import static org.apache.openmeetings.OpenmeetingsVariables.CONFIG_DEFAUT_LANG_KEY;
-import static org.apache.openmeetings.OpenmeetingsVariables.CONFIG_FRONTEND_REGISTER_KEY;
-import static org.apache.openmeetings.OpenmeetingsVariables.CONFIG_IGNORE_BAD_SSL;
-import static org.apache.openmeetings.OpenmeetingsVariables.CONFIG_LOGIN_MIN_LENGTH_KEY;
-import static org.apache.openmeetings.OpenmeetingsVariables.CONFIG_MAX_UPLOAD_SIZE_KEY;
-import static org.apache.openmeetings.OpenmeetingsVariables.CONFIG_PASS_MIN_LENGTH_KEY;
-import static org.apache.openmeetings.OpenmeetingsVariables.CONFIG_RSS_FEED1_KEY;
-import static org.apache.openmeetings.OpenmeetingsVariables.CONFIG_RSS_FEED2_KEY;
-import static org.apache.openmeetings.OpenmeetingsVariables.USER_LOGIN_MINIMUM_LENGTH;
-import static org.apache.openmeetings.OpenmeetingsVariables.USER_PASSWORD_MINIMUM_LENGTH;
-import static org.apache.openmeetings.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.openmeetings.db.dao.basic.ConfigurationDao.DEFAULT_MAX_UPLOAD_SIZE;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_CRYPT_KEY;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DASHBOARD_SHOW_MYROOMS_KEY;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DASHBOARD_SHOW_RSS_KEY;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAUT_LANG_KEY;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_FRONTEND_REGISTER_KEY;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_IGNORE_BAD_SSL;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_LOGIN_MIN_LENGTH_KEY;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_MAX_UPLOAD_SIZE_KEY;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_PASS_MIN_LENGTH_KEY;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_RSS_FEED1_KEY;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_RSS_FEED2_KEY;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.USER_LOGIN_MINIMUM_LENGTH;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.USER_PASSWORD_MINIMUM_LENGTH;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
 import java.io.File;
 import java.util.Arrays;

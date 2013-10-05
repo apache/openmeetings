@@ -34,8 +34,8 @@ import javax.swing.JTextArea;
 
 import org.apache.batik.dom.svg.SVGDOMImplementation;
 import org.apache.batik.svggen.SVGGraphics2D;
-import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
+import org.apache.openmeetings.util.OpenmeetingsVariables;
 import org.apache.openmeetings.util.geom.ArrowStyle;
 import org.apache.openmeetings.util.geom.GeomPoint;
 import org.red5.logging.Red5LoggerFactory;

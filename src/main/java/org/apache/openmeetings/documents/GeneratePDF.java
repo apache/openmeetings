@@ -23,11 +23,11 @@ import java.io.FilenameFilter;
 import java.util.ArrayList;
 
 import org.apache.commons.transaction.util.FileHelper;
-import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.converter.GenerateSWF;
 import org.apache.openmeetings.converter.GenerateThumbs;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.util.OmFileHelper;
+import org.apache.openmeetings.util.OpenmeetingsVariables;
 import org.apache.openmeetings.util.process.ConverterProcessResult;
 import org.apache.openmeetings.util.process.ConverterProcessResultList;
 import org.apache.openmeetings.util.process.ProcessHelper;

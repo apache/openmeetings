@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings;
+package org.apache.openmeetings.util;
 
 public class OpenmeetingsVariables {
 	public static final String CONFIG_CRYPT_KEY = "crypt_ClassName";

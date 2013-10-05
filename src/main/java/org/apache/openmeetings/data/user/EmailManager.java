@@ -18,7 +18,7 @@
  */
 package org.apache.openmeetings.data.user;
 
-import static org.apache.openmeetings.OpenmeetingsVariables.webAppRootKey;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.mail.MailHandler;

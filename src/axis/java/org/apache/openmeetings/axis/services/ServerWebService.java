@@ -19,12 +19,12 @@
 package org.apache.openmeetings.axis.services;
 
 import org.apache.axis2.AxisFault;
-import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.data.user.UserManager;
 import org.apache.openmeetings.db.dao.server.ServerDao;
 import org.apache.openmeetings.db.dao.server.SessiondataDao;
 import org.apache.openmeetings.db.entity.server.Server;
 import org.apache.openmeetings.util.AuthLevelUtil;
+import org.apache.openmeetings.util.OpenmeetingsVariables;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;

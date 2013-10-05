@@ -18,8 +18,8 @@
  */
 package org.apache.openmeetings.util.crypt;
 
-import static org.apache.openmeetings.OpenmeetingsVariables.configKeyCryptClassName;
-import static org.apache.openmeetings.OpenmeetingsVariables.webAppRootKey;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.configKeyCryptClassName;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;

@@ -18,8 +18,8 @@
  */
 package org.apache.openmeetings.web.pages.install;
 
-import static org.apache.openmeetings.OpenmeetingsVariables.USER_LOGIN_MINIMUM_LENGTH;
-import static org.apache.openmeetings.OpenmeetingsVariables.USER_PASSWORD_MINIMUM_LENGTH;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.USER_LOGIN_MINIMUM_LENGTH;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.USER_PASSWORD_MINIMUM_LENGTH;
 import static org.apache.wicket.validation.validator.RangeValidator.range;
 import static org.apache.wicket.validation.validator.StringValidator.minimumLength;
 

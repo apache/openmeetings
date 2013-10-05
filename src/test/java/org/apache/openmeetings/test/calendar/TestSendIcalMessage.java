@@ -60,9 +60,9 @@ import net.fortuna.ical4j.model.property.Uid;
 import net.fortuna.ical4j.model.property.Version;
 import net.fortuna.ical4j.util.UidGenerator;
 
-import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.test.AbstractOpenmeetingsSpringTest;
+import org.apache.openmeetings.util.OpenmeetingsVariables;
 import org.apache.openmeetings.util.mail.ByteArrayDataSource;
 import org.apache.openmeetings.util.mail.IcalHandler;
 import org.apache.openmeetings.util.mail.SmtpAuthenticator;

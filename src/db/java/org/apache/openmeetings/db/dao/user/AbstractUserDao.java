@@ -18,8 +18,8 @@
  */
 package org.apache.openmeetings.db.dao.user;
 
-import static org.apache.openmeetings.OpenmeetingsVariables.CONFIG_DEFAUT_LANG_KEY;
-import static org.apache.openmeetings.OpenmeetingsVariables.webAppRootKey;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAUT_LANG_KEY;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
 import java.security.NoSuchAlgorithmException;
 import java.util.Date;

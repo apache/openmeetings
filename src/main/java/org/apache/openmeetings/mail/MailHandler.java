@@ -18,7 +18,7 @@
  */
 package org.apache.openmeetings.mail;
 
-import static org.apache.openmeetings.OpenmeetingsVariables.webAppRootKey;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;

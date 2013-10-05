@@ -33,7 +33,6 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.transaction.util.FileHelper;
-import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.converter.GenerateImage;
 import org.apache.openmeetings.converter.GenerateThumbs;
 import org.apache.openmeetings.data.file.FileProcessor;
@@ -44,6 +43,7 @@ import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.documents.GeneratePDF;
 import org.apache.openmeetings.remote.red5.ScopeApplicationAdapter;
 import org.apache.openmeetings.util.OmFileHelper;
+import org.apache.openmeetings.util.OpenmeetingsVariables;
 import org.apache.openmeetings.util.StoredFile;
 import org.apache.openmeetings.util.process.ConverterProcessResultList;
 import org.apache.openmeetings.util.process.UploadCompleteMessage;

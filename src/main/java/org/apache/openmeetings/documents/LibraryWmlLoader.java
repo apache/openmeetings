@@ -25,8 +25,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 
-import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.util.OmFileHelper;
+import org.apache.openmeetings.util.OpenmeetingsVariables;
 import org.dom4j.Element;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;

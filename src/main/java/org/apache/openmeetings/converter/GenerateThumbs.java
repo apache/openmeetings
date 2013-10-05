@@ -21,7 +21,7 @@ package org.apache.openmeetings.converter;
 import java.io.File;
 import java.io.IOException;
 
-import org.apache.openmeetings.OpenmeetingsVariables;
+import org.apache.openmeetings.util.OpenmeetingsVariables;
 import org.apache.openmeetings.util.process.ConverterProcessResult;
 import org.apache.openmeetings.util.process.ProcessHelper;
 import org.red5.logging.Red5LoggerFactory;

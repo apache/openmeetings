@@ -19,9 +19,9 @@
 package org.apache.openmeetings.web.app;
 
 import static java.text.DateFormat.SHORT;
-import static org.apache.openmeetings.OpenmeetingsVariables.CONFIG_DASHBOARD_SHOW_MYROOMS_KEY;
-import static org.apache.openmeetings.OpenmeetingsVariables.CONFIG_DASHBOARD_SHOW_RSS_KEY;
-import static org.apache.openmeetings.OpenmeetingsVariables.CONFIG_DEFAUT_LANG_KEY;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DASHBOARD_SHOW_MYROOMS_KEY;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DASHBOARD_SHOW_RSS_KEY;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAUT_LANG_KEY;
 import static org.apache.openmeetings.web.app.Application.getAuthenticationStrategy;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.Application.getDashboardContext;

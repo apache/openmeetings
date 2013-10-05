@@ -18,9 +18,9 @@
  */
 package org.apache.openmeetings.data.user;
 
-import static org.apache.openmeetings.OpenmeetingsVariables.CONFIG_FRONTEND_REGISTER_KEY;
-import static org.apache.openmeetings.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.openmeetings.db.util.UserHelper.getMinLoginLength;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_FRONTEND_REGISTER_KEY;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
 import java.util.Arrays;
 import java.util.Date;

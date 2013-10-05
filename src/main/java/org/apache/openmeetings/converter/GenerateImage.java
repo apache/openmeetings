@@ -18,7 +18,6 @@
  */
 package org.apache.openmeetings.converter;
 
-import static org.apache.openmeetings.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.openmeetings.util.OmFileHelper.bigImagePrefix;
 import static org.apache.openmeetings.util.OmFileHelper.chatImagePrefix;
 import static org.apache.openmeetings.util.OmFileHelper.getUploadProfilesUserDir;
@@ -26,6 +25,7 @@ import static org.apache.openmeetings.util.OmFileHelper.profileFileExt;
 import static org.apache.openmeetings.util.OmFileHelper.profileFileName;
 import static org.apache.openmeetings.util.OmFileHelper.profileImagePrefix;
 import static org.apache.openmeetings.util.OmFileHelper.thumbImagePrefix;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
 import java.io.File;
 import java.io.FileFilter;

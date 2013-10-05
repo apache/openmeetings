@@ -18,7 +18,7 @@
  */
 package org.apache.openmeetings.data.conference;
 
-import static org.apache.openmeetings.OpenmeetingsVariables.webAppRootKey;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
 import java.util.Date;
 import java.util.Iterator;

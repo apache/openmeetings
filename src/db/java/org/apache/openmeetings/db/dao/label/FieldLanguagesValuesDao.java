@@ -18,7 +18,7 @@
  */
 package org.apache.openmeetings.db.dao.label;
 
-import static org.apache.openmeetings.OpenmeetingsVariables.CONFIG_DEFAUT_LANG_KEY;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAUT_LANG_KEY;
 
 import java.util.Date;
 import java.util.List;

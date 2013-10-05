@@ -27,7 +27,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.data.conference.RoomManager;
 import org.apache.openmeetings.data.user.UserManager;
 import org.apache.openmeetings.data.whiteboard.EmoticonsManager;
@@ -36,6 +35,7 @@ import org.apache.openmeetings.db.entity.room.Client;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.remote.red5.ScopeApplicationAdapter;
 import org.apache.openmeetings.remote.util.SessionVariablesUtil;
+import org.apache.openmeetings.util.OpenmeetingsVariables;
 import org.apache.openmeetings.util.stringhandlers.ChatString;
 import org.red5.logging.Red5LoggerFactory;
 import org.red5.server.api.IClient;

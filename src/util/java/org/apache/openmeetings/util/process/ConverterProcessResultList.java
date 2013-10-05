@@ -18,7 +18,7 @@
  */
 package org.apache.openmeetings.util.process;
 
-import static org.apache.openmeetings.OpenmeetingsVariables.webAppRootKey;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import static org.red5.logging.Red5LoggerFactory.getLogger;
 
 import java.util.HashMap;

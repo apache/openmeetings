@@ -18,10 +18,10 @@
  */
 package org.apache.openmeetings.db.util;
 
-import static org.apache.openmeetings.OpenmeetingsVariables.CONFIG_LOGIN_MIN_LENGTH_KEY;
-import static org.apache.openmeetings.OpenmeetingsVariables.CONFIG_PASS_MIN_LENGTH_KEY;
-import static org.apache.openmeetings.OpenmeetingsVariables.USER_LOGIN_MINIMUM_LENGTH;
-import static org.apache.openmeetings.OpenmeetingsVariables.USER_PASSWORD_MINIMUM_LENGTH;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_LOGIN_MIN_LENGTH_KEY;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_PASS_MIN_LENGTH_KEY;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.USER_LOGIN_MINIMUM_LENGTH;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.USER_PASSWORD_MINIMUM_LENGTH;
 
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 

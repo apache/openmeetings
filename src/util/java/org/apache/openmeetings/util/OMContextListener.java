@@ -20,7 +20,6 @@ package org.apache.openmeetings.util;
 
 import javax.servlet.ServletContextEvent;
 
-import org.apache.openmeetings.OpenmeetingsVariables;
 import org.red5.logging.ContextLoggingListener;
 
 public class OMContextListener extends ContextLoggingListener {

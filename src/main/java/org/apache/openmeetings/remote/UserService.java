@@ -24,7 +24,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.TimeZone;
 
-import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.cluster.SlaveHTTPConnectionManager;
 import org.apache.openmeetings.data.basic.FieldManager;
 import org.apache.openmeetings.data.conference.InvitationManager;
@@ -62,6 +61,7 @@ import org.apache.openmeetings.mail.MailHandler;
 import org.apache.openmeetings.remote.red5.ScopeApplicationAdapter;
 import org.apache.openmeetings.util.AuthLevelUtil;
 import org.apache.openmeetings.util.CalendarPatterns;
+import org.apache.openmeetings.util.OpenmeetingsVariables;
 import org.apache.openmeetings.web.util.ContactsHelper;
 import org.red5.logging.Red5LoggerFactory;
 import org.red5.server.api.scope.IScope;

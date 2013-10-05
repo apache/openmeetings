@@ -21,8 +21,8 @@ package org.apache.openmeetings.quartz.scheduler;
 import java.io.File;
 import java.io.FileFilter;
 
-import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.util.OmFileHelper;
+import org.apache.openmeetings.util.OpenmeetingsVariables;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 

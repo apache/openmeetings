@@ -18,7 +18,6 @@
  */
 package org.apache.openmeetings.util;
 
-import org.apache.openmeetings.OpenmeetingsVariables;
 import org.red5.logging.Red5LoggerFactory;
 
 public class Logger {

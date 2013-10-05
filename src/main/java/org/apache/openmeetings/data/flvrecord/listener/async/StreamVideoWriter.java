@@ -18,7 +18,7 @@
  */
 package org.apache.openmeetings.data.flvrecord.listener.async;
 
-import static org.apache.openmeetings.OpenmeetingsVariables.webAppRootKey;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
 import java.io.IOException;
 import java.util.Date;

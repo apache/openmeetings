@@ -18,9 +18,9 @@
  */
 package org.apache.openmeetings.db.util;
 
-import static org.apache.openmeetings.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.openmeetings.util.OmFileHelper.getLanguagesDir;
 import static org.apache.openmeetings.util.OmFileHelper.nameOfTimeZoneFile;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
 import java.io.File;
 import java.util.Calendar;

@@ -18,9 +18,9 @@
  */
 package org.apache.openmeetings.web.pages.auth;
 
-import static org.apache.openmeetings.OpenmeetingsVariables.CONFIG_FRONTEND_REGISTER_KEY;
-import static org.apache.openmeetings.OpenmeetingsVariables.CONFIG_IGNORE_BAD_SSL;
-import static org.apache.openmeetings.OpenmeetingsVariables.webAppRootKey;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_FRONTEND_REGISTER_KEY;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_IGNORE_BAD_SSL;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.openmeetings.web.app.Application.getBean;
 
 import java.io.DataOutputStream;

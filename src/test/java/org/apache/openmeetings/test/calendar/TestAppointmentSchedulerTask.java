@@ -20,9 +20,9 @@ package org.apache.openmeetings.test.calendar;
 
 import static org.junit.Assert.assertTrue;
 
-import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.data.calendar.management.AppointmentLogic;
 import org.apache.openmeetings.test.AbstractOpenmeetingsSpringTest;
+import org.apache.openmeetings.util.OpenmeetingsVariables;
 import org.junit.Test;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;

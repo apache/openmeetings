@@ -18,10 +18,10 @@
  */
 package org.apache.openmeetings.cli;
 
-import static org.apache.openmeetings.OpenmeetingsVariables.USER_LOGIN_MINIMUM_LENGTH;
-import static org.apache.openmeetings.OpenmeetingsVariables.USER_PASSWORD_MINIMUM_LENGTH;
 import static org.apache.openmeetings.db.util.UserHelper.getMinPasswdLength;
 import static org.apache.openmeetings.db.util.UserHelper.invalidPassword;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.USER_LOGIN_MINIMUM_LENGTH;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.USER_PASSWORD_MINIMUM_LENGTH;
 
 import java.io.BufferedReader;
 import java.io.File;

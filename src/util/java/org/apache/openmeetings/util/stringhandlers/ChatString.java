@@ -25,7 +25,7 @@ import java.util.LinkedList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.openmeetings.OpenmeetingsVariables;
+import org.apache.openmeetings.util.OpenmeetingsVariables;
 import org.apache.wicket.util.string.Strings;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;

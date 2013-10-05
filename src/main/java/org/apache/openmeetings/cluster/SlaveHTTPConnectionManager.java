@@ -21,9 +21,9 @@ package org.apache.openmeetings.cluster;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.cluster.sync.RestClient;
 import org.apache.openmeetings.db.entity.server.Server;
+import org.apache.openmeetings.util.OpenmeetingsVariables;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 

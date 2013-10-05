@@ -26,7 +26,6 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.transaction.util.FileHelper;
-import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.data.user.UserManager;
 import org.apache.openmeetings.data.whiteboard.WhiteboardManager;
 import org.apache.openmeetings.db.dao.file.FileExplorerItemDao;
@@ -41,6 +40,7 @@ import org.apache.openmeetings.documents.LibraryWmlLoader;
 import org.apache.openmeetings.documents.LoadLibraryPresentation;
 import org.apache.openmeetings.util.AuthLevelUtil;
 import org.apache.openmeetings.util.OmFileHelper;
+import org.apache.openmeetings.util.OpenmeetingsVariables;
 import org.apache.openmeetings.util.crypt.MD5;
 import org.red5.logging.Red5LoggerFactory;
 import org.red5.server.api.IConnection;

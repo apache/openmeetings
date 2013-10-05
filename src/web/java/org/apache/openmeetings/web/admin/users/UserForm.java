@@ -18,8 +18,8 @@
  */
 package org.apache.openmeetings.web.admin.users;
 
-import static org.apache.openmeetings.OpenmeetingsVariables.WEB_DATE_PATTERN;
 import static org.apache.openmeetings.db.util.UserHelper.getMinLoginLength;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.WEB_DATE_PATTERN;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import static org.apache.wicket.datetime.markup.html.basic.DateLabel.forDatePattern;

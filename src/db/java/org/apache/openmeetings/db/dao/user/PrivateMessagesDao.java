@@ -18,7 +18,7 @@
  */
 package org.apache.openmeetings.db.dao.user;
 
-import static org.apache.openmeetings.OpenmeetingsVariables.webAppRootKey;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
 import java.util.Collection;
 import java.util.Date;

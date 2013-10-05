@@ -18,7 +18,7 @@
  */
 package org.apache.openmeetings.remote;
 
-import static org.apache.openmeetings.OpenmeetingsVariables.CONFIG_DEFAUT_LANG_KEY;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAUT_LANG_KEY;
 
 import java.util.List;
 import java.util.Map;

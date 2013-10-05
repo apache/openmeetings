@@ -20,7 +20,7 @@ package org.apache.openmeetings.servlet;
 
 import javax.servlet.ServletContext;
 
-import org.apache.openmeetings.InitializationContainer;
+import org.apache.openmeetings.util.InitializationContainer;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
 public class BeanUtil {

@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings;
+package org.apache.openmeetings.util;
 
 public class InitializationContainer {
 	public static boolean initComplete = false;

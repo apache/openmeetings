@@ -19,7 +19,7 @@
 package org.apache.openmeetings.web.user;
 
 import static org.apache.commons.lang3.StringEscapeUtils.unescapeXml;
-import static org.apache.openmeetings.OpenmeetingsVariables.webAppRootKey;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.getDateFormat;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;

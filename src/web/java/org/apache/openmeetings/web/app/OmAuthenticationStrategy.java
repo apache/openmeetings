@@ -18,7 +18,7 @@
  */
 package org.apache.openmeetings.web.app;
 
-import static org.apache.openmeetings.OpenmeetingsVariables.webAppRootKey;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
 import org.apache.openmeetings.web.pages.MainPage;
 import org.apache.wicket.authentication.strategy.DefaultAuthenticationStrategy;

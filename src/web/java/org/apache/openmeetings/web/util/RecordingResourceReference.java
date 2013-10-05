@@ -18,7 +18,7 @@
  */
 package org.apache.openmeetings.web.util;
 
-import static org.apache.openmeetings.OpenmeetingsVariables.webAppRootKey;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import static org.red5.logging.Red5LoggerFactory.getLogger;

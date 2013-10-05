@@ -21,12 +21,12 @@ package org.apache.openmeetings.backup;
 import java.io.InputStream;
 import java.util.Iterator;
 
-import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.db.dao.label.FieldLanguageDao;
 import org.apache.openmeetings.db.dao.label.FieldLanguagesValuesDao;
 import org.apache.openmeetings.db.dao.label.FieldValueDao;
 import org.apache.openmeetings.db.entity.label.Fieldlanguagesvalues;
 import org.apache.openmeetings.db.entity.label.Fieldvalues;
+import org.apache.openmeetings.util.OpenmeetingsVariables;
 import org.dom4j.Document;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;

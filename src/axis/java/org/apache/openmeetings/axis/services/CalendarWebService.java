@@ -18,7 +18,7 @@
  */
 package org.apache.openmeetings.axis.services;
 
-import static org.apache.openmeetings.OpenmeetingsVariables.webAppRootKey;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.openmeetings.web.app.WebSession.getBaseUrl;
 
 import java.util.ArrayList;

@@ -22,12 +22,12 @@ import static org.junit.Assert.assertEquals;
 
 import java.util.List;
 
-import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.db.dao.room.ClientDao;
 import org.apache.openmeetings.db.dao.server.ServerDao;
 import org.apache.openmeetings.db.entity.room.Client;
 import org.apache.openmeetings.db.entity.server.Server;
 import org.apache.openmeetings.test.AbstractOpenmeetingsSpringTest;
+import org.apache.openmeetings.util.OpenmeetingsVariables;
 import org.junit.Test;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;

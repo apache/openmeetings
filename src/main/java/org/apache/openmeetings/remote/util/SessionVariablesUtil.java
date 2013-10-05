@@ -18,7 +18,7 @@
  */
 package org.apache.openmeetings.remote.util;
 
-import static org.apache.openmeetings.OpenmeetingsVariables.webAppRootKey;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
 import org.red5.logging.Red5LoggerFactory;
 import org.red5.server.api.IClient;

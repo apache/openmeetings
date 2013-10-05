@@ -21,9 +21,9 @@ package org.apache.openmeetings.documents;
 import java.util.Iterator;
 import java.util.LinkedList;
 
-import org.apache.openmeetings.OpenmeetingsVariables;
 import org.apache.openmeetings.db.dto.file.FilesObject;
 import org.apache.openmeetings.db.dto.file.PresentationObject;
+import org.apache.openmeetings.util.OpenmeetingsVariables;
 import org.dom4j.Document;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;

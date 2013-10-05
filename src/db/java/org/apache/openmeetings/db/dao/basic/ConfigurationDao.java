@@ -18,11 +18,11 @@
  */
 package org.apache.openmeetings.db.dao.basic;
 
-import static org.apache.openmeetings.OpenmeetingsVariables.CONFIG_CRYPT_KEY;
-import static org.apache.openmeetings.OpenmeetingsVariables.CONFIG_MAX_UPLOAD_SIZE_KEY;
-import static org.apache.openmeetings.OpenmeetingsVariables.configKeyCryptClassName;
-import static org.apache.openmeetings.OpenmeetingsVariables.webAppRootKey;
-import static org.apache.openmeetings.OpenmeetingsVariables.whiteboardDrawStatus;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_CRYPT_KEY;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_MAX_UPLOAD_SIZE_KEY;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.configKeyCryptClassName;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.whiteboardDrawStatus;
 
 import java.lang.reflect.Constructor;
 import java.util.Arrays;

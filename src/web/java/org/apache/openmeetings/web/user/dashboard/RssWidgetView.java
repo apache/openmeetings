@@ -18,9 +18,9 @@
  */
 package org.apache.openmeetings.web.user.dashboard;
 
-import static org.apache.openmeetings.OpenmeetingsVariables.CONFIG_RSS_FEED1_KEY;
-import static org.apache.openmeetings.OpenmeetingsVariables.CONFIG_RSS_FEED2_KEY;
 import static org.apache.openmeetings.rss.LoadAtomRssFeed.getFeedConnection;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_RSS_FEED1_KEY;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_RSS_FEED2_KEY;
 import static org.apache.openmeetings.web.app.Application.getBean;
 
 import java.io.IOException;
