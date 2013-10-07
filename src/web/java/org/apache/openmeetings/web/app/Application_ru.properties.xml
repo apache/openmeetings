@@ -211,7 +211,7 @@
 	<entry key="install.wizard.params.step3.imageMagicPath.text"></entry>
 	<entry key="install.wizard.params.step3.ffmpegPath">FFMPEG Путь</entry>
 	<entry key="install.wizard.params.step3.ffmpegPath.title">Укажите путь к FFMPEG, или не заполняйте данное поле если FFMPEG установлен в путях Вашей системы</entry>
-	<entry key="install.wizard.params.step3.ffmpegPath"></entry>
+	<entry key="install.wizard.params.step3.ffmpegPath.text"></entry>
 	<entry key="install.wizard.params.step3.soxPath">SoX Путь</entry>
 	<entry key="install.wizard.params.step3.soxPath.title">Укажите путь к SoX, или не заполняйте данное поле если SoX установлен в путях Вашей системы</entry>
 	<entry key="install.wizard.params.step3.soxPath.text"></entry>

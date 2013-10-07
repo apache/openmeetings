@@ -182,7 +182,7 @@
 	<entry key="install.wizard.params.step3.imageMagicPath.text"></entry>
 	<entry key="install.wizard.params.step3.ffmpegPath">Chemin vers FFMPEG</entry>
 	<entry key="install.wizard.params.step3.ffmpegPath.title">Indiquez le chemin vers FFMPEG dans le cas où FFMPEG ne se trouve pas dans le chemin système.</entry>
-	<entry key="install.wizard.params.step3.ffmpegPath"></entry>
+	<entry key="install.wizard.params.step3.ffmpegPath.text"></entry>
 	<entry key="install.wizard.params.step3.soxPath">Chemin vers SoX</entry>
 	<entry key="install.wizard.params.step3.soxPath.title">Indiquez le chemin vers SoX dans le cas où SoX ne se trouve pas dans le chemin système.</entry>
 	<entry key="install.wizard.params.step3.soxPath.text"></entry>

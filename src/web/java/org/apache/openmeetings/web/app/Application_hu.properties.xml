@@ -196,7 +196,7 @@
 	<entry key="install.wizard.params.step3.imageMagicPath.text"></entry>
 	<entry key="install.wizard.params.step3.ffmpegPath">FFMPEG útvonala</entry>
 	<entry key="install.wizard.params.step3.ffmpegPath.title">Adja meg az FFMPEG alérési útvonalát, hagyja üresen, ha az FFMPEG elérhető a rendszer útvonalak közt</entry>
-	<entry key="install.wizard.params.step3.ffmpegPath"></entry>
+	<entry key="install.wizard.params.step3.ffmpegPath.text"></entry>
 	<entry key="install.wizard.params.step3.soxPath">SoX útvonala</entry>
 	<entry key="install.wizard.params.step3.soxPath.title">Adja meg a SoX elérési útvonalát, hagyja üresen, ha a SoX elérhető a rendszer útvonalak közt</entry>
 	<entry key="install.wizard.params.step3.soxPath.text"></entry>

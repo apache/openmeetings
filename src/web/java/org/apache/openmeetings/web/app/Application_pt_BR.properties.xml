@@ -212,7 +212,7 @@
 	<entry key="install.wizard.params.step3.imageMagicPath.text"></entry>
 	<entry key="install.wizard.params.step3.ffmpegPath"><![CDATA[Diret&oacute;rio do FFMPEG]]></entry>
 	<entry key="install.wizard.params.step3.ffmpegPath.title"><![CDATA[Digite o caminho do diret&oacute;rio do para o FFMPEG, deixe em branco se o FFMPEG estiver localizado em um diret&oatilde;rio contido no caminho do sistema (system path)]]></entry>
-	<entry key="install.wizard.params.step3.ffmpegPath"></entry>
+	<entry key="install.wizard.params.step3.ffmpegPath.text"></entry>
 	<entry key="install.wizard.params.step3.soxPath"><![CDATA[Diret&oacute;rio do SoX]]></entry>
 	<entry key="install.wizard.params.step3.soxPath.title"><![CDATA[Digite o caminho do diret&oacute;rio do para o SoX, deixe em branco se o SoX estiver localizado em um diret&oatilde;rio contido no caminho do sistema (system path)]]></entry>
 	<entry key="install.wizard.params.step3.soxPath.text"></entry>

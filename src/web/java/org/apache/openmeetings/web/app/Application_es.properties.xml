@@ -205,7 +205,7 @@
 	<entry key="install.wizard.params.step3.imageMagicPath.text"></entry>
 	<entry key="install.wizard.params.step3.ffmpegPath">FFMPEG Path (Ruta)</entry>
 	<entry key="install.wizard.params.step3.ffmpegPath.title">Enter the path to FFMPEG, leave blank if FFMPEG is successfully installed to system-path</entry>
-	<entry key="install.wizard.params.step3.ffmpegPath"></entry>
+	<entry key="install.wizard.params.step3.ffmpegPath.text"></entry>
 	<entry key="install.wizard.params.step3.soxPath">SoX Path (Ruta)</entry>
 	<entry key="install.wizard.params.step3.soxPath.title">Enter the path to SoX, leave blank if SoX is successfully installed to system-path</entry>
 	<entry key="install.wizard.params.step3.soxPath.text"></entry>
