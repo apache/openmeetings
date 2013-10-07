@@ -42,6 +42,7 @@
 	<property name="webcontent.base.dir" value="${basedir}/WebContent" />
 	
 	<property name="screenshare.resources.dir" value="${src.base.dir}/screenshare/resources" />
+	<property name="screenshare.src.dir" value="${src.base.dir}/screenshare/java" />
 	<property name="axis.resources.dir" value="${src.base.dir}/axis/resources" />
 	
 	<property name="webapp.dir" value="${src.base.dir}/main/webapp" />
@@ -246,6 +247,7 @@
 			<fileset dir="${src.base.dir}/web/java">
 				<include name="**/*.html" />
 				<include name="**/*.xml" />
+				<include name="**/*.js" />
 			</fileset>
 		</copy>
 	</target>
@@ -295,6 +297,7 @@
 		<jar destfile="${dist.webapps.dir}/WEB-INF/lib/${project.distname}-core-${jar.suffix}.jar">
 			<fileset dir="${main.out.dir}">
 				<include name="org/apache/openmeetings/**" />
+				<include name="*.vm" />
 				<include name="META-INF/*" />
 				<exclude name="META-INF/*.xml" />
 				<exclude name="org/apache/openmeetings/util/**" />
@@ -424,6 +427,7 @@
 				<include name="META-INF/NOTICE" />
 			</fileset>
 			<fileset file="${screenshare.resources.dir}/logback.xml" />
+			<fileset file="${screenshare.src.dir}/org/apache/openmeetings/screen/*.png" />
 			<manifest>
 				<attribute name="Built-By" value="OpenMeetings - http://openmeetings.apache.org" />
 				<attribute name="Built-On" value="${build.TODAY}" />
