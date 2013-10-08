@@ -42,7 +42,6 @@
 	<property name="webcontent.base.dir" value="${basedir}/WebContent" />
 	
 	<property name="screenshare.resources.dir" value="${src.base.dir}/screenshare/resources" />
-	<property name="screenshare.src.dir" value="${src.base.dir}/screenshare/java" />
 	<property name="axis.resources.dir" value="${src.base.dir}/axis/resources" />
 	
 	<property name="webapp.dir" value="${src.base.dir}/main/webapp" />
@@ -284,6 +283,12 @@
 				<patternset refid="resources" />
 			</fileset>
 		</copy>
+		<!-- Screen Share resources -->
+		<copy todir="${main.out.dir}">
+			<fileset dir="${src.base.dir}/screenshare/java">
+				<include name="**/*.png" />
+			</fileset>
+		</copy>
 	</target>
 
 	<target name="web.only" depends="jar.web.only, web.copy"/>
@@ -427,7 +432,6 @@
 				<include name="META-INF/NOTICE" />
 			</fileset>
 			<fileset file="${screenshare.resources.dir}/logback.xml" />
-			<fileset file="${screenshare.src.dir}/org/apache/openmeetings/screen/*.png" />
 			<manifest>
 				<attribute name="Built-By" value="OpenMeetings - http://openmeetings.apache.org" />
 				<attribute name="Built-On" value="${build.TODAY}" />
