@@ -97,7 +97,10 @@ limitations under the License.
 #if ($value.getAttributeValue("rowspan"))
 #set ($rowspan = $value.getAttributeValue("rowspan"))
 #end
-<td bgcolor="$tabletdbg" colspan="$!colspan" rowspan="$!rowspan" valign="top" align="left" style="color: black; font-size: small; font-family: arial, helvetica, sanserif;">
+#if ($value.getAttributeValue("class"))
+#set ($class = $value.getAttributeValue("class"))
+#end
+<td bgcolor="$tabletdbg" class="$class" colspan="$!colspan" rowspan="$!rowspan" valign="top" align="left" style="color: black; font-size: small; font-family: arial, helvetica, sanserif;">
     #if ($value.getText().length() != 0 || $value.hasChildren())
     $value.getContent()
     #else
@@ -113,7 +116,10 @@ limitations under the License.
 #if ($value.getAttributeValue("rowspan"))
 #set ($rowspan = $value.getAttributeValue("rowspan"))
 #end
-<th bgcolor="$tablethbg" colspan="$!colspan" rowspan="$!rowspan" valign="top" align="left" style="color: black; font-size: small; font-family: arial, helvetica, sanserif;">
+#if ($value.getAttributeValue("class"))
+#set ($class = $value.getAttributeValue("class"))
+#end
+<th bgcolor="$tablethbg" class="$class" colspan="$!colspan" rowspan="$!rowspan" valign="top" align="left" style="color: black; font-size: small; font-family: arial, helvetica, sanserif;">
     #if ($value.getText().length() != 0 || $value.hasChildren())
     $value.getContent()
     #else

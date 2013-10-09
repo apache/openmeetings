@@ -64,6 +64,7 @@
         <xs:element ref="ul"/>
         <xs:element ref="feature"/>
         <xs:element ref="source"/>
+        <xs:element ref="style"/>
         <xs:element ref="subsection"/>
         <xs:element ref="table"/>
       </xs:choice>
@@ -100,6 +101,8 @@
       <xs:attribute name="test" use="required"/>
     </xs:complexType>
   </xs:element>
+  <xs:element name="style">
+  </xs:element>
   <xs:element name="subsection">
     <xs:complexType>
       <xs:sequence>
@@ -135,6 +138,7 @@
   <xs:element name="th">
     <xs:complexType mixed="true">
       <xs:attribute name="style"/>
+      <xs:attribute name="class"/>
     </xs:complexType>
   </xs:element>
   <xs:element name="td">
@@ -144,6 +148,7 @@
         <xs:element ref="p"/>
       </xs:choice>
       <xs:attribute name="style"/>
+      <xs:attribute name="class"/>
     </xs:complexType>
   </xs:element>
   <xs:element name="ul">
