@@ -42,6 +42,9 @@ public class SeleniumUtils {
 			String inputText) throws Exception {
 		WebElement element = SeleniumUtils.findElement(driver, search, true);
 
+		//clear text before adding input
+		element.clear();
+		
 		// Would make send to check if this element is really an input text
 		element.sendKeys(inputText);
 	}
@@ -120,9 +123,6 @@ public class SeleniumUtils {
 	private static List<WebElement> _findElement(WebDriver driver, String search) {
 		for (By by : _getSearchArray(search)) {
 			try {
-				
-				
-				
 				List<WebElement> elements = driver.findElements(by);
 				if (elements != null && elements.size() > 0) {
 					return elements;
