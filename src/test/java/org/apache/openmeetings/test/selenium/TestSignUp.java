@@ -37,79 +37,85 @@ public class TestSignUp extends AbstractTestDefaults {
 
 	@Test
 	public void testSignUp() throws Exception {
-		driver.get(getBASE_URL());
 		
-		String currentRandomCounter = "" + ((new Date().getTime())/1000);
-		String userName = "seba" + currentRandomCounter;
-		String email = "hans." + currentRandomCounter + "@openmeetings.apache.org";
-		
-		super.testIsInstalledAndDoInstallation();
-		
-		WebElement signUpButton = SeleniumUtils.findElement(driver,
-				"//button[span[contains(text(), '" + getString(123) + "')]]", true, true);
-		signUpButton.click();
-		
-		// ##################################
-		// Test validation message for passwords to be identical
-		// ##################################
-		doSignUp("Hans","Muster", userName, "pw", "pw2", email);
-		
-		//Find Error label-id 232 "Please enter two identical passwords"
-		SeleniumUtils.findElement(driver, "//span[@class='feedbackPanelERROR'][contains(text(), '" + getString(232) + "')]", true, true);
-		
-		
-		// ##################################
-		// Sign up with user and sign in
-		// ##################################
-		doSignUp("Hans","Muster", userName, pass, pass, email);
-		
-		
-		//Check for popup with success message and email to check
-		//Labelid 674
-		SeleniumUtils.findElement(driver, "//span[contains(text(), '" + getString(674) + "')]", true, true);
-		
-		//click button to close popup
-		WebElement signUpSucessPopUpOkButton = SeleniumUtils.findElement(driver,
-				"//button[span[contains(text(), '" + DialogButtons.OK.toString() + "')]]", true, true);
-		signUpSucessPopUpOkButton.click();
-		
-		//Login with user
-		SeleniumUtils.inputText(driver, "login", userName);
-		SeleniumUtils.inputText(driver, "pass", pass);
-
-		//click labelid 112 "Sign In"
-		WebElement signInButton = SeleniumUtils.findElement(driver,
-				"//button[span[contains(text(), '" + getString(112) + "')]]", true, true);
-		signInButton.click();
-
-		// check for some text in dashbaord, labelid 281, "Help and support"
-		SeleniumUtils.elementExists(driver,
-				"//h3[contains(text(), '" + getString(281) + "')]", true);
-		
-		//sign out
-		WebElement signOutLink = SeleniumUtils.findElement(driver,
-				"//a[contains(text(), '" + getString(310) + "')]", true, true);
-		signOutLink.click();
-		
-		Alert alert = driver.switchTo().alert();
-		alert.accept();
-		
-		// ##################################
-		// Sign up with same user and email and check duplicate messages
-		// ##################################
-		
-		signUpButton = SeleniumUtils.findElement(driver,
-				"//button[span[contains(text(), '" + getString(123) + "')]]", true, true);
-		signUpButton.click();
-		
-		doSignUp("Hans","Muster", userName, pass, pass, email);
-		
-		//Find Error label-id 105, The username is already used
-		SeleniumUtils.findElement(driver, "//span[@class='feedbackPanelERROR'][contains(text(), '" + getString(105) + "')]", true, true);
-		
-		//Find Error label-id 1000, This email is already used by another user.
-		SeleniumUtils.findElement(driver, "//span[@class='feedbackPanelERROR'][contains(text(), '" + getString(1000) + "')]", true, true);
-				
+		try {
+			driver.get(getBASE_URL());
+			
+			String currentRandomCounter = "" + ((new Date().getTime())/1000);
+			String userName = "seba" + currentRandomCounter;
+			String email = "hans." + currentRandomCounter + "@openmeetings.apache.org";
+			
+			super.testIsInstalledAndDoInstallation();
+			
+			WebElement signUpButton = SeleniumUtils.findElement(driver,
+					"//button[span[contains(text(), '" + getString(123) + "')]]", true, true);
+			signUpButton.click();
+			
+			// ##################################
+			// Test validation message for passwords to be identical
+			// ##################################
+			doSignUp("Hans","Muster", userName, "pw", "pw2", email);
+			
+			//Find Error label-id 232 "Please enter two identical passwords"
+			SeleniumUtils.findElement(driver, "//span[@class='feedbackPanelERROR'][contains(text(), '" + getString(232) + "')]", true, true);
+			
+			
+			// ##################################
+			// Sign up with user and sign in
+			// ##################################
+			doSignUp("Hans","Muster", userName, pass, pass, email);
+			
+			
+			//Check for popup with success message and email to check
+			//Labelid 674
+			SeleniumUtils.findElement(driver, "//span[contains(text(), '" + getString(674) + "')]", true, true);
+			
+			//click button to close popup
+			WebElement signUpSucessPopUpOkButton = SeleniumUtils.findElement(driver,
+					"//button[span[contains(text(), '" + DialogButtons.OK.toString() + "')]]", true, true);
+			signUpSucessPopUpOkButton.click();
+			
+			//Login with user
+			SeleniumUtils.inputText(driver, "login", userName);
+			SeleniumUtils.inputText(driver, "pass", pass);
+	
+			//click labelid 112 "Sign In"
+			WebElement signInButton = SeleniumUtils.findElement(driver,
+					"//button[span[contains(text(), '" + getString(112) + "')]]", true, true);
+			signInButton.click();
+	
+			// check for some text in dashbaord, labelid 281, "Help and support"
+			SeleniumUtils.elementExists(driver,
+					"//h3[contains(text(), '" + getString(281) + "')]", true);
+			
+			//sign out
+			WebElement signOutLink = SeleniumUtils.findElement(driver,
+					"//a[contains(text(), '" + getString(310) + "')]", true, true);
+			signOutLink.click();
+			
+			Alert alert = driver.switchTo().alert();
+			alert.accept();
+			
+			// ##################################
+			// Sign up with same user and email and check duplicate messages
+			// ##################################
+			
+			signUpButton = SeleniumUtils.findElement(driver,
+					"//button[span[contains(text(), '" + getString(123) + "')]]", true, true);
+			signUpButton.click();
+			
+			doSignUp("Hans","Muster", userName, pass, pass, email);
+			
+			//Find Error label-id 105, The username is already used
+			SeleniumUtils.findElement(driver, "//span[@class='feedbackPanelERROR'][contains(text(), '" + getString(105) + "')]", true, true);
+			
+			//Find Error label-id 1000, This email is already used by another user.
+			SeleniumUtils.findElement(driver, "//span[@class='feedbackPanelERROR'][contains(text(), '" + getString(1000) + "')]", true, true);
+		} catch (Exception e) {
+			SeleniumUtils.makeScreenShot(this.getClass().getSimpleName(), e,
+					driver);
+			throw e;
+		}	
 	}
 	
 	private void doSignUp(String firstName, String lastName, String login, String password,
