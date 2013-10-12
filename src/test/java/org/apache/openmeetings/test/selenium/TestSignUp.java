@@ -21,6 +21,7 @@ package org.apache.openmeetings.test.selenium;
 import java.util.Date;
 
 import org.junit.Test;
+import org.openqa.selenium.Alert;
 import org.openqa.selenium.WebElement;
 
 import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButtons;
@@ -45,7 +46,7 @@ public class TestSignUp extends AbstractLoadTestDefaults {
 		super.testIsInstalledAndDoInstallation();
 		
 		WebElement signUpButton = SeleniumUtils.findElement(driver,
-				"//button[span[contains(text(), 'Not a member')]]", true, true);
+				"//button[span[contains(text(), '" + getString(123) + "')]]", true, true);
 		signUpButton.click();
 		
 		// ##################################
@@ -85,9 +86,30 @@ public class TestSignUp extends AbstractLoadTestDefaults {
 		SeleniumUtils.elementExists(driver,
 				"//h3[contains(text(), '" + getString(281) + "')]", true);
 		
+		//sign out
+		WebElement signOutLink = SeleniumUtils.findElement(driver,
+				"//a[contains(text(), '" + getString(310) + "')]", true, true);
+		signOutLink.click();
+		
+		Alert alert = driver.switchTo().alert();
+		alert.accept();
+		
 		// ##################################
-		// Sign up with same user and check duplicate user message
+		// Sign up with same user and email and check duplicate messages
 		// ##################################
+		
+		signUpButton = SeleniumUtils.findElement(driver,
+				"//button[span[contains(text(), '" + getString(123) + "')]]", true, true);
+		signUpButton.click();
+		
+		doSignUp("Hans","Muster", userName, pass, pass, email);
+		
+		//Find Error label-id 105, The username is already used
+		SeleniumUtils.findElement(driver, "//span[@class='feedbackPanelERROR'][contains(text(), '" + getString(105) + "')]", true, true);
+		
+		//Find Error label-id 1000, This email is already used by another user.
+		SeleniumUtils.findElement(driver, "//span[@class='feedbackPanelERROR'][contains(text(), '" + getString(1000) + "')]", true, true);
+				
 	}
 	
 	private void doSignUp(String firstName, String lastName, String login, String password,
