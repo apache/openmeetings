@@ -175,7 +175,7 @@ public class RegisterDialog extends AbstractFormDialog<String> {
 
 	@Override
 	protected void onSubmit(AjaxRequestTarget target) {
-		String hash = getBean(ManageCryptStyle.class).getInstanceOfCrypt()
+		String hash = ManageCryptStyle.getInstanceOfCrypt()
 				.createPassPhrase(login + CalendarPatterns.getDateWithTimeByMiliSeconds(new Date()));
 
 		String redirectPage = getRequestCycle().urlFor(ActivatePage.class, new PageParameters().add("u", hash)).toString().substring(2);
