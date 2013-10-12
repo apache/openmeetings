@@ -29,11 +29,11 @@ import org.apache.openmeetings.db.dao.user.AdminUserDao;
 import org.apache.openmeetings.db.entity.user.Organisation;
 import org.apache.openmeetings.db.entity.user.Organisation_Users;
 import org.apache.openmeetings.db.entity.user.User;
-import org.apache.openmeetings.test.AbstractOpenmeetingsSpringTest;
+import org.apache.openmeetings.test.AbstractJUnitDefaults;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-public class TestUserOrganisation extends AbstractOpenmeetingsSpringTest {
+public class TestUserOrganisation extends AbstractJUnitDefaults {
 	@Autowired
 	private OrganisationManager orgManagement;
 	@Autowired

@@ -20,12 +20,12 @@ package org.apache.openmeetings.test.library;
 
 import org.apache.log4j.Logger;
 import org.apache.openmeetings.documents.LibraryWmlLoader;
-import org.apache.openmeetings.test.AbstractOpenmeetingsSpringTest;
+import org.apache.openmeetings.test.AbstractJUnitDefaults;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 
-public class TestFileParser extends AbstractOpenmeetingsSpringTest {
+public class TestFileParser extends AbstractJUnitDefaults {
 	
 	private static final Logger log = Logger.getLogger(TestFileParser.class);
 	@Autowired

@@ -33,13 +33,13 @@ import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.dao.room.RoomOrganisationDao;
 import org.apache.openmeetings.db.dao.user.AdminUserDao;
 import org.apache.openmeetings.db.dao.user.OrganisationDao;
-import org.apache.openmeetings.test.AbstractOpenmeetingsSpringTest;
+import org.apache.openmeetings.test.AbstractJUnitDefaults;
 import org.junit.Test;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
-public class TestOldBackups extends AbstractOpenmeetingsSpringTest {
+public class TestOldBackups extends AbstractJUnitDefaults {
 	private static final Logger log = Red5LoggerFactory.getLogger(TestOldBackups.class, webAppRootKey);
 	
 	@Autowired

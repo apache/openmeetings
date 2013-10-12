@@ -26,12 +26,12 @@ import java.util.Calendar;
 import org.apache.openmeetings.data.calendar.management.AppointmentLogic;
 import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
-import org.apache.openmeetings.test.AbstractOpenmeetingsSpringTest;
+import org.apache.openmeetings.test.AbstractJUnitDefaults;
 import org.junit.Test;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-public class TestAppointmentAddAppointment extends AbstractOpenmeetingsSpringTest {
+public class TestAppointmentAddAppointment extends AbstractJUnitDefaults {
 	private static final Logger log = Red5LoggerFactory.getLogger(TestAppointmentAddAppointment.class, webAppRootKey);
 
 	@Autowired

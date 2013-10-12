@@ -25,14 +25,14 @@ import java.util.List;
 
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.entity.basic.Configuration;
-import org.apache.openmeetings.test.AbstractOpenmeetingsSpringTest;
+import org.apache.openmeetings.test.AbstractJUnitDefaults;
 import org.apache.openmeetings.test.calendar.TestAppointmentAddAppointment;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
-public class TestConfig extends AbstractOpenmeetingsSpringTest {
+public class TestConfig extends AbstractJUnitDefaults {
 
 	private static final Logger log = LoggerFactory.getLogger(TestAppointmentAddAppointment.class);
 

@@ -22,11 +22,11 @@ import static org.junit.Assert.assertTrue;
 
 import org.apache.openmeetings.db.dao.user.StateDao;
 import org.apache.openmeetings.db.entity.user.State;
-import org.apache.openmeetings.test.AbstractOpenmeetingsSpringTest;
+import org.apache.openmeetings.test.AbstractJUnitDefaults;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-public class TestStateToLower extends AbstractOpenmeetingsSpringTest {
+public class TestStateToLower extends AbstractJUnitDefaults {
 	
 	@Autowired
 	private StateDao stateDao;

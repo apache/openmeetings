@@ -61,7 +61,7 @@ import net.fortuna.ical4j.model.property.Version;
 import net.fortuna.ical4j.util.UidGenerator;
 
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
-import org.apache.openmeetings.test.AbstractOpenmeetingsSpringTest;
+import org.apache.openmeetings.test.AbstractJUnitDefaults;
 import org.apache.openmeetings.util.OpenmeetingsVariables;
 import org.apache.openmeetings.util.mail.ByteArrayDataSource;
 import org.apache.openmeetings.util.mail.IcalHandler;
@@ -71,7 +71,7 @@ import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
-public class TestSendIcalMessage extends AbstractOpenmeetingsSpringTest {
+public class TestSendIcalMessage extends AbstractJUnitDefaults {
 
 	private static final Logger log = Red5LoggerFactory.getLogger(
 			TestAppointmentSchedulerTask.class,

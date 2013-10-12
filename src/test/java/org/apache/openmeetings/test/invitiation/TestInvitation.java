@@ -25,13 +25,13 @@ import org.apache.openmeetings.db.entity.server.Sessiondata;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.remote.InvitationService;
 import org.apache.openmeetings.remote.MainService;
-import org.apache.openmeetings.test.AbstractOpenmeetingsSpringTest;
+import org.apache.openmeetings.test.AbstractJUnitDefaults;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
-public class TestInvitation extends AbstractOpenmeetingsSpringTest {
+public class TestInvitation extends AbstractJUnitDefaults {
 
 	private static final Logger log = LoggerFactory.getLogger(TestInvitation.class);
 	

@@ -22,7 +22,7 @@ import static org.junit.Assert.assertTrue;
 
 import org.apache.openmeetings.db.dao.label.FieldValueDao;
 import org.apache.openmeetings.db.entity.label.Fieldvalues;
-import org.apache.openmeetings.test.AbstractOpenmeetingsSpringTest;
+import org.apache.openmeetings.test.AbstractJUnitDefaults;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -31,7 +31,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  * @author sebawagner
  * 
  */
-public class TestGetFieldValues extends AbstractOpenmeetingsSpringTest {
+public class TestGetFieldValues extends AbstractJUnitDefaults {
 	
 	@Autowired
 	private FieldValueDao fieldValueDao;

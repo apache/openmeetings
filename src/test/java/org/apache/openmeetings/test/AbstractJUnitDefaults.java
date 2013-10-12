@@ -20,7 +20,6 @@ package org.apache.openmeetings.test;
 
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 
 import java.util.Date;
 
@@ -32,22 +31,14 @@ import org.apache.openmeetings.db.entity.calendar.Appointment;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.installation.ImportInitvalues;
 import org.apache.openmeetings.installation.InstallationConfig;
-import org.apache.openmeetings.util.OmFileHelper;
 import org.junit.Before;
-import org.junit.runner.RunWith;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.TestExecutionListeners;
-import org.springframework.test.context.junit4.AbstractJUnit4SpringContextTests;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@TestExecutionListeners({})
-@ContextConfiguration(locations={"classpath:openmeetings-applicationContext.xml"}, inheritLocations = true)
-public abstract class AbstractOpenmeetingsSpringTest extends AbstractJUnit4SpringContextTests {
-	private static final Logger log = Red5LoggerFactory.getLogger(AbstractOpenmeetingsSpringTest.class);
+public abstract class AbstractJUnitDefaults extends AbstractSpringTest {
+	
+	private static final Logger log = Red5LoggerFactory.getLogger(AbstractJUnitDefaults.class);
 	
 	protected static final String username = "swagner";
 	protected static final String userpass = "qweqwe";
@@ -68,7 +59,7 @@ public abstract class AbstractOpenmeetingsSpringTest extends AbstractJUnit4Sprin
 
 	@Before
 	public void setUp() throws Exception {
-		setOmHome();
+		super.setUp();
         if (userDao.count() < 1) {
             makeDefaultScheme();
             log.info("Default scheme created successfully");
@@ -123,14 +114,6 @@ public abstract class AbstractOpenmeetingsSpringTest extends AbstractJUnit4Sprin
 		return u;
 	}
 
-	protected void setOmHome() {
-		String webappsDir = System.getProperty("om.home", ".");
-		OmFileHelper.setOmHome(webappsDir);
-		if (!OmFileHelper.getOmHome().exists() || !OmFileHelper.getOmHome().isDirectory()) {
-			fail("Invalid directory is specified as OM HOME: " + webappsDir);
-		}
-	}
-	
 	private void makeDefaultScheme() throws Exception {
 		InstallationConfig cfg = new InstallationConfig();
 		cfg.username = username;

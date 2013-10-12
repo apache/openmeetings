@@ -25,11 +25,11 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.apache.openmeetings.data.user.OrganisationManager;
 import org.apache.openmeetings.db.entity.user.Organisation;
-import org.apache.openmeetings.test.AbstractOpenmeetingsSpringTest;
+import org.apache.openmeetings.test.AbstractJUnitDefaults;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-public class TestUserGroupAggregation extends AbstractOpenmeetingsSpringTest {
+public class TestUserGroupAggregation extends AbstractJUnitDefaults {
 
 	@Autowired
 	private OrganisationManager organisationManager;

@@ -21,24 +21,17 @@ package org.apache.openmeetings.test.selenium;
 import java.util.List;
 
 import org.apache.openmeetings.db.dao.label.FieldLanguagesValuesDao;
+import org.apache.openmeetings.test.AbstractSpringTest;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.runner.RunWith;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxProfile;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.TestExecutionListeners;
-import org.springframework.test.context.junit4.AbstractJUnit4SpringContextTests;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@TestExecutionListeners({})
-@ContextConfiguration(locations={"classpath:openmeetings-applicationContext.xml"}, inheritLocations = true)
-public abstract class AbstractTestDefaults extends AbstractJUnit4SpringContextTests {
+public abstract class AbstractTestDefaults extends AbstractSpringTest {
 	
 	@Autowired
 	private FieldLanguagesValuesDao fieldLanguagesValuesDao;
@@ -100,7 +93,8 @@ public abstract class AbstractTestDefaults extends AbstractJUnit4SpringContextTe
 	}
 
 	@Before
-	public void setUp() {
+	public void setUp() throws Exception {
+		super.setUp();
 		FirefoxProfile profile = new FirefoxProfile();
 		profile.setPreference("intl.accept_languages", getLocale());
 		driver = new FirefoxDriver(profile);

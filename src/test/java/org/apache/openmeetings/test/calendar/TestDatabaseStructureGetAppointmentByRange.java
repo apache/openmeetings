@@ -24,11 +24,11 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
-import org.apache.openmeetings.test.AbstractOpenmeetingsSpringTest;
+import org.apache.openmeetings.test.AbstractJUnitDefaults;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-public class TestDatabaseStructureGetAppointmentByRange extends AbstractOpenmeetingsSpringTest {
+public class TestDatabaseStructureGetAppointmentByRange extends AbstractJUnitDefaults {
 	private static final Logger log = Logger.getLogger(TestDatabaseStructureGetAppointmentByRange.class);
 	@Autowired
 	private AppointmentDao appointmentDao;

@@ -24,11 +24,11 @@ import org.apache.openmeetings.data.user.UserManager;
 import org.apache.openmeetings.db.entity.server.Sessiondata;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.remote.MainService;
-import org.apache.openmeetings.test.AbstractOpenmeetingsSpringTest;
+import org.apache.openmeetings.test.AbstractJUnitDefaults;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-public class TestLogin extends AbstractOpenmeetingsSpringTest {
+public class TestLogin extends AbstractJUnitDefaults {
 	
 	@Autowired
 	private MainService mService;

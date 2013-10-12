@@ -20,12 +20,12 @@ package org.apache.openmeetings.test.userdata;
 
 import org.apache.openmeetings.db.entity.server.Sessiondata;
 import org.apache.openmeetings.remote.MainService;
-import org.apache.openmeetings.test.AbstractOpenmeetingsSpringTest;
+import org.apache.openmeetings.test.AbstractJUnitDefaults;
 import org.apache.openmeetings.util.crypt.ManageCryptStyle;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-public class TestAuth extends AbstractOpenmeetingsSpringTest {
+public class TestAuth extends AbstractJUnitDefaults {
 	@Autowired
 	private MainService mService;
 

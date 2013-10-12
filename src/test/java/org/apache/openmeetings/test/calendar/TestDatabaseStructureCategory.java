@@ -23,11 +23,11 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.apache.openmeetings.db.dao.calendar.AppointmentCategoryDao;
 import org.apache.openmeetings.db.entity.calendar.AppointmentCategory;
-import org.apache.openmeetings.test.AbstractOpenmeetingsSpringTest;
+import org.apache.openmeetings.test.AbstractJUnitDefaults;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-public class TestDatabaseStructureCategory extends AbstractOpenmeetingsSpringTest {
+public class TestDatabaseStructureCategory extends AbstractJUnitDefaults {
 
 	@Autowired
 	private AppointmentCategoryDao appointmentCategoryDaoImpl;

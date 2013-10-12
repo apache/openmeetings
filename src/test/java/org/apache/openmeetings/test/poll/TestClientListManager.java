@@ -23,11 +23,11 @@ import static org.junit.Assert.assertNotNull;
 import java.util.Random;
 
 import org.apache.openmeetings.db.dao.server.ISessionManager;
-import org.apache.openmeetings.test.AbstractOpenmeetingsSpringTest;
+import org.apache.openmeetings.test.AbstractJUnitDefaults;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-public class TestClientListManager extends AbstractOpenmeetingsSpringTest {
+public class TestClientListManager extends AbstractJUnitDefaults {
 	@Autowired
 	private ISessionManager sessionManager;
 	

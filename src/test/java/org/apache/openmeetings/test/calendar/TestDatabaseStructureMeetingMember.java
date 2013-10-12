@@ -20,12 +20,12 @@ package org.apache.openmeetings.test.calendar;
 
 
 import org.apache.openmeetings.db.dao.calendar.MeetingMemberDao;
-import org.apache.openmeetings.test.AbstractOpenmeetingsSpringTest;
+import org.apache.openmeetings.test.AbstractJUnitDefaults;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 
-public class TestDatabaseStructureMeetingMember extends AbstractOpenmeetingsSpringTest {
+public class TestDatabaseStructureMeetingMember extends AbstractJUnitDefaults {
 	@Autowired
 	private MeetingMemberDao meetingMemberDao;
 

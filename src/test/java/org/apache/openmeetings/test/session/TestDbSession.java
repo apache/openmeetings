@@ -26,14 +26,14 @@ import org.apache.openmeetings.db.dao.room.ClientDao;
 import org.apache.openmeetings.db.dao.server.ServerDao;
 import org.apache.openmeetings.db.entity.room.Client;
 import org.apache.openmeetings.db.entity.server.Server;
-import org.apache.openmeetings.test.AbstractOpenmeetingsSpringTest;
+import org.apache.openmeetings.test.AbstractJUnitDefaults;
 import org.apache.openmeetings.util.OpenmeetingsVariables;
 import org.junit.Test;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
-public class TestDbSession extends AbstractOpenmeetingsSpringTest {
+public class TestDbSession extends AbstractJUnitDefaults {
 
 	protected static final Logger log = Red5LoggerFactory.getLogger(
 			TestDbSession.class, OpenmeetingsVariables.webAppRootKey);

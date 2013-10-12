@@ -20,11 +20,11 @@ package org.apache.openmeetings.test.calendar;
 
 import org.apache.log4j.Logger;
 import org.apache.openmeetings.db.dao.user.UserDao;
-import org.apache.openmeetings.test.AbstractOpenmeetingsSpringTest;
+import org.apache.openmeetings.test.AbstractJUnitDefaults;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-public class TestDatabaseStructureGetUserStart extends AbstractOpenmeetingsSpringTest {
+public class TestDatabaseStructureGetUserStart extends AbstractJUnitDefaults {
 	private static final Logger log = Logger.getLogger(TestDatabaseStructureGetUserStart.class);
 	@Autowired
 	private UserDao usersDao;

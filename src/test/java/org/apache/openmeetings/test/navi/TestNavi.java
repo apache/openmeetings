@@ -26,11 +26,11 @@ import java.util.List;
 import org.apache.openmeetings.db.dao.basic.NavigationDao;
 import org.apache.openmeetings.db.entity.basic.Naviglobal;
 import org.apache.openmeetings.db.entity.basic.Navimain;
-import org.apache.openmeetings.test.AbstractOpenmeetingsSpringTest;
+import org.apache.openmeetings.test.AbstractJUnitDefaults;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-public class TestNavi extends AbstractOpenmeetingsSpringTest {
+public class TestNavi extends AbstractJUnitDefaults {
 	
 	@Autowired
 	private NavigationDao navimanagement;

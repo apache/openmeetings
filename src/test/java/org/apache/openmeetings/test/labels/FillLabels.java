@@ -34,7 +34,7 @@ import org.apache.openmeetings.db.dao.label.FieldValueDao;
 import org.apache.openmeetings.db.entity.label.FieldLanguage;
 import org.apache.openmeetings.db.entity.label.Fieldlanguagesvalues;
 import org.apache.openmeetings.db.entity.label.Fieldvalues;
-import org.apache.openmeetings.test.AbstractOpenmeetingsSpringTest;
+import org.apache.openmeetings.test.AbstractJUnitDefaults;
 import org.apache.openmeetings.util.LangExport;
 import org.apache.openmeetings.util.OmFileHelper;
 import org.dom4j.Document;
@@ -64,7 +64,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  * @author sebawagner
  * 
  */
-public class FillLabels extends AbstractOpenmeetingsSpringTest {
+public class FillLabels extends AbstractJUnitDefaults {
 	private final String basePath = "languages/";
 	private final String masterLangFile = "english.xml";
 	private final String[] excludeFiles = { "errorvalues.xml",
