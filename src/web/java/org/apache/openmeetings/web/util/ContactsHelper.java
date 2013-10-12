@@ -43,7 +43,7 @@ public class ContactsHelper {
 		if (countContacts != null && countContacts > 0) {
 			return -45L;
 		}
-		String hash = getBean(ManageCryptStyle.class).getInstanceOfCrypt()
+		String hash = ManageCryptStyle.getInstanceOfCrypt()
 			.createPassPhrase(CalendarPatterns.getDateWithTimeByMiliSeconds(new Date()));
 
 		Long userContactId = getBean(UserContactsDao.class).addUserContact(userIdToAdd, getUserId(), true, hash);

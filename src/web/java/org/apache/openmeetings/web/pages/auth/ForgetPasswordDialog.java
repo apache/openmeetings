@@ -227,8 +227,7 @@ public class ForgetPasswordDialog extends AbstractFormDialog<String> {
 	private void sendHashByUser(User us, String appLink, AdminUserDao userDao) throws Exception {
 		String loginData = us.getLogin() + new Date();
 		log.debug("User: " + us.getLogin());
-		us.setResethash(getBean(ManageCryptStyle.class).getInstanceOfCrypt().createPassPhrase(
-				loginData));
+		us.setResethash(ManageCryptStyle.getInstanceOfCrypt().createPassPhrase(loginData));
 		userDao.update(us, -1L);
 		String reset_link = appLink + "?hash=" + us.getResethash();
 
