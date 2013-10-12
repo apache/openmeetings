@@ -38,7 +38,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 @RunWith(SpringJUnit4ClassRunner.class)
 @TestExecutionListeners({})
 @ContextConfiguration(locations={"classpath:openmeetings-applicationContext.xml"}, inheritLocations = true)
-public abstract class AbstractLoadTestDefaults extends AbstractJUnit4SpringContextTests {
+public abstract class AbstractTestDefaults extends AbstractJUnit4SpringContextTests {
 	
 	@Autowired
 	private FieldLanguagesValuesDao fieldLanguagesValuesDao;

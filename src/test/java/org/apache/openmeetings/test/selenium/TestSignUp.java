@@ -26,7 +26,7 @@ import org.openqa.selenium.WebElement;
 
 import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButtons;
 
-public class TestSignUp extends AbstractLoadTestDefaults {
+public class TestSignUp extends AbstractTestDefaults {
 	
 	String pass = "pass";
 	
