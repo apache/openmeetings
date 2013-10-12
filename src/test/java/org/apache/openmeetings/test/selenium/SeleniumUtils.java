@@ -40,7 +40,7 @@ public class SeleniumUtils {
 
 	public static void inputText(WebDriver driver, String search,
 			String inputText) throws Exception {
-		WebElement element = SeleniumUtils.findElement(driver, search, true);
+		WebElement element = SeleniumUtils.findElement(driver, search, true, true);
 
 		//clear text before adding input
 		element.clear();
@@ -50,7 +50,7 @@ public class SeleniumUtils {
 	}
 
 	public static void click(WebDriver driver, String search) throws Exception {
-		WebElement element = SeleniumUtils.findElement(driver, search, true);
+		WebElement element = SeleniumUtils.findElement(driver, search, true, true);
 		element.click();
 	}
 	
@@ -88,15 +88,26 @@ public class SeleniumUtils {
 	 * @param search
 	 * @param throwException
 	 *            under some circumstance you do't want to exit the test here
+	 * @param onlyReturnVisisbleElement TODO
 	 * @return
 	 * @throws Exception
 	 */
 	public static WebElement findElement(WebDriver driver, String search,
-			boolean throwException) throws Exception {
+			boolean throwException, boolean onlyReturnVisisbleElement) throws Exception {
 		for (int i = 0; i < numberOfRetries; i++) {
 			List<WebElement> elements = _findElement(driver, search);
 			if (elements != null) {
-				return elements.get(0);
+				
+				if (!onlyReturnVisisbleElement) {
+					return elements.get(0);
+				}
+				
+				for (WebElement element : elements) {
+					if (element.isDisplayed()) {
+						return element;
+					}
+				}
+				
 			}
 
 			Thread.sleep(defaultSleepInterval);

@@ -23,6 +23,8 @@ import java.util.Date;
 import org.junit.Test;
 import org.openqa.selenium.WebElement;
 
+import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButtons;
+
 public class TestSignUp extends AbstractLoadTestDefaults {
 	
 	String pass = "pass";
@@ -43,7 +45,7 @@ public class TestSignUp extends AbstractLoadTestDefaults {
 		super.testIsInstalledAndDoInstallation();
 		
 		WebElement signUpButton = SeleniumUtils.findElement(driver,
-				"//button[span[contains(text(), 'Not a member')]]", true);
+				"//button[span[contains(text(), 'Not a member')]]", true, true);
 		signUpButton.click();
 		
 		// ##################################
@@ -52,7 +54,7 @@ public class TestSignUp extends AbstractLoadTestDefaults {
 		doSignUp("Hans","Muster", userName, "pw", "pw2", email);
 		
 		//Find Error label-id 232 "Please enter two identical passwords"
-		SeleniumUtils.findElement(driver, "//span[@class='feedbackPanelERROR'][contains(text(), '" + getString(232) + "')]", true);
+		SeleniumUtils.findElement(driver, "//span[@class='feedbackPanelERROR'][contains(text(), '" + getString(232) + "')]", true, true);
 		
 		
 		// ##################################
@@ -60,13 +62,23 @@ public class TestSignUp extends AbstractLoadTestDefaults {
 		// ##################################
 		doSignUp("Hans","Muster", userName, pass, pass, email);
 		
+		
+		//Check for popup with success message and email to check
+		//Labelid 674
+		SeleniumUtils.findElement(driver, "//span[contains(text(), '" + getString(674) + "')]", true, true);
+		
+		//click button to close popup
+		WebElement signUpSucessPopUpOkButton = SeleniumUtils.findElement(driver,
+				"//button[span[contains(text(), '" + DialogButtons.OK.toString() + "')]]", true, true);
+		signUpSucessPopUpOkButton.click();
+		
 		//Login with user
 		SeleniumUtils.inputText(driver, "login", userName);
 		SeleniumUtils.inputText(driver, "pass", pass);
 
 		//click labelid 112 "Sign In"
 		WebElement signInButton = SeleniumUtils.findElement(driver,
-				"//button[span[contains(text(), '" + getString(112) + "')]]", true);
+				"//button[span[contains(text(), '" + getString(112) + "')]]", true, true);
 		signInButton.click();
 
 		// check for some text in dashbaord, labelid 281, "Help and support"
@@ -83,13 +95,13 @@ public class TestSignUp extends AbstractLoadTestDefaults {
 		
 		SeleniumUtils.inputText(driver, "firstName", firstName);
 		SeleniumUtils.inputText(driver, "lastName", lastName);
-		SeleniumUtils.inputText(driver, "//div[contains(@id, 'register')]//input[@name='login']", login);
+		SeleniumUtils.inputText(driver, "//input[@name='login']", login);
 		SeleniumUtils.inputText(driver, "password", password);
 		SeleniumUtils.inputText(driver, "confirmPassword", confirmPassword);
 		SeleniumUtils.inputText(driver, "email", email);
 		
 		WebElement submitButton = SeleniumUtils.findElement(driver,
-				"//button[span[contains(text(), 'Register')]]", true);
+				"//button[span[contains(text(), 'Register')]]", true, true);
 		submitButton.click();
 	}
 }

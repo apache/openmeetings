@@ -123,7 +123,7 @@ public abstract class AbstractLoadTestDefaults extends AbstractJUnit4SpringConte
 			SeleniumUtils.inputText(driver, "pass", getUserpass());
 
 			WebElement signInButton = SeleniumUtils.findElement(driver,
-					"//button[span[contains(text(), 'Sign in')]]", true);
+					"//button[span[contains(text(), 'Sign in')]]", true, true);
 			signInButton.click();
 
 			SeleniumUtils.elementExists(driver,
@@ -144,7 +144,7 @@ public abstract class AbstractLoadTestDefaults extends AbstractJUnit4SpringConte
 	protected void testIsInstalledAndDoInstallation() throws Exception {
 
 		WebElement wicketExtensionsWizardHeaderTitle = SeleniumUtils
-				.findElement(driver, "wicketExtensionsWizardHeaderTitle", false);
+				.findElement(driver, "wicketExtensionsWizardHeaderTitle", false, true);
 		if (wicketExtensionsWizardHeaderTitle == null) {
 			return;
 		}
@@ -207,7 +207,7 @@ public abstract class AbstractLoadTestDefaults extends AbstractJUnit4SpringConte
 			// check if installation is complete by searching for the link on
 			// the success page
 			WebElement enterApplicationLink = SeleniumUtils.findElement(driver,
-					"//a[contains(@href,'install')]", false);
+					"//a[contains(@href,'install')]", false, true);
 
 			if (enterApplicationLink == null) {
 				System.out
