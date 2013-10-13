@@ -176,6 +176,9 @@
 		<dependency org="org.apache.derby" name="derbyclient" rev="10.10.1.1" conf="openmeetings->*" transitive="false">
 			<include type="jar" />
 		</dependency>
+		<dependency org="org.apache.derby" name="derbynet" rev="10.10.1.1" conf="openmeetings->*" transitive="false">
+			<include type="jar" />
+		</dependency>
 		<dependency org="postgresql" name="postgresql" rev="9.1-901.jdbc4" conf="openmeetings->*" transitive="false">
 			<include type="jar" />
 		</dependency>

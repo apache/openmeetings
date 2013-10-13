@@ -32,6 +32,9 @@ import org.slf4j.Logger;
 public class OmFileHelper {
 	private static final Logger log = Red5LoggerFactory.getLogger(OmFileHelper.class, OpenmeetingsVariables.webAppRootKey);
 
+	/**
+	 * This variable needs to point to the openmeetings webapp directory
+	 */
 	private static File OM_HOME = null;
 	private static final String UPLOAD_DIR = "upload";
 	private static final String UPLOAD_TEMP_DIR = "uploadtemp";

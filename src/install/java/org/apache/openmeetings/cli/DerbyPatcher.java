@@ -23,6 +23,11 @@ public class DerbyPatcher extends ConnectionPropertiesPatcher {
 	protected String getUrl(String _url, String host, String _port, String _db) {
 		String db = (_db == null) ? "openmeetings" : _db;
 		String suffix = _url.substring(_url.indexOf(';'));
+		
+		if (host != null && _port != null) {
+			return "jdbc:derby" + "://" + host + ":" + _port + "/" + db + suffix;
+		}
+		
 		return "jdbc:derby" + ":" + db + suffix; 
 	}
 }

@@ -42,7 +42,7 @@ public abstract class ConnectionPropertiesPatcher {
 	protected static final String URL_PREFIX = "Url=";
 	protected ConnectionProperties connectionProperties;
 	
-	static ConnectionPropertiesPatcher getPatcher(String _dbType, ConnectionProperties connectionProperties) {
+	public static ConnectionPropertiesPatcher getPatcher(String _dbType, ConnectionProperties connectionProperties) {
 		DbType dbType = DbType.valueOf(_dbType);
 		ConnectionPropertiesPatcher patcher = null;
 		switch (dbType) {

@@ -853,6 +853,13 @@
 		<sleep seconds="10" />
 	</target>
 	
+	<target name="prepare-selenium-test-database" description="Prepare selenium database script">
+		<java classname="org.apache.openmeetings.test.derby.PrepareSystemFiles">
+	         <arg value="${dist.dir}/testred5/webapps/openmeetings"/>
+			<classpath refid="junit.classpath" />
+		</java>
+	</target>
+	
 	<target name="-prepare-selenium-copy-test-instance" description="Prepare selenium tests by starting up an OpenMeetings instance">
 		<copy todir="${dist.dir}/testred5">
 			<fileset dir="${dist.dir}/red5">
