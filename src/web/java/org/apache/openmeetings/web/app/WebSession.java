@@ -48,15 +48,21 @@ import org.apache.openmeetings.db.entity.user.State;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.util.TimezoneUtil;
 import org.apache.openmeetings.util.AuthLevelUtil;
+import org.apache.openmeetings.web.pages.SwfPage;
 import org.apache.openmeetings.web.user.dashboard.PrivateRoomsWidgetDescriptor;
 import org.apache.openmeetings.web.user.dashboard.RssWidgetDescriptor;
 import org.apache.openmeetings.web.user.dashboard.StartWidgetDescriptor;
 import org.apache.openmeetings.web.user.dashboard.WelcomeWidgetDescriptor;
 import org.apache.openmeetings.web.util.OmUrlFragment;
+import org.apache.wicket.RestartResponseAtInterceptPageException;
 import org.apache.wicket.authentication.IAuthenticationStrategy;
 import org.apache.wicket.authroles.authentication.AbstractAuthenticatedWebSession;
 import org.apache.wicket.authroles.authorization.strategies.role.Roles;
+import org.apache.wicket.request.IRequestParameters;
 import org.apache.wicket.request.Request;
+import org.apache.wicket.request.cycle.RequestCycle;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.apache.wicket.util.string.StringValue;
 import org.apache.wicket.util.string.Strings;
 
 import ro.fortsoft.wicket.dashboard.Dashboard;
@@ -102,6 +108,22 @@ public class WebSession extends AbstractAuthenticatedWebSession {
 			r = new Roles(Roles.USER);
 			if (AuthLevelUtil.checkAdminLevel(userLevel)) {
 				r.add(Roles.ADMIN);
+			}
+		} else {
+			try {
+				IRequestParameters params = RequestCycle.get().getRequest().getRequestParameters();
+				StringValue secureHash = params.getParameterValue("secureHash");
+				if (!secureHash.isEmpty()) {
+					PageParameters pp = new PageParameters();
+					for (String p : params.getParameterNames()) {
+						pp.add(p, params.getParameterValues(p));
+					}
+					throw new RestartResponseAtInterceptPageException(SwfPage.class, pp);
+				}
+			} catch (RestartResponseAtInterceptPageException e) {
+				throw e;
+			} catch (Exception e) {
+				//no-op, will continue to sign-in page
 			}
 		}
 		return r;

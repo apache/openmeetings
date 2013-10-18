@@ -66,12 +66,8 @@ public class MainPage extends BaseInitedPage {
 	private final AbstractAjaxTimerBehavior areaBehavior;
 	private DebugBar dev = null;
 	
-	public MainPage() {
-		this(null);
-	}
-	
 	public MainPage(PageParameters pp) {
-		super(pp);
+		super();
 		contents = new WebMarkupContainer("contents");
 		add(contents.add(new WebMarkupContainer(CHILD_ID)).setOutputMarkupId(true).setMarkupId("contents"));
 		menu = new MenuPanel("menu");

@@ -23,21 +23,10 @@ import static org.apache.openmeetings.web.app.Application.getBean;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.entity.label.FieldLanguage;
 import org.apache.openmeetings.web.app.WebSession;
-import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.apache.wicket.util.string.StringValue;
 
 public abstract class BaseInitedPage extends BasePage {
 	private static final long serialVersionUID = 5716753033219700254L;
 
-	public BaseInitedPage(PageParameters pp) {
-		if (pp != null) {
-			StringValue hash = pp.get("secureHash");
-			if (!hash.isEmpty()) {
-				setResponsePage(SwfPage.class, pp);
-			}
-		}
-	}
-	
 	@Override
 	protected String getApplicationName() {
 		return getBean(ConfigurationDao.class).getAppName();
