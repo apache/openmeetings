@@ -310,6 +310,17 @@ public class WhiteboardManager {
 				whiteBoardObjectListManagerById
 						.setWhiteBoardObjectListRoomObjAndWhiteboardId(room_id,
 								whiteboardObject, whiteBoardId);
+			} else if (action.equals("whiteboardObj")) {
+				WhiteboardObject whiteboardObject = whiteBoardObjectListManagerById
+						.getWhiteBoardObjectListByRoomIdAndWhiteboard(room_id,
+								whiteBoardId);
+
+				whiteboardObject.setFullFit((Boolean) actionObject.get(1));
+				whiteboardObject.setZoom((Integer) actionObject.get(2));
+
+				whiteBoardObjectListManagerById
+				.setWhiteBoardObjectListRoomObjAndWhiteboardId(room_id,
+						whiteboardObject, whiteBoardId);
 			} else {
 				log.warn("Unkown Type: " + action + " actionObject: "
 						+ actionObject);

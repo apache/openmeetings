@@ -1097,6 +1097,8 @@
 			this.setAttribute("x",actionObject[1]);
 			this.setAttribute("y",actionObject[2]);
 			
+        } else if(actionObject[0]=='whiteboardObj'){
+            this.doUpdateFullFitAndZoomRemote(actionObject);
 		} else if(action=='flv'){
 			
 			this.playFLVRemote(actionObject);
