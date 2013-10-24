@@ -116,7 +116,11 @@ public class WebSession extends AbstractAuthenticatedWebSession {
 				if (!secureHash.isEmpty()) {
 					PageParameters pp = new PageParameters();
 					for (String p : params.getParameterNames()) {
-						pp.add(p, params.getParameterValues(p));
+						for (StringValue sv : params.getParameterValues(p)) {
+							if (!sv.isEmpty()) {
+								pp.add(p, sv.toString());
+							}
+						}
 					}
 					throw new RestartResponseAtInterceptPageException(SwfPage.class, pp);
 				}
