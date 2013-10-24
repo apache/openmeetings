@@ -539,7 +539,8 @@
             this.ignoreUpdates = false;
         </method>
         
-        <labelCheckbox x="344" name="_fullFit" labelid="847" y="4" fontstyle="bold" bgcolor="0xFFFFFF" >
+        <labelCheckbox x="344" name="_fullFit" labelid="847" y="4" fontstyle="bold" bgcolor="0xFFFFFF"
+        		visible="${ ((canvas.becomemoderator) ? true : false ) }">
             <handler name="onvalue" args="v">
                 if (parent.ignoreUpdates) {
                     return;
@@ -554,7 +555,8 @@
         </labelCheckbox>
         
         <changeWidthSlider name="_zoom" initialNumberInit="50" labelid="1328"
-              boxPosition="down" initialNumber="50" maximum="200">
+	            boxPosition="down" initialNumber="50" maximum="200"
+	       		visible="${ ((canvas.becomemoderator) ? true : false ) }">
             <handler name="oninitialNumber" args="i">
                 if (parent.ignoreUpdates) {
                     return;
