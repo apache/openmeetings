@@ -660,7 +660,7 @@ limitations under the License.
       </td></tr>
       <tr><td>
         <blockquote>
-                                    <p>You need Apache OpenMeetings <strong>version 2.1</strong> to apply this guide!</p>
+                                    <p>You need Apache OpenMeetings <strong>version 3.0</strong> to apply this guide!</p>
                                                 <p>You need Asterisk <strong>version 11</strong> to apply this guide!</p>
                                                 <p>Here is instruction how-to set up red5sip transport integration with OpenMeetings on Ubuntu 12.10.</p>
                             </blockquote>
@@ -932,7 +932,7 @@ limitations under the License.
                                                 <br />
                                                 <div>
 				Update Openmeetings with creadentials for Asterisk manager. 
-				Modify <tt>/opt/red5/webapps/openmeetings/WEB-INF/openmeetings-applicationContext.xml</tt><br />
+				Modify <tt>/opt/red5/webapps/openmeetings/WEB-INF/classes/openmeetings-applicationContext.xml</tt><br />
 				find <strong>&lt;bean id="sipDao" class="org.apache.openmeetings.db.dao.room.SipDao"&gt;</strong>
 				uncomment its parameters and set it to your custom values.
 				<p style="font-size: larger; color: blue;">
