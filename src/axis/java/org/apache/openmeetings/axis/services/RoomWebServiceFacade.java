@@ -649,4 +649,8 @@ public class RoomWebServiceFacade extends BaseWebService {
 	public int modifyRoomParameter(String SID, Long room_id, String paramName, Object paramValue) throws AxisFault {
 		return getBean(RoomWebService.class).modifyRoomParameter(SID, room_id, paramName, paramValue);
 	}
+	
+	public Long addRoomToOrg(String SID, Long rooms_id, Long organisation_id) throws AxisFault {
+		return getBean(RoomWebService.class).addRoomToOrg(SID, rooms_id, organisation_id);
+	}
 }

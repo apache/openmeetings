@@ -2478,4 +2478,25 @@ public class RoomWebService {
 		}
 	}
 	
+	/**
+	 * Adds a room to an organization
+	 * 
+	 * @param SID - The SID of the User. This SID must be marked as Loggedin
+	 * @param rooms_id - Id of room to be added
+	 * @param organisation_id - Id of organisation that the room is being paired with
+	 * 
+	 * @return Id of the relation created, null or -1 in case of the error
+	 */
+	public Long addRoomToOrg(String SID, Long rooms_id, Long organisation_id) {
+		try {
+			Long users_id = sessiondataDao.checkSession(SID);
+			Long user_level = userManager.getUserLevelByID(users_id);
+			if (AuthLevelUtil.checkWebServiceLevel(user_level)) {
+				return roomManager.addRoomToOrganisation(user_level, rooms_id, organisation_id);
+			}
+		} catch (Exception err) {
+			log.error("[addRoomToOrg]", err);
+		}
+		return new Long(-1);
+	}
 }
