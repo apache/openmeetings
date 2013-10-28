@@ -2492,7 +2492,9 @@ public class RoomWebService {
 			Long users_id = sessiondataDao.checkSession(SID);
 			Long user_level = userManager.getUserLevelByID(users_id);
 			if (AuthLevelUtil.checkWebServiceLevel(user_level)) {
-				return roomManager.addRoomToOrganisation(user_level, rooms_id, organisation_id);
+				if (null == roomManager.getRoomsOrganisationByOrganisationIdAndRoomId(organisation_id, rooms_id)) {
+					return roomManager.addRoomToOrganisation(user_level, rooms_id, organisation_id);
+				}
 			}
 		} catch (Exception err) {
 			log.error("[addRoomToOrg]", err);

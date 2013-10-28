@@ -926,7 +926,7 @@ public class RoomManager implements IRoomManager {
 		return null;
 	}
 
-	private RoomOrganisation getRoomsOrganisationByOrganisationIdAndRoomId(
+	public RoomOrganisation getRoomsOrganisationByOrganisationIdAndRoomId(
 			long organisation_id, long rooms_id) {
 		try {
 			TypedQuery<RoomOrganisation> q = em.
