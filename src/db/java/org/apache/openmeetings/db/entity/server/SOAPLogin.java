@@ -50,22 +50,22 @@ public class SOAPLogin implements Serializable {
 	private Date created;
 	
 	@Column(name="used")
-	private Boolean used;
+	private boolean used;
 	
 	@Column(name="use_date")
 	private Date useDate;
 	
 	@Column(name="becomemoderator")
-	private Boolean becomemoderator;
+	private boolean becomemoderator;
 	
 	@Column(name="showaudiovideotest")
-	private Boolean showAudioVideoTest;
+	private boolean showAudioVideoTest;
 	
 	@Column(name="allow_same_url_multiple_times")
-	private Boolean allowSameURLMultipleTimes;
+	private boolean allowSameURLMultipleTimes;
 	
 	@Column(name="show_nick_name_dialog")
-	private Boolean showNickNameDialog;
+	private boolean showNickNameDialog;
 	
 	@Column(name="client_url")
 	private String clientURL;
@@ -77,7 +77,7 @@ public class SOAPLogin implements Serializable {
 	private String landingZone;
 	
 	@Column(name="allow_recording")
-	private Boolean allowRecording;
+	private boolean allowRecording;
 	
 	public long getSoapLoginId() {
 		return soapLoginId;
@@ -114,10 +114,10 @@ public class SOAPLogin implements Serializable {
 		this.created = created;
 	}
 	
-	public Boolean getUsed() {
+	public boolean getUsed() {
 		return used;
 	}
-	public void setUsed(Boolean used) {
+	public void setUsed(boolean used) {
 		this.used = used;
 	}
 	
@@ -128,31 +128,31 @@ public class SOAPLogin implements Serializable {
 		this.useDate = useDate;
 	}
 	
-	public Boolean getBecomemoderator() {
+	public boolean getBecomemoderator() {
 		return becomemoderator;
 	}
-	public void setBecomemoderator(Boolean becomemoderator) {
+	public void setBecomemoderator(boolean becomemoderator) {
 		this.becomemoderator = becomemoderator;
 	}
 	
-	public Boolean getShowAudioVideoTest() {
+	public boolean getShowAudioVideoTest() {
 		return showAudioVideoTest;
 	}
-	public void setShowAudioVideoTest(Boolean showAudioVideoTest) {
+	public void setShowAudioVideoTest(boolean showAudioVideoTest) {
 		this.showAudioVideoTest = showAudioVideoTest;
 	}
 	
-	public Boolean getAllowSameURLMultipleTimes() {
+	public boolean getAllowSameURLMultipleTimes() {
 		return allowSameURLMultipleTimes;
 	}
-	public void setAllowSameURLMultipleTimes(Boolean allowSameURLMultipleTimes) {
+	public void setAllowSameURLMultipleTimes(boolean allowSameURLMultipleTimes) {
 		this.allowSameURLMultipleTimes = allowSameURLMultipleTimes;
 	}
 
-	public Boolean getShowNickNameDialog() {
+	public boolean getShowNickNameDialog() {
 		return showNickNameDialog;
 	}
-	public void setShowNickNameDialog(Boolean showNickNameDialog) {
+	public void setShowNickNameDialog(boolean showNickNameDialog) {
 		this.showNickNameDialog = showNickNameDialog;
 	}
 	
@@ -177,10 +177,10 @@ public class SOAPLogin implements Serializable {
 		this.landingZone = landingZone;
 	}
 	
-	public Boolean getAllowRecording() {
+	public boolean getAllowRecording() {
 		return allowRecording;
 	}
-	public void setAllowRecording(Boolean allowRecording) {
+	public void setAllowRecording(boolean allowRecording) {
 		this.allowRecording = allowRecording;
 	}
 	

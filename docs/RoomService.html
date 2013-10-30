@@ -239,6 +239,10 @@ limitations under the License.
                 <a href="#modifyRoomParameter"><b>modifyRoomParameter</b></a><br/>
                 <div class="navigation_comment"><i >Method to update arbitrary room parameter.</i></div>
                 </div>
+                                               <div>
+                <a href="#addRoomToOrg"><b>addRoomToOrg</b></a><br/>
+                <div class="navigation_comment"><i >Adds a room to an organization</i></div>
+                </div>
                            </div>
 	   
 	    <h3>Methods Details in RoomService</h3>
@@ -5143,6 +5147,68 @@ limitations under the License.
     			    			<br/>
     			REST Sample Call/URL:<br/>
     			    			    				    								    				    								    				    								    				    												<a href="http://localhost:5080/openmeetings/services/RoomService/modifyRoomParameter?SID=VALUE&room_id=VALUE&paramName=VALUE&paramValue=VALUE">http://localhost:5080/openmeetings/services/RoomService/modifyRoomParameter?SID=VALUE&amp;room_id=VALUE&amp;paramName=VALUE&amp;paramValue=VALUE</a>
+    		  </div>
+    	   				    		      <div class="method">
+		        <div class="method_header">
+		        <div style="margin-left:10px">
+    			<a name="addRoomToOrg" ><b>addRoomToOrg</b></a>
+    			</div>
+    			</div>
+    			
+    			Method: <i>addRoomToOrg (
+    			    			    			       			   String SID
+    			       			    			       			     , 
+    			       			   Long rooms_id
+    			       			    			       			     , 
+    			       			   Long organisation_id
+    			       			    			)
+    			</i><br/>
+    			<p>
+    			  Adds a room to an organization
+    			</p>
+    			<p>
+                  Return Type: java.lang.Long
+                </p>
+    			<p>Params:</p>
+    			    			
+    				    			<table rules="all" border="1">
+	    			   <thead>
+	    			   <tr>
+	    			     <th width="200" align="left">Type</th>
+	    			     <th width="200" align="left">Fieldname</th>
+	    			     <th width="400" align="left">Description</th>
+	    			   </tr>
+	    			   </thead>
+	    			   <tbody>
+	    			   	    			   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">SID</td>
+	                     <td valign="top">- The SID of the User. This SID must be marked as Loggedin</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Long
+	                     		                     </td>
+	                     <td valign="top">rooms_id</td>
+	                     <td valign="top">- Id of room to be added</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Long
+	                     		                     </td>
+	                     <td valign="top">organisation_id</td>
+	                     <td valign="top">- Id of organisation that the room is being paired with</td>
+	                   </tr>
+	                   
+	                   	                   	                   </tbody>
+	    			</table>
+    			    			<br/>
+    			REST Sample Call/URL:<br/>
+    			    			    				    								    				    								    				    												<a href="http://localhost:5080/openmeetings/services/RoomService/addRoomToOrg?SID=VALUE&rooms_id=VALUE&organisation_id=VALUE">http://localhost:5080/openmeetings/services/RoomService/addRoomToOrg?SID=VALUE&amp;rooms_id=VALUE&amp;organisation_id=VALUE</a>
     		  </div>
     	   			
 	

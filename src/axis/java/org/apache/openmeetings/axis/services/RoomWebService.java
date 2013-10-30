@@ -710,7 +710,8 @@ public class RoomWebService {
 			if (AuthLevelUtil.checkWebServiceLevel(user_level)) {
 				return roomManager.addRoom(3L, name, roomtypes_id, comment,
 						numberOfPartizipants, ispublic, null, false, false,
-						null, false, null, true, false, false, true, "", "",
+						null, false, null, true, false, false, false //isClosed
+						, "", "",
 						null, null, null, false, // hideTopBar
 						false, // hideChat
 						false, // hideActivitiesAndActions
@@ -774,7 +775,8 @@ public class RoomWebService {
 				return roomManager.addRoom(3L, name, roomtypes_id, comment,
 						numberOfPartizipants, ispublic, null, appointment,
 						isDemoRoom, demoTime, isModeratedRoom, null, true,
-						false, false, true, "", "", null, null, null, false, // hideTopBar
+						false, true, false //isClosed
+						, "", "", null, null, null, false, // hideTopBar
 						false, // hideChat
 						false, // hideActivitiesAndActions
 						false, // hideFilesExplorer
@@ -843,7 +845,8 @@ public class RoomWebService {
 				return roomManager.addRoom(3L, name, roomtypes_id, comment,
 						numberOfPartizipants, ispublic, null, appointment,
 						isDemoRoom, demoTime, isModeratedRoom, null,
-						allowUserQuestions, false, true, false, "", "", null,
+						allowUserQuestions, false, true, false //isClosed
+						, "", "", null,
 						null, null, false, // hideTopBar
 						false, // hideChat
 						false, // hideActivitiesAndActions
@@ -915,7 +918,8 @@ public class RoomWebService {
 				return roomManager.addRoom(3L, name, roomtypes_id, comment,
 						numberOfPartizipants, ispublic, null, appointment,
 						isDemoRoom, demoTime, isModeratedRoom, null,
-						allowUserQuestions, isAudioOnly, true, false, "", "",
+						allowUserQuestions, isAudioOnly, true, false //isClosed
+						, "", "",
 						null, null, null, false, // hideTopBar
 						false, // hideChat
 						false, // hideActivitiesAndActions
@@ -1007,7 +1011,8 @@ public class RoomWebService {
 				return roomManager.addRoom(3L, name, roomtypes_id, comment,
 						numberOfPartizipants, ispublic, null, appointment,
 						isDemoRoom, demoTime, isModeratedRoom, null,
-						allowUserQuestions, isAudioOnly, true, false, "", "",
+						allowUserQuestions, isAudioOnly, true, false //isClosed
+						, "", "",
 						null, null, null, hideTopBar, hideChat,
 						hideActivitiesAndActions, hideFilesExplorer,
 						hideActionsMenu, hideScreenSharing, hideWhiteboard,
