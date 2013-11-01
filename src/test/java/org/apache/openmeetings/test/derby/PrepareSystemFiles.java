@@ -37,9 +37,13 @@ public class PrepareSystemFiles {
 		try {
 			OmFileHelper.setOmHome(args[0]);
 			
+			String databaseHomeDirectory = args[1];
+			
+			String persistanceFileToPatch = args[2];
+			
 			ConnectionProperties connectionProperties = new ConnectionProperties();
 			
-			File conf = new File(OmFileHelper.getWebinfDir(), "classes/META-INF/persistence.xml");
+			File conf = new File(persistanceFileToPatch);
 			
 			if (conf.exists()) {
 				conf.delete();
@@ -52,7 +56,7 @@ public class PrepareSystemFiles {
 					, conf
 					, "localhost"
 					, "1527"
-					, "OpenMeetingsSeleniumTest"
+					, databaseHomeDirectory + "openmeetings"
 					, "user"
 					, "secret"
 					);

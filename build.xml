@@ -827,7 +827,7 @@
 	 -->
 	
 	<target name="prepare-selenium-start-openmeetings" description="Prepare selenium tests by starting up an OpenMeetings instance" 
-		depends="prepare-selenium-stop-openmeetings, -prepare-selenium-port-properties" >
+		depends="-prepare-selenium-port-properties, prepare-selenium-stop-openmeetings" >
 		<exec dir="${dist.dir}/testred5" executable="red5-highperf.bat" osfamily="windows" output="${dist.dir}/testred5/red5_system.log">
 		</exec>
 		<!--this does only make sense if the unix executable is run obviously, however we do it for all -->
@@ -854,9 +854,17 @@
 	
 	<target name="prepare-selenium-test-database" description="Prepare selenium database script">
 		<java classname="org.apache.openmeetings.test.derby.PrepareSystemFiles">
-	         <arg value="${dist.dir}/testred5/webapps/openmeetings"/>
+			<!-- the home directory of the test instance of red5 -->
+	        <arg value="${dist.dir}/testred5/webapps/openmeetings"/>
+			<!-- the directory where the openmeetings database is created by derby -->
+			<arg value="${basedir}/${dist.dir}/testred5/"/>
+			<!-- the persistance file to patch -->
+			<arg value="${basedir}/src/main/webapp/WEB-INF/classes/META-INF/persistence.xml"/>
 			<classpath refid="junit.classpath" />
 		</java>
+	</target>
+
+	<target name="debug-prepare-selenium-copy-test-instance" depends="-prepare-selenium-copy-test-instance">
 	</target>
 	
 	<target name="-prepare-selenium-copy-test-instance" description="Prepare selenium tests by starting up an OpenMeetings instance">
