@@ -228,37 +228,37 @@
 		<dependency org="org.simpleframework" name="simple-xml" rev="2.7" conf="openmeetings->*" transitive="false">
 			<include type="jar" />
 		</dependency>
-		<dependency org="org.apache.wicket" name="wicket-request" rev="6.11.0" conf="openmeetings->*" transitive="false">
+		<dependency org="org.apache.wicket" name="wicket-request" rev="6.12.0" conf="openmeetings->*" transitive="false">
 			<include type="jar" />
 		</dependency>
-		<dependency org="org.apache.wicket" name="wicket-util" rev="6.11.0" conf="openmeetings->*" transitive="false">
+		<dependency org="org.apache.wicket" name="wicket-util" rev="6.12.0" conf="openmeetings->*" transitive="false">
 			<include type="jar" />
 		</dependency>
-		<dependency org="org.apache.wicket" name="wicket-core" rev="6.11.0" conf="openmeetings->*" transitive="false">
+		<dependency org="org.apache.wicket" name="wicket-core" rev="6.12.0" conf="openmeetings->*" transitive="false">
 			<include type="jar" />
 		</dependency>
-		<dependency org="org.apache.wicket" name="wicket-auth-roles" rev="6.11.0" conf="openmeetings->*" transitive="false">
+		<dependency org="org.apache.wicket" name="wicket-auth-roles" rev="6.12.0" conf="openmeetings->*" transitive="false">
 			<include type="jar" />
 		</dependency>
-		<dependency org="org.apache.wicket" name="wicket-ioc" rev="6.11.0" conf="openmeetings->*" transitive="false">
+		<dependency org="org.apache.wicket" name="wicket-ioc" rev="6.12.0" conf="openmeetings->*" transitive="false">
 			<include type="jar" />
 		</dependency>
-		<dependency org="org.apache.wicket" name="wicket-extensions" rev="6.11.0" conf="openmeetings->*" transitive="false">
+		<dependency org="org.apache.wicket" name="wicket-extensions" rev="6.12.0" conf="openmeetings->*" transitive="false">
 			<include type="jar" />
 		</dependency>
-		<dependency org="org.apache.wicket" name="wicket-datetime" rev="6.11.0" conf="openmeetings->*" transitive="false">
+		<dependency org="org.apache.wicket" name="wicket-datetime" rev="6.12.0" conf="openmeetings->*" transitive="false">
 			<include type="jar" />
 		</dependency>
 		<dependency org="joda-time" name="joda-time" rev="2.3" conf="openmeetings->*" transitive="false">
 			<include type="jar" />
 		</dependency>
-		<dependency org="org.apache.wicket" name="wicket-devutils" rev="6.11.0" conf="openmeetings->*" transitive="false">
+		<dependency org="org.apache.wicket" name="wicket-devutils" rev="6.12.0" conf="openmeetings->*" transitive="false">
 			<include type="jar" />
 		</dependency>
-		<dependency org="org.apache.wicket" name="wicket-native-websocket-core" rev="0.13" conf="openmeetings->*" transitive="false">
+		<dependency org="org.apache.wicket" name="wicket-native-websocket-core" rev="0.14" conf="openmeetings->*" transitive="false">
 			<include type="jar" />
 		</dependency>
-		<dependency org="org.apache.wicket" name="wicket-native-websocket-tomcat" rev="0.13" conf="openmeetings->*" transitive="false">
+		<dependency org="org.apache.wicket" name="wicket-native-websocket-tomcat" rev="0.14" conf="openmeetings->*" transitive="false">
 			<include type="jar" />
 		</dependency>
 		<dependency org="com.googlecode.wicket-jquery-ui" name="wicket-jquery-ui-core" rev="6.11.0" conf="openmeetings->*" transitive="false">
@@ -352,7 +352,7 @@
 		<!--  END OF DTD -->
 		
 		<!--  START OF svntask -->
-		<dependency org="org.tmatesoft.svnkit" name="svnkit" rev="1.7.10" conf="svntask->*" transitive="true">
+		<dependency org="org.tmatesoft.svnkit" name="svnkit" rev="1.7.11" conf="svntask->*" transitive="true">
 			<include type="jar" />
 		</dependency>
 		<dependency org="svnant" name="svnant" rev="1.3.1" conf="svntask->*" transitive="false">
