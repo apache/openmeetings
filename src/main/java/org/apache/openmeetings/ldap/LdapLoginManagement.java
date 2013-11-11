@@ -81,32 +81,26 @@ public class LdapLoginManagement implements ILdapLoginManagement {
 	public static final String CONFIGKEY_LDAP_ADMIN_DN = "ldap_admin_dn";
 	public static final String CONFIGKEY_LDAP_ADMIN_PASSWD = "ldap_passwd";
 	public static final String CONFIGKEY_LDAP_SEARCH_SCOPE = "ldap_search_base";
-	public static final String CONFIGKEY_LDAP_SERVER_TYPE = "ldap_server_type"; // for
-																				// OpenLDAP
-																				// use
-																				// only
+	public static final String CONFIGKEY_LDAP_SERVER_TYPE = "ldap_server_type"; // for OpenLDAP use only
 	public static final String CONFIGKEY_LDAP_AUTH_TYPE = "ldap_auth_type";
 
 	public static final String CONFIGKEY_LDAP_FIELDNAME_USER_PRINCIPAL = "field_user_principal";
-	public static final String CONFIGKEY_LDAP_SYNC_PASSWD_OM = "ldap_sync_password_to_om"; // 'yes'
-																							// or
-																							// 'no'
+	public static final String CONFIGKEY_LDAP_SYNC_PASSWD_OM = "ldap_sync_password_to_om"; // 'yes' or 'no'
 
 	public static final String CONFIGKEY_LDAP_USE_LOWER_CASE = "ldap_use_lower_case";
 	
 	public static final String CONFIGKEY_LDAP_TIMEZONE_NAME = "ldap_user_timezone";
 	
-	/***
-	 * for future use (lemeur) public static final String
-	 * CONFIGKEY_LDAP_USER_EXTRAFILTER = "ldap_user_extrafilter"; public static
-	 * final String CONFIGKEY_LDAP_GROUP_FILTER_NUM = "ldap_group_filter_num";
-	 * public static final String CONFIGKEY_LDAP_GROUP_FILTER_NAME_PREFIX =
-	 * "ldap_group_filter_name_"; public static final String
-	 * CONFIGKEY_LDAP_GROUP_FILTER_BASE_PREFIX = "ldap_group_filter_base_";
-	 * public static final String CONFIGKEY_LDAP_GROUP_FILTER_TYPE_PREFIX =
-	 * "ldap_group_filter_type_"; public static final String
-	 * CONFIGKEY_LDAP_GROUP_FILTER_TEXT_PREFIX = "ldap_group_filter_text_";
-	 ***/
+	/*
+	//for future use (lemeur)
+	public static final String CONFIGKEY_LDAP_USER_EXTRAFILTER = "ldap_user_extrafilter";
+	public static final String CONFIGKEY_LDAP_GROUP_FILTER_NUM = "ldap_group_filter_num";
+	public static final String CONFIGKEY_LDAP_GROUP_FILTER_NAME_PREFIX = "ldap_group_filter_name_";
+	public static final String CONFIGKEY_LDAP_GROUP_FILTER_BASE_PREFIX = "ldap_group_filter_base_";
+	public static final String CONFIGKEY_LDAP_GROUP_FILTER_TYPE_PREFIX = "ldap_group_filter_type_";
+	public static final String CONFIGKEY_LDAP_GROUP_FILTER_TEXT_PREFIX = "ldap_group_filter_text_";
+	*/
+	public static final String CONFIGKEY_LDAP_FILTER_ADD = "ldap_filter_add";
 
 	// LDAP default attributes mapping
 	public static final String LDAP_KEY_LASTNAME = "sn";
@@ -278,30 +272,26 @@ public class LdapLoginManagement implements ILdapLoginManagement {
 		// Wether or not we'll store Ldap passwd into OM db
 		boolean ldap_sync_passwd_to_om = "no".equals(configData.get(CONFIGKEY_LDAP_SYNC_PASSWD_OM));
 
-		/***
-		 * for future use (lemeur) // Ldap user filter to refine the search
-		 * String ldap_user_extrafilter =
-		 * configData.get(CONFIGKEY_LDAP_USER_EXTRAFILTER);
-		 * 
-		 * // Count of Ldap group filters String ldap_group_filter_num =
-		 * configData.get(CONFIGKEY_LDAP_GROUP_FILTER_NUM);
-		 * 
-		 * // Prefix name of Ldap group filter name String
-		 * ldap_group_filter_name_prefix =
-		 * configData.get(CONFIGKEY_LDAP_GROUP_FILTER_NAME_PREFIX);
-		 * 
-		 * // Prefix name of Ldap group filter base String
-		 * ldap_group_filter_base_prefix =
-		 * configData.get(CONFIGKEY_LDAP_GROUP_FILTER_NAME_PREFIX);
-		 * 
-		 * // Prefix name of Ldap group filter type String
-		 * ldap_group_filter_type_prefix =
-		 * configData.get(CONFIGKEY_LDAP_GROUP_FILTER_TYPE_PREFIX);
-		 * 
-		 * // Prefix name of Ldap group filter text String
-		 * ldap_group_filter_text_prefix =
-		 * configData.get(CONFIGKEY_LDAP_GROUP_FILTER_TEXT_PREFIX);
-		 ***/
+		/*
+		//for future use (lemeur)
+		// Ldap user filter to refine the search
+		String ldap_user_extrafilter = configData.get(CONFIGKEY_LDAP_USER_EXTRAFILTER);
+		
+		// Count of Ldap group filters 
+		String ldap_group_filter_num = configData.get(CONFIGKEY_LDAP_GROUP_FILTER_NUM);
+		
+		// Prefix name of Ldap group filter name
+		String ldap_group_filter_name_prefix = configData.get(CONFIGKEY_LDAP_GROUP_FILTER_NAME_PREFIX);
+		
+		// Prefix name of Ldap group filter base
+		String ldap_group_filter_base_prefix = configData.get(CONFIGKEY_LDAP_GROUP_FILTER_NAME_PREFIX);
+		
+		// Prefix name of Ldap group filter type
+		String ldap_group_filter_type_prefix = configData.get(CONFIGKEY_LDAP_GROUP_FILTER_TYPE_PREFIX);
+		
+		// Prefix name of Ldap group filter text
+		String ldap_group_filter_text_prefix = configData.get(CONFIGKEY_LDAP_GROUP_FILTER_TEXT_PREFIX);
+		*/
 
 		// Get custom Ldap attributes mapping
 		String ldap_user_attr_lastname = configData.get(CONFIGKEY_LDAP_KEY_LASTNAME);
@@ -317,7 +307,8 @@ public class LdapLoginManagement implements ILdapLoginManagement {
 		String ldap_user_attr_timezone = configData.get(CONFIGKEY_LDAP_TIMEZONE_NAME);
 		String ldap_user_picture_uri = configData.get(CONFIGKEY_LDAP_PICTURE_URI);
 		String ldap_use_lower_case = configData.get(CONFIGKEY_LDAP_USE_LOWER_CASE);
-		
+		String ldap_auth_type = configData.get(CONFIGKEY_LDAP_AUTH_TYPE);
+		String ldap_filter_add = configData.get(CONFIGKEY_LDAP_FILTER_ADD);
 		
 		if (ldap_use_lower_case != null && ldap_use_lower_case.equals("true")) {
 			user = user.toLowerCase();
@@ -356,14 +347,13 @@ public class LdapLoginManagement implements ILdapLoginManagement {
 		if (ldap_user_attr_timezone == null) {
 			ldap_user_attr_timezone = LDAP_KEY_TIMEZONE;
 		}
-
-		// Auth Type
-		String ldap_auth_type = configData.get(CONFIGKEY_LDAP_AUTH_TYPE);
-
 		if (ldap_auth_type == null) {
 			ldap_auth_type = "";
 		}
-
+		if (ldap_filter_add == null) {
+			ldap_filter_add = "";
+		}
+		
 		if (!isValidAuthType(ldap_auth_type)) {
 			log.error("ConfigKey in Ldap Config contains invalid auth type : '"
 					+ ldap_auth_type + "' -> Defaulting to "
@@ -373,6 +363,10 @@ public class LdapLoginManagement implements ILdapLoginManagement {
 
 		// Filter for Search of UserData
 		String ldap_search_filter = "(" + ldap_fieldname_user_principal + "=" + user + ")";
+		if (!"".equals(ldap_filter_add)) {
+			ldap_filter_add = ldap_filter_add.replaceAll(":", "=");
+			ldap_search_filter = "(&(" + ldap_filter_add + ")(" + ldap_fieldname_user_principal + "=" + user + "))";
+		}
 
 		log.debug("Searching userdata with LDAP Search Filter :" + ldap_search_filter);
 
