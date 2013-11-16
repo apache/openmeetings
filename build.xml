@@ -1310,7 +1310,7 @@
 		<!-- empty -->
 	</target>
 
-	<target name="-retrieve-postgres" unless="postgres.installed" description="Retrieves the libraries if needed" depends="-availability-check">
+	<target name="-retrieve-postgresql" unless="postgresql.installed" description="Retrieves the libraries if needed" depends="-availability-check">
 		<!-- retrieved automatically, added for compatibility -->
 	</target>
 
