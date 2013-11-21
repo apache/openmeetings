@@ -30,7 +30,7 @@ function initSwf(swfurl) {
 			__lzminimumversion : 8
 		};
 	var options = $.extend({}, general, {allowfullscreen : 'true'});
-	$('#header, #topLinks, #menu').hide();
+	$('#header, #topControls, #chatPanel').hide();
 	$('div[id="contents"], div[id="contents"] > div').css('height', '100%');
 	var embed = $('<embed>').attr('quality', 'high').attr('bgcolor', options.bgcolor)
 		.attr('src', "public/" + options.url)
@@ -45,7 +45,7 @@ function initSwf(swfurl) {
 }
 
 function roomExit() {
-	$('#header, #topLinks, #menu').show();
+	$('#header, #topControls, #chatPanel').show();
 	$('div[id="contents"], div[id="contents"] > div').css('height', 'auto');
 	window.location.hash = "#rooms/public";
 	$('#lzappContainer').remove();
