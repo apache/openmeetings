@@ -67,7 +67,8 @@
      -->
     <method name="reconnectSuccess" args="isInterview">
     	if ($debug) Debug.write("Send reconnectSuccess to ",canvas.rtmp_lc_name);
-    	canvas.sendViaLocalConnection(canvas.rtmp_lc_name, "reconnectSuccess", [canvas.thishib.src, canvas.publicSID, hib.userobject, isInterview, canvas.getHttpHost()]);
+    	canvas.sendViaLocalConnection(canvas.rtmp_lc_name, "reconnectSuccess", [canvas.thishib.src, canvas.publicSID
+    		, hib.userobject, isInterview, canvas.getHttpHost(), canvas.red5httpport]);
     </method>
     
     <handler name="onismoderator" reference="canvas" args="m">

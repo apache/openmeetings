@@ -321,7 +321,7 @@
         
         var hasParams = _url.indexOf("?");
         if (hasParams != -1) {
-            cleanUrl = _url.substr(0,hasParams-1);
+            cleanUrl = _url.substr(0, hasParams);
         }
         
         if ($debug) Debug.write("_url ",_url,cleanUrl);

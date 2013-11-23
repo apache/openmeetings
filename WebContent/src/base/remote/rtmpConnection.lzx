@@ -107,23 +107,21 @@
         have to invoke this method once again
         -swagner
      -->
-    <method name="registerMethods">
-        <![CDATA[
-	        if (this.subnodes!=null){
-		        //Register all methods which are onstanceof netRemoteCallHib
-		        for (var i=0;i<this.subnodes.length;i++){
-		            //If it is of Type netRemoteCallHib then register it to the NetConnection
-		            if (this.subnodes[i] instanceof lz.netRemoteCallHib){
-		                var t = hib;
-		                this._nc[this.subnodes[i].funcname] = function( args ){
-                            return hib.remoteCallMethod(arguments.callee,arguments);
-		                    //return hib.remoteCallMethod(arguments.callee,args);
-		                }
-		            }
-		        }
-        	}
-        ]]>
-    </method>
+	<method name="registerMethods">
+	<![CDATA[
+		if (this.subnodes != null) {
+			//Register all methods which are instanceof netRemoteCallHib
+			for (var i = 0; i < this.subnodes.length; ++i) {
+				//If it is of Type netRemoteCallHib then register it to the NetConnection
+				if (this.subnodes[i] instanceof lz.netRemoteCallHib) {
+					this._nc[this.subnodes[i].funcname] = function(args) {
+						return hib.remoteCallMethod(arguments.callee, arguments);
+					}
+				}
+			}
+		}
+	]]>
+	</method>
     
     <!-- 
         Process the RemoteCall to the Right Funtion

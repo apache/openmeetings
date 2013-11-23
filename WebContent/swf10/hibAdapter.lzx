@@ -95,9 +95,10 @@
     	in case its a cluster'ed OpenMeetings installation the connection_url
     	might point to the slave while the httphostlocal points to the master
      -->
-    <method name="reconnectSuccess" args="connection_url,publicSID,userobject,isInterview,httphostlocal">
+    <method name="reconnectSuccess" args="connection_url,publicSID,userobject,isInterview,httphostlocal,httpport">
         if($debug) Debug.write("reconnectSuccess",connection_url,publicSID,userobject);
         canvas.httphostlocal = httphostlocal;
+        canvas.red5httpport = httpport;
         canvas.publicSID = publicSID;
         canvas.userobject = userobject;
         canvas.isInterview = isInterview;
