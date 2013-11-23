@@ -28,7 +28,7 @@ limitations under the License.
 	    <all-permissions/>
 	</security>	
 	<resources> 
-		<j2se version='1.4+'/>
+		<j2se version='1.5+'/>
 $LIBRARIES
     </resources> 
     <application-desc main-class='$startUpClass'>
