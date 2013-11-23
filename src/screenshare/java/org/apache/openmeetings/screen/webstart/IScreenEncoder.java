@@ -19,12 +19,10 @@
 package org.apache.openmeetings.screen.webstart;
 
 import java.awt.Rectangle;
-import java.awt.image.BufferedImage;
 import java.io.IOException;
 
 public interface IScreenEncoder {
-	
-	byte[] encode(Rectangle screen, BufferedImage img, Rectangle size)  throws IOException;
+	byte[] encode(Rectangle screen, int[][] img)  throws IOException;
 	
 	void reset();
 }

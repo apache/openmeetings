@@ -18,24 +18,28 @@
  */
 package org.apache.openmeetings.screen.webstart;
 
+import static java.awt.Toolkit.getDefaultToolkit;
+import static java.awt.datatransfer.DataFlavor.stringFlavor;
+import static java.lang.Boolean.TRUE;
+import static org.apache.openmeetings.screen.webstart.gui.ScreenDimensions.resizeX;
+import static org.apache.openmeetings.screen.webstart.gui.ScreenDimensions.resizeY;
+import static org.apache.openmeetings.screen.webstart.gui.ScreenDimensions.spinnerHeight;
+import static org.apache.openmeetings.screen.webstart.gui.ScreenDimensions.spinnerWidth;
+import static org.apache.openmeetings.screen.webstart.gui.ScreenDimensions.spinnerX;
+import static org.apache.openmeetings.screen.webstart.gui.ScreenDimensions.spinnerY;
+import static org.slf4j.LoggerFactory.getLogger;
+
 import java.awt.MouseInfo;
 import java.awt.Point;
-import java.awt.PointerInfo;
 import java.awt.Robot;
-import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
-import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.Transferable;
-import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
-import java.io.IOException;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
-import org.apache.openmeetings.screen.webstart.gui.ScreenDimensions;
 import org.apache.openmeetings.screen.webstart.gui.ScreenSharerFrame;
 import org.red5.client.net.rtmp.INetStreamEventHandler;
 import org.red5.io.utils.ObjectMap;
@@ -49,10 +53,9 @@ import org.red5.server.net.rtmp.event.Notify;
 import org.red5.server.net.rtmp.message.Header;
 import org.red5.server.net.rtmp.status.StatusCodes;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class CoreScreenShare implements IPendingServiceCallback, INetStreamEventHandler {
-	private static final Logger logger = LoggerFactory.getLogger(CoreScreenShare.class);
+	private static final Logger log = getLogger(CoreScreenShare.class);
 
 	private IScreenShare instance = null;
 	private String host;
@@ -98,7 +101,7 @@ public class CoreScreenShare implements IPendingServiceCallback, INetStreamEvent
 		
 		try {
 			for (String arg : args) {
-				logger.debug("arg: " + arg);
+				log.debug("arg: " + arg);
 			}
 			String[] textArray = null;
 			if (args.length > 8) {
@@ -113,21 +116,21 @@ public class CoreScreenShare implements IPendingServiceCallback, INetStreamEvent
 
 				defaultQuality = Integer.parseInt(args[6]);
 				user_id = Long.parseLong(args[7]);
-				allowRecording = Boolean.valueOf(args[8]);
-				allowPublishing = Boolean.valueOf(args[9]);
+				allowRecording = bool(args[8]);
+				allowPublishing = bool(args[9]);
 
 				if (labelTexts.length() > 0) {
 					textArray = labelTexts.split(";");
 
-					logger.debug("labelTexts :: " + labelTexts);
+					log.debug("labelTexts :: " + labelTexts);
 
-					logger.debug("textArray Length " + textArray.length);
+					log.debug("textArray Length " + textArray.length);
 
 					for (int i = 0; i < textArray.length; i++) {
-						logger.debug(i + " :: " + textArray[i]);
+						log.debug(i + " :: " + textArray[i]);
 					}
 				}
-				logger.debug("host: " + host + ", app: "
+				log.debug("host: " + host + ", app: "
 						+ app + ", port: " + port + ", publish: "
 						+ publishName);
 			} else {
@@ -136,7 +139,7 @@ public class CoreScreenShare implements IPendingServiceCallback, INetStreamEvent
 
 			createWindow(textArray);
 		} catch (Exception err) {
-			logger.error("", err);
+			log.error("", err);
 		}
 	}
 
@@ -151,26 +154,24 @@ public class CoreScreenShare implements IPendingServiceCallback, INetStreamEvent
 			frame.setVisible(true);
 			frame.setRecordingTabEnabled(allowRecording);
 			frame.setPublishingTabEnabled(allowPublishing);
-			logger.debug("initialized");
+			log.debug("initialized");
 		} catch (Exception err) {
-			logger.error("createWindow Exception: ", err);
-			err.printStackTrace();
+			log.error("createWindow Exception: ", err);
 		}
 	}
 
 	synchronized public void sendCursorStatus() {
 		try {
-			PointerInfo a = MouseInfo.getPointerInfo();
-			Point mouseP = a.getLocation();
+			Point mouseP = MouseInfo.getPointerInfo().getLocation();
 
-			float scaleFactor = (1.0f * ScreenDimensions.resizeX) / ScreenDimensions.spinnerWidth;
+			float scaleFactor = (1.0f * resizeX) / spinnerWidth;
 
 			// Real size: Real mouse position = Resize : X
-			int x = (int)(Ampl_factor * (mouseP.getX() - ScreenDimensions.spinnerX) * scaleFactor);
-			int y = (int)(Ampl_factor * (mouseP.getY() - ScreenDimensions.spinnerY) * scaleFactor);
+			int x = (int)(Ampl_factor * (mouseP.getX() - spinnerX) * scaleFactor);
+			int y = (int)(Ampl_factor * (mouseP.getY() - spinnerY) * scaleFactor);
 
-			HashMap<String, Object> cursorPosition = new HashMap<String, Object>();
-			cursorPosition.put("publicSID", this.publishName);
+			Map<String, Object> cursorPosition = new HashMap<String, Object>();
+			cursorPosition.put("publicSID", publishName);
 			cursorPosition.put("cursor_x", x);
 			cursorPosition.put("cursor_y", y);
 
@@ -180,28 +181,26 @@ public class CoreScreenShare implements IPendingServiceCallback, INetStreamEvent
 		} catch (NullPointerException npe) {
 			//noop
 		} catch (Exception err) {
-			System.out.println("captureScreenStart Exception: ");
-			System.err.println(err);
 			frame.setStatus("Exception: " + err);
-			logger.error("[sendCursorStatus]", err);
+			log.error("[sendCursorStatus]", err);
 		}
 	}
 
 	synchronized public void setConnectionAsSharingClient() {
 		try {
-			logger.debug("########## setConnectionAsSharingClient");
+			log.debug("########## setConnectionAsSharingClient");
 
-			HashMap<Object, Object> map = new HashMap<Object, Object>();
-			map.put("screenX", ScreenDimensions.spinnerX);
-			map.put("screenY", ScreenDimensions.spinnerY);
+			Map<Object, Object> map = new HashMap<Object, Object>();
+			map.put("screenX", spinnerX);
+			map.put("screenY", spinnerY);
 
-			int scaledWidth = (int)(Ampl_factor * ScreenDimensions.resizeX);
-			int scaledHeight = (int)(Ampl_factor * ScreenDimensions.resizeY);
+			int scaledWidth = (int)(Ampl_factor * resizeX);
+			int scaledHeight = (int)(Ampl_factor * resizeY);
 
 			map.put("screenWidth", scaledWidth);
 			map.put("screenHeight", scaledHeight);
 
-			map.put("publishName", this.publishName);
+			map.put("publishName", publishName);
 			map.put("startRecording", startRecording);
 			map.put("startStreaming", startStreaming);
 			map.put("startPublishing", startPublishing);
@@ -209,14 +208,14 @@ public class CoreScreenShare implements IPendingServiceCallback, INetStreamEvent
 			map.put("publishingApp", frame.getPublishApp());
 			map.put("publishingId", frame.getPublishId());
 
-			map.put("organization_id", this.organization_id);
-			map.put("user_id", this.user_id);
+			map.put("organization_id", organization_id);
+			map.put("user_id", user_id);
 
 			instance.invoke("setConnectionAsSharingClient", new Object[] { map }, this);
 		} catch (Exception err) {
-			logger.error("setConnectionAsSharingClient Exception: ", err);
+			log.error("setConnectionAsSharingClient Exception: ", err);
 			frame.setStatus("Error: " + err.getLocalizedMessage());
-			logger.error("[setConnectionAsSharingClient]", err);
+			log.error("[setConnectionAsSharingClient]", err);
 		}
 	}
 
@@ -230,7 +229,7 @@ public class CoreScreenShare implements IPendingServiceCallback, INetStreamEvent
 
 	public void captureScreenStart(boolean startStreaming, boolean startRecording, boolean startPublishing) {
 		try {
-			logger.debug("captureScreenStart");
+			log.debug("captureScreenStart");
 			this.startStreaming = startStreaming;
 			this.startRecording= startRecording;
 			this.startPublishing = startPublishing;
@@ -241,14 +240,14 @@ public class CoreScreenShare implements IPendingServiceCallback, INetStreamEvent
 				setConnectionAsSharingClient();
 			}
 		} catch (Exception err) {
-			logger.error("captureScreenStart Exception: ", err);
+			log.error("captureScreenStart Exception: ", err);
 			frame.setStatus("Exception: " + err);
 		}
 	}
 
 	public void sendCaptureScreenStop(boolean stopStreaming, boolean stopRecording) {
 		try {
-			logger.debug("INVOKE screenSharerAction" );
+			log.debug("INVOKE screenSharerAction" );
 
 			Map<String, Object> map = new HashMap<String, Object>();
 			map.put("stopStreaming", stopStreaming);
@@ -256,7 +255,7 @@ public class CoreScreenShare implements IPendingServiceCallback, INetStreamEvent
 
 			instance.invoke("screenSharerAction", new Object[] { map }, this);
 		} catch (Exception err) {
-			logger.error("captureScreenStop Exception: ", err);
+			log.error("captureScreenStop Exception: ", err);
 			frame.setStatus("Exception: " + err);
 		}
 	}
@@ -308,9 +307,8 @@ public class CoreScreenShare implements IPendingServiceCallback, INetStreamEvent
 			Object[] args = invoke.getCall().getArguments();
 			if (args != null && args.length > 0) {
 				@SuppressWarnings("unchecked")
-				HashMap<String, Object> params = (HashMap<String, Object>)args[0];
-				if (params.containsKey("stopPublishing")
-					&& Boolean.valueOf("" + params.get("stopPublishing"))) {
+				Map<String, Object> params = (Map<String, Object>)args[0];
+				if (bool(params.get("stopPublishing"))) {
 					stopPublishing();
 				}
 				if (params.containsKey("error")) {
@@ -322,7 +320,7 @@ public class CoreScreenShare implements IPendingServiceCallback, INetStreamEvent
 
 	public void stopStream() {
 		try {
-			logger.debug("ScreenShare stopStream");
+			log.debug("ScreenShare stopStream");
 
 			stopStreaming();
 			stopRecording();
@@ -335,108 +333,77 @@ public class CoreScreenShare implements IPendingServiceCallback, INetStreamEvent
 			getCapture().release();
 			capture = null;
 		} catch (Exception e) {
-			logger.error("ScreenShare stopStream exception " + e);
+			log.error("ScreenShare stopStream exception " + e);
 		}
 
 	}
 
 	public void onStreamEvent(Notify notify) {
-
-		logger.debug( "onStreamEvent " + notify );
+		log.debug( "onStreamEvent " + notify );
 
 		@SuppressWarnings("rawtypes")
 		ObjectMap map = (ObjectMap) notify.getCall().getArguments()[0];
 		String code = (String) map.get("code");
 
 		if (StatusCodes.NS_PUBLISH_START.equals(code)) {
-			logger.debug( "onStreamEvent Publish start" );
+			log.debug( "onStreamEvent Publish start" );
 			getCapture().setStartPublish(true);
 			setReadyToRecord(true);
 		}
 	}
 
+	private boolean bool(Object b) {
+		return TRUE.equals(Boolean.valueOf("" + b));
+	}
+	
+	private int getInt(Map<String, Object> returnMap, String key) {
+		return Integer.valueOf(returnMap.get(key).toString()).intValue();
+	}
+	
+	private float getFloat(Map<String, Object> returnMap, String key) {
+		return Float.valueOf(returnMap.get(key).toString()).floatValue();
+	}
+	
+	private Point getCoordinates(Map<String, Object> returnMap) {
+		float scaleFactorX = spinnerWidth / (Ampl_factor * resizeX);
+		float scaleFactorY = spinnerHeight / (Ampl_factor * resizeY);
+
+		int x = Math.round(scaleFactorX * getFloat(returnMap, "x") + spinnerX);
+		int y = Math.round(scaleFactorY * getFloat(returnMap, "y") + spinnerY);
+		return new Point(x, y);
+	}
+	
 	public void sendRemoteCursorEvent(Object obj) {
 		try {
-			logger.trace("#### sendRemoteCursorEvent ");
-			logger.trace("Result Map Type "+obj.getClass().getName());
+			log.trace("#### sendRemoteCursorEvent ");
+			log.trace("Result Map Type "+obj.getClass().getName());
 
-			@SuppressWarnings("rawtypes")
-			Map returnMap = (Map) obj;
+			@SuppressWarnings("unchecked")
+			Map<String, Object> returnMap = (Map<String, Object>)obj;
 
 			String action = "" + returnMap.get("action");
 
 			if (action.equals("onmouseup")) {
-
 				Robot robot = new Robot();
-
-				Float scaleFactor = Float
-						.valueOf(ScreenDimensions.spinnerWidth)
-						/ Float.valueOf(ScreenDimensions.resizeX);
-
-				Float part_x1 = ((Float.valueOf(returnMap.get("x").toString())
-						.floatValue() * scaleFactor) / Float
-						.valueOf(Ampl_factor));
-
-				Integer x = Math.round(part_x1 + ScreenDimensions.spinnerX);
-
-				Integer y = Math
-						.round(((Float.valueOf(returnMap.get("y").toString())
-								.floatValue()
-								* ScreenDimensions.spinnerHeight / ScreenDimensions.resizeY) / Ampl_factor)
-								+ ScreenDimensions.spinnerY);
-
-				robot.mouseMove(x, y);
+				
+				Point p = getCoordinates(returnMap);
+				robot.mouseMove(p.x, p.y);
 				robot.mouseRelease(InputEvent.BUTTON1_MASK);
 			} else if (action.equals("onmousedown")) {
-
 				Robot robot = new Robot();
 
-				Float scaleFactor = Float
-						.valueOf(ScreenDimensions.spinnerWidth)
-						/ Float.valueOf(ScreenDimensions.resizeX);
-				Float part_x1 = ((Float.valueOf(returnMap.get("x").toString())
-						.floatValue() * scaleFactor) / Float
-						.valueOf(Ampl_factor));
-				Integer x = Math.round(part_x1
-						+ ScreenDimensions.spinnerX);
-				Integer y = Math
-						.round(((Float.valueOf(returnMap.get("y").toString())
-								.floatValue()
-								* ScreenDimensions.spinnerHeight / ScreenDimensions.resizeY) / Ampl_factor)
-								+ ScreenDimensions.spinnerY);
-
-				robot.mouseMove(x, y);
+				Point p = getCoordinates(returnMap);
+				robot.mouseMove(p.x, p.y);
 				robot.mousePress(InputEvent.BUTTON1_MASK);
-
 			} else if (action.equals("mousePos")) {
-
 				Robot robot = new Robot();
 
-				Float scaleFactor = Float
-						.valueOf(ScreenDimensions.spinnerWidth)
-						/ Float.valueOf(ScreenDimensions.resizeX);
-
-				Float part_x1 = ((Float.valueOf(returnMap.get("x").toString())
-						.floatValue() * scaleFactor) / Float
-						.valueOf(Ampl_factor));
-
-				Integer x = Math.round(part_x1
-						+ ScreenDimensions.spinnerX);
-
-				Integer y = Math
-						.round(((Float.valueOf(returnMap.get("y").toString())
-								.floatValue()
-								* ScreenDimensions.spinnerHeight / ScreenDimensions.resizeY) / Ampl_factor)
-								+ ScreenDimensions.spinnerY);
-
-				robot.mouseMove(x, y);
-
+				Point p = getCoordinates(returnMap);
+				robot.mouseMove(p.x, p.y);
 			} else if (action.equals("onkeydown")) {
-
 				Robot robot = new Robot();
 
-				Integer key = Integer.valueOf(returnMap.get("k").toString())
-						.intValue();
+				int key = getInt(returnMap, "k");
 
 				// logger.debug("key onkeydown -1 "+key);
 				boolean doAction = true;
@@ -444,23 +411,18 @@ public class CoreScreenShare implements IPendingServiceCallback, INetStreamEvent
 				if (key == 221) {
 					key = 61;
 				} else if (key == -1) {
-
 					String charValue = returnMap.get("c").toString();
 
 					// key = KeyEvent.VK_ADD;
 					doAction = false;
 
-					for (Iterator<Integer> iter = this.currentPressedKeys
-							.keySet().iterator(); iter.hasNext();) {
-						Integer storedKey = iter.next();
-
+					for (Integer storedKey : currentPressedKeys.keySet()) {
 						robot.keyRelease(storedKey);
-
 					}
 
-					this.currentPressedKeys = new HashMap<Integer, Boolean>();
+					currentPressedKeys = new HashMap<Integer, Boolean>();
 
-					this.pressSpecialSign(charValue, robot);
+					pressSpecialSign(charValue, robot);
 				} else if (key == 188) {
 					key = 44;
 				} else if (key == 189) {
@@ -473,23 +435,15 @@ public class CoreScreenShare implements IPendingServiceCallback, INetStreamEvent
 					key = KeyEvent.VK_ENTER;
 				}
 
-				// logger.debug("key onkeydown -2 "+key);
-
 				if (doAction) {
-
-					this.currentPressedKeys.put(key, true);
+					currentPressedKeys.put(key, true);
 
 					robot.keyPress(key);
 				}
-
 			} else if (action.equals("onkeyup")) {
-
 				Robot robot = new Robot();
 
-				Integer key = Integer.valueOf(returnMap.get("k").toString())
-						.intValue();
-
-				// logger.debug("key onkeyup 1- "+key);
+				int key = getInt(returnMap, "k");
 
 				boolean doAction = true;
 
@@ -512,46 +466,34 @@ public class CoreScreenShare implements IPendingServiceCallback, INetStreamEvent
 				// logger.debug("key onkeyup 2- "+key);
 
 				if (doAction) {
-
-					if (this.currentPressedKeys.containsKey(key)) {
-						this.currentPressedKeys.remove(key);
+					if (currentPressedKeys.containsKey(key)) {
+						currentPressedKeys.remove(key);
 
 						robot.keyRelease(key);
-
 					}
-
 				}
-
 			} else if (action.equals("paste")) {
-
 				Robot robot = new Robot();
 
 				String paste = returnMap.get("paste").toString();
 
-				this.pressSpecialSign(paste, robot);
-
+				pressSpecialSign(paste, robot);
 			} else if (action.equals("copy")) {
-
 				Robot robot = new Robot();
 
 				String paste = this.getHighlightedText(robot);
 
-				HashMap<Integer, String> map = new HashMap<Integer, String>();
+				Map<Integer, String> map = new HashMap<Integer, String>();
 				map.put(0, "copiedText");
 				map.put(1, paste);
 
 				String clientId = returnMap.get("clientId").toString();
 
-				// public synchronized int sendMessageWithClientById(Object
-				// newMessage, String clientId)
-
 				instance.invoke("sendMessageWithClientById", new Object[]{map, clientId}, this);
-
 			} else if (action.equals("show")) {
+				String paste = getClipboardText();
 
-				String paste = this.getClipboardText();
-
-				HashMap<Integer, String> map = new HashMap<Integer, String>();
+				Map<Integer, String> map = new HashMap<Integer, String>();
 				map.put(0, "copiedText");
 				map.put(1, paste);
 
@@ -561,22 +503,16 @@ public class CoreScreenShare implements IPendingServiceCallback, INetStreamEvent
 				// newMessage, String clientId)
 
 				instance.invoke("sendMessageWithClientById", new Object[]{map, clientId}, this);
-
 			}
-
-			// KeyEvent.VK
-			// KeyEvent.
-
 		} catch (Exception err) {
-			logger.error("[sendRemoteCursorEvent]", err);
+			log.error("[sendRemoteCursorEvent]", err);
 		}
 	}
 
 	public String getClipboardText() {
 		try {
 			// get the system clipboard
-			Clipboard systemClipboard = Toolkit.getDefaultToolkit()
-					.getSystemClipboard();
+			Clipboard systemClipboard = getDefaultToolkit().getSystemClipboard();
 
 			// get the contents on the clipboard in a
 			// transferable object
@@ -584,130 +520,73 @@ public class CoreScreenShare implements IPendingServiceCallback, INetStreamEvent
 
 			// check if clipboard is empty
 			if (clipboardContents == null) {
-
 				// Clipboard is empty!!!
 				return ("");
 
 				// see if DataFlavor of
 				// DataFlavor.stringFlavor is supported
-			} else if (clipboardContents
-					.isDataFlavorSupported(DataFlavor.stringFlavor)) {
-
+			} else if (clipboardContents.isDataFlavorSupported(stringFlavor)) {
 				// return text content
-				String returnText = (String) clipboardContents
-						.getTransferData(DataFlavor.stringFlavor);
+				String returnText = (String) clipboardContents.getTransferData(stringFlavor);
 
 				return returnText;
 			}
 
 			return "";
-		} catch (UnsupportedFlavorException ufe) {
-			ufe.printStackTrace();
-		} catch (IOException ioe) {
-			ioe.printStackTrace();
+		} catch (Exception e) {
+			log.error("Unexpected exception while getting clipboard text", e);
 		}
 		return "";
 	}
 
+	private void pressSequence(Robot robot, long delay, int... codes) throws InterruptedException {
+		for (int code : codes) {
+			robot.keyPress(code);
+			Thread.sleep(delay);
+		}
+	}
+	
 	private String getHighlightedText(Robot instance) {
-
 		try {
-
-			// clippy.setContents( selection,selection );
-
-			// logger.debug("os.name :: "+System.getProperty("os.name"));
-
 			if (System.getProperty("os.name").toUpperCase().indexOf("WINDOWS") >= 0) {
-
-				// logger.debug("IS WINDOWS");
-
 				// pressing STRG+C == copy
-				instance.keyPress(KeyEvent.VK_CONTROL);
-				Thread.sleep(200);
-				instance.keyPress(KeyEvent.VK_C);
-				Thread.sleep(200);
-				instance.keyRelease(KeyEvent.VK_C);
-				Thread.sleep(200);
-				instance.keyRelease(KeyEvent.VK_CONTROL);
-				Thread.sleep(200);
-
+				pressSequence(instance, 200, KeyEvent.VK_CONTROL, KeyEvent.VK_C, KeyEvent.VK_C, KeyEvent.VK_CONTROL);
 			} else {
-
-				// logger.debug("IS MAC");
-
 				// Macintosh simulate Copy
-				instance.keyPress(157);
-				Thread.sleep(200);
-				instance.keyPress(67);
-				Thread.sleep(200);
-				instance.keyRelease(67);
-				Thread.sleep(200);
-				instance.keyRelease(157);
-				Thread.sleep(200);
-
+				pressSequence(instance, 200, 157, 67, 67, 157);
 			}
-
-			String charValue = this.getClipboardText();
-
-			return charValue;
-
-		} catch (Exception ex) {
-			ex.printStackTrace();
+			return getClipboardText();
+		} catch (Exception e) {
+			log.error("Unexpected exception while getting highlighted text", e);
 		}
 		return "";
 	}
 
 	private void pressSpecialSign(String charValue, Robot instance) {
-		Clipboard clippy = Toolkit.getDefaultToolkit().getSystemClipboard();
+		Clipboard clippy = getDefaultToolkit().getSystemClipboard();
 		try {
-
 			Transferable transferableText = new StringSelection(charValue);
 			clippy.setContents(transferableText, null);
 
-			// logger.debug("os.name :: "+System.getProperty("os.name"));
-
 			if (System.getProperty("os.name").toUpperCase().indexOf("WINDOWS") >= 0) {
-
-				// logger.debug("IS WINDOWS");
-
 				// pressing STRG+V == insert-mode
-				instance.keyPress(KeyEvent.VK_CONTROL);
-				Thread.sleep(100);
-				instance.keyPress(KeyEvent.VK_V);
-				Thread.sleep(100);
-				instance.keyRelease(KeyEvent.VK_V);
-				Thread.sleep(100);
-				instance.keyRelease(KeyEvent.VK_CONTROL);
-				Thread.sleep(100);
-
+				pressSequence(instance, 100, KeyEvent.VK_CONTROL, KeyEvent.VK_V, KeyEvent.VK_V, KeyEvent.VK_CONTROL);
 			} else {
-
-				// logger.debug("IS MAC");
-
 				// Macintosh simulate Insert
-				instance.keyPress(157);
-				Thread.sleep(100);
-				instance.keyPress(86);
-				Thread.sleep(100);
-				instance.keyRelease(86);
-				Thread.sleep(100);
-				instance.keyRelease(157);
-				Thread.sleep(100);
-
+				pressSequence(instance, 100, 157, 86, 86, 157);
 			}
-
-		} catch (Exception ex) {
-			ex.printStackTrace();
+		} catch (Exception e) {
+			log.error("Unexpected exception while pressSpecialSign", e);
 		}
 	}
 
 	public void resultReceived(IPendingServiceCall call) {
 		try {
 
-			logger.trace( "service call result: " + call );
+			log.trace( "service call result: " + call );
 
 			String method = call == null ? null : call.getServiceMethodName();
-			logger.trace("call ### get Method Name " + method);
+			log.trace("call ### get Method Name " + method);
 			if ("connect".equals(method)) {
 				isConnected = true;
 				setConnectionAsSharingClient();
@@ -718,13 +597,13 @@ public class CoreScreenShare implements IPendingServiceCallback, INetStreamEvent
 				@SuppressWarnings("unchecked")
 				Map<String, Object> returnMap = (Map<String, Object>) o;
 
-				if (o == null || !Boolean.valueOf("" + returnMap.get("alreadyPublished")).booleanValue()) {
-					logger.trace("Stream not yet started - do it ");
+				if (o == null || !bool(returnMap.get("alreadyPublished"))) {
+					log.trace("Stream not yet started - do it ");
 
 					instance.createStream(this);
 				} else {
 					getCapture().resetBuffer();
-					logger.trace("The Stream was already started ");
+					log.trace("The Stream was already started ");
 				}
 				if (returnMap != null) {
 					Object modus = returnMap.get("modus");
@@ -744,8 +623,7 @@ public class CoreScreenShare implements IPendingServiceCallback, INetStreamEvent
 						publishClient.connect();
 					}
 				} else {
-					throw new Exception(
-							"Could not aquire modus for event setConnectionAsSharingClient");
+					throw new Exception("Could not aquire modus for event setConnectionAsSharingClient");
 				}
 
 			} else if ("createStream".equals(method)) {
@@ -753,16 +631,14 @@ public class CoreScreenShare implements IPendingServiceCallback, INetStreamEvent
 					if (call.getResult() != null) {
 						getCapture().setStreamId((Integer)call.getResult());
 					}
-					logger.debug("createPublishStream result stream id: " + getCapture().getStreamId());
-					logger.debug("publishing video by name: " + publishName);
+					log.debug("createPublishStream result stream id: " + getCapture().getStreamId());
+					log.debug("publishing video by name: " + publishName);
 					instance.publish(getCapture().getStreamId(), publishName, "live", this);
 	
-					logger.debug("setup capture thread");
+					log.debug("setup capture thread");
 	
-					logger.debug("setup capture thread vScreenSpinnerWidth "
-							+ ScreenDimensions.spinnerWidth);
-					logger.debug("setup capture thread vScreenSpinnerHeight "
-							+ ScreenDimensions.spinnerHeight);
+					log.debug("setup capture thread vScreenSpinnerWidth " + spinnerWidth);
+					log.debug("setup capture thread vScreenSpinnerHeight " + spinnerHeight);
 	
 					getCapture().setSendCursor(true);
 					getCapture().start();
@@ -770,13 +646,13 @@ public class CoreScreenShare implements IPendingServiceCallback, INetStreamEvent
 			} else if ("screenSharerAction".equals(method)) {
 				Object o = call.getResult();
 
-				logger.trace("Result Map Type " + o.getClass().getName());
+				log.trace("Result Map Type " + o.getClass().getName());
 
 				@SuppressWarnings("unchecked")
 				Map<String, Object> returnMap = (Map<String, Object>)o;
 				Object result = returnMap.get("result");
 				if ("stopAll".equals(result)) {
-					logger.trace("Stopping to stream, there is neither a Desktop Sharing nor Recording anymore");
+					log.trace("Stopping to stream, there is neither a Desktop Sharing nor Recording anymore");
 					stopStream();
 				} else if ("stopSharingOnly".equals(result)) {
 					stopStreaming();
@@ -788,11 +664,11 @@ public class CoreScreenShare implements IPendingServiceCallback, INetStreamEvent
 			} else if ("setNewCursorPosition".equals(method)) {
 				// Do not do anything
 			} else {
-				logger.debug("Unknown method " + method);
+				log.debug("Unknown method " + method);
 			}
 
 		} catch (Exception err) {
-			logger.error("[resultReceived]", err);
+			log.error("[resultReceived]", err);
 		}
 	}
 }

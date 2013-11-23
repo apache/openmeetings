@@ -25,7 +25,7 @@ import java.awt.image.BufferedImage;
 
 public abstract class BaseScreenEncoder implements IScreenEncoder {
 
-	public BufferedImage resize(BufferedImage _img, Rectangle size) {
+	public static BufferedImage resize(BufferedImage _img, Rectangle size) {
 		BufferedImage img = _img;
 		if (img.getWidth() != size.width || img.getHeight() != size.height) {
 			img = new BufferedImage(size.width, size.height, BufferedImage.TYPE_INT_RGB);

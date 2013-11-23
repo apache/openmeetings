@@ -18,7 +18,11 @@
  */
 package org.apache.openmeetings.screen.webstart;
 
+import static org.apache.openmeetings.screen.webstart.gui.ScreenDimensions.resizeX;
+import static org.apache.openmeetings.screen.webstart.gui.ScreenDimensions.resizeY;
+
 import java.awt.Rectangle;
+import java.awt.Robot;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -26,7 +30,7 @@ import java.io.OutputStream;
 import java.util.zip.Deflater;
 
 public class ScreenV1Encoder extends BaseScreenEncoder {
-	private BufferedImage last = null;
+	private int[][] last = null;
 	private static int KEY_FRAME_INDEX = 100;
 	private static int DEFAULT_BLOCK_SIZE = 32;
 	private static int DEFAULT_SCREEN_WIDTH = 1920;
@@ -56,10 +60,9 @@ public class ScreenV1Encoder extends BaseScreenEncoder {
 		zipBuf = new byte[3 * blockSize * blockSize];
 	}
 	
-	public byte[] encode(Rectangle screen, BufferedImage _img, Rectangle size) throws IOException {
-		BufferedImage img = resize(_img, size);
+	public byte[] encode(Rectangle screen, int[][] img) throws IOException {
 		ba.reset();
-		Rectangle imgArea = new Rectangle(img.getWidth(), img.getHeight());
+		Rectangle imgArea = new Rectangle(img.length, img[0].length);
 		Rectangle area = getNextBlock(imgArea, null);
 		boolean isKeyFrame = (frameCount++ % keyFrameIndex) == 0 || last == null || !screen.equals(this.screen);
 		
@@ -101,13 +104,13 @@ public class ScreenV1Encoder extends BaseScreenEncoder {
 		return img.intersection(prev); 
 	}
 
-	private void writeBytesIfChanged(ByteArrayOutputStream ba, boolean isKeyFrame, BufferedImage img, Rectangle area) throws IOException {
+	private void writeBytesIfChanged(ByteArrayOutputStream ba, boolean isKeyFrame, int[][] img, Rectangle area) throws IOException {
 		boolean changed = isKeyFrame;
 		int count = 0;
 		for (int y = area.y + area.height - 1; y >= area.y; --y) {
 			for (int x = area.x; x < area.x + area.width; ++x) {
-				int pixel = img.getRGB(x, y);
-				if (!changed && (last == null || pixel != last.getRGB(x, y))) {
+				int pixel = img[x][y];
+				if (!changed && (last == null || pixel != last[x][y])) {
 					changed = true;
 				}
 				areaBuf[count++] = (byte)(pixel & 0xFF);			// Blue component
@@ -134,5 +137,16 @@ public class ScreenV1Encoder extends BaseScreenEncoder {
 	private void writeShort(OutputStream os, final int n) throws IOException {
 		os.write((n >> 8) & 0xFF);
 		os.write((n >> 0) & 0xFF);
+	}
+	
+	public static int[][] getImage(Rectangle screen, Robot robot) {
+		int[][] buffer = new int[resizeX][resizeY];
+		BufferedImage image = resize(robot.createScreenCapture(screen), new Rectangle(resizeX, resizeY));
+		for (int x = 0; x < image.getWidth(); ++x) {
+			for (int y = 0; y < image.getHeight(); ++y) {
+				buffer[x][y] = image.getRGB(x, y);
+			}
+		}
+		return buffer;
 	}
 }

@@ -18,6 +18,8 @@
  */
 package org.apache.openmeetings.screen.webstart.gui;
 
+import static org.slf4j.LoggerFactory.getLogger;
+
 import java.awt.AWTException;
 import java.awt.Color;
 import java.awt.Component;
@@ -53,11 +55,10 @@ import javax.swing.event.DocumentListener;
 import org.apache.openmeetings.screen.webstart.CoreScreenShare;
 import org.apache.openmeetings.screen.webstart.gui.ScreenDimensions.ScreenQuality;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class ScreenSharerFrame extends JFrame {
 	private static final long serialVersionUID = 6892639796386017437L;
-	private static final Logger logger = LoggerFactory.getLogger(ScreenSharerFrame.class);
+	private static final Logger logger = getLogger(ScreenSharerFrame.class);
 	
 	private JPanel contentPane;
 	private JPanel panelScreen = new DisabledPanel();
@@ -738,12 +739,12 @@ public class ScreenSharerFrame extends JFrame {
 		ScreenDimensions.resizeY = spinnerHeight.getValue();
 		switch (ScreenDimensions.quality) {
 			case Medium:
-				ScreenDimensions.resizeX = (int)(1.0/2 * ScreenDimensions.resizeX);
-				ScreenDimensions.resizeY = (int)(1.0/2 * ScreenDimensions.resizeY);
+				ScreenDimensions.resizeX = (int)(1.0 * ScreenDimensions.resizeX / 2);
+				ScreenDimensions.resizeY = (int)(1.0 * ScreenDimensions.resizeY / 2);
 				break;
 			case Low:
-				ScreenDimensions.resizeX = (int)(3.0/8 * ScreenDimensions.resizeX);
-				ScreenDimensions.resizeY = (int)(3.0/8 * ScreenDimensions.resizeY);
+				ScreenDimensions.resizeX = (int)(3.0 * ScreenDimensions.resizeX / 8);
+				ScreenDimensions.resizeY = (int)(3.0 * ScreenDimensions.resizeY / 8);
 				break;
 			case VeryHigh:
 			case High:

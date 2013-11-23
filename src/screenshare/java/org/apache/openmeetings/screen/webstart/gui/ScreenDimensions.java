@@ -52,16 +52,16 @@ public class ScreenDimensions {
 	
 	static {
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-		ScreenDimensions.ratio = screenSize.getHeight() / screenSize.getWidth();
-		ScreenDimensions.widthMax = (int)screenSize.getWidth();
-		ScreenDimensions.heightMax = (int)screenSize.getHeight();
-		ScreenDimensions.height = (int)Math.round(ScreenDimensions.width * ScreenDimensions.ratio);
-		ScreenDimensions.spinnerX = 0;
-		ScreenDimensions.spinnerY = 0;
-		ScreenDimensions.spinnerWidth = ScreenDimensions.widthMax;
-		ScreenDimensions.spinnerHeight = ScreenDimensions.heightMax;
-		ScreenDimensions.resizeX = 640;
-		ScreenDimensions.resizeY = 400;
+		ratio = screenSize.getHeight() / screenSize.getWidth();
+		widthMax = (int)screenSize.getWidth();
+		heightMax = (int)screenSize.getHeight();
+		height = (int)(width * ratio);
+		spinnerX = 0;
+		spinnerY = 0;
+		spinnerWidth = widthMax;
+		spinnerHeight = heightMax;
+		resizeX = 640;
+		resizeY = 400;
 	}
 	
 	public enum ScreenQuality {
