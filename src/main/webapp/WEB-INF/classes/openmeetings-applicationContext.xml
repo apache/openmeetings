@@ -38,7 +38,7 @@
 	<!-- Configures the @Controller programming model -->
 	<mvc:annotation-driven />
 
-	<tx:annotation-driven transaction-manager="jpaTransactionManager" proxy-target-class="true" />
+	<tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="true" />
 	<context:annotation-config />
 	<context:component-scan base-package="org.apache.openmeetings" />
 
