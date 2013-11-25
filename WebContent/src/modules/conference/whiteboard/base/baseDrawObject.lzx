@@ -74,19 +74,20 @@
     <method name="doUpdateFullFit" args="fullFit,zoom">
     	<![CDATA[
     	
-    		if ($debug) Debug.write("doUpdateFullFit ",fullFit,zoom);
-    	
-    		var actionObject = new Array();
-    		actionObject.push("whiteboardObj");
-    		actionObject.push(fullFit);
-    		
-    		this.doFullFit(fullFit);
-    		
-    		actionObject.push(this.getDisplayObject()._xscale);
-    		
-    		if ($debug) Debug.write("doUpdateFullFit ",fullFit,this.getDisplayObject()._xscale);
-    		
-    		this.onsharedMessage('whiteboardObj',actionObject);	
+            if (canvas.ismoderator) {
+	    		if ($debug) Debug.write("doUpdateFullFit ",fullFit,zoom);
+	    	
+	    		var actionObject = new Array();
+	    		actionObject.push("whiteboardObj");
+	    		actionObject.push(fullFit);
+	    		
+	    		this.doFullFit(fullFit);
+	    		
+	    		actionObject.push(this.getDisplayObject()._xscale);
+	    		
+	    		if ($debug) Debug.write("doUpdateFullFit ",fullFit,this.getDisplayObject()._xscale);
+	    		this.onsharedMessage('whiteboardObj',actionObject);
+    		}	
     	
     	]]>
     </method>
@@ -94,30 +95,31 @@
     <method name="doUpdateZoom" args="fullFit,zoom">
     	<![CDATA[
     	
-    		var actionObject = new Array();
-    		actionObject.push("whiteboardObj");
-    		actionObject.push(fullFit);
-    		actionObject.push(zoom);
-    		
     		if ($debug) Debug.write("doUpdateZoom ",this.fullFit,zoom);
-    		
     		
     		this.getDisplayObject()._xscale = zoom;
     		this.getDisplayObject()._yscale = zoom;
     		
-    		this.onupdateScale.sendEvent(null);
-    		this.onsharedMessage('whiteboardObj',actionObject);	
+    		if ($debug) Debug.write("doUpdateZoom is moderator ", canvas.ismoderator);
+            if (canvas.ismoderator) {
+	    		var actionObject = new Array();
+	    		actionObject.push("whiteboardObj");
+	    		actionObject.push(fullFit);
+	    		actionObject.push(zoom);
+    		
+	    		this.onupdateScale.sendEvent(null);
+	    		this.onsharedMessage('whiteboardObj',actionObject);	
+            }
     	
     	]]>
     </method>
     
     <method name="doUpdateFullFitAndZoomRemote" args="actionObject">
     	<![CDATA[
-    	
     		parent.parent.zoombox.setWhiteboardValues(actionObject[1],actionObject[2]);
-    	
-    		this.doFullFit(actionObject[1]);
     		if ($debug) Debug.write("doUpdateFullFitAndZoomRemote ",actionObject[1],actionObject[2]);
+
+    		this.doFullFit(actionObject[1]);
     		
     		if (!actionObject[1]) {
 	    		this.getDisplayObject()._xscale = actionObject[2];

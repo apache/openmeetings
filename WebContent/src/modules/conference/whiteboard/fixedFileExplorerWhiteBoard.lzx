@@ -507,8 +507,7 @@
              visible="${ (parent.parent.restricted) ? false : (((canvas.ismoderator) ? false : ((canvas.isAllowedToDraw) ? false : true ))) }"/>
     </view> 
     
-    <view name="zoombox" y="0" x="${ parent.parent.width-this.width-14 }" layout="axis:x;spacing:2"
-          visible="${ ((canvas.ismoderator) ? true : ((canvas.isAllowedToDraw) ? true : false )) }">
+    <view name="zoombox" y="0" x="${ parent.parent.width-this.width-14 }" layout="axis:x;spacing:2">
         
         <attribute name="ignoreUpdates" value="false" type="boolean" />
         
@@ -555,8 +554,7 @@
         </labelCheckbox>
         
         <changeWidthSlider name="_zoom" initialNumberInit="50" labelid="1328"
-	            boxPosition="down" initialNumber="50" maximum="200"
-	       		visible="${ ((canvas.becomemoderator) ? true : false ) }">
+	            boxPosition="down" initialNumber="50" maximum="200">
             <handler name="oninitialNumber" args="i">
                 if (parent.ignoreUpdates) {
                     return;
@@ -565,8 +563,7 @@
                 if ($debug) Debug.warn("onvalue Zoom Fit ",this.initialNumber);
                 
                 parent._fullFit.setValue(false);
-                
-                parent.parent._drawareaMask._drawarea.doUpdateZoom(parent._fullFit.getValue(),this.initialNumber);
+				parent.parent._drawareaMask._drawarea.doUpdateZoom(parent._fullFit.getValue(),this.initialNumber);
             </handler>
         </changeWidthSlider>
         
