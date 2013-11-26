@@ -28,6 +28,7 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_IGNORE_B
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_LOGIN_MIN_LENGTH_KEY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_MAX_UPLOAD_SIZE_KEY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_PASS_MIN_LENGTH_KEY;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_REDIRECT_URL_FOR_EXTERNAL_KEY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_RSS_FEED1_KEY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_RSS_FEED2_KEY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.USER_LOGIN_MINIMUM_LENGTH;
@@ -537,6 +538,9 @@ public class ImportInitvalues {
 						null, 
 						"Set \"yes\" or \"no\" to enable/disable ssl certifications checking for OAuth2");
 
+		configurationDao.add(CONFIG_REDIRECT_URL_FOR_EXTERNAL_KEY, "", null,
+				"Users entered the room via invitationHash or secureHash will be redirected to this URL on connection lost");
+		
 		log.debug("Configurations ADDED");
 	}
 

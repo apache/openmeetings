@@ -1139,4 +1139,7 @@
 		return value == null ? '' : value;
 	</method>
 	
+	<method name="isRemoteUser" args="">
+		return canvas.isinitRoomDirect || canvas.remoteUserLogin || canvas.directUserLogin || canvas.secureRemoteUserLogin;
+	</method>
 </library>

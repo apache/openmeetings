@@ -467,6 +467,11 @@ and some more references to temp-objects
  -->
 <attribute name="MAX_UPLOAD_SIZE" value="-1" type="string" /> 
 
+<!-- 
+	The server side configuration of the redirect.url.for.external.users
+ -->
+<attribute name="REDIRECT_URL_FOR_EXTERNAL_USERS" value="null" type="string" /> 
+
 <attribute name="currentNC" value="null" />
 
 <!-- 

@@ -100,7 +100,7 @@
 	    
 	    <handler name="oninit">
 			<![CDATA[
-				if (canvas.isinitRoomDirect || canvas.remoteUserLogin || canvas.secureRemoteUserLogin) {
+				if (canvas.isRemoteUser()) {
 	            	if ($debug) Debug.write("this mbarcontent ",this);
 	            	if (canvas.destroyExitButton) {
 	                    this.destroy();

@@ -103,8 +103,7 @@
             	isDirectLink = true;
             }
             
-            if (canvas.isinitRoomDirect || canvas.remoteUserLogin 
-                                || canvas.directUserLogin || canvas.secureRemoteUserLogin) {
+            if (canvas.isRemoteUser()) {
                 isDirectLink = true;               	
             }
             if ( usercolor==null || usercolor==0 || (usercolor !=null && usercolor.length==0) )usercolor=0xCCCCCC;

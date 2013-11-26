@@ -20,6 +20,7 @@ package org.apache.openmeetings.remote;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_FRONTEND_REGISTER_KEY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_MAX_UPLOAD_SIZE_KEY;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_REDIRECT_URL_FOR_EXTERNAL_KEY;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -505,7 +506,7 @@ public class MainService implements IPendingServiceCallback {
 	 * in, needs no authentification to load
 	 * 
 	 * @param SID
-	 * @return configuration with key "allow_frontend_register"
+	 * @return configuration with key {@link OpenmeetingsVariables#CONFIG_FRONTEND_REGISTER_KEY}
 	 */
 	public Configuration allowFrontendRegister(String SID) {
 		return configurationDao.get(CONFIG_FRONTEND_REGISTER_KEY).get(0); //FIXME need to be removed
@@ -514,7 +515,7 @@ public class MainService implements IPendingServiceCallback {
 	public List<Configuration> getGeneralOptions(String SID) {
 		try {
 			return configurationDao.get("exclusive.audio.keycode", "red5sip.enable", CONFIG_MAX_UPLOAD_SIZE_KEY,
-					"mute.keycode");
+					"mute.keycode", CONFIG_REDIRECT_URL_FOR_EXTERNAL_KEY);
 		} catch (Exception err) {
 			log.error("[getLoginOptions]",err);
 		}

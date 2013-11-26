@@ -214,49 +214,62 @@
         canvas.currentContentView.sendInit.sendEvent(this);
     </method>
     
-    <handler name="onerror" >
-        <![CDATA[
-            canvas.remoteLogWrite("error " + this.status + " " + this.src + " " + this.lastCalled + " " + this.showKickMessage);
-            if (this.showFullMessage) {
-                new lz.labelerrorPopup(canvas,{errorlabelid:99});
-                this.showFullMessage = false;
-                return;
-            } else if (this.showKickMessage) {
-                new lz.labelerrorPopup(canvas,{errorlabelid:606});
-                canvas._loadingAll.hideContentOnly();
-                return;
-            } else if (this.reconnectionAction){
-                this.connect();
-            } else if (this.reconnectAfterRoomleft) {
-                if ($debug) Debug.write("this.reconnectAfterRoomleft: ",this.reconnectAfterRoomleft);
-                this.counterror=0;
-                this.connect();
-            } else {
-            	this.useRTMPT = true
-                var src = getUrl();
-                this.setAttribute('src',src);
-                //Debug.write("new src ",this.src);
-                if (this.counterror<3){
-                    this.counterror++;
-                    //Debug.write("try ",this.counterror,"one");
-                    if (canvas.thishib.loaderVar != null) {
-                    	canvas.thishib.loaderVar.error.setAttribute('text',"try "+this.counterror);
-                    }
-                    this.connect();
-                } else {
-                    //Debug.write("connection failed");
-                    if (canvas.thishib.loaderVar != null) {
-                    	canvas.thishib.loaderVar.error.setAttribute('text',this.status);
-                    }
-                    canvas.setAttribute('loadingmessage','connection failed');
-                    new lz.labelerrorPopup(canvas,{errorlabelid:556});
-                }
-                if (canvas.thishib.loaderVar != null) {
-                	canvas.thishib.loaderVar._src.setAttribute('text',src);
-                }
-            }
-        ]]>
-    </handler>    
+	<handler name="onerror" >
+	<![CDATA[
+		canvas.remoteLogWrite("error status='" + this.status + "'; src='" + this.src + "'; lastCalled='" + this.lastCalled
+			+ "'; showKickMessage='" + this.showKickMessage + "'; showFullMessage='" + this.showFullMessage
+			+ "'; reconnectionAction='" + this.reconnectionAction + "'; reconnectAfterRoomleft='" + this.reconnectAfterRoomleft + "'");
+		if (this.showFullMessage) {
+			new lz.labelerrorPopup(canvas,{errorlabelid:99});
+			this.showFullMessage = false;
+			return;
+		} else if (this.showKickMessage) {
+			new lz.labelerrorPopup(canvas,{errorlabelid:606});
+			canvas._loadingAll.hideContentOnly();
+			return;
+		} else if (this.reconnectionAction){
+			this.connect();
+		} else if (this.reconnectAfterRoomleft) {
+			if ($debug) Debug.write("this.reconnectAfterRoomleft: ",this.reconnectAfterRoomleft);
+			this.counterror=0;
+			this.connect();
+		} else {
+			if (canvas.isRemoteUser() && (this.status == 'NetConnection.Connect.Closed' 
+					|| this.status == 'NetConnection.Connect.NetworkChange'))
+			{
+				if (null != canvas.REDIRECT_URL_FOR_EXTERNAL_USERS) {
+					new lz.redirectBox(canvas, {
+							redirectURL:canvas.REDIRECT_URL_FOR_EXTERNAL_USERS
+							, maxTime: 0
+						});
+				}
+				this.counterror = 6; //NO more reconnects
+			}
+			this.useRTMPT = true
+			var src = getUrl();
+			this.setAttribute('src',src);
+			//Debug.write("new src ",this.src);
+			if (this.counterror<3){
+				this.counterror++;
+				//Debug.write("try ",this.counterror,"one");
+				if (canvas.thishib.loaderVar != null) {
+					canvas.thishib.loaderVar.error.setAttribute('text',"try "+this.counterror);
+				}
+				this.connect();
+			} else {
+				//Debug.write("connection failed");
+				if (canvas.thishib.loaderVar != null) {
+					canvas.thishib.loaderVar.error.setAttribute('text',this.status);
+				}
+				canvas.setAttribute('loadingmessage','connection failed');
+				new lz.labelerrorPopup(canvas,{errorlabelid:556});
+			}
+			if (canvas.thishib.loaderVar != null) {
+				canvas.thishib.loaderVar._src.setAttribute('text',src);
+			}
+		}
+	]]>
+	</handler>    
     
     <method name="refreshSessionMeth" args="calleeObj">
         this.refreshSession.doCall();
@@ -425,34 +438,28 @@
         </handler>  
     </netRemoteCallHib>      
     
-    <netRemoteCallHib name="getInvitationByHash" activeErrorHandler="true" 
-        funcname="invitationservice.getInvitationByHash" >          
-        <netparam name="invitationHash"><method name="getValue">return canvas.invitationHash;</method></netparam>
-        <handler name="ondata" args="value">
-            <![CDATA[
-                canvas.thishib.loaderVar.close();
-                //The onResult-Handler will be called be the rtmpconnection
-                if ($debug) Debug.write("getInvitationByHash: ",value);
-                if (value<0){
-                    
-                } else {
-                    
-                    if (value.allowEntry) {
-                        parent.currentInvitation = value;
-                        new lz.invitationQuickLoader(canvas.main_content._content.inner);
-                    } else {
-                        
-                        var addInfo = "" + value.validFrom +"<br/> - <br/>"+ value.validTo;
-                        
-                        var dlg = new lz.rpcErrorDialog(canvas,{errorid:-50,addInfo:addInfo});
-                        
-                    }
-                    
-                    
-                }
-            ]]>
-        </handler>   
-    </netRemoteCallHib> 
+	<netRemoteCallHib name="getInvitationByHash" activeErrorHandler="true" funcname="invitationservice.getInvitationByHash">
+		<netparam name="invitationHash"><method name="getValue">return canvas.invitationHash;</method></netparam>
+		<handler name="ondata" args="value">
+		<![CDATA[
+			if (canvas.thishib.loaderVar != null) {
+				canvas.thishib.loaderVar.close();
+			}
+			//The onResult-Handler will be called be the rtmpconnection
+			if ($debug) Debug.write("getInvitationByHash: ",value);
+			if (value<0){
+			} else {
+				if (value.allowEntry) {
+					parent.currentInvitation = value;
+					new lz.invitationQuickLoader(canvas.main_content._content.inner);
+				} else {
+					var addInfo = "" + value.validFrom +"<br/> - <br/>"+ value.validTo;
+					var dlg = new lz.rpcErrorDialog(canvas,{errorid:-50,addInfo:addInfo});
+				}
+			}
+		]]>
+		</handler>
+	</netRemoteCallHib> 
     
 	<netRemoteCallHib name="secureLoginByRemote" activeErrorHandler="true" funcname="xmlcrm.secureLoginByRemote" >
 		<netparam><method name="getValue">return canvas.sessionId;</method></netparam>
@@ -546,7 +553,9 @@
                         canvas.destroyExitButton = false;
                         parent.getRoomTypes.doCall();
                     } else if (canvas.roomRecordingId > 0) {
-                        canvas.thishib.loaderVar.close();
+                    	if (canvas.thishib.loaderVar != null) {
+                        	canvas.thishib.loaderVar.close();
+                        }
                         //parent.getRoomById.doCall();
                         var obj = new Array();
                         obj["action"] = "recordModule";
@@ -724,6 +733,10 @@
 					if ($debug) Debug.write("Mute/unmute keycode is: ", value[3].conf_value);
 					canvas.setAttribute('MUTE_AUDIO_KEY', value[3].conf_value);
 				}
+				if (value.length > 4) {
+					if ($debug) Debug.write("redirect.url.for.external.users is: ", value[4].conf_value);
+					canvas.setAttribute('REDIRECT_URL_FOR_EXTERNAL_USERS', value[4].conf_value);
+				}
 			} else {
 				if ($debug) Debug.warn("xmlcrm.getGeneralOptions empty!");
 			}
@@ -761,8 +774,7 @@
                 if (parent.testAppLoading){ 
                     canvas.loadNextStepTestApp();
                 } else {
-                    if (canvas.isinitRoomDirect || canvas.remoteUserLogin 
-                                || canvas.directUserLogin || canvas.secureRemoteUserLogin){
+                    if (canvas.isRemoteUser()){
                         if (canvas.thishib.loaderVar != null) {
                           canvas.thishib.loaderVar.setProgress();
                         }

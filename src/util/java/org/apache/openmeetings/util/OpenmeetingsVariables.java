@@ -31,6 +31,7 @@ public class OpenmeetingsVariables {
 	public static final String CONFIG_RSS_FEED2_KEY = "rss_feed2";
 	public static final String CONFIG_IGNORE_BAD_SSL = "oauth2.ignore_bad_ssl";
 	public static final String WEB_DATE_PATTERN = "dd.MM.yyyy HH:mm:ss"; //FIXME need to be made locale based
+	public static final String CONFIG_REDIRECT_URL_FOR_EXTERNAL_KEY = "redirect.url.for.external.users";
 	public static String webAppRootKey = null;
 	public static String webAppRootPath = null;
 	public static String configKeyCryptClassName = null;
