@@ -42,14 +42,12 @@ import org.apache.openmeetings.db.entity.user.User;
 
 @Entity
 @NamedQueries({
-	@NamedQuery(name = "getInvitationbyId", query = "select invi from Invitations invi "
-					+ "WHERE invi.deleted <> :deleted "
-					+ "AND invi.invitations_id = :invid"),
-	@NamedQuery(name = "getInvitationByHashCode", query = "select c from Invitations as c "
-					+ "where c.hash LIKE :hashCode "
-					+ "AND c.deleted = :deleted"),
-	@NamedQuery(name = "getInvitationByAppointment", query = "select a from Invitations a "
-					+ "WHERE a.appointmentId = :appointmentId  ")
+	@NamedQuery(name = "getInvitationbyId", query = "SELECT i FROM Invitation i "
+					+ "WHERE i.deleted = false AND i.id = :invid"),
+	@NamedQuery(name = "getInvitationByHashCode", query = "SELECT i FROM Invitation i "
+					+ "where i.hash LIKE :hashCode AND i.deleted = false"),
+	@NamedQuery(name = "getInvitationByAppointment", query = "SELECT i FROM Invitation i "
+					+ "WHERE i.appointment.id = :appointmentId  ")
 })
 @Table(name = "invitations")
 public class Invitation implements Serializable {

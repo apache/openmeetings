@@ -18,6 +18,8 @@
  */
 package org.apache.openmeetings.db.dao.room;
 
+import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+
 import java.util.Date;
 
 import javax.persistence.EntityManager;
@@ -26,16 +28,13 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
 import org.apache.openmeetings.db.entity.room.Invitation;
-import org.apache.openmeetings.util.OpenmeetingsVariables;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
 public class InvitationDao {
-	
-	private static final Logger log = Red5LoggerFactory.getLogger(
-			InvitationDao.class, OpenmeetingsVariables.webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(InvitationDao.class, webAppRootKey);
 	
 	@PersistenceContext
 	private EntityManager em;
@@ -57,7 +56,6 @@ public class InvitationDao {
 		try {
 			
 			TypedQuery<Invitation> query = em.createNamedQuery("getInvitationbyId", Invitation.class);
-			query.setParameter("deleted", true);
 			query.setParameter("invid", invId);
 			
 			try {
@@ -66,7 +64,7 @@ public class InvitationDao {
 			}
 
 		} catch (Exception e) {
-			log.error("getInvitationbyId : ", e);
+			log.error("get : ", e);
 		}
 		return null;
 	}
@@ -76,7 +74,6 @@ public class InvitationDao {
 			
 			TypedQuery<Invitation> query = em.createNamedQuery("getInvitationByHashCode", Invitation.class);
 			query.setParameter("hashCode", hashCode);
-			query.setParameter("deleted", false);
 			
 			try {
 				return query.getSingleResult();
@@ -84,7 +81,7 @@ public class InvitationDao {
 			}
 			
 		} catch (Exception e) {
-			log.error("getInvitationbyAppointementId : ", e);
+			log.error("getInvitationByHashCode : ", e);
 		}
 		return null;
 	}
