@@ -67,7 +67,7 @@ final class CaptureScreen extends Thread {
 				tbf = 50;
 				break;
 			case High:
-				tbf = 100;
+				tbf = 200;
 				break;
 			case Low:
 			case Medium:

@@ -31,7 +31,7 @@ import java.util.zip.Deflater;
 
 public class ScreenV1Encoder extends BaseScreenEncoder {
 	private int[][] last = null;
-	private static int KEY_FRAME_INDEX = 100;
+	private static int KEY_FRAME_INDEX = 25;
 	private static int DEFAULT_BLOCK_SIZE = 32;
 	private static int DEFAULT_SCREEN_WIDTH = 1920;
 	private static int DEFAULT_SCREEN_HEIGHT = 1080;
@@ -60,7 +60,7 @@ public class ScreenV1Encoder extends BaseScreenEncoder {
 		zipBuf = new byte[3 * blockSize * blockSize];
 	}
 	
-	public byte[] encode(Rectangle screen, int[][] img) throws IOException {
+	public synchronized byte[] encode(Rectangle screen, int[][] img) throws IOException {
 		ba.reset();
 		Rectangle imgArea = new Rectangle(img.length, img[0].length);
 		Rectangle area = getNextBlock(imgArea, null);

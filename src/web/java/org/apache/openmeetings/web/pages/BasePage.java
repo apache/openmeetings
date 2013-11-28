@@ -75,8 +75,7 @@ public abstract class BasePage extends AsyncUrlFragmentAwarePage {
 	
 	@Override
 	public void renderHead(IHeaderResponse response) {
-		response.render(JavaScriptHeaderItem.forReference(Application.get()
-				.getJavaScriptLibrarySettings().getJQueryReference()));
+		response.render(JavaScriptHeaderItem.forReference(Application.get().getJavaScriptLibrarySettings().getJQueryReference()));
 		super.renderHead(response);
 	}
 }
