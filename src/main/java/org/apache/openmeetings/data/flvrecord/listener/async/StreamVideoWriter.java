@@ -20,7 +20,6 @@ package org.apache.openmeetings.data.flvrecord.listener.async;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
-import java.io.IOException;
 import java.util.Date;
 
 import org.apache.mina.core.buffer.IoBuffer;
@@ -37,14 +36,14 @@ public class StreamVideoWriter extends BaseStreamWriter {
 	private Date startedSessionScreenTimeDate = null;
 	private final FlvRecordingMetaDataDao metaDataDao;
 
-	public StreamVideoWriter(String streamName, IScope scope, Long flvRecordingMetaDataId, boolean isScreenData,
+	public StreamVideoWriter(String streamName, IScope scope, Long metaDataId, boolean isScreenData,
 			boolean isInterview, FlvRecordingMetaDataDao metaDataDao) {
 
-		super(streamName, scope, flvRecordingMetaDataId, isScreenData);
+		super(streamName, scope, metaDataId, isScreenData);
 
 		this.metaDataDao = metaDataDao;
 
-		FlvRecordingMetaData metaData = metaDataDao.get(flvRecordingMetaDataId);
+		FlvRecordingMetaData metaData = metaDataDao.get(metaDataId);
 		metaData.setStreamReaderThreadComplete(false);
 		metaDataDao.update(metaData);
 	}
@@ -62,7 +61,7 @@ public class StreamVideoWriter extends BaseStreamWriter {
 
 				// This is important for the Interview Post Processing to get the time between starting the stream and
 				// the actual Access to the webcam by the Flash Security Dialog
-				metaDataDao.updateFlvRecordingMetaDataInitialGap(flvRecordingMetaDataId, initialDelta);
+				metaDataDao.updateFlvRecordingMetaDataInitialGap(metaDataId, initialDelta);
 			}
 
 			if (streampacket.getTimestamp() <= 0) {
@@ -91,8 +90,6 @@ public class StreamVideoWriter extends BaseStreamWriter {
 			tag.setBody(data);
 
 			writer.writeTag(tag);
-		} catch (IOException e) {
-			log.error("[packetReceived]", e);
 		} catch (Exception e) {
 			log.error("[packetReceived]", e);
 		}
@@ -105,7 +102,7 @@ public class StreamVideoWriter extends BaseStreamWriter {
 
 			// Add Delta in the beginning, this Delta is the Gap between the device chosen and when the User hits the
 			// button in the Flash Security Warning
-			FlvRecordingMetaData metaData = metaDataDao.get(flvRecordingMetaDataId);
+			FlvRecordingMetaData metaData = metaDataDao.get(metaDataId);
 
 			metaData.setRecordStart(new Date(metaData.getRecordStart().getTime() + initialDelta));
 

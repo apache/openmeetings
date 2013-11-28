@@ -52,7 +52,7 @@ public abstract class BaseStreamWriter implements Runnable {
 
 	protected ITagWriter writer = null;
 
-	protected Long flvRecordingMetaDataId = null;
+	protected Long metaDataId = null;
 
 	protected Date startedSessionTimeDate = null;
 
@@ -66,11 +66,11 @@ public abstract class BaseStreamWriter implements Runnable {
 
 	private final BlockingQueue<CachedEvent> queue = new LinkedBlockingQueue<CachedEvent>();
 
-	public BaseStreamWriter(String streamName, IScope scope, Long flvRecordingMetaDataId, boolean isScreenData) {
+	public BaseStreamWriter(String streamName, IScope scope, Long metaDataId, boolean isScreenData) {
 		startedSessionTimeDate = new Date();
 		this.isScreenData = isScreenData;
 		this.streamName = streamName;
-		this.flvRecordingMetaDataId = flvRecordingMetaDataId;
+		this.metaDataId = metaDataId;
 		this.scope = scope;
 		try {
 			init();
@@ -103,7 +103,6 @@ public abstract class BaseStreamWriter implements Runnable {
 		IStreamableFileService service = factory.getService(file);
 		IStreamableFile flv = service.getStreamableFile(file);
 		writer = flv.getWriter();
-
 	}
 
 	private void open() {
