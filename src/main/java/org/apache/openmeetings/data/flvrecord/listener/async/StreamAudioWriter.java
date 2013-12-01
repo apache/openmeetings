@@ -77,10 +77,12 @@ public class StreamAudioWriter extends BaseStreamWriter {
 				}
 				if (isInterview && startTimeStamp == -1 && KEYFRAME != streampacket.getFrameType()) {
 					//skip until keyframe
+					log.trace("no KEYFRAME, skipping");
 					return;
 				}
 				IoBuffer data = streampacket.getData().asReadOnlyBuffer();
 				if (data.limit() == 0) {
+					log.trace("data.limit() == 0 ");
 					return;
 				}
 
@@ -90,7 +92,6 @@ public class StreamAudioWriter extends BaseStreamWriter {
 				int timeStamp = streampacket.getTimestamp();
 				Date virtualTime = streampacket.getCurrentTime();
 
-				// TODO seems like this copy/pasted block need to be refactored
 				if (startTimeStamp == -1) {
 					// Calculate the delta between the initial start and the first audio-packet data
 
@@ -170,6 +171,7 @@ public class StreamAudioWriter extends BaseStreamWriter {
 					metaDeltaDao.addFlvRecordingMetaDelta(metaDelta);
 				}
 
+				log.trace("timeStamp :: " + timeStamp);
 				ITag tag = new Tag();
 				tag.setDataType(streampacket.getDataType());
 

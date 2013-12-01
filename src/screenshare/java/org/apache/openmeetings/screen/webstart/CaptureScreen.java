@@ -39,9 +39,10 @@ import org.slf4j.Logger;
 
 final class CaptureScreen extends Thread {
 	private static final Logger log = getLogger(CaptureScreen.class);
+	private static final int NANO_MULTIPLIER = 1000 * 1000;
 	private CoreScreenShare core;
 	private int timeBetweenFrames;
-	private volatile long timestamp = 0;
+	private volatile int timestamp = 0;
 	private volatile boolean active = true;
 	private IScreenEncoder se;
 	private IScreenShare client;
@@ -61,27 +62,26 @@ final class CaptureScreen extends Thread {
 		this.host = host;
 		this.app = app;
 		this.port = port;
-		int tbf;
 		switch (quality) {
 			case VeryHigh:
-				tbf = 50;
+				timeBetweenFrames = 50;
 				break;
 			case High:
-				tbf = 200;
+				timeBetweenFrames = 200;
 				break;
 			case Low:
 			case Medium:
 			default:
-				tbf = 500;
+				timeBetweenFrames = 500;
 				break;
 			
 		}
-		timeBetweenFrames = tbf * 1000 * 1000; // nano time
 		se = new ScreenV1Encoder(); //NOTE get image should be changed in the code below
 	}
 
 	public void release() {
 		active = false;
+		timestamp = 0;
 		try {
 			scheduler.shutdownNow();
 		} catch (Exception e) {
@@ -120,18 +120,19 @@ final class CaptureScreen extends Thread {
 						if (log.isTraceEnabled()) {
 							log.trace(String.format("Image was encoded in %s ms", System.currentTimeMillis() - start));
 						}
+						timestamp += timeBetweenFrames;
 						pushVideo(data, timestamp);
 					} catch (IOException e) {
 						log.error("Error while encoding/sending: ", e);
 					}
 				}
-			}, 0, timeBetweenFrames, TimeUnit.NANOSECONDS);
+			}, 0, timeBetweenFrames * NANO_MULTIPLIER, TimeUnit.NANOSECONDS);
 			if (sendCursor) {
 				cursorScheduler.scheduleWithFixedDelay(new Runnable() {
 					public void run() {
 						core.sendCursorStatus();
 					}
-				}, 0, timeBetweenFrames, TimeUnit.NANOSECONDS);
+				}, 0, timeBetweenFrames * NANO_MULTIPLIER, TimeUnit.NANOSECONDS);
 			}
 		} catch (Exception e) {
 			log.error("Error while running: ", e);
@@ -155,7 +156,7 @@ final class CaptureScreen extends Thread {
 	}
 	*/
 	
-	private void pushVideo(byte[] video, long ts) throws IOException {
+	private void pushVideo(byte[] video, int ts) throws IOException {
 		if (startPublish) {
 			if (buffer == null || (buffer.capacity() < video.length && !buffer.isAutoExpand())) {
 				buffer = IoBuffer.allocate(video.length);
@@ -166,7 +167,8 @@ final class CaptureScreen extends Thread {
 			buffer.put(video);
 			buffer.flip();
 	
-			RTMPMessage rtmpMsg = RTMPMessage.build(new VideoData(buffer), (int) ts);
+			log.trace("Video frame sent :: " + ts);
+			RTMPMessage rtmpMsg = RTMPMessage.build(new VideoData(buffer), ts);
 			client.publishStreamData(streamId, rtmpMsg);
 		}
 	}

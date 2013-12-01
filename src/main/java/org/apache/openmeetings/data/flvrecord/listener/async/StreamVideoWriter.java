@@ -19,6 +19,7 @@
 package org.apache.openmeetings.data.flvrecord.listener.async;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+import static org.red5.server.net.rtmp.event.VideoData.FrameType.KEYFRAME;
 
 import java.util.Date;
 
@@ -52,6 +53,21 @@ public class StreamVideoWriter extends BaseStreamWriter {
 	public void packetReceived(CachedEvent streampacket) {
 		try {
 			int timeStamp = streampacket.getTimestamp();
+			log.trace("incoming timeStamp :: " + timeStamp);
+			if (startTimeStamp == -1 && KEYFRAME != streampacket.getFrameType()) {
+				//skip until keyframe
+				log.trace("no KEYFRAME, skipping ::" + streampacket.getFrameType());
+				return;
+			}
+			if (timeStamp <= 0) {
+				log.warn("Negative TimeStamp");
+				return;
+			}
+			IoBuffer data = streampacket.getData().asReadOnlyBuffer();
+			if (data.limit() == 0) {
+				log.trace("Data.limit() == 0");
+				return;
+			}
 			Date virtualTime = streampacket.getCurrentTime();
 
 			if (startedSessionScreenTimeDate == null) {
@@ -64,24 +80,14 @@ public class StreamVideoWriter extends BaseStreamWriter {
 				metaDataDao.updateFlvRecordingMetaDataInitialGap(metaDataId, initialDelta);
 			}
 
-			if (streampacket.getTimestamp() <= 0) {
-				log.warn("Negative TimeStamp");
-				return;
-			}
-
-			IoBuffer data = streampacket.getData().asReadOnlyBuffer();
-
-			if (data.limit() == 0) {
-				return;
-			}
-
 			if (startTimeStamp == -1) {
 				// That will be not bigger then long value
-				startTimeStamp = streampacket.getTimestamp();
+				startTimeStamp = timeStamp;
 			}
 
 			timeStamp -= startTimeStamp;
 
+			log.trace("timeStamp :: " + timeStamp);
 			ITag tag = new Tag();
 			tag.setDataType(streampacket.getDataType());
 

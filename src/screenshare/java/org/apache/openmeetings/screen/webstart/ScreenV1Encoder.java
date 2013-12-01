@@ -20,6 +20,9 @@ package org.apache.openmeetings.screen.webstart;
 
 import static org.apache.openmeetings.screen.webstart.gui.ScreenDimensions.resizeX;
 import static org.apache.openmeetings.screen.webstart.gui.ScreenDimensions.resizeY;
+import static org.red5.io.IoConstants.FLAG_CODEC_SCREEN;
+import static org.red5.io.IoConstants.FLAG_FRAMETYPE_INTERFRAME;
+import static org.red5.io.IoConstants.FLAG_FRAMETYPE_KEYFRAME;
 
 import java.awt.Rectangle;
 import java.awt.Robot;
@@ -67,7 +70,7 @@ public class ScreenV1Encoder extends BaseScreenEncoder {
 		boolean isKeyFrame = (frameCount++ % keyFrameIndex) == 0 || last == null || !screen.equals(this.screen);
 		
 		//header
-		ba.write(getTag(isKeyFrame ? 0x01 : 0x02, 0x03));
+		ba.write(getTag(isKeyFrame ? FLAG_FRAMETYPE_KEYFRAME : FLAG_FRAMETYPE_INTERFRAME, FLAG_CODEC_SCREEN));
 		writeShort(ba, imgArea.width + ((blockSize / 16 - 1) << 12));
 		writeShort(ba, imgArea.height + ((blockSize / 16 - 1) << 12));
 		

@@ -119,7 +119,6 @@ public abstract class BaseStreamWriter implements Runnable {
 			try {
 				CachedEvent item = queue.poll(100, TimeUnit.MICROSECONDS);
 				if (item != null) {
-
 					if (dostopping) {
 						log.debug("Recording stopped but still packets to write to file!");
 					}
