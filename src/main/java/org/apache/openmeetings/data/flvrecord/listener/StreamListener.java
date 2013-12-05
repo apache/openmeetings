@@ -41,13 +41,13 @@ public class StreamListener implements IStreamListener {
 
 	private final BaseStreamWriter streamWriter;
 
-	public StreamListener(boolean isAudio, String streamName, IScope scope, Long flvRecordingMetaDataId,
+	public StreamListener(boolean isAudio, String streamName, IScope scope, Long metaDataId,
 			boolean isScreenData, boolean isInterview, FlvRecordingMetaDataDao metaDataDao
 			, FlvRecordingMetaDeltaDao metaDeltaDao) {
 		streamWriter = isAudio
-			? new StreamAudioWriter(streamName, scope, flvRecordingMetaDataId, isScreenData, isInterview, metaDataDao
+			? new StreamAudioWriter(streamName, scope, metaDataId, isScreenData, isInterview, metaDataDao
 					, metaDeltaDao)
-			: new StreamVideoWriter(streamName, scope, flvRecordingMetaDataId, isScreenData, isInterview, metaDataDao);
+			: new StreamVideoWriter(streamName, scope, metaDataId, isScreenData, isInterview, metaDataDao);
 	}
 
 	public void packetReceived(IBroadcastStream broadcastStream, IStreamPacket streampacket) {
