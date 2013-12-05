@@ -202,35 +202,43 @@
     		<handler name="onx" args="x">
                 if (this.sendUpdate) {
                     if ($debug) Debug.write("# x",x);
-                    parent.parent.scrollContainer.calcScrollContent();
+					if ('scrollContainer' in parent.parent) {
+	                    parent.parent.scrollContainer.calcScrollContent();
+					}
                 }
             </handler>
             
             <handler name="ony" args="y">
                 if (this.sendUpdate) {
                     if ($debug) Debug.write("# y",y);
-                    if (parent.parent.scrollContainer != null) {
+					if ('scrollContainer' in parent.parent) {
                     	parent.parent.scrollContainer.calcScrollContent();
-                    }
+					}
                 }
             </handler>
             
             <handler name="onheight" args="h">
                 if ($debug) Debug.write("# height",h);
                 //this.dragger.drag_min_x = parent.width - w;
-                parent.parent.scrollContainer.calcScrollContent();
+				if ('scrollContainer' in parent.parent) {
+	                parent.parent.scrollContainer.calcScrollContent();
+				}
                 parent.parent.zoombox.sendUpdate(null);
             </handler>
             
             <handler name="onwidth" args="w">
                 if ($debug) Debug.write("# width",w);
                 //this.dragger.drag_min_y = parent.height - h;
-                parent.parent.scrollContainer.calcScrollContent();
+				if ('scrollContainer' in parent.parent) {
+	                parent.parent.scrollContainer.calcScrollContent();
+				}
             </handler>
             
             <handler name="onupdateScale" args="tRef">
                 if ($debug) Debug.write("# updateScale",this.getDisplayObject()._xscale);
-                parent.parent.scrollContainer.calcScrollContent();
+				if ('scrollContainer' in parent.parent) {
+	                parent.parent.scrollContainer.calcScrollContent();
+				}
             </handler>
     		
             <attribute name="initH"/>
@@ -477,8 +485,7 @@
             <![CDATA[
                 for (var i=0;i<this.subviews.length;i++) {
                     if (this.subviews[i].y != 0) {
-                        if (this.subviews[i] instanceof lz.mainToolsTopPanel
-                            || this.subviews[i] instanceof lz.documentIconTopPanel) {
+                        if (this.subviews[i] instanceof lz.mainToolsTopPanel) {
                             if (objRef.height<=22){
                                 if (this.subviews[i].y+this.subviews[i].height+5>=parent.parent.height-objRef.initheight-21){
                                     if ($debug) Debug.write("mainToolsTopPanel");
@@ -526,7 +533,9 @@
         <method name="setWhiteboardValues" args="fullFit,zoom">
             if ($debug) Debug.write("setWhiteboardValues -1- ",fullFit,zoom);
             this.ignoreUpdates = true;
-            this._zoom.setSliderValue(zoom);
+			if ('_zoom' in this) {
+	            this._zoom.setSliderValue(zoom);
+			}
             this._fullFit.setValue(fullFit);
             this.ignoreUpdates = false;
         </method>
@@ -534,7 +543,9 @@
         <method name="setCurrentScaleByFullFit" args="tScale">
             if ($debug) Debug.write("setCurrentScaleByFullFit -2- ",tScale);
             this.ignoreUpdates = true;
-            this._zoom.setSliderValue(tScale);
+			if ('_zoom' in this) {
+	            this._zoom.setSliderValue(tScale);
+			}
             this.ignoreUpdates = false;
         </method>
         
@@ -546,9 +557,9 @@
                 }
                 if ($debug) Debug.warn("onvalue Full Fit ",v);
                 
-                if (parent._zoom != null) {
+				if ('_zoom' in parent) {
                 	parent.parent._drawareaMask._drawarea.doUpdateFullFit(v,parent._zoom.initialNumber);
-                }
+				}
             </handler>
             <labelTooltip labelid="1212" multiline="true" />
         </labelCheckbox>

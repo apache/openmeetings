@@ -54,14 +54,6 @@
 			<contextmenuitem caption="$once{ canvas.getLabelName(711) }" 
 							 onselect="parent.parent.parent.editFolderName()" />
 			
-			<!--	
-			//Load File To Whiteboard missing		 
-			<contextmenuitem name="_openDocument"
-				             caption="$once{ canvas.getLabelName(716) }" 
-							 separatorbefore="true"
-                             onselect="parent.parent.parent.loadDocument()" />
-             -->
-            				 
             <contextmenuitem caption="$once{ canvas.getLabelName(719) }" 
             				 onselect="parent.parent.parent.deleteFile(719)" />
             				 

@@ -128,9 +128,12 @@
         <handler name="onisopen" args="o">
 			if ($debug) Debug.write("onisopen",o);
 			if (o) {
-				canvas._chatcontent.doInitByOpen();
-				if (canvas.currentRoomObject != null)
+				if ('doInitByOpen' in canvas._chatcontent) {
+					canvas._chatcontent.doInitByOpen();
+				}
+				if (canvas.currentRoomObject != null) {
 					content._content1._chattabbottom.updatefontbuttonvisible();
+				}
 				this.doBlink = false;
 				this._newMessage.setAttribute("visibility","hidden");
 				this._newMessage.setAttribute( "opacity", 0 );
