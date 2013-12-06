@@ -21,6 +21,7 @@ package org.apache.openmeetings.axis.services;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.openmeetings.web.app.WebSession.getBaseUrl;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -448,89 +449,48 @@ public class RoomWebService {
 	 * 
 	 * @param SID
 	 *            The SID of the User. This SID must be marked as Loggedin
-	 * @param roomId1
-	 * @param roomId2
-	 * @param roomId3
-	 * @param roomId4
-	 * @param roomId5
-	 * @param roomId6
-	 * @param roomId7
-	 * @param roomId8
-	 * @param roomId9
-	 * @param roomId10
+	 * @param roomId
 	 * @return - current users for rooms ids
 	 * @throws AxisFault
 	 */
-	public RoomCountBean[] getRoomCounters(String SID, Integer roomId1,
-			Integer roomId2, Integer roomId3, Integer roomId4, Integer roomId5,
-			Integer roomId6, Integer roomId7, Integer roomId8, Integer roomId9,
-			Integer roomId10) throws AxisFault {
+	public List<RoomCountBean> getRoomCounters(String SID, Integer[] roomId) throws AxisFault {
+		List<RoomCountBean> roomBeans = new ArrayList<RoomCountBean>();
 		try {
 			Long users_id = sessiondataDao.checkSession(SID);
 			Long user_level = userManager.getUserLevelByID(users_id);
 
 			if (AuthLevelUtil.checkWebServiceLevel(user_level)) {
+				List<Integer> roomIds = new ArrayList<Integer>();
 
-				LinkedList<Integer> roomIds = new LinkedList<Integer>();
-
-				if (roomId1 != null && roomId1 > 0) {
-					roomIds.push(roomId1);
-				}
-				if (roomId2 != null && roomId2 > 0) {
-					log.debug("roomId2 :: " + roomId2);
-					roomIds.push(roomId2);
-				}
-				if (roomId3 != null && roomId3 > 0) {
-					roomIds.push(roomId3);
-				}
-				if (roomId4 != null && roomId4 > 0) {
-					roomIds.push(roomId4);
-				}
-				if (roomId5 != null && roomId5 > 0) {
-					roomIds.push(roomId5);
-				}
-				if (roomId6 != null && roomId6 > 0) {
-					roomIds.push(roomId6);
-				}
-				if (roomId7 != null && roomId7 > 0) {
-					roomIds.push(roomId7);
-				}
-				if (roomId8 != null && roomId8 > 0) {
-					roomIds.push(roomId8);
-				}
-				if (roomId9 != null && roomId9 > 0) {
-					roomIds.push(roomId9);
-				}
-				if (roomId10 != null && roomId10 > 0) {
-					roomIds.push(roomId10);
+				if (roomId != null) {
+					for (Integer id : roomId) {
+						if (id != null && id > 0) {
+							log.debug("roomId :: " + id);
+							roomIds.add(id);
+						}
+					}
 				}
 
 				List<Room> rooms = roomManager.getRoomsByIds(roomIds);
 
-				RoomCountBean[] roomsArray = new RoomCountBean[rooms.size()];
-
-				int i = 0;
 				for (Room room : rooms) {
 					RoomCountBean rCountBean = new RoomCountBean();
 					rCountBean.setRoomId(room.getRooms_id());
 					rCountBean.setRoomName(room.getName());
-					rCountBean.setMaxUser(room.getNumberOfPartizipants()
-							.intValue());
-					rCountBean.setRoomCount(sessionManager
-							.getClientListByRoom(room.getRooms_id()).size());
+					rCountBean.setMaxUser(room.getNumberOfPartizipants().intValue());
+					rCountBean.setRoomCount(sessionManager.getClientListByRoom(room.getRooms_id()).size());
 
-					roomsArray[i] = rCountBean;
-					i++;
+					roomBeans.add(rCountBean);
 				}
 
-				return roomsArray;
+			} else {
+				log.error("Not authorized");
 			}
-
 		} catch (Exception err) {
 			log.error("[getRoomTypes]", err);
 			throw new AxisFault(err.getMessage());
 		}
-		return null;
+		return roomBeans;
 	}
 
 	/**
@@ -544,18 +504,6 @@ public class RoomWebService {
 	 */
 	public Room getRoomById(String SID, long rooms_id) {
 		return conferenceService.getRoomById(SID, rooms_id);
-	}
-
-	/**
-	 * @deprecated this function is intend to be deleted
-	 * @param SID
-	 *            The SID of the User. This SID must be marked as Loggedin
-	 * @param rooms_id
-	 * @return - room with the id given
-	 */
-	@Deprecated
-	public Room getRoomWithCurrentUsersById(String SID, long rooms_id) {
-		return conferenceService.getRoomWithCurrentUsersById(SID, rooms_id);
 	}
 
 	/**

@@ -92,30 +92,12 @@ public class RoomWebServiceFacade extends BaseWebService {
 		return getBean(RoomWebService.class).getRoomTypes(SID);
 	}
 
-	public RoomCountBean[] getRoomCounters(String SID, Integer roomId1,
-			Integer roomId2, Integer roomId3, Integer roomId4, Integer roomId5,
-			Integer roomId6, Integer roomId7, Integer roomId8, Integer roomId9,
-			Integer roomId10) throws AxisFault {
-		return getBean(RoomWebService.class).getRoomCounters(SID, roomId1,
-				roomId2, roomId3, roomId4, roomId5, roomId6, roomId7, roomId8,
-				roomId9, roomId10);
+	public List<RoomCountBean> getRoomCounters(String SID, Integer[] roomId) throws AxisFault {
+		return getBean(RoomWebService.class).getRoomCounters(SID, roomId);
 	}
 
 	public Room getRoomById(String SID, long rooms_id) throws AxisFault {
 		return getBean(RoomWebService.class).getRoomById(SID, rooms_id);
-	}
-
-	/**
-	 * @deprecated this function is intend to be deleted
-	 * @param SID
-	 * @param rooms_id
-	 * @return
-	 */
-	@Deprecated
-	public Room getRoomWithCurrentUsersById(String SID, long rooms_id)
-			throws AxisFault {
-		return getBean(RoomWebService.class).getRoomWithCurrentUsersById(SID,
-				rooms_id);
 	}
 
 	public RoomReturn getRoomWithClientObjectsById(String SID, long rooms_id)
