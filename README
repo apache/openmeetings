@@ -8,6 +8,39 @@ Apache Openmeetings provides video conferencing, instant messaging, white board,
 collaborative document editing and other groupware tools using API functions of 
 the Red5 Streaming Server for Remoting and Streaming. 
 
+Release Notes 2.2.0
+=============
+see CHANGELOG file for detailed log
+
+Bug fix release for 2.1.1
+This release includes lots of UI and command line fixes, as well as some improvements:
+MSSQL DB support, Faster screen sharing, improved SOAP/REST call and LDAP support.
+
+_Known Issues_
+RTMPS seems to be very unstable (will try to fix it in 3.0)
+
+
+Release Notes 2.1.1
+=============
+see CHANGELOG file for detailed log
+
+Bug fix release for 2.1.0.
+This release includes some improvements in user interface, fixes for the 
+interview and video only rooms, and localization issues. 
+Configurable hot key for Mute/Unmute have been added.
+
+_Known Issues_
+Video/audio SIP integration is not a part of this Apache release.
+Check free red5sip product for this integration.
+
+Release passed reliability testing (great job, Vasily Degtyarev!)
+For 1 hour long conferences the following does not work with this release:
+* Recordigs (expected to work in 3.0)
+https://issues.apache.org/jira/browse/OPENMEETINGS-669
+* Recent version with Adobe Flash (please downgrade to 11.5 version)
+https://bugzilla.mozilla.org/show_bug.cgi?id=885188
+* Multi-tabbing (no other flash application should be running in
+different browsers or tabs)
 
 Release Notes 2.1
 =============
@@ -16,7 +49,7 @@ see CHANGELOG file for detailed log
 _Integration with Asterisk_
 SIP/VOIP integration with Asterisk was refactored. 
 Confbridge application is now used instead of Meetme for the conferences.
-Sound quality and SIP transport stability was significamtly improved.
+Sound quality and SIP transport stability was significantly improved.
 Basic support for video is added (is unstable and in beta version stage now).
 See also: http://openmeetings.apache.org/red5sip-integration_2.1.html
 

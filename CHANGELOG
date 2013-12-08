@@ -2,6 +2,71 @@ Apache OpenMeetings Change Log
 
 See http://issues.apache.org/jira/browse/OPENMEETINGS-* (where * is the number of the issue below)
 
+Release Notes - Openmeetings - Version 2.2.0 Apache Release
+================================================================================================================
+
+** Bug
+    * [OPENMEETINGS-671] - Calendar is shown incompletely when book conference room
+    * [OPENMEETINGS-763] - Command line admin: --drop option is broken
+    * [OPENMEETINGS-789] - Interview room recording in 2.1.1
+    * [OPENMEETINGS-791] - Backup import is broken
+    * [OPENMEETINGS-799] - SOAP methods RoomService.{getRooms,getRoomsWithCurrentUsers} and UserService.getUsersByOrganisation are broken
+    * [OPENMEETINGS-803] - Image files are not visible for attendees on whiteboard
+    * [OPENMEETINGS-804] - updateRoomWithModerationQuestionsAudioTypeAndHideOptions sets isAudioOnly always to true
+    * [OPENMEETINGS-806] - addNewUser SOAP method doe not return valid error code
+    * [OPENMEETINGS-810] - Entering interview room doesnt have option to select camera size - it inhetits the last used size
+    * [OPENMEETINGS-811] - Recordings does not downloaded via Google Chrome browser
+    * [OPENMEETINGS-819] - Zoom is not synchronyzed on whiteboard
+    * [OPENMEETINGS-832] - SOAP doesn't work
+    * [OPENMEETINGS-835] - no proper db-type option for postgresql db (Command Line Admin)
+    * [OPENMEETINGS-837] - "Choose Device" Dialog stops working after a few Changes
+    * [OPENMEETINGS-842] - External users should not be redirected to dashboard
+    * [OPENMEETINGS-848] - RoomService.getRoomCounters REST/SOAP method is not working
+
+** Improvement
+    * [OPENMEETINGS-368] - Allow users to zoom their view of the Whiteboard by default and not being controlled by "Draw on the Whiteboard" permissions
+    * [OPENMEETINGS-556] - GSOC: Faster screen sharing
+    * [OPENMEETINGS-798] - MSSQL support should be added to OM
+    * [OPENMEETINGS-820] - No function to match user groups with rooms via SOAP
+
+** New Feature
+    * [OPENMEETINGS-491] - LDAP authentication filter
+
+** Task
+    * [OPENMEETINGS-790] - Red5 version in 2.x branch should be bumped
+
+
+Release Notes - Openmeetings - Version 2.1.1 Apache Release
+================================================================================================================
+
+** Bug
+    * [OPENMEETINGS-432] - video only room is coming with white board also
+    * [OPENMEETINGS-439] - An LDAP user can't change their own profile picture.
+    * [OPENMEETINGS-481] - When I reserve a room by sending an email, users who connected to this link from an email have the same email address as me
+    * [OPENMEETINGS-503] - Openmeetings does not logout on the Recording panel
+    * [OPENMEETINGS-507] - Error message is shown when user save the Profile settings 
+    * [OPENMEETINGS-537] - Pop menu  in conference for files shows "Delete folder"
+    * [OPENMEETINGS-586] - FileItem owner_id is not replaced with new id while system import
+    * [OPENMEETINGS-587] - Exclusive audio by hotkey is broken
+    * [OPENMEETINGS-598] - dont build trunk on JDK 1.7 x64
+    * [OPENMEETINGS-608] - Office file are uploaded but not displayed
+    * [OPENMEETINGS-609] - The end time shown under the Book Conference Room option in New Message is Incorrect
+    * [OPENMEETINGS-618] - Incorrect translation
+    * [OPENMEETINGS-625] - Profile Pictures not working on LDAP Accounts
+    * [OPENMEETINGS-634] - No menu accessable after file upload, in a special condition
+    * [OPENMEETINGS-635] - Administration / Configuration : default_lang_id documentation
+    * [OPENMEETINGS-654] - Interview room is broken
+    * [OPENMEETINGS-670] - The webinar is already closed, you wil be rediredcted to some interesting offerings in X sek
+    * [OPENMEETINGS-687] - Microphone is unmuted when user refresh video frame
+
+** Improvement
+    * [OPENMEETINGS-589] - Configurable hot key for Mute/Unmute should be added
+
+----------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------
+
+
 
 Release Notes - Openmeetings - Version 2.1 Apache Release
 ================================================================================================================
@@ -21,6 +86,7 @@ Release Notes - Openmeetings - Version 2.1 Apache Release
     * [OPENMEETINGS-180] - bug sending invitation
     * [OPENMEETINGS-196] - Calendar Ical / Simple Mail - double invitation mail
     * [OPENMEETINGS-212] - Activities and actions: "Deny and remove message " button is not worked
+    * [OPENMEETINGS-243] - "Updated" field in Administration -> LDAP panel contains "null" for string for empty value.
     * [OPENMEETINGS-251] - Minors layout problems when translating
     * [OPENMEETINGS-267] - missing translation
     * [OPENMEETINGS-291] - light does not indicate when the user is speaking
@@ -34,13 +100,13 @@ Release Notes - Openmeetings - Version 2.1 Apache Release
     * [OPENMEETINGS-327] - Add Restart Save Mail-Queue
     * [OPENMEETINGS-328] - screen sharing is not closing automatically
     * [OPENMEETINGS-331] - tooltip for cmd_applyforWhiteBoard room action is not set
-    * [OPENMEETINGS-343] - OM crashes if Invited guest with screen sharing rights tries to start screen sharing
+    * [OPENMEETINGS-343] - OM crashes if Inviteв guest with screen sharing rights tries to start screen sharing
     * [OPENMEETINGS-346] - Screen Sharing does not end with end of meeting
     * [OPENMEETINGS-362] - Download of profile images broken
     * [OPENMEETINGS-363] - Some minor bugs in private chat
     * [OPENMEETINGS-364] - User is not removed from user list when he leaves the room
     * [OPENMEETINGS-366] - File upload does not show images as options when doing file upload
-    * [OPENMEETINGS-376] - "Notification type" text overflows the drop down data selection area and is partly covered
+    * [OPENMEETINGS-376] - “Notification type” text overflows the drop down data selection area and is partly covered
     * [OPENMEETINGS-378] - Update Calendar email notification rules to send notification only when data relevant to the users has been changed
     * [OPENMEETINGS-379] - The Calendar ics format email notification is incorrectly formed
     * [OPENMEETINGS-380] - Calendar "Add attendee" option has a second option of itself to "Add external" but adding an external attendee does not close this dialog
@@ -113,6 +179,14 @@ Release Notes - Openmeetings - Version 2.1 Apache Release
     * [OPENMEETINGS-552] - Release blocking UI issues
     * [OPENMEETINGS-561] - Video is not removed on Whiteboard closing
     * [OPENMEETINGS-563] - "Black box" is displayed on test audio/video setup dialog
+    * [OPENMEETINGS-565] - Stackoverflow Exception when you goto your user profile and try to save it.
+    * [OPENMEETINGS-566] - No default timezone selection in registration/sign up when user is in timezone +12
+    * [OPENMEETINGS-567] - If you hit the "start upload" button twice, while the conversion is running, Openmeetings will run into an error
+    * [OPENMEETINGS-568] - OpenMeetings requests access to Cam even if there is none
+    * [OPENMEETINGS-569] - Faulty highperf settings in bat script
+    * [OPENMEETINGS-572] - Empty fields are replaced with string "null" after export&import
+    * [OPENMEETINGS-580] - Smslib 3.5.3 should be used.
+    * [OPENMEETINGS-582] - 2.0 RoomPoll and Configs restore failed
 
 
 
@@ -148,6 +222,7 @@ Release Notes - Openmeetings - Version 2.1 Apache Release
     * [OPENMEETINGS-535] - an update of the german language file
     * [OPENMEETINGS-541] - Updated version of French language file
     * [OPENMEETINGS-562] - To import ppt presentation delete page
+    * [OPENMEETINGS-583] - Ability to disable enhanced microphone should be added
 
 ** New Feature
     * [OPENMEETINGS-111] - Command line admin need to be created
@@ -172,6 +247,7 @@ Release Notes - Openmeetings - Version 2.1 Apache Release
     * [OPENMEETINGS-417] - How to add/register SIP extension in OpenMeeting ?
     * [OPENMEETINGS-446] - Create a Master backup File for last versions (including all generated data)
     * [OPENMEETINGS-522] - add Redmine Plugin Link to HomePage
+    * [OPENMEETINGS-585] - Clustering documentation
 
 
 
