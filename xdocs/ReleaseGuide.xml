@@ -240,9 +240,13 @@
 				<p>
 					Add a section to <a href="downloads.html">downloads</a> website.<br />
 					Make sure that the binary packages are linked using the mirror URL as base path (
-					<b>not</b>http://www.apache.org/dist):<br />
+					<b>not</b> http://www.apache.org/dist):<br />
 					Mirror URL: 
 					<a href="http://www.apache.org/dyn/closer.cgi/openmeetings/">http://www.apache.org/dyn/closer.cgi/openmeetings/</a>
+				</p>
+				<p>
+					Release candidates should be deleted from <tt>https://dist.apache.org/repos/dist/dev/openmeetings/</tt><br/>
+					Old releases should be deleted from <tt>https://dist.apache.org/repos/dist/release/openmeetings/</tt>
 				</p>
 			</subsection>
 
