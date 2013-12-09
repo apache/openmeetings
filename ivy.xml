@@ -179,7 +179,7 @@
 		<dependency org="org.apache.derby" name="derbynet" rev="10.10.1.1" conf="openmeetings->*" transitive="false">
 			<include type="jar" />
 		</dependency>
-		<dependency org="postgresql" name="postgresql" rev="9.1-901.jdbc4" conf="openmeetings->*" transitive="false">
+		<dependency org="org.postgresql" name="postgresql" rev="9.3-1100-jdbc4" conf="openmeetings->*" transitive="false">
 			<include type="jar" />
 		</dependency>
 		<dependency org="dom4j" name="dom4j" rev="1.6.1" conf="openmeetings->*" transitive="false">
