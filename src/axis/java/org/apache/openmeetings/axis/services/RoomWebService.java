@@ -45,6 +45,7 @@ import org.apache.openmeetings.db.dao.server.ISessionManager;
 import org.apache.openmeetings.db.dao.server.SessiondataDao;
 import org.apache.openmeetings.db.dao.user.AdminUserDao;
 import org.apache.openmeetings.db.dto.basic.SearchResult;
+import org.apache.openmeetings.db.dto.file.RecordingObject;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
 import org.apache.openmeetings.db.entity.calendar.MeetingMember;
 import org.apache.openmeetings.db.entity.record.FlvRecording;
@@ -188,49 +189,26 @@ public class RoomWebService {
 	/**
 	 * Gets a list of flv recordings
 	 * 
-	 * @param SID
-	 *            The SID of the User. This SID must be marked as Loggedin
-	 * @param externalUserId
-	 *            the externalUserId
+	 * @param SID The SID of the User. This SID must be marked as Loggedin
+	 * @param externalUserId the externalUserId
+	 * @param externalUsertype the externalUserType
 	 *            
 	 * @return - list of flv recordings
 	 * @throws AxisFault
 	 */
-	public FLVRecordingReturn[] getFlvRecordingByExternalUserId(String SID,
-			String externalUserId) throws AxisFault {
+	public List<RecordingObject> getFlvRecordingByExternalUserId(String SID,
+			String externalUserId, String externalUserType) throws AxisFault {
 		try {
-
 			Long users_id = sessiondataDao.checkSession(SID);
 			Long user_level = userManager.getUserLevelByID(users_id);
 
 			if (AuthLevelUtil.checkWebServiceLevel(user_level)) {
-				List<FlvRecording> recordingList = flvRecordingDao
-						.getFlvRecordingByExternalUserId(externalUserId);
-
-				// We need to re-marshal the Rooms object cause Axis2 cannot use
-				// our objects
-				if (recordingList != null && recordingList.size() != 0) {
-					// roomsListObject.setRoomList(roomList);
-					FLVRecordingReturn[] recordingListItems = new FLVRecordingReturn[recordingList
-							.size()];
-					int count = 0;
-					for (Iterator<FlvRecording> it = recordingList.iterator(); it
-							.hasNext();) {
-						FlvRecording flvRecording = it.next();
-						recordingListItems[count] = FLVRecordingReturn
-								.initObject(flvRecording);
-						count++;
-					}
-
-					return recordingListItems;
-				}
-
-				return null;
+				return flvRecordingDao.getFlvRecordingByExternalUserId(externalUserId, externalUserType);
 			}
 
 			return null;
 		} catch (Exception err) {
-			log.error("[getFlvRecordingByExternalRoomType] ", err);
+			log.error("[getFlvRecordingByExternalUserId] ", err);
 			throw new AxisFault(err.getMessage());
 		}
 	}
@@ -247,7 +225,7 @@ public class RoomWebService {
 	 * @return - list of flv recordings
 	 * @throws AxisFault
 	 */
-	public FLVRecordingReturn[] getFlvRecordingByExternalRoomTypeAndCreator(
+	public RecordingObject[] getFlvRecordingByExternalRoomTypeAndCreator(
 			String SID, String externalRoomType, Long insertedBy)
 			throws AxisFault {
 		try {
@@ -264,14 +242,11 @@ public class RoomWebService {
 				// our objects
 				if (recordingList != null && recordingList.size() != 0) {
 					// roomsListObject.setRoomList(roomList);
-					FLVRecordingReturn[] recordingListItems = new FLVRecordingReturn[recordingList
-							.size()];
+					RecordingObject[] recordingListItems = new RecordingObject[recordingList.size()];
 					int count = 0;
-					for (Iterator<FlvRecording> it = recordingList.iterator(); it
-							.hasNext();) {
+					for (Iterator<FlvRecording> it = recordingList.iterator(); it.hasNext();) {
 						FlvRecording flvRecording = it.next();
-						recordingListItems[count] = FLVRecordingReturn
-								.initObject(flvRecording);
+						recordingListItems[count] = new RecordingObject(flvRecording);
 						count++;
 					}
 

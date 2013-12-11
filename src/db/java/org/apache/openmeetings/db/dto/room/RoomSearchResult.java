@@ -16,30 +16,30 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.db.dto.basic;
+package org.apache.openmeetings.db.dto.room;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.openmeetings.db.dto.user.UserDTO;
-import org.apache.openmeetings.db.entity.user.User;
+import org.apache.openmeetings.db.dto.basic.SearchResult;
+import org.apache.openmeetings.db.entity.room.Room;
 
-public class UserSearchResult {
+public class RoomSearchResult {
 	private String objectName;
 	private Long records;
-	private List<UserDTO> result;
+	private List<RoomDTO> result;
 	private Long errorId;
-	
-	public UserSearchResult(SearchResult<User> copy) {
+
+	public RoomSearchResult(SearchResult<Room> copy) {
 		this.objectName = copy.getObjectName();
 		this.records = copy.getRecords();
-		this.result = new ArrayList<UserDTO>(copy.getResult().size());
-		for (User u : copy.getResult()) {
-			result.add(new UserDTO(u));
+		this.result = new ArrayList<RoomDTO>(copy.getResult().size());
+		for (Room r : copy.getResult()) {
+			result.add(new RoomDTO(r));
 		}
 		this.errorId = copy.getErrorId();
 	}
-	
+
 	public String getObjectName() {
 		return objectName;
 	}
@@ -56,11 +56,11 @@ public class UserSearchResult {
 		this.records = records;
 	}
 
-	public List<UserDTO> getResult() {
+	public List<RoomDTO> getResult() {
 		return result;
 	}
 
-	public void setResult(List<UserDTO> result) {
+	public void setResult(List<RoomDTO> result) {
 		this.result = result;
 	}
 
@@ -71,5 +71,4 @@ public class UserSearchResult {
 	public void setErrorId(Long errorId) {
 		this.errorId = errorId;
 	}
-
 }

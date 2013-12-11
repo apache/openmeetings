@@ -20,7 +20,7 @@ package org.apache.openmeetings.axis.services;
 
 import org.apache.axis2.AxisFault;
 import org.apache.openmeetings.db.dto.basic.ErrorResult;
-import org.apache.openmeetings.db.dto.basic.UserSearchResult;
+import org.apache.openmeetings.db.dto.user.UserSearchResult;
 import org.apache.openmeetings.db.entity.server.Sessiondata;
 
 public class UserWebServiceFacade extends BaseWebService {

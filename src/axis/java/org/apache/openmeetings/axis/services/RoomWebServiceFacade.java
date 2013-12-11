@@ -22,7 +22,8 @@ import java.util.Date;
 import java.util.List;
 
 import org.apache.axis2.AxisFault;
-import org.apache.openmeetings.db.dto.basic.RoomSearchResult;
+import org.apache.openmeetings.db.dto.file.RecordingObject;
+import org.apache.openmeetings.db.dto.room.RoomSearchResult;
 import org.apache.openmeetings.db.entity.record.FlvRecording;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.room.RoomType;
@@ -57,13 +58,12 @@ public class RoomWebServiceFacade extends BaseWebService {
 				flvRecordingId);
 	}
 
-	public FLVRecordingReturn[] getFlvRecordingByExternalUserId(String SID,
-			String externalUserId) throws AxisFault {
-		return getBean(RoomWebService.class).getFlvRecordingByExternalUserId(SID,
-				externalUserId);
+	public List<RecordingObject> getFlvRecordingByExternalUserId(String SID,
+			String externalUserId, String externalUserType) throws AxisFault {
+		return getBean(RoomWebService.class).getFlvRecordingByExternalUserId(SID, externalUserId, externalUserType);
 	}
 
-	public FLVRecordingReturn[] getFlvRecordingByExternalRoomTypeAndCreator(
+	public RecordingObject[] getFlvRecordingByExternalRoomTypeAndCreator(
 			String SID, String externalRoomType, Long insertedBy)
 			throws AxisFault {
 		return getBean(RoomWebService.class)

@@ -362,13 +362,15 @@ limitations under the License.
     			    			    			       			   String SID
     			       			    			       			     , 
     			       			   String externalUserId
+    			       			    			       			     , 
+    			       			   String externalUserType
     			       			    			)
     			</i><br/>
     			<p>
     			  Gets a list of flv recordings
     			</p>
     			<p>
-                  Return Type: org.apache.openmeetings.axis.services.FLVRecordingReturn[]
+                  Return Type: java.util.List
                 </p>
     			<p>Params:</p>
     			    			
@@ -397,11 +399,19 @@ limitations under the License.
 	                     <td valign="top">the externalUserId</td>
 	                   </tr>
 	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">externalUsertype</td>
+	                     <td valign="top">the externalUserType</td>
+	                   </tr>
+	                   
 	                   	                   	                   </tbody>
 	    			</table>
     			    			<br/>
     			REST Sample Call/URL:<br/>
-    			    			    				    								    				    												<a href="http://localhost:5080/openmeetings/services/RoomService/getFlvRecordingByExternalUserId?SID=VALUE&externalUserId=VALUE">http://localhost:5080/openmeetings/services/RoomService/getFlvRecordingByExternalUserId?SID=VALUE&amp;externalUserId=VALUE</a>
+    			    			    				    								    				    								    				    												<a href="http://localhost:5080/openmeetings/services/RoomService/getFlvRecordingByExternalUserId?SID=VALUE&externalUserId=VALUE&externalUserType=VALUE">http://localhost:5080/openmeetings/services/RoomService/getFlvRecordingByExternalUserId?SID=VALUE&amp;externalUserId=VALUE&amp;externalUserType=VALUE</a>
     		  </div>
     	   				    		      <div class="method">
 		        <div class="method_header">
@@ -422,7 +432,7 @@ limitations under the License.
     			  Gets a list of flv recordings
     			</p>
     			<p>
-                  Return Type: org.apache.openmeetings.axis.services.FLVRecordingReturn[]
+                  Return Type: org.apache.openmeetings.db.dto.file.RecordingObject[]
                 </p>
     			<p>Params:</p>
     			    			

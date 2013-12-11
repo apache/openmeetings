@@ -28,6 +28,7 @@ import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
+import org.apache.openmeetings.db.dto.file.RecordingObject;
 import org.apache.openmeetings.db.entity.record.FlvRecording;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -96,26 +97,21 @@ public class FlvRecordingDao {
 		return null;
 	}
 
-	public List<FlvRecording> getFlvRecordingByExternalUserId(String externalUserId) {
+	public List<RecordingObject> getFlvRecordingByExternalUserId(String externalUserId, String externalUserType) {
 		try {
+			log.debug("getFlvRecordingByExternalUserId :externalUserId: {}; externalType: {}", externalUserId, externalUserType);
 
-			log.debug("getFlvRecordingByExternalUserId :externalUserId: " + externalUserId);
-
-			String hql = "SELECT c FROM FlvRecording c, Room r, User u WHERE c.room_id = r.rooms_id "
-					+ "AND c.insertedBy = u.user_id AND u.externalUserId LIKE :externalUserId "
-					+ "AND c.deleted <> :deleted ";
-
-			TypedQuery<FlvRecording> query = em.createQuery(hql, FlvRecording.class);
+			TypedQuery<RecordingObject> query = em.createNamedQuery("getRecordingsByExternalUser", RecordingObject.class);
 			query.setParameter("externalUserId", externalUserId);
-			query.setParameter("deleted", true);
+			query.setParameter("externalUserType", externalUserType);
 
-			List<FlvRecording> flvRecordingList = query.getResultList();
+			List<RecordingObject> flvRecordingList = query.getResultList();
 
-			log.debug("getFlvRecordingByExternalRoomType :: " + flvRecordingList.size());
+			log.debug("getFlvRecordingByExternalUserId :: " + flvRecordingList.size());
 
 			return flvRecordingList;
 		} catch (Exception ex2) {
-			log.error("[getFlvRecordingByExternalRoomType]: ", ex2);
+			log.error("[getFlvRecordingByExternalUserId]: ", ex2);
 		}
 		return null;
 	}

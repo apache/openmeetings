@@ -16,14 +16,14 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.axis.services;
+package org.apache.openmeetings.db.dto.file;
 
 import java.util.Date;
 
 import org.apache.openmeetings.db.entity.record.FlvRecording;
 
 
-public class FLVRecordingReturn {
+public class RecordingObject {
 
 	private long flvRecordingId;
 	
@@ -65,51 +65,48 @@ public class FLVRecordingReturn {
 	private Boolean isInterview;
 	private Integer progressPostProcessing;
 	
-	public static FLVRecordingReturn initObject(FlvRecording customObject) {
+	public RecordingObject() {}
+	
+	public RecordingObject(FlvRecording customObject) {
+		this.flvRecordingId = customObject.getFlvRecordingId();
 		
-		FLVRecordingReturn flvRecordingReturn = new FLVRecordingReturn();
+		this.fileName = customObject.getFileName();
+		this.alternateDownload = customObject.getAlternateDownload();
+		this.fileHash = customObject.getFileHash();
+		this.comment = customObject.getComment();
 		
-		flvRecordingReturn.flvRecordingId = customObject.getFlvRecordingId();
-		
-		flvRecordingReturn.fileName = customObject.getFileName();
-		flvRecordingReturn.alternateDownload = customObject.getAlternateDownload();
-		flvRecordingReturn.fileHash = customObject.getFileHash();
-		flvRecordingReturn.comment = customObject.getComment();
-		
-		flvRecordingReturn.parentFileExplorerItemId = customObject.getParentFileExplorerItemId();
-		flvRecordingReturn.room_id = customObject.getRoom_id();
-		flvRecordingReturn.ownerId = customObject.getOwnerId();//OwnerID => only set if its directly root in Owner Directory, other Folders and Files
+		this.parentFileExplorerItemId = customObject.getParentFileExplorerItemId();
+		this.room_id = customObject.getRoom_id();
+		this.ownerId = customObject.getOwnerId();//OwnerID => only set if its directly root in Owner Directory, other Folders and Files
 		//maybe are also in a Home directory but just because their parent is
 		
-		flvRecordingReturn.isFolder = customObject.getIsFolder();
-		flvRecordingReturn.isImage = customObject.getIsImage();
-		flvRecordingReturn.isPresentation = customObject.getIsPresentation();
-		flvRecordingReturn.isRecording = customObject.getIsRecording();
+		this.isFolder = customObject.getIsFolder();
+		this.isImage = customObject.getIsImage();
+		this.isPresentation = customObject.getIsPresentation();
+		this.isRecording = customObject.getIsRecording();
 		
-		flvRecordingReturn.recordStart = customObject.getRecordStart();
-		flvRecordingReturn.recordEnd = customObject.getRecordEnd();
+		this.recordStart = customObject.getRecordStart();
+		this.recordEnd = customObject.getRecordEnd();
 		
-		flvRecordingReturn.insertedBy = customObject.getInsertedBy();
-		flvRecordingReturn.inserted = customObject.getInserted();
-		flvRecordingReturn.updated = customObject.getUpdated();
-		flvRecordingReturn.deleted = customObject.getDeleted();
+		this.insertedBy = customObject.getInsertedBy();
+		this.inserted = customObject.getInserted();
+		this.updated = customObject.getUpdated();
+		this.deleted = customObject.getDeleted();
 		
-		flvRecordingReturn.width = customObject.getWidth();
-		flvRecordingReturn.height = customObject.getHeight();
+		this.width = customObject.getWidth();
+		this.height = customObject.getHeight();
 		
-		flvRecordingReturn.flvWidth = customObject.getFlvWidth();
-		flvRecordingReturn.flvHeight = customObject.getFlvHeight();
-		flvRecordingReturn.previewImage = customObject.getPreviewImage();
+		this.flvWidth = customObject.getFlvWidth();
+		this.flvHeight = customObject.getFlvHeight();
+		this.previewImage = customObject.getPreviewImage();
 		
-		flvRecordingReturn.fileSize = customObject.getFileSize();
+		this.fileSize = customObject.getFileSize();
 		
-		flvRecordingReturn.recorderStreamId = customObject.getRecorderStreamId();
-		flvRecordingReturn.organization_id = customObject.getOrganization_id();
+		this.recorderStreamId = customObject.getRecorderStreamId();
+		this.organization_id = customObject.getOrganization_id();
 		
-		flvRecordingReturn.isInterview = customObject.getIsInterview();
-		flvRecordingReturn.progressPostProcessing = customObject.getProgressPostProcessing();
-		
-		return flvRecordingReturn;
+		this.isInterview = customObject.getIsInterview();
+		this.progressPostProcessing = customObject.getProgressPostProcessing();
 	}
 
 	public long getFlvRecordingId() {
@@ -335,9 +332,4 @@ public class FLVRecordingReturn {
 	public void setProgressPostProcessing(Integer progressPostProcessing) {
 		this.progressPostProcessing = progressPostProcessing;
 	}
-	
-	
-	
-	
-	
 }
