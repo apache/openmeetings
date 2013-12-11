@@ -47,7 +47,7 @@
 			<baseMenuMeetingsItem text="$once{ canvas.getLabelName(245) }" 
 						text_y_inset="4" text_fontsize="14" down_y_inset="8"
 						textToolTip="" height="28"
-						visible="${ (classroot.viewType=='conference') ? true : ((canvas.ismoderator) ? true : ((canvas.isAllowedToDraw) ? true : false )) }"
+						visible="${ (classroot.viewType=='interview') ? false : ((canvas.ismoderator) ? true : ((canvas.isAllowedToDraw) ? true : false )) }"
 						>
 				<handler name="onclick">
 			    	new lz.conferenceMenuFiles(canvas,{
@@ -225,13 +225,8 @@
 						enabled="${ canvas.ismoderator }" />
 			<horizontalDropDownSpacer />
 			<conferencDropDownMenuItem labelid="239" command="cmd_shareDesktop" 
-						enabled="${ canvas.ismoderator }" />			
+						enabled="${ classroot.btnRef.classroot.viewType != 'interview' &amp;&amp; canvas.ismoderator }" />			
 			<horizontalDropDownSpacer />
-			<!-- 
-			<conferencDropDownMenuItem labelid="306" command="cmd_editCamMicSettings" 
-						enabled="true" />			
-			<horizontalDropDownSpacer />
-			 -->
 			<conferencDropDownMenuItem labelid="784" command="cmd_applyforMod"
 						enabled="${ !canvas.ismoderator }" />	
 			<horizontalDropDownSpacer />
@@ -266,10 +261,4 @@
 		</view>
 		
 	</class>
-	
-
-
-	
-
-
 </library>
