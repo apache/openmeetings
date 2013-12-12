@@ -790,12 +790,12 @@ public class ImportInitvalues {
 
 		Boolean langRtl = false;
 
-		if (rtl != null && rtl.equals("true"))
+		if (rtl != null && rtl.equals("true")) {
 			langRtl = true;
+		}
 
 		long ticks = System.currentTimeMillis();
-		FieldLanguage lang = fieldLanguageDaoImpl.addLanguage(langId, langName,
-				langRtl, code);
+		FieldLanguage lang = fieldLanguageDaoImpl.addLanguage(langId, langName, langRtl, code);
 
 		SAXReader reader = new SAXReader();
 		Document document = reader.read(new File(
@@ -850,8 +850,7 @@ public class ImportInitvalues {
 		}
 		lang.setLanguageValues(flvMap.values());
 		fieldLanguageDaoImpl.updateLanguage(lang);
-		log.debug("Lang ADDED: " + lang + "; seconds passed: "
-				+ (System.currentTimeMillis() - ticks) / 1000);
+		log.debug("Lang ADDED: " + lang + "; seconds passed: " + (System.currentTimeMillis() - ticks) / 1000);
 	}
 	
 	public static void main(String... args) {
