@@ -30,7 +30,7 @@ public class InvitationTemplate extends AbstractTemplatePanel {
 		add(new Label("user", user));
 		add(new Label("message", message));
 		add(new ExternalLink("invitation_link1", link));
-		add(new Label("invitation_link2", link));
+		add(new Label("invitation_link2", link).setEscapeModelStrings(false));
 	}
 	
 	public static String getEmail(String user, String message, String link) {

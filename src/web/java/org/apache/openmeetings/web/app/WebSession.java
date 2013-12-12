@@ -30,8 +30,10 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 import java.util.TimeZone;
 
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
@@ -86,6 +88,11 @@ public class WebSession extends AbstractAuthenticatedWebSession {
 	private String baseUrl = null;
 	private Locale browserLocale = null;
 	private int browserTZOffset = Integer.MIN_VALUE;
+	private static Set<Long> STRINGS_WITH_APP = new HashSet<Long>(); //FIXME need to be removed
+	static {
+		STRINGS_WITH_APP.addAll(Arrays.asList(499L, 500L, 506L, 511L, 512L, 513L, 517L, 532L, 622L, 804L
+				, 909L, 952L, 978L, 981L, 984L, 989L, 990L, 999L, 1151L, 1155L, 1157L, 1158L, 1194L));
+	}
 	
 	public WebSession(Request request) {
 		super(request);
@@ -103,31 +110,35 @@ public class WebSession extends AbstractAuthenticatedWebSession {
 	
 	@Override
 	public Roles getRoles() {
+		//first of all will check hashes
+		try {
+			IRequestParameters params = RequestCycle.get().getRequest().getRequestParameters();
+			StringValue secureHash = params.getParameterValue("secureHash");
+			StringValue invitationHash = params.getParameterValue("invitationHash");
+			if (!secureHash.isEmpty() || !invitationHash.isEmpty()) {
+				PageParameters pp = new PageParameters();
+				for (String p : params.getParameterNames()) {
+					for (StringValue sv : params.getParameterValues(p)) {
+						if (!sv.isEmpty()) {
+							pp.add(p, sv.toString());
+						}
+					}
+				}
+				if (isSignedIn()) {
+					invalidate();
+				}
+				throw new RestartResponseAtInterceptPageException(SwfPage.class, pp);
+			}
+		} catch (RestartResponseAtInterceptPageException e) {
+			throw e;
+		} catch (Exception e) {
+			//no-op, will continue to sign-in page
+		}
 		Roles r = null;
 		if (isSignedIn()) {
 			r = new Roles(Roles.USER);
 			if (AuthLevelUtil.checkAdminLevel(userLevel)) {
 				r.add(Roles.ADMIN);
-			}
-		} else {
-			try {
-				IRequestParameters params = RequestCycle.get().getRequest().getRequestParameters();
-				StringValue secureHash = params.getParameterValue("secureHash");
-				if (!secureHash.isEmpty()) {
-					PageParameters pp = new PageParameters();
-					for (String p : params.getParameterNames()) {
-						for (StringValue sv : params.getParameterValues(p)) {
-							if (!sv.isEmpty()) {
-								pp.add(p, sv.toString());
-							}
-						}
-					}
-					throw new RestartResponseAtInterceptPageException(SwfPage.class, pp);
-				}
-			} catch (RestartResponseAtInterceptPageException e) {
-				throw e;
-			} catch (Exception e) {
-				//no-op, will continue to sign-in page
 			}
 		}
 		return r;
@@ -180,7 +191,8 @@ public class WebSession extends AbstractAuthenticatedWebSession {
 	
 	public static String getString(long id) {
 		String s = getBean(FieldLanguagesValuesDao.class).getString(id, getLanguage());
-		return s == null ? "[Missing]" : s;
+		return s == null ? "[Missing]" :
+			(STRINGS_WITH_APP.contains(id) ? s.replaceAll("\\$APP_NAME", getBean(ConfigurationDao.class).getAppName()) : s);
 	}
 	
 	void setLanguage(long languageId) {
