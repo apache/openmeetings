@@ -1229,13 +1229,15 @@
 
         <netRemoteCallHib name="newRed5ScreenCursor" funcname="newRed5ScreenCursor">
             <netparam><method name="getValue">return null;</method></netparam>
-            <handler name="ondata" args="value">
-                <![CDATA[
-                    //The onResult-Handler will be called be the rtmpconnection
-                    //if ($debug) Debug.write(" onResult newRed5ScreenCursor : ",value);  
-                    canvas.currentBaseConferenceRoom._screenSharingAdapter.updateCursorScreenSharing(value);
-                ]]>
-            </handler>   
+			<handler name="ondata" args="value">
+			<![CDATA[
+				//The onResult-Handler will be called be the rtmpconnection
+				//if ($debug) Debug.write(" onResult newRed5ScreenCursor : ",value);
+				if (canvas.currentBaseConferenceRoom._screenSharingAdapter != null) {
+					canvas.currentBaseConferenceRoom._screenSharingAdapter.updateCursorScreenSharing(value);
+				}
+			]]>
+			</handler>   
         </netRemoteCallHib>
         
         
