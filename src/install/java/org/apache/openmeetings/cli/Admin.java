@@ -412,7 +412,7 @@ public class Admin {
 						}
 						missing = 0;
 						for (FileExplorerItem item : fileDao.getFileExplorerItems()) {
-							if (!item.getDeleted() && !new File(files, item.getFileHash()).exists()) {
+							if (!item.getDeleted() && item.getFileHash() != null && !new File(files, item.getFileHash()).exists()) {
 								missing++;
 							}
 						}
@@ -449,28 +449,11 @@ public class Admin {
 							if (f.isFile() && f.getName().endsWith(".flv")) {
 								FlvRecording rec = recordDao.getRecordingByHash(f.getName());
 								if (rec == null) {
-									if (cleanup) {
-										FileHelper.removeRec(f);
-									} else {
-										invalid += f.length();
-									}
+									cleanUpFile(invalid, cleanup, f);
 									String name = f.getName().substring(0, f.getName().length() - 5);
-									File rfa = new File(hibernateDir, name + ".avi");
-									if (rfa.exists()) {
-										if (cleanup) {
-											FileHelper.removeRec(rfa);
-										} else {
-											invalid += rfa.length();
-										}
-									}
-									File rfj = new File(hibernateDir, name + ".jpg");
-									if (rfj.exists()) {
-										if (cleanup) {
-											FileHelper.removeRec(rfj);
-										} else {
-											invalid += rfj.length();
-										}
-									}
+									cleanUpFile(invalid, cleanup, new File(hibernateDir, name + ".avi"));
+									cleanUpFile(invalid, cleanup, new File(hibernateDir, name + ".jpg"));
+									cleanUpFile(invalid, cleanup, new File(hibernateDir, name + ".flv.meta"));
 								}
 							}
 						}
@@ -495,6 +478,16 @@ public class Admin {
 		System.exit(0);
 	}
 	
+	private long cleanUpFile(long invalid, boolean cleanup, File f) {
+		if (f.exists()) {
+			if (cleanup) {
+				FileHelper.removeRec(f);
+			} else {
+				invalid += f.length();
+			}
+		}
+		return invalid;
+	}
 	private void checkRecordingFile(File hibernateDir, String name, boolean deleted, long[] params, boolean cleanup) {
 		File flv = name != null ? new File(hibernateDir, name) : null;
 		if (flv != null) {
