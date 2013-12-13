@@ -63,13 +63,8 @@
 			<baseMenuMeetingsItem text="$once{ canvas.getLabelName(635) }" 
 						text_y_inset="4" text_fontsize="14" down_y_inset="8"
 						textToolTip="" height="28"
-						visible="${ (classroot.viewType=='conference') ? true : ((canvas.ismoderator) ? true : ((canvas.isAllowedToDraw) ? true : false )) }"
+						visible="${ canvas.currentRoomObj.hideActionsMenu ? false : ((classroot.viewType=='conference') ? true : (canvas.ismoderator ? true : (canvas.isAllowedToDraw ? true : false ))) }"
 						>
-				<handler name="oninit">
-					if(canvas.currentRoomObj.hideActionsMenu){	      
-						this.setAttribute("visibility", "hidden");
-					}
-				</handler>		
 				<handler name="onclick">
 			    	new lz.conferenceMenuActions(canvas,{
 			    				x:this.getAttributeRelative("x",canvas),

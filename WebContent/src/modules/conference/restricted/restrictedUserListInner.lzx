@@ -452,9 +452,9 @@
                     }
                 }
         	   
-
-                parent._applyAndStatusIcons.updateIcons();
-        	   
+                if (parent._applyAndStatusIcons != null) {
+                	parent._applyAndStatusIcons.updateIcons();
+                }
         	]]>
         </handler>
         
@@ -489,7 +489,9 @@
                     }
                 }
 
-                parent._applyAndStatusIcons.updateIcons();
+                if (parent._applyAndStatusIcons != null) {
+                	parent._applyAndStatusIcons.updateIcons();
+                }
             ]]>
         </handler>
 
@@ -518,7 +520,9 @@
                     }
                 }
 
-                parent._applyAndStatusIcons.updateIcons();
+                if (parent._applyAndStatusIcons != null) {
+                	parent._applyAndStatusIcons.updateIcons();
+                }
             ]]>
         </handler>
         
@@ -551,7 +555,9 @@
                     }
                 }
                 
-                parent._applyAndStatusIcons.updateIcons();
+                if (parent._applyAndStatusIcons != null) {
+                	parent._applyAndStatusIcons.updateIcons();
+                }
             ]]>
         </handler>
         
@@ -606,7 +612,9 @@
                 
                 }
                 
-                parent._applyAndStatusIcons.updateIcons();
+                if (parent._applyAndStatusIcons != null) {
+                	parent._applyAndStatusIcons.updateIcons();
+                }
             ]]>
         </method>
         
