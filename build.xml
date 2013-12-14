@@ -30,7 +30,7 @@
 
 	<property name="src.base.dir" value="${basedir}/src" />
 
-	<property name="dist.dir" value="dist" />
+	<property name="dist.dir" value="${basedir}/dist" />
 
 	<property name="build.base.dir" value="${basedir}/build" />
 	<property name="project.lib.dir" value="${build.base.dir}/lib" />
@@ -75,7 +75,7 @@
 	<property name="main.out.dir" value="${build.base.dir}/classes/openmeetings" />
 
 	<!-- LPS Properties -->
-	<property name="out.dir.swf" value="${basedir}/${dist.webapps.dir}/public" />
+	<property name="out.dir.swf" value="${dist.webapps.dir}/public" />
 	<property name="laszlo.as3.src.dir" value="${webcontent.base.dir}/swf10" />
 	<property name="laszlo.src.dir" value="${webcontent.base.dir}/src" />
 
@@ -83,6 +83,7 @@
 
 	<property name="junit.base.dir" value="${build.base.dir}/junit" />
 	<property name="junit.report.dir" value="${junit.base.dir}/report" />
+	<property name="om.dist.webapp" value="${red5.root}/webapps/${project.distname}" />
 	<tstamp prefix="build">
 		<format property="TODAY" pattern="d-MMMM-yyyy" locale="en" />
 	</tstamp>
@@ -114,6 +115,18 @@
 	<path id="compile.classpath">
 		<fileset dir="${red5.lib}/plugins" includes="*.jar" />
 		<path refid="check.classpath"/>
+	</path>
+	<path id="junit.classpath">
+		<fileset dir="${junit.lib.dir}" includes="*.jar" />
+		<fileset dir="${om.dist.webapp}/WEB-INF/lib">
+			<include name="*.jar" />
+			<exclude name="openmeetings*.jar" />
+		</fileset>
+		<fileset dir="${red5.root}" includes="*.jar" />
+		<fileset dir="${red5.root}/lib" includes="*.jar" />
+		<fileset dir="${red5.root}/plugins" includes="*.jar" />
+		<pathelement path="${dist.classes.dir}" />
+		<pathelement path="${main.out.dir}" />
 	</path>
 
 	<target name="info" unless="java6.installed">
@@ -853,7 +866,7 @@
 			<!-- the home directory of the test instance of red5 -->
 	        <arg value="${dist.dir}/testred5/webapps/openmeetings"/>
 			<!-- the directory where the openmeetings database is created by derby -->
-			<arg value="${basedir}/${dist.dir}/testred5/"/>
+			<arg value="${dist.dir}/testred5/"/>
 			<!-- the persistance file to patch -->
 			<arg value="${basedir}/src/main/webapp/WEB-INF/classes/META-INF/persistence.xml"/>
 			<classpath refid="junit.classpath" />
@@ -909,7 +922,7 @@
 		<junit maxmemory="1024m" printsummary="yes" dir="${junit.base.dir}" tempdir="${junit.base.dir}" fork="yes" 
 			forkmode="perBatch" failureproperty="junit.failed" errorproperty="junit.error">
 			<classpath refid="junit.classpath" />
-			<jvmarg value="-Dom.home=${basedir}/${om.dist.webapp}" />
+			<jvmarg value="-Dom.home=${om.dist.webapp}" />
 			<jvmarg value="-Dlanguages.home=${webapp.dir}/languages" />
 			<jvmarg value="-Dred5.root=${red5.root}" />
 			<jvmarg value="-Dbasedir=${basedir}" />
@@ -941,8 +954,6 @@
 	</target>
 
 	<!-- Unit Tests -->
-	<property name="om.dist.webapp" value="${red5.root}/webapps/${project.distname}" />
-
 	<condition property="junit.test.pattern" value="${testcases}" else="Test*">
 		<isset property="testcases" />
 	</condition>
@@ -951,21 +962,6 @@
 		<isset property="test.formatter" />
 	</condition>
 
-	<path id="junit.classpath">
-		<fileset dir="${junit.lib.dir}" includes="*.jar" />
-		<fileset dir="${red5.server.dir}/target/lib" includes="junit*.jar" />
-		<fileset dir="${om.dist.webapp}/WEB-INF/lib">
-			<include name="*.jar" />
-			<exclude name="openmeetings*.jar" />
-		</fileset>
-		<fileset dir="${red5.root}" includes="*.jar" />
-		<fileset dir="${red5.root}/lib" includes="*.jar" />
-		<fileset dir="${red5.root}/plugins" includes="*.jar" />
-		<pathelement path="${dist.classes.dir}" />
-		<pathelement path="${main.out.dir}" />
-	</path>
-	
-	
 	<target name="test" depends="-dist-test-no-clean, -run-selenium" 
 			description="Will run all tests except selenium unless -Dtestcases=_file_name_pattern_ will be passed">
 		<taskdef resource="net/sf/antcontrib/antlib.xml">
@@ -990,7 +986,7 @@
 		<junit maxmemory="1024m" printsummary="yes" dir="${junit.base.dir}" tempdir="${junit.base.dir}" fork="yes" 
 			forkmode="perBatch" failureproperty="junit.failed" errorproperty="junit.error">
 			<classpath refid="junit.classpath" />
-			<jvmarg value="-Dom.home=${basedir}/${om.dist.webapp}" />
+			<jvmarg value="-Dom.home=${om.dist.webapp}" />
 			<jvmarg value="-Dlanguages.home=${webapp.dir}/languages" />
 			<jvmarg value="-Dred5.root=${red5.root}" />
 			<jvmarg value="-Dbasedir=${basedir}" />
