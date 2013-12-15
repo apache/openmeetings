@@ -83,6 +83,7 @@ public class ScreenSharerFrame extends JFrame {
 	private NumberSpinner spinnerWidth;
 	private NumberSpinner spinnerHeight;
 	private JComboBox comboQuality;
+	private JComboBox comboFPS;
 	private JTextField textPublishHost;
 	private JTextField textPublishApp;
 	private JTextField textPublishId;
@@ -428,7 +429,7 @@ public class ScreenSharerFrame extends JFrame {
 		comboQuality.addItem(new KeyValue<ScreenQuality>(getTextLabel(textLabels, 20), ScreenQuality.High)); //#id 1091
 		comboQuality.addItem(new KeyValue<ScreenQuality>(getTextLabel(textLabels, 21), ScreenQuality.Medium)); //#id 1092
 		comboQuality.addItem(new KeyValue<ScreenQuality>(getTextLabel(textLabels, 22), ScreenQuality.Low)); //#id 1093
-		comboQuality.setBounds(250, 170, 200, 24);
+		comboQuality.setBounds(250, 170, 130, 24);
 		comboQuality.addActionListener(new ActionListener() {
 			@SuppressWarnings("unchecked")
 			public void actionPerformed(ActionEvent e) {
@@ -438,6 +439,24 @@ public class ScreenSharerFrame extends JFrame {
 		}); 
 		comboQuality.setSelectedIndex(core.defaultQuality);
 		panelScreen.add(comboQuality);
+		comboFPS = new JComboBox();
+		comboFPS.addItem(new KeyValue<Integer>("2 FPS", 2));
+		comboFPS.addItem(new KeyValue<Integer>("5 FPS", 5));
+		comboFPS.addItem(new KeyValue<Integer>("10 FPS", 10));
+		comboFPS.addItem(new KeyValue<Integer>("15 FPS", 15));
+		comboFPS.addItem(new KeyValue<Integer>("20 FPS", 20));
+		comboFPS.addItem(new KeyValue<Integer>("25 FPS", 25));
+		comboFPS.addItem(new KeyValue<Integer>("30 FPS", 30));
+		comboFPS.addActionListener(new ActionListener() {
+			@SuppressWarnings("unchecked")
+			public void actionPerformed(ActionEvent e) {
+		        ScreenDimensions.FPS = ((KeyValue<Integer>)comboFPS.getSelectedItem()).getValue();
+		        calcRescaleFactors();
+			}
+		}); 
+		comboFPS.setSelectedIndex(1);
+		comboFPS.setBounds(390, 170, 70, 24);
+		panelScreen.add(comboFPS);
 		
 		panelRecording.setBackground(Color.WHITE);
 		tabbedPane.addTab(getTextLabel(textLabels, 13), null, panelRecording, null); //#id 869
@@ -746,8 +765,11 @@ public class ScreenSharerFrame extends JFrame {
 				ScreenDimensions.resizeX = (int)(3.0 * ScreenDimensions.resizeX / 8);
 				ScreenDimensions.resizeY = (int)(3.0 * ScreenDimensions.resizeY / 8);
 				break;
-			case VeryHigh:
 			case High:
+				ScreenDimensions.resizeX = (int)(6.0 * ScreenDimensions.resizeX / 8);
+				ScreenDimensions.resizeY = (int)(6.0 * ScreenDimensions.resizeY / 8);
+				break;
+			case VeryHigh:
 			default:
 				break;
 		}

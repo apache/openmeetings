@@ -18,7 +18,7 @@
  */
 package org.apache.openmeetings.screen.webstart;
 
-import static org.apache.openmeetings.screen.webstart.gui.ScreenDimensions.quality;
+import static org.apache.openmeetings.screen.webstart.gui.ScreenDimensions.FPS;
 import static org.apache.openmeetings.screen.webstart.gui.ScreenDimensions.spinnerHeight;
 import static org.apache.openmeetings.screen.webstart.gui.ScreenDimensions.spinnerWidth;
 import static org.apache.openmeetings.screen.webstart.gui.ScreenDimensions.spinnerX;
@@ -62,20 +62,6 @@ final class CaptureScreen extends Thread {
 		this.host = host;
 		this.app = app;
 		this.port = port;
-		switch (quality) {
-			case VeryHigh:
-				timeBetweenFrames = 50;
-				break;
-			case High:
-				timeBetweenFrames = 200;
-				break;
-			case Low:
-			case Medium:
-			default:
-				timeBetweenFrames = 500;
-				break;
-			
-		}
 		se = new ScreenV1Encoder(); //NOTE get image should be changed in the code below
 	}
 
@@ -103,6 +89,7 @@ final class CaptureScreen extends Thread {
 			while (active && !core.isReadyToRecord()) {
 				Thread.sleep(60);
 			}
+			timeBetweenFrames = 1000 / FPS;
 			scheduler.scheduleWithFixedDelay(new Runnable() {
 				Robot robot = new Robot();
 				Rectangle screen = new Rectangle(spinnerX, spinnerY, spinnerWidth, spinnerHeight);

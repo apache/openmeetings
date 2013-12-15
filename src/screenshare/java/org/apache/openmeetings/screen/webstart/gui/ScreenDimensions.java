@@ -46,6 +46,7 @@ public class ScreenDimensions {
 	public static int spinnerY = 0;
 	
 	public static ScreenQuality quality = ScreenQuality.Medium;
+	public static int FPS = 10;
 	
 	public static int resizeX = 640;
 	public static int resizeY = 480;
