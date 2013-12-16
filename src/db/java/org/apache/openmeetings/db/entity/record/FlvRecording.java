@@ -60,7 +60,8 @@ import org.simpleframework.xml.Root;
 @Entity
 @NamedQueries({ 
 	@NamedQuery(name = "getRecordingByHash", query = "SELECT f FROM FlvRecording f WHERE f.fileHash = :fileHash") 
-	, @NamedQuery(name = "getRecordingsByExternalUser", query = "SELECT NEW org.apache.openmeetings.db.dto.file.RecordingObject(c) FROM FlvRecording c, User u "
+	, @NamedQuery(name = "getRecordingsByExternalUser", query = "SELECT NEW org.apache.openmeetings.db.dto.file.RecordingObject(c) "
+			+ "FROM FlvRecording c, User u "
 			+ "WHERE c.insertedBy = u.user_id AND u.externalUserId = :externalUserId  AND u.externalUserType = :externalUserType "
 			+ "AND c.deleted = false") 
 })
