@@ -79,7 +79,7 @@
 	<property name="laszlo.as3.src.dir" value="${webcontent.base.dir}/swf10" />
 	<property name="laszlo.src.dir" value="${webcontent.base.dir}/src" />
 
-	<property name="keystore.file" value="${build.base.dir}/filetest.keystore" />
+	<property name="keystore.file" value="${build.base.dir}/screensharing_sign.keystore" />
 
 	<property name="junit.base.dir" value="${build.base.dir}/junit" />
 	<property name="junit.report.dir" value="${junit.base.dir}/report" />
@@ -426,10 +426,10 @@
 
 	<target name="dist.screen.share" description="Make Screen Share Archive" depends="jar.screen.share, signWebStartJars" />
 
+	<tstamp prefix="screensharing.build">
+		<format property="TODAY" pattern="d-MMMM-yyyy" locale="en" />
+	</tstamp>
 	<target name="jar.screen.share" description="Make Screen Share Archive" depends="compile.only">
-		<tstamp prefix="build">
-			<format property="TODAY" pattern="d-MMMM-yyyy" locale="en" />
-		</tstamp>
 		<manifestclasspath property="jar2.classpath" jarfile="${project.distname}.jar">
 			<classpath refid="compile.classpath" />
 		</manifestclasspath>
@@ -443,8 +443,12 @@
 			<fileset file="${screenshare.resources.dir}/logback.xml" />
 			<manifest>
 				<attribute name="Built-By" value="OpenMeetings - http://openmeetings.apache.org" />
-				<attribute name="Built-On" value="${build.TODAY}" />
+				<attribute name="Built-On" value="${screensharing.build.TODAY}" />
 				<attribute name="Class-Path" value="conf/ ${jar2.classpath}" />
+				<attribute name="Permissions" value="all-permissions" />
+				<attribute name="Codebase" value="*" />
+				<attribute name="Application-Library-Allowable-Codebase" value="*" />
+				<attribute name="Caller-Allowable-Codebase" value="*" />
 			</manifest>
 		</jar>
 	</target>
@@ -475,7 +479,7 @@
 		</tstamp>
 	</target>
 
-	<target name="signWebStartJars">
+	<target name="generateSignKey"  unless="skip.sign.key.generation">
 		<delete file="${keystore.file}" />
 		<genkey alias="filetest" storepass="secret" keystore="${keystore.file}" verbose="true"
 			sigalg="MD5withRSA" keyalg="RSA" >
@@ -486,7 +490,10 @@
 				<param name="C" value="DE" />
 			</dname>
 		</genkey>
-		<copy todir="${screenshare.out.dir}">
+	</target>
+	
+	<target name="signWebStartJars" depends="generateSignKey">
+		<copy todir="${screenshare.out.dir}" overwrite="true" force="true">
 			<fileset dir="${red5.server.lib}" includes="commons-codec*.jar" />
 			<fileset dir="${red5.server.lib}" includes="httpclient*.jar" />
 			<fileset dir="${red5.server.lib}" includes="httpcore*.jar" />
@@ -504,6 +511,15 @@
 			<fileset dir="${red5.server.lib}" includes="com.springsource.slf4j.api*.jar" />
 			<fileset dir="${red5.client.lib}" includes="red5*.jar" />
 		</copy>
+		<taskdef resource="net/sf/antcontrib/antlib.xml">
+			<classpath refid="check.classpath" />
+		</taskdef>
+		<foreach target="-repack-jar" param="theJar">
+			<fileset dir="${screenshare.out.dir}" casesensitive="yes">
+				<include name="*.jar"/>
+				<exclude name="*openmeetings*.jar"/>
+			</fileset>
+		</foreach>
 		<signjar alias="filetest" keystore="${keystore.file}" storepass="secret" lazy="false"
 			sigalg="MD5withRSA" digestalg="SHA1">
 			<path>
@@ -514,6 +530,29 @@
 		</signjar>
 	</target>
 
+	<target name="-repack-jar">
+		<echo message="${theJar}"/>
+		<delete dir="${screenshare.out.dir}/1" />
+		<mkdir dir="${screenshare.out.dir}/1" />
+		<unjar src="${theJar}" dest="${screenshare.out.dir}/1"/>
+		<delete dir="${screenshare.out.dir}/1/META-INF" includes="*"/>
+		<delete file="${theJar}" />
+		<jar destfile="${theJar}">
+			<fileset dir="${screenshare.out.dir}/1">
+				<include name="**" />
+			</fileset>
+			<manifest>
+				<attribute name="Built-By" value="OpenMeetings - http://openmeetings.apache.org" />
+				<attribute name="Built-On" value="${screensharing.build.TODAY}" />
+				<attribute name="Permissions" value="all-permissions" />
+				<attribute name="Codebase" value="*" />
+				<attribute name="Application-Library-Allowable-Codebase" value="*" />
+				<attribute name="Caller-Allowable-Codebase" value="*" />
+			</manifest>
+		</jar>
+		<delete dir="${screenshare.out.dir}/1" />
+	</target>
+	
 	<target name="client.only" depends="compile.laszlo.main.as3,compile.laszlo.main,compile.laszlo.networktesting" />
 
 	<target name="client.debug.only" depends="compile.laszlo.main.debug.as3,compile.laszlo.main.debug,compile.laszlo.networktesting.debug" />
@@ -563,7 +602,7 @@
 			<param name="flash.debug" value="--debug" />
 		</antcall>
 	</target>
-	
+
 	<target name="compile.laszlo.testsetup.as3" depends="-retrieve-openlaszlo46">
         <antcall target="-compile.flash" inheritAll="true" inheritRefs="true">
             <param name="flash.classpath.ref" value="laszlo46.lib" />
