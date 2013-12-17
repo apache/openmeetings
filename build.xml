@@ -424,7 +424,7 @@
 
 	<target name="jar.only" depends="buildJavaDocs, enhance.only, jar.web.only"/>
 
-	<target name="dist.screen.share" description="Make Screen Share Archive" depends="jar.screen.share, signWebStartJars" />
+	<target name="dist.screen.share" description="Make Screen Share Archive" depends="signWebStartJars" />
 
 	<tstamp prefix="screensharing.build">
 		<format property="TODAY" pattern="d-MMMM-yyyy" locale="en" />
@@ -481,8 +481,8 @@
 
 	<target name="generateSignKey"  unless="skip.sign.key.generation">
 		<delete file="${keystore.file}" />
-		<genkey alias="filetest" storepass="secret" keystore="${keystore.file}" verbose="true"
-			sigalg="MD5withRSA" keyalg="RSA" >
+		<genkey alias="${screensharing.keystore.alias}" storepass="${screensharing.keystore.password}" keystore="${keystore.file}"
+			verbose="true" sigalg="MD5withRSA" keyalg="RSA" >
 			<dname>
 				<param name="CN" value="Sebastian Wagner" />
 				<param name="OU" value="technology" />
@@ -492,7 +492,7 @@
 		</genkey>
 	</target>
 	
-	<target name="signWebStartJars" depends="generateSignKey">
+	<target name="signWebStartJars" depends="generateSignKey,jar.screen.share">
 		<copy todir="${screenshare.out.dir}" overwrite="true" force="true">
 			<fileset dir="${red5.server.lib}" includes="commons-codec*.jar" />
 			<fileset dir="${red5.server.lib}" includes="httpclient*.jar" />
@@ -520,8 +520,8 @@
 				<exclude name="*openmeetings*.jar"/>
 			</fileset>
 		</foreach>
-		<signjar alias="filetest" keystore="${keystore.file}" storepass="secret" lazy="false"
-			sigalg="MD5withRSA" digestalg="SHA1">
+		<signjar alias="${screensharing.keystore.alias}" keystore="${keystore.file}" storepass="${screensharing.keystore.password}"
+			lazy="false" sigalg="MD5withRSA" digestalg="SHA1">
 			<path>
 				<fileset dir="${screenshare.out.dir}">
 					<include name="**/*.jar" />
