@@ -487,7 +487,7 @@
             if($debug) Debug.write("doActionmenu: ",stringSub);
             if (canvas._conferencemenu.visibility == 'visible'){
             	 if (stringSub == "invitation") {
-			        new lz.inviteMainWindow(canvas.main_content._content.inner);
+				    canvas.inviteMainWindow.setAttribute('visibility', 'visible');
 			    } else if (stringSub=='editWhiteboardDefault') {
                     new lz.editWhiteboardDefault(canvas.main_content._content.inner);
                 } else if (stringSub=='createPoll') {
@@ -637,6 +637,10 @@
         //this is needed cause in the rpc-method *getCurrentModeratorList* we check if its roomtype_id == 3
         //and if roomtype_id == 3 we will not show any *There is no Moderator* Warning Dialog
         canvas.currentRoomObject = roomObj;
+
+		var inviteMainWindow = new lz.inviteMainWindow(canvas);
+	    canvas.inviteMainWindow = inviteMainWindow;
+		if($debug) Debug.write("create invitationWindow: ",canvas.inviteMainWindow);
         
         hib.currentroomid = roomId;
         if (roomObj!=null){

@@ -58,11 +58,19 @@
     cmenu.hideBuiltInItems();
     if($debug) Debug.write("main.lzx/oninit:",this);
     canvas.lc = new LocalConnection();
+
+	getTimeZoneOffset(this);
 </handler>
 
 <handler name="onerror" args="errmsg">
 	canvas.remoteLogWrite("error " + errmsg);
 </handler>
+
+<method name="callback" args="returnValue">
+    if ($debug) Debug.write("getTimeZoneOffset callback ",returnValue);
+            
+    canvas.stdTimeOffset = Number(returnValue);
+</method>
 
 <!-- View for Contents. All Windows will be loaded on this view. -->
 <view name="main_content" y="${ canvas.naviHeightDelta }" width="${canvas.width}" 

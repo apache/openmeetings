@@ -26,7 +26,7 @@
 		label: send invitation
 	-->
 	<class name="inviteMainWindow" extends="labelExplorerBox" labelid="214" 
-			docking="true" closable="true" width="464" x="200" y="100" height="465">
+			docking="true" closable="false" width="464" x="200" y="100" height="465">
 		
 		<attribute name="roomType" value="conference" type="string" />
 		<attribute name="baseUrl" value="http://www.denic.de" type="string" />
@@ -35,29 +35,34 @@
     	
 		<handler name="oninit">
 		<![CDATA[
-			lz.ModeManager.makeModal(this);
-			
-			getTimeZoneOffset(this);
-			
+    		this.setAttribute('visibility', 'hidden');
 			this.baseUrl = canvas.getAppBaseUrl();
 			if( $debug ) Debug.write("this.baseUrl: ", this.baseUrl);
-			if (!canvas.isConference){
-				this.roomType = "restricted"; //FIXME
-			}
 		]]>
 		</handler>
-        
-        <method name="callback" args="returnValue">
-            if ($debug) Debug.write("getTimeZoneOffset callback ",returnValue);
-                    
-            var std_time_offset = Number(returnValue);
-            
-            this.setOffset(std_time_offset);
-        </method>
+        <handler name="onvisible" args="v">
+    	<![CDATA[
+    		if (v) {
+			    this.setOffset(canvas.stdTimeOffset);
+				this._recipient.setAttribute('text', '');
+				this._message.setAttribute('text', '');
+				this._password.setAttribute('text', '');
+				this._ispasswordProtected.setValue(false);
+				this._timeFrom.setAttribute('text', getStringTime());
+				this._timeTo.setAttribute('text', getStringTime());
+				lz.ModeManager.makeModal(this);
+				if (!canvas.isConference){
+					this.roomType = "restricted"; //FIXME
+				}
+			} else {
+	    		lz.ModeManager.release(this);
+			}
+    	]]>
+	    </handler>
         
 		<method name="setOffset" args="std_time_offset">
 		<![CDATA[
-			std_time_offset = Math.round(std_time_offset);
+			var std_time_offset = Math.round(std_time_offset);
 			var timeZoneJavaFormat = "Etc/GMT";
 			if (std_time_offset > 0) {
 				timeZoneJavaFormat += "+"+std_time_offset;
@@ -76,10 +81,6 @@
 			this._languages.selectItem(canvas.language_id);
 		]]>
 		</method> 
-        
-    	<handler name="onclose">
-    		lz.ModeManager.release(this);
-    	</handler>	
 		
 		<!-- label: recipient -->
 		<labelText labelid="216" y="24" width="120" />
@@ -173,7 +174,7 @@
 		<!-- label: cancel -->
 		<simpleLabelButton labelid="219" x="$once{ parent.width-130 }" width="120" y="$once{ parent.height-26 }">
 			<handler name="onclick">
-				parent.close();
+	    		parent.setAttribute('visibility', 'hidden');
 			</handler>
 		</simpleLabelButton>
 	   
@@ -187,7 +188,7 @@
 			<handler name="ondata" args="value">
 			<![CDATA[
 				if (value != null){
-					parent.close();
+		    		parent.setAttribute('visibility', 'hidden');
 				} else {
 					new lz.errorPopup(canvas.main_content._content.inner,{error:value});
 				}
@@ -229,7 +230,7 @@
 						parent.currentHash = value.hash;
 						parent._url.setAttribute('text', parent.baseUrl + "?invitationHash=" + parent.currentHash + "&language=" + parent._languages.getValue());
 					} else {
-						parent.close();
+			    		parent.setAttribute('visibility', 'hidden');
 					}
 				} else {
 					new lz.errorPopup(canvas.main_content._content.inner,{error:value});

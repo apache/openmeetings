@@ -254,6 +254,9 @@ the LAST RoomClient Object that has been changed the giveExclusiveAudio status
 <attribute name="salutationsInitValues" value="null" />
 <attribute name="roomTypesInitValues" value="null" />
 
+<attribute name="stdTimeOffset" value="0" type="number" />
+<attribute name="inviteMainWindow" value="null" />
+
 <!--- Audio-Video Quality Settings
     overwritten by values from the public/config.xml 
  -->
