@@ -48,10 +48,10 @@ import org.simpleframework.xml.Root;
 @Entity
 @Table(name = "appointments")
 @NamedQueries({
-    @NamedQuery(name="getAppointmentById", query="SELECT a FROM Appointment a LEFT JOIN FETCH a.meetingMembers"
+    @NamedQuery(name="getAppointmentById", query="SELECT DISTINCT a FROM Appointment a LEFT JOIN FETCH a.meetingMembers"
     		+ " WHERE a.deleted = false AND a.id = :id")
     , @NamedQuery(name="appointmentsInRange",
-    	query="SELECT a FROM Appointment a LEFT JOIN FETCH a.meetingMembers "
+    	query="SELECT DISTINCT a FROM Appointment a LEFT JOIN FETCH a.meetingMembers "
 			+ "WHERE a.deleted = false "
 			+ "	AND ( "
 			+ "		(a.start BETWEEN :starttime AND :endtime) "
@@ -61,7 +61,7 @@ import org.simpleframework.xml.Root;
 			+ "	AND a.owner.user_id = :userId"
     	)
     , @NamedQuery(name="joinedAppointmentsInRange",
-		query="SELECT a FROM MeetingMember mm INNER JOIN mm.appointment a LEFT JOIN FETCH a.meetingMembers "
+		query="SELECT DISTINCT a FROM MeetingMember mm INNER JOIN mm.appointment a LEFT JOIN FETCH a.meetingMembers "
 			+ "WHERE mm.deleted = false AND mm.user.user_id <> a.owner.user_id AND mm.user.user_id = :userId "
 			+ "	AND a.id NOT IN (SELECT a.id FROM Appointment a WHERE a.owner.user_id = :userId)"
 			+ "	AND mm.connectedEvent = false " //TODO review: isConnectedEvent is set for the MeetingMember if event is created from "Private Messages", it is weird
@@ -72,7 +72,7 @@ import org.simpleframework.xml.Root;
 			+ "	)"
     	)
     , @NamedQuery(name="appointmentsInRangeRemind",
-		query="SELECT a FROM MeetingMember mm INNER JOIN mm.appointment a LEFT JOIN FETCH a.meetingMembers "
+		query="SELECT DISTINCT a FROM MeetingMember mm INNER JOIN mm.appointment a LEFT JOIN FETCH a.meetingMembers "
 			//only ReminderType simple mail is concerned!
 			+ "WHERE mm.deleted = false AND a.deleted = false AND a.reminderEmailSend = false"
 			+ " AND (a.remind.typId = 2 OR a.remind.typId = 3) "
@@ -82,7 +82,7 @@ import org.simpleframework.xml.Root;
 			+ "		OR (a.start < :starttime AND a.end > :endtime) "
 			+ "	)"
     	)
-    , @NamedQuery(name="getAppointmentByRoomId", query="SELECT a FROM Appointment a LEFT JOIN FETCH a.meetingMembers"
+    , @NamedQuery(name="getAppointmentByRoomId", query="SELECT DISTINCT a FROM Appointment a LEFT JOIN FETCH a.meetingMembers"
     		+ " WHERE a.deleted = false AND a.room.rooms_id = :room_id")
 	//TODO this query returns duplicates if the user books an appointment with
 	//his own user as second meeting-member, swagner 19.02.2012

@@ -161,8 +161,8 @@ public class AppointmentDao {
 					invitationManager.processInvitation(a, mm, MessageType.Create, baseUrl);
 				} else {
 					boolean sendMail = a0 == null || !a0.getTitle().equals(a.getTitle()) ||
-						!a0.getDescription().equals(a.getDescription()) ||
-						!a0.getLocation().equals(a.getLocation()) ||
+						!(a0.getDescription() != null ? a0.getDescription().equals(a.getDescription()) : true) ||
+						!(a0.getLocation() != null ? a0.getLocation().equals(a.getLocation()) : true) ||
 						!a0.getStart().equals(a.getStart()) ||
 						!a0.getEnd().equals(a.getEnd());
 					mmIds.remove(mm.getId());
