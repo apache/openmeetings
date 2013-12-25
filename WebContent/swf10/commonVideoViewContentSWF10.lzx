@@ -83,7 +83,7 @@
 		if($debug) Debug.info("createEditRecordStream,",syncUpdate,isInterview,interviewPodId);
 		if (canvas.inner.editRecordStream != null)
 			canvas.inner.editRecordStream.destroy();
-		new lz.editRecordStreamSWF10(canvas.inner, {
+			new lz.editRecordStreamSWF10(canvas.inner, {
 					name:"editRecordStream",
 					isSyncUpdate:syncUpdate,
 					isInterview:isInterview,

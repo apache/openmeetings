@@ -638,10 +638,6 @@
         //and if roomtype_id == 3 we will not show any *There is no Moderator* Warning Dialog
         canvas.currentRoomObject = roomObj;
 
-		var inviteMainWindow = new lz.inviteMainWindow(canvas);
-	    canvas.inviteMainWindow = inviteMainWindow;
-		if($debug) Debug.write("create invitationWindow: ",canvas.inviteMainWindow);
-        
         hib.currentroomid = roomId;
         if (roomObj!=null){
             if (roomTypeId==1){

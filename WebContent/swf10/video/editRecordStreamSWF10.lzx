@@ -150,7 +150,7 @@
 	   is true and the box will close without asking for device settings.
 	 -->
 	<method name="checkDeviceSettingsRememberStatus">
-	    <![CDATA[
+	<![CDATA[
 		var t:SharedObject = SharedObject.getLocal('userdata');
 		var g = t.data;
 		var save = g["savecamdata"];
@@ -160,11 +160,15 @@
 		
 		//In case the user presses the Sync Button this box should
         //not close automatically and do the user-prefered values
+        if (canvas.currentRoomObject.roomtype.roomtypes_id == 3) {
+        	//restricted room
+        	return null;
+        }
 		if(save && !this.isSyncUpdate && this.checkLocalDataComplete()) {
 		    return g;
 		}
 		return null;
-		]]>
+	]]>
 	</method>
 	
 	<!-- 

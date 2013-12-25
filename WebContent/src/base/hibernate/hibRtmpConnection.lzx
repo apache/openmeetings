@@ -694,19 +694,21 @@
 			if (canvas.thishib.loaderVar != null) {
             	canvas.thishib.loaderVar.setProgress();
             }
-            parent.getTimeZones.doCall();
+            parent.getTimeZones.doCall(); // this is very long call let it be async
+            parent.getGeneralOptions.doCall();
         </handler>  
     </netRemoteCallHib>  
     
     <netRemoteCallHib name="getTimeZones" funcname="xmlcrm.getTimeZones" dataobject="timeZoneSet">
         <handler name="ondata" args="value">
-            //The onResult-Handler will be called be the rtmpconnection
-            if ($debug) Debug.write("getTimeZones: ",value);
+			//The onResult-Handler will be called be the rtmpconnection
+			if ($debug) Debug.write("getTimeZones: ",value);
 			if (canvas.thishib.loaderVar != null) {
-            	canvas.thishib.loaderVar.setProgress();
-            }
-            parent.getGeneralOptions.doCall();
-        </handler>  
+				canvas.thishib.loaderVar.setProgress();
+			}
+			canvas.inviteMainWindow = new lz.inviteMainWindow(canvas);
+			if($debug) Debug.write("create invitationWindow: ",canvas.inviteMainWindow);
+        </handler>
     </netRemoteCallHib>
 
 	<netRemoteCallHib name="getGeneralOptions" funcname="xmlcrm.getGeneralOptions">
@@ -904,7 +906,7 @@
                     
                     //if ($debug) Debug.write("throw event to drawarea: ",canvas.moderatorStreamID,canvas.ismoderator);
                     
-					if (this.parent.modus == "conference"){
+					if (this.parent.modus == "conference") {
 						if ($debug) Debug.write("############## showDevicePopUp");
 						canvas._videocontainer._videoviewcontent.showDevicePopUp(false);
 					}
