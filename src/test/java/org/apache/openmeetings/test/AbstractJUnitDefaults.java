@@ -22,12 +22,18 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.util.Date;
+import java.util.List;
 
 import org.apache.openmeetings.data.user.UserManager;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
+import org.apache.openmeetings.db.dao.calendar.AppointmentReminderTypDao;
+import org.apache.openmeetings.db.dao.room.RoomTypeDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
+import org.apache.openmeetings.db.entity.calendar.AppointmentReminderTyps;
+import org.apache.openmeetings.db.entity.room.Room;
+import org.apache.openmeetings.db.entity.room.RoomType;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.installation.ImportInitvalues;
 import org.apache.openmeetings.installation.InstallationConfig;
@@ -37,8 +43,8 @@ import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public abstract class AbstractJUnitDefaults extends AbstractSpringTest {
-	
 	private static final Logger log = Red5LoggerFactory.getLogger(AbstractJUnitDefaults.class);
+	public static final String OM_URL = "http://testserver.apache.org/openmeetings";
 	
 	protected static final String username = "swagner";
 	protected static final String userpass = "qweqwe";
@@ -49,6 +55,10 @@ public abstract class AbstractJUnitDefaults extends AbstractSpringTest {
 	@Autowired
 	private AppointmentDao appointmentDao;
 	@Autowired
+	private AppointmentReminderTypDao reminderTypeDao;
+	@Autowired
+	private RoomTypeDao roomTypeDao;
+	@Autowired
 	private UserManager userManager;
 	@Autowired
 	private UserDao userDao;
@@ -56,6 +66,9 @@ public abstract class AbstractJUnitDefaults extends AbstractSpringTest {
 	private ImportInitvalues importInitvalues;
 	@Autowired
 	private ConfigurationDao configurationDao;
+	
+	private List<AppointmentReminderTyps> remindTypes;
+	private List<RoomType> roomTypes;
 
 	@Before
 	public void setUp() throws Exception {
@@ -66,9 +79,18 @@ public abstract class AbstractJUnitDefaults extends AbstractSpringTest {
         } else {
             log.info("Default scheme already created");
         }
+        remindTypes = reminderTypeDao.getAppointmentReminderTypList(1L);
+        roomTypes = roomTypeDao.getAll(1L);
     }
 
-	public Appointment createAppointment() throws Exception {
+	public Appointment createAppointment() {
+		Date appointmentstart = new Date();
+		Date appointmentend = new Date();
+		appointmentend.setTime(appointmentstart.getTime() + 3600);
+		return createAppointment(appointmentstart, appointmentend);
+	}
+	
+	public Appointment getAppointment(Date start, Date end) {
 		assertNotNull("Can't access to appointment dao implimentation", appointmentDao);
 
 		// add new appointment
@@ -77,12 +99,44 @@ public abstract class AbstractJUnitDefaults extends AbstractSpringTest {
 		ap.setTitle("appointmentName");
 		ap.setLocation("appointmentLocation");
 
-		Date appointmentstart = new Date();
-		Date appointmentend = new Date();
-		appointmentend.setTime(appointmentstart.getTime() + 3600);
+		ap.setStart(start);
+		ap.setEnd(end);
+		ap.setDescription("appointmentDescription");
+		ap.setInserted(new Date());
+		ap.setDeleted(false);
+		ap.setIsDaily(false);
+		ap.setIsWeekly(false);
+		ap.setIsMonthly(false);
+		ap.setIsYearly(false);
+		ap.setPasswordProtected(false);
 
-		ap.setStart(appointmentstart);
-		ap.setEnd(appointmentend);
+		ap.setOwner(userDao.get(1L));
+		ap.setConnectedEvent(false);
+
+		if (ap.getRemind() == null && !remindTypes.isEmpty()) {
+			ap.setRemind(remindTypes.get(0));
+		}
+		
+		Room r = new Room();
+		if (!roomTypes.isEmpty()) {
+			r.setRoomtype(roomTypes.get(0));
+		}
+		r.setAppointment(true);
+		ap.setRoom(r);
+		return ap;
+	}
+
+	public Appointment createAppointment(Date start, Date end) {
+		assertNotNull("Can't access to appointment dao implimentation", appointmentDao);
+
+		// add new appointment
+		Appointment ap = new Appointment();
+
+		ap.setTitle("appointmentName");
+		ap.setLocation("appointmentLocation");
+
+		ap.setStart(start);
+		ap.setEnd(end);
 		ap.setDescription("appointmentDescription");
 		ap.setInserted(new Date());
 		ap.setDeleted(false);
@@ -104,7 +158,7 @@ public abstract class AbstractJUnitDefaults extends AbstractSpringTest {
 		// add user
 		u.setFirstname("firstname" + rnd);
 		u.setLastname("lastname" + rnd);
-		u.setLogin("login");
+		u.setLogin("login" + rnd);
 		u.updatePassword(configurationDao, "pass" + rnd);
 		u.setLanguage_id(1L);
 		Long user_id = userManager.addUser(u);
@@ -124,7 +178,7 @@ public abstract class AbstractJUnitDefaults extends AbstractSpringTest {
 		importInitvalues.loadAll(cfg, false);
 	}
 
-	public User createUserContact(int rnd, Long ownerId) throws Exception {
+	public User createUserContact(int rnd, Long ownerId) {
 		User user = userDao.getContact("email" + rnd, "firstname" + rnd, "lastname" + rnd, ownerId);
 		user = userDao.update(user, ownerId);
 		assertNotNull("Cann't add user", user);

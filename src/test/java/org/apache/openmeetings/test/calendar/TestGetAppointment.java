@@ -18,20 +18,19 @@
  */
 package org.apache.openmeetings.test.calendar;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 import java.util.Calendar;
-import java.util.GregorianCalendar;
 
 import org.apache.log4j.Logger;
 import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
+import org.apache.openmeetings.db.entity.calendar.Appointment;
 import org.apache.openmeetings.test.AbstractJUnitDefaults;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-public class TestGetAppointment extends
-AbstractJUnitDefaults {
-
+public class TestGetAppointment extends AbstractJUnitDefaults {
 	private static final Logger log = Logger.getLogger(TestGetAppointment.class);
 
 	@Autowired
@@ -42,17 +41,18 @@ AbstractJUnitDefaults {
 		log.debug("getAppoinment enter");
 		Long userId = 1L;
 		
-		Calendar starttime = GregorianCalendar.getInstance();
-
-		starttime.set(Calendar.MONTH, starttime.get(Calendar.MONTH-1));
-
-		Calendar endtime = GregorianCalendar.getInstance();
+		Calendar now = Calendar.getInstance();
+		Calendar a1End = Calendar.getInstance();
+		a1End.setTime(now.getTime());
+		a1End.add(Calendar.HOUR_OF_DAY, 1);
+		Appointment a1 = getAppointment(now.getTime(), a1End.getTime());
+		a1.setTitle("GetAppointment");
 		
-		appointmentDao.getAppointmentsByRange(userId, starttime.getTime(),
-				endtime.getTime());
+		a1 = appointmentDao.update(a1, OM_URL, userId);
 		
-		assertTrue(true);
-		
+		Appointment a = appointmentDao.get(a1.getId());
+		assertNotNull("Failed to get Appointment By id", a);
+		assertEquals("Inapropriate MeetingMembers count", 0, a.getMeetingMembers() == null ? 0 : a.getMeetingMembers().size());
 	}
 	
 }

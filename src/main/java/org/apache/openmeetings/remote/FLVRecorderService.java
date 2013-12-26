@@ -156,8 +156,7 @@ public class FLVRecorderService implements IPendingServiceCallback {
 					if (conn instanceof IServiceCapableConnection) {
 						Client rcl = sessionManager.getClientByStreamId(conn.getClient().getId(), null);
 
-						// Send every user a notification that the recording did
-						// start
+						// Send every user a notification that the recording did start
 						if (!rcl.getIsAVClient()) {
 							((IServiceCapableConnection) conn).invoke("startedRecording", new Object[] { currentClient }, this);
 						}
@@ -339,14 +338,6 @@ public class FLVRecorderService implements IPendingServiceCallback {
 				if (conn != null) {
 					if (conn instanceof IServiceCapableConnection) {
 						Client rcl = sessionManager.getClientByStreamId(conn.getClient().getId(), null);
-
-						// FIXME: Check if this function is really in use at
-						// the moment
-						// if (!rcl.getIsScreenClient()) {
-						// ((IServiceCapableConnection)
-						// conn).invoke("stoppedRecording",new Object[] {
-						// currentClient }, this);
-						// }
 
 						log.debug("is this users still alive? stop it :" + rcl);
 

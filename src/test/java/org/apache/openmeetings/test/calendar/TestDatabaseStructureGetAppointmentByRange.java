@@ -18,12 +18,16 @@
  */
 package org.apache.openmeetings.test.calendar;
 
+import static org.junit.Assert.assertEquals;
+
+import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
+import java.util.Random;
 
 import org.apache.log4j.Logger;
 import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
+import org.apache.openmeetings.db.entity.calendar.MeetingMember;
 import org.apache.openmeetings.test.AbstractJUnitDefaults;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,11 +39,66 @@ public class TestDatabaseStructureGetAppointmentByRange extends AbstractJUnitDef
 
 	@Test
 	public void test() {
-		List<Appointment> listAppoints = appointmentDao.getAppointmentsByRange(1L,
-				Calendar.getInstance().getTime(), Calendar.getInstance().getTime());
+		log.debug("Test started");
+		Long userId = 1L;
+		
+		Random rnd = new Random();
+		Calendar now = Calendar.getInstance();
+		Calendar rangeStart = Calendar.getInstance();
+		rangeStart.setTime(now.getTime());
+		rangeStart.add(Calendar.DATE, -1);
+		Calendar rangeEnd = Calendar.getInstance();
+		rangeEnd.add(Calendar.DATE, 1);
+		rangeEnd.setTime(now.getTime());
+		
+		Calendar a1End = Calendar.getInstance();
+		a1End.setTime(now.getTime());
+		a1End.add(Calendar.HOUR_OF_DAY, 1);
+		Appointment a1 = getAppointment(now.getTime(), a1End.getTime());
+		a1.setTitle("AppointmentByRange_a1");
 
-		for (Appointment appoints : listAppoints) {
-			log.debug("" + appoints);
+		Appointment a2 = getAppointment(now.getTime(), a1End.getTime());
+		a2.setTitle("AppointmentByRange_a2");
+		a2.setMeetingMembers(new ArrayList<MeetingMember>());
+		MeetingMember mm1 = new MeetingMember();
+		mm1.setUser(createUserContact(rnd.nextInt(), userId));
+		mm1.setAppointment(a2);
+		a2.getMeetingMembers().add(mm1);
+		
+		Appointment a3 = getAppointment(now.getTime(), a1End.getTime());
+		a3.setTitle("AppointmentByRange_a3");
+		a3.setMeetingMembers(new ArrayList<MeetingMember>());
+		MeetingMember mm2 = new MeetingMember();
+		mm2.setUser(createUserContact(rnd.nextInt(), userId));
+		mm2.setAppointment(a3);
+		a3.getMeetingMembers().add(mm2);
+		MeetingMember mm3 = new MeetingMember();
+		mm3.setUser(createUserContact(rnd.nextInt(), userId));
+		mm3.setAppointment(a3);
+		a3.getMeetingMembers().add(mm3);
+		
+		a1 = appointmentDao.update(a1, OM_URL, userId);
+		a2 = appointmentDao.update(a2, OM_URL, userId);
+		a3 = appointmentDao.update(a3, OM_URL, userId);
+		
+		int a1found = 0, a2found = 0, a3found = 0;
+		for (Appointment a : appointmentDao.getAppointmentsByRange(userId, rangeStart.getTime(), rangeEnd.getTime())) {
+			int mmCount = a.getMeetingMembers() == null ? 0 : a.getMeetingMembers().size();
+			if (a.getId().equals(a1.getId())) {
+				assertEquals("Inapropriate MeetingMembers count", 0, mmCount);
+				a1found++;
+			}
+			if (a.getId().equals(a2.getId())) {
+				assertEquals("Inapropriate MeetingMembers count", 1, mmCount);
+				a2found++;
+			}
+			if (a.getId().equals(a3.getId())) {
+				assertEquals("Inapropriate MeetingMembers count", 2, mmCount);
+				a3found++;
+			}
 		}
+		assertEquals("Inappropriate count of appointments without members found", 1, a1found);
+		assertEquals("Inappropriate count of appointments with 1 member found", 1, a2found);
+		assertEquals("Inappropriate count of appointments with 2 members found", 1, a3found);
 	}
 }

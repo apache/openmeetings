@@ -341,8 +341,7 @@
 	<method name="updateCursorScreenSharing" args="value">
 		<![CDATA[
 			if (canvas.screenSharingDialogContainer != null) {
-				var obj = canvas.screenSharingDialogContainer
-						.searchForSession(value.streamPublishName);
+				var obj = canvas.screenSharingDialogContainer.searchForSession(value.streamPublishName);
 				obj.updateCursor(value.cursor_x, value.cursor_y);
 			}
 		]]>
