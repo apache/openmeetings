@@ -4539,7 +4539,18 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>Сообщение. Пользователю:</value>
   </string>
   <string id="1505" name="cmd_line_admin">
-    <value>Что бы уменьшить время и интернет траффик вы можете воспользоватся командной строкой admin для копирования/восстановления/обновления: 1) войдите в установочную папку OM (например /opt/red5) 2) остановите OM (./red5-shutdown.sh) 3) выполняем ./admin.sh -b -file ~/today_om_backup.zip (создает резервную копию OM) 4) загрузите новый дистрибутив OM 5) mv /opt/red5 /opt.red5.bak (перемещаем рабочую версию OM :)) 6) распаковываем дистрибутив OM в папку /opt/red5 7) запускаем ./admin.sh -i -file ~/today_om_backup.zip (или './admin.sh -i -file ~/today_om_backup.zip --db-type mysql --db-user om_user --db-pass om_user_pass' в случае когда база данных отличается от базы по умолчанию ) 8) запускаем OM</value>
+    <value><![CDATA[Что бы уменьшить время и интернет траффик вы можете воспользоватся командной строкой admin для копирования/восстановления/обновления:
+    <ol>
+		<li>войдите в установочную папку OM (например /opt/red5)</li>
+		<li>остановите OM (./red5-shutdown.sh)</li>
+		<li>выполняем ./admin.sh -b -file ~/today_om_backup.zip (создает резервную копию OM)</li>
+		<li>загрузите новый дистрибутив OM</li>
+		<li>mv /opt/red5 /opt.red5.bak (перемещаем рабочую версию OM :))</li>
+		<li>распаковываем дистрибутив OM в папку /opt/red5</li>
+		<li>запускаем ./admin.sh -i -file ~/today_om_backup.zip (или './admin.sh -i -file ~/today_om_backup.zip --db-type mysql --db-user om_user --db-pass om_user_pass' в случае когда база данных отличается от базы по умолчанию )</li>
+		<li>запускаем OM</li>
+	</ol>
+	]]></value>
   </string>
   <string id="1506" name="public_room_tooltip">
     <value>Общие комнаты для всех пользователей</value>

@@ -34,9 +34,6 @@
                 $('#adminForm').height(documentHeight-114);
                 $('#adminTable').height(documentHeight-164);
 			};
-			function fileDialog() {
-				$('#fileInput').click();
-			}
 		</script>
 		<div class="adminPanel">
 			<div class="adminPanelColumnTable">
@@ -54,13 +51,15 @@
 								<select wicket:id="language"></select>
 							</td>
 							<td>
-								<input wicket:id="export" type="button" wicket:ommessage="value:360"/>
+								<div class="ui-button ui-widget ui-state-default ui-corner-all" wicket:id="export">
+									<span class="btn"><wicket:ommessage key="360"/></span>
+								</div>
 							</td>
 							<td class="profile">
-								<div id="fileLangBtn" onclick="fileDialog();"
-									class="uploadlang ui-button ui-widget ui-state-default ui-corner-all"><wicket:ommessage key="387"/></div><div class="upload"><input id="fileInput" type="file"
-										accept="text/xml" wicket:id="fileInput"/><span wicket:id="progress">[progressbar]</span>
+								<div class="ui-button ui-widget ui-state-default ui-corner-all fileupload fileupload-new" data-provides="fileupload" style="margin: 0;">
+									<span class="btn btn-file"><wicket:ommessage key="387"/><input type="file" accept="text/xml" wicket:id="fileInput"/></span>
 								</div>
+								<span wicket:id="progress">[progressbar]</span>
 							</td>
 						</tr>
 					</table>

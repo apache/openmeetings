@@ -53,7 +53,6 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
-import org.apache.wicket.markup.html.form.upload.FileUploadField;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.util.resource.AbstractResourceStream;
@@ -64,6 +63,8 @@ import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 
 import com.googlecode.wicket.jquery.ui.form.button.AjaxButton;
+
+import de.agilecoders.wicket.extensions.javascript.jasny.FileUploadField;
 
 /**
  * Language Editor, add/insert/update {@link Fieldlanguagesvalues} and
@@ -182,9 +183,6 @@ public class LangPanel extends AdminPanel {
 					}
 					getBean(LanguageImport.class)
 						.addLanguageByDocument(language.getLanguage_id(), download.getInputStream(), getUserId());
-				} catch (IOException e) {
-					log.error("IOException on panel language editor import ", e);
-					importFeedback.error(e);
 				} catch (Exception e) {
 					log.error("Exception on panel language editor import ", e);
 					importFeedback.error(e);

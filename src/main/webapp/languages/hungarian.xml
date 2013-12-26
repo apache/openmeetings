@@ -4539,7 +4539,18 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>Közzététel. Felhasználó:</value>
   </string>
   <string id="1505" name="cmd_line_admin">
-    <value>Időt és adatforgalmat takarít meg ha a parancssori admint használja a mentésekhez backup/restore/upgrade:\n 1) lépjen be az OM telepített könyvtárába (pl.: /opt/red5) \n 2) állítsa meg az OM-et (cmd: ./red5-shutdown.sh)\n 3) ./admin.sh -b -file ~/today_om_backup.zip (backup készítése az aktuális OM -ről)\n 4) töltse le az új OM-et\n 5) mv /opt/red5 /opt.red5.bak (A működő OM verziót őrizze meg :))\n 6) Csomagolja ki az új OM-et /opt/red5\n 7) ./admin.sh -i -file ~/today_om_backup.zip (or './admin.sh -i -file ~/today_om_backup.zip --db-type mysql --db-user om_user --db-pass om_user_pass' adja meg, ha nem az alapértelmezett DB hozzáférést használja )\n 8) OM indítása\n</value>
+    <value><![CDATA[Időt és adatforgalmat takarít meg ha a parancssori admint használja a mentésekhez backup/restore/upgrade:
+    <ol>
+		<li>lépjen be az OM telepített könyvtárába (pl.: /opt/red5)</li>
+		<li>állítsa meg az OM-et (cmd: ./red5-shutdown.sh)</li>
+		<li>./admin.sh -b -file ~/today_om_backup.zip (backup készítése az aktuális OM -ről)</li>
+		<li>töltse le az új OM-et</li>
+		<li>mv /opt/red5 /opt.red5.bak (A működő OM verziót őrizze meg :))</li>
+		<li>Csomagolja ki az új OM-et /opt/red5</li>
+		<li>./admin.sh -i -file ~/today_om_backup.zip (or './admin.sh -i -file ~/today_om_backup.zip --db-type mysql --db-user om_user --db-pass om_user_pass' adja meg, ha nem az alapértelmezett DB hozzáférést használja )</li>
+		<li>OM indítása</li>
+	</ol>
+	]]></value>
   </string>
   <string id="1506" name="public_room_tooltip">
     <value>Közös termek minden felhasználó számára</value>

@@ -320,44 +320,6 @@ div.tableWrapperSmall {
 	background-image: url(../public/themes/basic-theme/dashboard/wizzard_button_4.png);
 	margin-left: 60px;
 }
-.profile {
-	position: relative;
-}
-.profile .upload, .profile .uploadtext {
-	display: inline-block;
-	position: absolute;
-	bottom: -20px;
-	left: 0px;
-	opacity: .7;
-	width: 130px;
-	padding: 5px;
-	z-index: 50;
-	font-size: 14px;
-	font-family: Arial;
-	font-weight: bold;
-	color: blue;
-}
-
-.profile .uploadlang {
-	text-align: center;
-	font-size: 16px;
-	padding: 0.4em 1em;
-}
-
-.profile .upload {
-	z-index: 100;
-	cursor: pointer;
-}
-.profile .uploadtext:hover {
-	opacity: 1;
-}
-.profile .upload input {
-	position: relative;
-	height: 100%;
-	opacity: 0;
-	width: 100%;
-	cursor: pointer;
-}
 .widget {
 	width: 100%;
 }

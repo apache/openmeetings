@@ -4539,7 +4539,19 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>公開中。ユーザー：</value>
   </string>
   <string id="1505" name="cmd_line_admin">
-    <value>バックアップ／リストア／アップグレードを行なう際にコマンドライン・ツールを利用すると、時間とインターネット・トラフィックを節約することができます:&lt;br&gt; 1) オープンミーティングスのインストール・ディレクトリに移動する (例：/opt/red5)&lt;br&gt; 2) オープン・ミーティングスを停止する(例： ./red5-shutdown.sh)&lt;br&gt; 3) ./admin.sh -b -file ~/today_om_backup.zip (オープン・ミーティングスの現状バックアップを作成する)&lt;br&gt; 4) オープン・ミーティングスの最新アーカイブをダウンロードする&lt;br&gt; 5) mv /opt/red5 /opt.red5.bak (必要に応じて、現環境を移動しておく)&lt;br&gt; 6) /opt/red5 にダウンロードしたアーカイブを展開する&lt;br&gt; 7) ./admin.sh -i -file ~/today_om_backup.zip&lt;br&gt;(デフォルトのデータベースを使用していない場合は './admin.sh -i -file ~/today_om_backup.zip --db-type mysql --db-user om_user --db-pass om_user_pass')&lt;br&gt; 8) オープン・ミーティングスを起動する</value>
+    <value><![CDATA[バックアップ／リストア／アップグレードを行なう際にコマンドライン・ツールを利用すると、時間とインターネット・トラフィックを節約することができます:
+    <ol>
+		<li>オープンミーティングスのインストール・ディレクトリに移動する (例：/opt/red5)</li>
+		<li>オープン・ミーティングスを停止する(例： ./red5-shutdown.sh)</li>
+		<li>./admin.sh -b -file ~/today_om_backup.zip (オープン・ミーティングスの現状バックアップを作成する)</li>
+		<li>オープン・ミーティングスの最新アーカイブをダウンロードする</li>
+		<li>mv /opt/red5 /opt.red5.bak (必要に応じて、現環境を移動しておく)</li>
+		<li>/opt/red5 にダウンロードしたアーカイブを展開する</li>
+		<li>./admin.sh -i -file ~/today_om_backup.zip<br/>
+			(デフォルトのデータベースを使用していない場合は './admin.sh -i -file ~/today_om_backup.zip --db-type mysql --db-user om_user --db-pass om_user_pass')</li>
+		<li>オープン・ミーティングスを起動する</li>
+	</ol>
+	]]></value>
   </string>
   <string id="1506" name="public_room_tooltip">
     <value>全ユーザーに供用される会議室</value>

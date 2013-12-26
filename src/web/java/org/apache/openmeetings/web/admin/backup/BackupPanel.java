@@ -22,7 +22,6 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.openmeetings.web.app.Application.getBean;
 
 import java.io.File;
-import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.Date;
 
@@ -32,21 +31,24 @@ import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.util.CalendarPatterns;
 import org.apache.openmeetings.util.OmFileHelper;
 import org.apache.openmeetings.web.admin.AdminPanel;
+import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.util.AjaxDownload;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.form.AjaxFormSubmitBehavior;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.extensions.ajax.markup.html.form.upload.UploadProgressBar;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
-import org.apache.wicket.markup.html.form.upload.FileUploadField;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.util.lang.Bytes;
 import org.apache.wicket.util.resource.FileResourceStream;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
+
+import de.agilecoders.wicket.extensions.javascript.jasny.FileUploadField;
 
 /**
  * Panel component to manage Backup Import/Export
@@ -69,11 +71,9 @@ public class BackupPanel extends AdminPanel {
 	 * 
 	 */
 	private class BackupForm extends Form<Void> {
-
 		private static final long serialVersionUID = 1L;
-
-		FileUploadField fileUploadField;
-		CheckBox includeFilesInBackup;
+		private FileUploadField fileUploadField;
+		private Model<Boolean> includeFilesInBackup = Model.of(true);
 
 		public BackupForm(String id) {
 			super(id);
@@ -89,11 +89,8 @@ public class BackupPanel extends AdminPanel {
 
 			// Add one file input field
 			fileUploadField = new FileUploadField("fileInput");
-			add(fileUploadField);
 
-			includeFilesInBackup = new CheckBox("includeFilesInBackup",
-					Model.of(true));
-			add(includeFilesInBackup);
+			add(new CheckBox("includeFilesInBackup", includeFilesInBackup));
 
 			// Set maximum size controlled by configuration
 			setMaxSize(Bytes.bytes(maxBytes));
@@ -103,15 +100,14 @@ public class BackupPanel extends AdminPanel {
 			add(download);
 			// add an download button
 			add(new AjaxButton("download", this) {
-				private static final long serialVersionUID = 839803820502260006L;
+				private static final long serialVersionUID = 1L;
 
 				@Override
 				protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
 
 					File working_dir = OmFileHelper.getUploadBackupDir();
 
-					String dateString = "backup_"
-							+ CalendarPatterns.getTimeForStreamId(new Date());
+					String dateString = "backup_" + CalendarPatterns.getTimeForStreamId(new Date());
 
 					File backup_dir = new File(working_dir, dateString);
 					File backupFile = new File(backup_dir, dateString + ".zip");
@@ -120,12 +116,10 @@ public class BackupPanel extends AdminPanel {
 						getBean(BackupExport.class).performExport(
 								backupFile,
 								backup_dir,
-								includeFilesInBackup.getConvertedInput()
-										.booleanValue());
+								includeFilesInBackup.getObject());
 
 						download.setFileName(backupFile.getName());
-						download.setResourceStream(new FileResourceStream(
-								backupFile));
+						download.setResourceStream(new FileResourceStream(backupFile));
 						download.initiate(target);
 					} catch (Exception e) {
 						log.error("Exception on panel backup download ", e);
@@ -143,39 +137,34 @@ public class BackupPanel extends AdminPanel {
 				}
 			});
 
-			// add an upload button
-			add(new AjaxButton("upload", this) {
-				private static final long serialVersionUID = 839803820502260006L;
+			add(fileUploadField.add(new AjaxFormSubmitBehavior(this, "onchange") {
+				private static final long serialVersionUID = 1L;
 
 				@Override
-				protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+				protected void onSubmit(AjaxRequestTarget target) {
 					FileUpload upload = fileUploadField.getFileUpload();
 					try {
 						if (upload == null || upload.getInputStream() == null) {
 							uploadFeedback.error("File is empty");
+							target.add(uploadFeedback);
 							return;
 						}
 						getBean(BackupImport.class).performImport(upload.getInputStream());
-					} catch (IOException e) {
-						log.error("IOException on panel backup upload ", e);
-						uploadFeedback.error(e);
 					} catch (Exception e) {
 						log.error("Exception on panel backup upload ", e);
 						uploadFeedback.error(e);
 					}
-
 					// repaint the feedback panel so that it is hidden
 					target.add(uploadFeedback);
-
 				}
 
 				@Override
-				protected void onError(AjaxRequestTarget target, Form<?> form) {
+				protected void onError(AjaxRequestTarget target) {
 					// repaint the feedback panel so errors are shown
 					target.add(uploadFeedback);
 				}
-			});
-
+			}));
+			add(new Label("cmdLineDesc", WebSession.getString(1505)).setEscapeModelStrings(false));
 		}
 
 	}
@@ -191,8 +180,7 @@ public class BackupPanel extends AdminPanel {
 
 		BackupForm backupForm = new BackupForm("backupUpload");
 
-		backupForm.add(new UploadProgressBar("progress", backupForm,
-				backupForm.fileUploadField));
+		backupForm.add(new UploadProgressBar("progress", backupForm, backupForm.fileUploadField));
 
 		add(backupForm);
 	}

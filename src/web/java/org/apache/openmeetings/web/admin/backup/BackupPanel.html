@@ -34,16 +34,17 @@
                    <label><wicket:ommessage key="1537" /></label> <input type="checkbox" wicket:id="includeFilesInBackup" />
 	            </div>
 	            <div class="formelement">
-	               <input class="uploadFileField" wicket:id="fileInput" type="file"/>
-	            </div>
-	            <div class="formelement">
 	               <span wicket:id="progress">[[upload progressbar]]</span>
 	            </div>
 	            <div class="formelement">
 		            <!-- Perform Download -->
-					<input type="submit" wicket:ommessage="value:1536" wicket:id="upload" class="ui-button ui-widget ui-state-default ui-corner-all"/>
+					<div wicket:id="download" class="ui-button ui-widget ui-state-default ui-corner-all">
+						<span class="btn btn-file"><wicket:ommessage key="1066"/></span>
+					</div>
 					<!-- Perform Upload -->
-					<input type="submit" wicket:ommessage="value:1066" wicket:id="download" class="ui-button ui-widget ui-state-default ui-corner-all"/>
+					<div class="ui-button ui-widget ui-state-default ui-corner-all fileupload fileupload-new" data-provides="fileupload" style="margin: 0;">
+						<span class="btn btn-file"><wicket:ommessage key="1536"/><input class="uploadFileField" wicket:id="fileInput" type="file"/></span>
+					</div>
 	            </div>
 	            <div class="formelement">
 		            <!-- Max upload size -->
@@ -51,7 +52,7 @@
 	            </div>
 	            <div class="formelement">
 		            <!-- Backup CLI import information -->
-	               <div class="info-text"><wicket:ommessage key="1505" /></div>
+	               <div class="info-text" wicket:id="cmdLineDesc"></div>
 	            </div>
 	        </fieldset>
 		</form>

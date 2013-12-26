@@ -69,6 +69,8 @@ import ro.fortsoft.wicket.dashboard.WidgetRegistry;
 import ro.fortsoft.wicket.dashboard.web.DashboardContext;
 import ro.fortsoft.wicket.dashboard.web.DashboardContextInjector;
 import ro.fortsoft.wicket.dashboard.web.DashboardSettings;
+import de.agilecoders.wicket.core.Bootstrap;
+import de.agilecoders.wicket.core.settings.BootstrapSettings;
 
 public class Application extends AuthenticatedWebApplication {
 	private DashboardContext dashboardContext;
@@ -111,6 +113,8 @@ public class Application extends AuthenticatedWebApplication {
 		DashboardSettings dashboardSettings = DashboardSettings.get();
 		dashboardSettings.setIncludeJQuery(false);
 		dashboardSettings.setIncludeJQueryUI(false);
+		
+		Bootstrap.install(Application.get(), new BootstrapSettings());
 		
 		getRootRequestMapperAsCompound().add(new NoVersionMapper(getHomePage()));
 		getRootRequestMapperAsCompound().add(new NoVersionMapper("notinited", NotInitedPage.class));

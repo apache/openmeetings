@@ -251,6 +251,9 @@ table.adminListTable tr:hover {
 .adminForm {
 	
 }
+.adminForm .btn {
+	width: 280px;
+}
 .adminForm input {
 	display: block;
 	float: left;
