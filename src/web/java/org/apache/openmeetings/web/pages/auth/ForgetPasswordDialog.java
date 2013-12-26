@@ -60,7 +60,8 @@ import com.googlecode.wicket.jquery.ui.widget.dialog.MessageDialog;
 public class ForgetPasswordDialog extends AbstractFormDialog<String> {
 	private static final Logger log = Red5LoggerFactory.getLogger(ForgetPasswordDialog.class, webAppRootKey);
 	private static final long serialVersionUID = 8494008571497363018L;
-	private DialogButton send = new DialogButton(WebSession.getString(317));
+	private String sendLbl = WebSession.getString(317);
+	private DialogButton send = new DialogButton(sendLbl);
 	private DialogButton cancel = new DialogButton(WebSession.getString(122));
 	private FeedbackPanel feedback = new FeedbackPanel("feedback");
 	private RequiredTextField<String> nameField;
@@ -146,8 +147,13 @@ public class ForgetPasswordDialog extends AbstractFormDialog<String> {
 		add(confirmDialog);
 	}
 
+	@Override
+	public boolean isDefaultCloseEventEnabled()	{
+		return true;
+	}
+	
 	public void onClose(AjaxRequestTarget target, DialogButton button) {
-		if (button.equals(send)){
+		if (button != null && button.match(sendLbl)){
 			confirmDialog.open(target);
 		} else {
 			s.open(target);

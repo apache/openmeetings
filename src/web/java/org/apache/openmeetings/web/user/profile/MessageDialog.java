@@ -57,7 +57,8 @@ public class MessageDialog extends AbstractFormDialog<PrivateMessage> {
 	private static final long serialVersionUID = 1L;
 	private final Form<PrivateMessage> form;
 	private FeedbackPanel feedback = new FeedbackPanel("feedback");
-	DialogButton send = new DialogButton(WebSession.getString(218));
+	String sendLbl = WebSession.getString(218);
+	DialogButton send = new DialogButton(sendLbl);
 	private DialogButton cancel = new DialogButton(WebSession.getString(219));
 	private final WebMarkupContainer roomParamsBlock = new WebMarkupContainer("roomParamsBlock");
 	private final WebMarkupContainer roomParams = new WebMarkupContainer("roomParams");

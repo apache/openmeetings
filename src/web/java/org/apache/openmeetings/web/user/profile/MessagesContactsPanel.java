@@ -251,7 +251,7 @@ public class MessagesContactsPanel extends UserPanel {
 
 			@Override
 			public void onClose(AjaxRequestTarget target, DialogButton button) {
-				if (button.equals(send)) {
+				if (button != null && button.match(sendLbl)) {
 					target.add(container);
 				}
 			}

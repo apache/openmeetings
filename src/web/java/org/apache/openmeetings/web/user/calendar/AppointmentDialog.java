@@ -67,6 +67,7 @@ import org.slf4j.Logger;
 
 import com.googlecode.wicket.jquery.ui.plugins.wysiwyg.WysiwygEditor;
 import com.googlecode.wicket.jquery.ui.plugins.wysiwyg.toolbar.DefaultWysiwygToolbar;
+import com.googlecode.wicket.jquery.ui.widget.dialog.AbstractDialog;
 import com.googlecode.wicket.jquery.ui.widget.dialog.AbstractFormDialog;
 import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
 import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButtons;
@@ -80,8 +81,10 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 	private AppointmentForm form;
 	private DialogButton save = new DialogButton(WebSession.getString(813));
 	private DialogButton cancel = new DialogButton(WebSession.getString(1130));
-	private DialogButton delete = new DialogButton(WebSession.getString(814));
-	private DialogButton enterRoom = new DialogButton(WebSession.getString(1282));
+	private String deleteLbl = WebSession.getString(814);
+	private DialogButton delete = new DialogButton(deleteLbl);
+	private String enterRoomLbl = WebSession.getString(1282);
+	private DialogButton enterRoom = new DialogButton(enterRoomLbl);
 	private final CalendarPanel calendar;
 	protected final FeedbackPanel feedback;
 	final MeetingMemberDialog addAttendees;
@@ -121,7 +124,7 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 			private static final long serialVersionUID = 1L;
 
 			public void onClose(AjaxRequestTarget target, DialogButton button) {
-				if (button.equals(DialogButtons.OK)){
+				if (button != null && button.match(AbstractDialog.LBL_OK)){
 					deleteAppointment(target);
 				}
 			}
@@ -156,9 +159,9 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 	
 	@Override
 	public void onClose(AjaxRequestTarget target, DialogButton button) {
-		if (delete.equals(button)) {
+		if (button != null && button.match(deleteLbl)) {
 			confirmDelete.open(target);
-		} else if (enterRoom.equals(button)) {
+		} else if (button != null && button.match(enterRoomLbl)) {
 			RoomEnterBehavior.roomEnter((MainPage)getPage(), target, getModelObject().getRoom().getRooms_id());
 		}
 	}

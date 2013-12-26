@@ -37,8 +37,10 @@ public class UserInfoDialog extends AbstractDialog<String> {
 	private static final long serialVersionUID = 6393565468567393270L;
 	private WebMarkupContainer container;
 	private DialogButton cancel = new DialogButton(WebSession.getString(61));
-	private DialogButton message = new DialogButton(WebSession.getString(1253));
-	private DialogButton contacts = new DialogButton(WebSession.getString(1186));
+	private String messageLbl = WebSession.getString(1253);
+	private DialogButton message = new DialogButton(messageLbl);
+	private String contactsLbl = WebSession.getString(1186);
+	private DialogButton contacts = new DialogButton(contactsLbl);
 	private MessageDialog newMessage;
 	private long userId;
 	
@@ -74,9 +76,9 @@ public class UserInfoDialog extends AbstractDialog<String> {
 	}
 	
 	public void onClose(AjaxRequestTarget target, DialogButton button) {
-		if (button.equals(message)) {
+		if (button != null && button.match(messageLbl)) {
 			newMessage.reset(false).open(target, userId);
-		} else if (button.equals(contacts)) {
+		} else if (button != null && button.match(contactsLbl)) {
 			ContactsHelper.addUserToContactList(userId);
 		}
 	}

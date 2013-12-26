@@ -73,7 +73,7 @@
 	</natures>
 	<filteredResources>
 		<filter>
-			<id>1373769575676</id>
+			<id>1387965572383</id>
 			<name></name>
 			<type>26</type>
 			<matcher>
@@ -82,7 +82,7 @@
 			</matcher>
 		</filter>
 		<filter>
-			<id>1373769575677</id>
+			<id>1387965572384</id>
 			<name></name>
 			<type>10</type>
 			<matcher>
@@ -91,7 +91,7 @@
 			</matcher>
 		</filter>
 		<filter>
-			<id>1373769575687</id>
+			<id>1387965572388</id>
 			<name></name>
 			<type>26</type>
 			<matcher>
@@ -100,7 +100,7 @@
 			</matcher>
 		</filter>
 		<filter>
-			<id>1373769575695</id>
+			<id>1387965572390</id>
 			<name></name>
 			<type>26</type>
 			<matcher>
@@ -109,7 +109,7 @@
 			</matcher>
 		</filter>
 		<filter>
-			<id>1373769576236</id>
+			<id>1387965572391</id>
 			<name></name>
 			<type>6</type>
 			<matcher>
@@ -118,7 +118,7 @@
 			</matcher>
 		</filter>
 		<filter>
-			<id>1373769576238</id>
+			<id>1387965572392</id>
 			<name></name>
 			<type>30</type>
 			<matcher>
@@ -127,7 +127,7 @@
 			</matcher>
 		</filter>
 		<filter>
-			<id>1373769576249</id>
+			<id>1387965572392</id>
 			<name></name>
 			<type>30</type>
 			<matcher>
@@ -136,7 +136,7 @@
 			</matcher>
 		</filter>
 		<filter>
-			<id>1373769576258</id>
+			<id>1387965572393</id>
 			<name></name>
 			<type>30</type>
 			<matcher>
@@ -145,7 +145,7 @@
 			</matcher>
 		</filter>
 		<filter>
-			<id>1373769576269</id>
+			<id>1387965572393</id>
 			<name></name>
 			<type>30</type>
 			<matcher>
@@ -154,12 +154,21 @@
 			</matcher>
 		</filter>
 		<filter>
-			<id>1373769576283</id>
+			<id>1387965572394</id>
 			<name></name>
 			<type>30</type>
 			<matcher>
 				<id>org.eclipse.ui.ide.multiFilter</id>
 				<arguments>1.0-projectRelativePath-matches-false-false-build/red5/server/src/main/server</arguments>
+			</matcher>
+		</filter>
+		<filter>
+			<id>1387965572395</id>
+			<name></name>
+			<type>30</type>
+			<matcher>
+				<id>org.eclipse.ui.ide.multiFilter</id>
+				<arguments>1.0-projectRelativePath-matches-false-false-build/red5/server/webapps</arguments>
 			</matcher>
 		</filter>
 	</filteredResources>

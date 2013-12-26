@@ -73,7 +73,8 @@ public class SignInDialog extends AbstractFormDialog<String> {
 	private static final long serialVersionUID = 7746996016261051947L;
 	private Form<String> form;
 	private DialogButton loginBtn = new DialogButton(WebSession.getString(112));
-	private DialogButton registerBtn = new DialogButton(WebSession.getString(123));
+	private String registerLbl = WebSession.getString(123);
+	private DialogButton registerBtn = new DialogButton(registerLbl);
     private String password;
     private String login;
     private boolean rememberMe = false;
@@ -145,7 +146,7 @@ public class SignInDialog extends AbstractFormDialog<String> {
 	
 	@Override
 	public void onClose(AjaxRequestTarget target, DialogButton button) {
-		if (registerBtn.equals(button)) {
+		if (button != null && button.match(registerLbl)) {
 			r.setBrowserTZOffset(target, browserTZOffset.getModelObject());
 			r.open(target);
 		}
@@ -179,7 +180,7 @@ public class SignInDialog extends AbstractFormDialog<String> {
 	
 	@Override
 	public void onClick(AjaxRequestTarget target, DialogButton button) {
-		if (button.equals(registerBtn) || WebSession.get().isSignedIn()) {
+		if ((button != null && button.match(registerLbl)) || WebSession.get().isSignedIn()) {
 			super.onClick(target, button);
 		}
 	}

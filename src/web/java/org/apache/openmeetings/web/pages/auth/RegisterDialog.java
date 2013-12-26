@@ -72,7 +72,8 @@ public class RegisterDialog extends AbstractFormDialog<String> {
 	private static final long serialVersionUID = -8333305491376538792L;
 	private static final Logger log = Red5LoggerFactory.getLogger(MainPage.class, webAppRootKey);
 	private DialogButton cancelBtn = new DialogButton(WebSession.getString(122));
-	private DialogButton registerBtn = new DialogButton(WebSession.getString(121));
+	private String registerLbl = WebSession.getString(121);
+	private DialogButton registerBtn = new DialogButton(registerLbl);
 	private FeedbackPanel feedback = new FeedbackPanel("feedback");
 	private final IModel<String> tzModel = Model.of(WebSession.get().getTimeZoneByBrowserLocale(0));
 	private final DropDownChoice<String> tzDropDown = new DropDownChoice<String>("tz", tzModel, getAvailableTimezones());
@@ -151,7 +152,7 @@ public class RegisterDialog extends AbstractFormDialog<String> {
 	}
 	
 	public void onClose(AjaxRequestTarget target, DialogButton button) {
-		if (button.equals(registerBtn)){
+		if (button != null && button.match(registerLbl)){
 			confirmRegistration.open(target);
 		} else {
 			s.open(target);

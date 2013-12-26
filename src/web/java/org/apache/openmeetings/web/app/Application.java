@@ -210,7 +210,7 @@ public class Application extends AuthenticatedWebApplication {
 		if (!isInstalled) {
 			if (InitializationContainer.initComplete) {
 				//TODO can also check crypt class here
-				result = get()._getBean(AdminUserDao.class).count() > 0
+				isInstalled = result = get()._getBean(AdminUserDao.class).count() > 0
 						&& get()._getBean(FieldLanguagesValuesDao.class).count() > 0;
 			}
 		}
