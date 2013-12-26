@@ -30,9 +30,10 @@ import org.apache.wicket.ajax.form.AjaxFormSubmitBehavior;
 import org.apache.wicket.extensions.ajax.markup.html.form.upload.UploadProgressBar;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
-import org.apache.wicket.markup.html.form.upload.FileUploadField;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.util.lang.Bytes;
+
+import de.agilecoders.wicket.extensions.javascript.jasny.FileUploadField;
 
 public class UploadableProfileImagePanel extends ProfileImagePanel {
 	private static final long serialVersionUID = -6681473769070950510L;

@@ -21,7 +21,8 @@
 <html xmlns:wicket="http://wicket.apache.org">
 	<wicket:extend>
 		<form wicket:id="form"><div 
-			class="uploadtext"><wicket:ommessage key="379"/></div><div class="upload"><input type="file" 
-			wicket:id="image"/><span wicket:id="progress">[progressbar]</span></div></form>
+			class="fileupload fileupload-new" data-provides="fileupload" style="margin: 0;"><span 
+			class="btn btn-file" style="width: 120px;"><wicket:ommessage key="379"/><input type="file" accept="image/*" 
+			wicket:id="image"/></span></div><span wicket:id="progress">[progressbar]</span></form>
 	</wicket:extend>
 </html>
