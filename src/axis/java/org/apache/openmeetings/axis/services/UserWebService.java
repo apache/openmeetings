@@ -311,7 +311,7 @@ public class UserWebService {
 											// enabled
 						jNameTimeZone); 
 
-				if (user_id < 0) {
+				if (user_id == null || user_id < 0) {
 					return user_id;
 				}
 
@@ -404,7 +404,7 @@ public class UserWebService {
 						language_id, "", false, true, // generate SIP Data if the config is enabled
 						jNameTimeZone);
 
-				if (user_id < 0) {
+				if (user_id == null || user_id < 0) {
 					return user_id;
 				}
 
