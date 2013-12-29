@@ -22,7 +22,9 @@ import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import static org.apache.openmeetings.web.util.RoomTypeDropDown.getRoomTypes;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
@@ -31,11 +33,12 @@ import org.apache.openmeetings.db.dao.user.PrivateMessagesDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.user.PrivateMessage;
+import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.mail.MailHandler;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.util.ContactsHelper;
 import org.apache.openmeetings.web.util.RoomTypeDropDown;
-import org.apache.openmeetings.web.util.UserAutoCompleteTextField;
+import org.apache.openmeetings.web.util.UserMultiChoice;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.extensions.yui.calendar.DateTimeField;
@@ -47,6 +50,7 @@ import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.model.util.CollectionModel;
 
 import com.googlecode.wicket.jquery.ui.plugins.wysiwyg.WysiwygEditor;
 import com.googlecode.wicket.jquery.ui.plugins.wysiwyg.toolbar.DefaultWysiwygToolbar;
@@ -65,6 +69,7 @@ public class MessageDialog extends AbstractFormDialog<PrivateMessage> {
 	private final IModel<Date> modelStart = Model.of(new Date());
 	private final IModel<Date> modelEnd = Model.of(new Date());
 	private boolean isPrivate = false; 
+	private final IModel<Collection<User>> modelTo = new CollectionModel<User>(new ArrayList<User>());
 
 	@Override
 	public int getWidth() {
@@ -79,6 +84,7 @@ public class MessageDialog extends AbstractFormDialog<PrivateMessage> {
 	public MessageDialog reset(boolean isPrivate) {
 		modelStart.setObject(new Date());
 		modelEnd.setObject(new Date()); //TODO should we add 1 hour or generalize with Calendar???
+		modelTo.setObject(new ArrayList<User>());
 		PrivateMessage p = new PrivateMessage();
 		p.setFrom(getBean(UserDao.class).get(getUserId()));
 		p.setOwner(p.getFrom());
@@ -107,7 +113,7 @@ public class MessageDialog extends AbstractFormDialog<PrivateMessage> {
 		form = new Form<PrivateMessage>("form", getModel());
 		
 		form.add(feedback.setOutputMarkupId(true));
-		form.add(new UserAutoCompleteTextField("to").setRequired(true));
+		form.add(new UserMultiChoice("to", modelTo).setRequired(true));
 		form.add(new TextField<String>("subject"));
 		DefaultWysiwygToolbar toolbar = new DefaultWysiwygToolbar("toolbarContainer");
 		form.add(toolbar);
@@ -168,22 +174,26 @@ public class MessageDialog extends AbstractFormDialog<PrivateMessage> {
 		} else {
 			p.setRoom(null);
 		}
-		if (p.getTo().getUser_id() == null) {
-			getBean(UserDao.class).update(p.getTo(), getUserId());
-		}
-		//to send
-		getBean(PrivateMessagesDao.class).update(p, getUserId());
-		//to inbox
-		p.setPrivateMessageId(0);
-		p.setOwner(p.getTo());
-		getBean(PrivateMessagesDao.class).update(p, getUserId());
-		if (p.getTo().getAdresses() != null) {
-			String aLinkHTML = 	isPrivate ? "<br/><br/>" + "<a href='" + ContactsHelper.getLink() + "'>"
-						+ WebSession.getString(1302) + "</a><br/>" : "";
-			
-			getBean(MailHandler.class).send(p.getTo().getAdresses().getEmail(),
-					WebSession.getString(1301) + p.getSubject(),
-					p.getMessage().replaceAll("\\<.*?>", "") + aLinkHTML);
+		for (User to : modelTo.getObject()) {
+			if (to.getUser_id() == null) {
+				getBean(UserDao.class).update(to, getUserId());
+			}
+			//to send
+			p.setPrivateMessageId(0);
+			p.setTo(to);
+			getBean(PrivateMessagesDao.class).update(p, getUserId());
+			//to inbox
+			p.setPrivateMessageId(0);
+			p.setOwner(to);
+			getBean(PrivateMessagesDao.class).update(p, getUserId());
+			if (to.getAdresses() != null) {
+				String aLinkHTML = 	isPrivate ? "<br/><br/>" + "<a href='" + ContactsHelper.getLink() + "'>"
+							+ WebSession.getString(1302) + "</a><br/>" : "";
+				
+				getBean(MailHandler.class).send(to.getAdresses().getEmail(),
+						WebSession.getString(1301) + p.getSubject(),
+						p.getMessage().replaceAll("\\<.*?>", "") + aLinkHTML);
+			}
 		}
 	}
 }

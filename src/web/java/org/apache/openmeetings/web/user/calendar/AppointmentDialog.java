@@ -27,7 +27,11 @@ import static org.apache.openmeetings.web.util.RoomTypeDropDown.getRoomTypes;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
 import org.apache.openmeetings.db.dao.calendar.AppointmentReminderTypDao;
@@ -39,29 +43,27 @@ import org.apache.openmeetings.db.entity.calendar.MeetingMember;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.room.RoomType;
 import org.apache.openmeetings.db.entity.user.Organisation_Users;
+import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.pages.MainPage;
 import org.apache.openmeetings.web.user.rooms.RoomEnterBehavior;
 import org.apache.openmeetings.web.util.RoomTypeDropDown;
-import org.apache.wicket.ajax.AjaxEventBehavior;
+import org.apache.openmeetings.web.util.UserMultiChoice;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxCheckBox;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.extensions.yui.calendar.DateTimeField;
-import org.apache.wicket.markup.html.WebMarkupContainer;
-import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.PasswordTextField;
 import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.form.TextField;
-import org.apache.wicket.markup.html.list.ListItem;
-import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.model.util.CollectionModel;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 
@@ -87,8 +89,8 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 	private DialogButton enterRoom = new DialogButton(enterRoomLbl);
 	private final CalendarPanel calendar;
 	protected final FeedbackPanel feedback;
-	final MeetingMemberDialog addAttendees;
 	final MessageDialog confirmDelete;
+	private IModel<Collection<User>> attendeesModel = new CollectionModel<User>(new ArrayList<User>());
 	
 	@Override
 	public int getWidth() {
@@ -118,8 +120,6 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 		feedback = new FeedbackPanel("feedback");
 		form = new AppointmentForm("appForm", model);
 		add(form);
-		addAttendees = new MeetingMemberDialog("addAttendees", WebSession.getString(812), model, form.get("attendeeContainer"));
-		add(addAttendees);
 		confirmDelete = new MessageDialog("confirmDelete", WebSession.getString(814), WebSession.getString(833), DialogButtons.OK_CANCEL, DialogIcon.WARN){
 			private static final long serialVersionUID = 1L;
 
@@ -173,7 +173,40 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 
 	@Override
 	protected void onSubmit(AjaxRequestTarget target) {
-		getBean(AppointmentDao.class).update(form.getModelObject(), getBaseUrl(), getUserId());
+        Appointment a = form.getModelObject();
+        final List<MeetingMember> attendees = a.getMeetingMembers() == null ? new ArrayList<MeetingMember>() : a.getMeetingMembers();
+        Set<Long> currentIds = new HashSet<Long>();
+        for (User u : attendeesModel.getObject()) {
+        	if (u.getUser_id() != null) {
+        		currentIds.add(u.getUser_id());
+        	}
+        }
+        
+        //remove users
+        for (Iterator<MeetingMember> i = attendees.iterator(); i.hasNext();) {
+        	MeetingMember m = i.next();
+        	if (!currentIds.contains(m.getUser().getUser_id())) {
+        		i.remove();
+        	}
+        }
+        Set<Long> originalIds = new HashSet<Long>();
+        for (MeetingMember m : attendees) {
+        	originalIds.add(m.getUser().getUser_id());
+        }
+        //add users
+        for (User u : attendeesModel.getObject()) {
+        	if (u.getUser_id() == null || !originalIds.contains(u.getUser_id())) {
+        		MeetingMember mm = new MeetingMember();
+        		mm.setUser(u);
+        		mm.setDeleted(false);
+        		mm.setInserted(a.getInserted());
+        		mm.setUpdated(a.getUpdated());
+        		mm.setAppointment(a);
+        		attendees.add(mm);
+        	}
+        }
+        a.setMeetingMembers(attendees);
+        getBean(AppointmentDao.class).update(a, getBaseUrl(), getUserId());
 		target.add(feedback);
 		calendar.refresh(target);
 	}
@@ -210,6 +243,12 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 				if (start.equals(end)) {
 					end.add(java.util.Calendar.HOUR_OF_DAY, 1);
 					a.setEnd(end.getTime());
+				}
+			}
+			attendeesModel.setObject(new ArrayList<User>());
+			if (a.getMeetingMembers() != null) {
+				for (MeetingMember mm : a.getMeetingMembers()) {
+					attendeesModel.getObject().add(mm.getUser());
 				}
 			}
 		}
@@ -269,41 +308,7 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 					target.add(pwd);
 				}
 			});
-			
-			final WebMarkupContainer addMeetingMember = new WebMarkupContainer("addMeetingMember");
-			addMeetingMember.add(new AjaxEventBehavior("onclick") {
-				private static final long serialVersionUID = 7016550192188649714L;
-
-				protected void onEvent(AjaxRequestTarget target) {
-					addAttendees.open(target);
-	        	}
-	        });
-			add(addMeetingMember);
-			
-			final WebMarkupContainer attendeeContainer = new WebMarkupContainer("attendeeContainer");
-			attendeeContainer.add(new ListView<MeetingMember>("meetingMembers"){
-
-				private static final long serialVersionUID = -2609044181991754097L;
-
-				@Override
-				protected void populateItem(final ListItem<MeetingMember> item) {
-					MeetingMember mm = item.getModelObject();
-					item.add(new Label("attendeeName", mm.getUser().getFirstname() + " " + mm.getUser().getLastname()));
-					item.add(new Label("attendeeEmail", mm.getUser().getAdresses().getEmail()));
-					item.add(new WebMarkupContainer("attendeeDelete").add(new AjaxEventBehavior("onclick"){
-						private static final long serialVersionUID = 1L;
-
-						@Override
-						protected void onEvent(AjaxRequestTarget target) {
-							MeetingMember mm = item.getModelObject();
-							AppointmentForm.this.getModelObject().getMeetingMembers().remove(mm);
-							target.add(attendeeContainer);
-						}
-					})); 
-				}
-			});
-			add(attendeeContainer.setOutputMarkupId(true));
-
+			add(new UserMultiChoice("attendees", attendeesModel));
 		}
 		
 		private List<AppointmentReminderTyps> getRemindTypes() {

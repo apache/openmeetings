@@ -4799,4 +4799,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
   <string id="1587" name="oauth2">
     <value>Redirect uri</value>
   </string>
+  <string id="1588" name="multiple_addresses">
+    <value>You can enter email address in the format: firstname1 lastname1 &lt;email1&gt; or "firstname2 lastname2" &lt;email2&gt; or 'firstname3 lastname3' &lt;email3&gt; or email</value>
+  </string>
 </language>

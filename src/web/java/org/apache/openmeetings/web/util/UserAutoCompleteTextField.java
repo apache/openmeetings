@@ -26,11 +26,8 @@ import java.util.Locale;
 
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.user.User;
-import org.apache.wicket.extensions.validation.validator.RfcCompliantEmailAddressValidator;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.util.convert.IConverter;
-import org.apache.wicket.validation.IValidationError;
-import org.apache.wicket.validation.Validatable;
 
 import com.googlecode.wicket.jquery.core.renderer.ITextRenderer;
 import com.googlecode.wicket.jquery.ui.form.autocomplete.AutoCompleteTextField;
@@ -46,42 +43,7 @@ public class UserAutoCompleteTextField extends AutoCompleteTextField<User> {
 			if (value != null && value.equals(UserAutoCompleteTextField.this.getModelValue()))  {
 				return UserAutoCompleteTextField.this.getModelObject();
 			} else {
-				//TODO extract to function
-				User u = null;
-				//FIXME refactor this
-				String email = null;
-				String fName = null;
-				String lName = null;
-				int idx = value.indexOf('<');
-				if (idx > -1) {
-					int idx1 = value.indexOf('>', idx);
-					if (idx1 > -1) {
-						email = value.substring(idx + 1, idx1);
-						
-						String name = value.substring(0, idx).replace("\"", "");
-						int idx2 = name.indexOf(' ');
-						if (idx2 > -1) {
-							fName = name.substring(0, idx2);
-							lName = name.substring(idx2 + 1);
-						} else {
-							fName = "";
-							lName = name;
-						}
-						 
-					}
-				} else {
-					email = value;
-				}
-				Validatable<String> valEmail = new Validatable<String>(email);
-				RfcCompliantEmailAddressValidator.getInstance().validate(valEmail);
-				if (valEmail.isValid()) {
-					u = getBean(UserDao.class).getContact(email, fName, lName, getUserId());
-				} else {
-					for (IValidationError err : valEmail.getErrors()) {
-						UserAutoCompleteTextField.this.error(err);
-					}
-				}
-				return u;
+				return UserChoiceProvider.getUser(value);
 			}
 		}
 

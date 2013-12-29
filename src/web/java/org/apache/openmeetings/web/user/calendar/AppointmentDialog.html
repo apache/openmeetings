@@ -62,22 +62,7 @@
 				</tr>
 				<tr>
 					<td><wicket:ommessage key="803" /></td>
-					<td >
-					   <div class="attendeesComponentWrapper">
-							<div class="attendeeContainer">
-								<table>
-									<tbody wicket:id="attendeeContainer">		
-							    		<tr wicket:id="meetingMembers">
-											<td><div><span wicket:id="attendeeName"></span></div></td>
-											<td><div><span wicket:id="attendeeEmail"></span></div></td>
-											<td><div class="formCancelButton" wicket:id="attendeeDelete" wicket:ommessage="title:814"><input/></div></td>
-										</tr>
-									</tbody>
-								</table>
-							</div>
-							<div wicket:id="addMeetingMember" class="formNewButton" wicket:ommessage="title:812"><input/></div>
-						</div>
-					</td>
+					<td wicket:ommessage="title:1588"><input class="appointment attendees" type="hidden" wicket:id="attendees"/></td>
 				</tr>
 				<tr>
 					<td><wicket:ommessage key="569" /></td>
@@ -92,7 +77,6 @@
 				</tr>
 			</table>
 		</form>
-		<div wicket:id="addAttendees"></div>
 		<div wicket:id="confirmDelete"></div>
 	</wicket:panel>
 </html>

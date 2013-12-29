@@ -4798,4 +4798,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
   <string id="1587" name="oauth2">
     <value>Uri возврата</value>
   </string>
+  <string id="1588" name="multiple_addresses">
+    <value>Вы можете ввести адрес в формате: Имя1 Фамилия1 &lt;адрес1&gt; или "Имя2 Фамилия2" &lt;адрес2&gt; или 'Имя3 Фамилия3' &lt;адрес3&gt; или адрес</value>
+  </string>
 </language>

@@ -79,3 +79,6 @@
 .appointmentPopUp .attendeeContainer table td:nth-child(3) div {
 	width: 20px;
 }
+.appointment.attendees {
+	width: 100%;
+}

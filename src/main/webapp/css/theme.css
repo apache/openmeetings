@@ -514,7 +514,7 @@ table.messages td.main {
 	width: 20px;
 	min-height: inherit;
 }
-input[type="text"].messages.text {
+input[type="text"].messages.text, .messages.text.to {
 	width: 100%;
 }
 textarea.messages.body {
@@ -557,4 +557,20 @@ tr.unread {
 .room-row {
 	background-color: rgb(248, 248, 248);
 	border-bottom: 5px solid white;
+}
+.select2-results .select2-result .select2-result-label .user.external
+, .select2-results .select2-result .select2-result-label .user.internal
+, .select2-choices .select2-search-choice .user.external
+, .select2-choices .select2-search-choice .user.internal {
+	padding-left: 18px;
+	background-repeat: no-repeat;
+	background-position: 0px 2px;
+}
+.select2-results .select2-result .select2-result-label .user.external
+, .select2-choices .select2-search-choice .user.external {
+	background-image: url(images/user_go.png);
+}
+.select2-results .select2-result .select2-result-label .user.internal
+, .select2-choices .select2-search-choice .user.internal {
+	background-image: url(images/user.png);
 }

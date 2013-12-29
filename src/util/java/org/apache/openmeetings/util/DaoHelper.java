@@ -73,7 +73,7 @@ public class DaoHelper {
 	public static void getWhereClause(StringBuilder sb, String search, String alias, String... fields) {
 		if (search != null) {
 			boolean notEmpty = false;
-			String[] searchItems = search.split(" ");
+			String[] searchItems = search.replace("\'", "").replace("\"", "").split(" ");
 			for (int i = 0; i < searchItems.length; ++i) {
 				if (searchItems[i].isEmpty()) {
 					continue;
