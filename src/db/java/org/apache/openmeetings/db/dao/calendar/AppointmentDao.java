@@ -157,7 +157,7 @@ public class AppointmentDao {
 		if (mmList != null){
 			Appointment a0 = a.getId() == null ? null : get(a.getId());
 			for (MeetingMember mm : mmList) {
-				if (mm.getId() != null && !mmIds.contains(mm.getId())) {
+				if (mm.getId() == null || !mmIds.contains(mm.getId())) {
 					invitationManager.processInvitation(a, mm, MessageType.Create, baseUrl);
 				} else {
 					boolean sendMail = a0 == null || !a0.getTitle().equals(a.getTitle()) ||
