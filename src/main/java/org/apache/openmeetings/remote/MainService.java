@@ -169,7 +169,8 @@ public class MainService implements IPendingServiceCallback {
 		User u = userId == null ? null : usersDao.get(userId);
 		if (u != null) {
 			IConnection current = Red5.getConnectionLocal();
-			Client currentClient = sessionManager.getClientByStreamId(current.getClient().getId(), null);
+			String streamId = current.getClient().getId();
+			Client currentClient = sessionManager.getClientByStreamId(streamId, null);
 			
 			if (!u.getOrganisation_users().isEmpty()) {
 				u.setSessionData(sessiondataDao.getSessionByHash(wicketSID));
@@ -179,6 +180,7 @@ public class MainService implements IPendingServiceCallback {
 			
 				currentClient.setFirstname(u.getFirstname());
 				currentClient.setLastname(u.getLastname());
+				sessionManager.updateClientByStreamId(streamId, currentClient, false, null);
 				
 				scopeApplicationAdapter.syncMessageToCurrentScope("roomConnect", currentClient, false);
 				
@@ -192,8 +194,7 @@ public class MainService implements IPendingServiceCallback {
 		try {
 
 			log.debug("############### secureLoginByRemote " + secureHash);
-			System.out.println("############### secureLoginByRemote "
-					+ secureHash);
+			System.out.println("############### secureLoginByRemote " + secureHash);
 
 			String clientURL = Red5.getConnectionLocal().getRemoteAddress();
 
@@ -221,27 +222,21 @@ public class MainService implements IPendingServiceCallback {
 
 			IConnection current = Red5.getConnectionLocal();
 			String streamId = current.getClient().getId();
-			Client currentClient = this.sessionManager
-					.getClientByStreamId(streamId, null);
+			Client currentClient = sessionManager.getClientByStreamId(streamId, null);
 
 			if (currentClient.getUser_id() != null) {
 				sessiondataDao.updateUser(SID, currentClient.getUser_id());
 			}
 
 			currentClient.setAllowRecording(soapLogin.getAllowRecording());
-			this.sessionManager.updateClientByStreamId(streamId,
-					currentClient, false, null);
+			sessionManager.updateClientByStreamId(streamId, currentClient, false, null);
 
 			if (loginReturn == null) {
-
-				log.debug("loginReturn IS NULL for SID: "
-						+ soapLogin.getSessionHash());
+				log.debug("loginReturn IS NULL for SID: " + soapLogin.getSessionHash());
 
 				return -1L;
 			} else if (loginReturn < 0) {
-
-				log.debug("loginReturn IS < 0 for SID: "
-						+ soapLogin.getSessionHash());
+				log.debug("loginReturn IS < 0 for SID: " + soapLogin.getSessionHash());
 
 				return loginReturn;
 			} else {
@@ -260,18 +255,13 @@ public class MainService implements IPendingServiceCallback {
 				SOAPLogin returnSoapLogin = new SOAPLogin();
 
 				returnSoapLogin.setRoom_id(soapLogin.getRoom_id());
-				returnSoapLogin.setBecomemoderator(soapLogin
-						.getBecomemoderator());
-				returnSoapLogin.setShowAudioVideoTest(soapLogin
-						.getShowAudioVideoTest());
-				returnSoapLogin.setRoomRecordingId(soapLogin
-						.getRoomRecordingId());
-				returnSoapLogin.setShowNickNameDialog(soapLogin
-						.getShowNickNameDialog());
+				returnSoapLogin.setBecomemoderator(soapLogin.getBecomemoderator());
+				returnSoapLogin.setShowAudioVideoTest(soapLogin.getShowAudioVideoTest());
+				returnSoapLogin.setRoomRecordingId(soapLogin.getRoomRecordingId());
+				returnSoapLogin.setShowNickNameDialog(soapLogin.getShowNickNameDialog());
 				returnSoapLogin.setLandingZone(soapLogin.getLandingZone());
 
 				return returnSoapLogin;
-
 			}
 
 		} catch (Exception err) {

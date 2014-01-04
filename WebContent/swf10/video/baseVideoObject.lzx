@@ -230,12 +230,14 @@
 	    	}
 		]]>
 		</method>
+		
 		<method name="setVideouserProfilePic" args="value">
 			if ($debug) Debug.write("### setVideouserProfilePic ",value);
 			this.deleteVideoConfProfilePic();
 			new lz.videoUserProfilePicSWF10(this._chatvideoinner,{name:'userProfilePic',value:value});
 			this.showUserProfilePic = true;
 		</method>
+		
 		<method name="deleteVideoConfProfilePic">
 			if ($debug) Debug.write("### deleteVideoConfProfilePic ###");
 			if ($debug) Debug.write("delete ",this.showUserProfilePic);
