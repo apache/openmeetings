@@ -75,7 +75,8 @@ public class StreamAudioWriter extends BaseStreamWriter {
 					log.warn("Negative TimeStamp");
 					return;
 				}
-				if (isInterview && startTimeStamp == -1 && KEYFRAME != streampacket.getFrameType()) {
+				// we should not skip audio data in case it is Audio only interview
+				if (isInterview && isScreenData && startTimeStamp == -1 && KEYFRAME != streampacket.getFrameType()) {
 					//skip until keyframe
 					log.trace("no KEYFRAME, skipping");
 					return;

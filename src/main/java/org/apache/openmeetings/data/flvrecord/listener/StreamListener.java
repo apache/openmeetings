@@ -45,8 +45,7 @@ public class StreamListener implements IStreamListener {
 			boolean isScreenData, boolean isInterview, FlvRecordingMetaDataDao metaDataDao
 			, FlvRecordingMetaDeltaDao metaDeltaDao) {
 		streamWriter = isAudio
-			? new StreamAudioWriter(streamName, scope, metaDataId, isScreenData, isInterview, metaDataDao
-					, metaDeltaDao)
+			? new StreamAudioWriter(streamName, scope, metaDataId, isScreenData, isInterview, metaDataDao, metaDeltaDao)
 			: new StreamVideoWriter(streamName, scope, metaDataId, isScreenData, isInterview, metaDataDao);
 	}
 
@@ -61,6 +60,9 @@ public class StreamListener implements IStreamListener {
 				cachedEvent.setFrameType(((VideoData) streampacket).getFrameType());
 			}
 
+			if (log.isTraceEnabled()) {
+				log.trace("Packet recieved. type: {} frame type: {}", cachedEvent.getDataType(), cachedEvent.getFrameType());
+			}
 			streamWriter.append(cachedEvent);
 		} catch (Exception e) {
 			log.error("[packetReceived]", e);
