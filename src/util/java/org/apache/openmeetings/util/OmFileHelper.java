@@ -185,7 +185,8 @@ public class OmFileHelper {
 	
 	public static boolean isRecordingExists(String name) {
 		try {
-			return new File(getDir(getStreamsDir(), HIBERNATE_DIR), name).exists();
+			File f = new File(getDir(getStreamsDir(), HIBERNATE_DIR), name);
+			return f.exists() && f.isFile();
 		} catch (Exception e) {
 			//no-op
 		}
