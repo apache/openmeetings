@@ -20,6 +20,7 @@ package org.apache.openmeetings.web.user.record;
 
 import static org.apache.openmeetings.util.OmFileHelper.getMp4Recording;
 import static org.apache.openmeetings.util.OmFileHelper.getRecording;
+import static org.apache.openmeetings.util.OmFileHelper.isRecordingExists;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 
@@ -260,8 +261,8 @@ public class RecordingsPanel extends UserPanel {
 									, new MediaSource("" + getRequestCycle().urlFor(oggres, pp), "video/ogg")));
 						}
 						player.setVisible(videoExists);
-						target.add(video, info, dAVI.setEnabled(getRecording(r.getAlternateDownload()).exists()));
-						target.add(video, info, dFLV.setEnabled(getRecording(r.getFileHash()).exists()));
+						target.add(video, info, dAVI.setEnabled(isRecordingExists(r.getAlternateDownload())));
+						target.add(video, info, dFLV.setEnabled(isRecordingExists(r.getFileHash())));
 						updateNode(r, target);
 					}
 				}
