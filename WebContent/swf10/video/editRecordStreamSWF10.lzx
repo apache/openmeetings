@@ -322,14 +322,14 @@
 		if ($debug) Debug.write("BroadcastId: ", this.currentClient.broadCastID);
 		switch (settings){
 			case "s":
-				this.myvideocontainer.setAttribute("visibility","hidden");
+				this.myvideocontainer.setAttribute("visible", false);
 				break;
 			case "vs":
 				videoview.broadcast(this.currentClient.broadCastID,_camera,null);
+				this.myvideocontainer.setAttribute("visible", true);
 				if(canvas.isInterview) {
 					canvas.videoComp_lc.send(canvas.videoComp_lc_name, "onStartBroadcast", this.currentClient.broadCastID, settings);
 				} else {
-					this.myvideocontainer.setAttribute("visibility","visible");
 					if (this.myvideocontainer.minimized) {
 						this.myvideocontainer.reminimize();
 					}
@@ -337,10 +337,10 @@
 				break;
 			case "av":
 				videoview.broadcast(this.currentClient.broadCastID,_camera,_micro);
+				this.myvideocontainer.setAttribute("visible", true);
 				if(canvas.isInterview) {
 					canvas.videoComp_lc.send(canvas.videoComp_lc_name, "onStartBroadcast", this.currentClient.broadCastID, settings);
 				} else {
-					this.myvideocontainer.setAttribute("visibility","visible");
 					if (this.myvideocontainer.minimized) {
 						this.myvideocontainer.reminimize();
 					}
@@ -348,13 +348,11 @@
 				break;
 			case "a":
 				videoview.broadcast(this.currentClient.broadCastID,null,_micro);
+				this.myvideocontainer.setAttribute("visible", canvas.isInterview || !this.myvideocontainer.hidebyAudioOnly);
 				if(canvas.isInterview) {
 					canvas.videoComp_lc.send(canvas.videoComp_lc_name, "onStartBroadcast", this.currentClient.broadCastID, settings);
 				} else {
-					if (this.myvideocontainer.hidebyAudioOnly) {
-						this.myvideocontainer.setAttribute("visibility","hidden");
-					} else {
-						this.myvideocontainer.setAttribute("visibility","visible");
+					if (!this.myvideocontainer.hidebyAudioOnly) {
 						if (!this.myvideocontainer.minimized) {
 							this.myvideocontainer.minimize();
 						}
@@ -363,10 +361,10 @@
 				break;
 			case "v":
 				videoview.broadcast(this.currentClient.broadCastID,_camera,null);
+				this.myvideocontainer.setAttribute("visible", true);
 				if(canvas.isInterview) {
 					canvas.videoComp_lc.send(canvas.videoComp_lc_name, "onStartBroadcast", this.currentClient.broadCastID, settings);
 				} else {
-					this.myvideocontainer.setAttribute("visibility","visible");
 					if (this.myvideocontainer.minimized) {
 						this.myvideocontainer.reminimize();
 					}

@@ -37,6 +37,12 @@
         	//FIXME: Throws a Null Pointer Exception if the parent view was already destroyed
         	t.parent.as3ConnectionSuccess();
         }
+		canvas.videoComp_lc.onInterviewPodCount = function(count) {
+			//if ($debug) Debug.write(":::: onInterviewPodCount", count);
+			if (canvas._drawarea["onInterviewPodCount"]) {
+				canvas._drawarea.onInterviewPodCount(count);
+			}
+		}
     </handler>
     
     <!---

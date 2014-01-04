@@ -21,21 +21,50 @@
 <library>
     
 <class name="interviewWhiteboard" extends="view" clip="true">
-        
-    <handler name="oninit">
-        canvas._drawarea = this;
-        this.reloadStatus();
+	<attribute name="checkPodsDelegate" value="null"/>
+	        
+	<handler name="oninit">
+	<![CDATA[
+		canvas._drawarea = this;
+		if (checkPodsDelegate == null && !_recStarted.visible) {
+			checkPodsDelegate = new LzDelegate(this, "checkPods");
+			lz.Timer.addTimer(checkPodsDelegate, 1000);
+		}
+		this.reloadStatus();
+	]]>
+	</handler>
+    
+    <handler name="ondestroy">
+		stopPodChecks();
     </handler>
+    
     <handler name="onopenWhiteBoard" >
         if ($debug) Debug.write("-- onOpenWhiteBoard --");
     </handler>
     
-    <method name="newInterviewStarting" args="refObj">
-        <![CDATA[
-           this._videoviewcontent["interviewVideoBox"+refObj.interviewPodId].startInterView();
-        ]]>
-    </method>
-        
+	<method name="newInterviewStarting" args="refObj">
+	<![CDATA[
+		this._videoviewcontent["interviewVideoBox"+refObj.interviewPodId].startInterView();
+	]]>
+	</method>
+	
+	<method name="stopPodChecks">
+		if (checkPodsDelegate != null) {
+			lz.Timer.removeTimer(checkPodsDelegate);
+			checkPodsDelegate = null;
+		}
+	</method>
+
+	<method name="onInterviewPodCount" args="count">
+		_interview._start.setAttribute("enabled", count > 0);
+	</method>
+	
+	<method name="checkPods" args="ignore=null">
+		//if ($debug) Debug.write(":: Pods :: check :: ");
+		canvas.sendViaLocalConnection(canvas.vid_lc_name, "getVideoObjectCount", [null]);
+		lz.Timer.resetTimer(checkPodsDelegate, 1000);
+	</method>
+	
     <method name="reloadStatus">
         this.getInterviewRecordingStatus.doCall();
     </method>
@@ -67,7 +96,6 @@
     </commonVideoViewContent>
     
     <view name="_interview" align="center" visible="${ canvas.ismoderator }">
-        
         <!--
            public synchronized Boolean startInterviewRecording()
          -->

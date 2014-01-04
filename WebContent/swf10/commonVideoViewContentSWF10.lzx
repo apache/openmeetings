@@ -49,6 +49,7 @@
             client.getVideoObjectByPublicSID = this.getVideoObjectByPublicSID;
             client.getNewVideoObject = this.getNewVideoObject;
             client.getVideoObjectFreePos = this.getVideoObjectFreePos;
+            client.getVideoObjectCount = this.getVideoObjectCount;
             client.disconnectclient = this.disconnectclient;
             client.resetAllValues = this.resetAllValues;
             client.closeStreamClient = this.closeStreamClient;
@@ -142,7 +143,7 @@
                     vidContainer.setVideouserProfilePic(object);
                     if ($debug) Debug.warn("start play");
                     vidContainer._chatvideoinner._videostream.playStream(broadcastId,-1);
-                    vidContainer.setAttribute("visibility","hidden");
+                    vidContainer.setAttribute("visible", false);
                 } else if (avsettings=="v" || avsettings=="av") {
                     //this means avsettings is either: "v" or "av"
                 	vidContainer.setDefaultVideoSize(object.VWidth,object.VHeight);
@@ -235,6 +236,19 @@
             return null;
         ]]>
     </method>
+
+	<method name="getVideoObjectCount" args="a">
+	<![CDATA[
+		var count = 0;
+		for (var i = 0; i < this.subviews.length; ++i) {
+			if (this.subviews[i].visible) {
+				count++;
+			}
+		}
+		//if ($debug) Debug.debug("COUNT :: ", count);
+		canvas.videoComp_lc.send(canvas.videoComp_lc_name, 'onInterviewPodCount', count);
+	]]>
+	</method>
 
     <method name="getVideoObjectFreePos" args="offsetLength,videoWidth,videoHeight">
         <![CDATA[
@@ -366,27 +380,29 @@
 	]]>
 	</method>
 
-    <method name="setAVSettingsToClient" args="rcl">
-        if ($debug) Debug.write("setAVSettingsToClient ",rcl.publicSID,rcl);
-        var obj = this.getVideoObjectByPublicSID(rcl.publicSID);
-        if ($debug) Debug.write("setAVSettingsToClient: ",obj,rcl.avsettings);
-        if (obj == null) {
-    		obj = this.getNewVideoObjectByPos(rcl.publicSID);
-        }
-        if (rcl.avsettings=="n"){
-            obj.setAttribute("visibility","hidden");
-            obj.setVideouserProfilePic(rcl);
-        } else if (rcl.avsettings=="a"){
-            obj.setVideouserProfilePic(rcl);
-            obj.setAttribute("visibility","hidden");
-        } else {
-            obj.deleteVideoConfProfilePic();
-            obj.setAttribute("visibility","visible");
-        }
-        obj.thisVars = rcl;
-        obj.updateAVSettingsSymbol(rcl);
-        return;
-    </method>
+	<method name="setAVSettingsToClient" args="rcl">
+	<![CDATA[
+		if ($debug) Debug.write("setAVSettingsToClient: ", rcl.publicSID, rcl);
+		var obj = this.getVideoObjectByPublicSID(rcl.publicSID);
+		if ($debug) Debug.write("setAVSettingsToClient: ", obj, rcl.avsettings);
+		if (obj == null) {
+			obj = this.getNewVideoObjectByPos(rcl.publicSID);
+		}
+		if ("n" == rcl.avsettings){
+			obj.setVideouserProfilePic(rcl);
+		} else if ("a" == rcl.avsettings){
+			obj.setVideouserProfilePic(rcl);
+		} else {
+			obj.deleteVideoConfProfilePic();
+		}
+		obj.thisVars = rcl;
+		obj.updateAVSettingsSymbol(rcl);
+		var v = ("a" == rcl.avsettings && obj.isInterview) || ("a" != rcl.avsettings && rcl.avsettings != "n");
+		obj.setAttribute("visible", v);
+		obj.setAttribute("visibility", v ? "visible" : "hidden");
+		if ($debug) Debug.write("setAVSettingsToClient: ", v, obj.visible);
+	]]>
+	</method>
 
     <method name="startStream" args="publicSID,broadcastId,firstname,lastname,interviewPodId,width,height">
         <![CDATA[

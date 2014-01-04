@@ -572,31 +572,30 @@
         </handler>   
     </netRemoteCallHib>
     
-    <netRemoteCallHib name="getRoomById" funcname="conferenceservice.getRoomById" >          
-        <netparam name="sessionId"><method name="getValue">return canvas.sessionId;</method></netparam>
-        <netparam name="roomId"><method name="getValue">return canvas.initroomid;</method></netparam>
-        <handler name="ondata" args="value">
-            <![CDATA[
-                //The onResult-Handler will be called be the rtmpconnection
-                if ($debug) Debug.write("getRoomById: ",value);
-                if (value!=null){
-                	if (canvas.wicketsid != null) {
-                		canvas.thishib.loaderVar.close();
-                	}
-                    if (canvas.directUserLogin) {
-                        canvas.directRoomObj = value;
-                        canvas.thishib.loaderVar.close();
-                        
-                    } else {
-                       canvas.setRoomValues(value.roomtype.roomtypes_id,value.rooms_id,value);
-                       canvas.sendViaLocalConnection(canvas.rtmp_lc_name,"setRoomValues",[value.roomtype.roomtypes_id,value.rooms_id,value]);
-                    }
-                } else {
-                    new lz.labelerrorPopup(canvas,{errorlabelid:1286});
-                }
-            ]]>
-        </handler>   
-    </netRemoteCallHib>
+	<netRemoteCallHib name="getRoomById" funcname="conferenceservice.getRoomById" >          
+		<netparam name="sessionId"><method name="getValue">return canvas.sessionId;</method></netparam>
+		<netparam name="roomId"><method name="getValue">return canvas.initroomid;</method></netparam>
+		<handler name="ondata" args="value">
+		<![CDATA[
+			//The onResult-Handler will be called be the rtmpconnection
+			if ($debug) Debug.write("getRoomById: ",value);
+			if (value!=null){
+				if (canvas.wicketsid != null) {
+					canvas.thishib.loaderVar.close();
+				}
+				if (canvas.directUserLogin) {
+					canvas.directRoomObj = value;
+					canvas.thishib.loaderVar.close();
+				} else {
+					canvas.setRoomValues(value.roomtype.roomtypes_id,value.rooms_id,value);
+					canvas.sendViaLocalConnection(canvas.rtmp_lc_name,"setRoomValues",[value.roomtype.roomtypes_id,value.rooms_id,value]);
+				}
+			} else {
+				new lz.labelerrorPopup(canvas,{errorlabelid:1286});
+			}
+		]]>
+		</handler>
+	</netRemoteCallHib>
         
     <netRemoteCallHib name="getLanguageByIdAndMax" funcname="languageservice.getLanguageByIdAndMax" >
         <attribute name="start" value="0" type="number" />
@@ -628,7 +627,11 @@
                     } else {
                     	if($debug) Debug.write("getStates");
                         parent.initlanguageLoaded=true;
-                        parent.getStates.doCall();
+                        parent.getStates.doCall(); // this is very long call let it be async
+                    	if($debug) Debug.write("getTimeZones");
+			            parent.getTimeZones.doCall(); // this is very long call let it be async
+                    	if($debug) Debug.write("getGeneralOptions");
+			            parent.getGeneralOptions.doCall();
                     }
                 }
             ]]>
@@ -694,8 +697,6 @@
 			if (canvas.thishib.loaderVar != null) {
             	canvas.thishib.loaderVar.setProgress();
             }
-            parent.getTimeZones.doCall(); // this is very long call let it be async
-            parent.getGeneralOptions.doCall();
         </handler>  
     </netRemoteCallHib>  
     
