@@ -63,10 +63,8 @@ public class GenerateImage extends BaseConverter {
 
 		log.debug("##### convertImage destinationFile: " + destinationFile);
 
-		ConverterProcessResult processJPG = this.convertSingleJpg(
-				fileFullPath.getCanonicalPath(), destinationFile);
-		ConverterProcessResult processThumb = generateThumbs.generateThumb(
-				thumbImagePrefix, destinationFile, 50);
+		ConverterProcessResult processJPG = convertSingleJpg(fileFullPath.getCanonicalPath(), destinationFile);
+		ConverterProcessResult processThumb = generateThumbs.generateThumb(thumbImagePrefix, destinationFile, 50);
 
 		returnMap.addItem("processJPG", processJPG);
 		returnMap.addItem("processThumb", processThumb);
@@ -124,22 +122,14 @@ public class GenerateImage extends BaseConverter {
 	private ConverterProcessResult convertSingleJpg(String inputFile, File outputfile) throws IOException {
 		String[] argv = new String[] { getPathToImageMagick(), inputFile, outputfile.getCanonicalPath() };
 
-		// return GenerateSWF.executeScript("convertSingleJpg", argv);
-
-		if (System.getProperty("os.name").toUpperCase().indexOf("WINDOWS") == -1) {
-			return ProcessHelper.executeScript("generateBatchThumbByWidth", argv);
-		} else {
-			return generateThumbs.processImageWindows(argv);
-		}
-
+		return ProcessHelper.executeScript("generateBatchThumbByWidth", argv);
 	}
 
 	public ConverterProcessResult convertImageByTypeAndSize(String inputFile,
 			String outputfile, int width, int height) {
 		String[] argv = new String[] { getPathToImageMagick(), "-size",
 				width + "x" + height, inputFile, outputfile };
-		return ProcessHelper.executeScript("convertImageByTypeAndSizeAndDepth",
-				argv);
+		return ProcessHelper.executeScript("convertImageByTypeAndSizeAndDepth", argv);
 	}
 
 	public ConverterProcessResult convertImageByTypeAndSizeAndDepth(
@@ -148,8 +138,7 @@ public class GenerateImage extends BaseConverter {
 		String[] argv = new String[] { getPathToImageMagick(), "-size",
 				width + "x" + height, "-depth", Integer.toString(depth),
 				inputFile, outputfile };
-		return ProcessHelper.executeScript("convertImageByTypeAndSizeAndDepth",
-				argv);
+		return ProcessHelper.executeScript("convertImageByTypeAndSizeAndDepth", argv);
 	}
 
 }

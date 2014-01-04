@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.converter;
 
+import static org.apache.openmeetings.util.OmFileHelper.getStreamsHibernateDir;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
 import java.io.File;
@@ -127,7 +128,7 @@ public class FlvInterviewConverter extends BaseConverter {
 			stripAudioFirstPass(flvRecording, returnLog, listOfFullWaveFiles, streamFolder, metaDataList);
 		
 			// Merge Wave to Full Length
-			File streamFolderGeneral = getStreamFolder();
+			File streamFolderGeneral = getStreamsHibernateDir();
 
 			String hashFileFullName = "INTERVIEW_" + flvRecording.getFlvRecordingId() + "_FINAL_WAVE.wav";
 			String outputFullWav = streamFolder.getAbsolutePath() + File.separatorChar + hashFileFullName;
@@ -145,16 +146,7 @@ public class FlvInterviewConverter extends BaseConverter {
 					argv_full_sox = mergeAudioToWaves(listOfFullWaveFiles, outputFullWav);
 				}
 
-				log.debug("START mergeAudioToWaves ################# ");
-				log.debug(argv_full_sox.toString());
-				String iString = "";
-				for (int i = 0; i < argv_full_sox.length; i++) {
-					iString += argv_full_sox[i] + " ";
-				}
-				log.debug(iString);
-				log.debug("END mergeAudioToWaves ################# ");
-
-				returnLog.add(ProcessHelper.executeScript("mergeWave", argv_full_sox));
+				returnLog.add(ProcessHelper.executeScript("mergeAudioToWaves", argv_full_sox));
 			} else {
 
 				// create default Audio to merge it.
@@ -169,15 +161,7 @@ public class FlvInterviewConverter extends BaseConverter {
 				String[] argv_full_sox = new String[] { getPathToSoX(), outputWav.getCanonicalPath(),
 						outputFullWav, "pad", "0", deltaPadding.toString() };
 
-				log.debug("START generateSampleAudio ################# ");
-				String tString = "";
-				for (int i = 0; i < argv_full_sox.length; i++) {
-					tString += argv_full_sox[i] + " ";
-				}
-				log.debug(tString);
-				log.debug("END generateSampleAudio ################# ");
-
-				returnLog.add(ProcessHelper.executeScript("mergeWave", argv_full_sox));
+				returnLog.add(ProcessHelper.executeScript("generateSampleAudio", argv_full_sox));
 
 			}
 			// Default Image for empty interview video pods
@@ -269,15 +253,6 @@ public class FlvInterviewConverter extends BaseConverter {
 					"-vcodec", "flv", //
 					"-r", "" + frameRate, "-qmax", "1", "-qmin", "1", "-y", outputFullFlv};
 
-			log.debug("START generateFullFLV ################# ");
-			String tString = "";
-			for (int i = 0; i < argv_fullFLV.length; i++) {
-				tString += argv_fullFLV[i] + " ";
-				// log.debug(" i " + i + " argv-i " + argv_fullFLV[i]);
-			}
-			log.debug(tString);
-			log.debug("END generateFullFLV ################# ");
-
 			returnLog.add(ProcessHelper.executeScript("generateFullFLV", argv_fullFLV));
 
 			flvRecording.setFileHash(hashFileFullNameFlv);
@@ -351,13 +326,6 @@ public class FlvInterviewConverter extends BaseConverter {
 		} catch (Exception err) {
 			log.error("[startConversion]", err);
 		}
-	}
-
-	public ConverterProcessResult thumbProcessImageWindows(String file1, String file2, String file3) {
-		// Init variables
-		String[] cmd = { getPathToImageMagick(), file1, file2, "+append", file3 };
-
-		return generateThumbs.processImageWindows(cmd);
 	}
 
 	public ConverterProcessResult processImageWindows(String file1, String file2, String file3) {

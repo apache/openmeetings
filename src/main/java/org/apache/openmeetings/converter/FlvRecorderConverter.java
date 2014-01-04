@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.converter;
 
+import static org.apache.openmeetings.util.OmFileHelper.getStreamsHibernateDir;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
 import java.io.File;
@@ -77,7 +78,7 @@ public class FlvRecorderConverter extends BaseConverter {
 			stripAudioFirstPass(flvRecording, returnLog, listOfFullWaveFiles, streamFolder);
 
 			// Merge Wave to Full Length
-			String streamFolderGeneralName = getStreamFolder().getCanonicalPath() + File.separator; // FIXME
+			String streamFolderGeneralName = getStreamsHibernateDir().getCanonicalPath() + File.separator; // FIXME
 
 			FlvRecordingMetaData flvRecordingMetaDataOfScreen = flvRecordingMetaDataDaoImpl
 					.getFlvRecordingMetaDataScreenFlvByRecording(flvRecording.getFlvRecordingId());
@@ -125,20 +126,11 @@ public class FlvRecorderConverter extends BaseConverter {
 
 				String[] argv_full_sox = mergeAudioToWaves(listOfFullWaveFiles, outputFullWav);
 
-				log.debug("START mergeAudioToWaves ################# ");
-				log.debug(argv_full_sox.toString());
-				String iString = "";
-				for (int i = 0; i < argv_full_sox.length; i++) {
-					iString += argv_full_sox[i] + " ";
-				}
-				log.debug(iString);
-				log.debug("END mergeAudioToWaves ################# ");
-
 				flvRecordingMetaDataOfScreen.setFullWavAudioData(hashFileFullName);
 
 				flvRecordingMetaDataDaoImpl.update(flvRecordingMetaDataOfScreen);
 
-				returnLog.add(ProcessHelper.executeScript("mergeWave", argv_full_sox));
+				returnLog.add(ProcessHelper.executeScript("mergeAudioToWaves", argv_full_sox));
 			} else {
 
 				// create default Audio to merge it.
@@ -153,20 +145,9 @@ public class FlvRecorderConverter extends BaseConverter {
 				String[] argv_full_sox = new String[] { getPathToSoX(), outputWav, outputFullWav, "pad", "0",
 						deltaPadding.toString() };
 
-				log.debug("START generateSampleAudio ################# ");
-				String tString = "";
-				for (int i = 0; i < argv_full_sox.length; i++) {
-					tString += argv_full_sox[i] + " ";
-				}
-				log.debug(tString);
-				log.debug("END generateSampleAudio ################# ");
-
 				flvRecordingMetaDataOfScreen.setFullWavAudioData(hashFileFullName);
-
 				flvRecordingMetaDataDaoImpl.update(flvRecordingMetaDataOfScreen);
-
-				returnLog.add(ProcessHelper.executeScript("mergeWave", argv_full_sox));
-
+				returnLog.add(ProcessHelper.executeScript("generateSampleAudio", argv_full_sox));
 			}
 
 			// Merge Audio with Video / Calculate resulting FLV
@@ -207,15 +188,6 @@ public class FlvRecorderConverter extends BaseConverter {
 					"-map", "1" + FFMPEG_MAP_PARAM + "0", //
 					outputFullFlv };
 
-			log.debug("START generateFullFLV ################# ");
-			String tString = "";
-			for (int i = 0; i < argv_fullFLV.length; i++) {
-				tString += argv_fullFLV[i] + " ";
-				// log.debug(" i " + i + " argv-i " + argv_fullFLV[i]);
-			}
-			log.debug(tString);
-			log.debug("END generateFullFLV ################# ");
-
 			returnLog.add(ProcessHelper.executeScript("generateFullFLV", argv_fullFLV));
 
 			flvRecording.setFileHash(hashFileFullNameFlv);
@@ -238,31 +210,13 @@ public class FlvRecorderConverter extends BaseConverter {
 					"-s", flvWidth + "x" + flvHeight, //
 					outPutJpeg };
 
-			log.debug("START previewFullFLV ################# ");
-			log.debug(argv_previewFLV.toString());
-			String kString = "";
-			for (int i = 0; i < argv_previewFLV.length; i++) {
-				kString += argv_previewFLV[i] + " ";
-			}
-			log.debug(kString);
-			log.debug("END previewFullFLV ################# ");
-
-			returnLog.add(ProcessHelper.executeScript("generateFullFLV", argv_previewFLV));
+			returnLog.add(ProcessHelper.executeScript("previewFullFLV", argv_previewFLV));
 
 			String alternateDownloadName = "flvRecording_" + flvRecording.getFlvRecordingId() + ".avi";
 			String alternateDownloadFullName = streamFolderGeneralName + alternateDownloadName;
 
 			String[] argv_alternateDownload = new String[] { getPathToFFMPEG(), "-i", outputFullFlv, "-vcodec",
 					"copy", alternateDownloadFullName };
-
-			log.debug("START alternateDownLoad ################# ");
-			log.debug(argv_previewFLV.toString());
-			String sString = "";
-			for (int i = 0; i < argv_alternateDownload.length; i++) {
-				sString += argv_alternateDownload[i] + " ";
-			}
-			log.debug(sString);
-			log.debug("END alternateDownLoad ################# ");
 
 			returnLog.add(ProcessHelper.executeScript("alternateDownload", argv_alternateDownload));
 

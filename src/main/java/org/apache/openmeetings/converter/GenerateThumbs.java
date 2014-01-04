@@ -18,21 +18,21 @@
  */
 package org.apache.openmeetings.converter;
 
+import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+
 import java.io.File;
 import java.io.IOException;
 
-import org.apache.openmeetings.util.OpenmeetingsVariables;
 import org.apache.openmeetings.util.process.ConverterProcessResult;
 import org.apache.openmeetings.util.process.ProcessHelper;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 
 public class GenerateThumbs extends BaseConverter {
-
-	private static final Logger log = Red5LoggerFactory
-			.getLogger(GenerateThumbs.class, OpenmeetingsVariables.webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(GenerateThumbs.class, webAppRootKey);
 
 	public ConverterProcessResult generateThumb(String pre, File f, Integer thumbSize) throws IOException {
+		log.debug("generateThumb");
 		// Init variables
 		String name = f.getName();
 		File parent = f.getParentFile();
@@ -45,76 +45,38 @@ public class GenerateThumbs extends BaseConverter {
 			, new File(parent, pre + name).getCanonicalPath()
 			};
 
-		log.debug("START generateThumb ################# ");
-		for (int i = 0; i < argv.length; i++) {
-			log.debug(" i " + i + " argv-i " + argv[i]);
-		}
-		log.debug("END generateThumb ################# ");
-
-		if (System.getProperty("os.name").toUpperCase().indexOf("WINDOWS") == -1) {
-			return ProcessHelper.executeScript("generateBatchThumbByWidth", argv);
-		} else {
-			return this.processImageWindows(argv);
-		}
+		return ProcessHelper.executeScript("generateBatchThumbByWidth", argv);
 	}
 
 	public ConverterProcessResult decodePDF(String inputfile, String outputfile) {
+		log.debug("decodePDF");
+		String[] argv = new String[] { getPathToImageMagick(), inputfile, outputfile };
 
-		String[] argv = new String[] { getPathToImageMagick(),
-				inputfile, outputfile };
-
-		if (System.getProperty("os.name").toUpperCase().indexOf("WINDOWS") == -1) {
-			return ProcessHelper.executeScript("generateBatchThumbByWidth", argv);
-		} else {
-			return this.processImageWindows(argv);
-		}
-
+		return ProcessHelper.executeScript("generateBatchThumbByWidth", argv);
 	}
 
 	public ConverterProcessResult generateBatchThumb(File inputfile, File outputpath, Integer thumbSize, String pre) throws IOException {
+		log.debug("generateBatchThumbByWidth");
+		String[] argv = new String[] {
+			getPathToImageMagick()
+			, "-thumbnail" // FIXME
+			, Integer.toString(thumbSize)
+			, inputfile.getCanonicalPath()
+			, new File(outputpath, "_" + pre + "_page-%04d.jpg").getCanonicalPath()
+			};
 
-		if (System.getProperty("os.name").toUpperCase().indexOf("WINDOWS") == -1) {
-			String[] argv = new String[] {
-				getPathToImageMagick()
-				, "-thumbnail" // FIXME
-				, Integer.toString(thumbSize)
-				, inputfile.getCanonicalPath()
-				, new File(outputpath, "_" + pre + "_page-%04d.jpg").getCanonicalPath()
-				};
-
-			return ProcessHelper.executeScript("generateBatchThumbByWidth", argv);
-		} else {
-
-			String[] argv = new String[] {
-				getPathToImageMagick()
-				, "-thumbnail" // FIXME
-				, Integer.toString(thumbSize)
-				, inputfile.getCanonicalPath()
-				, new File(outputpath, "_" + pre + "_page-%04d.jpg").getCanonicalPath()
-				};
-
-			// return GenerateSWF.executeScript("generateBatchThumbByWidth",
-			// argv);
-			return this.processImageWindows(argv);
-		}
+		return ProcessHelper.executeScript("generateBatchThumbByWidth", argv);
 	}
 
 	public ConverterProcessResult generateImageBatchByWidth(
 			String current_dir, String inputfile, String outputpath,
 			Integer thumbWidth, String pre) {
+		log.debug("generateImageBatchByWidth");
 
 		String[] argv = new String[] { getPathToImageMagick(),
 				"-resize", Integer.toString(thumbWidth), inputfile,
 				outputpath + "_" + pre + "_page.png" };
 
-		if (System.getProperty("os.name").toUpperCase().indexOf("WINDOWS") == -1) {
-			return ProcessHelper.executeScript("generateBatchThumbByWidth", argv);
-		} else {
-			return this.processImageWindows(argv);
-		}
-	}
-
-	public ConverterProcessResult processImageWindows(String[] args) {
-		return ProcessHelper.executeScriptWindows("processImageWindows", args);
+		return ProcessHelper.executeScript("generateImageBatchByWidth", argv);
 	}
 }

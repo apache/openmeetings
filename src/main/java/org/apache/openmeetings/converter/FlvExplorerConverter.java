@@ -18,6 +18,8 @@
  */
 package org.apache.openmeetings.converter;
 
+import static org.apache.openmeetings.util.OmFileHelper.getStreamsHibernateDir;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -57,15 +59,12 @@ public class FlvExplorerConverter extends BaseConverter {
 	public List<ConverterProcessResult> startConversion(Long fileExplorerItemId, String moviePath) {
 		List<ConverterProcessResult> returnLog = new ArrayList<ConverterProcessResult>();
 		try {
+			FileExplorerItem fileExplorerItem = fileExplorerItemDaoImpl.getFileExplorerItemsById(fileExplorerItemId);
 
-			FileExplorerItem fileExplorerItem = this.fileExplorerItemDaoImpl
-					.getFileExplorerItemsById(fileExplorerItemId);
-
-			log.debug("fileExplorerItem "
-					+ fileExplorerItem.getFileExplorerItemId());
+			log.debug("fileExplorerItem " + fileExplorerItem.getFileExplorerItemId());
 
 			//  Convert to FLV
-			return this.convertToFLV(fileExplorerItem, moviePath);
+			return convertToFLV(fileExplorerItem, moviePath);
 
 			// Add empty pieces at the beginning and end of the wav
 			// FIXME: Is this really needed anymore?!
@@ -76,35 +75,22 @@ public class FlvExplorerConverter extends BaseConverter {
 		}
 
 		return returnLog;
-
 	}
 
-	private List<ConverterProcessResult> convertToFLV(FileExplorerItem fileExplorerItem,
-			String moviePath) {
+	private List<ConverterProcessResult> convertToFLV(FileExplorerItem fileExplorerItem, String moviePath) {
 		List<ConverterProcessResult> returnLog = new ArrayList<ConverterProcessResult>();
 		try {
 			String name = "UPLOADFLV_" + fileExplorerItem.getFileExplorerItemId();
-			File outputFullFlv = new File(getStreamFolder(), name + ".flv");
+			File outputFullFlv = new File(getStreamsHibernateDir(), name + ".flv");
 
 			fileExplorerItem.setIsVideo(true);
 
-			String[] argv_fullFLV = null;
-
-			argv_fullFLV = new String[] { getPathToFFMPEG(), "-i", moviePath,
+			String[] argv_fullFLV = new String[] { getPathToFFMPEG(), "-i", moviePath,
 					"-ar", "22050", "-acodec", "libmp3lame", "-ab", "32k",
 					"-vcodec", "flv",
 					outputFullFlv.getCanonicalPath() };
 			// "-s", flvWidth + "x" + flvHeight, 
 
-			log.debug("START generateFullFLV ################# ");
-			String tString = "";
-			for (int i = 0; i < argv_fullFLV.length; i++) {
-				tString += argv_fullFLV[i] + " ";
-				// log.debug(" i " + i + " argv-i " + argv_fullFLV[i]);
-			}
-			log.debug(tString);
-			log.debug("END generateFullFLV ################# ");
-			
 			ConverterProcessResult returnMapConvertFLV = ProcessHelper.executeScript("uploadFLV ID :: "
 					+ fileExplorerItem.getFileExplorerItemId(), argv_fullFLV);
 			
@@ -119,9 +105,8 @@ public class FlvExplorerConverter extends BaseConverter {
 
 			returnLog.add(returnMapConvertFLV);
 
-			String hashFileFullNameJPEG = "UPLOADFLV_"
-					+ fileExplorerItem.getFileExplorerItemId() + ".jpg";
-			File outPutJpeg = new File(getStreamFolder(), name + ".jpg");
+			String hashFileFullNameJPEG = "UPLOADFLV_" + fileExplorerItem.getFileExplorerItemId() + ".jpg";
+			File outPutJpeg = new File(getStreamsHibernateDir(), name + ".jpg");
 
 			fileExplorerItem.setPreviewImage(hashFileFullNameJPEG);
 
@@ -130,29 +115,15 @@ public class FlvExplorerConverter extends BaseConverter {
 					"-f", "rawvideo", "-s", flvWidth + "x" + flvHeight,
 					outPutJpeg.getCanonicalPath() };
 
-			log.debug("START previewFullFLV ################# ");
-			log.debug(argv_previewFLV.toString());
-			String kString = "";
-			for (int i = 0; i < argv_previewFLV.length; i++) {
-				kString += argv_previewFLV[i] + " ";
-				// log.debug(" i " + i + " argv-i " + argv_previewFLV[i]);
-			}
-			log.debug(kString);
-			log.debug("END previewFullFLV ################# ");
-
 			returnLog.add(ProcessHelper.executeScript("previewUpload ID :: "
 							+ fileExplorerItem.getFileExplorerItemId(),
 							argv_previewFLV));
 
-			this.fileExplorerItemDaoImpl.updateFileOrFolder(fileExplorerItem);
+			fileExplorerItemDaoImpl.updateFileOrFolder(fileExplorerItem);
 
 			for (ConverterProcessResult returnMap : returnLog) {
-				this.flvRecordingLogDaoImpl.addFLVRecordingLog(
-						"generateFFMPEG", null, returnMap);
+				flvRecordingLogDaoImpl.addFLVRecordingLog("generateFFMPEG", null, returnMap);
 			}
-			
-			
-
 		} catch (Exception err) {
 			log.error("[convertToFLV]", err);
 			returnLog.add(new ConverterProcessResult("convertToFLV", err.getMessage(), err));

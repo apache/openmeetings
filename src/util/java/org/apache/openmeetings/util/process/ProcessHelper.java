@@ -92,6 +92,18 @@ public class ProcessHelper {
 		}
 	}
 	
+	private static void debugCommand(String desc, String[] argv) {
+		if (log.isDebugEnabled()) {
+			log.debug("START " + desc + " ################# ");
+			String tString = "";
+			for (int i = 0; i < argv.length; i++) {
+				tString += argv[i] + " ";
+			}
+			log.debug(tString);
+			log.debug("END " + desc + " ################# ");
+		}
+	}
+	
 	public static ConverterProcessResult executeScript(String process, String[] argv) {
 		Map<String, String> env = new HashMap<String, String>();
 		return executeScript(process, argv, env);
@@ -101,8 +113,7 @@ public class ProcessHelper {
 			String[] argv, Map<? extends String, ? extends String> env) {
 		ConverterProcessResult returnMap = new ConverterProcessResult();
 		returnMap.setProcess(process);
-		log.debug("process: " + process);
-		log.debug("args: " + Arrays.toString(argv));
+		debugCommand(process, argv);
 	
 		try {
 			returnMap.setCommand(Arrays.toString(argv));

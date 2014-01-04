@@ -20,6 +20,9 @@ package org.apache.openmeetings.converter;
 
 import static org.apache.openmeetings.util.OmFileHelper.MP4_EXTENSION;
 import static org.apache.openmeetings.util.OmFileHelper.OGG_EXTENSION;
+import static org.apache.openmeetings.util.OmFileHelper.getRecording;
+import static org.apache.openmeetings.util.OmFileHelper.getStreamsSubDir;
+import static org.apache.openmeetings.util.OmFileHelper.isRecordingExists;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
 import java.io.File;
@@ -32,7 +35,6 @@ import org.apache.openmeetings.db.dao.record.FlvRecordingMetaDeltaDao;
 import org.apache.openmeetings.db.entity.record.FlvRecording;
 import org.apache.openmeetings.db.entity.record.FlvRecordingMetaData;
 import org.apache.openmeetings.db.entity.record.FlvRecordingMetaDelta;
-import org.apache.openmeetings.util.OmFileHelper;
 import org.apache.openmeetings.util.process.ConverterProcessResult;
 import org.apache.openmeetings.util.process.ProcessHelper;
 import org.red5.logging.Red5LoggerFactory;
@@ -75,12 +77,8 @@ public abstract class BaseConverter {
 				"use.old.style.ffmpeg.map.option", String.class, "0"));
 	}
 	
-	protected File getStreamFolder() {
-		return OmFileHelper.getStreamsHibernateDir();
-	}
-
 	protected File getStreamFolder(FlvRecording flvRecording) {
-		return OmFileHelper.getStreamsSubDir(flvRecording.getRoom_id());
+		return getStreamsSubDir(flvRecording.getRoom_id());
 	}
 	
 	protected void deleteFileIfExists(String name) {
@@ -122,21 +120,12 @@ public abstract class BaseConverter {
 	
 	private String[] addSoxPad(List<ConverterProcessResult> returnLog, String job, double length, double position, String inFile, String outFile) {
 		if (length >= 0 && position >= 0 && (length > 0 || position > 0)) {
-			String[] argv_sox = new String[] { getPathToSoX(),
+			String[] argv = new String[] { getPathToSoX(),
 					inFile, outFile, "pad",
 					"" + length, "" + position };
 	
-			if (log.isDebugEnabled()) {
-				log.debug("START " + job + " ################# ");
-				String padString = "";
-				for (int i = 0; i < argv_sox.length; i++) {
-					padString += " " + argv_sox[i];
-				}
-				log.debug("padString :: " + padString);
-				log.debug("END " + job + " ################# ");
-			}
-			returnLog.add(ProcessHelper.executeScript(job, argv_sox));
-			return argv_sox;
+			returnLog.add(ProcessHelper.executeScript(job, argv));
+			return argv;
 		} else {
 			log.debug("::addSoxPad " + job + " Invalid parameters: "
 				+ " length = " + length + "; position = " + position + "; inFile = " + inFile);
@@ -191,17 +180,10 @@ public abstract class BaseConverter {
 				metaData.setAudioIsValid(false);
 				if (inputFlvFile.exists()) {
 	
-					String[] argv = new String[] { this.getPathToFFMPEG(),
-							"-async", "1", "-i", inputFlvFile.getCanonicalPath(), outputWav };
+					String[] argv = new String[] {getPathToFFMPEG(),
+							"-async", "1", "-i", inputFlvFile.getCanonicalPath(), outputWav};
 	
-					log.debug("START stripAudioFromFLVs ################# ");
-					for (int i = 0; i < argv.length; i++) {
-						log.debug(" i " + i + " argv-i " + argv[i]);
-					}
-					log.debug("END stripAudioFromFLVs ################# ");
-	
-					returnLog.add(ProcessHelper.executeScript("generateFFMPEG",
-							argv));
+					returnLog.add(ProcessHelper.executeScript("stripAudioFromFLVs", argv));
 	
 					// check if the resulting Audio is valid
 					File output_wav = new File(outputWav);
@@ -299,16 +281,16 @@ public abstract class BaseConverter {
 				flvRecordingMetaDataDaoImpl.update(metaData);
 			}
 		} catch (Exception err) {
-			log.error("[stripAudioFromFLVs]", err);
+			log.error("[stripAudioFirstPass]", err);
 		}
 	}
 	
 	public void convertToMp4(FlvRecording r, List<ConverterProcessResult> returnLog) throws IOException {
 		//TODO add faststart, move filepaths to helpers
-		File file = OmFileHelper.getRecording(r.getFileHash());
-		if (!file.exists()) {
+		if (!isRecordingExists(r.getFileHash())) {
 			return;
 		}
+		File file = getRecording(r.getFileHash());
 		String path = file.getCanonicalPath();
 		String mp4path = path + MP4_EXTENSION;
 		// ffmpeg -i video_source_file.ext -vcodec libx264 -b 250k -bt 50k -acodec libfaac -ab 56k -ac 2 -s 480x320 video_out_file.mp4
@@ -324,17 +306,6 @@ public abstract class BaseConverter {
 				"-s", r.getFlvWidth() + "x" + r.getFlvHeight(), //
 				mp4path
 				};
-
-		if (log.isDebugEnabled()) {
-			log.debug("START generate MP4 ################# ");
-			String tString = "";
-			for (int i = 0; i < argv.length; i++) {
-				tString += argv[i] + " ";
-				// log.debug(" i " + i + " argv-i " + argv_fullFLV[i]);
-			}
-			log.debug(tString);
-			log.debug("END generate MP4 ################# ");
-		}
 		returnLog.add(ProcessHelper.executeScript("generate MP4", argv));
 		
 		argv = new String[] {
@@ -345,16 +316,6 @@ public abstract class BaseConverter {
 				path + OGG_EXTENSION
 				};
 
-		if (log.isDebugEnabled()) {
-			log.debug("START generate MP4 ################# ");
-			String tString = "";
-			for (int i = 0; i < argv.length; i++) {
-				tString += argv[i] + " ";
-				// log.debug(" i " + i + " argv-i " + argv_fullFLV[i]);
-			}
-			log.debug(tString);
-			log.debug("END generate MP4 ################# ");
-		}
-		returnLog.add(ProcessHelper.executeScript("generate MP4", argv));
+		returnLog.add(ProcessHelper.executeScript("generate OGG", argv));
 	}
 }
