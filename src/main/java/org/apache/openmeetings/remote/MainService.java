@@ -180,6 +180,7 @@ public class MainService implements IPendingServiceCallback {
 			
 				currentClient.setFirstname(u.getFirstname());
 				currentClient.setLastname(u.getLastname());
+				currentClient.setPicture_uri(u.getPictureuri());
 				sessionManager.updateClientByStreamId(streamId, currentClient, false, null);
 				
 				scopeApplicationAdapter.syncMessageToCurrentScope("roomConnect", currentClient, false);

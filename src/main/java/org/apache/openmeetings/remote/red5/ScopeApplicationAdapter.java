@@ -606,13 +606,9 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 				for (IConnection cons : conset) {
 					if (cons != null && cons instanceof IServiceCapableConnection) {
 
-						log.debug("sending roomDisconnect to " + cons
-								+ " client id "
-								+ cons.getClient().getId());
+						log.debug("sending roomDisconnect to {}  client id {}", cons, cons.getClient().getId());
 
-						Client rcl = this.sessionManager
-								.getClientByStreamId(cons.getClient()
-										.getId(), null);
+						Client rcl = sessionManager.getClientByStreamId(cons.getClient().getId(), null);
 
 						/*
 						 * Check if the Client does still exist on the
@@ -625,16 +621,13 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 							 * all other clients should receive this
 							 * message swagner 01.10.2009
 							 */
-							if (!currentClient.getStreamid().equals(
-									rcl.getStreamid())) {
+							if (!currentClient.getStreamid().equals(rcl.getStreamid())) {
 								
 								// add Notification if another user isrecording
 								log.debug("###########[roomLeave]");
 								if (rcl.getIsRecording()) {
 									log.debug("*** roomLeave Any Client is Recording - stop that");
-									this.flvRecorderService
-											.stopRecordingShowForClient(
-													cons, currentClient);
+									flvRecorderService.stopRecordingShowForClient(cons, currentClient);
 								}
 								
 								//If the user was a avclient, we do not broadcast a message about that to everybody
@@ -656,15 +649,11 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 								}
 								
 								// Send to all connected users
-								((IServiceCapableConnection) cons)
-										.invoke("roomDisconnect",
-											new Object[] { currentClient },this);
+								((IServiceCapableConnection) cons).invoke("roomDisconnect", new Object[] { currentClient },this);
 								log.debug("sending roomDisconnect to " + cons);
 							}
 						} else {
-							log.debug("For this StreamId: "
-									+ cons.getClient().getId()
-									+ " There is no Client in the List anymore");
+							log.debug("For this StreamId: " + cons.getClient().getId() + " There is no Client in the List anymore");
 						}
 					}
 				}
@@ -745,10 +734,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 						}
 						if (rcl.getIsRecording()) {
 							log.debug("RCL getIsRecording newStream SEND");
-							this.flvRecorderService
-									.addRecordingByStreamId(current,
-											streamid, currentClient,
-											rcl.getFlvRecordingId());
+							flvRecorderService.addRecordingByStreamId(current, streamid, currentClient, rcl.getFlvRecordingId());
 						}
 						if (rcl.getIsAVClient()) {
 							log.debug("RCL getIsAVClient newStream SEND");
@@ -766,10 +752,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 						
 						log.debug("RCL SEND is equal newStream SEND "+rcl.getPublicSID()+" || "+rcl.getUserport());
 							
-						IServiceCapableConnection iStream = (IServiceCapableConnection) conn;
-						iStream.invoke("newStream",
-								new Object[] { clientObjectSendToSync },
-								this);
+						((IServiceCapableConnection) conn).invoke("newStream", new Object[] { clientObjectSendToSync }, this);
 
 					}
 				}
@@ -818,16 +801,12 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 	 * @return void
 	 * 
 	 */
-	private synchronized void sendClientBroadcastNotifications(
-			IBroadcastStream stream, String clientFunction, Client rc) {
+	private synchronized void sendClientBroadcastNotifications(IBroadcastStream stream, String clientFunction, Client rc) {
 		try {
-
-			// Store the local so that we do not send notification to ourself
-			// back
+			// Store the local so that we do not send notification to ourself back
 			IConnection current = Red5.getConnectionLocal();
 			String streamid = current.getClient().getId();
-			Client currentClient = this.sessionManager
-					.getClientByStreamId(streamid, null);
+			Client currentClient = sessionManager.getClientByStreamId(streamid, null);
 
 			if (currentClient == null) {
 
@@ -841,10 +820,8 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 
 			}
 			// Notify all the clients that the stream had been started
-			log.debug("sendClientBroadcastNotifications: "
-					+ stream.getPublishedName());
-			log.debug("sendClientBroadcastNotifications : " + currentClient
-					+ " " + currentClient.getStreamid());
+			log.debug("sendClientBroadcastNotifications: " + stream.getPublishedName());
+			log.debug("sendClientBroadcastNotifications : " + currentClient + " " + currentClient.getStreamid());
 
 			// Notify all clients of the same scope (room)
 			for (Set<IConnection> conset : current.getScope().getConnections()) {
@@ -855,53 +832,38 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 							// there is a Bug in the current implementation
 							// of the appDisconnect
 							if (clientFunction.equals("closeStream")) {
-								Client rcl = this.sessionManager
-										.getClientByStreamId(conn
-												.getClient().getId(), null);
-								if (clientFunction.equals("closeStream")
-										&& rcl.getIsRecording()) {
+								Client rcl = sessionManager.getClientByStreamId(conn.getClient().getId(), null);
+								if (clientFunction.equals("closeStream") && rcl.getIsRecording()) {
 									log.debug("*** stopRecordingShowForClient Any Client is Recording - stop that");
 									// StreamService.stopRecordingShowForClient(conn,
 									// currentClient,
 									// rcl.getRoomRecordingName(), false);
-									this.flvRecorderService
-											.stopRecordingShowForClient(
-													conn, currentClient);
+									flvRecorderService.stopRecordingShowForClient(conn, currentClient);
 								}
 								// Don't notify current client
 								current.ping();
 							}
 							continue;
 						} else {
-							Client rcl = this.sessionManager
-									.getClientByStreamId(conn.getClient()
-											.getId(), null);
+							Client rcl = sessionManager.getClientByStreamId(conn.getClient().getId(), null);
 							if (rcl != null) {
-								if (rcl.getIsScreenClient() != null
-										&& rcl.getIsScreenClient()) {
+								if (rcl.getIsScreenClient() != null && rcl.getIsScreenClient()) {
 									// continue;
 								} else {
-									log.debug("is this users still alive? :"
-											+ rcl);
+									log.debug("is this users still alive? :" + rcl);
 									IServiceCapableConnection iStream = (IServiceCapableConnection) conn;
-									iStream.invoke(clientFunction,
-											new Object[] { rc }, this);
+									iStream.invoke(clientFunction, new Object[] { rc }, this);
 								}
 
-								log.debug("sending notification to " + conn
-										+ " ID: ");
+								log.debug("sending notification to " + conn + " ID: ");
 
 								// if this close stream event then stop the
 								// recording of this stream
-								if (clientFunction.equals("closeStream")
-										&& rcl.getIsRecording()) {
+								if (clientFunction.equals("closeStream") && rcl.getIsRecording()) {
 									log.debug("***  +++++++ ######## sendClientBroadcastNotifications Any Client is Recording - stop that");
-									this.flvRecorderService
-											.stopRecordingShowForClient(
-													conn, currentClient);
+									flvRecorderService.stopRecordingShowForClient(conn, currentClient);
 								}
 							}
-
 						}
 					}
 				}
@@ -979,9 +941,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 							// don't send back to same user
 							continue;
 						}
-						IServiceCapableConnection iStream = (IServiceCapableConnection) conn;
-						iStream.invoke("newRed5ScreenCursor",
-								new Object[] { cursor }, this);
+						((IServiceCapableConnection) conn).invoke("newRed5ScreenCursor", new Object[] { cursor }, this);
 					}
 				}
 			}
@@ -1048,8 +1008,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 			IConnection current = Red5.getConnectionLocal();
 			// String streamid = current.getClient().getId();
 
-            Client currentClient = this.sessionManager
-					.getClientByPublicSID(publicSID, false, null);
+            Client currentClient = sessionManager.getClientByPublicSID(publicSID, false, null);
 
 			if (currentClient == null) {
 				return -1L;
@@ -1059,8 +1018,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 			currentClient.setInterviewPodId(interviewPodId);
 
             // Put the mod-flag to true for this client
-		    this.sessionManager.updateClientByStreamId(
-		    		currentClient.getStreamid(), currentClient, false, null);
+		    sessionManager.updateClientByStreamId(currentClient.getStreamid(), currentClient, false, null);
 		    
 			// Notify all clients of the same scope (room)
 			for (Set<IConnection> conset : current.getScope().getConnections()) {
@@ -1270,6 +1228,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 			IClient c = current.getClient();
 			String streamid = c.getId();
 			log.debug("-----------  setUserAVSettings {} {} {}", new Object[] {streamid, publicSID, avsettings, newMessage});
+			Client parentClient = sessionManager.getClientByPublicSID(publicSID, false, null);
 			Client currentClient = sessionManager.getClientByStreamId(streamid, null);
 			currentClient.setAvsettings(avsettings);
 			currentClient.setRoom_id(room_id);
@@ -1277,6 +1236,10 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 			currentClient.setVWidth(vWidth);
 			currentClient.setVHeight(vHeight);
 			currentClient.setInterviewPodId(interviewPodId);
+			currentClient.setUser_id(parentClient.getUser_id());
+			currentClient.setLastname(parentClient.getLastname());
+			currentClient.setFirstname(parentClient.getFirstname());
+			currentClient.setPicture_uri(parentClient.getPicture_uri());
 			sessionManager.updateAVClientByStreamId(streamid, currentClient, null);
 			SessionVariablesUtil.initClient(c, false, publicSID);
 
@@ -1296,8 +1259,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 							// AVClients or potential AVClients do not receive events
 							continue;
 						}
-						((IServiceCapableConnection)conn)
-							.invoke("sendVarsToMessageWithClient", new Object[] { hsm }, this);
+						((IServiceCapableConnection)conn).invoke("sendVarsToMessageWithClient", new Object[] { hsm }, this);
 					}
 				}
 			}
@@ -1960,14 +1922,11 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 							} else if (SessionVariablesUtil.isAVClient(client)) {
 								// AVClients or potential AVClients do not receive events
 								continue;
-							} if (client.getId().equals(
-									current.getClient().getId())) {
+							} if (client.getId().equals(current.getClient().getId())) {
 								// don't send back to same user
 								continue;
 							}
-							((IServiceCapableConnection) conn)
-									.invoke("sendVarsToModeratorGeneral",
-											new Object[] { vars },this);
+							((IServiceCapableConnection) conn).invoke("sendVarsToModeratorGeneral", new Object[] { vars },this);
 						}
 					}
 				}
@@ -2312,10 +2271,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 					}
 					
 					if (SessionVariablesUtil.getPublicSID(client).equals(publicSID)) {
-						// log.debug("IS EQUAL ");
-						((IServiceCapableConnection) conn)
-								.invoke("newMessageByRoomAndDomain",
-									new Object[] { message }, this);
+						((IServiceCapableConnection) conn).invoke("newMessageByRoomAndDomain", new Object[] { message }, this);
 					}
 				}
 				}
