@@ -293,7 +293,6 @@ public abstract class BaseConverter {
 		File file = getRecording(r.getFileHash());
 		String path = file.getCanonicalPath();
 		String mp4path = path + MP4_EXTENSION;
-		// ffmpeg -i video_source_file.ext -vcodec libx264 -b 250k -bt 50k -acodec libfaac -ab 56k -ac 2 -s 480x320 video_out_file.mp4
 		String[] argv = new String[] {
 				getPathToFFMPEG(), //
 				"-i", path,
@@ -303,6 +302,7 @@ public abstract class BaseConverter {
 				"-preset", "medium",
 				"-profile:v", "baseline",
 				"-c:a", "libfaac",
+				"-c:a", "libfdk_aac", "-b:a", "32k", //FIXME add quality constants 
 				"-s", r.getFlvWidth() + "x" + r.getFlvHeight(), //
 				mp4path
 				};
