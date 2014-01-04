@@ -173,11 +173,11 @@ public class FlvInterviewConverter extends BaseConverter {
 
 			final int flvWidth = 640;
 			final int flvHeight = 260;
+			final int frameRate = 25;
 			// Merge Audio with Video / Calculate resulting FLV
 
-			int frameRate = 25;
-
 			String[] pods = new String[2];
+			boolean found = false;
 			for (FlvRecordingMetaData meta : metaDataList) {
 				File flv = new File(streamFolder, meta.getStreamName() + ".flv");
 
@@ -190,6 +190,7 @@ public class FlvInterviewConverter extends BaseConverter {
 					 */ 
 					String[] args = new String[] {getPathToFFMPEG()
 							, "-i", path
+							, "-an" // only input files with video will be treated as video sources
 							, "-v", "error"
 							, "-f", "null"
 							, "file.null"};
@@ -198,9 +199,10 @@ public class FlvInterviewConverter extends BaseConverter {
 					if ("".equals(r.getError())) {
 						pods[pod - 1] = path;
 					}
+					found = true;
 				}
 			}
-			if (pods[0] == null && pods[1] == null) {
+			if (!found) {
 				ConverterProcessResult r = new ConverterProcessResult();
 				r.setProcess("CheckFlvFilesExists");
 				r.setError("No valid pods found");
@@ -220,40 +222,33 @@ public class FlvInterviewConverter extends BaseConverter {
 				 */
 				if (pods[i] == null) {
 					shortest = true;
-					args.add("-loop");
-					args.add("1");
-					args.add("-i");
-					args.add(defaultInterviewImageFile.getCanonicalPath());
+					args.add("-loop"); args.add("1");
+					args.add("-i"); args.add(defaultInterviewImageFile.getCanonicalPath());
 				} else {
-					args.add("-i");
-					args.add(pods[i]);
+					args.add("-i"); args.add(pods[i]);
 				}
 			}
+			args.add("-i"); args.add(outputFullWav);
+			args.add("-ar"); args.add("22050");
+			args.add("-ab"); args.add("32k");
 			args.add("-filter_complex");
 			args.add(String.format("[0:v]scale=%1$d:%2$d,pad=2*%1$d:%2$d[left];[1:v]scale=%1$d:%2$d[right];[left][right]overlay=main_w/2:0", flvWidth, flvHeight));
 			if (shortest) {
 				args.add("-shortest");
 			}
+			args.add("-vcodec"); args.add("flv");
+			args.add("-r"); args.add("" + frameRate);
+			args.add("-qmax"); args.add("1");
+			args.add("-qmin"); args.add("1");
 			args.add("-y");
-			String inputScreenFullFlv = new File(streamFolder
-					, "COMPLETE_INTERVIEW_" + flvRecording.getFlvRecordingId() + ".flv").getCanonicalPath();
-			args.add(inputScreenFullFlv);
+			String hashFileFullNameFlv = "flvRecording_" + flvRecording.getFlvRecordingId() + ".flv";
+			String outputFullFlv = new File(streamFolderGeneral, hashFileFullNameFlv).getCanonicalPath();
+			args.add(outputFullFlv);
 			// TODO additional flag to 'quiet' output should be added
 			returnLog.add(ProcessHelper.executeScript("generateFullBySequenceFLV", args.toArray(new String[]{})));
 
 			flvRecording.setFlvWidth(flvWidth);
 			flvRecording.setFlvHeight(flvHeight);
-
-			String hashFileFullNameFlv = "flvRecording_" + flvRecording.getFlvRecordingId() + ".flv";
-			String outputFullFlv = new File(streamFolderGeneral, hashFileFullNameFlv).getCanonicalPath();
-			String[] argv_fullFLV = new String[] { getPathToFFMPEG(), //
-					"-i", inputScreenFullFlv, "-i", outputFullWav, "-ar", "22050", //
-					"-ab", "32k", //
-					"-s", flvWidth + "x" + flvHeight, //
-					"-vcodec", "flv", //
-					"-r", "" + frameRate, "-qmax", "1", "-qmin", "1", "-y", outputFullFlv};
-
-			returnLog.add(ProcessHelper.executeScript("generateFullFLV", argv_fullFLV));
 
 			flvRecording.setFileHash(hashFileFullNameFlv);
 
@@ -276,15 +271,6 @@ public class FlvInterviewConverter extends BaseConverter {
 					"-s", flvWidth + "x" + flvHeight, //
 					outPutJpeg };
 
-			log.debug("START previewFullFLV ################# ");
-			log.debug(argv_previewFLV.toString());
-			String kString = "";
-			for (int i = 0; i < argv_previewFLV.length; i++) {
-				kString += argv_previewFLV[i] + " ";
-			}
-			log.debug(kString);
-			log.debug("END previewFullFLV ################# ");
-
 			returnLog.add(ProcessHelper.executeScript("generateFullFLV", argv_previewFLV));
 
 			String alternateDownloadName = "flvRecording_" + flvRecording.getFlvRecordingId() + ".avi";
@@ -293,15 +279,6 @@ public class FlvInterviewConverter extends BaseConverter {
 
 			String[] argv_alternateDownload = new String[] { getPathToFFMPEG(), "-i", outputFullFlv,
 					alternateDownloadFullName };
-
-			log.debug("START alternateDownLoad ################# ");
-			log.debug(argv_previewFLV.toString());
-			String sString = "";
-			for (int i = 0; i < argv_alternateDownload.length; i++) {
-				sString += argv_alternateDownload[i] + " ";
-			}
-			log.debug(sString);
-			log.debug("END alternateDownLoad ################# ");
 
 			returnLog.add(ProcessHelper.executeScript("alternateDownload", argv_alternateDownload));
 
