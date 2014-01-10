@@ -24,6 +24,7 @@ public class OpenmeetingsVariables {
 	public static final String CONFIG_DASHBOARD_SHOW_RSS_KEY = "dashboard.show.rssfeed";
 	public static final String CONFIG_DEFAUT_LANG_KEY = "default_lang_id";
 	public static final String CONFIG_FRONTEND_REGISTER_KEY = "allow_frontend_register";
+	public static final String CONFIG_SOAP_REGISTER_KEY = "allow.soap.register";
 	public static final String CONFIG_LOGIN_MIN_LENGTH_KEY = "user.login.minimum.length";
 	public static final String CONFIG_MAX_UPLOAD_SIZE_KEY = "max_upload_size";
 	public static final String CONFIG_PASS_MIN_LENGTH_KEY = "user.pass.minimum.length";

@@ -19,7 +19,7 @@
 package org.apache.openmeetings.data.user;
 
 import static org.apache.openmeetings.db.util.UserHelper.getMinLoginLength;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_FRONTEND_REGISTER_KEY;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SOAP_REGISTER_KEY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
 import java.util.Arrays;
@@ -604,8 +604,7 @@ public class UserManager implements IUserManager {
 			boolean generateSipUserData, String jNameTimeZone, Boolean sendConfirmation) {
 		try {
 			// Checks if FrontEndUsers can register
-			if ("1".equals(configurationDao.getConfValue(
-					CONFIG_FRONTEND_REGISTER_KEY, String.class, "0"))) {
+			if ("1".equals(configurationDao.getConfValue(CONFIG_SOAP_REGISTER_KEY, String.class, "0"))) {
 				
 				// TODO: Read and generate SIP-Data via RPC-Interface Issue 1098
 

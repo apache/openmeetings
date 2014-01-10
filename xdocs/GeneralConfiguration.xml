@@ -164,6 +164,18 @@
 					<td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> Users entered the room via invitationHash or secureHash will be redirected to this URL on connection lost </td>
 					<td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> 2.2.x </td>
 				</tr>
+				<tr>
+					<td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> allow_frontend_register </td>
+					<td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> (configurable during install) </td>
+					<td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> Is user register available on login screen </td>
+					<td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> 1.8.x </td>
+				</tr>
+				<tr>
+					<td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> allow.soap.register </td>
+					<td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> 1 </td>
+					<td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> Is user register available via SOAP/REST </td>
+					<td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> 3.0.x </td>
+				</tr>
 			</table>
 		</section>
 

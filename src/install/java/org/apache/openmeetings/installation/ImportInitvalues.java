@@ -31,6 +31,7 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_PASS_MIN
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_REDIRECT_URL_FOR_EXTERNAL_KEY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_RSS_FEED1_KEY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_RSS_FEED2_KEY;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SOAP_REGISTER_KEY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.USER_LOGIN_MINIMUM_LENGTH;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.USER_PASSWORD_MINIMUM_LENGTH;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
@@ -306,8 +307,8 @@ public class ImportInitvalues {
 								+ "for more Information see http://openmeetings.apache.org/CustomCryptMechanism.html");
 
 		configurationDao.add(CONFIG_FRONTEND_REGISTER_KEY,
-				cfg.allowFrontendRegister, null, "");
-
+				cfg.allowFrontendRegister, null, "Is user register available on login screen");
+		configurationDao.add(CONFIG_SOAP_REGISTER_KEY, "1", null, "Is user register available via SOAP/REST");
 		configurationDao.add("default_group_id", "1", null, "");
 
 		// this domain_id is the Organisation of users who register through the
