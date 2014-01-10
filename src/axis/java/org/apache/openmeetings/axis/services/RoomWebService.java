@@ -44,8 +44,8 @@ import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.dao.server.ISessionManager;
 import org.apache.openmeetings.db.dao.server.SessiondataDao;
 import org.apache.openmeetings.db.dao.user.AdminUserDao;
-import org.apache.openmeetings.db.dto.basic.SearchResult;
 import org.apache.openmeetings.db.dto.file.RecordingObject;
+import org.apache.openmeetings.db.dto.room.RoomSearchResult;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
 import org.apache.openmeetings.db.entity.calendar.MeetingMember;
 import org.apache.openmeetings.db.entity.record.FlvRecording;
@@ -393,26 +393,13 @@ public class RoomWebService {
 	/**
 	 * List of available room types
 	 * 
-	 * @param SID
-	 *            The SID of the User. This SID must be marked as Loggedin
+	 * @param SID - The SID of the User. This SID must be marked as Loggedin
 	 * @return - List of available room types
 	 * @throws AxisFault
 	 */
-	public RoomType[] getRoomTypes(String SID) throws AxisFault {
+	public List<RoomType> getRoomTypes(String SID) throws AxisFault {
 		try {
-			List<RoomType> rommTypesList = conferenceService.getRoomTypes(SID);
-			RoomType[] roomTypesArray = new RoomType[rommTypesList.size()];
-
-			int count = 0;
-			for (Iterator<RoomType> it = rommTypesList.iterator(); it
-					.hasNext();) {
-				RoomType roomType = it.next();
-				roomTypesArray[count] = roomType;
-				count++;
-			}
-
-			return roomTypesArray;
-
+			return conferenceService.getRoomTypes(SID);
 		} catch (Exception err) {
 			log.error("[getRoomTypes]", err);
 			throw new AxisFault(err.getMessage());
@@ -422,8 +409,7 @@ public class RoomWebService {
 	/**
 	 * Returns current users for rooms ids
 	 * 
-	 * @param SID
-	 *            The SID of the User. This SID must be marked as Loggedin
+	 * @param SID - The SID of the User. This SID must be marked as Loggedin
 	 * @param roomId
 	 * @return - current users for rooms ids
 	 * @throws AxisFault
@@ -471,10 +457,8 @@ public class RoomWebService {
 	/**
 	 * returns a conference room object
 	 * 
-	 * @param SID
-	 *            The SID of the User. This SID must be marked as Loggedin
-	 * @param rooms_id
-	 *            the room id
+	 * @param SID - The SID of the User. This SID must be marked as Loggedin
+	 * @param rooms_id - the room id
 	 * @return - room with the id given
 	 */
 	public Room getRoomById(String SID, long rooms_id) {
@@ -490,8 +474,7 @@ public class RoomWebService {
 	 * @return - object of type RoomReturn
 	 * @throws AxisFault
 	 */
-	public RoomReturn getRoomWithClientObjectsById(String SID, long rooms_id)
-			throws AxisFault {
+	public RoomReturn getRoomWithClientObjectsById(String SID, long rooms_id) throws AxisFault {
 		try {
 			Long users_id = sessiondataDao.checkSession(SID);
 			Long user_level = userManager.getUserLevelByID(users_id);
@@ -543,22 +526,16 @@ public class RoomWebService {
 	 * Returns a List of Objects of Rooms You can use "name" as value for
 	 * orderby or rooms_id
 	 * 
-	 * @param SID
-	 *            The SID of the User. This SID must be marked as Loggedin
-	 * @param start
-	 *            The id you want to start
-	 * @param max
-	 *            The maximum you want to get
-	 * @param orderby
-	 *            The column it will be ordered
-	 * @param asc
-	 *            Asc or Desc sort ordering
+	 * @param SID - The SID of the User. This SID must be marked as Loggedin
+	 * @param start - The id you want to start
+	 * @param max - The maximum you want to get
+	 * @param orderby - The column it will be ordered
+	 * @param asc - Asc or Desc sort ordering
 	 *            
 	 * @return - List of Objects of Rooms
 	 */
-	public SearchResult<Room> getRooms(String SID, int start, int max,
-			String orderby, boolean asc) {
-		return conferenceService.getRooms(SID, start, max, orderby, asc, "");
+	public RoomSearchResult getRooms(String SID, int start, int max, String orderby, boolean asc) {
+		return new RoomSearchResult(conferenceService.getRooms(SID, start, max, orderby, asc, ""));
 	}
 
 	/**
@@ -566,23 +543,16 @@ public class RoomWebService {
 	 * orderby or rooms_id. It also fills the attribute currentUsers in the
 	 * Room-Object
 	 * 
-	 * @param SID
-	 *            The SID of the User. This SID must be marked as Loggedin
-	 * @param start
-	 *            The id you want to start
-	 * @param max
-	 *            The maximum you want to get
-	 * @param orderby
-	 *            The column it will be ordered
-	 * @param asc
-	 *            Asc or Desc sort ordering
+	 * @param SID - The SID of the User. This SID must be marked as Loggedin
+	 * @param start - The id you want to start
+	 * @param max - The maximum you want to get
+	 * @param orderby - The column it will be ordered
+	 * @param asc - Asc or Desc sort ordering
 	 *            
 	 * @return - List of Objects of Rooms
 	 */
-	public SearchResult<Room> getRoomsWithCurrentUsers(String SID, int start,
-			int max, String orderby, boolean asc) {
-		return conferenceService.getRoomsWithCurrentUsers(SID, start, max,
-				orderby, asc);
+	public RoomSearchResult getRoomsWithCurrentUsers(String SID, int start, int max, String orderby, boolean asc) {
+		return new RoomSearchResult(conferenceService.getRoomsWithCurrentUsers(SID, start, max, orderby, asc));
 	}
 
 	// TODO: Add functions to get Users of a Room

@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.axis.services;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.openmeetings.data.conference.InvitationManager;
@@ -26,6 +27,7 @@ import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.dao.server.SessiondataDao;
 import org.apache.openmeetings.db.dao.user.AdminUserDao;
+import org.apache.openmeetings.db.dto.room.RoomDTO;
 import org.apache.openmeetings.db.entity.room.Invitation;
 import org.apache.openmeetings.db.entity.room.Invitation.Valid;
 import org.apache.openmeetings.db.entity.room.Room;
@@ -69,37 +71,41 @@ public class JabberWebService {
 	private RoomDao roomDao;
 
 	/**
-	 * Get List&lt;Rooms&gt; of all rooms available to the user.
+	 * Get List&lt;RoomDTO&gt; of all rooms available to the user.
 	 * No admin rights are necessary for this call
 	 * 
 	 * @param SID The SID from UserService.getSession
-	 * @return List&lt;Rooms&gt; of Rooms
+	 * @return List&lt;RoomDTO&gt; of Rooms
 	 */
-	public List<Room> getAvailableRooms(String SID) {
+	public List<RoomDTO> getAvailableRooms(String SID) {
 		log.debug("getAvailableRooms enter");
-
-		List<Room> result = this.conferenceService
-				.getAppointedMeetingRoomsWithoutType(SID);
-
-		List<Room> pbl = this.conferenceService.getRoomsPublicWithoutType(SID);
-		if (pbl != null) {
-			result.addAll(pbl);
+		
+		List<Room> rl = new ArrayList<Room>();
+		List<Room> al = conferenceService.getAppointedMeetingRoomsWithoutType(SID);
+		if (al != null) {
+			rl.addAll(al);
 		}
 
-		Long users_id = this.sessiondataDao.checkSession(SID);
-		User u = this.userManager.getUserById(users_id);
+		List<Room> pbl = conferenceService.getRoomsPublicWithoutType(SID);
+		if (pbl != null) {
+			rl.addAll(pbl);
+		}
+
+		Long users_id = sessiondataDao.checkSession(SID);
+		User u = userManager.getUserById(users_id);
 		for (Organisation_Users ou : u.getOrganisation_users()) {
-			List<RoomOrganisation> rol = this.conferenceService
-					.getRoomsByOrganisationWithoutType(SID, ou
-							.getOrganisation().getOrganisation_id().longValue());
+			List<RoomOrganisation> rol = conferenceService.getRoomsByOrganisationWithoutType(SID
+					, ou.getOrganisation().getOrganisation_id().longValue());
 			if (rol != null) {
 				for (RoomOrganisation ro : rol) {
-					result.add(ro.getRoom());
+					rl.add(ro.getRoom());
 				}
 			}
 		}
-		for (Room r : result) {
+		List<RoomDTO> result = new ArrayList<RoomDTO>();
+		for (Room r : rl) {
 			r.setCurrentusers(null);
+			result.add(new RoomDTO(r));
 		}
 		return result;
 	}

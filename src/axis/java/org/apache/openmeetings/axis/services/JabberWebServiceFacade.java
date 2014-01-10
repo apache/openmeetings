@@ -18,8 +18,10 @@
  */
 package org.apache.openmeetings.axis.services;
 
+import java.util.List;
+
 import org.apache.axis2.AxisFault;
-import org.apache.openmeetings.db.entity.room.Room;
+import org.apache.openmeetings.db.dto.room.RoomDTO;
 
 /**
  * This class provides method entry points necessary for OM to Jabber integration.
@@ -30,15 +32,15 @@ import org.apache.openmeetings.db.entity.room.Room;
 public class JabberWebServiceFacade extends BaseWebService {
 	
 	/**
-	 * Get array of all rooms available to the user.
+	 * Get list of all rooms available to the user.
 	 * No admin rights are necessary for this call
 	 * 
 	 * @param SID The SID from {@link UserWebService.getSession}
 	 * @return array of Rooms
 	 * @throws AxisFault 
 	 */
-	public Room[] getAvailableRooms(String SID) throws AxisFault {
-		return getBean(JabberWebService.class).getAvailableRooms(SID).toArray(new Room[0]);
+	public List<RoomDTO> getAvailableRooms(String SID) throws AxisFault {
+		return getBean(JabberWebService.class).getAvailableRooms(SID);
 	}
 
 	/**

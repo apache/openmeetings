@@ -91,16 +91,13 @@ public class UserWebService {
 	}
 
 	/**
-	 * uth function, use the SID you get by getSession, return positive means
+	 * Auth function, use the SID you get by getSession, return positive means
 	 * logged-in, if negative its an ErrorCode, you have to invoke the Method
 	 * getErrorByCode to get the Text-Description of that ErrorCode
 	 * 
-	 * @param SID
-	 *            The SID from getSession
-	 * @param username
-	 *            Username from OpenMeetings, the user has to have Admin-rights
-	 * @param userpass
-	 *            Userpass from OpenMeetings
+	 * @param SID - The SID from getSession
+	 * @param username - Username from OpenMeetings, the user has to have Admin-rights
+	 * @param userpass - Userpass from OpenMeetings
 	 *            
 	 * @return - id of the logged in user, -1 in case of the error
 	 */

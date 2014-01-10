@@ -30,15 +30,7 @@ import org.apache.openmeetings.db.entity.room.RoomType;
 
 public class RoomWebServiceFacade extends BaseWebService {
 
-	// TODO: Not implemented yet
-	// public List<Rooms_Organisation> getRoomsByOrganisationAndType(String SID,
-	// long organisation_id, long roomtypes_id) {
-	// return conferenceService.getRoomsByOrganisationAndType(SID,
-	// organisation_id, roomtypes_id);
-	// }
-
-	public Room[] getRoomsPublic(String SID, Long roomtypes_id)
-			throws AxisFault {
+	public Room[] getRoomsPublic(String SID, Long roomtypes_id) throws AxisFault {
 		return getBean(RoomWebService.class).getRoomsPublic(SID, roomtypes_id);
 	}
 
@@ -77,18 +69,15 @@ public class RoomWebServiceFacade extends BaseWebService {
 				.getFlvRecordingByExternalRoomTypeByList(SID, externalRoomType);
 	}
 
-	public FlvRecording[] getFlvRecordingByExternalRoomType(String SID,
-			String externalRoomType) throws AxisFault {
-		return getBean(RoomWebService.class).getFlvRecordingByExternalRoomType(
-				SID, externalRoomType);
+	public FlvRecording[] getFlvRecordingByExternalRoomType(String SID, String externalRoomType) throws AxisFault {
+		return getBean(RoomWebService.class).getFlvRecordingByExternalRoomType(SID, externalRoomType);
 	}
 
-	public FlvRecording[] getFlvRecordingByRoomId(String SID, Long roomId)
-			throws AxisFault {
+	public FlvRecording[] getFlvRecordingByRoomId(String SID, Long roomId) throws AxisFault {
 		return getBean(RoomWebService.class).getFlvRecordingByRoomId(SID, roomId);
 	}
 
-	public RoomType[] getRoomTypes(String SID) throws AxisFault {
+	public List<RoomType> getRoomTypes(String SID) throws AxisFault {
 		return getBean(RoomWebService.class).getRoomTypes(SID);
 	}
 
@@ -107,13 +96,11 @@ public class RoomWebServiceFacade extends BaseWebService {
 	}
 
 	public RoomSearchResult getRooms(String SID, int start, int max, String orderby, boolean asc) throws AxisFault {
-		return new RoomSearchResult(getBean(RoomWebService.class).getRooms(SID, start, max, orderby, asc));
+		return getBean(RoomWebService.class).getRooms(SID, start, max, orderby, asc);
 	}
 
-	public RoomSearchResult getRoomsWithCurrentUsers(String SID, int start, int max, String orderby
-			, boolean asc) throws AxisFault {
-		return new RoomSearchResult(getBean(RoomWebService.class).getRoomsWithCurrentUsers(SID, start,
-				max, orderby, asc));
+	public RoomSearchResult getRoomsWithCurrentUsers(String SID, int start, int max, String orderby , boolean asc) throws AxisFault {
+		return getBean(RoomWebService.class).getRoomsWithCurrentUsers(SID, start, max, orderby, asc);
 	}
 
 	/**

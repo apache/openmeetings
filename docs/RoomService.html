@@ -646,7 +646,7 @@ limitations under the License.
     			  List of available room types
     			</p>
     			<p>
-                  Return Type: org.apache.openmeetings.db.entity.room.RoomType[]
+                  Return Type: java.util.List
                 </p>
     			<p>Params:</p>
     			    			
@@ -664,7 +664,7 @@ limitations under the License.
 	                     		                     		String
 	                     		                     </td>
 	                     <td valign="top">SID</td>
-	                     <td valign="top">The SID of the User. This SID must be marked as Loggedin</td>
+	                     <td valign="top">- The SID of the User. This SID must be marked as Loggedin</td>
 	                   </tr>
 	                   
 	                   	                   	                   </tbody>
@@ -708,7 +708,7 @@ limitations under the License.
 	                     		                     		String
 	                     		                     </td>
 	                     <td valign="top">SID</td>
-	                     <td valign="top">The SID of the User. This SID must be marked as Loggedin</td>
+	                     <td valign="top">- The SID of the User. This SID must be marked as Loggedin</td>
 	                   </tr>
 	                   
 	                   	                   	    			   <tr>
@@ -760,7 +760,7 @@ limitations under the License.
 	                     		                     		String
 	                     		                     </td>
 	                     <td valign="top">SID</td>
-	                     <td valign="top">The SID of the User. This SID must be marked as Loggedin</td>
+	                     <td valign="top">- The SID of the User. This SID must be marked as Loggedin</td>
 	                   </tr>
 	                   
 	                   	                   	    			   <tr>
@@ -768,7 +768,7 @@ limitations under the License.
 	                     		                     		long
 	                     		                     </td>
 	                     <td valign="top">rooms_id</td>
-	                     <td valign="top">the room id</td>
+	                     <td valign="top">- the room id</td>
 	                   </tr>
 	                   
 	                   	                   	                   </tbody>
@@ -853,7 +853,7 @@ limitations under the License.
  orderby or rooms_id
     			</p>
     			<p>
-                  Return Type: org.apache.openmeetings.db.dto.basic.SearchResult
+                  Return Type: org.apache.openmeetings.db.dto.room.RoomSearchResult
                 </p>
     			<p>Params:</p>
     			    			
@@ -871,7 +871,7 @@ limitations under the License.
 	                     		                     		String
 	                     		                     </td>
 	                     <td valign="top">SID</td>
-	                     <td valign="top">The SID of the User. This SID must be marked as Loggedin</td>
+	                     <td valign="top">- The SID of the User. This SID must be marked as Loggedin</td>
 	                   </tr>
 	                   
 	                   	                   	    			   <tr>
@@ -879,7 +879,7 @@ limitations under the License.
 	                     		                     		int
 	                     		                     </td>
 	                     <td valign="top">start</td>
-	                     <td valign="top">The id you want to start</td>
+	                     <td valign="top">- The id you want to start</td>
 	                   </tr>
 	                   
 	                   	                   	    			   <tr>
@@ -887,7 +887,7 @@ limitations under the License.
 	                     		                     		int
 	                     		                     </td>
 	                     <td valign="top">max</td>
-	                     <td valign="top">The maximum you want to get</td>
+	                     <td valign="top">- The maximum you want to get</td>
 	                   </tr>
 	                   
 	                   	                   	    			   <tr>
@@ -895,7 +895,7 @@ limitations under the License.
 	                     		                     		String
 	                     		                     </td>
 	                     <td valign="top">orderby</td>
-	                     <td valign="top">The column it will be ordered</td>
+	                     <td valign="top">- The column it will be ordered</td>
 	                   </tr>
 	                   
 	                   	                   	    			   <tr>
@@ -903,7 +903,7 @@ limitations under the License.
 	                     		                     		boolean
 	                     		                     </td>
 	                     <td valign="top">asc</td>
-	                     <td valign="top">Asc or Desc sort ordering</td>
+	                     <td valign="top">- Asc or Desc sort ordering</td>
 	                   </tr>
 	                   
 	                   	                   	                   </tbody>
@@ -937,7 +937,7 @@ limitations under the License.
  Room-Object
     			</p>
     			<p>
-                  Return Type: org.apache.openmeetings.db.dto.basic.SearchResult
+                  Return Type: org.apache.openmeetings.db.dto.room.RoomSearchResult
                 </p>
     			<p>Params:</p>
     			    			
@@ -955,7 +955,7 @@ limitations under the License.
 	                     		                     		String
 	                     		                     </td>
 	                     <td valign="top">SID</td>
-	                     <td valign="top">The SID of the User. This SID must be marked as Loggedin</td>
+	                     <td valign="top">- The SID of the User. This SID must be marked as Loggedin</td>
 	                   </tr>
 	                   
 	                   	                   	    			   <tr>
@@ -963,7 +963,7 @@ limitations under the License.
 	                     		                     		int
 	                     		                     </td>
 	                     <td valign="top">start</td>
-	                     <td valign="top">The id you want to start</td>
+	                     <td valign="top">- The id you want to start</td>
 	                   </tr>
 	                   
 	                   	                   	    			   <tr>
@@ -971,7 +971,7 @@ limitations under the License.
 	                     		                     		int
 	                     		                     </td>
 	                     <td valign="top">max</td>
-	                     <td valign="top">The maximum you want to get</td>
+	                     <td valign="top">- The maximum you want to get</td>
 	                   </tr>
 	                   
 	                   	                   	    			   <tr>
@@ -979,7 +979,7 @@ limitations under the License.
 	                     		                     		String
 	                     		                     </td>
 	                     <td valign="top">orderby</td>
-	                     <td valign="top">The column it will be ordered</td>
+	                     <td valign="top">- The column it will be ordered</td>
 	                   </tr>
 	                   
 	                   	                   	    			   <tr>
@@ -987,7 +987,7 @@ limitations under the License.
 	                     		                     		boolean
 	                     		                     </td>
 	                     <td valign="top">asc</td>
-	                     <td valign="top">Asc or Desc sort ordering</td>
+	                     <td valign="top">- Asc or Desc sort ordering</td>
 	                   </tr>
 	                   
 	                   	                   	                   </tbody>
