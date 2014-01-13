@@ -182,7 +182,7 @@ public class MailHandler {
 		log.debug("getMimeMessage");
 		// Building MimeMessage
 		MimeMessage msg = getBasicMimeMessage();
-		msg.setSubject(m.getSubject());
+		msg.setSubject(m.getSubject(), "UTF-8");
 		String replyTo = m.getReplyTo();
 		if (replyTo != null && mailAddReplyTo) {
 			log.debug("setReplyTo " + replyTo);
