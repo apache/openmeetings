@@ -31,9 +31,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class RTMPSScreenShare extends RTMPSClient implements ClientExceptionHandler, IScreenShare {
-
-	private static final Logger logger = LoggerFactory
-			.getLogger(RTMPSScreenShare.class);
+	private static final Logger logger = LoggerFactory.getLogger(RTMPSScreenShare.class);
 
 	private CoreScreenShare core = null;
 
@@ -76,6 +74,9 @@ public class RTMPSScreenShare extends RTMPSClient implements ClientExceptionHand
 	public void connectionClosed(RTMPConnection conn, RTMP rtmp) {
 		logger.debug("connection closed");
 		super.connectionClosed(conn, rtmp);
+		if (core.isAudioNotify()) {
+			AudioTone.play();
+		}
 		core.stopStream();
 	}
 

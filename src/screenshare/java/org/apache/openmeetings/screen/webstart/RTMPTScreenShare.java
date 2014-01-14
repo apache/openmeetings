@@ -56,6 +56,9 @@ public class RTMPTScreenShare extends RTMPTClient implements ClientExceptionHand
 	public void connectionClosed(RTMPConnection conn, RTMP rtmp) {
 		logger.debug("connection closed");
 		super.connectionClosed(conn, rtmp);
+		if (core.isAudioNotify()) {
+			AudioTone.play();
+		}
 		core.stopStream();
 	}
 

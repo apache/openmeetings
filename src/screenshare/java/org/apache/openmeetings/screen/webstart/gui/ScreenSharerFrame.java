@@ -39,6 +39,7 @@ import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -108,6 +109,7 @@ public class ScreenSharerFrame extends JFrame {
 	private String reduceYLabel;
 	private String recordingTipLabel;
 	private String publishingTipLabel;
+	private JCheckBox audioNotify;
 	
 	private class PublishTextField extends JTextField {
 		private static final long serialVersionUID = -2104245360975135871L;
@@ -281,6 +283,14 @@ public class ScreenSharerFrame extends JFrame {
 		
 		JLabel lblSelectArea = new JLabel(getTextLabel(textLabels, 4)); //#id 734
 		JPanel panelStatus = new JPanel();
+		audioNotify = new JCheckBox(getTextLabel(textLabels, 36)); //#id 1589
+		audioNotify.setBackground(Color.WHITE);
+		audioNotify.setSelected(core.isAudioNotify());
+		audioNotify.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				core.setAudioNotify(audioNotify.isSelected());
+			}
+		});
 		
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
 		gl_contentPane.setHorizontalGroup(
@@ -289,7 +299,9 @@ public class ScreenSharerFrame extends JFrame {
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
 						.addGroup(gl_contentPane.createSequentialGroup()
 							.addGap(7)
-							.addComponent(lblStartSharing))
+							.addComponent(lblStartSharing)
+							.addGap(15)
+							.addComponent(audioNotify))
 						.addGroup(gl_contentPane.createSequentialGroup()
 							.addGap(21)
 							.addComponent(btnStartStopSharing, 200, 200, 200)
@@ -315,7 +327,7 @@ public class ScreenSharerFrame extends JFrame {
 					.addComponent(lblStartSharing)
 					.addGap(4)
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-						.addComponent(btnStartStopSharing, 32, 32, 32)
+						.addComponent(btnStartStopSharing, 32, 32, 32).addComponent(audioNotify, 32, 32, 32)
 						)
 					.addGap(4)
 					.addComponent(lblSelectArea)

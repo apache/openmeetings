@@ -81,6 +81,7 @@ public class CoreScreenShare implements IPendingServiceCallback, INetStreamEvent
 	public float Ampl_factor = 1f;
 	public boolean isConnected = false;
 	private boolean readyToRecord = false;
+	private boolean audioNotify = false;
 
 	public Map<Integer, Boolean> currentPressedKeys = new HashMap<Integer, Boolean>();
 
@@ -670,5 +671,13 @@ public class CoreScreenShare implements IPendingServiceCallback, INetStreamEvent
 		} catch (Exception err) {
 			log.error("[resultReceived]", err);
 		}
+	}
+
+	public boolean isAudioNotify() {
+		return audioNotify;
+	}
+
+	public void setAudioNotify(boolean audioNotify) {
+		this.audioNotify = audioNotify;
 	}
 }
