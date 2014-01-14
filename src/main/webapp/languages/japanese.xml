@@ -4539,19 +4539,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>公開中。ユーザー：</value>
   </string>
   <string id="1505" name="cmd_line_admin">
-    <value><![CDATA[バックアップ／リストア／アップグレードを行なう際にコマンドライン・ツールを利用すると、時間とインターネット・トラフィックを節約することができます:
-    <ol>
-		<li>オープンミーティングスのインストール・ディレクトリに移動する (例：/opt/red5)</li>
-		<li>オープン・ミーティングスを停止する(例： ./red5-shutdown.sh)</li>
-		<li>./admin.sh -b -file ~/today_om_backup.zip (オープン・ミーティングスの現状バックアップを作成する)</li>
-		<li>オープン・ミーティングスの最新アーカイブをダウンロードする</li>
-		<li>mv /opt/red5 /opt.red5.bak (必要に応じて、現環境を移動しておく)</li>
-		<li>/opt/red5 にダウンロードしたアーカイブを展開する</li>
-		<li>./admin.sh -i -file ~/today_om_backup.zip<br/>
-			(デフォルトのデータベースを使用していない場合は './admin.sh -i -file ~/today_om_backup.zip --db-type mysql --db-user om_user --db-pass om_user_pass')</li>
-		<li>オープン・ミーティングスを起動する</li>
-	</ol>
-	]]></value>
+    <value>バックアップ／リストア／アップグレードを行なう際にコマンドライン・ツールを利用すると、時間とインターネット・トラフィックを節約することができます: &lt;ol&gt; &lt;li&gt;オープンミーティングスのインストール・ディレクトリに移動する (例：/opt/red5)&lt;/li&gt; &lt;li&gt;オープン・ミーティングスを停止する(例： ./red5-shutdown.sh)&lt;/li&gt; &lt;li&gt;./admin.sh -b -file ~/today_om_backup.zip (オープン・ミーティングスの現状バックアップを作成する)&lt;/li&gt; &lt;li&gt;オープン・ミーティングスの最新アーカイブをダウンロードする&lt;/li&gt; &lt;li&gt;mv /opt/red5 /opt.red5.bak (必要に応じて、現環境を移動しておく)&lt;/li&gt; &lt;li&gt;/opt/red5 にダウンロードしたアーカイブを展開する&lt;/li&gt; &lt;li&gt;./admin.sh -i -file ~/today_om_backup.zip&lt;br/&gt; (デフォルトのデータベースを使用していない場合は './admin.sh -i -file ~/today_om_backup.zip --db-type mysql --db-user om_user --db-pass om_user_pass')&lt;/li&gt; &lt;li&gt;オープン・ミーティングスを起動する&lt;/li&gt; &lt;/ol&gt;</value>
   </string>
   <string id="1506" name="public_room_tooltip">
     <value>全ユーザーに供用される会議室</value>
@@ -4801,5 +4789,8 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
   </string>
   <string id="1588" name="multiple_addresses">
     <value>You can enter email address in the format: firstname1 lastname1 &lt;email1&gt; or "firstname2 lastname2" &lt;email2&gt; or 'firstname3 lastname3' &lt;email3&gt; or email</value>
+  </string>
+  <string id="1589" name="notify_on_disconnect">
+    <value>Notify on disconnect</value>
   </string>
 </language>

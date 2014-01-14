@@ -4539,18 +4539,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>Сообщение. Пользователю:</value>
   </string>
   <string id="1505" name="cmd_line_admin">
-    <value><![CDATA[Что бы уменьшить время и интернет траффик вы можете воспользоватся командной строкой admin для копирования/восстановления/обновления:
-    <ol>
-		<li>войдите в установочную папку OM (например /opt/red5)</li>
-		<li>остановите OM (./red5-shutdown.sh)</li>
-		<li>выполняем ./admin.sh -b -file ~/today_om_backup.zip (создает резервную копию OM)</li>
-		<li>загрузите новый дистрибутив OM</li>
-		<li>mv /opt/red5 /opt.red5.bak (перемещаем рабочую версию OM :))</li>
-		<li>распаковываем дистрибутив OM в папку /opt/red5</li>
-		<li>запускаем ./admin.sh -i -file ~/today_om_backup.zip (или './admin.sh -i -file ~/today_om_backup.zip --db-type mysql --db-user om_user --db-pass om_user_pass' в случае когда база данных отличается от базы по умолчанию )</li>
-		<li>запускаем OM</li>
-	</ol>
-	]]></value>
+    <value>Что бы уменьшить время и интернет траффик вы можете воспользоватся командной строкой admin для копирования/восстановления/обновления: &lt;ol&gt; &lt;li&gt;войдите в установочную папку OM (например /opt/red5)&lt;/li&gt; &lt;li&gt;остановите OM (./red5-shutdown.sh)&lt;/li&gt; &lt;li&gt;выполняем ./admin.sh -b -file ~/today_om_backup.zip (создает резервную копию OM)&lt;/li&gt; &lt;li&gt;загрузите новый дистрибутив OM&lt;/li&gt; &lt;li&gt;mv /opt/red5 /opt.red5.bak (перемещаем рабочую версию OM :))&lt;/li&gt; &lt;li&gt;распаковываем дистрибутив OM в папку /opt/red5&lt;/li&gt; &lt;li&gt;запускаем ./admin.sh -i -file ~/today_om_backup.zip (или './admin.sh -i -file ~/today_om_backup.zip --db-type mysql --db-user om_user --db-pass om_user_pass' в случае когда база данных отличается от базы по умолчанию )&lt;/li&gt; &lt;li&gt;запускаем OM&lt;/li&gt; &lt;/ol&gt;</value>
   </string>
   <string id="1506" name="public_room_tooltip">
     <value>Общие комнаты для всех пользователей</value>
@@ -4800,5 +4789,8 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
   </string>
   <string id="1588" name="multiple_addresses">
     <value>Вы можете ввести адрес в формате: Имя1 Фамилия1 &lt;адрес1&gt; или "Имя2 Фамилия2" &lt;адрес2&gt; или 'Имя3 Фамилия3' &lt;адрес3&gt; или адрес</value>
+  </string>
+  <string id="1589" name="notify_on_disconnect">
+    <value>Notify on disconnect</value>
   </string>
 </language>

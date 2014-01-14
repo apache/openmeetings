@@ -4539,18 +4539,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>Közzététel. Felhasználó:</value>
   </string>
   <string id="1505" name="cmd_line_admin">
-    <value><![CDATA[Időt és adatforgalmat takarít meg ha a parancssori admint használja a mentésekhez backup/restore/upgrade:
-    <ol>
-		<li>lépjen be az OM telepített könyvtárába (pl.: /opt/red5)</li>
-		<li>állítsa meg az OM-et (cmd: ./red5-shutdown.sh)</li>
-		<li>./admin.sh -b -file ~/today_om_backup.zip (backup készítése az aktuális OM -ről)</li>
-		<li>töltse le az új OM-et</li>
-		<li>mv /opt/red5 /opt.red5.bak (A működő OM verziót őrizze meg :))</li>
-		<li>Csomagolja ki az új OM-et /opt/red5</li>
-		<li>./admin.sh -i -file ~/today_om_backup.zip (or './admin.sh -i -file ~/today_om_backup.zip --db-type mysql --db-user om_user --db-pass om_user_pass' adja meg, ha nem az alapértelmezett DB hozzáférést használja )</li>
-		<li>OM indítása</li>
-	</ol>
-	]]></value>
+    <value>Időt és adatforgalmat takarít meg ha a parancssori admint használja a mentésekhez backup/restore/upgrade: &lt;ol&gt; &lt;li&gt;lépjen be az OM telepített könyvtárába (pl.: /opt/red5)&lt;/li&gt; &lt;li&gt;állítsa meg az OM-et (cmd: ./red5-shutdown.sh)&lt;/li&gt; &lt;li&gt;./admin.sh -b -file ~/today_om_backup.zip (backup készítése az aktuális OM -ről)&lt;/li&gt; &lt;li&gt;töltse le az új OM-et&lt;/li&gt; &lt;li&gt;mv /opt/red5 /opt.red5.bak (A működő OM verziót őrizze meg :))&lt;/li&gt; &lt;li&gt;Csomagolja ki az új OM-et /opt/red5&lt;/li&gt; &lt;li&gt;./admin.sh -i -file ~/today_om_backup.zip (or './admin.sh -i -file ~/today_om_backup.zip --db-type mysql --db-user om_user --db-pass om_user_pass' adja meg, ha nem az alapértelmezett DB hozzáférést használja )&lt;/li&gt; &lt;li&gt;OM indítása&lt;/li&gt; &lt;/ol&gt;</value>
   </string>
   <string id="1506" name="public_room_tooltip">
     <value>Közös termek minden felhasználó számára</value>
@@ -4800,5 +4789,8 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
   </string>
   <string id="1588" name="multiple_addresses">
     <value>You can enter email address in the format: firstname1 lastname1 &lt;email1&gt; or "firstname2 lastname2" &lt;email2&gt; or 'firstname3 lastname3' &lt;email3&gt; or email</value>
+  </string>
+  <string id="1589" name="notify_on_disconnect">
+    <value>Notify on disconnect</value>
   </string>
 </language>

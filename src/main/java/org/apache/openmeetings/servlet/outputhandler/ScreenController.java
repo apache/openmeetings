@@ -128,7 +128,7 @@ public class ScreenController {
 					, 1091, 1092, 1093, 1465, 1466
 					, 1467, 1468, 1469, 1470, 1471
 					, 1472, 1473, 1474, 1475, 1476
-					, 1477);
+					, 1477, 1589);
 			} catch (Exception e) {
 				log.error("Error resolving Language labels : ", e);
 			}

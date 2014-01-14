@@ -4539,18 +4539,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>Veröffentlichen. Nutzer:</value>
   </string>
   <string id="1505" name="cmd_line_admin">
-    <value><![CDATA[Um Zeit und Internet-Verkehr sparen, können Sie den Befehl admin für Backup/Wiederherstellen/Aktualisieren verwenden.
-    <ol>
-		<li>Gehen sie zum OM-Installationspfad (z.b. /opt/red5)</li>
-		<li>Stopen Sie OM (z.b. ./red5-shutdown.sh)</li>
-		<li>./admin.sh -b -file ~/heute_om_backup.zip (Backup vom bestehenden OM erstellen)</li>
-		<li>Laden Sie die neue Version OM herunter</li>
-		<li>mv /opt/red5 /opt.red5.bak (kopieren Sie die existierende OM-Version für den Fall :))</li>
-		<li>Entpacken Sie die heruntergeladene OM-Version nach /opt/red5</li>
-		<li>./admin.sh -i -file ~/heute_om_backup.zip (or './admin.sh -i -file ~/heute_om_backup.zip --db-type mysql --db-user om_user --db-pass om_user_pass', für den Fall, dass Sie eine Nicht-Standard-DB verwenden)</li>
-		<li>Starten Sie OM</li>
-	</ol>
-	]]></value>
+    <value>Um Zeit und Internet-Verkehr sparen, können Sie den Befehl admin für Backup/Wiederherstellen/Aktualisieren verwenden. &lt;ol&gt; &lt;li&gt;Gehen sie zum OM-Installationspfad (z.b. /opt/red5)&lt;/li&gt; &lt;li&gt;Stopen Sie OM (z.b. ./red5-shutdown.sh)&lt;/li&gt; &lt;li&gt;./admin.sh -b -file ~/heute_om_backup.zip (Backup vom bestehenden OM erstellen)&lt;/li&gt; &lt;li&gt;Laden Sie die neue Version OM herunter&lt;/li&gt; &lt;li&gt;mv /opt/red5 /opt.red5.bak (kopieren Sie die existierende OM-Version für den Fall :))&lt;/li&gt; &lt;li&gt;Entpacken Sie die heruntergeladene OM-Version nach /opt/red5&lt;/li&gt; &lt;li&gt;./admin.sh -i -file ~/heute_om_backup.zip (or './admin.sh -i -file ~/heute_om_backup.zip --db-type mysql --db-user om_user --db-pass om_user_pass', für den Fall, dass Sie eine Nicht-Standard-DB verwenden)&lt;/li&gt; &lt;li&gt;Starten Sie OM&lt;/li&gt; &lt;/ol&gt;</value>
   </string>
   <string id="1506" name="public_room_tooltip">
     <value>gemeinsame Räume für alle Benutzer</value>
@@ -4800,5 +4789,8 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
   </string>
   <string id="1588" name="multiple_addresses">
     <value>You can enter email address in the format: firstname1 lastname1 &lt;email1&gt; or "firstname2 lastname2" &lt;email2&gt; or 'firstname3 lastname3' &lt;email3&gt; or email</value>
+  </string>
+  <string id="1589" name="notify_on_disconnect">
+    <value>Notify on disconnect</value>
   </string>
 </language>

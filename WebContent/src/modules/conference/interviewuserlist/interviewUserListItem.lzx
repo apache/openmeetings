@@ -40,8 +40,6 @@
     
 	<handler name="oninit">
         <![CDATA[
-        
-            //this._userpic.setAttribute('src',downloadurl); 
             //This is a workaround cause in LPS-4.2.x immediatelly loading does not work
             lz.Timer.addTimer( new LzDelegate( this, "fadeText" ), 1000 );
 

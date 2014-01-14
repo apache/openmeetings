@@ -510,6 +510,7 @@
 			<fileset dir="${red5.server.lib}" includes="mina-core*.jar" />
 			<fileset dir="${red5.server.lib}" includes="com.springsource.slf4j.api*.jar" />
 			<fileset dir="${red5.client.lib}" includes="red5*.jar" />
+			<fileset dir="${red5.lib}" includes="red5*.jar" />
 		</copy>
 		<taskdef resource="net/sf/antcontrib/antlib.xml">
 			<classpath refid="check.classpath" />

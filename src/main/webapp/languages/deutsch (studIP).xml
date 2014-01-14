@@ -4539,18 +4539,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>Publishing. User:</value>
   </string>
   <string id="1505" name="cmd_line_admin">
-    <value><![CDATA[To save time and internet traffic you can use command line admin to backup/restore/upgrade:
-    <ol>
-		<li>go to OM install dir (for ex. /opt/red5)</li>
-		<li>stop OM (for ex. ./red5-shutdown.sh)</li>
-		<li>./admin.sh -b -file ~/today_om_backup.zip (create backup of current OM)</li>
-		<li>download archive with new OM</li>
-		<li>mv /opt/red5 /opt.red5.bak (move working version of OM just in case :))</li>
-		<li>extract downloaded OM to the /opt/red5</li>
-		<li>./admin.sh -i -file ~/today_om_backup.zip (or './admin.sh -i -file ~/today_om_backup.zip --db-type mysql --db-user om_user --db-pass om_user_pass' in case of you are using non-default DB )</li>
-		<li>start OM</li>
-	</ol>
-	]]></value>
+    <value>To save time and internet traffic you can use command line admin to backup/restore/upgrade: &lt;ol&gt; &lt;li&gt;go to OM install dir (for ex. /opt/red5)&lt;/li&gt; &lt;li&gt;stop OM (for ex. ./red5-shutdown.sh)&lt;/li&gt; &lt;li&gt;./admin.sh -b -file ~/today_om_backup.zip (create backup of current OM)&lt;/li&gt; &lt;li&gt;download archive with new OM&lt;/li&gt; &lt;li&gt;mv /opt/red5 /opt.red5.bak (move working version of OM just in case :))&lt;/li&gt; &lt;li&gt;extract downloaded OM to the /opt/red5&lt;/li&gt; &lt;li&gt;./admin.sh -i -file ~/today_om_backup.zip (or './admin.sh -i -file ~/today_om_backup.zip --db-type mysql --db-user om_user --db-pass om_user_pass' in case of you are using non-default DB )&lt;/li&gt; &lt;li&gt;start OM&lt;/li&gt; &lt;/ol&gt;</value>
   </string>
   <string id="1506" name="public_room_tooltip">
     <value>Rooms common to all user</value>
@@ -4800,5 +4789,8 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
   </string>
   <string id="1588" name="multiple_addresses">
     <value>You can enter email address in the format: firstname1 lastname1 &lt;email1&gt; or "firstname2 lastname2" &lt;email2&gt; or 'firstname3 lastname3' &lt;email3&gt; or email</value>
+  </string>
+  <string id="1589" name="notify_on_disconnect">
+    <value>Notify on disconnect</value>
   </string>
 </language>
