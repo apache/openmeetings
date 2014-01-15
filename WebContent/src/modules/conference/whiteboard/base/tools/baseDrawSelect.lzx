@@ -263,8 +263,8 @@
                 //}
                 
                 if (
-                    (this.baseactionobjectList[eg][this.baseactionobjectList[eg].length-5] > x && this.baseactionobjectList[eg][this.baseactionobjectList[eg].length-4] > y) &&
-                    (this.baseactionobjectList[eg][this.baseactionobjectList[eg].length-5] < x+width && this.baseactionobjectList[eg][this.baseactionobjectList[eg].length-4] < y+height)
+                    (this.baseactionobjectList[eg][this.baseactionobjectList[eg].length-5] >= x && this.baseactionobjectList[eg][this.baseactionobjectList[eg].length-4] >= y) &&
+                    (this.baseactionobjectList[eg][this.baseactionobjectList[eg].length-5] <= x+width && this.baseactionobjectList[eg][this.baseactionobjectList[eg].length-4] <= y+height)
                    ) {
                     //return this.baseactionobjectList[eg];
                     //this.baseactionobjectList[eg][6] = 0.2;

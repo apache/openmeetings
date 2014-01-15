@@ -984,10 +984,10 @@
             //if ($debug) Debug.write("c4 ",( this.baseactionobjectList[eg][this.baseactionobjectList[eg].length-4]+this.baseactionobjectList[eg][this.baseactionobjectList[eg].length-2] ),">",y);
         
 			
-			if ( ( this.baseactionobjectList[eg][this.baseactionobjectList[eg].length-5]<x 
+			if ( ( this.baseactionobjectList[eg][this.baseactionobjectList[eg].length-5]<=x 
 				&& ( (this.baseactionobjectList[eg][this.baseactionobjectList[eg].length-5]+this.baseactionobjectList[eg][this.baseactionobjectList[eg].length-3]) >=x ) ) 
-				&& ( this.baseactionobjectList[eg][this.baseactionobjectList[eg].length-4]<y 
-				&& ( this.baseactionobjectList[eg][this.baseactionobjectList[eg].length-4]+this.baseactionobjectList[eg][this.baseactionobjectList[eg].length-2] )>y  ) ) {
+				&& ( this.baseactionobjectList[eg][this.baseactionobjectList[eg].length-4]<=y 
+				&& ( this.baseactionobjectList[eg][this.baseactionobjectList[eg].length-4]+this.baseactionobjectList[eg][this.baseactionobjectList[eg].length-2] )>=y  ) ) {
 					
 				if (this.baseactionobjectList[eg][0] != "mindMapNode"
 				        && this.baseactionobjectList[eg][0] != "mindMapCenter")	{
