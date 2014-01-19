@@ -41,15 +41,15 @@ import org.slf4j.Logger;
 @Root
 public class RemoteSessionObject {
 	private static final Logger log = Red5LoggerFactory.getLogger(BackupExport.class, webAppRootKey);
-	@Element
+	@Element(required = false)
 	private String username;
-	@Element
+	@Element(required = false)
 	private String firstname;
-	@Element
+	@Element(required = false)
 	private String lastname;
-	@Element
+	@Element(required = false)
 	private String pictureUrl;
-	@Element
+	@Element(required = false)
 	private String email;
 	@Element
 	private String externalUserId;
