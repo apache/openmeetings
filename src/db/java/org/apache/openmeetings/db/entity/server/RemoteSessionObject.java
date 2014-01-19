@@ -56,6 +56,9 @@ public class RemoteSessionObject {
 	@Element
 	private String externalUserType;
 	
+	public RemoteSessionObject() {
+	}
+	
 	public RemoteSessionObject(String username, String firstname, String lastname,
 			String pictureUrl, String email) {
 		this(username, firstname, lastname, pictureUrl, email, "0", "");
