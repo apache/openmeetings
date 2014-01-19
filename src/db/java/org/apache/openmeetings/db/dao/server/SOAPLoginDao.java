@@ -18,6 +18,8 @@
  */
 package org.apache.openmeetings.db.dao.server;
 
+import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+
 import java.util.Date;
 import java.util.List;
 
@@ -26,7 +28,6 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
 import org.apache.openmeetings.db.entity.server.SOAPLogin;
-import org.apache.openmeetings.util.OpenmeetingsVariables;
 import org.apache.openmeetings.util.crypt.ManageCryptStyle;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -34,9 +35,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
 public class SOAPLoginDao {
-
-	private static final Logger log = Red5LoggerFactory.getLogger(
-			SOAPLoginDao.class, OpenmeetingsVariables.webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(SOAPLoginDao.class, webAppRootKey);
 
 	@PersistenceContext
 	private EntityManager em;
@@ -82,18 +81,15 @@ public class SOAPLoginDao {
 		return null;
 	}
 
-	public SOAPLogin getSOAPLoginByHash(String hash) {
+	public SOAPLogin get(String hash) {
 		try {
-			String hql = "select sl from SOAPLogin as sl "
-					+ "WHERE sl.hash LIKE :hash";
+			String hql = "select sl from SOAPLogin as sl WHERE sl.hash LIKE :hash";
 			TypedQuery<SOAPLogin> query = em.createQuery(hql, SOAPLogin.class);
 			query.setParameter("hash", hash);
 			List<SOAPLogin> sList = query.getResultList();
 
 			if (sList.size() > 1) {
-				throw new Exception(
-						"there are more then one SOAPLogin with identical hash! "
-								+ hash);
+				throw new Exception("there are more then one SOAPLogin with identical hash! " + hash);
 			}
 
 			if (sList.size() == 1) {
@@ -101,12 +97,12 @@ public class SOAPLoginDao {
 			}
 
 		} catch (Exception ex2) {
-			log.error("[getSOAPLoginByHash]: ", ex2);
+			log.error("[get]: ", ex2);
 		}
 		return null;
 	}
 
-	public void updateSOAPLogin(SOAPLogin soapLogin) {
+	public void update(SOAPLogin soapLogin) {
 		try {
 			if (soapLogin.getSoapLoginId() == 0) {
 				em.persist(soapLogin);
@@ -116,7 +112,7 @@ public class SOAPLoginDao {
 				}
 			}
 		} catch (Exception ex2) {
-			log.error("[updateSOAPLogin]: ", ex2);
+			log.error("[update]: ", ex2);
 		}
 	}
 

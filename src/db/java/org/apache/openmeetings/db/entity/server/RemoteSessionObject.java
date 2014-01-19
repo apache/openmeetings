@@ -18,6 +18,19 @@
  */
 package org.apache.openmeetings.db.entity.server;
 
+import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+
+import java.io.StringReader;
+import java.io.StringWriter;
+
+import org.apache.openmeetings.backup.BackupExport;
+import org.red5.logging.Red5LoggerFactory;
+import org.simpleframework.xml.Element;
+import org.simpleframework.xml.Root;
+import org.simpleframework.xml.Serializer;
+import org.simpleframework.xml.core.Persister;
+import org.slf4j.Logger;
+
 /**
  * This Class is marshaled as an XML-Object and stored as a String in the DB to make
  * it more easy to extend it
@@ -25,15 +38,22 @@ package org.apache.openmeetings.db.entity.server;
  * @author sebastianwagner
  *
  */
+@Root
 public class RemoteSessionObject {
-	
+	private static final Logger log = Red5LoggerFactory.getLogger(BackupExport.class, webAppRootKey);
+	@Element
 	private String username;
+	@Element
 	private String firstname;
+	@Element
 	private String lastname;
+	@Element
 	private String pictureUrl;
+	@Element
 	private String email;
-	
+	@Element
 	private String externalUserId;
+	@Element
 	private String externalUserType;
 	
 	public RemoteSessionObject(String username, String firstname, String lastname,
@@ -113,5 +133,28 @@ public class RemoteSessionObject {
 	public void setExternalUserType(String externalUserType) {
 		this.externalUserType = externalUserType;
 	}
+
+	public String toXml() throws Exception {
+		StringWriter sw = new StringWriter();
+		Serializer serializer = new Persister();
+		serializer.write(this, sw);
+		return sw.toString();
+	}
+
+	public static RemoteSessionObject fromXml(String xml) {
+		Serializer serializer = new Persister();
+		try {
+			return serializer.read(RemoteSessionObject.class, new StringReader(xml));
+		} catch (Exception e) {
+			log.error("Unexpected error while restoring object from XML: " + xml, e);
+		}
+		return null;
+	}
 	
+	@Override
+	public String toString() {
+		return "RemoteSessionObject [username=" + username + ", firstname=" + firstname + ", lastname=" + lastname
+				+ ", pictureUrl=" + pictureUrl + ", email=" + email + ", externalUserId=" + externalUserId
+				+ ", externalUserType=" + externalUserType + "]";
+	}
 }

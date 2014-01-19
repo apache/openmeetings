@@ -40,6 +40,8 @@ import org.apache.openmeetings.web.user.dashboard.PrivateRoomsWidgetDescriptor;
 import org.apache.openmeetings.web.user.dashboard.RssWidgetDescriptor;
 import org.apache.openmeetings.web.user.dashboard.StartWidgetDescriptor;
 import org.apache.openmeetings.web.user.dashboard.WelcomeWidgetDescriptor;
+import org.apache.openmeetings.web.util.AviRecordingResourceReference;
+import org.apache.openmeetings.web.util.FlvRecordingResourceReference;
 import org.apache.openmeetings.web.util.Mp4RecordingResourceReference;
 import org.apache.openmeetings.web.util.OggRecordingResourceReference;
 import org.apache.openmeetings.web.util.UserDashboardPersister;
@@ -123,6 +125,8 @@ public class Application extends AuthenticatedWebApplication {
 		mountPage("signin", getSignInPageClass());
 		mountPage("activate", ActivatePage.class);
 		mountPage("reset", ResetPage.class);
+		mountResource("/recordings/avi/${id}", new AviRecordingResourceReference());
+		mountResource("/recordings/flv/${id}", new FlvRecordingResourceReference());
 		mountResource("/recordings/mp4/${id}", new Mp4RecordingResourceReference());
 		mountResource("/recordings/ogg/${id}", new OggRecordingResourceReference());
 	}

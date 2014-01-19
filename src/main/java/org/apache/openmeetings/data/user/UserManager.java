@@ -919,8 +919,7 @@ public class UserManager implements IUserManager {
 			if (address != null) {
 				users.setAdresses(address);
 			} else {
-				users.setAdresses("", "", "", statemanagement.getStateById(1L), "",
-						"", "", "", email);
+				users.setAdresses("", "", "", statemanagement.getStateById(1L), "", "", "", "", email);
 			}
 
 			users.setAvailible(availible);
@@ -959,7 +958,7 @@ public class UserManager implements IUserManager {
 			return user_id;
 
 		} catch (Exception ex2) {
-			log.error("[registerUser]", ex2);
+			log.error("[addUserWithExternalKey]", ex2);
 		}
 		return null;
 	}

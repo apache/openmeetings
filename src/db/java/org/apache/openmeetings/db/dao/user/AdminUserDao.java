@@ -124,4 +124,8 @@ public class AdminUserDao implements IDataProviderDao<User> {
 	public User getContact(String email, String firstName, String lastName, Long langId, String tzId, long ownerId) {
 		return dao.getContact(email, firstName, lastName, langId, tzId, dao.get(ownerId));
 	}
+	
+	public User getExternalUser(String extId, String extType) {
+		return dao.getExternalUser(extId, extType);
+	}
 }

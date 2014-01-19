@@ -258,7 +258,7 @@ public class RoomWebService {
 
 			return null;
 		} catch (Exception err) {
-			log.error("[getFlvRecordingByExternalRoomType] ", err);
+			log.error("[getFlvRecordingByExternalRoomTypeAndCreator] ", err);
 			throw new AxisFault(err.getMessage());
 		}
 	}
@@ -288,7 +288,7 @@ public class RoomWebService {
 
 			return null;
 		} catch (Exception err) {
-			log.error("[getFlvRecordingByExternalRoomType] ", err);
+			log.error("[getFlvRecordingByExternalRoomTypeByList] ", err);
 			throw new AxisFault(err.getMessage());
 		}
 	}

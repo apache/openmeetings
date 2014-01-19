@@ -107,7 +107,7 @@ public class SessiondataDao {
 
 			return sd;
 		} catch (Exception ex2) {
-			log.error("[updateUser]: ", ex2);
+			log.error("[getSessionByHash]: ", ex2);
 		}
 		return null;
 	}

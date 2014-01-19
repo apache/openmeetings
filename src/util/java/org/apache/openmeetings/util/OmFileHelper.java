@@ -194,11 +194,11 @@ public class OmFileHelper {
 	}
 	
 	public static File getMp4Recording(String name) {
-		return new File(getDir(getStreamsDir(), HIBERNATE_DIR), name + MP4_EXTENSION);
+		return getRecording(name + MP4_EXTENSION);
 	}
 	
 	public static File getOggRecording(String name) {
-		return new File(getDir(getStreamsDir(), HIBERNATE_DIR), name + OGG_EXTENSION);
+		return getRecording(name + OGG_EXTENSION);
 	}
 	
 	public static File getStreamsSubDir(Long id) {

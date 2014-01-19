@@ -30,6 +30,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
@@ -39,12 +40,16 @@ import java.util.TimeZone;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.label.FieldLanguageDao;
 import org.apache.openmeetings.db.dao.label.FieldLanguagesValuesDao;
+import org.apache.openmeetings.db.dao.server.SOAPLoginDao;
 import org.apache.openmeetings.db.dao.server.SessiondataDao;
+import org.apache.openmeetings.db.dao.user.AdminUserDao;
 import org.apache.openmeetings.db.dao.user.ILdapLoginManagement;
 import org.apache.openmeetings.db.dao.user.IUserManager;
 import org.apache.openmeetings.db.dao.user.StateDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.label.FieldLanguage;
+import org.apache.openmeetings.db.entity.server.RemoteSessionObject;
+import org.apache.openmeetings.db.entity.server.SOAPLogin;
 import org.apache.openmeetings.db.entity.server.Sessiondata;
 import org.apache.openmeetings.db.entity.user.State;
 import org.apache.openmeetings.db.entity.user.User;
@@ -88,6 +93,7 @@ public class WebSession extends AbstractAuthenticatedWebSession {
 	private String baseUrl = null;
 	private Locale browserLocale = null;
 	private int browserTZOffset = Integer.MIN_VALUE;
+	private Long recordingId;
 	private static Set<Long> STRINGS_WITH_APP = new HashSet<Long>(); //FIXME need to be removed
 	static {
 		STRINGS_WITH_APP.addAll(Arrays.asList(499L, 500L, 506L, 511L, 512L, 513L, 517L, 532L, 622L, 804L
@@ -106,6 +112,7 @@ public class WebSession extends AbstractAuthenticatedWebSession {
 		userLevel = -1;
 		SID = null;
 		sdf = null;
+		recordingId = null;
 	}
 	
 	@Override
@@ -161,6 +168,62 @@ public class WebSession extends AbstractAuthenticatedWebSession {
 		return userId > -1;
 	}
 
+	public boolean signIn(String secureHash) {
+		//FIXME code is duplicated from MainService, need to be unified
+		SOAPLoginDao soapDao = getBean(SOAPLoginDao.class);
+		SOAPLogin soapLogin = soapDao.get(secureHash);
+		if (!soapLogin.getUsed()) { //add code for  || (soapLogin.getAllowSameURLMultipleTimes())
+			SessiondataDao sessionDao = getBean(SessiondataDao.class);
+			Sessiondata sd = sessionDao.getSessionByHash(soapLogin.getSessionHash());
+			if (sd != null && sd.getSessionXml() != null) {
+				RemoteSessionObject remoteUser = RemoteSessionObject.fromXml(sd.getSessionXml());
+				if (remoteUser != null && !Strings.isEmpty(remoteUser.getExternalUserId())) {
+					AdminUserDao userDao = getBean(AdminUserDao.class);
+					User user = userDao.getExternalUser(remoteUser.getExternalUserId(), remoteUser.getExternalUserType());
+					if (user == null) {
+						user = userDao.getNewUserInstance(null);
+						user.setFirstname(remoteUser.getFirstname());
+						user.setLastname(remoteUser.getLastname());
+						user.setLogin(remoteUser.getUsername()); //FIXME check if login UNIQUE
+						user.setExternalUserId(remoteUser.getExternalUserId());
+						user.setExternalUserType(remoteUser.getExternalUserType());
+						user.getAdresses().setEmail(remoteUser.getEmail());
+						user.setPictureuri(remoteUser.getPictureUrl());
+					} else {
+						user.setFirstname(remoteUser.getFirstname());
+						user.setLastname(remoteUser.getLastname());
+						user.setPictureuri(remoteUser.getPictureUrl());
+					}
+					user = userDao.update(user, null);
+
+					soapLogin.setUsed(true);
+					soapLogin.setUseDate(new Date());
+					//soapLogin.setClientURL(clientURL); //FIXME
+					soapDao.update(soapLogin);
+
+					sessionDao.updateUser(SID, user.getUser_id());
+					setUser(user);
+					recordingId = soapLogin.getRoomRecordingId();
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+	
+	private void setUser(User u) {
+		userId = u.getUser_id();
+		userLevel = u.getLevel_id();
+		languageId = u.getLanguage_id();
+		tz = getBean(TimezoneUtil.class).getTimeZone(u);
+		ISO8601FORMAT.setTimeZone(tz);
+		//FIXMW locale need to be set by User language first
+		sdf = DateFormat.getDateTimeInstance(SHORT, SHORT, getLocale());
+		if (null == getId()) {
+			bind();
+		}
+	}
+	
 	public boolean signIn(String login, String password, String ldapConfigFileName) {
 		Sessiondata sessData = getBean(SessiondataDao.class).startsession();
 		SID = sessData.getSession_id();
@@ -169,17 +232,7 @@ public class WebSession extends AbstractAuthenticatedWebSession {
 				: getBean(ILdapLoginManagement.class).doLdapLogin(login, password, null, null, SID, ldapConfigFileName);
 		
 		if (u instanceof User) {
-			User user = (User)u;
-			userId = user.getUser_id();
-			userLevel = user.getLevel_id();
-			languageId = user.getLanguage_id();
-			tz = getBean(TimezoneUtil.class).getTimeZone(user);
-			ISO8601FORMAT.setTimeZone(tz);
-			//FIXMW locale need to be set by User language first
-			sdf = DateFormat.getDateTimeInstance(SHORT, SHORT, getLocale());
-			if (null == getId()) {
-				bind();
-			}
+			setUser((User)u);
 			return true;
 		}
 		return false;
@@ -221,6 +274,10 @@ public class WebSession extends AbstractAuthenticatedWebSession {
 
 	public static long getUserId() {
 		return get().userId;
+	}
+	
+	public static Long getRecordingId() {
+		return get().recordingId;
 	}
 	
 	public static TimeZone getUserTimeZone() {

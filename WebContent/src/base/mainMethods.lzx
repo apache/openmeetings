@@ -437,6 +437,7 @@
             hib.userScope = scopeRoomId;
         }
         
+       	canvas.setAttribute('wicketsid', null);
         var wicketsid = lz.Browser.getInitArg('wicketsid');
         var wicketroomid = lz.Browser.getInitArg('wicketroomid');
         if (wicketsid != undefined && wicketroomid != undefined && !isNaN(wicketroomid)) {

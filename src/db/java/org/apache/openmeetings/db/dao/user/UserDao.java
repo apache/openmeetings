@@ -83,4 +83,8 @@ public class UserDao {
 	public Long searchCountUserProfile(String text, String offers, String search) {
 		return dao.searchCountUserProfile(text, offers, search);
 	}
+	
+	public User getExternalUser(String extId, String extType) {
+		return dao.getExternalUser(extId, extType);
+	}
 }

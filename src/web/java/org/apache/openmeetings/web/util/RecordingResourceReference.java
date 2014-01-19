@@ -20,6 +20,7 @@ package org.apache.openmeetings.web.util;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.openmeetings.web.app.Application.getBean;
+import static org.apache.openmeetings.web.app.WebSession.getRecordingId;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import static org.red5.logging.Red5LoggerFactory.getLogger;
 
@@ -165,21 +166,43 @@ public abstract class RecordingResourceReference extends ResourceReference {
 	abstract String getFileName(FlvRecording r);
 	abstract File getFile(FlvRecording r);
 	
-	private FlvRecording getRecording(Attributes attributes) {
-		PageParameters params = attributes.getParameters();
-		StringValue id = params.get("id");
-		if (WebSession.get().isSignedIn() && !id.isEmpty()) {
-			FlvRecording r = getBean(FlvRecordingDao.class).get(id.toLongObject());
-			if (r.getOwnerId() == null || getUserId() == r.getOwnerId()) {
+	private Long getLong(StringValue id) {
+		Long result = null;
+		try {
+			result = id.toLongObject();
+		} catch(Exception e) {
+			//no-op
+		}
+		return result;
+	}
+	
+	private FlvRecording getRecording(Long id) {
+		FlvRecording r = getBean(FlvRecordingDao.class).get(id);
+		if (r.getOwnerId() == null || getUserId() == r.getOwnerId()) {
+			return r;
+		}
+		//FIXME UGLY need to be optimized
+		for (Organisation_Users ou : getBean(UserDao.class).get(getUserId()).getOrganisation_users()) {
+			if (ou.getOrganisation().getOrganisation_id().equals(r.getOrganization_id())) {
 				return r;
 			}
-			//FIXME UGLY need to be optimized
-			for (Organisation_Users ou : getBean(UserDao.class).get(getUserId()).getOrganisation_users()) {
-				if (ou.getOrganisation().getOrganisation_id().equals(r.getOrganization_id())) {
-					return r;
-				}
+		}
+		//TODO investigate if these checks are enough
+		return null;
+	}
+	
+	private FlvRecording getRecording(Attributes attributes) {
+		PageParameters params = attributes.getParameters();
+		StringValue idStr = params.get("id");
+		Long id = getLong(idStr);
+		WebSession ws = WebSession.get();
+		if (id != null && ws.isSignedIn()) {
+			return getRecording(id);
+		} else {
+			ws.invalidate();
+			if (ws.signIn(idStr.toString())) {
+				return getRecording(getRecordingId());
 			}
-			//TODO investigate if these checks are enough
 		}
 		return null;
 	}

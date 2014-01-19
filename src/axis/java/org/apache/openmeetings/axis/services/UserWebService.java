@@ -43,9 +43,6 @@ import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.thoughtworks.xstream.XStream;
-import com.thoughtworks.xstream.io.xml.DomDriver;
-
 /**
  * 
  * The Service contains methods to login and create hash to directly enter
@@ -539,16 +536,9 @@ public class UserWebService {
 				RemoteSessionObject remoteSessionObject = new RemoteSessionObject(
 						username, firstname, lastname, profilePictureUrl, email);
 
-				log.debug("username " + username);
-				log.debug("firstname " + firstname);
-				log.debug("lastname " + lastname);
-				log.debug("profilePictureUrl " + profilePictureUrl);
-				log.debug("email " + email);
+				log.debug(remoteSessionObject.toString());
 
-				// XStream xStream = new XStream(new XppDriver());
-				XStream xStream = new XStream(new DomDriver("UTF-8"));
-				xStream.setMode(XStream.NO_REFERENCES);
-				String xmlString = xStream.toXML(remoteSessionObject);
+				String xmlString = remoteSessionObject.toXml();
 
 				log.debug("xmlString " + xmlString);
 
@@ -607,18 +597,9 @@ public class UserWebService {
 						username, firstname, lastname, profilePictureUrl,
 						email, externalUserId, externalUserType);
 
-				log.debug("username " + username);
-				log.debug("firstname " + firstname);
-				log.debug("lastname " + lastname);
-				log.debug("profilePictureUrl " + profilePictureUrl);
-				log.debug("email " + email);
-				log.debug("externalUserId " + externalUserId);
-				log.debug("externalUserType " + externalUserType);
+				log.debug(remoteSessionObject.toString());
 
-				// XStream xStream = new XStream(new XppDriver());
-				XStream xStream = new XStream(new DomDriver("UTF-8"));
-				xStream.setMode(XStream.NO_REFERENCES);
-				String xmlString = xStream.toXML(remoteSessionObject);
+				String xmlString = remoteSessionObject.toXml();
 
 				log.debug("xmlString " + xmlString);
 
@@ -680,18 +661,9 @@ public class UserWebService {
 						username, firstname, lastname, profilePictureUrl,
 						email, externalUserId, externalUserType);
 
-				log.debug("username " + username);
-				log.debug("firstname " + firstname);
-				log.debug("lastname " + lastname);
-				log.debug("profilePictureUrl " + profilePictureUrl);
-				log.debug("email " + email);
-				log.debug("externalUserId " + externalUserId);
-				log.debug("externalUserType " + externalUserType);
+				log.debug(remoteSessionObject.toString());
 
-				// XStream xStream = new XStream(new XppDriver());
-				XStream xStream = new XStream(new DomDriver("UTF-8"));
-				xStream.setMode(XStream.NO_REFERENCES);
-				String xmlString = xStream.toXML(remoteSessionObject);
+				String xmlString = remoteSessionObject.toXml();
 
 				log.debug("xmlString " + xmlString);
 
@@ -781,18 +753,9 @@ public class UserWebService {
 						username, firstname, lastname, profilePictureUrl,
 						email, externalUserId, externalUserType);
 
-				log.debug("username " + username);
-				log.debug("firstname " + firstname);
-				log.debug("lastname " + lastname);
-				log.debug("profilePictureUrl " + profilePictureUrl);
-				log.debug("email " + email);
-				log.debug("externalUserId " + externalUserId);
-				log.debug("externalUserType " + externalUserType);
+				log.debug(remoteSessionObject.toString());
 
-				// XStream xStream = new XStream(new XppDriver());
-				XStream xStream = new XStream(new DomDriver("UTF-8"));
-				xStream.setMode(XStream.NO_REFERENCES);
-				String xmlString = xStream.toXML(remoteSessionObject);
+				String xmlString = remoteSessionObject.toXml();
 
 				log.debug("xmlString " + xmlString);
 
@@ -883,19 +846,9 @@ public class UserWebService {
 						username, firstname, lastname, profilePictureUrl,
 						email, externalUserId, externalUserType);
 
-				log.debug("username " + username);
-				log.debug("firstname " + firstname);
-				log.debug("lastname " + lastname);
-				log.debug("profilePictureUrl " + profilePictureUrl);
-				log.debug("email " + email);
-				log.debug("externalUserId " + externalUserId);
-				log.debug("externalUserType " + externalUserType);
-				log.debug("allowRecording " + allowRecording);
+				log.debug(remoteSessionObject.toString());
 
-				// XStream xStream = new XStream(new XppDriver());
-				XStream xStream = new XStream(new DomDriver("UTF-8"));
-				xStream.setMode(XStream.NO_REFERENCES);
-				String xmlString = xStream.toXML(remoteSessionObject);
+				String xmlString = remoteSessionObject.toXml();
 
 				log.debug("xmlString " + xmlString);
 
@@ -980,18 +933,9 @@ public class UserWebService {
 						username, firstname, lastname, profilePictureUrl,
 						email, externalUserId, externalUserType);
 
-				log.debug("username " + username);
-				log.debug("firstname " + firstname);
-				log.debug("lastname " + lastname);
-				log.debug("profilePictureUrl " + profilePictureUrl);
-				log.debug("email " + email);
-				log.debug("externalUserId " + externalUserId);
-				log.debug("externalUserType " + externalUserType);
+				log.debug(remoteSessionObject.toString());
 
-				// XStream xStream = new XStream(new XppDriver());
-				XStream xStream = new XStream(new DomDriver("UTF-8"));
-				xStream.setMode(XStream.NO_REFERENCES);
-				String xmlString = xStream.toXML(remoteSessionObject);
+				String xmlString = remoteSessionObject.toXml();
 
 				log.debug("xmlString " + xmlString);
 
@@ -1080,19 +1024,10 @@ public class UserWebService {
 						username, firstname, lastname, profilePictureUrl,
 						email, externalUserId, externalUserType);
 
-				log.debug("username " + username);
-				log.debug("firstname " + firstname);
-				log.debug("lastname " + lastname);
-				log.debug("profilePictureUrl " + profilePictureUrl);
-				log.debug("email " + email);
-				log.debug("externalUserId " + externalUserId);
-				log.debug("externalUserType " + externalUserType);
+				log.debug(remoteSessionObject.toString());
 				log.debug("showNickNameDialogAsInt" + showNickNameDialogAsInt);
 
-				// XStream xStream = new XStream(new XppDriver());
-				XStream xStream = new XStream(new DomDriver("UTF-8"));
-				xStream.setMode(XStream.NO_REFERENCES);
-				String xmlString = xStream.toXML(remoteSessionObject);
+				String xmlString = remoteSessionObject.toXml();
 
 				log.debug("xmlString " + xmlString);
 
@@ -1165,18 +1100,9 @@ public class UserWebService {
 						username, firstname, "", "", "", externalUserId,
 						externalUserType);
 
-				log.debug("username " + username);
-				log.debug("firstname " + firstname);
-				log.debug("lastname " + lastname);
-				log.debug("profilePictureUrl " + "");
-				log.debug("email " + "");
-				log.debug("externalUserId " + externalUserId);
-				log.debug("externalUserType " + externalUserType);
+				log.debug(remoteSessionObject.toString());
 
-				// XStream xStream = new XStream(new XppDriver());
-				XStream xStream = new XStream(new DomDriver("UTF-8"));
-				xStream.setMode(XStream.NO_REFERENCES);
-				String xmlString = xStream.toXML(remoteSessionObject);
+				String xmlString = remoteSessionObject.toXml();
 
 				log.debug("xmlString " + xmlString);
 

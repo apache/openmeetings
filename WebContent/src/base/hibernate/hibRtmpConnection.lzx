@@ -564,7 +564,9 @@
                     	canvas.initroomid = canvas.wicketroomid;
                         parent.getRoomById.doCall();
                     } else {
-                        canvas.thishib.loaderVar.close();
+                    	if (canvas.thishib.loaderVar != null) {
+	                        canvas.thishib.loaderVar.close();
+                        }
                         parent.getRoomById.doCall();
                     }
                 }

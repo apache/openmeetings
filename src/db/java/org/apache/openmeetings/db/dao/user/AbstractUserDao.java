@@ -265,7 +265,7 @@ public class AbstractUserDao  {
 	 * @return
 	 */
 	public boolean checkUserLogin(String login, Long id) {
-		log.debug("checkUserLogin: email = {}, id = {}", login, id);
+		log.debug("checkUserLogin: login = {}, id = {}", login, id);
 		long count = em.createNamedQuery("checkUserLogin", Long.class)
 				.setParameter("login", login)
 				.setParameter("id", id == null ? 0 : id)
@@ -480,5 +480,12 @@ public class AbstractUserDao  {
 			query.setParameter("userSearchs", StringUtils.lowerCase("%" + search + "%"));
 		}
 		return query.getSingleResult();
+	}
+
+	public User getExternalUser(String extId, String extType) {
+		return em.createNamedQuery("getExternalUser", User.class)
+				.setParameter("externalId", extId)
+				.setParameter("externalType", extType)
+				.getSingleResult();
 	}
 }

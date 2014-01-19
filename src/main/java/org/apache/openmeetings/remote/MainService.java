@@ -53,6 +53,7 @@ import org.apache.openmeetings.remote.red5.ScopeApplicationAdapter;
 import org.apache.openmeetings.remote.util.SessionVariablesUtil;
 import org.apache.openmeetings.util.AuthLevelUtil;
 import org.apache.openmeetings.util.OpenmeetingsVariables;
+import org.apache.wicket.util.string.Strings;
 import org.red5.logging.Red5LoggerFactory;
 import org.red5.server.api.IConnection;
 import org.red5.server.api.Red5;
@@ -60,9 +61,6 @@ import org.red5.server.api.service.IPendingServiceCall;
 import org.red5.server.api.service.IPendingServiceCallback;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import com.thoughtworks.xstream.XStream;
-import com.thoughtworks.xstream.io.xml.DomDriver;
 
 import edu.emory.mathcs.backport.java.util.Arrays;
 
@@ -200,7 +198,7 @@ public class MainService implements IPendingServiceCallback {
 
 			log.debug("swfURL " + clientURL);
 
-			SOAPLogin soapLogin = soapLoginDao.getSOAPLoginByHash(secureHash);
+			SOAPLogin soapLogin = soapLoginDao.get(secureHash);
 
 			if (soapLogin.getUsed()) {
 
@@ -217,8 +215,7 @@ public class MainService implements IPendingServiceCallback {
 				}
 			}
 
-			Long loginReturn = this.loginUserByRemote(soapLogin
-					.getSessionHash());
+			Long loginReturn = loginUserByRemote(soapLogin.getSessionHash());
 
 			IConnection current = Red5.getConnectionLocal();
 			String streamId = current.getClient().getId();
@@ -246,7 +243,7 @@ public class MainService implements IPendingServiceCallback {
 
 				soapLogin.setClientURL(clientURL);
 
-				soapLoginDao.updateSOAPLogin(soapLogin);
+				soapLoginDao.update(soapLogin);
 
 				// Create Return Object and hide the validated
 				// sessionHash that is stored server side
@@ -323,44 +320,23 @@ public class MainService implements IPendingServiceCallback {
 		try {
 			Long users_id = sessiondataDao.checkSession(SID);
 			Long user_level = userManager.getUserLevelByID(users_id);
-			if (AuthLevelUtil.checkWebServiceLevel(
-					user_level)) {
-
+			if (AuthLevelUtil.checkWebServiceLevel(user_level)) {
 				Sessiondata sd = sessiondataDao.getSessionByHash(SID);
 				if (sd == null || sd.getSessionXml() == null) {
 					return new Long(-37);
 				} else {
+					RemoteSessionObject userObject = RemoteSessionObject.fromXml(sd.getSessionXml());
 
-					// XStream xStream = new XStream(new XppDriver());
-					XStream xStream = new XStream(new DomDriver("UTF-8"));
-					xStream.setMode(XStream.NO_REFERENCES);
-
-					String xmlString = sd.getSessionXml();
-					RemoteSessionObject userObject = (RemoteSessionObject) xStream
-							.fromXML(xmlString);
-
-					log.debug("userObject.getUsername(), userObject.getFirstname(), userObject.getLastname() "
-							+ userObject.getUsername()
-							+ ", "
-							+ userObject.getFirstname()
-							+ ", "
-							+ userObject.getLastname());
+					log.debug(userObject.toString());
 
 					IConnection current = Red5.getConnectionLocal();
 					String streamId = current.getClient().getId();
-					Client currentClient = this.sessionManager
-							.getClientByStreamId(streamId, null);
+					Client currentClient = sessionManager.getClientByStreamId(streamId, null);
 
 					// Check if this User is simulated in the OpenMeetings
 					// Database
 
-					log.debug("userObject.getExternalUserId() -1- "
-							+ userObject.getExternalUserId());
-
-					if (userObject.getExternalUserId() != null
-							&& userObject.getExternalUserId() != null && 
-							!"".equals(userObject.getExternalUserId())) {
-
+					if (!Strings.isEmpty(userObject.getExternalUserId())) {
 						// If so we need to check that we create this user in
 						// OpenMeetings and update its record
 
@@ -387,7 +363,6 @@ public class MainService implements IPendingServiceCallback {
 							currentClient.setUser_id(userId);
 							SessionVariablesUtil.setUserId(current.getClient(), userId);
 						} else {
-
 							user.setPictureuri(userObject.getPictureUrl());
 
 							userManager.updateUser(user);
@@ -397,25 +372,19 @@ public class MainService implements IPendingServiceCallback {
 						}
 					}
 
-					log.debug("userObject.getExternalUserId() -2- "
-							+ currentClient.getUser_id());
+					log.debug("userObject.getExternalUserId() -2- " + currentClient.getUser_id());
 
-					currentClient
-							.setUserObject(userObject.getUsername(),
-									userObject.getFirstname(),
-									userObject.getLastname());
+					currentClient.setUserObject(userObject.getUsername(), userObject.getFirstname(), userObject.getLastname());
 					currentClient.setPicture_uri(userObject.getPictureUrl());
 					currentClient.setMail(userObject.getEmail());
 
 					log.debug("UPDATE USER BY STREAMID " + streamId);
 
 					if (currentClient.getUser_id() != null) {
-						sessiondataDao.updateUser(SID,
-								currentClient.getUser_id());
+						sessiondataDao.updateUser(SID, currentClient.getUser_id());
 					}
 
-					this.sessionManager.updateClientByStreamId(streamId,
-							currentClient, false, null);
+					sessionManager.updateClientByStreamId(streamId, currentClient, false, null);
 
 					return new Long(1);
 				}

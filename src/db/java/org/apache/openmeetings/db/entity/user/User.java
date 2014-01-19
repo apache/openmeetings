@@ -97,7 +97,8 @@ import org.simpleframework.xml.Root;
 	@NamedQuery(name = "updatePassword", query = "UPDATE User u SET u.password = :password WHERE u.user_id = :userId"), //
 	@NamedQuery(name = "getNondeletedUsers", query = "SELECT u FROM User u WHERE u.deleted = false"),
 	@NamedQuery(name = "countNondeletedUsers", query = "SELECT COUNT(u) FROM User u WHERE u.deleted = false"),
-	@NamedQuery(name = "getUsersByOrganisationId", query = "SELECT u FROM User u WHERE u.deleted = false AND u.organisation_users.organisation.organisation_id = :organisation_id") 
+	@NamedQuery(name = "getUsersByOrganisationId", query = "SELECT u FROM User u WHERE u.deleted = false AND u.organisation_users.organisation.organisation_id = :organisation_id"), 
+	@NamedQuery(name = "getExternalUser", query = "SELECT u FROM User u WHERE u.deleted = false AND u.externalUserId LIKE :externalId AND u.externalUserType LIKE :externalType") 
 })
 @Table(name = "om_user")
 @Root(name = "user")
