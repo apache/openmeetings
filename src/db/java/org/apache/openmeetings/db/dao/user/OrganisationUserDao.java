@@ -78,6 +78,11 @@ public class OrganisationUserDao implements IDataProviderDao<Organisation_Users>
 		return orgUserList;
 	}
 
+	public boolean isUserInOrganization(long orgId, long userId) {
+		return null != em.createNamedQuery("isUserInOrganization", Organisation_Users.class)
+				.setParameter("orgId", orgId).setParameter("userId", userId).getSingleResult();
+	}
+	
 	public long count() {
 		throw new RuntimeException("Should not be used");
 	}

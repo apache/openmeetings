@@ -46,6 +46,7 @@ import org.simpleframework.xml.Root;
 	, @NamedQuery(name="countOrganisationUsers", query="SELECT COUNT(c) FROM Organisation_Users c WHERE c.organisation.organisation_id = :id")
 	, @NamedQuery(name="getOrganisationUsersById", query="SELECT c FROM Organisation_Users c WHERE c.organisation_users_id = :id")
 	, @NamedQuery(name="getOrganisationUsersByOrgId", query="SELECT c FROM Organisation_Users c WHERE c.organisation.organisation_id = :id")
+	, @NamedQuery(name="isUserInOrganization", query="SELECT c FROM Organisation_Users c WHERE c.organisation.organisation_id = :orgId AND c.user.user_id = :userId")
 })
 @Table(name = "organisation_users")
 @Root(name="user_organisation")

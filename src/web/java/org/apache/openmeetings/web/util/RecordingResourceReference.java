@@ -33,9 +33,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.input.BoundedInputStream;
 import org.apache.openmeetings.db.dao.record.FlvRecordingDao;
-import org.apache.openmeetings.db.dao.user.UserDao;
+import org.apache.openmeetings.db.dao.user.OrganisationUserDao;
 import org.apache.openmeetings.db.entity.record.FlvRecording;
-import org.apache.openmeetings.db.entity.user.Organisation_Users;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.wicket.protocol.http.servlet.ResponseIOException;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
@@ -181,11 +180,8 @@ public abstract class RecordingResourceReference extends ResourceReference {
 		if (r.getOwnerId() == null || getUserId() == r.getOwnerId()) {
 			return r;
 		}
-		//FIXME UGLY need to be optimized
-		for (Organisation_Users ou : getBean(UserDao.class).get(getUserId()).getOrganisation_users()) {
-			if (ou.getOrganisation().getOrganisation_id().equals(r.getOrganization_id())) {
-				return r;
-			}
+		if (getBean(OrganisationUserDao.class).isUserInOrganization(r.getOrganization_id(), getUserId())) {
+			return r;
 		}
 		//TODO investigate if these checks are enough
 		return null;
