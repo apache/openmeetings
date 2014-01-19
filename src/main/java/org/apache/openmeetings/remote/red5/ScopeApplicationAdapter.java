@@ -575,8 +575,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 
 			// Remove User from Sync List's
 			if (room_id != null) {
-				this.whiteBoardService.removeUserFromAllLists(currentScope,
-						currentClient);
+				whiteBoardService.removeUserFromAllLists(currentScope, currentClient);
 			}
 
 			log.debug("removing USername " + currentClient.getUsername() + " "
@@ -586,14 +585,16 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 			// stop and save any recordings
 			if (currentClient.getIsRecording()) {
 				log.debug("*** roomLeave Current Client is Recording - stop that");
-				// StreamService.stopRecordAndSave(currentScope,
-				// currentClient.getRoomRecordingName(), currentClient);
+				if (currentClient.getInterviewPodId() != null) {
+					//interview, TODO need better check
+					stopInterviewRecording();
+				} else {
+					flvRecorderService.stopRecordAndSave(currentScope, currentClient, null);
 
-				flvRecorderService.stopRecordAndSave(currentScope, currentClient, null);
-
-				// set to true and overwrite the default one cause otherwise no
-				// notification is send
-				currentClient.setIsRecording(true);
+					// set to true and overwrite the default one cause otherwise no
+					// notification is send
+					currentClient.setIsRecording(true);
+				}
 			}
 
 			// Notify all clients of the same currentScope (room) with domain
@@ -2498,6 +2499,23 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 		}
 		return null;
 	}
+
+	private Long checkRecordingClient(IConnection conn) {
+		Long flvRecordingId = null;
+		if (conn != null) {
+			Client rcl = sessionManager.getClientByStreamId(conn.getClient().getId(), null);
+			if (rcl.getIsRecording() != null && rcl.getIsRecording()) {
+				rcl.setIsRecording(false);
+				flvRecordingId = rcl.getFlvRecordingId();
+				rcl.setFlvRecordingId(null);
+
+				// Reset the Recording Flag to Record all
+				// Participants that enter later
+				sessionManager.updateClientByStreamId(conn.getClient().getId(), rcl, false, null);
+			}
+		}
+		return flvRecordingId;
+	}
 	
 	/**
 	 * Stop the recording of the streams and send event to connected users of scope
@@ -2509,46 +2527,25 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 			log.debug("-----------  stopInterviewRecording");
 			IConnection current = Red5.getConnectionLocal();
 
-			boolean found = false;
-			Long flvRecordingId = null;
+			Long flvRecordingId = checkRecordingClient(current);
 
 			Collection<Set<IConnection>> concolset = current.getScope().getConnections();
 			for (Set<IConnection> conset : concolset) {
-			for (IConnection conn : conset) {
-				if (conn != null) {
-
-					Client rcl = this.sessionManager
-							.getClientByStreamId(conn.getClient().getId(), null);
-
-					if (rcl.getIsRecording() != null
-							&& rcl.getIsRecording()) {
-
-						rcl.setIsRecording(false);
-
-						flvRecordingId = rcl.getFlvRecordingId();
-
-						rcl.setFlvRecordingId(null);
-
-						// Reset the Recording Flag to Record all
-						// Participants that enter later
-						this.sessionManager.updateClientByStreamId(conn
-								.getClient().getId(), rcl, false, null);
-
-						found = true;
+				for (IConnection conn : conset) {
+					Long recordingId = checkRecordingClient(conn);
+					if (recordingId != null) {
+						flvRecordingId = recordingId;
 					}
-
 				}
 			}
-			}
-			if (!found) {
+			if (flvRecordingId == null) {
+				log.debug("stopInterviewRecording:: unable to find recording client");
 				return false;
 			}
 
-			Client currentClient = this.sessionManager
-					.getClientByStreamId(current.getClient().getId(), null);
+			Client currentClient = sessionManager.getClientByStreamId(current.getClient().getId(), null);
 
-			this.flvRecorderService.stopRecordAndSave(scope, currentClient,
-					flvRecordingId);
+			flvRecorderService.stopRecordAndSave(scope, currentClient, flvRecordingId);
 
 			Map<String, String> interviewStatus = new HashMap<String, String>();
 			interviewStatus.put("action", "stop");
