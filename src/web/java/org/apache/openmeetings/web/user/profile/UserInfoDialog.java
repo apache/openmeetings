@@ -35,7 +35,7 @@ import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
 
 public class UserInfoDialog extends AbstractDialog<String> {
 	private static final long serialVersionUID = 6393565468567393270L;
-	private WebMarkupContainer container;
+	private WebMarkupContainer container = new WebMarkupContainer("container");
 	private DialogButton cancel = new DialogButton(WebSession.getString(61));
 	private String messageLbl = WebSession.getString(1253);
 	private DialogButton message = new DialogButton(messageLbl);
@@ -46,10 +46,7 @@ public class UserInfoDialog extends AbstractDialog<String> {
 	
 	public UserInfoDialog(String id, MessageDialog newMessage) {
 		super(id, WebSession.getString(1235));
-		setOutputMarkupId(true);
-		
-		add(container = new WebMarkupContainer("container"));
-		container.add(new WebMarkupContainer("body")).setOutputMarkupId(true);
+		add(container.add(new WebMarkupContainer("body")).setOutputMarkupId(true));
 		this.newMessage = newMessage;
 	}
 

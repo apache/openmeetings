@@ -111,7 +111,7 @@ public class MessageDialog extends AbstractFormDialog<PrivateMessage> {
 		super.onOpen(target);
 	}
 	
-	public MessageDialog(String id, CompoundPropertyModel<PrivateMessage> model ) {
+	public MessageDialog(String id, CompoundPropertyModel<PrivateMessage> model) {
 		super(id, WebSession.getString(1209), model);
 		form = new Form<PrivateMessage>("form", getModel());
 		
