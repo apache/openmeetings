@@ -104,6 +104,9 @@ public class MessageDialog extends AbstractFormDialog<PrivateMessage> {
 	
 	@Override
 	protected void onOpen(AjaxRequestTarget target) {
+		if (getModel().getObject().getTo() != null) {
+			modelTo.getObject().add(getModel().getObject().getTo());
+		}
 		target.add(form);
 		super.onOpen(target);
 	}
