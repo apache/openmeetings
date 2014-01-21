@@ -179,9 +179,9 @@ public abstract class RecordingResourceReference extends ResourceReference {
 	private FlvRecording getRecording(Long id) {
 		FlvRecordingDao recDao = getBean(FlvRecordingDao.class);
 		FlvRecording r = recDao.get(id);
-		if (r.getOwnerId() == null || r.getOwnerId() == 0 
-				|| r.getParentFileExplorerItemId() == null || r.getParentFileExplorerItemId() == 0
-				|| getUserId() == r.getOwnerId()) {
+		// TODO should we process public?
+		// || r.getOwnerId() == 0 || r.getParentFileExplorerItemId() == null || r.getParentFileExplorerItemId() == 0
+		if (r.getOwnerId() == null || getUserId() == r.getOwnerId()) {
 			return r;
 		}
 		if (getBean(OrganisationUserDao.class).isUserInOrganization(r.getOrganization_id(), getUserId())) {
