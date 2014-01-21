@@ -29,8 +29,8 @@ public class RequestContactConfirmTemplate extends AbstractTemplatePanel {
 		super(id);
 		add(new Label("firstName", user.getFirstname()));
 		add(new Label("lastName", user.getLastname()));
-		add(new Label("contactFirstName", contact.getContact().getFirstname()));
-		add(new Label("contactLastName", contact.getContact().getLastname()));
+		add(new Label("addedFirstName", contact.getContact().getFirstname()));
+		add(new Label("addedLastName", contact.getContact().getLastname()));
 	}
 	
 	public static String getEmail(User user, UserContact contact) {
