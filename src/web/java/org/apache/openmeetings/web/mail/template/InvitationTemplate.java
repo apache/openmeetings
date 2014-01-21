@@ -29,7 +29,7 @@ public class InvitationTemplate extends AbstractTemplatePanel {
 	public InvitationTemplate(String id, String user, String message, String link, boolean isCanceled) {
 		super(id);
 		add(new Label("user", user));
-		add(new Label("message", message));
+		add(new Label("message", message).setEscapeModelStrings(false));
 		Label commentForLink1 = new Label("comment_for_link1", WebSession.getString(503));
 		commentForLink1.setVisible(!isCanceled);
 		add(commentForLink1);
