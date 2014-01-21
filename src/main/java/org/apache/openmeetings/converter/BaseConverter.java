@@ -143,20 +143,19 @@ public abstract class BaseConverter {
 			log.debug("###################################################");
 	
 			for (FlvRecordingMetaData metaData : metaDataList) {
-				
+				long metaId = metaData.getFlvRecordingMetaDataId();
 				if (metaData.getStreamReaderThreadComplete() == null) {
-					throw new IllegalStateException("StreamReaderThreadComplete Bit is NULL, error in recording");
+					log.debug("stripAudioFirstPass:: StreamReaderThreadComplete Bit is NULL, error in recording " + metaId);
+					continue;
 				}
 				
 				if (!metaData.getStreamReaderThreadComplete()) {
-					
-					log.debug("### meta Stream not yet written to disk" + metaData.getFlvRecordingMetaDataId());
+					log.debug("### meta Stream not yet written to disk " + metaId);
 					boolean doStop = true;
 					while(doStop) {
+						log.debug("### Stream not yet written Thread Sleep - " + metaId);
 						
-						log.debug("### Stream not yet written Thread Sleep - " + metaData.getFlvRecordingMetaDataId());
-						
-						metaData = flvRecordingMetaDataDaoImpl.get(metaData.getFlvRecordingMetaDataId());
+						metaData = flvRecordingMetaDataDaoImpl.get(metaId);
 						
 						if (metaData.getStreamReaderThreadComplete()) {
 							log.debug("### Stream now written Thread continue - " );
@@ -200,8 +199,7 @@ public abstract class BaseConverter {
 	
 					// Fix Start/End in Audio
 					List<FlvRecordingMetaDelta> flvRecordingMetaDeltas = flvRecordingMetaDeltaDaoImpl
-							.getFlvRecordingMetaDeltaByMetaId(metaData
-									.getFlvRecordingMetaDataId());
+							.getFlvRecordingMetaDeltaByMetaId(metaId);
 	
 					int counter = 0;
 	

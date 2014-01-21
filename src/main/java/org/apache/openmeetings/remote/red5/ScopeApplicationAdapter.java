@@ -497,21 +497,17 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 	@Override
 	public void roomLeave(IClient client, IScope room) {
 		try {
+			log.debug(String.format("roomLeave %s %s %s %s", client.getId(), room.getClients().size()
+					, room.getContextPath(), room.getName()));
 
-			log.debug("roomLeave " + client.getId() + " "
-					+ room.getClients().size() + " " + room.getContextPath()
-					+ " " + room.getName());
-
-			Client currentClient = this.sessionManager
-					.getClientByStreamId(client.getId(), null);
+			Client currentClient = sessionManager.getClientByStreamId(client.getId(), null);
 
 			// The Room Client can be null if the Client left the room by using
 			// logicalRoomLeave
 			if (currentClient != null) {
 				log.debug("currentClient IS NOT NULL");
-				this.roomLeaveByScope(currentClient, room, true);
+				roomLeaveByScope(currentClient, room, true);
 			}
-
 		} catch (Exception err) {
 			log.error("[roomLeave]", err);
 		}
@@ -534,11 +530,9 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 
 			log.debug(streamid + " is leaving");
 
-			Client currentClient = this.sessionManager
-					.getClientByStreamId(streamid, null);
+			Client currentClient = sessionManager.getClientByStreamId(streamid, null);
 
-			this.roomLeaveByScope(currentClient, current.getScope(), true);
-
+			roomLeaveByScope(currentClient, current.getScope(), true);
 		} catch (Exception err) {
 			log.error("[logicalRoomLeave]", err);
 		}
@@ -557,10 +551,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 	public synchronized void roomLeaveByScope(Client currentClient,
 			IScope currentScope, boolean removeUserFromSessionList) {
 		try {
-
 			log.debug("currentClient " + currentClient);
-			log.debug("currentScope " + currentScope);
-			// log.debug("currentClient "+currentClient.getRoom_id());
 
 			Long room_id = currentClient.getRoom_id();
 
@@ -606,7 +597,6 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 				for (Set<IConnection> conset : currentScope.getConnections()) {
 				for (IConnection cons : conset) {
 					if (cons != null && cons instanceof IServiceCapableConnection) {
-
 						log.debug("sending roomDisconnect to {}  client id {}", cons, cons.getClient().getId());
 
 						Client rcl = sessionManager.getClientByStreamId(cons.getClient().getId(), null);
@@ -615,46 +605,45 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 						 * Check if the Client does still exist on the
 						 * list
 						 */
-						if (rcl != null) {
-
-							/*
-							 * Do not send back to sender, but actually
-							 * all other clients should receive this
-							 * message swagner 01.10.2009
-							 */
-							if (!currentClient.getStreamid().equals(rcl.getStreamid())) {
-								
-								// add Notification if another user isrecording
-								log.debug("###########[roomLeave]");
-								if (rcl.getIsRecording()) {
-									log.debug("*** roomLeave Any Client is Recording - stop that");
-									flvRecorderService.stopRecordingShowForClient(cons, currentClient);
-								}
-								
-								//If the user was a avclient, we do not broadcast a message about that to everybody
-								if (currentClient.getIsAVClient()) {
-									continue;
-								}
-								
-								boolean isScreen = rcl.getIsScreenClient() != null && rcl.getIsScreenClient();
-								if (isScreen && currentClient.getPublicSID().equals(rcl.getStreamPublishName())) {
-									//going to terminate screen sharing started by this client
-									((IServiceCapableConnection) cons).invoke("stopStream", new Object[] { },this);
-									continue;
-								} else if (isScreen) {
-									// screen sharing clients do not receive events
-									continue;
-								} else if (rcl.getIsAVClient()) {
-									// AVClients or potential AVClients do not receive events
-									continue;
-								}
-								
-								// Send to all connected users
-								((IServiceCapableConnection) cons).invoke("roomDisconnect", new Object[] { currentClient },this);
-								log.debug("sending roomDisconnect to " + cons);
-							}
-						} else {
+						if (rcl == null) {
 							log.debug("For this StreamId: " + cons.getClient().getId() + " There is no Client in the List anymore");
+							continue;
+						}
+						
+						/*
+						 * Do not send back to sender, but actually
+						 * all other clients should receive this
+						 * message swagner 01.10.2009
+						 */
+						if (!currentClient.getStreamid().equals(rcl.getStreamid())) {
+							// add Notification if another user isrecording
+							log.debug("###########[roomLeave]");
+							if (rcl.getIsRecording()) {
+								log.debug("*** roomLeave Any Client is Recording - stop that");
+								flvRecorderService.stopRecordingShowForClient(cons, currentClient);
+							}
+							
+							//If the user was a avclient, we do not broadcast a message about that to everybody
+							if (currentClient.getIsAVClient()) {
+								continue;
+							}
+							
+							boolean isScreen = rcl.getIsScreenClient() != null && rcl.getIsScreenClient();
+							if (isScreen && currentClient.getPublicSID().equals(rcl.getStreamPublishName())) {
+								//going to terminate screen sharing started by this client
+								((IServiceCapableConnection) cons).invoke("stopStream", new Object[] { },this);
+								continue;
+							} else if (isScreen) {
+								// screen sharing clients do not receive events
+								continue;
+							} else if (rcl.getIsAVClient()) {
+								// AVClients or potential AVClients do not receive events
+								continue;
+							}
+							
+							// Send to all connected users
+							((IServiceCapableConnection) cons).invoke("roomDisconnect", new Object[] { currentClient },this);
+							log.debug("sending roomDisconnect to " + cons);
 						}
 					}
 				}
@@ -2374,24 +2363,18 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 	 */
 	public synchronized Boolean getInterviewRecordingStatus() {
 		try {
-
 			IConnection current = Red5.getConnectionLocal();
 
 			for (Set<IConnection> conset : current.getScope().getConnections()) {
-			for (IConnection conn : conset) {
-				if (conn != null) {
-
-					Client rcl = this.sessionManager
-							.getClientByStreamId(conn.getClient().getId(),
-									null);
-
-					if (rcl.getIsRecording() != null
-							&& rcl.getIsRecording()) {
-						return true;
+				for (IConnection conn : conset) {
+					if (conn != null) {
+						Client rcl = sessionManager.getClientByStreamId(conn.getClient().getId(), null);
+	
+						if (rcl.getIsRecording() != null && rcl.getIsRecording()) {
+							return true;
+						}
 					}
-
 				}
-			}
 			}
 			return false;
 		} catch (Exception err) {
@@ -2412,61 +2395,50 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 
 			Collection<Set<IConnection>> concolset = current.getScope().getConnections();
 			for (Set<IConnection> conset : concolset) {
-			for (IConnection conn : conset) {
-				if (conn != null) {
-
-					Client rcl = this.sessionManager
-							.getClientByStreamId(conn.getClient().getId(), null);
-
-					if (rcl.getIsRecording() != null
-							&& rcl.getIsRecording()) {
-						return false;
+				for (IConnection conn : conset) {
+					if (conn != null) {
+						Client rcl = sessionManager.getClientByStreamId(conn.getClient().getId(), null);
+	
+						if (rcl.getIsRecording() != null && rcl.getIsRecording()) {
+							return false;
+						}
 					}
-
 				}
 			}
-			}
-			Client current_rcl = this.sessionManager
-					.getClientByStreamId(current.getClient().getId(), null);
+			Client current_rcl = sessionManager.getClientByStreamId(current.getClient().getId(), null);
 
 			// Also set the Recording Flag to Record all Participants that enter
 			// later
 			current_rcl.setIsRecording(true);
-			this.sessionManager.updateClientByStreamId(current.getClient()
-					.getId(), current_rcl, false, null);
+			sessionManager.updateClientByStreamId(current.getClient().getId(), current_rcl, false, null);
 
 			Map<String, String> interviewStatus = new HashMap<String, String>();
 			interviewStatus.put("action", "start");
 
 			for (Set<IConnection> conset : concolset) {
-			for (IConnection conn : conset) {
-				if (conn != null) {
-					
-					IClient client = conn.getClient();
-					if (SessionVariablesUtil.isScreenClient(client)) {
-						// screen sharing clients do not receive events
-						continue;
-					} else if (SessionVariablesUtil.isAVClient(client)) {
-						// AVClients or potential AVClients do not receive events
-						continue;
+				for (IConnection conn : conset) {
+					if (conn != null) {
+						IClient client = conn.getClient();
+						if (SessionVariablesUtil.isScreenClient(client)) {
+							// screen sharing clients do not receive events
+							continue;
+						} else if (SessionVariablesUtil.isAVClient(client)) {
+							// AVClients or potential AVClients do not receive events
+							continue;
+						}
+	
+						((IServiceCapableConnection) conn).invoke(
+								"interviewStatus",
+								new Object[] { interviewStatus }, this);
+						log.debug("-- interviewStatus" + interviewStatus);
 					}
-
-					((IServiceCapableConnection) conn).invoke(
-							"interviewStatus",
-							new Object[] { interviewStatus }, this);
-					log.debug("-- interviewStatus" + interviewStatus);
-
 				}
 			}
-			}
-			String recordingName = "Interview "
-					+ CalendarPatterns.getDateWithTimeByMiliSeconds(new Date());
+			String recordingName = "Interview " + CalendarPatterns.getDateWithTimeByMiliSeconds(new Date());
 
-			this.flvRecorderService
-					.recordMeetingStream(recordingName, "", true);
+			flvRecorderService.recordMeetingStream(recordingName, "", true);
 
 			return true;
-
 		} catch (Exception err) {
 			log.debug("[startInterviewRecording]", err);
 		}

@@ -21,9 +21,9 @@ package org.apache.openmeetings.remote;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.openmeetings.data.flvrecord.converter.FlvInterviewConverterTask;
 import org.apache.openmeetings.data.flvrecord.converter.FlvInterviewReConverterTask;
@@ -64,7 +64,7 @@ public class FLVRecorderService implements IPendingServiceCallback {
 	 * red5 stream object might be gone when the user closes the browser. But each listener has an asynchronous
 	 * component that needs to be closed no matter how the user leaves the application!
 	 */
-	private static final Map<Long, StreamListener> streamListeners = new HashMap<Long, StreamListener>();
+	private static final Map<Long, StreamListener> streamListeners = new ConcurrentHashMap<Long, StreamListener>();
 
 	// Spring Beans
 	@Autowired
@@ -161,8 +161,7 @@ public class FLVRecorderService implements IPendingServiceCallback {
 							((IServiceCapableConnection) conn).invoke("startedRecording", new Object[] { currentClient }, this);
 						}
 
-						// If its the recording client we need another type
-						// of Meta Data
+						// If its the recording client we need another type of Meta Data
 						if (rcl.getIsScreenClient()) {
 							if (rcl.getFlvRecordingId() != null && rcl.isScreenPublishStarted()) {
 								String streamName_Screen = generateFileName(flvRecordingId, rcl.getStreamPublishName().toString());
