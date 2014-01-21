@@ -358,7 +358,8 @@ public class InvitationManager implements IInvitationManager {
 		User owner = i.getInvitedBy();
 		
 		String invitorName = owner.getFirstname() + " " + owner.getLastname();
-		String template = InvitationTemplate.getEmail(i.getInvitee().getLanguage_id(), invitorName, message, invitation_link);
+		boolean isCanceled = (type==MessageType.Cancel); 
+		String template = InvitationTemplate.getEmail(i.getInvitee().getLanguage_id(), invitorName, message, invitation_link, isCanceled);
 		String email = i.getInvitee().getAdresses().getEmail();
 		String replyToEmail = owner.getAdresses().getEmail();
 		
