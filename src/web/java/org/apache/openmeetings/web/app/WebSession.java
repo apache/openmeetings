@@ -94,6 +94,7 @@ public class WebSession extends AbstractAuthenticatedWebSession {
 	private Locale browserLocale = null;
 	private int browserTZOffset = Integer.MIN_VALUE;
 	private Long recordingId;
+	private String externalType;
 	private static Set<Long> STRINGS_WITH_APP = new HashSet<Long>(); //FIXME need to be removed
 	static {
 		STRINGS_WITH_APP.addAll(Arrays.asList(499L, 500L, 506L, 511L, 512L, 513L, 517L, 532L, 622L, 804L
@@ -113,6 +114,7 @@ public class WebSession extends AbstractAuthenticatedWebSession {
 		SID = null;
 		sdf = null;
 		recordingId = null;
+		externalType = null;
 	}
 	
 	@Override
@@ -215,6 +217,7 @@ public class WebSession extends AbstractAuthenticatedWebSession {
 		userId = u.getUser_id();
 		userLevel = u.getLevel_id();
 		languageId = u.getLanguage_id();
+		externalType = u.getExternalUserType();
 		tz = getBean(TimezoneUtil.class).getTimeZone(u);
 		ISO8601FORMAT.setTimeZone(tz);
 		//FIXMW locale need to be set by User language first
@@ -278,6 +281,10 @@ public class WebSession extends AbstractAuthenticatedWebSession {
 	
 	public static Long getRecordingId() {
 		return get().recordingId;
+	}
+	
+	public static String getExternalType() {
+		return get().externalType;
 	}
 	
 	public static TimeZone getUserTimeZone() {

@@ -20,6 +20,7 @@ package org.apache.openmeetings.web.util;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.openmeetings.web.app.Application.getBean;
+import static org.apache.openmeetings.web.app.WebSession.getExternalType;
 import static org.apache.openmeetings.web.app.WebSession.getRecordingId;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import static org.red5.logging.Red5LoggerFactory.getLogger;
@@ -176,14 +177,21 @@ public abstract class RecordingResourceReference extends ResourceReference {
 	}
 	
 	private FlvRecording getRecording(Long id) {
-		FlvRecording r = getBean(FlvRecordingDao.class).get(id);
-		if (r.getOwnerId() == null || getUserId() == r.getOwnerId()) {
+		FlvRecordingDao recDao = getBean(FlvRecordingDao.class);
+		FlvRecording r = recDao.get(id);
+		if (r.getOwnerId() == null || r.getOwnerId() == 0 
+				|| r.getParentFileExplorerItemId() == null || r.getParentFileExplorerItemId() == 0
+				|| getUserId() == r.getOwnerId()) {
 			return r;
 		}
 		if (getBean(OrganisationUserDao.class).isUserInOrganization(r.getOrganization_id(), getUserId())) {
 			return r;
 		}
-		//TODO investigate if these checks are enough
+		//TODO external group check was added for plugin recording download
+		String extType = getExternalType();
+		if (extType != null && extType.equals(r.getCreator().getExternalUserType())) {
+			return r;
+		}
 		return null;
 	}
 	

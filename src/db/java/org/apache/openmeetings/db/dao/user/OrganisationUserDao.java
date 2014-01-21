@@ -79,8 +79,8 @@ public class OrganisationUserDao implements IDataProviderDao<Organisation_Users>
 	}
 
 	public boolean isUserInOrganization(long orgId, long userId) {
-		return null != em.createNamedQuery("isUserInOrganization", Organisation_Users.class)
-				.setParameter("orgId", orgId).setParameter("userId", userId).getSingleResult();
+		return em.createNamedQuery("isUserInOrganization", Organisation_Users.class)
+				.setParameter("orgId", orgId).setParameter("userId", userId).getResultList().size() > 0;
 	}
 	
 	public long count() {

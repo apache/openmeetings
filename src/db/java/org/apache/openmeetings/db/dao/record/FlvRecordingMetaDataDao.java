@@ -67,12 +67,11 @@ public class FlvRecordingMetaDataDao {
 	public List<FlvRecordingMetaData> getFlvRecordingMetaDataByRecording(Long flvRecordingId) {
 		try {
 
-			String hql = "SELECT c FROM FlvRecordingMetaData c " + "WHERE c.flvRecording.flvRecordingId = :flvRecordingId "
-					+ "AND c.deleted <> :deleted ";
+			String hql = "SELECT c FROM FlvRecordingMetaData c WHERE c.flvRecording.flvRecordingId = :flvRecordingId "
+					+ "AND c.deleted = false ";
 
 			TypedQuery<FlvRecordingMetaData> query = em.createQuery(hql, FlvRecordingMetaData.class);
 			query.setParameter("flvRecordingId", flvRecordingId);
-			query.setParameter("deleted", true);
 
 			List<FlvRecordingMetaData> flvRecordingMetaDatas = query.getResultList();
 
@@ -86,10 +85,9 @@ public class FlvRecordingMetaDataDao {
 
 	public List<FlvRecordingMetaData> getFlvRecordingMetaDataAudioFlvsByRecording(Long flvRecordingId) {
 		try {
-
-			String hql = "SELECT c FROM FlvRecordingMetaData c " + "WHERE c.flvRecording.flvRecordingId = :flvRecordingId " + "AND ("
-					+ "(c.isScreenData = false) " + " AND " + "(c.isAudioOnly = true OR (c.isAudioOnly = false AND c.isVideoOnly = false))"
-					+ ")";
+			String hql = "SELECT c FROM FlvRecordingMetaData c WHERE c.flvRecording.flvRecordingId = :flvRecordingId "
+					+ "AND c.isScreenData = false AND c.streamReaderThreadComplete IS NOT NULL "
+					+ "AND (c.isAudioOnly = true OR (c.isAudioOnly = false AND c.isVideoOnly = false))";
 
 			TypedQuery<FlvRecordingMetaData> query = em.createQuery(hql, FlvRecordingMetaData.class);
 			query.setParameter("flvRecordingId", flvRecordingId);
@@ -97,7 +95,6 @@ public class FlvRecordingMetaDataDao {
 			List<FlvRecordingMetaData> flvRecordingMetaDatas = query.getResultList();
 
 			return flvRecordingMetaDatas;
-
 		} catch (Exception ex2) {
 			log.error("[getFlvRecordingMetaDataAudioFlvsByRecording]: ", ex2);
 		}
@@ -107,7 +104,7 @@ public class FlvRecordingMetaDataDao {
 	public FlvRecordingMetaData getFlvRecordingMetaDataScreenFlvByRecording(Long flvRecordingId) {
 		try {
 
-			String hql = "SELECT c FROM FlvRecordingMetaData c " + "WHERE c.flvRecording.flvRecordingId = :flvRecordingId "
+			String hql = "SELECT c FROM FlvRecordingMetaData c WHERE c.flvRecording.flvRecordingId = :flvRecordingId "
 					+ "AND c.isScreenData = true";
 
 			TypedQuery<FlvRecordingMetaData> query = em.createQuery(hql, FlvRecordingMetaData.class);

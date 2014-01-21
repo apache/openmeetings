@@ -46,11 +46,8 @@ public class FlvRecordingDao {
 
 	public FlvRecording get(Long flvRecordingId) {
 		try {
-
-			String hql = "SELECT c FROM FlvRecording c WHERE c.flvRecordingId = :flvRecordingId";
-
-			TypedQuery<FlvRecording> query = em.createQuery(hql, FlvRecording.class);
-			query.setParameter("flvRecordingId", flvRecordingId);
+			TypedQuery<FlvRecording> query = em.createNamedQuery("getRecordingById", FlvRecording.class);
+			query.setParameter("id", flvRecordingId);
 
 			FlvRecording flvRecording = null;
 			try {
@@ -82,15 +79,8 @@ public class FlvRecordingDao {
 
 	public List<FlvRecording> getFlvRecordings() {
 		try {
-
-			String hql = "SELECT c FROM FlvRecording c WHERE c.deleted <> :deleted ";
-
-			TypedQuery<FlvRecording> query = em.createQuery(hql, FlvRecording.class);
-			query.setParameter("deleted", true);
-
-			List<FlvRecording> flvRecordings = query.getResultList();
-
-			return flvRecordings;
+			return em.createQuery("SELECT c FROM FlvRecording c WHERE c.deleted = false", FlvRecording.class)
+					.getResultList();
 		} catch (Exception ex2) {
 			log.error("[getFlvRecordings]: ", ex2);
 		}
@@ -123,7 +113,7 @@ public class FlvRecordingDao {
 
 			String hql = "SELECT c FROM FlvRecording c, Room r WHERE c.room_id = r.rooms_id "
 					+ "AND r.externalRoomType LIKE :externalRoomType AND c.insertedBy LIKE :insertedBy "
-					+ "AND c.deleted <> :deleted ";
+					+ "AND c.deleted = false";
 
 			TypedQuery<FlvRecording> query = em.createQuery(hql, FlvRecording.class);
 			query.setParameter("externalRoomType", externalRoomType);
@@ -180,13 +170,12 @@ public class FlvRecordingDao {
 	public List<FlvRecording> getFlvRecordingsPublic() {
 		try {
 
-			String hql = "SELECT c FROM FlvRecording c " + "WHERE c.deleted <> :deleted "
+			String hql = "SELECT c FROM FlvRecording c " + "WHERE c.deleted = false "
 					+ "AND (c.ownerId IS NULL OR c.ownerId = 0)  "
 					+ "AND (c.parentFileExplorerItemId IS NULL OR c.parentFileExplorerItemId = 0) "
 					+ "ORDER BY c.isFolder DESC, c.fileName ";
 
 			TypedQuery<FlvRecording> query = em.createQuery(hql, FlvRecording.class);
-			query.setParameter("deleted", true);
 
 			List<FlvRecording> flvRecordingList = query.getResultList();
 			return flvRecordingList;

@@ -63,10 +63,6 @@ import org.apache.openmeetings.util.CalendarPatterns;
 })
 @Table(name = "client")
 public class Client implements IDataProviderEntity, Serializable {
-
-	/**
-	 * 	
-	 */
 	private static final long serialVersionUID = -5980636447877077730L;
 	
 	@Id
@@ -872,20 +868,10 @@ public class Client implements IDataProviderEntity, Serializable {
 
 	@Override
 	public String toString() {
-		return super.toString() //
-				+ " StreamId: " + this.getStreamid() //
-				+ " PublicSID: " + this.getPublicSID() //
-				+ " UserId: " + this.getUser_id() //
-				+ " RoomId: " + this.room_id //
-				+ " isScreenClient: " + this.getIsScreenClient() //
-				+ " flvRecordingId: " + this.getFlvRecordingId() //
-				+ " screenPublishStarted: " + this.isScreenPublishStarted() //
-				+ " flvRecordingMetaDataId: " + this.getFlvRecordingMetaDataId() //
-				+ " isRecording: " + this.getIsRecording() //
-				+ " isAVClient: " + this.getIsAVClient() //
-				+ " broadCastID: " + this.getBroadCastID() //
-				+ " avsettings: " + this.getAvsettings() //
-				+ " server: " + server
-				;
+		return "Client [streamid=" + streamid + ", publicSID=" + publicSID + ", isScreenClient=" + isScreenClient
+				+ ", isAVClient=" + isAVClient + ", room_id=" + room_id + ", broadCastID=" + broadCastID + ", user_id="
+				+ user_id + ", avsettings=" + avsettings + ", isRecording=" + isRecording + ", flvRecordingId="
+				+ flvRecordingId + ", flvRecordingMetaDataId=" + flvRecordingMetaDataId + ", screenPublishStarted="
+				+ screenPublishStarted + ", interviewPodId=" + interviewPodId + ", server=" + server + "]";
 	}
 }

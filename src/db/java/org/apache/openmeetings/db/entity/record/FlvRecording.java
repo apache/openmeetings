@@ -59,7 +59,8 @@ import org.simpleframework.xml.Root;
  */
 @Entity
 @NamedQueries({ 
-	@NamedQuery(name = "getRecordingByHash", query = "SELECT f FROM FlvRecording f WHERE f.fileHash = :fileHash") 
+	@NamedQuery(name = "getRecordingById", query = "SELECT f FROM FlvRecording f WHERE f.flvRecordingId = :id") 
+	, @NamedQuery(name = "getRecordingByHash", query = "SELECT f FROM FlvRecording f WHERE f.fileHash = :fileHash") 
 	, @NamedQuery(name = "getRecordingsByExternalUser", query = "SELECT NEW org.apache.openmeetings.db.dto.file.RecordingObject(c) "
 			+ "FROM FlvRecording c, User u "
 			+ "WHERE c.insertedBy = u.user_id AND u.externalUserId = :externalUserId  AND u.externalUserType = :externalUserType "
@@ -68,7 +69,6 @@ import org.simpleframework.xml.Root;
 @Table(name = "flvrecording")
 @Root(name = "flvrecording")
 public class FlvRecording implements Serializable {
-
 	private static final long serialVersionUID = -2234874663310617072L;
 
 	@Id
