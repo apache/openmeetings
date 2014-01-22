@@ -38,7 +38,7 @@ public class RecordingPage extends BaseInitedPage {
 		FlvRecording r = null;
 		if (WebSession.get().signIn(hash)) {
 			Long recId = getRecordingId();
-			if (WebSession.get().signIn(hash) && recId != null) {
+			if (recId != null) {
 				r = getBean(FlvRecordingDao.class).get(recId);
 			}
 		}
