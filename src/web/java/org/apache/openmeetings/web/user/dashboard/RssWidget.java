@@ -31,8 +31,14 @@ public class RssWidget extends AbstractWidget {
 
 	public RssWidget() {
 		super();
-		title = WebSession.getString(277L);
 		location = new WidgetLocation(1, 1);
+		init();
+	}
+	
+	@Override
+	public void init() {
+		super.init();
+		title = WebSession.getString(277L);
 	}
 	
 	public WidgetView createView(String viewId) {

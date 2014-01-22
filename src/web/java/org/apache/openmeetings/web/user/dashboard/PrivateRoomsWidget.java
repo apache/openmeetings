@@ -31,8 +31,14 @@ public class PrivateRoomsWidget extends AbstractWidget {
 
 	public PrivateRoomsWidget() {
 		super();
-		title = WebSession.getString(781L);
 		location = new WidgetLocation(0, 1);
+		init();
+	}
+	
+	@Override
+	public void init() {
+		super.init();
+		title = WebSession.getString(781L);
 	}
 	
 	public WidgetView createView(String viewId) {

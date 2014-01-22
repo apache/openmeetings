@@ -74,6 +74,7 @@ import org.apache.wicket.util.string.Strings;
 
 import ro.fortsoft.wicket.dashboard.Dashboard;
 import ro.fortsoft.wicket.dashboard.DefaultDashboard;
+import ro.fortsoft.wicket.dashboard.Widget;
 import ro.fortsoft.wicket.dashboard.WidgetFactory;
 import ro.fortsoft.wicket.dashboard.web.DashboardContext;
 
@@ -390,7 +391,6 @@ public class WebSession extends AbstractAuthenticatedWebSession {
 	
 	private void initDashboard() {
 		DashboardContext dashboardContext = getDashboardContext();
-		//FIXME check title etc.
 		dashboard = dashboardContext.getDashboardPersiter().load();
 		if (dashboard == null) {
 			dashboard = new DefaultDashboard("default", "Default");
@@ -406,6 +406,10 @@ public class WebSession extends AbstractAuthenticatedWebSession {
 				dashboard.addWidget(widgetFactory.createWidget(new RssWidgetDescriptor()));
 			}
 			dashboardContext.getDashboardPersiter().save(dashboard);
+		} else {
+			for (Widget w : dashboard.getWidgets()) {
+				w.init();
+			}
 		}
 	}
 }

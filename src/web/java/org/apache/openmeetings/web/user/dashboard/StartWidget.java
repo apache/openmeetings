@@ -31,8 +31,14 @@ public class StartWidget extends AbstractWidget {
 
 	public StartWidget() {
 		super();
-		title = WebSession.getString(774L);
 		location = new WidgetLocation(1, 0);
+		init();
+	}
+	
+	@Override
+	public void init() {
+		super.init();
+		title = WebSession.getString(774L);
 	}
 	
 	public WidgetView createView(String viewId) {

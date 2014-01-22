@@ -4791,6 +4791,9 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>Вы можете ввести адрес в формате: Имя1 Фамилия1 &lt;адрес1&gt; или "Имя2 Фамилия2" &lt;адрес2&gt; или 'Имя3 Фамилия3' &lt;адрес3&gt; или адрес</value>
   </string>
   <string id="1589" name="notify_on_disconnect">
-    <value>Notify on disconnect</value>
+    <value>Сообщить об отключении</value>
+  </string>
+  <string id="1590" name="dashboard.display">
+    <value>Показать</value>
   </string>
 </language>

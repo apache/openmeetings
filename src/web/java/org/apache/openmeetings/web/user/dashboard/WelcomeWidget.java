@@ -31,8 +31,14 @@ public class WelcomeWidget extends AbstractWidget {
 
 	public WelcomeWidget() {
 		super();
-		title = WebSession.getString(1546L);
 		location = new WidgetLocation(0, 0);
+		init();
+	}
+	
+	@Override
+	public void init() {
+		super.init();
+		title = WebSession.getString(1546L);
 	}
 	
 	public WidgetView createView(String viewId) {

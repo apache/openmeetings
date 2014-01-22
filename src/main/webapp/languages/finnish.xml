@@ -4793,4 +4793,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
   <string id="1589" name="notify_on_disconnect">
     <value>Notify on disconnect</value>
   </string>
+  <string id="1590" name="dashboard.display">
+    <value>Display</value>
+  </string>
 </language>
