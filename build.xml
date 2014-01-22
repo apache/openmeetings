@@ -276,7 +276,15 @@
 	</target>
 
 	<!-- Copy any resource or configuration files -->
-	<target name="resources">
+	<target name="vmresources">
+		<copy todir="${main.out.dir}" includeEmptyDirs="yes">
+			<fileset dir="${src.base.dir}">
+				<include name="**/*.vm" />
+			</fileset>
+		</copy>
+	</target>
+	
+	<target name="resources" depends="vmresources">
 		<patternset id="xmlpng">
 			<include name="**/*.xml" />
 			<include name="**/*.png" />
@@ -285,7 +293,6 @@
 			<patternset refid="xmlpng" />
 			<include name="**/*.conf" />
 			<include name="**/*.properties" />
-			<include name="**/*.vm" />
 		</patternset>
 
 		<!-- Main Applications -->
@@ -304,7 +311,7 @@
 
 	<target name="web.only" depends="jar.web.only, web.copy"/>
 	
-	<target name="jar.web.only" depends="enhance.only.norefresh, current_revision">
+	<target name="jar.web.only" depends="enhance.only.norefresh, current_revision, vmresources">
 		<manifestclasspath property="jar.classpath" jarfile="${project.distname}-${jar.suffix}.jar">
 			<classpath refid="compile.classpath" />
 		</manifestclasspath>

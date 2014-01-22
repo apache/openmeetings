@@ -32,6 +32,7 @@ import org.apache.openmeetings.util.InitializationContainer;
 import org.apache.openmeetings.web.pages.ActivatePage;
 import org.apache.openmeetings.web.pages.MainPage;
 import org.apache.openmeetings.web.pages.NotInitedPage;
+import org.apache.openmeetings.web.pages.RecordingPage;
 import org.apache.openmeetings.web.pages.ResetPage;
 import org.apache.openmeetings.web.pages.SwfPage;
 import org.apache.openmeetings.web.pages.auth.SignInPage;
@@ -125,6 +126,7 @@ public class Application extends AuthenticatedWebApplication {
 		mountPage("signin", getSignInPageClass());
 		mountPage("activate", ActivatePage.class);
 		mountPage("reset", ResetPage.class);
+		mountPage("/recording/${hash}", RecordingPage.class);
 		mountResource("/recordings/avi/${id}", new AviRecordingResourceReference());
 		mountResource("/recordings/flv/${id}", new FlvRecordingResourceReference());
 		mountResource("/recordings/mp4/${id}", new Mp4RecordingResourceReference());
