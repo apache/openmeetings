@@ -574,3 +574,14 @@ tr.unread {
 , .select2-choices .select2-search-choice .user.internal {
 	background-image: url(images/user.png);
 }
+.page.recording {
+	padding-top: 40px;
+}
+.page.recording .video, .page.recording .info {
+	display: inline-block;
+	float: left;
+	padding-left: 20px;
+}
+.page.recording .video {
+	min-width: 400px;
+}
