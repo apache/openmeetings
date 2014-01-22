@@ -42,7 +42,7 @@ public class RecordingPage extends BaseInitedPage {
 				r = getBean(FlvRecordingDao.class).get(recId);
 			}
 		}
-		add(new VideoInfo("info", r).setVisible(r != null), new VideoPlayer("player").setVisible(r != null));
+		add(new VideoInfo("info", r).setVisible(r != null), new VideoPlayer("player", r).setVisible(r != null));
 	}
 
 	@Override
