@@ -35,7 +35,7 @@ import org.apache.wicket.util.resource.FileResourceStream;
 
 public class VideoInfo extends Panel {
 	private static final long serialVersionUID = 1L;
-	private final static WebMarkupContainer container = new WebMarkupContainer("container");
+	private final WebMarkupContainer container = new WebMarkupContainer("container");
 	private final Button dAVI = new Button("dAVI");
 	private final Button dFLV = new Button("dFLV");
 	private final AjaxDownload download = new AjaxDownload();

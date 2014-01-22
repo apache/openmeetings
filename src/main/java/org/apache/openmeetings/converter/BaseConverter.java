@@ -27,6 +27,7 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
@@ -89,43 +90,36 @@ public abstract class BaseConverter {
 		}
 	}
 	
-	protected String[] mergeAudioToWaves(List<String> listOfFullWaveFiles, String outputFullWav) throws Exception {
-		String[] argv_full_sox = new String[listOfFullWaveFiles.size() + 3];
+	protected String[] mergeAudioToWaves(List<String> listOfFullWaveFiles, String outputFullWav) {
+		List<String> argv = new ArrayList<String>();
 		
-		log.debug(" listOfFullWaveFiles " + listOfFullWaveFiles.size() + " argv_full_sox LENGTH " + argv_full_sox.length);
-		
-		argv_full_sox[0] = getPathToSoX();
-		argv_full_sox[1] = "-m";
-
-		int i = 0;
-		for (;i < listOfFullWaveFiles.size(); i++) {
-			log.debug(" i "+i+" = "+listOfFullWaveFiles.get(i));
-			argv_full_sox[2 + i] = listOfFullWaveFiles.get(i);
+		argv.add(getPathToSoX());
+		argv.add("-m");
+		for (String arg : listOfFullWaveFiles) {
+			argv.add(arg);
 		}
-		log.debug(" i + 2 "+(i+2)+" "+outputFullWav);
+		argv.add(outputFullWav);
 		
-		argv_full_sox[i + 2] = outputFullWav;
-		
-		return argv_full_sox;
+		return argv.toArray(new String[0]);
 	}
 	
 	protected void stripAudioFirstPass(FlvRecording flvRecording, List<ConverterProcessResult> returnLog,
-			List<String> listOfFullWaveFiles, File streamFolder) throws Exception {
-		List<FlvRecordingMetaData> metaDataList = metaDataDao.getAudioMetaDataByRecording(flvRecording.getFlvRecordingId());
-		stripAudioFirstPass(flvRecording, returnLog, listOfFullWaveFiles, streamFolder, metaDataList);
+			List<String> listOfFullWaveFiles, File streamFolder)
+	{
+		stripAudioFirstPass(flvRecording, returnLog, listOfFullWaveFiles, streamFolder
+				, metaDataDao.getAudioMetaDataByRecording(flvRecording.getFlvRecordingId()));
 	}
 	
-	private String[] addSoxPad(List<ConverterProcessResult> returnLog, String job, double length, double position, String inFile, String outFile) {
+	private String[] addSoxPad(List<ConverterProcessResult> returnLog, String job, double length, double position,
+			String inFile, String outFile) {
 		if (length >= 0 && position >= 0 && (length > 0 || position > 0)) {
-			String[] argv = new String[] { getPathToSoX(),
-					inFile, outFile, "pad",
-					"" + length, "" + position };
-	
+			String[] argv = new String[] { getPathToSoX(), inFile, outFile, "pad", "" + length, "" + position };
+
 			returnLog.add(ProcessHelper.executeScript(job, argv));
 			return argv;
 		} else {
-			log.debug("::addSoxPad " + job + " Invalid parameters: "
-				+ " length = " + length + "; position = " + position + "; inFile = " + inFile);
+			log.debug("::addSoxPad " + job + " Invalid parameters: " + " length = " + length + "; position = "
+					+ position + "; inFile = " + inFile);
 		}
 		return null;
 	}

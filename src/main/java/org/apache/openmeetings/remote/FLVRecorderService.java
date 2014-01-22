@@ -308,10 +308,10 @@ public class FLVRecorderService implements IPendingServiceCallback {
 				// in the FlvRecorderConverter waiting for the stream to finish
 				// this would normally happen in the Listener
 				FlvRecordingMetaData metaData = metaDataDao.get(flvRecordingMetaDataId);
-				if (metaData.getStreamStatus() != Status.STOPPING) {
+				if (metaData.getStreamStatus() == Status.STARTED) {
 					metaData.setStreamStatus(Status.STOPPED);
+					metaDataDao.update(metaData);
 				}
-				metaDataDao.update(metaData);
 				throw new IllegalStateException("Could not find Listener to stop! flvRecordingMetaDataId " + flvRecordingMetaDataId);
 			} else {
 				FlvRecordingMetaData metaData = metaDataDao.get(flvRecordingMetaDataId);
