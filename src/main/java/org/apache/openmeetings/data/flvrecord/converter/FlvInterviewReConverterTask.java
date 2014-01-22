@@ -18,41 +18,34 @@
  */
 package org.apache.openmeetings.data.flvrecord.converter;
 
+import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+
 import org.apache.openmeetings.converter.FlvInterviewConverter;
-import org.apache.openmeetings.util.OpenmeetingsVariables;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.task.TaskExecutor;
 
 public class FlvInterviewReConverterTask {
-	private static final Logger log = Red5LoggerFactory.getLogger(
-			FlvInterviewReConverterTask.class,
-			OpenmeetingsVariables.webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(FlvInterviewReConverterTask.class, webAppRootKey);
 
 	@Autowired
 	private TaskExecutor taskExecutor;
 	@Autowired
 	private FlvInterviewConverter flvInterviewConverter;
 
-	public void startConversionThread(final Long flvRecordingId,
-			final Integer leftSideLoud, final Integer rightSideLoud,
+	public void startConversionThread(final Long flvRecordingId, final Integer leftSideLoud, final Integer rightSideLoud,
 			final Integer leftSideTime, final Integer rightSideTime) {
 		try {
+			log.debug("[-1-]" + taskExecutor);
 
-			log.debug("[-1-]" + this.taskExecutor);
-
-			this.taskExecutor.execute(new Runnable() {
+			taskExecutor.execute(new Runnable() {
 				public void run() {
-					flvInterviewConverter.startReConversion(flvRecordingId,
-							leftSideLoud, rightSideLoud, leftSideTime,
-							rightSideTime);
+					flvInterviewConverter.startReConversion(flvRecordingId, leftSideLoud, rightSideLoud, leftSideTime, rightSideTime);
 				}
 			});
-
 		} catch (Exception err) {
 			log.error("[startConversionThread]", err);
 		}
 	}
-
 }

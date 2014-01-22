@@ -40,6 +40,7 @@ import org.apache.openmeetings.db.dao.server.SessiondataDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.record.FlvRecording;
 import org.apache.openmeetings.db.entity.record.FlvRecordingMetaData;
+import org.apache.openmeetings.db.entity.record.FlvRecordingMetaData.Status;
 import org.apache.openmeetings.db.entity.room.Client;
 import org.apache.openmeetings.remote.red5.ScopeApplicationAdapter;
 import org.apache.openmeetings.util.AuthLevelUtil;
@@ -72,8 +73,6 @@ public class FLVRecorderService implements IPendingServiceCallback {
 	@Autowired
 	private FlvRecordingDao flvRecordingDaoImpl;
 	@Autowired
-	private FlvRecordingMetaDataDao flvRecordingMetaDataDao;
-	@Autowired
 	private UserDao usersDaoImpl;
 	@Autowired
 	private RoomDao roomDao;
@@ -92,9 +91,9 @@ public class FLVRecorderService implements IPendingServiceCallback {
 	@Autowired
 	private ScopeApplicationAdapter scopeApplicationAdapter;
 	@Autowired
-	private FlvRecordingMetaDeltaDao flvRecordingMetaDeltaDao;
+	private FlvRecordingMetaDeltaDao metaDeltaDao;
 	@Autowired
-	private FlvRecordingMetaDataDao flvRecordingMetaDataDaoImpl;
+	private FlvRecordingMetaDataDao metaDataDao;
 
 	public void resultReceived(IPendingServiceCall arg0) {
 	}
@@ -124,13 +123,12 @@ public class FLVRecorderService implements IPendingServiceCallback {
 	}
 	
 	private static String generateFileName(Long flvRecording_id, String streamid) throws Exception {
-		String dateString = CalendarPatterns.getTimeForStreamId(new java.util.Date());
+		String dateString = CalendarPatterns.getTimeForStreamId(new Date());
 		return "rec_" + flvRecording_id + "_stream_" + streamid + "_" + dateString;
 	}
 
 	public String recordMeetingStream(String roomRecordingName, String comment, Boolean isInterview) {
 		try {
-
 			log.debug(":: recordMeetingStream ::");
 
 			IConnection current = Red5.getConnectionLocal();
@@ -166,7 +164,7 @@ public class FLVRecorderService implements IPendingServiceCallback {
 							if (rcl.getFlvRecordingId() != null && rcl.isScreenPublishStarted()) {
 								String streamName_Screen = generateFileName(flvRecordingId, rcl.getStreamPublishName().toString());
 
-								Long flvRecordingMetaDataId = flvRecordingMetaDataDao.addFlvRecordingMetaData(
+								Long flvRecordingMetaDataId = metaDataDao.addFlvRecordingMetaData(
 										flvRecordingId, rcl.getFirstname() + " " + rcl.getLastname(), now, false,
 										false, true, streamName_Screen, rcl.getInterviewPodId());
 
@@ -195,7 +193,7 @@ public class FLVRecorderService implements IPendingServiceCallback {
 								isVideoOnly = true;
 							}
 
-							Long flvRecordingMetaDataId = flvRecordingMetaDataDao.addFlvRecordingMetaData(flvRecordingId,
+							Long flvRecordingMetaDataId = metaDataDao.addFlvRecordingMetaData(flvRecordingId,
 									rcl.getFirstname() + " " + rcl.getLastname(), now, isAudioOnly, isVideoOnly, false, streamName,
 									rcl.getInterviewPodId());
 
@@ -251,8 +249,7 @@ public class FLVRecorderService implements IPendingServiceCallback {
 			log.debug("### isScreenData " + isScreenData);
 			log.debug("### isInterview " + isInterview);
 			StreamListener streamListener = new StreamListener(!isScreenData, streamName, conn.getScope(),
-					flvRecordingMetaDataId, isScreenData, isInterview, flvRecordingMetaDataDao,
-					flvRecordingMetaDeltaDao);
+					flvRecordingMetaDataId, isScreenData, isInterview, metaDataDao, metaDeltaDao);
 
 			streamListeners.put(flvRecordingMetaDataId, streamListener);
 
@@ -271,7 +268,6 @@ public class FLVRecorderService implements IPendingServiceCallback {
 	 */
 	public synchronized void stopRecordingShow(IConnection conn, String broadcastId, Long flvRecordingMetaDataId) {
 		try {
-
 			if (flvRecordingMetaDataId == null) {
 				// this should be fixed, can be useful for debugging, after all this is an error
 				// but we don't want the application to completely stop the process
@@ -294,7 +290,6 @@ public class FLVRecorderService implements IPendingServiceCallback {
 			if (stream != null) {
 				// Iterate through all stream listeners and stop the appropriate
 				if (stream.getStreamListeners() != null) {
-
 					for (IStreamListener iStreamListener : stream.getStreamListeners()) {
 						stream.removeStreamListener(iStreamListener);
 					}
@@ -302,7 +297,6 @@ public class FLVRecorderService implements IPendingServiceCallback {
 			}
 
 			if (listenerAdapter == null) {
-
 				log.debug("Stream Not Found :: " + flvRecordingMetaDataId);
 				log.debug("Available Streams :: " + streamListeners.size());
 
@@ -313,10 +307,16 @@ public class FLVRecorderService implements IPendingServiceCallback {
 				// Manually call finish on the stream so that there is no endless loop waiting
 				// in the FlvRecorderConverter waiting for the stream to finish
 				// this would normally happen in the Listener
-				FlvRecordingMetaData flvRecordingMetaData = flvRecordingMetaDataDaoImpl.get(flvRecordingMetaDataId);
-				flvRecordingMetaData.setStreamReaderThreadComplete(true);
-				flvRecordingMetaDataDaoImpl.update(flvRecordingMetaData);
+				FlvRecordingMetaData metaData = metaDataDao.get(flvRecordingMetaDataId);
+				if (metaData.getStreamStatus() != Status.STOPPING) {
+					metaData.setStreamStatus(Status.STOPPED);
+				}
+				metaDataDao.update(metaData);
 				throw new IllegalStateException("Could not find Listener to stop! flvRecordingMetaDataId " + flvRecordingMetaDataId);
+			} else {
+				FlvRecordingMetaData metaData = metaDataDao.get(flvRecordingMetaDataId);
+				metaData.setStreamStatus(Status.STOPPING);
+				metaDataDao.update(metaData);
 			}
 
 			listenerAdapter.closeStream();
@@ -338,6 +338,9 @@ public class FLVRecorderService implements IPendingServiceCallback {
 					if (conn instanceof IServiceCapableConnection) {
 						Client rcl = sessionManager.getClientByStreamId(conn.getClient().getId(), null);
 
+						if (rcl == null) {
+							continue;
+						}
 						log.debug("is this users still alive? stop it :" + rcl);
 
 						if (rcl.getIsScreenClient()) {
@@ -346,7 +349,7 @@ public class FLVRecorderService implements IPendingServiceCallback {
 								stopRecordingShow(conn, rcl.getStreamPublishName(), rcl.getFlvRecordingMetaDataId());
 
 								// Update Meta Data
-								flvRecordingMetaDataDao.updateFlvRecordingMetaDataEndDate(rcl.getFlvRecordingMetaDataId(), new Date());
+								metaDataDao.updateFlvRecordingMetaDataEndDate(rcl.getFlvRecordingMetaDataId(), new Date());
 							}
 						} else if (rcl.getIsAVClient()
 								&& (rcl.getAvsettings().equals("av") || rcl.getAvsettings().equals("a") || rcl.getAvsettings().equals("v"))) {
@@ -354,7 +357,7 @@ public class FLVRecorderService implements IPendingServiceCallback {
 							stopRecordingShow(conn, String.valueOf(rcl.getBroadCastID()).toString(), rcl.getFlvRecordingMetaDataId());
 
 							// Update Meta Data
-							flvRecordingMetaDataDao.updateFlvRecordingMetaDataEndDate(rcl.getFlvRecordingMetaDataId(), new Date());
+							metaDataDao.updateFlvRecordingMetaDataEndDate(rcl.getFlvRecordingMetaDataId(), new Date());
 						}
 					}
 				}
@@ -435,7 +438,7 @@ public class FLVRecorderService implements IPendingServiceCallback {
 					stopRecordingShow(conn, rcl.getStreamPublishName(), rcl.getFlvRecordingMetaDataId());
 
 					// Update Meta Data
-					flvRecordingMetaDataDao.updateFlvRecordingMetaDataEndDate(rcl.getFlvRecordingMetaDataId(), new Date());
+					metaDataDao.updateFlvRecordingMetaDataEndDate(rcl.getFlvRecordingMetaDataId(), new Date());
 				}
 
 			} else if (rcl.getIsAVClient()
@@ -446,7 +449,7 @@ public class FLVRecorderService implements IPendingServiceCallback {
 				stopRecordingShow(conn, String.valueOf(rcl.getBroadCastID()), rcl.getFlvRecordingMetaDataId());
 
 				// Update Meta Data
-				flvRecordingMetaDataDao.updateFlvRecordingMetaDataEndDate(rcl.getFlvRecordingMetaDataId(), new Date());
+				metaDataDao.updateFlvRecordingMetaDataEndDate(rcl.getFlvRecordingMetaDataId(), new Date());
 			}
 
 		} catch (Exception err) {
@@ -467,7 +470,7 @@ public class FLVRecorderService implements IPendingServiceCallback {
 
 					log.debug("##############  ADD SCREEN OF SHARER :: " + rcl.getStreamPublishName());
 
-					Long flvRecordingMetaDataId = flvRecordingMetaDataDao.addFlvRecordingMetaData(flvRecordingId, rcl.getFirstname()
+					Long flvRecordingMetaDataId = metaDataDao.addFlvRecordingMetaData(flvRecordingId, rcl.getFirstname()
 							+ " " + rcl.getLastname(), now, false, false, true, streamName_Screen, rcl.getInterviewPodId());
 
 					// Start FLV Recording
@@ -496,7 +499,7 @@ public class FLVRecorderService implements IPendingServiceCallback {
 					isVideoOnly = true;
 				}
 
-				Long flvRecordingMetaDataId = flvRecordingMetaDataDao.addFlvRecordingMetaData(flvRecordingId, rcl.getFirstname() + " "
+				Long flvRecordingMetaDataId = metaDataDao.addFlvRecordingMetaData(flvRecordingId, rcl.getFirstname() + " "
 						+ rcl.getLastname(), now, isAudioOnly, isVideoOnly, false, streamName, rcl.getInterviewPodId());
 
 				// Start FLV recording

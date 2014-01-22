@@ -48,11 +48,11 @@ public class FlvInterviewConverter extends BaseConverter {
 
 	// Spring loaded Beans
 	@Autowired
-	private FlvRecordingDao flvRecordingDaoImpl = null;
+	private FlvRecordingDao recordingDao;
 	@Autowired
-	private FlvRecordingMetaDataDao flvRecordingMetaDataDaoImpl = null;
+	private FlvRecordingMetaDataDao metaDataDao;
 	@Autowired
-	private FlvRecordingLogDao flvRecordingLogDaoImpl;
+	private FlvRecordingLogDao logDao;
 	@Autowired
 	private GenerateThumbs generateThumbs;
 
@@ -116,14 +116,13 @@ public class FlvInterviewConverter extends BaseConverter {
 
 	public void startConversion(Long flvRecordingId, boolean reconversion, ReConverterParams rcv) {
 		try {
-			FlvRecording flvRecording = flvRecordingDaoImpl.get(flvRecordingId);
+			FlvRecording flvRecording = recordingDao.get(flvRecordingId);
 			log.debug("flvRecording " + flvRecording.getFlvRecordingId());
 
 			List<ConverterProcessResult> returnLog = new ArrayList<ConverterProcessResult>();
 			List<String> listOfFullWaveFiles = new LinkedList<String>();
 			File streamFolder = getStreamFolder(flvRecording);
-			List<FlvRecordingMetaData> metaDataList = flvRecordingMetaDataDaoImpl
-					.getFlvRecordingMetaDataAudioFlvsByRecording(flvRecording.getFlvRecordingId());
+			List<FlvRecordingMetaData> metaDataList = metaDataDao.getAudioMetaDataByRecording(flvRecording.getFlvRecordingId());
 	
 			stripAudioFirstPass(flvRecording, returnLog, listOfFullWaveFiles, streamFolder, metaDataList);
 		
@@ -135,9 +134,7 @@ public class FlvInterviewConverter extends BaseConverter {
 			deleteFileIfExists(outputFullWav);
 
 			if (listOfFullWaveFiles.size() == 1) {
-
 				outputFullWav = listOfFullWaveFiles.get(0);
-
 			} else if (listOfFullWaveFiles.size() > 0) {
 				String[] argv_full_sox;
 				if (reconversion) {
@@ -148,21 +145,17 @@ public class FlvInterviewConverter extends BaseConverter {
 
 				returnLog.add(ProcessHelper.executeScript("mergeAudioToWaves", argv_full_sox));
 			} else {
-
 				// create default Audio to merge it.
 				// strip to content length
 				File outputWav = new File(streamFolderGeneral, "one_second.wav");
 
 				// Calculate delta at beginning
-				Long deltaTimeMilliSeconds = flvRecording.getRecordEnd().getTime()
-						- flvRecording.getRecordStart().getTime();
+				Long deltaTimeMilliSeconds = flvRecording.getRecordEnd().getTime() - flvRecording.getRecordStart().getTime();
 				Float deltaPadding = (Float.parseFloat(deltaTimeMilliSeconds.toString()) / 1000) - 1;
 
-				String[] argv_full_sox = new String[] { getPathToSoX(), outputWav.getCanonicalPath(),
-						outputFullWav, "pad", "0", deltaPadding.toString() };
+				String[] argv_full_sox = new String[] { getPathToSoX(), outputWav.getCanonicalPath(), outputFullWav, "pad", "0", deltaPadding.toString() };
 
 				returnLog.add(ProcessHelper.executeScript("generateSampleAudio", argv_full_sox));
-
 			}
 			// Default Image for empty interview video pods
 			final File defaultInterviewImageFile = new File(streamFolderGeneral, "default_interview_image.png");
@@ -171,7 +164,7 @@ public class FlvInterviewConverter extends BaseConverter {
 				throw new Exception("defaultInterviewImageFile does not exist!");
 			}
 
-			final int flvWidth = 640;
+			final int flvWidth = 320;
 			final int flvHeight = 260;
 			final int frameRate = 25;
 			// Merge Audio with Video / Calculate resulting FLV
@@ -277,20 +270,19 @@ public class FlvInterviewConverter extends BaseConverter {
 			String alternateDownloadFullName = new File(streamFolderGeneral, alternateDownloadName).getCanonicalPath();
 			deleteFileIfExists(alternateDownloadFullName);
 
-			String[] argv_alternateDownload = new String[] { getPathToFFMPEG(), "-i", outputFullFlv,
-					alternateDownloadFullName };
+			String[] argv_alternateDownload = new String[] { getPathToFFMPEG(), "-i", outputFullFlv, alternateDownloadFullName };
 
 			returnLog.add(ProcessHelper.executeScript("alternateDownload", argv_alternateDownload));
 
 			flvRecording.setAlternateDownload(alternateDownloadName);
 
-			flvRecordingDaoImpl.updateFlvRecording(flvRecording);
+			recordingDao.updateFlvRecording(flvRecording);
 			convertToMp4(flvRecording, returnLog);
 
-			flvRecordingLogDaoImpl.deleteFLVRecordingLogByRecordingId(flvRecording.getFlvRecordingId());
+			logDao.deleteFLVRecordingLogByRecordingId(flvRecording.getFlvRecordingId());
 
 			for (ConverterProcessResult returnMap : returnLog) {
-				flvRecordingLogDaoImpl.addFLVRecordingLog("generateFFMPEG", flvRecording, returnMap);
+				logDao.addFLVRecordingLog("generateFFMPEG", flvRecording, returnMap);
 			}
 
 			// Delete Wave Files

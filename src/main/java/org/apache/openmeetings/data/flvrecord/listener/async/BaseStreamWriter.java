@@ -27,6 +27,9 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
 
+import org.apache.openmeetings.db.dao.record.FlvRecordingMetaDataDao;
+import org.apache.openmeetings.db.entity.record.FlvRecordingMetaData;
+import org.apache.openmeetings.db.entity.record.FlvRecordingMetaData.Status;
 import org.apache.openmeetings.util.OmFileHelper;
 import org.red5.io.IStreamableFile;
 import org.red5.io.IStreamableFileFactory;
@@ -63,14 +66,15 @@ public abstract class BaseStreamWriter implements Runnable {
 	protected boolean isScreenData = false;
 
 	protected String streamName = "";
-
+	protected final FlvRecordingMetaDataDao metaDataDao;
 	private final BlockingQueue<CachedEvent> queue = new LinkedBlockingQueue<CachedEvent>();
 
-	public BaseStreamWriter(String streamName, IScope scope, Long metaDataId, boolean isScreenData) {
+	public BaseStreamWriter(String streamName, IScope scope, Long metaDataId, boolean isScreenData, FlvRecordingMetaDataDao metaDataDao) {
 		startedSessionTimeDate = new Date();
 		this.isScreenData = isScreenData;
 		this.streamName = streamName;
 		this.metaDataId = metaDataId;
+		this.metaDataDao = metaDataDao;
 		this.scope = scope;
 		try {
 			init();
@@ -78,6 +82,10 @@ public abstract class BaseStreamWriter implements Runnable {
 			log.error("[BaseStreamWriter] Could not start Thread", ex);
 		}
 		open();
+
+		FlvRecordingMetaData metaData = metaDataDao.get(metaDataId);
+		metaData.setStreamStatus(Status.STARTED);
+		metaDataDao.update(metaData);
 	}
 
 	/**
@@ -141,10 +149,27 @@ public abstract class BaseStreamWriter implements Runnable {
 	 */
 	public abstract void packetReceived(CachedEvent streampacket);
 
+	protected abstract void internalCloseStream();
 	/**
 	 * called when the stream is finished written on the disk
 	 */
-	public abstract void closeStream();
+	public void closeStream() {
+		try {
+			writer.close();
+		} catch (Exception err) {
+			log.error("[closeStream, close writer]", err);
+		}
+		internalCloseStream();
+		// Write the complete Bit to the meta data, the converter task will wait for this bit!
+		try {
+			FlvRecordingMetaData metaData = metaDataDao.get(metaDataId);
+			log.debug("Stream Status was: {} has been written for: {}", metaData.getStreamStatus(), metaDataId);
+			metaData.setStreamStatus(Status.STOPPED);
+			metaDataDao.update(metaData);
+		} catch (Exception err) {
+			log.error("[closeStream, complete Bit]", err);
+		}
+	}
 
 	public void append(CachedEvent streampacket) {
 		if (!running) {

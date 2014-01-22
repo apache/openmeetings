@@ -29,6 +29,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
 import org.apache.openmeetings.db.entity.record.FlvRecordingMetaData;
+import org.apache.openmeetings.db.entity.record.FlvRecordingMetaData.Status;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,7 +45,6 @@ public class FlvRecordingMetaDataDao {
 
 	public FlvRecordingMetaData get(Long flvRecordingMetaDataId) {
 		try {
-
 			String hql = "SELECT c FROM FlvRecordingMetaData c WHERE c.flvRecordingMetaDataId = :flvRecordingMetaDataId";
 
 			TypedQuery<FlvRecordingMetaData> query = em.createQuery(hql, FlvRecordingMetaData.class);
@@ -57,7 +57,6 @@ public class FlvRecordingMetaDataDao {
 			}
 
 			return flvRecordingMetaData;
-
 		} catch (Exception ex2) {
 			log.error("[getFlvRecordingMetaDataById]: ", ex2);
 		}
@@ -83,27 +82,27 @@ public class FlvRecordingMetaDataDao {
 		return null;
 	}
 
-	public List<FlvRecordingMetaData> getFlvRecordingMetaDataAudioFlvsByRecording(Long flvRecordingId) {
+	public List<FlvRecordingMetaData> getAudioMetaDataByRecording(Long flvRecordingId) {
 		try {
 			String hql = "SELECT c FROM FlvRecordingMetaData c WHERE c.flvRecording.flvRecordingId = :flvRecordingId "
-					+ "AND c.isScreenData = false AND c.streamReaderThreadComplete IS NOT NULL "
+					+ "AND c.isScreenData = false AND c.streamStatus <> :none "
 					+ "AND (c.isAudioOnly = true OR (c.isAudioOnly = false AND c.isVideoOnly = false))";
 
 			TypedQuery<FlvRecordingMetaData> query = em.createQuery(hql, FlvRecordingMetaData.class);
 			query.setParameter("flvRecordingId", flvRecordingId);
+			query.setParameter("none", Status.NONE);
 
 			List<FlvRecordingMetaData> flvRecordingMetaDatas = query.getResultList();
 
 			return flvRecordingMetaDatas;
 		} catch (Exception ex2) {
-			log.error("[getFlvRecordingMetaDataAudioFlvsByRecording]: ", ex2);
+			log.error("[getAudioMetaDataByRecording]: ", ex2);
 		}
 		return null;
 	}
 
-	public FlvRecordingMetaData getFlvRecordingMetaDataScreenFlvByRecording(Long flvRecordingId) {
+	public FlvRecordingMetaData getScreenMetaDataByRecording(Long flvRecordingId) {
 		try {
-
 			String hql = "SELECT c FROM FlvRecordingMetaData c WHERE c.flvRecording.flvRecordingId = :flvRecordingId "
 					+ "AND c.isScreenData = true";
 
@@ -117,7 +116,7 @@ public class FlvRecordingMetaDataDao {
 			}
 
 		} catch (Exception ex2) {
-			log.error("[getFlvRecordingMetaDataScreenFlvByRecording]: ", ex2);
+			log.error("[getScreenMetaDataByRecording]: ", ex2);
 		}
 		return null;
 	}

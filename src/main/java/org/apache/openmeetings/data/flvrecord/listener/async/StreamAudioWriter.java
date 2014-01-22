@@ -27,7 +27,6 @@ import java.util.Date;
 import org.apache.mina.core.buffer.IoBuffer;
 import org.apache.openmeetings.db.dao.record.FlvRecordingMetaDataDao;
 import org.apache.openmeetings.db.dao.record.FlvRecordingMetaDeltaDao;
-import org.apache.openmeetings.db.entity.record.FlvRecordingMetaData;
 import org.apache.openmeetings.db.entity.record.FlvRecordingMetaDelta;
 import org.red5.io.ITag;
 import org.red5.io.flv.impl.Tag;
@@ -49,21 +48,15 @@ public class StreamAudioWriter extends BaseStreamWriter {
 
 	// Autowire is not possible
 	protected final FlvRecordingMetaDeltaDao metaDeltaDao;
-	protected final FlvRecordingMetaDataDao metaDataDao;
 
 	private boolean isInterview = false;
 
 	public StreamAudioWriter(String streamName, IScope scope, Long metaDataId, boolean isScreenData,
 			boolean isInterview, FlvRecordingMetaDataDao metaDataDao, FlvRecordingMetaDeltaDao metaDeltaDao) {
-		super(streamName, scope, metaDataId, isScreenData);
+		super(streamName, scope, metaDataId, isScreenData, metaDataDao);
 
 		this.metaDeltaDao = metaDeltaDao;
-		this.metaDataDao = metaDataDao;
 		this.isInterview = isInterview;
-
-		FlvRecordingMetaData metaData = metaDataDao.get(metaDataId);
-		metaData.setStreamReaderThreadComplete(false);
-		metaDataDao.update(metaData);
 	}
 
 	@Override
@@ -190,13 +183,7 @@ public class StreamAudioWriter extends BaseStreamWriter {
 	}
 
 	@Override
-	public void closeStream() {
-		try {
-			writer.close();
-		} catch (Exception err) {
-			log.error("[closeStream, close writer]", err);
-		}
-
+	protected void internalCloseStream() {
 		try {
 			// We do not add any End Padding or count the gaps for the
 			// Screen Data, cause there is no!
@@ -230,14 +217,8 @@ public class StreamAudioWriter extends BaseStreamWriter {
 			metaDelta.setCurrentTime(new Date());
 
 			metaDeltaDao.addFlvRecordingMetaDelta(metaDelta);
-
-			// Write the complete Bit to the meta data, the converter task will wait for this bit!
-			FlvRecordingMetaData metaData = metaDataDao.get(metaDataId);
-			metaData.setStreamReaderThreadComplete(true);
-			metaDataDao.update(metaData);
-
 		} catch (Exception err) {
-			log.error("[closeStream]", err);
+			log.error("[internalCloseStream]", err);
 		}
 	}
 }

@@ -2476,7 +2476,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 		Long flvRecordingId = null;
 		if (conn != null) {
 			Client rcl = sessionManager.getClientByStreamId(conn.getClient().getId(), null);
-			if (rcl.getIsRecording() != null && rcl.getIsRecording()) {
+			if (rcl != null && rcl.getIsRecording() != null && rcl.getIsRecording()) {
 				rcl.setIsRecording(false);
 				flvRecordingId = rcl.getFlvRecordingId();
 				rcl.setFlvRecordingId(null);

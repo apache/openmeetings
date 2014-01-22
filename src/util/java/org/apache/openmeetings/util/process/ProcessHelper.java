@@ -142,7 +142,7 @@ public class ProcessHelper {
 			try {
 				worker.join(timeout);
 				if (worker.exitCode != null) {
-					returnMap.setExitValue(""+worker.exitCode);
+					returnMap.setExitValue("" + worker.exitCode);
 					log.debug("exitVal: " + worker.exitCode);
 					returnMap.setError(errorWatcher.output.toString());
 				} else {

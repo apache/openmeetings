@@ -18,16 +18,16 @@
  */
 package org.apache.openmeetings.data.flvrecord.converter;
 
+import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+
 import org.apache.openmeetings.converter.FlvRecorderConverter;
-import org.apache.openmeetings.util.OpenmeetingsVariables;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.task.TaskExecutor;
 
 public class FlvRecorderConverterTask {
-
-	private static final Logger log = Red5LoggerFactory.getLogger(FlvRecorderConverterTask.class, OpenmeetingsVariables.webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(FlvRecorderConverterTask.class, webAppRootKey);
 
 	@Autowired
 	private TaskExecutor taskExecutor;
@@ -36,18 +36,15 @@ public class FlvRecorderConverterTask {
 
 	public void startConversionThread(final Long flvRecordingId) {
 		try {
-			
-			log.debug("[-1-]"+this.taskExecutor);
-			
-			this.taskExecutor.execute(new Runnable() {
+			log.debug("[-1-]" + taskExecutor);
+
+			taskExecutor.execute(new Runnable() {
 				public void run() {
-	            	   flvRecorderConverter.startConversion( flvRecordingId );
-	               }
-	          });
-			
+					flvRecorderConverter.startConversion(flvRecordingId);
+				}
+			});
 		} catch (Exception err) {
-			log.error("[startConversionThread]",err);
+			log.error("[startConversionThread]", err);
 		}
 	}
-
 }

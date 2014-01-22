@@ -23,6 +23,8 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -36,10 +38,10 @@ import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
 
 /**
- * contains meta data about each stream, for example if it is a sreen sharing or
- * audio/video stream. There is also a boolean value
- * {@link #streamReaderThreadComplete}, as long as this boolean flag is not set
- * to true, the recording process will not proceed and start to convert all
+ * contains meta data about each stream, for example if it is a screen sharing or
+ * audio/video stream. There is also a {@link Status} value
+ * {@link #streamStatus}, as long as this variable is not set
+ * to {@link Status.STOPPED}, the recording process will not proceed and start to convert all
  * input sources to a single recording file.
  * 
  * @author sebawagner
@@ -48,7 +50,14 @@ import org.simpleframework.xml.Root;
 @Table(name = "flvrecording_metadata")
 @Root(name = "flvrecordingmetadata")
 public class FlvRecordingMetaData implements Serializable {
-	private static final long serialVersionUID = 8444176152324513716L;
+	private static final long serialVersionUID = 1L;
+	public enum Status {
+		NONE
+		, STARTED
+		, STOPPING
+		, STOPPED
+	}
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
@@ -124,11 +133,12 @@ public class FlvRecordingMetaData implements Serializable {
 	private Integer initialGapSeconds;
 
 	/**
-	 * this is only true when the asynchronous stream writer's have completed to
-	 * write packets to the file.
+	 * this is only STOPPED when the asynchronous stream writer's have completed to write packets to the file.
+	 * @see BaseStreamWriter#closeStream()
 	 */
-	@Column(name = "stream_reader_thread_complete")
-	private Boolean streamReaderThreadComplete;
+	@Column(name = "stream_status")
+	@Enumerated(EnumType.STRING)
+	private Status streamStatus = Status.NONE;
 
 	public long getFlvRecordingMetaDataId() {
 		return flvRecordingMetaDataId;
@@ -274,11 +284,11 @@ public class FlvRecordingMetaData implements Serializable {
 		this.initialGapSeconds = initialGapSeconds;
 	}
 
-	public Boolean getStreamReaderThreadComplete() {
-		return streamReaderThreadComplete;
+	public Status getStreamStatus() {
+		return streamStatus;
 	}
 
-	public void setStreamReaderThreadComplete(Boolean streamReaderThreadComplete) {
-		this.streamReaderThreadComplete = streamReaderThreadComplete;
+	public void setStreamStatus(Status status) {
+		this.streamStatus = status;
 	}
 }

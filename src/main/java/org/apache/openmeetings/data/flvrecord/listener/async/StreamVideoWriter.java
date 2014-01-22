@@ -35,18 +35,11 @@ import org.slf4j.Logger;
 public class StreamVideoWriter extends BaseStreamWriter {
 	private static final Logger log = Red5LoggerFactory.getLogger(StreamVideoWriter.class, webAppRootKey);
 	private Date startedSessionScreenTimeDate = null;
-	private final FlvRecordingMetaDataDao metaDataDao;
 
 	public StreamVideoWriter(String streamName, IScope scope, Long metaDataId, boolean isScreenData,
 			boolean isInterview, FlvRecordingMetaDataDao metaDataDao) {
 
-		super(streamName, scope, metaDataId, isScreenData);
-
-		this.metaDataDao = metaDataDao;
-
-		FlvRecordingMetaData metaData = metaDataDao.get(metaDataId);
-		metaData.setStreamReaderThreadComplete(false);
-		metaDataDao.update(metaData);
+		super(streamName, scope, metaDataId, isScreenData, metaDataDao);
 	}
 
 	@Override
@@ -102,21 +95,15 @@ public class StreamVideoWriter extends BaseStreamWriter {
 	}
 
 	@Override
-	public void closeStream() {
+	protected void internalCloseStream() {
 		try {
-			writer.close();
-
 			// Add Delta in the beginning, this Delta is the Gap between the device chosen and when the User hits the
 			// button in the Flash Security Warning
 			FlvRecordingMetaData metaData = metaDataDao.get(metaDataId);
-
 			metaData.setRecordStart(new Date(metaData.getRecordStart().getTime() + initialDelta));
-
-			metaData.setStreamReaderThreadComplete(true);
-
 			metaDataDao.update(metaData);
 		} catch (Exception err) {
-			log.error("[closeStream]", err);
+			log.error("[internalCloseStream]", err);
 		}
 	}
 }
