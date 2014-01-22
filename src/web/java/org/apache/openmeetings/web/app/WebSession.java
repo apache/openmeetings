@@ -144,6 +144,9 @@ public class WebSession extends AbstractAuthenticatedWebSession {
 			//no-op, will continue to sign-in page
 		}
 		Roles r = null;
+		if (externalType != null) {
+			invalidate();
+		}
 		if (isSignedIn()) {
 			r = new Roles(Roles.USER);
 			if (AuthLevelUtil.checkAdminLevel(userLevel)) {
