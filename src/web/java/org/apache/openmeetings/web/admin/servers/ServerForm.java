@@ -103,7 +103,7 @@ public class ServerForm extends AdminBaseForm<Server> {
 	@Override
 	protected void onRefreshSubmit(AjaxRequestTarget target, Form<?> form) {
 		Server server = getModelObject();
-		if (server.getId() <= 0) {
+		if (server.getId() > 0) {
 			server = Application.getBean(ServerDao.class).get(
 					server.getId());
 		} else {
