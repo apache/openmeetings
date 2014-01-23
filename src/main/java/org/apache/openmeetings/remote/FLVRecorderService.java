@@ -202,7 +202,7 @@ public class FLVRecorderService implements IPendingServiceCallback {
 							sessionManager.updateClientByStreamId(rcl.getStreamid(), rcl, false, null);
 
 							// Start FLV recording
-							recordShow(conn, String.valueOf(rcl.getBroadCastID()).toString(), streamName, flvRecordingMetaDataId, false,
+							recordShow(conn, String.valueOf(rcl.getBroadCastID()).toString(), streamName, flvRecordingMetaDataId, !isAudioOnly,
 									isInterview);
 						}
 					}

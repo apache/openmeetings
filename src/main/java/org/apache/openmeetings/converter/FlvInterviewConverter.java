@@ -240,7 +240,7 @@ public class FlvInterviewConverter extends BaseConverter {
 			// TODO additional flag to 'quiet' output should be added
 			returnLog.add(ProcessHelper.executeScript("generateFullBySequenceFLV", args.toArray(new String[]{})));
 
-			flvRecording.setFlvWidth(flvWidth);
+			flvRecording.setFlvWidth(2 * flvWidth);
 			flvRecording.setFlvHeight(flvHeight);
 
 			flvRecording.setFileHash(hashFileFullNameFlv);
