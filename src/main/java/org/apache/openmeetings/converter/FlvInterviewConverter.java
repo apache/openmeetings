@@ -261,7 +261,7 @@ public class FlvInterviewConverter extends BaseConverter {
 					"-vcodec", "mjpeg", //
 					"-vframes", "100", "-an", //
 					"-f", "rawvideo", //
-					"-s", flvWidth + "x" + flvHeight, //
+					"-s", (2 * flvWidth) + "x" + flvHeight, //
 					outPutJpeg };
 
 			returnLog.add(ProcessHelper.executeScript("generateFullFLV", argv_previewFLV));
