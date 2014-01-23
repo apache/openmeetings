@@ -314,7 +314,6 @@ public class AbstractUserDao  {
 	public User getUserByEmail(String email) {
 		TypedQuery<User> query = em.createNamedQuery("getUserByEmail", User.class);
 		query.setParameter("email", email);
-		query.setParameter("deleted", true);
 		User us = null;
 		try {
 			us = query.getSingleResult();
@@ -392,7 +391,13 @@ public class AbstractUserDao  {
 	}
 	
 	public User getContact(String email, String firstName, String lastName, Long langId, String tzId, User owner) {
-		User to = getUserByEmail(email);
+		User to = null;
+		try {
+			to = em.createNamedQuery("getContactByEmailAndUser", User.class)
+					.setParameter("email", email).setParameter("type", User.Type.contact).setParameter("ownerId", owner.getUser_id()).getSingleResult();
+		} catch (Exception e) {
+			//no-op
+		}
 		if (to == null) {
 			to = new User();
 			to.setType(Type.contact);

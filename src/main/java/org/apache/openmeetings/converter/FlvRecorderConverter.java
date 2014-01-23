@@ -91,26 +91,7 @@ public class FlvRecorderConverter extends BaseConverter {
 				throw new Exception("Stream has not been started, error in recording");
 			}
 
-			if (screenMetaData.getStreamStatus() != Status.STOPPED) {
-
-				log.debug("### meta ScreenStream not yet written to disk"
-						+ screenMetaData.getFlvRecordingMetaDataId());
-				boolean doStop = true;
-				while (doStop) {
-
-					log.debug("### Stream not yet written Thread Sleep - "
-							+ screenMetaData.getFlvRecordingMetaDataId());
-
-					Thread.sleep(100L);
-					
-					screenMetaData = metaDataDao.get(screenMetaData.getFlvRecordingMetaDataId());
-					
-					if (screenMetaData.getStreamStatus() == Status.STOPPED) {
-						log.debug("### Screen Stream now written Thread continue - ");
-						doStop = false;
-					}
-				}
-			}
+			screenMetaData = waitForTheStream(screenMetaData.getFlvRecordingMetaDataId());
 
 			String hashFileFullName = screenMetaData.getStreamName() + "_FINAL_WAVE.wav";
 			String outputFullWav = new File(streamFolder, hashFileFullName).getCanonicalPath();

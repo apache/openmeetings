@@ -110,18 +110,40 @@ public abstract class BaseConverter {
 				, metaDataDao.getAudioMetaDataByRecording(flvRecording.getFlvRecordingId()));
 	}
 	
-	private String[] addSoxPad(List<ConverterProcessResult> returnLog, String job, double length, double position,
-			String inFile, String outFile) {
-		if (length >= 0 && position >= 0 && (length > 0 || position > 0)) {
-			String[] argv = new String[] { getPathToSoX(), inFile, outFile, "pad", "" + length, "" + position };
-
-			returnLog.add(ProcessHelper.executeScript(job, argv));
-			return argv;
-		} else {
-			log.debug("::addSoxPad " + job + " Invalid parameters: " + " length = " + length + "; position = "
-					+ position + "; inFile = " + inFile);
+	private String[] addSoxPad(List<ConverterProcessResult> returnLog, String job, double length, double position, String inFile, String outFile) {
+		//FIXME need to check this
+		if (length < 0 || position < 0) {
+			log.debug("::addSoxPad " + job + " Invalid parameters: "
+					+ " length = " + length + "; position = " + position + "; inFile = " + inFile);
 		}
-		return null;
+		length = length < 0 ? 0 : length;
+		position = position < 0 ? 0 : position;
+
+		String[] argv = new String[] { getPathToSoX(), inFile, outFile, "pad", "" + length, "" + position };
+
+		returnLog.add(ProcessHelper.executeScript(job, argv));
+		return argv;
+	}
+	
+	protected FlvRecordingMetaData waitForTheStream(long metaId) throws InterruptedException {
+		FlvRecordingMetaData metaData = metaDataDao.get(metaId);
+		if (metaData.getStreamStatus() != Status.STOPPED) {
+			log.debug("### meta Stream not yet written to disk " + metaId);
+			boolean doStop = true;
+			while(doStop) {
+				log.trace("### Stream not yet written Thread Sleep - " + metaId);
+				
+				metaData = metaDataDao.get(metaId);
+				
+				if (metaData.getStreamStatus() == Status.STOPPED) {
+					log.debug("### Stream now written Thread continue - " );
+					doStop = false;
+				}
+				
+				Thread.sleep(100L);
+			}
+		}
+		return metaData;
 	}
 	
 	protected void stripAudioFirstPass(FlvRecording flvRecording,
@@ -141,22 +163,7 @@ public abstract class BaseConverter {
 					continue;
 				}
 				
-				if (metaData.getStreamStatus() != Status.STOPPED) {
-					log.debug("### meta Stream not yet written to disk " + metaId);
-					boolean doStop = true;
-					while(doStop) {
-						log.debug("### Stream not yet written Thread Sleep - " + metaId);
-						
-						metaData = metaDataDao.get(metaId);
-						
-						if (metaData.getStreamStatus() == Status.STOPPED) {
-							log.debug("### Stream now written Thread continue - " );
-							doStop = false;
-						}
-						
-						Thread.sleep(100L);
-					}
-				}
+				metaData = waitForTheStream(metaId);
 	
 				File inputFlvFile = new File(streamFolder, metaData.getStreamName() + ".flv");
 	

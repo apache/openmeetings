@@ -78,12 +78,11 @@ import org.simpleframework.xml.Root;
 			+ "AND u.adresses.email = :email AND u.deleted = false AND u.type <> :type"),
 	@NamedQuery(name = "getUserByName", query = "SELECT u FROM User as u "
 			+ " where u.login = :login" + " AND u.deleted <> :deleted"),
-	@NamedQuery(name = "getUserByEmail", query = "SELECT u FROM User as u "
-			+ " where u.adresses.email = :email"
-			+ " AND u.deleted <> :deleted"),
+	@NamedQuery(name = "getUserByEmail", query = "SELECT u FROM User as u WHERE deleted = false AND u.adresses.email = :email"),
 	@NamedQuery(name = "getUserByHash", query = "SELECT u FROM User as u "
 			+ " where u.resethash = :resethash"
 			+ " AND u.deleted <> :deleted"),
+	@NamedQuery(name = "getContactByEmailAndUser", query = "SELECT u FROM User u WHERE u.deleted = false AND u.adresses.email = :email AND u.type = :type AND u.ownerId = :ownerId"), 
 	@NamedQuery(name = "selectMaxFromUsersWithSearch", query = "select count(c.user_id) from User c "
 			+ "where c.deleted = false " + "AND ("
 			+ "lower(c.login) LIKE :search "

@@ -128,7 +128,7 @@ public abstract class BaseStreamWriter implements Runnable {
 				CachedEvent item = queue.poll(100, TimeUnit.MICROSECONDS);
 				if (item != null) {
 					if (dostopping) {
-						log.debug("metadatId: {} :: Recording stopped but still packets to write to file!", metaDataId);
+						log.trace("metadatId: {} :: Recording stopped but still packets to write to file!", metaDataId);
 					}
 
 					packetReceived(item);
