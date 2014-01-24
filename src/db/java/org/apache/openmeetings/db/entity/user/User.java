@@ -71,15 +71,15 @@ import org.simpleframework.xml.Root;
 @Entity
 @FetchGroups({ @FetchGroup(name = "backupexport", attributes = { @FetchAttribute(name = "password") }) })
 @NamedQueries({
-	@NamedQuery(name = "getUserById", query = "select c from User as c where c.user_id = :user_id"),
-	@NamedQuery(name = "checkUserLogin", query = "SELECT COUNT(u) FROM User AS u WHERE ((:id > 0 AND u.user_id <> :id) OR (:id = 0)) "
+	@NamedQuery(name = "getUserById", query = "select c from User c where c.user_id = :user_id"),
+	@NamedQuery(name = "checkUserLogin", query = "SELECT COUNT(u) FROM User u WHERE ((:id > 0 AND u.user_id <> :id) OR (:id = 0)) "
 			+ "AND u.login = :login AND u.deleted = false"),
 	@NamedQuery(name = "checkUserEmail", query = "SELECT COUNT(u) FROM User u WHERE ((:id > 0 AND u.user_id <> :id) OR (:id = 0)) "
 			+ "AND u.adresses.email = :email AND u.deleted = false AND u.type <> :type"),
-	@NamedQuery(name = "getUserByName", query = "SELECT u FROM User as u "
+	@NamedQuery(name = "getUserByName", query = "SELECT u FROM User u "
 			+ " where u.login = :login" + " AND u.deleted <> :deleted"),
-	@NamedQuery(name = "getUserByEmail", query = "SELECT u FROM User as u WHERE deleted = false AND u.adresses.email = :email"),
-	@NamedQuery(name = "getUserByHash", query = "SELECT u FROM User as u "
+	@NamedQuery(name = "getUserByEmail", query = "SELECT u FROM User u WHERE u.deleted = false AND u.adresses.email = :email"),
+	@NamedQuery(name = "getUserByHash", query = "SELECT u FROM User u "
 			+ " where u.resethash = :resethash"
 			+ " AND u.deleted <> :deleted"),
 	@NamedQuery(name = "getContactByEmailAndUser", query = "SELECT u FROM User u WHERE u.deleted = false AND u.adresses.email = :email AND u.type = :type AND u.ownerId = :ownerId"), 
