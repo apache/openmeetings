@@ -4796,4 +4796,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
   <string id="1590" name="dashboard.display">
     <value>Display</value>
   </string>
+  <string id="1591" name="register.confirmation.sent">
+    <value>Your account has been created. Confirmation email has been sent. You can now login.</value>
+  </string>
 </language>

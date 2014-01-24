@@ -77,7 +77,7 @@ public class RegisterDialog extends AbstractFormDialog<String> {
 	private FeedbackPanel feedback = new FeedbackPanel("feedback");
 	private final IModel<String> tzModel = Model.of(WebSession.get().getTimeZoneByBrowserLocale(0));
 	private final DropDownChoice<String> tzDropDown = new DropDownChoice<String>("tz", tzModel, getAvailableTimezones());
-	private Form<String> form;
+	private RegisterForm form;
 	private SignInDialog s;
     private String firstName;
     private String lastName;
@@ -94,11 +94,10 @@ public class RegisterDialog extends AbstractFormDialog<String> {
 	public RegisterDialog(String id) {
 		super(id, WebSession.getString(113));
 		add(form = new RegisterForm("form"));
-		lang = WebSession.get().getLanguageByBrowserLocale();
-		state = WebSession.get().getCountryByBrowserLocale();
+		form.setOutputMarkupId(true);
 		tzDropDown.setOutputMarkupId(true);
 		
-		confirmRegistration = new MessageDialog("confirmRegistration", WebSession.getString(235), WebSession.getString(674), DialogButtons.OK, DialogIcon.INFO){
+		confirmRegistration = new MessageDialog("confirmRegistration", WebSession.getString(235), WebSession.getString(674), DialogButtons.OK, DialogIcon.INFO) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -108,16 +107,13 @@ public class RegisterDialog extends AbstractFormDialog<String> {
 				behavior.setOption("closeOnEscape", false);
 			}
 			
-			public void onOpen(AjaxRequestTarget target) {
-				this.setTitle(Model.of(sendConfirmation && sendEmailAtRegister ? WebSession.getString(674) : WebSession.getString(236)));
-			}
-			
 			public void onClose(AjaxRequestTarget target, DialogButton button) {
 				s.open(target);
 			}
 		};
 		add(confirmRegistration);
-}
+		reset();
+	}
 
 	@Override
 	public void onConfigure(JQueryBehavior behavior) {
@@ -145,12 +141,32 @@ public class RegisterDialog extends AbstractFormDialog<String> {
 		return Arrays.asList(registerBtn, cancelBtn);
 	}
 
+	public void reset() {
+	    firstName = null;
+	    lastName = null;
+	    login = null;
+	    password = null;
+	    form.confirmPassword.setModelObject(null);
+	    email = null;
+		lang = WebSession.get().getLanguageByBrowserLocale();
+		state = WebSession.get().getCountryByBrowserLocale();
+	}
+	
 	public void onOpen(AjaxRequestTarget target) {
 		String baseURL = getBaseUrl();
 		sendEmailAtRegister = 1 == getBean(ConfigurationDao.class).getConfValue("sendEmailAtRegister", Integer.class, "0");
 		sendConfirmation = baseURL != null
 				&& !baseURL.isEmpty()
 				&& 1 == getBean(ConfigurationDao.class).getConfValue("sendEmailWithVerficationCode", Integer.class, "0");
+		long messageCode = 236;
+		if (sendConfirmation && sendEmailAtRegister) {
+			messageCode = 674;
+		} else if (sendConfirmation) {
+			messageCode = 1591;
+		}
+		confirmRegistration.setModelObject(WebSession.getString(messageCode));
+		reset();
+		target.add(form);
 	}
 	
 	public void onClose(AjaxRequestTarget target, DialogButton button) {
@@ -167,7 +183,7 @@ public class RegisterDialog extends AbstractFormDialog<String> {
 	}
 
 	@Override
-	public Form<String> getForm() {
+	public Form<Void> getForm() {
 		return form;
 	}
 
@@ -205,14 +221,16 @@ public class RegisterDialog extends AbstractFormDialog<String> {
 
 	}
 	
-	class RegisterForm extends StatelessForm<String> {
+	class RegisterForm extends StatelessForm<Void> {
 		private static final long serialVersionUID = 1701373326213602431L;
-	    private PasswordTextField confirmPassword;
+		private PasswordTextField confirmPassword;
 		private PasswordTextField passwordField;
 		private RequiredTextField<String> emailField;
 		private RequiredTextField<String> loginField;
 		private RequiredTextField<String> firstNameField;
 		private RequiredTextField<String> lastNameField;
+		private DropDownChoice<FieldLanguage> langField;
+		private DropDownChoice<State> stateField;
 
 		public RegisterForm(String id) {
 			super(id);
@@ -233,18 +251,19 @@ public class RegisterDialog extends AbstractFormDialog<String> {
 			add(emailField = new RequiredTextField<String>("email", new PropertyModel<String>(RegisterDialog.this, "email")));
 			emailField.setLabel(Model.of(WebSession.getString(119)));
 			emailField.add(RfcCompliantEmailAddressValidator.getInstance());
-			add(new DropDownChoice<FieldLanguage>("lang"
+			add(langField = new DropDownChoice<FieldLanguage>("lang"
 					, new PropertyModel<FieldLanguage>(RegisterDialog.this, "lang")
 					, getBean(FieldLanguageDao.class).getLanguages()
 					, new ChoiceRenderer<FieldLanguage>("name", "language_id"))
-				.setRequired(true).setLabel(Model.of(WebSession.getString(111))));
+				);
+			langField.setRequired(true).setLabel(Model.of(WebSession.getString(111)));
 			add(tzDropDown.setRequired(true).setLabel(Model.of(WebSession.getString(1143))));
-			add(new DropDownChoice<State>("state"
+			add(stateField = new DropDownChoice<State>("state"
 					, new PropertyModel<State>(RegisterDialog.this, "state")
 					, getBean(StateDao.class).getStates()
 					, new ChoiceRenderer<State>("name", "state_id"))
-				.setRequired(true).setLabel(Model.of(WebSession.getString(120))));
-			
+				);
+			stateField.setRequired(true).setLabel(Model.of(WebSession.getString(120)));
 			add(new AjaxButton("submit") { //FAKE button so "submit-on-enter" works as expected
 				private static final long serialVersionUID = -3612671587183668912L;
 
