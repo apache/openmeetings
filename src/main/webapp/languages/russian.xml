@@ -4799,4 +4799,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
   <string id="1591" name="register.confirmation.sent">
     <value>Ваш аккаунт создан. Письмо с подтверждение было выслано. Теперь вы можете войти под своим именем.</value>
   </string>
+  <string id="1592" name="end.date.is.earlier.than.start">
+    <value>Введенная дата начала раньше даты окончания.</value>
+  </string>
 </language>

@@ -214,6 +214,8 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 	private class AppointmentForm extends Form<Appointment> {
 		private static final long serialVersionUID = -1764738237821487526L;
 		private boolean createRoom = true;
+		private DateTimeField start;
+		private DateTimeField end;
 
 		@Override
 		protected void onModelChanged() {
@@ -264,8 +266,8 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 			add(toolbar);
 			add(new WysiwygEditor("description", toolbar));
 			add(new TextField<String>("location"));
-			add(new DateTimeField("start"));
-			add(new DateTimeField("end"));
+			add(start = new DateTimeField("start"));
+			add(end = new DateTimeField("end"));
 			final PasswordTextField pwd = new PasswordTextField("password");
 			pwd.setEnabled(getModelObject().isPasswordProtected());
 			pwd.setOutputMarkupId(true);
@@ -327,6 +329,14 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 				result.add(getModelObject().getRoom());
 			}
 			return result;
+		}
+		
+		@Override
+		protected void onValidate() {
+			Appointment a = getModelObject();
+			if (end.getConvertedInput().before(start.getConvertedInput())) {
+				error(WebSession.getString(1592));
+			}
 		}
 	}
 }
