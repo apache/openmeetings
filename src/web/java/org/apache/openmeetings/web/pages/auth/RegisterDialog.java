@@ -97,13 +97,7 @@ public class RegisterDialog extends AbstractFormDialog<String> {
 		lang = WebSession.get().getLanguageByBrowserLocale();
 		state = WebSession.get().getCountryByBrowserLocale();
 		tzDropDown.setOutputMarkupId(true);
-		String baseURL = getBaseUrl();
 		
-		sendEmailAtRegister = 1 == getBean(ConfigurationDao.class).getConfValue("sendEmailAtRegister", Integer.class, "0");
-		sendConfirmation = baseURL != null
-				&& !baseURL.isEmpty()
-				&& 1 == getBean(ConfigurationDao.class).getConfValue("sendEmailWithVerficationCode", Integer.class, "0");
-
 		confirmRegistration = new MessageDialog("confirmRegistration", WebSession.getString(235), WebSession.getString(674), DialogButtons.OK, DialogIcon.INFO){
 			private static final long serialVersionUID = 1L;
 
@@ -149,6 +143,14 @@ public class RegisterDialog extends AbstractFormDialog<String> {
 	@Override
 	protected List<DialogButton> getButtons() {
 		return Arrays.asList(registerBtn, cancelBtn);
+	}
+
+	public void onOpen(AjaxRequestTarget target) {
+		String baseURL = getBaseUrl();
+		sendEmailAtRegister = 1 == getBean(ConfigurationDao.class).getConfValue("sendEmailAtRegister", Integer.class, "0");
+		sendConfirmation = baseURL != null
+				&& !baseURL.isEmpty()
+				&& 1 == getBean(ConfigurationDao.class).getConfValue("sendEmailWithVerficationCode", Integer.class, "0");
 	}
 	
 	public void onClose(AjaxRequestTarget target, DialogButton button) {
