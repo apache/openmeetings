@@ -59,8 +59,8 @@ public class UserProfilePanel extends UserPanel {
 		add(new Label("lastname", u.getLastname()));
 		add(new Label("tz", u.getTimeZoneId()));
 		add(new Label("created", u.getRegdate()));
-		add(new TextArea<String>("offer", Model.of(u.getUserOffers())).setEnabled(userId == getUserId()));
-		add(new TextArea<String>("interest", Model.of(u.getUserSearchs())).setEnabled(userId == getUserId()));
+		add(new TextArea<String>("offer", Model.of(u.getUserOffers())).setEnabled(false));
+		add(new TextArea<String>("interest", Model.of(u.getUserSearchs())).setEnabled(false));
 		add(new Label("address", getAddress(u)));
 	}
 }
