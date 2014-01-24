@@ -333,7 +333,6 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 		
 		@Override
 		protected void onValidate() {
-			Appointment a = getModelObject();
 			if (end.getConvertedInput().before(start.getConvertedInput())) {
 				error(WebSession.getString(1592));
 			}
