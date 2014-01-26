@@ -38,6 +38,8 @@ import org.apache.openmeetings.db.dao.user.OrganisationUserDao;
 import org.apache.openmeetings.db.entity.record.FlvRecording;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.wicket.protocol.http.servlet.ResponseIOException;
+import org.apache.wicket.request.Response;
+import org.apache.wicket.request.http.WebResponse;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.AbstractResource;
 import org.apache.wicket.request.resource.ContentDisposition;
@@ -49,6 +51,7 @@ import org.apache.wicket.util.resource.FileResourceStream;
 import org.apache.wicket.util.resource.IResourceStream;
 import org.apache.wicket.util.resource.ResourceStreamNotFoundException;
 import org.apache.wicket.util.string.StringValue;
+import org.apache.wicket.util.time.Time;
 import org.slf4j.Logger;
 
 public abstract class RecordingResourceReference extends ResourceReference {
@@ -69,8 +72,12 @@ public abstract class RecordingResourceReference extends ResourceReference {
 			private final static String RANGES_BYTES = "bytes";
 			private File file;
 			private boolean isRange = false;
-			private int start = 0;
-			private int end = 0;
+			private long start = 0;
+			private long end = 0;
+			
+			private long getChunkLength() {
+				return isRange ? end - start + 1 : (file == null ? -1 : file.length());
+			}
 			
 			private IResourceStream getResourceStream() {
 				return file == null ? null : new FileResourceStream(file) {
@@ -80,7 +87,8 @@ public abstract class RecordingResourceReference extends ResourceReference {
 					@Override
 					public InputStream getInputStream() throws ResourceStreamNotFoundException {
 						if (bi == null) {
-							bi = new BoundedInputStream(super.getInputStream(), isRange ? end + start + 1 : -1);
+							//bi = new BoundedInputStream(super.getInputStream(), end + 1);
+							bi = new BoundedInputStream(super.getInputStream(), isRange ? end + 1 : (file == null ? -1 : file.length()));
 							try {
 								bi.skip(start);
 							} catch (IOException e) {
@@ -92,7 +100,7 @@ public abstract class RecordingResourceReference extends ResourceReference {
 					
 					@Override
 					public Bytes length() {
-						return Bytes.bytes(isRange ? end - start + 1 : file.length());
+						return Bytes.bytes(getChunkLength());
 					}
 					
 					@Override
@@ -109,7 +117,17 @@ public abstract class RecordingResourceReference extends ResourceReference {
 					}
 				};
 			}
-			
+
+			@Override
+			protected void setResponseHeaders(ResourceResponse data, Attributes attributes) {
+				Response response = attributes.getResponse();
+				if (response instanceof WebResponse) {
+					WebResponse webResponse = (WebResponse)response;
+					webResponse.setStatus(isRange ? HttpServletResponse.SC_PARTIAL_CONTENT : HttpServletResponse.SC_OK);
+				}
+				super.setResponseHeaders(data, attributes);
+			}
+
 			@Override
 			protected ResourceResponse newResourceResponse(Attributes attributes) {
 				ResourceResponse rr = new ResourceResponse();
@@ -120,40 +138,38 @@ public abstract class RecordingResourceReference extends ResourceReference {
 					rr.setFileName(getFileName(r));
 					rr.setContentType(RecordingResourceReference.this.getContentType());
 					rr.setContentDisposition(ContentDisposition.INLINE);
+					rr.setLastModified(Time.millis(file.lastModified()));
 					rr.getHeaders().addHeader(ACCEPT_RANGES_HEADER, RANGES_BYTES);
 					String range = ((HttpServletRequest)attributes.getRequest().getContainerRequest()).getHeader(RANGE_HEADER);
 					if (range != null && range.startsWith(RANGES_BYTES)) {
-						String[] bounds = range.substring(RANGES_BYTES.length() + 1).split("-"); //TODO open ranges !!
-						if (bounds != null && bounds.length > 1) {
+						String[] bounds = range.substring(RANGES_BYTES.length() + 1).split("-");
+						if (bounds != null && bounds.length > 0) {
+							long length = file.length();
 							isRange = true;
-							start = Integer.parseInt(bounds[0]);
-							end = Integer.parseInt(bounds[1]);
+							start = Long.parseLong(bounds[0]);
+							end = bounds.length > 1 ? Long.parseLong(bounds[1]) : length - 1;
 							//Content-Range: bytes 229376-232468/232469
-							rr.getHeaders().addHeader(CONTENT_RANGE_HEADER, String.format("%s %d-%d/%d", RANGES_BYTES, start, end, file.length()));
+							rr.getHeaders().addHeader(CONTENT_RANGE_HEADER, String.format("%s %d-%d/%d", RANGES_BYTES, start, end, length));
 						}
 					}
-					final IResourceStream rStream = getResourceStream();
-					rr.setContentLength(rStream.length().bytes());
-					try {
-						final InputStream  s = rStream.getInputStream();
-						rr.setWriteCallback(new WriteCallback() {
-							@Override
-							public void writeData(Attributes attributes) throws IOException {
-								try {
-									writeStream(attributes, s);
-								} catch (ResponseIOException e) {
-									if (!isRange) {
-										log.error("Error while playing the stream", e);
-									}
-									// in case of range operations we expecting such exceptions 
-								} finally {
-									rStream.close();
+					rr.setContentLength(getChunkLength());
+					rr.setWriteCallback(new WriteCallback() {
+						@Override
+						public void writeData(Attributes attributes) throws IOException {
+							IResourceStream rStream = getResourceStream();
+							try {
+								writeStream(attributes, rStream.getInputStream());
+							} catch (ResourceStreamNotFoundException e1) {
+							} catch (ResponseIOException e) {
+								// in case of range operations we expecting such exceptions
+								if (!isRange) {
+									log.error("Error while playing the stream", e);
 								}
+							} finally {
+								rStream.close();
 							}
-						});
-					} catch (ResourceStreamNotFoundException e1) {
-						rr.setError(HttpServletResponse.SC_NOT_FOUND);
-					}
+						}
+					});
 				} else {
 					rr.setError(HttpServletResponse.SC_NOT_FOUND);
 				}
@@ -177,10 +193,12 @@ public abstract class RecordingResourceReference extends ResourceReference {
 	}
 	
 	private FlvRecording getRecording(Long id) {
-		FlvRecordingDao recDao = getBean(FlvRecordingDao.class);
-		FlvRecording r = recDao.get(id);
+		FlvRecording r = getBean(FlvRecordingDao.class).get(id);
 		// TODO should we process public?
 		// || r.getOwnerId() == 0 || r.getParentFileExplorerItemId() == null || r.getParentFileExplorerItemId() == 0
+		if (r == null) {
+			return r;
+		}
 		if (r.getOwnerId() == null || getUserId() == r.getOwnerId()) {
 			return r;
 		}
