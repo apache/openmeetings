@@ -1140,7 +1140,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>ir al final</value>
   </string>
   <string id="372" name="videobox">
-    <value>el usuario habla (By clicking here you can give exclusive audio / mute the microphone of others)</value>
+    <value>usuario habla (Haciendo clic aquí usted podrá dar audio exclusivo o silenciar el micrófono de los demás)</value>
   </string>
   <string id="373" name="videobox">
     <value>encender o apagar sonido</value>
@@ -1188,7 +1188,12 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>importar</value>
   </string>
   <string id="388" name="languageseditor">
-    <value>Exportar a XML - Estos archivos pueden ser usados para: - Contribuir en el proyecto - Importarlos en otro sistema - Copia de Respaldo - Personalización - Colocarlo en el directorio de idiomas para la próxima instalación.</value>
+    <value>Exportar a XML - Estos archivos pueden ser usados para: 
+		- Contribuir en el proyecto 
+		- Importarlos en otro sistema 
+		- Copia de Respaldo (Backup)
+		- Personalización 
+		- Colocarlo en el directorio de idiomas para la próxima instalación.</value>
   </string>
   <string id="389" name="languageseditor">
     <value>Seleccione un archivo de idioma que se importará. Configure correctamente el idioma en el menú desplegable (no importa el nombre que tenga el archivo ya que será importado de todos los modos).</value>
@@ -1797,7 +1802,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>D</value>
   </string>
   <string id="591" name="swf sync message">
-    <value>Cargando documento. Espere hasta que todos los clientes estén sincronizados.</value>
+    <value>Cargando documento. Aguarde hasta que todos los clientes estén sincronizados.</value>
   </string>
   <string id="592" name="upload dialog">
     <value>Subida completa. Convirtiendo documento...</value>
@@ -2358,7 +2363,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>Salas públicas</value>
   </string>
   <string id="778" name="overview room">
-    <value>Las salas públicas son accesibles para todos los usuarios.</value>
+    <value>Las salas públicas son accesibles a todos los usuarios.</value>
   </string>
   <string id="779" name="overview room">
     <value>Salas privadas</value>
@@ -2748,7 +2753,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>Guardar cambios de la cita</value>
   </string>
   <string id="908" name="lzcalendar">
-    <value>La cita ha sido cambiada. ¿Desea guardar dichos cambios? \n\nTodos los participantes implicados recibirán un correo con la fecha y hora actualizadas (dependiendo del tipo de notificación de esta cita).</value>
+    <value>La cita ha sido cambiada. ¿Desea guardar dichos cambios? <br/><br/>Todos los participantes implicados recibirán un correo con la fecha y hora actualizadas (dependiendo del tipo de notificación de esta cita).</value>
   </string>
   <string id="909" name="flv recorder error message">
     <value>Para acceder a otras grabaciones, tiene que autenticarse en la aplicación $APP_NAME.</value>
@@ -3444,7 +3449,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>Enviar invitación</value>
   </string>
   <string id="1140" name="chat invite user">
-    <value>did &lt;b&gt;not&lt;/b&gt; acepta su invitación</value>
+    <value>did &lt;b&gt;no&lt;/b&gt; acepta su invitación</value>
   </string>
   <string id="1141" name="chat invite user">
     <value>Aceptar</value>
@@ -3468,7 +3473,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>Hecho por</value>
   </string>
   <string id="1148" name="user administration">
-    <value>Mensaje de Zona Horario</value>
+    <value>Mensaje de Zona Horaria</value>
   </string>
   <string id="1149" name="user administration">
     <value>Chequear "Mensaje de Zona Horaria" para dar mensaje a los usuarios la próxima vez que accedan para que actualicen sus perfiles.</value>
@@ -3501,7 +3506,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>$APP_NAME Recordar conferencia:</value>
   </string>
   <string id="1159" name="user settings">
-    <value>Configuraciones de la Comunidad</value>
+    <value>Datos para la Comunidad</value>
   </string>
   <string id="1160" name="user settings">
     <value>Mostrar datos de contacto a todos</value>
@@ -3558,7 +3563,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>Ofertas del usuario</value>
   </string>
   <string id="1178" name="user search">
-    <value>Usuario busca</value>
+    <value>Busca usuario</value>
   </string>
   <string id="1179" name="user search">
     <value>Texto libre</value>
@@ -3576,7 +3581,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>Búsquedas</value>
   </string>
   <string id="1184" name="user search">
-    <value>Resultado de la búsqueda</value>
+    <value>Resultado de búsqueda</value>
   </string>
   <string id="1185" name="user search">
     <value>Acciones</value>
@@ -3630,7 +3635,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>Log del chat</value>
   </string>
   <string id="1202" name="private message">
-    <value>De</value>
+    <value>De:</value>
   </string>
   <string id="1203" name="private message">
     <value>Asunto</value>
@@ -3669,7 +3674,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>No puede expulsarse a sí mismo de la sala de conferencia! Si quiere salir cierre el navegador o emplee el botón Salir!</value>
   </string>
   <string id="1215" name="kick-user">
-    <value>En verdad quiere desconectar este usuario de la sala de conferencia?</value>
+    <value>Realmente quiere desconectar este usuario de la sala de conferencia?</value>
   </string>
   <string id="1216" name="kick-user">
     <value>Confirme la acción ...</value>
@@ -3720,7 +3725,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>No está ese contacto!</value>
   </string>
   <string id="1232" name="user contacts">
-    <value>En verdad quiere eliminar ese contacto?</value>
+    <value>Realmente quiere eliminar ese contacto?</value>
   </string>
   <string id="1233" name="user contacts">
     <value>Confirmar eliminación del contacto</value>
@@ -3777,7 +3782,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>Responder a todos</value>
   </string>
   <string id="1251" name="private message">
-    <value>adelante</value>
+    <value>Adelante</value>
   </string>
   <string id="1252" name="private message">
     <value>Acciones ...</value>
@@ -3819,7 +3824,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>Editar nombre</value>
   </string>
   <string id="1265" name="private message folder">
-    <value>En verdad quiere borrar esta carpeta? No se podrá recuperar.</value>
+    <value>Realmente quiere borrar esta carpeta? No se podrá recuperar.</value>
   </string>
   <string id="1266" name="user contacts">
     <value>Su petición fue enviada al usuario. El usuario recibirá una notificación para aceptar o denegar la petición. Solamente las peticiones aceptadas estarán en su lista de contactos...naturalmente!</value>
@@ -3840,7 +3845,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>Su código de invitación no es válido. El código solamente es válido durante la fecha y hora especificados:</value>
   </string>
   <string id="1272" name="user calendar">
-    <value>Este evento está conectado a los calendarios de otros usuarios. Los cambios que efectúe afectarán tambien a sus calendarios. En verdad quiere cambiar el evento?</value>
+    <value>Este evento está conectado a los calendarios de otros usuarios. Los cambios que efectúe afectarán tambien a sus calendarios. Realmente quiere cambiar el evento?</value>
   </string>
   <string id="1273" name="user calendar">
     <value>Confirmar cambios</value>
@@ -3864,7 +3869,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>Mostrar mi calendario nuevamente!</value>
   </string>
   <string id="1280" name="user calendar">
-    <value>Este evento está conectado a los calendarios de otros usuarios. Su acción borrará tambien el evento de sus calendarios. En verdad quiere borrar el evento?</value>
+    <value>Este evento está conectado a los calendarios de otros usuarios. Su acción borrará tambien el evento de sus calendarios. Realmente quiere borrar el evento?</value>
   </string>
   <string id="1281" name="user calendar">
     <value>Confirmar acción</value>
@@ -3963,7 +3968,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>Cargar directamente a la pizarra</value>
   </string>
   <string id="1313" name="whiteboard close confirmation">
-    <value>En verdad quiere suprimir esta pizarra? Esta acción no puede ser deshecha!</value>
+    <value>Realmente quiere suprimir esta pizarra? Esta acción no puede ser deshecha!</value>
   </string>
   <string id="1314" name="whiteboard load WML">
     <value>Cargar a la pizarra</value>
@@ -3987,7 +3992,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>Cuadrado</value>
   </string>
   <string id="1321" name="shape">
-    <value>Triángulo</value>
+    <value>Triangulo</value>
   </string>
   <string id="1322" name="icon">
     <value>Texto/Nota</value>
@@ -4044,7 +4049,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>Borrar</value>
   </string>
   <string id="1340" name="submenu">
-    <value>En verdad quiere borrar todo el contenido de la pizarra?</value>
+    <value>Realmente quiere borrar todo el contenido de la pizarra?</value>
   </string>
   <string id="1341" name="submenu">
     <value>Cargar directamente a la pizarra</value>
@@ -4101,7 +4106,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>Reproducir video</value>
   </string>
   <string id="1359" name="submenu">
-    <value>En verdad quiere borrar el contenido de la presente exposición?</value>
+    <value>Realmente quiere borrar el contenido de la presente exposición?</value>
   </string>
   <string id="1360" name="activity_window">
     <value>Aceptar y otorgar derechos al usuario</value>
@@ -4131,7 +4136,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>Iconos de Matematicas</value>
   </string>
   <string id="1369" name="clipart icons">
-    <value>No category</value>
+    <value>Sin categoría</value>
   </string>
   <string id="1370" name="login_screen">
     <value>Color-Estilo</value>
@@ -4191,19 +4196,19 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>Silenciar micrófonos globalmente?</value>
   </string>
   <string id="1389" name="mute self confirm message message">
-    <value>En verdad quiere silenciarse globalmente a sí mismo? Nadie podrá oirle!</value>
+    <value>Realmente quiere silenciarse globalmente a sí mismo? Nadie podrá oirle!</value>
   </string>
   <string id="1390" name="mute others confirm message title">
     <value>Silenciar micrófono localmente?</value>
   </string>
   <string id="1391" name="mute others confirm message">
-    <value>En verdad quiere silenciar este micrófono? Puede silenciarlo solo en su pantalla localmente. Esto no tendrá efecto en cómo otros usuarios oyen a este usuario. Solo los moderadores pueden silenciarlo globalmente!</value>
+    <value>Realmente quiere silenciar este micrófono? Puede silenciarlo solo en su pantalla localmente. Esto no tendrá efecto en cómo otros usuarios oyen a este usuario. Solo los moderadores pueden silenciarlo globalmente!</value>
   </string>
   <string id="1392" name="mute others confirm message title">
     <value>Silenciar micrófono globalmente?</value>
   </string>
   <string id="1393" name="mute others moderator message">
-    <value>En verdad quiere desactivar a este usuario globalmente? Ningún otro usuario podrá oirle!</value>
+    <value>Realmente quiere silenciar a este usuario globalmente? Ningún otro usuario podrá oirle!</value>
   </string>
   <string id="1394" name="mute status icons">
     <value>Su sonido está activado. Haga click aquí y enviará un mensaje al moderador para silenciar globalmente tu micrófono (en toda la sala de conferencias)!</value>
@@ -4248,13 +4253,13 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>Silenciar micrófono globalmente</value>
   </string>
   <string id="1408" name="unmute micro">
-    <value>Unmute microphone globally</value>
+    <value>Reactivar micrófono globalmente</value>
   </string>
   <string id="1409" name="mute moderator message">
     <value>Solo los moderadores pueden pueden desactivar o reactivar globalmente a un usuario! Para silenciar su propio micrófono: Por favor, emplee el icono en tu ventana de video!</value>
   </string>
   <string id="1410" name="poll_name">
-    <value>Nombre de la Encuesta</value>
+    <value>Nombre Encuesta</value>
   </string>
   <string id="1411" name="poll_name">
     <value>Usted</value>
@@ -4281,13 +4286,13 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>Encuesta cerrada</value>
   </string>
   <string id="1419" name="poll_close_confirm">
-    <value>En verdad quiere cerrar esta Encuesta? Nadie más podrá votar.</value>
+    <value>Realmente quiere cerrar esta encuesta? Nadie más podrá votar.</value>
   </string>
   <string id="1420" name="poll_delete">
-    <value>Eliminar Encuesta</value>
+    <value>Eliminar encuesta</value>
   </string>
   <string id="1421" name="poll_delete_confirm">
-    <value>En verdad quiere eliminar esta Encuesta? Los resultados tambien se eliminarán.</value>
+    <value>Realmente quiere eliminar esta encuesta? Los resultados tambien se eliminarán.</value>
   </string>
   <string id="1422" name="language_code">
     <value>Lenguaje ISO Código</value>
@@ -4302,16 +4307,16 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>Denegar a usuario dar audio exclusivo</value>
   </string>
   <string id="1426" name="excl_audio apply self on message">
-    <value>quisiera obtener permiso para tener audio exclusivo.</value>
+    <value>Quisiera obtener permiso para tener audio exclusivo.</value>
   </string>
   <string id="1427" name="excl_audio apply of message">
-    <value>quisiera que el moderador me concediera permiso para tener audio exclusivo.</value>
+    <value>Quisiera que el moderador me concediera permiso para tener audio exclusivo.</value>
   </string>
   <string id="1428" name="excl_audio status icons">
     <value>Dar permiso para audio exclusivo.</value>
   </string>
   <string id="1429" name="cam_resolution">
-    <value>Resolución de Cámara</value>
+    <value>Resolución de cámara</value>
   </string>
   <string id="1430" name="cam_resolution_info">
     <value>Cambiando la resolución a efecto de ancho de banda, fotos grandes necesitan más ancho de banda!</value>
@@ -4359,7 +4364,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>Nuevo Evento</value>
   </string>
   <string id="1445" name="calendar password info text">
-    <value>Los enlaces a la conferencia que son enviados a los participantes cuando usted guarda el evento en el calendario están protegidos por contraseña, no la sala! Ello quiere decir que si guarda el evento múltiples veces pero con diferentes contraseñas, cada participante recibirá un nuevo enlace con una contraseña diferente. Aunque los enlaces primeros seguirán estando activos una vez se hayan enviado!</value>
+    <value>Los enlaces a la conferencia que son enviados a los participantes cuando usted guarda el evento en el calendario, están protegidos por contraseña, no la sala! Ello quiere decir que si guarda el evento múltiples veces pero con diferentes contraseñas, cada participante recibirá un nuevo enlace con una contraseña diferente. Aunque los enlaces primeros seguirán estando activos una vez se hayan enviado!</value>
   </string>
   <string id="1446" name="calendar edit button">
     <value>Editar detalles</value>
@@ -4374,7 +4379,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>Mostrar los eventos de contacto en el calendario</value>
   </string>
   <string id="1450" name="tooltip menu">
-    <value>Su home!</value>
+    <value>Su inicio!</value>
   </string>
   <string id="1451" name="tooltip menu">
     <value>Planear sus reuniones</value>
@@ -4458,7 +4463,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>Es requerido permiso del Moderador para comenzar la grabaciónModerator permission required to start recording</value>
   </string>
   <string id="1478" name="no right for exclusive audio">
-    <value>Usted no tiene permiso para conceder audio exclusivo a cualquier participante. Necesita tener el papel de moderador o el derecho de audio exclusivo para hacer exclusivo y activado a algun micrófono.</value>
+    <value>Usted no tiene permiso para conceder audio exclusivo a cualquier participante. Necesita tener el papel de moderador o el derecho de audio exclusivo para hacer exclusivo y activo a algun micrófono.</value>
   </string>
   <string id="1479" name="conference menu">
     <value>Subir nuevo archivo al explorador de archivos</value>
@@ -4476,7 +4481,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>Reunir feedback al crear una encuesta</value>
   </string>
   <string id="1484" name="conference menu">
-    <value>Resultados de las encuestas pasada y actual como cuadro</value>
+    <value>Resultados de las encuestas pasadas y actual como gráfico</value>
   </string>
   <string id="1485" name="conference menu">
     <value>Vote si hay una encuesta para esta sala de conferencias</value>
@@ -4494,7 +4499,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>Enviar un correo con un link directo a esta sala</value>
   </string>
   <string id="1490" name="conference menu">
-    <value>Chambiar sus configuraciones de la pizarra</value>
+    <value>Cambiar sus configuraciones de la pizarra</value>
   </string>
   <string id="1491" name="backup admin">
     <value>Máximo peso de subida</value>
@@ -4503,7 +4508,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>Pedir al moderador compartir tu pizarra</value>
   </string>
   <string id="1493" name="private chat">
-    <value>Comenzar Chat Privada</value>
+    <value>Comenzar Chat Privado</value>
   </string>
   <string id="1494" name="all_private_chat">
     <value>Todo</value>
@@ -4515,13 +4520,13 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>Usted ya comenzó un chat privado con este participante.</value>
   </string>
   <string id="1497" name="private chat">
-    <value>En verdad quiere eliminar este chat privado?</value>
+    <value>Realmente quiere eliminar este chat privado?</value>
   </string>
   <string id="1498" name="Servers">
     <value>Servidores</value>
   </string>
   <string id="1499" name="Servers">
-    <value>Servidores participantes in grupo</value>
+    <value>Servidores participantes en grupo</value>
   </string>
   <string id="1500" name="Server name">
     <value>Nombre del Servidor</value>
@@ -4545,7 +4550,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>Salas comunes a todos los usuarios</value>
   </string>
   <string id="1507" name="private_room_tooltip">
-    <value>Salas comunes al grupo de usuario actual</value>
+    <value>Salas comunes al grupo de usuarios actual</value>
   </string>
   <string id="1508" name="my_room_tooltip">
     <value>Salas del usuario actual</value>
@@ -4554,7 +4559,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>Crear/Modificar sala especial de cita</value>
   </string>
   <string id="1510" name="multiple_addresses">
-    <value>Puede insertar multiples direcciones en el formato: nombre1 apellidos1 &lt;correo1&gt;,"nombre2 apellidos2" &lt;correo2&gt;,'nombre3 apellidos3' &lt;correo3&gt;, ...</value>
+    <value>Puede insertar múltiples direcciones en el formato: nombre1 apellidos1 &lt;correo1&gt;,"nombre2 apellidos2" &lt;correo2&gt;,'nombre3 apellidos3' &lt;correo3&gt;, ...</value>
   </string>
   <string id="1511" name="stream_volume">
     <value>Ajustar volumen de flujo</value>
@@ -4608,7 +4613,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>Testeando la Red</value>
   </string>
   <string id="1528" name="room_options">
-    <value>Auto seleccionar ventana de video en interview</value>
+    <value>Auto-seleccionar ventana de video en interview</value>
   </string>
   <string id="1529" name="font_underline">
     <value>Subrayar</value>
@@ -4641,7 +4646,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>Permitir transporte SIP en la sala</value>
   </string>
   <string id="1539" name="exclusive_audio_confirm">
-    <value>En verdad quiere proveer a este usuario de audio exclusivo?</value>
+    <value>Realmente quiere proveer a este usuario de audio exclusivo?</value>
   </string>
   <string id="1540" name="no_timezone">
     <value>Por favor, especifique su Zona Horaria</value>
@@ -4659,10 +4664,10 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>Ya existe la configuración con esa clave, por favor especifique otra clave o edite la configuración existente</value>
   </string>
   <string id="1545" name="content_is_saving">
-    <value>El contenido se está Guardando, Por favor aguarde.</value>
+    <value>El contenido se está guardando, Por favor espere.</value>
   </string>
   <string id="1546" name="widget_welcome">
-    <value>Bien Venidos</value>
+    <value>BienVenidos</value>
   </string>
   <string id="1547" name="widget_welcome_desc">
     <value>El Widget muestra información básica del usuario y links soportados</value>
@@ -4728,7 +4733,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>Dic</value>
   </string>
   <string id="1568" name="remindertype_no_email">
-    <value>no envie notificación</value>
+    <value>no envíe notificación</value>
   </string>
   <string id="1569" name="remindertype_simple_email">
     <value>correo simple</value>
@@ -4797,9 +4802,9 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>Exponer</value>
   </string>
   <string id="1591" name="register.confirmation.sent">
-    <value>Your account has been created. Confirmation email has been sent. You can now login.</value>
+    <value>Su cuenta ha sido hecha. El correo de confirmación ha sido enviado. Ahora puede usted hacer login.</value>
   </string>
   <string id="1592" name="end.date.is.earlier.than.start">
-    <value>End date entered is earlier than start date.</value>
+    <value>El final de la fecha introducida es anterior a la fecha del comienzo.</value>
   </string>
 </language>
