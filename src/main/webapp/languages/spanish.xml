@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 
 <!--
   Licensed to the Apache Software Foundation (ASF) under one
@@ -1224,7 +1224,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>Unido:</value>
   </string>
   <string id="400" name="roomslist">
-    <value></value>
+    <value/>
   </string>
   <string id="401" name="roomslist">
     <value>Usuarios en la sala:</value>
@@ -3381,1318 +3381,1318 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>Dominio</value>
   </string>
   <string id="1119" name="remote control">
-    <value>Insert</value>
+    <value>Insertar</value>
   </string>
   <string id="1120" name="remote control">
-    <value>Copy highlighted text</value>
+    <value>Copiar el texto remarcado</value>
   </string>
   <string id="1121" name="remote control">
-    <value>Remote Clipboard Text</value>
+    <value>Texto remoto en Portapapeles</value>
   </string>
   <string id="1122" name="remote control">
-    <value>Show remote Clipboard</value>
+    <value>Mostrar Portapapeles remoto</value>
   </string>
   <string id="1123" name="right click screen share">
-    <value>Do not show again</value>
+    <value>No mostrar nuevamente</value>
   </string>
   <string id="1124" name="right click screen share">
-    <value>Copy text here ...</value>
+    <value>Copie el texto aquí ...</value>
   </string>
   <string id="1125" name="right click screen share">
-    <value>You need the right to remote control (or the moderation) to copy and paste text to or from the remote screen.</value>
+    <value>Necesita derechos de control remoto (o moderación) para copiar y pegar texto desde o a la pantalla remota.</value>
   </string>
   <string id="1126" name="right click screen share">
-    <value>Edit default settings ...</value>
+    <value>Editar configuración original ...</value>
   </string>
   <string id="1127" name="right click screen share">
-    <value>Do not show info box in Remote Control about Copy and Paste</value>
+    <value>No mostrar la caja de información en el Control Remoto acerca de Copiar y Pegar</value>
   </string>
   <string id="1128" name="calendar">
-    <value>Save</value>
+    <value>Guardar</value>
   </string>
   <string id="1129" name="calendar">
-    <value>Remove</value>
+    <value>Suprimir</value>
   </string>
   <string id="1130" name="calendar">
-    <value>Cancel</value>
+    <value>Cancelar</value>
   </string>
   <string id="1131" name="chat invite user">
-    <value>Invite user to conference room</value>
+    <value>Invitar usuario a sala de conferencias</value>
   </string>
   <string id="1132" name="chat invite user">
-    <value>Choose a conference room. The invited user will get a message with your name and a link to the room.</value>
+    <value>Escoja sala de conferencias. El usuario invitado verá un mensaje con tu nombre y un link a la sala.</value>
   </string>
   <string id="1133" name="chat user">
-    <value>Connected since:</value>
+    <value>Conectado desde:</value>
   </string>
   <string id="1134" name="chat invite user">
-    <value>Enter room after sending invitation</value>
+    <value>Entrar a sala tras enviar invitación</value>
   </string>
   <string id="1135" name="chat invite user">
-    <value>Invite</value>
+    <value>Invitar</value>
   </string>
   <string id="1136" name="chat invite user">
-    <value>Message</value>
+    <value>Mensaje</value>
   </string>
   <string id="1137" name="chat invite user">
-    <value>would like to invite you to the conference room:</value>
+    <value>Me gustaría invitarle a sala de conferencia:</value>
   </string>
   <string id="1138" name="chat invite user">
-    <value>Invite message</value>
+    <value>Mensaje de invitación</value>
   </string>
   <string id="1139" name="chat invite user">
-    <value>Send Invitation</value>
+    <value>Enviar invitación</value>
   </string>
   <string id="1140" name="chat invite user">
-    <value>did &lt;b&gt;not&lt;/b&gt; accept your invitation!</value>
+    <value>did &lt;b&gt;not&lt;/b&gt; acepta su invitación</value>
   </string>
   <string id="1141" name="chat invite user">
-    <value>Accept</value>
+    <value>Aceptar</value>
   </string>
   <string id="1142" name="chat invite user">
-    <value>Deny</value>
+    <value>Denegar</value>
   </string>
   <string id="1143" name="user profile">
-    <value>Timezone</value>
+    <value>Zona Horaria</value>
   </string>
   <string id="1144" name="appointment notification">
-    <value>Event Details</value>
+    <value>Detalles del Evento</value>
   </string>
   <string id="1145" name="appointment notification">
-    <value>Name</value>
+    <value>Nombre</value>
   </string>
   <string id="1146" name="appointment notification">
-    <value>Description</value>
+    <value>Descripción</value>
   </string>
   <string id="1147" name="appointment notification">
-    <value>Created by</value>
+    <value>Hecho por</value>
   </string>
   <string id="1148" name="user administration">
-    <value>TimeZone Message</value>
+    <value>Mensaje de Zona Horario</value>
   </string>
   <string id="1149" name="user administration">
-    <value>Check "TimeZone Message" to give users a message next time they login to update their profile.</value>
+    <value>Chequear "Mensaje de Zona Horaria" para dar mensaje a los usuarios la próxima vez que accedan para que actualicen sus perfiles.</value>
   </string>
   <string id="1150" name="time zone update message">
-    <value>Please check the time zone in your user profile.</value>
+    <value>Por favor, chequee la zona horaria en su perfil.</value>
   </string>
   <string id="1151" name="calendar invitation message">
-    <value>New $APP_NAME conference:</value>
+    <value>Nueva $APP_NAME conferencia:</value>
   </string>
   <string id="1152" name="calendar invitation message">
-    <value>Details:&lt;br/&gt;</value>
+    <value>Detalles:&lt;br/&gt;</value>
   </string>
   <string id="1153" name="calendar invitation message">
-    <value>Start:</value>
+    <value>Comenzar:</value>
   </string>
   <string id="1154" name="calendar invitation message">
-    <value>End:</value>
+    <value>Finalizar:</value>
   </string>
   <string id="1155" name="calendar invitation message">
-    <value>Changed $APP_NAME conference:</value>
+    <value>Conferencia $APP_NAME cambiada:</value>
   </string>
   <string id="1156" name="calendar invitation message">
-    <value>Organizer:</value>
+    <value>Organizar:</value>
   </string>
   <string id="1157" name="calendar invitation message">
-    <value>Canceled $APP_NAME conference:</value>
+    <value>Conferencia $APP_NAME cancelada:</value>
   </string>
   <string id="1158" name="calendar invitation message">
-    <value>$APP_NAME conference Reminder:</value>
+    <value>$APP_NAME Recordar conferencia:</value>
   </string>
   <string id="1159" name="user settings">
-    <value>Community settings</value>
+    <value>Configuraciones de la Comunidad</value>
   </string>
   <string id="1160" name="user settings">
-    <value>Show contact data to everybody</value>
+    <value>Mostrar datos de contacto a todos</value>
   </string>
   <string id="1161" name="user settings">
-    <value>Add fields of interest that you offer or that you are searching to find interesting partners for a conference. Comma separate the terms (for example: Medical Service, Health assurance, ...)</value>
+    <value>Agregar campos de interés que usted ofrece o que está buscando para encontrar socios interesantes para una conferencia. Las comas separan los términos (por ejemplo: Servicio médico, Aseguradoras de la Salud, ...)</value>
   </string>
   <string id="1162" name="user settings">
-    <value>My offerings</value>
+    <value>Mis ofertas</value>
   </string>
   <string id="1163" name="user settings">
-    <value>My interests</value>
+    <value>Mis intereses</value>
   </string>
   <string id="1164" name="user settings">
-    <value>Name</value>
+    <value>Nombre</value>
   </string>
   <string id="1165" name="user settings">
-    <value>Timezone</value>
+    <value>Zona Horaria</value>
   </string>
   <string id="1166" name="user settings">
-    <value>Fields of interest</value>
+    <value>Campos de interés</value>
   </string>
   <string id="1167" name="user settings">
-    <value>Contact information</value>
+    <value>Información de contacto</value>
   </string>
   <string id="1168" name="user settings">
-    <value>Show contact data to contacts only</value>
+    <value>Mostrar información de contacto solo a contactados.</value>
   </string>
   <string id="1169" name="user settings">
-    <value>Show contact data to nobody</value>
+    <value>No mostrar datos de contacto a nadie</value>
   </string>
   <string id="1170" name="user settings">
-    <value>My Profile</value>
+    <value>Mi Perfil</value>
   </string>
   <string id="1171" name="user settings">
-    <value>Edit settings</value>
+    <value>Editar configuraciones</value>
   </string>
   <string id="1172" name="user settings">
-    <value>Search users</value>
+    <value>Buscar usuarios</value>
   </string>
   <string id="1173" name="user settings">
-    <value>Watch your profile like other see you</value>
+    <value>Ver tu perfil como los demás lo ven</value>
   </string>
   <string id="1174" name="user settings">
-    <value>Edit your settings, add your interests to be found</value>
+    <value>Editar tu configuraciones, añadir tus intereses para ser encontradas</value>
   </string>
   <string id="1175" name="user settings">
-    <value>Search for other users and extend your network</value>
+    <value>Buscar otros usuarios y ampliar tu red</value>
   </string>
   <string id="1176" name="user search">
-    <value>Search</value>
+    <value>Buscar</value>
   </string>
   <string id="1177" name="user search">
-    <value>User offers</value>
+    <value>Ofertas del usuario</value>
   </string>
   <string id="1178" name="user search">
-    <value>User looks for</value>
+    <value>Usuario busca</value>
   </string>
   <string id="1179" name="user search">
-    <value>Freetext</value>
+    <value>Texto libre</value>
   </string>
   <string id="1180" name="user search">
-    <value>Name</value>
+    <value>Nombre</value>
   </string>
   <string id="1181" name="user search">
-    <value>Timezone</value>
+    <value>Zona Horaria</value>
   </string>
   <string id="1182" name="user search">
-    <value>Offers</value>
+    <value>Ofertas</value>
   </string>
   <string id="1183" name="user search">
-    <value>Searchs</value>
+    <value>Búsquedas</value>
   </string>
   <string id="1184" name="user search">
-    <value>Searchresult</value>
+    <value>Resultado de la búsqueda</value>
   </string>
   <string id="1185" name="user search">
-    <value>Actions</value>
+    <value>Acciones</value>
   </string>
   <string id="1186" name="user search">
-    <value>Add to contacts</value>
+    <value>Añadir a Contactos</value>
   </string>
   <string id="1187" name="user search">
-    <value>Send message</value>
+    <value>Enviar mensaje</value>
   </string>
   <string id="1188" name="user search">
-    <value>Contacts and Messages</value>
+    <value>Contactos y Mensajes</value>
   </string>
   <string id="1189" name="user search">
-    <value>Pending contacts</value>
+    <value>Contactos pendientes</value>
   </string>
   <string id="1190" name="user contacts">
-    <value>Accept</value>
+    <value>Aceptar</value>
   </string>
   <string id="1191" name="user contacts">
-    <value>Deny</value>
+    <value>Denegar</value>
   </string>
   <string id="1192" name="user contact request">
-    <value>Hi,</value>
+    <value>Hola,</value>
   </string>
   <string id="1193" name="user contact request">
-    <value>would like to add you as contact.</value>
+    <value>me gustaría añadirle como contacto.</value>
   </string>
   <string id="1194" name="user contact request">
-    <value>Check your contact requests in $APP_NAME or click on those links to accept or deny the request</value>
+    <value>Chequear sus peticiones de contacto $APP_NAME o hacer clic en los links para aceptar o denegar la petición</value>
   </string>
   <string id="1195" name="add user contact">
-    <value>This user is already in your contact list or has received an invitation to your contact list that is not answered yet.</value>
+    <value>Este usuario ya se encuentra en su lista de contactos o ha recibido una invitación a su lista de contactos que aún no ha contestado.</value>
   </string>
   <string id="1196" name="user contact mail">
-    <value>Your contact list</value>
+    <value>Su lista de contactos</value>
   </string>
   <string id="1197" name="user contacts">
-    <value>Edit your contact and messages,&lt;br/&gt; manage your pending contacts!</value>
+    <value>Editar sus Contactos y Mensajes,&lt;br/&gt; administrar sus contactos pendientes!</value>
   </string>
   <string id="1198" name="user contacts">
-    <value>confirmed you as contact!</value>
+    <value>está usted confirmado como contacto!</value>
   </string>
   <string id="1199" name="chat info message">
-    <value></value>
+    <value/>
   </string>
   <string id="1200" name="chat log icon">
-    <value>Show / Copy chat log</value>
+    <value>Mostrar / Copiar log del chat</value>
   </string>
   <string id="1201" name="chat log window">
-    <value>Chat Log</value>
+    <value>Log del chat</value>
   </string>
   <string id="1202" name="private message">
-    <value>From</value>
+    <value>De</value>
   </string>
   <string id="1203" name="private message">
-    <value>Subject</value>
+    <value>Asunto</value>
   </string>
   <string id="1204" name="private message">
-    <value>Send</value>
+    <value>Enviar</value>
   </string>
   <string id="1205" name="private message">
-    <value></value>
+    <value/>
   </string>
   <string id="1206" name="private message">
-    <value>Messages</value>
+    <value>Mensajes</value>
   </string>
   <string id="1207" name="private message">
-    <value>New Mail</value>
+    <value>Nuevo correo</value>
   </string>
   <string id="1208" name="private message">
-    <value>Click to write a new message to any of your contacts</value>
+    <value>Click para escribir nuevo mensaje a cualquiera de sus contactos</value>
   </string>
   <string id="1209" name="private message">
-    <value>Write new message</value>
+    <value>Escribir nuevo mensaje</value>
   </string>
   <string id="1210" name="private message">
-    <value>To:</value>
+    <value>A:</value>
   </string>
   <string id="1211" name="private message">
-    <value>Subject:</value>
+    <value>Asunto:</value>
   </string>
   <string id="1212" name="whiteboard full-fit">
-    <value>Enable full fit and the whiteboard will zoom the whole whiteboard so that all&lt;br/&gt;documents are visible according to each participants screen resolution.</value>
+    <value>Activar ajuste completo y la pizarra hará zoom para que todos&lt;br/&gt;documentos sean visibles en función de la resolución de los monitores de cada  participante.</value>
   </string>
   <string id="1213" name="user-list">
-    <value>Kick user</value>
+    <value>Expulsar usuario</value>
   </string>
   <string id="1214" name="user-list">
-    <value>You cannot kick yourself out of the conference room! If you want to leave it close the browser or use the exit button!</value>
+    <value>No puede expulsarse a sí mismo de la sala de conferencia! Si quiere salir cierre el navegador o emplee el botón Salir!</value>
   </string>
   <string id="1215" name="kick-user">
-    <value>Do you really want to disconnect this user from this conference room?</value>
+    <value>En verdad quiere desconectar este usuario de la sala de conferencia?</value>
   </string>
   <string id="1216" name="kick-user">
-    <value>Confirm action ...</value>
+    <value>Confirme la acción ...</value>
   </string>
   <string id="1217" name="kick-user">
-    <value>You cannot kick a Super-Moderator out of a room!</value>
+    <value>No puede expulsar de la sala a un Super-Moderador!</value>
   </string>
   <string id="1218" name="private message">
-    <value>Book conference room</value>
+    <value>Libro sala de conferencias</value>
   </string>
   <string id="1219" name="private message">
-    <value>Start</value>
+    <value>Comenzar</value>
   </string>
   <string id="1220" name="private message">
-    <value>End</value>
+    <value>Finalizar</value>
   </string>
   <string id="1221" name="private message">
-    <value>Add an optional request for meeting to the message and create a conference room. The Event is then copied in the calendar of every participant.</value>
+    <value>Agregar una solicitud opcional para reunirse al mensaje y hacer una sala de conferencias. El evento es entonces copiado en el calendario de cada participante.</value>
   </string>
   <string id="1222" name="private message">
-    <value>Inbox</value>
+    <value>Carpeta de entrada</value>
   </string>
   <string id="1223" name="private message">
-    <value>Sent</value>
+    <value>Enviados</value>
   </string>
   <string id="1224" name="private message">
-    <value>Trash</value>
+    <value>Papelera</value>
   </string>
   <string id="1225" name="private message">
-    <value>This is you! You cannot add yourself as your own contact.</value>
+    <value>Este es usted! No puede añadirse a sí mismo como contacto.</value>
   </string>
   <string id="1226" name="user contacts">
-    <value>The user is already denied!</value>
+    <value>El usuario ya estaba denegado!</value>
   </string>
   <string id="1227" name="user contacts">
-    <value>The user is already approved!</value>
+    <value>El usuario ya estaba aprobado!</value>
   </string>
   <string id="1228" name="user contacts">
-    <value>This user contact hash is invalid!</value>
+    <value>El hash de este usuario-contacto es inválido!</value>
   </string>
   <string id="1229" name="user contacts">
-    <value>User added to contact list!</value>
+    <value>Usuario añadido a lista de contactos!</value>
   </string>
   <string id="1230" name="user contacts">
-    <value>User denied as contact and removed from pending contact list!</value>
+    <value>Usuario denegado como contacto y eliminado de la lista de contactos pendiente!</value>
   </string>
   <string id="1231" name="user contacts">
-    <value>There is no such contact!</value>
+    <value>No está ese contacto!</value>
   </string>
   <string id="1232" name="user contacts">
-    <value>Would you really like to remove that contact?</value>
+    <value>En verdad quiere eliminar ese contacto?</value>
   </string>
   <string id="1233" name="user contacts">
-    <value>Confirm contact removal</value>
+    <value>Confirmar eliminación del contacto</value>
   </string>
   <string id="1234" name="user contacts">
-    <value>Delete contact from list</value>
+    <value>Eliminar contacto de la lista</value>
   </string>
   <string id="1235" name="user profile">
-    <value>User Profile</value>
+    <value>Perfil de Usuario</value>
   </string>
   <string id="1236" name="user profile">
-    <value>Show user profile</value>
+    <value>Mostrar perfil del usuario</value>
   </string>
   <string id="1237" name="private message">
-    <value>Messages</value>
+    <value>Mensajes</value>
   </string>
   <string id="1238" name="private message">
-    <value>Search</value>
+    <value>Buscar</value>
   </string>
   <string id="1239" name="private message">
-    <value>Select all</value>
+    <value>Seleccionar todos</value>
   </string>
   <string id="1240" name="private message">
-    <value>Select none</value>
+    <value>No seleccionar ninguno</value>
   </string>
   <string id="1241" name="private message">
-    <value>Select unread</value>
+    <value>Seleccionar no leidos</value>
   </string>
   <string id="1242" name="private message">
-    <value>Select read</value>
+    <value>Seleccionar leidos</value>
   </string>
   <string id="1243" name="private message">
-    <value>Move to folder ...</value>
+    <value>Mover a carpeta ...</value>
   </string>
   <string id="1244" name="private message">
-    <value>Add new folder ...</value>
+    <value>Añadir nueva carpeta ...</value>
   </string>
   <string id="1245" name="private message">
-    <value>Delete</value>
+    <value>Borrar</value>
   </string>
   <string id="1246" name="private message">
-    <value>Deleted mails are still in your trash folder!</value>
+    <value>Correos borrados aún permanecen en su papelera!</value>
   </string>
   <string id="1247" name="private message">
-    <value>Mark unread</value>
+    <value>Marcar no leidos</value>
   </string>
   <string id="1248" name="private message">
-    <value>Mark read</value>
+    <value>Marcar leidos</value>
   </string>
   <string id="1249" name="private message">
-    <value>Answer</value>
+    <value>Responder</value>
   </string>
   <string id="1250" name="private message">
-    <value>Answer everybody</value>
+    <value>Responder a todos</value>
   </string>
   <string id="1251" name="private message">
-    <value>Forward</value>
+    <value>adelante</value>
   </string>
   <string id="1252" name="private message">
-    <value>Actions ...</value>
+    <value>Acciones ...</value>
   </string>
   <string id="1253" name="user contacts">
-    <value>Send private message</value>
+    <value>Enviar mensaje privado</value>
   </string>
   <string id="1254" name="private message">
-    <value>Nothing selected!</value>
+    <value>Nada seleccionado!</value>
   </string>
   <string id="1255" name="private message">
-    <value>Move to Inbox</value>
+    <value>Mover a carpeta de entrada</value>
   </string>
   <string id="1256" name="private message">
-    <value>Delete (final)</value>
+    <value>Borrar (final)</value>
   </string>
   <string id="1257" name="private message">
-    <value>This action cannot be undone!</value>
+    <value>Esta acción no puede ser deshecha!</value>
   </string>
   <string id="1258" name="private message">
-    <value>Add folder</value>
+    <value>Añadir carpeta</value>
   </string>
   <string id="1259" name="private message">
-    <value>Add folders and organize your messages!</value>
+    <value>Añadir carpetas y organizar sus mensajes!</value>
   </string>
   <string id="1260" name="private message">
-    <value>Add folder</value>
+    <value>Añadir carpeta</value>
   </string>
   <string id="1261" name="private message">
-    <value>Add</value>
+    <value>Añadir</value>
   </string>
   <string id="1262" name="private message folder">
-    <value>Delete folder</value>
+    <value>Borrar carpeta</value>
   </string>
   <string id="1263" name="private message folder">
-    <value>You cannot delete this folder, there are still messages inside! Delete first the messages or move them to another folder.</value>
+    <value>No puede borrar esta carpeta, aún contiene mensajes! Borre antes los mensajes o muévalos a otra carpeta.</value>
   </string>
   <string id="1264" name="private message folder">
-    <value>Edit name</value>
+    <value>Editar nombre</value>
   </string>
   <string id="1265" name="private message folder">
-    <value>Do you really want to delete this folder? There is no way to undo that.</value>
+    <value>En verdad quiere borrar esta carpeta? No se podrá recuperar.</value>
   </string>
   <string id="1266" name="user contacts">
-    <value>Your request was send to the user. The user will receive a notification to accept or deny your request. Only accepted requests are in your contact list of course!</value>
+    <value>Su petición fue enviada al usuario. El usuario recibirá una notificación para aceptar o denegar la petición. Solamente las peticiones aceptadas estarán en su lista de contactos...naturalmente!</value>
   </string>
   <string id="1267" name="user contacts">
-    <value>Message</value>
+    <value>Mensaje</value>
   </string>
   <string id="1268" name="user view profile">
-    <value>The user does not share his personal contact data.</value>
+    <value>El usuario no comparte sus datos personales de contacto.</value>
   </string>
   <string id="1269" name="user view profile">
-    <value>The user does share his personal contact data only to contacts.</value>
+    <value>El usuario comparte sus datos personales solamente con sus contactos.</value>
   </string>
   <string id="1270" name="user view profile">
-    <value>Address &amp; Phone</value>
+    <value>Dirección &amp; Teléfono</value>
   </string>
   <string id="1271" name="error code">
-    <value>You invitation code is no valid, the code is only valid during this specific date and time:</value>
+    <value>Su código de invitación no es válido. El código solamente es válido durante la fecha y hora especificados:</value>
   </string>
   <string id="1272" name="user calendar">
-    <value>This event is connected to several calendars of other users. Your change will also update their calendar. Would you really like to update the event?</value>
+    <value>Este evento está conectado a los calendarios de otros usuarios. Los cambios que efectúe afectarán tambien a sus calendarios. En verdad quiere cambiar el evento?</value>
   </string>
   <string id="1273" name="user calendar">
-    <value>Confirm update</value>
+    <value>Confirmar cambios</value>
   </string>
   <string id="1274" name="user contacts">
-    <value>Allow contact to see my calendar (view only)</value>
+    <value>Permitir a los contactos ver mi calendario (ver solamente)</value>
   </string>
   <string id="1275" name="user contacts">
-    <value>Do not share calendar</value>
+    <value>No compartir calendario</value>
   </string>
   <string id="1276" name="user contacts">
-    <value>Calendar of contacts</value>
+    <value>Calendario de contactos</value>
   </string>
   <string id="1277" name="user contacts">
-    <value>Your contacts need to approve you first to be able to see their calendar.</value>
+    <value>Sus contactos necesitan aprovarle primero para poder ver sus calendarios.</value>
   </string>
   <string id="1278" name="user contacts">
-    <value>You cannot store or delete events from other calendars then your own!</value>
+    <value>Usted no puede almacenar o borrar eventos de otros calendarios que no sean el suyo!</value>
   </string>
   <string id="1279" name="user contacts">
-    <value>Show my own calendar again!</value>
+    <value>Mostrar mi calendario nuevamente!</value>
   </string>
   <string id="1280" name="user calendar">
-    <value>This event is connected to several calendars of other users. Your action will also delete the event from their calendar. Would you really like to delete the event?</value>
+    <value>Este evento está conectado a los calendarios de otros usuarios. Su acción borrará tambien el evento de sus calendarios. En verdad quiere borrar el evento?</value>
   </string>
   <string id="1281" name="user calendar">
-    <value>Confirm action</value>
+    <value>Confirmar acción</value>
   </string>
   <string id="1282" name="user calendar">
-    <value>Enter room</value>
+    <value>Entrar a sala</value>
   </string>
   <string id="1283" name="user calendar">
-    <value>Access the conference room</value>
+    <value>Acceso a la sala de conferencias</value>
   </string>
   <string id="1284" name="private message">
-    <value>There is a conference room and event booked with this private message.</value>
+    <value>Hay una sala de conferencias y evento reservado con este mensaje privado.</value>
   </string>
   <string id="1285" name="user calendar">
-    <value>You need to store the event first!</value>
+    <value>Primero es necesario almacenar el evento!</value>
   </string>
   <string id="1286" name="access rooms error">
-    <value>There is no such room available. The event in the calendar and connected room is already deleted!</value>
+    <value>Esa sala no es accesible. El evento en el Calendario y sala relacionada, ya ha sido eliminada!</value>
   </string>
   <string id="1287" name="nick name">
-    <value>Choose your nickname</value>
+    <value>Elija su nick-nombre</value>
   </string>
   <string id="1288" name="nick name">
-    <value>Firstname</value>
+    <value>Nombre</value>
   </string>
   <string id="1289" name="nick name">
-    <value>Lastname</value>
+    <value>Apellidos</value>
   </string>
   <string id="1290" name="nick name">
-    <value>Email</value>
+    <value>Dirección mail</value>
   </string>
   <string id="1291" name="nick name">
     <value>Ok</value>
   </string>
   <string id="1292" name="nick name">
-    <value>Minimum length 4 chars! For both, firstname and lastname.</value>
+    <value>Mínimo 4 caracteres! para ambos: Nombre y Apellidos.</value>
   </string>
   <string id="1293" name="nick name">
-    <value>Please enter a valid email!</value>
+    <value>Por favor, introduzca un mail válido!</value>
   </string>
   <string id="1294" name="auth from">
     <value>Facebook</value>
   </string>
   <string id="1295" name="auth form">
-    <value>Login with your Facebook account</value>
+    <value>Login con su cuenta de Facebook</value>
   </string>
   <string id="1296" name="view profile">
-    <value>Member since</value>
+    <value>Miembro desde</value>
   </string>
   <string id="1297" name="direct login message">
-    <value>You've logged with your Facebook account. You should update your profile with the correct email. Otherwise you will not receive invitations and private messages from other users.</value>
+    <value>Ha hecho login con su cuenta de Facebook. Actualice su perfil con la cuenta de mail correcta; de otro modo no podrá recibir invitaciones ni mensajes privados de otros usuarios.</value>
   </string>
   <string id="1298" name="direct login message header">
-    <value>Message</value>
+    <value>Mensaje</value>
   </string>
   <string id="1299" name="direct login message checkbox control">
-    <value>Do not show update profile message again</value>
+    <value>No mostrar nuevamente mensaje actualización del perfil</value>
   </string>
   <string id="1300" name="profile settings button">
-    <value>more display options ...</value>
+    <value>más opciones ...</value>
   </string>
   <string id="1301" name="private message">
-    <value>New private message:</value>
+    <value>Nuevo mensaje privado:</value>
   </string>
   <string id="1302" name="private message">
-    <value>Click here to visit your profile to see the full message ...</value>
+    <value>Haga click aquí para visitar su perfil y ver el mensaje completo ...</value>
   </string>
   <string id="1303" name="private message">
-    <value>Reply</value>
+    <value>Replicar</value>
   </string>
   <string id="1304" name="dashboard">
-    <value>Rooms and chats</value>
+    <value>Salas y Chats</value>
   </string>
   <string id="1305" name="dashboard">
-    <value>My rooms</value>
+    <value>Mis salas</value>
   </string>
   <string id="1306" name="my rooms">
-    <value>My conference room (for 1-16 users)</value>
+    <value>Mi sala de conferencias (para 1-16 usuarios)</value>
   </string>
   <string id="1307" name="my rooms">
-    <value>My webinar room (for 1-120 users)</value>
+    <value>Mi sala webinar (para 1-120 usuarios)</value>
   </string>
   <string id="1308" name="room administration">
-    <value>Owner Id</value>
+    <value>Propietario Id</value>
   </string>
   <string id="1309" name="login error">
-    <value>Please enter a password</value>
+    <value>Por favor introduzca una contraseña</value>
   </string>
   <string id="1310" name="login error">
-    <value>You need an account with User-Level User, Moderator or Admin</value>
+    <value>Necesita una cuenta con el Nivel de Usuario, Moderador o Admin.</value>
   </string>
   <string id="1311" name="user administration">
-    <value>Web-Service (only access via SOAP)</value>
+    <value>Web-Service (acceso solamente via SOAP)</value>
   </string>
   <string id="1312" name="upload file explorer">
-    <value>Do directly load to whiteboard</value>
+    <value>Cargar directamente a la pizarra</value>
   </string>
   <string id="1313" name="whiteboard close confirmation">
-    <value>Do you really want to remove this whiteboard? This action cannot be undone!</value>
+    <value>En verdad quiere suprimir esta pizarra? Esta acción no puede ser deshecha!</value>
   </string>
   <string id="1314" name="whiteboard load WML">
-    <value>Load to whiteboard</value>
+    <value>Cargar a la pizarra</value>
   </string>
   <string id="1315" name="recording flag">
-    <value>Do not forget start recording! One user per room always needs to start it to have the recording afterwards.</value>
+    <value>No olvide comenzar la grabación! Un usuario por sala necesita comenzarla para tener después el control de la misma.</value>
   </string>
   <string id="1316" name="recording flag">
-    <value>Start Recording</value>
+    <value>Comenzar grabación</value>
   </string>
   <string id="1317" name="shape">
-    <value>Arrow</value>
+    <value>Flecha</value>
   </string>
   <string id="1318" name="shape">
-    <value>Circle</value>
+    <value>Circulo</value>
   </string>
   <string id="1319" name="shape">
-    <value>Line</value>
+    <value>Linea</value>
   </string>
   <string id="1320" name="shape">
-    <value>Square</value>
+    <value>Cuadrado</value>
   </string>
   <string id="1321" name="shape">
-    <value>Triangle</value>
+    <value>Triángulo</value>
   </string>
   <string id="1322" name="icon">
-    <value>Text/Note</value>
+    <value>Texto/Nota</value>
   </string>
   <string id="1323" name="icon">
     <value>Cliparts</value>
   </string>
   <string id="1324" name="icon">
-    <value>Draw Free</value>
+    <value>Dibujo Libre</value>
   </string>
   <string id="1325" name="icon">
-    <value>Select/Move</value>
+    <value>Seleccionar/Mover</value>
   </string>
   <string id="1326" name="icon">
-    <value>Draw Shape</value>
+    <value>Dibujar Formas</value>
   </string>
   <string id="1327" name="icon">
-    <value>Cut/Move</value>
+    <value>Cortar/Mover</value>
   </string>
   <string id="1328" name="icon">
     <value>Zoom In/Out</value>
   </string>
   <string id="1329" name="icon">
-    <value>Print</value>
+    <value>Imprimir</value>
   </string>
   <string id="1330" name="icon">
-    <value>Undo</value>
+    <value>Deshacer</value>
   </string>
   <string id="1331" name="icon">
-    <value>Trash</value>
+    <value>Papelera</value>
   </string>
   <string id="1332" name="icon">
-    <value>Add Grid</value>
+    <value>Añadir Rejilla</value>
   </string>
   <string id="1333" name="icon">
-    <value>Share File</value>
+    <value>Compartir Archivo</value>
   </string>
   <string id="1334" name="icon submenu">
-    <value>Select Shape</value>
+    <value>Seleccionar Formas</value>
   </string>
   <string id="1335" name="icon submenu">
-    <value>Select Clipart</value>
+    <value>Seleccionar Clipart</value>
   </string>
   <string id="1336" name="submenu">
-    <value>Copy</value>
+    <value>Copiar</value>
   </string>
   <string id="1337" name="submenu">
-    <value>Cut</value>
+    <value>Cortar</value>
   </string>
   <string id="1338" name="submenu">
-    <value>Paste</value>
+    <value>Pegar</value>
   </string>
   <string id="1339" name="submenu">
-    <value>Delete</value>
+    <value>Borrar</value>
   </string>
   <string id="1340" name="submenu">
-    <value>Do you really want to delete the complete content on the whiteboard?</value>
+    <value>En verdad quiere borrar todo el contenido de la pizarra?</value>
   </string>
   <string id="1341" name="submenu">
-    <value>Load directly to whiteboard</value>
+    <value>Cargar directamente a la pizarra</value>
   </string>
   <string id="1342" name="attendees">
-    <value>Attendees</value>
+    <value>Asistentes</value>
   </string>
   <string id="1343" name="atendee manager">
-    <value>Attendee Manager</value>
+    <value>Administrador de asistentes</value>
   </string>
   <string id="1344" name="atendee manager">
-    <value>Present</value>
+    <value>Presente</value>
   </string>
   <string id="1345" name="atendee manager">
-    <value>Remote Controll</value>
+    <value>Control Remoto</value>
   </string>
   <string id="1346" name="atendee manager">
-    <value>Eject</value>
+    <value>Expulsar</value>
   </string>
   <string id="1347" name="chat">
     <value>Chat</value>
   </string>
   <string id="1348" name="invite attendee">
-    <value>Invite Attendees</value>
+    <value>Invitar Asistentes</value>
   </string>
   <string id="1349" name="invite attendee">
-    <value>By Email</value>
+    <value>Por Email</value>
   </string>
   <string id="1350" name="invite attendee">
-    <value>User is moderator</value>
+    <value>Usuario es moderador</value>
   </string>
   <string id="1351" name="invite attendee">
-    <value>User has webcam switched on</value>
+    <value>Usuario ha conectado su webcam</value>
   </string>
   <string id="1352" name="fill_option">
-    <value>Deactivate shape fill</value>
+    <value>Desactivar llenar con formas</value>
   </string>
   <string id="1353" name="fill_option">
-    <value>Activate shape fill</value>
+    <value>Activar llenar con formas</value>
   </string>
   <string id="1354" name="icon">
-    <value>Snap to Grid</value>
+    <value>Click a Rejilla</value>
   </string>
   <string id="1355" name="allow_recording">
-    <value>Allow recording</value>
+    <value>Permitir grabación</value>
   </string>
   <string id="1356" name="wait_for_recording">
-    <value>Wait for recording</value>
+    <value>Esperando a grabación</value>
   </string>
   <string id="1357" name="hide_top_bar">
-    <value>Hide topbar</value>
+    <value>Ocultar la barra superior</value>
   </string>
   <string id="1358" name="fileExplorer">
-    <value>Play video</value>
+    <value>Reproducir video</value>
   </string>
   <string id="1359" name="submenu">
-    <value>Do you really want to delete the content on the current slide?</value>
+    <value>En verdad quiere borrar el contenido de la presente exposición?</value>
   </string>
   <string id="1360" name="activity_window">
-    <value>Accept and grant user right</value>
+    <value>Aceptar y otorgar derechos al usuario</value>
   </string>
   <string id="1361" name="activity_window">
-    <value>Deny</value>
+    <value>Denegar</value>
   </string>
   <string id="1362" name="activity_window">
     <value>I</value>
   </string>
   <string id="1363" name="activity_window">
-    <value>Activities and actions</value>
+    <value>Actividades y acciones</value>
   </string>
   <string id="1364" name="whiteboard">
-    <value>Remove whiteboard</value>
+    <value>Suprimir pizarra</value>
   </string>
   <string id="1365" name="whiteboard">
-    <value>You need the moderation or the right to draw on the whiteboard to remove whiteboards!</value>
+    <value>Necesita la moderación o el derecho a dibujar en la pizarra para suprimir esta!</value>
   </string>
   <string id="1366" name="whiteboard">
-    <value>Not allowed</value>
+    <value>No permitido</value>
   </string>
   <string id="1367" name="user_left_act_msg">
-    <value>has left the room.</value>
+    <value>ha salido de la sala.</value>
   </string>
   <string id="1368" name="clipart icons">
-    <value>Math icons</value>
+    <value>Iconos de Matematicas</value>
   </string>
   <string id="1369" name="clipart icons">
     <value>No category</value>
   </string>
   <string id="1370" name="login_screen">
-    <value>Color-Style</value>
+    <value>Color-Estilo</value>
   </string>
   <string id="1371" name="login_screen">
-    <value>Quality</value>
+    <value>Calidad</value>
   </string>
   <string id="1372" name="login_screen">
-    <value>Domain</value>
+    <value>Dominio</value>
   </string>
   <string id="1373" name="login_screen">
-    <value>visit</value>
+    <value>visite</value>
   </string>
   <string id="1374" name="login_screen">
-    <value>redorange</value>
+    <value>rojo-naranja</value>
   </string>
   <string id="1375" name="login_screen">
-    <value>mediumseagreen</value>
+    <value>verde-mar</value>
   </string>
   <string id="1376" name="login_screen">
-    <value>steelblue</value>
+    <value>azul-industrial</value>
   </string>
   <string id="1377" name="login_screen">
-    <value>lightsteelblue</value>
+    <value>azul-brillante</value>
   </string>
   <string id="1378" name="login_screen">
-    <value>goldenred</value>
+    <value>rojo-oro</value>
   </string>
   <string id="1379" name="login_screen">
-    <value>silvergray</value>
+    <value>gris-plata</value>
   </string>
   <string id="1380" name="login_screen">
-    <value>userdefined</value>
+    <value>usuario-definido</value>
   </string>
   <string id="1381" name="login_screen">
-    <value>best</value>
+    <value>mejor</value>
   </string>
   <string id="1382" name="login_screen">
-    <value>upload</value>
+    <value>subir</value>
   </string>
   <string id="1383" name="login_screen">
-    <value>medium</value>
+    <value>medio</value>
   </string>
   <string id="1384" name="mute micro">
-    <value>Mute microphone globally</value>
+    <value>Silenciar micrófonos globalmente</value>
   </string>
   <string id="1385" name="unmute micro">
-    <value>Unmute microphone globally</value>
+    <value>Volver a activar micrófonos globalmente</value>
   </string>
   <string id="1386" name="give exclusive audio">
-    <value>Mute microphone of others</value>
+    <value>Silenciar los micrófonos de los demás</value>
   </string>
   <string id="1387" name="mute self message">
-    <value>You are globally muted by the moderator. You cannot unmute yourself!</value>
+    <value>Usted ha sido desactivado globalmente por el moderador. Usted no puede volver a activarse a sí mismo!</value>
   </string>
   <string id="1388" name="mute self confirm message title">
-    <value>Mute microphone globally?</value>
+    <value>Silenciar micrófonos globalmente?</value>
   </string>
   <string id="1389" name="mute self confirm message message">
-    <value>Do you really want to mute yourself globally? No other user will hear you anymore!</value>
+    <value>En verdad quiere silenciarse globalmente a sí mismo? Nadie podrá oirle!</value>
   </string>
   <string id="1390" name="mute others confirm message title">
-    <value>Mute microphone locally?</value>
+    <value>Silenciar micrófono localmente?</value>
   </string>
   <string id="1391" name="mute others confirm message">
-    <value>Do you really want to mute this microphone? You can only mute it locally on your screen. It has no effect to how other users hear this user. Only moderators can turn it off globally!</value>
+    <value>En verdad quiere silenciar este micrófono? Puede silenciarlo solo en su pantalla localmente. Esto no tendrá efecto en cómo otros usuarios oyen a este usuario. Solo los moderadores pueden silenciarlo globalmente!</value>
   </string>
   <string id="1392" name="mute others confirm message title">
-    <value>Mute microphone off globally?</value>
+    <value>Silenciar micrófono globalmente?</value>
   </string>
   <string id="1393" name="mute others moderator message">
-    <value>Do you really want to mute this user globally? No other user will hear him anymore!</value>
+    <value>En verdad quiere desactivar a este usuario globalmente? Ningún otro usuario podrá oirle!</value>
   </string>
   <string id="1394" name="mute status icons">
-    <value>Your sound is on. Click here to send moderator message to mute your microphone globally (in the complete conference room) off!</value>
+    <value>Su sonido está activado. Haga click aquí y enviará un mensaje al moderador para silenciar globalmente tu micrófono (en toda la sala de conferencias)!</value>
   </string>
   <string id="1395" name="mute status icons">
-    <value>Your sound is off. Click here to send moderator message to unmute your microphone globally (in the complete conference room) on!</value>
+    <value>Su sonido está desactivado. Haga click aquí y enviará un mensaje al moderador para reactivar tu micrófono globalmente (en toda la sala de conferencias)!</value>
   </string>
   <string id="1396" name="mute apply self on message">
-    <value>would like that the moderator mutes my microphone globally.</value>
+    <value>desearía que el moderador silencie mi micrófono globalmente.</value>
   </string>
   <string id="1397" name="mute apply self off message">
-    <value>would like that the moderator unmutes my microphone globally.</value>
+    <value>desearía que el moderador reactive mi micrófono globalmente.</value>
   </string>
   <string id="1398" name="mute apply of message">
-    <value>want that the moderator unmutes his/her microphone.</value>
+    <value>quiero que el moderador reactive su micrófono.</value>
   </string>
   <string id="1399" name="mute apply of message">
-    <value>want that the moderator mutes his/her microphone.</value>
+    <value>quiero que el moderador silencie su micrófono.</value>
   </string>
   <string id="1400" name="mute status icons">
-    <value>Unmute microphone. Click here to mute his/her microphone globally!</value>
+    <value>Reactivar micrófono. Haga click aquí para silenciar su micrófono globalmente!</value>
   </string>
   <string id="1401" name="mute status icons">
-    <value>Mute microphone. Click here to unmute his/her microphone globally!</value>
+    <value>Silenciar micrófono. Haga click aquí para reactivar su micrófono globalmente!</value>
   </string>
   <string id="1402" name="mute self message">
-    <value>This user is globally muted by the moderator. You cannot unmute him!</value>
+    <value>Este usuario ha sido desactivado globalmente por el moderador. Usted no puede reactivarle!</value>
   </string>
   <string id="1403" name="mute micro">
-    <value>Mute your microphone globally</value>
+    <value>Silenciar tu micrófono globalmente</value>
   </string>
   <string id="1404" name="unmute micro">
-    <value>Unmute your microphone globally</value>
+    <value>Reactivar tu micrófono globalmente</value>
   </string>
   <string id="1405" name="mute micro">
-    <value>Mute microphone</value>
+    <value>Silenciar micrófono</value>
   </string>
   <string id="1406" name="unmute micro">
-    <value>Unmute microphone</value>
+    <value>Reactivar micrófono</value>
   </string>
   <string id="1407" name="mute micro">
-    <value>Mute microphone globally</value>
+    <value>Silenciar micrófono globalmente</value>
   </string>
   <string id="1408" name="unmute micro">
     <value>Unmute microphone globally</value>
   </string>
   <string id="1409" name="mute moderator message">
-    <value>Only moderators can mute or unmute an user globally! To mute your own microphone: Please use the microphone icon in your video pod!</value>
+    <value>Solo los moderadores pueden pueden desactivar o reactivar globalmente a un usuario! Para silenciar su propio micrófono: Por favor, emplee el icono en tu ventana de video!</value>
   </string>
   <string id="1410" name="poll_name">
-    <value>Poll Name</value>
+    <value>Nombre de la Encuesta</value>
   </string>
   <string id="1411" name="poll_name">
-    <value>You</value>
+    <value>Usted</value>
   </string>
   <string id="1412" name="archived_polls">
-    <value>Archieved Polls</value>
+    <value>Encuestas archivadas</value>
   </string>
   <string id="1413" name="active_poll">
-    <value>active</value>
+    <value>activa</value>
   </string>
   <string id="1414" name="chart_simple">
-    <value>Simple Chart</value>
+    <value>Cuadro Simple</value>
   </string>
   <string id="1415" name="chart_pie">
-    <value>Pie Chart</value>
+    <value>Cuadro Gráfico</value>
   </string>
   <string id="1416" name="sign_up_validation">
-    <value>Please enter email</value>
+    <value>Por favor, introduzca su dirección de correo</value>
   </string>
   <string id="1417" name="chat_notification">
-    <value>New message(s)</value>
+    <value>Nuevo mensaje(s)</value>
   </string>
   <string id="1418" name="poll_close">
-    <value>Close Poll</value>
+    <value>Encuesta cerrada</value>
   </string>
   <string id="1419" name="poll_close_confirm">
-    <value>Are you sure you want to close this Poll? No one will be able to vote</value>
+    <value>En verdad quiere cerrar esta Encuesta? Nadie más podrá votar.</value>
   </string>
   <string id="1420" name="poll_delete">
-    <value>Delete Poll</value>
+    <value>Eliminar Encuesta</value>
   </string>
   <string id="1421" name="poll_delete_confirm">
-    <value>Are you sure you want to delete this Poll? The results will be deleted as well.</value>
+    <value>En verdad quiere eliminar esta Encuesta? Los resultados tambien se eliminarán.</value>
   </string>
   <string id="1422" name="language_code">
-    <value>Language ISO Code</value>
+    <value>Lenguaje ISO Código</value>
   </string>
   <string id="1423" name="exclusive_audio_permission">
-    <value>Allow/Deny right to give exclusive audio.</value>
+    <value>Permitir/Denegar derecho para dar audio exclusivo.</value>
   </string>
   <string id="1424" name="allow_exclusive_audio_permission">
-    <value>Allow user to give exclusive audio</value>
+    <value>Permitir a usuario dar audio exclusivo</value>
   </string>
   <string id="1425" name="deny_exclusive_audio_permission">
-    <value>Deny user to give exclusive audio</value>
+    <value>Denegar a usuario dar audio exclusivo</value>
   </string>
   <string id="1426" name="excl_audio apply self on message">
-    <value>would like to get a permission for exclusive audio.</value>
+    <value>quisiera obtener permiso para tener audio exclusivo.</value>
   </string>
   <string id="1427" name="excl_audio apply of message">
-    <value>want that the moderator gives me a permission for exclusive audio.</value>
+    <value>quisiera que el moderador me concediera permiso para tener audio exclusivo.</value>
   </string>
   <string id="1428" name="excl_audio status icons">
-    <value>Give a permission for exclusive audio.</value>
+    <value>Dar permiso para audio exclusivo.</value>
   </string>
   <string id="1429" name="cam_resolution">
-    <value>Cam resolution</value>
+    <value>Resolución de Cámara</value>
   </string>
   <string id="1430" name="cam_resolution_info">
-    <value>Changing the resolution affects bandwidth, bigger picture needs more bandwith!</value>
+    <value>Cambiando la resolución a efecto de ancho de banda, fotos grandes necesitan más ancho de banda!</value>
   </string>
   <string id="1431" name="exclusive_audio_error">
-    <value>You don't have the right to give yourself or others exclusive audio. You need to apply for the right from the moderator or ask the moderator to give you exclusive audio.</value>
+    <value>Usted no tiene los derechos para darse a sí mismo o a los demás audio exclusivo. Necesita solicitar los derechos al moderador o que éste le de audio exclusivo.</value>
   </string>
   <string id="1432" name="exclusive_audio_ask">
-    <value>I would like to get the right for exclusive audio</value>
+    <value>Quisiera obtener los derechos para audio exclusivo</value>
   </string>
   <string id="1433" name="exclusive_audio_action">
-    <value>Give exclusive audio to me (alternatively click on your video pod or press F12)</value>
+    <value>Darme audio exclusivo a mí mismo (alternativamente hacer click en la ventana de video o pulsar F12)</value>
   </string>
   <string id="1434" name="micro is on">
-    <value>Microphone is on!</value>
+    <value>El micrófono está abierto!</value>
   </string>
   <string id="1435" name="micro is off">
-    <value>Microphone is muted</value>
+    <value>El micrófono esta silenciado</value>
   </string>
   <string id="1436" name="hide_chat">
-    <value>Hide chat</value>
+    <value>Ocultar chat</value>
   </string>
   <string id="1437" name="hide_activities_and_actions">
-    <value>Hide activities</value>
+    <value>Ocultar actividades</value>
   </string>
   <string id="1438" name="hide_files_explorer">
-    <value>Hide files explorer</value>
+    <value>Ocultar explorador de archivos</value>
   </string>
   <string id="1439" name="hide_actions_menu">
-    <value>Hide actions menu</value>
+    <value>Ocultar menú de acciones</value>
   </string>
   <string id="1440" name="hide_screen_sharing">
-    <value>Hide screen sharing</value>
+    <value>Ocultar compartir pantalla</value>
   </string>
   <string id="1441" name="hide_whiteboard">
-    <value>Hide whiteboard</value>
+    <value>Ocultar pizarra</value>
   </string>
   <string id="1442" name="show microphone status">
-    <value>Show micro status in video</value>
+    <value>Mostrar estatus del micrófono en video</value>
   </string>
   <string id="1443" name="layout_options">
-    <value>Layout options</value>
+    <value>Opciones de capa</value>
   </string>
   <string id="1444" name="calendar new button">
-    <value>New Event</value>
+    <value>Nuevo Evento</value>
   </string>
   <string id="1445" name="calendar password info text">
-    <value>Password protected are the links to the conference that are send to the participents when you save the calendar event, not the room! That means if you save the event multiple times but with different passwords every participent receives a new link that has a different password. But old links still work once send!</value>
+    <value>Los enlaces a la conferencia que son enviados a los participantes cuando usted guarda el evento en el calendario están protegidos por contraseña, no la sala! Ello quiere decir que si guarda el evento múltiples veces pero con diferentes contraseñas, cada participante recibirá un nuevo enlace con una contraseña diferente. Aunque los enlaces primeros seguirán estando activos una vez se hayan enviado!</value>
   </string>
   <string id="1446" name="calendar edit button">
-    <value>Edit details</value>
+    <value>Editar detalles</value>
   </string>
   <string id="1447" name="sip show dialer">
-    <value>Show sip dialer</value>
+    <value>Mostrar sip dialer</value>
   </string>
   <string id="1448" name="sip call">
-    <value>Call</value>
+    <value>Llamar</value>
   </string>
   <string id="1449" name="calendar contact list">
-    <value>Show calendar events of contact</value>
+    <value>Mostrar los eventos de contacto en el calendario</value>
   </string>
   <string id="1450" name="tooltip menu">
-    <value>Your home!</value>
+    <value>Su home!</value>
   </string>
   <string id="1451" name="tooltip menu">
-    <value>Plan your meetings</value>
+    <value>Planear sus reuniones</value>
   </string>
   <string id="1452" name="tooltip menu">
-    <value>Watch recording and interviews</value>
+    <value>Ver grabaciones y entrevistas</value>
   </string>
   <string id="1453" name="tooltip menu">
-    <value>Choose and start a web-conference</value>
+    <value>Escoger y comenzar una web-conferencia</value>
   </string>
   <string id="1454" name="tooltip menu">
-    <value>Manage users and rights</value>
+    <value>Administrar usuarios y derechos</value>
   </string>
   <string id="1455" name="tooltip menu">
-    <value>Manage connections and kick users</value>
+    <value>Administrar conexiones y usuarios expulsados</value>
   </string>
   <string id="1456" name="tooltip menu">
-    <value>Manage usergroups</value>
+    <value>Administrar grupos de usuarios</value>
   </string>
   <string id="1457" name="tooltip menu">
-    <value>Manage conference rooms</value>
+    <value>Administrar salas de conferencia</value>
   </string>
   <string id="1458" name="tooltip menu">
-    <value>Manage system settings</value>
+    <value>Administrar configuraciones del sistema</value>
   </string>
   <string id="1459" name="tooltip menu">
-    <value>Manage labels and wording</value>
+    <value>Administrar etiquetas y formularios</value>
   </string>
   <string id="1460" name="tooltip menu">
-    <value>Manage LDAP and ADS configurations</value>
+    <value>Administrar configuraciones de LDAP y ADS</value>
   </string>
   <string id="1461" name="tooltip menu">
-    <value>Export/Import System Backups</value>
+    <value>Exportar/Importar Backups del Sistema</value>
   </string>
   <string id="1462" name="file explorer">
-    <value>You need moderation or the right to draw on whiteboard to upload, add, delete or load files and folders.</value>
+    <value>Usted necesita la moderación o el derecho para dibujar en la pizarra, subir, añadir, suprimir o cargar archivos y carpetas.</value>
   </string>
   <string id="1463" name="whiteboard">
-    <value>Edit text</value>
+    <value>Editar texto</value>
   </string>
   <string id="1464" name="salutation">
     <value>Prof</value>
   </string>
   <string id="1465" name="sharing client">
-    <value>Publish</value>
+    <value>Publicar</value>
   </string>
   <string id="1466" name="sharing client">
-    <value>Start Publish</value>
+    <value>Comenzar Publicación</value>
   </string>
   <string id="1467" name="sharing client">
-    <value>Stop Publish</value>
+    <value>Finalizar Publicación</value>
   </string>
   <string id="1468" name="sharing client">
     <value>Host</value>
   </string>
   <string id="1469" name="sharing client">
-    <value>Publish App</value>
+    <value>Publicar App</value>
   </string>
   <string id="1470" name="sharing client">
-    <value>Publish Id</value>
+    <value>Publicar Id</value>
   </string>
   <string id="1471" name="sharing client">
-    <value>Reduce the width of the SharingScreen before you try to move it left</value>
+    <value>Reducir la anchura de la Compartición de Escritorio antes de intentar moverlo a la izquierda</value>
   </string>
   <string id="1472" name="sharing client">
-    <value>Reduce the height of the SharingScreen before you try to move it bottom</value>
+    <value>Reducir la altura de la Compartición de Escritorio antes de intentar moverlo abajo</value>
   </string>
   <string id="1473" name="sharing client">
-    <value>Reduce the x of the SharingScreen before you try to make it wider</value>
+    <value>Reducir la x de la Compartición de Escritorio antes de intentar hacerla más ancho</value>
   </string>
   <string id="1474" name="sharing client">
-    <value>Reduce the y of the SharingScreen before you try to make it higher</value>
+    <value>Reducir la y de la Compartición de Escritorio antes de intentar hacerla más alta</value>
   </string>
   <string id="1475" name="sharing client">
-    <value>Fill these settings stream your screen data to 3th party providers like justin.tv</value>
+    <value>Completar estas configuraciones stream con los datos de tu pantalla a proveedores de terceras partes como justin.tv</value>
   </string>
   <string id="1476" name="sharing client">
-    <value>Please start Screen sharing to be able to publish it</value>
+    <value>Por favor lance Compartición de Escritorio para que pueda ser publicada</value>
   </string>
   <string id="1477" name="sharing client">
-    <value>Moderator permission required to start recording</value>
+    <value>Es requerido permiso del Moderador para comenzar la grabaciónModerator permission required to start recording</value>
   </string>
   <string id="1478" name="no right for exclusive audio">
-    <value>You don't have permission to apply exclusive audio to any participant. You need moderation role or the right for exclusive audio to make any microphone exclusive turned on..</value>
+    <value>Usted no tiene permiso para conceder audio exclusivo a cualquier participante. Necesita tener el papel de moderador o el derecho de audio exclusivo para hacer exclusivo y activado a algun micrófono.</value>
   </string>
   <string id="1479" name="conference menu">
-    <value>Upload new file to file explorer</value>
+    <value>Subir nuevo archivo al explorador de archivos</value>
   </string>
   <string id="1480" name="conference menu">
-    <value>Open new dialog with sharing settings</value>
+    <value>Abrir nuevo diálogo de configuraciones compartidas</value>
   </string>
   <string id="1481" name="conference menu">
-    <value>An existing moderator must approve it</value>
+    <value>Un moderador debe aprobarlo</value>
   </string>
   <string id="1482" name="conference menu">
-    <value>Ask moderator to share your webcam/micro</value>
+    <value>Decir al moderador que quieres compartir tu webcam/micro</value>
   </string>
   <string id="1483" name="conference menu">
-    <value>Gather feedback by creating a poll</value>
+    <value>Reunir feedback al crear una encuesta</value>
   </string>
   <string id="1484" name="conference menu">
-    <value>Past and current poll results as charts</value>
+    <value>Resultados de las encuestas pasada y actual como cuadro</value>
   </string>
   <string id="1485" name="conference menu">
-    <value>Vote if there is a poll for this conference room</value>
+    <value>Vote si hay una encuesta para esta sala de conferencias</value>
   </string>
   <string id="1486" name="conference menu">
-    <value>Edit cam and mic settings</value>
+    <value>Editar configuraciones de cam y micro</value>
   </string>
   <string id="1487" name="conference menu">
-    <value>Confirm and leave the room</value>
+    <value>Confirmar y dejar la sala</value>
   </string>
   <string id="1488" name="conference menu">
-    <value>Call external people via VoIP/SIP</value>
+    <value>Llamada a gente externa via VoIP/SIP</value>
   </string>
   <string id="1489" name="conference menu">
-    <value>Send an email with a direct link to this room</value>
+    <value>Enviar un correo con un link directo a esta sala</value>
   </string>
   <string id="1490" name="conference menu">
-    <value>Change your whiteboard settings</value>
+    <value>Chambiar sus configuraciones de la pizarra</value>
   </string>
   <string id="1491" name="backup admin">
-    <value>Max upload size</value>
+    <value>Máximo peso de subida</value>
   </string>
   <string id="1492" name="conference menu">
-    <value>Ask moderator to share your whiteboard</value>
+    <value>Pedir al moderador compartir tu pizarra</value>
   </string>
   <string id="1493" name="private chat">
-    <value>Start Private Chat</value>
+    <value>Comenzar Chat Privada</value>
   </string>
   <string id="1494" name="all_private_chat">
-    <value>All</value>
+    <value>Todo</value>
   </string>
   <string id="1495" name="private chat">
-    <value>You cannot start a private chat with yourself.</value>
+    <value>No puede comenzar un chat privado con usted mismo.</value>
   </string>
   <string id="1496" name="private chat">
-    <value>You've already started a private chat with this participant.</value>
+    <value>Usted ya comenzó un chat privado con este participante.</value>
   </string>
   <string id="1497" name="private chat">
-    <value>Do you really want to delete this private chat?</value>
+    <value>En verdad quiere eliminar este chat privado?</value>
   </string>
   <string id="1498" name="Servers">
-    <value>Servers</value>
+    <value>Servidores</value>
   </string>
   <string id="1499" name="Servers">
-    <value>Servers participating in cluster</value>
+    <value>Servidores participantes in grupo</value>
   </string>
   <string id="1500" name="Server name">
-    <value>Server Name</value>
+    <value>Nombre del Servidor</value>
   </string>
   <string id="1501" name="Server Address">
-    <value>Server Address</value>
+    <value>Dirección del Servidor</value>
   </string>
   <string id="1502" name="Server details">
-    <value>Server details</value>
+    <value>Detalles del Servidor</value>
   </string>
   <string id="1503" name="Send SMS">
-    <value>Send SMS</value>
+    <value>Enviar SMS</value>
   </string>
   <string id="1504" name="publishing_message">
-    <value>Publishing. User:</value>
+    <value>Publicando. Usuario:</value>
   </string>
   <string id="1505" name="cmd_line_admin">
-    <value>To save time and internet traffic you can use command line admin to backup/restore/upgrade: &lt;ol&gt; &lt;li&gt;go to OM install dir (for ex. /opt/red5)&lt;/li&gt; &lt;li&gt;stop OM (for ex. ./red5-shutdown.sh)&lt;/li&gt; &lt;li&gt;./admin.sh -b -file ~/today_om_backup.zip (create backup of current OM)&lt;/li&gt; &lt;li&gt;download archive with new OM&lt;/li&gt; &lt;li&gt;mv /opt/red5 /opt.red5.bak (move working version of OM just in case :))&lt;/li&gt; &lt;li&gt;extract downloaded OM to the /opt/red5&lt;/li&gt; &lt;li&gt;./admin.sh -i -file ~/today_om_backup.zip (or './admin.sh -i -file ~/today_om_backup.zip --db-type mysql --db-user om_user --db-pass om_user_pass' in case of you are using non-default DB )&lt;/li&gt; &lt;li&gt;start OM&lt;/li&gt; &lt;/ol&gt;</value>
+    <value>Para guardar hora y tráfico de internet puede emplear la linea de comandos como administrador para hacer backup/restaurar/actualizar: &lt;ol&gt; &lt;li&gt;ir al directorio de instalación en OM (por ejemplo /opt/red5)&lt;/li&gt; &lt;li&gt;detenga OM (por ejemplo ./red5-shutdown.sh)&lt;/li&gt; &lt;li&gt;./admin.sh -b -file  ~/today_om_backup.zip (hacer backup del actual OM)&lt;/li&gt; &lt;li&gt;descargar archivo con el nuevo OM&lt;/li&gt; &lt;li&gt; (mover versión de trabajo de OM solo en el caso :))&lt;/li&gt; &lt;li&gt;extraer el OM descargado a /opt/red5&lt;/li&gt; &lt;li&gt;./admin.sh -i -file ~/today_om_backup.zip (or './admin.sh -i -file ~/today_om_backup.zip --db-type mysql --db-user om_user --db-pass om_user_pass' en el caso de que esté usted empleando una base de datos DB distinta a la original )&lt;/li&gt; &lt;li&gt;start OM&lt;/li&gt; &lt;/ol&gt;</value>
   </string>
   <string id="1506" name="public_room_tooltip">
-    <value>Rooms common to all user</value>
+    <value>Salas comunes a todos los usuarios</value>
   </string>
   <string id="1507" name="private_room_tooltip">
-    <value>Rooms common to the current user group</value>
+    <value>Salas comunes al grupo de usuario actual</value>
   </string>
   <string id="1508" name="my_room_tooltip">
-    <value>Rooms of the current user</value>
+    <value>Salas del usuario actual</value>
   </string>
   <string id="1509" name="create_new_room">
-    <value>Create/Modify appointment special room</value>
+    <value>Crear/Modificar sala especial de cita</value>
   </string>
   <string id="1510" name="multiple_addresses">
-    <value>You can enter multiple addresses in the format: firstname1 lastname1 &lt;email1&gt;,"firstname2 lastname2" &lt;email2&gt;,'firstname3 lastname3' &lt;email3&gt;, ...</value>
+    <value>Puede insertar multiples direcciones en el formato: nombre1 apellidos1 &lt;correo1&gt;,"nombre2 apellidos2" &lt;correo2&gt;,'nombre3 apellidos3' &lt;correo3&gt;, ...</value>
   </string>
   <string id="1511" name="stream_volume">
-    <value>Adjust stream volume</value>
+    <value>Ajustar volumen de flujo</value>
   </string>
   <string id="1512" name="microphone_volume">
-    <value>Adjust microphone volume</value>
+    <value>Ajustar volumen del micrófono</value>
   </string>
   <string id="1513" name="chat_moderated">
-    <value>Is chat moderated</value>
+    <value>Es un chat moderado</value>
   </string>
   <string id="1514" name="chat_moderated">
-    <value>Allow message</value>
+    <value>Permitir mensajes</value>
   </string>
   <string id="1515" name="chat_opened">
-    <value>Chat panel opened by default</value>
+    <value>Panel de chat abierto por defecto</value>
   </string>
   <string id="1516" name="files_opened">
-    <value>Files panel opened by default</value>
+    <value>Panel de archivos abierto por defecto</value>
   </string>
   <string id="1517" name="server admin section lastping">
-    <value>Last ping</value>
+    <value>Último ping</value>
   </string>
   <string id="1518" name="server admin section lastping info">
-    <value>Every slave sends a ping to the master every 3 seconds (configurable). Slave lastPing must be smaller then 1 minute so that the master uses the slave.</value>
+    <value>Cada esclavo envió un ping al master cada 3 segundos (configurable). El último ping del esclavo debe ser inferior a 1 minuto así el master emplea al esclavo. Every slave sends a ping to the master every 3 seconds (configurable).</value>
   </string>
   <string id="1519" name="server admin port">
-    <value>HTTP Port</value>
+    <value>Puerto HTTP</value>
   </string>
   <string id="1520" name="server admin user">
-    <value>User (SOAP-Access)</value>
+    <value>Usuario (SOAP-Access)</value>
   </string>
   <string id="1521" name="server admin password">
-    <value>Password</value>
+    <value>Contraseña</value>
   </string>
   <string id="1522" name="server admin webapp path">
-    <value>Webapp path</value>
+    <value>Ruta Webapp</value>
   </string>
   <string id="1523" name="server admin protocol">
-    <value>Protocol</value>
+    <value>Protocolo</value>
   </string>
   <string id="1524" name="server admin ping running">
-    <value>Ping running</value>
+    <value>Ping funcionando</value>
   </string>
   <string id="1525" name="server admin active">
-    <value>Active</value>
+    <value>Activo</value>
   </string>
   <string id="1526" name="generate_hash">
-    <value>Generate URL</value>
+    <value>Generar URL</value>
   </string>
   <string id="1527" name="network testing link">
-    <value>Network testing</value>
+    <value>Testeando la Red</value>
   </string>
   <string id="1528" name="room_options">
-    <value>Auto select interview video pod</value>
+    <value>Auto seleccionar ventana de video en interview</value>
   </string>
   <string id="1529" name="font_underline">
-    <value>Underline</value>
+    <value>Subrayar</value>
   </string>
   <string id="1530" name="font_style">
-    <value>Font style</value>
+    <value>Estilo de fuente</value>
   </string>
   <string id="1531" name="allow_font_styles">
-    <value>Allow font styles</value>
+    <value>Permitir estilos de fuentes</value>
   </string>
   <string id="1532" name="font_color">
-    <value>Font color</value>
+    <value>Color de fuente</value>
   </string>
   <string id="1533" name="hyperlink">
     <value>Hyperlink</value>
   </string>
   <string id="1534" name="connection admin">
-    <value>Show session statistics</value>
+    <value>Mostrar estadísticas de sesión</value>
   </string>
   <string id="1535" name="connection admin">
-    <value>Session details</value>
+    <value>Detalles de la sesión</value>
   </string>
   <string id="1536" name="system_import">
-    <value>System import</value>
+    <value>Importar sistema</value>
   </string>
   <string id="1537" name="include_into_backup">
-    <value>Include uploaded files and recordings in backup</value>
+    <value>Incluir archivos subidos y grabaciones en el backup</value>
   </string>
   <string id="1538" name="room_admin_sip">
-    <value>Enable SIP transport in the room</value>
+    <value>Permitir transporte SIP en la sala</value>
   </string>
   <string id="1539" name="exclusive_audio_confirm">
-    <value>Do you really want to provide this user an exclusive audio?</value>
+    <value>En verdad quiere proveer a este usuario de audio exclusivo?</value>
   </string>
   <string id="1540" name="no_timezone">
-    <value>Please specify your timezone</value>
+    <value>Por favor, especifique su Zona Horaria</value>
   </string>
   <string id="1541" name="conference_room_type">
-    <value>conference (1-25 users)</value>
+    <value>conferencia (1-25 usuarios)</value>
   </string>
   <string id="1542" name="conference_room_type">
-    <value>restricted (1-150 users)</value>
+    <value>restringida (1-150 usuarios)</value>
   </string>
   <string id="1543" name="conference_room_type">
-    <value>interview (1:1 meeting with recording)</value>
+    <value>interview (1:1 reunión con grabación)</value>
   </string>
   <string id="1544" name="duplicate_key_error">
-    <value>Configuration with given key already exists, please specify another key or edit existent configuration</value>
+    <value>Ya existe la configuración con esa clave, por favor especifique otra clave o edite la configuración existente</value>
   </string>
   <string id="1545" name="content_is_saving">
-    <value>Content is Saving, Please wait.</value>
+    <value>El contenido se está Guardando, Por favor aguarde.</value>
   </string>
   <string id="1546" name="widget_welcome">
-    <value>Welcome</value>
+    <value>Bien Venidos</value>
   </string>
   <string id="1547" name="widget_welcome_desc">
-    <value>Widget displaying basic user info and support links</value>
+    <value>El Widget muestra información básica del usuario y links soportados</value>
   </string>
   <string id="1548" name="widgets_tab">
     <value>Widgets</value>
   </string>
   <string id="1549" name="about_title">
-    <value>About</value>
+    <value>Acerca de</value>
   </string>
   <string id="1550" name="about_name">
-    <value>Name</value>
+    <value>Nonmbre</value>
   </string>
   <string id="1551" name="about_version">
-    <value>Version</value>
+    <value>Versión</value>
   </string>
   <string id="1552" name="about_revision">
-    <value>Revision</value>
+    <value>Revisión</value>
   </string>
   <string id="1553" name="about_build_date">
-    <value>Build date</value>
+    <value>Fecha de construcción</value>
   </string>
   <string id="1554" name="about_build_date">
-    <value>Loading ...</value>
+    <value>Cargando ...</value>
   </string>
   <string id="1555" name="calendar_today">
-    <value>today</value>
+    <value>hoy</value>
   </string>
   <string id="1556" name="calendar_shortmonthnames">
-    <value>Jan</value>
+    <value>Ene</value>
   </string>
   <string id="1557" name="calendar_shortmonthnames">
     <value>Feb</value>
@@ -4701,7 +4701,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>Mar</value>
   </string>
   <string id="1559" name="calendar_shortmonthnames">
-    <value>Apr</value>
+    <value>Abr</value>
   </string>
   <string id="1560" name="calendar_shortmonthnames">
     <value>May</value>
@@ -4713,7 +4713,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>Jul</value>
   </string>
   <string id="1563" name="calendar_shortmonthnames">
-    <value>Aug</value>
+    <value>Ago</value>
   </string>
   <string id="1564" name="calendar_shortmonthnames">
     <value>Sep</value>
@@ -4725,31 +4725,31 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>Nov</value>
   </string>
   <string id="1567" name="calendar_shortmonthnames">
-    <value>Dec</value>
+    <value>Dic</value>
   </string>
   <string id="1568" name="remindertype_no_email">
-    <value>do not send notification</value>
+    <value>no envie notificación</value>
   </string>
   <string id="1569" name="remindertype_simple_email">
-    <value>simple email</value>
+    <value>correo simple</value>
   </string>
   <string id="1570" name="remindertype_iCal_email">
-    <value>iCal email</value>
+    <value>iCal correo</value>
   </string>
   <string id="1571" name="oauth2">
     <value>OAuth2</value>
   </string>
   <string id="1572" name="oauth2">
-    <value>Manage OAuth2 configurations</value>
+    <value>Administrar configuraciones de OAuth2</value>
   </string>
   <string id="1573" name="oauth2">
-    <value>Name</value>
+    <value>Nombre</value>
   </string>
   <string id="1574" name="oauth2">
-    <value>Enabled</value>
+    <value>Permitido</value>
   </string>
   <string id="1575" name="oauth2">
-    <value>Icon URL</value>
+    <value>Icono URL</value>
   </string>
   <string id="1576" name="oauth2">
     <value>client_id</value>
@@ -4758,43 +4758,43 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>client_secret</value>
   </string>
   <string id="1578" name="oauth2">
-    <value>Request key URL</value>
+    <value>Solicitud de clave URL</value>
   </string>
   <string id="1579" name="oauth2">
-    <value>Request token URL</value>
+    <value>Solicitud simbólica de URL</value>
   </string>
   <string id="1580" name="oauth2">
-    <value>Request info URL</value>
+    <value>Solicitud de información URL</value>
   </string>
   <string id="1581" name="oauth2">
-    <value>OAuth2 config</value>
+    <value>Configuración de OAuth2</value>
   </string>
   <string id="1582" name="oauth2">
-    <value>Login param name</value>
+    <value>Login parámetros nombre</value>
   </string>
   <string id="1583" name="oauth2">
-    <value>Email param name</value>
+    <value>Correo parámetros nombre</value>
   </string>
   <string id="1584" name="oauth2">
-    <value>Firstname param name</value>
+    <value>Nombre parámetros nombre</value>
   </string>
   <string id="1585" name="oauth2">
-    <value>Lastname param name</value>
+    <value>Apellidos parámetros nombre</value>
   </string>
   <string id="1586" name="oauth2">
-    <value>Request token attributes</value>
+    <value>Solicitud simbólica de atributos</value>
   </string>
   <string id="1587" name="oauth2">
-    <value>Redirect uri</value>
+    <value>Redireccionar uri</value>
   </string>
   <string id="1588" name="multiple_addresses">
-    <value>You can enter email address in the format: firstname1 lastname1 &lt;email1&gt; or "firstname2 lastname2" &lt;email2&gt; or 'firstname3 lastname3' &lt;email3&gt; or email</value>
+    <value>Puede introducir la dirección de correo en el formato: nombre1 apellidos1 &lt;email1&gt;  o "nombre2 apellidos2" &lt;email2&gt; o 'nombre3 apellidos3'  &lt;email3&gt; o email</value>
   </string>
   <string id="1589" name="notify_on_disconnect">
-    <value>Notify on disconnect</value>
+    <value>Notificar desconexión</value>
   </string>
   <string id="1590" name="dashboard.display">
-    <value>Display</value>
+    <value>Exponer</value>
   </string>
   <string id="1591" name="register.confirmation.sent">
     <value>Your account has been created. Confirmation email has been sent. You can now login.</value>
