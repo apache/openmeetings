@@ -159,9 +159,9 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 	
 	@Override
 	public void onClose(AjaxRequestTarget target, DialogButton button) {
-		if (button != null && button.match(deleteLbl)) {
+		if (delete.equals(button)) {
 			confirmDelete.open(target);
-		} else if (button != null && button.match(enterRoomLbl)) {
+		} else if (enterRoom.equals(button)) {
 			RoomEnterBehavior.roomEnter((MainPage)getPage(), target, getModelObject().getRoom().getRooms_id());
 		}
 	}

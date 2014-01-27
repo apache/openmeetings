@@ -229,49 +229,49 @@
 		<dependency org="org.simpleframework" name="simple-xml" rev="2.7" conf="openmeetings->*" transitive="false">
 			<include type="jar" />
 		</dependency>
-		<dependency org="org.apache.wicket" name="wicket-request" rev="6.12.0" conf="openmeetings->*" transitive="false">
+		<dependency org="org.apache.wicket" name="wicket-request" rev="6.13.0" conf="openmeetings->*" transitive="false">
 			<include type="jar" />
 		</dependency>
-		<dependency org="org.apache.wicket" name="wicket-util" rev="6.12.0" conf="openmeetings->*" transitive="false">
+		<dependency org="org.apache.wicket" name="wicket-util" rev="6.13.0" conf="openmeetings->*" transitive="false">
 			<include type="jar" />
 		</dependency>
-		<dependency org="org.apache.wicket" name="wicket-core" rev="6.12.0" conf="openmeetings->*" transitive="false">
+		<dependency org="org.apache.wicket" name="wicket-core" rev="6.13.0" conf="openmeetings->*" transitive="false">
 			<include type="jar" />
 		</dependency>
-		<dependency org="org.apache.wicket" name="wicket-auth-roles" rev="6.12.0" conf="openmeetings->*" transitive="false">
+		<dependency org="org.apache.wicket" name="wicket-auth-roles" rev="6.13.0" conf="openmeetings->*" transitive="false">
 			<include type="jar" />
 		</dependency>
-		<dependency org="org.apache.wicket" name="wicket-ioc" rev="6.12.0" conf="openmeetings->*" transitive="false">
+		<dependency org="org.apache.wicket" name="wicket-ioc" rev="6.13.0" conf="openmeetings->*" transitive="false">
 			<include type="jar" />
 		</dependency>
-		<dependency org="org.apache.wicket" name="wicket-extensions" rev="6.12.0" conf="openmeetings->*" transitive="false">
+		<dependency org="org.apache.wicket" name="wicket-extensions" rev="6.13.0" conf="openmeetings->*" transitive="false">
 			<include type="jar" />
 		</dependency>
-		<dependency org="org.apache.wicket" name="wicket-datetime" rev="6.12.0" conf="openmeetings->*" transitive="false">
+		<dependency org="org.apache.wicket" name="wicket-datetime" rev="6.13.0" conf="openmeetings->*" transitive="false">
 			<include type="jar" />
 		</dependency>
 		<dependency org="joda-time" name="joda-time" rev="2.3" conf="openmeetings->*" transitive="false">
 			<include type="jar" />
 		</dependency>
-		<dependency org="org.apache.wicket" name="wicket-devutils" rev="6.12.0" conf="openmeetings->*" transitive="false">
+		<dependency org="org.apache.wicket" name="wicket-devutils" rev="6.13.0" conf="openmeetings->*" transitive="false">
 			<include type="jar" />
 		</dependency>
-		<dependency org="org.apache.wicket" name="wicket-native-websocket-core" rev="0.14" conf="openmeetings->*" transitive="false">
+		<dependency org="org.apache.wicket" name="wicket-native-websocket-core" rev="0.15" conf="openmeetings->*" transitive="false">
 			<include type="jar" />
 		</dependency>
-		<dependency org="org.apache.wicket" name="wicket-native-websocket-tomcat" rev="0.14" conf="openmeetings->*" transitive="false">
+		<dependency org="org.apache.wicket" name="wicket-native-websocket-tomcat" rev="0.15" conf="openmeetings->*" transitive="false">
 			<include type="jar" />
 		</dependency>
-		<dependency org="com.googlecode.wicket-jquery-ui" name="wicket-jquery-ui-core" rev="6.12.0" conf="openmeetings->*" transitive="false">
+		<dependency org="com.googlecode.wicket-jquery-ui" name="wicket-jquery-ui-core" rev="6.13.0" conf="openmeetings->*" transitive="false">
 			<include type="jar" />
 		</dependency>
-		<dependency org="com.googlecode.wicket-jquery-ui" name="wicket-jquery-ui" rev="6.12.0" conf="openmeetings->*" transitive="false">
+		<dependency org="com.googlecode.wicket-jquery-ui" name="wicket-jquery-ui" rev="6.13.0" conf="openmeetings->*" transitive="false">
             <include type="jar" />
         </dependency>
-		<dependency org="com.googlecode.wicket-jquery-ui" name="wicket-jquery-ui-calendar" rev="6.12.0" conf="openmeetings->*" transitive="false">
+		<dependency org="com.googlecode.wicket-jquery-ui" name="wicket-jquery-ui-calendar" rev="6.13.0" conf="openmeetings->*" transitive="false">
 			<include type="jar" />
 		</dependency>
-		<dependency org="com.googlecode.wicket-jquery-ui" name="wicket-jquery-ui-plugins" rev="6.12.0" conf="openmeetings->*" transitive="false">
+		<dependency org="com.googlecode.wicket-jquery-ui" name="wicket-jquery-ui-plugins" rev="6.13.0" conf="openmeetings->*" transitive="false">
 			<include type="jar" />
 		</dependency>
 		<dependency org="ro.fortsoft.wicket.dashboard" name="wicket-dashboard-core" rev="0.9" conf="openmeetings->*" transitive="false">
@@ -285,10 +285,10 @@
 			<include type="jar" />
 		</dependency>
 		-->
-		<dependency org="org.wicketstuff" name="wicketstuff-urlfragment" rev="6.12.0" conf="openmeetings->*" transitive="false">
+		<dependency org="org.wicketstuff" name="wicketstuff-urlfragment" rev="6.13.0" conf="openmeetings->*" transitive="false">
 			<include type="jar" />
 		</dependency>
-		<dependency org="org.wicketstuff" name="wicketstuff-html5" rev="6.12.0" conf="openmeetings->*" transitive="false">
+		<dependency org="org.wicketstuff" name="wicketstuff-html5" rev="6.13.0" conf="openmeetings->*" transitive="false">
 			<include type="jar" />
 		</dependency>
 		<dependency org="com.vaynberg.wicket.select2" name="wicket-select2" rev="2.2.2" conf="openmeetings->*" transitive="false">
@@ -395,16 +395,16 @@
 		<!--  END OF MySQL Driver -->
 
 		<!-- Tomcat 7 --> 
-		<dependency org="org.apache.tomcat.embed" name="tomcat-embed-core" conf="tomcat7->*" rev="7.0.42" transitive="false" >
+		<dependency org="org.apache.tomcat.embed" name="tomcat-embed-core" conf="tomcat7->*" rev="7.0.50" transitive="false" >
 			<include type="jar" />
 		</dependency>
-		<dependency org="org.apache.tomcat.embed" name="tomcat-embed-jasper" conf="tomcat7->*" rev="7.0.42" transitive="false" >
+		<dependency org="org.apache.tomcat.embed" name="tomcat-embed-jasper" conf="tomcat7->*" rev="7.0.50" transitive="false" >
 			<include type="jar" />
 		</dependency>
-		<dependency org="org.apache.tomcat.embed" name="tomcat-embed-logging-juli" conf="tomcat7->*" rev="7.0.42" transitive="false" >
+		<dependency org="org.apache.tomcat.embed" name="tomcat-embed-logging-juli" conf="tomcat7->*" rev="7.0.50" transitive="false" >
 			<include type="jar" />
 		</dependency>
-		<dependency org="org.apache.tomcat.embed" name="tomcat-embed-logging-log4j" conf="tomcat7->*" rev="7.0.42" transitive="false" >
+		<dependency org="org.apache.tomcat.embed" name="tomcat-embed-logging-log4j" conf="tomcat7->*" rev="7.0.50" transitive="false" >
 			<include type="jar" />
 		</dependency>
 		<dependency org="tomcatplugin" name="tomcatplugin" rev="1.4" conf="tomcat7->*" transitive="false">

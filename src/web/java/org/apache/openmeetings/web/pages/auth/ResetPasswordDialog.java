@@ -164,7 +164,7 @@ public class ResetPasswordDialog extends AbstractFormDialog<String> {
 	
 	@Override
 	public void onClose(AjaxRequestTarget target, DialogButton button) {
-		if (button != null && button.match(resetLbl)){
+		if (resetBtn.equals(button)){
 			confirmReset.open(target);
 		} else {
 			setResponsePage(Application.get().getSignInPageClass());

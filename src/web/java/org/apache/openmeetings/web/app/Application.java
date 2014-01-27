@@ -119,8 +119,9 @@ public class Application extends AuthenticatedWebApplication {
 		
 		Bootstrap.install(Application.get(), new BootstrapSettings());
 		
-		getRootRequestMapperAsCompound().add(new NoVersionMapper(getHomePage()));
-		getRootRequestMapperAsCompound().add(new NoVersionMapper("notinited", NotInitedPage.class));
+		mountPage("notinited", NotInitedPage.class);
+		//getRootRequestMapperAsCompound().add(new NoVersionMapper(getHomePage()));
+		//getRootRequestMapperAsCompound().add(new NoVersionMapper("notinited", NotInitedPage.class));
 		mountPage("swf", SwfPage.class);
 		mountPage("install", InstallWizardPage.class);
 		mountPage("signin", getSignInPageClass());
@@ -132,7 +133,7 @@ public class Application extends AuthenticatedWebApplication {
 		mountResource("/recordings/mp4/${id}", new Mp4RecordingResourceReference());
 		mountResource("/recordings/ogg/${id}", new OggRecordingResourceReference());
 	}
-	
+
 	private static class NoVersionMapper extends MountedMapper {
 		public NoVersionMapper(final Class<? extends IRequestablePage> pageClass) {
 			this("/", pageClass);
@@ -156,7 +157,7 @@ public class Application extends AuthenticatedWebApplication {
 			}
 		}
 	}
-	
+
 	public static OmAuthenticationStrategy getAuthenticationStrategy() {
 		return (OmAuthenticationStrategy)get().getSecuritySettings().getAuthenticationStrategy();
 	}

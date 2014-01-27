@@ -153,7 +153,7 @@ public class ForgetPasswordDialog extends AbstractFormDialog<String> {
 	}
 	
 	public void onClose(AjaxRequestTarget target, DialogButton button) {
-		if (button != null && button.match(sendLbl)){
+		if (send.equals(button)){
 			confirmDialog.open(target);
 		} else {
 			s.open(target);

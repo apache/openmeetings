@@ -44,7 +44,7 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.protocol.ws.IWebSocketSettings;
 import org.apache.wicket.protocol.ws.api.IWebSocketConnection;
-import org.apache.wicket.protocol.ws.api.IWebSocketConnectionRegistry;
+import org.apache.wicket.protocol.ws.api.registry.IWebSocketConnectionRegistry;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 

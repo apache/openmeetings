@@ -73,9 +73,9 @@ public class UserInfoDialog extends AbstractDialog<String> {
 	}
 	
 	public void onClose(AjaxRequestTarget target, DialogButton button) {
-		if (button != null && button.match(messageLbl)) {
+		if (message.equals(button)) {
 			newMessage.reset(false).open(target, userId);
-		} else if (button != null && button.match(contactsLbl)) {
+		} else if (contacts.equals(button)) {
 			ContactsHelper.addUserToContactList(userId);
 		}
 	}

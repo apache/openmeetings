@@ -160,11 +160,6 @@ public class CalendarPanel extends UserPanel {
 			}
 			
 			@Override
-			public boolean isEditable() {
-				return true;
-			}
-			
-			@Override
 			public boolean isEventDropEnabled() {
 				return true;
 			}
@@ -226,7 +221,7 @@ public class CalendarPanel extends UserPanel {
 				dao.update(a, getBaseUrl(), getUserId());
 				//FIXME add feedback info
 			}
-			
+
 			@Override
 			public void onEventResize(AjaxRequestTarget target, int eventId, long delta) {
 				AppointmentDao dao = getDao();

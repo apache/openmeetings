@@ -170,7 +170,7 @@ public class RegisterDialog extends AbstractFormDialog<String> {
 	}
 	
 	public void onClose(AjaxRequestTarget target, DialogButton button) {
-		if (button != null && button.match(registerLbl)){
+		if (registerBtn.equals(button)){
 			confirmRegistration.open(target);
 		} else {
 			s.open(target);

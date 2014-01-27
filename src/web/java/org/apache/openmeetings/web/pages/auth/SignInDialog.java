@@ -146,7 +146,7 @@ public class SignInDialog extends AbstractFormDialog<String> {
 	
 	@Override
 	public void onClose(AjaxRequestTarget target, DialogButton button) {
-		if (button != null && button.match(registerLbl)) {
+		if (registerBtn.equals(button)) {
 			r.setBrowserTZOffset(target, browserTZOffset.getModelObject());
 			r.open(target);
 		}
@@ -180,7 +180,7 @@ public class SignInDialog extends AbstractFormDialog<String> {
 	
 	@Override
 	public void onClick(AjaxRequestTarget target, DialogButton button) {
-		if ((button != null && button.match(registerLbl)) || WebSession.get().isSignedIn()) {
+		if (registerBtn.equals(button) || WebSession.get().isSignedIn()) {
 			super.onClick(target, button);
 		}
 	}
