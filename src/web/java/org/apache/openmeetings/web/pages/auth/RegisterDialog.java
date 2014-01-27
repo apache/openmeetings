@@ -22,7 +22,7 @@ import static org.apache.openmeetings.db.util.UserHelper.getMinLoginLength;
 import static org.apache.openmeetings.db.util.UserHelper.getMinPasswdLength;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.openmeetings.web.app.Application.getBean;
-import static org.apache.openmeetings.web.app.WebSession.getAvailableTimezones;
+import static org.apache.openmeetings.web.app.WebSession.AVAILABLE_TIMEZONES;
 import static org.apache.openmeetings.web.app.WebSession.getBaseUrl;
 import static org.apache.wicket.validation.validator.StringValidator.minimumLength;
 
@@ -75,38 +75,39 @@ public class RegisterDialog extends AbstractFormDialog<String> {
 	private String registerLbl = WebSession.getString(121);
 	private DialogButton registerBtn = new DialogButton(registerLbl);
 	private FeedbackPanel feedback = new FeedbackPanel("feedback");
-	private final IModel<String> tzModel = Model.of(WebSession.get().getTimeZoneByBrowserLocale(0));
-	private final DropDownChoice<String> tzDropDown = new DropDownChoice<String>("tz", tzModel, getAvailableTimezones());
+	private final IModel<String> tzModel = Model.of(WebSession.get().getClientTimeZone());
+	private final DropDownChoice<String> tzDropDown = new DropDownChoice<String>("tz", tzModel, AVAILABLE_TIMEZONES);
 	private RegisterForm form;
 	private SignInDialog s;
-    private String firstName;
-    private String lastName;
-    private String login;
-    private String password;
-    private String email;
-    private State state;
-    private FieldLanguage lang;
+	private String firstName;
+	private String lastName;
+	private String login;
+	private String password;
+	private String email;
+	private State state;
+	private FieldLanguage lang;
 
-    final MessageDialog confirmRegistration;
-    private boolean sendConfirmation = false;
-    private boolean sendEmailAtRegister = false;
-    
+	final MessageDialog confirmRegistration;
+	private boolean sendConfirmation = false;
+	private boolean sendEmailAtRegister = false;
+
 	public RegisterDialog(String id) {
 		super(id, WebSession.getString(113));
 		add(form = new RegisterForm("form"));
 		form.setOutputMarkupId(true);
 		tzDropDown.setOutputMarkupId(true);
-		
-		confirmRegistration = new MessageDialog("confirmRegistration", WebSession.getString(235), WebSession.getString(674), DialogButtons.OK, DialogIcon.INFO) {
+
+		confirmRegistration = new MessageDialog("confirmRegistration", WebSession.getString(235),
+				WebSession.getString(674), DialogButtons.OK, DialogIcon.INFO) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
 			public void onConfigure(JQueryBehavior behavior) {
 				super.onConfigure(behavior);
-		        behavior.setOption("dialogClass", Options.asString("no-close"));
+				behavior.setOption("dialogClass", Options.asString("no-close"));
 				behavior.setOption("closeOnEscape", false);
 			}
-			
+
 			public void onClose(AjaxRequestTarget target, DialogButton button) {
 				s.open(target);
 			}
@@ -118,46 +119,47 @@ public class RegisterDialog extends AbstractFormDialog<String> {
 	@Override
 	public void onConfigure(JQueryBehavior behavior) {
 		super.onConfigure(behavior);
-        behavior.setOption("dialogClass", Options.asString("no-close"));
+		behavior.setOption("dialogClass", Options.asString("no-close"));
 		behavior.setOption("closeOnEscape", false);
 	}
-	
+
 	public void setSignInDialog(SignInDialog s) {
 		this.s = s;
 	}
 
-	public void setBrowserTZOffset(AjaxRequestTarget target, int browserTZOffset) {
-		tzModel.setObject(WebSession.get().getTimeZoneByBrowserLocale(browserTZOffset));
-		target.add(tzDropDown);
+	public void setClientTimeZone() {
+		tzModel.setObject(WebSession.get().getClientTimeZone());
 	}
 	
 	@Override
 	public int getWidth() {
 		return 400;
 	}
-	
+
 	@Override
 	protected List<DialogButton> getButtons() {
 		return Arrays.asList(registerBtn, cancelBtn);
 	}
 
 	public void reset() {
-	    firstName = null;
-	    lastName = null;
-	    login = null;
-	    password = null;
-	    form.confirmPassword.setModelObject(null);
-	    email = null;
+		firstName = null;
+		lastName = null;
+		login = null;
+		password = null;
+		form.confirmPassword.setModelObject(null);
+		email = null;
 		lang = WebSession.get().getLanguageByBrowserLocale();
 		state = WebSession.get().getCountryByBrowserLocale();
 	}
-	
+
 	public void onOpen(AjaxRequestTarget target) {
 		String baseURL = getBaseUrl();
-		sendEmailAtRegister = 1 == getBean(ConfigurationDao.class).getConfValue("sendEmailAtRegister", Integer.class, "0");
+		sendEmailAtRegister = 1 == getBean(ConfigurationDao.class).getConfValue("sendEmailAtRegister", Integer.class,
+				"0");
 		sendConfirmation = baseURL != null
 				&& !baseURL.isEmpty()
-				&& 1 == getBean(ConfigurationDao.class).getConfValue("sendEmailWithVerficationCode", Integer.class, "0");
+				&& 1 == getBean(ConfigurationDao.class)
+						.getConfValue("sendEmailWithVerficationCode", Integer.class, "0");
 		long messageCode = 236;
 		if (sendConfirmation && sendEmailAtRegister) {
 			messageCode = 674;
@@ -168,9 +170,9 @@ public class RegisterDialog extends AbstractFormDialog<String> {
 		reset();
 		target.add(form);
 	}
-	
+
 	public void onClose(AjaxRequestTarget target, DialogButton button) {
-		if (registerBtn.equals(button)){
+		if (registerBtn.equals(button)) {
 			confirmRegistration.open(target);
 		} else {
 			s.open(target);
@@ -194,33 +196,27 @@ public class RegisterDialog extends AbstractFormDialog<String> {
 
 	@Override
 	protected void onSubmit(AjaxRequestTarget target) {
-		String hash = ManageCryptStyle.getInstanceOfCrypt()
-				.createPassPhrase(login + CalendarPatterns.getDateWithTimeByMiliSeconds(new Date()));
+		String hash = ManageCryptStyle.getInstanceOfCrypt().createPassPhrase(
+				login + CalendarPatterns.getDateWithTimeByMiliSeconds(new Date()));
 
-		String redirectPage = getRequestCycle().urlFor(ActivatePage.class, new PageParameters().add("u", hash)).toString().substring(2);
+		String redirectPage = getRequestCycle().urlFor(ActivatePage.class, new PageParameters().add("u", hash))
+				.toString().substring(2);
 		String baseURL = getBaseUrl() + redirectPage;
 		try {
-			getBean(IUserManager.class).registerUserInit(3, 1, 0, 1,
-					login, password, lastName,
-					firstName, email, new Date(), "" /*street*/,
-					"" /*additionalname*/, "" /*fax*/, "" /*zip*/,
-					state.getState_id(),
-					"" /*town*/, lang.getLanguage_id(), true /*sendWelcomeMessage*/,
+			getBean(IUserManager.class).registerUserInit(3, 1, 0, 1, login, password, lastName, firstName, email,
+					new Date(), "" /* street */, "" /* additionalname */, "" /* fax */, "" /* zip */, state.getState_id(),
+					"" /* town */, lang.getLanguage_id(), true /* sendWelcomeMessage */,
 					Arrays.asList(getBean(ConfigurationDao.class).getConfValue("default_domain_id", Long.class, null)),
-					"" /*phone*/, false, baseURL,
-					sendConfirmation,
-					TimeZone.getTimeZone(tzModel.getObject()),
-					false /*forceTimeZoneCheck*/,
-					"" /*userOffers*/, "" /*userSearchs*/,
-					false /*showContactData*/,
-					true /*showContactDataToContacts*/, hash);
-			
+					"" /* phone */, false, baseURL, sendConfirmation, TimeZone.getTimeZone(tzModel.getObject()),
+					false /* forceTimeZoneCheck */, "" /* userOffers */, "" /* userSearchs */, false /* showContactData */,
+					true /* showContactDataToContacts */, hash);
+
 		} catch (Exception e) {
 			log.error("[registerUser]", e);
 		}
 
 	}
-	
+
 	class RegisterForm extends StatelessForm<Void> {
 		private static final long serialVersionUID = 1701373326213602431L;
 		private PasswordTextField confirmPassword;
@@ -236,59 +232,59 @@ public class RegisterDialog extends AbstractFormDialog<String> {
 			super(id);
 			add(feedback.setOutputMarkupId(true));
 			ConfigurationDao cfgDao = getBean(ConfigurationDao.class);
-			add(firstNameField = new RequiredTextField<String>("firstName", new PropertyModel<String>(RegisterDialog.this, "firstName")));
+			add(firstNameField = new RequiredTextField<String>("firstName", new PropertyModel<String>(
+					RegisterDialog.this, "firstName")));
 			firstNameField.setLabel(Model.of(WebSession.getString(117)));
-			add(lastNameField = new RequiredTextField<String>("lastName", new PropertyModel<String>(RegisterDialog.this, "lastName")));
+			add(lastNameField = new RequiredTextField<String>("lastName", new PropertyModel<String>(
+					RegisterDialog.this, "lastName")));
 			lastNameField.setLabel(Model.of(WebSession.getString(118)));
-			add(loginField = new RequiredTextField<String>("login", new PropertyModel<String>(RegisterDialog.this, "login")));
+			add(loginField = new RequiredTextField<String>("login", new PropertyModel<String>(RegisterDialog.this,
+					"login")));
 			loginField.setLabel(Model.of(WebSession.getString(114)));
 			loginField.add(minimumLength(getMinLoginLength(cfgDao)));
-			add(passwordField = new PasswordTextField("password", new PropertyModel<String>(RegisterDialog.this, "password")));
+			add(passwordField = new PasswordTextField("password", new PropertyModel<String>(RegisterDialog.this,
+					"password")));
 			passwordField.setLabel(Model.of(WebSession.getString(115)));
 			passwordField.setResetPassword(true).add(minimumLength(getMinPasswdLength(cfgDao)));
 			add(confirmPassword = new PasswordTextField("confirmPassword", new Model<String>()).setResetPassword(true));
 			confirmPassword.setLabel(Model.of(WebSession.getString(116)));
-			add(emailField = new RequiredTextField<String>("email", new PropertyModel<String>(RegisterDialog.this, "email")));
+			add(emailField = new RequiredTextField<String>("email", new PropertyModel<String>(RegisterDialog.this,
+					"email")));
 			emailField.setLabel(Model.of(WebSession.getString(119)));
 			emailField.add(RfcCompliantEmailAddressValidator.getInstance());
-			add(langField = new DropDownChoice<FieldLanguage>("lang"
-					, new PropertyModel<FieldLanguage>(RegisterDialog.this, "lang")
-					, getBean(FieldLanguageDao.class).getLanguages()
-					, new ChoiceRenderer<FieldLanguage>("name", "language_id"))
-				);
+			add(langField = new DropDownChoice<FieldLanguage>("lang", new PropertyModel<FieldLanguage>(
+					RegisterDialog.this, "lang"), getBean(FieldLanguageDao.class).getLanguages(),
+					new ChoiceRenderer<FieldLanguage>("name", "language_id")));
 			langField.setRequired(true).setLabel(Model.of(WebSession.getString(111)));
 			add(tzDropDown.setRequired(true).setLabel(Model.of(WebSession.getString(1143))));
-			add(stateField = new DropDownChoice<State>("state"
-					, new PropertyModel<State>(RegisterDialog.this, "state")
-					, getBean(StateDao.class).getStates()
-					, new ChoiceRenderer<State>("name", "state_id"))
-				);
+			add(stateField = new DropDownChoice<State>("state", new PropertyModel<State>(RegisterDialog.this, "state"),
+					getBean(StateDao.class).getStates(), new ChoiceRenderer<State>("name", "state_id")));
 			stateField.setRequired(true).setLabel(Model.of(WebSession.getString(120)));
-			add(new AjaxButton("submit") { //FAKE button so "submit-on-enter" works as expected
+			add(new AjaxButton("submit") { // FAKE button so "submit-on-enter" works as expected
 				private static final long serialVersionUID = -3612671587183668912L;
 
 				@Override
 				protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
 					RegisterDialog.this.onSubmit(target);
 				}
-				
+
 				@Override
 				protected void onError(AjaxRequestTarget target, Form<?> form) {
 					RegisterDialog.this.onError(target);
 				}
 			});
 		}
-		
+
 		@Override
 		protected void onValidate() {
 			if (passwordField.getConvertedInput() == null
 					|| !passwordField.getConvertedInput().equals(confirmPassword.getConvertedInput())) {
 				error(WebSession.getString(232));
 			}
-			if(!getBean(AdminUserDao.class).checkUserEMail(emailField.getConvertedInput(), null)) {
+			if (!getBean(AdminUserDao.class).checkUserEMail(emailField.getConvertedInput(), null)) {
 				error(WebSession.getString(1000));
 			}
-			if(!getBean(AdminUserDao.class).checkUserLogin(loginField.getConvertedInput(), null)) {
+			if (!getBean(AdminUserDao.class).checkUserLogin(loginField.getConvertedInput(), null)) {
 				error(WebSession.getString(105));
 			}
 		}

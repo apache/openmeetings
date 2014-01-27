@@ -32,6 +32,7 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
@@ -88,6 +89,7 @@ public class WebSession extends AbstractAuthenticatedWebSession {
 	private String SID = null;
 	private OmUrlFragment area = null;
 	private TimeZone tz;
+	private TimeZone browserTz;
 	private SimpleDateFormat ISO8601FORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
 	private DateFormat sdf;
 	private Dashboard dashboard;
@@ -97,6 +99,8 @@ public class WebSession extends AbstractAuthenticatedWebSession {
 	private Long recordingId;
 	private String externalType;
 	private static Set<Long> STRINGS_WITH_APP = new HashSet<Long>(); //FIXME need to be removed
+	public final static List<String> AVAILABLE_TIMEZONES = Arrays.asList(TimeZone.getAvailableIDs());
+	public final static Set<String> AVAILABLE_TIMEZONE_SET = new LinkedHashSet<String>(AVAILABLE_TIMEZONES);
 	static {
 		STRINGS_WITH_APP.addAll(Arrays.asList(499L, 500L, 506L, 511L, 512L, 513L, 517L, 532L, 622L, 804L
 				, 909L, 952L, 978L, 981L, 984L, 989L, 990L, 999L, 1151L, 1155L, 1157L, 1158L, 1194L));
@@ -116,6 +120,8 @@ public class WebSession extends AbstractAuthenticatedWebSession {
 		sdf = null;
 		recordingId = null;
 		externalType = null;
+		tz = null;
+		browserTz = null;
 	}
 	
 	@Override
@@ -370,23 +376,27 @@ public class WebSession extends AbstractAuthenticatedWebSession {
 		return states.get(0);
 	}
 
-	public static List<String> getAvailableTimezones() {
-		return Arrays.asList(TimeZone.getAvailableIDs());
-	}
-	
-	private boolean checkTimezone(TimeZone tz, int offsetByMinutes) {
-		return offsetByMinutes == (tz.getRawOffset() / MILLIS_IN_MINUTE);
-	}
-	
-	public String getTimeZoneByBrowserLocale(int offsetByMinutes){
-		TimeZone tz = Calendar.getInstance(getBrowserLocale()).getTimeZone();
-		if (!checkTimezone(tz, offsetByMinutes)){
-			String[] tzIds = TimeZone.getAvailableIDs(MILLIS_IN_MINUTE * offsetByMinutes);
-			if (tzIds != null && tzIds.length > 0) {
-				return tzIds[0];
+	public String getClientTimeZone() {
+		if (browserTz == null) {
+			try {
+				browserTz = getClientInfo().getProperties().getTimeZone();
+				if (!AVAILABLE_TIMEZONE_SET.contains(browserTz.getID())) {
+					for (String availableID : AVAILABLE_TIMEZONES) {
+						if (availableID.startsWith("Etc")) {
+							continue; //somehow these timezones has reverted rules
+						}
+						TimeZone zone = TimeZone.getTimeZone(availableID);
+						if (zone.hasSameRules(browserTz)) {
+							browserTz = zone;
+							break;
+						}
+					}
+				}
+			} catch (Exception e) {
+				browserTz = Calendar.getInstance(getBrowserLocale()).getTimeZone();
 			}
 		}
-		return tz.getID();
+		return browserTz == null ? null : browserTz.getID();
 	}
 	
 	private void initDashboard() {

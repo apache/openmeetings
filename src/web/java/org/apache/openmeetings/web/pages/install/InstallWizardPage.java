@@ -19,11 +19,12 @@
 package org.apache.openmeetings.web.pages.install;
 
 import org.apache.openmeetings.web.app.Application;
-import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.ErrorMessagePanel;
 import org.apache.openmeetings.web.pages.BaseNotInitedPage;
-import org.apache.openmeetings.web.util.TimeZoneOffsetAjaxBehavior;
 import org.apache.wicket.RestartResponseException;
+import org.apache.wicket.ajax.AjaxClientInfoBehavior;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.protocol.http.request.WebClientInfo;
 
 public class InstallWizardPage extends BaseNotInitedPage {
 	private static final long serialVersionUID = -438388395397826138L;
@@ -36,14 +37,14 @@ public class InstallWizardPage extends BaseNotInitedPage {
 		try {
 			add(wizard = new InstallWizard("wizard"));
 			// This code is required to detect time zone offset
-			add(new TimeZoneOffsetAjaxBehavior() {
-				private static final long serialVersionUID = 2558971671370041214L;
-				
-				@Override
-				protected void customFunction(){
-					wizard.initTzDropDown(WebSession.get().getBrowserTimeZoneOffset());
-				}
+			add(new AjaxClientInfoBehavior() {
+				private static final long serialVersionUID = 1L;
 
+				@Override
+				protected void onClientInfo(AjaxRequestTarget target, WebClientInfo clientInfo) {
+					super.onClientInfo(target, clientInfo);
+					wizard.initTzDropDown();
+				}
 			});
 		} catch (RestartResponseException re) {
 			throw re;

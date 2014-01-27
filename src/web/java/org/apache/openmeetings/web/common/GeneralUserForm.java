@@ -20,6 +20,7 @@ package org.apache.openmeetings.web.common;
 
 import static org.apache.openmeetings.db.util.UserHelper.getMinPasswdLength;
 import static org.apache.openmeetings.web.app.Application.getBean;
+import static org.apache.openmeetings.web.app.WebSession.AVAILABLE_TIMEZONES;
 import static org.apache.openmeetings.web.app.WebSession.getLanguage;
 import static org.apache.wicket.validation.validator.StringValidator.minimumLength;
 
@@ -93,7 +94,7 @@ public class GeneralUserForm extends Form<User> {
 		add(new TextField<String>("firstname"));
 		add(new TextField<String>("lastname"));
 		
-		add(new DropDownChoice<String>("timeZoneId", WebSession.getAvailableTimezones()));
+		add(new DropDownChoice<String>("timeZoneId", AVAILABLE_TIMEZONES));
 
 		add(new DropDownChoice<FieldLanguage>("language"
 				, new PropertyModel<FieldLanguage>(this, "lang")

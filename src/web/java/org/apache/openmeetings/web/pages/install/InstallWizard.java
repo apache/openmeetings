@@ -20,6 +20,8 @@ package org.apache.openmeetings.web.pages.install;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.USER_LOGIN_MINIMUM_LENGTH;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.USER_PASSWORD_MINIMUM_LENGTH;
+import static org.apache.openmeetings.web.app.WebSession.AVAILABLE_TIMEZONES;
+import static org.apache.openmeetings.web.app.WebSession.AVAILABLE_TIMEZONE_SET;
 import static org.apache.wicket.validation.validator.RangeValidator.range;
 import static org.apache.wicket.validation.validator.StringValidator.minimumLength;
 
@@ -80,16 +82,8 @@ public class InstallWizard extends Wizard {
 	private final InstallStep installStep;
 	private Throwable th = null;
 	
-	public void initTzDropDown(int browserTZOffset){
-        List<String> tzList = WebSession.getAvailableTimezones();
-        paramsStep1.tzDropDown.option = tzList.get(0); 
-		String tzId = WebSession.get().getTimeZoneByBrowserLocale(browserTZOffset);
-		for (String tz : tzList) {
-			if (tz.equals(tzId)) {
-				paramsStep1.tzDropDown.option = tz;
-				break;
-			}
-		}
+	public void initTzDropDown() {
+		paramsStep1.tzDropDown.init();
 	}
 	
 	//onInit, applyState
@@ -428,12 +422,17 @@ public class InstallWizard extends Wizard {
 	}
 	
 	private final class TzDropDown extends WizardDropDown<String> {
-		private static final long serialVersionUID = 6084349711073918837L;
+		private static final long serialVersionUID = 1L;
 
+		public void init() {
+			List<String> tzList = AVAILABLE_TIMEZONES;
+			String tzId = WebSession.get().getClientTimeZone();
+			option = AVAILABLE_TIMEZONE_SET.contains(tzId) ? tzId : tzList.get(0);
+		}
+		
 		public TzDropDown(String id) throws Exception {
 			super(id);
-            List<String> tzList = WebSession.getAvailableTimezones();
-			setChoices(tzList);
+			setChoices(AVAILABLE_TIMEZONES);
 			setChoiceRenderer(new IChoiceRenderer<String>() {
 				private static final long serialVersionUID = 1L;
 				
@@ -444,14 +443,6 @@ public class InstallWizard extends Wizard {
 					return object.toString();
 				}
 			});
-			option = tzList.get(0);
-			String tzId = WebSession.get().getTimeZoneByBrowserLocale(WebSession.get().getBrowserTimeZoneOffset());
-			for (String tz : tzList) {
-				if (tz.equals(tzId)) {
-					option = tz;
-					break;
-				}
-			}
 		}
 		
 		@Override

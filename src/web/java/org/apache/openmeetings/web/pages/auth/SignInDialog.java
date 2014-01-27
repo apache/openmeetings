@@ -35,9 +35,9 @@ import org.apache.openmeetings.web.app.OmAuthenticationStrategy;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.pages.SwfPage;
 import org.apache.openmeetings.web.util.BaseUrlAjaxBehavior;
-import org.apache.openmeetings.web.util.TimeZoneOffsetAjaxBehavior;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.RestartResponseException;
+import org.apache.wicket.ajax.AjaxClientInfoBehavior;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
@@ -48,7 +48,6 @@ import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.form.HiddenField;
 import org.apache.wicket.markup.html.form.PasswordTextField;
 import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.form.StatelessForm;
@@ -82,25 +81,12 @@ public class SignInDialog extends AbstractFormDialog<String> {
     private ForgetPasswordDialog f;
     private LdapConfig domain;
     private String ldapConfigFileName;
-	private HiddenField<Integer> browserTZOffset;
 	
 	public SignInDialog(String id) {
 		super(id, WebSession.getString(108));
 		add(form = new SignInForm("signin"));
-		browserTZOffset = new HiddenField<Integer>("tzOffset", Model.of(new Integer(0)));
-		add(browserTZOffset);
-
-		// This code is required to detect time zone offset
-		add(new TimeZoneOffsetAjaxBehavior() {
-			private static final long serialVersionUID = 2954455885345860021L;
-			
-			@Override
-			protected void customFunction(){		
-				browserTZOffset.setModelObject(WebSession.get().getBrowserTimeZoneOffset());
-			}
-			
-		});
 		add(new BaseUrlAjaxBehavior());
+		add(new AjaxClientInfoBehavior());
 	}
 
 	public void setRegisterDialog(RegisterDialog r) {
@@ -147,7 +133,7 @@ public class SignInDialog extends AbstractFormDialog<String> {
 	@Override
 	public void onClose(AjaxRequestTarget target, DialogButton button) {
 		if (registerBtn.equals(button)) {
-			r.setBrowserTZOffset(target, browserTZOffset.getModelObject());
+			r.setClientTimeZone();
 			r.open(target);
 		}
 	}
