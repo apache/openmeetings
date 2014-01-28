@@ -50,6 +50,7 @@ import org.apache.wicket.Page;
 import org.apache.wicket.RestartResponseException;
 import org.apache.wicket.authroles.authentication.AbstractAuthenticatedWebSession;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebApplication;
+import org.apache.wicket.core.request.handler.BookmarkableListenerInterfaceRequestHandler;
 import org.apache.wicket.core.request.handler.ListenerInterfaceRequestHandler;
 import org.apache.wicket.core.request.mapper.MountedMapper;
 import org.apache.wicket.markup.MarkupFactory;
@@ -119,9 +120,8 @@ public class Application extends AuthenticatedWebApplication {
 		
 		Bootstrap.install(Application.get(), new BootstrapSettings());
 		
-		mountPage("notinited", NotInitedPage.class);
-		//getRootRequestMapperAsCompound().add(new NoVersionMapper(getHomePage()));
-		//getRootRequestMapperAsCompound().add(new NoVersionMapper("notinited", NotInitedPage.class));
+		getRootRequestMapperAsCompound().add(new NoVersionMapper(getHomePage()));
+		getRootRequestMapperAsCompound().add(new NoVersionMapper("notinited", NotInitedPage.class));
 		mountPage("swf", SwfPage.class);
 		mountPage("install", InstallWizardPage.class);
 		mountPage("signin", getSignInPageClass());
@@ -150,7 +150,7 @@ public class Application extends AuthenticatedWebApplication {
 		
 		@Override
 		public Url mapHandler(IRequestHandler requestHandler) {
-			if (requestHandler instanceof ListenerInterfaceRequestHandler) {
+			if (requestHandler instanceof ListenerInterfaceRequestHandler || requestHandler instanceof BookmarkableListenerInterfaceRequestHandler) {
 				return null;
 			} else {
 				return super.mapHandler(requestHandler);
