@@ -32,14 +32,12 @@ import org.apache.openmeetings.db.entity.basic.ChatMessage;
 import org.apache.openmeetings.web.common.UserPanel;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.form.AjaxFormSubmitBehavior;
 import org.apache.wicket.ajax.json.JSONException;
 import org.apache.wicket.ajax.json.JSONObject;
 import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
-import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.protocol.ws.IWebSocketSettings;
@@ -48,6 +46,7 @@ import org.apache.wicket.protocol.ws.api.registry.IWebSocketConnectionRegistry;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 
+import com.googlecode.wicket.jquery.ui.form.button.AjaxButton;
 import com.googlecode.wicket.jquery.ui.plugins.emoticons.EmoticonsBehavior;
 import com.googlecode.wicket.jquery.ui.plugins.wysiwyg.WysiwygEditor;
 
@@ -62,6 +61,7 @@ public class ChatPanel extends UserPanel {
 			.put("msg", new JSONObject()
 				.put("id", m.getId())
 				.put("message", m.getMessage())
+				.put("from", m.getFromUser().getFirstname() + " " + m.getFromUser().getLastname())
 				.put("sent", getDateFormat().format(m.getSent()))
 			);
 	}
@@ -100,10 +100,11 @@ public class ChatPanel extends UserPanel {
 		add(new Form<Void>("sendForm").add(
 				toolbar
 				, chatMessage.setOutputMarkupId(true)
-				, new Button("send").add(new AjaxFormSubmitBehavior("onclick"){
-					private static final long serialVersionUID = -3746739738826501331L;
+				, new AjaxButton("send") {
+					private static final long serialVersionUID = 1L;
 					
-					protected void onSubmit(AjaxRequestTarget target) {
+					@Override
+					protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
 						ChatDao dao = getBean(ChatDao.class);
 						ChatMessage m = new ChatMessage();
 						m.setMessage(unescapeXml(chatMessage.getDefaultModelObjectAsString()));
@@ -121,6 +122,6 @@ public class ChatPanel extends UserPanel {
 						chatMessage.setDefaultModelObject("");
 						target.add(chatMessage);
 					};
-				})));
+				}));
 	}
 }

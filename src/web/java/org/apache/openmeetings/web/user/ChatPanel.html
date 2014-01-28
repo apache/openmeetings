@@ -30,7 +30,8 @@
 			}
 			function addChatMessageInternal(m) {
 				if (m && m.type == "chat") {
-					var msg = $('<div><span class="date">' + m.msg.sent + '</span>' + m.msg.message + '</div>');
+					var msg = $('<div><span class="from">' + m.msg.from + '</span><span class="date">'
+							+ m.msg.sent + '</span>' + m.msg.message + '</div>');
 					$('#messageArea').append(msg);
 					msg[0].scrollIntoView();
 				}
@@ -53,7 +54,7 @@
 			<form wicket:id="sendForm">
 				<div wicket:id="toolbarContainer"></div>
 				<div id="chatMessage" wicket:id="chatMessage"></div>
-				<input type="submit" wicket:id="send"/>
+				<button type="submit" wicket:id="send"><wicket:ommessage key="220"/></button>
 			</form>
 		</div>
 	</wicket:panel>

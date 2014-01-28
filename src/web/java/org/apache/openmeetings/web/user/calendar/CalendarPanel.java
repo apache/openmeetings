@@ -160,6 +160,16 @@ public class CalendarPanel extends UserPanel {
 			}
 			
 			@Override
+			public boolean isDayClickEnabled() {
+				return true;
+			}
+			
+			@Override
+			public boolean isEventClickEnabled() {
+				return true;
+			}
+			
+			@Override
 			public boolean isEventDropEnabled() {
 				return true;
 			}

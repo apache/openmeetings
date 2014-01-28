@@ -44,7 +44,6 @@ import com.googlecode.wicket.jquery.ui.widget.dialog.AbstractFormDialog;
 import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
 
 public class AddUsersDialog extends AbstractFormDialog<User> {
-
 	private static final long serialVersionUID = 1L;
 	private final Form<User> formUsers;
 	private FeedbackPanel feedbackDialog = new FeedbackPanel("feedbackDialog");
@@ -55,9 +54,7 @@ public class AddUsersDialog extends AbstractFormDialog<User> {
 	DialogButton send = new DialogButton(WebSession.getString(175));
 	private DialogButton cancel = new DialogButton(WebSession.getString(219));
 
-	
-	public AddUsersDialog(String id, String title, AdminCommonUserForm<?> commonForm)
-	{
+	public AddUsersDialog(String id, String title, AdminCommonUserForm<?> commonForm) {
 		super(id, title, true);
 		formUsers = new Form<User>("formUsers", getModel());
 		this.commonForm = commonForm;

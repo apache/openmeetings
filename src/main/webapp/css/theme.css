@@ -81,14 +81,15 @@ html, body {
 	z-index: 2000;
 	bottom: 0px;
 	right: 10px;
-	width: 300px;
+	width: 600px;
 }
-
 #chatPanel #chat {
 	height: 10px;
 	background-color: #F2FAFF;
 }
-
+#chatPanel #chat #controlBlock {
+	background-color: #5294BB;
+}
 #chatPanel #chat #controlBlock:hover {
 	background-color: #2779aa;
 }
@@ -101,6 +102,11 @@ html, body {
     margin-right: 5px;
     font-style: italic;
     font-size: smaller;
+}
+#chatPanel #chat #messageArea .from {
+	margin-left: 5px;
+    margin-right: 5px;
+	font-weight: bold;
 }
 #messageArea {
 	height: 140px;

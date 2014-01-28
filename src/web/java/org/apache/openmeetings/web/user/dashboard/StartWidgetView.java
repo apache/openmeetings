@@ -25,11 +25,12 @@ import org.apache.openmeetings.web.pages.MainPage;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.WebMarkupContainer;
-import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.model.Model;
 
 import ro.fortsoft.wicket.dashboard.Widget;
 import ro.fortsoft.wicket.dashboard.web.WidgetView;
+
+import com.googlecode.wicket.jquery.ui.form.button.Button;
 
 public class StartWidgetView extends WidgetView {
 	private static final long serialVersionUID = -3886388347737468022L;
@@ -40,9 +41,9 @@ public class StartWidgetView extends WidgetView {
 		add(new WebMarkupContainer("step2").add(new PublicRoomsEventBehavior()));
 		add(new WebMarkupContainer("step3").add(new PublicRoomsEventBehavior()));
 		add(new WebMarkupContainer("step4").add(new PublicRoomsEventBehavior()));
-		add(new WebMarkupContainer("start").add(new PublicRoomsEventBehavior()));
+		add(new Button("start").add(new PublicRoomsEventBehavior()));
 		add(new Button("calendar").add(new AjaxEventBehavior("onclick") {
-			private static final long serialVersionUID = -1736827409409436737L;
+			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected void onEvent(AjaxRequestTarget target) {
@@ -52,7 +53,7 @@ public class StartWidgetView extends WidgetView {
 	}
 	
 	private class PublicRoomsEventBehavior extends AjaxEventBehavior {
-		private static final long serialVersionUID = 1475840707332889254L;
+		private static final long serialVersionUID = 1L;
 
 		public PublicRoomsEventBehavior() {
 			super("onclick");

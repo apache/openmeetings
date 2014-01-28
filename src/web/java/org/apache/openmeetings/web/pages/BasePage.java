@@ -29,11 +29,16 @@ import org.apache.openmeetings.web.util.OmUrlFragment.AreaKeys;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
+import org.apache.wicket.markup.head.PriorityHeaderItem;
 import org.apache.wicket.markup.html.TransparentWebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.request.IRequestParameters;
 import org.apache.wicket.util.string.StringValue;
 import org.wicketstuff.urlfragment.AsyncUrlFragmentAwarePage;
+
+import com.googlecode.wicket.jquery.ui.plugins.wysiwyg.settings.WysiwygLibrarySettings;
+
+import de.agilecoders.wicket.extensions.javascript.jasny.JasnyJsReference;
 
 public abstract class BasePage extends AsyncUrlFragmentAwarePage {
 	private static final long serialVersionUID = -6237917782433412496L;
@@ -75,7 +80,9 @@ public abstract class BasePage extends AsyncUrlFragmentAwarePage {
 	
 	@Override
 	public void renderHead(IHeaderResponse response) {
-		response.render(JavaScriptHeaderItem.forReference(Application.get().getJavaScriptLibrarySettings().getJQueryReference()));
+		response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forReference(Application.get().getJavaScriptLibrarySettings().getJQueryReference())));
+        response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forReference(JasnyJsReference.INSTANCE)));
+        response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forReference(WysiwygLibrarySettings.get().getBootstrapWysiwygJavaScriptReference())));
 		super.renderHead(response);
 	}
 }

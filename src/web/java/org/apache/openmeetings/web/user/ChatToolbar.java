@@ -56,13 +56,13 @@ public class ChatToolbar extends Panel implements IWysiwygToolbar {
 	public ChatToolbar(String id, IModel<String> model) {
 		super(id, model);
 
-		this.toolbar = new WebMarkupContainer("toolbar");
-		this.toolbar.setMarkupId("bToolbar");
-		this.add(this.toolbar);
+		toolbar = new WebMarkupContainer("toolbar");
+		toolbar.setMarkupId("bToolbar");
+		add(toolbar);
 
 	}
 
 	public void attachToEditor(Component editor) {
-		this.toolbar.add(AttributeModifier.replace("data-target", JQueryWidget.getSelector(editor)));
+		toolbar.add(AttributeModifier.replace("data-target", JQueryWidget.getSelector(editor)));
 	}
 }
