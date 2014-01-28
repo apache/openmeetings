@@ -97,6 +97,7 @@ public class WebSession extends AbstractAuthenticatedWebSession {
 	private Locale browserLocale = null;
 	private int browserTZOffset = Integer.MIN_VALUE;
 	private Long recordingId;
+	private Long loginError = null;
 	private String externalType;
 	private static Set<Long> STRINGS_WITH_APP = new HashSet<Long>(); //FIXME need to be removed
 	public final static List<String> AVAILABLE_TIMEZONES = Arrays.asList(TimeZone.getAvailableIDs());
@@ -122,6 +123,7 @@ public class WebSession extends AbstractAuthenticatedWebSession {
 		externalType = null;
 		tz = null;
 		browserTz = null;
+		loginError = null;
 	}
 	
 	@Override
@@ -247,8 +249,14 @@ public class WebSession extends AbstractAuthenticatedWebSession {
 		if (u instanceof User) {
 			setUser((User)u);
 			return true;
+		} else if (u instanceof Long) {
+			loginError = (Long)u;
 		}
 		return false;
+	}
+	
+	public Long getLoginError() {
+		return loginError;
 	}
 	
 	public static WebSession get() {

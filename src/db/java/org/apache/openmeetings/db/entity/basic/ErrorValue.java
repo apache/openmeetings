@@ -30,9 +30,7 @@ import javax.persistence.Table;
 
 @Entity
 @NamedQueries({
-	@NamedQuery(name = "getErrorValuesById", query = "select c from ErrorValue as c "
-					+ " where c.errorvalues_id = :errorvalues_id "
-					+ " AND c.deleted <> :deleted")
+	@NamedQuery(name = "getErrorValueById", query = "SELECT e FROM ErrorValue e WHERE e.errorvalues_id = :id AND e.deleted = false")
 })
 @Table(name = "errorvalue")
 public class ErrorValue implements Serializable {

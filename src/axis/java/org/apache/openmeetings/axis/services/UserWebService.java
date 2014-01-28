@@ -26,13 +26,14 @@ import org.apache.openmeetings.data.user.OrganisationManager;
 import org.apache.openmeetings.data.user.UserManager;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.basic.ErrorDao;
+import org.apache.openmeetings.db.dao.label.FieldLanguagesValuesDao;
 import org.apache.openmeetings.db.dao.server.SOAPLoginDao;
 import org.apache.openmeetings.db.dao.server.SessiondataDao;
 import org.apache.openmeetings.db.dao.user.AdminUserDao;
 import org.apache.openmeetings.db.dto.basic.ErrorResult;
 import org.apache.openmeetings.db.dto.basic.SearchResult;
+import org.apache.openmeetings.db.entity.basic.ErrorType;
 import org.apache.openmeetings.db.entity.basic.ErrorValue;
-import org.apache.openmeetings.db.entity.label.Fieldlanguagesvalues;
 import org.apache.openmeetings.db.entity.server.RemoteSessionObject;
 import org.apache.openmeetings.db.entity.server.Sessiondata;
 import org.apache.openmeetings.db.entity.user.User;
@@ -66,7 +67,7 @@ public class UserWebService {
 	@Autowired
 	private FieldManager fieldManager;
 	@Autowired
-	private ErrorDao errorManagement;
+	private ErrorDao errorDao;
 	@Autowired
 	private OrganisationManager organisationManager;
 	@Autowired
@@ -75,6 +76,8 @@ public class UserWebService {
 	private AdminUserDao usersDao;
 	@Autowired
 	private MainService mainService;
+	@Autowired
+	private FieldLanguagesValuesDao labelDao;
 
 	/**
 	 * load this session id before doing anything else Returns an Object of Type
@@ -128,32 +131,27 @@ public class UserWebService {
 	 *            The SID from getSession
 	 * @param errorid
 	 *            the error id (negative Value here!)
-	 * @param language_id
+	 * @param langId
 	 *            The id of the language
 	 *            
 	 * @return - error with the code given
 	 */
-	public ErrorResult getErrorByCode(String SID, long errorid, long language_id) {
+	public ErrorResult getErrorByCode(String SID, long errorid, long langId) {
 		try {
 			if (errorid < 0) {
-				ErrorValue eValues = errorManagement
-						.getErrorValuesById(errorid * (-1));
+				ErrorValue eValues = errorDao.get(-1 * errorid);
 				if (eValues != null) {
-					Fieldlanguagesvalues errorValue = fieldManager
-							.getFieldByIdAndLanguage(
-									eValues.getFieldvalues_id(), language_id);
-					Fieldlanguagesvalues typeValue = fieldManager
-							.getFieldByIdAndLanguage(errorManagement
-									.getErrorType(eValues.getErrortype_id())
-									.getFieldvalues_id(), language_id);
-					if (errorValue != null) {
-						return new ErrorResult(errorid, errorValue.getValue(),
-								typeValue.getValue());
+					ErrorType eType = errorDao.getErrorType(eValues.getErrortype_id());
+					log.debug("eValues.getFieldvalues_id() = " + eValues.getFieldvalues_id());
+					log.debug("eValues.getErrorType() = " + eType);
+					String eValue = labelDao.getString(eValues.getFieldvalues_id(), langId);
+					String tValue = labelDao.getString(eType.getFieldvalues_id(), langId);
+					if (eValue != null) {
+						return new ErrorResult(errorid, eValue, tValue);
 					}
 				}
 			} else {
-				return new ErrorResult(errorid,
-						"Error ... please check your input", "Error");
+				return new ErrorResult(errorid, "Error ... please check your input", "Error");
 			}
 		} catch (Exception err) {
 			log.error("[getErrorByCode] ", err);

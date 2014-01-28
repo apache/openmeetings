@@ -113,7 +113,14 @@ html, body {
 .clickable {
 	cursor: pointer;
 }
-
+.dragbox-content .tableWrapper {
+	width: auto;
+	height: 100px;
+}
+.dragbox-content .tableWrapper .adminListTable {
+	max-width: none;
+	min-width: 0;
+}
 div.tableWrapper {
 	background-color: #FFFFFF;
 	border: solid 1px #aacfe4;

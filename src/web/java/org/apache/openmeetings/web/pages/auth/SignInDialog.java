@@ -26,8 +26,10 @@ import static org.apache.openmeetings.web.pages.auth.SignInPage.allowRegister;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.openmeetings.db.dao.basic.ErrorDao;
 import org.apache.openmeetings.db.dao.server.LdapConfigDao;
 import org.apache.openmeetings.db.dao.server.OAuth2Dao;
+import org.apache.openmeetings.db.entity.basic.ErrorValue;
 import org.apache.openmeetings.db.entity.server.LdapConfig;
 import org.apache.openmeetings.db.entity.server.OAuthServer;
 import org.apache.openmeetings.web.app.Application;
@@ -81,7 +83,8 @@ public class SignInDialog extends AbstractFormDialog<String> {
     private ForgetPasswordDialog f;
     private LdapConfig domain;
     private String ldapConfigFileName;
-	
+    private FeedbackPanel feedback = new FeedbackPanel("feedback");
+    
 	public SignInDialog(String id) {
 		super(id, WebSession.getString(108));
 		add(form = new SignInForm("signin"));
@@ -183,7 +186,8 @@ public class SignInDialog extends AbstractFormDialog<String> {
 			login = login + "@" + domain.getDomain();
 		}
 		OmAuthenticationStrategy strategy = getAuthenticationStrategy();
-		if (WebSession.get().signIn(login, password, ldapConfigFileName)) {
+		WebSession ws = WebSession.get();
+		if (ws.signIn(login, password, ldapConfigFileName)) {
  			setResponsePage(Application.get().getHomePage());
 			if (rememberMe) {
 				strategy.save(login, password, ldapConfigFileName);
@@ -192,6 +196,13 @@ public class SignInDialog extends AbstractFormDialog<String> {
 			}
 		} else {
 			strategy.remove();
+			if (ws.getLoginError() != null) {
+				ErrorValue eValue = getBean(ErrorDao.class).get(-1 * ws.getLoginError());
+				if (eValue != null) {
+					error(WebSession.getString(eValue.getFieldvalues_id()));
+					target.add(feedback);
+				}
+			}
 			shake(target);
 		}
 	}
@@ -207,7 +218,7 @@ public class SignInDialog extends AbstractFormDialog<String> {
 			if (WebSession.get().isSignedIn()) {
 				alreadyLoggedIn();
 			}
-			add(new FeedbackPanel("feedback"));
+			add(feedback.setOutputMarkupId(true));
 			add(loginField = new RequiredTextField<String>("login", new PropertyModel<String>(SignInDialog.this, "login")));
 			loginField.setLabel(Model.of(WebSession.getString(114)));
 			add(passField = new PasswordTextField("pass", new PropertyModel<String>(SignInDialog.this, "password")).setResetPassword(true));

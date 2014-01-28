@@ -18,12 +18,13 @@
  */
 package org.apache.openmeetings.remote;
 
-import org.apache.openmeetings.data.basic.FieldManager;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+
 import org.apache.openmeetings.db.dao.basic.ErrorDao;
+import org.apache.openmeetings.db.dao.label.FieldLanguagesValuesDao;
 import org.apache.openmeetings.db.dto.basic.ErrorResult;
+import org.apache.openmeetings.db.entity.basic.ErrorType;
 import org.apache.openmeetings.db.entity.basic.ErrorValue;
-import org.apache.openmeetings.db.entity.label.Fieldlanguagesvalues;
-import org.apache.openmeetings.util.OpenmeetingsVariables;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,13 +35,12 @@ import org.springframework.beans.factory.annotation.Autowired;
  * 
  */
 public class ErrorService {
-	private static final Logger log = Red5LoggerFactory.getLogger(
-			ErrorService.class, OpenmeetingsVariables.webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(ErrorService.class, webAppRootKey);
 
 	@Autowired
-	private FieldManager fieldManager;
+	private FieldLanguagesValuesDao labelDao;
 	@Autowired
-	private ErrorDao errorManagement;
+	private ErrorDao errorDao;
 
 	/**
 	 * Gets an Error-Object by its id TODO: add error-code-handlers -20
@@ -51,28 +51,22 @@ public class ErrorService {
 	 * @param errorid
 	 * @return - ErrorResult object with the id given
 	 */
-	public ErrorResult getErrorByCode(String SID, Long errorid, Long language_id) {
+	public ErrorResult getErrorByCode(String SID, Long errorid, Long langId) {
 		if (errorid < 0) {
-			log.debug("errorid, language_id: " + errorid + "|" + language_id);
-			ErrorValue eValues = errorManagement.getErrorValuesById(-1
-					* errorid);
+			log.debug("errorid, language_id: " + errorid + "|" + langId);
+			ErrorValue eValues = errorDao.get(-1 * errorid);
 			if (eValues != null) {
+				ErrorType eType = errorDao.getErrorType(eValues.getErrortype_id());
 				log.debug("eValues.getFieldvalues_id() = " + eValues.getFieldvalues_id());
-				log.debug("eValues.getErrorType() = " + errorManagement.getErrorType(eValues.getErrortype_id()));
-				Fieldlanguagesvalues errorValue = fieldManager
-						.getFieldByIdAndLanguage(eValues.getFieldvalues_id(),
-								language_id);
-				Fieldlanguagesvalues typeValue = fieldManager
-						.getFieldByIdAndLanguage(errorManagement.getErrorType(eValues.getErrortype_id())
-								.getFieldvalues_id(), language_id);
-				if (errorValue != null) {
-					return new ErrorResult(errorid, errorValue.getValue(),
-							typeValue.getValue());
+				log.debug("eValues.getErrorType() = " + eType);
+				String eValue = labelDao.getString(eValues.getFieldvalues_id(), langId);
+				String tValue = labelDao.getString(eType.getFieldvalues_id(), langId);
+				if (eValue != null) {
+					return new ErrorResult(errorid, eValue, tValue);
 				}
 			}
 		} else {
-			return new ErrorResult(errorid,
-					"Error ... please check your input", "Error");
+			return new ErrorResult(errorid, "Error ... please check your input", "Error");
 		}
 		return null;
 	}

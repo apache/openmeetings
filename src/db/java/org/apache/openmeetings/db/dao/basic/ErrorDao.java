@@ -18,6 +18,8 @@
  */
 package org.apache.openmeetings.db.dao.basic;
 
+import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+
 import java.util.Date;
 import java.util.List;
 
@@ -28,15 +30,13 @@ import javax.persistence.TypedQuery;
 
 import org.apache.openmeetings.db.entity.basic.ErrorType;
 import org.apache.openmeetings.db.entity.basic.ErrorValue;
-import org.apache.openmeetings.util.OpenmeetingsVariables;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
 public class ErrorDao {
-	private static final Logger log = Red5LoggerFactory.getLogger(
-			ErrorDao.class, OpenmeetingsVariables.webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(ErrorDao.class, webAppRootKey);
 
 	@PersistenceContext
 	private EntityManager em;
@@ -128,11 +128,10 @@ public class ErrorDao {
 		return null;
 	}
 
-	public ErrorValue getErrorValuesById(Long errorvalues_id) {
+	public ErrorValue get(Long id) {
 		try {
-			TypedQuery<ErrorValue> query = em.createNamedQuery("getErrorValuesById", ErrorValue.class);
-			query.setParameter("errorvalues_id", errorvalues_id);
-			query.setParameter("deleted", true);
+			TypedQuery<ErrorValue> query = em.createNamedQuery("getErrorValueById", ErrorValue.class);
+			query.setParameter("id", id);
 			ErrorValue e = null;
 			try {
 				e = query.getSingleResult();
@@ -140,7 +139,7 @@ public class ErrorDao {
 			}
 			return e;
 		} catch (Exception ex2) {
-			log.error("[getErrorValuesById]", ex2);
+			log.error("[get]", ex2);
 		}
 		return null;
 	}
