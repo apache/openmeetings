@@ -225,11 +225,14 @@ public class FlvInterviewConverter extends BaseConverter {
 			args.add("-ar"); args.add("22050");
 			args.add("-ab"); args.add("32k");
 			args.add("-filter_complex");
-			args.add(String.format("[0:v]scale=%1$d:%2$d,pad=2*%1$d:%2$d[left];[1:v]scale=%1$d:%2$d[right];[left][right]overlay=main_w/2:0", flvWidth, flvHeight));
+			args.add(String.format("[0:v]scale=%1$d:%2$d,pad=2*%1$d:%2$d[left];[1:v]scale=%1$d:%2$d[right];[left][right]overlay=main_w/2:0%3$s"
+					, flvWidth, flvHeight, shortest ? ":shortest=1" : ""));
 			if (shortest) {
 				args.add("-shortest");
 			}
-			args.add("-vcodec"); args.add("flv");
+			args.add("-map"); args.add("0:0");
+			args.add("-map"); args.add("1:0");
+			args.add("-map"); args.add("2:0");
 			args.add("-r"); args.add("" + frameRate);
 			args.add("-qmax"); args.add("1");
 			args.add("-qmin"); args.add("1");

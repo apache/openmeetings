@@ -23,7 +23,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeoutException;
@@ -92,14 +91,18 @@ public class ProcessHelper {
 		}
 	}
 	
+	private static String getCommand(String[] argv) {
+		String tString = "";
+		for (int i = 0; i < argv.length; i++) {
+			tString += argv[i] + " ";
+		}
+		return tString;
+	}
+	
 	private static void debugCommand(String desc, String[] argv) {
 		if (log.isDebugEnabled()) {
 			log.debug("START " + desc + " ################# ");
-			String tString = "";
-			for (int i = 0; i < argv.length; i++) {
-				tString += argv[i] + " ";
-			}
-			log.debug(tString);
+			log.debug(getCommand(argv));
 			log.debug("END " + desc + " ################# ");
 		}
 	}
@@ -109,14 +112,13 @@ public class ProcessHelper {
 		return executeScript(process, argv, env);
 	}
 	
-	public static ConverterProcessResult executeScript(String process,
-			String[] argv, Map<? extends String, ? extends String> env) {
+	public static ConverterProcessResult executeScript(String process, String[] argv, Map<? extends String, ? extends String> env) {
 		ConverterProcessResult returnMap = new ConverterProcessResult();
 		returnMap.setProcess(process);
 		debugCommand(process, argv);
 	
 		try {
-			returnMap.setCommand(Arrays.toString(argv));
+			returnMap.setCommand(getCommand(argv));
 			returnMap.setOut("");
 	
 			// By using the process Builder we have access to modify the
