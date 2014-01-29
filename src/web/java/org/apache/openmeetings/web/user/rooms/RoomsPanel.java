@@ -43,6 +43,8 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.request.resource.ByteArrayResource;
 import org.apache.wicket.util.io.IOUtils;
 
+import com.googlecode.wicket.jquery.ui.form.button.Button;
+
 public class RoomsPanel extends UserPanel {
 	private static final long serialVersionUID = -892281210307880052L;
 	final WebMarkupContainer clientsContainer;
@@ -74,7 +76,7 @@ public class RoomsPanel extends UserPanel {
 				final Label curUsers = new Label("curUsers", curUsersModel);
 				roomContainer.add(curUsers.setOutputMarkupId(true));
 				roomContainer.add(new Label("totalUsers", r.getNumberOfPartizipants()));
-				item.add(new WebMarkupContainer("enter").add(new RoomEnterBehavior(r.getRooms_id())));
+				item.add(new Button("enter").add(new RoomEnterBehavior(r.getRooms_id())));
 				roomContainer.add(new AjaxLink<Void>("refresh") {
 					private static final long serialVersionUID = -3426813755917489787L;
 

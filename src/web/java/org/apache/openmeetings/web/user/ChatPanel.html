@@ -53,8 +53,12 @@
 			<div wicket:id="messages"></div>
 			<form wicket:id="sendForm">
 				<div wicket:id="toolbarContainer"></div>
-				<div id="chatMessage" wicket:id="chatMessage"></div>
-				<button type="submit" wicket:id="send"><wicket:ommessage key="220"/></button>
+				<table style="width: 100%">
+					<tr>
+						<td><div id="chatMessage" wicket:id="chatMessage"></div></td>
+						<td style="width: 50px"><div wicket:id="send"><wicket:ommessage key="220"/></div></td>
+					</tr>
+				</table>
 			</form>
 		</div>
 	</wicket:panel>

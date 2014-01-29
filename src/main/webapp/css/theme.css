@@ -109,7 +109,7 @@ html, body {
 	font-weight: bold;
 }
 #messageArea {
-	height: 140px;
+	height: 165px;
 	overflow-y: auto;
 }
 #chatMessage .wysiwyg-editor {
@@ -340,8 +340,11 @@ div.tableWrapperSmall {
 .widget td {
 	min-width: 150px;
 }
+#contents .dragbox-content {
+	min-height: 300px;
+	max-height: 300px;
+}
 #feedcontainer {
-	height: 300px;
 	overflow: auto;
 }
 .recording {
