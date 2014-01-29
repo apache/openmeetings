@@ -20,9 +20,9 @@
 -->
 <html xmlns:wicket="http://wicket.apache.org">
 	<wicket:panel>
-					<div>
-				        <span wicket:id="importFeedback"/>
-				     </div>
+		<div>
+			<span wicket:id="importFeedback"/>
+		</div>
 		<script type="text/javascript">
 			function labelsInit() {
 				$('#addLanguage').dialog({
@@ -51,12 +51,10 @@
 								<select wicket:id="language"></select>
 							</td>
 							<td>
-								<div class="ui-button ui-widget ui-state-default ui-corner-all" wicket:id="export">
-									<span class="btn"><wicket:ommessage key="360"/></span>
-								</div>
+								<span wicket:id="export" class="btn"><wicket:ommessage key="360"/></span>
 							</td>
 							<td class="profile">
-								<div class="ui-button ui-widget ui-state-default ui-corner-all fileupload fileupload-new" data-provides="fileupload" style="margin: 0;">
+								<div class="fileupload fileupload-new" data-provides="fileupload" style="margin: 0;">
 									<span class="btn btn-file"><wicket:ommessage key="387"/><input type="file" accept="text/xml" wicket:id="fileInput"/></span>
 								</div>
 								<span wicket:id="progress">[progressbar]</span>

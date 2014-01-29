@@ -258,6 +258,7 @@
 				<include name="**/*.html" />
 				<include name="**/*.xml" />
 				<include name="**/*.js" />
+				<include name="**/*.css" />
 			</fileset>
 		</copy>
 	</target>

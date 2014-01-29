@@ -25,18 +25,18 @@ import java.util.List;
 import org.apache.openmeetings.converter.GenerateImage;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.util.StoredFile;
+import org.apache.openmeetings.web.util.BootstrapFileUploadBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormSubmitBehavior;
 import org.apache.wicket.extensions.ajax.markup.html.form.upload.UploadProgressBar;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
+import org.apache.wicket.markup.html.form.upload.FileUploadField;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.util.lang.Bytes;
 
-import de.agilecoders.wicket.extensions.javascript.jasny.FileUploadField;
-
 public class UploadableProfileImagePanel extends ProfileImagePanel {
-	private static final long serialVersionUID = -6681473769070950510L;
+	private static final long serialVersionUID = 1L;
 	private FileUploadField fileUploadField;
 	
 	public UploadableProfileImagePanel(String id, final long userId) {
@@ -46,7 +46,7 @@ public class UploadableProfileImagePanel extends ProfileImagePanel {
 		form.setMaxSize(Bytes.bytes(getBean(ConfigurationDao.class).getMaxUploadSize()));
 		// Model is necessary here to avoid writing image to the User object
 		form.add(fileUploadField = new FileUploadField("image", new IModel<List<FileUpload>>() {
-			private static final long serialVersionUID = -8514518605278263956L;
+			private static final long serialVersionUID = 1L;
 
 			//FIXME this need to be eliminated
 			public void detach() {
@@ -86,5 +86,6 @@ public class UploadableProfileImagePanel extends ProfileImagePanel {
 			}
 		});
 		add(form.setOutputMarkupId(true));
+		add(BootstrapFileUploadBehavior.INSTANCE);
 	}
 }

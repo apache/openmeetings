@@ -32,7 +32,6 @@ function setCalendarHeight() {
 
 $(function() {
     $(window).load(function() { setCalendarHeight(); } );
-    $(window).resize(function() { setCalendarHeight(); } );
 });
 
 function addCalButton(where, text, id) {

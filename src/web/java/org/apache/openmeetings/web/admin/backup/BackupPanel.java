@@ -33,6 +33,7 @@ import org.apache.openmeetings.util.OmFileHelper;
 import org.apache.openmeetings.web.admin.AdminPanel;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.util.AjaxDownload;
+import org.apache.openmeetings.web.util.BootstrapFileUploadBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormSubmitBehavior;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
@@ -41,14 +42,13 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
+import org.apache.wicket.markup.html.form.upload.FileUploadField;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.util.lang.Bytes;
 import org.apache.wicket.util.resource.FileResourceStream;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
-
-import de.agilecoders.wicket.extensions.javascript.jasny.FileUploadField;
 
 /**
  * Panel component to manage Backup Import/Export
@@ -183,5 +183,6 @@ public class BackupPanel extends AdminPanel {
 		backupForm.add(new UploadProgressBar("progress", backupForm, backupForm.fileUploadField));
 
 		add(backupForm);
+		add(BootstrapFileUploadBehavior.INSTANCE);
 	}
 }

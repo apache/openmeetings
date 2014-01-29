@@ -107,7 +107,8 @@ public class ChatPanel extends UserPanel {
 					protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
 						ChatDao dao = getBean(ChatDao.class);
 						ChatMessage m = new ChatMessage();
-						m.setMessage(unescapeXml(chatMessage.getDefaultModelObjectAsString()));
+						String msg = unescapeXml(chatMessage.getDefaultModelObjectAsString());
+						m.setMessage(msg == null ? null : " " + msg + " "); //this is necessary so emotions are selectable
 						m.setSent(new Date());
 						m.setFromUser(getBean(UserDao.class).get(getUserId()));
 						dao.update(m);

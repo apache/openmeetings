@@ -38,8 +38,6 @@ import org.wicketstuff.urlfragment.AsyncUrlFragmentAwarePage;
 
 import com.googlecode.wicket.jquery.ui.plugins.wysiwyg.settings.WysiwygLibrarySettings;
 
-import de.agilecoders.wicket.extensions.javascript.jasny.JasnyJsReference;
-
 public abstract class BasePage extends AsyncUrlFragmentAwarePage {
 	private static final long serialVersionUID = -6237917782433412496L;
 	private final Map<String, String> options;
@@ -81,8 +79,7 @@ public abstract class BasePage extends AsyncUrlFragmentAwarePage {
 	@Override
 	public void renderHead(IHeaderResponse response) {
 		response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forReference(Application.get().getJavaScriptLibrarySettings().getJQueryReference())));
-        response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forReference(JasnyJsReference.INSTANCE)));
-        response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forReference(WysiwygLibrarySettings.get().getBootstrapWysiwygJavaScriptReference())));
+		response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forReference(WysiwygLibrarySettings.get().getBootstrapWysiwygJavaScriptReference())));
 		super.renderHead(response);
 	}
 }

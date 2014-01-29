@@ -44,15 +44,18 @@ import org.apache.openmeetings.web.data.DataViewContainer;
 import org.apache.openmeetings.web.data.OmOrderByBorder;
 import org.apache.openmeetings.web.data.SearchableDataProvider;
 import org.apache.openmeetings.web.util.AjaxDownload;
+import org.apache.openmeetings.web.util.BootstrapFileUploadBehavior;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormSubmitBehavior;
+import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.extensions.ajax.markup.html.form.upload.UploadProgressBar;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
+import org.apache.wicket.markup.html.form.upload.FileUploadField;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.util.resource.AbstractResourceStream;
@@ -61,10 +64,6 @@ import org.dom4j.Document;
 import org.dom4j.Element;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
-
-import com.googlecode.wicket.jquery.ui.form.button.AjaxButton;
-
-import de.agilecoders.wicket.extensions.javascript.jasny.FileUploadField;
 
 /**
  * Language Editor, add/insert/update {@link Fieldlanguagesvalues} and
@@ -198,7 +197,7 @@ public class LangPanel extends AdminPanel {
 		langForm.add(download);
 
 		langForm.add(new AjaxButton("export"){
-			private static final long serialVersionUID = -2845639751469777460L;
+			private static final long serialVersionUID = 1L;
 
 			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
 
@@ -249,6 +248,7 @@ public class LangPanel extends AdminPanel {
 		
 		add(langForm);
 		add(new AddLanguageForm("addLangForm", this));
+		add(BootstrapFileUploadBehavior.INSTANCE);
 	}
 
 	public LangForm getLangForm() {

@@ -319,7 +319,6 @@
 		<dependency org="org.mnode.ical4j" name="ical4j" rev="1.0.5" conf="openmeetings.ext->*" transitive="false"/>
 		<dependency org="org.apache.openjpa" name="openjpa" rev="2.2.2" conf="openmeetings.ext->*" transitive="false"/>
 		<dependency org="commons-lang" name="commons-lang" rev="2.6" conf="openmeetings.ext->*" transitive="false"/> <!-- required by PCEnchancer -->
-		<dependency org="de.agilecoders.wicket" name="wicket-bootstrap-extensions" rev="0.8.4" conf="openmeetings.ext->*" transitive="true"/>
 		
 		<dependency org="org.apache.ws.commons.axiom" name="axiom-impl" rev="1.2.14" conf="openmeetings.axis2->*" transitive="true">
 			<exclude name='commons-io' />

@@ -54,11 +54,12 @@ public class CalendarPanel extends UserPanel {
 	private static final String javaScriptMarkup = "setCalendarHeight();";
 	private static final String javaScriptAddDatepicker = "addCalButton('left', 'Datepicker', 'datepicker');";
 	private static final SimpleDateFormat formatDateJava = new SimpleDateFormat("MM/dd/yy");
-	private AbstractAjaxTimerBehavior refreshTimer = new AbstractAjaxTimerBehavior(Duration.seconds(10)) {
-		private static final long serialVersionUID = -4353305314396043476L;
+	private final AbstractAjaxTimerBehavior refreshTimer = new AbstractAjaxTimerBehavior(Duration.seconds(10)) {
+		private static final long serialVersionUID = 1L;
 
 		@Override
 		protected void onTimer(AjaxRequestTarget target) {
+			target.appendJavaScript("setCalendarHeight();");
 			refresh(target);
 		}
 	};
