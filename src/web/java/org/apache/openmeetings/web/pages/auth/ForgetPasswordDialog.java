@@ -112,7 +112,6 @@ public class ForgetPasswordDialog extends AbstractFormDialog<String> {
 					
 					@Override
 					protected void onError(AjaxRequestTarget target, Form<?> form) {
-						// TODO Auto-generated method stub
 						ForgetPasswordDialog.this.onError(target);
 					}
 				});
@@ -122,11 +121,13 @@ public class ForgetPasswordDialog extends AbstractFormDialog<String> {
 			protected void onValidate() {
 				AdminUserDao dao = getBean(AdminUserDao.class);
 				String n = nameField.getConvertedInput();
-				if (type == Type.email && null == dao.getUserByEmail(n)) {
-					error(WebSession.getString(318));
-				}
-				if (type == Type.login && null == dao.getUserByName(n)) {
-					error(WebSession.getString(320));
+				if (n != null) {
+					if (type == Type.email && null == dao.getUserByEmail(n)) {
+						error(WebSession.getString(318));
+					}
+					if (type == Type.login && null == dao.getUserByName(n)) {
+						error(WebSession.getString(320));
+					}
 				}
 			}
 		});

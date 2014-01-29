@@ -295,54 +295,48 @@ public class AbstractUserDao  {
 	}
 	
 	public User getUserByName(String login) {
+		User us = null;
 		try {
-			TypedQuery<User> query = em.createNamedQuery("getUserByName", User.class);
-			query.setParameter("login", login);
-			query.setParameter("deleted", true);
-			User us = null;
-			try {
-				us = query.getSingleResult();
-			} catch (NoResultException ex) {
-			}
-			return us;
-		} catch (Exception e) {
-			log.error("[getUserByAdressesId]", e);
+			us = em.createNamedQuery("getUserByLogin", User.class)
+					.setParameter("login", login)
+					.setParameter("type", User.Type.user)
+					.getSingleResult();
+		} catch (NoResultException ex) {
 		}
-		return null;
+		return us;
 	}
 
 	public User getUserByEmail(String email) {
-		TypedQuery<User> query = em.createNamedQuery("getUserByEmail", User.class);
-		query.setParameter("email", email);
 		User us = null;
 		try {
-			us = query.getSingleResult();
+			us = em.createNamedQuery("getUserByEmail", User.class)
+					.setParameter("email", email)
+					.setParameter("type", User.Type.user)
+					.getSingleResult();
 		} catch (NoResultException ex) {
 		}
 		return us;
 	}
 
 	public Object getUserByHash(String hash) {
+		if (hash.length() == 0) {
+			return new Long(-5);
+		}
+		User us = null;
 		try {
-			if (hash.length() == 0)
-				return new Long(-5);
-			TypedQuery<User> query = em.createNamedQuery("getUserByHash", User.class);
-			query.setParameter("resethash", hash);
-			query.setParameter("deleted", true);
-			User us = null;
-			try {
-				us = query.getSingleResult();
-			} catch (NoResultException ex) {
-			}
-			if (us != null) {
-				return us;
-			} else {
-				return new Long(-5);
-			}
+			us = em.createNamedQuery("getUserByHash", User.class)
+					.setParameter("resethash", hash)
+					.setParameter("type", User.Type.user)
+					.getSingleResult();
+		} catch (NoResultException ex) {
 		} catch (Exception e) {
 			log.error("[getUserByHash]", e);
 		}
-		return new Long(-1);
+		if (us != null) {
+			return us;
+		} else {
+			return new Long(-5);
+		}
 	}
 
 	/**
