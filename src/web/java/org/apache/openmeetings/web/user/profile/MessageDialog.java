@@ -195,7 +195,7 @@ public class MessageDialog extends AbstractFormDialog<PrivateMessage> {
 				
 				getBean(MailHandler.class).send(to.getAdresses().getEmail(),
 						WebSession.getString(1301) + p.getSubject(),
-						p.getMessage().replaceAll("\\<.*?>", "") + aLinkHTML);
+						(p.getMessage() == null ? "" : p.getMessage().replaceAll("\\<.*?>", "")) + aLinkHTML);
 			}
 		}
 	}
