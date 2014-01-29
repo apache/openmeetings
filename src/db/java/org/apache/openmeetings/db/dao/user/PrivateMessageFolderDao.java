@@ -93,8 +93,7 @@ public class PrivateMessageFolderDao implements IDataProviderDao<PrivateMessageF
 	}
 
 	public List<PrivateMessageFolder> get(int start, int count) {
-		String hql = "select c from PrivateMessageFolder c ";
-		return em.createQuery(hql, PrivateMessageFolder.class)
+		return em.createQuery("SELECT c FROM PrivateMessageFolder c ORDER BY c.privateMessageFolderId", PrivateMessageFolder.class)
 				.setFirstResult(start).setMaxResults(count)
 				.getResultList();
 	}

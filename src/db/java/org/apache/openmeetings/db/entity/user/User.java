@@ -85,7 +85,7 @@ import org.simpleframework.xml.Root;
 			+ "lower(c.login) LIKE :search "
 			+ "OR lower(c.firstname) LIKE :search "
 			+ "OR lower(c.lastname) LIKE :search )"),
-	@NamedQuery(name = "getAllUsers", query = "SELECT u FROM User u"),
+	@NamedQuery(name = "getAllUsers", query = "SELECT u FROM User u ORDER BY u.user_id"),
 	@NamedQuery(name = "checkPassword", query = "select count(c.user_id) from User c "
 			+ "where c.deleted = false " //
 			+ "AND c.user_id = :userId " //

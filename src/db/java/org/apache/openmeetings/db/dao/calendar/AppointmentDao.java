@@ -125,7 +125,7 @@ public class AppointmentDao {
 
 	public List<Appointment> getAppointments() {
 		return em.createQuery(
-				"SELECT a FROM Appointment a LEFT JOIN FETCH a.meetingMembers WHERE a.deleted = false "
+				"SELECT a FROM Appointment a LEFT JOIN FETCH a.meetingMembers WHERE a.deleted = false ORDER BY a.id"
 				, Appointment.class).getResultList();
 	}
 

@@ -68,9 +68,8 @@ import org.simpleframework.xml.Root;
 	@NamedQuery(name = "countContactsByUser", query = "select COUNT(c) from UserContact c " +
 			"where c.contact.user_id = :user_id " +
 			"AND c.contact.deleted <> true"),
-	@NamedQuery(name = "getUserContactsById", query = "select c from UserContact c " +
-			"where c.userContactId = :userContactId"),
-	@NamedQuery(name = "getUserContacts", query = "select c from UserContact c")
+	@NamedQuery(name = "getUserContactsById", query = "SELECT c FROM UserContact c WHERE c.userContactId = :userContactId"),
+	@NamedQuery(name = "getUserContacts", query = "SELECT c FROM UserContact c ORDER BY c.userContactId")
 })
 @Table(name = "user_contact")
 @Root(name="usercontact")

@@ -246,8 +246,7 @@ public class AbstractUserDao  {
 
 	public List<User> getAllUsersDeleted() {
 		try {
-			TypedQuery<User> q = em.createNamedQuery("getAllUsers",
-					User.class);
+			TypedQuery<User> q = em.createNamedQuery("getAllUsers", User.class);
 			@SuppressWarnings("unchecked")
 			OpenJPAQuery<User> kq = OpenJPAPersistence.cast(q);
 			kq.getFetchPlan().addFetchGroup("backupexport");

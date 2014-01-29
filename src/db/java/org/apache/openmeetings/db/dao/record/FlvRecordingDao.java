@@ -133,7 +133,7 @@ public class FlvRecordingDao {
 
 	public List<FlvRecording> getAllFlvRecordings() {
 		try {
-			String hql = "SELECT c FROM FlvRecording c LEFT JOIN FETCH c.flvRecordingMetaData";
+			String hql = "SELECT c FROM FlvRecording c LEFT JOIN FETCH c.flvRecordingMetaData ORDER BY c.flvRecordingId";
 
 			TypedQuery<FlvRecording> query = em.createQuery(hql, FlvRecording.class);
 

@@ -43,7 +43,7 @@ import org.simpleframework.xml.Root;
 
 @Entity
 @NamedQueries({
-		@NamedQuery(name = "getAllServers", query = "SELECT s FROM Server s WHERE s.deleted = false"),
+		@NamedQuery(name = "getAllServers", query = "SELECT s FROM Server s WHERE s.deleted = false ORDER BY s.id"),
 		@NamedQuery(name = "getServerCount", query = "SELECT COUNT(s) FROM Server s WHERE s.deleted = false"),
 		@NamedQuery(name = "getServerById", query = "SELECT s FROM Server s LEFT JOIN FETCH s.insertedby LEFT JOIN FETCH s.updatedby WHERE s.deleted = false AND s.id = :id"),
 		@NamedQuery(name = "getServerByName", query = "SELECT s FROM Server s WHERE s.deleted = false AND s.name LIKE :name"),

@@ -140,7 +140,7 @@ public class PollDao {
 	
 	public List<RoomPoll> getPollListBackup() {
 		try {
-			TypedQuery<RoomPoll> q = em.createNamedQuery("getPollListBackup",RoomPoll.class);
+			TypedQuery<RoomPoll> q = em.createNamedQuery("getPollListBackup", RoomPoll.class);
 			return q.getResultList();
 		} catch (NoResultException nre) {
 			//expected

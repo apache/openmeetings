@@ -35,7 +35,7 @@ import org.simpleframework.xml.Root;
 
 @Entity
 @NamedQueries({
-	@NamedQuery(name="getAllFiles", query="SELECT c FROM FileExplorerItem c")
+	@NamedQuery(name="getAllFiles", query="SELECT c FROM FileExplorerItem c ORDER BY c.fileExplorerItemId")
     , @NamedQuery(name="getById", query="SELECT c FROM FileExplorerItem c WHERE c.fileExplorerItemId = :fileExplorerItemId")
     , @NamedQuery(name="getByHash", query="SELECT c FROM FileExplorerItem c WHERE c.fileHash = :fileHash")
 })

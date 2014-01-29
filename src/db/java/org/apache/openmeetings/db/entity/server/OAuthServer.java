@@ -38,7 +38,7 @@ import org.simpleframework.xml.Root;
 @NamedQueries({
 		@NamedQuery(name = "getEnabledOAuthServers", query = "select s from OAuthServer as s where s.enabled = true and s.deleted = false"),
 		@NamedQuery(name = "getOAuthServerById", query = "select s from OAuthServer as s where s.id = :id"),
-		@NamedQuery(name = "getAllOAuthServers", query = "select s from OAuthServer as s where s.deleted = false"),
+		@NamedQuery(name = "getAllOAuthServers", query = "SELECT s FROM OAuthServer s WHERE s.deleted = false ORDER BY s.id"),
 		@NamedQuery(name = "countOAuthServers", query = "select count(s) from OAuthServer s WHERE s.deleted = false") })
 @Root
 public class OAuthServer implements Serializable, IDataProviderEntity {
@@ -96,15 +96,15 @@ public class OAuthServer implements Serializable, IDataProviderEntity {
 	private String loginParamName;
 	
 	@Column(name = "email_param_name")
-	@Element(data = true)
+	@Element(data = true, required = false)
 	private String emailParamName;
 	
 	@Column(name = "firstname_param_name")
-	@Element(data = true)
+	@Element(data = true, required = false)
 	private String firstnameParamName;
 	
 	@Column(name = "lastname_param_name")
-	@Element(data = true)
+	@Element(data = true, required = false)
 	private String lastnameParamName;
 	
 	@Column(name = "deleted")

@@ -42,7 +42,7 @@ import org.simpleframework.xml.Root;
 
 @Entity
 @NamedQueries({
-	@NamedQuery(name = "getPrivateMessages", query = "select c from PrivateMessage c"),
+	@NamedQuery(name = "getPrivateMessages", query = "SELECT c FROM PrivateMessage c ORDER BY c.privateMessageId"),
 	@NamedQuery(name = "getPrivateMessagesById", query = "select c from PrivateMessage c " +
 			"where c.privateMessageId = :privateMessageId "),
 	@NamedQuery(name = "getNumberMessages", query = "select COUNT(c.privateMessageId) from PrivateMessage c " +

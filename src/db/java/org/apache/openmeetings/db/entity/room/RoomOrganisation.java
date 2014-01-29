@@ -40,7 +40,7 @@ import org.simpleframework.xml.Root;
 
 @Entity
 @NamedQueries({
-	@NamedQuery(name = "getAllRoomsOrganisations", query = "select c from RoomOrganisation as c"),
+	@NamedQuery(name = "getAllRoomsOrganisations", query = "select ro from RoomOrganisation ro ORDER BY ro.rooms_organisation_id"),
 	@NamedQuery(name = "getRoomsOrganisationByOrganisationIdAndRoomType", query = "select c from RoomOrganisation as c "
 			+ "where c.room.roomtypes_id = :roomtypes_id "
 			+ "AND c.organisation.organisation_id = :organisation_id "

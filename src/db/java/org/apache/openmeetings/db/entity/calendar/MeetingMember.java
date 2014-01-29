@@ -45,7 +45,7 @@ import org.simpleframework.xml.Root;
 @NamedQueries({
     @NamedQuery(name="getMeetingMemberById"
     		, query="SELECT mm FROM MeetingMember mm WHERE mm.deleted = false AND mm.id = :id")
-    , @NamedQuery(name="getMeetingMembers", query="SELECT mm FROM MeetingMember mm")
+    , @NamedQuery(name="getMeetingMembers", query="SELECT mm FROM MeetingMember mm ORDER BY mm.id")
     , @NamedQuery(name="getMeetingMemberIdsByAppointment"
     		, query="SELECT mm.id FROM MeetingMember mm WHERE mm.deleted = false AND mm.appointment.id = :id")
 })

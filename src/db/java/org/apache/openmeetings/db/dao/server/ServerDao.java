@@ -73,8 +73,7 @@ public class ServerDao implements IDataProviderDao<Server> {
 	 * @see org.apache.openmeetings.data.OmDAO#get(int, int)
 	 */
 	public List<Server> get(int start, int max) {
-		TypedQuery<Server> q = em.createNamedQuery("getAllServers",
-				Server.class);
+		TypedQuery<Server> q = em.createNamedQuery("getAllServers", Server.class);
 		q.setFirstResult(start);
 		q.setMaxResults(max);
 		return q.getResultList();

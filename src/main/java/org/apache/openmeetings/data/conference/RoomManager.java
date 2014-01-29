@@ -1356,8 +1356,7 @@ public class RoomManager implements IRoomManager {
 			if (roomtypesId == null || roomtypesId == 0) {
 				return null;
 			}
-			log.debug("getRoomByOwnerAndTypeId : " + ownerId + " || "
-					+ roomtypesId);
+			log.debug("getRoomByOwnerAndTypeId : " + ownerId + " || " + roomtypesId);
 			Room room = null;
 			TypedQuery<Room> query = em.createNamedQuery("getRoomByOwnerAndTypeId", Room.class);
 			query.setParameter("ownerId", ownerId);
