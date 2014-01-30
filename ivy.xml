@@ -262,16 +262,16 @@
 		<dependency org="org.apache.wicket" name="wicket-native-websocket-tomcat" rev="0.15" conf="openmeetings->*" transitive="false">
 			<include type="jar" />
 		</dependency>
-		<dependency org="com.googlecode.wicket-jquery-ui" name="wicket-jquery-ui-core" rev="6.13.1-20140129.230938-1" conf="openmeetings->*" transitive="false">
+		<dependency org="com.googlecode.wicket-jquery-ui" name="wicket-jquery-ui-core" rev="6.13.1" conf="openmeetings->*" transitive="false">
 			<include type="jar" />
 		</dependency>
-		<dependency org="com.googlecode.wicket-jquery-ui" name="wicket-jquery-ui" rev="6.13.1-20140129.231019-1" conf="openmeetings->*" transitive="false">
+		<dependency org="com.googlecode.wicket-jquery-ui" name="wicket-jquery-ui" rev="6.13.1" conf="openmeetings->*" transitive="false">
             <include type="jar" />
         </dependency>
-		<dependency org="com.googlecode.wicket-jquery-ui" name="wicket-jquery-ui-calendar" rev="6.13.1-20140129.231132-1" conf="openmeetings->*" transitive="false">
+		<dependency org="com.googlecode.wicket-jquery-ui" name="wicket-jquery-ui-calendar" rev="6.13.1" conf="openmeetings->*" transitive="false">
 			<include type="jar" />
 		</dependency>
-		<dependency org="com.googlecode.wicket-jquery-ui" name="wicket-jquery-ui-plugins" rev="6.13.1-20140129.231059-1" conf="openmeetings->*" transitive="false">
+		<dependency org="com.googlecode.wicket-jquery-ui" name="wicket-jquery-ui-plugins" rev="6.13.1" conf="openmeetings->*" transitive="false">
 			<include type="jar" />
 		</dependency>
 		<dependency org="ro.fortsoft.wicket.dashboard" name="wicket-dashboard-core" rev="0.9" conf="openmeetings->*" transitive="false">
