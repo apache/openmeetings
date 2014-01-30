@@ -396,10 +396,10 @@ webapps/openmeetings/WEB-INF/lib/wicket-datetime-jar-6.13.0.jar
 webapps/openmeetings/WEB-INF/lib/wicket-devutils-jar-6.13.0.jar
 webapps/openmeetings/WEB-INF/lib/wicket-extensions-jar-6.13.0.jar
 webapps/openmeetings/WEB-INF/lib/wicket-ioc-jar-6.13.0.jar
-webapps/openmeetings/WEB-INF/lib/wicket-jquery-ui-calendar-jar-6.13.0.jar
-webapps/openmeetings/WEB-INF/lib/wicket-jquery-ui-core-jar-6.13.0.jar
-webapps/openmeetings/WEB-INF/lib/wicket-jquery-ui-jar-6.13.0.jar
-webapps/openmeetings/WEB-INF/lib/wicket-jquery-ui-plugins-jar-6.13.0.jar
+webapps/openmeetings/WEB-INF/lib/wicket-jquery-ui-calendar-jar-6.13.1.jar
+webapps/openmeetings/WEB-INF/lib/wicket-jquery-ui-core-jar-6.13.1.jar
+webapps/openmeetings/WEB-INF/lib/wicket-jquery-ui-jar-6.13.1.jar
+webapps/openmeetings/WEB-INF/lib/wicket-jquery-ui-plugins-jar-6.13.1.jar
 webapps/openmeetings/WEB-INF/lib/wicket-native-websocket-core-jar-0.15.jar
 webapps/openmeetings/WEB-INF/lib/wicket-native-websocket-tomcat-jar-0.15.jar
 webapps/openmeetings/WEB-INF/lib/wicket-request-jar-6.13.0.jar

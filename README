@@ -8,6 +8,28 @@ Apache Openmeetings provides video conferencing, instant messaging, white board,
 collaborative document editing and other groupware tools using API functions of 
 the Red5 Streaming Server for Remoting and Streaming. 
 
+Release Notes 3.0
+=============
+see CHANGELOG file for detailed log
+
+Refactoring main interface (admin, dashboard, etc.) to use HTML5 instead of Flash. 
+All the screens but the room are on HTML5. The room is still on Flash.
+
+The release also includes some bug fixes, timezone refactoring and a lot of 
+localization improvements.
+
+_Known Issues And Limitations_
+* RTMPS seems to be very unstable (will try to fix it in 3.1)
+* Recent version of Adobe Flash still causes crash (please downgrade to 11.5 version)
+https://bugzilla.mozilla.org/show_bug.cgi?id=885188
+* Multi-tabbing (no other flash application should be running in
+different browsers or tabs)
+* Chat clean up and log copying is not implemented
+* Moving recordings between folders does not work
+
+Please not that this is a first HTML5 release, so some minor UI issues are possible
+
+
 Release Notes 2.2.0
 =============
 see CHANGELOG file for detailed log
