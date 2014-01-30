@@ -47,11 +47,12 @@ import com.googlecode.wicket.jquery.ui.form.button.Button;
 
 public class RoomsPanel extends UserPanel {
 	private static final long serialVersionUID = -892281210307880052L;
-	final WebMarkupContainer clientsContainer;
-	final ListView<Client> clients;
-	Label roomComment;
-	List<Client> clientsInRoom = null;
-	long roomId = 0;
+	private final WebMarkupContainer clientsContainer = new WebMarkupContainer("clientsContainer");
+	private final WebMarkupContainer details = new WebMarkupContainer("details");
+	private final ListView<Client> clients;
+	private Label roomComment;
+	private List<Client> clientsInRoom = null;
+	private long roomId = 0;
 
 	public RoomsPanel(String id, List<Room> rooms) {
 		super(id);
@@ -93,8 +94,8 @@ public class RoomsPanel extends UserPanel {
 		
 		// Users in this Room
 		roomComment = new Label("roomComment", Model.of(""));
-		add(roomComment.setOutputMarkupId(true));
-		clientsContainer = new WebMarkupContainer("clientsContainer");
+		add(details.setVisible(rooms.size() > 0));
+		details.add(roomComment.setOutputMarkupId(true));
 		clients = new ListView<Client>("clients", clientsInRoom){
 			private static final long serialVersionUID = 8542589945574690054L;
 
@@ -126,7 +127,7 @@ public class RoomsPanel extends UserPanel {
 				item.add(new Label("clientLogin", "" + client.getUsername()));
 			}
 		};
-		add(clientsContainer.add(clients.setOutputMarkupId(true)).setOutputMarkupId(true));
+		details.add(clientsContainer.add(clients.setOutputMarkupId(true)).setOutputMarkupId(true));
 	}
 
 	void updateRoomDetails(AjaxRequestTarget target) {
