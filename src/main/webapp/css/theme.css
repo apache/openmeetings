@@ -602,3 +602,12 @@ tr.unread {
 .page.recording .video {
 	min-width: 400px;
 }
+.rooms.title {
+	font-weight: bold;
+	padding: 10px;
+	padding-bottom: 0;
+}
+.rooms.desc {
+	margin: 10px;
+	max-width: 900px;
+}
