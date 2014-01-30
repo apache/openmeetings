@@ -223,8 +223,8 @@ webapps/openmeetings/css/theme.css
 webapps/openmeetings/docs/*
 webapps/openmeetings/js/openmeetings_functions.js
 webapps/openmeetings/languages/*
-webapps/openmeetings/public/favicon.ico
 webapps/openmeetings/public/config.*
+webapps/openmeetings/public/favicon.ico
 webapps/openmeetings/public/main.as3.swf11.swf
 webapps/openmeetings/public/main.swf8.swf
 webapps/openmeetings/public/maindebug.as3.swf11.swf
@@ -236,7 +236,6 @@ webapps/openmeetings/screensharing
 webapps/openmeetings/streams/*
 webapps/openmeetings/upload/*
 
-webapps/openmeetings/WEB-INF/openmeetings-applicationContext.xml
 webapps/openmeetings/WEB-INF/red5-web.properties
 webapps/openmeetings/WEB-INF/red5-web.xml
 webapps/openmeetings/WEB-INF/spring-mvc-servlet.xml
@@ -244,6 +243,7 @@ webapps/openmeetings/WEB-INF/velocity.properties
 webapps/openmeetings/WEB-INF/web.xml
 webapps/openmeetings/WEB-INF/classes/logback.xsd
 webapps/openmeetings/WEB-INF/classes/logback-config.xml
+webapps/openmeetings/WEB-INF/classes/openmeetings-applicationContext.xml
 webapps/openmeetings/WEB-INF/classes/META-INF/db2_persistence.xml
 webapps/openmeetings/WEB-INF/classes/META-INF/derby_persistence.xml
 webapps/openmeetings/WEB-INF/classes/META-INF/mssql_persistence.xml
@@ -253,20 +253,20 @@ webapps/openmeetings/WEB-INF/classes/META-INF/persistence.xml
 webapps/openmeetings/WEB-INF/classes/META-INF/postgres_persistence.xml
 webapps/openmeetings/WEB-INF/conf/axis2.xml
 webapps/openmeetings/WEB-INF/conf/axis2.xsd
-webapps/openmeetings/WEB-INF/services/oopenmeetings-3.0.0-SNAPSHOT.aar
+webapps/openmeetings/WEB-INF/services/openmeetings-3.1.0-SNAPSHOT.aar
 webapps/openmeetings/WEB-INF/services/services.list
 webapps/openmeetings/WEB-INF/services/version.aar
 
-webapps/openmeetings/WEB-INF/lib/openmeetings-axis-3.0.0-SNAPSHOT.jar
-webapps/openmeetings/WEB-INF/lib/openmeetings-cli-3.0.0-SNAPSHOT.jar
-webapps/openmeetings/WEB-INF/lib/openmeetings-core-3.0.0-SNAPSHOT.jar
-webapps/openmeetings/WEB-INF/lib/openmeetings-db-3.0.0-SNAPSHOT.jar
-webapps/openmeetings/WEB-INF/lib/openmeetings-util-3.0.0-SNAPSHOT.jar
-webapps/openmeetings/WEB-INF/lib/openmeetings-web-3.0.0-SNAPSHOT.jar
+webapps/openmeetings/WEB-INF/lib/openmeetings-axis-3.1.0-SNAPSHOT.jar
+webapps/openmeetings/WEB-INF/lib/openmeetings-cli-3.1.0-SNAPSHOT.jar
+webapps/openmeetings/WEB-INF/lib/openmeetings-core-3.1.0-SNAPSHOT.jar
+webapps/openmeetings/WEB-INF/lib/openmeetings-db-3.1.0-SNAPSHOT.jar
+webapps/openmeetings/WEB-INF/lib/openmeetings-util-3.1.0-SNAPSHOT.jar
+webapps/openmeetings/WEB-INF/lib/openmeetings-web-3.1.0-SNAPSHOT.jar
 
 webapps/openmeetings/screensharing/icon.jpg
 webapps/openmeetings/screensharing/splashicon.jpg
-webapps/openmeetings/screensharing/openmeetings-screenshare-3.0.0-SNAPSHOT.jar
+webapps/openmeetings/screensharing/openmeetings-screenshare-3.1.0-SNAPSHOT.jar
 
 ======================================================================================================================
 
@@ -276,9 +276,8 @@ projects licensed under the Apache License 2.0:
 ======================================================================================================================
 
 red5.jar
-webapps/openmeetings/screensharing/red5-client.jar
-webapps/openmeetings/screensharing/red5.jar
-boot.jar
+webapps/openmeetings/screensharing/red5_client-jar-r4393.jar
+webapps/openmeetings/screensharing/red5_server-jar-r4393.jar
 commons-cli-jar-1.2.jar
 red5.bat
 red5.sh
@@ -286,6 +285,8 @@ red5-highperf.sh
 red5-highperf.bat
 red5-debug.sh
 red5-debug.bat
+red5-server-bootstrap.jar
+red5-server.jar
 red5-shutdown.sh
 red5-shutdown.bat
 conf/access.properties
@@ -293,9 +294,7 @@ conf/build_standalone.properties
 conf/catalina.policy
 conf/context.xml
 conf/ehcache.xml
-conf/jee-container-ssl.xml
 conf/jee-container.xml
-conf/keystore
 conf/keystore.jmx
 conf/logback.xml
 conf/no-jee-container.xml
@@ -311,7 +310,6 @@ conf/red5.xml
 conf/tomcat-users.xml
 conf/truststore.jmx
 conf/web.xml
-webapps/red5-default.xml
 webapps/root/biglogo.png
 webapps/root/crossdomain.xml
 webapps/root/favicon.ico
@@ -422,14 +420,14 @@ webapps/openmeetings/WEB-INF/lib/XmlSchema-bundle-1.4.8-SNAPSHOT.jar
 
 webapps/openmeetings/screensharing/commons-beanutils-1.8.3.jar
 webapps/openmeetings/screensharing/commons-codec-1.6.jar
-webapps/openmeetings/screensharing/commons-collections-3.2.1.jar
+webapps/openmeetings/screensharing/commons-collections-20040616.jar
 webapps/openmeetings/screensharing/ehcache-core-2.5.0.jar
-webapps/openmeetings/screensharing/httpclient-4.2.jar
+webapps/openmeetings/screensharing/httpclient-4.2.1.jar
 webapps/openmeetings/screensharing/httpcore-4.2.1.jar
-webapps/openmeetings/screensharing/mina-core-2.0.4.jar
-webapps/openmeetings/screensharing/spring-beans-3.1.1.RELEASE.jar
-webapps/openmeetings/screensharing/spring-context-3.1.1.RELEASE.jar
-webapps/openmeetings/screensharing/spring-core-3.1.1.RELEASE.jar
+webapps/openmeetings/screensharing/mina-core-2.0.7.jar
+webapps/openmeetings/screensharing/spring-beans-3.1.4.RELEASE.jar
+webapps/openmeetings/screensharing/spring-context-3.1.4.RELEASE.jar
+webapps/openmeetings/screensharing/spring-core-3.1.4.RELEASE.jar
 
 lib/cglib-jar-2.2.2.jar
 lib/com.springsource.javax.xml.stream-1.0.1.jar
