@@ -31,8 +31,10 @@ import org.apache.openmeetings.web.data.SearchableDataProvider;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.repeater.Item;
 
 public class RoomsPanel extends AdminPanel {
@@ -91,15 +93,14 @@ public class RoomsPanel extends AdminPanel {
 		add(container.orderLinks);
 		add(navigator);
 
-		final WebMarkupContainer addModerator = new WebMarkupContainer("addModerator");
-		addModerator.add(new AjaxEventBehavior("onclick") {
-
-			private static final long serialVersionUID = 1818116963707864134L;
-
-			protected void onEvent(AjaxRequestTarget target) {
+		final AjaxButton addModerator = new AjaxButton("addModerator") {
+			private static final long serialVersionUID = 1L;
+			
+			@Override
+			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
         		addModeratorsDialog.open(target);
-        	}
-        });
+			}
+		};
 		
 		form = new RoomForm("form", listContainer, new Room()){
 			private static final long serialVersionUID = 3186201157375166657L;
@@ -108,11 +109,7 @@ public class RoomsPanel extends AdminPanel {
 			protected void onModelChanged() {
 				super.onModelChanged();
 				boolean roomEmpty = (getModelObject() == null || getModelObject().getRooms_id() == null);
-				if (roomEmpty) {
-					addModerator.add(AttributeModifier.replace("class", "formNewButton disabled"));
-				} else {
-					addModerator.add(AttributeModifier.replace("class", "formNewButton"));
-				}
+				addModerator.add(AttributeModifier.replace("class", roomEmpty ? "formNewButton disabled" : "formNewButton"));
 				addModerator.setEnabled(!roomEmpty);
 			}
 			

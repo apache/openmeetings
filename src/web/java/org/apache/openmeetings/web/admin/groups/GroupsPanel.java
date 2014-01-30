@@ -32,8 +32,10 @@ import org.apache.openmeetings.web.data.SearchableDataProvider;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.repeater.Item;
 
 /**
@@ -57,14 +59,13 @@ public class GroupsPanel extends AdminPanel {
 	public GroupsPanel(String id) {
 		super(id);
 		final WebMarkupContainer listContainer = new WebMarkupContainer("listContainer");
-        final WebMarkupContainer addUsersBtn = new WebMarkupContainer("addUsersBtn");
-        addUsersBtn.add(new AjaxEventBehavior("onclick") {
-			private static final long serialVersionUID = 6037994365235148885L;
-
-			protected void onEvent(AjaxRequestTarget target) {
+        final AjaxButton addUsersBtn = new AjaxButton("addUsersBtn") {
+			private static final long serialVersionUID = 1L;
+        	@Override
+        	protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
 				addUsersDialog.open(target);
         	}
-        });
+        };
         
 		//Adding the Group Form
 		form = new GroupForm("form", listContainer, new Organisation()){
@@ -74,11 +75,7 @@ public class GroupsPanel extends AdminPanel {
 			protected void onModelChanged() {
 				super.onModelChanged();
 				boolean orgEmpty = getModelObject().getOrganisation_id() == null;
-				if (orgEmpty) {
-					addUsersBtn.add(AttributeModifier.replace("class", "formNewButton disabled"));
-				} else {
-					addUsersBtn.add(AttributeModifier.replace("class", "formNewButton"));
-				}
+				addUsersBtn.add(AttributeModifier.replace("class", orgEmpty ? "formNewButton disabled" : "formNewButton"));
 				addUsersBtn.setEnabled(!orgEmpty);
 			}
 			
