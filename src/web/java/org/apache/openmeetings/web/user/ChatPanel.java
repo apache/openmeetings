@@ -56,11 +56,13 @@ public class ChatPanel extends UserPanel {
 	private static final String MESSAGE_AREA_ID = "messageArea";
 	
 	private JSONObject getMessage(ChatMessage m) throws JSONException {
+		String msg = m.getMessage();
+		msg = msg == null ? msg : " " + msg.replaceAll("&nbsp;", " ") + " ";
 		return new JSONObject()
 			.put("type", "chat")
 			.put("msg", new JSONObject()
 				.put("id", m.getId())
-				.put("message", m.getMessage())
+				.put("message", msg)
 				.put("from", m.getFromUser().getFirstname() + " " + m.getFromUser().getLastname())
 				.put("sent", getDateFormat().format(m.getSent()))
 			);
@@ -107,8 +109,7 @@ public class ChatPanel extends UserPanel {
 					protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
 						ChatDao dao = getBean(ChatDao.class);
 						ChatMessage m = new ChatMessage();
-						String msg = unescapeXml(chatMessage.getDefaultModelObjectAsString());
-						m.setMessage(msg == null ? null : " " + msg + " "); //this is necessary so emotions are selectable
+						m.setMessage(unescapeXml(chatMessage.getDefaultModelObjectAsString()));
 						m.setSent(new Date());
 						m.setFromUser(getBean(UserDao.class).get(getUserId()));
 						dao.update(m);
