@@ -2399,7 +2399,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 					if (conn != null) {
 						Client rcl = sessionManager.getClientByStreamId(conn.getClient().getId(), null);
 	
-						if (rcl.getIsRecording() != null && rcl.getIsRecording()) {
+						if (rcl != null && rcl.getIsRecording() != null && rcl.getIsRecording()) {
 							return false;
 						}
 					}

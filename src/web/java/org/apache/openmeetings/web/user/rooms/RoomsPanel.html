@@ -40,11 +40,15 @@
 			<td style="vertical-align: top">
 				<!-- Users in this Room -->
 				<fieldset wicket:id="details">
-					<div class="formelement">
+					<div class="formelement" style="font-style: italic;">
 	                    <label><wicket:ommessage key="404" /></label>
 					</div>
 					<div class="formelement">
-	                    <label><wicket:ommessage key="270" /></label>
+	                    <label style="font-weight: bold;"><wicket:ommessage key="406" /></label>
+	                    <span wicket:id="roomName"></span>&nbsp;#<span wicket:id="roomId"></span>
+					</div>
+					<div class="formelement">
+	                    <label style="font-weight: bold;"><wicket:ommessage key="270" /></label>
 	                    <span wicket:id="roomComment"></span>
 					</div>
 					<div class="formelement">
@@ -55,7 +59,9 @@
 							<tbody wicket:id="clientsContainer">		
 					    		<tr wicket:id="clients">
 									<td style="width: 50px; height:50px" ><div style="width: 50px; height:50px"><img wicket:id="clientImage" width="50" height="50" /></div></td>
-									<td style="width: 350px; height:50px"><div style="width: 350px; height:50px"><span wicket:id="clientLogin"></span></div></td>
+									<td style="width: 350px; height:50px">
+										<div style="width: 350px; height:50px"><span wicket:id="clientLogin"></span>&nbsp;<wicket:ommessage key="408"/>&nbsp;<span wicket:id="from"></span></div>
+									</td>
 								</tr>
 							</tbody>
 						</table>

@@ -82,6 +82,18 @@ table.adminListTable th.three_column_layout_column3 {
 	width: 244px;
 }
 
+.rooms table.adminListTable th.three_column_layout_column1 {
+	width: 46px;
+}
+
+.rooms table.adminListTable th.three_column_layout_column2 {
+	width: 370px;
+}
+
+.rooms table.adminListTable th.three_column_layout_column3 {
+	width: 74px;
+}
+
 table.adminListTableSmall th.three_column_layout_column1 {
 	width: 50px;
 }
@@ -143,6 +155,21 @@ table.adminListTable td div.three_column_layout_divcolumn2 {
 table.adminListTable td div.three_column_layout_divcolumn3 {
 	word-wrap: break-word;
 	width: 244px;
+}
+
+.rooms table.adminListTable td div.three_column_layout_divcolumn1 {
+	word-wrap: break-word;
+	width: 44px;
+}
+
+.rooms table.adminListTable td div.three_column_layout_divcolumn2 {
+	word-wrap: break-word;
+	width: 382px;
+}
+
+.rooms table.adminListTable td div.three_column_layout_divcolumn3 {
+	word-wrap: break-word;
+	width: 74px;
 }
 
 table.adminListTableSmall td div.three_column_layout_divcolumn1 {

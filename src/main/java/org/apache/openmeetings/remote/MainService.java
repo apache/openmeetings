@@ -175,6 +175,7 @@ public class MainService implements IPendingServiceCallback {
 				currentClient.setRoom_id(wicketroomid);
 				SessionVariablesUtil.setUserId(current.getClient(), u.getUser_id());
 			
+				currentClient.setUsername(u.getLogin());
 				currentClient.setFirstname(u.getFirstname());
 				currentClient.setLastname(u.getLastname());
 				currentClient.setPicture_uri(u.getPictureuri());

@@ -50,7 +50,9 @@ public class RoomsPanel extends UserPanel {
 	private final WebMarkupContainer clientsContainer = new WebMarkupContainer("clientsContainer");
 	private final WebMarkupContainer details = new WebMarkupContainer("details");
 	private final ListView<Client> clients;
-	private Label roomComment;
+	private IModel<Long> roomID = Model.of((Long)null);
+	private IModel<String> roomName = Model.of((String)null);
+	private IModel<String> roomComment = Model.of((String)null);
 	private List<Client> clientsInRoom = null;
 	private long roomId = 0;
 
@@ -93,9 +95,10 @@ public class RoomsPanel extends UserPanel {
 		});
 		
 		// Users in this Room
-		roomComment = new Label("roomComment", Model.of(""));
-		add(details.setVisible(rooms.size() > 0));
-		details.add(roomComment.setOutputMarkupId(true));
+		add(details.setOutputMarkupId(true).setVisible(rooms.size() > 0));
+		details.add(new Label("roomId", roomID));
+		details.add(new Label("roomName", roomName));
+		details.add(new Label("roomComment", roomComment));
 		clients = new ListView<Client>("clients", clientsInRoom){
 			private static final long serialVersionUID = 8542589945574690054L;
 
@@ -124,7 +127,8 @@ public class RoomsPanel extends UserPanel {
 						return null;
 					}
 				}));
-				item.add(new Label("clientLogin", "" + client.getUsername()));
+				item.add(new Label("clientLogin", client.getUsername()));
+				item.add(new Label("from", client.getConnectedSince()));
 			}
 		};
 		details.add(clientsContainer.add(clients.setOutputMarkupId(true)).setOutputMarkupId(true));
@@ -133,8 +137,10 @@ public class RoomsPanel extends UserPanel {
 	void updateRoomDetails(AjaxRequestTarget target) {
 		final List<Client> clientsInRoom = Application.getBean(ISessionManager.class).getClientListByRoom(roomId);
 		clients.setDefaultModelObject(clientsInRoom);
-		Room room = Application.getBean(RoomDao.class).get(roomId); 
-		roomComment.setDefaultModel(Model.of(room.getComment()));
-		target.add(clientsContainer, roomComment);
+		Room room = Application.getBean(RoomDao.class).get(roomId);
+		roomID.setObject(room.getRooms_id());
+		roomName.setObject(room.getName());
+		roomComment.setObject(room.getComment());
+		target.add(clientsContainer, details);
 	}
 }
