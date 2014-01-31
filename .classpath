@@ -35,8 +35,8 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="con" path="org.apache.ivyde.eclipse.cpcontainer.IVYDE_CONTAINER/?project=Openmeetings&amp;ivyXmlPath=ivy.xml&amp;confs=*&amp;ivySettingsPath=%24%7Bworkspace_loc%3AOpenmeetings%2Fivysettings.xml%7D&amp;loadSettingsOnDemand=false&amp;propertyFiles="/>
-	<classpathentry kind="con" path="org.apache.ivyde.eclipse.cpcontainer.IVYDE_CONTAINER/?project=Openmeetings&amp;ivyXmlPath=build%2Fred5%2Fserver%2Fivy.xml&amp;confs=default%2Cjava6&amp;ivySettingsPath=%24%7Bworkspace_loc%3AOpenmeetings%7D%2Fbuild%2Fred5%2Fserver%2Fivysettings.xml&amp;loadSettingsOnDemand=false&amp;propertyFiles="/>
+	<classpathentry kind="con" path="org.apache.ivyde.eclipse.cpcontainer.IVYDE_CONTAINER/?project=Openmeetings+3.0.x&amp;ivyXmlPath=ivy.xml&amp;confs=*&amp;ivySettingsPath=%24%7Bworkspace_loc%3AOpenmeetings+3.0.x%2Fivysettings.xml%7D&amp;loadSettingsOnDemand=false&amp;propertyFiles="/>
+	<classpathentry kind="con" path="org.apache.ivyde.eclipse.cpcontainer.IVYDE_CONTAINER/?project=Openmeetings+3.0.x&amp;ivyXmlPath=build%2Fred5%2Fserver%2Fivy.xml&amp;confs=default%2Cjava6&amp;ivySettingsPath=%24%7Bworkspace_loc%3AOpenmeetings+3.0.x%7D%2Fbuild%2Fred5%2Fserver%2Fivysettings.xml&amp;loadSettingsOnDemand=false&amp;propertyFiles="/>
 	<classpathentry kind="lib" path="build/red5/server/dist/red5.jar" sourcepath="build/red5/server/src"/>
 	<classpathentry kind="lib" path="build/red5/client/dist/red5-client.jar" sourcepath="build/red5/client/src"/>
 	<classpathentry kind="lib" path="build/lib/java_16_tools.jar"/>
