@@ -385,6 +385,7 @@ public class WebSession extends AbstractAuthenticatedWebSession {
 	}
 
 	public String getClientTimeZone() {
+		TimeZone _zone = browserTz;
 		if (browserTz == null) {
 			try {
 				browserTz = getClientInfo().getProperties().getTimeZone();
@@ -400,11 +401,12 @@ public class WebSession extends AbstractAuthenticatedWebSession {
 						}
 					}
 				}
+				_zone = browserTz;
 			} catch (Exception e) {
-				browserTz = Calendar.getInstance(getBrowserLocale()).getTimeZone();
+				_zone = Calendar.getInstance(getBrowserLocale()).getTimeZone();
 			}
 		}
-		return browserTz == null ? null : browserTz.getID();
+		return _zone == null ? null : _zone.getID();
 	}
 	
 	private void initDashboard() {
