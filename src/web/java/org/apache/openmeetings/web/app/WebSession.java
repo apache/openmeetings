@@ -91,11 +91,7 @@ public class WebSession extends AbstractAuthenticatedWebSession {
 	private TimeZone tz;
 	private TimeZone browserTz;
 	public final static String ISO8601_FORMAT_STRING = "yyyy-MM-dd'T'HH:mm:ssZ";
-	private ThreadLocal<DateFormat> ISO8601FORMAT = new ThreadLocal<DateFormat>() {
-		protected DateFormat initialValue() {
-			return new SimpleDateFormat(ISO8601_FORMAT_STRING);
-		}
-	};
+	private DateFormat ISO8601FORMAT = new SimpleDateFormat(ISO8601_FORMAT_STRING); //FIXME not thread safe
 	private DateFormat sdf;
 	private Dashboard dashboard;
 	private String baseUrl = null;
@@ -235,7 +231,7 @@ public class WebSession extends AbstractAuthenticatedWebSession {
 		languageId = u.getLanguage_id();
 		externalType = u.getExternalUserType();
 		tz = getBean(TimezoneUtil.class).getTimeZone(u);
-		ISO8601FORMAT.get().setTimeZone(tz);
+		ISO8601FORMAT.setTimeZone(tz);
 		//FIXMW locale need to be set by User language first
 		sdf = DateFormat.getDateTimeInstance(SHORT, SHORT, getLocale());
 		if (null == getId()) {
@@ -318,7 +314,7 @@ public class WebSession extends AbstractAuthenticatedWebSession {
 	}
 
 	public static DateFormat getIsoDateFormat() {
-		return get().ISO8601FORMAT.get();
+		return get().ISO8601FORMAT;
 	}
 	
 	public static DateFormat getDateFormat() {
