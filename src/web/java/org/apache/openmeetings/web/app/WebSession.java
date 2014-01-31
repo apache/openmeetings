@@ -90,12 +90,16 @@ public class WebSession extends AbstractAuthenticatedWebSession {
 	private OmUrlFragment area = null;
 	private TimeZone tz;
 	private TimeZone browserTz;
-	private SimpleDateFormat ISO8601FORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
+	public final static String ISO8601_FORMAT_STRING = "yyyy-MM-dd'T'HH:mm:ssZ";
+	private ThreadLocal<DateFormat> ISO8601FORMAT = new ThreadLocal<DateFormat>() {
+		protected DateFormat initialValue() {
+			return new SimpleDateFormat(ISO8601_FORMAT_STRING);
+		}
+	};
 	private DateFormat sdf;
 	private Dashboard dashboard;
 	private String baseUrl = null;
 	private Locale browserLocale = null;
-	private int browserTZOffset = Integer.MIN_VALUE;
 	private Long recordingId;
 	private Long loginError = null;
 	private String externalType;
@@ -231,7 +235,7 @@ public class WebSession extends AbstractAuthenticatedWebSession {
 		languageId = u.getLanguage_id();
 		externalType = u.getExternalUserType();
 		tz = getBean(TimezoneUtil.class).getTimeZone(u);
-		ISO8601FORMAT.setTimeZone(tz);
+		ISO8601FORMAT.get().setTimeZone(tz);
 		//FIXMW locale need to be set by User language first
 		sdf = DateFormat.getDateTimeInstance(SHORT, SHORT, getLocale());
 		if (null == getId()) {
@@ -314,7 +318,7 @@ public class WebSession extends AbstractAuthenticatedWebSession {
 	}
 
 	public static DateFormat getIsoDateFormat() {
-		return get().ISO8601FORMAT;
+		return get().ISO8601FORMAT.get();
 	}
 	
 	public static DateFormat getDateFormat() {
@@ -355,14 +359,6 @@ public class WebSession extends AbstractAuthenticatedWebSession {
 		return browserLocale;
 	}
 
-	public void setBrowserTimeZoneOffset(int browserTZOffset){
-		this.browserTZOffset = browserTZOffset;
-	}
-	
-	public int getBrowserTimeZoneOffset(){
-		return browserTZOffset;
-	}
-	
 	public FieldLanguage getLanguageByBrowserLocale() {
 		List<FieldLanguage> languages = getBean(FieldLanguageDao.class).getLanguages();
 		for (FieldLanguage l : languages) {

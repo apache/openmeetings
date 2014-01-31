@@ -526,7 +526,7 @@ public class Admin {
 		}
 		
 		try {
-			if (!MailUtil.matches(cfg.email)) {
+			if (cfg.email == null || !MailUtil.matches(cfg.email)) {
 			    throw new AddressException("Invalid address");
 			}
 			new InternetAddress(cfg.email, true);

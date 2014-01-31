@@ -41,9 +41,7 @@ public class AppointmentModel extends CalendarModel implements ICalendarVisitor 
 	protected List<? extends CalendarEvent> load() {
 		List<CalendarEvent> list = new ArrayList<CalendarEvent>();
 		for (Appointment a : Application.getBean(AppointmentDao.class).getAppointmentsByRange(WebSession.getUserId(), this.getStart(), this.getEnd())) {
-			CalendarEvent c = new CalendarEvent(a.getId().intValue(), a.getTitle(), a.getStart(), a.getEnd());
-			c.setAllDay(false);
-			//FIXME desc c.set
+			CalendarEvent c = new OmCalendarEvent(a.getId().intValue(), a.getTitle(), a.getStart(), a.getEnd());
 			list.add(c);
 		}
 		return list;
