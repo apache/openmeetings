@@ -30,7 +30,7 @@
 		
 		<handler name="oninit">
 			this.setRoomValues();
-			if (canvas.thishib.currentInvitation.isPasswordProtected){
+			if (canvas.thishib.currentInvitation.passwordProtected){
 				if ($debug) Debug.write("Is Password Protected");
 				this.pass_label.setAttribute('visibility','visible');
 				this._password.setAttribute('visibility','visible');
@@ -106,43 +106,39 @@
         	
 		</method>
 		
-    	<method name="login">
+		<method name="login">
 			this.userlang = Number(this.languages.getValue());
 			this.labellanguages.setAttribute('visibility','hidden');
 			this.languages.setAttribute('visibility','hidden');
 			this.connect.setAttribute('visibility','hidden');
 			this.labelloading.setAttribute('visibility','visible');
-           
-        	parent.userlang = Number(this.userlang);
-           
-        	var userObject = new Array();
-           
-        	canvas.setAttribute('currentuser',canvas.thishib.currentInvitation.invitedEMail);
-        	canvas.setAttribute('user_id',-1);
-        	canvas.setAttribute('firstName',"");
-        	canvas.setAttribute('lastName',canvas.thishib.currentInvitation.invitedEMail);	
-        	canvas.setAttribute('mail',canvas.mail);
-        	canvas.setAttribute('lastLogin','');
-        	canvas.setAttribute('official_code','');
-        	canvas.setAttribute('picture_uri','');
-        	canvas.setAttribute('language','');					
-       
-        	userObject["login"] = canvas.thishib.currentInvitation.invitedEMail;
-        	userObject["firstname"] = "";
-        	userObject["lastname"] = canvas.thishib.currentInvitation.invitedEMail;
-        	userObject["adresses"] = new Array();
-        	//userObject["adresses"]["emails"] = new Array();
-        	userObject["adresses"]["email"] = canvas.thishib.currentInvitation.invitedEMail;
-        	//userObject["adresses"]["emails"][0]["mail"] = new Array();
-        	//userObject["adresses"]["emails"][0]["mail"]["email"] = canvas.thishib.currentInvitation.invitedEMail;
-           
-        	hib.userobject = userObject;
-           
-        	hib.userlang = Number(this.userlang);
-        	canvas.thishib.loaderVar = new lz.autoloaderBarOnly(canvas);
+			
+			parent.userlang = Number(this.userlang);
+			
+			var invitee = canvas.thishib.currentInvitation.invitee;
+			var email = invitee.adresses.email;
+			var fName = invitee.firstname == null ? "" : invitee.firstname;
+			var lName = invitee.lastname == null ? email : invitee.lastname;
+			
+			canvas.setAttribute('currentuser', email);
+			canvas.setAttribute('user_id', -1);
+			canvas.setAttribute('firstName', fName);
+			canvas.setAttribute('lastName', lName);
+			canvas.setAttribute('mail', email);
+			canvas.setAttribute('lastLogin', invitee.lastlogin);
+			canvas.setAttribute('official_code','');
+			canvas.setAttribute('picture_uri', invitee.pictureuri);
+			canvas.setAttribute('language', invitee.language_id);
+			
+			hib.userobject = invitee;
+			hib.userobject.firstname = fName;
+			hib.userobject.lastname = lName;
+			
+			hib.userlang = Number(this.userlang);
+			canvas.thishib.loaderVar = new lz.autoloaderBarOnly(canvas);
 			canvas.thishib.loaderVar.setProgress();
 			this.close();
-        	canvas.thishib.loaderVar.getLanguageByIdAndMax.doCall();         
+			canvas.thishib.loaderVar.getLanguageByIdAndMax.doCall();         
 		</method>
 		 
 		<!-- label: password -->
