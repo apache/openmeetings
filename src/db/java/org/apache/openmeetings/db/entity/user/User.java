@@ -299,9 +299,7 @@ public class User implements Serializable, IDataProviderEntity {
 	}
 
 	public void setAge(Date age) {
-		if (age == null)
-			age = new Date();
-		this.age = age;
+		this.age = age == null ? new Date() :age;
 	}
 
 	public Integer getAvailible() {
