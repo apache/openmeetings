@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.web.user.rooms;
+package org.apache.openmeetings.web.room;
 
 
 import org.apache.openmeetings.web.common.BasePanel;
@@ -32,10 +32,10 @@ import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.apache.wicket.request.resource.ResourceReference;
 import org.apache.wicket.util.string.StringValue;
 
-public class RoomPanel extends BasePanel {
+public class SwfRoomPanel extends BasePanel {
 	private static final long serialVersionUID = 2308988314987829510L;
 	
-	public RoomPanel(String id) {
+	public SwfRoomPanel(String id) {
 		this(id, new PageParameters());
 	}
 	
@@ -44,7 +44,7 @@ public class RoomPanel extends BasePanel {
 				? "maindebug.as3.swf11.swf" : "main.as3.swf11.swf";
 	}
 	
-	public RoomPanel(String id, PageParameters pp) {
+	public SwfRoomPanel(String id, PageParameters pp) {
 		super(id);
 
 		StringValue swfVal = pp.get("swf");
@@ -54,7 +54,7 @@ public class RoomPanel extends BasePanel {
 	}
 
 	private ResourceReference newResourceReference() {
-		return new JavaScriptResourceReference(RoomPanel.class, "swf-functions.js");
+		return new JavaScriptResourceReference(SwfRoomPanel.class, "swf-functions.js");
 	}
 	
 	@Override

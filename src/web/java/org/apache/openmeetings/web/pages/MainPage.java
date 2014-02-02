@@ -61,18 +61,19 @@ import org.wicketstuff.urlfragment.UrlFragment;
 public class MainPage extends BaseInitedPage {
 	private static final long serialVersionUID = 6421960759218157999L;
 	private static final Logger log = Red5LoggerFactory.getLogger(MainPage.class, webAppRootKey);
-	private final MenuPanel menu;
+	private final MenuPanel menu = new MenuPanel("menu");
+	private final WebMarkupContainer topLinks = new WebMarkupContainer("topLinks");
 	private final MarkupContainer contents;
 	private final AbstractAjaxTimerBehavior areaBehavior;
 	private DebugBar dev = null;
 	
 	public MainPage(PageParameters pp) {
 		super();
+		getHeader().setVisible(false);
 		contents = new WebMarkupContainer("contents");
 		add(contents.add(new WebMarkupContainer(CHILD_ID)).setOutputMarkupId(true).setMarkupId("contents"));
-		menu = new MenuPanel("menu");
-		add(menu);
-		add(new AjaxLink<Void>("messages") {
+		add(menu.setVisible(false), topLinks.setVisible(false).setOutputMarkupPlaceholderTag(true).setMarkupId("topLinks"));
+		topLinks.add(new AjaxLink<Void>("messages") {
 			private static final long serialVersionUID = 4065339709905366840L;
 
 			@Override
@@ -80,7 +81,7 @@ public class MainPage extends BaseInitedPage {
 				updateContents(PROFILE_MESSAGES, target);
 			}
 		});
-		add(new ConfirmableAjaxLink("logout", 634L) {
+		topLinks.add(new ConfirmableAjaxLink("logout", 634L) {
 			private static final long serialVersionUID = -2994610981053570537L;
 
 			@Override
@@ -89,7 +90,7 @@ public class MainPage extends BaseInitedPage {
 				setResponsePage(Application.get().getSignInPageClass());
 			}
 		});
-		add(new AjaxLink<Void>("profile") {
+		topLinks.add(new AjaxLink<Void>("profile") {
 			private static final long serialVersionUID = 4065339709905366840L;
 
 			@Override
@@ -98,7 +99,7 @@ public class MainPage extends BaseInitedPage {
 			}
 		});
 		final AboutDialog about = new AboutDialog("aboutDialog");
-		add(new AjaxLink<Void>("about") {
+		topLinks.add(new AjaxLink<Void>("about") {
 			private static final long serialVersionUID = 4065339709905366840L;
 
 			@Override
@@ -113,7 +114,7 @@ public class MainPage extends BaseInitedPage {
 		} else {
 		    add(new EmptyPanel("dev").setVisible(false));
 		}		
-		add(new ExternalLink("bug", "https://issues.apache.org/jira/browse/OPENMEETINGS"));//FIXME hardcoded
+		topLinks.add(new ExternalLink("bug", "https://issues.apache.org/jira/browse/OPENMEETINGS"));//FIXME hardcoded
 		
 		add(new ChatPanel("chatPanel"));
 		add(new WebSocketBehavior() {
@@ -173,5 +174,13 @@ public class MainPage extends BaseInitedPage {
 			areaBehavior.stop(target);
 			updateContents(uf, target);
 		}
+	}
+	
+	public MenuPanel getMenu() {
+		return menu;
+	}
+
+	public WebMarkupContainer getTopLinks() {
+		return topLinks;
 	}
 }

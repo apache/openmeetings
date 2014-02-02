@@ -25,6 +25,7 @@ public class HeaderPanel extends BasePanel {
 
 	public HeaderPanel(String id, String appName) {
 		super(id);
+		setOutputMarkupPlaceholderTag(true);
 		add(new Label("appName", appName));
 	}
 }

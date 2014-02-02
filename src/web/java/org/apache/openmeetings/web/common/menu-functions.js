@@ -16,25 +16,14 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.web.pages;
-
-import static org.apache.openmeetings.web.app.Application.getBean;
-
-import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
-import org.apache.openmeetings.web.room.SwfRoomPanel;
-import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.request.mapper.parameter.PageParameters;
-
-public class SwfPage extends BaseNotInitedPage {
-	private static final long serialVersionUID = 6492618860620779445L;
-
-	public SwfPage() {
-		this(new PageParameters());
-	}
-
-	public SwfPage(PageParameters pp) {
-		add(new Label("titleAppName", getBean(ConfigurationDao.class).getAppName()));
-		add(new SwfRoomPanel("room", pp));
-	}
-	
+function initMenu(menuContainerId, menuId) {
+	$("#" + menuContainerId).menubar({
+		autoExpand: true
+		, menuIcon: true
+		, buttons: true
+		, position: {
+			within: $("#" + menuId).add(window).first()
+		}
+		//, select: select
+	});
 }

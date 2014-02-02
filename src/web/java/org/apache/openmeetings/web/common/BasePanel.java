@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.web.common;
 
+import org.apache.openmeetings.web.pages.MainPage;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.panel.Panel;
 
@@ -29,6 +30,10 @@ public abstract class BasePanel extends Panel {
 		setOutputMarkupId(true);
 	}
 
+	protected MainPage getMainPage() {
+		return (MainPage)super.getPage();
+	}
+	
 	/**
 	 * Overwrite this method to execute Java code after Panel is loaded by the
 	 * {@link MenuPanel}
@@ -36,6 +41,8 @@ public abstract class BasePanel extends Panel {
 	 * @param target
 	 */
 	public void onMenuPanelLoad(AjaxRequestTarget target) {
+		target.add(getMainPage().getHeader().setVisible(true), getMainPage().getMenu().setVisible(true)
+				, getMainPage().getTopLinks().setVisible(true));
 	}
 
 	/**

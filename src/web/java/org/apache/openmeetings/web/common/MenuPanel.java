@@ -23,12 +23,12 @@ import org.apache.openmeetings.db.entity.basic.Naviglobal;
 import org.apache.openmeetings.db.entity.basic.Navimain;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
-import org.apache.openmeetings.web.pages.MainPage;
 import org.apache.openmeetings.web.util.OmUrlFragment;
 import org.apache.openmeetings.web.util.OmUrlFragment.MenuActions;
 import org.apache.openmeetings.web.util.OmUrlFragment.MenuParams;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
@@ -40,14 +40,17 @@ import org.apache.wicket.markup.html.list.ListView;
  *
  */
 public class MenuPanel extends BasePanel {
-	private static final long serialVersionUID = 6626039612808753514L;
+	private static final long serialVersionUID = 1L;
+	private WebMarkupContainer menuContainer = new WebMarkupContainer("menuContainer");
 
 	public MenuPanel(String id) {
 		super(id);
+		setOutputMarkupPlaceholderTag(true);
 		setMarkupId(id);
 		
+		add(menuContainer.setOutputMarkupId(true));
 		final NavigationDao man = Application.getBean(NavigationDao.class);
-		add(new ListView<Naviglobal>("mainItem", man.getMainMenu(WebSession.getUserLevel(), WebSession.getUserId(), WebSession.getLanguage())) {
+		menuContainer.add(new ListView<Naviglobal>("mainItem", man.getMainMenu(WebSession.getUserLevel(), WebSession.getUserId(), WebSession.getLanguage())) {
 			private static final long serialVersionUID = 2173926553418745231L;
 
 			@Override
@@ -73,12 +76,13 @@ public class MenuPanel extends BasePanel {
 							}
 							
 							public void onClick(AjaxRequestTarget target) {
-								((MainPage)getPage()).updateContents(new OmUrlFragment(action, params), target);
+								getMainPage().updateContents(new OmUrlFragment(action, params), target);
 							}
 						});
 					}
 				}.setReuseItems(true));
 			}
 		}.setReuseItems(true));
+		add(new MenuFunctionsBehavior(menuContainer.getMarkupId(), id));
 	}
 }

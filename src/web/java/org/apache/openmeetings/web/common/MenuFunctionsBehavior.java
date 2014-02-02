@@ -19,40 +19,30 @@
 /**
  * @author Sebastien Briquet
  */
-package org.apache.openmeetings.web.user.calendar;
-
-import java.util.Map;
+package org.apache.openmeetings.web.common;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
-import org.apache.wicket.markup.head.PriorityHeaderItem;
-import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
-import org.apache.wicket.request.resource.ResourceReference;
-import org.apache.wicket.resource.TextTemplateResourceReference;
-import org.apache.wicket.util.collections.MicroMap;
+import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
+import org.apache.wicket.request.resource.JavaScriptResourceReference;
 
-public class CalendarFunctionsBehavior extends Behavior {
+public class MenuFunctionsBehavior extends Behavior {
 	private static final long serialVersionUID = 1L;
-	private final String markupId;
+	private final static JavaScriptResourceReference MENU_FUNCTIONS = new JavaScriptResourceReference(MenuFunctionsBehavior.class, "menu-functions.js");
+	private final String menuContainerId;
+	private final String menuId;
 	
-	public CalendarFunctionsBehavior(String markupId) {
-		this.markupId = markupId;
-	}
-	
-	private IModel<Map<String, Object>> newResourceModel() {
-		return Model.ofMap(new MicroMap<String, Object>("markupId", this.markupId));
-	}
-	
-	private ResourceReference newResourceReference() {
-		return new TextTemplateResourceReference(CalendarFunctionsBehavior.class, "calendar-functions.js", this.newResourceModel());
+	public MenuFunctionsBehavior(String menuContainerId, String menuId) {
+		this.menuContainerId = menuContainerId;
+		this.menuId = menuId;
 	}
 	
 	@Override
 	public void renderHead(Component component, IHeaderResponse response) {
 		super.renderHead(component, response);
-		response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forReference(this.newResourceReference(), "calendar-functions")));
+		response.render(JavaScriptHeaderItem.forReference(MENU_FUNCTIONS));
+		response.render(OnDomReadyHeaderItem.forScript(String.format("initMenu('%s', '%s');", menuContainerId, menuId)));
 	}
 }

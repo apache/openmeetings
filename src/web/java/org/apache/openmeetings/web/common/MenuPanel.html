@@ -19,36 +19,19 @@
   
 -->
 <html xmlns:wicket="http://wicket.apache.org">
-	<wicket:head>
-		<link media="screen" type="text/css" rel="stylesheet" href="css/jquery.ui.menubar.css"/>
-	</wicket:head>
-	<wicket:panel>
-		<script type="text/javascript" src="js/jquery.ui.menubar.js"></script>
-		<script type="text/javascript">
-			$(function() {
-				$("#jMenu").menubar({
-					autoExpand: true
-					, menuIcon: true
-					, buttons: true
-					, position: {
-						within: $("#menu").add(window).first()
-					}
-					//, select: select
-				});
-			});
-		</script>
-		<ul id="jMenu">
-			<li wicket:id="mainItem">
-				<a class="fNiv" href="#" onclick="return false;"><span wicket:id="label"></span></a>
-				<ul wicket:enclosure="childItem">
-					<li wicket:id="childItem">
-						<a wicket:id="link" href="#">
-							<span class="menuName" wicket:id="name"></span><br />
-							<span class="menuDesc" wicket:id="description"></span>
-						</a>
-					</li>
-				</ul>
-			</li>
-		</ul>
-	</wicket:panel>
+<wicket:panel>
+	<ul wicket:id="menuContainer">
+		<li wicket:id="mainItem">
+			<a href="#" onclick="return false;"><span wicket:id="label"></span></a>
+			<ul wicket:enclosure="childItem">
+				<li wicket:id="childItem">
+					<a wicket:id="link" href="#">
+						<span class="menuName" wicket:id="name"></span><br />
+						<span class="menuDesc" wicket:id="description"></span>
+					</a>
+				</li>
+			</ul>
+		</li>
+	</ul>
+</wicket:panel>
 </html>
