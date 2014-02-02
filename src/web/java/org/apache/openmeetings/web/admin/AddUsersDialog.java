@@ -39,6 +39,7 @@ import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.model.util.ListModel;
 
 import com.googlecode.wicket.jquery.ui.widget.dialog.AbstractFormDialog;
 import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
@@ -49,8 +50,22 @@ public class AddUsersDialog extends AbstractFormDialog<User> {
 	private FeedbackPanel feedbackDialog = new FeedbackPanel("feedbackDialog");
 	private final AdminCommonUserForm<?> commonForm;
 	private String userSearchText;
-	private List<User> usersInList = new ArrayList<User>();
-	private final List<User> usersToAdd = new ArrayList<User>();
+	private final IModel<List<User>> listUsersModel = new ListModel<User>(new ArrayList<User>());
+	private final IModel<List<User>> selectedUsersModel = new ListModel<User>(new ArrayList<User>());
+	private final ListMultipleChoice<User> users = new ListMultipleChoice<User>("users"
+			, selectedUsersModel
+			, listUsersModel
+			, new IChoiceRenderer<User>() {
+		private static final long serialVersionUID = 1L;
+
+		public Object getDisplayValue(User object) {
+			return getUser(object);
+		}
+
+		public String getIdValue(User object, int index) {
+			return "" + object.getUser_id();
+		}
+	});
 	DialogButton send = new DialogButton(WebSession.getString(175));
 	private DialogButton cancel = new DialogButton(WebSession.getString(219));
 
@@ -60,38 +75,28 @@ public class AddUsersDialog extends AbstractFormDialog<User> {
 		this.commonForm = commonForm;
 		formUsers.add(feedbackDialog.setOutputMarkupId(true));
 
-		IModel<List<User>> listUsersModel = new PropertyModel<List<User>>(AddUsersDialog.this, "usersInList");
-		IModel<List<User>> selectedUsersModel = new PropertyModel<List<User>>(AddUsersDialog.this, "usersToAdd");
-		final ListMultipleChoice<User> users = new ListMultipleChoice<User>("users"
-				, selectedUsersModel
-				, listUsersModel
-				, new IChoiceRenderer<User>() {
-			private static final long serialVersionUID = 1L;
-
-			public Object getDisplayValue(User object) {
-				return getUser(object);
-			}
-
-			public String getIdValue(User object, int index) {
-				return "" + object.getUser_id();
-			}
-		});
-		
 		formUsers.add(new TextField<String>("searchText", new PropertyModel<String>(AddUsersDialog.this, "userSearchText")));
 		formUsers.add(new AjaxButton("search", Model.of(WebSession.getString(182L))) {
 			private static final long serialVersionUID = -4752180617634945030L;
 
 			protected void onAfterSubmit(AjaxRequestTarget target, Form<?> form) {
-				usersToAdd.clear();
-				usersInList.clear();
-				usersInList.addAll(Application.getBean(AdminUserDao.class).get(userSearchText));
+				listUsersModel.getObject().clear();
+				selectedUsersModel.getObject().clear();
+				listUsersModel.getObject().addAll(Application.getBean(AdminUserDao.class).get(userSearchText));
 				target.add(users);
 			}
 		});
 		formUsers.add(users.setOutputMarkupId(true));
 		add(formUsers.setOutputMarkupId(true));
-}
+	}
 
+	@Override
+	protected void onOpen(AjaxRequestTarget target) {
+		listUsersModel.getObject().clear();
+		selectedUsersModel.getObject().clear();
+		target.add(users);
+		super.onOpen(target);
+	}
 	
 	@Override
 	protected List<DialogButton> getButtons() {
@@ -116,7 +121,6 @@ public class AddUsersDialog extends AbstractFormDialog<User> {
 
 	@Override
 	protected void onSubmit(AjaxRequestTarget target) {
-		commonForm.submitView(target, usersToAdd);
+		commonForm.submitView(target, selectedUsersModel.getObject());
 	}
-
 }
