@@ -127,6 +127,9 @@ html, body {
 	max-width: none;
 	min-width: 0;
 }
+.help.support h3 {
+	margin-bottom: 5px;
+}
 div.tableWrapper {
 	background-color: #FFFFFF;
 	border: solid 1px #aacfe4;
