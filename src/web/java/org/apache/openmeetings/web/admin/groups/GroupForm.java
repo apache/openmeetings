@@ -62,7 +62,7 @@ public class GroupForm extends AdminCommonUserForm<Organisation> {
 	@Override
 	public void updateView(AjaxRequestTarget target) {
 		usersPanel.update(getOrgId());
-		target.add(this);
+		target.add(this, groupList);
 		target.appendJavaScript("groupsInit();");
 	}
 
@@ -115,16 +115,15 @@ public class GroupForm extends AdminCommonUserForm<Organisation> {
 	@Override
 	protected void onDeleteSubmit(AjaxRequestTarget target, Form<?> form) {
 		getBean(OrganisationDao.class).delete(getModelObject(), getUserId());
-		target.add(groupList);
-		target.appendJavaScript("groupsInit();");
+		this.setModelObject(new Organisation());
+		updateView(target);
 	}
 	
 	@Override
 	protected void onSaveSubmit(AjaxRequestTarget target, Form<?> form) {
 		getBean(OrganisationDao.class).update(getModelObject(), getUserId());
 		hideNewRecord();
-		target.add(groupList);
-		target.appendJavaScript("groupsInit();");
+		updateView(target);
 	}
 
 	@Override
