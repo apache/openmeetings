@@ -33,30 +33,16 @@ public class DaoHelper {
 		} else {
 			sb.append(alias);
 		}
-		sb.append(" FROM ").append(table).append(" ").append(alias);
-		boolean whereAdded = false;
+		sb.append(" FROM ").append(table).append(" ").append(alias).append(" WHERE 1 = 1 ");
 		if (filterDeleted) {
-			whereAdded = true;
-			sb.append(" WHERE ").append(alias).append(".deleted = false ");
+			sb.append("AND ").append(alias).append(".deleted = false ");
 		}
 		StringBuilder where = DaoHelper.getWhereClause(search, alias, fields);
 		if (where.length() > 0) {
-			if (!whereAdded) {
-				whereAdded = true;
-				sb.append(" WHERE ");
-			} else {
-				sb.append("AND ");
-			}
-			sb.append(where);
+			sb.append("AND ").append(where);
 		}
 		if (additionalWhere != null && !additionalWhere.trim().isEmpty()) {
-			if (!whereAdded) {
-				whereAdded = true;
-				sb.append(" WHERE ");
-			} else {
-				sb.append("AND ");
-			}
-			sb.append(additionalWhere);
+			sb.append("AND ").append(additionalWhere);
 		}
 		if (sort != null && !sort.trim().isEmpty()) {
 			sb.append(" ORDER BY ").append(alias).append(".").append(sort);
