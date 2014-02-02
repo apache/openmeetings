@@ -69,20 +69,25 @@ public class GroupsPanel extends AdminPanel {
         
 		//Adding the Group Form
 		form = new GroupForm("form", listContainer, new Organisation()){
-			private static final long serialVersionUID = -3042797340375988889L;
+			private static final long serialVersionUID = 1L;
 
+			private AjaxButton processAddClass() {
+				boolean orgSaved = getModelObject().getOrganisation_id() != null;
+				addUsersBtn.add(AttributeModifier.replace("class", orgSaved ? "formNewButton" : "formNewButton disabled"));
+				addUsersBtn.setEnabled(orgSaved);
+				return addUsersBtn;
+			}
+			
 			@Override
 			protected void onModelChanged() {
 				super.onModelChanged();
-				boolean orgEmpty = getModelObject().getOrganisation_id() == null;
-				addUsersBtn.add(AttributeModifier.replace("class", orgEmpty ? "formNewButton disabled" : "formNewButton"));
-				addUsersBtn.setEnabled(!orgEmpty);
+				processAddClass();
 			}
 			
 			@Override
 			public void updateView(AjaxRequestTarget target) {
 				super.updateView(target);
-				target.add(addUsersBtn);
+				target.add(processAddClass());
 			}
 		};
         add(form.add(addUsersBtn.setOutputMarkupId(true)));
