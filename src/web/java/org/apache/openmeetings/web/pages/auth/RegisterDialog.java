@@ -204,7 +204,7 @@ public class RegisterDialog extends AbstractFormDialog<String> {
 		String baseURL = getBaseUrl() + redirectPage;
 		try {
 			getBean(IUserManager.class).registerUserInit(3, 1, 0, 1, login, password, lastName, firstName, email,
-					new Date(), "" /* street */, "" /* additionalname */, "" /* fax */, "" /* zip */, state.getState_id(),
+					null /* age/birthday */, "" /* street */, "" /* additionalname */, "" /* fax */, "" /* zip */, state.getState_id(),
 					"" /* town */, lang.getLanguage_id(), true /* sendWelcomeMessage */,
 					Arrays.asList(getBean(ConfigurationDao.class).getConfValue("default_domain_id", Long.class, null)),
 					"" /* phone */, false, baseURL, sendConfirmation, TimeZone.getTimeZone(tzModel.getObject()),
