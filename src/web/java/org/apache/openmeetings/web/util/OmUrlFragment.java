@@ -18,6 +18,8 @@
  */
 package org.apache.openmeetings.web.util;
 
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_LANDING_ZONE;
+import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.getBaseUrl;
 import static org.apache.openmeetings.web.app.WebSession.getLanguage;
 import static org.apache.openmeetings.web.app.WebSession.getSid;
@@ -26,6 +28,7 @@ import static org.apache.openmeetings.web.user.profile.SettingsPanel.MESSAGES_TA
 
 import java.io.Serializable;
 
+import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.web.admin.backup.BackupPanel;
 import org.apache.openmeetings.web.admin.configurations.ConfigsPanel;
 import org.apache.openmeetings.web.admin.connection.ConnectionsPanel;
@@ -51,6 +54,7 @@ public class OmUrlFragment implements Serializable {
 	private String type = "";
 	public static final String CHILD_ID = "child";
 	public static final String TYPE_CALENDAR = "calendar";
+	public static final String TYPE_DASHBOARD = "dashboard";
 	public static final String TYPE_MESSAGES = "messages";
 	public static final String TYPE_EDIT = "edit";
 	public static final String TYPE_RECORDINGS = "record";
@@ -66,7 +70,7 @@ public class OmUrlFragment implements Serializable {
 	public static final String TYPE_BACKUP = "backup";
 	public static final String TYPE_SERVER = "server";
 	public static final String TYPE_OAUTH2 = "oauth2";
-	public static final OmUrlFragment DASHBOARD = new OmUrlFragment(AreaKeys.user, "");
+	public static final OmUrlFragment DASHBOARD = new OmUrlFragment(AreaKeys.user, TYPE_DASHBOARD);
 	public static final OmUrlFragment PROFILE_EDIT = new OmUrlFragment(AreaKeys.profile, TYPE_EDIT);
 	public static final OmUrlFragment PROFILE_MESSAGES = new OmUrlFragment(AreaKeys.profile, TYPE_MESSAGES);
 	public static final OmUrlFragment CALENDAR = new OmUrlFragment(AreaKeys.user, TYPE_CALENDAR);
@@ -106,6 +110,18 @@ public class OmUrlFragment implements Serializable {
 		, myTabButton
 	}
 	
+	public static OmUrlFragment get() {
+		String[] arr = getBean(ConfigurationDao.class).getConfValue(CONFIG_DEFAULT_LANDING_ZONE, String.class, "").split("/");
+		if (arr != null && arr.length == 2) {
+			try {
+				return new OmUrlFragment(AreaKeys.valueOf(arr[0]), arr[1]);
+			} catch (Exception e) {
+				// no-op
+			}
+		}
+		return DASHBOARD;
+	}
+	
 	public OmUrlFragment(AreaKeys area, String type) {
 		this.setArea(area);
 		this.setType(type);
@@ -118,6 +134,8 @@ public class OmUrlFragment implements Serializable {
 	public OmUrlFragment(MenuActions action, MenuParams params) {
 		switch(action) {
 			case dashboardModuleStartScreen:
+				setArea(AreaKeys.user);
+				setType(TYPE_DASHBOARD);
 				break;
 			case dashboardModuleCalendar:
 				setArea(AreaKeys.user);
