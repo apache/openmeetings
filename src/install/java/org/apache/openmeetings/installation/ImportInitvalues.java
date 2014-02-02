@@ -22,6 +22,7 @@ import static org.apache.openmeetings.db.dao.basic.ConfigurationDao.DEFAULT_MAX_
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_CRYPT_KEY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DASHBOARD_SHOW_MYROOMS_KEY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DASHBOARD_SHOW_RSS_KEY;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_LANDING_ZONE;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAUT_LANG_KEY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_FRONTEND_REGISTER_KEY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_IGNORE_BAD_SSL;
@@ -523,13 +524,12 @@ public class ImportInitvalues {
 						null,
 						"Set inviter's email address as ReplyTo in email invitations (1 == set, 0 == NOT set)");
 
-		configurationDao
-				.add(
-						"default.landing.zone",
-						"dashboard.rooms",
-						null,
-						"Area to be shown to the user after login. Possible values are: "
-								+ "dashboard.rooms, dashboard.chat, calendar, rooms.public, rooms.private, rooms.user");
+		configurationDao.add(CONFIG_DEFAULT_LANDING_ZONE,
+				"user/dashboard"
+				, null
+				, "Area to be shown to the user after login. Possible values are: "
+					+ "user/dashboard, user/calendar, user/record, rooms/my, rooms/group, rooms/public, admin/user, admin/connection"
+					+ ", admin/group, admin/room, admin/config, admin/lang, admin/ldap, admin/backup, admin/server, admin/oauth2");
 		
 		// oauth2 params
 		configurationDao

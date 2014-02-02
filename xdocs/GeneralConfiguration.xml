@@ -102,9 +102,10 @@
 				</tr>
 				<tr>
 					<td class="configCell"> default.landing.zone </td>
-					<td class="configCell"> dashboard.rooms </td>
-					<td class="configCell"> Area to be shown to the user after login. Possible values are: dashboard.rooms, dashboard.chat, calendar, rooms.public, rooms.private, rooms.user </td>
-					<td class="configCell"> 2.1.x </td>
+					<td class="configCell"> user/dashboard </td>
+					<td class="configCell"> Area to be shown to the user after login. Possible values are: user/dashboard, user/calendar, user/record, rooms/my, rooms/group, rooms/public, admin/user, admin/connection
+						, admin/group, admin/room, admin/config, admin/lang, admin/ldap, admin/backup, admin/server, admin/oauth2 </td>
+					<td class="configCell"> 2.1.x, <b> values are changed in 3.0.0</b> </td>
 				</tr>
 				<tr>
 					<td class="configCell"> sms.provider </td>

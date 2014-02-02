@@ -146,6 +146,7 @@
       <xs:choice minOccurs="0" maxOccurs="unbounded">
         <xs:element ref="a"/>
         <xs:element ref="p"/>
+        <xs:element ref="b"/>
       </xs:choice>
       <xs:attribute name="style"/>
       <xs:attribute name="class"/>

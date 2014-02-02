@@ -23,7 +23,6 @@ import static org.apache.openmeetings.web.app.Application.addOnlineUser;
 import static org.apache.openmeetings.web.app.Application.removeOnlineUser;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import static org.apache.openmeetings.web.util.OmUrlFragment.CHILD_ID;
-import static org.apache.openmeetings.web.util.OmUrlFragment.DASHBOARD;
 import static org.apache.openmeetings.web.util.OmUrlFragment.PROFILE_EDIT;
 import static org.apache.openmeetings.web.util.OmUrlFragment.PROFILE_MESSAGES;
 import static org.apache.openmeetings.web.util.OmUrlFragment.getPanel;
@@ -141,7 +140,7 @@ public class MainPage extends BaseInitedPage {
 			@Override
 			protected void onTimer(AjaxRequestTarget target) {
 				OmUrlFragment area = WebSession.get().getArea();
-				updateContents(area == null ? DASHBOARD : area, target);
+				updateContents(area == null ? OmUrlFragment.get() : area, target);
 				stop(target);
 				WebSession.get().setArea(null);
 			}
