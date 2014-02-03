@@ -590,7 +590,7 @@ select.messages.selector {
 #messagesTable tr.selected {
 	background-color: #d7ebf9;
 }
-tr.unread {
+#messagesTable tr.unread {
 	font-weight: bold;
 }
 .fht-tbody {
