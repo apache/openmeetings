@@ -104,11 +104,11 @@ public class AbstractUserDao  {
 		return q.getResultList();
 	}
 	
-	private String getAdditionalWhere(boolean isAdmin){
+	private String getAdditionalWhere(boolean isAdmin) {
 		return isAdmin ? null : "(u.type <> :contact OR (u.type = :contact AND u.ownerId = :ownerId))";
 	}
 	
-	private void setAdditionalParams(TypedQuery<?> q, boolean isAdmin, long currentUserId){
+	private void setAdditionalParams(TypedQuery<?> q, boolean isAdmin, long currentUserId) {
 		if (!isAdmin) {
 			q.setParameter("ownerId", currentUserId);
 			q.setParameter("contact", Type.contact);
@@ -426,7 +426,8 @@ public class AbstractUserDao  {
 	private StringBuilder getUserProfileQuery(boolean count, String text, String offers, String search) {
 		StringBuilder sb = new StringBuilder("SELECT ");
 		sb.append(count ? "COUNT(" : "").append("u").append(count ? ") " : " ")
-			.append("FROM User u WHERE u.deleted = false ");
+			.append("FROM User u WHERE u.deleted = false AND ")
+			.append(getAdditionalWhere(false));
 		if (offers != null && offers.length() != 0) {
 			sb.append("AND (LOWER(u.userOffers) LIKE :userOffers) ");
 		}
@@ -443,12 +444,13 @@ public class AbstractUserDao  {
 		return sb;
 	}
 	
-	public List<User> searchUserProfile(String text, String offers, String search, String orderBy, int start, int max, boolean asc) {
+	public List<User> searchUserProfile(long userId, String text, String offers, String search, String orderBy, int start, int max, boolean asc) {
 		StringBuilder sb = getUserProfileQuery(false, text, offers, search);
 		sb.append(" ORDER BY ").append(orderBy).append(asc ? " ASC" : " DESC");
 
 		log.debug("hql :: " + sb.toString());
 		TypedQuery<User> query = em.createQuery(sb.toString(), User.class);
+		setAdditionalParams(query, false, userId);
 
 		if (text != null && text.length() != 0) {
 			query.setParameter("search", StringUtils.lowerCase("%" + text + "%"));
@@ -462,11 +464,12 @@ public class AbstractUserDao  {
 		return query.setFirstResult(start).setMaxResults(max).getResultList();
 	}
 
-	public Long searchCountUserProfile(String text, String offers, String search) {
+	public Long searchCountUserProfile(long userId, String text, String offers, String search) {
 		StringBuilder sb = getUserProfileQuery(true, text, offers, search);
 		
 		log.debug("hql :: " + sb.toString());
 		TypedQuery<Long> query = em.createQuery(sb.toString(), Long.class);
+		setAdditionalParams(query, false, userId);
 		
 		if (text != null && text.length() != 0) {
 			query.setParameter("search", StringUtils.lowerCase("%" + text + "%"));

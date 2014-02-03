@@ -76,12 +76,12 @@ public class UserDao {
 		return dao.getUserByActivationHash(hash);
 	}
 
-	public List<User> searchUserProfile(String text, String offers, String search, String orderBy, int start, int max, boolean asc) {
-		return dao.searchUserProfile(text, offers, search, orderBy, start, max, asc);
+	public List<User> searchUserProfile(long userId, String text, String offers, String search, String orderBy, int start, int max, boolean asc) {
+		return dao.searchUserProfile(userId, text, offers, search, orderBy, start, max, asc);
 	}
 
-	public Long searchCountUserProfile(String text, String offers, String search) {
-		return dao.searchCountUserProfile(text, offers, search);
+	public Long searchCountUserProfile(long userId, String text, String offers, String search) {
+		return dao.searchCountUserProfile(userId, text, offers, search);
 	}
 	
 	public User getExternalUser(String extId, String extType) {
