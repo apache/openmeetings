@@ -18,7 +18,8 @@
  */
 package org.apache.openmeetings.web.user.record;
 
-import static org.apache.openmeetings.util.OmFileHelper.getMp4Recording;
+import static org.apache.openmeetings.util.OmFileHelper.MP4_EXTENSION;
+import static org.apache.openmeetings.util.OmFileHelper.isRecordingExists;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 
@@ -57,6 +58,7 @@ public class RecordingsPanel extends UserPanel {
 	private final VideoInfo info = new VideoInfo("info");
 	private final RecordingTree myTree;
 	private final IModel<FlvRecording> rm = new CompoundPropertyModel<FlvRecording>(new FlvRecording());
+	private final RecordingErrorsDialog errorsDialog = new RecordingErrorsDialog("errors", Model.of((FlvRecording)null));
 	private RecordingTree selected;
 
 	public RecordingsPanel(String id) {
@@ -122,7 +124,7 @@ public class RecordingsPanel extends UserPanel {
 			);
 		add(new Label("homeSize", ""));
 		add(new Label("publicSize", ""));
-		add(video, info);
+		add(video, info, errorsDialog);
 	}
 
 	//FIXME need to be generalized to use as Room files explorer
@@ -162,7 +164,11 @@ public class RecordingsPanel extends UserPanel {
 							}
 						};
 					} else {
-						return super.newLabelComponent(id, lm);
+						if (r.getFlvRecordingId() > 0) {
+							return new RecordingPanel(id, lm, errorsDialog);
+						} else {
+							return super.newLabelComponent(id, lm);
+						}
 					}
 				}
 				
@@ -209,7 +215,7 @@ public class RecordingsPanel extends UserPanel {
 						style = "public-recordings om-icon";
 					} else {
 						style = t.getIsFolder() ? super.getOtherStyleClass(t)
-								: (getMp4Recording(t.getFileHash()).exists() ? "recording om-icon" : "broken-recording om-icon");
+								: (isRecordingExists(t.getFileHash() + MP4_EXTENSION) ? "recording om-icon" : "broken-recording om-icon");
 					}
 					if (isSelected()) {
 						style += " selected";

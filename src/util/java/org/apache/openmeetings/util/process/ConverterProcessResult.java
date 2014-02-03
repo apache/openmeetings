@@ -19,9 +19,8 @@
 package org.apache.openmeetings.util.process;
 
 /**
- * Object created by each conversion step,
- * each conversion step that invokes and external tool like ImageMagick is one single 
- * ConverterProcessMessage
+ * Object created by each conversion step, each conversion step that invokes and
+ * external tool like ImageMagick is one single ConverterProcessMessage
  * 
  * if exitValue equals "-1" then there was an issue.
  * 
@@ -29,27 +28,24 @@ package org.apache.openmeetings.util.process;
  *
  */
 public class ConverterProcessResult {
-	
 	private String process;
 	private String command;
 	private String exception;
 	private String error;
 	private String exitValue;
 	private String out;
-	
+
 	public ConverterProcessResult() {
-		
+		this(null, null, null);
 	}
-	
-	public ConverterProcessResult (String process,
-			String error, Exception ex) {
+
+	public ConverterProcessResult(String error) {
+		this(null, error, null);
+	}
+
+	public ConverterProcessResult(String process, String error, Exception ex) {
 		setProcess(process);
 		setException(ex.toString());
-		setError(error);
-		setExitValue("-1");
-	}
-	
-	public ConverterProcessResult(String error) {
 		setError(error);
 		setExitValue("-1");
 	}
@@ -57,61 +53,59 @@ public class ConverterProcessResult {
 	public String getOut() {
 		return out;
 	}
+
 	public void setOut(String out) {
 		this.out = out;
 	}
+
 	public String getCommand() {
 		return command;
 	}
+
 	public void setCommand(String command) {
 		this.command = command;
 	}
+
 	public String getProcess() {
 		return process;
 	}
+
 	public void setProcess(String process) {
 		this.process = process;
 	}
+
 	public String getException() {
 		return exception;
 	}
+
 	public void setException(String exception) {
 		this.exception = exception;
 	}
+
 	public String getError() {
 		return error;
 	}
+
 	public void setError(String error) {
 		this.error = error;
 	}
+
 	public String getExitValue() {
 		return exitValue;
 	}
+
 	public void setExitValue(String exitValue) {
 		this.exitValue = exitValue;
 	}
-	
+
 	public String buildLogMessage() {
 		StringBuilder strBuilder = new StringBuilder();
-		strBuilder.append("process: ");
-		strBuilder.append(getProcess());
-		strBuilder.append("\r\n");
-		strBuilder.append("command; ");
-		strBuilder.append(getCommand());
-		strBuilder.append("\r\n");
-		strBuilder.append("exception: ");
-		strBuilder.append(getException());
-		strBuilder.append("\r\n");
-		strBuilder.append("error: ");
-		strBuilder.append(getError());
-		strBuilder.append("\r\n");
-		strBuilder.append("exitValue: ");
-		strBuilder.append(getException());
-		strBuilder.append("\r\n");
-		strBuilder.append("out: ");
-		strBuilder.append(getOut());
-		strBuilder.append("\r\n");
+		strBuilder.append("process: ").append(getProcess()).append("\r\n");
+		strBuilder.append("command: ").append(getCommand()).append("\r\n");
+		strBuilder.append("exception: ").append(getException()).append("\r\n");
+		strBuilder.append("error: ").append(getError()).append("\r\n");
+		strBuilder.append("exitValue: ").append(getException()).append("\r\n");
+		strBuilder.append("out: ").append(getOut()).append("\r\n");
 		return strBuilder.toString();
 	}
-
 }

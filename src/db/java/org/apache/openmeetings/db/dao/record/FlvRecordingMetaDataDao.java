@@ -63,7 +63,7 @@ public class FlvRecordingMetaDataDao {
 		return null;
 	}
 
-	public List<FlvRecordingMetaData> getFlvRecordingMetaDataByRecording(Long flvRecordingId) {
+	public List<FlvRecordingMetaData> getByRecording(Long flvRecordingId) {
 		try {
 
 			String hql = "SELECT c FROM FlvRecordingMetaData c WHERE c.flvRecording.flvRecordingId = :flvRecordingId "
