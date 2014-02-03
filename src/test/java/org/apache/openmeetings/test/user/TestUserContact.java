@@ -45,33 +45,35 @@ public class TestUserContact extends AbstractWicketTester {
 		login(null, null);
 		
 		List<User> users = adminUserDao.getAllUsers();
-		assertNotNull("Users list should not be null ", users);
-		assertFalse("Users list should not be empty ", users.isEmpty());
+		assertNotNull("User list should not be null ", users);
+		assertFalse("User list should not be empty ", users.isEmpty());
 		
 		Random random = new Random();
 		User contact = createUserContact(random.nextInt(), getUserId());
 		String email = contact.getAdresses().getEmail();
 		List<User> l = adminUserDao.get(email);
 		// check that contact is visible for admin
-		assertNotNull("Contacts list should not be null for admin ", l);
-		assertFalse("Contacts list should not be empty for admin ", l.isEmpty());
+		assertNotNull("Contact list should not be null for admin ", l);
+		assertFalse("Contact list should not be empty for admin ", l.isEmpty());
 		
 		// check that contact is visible for owner
-		l = usersDao.get(contact.getAdresses().getEmail(), getUserId());
-		assertTrue("Contacts list should not be empty for admin ", !l.isEmpty());		
+		l = usersDao.get(email, getUserId());
+		assertTrue("Contact list should not be empty for owner ", !l.isEmpty());		
 		//delete contact
 		adminUserDao.delete(contact, getUserId());
 		l = adminUserDao.get(email);
-		assertTrue("Contacts list should be empty", l.isEmpty());
+		assertTrue("Contact list should be empty after deletion", l.isEmpty());
 
 		User u = createUser(random.nextInt());
-		contact = createUserContact(random.nextInt(), u.getUser_id());		
+		User u1 = createUser(random.nextInt());
+		contact = createUserContact(random.nextInt(), u.getUser_id());
+		email = contact.getAdresses().getEmail();
 		// check that contact is not visible for user that is not owner of this contact
-		l = usersDao.get(contact.getAdresses().getEmail(), getUserId());
-		assertTrue("Contacts list should be empty for admin ", !l.isEmpty());
+		l = usersDao.get(email, u1.getUser_id());
+		assertTrue("Contact list should be empty for another user", l.isEmpty());
 		//delete contact
-		adminUserDao.delete(contact, getUserId());
+		adminUserDao.delete(contact, u.getUser_id());
 		l = adminUserDao.get(email);
-		assertTrue("Contacts list should be empty", l.isEmpty());
+		assertTrue("Contact list should be empty after deletion", l.isEmpty());
 	}
 }
