@@ -282,7 +282,7 @@ public class FlvInterviewConverter extends BaseConverter {
 			recordingDao.updateFlvRecording(flvRecording);
 			convertToMp4(flvRecording, returnLog);
 
-			logDao.deleteFLVRecordingLogByRecordingId(flvRecording.getFlvRecordingId());
+			logDao.deleteByRecordingId(flvRecording.getFlvRecordingId());
 
 			for (ConverterProcessResult returnMap : returnLog) {
 				logDao.addFLVRecordingLog("generateFFMPEG", flvRecording, returnMap);

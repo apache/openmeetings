@@ -21,8 +21,6 @@ package org.apache.openmeetings.db.entity.record;
 import java.io.Serializable;
 import java.util.Date;
 
-
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -32,8 +30,14 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 @Entity
+@NamedQueries({ 
+	@NamedQuery(name = "getRecordingLogsByRecording", query = "SELECT fl FROM FlvRecordingLog fl WHERE fl.flvRecording.flvRecordingId = :recId")
+	, @NamedQuery(name = "countErrorRecordingLogsByRecording", query = "SELECT COUNT(fl) FROM FlvRecordingLog fl WHERE fl.flvRecording.flvRecordingId = :recId AND fl.exitValue <> '0'")
+})
 @Table(name = "flvrecording_log")
 public class FlvRecordingLog implements Serializable {
 	private static final long serialVersionUID = -2577533628675416706L;

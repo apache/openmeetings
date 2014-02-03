@@ -18,12 +18,13 @@
  */
 package org.apache.openmeetings.db.dao.record;
 
+import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+
 import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.TypedQuery;
 
 import org.apache.openmeetings.db.entity.record.FlvRecording;
 import org.apache.openmeetings.db.entity.record.FlvRecordingLog;
@@ -34,30 +35,23 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
 public class FlvRecordingLogDao {
-	
-	private static final Logger log = Red5LoggerFactory.getLogger(FlvRecordingLogDao.class);
+	private static final Logger log = Red5LoggerFactory.getLogger(FlvRecordingDao.class, webAppRootKey);
 	@PersistenceContext
 	private EntityManager em;
 	
-	public List<FlvRecordingLog> getFLVRecordingLogByRecordingId(Long flvRecordingId){
-		try {
-			String hql = "select c from FlvRecordingLog as c where c.flvRecording.flvRecordingId = :flvRecordingId";
-			
-			TypedQuery<FlvRecordingLog> query = em.createQuery(hql, FlvRecordingLog.class);
-			query.setParameter("flvRecordingId", flvRecordingId);
-			List<FlvRecordingLog> flvRecordingList = query.getResultList();
-			
-			return flvRecordingList;
-			
-		} catch (Exception ex2) {
-			log.error("[getFLVRecordingLogByRecordingId] ", ex2);
-		}
-		return null;
+	public long countErrors(Long recordingId) {
+		return em.createNamedQuery("countErrorRecordingLogsByRecording", Long.class)
+				.setParameter("recId", recordingId).getSingleResult();
 	}	
 	
-	public void deleteFLVRecordingLogByRecordingId(Long flvRecordingId){
+	public List<FlvRecordingLog> getByRecordingId(Long recordingId) {
+		return em.createNamedQuery("getRecordingLogsByRecording", FlvRecordingLog.class)
+				.setParameter("recId", recordingId).getResultList();
+	}	
+	
+	public void deleteByRecordingId(Long flvRecordingId) {
 		try {
-			List<FlvRecordingLog> flvRecordingLogs = this.getFLVRecordingLogByRecordingId(flvRecordingId);
+			List<FlvRecordingLog> flvRecordingLogs = getByRecordingId(flvRecordingId);
 			
 			for (FlvRecordingLog flvRecordingLog : flvRecordingLogs) {
 				flvRecordingLog = em.find(FlvRecordingLog.class, flvRecordingLog.getFlvRecordingLogId());
@@ -87,5 +81,4 @@ public class FlvRecordingLogDao {
 		}
 		return -1L;
 	}
-	
 }

@@ -446,6 +446,34 @@ div.tableWrapperSmall {
 	background-image: url(images/world_link.png);
 	background-repeat: no-repeat;
 }
+.recording.item {
+	position: relative;
+}
+.recording.item .name {
+	color: black;
+}
+.recording.item .errors {
+	position: absolute;
+	right: 0px;
+	background-image: url(images/script_error.png);
+	width: 16px;
+	height: 16px;
+}
+.recording.dialog.errors {
+	width: 600px;
+	height: 500px;
+	font-size: small;
+}
+.recording.dialog.errors .alert {
+	color: red;
+}
+.recording.dialog.errors .message {
+	display: block;
+    unicode-bidi: embed;
+    font-family: monospace;
+    white-space: pre;
+    margin: 0;
+}
 .online.om-icon {
 	background-image: url(images/bullet_green.png);
 }
