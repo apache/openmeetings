@@ -51,7 +51,6 @@ public class RecordingErrorsDialog extends AbstractDialog<FlvRecording> {
 		@Override
 		protected void populateItem(ListItem<FlvRecordingLog> item) {
 			FlvRecordingLog l = item.getModelObject();
-			item.add(new Label("name", l.getMsgType()));
 			item.add(new Label("exitCode", l.getExitValue()));
 			item.add(new Label("message", l.getFullMessage()));
 			if (!"0".equals(l.getExitValue())) {
@@ -89,7 +88,7 @@ public class RecordingErrorsDialog extends AbstractDialog<FlvRecording> {
 			message.setDefaultModelObject(WebSession.getString(888));
 		} else if (!isRecordingExists(f.getFileHash() + MP4_EXTENSION)) {
 			message.setVisible(true);
-			message.setDefaultModelObject("[Recording file is not found]");
+			message.setDefaultModelObject(WebSession.getString(1595));
 		} else {
 			message.setVisible(false);
 		}
