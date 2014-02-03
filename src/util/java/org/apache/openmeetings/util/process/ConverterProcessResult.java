@@ -45,7 +45,7 @@ public class ConverterProcessResult {
 
 	public ConverterProcessResult(String process, String error, Exception ex) {
 		setProcess(process);
-		setException(ex.toString());
+		setException(ex == null ? null : ex.toString());
 		setError(error);
 		setExitValue("-1");
 	}
