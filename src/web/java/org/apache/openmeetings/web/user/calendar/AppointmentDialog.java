@@ -212,10 +212,11 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 	}
 	
 	private class AppointmentForm extends Form<Appointment> {
-		private static final long serialVersionUID = -1764738237821487526L;
+		private static final long serialVersionUID = 1L;
 		private boolean createRoom = true;
 		private DateTimeField start;
 		private DateTimeField end;
+		private final PasswordTextField pwd = new PasswordTextField("password");
 
 		@Override
 		protected void onModelChanged() {
@@ -253,6 +254,7 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 					attendeesModel.getObject().add(mm.getUser());
 				}
 			}
+			pwd.setEnabled(a.isPasswordProtected());
 		}
 		
 		public AppointmentForm(String id, IModel<Appointment> model) {
@@ -268,7 +270,6 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 			add(new TextField<String>("location"));
 			add(start = new DateTimeField("start"));
 			add(end = new DateTimeField("end"));
-			final PasswordTextField pwd = new PasswordTextField("password");
 			pwd.setEnabled(getModelObject().isPasswordProtected());
 			pwd.setOutputMarkupId(true);
 			add(pwd);
