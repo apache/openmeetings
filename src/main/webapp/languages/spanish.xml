@@ -4807,4 +4807,13 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
   <string id="1592" name="end.date.is.earlier.than.start">
     <value>El final de la fecha introducida es anterior a la fecha del comienzo.</value>
   </string>
+  <string id="1593" name="recording.errors.exit.val">
+    <value>Exit value</value>
+  </string>
+  <string id="1594" name="recording.errors.conversion.messages">
+    <value>Conversion messages</value>
+  </string>
+  <string id="1595" name="recording.errors.file.not.found">
+    <value>Recording file is not found</value>
+  </string>
 </language>
