@@ -187,7 +187,7 @@ public class CalendarPanel extends UserPanel {
 				target.appendJavaScript("setDatepickerDate('datepicker','" +  formatDateJava.format(start) + "');");
 				Appointment a = getDefault();
 				if (CalendarView.month == view && start.equals(end)) {
-					java.util.Calendar now = java.util.Calendar.getInstance();
+					java.util.Calendar now = WebSession.getCalendar();
 					now.setTime(start);
 					java.util.Calendar cal = WebSession.getCalendar();
 					cal.set(java.util.Calendar.YEAR, now.get(java.util.Calendar.YEAR));
