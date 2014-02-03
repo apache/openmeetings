@@ -108,12 +108,12 @@ public class UserSearchPanel extends UserPanel {
 			}
 
 			public Iterator<? extends User> iterator(long first, long count) {
-				return searched ? getBean(UserDao.class).searchUserProfile(text, offer, search, orderBy, (int)first, (int)count, asc).iterator()
+				return searched ? getBean(UserDao.class).searchUserProfile(getUserId(), text, offer, search, orderBy, (int)first, (int)count, asc).iterator()
 						: new ArrayList<User>().iterator();
 			}
 
 			public long size() {
-				return searched ? getBean(UserDao.class).searchCountUserProfile(text, offer, search) : 0;
+				return searched ? getBean(UserDao.class).searchCountUserProfile(getUserId(), text, offer, search) : 0;
 			}
 
 			public IModel<User> model(User object) {
