@@ -28,6 +28,7 @@ import static org.slf4j.LoggerFactory.getLogger;
 import java.awt.Rectangle;
 import java.awt.Robot;
 import java.io.IOException;
+import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -46,13 +47,14 @@ final class CaptureScreen extends Thread {
 	private volatile boolean active = true;
 	private IScreenEncoder se;
 	private IScreenShare client;
-	private IoBuffer buffer;
+	private ArrayBlockingQueue<VideoData> frames = new ArrayBlockingQueue<VideoData>(2);
 	private String host = null;
 	private String app = null;
 	private int port = -1;
 	private int streamId;
 	private boolean startPublish = false;
 	private boolean sendCursor = false;
+	private final ScheduledExecutorService sendScheduler = Executors.newScheduledThreadPool(1);
 	private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(20);
 	private final ScheduledExecutorService cursorScheduler = Executors.newScheduledThreadPool(1);
 
@@ -70,6 +72,11 @@ final class CaptureScreen extends Thread {
 		timestamp = 0;
 		try {
 			scheduler.shutdownNow();
+		} catch (Exception e) {
+			//no-op
+		}
+		try {
+			sendScheduler.shutdownNow();
 		} catch (Exception e) {
 			//no-op
 		}
@@ -107,10 +114,29 @@ final class CaptureScreen extends Thread {
 						if (log.isTraceEnabled()) {
 							log.trace(String.format("Image was encoded in %s ms", System.currentTimeMillis() - start));
 						}
-						timestamp += timeBetweenFrames;
-						pushVideo(data, timestamp);
+						IoBuffer buf = IoBuffer.allocate(data.length);
+						buf.clear();
+						buf.put(data);
+						buf.flip();
+						frames.offer(new VideoData(buf));
 					} catch (IOException e) {
-						log.error("Error while encoding/sending: ", e);
+						log.error("Error while encoding: ", e);
+					}
+				}
+			}, 0, timeBetweenFrames * NANO_MULTIPLIER, TimeUnit.NANOSECONDS);
+			sendScheduler.scheduleWithFixedDelay(new Runnable() {
+				public void run() {
+					if (frames.size() > 1) {
+						frames.poll();
+					}
+					VideoData f = frames.peek();
+					if (f != null) {
+						try {
+							timestamp += timeBetweenFrames;
+							pushVideo(f, (int)timestamp);
+						} catch (IOException e) {
+							log.error("Error while sending: ", e);
+						}
 					}
 				}
 			}, 0, timeBetweenFrames * NANO_MULTIPLIER, TimeUnit.NANOSECONDS);
@@ -143,19 +169,9 @@ final class CaptureScreen extends Thread {
 	}
 	*/
 	
-	private void pushVideo(byte[] video, int ts) throws IOException {
+	private void pushVideo(VideoData data, int ts) throws IOException {
 		if (startPublish) {
-			if (buffer == null || (buffer.capacity() < video.length && !buffer.isAutoExpand())) {
-				buffer = IoBuffer.allocate(video.length);
-				buffer.setAutoExpand(true);
-			}
-	
-			buffer.clear();
-			buffer.put(video);
-			buffer.flip();
-	
-			log.trace("Video frame sent :: " + ts);
-			RTMPMessage rtmpMsg = RTMPMessage.build(new VideoData(buffer), ts);
+			RTMPMessage rtmpMsg = RTMPMessage.build(data, ts);
 			client.publishStreamData(streamId, rtmpMsg);
 		}
 	}

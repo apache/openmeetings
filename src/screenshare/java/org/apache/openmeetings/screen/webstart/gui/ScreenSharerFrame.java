@@ -466,7 +466,7 @@ public class ScreenSharerFrame extends JFrame {
 		        calcRescaleFactors();
 			}
 		}); 
-		comboFPS.setSelectedIndex(1);
+		comboFPS.setSelectedIndex(2);
 		comboFPS.setBounds(390, 170, 70, 24);
 		panelScreen.add(comboFPS);
 		

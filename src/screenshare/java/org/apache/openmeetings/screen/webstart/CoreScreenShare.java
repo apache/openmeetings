@@ -214,7 +214,6 @@ public class CoreScreenShare implements IPendingServiceCallback, INetStreamEvent
 
 			instance.invoke("setConnectionAsSharingClient", new Object[] { map }, this);
 		} catch (Exception err) {
-			log.error("setConnectionAsSharingClient Exception: ", err);
 			frame.setStatus("Error: " + err.getLocalizedMessage());
 			log.error("[setConnectionAsSharingClient]", err);
 		}
