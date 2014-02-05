@@ -153,18 +153,19 @@ public class AppointmentDao {
 		Set<Long> mmIds = a.getId() == null ? new HashSet<Long>()
 				: meetingMemberDao.getMeetingMemberIdsByAppointment(a.getId());
 		// update meeting members
+		//TODO update email need to be sent on meeting members list update
+		Appointment a0 = a.getId() == null ? null : get(a.getId());
+		boolean sendMail = a0 == null || !a0.getTitle().equals(a.getTitle()) ||
+				!(a0.getDescription() != null ? a0.getDescription().equals(a.getDescription()) : true) ||
+				!(a0.getLocation() != null ? a0.getLocation().equals(a.getLocation()) : true) ||
+				!a0.getStart().equals(a.getStart()) ||
+				!a0.getEnd().equals(a.getEnd());
 		List<MeetingMember> mmList = a.getMeetingMembers();
 		if (mmList != null){
-			Appointment a0 = a.getId() == null ? null : get(a.getId());
 			for (MeetingMember mm : mmList) {
 				if (mm.getId() == null || !mmIds.contains(mm.getId())) {
 					invitationManager.processInvitation(a, mm, MessageType.Create, baseUrl);
 				} else {
-					boolean sendMail = a0 == null || !a0.getTitle().equals(a.getTitle()) ||
-						!(a0.getDescription() != null ? a0.getDescription().equals(a.getDescription()) : true) ||
-						!(a0.getLocation() != null ? a0.getLocation().equals(a.getLocation()) : true) ||
-						!a0.getStart().equals(a.getStart()) ||
-						!a0.getEnd().equals(a.getEnd());
 					mmIds.remove(mm.getId());
 					invitationManager.processInvitation(a, mm, MessageType.Update, baseUrl, sendMail);
 				}
@@ -172,6 +173,16 @@ public class AppointmentDao {
 		}
 		for (long id : mmIds) {
 			invitationManager.processInvitation(a, meetingMemberDao.get(id), MessageType.Cancel, baseUrl);
+		}
+		//notify owner
+		MeetingMember owner = new MeetingMember();
+		owner.setUser(a.getOwner());
+		if (a.getId() == null) {
+			invitationManager.processInvitation(a, owner, MessageType.Create, baseUrl);
+		} else if (a.isDeleted()) {
+			invitationManager.processInvitation(a, owner, MessageType.Cancel, baseUrl);
+		} else if (sendMail) {
+			invitationManager.processInvitation(a, owner, MessageType.Update, baseUrl, sendMail);
 		}
 		if (a.getId() == null) {
 			a.setInserted(new Date());
