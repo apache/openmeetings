@@ -19,6 +19,9 @@
 package org.apache.openmeetings.backup;
 
 import static org.apache.commons.transaction.util.FileHelper.copyRec;
+import static org.apache.openmeetings.db.entity.user.PrivateMessage.INBOX_FOLDER_ID;
+import static org.apache.openmeetings.db.entity.user.PrivateMessage.SENT_FOLDER_ID;
+import static org.apache.openmeetings.db.entity.user.PrivateMessage.TRASH_FOLDER_ID;
 import static org.apache.openmeetings.util.OmFileHelper.getStreamsHibernateDir;
 import static org.apache.openmeetings.util.OmFileHelper.getUploadDir;
 import static org.apache.openmeetings.util.OmFileHelper.getUploadProfilesUserDir;
@@ -119,7 +122,6 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
 public class BackupImport {
-
 	private static final Logger log = Red5LoggerFactory.getLogger(BackupImport.class, webAppRootKey);
 
 	@Autowired
@@ -186,7 +188,16 @@ public class BackupImport {
 		if (!working_dir.exists()) {
 			working_dir.mkdir();
 		}
-
+		usersMap.clear();
+		organisationsMap.clear();
+		appointmentsMap.clear();
+		roomsMap.clear();
+		messageFoldersMap.clear();
+		userContactsMap.clear();
+		userEmailMap.clear();
+		messageFoldersMap.put(INBOX_FOLDER_ID, INBOX_FOLDER_ID);
+		messageFoldersMap.put(SENT_FOLDER_ID, SENT_FOLDER_ID);
+		messageFoldersMap.put(TRASH_FOLDER_ID, TRASH_FOLDER_ID);
 		File f = OmFileHelper.getNewDir(working_dir, "import_" + CalendarPatterns.getTimeForStreamId(new Date()));
 
 		log.debug("##### WRITE FILE TO: " + f);
@@ -493,8 +504,7 @@ public class BackupImport {
 				PrivateMessageFolder storedFolder = privateMessageFolderDao.get(folderId);
 				if (storedFolder == null) {
 					p.setPrivateMessageFolderId(0);
-					Long newFolderId = privateMessageFolderDao
-							.addPrivateMessageFolderObj(p);
+					Long newFolderId = privateMessageFolderDao.addPrivateMessageFolderObj(p);
 					messageFoldersMap.put(folderId, newFolderId);
 				}
 			}
@@ -538,12 +548,18 @@ public class BackupImport {
 			registry.bind(Date.class, DateConverter.class);
 			
 			List<PrivateMessage> list = readList(serializer, f, "privateMessages.xml", "privatemessages", PrivateMessage.class, true);
+			boolean oldBackup = true;
 			for (PrivateMessage p : list) {
-				p.setPrivateMessageId(0);
-				p.setPrivateMessageFolderId(
-					getNewId(p.getPrivateMessageFolderId(), Maps.MESSAGEFOLDERS));
-				p.setUserContactId(
-					getNewId(p.getUserContactId(), Maps.USERCONTACTS));
+				if (p.getFolderId() < 0) {
+					oldBackup = false;
+					break;
+				}
+				
+			}
+			for (PrivateMessage p : list) {
+				p.setId(0);
+				p.setFolderId(getNewId(p.getFolderId(), Maps.MESSAGEFOLDERS));
+				p.setUserContactId(getNewId(p.getUserContactId(), Maps.USERCONTACTS));
 				if (p.getRoom() != null && p.getRoom().getRooms_id() == null) {
 					p.setRoom(null);
 				}
@@ -556,7 +572,13 @@ public class BackupImport {
 				if (p.getOwner() != null && p.getOwner().getUser_id() == null) {
 					p.setOwner(null);
 				}
-				privateMessagesDao.addPrivateMessageObj(p);
+				if (oldBackup && p.getOwner() != null && p.getOwner().getUser_id() != null 
+						&& p.getFrom() != null && p.getFrom().getUser_id() != null 
+						&& p.getOwner().getUser_id() == p.getFrom().getUser_id())
+				{
+					p.setFolderId(SENT_FOLDER_ID);
+				}
+				privateMessagesDao.update(p, null);
 			}
 		}
 

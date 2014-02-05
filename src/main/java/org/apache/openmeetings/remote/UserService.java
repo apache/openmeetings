@@ -479,7 +479,6 @@ public class UserService implements IUserService {
 				a = appointmentDao.update(a, baseURL, users_id);
 				for (MeetingMember mm : a.getMeetingMembers()) {
 					User to = mm.getUser();
-					String email = to.getAdresses().getEmail();
 					Room room = a.getRoom();
 					
 					//TODO should be reviewed
@@ -487,12 +486,12 @@ public class UserService implements IUserService {
 						// One message to the Send
 						privateMessagesDao.addPrivateMessage(subject,
 								message, parentMessageId, from, to, from,
-								bookedRoom, room, false, 0L, email);
+								bookedRoom, room, false, 0L);
 
 						// One message to the Inbox
 						privateMessagesDao.addPrivateMessage(subject,
 								message, parentMessageId, from, to, to,
-								bookedRoom, room, false, 0L, email);
+								bookedRoom, room, false, 0L);
 					}
 
 					// We do not send an email to the one that has created the
