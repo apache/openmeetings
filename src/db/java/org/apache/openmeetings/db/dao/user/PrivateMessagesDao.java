@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.db.dao.user;
 
+import static org.apache.openmeetings.db.entity.user.PrivateMessage.INBOX_FOLDER_ID;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
 import java.util.Collection;
@@ -47,7 +48,7 @@ public class PrivateMessagesDao implements IDataProviderDao<PrivateMessage> {
 	
 	public Long addPrivateMessage(String subject, String message, Long parentMessageId, 
 			User from, User to, User owner, Boolean bookedRoom, Room room,
-			Boolean isContactRequest, Long userContactId, String email) {
+			Boolean isContactRequest, Long userContactId) {
 		try {
 			PrivateMessage privateMessage = new PrivateMessage();
 			privateMessage.setInserted(new Date());
@@ -59,28 +60,13 @@ public class PrivateMessagesDao implements IDataProviderDao<PrivateMessage> {
 			privateMessage.setBookedRoom(Boolean.TRUE.equals(bookedRoom));
 			privateMessage.setRoom(room);
 			privateMessage.setParentMessage(parentMessageId);
-			privateMessage.setIsTrash(false);
-			privateMessage.setPrivateMessageFolderId(0L);
+			privateMessage.setFolderId(INBOX_FOLDER_ID);
 			privateMessage.setIsRead(false);
 			privateMessage.setIsContactRequest(isContactRequest);
 			privateMessage.setUserContactId(userContactId);
-			privateMessage.setEmail(email);
 			
 			privateMessage = em.merge(privateMessage);
-			Long privateMessageId = privateMessage.getPrivateMessageFolderId();
-			
-			return privateMessageId;			
-		} catch (Exception e) {
-			log.error("[addPrivateMessage]",e);
-		}
-		return null;
-	}
-	
-	public Long addPrivateMessageObj(PrivateMessage privateMessage) {
-		try {
-			
-			privateMessage = em.merge(privateMessage);
-			Long privateMessageId = privateMessage.getPrivateMessageFolderId();
+			Long privateMessageId = privateMessage.getFolderId();
 			
 			return privateMessageId;			
 		} catch (Exception e) {
@@ -95,9 +81,9 @@ public class PrivateMessagesDao implements IDataProviderDao<PrivateMessage> {
 				.getResultList();
 	}
 	
-	public PrivateMessage get(long privateMessageId) {
-		TypedQuery<PrivateMessage> query = em.createNamedQuery("getPrivateMessagesById", PrivateMessage.class); 
-		query.setParameter("privateMessageId", privateMessageId);
+	public PrivateMessage get(long id) {
+		TypedQuery<PrivateMessage> query = em.createNamedQuery("getPrivateMessageById", PrivateMessage.class); 
+		query.setParameter("id", id);
 		PrivateMessage privateMessage = null;
 		try {
 			privateMessage = query.getSingleResult();
@@ -106,460 +92,85 @@ public class PrivateMessagesDao implements IDataProviderDao<PrivateMessage> {
 		return privateMessage;
 	}
 	
-	public PrivateMessage update(PrivateMessage privateMessage, Long userId) {
-		if (privateMessage.getPrivateMessageFolderId() == null) {
-			em.persist(privateMessage);
+	public PrivateMessage update(PrivateMessage entity, Long userId) {
+		if (entity.getId() < 1) {
+			entity.setInserted(new Date());
+			em.persist(entity);
 	    } else {
-	    	if (!em.contains(privateMessage)) {
-	    		privateMessage = em.merge(privateMessage);
-		    }
+    		entity = em.merge(entity);
 		}
-		return privateMessage;
+		return entity;
 	}
 	
-	public Long countPrivateMessagesByUser(Long toUserId, String search, Long privateMessageFolderId) {
-		try {
-			
-			String hql = "select count(c.privateMessageId) from PrivateMessage c " +
-						"where c.to.user_id = :toUserId " +
-						"AND c.isTrash = false " +
-						"AND c.owner.user_id = :toUserId " +
-						"AND c.privateMessageFolderId = :privateMessageFolderId ";
-			
-			if (search.length() != 0) {
-				hql += "AND ( ";
-				hql += "lower(c.subject) LIKE :search ";
-				hql += "OR lower(c.message) LIKE :search ";
-				hql += "OR lower(c.from.firstname) LIKE :search ";
-				hql += "OR lower(c.from.lastname) LIKE :search ";
-				hql += "OR lower(c.from.login) LIKE :search ";
-				hql += "OR lower(c.from.adresses.email) LIKE :search ";
-				hql += " ) ";
-			}
-
-			TypedQuery<Long> query = em.createQuery(hql, Long.class); 
-			query.setParameter("toUserId", toUserId);
-			if (search.length() != 0) {
-				query.setParameter("search", StringUtils.lowerCase("%"+search+"%"));
-			}
-			query.setParameter("privateMessageFolderId", privateMessageFolderId);
-			List<Long> ll = query.getResultList();
-			
-			return ll.get(0);
-			
-		} catch (Exception e) {
-			log.error("[countPrivateMessagesByUser]",e);
+	private String getQuery(boolean isCount, String search, String orderBy, boolean asc) {
+		StringBuilder hql = new StringBuilder("SELECT ");
+		hql.append(isCount ? "COUNT(" : "").append("m").append(isCount ? ")" : "")
+			.append(" FROM PrivateMessage m WHERE m.owner.user_id = :ownerId ")
+			.append(" AND m.folderId = :folderId ");
+		
+		if (!StringUtils.isEmpty(search)) {
+			hql.append(" AND ( ")
+				.append("lower(m.subject) LIKE :search ")
+				.append("OR lower(m.message) LIKE :search ")
+				.append("OR lower(m.from.firstname) LIKE :search ")
+				.append("OR lower(m.from.lastname) LIKE :search ")
+				.append("OR lower(m.from.login) LIKE :search ")
+				.append("OR lower(m.from.adresses.email) LIKE :search ")
+				.append(" ) ");
 		}
-		return null;
+		
+		if (!isCount && !StringUtils.isEmpty(orderBy)) {
+			hql.append(" ORDER BY ").append(orderBy).append(asc ? " ASC" : " DESC");
+		}
+		return hql.toString();
 	}
 	
-	public long count(Long toUserId, Long folderId, Boolean isRead, boolean isTrash) {
-		TypedQuery<Long> query = em.createNamedQuery("getNumberMessages", Long.class); 
-		query.setParameter("toUserId", toUserId);
-		query.setParameter("isTrash", isTrash);
-		query.setParameter("isRead", isRead);
+	public Long count(Long ownerId, Long folderId, String search) {
+		TypedQuery<Long> query = em.createQuery(getQuery(true, search, null, true), Long.class); 
+		query.setParameter("ownerId", ownerId);
+		if (!StringUtils.isEmpty(search)) {
+			query.setParameter("search", StringUtils.lowerCase("%" + search + "%"));
+		}
 		query.setParameter("folderId", folderId);
 		return query.getSingleResult();
 	}
 	
-	public List<PrivateMessage> getPrivateMessagesByUser(Long toUserId, String search,
-			String orderBy, int start, Boolean asc, Long privateMessageFolderId, int max) {
-		try {
-			
-			String hql = "select c from PrivateMessage c " +
-						"where c.to.user_id = :toUserId " +
-						"AND c.isTrash = :isTrash " +
-						"AND c.owner.user_id = :toUserId " +
-						"AND c.privateMessageFolderId = :privateMessageFolderId ";
-			
-			if (search.length() != 0) {
-				hql += "AND ( ";
-				hql += "lower(c.subject) LIKE :search ";
-				hql += "OR lower(c.message) LIKE :search ";
-				hql += "OR lower(c.from.firstname) LIKE :search ";
-				hql += "OR lower(c.from.lastname) LIKE :search ";
-				hql += "OR lower(c.from.login) LIKE :search ";
-				hql += "OR lower(c.from.adresses.email) LIKE :search ";
-				hql += " ) ";
-			}
-			
-			if (orderBy != null && orderBy.length() > 0) {
-				hql += "ORDER BY "+orderBy;
-				
-				if (asc) {
-					hql += " ASC";
-				} else {
-					hql += " DESC";
-				}
-			}
-
-			TypedQuery<PrivateMessage> query = em.createQuery(hql, PrivateMessage.class); 
-			query.setParameter("toUserId", toUserId);
-			query.setParameter("isTrash", false);
-			query.setParameter("privateMessageFolderId", privateMessageFolderId);
-			if (search.length() != 0) {
-				query.setParameter("search", StringUtils.lowerCase("%"+search+"%"));
-			}
-			query.setFirstResult(start);
-			query.setMaxResults(max);
-			List<PrivateMessage> ll = query.getResultList();
-			
-			return ll;	
-		} catch (Exception e) {
-			log.error("[getPrivateMessagesByUser]",e);
+	public List<PrivateMessage> get(Long ownerId, Long folderId, String search, String orderBy, boolean asc, int start, int max) {
+		TypedQuery<PrivateMessage> query = em.createQuery(getQuery(false, search, orderBy, asc), PrivateMessage.class); 
+		query.setParameter("ownerId", ownerId);
+		query.setParameter("folderId", folderId);
+		if (!StringUtils.isEmpty(search)) {
+			query.setParameter("search", StringUtils.lowerCase("%" + search + "%"));
 		}
-		return null;
+		query.setFirstResult(start);
+		query.setMaxResults(max);
+		return query.getResultList();
 	}
 	
-	public Long countSendPrivateMessagesByUser(Long toUserId, String search, 
-			Long privateMessageFolderId) {
-		try {
-			
-			String hql = "select count(c.privateMessageId) from PrivateMessage c " +
-						"where c.from.user_id = :toUserId " +
-						"AND c.isTrash = :isTrash " +
-						"AND c.owner.user_id = :toUserId " +
-						"AND c.privateMessageFolderId = :privateMessageFolderId ";
-			
-			if (search.length() != 0) {
-				hql += "AND ( ";
-				hql += "lower(c.subject) LIKE :search ";
-				hql += "OR lower(c.message) LIKE :search ";
-				hql += "OR lower(c.from.firstname) LIKE :search ";
-				hql += "OR lower(c.from.lastname) LIKE :search ";
-				hql += "OR lower(c.from.login) LIKE :search ";
-				hql += "OR lower(c.from.adresses.email) LIKE :search ";
-				hql += " ) ";
-			}
-
-			TypedQuery<Long> query = em.createQuery(hql, Long.class); 
-			query.setParameter("toUserId", toUserId);
-			query.setParameter("isTrash", false);
-			query.setParameter("privateMessageFolderId", privateMessageFolderId);
-			if (search.length() != 0) {
-				query.setParameter("search", StringUtils.lowerCase("%"+search+"%"));
-			}
-			List<Long> ll = query.getResultList();
-			
-			return ll.get(0);
-			
-		} catch (Exception e) {
-			log.error("[countSendPrivateMessagesByUser]",e);
-		}
-		return null;
-	}
-	
-	//FIXME need to be rewritten
-	public List<PrivateMessage> getTrashPrivateMessagesByUser(Long user_id, String search, 
-			String orderBy, int start, Boolean asc, int max) {
-		try {
-			
-			String hql = "select c from PrivateMessage c " +
-						"where c.isTrash = true " +
-						"AND c.owner.user_id = :user_id ";
-			
-			if (search.length() != 0) {
-				hql += "AND ( ";
-				hql += "lower(c.subject) LIKE :search ";
-				hql += "OR lower(c.message) LIKE :search ";
-				hql += "OR lower(c.from.firstname) LIKE :search ";
-				hql += "OR lower(c.from.lastname) LIKE :search ";
-				hql += "OR lower(c.from.login) LIKE :search ";
-				hql += "OR lower(c.from.adresses.email) LIKE :search ";
-				hql += " ) ";
-			}
-			
-			if (orderBy != null && orderBy.length() > 0) {
-				hql += "ORDER BY "+orderBy;
-				
-				if (asc) {
-					hql += " ASC";
-				} else {
-					hql += " DESC";
-				}
-			}
-
-			TypedQuery<PrivateMessage> query = em.createQuery(hql, PrivateMessage.class); 
-			if (search.length() != 0) {
-				query.setParameter("search", StringUtils.lowerCase("%"+search+"%"));
-			}
-			query.setParameter("user_id", user_id);
-			query.setFirstResult(start);
-			query.setMaxResults(max);
-			List<PrivateMessage> ll = query.getResultList();
-			
-			return ll;	
-		} catch (Exception e) {
-			log.error("[getTrashPrivateMessagesByUser]",e);
-		}
-		return null;
-	}
-	
-	public Long countTrashPrivateMessagesByUser(Long user_id, String search) {
-		try {
-			
-			String hql = "select count(c.privateMessageId) from PrivateMessage c " +
-						"where c.isTrash = true  " +
-						"AND c.owner.user_id = :user_id ";
-			
-			if (search.length() != 0) {
-				hql += "AND ( ";
-				hql += "lower(c.subject) LIKE :search ";
-				hql += "OR lower(c.message) LIKE :search ";
-				hql += "OR lower(c.from.firstname) LIKE :search ";
-				hql += "OR lower(c.from.lastname) LIKE :search ";
-				hql += "OR lower(c.from.login) LIKE :search ";
-				hql += "OR lower(c.from.adresses.email) LIKE :search ";
-				hql += " ) ";
-			}
-			
-			TypedQuery<Long> query = em.createQuery(hql, Long.class); 
-			query.setParameter("user_id", user_id);
-			if (search.length() != 0) {
-				query.setParameter("search", StringUtils.lowerCase("%"+search+"%"));
-			}
-			List<Long> ll = query.getResultList();
-			
-			return ll.get(0);
-			
-		} catch (Exception e) {
-			log.error("[countTrashPrivateMessagesByUser]",e);
-		}
-		return null;
+	public int updateReadStatus(Collection<Long> ids, Boolean isRead) {
+		Query query = em.createNamedQuery("updatePrivateMessagesReadStatus"); 
+		query.setParameter("isRead", isRead);
+		query.setParameter("ids", ids);
+		return query.executeUpdate();
 	}
 
-	//FIXME need to be rewritten
-	public List<PrivateMessage> getSendPrivateMessagesByUser(Long toUserId, String search, 
-			String orderBy, int start, Boolean asc, Long privateMessageFolderId, int max) {
-		try {
-			
-			String hql = "select c from PrivateMessage c " +
-						"where c.from.user_id = :toUserId " +
-						"AND c.isTrash = false " +
-						"AND c.owner.user_id = :toUserId " +
-						"AND c.privateMessageFolderId = :privateMessageFolderId ";
-			
-			if (search.length() != 0) {
-				hql += "AND ( ";
-				hql += "lower(c.subject) LIKE :search ";
-				hql += "OR lower(c.message) LIKE :search ";
-				hql += "OR lower(c.from.firstname) LIKE :search ";
-				hql += "OR lower(c.from.lastname) LIKE :search ";
-				hql += "OR lower(c.from.login) LIKE :search ";
-				hql += "OR lower(c.from.adresses.email) LIKE :search ";
-				hql += " ) ";
-			}
-			
-			if (orderBy != null && orderBy.length() > 0) {
-				hql += "ORDER BY "+orderBy;
-				
-				if (asc) {
-					hql += " ASC";
-				} else {
-					hql += " DESC";
-				}
-			}
-			TypedQuery<PrivateMessage> query = em.createQuery(hql, PrivateMessage.class); 
-			query.setParameter("toUserId", toUserId);
-			query.setParameter("privateMessageFolderId", privateMessageFolderId);
-			if (search.length() != 0) {
-				query.setParameter("search", StringUtils.lowerCase("%"+search+"%"));
-			}
-			query.setFirstResult(start);
-			query.setMaxResults(max);
-			List<PrivateMessage> ll = query.getResultList();
-			
-			return ll;	
-		} catch (Exception e) {
-			log.error("[getSendPrivateMessagesByUser]",e);
-		}
-		return null;
+	public Integer moveMailsToFolder(Collection<Long> ids, Long folderId) {
+		Query query = em.createNamedQuery("moveMailsToFolder"); 
+		query.setParameter("folderId", folderId);
+		query.setParameter("ids", ids);
+		return query.executeUpdate();
 	}
 	
-	
-	public Long countFolderPrivateMessagesByUser(Long toUserId, Long privateMessageFolderId, String search) {
-		try {
-			
-			String hql = "select count(c.privateMessageId) from PrivateMessage c " +
-						"where c.isTrash = false " +
-						"AND c.owner.user_id = :toUserId " +
-						"AND c.privateMessageFolderId = :privateMessageFolderId ";
-
-			if (search.length() != 0) {
-				hql += "AND ( ";
-				hql += "lower(c.subject) LIKE :search ";
-				hql += "OR lower(c.message) LIKE :search ";
-				hql += "OR lower(c.from.firstname) LIKE :search ";
-				hql += "OR lower(c.from.lastname) LIKE :search ";
-				hql += "OR lower(c.from.login) LIKE :search ";
-				hql += "OR lower(c.from.adresses.email) LIKE :search ";
-				hql += " ) ";
-			}
-			
-			TypedQuery<Long> query = em.createQuery(hql, Long.class); 
-			query.setParameter("toUserId", toUserId);
-			if (search.length() != 0) {
-				query.setParameter("search", StringUtils.lowerCase("%"+search+"%"));
-			}
-			query.setParameter("privateMessageFolderId", privateMessageFolderId);
-			List<Long> ll = query.getResultList();
-			
-			return ll.get(0);
-			
-		} catch (Exception e) {
-			log.error("[countFolderPrivateMessagesByUser]",e);
-		}
-		return null;
-	}
-	
-	//FIXME need to be rewritten
-	public List<PrivateMessage> getFolderPrivateMessagesByUser(Long toUserId, String search, String orderBy, 
-			int start, Boolean asc, Long privateMessageFolderId, int max) {
-		try {
-			
-			String hql = "select c from PrivateMessage c " +
-							"where c.isTrash = :isTrash " +
-							"AND c.owner.user_id = :toUserId " +
-							"AND c.privateMessageFolderId = :privateMessageFolderId ";
-
-			if (search.length() != 0) {
-				hql += "AND ( ";
-				hql += "lower(c.subject) LIKE :search ";
-				hql += "OR lower(c.message) LIKE :search ";
-				hql += "OR lower(c.from.firstname) LIKE :search ";
-				hql += "OR lower(c.from.lastname) LIKE :search ";
-				hql += "OR lower(c.from.login) LIKE :search ";
-				hql += "OR lower(c.from.adresses.email) LIKE :search ";
-				hql += " ) ";
-			}
-			
-			if (orderBy != null && orderBy.length() > 0) {
-				hql += "ORDER BY "+orderBy;
-				
-				if (asc) {
-					hql += " ASC";
-				} else {
-					hql += " DESC";
-				}
-			}
-			
-			log.debug("HQL "+hql);
-			
-			log.debug("privateMessageFolderId "+privateMessageFolderId);
-			
-			TypedQuery<PrivateMessage> query = em.createQuery(hql, PrivateMessage.class); 
-			query.setParameter("toUserId", toUserId);
-			query.setParameter("isTrash", false);
-			query.setParameter("privateMessageFolderId", privateMessageFolderId);
-			if (search.length() != 0) {
-				query.setParameter("search", StringUtils.lowerCase("%"+search+"%"));
-			}
-			query.setFirstResult(start);
-			query.setMaxResults(max);
-			List<PrivateMessage> ll = query.getResultList();
-			
-			return ll;
-			
-		} catch (Exception e) {
-			log.error("[getFolderPrivateMessagesByUser]",e);
-		}
-		return null;
-	}
-
-	public int updatePrivateMessagesToTrash(Collection<Long> privateMessageIds, Boolean isTrash, Long privateMessageFolderId) {
-		try {
-			Query query = em.createNamedQuery("updatePrivateMessagesToTrash"); 
-			query.setParameter("isTrash", isTrash);
-			query.setParameter("privateMessageFolderId", privateMessageFolderId);
-			query.setParameter("privateMessageIds", privateMessageIds);
-			int updatedEntities = query.executeUpdate();
-			
-			//Refresh the Entities in the Cache as Hibernate will not do it!
-			//FIXME weird code
-			for (Long privateMessageId : privateMessageIds) {
-				TypedQuery<PrivateMessage> querySel = em.createNamedQuery("getPrivateMessagesById", PrivateMessage.class); 
-				querySel.setParameter("privateMessageId", privateMessageId);
-				try {
-					querySel.getSingleResult();
-			    } catch (NoResultException ex) {
-			    }
-			}
-			
-			return updatedEntities;
-		} catch (Exception e) {
-			log.error("[updatePrivateMessagesToTrash]",e);
-		}
-		return -1;
-	}
-	
-	public int updatePrivateMessagesReadStatus(Collection<Long> privateMessageIds, Boolean isRead) {
-		try {
-			Query query = em.createNamedQuery("updatePrivateMessagesReadStatus"); 
-			query.setParameter("isRead", isRead);
-			query.setParameter("privateMessageIds", privateMessageIds);
-			int updatedEntities = query.executeUpdate();
-			
-			//Refresh the Entities in the Cache as Hibernate will not do it!
-			//FIXME weird code
-			for (Long privateMessageId : privateMessageIds) {
-				TypedQuery<PrivateMessage> querySel = em.createNamedQuery("getPrivateMessagesById", PrivateMessage.class); 
-				querySel.setParameter("privateMessageId", privateMessageId);
-				try {
-					querySel.getSingleResult();
-			    } catch (NoResultException ex) {
-			    }
-			}
-			return updatedEntities;
-		} catch (Exception e) {
-			log.error("[updatePrivateMessagesReadStatus]",e);
-		}
-		return -1;
-	}
-
-	public Integer moveMailsToFolder(Collection<Long> privateMessageIds, Long privateMessageFolderId) {
-		try {
-			Query query = em.createNamedQuery("moveMailsToFolder"); 
-			query.setParameter("privateMessageFolderId", privateMessageFolderId);
-			query.setParameter("privateMessageIds", privateMessageIds);
-			int updatedEntities = query.executeUpdate();
-			
-			//Refresh the Entities in the Cache as Hibernate will not do it!
-			//FIXME weird code
-			for (Long privateMessageId : privateMessageIds) {
-				TypedQuery<PrivateMessage> querySel = em.createNamedQuery("getPrivateMessagesById", PrivateMessage.class); 
-				querySel.setParameter("privateMessageId", privateMessageId);
-				try {
-					querySel.getSingleResult();
-			    } catch (NoResultException ex) {
-			    }
-			}
-			return updatedEntities;
-		} catch (Exception e) {
-			log.error("[updatePrivateMessagesReadStatus]",e);
-		}
-		return -1;
-	}
-	
-	public int deletePrivateMessages(Collection<Long> privateMessageIds) {
-		try {
-			Query query = em.createNamedQuery("deletePrivateMessages"); 
-			query.setParameter("privateMessageIds", privateMessageIds);
-			return query.executeUpdate();
-		} catch (Exception e) {
-			log.error("[deletePrivateMessages]",e);
-		}
-		return -1;
+	public int delete(Collection<Long> ids) {
+		Query query = em.createNamedQuery("deletePrivateMessages"); 
+		query.setParameter("ids", ids);
+		return query.executeUpdate();
 	}
 	
 	public List<PrivateMessage> getPrivateMessagesByRoom(Long roomId) {
-		try {
-			TypedQuery<PrivateMessage> query = em.createNamedQuery("getPrivateMessagesByRoom", PrivateMessage.class); 
-			query.setParameter("roomId", roomId);
-			return query.getResultList();
-		} catch (Exception e) {
-			log.error("[getPrivateMessagesByRoom]",e);
-		}
-		return null;
+		TypedQuery<PrivateMessage> query = em.createNamedQuery("getPrivateMessagesByRoom", PrivateMessage.class); 
+		query.setParameter("roomId", roomId);
+		return query.getResultList();
 	}
 
 	public List<PrivateMessage> get(String search, int start, int count, String order) {

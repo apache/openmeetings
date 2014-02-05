@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.web.user.dashboard;
 
+import static org.apache.openmeetings.db.entity.user.PrivateMessage.INBOX_FOLDER_ID;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import static org.apache.openmeetings.web.util.OmUrlFragment.PROFILE_EDIT;
@@ -58,7 +59,7 @@ public class WelcomeWidgetView extends WidgetView {
 			public void onClick(AjaxRequestTarget target) {
 				((MainPage)getPage()).updateContents(PROFILE_MESSAGES, target);
 			}
-		}.add(new Label("unread", Model.of("" + getBean(PrivateMessagesDao.class).count(getUserId(), null, false, false)))));
+		}.add(new Label("unread", Model.of("" + getBean(PrivateMessagesDao.class).count(getUserId(), INBOX_FOLDER_ID, null)))));
 		add(new AjaxLink<Void>("editProfile") {
 			private static final long serialVersionUID = -1847619557485964386L;
 

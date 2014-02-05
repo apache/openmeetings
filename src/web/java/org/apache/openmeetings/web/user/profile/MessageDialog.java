@@ -18,6 +18,8 @@
  */
 package org.apache.openmeetings.web.user.profile;
 
+import static org.apache.openmeetings.db.entity.user.PrivateMessage.INBOX_FOLDER_ID;
+import static org.apache.openmeetings.db.entity.user.PrivateMessage.SENT_FOLDER_ID;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import static org.apache.openmeetings.web.util.RoomTypeDropDown.getRoomTypes;
@@ -88,9 +90,8 @@ public class MessageDialog extends AbstractFormDialog<PrivateMessage> {
 		PrivateMessage p = new PrivateMessage();
 		p.setFrom(getBean(UserDao.class).get(getUserId()));
 		p.setOwner(p.getFrom());
-		p.setIsTrash(false);
 		p.setIsRead(false);
-		p.setPrivateMessageFolderId(0L);
+		p.setFolderId(INBOX_FOLDER_ID);
 		Room r = new Room();
 		r.setAppointment(true);
 		r.setRoomtype(getRoomTypes().get(0));
@@ -177,18 +178,21 @@ public class MessageDialog extends AbstractFormDialog<PrivateMessage> {
 		} else {
 			p.setRoom(null);
 		}
+		PrivateMessagesDao msgDao = getBean(PrivateMessagesDao.class);
 		for (User to : modelTo.getObject()) {
 			if (to.getUser_id() == null) {
 				getBean(UserDao.class).update(to, getUserId());
 			}
 			//to send
-			p.setPrivateMessageId(0);
+			p = new PrivateMessage(p);
 			p.setTo(to);
-			getBean(PrivateMessagesDao.class).update(p, getUserId());
+			p.setFolderId(SENT_FOLDER_ID);
+			msgDao.update(p, getUserId());
 			//to inbox
-			p.setPrivateMessageId(0);
+			p = new PrivateMessage(p);
 			p.setOwner(to);
-			getBean(PrivateMessagesDao.class).update(p, getUserId());
+			p.setFolderId(INBOX_FOLDER_ID);
+			msgDao.update(p, getUserId());
 			if (to.getAdresses() != null) {
 				String aLinkHTML = 	isPrivate ? "<br/><br/>" + "<a href='" + ContactsHelper.getLink() + "'>"
 							+ WebSession.getString(1302) + "</a><br/>" : "";
