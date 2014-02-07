@@ -20,6 +20,7 @@ package org.apache.openmeetings.db.dao.record;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
+import java.io.File;
 import java.util.Date;
 import java.util.List;
 
@@ -28,10 +29,15 @@ import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
+import org.apache.openmeetings.db.dao.user.UserDao;
+import org.apache.openmeetings.db.dto.file.RecordingContainerData;
 import org.apache.openmeetings.db.dto.file.RecordingObject;
 import org.apache.openmeetings.db.entity.record.FlvRecording;
+import org.apache.openmeetings.db.entity.user.Organisation_Users;
+import org.apache.openmeetings.util.OmFileHelper;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
@@ -40,9 +46,13 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Transactional
 public class FlvRecordingDao {
+	
 	private static final Logger log = Red5LoggerFactory.getLogger(FlvRecordingDao.class, webAppRootKey);
+	
 	@PersistenceContext
 	private EntityManager em;
+	@Autowired
+	private UserDao userDao;
 
 	public FlvRecording get(Long flvRecordingId) {
 		try {
@@ -549,6 +559,81 @@ public class FlvRecordingDao {
 		} catch (Exception ex2) {
 			log.error("[moveFile]: ", ex2);
 		}
+	}
+	
+	public RecordingContainerData getRecordingContainerData(long userId) {
+		try {
+			RecordingContainerData containerData = new RecordingContainerData();
+	
+			// User Home Recordings
+			List<FlvRecording> homeFlvRecordings = getFlvRecordingRootByOwner(userId);
+			long homeFileSize = 0;
+	
+			for (FlvRecording homeFlvRecording : homeFlvRecordings) {
+				homeFileSize += this
+						.getSizeOfDirectoryAndSubs(homeFlvRecording);
+			}
+	
+			containerData.setUserHomeSize(homeFileSize);
+			
+			// Public Recordings
+			long publicFileSize = 0;
+			
+			//get all organizations the user can view
+			for (Organisation_Users ou : userDao.get(userId).getOrganisation_users()) {
+				List<FlvRecording>publicFlvRecordings = getFlvRecordingRootByPublic(ou.getOrganisation().getOrganisation_id());
+				//get sizes
+				for (FlvRecording publicFlvRecording : publicFlvRecordings) {
+					publicFileSize += this
+							.getSizeOfDirectoryAndSubs(publicFlvRecording);
+				}
+			}
+			containerData.setPublicFileSize(publicFileSize);
+
+			return containerData;
+		} catch (Exception ex2) {
+			log.error("[getRecordingContainerData]: ", ex2);
+		}
+		return null;
+	}
+	
+	private long getSizeOfDirectoryAndSubs(FlvRecording rec) {
+		try {
+			long fileSize = 0;
+
+			if (rec.getFileHash() != null) {
+				File tFile = new File(OmFileHelper.getStreamsHibernateDir(), rec.getFileHash());
+				if (tFile.exists()) {
+					fileSize += tFile.length();
+				}
+			}
+
+			if (rec.getAlternateDownload() != null) {
+				File dFile = new File(OmFileHelper.getStreamsHibernateDir(), rec.getAlternateDownload());
+				if (dFile.exists()) {
+					fileSize += dFile.length();
+				}
+			}
+			if (rec.getPreviewImage() != null) {
+				File iFile = new File(OmFileHelper.getStreamsHibernateDir(), rec.getPreviewImage());
+				if (iFile.exists()) {
+					fileSize += iFile.length();
+				}
+			}
+
+			List<FlvRecording> flvRecordings = getFlvRecordingByParent(
+				rec.getFlvRecordingId());
+
+			for (FlvRecording flvRecording : flvRecordings) {
+				fileSize += getSizeOfDirectoryAndSubs(flvRecording);
+			}
+
+			return fileSize;
+
+		} catch (Exception err) {
+			log.error("[getSizeOfDirectoryAndSubs] ", err);
+		}
+		return 0;
 	}
 
 }

@@ -31,6 +31,7 @@ import java.util.List;
 
 import org.apache.openmeetings.db.dao.record.FlvRecordingDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
+import org.apache.openmeetings.db.dto.file.RecordingContainerData;
 import org.apache.openmeetings.db.entity.record.FlvRecording;
 import org.apache.openmeetings.db.entity.user.Organisation_Users;
 import org.apache.openmeetings.web.app.WebSession;
@@ -50,6 +51,7 @@ import org.apache.wicket.markup.repeater.ReuseIfModelsEqualStrategy;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.model.PropertyModel;
 
 public class RecordingsPanel extends UserPanel {
 	private static final long serialVersionUID = 1321258690447136958L;
@@ -60,6 +62,8 @@ public class RecordingsPanel extends UserPanel {
 	private final IModel<FlvRecording> rm = new CompoundPropertyModel<FlvRecording>(new FlvRecording());
 	private final RecordingErrorsDialog errorsDialog = new RecordingErrorsDialog("errors", Model.of((FlvRecording)null));
 	private RecordingTree selected;
+	
+	private RecordingContainerData recordingContainerData = getBean(FlvRecordingDao.class).getRecordingContainerData(getUserId());
 
 	public RecordingsPanel(String id) {
 		super(id);
@@ -122,8 +126,8 @@ public class RecordingsPanel extends UserPanel {
 			.add(new RecordingTree("publicrecordings", new PublicRecordingTreeProvider()))
 			.setOutputMarkupId(true)
 			);
-		add(new Label("homeSize", ""));
-		add(new Label("publicSize", ""));
+		add(new Label("homeSize", new PropertyModel<RecordingContainerData>(recordingContainerData, "userHomeSize"))); //new Label("homeSize", "")
+		add(new Label("publicSize", new PropertyModel<RecordingContainerData>(recordingContainerData, "publicFileSize")));
 		add(video, info, errorsDialog);
 	}
 
