@@ -62,8 +62,10 @@ public class GroupsPanel extends AdminPanel {
         final AjaxButton addUsersBtn = new AjaxButton("addUsersBtn") {
 			private static final long serialVersionUID = 1L;
         	@Override
-        	protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-				addUsersDialog.open(target);
+        	protected void onSubmit(AjaxRequestTarget target, Form<?> form1) {
+        		if (form.getModelObject().getOrganisation_id() != null) {
+        			addUsersDialog.open(target);
+        		}
         	}
         };
         
