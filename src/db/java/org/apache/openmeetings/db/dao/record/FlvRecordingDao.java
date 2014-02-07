@@ -18,6 +18,12 @@
  */
 package org.apache.openmeetings.db.dao.record;
 
+import static org.apache.openmeetings.util.OmFileHelper.MP4_EXTENSION;
+import static org.apache.openmeetings.util.OmFileHelper.OGG_EXTENSION;
+import static org.apache.openmeetings.util.OmFileHelper.getMp4Recording;
+import static org.apache.openmeetings.util.OmFileHelper.getOggRecording;
+import static org.apache.openmeetings.util.OmFileHelper.getRecording;
+import static org.apache.openmeetings.util.OmFileHelper.isRecordingExists;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
 import java.util.Date;
@@ -28,10 +34,14 @@ import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
+import org.apache.openmeetings.db.dao.user.UserDao;
+import org.apache.openmeetings.db.dto.file.RecordingContainerData;
 import org.apache.openmeetings.db.dto.file.RecordingObject;
 import org.apache.openmeetings.db.entity.record.FlvRecording;
+import org.apache.openmeetings.db.entity.user.Organisation_Users;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
@@ -40,9 +50,13 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Transactional
 public class FlvRecordingDao {
+	
 	private static final Logger log = Red5LoggerFactory.getLogger(FlvRecordingDao.class, webAppRootKey);
+	
 	@PersistenceContext
 	private EntityManager em;
+	@Autowired
+	private UserDao userDao;
 
 	public FlvRecording get(Long flvRecordingId) {
 		try {
@@ -550,5 +564,62 @@ public class FlvRecordingDao {
 			log.error("[moveFile]: ", ex2);
 		}
 	}
+	
+	public RecordingContainerData getRecordingContainerData(long userId) {
+		try {
+			RecordingContainerData containerData = new RecordingContainerData();
+	
+			// User Home Recordings
+			List<FlvRecording> homeFlvRecordings = getFlvRecordingRootByOwner(userId);
+			long homeFileSize = 0;
+	
+			for (FlvRecording homeFlvRecording : homeFlvRecordings) {
+				homeFileSize += getRecordingSize(homeFlvRecording);
+			}
+	
+			containerData.setUserHomeSize(homeFileSize);
+			
+			// Public Recordings
+			long publicFileSize = 0;
+			
+			//get all organizations the user can view
+			for (Organisation_Users ou : userDao.get(userId).getOrganisation_users()) {
+				List<FlvRecording>publicFlvRecordings = getFlvRecordingRootByPublic(ou.getOrganisation().getOrganisation_id());
+				//get sizes
+				for (FlvRecording publicFlvRecording : publicFlvRecordings) {
+					publicFileSize += getRecordingSize(publicFlvRecording);
+				}
+			}
+			containerData.setPublicFileSize(publicFileSize);
 
+			return containerData;
+		} catch (Exception ex2) {
+			log.error("[getRecordingContainerData]: ", ex2);
+		}
+		return null;
+	}
+	
+	private long getRecordingSize(FlvRecording r) {
+		long size = 0;
+
+		if (isRecordingExists(r.getFileHash())) {
+			size += getRecording(r.getFileHash()).length();
+		}
+		if (isRecordingExists(r.getAlternateDownload())) {
+			size += getRecording(r.getAlternateDownload()).length();
+		}
+		if (isRecordingExists(r.getPreviewImage())) {
+			size += getRecording(r.getPreviewImage()).length();
+		}
+		if (isRecordingExists(r.getFileHash() + MP4_EXTENSION)) {
+			size += getMp4Recording(r.getFileHash()).length();
+		}
+		if (isRecordingExists(r.getFileHash() + OGG_EXTENSION)) {
+			size += getOggRecording(r.getFileHash()).length();
+		}
+		for (FlvRecording flvRecording : getFlvRecordingByParent(r.getFlvRecordingId())) {
+			size += getRecordingSize(flvRecording);
+		}
+		return size;
+	}
 }
