@@ -18,9 +18,14 @@
  */
 package org.apache.openmeetings.db.dao.record;
 
+import static org.apache.openmeetings.util.OmFileHelper.MP4_EXTENSION;
+import static org.apache.openmeetings.util.OmFileHelper.OGG_EXTENSION;
+import static org.apache.openmeetings.util.OmFileHelper.getMp4Recording;
+import static org.apache.openmeetings.util.OmFileHelper.getOggRecording;
+import static org.apache.openmeetings.util.OmFileHelper.getRecording;
+import static org.apache.openmeetings.util.OmFileHelper.isRecordingExists;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
-import java.io.File;
 import java.util.Date;
 import java.util.List;
 
@@ -34,7 +39,6 @@ import org.apache.openmeetings.db.dto.file.RecordingContainerData;
 import org.apache.openmeetings.db.dto.file.RecordingObject;
 import org.apache.openmeetings.db.entity.record.FlvRecording;
 import org.apache.openmeetings.db.entity.user.Organisation_Users;
-import org.apache.openmeetings.util.OmFileHelper;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -570,8 +574,7 @@ public class FlvRecordingDao {
 			long homeFileSize = 0;
 	
 			for (FlvRecording homeFlvRecording : homeFlvRecordings) {
-				homeFileSize += this
-						.getSizeOfDirectoryAndSubs(homeFlvRecording);
+				homeFileSize += getRecordingSize(homeFlvRecording);
 			}
 	
 			containerData.setUserHomeSize(homeFileSize);
@@ -584,8 +587,7 @@ public class FlvRecordingDao {
 				List<FlvRecording>publicFlvRecordings = getFlvRecordingRootByPublic(ou.getOrganisation().getOrganisation_id());
 				//get sizes
 				for (FlvRecording publicFlvRecording : publicFlvRecordings) {
-					publicFileSize += this
-							.getSizeOfDirectoryAndSubs(publicFlvRecording);
+					publicFileSize += getRecordingSize(publicFlvRecording);
 				}
 			}
 			containerData.setPublicFileSize(publicFileSize);
@@ -597,43 +599,27 @@ public class FlvRecordingDao {
 		return null;
 	}
 	
-	private long getSizeOfDirectoryAndSubs(FlvRecording rec) {
-		try {
-			long fileSize = 0;
+	private long getRecordingSize(FlvRecording r) {
+		long size = 0;
 
-			if (rec.getFileHash() != null) {
-				File tFile = new File(OmFileHelper.getStreamsHibernateDir(), rec.getFileHash());
-				if (tFile.exists()) {
-					fileSize += tFile.length();
-				}
-			}
-
-			if (rec.getAlternateDownload() != null) {
-				File dFile = new File(OmFileHelper.getStreamsHibernateDir(), rec.getAlternateDownload());
-				if (dFile.exists()) {
-					fileSize += dFile.length();
-				}
-			}
-			if (rec.getPreviewImage() != null) {
-				File iFile = new File(OmFileHelper.getStreamsHibernateDir(), rec.getPreviewImage());
-				if (iFile.exists()) {
-					fileSize += iFile.length();
-				}
-			}
-
-			List<FlvRecording> flvRecordings = getFlvRecordingByParent(
-				rec.getFlvRecordingId());
-
-			for (FlvRecording flvRecording : flvRecordings) {
-				fileSize += getSizeOfDirectoryAndSubs(flvRecording);
-			}
-
-			return fileSize;
-
-		} catch (Exception err) {
-			log.error("[getSizeOfDirectoryAndSubs] ", err);
+		if (isRecordingExists(r.getFileHash())) {
+			size += getRecording(r.getFileHash()).length();
 		}
-		return 0;
+		if (isRecordingExists(r.getAlternateDownload())) {
+			size += getRecording(r.getAlternateDownload()).length();
+		}
+		if (isRecordingExists(r.getPreviewImage())) {
+			size += getRecording(r.getPreviewImage()).length();
+		}
+		if (isRecordingExists(r.getFileHash() + MP4_EXTENSION)) {
+			size += getMp4Recording(r.getFileHash()).length();
+		}
+		if (isRecordingExists(r.getFileHash() + OGG_EXTENSION)) {
+			size += getOggRecording(r.getFileHash()).length();
+		}
+		for (FlvRecording flvRecording : getFlvRecordingByParent(r.getFlvRecordingId())) {
+			size += getRecordingSize(flvRecording);
+		}
+		return size;
 	}
-
 }

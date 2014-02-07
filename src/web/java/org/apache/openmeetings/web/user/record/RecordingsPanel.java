@@ -19,6 +19,7 @@
 package org.apache.openmeetings.web.user.record;
 
 import static org.apache.openmeetings.util.OmFileHelper.MP4_EXTENSION;
+import static org.apache.openmeetings.util.OmFileHelper.getHumanSize;
 import static org.apache.openmeetings.util.OmFileHelper.isRecordingExists;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
@@ -41,6 +42,7 @@ import org.apache.openmeetings.web.common.UserPanel;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.AjaxSelfUpdatingTimerBehavior;
 import org.apache.wicket.extensions.ajax.markup.html.AjaxEditableLabel;
 import org.apache.wicket.extensions.markup.html.repeater.tree.DefaultNestedTree;
 import org.apache.wicket.extensions.markup.html.repeater.tree.ITreeProvider;
@@ -51,7 +53,7 @@ import org.apache.wicket.markup.repeater.ReuseIfModelsEqualStrategy;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
-import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.util.time.Duration;
 
 public class RecordingsPanel extends UserPanel {
 	private static final long serialVersionUID = 1321258690447136958L;
@@ -60,11 +62,11 @@ public class RecordingsPanel extends UserPanel {
 	private final VideoInfo info = new VideoInfo("info");
 	private final RecordingTree myTree;
 	private final IModel<FlvRecording> rm = new CompoundPropertyModel<FlvRecording>(new FlvRecording());
+	private final IModel<String> homeSize = Model.of((String)null);
+	private final IModel<String> publicSize = Model.of((String)null);
 	private final RecordingErrorsDialog errorsDialog = new RecordingErrorsDialog("errors", Model.of((FlvRecording)null));
 	private RecordingTree selected;
 	
-	private RecordingContainerData recordingContainerData = getBean(FlvRecordingDao.class).getRecordingContainerData(getUserId());
-
 	public RecordingsPanel(String id) {
 		super(id);
 		rm.getObject().setFlvRecordingId(-3);
@@ -126,11 +128,28 @@ public class RecordingsPanel extends UserPanel {
 			.add(new RecordingTree("publicrecordings", new PublicRecordingTreeProvider()))
 			.setOutputMarkupId(true)
 			);
-		add(new Label("homeSize", new PropertyModel<RecordingContainerData>(recordingContainerData, "userHomeSize"))); //new Label("homeSize", "")
-		add(new Label("publicSize", new PropertyModel<RecordingContainerData>(recordingContainerData, "publicFileSize")));
+		updateSizes();
+		final Label homeSizeLbl = new Label("homeSize", homeSize);
+		final Label publicSizeLbl = new Label("publicSize", publicSize);
+		add(homeSizeLbl.setOutputMarkupId(true), publicSizeLbl.setOutputMarkupId(true));
+		add(new AjaxSelfUpdatingTimerBehavior(Duration.seconds(30)) {
+			private static final long serialVersionUID = 1L;
+
+			protected void onPostProcessTarget(AjaxRequestTarget target) {
+				updateSizes();
+				target.add(homeSizeLbl, publicSizeLbl);
+			}
+		});
 		add(video, info, errorsDialog);
 	}
 
+	private void updateSizes() {
+		RecordingContainerData sizeData = getBean(FlvRecordingDao.class).getRecordingContainerData(getUserId());
+		if (sizeData != null) {
+			homeSize.setObject(getHumanSize(sizeData.getUserHomeSize()));
+			publicSize.setObject(getHumanSize(sizeData.getPublicFileSize()));
+		}
+	}
 	//FIXME need to be generalized to use as Room files explorer
 	class RecordingTree extends DefaultNestedTree<FlvRecording> {
 		private static final long serialVersionUID = 2527395034256868022L;
