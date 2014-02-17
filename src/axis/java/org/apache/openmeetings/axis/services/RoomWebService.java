@@ -175,7 +175,7 @@ public class RoomWebService {
 			Long user_level = userManager.getUserLevelByID(users_id);
 
 			if (AuthLevelUtil.checkWebServiceLevel(user_level)) {
-				return flvRecordingDao.deleteFlvRecording(flvRecordingId);
+				return flvRecordingDao.delete(flvRecordingId);
 			}
 
 		} catch (Exception err) {

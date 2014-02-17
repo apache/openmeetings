@@ -117,18 +117,29 @@ public class RecordingsPanel extends UserPanel {
 				target.add(trees); //FIXME add correct refresh
 			}
 		}));
-		add(new ConfirmableAjaxLink("trash", 713) {
+		ConfirmableAjaxLink trash = new ConfirmableAjaxLink("trash", 713) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
 			public void onClick(AjaxRequestTarget target) {
 				long id = rm.getObject().getFlvRecordingId();
 				if (id > 0) {
-					getBean(FlvRecordingDao.class).deleteFlvRecording(id);
+					getBean(FlvRecordingDao.class).delete(rm.getObject());
 				}
 				target.add(trees); //FIXME add correct refresh
 			}
-		});
+		};
+		trash.add(new WebMarkupContainer("drop-center").setOutputMarkupId(true)).add(new DropTarget(Operation.MOVE) {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void onDrop(AjaxRequestTarget target, Transfer transfer, Location location) throws Reject {
+				FlvRecording r = transfer.getData();
+				getBean(FlvRecordingDao.class).delete(r);
+				target.add(trees); //FIXME add correct refresh
+			}
+		}.dropCenter("span"));
+		//add(trash.add(new WindowsTheme())); //TODO check theme here
 		RepeatingView treesView = new RepeatingView("tree");
 		treesView.add(selected = new RecordingTree(treesView.newChildId(), new MyRecordingTreeProvider()));
 		for (Organisation_Users ou : getBean(UserDao.class).get(getUserId()).getOrganisation_users()) {

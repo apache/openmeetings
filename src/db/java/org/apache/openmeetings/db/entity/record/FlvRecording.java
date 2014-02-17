@@ -67,7 +67,10 @@ import org.simpleframework.xml.Root;
 			+ "AND c.deleted = false") 
 	, @NamedQuery(name = "getRecordingsByOrganization", query = "SELECT f FROM FlvRecording f WHERE f.deleted = false AND f.ownerId IS NULL "
 			+ "AND f.organization_id = :organization_id AND (f.parentFileExplorerItemId IS NULL OR f.parentFileExplorerItemId = 0) "
-			+ "ORDER BY f.folder DESC, f.fileName") 
+			+ "ORDER BY f.folder DESC, f.fileName")
+	, @NamedQuery(name = "getRecordingsByOwner", query = "SELECT f FROM FlvRecording f WHERE f.deleted = false AND f.ownerId = :ownerId "
+			+ "AND (f.parentFileExplorerItemId IS NULL OR f.parentFileExplorerItemId = 0) "
+			+ "ORDER BY f.folder DESC, f.fileName ")
 })
 @Table(name = "flvrecording")
 @Root(name = "flvrecording")

@@ -488,7 +488,7 @@ public class BackupImport {
 						meta.setFlvRecording(fr);
 					}
 				}
-				flvRecordingDao.addFlvRecordingObj(fr);
+				flvRecordingDao.update(fr);
 			}
 		}
 
