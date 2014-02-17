@@ -181,69 +181,12 @@ public class FlvRecordingDao {
 		return null;
 	}
 
-	public List<FlvRecording> getFlvRecordingsPublic() {
-		try {
-
-			String hql = "SELECT c FROM FlvRecording c " + "WHERE c.deleted = false "
-					+ "AND (c.ownerId IS NULL OR c.ownerId = 0)  "
-					+ "AND (c.parentFileExplorerItemId IS NULL OR c.parentFileExplorerItemId = 0) "
-					+ "ORDER BY c.folder DESC, c.fileName ";
-
-			TypedQuery<FlvRecording> query = em.createQuery(hql, FlvRecording.class);
-
-			List<FlvRecording> flvRecordingList = query.getResultList();
-			return flvRecordingList;
-		} catch (Exception ex2) {
-			log.error("[getFlvRecordingsPublic]: ", ex2);
-		}
-		return null;
-	}
-
 	public List<FlvRecording> getFlvRecordingRootByPublic(Long organization_id) {
 		return em.createNamedQuery("getRecordingsByOrganization", FlvRecording.class).setParameter("organization_id", organization_id).getResultList();
 	}
 
 	public List<FlvRecording> getFlvRecordingRootByOwner(Long ownerId) {
-		try {
-
-			String hql = "SELECT c FROM FlvRecording c " + "WHERE c.deleted <> :deleted " + "AND c.ownerId = :ownerId "
-					+ "AND (c.parentFileExplorerItemId IS NULL OR c.parentFileExplorerItemId = 0) "
-					+ "ORDER BY c.folder DESC, c.fileName ";
-
-			TypedQuery<FlvRecording> query = em.createQuery(hql, FlvRecording.class);
-			query.setParameter("deleted", true);
-			query.setParameter("ownerId", ownerId);
-
-			List<FlvRecording> flvRecordingList = query.getResultList();
-
-			return flvRecordingList;
-		} catch (Exception ex2) {
-			log.error("[getFlvRecordingByOwner]: ", ex2);
-		}
-		return null;
-	}
-
-	public List<FlvRecording> getFlvRecordingByOwner(Long ownerId, Long parentFileExplorerItemId) {
-		try {
-
-			String hql = "SELECT c FROM FlvRecording c "
-					+ "WHERE c.deleted <> :deleted "
-					+ "AND c.ownerId = :ownerId "
-					+ "AND (c.parentFileExplorerItemId IS NULL OR c.parentFileExplorerItemId = :parentFileExplorerItemId)"
-					+ "ORDER BY c.folder DESC, c.fileName ";
-
-			TypedQuery<FlvRecording> query = em.createQuery(hql, FlvRecording.class);
-			query.setParameter("deleted", true);
-			query.setParameter("ownerId", ownerId);
-			query.setParameter("parentFileExplorerItemId", parentFileExplorerItemId);
-
-			List<FlvRecording> flvRecordingList = query.getResultList();
-
-			return flvRecordingList;
-		} catch (Exception ex2) {
-			log.error("[getFlvRecordingByOwner]: ", ex2);
-		}
-		return null;
+		return em.createNamedQuery("getRecordingsByOwner", FlvRecording.class).setParameter("ownerId", ownerId).getResultList();
 	}
 
 	public List<FlvRecording> getFlvRecordingByRoomId(Long room_id) {
@@ -285,44 +228,6 @@ public class FlvRecordingDao {
 		return null;
 	}
 
-	public Long addFlvFolderRecording(String fileHash, String fileName, Long fileSize, Long user_id, Long room_id,
-			Date recordStart, Date recordEnd, Long ownerId, String comment, Long parentFileExplorerItemId,
-			Long organization_id) {
-		try {
-
-			FlvRecording flvRecording = new FlvRecording();
-
-			flvRecording.setParentFileExplorerItemId(parentFileExplorerItemId);
-
-			flvRecording.setDeleted(false);
-			flvRecording.setFileHash(fileHash);
-			flvRecording.setFileName(fileName);
-			flvRecording.setFileSize(fileSize);
-			flvRecording.setInserted(new Date());
-			flvRecording.setInsertedBy(user_id);
-			flvRecording.setFolder(true);
-			flvRecording.setIsImage(false);
-			flvRecording.setIsPresentation(false);
-			flvRecording.setIsRecording(true);
-			flvRecording.setComment(comment);
-			flvRecording.setOrganization_id(organization_id);
-
-			flvRecording.setRoom_id(room_id);
-			flvRecording.setRecordStart(recordStart);
-			flvRecording.setRecordEnd(recordEnd);
-
-			flvRecording.setOwnerId(ownerId);
-
-			flvRecording = em.merge(flvRecording);
-			Long flvRecordingId = flvRecording.getFlvRecordingId();
-
-			return flvRecordingId;
-		} catch (Exception ex2) {
-			log.error("[addFlvRecording]: ", ex2);
-		}
-		return null;
-	}
-
 	public Long addFlvRecording(String fileHash, String fileName, Long fileSize, Long user_id, Long room_id,
 			Date recordStart, Date recordEnd, Long ownerId, String comment, String recorderStreamId, Integer width,
 			Integer height, Boolean isInterview) {
@@ -334,7 +239,6 @@ public class FlvRecordingDao {
 			flvRecording.setFileHash(fileHash);
 			flvRecording.setFileName(fileName);
 			flvRecording.setFileSize(fileSize);
-			flvRecording.setInserted(new Date());
 			flvRecording.setInsertedBy(user_id);
 			flvRecording.setFolder(false);
 			flvRecording.setIsImage(false);
@@ -352,47 +256,12 @@ public class FlvRecordingDao {
 
 			flvRecording.setOwnerId(ownerId);
 
-			flvRecording = em.merge(flvRecording);
-			Long flvRecordingId = flvRecording.getFlvRecordingId();
-
-			return flvRecordingId;
+			flvRecording = update(flvRecording);
+			return flvRecording.getFlvRecordingId();
 		} catch (Exception ex2) {
 			log.error("[addFlvRecording]: ", ex2);
 		}
 		return null;
-	}
-
-	public Long addFlvRecordingObj(FlvRecording flvRecording) {
-		try {
-
-			flvRecording = em.merge(flvRecording);
-			Long flvRecordingId = flvRecording.getFlvRecordingId();
-
-			return flvRecordingId;
-		} catch (Exception ex2) {
-			log.error("[addFlvRecording]: ", ex2);
-		}
-		return null;
-	}
-
-	public void updateFlvRecordingOrganization(Long flvRecordingId, Long organization_id) {
-		try {
-
-			FlvRecording fId = get(flvRecordingId);
-
-			fId.setOrganization_id(organization_id);
-
-			if (fId.getFlvRecordingId() == 0) {
-				em.persist(fId);
-			} else {
-				if (!em.contains(fId)) {
-					em.merge(fId);
-				}
-			}
-
-		} catch (Exception ex2) {
-			log.error("[deleteFileExplorerItem]: ", ex2);
-		}
 	}
 
 	public void updateFlvRecordingEndTime(Long flvRecordingId, Date recordEnd, Long organization_id) {
@@ -404,34 +273,7 @@ public class FlvRecordingDao {
 			fId.setRecordEnd(recordEnd);
 			fId.setOrganization_id(organization_id);
 
-			if (fId.getFlvRecordingId() == 0) {
-				em.persist(fId);
-			} else {
-				if (!em.contains(fId)) {
-					em.merge(fId);
-				}
-			}
-
-		} catch (Exception ex2) {
-			log.error("[deleteFileExplorerItem]: ", ex2);
-		}
-	}
-
-	public void updateFlvRecordingProgress(Long flvRecordingId, Integer progress) {
-		try {
-
-			FlvRecording fId = get(flvRecordingId);
-
-			fId.setProgressPostProcessing(progress);
-
-			if (fId.getFlvRecordingId() == 0) {
-				em.persist(fId);
-			} else {
-				if (!em.contains(fId)) {
-					em.merge(fId);
-				}
-			}
-
+			update(fId);
 		} catch (Exception ex2) {
 			log.error("[deleteFileExplorerItem]: ", ex2);
 		}
@@ -440,114 +282,45 @@ public class FlvRecordingDao {
 	/**
 	 * @param fileExplorerItemId
 	 */
-	public boolean deleteFlvRecording(Long flvRecordingId) {
+	public boolean delete(Long flvRecordingId) {
 		try {
 
-			FlvRecording fId = get(flvRecordingId);
-
-			if (fId == null) {
-				return false;
-			}
-
-			fId.setDeleted(true);
-			fId.setUpdated(new Date());
-
-			if (fId.getFlvRecordingId() == 0) {
-				em.persist(fId);
-			} else {
-				if (!em.contains(fId)) {
-					em.merge(fId);
-				}
-			}
-
-			return true;
-
+			FlvRecording f = get(flvRecordingId);
+			return delete(f);
 		} catch (Exception ex2) {
-			log.error("[deleteFileExplorerItem]: ", ex2);
+			log.error("[delete]: ", ex2);
 		}
 
 		return false;
 	}
 
-	/**
-	 * @param fileExplorerItemId
-	 * @param fileName
-	 */
-	public void updateFileOrFolderName(Long flvRecordingId, String fileName) {
-		try {
-
-			FlvRecording fId = get(flvRecordingId);
-
-			fId.setFileName(fileName);
-			fId.setUpdated(new Date());
-
-			if (fId.getFlvRecordingId() == 0) {
-				em.persist(fId);
-			} else {
-				if (!em.contains(fId)) {
-					em.merge(fId);
-				}
-			}
-
-		} catch (Exception ex2) {
-			log.error("[updateFileOrFolderName]: ", ex2);
+	public boolean delete(FlvRecording f) {
+		if (f == null || f.getFlvRecordingId() == 0) {
+			return false;
 		}
-	}
-
-	public void update(FlvRecording fId) {
-		try {
-
-			if (fId.getFlvRecordingId() == 0) {
-				em.persist(fId);
-			} else {
-				if (!em.contains(fId)) {
-					em.merge(fId);
-				}
-			}
-
-		} catch (Exception ex2) {
-			log.error("[updateFileOrFolderName]: ", ex2);
-		}
-	}
-
-	/**
-	 * @param fileExplorerItemId
-	 * @param newParentFileExplorerItemId
-	 * @param isOwner
-	 */
-	public void moveFile(Long flvRecordingId, Long parentFileExplorerItemId, Boolean isOwner, Long ownerId) {
-		try {
-
-			FlvRecording fId = get(flvRecordingId);
-
-			fId.setParentFileExplorerItemId(parentFileExplorerItemId);
-
-			if (parentFileExplorerItemId == 0) {
-				if (isOwner) {
-					// move to personal Folder
-					fId.setOwnerId(ownerId);
-				} else {
-					// move to public room folder
-					fId.setOwnerId(null);
-				}
-			} else {
-				fId.setOwnerId(null);
-			}
-
-			fId.setUpdated(new Date());
-
-			if (fId.getFlvRecordingId() == 0) {
-				em.persist(fId);
-			} else {
-				if (!em.contains(fId)) {
-					em.merge(fId);
-				}
-			}
-		} catch (Exception ex2) {
-			log.error("[moveFile]: ", ex2);
-		}
+		f.setDeleted(true);
+		update(f);
+		return true;
 	}
 	
+	public FlvRecording update(FlvRecording f) {
+		try {
+			if (f.getFlvRecordingId() == 0) {
+				f.setInserted(new Date());
+				em.persist(f);
+			} else {
+				f.setUpdated(new Date());
+				if (!em.contains(f)) {
+					f = em.merge(f);
+				}
+			}
+
+		} catch (Exception ex2) {
+			log.error("[update]: ", ex2);
+		}
+		return f;
+	}
+
 	public RecordingContainerData getRecordingContainerData(long userId) {
 		try {
 			RecordingContainerData containerData = new RecordingContainerData();
