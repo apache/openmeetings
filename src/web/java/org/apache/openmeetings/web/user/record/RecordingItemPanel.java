@@ -18,49 +18,32 @@
  */
 package org.apache.openmeetings.web.user.record;
 
+import static org.apache.openmeetings.util.OmFileHelper.MP4_EXTENSION;
+import static org.apache.openmeetings.util.OmFileHelper.isRecordingExists;
 import static org.apache.openmeetings.web.app.Application.getBean;
 
-import org.apache.openmeetings.db.dao.record.FlvRecordingDao;
+import org.apache.openmeetings.db.dao.record.FlvRecordingLogDao;
 import org.apache.openmeetings.db.entity.record.FlvRecording;
+import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.extensions.ajax.markup.html.AjaxEditableLabel;
 import org.apache.wicket.markup.html.WebMarkupContainer;
-import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
 
-import wicketdnd.theme.WindowsTheme;
-
-public class RecordingPanel extends Panel {
+public class RecordingItemPanel extends RecordingPanel {
 	private static final long serialVersionUID = 1L;
-	protected final WebMarkupContainer item = new WebMarkupContainer("item");
 
-	public RecordingPanel(String id, final IModel<FlvRecording> model) {
+	public RecordingItemPanel(String id, final IModel<FlvRecording> model, final RecordingErrorsDialog errorsDialog) {
 		super(id, model);
-		FlvRecording r = model.getObject();
-		add(new WindowsTheme());
-		item.add(r.isFolder() ? new AjaxEditableLabel<String>("name", Model.of(model.getObject().getFileName())) {
+		long errorCount = getBean(FlvRecordingLogDao.class).countErrors(model.getObject().getFlvRecordingId());
+		boolean visible = errorCount != 0 || !isRecordingExists(model.getObject().getFileHash() + MP4_EXTENSION);
+		item.add(new WebMarkupContainer("errors").add(new AjaxEventBehavior("click") {
 			private static final long serialVersionUID = 1L;
-			
+
 			@Override
-			protected String getLabelAjaxEvent() {
-				return "dblClick";
+			protected void onEvent(AjaxRequestTarget target) {
+				errorsDialog.setDefaultModel(model);
+				errorsDialog.open(target);
 			}
-			
-			@Override
-			protected void onSubmit(AjaxRequestTarget target) {
-				super.onSubmit(target);
-				FlvRecording r = model.getObject();
-				r.setFileName(getEditor().getModelObject());
-				getBean(FlvRecordingDao.class).update(r);
-			}
-			
-			@Override
-			public void onEdit(AjaxRequestTarget target) {
-				super.onEdit(target);
-			}
-		} : new Label("name", r.getFileName()));
-		add(item.setOutputMarkupId(true));
+		}).setVisible(visible));
 	}
 }
