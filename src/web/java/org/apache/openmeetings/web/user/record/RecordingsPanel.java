@@ -89,12 +89,13 @@ public class RecordingsPanel extends UserPanel {
 				f.setIsImage(false);
 				f.setIsPresentation(false);
 				f.setIsRecording(true);
-				long parentId = rm.getObject().getFlvRecordingId();
-				f.setParentFileExplorerItemId(parentId > 0 ? parentId : 0);
-				f.setOwnerId(rm.getObject().getOwnerId());
-				if (parentId < 0) {
-					f.setOrganization_id(-parentId);
+				FlvRecording p = rm.getObject();
+				long parentId = p.getFlvRecordingId();
+				if (p.isFolder()) {
+					f.setParentFileExplorerItemId(parentId);
 				}
+				f.setOwnerId(p.getOwnerId());
+				f.setOrganization_id(p.getOrganization_id());
 				getBean(FlvRecordingDao.class).update(f);
 				target.add(trees); //FIXME add correct refresh
 			}
