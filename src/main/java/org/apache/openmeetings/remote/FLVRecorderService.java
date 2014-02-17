@@ -532,7 +532,7 @@ public class FLVRecorderService implements IPendingServiceCallback {
 
 				flvRecording.setProgressPostProcessing(0);
 
-				flvRecordingDaoImpl.updateFlvRecording(flvRecording);
+				flvRecordingDaoImpl.update(flvRecording);
 
 				if (flvRecording.getIsInterview() == null || !flvRecording.getIsInterview()) {
 					flvRecorderConverterTask.startConversionThread(flvRecordingId);

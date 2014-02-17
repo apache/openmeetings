@@ -65,6 +65,9 @@ import org.simpleframework.xml.Root;
 			+ "FROM FlvRecording c, User u "
 			+ "WHERE c.insertedBy = u.user_id AND u.externalUserId = :externalUserId  AND u.externalUserType = :externalUserType "
 			+ "AND c.deleted = false") 
+	, @NamedQuery(name = "getRecordingsByOrganization", query = "SELECT f FROM FlvRecording f WHERE f.deleted = false AND f.ownerId IS NULL "
+			+ "AND f.organization_id = :organization_id AND (f.parentFileExplorerItemId IS NULL OR f.parentFileExplorerItemId = 0) "
+			+ "ORDER BY f.folder DESC, f.fileName") 
 })
 @Table(name = "flvrecording")
 @Root(name = "flvrecording")
@@ -110,7 +113,7 @@ public class FlvRecording implements Serializable {
 
 	@Column(name = "is_folder")
 	@Element(data = true, required = false)
-	private Boolean isFolder;
+	private boolean folder;
 
 	@Column(name = "is_image")
 	@Element(data = true, required = false)
@@ -258,12 +261,12 @@ public class FlvRecording implements Serializable {
 		this.ownerId = ownerId;
 	}
 
-	public Boolean getIsFolder() {
-		return isFolder;
+	public boolean isFolder() {
+		return folder;
 	}
 
-	public void setIsFolder(Boolean isFolder) {
-		this.isFolder = isFolder;
+	public void setFolder(boolean folder) {
+		this.folder = folder;
 	}
 
 	public Boolean getIsImage() {

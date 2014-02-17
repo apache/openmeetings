@@ -80,7 +80,7 @@ public class RecordingObject {
 		this.ownerId = customObject.getOwnerId();//OwnerID => only set if its directly root in Owner Directory, other Folders and Files
 		//maybe are also in a Home directory but just because their parent is
 		
-		this.isFolder = customObject.getIsFolder();
+		this.isFolder = customObject.isFolder();
 		this.isImage = customObject.getIsImage();
 		this.isPresentation = customObject.getIsPresentation();
 		this.isRecording = customObject.getIsRecording();

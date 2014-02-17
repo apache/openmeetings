@@ -202,7 +202,7 @@ public class FlvRecorderConverter extends BaseConverter {
 
 			flvRecording.setAlternateDownload(alternateDownloadName);
 
-			recordingDao.updateFlvRecording(flvRecording);
+			recordingDao.update(flvRecording);
 			convertToMp4(flvRecording, returnLog);
 
 			for (ConverterProcessResult returnMap : returnLog) {

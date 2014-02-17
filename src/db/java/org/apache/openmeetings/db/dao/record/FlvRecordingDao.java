@@ -187,7 +187,7 @@ public class FlvRecordingDao {
 			String hql = "SELECT c FROM FlvRecording c " + "WHERE c.deleted = false "
 					+ "AND (c.ownerId IS NULL OR c.ownerId = 0)  "
 					+ "AND (c.parentFileExplorerItemId IS NULL OR c.parentFileExplorerItemId = 0) "
-					+ "ORDER BY c.isFolder DESC, c.fileName ";
+					+ "ORDER BY c.folder DESC, c.fileName ";
 
 			TypedQuery<FlvRecording> query = em.createQuery(hql, FlvRecording.class);
 
@@ -200,24 +200,7 @@ public class FlvRecordingDao {
 	}
 
 	public List<FlvRecording> getFlvRecordingRootByPublic(Long organization_id) {
-		try {
-
-			String hql = "SELECT c FROM FlvRecording c " + "WHERE c.deleted <> :deleted " + "AND c.ownerId IS NULL "
-					+ "AND c.organization_id = :organization_id "
-					+ "AND (c.parentFileExplorerItemId IS NULL OR c.parentFileExplorerItemId = 0) "
-					+ "ORDER BY c.isFolder DESC, c.fileName ";
-
-			TypedQuery<FlvRecording> query = em.createQuery(hql, FlvRecording.class);
-			query.setParameter("organization_id", organization_id);
-			query.setParameter("deleted", true);
-
-			List<FlvRecording> flvRecordingList = query.getResultList();
-
-			return flvRecordingList;
-		} catch (Exception ex2) {
-			log.error("[getFlvRecordingRootByPublic]: ", ex2);
-		}
-		return null;
+		return em.createNamedQuery("getRecordingsByOrganization", FlvRecording.class).setParameter("organization_id", organization_id).getResultList();
 	}
 
 	public List<FlvRecording> getFlvRecordingRootByOwner(Long ownerId) {
@@ -225,7 +208,7 @@ public class FlvRecordingDao {
 
 			String hql = "SELECT c FROM FlvRecording c " + "WHERE c.deleted <> :deleted " + "AND c.ownerId = :ownerId "
 					+ "AND (c.parentFileExplorerItemId IS NULL OR c.parentFileExplorerItemId = 0) "
-					+ "ORDER BY c.isFolder DESC, c.fileName ";
+					+ "ORDER BY c.folder DESC, c.fileName ";
 
 			TypedQuery<FlvRecording> query = em.createQuery(hql, FlvRecording.class);
 			query.setParameter("deleted", true);
@@ -247,7 +230,7 @@ public class FlvRecordingDao {
 					+ "WHERE c.deleted <> :deleted "
 					+ "AND c.ownerId = :ownerId "
 					+ "AND (c.parentFileExplorerItemId IS NULL OR c.parentFileExplorerItemId = :parentFileExplorerItemId)"
-					+ "ORDER BY c.isFolder DESC, c.fileName ";
+					+ "ORDER BY c.folder DESC, c.fileName ";
 
 			TypedQuery<FlvRecording> query = em.createQuery(hql, FlvRecording.class);
 			query.setParameter("deleted", true);
@@ -267,7 +250,7 @@ public class FlvRecordingDao {
 		try {
 
 			String hql = "SELECT c FROM FlvRecording c " + "WHERE c.deleted <> :deleted " + "AND c.room_id = :room_id "
-					+ "ORDER BY c.isFolder DESC, c.fileName ";
+					+ "ORDER BY c.folder DESC, c.fileName ";
 
 			TypedQuery<FlvRecording> query = em.createQuery(hql, FlvRecording.class);
 			query.setParameter("deleted", true);
@@ -287,7 +270,7 @@ public class FlvRecordingDao {
 
 			String hql = "SELECT c FROM FlvRecording c " + "WHERE c.deleted <> :deleted "
 					+ "AND c.parentFileExplorerItemId = :parentFileExplorerItemId "
-					+ "ORDER BY c.isFolder DESC, c.fileName ";
+					+ "ORDER BY c.folder DESC, c.fileName ";
 
 			TypedQuery<FlvRecording> query = em.createQuery(hql, FlvRecording.class);
 			query.setParameter("deleted", true);
@@ -317,7 +300,7 @@ public class FlvRecordingDao {
 			flvRecording.setFileSize(fileSize);
 			flvRecording.setInserted(new Date());
 			flvRecording.setInsertedBy(user_id);
-			flvRecording.setIsFolder(true);
+			flvRecording.setFolder(true);
 			flvRecording.setIsImage(false);
 			flvRecording.setIsPresentation(false);
 			flvRecording.setIsRecording(true);
@@ -353,7 +336,7 @@ public class FlvRecordingDao {
 			flvRecording.setFileSize(fileSize);
 			flvRecording.setInserted(new Date());
 			flvRecording.setInsertedBy(user_id);
-			flvRecording.setIsFolder(false);
+			flvRecording.setFolder(false);
 			flvRecording.setIsImage(false);
 			flvRecording.setIsPresentation(false);
 			flvRecording.setIsRecording(true);
@@ -511,7 +494,7 @@ public class FlvRecordingDao {
 		}
 	}
 
-	public void updateFlvRecording(FlvRecording fId) {
+	public void update(FlvRecording fId) {
 		try {
 
 			if (fId.getFlvRecordingId() == 0) {

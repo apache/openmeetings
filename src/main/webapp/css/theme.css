@@ -352,6 +352,7 @@ div.tableWrapperSmall {
 }
 .recording {
 	width: 100%;
+	display: inline-block;
 }
 .recording .files {
 	width: 250px;
@@ -445,6 +446,9 @@ div.tableWrapperSmall {
 	padding-left: 18px;
 	background-image: url(images/world_link.png);
 	background-repeat: no-repeat;
+}
+.selected .recording.item {
+	background-color: #0099FF;
 }
 .recording.item {
 	position: relative;
