@@ -139,7 +139,7 @@ public class RecordingsPanel extends UserPanel {
 				target.add(trees); //FIXME add correct refresh
 			}
 		}.dropCenter("span"));
-		//add(trash.add(new WindowsTheme())); //TODO check theme here
+		add(trash/*.add(new WindowsTheme())*/); //TODO check theme here
 		RepeatingView treesView = new RepeatingView("tree");
 		treesView.add(selected = new RecordingTree(treesView.newChildId(), new MyRecordingTreeProvider()));
 		for (Organisation_Users ou : getBean(UserDao.class).get(getUserId()).getOrganisation_users()) {
