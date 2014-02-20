@@ -65,6 +65,9 @@ import org.simpleframework.xml.Root;
 			+ "FROM FlvRecording c, User u "
 			+ "WHERE c.insertedBy = u.user_id AND u.externalUserId = :externalUserId  AND u.externalUserType = :externalUserType "
 			+ "AND c.deleted = false") 
+	, @NamedQuery(name = "getRecordingsPublic", query = "SELECT f FROM FlvRecording f WHERE f.deleted = false AND f.ownerId IS NULL "
+			+ "AND f.organization_id IS NULL AND (f.parentFileExplorerItemId IS NULL OR f.parentFileExplorerItemId = 0) "
+			+ "ORDER BY f.folder DESC, f.fileName")
 	, @NamedQuery(name = "getRecordingsByOrganization", query = "SELECT f FROM FlvRecording f WHERE f.deleted = false AND f.ownerId IS NULL "
 			+ "AND f.organization_id = :organization_id AND (f.parentFileExplorerItemId IS NULL OR f.parentFileExplorerItemId = 0) "
 			+ "ORDER BY f.folder DESC, f.fileName")
