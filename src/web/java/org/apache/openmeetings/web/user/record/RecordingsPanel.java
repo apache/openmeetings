@@ -102,7 +102,7 @@ public class RecordingsPanel extends UserPanel {
 		};
 		add(addFolder);
 		add(new WebMarkupContainer("create").add(new AjaxEventBehavior("onclick") {
-			private static final long serialVersionUID = -110084769805785972L;
+			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected void onEvent(AjaxRequestTarget target) {
@@ -110,7 +110,7 @@ public class RecordingsPanel extends UserPanel {
 			}
 		}));
 		add(new WebMarkupContainer("refresh").add(new AjaxEventBehavior("onclick") {
-			private static final long serialVersionUID = -110084769805785972L;
+			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected void onEvent(AjaxRequestTarget target) {
@@ -142,6 +142,7 @@ public class RecordingsPanel extends UserPanel {
 		add(trash/*.add(new WindowsTheme())*/); //TODO check theme here
 		RepeatingView treesView = new RepeatingView("tree");
 		treesView.add(selected = new RecordingTree(treesView.newChildId(), new MyRecordingTreeProvider()));
+		treesView.add(new RecordingTree(treesView.newChildId(), new PublicRecordingTreeProvider(null, null)));
 		for (Organisation_Users ou : getBean(UserDao.class).get(getUserId()).getOrganisation_users()) {
 			Organisation o = ou.getOrganisation();
 			treesView.add(new RecordingTree(treesView.newChildId(), new PublicRecordingTreeProvider(o.getOrganisation_id(), o.getName())));
@@ -209,14 +210,8 @@ public class RecordingsPanel extends UserPanel {
 								FlvRecording p = lm.getObject();
 								long pid = p.getFlvRecordingId();
 								FlvRecording r = transfer.getData();
-								if (pid == 0) {
-									r.setParentFileExplorerItemId(null);
-								} else if (pid < 0) {
-									r.setOrganization_id(-pid);
-									r.setParentFileExplorerItemId(null);
-								} else {
-									r.setParentFileExplorerItemId(pid);
-								}
+								r.setParentFileExplorerItemId(pid > 0 ? pid : null);
+								r.setOrganization_id(p.getOrganization_id());
 								r.setOwnerId(p.getOwnerId());
 								getBean(FlvRecordingDao.class).update(r);
 								target.add(trees); //FIXME add correct refresh
@@ -315,7 +310,7 @@ public class RecordingsPanel extends UserPanel {
 	}
 	
 	class MyRecordingTreeProvider extends RecordingTreeProvider {
-		private static final long serialVersionUID = -4463900798616753927L;
+		private static final long serialVersionUID = 1L;
 
 		public Iterator<? extends FlvRecording> getRoots() {
 			FlvRecording r = new FlvRecording();
@@ -336,18 +331,21 @@ public class RecordingsPanel extends UserPanel {
 	
 	class PublicRecordingTreeProvider extends RecordingTreeProvider {
 		private static final long serialVersionUID = 5502610991599632079L;
-		private final long orgId;
+		private final Long orgId;
 		private final String name;
 
-		public PublicRecordingTreeProvider(long orgId, String name) {
+		public PublicRecordingTreeProvider(Long orgId, String name) {
 			this.orgId = orgId;
 			this.name = name;
 		}
 		
 		public Iterator<? extends FlvRecording> getRoots() {
 			FlvRecording r = new FlvRecording();
-			r.setFlvRecordingId(-orgId);
-			r.setFileName(String.format("%s (%s)", WebSession.getString(861), name));
+			r.setFlvRecordingId(-1);
+			r.setOrganization_id(orgId);
+			r.setOwnerId(null);
+			String pub = WebSession.getString(861);
+			r.setFileName(orgId == null ? pub : String.format("%s (%s)", pub, name));
 			return Arrays.asList(r).iterator();
 		}
 		
@@ -361,7 +359,7 @@ public class RecordingsPanel extends UserPanel {
 	}
 	
 	abstract class RecordingTreeProvider implements ITreeProvider<FlvRecording> {
-		private static final long serialVersionUID = -3149843028275612342L;
+		private static final long serialVersionUID = 1L;
 
 		public void detach() {
 			// TODO LDM should be used
