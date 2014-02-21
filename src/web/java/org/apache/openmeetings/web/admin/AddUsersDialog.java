@@ -66,8 +66,8 @@ public class AddUsersDialog extends AbstractFormDialog<User> {
 			return "" + object.getUser_id();
 		}
 	});
-	DialogButton send = new DialogButton(WebSession.getString(175));
-	private DialogButton cancel = new DialogButton(WebSession.getString(219));
+	private final DialogButton send = new DialogButton(WebSession.getString(175));
+	private final DialogButton cancel = new DialogButton(WebSession.getString(219));
 
 	public AddUsersDialog(String id, String title, AdminCommonUserForm<?> commonForm) {
 		super(id, title, true);

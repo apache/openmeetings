@@ -46,7 +46,6 @@ import org.apache.wicket.util.time.Duration;
  * 
  */
 public class LdapForm extends AdminBaseForm<LdapConfig> {
-
 	private static final long serialVersionUID = 1L;
 	private final WebMarkupContainer listContainer;
 

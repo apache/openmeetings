@@ -18,6 +18,9 @@
  */
 package org.apache.openmeetings.web.app;
 
+import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+import static org.red5.logging.Red5LoggerFactory.getLogger;
+import static org.springframework.web.context.WebApplicationContext.ROOT_WEB_APPLICATION_CONTEXT_ATTRIBUTE;
 import static org.springframework.web.context.support.WebApplicationContextUtils.getWebApplicationContext;
 
 import java.util.Map;
@@ -66,7 +69,7 @@ import org.apache.wicket.request.mapper.parameter.PageParametersEncoder;
 import org.apache.wicket.settings.IPageSettings;
 import org.apache.wicket.util.collections.ConcurrentHashSet;
 import org.apache.wicket.util.tester.WicketTester;
-import org.springframework.web.context.WebApplicationContext;
+import org.slf4j.Logger;
 import org.springframework.web.context.support.XmlWebApplicationContext;
 
 import ro.fortsoft.wicket.dashboard.WidgetRegistry;
@@ -75,9 +78,10 @@ import ro.fortsoft.wicket.dashboard.web.DashboardContextInjector;
 import ro.fortsoft.wicket.dashboard.web.DashboardSettings;
 
 public class Application extends AuthenticatedWebApplication {
-	private DashboardContext dashboardContext;
+	private static final Logger log = getLogger(Application.class, webAppRootKey);
 	private static boolean isInstalled;
 	private static Map<Long, Set<String>> ONLINE_USERS = new ConcurrentHashMap<Long, Set<String>>();
+	private DashboardContext dashboardContext;
 	
 	@Override
 	protected void init() {
@@ -110,8 +114,7 @@ public class Application extends AuthenticatedWebApplication {
 		widgetRegistry.registerWidget(new StartWidgetDescriptor());
 		widgetRegistry.registerWidget(new RssWidgetDescriptor());
 		// add dashboard context injector
-		DashboardContextInjector dashboardContextInjector = new DashboardContextInjector(dashboardContext);
-		getComponentInstantiationListeners().add(dashboardContextInjector);
+		getComponentInstantiationListeners().add(new DashboardContextInjector(dashboardContext));
 		DashboardSettings dashboardSettings = DashboardSettings.get();
 		dashboardSettings.setIncludeJQuery(false);
 		dashboardSettings.setIncludeJQueryUI(false);
@@ -244,15 +247,27 @@ public class Application extends AuthenticatedWebApplication {
         
 		WicketTester tester = new WicketTester(app);
 		ServletContext sc = app.getServletContext();
-        XmlWebApplicationContext  applicationContext = new XmlWebApplicationContext();
-        applicationContext.setConfigLocation("classpath:openmeetings-applicationContext.xml");
-        applicationContext.setServletContext(sc);
-        applicationContext.refresh();
-        sc.setAttribute(WebApplicationContext.ROOT_WEB_APPLICATION_CONTEXT_ATTRIBUTE, applicationContext);
+        XmlWebApplicationContext xmlContext = new XmlWebApplicationContext();
+        xmlContext.setConfigLocation("classpath:openmeetings-applicationContext.xml");
+        xmlContext.setServletContext(sc);
+        xmlContext.refresh();
+        sc.setAttribute(ROOT_WEB_APPLICATION_CONTEXT_ATTRIBUTE, xmlContext);
         if (langId > 0) {
         	WebSession.get().setLanguage(langId);
         }
         InitializationContainer.initComplete = true;
         return tester;
+	}
+	
+	public static void destroy(WicketTester tester) {
+		if (tester != null) {
+			ServletContext sc = tester.getServletContext();
+			try {
+				((XmlWebApplicationContext)sc.getAttribute(ROOT_WEB_APPLICATION_CONTEXT_ATTRIBUTE)).close();
+			} catch (Exception e) {
+				log.error("Unexpected error while destroying XmlWebApplicationContext", e);
+			}
+			tester.destroy();
+		}
 	}
 }

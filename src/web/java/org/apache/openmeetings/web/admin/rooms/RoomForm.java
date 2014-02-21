@@ -79,6 +79,7 @@ public class RoomForm extends AdminCommonUserForm<Room> {
 	final ListView<Client> clients;
 	List<RoomModerator> moderatorsInRoom = null;
 	List<Client> clientsInRoom = null;
+	
 	public RoomForm(String id, WebMarkupContainer roomList, final Room room) {
 		super(id, new CompoundPropertyModel<Room>(room));
 		this.roomList = roomList;
