@@ -20,7 +20,6 @@ package org.apache.openmeetings.web.app;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
-import org.apache.openmeetings.web.pages.MainPage;
 import org.apache.wicket.authentication.strategy.DefaultAuthenticationStrategy;
 import org.apache.wicket.util.string.Strings;
 import org.red5.logging.Red5LoggerFactory;
@@ -30,7 +29,7 @@ public class OmAuthenticationStrategy extends DefaultAuthenticationStrategy {
 	/** The separator used to concatenate the username and password */
 	private static final String VALUE_SEPARATOR = "-sep-";
 	private static final String COOKIE_KEY = "LoggedIn";
-	private static final Logger log = Red5LoggerFactory.getLogger(MainPage.class, webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(OmAuthenticationStrategy.class, webAppRootKey);
 	/** The cookie name to store the username/password/domain */
 	private final String cookieKey;
 	

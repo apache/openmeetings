@@ -18,9 +18,10 @@
  */
 package org.apache.openmeetings.web.admin.labels;
 
+import static org.apache.openmeetings.web.app.Application.getBean;
+
 import org.apache.openmeetings.db.dao.label.FieldLanguageDao;
 import org.apache.openmeetings.db.entity.label.FieldLanguage;
-import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.common.ConfirmCallListener;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -41,13 +42,11 @@ import org.apache.wicket.util.time.Duration;
  * 
  */
 public class LangForm extends Form<Void> {
-
 	private static final long serialVersionUID = 2837702941211636609L;
 	private DropDownChoice<FieldLanguage> languages;
 
 	public void updateLanguages(AjaxRequestTarget target) {
-		FieldLanguageDao langDao = Application
-				.getBean(FieldLanguageDao.class);
+		FieldLanguageDao langDao = getBean(FieldLanguageDao.class);
 		languages.setChoices(langDao.getLanguages());
 		// add(languages);
 		target.add(languages);
@@ -61,13 +60,11 @@ public class LangForm extends Form<Void> {
 	 * @param language
 	 * @param langPanel
 	 */
-	public LangForm(String id, final WebMarkupContainer listContainer,
-			final LangPanel langPanel) {
+	public LangForm(String id, final WebMarkupContainer listContainer, final LangPanel langPanel) {
 		super(id);
 		setOutputMarkupId(true);
 
-		FieldLanguageDao langDao = Application
-				.getBean(FieldLanguageDao.class);
+		FieldLanguageDao langDao = getBean(FieldLanguageDao.class);
 		
 		languages = new DropDownChoice<FieldLanguage>("language"
 				, new PropertyModel<FieldLanguage>(langPanel, "language")
@@ -96,7 +93,7 @@ public class LangForm extends Form<Void> {
 			@Override
 			protected void onEvent(AjaxRequestTarget target) {
 				langPanel.language.setDeleted(true);
-				FieldLanguageDao langDao = Application.getBean(FieldLanguageDao.class);
+				FieldLanguageDao langDao = getBean(FieldLanguageDao.class);
 				try {
 					langDao.updateLanguage(langPanel.language);
 				} catch (Exception e) {

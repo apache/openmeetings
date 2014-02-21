@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.web.mail.template;
 
+import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.ExternalLink;
@@ -54,9 +55,7 @@ public class InvitationTemplate extends AbstractTemplatePanel {
 			tester = ensureApplication(langId);
 			return renderPanel(new InvitationTemplate(TemplatePage.COMP_ID, user, message, link, isCanceled)).toString();
 		} finally {
-			if (tester != null) {
-				tester.destroy();
-			}
+			Application.destroy(tester);
 		}
 	}
 }

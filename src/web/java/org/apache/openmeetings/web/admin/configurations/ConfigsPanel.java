@@ -42,7 +42,7 @@ import org.apache.wicket.markup.repeater.Item;
 public class ConfigsPanel extends AdminPanel {
 	private static final long serialVersionUID = -1L;
 	private ConfigForm form;
-	final WebMarkupContainer listContainer = new WebMarkupContainer("listContainer");
+	private final WebMarkupContainer listContainer = new WebMarkupContainer("listContainer");
 	
 	@Override
 	public void onMenuPanelLoad(AjaxRequestTarget target) {

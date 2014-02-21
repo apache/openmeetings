@@ -19,12 +19,12 @@
 package org.apache.openmeetings.web.admin.configurations;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.WEB_DATE_PATTERN;
+import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.wicket.datetime.markup.html.basic.DateLabel.forDatePattern;
 
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.entity.basic.Configuration;
 import org.apache.openmeetings.web.admin.AdminBaseForm;
-import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormValidatingBehavior;
@@ -47,14 +47,9 @@ import org.apache.wicket.validation.IValidator;
  * 
  */
 public class ConfigForm extends AdminBaseForm<Configuration> {
-
 	private static final long serialVersionUID = 1L;
 	private final WebMarkupContainer listContainer;
 
-	private ConfigurationDao getConfigDao() {
-		return Application.getBean(ConfigurationDao.class);
-	}
-	
 	private void refresh(AjaxRequestTarget target) {
 		target.add(this);
 		target.appendJavaScript("omConfigPanelInit();");
@@ -68,7 +63,7 @@ public class ConfigForm extends AdminBaseForm<Configuration> {
 			private static final long serialVersionUID = -3371792361118941958L;
 
 			public void validate(IValidatable<String> validatable) {
-				Configuration c = getConfigDao().forceGet(validatable.getValue());
+				Configuration c = getBean(ConfigurationDao.class).forceGet(validatable.getValue());
 				if (c != null && !c.getConfiguration_id().equals(ConfigForm.this.getModelObject().getConfiguration_id())) {
 					error(WebSession.getString(1544L));
 				}
@@ -86,7 +81,7 @@ public class ConfigForm extends AdminBaseForm<Configuration> {
 	
 	@Override
 	protected void onSaveSubmit(AjaxRequestTarget target, Form<?> form) {
-		this.setModelObject(getConfigDao().update(getModelObject(), WebSession.getUserId()));
+		setModelObject(getBean(ConfigurationDao.class).update(getModelObject(), WebSession.getUserId()));
 		hideNewRecord();
 		target.add(listContainer);
 		refresh(target);
@@ -100,20 +95,20 @@ public class ConfigForm extends AdminBaseForm<Configuration> {
 	
 	@Override
 	protected void onRefreshSubmit(AjaxRequestTarget target, Form<?> form) {
-		Configuration conf = this.getModelObject();
+		Configuration conf = getModelObject();
 		if (conf.getConfiguration_id() != null) {
-			conf = getConfigDao().get(conf.getConfiguration_id());
+			conf = getBean(ConfigurationDao.class).get(conf.getConfiguration_id());
 		} else {
 			conf = new Configuration();
 		}
-		this.setModelObject(conf);
+		setModelObject(conf);
 		refresh(target);
 	}
 	
 	@Override
 	protected void onDeleteSubmit(AjaxRequestTarget target, Form<?> form) {
-		Application.getBean(ConfigurationDao.class).delete(this.getModelObject(), WebSession.getUserId());
-		this.setModelObject(new Configuration());
+		getBean(ConfigurationDao.class).delete(getModelObject(), WebSession.getUserId());
+		setModelObject(new Configuration());
 		target.add(listContainer);
 		refresh(target);
 	}

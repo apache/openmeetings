@@ -36,7 +36,6 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.util.time.Duration;
 
 public class OAuthForm extends AdminBaseForm<OAuthServer> {
-
 	private static final long serialVersionUID = 1L;
 	private WebMarkupContainer listContainer;
 	private TextField<String> redirectUriText;
