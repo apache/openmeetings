@@ -74,7 +74,8 @@ public class TestOldBackups extends AbstractJUnitDefaults {
 		long apptCount = 0;
 		long meetingMembersCount = 0;
 		for (File backup : backupsHome.listFiles()) {
-			log.debug("Import of backup file : '" + backup.getName() + "' is started ...");
+			String name = backup.getName();
+			log.debug("Import of backup file : '" + name + "' is started ...");
 			try {
 				backupController.performImport(new FileInputStream(backup));
 				long newOrgCount = organisationDao.count();
@@ -83,12 +84,12 @@ public class TestOldBackups extends AbstractJUnitDefaults {
 				long newRoomOrgCount = roomOrganisationDao.get().size();
 				long newApptCount = appointmentDao.getAppointments().size();
 				long newMeetingMembersCount = meetingMemberDao.getMeetingMembers().size();
-				assertTrue("Zero organizations were imported", newOrgCount > orgCount);
-				assertTrue("Zero users were imported", newUserCount > userCount);
-				assertTrue("Zero rooms were imported", newRoomCount > roomCount);
-				assertTrue("Zero room organizations were imported", newRoomOrgCount > roomOrgCount);
-				assertTrue("Zero appointments were imported", newApptCount > apptCount);
-				assertTrue("Zero meeting members were imported", newMeetingMembersCount > meetingMembersCount);
+				assertTrue("Zero organizations were imported from " + name, newOrgCount > orgCount);
+				assertTrue("Zero users were imported from " + name, newUserCount > userCount);
+				assertTrue("Zero rooms were imported from " + name, newRoomCount > roomCount);
+				assertTrue("Zero room organizations were imported from " + name, newRoomOrgCount > roomOrgCount);
+				assertTrue("Zero appointments were imported from " + name, newApptCount > apptCount);
+				assertTrue("Zero meeting members were imported from " + name, newMeetingMembersCount > meetingMembersCount);
 				
 				orgCount = newOrgCount;
 				userCount = newUserCount;
@@ -97,7 +98,7 @@ public class TestOldBackups extends AbstractJUnitDefaults {
 				apptCount = newApptCount;
 				meetingMembersCount = newMeetingMembersCount;
 			} catch (Exception e) {
-				throw new RuntimeException("Unexpected exception while importing backup: " + backup.getName(), e);
+				throw new RuntimeException("Unexpected exception while importing backup: " + name, e);
 			}
 			log.debug("... Done.");
 		}
