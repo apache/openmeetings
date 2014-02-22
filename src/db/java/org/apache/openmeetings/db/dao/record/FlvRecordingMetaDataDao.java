@@ -85,7 +85,7 @@ public class FlvRecordingMetaDataDao {
 	public List<FlvRecordingMetaData> getAudioMetaDataByRecording(Long flvRecordingId) {
 		try {
 			String hql = "SELECT c FROM FlvRecordingMetaData c WHERE c.flvRecording.flvRecordingId = :flvRecordingId "
-					+ "AND c.isScreenData = false AND c.streamStatus <> :none "
+					+ "AND c.screenData = false AND c.streamStatus <> :none "
 					+ "AND (c.isAudioOnly = true OR (c.isAudioOnly = false AND c.isVideoOnly = false))";
 
 			TypedQuery<FlvRecordingMetaData> query = em.createQuery(hql, FlvRecordingMetaData.class);
@@ -104,7 +104,7 @@ public class FlvRecordingMetaDataDao {
 	public FlvRecordingMetaData getScreenMetaDataByRecording(Long flvRecordingId) {
 		try {
 			String hql = "SELECT c FROM FlvRecordingMetaData c WHERE c.flvRecording.flvRecordingId = :flvRecordingId "
-					+ "AND c.isScreenData = true";
+					+ "AND c.screenData = true";
 
 			TypedQuery<FlvRecordingMetaData> query = em.createQuery(hql, FlvRecordingMetaData.class);
 			query.setParameter("flvRecordingId", flvRecordingId);
@@ -137,7 +137,7 @@ public class FlvRecordingMetaDataDao {
 
 			flvRecordingMetaData.setIsAudioOnly(isAudioOnly);
 			flvRecordingMetaData.setIsVideoOnly(isVideoOnly);
-			flvRecordingMetaData.setIsScreenData(isScreenData);
+			flvRecordingMetaData.setScreenData(isScreenData);
 
 			flvRecordingMetaData.setStreamName(streamName);
 

@@ -33,7 +33,6 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-import org.apache.mina.core.buffer.IoBuffer;
 import org.red5.server.net.rtmp.event.VideoData;
 import org.red5.server.stream.message.RTMPMessage;
 import org.slf4j.Logger;
@@ -64,7 +63,6 @@ final class CaptureScreen extends Thread {
 		this.host = host;
 		this.app = app;
 		this.port = port;
-		se = new ScreenV1Encoder(); //NOTE get image should be changed in the code below
 	}
 
 	public void release() {
@@ -87,16 +85,13 @@ final class CaptureScreen extends Thread {
 		}
 	}
 
-	public void resetBuffer() {
-		se.reset();
-	}
-
 	public void run() {
 		try {
 			while (active && !core.isReadyToRecord()) {
 				Thread.sleep(60);
 			}
 			timeBetweenFrames = 1000 / FPS;
+			se = new ScreenV1Encoder(3 * FPS); //send keyframe every 3 seconds
 			scheduler.scheduleWithFixedDelay(new Runnable() {
 				Robot robot = new Robot();
 				Rectangle screen = new Rectangle(spinnerX, spinnerY, spinnerWidth, spinnerHeight);
@@ -110,15 +105,12 @@ final class CaptureScreen extends Thread {
 					}
 					start = System.currentTimeMillis();
 					try {
-						byte[] data = se.encode(screen, image);
+						VideoData data = se.encode(image);
 						if (log.isTraceEnabled()) {
 							log.trace(String.format("Image was encoded in %s ms", System.currentTimeMillis() - start));
 						}
-						IoBuffer buf = IoBuffer.allocate(data.length);
-						buf.clear();
-						buf.put(data);
-						buf.flip();
-						frames.offer(new VideoData(buf));
+						frames.offer(data);
+						se.createUnalteredFrame(screen);
 					} catch (IOException e) {
 						log.error("Error while encoding: ", e);
 					}
@@ -126,14 +118,15 @@ final class CaptureScreen extends Thread {
 			}, 0, timeBetweenFrames * NANO_MULTIPLIER, TimeUnit.NANOSECONDS);
 			sendScheduler.scheduleWithFixedDelay(new Runnable() {
 				public void run() {
-					if (frames.size() > 1) {
-						frames.poll();
-					}
-					VideoData f = frames.peek();
+					VideoData f = frames.poll();
+					f = f == null ? se.getUnalteredFrame() : f;
 					if (f != null) {
 						try {
 							timestamp += timeBetweenFrames;
 							pushVideo(f, (int)timestamp);
+							if (log.isTraceEnabled()) {
+								log.trace("Sending video, timestamp: " + timestamp);
+							}
 						} catch (IOException e) {
 							log.error("Error while sending: ", e);
 						}

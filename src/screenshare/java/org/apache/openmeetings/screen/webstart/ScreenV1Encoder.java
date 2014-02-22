@@ -32,6 +32,9 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.zip.Deflater;
 
+import org.apache.mina.core.buffer.IoBuffer;
+import org.red5.server.net.rtmp.event.VideoData;
+
 public class ScreenV1Encoder extends BaseScreenEncoder {
 	private int[][] last = null;
 	private static int KEY_FRAME_INDEX = 25;
@@ -41,14 +44,18 @@ public class ScreenV1Encoder extends BaseScreenEncoder {
 	private int keyFrameIndex;
 	private int frameCount = 0;
 	private int blockSize;
-	private Rectangle screen;
 	private ByteArrayOutputStream ba = new ByteArrayOutputStream(50 + 3 * DEFAULT_SCREEN_WIDTH * DEFAULT_SCREEN_HEIGHT);
 	private byte[] areaBuf = null;
 	private Deflater d = new Deflater(Deflater.DEFAULT_COMPRESSION);
 	private byte[] zipBuf = null;
+	private VideoData unalteredFrame = null;
 	
 	public ScreenV1Encoder() {
 		this(KEY_FRAME_INDEX, DEFAULT_BLOCK_SIZE);
+	}
+	
+	public ScreenV1Encoder(int keyFrameIndex) {
+		this(keyFrameIndex, DEFAULT_BLOCK_SIZE);
 	}
 	
 	//will create square blocks
@@ -62,12 +69,47 @@ public class ScreenV1Encoder extends BaseScreenEncoder {
 		areaBuf = new byte[3 * blockSize * blockSize];
 		zipBuf = new byte[3 * blockSize * blockSize];
 	}
+
+	private VideoData getData(byte[] data) {
+		IoBuffer buf = IoBuffer.allocate(data.length);
+		buf.clear();
+		buf.put(data);
+		buf.flip();
+		return new VideoData(buf);
+	}
 	
-	public synchronized byte[] encode(Rectangle screen, int[][] img) throws IOException {
+	public void createUnalteredFrame(Rectangle _area) throws IOException {
+		if (last == null) {
+			return;
+		}
+		if (unalteredFrame == null) {
+			ByteArrayOutputStream ba = new ByteArrayOutputStream(200);
+			
+			//header
+			ba.write(getTag(FLAG_FRAMETYPE_INTERFRAME, FLAG_CODEC_SCREEN));
+			writeShort(ba, _area.width + ((blockSize / 16 - 1) << 12));
+			writeShort(ba, _area.height + ((blockSize / 16 - 1) << 12));
+			Rectangle area = getNextBlock(_area, null);
+			while (area.width > 0 && area.height > 0) {
+				writeShort(ba, 0);
+				area = getNextBlock(_area, area);
+			}
+			unalteredFrame = getData(ba.toByteArray());
+		}
+	}
+	
+	public VideoData getUnalteredFrame() {
+		if (unalteredFrame != null && (frameCount % keyFrameIndex) != 0) {
+			frameCount++;
+		}
+		return unalteredFrame;
+	}
+	
+	public synchronized VideoData encode(int[][] img) throws IOException {
 		ba.reset();
 		Rectangle imgArea = new Rectangle(img.length, img[0].length);
 		Rectangle area = getNextBlock(imgArea, null);
-		boolean isKeyFrame = (frameCount++ % keyFrameIndex) == 0 || last == null || !screen.equals(this.screen);
+		boolean isKeyFrame = (frameCount++ % keyFrameIndex) == 0 || last == null;
 		
 		//header
 		ba.write(getTag(isKeyFrame ? FLAG_FRAMETYPE_KEYFRAME : FLAG_FRAMETYPE_INTERFRAME, FLAG_CODEC_SCREEN));
@@ -78,13 +120,13 @@ public class ScreenV1Encoder extends BaseScreenEncoder {
 			writeBytesIfChanged(ba, isKeyFrame, img, area);
 			area = getNextBlock(imgArea, area);
 		}
-		this.screen = screen;
 		last = img;
-		return ba.toByteArray();
+		return getData(ba.toByteArray());
 	}
 	
 	public void reset() {
 		last = null;
+		unalteredFrame = null;
 	}
 	
 	private Rectangle getNextBlock(Rectangle img, Rectangle _prev) {
