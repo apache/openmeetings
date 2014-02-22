@@ -290,7 +290,7 @@
 			<include name="**/*.xml" />
 			<include name="**/*.png" />
 		</patternset>
-		<patternset id="resources">
+		<patternset id="xmlpngconf">
 			<patternset refid="xmlpng" />
 			<include name="**/*.conf" />
 			<include name="**/*.properties" />
@@ -299,7 +299,7 @@
 		<!-- Main Applications -->
 		<copy todir="${main.out.dir}" includeEmptyDirs="yes">
 			<fileset dir="${src.base.dir}">
-				<patternset refid="resources" />
+				<patternset refid="xmlpngconf" />
 			</fileset>
 		</copy>
 		<!-- Screen Share resources -->
@@ -675,7 +675,7 @@
 	<target name="compile" depends="compile.only, prepare" />
 
 	<target name="compile.only"
-		depends="-retrieve-mainlibs,-retrieve-om,-retrieve-dtd-generator,-retrieve-junit,-retrieve-cmdadmin,-retrieve-tools.jar,resources,compile.only.nocheck"/>
+		depends="-retrieve-mainlibs,-retrieve-om,-retrieve-dtd-generator,-retrieve-junit,-retrieve-cmdadmin,-retrieve-tools.jar,compile.only.nocheck,resources"/>
 	
 	<target name="compile.only.nocheck" depends="clean.classes">
 		<antcall target="prepare.mkdir" inheritAll="true" inheritRefs="true"/>
