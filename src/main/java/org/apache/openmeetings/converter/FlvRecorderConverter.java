@@ -76,11 +76,6 @@ public class FlvRecorderConverter extends BaseConverter {
 		List<String> listOfFullWaveFiles = new LinkedList<String>();
 		File streamFolder = getStreamFolder(flvRecording);
 		try {
-			stripAudioFirstPass(flvRecording, returnLog, listOfFullWaveFiles, streamFolder);
-
-			// Merge Wave to Full Length
-			String streamFolderGeneralName = getStreamsHibernateDir().getCanonicalPath() + File.separator; // FIXME
-
 			FlvRecordingMetaData screenMetaData = metaDataDao.getScreenMetaDataByRecording(flvRecording.getFlvRecordingId());
 
 			if (screenMetaData == null) {
@@ -92,6 +87,11 @@ public class FlvRecorderConverter extends BaseConverter {
 			}
 
 			screenMetaData = waitForTheStream(screenMetaData.getFlvRecordingMetaDataId());
+
+			stripAudioFirstPass(flvRecording, returnLog, listOfFullWaveFiles, streamFolder);
+
+			// Merge Wave to Full Length
+			String streamFolderGeneralName = getStreamsHibernateDir().getCanonicalPath() + File.separator; // FIXME
 
 			String hashFileFullName = screenMetaData.getStreamName() + "_FINAL_WAVE.wav";
 			String outputFullWav = new File(streamFolder, hashFileFullName).getCanonicalPath();

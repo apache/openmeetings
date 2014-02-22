@@ -214,26 +214,29 @@ public class CoreScreenShare implements IPendingServiceCallback, INetStreamEvent
 
 			instance.invoke("setConnectionAsSharingClient", new Object[] { map }, this);
 		} catch (Exception err) {
-			log.error("setConnectionAsSharingClient Exception: ", err);
 			frame.setStatus("Error: " + err.getLocalizedMessage());
 			log.error("[setConnectionAsSharingClient]", err);
 		}
 	}
 
-	/**
-	 * @param startStreaming flag denoting the streaming is started
-	 * @param startRecording flag denoting the recording is started
-	 */
-	public void captureScreenStart(boolean startStreaming, boolean startRecording) {
-		captureScreenStart(startStreaming, startRecording, false);
+	public void streamingStart() {
+		startStreaming = true;
+		captureScreenStart();
 	}
-
-	public void captureScreenStart(boolean startStreaming, boolean startRecording, boolean startPublishing) {
+	
+	public void recordingStart() {
+		startRecording= true;
+		captureScreenStart();
+	}
+	
+	public void publishingStart() {
+		startPublishing = true;
+		captureScreenStart();
+	}
+	
+	private void captureScreenStart() {
 		try {
 			log.debug("captureScreenStart");
-			this.startStreaming = startStreaming;
-			this.startRecording= startRecording;
-			this.startPublishing = startPublishing;
 			
 			if (!isConnected) {
 				instance.connect(host, port, app, this);
@@ -246,13 +249,27 @@ public class CoreScreenShare implements IPendingServiceCallback, INetStreamEvent
 		}
 	}
 
-	public void sendCaptureScreenStop(boolean stopStreaming, boolean stopRecording) {
+	public void streamingStop() {
+		startStreaming = false;
+		captureScreenStop("stopStreaming");
+	}
+	
+	public void recordingStop() {
+		startRecording = false;
+		captureScreenStop("stopRecording");
+	}
+	
+	public void publishingStop() {
+		startPublishing = false;
+		captureScreenStop("stopPublishing");
+	}
+	
+	private void captureScreenStop(String action) {
 		try {
 			log.debug("INVOKE screenSharerAction" );
 
 			Map<String, Object> map = new HashMap<String, Object>();
-			map.put("stopStreaming", stopStreaming);
-			map.put("stopRecording", stopRecording);
+			map.put(action, true);
 
 			instance.invoke("screenSharerAction", new Object[] { map }, this);
 		} catch (Exception err) {
@@ -261,12 +278,6 @@ public class CoreScreenShare implements IPendingServiceCallback, INetStreamEvent
 		}
 	}
 
-	public void sendStopPublishing() {
-		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("stopPublishing", true);
-		instance.invoke("screenSharerAction", new Object[] { map }, this);
-	}
-	
 	public void stopStreaming() {
 		startStreaming = false;
 		frame.setSharingStatus(false, !startPublishing && !startRecording && !startStreaming);
@@ -603,7 +614,6 @@ public class CoreScreenShare implements IPendingServiceCallback, INetStreamEvent
 
 					instance.createStream(this);
 				} else {
-					getCapture().resetBuffer();
 					log.trace("The Stream was already started ");
 				}
 				if (returnMap != null) {
@@ -632,14 +642,10 @@ public class CoreScreenShare implements IPendingServiceCallback, INetStreamEvent
 					if (call.getResult() != null) {
 						getCapture().setStreamId((Integer)call.getResult());
 					}
-					log.debug("createPublishStream result stream id: " + getCapture().getStreamId());
-					log.debug("publishing video by name: " + publishName);
+					log.debug("createPublishStream result stream id: {}; name: {}", getCapture().getStreamId(), publishName);
 					instance.publish(getCapture().getStreamId(), publishName, "live", this);
 	
-					log.debug("setup capture thread");
-	
-					log.debug("setup capture thread vScreenSpinnerWidth " + spinnerWidth);
-					log.debug("setup capture thread vScreenSpinnerHeight " + spinnerHeight);
+					log.debug("setup capture thread spinnerWidth = {}; spinnerHeight = {];", spinnerWidth, spinnerHeight);
 	
 					getCapture().setSendCursor(true);
 					getCapture().start();

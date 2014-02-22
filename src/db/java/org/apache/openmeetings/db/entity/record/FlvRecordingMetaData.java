@@ -95,7 +95,7 @@ public class FlvRecordingMetaData implements Serializable {
 
 	@Column(name = "is_screen_data")
 	@Element(data = true)
-	private Boolean isScreenData;
+	private boolean screenData;
 
 	@Column(name = "inserted_by")
 	@Element(data = true, required = false)
@@ -228,12 +228,12 @@ public class FlvRecordingMetaData implements Serializable {
 		this.updated = updated;
 	}
 
-	public Boolean getIsScreenData() {
-		return isScreenData;
+	public boolean isScreenData() {
+		return screenData;
 	}
 
-	public void setIsScreenData(Boolean isScreenData) {
-		this.isScreenData = isScreenData;
+	public void setScreenData(boolean screenData) {
+		this.screenData = screenData;
 	}
 
 	public String getStreamName() {

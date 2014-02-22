@@ -28,11 +28,11 @@ import static org.slf4j.LoggerFactory.getLogger;
 import java.awt.Rectangle;
 import java.awt.Robot;
 import java.io.IOException;
+import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-import org.apache.mina.core.buffer.IoBuffer;
 import org.red5.server.net.rtmp.event.VideoData;
 import org.red5.server.stream.message.RTMPMessage;
 import org.slf4j.Logger;
@@ -46,13 +46,14 @@ final class CaptureScreen extends Thread {
 	private volatile boolean active = true;
 	private IScreenEncoder se;
 	private IScreenShare client;
-	private IoBuffer buffer;
+	private ArrayBlockingQueue<VideoData> frames = new ArrayBlockingQueue<VideoData>(2);
 	private String host = null;
 	private String app = null;
 	private int port = -1;
 	private int streamId;
 	private boolean startPublish = false;
 	private boolean sendCursor = false;
+	private final ScheduledExecutorService sendScheduler = Executors.newScheduledThreadPool(1);
 	private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(20);
 	private final ScheduledExecutorService cursorScheduler = Executors.newScheduledThreadPool(1);
 
@@ -62,7 +63,6 @@ final class CaptureScreen extends Thread {
 		this.host = host;
 		this.app = app;
 		this.port = port;
-		se = new ScreenV1Encoder(); //NOTE get image should be changed in the code below
 	}
 
 	public void release() {
@@ -74,14 +74,15 @@ final class CaptureScreen extends Thread {
 			//no-op
 		}
 		try {
+			sendScheduler.shutdownNow();
+		} catch (Exception e) {
+			//no-op
+		}
+		try {
 			cursorScheduler.shutdownNow();
 		} catch (Exception e) {
 			//no-op
 		}
-	}
-
-	public void resetBuffer() {
-		se.reset();
 	}
 
 	public void run() {
@@ -90,6 +91,7 @@ final class CaptureScreen extends Thread {
 				Thread.sleep(60);
 			}
 			timeBetweenFrames = 1000 / FPS;
+			se = new ScreenV1Encoder(3 * FPS); //send keyframe every 3 seconds
 			scheduler.scheduleWithFixedDelay(new Runnable() {
 				Robot robot = new Robot();
 				Rectangle screen = new Rectangle(spinnerX, spinnerY, spinnerWidth, spinnerHeight);
@@ -103,14 +105,31 @@ final class CaptureScreen extends Thread {
 					}
 					start = System.currentTimeMillis();
 					try {
-						byte[] data = se.encode(screen, image);
+						VideoData data = se.encode(image);
 						if (log.isTraceEnabled()) {
 							log.trace(String.format("Image was encoded in %s ms", System.currentTimeMillis() - start));
 						}
-						timestamp += timeBetweenFrames;
-						pushVideo(data, timestamp);
+						frames.offer(data);
+						se.createUnalteredFrame(screen);
 					} catch (IOException e) {
-						log.error("Error while encoding/sending: ", e);
+						log.error("Error while encoding: ", e);
+					}
+				}
+			}, 0, timeBetweenFrames * NANO_MULTIPLIER, TimeUnit.NANOSECONDS);
+			sendScheduler.scheduleWithFixedDelay(new Runnable() {
+				public void run() {
+					VideoData f = frames.poll();
+					f = f == null ? se.getUnalteredFrame() : f;
+					if (f != null) {
+						try {
+							timestamp += timeBetweenFrames;
+							pushVideo(f, (int)timestamp);
+							if (log.isTraceEnabled()) {
+								log.trace("Sending video, timestamp: " + timestamp);
+							}
+						} catch (IOException e) {
+							log.error("Error while sending: ", e);
+						}
 					}
 				}
 			}, 0, timeBetweenFrames * NANO_MULTIPLIER, TimeUnit.NANOSECONDS);
@@ -143,19 +162,9 @@ final class CaptureScreen extends Thread {
 	}
 	*/
 	
-	private void pushVideo(byte[] video, int ts) throws IOException {
+	private void pushVideo(VideoData data, int ts) throws IOException {
 		if (startPublish) {
-			if (buffer == null || (buffer.capacity() < video.length && !buffer.isAutoExpand())) {
-				buffer = IoBuffer.allocate(video.length);
-				buffer.setAutoExpand(true);
-			}
-	
-			buffer.clear();
-			buffer.put(video);
-			buffer.flip();
-	
-			log.trace("Video frame sent :: " + ts);
-			RTMPMessage rtmpMsg = RTMPMessage.build(new VideoData(buffer), ts);
+			RTMPMessage rtmpMsg = RTMPMessage.build(data, ts);
 			client.publishStreamData(streamId, rtmpMsg);
 		}
 	}

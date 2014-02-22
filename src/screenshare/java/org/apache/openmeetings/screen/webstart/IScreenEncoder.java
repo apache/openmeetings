@@ -21,8 +21,14 @@ package org.apache.openmeetings.screen.webstart;
 import java.awt.Rectangle;
 import java.io.IOException;
 
+import org.red5.server.net.rtmp.event.VideoData;
+
 public interface IScreenEncoder {
-	byte[] encode(Rectangle screen, int[][] img)  throws IOException;
+	void createUnalteredFrame(Rectangle area) throws IOException;
+	
+	VideoData getUnalteredFrame();
+
+	VideoData encode(int[][] img) throws IOException;
 	
 	void reset();
 }

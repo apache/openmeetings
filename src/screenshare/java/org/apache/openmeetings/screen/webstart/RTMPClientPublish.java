@@ -67,7 +67,7 @@ class RTMPClientPublish extends RTMPClient implements IPendingServiceCallback, I
 	private void connectionClosed() {
 		publishScreen.setStartPublish(false);
 		publishScreen.release();
-		core.sendStopPublishing();
+		core.publishingStop();
 	}
 	
 	@Override

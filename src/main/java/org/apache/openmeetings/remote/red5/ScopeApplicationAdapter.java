@@ -287,33 +287,24 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 		try {
 			log.debug("-----------  setConnectionAsSharingClient");
 			IConnection current = Red5.getConnectionLocal();
-			// IServiceCapableConnection service = (IServiceCapableConnection)
-			// current;
 
-			Client currentClient = this.sessionManager
-					.getClientByStreamId(current.getClient().getId(), null);
+			Client currentClient = sessionManager.getClientByStreamId(current.getClient().getId(), null);
 
 			if (currentClient != null) {
+				boolean startRecording = Boolean.valueOf("" + map.get("startRecording"));
+				boolean startStreaming = Boolean.valueOf("" + map.get("startStreaming"));
+				boolean startPublishing = Boolean.valueOf("" + map.get("startPublishing"))
+					&& (0 == sessionManager.getPublishingCount(currentClient.getRoom_id()));
 
-				boolean startRecording = Boolean.valueOf("" + map.get(
-						"startRecording"));
-				boolean startStreaming = Boolean.valueOf("" + map.get(
-						"startStreaming"));
-				boolean startPublishing = Boolean.valueOf("" + map.get(
-						"startPublishing")) && (0 == sessionManager.getPublishingCount(currentClient.getRoom_id()));
-
-				currentClient.setRoom_id(Long.parseLong(current.getScope()
-						.getName()));
+				currentClient.setRoom_id(Long.parseLong(current.getScope().getName()));
 
 				// Set this connection to be a RTMP-Java Client
 				currentClient.setIsScreenClient(true);
 				
 				SessionVariablesUtil.setIsScreenClient(current.getClient());
 				
-				currentClient.setUser_id(Long.parseLong(map.get("user_id")
-						.toString()));
-				SessionVariablesUtil.setUserId(current.getClient(), Long.parseLong(map.get("user_id")
-						.toString()));
+				currentClient.setUser_id(Long.parseLong(map.get("user_id").toString()));
+				SessionVariablesUtil.setUserId(current.getClient(), Long.parseLong(map.get("user_id").toString()));
 
 				boolean alreadyStreaming = currentClient.isStartStreaming();
 				if (startStreaming) {
@@ -327,11 +318,9 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 					currentClient.setStreamPublishStarted(true);
 				}
 
-				currentClient.setOrganization_id(Long.parseLong(map.get(
-						"organization_id").toString()));
+				currentClient.setOrganization_id(Long.parseLong(map.get("organization_id").toString()));
 
-				this.sessionManager.updateClientByStreamId(current
-						.getClient().getId(), currentClient, false, null);
+				sessionManager.updateClientByStreamId(current.getClient().getId(), currentClient, false, null);
 
 				Map returnMap = new HashMap();
 				returnMap.put("alreadyPublished", false);
@@ -342,14 +331,10 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 					returnMap.put("alreadyPublished", true);
 				}
 
-				currentClient.setVX(Integer.parseInt(map.get("screenX")
-						.toString()));
-				currentClient.setVY(Integer.parseInt(map.get("screenY")
-						.toString()));
-				currentClient.setVWidth(Integer.parseInt(map.get("screenWidth")
-						.toString()));
-				currentClient.setVHeight(Integer.parseInt(map.get(
-						"screenHeight").toString()));
+				currentClient.setVX(Integer.parseInt(map.get("screenX").toString()));
+				currentClient.setVY(Integer.parseInt(map.get("screenY").toString()));
+				currentClient.setVWidth(Integer.parseInt(map.get("screenWidth").toString()));
+				currentClient.setVHeight(Integer.parseInt(map.get("screenHeight").toString()));
 
 				log.debug("screen x,y,width,height " + currentClient.getVX()
 						+ " " + currentClient.getVY() + " "
@@ -358,20 +343,16 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 
 				log.debug("publishName :: " + map.get("publishName"));
 
-				currentClient.setStreamPublishName(map.get("publishName")
-						.toString());
+				currentClient.setStreamPublishName(map.get("publishName").toString());
 
-				Client currentScreenUser = this.sessionManager
-						.getClientByPublicSID(currentClient
-								.getStreamPublishName(), false, null);
+				Client currentScreenUser = sessionManager.getClientByPublicSID(currentClient.getStreamPublishName(), false, null);
 
 				currentClient.setFirstname(currentScreenUser.getFirstname());
 				currentClient.setLastname(currentScreenUser.getLastname());
 
 				// This is duplicated, but its not sure that in the meantime
 				// somebody requests this Client Object Info
-				this.sessionManager.updateClientByStreamId(current
-						.getClient().getId(), currentClient, false, null);
+				sessionManager.updateClientByStreamId(current.getClient().getId(), currentClient, false, null);
 
 				if (startStreaming) {
 					if (!alreadyStreaming) {
@@ -384,18 +365,19 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 					} else {
 						log.warn("Streaming is already started for the client id=" + currentClient.getId() + ". Second request is ignored.");
 					}
-				} else if (startRecording) {
+				}
+				if (startRecording) {
 					if (!alreadyRecording) {
 						returnMap.put("modus", "startRecording");
 	
-						String recordingName = "Recording "
-								+ CalendarPatterns.getDateWithTimeByMiliSeconds(new Date());
+						String recordingName = "Recording " + CalendarPatterns.getDateWithTimeByMiliSeconds(new Date());
 	
 						flvRecorderService.recordMeetingStream(recordingName, "", false);
 					} else {
 						log.warn("Recording is already started for the client id=" + currentClient.getId() + ". Second request is ignored.");
 					}
-				} else if (startPublishing) {
+				}
+				if (startPublishing) {
 					syncMessageToCurrentScope("startedPublishing", new Object[]{currentClient, "rtmp://" + map.get("publishingHost") + ":1935/"
 							+ map.get("publishingApp") + "/" + map.get("publishingId")}, false, true);
 					returnMap.put("modus", "startPublishing");
@@ -404,8 +386,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 				return returnMap;
 
 			} else {
-				throw new Exception("Could not find Screen Sharing Client "
-						+ current.getClient().getId());
+				throw new Exception("Could not find Screen Sharing Client " + current.getClient().getId());
 			}
 
 		} catch (Exception err) {

@@ -32,12 +32,12 @@ import org.apache.openmeetings.db.entity.record.FlvRecordingMetaData;
 import org.apache.openmeetings.db.entity.record.FlvRecordingMetaData.Status;
 import org.apache.openmeetings.util.OmFileHelper;
 import org.red5.io.IStreamableFile;
+import org.red5.io.IStreamableFileFactory;
+import org.red5.io.IStreamableFileService;
 import org.red5.io.ITagWriter;
+import org.red5.io.StreamableFileFactory;
 import org.red5.logging.Red5LoggerFactory;
 import org.red5.server.api.scope.IScope;
-import org.red5.server.api.service.IStreamableFileService;
-import org.red5.server.api.stream.IStreamableFileFactory;
-import org.red5.server.stream.StreamableFileFactory;
 import org.red5.server.util.ScopeUtils;
 import org.slf4j.Logger;
 

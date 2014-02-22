@@ -266,14 +266,14 @@ public class ScreenSharerFrame extends JFrame {
 				if (sharingStarted) {
 					if (!sharingActionRequested) {
 						sharingActionRequested = true;
-						core.sendCaptureScreenStop(true, false);
+						core.streamingStop();;
 					} else {
 						logger.warn("Sharing action is already requested");
 					}
 				} else {
 					if (!sharingActionRequested) {
 						sharingActionRequested = true;
-						core.captureScreenStart(true, false);
+						core.streamingStart();
 					} else {
 						logger.warn("Sharing action is already requested");
 					}
@@ -466,7 +466,7 @@ public class ScreenSharerFrame extends JFrame {
 		        calcRescaleFactors();
 			}
 		}); 
-		comboFPS.setSelectedIndex(1);
+		comboFPS.setSelectedIndex(2);
 		comboFPS.setBounds(390, 170, 70, 24);
 		panelScreen.add(comboFPS);
 		
@@ -490,14 +490,14 @@ public class ScreenSharerFrame extends JFrame {
 				if (recordingStarted) {
 					if (!recordingActionRequested) {
 						recordingActionRequested = true;
-						core.sendCaptureScreenStop(false, true);
+						core.recordingStop();
 					} else {
 						logger.warn("Recording action is already requested");
 					}
 				} else {
 					if (!recordingActionRequested) {
 						recordingActionRequested = true;
-						core.captureScreenStart(false, true);
+						core.recordingStart();
 					} else {
 						logger.warn("Recording action is already requested");
 					}
@@ -557,14 +557,14 @@ public class ScreenSharerFrame extends JFrame {
 				if (publishStarted) {
 					if (!publishingActionRequested) {
 						publishingActionRequested = true;
-						core.sendStopPublishing();
+						core.publishingStop();
 					} else {
 						logger.warn("Publishing action is already requested");
 					}
 				} else {
 					if (!publishingActionRequested) {
 						publishingActionRequested = true;
-						core.captureScreenStart(false, false, true);
+						core.publishingStart();
 					} else {
 						logger.warn("Publishing action is already requested");
 					}
