@@ -18,12 +18,14 @@
  */
 package org.apache.openmeetings.db.dao.user;
 
+import static org.apache.openmeetings.db.util.UserHelper.getMinLoginLength;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAUT_LANG_KEY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
 import java.security.NoSuchAlgorithmException;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -62,7 +64,7 @@ public class AbstractUserDao  {
 	private EntityManager em;
 
 	@Autowired
-	private ConfigurationDao configurationDao;
+	private ConfigurationDao cfgDao;
 	@Autowired
 	private StateDao stateDaoImpl;
 	@Autowired
@@ -82,7 +84,7 @@ public class AbstractUserDao  {
 		user.setSalutations_id(1L); // TODO: Fix default selection to be
 									// configurable
 		user.setLevel_id(1L);
-		user.setLanguage_id(configurationDao.getConfValue(CONFIG_DEFAUT_LANG_KEY, Long.class, "1"));
+		user.setLanguage_id(cfgDao.getConfValue(CONFIG_DEFAUT_LANG_KEY, Long.class, "1"));
 		user.setTimeZoneId(timezoneUtil.getTimeZone(currentUser).getID());
 		user.setForceTimeZoneCheck(false);
 		user.setSendSMS(false);
@@ -164,7 +166,7 @@ public class AbstractUserDao  {
 		if (password != null && !password.isEmpty()) {
 			//OpenJPA is not allowing to set fields not being fetched before
 			User u1 = get(u.getUser_id(), true);
-			u1.updatePassword(configurationDao, password);
+			u1.updatePassword(cfgDao, password);
 			update(u1, updatedBy);
 		}
 		return u;
@@ -394,7 +396,8 @@ public class AbstractUserDao  {
 		if (to == null) {
 			to = new User();
 			to.setType(Type.contact);
-			to.setLogin(owner.getUser_id() + "_" + email); //UserId prefix is used to ensure unique login
+			String login = owner.getUser_id() + "_" + email; //UserId prefix is used to ensure unique login
+			to.setLogin(login.length() < getMinLoginLength(cfgDao) ? UUID.randomUUID().toString() : login);
 			to.setFirstname(firstName);
 			to.setLastname(lastName);
 			to.setLanguage_id(null == langId ? owner.getLanguage_id() : langId);

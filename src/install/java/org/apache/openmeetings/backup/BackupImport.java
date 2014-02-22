@@ -22,6 +22,7 @@ import static org.apache.commons.transaction.util.FileHelper.copyRec;
 import static org.apache.openmeetings.db.entity.user.PrivateMessage.INBOX_FOLDER_ID;
 import static org.apache.openmeetings.db.entity.user.PrivateMessage.SENT_FOLDER_ID;
 import static org.apache.openmeetings.db.entity.user.PrivateMessage.TRASH_FOLDER_ID;
+import static org.apache.openmeetings.db.util.UserHelper.getMinLoginLength;
 import static org.apache.openmeetings.util.OmFileHelper.getStreamsHibernateDir;
 import static org.apache.openmeetings.util.OmFileHelper.getUploadDir;
 import static org.apache.openmeetings.util.OmFileHelper.getUploadProfilesUserDir;
@@ -42,6 +43,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -284,9 +286,13 @@ public class BackupImport {
 		{
 			String jNameTimeZone = configurationDao.getConfValue("default.timezone", String.class, "Europe/Berlin");
 			List<User> list = readUserList(f, "users.xml", "users");
+			int minLoginLength = getMinLoginLength(configurationDao);
 			for (User u : list) {
 				if (u.getLogin() == null) {
 					continue;
+				}
+				if (u.getType() == Type.contact && u.getLogin().length() < minLoginLength) {
+					u.setLogin(UUID.randomUUID().toString());
 				}
 				//FIXME: OPENMEETINGS-750
 				//Convert old Backups with OmTimeZone to new schema
