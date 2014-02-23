@@ -94,7 +94,7 @@ public class FlvRecordingMetaData implements Serializable {
 	private Boolean isVideoOnly;
 
 	@Column(name = "is_screen_data")
-	@Element(data = true)
+	@Element(data = true, name = "isScreenData")
 	private boolean screenData;
 
 	@Column(name = "inserted_by")
