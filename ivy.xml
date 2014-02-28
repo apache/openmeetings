@@ -283,10 +283,10 @@
 		<dependency org="com.github.svenmeier.wicket-dnd" name="wicket-dnd" rev="0.6.0" conf="openmeetings->*" transitive="false">
 			<include type="jar" />
 		</dependency>
-		<dependency org="org.wicketstuff" name="wicketstuff-urlfragment" rev="6.13.0" conf="openmeetings->*" transitive="false">
+		<dependency org="org.wicketstuff" name="wicketstuff-urlfragment" rev="6.14.0" conf="openmeetings->*" transitive="false">
 			<include type="jar" />
 		</dependency>
-		<dependency org="org.wicketstuff" name="wicketstuff-html5" rev="6.13.0" conf="openmeetings->*" transitive="false">
+		<dependency org="org.wicketstuff" name="wicketstuff-html5" rev="6.14.0" conf="openmeetings->*" transitive="false">
 			<include type="jar" />
 		</dependency>
 		<dependency org="com.vaynberg.wicket.select2" name="wicket-select2" rev="2.2.2" conf="openmeetings->*" transitive="false">
