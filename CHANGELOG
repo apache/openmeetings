@@ -2,7 +2,7 @@ Apache OpenMeetings Change Log
 
 See http://issues.apache.org/jira/browse/OPENMEETINGS-* (where * is the number of the issue below)
 
-Release Notes - Openmeetings - Version 3.0.0 Apache Release
+Release Notes - Openmeetings - Version 3.0.0
 ================================================================================================================
 
 ** Sub-task
@@ -127,10 +127,6 @@ Release Notes - Openmeetings - Version 3.0.0 Apache Release
     * [OPENMEETINGS-718] - Newly created users are unable to login
     * [OPENMEETINGS-719] - Calendar UI delete button has no confirmation
     * [OPENMEETINGS-720] - Calendar throws server error if any calendar event is saved (only tested with new events so far)
-    * [OPENMEETINGS-722] - Sing up form does not preselect for comboboxes
-    * [OPENMEETINGS-723] - Close button on the Sing Up form should be disabled
-    * [OPENMEETINGS-724] - HTML Version Registration email link does not work 
-    * [OPENMEETINGS-725] - Sign up form does not tell the user that he has received an email with the activation link
     * [OPENMEETINGS-726] - Internal users do not show calendar events of events that you have been added to
     * [OPENMEETINGS-729] - Empty / null values in email_username/password throws Exception when processing emails
     * [OPENMEETINGS-730] - Cannot save empty value for configuration key in HTML5 UI (for instance username / pas for email configuration)
@@ -184,6 +180,7 @@ Release Notes - Openmeetings - Version 3.0.0 Apache Release
     * [OPENMEETINGS-852] - Whiteboard Objects not clickable
     * [OPENMEETINGS-855] - NPE using ./admin.sh -v -f --cleanup
     * [OPENMEETINGS-856] - Invitation link is broken
+    * [OPENMEETINGS-859] - Audio and Video in recordings is no more in sync
     * [OPENMEETINGS-860] - Invite window is opened with long delay
     * [OPENMEETINGS-864] - Exception is thrown when update event in the calendar
     * [OPENMEETINGS-865] - Upload buttons has artifacts
@@ -204,6 +201,30 @@ Release Notes - Openmeetings - Version 3.0.0 Apache Release
     * [OPENMEETINGS-885] - Record is not played under Chrome browser
     * [OPENMEETINGS-886] - Impossible to save editable fields in My Profile.
     * [OPENMEETINGS-890] - The "Login" field is not displayed on the connection panel.
+    * [OPENMEETINGS-891] - Wrong birthday date is displayed on the profile->edit settings panel
+    * [OPENMEETINGS-892] - "Add user" button is disabled when add new group
+    * [OPENMEETINGS-893] - Removed user is not added to usergroup again
+    * [OPENMEETINGS-898] - Time zone is not defined correctly on sign in page
+    * [OPENMEETINGS-899] - Calendar event start and end time are not displayed correctly
+    * [OPENMEETINGS-900] - Deleted contact is selected when user invite external guest to calendar invitation
+    * [OPENMEETINGS-901] - Password is not requested when password protected invitation send to external guest.
+    * [OPENMEETINGS-902] - Records are not created correctly
+    * [OPENMEETINGS-904] - Default landing zone
+    * [OPENMEETINGS-906] - Cannot create new group with users
+    * [OPENMEETINGS-907] - "password is required" message is displayed when "Password protected" checkbox is not  checked
+    * [OPENMEETINGS-908] - Calendar event start and end date are not displayed correctly in the month vew
+    * [OPENMEETINGS-909] - Event owners is not receive email notification
+    * [OPENMEETINGS-910] - Contacts are availble to search on the Search user page
+    * [OPENMEETINGS-912] - Email disappears when move emial to the new folder
+    * [OPENMEETINGS-914] - "Mark unread" action does not work on Contacts and message page
+    * [OPENMEETINGS-919] - Access logs will not be generated
+    * [OPENMEETINGS-922] - Add folder button does not add a folder.
+    * [OPENMEETINGS-923] - Drag and drop of files in the recordings section does not work
+    * [OPENMEETINGS-924] - deleting recordings?
+    * [OPENMEETINGS-925] - Recording details previously showed the room name not the id
+    * [OPENMEETINGS-927] - Memory leak in OM wicket application
+    * [OPENMEETINGS-930] - getInvitationHash method allow creation of invalid users (login too small)
+    * [OPENMEETINGS-932] - SIP dialer menu item is not availble in the OM 3.x
 
 ** Improvement
     * [OPENMEETINGS-167] - Main menu of OM
