@@ -49,6 +49,7 @@ import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
 import org.apache.wicket.ajax.form.AjaxFormValidatingBehavior;
+import org.apache.wicket.ajax.markup.html.form.AjaxCheckBox;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.CheckBox;
@@ -71,8 +72,7 @@ public class RoomForm extends AdminCommonUserForm<Room> {
 	private final static List<Long> DROPDOWN_NUMBER_OF_PARTICIPANTS = Arrays.asList(2L, 4L, 6L, 8L, 10L, 12L, 14L, 16L, 20L, 25L, 32L, 50L,
 			100L, 150L, 200L, 500L, 1000L);
 	private final WebMarkupContainer roomList;
-	private final TextField<String> confno;
-	private final CheckBox sipEnabled;
+	private final TextField<String> pin;
 	final WebMarkupContainer moderatorContainer;
 	final WebMarkupContainer clientsContainer;
 	final ListView<RoomModerator> moderators;
@@ -213,28 +213,22 @@ public class RoomForm extends AdminCommonUserForm<Room> {
 		CheckBox isModeratedRoom = new CheckBox("isModeratedRoom");
         add(isModeratedRoom.setOutputMarkupId(true));
 
-		
 		moderatorContainer = new WebMarkupContainer("moderatorContainer");
 		
 		add(moderatorContainer.add(moderators).setOutputMarkupId(true));
 		
-		confno = new TextField<String>("confno");
-		add(confno);
-		add(new TextField<String>("pin"));
-		add(new TextField<String>("ownerId"));
-		sipEnabled = new CheckBox("sipEnabled");
-		add(sipEnabled.setOutputMarkupId(true).add(new AjaxEventBehavior("onclick") {
-			private static final long serialVersionUID = -1206667381066917517L;
+		add(new TextField<String>("confno").setEnabled(false));
+		add(pin = new TextField<String>("pin"));
+		pin.setEnabled(room.isSipEnabled());
+		add(new TextField<String>("ownerId").setEnabled(false));
+		add(new AjaxCheckBox("sipEnabled") {
+			private static final long serialVersionUID = 1L;
 
 			@Override
-			protected void onEvent(AjaxRequestTarget target) {
-				sipEnabled.setModelObject(!sipEnabled.getModelObject());
-				if (sipEnabled.getModelObject() && confno.getModelObject() == null){
-					getBean(RoomDao.class).update(getModelObject(), getUserId());
-				}
-				updateView(target);				
+			protected void onUpdate(AjaxRequestTarget target) {
+				updateView(target);
 			}
-		}));
+		}.setOutputMarkupId(true));
 		
 		// attach an ajax validation behavior to all form component's keydown
 		// event and throttle it down to once per second
@@ -312,8 +306,7 @@ public class RoomForm extends AdminCommonUserForm<Room> {
 	public void updateView(AjaxRequestTarget target) {
 		target.add(this);
 		target.add(roomList);
-		confno.setEnabled(sipEnabled.getModelObject());
-		target.add(confno);
+		target.add(pin.setEnabled(getModelObject().isSipEnabled()));
 		updateModerators(target);
 		updatClients(target);
 		target.appendJavaScript("omRoomPanelInit();");

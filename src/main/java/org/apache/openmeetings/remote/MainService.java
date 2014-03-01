@@ -463,10 +463,9 @@ public class MainService implements IPendingServiceCallback {
 
 	public List<Configuration> getGeneralOptions(String SID) {
 		try {
-			return configurationDao.get("exclusive.audio.keycode", "red5sip.enable", CONFIG_MAX_UPLOAD_SIZE_KEY,
-					"mute.keycode", CONFIG_REDIRECT_URL_FOR_EXTERNAL_KEY);
+			return configurationDao.get("exclusive.audio.keycode", "red5sip.enable", CONFIG_MAX_UPLOAD_SIZE_KEY, "mute.keycode", CONFIG_REDIRECT_URL_FOR_EXTERNAL_KEY);
 		} catch (Exception err) {
-			log.error("[getLoginOptions]",err);
+			log.error("[getGeneralOptions]",err);
 		}
 		return null;
 	}

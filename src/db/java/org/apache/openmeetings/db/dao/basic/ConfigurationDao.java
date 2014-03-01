@@ -25,6 +25,7 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.whiteboardDrawStatus;
 
 import java.lang.reflect.Constructor;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -85,15 +86,20 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 					.setParameter("conf_key", confKey).getResultList();
 			return list.isEmpty() ? null : list.get(0);
 		} catch (Exception e) {
-			log.error("[getConfKey]: ", e);
+			log.error("[forceGet]: ", e);
 		}
 		return null;
 	}
 
 	public List<Configuration> get(String... keys) {
-		return em.createNamedQuery("getConfigurationsByKeys", Configuration.class)
-				.setParameter("conf_keys", Arrays.asList(keys))
-				.getResultList();
+		List<Configuration> result = new ArrayList<Configuration>();
+		for (String key : keys) { //iteration is necessary to fill list with all values 
+			List<Configuration> r = em.createNamedQuery("getConfigurationsByKeys", Configuration.class)
+					.setParameter("conf_keys", Arrays.asList(key))
+					.getResultList();
+			result.add(r.isEmpty() ? null : r.get(0));
+		}
+		return result;
 	}
 
 	/**
