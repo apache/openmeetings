@@ -21,7 +21,6 @@ package org.apache.openmeetings.remote;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_MAX_UPLOAD_SIZE_KEY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_REDIRECT_URL_FOR_EXTERNAL_KEY;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -463,15 +462,9 @@ public class MainService implements IPendingServiceCallback {
 
 	public List<Configuration> getGeneralOptions(String SID) {
 		try {
-			List<Configuration> result = new ArrayList<Configuration>();
-			result.add(configurationDao.forceGet("exclusive.audio.keycode"));
-			result.add(configurationDao.forceGet("red5sip.enable"));
-			result.add(configurationDao.forceGet(CONFIG_MAX_UPLOAD_SIZE_KEY));
-			result.add(configurationDao.forceGet("mute.keycode"));
-			result.add(configurationDao.forceGet(CONFIG_REDIRECT_URL_FOR_EXTERNAL_KEY));
-			return result;
+			return configurationDao.get("exclusive.audio.keycode", "red5sip.enable", CONFIG_MAX_UPLOAD_SIZE_KEY, "mute.keycode", CONFIG_REDIRECT_URL_FOR_EXTERNAL_KEY);
 		} catch (Exception err) {
-			log.error("[getLoginOptions]",err);
+			log.error("[getGeneralOptions]",err);
 		}
 		return null;
 	}
