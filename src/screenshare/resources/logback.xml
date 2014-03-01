@@ -44,7 +44,7 @@
 		<level value="DEBUG" />
 	</logger>
 	<root>
-		<level value="DEBUG" />
+		<level value="INFO" />
 		<appender-ref ref="FLOG2" />
 		<appender-ref ref="CONSOLE2" />
 	</root>

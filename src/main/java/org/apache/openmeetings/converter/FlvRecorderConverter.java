@@ -23,8 +23,10 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.openmeetings.db.dao.record.FlvRecordingDao;
 import org.apache.openmeetings.db.dao.record.FlvRecordingLogDao;
@@ -71,6 +73,17 @@ public class FlvRecorderConverter extends BaseConverter {
 		}
 	}
 
+	private String getDifference(Date from, Date to) {
+		long millis = from.getTime() - to.getTime();
+		long hours = TimeUnit.MILLISECONDS.toHours(millis);
+		millis -= TimeUnit.HOURS.toMillis(hours);
+		long minutes = TimeUnit.MILLISECONDS.toMinutes(millis);
+		millis -= TimeUnit.MINUTES.toMillis(minutes);
+		long seconds = TimeUnit.MILLISECONDS.toSeconds(millis);
+		millis -= TimeUnit.SECONDS.toMillis(seconds);
+		return String.format("%02d:%02d:%02d.%03d", hours, minutes, seconds, millis);
+	}
+	
 	public void stripAudioFromFLVs(FlvRecording flvRecording) {
 		List<ConverterProcessResult> returnLog = new ArrayList<ConverterProcessResult>();
 		List<String> listOfFullWaveFiles = new LinkedList<String>();
@@ -97,38 +110,25 @@ public class FlvRecorderConverter extends BaseConverter {
 			String outputFullWav = new File(streamFolder, hashFileFullName).getCanonicalPath();
 
 			if (listOfFullWaveFiles.size() == 1) {
-
 				outputFullWav = listOfFullWaveFiles.get(0);
-
-				screenMetaData.setFullWavAudioData(hashFileFullName);
-
 			} else if (listOfFullWaveFiles.size() > 0) {
-
 				String[] argv_full_sox = mergeAudioToWaves(listOfFullWaveFiles, outputFullWav);
-
-				screenMetaData.setFullWavAudioData(hashFileFullName);
-
-				metaDataDao.update(screenMetaData);
 
 				returnLog.add(ProcessHelper.executeScript("mergeAudioToWaves", argv_full_sox));
 			} else {
-
-				// create default Audio to merge it.
-				// strip to content length
+				// create default Audio to merge it. strip to content length
 				String outputWav = streamFolderGeneralName + "one_second.wav";
 
 				// Calculate delta at beginning
-				Long deltaTimeMilliSeconds = flvRecording.getRecordEnd().getTime()
-						- flvRecording.getRecordStart().getTime();
+				Long deltaTimeMilliSeconds = flvRecording.getRecordEnd().getTime() - flvRecording.getRecordStart().getTime();
 				Float deltaPadding = (Float.parseFloat(deltaTimeMilliSeconds.toString()) / 1000) - 1;
 
-				String[] argv_full_sox = new String[] { getPathToSoX(), outputWav, outputFullWav, "pad", "0",
-						deltaPadding.toString() };
+				String[] argv_full_sox = new String[] { getPathToSoX(), outputWav, outputFullWav, "pad", "0", deltaPadding.toString() };
 
-				screenMetaData.setFullWavAudioData(hashFileFullName);
-				metaDataDao.update(screenMetaData);
 				returnLog.add(ProcessHelper.executeScript("generateSampleAudio", argv_full_sox));
 			}
+			screenMetaData.setFullWavAudioData(hashFileFullName);
+			metaDataDao.update(screenMetaData);
 
 			// Merge Audio with Video / Calculate resulting FLV
 
@@ -159,6 +159,7 @@ public class FlvRecorderConverter extends BaseConverter {
 			flvRecording.setFlvHeight(flvHeight);
 
 			String[] argv_fullFLV = new String[] { getPathToFFMPEG(), //
+					"-itsoffset", getDifference(screenMetaData.getRecordStart(), screenMetaData.getFlvRecording().getRecordStart()),
 					"-i", inputScreenFullFlv, "-i", outputFullWav, "-ar", "22050", //
 					"-acodec", "libmp3lame", //
 					"-ab", "32k", //
