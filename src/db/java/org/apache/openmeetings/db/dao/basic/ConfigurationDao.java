@@ -117,7 +117,7 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 		try {
 			List<Configuration> list = get(key);
 
-			if (list == null || list.isEmpty()) {
+			if (list == null || list.isEmpty() || list.get(0) == null) {
 				log.warn("Could not find key in configuration CONF_KEY: " + key);
 			} else {
 				String val = list.get(0).getConf_value();
@@ -139,9 +139,7 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 			return c.newInstance(defaultValue);
 
 		} catch (Exception err) {
-			log.error(
-					"cannot be cast to return type, you have misconfigured your configuration CONF_KEY: "
-							+ key, err);
+			log.error("cannot be cast to return type, you have misconfigured your configuration CONF_KEY: " + key, err);
 			return null;
 		}
 	}
