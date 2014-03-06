@@ -22,6 +22,7 @@ import java.awt.Dimension;
 import java.awt.Toolkit;
 
 public class ScreenDimensions {
+	public static final int ROUND_VALUE = 16;
 	/**
 	 * image recalcing value's from the virtual Screen drawer
 	 */

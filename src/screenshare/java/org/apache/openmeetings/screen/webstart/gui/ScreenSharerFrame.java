@@ -18,6 +18,9 @@
  */
 package org.apache.openmeetings.screen.webstart.gui;
 
+import static org.apache.openmeetings.screen.webstart.gui.ScreenDimensions.ROUND_VALUE;
+import static org.apache.openmeetings.screen.webstart.gui.ScreenDimensions.resizeX;
+import static org.apache.openmeetings.screen.webstart.gui.ScreenDimensions.resizeY;
 import static org.slf4j.LoggerFactory.getLogger;
 
 import java.awt.AWTException;
@@ -766,26 +769,30 @@ public class ScreenSharerFrame extends JFrame {
 	 */
 	void calcRescaleFactors() {
 		logger.trace("calcRescaleFactors -- ");
-		ScreenDimensions.resizeX = spinnerWidth.getValue();
-		ScreenDimensions.resizeY = spinnerHeight.getValue();
+		resizeX = spinnerWidth.getValue();
+		resizeY = spinnerHeight.getValue();
 		switch (ScreenDimensions.quality) {
-			case Medium:
-				ScreenDimensions.resizeX = (int)(1.0 * ScreenDimensions.resizeX / 2);
-				ScreenDimensions.resizeY = (int)(1.0 * ScreenDimensions.resizeY / 2);
-				break;
 			case Low:
-				ScreenDimensions.resizeX = (int)(3.0 * ScreenDimensions.resizeX / 8);
-				ScreenDimensions.resizeY = (int)(3.0 * ScreenDimensions.resizeY / 8);
+				resizeX = (int)(2.0 * ScreenDimensions.resizeX / 8);
+				resizeY = (int)(2.0 * ScreenDimensions.resizeY / 8);
+				break;
+			case Medium:
+				resizeX = (int)(4.0 * ScreenDimensions.resizeX / 8);
+				resizeY = (int)(4.0 * ScreenDimensions.resizeY / 8);
 				break;
 			case High:
-				ScreenDimensions.resizeX = (int)(6.0 * ScreenDimensions.resizeX / 8);
-				ScreenDimensions.resizeY = (int)(6.0 * ScreenDimensions.resizeY / 8);
+				resizeX = (int)(6.0 * ScreenDimensions.resizeX / 8);
+				resizeY = (int)(6.0 * ScreenDimensions.resizeY / 8);
 				break;
 			case VeryHigh:
 			default:
 				break;
 		}
-		logger.trace("resize: X:" + ScreenDimensions.resizeX + " Y: " + ScreenDimensions.resizeY);
+		int dX = resizeX % ROUND_VALUE;
+		int dY = resizeY % ROUND_VALUE;
+		resizeX += dX == 0 ? 0 : ROUND_VALUE - dX;
+		resizeY += dY == 0 ? 0 : ROUND_VALUE - dY;
+		logger.trace("resize: X:" + resizeX + " Y: " + resizeY);
 		updateVScreenBounds();
 	}
 
