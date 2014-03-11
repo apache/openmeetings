@@ -26,7 +26,7 @@
 		<section name="Downloads">
 			<div>
 				All downloads can be verified using the Apache OpenMeetings code
-				signing <a href="https://www.apache.org/dist/openmeetings/2.2.0/KEYS">KEYS</a>.
+				signing <a href="https://www.apache.org/dist/openmeetings/3.0.0/KEYS">KEYS</a>.
 			</div>
 			<p>
 				All are available for download as source and binary.
@@ -34,21 +34,21 @@
 			
 			<subsection name="Latest Official Release">
 				<p>
-					Apache Openmeetings 2.2.0
+					Apache Openmeetings 3.0.0
 				</p>
 				<ul>
 					<li>
 						Binaries:
 						<ul>
 							<li>
-								<a href="http://www.apache.org/dyn/closer.cgi/openmeetings/2.2.0/bin/apache-openmeetings-2.2.0.zip">apache-openmeetings-2.2.0.zip</a>
-								<a href="http://www.apache.org/dist/openmeetings/2.2.0/bin/apache-openmeetings-2.2.0.zip.asc">[SIG]</a>
-								<a href="http://www.apache.org/dist/openmeetings/2.2.0/bin/apache-openmeetings-2.2.0.zip.md5">[MD5]</a>
+								<a href="http://www.apache.org/dyn/closer.cgi/openmeetings/3.0.0/bin/apache-openmeetings-3.0.0.zip">apache-openmeetings-3.0.0.zip</a>
+								<a href="http://www.apache.org/dist/openmeetings/3.0.0/bin/apache-openmeetings-3.0.0.zip.asc">[SIG]</a>
+								<a href="http://www.apache.org/dist/openmeetings/3.0.0/bin/apache-openmeetings-3.0.0.zip.md5">[MD5]</a>
 							</li>
 							<li>
-								<a href="http://www.apache.org/dyn/closer.cgi/openmeetings/2.2.0/bin/apache-openmeetings-2.2.0.tar.gz">apache-openmeetings-2.2.0.tar.gz</a>
-								<a href="http://www.apache.org/dist/openmeetings/2.2.0/bin/apache-openmeetings-2.2.0.tar.gz.asc">[SIG]</a>
-								<a href="http://www.apache.org/dist/openmeetings/2.2.0/bin/apache-openmeetings-2.2.0.tar.gz.md5">[MD5]</a>
+								<a href="http://www.apache.org/dyn/closer.cgi/openmeetings/3.0.0/bin/apache-openmeetings-3.0.0.tar.gz">apache-openmeetings-3.0.0.tar.gz</a>
+								<a href="http://www.apache.org/dist/openmeetings/3.0.0/bin/apache-openmeetings-3.0.0.tar.gz.asc">[SIG]</a>
+								<a href="http://www.apache.org/dist/openmeetings/3.0.0/bin/apache-openmeetings-3.0.0.tar.gz.md5">[MD5]</a>
 							</li>
 						</ul>
 					</li>
@@ -56,14 +56,14 @@
 						Sources:
 						<ul>
 							<li>
-								<a href="http://www.apache.org/dyn/closer.cgi/openmeetings/2.2.0/src/apache-openmeetings-2.2.0-src.zip">apache-openmeetings-2.2.0-src.zip</a>
-								<a href="http://www.apache.org/dist/openmeetings/2.2.0/src/apache-openmeetings-2.2.0-src.zip.asc">[SIG]</a>
-								<a href="http://www.apache.org/dist/openmeetings/2.2.0/src/apache-openmeetings-2.2.0-src.zip.md5">[MD5]</a>
+								<a href="http://www.apache.org/dyn/closer.cgi/openmeetings/3.0.0/src/apache-openmeetings-3.0.0-src.zip">apache-openmeetings-3.0.0-src.zip</a>
+								<a href="http://www.apache.org/dist/openmeetings/3.0.0/src/apache-openmeetings-3.0.0-src.zip.asc">[SIG]</a>
+								<a href="http://www.apache.org/dist/openmeetings/3.0.0/src/apache-openmeetings-3.0.0-src.zip.md5">[MD5]</a>
 							</li>
 							<li>
-								<a href="http://www.apache.org/dyn/closer.cgi/openmeetings/2.2.0/src/apache-openmeetings-2.2.0-src.tar.gz">apache-openmeetings-2.2.0-src.tar.gz</a>
-								<a href="http://www.apache.org/dist/openmeetings/2.2.0/src/apache-openmeetings-2.2.0-src.tar.gz.asc">[SIG]</a>
-								<a href="http://www.apache.org/dist/openmeetings/2.2.0/src/apache-openmeetings-2.2.0-src.tar.gz.md5">[MD5]</a>
+								<a href="http://www.apache.org/dyn/closer.cgi/openmeetings/3.0.0/src/apache-openmeetings-3.0.0-src.tar.gz">apache-openmeetings-3.0.0-src.tar.gz</a>
+								<a href="http://www.apache.org/dist/openmeetings/3.0.0/src/apache-openmeetings-3.0.0-src.tar.gz.asc">[SIG]</a>
+								<a href="http://www.apache.org/dist/openmeetings/3.0.0/src/apache-openmeetings-3.0.0-src.tar.gz.md5">[MD5]</a>
 							</li>
 						</ul>
 					</li>
