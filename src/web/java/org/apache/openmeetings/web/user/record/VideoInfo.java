@@ -55,7 +55,7 @@ public class VideoInfo extends Panel {
 		add(container.setOutputMarkupId(true));
 		setDefaultModel(rm);
 		
-		container.add(new Label("fileName"), new Label("fileSize"), new Label("recordEnd"), new Label("room_id", roomName),
+		container.add(new Label("fileName"), new Label("duration"), new Label("recordEnd"), new Label("room_id", roomName),
 				dFLV.setEnabled(false), dAVI.setEnabled(false));
 		dAVI.add(new AjaxEventBehavior("click"){
 			private static final long serialVersionUID = 1L;

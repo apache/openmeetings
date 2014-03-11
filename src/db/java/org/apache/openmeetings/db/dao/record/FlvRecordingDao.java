@@ -232,7 +232,7 @@ public class FlvRecordingDao {
 		return null;
 	}
 
-	public Long addFlvRecording(String fileHash, String fileName, Long fileSize, Long user_id, Long room_id,
+	public Long addFlvRecording(String fileHash, String fileName, Long user_id, Long room_id,
 			Date recordStart, Date recordEnd, Long ownerId, String comment, String recorderStreamId, Integer width,
 			Integer height, Boolean isInterview) {
 		try {
@@ -242,7 +242,6 @@ public class FlvRecordingDao {
 			flvRecording.setDeleted(false);
 			flvRecording.setFileHash(fileHash);
 			flvRecording.setFileName(fileName);
-			flvRecording.setFileSize(fileSize);
 			flvRecording.setInsertedBy(user_id);
 			flvRecording.setFolder(false);
 			flvRecording.setIsImage(false);

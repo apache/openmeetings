@@ -176,9 +176,9 @@ public class FlvRecording implements Serializable {
 	@Element(data = true, required = false)
 	private String previewImage;
 
-	@Column(name = "filesize")
+	@Column(name = "duration")
 	@Element(data = true, required = false)
-	private Long fileSize;
+	private String duration;
 
 	@Column(name = "recorder_stream_id")
 	@Element(data = true, required = false)
@@ -331,12 +331,12 @@ public class FlvRecording implements Serializable {
 		this.updated = updated;
 	}
 
-	public Long getFileSize() {
-		return fileSize;
+	public String getDuration() {
+		return duration;
 	}
 
-	public void setFileSize(Long fileSize) {
-		this.fileSize = fileSize;
+	public void setDuration(String duration) {
+		this.duration = duration;
 	}
 
 	public Date getRecordStart() {

@@ -57,7 +57,7 @@ public class RecordingObject {
 	private Integer flvHeight;
 	private String previewImage;
 	
-	private Long fileSize;
+	private String duration;
 	
 	private String recorderStreamId;
 	private Long organization_id;
@@ -100,7 +100,7 @@ public class RecordingObject {
 		this.flvHeight = customObject.getFlvHeight();
 		this.previewImage = customObject.getPreviewImage();
 		
-		this.fileSize = customObject.getFileSize();
+		this.duration = customObject.getDuration();
 		
 		this.recorderStreamId = customObject.getRecorderStreamId();
 		this.organization_id = customObject.getOrganization_id();
@@ -293,12 +293,12 @@ public class RecordingObject {
 		this.previewImage = previewImage;
 	}
 
-	public Long getFileSize() {
-		return fileSize;
+	public String getDuration() {
+		return duration;
 	}
 
-	public void setFileSize(Long fileSize) {
-		this.fileSize = fileSize;
+	public void setDuration(String duration) {
+		this.duration = duration;
 	}
 
 	public String getRecorderStreamId() {

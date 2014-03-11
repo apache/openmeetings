@@ -138,7 +138,7 @@ public class FLVRecorderService implements IPendingServiceCallback {
 			Date now = new Date();
 
 			// Receive flvRecordingId
-			Long flvRecordingId = flvRecordingDaoImpl.addFlvRecording("", roomRecordingName, null,
+			Long flvRecordingId = flvRecordingDaoImpl.addFlvRecording("", roomRecordingName,
 					currentClient.getUser_id(), room_id, now, null, currentClient.getUser_id(), comment,
 					currentClient.getStreamid(), currentClient.getVWidth(), currentClient.getVHeight(), isInterview);
 
