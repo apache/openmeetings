@@ -279,6 +279,7 @@ public class FlvInterviewConverter extends BaseConverter {
 
 			flvRecording.setAlternateDownload(alternateDownloadName);
 
+			updateDuration(flvRecording);
 			recordingDao.update(flvRecording);
 			convertToMp4(flvRecording, returnLog);
 

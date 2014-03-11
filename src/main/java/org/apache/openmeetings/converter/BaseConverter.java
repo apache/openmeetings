@@ -28,7 +28,9 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.record.FlvRecordingMetaDataDao;
@@ -80,6 +82,21 @@ public abstract class BaseConverter {
 	
 	protected File getStreamFolder(FlvRecording flvRecording) {
 		return getStreamsSubDir(flvRecording.getRoom_id());
+	}
+	
+	protected String getDifference(Date from, Date to) {
+		long millis = from.getTime() - to.getTime();
+		long hours = TimeUnit.MILLISECONDS.toHours(millis);
+		millis -= TimeUnit.HOURS.toMillis(hours);
+		long minutes = TimeUnit.MILLISECONDS.toMinutes(millis);
+		millis -= TimeUnit.MINUTES.toMillis(minutes);
+		long seconds = TimeUnit.MILLISECONDS.toSeconds(millis);
+		millis -= TimeUnit.SECONDS.toMillis(seconds);
+		return String.format("%02d:%02d:%02d.%03d", hours, minutes, seconds, millis);
+	}
+
+	protected void updateDuration(FlvRecording r) {
+		r.setDuration(getDifference(r.getRecordEnd(), r.getRecordStart()));
 	}
 	
 	protected void deleteFileIfExists(String name) {
