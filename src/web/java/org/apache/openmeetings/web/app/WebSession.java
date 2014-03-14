@@ -19,6 +19,7 @@
 package org.apache.openmeetings.web.app;
 
 import static java.text.DateFormat.SHORT;
+import static org.apache.openmeetings.util.AuthLevelUtil.checkAdminLevel;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DASHBOARD_SHOW_MYROOMS_KEY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DASHBOARD_SHOW_RSS_KEY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAUT_LANG_KEY;
@@ -54,8 +55,8 @@ import org.apache.openmeetings.db.entity.server.SOAPLogin;
 import org.apache.openmeetings.db.entity.server.Sessiondata;
 import org.apache.openmeetings.db.entity.user.State;
 import org.apache.openmeetings.db.entity.user.User;
+import org.apache.openmeetings.db.entity.user.User.Type;
 import org.apache.openmeetings.db.util.TimezoneUtil;
-import org.apache.openmeetings.util.AuthLevelUtil;
 import org.apache.openmeetings.web.pages.SwfPage;
 import org.apache.openmeetings.web.user.dashboard.PrivateRoomsWidgetDescriptor;
 import org.apache.openmeetings.web.user.dashboard.RssWidgetDescriptor;
@@ -158,7 +159,7 @@ public class WebSession extends AbstractAuthenticatedWebSession {
 		}
 		if (isSignedIn()) {
 			r = new Roles(Roles.USER);
-			if (AuthLevelUtil.checkAdminLevel(userLevel)) {
+			if (checkAdminLevel(userLevel)) {
 				r.add(Roles.ADMIN);
 			}
 		}
@@ -242,15 +243,20 @@ public class WebSession extends AbstractAuthenticatedWebSession {
 	public boolean signIn(String login, String password, String ldapConfigFileName) {
 		Sessiondata sessData = getBean(SessiondataDao.class).startsession();
 		SID = sessData.getSession_id();
-		Object u = Strings.isEmpty(ldapConfigFileName)
+		Object _u = Strings.isEmpty(ldapConfigFileName)
 				? getBean(IUserManager.class).loginUser(SID, login, password, null, null, false)
 				: getBean(ILdapLoginManagement.class).doLdapLogin(login, password, null, null, SID, ldapConfigFileName);
 		
-		if (u instanceof User) {
-			setUser((User)u);
+		if (_u instanceof User) {
+			User u = (User)_u;
+			if (!checkAdminLevel(u.getLevel_id()) && Type.ldap == u.getType() && Strings.isEmpty(ldapConfigFileName)) {
+				//user is LDAP and is not admin, then authentication should be done on the LDAP server (even if the LDAP server is down)
+				return false;
+			}
+			setUser(u);
 			return true;
-		} else if (u instanceof Long) {
-			loginError = (Long)u;
+		} else if (_u instanceof Long) {
+			loginError = (Long)_u;
 		}
 		return false;
 	}

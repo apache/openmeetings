@@ -218,8 +218,7 @@ public class UserManager implements IUserManager {
 	public Object loginUser(String SID, String userOrEmail, String userpass,
 			Client currentClient, IClient client, Boolean storePermanent) {
 		try {
-			log.debug("Login user SID : " + SID + " Stored Permanent :"
-					+ storePermanent);
+			log.debug("Login user SID : " + SID + " Stored Permanent: " + storePermanent);
 			String hql = "SELECT c from User AS c "
 					+ "WHERE "
 					+ "(c.login LIKE :userOrEmail OR c.adresses.email LIKE :userOrEmail  ) "
@@ -239,13 +238,10 @@ public class UserManager implements IUserManager {
 				User users = ll.get(0);
 
 				// Refresh User Object
-				users = this.refreshUserObject(users);
+				users = refreshUserObject(users);
 
 				if (usersDao.verifyPassword(users.getUser_id(), userpass)) {
-
-					Boolean bool = sessiondataDao.updateUser(SID,
-							users.getUser_id(), storePermanent,
-							users.getLanguage_id());
+					Boolean bool = sessiondataDao.updateUser(SID, users.getUser_id(), storePermanent, users.getLanguage_id());
 					if (bool == null) {
 						// Exception
 						return new Long(-1);
@@ -255,8 +251,7 @@ public class UserManager implements IUserManager {
 					}
 
 					// Check if activated
-					if (users.getStatus() != null
-							&& users.getStatus().equals(0)) {
+					if (users.getStatus() != null && users.getStatus().equals(0)) {
 						return -41L;
 					}
 
@@ -270,8 +265,7 @@ public class UserManager implements IUserManager {
 
 					log.debug("loginUser " + users.getOrganisation_users());
 					if (!users.getOrganisation_users().isEmpty()) {
-						log.debug("loginUser size "
-								+ users.getOrganisation_users().size());
+						log.debug("loginUser size " + users.getOrganisation_users().size());
 					} else {
 						throw new Exception("No Organization assigned to user");
 					}

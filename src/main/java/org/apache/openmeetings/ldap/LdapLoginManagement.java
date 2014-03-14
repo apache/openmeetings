@@ -27,6 +27,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
+import java.util.UUID;
 import java.util.Vector;
 
 import org.apache.openmeetings.data.user.UserManager;
@@ -40,6 +41,7 @@ import org.apache.openmeetings.db.entity.room.Client;
 import org.apache.openmeetings.db.entity.server.LdapConfig;
 import org.apache.openmeetings.db.entity.user.State;
 import org.apache.openmeetings.db.entity.user.User;
+import org.apache.openmeetings.db.entity.user.User.Type;
 import org.apache.openmeetings.db.util.TimezoneUtil;
 import org.apache.openmeetings.ldap.config.ConfigReader;
 import org.apache.openmeetings.remote.util.SessionVariablesUtil;
@@ -72,9 +74,6 @@ public class LdapLoginManagement implements ILdapLoginManagement {
 	private UserDao usersDao;
 	@Autowired
 	private TimezoneUtil timezoneUtil;
-
-	// External User Types
-	public static final String EXTERNAL_USER_TYPE_LDAP = "LDAP";
 
 	// ConfigConstants
 	public static final String CONFIGKEY_LDAP_URL = "ldap_conn_url";
@@ -481,9 +480,8 @@ public class LdapLoginManagement implements ILdapLoginManagement {
 				Long userid;
 				if (ldap_sync_passwd_to_om) {
 					Random r = new Random();
-					String token = Long.toString(Math.abs(r.nextLong()), 36);
-					log.debug("Synching Ldap user to OM DB with RANDOM password: "
-							+ token);
+					String token = UUID.randomUUID().toString() + Long.toString(Math.abs(r.nextLong()), 36);
+					log.debug("Synching Ldap user to OM DB with RANDOM password: " + token);
 					userid = createUserFromLdapData(userData, token, user, ldapAttrs);
 				} else {
 					log.debug("Synching Ldap user to OM DB with password");
@@ -513,10 +511,11 @@ public class LdapLoginManagement implements ILdapLoginManagement {
 				// Return UserObject
 				User u2 = userManager.getUserById(userid);
 
-				if (u2 == null)
+				if (u2 == null) {
 					return new Long(-1);
+				}
 
-				u2.setExternalUserType(EXTERNAL_USER_TYPE_LDAP); // TIBO
+				u2.setType(Type.ldap);
 
 				// initialize lazy collection
 				userManager.refreshUserObject(u2);
@@ -524,7 +523,6 @@ public class LdapLoginManagement implements ILdapLoginManagement {
 				log.debug("getUserbyId : " + userid + " : " + u2.getLogin());
 
 				return u2;
-
 			} catch (Exception e) {
 				log.error("Error on Working Userdata : ", e);
 				return new Long(-1);
@@ -729,49 +727,47 @@ public class LdapLoginManagement implements ILdapLoginManagement {
 	
 		// Retrieve Data from LDAP - Data
 	
-		if (userdata.containsKey(ldapAttrs.get("lastnameAttr"))
-				&& userdata.get(ldapAttrs.get("lastnameAttr")) != null)
+		if (userdata.containsKey(ldapAttrs.get("lastnameAttr")) && userdata.get(ldapAttrs.get("lastnameAttr")) != null)
 			user.setLastname(userdata.get(ldapAttrs.get("lastnameAttr")));
 	
-		if (userdata.containsKey(ldapAttrs.get("firstnameAttr"))
-				&& userdata.get(ldapAttrs.get("firstnameAttr")) != null)
+		if (userdata.containsKey(ldapAttrs.get("firstnameAttr")) && userdata.get(ldapAttrs.get("firstnameAttr")) != null)
 			user.setFirstname(userdata.get(ldapAttrs.get("firstnameAttr")));
 	
-		if (userdata.containsKey(ldapAttrs.get("mailAttr"))
-				&& userdata.get(ldapAttrs.get("mailAttr")) != null) {
-			if (user.getAdresses() != null ) 
+		if (userdata.containsKey(ldapAttrs.get("mailAttr")) && userdata.get(ldapAttrs.get("mailAttr")) != null) {
+			if (user.getAdresses() != null) {
 				user.getAdresses().setEmail(userdata.get(ldapAttrs.get("mailAttr")));
+			}
 		}
 			
-		if (userdata.containsKey(ldapAttrs.get("streetAttr"))
-				&& userdata.get(ldapAttrs.get("streetAttr")) != null) {
-			if (user.getAdresses() != null ) 
+		if (userdata.containsKey(ldapAttrs.get("streetAttr")) && userdata.get(ldapAttrs.get("streetAttr")) != null) {
+			if (user.getAdresses() != null) { 
 				user.getAdresses().setStreet(userdata.get(ldapAttrs.get("streetAttr")));
+			}
 		}
 		
-		if (userdata.containsKey(ldapAttrs.get("additionalNameAttr"))
-				&& userdata.get(ldapAttrs.get("additionalNameAttr")) != null) {
-			if (user.getAdresses() != null ) 
+		if (userdata.containsKey(ldapAttrs.get("additionalNameAttr")) && userdata.get(ldapAttrs.get("additionalNameAttr")) != null) {
+			if (user.getAdresses() != null) { 
 				user.getAdresses().setAdditionalname(userdata.get(ldapAttrs.get("additionalNameAttr")));
+			}
 		}
 	
-		if (userdata.containsKey(ldapAttrs.get("faxAttr"))
-				&& userdata.get(ldapAttrs.get("faxAttr")) != null) {
-			if (user.getAdresses() != null ) 
+		if (userdata.containsKey(ldapAttrs.get("faxAttr")) && userdata.get(ldapAttrs.get("faxAttr")) != null) {
+			if (user.getAdresses() != null) {
 				user.getAdresses().setFax(userdata.get(ldapAttrs.get("faxAttr")));
+			}
 		}
 	
-		if (userdata.containsKey(ldapAttrs.get("zipAttr"))
-				&& userdata.get(ldapAttrs.get("zipAttr")) != null) {
-			if (user.getAdresses() != null ) 
+		if (userdata.containsKey(ldapAttrs.get("zipAttr")) && userdata.get(ldapAttrs.get("zipAttr")) != null) {
+			if (user.getAdresses() != null) {
 				user.getAdresses().setZip(userdata.get(ldapAttrs.get("zipAttr")));
+			}
 		}
 	
 		long state_id = -1;
 		String state = null;
-		if (userdata.containsKey(ldapAttrs.get("countryAttr"))
-				&& userdata.get(ldapAttrs.get("countryAttr")) != null)
+		if (userdata.containsKey(ldapAttrs.get("countryAttr")) && userdata.get(ldapAttrs.get("countryAttr")) != null) {
 			state = userdata.get(ldapAttrs.get("countryAttr"));
+		}
 		
 		if (state != null) {
 			// Lookup for states
@@ -783,28 +779,28 @@ public class LdapLoginManagement implements ILdapLoginManagement {
 		// Create Country if not found
 		if (state_id < 0) {
 			Long id = statemanagement.addState(state);
-			if (id != null)
+			if (id != null) {
 				state_id = id;
+			}
 
 		}
 		if (user.getAdresses() != null && state_id > 0) {
 			user.getAdresses().setStates(statemanagement.getStateById(state_id));
 		}
 		
-		if (userdata.containsKey(ldapAttrs.get("townAttr"))
-				&& userdata.get(ldapAttrs.get("townAttr")) != null) {
-			if (user.getAdresses() != null )
+		if (userdata.containsKey(ldapAttrs.get("townAttr")) && userdata.get(ldapAttrs.get("townAttr")) != null) {
+			if (user.getAdresses() != null) {
 				user.getAdresses().setTown(userdata.get(ldapAttrs.get("townAttr")));
+			}
 		}
 
-		if (userdata.containsKey(ldapAttrs.get("phoneAttr"))
-				&& userdata.get(ldapAttrs.get("phoneAttr")) != null) {
-			if (user.getAdresses() != null ) 
+		if (userdata.containsKey(ldapAttrs.get("phoneAttr")) && userdata.get(ldapAttrs.get("phoneAttr")) != null) {
+			if (user.getAdresses() != null) {
 				user.getAdresses().setPhone(userdata.get(ldapAttrs.get("phoneAttr")));
+			}
 		}
 		
-		if (userdata.containsKey(ldapAttrs.get("pictureUri"))
-				&& userdata.get(ldapAttrs.get("pictureUri")) != null) {
+		if (userdata.containsKey(ldapAttrs.get("pictureUri")) && userdata.get(ldapAttrs.get("pictureUri")) != null) {
 			user.setPictureuri(userdata.get(ldapAttrs.get("pictureUri")));
 		}
 	
