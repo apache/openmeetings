@@ -30,8 +30,9 @@ import org.apache.velocity.app.Velocity;
 import com.sun.javadoc.ClassDoc;
 import com.sun.javadoc.RootDoc;
 import com.sun.javadoc.Tag;
+import com.sun.tools.doclets.standard.Standard;
 
-public class WebServiceDoclet {
+public class WebServiceDoclet extends Standard {
 	static final String baseTemplatePath = "xdocs";
 	static final String basePath = "docs";
 	static final String templateName = "ApiMethodsTemplate.vm";
