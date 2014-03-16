@@ -101,7 +101,7 @@ public abstract class ConnectionPropertiesPatcher {
 		TransformerFactory transformerFactory = TransformerFactory.newInstance();
 		Transformer transformer = transformerFactory.newTransformer();
 		DOMSource source = new DOMSource(doc);
-		transformer.transform(source, new StreamResult(destXml));
+		transformer.transform(source, new StreamResult(destXml.getCanonicalPath())); //this constructor is used to avoid transforming path to URI
 	}
 	
 	protected Attr patchAttribute(Attr attr, String host, String port, String db, String user, String pass) {
