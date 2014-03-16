@@ -846,7 +846,7 @@
 	</target>
 
 	<target name="build.only.webservice.doc" depends="anakia">
-		<javadoc classpathref="build.webservice.classpath" useexternalfile="true">
+		<javadoc classpathref="build.webservice.classpath" useexternalfile="true" destdir="${basedir}/docs">
 			<fileset dir="${src.base.dir}/axis/java/org/apache/openmeetings/axis/services">
 				<include name="*WebService.java" />
 				<exclude name="BaseWebService.java" />
