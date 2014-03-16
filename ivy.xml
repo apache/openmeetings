@@ -38,6 +38,7 @@
 		<conf name="openlaszlo46" description="Openlaszlo with Flex 4.6 dependencies" />
 		<conf name="mysql" description="MySQL JDBC driver" />
 		<conf name="mvn" description="Maven Ant task to build Red5" />
+		<conf name="jgit" description="JGit Ant task to retirieve Red5" />
 		<conf name="red5-client" description="Red5 Client/Server for screensharing" />
 	</configurations>
 	<dependencies>
@@ -51,19 +52,19 @@
 		<dependency org="asm" name="asm" rev="3.1" transitive="false">
 			<include type="jar" />
 		</dependency>
-		<dependency org="org.springframework" name="spring-aspects" rev="3.1.4.RELEASE" transitive="false">
+		<dependency org="org.springframework" name="spring-aspects" rev="4.0.0.RELEASE" transitive="false">
 			<include type="jar" />
 		</dependency>
-		<dependency org="org.springframework" name="spring-jdbc" rev="3.1.4.RELEASE" transitive="false">
+		<dependency org="org.springframework" name="spring-jdbc" rev="4.0.0.RELEASE" transitive="false">
 			<include type="jar" />
 		</dependency>
-		<dependency org="org.springframework" name="spring-orm" rev="3.1.4.RELEASE" transitive="false">
+		<dependency org="org.springframework" name="spring-orm" rev="4.0.0.RELEASE" transitive="false">
 			<include type="jar" />
 		</dependency>
-		<dependency org="org.springframework" name="spring-tx" rev="3.1.4.RELEASE" transitive="false">
+		<dependency org="org.springframework" name="spring-tx" rev="4.0.0.RELEASE" transitive="false">
 			<include type="jar" />
 		</dependency>
-		<dependency org="org.springframework" name="spring-webmvc" rev="3.1.4.RELEASE" transitive="false">
+		<dependency org="org.springframework" name="spring-webmvc" rev="4.0.0.RELEASE" transitive="false">
 			<include type="jar" />
 		</dependency>
 		<!-- include type="bundle" / FIXME unable to get openjpa without  sources -->
@@ -326,7 +327,7 @@
 		<!--  END OF OPENMEETINGS -->
 
 		<!--  START OF JUNIT -->
-		<dependency org="org.springframework" name="spring-test" rev="3.1.1.RELEASE" conf="junit->*" transitive="false">
+		<dependency org="org.springframework" name="spring-test" rev="4.0.0.RELEASE" conf="junit->*" transitive="false">
 			<include type="jar" />
 		</dependency>
 		<dependency org="ant-contrib" name="ant-contrib" rev="1.0b3" conf="junit->*" transitive="false">
@@ -392,12 +393,10 @@
 			<include type="jar" />
 		</dependency>
 
-		<!-- Red5 Client/Server for screensharing -->
-		<dependency org="red5_client" name="red5_client" rev="r4393" conf="red5-client->*" transitive="false">
+		<!-- JGIT --> 
+        <dependency org="org.eclipse.jgit" name="org.eclipse.jgit.ant" conf="jgit->*" rev="3.3.0.201403021825-r" transitive="true" >
 			<include type="jar" />
-		</dependency>
-		<dependency org="red5_server" name="red5_server" rev="r4393" conf="red5-client->*" transitive="false">
-			<include type="jar" />
+	        <exclude org="org.apache.ant"/>
 		</dependency>
 		
 		<exclude org="javax.servlet" module="servlet-api" type="*" ext="*" conf="*" matcher="exact"/>		

@@ -423,9 +423,9 @@ webapps/openmeetings/screensharing/ehcache-core-2.5.0.jar
 webapps/openmeetings/screensharing/httpclient-4.2.1.jar
 webapps/openmeetings/screensharing/httpcore-4.2.1.jar
 webapps/openmeetings/screensharing/mina-core-2.0.7.jar
-webapps/openmeetings/screensharing/spring-beans-3.1.4.RELEASE.jar
-webapps/openmeetings/screensharing/spring-context-3.1.4.RELEASE.jar
-webapps/openmeetings/screensharing/spring-core-3.1.4.RELEASE.jar
+webapps/openmeetings/screensharing/spring-beans-4.0.0.RELEASE.jar
+webapps/openmeetings/screensharing/spring-context-4.0.0.RELEASE.jar
+webapps/openmeetings/screensharing/spring-core-4.0.0.RELEASE.jar
 
 lib/cglib-jar-2.2.2.jar
 lib/com.springsource.javax.xml.stream-1.0.1.jar
@@ -452,27 +452,27 @@ lib/httpcore-4.2.1.jar
 lib/mina-core-2.0.4.jar
 lib/mina-integration-beans-2.0.4.jar
 lib/mina-integration-jmx-2.0.4.jar
-lib/org.springframework.aspects-jar-3.1.1.RELEASE.jar
-lib/org.springframework.jdbc-jar-3.1.1.RELEASE.jar
-lib/org.springframework.orm-jar-3.1.1.RELEASE.jar
-lib/org.springframework.transaction-jar-3.1.1.RELEASE.jar
-lib/org.springframework.web.servlet-jar-3.1.1.RELEASE.jar
+lib/org.springframework.aspects-jar-4.0.0.RELEASE.jar
+lib/org.springframework.jdbc-jar-4.0.0.RELEASE.jar
+lib/org.springframework.orm-jar-4.0.0.RELEASE.jar
+lib/org.springframework.transaction-jar-4.0.0.RELEASE.jar
+lib/org.springframework.web.servlet-jar-4.0.0.RELEASE.jar
 lib/quartz-1.8.5.jar
 lib/red5-client.jar
-lib/spring-aop-3.1.1.RELEASE.jar
-lib/spring-asm-3.1.1.RELEASE.jar
-lib/spring-beans-3.1.1.RELEASE.jar
-lib/spring-context-3.1.1.RELEASE.jar
-lib/spring-context-support-3.1.1.RELEASE.jar
-lib/spring-core-3.1.1.RELEASE.jar
-lib/spring-expression-3.1.1.RELEASE.jar
-lib/spring-web-3.1.1.RELEASE.jar
+lib/spring-aop-4.0.0.RELEASE.jar
+lib/spring-asm-4.0.0.RELEASE.jar
+lib/spring-beans-4.0.0.RELEASE.jar
+lib/spring-context-4.0.0.RELEASE.jar
+lib/spring-context-support-4.0.0.RELEASE.jar
+lib/spring-core-4.0.0.RELEASE.jar
+lib/spring-expression-4.0.0.RELEASE.jar
+lib/spring-web-4.0.0.RELEASE.jar
 lib/xmlrpc-2.0.1.jar
 
-plugins/tomcat-embed-core-jar-7.0.42.jar
-plugins/tomcat-embed-jasper-jar-7.0.42.jar
-plugins/tomcat-embed-logging-juli-jar-7.0.42.jar
-plugins/tomcat-embed-logging-log4j-jar-7.0.42.jar
+plugins/tomcat-embed-core-jar-7.0.50.jar
+plugins/tomcat-embed-jasper-jar-7.0.50.jar
+plugins/tomcat-embed-logging-juli-jar-7.0.50.jar
+plugins/tomcat-embed-logging-log4j-jar-7.0.50.jar
 plugins/tomcatplugin-jar-1.4.jar
 
 ======================================================================================================================
