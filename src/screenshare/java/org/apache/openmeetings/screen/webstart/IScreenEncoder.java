@@ -18,13 +18,12 @@
  */
 package org.apache.openmeetings.screen.webstart;
 
-import java.awt.Rectangle;
 import java.io.IOException;
 
 import org.red5.server.net.rtmp.event.VideoData;
 
 public interface IScreenEncoder {
-	void createUnalteredFrame(Rectangle area) throws IOException;
+	void createUnalteredFrame() throws IOException;
 	
 	VideoData getUnalteredFrame();
 
