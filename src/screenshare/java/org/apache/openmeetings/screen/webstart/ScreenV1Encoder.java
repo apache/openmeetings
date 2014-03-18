@@ -78,13 +78,14 @@ public class ScreenV1Encoder extends BaseScreenEncoder {
 		return new VideoData(buf);
 	}
 	
-	public void createUnalteredFrame(Rectangle _area) throws IOException {
+	public void createUnalteredFrame() throws IOException {
 		if (last == null) {
 			return;
 		}
 		if (unalteredFrame == null) {
 			ByteArrayOutputStream ba = new ByteArrayOutputStream(200);
 			
+			Rectangle _area = new Rectangle(resizeX, resizeY);
 			//header
 			ba.write(getTag(FLAG_FRAMETYPE_INTERFRAME, FLAG_CODEC_SCREEN));
 			writeShort(ba, _area.width + ((blockSize / 16 - 1) << 12));
