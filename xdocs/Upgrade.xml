@@ -22,25 +22,36 @@
 	</properties>
 
 	<body>
-
 		<section name="Upgrading OpenMeetings via the Web-Interface">
-
-			<p>There is a System Backup and Import tool. Login as Administrator
-				and Goto > Backup
-			</p>
-			<a class="fancybox-buttons" href="images/backup.png">
-				<img src="images/backup.png" alt="" width="600" height="145" />
-			</a>
-			<p>
-				The Text in the Administration>Backup section actually just says
-				it
-				all. The backup contains users, rooms, organizations and
-				appointements (Invitations and Reminders are NOT included in the
-				Backup and Reminders will not be send again!). The Backup contains
-				also all uploaded Files and Documents and will re-import them again.
-
-				Max Upload Size is 1000 MB.
-			</p>
+			<ol>
+				<li>
+					<p>There is a System Backup and Import tool. Login as Administrator and Administration &gt; Backup</p>
+					<a class="fancybox-buttons" href="images/backup.png"><img src="images/backup.png" alt="" width="600" /></a>
+					<p>
+						The Text in the Administration &gt; Backup section actually just says
+						it all. The backup contains users, rooms, organizations and
+						appointments (Invitations and Reminders are NOT included in the
+						Backup and Reminders will not be send again!). The Backup contains
+						also all uploaded Files and Documents and will re-import them again.
+		
+						Max Upload Size is 1000 MB.
+					</p>
+				</li>
+				<li>Stop Openmeetings</li>
+				<li>(*) Backup folder with existing installation</li>
+				<li>(*) Perform DB backup using tools available for your database</li>
+				<li>Delete/move folder with existing installation of OM</li>
+				<li>Drop existing OM database</li>
+				<li>Create empty Database with same name and UTF-8 support</li>
+				<li>Unzip new version of OM into the same folder</li>
+				<li>(*) Modify DB settings</li>
+				<li>Start Openmeetings</li>
+				<li>go to http://localhost:5080/openmeetings</li>
+				<li>Install OM using Web installer</li>
+				<li>Login as Administrator and Administration &gt; Backup</li>
+				<li>Perform system import</li>
+			</ol>
+			<p>(*) Optional step</p>
 		</section>
 
 		<section name="Upgrading OpenMeetings from command line">
@@ -50,36 +61,36 @@
 				</i>
 			</p>
 			<p>
-				Alternatively to the Web-Installer you can also export and import
-				via the command line. <br/>
-				<b>You should shutdown the Red5-Service while doing CLI export or import operations</b>
+				Alternatively to the Web-Installer you can also export and import via the command line. <br/>
+				<b>You should shutdown the Red5-Service while doing CLI export or import operations</b><br />
+				Cd to your red5-home directory, type "./admin.sh" and hit enter. You will get options available.<br />
 				<br />
-				Cd to your red5-home directory, type "admin" and hit enter. You will
-				get options available.
+				A typical export would be:<br />
+				<tt>./admin.sh -b -file backup_today.zip</tt><br />
 				<br />
+				A typical import would be:<br />
+				<tt>./admin.sh -r -file backup_yesterday.zip</tt><br />
 				<br />
-				A typical export would be:
-				<br />
-				<tt>admin -b -file backup_today.zip</tt>
-				<br />
-				<br />
-				A typical import would be:
-				<br />
-				<tt>admin -r -file backup_yesterday.zip</tt>
-				<br />
-				<br />
-				You can also combine the installation with a backup, that way you
-				will create exactly the user table that existed in the backup.
-				<br />
-				A typical install from backup would be:
-				<br />
-				<tt>admin -i -file backup_yesterday.zip</tt>
-				<br/>
-				please see
-				<a href="CommandLineAdmin.html" target="_BLANK" rel="nofollow">Command Line Admin
-				</a>
-				for more options
+				You can also combine the installation with a backup, that way you will create exactly the user table 
+				that existed in the backup.<br />
+				A typical install from backup would be:<br />
+				<tt>./admin.sh -i -file backup_yesterday.zip</tt><br/>
+				please see <a href="CommandLineAdmin.html" target="_BLANK" rel="nofollow">Command Line Admin</a> for more options
 			</p>
+			<p><b>Detailed steps</b></p>
+			<ol>
+				<li>Stop Openmeetings</li>
+				<li>(*) Backup folder with existing installation</li>
+				<li>(*) Perform DB backup using tools available for your database</li>
+				<li><tt>./admin.sh -v -b -file ../backup_today.zip</tt></li>
+				<li>Delete/move folder with existing installation of OM</li>
+				<li>Unzip new version of OM into the same folder</li>
+				<li><tt>./admin.sh -v -i -file ../backup_today.zip --drop --skip-default-room</tt> (Optionally you can specify
+					additional parameters like DB host/user/pass/instance etc.)</li>
+				<li>Start Openmeetings</li>
+				<li>go to http://localhost:5080/openmeetings</li>
+			</ol>
+			<p>(*) Optional step</p>
 		</section>
 
 	</body>
