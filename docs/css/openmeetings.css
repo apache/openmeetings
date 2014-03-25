@@ -82,3 +82,6 @@ ul {
 	margin-top: 10px;
 	margin-bottom: 10px;
 }
+#accordion.ui-accordion .ui-accordion-header a {
+	padding-left: 20px;
+}

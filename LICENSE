@@ -1733,44 +1733,32 @@ For components:
 
 coin-slider-styles.css
 colorbox.css
-jquery-ui.css
 jquery.ui.menubar.js
 jquery.ui.menubar.css
-jquery-ui-1.10.3.custom.min.css
 
 coin-slider.min.js	
-jquery-1.7.1.min.js	
-jquery.colorbox.js	
-jquery.ui.accordion.js	
-jquery.ui.core.js	
-jquery.ui.widget.js
+jquery.colorbox.js
+jquery-1.11.0.min.js	
+jquery-ui-1.10.4.custom.min.js
+jquery-ui-1.10.4.custom.css
 
-border.png					
-controls.png					
-loading.gif					
-loading_background.png				
-overlay.png					
-borderBottomCenter.png	
-borderBottomRight.png	
-borderMiddleRight.png	
-borderTopLeft.png
-borderBottomLeft.png	
-borderMiddleLeft.png	
-borderTopCenter.png	
-borderTopRight.png
-ui-bg_diagonals-thick_90_eeeeee_40x40.png
-ui-bg_flat_15_cd0a0a_40x100.png
-ui-bg_glass_100_e4f1fb_1x400.png
-ui-bg_glass_50_3baae3_1x400.png
-ui-bg_glass_80_d7ebf9_1x400.png
-ui-bg_highlight-hard_100_f2f5f7_1x100.png
-ui-bg_highlight-hard_70_000000_1x100.png
-ui-bg_highlight-soft_100_deedf7_1x100.png
-ui-bg_highlight-soft_25_ffef8f_1x100.png
-ui-icons_2694e8_256x240.png
-ui-icons_2e83ff_256x240.png
-ui-icons_3d80b3_256x240.png
-ui-icons_72a7cf_256x240.png
+border.png
+controls.png
+loading.gif
+loading_background.png
+overlay.png
+animated-overlay.gif
+ui-bg_flat_0_000088_40x100.png
+ui-bg_flat_0_e6b900_40x100.png
+ui-bg_flat_100_eeeeee_40x100.png
+ui-bg_flat_20_000088_40x100.png
+ui-bg_flat_22_1484e6_40x100.png
+ui-bg_flat_25_c5ddfc_40x100.png
+ui-bg_flat_26_2293f7_40x100.png
+ui-bg_highlight-soft_100_f9f9f9_1x100.png
+ui-icons_0a82eb_256x240.png
+ui-icons_0b54d5_256x240.png
+ui-icons_5fa5e3_256x240.png
 ui-icons_ffffff_256x240.png
 
 JQuery: http://jquery.com/
@@ -1801,14 +1789,3 @@ NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
 LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
 OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-
-======================================================================================================================
-
-fullcalendar.css 
-fullcalendar.print.css 
-fullcalendar.min.js
-
- Copyright (c) 2011 Adam Shaw
- Dual licensed under the MIT and GPL licenses, located in
- MIT-LICENSE.txt and GPL-LICENSE.txt respectively.
-

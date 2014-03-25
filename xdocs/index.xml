@@ -445,8 +445,7 @@
 			</feature>
 
 			<feature title="Backup">
-				<image href="images/backup.png" fullhref="images/backup.png"
-					title="Backup" width="250" height="60" />
+				<image href="images/backup.png" fullhref="images/backup.png" title="Backup" width="250" />
 				<text>
 				<div>
 					You can backup all user-generated data including files
@@ -461,8 +460,3 @@
 
 	</body>
 </document>
-
-
-
-
-
