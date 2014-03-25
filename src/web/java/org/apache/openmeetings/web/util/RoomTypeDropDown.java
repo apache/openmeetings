@@ -30,16 +30,14 @@ import org.apache.wicket.markup.html.form.DropDownChoice;
 
 public class RoomTypeDropDown extends DropDownChoice<RoomType> {
 	private static final long serialVersionUID = 1L;
-	private static List<RoomType> roomTypes;
 	
 	public static List<RoomType> getRoomTypes() {
-		if (roomTypes == null) {
-			roomTypes = getBean(RoomTypeDao.class).getAll(getLanguage());
-		}
-		return roomTypes;
+		return getBean(RoomTypeDao.class).getAll(getLanguage());
 	}
 	
 	public RoomTypeDropDown(String id) {
-		super(id, getRoomTypes(), new ChoiceRenderer<RoomType>("label.value", "roomtypes_id"));
+		super(id);
+		setChoices(getRoomTypes());
+		setChoiceRenderer(new ChoiceRenderer<RoomType>("label.value", "roomtypes_id"));
 	}
 }
