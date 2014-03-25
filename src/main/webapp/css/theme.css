@@ -403,6 +403,7 @@ div.tableWrapperSmall {
 }
 .trees a.om-icon span {
 	white-space: nowrap;
+	padding-right: 20px;
 }
 .cross.om-icon {
 	background-image: url(images/cross.png);
@@ -463,6 +464,8 @@ div.tableWrapperSmall {
 	background-image: url(images/script_error.png);
 	width: 16px;
 	height: 16px;
+	background-repeat: no-repeat;
+	padding-right: 20px;
 }
 .recording.dialog.errors {
 	width: 600px;
