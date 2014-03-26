@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 
 <!--
   Licensed to the Apache Software Foundation (ASF) under one
@@ -1188,7 +1188,12 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>importar</value>
   </string>
   <string id="388" name="languageseditor">
-    <value>Exportar a XML - Estos archivos pueden ser usados para: - Contribuir en el proyecto - Importarlos en otro sistema - Copia de Respaldo (Backup) - Personalización - Colocarlo en el directorio de idiomas para la próxima instalación.</value>
+    <value>Exportar a XML - Estos archivos pueden ser usados para: 
+		- Contribuir en el proyecto 
+		- Importarlos en otro sistema 
+		- Copia de Respaldo (Backup)
+		- Personalización 
+		- Colocarlo en el directorio de idiomas para la próxima instalación.</value>
   </string>
   <string id="389" name="languageseditor">
     <value>Seleccione un archivo de idioma que se importará. Configure correctamente el idioma en el menú desplegable (no importa el nombre que tenga el archivo ya que será importado de todos los modos).</value>
@@ -1224,7 +1229,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>Unido:</value>
   </string>
   <string id="400" name="roomslist">
-    <value></value>
+    <value/>
   </string>
   <string id="401" name="roomslist">
     <value>Usuarios en la sala:</value>
@@ -2748,7 +2753,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>Guardar cambios de la cita</value>
   </string>
   <string id="908" name="lzcalendar">
-    <value>La cita ha sido cambiada. ¿Desea guardar dichos cambios? Todos los participantes implicados recibirán un correo con la fecha y hora actualizadas (dependiendo del tipo de notificación de esta cita).</value>
+    <value>La cita ha sido cambiada. ¿Desea guardar dichos cambios? <br/><br/>Todos los participantes implicados recibirán un correo con la fecha y hora actualizadas (dependiendo del tipo de notificación de esta cita).</value>
   </string>
   <string id="909" name="flv recorder error message">
     <value>Para acceder a otras grabaciones, tiene que autenticarse en la aplicación $APP_NAME.</value>
@@ -3621,7 +3626,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>está usted confirmado como contacto!</value>
   </string>
   <string id="1199" name="chat info message">
-    <value></value>
+    <value/>
   </string>
   <string id="1200" name="chat log icon">
     <value>Mostrar / Copiar log del chat</value>
@@ -3639,7 +3644,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>Enviar</value>
   </string>
   <string id="1205" name="private message">
-    <value></value>
+    <value/>
   </string>
   <string id="1206" name="private message">
     <value>Mensajes</value>
@@ -3660,7 +3665,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>Asunto:</value>
   </string>
   <string id="1212" name="whiteboard full-fit">
-    <value>Activar ajuste completo y la pizarra hará zoom para que todos&lt;br/&gt;documentos sean visibles en función de la resolución de los monitores de cada participante.</value>
+    <value>Activar ajuste completo y la pizarra hará zoom para que todos&lt;br/&gt;documentos sean visibles en función de la resolución de los monitores de cada  participante.</value>
   </string>
   <string id="1213" name="user-list">
     <value>Expulsar usuario</value>
@@ -4539,7 +4544,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>Publicando. Usuario:</value>
   </string>
   <string id="1505" name="cmd_line_admin">
-    <value>Para guardar hora y tráfico de internet puede emplear la linea de comandos como administrador para hacer backup/restaurar/actualizar: &lt;ol&gt; &lt;li&gt;ir al directorio de instalación en OM (por ejemplo /opt/red5)&lt;/li&gt; &lt;li&gt;detenga OM (por ejemplo ./red5-shutdown.sh)&lt;/li&gt; &lt;li&gt;./admin.sh -b -file ~/today_om_backup.zip (hacer backup del actual OM)&lt;/li&gt; &lt;li&gt;descargar archivo con el nuevo OM&lt;/li&gt; &lt;li&gt; (mover versión de trabajo de OM solo en el caso :))&lt;/li&gt; &lt;li&gt;extraer el OM descargado a /opt/red5&lt;/li&gt; &lt;li&gt;./admin.sh -i -file ~/today_om_backup.zip (or './admin.sh -i -file ~/today_om_backup.zip --db-type mysql --db-user om_user --db-pass om_user_pass' en el caso de que esté usted empleando una base de datos DB distinta a la original )&lt;/li&gt; &lt;li&gt;start OM&lt;/li&gt; &lt;/ol&gt;</value>
+    <value>Para guardar hora y tráfico de internet puede emplear la linea de comandos como administrador para hacer backup/restaurar/actualizar: &lt;ol&gt; &lt;li&gt;ir al directorio de instalación en OM (por ejemplo /opt/red5)&lt;/li&gt; &lt;li&gt;detenga OM (por ejemplo ./red5-shutdown.sh)&lt;/li&gt; &lt;li&gt;./admin.sh -b -file  ~/today_om_backup.zip (hacer backup del actual OM)&lt;/li&gt; &lt;li&gt;descargar archivo con el nuevo OM&lt;/li&gt; &lt;li&gt; (mover versión de trabajo de OM solo en el caso :))&lt;/li&gt; &lt;li&gt;extraer el OM descargado a /opt/red5&lt;/li&gt; &lt;li&gt;./admin.sh -i -file ~/today_om_backup.zip (or './admin.sh -i -file ~/today_om_backup.zip --db-type mysql --db-user om_user --db-pass om_user_pass' en el caso de que esté usted empleando una base de datos DB distinta a la original )&lt;/li&gt; &lt;li&gt;start OM&lt;/li&gt; &lt;/ol&gt;</value>
   </string>
   <string id="1506" name="public_room_tooltip">
     <value>Salas comunes a todos los usuarios</value>
@@ -4788,7 +4793,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>Redireccionar uri</value>
   </string>
   <string id="1588" name="multiple_addresses">
-    <value>Puede introducir la dirección de correo en el formato: nombre1 apellidos1 &lt;email1&gt; o "nombre2 apellidos2" &lt;email2&gt; o 'nombre3 apellidos3' &lt;email3&gt; o email</value>
+    <value>Puede introducir la dirección de correo en el formato: nombre1 apellidos1 &lt;email1&gt;  o "nombre2 apellidos2" &lt;email2&gt; o 'nombre3 apellidos3'  &lt;email3&gt; o email</value>
   </string>
   <string id="1589" name="notify_on_disconnect">
     <value>Notificar desconexión</value>
