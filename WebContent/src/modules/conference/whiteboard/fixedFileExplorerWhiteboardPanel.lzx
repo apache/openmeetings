@@ -338,7 +338,7 @@
     	
     	<view resource="add_whiteboard_rsc" y="0" x="0" />
     	
-    	<labelTooltip text="Add Whiteboard" />
+    	<labelTooltip labelid="1596" />
     </view>
     
     <view width="${ parent.width }" height="1" y="41"
