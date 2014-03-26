@@ -4816,4 +4816,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
   <string id="1595" name="recording.errors.file.not.found">
     <value>Recording file is not found</value>
   </string>
+  <string id="1596" name="whiteboard.add_whiteboard">
+    <value>Add Whiteboard</value>
+  </string>
 </language>

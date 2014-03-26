@@ -4811,4 +4811,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
   <string id="1595" name="recording.errors.file.not.found">
     <value>Файл записи не найден</value>
   </string>
+  <string id="1596" name="whiteboard.add_whiteboard">
+    <value>Добавить доску</value>
+  </string>
 </language>
