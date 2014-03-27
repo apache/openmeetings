@@ -400,8 +400,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
     	HashSet<Integer> broadcastList = new HashSet<Integer>();
         IConnection current = Red5.getConnectionLocal();
         String streamid = current.getClient().getId();
-        for (Set<IConnection> conset : current.getScope().getConnections()) {
-        for (IConnection conn : conset) {
+        for (IConnection conn : current.getScope().getClientConnections()) {
             if (conn != null) {
                 Client rcl = this.sessionManager
                         .getClientByStreamId(conn
@@ -426,7 +425,6 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
                     }
                 }
             }
-        }
         }
         return new ArrayList<Integer>(broadcastList);
     }
@@ -574,10 +572,9 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 			// and room except the current disconnected cause it could throw an exception
 			log.debug("currentScope " + currentScope);
 
-			if (currentScope != null && currentScope.getConnections() != null) {
+			if (currentScope != null && currentScope.getClientConnections() != null) {
 				// Notify Users of the current Scope
-				for (Set<IConnection> conset : currentScope.getConnections()) {
-				for (IConnection cons : conset) {
+				for (IConnection cons : currentScope.getClientConnections()) {
 					if (cons != null && cons instanceof IServiceCapableConnection) {
 						log.debug("sending roomDisconnect to {}  client id {}", cons, cons.getClient().getId());
 
@@ -628,7 +625,6 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 							log.debug("sending roomDisconnect to " + cons);
 						}
 					}
-				}
 				}
 			}
 
@@ -684,8 +680,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 
 			// Notify all users of the same Scope
 			// We need to iterate through the streams to catch if anybody is recording
-			for (Set<IConnection> conset : current.getScope().getConnections()) {
-			for (IConnection conn : conset) {
+			for (IConnection conn : current.getScope().getClientConnections()) {
 				if (conn != null) {
 					if (conn instanceof IServiceCapableConnection) {
 						
@@ -728,7 +723,6 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 
 					}
 				}
-			}
 			}
 		} catch (Exception err) {
 			log.error("[streamPublishStart]", err);
@@ -796,8 +790,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 			log.debug("sendClientBroadcastNotifications : " + currentClient + " " + currentClient.getStreamid());
 
 			// Notify all clients of the same scope (room)
-			for (Set<IConnection> conset : current.getScope().getConnections()) {
-			for (IConnection conn : conset) {
+			for (IConnection conn : current.getScope().getClientConnections()) {
 				if (conn != null) {
 					if (conn instanceof IServiceCapableConnection) {
 						if (conn.equals(current)) {
@@ -839,7 +832,6 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 						}
 					}
 				}
-			}
 			}
 		} catch (Exception err) {
 			log.error("[sendClientBroadcastNotifications]", err);
@@ -897,8 +889,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 					currentClient.getStreamPublishName());
 
 			// Notify all users of the same Scope
-			for (Set<IConnection> conset : current.getScope().getConnections()) {
-			for (IConnection conn : conset) {
+			for (IConnection conn : current.getScope().getClientConnections()) {
 				if (conn != null) {
 					if (conn instanceof IServiceCapableConnection) {
 						IClient client = conn.getClient();
@@ -916,7 +907,6 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 						((IServiceCapableConnection) conn).invoke("newRed5ScreenCursor", new Object[] { cursor }, this);
 					}
 				}
-			}
 			}
 		} catch (Exception err) {
 			log.error("[setNewCursorPosition]", err);
@@ -947,8 +937,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 					.getCurrentModeratorByRoom(room_id);
 
 			// Notify all clients of the same scope (room)
-			for (Set<IConnection> conset : current.getScope().getConnections()) {
-			for (IConnection conn : conset) {
+			for (IConnection conn : current.getScope().getClientConnections()) {
 				if (conn != null) {
 					if (conn instanceof IServiceCapableConnection) {
 						IClient client = conn.getClient();
@@ -964,7 +953,6 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 								new Object[] { currentMods }, this);
 					}
 				}
-			}
 			}
 		} catch (Exception err) {
 			log.error("[addModerator]", err);
@@ -993,8 +981,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 		    sessionManager.updateClientByStreamId(currentClient.getStreamid(), currentClient, false, null);
 		    
 			// Notify all clients of the same scope (room)
-			for (Set<IConnection> conset : current.getScope().getConnections()) {
-			for (IConnection conn : conset) {
+			for (IConnection conn : current.getScope().getClientConnections()) {
 				if (conn != null) {
 					if (conn instanceof IServiceCapableConnection) {
 						IClient client = conn.getClient();
@@ -1011,7 +998,6 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 								new Object[] { currentClient }, this);
 					}
 				}
-			}
 			}
 		} catch (Exception err) {
 			log.error("[setBroadCastingFlag]", err);
@@ -1039,8 +1025,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 					currentClient.getStreamid(), currentClient, false, null);
 
 			// Notify all clients of the same scope (room)
-			for (Set<IConnection> conset : current.getScope().getConnections()) {
-			for (IConnection conn : conset) {
+			for (IConnection conn : current.getScope().getClientConnections()) {
 				if (conn != null) {
 					Client rcl = this.sessionManager
 							.getClientByStreamId(conn.getClient().getId(), null);
@@ -1066,7 +1051,6 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 						}
 					}
 				}
-			}
 			}
 		} catch (Exception err) {
 			log.error("[giveExclusiveAudio]", err);
@@ -1219,8 +1203,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 			hsm.put("client", currentClient);
 			hsm.put("message", newMessage);
 
-			for (Set<IConnection> conset : current.getScope().getConnections()) {
-			for (IConnection conn : conset) {
+			for (IConnection conn : current.getScope().getClientConnections()) {
 				if (conn != null) {
 					if (conn instanceof IServiceCapableConnection) {
 						IClient client = conn.getClient();
@@ -1234,7 +1217,6 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 						((IServiceCapableConnection)conn).invoke("sendVarsToMessageWithClient", new Object[] { hsm }, this);
 					}
 				}
-			}
 			}
 			return currentClient;
 		} catch (Exception err) {
@@ -1706,8 +1688,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 			log.debug("sendMessageByRoomAndDomain " + room_id);
 
 			IScope globalScope = getContext().getGlobalScope();
-			IScope webAppKeyScope = globalScope
-					.getScope(OpenmeetingsVariables.webAppRootKey);
+			IScope webAppKeyScope = globalScope.getScope(OpenmeetingsVariables.webAppRootKey);
 
 			log.debug("webAppKeyScope " + webAppKeyScope);
 
@@ -1715,8 +1696,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 
 			if (scopeHibernate != null) {
 
-				for (Set<IConnection> conset : webAppKeyScope.getScope(room_id.toString()).getConnections()) {
-				for (IConnection conn : conset) {
+				for (IConnection conn : webAppKeyScope.getScope(room_id.toString()).getClientConnections()) {
 					if (conn != null) {
 						if (conn instanceof IServiceCapableConnection) {
 							IClient client = conn.getClient();
@@ -1732,7 +1712,6 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 									new Object[] { message }, this);
 						}
 					}
-				}
 				}
 			} else {
 				log.debug("sendMessageByRoomAndDomain servlet not yet started  - roomID : '"
@@ -1839,8 +1818,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 			boolean showDrawStatus = getWhiteboardDrawStatus();
 
 			// Notify all Clients of that Scope (Room)
-			for (Set<IConnection> conset : current.getScope().getConnections()) {
-			for (IConnection conn : conset) {
+			for (IConnection conn : current.getScope().getClientConnections()) {
 				if (conn != null) {
 					if (conn instanceof IServiceCapableConnection) {
 						IClient client = conn.getClient();
@@ -1862,7 +1840,6 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 					}
 				}
 			}
-			}
 		} catch (Exception err) {
 			log.error("[sendVarsByWhiteboardId]", err);
 		}
@@ -1883,8 +1860,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 			if (ismod) {
 				log.debug("CurrentScope :" + current.getScope().getName());
 				// Send to all Clients of the same Scope
-				for (Set<IConnection> conset : current.getScope().getConnections()) {
-				for (IConnection conn : conset) {
+				for (IConnection conn : current.getScope().getClientConnections()) {
 					if (conn != null) {
 						if (conn instanceof IServiceCapableConnection) {
 							IClient client = conn.getClient();
@@ -1901,7 +1877,6 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 							((IServiceCapableConnection) conn).invoke("sendVarsToModeratorGeneral", new Object[] { vars },this);
 						}
 					}
-				}
 				}
 				return 1;
 			} else {
@@ -2036,8 +2011,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 			IConnection current = Red5.getConnectionLocal();
 
 			// Send to all Clients of that Scope(Room)
-			for (Set<IConnection> conset : current.getScope().getConnections()) {
-			for (IConnection conn : conset) {
+			for (IConnection conn : current.getScope().getClientConnections()) {
 				if (conn != null) {
 					if (conn instanceof IServiceCapableConnection) {
 						IClient client = conn.getClient();
@@ -2057,7 +2031,6 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 						
 					}
 				}
-			}
 			}
 		} catch (Exception err) {
 			log.error("[syncMessageToCurrentScope]", err);
@@ -2123,8 +2096,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 			hsm.put("message", newMessage);
 
 			// broadcast Message to specific user with id inside the same Scope
-			for (Set<IConnection> conset : scope.getConnections()) {
-			for (IConnection conn : conset) {
+			for (IConnection conn : scope.getClientConnections()) {
 				if (conn != null) {
 					if (conn instanceof IServiceCapableConnection) {
 						if (conn.getClient().getId().equals(clientId)) {
@@ -2134,7 +2106,6 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 						}
 					}
 				}
-			}
 			}
 		} catch (Exception err) {
 			log.error("[sendMessageWithClient] ", err);
@@ -2150,8 +2121,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 	 * @param clientId
 	 * @return 1 in case of no exceptions, -1 otherwise
 	 */
-	public synchronized int sendMessageWithClientById(Object newMessage,
-			String clientId) {
+	public synchronized int sendMessageWithClientById(Object newMessage, String clientId) {
 		try {
 			IConnection current = Red5.getConnectionLocal();
 			Client currentClient = this.sessionManager
@@ -2162,14 +2132,12 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 			hsm.put("message", newMessage);
 
 			// broadcast Message to specific user with id inside the same Scope
-			for (Set<IConnection> conset : current.getScope().getConnections()) {
-			for (IConnection conn : conset) {
+			for (IConnection conn : current.getScope().getClientConnections()) {
 				if (conn.getClient().getId().equals(clientId)) {
 					((IServiceCapableConnection) conn).invoke(
 							"sendVarsToMessageWithClient",
 							new Object[] { hsm }, this);
 				}
-			}
 			}
 		} catch (Exception err) {
 			log.error("[sendMessageWithClient] ", err);
@@ -2231,8 +2199,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 			if (scopeHibernate != null) {
 				// Notify the clients of the same scope (room) with user_id
 
-				for (Set<IConnection> conset : webAppKeyScope.getScope(scopeName).getConnections()) {
-				for (IConnection conn : conset) {
+				for (IConnection conn : webAppKeyScope.getScope(scopeName).getClientConnections()) {
 					IClient client = conn.getClient();
 					if (SessionVariablesUtil.isScreenClient(client)) {
 						// screen sharing clients do not receive events
@@ -2245,7 +2212,6 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 					if (SessionVariablesUtil.getPublicSID(client).equals(publicSID)) {
 						((IServiceCapableConnection) conn).invoke("newMessageByRoomAndDomain", new Object[] { message }, this);
 					}
-				}
 				}
 			} else {
 				// Scope not yet started
@@ -2275,14 +2241,14 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 				currentClient = sessionManager.getClientByUserId(user_id);
 			}
 
-			Collection<Set<IConnection>> concolset = null;
+			Set<IConnection> conset = null;
 
 			if (currentClient == null) {
 				// Must be from a previous session, search for user in current
 				// scope
 				IConnection current = Red5.getConnectionLocal();
 				// Notify all Clients of that Scope (Room)
-				concolset = current.getScope().getConnections();
+				conset = current.getScope().getClientConnections();
 			} else {
 				// default Scope Name
 				String scopeName = "hibernate";
@@ -2293,7 +2259,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 				IScope scopeHibernate = webAppKeyScope.getScope(scopeName);
 
 				if (scopeHibernate != null) {
-					concolset = webAppKeyScope.getScope(scopeName).getConnections();
+					conset = webAppKeyScope.getScope(scopeName).getClientConnections();
 				}
 			}
 
@@ -2301,7 +2267,6 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 
 			// Notify the clients of the same scope (room) with user_id
 
-			for (Set<IConnection> conset : concolset) {
 			for (IConnection conn : conset) {
 				if (conn != null) {
 					
@@ -2330,7 +2295,6 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 								+ message);
 					}
 				}
-			}
 			}
 		} catch (Exception err) {
 			log.error("[sendMessageWithClient] ", err);
@@ -2434,8 +2398,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 
 			IConnection current = Red5.getConnectionLocal();
 
-			for (Set<IConnection> conset : current.getScope().getConnections()) {
-			for (IConnection conn : conset) {
+			for (IConnection conn : current.getScope().getClientConnections()) {
 				if (conn != null) {
 					IClient client = conn.getClient();
 					if (SessionVariablesUtil.isScreenClient(client)) {
@@ -2446,7 +2409,6 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 						}
 					}
 				}
-			}
 			}
 		} catch (Exception err) {
 			log.debug("[sendRemoteCursorEvent]", err);
@@ -2483,13 +2445,11 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 
 			Long flvRecordingId = checkRecordingClient(current);
 
-			Collection<Set<IConnection>> concolset = current.getScope().getConnections();
-			for (Set<IConnection> conset : concolset) {
-				for (IConnection conn : conset) {
-					Long recordingId = checkRecordingClient(conn);
-					if (recordingId != null) {
-						flvRecordingId = recordingId;
-					}
+			Set<IConnection> conset = current.getScope().getClientConnections();
+			for (IConnection conn : conset) {
+				Long recordingId = checkRecordingClient(conn);
+				if (recordingId != null) {
+					flvRecordingId = recordingId;
 				}
 			}
 			if (flvRecordingId == null) {
@@ -2504,7 +2464,6 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 			Map<String, String> interviewStatus = new HashMap<String, String>();
 			interviewStatus.put("action", "stop");
 
-			for (Set<IConnection> conset : concolset) {
 			for (IConnection conn : conset) {
 				if (conn != null) {
 					IClient client = conn.getClient();
@@ -2519,7 +2478,6 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 							"interviewStatus",
 							new Object[] { interviewStatus }, this);
 				}
-			}
 			}
 			return true;
 
@@ -2681,8 +2639,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 		sessionManager.updateClientByStreamId(streamid, currentClient, false, null);
 		SessionVariablesUtil.initClient(c, false, publicSID);
 
-		for (Set<IConnection> conset : current.getScope().getConnections()) {
-		for (IConnection conn : conset) {
+		for (IConnection conn : current.getScope().getClientConnections()) {
 			if (conn != null) {
 				IClient client = conn.getClient();
 				if (SessionVariablesUtil.isScreenClient(client)) {
@@ -2702,7 +2659,6 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 					}
 				}
 			}
-		}
 		}
 	}
 }

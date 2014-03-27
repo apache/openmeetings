@@ -22,7 +22,6 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
 import java.util.Date;
 import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.openmeetings.data.flvrecord.converter.FlvInterviewConverterTask;
@@ -169,8 +168,7 @@ public class FLVRecorderService implements IPendingServiceCallback {
 			sessionManager.updateClientByStreamId(current.getClient().getId(), currentClient, false, null);
 
 			// get all stream and start recording them
-			for (Set<IConnection> conset : current.getScope().getConnections()) {
-			for (IConnection conn : conset) {
+			for (IConnection conn : current.getScope().getClientConnections()) {
 				if (conn != null) {
 					if (conn instanceof IServiceCapableConnection) {
 						Client rcl = sessionManager.getClientByStreamId(conn.getClient().getId(), null);
@@ -228,7 +226,6 @@ public class FLVRecorderService implements IPendingServiceCallback {
 						}
 					}
 				}
-			}
 			}
 			return roomRecordingName;
 
@@ -353,8 +350,7 @@ public class FLVRecorderService implements IPendingServiceCallback {
 			log.debug("stopRecordAndSave " + currentClient.getUsername() + "," + currentClient.getUserip());
 
 			// get all stream and stop recording them
-			for (Set<IConnection> conset : scope.getConnections()) {
-			for (IConnection conn : conset) {
+			for (IConnection conn : scope.getClientConnections()) {
 				if (conn != null) {
 					if (conn instanceof IServiceCapableConnection) {
 						Client rcl = sessionManager.getClientByStreamId(conn.getClient().getId(), null);
@@ -382,7 +378,6 @@ public class FLVRecorderService implements IPendingServiceCallback {
 						}
 					}
 				}
-			}
 			}
 			// Store to database
 			Long flvRecordingId = currentClient.getFlvRecordingId();

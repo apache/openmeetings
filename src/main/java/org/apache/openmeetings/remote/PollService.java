@@ -20,7 +20,6 @@ package org.apache.openmeetings.remote;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
 
 import org.apache.openmeetings.data.user.UserManager;
 import org.apache.openmeetings.db.dao.room.PollDao;
@@ -138,8 +137,7 @@ public class PollService implements IPendingServiceCallback {
 			Object[] obj) throws Exception {
 		// Notify all clients of the same scope (room)
 		Client rc = this.sessionManager.getClientByStreamId(current.getClient().getId(), null);
-		for (Set<IConnection> conset : current.getScope().getConnections()) {
-		for (IConnection conn : conset) {
+		for (IConnection conn : current.getScope().getClientConnections()) {
 			if (conn != null) {
 				if (conn instanceof IServiceCapableConnection) {
 					Client rcl = this.sessionManager
@@ -159,7 +157,6 @@ public class PollService implements IPendingServiceCallback {
 					}
 				}
 			}
-		}
 		}
 	}
 
