@@ -38,6 +38,7 @@ import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.dto.file.RecordingContainerData;
 import org.apache.openmeetings.db.dto.file.RecordingObject;
 import org.apache.openmeetings.db.entity.record.FlvRecording;
+import org.apache.openmeetings.db.entity.record.FlvRecording.Status;
 import org.apache.openmeetings.db.entity.user.Organisation_Users;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -232,41 +233,6 @@ public class FlvRecordingDao {
 		return null;
 	}
 
-	public Long addFlvRecording(String fileHash, String fileName, Long user_id, Long room_id,
-			Date recordStart, Date recordEnd, Long ownerId, String comment, String recorderStreamId, Integer width,
-			Integer height, Boolean isInterview) {
-		try {
-
-			FlvRecording flvRecording = new FlvRecording();
-
-			flvRecording.setDeleted(false);
-			flvRecording.setFileHash(fileHash);
-			flvRecording.setFileName(fileName);
-			flvRecording.setInsertedBy(user_id);
-			flvRecording.setFolder(false);
-			flvRecording.setIsImage(false);
-			flvRecording.setIsPresentation(false);
-			flvRecording.setIsRecording(true);
-			flvRecording.setComment(comment);
-			flvRecording.setIsInterview(isInterview);
-
-			flvRecording.setRoom_id(room_id);
-			flvRecording.setRecordStart(recordStart);
-			flvRecording.setRecordEnd(recordEnd);
-
-			flvRecording.setWidth(width);
-			flvRecording.setHeight(height);
-
-			flvRecording.setOwnerId(ownerId);
-
-			flvRecording = update(flvRecording);
-			return flvRecording.getFlvRecordingId();
-		} catch (Exception ex2) {
-			log.error("[addFlvRecording]: ", ex2);
-		}
-		return null;
-	}
-
 	public void updateFlvRecordingEndTime(Long flvRecordingId, Date recordEnd, Long organization_id) {
 		try {
 
@@ -324,6 +290,10 @@ public class FlvRecordingDao {
 		return f;
 	}
 
+	public void resetProcessingStatus() {
+		em.createNamedQuery("resetRecordingProcessingStatus").setParameter("error", Status.ERROR).setParameter("processing", Status.PROCESSING).executeUpdate();
+	}
+	
 	public RecordingContainerData getRecordingContainerData(long userId) {
 		try {
 			RecordingContainerData containerData = new RecordingContainerData();

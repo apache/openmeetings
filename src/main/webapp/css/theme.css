@@ -439,6 +439,11 @@ div.tableWrapperSmall {
 	background-image: url(images/film_error.png);
 	background-repeat: no-repeat;
 }
+.processing-recording.om-icon {
+	padding-left: 18px;
+	background-image: url(images/film_processing.png);
+	background-repeat: no-repeat;
+}
 .my-recordings.om-icon {
 	padding-left: 18px;
 	background-image: url(images/house_link.png);
