@@ -123,7 +123,7 @@ final class CaptureScreen extends Thread {
 					if (f != null) {
 						try {
 							timestamp += timeBetweenFrames;
-							pushVideo(f, (int)timestamp);
+							pushVideo(f, timestamp);
 							if (log.isTraceEnabled()) {
 								log.trace("Sending video, timestamp: " + timestamp);
 							}
