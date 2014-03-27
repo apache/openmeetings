@@ -45,6 +45,7 @@ import org.apache.openmeetings.db.entity.room.RoomType;
 import org.apache.openmeetings.db.entity.user.Organisation_Users;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.web.app.WebSession;
+import org.apache.openmeetings.web.common.FormatHelper;
 import org.apache.openmeetings.web.pages.MainPage;
 import org.apache.openmeetings.web.user.rooms.RoomEnterBehavior;
 import org.apache.openmeetings.web.util.RoomTypeDropDown;
@@ -53,6 +54,7 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxCheckBox;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.extensions.yui.calendar.DateTimeField;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
@@ -103,12 +105,13 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 		form.setEnabled(object.getOwner() == null || getUserId() == object.getOwner().getUser_id());
 		log.debug(" -- setModelObjectWithAjaxTarget -- Current model " + object);
 		if (object.getId() != null) {
-			delete.setVisible(true, target);
+			delete.setVisible(isOwner(object), target);
 			enterRoom.setVisible(object.getRoom() != null, target);
 		} else {
 			delete.setVisible(false, target);
 			enterRoom.setVisible(false, target);
 		}
+		save.setVisible(isOwner(object), target);
 		super.setModelObject(object);
 	}
 	
@@ -211,12 +214,17 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 		calendar.refresh(target);
 	}
 	
+	private boolean isOwner(Appointment object) {
+		return object.getOwner() != null && getUserId() == object.getOwner().getUser_id();
+	}
+	
 	private class AppointmentForm extends Form<Appointment> {
 		private static final long serialVersionUID = 1L;
 		private boolean createRoom = true;
 		private DateTimeField start;
 		private DateTimeField end;
 		private final PasswordTextField pwd = new PasswordTextField("password");
+		private final Label owner = new Label("owner");
 
 		@Override
 		protected void onModelChanged() {
@@ -255,6 +263,9 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 				}
 			}
 			pwd.setEnabled(a.isPasswordProtected());
+			owner.setOutputMarkupId(true);
+			owner.setDefaultModel(Model.of(FormatHelper.formatUser(a.getOwner(), false)));
+			owner.setVisible(!isOwner(a));
 		}
 		
 		public AppointmentForm(String id, IModel<Appointment> model) {
@@ -312,6 +323,9 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 				}
 			});
 			add(new UserMultiChoice("attendees", attendeesModel));
+				
+			add(owner);
+
 		}
 		
 		private List<AppointmentReminderTyps> getRemindTypes() {
