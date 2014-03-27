@@ -45,9 +45,9 @@ import org.apache.openmeetings.db.entity.room.RoomType;
 import org.apache.openmeetings.db.entity.user.Organisation_Users;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.web.app.WebSession;
-import org.apache.openmeetings.web.common.FormatHelper;
 import org.apache.openmeetings.web.pages.MainPage;
 import org.apache.openmeetings.web.user.rooms.RoomEnterBehavior;
+import org.apache.openmeetings.web.util.FormatHelper;
 import org.apache.openmeetings.web.util.RoomTypeDropDown;
 import org.apache.openmeetings.web.util.UserMultiChoice;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -264,7 +264,7 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 			}
 			pwd.setEnabled(a.isPasswordProtected());
 			owner.setOutputMarkupId(true);
-			owner.setDefaultModel(Model.of(FormatHelper.formatUser(a.getOwner(), false)));
+			owner.setDefaultModel(Model.of(FormatHelper.formatUser(a.getOwner())));
 			owner.setVisible(!isOwner(a));
 		}
 		

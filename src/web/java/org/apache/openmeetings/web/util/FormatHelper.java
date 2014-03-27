@@ -16,18 +16,22 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.web.common;
+package org.apache.openmeetings.web.util;
 
 import static org.apache.commons.lang3.StringEscapeUtils.escapeHtml4;
 
 import org.apache.openmeetings.db.entity.user.User;
 
 public class FormatHelper {
-	
-	// TODO check RIGHTS here (email might need to be hidden)
-	public static String formatUser(User u, boolean isHTMLEscape) {
-			return u == null ? "" : isHTMLEscape ? escapeHtml4(String.format("\"%s %s\" <%s>", u.getFirstname(), u.getLastname(), u.getAdresses().getEmail()))
-											: String.format("\"%s %s\" <%s>", u.getFirstname(), u.getLastname(), u.getAdresses().getEmail());		
+
+	public static String formatUser(User u) {
+		return formatUser(u, false);
 	}
 
+	// TODO check RIGHTS here (email might need to be hidden)
+	public static String formatUser(User u, boolean isHTMLEscape) {
+		String email = u.getAdresses() == null ? "" : u.getAdresses().getEmail();
+		String user = u == null ? "" : String.format("\"%s %s\" <%s>", u.getFirstname(), u.getLastname(), email);
+		return isHTMLEscape ? escapeHtml4(user) : user;
+	}
 }
