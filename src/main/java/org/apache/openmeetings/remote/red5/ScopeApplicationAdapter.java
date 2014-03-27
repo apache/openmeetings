@@ -40,6 +40,7 @@ import org.apache.openmeetings.data.whiteboard.WhiteboardManager;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.calendar.MeetingMemberDao;
 import org.apache.openmeetings.db.dao.log.ConferenceLogDao;
+import org.apache.openmeetings.db.dao.record.FlvRecordingDao;
 import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.dao.server.ISessionManager;
 import org.apache.openmeetings.db.dao.server.ServerDao;
@@ -108,6 +109,8 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 	@Autowired
 	private RoomDao roomDao;
 	@Autowired
+	private FlvRecordingDao recordingDao;
+	@Autowired
 	private MeetingMemberDao meetingMemberDao;
 	@Autowired
 	private ServerDao serverDao;
@@ -127,17 +130,14 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 
 			log.debug("webAppPath : " + OmFileHelper.getOmHome());
 
-			// Only load this Class one time
-			// Initially this value might by empty, because the DB is empty yet
+			// Only load this Class one time Initially this value might by empty, because the DB is empty yet
 			getCryptKey();
 
 			// init your handler here
 
-			// The scheduled Jobs did go into the Spring-Managed Beans, see
-			// schedulerJobs.service.xml
+			// The scheduled Jobs did go into the Spring-Managed Beans, see schedulerJobs.service.xml
 
-			// Spring Definition does not work here, its too early, Instance is
-			// not set yet
+			// Spring Definition does not work here, its too early, Instance is not set yet
 			emoticonsManager.loadEmot();
 
 			for (String scopeName : scope.getScopeNames()) {
@@ -146,6 +146,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 			
 			InitializationContainer.initComplete = true;
 		    Version.logOMStarted();
+		    recordingDao.resetProcessingStatus(); //we are starting so all processing recordings are now errors
 		} catch (Exception err) {
 			log.error("[appStart]", err);
 		}

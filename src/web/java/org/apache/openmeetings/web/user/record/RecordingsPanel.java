@@ -32,6 +32,7 @@ import org.apache.openmeetings.db.dao.record.FlvRecordingDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.dto.file.RecordingContainerData;
 import org.apache.openmeetings.db.entity.record.FlvRecording;
+import org.apache.openmeetings.db.entity.record.FlvRecording.Status;
 import org.apache.openmeetings.db.entity.user.Organisation;
 import org.apache.openmeetings.db.entity.user.Organisation_Users;
 import org.apache.openmeetings.web.app.WebSession;
@@ -256,17 +257,27 @@ public class RecordingsPanel extends UserPanel {
 					}
 				}
 				
-				@Override
-				protected String getOtherStyleClass(FlvRecording t) {
+				private String getRecordingStyle(FlvRecording r, String def) {
 					String style;
-					if (t.getFlvRecordingId() == 0) {
+					if (r.getFlvRecordingId() == 0) {
 						style = "my-recordings om-icon";
-					} else if (t.getFlvRecordingId() < 0) {
+					} else if (r.getFlvRecordingId() < 0) {
 						style = "public-recordings om-icon";
+					} else if (r.isFolder()) {
+						style = def;
+					} else if (isRecordingExists(r.getFileHash() + MP4_EXTENSION)) {
+						style = "recording om-icon";
+					} else if (Status.PROCESSING == r.getStatus()) {
+						style = "processing-recording om-icon";
 					} else {
-						style = t.isFolder() ? super.getOtherStyleClass(t)
-								: (isRecordingExists(t.getFileHash() + MP4_EXTENSION) ? "recording om-icon" : "broken-recording om-icon");
+						style = "broken-recording om-icon";
 					}
+					return style;
+				}
+				
+				@Override
+				protected String getOtherStyleClass(FlvRecording r) {
+					String style = getRecordingStyle(r, super.getOtherStyleClass(r));
 					if (isSelected()) {
 						style += " selected";
 					}
@@ -275,30 +286,12 @@ public class RecordingsPanel extends UserPanel {
 				
 				@Override
 				protected String getOpenStyleClass() {
-					String style;
-					FlvRecording r = getModelObject();
-					if (r.getFlvRecordingId() == 0) {
-						style = "my-recordings om-icon";
-					} else if (r.getFlvRecordingId() < 0) {
-						style = "public-recordings om-icon";
-					} else {
-						style = super.getOpenStyleClass();
-					}
-					return style;
+					return getRecordingStyle(getModelObject(), super.getOpenStyleClass());
 				}
 				
 				@Override
 				protected String getClosedStyleClass() {
-					String style;
-					FlvRecording r = getModelObject();
-					if (r.getFlvRecordingId() == 0) {
-						style = "my-recordings om-icon";
-					} else if (r.getFlvRecordingId() < 0) {
-						style = "public-recordings om-icon";
-					} else {
-						style = super.getClosedStyleClass();
-					}
-					return style;
+					return getRecordingStyle(getModelObject(), super.getClosedStyleClass());
 				}
 				
 				@Override
@@ -341,7 +334,7 @@ public class RecordingsPanel extends UserPanel {
 		
 		public Iterator<? extends FlvRecording> getRoots() {
 			FlvRecording r = new FlvRecording();
-			r.setFlvRecordingId(-1);
+			r.setFlvRecordingId(orgId == null ? -1 : -orgId);
 			r.setOrganization_id(orgId);
 			r.setOwnerId(null);
 			String pub = WebSession.getString(861);

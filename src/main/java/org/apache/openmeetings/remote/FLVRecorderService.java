@@ -85,6 +85,8 @@ public class FLVRecorderService implements IPendingServiceCallback {
 	@Autowired
 	private FlvRecordingLogDao flvRecordingLogDaoImpl;
 	@Autowired
+	private FlvRecordingDao recordingDao;
+	@Autowired
 	private SessiondataDao sessiondataDao;
 	@Autowired
 	private UserManager userManager;
@@ -137,10 +139,29 @@ public class FLVRecorderService implements IPendingServiceCallback {
 
 			Date now = new Date();
 
+			FlvRecording flvRecording = new FlvRecording();
+
+			flvRecording.setFileHash("");
+			flvRecording.setFileName(roomRecordingName);
+			flvRecording.setInsertedBy(currentClient.getUser_id());
+			flvRecording.setFolder(false);
+			flvRecording.setIsImage(false);
+			flvRecording.setIsPresentation(false);
+			flvRecording.setIsRecording(true);
+			flvRecording.setComment(comment);
+			flvRecording.setIsInterview(isInterview);
+
+			flvRecording.setRoom_id(room_id);
+			flvRecording.setRecordStart(now);
+
+			flvRecording.setWidth(currentClient.getVWidth());
+			flvRecording.setHeight(currentClient.getVHeight());
+
+			flvRecording.setOwnerId(currentClient.getUser_id());
+			flvRecording.setStatus(FlvRecording.Status.PROCESSING);
+			flvRecording = recordingDao.update(flvRecording);
 			// Receive flvRecordingId
-			Long flvRecordingId = flvRecordingDaoImpl.addFlvRecording("", roomRecordingName,
-					currentClient.getUser_id(), room_id, now, null, currentClient.getUser_id(), comment,
-					currentClient.getStreamid(), currentClient.getVWidth(), currentClient.getVHeight(), isInterview);
+			Long flvRecordingId = flvRecording.getFlvRecordingId();
 
 			// Update Client and set Flag
 			currentClient.setIsRecording(true);

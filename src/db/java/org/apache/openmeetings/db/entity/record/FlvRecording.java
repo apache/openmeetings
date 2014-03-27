@@ -25,6 +25,8 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -74,12 +76,19 @@ import org.simpleframework.xml.Root;
 	, @NamedQuery(name = "getRecordingsByOwner", query = "SELECT f FROM FlvRecording f WHERE f.deleted = false AND f.ownerId = :ownerId "
 			+ "AND (f.parentFileExplorerItemId IS NULL OR f.parentFileExplorerItemId = 0) "
 			+ "ORDER BY f.folder DESC, f.fileName ")
+	, @NamedQuery(name = "resetRecordingProcessingStatus", query = "UPDATE FlvRecording f SET f.status = :error WHERE f.status = :processing")
 })
 @Table(name = "flvrecording")
 @Root(name = "flvrecording")
 public class FlvRecording implements Serializable {
 	private static final long serialVersionUID = -2234874663310617072L;
-
+	
+	public enum Status {
+		NONE
+		, PROCESSING
+		, PROCESSED
+		, ERROR
+	}
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
@@ -201,6 +210,11 @@ public class FlvRecording implements Serializable {
 	@ElementList(name = "flvrecordingmetadatas", required = false)
 	private List<FlvRecordingMetaData> flvRecordingMetaData;
 
+	@Column(name = "status")
+	@Enumerated(value = EnumType.STRING)
+	@Element(data = true, required = false)
+	private Status status = Status.NONE;
+	
 	// Not Mapped
 	@Transient
 	private User creator;
@@ -466,6 +480,14 @@ public class FlvRecording implements Serializable {
 
 	public void setProgressPostProcessing(Integer progressPostProcessing) {
 		this.progressPostProcessing = progressPostProcessing;
+	}
+
+	public Status getStatus() {
+		return status;
+	}
+
+	public void setStatus(Status status) {
+		this.status = status;
 	}
 
 }
