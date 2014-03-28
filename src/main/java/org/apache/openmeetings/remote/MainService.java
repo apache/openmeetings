@@ -21,6 +21,7 @@ package org.apache.openmeetings.remote;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_MAX_UPLOAD_SIZE_KEY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_REDIRECT_URL_FOR_EXTERNAL_KEY;
 
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -44,7 +45,6 @@ import org.apache.openmeetings.db.entity.room.Client;
 import org.apache.openmeetings.db.entity.server.RemoteSessionObject;
 import org.apache.openmeetings.db.entity.server.SOAPLogin;
 import org.apache.openmeetings.db.entity.server.Sessiondata;
-import org.apache.openmeetings.db.entity.user.State;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.Userdata;
 import org.apache.openmeetings.ldap.LdapLoginManagement;
@@ -61,8 +61,6 @@ import org.red5.server.api.service.IPendingServiceCall;
 import org.red5.server.api.service.IPendingServiceCallback;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import edu.emory.mathcs.backport.java.util.Arrays;
 
 /**
  * 
@@ -447,18 +445,9 @@ public class MainService implements IPendingServiceCallback {
 		return -1L;
 	}
 
-	/**
-	 * get a list of all states, needs no authentication to load
-	 * 
-	 * @return List of State-Objects or null
-	 */
-	public List<State> getStates() {
-		return statemanagement.getStates();
-	}
-
-	@SuppressWarnings("unchecked")
-	public List<String> getTimeZones() {
-		return Arrays.asList(TimeZone.getAvailableIDs());
+	public String[] getTimeZones(int start, int count) {
+		String all[] = TimeZone.getAvailableIDs();
+		return Arrays.copyOfRange(all, start, Math.min(start + count, all.length));
 	}
 
 	public List<Configuration> getGeneralOptions(String SID) {

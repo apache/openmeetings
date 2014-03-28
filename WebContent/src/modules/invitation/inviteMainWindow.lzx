@@ -32,14 +32,36 @@
 		<attribute name="baseUrl" value="http://www.denic.de" type="string" />
 		<attribute name="currentHash" value="" type="string" />
 		<attribute name="display" value="false" type="boolean" />
+		<attribute name="addTimezoneItemsDelegate" value="null"/>
     	
 		<handler name="oninit">
 		<![CDATA[
     		this.setAttribute('visibility', 'hidden');
 			this.baseUrl = canvas.getAppBaseUrl();
 			if( $debug ) Debug.write("this.baseUrl: ", this.baseUrl);
+			if (addTimezoneItemsDelegate == null) {
+				addTimezoneItemsDelegate = new LzDelegate(this, "addTimezoneItems");
+				lz.Timer.addTimer(addTimezoneItemsDelegate, 2000);
+			}
 		]]>
 		</handler>
+		
+		<method name="addTimezoneItems" args="ignore=null">
+		<![CDATA[
+			var itemCount = _timeZone.cblist.getNumItems();
+			if ( itemCount < canvas.timeZones.length) {
+				for (var i = itemCount; i < Math.min(itemCount + 30, canvas.timeZones.length); ++i) {
+					_timeZone.addItem(canvas.timeZones[i], canvas.timeZones[i]);
+				}
+			} else {
+				lz.Timer.removeTimer(addTimezoneItemsDelegate);
+				addTimezoneItemsDelegate = null;
+			}
+			if ($debug) Debug.write(":: addTimezoneItems :: ", itemCount);
+			lz.Timer.resetTimer(addTimezoneItemsDelegate, 500);
+		]]>
+		</method>
+
         <handler name="onvisible" args="v">
     	<![CDATA[
     		if (v) {
@@ -131,12 +153,10 @@
 		<customEdittext name="_timeTo" enabled="${ ((parent._valid.value==2) ? true : false ) }"
 						width="50" x="232" y="314" text="$once{ getStringTime() }" regexpType="time" />				   
 
-        <labelText labelid="1143" width="200" y="344" fgcolor="${ ((parent._valid.value==2) ? 0x000000 : 0xCCCCCC ) }"  x="4" />
-        <resetCombobox name="_timeZone" editable="false" y="344" width="270" x="120"
-         			   enabled="${ ((parent._valid.value==2) ? true : false ) }"
-         			   fontsize="11" style="componentStyle">
-            <labeldTextListItem datapath="timeZoneSet:/item" text="$path{ 'text()' }" value="$path{ 'text()' }"/>
-        </resetCombobox>
+		<labelText labelid="1143" width="200" y="344" fgcolor="${ ((parent._valid.value==2) ? 0x000000 : 0xCCCCCC ) }"  x="4" />
+		<resetCombobox name="_timeZone" editable="false" y="344" width="270" x="120"
+				enabled="${ ((parent._valid.value==2) ? true : false ) }"
+				fontsize="11" style="componentStyle"/>
          
 		<labelText labelid="59" width="200" y="374" x="4" />
         <resetCombobox name="_languages" editable="false" y="374" width="270" x="120"
