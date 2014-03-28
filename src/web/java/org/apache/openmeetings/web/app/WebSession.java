@@ -295,8 +295,26 @@ public class WebSession extends AbstractAuthenticatedWebSession {
 		return getBean(FieldLanguageDao.class).getFieldLanguageById(getLanguage());
 	}
 	
+	public String getValidatedSid() {
+		SessiondataDao sessionDao = getBean(SessiondataDao.class);
+		Long _userId = sessionDao.checkSession(SID);
+		if (_userId == null || userId != _userId) {
+			Sessiondata sessionData = sessionDao.getSessionByHash(SID);
+			if (sessionData == null) {
+				sessionData = sessionDao.startsession();
+			}
+			if (!sessionDao.updateUser(sessionData.getSession_id(), userId, false, languageId)) {
+				//something bad, force user to re-login
+				invalidate();
+			} else {
+				SID = sessionData.getSession_id();
+			}
+		}
+		return SID;
+	}
+	
 	public static String getSid() {
-		return get().SID;
+		return get().getValidatedSid();
 	}
 
 	public static long getUserId() {

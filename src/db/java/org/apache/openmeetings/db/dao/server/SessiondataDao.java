@@ -190,8 +190,7 @@ public class SessiondataDao {
 		return null;
 	}
 
-	public Boolean updateUser(String SID, long USER_ID, boolean storePermanent,
-			Long language_id) {
+	public boolean updateUser(String SID, long USER_ID, boolean storePermanent, Long language_id) {
 		try {
 			log.debug("updateUser User: " + USER_ID + " || " + SID);
 			TypedQuery<Sessiondata> query = em.createNamedQuery("getSessionById", Sessiondata.class);
@@ -208,8 +207,7 @@ public class SessiondataDao {
 				log.error("Could not find session to Update");
 				return false;
 			}
-			log.debug("Found session to update: " + sessiondata.getSession_id()
-					+ " userId: " + USER_ID);
+			log.debug("Found session to update: " + sessiondata.getSession_id() + " userId: " + USER_ID);
 
 			sessiondata.setRefresh_time(new Date());
 			sessiondata.setUser_id(USER_ID);
@@ -230,7 +228,7 @@ public class SessiondataDao {
 		} catch (Exception ex2) {
 			log.error("[updateUser]: ", ex2);
 		}
-		return null;
+		return false;
 	}
 
 	public Boolean updateUserOrg(String SID, Long organization_id) {
