@@ -21,7 +21,7 @@ package org.apache.openmeetings.converter;
 import static org.apache.openmeetings.util.OmFileHelper.bigImagePrefix;
 import static org.apache.openmeetings.util.OmFileHelper.chatImagePrefix;
 import static org.apache.openmeetings.util.OmFileHelper.getUploadProfilesUserDir;
-import static org.apache.openmeetings.util.OmFileHelper.profileFileExt;
+import static org.apache.openmeetings.util.OmFileHelper.JPG_EXTENTION;
 import static org.apache.openmeetings.util.OmFileHelper.profileFileName;
 import static org.apache.openmeetings.util.OmFileHelper.profileImagePrefix;
 import static org.apache.openmeetings.util.OmFileHelper.thumbImagePrefix;
@@ -81,13 +81,13 @@ public class GenerateImage extends BaseConverter {
 		// User Profile Update
 		for (File f : getUploadProfilesUserDir(users_id).listFiles(new FileFilter() {
 			public boolean accept(File pathname) {
-				return pathname.getName().endsWith(profileFileExt);
+				return pathname.getName().endsWith(JPG_EXTENTION);
 			}
 		})) {
 			FileHelper.removeRec(f);
 		}
 		
-		File destinationFile = OmFileHelper.getNewFile(getUploadProfilesUserDir(users_id), profileFileName, profileFileExt);
+		File destinationFile = OmFileHelper.getNewFile(getUploadProfilesUserDir(users_id), profileFileName, JPG_EXTENTION);
 		if (!skipConvertion) {
 			returnMap.addItem("processJPG", convertSingleJpg(file.getCanonicalPath(), destinationFile));
 		} else {

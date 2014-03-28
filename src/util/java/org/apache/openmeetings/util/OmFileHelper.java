@@ -65,7 +65,6 @@ public class OmFileHelper {
 	public static final String libraryFileName = "library.xml";
 	public static final String defaultProfileImageName = "profile_pic.jpg";
 	public static final String profileFileName = "profile";
-	public static final String profileFileExt = ".jpg";
 	public static final String profileImagePrefix = "_profile_";
 	public static final String chatImagePrefix = "_chat_";
 	public static final String bigImagePrefix = "_big_";
@@ -73,6 +72,7 @@ public class OmFileHelper {
 	public static final String dashboardFile = "dashboard.xml";
 	public static final String MP4_EXTENSION = ".mp4";
 	public static final String OGG_EXTENSION = ".ogg";
+	public static final String JPG_EXTENTION = ".jpg";
 
 	public static void setOmHome(File omHome) {
 		OmFileHelper.OM_HOME = omHome;

@@ -42,8 +42,8 @@ public class VideoPlayer extends Panel {
 	private final WebMarkupContainer container = new WebMarkupContainer("container");
 	private final Mp4RecordingResourceReference mp4res = new Mp4RecordingResourceReference();
 	private final OggRecordingResourceReference oggres = new OggRecordingResourceReference();
-	private final WebMarkupContainer player;
 	private final IModel<List<MediaSource>> playerModel = new ListModel<MediaSource>(new ArrayList<MediaSource>());
+	private final OmHtml5Video player = new OmHtml5Video("player", playerModel, null);
 
 	public VideoPlayer(String id) {
 		this(id, null);
@@ -52,19 +52,6 @@ public class VideoPlayer extends Panel {
 	public VideoPlayer(String id, FlvRecording r) {
 		super(id);
 		add(container.setOutputMarkupPlaceholderTag(true));
-		player = new Html5Video("player", playerModel) {
-			private static final long serialVersionUID = -6058309447222765121L;
-
-			@Override
-			protected boolean isAutoPlay() {
-				return false;
-			}
-			
-			@Override
-			protected boolean isControls() {
-				return true;
-			}
-		};
 		container.add(wait.setVisible(false), player);
 		update(null, r);
 	}
@@ -76,6 +63,7 @@ public class VideoPlayer extends Panel {
 			playerModel.setObject(Arrays.asList(
 					new MediaSource("" + getRequestCycle().urlFor(mp4res, pp), "video/mp4")
 					, new MediaSource("" + getRequestCycle().urlFor(oggres, pp), "video/ogg")));
+			player.recId = r.getFlvRecordingId();
 		}
 		container.setVisible(videoExists);
 		if (target != null) {
@@ -83,5 +71,30 @@ public class VideoPlayer extends Panel {
 		}
 		
 		return this;
+	}
+	
+	private static class OmHtml5Video extends Html5Video {
+		private static final long serialVersionUID = 1L;
+		Long recId = null;
+		
+		OmHtml5Video(String id, IModel<List<MediaSource>> model, Long recId) {
+			super(id, model);
+			this.recId = recId;
+		}
+		
+		@Override
+		protected boolean isAutoPlay() {
+			return false;
+		}
+		
+		@Override
+		protected boolean isControls() {
+			return true;
+		}
+		
+		@Override
+		protected String getPoster() {
+			return recId == null ? null : "recordings/jpg/" + recId;
+		}
 	}
 }
