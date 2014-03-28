@@ -276,6 +276,7 @@ the LAST RoomClient Object that has been changed the giveExclusiveAudio status
 <attribute name="firstName" value="" type="string" />
 <attribute name="timeZoneId" value="0" type="number" />
 <attribute name="jNameTimeZone" value="" type="string" />
+<attribute name="timeZones" type="object" />
 <attribute name="lastName" value="" type="string" />
 <attribute name="mail" value="" type="string" />
 <attribute name="lastLogin" value="" type="string" />

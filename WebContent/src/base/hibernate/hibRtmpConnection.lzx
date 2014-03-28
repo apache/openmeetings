@@ -24,9 +24,6 @@
 
 <dataset name="languagesSet" />        
 
-<dataset name="countrySet" />
-<dataset name="timeZoneSet" />
-
 <class name="userStatus" extends="view" width="250" height="30">
     <attribute name="statusText" type="string" />
     <attribute name="statusColor" type="number" value="0" />
@@ -627,19 +624,47 @@
                         if($debug) Debug.write("getRoomTypes");
                         parent.getRoomTypes.doCall();
                     } else {
-                    	if($debug) Debug.write("getStates");
-                        parent.initlanguageLoaded=true;
-                        parent.getStates.doCall(); // this is very long call let it be async
-                    	if($debug) Debug.write("getTimeZones");
-			            parent.getTimeZones.doCall(); // this is very long call let it be async
-                    	if($debug) Debug.write("getGeneralOptions");
-			            parent.getGeneralOptions.doCall();
+						parent.initlanguageLoaded=true;
+						if($debug) Debug.write("getGeneralOptions");
+						parent.getGeneralOptions.doCall();
+						if($debug) Debug.write("getTimeZones");
+						parent.getTimeZones.doCall(); // this is very long call let it be async
                     }
                 }
             ]]>
         </handler>  
     </netRemoteCallHib>
         
+	<netRemoteCallHib name="getTimeZones" funcname="xmlcrm.getTimeZones">
+		<attribute name="start" value="0" type="number" />
+		<attribute name="step" value="100" type="number" />
+		<netparam><method name="getValue">return parent.start;</method></netparam>
+		<netparam><method name="getValue">return parent.step;</method></netparam>
+		<handler name="ondata" args="value">
+		<![CDATA[
+			//The onResult-Handler will be called be the rtmpconnection
+			if ($debug) Debug.write("getTimeZones count: ", value.length);
+			if (canvas.thishib.loaderVar != null) {
+				canvas.thishib.loaderVar.setProgress();
+			}
+			if (start == 0) {
+				canvas.timeZones = new Array();
+			}
+			for (var i = 0; i < value.length; ++i) {
+				canvas.timeZones.push(value[i]);
+			}
+			if (value.length < step) {
+				//if($debug) Debug.write("canvas.timeZones == ", canvas.timeZones);
+				canvas.inviteMainWindow = new lz.inviteMainWindow(canvas);
+				if($debug) Debug.write("create invitationWindow: ",canvas.inviteMainWindow);
+			} else {
+				start += step;
+				doCall();
+			}
+		]]>
+		</handler>
+	</netRemoteCallHib>
+
     <!--
         There must be a temporary SIP-Account created at this moment
      -->  
@@ -691,29 +716,6 @@
         </handler>  
     </netRemoteCallHib> 
     
-    <netRemoteCallHib name="getStates" funcname="xmlcrm.getStates" dataobject="countrySet">
-        <handler name="ondata" args="value">
-            //The onResult-Handler will be called be the rtmpconnection
-            if ($debug) Debug.write("getStates: ",value);
-            canvas.statesInitValues = value;
-			if (canvas.thishib.loaderVar != null) {
-            	canvas.thishib.loaderVar.setProgress();
-            }
-        </handler>  
-    </netRemoteCallHib>  
-    
-    <netRemoteCallHib name="getTimeZones" funcname="xmlcrm.getTimeZones" dataobject="timeZoneSet">
-        <handler name="ondata" args="value">
-			//The onResult-Handler will be called be the rtmpconnection
-			if ($debug) Debug.write("getTimeZones: ",value);
-			if (canvas.thishib.loaderVar != null) {
-				canvas.thishib.loaderVar.setProgress();
-			}
-			canvas.inviteMainWindow = new lz.inviteMainWindow(canvas);
-			if($debug) Debug.write("create invitationWindow: ",canvas.inviteMainWindow);
-        </handler>
-    </netRemoteCallHib>
-
 	<netRemoteCallHib name="getGeneralOptions" funcname="xmlcrm.getGeneralOptions">
 		<handler name="ondata" args="value">
 		<![CDATA[
@@ -722,23 +724,23 @@
 			}
 			if ($debug) Debug.write("getGeneralOptions: ", value.length, value);
 			if (value != null) {
-				if (value.length > 0) {
+				if (value.length > 0 && value[0] != null) {
 					//if ($debug) Debug.write("Give exclusive audio keycode is: ", value[0].conf_value);
 					canvas.setAttribute('GIVE_EXCLUSIVE_AUDIO_KEY', value[0].conf_value);
 				}
-				if (value.length > 1) {
+				if (value.length > 1 && value[1] != null) {
 					if ($debug) Debug.write("red5sip.enable is: ", value[1].conf_value);
 					canvas.setAttribute('RED5_SIP_ENABLE', value[1].conf_value);
 				}
-				if (value.length > 2) {
+				if (value.length > 2 && value[2] != null) {
 					if ($debug) Debug.write("max_upload_size is: ", value[2].conf_value);
 					canvas.setAttribute('MAX_UPLOAD_SIZE', value[2].conf_value);
 				}
-				if (value.length > 3) {
+				if (value.length > 3 && value[3] != null) {
 					if ($debug) Debug.write("Mute/unmute keycode is: ", value[3].conf_value);
 					canvas.setAttribute('MUTE_AUDIO_KEY', value[3].conf_value);
 				}
-				if (value.length > 4) {
+				if (value.length > 4 && value[4] != null) {
 					if ($debug) Debug.write("redirect.url.for.external.users is: ", value[4].conf_value);
 					canvas.setAttribute('REDIRECT_URL_FOR_EXTERNAL_USERS', value[4].conf_value);
 				}

@@ -67,22 +67,11 @@
 					this.doCall();
 	            } else {
             		parent.setProgress();
-            		parent.getStates.doCall();
+		            parent.getTimeZones.doCall();
 				}
 			]]>
         </handler>  
     </netRemoteCallHib>	 
-    
-    <netRemoteCallHib name="getStates" funcname="xmlcrm.getStates" 
-		remotecontext="$once{ canvas.thishib }" dataobject="countrySet"> 
-        <handler name="ondata" args="value">
-            //The onResult-Handler will be called be the rtmpconnection
-            if ($debug) Debug.write("getStates: ",value);
-            canvas.statesInitValues = value;
-            parent.setProgress();
-            parent.getTimeZones.doCall();
-        </handler>  
-    </netRemoteCallHib>   
     
     <netRemoteCallHib name="getTimeZones" funcname="xmlcrm.getTimeZones" 
 		  remotecontext="$once{ canvas.thishib }" dataobject="timeZoneSet">

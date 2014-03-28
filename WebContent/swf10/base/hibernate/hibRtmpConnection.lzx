@@ -24,9 +24,6 @@
 
 <dataset name="languagesSet" />        
 
-<dataset name="countrySet" />
-<dataset name="timeZoneSet" />
-
 <class name="userStatus" extends="view" width="250" height="30">
     <attribute name="statusText" type="string" />
     <attribute name="statusColor" type="number" value="0" />
