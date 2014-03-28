@@ -149,53 +149,6 @@ public class UserWebServiceFacade extends BaseWebService {
 				externalUserId, externalUserType);
 	}
 
-	/**
-	 * 
-	 * @param SID
-	 * @param firstname
-	 * @param lastname
-	 * @param profilePictureUrl
-	 * @param email
-	 * @return
-	 * @throws AxisFault
-	 */
-	@Deprecated
-	public Long setUserObject(String SID, String username, String firstname,
-			String lastname, String profilePictureUrl, String email)
-			throws AxisFault {
-		return getBean(UserWebService.class).setUserObject(SID, username, firstname,
-				lastname, profilePictureUrl, email);
-	}
-
-	/**
-	 * This is the advanced technique to set the User Object + simulate a User
-	 * from the external system, this is needed cause you can that always
-	 * simulate to same user in openmeetings
-	 * 
-	 * @param SID
-	 * @param username
-	 * @param firstname
-	 * @param lastname
-	 * @param profilePictureUrl
-	 * @param email
-	 * @param externalUserId
-	 *            the User Id of the external System
-	 * @param externalUserType
-	 *            the Name of the external system, for example you can run
-	 *            several external system and one meeting server
-	 * @return
-	 * @throws AxisFault
-	 */
-	@Deprecated
-	public Long setUserObjectWithExternalUser(String SID, String username,
-			String firstname, String lastname, String profilePictureUrl,
-			String email, String externalUserId, String externalUserType)
-			throws AxisFault {
-		return getBean(UserWebService.class).setUserObjectWithExternalUser(SID,
-				username, firstname, lastname, profilePictureUrl, email,
-				externalUserId, externalUserType);
-	}
-
 	public String setUserObjectAndGenerateRoomHash(String SID, String username,
 			String firstname, String lastname, String profilePictureUrl,
 			String email, String externalUserId, String externalUserType,
