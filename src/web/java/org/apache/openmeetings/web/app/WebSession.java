@@ -55,7 +55,6 @@ import org.apache.openmeetings.db.entity.server.SOAPLogin;
 import org.apache.openmeetings.db.entity.server.Sessiondata;
 import org.apache.openmeetings.db.entity.user.State;
 import org.apache.openmeetings.db.entity.user.User;
-import org.apache.openmeetings.db.entity.user.User.Type;
 import org.apache.openmeetings.db.util.TimezoneUtil;
 import org.apache.openmeetings.web.pages.SwfPage;
 import org.apache.openmeetings.web.user.dashboard.PrivateRoomsWidgetDescriptor;
@@ -249,10 +248,12 @@ public class WebSession extends AbstractAuthenticatedWebSession {
 		
 		if (_u instanceof User) {
 			User u = (User)_u;
+			/* we will allow login in case user 'guess' the password
 			if (!checkAdminLevel(u.getLevel_id()) && Type.ldap == u.getType() && Strings.isEmpty(ldapConfigFileName)) {
 				//user is LDAP and is not admin, then authentication should be done on the LDAP server (even if the LDAP server is down)
 				return false;
 			}
+			*/
 			setUser(u);
 			return true;
 		} else if (_u instanceof Long) {
