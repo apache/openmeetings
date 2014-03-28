@@ -45,7 +45,7 @@
 ## This is where the macro's live
 
 #macro ( feature $feature)
-	<h3>$feature.getAttribute("title").getValue()</h3>
+	<h3>$feature.getAttributeValue("title")</h3>
 	<table border="0">
 		<tbody>
 			<tr>
@@ -53,9 +53,9 @@
 					#foreach ( $items in $feature.getChildren() )
 						#if ($items.getName().equals("image"))
 							<p>
-							<a class="group1 fancybox-buttons" href="$items.getAttribute("fullhref").getValue()">
-								<img src="$items.getAttribute("href").getValue()" alt="" width="$items.getAttribute("width").getValue()" 
-									#if ($items.hasAttribute("height")) height="$items.getAttribute("height").getValue()" #end />
+							<a class="group1 fancybox-buttons" href="$items.getAttributeValue("fullhref")">
+								<img src="$items.getAttributeValue("href")" alt="" width="$items.getAttributeValue("width")"
+									#if ($items.getAttributeValue("height")) height="$items.getAttributeValue("height")" #end />
 							</a>
 						#end
 					#end
