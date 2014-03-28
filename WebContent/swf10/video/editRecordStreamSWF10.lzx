@@ -521,7 +521,7 @@
 		
 		//fill list of Mics
 		var mics = Microphone.names;
-		var foundStoredMic = fillDeviceList(cameras, availableMics, "mic");
+		var foundStoredMic = fillDeviceList(mics, availableMics, "mic");
 		selectListItem(availableMics, foundStoredMic, mics.length > 0);
 
 		// settings
