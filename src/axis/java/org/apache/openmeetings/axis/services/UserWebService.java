@@ -234,7 +234,7 @@ public class UserWebService {
 				return new Long(-26);
 			}
 		} catch (Exception err) {
-			log.error("setUserObject", err);
+			log.error("addNewUser", err);
 			throw new AxisFault(err.getMessage());
 		}
 	}
@@ -321,7 +321,7 @@ public class UserWebService {
 				return new Long(-26);
 			}
 		} catch (Exception err) {
-			log.error("setUserObject", err);
+			log.error("addNewUserWithTimeZone", err);
 			throw new AxisFault(err.getMessage());
 		}
 	}
@@ -493,122 +493,7 @@ public class UserWebService {
 			}
 
 		} catch (Exception err) {
-			log.error("deleteUserById", err);
-			throw new AxisFault(err.getMessage());
-		}
-	}
-
-	/**
-	 * deprecated use setUserObjectAndGenerateRoomHash
-	 * 
-	 * Description: sets the SessionObject for a certain SID, after setting this
-	 * Session-Object you can use the SID + a RoomId to enter any Room.
-	 * 
-	 * @param SID
-	 *            The SID from getSession
-	 * @param username
-	 *            any username
-	 * @param firstname
-	 *            any firstname
-	 * @param lastname
-	 *            any lastname
-	 * @param profilePictureUrl
-	 *            any profilePictureUrl
-	 * @param email
-	 *            any email
-	 *            
-	 * @return - 1 in case of success, -1 otherwise
-	 * @throws AxisFault
-	 */
-	@Deprecated
-	public Long setUserObject(String SID, String username, String firstname,
-			String lastname, String profilePictureUrl, String email)
-			throws AxisFault {
-		log.debug("UserService.setUserObject");
-
-		try {
-			Long users_id = sessiondataDao.checkSession(SID);
-			Long user_level = userManagement.getUserLevelByID(users_id);
-			if (AuthLevelUtil.checkWebServiceLevel(user_level)) {
-
-				RemoteSessionObject remoteSessionObject = new RemoteSessionObject(
-						username, firstname, lastname, profilePictureUrl, email);
-
-				log.debug(remoteSessionObject.toString());
-
-				String xmlString = remoteSessionObject.toXml();
-
-				log.debug("xmlString " + xmlString);
-
-				sessiondataDao.updateUserRemoteSession(SID, xmlString);
-
-				return new Long(1);
-			} else {
-				return new Long(-26);
-			}
-		} catch (Exception err) {
-			log.error("setUserObject", err);
-			throw new AxisFault(err.getMessage());
-		}
-		// return new Long(-1);
-	}
-
-	/**
-	 * deprecated use setUserObjectAndGenerateRoomHash
-	 * 
-	 * Description: sets the SessionObject for a certain SID, after setting this
-	 * Session-Object you can use the SID + a RoomId to enter any Room.
-	 * 
-	 * @param SID
-	 *            The SID from getSession
-	 * @param username
-	 *            any username
-	 * @param firstname
-	 *            any firstname
-	 * @param lastname
-	 *            any lastname
-	 * @param profilePictureUrl
-	 *            any profilePictureUrl
-	 * @param email
-	 *            any email
-	 * @param externalUserId
-	 *            if you have any external user Id you may set it here
-	 * @param externalUserType
-	 *            you can specify your system-name here, for example "moodle"
-	 *            
-	 * @return - 1 in case of success, -1 otherwise
-	 * @throws AxisFault
-	 */
-	@Deprecated
-	public Long setUserObjectWithExternalUser(String SID, String username,
-			String firstname, String lastname, String profilePictureUrl,
-			String email, String externalUserId, String externalUserType)
-			throws AxisFault {
-		log.debug("UserService.setUserObject");
-
-		try {
-			Long users_id = sessiondataDao.checkSession(SID);
-			Long user_level = userManagement.getUserLevelByID(users_id);
-			if (AuthLevelUtil.checkWebServiceLevel(user_level)) {
-
-				RemoteSessionObject remoteSessionObject = new RemoteSessionObject(
-						username, firstname, lastname, profilePictureUrl,
-						email, externalUserId, externalUserType);
-
-				log.debug(remoteSessionObject.toString());
-
-				String xmlString = remoteSessionObject.toXml();
-
-				log.debug("xmlString " + xmlString);
-
-				sessiondataDao.updateUserRemoteSession(SID, xmlString);
-
-				return new Long(1);
-			} else {
-				return new Long(-26);
-			}
-		} catch (Exception err) {
-			log.error("setUserObjectWithExternalUser", err);
+			log.error("deleteUserByExternalUserIdAndType", err);
 			throw new AxisFault(err.getMessage());
 		}
 	}
@@ -739,9 +624,9 @@ public class UserWebService {
 			String username, String firstname, String lastname,
 			String profilePictureUrl, String email, String externalUserId,
 			String externalUserType, Long room_id, int becomeModeratorAsInt,
-			int showAudioVideoTestAsInt) {
-		log.debug("UserService.setUserObject");
+			int showAudioVideoTestAsInt) throws AxisFault {
 
+		log.debug("UserService.setUserObjectAndGenerateRoomHashByURL");
 		try {
 			Long users_id = sessiondataDao.checkSession(SID);
 			Long user_level = userManagement.getUserLevelByID(users_id);
@@ -785,7 +670,8 @@ public class UserWebService {
 				return "" + new Long(-26);
 			}
 		} catch (Exception err) {
-			log.error("setUserObjectWithAndGenerateRoomHash", err);
+			log.error("setUserObjectAndGenerateRoomHashByURL", err);
+			throw new AxisFault(err.getMessage());
 		}
 		return "" + new Long(-1);
 	}
