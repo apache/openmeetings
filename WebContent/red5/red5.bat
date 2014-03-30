@@ -28,7 +28,7 @@ set LOGGING_OPTS=-Dlogback.ContextSelector=org.red5.logging.LoggingContextSelect
 REM Set up security options
 REM set SECURITY_OPTS= -Djava.security.debug=failure -Djava.security.manager -Djava.security.policy="%RED5_HOME%/conf/red5.policy"
 set SECURITY_OPTS=-Djava.security.debug=failure
-IF [%JAVA_OPTS%] == [] (
+IF ["a%JAVA_OPTS%"] == ["a"] (
 	set JAVA_OPTS=-XX:PermSize=192m -XX:MaxPermSize=512m -XX:+CMSClassUnloadingEnabled
 )
 set JAVA_OPTS=%LOGGING_OPTS% %SECURITY_OPTS% %JAVA_OPTS%
