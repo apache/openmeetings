@@ -275,7 +275,7 @@ public class MessagesContactsPanel extends UserPanel {
 
 			@Override
 			protected void onEvent(AjaxRequestTarget target) {
-				newMessage.reset(false).open(target);
+				newMessage.reset(true).open(target);
 			}
 		}).add(new JQueryBehavior(".email.new", "button")));
 		folders.add(inbox.add(new AjaxEventBehavior("click") {
