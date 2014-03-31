@@ -32,14 +32,13 @@ public class LinkHelper {
 		}
 		if (i.getInvitee().getType() == Type.contact) {
 			link += "?invitationHash=" + i.getHash();
-
-            if (i.getInvitee().getLanguage_id() > 0) {
-                link += "&language=" + i.getInvitee().getLanguage_id().toString();
-            }
+	
+			if (i.getInvitee().getLanguage_id() > 0) {
+				link += "&language=" + i.getInvitee().getLanguage_id().toString();
+			}
 		} else {
 			link = getRoomUrlFragment(i.getRoom().getRooms_id()).getLink(i.getBaseUrl());
 		}
 		return link;
 	}
-
 }
