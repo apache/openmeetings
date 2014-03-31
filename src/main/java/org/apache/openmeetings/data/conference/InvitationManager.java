@@ -19,7 +19,6 @@
 package org.apache.openmeetings.data.conference;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
-import static org.apache.openmeetings.web.user.rooms.RoomEnterBehavior.getRoomUrlFragment;
 
 import java.security.NoSuchAlgorithmException;
 import java.util.Calendar;
@@ -43,6 +42,7 @@ import org.apache.openmeetings.db.util.TimezoneUtil;
 import org.apache.openmeetings.mail.MailHandler;
 import org.apache.openmeetings.mail.SMSHandler;
 import org.apache.openmeetings.util.CalendarPatterns;
+import org.apache.openmeetings.util.LinkHelper;
 import org.apache.openmeetings.util.crypt.MD5;
 import org.apache.openmeetings.util.crypt.ManageCryptStyle;
 import org.apache.openmeetings.util.mail.IcalHandler;
@@ -345,16 +345,7 @@ public class InvitationManager implements IInvitationManager {
 	}
 	
 	public void sendInvitionLink(Invitation i, MessageType type, String subject, String message, boolean ical) throws Exception {
-		String invitation_link = i.getBaseUrl();
-		if (i.getInvitee().getType() == Type.contact) {
-			invitation_link += "?invitationHash=" + i.getHash();
-
-            if (i.getInvitee().getLanguage_id() > 0) {
-                invitation_link += "&language=" + i.getInvitee().getLanguage_id().toString();
-            }
-		} else {
-			invitation_link = getRoomUrlFragment(i.getRoom().getRooms_id()).getLink(i.getBaseUrl());
-		}
+		String invitation_link = LinkHelper.getInvitationLink(i);
 		User owner = i.getInvitedBy();
 		
 		String invitorName = owner.getFirstname() + " " + owner.getLastname();

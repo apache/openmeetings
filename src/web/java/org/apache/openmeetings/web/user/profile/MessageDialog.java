@@ -21,6 +21,7 @@ package org.apache.openmeetings.web.user.profile;
 import static org.apache.openmeetings.db.entity.user.PrivateMessage.INBOX_FOLDER_ID;
 import static org.apache.openmeetings.db.entity.user.PrivateMessage.SENT_FOLDER_ID;
 import static org.apache.openmeetings.web.app.Application.getBean;
+import static org.apache.openmeetings.web.app.WebSession.getBaseUrl;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import static org.apache.openmeetings.web.util.RoomTypeDropDown.getRoomTypes;
 
@@ -30,13 +31,18 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.openmeetings.data.conference.InvitationManager;
 import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.dao.user.PrivateMessagesDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
+import org.apache.openmeetings.db.entity.room.Invitation;
+import org.apache.openmeetings.db.entity.room.Invitation.Valid;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.user.PrivateMessage;
 import org.apache.openmeetings.db.entity.user.User;
+import org.apache.openmeetings.db.entity.user.User.Type;
 import org.apache.openmeetings.mail.MailHandler;
+import org.apache.openmeetings.util.LinkHelper;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.util.ContactsHelper;
 import org.apache.openmeetings.web.util.RoomTypeDropDown;
@@ -171,17 +177,19 @@ public class MessageDialog extends AbstractFormDialog<PrivateMessage> {
 			r.setName(p.getSubject());
 			r.setComment("");
 			r.setNumberOfPartizipants(100L);
-			r.setAppointment(true);
+			r.setAppointment(false);
 			r.setAllowUserQuestions(true);
 			r.setAllowFontStyles(true);
-			getBean(RoomDao.class).update(r, getUserId());
+			r = getBean(RoomDao.class).update(r, getUserId());
+			p.setRoom(r);
 		} else {
 			p.setRoom(null);
 		}
 		PrivateMessagesDao msgDao = getBean(PrivateMessagesDao.class);
 		for (User to : modelTo.getObject()) {
+			UserDao userDao = getBean(UserDao.class); 
 			if (to.getUser_id() == null) {
-				getBean(UserDao.class).update(to, getUserId());
+				userDao.update(to, getUserId());
 			}
 			//to send
 			p = new PrivateMessage(p);
@@ -194,12 +202,31 @@ public class MessageDialog extends AbstractFormDialog<PrivateMessage> {
 			p.setFolderId(INBOX_FOLDER_ID);
 			msgDao.update(p, getUserId());
 			if (to.getAdresses() != null) {
-				String aLinkHTML = 	isPrivate ? "<br/><br/>" + "<a href='" + ContactsHelper.getLink() + "'>"
+				String aLinkHTML = 	(isPrivate && to.getType() == Type.user) ? "<br/><br/>" + "<a href='" + ContactsHelper.getLink() + "'>"
 							+ WebSession.getString(1302) + "</a><br/>" : "";
+				String invitation_link = "";
+				if (p.isBookedRoom()) {
+					Invitation i = getBean(InvitationManager.class).getInvitation(to, p.getRoom(),
+							false, null, Valid.Period
+							, userDao.get(getUserId()), getBaseUrl(), userDao.get(getUserId()).getLanguage_id(),
+							modelStart.getObject(), modelEnd.getObject(), null);
+					
+					invitation_link = LinkHelper.getInvitationLink(i);
+
+					if (invitation_link == null) {
+						invitation_link = "";
+					} else {
+						invitation_link = "<br/>" //
+								+ WebSession.getString(503)
+								+ "<br/><a href='" + invitation_link
+								+ "'>"
+								+ WebSession.getString(504) + "</a><br/>";
+					}
+				}
 				
 				getBean(MailHandler.class).send(to.getAdresses().getEmail(),
 						WebSession.getString(1301) + p.getSubject(),
-						(p.getMessage() == null ? "" : p.getMessage().replaceAll("\\<.*?>", "")) + aLinkHTML);
+						(p.getMessage() == null ? "" : p.getMessage().replaceAll("\\<.*?>", "")) + aLinkHTML + invitation_link);
 			}
 		}
 	}
