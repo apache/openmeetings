@@ -426,7 +426,7 @@ public class InstallWizard extends Wizard {
 
 		public void init() {
 			List<String> tzList = AVAILABLE_TIMEZONES;
-			String tzId = WebSession.get().getClientTimeZone();
+			String tzId = WebSession.get().getClientTZCode();
 			option = AVAILABLE_TIMEZONE_SET.contains(tzId) ? tzId : tzList.get(0);
 		}
 		

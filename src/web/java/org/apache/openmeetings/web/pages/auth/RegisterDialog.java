@@ -75,7 +75,7 @@ public class RegisterDialog extends AbstractFormDialog<String> {
 	private String registerLbl = WebSession.getString(121);
 	private DialogButton registerBtn = new DialogButton(registerLbl);
 	private FeedbackPanel feedback = new FeedbackPanel("feedback");
-	private final IModel<String> tzModel = Model.of(WebSession.get().getClientTimeZone());
+	private final IModel<String> tzModel = Model.of(WebSession.get().getClientTZCode());
 	private final DropDownChoice<String> tzDropDown = new DropDownChoice<String>("tz", tzModel, AVAILABLE_TIMEZONES);
 	private RegisterForm form;
 	private SignInDialog s;
@@ -128,7 +128,7 @@ public class RegisterDialog extends AbstractFormDialog<String> {
 	}
 
 	public void setClientTimeZone() {
-		tzModel.setObject(WebSession.get().getClientTimeZone());
+		tzModel.setObject(WebSession.get().getClientTZCode());
 	}
 	
 	@Override

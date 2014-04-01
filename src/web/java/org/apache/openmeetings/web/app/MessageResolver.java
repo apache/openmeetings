@@ -41,14 +41,15 @@ public class MessageResolver extends WicketMessageResolver {
 		if (tag instanceof WicketTag) {
 			WicketTag wtag = (WicketTag)tag;
 			if (TAG_NAME.equals(wtag.getName())) {
+				Boolean escapeKey = wtag.getAttributes().getAsBoolean("escape");
 				Long messageKey = wtag.getAttributes().getAsLong("key");
 				if (messageKey != null) {
 					final String id = "_message_" + container.getPage().getAutoIndex();
 					Label label = new Label(id, WebSession.getString(messageKey));
 					label.setRenderBodyOnly(container.getApplication()
 						.getMarkupSettings()
-						.getStripWicketTags());
-
+						.getStripWicketTags()).setEscapeModelStrings(!Boolean.FALSE.equals(escapeKey));
+					
 					return label;
 				}
 			}
