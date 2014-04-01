@@ -445,10 +445,10 @@ public class WebSession extends AbstractAuthenticatedWebSession {
 			dashboard.addWidget(widgetFactory.createWidget(new WelcomeWidgetDescriptor()));
 			dashboard.addWidget(widgetFactory.createWidget(new StartWidgetDescriptor()));
 			ConfigurationDao cfgDao = getBean(ConfigurationDao.class);
-			if ("1".equals(cfgDao.getConfValue(CONFIG_DASHBOARD_SHOW_MYROOMS_KEY, Integer.class, "0"))) {
+			if (1 == cfgDao.getConfValue(CONFIG_DASHBOARD_SHOW_MYROOMS_KEY, Integer.class, "0")) {
 				dashboard.addWidget(widgetFactory.createWidget(new PrivateRoomsWidgetDescriptor()));
 			}
-			if ("1".equals(cfgDao.getConfValue(CONFIG_DASHBOARD_SHOW_RSS_KEY, Integer.class, "0"))) {
+			if (1 == cfgDao.getConfValue(CONFIG_DASHBOARD_SHOW_RSS_KEY, Integer.class, "0")) {
 				dashboard.addWidget(widgetFactory.createWidget(new RssWidgetDescriptor()));
 			}
 			dashboardContext.getDashboardPersiter().save(dashboard);
