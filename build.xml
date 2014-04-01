@@ -1174,7 +1174,7 @@
 	<target name="-retrieve-red5-server" unless="red5.server.installed" description="Retrieves the libraries if needed" depends="-ant-task,-maven-task,-jgit-task">
 		<!-- Needs an empty dir to checkout to -->
 		<delete dir="${red5.server.dir}"></delete>
-		<git-clone uri="https://github.com/Red5/red5-server.git" dest="${red5.server.dir}" />
+		<git-clone uri="https://github.com/Red5/red5-server.git" dest="${red5.server.dir}" branch="v${red5.server.version}"/>
 		<artifact:mvn pom="${red5.server.dir}/pom.xml" mavenVersion="${maven.version}" fork="true" dir="${red5.server.dir}">
 			<jvmarg value="-Dmaven.buildNumber.doUpdate=false" />
 			<!--jvmarg value="-Dassembly.skipAssembly=true" /-->
