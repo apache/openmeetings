@@ -274,7 +274,7 @@
 		<dependency org="com.googlecode.wicket-jquery-ui" name="wicket-jquery-ui-plugins" rev="6.14.0" conf="openmeetings->*" transitive="false">
 			<include type="jar" />
 		</dependency>
-		<dependency org="ro.fortsoft.wicket.dashboard" name="wicket-dashboard-core" rev="0.9" conf="openmeetings->*" transitive="false">
+		<dependency org="ro.fortsoft.wicket.dashboard" name="wicket-dashboard-core" rev="0.10" conf="openmeetings->*" transitive="false">
 			<include type="jar" />
 		</dependency>
 		<dependency org="com.google.code.gson" name="gson" rev="2.2.4" conf="openmeetings->*" transitive="false">
