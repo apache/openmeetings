@@ -69,7 +69,7 @@ public class AddUsersDialog extends AbstractFormDialog<User> {
 	private final DialogButton send = new DialogButton(WebSession.getString(175));
 	private final DialogButton cancel = new DialogButton(WebSession.getString(219));
 
-	public AddUsersDialog(String id, String title, AdminCommonUserForm<?> commonForm) {
+	public AddUsersDialog(String id, String title, AdminCommonUserForm<?> commonForm, final boolean excludeContacts) {
 		super(id, title, true);
 		formUsers = new Form<User>("formUsers", getModel());
 		this.commonForm = commonForm;
@@ -82,7 +82,7 @@ public class AddUsersDialog extends AbstractFormDialog<User> {
 			protected void onAfterSubmit(AjaxRequestTarget target, Form<?> form) {
 				listUsersModel.getObject().clear();
 				selectedUsersModel.getObject().clear();
-				listUsersModel.getObject().addAll(Application.getBean(AdminUserDao.class).get(userSearchText));
+				listUsersModel.getObject().addAll(Application.getBean(AdminUserDao.class).get(userSearchText, excludeContacts));
 				target.add(users);
 			}
 		});

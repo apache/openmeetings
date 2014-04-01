@@ -45,8 +45,8 @@ public class AdminUserDao implements IDataProviderDao<User> {
 		return dao.get(search, start, count, order, true, -1);
 	}
 
-	public List<User> get(String search) {
-		return dao.get(search, true, -1);
+	public List<User> get(String search, boolean excludeContacts) {
+		return dao.get(search, excludeContacts, -1);
 	}
 
 	public long count() {
