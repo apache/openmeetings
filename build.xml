@@ -1420,6 +1420,7 @@
 				<or>
 					<equals arg1="${java.specification.version}" arg2="1.6" />
 					<equals arg1="${java.specification.version}" arg2="1.7" />
+					<equals arg1="${java.specification.version}" arg2="1.8" />
 				</or>
 				<matches string="${java.vm.specification.vendor}" pattern=".*[sun,oracle].*" casesensitive="false" singleline="true" />
 			</and>
