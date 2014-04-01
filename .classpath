@@ -63,6 +63,5 @@
 	<classpathentry kind="lib" path="build/red5/server/dist/plugins/tomcat-embed-core-7.0.50.jar"/>
 	<classpathentry kind="lib" path="build/red5/server/dist/lib/bcprov-jdk15on-1.47.jar"/>
 	<classpathentry kind="lib" path="build/red5/server/dist/lib/cglib-nodep-2.2.2.jar"/>
-	<classpathentry kind="lib" path="build/red5/client/dist/red5-client-1.0.2-RC2.jar" sourcepath="build/red5/client/src/main/java"/>
 	<classpathentry kind="output" path="build/classes/eclipse"/>
 </classpath>
