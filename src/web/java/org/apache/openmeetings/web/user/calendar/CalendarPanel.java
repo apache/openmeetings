@@ -21,6 +21,7 @@ package org.apache.openmeetings.web.user.calendar;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.getBaseUrl;
+import static org.apache.openmeetings.web.app.WebSession.getClientTimeZone;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 
 import java.text.SimpleDateFormat;
@@ -187,17 +188,16 @@ public class CalendarPanel extends UserPanel {
 				target.appendJavaScript("setDatepickerDate('datepicker','" +  formatDateJava.format(start) + "');");
 				Appointment a = getDefault();
 				if (CalendarView.month == view && start.equals(end)) {
-					java.util.Calendar now = WebSession.getCalendar();
-					now.setTime(start);
-					java.util.Calendar cal = WebSession.getCalendar();
-					cal.set(java.util.Calendar.YEAR, now.get(java.util.Calendar.YEAR));
-					cal.set(java.util.Calendar.MONTH, now.get(java.util.Calendar.MONTH));
-					cal.set(java.util.Calendar.DATE, now.get(java.util.Calendar.DATE));
-					cal.set(java.util.Calendar.SECOND, 0);
-					cal.set(java.util.Calendar.MILLISECOND, 0);
-					a.setStart(cal.getTime());
-					cal.add(java.util.Calendar.HOUR_OF_DAY, 1);
-					a.setEnd(cal.getTime());
+					java.util.Calendar cNow = java.util.Calendar.getInstance(getClientTimeZone());
+					java.util.Calendar cStart = java.util.Calendar.getInstance(getClientTimeZone());
+					cStart.setTime(start);
+					cStart.set(java.util.Calendar.HOUR_OF_DAY, cNow.get(java.util.Calendar.HOUR_OF_DAY));
+					cStart.set(java.util.Calendar.MINUTE, cNow.get(java.util.Calendar.MINUTE));
+					cStart.set(java.util.Calendar.SECOND, 0);
+					cStart.set(java.util.Calendar.MILLISECOND, 0);
+					a.setStart(cStart.getTime());
+					cStart.add(java.util.Calendar.HOUR_OF_DAY, 1);
+					a.setEnd(cStart.getTime());
 				} else {
 					a.setStart(start);
 					a.setEnd(end);

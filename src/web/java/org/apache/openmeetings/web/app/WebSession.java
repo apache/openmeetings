@@ -338,6 +338,10 @@ public class WebSession extends AbstractAuthenticatedWebSession {
 		return Calendar.getInstance(get().tz);
 	}
 
+	public static Calendar getClientCalendar() {
+		return Calendar.getInstance(getClientTimeZone());
+	}
+
 	public static DateFormat getIsoDateFormat() {
 		return get().ISO8601FORMAT;
 	}
@@ -401,7 +405,7 @@ public class WebSession extends AbstractAuthenticatedWebSession {
 		return states.get(0);
 	}
 
-	public String getClientTimeZone() {
+	public String getClientTZCode() {
 		TimeZone _zone = browserTz;
 		if (browserTz == null) {
 			try {
@@ -424,6 +428,11 @@ public class WebSession extends AbstractAuthenticatedWebSession {
 			}
 		}
 		return _zone == null ? null : _zone.getID();
+	}
+	
+	public static TimeZone getClientTimeZone() {
+		String tzCode = get().getClientTZCode();
+		return tzCode == null ? null : TimeZone.getTimeZone(tzCode);
 	}
 	
 	private void initDashboard() {

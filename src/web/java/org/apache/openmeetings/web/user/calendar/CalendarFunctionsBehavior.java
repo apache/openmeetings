@@ -35,7 +35,7 @@ import org.apache.wicket.resource.TextTemplateResourceReference;
 import org.apache.wicket.util.collections.MicroMap;
 
 public class CalendarFunctionsBehavior extends Behavior {
-	private static final long serialVersionUID = 5455085536095081262L;
+	private static final long serialVersionUID = 1L;
 	private final String markupId;
 	
 	public CalendarFunctionsBehavior(String markupId) {

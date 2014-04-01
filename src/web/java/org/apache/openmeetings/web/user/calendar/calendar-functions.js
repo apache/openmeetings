@@ -36,7 +36,7 @@ $(function() {
 
 function addCalButton(where, text, id) {
 	var my_button = '<span class="fc-header-space"></span>' +
-		'<span class="fc-button fc-button-nextYear fc-state-default fc-corner-right" unselectable="on">' +
+		'<span class="fc-button fc-state-default fc-corner-right fc-corner-left">' +
 		'<input type="text" id="' + id + '" value="' + text +'" /></span>';
 	$("td.fc-header-" + where).append(my_button);
 	 
