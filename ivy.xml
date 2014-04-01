@@ -39,7 +39,6 @@
 		<conf name="mysql" description="MySQL JDBC driver" />
 		<conf name="mvn" description="Maven Ant task to build Red5" />
 		<conf name="jgit" description="JGit Ant task to retirieve Red5" />
-		<conf name="red5-client" description="Red5 Client/Server for screensharing" />
 	</configurations>
 	<dependencies>
 		<!--  START OF mainlib -->
@@ -65,6 +64,9 @@
 			<include type="jar" />
 		</dependency>
 		<dependency org="org.springframework" name="spring-webmvc" rev="4.0.0.RELEASE" transitive="false">
+			<include type="jar" />
+		</dependency>
+		<dependency org="org.red5" name="red5-client" rev="1.0.2-RC2" transitive="false">
 			<include type="jar" />
 		</dependency>
 		<!-- include type="bundle" / FIXME unable to get openjpa without  sources -->
@@ -394,7 +396,7 @@
 		</dependency>
 
 		<!-- JGIT --> 
-        <dependency org="org.eclipse.jgit" name="org.eclipse.jgit.ant" conf="jgit->*" rev="3.3.0.201403021825-r" transitive="true" >
+        <dependency org="org.eclipse.jgit" name="org.eclipse.jgit.ant" conf="jgit->*" rev="3.3.1.201403241930-r" transitive="true" >
 			<include type="jar" />
 	        <exclude org="org.apache.ant"/>
 		</dependency>
