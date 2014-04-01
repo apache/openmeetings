@@ -93,7 +93,7 @@ public class GroupsPanel extends AdminPanel {
 			}
 		};
         add(form.add(addUsersBtn.setOutputMarkupId(true)));
-        addUsersDialog = new AddUsersDialog("addUsers",WebSession.getString(180), form);
+        addUsersDialog = new AddUsersDialog("addUsers",WebSession.getString(180), form, false);
 		add(addUsersDialog.setOutputMarkupId(true));
 
         //List view

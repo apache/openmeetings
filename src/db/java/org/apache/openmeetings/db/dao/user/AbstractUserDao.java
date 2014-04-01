@@ -106,12 +106,12 @@ public class AbstractUserDao  {
 		return q.getResultList();
 	}
 	
-	private String getAdditionalWhere(boolean isAdmin) {
-		return isAdmin ? null : "(u.type <> :contact OR (u.type = :contact AND u.ownerId = :ownerId))";
+	private String getAdditionalWhere(boolean excludeContacts) {
+		return !excludeContacts ? null : "(u.type <> :contact OR (u.type = :contact AND u.ownerId = :ownerId))";
 	}
 	
-	private void setAdditionalParams(TypedQuery<?> q, boolean isAdmin, long currentUserId) {
-		if (!isAdmin) {
+	private void setAdditionalParams(TypedQuery<?> q, boolean excludeContacts, long currentUserId) {
+		if (excludeContacts) {
 			q.setParameter("ownerId", currentUserId);
 			q.setParameter("contact", Type.contact);
 		}
@@ -131,15 +131,15 @@ public class AbstractUserDao  {
 		return q.getSingleResult();
 	}
 
-	public long count(String search, boolean isAdmin, long currentUserId) {
-		TypedQuery<Long> q = em.createQuery(DaoHelper.getSearchQuery("User", "u", search, true, true, getAdditionalWhere(isAdmin), null, searchFields), Long.class);
-		setAdditionalParams(q, isAdmin, currentUserId);
+	public long count(String search, boolean excludeContacts, long currentUserId) {
+		TypedQuery<Long> q = em.createQuery(DaoHelper.getSearchQuery("User", "u", search, true, true, getAdditionalWhere(excludeContacts), null, searchFields), Long.class);
+		setAdditionalParams(q, excludeContacts, currentUserId);
 		return q.getSingleResult();
 	}
 	
-	public List<User> get(String search, boolean isAdmin, long currentUserId) {
-		TypedQuery<User> q = em.createQuery(DaoHelper.getSearchQuery("User", "u", search, true, false, getAdditionalWhere(isAdmin), null, searchFields), User.class);
-		if (!isAdmin) {
+	public List<User> get(String search, boolean excludeContacts, long currentUserId) {
+		TypedQuery<User> q = em.createQuery(DaoHelper.getSearchQuery("User", "u", search, true, false, getAdditionalWhere(excludeContacts), null, searchFields), User.class);
+		if (excludeContacts) {
 			q.setParameter("ownerId", currentUserId);
 			q.setParameter("contact", Type.contact);
 		}

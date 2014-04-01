@@ -116,6 +116,6 @@ public class RoomsPanel extends AdminPanel {
 		};
 		
         add(form.add(addModerator.setOutputMarkupId(true)));
-        add(addModeratorsDialog = new AddUsersDialog("addModerators", WebSession.getString(821), form));
+        add(addModeratorsDialog = new AddUsersDialog("addModerators", WebSession.getString(821), form, true));
 	}
 }
