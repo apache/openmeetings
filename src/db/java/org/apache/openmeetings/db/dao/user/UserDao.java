@@ -37,7 +37,7 @@ public class UserDao {
 	}
 
 	public List<User> get(String search, long currentUserId) {
-		return dao.get(search, false, currentUserId);
+		return dao.get(search, true, currentUserId);
 	}
 	
 	public List<User> get(String search, int start, int count, String order, long currentUserId) {
