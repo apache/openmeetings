@@ -23,6 +23,7 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_CRYPT_KE
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DASHBOARD_SHOW_MYROOMS_KEY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DASHBOARD_SHOW_RSS_KEY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_LANDING_ZONE;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_LDAP_ID;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAUT_LANG_KEY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_FRONTEND_REGISTER_KEY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_IGNORE_BAD_SSL;
@@ -513,7 +514,7 @@ public class ImportInitvalues {
 						"A hot key code for the 'mute/unmute audio' functionality. Keycode 118 is F7");
 		
 		// system-wide ldap params
-		configurationDao.add("ldap_default_id", "0", null,
+		configurationDao.add(CONFIG_DEFAULT_LDAP_ID, "0", null,
 				"Ldap domain selected by default in the login screen");
 
 		// set inviter's email address as ReplyTo in email invitations
