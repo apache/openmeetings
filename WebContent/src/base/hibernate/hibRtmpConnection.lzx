@@ -624,7 +624,7 @@
                         if($debug) Debug.write("getRoomTypes");
                         parent.getRoomTypes.doCall();
                     } else {
-						parent.initlanguageLoaded=true;
+						parent.initlanguageLoaded = true;
 						if($debug) Debug.write("getGeneralOptions");
 						parent.getGeneralOptions.doCall();
 						if($debug) Debug.write("getTimeZones");

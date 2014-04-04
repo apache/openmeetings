@@ -68,20 +68,41 @@
 	            } else {
             		parent.setProgress();
 		            parent.getTimeZones.doCall();
+		            parent.getUserSalutations.doCall();
 				}
 			]]>
         </handler>  
     </netRemoteCallHib>	 
     
-    <netRemoteCallHib name="getTimeZones" funcname="xmlcrm.getTimeZones" 
-		  remotecontext="$once{ canvas.thishib }" dataobject="timeZoneSet">
-        <handler name="ondata" args="value">
-            //The onResult-Handler will be called be the rtmpconnection
-            //Debug.write("getStates: ",value);
-            parent.setProgress();
-            parent.getUserSalutations.doCall();
-        </handler>  
-    </netRemoteCallHib> 
+	<netRemoteCallHib name="getTimeZones" funcname="xmlcrm.getTimeZones">
+		<attribute name="start" value="0" type="number" />
+		<attribute name="step" value="100" type="number" />
+		<netparam><method name="getValue">return parent.start;</method></netparam>
+		<netparam><method name="getValue">return parent.step;</method></netparam>
+		<handler name="ondata" args="value">
+		<![CDATA[
+			//The onResult-Handler will be called be the rtmpconnection
+			if ($debug) Debug.write("getTimeZones count: ", value.length);
+			if (canvas.thishib.loaderVar != null) {
+				canvas.thishib.loaderVar.setProgress();
+			}
+			if (start == 0) {
+				canvas.timeZones = new Array();
+			}
+			for (var i = 0; i < value.length; ++i) {
+				canvas.timeZones.push(value[i]);
+			}
+			if (value.length < step) {
+				//if($debug) Debug.write("canvas.timeZones == ", canvas.timeZones);
+				canvas.inviteMainWindow = new lz.inviteMainWindow(canvas);
+				if($debug) Debug.write("create invitationWindow: ",canvas.inviteMainWindow);
+			} else {
+				start += step;
+				doCall();
+			}
+		]]>
+		</handler>
+	</netRemoteCallHib>
     
     <netRemoteCallHib name="getUserSalutations" funcname="userservice.getUserSalutations" 
 		remotecontext="$once{ canvas.thishib }" >  
