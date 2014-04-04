@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+   Licensed to the Apache Software Foundation (ASF) under one or more
+   contributor license agreements.  See the NOTICE file distributed with
+   this work for additional information regarding copyright ownership.
+   The ASF licenses this file to You under the Apache License, Version 2.0
+   (the "License"); you may not use this file except in compliance with
+   the License.  You may obtain a copy of the License at
+
+        http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>org.apache.openmeetings</groupId>
+		<artifactId>openmeetings-parent</artifactId>
+		<version>${openmeetings.version}</version>
+		<relativePath>../pom.xml</relativePath>
+	</parent>
+	<groupId>org.apache.openmeetings</groupId>
+	<artifactId>openmeetings-db</artifactId>
+	<packaging>jar</packaging>
+	<name>Openmeetings DB</name>
+	<description>TODO</description>
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<openjpa.version>2.3.0</openjpa.version>
+		<simple-xml.version>2.7.1</simple-xml.version>
+		<asterisk-java.version>1.0.0.CI-SNAPSHOT</asterisk-java.version>
+	</properties>
+	<dependencies>
+		<dependency>
+			<groupId>org.apache.openmeetings</groupId>
+			<artifactId>openmeetings-util</artifactId>
+			<version>${openmeetings.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.openjpa</groupId>
+			<artifactId>openjpa</artifactId>
+			<version>${openjpa.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-tx</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.simpleframework</groupId>
+			<artifactId>simple-xml</artifactId>
+			<version>${simple-xml.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.asteriskjava</groupId>
+			<artifactId>asterisk-java</artifactId>
+			<version>${asterisk-java.version}</version>
+		</dependency>
+	</dependencies>
+	<repositories>
+		<repository>
+			<id>openmeetings-googlecode</id>
+			<url>https://openmeetings.googlecode.com/svn/repository/</url>
+		</repository>
+	</repositories>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.openjpa</groupId>
+				<artifactId>openjpa-maven-plugin</artifactId>
+				<version>${openjpa.version}</version>
+				<configuration>
+				    <includes>**/entity/**/*.class</includes>
+				    <addDefaultConstructor>true</addDefaultConstructor>               
+				    <enforcePropertyRestrictions>true</enforcePropertyRestrictions>
+				    <persistenceXmlFile>${project.parent.basedir}/openmeetings-core/src/main/webapp/WEB-INF/classes/META-INF/derby_persistence.xml</persistenceXmlFile>
+				</configuration>
+				<executions>
+				    <execution>
+				        <id>enhancer</id>
+				        <phase>process-classes</phase>
+				        <goals>
+				            <goal>enhance</goal>
+				        </goals>
+				    </execution>
+				</executions>
+				<dependencies>
+				    <dependency>
+				        <groupId>org.apache.openjpa</groupId>
+				        <artifactId>openjpa</artifactId>
+				        <!-- set the version to be the same as the level in your runtime -->
+				        <version>${openjpa.version}</version>
+				    </dependency>
+				</dependencies>
+			</plugin>
+		</plugins>
+    </build>
+</project>

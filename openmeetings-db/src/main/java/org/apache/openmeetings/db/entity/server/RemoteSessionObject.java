@@ -23,7 +23,6 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import java.io.StringReader;
 import java.io.StringWriter;
 
-import org.apache.openmeetings.backup.BackupExport;
 import org.red5.logging.Red5LoggerFactory;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
@@ -40,7 +39,7 @@ import org.slf4j.Logger;
  */
 @Root
 public class RemoteSessionObject {
-	private static final Logger log = Red5LoggerFactory.getLogger(BackupExport.class, webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(RemoteSessionObject.class, webAppRootKey);
 	@Element(required = false)
 	private String username;
 	@Element(required = false)

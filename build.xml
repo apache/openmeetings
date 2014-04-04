@@ -41,10 +41,10 @@
 	<property name="anakia.lib.dir" value="${project.lib.dir}/anakia" />
 	<property name="webcontent.base.dir" value="${basedir}/WebContent" />
 	
-	<property name="screenshare.resources.dir" value="${src.base.dir}/screenshare/resources" />
-	<property name="axis.resources.dir" value="${src.base.dir}/axis/resources" />
+	<property name="screenshare.resources.dir" value="${basedir}/openmeetings-screenshare/src/main/resources" />
+	<property name="axis.resources.dir" value="${basedir}/openmeetings-axis/src/main/resources" />
 	
-	<property name="webapp.dir" value="${src.base.dir}/main/webapp" />
+	<property name="webapp.dir" value="${basedir}/openmeetings-core/src/main/webapp" />
 	<property name="junit.lib.dir" value="${project.lib.dir}/junit" />
 	<property name="junit.backups.dir" value="${junit.lib.dir}/backups" />
 	<property name="rat.lib.dir" value="${project.lib.dir}/rat" />
@@ -257,7 +257,7 @@
 			<fileset file="${webapp.dir}/WEB-INF/web.xml" />
 		</copy>
 		<copy todir="${dist.classes.dir}">
-			<fileset dir="${src.base.dir}/web/java">
+			<fileset dir="${basedir}/openmeetings-web/src/main/java">
 				<include name="**/*.html" />
 				<include name="**/*.xml" />
 				<include name="**/*.js" />
@@ -307,7 +307,7 @@
 		</copy>
 		<!-- Screen Share resources -->
 		<copy todir="${main.out.dir}">
-			<fileset dir="${src.base.dir}/screenshare/java">
+			<fileset dir="${basedir}/openmeetings-screenshare/src/main/java">
 				<include name="**/*.png" />
 			</fileset>
 		</copy>
@@ -469,7 +469,7 @@
 			<format property="TODAY_YEAR" pattern="yyyy" locale="en" />
 		</tstamp>
 	    <javadoc packagenames="org.apache.openmeetings.remote.*"
-	           sourcepath="${src.base.dir}/axis/java:${src.base.dir}/db/java:${src.base.dir}/doc/java:${src.base.dir}/install/java:${src.base.dir}/main/java:${src.base.dir}/screenshare/java:${src.base.dir}/util/java:${src.base.dir}/web/java"
+	           sourcepath="${basedir}/openmeetings-axis/src/main/java:${basedir}/openmeetings-db/src/main/java:${src.base.dir}/doc/java:${basedir}/openmeetings-install/src/main/java:${basedir}/openmeetings-core/src/main/java:${basedir}/openmeetings-screenshare/src/main/java:${basedir}/openmeetings-util/src/main/java:${basedir}/openmeetings-web/src/main/java"
 	           excludepackagenames="org.apache.openmeetings.test.*"
 	           defaultexcludes="yes"
 	           destdir="build/api"
@@ -687,21 +687,21 @@
 		<echo message="Compile main to ${main.out.dir}" />
 		<javac debug="on" debuglevel="lines,vars,source" destdir="${main.out.dir}" includeantruntime="false"
 			source="1.6" target="1.6">
-			<src path="${src.base.dir}/axis/java" />
-			<src path="${src.base.dir}/db/java" />
+			<src path="${basedir}/openmeetings-axis/src/main/java" />
+			<src path="${basedir}/openmeetings-db/src/main/java" />
 			<src path="${src.base.dir}/doc/java" />
-			<src path="${src.base.dir}/install/java" />
-			<src path="${src.base.dir}/main/java" />
+			<src path="${basedir}/openmeetings-install/src/main/java" />
+			<src path="${basedir}/openmeetings-core/src/main/java" />
 			<src path="${src.base.dir}/test/java" />
-			<src path="${src.base.dir}/screenshare/java" />
-			<src path="${src.base.dir}/util/java" />
-			<src path="${src.base.dir}/web/java" />
+			<src path="${basedir}/openmeetings-screenshare/src/main/java" />
+			<src path="${basedir}/openmeetings-util/src/main/java" />
+			<src path="${basedir}/openmeetings-web/src/main/java" />
 			<classpath refid="compile.classpath" />
 			<compilerarg value="-Aopenjpa.metamodel=true" />
 			<!-- compilerarg value="-Xlint:deprecation"/ -->
 		</javac>
 		<copy todir="${main.out.dir}">
-			<fileset dir="${src.base.dir}/main/java">
+			<fileset dir="${basedir}/openmeetings-core/src/main/java">
 				<include name="**/*.*" />
 				<exclude name="**/*.java" />
 			</fileset>
@@ -852,7 +852,7 @@
 
 	<target name="build.only.webservice.doc" depends="anakia">
 		<javadoc classpathref="build.webservice.classpath" useexternalfile="true" destdir="${basedir}/docs">
-			<fileset dir="${src.base.dir}/axis/java/org/apache/openmeetings/axis/services">
+			<fileset dir="${basedir}/openmeetings-axis/src/main/java/org/apache/openmeetings/axis/services">
 				<include name="*WebService.java" />
 				<exclude name="BaseWebService.java" />
 			</fileset>
