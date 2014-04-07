@@ -21,15 +21,16 @@ package org.apache.openmeetings.axis.services;
 import java.util.Date;
 
 import org.apache.axis2.AxisFault;
-import org.apache.openmeetings.data.basic.FieldManager;
-import org.apache.openmeetings.data.user.OrganisationManager;
-import org.apache.openmeetings.data.user.UserManager;
+import org.apache.openmeetings.core.data.basic.FieldManager;
+import org.apache.openmeetings.core.data.user.OrganisationManager;
+import org.apache.openmeetings.core.remote.MainService;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.basic.ErrorDao;
 import org.apache.openmeetings.db.dao.label.FieldLanguagesValuesDao;
 import org.apache.openmeetings.db.dao.server.SOAPLoginDao;
 import org.apache.openmeetings.db.dao.server.SessiondataDao;
 import org.apache.openmeetings.db.dao.user.AdminUserDao;
+import org.apache.openmeetings.db.dao.user.IUserManager;
 import org.apache.openmeetings.db.dto.basic.ErrorResult;
 import org.apache.openmeetings.db.dto.basic.SearchResult;
 import org.apache.openmeetings.db.entity.basic.ErrorType;
@@ -37,7 +38,6 @@ import org.apache.openmeetings.db.entity.basic.ErrorValue;
 import org.apache.openmeetings.db.entity.server.RemoteSessionObject;
 import org.apache.openmeetings.db.entity.server.Sessiondata;
 import org.apache.openmeetings.db.entity.user.User;
-import org.apache.openmeetings.remote.MainService;
 import org.apache.openmeetings.util.AuthLevelUtil;
 import org.apache.openmeetings.util.OpenmeetingsVariables;
 import org.red5.logging.Red5LoggerFactory;
@@ -63,7 +63,7 @@ public class UserWebService {
 	@Autowired
 	private ConfigurationDao configurationDao;
 	@Autowired
-	private UserManager userManagement;
+	private IUserManager userManagement;
 	@Autowired
 	private FieldManager fieldManager;
 	@Autowired
@@ -220,13 +220,13 @@ public class UserWebService {
 					return user_id;
 				}
 
-				User user = userManagement.getUserById(user_id);
+				User user = usersDao.get(user_id);
 
 				// activate the User
 				user.setStatus(1);
 				user.setUpdatetime(new Date());
 
-				userManagement.updateUser(user);
+				usersDao.update(user, users_id);
 
 				return user_id;
 
@@ -307,13 +307,13 @@ public class UserWebService {
 					return user_id;
 				}
 
-				User user = userManagement.getUserById(user_id);
+				User user = usersDao.get(user_id);
 
 				// activate the User
 				user.setStatus(1);
 				user.setUpdatetime(new Date());
 
-				userManagement.updateUser(user);
+				usersDao.update(user, users_id);
 
 				return user_id;
 
@@ -382,8 +382,7 @@ public class UserWebService {
 
 			if (AuthLevelUtil.checkAdminLevel(user_level)) {
 
-				User testUser = userManagement.getUserByExternalIdAndType(
-						externalUserId, externalUserType);
+				User testUser = usersDao.getExternalUser(externalUserId, externalUserType);
 
 				if (testUser != null) {
 					throw new Exception("User does already exist!");
@@ -400,7 +399,7 @@ public class UserWebService {
 					return user_id;
 				}
 
-				User user = userManagement.getUserById(user_id);
+				User user = usersDao.get(user_id);
 
 				// activate the User
 				user.setStatus(1);
@@ -408,7 +407,7 @@ public class UserWebService {
 				user.setExternalUserId(externalUserId);
 				user.setExternalUserType(externalUserType);
 
-				userManagement.updateUser(user);
+				usersDao.update(user, users_id);
 
 				return user_id;
 
@@ -478,8 +477,7 @@ public class UserWebService {
 
 			if (AuthLevelUtil.checkAdminLevel(user_level)) {
 
-				User userExternal = userManagement.getUserByExternalIdAndType(
-						externalUserId, externalUserType);
+				User userExternal = usersDao.getExternalUser(externalUserId, externalUserType);
 
 				Long userId = userExternal.getUser_id();
 

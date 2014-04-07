@@ -18,7 +18,6 @@
  */
 package org.apache.openmeetings.web.pages;
 
-import org.apache.openmeetings.db.entity.label.FieldLanguage;
 import org.apache.openmeetings.installation.InstallationConfig;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.request.IRequestParameters;
@@ -26,11 +25,6 @@ import org.apache.wicket.request.IRequestParameters;
 public abstract class BaseNotInitedPage extends BasePage {
 	private static final long serialVersionUID = 5716753033219700254L;
 	private static final InstallationConfig installCfg = new InstallationConfig(); 
-	private static final FieldLanguage l = new FieldLanguage();
-	static {
-		l.setCode("en");
-		l.setRtl(false);
-	}
 
 
 	@Override
@@ -39,8 +33,13 @@ public abstract class BaseNotInitedPage extends BasePage {
 	}
 	
 	@Override
-	protected FieldLanguage getLanguage() {
-		return l;
+	protected String getLanguageCode() {
+		return "en";
+	}
+	
+	@Override
+	protected Boolean isRtl() {
+		return false;
 	}
 	
 	@Override

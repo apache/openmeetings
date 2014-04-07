@@ -21,12 +21,13 @@ package org.apache.openmeetings.axis.services;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.openmeetings.data.conference.InvitationManager;
-import org.apache.openmeetings.data.user.UserManager;
+import org.apache.openmeetings.core.remote.ConferenceService;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
+import org.apache.openmeetings.db.dao.room.IInvitationManager;
 import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.dao.server.SessiondataDao;
 import org.apache.openmeetings.db.dao.user.AdminUserDao;
+import org.apache.openmeetings.db.dao.user.IUserManager;
 import org.apache.openmeetings.db.dto.room.RoomDTO;
 import org.apache.openmeetings.db.entity.room.Invitation;
 import org.apache.openmeetings.db.entity.room.Invitation.Valid;
@@ -35,7 +36,6 @@ import org.apache.openmeetings.db.entity.room.RoomOrganisation;
 import org.apache.openmeetings.db.entity.user.Organisation_Users;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.util.TimezoneUtil;
-import org.apache.openmeetings.remote.ConferenceService;
 import org.apache.openmeetings.util.AuthLevelUtil;
 import org.apache.openmeetings.util.OpenmeetingsVariables;
 import org.red5.logging.Red5LoggerFactory;
@@ -54,7 +54,7 @@ public class JabberWebService {
 			JabberWebService.class, OpenmeetingsVariables.webAppRootKey);
 
 	@Autowired
-	private UserManager userManager;
+	private IUserManager userManager;
 	@Autowired
 	private AdminUserDao userDao;
 	@Autowired
@@ -62,7 +62,7 @@ public class JabberWebService {
 	@Autowired
 	private ConferenceService conferenceService;
 	@Autowired
-	private InvitationManager invitationManager;
+	private IInvitationManager invitationManager;
 	@Autowired
 	private ConfigurationDao configurationDao;
 	@Autowired
@@ -92,7 +92,7 @@ public class JabberWebService {
 		}
 
 		Long users_id = sessiondataDao.checkSession(SID);
-		User u = userManager.getUserById(users_id);
+		User u = userDao.get(users_id);
 		for (Organisation_Users ou : u.getOrganisation_users()) {
 			List<RoomOrganisation> rol = conferenceService.getRoomsByOrganisationWithoutType(SID
 					, ou.getOrganisation().getOrganisation_id().longValue());

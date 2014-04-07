@@ -51,8 +51,14 @@ import org.apache.openmeetings.db.entity.user.User;
 })
 @Table(name = "invitations")
 public class Invitation implements Serializable {
-	private static final long serialVersionUID = 1153321347974705506L;
+	private static final long serialVersionUID = 1L;
 
+	public enum MessageType {
+		Create
+		, Update
+		, Cancel
+	}
+	
 	public enum Valid {
 		OneTime
 		, Period

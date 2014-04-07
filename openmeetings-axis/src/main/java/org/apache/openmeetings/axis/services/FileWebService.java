@@ -26,16 +26,17 @@ import java.net.URLConnection;
 import java.util.LinkedHashMap;
 
 import org.apache.axis2.AxisFault;
-import org.apache.openmeetings.data.file.FileProcessor;
-import org.apache.openmeetings.data.file.FileUtils;
-import org.apache.openmeetings.data.user.UserManager;
+import org.apache.openmeetings.core.data.file.FileProcessor;
+import org.apache.openmeetings.core.data.file.FileUtils;
+import org.apache.openmeetings.core.documents.LoadLibraryPresentation;
 import org.apache.openmeetings.db.dao.file.FileExplorerItemDao;
 import org.apache.openmeetings.db.dao.server.SessiondataDao;
+import org.apache.openmeetings.db.dao.user.IUserManager;
+import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.dto.file.FileExplorerObject;
 import org.apache.openmeetings.db.dto.file.LibraryPresentation;
 import org.apache.openmeetings.db.entity.file.FileExplorerItem;
 import org.apache.openmeetings.db.entity.user.User;
-import org.apache.openmeetings.documents.LoadLibraryPresentation;
 import org.apache.openmeetings.util.AuthLevelUtil;
 import org.apache.openmeetings.util.OmFileHelper;
 import org.apache.openmeetings.util.OpenmeetingsVariables;
@@ -62,7 +63,9 @@ public class FileWebService {
 	@Autowired
 	private SessiondataDao sessiondataDao;
 	@Autowired
-	private UserManager userManager;
+	private IUserManager userManager;
+	@Autowired
+	private UserDao userDao;
 	@Autowired
 	private FileExplorerItemDao fileExplorerItemDao;
 	@Autowired
@@ -124,8 +127,7 @@ public class FileWebService {
 				InputStream inputstream = new BufferedInputStream(
 						uc.getInputStream());
 
-				User externalUser = userManager.getUserByExternalIdAndType(
-						externalUserId, externalType);
+				User externalUser = userDao.getExternalUser(externalUserId, externalType);
 
 				LinkedHashMap<String, Object> hs = new LinkedHashMap<String, Object>();
 				hs.put("user", externalUser);
@@ -210,7 +212,7 @@ public class FileWebService {
 				InputStream inputstream = new BufferedInputStream(
 						uc.getInputStream());
 
-				User internalUser = userManager.getUserById(internalUserId);
+				User internalUser = userDao.get(internalUserId);
 
 				LinkedHashMap<String, Object> hs = new LinkedHashMap<String, Object>();
 				hs.put("user", internalUser);
@@ -277,8 +279,7 @@ public class FileWebService {
 
 			if (AuthLevelUtil.checkWebServiceLevel(User_level)) {
 
-				User userExternal = userManager.getUserByExternalIdAndType(
-						externalUserId, externalType);
+				User userExternal = userDao.getExternalUser(externalUserId, externalType);
 
 				Long userId = userExternal.getUser_id();
 

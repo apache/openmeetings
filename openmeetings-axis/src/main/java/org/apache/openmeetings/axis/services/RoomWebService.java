@@ -31,19 +31,21 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.axis2.AxisFault;
-import org.apache.openmeetings.data.calendar.management.AppointmentLogic;
-import org.apache.openmeetings.data.conference.InvitationManager;
-import org.apache.openmeetings.data.conference.RoomManager;
-import org.apache.openmeetings.data.user.UserManager;
+import org.apache.openmeetings.core.data.calendar.management.AppointmentLogic;
+import org.apache.openmeetings.core.data.conference.RoomManager;
+import org.apache.openmeetings.core.remote.ConferenceService;
+import org.apache.openmeetings.core.remote.red5.ScopeApplicationAdapter;
 import org.apache.openmeetings.db.dao.calendar.AppointmentCategoryDao;
 import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
 import org.apache.openmeetings.db.dao.calendar.AppointmentReminderTypDao;
-import org.apache.openmeetings.db.dao.calendar.IInvitationManager.MessageType;
 import org.apache.openmeetings.db.dao.record.FlvRecordingDao;
+import org.apache.openmeetings.db.dao.room.IInvitationManager;
+import org.apache.openmeetings.db.dao.room.InvitationDao;
 import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.dao.server.ISessionManager;
 import org.apache.openmeetings.db.dao.server.SessiondataDao;
 import org.apache.openmeetings.db.dao.user.AdminUserDao;
+import org.apache.openmeetings.db.dao.user.IUserManager;
 import org.apache.openmeetings.db.dto.file.RecordingObject;
 import org.apache.openmeetings.db.dto.room.RoomSearchResult;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
@@ -51,13 +53,12 @@ import org.apache.openmeetings.db.entity.calendar.MeetingMember;
 import org.apache.openmeetings.db.entity.record.FlvRecording;
 import org.apache.openmeetings.db.entity.room.Client;
 import org.apache.openmeetings.db.entity.room.Invitation;
+import org.apache.openmeetings.db.entity.room.Invitation.MessageType;
 import org.apache.openmeetings.db.entity.room.Invitation.Valid;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.room.RoomType;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.util.TimezoneUtil;
-import org.apache.openmeetings.remote.ConferenceService;
-import org.apache.openmeetings.remote.red5.ScopeApplicationAdapter;
 import org.apache.openmeetings.util.AuthLevelUtil;
 import org.apache.openmeetings.util.CalendarPatterns;
 import org.red5.logging.Red5LoggerFactory;
@@ -87,7 +88,7 @@ public class RoomWebService {
 	@Autowired
 	private SessiondataDao sessiondataDao;
 	@Autowired
-	private UserManager userManager;
+	private IUserManager userManager;
 	@Autowired
 	private AdminUserDao userDao;
 	@Autowired
@@ -95,7 +96,9 @@ public class RoomWebService {
 	@Autowired
 	private FlvRecordingDao flvRecordingDao;
 	@Autowired
-	private InvitationManager invitationManager;
+	private InvitationDao invitationDao;
+	@Autowired
+	private IInvitationManager invitationManager;
 	@Autowired
 	private ScopeApplicationAdapter scopeApplicationAdapter;
 	@Autowired

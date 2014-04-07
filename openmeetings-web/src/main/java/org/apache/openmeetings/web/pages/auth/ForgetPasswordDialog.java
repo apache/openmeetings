@@ -26,9 +26,9 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.openmeetings.core.mail.MailHandler;
 import org.apache.openmeetings.db.dao.user.AdminUserDao;
 import org.apache.openmeetings.db.entity.user.User;
-import org.apache.openmeetings.mail.MailHandler;
 import org.apache.openmeetings.util.crypt.ManageCryptStyle;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.mail.template.ResetPasswordTemplate;
@@ -125,7 +125,7 @@ public class ForgetPasswordDialog extends AbstractFormDialog<String> {
 					if (type == Type.email && null == dao.getUserByEmail(n)) {
 						error(WebSession.getString(318));
 					}
-					if (type == Type.login && null == dao.getUserByName(n)) {
+					if (type == Type.login && null == dao.getUserByLogin(n)) {
 						error(WebSession.getString(320));
 					}
 				}
@@ -216,7 +216,7 @@ public class ForgetPasswordDialog extends AbstractFormDialog<String> {
 					return new Long(-9);
 				}
 			} else if (username.length() > 0) {
-				User us = userDao.getUserByName(username);
+				User us = userDao.getUserByLogin(username);
 				if (us != null) {
 					sendHashByUser(us, appLink, userDao);
 					return new Long(-4);

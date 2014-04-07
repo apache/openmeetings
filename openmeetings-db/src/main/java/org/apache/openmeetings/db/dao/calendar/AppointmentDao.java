@@ -34,12 +34,13 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
-import org.apache.openmeetings.db.dao.calendar.IInvitationManager.MessageType;
+import org.apache.openmeetings.db.dao.room.IInvitationManager;
 import org.apache.openmeetings.db.dao.room.InvitationDao;
 import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
 import org.apache.openmeetings.db.entity.calendar.MeetingMember;
+import org.apache.openmeetings.db.entity.room.Invitation.MessageType;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.util.TimezoneUtil;
 import org.red5.logging.Red5LoggerFactory;
@@ -65,11 +66,11 @@ public class AppointmentDao {
 	@Autowired
 	private ConfigurationDao cfgDao;
 	@Autowired
-	private IInvitationManager invitationManager;
-	@Autowired
 	private TimezoneUtil timezoneUtil;
 	@Autowired
 	private InvitationDao invitationDao;
+	@Autowired
+	private IInvitationManager invitationManager;
 
 	/*
 	 * insert, update, delete, select

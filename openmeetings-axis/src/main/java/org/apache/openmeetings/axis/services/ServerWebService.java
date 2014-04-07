@@ -19,9 +19,9 @@
 package org.apache.openmeetings.axis.services;
 
 import org.apache.axis2.AxisFault;
-import org.apache.openmeetings.data.user.UserManager;
 import org.apache.openmeetings.db.dao.server.ServerDao;
 import org.apache.openmeetings.db.dao.server.SessiondataDao;
+import org.apache.openmeetings.db.dao.user.IUserManager;
 import org.apache.openmeetings.db.entity.server.Server;
 import org.apache.openmeetings.util.AuthLevelUtil;
 import org.apache.openmeetings.util.OpenmeetingsVariables;
@@ -44,7 +44,7 @@ public class ServerWebService {
 	@Autowired
 	private SessiondataDao sessiondataDao;
 	@Autowired
-	private UserManager userManager;
+	private IUserManager userManager;
 	@Autowired
 	private ServerDao serversDao;
 

@@ -44,7 +44,7 @@
 	<property name="screenshare.resources.dir" value="${basedir}/openmeetings-screenshare/src/main/resources" />
 	<property name="axis.resources.dir" value="${basedir}/openmeetings-axis/src/main/resources" />
 	
-	<property name="webapp.dir" value="${basedir}/openmeetings-core/src/main/webapp" />
+	<property name="webapp.dir" value="${basedir}/openmeetings-web/src/main/webapp" />
 	<property name="junit.lib.dir" value="${project.lib.dir}/junit" />
 	<property name="junit.backups.dir" value="${junit.lib.dir}/backups" />
 	<property name="rat.lib.dir" value="${project.lib.dir}/rat" />
@@ -468,8 +468,8 @@
 		<tstamp prefix="doc">
 			<format property="TODAY_YEAR" pattern="yyyy" locale="en" />
 		</tstamp>
-	    <javadoc packagenames="org.apache.openmeetings.remote.*"
-	           sourcepath="${basedir}/openmeetings-axis/src/main/java:${basedir}/openmeetings-db/src/main/java:${src.base.dir}/doc/java:${basedir}/openmeetings-install/src/main/java:${basedir}/openmeetings-core/src/main/java:${basedir}/openmeetings-screenshare/src/main/java:${basedir}/openmeetings-util/src/main/java:${basedir}/openmeetings-web/src/main/java"
+	    <javadoc packagenames="org.apache.openmeetings.core.remote.*"
+	           sourcepath="${basedir}/openmeetings-axis/src/main/java:${basedir}/openmeetings-db/src/main/java:${src.base.dir}/doc/java:${basedir}/openmeetings-install/src/main/java:${basedir}/openmeetings-core/src/main/java:${basedir}/openmeetings-screenshare/src/main/java:${basedir}/openmeetings-util/src/main/java:${basedir}/openmeetings-web/src/main/java:${basedir}/openmeetings-service/src/main/java"
 	           excludepackagenames="org.apache.openmeetings.test.*"
 	           defaultexcludes="yes"
 	           destdir="build/api"
@@ -692,10 +692,12 @@
 			<src path="${src.base.dir}/doc/java" />
 			<src path="${basedir}/openmeetings-install/src/main/java" />
 			<src path="${basedir}/openmeetings-core/src/main/java" />
-			<src path="${src.base.dir}/test/java" />
+			<src path="${basedir}/openmeetings-core/src/test/java" />
 			<src path="${basedir}/openmeetings-screenshare/src/main/java" />
 			<src path="${basedir}/openmeetings-util/src/main/java" />
 			<src path="${basedir}/openmeetings-web/src/main/java" />
+			<src path="${basedir}/openmeetings-web/src/test/java" />
+			<src path="${basedir}/openmeetings-service/src/main/java" />
 			<classpath refid="compile.classpath" />
 			<compilerarg value="-Aopenjpa.metamodel=true" />
 			<!-- compilerarg value="-Xlint:deprecation"/ -->

@@ -23,8 +23,8 @@ import javax.servlet.ServletContext;
 import org.apache.axis2.AxisFault;
 import org.apache.axis2.context.MessageContext;
 import org.apache.axis2.transport.http.HTTPConstants;
-import org.apache.openmeetings.servlet.BeanUtil;
-import org.apache.openmeetings.servlet.ServerNotInitializedException;
+import org.apache.openmeetings.core.servlet.BeanUtil;
+import org.apache.openmeetings.core.servlet.ServerNotInitializedException;
 
 public abstract class BaseWebService {
 	private BeanUtil beanUtil = new BeanUtil();

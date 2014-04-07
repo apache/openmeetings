@@ -97,8 +97,8 @@ public class AdminUserDao implements IDataProviderDao<User> {
 		return dao.checkUserEMail(email, id);
 	}
 	
-	public User getUserByName(String login) {
-		return dao.getUserByName(login);
+	public User getUserByLogin(String login) {
+		return dao.getUserByLogin(login);
 	}
 
 	public User getUserByEmail(String email) {

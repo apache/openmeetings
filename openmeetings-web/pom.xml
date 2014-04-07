@@ -33,6 +33,10 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<wicket-dashboard.version>0.10</wicket-dashboard.version>
+		<select2.version>2.2.2</select2.version>
+		<dnd.version>0.6.0</dnd.version>
+		<commons-io.version>2.4</commons-io.version>
+		<selenium.version>2.35.0</selenium.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -51,6 +55,11 @@
 			<version>${openmeetings.version}</version>
 		</dependency>
 		<dependency>
+			<groupId>org.apache.openmeetings</groupId>
+			<artifactId>openmeetings-install</artifactId>
+			<version>${openmeetings.version}</version>
+		</dependency>
+		<dependency>
 			<groupId>ro.fortsoft.wicket.dashboard</groupId>
 			<artifactId>wicket-dashboard-core</artifactId>
 			<version>${wicket-dashboard.version}</version>
@@ -62,12 +71,27 @@
 		</dependency>
 		<dependency>
 			<groupId>org.apache.wicket</groupId>
+			<artifactId>wicket-auth-roles</artifactId>
+			<version>${wicket.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.wicket</groupId>
 			<artifactId>wicket-native-websocket-core</artifactId>
 			<version>${wicket.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.wicket</groupId>
 			<artifactId>wicket-native-websocket-tomcat</artifactId>
+			<version>${wicket.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.wicket</groupId>
+			<artifactId>wicket-devutils</artifactId>
+			<version>${wicket.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.wicket</groupId>
+			<artifactId>wicket-datetime</artifactId>
 			<version>${wicket.version}</version>
 		</dependency>
 		<dependency>
@@ -89,6 +113,45 @@
 			<groupId>com.googlecode.wicket-jquery-ui</groupId>
 			<artifactId>wicket-jquery-ui-plugins</artifactId>
 			<version>${wicket.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.wicketstuff</groupId>
+			<artifactId>wicketstuff-urlfragment</artifactId>
+			<version>${wicket.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.wicketstuff</groupId>
+			<artifactId>wicketstuff-html5</artifactId>
+			<version>${wicket.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.vaynberg.wicket.select2</groupId>
+			<artifactId>wicket-select2</artifactId>
+			<version>${select2.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.github.svenmeier.wicket-dnd</groupId>
+			<artifactId>wicket-dnd</artifactId>
+			<version>${dnd.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>${commons-io.version}</version>
+		</dependency>
+		<!-- Test dependencies -->
+		<dependency>
+			<groupId>org.seleniumhq.selenium</groupId>
+			<artifactId>selenium-java</artifactId>
+			<version>${selenium.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.openmeetings</groupId>
+			<artifactId>openmeetings-core</artifactId>
+			<version>${openmeetings.version}</version>
+			<type>test-jar</type>
+			<scope>test</scope>
 		</dependency>
 	</dependencies>
 </project>

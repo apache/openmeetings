@@ -23,10 +23,20 @@ import java.util.List;
 import java.util.TimeZone;
 
 import org.apache.openmeetings.db.entity.room.Client;
+import org.apache.openmeetings.db.entity.user.Address;
+import org.apache.openmeetings.db.entity.user.Userdata;
 import org.red5.server.api.IClient;
 
 //FIXME HACK to bypass cross project compilation
 public interface IUserManager {
+	Long getUserLevelByID(Long user_id);
+	
+	Long registerUser(String login, String Userpass, String lastname,
+			String firstname, String email, Date age, String street,
+			String additionalname, String fax, String zip, long states_id,
+			String town, long language_id, String phone, boolean sendSMS, String baseURL,
+			boolean generateSipUserData, String jNameTimeZone);
+	
 	Long registerUserInit(long user_level, long level_id, int availible,
 			int status, String login, String password, String lastname,
 			String firstname, String email, Date age, String street,
@@ -38,6 +48,16 @@ public interface IUserManager {
 			String userOffers, String userSearchs, Boolean showContactData,
 			Boolean showContactDataToContacts, String activatedHash) throws Exception;
 
+	Long registerUserInit(long user_level, long level_id, int availible,
+			int status, String login, String password, String lastname,
+			String firstname, String email, Date age, String street,
+			String additionalname, String fax, String zip, long states_id,
+			String town, long language_id, boolean sendWelcomeMessage,
+			List<Long> organisations, String phone, boolean sendSMS, String baseURL,
+			Boolean sendConfirmation, String iCalTz, Boolean forceTimeZoneCheck,
+			String userOffers, String userSearchs, Boolean showContactData,
+			Boolean showContactDataToContacts) throws Exception;
+	
 	Long registerUserNoEmail(String login, String Userpass,
 			String lastname, String firstname, String email, Date age,
 			String street, String additionalname, String fax, String zip,
@@ -46,4 +66,21 @@ public interface IUserManager {
 	
 	Object loginUser(String SID, String userOrEmail, String userpass,
 			Client currentClient, IClient client, Boolean storePermanent);
+	
+	Boolean kickUserByStreamId(String SID, Long room_id);
+	
+	Boolean kickUserByPublicSID(String SID, String publicSID);
+	
+	Long logout(String SID, long USER_ID);
+	
+	List<Userdata> getUserdataDashBoard(Long user_id);
+	
+	Long addUserWithExternalKey(long level_id, int availible,
+			int status, String firstname, String login, String lastname,
+			long language_id, boolean emptyPass, String userpass, Address address, Date age,
+			String hash, String externalUserId, String externalUserType,
+			boolean generateSipUserData, String email, String iCalTz,
+			String pictureuri);
+	
+	Long getUserLevelByIdAndOrg(Long user_id, Long organisation_id);
 }

@@ -49,5 +49,10 @@
 			<artifactId>openmeetings-core</artifactId>
 			<version>${openmeetings.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>org.apache.openmeetings</groupId>
+			<artifactId>openmeetings-web</artifactId>
+			<version>${openmeetings.version}</version>
+		</dependency>
 	</dependencies>
 </project>

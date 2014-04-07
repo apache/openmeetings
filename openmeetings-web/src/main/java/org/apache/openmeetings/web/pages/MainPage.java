@@ -20,18 +20,29 @@ package org.apache.openmeetings.web.pages;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.openmeetings.web.app.Application.addOnlineUser;
+import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.Application.removeOnlineUser;
+import static org.apache.openmeetings.web.app.WebSession.getLanguage;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
+import static org.apache.openmeetings.web.app.WebSession.getUserLevel;
 import static org.apache.openmeetings.web.util.OmUrlFragment.CHILD_ID;
 import static org.apache.openmeetings.web.util.OmUrlFragment.PROFILE_EDIT;
 import static org.apache.openmeetings.web.util.OmUrlFragment.PROFILE_MESSAGES;
 import static org.apache.openmeetings.web.util.OmUrlFragment.getPanel;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.openmeetings.db.dao.basic.NavigationDao;
+import org.apache.openmeetings.db.entity.basic.Naviglobal;
+import org.apache.openmeetings.db.entity.basic.Navimain;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.BasePanel;
 import org.apache.openmeetings.web.common.ConfirmableAjaxLink;
-import org.apache.openmeetings.web.common.MenuPanel;
+import org.apache.openmeetings.web.common.menu.MainMenuItem;
+import org.apache.openmeetings.web.common.menu.MenuItem;
+import org.apache.openmeetings.web.common.menu.MenuPanel;
 import org.apache.openmeetings.web.user.AboutDialog;
 import org.apache.openmeetings.web.user.ChatPanel;
 import org.apache.openmeetings.web.util.BaseUrlAjaxBehavior;
@@ -60,7 +71,7 @@ import org.wicketstuff.urlfragment.UrlFragment;
 public class MainPage extends BaseInitedPage {
 	private static final long serialVersionUID = 6421960759218157999L;
 	private static final Logger log = Red5LoggerFactory.getLogger(MainPage.class, webAppRootKey);
-	private final MenuPanel menu = new MenuPanel("menu");
+	private final MenuPanel menu;
 	private final WebMarkupContainer topLinks = new WebMarkupContainer("topLinks");
 	private final MarkupContainer contents;
 	private final AbstractAjaxTimerBehavior areaBehavior;
@@ -69,6 +80,7 @@ public class MainPage extends BaseInitedPage {
 	public MainPage(PageParameters pp) {
 		super();
 		getHeader().setVisible(false);
+		menu = new MenuPanel("menu", getMainMenu());
 		contents = new WebMarkupContainer("contents");
 		add(contents.add(new WebMarkupContainer(CHILD_ID)).setOutputMarkupId(true).setMarkupId("contents"));
 		add(menu.setVisible(false), topLinks.setVisible(false).setOutputMarkupPlaceholderTag(true).setMarkupId("topLinks"));
@@ -147,6 +159,27 @@ public class MainPage extends BaseInitedPage {
 		});
 		
 		add(new BaseUrlAjaxBehavior());
+	}
+	
+	private List<MenuItem> getMainMenu() {
+		List<MenuItem> menu = new ArrayList<MenuItem>();
+		for (Naviglobal gl : getBean(NavigationDao.class).getMainMenu(getUserLevel(), getUserId(), getLanguage())) {
+			MenuItem g = new MenuItem(gl.getLabel().getValue()) {
+				private static final long serialVersionUID = 1L;
+
+				@Override
+				public void onClick(MainPage page, AjaxRequestTarget terget) {}
+			};
+			List<MainMenuItem> l = new ArrayList<MainMenuItem>();
+			for (Navimain nm : gl.getMainnavi()) {
+				l.add(new MainMenuItem(nm)); 
+			}
+			if (!l.isEmpty()) {
+				g.setChildren(l);
+			}
+			menu.add(g);
+		}
+		return menu;
 	}
 	
 	public void updateContents(OmUrlFragment f, AjaxRequestTarget target) {

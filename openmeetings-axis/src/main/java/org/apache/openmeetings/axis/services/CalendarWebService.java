@@ -27,9 +27,8 @@ import java.util.Date;
 import java.util.List;
 
 import org.apache.axis2.AxisFault;
-import org.apache.openmeetings.data.calendar.management.AppointmentLogic;
-import org.apache.openmeetings.data.conference.RoomManager;
-import org.apache.openmeetings.data.user.UserManager;
+import org.apache.openmeetings.core.data.calendar.management.AppointmentLogic;
+import org.apache.openmeetings.core.data.conference.RoomManager;
 import org.apache.openmeetings.db.dao.calendar.AppointmentCategoryDao;
 import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
 import org.apache.openmeetings.db.dao.calendar.AppointmentReminderTypDao;
@@ -37,6 +36,7 @@ import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.dao.room.RoomTypeDao;
 import org.apache.openmeetings.db.dao.server.SessiondataDao;
 import org.apache.openmeetings.db.dao.user.AdminUserDao;
+import org.apache.openmeetings.db.dao.user.IUserManager;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
 import org.apache.openmeetings.db.entity.calendar.AppointmentCategory;
 import org.apache.openmeetings.db.entity.calendar.AppointmentReminderTyps;
@@ -66,7 +66,7 @@ public class CalendarWebService {
 	@Autowired
 	private SessiondataDao sessiondataDao;
 	@Autowired
-	private UserManager userManager;
+	private IUserManager userManager;
 	@Autowired
 	private AdminUserDao userDao;
 	@Autowired
@@ -593,7 +593,7 @@ public class CalendarWebService {
 			Long user_level = userManager.getUserLevelByID(users_id);
 			if (AuthLevelUtil.checkUserLevel(user_level)) {
 
-				User user = userManager.getUserById(users_id);
+				User user = userDao.get(users_id);
 				long language_id = (user == null) ? 1 : user.getLanguage_id();
 				List<AppointmentReminderTyps> res = appointmentReminderTypDao
 						.getAppointmentReminderTypList(language_id);

@@ -21,7 +21,6 @@ package org.apache.openmeetings.web.pages;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.openmeetings.db.entity.label.FieldLanguage;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.common.HeaderPanel;
 import org.apache.openmeetings.web.util.OmUrlFragment;
@@ -41,7 +40,8 @@ public abstract class BasePage extends AsyncUrlFragmentAwarePage {
 	private final Map<String, String> options;
 	private final HeaderPanel header;
 
-	protected abstract FieldLanguage getLanguage();
+	protected abstract Boolean isRtl();
+	protected abstract String getLanguageCode();
 	protected abstract String getApplicationName();
 	
 	public BasePage() {
@@ -50,12 +50,11 @@ public abstract class BasePage extends AsyncUrlFragmentAwarePage {
 		options.put("keyValueDelimiter", "/");
 		String appName = getApplicationName();
 
-		FieldLanguage lang = getLanguage();
-		String code = lang.getCode();
+		String code = getLanguageCode();
 		add(new TransparentWebMarkupContainer("html")
 	    	.add(new AttributeModifier("xml:lang", code))
 	    	.add(new AttributeModifier("lang", code))
-	    	.add(new AttributeModifier("dir", Boolean.TRUE.equals(lang.getRtl()) ? "rtl" : "ltr"))); 
+	    	.add(new AttributeModifier("dir", Boolean.TRUE.equals(isRtl()) ? "rtl" : "ltr"))); 
 		add(new Label("pageTitle", appName));
 		add(header = new HeaderPanel("header", appName));
 	}

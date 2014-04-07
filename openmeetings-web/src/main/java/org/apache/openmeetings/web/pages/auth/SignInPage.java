@@ -325,7 +325,7 @@ public class SignInPage extends BaseInitedPage {
 		String firstname = params.get("firstname");
 		if (firstname == null) firstname = "";
 		if (lastname == null) lastname = "";
-		User user = userDao.getUserByName(login);
+		User user = userDao.getUserByLogin(login);
 		// generate random password
 		byte[] rawPass = new byte[16];
 		Random rnd = new Random();

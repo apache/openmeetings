@@ -34,9 +34,11 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<openmeetings.version>3.1.0-SNAPSHOT</openmeetings.version>
 		<red5.server.version>1.0.2-M1</red5.server.version>
+		<red5.client.version>1.0.2-RC2</red5.client.version>
 		<wicket.version>6.14.0</wicket.version>
 		<jaudiotagger.version>2.0.4-SNAPSHOT</jaudiotagger.version>
 		<spring.version>4.0.0.RELEASE</spring.version>
+		<junit.version>4.11</junit.version>
 	</properties>
 	<modules>
 		<module>openmeetings-util</module>
@@ -46,6 +48,7 @@
 		<module>openmeetings-web</module>
 		<module>openmeetings-core</module>
 		<module>openmeetings-axis</module>
+		<module>openmeetings-service</module>
 	</modules>
 	<profiles>
 		<profile>
@@ -149,6 +152,18 @@
 			<groupId>org.apache.wicket</groupId>
 			<artifactId>wicket-util</artifactId>
 			<version>${wicket.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>${junit.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-test</artifactId>
+			<version>${spring.version}</version>
+			<scope>test</scope>
 		</dependency>
 	</dependencies>
 	<build>

@@ -22,7 +22,7 @@ import static org.apache.openmeetings.web.app.Application.getBean;
 
 import java.util.List;
 
-import org.apache.openmeetings.converter.GenerateImage;
+import org.apache.openmeetings.core.converter.GenerateImage;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.util.StoredFile;
 import org.apache.openmeetings.web.util.BootstrapFileUploadBehavior;

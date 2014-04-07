@@ -21,7 +21,6 @@ package org.apache.openmeetings.web.pages;
 import static org.apache.openmeetings.web.app.Application.getBean;
 
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
-import org.apache.openmeetings.db.entity.label.FieldLanguage;
 import org.apache.openmeetings.web.app.WebSession;
 
 public abstract class BaseInitedPage extends BasePage {
@@ -33,7 +32,12 @@ public abstract class BaseInitedPage extends BasePage {
 	}
 	
 	@Override
-	protected FieldLanguage getLanguage() {
-		return WebSession.getLanguageObj();
+	protected String getLanguageCode() {
+		return WebSession.getLanguageObj().getCode();
+	}
+	
+	@Override
+	protected Boolean isRtl() {
+		return WebSession.getLanguageObj().getRtl();
 	}
 }

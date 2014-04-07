@@ -79,7 +79,7 @@
 				    <includes>**/entity/**/*.class</includes>
 				    <addDefaultConstructor>true</addDefaultConstructor>               
 				    <enforcePropertyRestrictions>true</enforcePropertyRestrictions>
-				    <persistenceXmlFile>${project.parent.basedir}/openmeetings-core/src/main/webapp/WEB-INF/classes/META-INF/derby_persistence.xml</persistenceXmlFile>
+				    <persistenceXmlFile>${project.parent.basedir}/openmeetings-web/src/main/webapp/WEB-INF/classes/META-INF/derby_persistence.xml</persistenceXmlFile>
 				</configuration>
 				<executions>
 				    <execution>

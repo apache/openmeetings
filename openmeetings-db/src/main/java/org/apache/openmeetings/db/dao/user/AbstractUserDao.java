@@ -295,7 +295,7 @@ public class AbstractUserDao  {
 		return count == 0;
 	}
 	
-	public User getUserByName(String login) {
+	public User getUserByLogin(String login) {
 		User us = null;
 		try {
 			us = em.createNamedQuery("getUserByLogin", User.class)

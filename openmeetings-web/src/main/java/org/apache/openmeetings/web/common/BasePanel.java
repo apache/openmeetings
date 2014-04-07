@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.web.common;
 
+import org.apache.openmeetings.web.common.menu.MenuPanel;
 import org.apache.openmeetings.web.pages.MainPage;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.panel.Panel;
