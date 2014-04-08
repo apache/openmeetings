@@ -89,13 +89,6 @@ public class MeetingMember implements Serializable {
 	@ForeignKey(enabled = true)
 	private Invitation invitation;
 
-	/**
-	 * java.util.TimeZone Id
-	 */
-	@Column(name = "time_zone_id")
-	@Element(data = true, required = false)
-	private String timeZoneId;
-
 	@Column(name = "is_connected_event")
 	private boolean connectedEvent;
 
@@ -170,13 +163,4 @@ public class MeetingMember implements Serializable {
 	public void setConnectedEvent(boolean connectedEvent) {
 		this.connectedEvent = connectedEvent;
 	}
-
-	public String getTimeZoneId() {
-		return timeZoneId;
-	}
-
-	public void setTimeZoneId(String timeZoneId) {
-		this.timeZoneId = timeZoneId;
-	}
-
 }

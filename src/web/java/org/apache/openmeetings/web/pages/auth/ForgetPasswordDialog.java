@@ -20,12 +20,12 @@ package org.apache.openmeetings.web.pages.auth;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.openmeetings.web.app.Application.getBean;
-import static org.apache.openmeetings.web.app.WebSession.getBaseUrl;
 
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.user.AdminUserDao;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.mail.MailHandler;
@@ -188,7 +188,7 @@ public class ForgetPasswordDialog extends AbstractFormDialog<String> {
 	@Override
 	protected void onSubmit(AjaxRequestTarget target) {
 		resetUser(type == Type.email ? name : "", type == Type.login ? name : ""
-			, getBaseUrl() + getRequestCycle().urlFor(ResetPage.class, new PageParameters()).toString().substring(2));
+			, getBean(ConfigurationDao.class).getBaseUrl() + getRequestCycle().urlFor(ResetPage.class, new PageParameters()).toString().substring(2));
 	}
 
 	/**

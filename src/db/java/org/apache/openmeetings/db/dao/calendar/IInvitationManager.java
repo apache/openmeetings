@@ -28,7 +28,7 @@ public interface IInvitationManager {
 		, Cancel
 	}
 	
-	void processInvitation(Appointment a, MeetingMember member, MessageType type, String baseUrl);
+	void processInvitation(Appointment a, MeetingMember member, MessageType type);
 	
-	void processInvitation(Appointment a, MeetingMember mm, MessageType type, String baseUrl, boolean sendMail);
+	void processInvitation(Appointment a, MeetingMember mm, MessageType type, boolean sendMail);
 }

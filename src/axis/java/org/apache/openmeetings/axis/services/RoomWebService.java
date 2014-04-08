@@ -19,7 +19,6 @@
 package org.apache.openmeetings.axis.services;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
-import static org.apache.openmeetings.web.app.WebSession.getBaseUrl;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -1680,8 +1679,7 @@ public class RoomWebService {
 				User invitee = userDao.getContact(username, username, username, users_id);
 				Invitation invitation = invitationManager.getInvitation(invitee, roomDao.get(room_id),
 								isPasswordProtected, invitationpass, Valid.fromInt(valid)
-								, userDao.get(users_id), "", 1L,
-								dFrom, dTo, null);
+								, userDao.get(users_id), 1L, dFrom, dTo, null);
 
 				if (invitation != null) {
 					return invitation.getHash();
@@ -1710,9 +1708,6 @@ public class RoomWebService {
 	 *            the Username of the User that he will get
 	 * @param message
 	 *            the Message in the Email Body send with the invitation if
-	 *            sendMail is true
-	 * @param baseurl
-	 *            the baseURL for the Infivations link in the Mail Body if
 	 *            sendMail is true
 	 * @param email
 	 *            the Email to send the invitation to if sendMail is true
@@ -1753,7 +1748,7 @@ public class RoomWebService {
 	 * @throws AxisFault
 	 */
 	public String sendInvitationHash(String SID, String username,
-			String message, String baseurl, String email, String subject,
+			String message, String email, String subject,
 			Long room_id, String conferencedomain, Boolean isPasswordProtected,
 			String invitationpass, Integer valid, String validFromDate,
 			String validFromTime, String validToDate, String validToTime,
@@ -1812,7 +1807,7 @@ public class RoomWebService {
 				User invitee = userDao.getContact(email, users_id);
 				Invitation invitation = invitationManager.getInvitation(invitee, roomDao.get(room_id),
 								isPasswordProtected, invitationpass, Valid.fromInt(valid)
-								, userDao.get(users_id), baseurl, language_id,
+								, userDao.get(users_id), language_id,
 								dFrom, dTo, null);
 
 				if (invitation != null) {
@@ -1848,9 +1843,6 @@ public class RoomWebService {
 	 * @param message
 	 *            the Message in the Email Body send with the invitation if
 	 *            sendMail is true
-	 * @param baseurl
-	 *            the baseURL for the Infivations link in the Mail Body if
-	 *            sendMail is true
 	 * @param email
 	 *            the Email to send the invitation to if sendMail is true
 	 * @param subject
@@ -1884,7 +1876,7 @@ public class RoomWebService {
 	 * @throws AxisFault
 	 */
 	public String sendInvitationHashWithDateObject(String SID, String username,
-			String message, String baseurl, String email, String subject,
+			String message, String email, String subject,
 			Long room_id, String conferencedomain, Boolean isPasswordProtected,
 			String invitationpass, Integer valid, Date fromDate, Date toDate,
 			Long language_id, Boolean sendMail) throws AxisFault {
@@ -1911,7 +1903,7 @@ public class RoomWebService {
 				User invitee = userDao.getContact(email, users_id);
 				Invitation invitation = invitationManager.getInvitation(invitee, roomDao.get(room_id),
 								isPasswordProtected, invitationpass, Valid.fromInt(valid)
-								, userDao.get(users_id), baseurl, language_id,
+								, userDao.get(users_id), language_id,
 								dFrom, dTo, null);
 
 				if (invitation != null) {
@@ -2184,7 +2176,7 @@ public class RoomWebService {
 				a.setPasswordProtected(isPasswordProtected);
 				a.setPassword(password);
 				a.setLanguageId(1L); //TODO check
-				appointmentDao.update(a, getBaseUrl(), users_id); //FIXME verify !!!
+				appointmentDao.update(a, users_id); //FIXME verify !!!
 
 				return rooms_id;
 
@@ -2214,9 +2206,6 @@ public class RoomWebService {
 	 *            The last name of the meeting member
 	 * @param email
 	 *            The email of the Meeting member
-	 * @param baseUrl
-	 *            The baseUrl, this is important to send the correct link in the
-	 *            invitation to the meeting member
 	 * @param language_id
 	 *            The ID of the language, for the email that is send to the
 	 *            meeting member
@@ -2225,9 +2214,8 @@ public class RoomWebService {
 	 * @throws AxisFault
 	 */
 	public Long addMeetingMemberRemindToRoom(String SID, Long room_id,
-			String firstname, String lastname, String email, String baseUrl,
-			Long language_id) throws AxisFault {
-		return addExternalMeetingMemberRemindToRoom(SID, room_id, firstname, lastname, email, baseUrl, language_id, null, null);
+			String firstname, String lastname, String email, Long language_id) throws AxisFault {
+		return addExternalMeetingMemberRemindToRoom(SID, room_id, firstname, lastname, email, language_id, null, null);
 	}
 
 	/**
@@ -2244,9 +2232,6 @@ public class RoomWebService {
 	 *            The last name of the meeting member
 	 * @param email
 	 *            The email of the Meeting member
-	 * @param baseUrl
-	 *            The baseUrl, this is important to send the correct link in the
-	 *            invitation to the meeting member
 	 * @param language_id
 	 *            The ID of the language, for the email that is send to the
 	 *            meeting member
@@ -2259,8 +2244,7 @@ public class RoomWebService {
 	 * @throws AxisFault
 	 */
 	public Long addExternalMeetingMemberRemindToRoom(String SID, Long room_id,
-			String firstname, String lastname, String email, String baseUrl,
-			Long language_id, String jNameTimeZone, String invitorName)
+			String firstname, String lastname, String email, Long language_id, String jNameTimeZone, String invitorName)
 			throws AxisFault {
 		try {
 			Long users_id = sessiondataDao.checkSession(SID);
@@ -2281,7 +2265,7 @@ public class RoomWebService {
 				mm.setAppointment(a);
 				mm.setUser(userDao.getContact(email, firstname, lastname, language_id, jNameTimeZone, users_id));
 				a.getMeetingMembers().add(mm);
-				appointmentDao.update(a, baseUrl, users_id);
+				appointmentDao.update(a, users_id);
 
 				return mm.getId(); //FIXME check to return ID
 			} else {

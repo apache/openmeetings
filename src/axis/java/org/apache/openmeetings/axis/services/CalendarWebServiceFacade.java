@@ -62,21 +62,19 @@ public class CalendarWebServiceFacade extends BaseWebService {
 			Calendar appointmentstart, Calendar appointmentend,
 			Boolean isDaily, Boolean isWeekly, Boolean isMonthly,
 			Boolean isYearly, Long categoryId, Long remind, String[] mmClient,
-			Long roomType, String baseUrl, Long languageId,
+			Long roomType, Long languageId,
 			Boolean isPasswordProtected, String password, long roomId) throws AxisFault {
 		return getBean(CalendarWebService.class).saveAppointment(SID, appointmentName,
 				appointmentLocation, appointmentDescription, appointmentstart,
 				appointmentend, isDaily, isWeekly, isMonthly, isYearly,
-				categoryId, remind, mmClient, roomType, baseUrl, languageId,
+				categoryId, remind, mmClient, roomType, languageId,
 				isPasswordProtected, password, roomId);
 	}
 
 	public Long updateAppointmentTimeOnly(String SID, Long appointmentId,
-			Date appointmentstart, Date appointmentend, String baseurl,
-			Long languageId) throws AxisFault {
+			Date appointmentstart, Date appointmentend, Long languageId) throws AxisFault {
 		return getBean(CalendarWebService.class).updateAppointmentTimeOnly(SID,
-				appointmentId, appointmentstart, appointmentend, baseurl,
-				languageId);
+				appointmentId, appointmentstart, appointmentend, languageId);
 	}
 
 	public Long updateAppointment(String SID, Long appointmentId,
@@ -84,13 +82,12 @@ public class CalendarWebServiceFacade extends BaseWebService {
 			String appointmentDescription, Calendar appointmentstart,
 			Calendar appointmentend, Boolean isDaily, Boolean isWeekly,
 			Boolean isMonthly, Boolean isYearly, Long categoryId, Long remind,
-			String[] mmClient, Long roomType, String baseurl, Long languageId,
+			String[] mmClient, Long roomType, Long languageId,
 			Boolean isPasswordProtected, String password) throws AxisFault {
 		return getBean(CalendarWebService.class).updateAppointment(SID, appointmentId,
 				appointmentName, appointmentLocation, appointmentDescription,
 				appointmentstart, appointmentend, isDaily, isWeekly, isMonthly,
-				isYearly, categoryId, remind, mmClient, roomType, baseurl,
-				languageId, isPasswordProtected, password);
+				isYearly, categoryId, remind, mmClient, roomType, languageId, isPasswordProtected, password);
 	}
 
 	public Long deleteAppointment(String SID, Long appointmentId,

@@ -19,6 +19,8 @@
 package org.apache.openmeetings.installation;
 
 import static org.apache.openmeetings.db.dao.basic.ConfigurationDao.DEFAULT_MAX_UPLOAD_SIZE;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_APPLICATION_BASE_URL;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_APPOINTMENT_REMINDER_MINUTES;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_CRYPT_KEY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DASHBOARD_SHOW_MYROOMS_KEY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DASHBOARD_SHOW_RSS_KEY;
@@ -368,14 +370,12 @@ public class ImportInitvalues {
 
 		configurationDao.add("ffmpeg_path", cfg.ffmpegPath, null,
 				"Path To FFMPEG");
-		configurationDao
-				.add(
+		configurationDao.add(
 						"office.path",
 						cfg.officePath,
 						null,
 						"The path to OpenOffice/LibreOffice (optional) please set this to the real path in case jodconverter is unable to find OpenOffice/LibreOffice installation automatically");
-		configurationDao
-				.add(
+		configurationDao.add(
 						"jod.path",
 						cfg.jodPath,
 						null,
@@ -387,13 +387,11 @@ public class ImportInitvalues {
 		configurationDao.add(CONFIG_RSS_FEED2_KEY, cfg.urlFeed2, null,
 				"Feed URL 2");
 
-		configurationDao
-				.add("sendEmailAtRegister", cfg.sendEmailAtRegister,
+		configurationDao.add("sendEmailAtRegister", cfg.sendEmailAtRegister,
 						null,
 						"User get a EMail with their Account data. Values: 0(No) or 1(Yes)");
 
-		configurationDao
-				.add(
+		configurationDao.add(
 						"sendEmailWithVerficationCode",
 						cfg.sendEmailWithVerficationCode,
 						null,
@@ -402,8 +400,7 @@ public class ImportInitvalues {
 								+ "It makes no sense to make this(sendEmailWithVerficationCode) 1(Yes) while "
 								+ "sendEmailAtRegister is 0(No) cause you need"
 								+ "to send a EMail.");
-		configurationDao
-				.add(
+		configurationDao.add(
 						"default_export_font",
 						cfg.defaultExportFont,
 						null,
@@ -413,6 +410,8 @@ public class ImportInitvalues {
 		configurationDao.add("default.rpc.userid", "" + 1, null,
 				"The User-Id of the Control User in OpenMeetings");
 
+		configurationDao.add(CONFIG_APPLICATION_BASE_URL, cfg.baseUrl, null, "Base URL your OPenmeetings installation will be accessible at.");
+		
 		// ***************************************
 		// ***************************************
 		// red5SIP Integration Coniguration Values
@@ -473,7 +472,7 @@ public class ImportInitvalues {
 
 		configurationDao
 				.add(
-						"number.minutes.reminder.send",
+						CONFIG_APPOINTMENT_REMINDER_MINUTES,
 						"15",
 						null,
 						"The number of minutes before reminder emails are send. Set to 0 to disable reminder emails");
@@ -652,12 +651,11 @@ public class ImportInitvalues {
 		org.setStarttime(new Date());
 		org = organisationDao.update(org, null);
 
-		// BaseUrl as param is empty as we do not send an EMAIL here
 		Long user_id = userManager.registerUserInit(new Long(3), 3, 1,
 				1, cfg.username, cfg.password, "lastname", "firstname", cfg.email,
 				new java.util.Date(), "street", "no", "fax", "zip", 1,
 				"town", default_lang_id, false,
-				Arrays.asList(org.getOrganisation_id()), "phone", false, "", false,
+				Arrays.asList(org.getOrganisation_id()), "phone", false, false,
 				timezoneUtil.getTimeZone(cfg.ical_timeZone),
 				false, "", "", false, true, null);
 

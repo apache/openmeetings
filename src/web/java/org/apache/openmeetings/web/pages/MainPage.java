@@ -34,7 +34,6 @@ import org.apache.openmeetings.web.common.ConfirmableAjaxLink;
 import org.apache.openmeetings.web.common.MenuPanel;
 import org.apache.openmeetings.web.user.AboutDialog;
 import org.apache.openmeetings.web.user.ChatPanel;
-import org.apache.openmeetings.web.util.BaseUrlAjaxBehavior;
 import org.apache.openmeetings.web.util.OmUrlFragment;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
@@ -144,8 +143,6 @@ public class MainPage extends BaseInitedPage {
 				WebSession.get().setArea(null);
 			}
 		});
-		
-		add(new BaseUrlAjaxBehavior());
 	}
 	
 	public void updateContents(OmUrlFragment f, AjaxRequestTarget target) {

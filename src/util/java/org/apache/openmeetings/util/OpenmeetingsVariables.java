@@ -33,8 +33,14 @@ public class OpenmeetingsVariables {
 	public static final String CONFIG_IGNORE_BAD_SSL = "oauth2.ignore_bad_ssl";
 	public static final String CONFIG_DEFAULT_LANDING_ZONE = "default.landing.zone";
 	public static final String CONFIG_DEFAULT_LDAP_ID = "ldap_default_id";
-	public static final String WEB_DATE_PATTERN = "dd.MM.yyyy HH:mm:ss"; //FIXME need to be made locale based
 	public static final String CONFIG_REDIRECT_URL_FOR_EXTERNAL_KEY = "redirect.url.for.external.users";
+	public static final String CONFIG_APPOINTMENT_REMINDER_MINUTES = "number.minutes.reminder.send";
+	public static final String CONFIG_APPLICATION_BASE_URL = "application.base.url";
+
+	public static int DEFAULT_MINUTES_REMINDER_SEND = 15;
+	public static String DEFAULT_BASE_URL = "http://localhost:5080/openmeetings/";
+	
+	public static final String WEB_DATE_PATTERN = "dd.MM.yyyy HH:mm:ss"; //FIXME need to be made locale based
 	public static String webAppRootKey = null;
 	public static String webAppRootPath = null;
 	public static String configKeyCryptClassName = null;

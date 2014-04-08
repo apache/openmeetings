@@ -20,7 +20,6 @@ package org.apache.openmeetings.web.user.calendar;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.openmeetings.web.app.Application.getBean;
-import static org.apache.openmeetings.web.app.WebSession.getBaseUrl;
 import static org.apache.openmeetings.web.app.WebSession.getLanguage;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import static org.apache.openmeetings.web.util.RoomTypeDropDown.getRoomTypes;
@@ -136,7 +135,7 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 	}
 
 	protected void deleteAppointment(AjaxRequestTarget target) {
-		getBean(AppointmentDao.class).delete(getModelObject(), getBaseUrl(), getUserId());
+		getBean(AppointmentDao.class).delete(getModelObject(), getUserId());
 		calendar.refresh(target);		
 	}
 
@@ -209,7 +208,7 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
         	}
         }
         a.setMeetingMembers(attendees);
-        getBean(AppointmentDao.class).update(a, getBaseUrl(), getUserId());
+        getBean(AppointmentDao.class).update(a, getUserId());
 		target.add(feedback);
 		calendar.refresh(target);
 	}

@@ -145,8 +145,7 @@ public class JabberWebService {
 			User invitee = userDao.getContact(username, username, username, users_id);
 			Invitation invitation = invitationManager.getInvitation(invitee, roomDao.get(room_id),
 							false, "", Valid.OneTime
-							, userDao.get(users_id), "", 1L,
-							null, null, null);
+							, userDao.get(users_id), 1L, null, null, null);
 	
 			return ((invitation == null) ? null : invitation.getHash());
 		} else {

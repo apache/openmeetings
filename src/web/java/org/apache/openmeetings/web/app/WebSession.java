@@ -94,7 +94,6 @@ public class WebSession extends AbstractAuthenticatedWebSession {
 	private DateFormat ISO8601FORMAT = new SimpleDateFormat(ISO8601_FORMAT_STRING); //FIXME not thread safe
 	private DateFormat sdf;
 	private Dashboard dashboard;
-	private String baseUrl = null;
 	private Locale browserLocale = null;
 	private Long recordingId;
 	private Long loginError = null;
@@ -370,14 +369,6 @@ public class WebSession extends AbstractAuthenticatedWebSession {
 			d = get().dashboard;
 		}
 		return d;
-	}
-	
-	public static String getBaseUrl() {
-		return get().baseUrl;
-	}
-	
-	public void setBaseUrl(String baseUrl){
-		this.baseUrl = baseUrl;
 	}
 	
 	public Locale getBrowserLocale(){

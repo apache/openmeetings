@@ -71,9 +71,9 @@ import org.simpleframework.xml.Root;
 			+ "	)"
     	)
     , @NamedQuery(name="appointmentsInRangeRemind",
-		query="SELECT a FROM MeetingMember mm INNER JOIN mm.appointment a "
+		query="SELECT a FROM Appointment a "
 			//only ReminderType simple mail is concerned!
-			+ "WHERE mm.deleted = false AND a.deleted = false AND a.reminderEmailSend = false"
+			+ "WHERE a.deleted = false AND a.reminderEmailSend = false"
 			+ " AND (a.remind.typId = 2 OR a.remind.typId = 3) "
 			+ "	AND ( "
 			+ "		(a.start BETWEEN :starttime AND :endtime) "

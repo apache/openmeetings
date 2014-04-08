@@ -23,7 +23,6 @@ import static org.apache.openmeetings.db.util.UserHelper.getMinPasswdLength;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.AVAILABLE_TIMEZONES;
-import static org.apache.openmeetings.web.app.WebSession.getBaseUrl;
 import static org.apache.wicket.validation.validator.StringValidator.minimumLength;
 
 import java.util.Arrays;
@@ -41,7 +40,6 @@ import org.apache.openmeetings.db.entity.user.State;
 import org.apache.openmeetings.util.CalendarPatterns;
 import org.apache.openmeetings.util.crypt.ManageCryptStyle;
 import org.apache.openmeetings.web.app.WebSession;
-import org.apache.openmeetings.web.pages.ActivatePage;
 import org.apache.openmeetings.web.pages.MainPage;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
@@ -56,7 +54,6 @@ import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
-import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 
@@ -153,7 +150,7 @@ public class RegisterDialog extends AbstractFormDialog<String> {
 	}
 
 	public void onOpen(AjaxRequestTarget target) {
-		String baseURL = getBaseUrl();
+		String baseURL = getBean(ConfigurationDao.class).getBaseUrl();
 		sendEmailAtRegister = 1 == getBean(ConfigurationDao.class).getConfValue("sendEmailAtRegister", Integer.class,
 				"0");
 		sendConfirmation = baseURL != null
@@ -199,15 +196,12 @@ public class RegisterDialog extends AbstractFormDialog<String> {
 		String hash = ManageCryptStyle.getInstanceOfCrypt().createPassPhrase(
 				login + CalendarPatterns.getDateWithTimeByMiliSeconds(new Date()));
 
-		String redirectPage = getRequestCycle().urlFor(ActivatePage.class, new PageParameters().add("u", hash))
-				.toString().substring(2);
-		String baseURL = getBaseUrl() + redirectPage;
 		try {
 			getBean(IUserManager.class).registerUserInit(3, 1, 0, 1, login, password, lastName, firstName, email,
 					null /* age/birthday */, "" /* street */, "" /* additionalname */, "" /* fax */, "" /* zip */, state.getState_id(),
 					"" /* town */, lang.getLanguage_id(), true /* sendWelcomeMessage */,
 					Arrays.asList(getBean(ConfigurationDao.class).getConfValue("default_domain_id", Long.class, null)),
-					"" /* phone */, false, baseURL, sendConfirmation, TimeZone.getTimeZone(tzModel.getObject()),
+					"" /* phone */, false, sendConfirmation, TimeZone.getTimeZone(tzModel.getObject()),
 					false /* forceTimeZoneCheck */, "" /* userOffers */, "" /* userSearchs */, false /* showContactData */,
 					true /* showContactDataToContacts */, hash);
 

@@ -63,24 +63,12 @@ public class InvitationService implements IPendingServiceCallback {
 		log.debug("InvitationService resultReceived" + arg0);
 	}
 
-	private String getBaseUrl(String baseUrl) {
-		String url = null;
-		if (baseUrl != null) {
-			url = baseUrl.toLowerCase();
-			if (url.endsWith("swf")) {
-				url = url.substring(0, url.length() - 4);
-			}
-		}	
-		return url;
-	}
-	
 	/**
 	 * send an invitation to another user by Mail
 	 * 
 	 * @param SID
 	 * @param username
 	 * @param message
-	 * @param baseurl
 	 * @param email
 	 * @param subject
 	 * @param room_id
@@ -97,7 +85,7 @@ public class InvitationService implements IPendingServiceCallback {
 	 * @return - invitation object in case of success, "Sys - Error" string or null in case of error
 	 */
 	public Object sendInvitationHash(String SID, String username,
-			String message, String baseurl, String email, String subject,
+			String message, String email, String subject,
 			Long room_id, String conferencedomain, Boolean isPasswordProtected,
 			String invitationpass, Integer valid, Date validFromDate,
 			String validFromTime, Date validToDate, String validToTime,
@@ -151,7 +139,7 @@ public class InvitationService implements IPendingServiceCallback {
 				User invitee = userDao.getContact(email, users_id);
 				Invitation invitation = invitationManager.getInvitation(invitee, roomDao.get(room_id),
 								isPasswordProtected, invitationpass, Valid.fromInt(valid)
-								, userDao.get(users_id), getBaseUrl(baseurl), language_id,
+								, userDao.get(users_id), language_id,
 								dFrom, dTo, null);
 
 				if (invitation != null) {
@@ -174,14 +162,13 @@ public class InvitationService implements IPendingServiceCallback {
 		return null;
 	}
 
-	public String sendInvitationByHash(String SID, String invitationHash, String message, String baseurl, String subject
+	public String sendInvitationByHash(String SID, String invitationHash, String message, String subject
 			, Long language_id) throws Exception {
 		Long users_id = sessiondataDao.checkSession(SID);
 		Long user_level = userManager.getUserLevelByID(users_id);
 
 		if (AuthLevelUtil.checkUserLevel(user_level)) {
 			Invitation inv = (Invitation)invitationManager.getInvitationByHashCode(invitationHash, true);
-			inv.setBaseUrl(getBaseUrl(baseurl));
 			inv.getInvitee().setLanguage_id(language_id);
 			invitationManager.sendInvitionLink(inv, MessageType.Create, subject, message, false);
 		} else {

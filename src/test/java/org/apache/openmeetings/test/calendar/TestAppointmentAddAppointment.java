@@ -66,15 +66,14 @@ public class TestAppointmentAddAppointment extends AbstractJUnitDefaults {
 					"first" + i + ".last" + i + "@webbase-design.de", "Etc/GMT+1");
 		}
 		Long language_id = 1L;
-		String baseUrl = "http://localhost:5080/openmeetings/";
 		Long roomType = 1L;
 
 		Appointment a = appointmentLogic.getAppointment(appointmentName,
 				appointmentLocation, appointmentDescription,
 				start, end, isDaily, isWeekly,
 				isMonthly, isYearly, categoryId, remind, mmClient,
-				roomType, baseUrl, language_id, false, "", -1, users_id);
-		a = appointmentDao.update(a, baseUrl, users_id);
+				roomType, language_id, false, "", -1, users_id);
+		a = appointmentDao.update(a, users_id);
 		
 		Thread.sleep(3000);
 		

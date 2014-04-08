@@ -49,7 +49,7 @@ public class TestInvitation extends AbstractJUnitDefaults {
 			
 			User us = (User) userManager.loginUser(sessionData.getSession_id(), username, userpass, null, null, false);
 			
-			invitationService.sendInvitationHash(sessionData.getSession_id(), username, "message", "baseurl", "sebawagner@apache.org", 
+			invitationService.sendInvitationHash(sessionData.getSession_id(), username, "message", "sebawagner@apache.org", 
 					"subject", 1L, "", false, "", 1, new Date(), "12:00", new Date(), "14:00", 1L, us.getTimeZoneId(), true);
 			
 		} catch (Exception err) {

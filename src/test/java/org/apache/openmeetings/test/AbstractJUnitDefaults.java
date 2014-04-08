@@ -44,7 +44,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 public abstract class AbstractJUnitDefaults extends AbstractSpringTest {
 	private static final Logger log = Red5LoggerFactory.getLogger(AbstractJUnitDefaults.class);
-	public static final String OM_URL = "http://testserver.apache.org/openmeetings";
 	
 	protected static final String username = "swagner";
 	protected static final String userpass = "qweqwe";

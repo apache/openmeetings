@@ -447,13 +447,6 @@ public class UserService implements IUserService {
 				log.info("validFromDate: " + CalendarPatterns.getDateWithTimeByMiliSeconds(start));
 				log.info("validToDate: " + CalendarPatterns.getDateWithTimeByMiliSeconds(end));
 
-				String baseURL = "http://" + domain + ":" + port + webapp;
-				if (port.equals("80")) {
-					baseURL = "http://" + domain + webapp;
-				} else if (port.equals("443")) {
-					baseURL = "https://" + domain + webapp;
-				}
-
 				Appointment a = new Appointment();
 				a.setTitle(subject);
 				a.setDescription(message);
@@ -476,7 +469,7 @@ public class UserService implements IUserService {
 					mm.setUser(userDao.getContact(email, users_id));
 					a.getMeetingMembers().add(mm);
 				}
-				a = appointmentDao.update(a, baseURL, users_id);
+				a = appointmentDao.update(a, users_id);
 				for (MeetingMember mm : a.getMeetingMembers()) {
 					User to = mm.getUser();
 					Room room = a.getRoom();
