@@ -493,17 +493,17 @@ public class UserManager implements IUserManager {
 	public Long registerUser(String login, String Userpass, String lastname,
 			String firstname, String email, Date age, String street,
 			String additionalname, String fax, String zip, long states_id,
-			String town, long language_id, String phone, boolean sendSMS, String baseURL,
+			String town, long language_id, String phone, boolean sendSMS,
 			boolean generateSipUserData, String jNameTimeZone) {
 		
+		String baseURL = configurationDao.getBaseUrl();
 		boolean sendConfirmation = baseURL != null
 				&& !baseURL.isEmpty()
-				&& 1 == configurationDao.getConfValue(
-						"sendEmailWithVerficationCode", Integer.class, "0");
+				&& 1 == configurationDao.getConfValue("sendEmailWithVerficationCode", Integer.class, "0");
 		
 		return registerUser(login, Userpass, lastname, firstname, email, age,
 				street, additionalname, fax, zip, states_id, town, language_id,
-				phone, sendSMS, baseURL, generateSipUserData, jNameTimeZone, sendConfirmation);
+				phone, sendSMS, generateSipUserData, jNameTimeZone, sendConfirmation);
 	}
 
 	public Long registerUserNoEmail(String login, String Userpass,
@@ -514,13 +514,13 @@ public class UserManager implements IUserManager {
 		
 		return registerUser(login, Userpass, lastname, firstname, email, age,
 				street, additionalname, fax, zip, states_id, town, language_id,
-				phone, sendSMS, "", generateSipUserData, jNameTimeZone, false);
+				phone, sendSMS, generateSipUserData, jNameTimeZone, false);
 	}
 
 	private Long registerUser(String login, String Userpass, String lastname,
 			String firstname, String email, Date age, String street,
 			String additionalname, String fax, String zip, long states_id,
-			String town, long language_id, String phone, boolean sendSMS, String baseURL,
+			String town, long language_id, String phone, boolean sendSMS,
 			boolean generateSipUserData, String jNameTimeZone, Boolean sendConfirmation) {
 		try {
 			// Checks if FrontEndUsers can register
@@ -533,8 +533,7 @@ public class UserManager implements IUserManager {
 						additionalname, fax, zip, states_id, town, language_id,
 						true, Arrays.asList(configurationDao.getConfValue(
 								"default_domain_id", Long.class, null)), phone,
-						sendSMS, baseURL,
-						sendConfirmation, jNameTimeZone, false, "", "", false, true);
+						sendSMS, sendConfirmation, jNameTimeZone, false, "", "", false, true);
 
 				if (user_id > 0 && sendConfirmation) {
 					return new Long(-40);
@@ -578,7 +577,7 @@ public class UserManager implements IUserManager {
 			String firstname, String email, Date age, String street,
 			String additionalname, String fax, String zip, long states_id,
 			String town, long language_id, boolean sendWelcomeMessage,
-			List<Long> organisations, String phone, boolean sendSMS, String baseURL,
+			List<Long> organisations, String phone, boolean sendSMS,
 			Boolean sendConfirmation, String iCalTz, Boolean forceTimeZoneCheck,
 			String userOffers, String userSearchs, Boolean showContactData,
 			Boolean showContactDataToContacts) throws Exception {
@@ -587,8 +586,7 @@ public class UserManager implements IUserManager {
 				firstname, email, age, street,
 				additionalname, fax, zip, states_id,
 				town, language_id, sendWelcomeMessage,
-				organisations, phone, sendSMS, baseURL,
-				sendConfirmation,
+				organisations, phone, sendSMS, sendConfirmation,
 				timezoneUtil.getTimeZone(iCalTz), 
 				forceTimeZoneCheck,
 				userOffers, userSearchs, showContactData,
@@ -617,7 +615,6 @@ public class UserManager implements IUserManager {
 	 * @param organisations
 	 * @param phone
 	 * @param sendSMS
-	 * @param baseURL
 	 * @param sendConfirmation
 	 * @param timezone
 	 * @param forceTimeZoneCheck
@@ -635,8 +632,7 @@ public class UserManager implements IUserManager {
 			String firstname, String email, Date age, String street,
 			String additionalname, String fax, String zip, long states_id,
 			String town, long language_id, boolean sendWelcomeMessage,
-			List<Long> organisations, String phone, boolean sendSMS, String baseURL,
-			Boolean sendConfirmation,
+			List<Long> organisations, String phone, boolean sendSMS, Boolean sendConfirmation,
 			TimeZone timezone, Boolean forceTimeZoneCheck,
 			String userOffers, String userSearchs, Boolean showContactData,
 			Boolean showContactDataToContacts, String activatedHash) throws Exception {
@@ -652,19 +648,16 @@ public class UserManager implements IUserManager {
 				boolean checkEmail = usersDao.checkUserEMail(email, null);
 				if (checkName && checkEmail) {
 
-					String link = baseURL;
+					String link = configurationDao.getBaseUrl();
 					String hash = activatedHash;
 					if (hash == null){
 						hash = ManageCryptStyle.getInstanceOfCrypt().createPassPhrase(login
 								+ CalendarPatterns.getDateWithTimeByMiliSeconds(new Date()));
-						link += baseURL + "activateUser?u=" + hash;
+						link += "activateUser?u=" + hash;
 					}
 
 					if (sendWelcomeMessage && email.length() != 0) {
-						// We need to pass the baseURL to check if this is
-						// really set to be send
-						String sendMail = emailManagement.sendMail(login,
-								password, email, link, sendConfirmation);
+						String sendMail = emailManagement.sendMail(login, password, email, link, sendConfirmation);
 						if (!sendMail.equals("success"))
 							return new Long(-19);
 					}

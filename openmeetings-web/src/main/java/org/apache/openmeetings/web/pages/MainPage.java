@@ -45,7 +45,6 @@ import org.apache.openmeetings.web.common.menu.MenuItem;
 import org.apache.openmeetings.web.common.menu.MenuPanel;
 import org.apache.openmeetings.web.user.AboutDialog;
 import org.apache.openmeetings.web.user.ChatPanel;
-import org.apache.openmeetings.web.util.BaseUrlAjaxBehavior;
 import org.apache.openmeetings.web.util.OmUrlFragment;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
@@ -157,8 +156,6 @@ public class MainPage extends BaseInitedPage {
 				WebSession.get().setArea(null);
 			}
 		});
-		
-		add(new BaseUrlAjaxBehavior());
 	}
 	
 	private List<MenuItem> getMainMenu() {

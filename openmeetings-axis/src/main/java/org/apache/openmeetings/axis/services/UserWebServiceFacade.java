@@ -65,21 +65,21 @@ public class UserWebServiceFacade extends BaseWebService {
 	public Long addNewUser(String SID, String username, String userpass,
 			String lastname, String firstname, String email,
 			String additionalname, String street, String zip, String fax,
-			long states_id, String town, long language_id, String baseURL)
+			long states_id, String town, long language_id)
 			throws AxisFault {
 		return getBean(UserWebService.class).addNewUser(SID, username, userpass,
 				lastname, firstname, email, additionalname, street, zip, fax,
-				states_id, town, language_id, baseURL);
+				states_id, town, language_id);
 	}
 
 	public Long addNewUserWithTimeZone(String SID, String username,
 			String userpass, String lastname, String firstname, String email,
 			String additionalname, String street, String zip, String fax,
-			long states_id, String town, long language_id, String baseURL,
+			long states_id, String town, long language_id,
 			String jNameTimeZone) throws AxisFault {
 		return getBean(UserWebService.class).addNewUserWithTimeZone(SID, username,
 				userpass, lastname, firstname, email, additionalname, street,
-				zip, fax, states_id, town, language_id, baseURL, jNameTimeZone);
+				zip, fax, states_id, town, language_id, jNameTimeZone);
 
 	}
 

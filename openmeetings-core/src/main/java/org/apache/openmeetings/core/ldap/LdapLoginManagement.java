@@ -687,7 +687,6 @@ public class LdapLoginManagement implements ILdapLoginManagement {
 																		// Ids
 					phone, 
 					false,
-					"",// BaseURL is empty as we do not send an Email here
 					false,// send verification code
 					iCalTz, 
 					false, // forceTimeZoneCheck

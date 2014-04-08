@@ -77,9 +77,9 @@ public class TestDatabaseStructureGetAppointmentByRange extends AbstractJUnitDef
 		mm3.setAppointment(a3);
 		a3.getMeetingMembers().add(mm3);
 		
-		a1 = appointmentDao.update(a1, OM_URL, userId);
-		a2 = appointmentDao.update(a2, OM_URL, userId);
-		a3 = appointmentDao.update(a3, OM_URL, userId);
+		a1 = appointmentDao.update(a1, userId);
+		a2 = appointmentDao.update(a2, userId);
+		a3 = appointmentDao.update(a3, userId);
 		
 		int a1found = 0, a2found = 0, a3found = 0;
 		for (Appointment a : appointmentDao.getAppointmentsByRange(userId, rangeStart.getTime(), rangeEnd.getTime())) {

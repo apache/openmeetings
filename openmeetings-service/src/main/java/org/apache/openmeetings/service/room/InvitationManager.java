@@ -30,6 +30,7 @@ import java.util.Vector;
 import org.apache.openmeetings.core.data.basic.FieldManager;
 import org.apache.openmeetings.core.mail.MailHandler;
 import org.apache.openmeetings.core.mail.SMSHandler;
+import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.room.IInvitationManager;
 import org.apache.openmeetings.db.dao.room.InvitationDao;
 import org.apache.openmeetings.db.entity.basic.MailMessage;
@@ -70,6 +71,8 @@ public class InvitationManager implements IInvitationManager {
 	private SMSHandler smsHandler;
 	@Autowired
 	private TimezoneUtil timezoneUtil;
+	@Autowired
+	private ConfigurationDao configDao;
 
 	
 	private String formatSubject(Long langId, Appointment a, TimeZone tz) {
@@ -221,7 +224,7 @@ public class InvitationManager implements IInvitationManager {
 	}
 	
 	public void sendInvitionLink(Invitation i, MessageType type, String subject, String message, boolean ical) throws Exception {
-		String invitation_link = LinkHelper.getInvitationLink(i);
+		String invitation_link = LinkHelper.getInvitationLink(configDao.getBaseUrl(), i);
 		User owner = i.getInvitedBy();
 		
 		String invitorName = owner.getFirstname() + " " + owner.getLastname();
@@ -389,11 +392,11 @@ public class InvitationManager implements IInvitationManager {
 		return new Long(-1);
 	}
 
-	public void processInvitation(Appointment a, MeetingMember member, MessageType type, String baseUrl) {
-		processInvitation(a, member, type, baseUrl, true);
+	public void processInvitation(Appointment a, MeetingMember member, MessageType type) {
+		processInvitation(a, member, type, true);
 	}
 
-	public void processInvitation(Appointment a, MeetingMember mm, MessageType type, String baseUrl, boolean sendMail) {
+	public void processInvitation(Appointment a, MeetingMember mm, MessageType type, boolean sendMail) {
 		if (a.getRemind() == null) {
 			log.error("Appointment doesn't have reminder set!");
 			return;
@@ -413,7 +416,7 @@ public class InvitationManager implements IInvitationManager {
 			try {
 				mm.setInvitation(getInvitation(mm.getInvitation()
 						, mm.getUser(), a.getRoom(), a.isPasswordProtected(), a.getPassword()
-						, Valid.Period, a.getOwner(), baseUrl, null, a.getStart(), a.getEnd(), a));
+						, Valid.Period, a.getOwner(), null, a.getStart(), a.getEnd(), a));
 				if (sendMail) {
 					sendInvitionLink(a, mm, type, remindType > 2);
 				}
@@ -425,7 +428,7 @@ public class InvitationManager implements IInvitationManager {
 
 	public Invitation getInvitation(Invitation _invitation, User inveetee, Room room
 			, boolean isPasswordProtected, String invitationpass, Valid valid,
-			User createdBy, String baseUrl, Long language_id, Date gmtTimeStart, Date gmtTimeEnd
+			User createdBy, Long language_id, Date gmtTimeStart, Date gmtTimeEnd
 			, Appointment appointment) {
 		
 		Invitation invitation = _invitation;
@@ -446,10 +449,6 @@ public class InvitationManager implements IInvitationManager {
 		}
 	
 		invitation.setUsed(false);
-		log.debug(baseUrl);
-		if (baseUrl != null) {
-			invitation.setBaseUrl(baseUrl);
-		}
 		invitation.setValid(valid);
 		
 		// valid period of Invitation
@@ -478,13 +477,11 @@ public class InvitationManager implements IInvitationManager {
 		return invitation;
 	}
 
-	public Invitation getInvitation(User inveetee, Room room
-			, boolean isPasswordProtected, String invitationpass, Valid valid,
-			User createdBy, String baseUrl, Long language_id, Date gmtTimeStart, Date gmtTimeEnd
-			, Appointment appointment)
+	public Invitation getInvitation(User inveetee, Room room, boolean isPasswordProtected, String invitationpass, Valid valid,
+			User createdBy, Long language_id, Date gmtTimeStart, Date gmtTimeEnd, Appointment appointment)
 	{
 		Invitation i = getInvitation((Invitation)null, inveetee, room, isPasswordProtected, invitationpass, valid, createdBy
-				, baseUrl, language_id, gmtTimeStart, gmtTimeEnd, appointment);
+				, language_id, gmtTimeStart, gmtTimeEnd, appointment);
 		i = invitationDao.update(i);
 		return i;
 	}

@@ -48,7 +48,7 @@ public class TestGetAppointment extends AbstractJUnitDefaults {
 		Appointment a1 = getAppointment(now.getTime(), a1End.getTime());
 		a1.setTitle("GetAppointment");
 		
-		a1 = appointmentDao.update(a1, OM_URL, userId);
+		a1 = appointmentDao.update(a1, userId);
 		
 		Appointment a = appointmentDao.get(a1.getId());
 		assertNotNull("Failed to get Appointment By id", a);

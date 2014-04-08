@@ -38,7 +38,6 @@ import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.OmAuthenticationStrategy;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.pages.SwfPage;
-import org.apache.openmeetings.web.util.BaseUrlAjaxBehavior;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.RestartResponseException;
 import org.apache.wicket.ajax.AjaxClientInfoBehavior;
@@ -90,7 +89,6 @@ public class SignInDialog extends AbstractFormDialog<String> {
 	public SignInDialog(String id) {
 		super(id, WebSession.getString(108));
 		add(form = new SignInForm("signin"));
-		add(new BaseUrlAjaxBehavior());
 		add(new AjaxClientInfoBehavior());
 	}
 

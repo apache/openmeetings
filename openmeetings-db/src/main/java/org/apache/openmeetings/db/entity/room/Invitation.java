@@ -128,11 +128,6 @@ public class Invitation implements Serializable {
 	@ForeignKey(enabled = true)
 	private Appointment appointment;
 
-	// BaseuRL defined at creation of InvitationLink - used for chronological
-	// reminders on serverside (updates)
-	@Column(name = "base_url")
-	private String baseUrl;
-	
 	//variable used in Flash
 	private boolean allowEntry = true;
 	
@@ -238,14 +233,6 @@ public class Invitation implements Serializable {
 
 	public void setUsed(boolean used) {
 		this.used = used;
-	}
-
-	public String getBaseUrl() {
-		return baseUrl;
-	}
-
-	public void setBaseUrl(String baseUrl) {
-		this.baseUrl = baseUrl;
 	}
 
 	public Appointment getAppointment() {

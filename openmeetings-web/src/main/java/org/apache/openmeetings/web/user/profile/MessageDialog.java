@@ -21,7 +21,6 @@ package org.apache.openmeetings.web.user.profile;
 import static org.apache.openmeetings.db.entity.user.PrivateMessage.INBOX_FOLDER_ID;
 import static org.apache.openmeetings.db.entity.user.PrivateMessage.SENT_FOLDER_ID;
 import static org.apache.openmeetings.web.app.Application.getBean;
-import static org.apache.openmeetings.web.app.WebSession.getBaseUrl;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import static org.apache.openmeetings.web.util.RoomTypeDropDown.getRoomTypes;
 
@@ -32,6 +31,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.apache.openmeetings.core.mail.MailHandler;
+import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.room.IInvitationManager;
 import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.dao.user.PrivateMessagesDao;
@@ -208,10 +208,10 @@ public class MessageDialog extends AbstractFormDialog<PrivateMessage> {
 				if (p.isBookedRoom()) {
 					Invitation i = getBean(IInvitationManager.class).getInvitation(to, p.getRoom(),
 							false, null, Valid.Period
-							, userDao.get(getUserId()), getBaseUrl(), userDao.get(getUserId()).getLanguage_id(),
+							, userDao.get(getUserId()), userDao.get(getUserId()).getLanguage_id(),
 							modelStart.getObject(), modelEnd.getObject(), null);
 					
-					invitation_link = LinkHelper.getInvitationLink(i);
+					invitation_link = LinkHelper.getInvitationLink(getBean(ConfigurationDao.class).getBaseUrl(), i);
 
 					if (invitation_link == null) {
 						invitation_link = "";

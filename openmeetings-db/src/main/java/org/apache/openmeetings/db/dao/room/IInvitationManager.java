@@ -29,18 +29,18 @@ import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.user.User;
 
 public interface IInvitationManager {
-	void processInvitation(Appointment a, MeetingMember member, MessageType type, String baseUrl);
+	void processInvitation(Appointment a, MeetingMember member, MessageType type);
 	
-	void processInvitation(Appointment a, MeetingMember mm, MessageType type, String baseUrl, boolean sendMail);
+	void processInvitation(Appointment a, MeetingMember mm, MessageType type, boolean sendMail);
 	
 	Invitation getInvitation(Invitation _invitation, User inveetee, Room room
 			, boolean isPasswordProtected, String invitationpass, Valid valid,
-			User createdBy, String baseUrl, Long language_id, Date gmtTimeStart, Date gmtTimeEnd
+			User createdBy, Long language_id, Date gmtTimeStart, Date gmtTimeEnd
 			, Appointment appointment);
 	
 	Invitation getInvitation(User inveetee, Room room
 			, boolean isPasswordProtected, String invitationpass, Valid valid,
-			User createdBy, String baseUrl, Long language_id, Date gmtTimeStart, Date gmtTimeEnd
+			User createdBy, Long language_id, Date gmtTimeStart, Date gmtTimeEnd
 			, Appointment appointment);
 	
 	void sendInvitionLink(Invitation i, MessageType type, String subject, String message, boolean ical) throws Exception ;

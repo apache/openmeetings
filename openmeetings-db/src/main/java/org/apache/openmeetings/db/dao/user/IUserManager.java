@@ -34,7 +34,7 @@ public interface IUserManager {
 	Long registerUser(String login, String Userpass, String lastname,
 			String firstname, String email, Date age, String street,
 			String additionalname, String fax, String zip, long states_id,
-			String town, long language_id, String phone, boolean sendSMS, String baseURL,
+			String town, long language_id, String phone, boolean sendSMS,
 			boolean generateSipUserData, String jNameTimeZone);
 	
 	Long registerUserInit(long user_level, long level_id, int availible,
@@ -42,7 +42,7 @@ public interface IUserManager {
 			String firstname, String email, Date age, String street,
 			String additionalname, String fax, String zip, long states_id,
 			String town, long language_id, boolean sendWelcomeMessage,
-			List<Long> organisations, String phone, boolean sendSMS, String baseURL,
+			List<Long> organisations, String phone, boolean sendSMS,
 			Boolean sendConfirmation,
 			TimeZone timezone, Boolean forceTimeZoneCheck,
 			String userOffers, String userSearchs, Boolean showContactData,
@@ -53,7 +53,7 @@ public interface IUserManager {
 			String firstname, String email, Date age, String street,
 			String additionalname, String fax, String zip, long states_id,
 			String town, long language_id, boolean sendWelcomeMessage,
-			List<Long> organisations, String phone, boolean sendSMS, String baseURL,
+			List<Long> organisations, String phone, boolean sendSMS,
 			Boolean sendConfirmation, String iCalTz, Boolean forceTimeZoneCheck,
 			String userOffers, String userSearchs, Boolean showContactData,
 			Boolean showContactDataToContacts) throws Exception;

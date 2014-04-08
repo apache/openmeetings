@@ -144,9 +144,7 @@ public class JabberWebService {
 		if (AuthLevelUtil.checkUserLevel(user_level)) {
 			User invitee = userDao.getContact(username, username, username, users_id);
 			Invitation invitation = invitationManager.getInvitation(invitee, roomDao.get(room_id),
-							false, "", Valid.OneTime
-							, userDao.get(users_id), "", 1L,
-							null, null, null);
+							false, "", Valid.OneTime, userDao.get(users_id), 1L, null, null, null);
 	
 			return ((invitation == null) ? null : invitation.getHash());
 		} else {

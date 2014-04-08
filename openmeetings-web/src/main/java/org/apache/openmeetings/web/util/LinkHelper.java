@@ -25,19 +25,21 @@ import org.apache.openmeetings.db.entity.user.User.Type;
 
 public class LinkHelper {
 	
-	public static String getInvitationLink(Invitation i) {
-		String link = i.getBaseUrl();
+	public static String getInvitationLink(String baseUrl, Invitation i) {
+		String link = baseUrl;
 		if (link == null) {
 			return null;
 		}
-		if (i.getInvitee().getType() == Type.contact) {
-			link += "?invitationHash=" + i.getHash();
-	
-			if (i.getInvitee().getLanguage_id() > 0) {
-				link += "&language=" + i.getInvitee().getLanguage_id().toString();
+		if (i.getRoom() != null) {
+			if (i.getInvitee().getType() == Type.contact) {
+				link += "?invitationHash=" + i.getHash();
+		
+				if (i.getInvitee().getLanguage_id() > 0) {
+					link += "&language=" + i.getInvitee().getLanguage_id().toString();
+				}
+			} else {
+				link = getRoomUrlFragment(i.getRoom().getRooms_id()).getLink();
 			}
-		} else {
-			link = getRoomUrlFragment(i.getRoom().getRooms_id()).getLink(i.getBaseUrl());
 		}
 		return link;
 	}

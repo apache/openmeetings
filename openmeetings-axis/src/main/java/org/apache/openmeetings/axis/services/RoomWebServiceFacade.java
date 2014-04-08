@@ -451,9 +451,6 @@ public class RoomWebServiceFacade extends BaseWebService {
 	 * @param message
 	 *            the Message in the Email Body send with the invitation if
 	 *            sendMail is true
-	 * @param baseurl
-	 *            the baseURL for the Infivations link in the Mail Body if
-	 *            sendMail is true
 	 * @param email
 	 *            the Email to send the invitation to if sendMail is true
 	 * @param subject
@@ -493,13 +490,13 @@ public class RoomWebServiceFacade extends BaseWebService {
 	 * @throws AxisFault
 	 */
 	public String sendInvitationHash(String SID, String username,
-			String message, String baseurl, String email, String subject,
+			String message, String email, String subject,
 			Long room_id, String conferencedomain, Boolean isPasswordProtected,
 			String invitationpass, Integer valid, String validFromDate,
 			String validFromTime, String validToDate, String validToTime,
 			Long language_id, Boolean sendMail) throws AxisFault {
 		return getBean(RoomWebService.class).sendInvitationHash(SID, username,
-				message, baseurl, email, subject, room_id, conferencedomain,
+				message, email, subject, room_id, conferencedomain,
 				isPasswordProtected, invitationpass, valid, validFromDate,
 				validFromTime, validToDate, validToTime, language_id, sendMail);
 	}
@@ -516,9 +513,6 @@ public class RoomWebServiceFacade extends BaseWebService {
 	 *            the Username of the User that he will get
 	 * @param message
 	 *            the Message in the Email Body send with the invitation if
-	 *            sendMail is true
-	 * @param baseurl
-	 *            the baseURL for the Infivations link in the Mail Body if
 	 *            sendMail is true
 	 * @param email
 	 *            the Email to send the invitation to if sendMail is true
@@ -553,12 +547,12 @@ public class RoomWebServiceFacade extends BaseWebService {
 	 * @throws AxisFault
 	 */
 	public String sendInvitationHashWithDateObject(String SID, String username,
-			String message, String baseurl, String email, String subject,
+			String message, String email, String subject,
 			Long room_id, String conferencedomain, Boolean isPasswordProtected,
 			String invitationpass, Integer valid, Date fromDate, Date toDate,
 			Long language_id, Boolean sendMail) throws AxisFault {
 		return getBean(RoomWebService.class).sendInvitationHashWithDateObject(SID,
-				username, message, baseurl, email, subject, room_id,
+				username, message, email, subject, room_id,
 				conferencedomain, isPasswordProtected, invitationpass, valid,
 				fromDate, toDate, language_id, sendMail);
 	}
@@ -595,18 +589,18 @@ public class RoomWebServiceFacade extends BaseWebService {
 	}
 
 	public Long addMeetingMemberRemindToRoom(String SID, Long room_id,
-			String firstname, String lastname, String email, String phone,
-			String baseUrl, Long language_id) throws AxisFault {
+			String firstname, String lastname, String email,
+			Long language_id) throws AxisFault {
 		return getBean(RoomWebService.class).addMeetingMemberRemindToRoom(SID,
-				room_id, firstname, lastname, email, phone, language_id);
+				room_id, firstname, lastname, email, language_id);
 	}
 
 	public Long addExternalMeetingMemberRemindToRoom(String SID, Long room_id,
-			String firstname, String lastname, String email, String baseUrl,
+			String firstname, String lastname, String email,
 			Long language_id, String jNameTimeZone, String invitorName)
 			throws AxisFault {
 		return getBean(RoomWebService.class).addExternalMeetingMemberRemindToRoom(
-				SID, room_id, firstname, lastname, email, baseUrl, language_id,
+				SID, room_id, firstname, lastname, email, language_id,
 				jNameTimeZone, invitorName);
 	}
 

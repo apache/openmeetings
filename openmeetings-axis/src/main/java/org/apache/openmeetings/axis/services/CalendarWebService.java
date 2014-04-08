@@ -19,7 +19,6 @@
 package org.apache.openmeetings.axis.services;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
-import static org.apache.openmeetings.web.app.WebSession.getBaseUrl;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -44,7 +43,6 @@ import org.apache.openmeetings.db.entity.calendar.MeetingMember;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.util.TimezoneUtil;
 import org.apache.openmeetings.util.AuthLevelUtil;
-import org.apache.openmeetings.web.app.WebSession;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -261,8 +259,6 @@ public class CalendarWebService {
 	 *            =2,firstname,lastname,hans.tier@gmail.com,1,Etc/GMT+1
 	 * @param roomType
 	 *            the room type for the calendar event
-	 * @param baseUrl
-	 *            the base URL for the invitations
 	 * @param languageId
 	 *            the language id of the calendar event, notification emails
 	 *            will be send in this language
@@ -278,10 +274,10 @@ public class CalendarWebService {
 			Calendar appointmentstart, Calendar appointmentend,
 			Boolean isDaily, Boolean isWeekly, Boolean isMonthly,
 			Boolean isYearly, Long categoryId, Long remind, String[] mmClient,
-			Long roomType, String baseUrl, Long languageId,
+			Long roomType, Long languageId,
 			Boolean isPasswordProtected, String password, long roomId) {
 		//Seems to be create
-		log.debug("saveAppointMent SID:" + SID + ", baseUrl : " + baseUrl);
+		log.debug("saveAppointMent SID:" + SID);
 
 		try {
 			Long users_id = sessiondataDao.checkSession(SID);
@@ -292,8 +288,8 @@ public class CalendarWebService {
 			if (AuthLevelUtil.checkUserLevel(user_level)) {
 				Appointment a = appointmentLogic.getAppointment(appointmentName, appointmentLocation, appointmentDescription,
 						appointmentstart, appointmentend, isDaily, isWeekly, isMonthly, isYearly, categoryId, remind,
-						mmClient, roomType, baseUrl, languageId, isPasswordProtected, password, roomId, users_id);
-				return appointmentDao.update(a, baseUrl, users_id).getId();
+						mmClient, roomType, languageId, isPasswordProtected, password, roomId, users_id);
+				return appointmentDao.update(a, users_id).getId();
 			} else {
 				log.error("saveAppointment : wrong user level");
 			}
@@ -315,15 +311,13 @@ public class CalendarWebService {
 	 *            start yyyy-mm-dd
 	 * @param appointmentend
 	 *            end yyyy-mm-dd
-	 * @param baseurl
-	 *            the base URL for the invitations that will be send by email
 	 * @param languageId
 	 *            the language id
 	 *            
 	 * @return - id of appointment updated
 	 */
 	public Long updateAppointmentTimeOnly(String SID, Long appointmentId,
-			Date appointmentstart, Date appointmentend, String baseurl,
+			Date appointmentstart, Date appointmentend,
 			Long languageId) {
 		try {
 
@@ -338,9 +332,8 @@ public class CalendarWebService {
 				if (!a.getStart().equals(appointmentstart) || !a.getEnd().equals(appointmentend)) {
 					a.setStart(appointmentstart);
 					a.setEnd(appointmentend);
-					WebSession.get().setBaseUrl(baseurl); //TODO verify !!!!!
 					//FIXME this might change the owner!!!!!
-					return appointmentDao.update(a, baseurl, users_id).getId();
+					return appointmentDao.update(a, users_id).getId();
 				}					
 			}
 		} catch (Exception err) {
@@ -394,8 +387,6 @@ public class CalendarWebService {
 	 *            =2,firstname,lastname,hans.tier@gmail.com,1,Etc/GMT+1
 	 * @param roomType
 	 *            the room type for the calendar event
-	 * @param baseUrl
-	 *            the base URL for the invitations
 	 * @param languageId
 	 *            the language id of the calendar event, notification emails
 	 *            will be send in this language
@@ -411,7 +402,7 @@ public class CalendarWebService {
 			String appointmentDescription, Calendar appointmentstart,
 			Calendar appointmentend, Boolean isDaily, Boolean isWeekly,
 			Boolean isMonthly, Boolean isYearly, Long categoryId, Long remind,
-			String[] mmClient, Long roomType, String baseurl, Long languageId,
+			String[] mmClient, Long roomType, Long languageId,
 			Boolean isPasswordProtected, String password) throws AxisFault {
 		try {
 
@@ -442,7 +433,6 @@ public class CalendarWebService {
 			a.setIsYearly(isYearly);
 			a.setCategory(appointmentCategoryDao.get(categoryId));
 			a.setRemind(appointmentReminderTypDao.get(remind));
-			WebSession.get().setBaseUrl(baseurl); //TODO verify !!!!!
 			a.getRoom().setComment(appointmentDescription);
 			a.getRoom().setName(appointmentName);
 			a.getRoom().setRoomtype(roomTypeDao.get(roomType));
@@ -455,7 +445,7 @@ public class CalendarWebService {
 				mm.setAppointment(a);
 				a.getMeetingMembers().add(mm);
 			}
-			return appointmentDao.update(a, baseurl, users_id).getId();
+			return appointmentDao.update(a, users_id).getId();
 		} catch (Exception err) {
 			log.error("[updateAppointment]", err);
 			throw new AxisFault(err.getMessage());
@@ -496,7 +486,7 @@ public class CalendarWebService {
 			} else {
 				throw new AxisFault("Not allowed to preform that action, Authenticate the SID first");
 			}
-			appointmentDao.delete(a, getBaseUrl(), users_id); //FIXME check this !!!!
+			appointmentDao.delete(a, users_id);
 			return a.getId();
 		} catch (Exception err) {
 			log.error("[deleteAppointment]", err);

@@ -144,7 +144,7 @@ public class AppointmentDao {
 		return null;
 	}
 
-	public Appointment update(Appointment a, String baseUrl, Long userId) {
+	public Appointment update(Appointment a, Long userId) {
 		Room r = a.getRoom();
 		if (r.getRooms_id() == null) {
 			r.setName(a.getTitle());
@@ -165,25 +165,25 @@ public class AppointmentDao {
 		if (mmList != null){
 			for (MeetingMember mm : mmList) {
 				if (mm.getId() == null || !mmIds.contains(mm.getId())) {
-					invitationManager.processInvitation(a, mm, MessageType.Create, baseUrl);
+					invitationManager.processInvitation(a, mm, MessageType.Create);
 				} else {
 					mmIds.remove(mm.getId());
-					invitationManager.processInvitation(a, mm, MessageType.Update, baseUrl, sendMail);
+					invitationManager.processInvitation(a, mm, MessageType.Update, sendMail);
 				}
 			}
 		}
 		for (long id : mmIds) {
-			invitationManager.processInvitation(a, meetingMemberDao.get(id), MessageType.Cancel, baseUrl);
+			invitationManager.processInvitation(a, meetingMemberDao.get(id), MessageType.Cancel);
 		}
 		//notify owner
 		MeetingMember owner = new MeetingMember();
 		owner.setUser(a.getOwner());
 		if (a.getId() == null) {
-			invitationManager.processInvitation(a, owner, MessageType.Create, baseUrl);
+			invitationManager.processInvitation(a, owner, MessageType.Create);
 		} else if (a.isDeleted()) {
-			invitationManager.processInvitation(a, owner, MessageType.Cancel, baseUrl);
+			invitationManager.processInvitation(a, owner, MessageType.Cancel);
 		} else if (sendMail) {
-			invitationManager.processInvitation(a, owner, MessageType.Update, baseUrl, sendMail);
+			invitationManager.processInvitation(a, owner, MessageType.Update, sendMail);
 		}
 		if (a.getId() == null) {
 			a.setInserted(new Date());
@@ -227,14 +227,14 @@ public class AppointmentDao {
 
 	// ----------------------------------------------------------------------------------------------------------
 
-	public void delete(Appointment a, String baseUrl, Long userId) {
+	public void delete(Appointment a, Long userId) {
 		a.setUpdated(new Date());
 		a.setDeleted(true);
 		a.setMeetingMembers(null);
 		if (Boolean.TRUE.equals(a.getRoom().getAppointment())) {
 			a.getRoom().setDeleted(true);
 		}
-		update(a, baseUrl, userId);
+		update(a, userId);
 	}
 	
 	public List<Appointment> getAppointmentsByRange(Long userId, Date start, Date end) {

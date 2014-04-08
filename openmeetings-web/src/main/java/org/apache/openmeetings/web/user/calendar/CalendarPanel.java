@@ -20,7 +20,6 @@ package org.apache.openmeetings.web.user.calendar;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.openmeetings.web.app.Application.getBean;
-import static org.apache.openmeetings.web.app.WebSession.getBaseUrl;
 import static org.apache.openmeetings.web.app.WebSession.getClientTimeZone;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 
@@ -229,7 +228,7 @@ public class CalendarPanel extends UserPanel {
 				cal.add(java.util.Calendar.MILLISECOND, (int)delta); //FIXME?
 				a.setEnd(cal.getTime());
 				
-				dao.update(a, getBaseUrl(), getUserId());
+				dao.update(a, getUserId());
 				//FIXME add feedback info
 			}
 
@@ -242,7 +241,7 @@ public class CalendarPanel extends UserPanel {
 				cal.add(java.util.Calendar.MILLISECOND, (int)delta); //FIXME?
 				a.setEnd(cal.getTime());
 				
-				dao.update(a, getBaseUrl(), getUserId());
+				dao.update(a, getUserId());
 				//FIXME add feedback info
 			}
 		};

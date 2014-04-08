@@ -177,6 +177,12 @@
 					<td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> Is user register available via SOAP/REST </td>
 					<td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> 3.0.x </td>
 				</tr>
+				<tr>
+					<td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> application.base.url </td>
+					<td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> http://localhost:5080/openmeetings </td>
+					<td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> Base URL your OPenmeetings installation will be accessible at. </td>
+					<td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> 3.0.x </td>
+				</tr>
 			</table>
 		</section>
 

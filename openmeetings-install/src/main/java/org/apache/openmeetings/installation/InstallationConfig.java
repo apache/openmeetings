@@ -18,12 +18,15 @@
  */
 package org.apache.openmeetings.installation;
 
+import static org.apache.openmeetings.util.OpenmeetingsVariables.DEFAULT_BASE_URL;
+
 import java.io.Serializable;
 
 import org.apache.openmeetings.util.crypt.MD5Implementation;
 
 public class InstallationConfig implements Serializable {
-	private static final long serialVersionUID = 8833208340193880562L;
+	private static final long serialVersionUID = 1L;
+	
 	public String appName = "Openmeetings";
 	public String username;
 	public String password;
@@ -61,6 +64,7 @@ public class InstallationConfig implements Serializable {
     public String red5SipRoomPrefix = "400";
     public String red5SipExtenContext = "rooms";
     public String replyToOrganizer = "1";
+    public String baseUrl = DEFAULT_BASE_URL;
     
 	@Override
 	public String toString() {

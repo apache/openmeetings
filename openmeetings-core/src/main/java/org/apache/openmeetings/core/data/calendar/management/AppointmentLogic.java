@@ -18,6 +18,10 @@
  */
 package org.apache.openmeetings.core.data.calendar.management;
 
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_APPLICATION_BASE_URL;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_APPOINTMENT_REMINDER_MINUTES;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.DEFAULT_BASE_URL;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.DEFAULT_MINUTES_REMINDER_SEND;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
 import java.util.ArrayList;
@@ -43,6 +47,7 @@ import org.apache.openmeetings.db.entity.calendar.MeetingMember;
 import org.apache.openmeetings.db.entity.room.Invitation;
 import org.apache.openmeetings.db.entity.room.Invitation.MessageType;
 import org.apache.openmeetings.db.entity.room.Room;
+import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.util.TimezoneUtil;
 import org.apache.openmeetings.util.CalendarPatterns;
 import org.red5.logging.Red5LoggerFactory;
@@ -78,8 +83,6 @@ public class AppointmentLogic {
 	private MeetingMemberDao meetingMemberDao;
 	@Autowired
 	private RoomTypeDao roomTypeDao;
-
-	private static int DEFAULT_MINUTES_REMINDER_SEND = 15;
 
 	public List<Appointment> getTodaysAppointmentsForUser(Long userId) {
 		try {
@@ -136,6 +139,44 @@ public class AppointmentLogic {
 		return null;
 	}
 
+	private void sendReminder(User u, Appointment a) throws Exception {
+		Invitation i = new Invitation();
+		i.setInvitedBy(u);
+		i.setInvitee(u);
+		i.setAppointment(a);
+		sendReminder(u, a, i);
+	}
+	
+	private void sendReminder(User u, Appointment a, Invitation inv) throws Exception {
+		if (inv == null) {
+			log.error(String.format("Error retrieving Invitation for member %s in Appointment %s"
+					, u.getAdresses().getEmail(), a.getTitle()));
+			return;
+		}
+
+		TimeZone tZone = timezoneUtil.getTimeZone(u.getTimeZoneId());
+
+		long language_id = u.getLanguage_id();
+		// Get the required labels one time for all meeting members. The
+		// Language of the email will be the system default language
+		String labelid1158 = fieldManager.getString(1158L, language_id);
+		String labelid1153 = fieldManager.getString(1153L, language_id);
+		String labelid1154 = fieldManager.getString(1154L, language_id);
+
+		String subject = generateSubject(labelid1158, a, tZone);
+		String smsSubject = generateSMSSubject(labelid1158, a);
+
+		String message = generateMessage(labelid1158, a, language_id, labelid1153, labelid1154, tZone);
+
+		invitationManager.sendInvitionLink(inv, MessageType.Create, subject, message, false);
+
+		invitationManager.sendInvitationReminderSMS(u.getAdresses().getPhone(), smsSubject, language_id);
+		if (inv.getHash() != null) {
+			inv.setUpdated(new Date());
+			invitationDao.update(inv);
+		}
+	}
+	
 	/**
 	 * Sending Reminder in Simple mail format 5 minutes before Meeting begins
 	 */
@@ -143,7 +184,12 @@ public class AppointmentLogic {
 	public void doScheduledMeetingReminder() throws Exception {
 		// log.debug("doScheduledMeetingReminder");
 
-		Integer minutesReminderSend = configurationDao.getConfValue("number.minutes.reminder.send", Integer.class
+		String baseUrl = configurationDao.getConfValue(CONFIG_APPLICATION_BASE_URL, String.class, DEFAULT_BASE_URL);
+		if (baseUrl == null || baseUrl.length() < 1) {
+			log.error("Error retrieving baseUrl for application");
+			return;
+		}
+		Integer minutesReminderSend = configurationDao.getConfValue(CONFIG_APPOINTMENT_REMINDER_MINUTES, Integer.class
 				, "" + DEFAULT_MINUTES_REMINDER_SEND);
 		if (minutesReminderSend == null) {
 			throw new Exception("minutesReminderSend is null!");
@@ -169,7 +215,7 @@ public class AppointmentLogic {
 			Calendar aNow = Calendar.getInstance(ownerZone);
 			Calendar aStart = a.startCalendar(ownerZone);
 			aStart.add(Calendar.MINUTE, -minutesReminderSend);
-			if (aStart.before(aNow)) {
+			if (aStart.after(aNow)) {
 				// to early to send reminder
 				continue;
 			}
@@ -179,6 +225,7 @@ public class AppointmentLogic {
 
 			List<MeetingMember> members = a.getMeetingMembers();
 
+			sendReminder(a.getOwner(), a);
 			if (members == null) {
 				log.debug("doScheduledMeetingReminder : no members in meeting!");
 				continue;
@@ -191,36 +238,7 @@ public class AppointmentLogic {
 
 				Invitation inv = mm.getInvitation();
 
-				if (inv == null) {
-					log.error(String.format("Error retrieving Invitation for member %s in Appointment %s"
-							, mm.getUser().getAdresses().getEmail(), a.getTitle()));
-					continue;
-				}
-
-				if (inv.getBaseUrl() == null || inv.getBaseUrl().length() < 1) {
-					log.error("Error retrieving baseUrl from Invitation ID : " + inv.getId());
-					continue;
-				}
-
-				TimeZone tZone = timezoneUtil.getTimeZone(mm.getTimeZoneId());
-
-				long language_id = mm.getUser().getLanguage_id();
-				// Get the required labels one time for all meeting members. The
-				// Language of the email will be the system default language
-				String labelid1158 = fieldManager.getString(1158L, language_id);
-				String labelid1153 = fieldManager.getString(1153L, language_id);
-				String labelid1154 = fieldManager.getString(1154L, language_id);
-
-				String subject = generateSubject(labelid1158, a, tZone);
-				String smsSubject = generateSMSSubject(labelid1158, a);
-
-				String message = generateMessage(labelid1158, a, language_id, labelid1153, labelid1154, tZone);
-
-				invitationManager.sendInvitionLink(inv, MessageType.Create, subject, message, false);
-
-				invitationManager.sendInvitationReminderSMS(mm.getUser().getAdresses().getPhone(), smsSubject, language_id);
-				inv.setUpdated(new Date());
-				invitationDao.update(inv);
+				sendReminder(mm.getUser(), a, inv);
 			}
 		}
 	}
@@ -258,7 +276,7 @@ public class AppointmentLogic {
 		StringBuilder message = new StringBuilder(labelid1158);
 		message.append(" ").append(ment.getTitle());
 
-		if (ment.getDescription().length() != 0) {
+		if (ment.getDescription() != null && ment.getDescription().length() > 0) {
 			message.append(fieldManager.getString(1152L, language_id)).append(ment.getDescription());
 		}
 
@@ -276,7 +294,7 @@ public class AppointmentLogic {
 			Calendar appointmentstart, Calendar appointmentend,
 			Boolean isDaily, Boolean isWeekly, Boolean isMonthly,
 			Boolean isYearly, Long categoryId, Long remind, String[] mmClient,
-			Long roomType, String baseUrl, Long languageId,
+			Long roomType, Long languageId,
 			Boolean isPasswordProtected, String password, long roomId, Long users_id) {
 		Appointment a = new Appointment();
 		a.setTitle(appointmentName);

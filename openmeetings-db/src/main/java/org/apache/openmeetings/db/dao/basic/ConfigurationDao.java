@@ -18,8 +18,10 @@
  */
 package org.apache.openmeetings.db.dao.basic;
 
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_APPLICATION_BASE_URL;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_CRYPT_KEY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_MAX_UPLOAD_SIZE_KEY;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.DEFAULT_BASE_URL;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.configKeyCryptClassName;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.whiteboardDrawStatus;
@@ -68,8 +70,7 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 	private AdminUserDao adminUserDao;
 
 	/**
-	 * @deprecated Dao's are not the place to store session variables, also
-	 *             updates to the key won't update this variable
+	 * @deprecated Dao's are not the place to store session variables
 	 */
 	@Deprecated
 	private String appName = null;
@@ -180,54 +181,19 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 		return update(c, userId);
 	}
 
-	/**
-	 * @deprecated please use {@link ConfigurationDao#update(Configuration, Long)}
-	 */
-	public Long addConfig(Configuration conf) {
-		try {
-			conf = em.merge(conf);
-			Long configuration_id = conf.getConfiguration_id();
-			return configuration_id;
-		} catch (Exception ex2) {
-			log.error("[updateConfByUID]: ", ex2);
-		}
-		return new Long(-1);
-	}
-
-	/**
-	 * @deprecated please use {@link ConfigurationDao#update(Configuration, Long)}
-	 * @param conf
-	 * @return
-	 */
-	public Long updateConfig(Configuration conf) {
-		try {
-			if (conf.getConfiguration_id() == null
-					|| conf.getConfiguration_id() == 0
-					|| conf.getConfiguration_id() == 0L) {
-				em.persist(conf);
-			} else {
-				if (!em.contains(conf)) {
-					conf = em.merge(conf);
-				}
-			}
-			if (CONFIG_CRYPT_KEY.equals(conf.getConf_key())) {
-				configKeyCryptClassName = conf.getConf_value();
-			} else if ("show.whiteboard.draw.status".equals(conf.getConf_key())) {
-				whiteboardDrawStatus = "1".equals(conf.getConf_value());
-			}
-			return conf.getConfiguration_id();
-		} catch (Exception ex2) {
-			log.error("[updateConfByUID]: ", ex2);
-		}
-		return new Long(-1);
-	}
-
 	public String getAppName() {
 		if (appName == null) {
-			appName = getConfValue("application.name", String.class,
-					ConfigurationDao.DEFAULT_APP_NAME);
+			appName = getConfValue("application.name", String.class, DEFAULT_APP_NAME);
 		}
 		return appName;
+	}
+
+	public String getBaseUrl() {
+		String val = getConfValue(CONFIG_APPLICATION_BASE_URL, String.class, DEFAULT_BASE_URL);
+		if (val != null && !val.endsWith("/")) {
+			val += "/";
+		}
+		return val;
 	}
 
 	public Configuration get(long id) {

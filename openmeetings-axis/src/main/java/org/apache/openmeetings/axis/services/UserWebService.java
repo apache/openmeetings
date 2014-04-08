@@ -189,10 +189,6 @@ public class UserWebService {
 	 *            any town
 	 * @param language_id
 	 *            the language_id
-	 * @param baseURL
-	 *            the baseURL is needed to send the Initial Email correctly to
-	 *            that User, otherwise the Link in the EMail that the new User
-	 *            will reveive is not valid
 	 *            
 	 * @return - id of the user added or error code
 	 * @throws AxisFault
@@ -200,7 +196,7 @@ public class UserWebService {
 	public Long addNewUser(String SID, String username, String userpass,
 			String lastname, String firstname, String email,
 			String additionalname, String street, String zip, String fax,
-			long states_id, String town, long language_id, String baseURL)
+			long states_id, String town, long language_id)
 			throws AxisFault {
 		try {
 			Long users_id = sessiondataDao.checkSession(SID);
@@ -213,7 +209,7 @@ public class UserWebService {
 				Long user_id = userManagement.registerUser(username, userpass,
 						lastname, firstname, email, new Date(), street,
 						additionalname, fax, zip, states_id, town, language_id,
-						"", false, baseURL, true, // generate SIP Data if the config is enabled
+						"", false, true, // generate SIP Data if the config is enabled
 						jName_timeZone);
 
 				if (user_id == null || user_id < 0) {
@@ -269,10 +265,6 @@ public class UserWebService {
 	 *            any town
 	 * @param language_id
 	 *            the language_id
-	 * @param baseURL
-	 *            the baseURL is needed to send the Initial Email correctly to
-	 *            that User, otherwise the Link in the EMail that the new User
-	 *            will reveive is not valid
 	 * @param jNameTimeZone
 	 *            the name of the timezone for the user
 	 *            
@@ -282,7 +274,7 @@ public class UserWebService {
 	public Long addNewUserWithTimeZone(String SID, String username,
 			String userpass, String lastname, String firstname, String email,
 			String additionalname, String street, String zip, String fax,
-			long states_id, String town, long language_id, String baseURL,
+			long states_id, String town, long language_id,
 			String jNameTimeZone) throws AxisFault {
 		try {
 			Long users_id = sessiondataDao.checkSession(SID);
@@ -293,7 +285,7 @@ public class UserWebService {
 				Long user_id = userManagement.registerUser(username, userpass,
 						lastname, firstname, email, new Date(), street,
 						additionalname, fax, zip, states_id, town, language_id,
-						"", false, baseURL, true, // generate
+						"", false, true, // generate
 											// SIP
 											// Data
 											// if
