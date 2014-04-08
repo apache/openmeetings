@@ -35,8 +35,8 @@
 			</div>
 			Sample file:
 			<a
-				href="http://svn.apache.org/viewvc/openmeetings/trunk/singlewebapp/src/main/webapp/WEB-INF/red5-web.properties"
-				rel="nofollow">http://svn.apache.org/viewvc/openmeetings/trunk/singlewebapp/src/main/webapp/WEB-INF/red5-web.properties
+				href="https://svn.apache.org/repos/asf/openmeetings/trunk/singlewebapp/openmeetings-web/src/main/webapp/WEB-INF/red5-web.properties"
+				rel="nofollow">https://svn.apache.org/repos/asf/openmeetings/trunk/singlewebapp/openmeetings-web/src/main/webapp/WEB-INF/red5-web.properties
 			</a>
 		</section>
 
