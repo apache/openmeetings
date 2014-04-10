@@ -200,10 +200,15 @@ public class AppointmentLogic {
 			return;
 		}
 
+		long milliseconds = (minutesReminderSend * 60 * 1000);
 		Calendar start = Calendar.getInstance();
-		start.add(Calendar.DATE, -3);
+		if (milliseconds < 0) {
+			start.setTimeInMillis(start.getTimeInMillis() + milliseconds);
+		}
 		Calendar end = Calendar.getInstance();
-		end.add(Calendar.DATE, 3);
+		if (milliseconds > 0) {
+			end.setTimeInMillis(end.getTimeInMillis() + milliseconds);
+		}
 
 		for (Appointment a : appointmentDao.getAppointmentsInRange(start, end)) {
 			// Prevent email from being send twice, even if the cycle takes
