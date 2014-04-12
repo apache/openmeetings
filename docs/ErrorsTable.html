@@ -64,7 +64,7 @@
 					var idx = location.href.lastIndexOf('/');
 					if (idx > -1) {
 						var url = '.' + location.href.substring(idx);
-						var a = $('#accordion a[href="' + url + '"]');
+						var a = $('#accordion a[href="' + (url == './' ? './index.html' : url) + '"]');
 						a.addClass('active');
 						var id = a.parent()[0].id;
 						var idx1 = id.lastIndexOf('-');
