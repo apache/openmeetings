@@ -1,0 +1,50 @@
+<?xml version="1.0"?>
+<?xml-stylesheet type="text/xsl" href="../xsl/p2.xsl"?>
+<rdf:RDF xmlns="http://usefulinc.com/ns/doap#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:asfext="http://projects.apache.org/ns/asfext#" xml:lang="en">
+  <Project rdf:about="http://openmeetings.apache.org/">
+    <name>Apache OpenMeetings</name>
+    <homepage rdf:resource="http://openmeetings.apache.org/"/>
+    <programming-language>Java</programming-language>
+    <category rdf:resource="http://projects.apache.org/category/network-server"/>
+    <category rdf:resource="http://projects.apache.org/category/network-client"/>
+    <license rdf:resource="http://usefulinc.com/doap/licenses/asl20"/>
+    <bug-database rdf:resource="https://issues.apache.org/jira/browse/OPENMEETINGS"/>
+    <download-page rdf:resource="http://openmeetings.apache.org/downloads.html"/>
+    <asfext:pmc rdf:resource="http://openmeetings.apache.org/"/>
+
+    <shortdesc xml:lang="en">
+      The Apache Openmeetings application.
+    </shortdesc>
+
+    <description xml:lang="en">
+      The Apache Openmeetings provides video conferencing, instant messaging, white board, 
+      collaborative document editing and other groupware tools using API functions 
+      of the Red5 Streaming Server for Remoting and Streaming.
+    </description>
+
+    <repository>
+      <SVNRepository>
+        <browse rdf:resource="http://svn.apache.org/viewcvs.cgi/openmeetings/"/>
+        <location rdf:resource="http://svn.apache.org/repos/asf/openmeetings/"/>
+      </SVNRepository>
+    </repository>
+
+    <mailing-list rdf:resource="http://openmeetings.apache.org/mail-lists.html"/>
+ 
+    <release>
+      <Version>
+        <name>Recommended current 3.0.x release</name>
+        <created>2014-03-10</created>
+        <revision>3.0.0</revision>
+      </Version>
+    </release>
+    <release>
+      <Version>
+        <name>Legacy 2.2.0 release</name>
+        <created>2013-12-12</created>
+        <revision>2.2.0</revision>
+      </Version>
+    </release>
+  </Project>
+</rdf:RDF>
+
