@@ -30,6 +30,7 @@ Release Notes - Openmeetings - Version 3.0.1
     * [OPENMEETINGS-967] - dashboard.show.myrooms and dashboard.show.rssfeed options are not working
     * [OPENMEETINGS-972] - Default user database
     * [OPENMEETINGS-975] - Reminder is not sent for calendar event
+    * [OPENMEETINGS-977] - Import of Appointments and UserContacts was broken
 
 ** Improvement
     * [OPENMEETINGS-938] - Recording length field should be filled by converters
