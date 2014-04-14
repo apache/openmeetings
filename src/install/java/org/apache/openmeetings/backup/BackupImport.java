@@ -414,6 +414,9 @@ public class BackupImport {
 				if (a.getOwner() != null && a.getOwner().getUser_id() == null) {
 					a.setOwner(null);
 				}
+				if (a.getRoom() != null && a.getRoom().getRooms_id() == null) {
+					a.setRoom(null);
+				}
 				Long newAppId = appointmentDao.addAppointmentObj(a);
 				appointmentsMap.put(appId, newAppId);
 			}
@@ -534,6 +537,9 @@ public class BackupImport {
 
 				if (storedUC == null && uc.getContact() != null && uc.getContact().getUser_id() != null) {
 					uc.setUserContactId(0);
+					if (uc.getOwner() != null && uc.getOwner().getUser_id() == null) {
+						uc.setOwner(null);
+					}
 					Long newId = userContactsDao.addUserContactObj(uc);
 					userContactsMap.put(ucId, newId);
 				}
