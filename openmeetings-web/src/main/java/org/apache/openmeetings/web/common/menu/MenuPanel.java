@@ -62,6 +62,9 @@ public class MenuPanel extends BasePanel {
 					link.add(new AttributeAppender("onclick", "return false;"));
 				}
 				item.add(link.add(new Label("label", gl.getName()).setRenderBodyOnly(true)));
+				if (gl.getCssClass() != null) {
+					link.add(AttributeAppender.append("class", gl.getCssClass()));
+				}
 				item.add(new WebMarkupContainer("childItems")
 						.add(new ListView<MenuItem>("childItem", gl.getChildren()) {
 							private static final long serialVersionUID = 1L;

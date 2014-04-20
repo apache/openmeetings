@@ -26,25 +26,13 @@ import org.apache.openmeetings.web.common.BasePanel;
 import org.apache.openmeetings.web.common.menu.MenuItem;
 import org.apache.openmeetings.web.common.menu.MenuPanel;
 import org.apache.openmeetings.web.common.menu.RoomMenuItem;
-import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.behavior.Behavior;
 
 public class RoomPanel extends BasePanel {
 	private static final long serialVersionUID = 1L;
-	private final Behavior menuBehavior = new AbstractDefaultAjaxBehavior() {
-		private static final long serialVersionUID = 1L;
-
-		@Override
-		protected void respond(AjaxRequestTarget target) {
-			// TODO Auto-generated method stub
-			
-		}
-	};
 
 	public RoomPanel(String id, long roomId) {
 		super(id);
-		add(menuBehavior);
 		add(new MenuPanel("menu", getMenu()));
 	}
 

@@ -264,8 +264,8 @@ public class OmUrlFragment implements Serializable {
 						pp.add("wicketsid", getSid());
 						pp.add("wicketroomid", roomId);
 						pp.add("language", getLanguage());
-						basePanel = new RoomPanel(CHILD_ID, roomId);
 						basePanel = new SwfRoomPanel(CHILD_ID, pp);
+						basePanel = new RoomPanel(CHILD_ID, roomId);
 					}
 				} catch(NumberFormatException ne) {
 					//skip it, bad roomid passed

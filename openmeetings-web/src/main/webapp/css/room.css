@@ -19,3 +19,10 @@
 .room.container {
 	width: 100%;
 }
+
+.room.menu.exit {
+	padding-left: 20px;
+	background-image: url(images/exit_button.png);
+	background-repeat: no-repeat;
+	background-position-x: 5px;
+}
