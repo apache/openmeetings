@@ -18,6 +18,8 @@
  */
 package org.apache.openmeetings.db.dao.label;
 
+import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
@@ -28,7 +30,6 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
 import org.apache.openmeetings.db.entity.label.FieldLanguage;
-import org.apache.openmeetings.util.OpenmeetingsVariables;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.transaction.annotation.Transactional;
@@ -40,11 +41,9 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Transactional
 public class FieldLanguageDao implements Serializable {
-
 	private static final long serialVersionUID = -2714490167956230305L;
 
-	private static final Logger log = Red5LoggerFactory.getLogger(
-			FieldLanguageDao.class, OpenmeetingsVariables.webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(FieldLanguageDao.class, webAppRootKey);
 
 	@PersistenceContext
 	private EntityManager em;
@@ -93,13 +92,11 @@ public class FieldLanguageDao implements Serializable {
 		em.merge(fl);
 	}
 
-	public void updateLanguage(FieldLanguage fl) {
+	public void update(FieldLanguage fl) {
 		if (fl.getLanguage_id() == null) {
 			em.persist(fl);
 		} else {
-			if (!em.contains(fl)) {
-				em.merge(fl);
-			}
+			em.merge(fl);
 		}
 	}
 

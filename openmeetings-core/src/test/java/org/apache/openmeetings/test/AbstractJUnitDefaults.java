@@ -21,6 +21,7 @@ package org.apache.openmeetings.test;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.configKeyCryptClassName;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.util.Date;
 import java.util.List;
@@ -28,6 +29,7 @@ import java.util.List;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
 import org.apache.openmeetings.db.dao.calendar.AppointmentReminderTypDao;
+import org.apache.openmeetings.db.dao.label.FieldLanguagesValuesDao;
 import org.apache.openmeetings.db.dao.room.RoomTypeDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
@@ -63,6 +65,8 @@ public abstract class AbstractJUnitDefaults extends AbstractSpringTest {
 	private ImportInitvalues importInitvalues;
 	@Autowired
 	private ConfigurationDao configurationDao;
+	@Autowired
+	private FieldLanguagesValuesDao labelDao;
 	
 	private List<AppointmentReminderTyps> remindTypes;
 	private List<RoomType> roomTypes;
@@ -75,6 +79,9 @@ public abstract class AbstractJUnitDefaults extends AbstractSpringTest {
             log.info("Default scheme created successfully");
         } else {
             log.info("Default scheme already created");
+        }
+        if (labelDao.count() < 1000) {
+        	fail("No languages were installed");
         }
 		if (configKeyCryptClassName == null) {
 			assertNotNull("Crypt class name should not be null", configurationDao.getCryptKey());

@@ -48,7 +48,7 @@
 		<dependency org="commons-io" name="commons-io" rev="2.4" transitive="false">
 			<include type="jar" />
 		</dependency>
-		<dependency org="asm" name="asm" rev="3.1" transitive="false">
+		<dependency org="asm" name="asm" rev="3.3.1" transitive="false">
 			<include type="jar" />
 		</dependency>
 		<dependency org="org.springframework" name="spring-aspects" rev="4.0.0.RELEASE" transitive="false">
@@ -69,8 +69,7 @@
 		<dependency org="org.red5" name="red5-client" rev="1.0.2-RC2" transitive="false">
 			<include type="jar" />
 		</dependency>
-		<!-- include type="bundle" / FIXME unable to get openjpa without  sources -->
-		<dependency org="org.apache.geronimo.specs" name="geronimo-jpa_2.0_spec" rev="1.1" conf="mainlib.ext->*" transitive="false"/>
+		<dependency org="org.apache.geronimo.specs" name="geronimo-jpa_2.0_spec" rev="1.1" transitive="false"/>
 		<!--  END OF mainlib -->
 		
 		<!--  START OF ANAKIA -->
@@ -308,15 +307,28 @@
 			<include type="jar" />
 		</dependency>
 		<!-- Selenium -->
-		<dependency org="org.seleniumhq.selenium" name="selenium-java" conf="openmeetings->*" rev="2.35.0" >
+		<dependency org="org.seleniumhq.selenium" name="selenium-java" conf="openmeetings->*" rev="2.41.0" transitive="false">
+			<include type="jar" />
+		</dependency>
+		<dependency org="org.seleniumhq.selenium" name="selenium-api" conf="openmeetings->*" rev="2.41.0" transitive="false">
+			<include type="jar" />
+		</dependency>
+		<dependency org="org.seleniumhq.selenium" name="selenium-remote-driver" conf="openmeetings->*" rev="2.41.0" transitive="false">
+			<include type="jar" />
+		</dependency>
+		<dependency org="org.seleniumhq.selenium" name="selenium-firefox-driver" conf="openmeetings->*" rev="2.41.0" transitive="false">
 			<include type="jar" />
 		</dependency>
 
-		<!-- include type="bundle" / FIXME unable to get openjpa without  sources -->
-		<dependency org="org.mnode.ical4j" name="ical4j" rev="1.0.5" conf="openmeetings.ext->*" transitive="false"/>
-		<dependency org="org.apache.openjpa" name="openjpa" rev="2.2.2" conf="openmeetings.ext->*" transitive="false"/>
-		<dependency org="commons-lang" name="commons-lang" rev="2.6" conf="openmeetings.ext->*" transitive="false"/> <!-- required by PCEnchancer -->
+		<dependency org="org.mnode.ical4j" name="ical4j" rev="1.0.5" conf="openmeetings->*" transitive="false"/>
 		
+		<dependency org="org.apache.openjpa" name="openjpa" rev="2.3.0" conf="openmeetings->*" transitive="false"/>
+		<dependency org="org.apache.xbean" name="xbean-asm4-shaded" rev="3.16" conf="openmeetings->*"/>
+		<dependency org="commons-lang" name="commons-lang" rev="2.6" transitive="false"><!-- required by PCEnchancer -->
+			<include type="jar" />
+		</dependency>
+		<dependency org="org.apache.geronimo.specs" name="geronimo-ejb_3.1_spec" rev="1.0.2" conf="openmeetings->*" transitive="false"/>
+		<dependency org="javax.transaction" name="jta" rev="1.1" conf="openmeetings->*" transitive="false"/>
 		<dependency org="org.apache.ws.commons.axiom" name="axiom-impl" rev="1.2.14" conf="openmeetings.axis2->*" transitive="true">
 			<exclude name='commons-io' />
 			<exclude name='commons-logging' />
@@ -396,7 +408,7 @@
 		</dependency>
 
 		<!-- JGIT --> 
-        <dependency org="org.eclipse.jgit" name="org.eclipse.jgit.ant" conf="jgit->*" rev="3.3.1.201403241930-r" transitive="true" >
+        <dependency org="org.eclipse.jgit" name="org.eclipse.jgit.ant" conf="jgit->*" rev="3.3.2.201404171909-r" transitive="true" >
 			<include type="jar" />
 	        <exclude org="org.apache.ant"/>
 		</dependency>
@@ -404,6 +416,7 @@
 		<exclude org="javax.servlet" module="servlet-api" type="*" ext="*" conf="*" matcher="exact"/>		
 		<exclude org="cglib" module="cglib-nodep" type="*" ext="*" conf="*" matcher="exact"/>
 		<exclude org="pull-parser" module="pull-parser" type="*" ext="*" conf="*" matcher="exact"/>
+		<exclude org="org.apache.geronimo.specs" module="geronimo-servlet_3.0_spec" type="*" ext="*" conf="*" matcher="exact"/>
 	</dependencies>
 </ivy-module>
 

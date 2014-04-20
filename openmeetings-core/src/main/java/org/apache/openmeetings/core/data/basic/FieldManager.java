@@ -18,6 +18,8 @@
  */
 package org.apache.openmeetings.core.data.basic;
 
+import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
@@ -37,7 +39,6 @@ import org.apache.openmeetings.db.dao.label.FieldLanguagesValuesDao;
 import org.apache.openmeetings.db.entity.label.FieldLanguage;
 import org.apache.openmeetings.db.entity.label.Fieldlanguagesvalues;
 import org.apache.openmeetings.db.entity.label.Fieldvalues;
-import org.apache.openmeetings.util.OpenmeetingsVariables;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,9 +51,7 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Transactional
 public class FieldManager {
-
-	private static final Logger log = Red5LoggerFactory.getLogger(
-			FieldManager.class, OpenmeetingsVariables.webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(FieldManager.class, webAppRootKey);
 
 	@PersistenceContext
 	private EntityManager em;
@@ -66,42 +65,6 @@ public class FieldManager {
 	@Autowired
 	private ConfigurationDao configurationDaoImpl;
 	
-	public String getString(Long fieldvalues_id, Long language_id) {
-		String result = null;
-		Fieldlanguagesvalues flv = getFieldByIdAndLanguage(fieldvalues_id, language_id);
-		if (flv != null) {
-			result = performReplace(flv).getValue();
-		}
-		return result;
-	}
-	
-	public Fieldlanguagesvalues getFieldByIdAndLanguage(Long fieldvalues_id,
-			Long language_id) {
-		try {
-
-			String hql = "select f from Fieldlanguagesvalues as f "
-					+ "WHERE f.language_id = :language_id "
-					+ "AND f.fieldvalues_id = :fieldvalues_id";
-
-			Fieldlanguagesvalues flv = null;
-
-			TypedQuery<Fieldlanguagesvalues> query = em.createQuery(hql, Fieldlanguagesvalues.class);
-
-			query.setParameter("fieldvalues_id", fieldvalues_id);
-			query.setParameter("language_id", language_id);
-			List<Fieldlanguagesvalues> fList = query.getResultList();
-
-			if (fList.size() > 0) {
-				flv = fList.get(0); //replace should not be performed here to enable string editing via admin
-			}
-
-			return flv;
-		} catch (Exception ex2) {
-			log.error("[getFieldByIdAndLanguage]: ", ex2);
-		}
-		return null;
-	}
-
 	public List<Fieldlanguagesvalues> getAllFieldsByLanguage(Long language_id) {
 		try {
 
@@ -187,69 +150,6 @@ public class FieldManager {
 		return null;
 	}
 
-	public List<Fieldlanguagesvalues> getAllFieldsByLanguage(Long language_id,
-			int start, int max) {
-		try {
-
-			String sql = "select f from Fieldlanguagesvalues f WHERE f.language_id = :language_id "
-					+ "AND f.fieldvalues_id >= :start AND f.fieldvalues_id <  :max";
-
-			TypedQuery<Fieldlanguagesvalues> query = em.createQuery(sql, Fieldlanguagesvalues.class);
-			query.setParameter("language_id", language_id);
-			query.setParameter("start", start);
-			query.setParameter("max", start + max);
-
-			List<Fieldlanguagesvalues> returnList = performReplace(query.getResultList());
-			FieldLanguage fieldLanguage = fieldLanguageDaoImpl
-					.getFieldLanguageById(language_id);
-
-			log.debug("GEtting all fields by language : "
-					+ fieldLanguage.getName());
-
-			// Check for Right To Left Languages
-			if (fieldLanguage.getRtl()) {
-				log.debug("language : " + fieldLanguage.getName()
-						+ " requieres RTL");
-
-				List<Fieldlanguagesvalues> returnRtlList = new LinkedList<Fieldlanguagesvalues>();
-
-				for (Iterator<Fieldlanguagesvalues> iter = returnList
-						.iterator(); iter.hasNext();) {
-					Fieldlanguagesvalues remote = iter.next();
-					Fieldlanguagesvalues toAdd = new Fieldlanguagesvalues();
-					toAdd.setFieldlanguagesvalues_id(remote
-							.getFieldlanguagesvalues_id());
-					toAdd.setFieldvalues_id(remote.getFieldvalues_id());
-					toAdd.setLanguage_id(remote.getLanguage_id());
-
-					String[] splitted = remote.getValue().split(" ");
-					String reverseOrder = "";
-					for (int i = splitted.length - 1; i >= 0; i--) {
-						reverseOrder += splitted[i];
-						if (splitted.length != 1) {
-							reverseOrder += " ";
-						}
-					}
-					toAdd.setValue(reverseOrder);
-
-					returnRtlList.add(toAdd);
-				}
-
-				return returnRtlList;
-			} else {
-				log.debug("language : " + fieldLanguage.getName()
-						+ " requieres NO RTL");
-
-				return returnList;
-
-			}
-
-		} catch (Exception ex2) {
-			log.error("[getConfKey]: ", ex2);
-		}
-		return null;
-	}
-
 	public Long addFieldValueByFieldAndLanguage(Fieldvalues fv,
 			Long language_id, String fieldvalue) {
 		try {
@@ -319,11 +219,6 @@ public class FieldManager {
 		return fv;
 	}
 
-	private Fieldlanguagesvalues performReplace(Fieldlanguagesvalues f) {
-		String appName = configurationDaoImpl.getAppName();
-		return performReplace(f, appName);
-	}
-	
 	private String performReplace(String val, String appName) {
 		return val == null ? val : val.replaceAll("\\$APP_NAME", appName);
 	}
@@ -332,7 +227,6 @@ public class FieldManager {
 		Fieldlanguagesvalues r = new Fieldlanguagesvalues();
 		r.setDeleted(f.getDeleted());
 		r.setFieldlanguagesvalues_id(f.getFieldlanguagesvalues_id());
-		r.setFieldvalues_id(f.getFieldvalues_id());
 		r.setLanguage_id(f.getLanguage_id());
 		r.setStarttime(f.getStarttime());
 		r.setUpdatetime(f.getUpdatetime());

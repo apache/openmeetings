@@ -18,6 +18,8 @@
  */
 package org.apache.openmeetings.db.dao.calendar;
 
+import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+
 import java.util.Date;
 import java.util.List;
 
@@ -29,7 +31,6 @@ import javax.persistence.TypedQuery;
 import org.apache.openmeetings.db.dao.label.FieldLanguagesValuesDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.calendar.AppointmentReminderTyps;
-import org.apache.openmeetings.util.OpenmeetingsVariables;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,10 +38,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
 public class AppointmentReminderTypDao {
-
-	private static final Logger log = Red5LoggerFactory.getLogger(
-			AppointmentReminderTypDao.class,
-			OpenmeetingsVariables.webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(AppointmentReminderTypDao.class, webAppRootKey);
 
 	@PersistenceContext
 	private EntityManager em;
@@ -76,9 +74,7 @@ public class AppointmentReminderTypDao {
 
 	public Long updateAppointmentReminderTyps(Long typId, String name) {
 		try {
-
-			AppointmentReminderTyps ac = this
-					.get(typId);
+			AppointmentReminderTyps ac = get(typId);
 
 			ac.setName(name);
 			ac.setUpdatetime(new Date());

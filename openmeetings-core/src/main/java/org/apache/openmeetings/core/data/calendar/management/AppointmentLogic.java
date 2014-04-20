@@ -30,13 +30,13 @@ import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
 
-import org.apache.openmeetings.core.data.basic.FieldManager;
 import org.apache.openmeetings.core.data.conference.RoomManager;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.calendar.AppointmentCategoryDao;
 import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
 import org.apache.openmeetings.db.dao.calendar.AppointmentReminderTypDao;
 import org.apache.openmeetings.db.dao.calendar.MeetingMemberDao;
+import org.apache.openmeetings.db.dao.label.FieldLanguagesValuesDao;
 import org.apache.openmeetings.db.dao.room.IInvitationManager;
 import org.apache.openmeetings.db.dao.room.InvitationDao;
 import org.apache.openmeetings.db.dao.room.RoomDao;
@@ -66,7 +66,7 @@ public class AppointmentLogic {
 	@Autowired
 	private ConfigurationDao configurationDao;
 	@Autowired
-	private FieldManager fieldManager;
+	private FieldLanguagesValuesDao langDao;
 	@Autowired
 	private RoomDao roomDao;
 	@Autowired
@@ -159,9 +159,9 @@ public class AppointmentLogic {
 		long language_id = u.getLanguage_id();
 		// Get the required labels one time for all meeting members. The
 		// Language of the email will be the system default language
-		String labelid1158 = fieldManager.getString(1158L, language_id);
-		String labelid1153 = fieldManager.getString(1153L, language_id);
-		String labelid1154 = fieldManager.getString(1154L, language_id);
+		String labelid1158 = langDao.getString(1158L, language_id);
+		String labelid1153 = langDao.getString(1153L, language_id);
+		String labelid1154 = langDao.getString(1154L, language_id);
 
 		String subject = generateSubject(labelid1158, a, tZone);
 		String smsSubject = generateSMSSubject(labelid1158, a);
@@ -282,7 +282,7 @@ public class AppointmentLogic {
 		message.append(" ").append(ment.getTitle());
 
 		if (ment.getDescription() != null && ment.getDescription().length() > 0) {
-			message.append(fieldManager.getString(1152L, language_id)).append(ment.getDescription());
+			message.append(langDao.getString(1152L, language_id)).append(ment.getDescription());
 		}
 
 		message.append("<br/>").append(labelid1153).append(' ')

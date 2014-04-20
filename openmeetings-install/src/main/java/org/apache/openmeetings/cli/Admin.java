@@ -564,7 +564,7 @@ public class Admin {
 		}
 	}
 	
-	public static void dropDB() throws Exception {
+	public void dropDB() throws Exception {
 		File conf = new File(OmFileHelper.getWebinfDir(), PERSISTENCE_NAME);
 		ConnectionProperties connectionProperties = ConnectionPropertiesPatcher.getConnectionProperties(conf);
 		immediateDropDB(connectionProperties);
@@ -580,7 +580,21 @@ public class Admin {
 		return (LogImpl)conf.getLog(JDBCConfiguration.LOG_SCHEMA);
 	}
 
-	private static void immediateDropDB(ConnectionProperties props) throws Exception {
+	private static void runSchemaTool(JDBCConfigurationImpl conf, String action) throws Exception {
+		SchemaTool st = new SchemaTool(conf, action);
+		st.setIgnoreErrors(true);
+		st.setOpenJPATables(true);
+		st.setIndexes(false);
+		st.setPrimaryKeys(false);
+		if (!SchemaTool.ACTION_DROPDB.equals(action)) {
+			st.setSchemaGroup(st.getDBSchemaGroup());
+		}
+		st.run();
+	}
+	
+	private void immediateDropDB(ConnectionProperties props) throws Exception {
+		ctx.destroy();
+		ctx = null;
     	JDBCConfigurationImpl conf = new JDBCConfigurationImpl();
         try {
         	conf.setPropertiesFile(new File(OmFileHelper.getWebinfDir(), PERSISTENCE_NAME));
@@ -590,12 +604,8 @@ public class Admin {
         	conf.setConnectionPassword(props.getPassword());
     		//HACK to suppress all warnings
     		getLogImpl(conf).setLevel(Log.INFO);
-    		SchemaTool st = new SchemaTool(conf, SchemaTool.ACTION_DROPDB);
-    		st.setIgnoreErrors(true);
-    		st.setOpenJPATables(true);
-    		st.setIndexes(false);
-    		st.setPrimaryKeys(false);
-    		st.run();
+    		runSchemaTool(conf, SchemaTool.ACTION_DROPDB);
+    		runSchemaTool(conf, SchemaTool.ACTION_CREATEDB);
         } finally {
             conf.close();
         }

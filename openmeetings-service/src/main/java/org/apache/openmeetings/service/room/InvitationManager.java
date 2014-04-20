@@ -27,10 +27,10 @@ import java.util.HashMap;
 import java.util.TimeZone;
 import java.util.Vector;
 
-import org.apache.openmeetings.core.data.basic.FieldManager;
 import org.apache.openmeetings.core.mail.MailHandler;
 import org.apache.openmeetings.core.mail.SMSHandler;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
+import org.apache.openmeetings.db.dao.label.FieldLanguagesValuesDao;
 import org.apache.openmeetings.db.dao.room.IInvitationManager;
 import org.apache.openmeetings.db.dao.room.InvitationDao;
 import org.apache.openmeetings.db.entity.basic.MailMessage;
@@ -64,7 +64,7 @@ public class InvitationManager implements IInvitationManager {
 	@Autowired
 	private InvitationDao invitationDao;
 	@Autowired
-	private FieldManager fieldManager;
+	private FieldLanguagesValuesDao langDao;
 	@Autowired
 	private MailHandler mailHandler;
 	@Autowired
@@ -76,7 +76,7 @@ public class InvitationManager implements IInvitationManager {
 
 	
 	private String formatSubject(Long langId, Appointment a, TimeZone tz) {
-		String message = fieldManager.getString(1151L, langId) + " " + a.getTitle();
+		String message = langDao.getString(1151L, langId) + " " + a.getTitle();
 
 		message += " "
 				+ CalendarPatterns.getDateWithTimeByMiliSecondsAndTimeZone(a.getStart(), tz);
@@ -88,29 +88,29 @@ public class InvitationManager implements IInvitationManager {
 	}
 
 	private String formatMessage(Long langId, Appointment a, TimeZone tz, String invitorName) {
-		String message = fieldManager.getString(1151L, langId) + " " + a.getTitle();
+		String message = langDao.getString(1151L, langId) + " " + a.getTitle();
 
 		if (a.getDescription() != null &&  a.getDescription().length() != 0) {
-			message += fieldManager.getString(1152L, langId) + a.getDescription();
+			message += langDao.getString(1152L, langId) + a.getDescription();
 		}
 
 		message += "<br/>"
-				+ fieldManager.getString(1153L, langId)
+				+ langDao.getString(1153L, langId)
 				+ ' '
 				+ CalendarPatterns.getDateWithTimeByMiliSecondsAndTimeZone(a.getStart(), tz)
 				+ "<br/>";
 
-		message += fieldManager.getString(1154L, langId)
+		message += langDao.getString(1154L, langId)
 				+ ' '
 				+ CalendarPatterns.getDateWithTimeByMiliSecondsAndTimeZone(a.getEnd(), tz) + "<br/>";
 
-		message += fieldManager.getString(1156L, langId) + invitorName + "<br/>";
+		message += langDao.getString(1156L, langId) + invitorName + "<br/>";
 
 		return message;
 	}
 
 	private String formatCancelSubject(Long langId, Appointment a, TimeZone tz) {
-		String message = fieldManager.getString(1157L, langId) + a.getTitle();
+		String message = langDao.getString(1157L, langId) + a.getTitle();
 
 		message += " "
 				+ CalendarPatterns.getDateWithTimeByMiliSecondsAndTimeZone(a.getStart(), tz)
@@ -122,24 +122,24 @@ public class InvitationManager implements IInvitationManager {
 
 	private String formatCancelMessage(Long langId, Appointment a, TimeZone tz, String invitorName) {
 		try {
-			String message = fieldManager.getString(1157L, langId) + a.getTitle();
+			String message = langDao.getString(1157L, langId) + a.getTitle();
 
 			if (a.getDescription() != null && a.getDescription().length() != 0) {
-				message += fieldManager.getString(1152L, langId) + a.getDescription();
+				message += langDao.getString(1152L, langId) + a.getDescription();
 			}
 
 			message += "<br/>"
-					+ fieldManager.getString(1153L, langId)
+					+ langDao.getString(1153L, langId)
 					+ ' '
 					+ CalendarPatterns.getDateWithTimeByMiliSecondsAndTimeZone(a.getStart(), tz)
 					+ "<br/>";
 
-			message += fieldManager.getString(1154L, langId)
+			message += langDao.getString(1154L, langId)
 					+ ' '
 					+ CalendarPatterns.getDateWithTimeByMiliSecondsAndTimeZone(a.getEnd(), tz)
 					+ "<br/>";
 
-			message += fieldManager.getString(1156L, langId) + invitorName + "<br/>";
+			message += langDao.getString(1156L, langId) + invitorName + "<br/>";
 
 			return message;
 		} catch (Exception err) {
@@ -149,7 +149,7 @@ public class InvitationManager implements IInvitationManager {
 	}
 
 	private String formatUpdateSubject(Long langId, Appointment a, TimeZone tz) {
-		String message = fieldManager.getString(1155L, langId) + " " + a.getTitle();
+		String message = langDao.getString(1155L, langId) + " " + a.getTitle();
 
 		message += " "
 				+ CalendarPatterns.getDateWithTimeByMiliSecondsAndTimeZone(a.getStart(), tz)
@@ -161,24 +161,24 @@ public class InvitationManager implements IInvitationManager {
 
 	private String formatUpdateMessage(Long langId, Appointment a, TimeZone tz, String invitorName) {
 		try {
-			String message = fieldManager.getString(1155L, langId) + " " + a.getTitle();
+			String message = langDao.getString(1155L, langId) + " " + a.getTitle();
 
 			if (a.getDescription().length() != 0) {
-				message += fieldManager.getString(1152L, langId) + a.getDescription();
+				message += langDao.getString(1152L, langId) + a.getDescription();
 			}
 
 			message += "<br/>"
-					+ fieldManager.getString(1153L, langId)
+					+ langDao.getString(1153L, langId)
 					+ ' '
 					+ CalendarPatterns.getDateWithTimeByMiliSecondsAndTimeZone(a.getStart(), tz)
 					+ "<br/>";
 
-			message += fieldManager.getString(1154L, langId)
+			message += langDao.getString(1154L, langId)
 					+ ' '
 					+ CalendarPatterns.getDateWithTimeByMiliSecondsAndTimeZone(a.getEnd(), tz)
 					+ "<br/>";
 
-			message += fieldManager.getString(1156L, langId) + invitorName + "<br/>";
+			message += langDao.getString(1156L, langId) + invitorName + "<br/>";
 
 			return message;
 		} catch (Exception err) {

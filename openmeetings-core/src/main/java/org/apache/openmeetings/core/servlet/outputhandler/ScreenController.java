@@ -29,8 +29,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.openmeetings.core.data.basic.FieldManager;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
+import org.apache.openmeetings.db.dao.label.FieldLanguagesValuesDao;
 import org.apache.openmeetings.db.dao.server.ISessionManager;
 import org.apache.openmeetings.db.dao.server.SessiondataDao;
 import org.apache.openmeetings.db.entity.room.Client;
@@ -60,7 +60,7 @@ public class ScreenController {
 	@Autowired
 	public ConfigurationDao configurationDao;
 	@Autowired
-	public FieldManager fieldManager;
+	public FieldLanguagesValuesDao labelDao;
 
 	private enum ConnectionType {
 		rtmp
@@ -75,7 +75,7 @@ public class ScreenController {
 			if (delim) {
 				result.append(';');
 			}
-			result.append(fieldManager.getFieldByIdAndLanguage((long)id, language_id).getValue());
+			result.append(labelDao.getString(id, language_id));
 			delim = true;
 		}
 		return result.toString();

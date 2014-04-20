@@ -144,7 +144,7 @@ public class LangPanel extends AdminPanel {
 				});
 				item.add(AttributeModifier.append("class", "clickable "
 						+ (item.getIndex() % 2 == 1 ? "even" : "odd")
-						+ (fv.getFieldvalues_id().equals(form.getModelObject().getFieldvalues_id()) ? " selected" : "")));
+						+ (fv.getFieldvalues_id().equals(form.getModelObject().getFieldvalues().getFieldvalues_id()) ? " selected" : "")));
 			}
 		};
 

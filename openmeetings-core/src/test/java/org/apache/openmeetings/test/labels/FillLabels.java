@@ -157,15 +157,14 @@ public class FillLabels extends AbstractJUnitDefaults {
 		for (@SuppressWarnings("unchecked")
 		Iterator<Element> i = root.elementIterator(); i.hasNext();) {
 			Element itemObject = i.next();
-			Long fieldvalues_id = Long.valueOf(
-					itemObject.attribute("id").getText()).longValue();
+			Long fieldvalues_id = Long.valueOf(itemObject.attribute("id").getText()).longValue();
 			String fieldName = itemObject.attribute("name").getText();
 			String value = itemObject.element("value").getText();
-			Fieldlanguagesvalues fValue = new Fieldlanguagesvalues();
-			fValue.setFieldvalues_id(fieldvalues_id);
-			fValue.setValue(value);
 			Fieldvalues fLabel = new Fieldvalues();
+			fLabel.setFieldvalues_id(fieldvalues_id);
 			fLabel.setName(fieldName);
+			Fieldlanguagesvalues fValue = new Fieldlanguagesvalues();
+			fValue.setValue(value);
 			fValue.setFieldvalues(fLabel);
 			
 			labelsArray.put(fieldvalues_id, fValue);
@@ -188,7 +187,7 @@ public class FillLabels extends AbstractJUnitDefaults {
 
 		for (Entry<Long, Fieldlanguagesvalues> entryLabel : labelsArray.entrySet()) {
 			Element eTemp = root.addElement("string")
-					.addAttribute("id", entryLabel.getValue().getFieldvalues_id().toString())
+					.addAttribute("id", entryLabel.getValue().getFieldvalues().getFieldvalues_id().toString())
 					.addAttribute("name", entryLabel.getValue().getFieldvalues().getName());
 			Element value = eTemp.addElement("value");
 			value.addText(entryLabel.getValue().getValue());

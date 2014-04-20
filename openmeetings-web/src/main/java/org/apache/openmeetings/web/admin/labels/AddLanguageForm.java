@@ -63,7 +63,7 @@ public class AddLanguageForm extends Form<Void> {
 				fl.setCode(newLanguageISO);
 				
 				try {
-					langDao.updateLanguage(fl);
+					langDao.update(fl);
 				} catch (Exception e) {
 					// TODO add feedback message
 					e.printStackTrace();

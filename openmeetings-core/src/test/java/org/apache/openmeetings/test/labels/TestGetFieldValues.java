@@ -18,9 +18,13 @@
  */
 package org.apache.openmeetings.test.labels;
 
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import org.apache.openmeetings.db.dao.label.FieldLanguageDao;
+import org.apache.openmeetings.db.dao.label.FieldLanguagesValuesDao;
 import org.apache.openmeetings.db.dao.label.FieldValueDao;
+import org.apache.openmeetings.db.entity.label.Fieldlanguagesvalues;
 import org.apache.openmeetings.db.entity.label.Fieldvalues;
 import org.apache.openmeetings.test.AbstractJUnitDefaults;
 import org.junit.Test;
@@ -32,15 +36,22 @@ import org.springframework.beans.factory.annotation.Autowired;
  * 
  */
 public class TestGetFieldValues extends AbstractJUnitDefaults {
-	
 	@Autowired
-	private FieldValueDao fieldValueDao;
+	private FieldLanguageDao langDao;
+	@Autowired
+	private FieldValueDao langValueDao;
+	@Autowired
+	private FieldLanguagesValuesDao labelDao;
 
 	@Test
 	public void testCount() throws Exception {
-		Fieldvalues fv = fieldValueDao.get(1L);
+		int langCount = langDao.getLanguages().size();
+		assertTrue("Languages should not be empty: " + langCount, langCount > 0);
+		Fieldvalues fv = langValueDao.get(1L);
+		assertNotNull("Fieldvalues should not be null", fv);
 		
-		assertTrue("Fieldvalues should not be null", (fv != null));
+		Fieldlanguagesvalues flv = labelDao.get(1L);
+		assertNotNull("Fieldlanguagesvalues should not be null", flv);
+		assertNotNull("Fieldvalues of Fieldlanguagesvalues should not be null", flv.getFieldvalues());
 	}
-	
 }

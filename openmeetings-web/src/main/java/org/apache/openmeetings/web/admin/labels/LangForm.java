@@ -95,7 +95,7 @@ public class LangForm extends Form<Void> {
 				langPanel.language.setDeleted(true);
 				FieldLanguageDao langDao = getBean(FieldLanguageDao.class);
 				try {
-					langDao.updateLanguage(langPanel.language);
+					langDao.update(langPanel.language);
 				} catch (Exception e) {
 					// TODO add feedback message
 					e.printStackTrace();

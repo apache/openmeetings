@@ -705,11 +705,10 @@ public class ImportInitvalues {
 		Map<Integer, Map<String, Object>> languages = new LinkedHashMap<Integer, Map<String, Object>>();
 
 		SAXReader reader = new SAXReader();
-		Document document = reader
-				.read(new File(OmFileHelper.getLanguagesDir(),
-						OmFileHelper.nameOfLanguageFile));
-
-		Element root = document.getRootElement();
+		File langFile = new File(OmFileHelper.getLanguagesDir(), OmFileHelper.nameOfLanguageFile);
+		log.debug("File to load languages from is: " + langFile.getCanonicalPath());
+		
+		Element root = reader.read(langFile).getRootElement();
 
 		for (@SuppressWarnings("unchecked")
 		Iterator<Element> it = root.elementIterator("lang"); it.hasNext();) {
@@ -753,12 +752,9 @@ public class ImportInitvalues {
 	public void loadInitAppointmentReminderTypes() {
 		log.debug("ImportInitValues.loadInitAppointmentReminderTypes");
 
-		appointmentReminderTypDaoImpl.addAppointmentReminderTyps(-1L,
-				"do not send notification", 1568);
-		appointmentReminderTypDaoImpl.addAppointmentReminderTyps(-1L,
-				"simple email", 1569);
-		appointmentReminderTypDaoImpl.addAppointmentReminderTyps(-1L,
-				"iCal email", 1570);
+		appointmentReminderTypDaoImpl.addAppointmentReminderTyps(-1L, "do not send notification", 1568);
+		appointmentReminderTypDaoImpl.addAppointmentReminderTyps(-1L, "simple email", 1569);
+		appointmentReminderTypDaoImpl.addAppointmentReminderTyps(-1L, "iCal email", 1570);
 	}
 
 	public void loadLanguagesFile(int langId) throws Exception {
@@ -768,6 +764,7 @@ public class ImportInitvalues {
 
 	public void loadLanguagesFile(String langName) throws Exception {
 		Map<Integer, Map<String, Object>> listlanguages = getLanguageFiles();
+		log.debug("Number of languages found: " + listlanguages.size());
 		for (int langId : listlanguages.keySet()) {
 			Map<String, Object> langMap = listlanguages.get(langId);
 			if (langName.equals(langMap.get("name"))) {
@@ -849,7 +846,7 @@ public class ImportInitvalues {
 			}
 		}
 		lang.setLanguageValues(flvMap.values());
-		fieldLanguageDaoImpl.updateLanguage(lang);
+		fieldLanguageDaoImpl.update(lang);
 		log.debug("Lang ADDED: " + lang + "; seconds passed: " + (System.currentTimeMillis() - ticks) / 1000);
 	}
 	

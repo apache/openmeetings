@@ -36,7 +36,7 @@
 		<select2.version>2.2.2</select2.version>
 		<dnd.version>0.6.0</dnd.version>
 		<commons-io.version>2.4</commons-io.version>
-		<selenium.version>2.35.0</selenium.version>
+		<selenium.version>2.41.0</selenium.version>
 	</properties>
 	<dependencies>
 		<dependency>
