@@ -142,7 +142,7 @@ public class Configuration implements Serializable, IDataProviderEntity {
 		this.updatetime = updatetime;
 	}
 
-	public boolean getDeleted() {
+	public boolean isDeleted() {
 		return deleted;
 	}
 

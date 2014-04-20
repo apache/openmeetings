@@ -242,11 +242,11 @@ public class BackupImport {
 			
 			List<Configuration> list = readList(serializer, f, "configs.xml", "configs", Configuration.class, true);
 			for (Configuration c : list) {
-				if (c.getConf_key() == null || c.getDeleted()) {
+				if (c.getConf_key() == null || c.isDeleted()) {
 					continue;
 				}
 				Configuration cfg = configurationDao.forceGet(c.getConf_key());
-				if (cfg != null && !cfg.getDeleted()) {
+				if (cfg != null && !cfg.isDeleted()) {
 					log.warn("Non deleted configuration with same key is found! old value: {}, new value: {}", cfg.getConf_value(), c.getConf_value());
 				}
 				c.setConfiguration_id(cfg == null ? null : cfg.getConfiguration_id());
