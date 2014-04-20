@@ -2,6 +2,41 @@ Apache OpenMeetings Change Log
 
 See http://issues.apache.org/jira/browse/OPENMEETINGS-* (where * is the number of the issue below)
 
+Release Notes - Openmeetings - Version 3.0.1
+================================================================================================================
+
+** Sub-task
+    * [OPENMEETINGS-937] - Screen sharing application should create recordings with size multiple by 16
+
+** Bug
+    * [OPENMEETINGS-913] - Booking is not working via private message
+    * [OPENMEETINGS-917] - Contacts should not be added as default moderator
+    * [OPENMEETINGS-920] - where are the controls to playback a recorded video?
+    * [OPENMEETINGS-934] - screenrecording without sound
+    * [OPENMEETINGS-935] - Names are mixed in contact request email
+    * [OPENMEETINGS-936] - First frame of the recording has size differs from all other frames
+    * [OPENMEETINGS-943] - OM3.0: login with LDAP user not working
+    * [OPENMEETINGS-949] - Add Whiteboard: untranslated string - hardcoded
+    * [OPENMEETINGS-951] - Command line installer fails if path contains spaces
+    * [OPENMEETINGS-952] - Build should be compatible with latest ant
+    * [OPENMEETINGS-956] - Recording frame is not scrolled
+    * [OPENMEETINGS-957] - Screensharing is broken
+    * [OPENMEETINGS-958] - Calendar event start and end date are not displayed correctly in the month vew for IST time zone
+    * [OPENMEETINGS-959] - "Choose Device" Dialog doesn't show (all) devices from flash-settings
+    * [OPENMEETINGS-960] - Long time without changing progressbar when enter OM
+    * [OPENMEETINGS-961] - Calendar event can be canceled by guest
+    * [OPENMEETINGS-965] - Dashboard is malfunctioning when the user language is set to french
+    * [OPENMEETINGS-966] - Invitation links are not working
+    * [OPENMEETINGS-967] - dashboard.show.myrooms and dashboard.show.rssfeed options are not working
+    * [OPENMEETINGS-972] - Default user database
+    * [OPENMEETINGS-975] - Reminder is not sent for calendar event
+    * [OPENMEETINGS-977] - Import of Appointments and UserContacts was broken
+
+** Improvement
+    * [OPENMEETINGS-938] - Recording length field should be filled by converters
+    * [OPENMEETINGS-939] - Not ready recordings should have special icon
+
+
 Release Notes - Openmeetings - Version 3.0.0
 ================================================================================================================
 
