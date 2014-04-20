@@ -29,7 +29,12 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.axis2.AxisFault;
+import javax.jws.WebService;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
+
+import org.apache.cxf.feature.Features;
 import org.apache.openmeetings.core.data.calendar.management.AppointmentLogic;
 import org.apache.openmeetings.core.data.conference.RoomManager;
 import org.apache.openmeetings.core.remote.ConferenceService;
@@ -73,6 +78,10 @@ import org.springframework.beans.factory.annotation.Autowired;
  * @webservice RoomService
  * 
  */
+@WebService
+@Features(features = "org.apache.cxf.feature.LoggingFeature")
+@Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+@Path("/room")
 public class RoomWebService {
 	private static final Logger log = Red5LoggerFactory.getLogger(RoomWebService.class, webAppRootKey);
 
@@ -120,10 +129,10 @@ public class RoomWebService {
 	 *            The SID of the User. This SID must be marked as Loggedin
 	 * @param roomtypes_id
 	 * @return - list of public rooms
-	 * @throws AxisFault
+	 * @throws ServiceException
 	 */
 	public Room[] getRoomsPublic(String SID, Long roomtypes_id)
-			throws AxisFault {
+			throws ServiceException {
 		try {
 
 			Long users_id = sessiondataDao.checkSession(SID);
@@ -154,7 +163,7 @@ public class RoomWebService {
 			return null;
 		} catch (Exception err) {
 			log.error("[getRoomsPublic] ", err);
-			throw new AxisFault(err.getMessage());
+			throw new ServiceException(err.getMessage());
 		}
 	}
 
@@ -167,10 +176,10 @@ public class RoomWebService {
 	 *            the id of the recording
 	 *            
 	 * @return - true if recording was deleted
-	 * @throws AxisFault
+	 * @throws ServiceException
 	 */
 	public boolean deleteFlvRecording(String SID, Long flvRecordingId)
-			throws AxisFault {
+			throws ServiceException {
 		try {
 
 			Long users_id = sessiondataDao.checkSession(SID);
@@ -182,7 +191,7 @@ public class RoomWebService {
 
 		} catch (Exception err) {
 			log.error("[deleteFlvRecording] ", err);
-			throw new AxisFault(err.getMessage());
+			throw new ServiceException(err.getMessage());
 		}
 
 		return false;
@@ -196,10 +205,10 @@ public class RoomWebService {
 	 * @param externalUsertype the externalUserType
 	 *            
 	 * @return - list of flv recordings
-	 * @throws AxisFault
+	 * @throws ServiceException
 	 */
 	public List<RecordingObject> getFlvRecordingByExternalUserId(String SID,
-			String externalUserId, String externalUserType) throws AxisFault {
+			String externalUserId, String externalUserType) throws ServiceException {
 		try {
 			Long users_id = sessiondataDao.checkSession(SID);
 			Long user_level = userManager.getUserLevelByID(users_id);
@@ -211,7 +220,7 @@ public class RoomWebService {
 			return null;
 		} catch (Exception err) {
 			log.error("[getFlvRecordingByExternalUserId] ", err);
-			throw new AxisFault(err.getMessage());
+			throw new ServiceException(err.getMessage());
 		}
 	}
 
@@ -225,11 +234,11 @@ public class RoomWebService {
 	 * @param insertedBy
 	 *            the userId that created the recording
 	 * @return - list of flv recordings
-	 * @throws AxisFault
+	 * @throws ServiceException
 	 */
 	public RecordingObject[] getFlvRecordingByExternalRoomTypeAndCreator(
 			String SID, String externalRoomType, Long insertedBy)
-			throws AxisFault {
+			throws ServiceException {
 		try {
 
 			Long users_id = sessiondataDao.checkSession(SID);
@@ -261,7 +270,7 @@ public class RoomWebService {
 			return null;
 		} catch (Exception err) {
 			log.error("[getFlvRecordingByExternalRoomTypeAndCreator] ", err);
-			throw new AxisFault(err.getMessage());
+			throw new ServiceException(err.getMessage());
 		}
 	}
 
@@ -273,10 +282,10 @@ public class RoomWebService {
 	 * @param externalRoomType
 	 *            externalRoomType specified when creating the room
 	 * @return - list of flv recordings
-	 * @throws AxisFault
+	 * @throws ServiceException
 	 */
 	public List<FlvRecording> getFlvRecordingByExternalRoomTypeByList(
-			String SID, String externalRoomType) throws AxisFault {
+			String SID, String externalRoomType) throws ServiceException {
 		try {
 
 			Long users_id = sessiondataDao.checkSession(SID);
@@ -291,7 +300,7 @@ public class RoomWebService {
 			return null;
 		} catch (Exception err) {
 			log.error("[getFlvRecordingByExternalRoomTypeByList] ", err);
-			throw new AxisFault(err.getMessage());
+			throw new ServiceException(err.getMessage());
 		}
 	}
 
@@ -303,10 +312,10 @@ public class RoomWebService {
 	 * @param externalRoomType
 	 *            externalRoomType specified when creating the room
 	 * @return - list of flv recordings
-	 * @throws AxisFault
+	 * @throws ServiceException
 	 */
 	public FlvRecording[] getFlvRecordingByExternalRoomType(String SID,
-			String externalRoomType) throws AxisFault {
+			String externalRoomType) throws ServiceException {
 		try {
 
 			Long users_id = sessiondataDao.checkSession(SID);
@@ -339,7 +348,7 @@ public class RoomWebService {
 			return null;
 		} catch (Exception err) {
 			log.error("[getFlvRecordingByExternalRoomType] ", err);
-			throw new AxisFault(err.getMessage());
+			throw new ServiceException(err.getMessage());
 		}
 	}
 
@@ -351,10 +360,10 @@ public class RoomWebService {
 	 * @param roomId
 	 *            the room id
 	 * @return - list of recordings
-	 * @throws AxisFault
+	 * @throws ServiceException
 	 */
 	public FlvRecording[] getFlvRecordingByRoomId(String SID, Long roomId)
-			throws AxisFault {
+			throws ServiceException {
 		try {
 
 			Long users_id = sessiondataDao.checkSession(SID);
@@ -388,7 +397,7 @@ public class RoomWebService {
 			return null;
 		} catch (Exception err) {
 			log.error("[getFlvRecordingByExternalRoomType] ", err);
-			throw new AxisFault(err.getMessage());
+			throw new ServiceException(err.getMessage());
 		}
 	}
 
@@ -397,14 +406,14 @@ public class RoomWebService {
 	 * 
 	 * @param SID - The SID of the User. This SID must be marked as Loggedin
 	 * @return - List of available room types
-	 * @throws AxisFault
+	 * @throws ServiceException
 	 */
-	public List<RoomType> getRoomTypes(String SID) throws AxisFault {
+	public List<RoomType> getRoomTypes(String SID) throws ServiceException {
 		try {
 			return conferenceService.getRoomTypes(SID);
 		} catch (Exception err) {
 			log.error("[getRoomTypes]", err);
-			throw new AxisFault(err.getMessage());
+			throw new ServiceException(err.getMessage());
 		}
 	}
 
@@ -414,9 +423,9 @@ public class RoomWebService {
 	 * @param SID - The SID of the User. This SID must be marked as Loggedin
 	 * @param roomId
 	 * @return - current users for rooms ids
-	 * @throws AxisFault
+	 * @throws ServiceException
 	 */
-	public List<RoomCountBean> getRoomCounters(String SID, Integer[] roomId) throws AxisFault {
+	public List<RoomCountBean> getRoomCounters(String SID, Integer[] roomId) throws ServiceException {
 		List<RoomCountBean> roomBeans = new ArrayList<RoomCountBean>();
 		try {
 			Long users_id = sessiondataDao.checkSession(SID);
@@ -451,7 +460,7 @@ public class RoomWebService {
 			}
 		} catch (Exception err) {
 			log.error("[getRoomTypes]", err);
-			throw new AxisFault(err.getMessage());
+			throw new ServiceException(err.getMessage());
 		}
 		return roomBeans;
 	}
@@ -474,9 +483,9 @@ public class RoomWebService {
 	 *            The SID of the User. This SID must be marked as Loggedin
 	 * @param rooms_id
 	 * @return - object of type RoomReturn
-	 * @throws AxisFault
+	 * @throws ServiceException
 	 */
-	public RoomReturn getRoomWithClientObjectsById(String SID, long rooms_id) throws AxisFault {
+	public RoomReturn getRoomWithClientObjectsById(String SID, long rooms_id) throws ServiceException {
 		try {
 			Long users_id = sessiondataDao.checkSession(SID);
 			Long user_level = userManager.getUserLevelByID(users_id);
@@ -519,7 +528,7 @@ public class RoomWebService {
 
 		} catch (Exception err) {
 			log.error("[getRoomWithClientObjectsById]", err);
-			throw new AxisFault(err.getMessage());
+			throw new ServiceException(err.getMessage());
 		}
 
 	}
@@ -799,13 +808,13 @@ public class RoomWebService {
 	 *            enable or disable the video / or audio-only
 	 * 
 	 * @return - id of the room or error code
-	 * @throws AxisFault
+	 * @throws ServiceException
 	 */
 	public Long addRoomWithModerationQuestionsAndAudioType(String SID,
 			String name, Long roomtypes_id, String comment,
 			Long numberOfPartizipants, Boolean ispublic, Boolean appointment,
 			Boolean isDemoRoom, Integer demoTime, Boolean isModeratedRoom,
-			Boolean allowUserQuestions, Boolean isAudioOnly) throws AxisFault {
+			Boolean allowUserQuestions, Boolean isAudioOnly) throws ServiceException {
 		try {
 			Long users_id = sessiondataDao.checkSession(SID);
 			Long user_level = userManager.getUserLevelByID(users_id);
@@ -833,7 +842,7 @@ public class RoomWebService {
 			return -1L;
 		} catch (Exception err) {
 			log.error("[addRoomWithModerationQuestionsAndAudioType] ", err);
-			throw new AxisFault(err.getMessage());
+			throw new ServiceException(err.getMessage());
 		}
 	}
 
@@ -888,7 +897,7 @@ public class RoomWebService {
 	 *            and scrollbar appear instead.
 	 *            
 	 * @return - id of the room or error code
-	 * @throws AxisFault
+	 * @throws ServiceException
 	 */
 	public Long addRoomWithModerationQuestionsAudioTypeAndHideOptions(
 			String SID, String name, Long roomtypes_id, String comment,
@@ -898,7 +907,7 @@ public class RoomWebService {
 			Boolean hideTopBar, Boolean hideChat,
 			Boolean hideActivitiesAndActions, Boolean hideFilesExplorer,
 			Boolean hideActionsMenu, Boolean hideScreenSharing,
-			Boolean hideWhiteboard) throws AxisFault {
+			Boolean hideWhiteboard) throws ServiceException {
 		try {
 			Long users_id = sessiondataDao.checkSession(SID);
 			Long user_level = userManager.getUserLevelByID(users_id);
@@ -923,7 +932,7 @@ public class RoomWebService {
 			log.error(
 					"[addRoomWithModerationQuestionsAudioTypeAndHideOptions] ",
 					err);
-			throw new AxisFault(err.getMessage());
+			throw new ServiceException(err.getMessage());
 		}
 	}
 
@@ -965,13 +974,13 @@ public class RoomWebService {
 	 *            example "moodle"
 	 *            
 	 * @return - id of the room or error code
-	 * @throws AxisFault
+	 * @throws ServiceException
 	 */
 	public Long getRoomIdByExternalId(String SID, String name,
 			Long roomtypes_id, String comment, Long numberOfPartizipants,
 			Boolean ispublic, Boolean appointment, Boolean isDemoRoom,
 			Integer demoTime, Boolean isModeratedRoom, Long externalRoomId,
-			String externalRoomType) throws AxisFault {
+			String externalRoomType) throws ServiceException {
 		try {
 			Long users_id = sessiondataDao.checkSession(SID);
 			Long user_level = userManager.getUserLevelByID(users_id);
@@ -994,7 +1003,7 @@ public class RoomWebService {
 			return -26L;
 		} catch (Exception err) {
 			log.error("[addRoomWithModeration] ", err);
-			throw new AxisFault(err.getMessage());
+			throw new ServiceException(err.getMessage());
 		}
 		// return new Long (-1);
 	}
@@ -1623,12 +1632,12 @@ public class RoomWebService {
 	 * @return a HASH value that can be made into a URL with
 	 *         http://$OPENMEETINGS_HOST
 	 *         :$PORT/openmeetings/?invitationHash="+invitationsHash;
-	 * @throws AxisFault
+	 * @throws ServiceException
 	 */
 	public String getInvitationHash(String SID, String username, Long room_id,
 			Boolean isPasswordProtected, String invitationpass, Integer valid,
 			String validFromDate, String validFromTime, String validToDate,
-			String validToTime) throws AxisFault {
+			String validToTime) throws ServiceException {
 		try {
 			Long users_id = sessiondataDao.checkSession(SID);
 			Long user_level = userManager.getUserLevelByID(users_id);
@@ -1694,7 +1703,7 @@ public class RoomWebService {
 			}
 		} catch (Exception err) {
 			log.error("[sendInvitationHash] ", err);
-			throw new AxisFault(err.getMessage());
+			throw new ServiceException(err.getMessage());
 		}
 	}
 
@@ -1748,14 +1757,14 @@ public class RoomWebService {
 	 * @return a HASH value that can be made into a URL with
 	 *         http://$OPENMEETINGS_HOST
 	 *         :$PORT/openmeetings/?invitationHash="+invitationsHash;
-	 * @throws AxisFault
+	 * @throws ServiceException
 	 */
 	public String sendInvitationHash(String SID, String username,
 			String message, String email, String subject,
 			Long room_id, String conferencedomain, Boolean isPasswordProtected,
 			String invitationpass, Integer valid, String validFromDate,
 			String validFromTime, String validToDate, String validToTime,
-			Long language_id, Boolean sendMail) throws AxisFault {
+			Long language_id, Boolean sendMail) throws ServiceException {
 		try {
 			Long users_id = sessiondataDao.checkSession(SID);
 			Long user_level = userManager.getUserLevelByID(users_id);
@@ -1828,7 +1837,7 @@ public class RoomWebService {
 
 		} catch (Exception err) {
 			log.error("[sendInvitationHash] ", err);
-			throw new AxisFault(err.getMessage());
+			throw new ServiceException(err.getMessage());
 		}
 	}
 
@@ -1876,13 +1885,13 @@ public class RoomWebService {
 	 * @return a HASH value that can be made into a URL with
 	 *         http://$OPENMEETINGS_HOST
 	 *         :$PORT/openmeetings/?invitationHash="+invitationsHash;
-	 * @throws AxisFault
+	 * @throws ServiceException
 	 */
 	public String sendInvitationHashWithDateObject(String SID, String username,
 			String message, String email, String subject,
 			Long room_id, String conferencedomain, Boolean isPasswordProtected,
 			String invitationpass, Integer valid, Date fromDate, Date toDate,
-			Long language_id, Boolean sendMail) throws AxisFault {
+			Long language_id, Boolean sendMail) throws ServiceException {
 		try {
 			Long users_id = sessiondataDao.checkSession(SID);
 			Long user_level = userManager.getUserLevelByID(users_id);
@@ -1922,7 +1931,7 @@ public class RoomWebService {
 			}
 		} catch (Exception err) {
 			log.error("[sendInvitationHash] ", err);
-			throw new AxisFault(err.getMessage());
+			throw new ServiceException(err.getMessage());
 		}
 	}
 
@@ -1942,10 +1951,10 @@ public class RoomWebService {
 	 *            Asc or Desc sort ordering
 	 *            
 	 * @return - RoomReturn Objects with information of the current users
-	 * @throws AxisFault
+	 * @throws ServiceException
 	 */
 	public List<RoomReturn> getRoomsWithCurrentUsersByList(String SID,
-			int start, int max, String orderby, boolean asc) throws AxisFault {
+			int start, int max, String orderby, boolean asc) throws ServiceException {
 		try {
 			List<Room> rooms = conferenceService
 					.getRoomsWithCurrentUsersByList(SID, start, max, orderby,
@@ -1986,7 +1995,7 @@ public class RoomWebService {
 			return returnObjList;
 		} catch (Exception err) {
 			log.error("setUserObjectWithExternalUser", err);
-			throw new AxisFault(err.getMessage());
+			throw new ServiceException(err.getMessage());
 		}
 	}
 
@@ -2008,11 +2017,11 @@ public class RoomWebService {
 	 *            the external room type
 	 *            
 	 * @return - list of room return objects
-	 * @throws AxisFault
+	 * @throws ServiceException
 	 */
 	public List<RoomReturn> getRoomsWithCurrentUsersByListAndType(String SID,
 			int start, int max, String orderby, boolean asc,
-			String externalRoomType) throws AxisFault {
+			String externalRoomType) throws ServiceException {
 		try {
 			List<Room> rooms = conferenceService
 					.getRoomsWithCurrentUsersByListAndType(SID, start, max,
@@ -2053,7 +2062,7 @@ public class RoomWebService {
 			return returnObjList;
 		} catch (Exception err) {
 			log.error("setUserObjectWithExternalUser", err);
-			throw new AxisFault(err.getMessage());
+			throw new ServiceException(err.getMessage());
 		}
 	}
 
@@ -2107,7 +2116,7 @@ public class RoomWebService {
 	 *            URL Users will be lead to if the Conference Time is elapsed
 	 *            
 	 * @return - id of the room in case of success, error code otherwise
-	 * @throws AxisFault
+	 * @throws ServiceException
 	 */
 	public Long addRoomWithModerationAndExternalTypeAndStartEnd(String SID,
 			String name, Long roomtypes_id, String comment,
@@ -2116,7 +2125,7 @@ public class RoomWebService {
 			String externalRoomType, String validFromDate,
 			String validFromTime, String validToDate, String validToTime,
 			Boolean isPasswordProtected, String password, Long reminderTypeId,
-			String redirectURL) throws AxisFault {
+			String redirectURL) throws ServiceException {
 		try {
 			Long users_id = sessiondataDao.checkSession(SID);
 			Long user_level = userManager.getUserLevelByID(users_id);
@@ -2188,7 +2197,7 @@ public class RoomWebService {
 		} catch (Exception err) {
 			log.error("[addRoomWithModeration] ", err);
 
-			throw new AxisFault(err.getMessage());
+			throw new ServiceException(err.getMessage());
 		}
 		// return new Long(-1);
 		// return numberOfPartizipants;
@@ -2213,10 +2222,10 @@ public class RoomWebService {
 	 *            meeting member
 	 *            
 	 * @return - id of the member in case of success, error code otherwise
-	 * @throws AxisFault
+	 * @throws ServiceException
 	 */
 	public Long addMeetingMemberRemindToRoom(String SID, Long room_id,
-			String firstname, String lastname, String email, Long language_id) throws AxisFault {
+			String firstname, String lastname, String email, Long language_id) throws ServiceException {
 		return addExternalMeetingMemberRemindToRoom(SID, room_id, firstname, lastname, email, language_id, null, null);
 	}
 
@@ -2243,12 +2252,12 @@ public class RoomWebService {
 	 *            name of invitation creators
 	 *            
 	 * @return - id of the member in case of success, error code otherwise
-	 * @throws AxisFault
+	 * @throws ServiceException
 	 */
 	public Long addExternalMeetingMemberRemindToRoom(String SID, Long room_id,
 			String firstname, String lastname, String email,
 			Long language_id, String jNameTimeZone, String invitorName)
-			throws AxisFault {
+			throws ServiceException {
 		try {
 			Long users_id = sessiondataDao.checkSession(SID);
 			Long user_level = userManager.getUserLevelByID(users_id);
@@ -2277,7 +2286,7 @@ public class RoomWebService {
 		} catch (Exception err) {
 			log.error("[addExternalMeetingMemberRemindToRoom] ", err);
 
-			throw new AxisFault(err.getMessage());
+			throw new ServiceException(err.getMessage());
 		}
 	}
 
@@ -2296,10 +2305,10 @@ public class RoomWebService {
 	 *            false = close, true = open
 	 *            
 	 * @return - 1 in case of success, -2 otherwise
-	 * @throws AxisFault
+	 * @throws ServiceException
 	 */
 	public int closeRoom(String SID, Long room_id, Boolean status)
-			throws AxisFault {
+			throws ServiceException {
 		try {
 			Long users_id = sessiondataDao.checkSession(SID);
 			Long user_level = userManager.getUserLevelByID(users_id);
@@ -2326,7 +2335,7 @@ public class RoomWebService {
 		} catch (Exception err) {
 			log.error("[closeRoom] ", err);
 
-			throw new AxisFault(err.getMessage());
+			throw new ServiceException(err.getMessage());
 		}
 
 	}
@@ -2339,10 +2348,10 @@ public class RoomWebService {
 	 * @param paramName
 	 * @param paramValue
 	 * @return 1 in case of success, -2 if permissions are insufficient
-	 * @throws AxisFault if any error occurred
+	 * @throws ServiceException if any error occurred
 	 */
 	public int modifyRoomParameter(String SID, Long room_id, String paramName, Object paramValue)
-			throws AxisFault {
+			throws ServiceException {
 		try {
 			Long users_id = sessiondataDao.checkSession(SID);
 			Long user_level = userManager.getUserLevelByID(users_id);
@@ -2359,7 +2368,7 @@ public class RoomWebService {
 		} catch (Exception err) {
 			log.error("[modifyRoomParameter] ", err);
 
-			throw new AxisFault(err.getMessage());
+			throw new ServiceException(err.getMessage());
 		}
 	}
 	

@@ -18,6 +18,8 @@
  */
 package org.apache.openmeetings.axis.services;
 
+import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.InputStream;
@@ -25,7 +27,12 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.LinkedHashMap;
 
-import org.apache.axis2.AxisFault;
+import javax.jws.WebService;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
+
+import org.apache.cxf.feature.Features;
 import org.apache.openmeetings.core.data.file.FileProcessor;
 import org.apache.openmeetings.core.data.file.FileUtils;
 import org.apache.openmeetings.core.documents.LoadLibraryPresentation;
@@ -39,7 +46,6 @@ import org.apache.openmeetings.db.entity.file.FileExplorerItem;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.util.AuthLevelUtil;
 import org.apache.openmeetings.util.OmFileHelper;
-import org.apache.openmeetings.util.OpenmeetingsVariables;
 import org.apache.openmeetings.util.StoredFile;
 import org.apache.openmeetings.util.process.ConverterProcessResultList;
 import org.apache.openmeetings.util.process.FileImportError;
@@ -56,10 +62,13 @@ import org.springframework.beans.factory.annotation.Autowired;
  * @webservice FileService
  * 
  */
+@WebService
+@Features(features = "org.apache.cxf.feature.LoggingFeature")
+@Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+@Path("/file")
 public class FileWebService {
 
-	private static final Logger log = Red5LoggerFactory.getLogger(
-			FileWebService.class, OpenmeetingsVariables.webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(FileWebService.class, webAppRootKey);
 	@Autowired
 	private SessiondataDao sessiondataDao;
 	@Autowired
@@ -109,12 +118,12 @@ public class FileWebService {
 	 *            the filename =&gt; Important WITH file extension!
 	 *            
 	 * @return - array of file import errors
-	 * @throws AxisFault
+	 * @throws ServiceException
 	 */
 	public FileImportError[] importFile(String SID, String externalUserId,
 			Long externalFileId, String externalType, Long room_id,
 			boolean isOwner, String path, Long parentFolderId,
-			String fileSystemName) throws AxisFault {
+			String fileSystemName) throws ServiceException {
 		try {
 
 			Long users_id = sessiondataDao.checkSession(SID);
@@ -194,12 +203,12 @@ public class FileWebService {
 	 *            the filename =&gt; Important WITH file extension!
 	 *            
 	 * @return - array of file import errors
-	 * @throws AxisFault
+	 * @throws ServiceException
 	 */
 	public FileImportError[] importFileByInternalUserId(String SID,
 			Long internalUserId, Long externalFileId, String externalType,
 			Long room_id, boolean isOwner, String path, Long parentFolderId,
-			String fileSystemName) throws AxisFault {
+			String fileSystemName) throws ServiceException {
 		try {
 
 			Long users_id = sessiondataDao.checkSession(SID);
@@ -266,12 +275,12 @@ public class FileWebService {
 	 *            the name of the external system
 	 *            
 	 * @return - id of folder added
-	 * @throws AxisFault
+	 * @throws ServiceException
 	 */
 	public Long addFolderByExternalUserIdAndType(String SID,
 			String externalUserId, Long parentFileExplorerItemId,
 			String folderName, Long room_id, Boolean isOwner,
-			Long externalFilesid, String externalType) throws AxisFault {
+			Long externalFilesid, String externalType) throws ServiceException {
 		try {
 
 			Long users_id = sessiondataDao.checkSession(SID);
@@ -332,12 +341,12 @@ public class FileWebService {
 	 * @param externalType the name of the external system
 	 *  
 	 * @return - id of the folder
-	 * @throws AxisFault
+	 * @throws ServiceException
 	 */
 	public Long addFolderByUserId(String SID, Long userId,
 			Long parentFileExplorerItemId, String folderName, Long room_id,
 			Boolean isOwner, Long externalFilesid, String externalType)
-			throws AxisFault {
+			throws ServiceException {
 		try {
 
 			Long users_id = sessiondataDao.checkSession(SID);
@@ -396,7 +405,7 @@ public class FileWebService {
 	 * @return - id of the folder
 	 */
 	public Long addFolderSelf(String SID, Long parentFileExplorerItemId,
-			String fileName, Long room_id, Boolean isOwner) throws AxisFault {
+			String fileName, Long room_id, Boolean isOwner) throws ServiceException {
 		try {
 			Long users_id = sessiondataDao.checkSession(SID);
 			Long user_level = userManager.getUserLevelByID(users_id);
@@ -450,7 +459,7 @@ public class FileWebService {
 	 * @return - null
 	 */
 	public Long deleteFileOrFolderByExternalIdAndType(String SID,
-			Long externalFilesid, String externalType) throws AxisFault {
+			Long externalFilesid, String externalType) throws ServiceException {
 
 		try {
 
@@ -481,7 +490,7 @@ public class FileWebService {
 	 * @return - null
 	 */
 	public Long deleteFileOrFolder(String SID, Long fileExplorerItemId)
-			throws AxisFault {
+			throws ServiceException {
 
 		try {
 
@@ -511,7 +520,7 @@ public class FileWebService {
 	 * @return - null
 	 */
 	public Long deleteFileOrFolderSelf(String SID, Long fileExplorerItemId)
-			throws AxisFault {
+			throws ServiceException {
 
 		try {
 
@@ -536,9 +545,9 @@ public class FileWebService {
 	 * Get available import File Extension allowed during import
 	 * 
 	 * @return the array of the import file extensions
-	 * @throws AxisFault
+	 * @throws ServiceException
 	 */
-	public String[] getImportFileExtensions() throws AxisFault {
+	public String[] getImportFileExtensions() throws ServiceException {
 		try {
 
 			return StoredFile.getExtensions();
@@ -556,10 +565,10 @@ public class FileWebService {
 	 * @param parentFolder
 	 * 
 	 * @return - LibraryPresentation-Object for a certain file
-	 * @throws AxisFault
+	 * @throws ServiceException
 	 */
 	public LibraryPresentation getPresentationPreviewFileExplorer(String SID,
-			String parentFolder) throws AxisFault {
+			String parentFolder) throws ServiceException {
 
 		try {
 
@@ -602,10 +611,10 @@ public class FileWebService {
 	 * @param owner_id
 	 *            Owner id
 	 * @return - File Explorer Object by a given Room and owner id
-	 * @throws AxisFault
+	 * @throws ServiceException
 	 */
 	public FileExplorerObject getFileExplorerByRoom(String SID, Long room_id,
-			Long owner_id) throws AxisFault {
+			Long owner_id) throws ServiceException {
 
 		try {
 
@@ -673,10 +682,10 @@ public class FileWebService {
 	 * @param room_id
 	 *            Room Id
 	 * @return - File Explorer Object by a given Room
-	 * @throws AxisFault
+	 * @throws ServiceException
 	 */
 	public FileExplorerObject getFileExplorerByRoomSelf(String SID, Long room_id)
-			throws AxisFault {
+			throws ServiceException {
 
 		try {
 
@@ -749,11 +758,11 @@ public class FileWebService {
 	 * @param owner_id
 	 *            the owner id
 	 * @return - FileExplorerItem list by parent folder
-	 * @throws AxisFault
+	 * @throws ServiceException
 	 */
 	public FileExplorerItem[] getFileExplorerByParent(String SID,
 			Long parentFileExplorerItemId, Long room_id, Boolean isOwner,
-			Long owner_id) throws AxisFault {
+			Long owner_id) throws ServiceException {
 
 		try {
 
@@ -799,11 +808,11 @@ public class FileWebService {
 	 * @param isOwner
 	 *            true to request private drive
 	 * @return - list of file explorer items
-	 * @throws AxisFault
+	 * @throws ServiceException
 	 */
 	public FileExplorerItem[] getFileExplorerByParentSelf(String SID,
 			Long parentFileExplorerItemId, Long room_id, Boolean isOwner)
-			throws AxisFault {
+			throws ServiceException {
 
 		try {
 
@@ -845,10 +854,10 @@ public class FileWebService {
 	 * @param fileName
 	 *            new file or folder name
 	 * @return - null
-	 * @throws AxisFault
+	 * @throws ServiceException
 	 */
 	public Long updateFileOrFolderName(String SID, Long fileExplorerItemId,
-			String fileName) throws AxisFault {
+			String fileName) throws ServiceException {
 
 		try {
 
@@ -881,10 +890,10 @@ public class FileWebService {
 	 * @param fileName
 	 *            new file or folder name
 	 * @return - null
-	 * @throws AxisFault
+	 * @throws ServiceException
 	 */
 	public Long updateFileOrFolderNameSelf(String SID, Long fileExplorerItemId,
-			String fileName) throws AxisFault {
+			String fileName) throws ServiceException {
 
 		try {
 
@@ -936,11 +945,11 @@ public class FileWebService {
 	 * @param owner_id
 	 *            owner id
 	 * @return - null
-	 * @throws AxisFault
+	 * @throws ServiceException
 	 */
 	public Long moveFile(String SID, Long fileExplorerItemId,
 			Long newParentFileExplorerItemId, Long room_id, Boolean isOwner,
-			Boolean moveToHome, Long owner_id) throws AxisFault {
+			Boolean moveToHome, Long owner_id) throws ServiceException {
 
 		try {
 
@@ -995,11 +1004,11 @@ public class FileWebService {
 	 * @param moveToHome
 	 *            move to private drive
 	 * @return - null
-	 * @throws AxisFault
+	 * @throws ServiceException
 	 */
 	public Long moveFileSelf(String SID, Long fileExplorerItemId,
 			Long newParentFileExplorerItemId, Long room_id, Boolean isOwner,
-			Boolean moveToHome) throws AxisFault {
+			Boolean moveToHome) throws ServiceException {
 
 		try {
 

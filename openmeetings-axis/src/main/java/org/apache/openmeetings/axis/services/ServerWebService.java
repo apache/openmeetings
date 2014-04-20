@@ -18,13 +18,19 @@
  */
 package org.apache.openmeetings.axis.services;
 
-import org.apache.axis2.AxisFault;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+
+import javax.jws.WebService;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
+
+import org.apache.cxf.feature.Features;
 import org.apache.openmeetings.db.dao.server.ServerDao;
 import org.apache.openmeetings.db.dao.server.SessiondataDao;
 import org.apache.openmeetings.db.dao.user.IUserManager;
 import org.apache.openmeetings.db.entity.server.Server;
 import org.apache.openmeetings.util.AuthLevelUtil;
-import org.apache.openmeetings.util.OpenmeetingsVariables;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,9 +43,12 @@ import org.springframework.beans.factory.annotation.Autowired;
  * @webservice ServerService
  * 
  */
+@WebService
+@Features(features = "org.apache.cxf.feature.LoggingFeature")
+@Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+@Path("/server")
 public class ServerWebService {
-	private static final Logger log = Red5LoggerFactory.getLogger(
-			ServerWebService.class, OpenmeetingsVariables.webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(ServerWebService.class, webAppRootKey);
 
 	@Autowired
 	private SessiondataDao sessiondataDao;
@@ -59,7 +68,7 @@ public class ServerWebService {
 	 *            - Maximum server count
 	 * @return The list of servers participating in cluster
 	 */
-	public Server[] getServers(String SID, int start, int max) throws AxisFault {
+	public Server[] getServers(String SID, int start, int max) throws ServiceException {
 		log.debug("getServers enter");
 		Long users_id = sessiondataDao.checkSession(SID);
 		Long user_level = userManager.getUserLevelByID(users_id);
@@ -80,7 +89,7 @@ public class ServerWebService {
 	 *            - session id to identify the user making request
 	 * @return total count of the servers participating in cluster
 	 */
-	public int getServerCount(String SID) throws AxisFault {
+	public int getServerCount(String SID) throws ServiceException {
 		log.debug("getServerCount enter");
 		Long users_id = sessiondataDao.checkSession(SID);
 		Long user_level = userManager.getUserLevelByID(users_id);
@@ -122,7 +131,7 @@ public class ServerWebService {
 	 */
 	public long saveServer(String SID, long id, String name, String address,
 			int port, String user, String pass, String webapp, String protocol,
-			Boolean active, String comment) throws AxisFault {
+			Boolean active, String comment) throws ServiceException {
 		log.debug("saveServerCount enter");
 		Long users_id = sessiondataDao.checkSession(SID);
 		Long user_level = userManager.getUserLevelByID(users_id);
@@ -157,7 +166,7 @@ public class ServerWebService {
 	 *            - the id of the server to delete
 	 * @return true if the server was deleted, false otherwise
 	 */
-	public boolean deleteServer(String SID, long id) throws AxisFault {
+	public boolean deleteServer(String SID, long id) throws ServiceException {
 		log.debug("saveServerCount enter");
 		Long users_id = sessiondataDao.checkSession(SID);
 		Long user_level = userManager.getUserLevelByID(users_id);

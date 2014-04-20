@@ -18,9 +18,17 @@
  */
 package org.apache.openmeetings.axis.services;
 
+import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.jws.WebService;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
+
+import org.apache.cxf.feature.Features;
 import org.apache.openmeetings.core.remote.ConferenceService;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.room.IInvitationManager;
@@ -37,7 +45,6 @@ import org.apache.openmeetings.db.entity.user.Organisation_Users;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.util.TimezoneUtil;
 import org.apache.openmeetings.util.AuthLevelUtil;
-import org.apache.openmeetings.util.OpenmeetingsVariables;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,9 +56,12 @@ import org.springframework.beans.factory.annotation.Autowired;
  * @webservice JabberService
  *
  */
+@WebService
+@Features(features = "org.apache.cxf.feature.LoggingFeature")
+@Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+@Path("/jabber")
 public class JabberWebService {
-	private static final Logger log = Red5LoggerFactory.getLogger(
-			JabberWebService.class, OpenmeetingsVariables.webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(JabberWebService.class, webAppRootKey);
 
 	@Autowired
 	private IUserManager userManager;

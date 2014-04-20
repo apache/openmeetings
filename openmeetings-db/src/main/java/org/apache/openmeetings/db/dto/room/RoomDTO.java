@@ -30,6 +30,9 @@ public class RoomDTO {
 	private boolean appointment;
 	private String confno;
 	
+	public RoomDTO() {
+	}
+	
 	public RoomDTO(Room r) {
 		id = r.getRooms_id();
 		name = r.getName();

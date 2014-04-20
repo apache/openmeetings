@@ -28,6 +28,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlType;
 
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
@@ -37,6 +38,7 @@ import org.simpleframework.xml.Root;
 @Root(name="asterisksipuser")
 public class AsteriskSipUser implements Serializable {
 	private static final long serialVersionUID = -565831761546365623L;
+	@XmlType(namespace="org.apache.openmeetings.user.asterisk")
 	public enum Type {
 		friend,
 		user,

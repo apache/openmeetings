@@ -37,6 +37,10 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
 
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.user.User;
@@ -80,9 +84,12 @@ import org.simpleframework.xml.Root;
 })
 @Table(name = "flvrecording")
 @Root(name = "flvrecording")
+@XmlRootElement
+@XmlAccessorType(XmlAccessType.FIELD)
 public class FlvRecording implements Serializable {
 	private static final long serialVersionUID = -2234874663310617072L;
 	
+	@XmlType(namespace="org.apache.openmeetings.record")
 	public enum Status {
 		NONE
 		, PROCESSING

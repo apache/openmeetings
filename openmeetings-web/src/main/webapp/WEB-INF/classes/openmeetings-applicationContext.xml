@@ -18,13 +18,19 @@
   under the License.
   
 -->
-<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:mvc="http://www.springframework.org/schema/mvc"
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
 	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:jaxrs="http://cxf.apache.org/jaxrs"
+	xmlns:jaxws="http://cxf.apache.org/jaxws"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd 
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
 		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.1.xsd
-		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.1.xsd">
+		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.1.xsd
+		http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd
+		http://cxf.apache.org/jaxrs http://cxf.apache.org/schemas/jaxrs.xsd">
 	<bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalEntityManagerFactoryBean">
 		<property name="persistenceUnitName" value="openmeetings" />
 	</bean>
@@ -310,4 +316,66 @@
 	<bean id="calendarWebService" class="org.apache.openmeetings.axis.services.CalendarWebService" />
 	<bean id="jabberWebService" class="org.apache.openmeetings.axis.services.JabberWebService" />
 	<bean id="serverWebService" class="org.apache.openmeetings.axis.services.ServerWebService" />
+	
+	<bean id="jsonProvider" class="org.apache.cxf.jaxrs.provider.json.JSONProvider">
+		<!-- (writeXsiType=false) -->
+		<property name="ignoreNamespaces" value="true" /> 
+	</bean>
+	<bean id="jaxbProvider" class="org.apache.cxf.jaxrs.provider.JAXBElementProvider"/>
+	<jaxrs:server id="serverRest" address="/rest">
+		<jaxrs:serviceBeans>
+			<ref bean="userWebService"/>
+			<ref bean="roomWebService"/>
+			<ref bean="fileWebService"/>
+			<ref bean="calendarWebService"/>
+			<ref bean="jabberWebService"/>
+			<ref bean="serverWebService"/>
+		</jaxrs:serviceBeans>
+		<jaxrs:providers>
+			<ref bean="jaxbProvider"/>
+		</jaxrs:providers>
+	</jaxrs:server>
+	<!-- jaxrs:server id="serverJson" address="/json">
+		<jaxrs:serviceBeans>
+			<ref bean="userWebService"/>
+			<ref bean="roomWebService"/>
+			<ref bean="fileWebService"/>
+			<ref bean="calendarWebService"/>
+			<ref bean="jabberWebService"/>
+			<ref bean="serverWebService"/>
+		</jaxrs:serviceBeans>
+		<jaxrs:providers>
+			<ref bean="jsonProvider"/>
+		</jaxrs:providers>
+	</jaxrs:server-->
+	<jaxws:endpoint id="userServiceWS" address="/UserService"
+		implementor="#userWebService" 
+		endpointName="UserServiceEndpoint"
+		serviceName="UserService"
+		/>
+	<jaxws:endpoint id="roomServiceWS" address="/RoomService"
+		implementor="#roomWebService" 
+		endpointName="RoomServiceEndpoint"
+		serviceName="RoomService"
+		/>
+	<jaxws:endpoint id="fileServiceWS" address="/FileService"
+		implementor="#fileWebService" 
+		endpointName="FileServiceEndpoint"
+		serviceName="FileService"
+		/>
+	<jaxws:endpoint id="calendarServiceWS" address="/CalendarService"
+		implementor="#calendarWebService" 
+		endpointName="CalendarServiceEndpoint"
+		serviceName="CalendarService"
+		/>
+	<jaxws:endpoint id="jabberServiceWS" address="/JabberService"
+		implementor="#jabberWebService" 
+		endpointName="JabberServiceEndpoint"
+		serviceName="JabberService"
+		/>
+	<jaxws:endpoint id="serverServiceWS" address="/ServerService"
+		implementor="#serverWebService" 
+		endpointName="ServerServiceEndpoint"
+		serviceName="ServerService"
+		/>
 </beans>

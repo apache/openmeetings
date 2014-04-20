@@ -30,6 +30,7 @@ import javax.persistence.Lob;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlRootElement;
 
 @Entity
 @NamedQueries({
@@ -41,6 +42,7 @@ import javax.persistence.Table;
 					+ "c.storePermanent = false " + ")")
 })
 @Table(name = "sessiondata")
+@XmlRootElement
 public class Sessiondata implements Serializable {
 	private static final long serialVersionUID = 1928177917452866750L;
 	@Id
@@ -74,8 +76,6 @@ public class Sessiondata implements Serializable {
 	private Long organization_id;
 	
 	public Sessiondata() {
-		super();
-		// TODO Auto-generated constructor stub
 	}
     
     public Long getId() {

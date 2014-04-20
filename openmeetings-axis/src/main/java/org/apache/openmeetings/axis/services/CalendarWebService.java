@@ -25,7 +25,12 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import org.apache.axis2.AxisFault;
+import javax.jws.WebService;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
+
+import org.apache.cxf.feature.Features;
 import org.apache.openmeetings.core.data.calendar.management.AppointmentLogic;
 import org.apache.openmeetings.core.data.conference.RoomManager;
 import org.apache.openmeetings.db.dao.calendar.AppointmentCategoryDao;
@@ -54,6 +59,10 @@ import org.springframework.beans.factory.annotation.Autowired;
  * @webservice CalendarService
  * 
  */
+@WebService
+@Features(features = "org.apache.cxf.feature.LoggingFeature")
+@Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+@Path("/calendar")
 public class CalendarWebService {
 	private static final Logger log = Red5LoggerFactory.getLogger(CalendarWebService.class, webAppRootKey);
 
@@ -327,7 +336,7 @@ public class CalendarWebService {
 
 				Appointment a = appointmentDao.get(appointmentId);
 				if (!AuthLevelUtil.checkAdminLevel(user_level) && !a.getOwner().getUser_id().equals(users_id)) {
-					throw new AxisFault("The Appointment cannot be updated by the given user");
+					throw new ServiceException("The Appointment cannot be updated by the given user");
 				}
 				if (!a.getStart().equals(appointmentstart) || !a.getEnd().equals(appointmentend)) {
 					a.setStart(appointmentstart);
@@ -403,7 +412,7 @@ public class CalendarWebService {
 			Calendar appointmentend, Boolean isDaily, Boolean isWeekly,
 			Boolean isMonthly, Boolean isYearly, Long categoryId, Long remind,
 			String[] mmClient, Long roomType, Long languageId,
-			Boolean isPasswordProtected, String password) throws AxisFault {
+			Boolean isPasswordProtected, String password) throws ServiceException {
 		try {
 
 			Long users_id = sessiondataDao.checkSession(SID);
@@ -415,10 +424,10 @@ public class CalendarWebService {
 				// check if the appointment belongs to the current user
 				Appointment a = appointmentDao.get(appointmentId);
 				if (!a.getOwner().getUser_id().equals(users_id)) {
-					throw new AxisFault("The Appointment cannot be updated by the given user");
+					throw new ServiceException("The Appointment cannot be updated by the given user");
 				}
 			} else {
-				throw new AxisFault("Not allowed to preform that action, Authenticate the SID first");
+				throw new ServiceException("Not allowed to preform that action, Authenticate the SID first");
 			}
 
 			Appointment a = appointmentDao.get(appointmentId);
@@ -448,7 +457,7 @@ public class CalendarWebService {
 			return appointmentDao.update(a, users_id).getId();
 		} catch (Exception err) {
 			log.error("[updateAppointment]", err);
-			throw new AxisFault(err.getMessage());
+			throw new ServiceException(err.getMessage());
 		}
 	}
 
@@ -470,7 +479,7 @@ public class CalendarWebService {
 	 *            appointment are send
 	 * @return - id of appointment deleted
 	 */
-	public Long deleteAppointment(String SID, Long appointmentId, Long language_id) throws AxisFault {
+	public Long deleteAppointment(String SID, Long appointmentId, Long language_id) throws ServiceException {
 		try {
 			Long users_id = sessiondataDao.checkSession(SID);
 			Long user_level = userManager.getUserLevelByID(users_id);
@@ -481,16 +490,16 @@ public class CalendarWebService {
 			} else if (AuthLevelUtil.checkUserLevel(user_level)) {
 				// check if the appointment belongs to the current user
 				if (!a.getOwner().getUser_id().equals(users_id)) {
-					throw new AxisFault("The Appointment cannot be updated by the given user");
+					throw new ServiceException("The Appointment cannot be updated by the given user");
 				}
 			} else {
-				throw new AxisFault("Not allowed to preform that action, Authenticate the SID first");
+				throw new ServiceException("Not allowed to preform that action, Authenticate the SID first");
 			}
 			appointmentDao.delete(a, users_id);
 			return a.getId();
 		} catch (Exception err) {
 			log.error("[deleteAppointment]", err);
-			throw new AxisFault(err.getMessage());
+			throw new ServiceException(err.getMessage());
 		}
 	}
 

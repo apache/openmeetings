@@ -416,14 +416,6 @@
 		</jar>
 
 		<!-- Build WebServices -->
-		<property name="om_aar_name" value="${project.distname}-${jar.suffix}.aar"/>
-		<property name="om_aar_folder" value="${dist.webapps.dir}/WEB-INF/services"/>
-		<jar destfile="${om_aar_folder}/${om_aar_name}">
-			<fileset dir="${main.out.dir}">
-				<include name="META-INF/*" />
-			</fileset>
-		</jar>
-		<echo file="${om_aar_folder}/services.list" append="false">${om_aar_name}${line.separator}version.aar${line.separator}</echo>
 		<jar destfile="${dist.webapps.dir}/WEB-INF/lib/${project.distname}-axis-${jar.suffix}.jar">
 			<fileset dir="${main.out.dir}">
 				<include name="**/apache/openmeetings/axis/**" />
@@ -1047,6 +1039,7 @@
 			<jvmarg value="-Dbasedir=${basedir}" />
 			<jvmarg value="-Dred5.config_root=${red5.root}/conf" />
 			<jvmarg value="-Dbackups.dir=${junit.backups.dir}" />
+			<!--jvmarg value="-Xrunjdwp:transport=dt_socket,address=8787,server=y,suspend=y" /-->
 			<formatter type="${junit.test.formatter}" />
 			<batchtest todir="${junit.report.dir}">
 				<fileset dir="${main.out.dir}">
@@ -1094,7 +1087,7 @@
 	
 	<target name="-availability-check" unless="red5.installed" description="Check which libraries need to be retrieved" depends="prepare.mkdir">
 		<available classpathref="check.classpath" classname="javax.persistence.spi.PersistenceProvider" property="mainlib.installed" />
-		<available classpathref="check.classpath" classname="org.apache.axis2.Version" property="om.installed" />
+		<available classpathref="check.classpath" classname="org.apache.wicket.Application" property="om.installed" />
 		<available classpathref="check.classpath" classname="net.sf.antcontrib.AntContribVersion" property="junit.installed" />
 		<available classpathref="check.classpath" classname="com.thaiopensource.relaxng.translate.Driver" property="dtd-generator.installed" />
 		<available classpathref="check.classpath" classname="org.apache.commons.cli.CommandLine" property="cmdadmin.installed" />
@@ -1217,6 +1210,7 @@
 		<antcall target="-retrieve" inheritAll="true" inheritRefs="true">
 			<param name="ivy.conf.name" value="mainlib.ext" />
 			<param name="ivy.lib.location" value="${mainlibs.lib.dir}" />
+			<param name="ivy.transitive" value="true" />
 		</antcall>
 		<delete>
 			<fileset dir="${mainlibs.lib.dir}" includes="*-source*.jar" />
@@ -1231,10 +1225,6 @@
 		</antcall>
 		<antcall target="-retrieve" inheritAll="true" inheritRefs="true">
 			<param name="ivy.conf.name" value="openmeetings.ext" />
-			<param name="ivy.lib.location" value="${om.lib.dir}" />
-		</antcall>
-		<antcall target="-retrieve" inheritAll="true" inheritRefs="true">
-			<param name="ivy.conf.name" value="openmeetings.axis2" />
 			<param name="ivy.lib.location" value="${om.lib.dir}" />
 			<param name="ivy.transitive" value="true" />
 		</antcall>

@@ -18,9 +18,17 @@
  */
 package org.apache.openmeetings.axis.services;
 
+import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+
 import java.util.Date;
 
-import org.apache.axis2.AxisFault;
+import javax.jws.WebService;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
+
+import org.apache.cxf.feature.Features;
 import org.apache.openmeetings.core.data.basic.FieldManager;
 import org.apache.openmeetings.core.data.user.OrganisationManager;
 import org.apache.openmeetings.core.remote.MainService;
@@ -39,7 +47,6 @@ import org.apache.openmeetings.db.entity.server.RemoteSessionObject;
 import org.apache.openmeetings.db.entity.server.Sessiondata;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.util.AuthLevelUtil;
-import org.apache.openmeetings.util.OpenmeetingsVariables;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,10 +60,12 @@ import org.springframework.beans.factory.annotation.Autowired;
  * @webservice UserService
  * 
  */
+@WebService
+@Features(features = "org.apache.cxf.feature.LoggingFeature")
+@Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+@Path("/user")
 public class UserWebService {
-
-	private static final Logger log = Red5LoggerFactory.getLogger(
-			UserWebService.class, OpenmeetingsVariables.webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(UserWebService.class, webAppRootKey);
 
 	@Autowired
 	private SessiondataDao sessiondataDao;
@@ -85,6 +94,8 @@ public class UserWebService {
 	 * 
 	 * @return - creates new session
 	 */
+	@GET
+	@Path("/session")
 	public Sessiondata getSession() {
 		log.debug("SPRING LOADED getSession -- ");
 		return mainService.getsessiondata();
@@ -101,11 +112,9 @@ public class UserWebService {
 	 *            
 	 * @return - id of the logged in user, -1 in case of the error
 	 */
-	public Long loginUser(String SID, String username, String userpass)
-			throws AxisFault {
+	public Long loginUser(String SID, String username, String userpass) {
 		try {
-			Object obj = userManagement.loginUser(SID, username, userpass,
-					null, null, false);
+			Object obj = userManagement.loginUser(SID, username, userpass, null, null, false);
 			if (obj == null) {
 				return new Long(-1);
 			}
@@ -191,13 +200,13 @@ public class UserWebService {
 	 *            the language_id
 	 *            
 	 * @return - id of the user added or error code
-	 * @throws AxisFault
+	 * @throws ServiceException
 	 */
 	public Long addNewUser(String SID, String username, String userpass,
 			String lastname, String firstname, String email,
 			String additionalname, String street, String zip, String fax,
 			long states_id, String town, long language_id)
-			throws AxisFault {
+			throws ServiceException {
 		try {
 			Long users_id = sessiondataDao.checkSession(SID);
 			Long user_level = userManagement.getUserLevelByID(users_id);
@@ -231,7 +240,7 @@ public class UserWebService {
 			}
 		} catch (Exception err) {
 			log.error("addNewUser", err);
-			throw new AxisFault(err.getMessage());
+			throw new ServiceException(err.getMessage());
 		}
 	}
 
@@ -269,13 +278,13 @@ public class UserWebService {
 	 *            the name of the timezone for the user
 	 *            
 	 * @return - id of the user added or the error code
-	 * @throws AxisFault
+	 * @throws ServiceException
 	 */
 	public Long addNewUserWithTimeZone(String SID, String username,
 			String userpass, String lastname, String firstname, String email,
 			String additionalname, String street, String zip, String fax,
 			long states_id, String town, long language_id,
-			String jNameTimeZone) throws AxisFault {
+			String jNameTimeZone) throws ServiceException {
 		try {
 			Long users_id = sessiondataDao.checkSession(SID);
 			Long user_level = userManagement.getUserLevelByID(users_id);
@@ -314,7 +323,7 @@ public class UserWebService {
 			}
 		} catch (Exception err) {
 			log.error("addNewUserWithTimeZone", err);
-			throw new AxisFault(err.getMessage());
+			throw new ServiceException(err.getMessage());
 		}
 	}
 
@@ -360,14 +369,14 @@ public class UserWebService {
 	 *            externalUserType
 	 *            
 	 * @return - id of user added or error code
-	 * @throws AxisFault
+	 * @throws ServiceException
 	 */
 	public Long addNewUserWithExternalType(String SID, String username,
 			String userpass, String lastname, String firstname, String email,
 			String additionalname, String street, String zip, String fax,
 			long states_id, String town, long language_id,
 			String jNameTimeZone, String externalUserId, String externalUserType)
-			throws AxisFault {
+			throws ServiceException {
 		try {
 			Long users_id = sessiondataDao.checkSession(SID);
 			Long user_level = userManagement.getUserLevelByID(users_id);
@@ -409,7 +418,7 @@ public class UserWebService {
 
 		} catch (Exception err) {
 			log.error("addNewUserWithExternalType", err);
-			throw new AxisFault(err.getMessage());
+			throw new ServiceException(err.getMessage());
 		}
 	}
 
@@ -423,9 +432,9 @@ public class UserWebService {
 	 *            the openmeetings user id
 	 *            
 	 * @return - id of the user deleted, error code otherwise
-	 * @throws AxisFault
+	 * @throws ServiceException
 	 */
-	public Long deleteUserById(String SID, Long userId) throws AxisFault {
+	public Long deleteUserById(String SID, Long userId) throws ServiceException {
 		try {
 			Long users_id = sessiondataDao.checkSession(SID);
 			Long user_level = userManagement.getUserLevelByID(users_id);
@@ -443,7 +452,7 @@ public class UserWebService {
 
 		} catch (Exception err) {
 			log.error("deleteUserById", err);
-			throw new AxisFault(err.getMessage());
+			throw new ServiceException(err.getMessage());
 		}
 	}
 
@@ -459,10 +468,10 @@ public class UserWebService {
 	 *            externalUserId
 	 *            
 	 * @return - id of user deleted, or error code
-	 * @throws AxisFault
+	 * @throws ServiceException
 	 */
 	public Long deleteUserByExternalUserIdAndType(String SID,
-			String externalUserId, String externalUserType) throws AxisFault {
+			String externalUserId, String externalUserType) throws ServiceException {
 		try {
 			Long users_id = sessiondataDao.checkSession(SID);
 			Long user_level = userManagement.getUserLevelByID(users_id);
@@ -484,7 +493,7 @@ public class UserWebService {
 
 		} catch (Exception err) {
 			log.error("deleteUserByExternalUserIdAndType", err);
-			throw new AxisFault(err.getMessage());
+			throw new ServiceException(err.getMessage());
 		}
 	}
 
@@ -518,13 +527,13 @@ public class UserWebService {
 	 *            Test Application before the user is logged into the room
 	 *            
 	 * @return - secure hash or error code
-	 * @throws AxisFault
+	 * @throws ServiceException
 	 */
 	public String setUserObjectAndGenerateRoomHash(String SID, String username,
 			String firstname, String lastname, String profilePictureUrl,
 			String email, String externalUserId, String externalUserType,
 			Long room_id, int becomeModeratorAsInt, int showAudioVideoTestAsInt)
-			throws AxisFault {
+			throws ServiceException {
 		try {
 			Long users_id = sessiondataDao.checkSession(SID);
 			Long user_level = userManagement.getUserLevelByID(users_id);
@@ -569,7 +578,7 @@ public class UserWebService {
 			}
 		} catch (Exception err) {
 			log.error("setUserObjectWithAndGenerateRoomHash", err);
-			throw new AxisFault(err.getMessage());
+			throw new ServiceException(err.getMessage());
 		}
 		return "" + new Long(-1);
 	}
@@ -614,7 +623,7 @@ public class UserWebService {
 			String username, String firstname, String lastname,
 			String profilePictureUrl, String email, String externalUserId,
 			String externalUserType, Long room_id, int becomeModeratorAsInt,
-			int showAudioVideoTestAsInt) throws AxisFault {
+			int showAudioVideoTestAsInt) throws ServiceException {
 
 		log.debug("UserService.setUserObjectAndGenerateRoomHashByURL");
 		try {
@@ -661,7 +670,7 @@ public class UserWebService {
 			}
 		} catch (Exception err) {
 			log.error("setUserObjectAndGenerateRoomHashByURL", err);
-			throw new AxisFault(err.getMessage());
+			throw new ServiceException(err.getMessage());
 		}
 		return "" + new Long(-1);
 	}
@@ -1109,9 +1118,9 @@ public class UserWebService {
 	 * @param name
 	 *            the name of the org
 	 * @return the new id of the org or -1 in case an error happened
-	 * @throws AxisFault
+	 * @throws ServiceException
 	 */
-	public Long addOrganisation(String SID, String name) throws AxisFault {
+	public Long addOrganisation(String SID, String name) throws ServiceException {
 		Long users_id = sessiondataDao.checkSession(SID);
 		Long user_level = userManagement.getUserLevelByID(users_id);
 		if (AuthLevelUtil.checkWebServiceLevel(user_level)) {

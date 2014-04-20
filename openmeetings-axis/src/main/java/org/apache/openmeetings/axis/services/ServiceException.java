@@ -16,44 +16,15 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.db.dto.basic;
+package org.apache.openmeetings.axis.services;
 
-public class ErrorResult {
-	private Long errorId;
-	private String errmessage;
-	private String errortype;
+import javax.xml.ws.WebFault;
 
-	public ErrorResult() {
-	}
-	
-	public ErrorResult(Long errorId, String errmessage, String errortype) {
-		super();
-		this.errorId = errorId;
-		this.errmessage = errmessage;
-		this.errortype = errortype;
-	}
+@WebFault
+public class ServiceException extends Exception {
+	private static final long serialVersionUID = 1L;
 
-	public Long getErrorId() {
-		return errorId;
-	}
-
-	public void setErrorId(Long errorId) {
-		this.errorId = errorId;
-	}
-
-	public String getErrmessage() {
-		return errmessage;
-	}
-
-	public void setErrmessage(String errmessage) {
-		this.errmessage = errmessage;
-	}
-
-	public String getErrortype() {
-		return errortype;
-	}
-
-	public void setErrortype(String errortype) {
-		this.errortype = errortype;
+	public ServiceException(String msg) {
+		super(msg);
 	}
 }

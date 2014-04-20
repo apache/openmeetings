@@ -32,6 +32,9 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
 
 import org.apache.openmeetings.db.entity.IDataProviderEntity;
 import org.apache.openmeetings.db.entity.server.Server;
@@ -62,6 +65,8 @@ import org.apache.openmeetings.util.CalendarPatterns;
 	@NamedQuery(name = "getRoomsIdsByServer", query = "SELECT c.room_id FROM Client c WHERE c.server = :server GROUP BY c.room_id")
 })
 @Table(name = "client")
+@XmlRootElement
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Client implements IDataProviderEntity, Serializable {
 	private static final long serialVersionUID = -5980636447877077730L;
 	

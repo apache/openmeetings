@@ -19,7 +19,6 @@
 package org.apache.openmeetings.axis.services;
 
 public class RoomCountBean {
-	
 	private long roomId;
 	private String roomName;
 	private Integer roomCount;
@@ -49,6 +48,4 @@ public class RoomCountBean {
 	public void setMaxUser(Integer maxUser) {
 		this.maxUser = maxUser;
 	}
-	
-
 }

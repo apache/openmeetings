@@ -30,6 +30,9 @@ public class RoomSearchResult {
 	private List<RoomDTO> result;
 	private Long errorId;
 
+	public RoomSearchResult() {
+	}
+	
 	public RoomSearchResult(SearchResult<Room> copy) {
 		this.objectName = copy.getObjectName();
 		this.records = copy.getRecords();

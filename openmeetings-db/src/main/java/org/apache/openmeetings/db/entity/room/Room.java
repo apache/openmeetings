@@ -38,6 +38,9 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
 
 import org.apache.openjpa.persistence.ElementDependent;
 import org.apache.openjpa.persistence.jdbc.ForeignKey;
@@ -80,6 +83,8 @@ import org.simpleframework.xml.Root;
 })
 @Table(name = "room")
 @Root(name = "room")
+@XmlRootElement
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Room implements Serializable, IDataProviderEntity {
 	private static final long serialVersionUID = -2860312283159251568L;
 	@Id

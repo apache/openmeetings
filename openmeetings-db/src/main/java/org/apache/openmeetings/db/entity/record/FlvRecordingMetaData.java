@@ -32,6 +32,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlType;
 
 import org.apache.openjpa.persistence.jdbc.ForeignKey;
 import org.simpleframework.xml.Element;
@@ -51,6 +52,7 @@ import org.simpleframework.xml.Root;
 @Root(name = "flvrecordingmetadata")
 public class FlvRecordingMetaData implements Serializable {
 	private static final long serialVersionUID = 1L;
+	@XmlType(namespace="org.apache.openmeetings.record.meta")
 	public enum Status {
 		NONE
 		, STARTED
