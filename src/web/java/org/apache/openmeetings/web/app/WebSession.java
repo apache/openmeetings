@@ -275,7 +275,7 @@ public class WebSession extends AbstractAuthenticatedWebSession {
 			(STRINGS_WITH_APP.contains(id) ? s.replaceAll("\\$APP_NAME", getBean(ConfigurationDao.class).getAppName()) : s);
 	}
 	
-	void setLanguage(long languageId) {
+	public void setLanguage(long languageId) {
 		this.languageId = languageId;
 	}
 	
