@@ -18,11 +18,9 @@
  */
 package org.apache.openmeetings.web.mail.template;
 
-import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.ExternalLink;
-import org.apache.wicket.util.tester.WicketTester;
 
 public class InvitationTemplate extends AbstractTemplatePanel {
 	private static final long serialVersionUID = 1L;
@@ -50,12 +48,7 @@ public class InvitationTemplate extends AbstractTemplatePanel {
 	}
 	
 	public static String getEmail(long langId, String user, String message, String link, boolean isCanceled) {
-		WicketTester tester = null;
-		try {
-			tester = ensureApplication(langId);
-			return renderPanel(new InvitationTemplate(TemplatePage.COMP_ID, user, message, link, isCanceled)).toString();
-		} finally {
-			Application.destroy(tester);
-		}
+		ensureApplication(langId);
+		return renderPanel(new InvitationTemplate(TemplatePage.COMP_ID, user, message, link, isCanceled)).toString();
 	}
 }

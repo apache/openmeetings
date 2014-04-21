@@ -83,9 +83,11 @@ public class Application extends AuthenticatedWebApplication {
 	private static boolean isInstalled;
 	private static Map<Long, Set<String>> ONLINE_USERS = new ConcurrentHashMap<Long, Set<String>>();
 	private DashboardContext dashboardContext;
+	private static String appName;
 	
 	@Override
 	protected void init() {
+		appName = super.getName();
 		getSecuritySettings().setAuthenticationStrategy(new OmAuthenticationStrategy());
 		IPageSettings pageSettings = getPageSettings();
 		pageSettings.addComponentResolver(new MessageResolver());
@@ -271,5 +273,9 @@ public class Application extends AuthenticatedWebApplication {
 			}
 			tester.destroy();
 		}
+	}
+	
+	public static String getAppName() {
+		return appName;
 	}
 }

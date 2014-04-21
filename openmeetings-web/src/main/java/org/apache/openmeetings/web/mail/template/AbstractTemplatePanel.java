@@ -18,19 +18,23 @@
  */
 package org.apache.openmeetings.web.mail.template;
 
-import static org.apache.openmeetings.web.app.Application.getWicketTester;
-
 import org.apache.openmeetings.web.app.Application;
+import org.apache.openmeetings.web.app.WebSession;
 import org.apache.wicket.MarkupContainer;
+import org.apache.wicket.ThreadContext;
 import org.apache.wicket.markup.IMarkupResourceStreamProvider;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.mock.MockWebResponse;
 import org.apache.wicket.protocol.http.BufferedWebResponse;
+import org.apache.wicket.protocol.http.mock.MockHttpServletRequest;
+import org.apache.wicket.protocol.http.mock.MockHttpSession;
+import org.apache.wicket.protocol.http.servlet.ServletWebRequest;
 import org.apache.wicket.request.Response;
 import org.apache.wicket.request.cycle.RequestCycle;
+import org.apache.wicket.request.cycle.RequestCycleContext;
 import org.apache.wicket.util.resource.IResourceStream;
 import org.apache.wicket.util.resource.StringResourceStream;
-import org.apache.wicket.util.tester.WicketTester;
 
 public abstract class AbstractTemplatePanel extends Panel {
 	private static final long serialVersionUID = 1L;
@@ -75,17 +79,18 @@ public abstract class AbstractTemplatePanel extends Panel {
 		}
 	}
 	
-	static WicketTester ensureApplication() {
-		return ensureApplication(-1);
-	}
-	
-	static WicketTester ensureApplication(long langId) {
-		WicketTester tester = null;
-		try {
-			Application.get();
-		} catch (Exception e) {
-			tester = getWicketTester(langId);
+	public static void ensureApplication(long langId) {
+		if (!Application.exists()) {
+			Application a = (Application)Application.get(Application.getAppName());
+			ThreadContext.setApplication(a);
+			
+			ServletWebRequest req = new ServletWebRequest(new MockHttpServletRequest(a, new MockHttpSession(a.getServletContext()), a.getServletContext()), "");
+			RequestCycleContext rctx = new RequestCycleContext(req, new MockWebResponse(), a.getRootRequestMapper(), a.getExceptionMapperProvider().get()); 
+			ThreadContext.setRequestCycle(new RequestCycle(rctx));
+			
+			WebSession s = WebSession.get();
+			s.setLanguage(1);
+			ThreadContext.setSession(s);
 		}
-		return tester;
 	}
 }
