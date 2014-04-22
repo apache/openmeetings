@@ -98,7 +98,7 @@
 	<bean id="openmeetings.FlvInterviewReConverterTask" class="org.apache.openmeetings.core.data.flvrecord.converter.FlvInterviewReConverterTask" />
 	<bean id="openmeetings.FlvInterviewConverter" class="org.apache.openmeetings.core.converter.FlvInterviewConverter" />
 	<bean id="openmeetings.FlvRecorderConverter" class="org.apache.openmeetings.core.converter.FlvRecorderConverter" />
-	<bean id="openmeetings.SlaveHTTPConnectionManager" class="org.apache.openmeetings.core.cluster.SlaveHTTPConnectionManager" />
+	<bean id="openmeetings.SlaveHTTPConnectionManager" class="org.apache.openmeetings.webservice.cluster.SlaveHTTPConnectionManager" />
 
 	<bean id="openmeetings.SessionClearJob" class="org.apache.openmeetings.core.quartz.scheduler.SessionClearJob" />
 	<bean id="sessionClearJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
@@ -310,12 +310,12 @@
 	</bean>
 
 	<!-- Axis2 Service Proxy's -->
-	<bean id="userWebService" class="org.apache.openmeetings.axis.services.UserWebService" />
-	<bean id="roomWebService" class="org.apache.openmeetings.axis.services.RoomWebService" />
-	<bean id="fileWebService" class="org.apache.openmeetings.axis.services.FileWebService" />
-	<bean id="calendarWebService" class="org.apache.openmeetings.axis.services.CalendarWebService" />
-	<bean id="jabberWebService" class="org.apache.openmeetings.axis.services.JabberWebService" />
-	<bean id="serverWebService" class="org.apache.openmeetings.axis.services.ServerWebService" />
+	<bean id="userWebService" class="org.apache.openmeetings.webservice.UserWebService" />
+	<bean id="roomWebService" class="org.apache.openmeetings.webservice.RoomWebService" />
+	<bean id="fileWebService" class="org.apache.openmeetings.webservice.FileWebService" />
+	<bean id="calendarWebService" class="org.apache.openmeetings.webservice.CalendarWebService" />
+	<bean id="jabberWebService" class="org.apache.openmeetings.webservice.JabberWebService" />
+	<bean id="serverWebService" class="org.apache.openmeetings.webservice.ServerWebService" />
 	
 	<bean id="jsonProvider" class="org.apache.cxf.jaxrs.provider.json.JSONProvider">
 		<!-- (writeXsiType=false) -->

@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.core.cluster.sync;
+package org.apache.openmeetings.webservice.cluster;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
@@ -25,8 +25,8 @@ import java.net.URL;
 import javax.xml.namespace.QName;
 import javax.xml.ws.Service;
 
-import org.apache.openmeetings.axis.services.UserWebService;
 import org.apache.openmeetings.db.entity.server.Server;
+import org.apache.openmeetings.webservice.UserWebService;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 

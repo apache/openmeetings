@@ -22,7 +22,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
-import org.apache.openmeetings.core.cluster.SlaveHTTPConnectionManager;
 import org.apache.openmeetings.core.data.basic.FieldManager;
 import org.apache.openmeetings.core.data.conference.RoomManager;
 import org.apache.openmeetings.core.data.user.OrganisationManager;
@@ -111,7 +110,7 @@ public class UserService implements IUserService {
 	@Autowired
 	private ServerDao serverDao;
 	@Autowired
-	private SlaveHTTPConnectionManager slaveHTTPConnectionManager;
+	private ISlaveHTTPConnectionManager slaveHTTPConnectionManager;
 	@Autowired
 	private FieldLanguagesValuesDao fieldLanguagesValuesDao;
 	@Autowired

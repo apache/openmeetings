@@ -32,8 +32,6 @@
 	<description>TODO</description>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<axis2.version>1.7.0-SNAPSHOT</axis2.version>
-		<axiom.version>1.2.14</axiom.version>
 		<velocity.version>1.7</velocity.version>
 		<batik.version>1.7</batik.version>
 		<smslib.version>3.5.4</smslib.version>
@@ -45,27 +43,6 @@
 			<url>http://smslib.org/maven2/v3</url>
 		</repository>
 	</repositories>
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-jar-plugin</artifactId>
-				<version>2.2</version>
-				<executions>
-					<execution>
-						<goals>
-							<goal>test-jar</goal>
-						</goals>
-					</execution>
-				</executions>
-				<!-- configuration>
-					<excludes>
-						<exclude>**/*.class</exclude>
-					</excludes>
-				</configuration-->
-			</plugin>
-		</plugins>
-	</build>
 	<dependencies>
 		<dependency>
 			<groupId>org.apache.openmeetings</groupId>
@@ -76,16 +53,6 @@
 			<groupId>org.apache.openmeetings</groupId>
 			<artifactId>openmeetings-db</artifactId>
 			<version>${openmeetings.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.axis2</groupId>
-			<artifactId>axis2</artifactId>
-			<version>${axis2.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.ws.commons.axiom</groupId>
-			<artifactId>axiom-impl</artifactId>
-			<version>${axiom.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.velocity</groupId>

@@ -16,14 +16,15 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.core.cluster;
+package org.apache.openmeetings.webservice.cluster;
+
+import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.openmeetings.core.cluster.sync.RestClient;
+import org.apache.openmeetings.core.remote.ISlaveHTTPConnectionManager;
 import org.apache.openmeetings.db.entity.server.Server;
-import org.apache.openmeetings.util.OpenmeetingsVariables;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 
@@ -36,10 +37,8 @@ import org.slf4j.Logger;
  * @author sebawagner
  *
  */
-public class SlaveHTTPConnectionManager {
-
-	private static Logger log = Red5LoggerFactory.getLogger(
-			SlaveHTTPConnectionManager.class, OpenmeetingsVariables.webAppRootKey);
+public class SlaveHTTPConnectionManager implements ISlaveHTTPConnectionManager {
+	private static Logger log = Red5LoggerFactory.getLogger(SlaveHTTPConnectionManager.class, webAppRootKey);
 
 	/**
 	 * We store the list of RestClients in the memory, so that we can simply

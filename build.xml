@@ -42,7 +42,6 @@
 	<property name="webcontent.base.dir" value="${basedir}/WebContent" />
 	
 	<property name="screenshare.resources.dir" value="${basedir}/openmeetings-screenshare/src/main/resources" />
-	<property name="axis.resources.dir" value="${basedir}/openmeetings-axis/src/main/resources" />
 	
 	<property name="webapp.dir" value="${basedir}/openmeetings-web/src/main/webapp" />
 	<property name="junit.lib.dir" value="${project.lib.dir}/junit" />
@@ -329,7 +328,7 @@
 				<exclude name="META-INF/*.xml" />
 				<exclude name="org/apache/openmeetings/util/**" />
 				<exclude name="org/apache/openmeetings/test/**" />
-				<exclude name="org/apache/openmeetings/axis/**" />
+				<exclude name="org/apache/openmeetings/webservice/**" />
 				<exclude name="org/apache/openmeetings/db/**" />
 				<exclude name="org/apache/openmeetings/cli/**" />
 				<exclude name="org/apache/openmeetings/backup/**" />
@@ -416,9 +415,9 @@
 		</jar>
 
 		<!-- Build WebServices -->
-		<jar destfile="${dist.webapps.dir}/WEB-INF/lib/${project.distname}-axis-${jar.suffix}.jar">
+		<jar destfile="${dist.webapps.dir}/WEB-INF/lib/${project.distname}-webservice-${jar.suffix}.jar">
 			<fileset dir="${main.out.dir}">
-				<include name="**/apache/openmeetings/axis/**" />
+				<include name="**/apache/openmeetings/webservice/**" />
 				<include name="META-INF/LICENSE" />
 				<include name="META-INF/NOTICE" />
 			</fileset>
@@ -461,7 +460,7 @@
 			<format property="TODAY_YEAR" pattern="yyyy" locale="en" />
 		</tstamp>
 	    <javadoc packagenames="org.apache.openmeetings.core.remote.*"
-	           sourcepath="${basedir}/openmeetings-axis/src/main/java:${basedir}/openmeetings-db/src/main/java:${src.base.dir}/doc/java:${basedir}/openmeetings-install/src/main/java:${basedir}/openmeetings-core/src/main/java:${basedir}/openmeetings-screenshare/src/main/java:${basedir}/openmeetings-util/src/main/java:${basedir}/openmeetings-web/src/main/java:${basedir}/openmeetings-service/src/main/java"
+	           sourcepath="${basedir}/openmeetings-webservice/src/main/java:${basedir}/openmeetings-db/src/main/java:${src.base.dir}/doc/java:${basedir}/openmeetings-install/src/main/java:${basedir}/openmeetings-core/src/main/java:${basedir}/openmeetings-screenshare/src/main/java:${basedir}/openmeetings-util/src/main/java:${basedir}/openmeetings-web/src/main/java:${basedir}/openmeetings-service/src/main/java"
 	           excludepackagenames="org.apache.openmeetings.test.*"
 	           defaultexcludes="yes"
 	           destdir="build/api"
@@ -679,7 +678,7 @@
 		<echo message="Compile main to ${main.out.dir}" />
 		<javac debug="on" debuglevel="lines,vars,source" destdir="${main.out.dir}" includeantruntime="false"
 			source="1.6" target="1.6">
-			<src path="${basedir}/openmeetings-axis/src/main/java" />
+			<src path="${basedir}/openmeetings-webservice/src/main/java" />
 			<src path="${basedir}/openmeetings-db/src/main/java" />
 			<src path="${src.base.dir}/doc/java" />
 			<src path="${basedir}/openmeetings-install/src/main/java" />
@@ -700,7 +699,6 @@
 				<exclude name="**/*.java" />
 			</fileset>
 		</copy>
-		<copy file="${axis.resources.dir}/services.xml" tofile="${main.out.dir}/META-INF/services.xml" overwrite="true" />
 		<copy file="LICENSE" tofile="${main.out.dir}/META-INF/LICENSE" overwrite="true" />
 		<copy file="NOTICE" tofile="${main.out.dir}/META-INF/NOTICE" overwrite="true" />
 	</target>
@@ -846,7 +844,7 @@
 
 	<target name="build.only.webservice.doc" depends="anakia">
 		<javadoc classpathref="build.webservice.classpath" useexternalfile="true" destdir="${basedir}/docs">
-			<fileset dir="${basedir}/openmeetings-axis/src/main/java/org/apache/openmeetings/axis/services">
+			<fileset dir="${basedir}/openmeetings-webservice/src/main/java/org/apache/openmeetings/webservice">
 				<include name="*WebService.java" />
 				<exclude name="BaseWebService.java" />
 			</fileset>

@@ -19,18 +19,18 @@
   
 -->
 <classpath>
-	<classpathentry kind="src" path="openmeetings-axis/src/main/java"/>
-	<classpathentry kind="src" path="openmeetings-db/src/main/java"/>
 	<classpathentry kind="src" path="src/doc/java"/>
-	<classpathentry kind="src" path="openmeetings-install/src/main/java"/>
 	<classpathentry kind="src" path="openmeetings-core/src/main/java"/>
 	<classpathentry kind="src" path="openmeetings-core/src/test/java"/>
+	<classpathentry kind="src" path="openmeetings-db/src/main/java"/>
+	<classpathentry kind="src" path="openmeetings-install/src/main/java"/>
 	<classpathentry kind="src" path="openmeetings-screenshare/src/main/java"/>
+	<classpathentry kind="src" path="openmeetings-service/src/main/java"/>
 	<classpathentry kind="src" path="openmeetings-util/src/main/java"/>
 	<classpathentry kind="src" path="openmeetings-web/src/main/java"/>
 	<classpathentry kind="src" path="openmeetings-web/src/main/webapp/WEB-INF/classes"/>
 	<classpathentry kind="src" path="openmeetings-web/src/test/java"/>
-	<classpathentry kind="src" path="openmeetings-service/src/main/java"/>
+	<classpathentry kind="src" path="openmeetings-webservice/src/main/java"/>
 	<classpathentry exported="true" kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4">
 		<attributes>

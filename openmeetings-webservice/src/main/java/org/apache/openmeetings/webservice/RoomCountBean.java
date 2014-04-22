@@ -16,56 +16,36 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.axis.services;
+package org.apache.openmeetings.webservice;
 
-import java.util.Date;
-
-public class RoomReturn {
-
-	private Long room_id;
-	private String name;
-	private String creator;
-	private Date created;
-	private RoomUser[] roomUser;
-
-	public Long getRoom_id() {
-		return room_id;
+public class RoomCountBean {
+	private long roomId;
+	private String roomName;
+	private Integer roomCount;
+	private Integer maxUser;
+	
+	public long getRoomId() {
+		return roomId;
 	}
-
-	public void setRoom_id(Long roomId) {
-		room_id = roomId;
+	public void setRoomId(long roomId) {
+		this.roomId = roomId;
 	}
-
-	public String getName() {
-		return name;
+	public String getRoomName() {
+		return roomName;
 	}
-
-	public void setName(String name) {
-		this.name = name;
+	public void setRoomName(String roomName) {
+		this.roomName = roomName;
 	}
-
-	public String getCreator() {
-		return creator;
+	public Integer getRoomCount() {
+		return roomCount;
 	}
-
-	public void setCreator(String creator) {
-		this.creator = creator;
+	public void setRoomCount(Integer roomCount) {
+		this.roomCount = roomCount;
 	}
-
-	public Date getCreated() {
-		return created;
+	public Integer getMaxUser() {
+		return maxUser;
 	}
-
-	public void setCreated(Date created) {
-		this.created = created;
+	public void setMaxUser(Integer maxUser) {
+		this.maxUser = maxUser;
 	}
-
-	public RoomUser[] getRoomUser() {
-		return roomUser;
-	}
-
-	public void setRoomUser(RoomUser[] roomUser) {
-		this.roomUser = roomUser;
-	}
-
 }
