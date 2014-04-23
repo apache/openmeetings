@@ -727,8 +727,8 @@ public class UserManager implements IUserManager {
 					if (hash == null){
 						hash = ManageCryptStyle.getInstanceOfCrypt().createPassPhrase(login
 								+ CalendarPatterns.getDateWithTimeByMiliSeconds(new Date()));
-						link += "activateUser?u=" + hash;
 					}
+					link += "activate?u=" + hash;
 
 					if (sendWelcomeMessage && email.length() != 0) {
 						String sendMail = emailManagement.sendMail(login,
