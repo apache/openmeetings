@@ -146,15 +146,18 @@ public abstract class BaseConverter {
 		FlvRecordingMetaData metaData = metaDataDao.get(metaId);
 		if (metaData.getStreamStatus() != Status.STOPPED) {
 			log.debug("### meta Stream not yet written to disk " + metaId);
-			boolean doStop = true;
-			while(doStop) {
+			boolean doWait = true;
+			long counter = 0;
+			while(doWait) {
 				log.trace("### Stream not yet written Thread Sleep - " + metaId);
 				
 				metaData = metaDataDao.get(metaId);
 				
 				if (metaData.getStreamStatus() == Status.STOPPED) {
 					log.debug("### Stream now written Thread continue - " );
-					doStop = false;
+					doWait = false;
+				} else if (++counter % 1000 == 0) {
+					log.debug(String.format("### Still waiting for the stream with id %s; current status: %s ", metaId, metaData.getStreamStatus()));
 				}
 				
 				Thread.sleep(100L);
