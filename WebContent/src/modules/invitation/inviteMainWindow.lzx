@@ -220,7 +220,6 @@
 			<netparam name="sid"><method name="getValue">return canvas.sessionId;</method></netparam>
 			<netparam name="username"><method name="getValue">return hib.userobject.firstname+' '+hib.userobject.lastname</method></netparam>
 			<netparam name="message"><method name="getValue">return this.parent.parent._message.getText();</method></netparam>
-			<netparam name="baseurl"><method name="getValue">return parent.parent.baseUrl;</method></netparam>
 			<netparam name="email"><method name="getValue">return this.parent.parent._recipient.getText();</method></netparam>
 			<netparam name="subject"><method name="getValue">return this.parent.parent._subject.getText();</method></netparam>
 			<netparam name="roomid"><method name="getValue">return hib.currentroomid;</method></netparam>
