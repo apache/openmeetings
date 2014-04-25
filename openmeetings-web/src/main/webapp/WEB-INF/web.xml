@@ -67,7 +67,7 @@
 		</init-param>
 		<init-param>
 			<param-name>configuration</param-name>
-			<param-value>@wicket.mode@</param-value>
+			<param-value>${wicket.mode}</param-value>
 		</init-param>
 		<init-param>
 			<param-name>ignorePaths</param-name>

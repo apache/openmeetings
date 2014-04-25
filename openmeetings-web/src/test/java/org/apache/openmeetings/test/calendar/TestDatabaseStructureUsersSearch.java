@@ -18,27 +18,27 @@
  */
 package org.apache.openmeetings.test.calendar;
 
+import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+
 import java.util.List;
 
-import org.apache.log4j.Logger;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.test.AbstractJUnitDefaults;
 import org.junit.Test;
+import org.red5.logging.Red5LoggerFactory;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
-
 public class TestDatabaseStructureUsersSearch extends AbstractJUnitDefaults {
-    @Autowired
-    private UserDao userDao;
+	private static final Logger log = Red5LoggerFactory.getLogger(TestDatabaseStructureUsersSearch.class, webAppRootKey);
 
-	private static final Logger log = Logger.getLogger(TestDatabaseStructureUsersSearch.class);
+	@Autowired
+    private UserDao userDao;
 
 	@Test
 	public void testAddingGroup(){
-
 		try {
-			
 			 List<User> users = userDao.get("first", 0, 10, "orderby", 1);
 			 log.debug("[result]" + users.size());
 			 log.debug("[records]"+ users);
@@ -50,18 +50,7 @@ public class TestDatabaseStructureUsersSearch extends AbstractJUnitDefaults {
 			//GroupMemberDaoImpl.getInstance().deleteGroupMember(2L);
 			//GroupMemberDaoImpl.getInstance().updateGroupMember(1L, "Eugen", "Schwert", Calendar.getInstance().getTime(), "1", "2", "interpol155", 1L, 1L);
 		} catch (Exception err) {
-
 			log.error("[testAddingGroup]",err);
-
 		}
-
-		
-
-		
-
 	}
-
-
-
 }
-

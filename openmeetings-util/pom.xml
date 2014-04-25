@@ -50,7 +50,15 @@
 						<groupId>org</groupId>
 						<artifactId>jaudiotagger</artifactId>
 					</exclusion>
-			</exclusions>
+					<exclusion>
+						<groupId>xerces</groupId>
+						<artifactId>xercesImpl</artifactId>
+					</exclusion>
+					<exclusion>
+						<groupId>antlr</groupId>
+						<artifactId>antlr</artifactId>
+					</exclusion>
+				</exclusions>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
@@ -63,6 +71,12 @@
 			<groupId>commons-transaction</groupId>
 			<artifactId>commons-transaction</artifactId>
 			<version>${commons-transaction.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>commons-logging</groupId>
+					<artifactId>commons-logging</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>dom4j</groupId>
@@ -73,6 +87,12 @@
 			<groupId>org.mnode.ical4j</groupId>
 			<artifactId>ical4j</artifactId>
 			<version>${ical4j.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>commons-logging</groupId>
+					<artifactId>commons-logging</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>javax.mail</groupId>

@@ -16,27 +16,27 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.web.mail.template;
+package org.apache.openmeetings.service.mail.template;
 
-import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.openmeetings.core.IApplication;
+import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
+import org.apache.wicket.Application;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.ExternalLink;
 
-public class RegisterUserTemplate extends AbstractTemplatePanel {
+public class FeedbackTemplate extends AbstractTemplatePanel {
 	private static final long serialVersionUID = 1L;
 
-	public RegisterUserTemplate(String id, String username, String userpass, String email, String verification_url) {
+	public FeedbackTemplate(String id, String username, String email, String message) {
 		super(id);
+		add(new Label("appname", ((IApplication)Application.get()).getOmBean(ConfigurationDao.class).getAppName()));
 		add(new Label("username", username));
-		add(new Label("userpass", userpass));
 		add(new Label("email", email));
-		WebMarkupContainer verification = new WebMarkupContainer("verification");
-		add(verification.add(new Label("verification_url2", verification_url))
-			.add(new ExternalLink("verification_url1", verification_url))
-			.setVisible(verification_url != null));
+		add(new Label("message", message));
+		add(new ExternalLink("invitation_link", ""));
 	}
-
-	public static String getEmail(String username, String userpass, String email, String verification_url) {
-		return renderPanel(new RegisterUserTemplate(TemplatePage.COMP_ID, username, userpass, email, verification_url)).toString();
+	
+	public static String getEmail(String username, String email, String message) {
+		return renderPanel(new FeedbackTemplate(TemplatePage.COMP_ID, username, email, message)).toString();
 	}
 }

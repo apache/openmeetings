@@ -18,22 +18,21 @@
  */
 package org.apache.openmeetings.test.calendar;
 
-//import groovy.sql.Sql;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
 import java.util.Calendar;
 import java.util.List;
 
-import org.apache.log4j.Logger;
 import org.apache.openmeetings.db.dao.calendar.AppointmentReminderTypDao;
 import org.apache.openmeetings.db.entity.calendar.AppointmentReminderTyps;
 import org.apache.openmeetings.test.AbstractJUnitDefaults;
 import org.junit.Test;
+import org.red5.logging.Red5LoggerFactory;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class TestDatabaseStructureAppointmentReminderTyp extends AbstractJUnitDefaults {
-
-	private static final Logger log = Logger
-			.getLogger(TestDatabaseStructureAppointmentReminderTyp.class);
+	private static final Logger log = Red5LoggerFactory.getLogger(TestDatabaseStructureAppointmentReminderTyp.class, webAppRootKey);
 
 	@Autowired
 	private AppointmentReminderTypDao appointmentReminderTypDaoImpl;

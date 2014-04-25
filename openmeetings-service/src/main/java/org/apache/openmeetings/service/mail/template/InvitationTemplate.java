@@ -16,9 +16,9 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.web.mail.template;
+package org.apache.openmeetings.service.mail.template;
 
-import org.apache.openmeetings.web.app.WebSession;
+import org.apache.openmeetings.service.mail.EmailManager;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.ExternalLink;
 
@@ -29,13 +29,13 @@ public class InvitationTemplate extends AbstractTemplatePanel {
 		super(id);
 		add(new Label("user", user));
 		add(new Label("message", message).setEscapeModelStrings(false));
-		Label commentForLink1 = new Label("comment_for_link1", WebSession.getString(503));
+		Label commentForLink1 = new Label("comment_for_link1", EmailManager.getString(503));
 		commentForLink1.setVisible(!isCanceled);
 		add(commentForLink1);
 		ExternalLink externalLink1 = new ExternalLink("invitation_link1", link);
 		externalLink1.setVisible(!isCanceled);
 		add(externalLink1);
-		Label commentForLink2 = new Label("comment_for_link2", WebSession.getString(505));
+		Label commentForLink2 = new Label("comment_for_link2", EmailManager.getString(505));
 		commentForLink2.setVisible(!isCanceled);
 		add(commentForLink2);
 		Label externalLink2 = new Label("invitation_link2", link);

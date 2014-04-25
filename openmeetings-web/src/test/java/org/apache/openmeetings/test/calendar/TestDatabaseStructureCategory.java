@@ -18,22 +18,23 @@
  */
 package org.apache.openmeetings.test.calendar;
 
+import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+
 import java.util.List;
 
-import org.apache.log4j.Logger;
 import org.apache.openmeetings.db.dao.calendar.AppointmentCategoryDao;
 import org.apache.openmeetings.db.entity.calendar.AppointmentCategory;
 import org.apache.openmeetings.test.AbstractJUnitDefaults;
 import org.junit.Test;
+import org.red5.logging.Red5LoggerFactory;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class TestDatabaseStructureCategory extends AbstractJUnitDefaults {
+	private static final Logger log = Red5LoggerFactory.getLogger(TestDatabaseStructureCategory.class, webAppRootKey);
 
 	@Autowired
 	private AppointmentCategoryDao appointmentCategoryDaoImpl;
-
-	private static final Logger log = Logger
-			.getLogger(TestDatabaseStructureCategory.class);
 
 	@Test
 	public void testAddingGroup() {

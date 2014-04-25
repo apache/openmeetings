@@ -16,10 +16,13 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.web.mail.template;
+package org.apache.openmeetings.service.mail.template;
 
-import org.apache.openmeetings.web.app.Application;
-import org.apache.openmeetings.web.app.WebSession;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.wicketApplicationName;
+
+import org.apache.openmeetings.core.IApplication;
+import org.apache.openmeetings.core.IWebSession;
+import org.apache.wicket.Application;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ThreadContext;
 import org.apache.wicket.markup.IMarkupResourceStreamProvider;
@@ -27,6 +30,7 @@ import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.mock.MockWebResponse;
 import org.apache.wicket.protocol.http.BufferedWebResponse;
+import org.apache.wicket.protocol.http.WebSession;
 import org.apache.wicket.protocol.http.mock.MockHttpServletRequest;
 import org.apache.wicket.protocol.http.mock.MockHttpSession;
 import org.apache.wicket.protocol.http.servlet.ServletWebRequest;
@@ -81,16 +85,17 @@ public abstract class AbstractTemplatePanel extends Panel {
 	
 	public static void ensureApplication(long langId) {
 		if (!Application.exists()) {
-			Application a = (Application)Application.get(Application.getAppName());
-			ThreadContext.setApplication(a);
+			Application app = Application.get(wicketApplicationName);
+			ThreadContext.setApplication(app);
+			IApplication a = (IApplication)app;
 			
-			ServletWebRequest req = new ServletWebRequest(new MockHttpServletRequest(a, new MockHttpSession(a.getServletContext()), a.getServletContext()), "");
+			ServletWebRequest req = new ServletWebRequest(new MockHttpServletRequest(app, new MockHttpSession(a.getServletContext()), a.getServletContext()), "");
 			RequestCycleContext rctx = new RequestCycleContext(req, new MockWebResponse(), a.getRootRequestMapper(), a.getExceptionMapperProvider().get()); 
 			ThreadContext.setRequestCycle(new RequestCycle(rctx));
 			
-			WebSession s = WebSession.get();
-			s.setLanguage(1);
-			ThreadContext.setSession(s);
+			WebSession session = WebSession.get();
+			((IWebSession)session).setLanguage(1);
+			ThreadContext.setSession(session);
 		}
 	}
 }

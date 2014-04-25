@@ -16,26 +16,21 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.web.mail.template;
+package org.apache.openmeetings.service.mail.template;
 
-import org.apache.openmeetings.db.entity.user.User;
-import org.apache.openmeetings.web.util.ContactsHelper;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.ExternalLink;
 
-public class RequestContactTemplate extends AbstractTemplatePanel {
+public class ResetPasswordTemplate extends AbstractTemplatePanel {
 	private static final long serialVersionUID = 1L;
 
-	public RequestContactTemplate(String id, User userToAdd, User user) {
+	public ResetPasswordTemplate(String id, String link) {
 		super(id);
-		add(new Label("addedFirstName", userToAdd.getFirstname()));
-		add(new Label("addedLastName", userToAdd.getLastname()));
-		add(new Label("firstName", user.getFirstname()));
-		add(new Label("lastName", user.getLastname()));
-		add(new ExternalLink("link", ContactsHelper.getLink()));
+		add(new ExternalLink("reset_link1", link));
+		add(new Label("reset_link2", link));
 	}
 	
-	public static String getEmail(User userToAdd, User user) {
-		return renderPanel(new RequestContactTemplate(TemplatePage.COMP_ID, userToAdd, user)).toString();
+	public static String getEmail(String link) {
+		return renderPanel(new ResetPasswordTemplate(TemplatePage.COMP_ID, link)).toString();
 	}
 }

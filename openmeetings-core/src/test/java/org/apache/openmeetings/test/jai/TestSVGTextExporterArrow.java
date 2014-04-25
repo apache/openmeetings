@@ -18,6 +18,8 @@
  */
 package org.apache.openmeetings.test.jai;
 
+import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 
@@ -26,15 +28,15 @@ import junit.framework.TestCase;
 import org.apache.batik.dom.GenericDOMImplementation;
 import org.apache.batik.dom.svg.SVGDOMImplementation;
 import org.apache.batik.svggen.SVGGraphics2D;
-import org.apache.log4j.Logger;
 import org.junit.Test;
+import org.red5.logging.Red5LoggerFactory;
+import org.slf4j.Logger;
 import org.w3c.dom.DOMImplementation;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 public class TestSVGTextExporterArrow extends TestCase {
-	
-	private static final Logger log = Logger.getLogger(TestSVGTextExporterArrow.class);
+	private static final Logger log = Red5LoggerFactory.getLogger(TestSVGTextExporterArrow.class, webAppRootKey);
 	
 	@Test
 	public void testGetDiagramList() {

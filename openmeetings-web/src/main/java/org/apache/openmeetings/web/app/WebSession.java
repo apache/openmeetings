@@ -39,6 +39,7 @@ import java.util.Locale;
 import java.util.Set;
 import java.util.TimeZone;
 
+import org.apache.openmeetings.core.IWebSession;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.label.FieldLanguageDao;
 import org.apache.openmeetings.db.dao.label.FieldLanguagesValuesDao;
@@ -79,7 +80,7 @@ import ro.fortsoft.wicket.dashboard.Widget;
 import ro.fortsoft.wicket.dashboard.WidgetFactory;
 import ro.fortsoft.wicket.dashboard.web.DashboardContext;
 
-public class WebSession extends AbstractAuthenticatedWebSession {
+public class WebSession extends AbstractAuthenticatedWebSession implements IWebSession {
 	private static final long serialVersionUID = 1123393236459095315L;
 	public static int MILLIS_IN_MINUTE = 60000;
 	//private static final Map<String, Locale> LNG_TO_LOCALE_MAP = new HashMap<String, Locale> ();
@@ -448,5 +449,9 @@ public class WebSession extends AbstractAuthenticatedWebSession {
 				w.init();
 			}
 		}
+	}
+
+	public String getOmString(long id) {
+		return getString(id);
 	}
 }

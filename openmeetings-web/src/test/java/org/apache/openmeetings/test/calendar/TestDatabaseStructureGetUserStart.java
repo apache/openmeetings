@@ -16,37 +16,29 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.test.rdc;
+package org.apache.openmeetings.test.calendar;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
-import java.awt.event.KeyEvent;
-
-import junit.framework.TestCase;
-
+import org.apache.openmeetings.db.dao.user.UserDao;
+import org.apache.openmeetings.test.AbstractJUnitDefaults;
 import org.junit.Test;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 
-public class TestKeyCodesNumber extends TestCase {
-	private static final Logger log = Red5LoggerFactory.getLogger(TestKeyCodesNumber.class, webAppRootKey);
+public class TestDatabaseStructureGetUserStart extends AbstractJUnitDefaults {
+	private static final Logger log = Red5LoggerFactory.getLogger(TestDatabaseStructureGetUserStart.class, webAppRootKey);
 
+	@Autowired
+	private UserDao usersDao;
+	
 	@Test
-	public void testKeyCodes() {
+	public void testAddingGroup() {
 		try {
-
-			for (int i = 1; i < 600; i++) {
-
-				String charText = KeyEvent.getKeyText(i);
-
-				log.debug("ERROR " + i + " " + charText);
-
-			}
-
+			usersDao.get(new Long(1));
 		} catch (Exception err) {
-			log.error("[testKeyCodes]", err);
+			log.error("[testAddingGroup]", err);
 		}
-
 	}
-
 }

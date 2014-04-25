@@ -47,4 +47,5 @@ public class OpenmeetingsVariables {
 	public static final int USER_LOGIN_MINIMUM_LENGTH = 4;
 	public static final int USER_PASSWORD_MINIMUM_LENGTH = 4;
 	public static Boolean whiteboardDrawStatus = null;
+	public static String wicketApplicationName = null;
 }

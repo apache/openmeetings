@@ -16,17 +16,18 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.web.mail;
+package org.apache.openmeetings.service.mail;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
+import org.apache.openmeetings.core.IApplication;
+import org.apache.openmeetings.core.IWebSession;
 import org.apache.openmeetings.core.mail.MailHandler;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
-import org.apache.openmeetings.web.app.WebSession;
-import org.apache.openmeetings.web.mail.template.FeedbackTemplate;
-import org.apache.openmeetings.web.mail.template.RegisterUserTemplate;
-import org.apache.openmeetings.web.pages.ActivatePage;
-import org.apache.openmeetings.web.util.OmUrlFor;
+import org.apache.openmeetings.service.mail.template.FeedbackTemplate;
+import org.apache.openmeetings.service.mail.template.RegisterUserTemplate;
+import org.apache.wicket.Application;
+import org.apache.wicket.protocol.http.WebSession;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -37,7 +38,6 @@ import org.springframework.beans.factory.annotation.Autowired;
  *
  */
 public class EmailManager {
-
 	private static final Logger log = Red5LoggerFactory.getLogger(EmailManager.class, webAppRootKey);
 
 	@Autowired
@@ -45,6 +45,10 @@ public class EmailManager {
 	@Autowired
 	private MailHandler mailHandler;
 
+	public static String getString(long id) {
+		return ((IWebSession)WebSession.get()).getOmString(512);
+	}
+	
 	/**
 	 * sends a mail address to the user with his account data
 	 * 
@@ -59,10 +63,10 @@ public class EmailManager {
 		log.debug("sendMail:: username = {}, email = {}", username, email);
 		Integer sendEmailAtRegister = configurationDao.getConfValue("sendEmailAtRegister", Integer.class, "0");
 
-		String link = new OmUrlFor("active").urlForPage(ActivatePage.class, new PageParameters().add("u",  hash));
+		String link = ((IApplication)Application.get()).urlForActivatePage(new PageParameters().add("u",  hash));
 		
 		if (sendEmailAtRegister == 1) {
-			mailHandler.send(email, WebSession.getString(512)
+			mailHandler.send(email, getString(512)
 				, RegisterUserTemplate.getEmail(username, userpass, email, sendEmailWithVerficationCode ? link : null));
 		}
 		return "success";
@@ -70,11 +74,6 @@ public class EmailManager {
 
 	//FIXME, seems to be not used
 	public void sendFeedback(String username, String email, String message) {
-		mailHandler.send("user@openmeetings.apache.org", WebSession.getString(499), FeedbackTemplate.getEmail(username, email, message));
-	}
-	
-	public String addEmailCon(String EMail, int CONTACT_ID) {
-		String succ = "invalid email";
-		return succ;
+		mailHandler.send("user@openmeetings.apache.org", getString(499), FeedbackTemplate.getEmail(username, email, message));
 	}
 }

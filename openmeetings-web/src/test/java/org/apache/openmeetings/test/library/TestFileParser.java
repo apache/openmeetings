@@ -16,37 +16,36 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.test.rdc;
+package org.apache.openmeetings.test.library;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
-import java.awt.event.KeyEvent;
-
-import junit.framework.TestCase;
-
+import org.apache.openmeetings.core.documents.LibraryWmlLoader;
+import org.apache.openmeetings.test.AbstractJUnitDefaults;
 import org.junit.Test;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 
-public class TestKeyCodesNumber extends TestCase {
-	private static final Logger log = Red5LoggerFactory.getLogger(TestKeyCodesNumber.class, webAppRootKey);
+public class TestFileParser extends AbstractJUnitDefaults {
+	private static final Logger log = Red5LoggerFactory.getLogger(TestFileParser.class, webAppRootKey);
 
+	@Autowired
+	private LibraryWmlLoader libraryWmlLoader;
+	
 	@Test
-	public void testKeyCodes() {
+	public void testLoadWmlFile(){
+		
 		try {
-
-			for (int i = 1; i < 600; i++) {
-
-				String charText = KeyEvent.getKeyText(i);
-
-				log.debug("ERROR " + i + " " + charText);
-
-			}
-
+			
+			libraryWmlLoader.loadWmlFile("filename1");
+			
 		} catch (Exception err) {
-			log.error("[testKeyCodes]", err);
+			
+			log.error("TestLoadWmlFile",err);
+			
 		}
-
+		
 	}
-
+	
 }

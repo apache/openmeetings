@@ -19,6 +19,9 @@
 package org.apache.openmeetings.web.app;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.wicketApplicationName;
+import static org.apache.openmeetings.web.user.rooms.RoomEnterBehavior.getRoomUrlFragment;
+import static org.apache.openmeetings.web.util.OmUrlFragment.PROFILE_MESSAGES;
 import static org.red5.logging.Red5LoggerFactory.getLogger;
 import static org.springframework.web.context.WebApplicationContext.ROOT_WEB_APPLICATION_CONTEXT_ATTRIBUTE;
 import static org.springframework.web.context.support.WebApplicationContextUtils.getWebApplicationContext;
@@ -29,8 +32,12 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import javax.servlet.ServletContext;
 
+import org.apache.openmeetings.core.IApplication;
+import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.label.FieldLanguagesValuesDao;
 import org.apache.openmeetings.db.dao.user.AdminUserDao;
+import org.apache.openmeetings.db.entity.room.Invitation;
+import org.apache.openmeetings.db.entity.user.User.Type;
 import org.apache.openmeetings.util.InitializationContainer;
 import org.apache.openmeetings.web.pages.ActivatePage;
 import org.apache.openmeetings.web.pages.MainPage;
@@ -65,7 +72,9 @@ import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.request.IRequestHandler;
 import org.apache.wicket.request.Url;
 import org.apache.wicket.request.component.IRequestablePage;
+import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.mapper.info.PageComponentInfo;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.mapper.parameter.PageParametersEncoder;
 import org.apache.wicket.settings.IPageSettings;
 import org.apache.wicket.util.collections.ConcurrentHashSet;
@@ -78,16 +87,15 @@ import ro.fortsoft.wicket.dashboard.web.DashboardContext;
 import ro.fortsoft.wicket.dashboard.web.DashboardContextInjector;
 import ro.fortsoft.wicket.dashboard.web.DashboardSettings;
 
-public class Application extends AuthenticatedWebApplication {
+public class Application extends AuthenticatedWebApplication implements IApplication {
 	private static final Logger log = getLogger(Application.class, webAppRootKey);
 	private static boolean isInstalled;
 	private static Map<Long, Set<String>> ONLINE_USERS = new ConcurrentHashMap<Long, Set<String>>();
 	private DashboardContext dashboardContext;
-	private static String appName;
 	
 	@Override
 	protected void init() {
-		appName = super.getName();
+		wicketApplicationName = super.getName();
 		getSecuritySettings().setAuthenticationStrategy(new OmAuthenticationStrategy());
 		IPageSettings pageSettings = getPageSettings();
 		pageSettings.addComponentResolver(new MessageResolver());
@@ -275,7 +283,47 @@ public class Application extends AuthenticatedWebApplication {
 		}
 	}
 	
-	public static String getAppName() {
-		return appName;
+	public <T> T getOmBean(Class<T> clazz) { //FIXME hack for email templates support (should be in separate module for now
+		return Application.getBean(clazz);
+	}
+
+	public static String getContactsLink() {
+		return PROFILE_MESSAGES.getLink();
+	}
+
+	public String getOmContactsLink() { //FIXME hack for email templates support (should be in separate module for now
+		return getContactsLink();
+	}
+
+	public static String getInvitationLink(String baseUrl, Invitation i) {
+		String link = baseUrl;
+		if (link == null) {
+			return null;
+		}
+		if (i.getRoom() != null) {
+			if (i.getInvitee().getType() == Type.contact) {
+				link += "?invitationHash=" + i.getHash();
+		
+				if (i.getInvitee().getLanguage_id() > 0) {
+					link += "&language=" + i.getInvitee().getLanguage_id().toString();
+				}
+			} else {
+				link = getRoomUrlFragment(i.getRoom().getRooms_id()).getLink();
+			}
+		}
+		return link;
+	}
+	
+	public String getOmInvitationLink(String baseUrl, Invitation i) { //FIXME hack for email templates support (should be in separate module for now
+		return getInvitationLink(baseUrl, i);
+	}
+	
+	public static String urlForPage(Class<? extends Page> clazz, PageParameters pp) {
+		RequestCycle rc = RequestCycle.get();
+		return rc.getUrlRenderer().renderFullUrl(Url.parse(getBean(ConfigurationDao.class).getBaseUrl() + rc.urlFor(clazz, pp)));
+	}
+
+	public String urlForActivatePage(PageParameters pp) { //FIXME hack for email templates support (should be in separate module for now
+		return urlForPage(ActivatePage.class, pp);
 	}
 }

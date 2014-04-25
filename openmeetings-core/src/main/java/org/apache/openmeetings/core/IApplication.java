@@ -16,37 +16,22 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.test.rdc;
+package org.apache.openmeetings.core;
 
-import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+import javax.servlet.ServletContext;
 
-import java.awt.event.KeyEvent;
+import org.apache.openmeetings.db.entity.room.Invitation;
+import org.apache.wicket.request.IExceptionMapper;
+import org.apache.wicket.request.IRequestMapper;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.apache.wicket.util.IProvider;
 
-import junit.framework.TestCase;
-
-import org.junit.Test;
-import org.red5.logging.Red5LoggerFactory;
-import org.slf4j.Logger;
-
-public class TestKeyCodesNumber extends TestCase {
-	private static final Logger log = Red5LoggerFactory.getLogger(TestKeyCodesNumber.class, webAppRootKey);
-
-	@Test
-	public void testKeyCodes() {
-		try {
-
-			for (int i = 1; i < 600; i++) {
-
-				String charText = KeyEvent.getKeyText(i);
-
-				log.debug("ERROR " + i + " " + charText);
-
-			}
-
-		} catch (Exception err) {
-			log.error("[testKeyCodes]", err);
-		}
-
-	}
-
+public interface IApplication {
+	<T> T getOmBean(Class<T> clazz);
+	ServletContext getServletContext();
+	IRequestMapper getRootRequestMapper();
+	IProvider<IExceptionMapper> getExceptionMapperProvider();
+	String getOmContactsLink();
+	String getOmInvitationLink(String baseUrl, Invitation i);
+	String urlForActivatePage(PageParameters pp);
 }

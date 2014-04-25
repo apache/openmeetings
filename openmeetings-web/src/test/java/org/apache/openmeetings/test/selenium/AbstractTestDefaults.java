@@ -24,6 +24,7 @@ import org.apache.openmeetings.db.dao.label.FieldLanguagesValuesDao;
 import org.apache.openmeetings.test.AbstractSpringTest;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.experimental.categories.Category;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -31,6 +32,7 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxProfile;
 import org.springframework.beans.factory.annotation.Autowired;
 
+@Category(SeleniumTests.class)
 public abstract class AbstractTestDefaults extends AbstractSpringTest {
 	
 	@Autowired

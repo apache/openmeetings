@@ -18,22 +18,25 @@
  */
 package org.apache.openmeetings.test.calendar;
 
+import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import static org.junit.Assert.assertEquals;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Random;
 
-import org.apache.log4j.Logger;
 import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
 import org.apache.openmeetings.db.entity.calendar.MeetingMember;
 import org.apache.openmeetings.test.AbstractJUnitDefaults;
 import org.junit.Test;
+import org.red5.logging.Red5LoggerFactory;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class TestDatabaseStructureGetAppointmentByRange extends AbstractJUnitDefaults {
-	private static final Logger log = Logger.getLogger(TestDatabaseStructureGetAppointmentByRange.class);
+	private static final Logger log = Red5LoggerFactory.getLogger(TestDatabaseStructureGetAppointmentByRange.class, webAppRootKey);
+	
 	@Autowired
 	private AppointmentDao appointmentDao;
 

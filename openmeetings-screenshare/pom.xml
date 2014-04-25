@@ -80,7 +80,7 @@
 					</goals>
 					<configuration>
 						<file>${project.basedir}/src/main/jnlp/templates/template.jnlp</file>
-						<outputFile>${project.basedir}/target/APPLICATION_TEMPLATE.jnlp</outputFile>
+						<outputFile>${project.build.directory}/APPLICATION_TEMPLATE.jnlp</outputFile>
 						<regex>false</regex>
 						<replacements>
 							<replacement>
@@ -189,7 +189,7 @@
 								</includes>
 							</dependencies>
 							<jnlp>
-								<inputTemplateResourcePath>${project.basedir}/target</inputTemplateResourcePath>
+								<inputTemplateResourcePath>${project.build.directory}</inputTemplateResourcePath>
 								<inputTemplate>APPLICATION_TEMPLATE.jnlp</inputTemplate>
 								<outputFile>APPLICATION_TEMPLATE.jnlp</outputFile>
 								<mainClass>org.apache.openmeetings.screen.webstart.CoreScreenShare</mainClass>
@@ -279,8 +279,8 @@
 						</goals>
 						<phase>verify</phase>
 						<configuration>
-							<from>${project.basedir}/target/jnlp/APPLICATION_TEMPLATE.jnlp</from>
-							<to>${project.basedir}/target/jnlp/${project.build.finalName}.jar/JNLP-INF/APPLICATION_TEMPLATE.jnlp</to>
+							<from>${project.build.directory}/jnlp/APPLICATION_TEMPLATE.jnlp</from>
+							<to>${project.build.directory}/jnlp/${project.build.finalName}.jar/JNLP-INF/APPLICATION_TEMPLATE.jnlp</to>
 						</configuration>
 					</execution>
 				</executions>

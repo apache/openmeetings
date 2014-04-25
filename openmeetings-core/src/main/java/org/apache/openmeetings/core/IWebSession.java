@@ -16,25 +16,9 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.test.calendar;
+package org.apache.openmeetings.core;
 
-import org.apache.log4j.Logger;
-import org.apache.openmeetings.db.dao.user.UserDao;
-import org.apache.openmeetings.test.AbstractJUnitDefaults;
-import org.junit.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-
-public class TestDatabaseStructureGetUserStart extends AbstractJUnitDefaults {
-	private static final Logger log = Logger.getLogger(TestDatabaseStructureGetUserStart.class);
-	@Autowired
-	private UserDao usersDao;
-	
-	@Test
-	public void testAddingGroup() {
-		try {
-			usersDao.get(new Long(1));
-		} catch (Exception err) {
-			log.error("[testAddingGroup]", err);
-		}
-	}
+public interface IWebSession {
+	String getOmString(long id);
+	void setLanguage(long languageId);
 }

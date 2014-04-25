@@ -18,22 +18,24 @@
  */
 package org.apache.openmeetings.test.domain;
 
-import org.apache.log4j.Logger;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+
 import org.apache.openmeetings.core.data.user.OrganisationManager;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.test.AbstractJUnitDefaults;
 import org.junit.Test;
+import org.red5.logging.Red5LoggerFactory;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class TestAddGroup extends AbstractJUnitDefaults {
+	private static final Logger log = Red5LoggerFactory.getLogger(TestAddGroup.class, webAppRootKey);
 
 	@Autowired
 	private OrganisationManager organisationManager;
 	@Autowired
 	private UserDao usersDao;
-
-	private static final Logger log = Logger.getLogger(TestAddGroup.class);
 
 	@Test
 	public void testAddingGroup() {

@@ -35,6 +35,9 @@
 		<openjpa.version>2.3.0</openjpa.version>
 		<simple-xml.version>2.7.1</simple-xml.version>
 		<asterisk-java.version>1.0.0.CI-SNAPSHOT</asterisk-java.version>
+		<commons-dbcp.version>1.4</commons-dbcp.version>
+		<derby.version>10.10.1.1</derby.version>
+		<postgresql.version>9.3-1101-jdbc4</postgresql.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -61,6 +64,26 @@
 			<groupId>org.asteriskjava</groupId>
 			<artifactId>asterisk-java</artifactId>
 			<version>${asterisk-java.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-dbcp</groupId>
+			<artifactId>commons-dbcp</artifactId>
+			<version>${commons-dbcp.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.derby</groupId>
+			<artifactId>derby</artifactId>
+			<version>${derby.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.derby</groupId>
+			<artifactId>derbyclient</artifactId>
+			<version>${derby.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.postgresql</groupId>
+			<artifactId>postgresql</artifactId>
+			<version>${postgresql.version}</version>
 		</dependency>
 	</dependencies>
 	<repositories>

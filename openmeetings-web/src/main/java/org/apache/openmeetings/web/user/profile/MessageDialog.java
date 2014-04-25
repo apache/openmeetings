@@ -21,6 +21,8 @@ package org.apache.openmeetings.web.user.profile;
 import static org.apache.openmeetings.db.entity.user.PrivateMessage.INBOX_FOLDER_ID;
 import static org.apache.openmeetings.db.entity.user.PrivateMessage.SENT_FOLDER_ID;
 import static org.apache.openmeetings.web.app.Application.getBean;
+import static org.apache.openmeetings.web.app.Application.getContactsLink;
+import static org.apache.openmeetings.web.app.Application.getInvitationLink;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import static org.apache.openmeetings.web.util.RoomTypeDropDown.getRoomTypes;
 
@@ -43,8 +45,6 @@ import org.apache.openmeetings.db.entity.user.PrivateMessage;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Type;
 import org.apache.openmeetings.web.app.WebSession;
-import org.apache.openmeetings.web.util.ContactsHelper;
-import org.apache.openmeetings.web.util.LinkHelper;
 import org.apache.openmeetings.web.util.RoomTypeDropDown;
 import org.apache.openmeetings.web.util.UserMultiChoice;
 import org.apache.wicket.ajax.AjaxEventBehavior;
@@ -202,7 +202,7 @@ public class MessageDialog extends AbstractFormDialog<PrivateMessage> {
 			p.setFolderId(INBOX_FOLDER_ID);
 			msgDao.update(p, getUserId());
 			if (to.getAdresses() != null) {
-				String aLinkHTML = 	(isPrivate && to.getType() == Type.user) ? "<br/><br/>" + "<a href='" + ContactsHelper.getLink() + "'>"
+				String aLinkHTML = 	(isPrivate && to.getType() == Type.user) ? "<br/><br/>" + "<a href='" + getContactsLink() + "'>"
 							+ WebSession.getString(1302) + "</a><br/>" : "";
 				String invitation_link = "";
 				if (p.isBookedRoom()) {
@@ -211,7 +211,7 @@ public class MessageDialog extends AbstractFormDialog<PrivateMessage> {
 							, userDao.get(getUserId()), userDao.get(getUserId()).getLanguage_id(),
 							modelStart.getObject(), modelEnd.getObject(), null);
 					
-					invitation_link = LinkHelper.getInvitationLink(getBean(ConfigurationDao.class).getBaseUrl(), i);
+					invitation_link = getInvitationLink(getBean(ConfigurationDao.class).getBaseUrl(), i);
 
 					if (invitation_link == null) {
 						invitation_link = "";

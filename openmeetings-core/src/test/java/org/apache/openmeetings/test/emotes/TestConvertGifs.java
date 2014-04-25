@@ -18,6 +18,8 @@
  */
 package org.apache.openmeetings.test.emotes;
 
+import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.io.PrintWriter;
@@ -25,15 +27,15 @@ import java.util.LinkedList;
 
 import junit.framework.TestCase;
 
-import org.apache.log4j.Logger;
 import org.junit.Test;
+import org.red5.logging.Red5LoggerFactory;
+import org.slf4j.Logger;
 
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.XppDriver;
 
 public class TestConvertGifs extends TestCase {
-	
-	private static final Logger log = Logger.getLogger(TestConvertGifs.class);
+	private static final Logger log = Red5LoggerFactory.getLogger(TestConvertGifs.class, webAppRootKey);
 
 	@Test
 	public void testConvertDir(){

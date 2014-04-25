@@ -16,24 +16,27 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.web.mail.template;
+package org.apache.openmeetings.service.mail.template;
 
+import org.apache.openmeetings.core.IApplication;
 import org.apache.openmeetings.db.entity.user.User;
-import org.apache.openmeetings.db.entity.user.UserContact;
+import org.apache.wicket.Application;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.link.ExternalLink;
 
-public class RequestContactConfirmTemplate extends AbstractTemplatePanel {
+public class RequestContactTemplate extends AbstractTemplatePanel {
 	private static final long serialVersionUID = 1L;
 
-	public RequestContactConfirmTemplate(String id, User user, UserContact contact) {
+	public RequestContactTemplate(String id, User userToAdd, User user) {
 		super(id);
+		add(new Label("addedFirstName", userToAdd.getFirstname()));
+		add(new Label("addedLastName", userToAdd.getLastname()));
 		add(new Label("firstName", user.getFirstname()));
 		add(new Label("lastName", user.getLastname()));
-		add(new Label("addedFirstName", contact.getContact().getFirstname()));
-		add(new Label("addedLastName", contact.getContact().getLastname()));
+		add(new ExternalLink("link", ((IApplication)Application.get()).getOmContactsLink()));
 	}
 	
-	public static String getEmail(User user, UserContact contact) {
-		return renderPanel(new RequestContactConfirmTemplate(TemplatePage.COMP_ID, user, contact)).toString();
+	public static String getEmail(User userToAdd, User user) {
+		return renderPanel(new RequestContactTemplate(TemplatePage.COMP_ID, userToAdd, user)).toString();
 	}
 }

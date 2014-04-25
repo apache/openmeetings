@@ -263,7 +263,7 @@
 	<bean id="roomTypeDao" class="org.apache.openmeetings.db.dao.room.RoomTypeDao" />
 	<bean id="conferenceLogDao" class="org.apache.openmeetings.db.dao.log.ConferenceLogDao" />
 	<bean id="conferenceLogTypeDao" class="org.apache.openmeetings.db.dao.log.ConferenceLogTypeDao" />
-	<bean id="emailManagement" class="org.apache.openmeetings.web.mail.EmailManager" />
+	<bean id="emailManagement" class="org.apache.openmeetings.service.mail.EmailManager" />
 	<bean id="fileExplorerItemDao" class="org.apache.openmeetings.db.dao.file.FileExplorerItemDao" />
 	<bean id="flvRecordingDao" class="org.apache.openmeetings.db.dao.record.FlvRecordingDao" />
 	<bean id="flvRecordingLogDao" class="org.apache.openmeetings.db.dao.record.FlvRecordingLogDao" />

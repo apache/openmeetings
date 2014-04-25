@@ -16,27 +16,24 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.web.mail.template;
+package org.apache.openmeetings.service.mail.template;
 
-import static org.apache.openmeetings.web.app.Application.getBean;
-
-import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
+import org.apache.openmeetings.db.entity.user.User;
+import org.apache.openmeetings.db.entity.user.UserContact;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.link.ExternalLink;
 
-public class FeedbackTemplate extends AbstractTemplatePanel {
+public class RequestContactConfirmTemplate extends AbstractTemplatePanel {
 	private static final long serialVersionUID = 1L;
 
-	public FeedbackTemplate(String id, String username, String email, String message) {
+	public RequestContactConfirmTemplate(String id, User user, UserContact contact) {
 		super(id);
-		add(new Label("appname", getBean(ConfigurationDao.class).getAppName()));
-		add(new Label("username", username));
-		add(new Label("email", email));
-		add(new Label("message", message));
-		add(new ExternalLink("invitation_link", ""));
+		add(new Label("firstName", user.getFirstname()));
+		add(new Label("lastName", user.getLastname()));
+		add(new Label("addedFirstName", contact.getContact().getFirstname()));
+		add(new Label("addedLastName", contact.getContact().getLastname()));
 	}
 	
-	public static String getEmail(String username, String email, String message) {
-		return renderPanel(new FeedbackTemplate(TemplatePage.COMP_ID, username, email, message)).toString();
+	public static String getEmail(User user, UserContact contact) {
+		return renderPanel(new RequestContactConfirmTemplate(TemplatePage.COMP_ID, user, contact)).toString();
 	}
 }

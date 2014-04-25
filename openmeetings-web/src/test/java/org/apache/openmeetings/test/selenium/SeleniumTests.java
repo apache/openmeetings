@@ -16,34 +16,8 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.test.library;
+package org.apache.openmeetings.test.selenium;
 
-import org.apache.log4j.Logger;
-import org.apache.openmeetings.core.documents.LibraryWmlLoader;
-import org.apache.openmeetings.test.AbstractJUnitDefaults;
-import org.junit.Test;
-import org.springframework.beans.factory.annotation.Autowired;
+public @interface SeleniumTests {
 
-
-public class TestFileParser extends AbstractJUnitDefaults {
-	
-	private static final Logger log = Logger.getLogger(TestFileParser.class);
-	@Autowired
-	private LibraryWmlLoader libraryWmlLoader;
-	
-	@Test
-	public void testLoadWmlFile(){
-		
-		try {
-			
-			libraryWmlLoader.loadWmlFile("filename1");
-			
-		} catch (Exception err) {
-			
-			log.error("TestLoadWmlFile",err);
-			
-		}
-		
-	}
-	
 }

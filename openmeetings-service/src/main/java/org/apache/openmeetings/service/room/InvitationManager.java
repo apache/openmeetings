@@ -27,6 +27,7 @@ import java.util.HashMap;
 import java.util.TimeZone;
 import java.util.Vector;
 
+import org.apache.openmeetings.core.IApplication;
 import org.apache.openmeetings.core.mail.MailHandler;
 import org.apache.openmeetings.core.mail.SMSHandler;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
@@ -43,12 +44,12 @@ import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Type;
 import org.apache.openmeetings.db.util.TimezoneUtil;
+import org.apache.openmeetings.service.mail.template.InvitationTemplate;
 import org.apache.openmeetings.util.CalendarPatterns;
 import org.apache.openmeetings.util.crypt.MD5;
 import org.apache.openmeetings.util.crypt.ManageCryptStyle;
 import org.apache.openmeetings.util.mail.IcalHandler;
-import org.apache.openmeetings.web.mail.template.InvitationTemplate;
-import org.apache.openmeetings.web.util.LinkHelper;
+import org.apache.wicket.Application;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -224,7 +225,7 @@ public class InvitationManager implements IInvitationManager {
 	}
 	
 	public void sendInvitionLink(Invitation i, MessageType type, String subject, String message, boolean ical) throws Exception {
-		String invitation_link = LinkHelper.getInvitationLink(configDao.getBaseUrl(), i);
+		String invitation_link = ((IApplication)Application.get()).getOmInvitationLink(configDao.getBaseUrl(), i); //TODO check for exceptions
 		User owner = i.getInvitedBy();
 		
 		String invitorName = owner.getFirstname() + " " + owner.getLastname();
