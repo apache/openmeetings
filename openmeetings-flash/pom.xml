@@ -26,23 +26,26 @@
 	</parent>
 	<groupId>org.apache.openmeetings</groupId>
 	<artifactId>openmeetings-flash</artifactId>
-    <packaging>swf</packaging>
+	<!-- packaging>swf</packaging -->
 	<name>Openmeetings Flash</name>
 	<description>TODO</description>
-	
+	<properties>
+		<openlaszlo>${project.build.directory}/openlaszlo</openlaszlo>
+		<laszlo.home>${openlaszlo}/openlaszlo</laszlo.home>
+		<laszlo46.home>${openlaszlo}/openlaszlo46</laszlo46.home>
+		<out.dir.swf>${project.build.directory}</out.dir.swf>
+		<webcontent.base.dir>${project.basedir}/src/main</webcontent.base.dir>
+	</properties>
 	<build>
 		<plugins>
 			<plugin>
 				<artifactId>maven-antrun-plugin</artifactId>
-				<version>1.7</version>
 				<executions>
 					<execution>
-						<phase>process-resources</phase>
+						<phase>compile</phase>
 						<configuration>
 							<target>
-								<copy file="${project.basedir}/src/main/webapp/WEB-INF/classes/META-INF/${db}_persistence.xml"
-									tofile="${project.build.directory}/${project.build.finalName}/WEB-INF/classes/META-INF/persistence.xml" 
-									overwrite="true"/>
+								<ant antfile="${basedir}/../openlaszlo.xml" target="client.only"/>
 							</target>
 						</configuration>
 						<goals>
