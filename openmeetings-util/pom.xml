@@ -39,7 +39,26 @@
 		<commons-codec.version>1.8</commons-codec.version>
 		<servlet-api.version>2.5</servlet-api.version>
 	</properties>
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.red5</groupId>
+				<artifactId>red5-server</artifactId>
+				<version>${red5-server.version}</version>
+				<exclusions>
+					<exclusion>
+						<groupId>org</groupId>
+						<artifactId>jaudiotagger</artifactId>
+					</exclusion>
+			</exclusions>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
 	<dependencies>
+		<dependency>
+			<groupId>org.red5</groupId>
+			<artifactId>red5-server</artifactId>
+		</dependency>
 		<dependency>
 			<groupId>commons-transaction</groupId>
 			<artifactId>commons-transaction</artifactId>
@@ -70,6 +89,17 @@
 			<artifactId>servlet-api</artifactId>
 			<version>${servlet-api.version}</version>
 			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>servlet-api</artifactId>
+			<version>${servlet-api.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.wicket</groupId>
+			<artifactId>wicket-util</artifactId>
+			<version>${wicket.version}</version>
 		</dependency>
 	</dependencies>
 </project>

@@ -18,6 +18,8 @@
  */
 package org.apache.openmeetings.util.stringhandlers;
 
+import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+
 import java.text.CharacterIterator;
 import java.text.StringCharacterIterator;
 import java.util.Iterator;
@@ -25,14 +27,12 @@ import java.util.LinkedList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.openmeetings.util.OpenmeetingsVariables;
 import org.apache.wicket.util.string.Strings;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 
 public class ChatString {
-	private static final Logger log = Red5LoggerFactory.getLogger(
-			ChatString.class, OpenmeetingsVariables.webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(ChatString.class, webAppRootKey);
 
 	private static String htmlToText(String source) {
 		String result = source;

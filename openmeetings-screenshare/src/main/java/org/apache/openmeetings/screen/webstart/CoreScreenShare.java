@@ -40,6 +40,7 @@ import java.awt.event.KeyEvent;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.commons.codec.binary.Hex;
 import org.apache.openmeetings.screen.webstart.gui.ScreenSharerFrame;
 import org.red5.client.net.rtmp.INetStreamEventHandler;
 import org.red5.io.utils.ObjectMap;
@@ -97,15 +98,13 @@ public class CoreScreenShare implements IPendingServiceCallback, INetStreamEvent
 	//
 	// ------------------------------------------------------------------------
 
-	public CoreScreenShare(IScreenShare instance, String[] args) {
-		this.instance = instance;
-		
+	public CoreScreenShare(String[] args) {
 		try {
 			for (String arg : args) {
 				log.debug("arg: " + arg);
 			}
 			String[] textArray = null;
-			if (args.length > 8) {
+			if (args.length > 9) {
 				host = args[0];
 				app = args[1];
 				port = Integer.parseInt(args[2]);
@@ -131,9 +130,17 @@ public class CoreScreenShare implements IPendingServiceCallback, INetStreamEvent
 						log.debug(i + " :: " + textArray[i]);
 					}
 				}
-				log.debug("host: " + host + ", app: "
-						+ app + ", port: " + port + ", publish: "
-						+ publishName);
+				instance = (IScreenShare)Class.forName(args[10]).newInstance();
+				instance.setCore(this);
+				if (instance instanceof RTMPSScreenShare) {
+					if (args.length < 12) {
+						System.exit(0);
+					}
+					RTMPSScreenShare client = (RTMPSScreenShare)instance;
+					client.setKeystoreBytes(Hex.decodeHex(args[11].toCharArray()));
+					client.setKeyStorePassword(args[12]);
+				}
+				log.debug(String.format("host: %s, app: %s, port: %s, publish: %s", host, port, app, publishName));
 			} else {
 				System.exit(0);
 			}
@@ -144,6 +151,10 @@ public class CoreScreenShare implements IPendingServiceCallback, INetStreamEvent
 		}
 	}
 
+	public static void main(String[] args) {
+		new CoreScreenShare(args);
+	}
+	
 	// ------------------------------------------------------------------------
 	//
 	// GUI

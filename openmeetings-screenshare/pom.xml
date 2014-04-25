@@ -29,10 +29,15 @@
 	<artifactId>openmeetings-screenshare</artifactId>
 	<packaging>jar</packaging>
 	<name>Openmeetings Screen Sharing applet</name>
-	<description>TODO</description>
+	<description>A File to grab a screen and send it to a Server</description>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<red5-client.version>1.0.2-RC2</red5-client.version>
+		<keystore.location>${project.build.directory}/screensharing_sign.keystore</keystore.location>
+		<key.password>secret</key.password>
+		<keystore.password>secret</keystore.password>
+		<keystore.type>jks</keystore.type>
+		<key.alias>screen</key.alias>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -40,5 +45,290 @@
 			<artifactId>red5-client</artifactId>
 			<version>${red5-client.version}</version>
 		</dependency>
+		<dependency><!-- FIXME should be removed later -->
+			<groupId>org.red5</groupId>
+			<artifactId>red5-io</artifactId>
+			<version>1.0.3</version>
+		</dependency>
+		<dependency><!-- FIXME should be removed later -->
+			<groupId>org.red5</groupId>
+			<artifactId>red5-server</artifactId>
+			<version>${red5-server.version}</version>
+		</dependency>
+		<dependency><!-- FIXME should be taken automatically from red5-client dependencies -->
+			<groupId>org.apache.mina</groupId>
+			<artifactId>mina-core</artifactId>
+			<version>2.0.7</version>
+		</dependency>
+		<dependency><!-- FIXME should be taken automatically from red5-client dependencies -->
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-core</artifactId>
+			<version>3.1.1.RELEASE</version>
+		</dependency>
 	</dependencies>
+	<build>
+		<plugins>
+		<plugin>
+			<groupId>com.google.code.maven-replacer-plugin</groupId>
+			<artifactId>replacer</artifactId>
+			<version>1.5.3</version>
+			<executions>
+				<execution>
+					<phase>generate-resources</phase>
+					<goals>
+						<goal>replace</goal>
+					</goals>
+					<configuration>
+						<file>${project.basedir}/src/main/jnlp/templates/template.jnlp</file>
+						<outputFile>${project.basedir}/target/APPLICATION_TEMPLATE.jnlp</outputFile>
+						<regex>false</regex>
+						<replacements>
+							<replacement>
+								<token>$applicationName</token>
+								<value>*</value>
+							</replacement>
+							<replacement>
+								<token>$codebase</token>
+								<value>*</value>
+							</replacement>
+							<replacement>
+								<token>$host</token>
+								<value>*</value>
+							</replacement>
+							<replacement>
+								<token>$port</token>
+								<value>*</value>
+							</replacement>
+							<replacement>
+								<token>$app</token>
+								<value>*</value>
+							</replacement>
+							<replacement>
+								<token>$userId</token>
+								<value>*</value>
+							</replacement>
+							<replacement>
+								<token>$organizationId</token>
+								<value>*</value>
+							</replacement>
+							<replacement>
+								<token>$publicSid</token>
+								<value>*</value>
+							</replacement>
+							<replacement>
+								<token>$labels</token>
+								<value>*</value>
+							</replacement>
+							<replacement>
+								<token>$defaultQuality</token>
+								<value>*</value>
+							</replacement>
+							<replacement>
+								<token>$allowRecording</token>
+								<value>*</value>
+							</replacement>
+							<replacement>
+								<token>$allowPublishing</token>
+								<value>*</value>
+							</replacement>
+							<replacement>
+								<token>$clientClass</token>
+								<value>*</value>
+							</replacement>
+							<replacement>
+								<token>$keystore</token>
+								<value>*</value>
+							</replacement>
+							<replacement>
+								<token>$password</token>
+								<value>*</value>
+							</replacement>
+						</replacements>
+					</configuration>
+				</execution>
+			</executions>
+		</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<!-- Step 1) your obvious configuration + added one new execution for APPLICATION_TEMPLATE.jnlp file generation from template 
+					stored in /templates/APPLICATION_TEMPLATE.jnlp dir -->
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>webstart-maven-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>generate-jnlp-template-for-signing</id>
+						<phase>generate-resources</phase>
+						<goals>
+							<goal>jnlp</goal>
+						</goals>
+						<configuration>
+							<excludeTransitive>false</excludeTransitive>
+							<dependencies>
+								<includes>
+									<include>commons-codec:commons-codec</include>
+									<include>commons-beanutils:commons-beanutils</include>
+									<include>commons-collections:commons-collections</include>
+									<include>org.apache.httpcomponents:httpclient</include>
+									<include>org.apache.httpcomponents:httpcore</include>
+									<include>org.bouncycastle:bcprov-jdk15on</include>
+									<include>net.sf.ehcache:ehcache-core</include>
+									<include>org.slf4j:slf4j-api</include>
+									<include>org.slf4j:jcl-over-slf4j</include>
+									<include>ch.qos.logback:logback-core</include>
+									<include>ch.qos.logback:logback-classic</include>
+									<include>org.apache.mina:mina-core</include>
+									<include>org.red5:red5-io</include>
+									<include>org.red5:red5-server</include>
+									<include>org.red5:red5-client</include>
+									<include>org.springframework:spring-context</include>
+									<include>org.springframework:spring-core</include>
+									<include>org.springframework:spring-beans</include>
+								</includes>
+							</dependencies>
+							<jnlp>
+								<inputTemplateResourcePath>${project.basedir}/target</inputTemplateResourcePath>
+								<inputTemplate>APPLICATION_TEMPLATE.jnlp</inputTemplate>
+								<outputFile>APPLICATION_TEMPLATE.jnlp</outputFile>
+								<mainClass>org.apache.openmeetings.screen.webstart.CoreScreenShare</mainClass>
+							</jnlp>
+							<makeArchive>false</makeArchive>
+						</configuration>
+					</execution>
+					<execution>
+						<id>generate-jnlp-and-sign-libs</id>
+						<phase>generate-resources</phase>
+						<goals>
+							<goal>jnlp</goal>
+						</goals>
+						<configuration>
+							<!--outputDirectory></outputDirectory --> <!-- not required?? -->
+					
+							<excludeTransitive>false</excludeTransitive>
+							<dependencies>
+								<includes>
+									<include>commons-codec:commons-codec</include>
+									<include>commons-beanutils:commons-beanutils</include>
+									<include>commons-collections:commons-collections</include>
+									<include>org.apache.httpcomponents:httpclient</include>
+									<include>org.apache.httpcomponents:httpcore</include>
+									<include>org.bouncycastle:bcprov-jdk15on</include>
+									<include>net.sf.ehcache:ehcache-core</include>
+									<include>org.slf4j:slf4j-api</include>
+									<include>org.slf4j:jcl-over-slf4j</include>
+									<include>ch.qos.logback:logback-core</include>
+									<include>ch.qos.logback:logback-classic</include>
+									<include>org.apache.mina:mina-core</include>
+									<include>org.red5:red5-io</include>
+									<include>org.red5:red5-server</include>
+									<include>org.red5:red5-client</include>
+									<include>org.springframework:spring-context</include>
+									<include>org.springframework:spring-core</include>
+									<include>org.springframework:spring-beans</include>
+								</includes>
+							</dependencies>
+							
+							<jnlp>
+								<inputTemplateResourcePath>${project.basedir}/src/main/jnlp/templates</inputTemplateResourcePath>
+								<inputTemplate>template.jnlp</inputTemplate>
+								<outputFile>APPLICATION.jnlp</outputFile>
+								<mainClass>org.apache.openmeetings.screen.webstart.CoreScreenShare</mainClass>
+							</jnlp>
+					
+							<sign>
+								<keystore>${keystore.location}</keystore>
+								<keypass>${key.password}</keypass>
+								<storepass>${keystore.password}</storepass>
+								<storetype>${keystore.type}</storetype>
+								<alias>${key.alias}</alias>
+					
+								<validity>365</validity>
+								<dnameCn>Sebastian Wagner</dnameCn>
+								<dnameOu>technology</dnameOu>
+								<dnameO>openmeetings.apache.org</dnameO>
+								<!-- dnameL>Location</dnameL>
+								<dnameSt>State</dnameSt-->
+								<dnameC>DE</dnameC>
+											
+								<keystoreConfig>
+									<delete>false</delete>
+									<gen>true</gen>
+								</keystoreConfig>
+								<verify>false</verify> <!-- due to self signed certificate -->
+							</sign>
+							<unsign>true</unsign>
+							<outputJarVersions>false</outputJarVersions>
+							<makeArchive>false</makeArchive>
+							<verbose>true</verbose>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<!-- Step 2) move to APPLICATION_TEMPLATE from /target/jnlp to target/jnlp/${project.build.finalName}.jar/JNLP-INF dir -->
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>truezip-maven-plugin</artifactId>
+				<version>1.1</version>
+				<executions>
+					<execution>
+						<id>move-jnlp-template</id>
+						<goals>
+							<goal>move</goal>
+						</goals>
+						<phase>verify</phase>
+						<configuration>
+							<from>${project.basedir}/target/jnlp/APPLICATION_TEMPLATE.jnlp</from>
+							<to>${project.basedir}/target/jnlp/${project.build.finalName}.jar/JNLP-INF/APPLICATION_TEMPLATE.jnlp</to>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<!-- Step 3) repeat signing of main.jar -->
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jarsigner-plugin</artifactId>
+				<version>1.3.2</version>
+				<executions>
+					<execution>
+						<id>sign</id>
+						<phase>verify</phase>
+						<goals>
+							<goal>sign</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<archiveDirectory>${project.build.directory}/jnlp</archiveDirectory>
+					<includes>
+						<include>${project.build.finalName}.jar</include>
+					</includes>
+					<keystore>${keystore.location}</keystore>
+					<keypass>${key.password}</keypass>
+					<storepass>${keystore.password}</storepass>
+					<storetype>${keystore.type}</storetype>
+					<alias>${key.alias}</alias>
+					<removeExistingSignatures>true</removeExistingSignatures>
+					<verbose>true</verbose>
+				</configuration>
+			</plugin>
+			<!-- plugin-->
+				<!-- Step 4) custom packaging -->
+				<!-- groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-war-plugin</artifactId>
+				<version>${maven-war-plugin.version}</version>
+				<configuration>
+					...
+					<webResources>
+						<resource>
+							<directory>${project.build.directory}/jnlp</directory>
+						</resource>
+						...
+					</webResources>
+					...
+				</configuration>
+			</plugin-->		
+		</plugins>
+	</build>
 </project>
