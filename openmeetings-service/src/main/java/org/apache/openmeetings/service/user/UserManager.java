@@ -648,16 +648,14 @@ public class UserManager implements IUserManager {
 				boolean checkEmail = usersDao.checkUserEMail(email, null);
 				if (checkName && checkEmail) {
 
-					String link = configurationDao.getBaseUrl();
 					String hash = activatedHash;
 					if (hash == null){
 						hash = ManageCryptStyle.getInstanceOfCrypt().createPassPhrase(login
 								+ CalendarPatterns.getDateWithTimeByMiliSeconds(new Date()));
 					}
-					link += "activate?u=" + hash;
 
 					if (sendWelcomeMessage && email.length() != 0) {
-						String sendMail = emailManagement.sendMail(login, password, email, link, sendConfirmation);
+						String sendMail = emailManagement.sendMail(login, password, email, hash, sendConfirmation);
 						if (!sendMail.equals("success"))
 							return new Long(-19);
 					}

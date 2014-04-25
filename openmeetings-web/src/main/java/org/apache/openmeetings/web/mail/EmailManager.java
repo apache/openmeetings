@@ -25,6 +25,9 @@ import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.mail.template.FeedbackTemplate;
 import org.apache.openmeetings.web.mail.template.RegisterUserTemplate;
+import org.apache.openmeetings.web.pages.ActivatePage;
+import org.apache.openmeetings.web.util.OmUrlFor;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +37,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  *
  */
 public class EmailManager {
+
 	private static final Logger log = Red5LoggerFactory.getLogger(EmailManager.class, webAppRootKey);
 
 	@Autowired
@@ -42,18 +46,21 @@ public class EmailManager {
 	private MailHandler mailHandler;
 
 	/**
-	 * sends a mail adress to the user with his account data
+	 * sends a mail address to the user with his account data
 	 * 
 	 * @param username
 	 * @param userpass
 	 * @param email
+	 * @param hash
 	 * @return
 	 * @throws Exception
 	 */
-	public String sendMail(String username, String userpass, String email, String link, Boolean sendEmailWithVerficationCode) {
+	public String sendMail(String username, String userpass, String email, String hash, Boolean sendEmailWithVerficationCode) {
 		log.debug("sendMail:: username = {}, email = {}", username, email);
 		Integer sendEmailAtRegister = configurationDao.getConfValue("sendEmailAtRegister", Integer.class, "0");
 
+		String link = new OmUrlFor("active").urlForPage(ActivatePage.class, new PageParameters().add("u",  hash));
+		
 		if (sendEmailAtRegister == 1) {
 			mailHandler.send(email, WebSession.getString(512)
 				, RegisterUserTemplate.getEmail(username, userpass, email, sendEmailWithVerficationCode ? link : null));
