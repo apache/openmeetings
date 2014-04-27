@@ -26,7 +26,7 @@
 	</parent>
 	<groupId>org.apache.openmeetings</groupId>
 	<artifactId>openmeetings-parent</artifactId>
-	<version>${openmeetings.version}</version>
+	<version>3.1.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<name>Openmeetings Parent</name>
 	<description>TODO</description>
@@ -34,12 +34,11 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<wicket.mode>DEPLOYMENT</wicket.mode>
 		<db>derby</db>
-		<openmeetings.version>3.1.0-SNAPSHOT</openmeetings.version>
 		<spring.version>4.0.3.RELEASE</spring.version>
 		<junit.version>4.11</junit.version>
 		<maven.javadoc.version>2.9.1</maven.javadoc.version>
 		<maven.surefire.version>2.17</maven.surefire.version>
-		<wicket.version>6.14.0</wicket.version>
+		<wicket.version>6.15.0</wicket.version>
 		<red5-server.version>1.0.2-RELEASE</red5-server.version>
 	</properties>
 	<modules>
@@ -221,28 +220,6 @@
 				</plugin>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-gpg-plugin</artifactId>
-					<version>1.4</version>
-					<executions>
-						<execution>
-							<id>sign-artifacts</id>
-							<phase>install</phase>
-							<goals>
-								<goal>sign</goal>
-							</goals>
-						</execution>
-					</executions>
-				</plugin>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-war-plugin</artifactId>
-					<version>2.2</version>
-					<configuration>
-						<warName>${project.artifactId}</warName>
-					</configuration>
-				</plugin>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-jar-plugin</artifactId>
 					<version>2.4</version>
 					<configuration>
@@ -272,13 +249,13 @@
 					<artifactId>maven-surefire-plugin</artifactId>
 					<version>${maven.surefire.version}</version>
 					<configuration>
+						<forkMode>never</forkMode>
 						<includes>
 							<include>**/Test*.java</include>
 						</includes>
 					</configuration>
 					<dependencies>
 						<dependency>
-							<!-- force 4.7 runner to enable excludedGroups on Categories (& parallel) -->
 							<groupId>org.apache.maven.surefire</groupId>
 							<artifactId>surefire-junit47</artifactId>
 							<version>${maven.surefire.version}</version>
@@ -300,27 +277,6 @@
 					<groupId>org.codehaus.mojo</groupId>
 					<artifactId>webstart-maven-plugin</artifactId>
 					<version>1.0-beta-6</version>
-				</plugin>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-dependency-plugin</artifactId>
-					<version>2.8</version>
-					<executions>
-						<execution>
-							<id>copy-dependencies</id>
-							<phase>package</phase>
-							<goals>
-								<goal>copy-dependencies</goal>
-							</goals>
-							<configuration>
-								<outputDirectory>${project.build.directory}/lib</outputDirectory>
-								<overWriteReleases>false</overWriteReleases>
-								<overWriteSnapshots>false</overWriteSnapshots>
-								<overWriteIfNewer>true</overWriteIfNewer>
-								<excludeTransitive>true</excludeTransitive>
-							</configuration>
-						</execution>
-					</executions>
 				</plugin>
 				
 				<!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
@@ -372,6 +328,16 @@
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-resources-plugin</artifactId>
 					<version>2.6</version>
+				</plugin>
+				<plugin>
+					<groupId>com.google.code.maven-replacer-plugin</groupId>
+					<artifactId>replacer</artifactId>
+					<version>1.5.3</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-jarsigner-plugin</artifactId>
+					<version>1.3.2</version>
 				</plugin>
 			</plugins>
 		</pluginManagement>

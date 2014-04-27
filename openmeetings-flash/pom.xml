@@ -21,7 +21,7 @@
 	<parent>
 		<groupId>org.apache.openmeetings</groupId>
 		<artifactId>openmeetings-parent</artifactId>
-		<version>${openmeetings.version}</version>
+		<version>3.1.0-SNAPSHOT</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 	<groupId>org.apache.openmeetings</groupId>
@@ -42,7 +42,7 @@
 				<artifactId>maven-antrun-plugin</artifactId>
 				<executions>
 					<execution>
-						<phase>compile</phase>
+						<phase>package</phase>
 						<configuration>
 							<target>
 								<ant antfile="${basedir}/../openlaszlo.xml" target="client.only"/>

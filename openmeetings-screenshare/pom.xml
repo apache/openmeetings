@@ -22,7 +22,7 @@
 	<parent>
 		<groupId>org.apache.openmeetings</groupId>
 		<artifactId>openmeetings-parent</artifactId>
-		<version>${openmeetings.version}</version>
+		<version>3.1.0-SNAPSHOT</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 	<groupId>org.apache.openmeetings</groupId>
@@ -71,10 +71,9 @@
 		<plugin>
 			<groupId>com.google.code.maven-replacer-plugin</groupId>
 			<artifactId>replacer</artifactId>
-			<version>1.5.3</version>
 			<executions>
 				<execution>
-					<phase>generate-resources</phase>
+					<phase>process-resources</phase>
 					<goals>
 						<goal>replace</goal>
 					</goals>
@@ -151,16 +150,30 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-dependency-plugin</artifactId>
+					<executions>
+						<execution>
+							<id>copy-dependencies</id>
+							<phase>package</phase>
+							<goals>
+								<goal>copy-dependencies</goal>
+							</goals>
+							<configuration>
+								<outputDirectory>${project.build.directory}/lib</outputDirectory>
+								<overWriteReleases>false</overWriteReleases>
+								<overWriteSnapshots>false</overWriteSnapshots>
+								<overWriteIfNewer>true</overWriteIfNewer>
+								<excludeTransitive>true</excludeTransitive>
+							</configuration>
+						</execution>
+					</executions>
 			</plugin>
 			<plugin>
-				<!-- Step 1) your obvious configuration + added one new execution for APPLICATION_TEMPLATE.jnlp file generation from template 
-					stored in /templates/APPLICATION_TEMPLATE.jnlp dir -->
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>webstart-maven-plugin</artifactId>
 				<executions>
 					<execution>
 						<id>generate-jnlp-template-for-signing</id>
-						<phase>generate-resources</phase>
+						<phase>process-resources</phase>
 						<goals>
 							<goal>jnlp</goal>
 						</goals>
@@ -199,13 +212,11 @@
 					</execution>
 					<execution>
 						<id>generate-jnlp-and-sign-libs</id>
-						<phase>generate-resources</phase>
+						<phase>process-resources</phase>
 						<goals>
 							<goal>jnlp</goal>
 						</goals>
 						<configuration>
-							<!--outputDirectory></outputDirectory --> <!-- not required?? -->
-					
 							<excludeTransitive>false</excludeTransitive>
 							<dependencies>
 								<includes>
@@ -267,10 +278,8 @@
 				</executions>
 			</plugin>
 			<plugin>
-				<!-- Step 2) move to APPLICATION_TEMPLATE from /target/jnlp to target/jnlp/${project.build.finalName}.jar/JNLP-INF dir -->
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>truezip-maven-plugin</artifactId>
-				<version>1.1</version>
 				<executions>
 					<execution>
 						<id>move-jnlp-template</id>
@@ -286,10 +295,8 @@
 				</executions>
 			</plugin>
 			<plugin>
-				<!-- Step 3) repeat signing of main.jar -->
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-jarsigner-plugin</artifactId>
-				<version>1.3.2</version>
 				<executions>
 					<execution>
 						<id>sign</id>
@@ -313,22 +320,7 @@
 					<verbose>true</verbose>
 				</configuration>
 			</plugin>
-			<!-- plugin-->
-				<!-- Step 4) custom packaging -->
-				<!-- groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-war-plugin</artifactId>
-				<version>${maven-war-plugin.version}</version>
-				<configuration>
-					...
-					<webResources>
-						<resource>
-							<directory>${project.build.directory}/jnlp</directory>
-						</resource>
-						...
-					</webResources>
-					...
-				</configuration>
-			</plugin-->		
 		</plugins>
 	</build>
 </project>
+
