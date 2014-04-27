@@ -25,7 +25,6 @@
 		<version>3.1.0-SNAPSHOT</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
-	<groupId>org.apache.openmeetings</groupId>
 	<artifactId>openmeetings-web</artifactId>
 	<packaging>war</packaging>
 	<name>Openmeetings Web</name>
@@ -68,6 +67,26 @@
 					<packagingExcludes>**/*.class</packagingExcludes>
 					<filteringDeploymentDescriptors>true</filteringDeploymentDescriptors>
 				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+					<executions>
+						<execution>
+							<id>copy-dependencies</id>
+							<phase>package</phase>
+							<goals>
+								<goal>copy-dependencies</goal>
+							</goals>
+							<configuration>
+								<outputDirectory>${project.build.directory}/lib</outputDirectory>
+								<overWriteReleases>false</overWriteReleases>
+								<overWriteSnapshots>false</overWriteSnapshots>
+								<overWriteIfNewer>true</overWriteIfNewer>
+								<excludeTransitive>true</excludeTransitive>
+							</configuration>
+						</execution>
+					</executions>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -117,6 +136,9 @@
 						<phase>process-resources</phase>
 						<configuration>
 							<target>
+								<copy todir="${project.build.directory}/test-root">
+									<fileset dir="${project.basedir}/src/main/webapp"/>
+								</copy>
 								<copy file="${project.basedir}/src/main/webapp/WEB-INF/classes/META-INF/${db}_persistence.xml"
 									tofile="${project.build.directory}/${project.build.finalName}/WEB-INF/classes/META-INF/persistence.xml" 
 									overwrite="true"/>
@@ -130,14 +152,14 @@
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-surefire-plugin</artifactId>
+				<artifactId>maven-surefire-plugin</artifactId><!-- maybe integration tests should be used -->
 				<inherited>true</inherited>
 				<configuration>
 					<workingDirectory>${project.build.directory}</workingDirectory>
 					<excludedGroups>org.apache.openmeetings.test.selenium.SeleniumTests</excludedGroups>
 					<systemPropertyVariables>
-						<om.home>${project.build.directory}/${project.build.finalName}</om.home>
-						<languages.home>${project.build.directory}/${project.build.finalName}/languages</languages.home>
+						<om.home>${project.build.directory}/test-root</om.home>
+						<languages.home>${project.basedir}/src/main/webapp/languages</languages.home>
 						<red5.root>red5.root</red5.root>
 						<backups.dir>${project.build.directory}/old-backups</backups.dir>
 					</systemPropertyVariables>
@@ -171,6 +193,74 @@
 				<directory>${project.basedir}/src/main/webapp/WEB-INF/classes</directory>
 			</testResource>
 		</testResources>
+		<pluginManagement>
+			<plugins>
+				<!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
+				<plugin>
+					<groupId>org.eclipse.m2e</groupId>
+					<artifactId>lifecycle-mapping</artifactId>
+					<version>1.0.0</version>
+					<configuration>
+						<lifecycleMappingMetadata>
+							<pluginExecutions>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>org.apache.maven.plugins</groupId>
+										<artifactId>maven-antrun-plugin</artifactId>
+										<versionRange>[1.7,)</versionRange>
+										<goals>
+											<goal>run</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore></ignore>
+									</action>
+								</pluginExecution>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>org.codehaus.mojo</groupId>
+										<artifactId>wagon-maven-plugin</artifactId>
+										<versionRange>[1.0-beta-5,)</versionRange>
+										<goals>
+											<goal>download</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore></ignore>
+									</action>
+								</pluginExecution>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>org.apache.maven.plugins</groupId>
+										<artifactId>maven-remote-resources-plugin</artifactId>
+										<versionRange>[1.2.1,)</versionRange>
+										<goals>
+											<goal>process</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore></ignore>
+									</action>
+								</pluginExecution>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>org.apache.maven.plugins</groupId>
+										<artifactId>maven-dependency-plugin</artifactId>
+										<versionRange>[2.8,)</versionRange>
+										<goals>
+											<goal>copy-dependencies</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore></ignore>
+									</action>
+								</pluginExecution>
+							</pluginExecutions>
+						</lifecycleMappingMetadata>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
 	</build>
 	<dependencies>
 		<dependency>

@@ -24,7 +24,6 @@
 		<version>3.1.0-SNAPSHOT</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
-	<groupId>org.apache.openmeetings</groupId>
 	<artifactId>openmeetings-flash</artifactId>
 	<!-- packaging>swf</packaging -->
 	<name>Openmeetings Flash</name>
