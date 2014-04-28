@@ -158,6 +158,11 @@ public abstract class BaseConverter {
 					doWait = false;
 				} else if (++counter % 1000 == 0) {
 					log.debug(String.format("### Still waiting for the stream with id %s; current status: %s ", metaId, metaData.getStreamStatus()));
+					File metaDir = getStreamsSubDir(metaData.getFlvRecording().getFlvRecordingId());
+					File metaFlv = new File(metaDir, metaData.getStreamName() + ".flv");
+					File metaSer = new File(metaDir, metaData.getStreamName() + ".flv.ser");
+					log.debug(String.format("### Still waiting:: Flv file exists ? %s; size: %s, lastModified: %s ", metaFlv.exists(), metaFlv.length(), metaFlv.lastModified()));
+					log.debug(String.format("### Still waiting:: Ser file exists ? %s; size: %s, lastModified: %s ", metaSer.exists(), metaSer.length(), metaSer.lastModified()));
 				}
 				
 				Thread.sleep(100L);
