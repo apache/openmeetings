@@ -185,6 +185,37 @@
 							<skip>${maven.test.skip}</skip>
 						</configuration>
 					</execution>
+					<execution>
+						<id>download-red5-server</id>
+						<phase>prepare-package</phase>
+						<goals>
+							<goal>download-single</goal>
+						</goals>
+						<configuration>
+							<url>https://github.com/Red5/red5-server/releases/download</url>
+							<fromFile>v${red5-server.version}/red5-server-${red5-server.version}-server.tar.gz</fromFile>
+							<toDir>${project.build.directory}</toDir>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>truezip-maven-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>unpack-red5-server</id>
+						<goals>
+							<goal>copy</goal>
+						</goals>
+						<phase>prepare-package</phase>
+						<configuration>
+							<fileset>
+								<directory>${project.build.directory}/red5-server-${red5-server.version}-server.tar.gz/red5-server-${red5-server.version}</directory>
+								<outputDirectory>${project.build.directory}/server</outputDirectory>
+							</fileset>
+						</configuration>
+					</execution>
 				</executions>
 			</plugin>
 		</plugins>
