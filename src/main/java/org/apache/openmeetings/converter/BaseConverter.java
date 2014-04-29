@@ -156,7 +156,7 @@ public abstract class BaseConverter {
 				if (metaData.getStreamStatus() == Status.STOPPED) {
 					log.debug("### Stream now written Thread continue - " );
 					doWait = false;
-				} else if (++counter % 1 == 0) {
+				} else if (++counter % 1000 == 0) {
 					log.debug(String.format("### Still waiting for the stream with id %s; current status: %s ", metaId, metaData.getStreamStatus()));
 					File metaDir = getStreamsSubDir(metaData.getFlvRecording().getRoom_id());
 					File metaFlv = new File(metaDir, metaData.getStreamName() + ".flv");
