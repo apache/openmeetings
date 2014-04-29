@@ -57,7 +57,7 @@ public class FlvRecordingLog implements Serializable {
 	private String msgType;
 	
 	@Lob
-	@Column(name="ful_message")
+	@Column(name="ful_message", length = 1 * 1024 * 1024)
 	private String fullMessage;
 	
 	@Column(name="exit_value")
