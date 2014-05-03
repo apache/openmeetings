@@ -22,10 +22,10 @@
 		<groupId>org.apache.openmeetings</groupId>
 		<artifactId>openmeetings-parent</artifactId>
 		<version>3.1.0-SNAPSHOT</version>
-		<relativePath>../pom.xml</relativePath>
+		<relativePath>..</relativePath>
 	</parent>
 	<artifactId>openmeetings-flash</artifactId>
-	<!-- packaging>swf</packaging -->
+	<packaging>pom</packaging><!-- FIXME -->
 	<name>Openmeetings Flash</name>
 	<description>TODO</description>
 	<properties>
@@ -84,16 +84,5 @@
             <type>swc</type>
             <scope>test</scope>
         </dependency>
-    </dependencies>
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>org.apache.flex</groupId>
-                <artifactId>framework</artifactId>
-                <version>4.12.0.20140303</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-        </dependencies>
-    </dependencyManagement-->
+    </dependencies-->
 </project>
