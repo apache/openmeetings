@@ -58,6 +58,19 @@
 				</dependency>
 			</dependencies>
 		</profile>
+		<profile>
+			<id>Quick</id>
+			<activation>
+				<property>
+					<name>quick</name>
+					<value>true</value>
+				</property>
+			</activation>
+			<properties>
+				<maven.test.skip>true</maven.test.skip>
+				<om.quick.build>true</om.quick.build>
+			</properties>
+		</profile>
 	</profiles>
 	<build>
 		<plugins>
@@ -68,27 +81,29 @@
 					<archiveClasses>true</archiveClasses>
 					<packagingExcludes>**/*.class</packagingExcludes>
 					<filteringDeploymentDescriptors>true</filteringDeploymentDescriptors>
+					<skip>${om.quick.build}</skip>
 				</configuration>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-dependency-plugin</artifactId>
-					<executions>
-						<execution>
-							<id>copy-dependencies</id>
-							<phase>package</phase>
-							<goals>
-								<goal>copy-dependencies</goal>
-							</goals>
-							<configuration>
-								<outputDirectory>${project.build.directory}/lib</outputDirectory>
-								<overWriteReleases>false</overWriteReleases>
-								<overWriteSnapshots>false</overWriteSnapshots>
-								<overWriteIfNewer>true</overWriteIfNewer>
-								<excludeTransitive>true</excludeTransitive>
-							</configuration>
-						</execution>
-					</executions>
+				<executions>
+					<execution>
+						<id>copy-dependencies</id>
+						<phase>package</phase>
+						<goals>
+							<goal>copy-dependencies</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>${project.build.directory}/lib</outputDirectory>
+							<overWriteReleases>false</overWriteReleases>
+							<overWriteSnapshots>false</overWriteSnapshots>
+							<overWriteIfNewer>true</overWriteIfNewer>
+							<excludeTransitive>true</excludeTransitive>
+							<skip>${om.quick.build}</skip>
+						</configuration>
+					</execution>
+				</executions>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -126,6 +141,7 @@
 									</includes>
 								</resource>
 							</resources>
+							<skip>${om.quick.build}</skip>
 						</configuration>
 					</execution>
 				</executions>
@@ -146,6 +162,7 @@
 									tofile="${project.build.directory}/${project.build.finalName}/WEB-INF/classes/META-INF/persistence.xml" 
 									overwrite="true"/>
 							</target>
+							<skip>${om.quick.build}</skip>
 						</configuration>
 						<goals>
 							<goal>run</goal>
@@ -169,6 +186,7 @@
 					<additionalClasspathElements>
 						<additionalClasspathElement>${project.build.directory}/${project.build.finalName}/WEB-INF/classes</additionalClasspathElement>
 					</additionalClasspathElements>
+					<skip>${om.quick.build}</skip>
 				</configuration>
 			</plugin>
 			<plugin>
@@ -198,6 +216,7 @@
 							<url>https://github.com/Red5/red5-server/releases/download</url>
 							<fromFile>v${red5-server.version}/red5-server-${red5-server.version}-server.tar.gz</fromFile>
 							<toDir>${project.build.directory}</toDir>
+							<skip>${om.quick.build}</skip>
 						</configuration>
 					</execution>
 				</executions>
@@ -217,6 +236,7 @@
 								<directory>${project.build.directory}/red5-server-${red5-server.version}-server.tar.gz/red5-server-${red5-server.version}</directory>
 								<outputDirectory>${project.build.directory}/server</outputDirectory>
 							</fileset>
+							<skip>${om.quick.build}</skip>
 						</configuration>
 					</execution>
 				</executions>
@@ -226,7 +246,7 @@
 				<artifactId>maven-antrun-plugin</artifactId>
 				<executions>
 					<execution>
-						<id>move-server-resources</id><!-- All this should be removed and implemented somehow differently -->
+						<id>basic-move-server-resources</id><!-- All this should be removed and implemented somehow differently -->
 						<phase>verify</phase>
 						<configuration>
 							<target>
@@ -236,27 +256,10 @@
 								<mkdir dir="${server.webapps.om}"/>
 								<unzip src="${project.build.directory}/${project.build.finalName}.war" dest="${server.webapps.om}"/>
 								<delete dir="${server.webapps.om}/META-INF"/>
-								<mkdir dir="${server.webapps.om}/screenshare"/>
-								<copy todir="${server.webapps.om}/screenshare" overwrite="true">
-									<fileset dir="${project.basedir}/../openmeetings-screenshare/target/jnlp"/>
-								</copy>
-								<copy todir="${server.webapps.om}/public" overwrite="true">
-									<fileset dir="${project.basedir}/../openmeetings-flash/target">
-										<include name="*.swf"/>
-									</fileset>
-								</copy>
 								<copy todir="${project.build.directory}/server" overwrite="true">
 									<fileset dir="${project.basedir}/../WebContent/red5">
 										<include name="*.sh"/>
 										<include name="*.bat"/>
-									</fileset>
-								</copy>
-								<copy todir="${server.webapps.om}/WEB-INF/classes" overwrite="true">
-									<fileset dir="${project.basedir}/src/main/java">
-										<include name="**/*.html"/>
-										<include name="**/*.js"/>
-										<include name="**/*.css"/>
-										<include name="**/*.xml"/>
 									</fileset>
 								</copy>
 								<copy file="${project.basedir}/../WebContent/red5/index.html" todir="${project.build.directory}/server/webapps/root" overwrite="true"/>
@@ -274,6 +277,58 @@
 										<include name="slf4j-*"/>
 									</fileset>
 								</delete>
+							</target>
+							<skip>${om.quick.build}</skip>
+						</configuration>
+						<goals>
+							<goal>run</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>move-server-resources</id><!-- All this should be removed and implemented somehow differently -->
+						<phase>verify</phase>
+						<configuration>
+							<target>
+								<mkdir dir="${server.webapps.om}/screenshare"/>
+								<copy todir="${server.webapps.om}/WEB-INF/lib" overwrite="true">
+									<fileset dir="${project.basedir}/../openmeetings-core/target">
+										<include name="openmeetings*.jar"/>
+									</fileset>
+									<fileset dir="${project.basedir}/../openmeetings-db/target">
+										<include name="openmeetings*.jar"/>
+									</fileset>
+									<fileset dir="${project.basedir}/../openmeetings-install/target">
+										<include name="openmeetings*.jar"/>
+									</fileset>
+									<fileset dir="${project.basedir}/../openmeetings-service/target">
+										<include name="openmeetings*.jar"/>
+									</fileset>
+									<fileset dir="${project.basedir}/../openmeetings-util/target">
+										<include name="openmeetings*.jar"/>
+									</fileset>
+									<fileset dir="${project.basedir}/../openmeetings-webservice/target">
+										<include name="openmeetings*.jar"/>
+									</fileset>
+									<fileset dir="${project.build.directory}/${project.build.finalName}/WEB-INF/lib/">
+										<include name="openmeetings*.jar"/>
+									</fileset>
+								</copy>
+								<copy todir="${server.webapps.om}/screenshare" overwrite="true">
+									<fileset dir="${project.basedir}/../openmeetings-screenshare/target/jnlp"/>
+								</copy>
+								<copy todir="${server.webapps.om}/public" overwrite="true">
+									<fileset dir="${project.basedir}/../openmeetings-flash/target">
+										<include name="*.swf"/>
+									</fileset>
+								</copy>
+								<copy todir="${server.webapps.om}/WEB-INF/classes" overwrite="true">
+									<fileset dir="${project.basedir}/src/main/java">
+										<include name="**/*.html"/>
+										<include name="**/*.js"/>
+										<include name="**/*.css"/>
+										<include name="**/*.xml"/>
+									</fileset>
+								</copy>
 							</target>
 						</configuration>
 						<goals>
