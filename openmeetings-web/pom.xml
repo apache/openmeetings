@@ -309,7 +309,7 @@
 									<fileset dir="${project.basedir}/../openmeetings-webservice/target">
 										<include name="openmeetings*.jar"/>
 									</fileset>
-									<fileset dir="${project.build.directory}/${project.build.finalName}/WEB-INF/lib/">
+									<fileset dir="${project.build.directory}/${project.build.finalName}/WEB-INF/lib">
 										<include name="openmeetings*.jar"/>
 									</fileset>
 								</copy>
@@ -319,6 +319,18 @@
 								<copy todir="${server.webapps.om}/public" overwrite="true">
 									<fileset dir="${project.basedir}/../openmeetings-flash/target">
 										<include name="*.swf"/>
+									</fileset>
+								</copy>
+								<copy todir="${server.webapps.om}/WEB-INF" overwrite="true">
+									<fileset dir="${project.build.directory}/${project.build.finalName}/WEB-INF">
+										<include name="**/*.xml"/>
+									</fileset>
+								</copy>
+								<copy todir="${server.webapps.om}/css" overwrite="true">
+									<fileset dir="${project.basedir}/src/main/webapp/css">
+										<include name="**/*.css"/>
+										<include name="**/*.png"/>
+										<include name="**/*.gif"/>
 									</fileset>
 								</copy>
 								<copy todir="${server.webapps.om}/WEB-INF/classes" overwrite="true">
