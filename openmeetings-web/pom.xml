@@ -37,6 +37,9 @@
 		<commons-io.version>2.4</commons-io.version>
 		<commons-fileupload.version>1.3</commons-fileupload.version>
 		<mysql.version>5.1.30</mysql.version>
+		<server.webapps>${project.build.directory}/server/webapps</server.webapps>
+		<server.lib>${project.build.directory}/server/lib</server.lib>
+		<server.webapps.om>${server.webapps}/openmeetings</server.webapps.om>
 	</properties>
 	<profiles>
 		<profile>
@@ -132,6 +135,7 @@
 				<artifactId>maven-antrun-plugin</artifactId>
 				<executions>
 					<execution>
+						<id>move-openjpa-resources</id>
 						<phase>process-resources</phase>
 						<configuration>
 							<target>
@@ -214,6 +218,67 @@
 								<outputDirectory>${project.build.directory}/server</outputDirectory>
 							</fileset>
 						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>move-server-resources</id><!-- All this should be removed and implemented somehow differently -->
+						<phase>verify</phase>
+						<configuration>
+							<target>
+								<delete dir="${server.webapps}/installer"/>
+								<delete dir="${server.webapps}/live"/>
+								<delete dir="${server.webapps}/vod"/>
+								<mkdir dir="${server.webapps.om}"/>
+								<unzip src="${project.build.directory}/${project.build.finalName}.war" dest="${server.webapps.om}"/>
+								<delete dir="${server.webapps.om}/META-INF"/>
+								<mkdir dir="${server.webapps.om}/screenshare"/>
+								<copy todir="${server.webapps.om}/screenshare" overwrite="true">
+									<fileset dir="${project.basedir}/../openmeetings-screenshare/target/jnlp"/>
+								</copy>
+								<copy todir="${server.webapps.om}/public" overwrite="true">
+									<fileset dir="${project.basedir}/../openmeetings-flash/target">
+										<include name="*.swf"/>
+									</fileset>
+								</copy>
+								<copy todir="${project.build.directory}/server" overwrite="true">
+									<fileset dir="${project.basedir}/../WebContent/red5">
+										<include name="*.sh"/>
+										<include name="*.bat"/>
+									</fileset>
+								</copy>
+								<copy todir="${server.webapps.om}/WEB-INF/classes" overwrite="true">
+									<fileset dir="${project.basedir}/src/main/java">
+										<include name="**/*.html"/>
+										<include name="**/*.js"/>
+										<include name="**/*.css"/>
+										<include name="**/*.xml"/>
+									</fileset>
+								</copy>
+								<copy file="${project.basedir}/../WebContent/red5/index.html" todir="${project.build.directory}/server/webapps/root" overwrite="true"/>
+								<chmod dir="${project.build.directory}/server" perm="ugo+rx" includes="**/*.sh"/>
+								<move todir="${server.lib}">
+									<fileset dir="${server.webapps.om}/WEB-INF/lib">
+										<include name="spring-*"/>
+										<include name="geronimo-jpa*"/>
+										<include name="commons-fileupload*"/>
+									</fileset>
+								</move>
+								<delete>
+									<fileset dir="${server.webapps.om}/WEB-INF/lib">
+										<include name="aopalliance*"/>
+										<include name="slf4j-*"/>
+									</fileset>
+								</delete>
+							</target>
+						</configuration>
+						<goals>
+							<goal>run</goal>
+						</goals>
 					</execution>
 				</executions>
 			</plugin>
@@ -348,6 +413,12 @@
 			<groupId>org.apache.wicket</groupId>
 			<artifactId>wicket-extensions</artifactId>
 			<version>${wicket.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.slf4j</groupId>
+					<artifactId>slf4j-api</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.wicket</groupId>

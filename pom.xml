@@ -328,12 +328,20 @@
 						<artifactId>antlr</artifactId>
 					</exclusion>
 					<exclusion>
+						<groupId>aopalliance</groupId>
+						<artifactId>aopalliance</artifactId>
+					</exclusion>
+					<exclusion>
 						<groupId>asm</groupId>
 						<artifactId>asm</artifactId>
 					</exclusion>
 					<exclusion>
 						<groupId>commons-logging</groupId>
 						<artifactId>commons-logging</artifactId>
+					</exclusion>
+					<exclusion>
+						<groupId>org.apache.geronimo.specs</groupId>
+						<artifactId>geronimo-servlet_3.0_spec</artifactId>
 					</exclusion>
 				</exclusions>
 			</dependency>
