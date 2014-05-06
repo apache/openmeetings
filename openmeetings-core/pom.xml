@@ -32,7 +32,7 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<velocity.version>1.7</velocity.version>
-		<smslib.version>3.5.4</smslib.version>
+		<smslib.version>3.5.3</smslib.version> <!-- 3.5.4 requires Java7 -->
 		<derby.version>10.10.1.1</derby.version>
 	</properties>
 	<repositories>
