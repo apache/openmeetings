@@ -345,18 +345,6 @@
 						</configuration>
 					</execution>
 					<execution><!-- FIXME should be refactored -->
-						<id>create-zip-distribution</id>
-						<goals>
-							<goal>cp</goal>
-						</goals>
-						<phase>verify</phase>
-						<configuration>
-							<from>${project.build.directory}/server</from>
-							<to>${project.build.directory}/openmeetings-${project.version}.zip</to>
-							<skip>${om.quick.build}</skip>
-						</configuration>
-					</execution>
-					<execution><!-- FIXME should be refactored -->
 						<id>create-tgz-distribution</id>
 						<goals>
 							<goal>cp</goal>
