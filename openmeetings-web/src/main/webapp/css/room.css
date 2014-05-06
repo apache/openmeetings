@@ -16,13 +16,36 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+#roomMenu {
+	position: absolute;
+    top: 0;
+    width: 100%;
+}
+.room.top.stub {
+	height: 35px;
+}
 .room.container {
 	width: 100%;
 }
-
 .room.menu.exit {
 	padding-left: 20px;
 	background-image: url(images/exit_button.png);
 	background-repeat: no-repeat;
-	background-position-x: 5px;
+	background-position: 5px 5px;
+}
+.room.sidebar.left {
+	min-width: 200px;
+	width: 20%;
+	height: 100%;
+	float: left;
+}
+.room.wb.area {
+	width: 80%;
+	height: 100%;
+	float: left;
+}
+.room.sidebar.left .user.list .user {
+	height: 40px;
+	padding-left: 5px;
+    padding-top: 5px;
 }

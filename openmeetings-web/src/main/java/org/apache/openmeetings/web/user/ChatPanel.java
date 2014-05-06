@@ -36,13 +36,17 @@ import org.apache.wicket.ajax.json.JSONException;
 import org.apache.wicket.ajax.json.JSONObject;
 import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
+import org.apache.wicket.markup.head.PriorityHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.protocol.ws.IWebSocketSettings;
 import org.apache.wicket.protocol.ws.api.IWebSocketConnection;
 import org.apache.wicket.protocol.ws.api.registry.IWebSocketConnectionRegistry;
+import org.apache.wicket.request.resource.JavaScriptResourceReference;
+import org.apache.wicket.request.resource.ResourceReference;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 
@@ -125,5 +129,15 @@ public class ChatPanel extends UserPanel {
 						target.add(chatMessage);
 					};
 				}));
+	}
+
+	private ResourceReference newResourceReference() {
+		return new JavaScriptResourceReference(ChatPanel.class, "chat.js");
+	}
+	
+	@Override
+	public void renderHead(IHeaderResponse response) {
+		super.renderHead(response);
+		response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forReference(newResourceReference())));
 	}
 }

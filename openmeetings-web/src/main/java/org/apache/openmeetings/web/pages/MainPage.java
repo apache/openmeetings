@@ -37,12 +37,14 @@ import org.apache.openmeetings.db.dao.basic.NavigationDao;
 import org.apache.openmeetings.db.entity.basic.Naviglobal;
 import org.apache.openmeetings.db.entity.basic.Navimain;
 import org.apache.openmeetings.web.app.Application;
+import org.apache.openmeetings.web.app.Client;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.BasePanel;
 import org.apache.openmeetings.web.common.ConfirmableAjaxLink;
 import org.apache.openmeetings.web.common.menu.MainMenuItem;
 import org.apache.openmeetings.web.common.menu.MenuItem;
 import org.apache.openmeetings.web.common.menu.MenuPanel;
+import org.apache.openmeetings.web.room.RoomPanel;
 import org.apache.openmeetings.web.user.AboutDialog;
 import org.apache.openmeetings.web.user.ChatPanel;
 import org.apache.openmeetings.web.util.OmUrlFragment;
@@ -133,20 +135,26 @@ public class MainPage extends BaseInitedPage {
 			@Override
 			protected void onConnect(ConnectedMessage message) {
 				super.onConnect(message);
-				addOnlineUser(getUserId(), WebSession.get().getId());
-				log.debug("WebSocketBehavior::onConnect");
+				addOnlineUser(new Client(message.getSessionId(), message.getKey(), getUserId()));
+				log.debug(String.format("WebSocketBehavior::onConnect [session: %s, key: %s]", message.getSessionId(), message.getKey()));
 			}
 			
 			@Override
 			protected void onClose(ClosedMessage message) {
 				super.onClose(message);
-				removeOnlineUser(getUserId(), WebSession.get().getId());
-				log.debug("WebSocketBehavior::onClose");
+				Client _c = new Client(message.getSessionId(), message.getKey(), getUserId());
+				removeOnlineUser(_c);
+				log.debug(String.format("WebSocketBehavior::onClose [session: %s, key: %s]", message.getSessionId(), message.getKey()));
+				long roomId = Application.getRoom(_c);
+				if (roomId > 0) {
+					Client c = Application.removeUserFromRoom(roomId, _c);
+					RoomPanel.sendRoom(roomId, RoomPanel.removeUser(c));
+				}
 			}
 		});
 		//load preselected content
 		add(areaBehavior = new AbstractAjaxTimerBehavior(Duration.ONE_SECOND) {
-			private static final long serialVersionUID = -1551197896975384329L;
+			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected void onTimer(AjaxRequestTarget target) {

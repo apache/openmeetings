@@ -28,6 +28,7 @@ html, body {
 	background-image: url(../public/themes/basic-theme/general/logo.png);
 	background-repeat: no-repeat;
 	padding-left: 150px;
+	margin-bottom: 10px;
 }
 #topLinks {
 	position: absolute;
@@ -45,9 +46,8 @@ html, body {
 	border-right: none;
 }
 
-#menu {
+#menu, #roomMenu {
 	background-color: #AFCBFB;
-	margin-top: 10px;
 }
 .ui-menubar .ui-menu {
 	width: 250px;
@@ -342,6 +342,9 @@ div.tableWrapperSmall {
 }
 .widget td {
 	min-width: 150px;
+}
+#contents {
+	height: 100%;
 }
 #contents .dragbox-content {
 	min-height: 300px;

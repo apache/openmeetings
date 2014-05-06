@@ -26,8 +26,10 @@ import static org.red5.logging.Red5LoggerFactory.getLogger;
 import static org.springframework.web.context.WebApplicationContext.ROOT_WEB_APPLICATION_CONTEXT_ATTRIBUTE;
 import static org.springframework.web.context.support.WebApplicationContextUtils.getWebApplicationContext;
 
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 import javax.servlet.ServletContext;
@@ -90,7 +92,9 @@ import ro.fortsoft.wicket.dashboard.web.DashboardSettings;
 public class Application extends AuthenticatedWebApplication implements IApplication {
 	private static final Logger log = getLogger(Application.class, webAppRootKey);
 	private static boolean isInstalled;
-	private static Map<Long, Set<String>> ONLINE_USERS = new ConcurrentHashMap<Long, Set<String>>();
+	private static Map<Long, Set<Client>> ONLINE_USERS = new ConcurrentHashMap<Long, Set<Client>>();
+	private static Map<Long, Set<Client>> ROOMS = new ConcurrentHashMap<Long, Set<Client>>();
+	//additional maps for faster searching should be created
 	private DashboardContext dashboardContext;
 	
 	@Override
@@ -196,26 +200,67 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 		return get().dashboardContext;
 	}
 	
-	public static void addOnlineUser(long userId, String sessionId) {
+	public static void addOnlineUser(Client client) {
+		long userId = client.getUserId();
 		if (!ONLINE_USERS.containsKey(userId)) {
-			ONLINE_USERS.put(userId, new ConcurrentHashSet<String>());
+			ONLINE_USERS.put(userId, new ConcurrentHashSet<Client>());
 		}
-		ONLINE_USERS.get(userId).add(sessionId);
+		ONLINE_USERS.get(userId).add(client);
 	}
 	
-	public static void removeOnlineUser(long userId, String sessionId) {
+	public static void removeOnlineUser(Client c) {
+		long userId = c.getUserId();
 		if (ONLINE_USERS.containsKey(userId)) {
-			Set<String> sessions = ONLINE_USERS.get(userId);
-			if (sessions.isEmpty()) {
+			Set<Client> clients = ONLINE_USERS.get(userId);
+			clients.remove(c);
+			if (clients.isEmpty()) {
 				ONLINE_USERS.remove(userId);
-			} else if (sessions.contains(sessionId)) {
-				if (sessions.size() > 1) {
-					sessions.remove(sessionId);
-				} else {
-					ONLINE_USERS.remove(userId);
-				}
 			}
 		}
+	}
+	
+	public static Client addUserToRoom(long roomId, int pageId) {
+		if (!ROOMS.containsKey(roomId)) {
+			ROOMS.put(roomId, new ConcurrentHashSet<Client>());
+		}
+		Client c = new Client(WebSession.get().getId(), pageId, WebSession.getUserId());
+		c.setUid(UUID.randomUUID().toString());
+		ROOMS.get(roomId).add(c);
+		return c;
+	}
+	
+	public static void removeUserFromRoom(long roomId, int pageId) {
+		removeUserFromRoom(roomId, new Client(WebSession.get().getId(), pageId, WebSession.getUserId()));
+	}
+	
+	public static Client removeUserFromRoom(long roomId, Client _c) {
+		if (ROOMS.containsKey(roomId)) {
+			Set<Client> clients = ROOMS.get(roomId);
+			for (Client c : clients) {
+				if (c.equals(_c)) {
+					clients.remove(c);
+					return c;
+				}
+			}
+			if (clients.isEmpty()) {
+				ROOMS.remove(roomId);
+			}
+		}
+		return _c;
+	}
+	
+	public static long getRoom(Client c) {
+		for (long roomId : ROOMS.keySet()) {
+			Set<Client> clients = ROOMS.get(roomId);
+			if (clients.contains(c)) {
+				return roomId;
+			}
+		}
+		return -1;
+	}
+	
+	public static Set<Client> getRoomUsers(long roomId) {
+		return ROOMS.containsKey(roomId) ? ROOMS.get(roomId) : new HashSet<Client>();
 	}
 	
 	public static boolean isUserOnline(long userId) {
