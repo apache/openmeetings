@@ -130,17 +130,17 @@
 			<id>Red5</id>
 			<url>http://red5.googlecode.com/svn/repository</url>
 		</repository>
-		<repository>
+		<!--repository>
 			<id>flex-mojos-repository</id>
 			<url>http://repository.sonatype.org/content/groups/flexgroup</url>
-		</repository>
+		</repository-->
 	</repositories>
-	<pluginRepositories>
+	<!--pluginRepositories>
 		<pluginRepository>
 			<id>flex-mojos-plugin-repository</id>
 			<url>http://repository.sonatype.org/content/groups/flexgroup</url>
 		</pluginRepository>
-	</pluginRepositories>
+	</pluginRepositories-->
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
