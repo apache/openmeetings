@@ -130,17 +130,17 @@
 			<id>Red5</id>
 			<url>http://red5.googlecode.com/svn/repository</url>
 		</repository>
-        <repository>
-            <id>flex-mojos-repository</id>
-            <url>http://repository.sonatype.org/content/groups/flexgroup</url>
-        </repository>
+		<repository>
+			<id>flex-mojos-repository</id>
+			<url>http://repository.sonatype.org/content/groups/flexgroup</url>
+		</repository>
 	</repositories>
-    <pluginRepositories>
-        <pluginRepository>
-            <id>flex-mojos-plugin-repository</id>
-            <url>http://repository.sonatype.org/content/groups/flexgroup</url>
-        </pluginRepository>
-    </pluginRepositories>
+	<pluginRepositories>
+		<pluginRepository>
+			<id>flex-mojos-plugin-repository</id>
+			<url>http://repository.sonatype.org/content/groups/flexgroup</url>
+		</pluginRepository>
+	</pluginRepositories>
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
@@ -455,13 +455,6 @@
 							</manifestEntries>
 						</archive>
 					</configuration>
-					<executions>
-						<execution>
-							<goals>
-								<goal>test-jar</goal>
-							</goals>
-						</execution>
-					</executions>
 				</plugin>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>

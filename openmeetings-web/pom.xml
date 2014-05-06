@@ -168,83 +168,6 @@
 							<goal>run</goal>
 						</goals>
 					</execution>
-				</executions>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-surefire-plugin</artifactId><!-- maybe integration tests should be used -->
-				<inherited>true</inherited>
-				<configuration>
-					<workingDirectory>${project.build.directory}</workingDirectory>
-					<excludedGroups>org.apache.openmeetings.test.selenium.SeleniumTests</excludedGroups>
-					<systemPropertyVariables>
-						<om.home>${project.build.directory}/test-root</om.home>
-						<languages.home>${project.basedir}/src/main/webapp/languages</languages.home>
-						<red5.root>red5.root</red5.root>
-						<backups.dir>${project.build.directory}/old-backups</backups.dir>
-					</systemPropertyVariables>
-					<additionalClasspathElements>
-						<additionalClasspathElement>${project.build.directory}/${project.build.finalName}/WEB-INF/classes</additionalClasspathElement>
-					</additionalClasspathElements>
-					<skip>${om.quick.build}</skip>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>wagon-maven-plugin</artifactId>
-				<executions>
-					<execution>
-						<id>download-test-data</id>
-						<phase>process-test-resources</phase>
-						<goals>
-							<goal>download</goal>
-						</goals>
-						<configuration>
-							<url>https://openmeetings.googlecode.com/svn/repository</url>
-							<includes>backup_*.zip</includes>
-							<toDir>${project.build.directory}/old-backups</toDir>
-							<skip>${maven.test.skip}</skip>
-						</configuration>
-					</execution>
-					<execution>
-						<id>download-red5-server</id>
-						<phase>prepare-package</phase>
-						<goals>
-							<goal>download-single</goal>
-						</goals>
-						<configuration>
-							<url>https://github.com/Red5/red5-server/releases/download</url>
-							<fromFile>v${red5-server.version}/red5-server-${red5-server.version}-server.tar.gz</fromFile>
-							<toDir>${project.build.directory}</toDir>
-							<skip>${om.quick.build}</skip>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>truezip-maven-plugin</artifactId>
-				<executions>
-					<execution>
-						<id>unpack-red5-server</id>
-						<goals>
-							<goal>copy</goal>
-						</goals>
-						<phase>prepare-package</phase>
-						<configuration>
-							<fileset>
-								<directory>${project.build.directory}/red5-server-${red5-server.version}-server.tar.gz/red5-server-${red5-server.version}</directory>
-								<outputDirectory>${project.build.directory}/server</outputDirectory>
-							</fileset>
-							<skip>${om.quick.build}</skip>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-antrun-plugin</artifactId>
-				<executions>
 					<execution>
 						<id>basic-move-server-resources</id><!-- All this should be removed and implemented somehow differently -->
 						<phase>verify</phase>
@@ -346,6 +269,77 @@
 						<goals>
 							<goal>run</goal>
 						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId><!-- maybe integration tests should be used -->
+				<inherited>true</inherited>
+				<configuration>
+					<workingDirectory>${project.build.directory}</workingDirectory>
+					<excludedGroups>org.apache.openmeetings.test.selenium.SeleniumTests</excludedGroups>
+					<systemPropertyVariables>
+						<om.home>${project.build.directory}/test-root</om.home>
+						<languages.home>${project.basedir}/src/main/webapp/languages</languages.home>
+						<red5.root>red5.root</red5.root>
+						<backups.dir>${project.build.directory}/old-backups</backups.dir>
+					</systemPropertyVariables>
+					<additionalClasspathElements>
+						<additionalClasspathElement>${project.build.directory}/${project.build.finalName}/WEB-INF/classes</additionalClasspathElement>
+					</additionalClasspathElements>
+					<skip>${om.quick.build}</skip>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>wagon-maven-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>download-test-data</id>
+						<phase>process-test-resources</phase>
+						<goals>
+							<goal>download</goal>
+						</goals>
+						<configuration>
+							<url>https://openmeetings.googlecode.com/svn/repository</url>
+							<includes>backup_*.zip</includes>
+							<toDir>${project.build.directory}/old-backups</toDir>
+							<skip>${maven.test.skip}</skip>
+						</configuration>
+					</execution>
+					<execution>
+						<id>download-red5-server</id>
+						<phase>prepare-package</phase>
+						<goals>
+							<goal>download-single</goal>
+						</goals>
+						<configuration>
+							<url>https://github.com/Red5/red5-server/releases/download</url>
+							<fromFile>v${red5-server.version}/red5-server-${red5-server.version}-server.tar.gz</fromFile>
+							<toDir>${project.build.directory}</toDir>
+							<skip>${om.quick.build}</skip>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>truezip-maven-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>unpack-red5-server</id>
+						<goals>
+							<goal>copy</goal>
+						</goals>
+						<phase>prepare-package</phase>
+						<configuration>
+							<fileset>
+								<directory>${project.build.directory}/red5-server-${red5-server.version}-server.tar.gz/red5-server-${red5-server.version}</directory>
+								<outputDirectory>${project.build.directory}/server</outputDirectory>
+							</fileset>
+							<skip>${om.quick.build}</skip>
+						</configuration>
 					</execution>
 				</executions>
 			</plugin>
