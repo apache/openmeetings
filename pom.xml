@@ -471,7 +471,9 @@
 					<artifactId>maven-surefire-plugin</artifactId>
 					<version>${maven.surefire.version}</version>
 					<configuration>
-						<forkMode>never</forkMode>
+						<forkCount>0</forkCount>
+						<reuseForks>false</reuseForks>
+						<argLine>-Xmx1024m -XX:MaxPermSize=256m</argLine>
 						<includes>
 							<include>**/Test*.java</include>
 						</includes>
