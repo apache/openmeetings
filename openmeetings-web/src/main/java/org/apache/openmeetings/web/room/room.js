@@ -21,18 +21,17 @@ function getUserId(uid) { return 'user' + uid; }
 
 function addUser(u, uld) {
 	var s = u.firstname + ' ' + u.lastname;
-	var d = $('<div class="user ui-corner-all ui-widget-content"></div>').attr('id', getUserId(u.uid)).attr('data-id', u.id);
+	var d = $('<div class="user ui-corner-all ui-widget-content"></div>').attr('id', getUserId(u.uid))
+		.attr('data-id', u.id).text(s);
 	if (u.current) {
-		d.append($('<b></b>').text(s));
-	} else {
-		d.text(s);
+		d.addClass('current');
 	}
 	uld.append(d);
 	//TODO add activity
 }
 
 function removeUser(id) {
-	$('#' + id).remove();
+	$('#' + id).remove();//TODO replace with 'ends-with-id'
 	//TODO add activity
 }
 
@@ -74,3 +73,16 @@ function roomMessage(m) {
 		}
 	}
 }
+
+function setHeight() {
+	var h = $(document).height() - $('#roomMenu').height();
+	$(".room.sidebar.left").height(h);
+	$(".room.wb.area").height(h);
+}
+
+$(document).ready(function() {
+	setHeight();
+	$(window).on('resize.openmeetings', function() {
+		setHeight();
+	});
+});

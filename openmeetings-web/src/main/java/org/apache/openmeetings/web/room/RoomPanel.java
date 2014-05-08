@@ -189,6 +189,7 @@ public class RoomPanel extends BasePanel {
 	public void cleanup(AjaxRequestTarget target) {
 		target.add(getMainPage().getHeader().setVisible(true), getMainPage().getMenu().setVisible(true)
 				, getMainPage().getTopLinks().setVisible(true));
+		target.appendJavaScript("$(window).off('resize.openmeetings');");
 		sendRoom(roomId, removeUser(c));
 	}
 
