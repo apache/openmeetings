@@ -361,16 +361,6 @@ public class RoomManager implements IRoomManager {
 		return null;
 	}
 
-	public List<Room> getBackupRooms() {
-		try {
-			return em.createNamedQuery("getBackupRooms", Room.class)
-					.getResultList();
-		} catch (Exception e) {
-			log.error("[getBackupRooms]", e);
-		}
-		return null;
-	}
-
 	public List<Room> getRoomsInternatlbyType(int start, int max,
 			String orderby, boolean asc, String externalRoomType) {
 		try {
