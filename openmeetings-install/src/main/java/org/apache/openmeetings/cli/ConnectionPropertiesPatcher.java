@@ -49,6 +49,9 @@ public abstract class ConnectionPropertiesPatcher {
 			case db2:
 				patcher = new Db2Patcher();
 				break;
+			case mssql:
+				patcher = new MssqlPatcher();
+				break;
 			case mysql:
 				patcher = new MysqlPatcher();
 				break;

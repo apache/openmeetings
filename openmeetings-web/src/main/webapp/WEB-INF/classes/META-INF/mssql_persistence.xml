@@ -77,7 +77,10 @@
 			<property name="openjpa.RuntimeUnenhancedClasses" value="unsupported" />
 			<property name="openjpa.ConnectionDriverName" value="org.apache.commons.dbcp.BasicDataSource" />
 			<property name="openjpa.ConnectionProperties"
-				value="DriverClassName=com.microsoft.sqlserver.jdbc.SQLServerDriver,Url=jdbc:sqlserver://localhost:1433;databaseName=openmeetings;user=Username;password=Password;" />
+				value="DriverClassName=com.microsoft.sqlserver.jdbc.SQLServerDriver
+					, Url=jdbc:sqlserver://localhost:1433;databaseName=openmeetings
+					, Username=Username
+					, Password=Password" />
 			<property name="openjpa.jdbc.SynchronizeMappings" value="buildSchema" />
 			<property name="openjpa.Log" value="DefaultLevel=WARN, Runtime=INFO" />
 			<property name="openjpa.DataCache" value="true" />
