@@ -22,6 +22,7 @@ public class ConnectionProperties {
 	public enum DbType {
 		db2
 		, derby
+		, mssql
 		, mysql
 		, oracle
 		, postgresql
