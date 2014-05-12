@@ -202,7 +202,6 @@
 			<netparam name="SID"><method name="getValue">return canvas.sessionId;</method></netparam>
 			<netparam name="invitationHash"><method name="getValue">return this.parent.parent.currentHash;</method></netparam>
 			<netparam name="message"><method name="getValue">return this.parent.parent._message.getText();</method></netparam>
-			<netparam name="baseurl"><method name="getValue">return parent.parent.baseUrl;</method></netparam>
 			<netparam name="subject"><method name="getValue">return this.parent.parent._subject.getText();</method></netparam>
 			<netparam name="language_id"><method name="getValue">return parent.parent._languages.getValue();</method></netparam>
 			<handler name="ondata" args="value">
