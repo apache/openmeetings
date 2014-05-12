@@ -259,7 +259,7 @@
 		<section name="Setup red5sip transport">
 			<div>
 				Download red5sip from
-				<blockquote>http://red5phone.googlecode.com/svn/branches/red5sip_2.1</blockquote>
+				<blockquote>http://red5phone.googlecode.com/svn/branches/red5sip_3.0</blockquote>
 			</div>
 			<div>
 				Build with Apache Ant
