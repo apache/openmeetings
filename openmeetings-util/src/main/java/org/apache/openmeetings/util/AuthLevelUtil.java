@@ -21,7 +21,7 @@ package org.apache.openmeetings.util;
 public class AuthLevelUtil {
 	 
 	public static boolean checkUserLevel(Long user_level) {
-		return user_level == 1 || user_level == 2 || user_level == 3;
+		return user_level == 1 || user_level == 2 || user_level == 3 || user_level == 4;
 	}
 	
 	public static boolean checkModLevel(Long user_level) {
