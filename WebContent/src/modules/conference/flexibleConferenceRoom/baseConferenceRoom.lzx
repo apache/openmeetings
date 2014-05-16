@@ -75,12 +75,7 @@
             }
             
             if (this.roomobj.waitForRecording) {
-                
-                new lz.errorDialog(canvas,{
-                           labelid:1316,
-                           errortext:canvas.getLabelName(1315)
-                        });
-                
+                new lz.labelerrorPopup(canvas, {labelid: 1316, errorlabelid: 1315});
             }
             
             canvas.currentRoomObject = this.roomobj;
