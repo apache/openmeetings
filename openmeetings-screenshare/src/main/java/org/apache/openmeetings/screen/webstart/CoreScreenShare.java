@@ -251,7 +251,8 @@ public class CoreScreenShare implements IPendingServiceCallback, INetStreamEvent
 			
 			if (!isConnected) {
 				instance.connect(host, port, app, this);
-			} else {
+			} 
+			if (isConnected) {
 				setConnectionAsSharingClient();
 			}
 		} catch (Exception err) {
@@ -290,18 +291,18 @@ public class CoreScreenShare implements IPendingServiceCallback, INetStreamEvent
 	}
 
 	public void stopStreaming() {
-		startStreaming = false;
 		frame.setSharingStatus(false, !startPublishing && !startRecording && !startStreaming);
+		startStreaming = false;
 	}
 	
 	public void stopRecording() {
-		startRecording = false;
 		frame.setRecordingStatus(false, !startPublishing && !startRecording && !startStreaming);
+		startRecording = false;
 	}
 	
 	public void stopPublishing() {
-		startPublishing = false;
 		frame.setPublishingStatus(false, !startPublishing && !startRecording && !startStreaming);
+		startPublishing = false;
 		if (publishClient != null) {
 			publishClient.disconnect();
 			publishClient = null;
@@ -660,7 +661,7 @@ public class CoreScreenShare implements IPendingServiceCallback, INetStreamEvent
 					log.debug("createPublishStream result stream id: {}; name: {}", getCapture().getStreamId(), publishName);
 					instance.publish(getCapture().getStreamId(), publishName, "live", this);
 	
-					log.debug("setup capture thread spinnerWidth = {}; spinnerHeight = {];", spinnerWidth, spinnerHeight);
+					log.debug("setup capture thread spinnerWidth = {}; spinnerHeight = {};", spinnerWidth, spinnerHeight);
 	
 					getCapture().setSendCursor(true);
 					getCapture().start();

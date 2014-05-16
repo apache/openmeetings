@@ -269,7 +269,7 @@ public class ScreenSharerFrame extends JFrame {
 				if (sharingStarted) {
 					if (!sharingActionRequested) {
 						sharingActionRequested = true;
-						core.streamingStop();;
+						core.streamingStop();
 					} else {
 						logger.warn("Sharing action is already requested");
 					}
@@ -598,6 +598,7 @@ public class ScreenSharerFrame extends JFrame {
 		if (status != sharingStarted) {
 			sharingActionRequested = false;
 		}
+		logger.debug("sharingActionRequested=" + sharingActionRequested);
 		sharingStarted = status;
 		btnStartStopSharing.setIcon(status ? stopIcon : startIcon);
 		btnStartStopSharing.setText(status ? stopSharingLabel : startSharingLabel);
