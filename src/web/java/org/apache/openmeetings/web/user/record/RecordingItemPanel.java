@@ -24,6 +24,7 @@ import static org.apache.openmeetings.web.app.Application.getBean;
 
 import org.apache.openmeetings.db.dao.record.FlvRecordingLogDao;
 import org.apache.openmeetings.db.entity.record.FlvRecording;
+import org.apache.openmeetings.db.entity.record.FlvRecording.Status;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -34,8 +35,9 @@ public class RecordingItemPanel extends RecordingPanel {
 
 	public RecordingItemPanel(String id, final IModel<FlvRecording> model, final RecordingErrorsDialog errorsDialog) {
 		super(id, model);
-		long errorCount = getBean(FlvRecordingLogDao.class).countErrors(model.getObject().getFlvRecordingId());
-		boolean visible = errorCount != 0 || !isRecordingExists(model.getObject().getFileHash() + MP4_EXTENSION);
+		FlvRecording r = model.getObject();
+		long errorCount = getBean(FlvRecordingLogDao.class).countErrors(r.getFlvRecordingId());
+		boolean visible = errorCount != 0 || (Status.PROCESSING != r.getStatus() && !isRecordingExists(r.getFileHash() + MP4_EXTENSION));
 		item.add(new WebMarkupContainer("errors").add(new AjaxEventBehavior("click") {
 			private static final long serialVersionUID = 1L;
 
