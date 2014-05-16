@@ -43,6 +43,9 @@
 	<logger name="org.apache.openmeetings">
 		<level value="DEBUG" />
 	</logger>
+	<logger name="org.red5.server.net.rtmp.codec.RTMPProtocolDecoder">
+		<level value="OFF" />
+	</logger>
 	<root>
 		<level value="INFO" />
 		<appender-ref ref="FLOG2" />
