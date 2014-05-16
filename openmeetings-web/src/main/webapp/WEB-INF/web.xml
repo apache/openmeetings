@@ -103,11 +103,11 @@
     </servlet>
     <servlet>
         <servlet-name>DownloadHandler</servlet-name>
-        <servlet-class>org.apache.openmeetings.servlet.outputhandler.DownloadHandler</servlet-class>
+        <servlet-class>org.apache.openmeetings.core.servlet.outputhandler.DownloadHandler</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>ExportToImage</servlet-name>
-        <servlet-class>org.apache.openmeetings.servlet.outputhandler.ExportToImage</servlet-class>
+        <servlet-class>org.apache.openmeetings.core.servlet.outputhandler.ExportToImage</servlet-class>
     </servlet>
 	
 	<servlet-mapping>
