@@ -37,9 +37,6 @@
 		<commons-io.version>2.4</commons-io.version>
 		<commons-fileupload.version>1.3</commons-fileupload.version>
 		<mysql.version>5.1.30</mysql.version>
-		<server.webapps>${project.build.directory}/server/webapps</server.webapps>
-		<server.lib>${project.build.directory}/server/lib</server.lib>
-		<server.webapps.om>${server.webapps}/openmeetings</server.webapps.om>
 	</properties>
 	<profiles>
 		<profile>
@@ -117,7 +114,6 @@
 						</goals>
 						<configuration>
 							<overwrite>true</overwrite>
-							<!-- outputDirectory>${project.build.directory}/${project.build.finalName}/WEB-INF/classes</outputDirectory-->
 							<outputDirectory>${project.build.directory}/test-classes</outputDirectory>
 							<resources>
 								<resource>
@@ -129,8 +125,6 @@
 										<include>**/*.xml</include>
 									</includes>
 								</resource>
-							</resources>
-							<resources>
 								<resource>
 									<directory>${project.parent.basedir}/openmeetings-service/src/main/java</directory>
 									<includes>
@@ -165,109 +159,6 @@
 									tofile="${project.build.directory}/test-classes/META-INF/persistence.xml" 
 									overwrite="true"/>
 							</target>
-							<skip>${om.quick.build}</skip>
-						</configuration>
-						<goals>
-							<goal>run</goal>
-						</goals>
-					</execution>
-					<execution>
-						<id>basic-move-server-resources</id><!-- All this should be removed and implemented somehow differently -->
-						<phase>verify</phase>
-						<configuration>
-							<target>
-								<delete dir="${server.webapps}/installer"/> <!-- maven-clean-plugin OR truezip::delete OR assembly::exclude-->
-								<delete dir="${server.webapps}/live"/>
-								<delete dir="${server.webapps}/vod"/>
-								<mkdir dir="${server.webapps.om}"/>
-								<unzip src="${project.build.directory}/${project.build.finalName}.war" dest="${server.webapps.om}"/>
-								<delete dir="${server.webapps.om}/META-INF"/>
-								<copy todir="${project.build.directory}/server" overwrite="true">
-									<fileset dir="${project.basedir}/../WebContent/red5">
-										<include name="*.sh"/>
-										<include name="*.bat"/>
-									</fileset>
-								</copy>
-								<copy file="${project.basedir}/../WebContent/red5/index.html" todir="${project.build.directory}/server/webapps/root" overwrite="true"/>
-								<chmod dir="${project.build.directory}/server" perm="ugo+rx" includes="**/*.sh"/>
-								<move todir="${server.lib}">
-									<fileset dir="${server.webapps.om}/WEB-INF/lib">
-										<include name="spring-*"/>
-										<include name="geronimo-jpa*"/>
-										<include name="commons-fileupload*"/>
-									</fileset>
-								</move>
-								<delete>
-									<fileset dir="${server.webapps.om}/WEB-INF/lib">
-										<include name="aopalliance*"/>
-										<include name="slf4j-*"/>
-									</fileset>
-								</delete>
-							</target>
-							<skip>${om.quick.build}</skip>
-						</configuration>
-						<goals>
-							<goal>run</goal>
-						</goals>
-					</execution>
-					<execution>
-						<id>move-server-resources</id><!-- All this should be removed and implemented somehow differently -->
-						<phase>verify</phase>
-						<configuration>
-							<target>
-								<mkdir dir="${server.webapps.om}/screenshare"/>
-								<copy todir="${server.webapps.om}/WEB-INF/lib" overwrite="true">
-									<fileset dir="${project.basedir}/../openmeetings-core/target">
-										<include name="openmeetings*.jar"/>
-									</fileset>
-									<fileset dir="${project.basedir}/../openmeetings-db/target">
-										<include name="openmeetings*.jar"/>
-									</fileset>
-									<fileset dir="${project.basedir}/../openmeetings-install/target">
-										<include name="openmeetings*.jar"/>
-									</fileset>
-									<fileset dir="${project.basedir}/../openmeetings-service/target">
-										<include name="openmeetings*.jar"/>
-									</fileset>
-									<fileset dir="${project.basedir}/../openmeetings-util/target">
-										<include name="openmeetings*.jar"/>
-									</fileset>
-									<fileset dir="${project.basedir}/../openmeetings-webservice/target">
-										<include name="openmeetings*.jar"/>
-									</fileset>
-									<fileset dir="${project.build.directory}/${project.build.finalName}/WEB-INF/lib">
-										<include name="openmeetings*.jar"/>
-									</fileset>
-								</copy>
-								<copy todir="${server.webapps.om}/screenshare" overwrite="true">
-									<fileset dir="${project.basedir}/../openmeetings-screenshare/target/jnlp"/>
-								</copy>
-								<copy todir="${server.webapps.om}/public" overwrite="true">
-									<fileset dir="${project.basedir}/../openmeetings-flash/target">
-										<include name="*.swf"/>
-									</fileset>
-								</copy>
-								<copy todir="${server.webapps.om}/WEB-INF" overwrite="true">
-									<fileset dir="${project.build.directory}/${project.build.finalName}/WEB-INF">
-										<include name="**/*.xml"/>
-									</fileset>
-								</copy>
-								<copy todir="${server.webapps.om}/css" overwrite="true">
-									<fileset dir="${project.basedir}/src/main/webapp/css">
-										<include name="**/*.css"/>
-										<include name="**/*.png"/>
-										<include name="**/*.gif"/>
-									</fileset>
-								</copy>
-								<copy todir="${server.webapps.om}/WEB-INF/classes" overwrite="true">
-									<fileset dir="${project.basedir}/src/main/java">
-										<include name="**/*.html"/>
-										<include name="**/*.js"/>
-										<include name="**/*.css"/>
-										<include name="**/*.xml"/>
-									</fileset>
-								</copy>
-							</target>
 						</configuration>
 						<goals>
 							<goal>run</goal>
@@ -294,70 +185,6 @@
 					<skip>${om.quick.build}</skip>
 				</configuration>
 			</plugin>
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>wagon-maven-plugin</artifactId>
-				<executions>
-					<execution>
-						<id>download-test-data</id>
-						<phase>process-test-resources</phase>
-						<goals>
-							<goal>download</goal>
-						</goals>
-						<configuration>
-							<url>https://openmeetings.googlecode.com/svn/repository</url>
-							<includes>backup_*.zip</includes>
-							<toDir>${project.build.directory}/old-backups</toDir>
-							<skip>${maven.test.skip}</skip>
-						</configuration>
-					</execution>
-					<execution>
-						<id>download-red5-server</id>
-						<phase>prepare-package</phase>
-						<goals>
-							<goal>download-single</goal>
-						</goals>
-						<configuration>
-							<url>https://github.com/Red5/red5-server/releases/download</url>
-							<fromFile>v${red5-server.version}/red5-server-${red5-server.version}-server.tar.gz</fromFile>
-							<toDir>${project.build.directory}</toDir>
-							<skip>${om.quick.build}</skip>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>truezip-maven-plugin</artifactId>
-				<executions>
-					<execution>
-						<id>unpack-red5-server</id>
-						<goals>
-							<goal>copy</goal>
-						</goals>
-						<phase>prepare-package</phase>
-						<configuration>
-							<fileset>
-								<directory>${project.build.directory}/red5-server-${red5-server.version}-server.tar.gz/red5-server-${red5-server.version}</directory>
-								<outputDirectory>${project.build.directory}/server</outputDirectory>
-							</fileset>
-							<skip>${om.quick.build}</skip>
-						</configuration>
-					</execution>
-					<execution><!-- FIXME should be refactored -->
-						<id>create-tgz-distribution</id>
-						<goals>
-							<goal>cp</goal>
-						</goals>
-						<phase>verify</phase>
-						<configuration>
-							<from>${project.build.directory}/server</from>
-							<to>${project.build.directory}/openmeetings-${project.version}.tgz</to>
-							<skip>${om.quick.build}</skip>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
 		</plugins>
 		<testResources>
 			<testResource>
@@ -381,32 +208,6 @@
 										<versionRange>[1.7,)</versionRange>
 										<goals>
 											<goal>run</goal>
-										</goals>
-									</pluginExecutionFilter>
-									<action>
-										<ignore></ignore>
-									</action>
-								</pluginExecution>
-								<pluginExecution>
-									<pluginExecutionFilter>
-										<groupId>org.codehaus.mojo</groupId>
-										<artifactId>wagon-maven-plugin</artifactId>
-										<versionRange>[1.0-beta-5,)</versionRange>
-										<goals>
-											<goal>download</goal>
-										</goals>
-									</pluginExecutionFilter>
-									<action>
-										<ignore></ignore>
-									</action>
-								</pluginExecution>
-								<pluginExecution>
-									<pluginExecutionFilter>
-										<groupId>org.apache.maven.plugins</groupId>
-										<artifactId>maven-remote-resources-plugin</artifactId>
-										<versionRange>[1.2.1,)</versionRange>
-										<goals>
-											<goal>process</goal>
 										</goals>
 									</pluginExecutionFilter>
 									<action>
@@ -458,16 +259,6 @@
 			<groupId>org.apache.openmeetings</groupId>
 			<artifactId>openmeetings-webservice</artifactId>
 		</dependency>
-		<!--dependency>
-			<groupId>org.apache.openmeetings</groupId>
-			<artifactId>openmeetings-flash</artifactId>
-			<optional>true</optional>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.openmeetings</groupId>
-			<artifactId>openmeetings-screenshare</artifactId>
-			<scope>provided</scope>
-		</dependency-->
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-core</artifactId>

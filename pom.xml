@@ -53,6 +53,7 @@
 		<module>openmeetings-flash</module>
 		<module>openmeetings-install</module>
 		<module>openmeetings-screenshare</module>
+		<module>openmeetings-server</module>
 		<module>openmeetings-service</module>
 		<module>openmeetings-util</module>
 		<module>openmeetings-web</module>
@@ -171,6 +172,11 @@
 			<dependency>
 				<groupId>org.apache.openmeetings</groupId>
 				<artifactId>openmeetings-screenshare</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.openmeetings</groupId>
+				<artifactId>openmeetings-web</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
@@ -455,6 +461,11 @@
 							</manifestEntries>
 						</archive>
 					</configuration>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-assembly-plugin</artifactId>
+					<version>2.4</version>
 				</plugin>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>

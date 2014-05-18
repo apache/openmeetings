@@ -50,6 +50,7 @@ import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.util.TimezoneUtil;
 import org.apache.openmeetings.util.CalendarPatterns;
+import org.apache.openmeetings.util.InitializationContainer;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -183,6 +184,9 @@ public class AppointmentLogic {
 	// ----------------------------------------------------------------------------------------------
 	public void doScheduledMeetingReminder() throws Exception {
 		// log.debug("doScheduledMeetingReminder");
+		if (!InitializationContainer.initComplete) {
+			return;
+		}
 
 		String baseUrl = configurationDao.getConfValue(CONFIG_APPLICATION_BASE_URL, String.class, DEFAULT_BASE_URL);
 		if (baseUrl == null || baseUrl.length() < 1) {
