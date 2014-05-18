@@ -1,0 +1,365 @@
+<?xml version="1.0"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+
+-->
+<s:Application xmlns:fx="http://ns.adobe.com/mxml/2009"
+			   xmlns:s="library://ns.adobe.com/flex/spark"
+			   xmlns:mx="library://ns.adobe.com/flex/mx" width="570" height="900" pageTitle="Openmeetings"
+			   preinitialize="init()" fontSize="12" applicationComplete="appInit()">
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+		<mx:TraceTarget/>
+	</fx:Declarations>
+	<fx:Script><![CDATA[
+		import mx.collections.ArrayCollection;
+		import mx.core.FlexGlobals;
+
+		private static const APP_WIDTH:int = 540;
+		private static const LEFT_WIDTH:int = 280;
+		private static const RIGHT_WIDTH:int = 240;
+		private var debugEnabled:Boolean = true;
+		private var sid:String;
+		private var roomid:int;
+		private var audioOnly:Boolean = false;
+		private var labels:Object = new Object();
+		private var cam:Camera = null;
+		private var mic:Microphone = null;
+		private var FPS:int = 30;
+		[Bindable]
+		private var interview:Boolean = false;
+		[Bindable]
+		private var debugStr:String = "";
+
+		private function setDimensions(width:int, height:int):void {
+			mainSetupGroup.width = width;
+			//mainSetupGroup.height = height;
+		}
+
+		public function debug(str:String):void {
+			if (debugEnabled) {
+				debugStr += str + "\n";
+				trace(str + "\n");
+			}
+		}
+
+		private function store():void {
+			var t:SharedObject = SharedObject.getLocal('userdata');
+			var g:Object = t.data ? t.data : new Object();
+			g["cam"] = cams.selectedItem.data;
+			g["mic"] = mics.selectedItem.data;
+			g["avstored"] = modes.selectedItem.data;
+			g["savecamdata"] = remember.selected;
+			g["width"] = ress.selectedItem.width;
+			g["height"] = ress.selectedItem.height;
+			t.flush();
+		}
+
+		private function getStoredProp(prop:String):String {
+			//Initialize and get eventually stored property
+			var t:SharedObject = SharedObject.getLocal('userdata');
+			var g:Object = t.data;
+			return g != null ? "" + g[prop] : null;
+		}
+
+		private function init():void {
+			debug("init()");
+			var tla:Object = FlexGlobals.topLevelApplication;
+			sid = tla.parameters['sid'];
+			roomid = tla.parameters['roomid'];
+			audioOnly = 'true' == tla.parameters['audioOnly'];
+			interview = 'true' == tla.parameters['interview'];
+			var _fps:int = parseInt(tla.parameters['fps']);
+			FPS = interview ? 24 : (isNaN(_fps) ? 30 : _fps);
+		}
+
+		private function selectListItem(combo:ComboBox, selected:int):void {
+			combo.callLater(function ():void {
+				if (combo.dataProvider && combo.dataProvider.length > 0) {
+					combo.selectedItem = combo.dataProvider.getItemAt(selected > -1 ? selected : 0);
+				}
+			});
+		}
+
+		private function getItemIdx(combo:ComboBox, data:String):int {
+			var idx:int = -1;
+			for (var i:int = 0; i < combo.dataProvider.length; ++i) {
+				if (combo.dataProvider[i].data == data) {
+					idx = i;
+					break;
+				}
+			}
+			return idx;
+		}
+
+		private function fillDeviceList(list:Array, combo:ComboBox, prop:String):int {
+			//Initialize and get eventually stored property
+			var dev:int = parseInt(getStoredProp(prop));
+
+			var items:ArrayCollection = new ArrayCollection();
+			//Get all available devices
+			var foundStoredDev:int = -1;
+			for (var i:int = 0; i < list.length; ++i) {
+				items.addItem({label: list[i], data: i});
+				if (i == dev) {
+					foundStoredDev = i;
+				}
+			}
+			combo.dataProvider = items;
+			return foundStoredDev;
+		}
+
+		private function appInit():void {
+			var cameras:Array = Camera.names;
+			var foundedCam:int = fillDeviceList(cameras, cams, "cam");
+			selectListItem(cams, foundedCam);
+
+			var micros:Array = Microphone.names;
+			var foundedMic:int = fillDeviceList(micros, mics, "mic");
+			selectListItem(mics, foundedMic);
+
+			var addCams:Boolean = !audioOnly && cameras.length > 0;
+			var addMics:Boolean = micros.length > 0;
+			var modItems:ArrayCollection = new ArrayCollection();
+			if (addCams && addMics) {
+				modItems.addItem({label: getLabel(448), data: "av"});
+			}
+			if (addMics) {
+				modItems.addItem({label: getLabel(449), data: "a"});
+			}
+			if (addCams) {
+				modItems.addItem({label: getLabel(450), data: "v"});
+			}
+			modItems.addItem({label: getLabel(451), data: "n"});
+			modes.dataProvider = modItems;
+
+			var idx:int = getItemIdx(modes, getStoredProp("avstored"));
+			debug("selected idx::" + idx);
+			selectListItem(modes, idx);
+			setMode(modes.dataProvider.getItemAt(idx > -1 ? idx : 0).data);
+
+			var tla:Object = FlexGlobals.topLevelApplication;
+			var resolutions:Array = JSON.parse(tla.parameters['resolutions']) as Array;
+			var resItems:ArrayCollection = new ArrayCollection();
+			idx = -1;
+			var storedWidth:int = parseInt(getStoredProp("width"));
+			var storedHeight:int = parseInt(getStoredProp("height"));
+			for (var i:int = 0; i < resolutions.length; ++i) {
+				var r:Object = resolutions[i];
+				resItems.addItem({label: r.width + 'x' + r.height + ' [' + r.label + ']', width: r.width, height: r.height});
+				if (!isNaN(storedWidth) && storedWidth > 0 && !isNaN(storedHeight) && storedHeight > 0) {
+					if (r.width == storedWidth && r.height == storedHeight) {
+						idx = i;
+					}
+				} else if (r.default) {
+					idx = i;
+				}
+			}
+			ress.dataProvider = resItems;
+			selectListItem(ress, idx);
+			var resI:Object = ress.dataProvider.getItemAt(idx > -1 ? idx : 0);
+			setResolution(resI.width, resI.height);
+
+			var lbls:Array = JSON.parse(tla.parameters['labels']) as Array;
+			for (i = 0; i < lbls.length; ++i) {
+				labels[lbls[i].id] = lbls.value;
+			}
+			remember.selected = true == getStoredProp("savecamdata");
+
+		}
+
+		public function getLabel(id:int):String {
+			return labels.hasOwnProperty("" + id) ? labels[id] : (debugEnabled ? "[Missing " + id + "]" : "");
+		}
+
+		private function setMode(mode:String):void {
+			var camVisible:Boolean = true;
+			var micVisible:Boolean = true;
+			var textVisible:Boolean = false;
+			switch (mode) {
+				case "av":
+					break;
+				case "a":
+					camVisible = false;
+					break;
+				case "v":
+					micVisible = false;
+					break;
+				case "n":
+					camVisible = false;
+					micVisible = false;
+					textVisible = true;
+					break;
+				default:
+					debug("no valid device Setup chosen");
+					break;
+			}
+			camGroup.visible = camVisible;
+			micGroup.visible = micVisible;
+			noAv.visible = textVisible;
+			startTest.visible = !textVisible;
+			videoGroup.visible = !textVisible;
+			resGroup.visible = interview ? false : camVisible;
+			attachCamera();
+		}
+
+		private function modeChanged(e:Event):void {
+			setMode(e.target.selectedItem.data);
+		}
+
+		private function cameraStatusHandler(event:StatusEvent):void {
+			debug("cameraStatusHandler! " + event);
+			if (cam.muted) {
+				debug("Unable to connect to active camera.");
+			} else {
+				_attachCamera();
+			}
+			cam.removeEventListener(StatusEvent.STATUS, cameraStatusHandler);
+		}
+
+		private function attachCamera():void {
+			if (!videoDisplay.visible) {
+				return;
+			}
+			debug("Camera selected:: " + cams.selectedItem.data);
+			cam = Camera.getCamera(cams.selectedItem.data);
+			debug("Camera selected:: " + cam);
+			mic = Microphone.getMicrophone(mics.selectedItem.data);
+			if (cam.muted) {
+				debug("Camera Muted");
+				videoDisplay.attachCamera(cam);
+				cam.addEventListener(StatusEvent.STATUS, cameraStatusHandler);
+			} else {
+				_attachCamera();
+			}
+		}
+
+		private function _attachCamera():void {
+			cam = Camera.getCamera(cams.selectedItem.data);
+			debug("_attachCamera():: muted ? " + cam.muted);
+			if (cam.muted) {
+				debug("Unable to connect to active camera.");
+			} else {
+				try {
+					//videoDisplay.stop();
+					//videoDisplay.attachCamera(null);
+					cam.setMode(videoDisplay.width, videoDisplay.height, FPS);
+					videoDisplay.attachCamera(cam);
+					debug("_attachCamera()::done");
+				} catch (error:Error) {
+					debug("_attach:: " + error.message + "\n" + error.getStackTrace());
+				}
+			}
+		}
+
+		private function setResolution(width:int, height:int):void {
+			if (!interview) {
+				debug("onselect WxH :: " + width + "x" + height);
+
+				videoScroller.width = Math.min(width, RIGHT_WIDTH);
+				videoScroller.height = Math.min(height, 200);
+				var newWidth:int = Math.max(APP_WIDTH, APP_WIDTH + videoScroller.width - RIGHT_WIDTH);
+				var newHeight:int = Math.max(500, 500 + videoScroller.height - 180);
+
+				var yPos:int = (startTest as DisplayObject).localToGlobal(new Point()).y;
+				debug("GLOBAL Y:: " + yPos);
+				playGroup.y = Math.max(yPos, videoScroller.height);
+				setDimensions(newWidth, newHeight);
+				videoDisplay.width = width;
+				videoDisplay.height = height;
+
+				attachCamera();
+			}
+		}
+
+		private function resChanged(e:Event):void {
+			setResolution(e.target.selectedItem.width, e.target.selectedItem.height);
+		}
+
+		private function camChanged(e:Event):void {
+			attachCamera();
+		}
+
+		private function startConf(e:Event):void {
+			store();
+		}
+		]]></fx:Script>
+
+	<s:Group id="mainSetupGroup" width="{APP_WIDTH}">
+		<s:layout>
+			<s:VerticalLayout/>
+		</s:layout>
+		<mx:Text width="100%" fontWeight="bold" text="{getLabel(758)}"/>
+		<s:HGroup>
+			<s:VGroup>
+				<mx:Text text="{getLabel(447)}"/>
+				<mx:ComboBox id="modes" width="{LEFT_WIDTH}" change="modeChanged(event)"/>
+				<s:VGroup id="av">
+					<s:VGroup id="camGroup">
+						<mx:Text text="{getLabel(52)}"/>
+						<mx:ComboBox id="cams" width="{LEFT_WIDTH}" change="camChanged(event)"/>
+					</s:VGroup>
+					<s:VGroup id="micGroup">
+						<mx:Text text="{getLabel(53)}"/>
+						<mx:ComboBox id="mics" width="{LEFT_WIDTH}"/>
+					</s:VGroup>
+					<s:VGroup id="resGroup">
+						<s:Group><mx:Text text="{getLabel(1429)}"/><mx:Image x="260" source="assets/error.png" toolTip="{getLabel(1430)}"/></s:Group>
+						<mx:ComboBox id="ress" width="{LEFT_WIDTH}" change="resChanged(event)"/>
+					</s:VGroup>
+					<s:Group width="100%">
+						<s:layout><s:HorizontalLayout horizontalAlign="right"/></s:layout>
+						<s:Button id="startTest" label="{getLabel(775)}"/>
+					</s:Group>
+				</s:VGroup>
+				<mx:Text text="{getLabel(452)}" id="noAv" visible="false"/>
+			</s:VGroup>
+			<s:Group id="videoGroup">
+				<s:Scroller id="videoScroller">
+					<s:Group id="videoScrollGroup">
+						<mx:VideoDisplay id="videoDisplay" width="0" height="0"/>
+					</s:Group>
+				</s:Scroller>
+				<s:VGroup id="playGroup">
+					<s:Group>
+						<s:Graphic x="0" z="1">
+							<s:Rect width="{RIGHT_WIDTH}" height="20">
+								<s:fill><s:SolidColor color="white"/></s:fill>
+								<s:stroke><s:SolidColorStroke color="black" weight="2"/></s:stroke>
+							</s:Rect>
+						</s:Graphic>
+						<mx:Image id="fill" source="assets/level_meter.png" x="2" y="1" z="3" width="0"/>
+						<mx:Text text="{getLabel(767)}" x="0" z="5"/>
+					</s:Group>
+					<s:Group width="100%">
+						<s:layout><s:HorizontalLayout horizontalAlign="right"/></s:layout>
+						<s:Button id="play" label="{getLabel(764)}" enabled="false"/>
+					</s:Group>
+				</s:VGroup>
+			</s:Group>
+		</s:HGroup>
+		<s:HGroup><mx:Image source="assets/info.png"/><mx:Text text="{getLabel(765)}"/></s:HGroup>
+		<s:Group width="100%">
+			<s:layout><s:HorizontalLayout horizontalAlign="right"/></s:layout>
+			<s:Button id="cancel" label="{getLabel(918)}"/>
+			<s:Button id="start" label="{getLabel(interview ? 54 : 761)}" click="startConf(event)"/>
+		</s:Group>
+		<s:CheckBox id="remember" label="{getLabel(762)}" />
+	</s:Group>
+	<s:TextArea id="traceArea" y="450" width="400" height="400" text="{debugStr}"/>
+</s:Application>
