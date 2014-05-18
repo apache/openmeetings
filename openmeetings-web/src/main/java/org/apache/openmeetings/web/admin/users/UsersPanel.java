@@ -54,6 +54,7 @@ public class UsersPanel extends AdminPanel {
 
 	@Override
 	public void onMenuPanelLoad(AjaxRequestTarget target) {
+		super.onMenuPanelLoad(target);
 		target.appendJavaScript("omUserPanelInit();");
 	}
 
@@ -85,8 +86,7 @@ public class UsersPanel extends AdminPanel {
 						target.appendJavaScript("omUserPanelInit();");
 					}
 				});
-				item.add(AttributeModifier.append("class", "clickable "
-						+ (item.getIndex() % 2 == 1 ? "even" : "odd")
+				item.add(AttributeModifier.append("class", "clickable ui-widget-content"
 						+ (u.getUser_id().equals(form.getModelObject().getUser_id()) ? " selected" : "")));
 			}
 		};

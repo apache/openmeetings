@@ -35,9 +35,9 @@
 				<table class="adminListTable">
 					<thead>
 						<tr>
-							<th class="three_column_layout_column1"><span wicket:id="orderById"></span><wicket:ommessage key="188" /></th>
-							<th class="three_column_layout_column2"><span wicket:id="orderByName"></span><wicket:ommessage key="189" /></th>
-							<th class="three_column_layout_column3"><span wicket:id="orderByPublic"></span><wicket:ommessage key="190" /></th>
+							<th class="three_column_layout_column1 ui-widget-header"><span wicket:id="orderById"></span><wicket:ommessage key="188" /></th>
+							<th class="three_column_layout_column2 ui-widget-header"><span wicket:id="orderByName"></span><wicket:ommessage key="189" /></th>
+							<th class="three_column_layout_column3 ui-widget-header"><span wicket:id="orderByPublic"></span><wicket:ommessage key="190" /></th>
 						</tr>	
 					</thead>
 				</table>
@@ -59,8 +59,8 @@
 					<div class="scrollcontent" id="adminForm">
 						
 						<!-- General -->
-						<fieldset>
-							<legend><wicket:ommessage key="187" /></legend>
+						<fieldset class="ui-widget-content">
+							<legend class="ui-widget-header"><wicket:ommessage key="187" /></legend>
 							<div class="formelement">
                                 <label><wicket:ommessage key="193" /></label><input type="text" wicket:id="name" />
 							</div>
@@ -79,8 +79,8 @@
 				        </fieldset>
 				        
 				        <!-- Organisations -->
-						<fieldset>
-							<legend><wicket:ommessage key="191" /></legend>
+						<fieldset class="ui-widget-content">
+							<legend class="ui-widget-header"><wicket:ommessage key="191" /></legend>
 				            <div class="formelement">
                                 <label><wicket:ommessage key="195" /></label><input type="checkbox" class="formcheckbox" wicket:id="ispublic" />
 				            </div>
@@ -94,8 +94,8 @@
 				        </fieldset>
 				        
 				        <!-- Limitations -->
-						<fieldset>
-							<legend><wicket:ommessage key="830" /></legend>
+						<fieldset class="ui-widget-content">
+							<legend class="ui-widget-header"><wicket:ommessage key="830" /></legend>
 				            <div class="formelement">
                                 <label><wicket:ommessage key="636" /></label><input type="checkbox" class="formcheckbox" wicket:id="isDemoRoom" />
 				            </div>
@@ -105,8 +105,8 @@
 						</fieldset>
 						
 						<!-- Rights -->
-						<fieldset>
-							<legend><wicket:ommessage key="881" /></legend>
+						<fieldset class="ui-widget-content">
+							<legend class="ui-widget-header"><wicket:ommessage key="881" /></legend>
 				            <div class="formelement">
                                 <label><wicket:ommessage key="879" /></label><input type="checkbox" class="formcheckbox" wicket:id="allowUserQuestions" />
 				            </div>
@@ -137,8 +137,8 @@
 						</fieldset>
 						
 						<!-- Room Layout options -->
-						<fieldset>
-							<legend><wicket:ommessage key="1443" /></legend>
+						<fieldset class="ui-widget-content">
+							<legend class="ui-widget-header"><wicket:ommessage key="1443" /></legend>
 							<div class="formelement">
                                 <label><wicket:ommessage key="1357" /></label><input type="checkbox" class="formcheckbox" wicket:id="hideTopBar" />
 				            </div>
@@ -178,14 +178,14 @@
 						</fieldset>
 						
 						<!-- Users in this Room -->
-						<fieldset>
-							<legend><wicket:ommessage key="587" /></legend>
+						<fieldset class="ui-widget-content">
+							<legend class="ui-widget-header"><wicket:ommessage key="587" /></legend>
 							<table class="adminListTable">
 								<thead>
 									<tr>
-										<th class="three_column_layout_column1"><wicket:ommessage key="588" /></th>
-										<th class="three_column_layout_column2"><wicket:ommessage key="589" /></th>
-										<th class="three_column_layout_column3"><wicket:ommessage key="590" /></th>
+										<th class="three_column_layout_column1 ui-widget-header"><wicket:ommessage key="588" /></th>
+										<th class="three_column_layout_column2 ui-widget-header"><wicket:ommessage key="589" /></th>
+										<th class="three_column_layout_column3 ui-widget-header"><wicket:ommessage key="590" /></th>
 									</tr>	
 								</thead>
 							</table>
@@ -203,7 +203,7 @@
 						</fieldset>
 						
 						<!-- Default moderators -->
-						<fieldset>
+						<fieldset class="ui-widget-content">
                             <div class="formelement">
 				            	<div class="info-text"><wicket:ommessage key="823" /></div>
                                 <br/>
@@ -216,11 +216,11 @@
 							<table class="adminListTableSmall">
 								<thead>
 									<tr>
-										<th class="three_column_layout_column1"><wicket:ommessage key="817" /></th>
-										<th class="three_column_layout_column2"><wicket:ommessage key="818" /></th>
-										<th class="three_column_layout_column3"><wicket:ommessage key="819" /></th>
-										<th class="three_column_layout_column4"><wicket:ommessage key="820" /></th>
-										<th class="three_column_layout_column5"><wicket:ommessage key="827" /></th>
+										<th class="three_column_layout_column1 ui-widget-header"><wicket:ommessage key="817" /></th>
+										<th class="three_column_layout_column2 ui-widget-header"><wicket:ommessage key="818" /></th>
+										<th class="three_column_layout_column3 ui-widget-header"><wicket:ommessage key="819" /></th>
+										<th class="three_column_layout_column4 ui-widget-header"><wicket:ommessage key="820" /></th>
+										<th class="three_column_layout_column5 ui-widget-header"><wicket:ommessage key="827" /></th>
 									</tr>	
 								</thead>
 							</table>
@@ -239,8 +239,8 @@
 							</div>
 						</fieldset>
 					    <!--SIP Settings -->
-						<fieldset>
-							<legend><wicket:ommessage key="1001" /></legend>
+						<fieldset class="ui-widget-content">
+							<legend class="ui-widget-header"><wicket:ommessage key="1001" /></legend>
 				            <div class="formelement">
 				                <div class="info-text"><wicket:ommessage key="1002" /></div>
                                 <br/>

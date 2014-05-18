@@ -63,8 +63,7 @@ public class OAuthPanel extends AdminPanel {
 						target.appendJavaScript("oauthPanelInit();");
 					}
 				});
-				item.add(AttributeModifier.replace("class", "clickable "
-						+ (item.getIndex() % 2 == 1 ? "even" : "odd")
+				item.add(AttributeModifier.replace("class", "clickable ui-widget-content"
 						+ (server.getId().equals(form.getModelObject().getId()) ? " selected" : "")));
 			}
 			

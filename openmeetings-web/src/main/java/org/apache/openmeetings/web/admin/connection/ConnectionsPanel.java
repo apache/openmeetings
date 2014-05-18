@@ -120,7 +120,7 @@ public class ConnectionsPanel extends AdminPanel {
 						target.add(details.setVisible(true));
 					}
 				});
-				item.add(AttributeModifier.append("class", "clickable " + ((item.getIndex() % 2 == 1) ? "even" : "odd")));
+				item.add(AttributeModifier.append("class", "clickable ui-widget-content"));
 			}
 		};
 		add(container.add(dataView).setOutputMarkupId(true), details.setVisible(false).setOutputMarkupPlaceholderTag(true));
@@ -137,5 +137,6 @@ public class ConnectionsPanel extends AdminPanel {
 
 	@Override
 	public void onMenuPanelLoad(AjaxRequestTarget target) {
+		super.onMenuPanelLoad(target);
 	}
 }

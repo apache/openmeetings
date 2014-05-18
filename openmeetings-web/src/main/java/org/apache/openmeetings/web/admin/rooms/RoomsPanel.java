@@ -45,6 +45,7 @@ public class RoomsPanel extends AdminPanel {
 	
 	@Override
 	public void onMenuPanelLoad(AjaxRequestTarget target) {
+		super.onMenuPanelLoad(target);
 		target.appendJavaScript("omRoomPanelInit();");
 	}
 
@@ -71,8 +72,7 @@ public class RoomsPanel extends AdminPanel {
 						target.appendJavaScript("omRoomPanelInit();");
 					}
 				});
-				item.add(AttributeModifier.replace("class", "clickable "
-						+ (item.getIndex() % 2 == 1 ? "even" : "odd")
+				item.add(AttributeModifier.replace("class", "clickable ui-widget-content"
 						+ (room.getRooms_id().equals(form.getModelObject().getRooms_id()) ? " selected" : "")));
 			}
 		};

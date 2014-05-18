@@ -46,6 +46,7 @@ public class LdapsPanel extends AdminPanel {
 	
 	@Override
 	public void onMenuPanelLoad(AjaxRequestTarget target) {
+		super.onMenuPanelLoad(target);
 		target.appendJavaScript("omLdapPanelInit();");
 	}
 
@@ -72,8 +73,7 @@ public class LdapsPanel extends AdminPanel {
 						target.appendJavaScript("omLdapPanelInit();");
 					}
 				});
-				item.add(AttributeModifier.replace("class", "clickable "
-						+ ((item.getIndex() % 2 == 1) ? "even" : "odd")
+				item.add(AttributeModifier.replace("class", "clickable ui-widget-content"
 						+ (lc.getLdapConfigId() == form.getModelObject().getLdapConfigId() ? " selected" : "")));
 			}
 		};

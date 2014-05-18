@@ -86,6 +86,7 @@ public class LangPanel extends AdminPanel {
 	
 	@Override
 	public void onMenuPanelLoad(AjaxRequestTarget target) {
+		super.onMenuPanelLoad(target);
 		target.appendJavaScript("labelsInit();");
 	}
 
@@ -142,8 +143,7 @@ public class LangPanel extends AdminPanel {
 						target.appendJavaScript("labelsInit();");
 					}
 				});
-				item.add(AttributeModifier.append("class", "clickable "
-						+ (item.getIndex() % 2 == 1 ? "even" : "odd")
+				item.add(AttributeModifier.append("class", "clickable ui-widget-content"
 						+ (fv.getFieldvalues_id().equals(form.getModelObject().getFieldvalues().getFieldvalues_id()) ? " selected" : "")));
 			}
 		};

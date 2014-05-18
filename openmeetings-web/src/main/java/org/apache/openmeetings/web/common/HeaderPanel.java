@@ -19,6 +19,7 @@
 package org.apache.openmeetings.web.common;
 
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.util.string.Strings;
 
 public class HeaderPanel extends BasePanel {
 	private static final long serialVersionUID = 9020842845946685193L;
@@ -26,6 +27,6 @@ public class HeaderPanel extends BasePanel {
 	public HeaderPanel(String id, String appName) {
 		super(id);
 		setOutputMarkupPlaceholderTag(true);
-		add(new Label("appName", appName));
+		add(new Label("appName", Strings.isEmpty(appName) ? "&nbsp;" : appName).setEscapeModelStrings(false));
 	}
 }
