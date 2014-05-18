@@ -258,8 +258,8 @@
 				try {
 					//videoDisplay.stop();
 					//videoDisplay.attachCamera(null);
-					cam.setMode(videoDisplay.width, videoDisplay.height, FPS);
-					videoDisplay.attachCamera(cam);
+					//cam.setMode(videoDisplay.width, videoDisplay.height, FPS);
+					//videoDisplay.attachCamera(cam);
 					debug("_attachCamera()::done");
 				} catch (error:Error) {
 					debug("_attach:: " + error.message + "\n" + error.getStackTrace());
