@@ -22,12 +22,13 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.DEFAULT_BASE_UR
 
 import java.io.Serializable;
 
+import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.util.crypt.MD5Implementation;
 
 public class InstallationConfig implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
-	public String appName = "Openmeetings";
+	public String appName = ConfigurationDao.DEFAULT_APP_NAME;
 	public String username;
 	public String password;
 	public String email;

@@ -34,14 +34,16 @@ table.adminListTable {
 	min-width: 518px;
 }
 
-table.adminListTable th {
-	background: #AFCBFB;
-	color: #ffffff;
+table.adminListTable tr:nth-child(odd), table.adminListTableSmall tr:nth-child(odd) {
+	opacity: .8;
 }
 
-table.adminListTableSmall th {
-	background: #AFCBFB;
-	color: #ffffff;
+table.adminListTable tr:hover, table.adminListTableSmall tr:hover {
+	/*SHOULD BE MANUALLY IN SYNC WITH THEME .ui-state-hover */
+	border: 1px solid #74b2e2;
+	background: #e4f1fb url(theme_om/images/ui-bg_glass_100_e4f1fb_1x400.png) 50% 50% repeat-x;
+	font-weight: normal;
+	color: #0070a3;
 }
 
 table.adminListTable th.two_column_layout_column1 {
@@ -244,25 +246,6 @@ table.adminListTable td div.four_column_layout_divcolumn4 {
 	width: 132px;
 }
 
-table.adminListTable tr.even {
-	background-color: #EDF2FF;
-}
-
-table.adminListTableSmall tr.even {
-	background-color: #EDF2FF;
-}
-
-table.adminListTable tr.odd {
-	background-color: #F2FAFF;
-}
-
-table.adminListTableSmall tr.odd {
-	background-color: #F2FAFF;
-}
-
-table.adminListTable tr:hover {
-	background-color: #CCDCE8;
-}
 .adminPanelColumnForm {
 	display: inline-block;
 	vertical-align: top;
@@ -306,18 +289,13 @@ table.adminListTable tr:hover {
 }
 
 .adminForm fieldset {
-	background-color: #F2FAFF;
-	border: solid 1px #aacfe4;
 	margin-top: 4px;
 	padding: 4px;
 }
 
 .adminForm legend {
-	background-color: #F2FAFF;
 	padding: 0.2em 0.5em;
 	margin: 0px 10px;
-	border: solid 1px #aacfe4;
-	color: #000000;
 	font-style: italic;
 	text-align: right;
 }
@@ -365,14 +343,9 @@ table.adminListTable tr:hover {
     max-width: 1240px;
 }
 .adminFormsFeedbackPanel {
-	background-color: #F2FAFF;
-	color: #ff3300;
 	position:absolute;
 	left:550px;
 	width: 480px;
 	bottom: 16px;
 	z-index:999;
-}
-.adminPanel .adminListTable .selected {
-	background-color: #2779aa;
 }

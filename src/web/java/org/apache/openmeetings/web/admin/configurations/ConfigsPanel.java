@@ -46,6 +46,7 @@ public class ConfigsPanel extends AdminPanel {
 	
 	@Override
 	public void onMenuPanelLoad(AjaxRequestTarget target) {
+		super.onMenuPanelLoad(target);
 		target.appendJavaScript("omConfigPanelInit();");
 	}
 
@@ -73,9 +74,8 @@ public class ConfigsPanel extends AdminPanel {
 						target.appendJavaScript("omConfigPanelInit();");
 					}
 				});
-				item.add(AttributeModifier.replace("class", "clickable "
-						+ (item.getIndex() % 2 == 1 ? "even" : "odd")
-						+ (c.getConfiguration_id().equals(form.getModelObject().getConfiguration_id()) ? " selected" : "")));
+				item.add(AttributeModifier.replace("class", "clickable ui-widget-content"
+						+ (c.getConfiguration_id().equals(form.getModelObject().getConfiguration_id()) ? " ui-state-default" : "")));
 			}
 		};
 		add(listContainer.add(dataView).setOutputMarkupId(true));

@@ -20,8 +20,8 @@
 -->
 <html xmlns:wicket="http://wicket.apache.org">
 <wicket:panel>
-	<fieldset id="userData">
-		<legend><wicket:message key="install.wizard.params.step1.userdata"/></legend>
+	<fieldset class="ui-widget-content" id="userData">
+		<legend class="ui-widget-header"><wicket:message key="install.wizard.params.step1.userdata"/></legend>
 		<ul>
 			<li><label wicket:for="cfg.username"><wicket:message key="install.wizard.params.step1.username"/></label>
 				<input wicket:id="cfg.username" wicket:message="title:install.wizard.params.step1.username.title" type="text" />
@@ -38,8 +38,8 @@
 		</ul>
 	</fieldset>
 
-	<fieldset id="userOrga">
-		<legend><wicket:message key="install.wizard.params.step1.groupdata"/></legend>
+	<fieldset class="ui-widget-content" id="userOrga">
+		<legend class="ui-widget-header"><wicket:message key="install.wizard.params.step1.groupdata"/></legend>
 		<ul>
 			<li><label wicket:for="cfg.group"><wicket:message key="install.wizard.params.step1.group"/></label>
 				<input wicket:id="cfg.group" wicket:message="title:install.wizard.params.step1.group.title" type="text" /></li>

@@ -202,6 +202,25 @@ div.tableWrapperSmall {
 	float: none;
 }
 
+.goto, .goto :link, .goto :hover {
+	font-size: 14px;
+	line-height: 14px;
+	text-decoration: none;
+	text-align: center;
+	vertical-align: middle;
+	min-width: 16px;
+}
+
+.goto.icon {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    border: none;
+    margin: 0px;
+    padding: 0px;
+    zoom: 1.2;
+}
+
 .ui-dialog {
 	-moz-box-shadow: 3px 3px 4px #000;
 	-webkit-box-shadow: 3px 3px 4px #000;
@@ -217,102 +236,6 @@ div.tableWrapperSmall {
 .sort-icon {
 	display: inline-block !important;
 	text-indent: 0px !important;
-}
-
-.pagedEntityListPanel :LINK {
-	text-decoration: none;
-}
-
-.pagedEntityListPanel :HOVER {
-	text-decoration: none;
-}
-
-.pagedEntityListPanel span.prev {
-    background: url(images/forms/resultset_previous.png) no-repeat;
-    display: inline-block;
-    opacity:0.4;
-    filter:alpha(opacity=40); /* For IE8 and earlier */
-    width: 14px;
-    height: 14px;
-    border: none;
-    margin: 0px;
-    padding: 0px;
-}
-
-.pagedEntityListPanel span.next {
-    background: url(images/forms/resultset_next.png) no-repeat;
-    display: inline-block;
-    opacity:0.4;
-    filter:alpha(opacity=40); /* For IE8 and earlier */
-    width: 14px;
-    height: 14px;
-    border: none;
-    margin: 0px;
-    padding: 0px;
-}
-
-.pagedEntityListPanel span.first {
-    background: url(images/forms/resultset_first.png) no-repeat;
-    display: inline-block;
-    opacity:0.4;
-    filter:alpha(opacity=40); /* For IE8 and earlier */
-    width: 14px;
-    height: 14px;
-    border: none;
-    margin: 0px;
-    padding: 0px;
-}
-
-.pagedEntityListPanel span.last {
-    background: url(images/forms/resultset_last.png) no-repeat;
-    display: inline-block;
-    opacity:0.4;
-    filter:alpha(opacity=40); /* For IE8 and earlier */
-    width: 14px;
-    height: 14px;
-    border: none;
-    margin: 0px;
-    padding: 0px;
-}
-
-.pagedEntityListPanel a.prev {
-	background: url(images/forms/resultset_previous.png) no-repeat;
-	display: inline-block;
-	width: 14px;
-	height: 14px;
-	border: none;
-	margin: 0px;
-    padding: 0px;
-}
-
-.pagedEntityListPanel a.next {
-	background: url(images/forms/resultset_next.png) no-repeat;
-	display: inline-block; 
-	width: 14px;
-	height: 14px;
-	border: none;
-	margin: 0px;
-    padding: 0px;
-}
-
-.pagedEntityListPanel a.first {
-	background: url(images/forms/resultset_first.png) no-repeat;
-	display: inline-block;
-	width: 14px;
-	height: 14px;
-	border: none;
-	margin: 0px;
-    padding: 0px;
-}
-
-.pagedEntityListPanel a.last {
-	background: url(images/forms/resultset_last.png) no-repeat;
-	display: inline-block;
-	width: 14px;
-	height: 14px;
-	border: none;
-	margin: 0px;
-    padding: 0px;
 }
 
 .start_step1, .start_step2, .start_step3, .start_step4  {

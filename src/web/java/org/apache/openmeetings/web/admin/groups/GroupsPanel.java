@@ -52,6 +52,7 @@ public class GroupsPanel extends AdminPanel {
 	
 	@Override
 	public void onMenuPanelLoad(AjaxRequestTarget target) {
+		super.onMenuPanelLoad(target);
 		target.appendJavaScript("groupsInit();");
 	}
 
@@ -116,8 +117,7 @@ public class GroupsPanel extends AdminPanel {
 						target.appendJavaScript("groupsInit();");
 					}
 				});
-				item.add(AttributeModifier.append("class", "clickable "
-						+ (item.getIndex() % 2 == 1 ? "even" : "odd")
+				item.add(AttributeModifier.append("class", "clickable ui-widget-content"
 						+ (o.getOrganisation_id().equals(form.getModelObject().getOrganisation_id()) ? " selected" : "")));
 			}
 		};
