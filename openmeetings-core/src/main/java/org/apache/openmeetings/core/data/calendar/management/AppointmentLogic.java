@@ -184,10 +184,6 @@ public class AppointmentLogic {
 	// ----------------------------------------------------------------------------------------------
 	public void doScheduledMeetingReminder() throws Exception {
 		// log.debug("doScheduledMeetingReminder");
-		if (!InitializationContainer.initComplete) {
-			return;
-		}
-
 		String baseUrl = configurationDao.getConfValue(CONFIG_APPLICATION_BASE_URL, String.class, DEFAULT_BASE_URL);
 		if (baseUrl == null || baseUrl.length() < 1) {
 			log.error("Error retrieving baseUrl for application");

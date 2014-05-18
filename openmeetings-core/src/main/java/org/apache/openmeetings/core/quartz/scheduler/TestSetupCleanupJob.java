@@ -21,6 +21,7 @@ package org.apache.openmeetings.core.quartz.scheduler;
 import java.io.File;
 import java.io.FileFilter;
 
+import org.apache.openmeetings.util.InitializationContainer;
 import org.apache.openmeetings.util.OmFileHelper;
 import org.apache.openmeetings.util.OpenmeetingsVariables;
 import org.red5.logging.Red5LoggerFactory;
@@ -32,6 +33,9 @@ public class TestSetupCleanupJob {
 
 	public void doIt() {
 		log.debug("TestSetupClearJob.execute");
+		if (!InitializationContainer.initComplete) {
+			return;
+		}
 		try {
 			//FIXME need to move all these staff to helper
 			File[] folders = OmFileHelper.getStreamsDir().listFiles();

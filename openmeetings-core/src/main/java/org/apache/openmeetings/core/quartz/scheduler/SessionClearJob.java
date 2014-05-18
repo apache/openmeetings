@@ -19,6 +19,7 @@
 package org.apache.openmeetings.core.quartz.scheduler;
 
 import org.apache.openmeetings.db.dao.server.SessiondataDao;
+import org.apache.openmeetings.util.InitializationContainer;
 import org.apache.openmeetings.util.OpenmeetingsVariables;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -31,6 +32,9 @@ public class SessionClearJob {
 
 	public void doIt() {
 		log.trace("SessionClearJob.execute");
+		if (!InitializationContainer.initComplete) {
+			return;
+		}
 		try {
 			// TODO Generate report
 			sessiondataDao.clearSessionTable();
