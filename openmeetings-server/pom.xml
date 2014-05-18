@@ -121,6 +121,7 @@
 					</descriptors>
 					<finalName>${assembly.finalName}</finalName>
 					<appendAssemblyId>false</appendAssemblyId>
+					<tarLongFileMode>gnu</tarLongFileMode>
 				</configuration>
 				<executions>
 					<execution>
