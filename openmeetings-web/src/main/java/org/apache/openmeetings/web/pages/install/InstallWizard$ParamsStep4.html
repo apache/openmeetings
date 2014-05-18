@@ -20,8 +20,8 @@
 -->
 <html xmlns:wicket="http://wicket.apache.org">
 <wicket:panel>
-	<fieldset id="userConf2">
-		<legend><wicket:message key="install.wizard.params.step4.crypt"/></legend>
+	<fieldset class="ui-widget-content" id="userConf2">
+		<legend class="ui-widget-header"><wicket:message key="install.wizard.params.step4.crypt"/></legend>
 		<ul>
 			<li><label wicket:for="cfg.cryptClassName"><wicket:message key="install.wizard.params.step4.cryptClassName"/></label>
 				<input wicket:id="cfg.cryptClassName" type="text"
@@ -35,8 +35,8 @@
 		</ul>
 	</fieldset>
 
-	<fieldset id="red5sip">
-		<legend><wicket:message key="install.wizard.params.step4.red5SIP"/></legend>
+	<fieldset class="ui-widget-content" id="red5sip">
+		<legend class="ui-widget-header"><wicket:message key="install.wizard.params.step4.red5SIP"/></legend>
 		<ul>
 			<li><label wicket:for="red5SipEnable"><wicket:message key="install.wizard.params.step4.red5SipEnable"/></label>
 				<select wicket:id="red5SipEnable"></select>
