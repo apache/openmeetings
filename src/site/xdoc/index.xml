@@ -25,76 +25,65 @@
 	<body>
 
 		<section name="Apache OpenMeetings - Features and overview">
-
-			<div id="coin-slider">
-				<a href="#">
-					<img src="images/cut_conference_room.png" alt="Conference Room" />
-					<span>
-						<b>Audio/Video Conferencing</b>
-						<br />
-						OpenMeetings enables you to make Audio/Video conferencing.
-					</span>
-				</a>
-
-				<a href="#">
-					<img src="images/cut_integrated_calendar.png" alt="Calendar" />
-					<span>
-						<b>Calendar</b>
-						<br />
-						You can create meetings with the integrated calendar, conference rooms and invitations are automatically send to everybody
-					</span>
-				</a>
-
-				<a href="#">
-					<img src="images/cut_file_explorer.png" alt="File Explorer" />
-					<span>
-						<b>File Explorer</b>
-						<br />
-						Each room has its own File-Explorer. Each user has his own private drive and additionally there is a public drive to share files with other participants
-					</span>
-				</a>
-
-				<a href="#">
-					<img src="images/cut_integration_api.png" alt="Integration API" />
-					<span>
-						<b>Integration API</b>
-						<br />
-						There is a SOAP/REST API to integrate into your website or intranet, as well
-						as LDAP/ADS connectors and VoIP/Asterisk integration modules
-					</span>
-				</a>
-
-				<a href="#">
-					<img src="images/cut_private_messages.png" alt="Private messages" />
-					<span>
-						<b>Private messages and contacts</b>
-						<br />
-						From the private message center you can send invitations by email
-						and attach meeting invitations to every email
-					</span>
-				</a>
-
-				<a href="#">
-					<img src="images/cut_administration_configuration.png" alt="Administration" />
-					<span>
-						<b>Administration and Configuration</b>
-						<br />
-						You can configure users, rooms, usergroups, config settings or
-						edit labels with a Web-Frontend integrated in the application
-					</span>
-				</a>
-
-				<a href="#">
-					<img src="images/cut_recordings_playback.png" alt="Share and Record" />
-					<span>
-						<b>Screen sharing and Recording</b>
-						<br />
-						You can do screen sharing as well as recording of whole sessions
-						including audio/video. Recordings can be downloaded as AVI/FLV or
-						watched online in the integrated player.
-					</span>
-				</a>
-
+			<div id="slider">
+				<div class="carousel-inner">
+					<div class="item active">
+						<img src="images/cut_conference_room.png" alt="Conference Room"/>
+						<span class="carousel-caption">
+							<span class="title">Audio/Video Conferencing</span>
+							<span class="desc">OpenMeetings enables you to make Audio/Video conferencing.</span>
+						</span>
+					</div>
+					<div class="item">
+						<img src="images/cut_integrated_calendar.png" alt="Calendar" />
+						<span class="carousel-caption">
+							<span class="title">Calendar</span>
+							<span class="desc">You can create meetings with the integrated calendar, conference rooms and invitations are automatically send to everybody</span>
+						</span>
+					</div>
+					<div class="item">
+						<img src="images/cut_file_explorer.png" alt="File Explorer" />
+						<span class="carousel-caption">
+							<span class="title">File Explorer</span>
+							<span class="desc">Each room has its own File-Explorer. Each user has his own private drive and additionally there is a public drive to share files with other participants</span>
+						</span>
+					</div>
+					<div class="item">
+						<img src="images/cut_integration_api.png" alt="Integration API" />
+						<span class="carousel-caption">
+							<span class="title">Integration API</span>
+							<span class="desc">There is a SOAP/REST API to integrate into your website or intranet, as well
+								as LDAP/ADS connectors and VoIP/Asterisk integration modules</span>
+						</span>
+					</div>
+					<div class="item">
+						<img src="images/cut_private_messages.png" alt="Private messages" />
+						<span class="carousel-caption">
+							<span class="title">Private messages and contacts</span>
+							<span class="desc">From the private message center you can send invitations by email
+								and attach meeting invitations to every email</span>
+						</span>
+					</div>
+					<div class="item">
+						<img src="images/cut_administration_configuration.png" alt="Administration" />
+						<span class="carousel-caption">
+							<span class="title">Administration and Configuration</span>
+							<span class="desc">You can configure users, rooms, usergroups, config settings or
+								edit labels with a Web-Frontend integrated in the application</span>
+						</span>
+					</div>
+					<div class="item">
+						<img src="images/cut_recordings_playback.png" alt="Share and Record" />
+						<span class="carousel-caption">
+							<span class="title">Screen sharing and Recording</span>
+							<span class="desc">You can do screen sharing as well as recording of whole sessions
+								including audio/video. Recordings can be downloaded as AVI/FLV or
+								watched online in the integrated player.</span>
+						</span>
+					</div>
+				</div>
+				<a class="carousel-control left" href="#slider">&lsaquo;</a>
+				<a class="carousel-control right" href="#slider">&rsaquo;</a>
 			</div>
 
 
@@ -107,7 +96,7 @@
 			<p>
 				OpenMeetings is a project of the Apache, the old project
 				website at
-				<a href="http://code.google.com/p/openmeetings/" target="_BLANK">GoogleCode
+				<a href="http://code.google.com/p/openmeetings/" target="_blank">GoogleCode
 				</a>
 				will receive no updates anymore. The website at Apache is the only
 				place that receives updates.
@@ -134,7 +123,7 @@
                 </strong>
                 <br />
 			    <strong>
-                    Version 2.1.1 released! See <a href="https://blogs.apache.org/openmeetings/entry/apache_openmeetings_2_1_11" target="_BLANK">Project Blog</a> or <a href="downloads.html">Downloads page</a>. 
+                    Version 2.1.1 released! See <a href="https://blogs.apache.org/openmeetings/entry/apache_openmeetings_2_1_11" target="_blank">Project Blog</a> or <a href="downloads.html">Downloads page</a>. 
                     (2013-07-06)
                 </strong>
                 <br />
@@ -151,31 +140,31 @@
 				<br />
 			    <strong>
 					OpenMeetings on the road to graduate from the Incubator
-					<a href="https://blogs.apache.org/openmeetings/entry/openmeetings_on_the_road_to" target="_BLANK" rel="nofollow">at our blog</a>
+					<a href="https://blogs.apache.org/openmeetings/entry/openmeetings_on_the_road_to" target="_blank" rel="nofollow">at our blog</a>
 					(2012-12-07)
 				</strong>
 				<br />
 				<strong>
 					Some slides from our Fast Feather Track at the ApacheCon Europe 2012 
-					<a href="https://blogs.apache.org/openmeetings/entry/openmeetings_apachecon_presentation_slide" target="_BLANK" rel="nofollow">at our blog</a>
+					<a href="https://blogs.apache.org/openmeetings/entry/openmeetings_apachecon_presentation_slide" target="_blank" rel="nofollow">at our blog</a>
 					(2012-11-18)
 				</strong>
 				<br />
 				<strong>
 					Update: Builds are available at
-					<a href="https://builds.apache.org/view/M-R/view/OpenMeetings/" target="_BLANK" rel="nofollow">builds.apache.org</a>
+					<a href="https://builds.apache.org/view/M-R/view/OpenMeetings/" target="_blank" rel="nofollow">builds.apache.org</a>
 					(2012-08-03)
 				</strong>
 				<br />
 				<strong>
-					<a href="https://blogs.apache.org/openmeetings/entry/apache_openmeetings_2_0_incubating" target="_BLANK" rel="nofollow">Version 2.0 released</a>
+					<a href="https://blogs.apache.org/openmeetings/entry/apache_openmeetings_2_0_incubating" target="_blank" rel="nofollow">Version 2.0 released</a>
 					(2012-07-26)
 				</strong>
 				<br />
 				<strong>New committer: Timur Tleukenov (2012-03-06)</strong>
 				<br />
 				<strong>
-					<a href="http://demo.openmeetings.de" target="_BLANK" rel="nofollow">Demo
+					<a href="http://demo.openmeetings.de" target="_blank" rel="nofollow">Demo
 						server</a>
 					updated to r1236172 (2012-01-26)
 				</strong>
