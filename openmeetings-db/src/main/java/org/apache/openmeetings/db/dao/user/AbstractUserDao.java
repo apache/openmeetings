@@ -107,7 +107,7 @@ public class AbstractUserDao  {
 	}
 	
 	private String getAdditionalWhere(boolean excludeContacts) {
-		return !excludeContacts ? null : "(u.type <> :contact OR (u.type = :contact AND u.ownerId = :ownerId))";
+		return excludeContacts ? "(u.type <> :contact OR (u.type = :contact AND u.ownerId = :ownerId))" : null;
 	}
 	
 	private void setAdditionalParams(TypedQuery<?> q, boolean excludeContacts, long currentUserId) {
@@ -430,15 +430,15 @@ public class AbstractUserDao  {
 		StringBuilder sb = new StringBuilder("SELECT ");
 		sb.append(count ? "COUNT(" : "").append("u").append(count ? ") " : " ")
 			.append("FROM User u WHERE u.deleted = false AND ")
-			.append(getAdditionalWhere(false));
+			.append(getAdditionalWhere(true));
 		if (offers != null && offers.length() != 0) {
-			sb.append("AND (LOWER(u.userOffers) LIKE :userOffers) ");
+			sb.append(" AND (LOWER(u.userOffers) LIKE :userOffers) ");
 		}
 		if (search != null && search.length() != 0) {
-			sb.append("AND (LOWER(u.userSearchs) LIKE :userSearchs) ");
+			sb.append(" AND (LOWER(u.userSearchs) LIKE :userSearchs) ");
 		}
 		if (text != null && text.length() != 0) {
-			sb.append("AND (LOWER(u.login) LIKE :search ")
+			sb.append(" AND (LOWER(u.login) LIKE :search ")
 				.append("OR LOWER(u.firstname) LIKE :search ")
 				.append("OR LOWER(u.lastname) LIKE :search ")
 				.append("OR LOWER(u.adresses.email) LIKE :search ")
