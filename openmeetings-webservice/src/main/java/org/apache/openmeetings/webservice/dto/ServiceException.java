@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.webservice;
+package org.apache.openmeetings.webservice.dto;
 
 import javax.xml.ws.WebFault;
 

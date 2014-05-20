@@ -37,6 +37,29 @@
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<executions>
+					<execution>
+						<goals>
+							<goal>javadoc</goal>
+						</goals>
+						<phase>site</phase>
+						<configuration>
+							<groups>
+								<group>
+									<title>Available WebServices</title>
+									<packages>org.apache.openmeetings.webservice</packages>
+								</group>
+							</groups>
+							<excludePackageNames>org.apache.openmeetings.webservice.cluster,org.apache.openmeetings.webservice.dto</excludePackageNames>
+							<reportOutputDirectory>${project.parent.build.directory}/site</reportOutputDirectory>
+							<destDir>webservices</destDir>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-site-plugin</artifactId>
 				<configuration>
 					<skip>true</skip>
