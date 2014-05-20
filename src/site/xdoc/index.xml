@@ -182,281 +182,208 @@
 			<div>
 				<strong>Who we are</strong>
 				<blockquote>
-					<a href="team-list.html">List of committers</a>
-					.
+					<a href="team-list.html">List of committers</a>.
 				</blockquote>
 			</div>
 			<div>
 				<strong>Users!</strong>
 				<blockquote>
 					We'd love to have you involved. Check out the
-					<a href="get-involved.html">Get involved</a>
-					.
+					<a href="get-involved.html">Get involved</a>.
 				</blockquote>
 			</div>
 		</section>
 
 		<section name="Feature details">
 
-			<feature title="Audio and Video Conferencing">
+			<div class="feature clearfix">
+				<span class="feature title">Audio and Video Conferencing</span>
 
-				<image fullhref="images/Features_Screen_Conference_Room_Thumb.png"
-					href="images/Features_Screen_Conference_Room_Thumb.png" title="OpenMeetings Conference Room"
+				<img src="images/Features_Screen_Conference_Room_Thumb.png" title="OpenMeetings Conference Room"
 					width="250" height="175" />
-				<text>
-				<div>
-					There are four options to use OpenMeetings audio/video functions,
-					which you can select during a conference session.
+				<span class="desc">
+					<span class="p">There are four options to use OpenMeetings audio/video functions,
+						which you can select during a conference session.</span>
 					<ul>
 						<li>audio + video</li>
 						<li>audio only</li>
 						<li>video only</li>
 						<li>picture only</li>
 					</ul>
-					Additional you can change video-/audio-quality, choose multiple
-					camera resolutions (4:3, 16:9 or 3:2)
-					and choose your input devices.
-				</div>
-				</text>
-			</feature>
+					<span class="p">Additional you can change video-/audio-quality, choose multiple
+						camera resolutions (4:3, 16:9 or 3:2)
+						and choose your input devices.</span>
+				</span>
+			</div>
 
-			<feature title="Meeting recording and Screen sharing">
+			<div class="feature clearfix">
+				<span class="feature title">Meeting recording and Screen sharing</span>
 
-				<image href="images/desktopsharing.png" fullhref="images/desktopsharing.png"
-					title="Screensharing-/recording" width="140" height="150" />
-				<image href="images/recordings_timeleine.png" fullhref="images/recordings_timeleine.png"
-					title="Device" width="200" height="115" />
-					
-				<text>
-				<div>
+				<span class="desc" style="float: left;">
+					<img src="images/desktopsharing.png" title="Screensharing-recording"
+						style="float:none; display: block; width: 140px; height: 150px" />
+					<img src="images/recordings_timeleine.png" title="Device" style="float:none; display: block; width: 200px; height: 115px" />
+				</span>
+				<span class="desc" style="margin-top: 50px;">
 					<ul>
 						<li>Recorded sessions contain everything including sound recorded
 							from all audio streams in exactly the way you've seen it in the
 							conference.
 						</li>
-					</ul>
-					<ul>
 						<li>Recorded sessions can be downloaded as AVI/FLV files.</li>
-					</ul>
-					<ul>
 						<li>Possibility to select a screen area for sharing.</li>
-					</ul>
-					<ul>
 						<li>Different quality steps for Screensharing.</li>
-					</ul>
-					<ul>
 						<li>Watch and organize recordings in an integrated Drag and Drop
 							File-Explorer
 						</li>
 					</ul>
-				</div>
-				</text>
-			</feature>
+				</span>
+			</div>
 
-			<feature title="File Explorer">
+			<div class="feature clearfix">
+				<span class="feature title">File Explorer</span>
 
-				<image href="images/file_smal.png" title="File Explorer"
-					fullhref="images/file_smal.png" width="135" height="200" />
-				<text>
-				<div>
-					Advanced File-Explorer in every conference room, Drag and Drop
+				<img src="images/file_smal.png" title="File Explorer"
+					width="135" height="200" />
+				<span class="desc">
+					<span class="p">Advanced File-Explorer in every conference room, Drag and Drop
 					interface for managing uploaded files, including the possibility to
-					create a document tree with folders.
-					<br />
-					<br />
-					Private and Public Drive in
-					File-Explorer. The File-Explorer has two
-					different views, one is the
-					<b>Private Drive</b>
-					and the other the
-					<b>Public Drive</b>
-					. The Private Drive
-					always contains the same files.
-					Those files are
-					visible only to the
-					user currently loggedin. The
-					Public Drive is not
-					bound to the user,
-					but to the conference room
-					instead. All users in
-					the conference room
-					have access to the Public
-					Drive.
-				</div>
-				</text>
-			</feature>
+					create a document tree with folders.</span>
+					<br/>
+					<span class="p">Private and Public Drive in File-Explorer. The File-Explorer has two
+					different views, one is the <b>Private Drive</b> and the other the
+					<b>Public Drive</b> . The Private Drive always contains the same files.
+					Those files are visible only to the user currently loggedin. The Public Drive is not
+					bound to the user, but to the conference room instead. All users in the conference room
+					have access to the Public Drive.</span>
+				</span>
+			</div>
 
-			<feature title="Moderating System">
+			<div class="feature clearfix">
+				<span class="feature title">Moderating System</span>
 
-				<image href="images/right_management.png" title="Right management"
-					fullhref="images/right_management.png" width="135" height="216" />
-				<text>
-				<div>
-					During a conference, the moderator can adjust the user permission
-					to every user individually .
+				<img src="images/right_management.png" title="Right management"
+					width="135" height="216" />
+				<span class="desc">
+					<span class="p">During a conference, the moderator can adjust the user permission
+					to every user individually.</span>
 					<ul>
-						<li>
-							<img class="alignnone" title="Allow modaration" src="images/user_add.png"
-								alt="" />
-							Allow/Deny moderation
-						</li>
-						<li>
-							<img class="alignnone" title="Whiteboard Access" src="images/pencil_add.png"
-								alt="" />
-							Allow/Deny to draw on white board
-						</li>
-						<li>
-							<img class="alignnone" title="Screenshare" src="images/monitor_add.png"
-								alt="" />
-							Allow/Deny screen-sharing/record screen
-						</li>
-						<li>
-							<img class="alignnone" title="Remote control" src="images/mouse_add.png"
-								alt="" />
-							Allow/Deny Remote Control Screen
-						</li>
-						<li>
-							<img class="alignnone" title="Remote control" src="images/micro_small.png"
-								alt="" />
-							Give exclusive audio to others or self
-						</li>
-						<li>
-							<img class="alignnone" title="Video Audio" src="images/audio_and_video.png"
-								alt="" />
-							(Re-) Start Audio, Video or Device settings
-						</li>
+						<li><img class="alignnone" title="Allow modaration" src="images/user_add.png" alt="" /> Allow/Deny moderation</li>
+						<li><img class="alignnone" title="Whiteboard Access" src="images/pencil_add.png" alt="" />Allow/Deny to draw on white board</li>
+						<li><img class="alignnone" title="Screenshare" src="images/monitor_add.png" alt="" />Allow/Deny screen-sharing/record screen</li>
+						<li><img class="alignnone" title="Remote control" src="images/mouse_add.png" alt="" />Allow/Deny Remote Control Screen</li>
+						<li><img class="alignnone" title="Remote control" src="images/micro_small.png" alt="" />Give exclusive audio to others or self</li>
+						<li><img class="alignnone" title="Video Audio" src="images/audio_and_video.png" alt="" />(Re-) Start Audio, Video or Device settings</li>
 					</ul>
-				</div>
-				</text>
-			</feature>
+				</span>
+			</div>
 
+			<div class="feature clearfix">
+				<span class="feature title">Multi-Whiteboard and Chat</span>
 
-			<feature title="Multi-Whiteboard and Chat">
+				<span class="desc" style="float: left;">
+					<img src="images/whiteboard.png" title="Whiteboard"
+						style="float:none; display: block; width: 240px; height: 165px" />
+					<img src="images/chat.png" title="Chat in Conference Room" style="float:none; display: block; width: 240px; height: 68px" />
+				</span>
+				<span class="desc" style="margin-top: 50px;">
+					<span class="p">Multi-Whiteboard, you can add new whiteboard instances, each
+						white board can have the full range of tools and documents inside.
+						<br />
+						<br />
+						Save white boards. You can save each whiteboard instance as a file.
+						The file is located in the File-Explorer and can be drag n' drop'ed
+						to the white board again and organized like any other document,
+						image or folder.
+						<br />
+						<br />
+						White board with drawing, writing, Drag n' Drop, Resizing, Images
+						(Drag n' Drop from File-Explorer), Symbol(s)/Cliparts .
+						<br />
+						<br />
+						Full-fit does rescale the document on the screen to be 100% visible
+						on all screens no matter what kind of screen resolution different users have.
+						<br />
+						<br />
+						You can import from a wide range of document formats (PDF, DOC, ODT, PPT, et cetera...)
+					</span>
+				</span>
+			</div>
 
-				<image href="images/whiteboard.png" fullhref="images/whiteboard.png"
-					title="Whiteboard" width="240" height="165" />
-				<image href="images/chat.png" fullhref="images/chat.png"
-					title="Chat in Conference Room" width="240" height="68" />
-				<text>
-				<div>
-					Multi-Whiteboard, you can add new whiteboard instances, each
-					white
-					board can have the full range of tools and documents inside.
-					<br />
-					<br />
-					Save white boards. You can save each whiteboard instance as a file.
-					The file is located in the File-Explorer and can be drag n' drop'ed
-					to the white board again and organized like any other document,
-					image or folder.
-					<br />
-					<br />
-					White board with drawing, writing, Drag n' Drop, Resizing, Images
-					(Drag n'
-					Drop from File-Explorer), Symbol(s)/Cliparts .
-					<br />
-					<br />
-					Full-fit does rescale the document on the screen to be 100% visible
-					on all
-					screens no matter what kind of screen resolution different
-					users
-					have.
-					<br />
-					<br />
-					You can import from a wide range of document formats (PDF, DOC,
-					ODT, PPT, et cetera...)
-				</div>
-				</text>
-			</feature>
+			<div class="feature clearfix">
+				<span class="feature title">User and room management</span>
 
-			<feature title="User and room management">
-
-				<image href="images/dashboard.png" fullhref="images/dashboard.png"
-					title="Dashboard with MyRooms" width="250" height="130" />
-				<text>
-				<div>
-					You can manage users and multiple organizations in a single
+				<img src="images/dashboard.png" title="Dashboard with MyRooms"
+					width="250" height="130" />
+				<span class="desc">
+					<span class="p">You can manage users and multiple organizations in a single
 					OpenMeetings instance. You can also create users that only have
 					access via the SOAP-API.
 					<br />
 					<br />
-					MyRooms section. Each user has by default 2 personal rooms that
-					are
-					always accessible exclusively for that user. There are buttons
-					to
+					MyRooms section. Each user has by default 2 personal rooms that are
+					always accessible exclusively for that user. There are buttons to
 					enter those rooms from the Dashboard.
 					<br />
 					<br />
 					You can assign conference room to all users, or you can assign them
-					only to specific user-groups.
-				</div>
-				</text>
-			</feature>
+					only to specific user-groups.</span>
+				</span>
+			</div>
 
-			<feature title="Private message center">
-				<image href="images/privat_messages.png" fullhref="images/privat_messages.png"
-					title="Private Messages and Contact Search" width="230" height="125" />
-				<text>
-				<div>
-					Send users messages and organize them in folders. You can book
+			<div class="feature clearfix">
+				<span class="feature title">Private message center</span>
+
+				<img src="images/privat_messages.png" title="Private Messages and Contact Search" width="230" height="125" />
+				<span class="desc">
+					<span class="p">Send users messages and organize them in folders. You can book
 					conference rooms by sending private messages. The booked event
 					automatically is in your and the participants calendar, changes to
 					that event will be populated to all users booked to the event.
 					<br />
 					<br />
-					User contacts, you can search users and add them to your contacts.
-					You
-					can even give them the right to see your calendar.
-				</div>
-				</text>
-			</feature>
+					User contacts, you can search users and add them to your contacts. You
+					can even give them the right to see your calendar.</span>
+				</span>
+			</div>
 
-			<feature title="Plan meetings with integrated calendar">
-				<image href="images/calendar.png" fullhref="images/calendar.png"
-					title="Calendar" width="200" height="115" />
-				<text>
-				<div>
+			<div class="feature clearfix">
+				<span class="feature title">Plan meetings with integrated calendar</span>
+
+				<img src="images/calendar.png" title="Calendar" width="200" height="115" />
+				<span class="desc">
 					<ul>
-						<li>Plan your conferencing and invite attendees from OpenMeetings
-							or External.
-						</li>
-						<li>The invited attendees will recieve an E-mail with details to
-							the meetings and a link with a secure hash to the conference
-							room.
-						</li>
+						<li>Plan your conferencing and invite attendees from OpenMeetings or External.</li>
+						<li>The invited attendees will recieve an E-mail with details to the meetings and a link with a 
+							secure hash to the conference room.</li>
 						<li>Share your calendar with your contacts.</li>
 					</ul>
-				</div>
-				</text>
-			</feature>
+				</span>
+			</div>
 
-			<feature title="Polls and Votes">
-				<image href="images/poll.png" fullhref="images/poll.png"
-					title="Create a poll" width="250" height="250" />
-				<text>
-				<div>
-					You can create a poll with yes/no or 1-10 questions, let the
-					user
-					vote and see the voting results.
+			<div class="feature clearfix">
+				<span class="feature title">Polls and Votes</span>
+
+				<img src="images/poll.png" title="Create a poll" width="250" height="250" />
+				<span class="desc">
+					<span class="p">You can create a poll with yes/no or 1-10 questions, let the
+					user vote and see the voting results.
 					<br />
 					<br />
-					Polls can be stored and results viewed as pie-chart
-				</div>
-				</text>
-			</feature>
+					Polls can be stored and results viewed as pie-chart</span>
+				</span>
+			</div>
 
-			<feature title="Backup">
-				<image href="images/backup.png" fullhref="images/backup.png" title="Backup" width="250" />
-				<text>
-				<div>
-					You can backup all user-generated data including files
+			<div class="feature clearfix">
+				<span class="feature title">Backup</span>
+
+				<img src="images/backup.png" title="Backup" width="250" />
+				<span class="desc">
+					<span class="p">You can backup all user-generated data including files
 					uploaded by the users in a single ZIP file and import that ZIP into
-					a new installation of OpenMeetings again.
-				</div>
-				</text>
-			</feature>
-
-
+					a new installation of OpenMeetings again.</span>
+				</span>
+			</div>
 		</section>
-
 	</body>
 </document>

@@ -26,3 +26,29 @@
 	font-weight: 500;
 	margin-top: 20px;
 }
+.feature.title {
+	display: block;
+	text-align: center;
+	font-size: 1.17em;
+	font-weight: bold;
+	margin-top: 20px;
+	margin-bottom: 10px;
+}
+.feature img {
+	float: left;
+	padding: 10px;
+	padding-right: 30px;
+}
+.feature .desc, .feature .p {
+	display: block;
+}
+.feature li {
+	position: relative;
+	left: 30px;
+	margin-right: 20px;
+}
+.feature li img {
+	float: none;
+	padding: 0;
+	padding-right: 10px;
+}
