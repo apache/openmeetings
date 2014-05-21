@@ -84,7 +84,7 @@ public class InvitationService implements IPendingServiceCallback {
      * @param iCalTz
 	 * @return - invitation object in case of success, "Sys - Error" string or null in case of error
 	 */
-	public Object sendInvitationHash(String SID, String username,
+	public Object sendInvitationHash(String SID, String firstname, String lastname,
 			String message, String email, String subject,
 			Long room_id, String conferencedomain, Boolean isPasswordProtected,
 			String invitationpass, Integer valid, Date validFromDate,
@@ -136,7 +136,7 @@ public class InvitationService implements IPendingServiceCallback {
 				Date dFrom = calFrom.getTime();
 				Date dTo = calTo.getTime();
 	
-				User invitee = userDao.getContact(email, users_id);
+				User invitee = userDao.getContact(email, firstname, lastname, users_id);
 				Invitation invitation = invitationManager.getInvitation(invitee, roomDao.get(room_id),
 								isPasswordProtected, invitationpass, Valid.fromInt(valid)
 								, userDao.get(users_id), language_id,

@@ -33,6 +33,9 @@
 		<attribute name="currentHash" value="" type="string" />
 		<attribute name="display" value="false" type="boolean" />
 		<attribute name="addTimezoneItemsDelegate" value="null"/>
+		<attribute name="firstname" value="null"/>
+		<attribute name="lastname" value="null"/>
+		<attribute name="email" value="null"/>
     	
 		<handler name="oninit">
 		<![CDATA[
@@ -105,9 +108,61 @@
 		</method> 
 		
 		<!-- label: recipient -->
-		<labelText labelid="216" y="24" width="120" />
-		<customEdittext name="_recipient" width="340" regexpType="email" x="120" y="22" />
+		<labelTextWidthTooltip name="_recepientLbl" y="24" width="120" labelid="216" labelLabelid="1597"  />
+		<customEdittext name="_recipient" width="340" x="120" y="22" regexpLabelid="1597">
+			<handler name="onblur">
+			<![CDATA[
+				var addr = parent.replaceAll(parent.replaceAll(getText(), "'", ""), "\"", "");
+				if ($debug) Debug.write("addr: ", addr);
+				var idx1 = addr.indexOf("<"), idx2 = addr.indexOf(">");
+				if (idx1 > -1 && idx2 > -1 && idx2 > idx1) {
+					parent.email = parent.trim(addr.substring(idx1 + 1, idx2));
+					var s = parent.trim(addr.substring(0, idx1));
+					var idx = s.indexOf(" ");
+					if (idx > -1) {
+						parent.firstname = s.substring(0, idx);
+						parent.lastname = s.substring(idx + 1);
+					} else {
+						parent.firstname = s;
+					}
+				} else {
+					parent.email = addr;
+				}
+				if ($debug) Debug.write("[first, last, email]: ", getText(), idx1, idx2, parent.firstname, parent.lastname, parent.email);
+				this.regExpCheckId = canvas.doRegExpCheck(parent.email, this.emailRegEx);
+				if(this.callDelegate == null) {
+					this.callDelegate = new LzDelegate(this, "checkRegExpResult");
+				}
+				lz.Timer.resetTimer(this.callDelegate, 50);
+			]]>
+			</handler>
+			<handler name="onafterCheck">
+				if (!isvalidInput) {
+					this.setAttribute('text', "");
+					parent.email = null;
+					parent.firstname = null;
+					parent.lastname = null;
+				}
+			</handler>
+		</customEdittext>
 		
+		<method name="trim" args="s">
+		<![CDATA[
+			var str = "" + s, begin = 0, end = str.length - 1;
+			while (begin <= end && str.charCodeAt(begin) == 32) { ++begin; }
+			while (end > begin && str.charCodeAt(end) == 32) { --end; }
+			return str.substr(begin, end - begin + 1);
+		]]>
+		</method>
+		
+		<method name="replaceAll" args="s,f,r">
+		<![CDATA[
+			var str = s;
+			while (str.indexOf(f) > -1) { str = str.replace(f, r); }
+			return str;
+		]]>
+		</method>
+	
 		<!-- label: subject -->
 		<labelText labelid="215" y="52" width="120" />
 		<customEdittext name="_subject" labelid="532" width="340" enabled="false" x="120" y="52" />	
@@ -169,6 +224,10 @@
 		<simpleLabelButton name="generate" labelid="1526" x="$once{ parent.width-440 }" width="170" y="$once{ parent.height-26 }">
 			<handler name="onclick">
 			<![CDATA[
+				if (parent.email == null) {
+					new lz.errorPopup(canvas.main_content._content.inner,{error:canvas.getLabelName(519)});
+					return;
+				}
         		parent.display = true;
 				parent.sendInvitationHash.doCall();
 			]]>
@@ -179,6 +238,10 @@
 		<simpleLabelButton name="send" labelid="218" x="$once{ parent.width-260 }" width="120" y="$once{ parent.height-26 }">
 			<handler name="onclick">
 			<![CDATA[
+				if (parent.email == null) {
+					new lz.errorPopup(canvas.main_content._content.inner,{error:canvas.getLabelName(519)});
+					return;
+				}
                 for (var eg in this.parent.subviews){
                     this.parent.subviews[eg].setAttribute('enabled', false);
                 }
@@ -217,9 +280,10 @@
 			
 		<netRemoteCallHib name="sendInvitationHash" funcname="invitationservice.sendInvitationHash" remotecontext="$once{ canvas.thishib }" >
 			<netparam name="sid"><method name="getValue">return canvas.sessionId;</method></netparam>
-			<netparam name="username"><method name="getValue">return hib.userobject.firstname+' '+hib.userobject.lastname</method></netparam>
+			<netparam name="firstname"><method name="getValue">return parent.parent.firstname</method></netparam>
+			<netparam name="lastname"><method name="getValue">return parent.parent.lastname</method></netparam>
 			<netparam name="message"><method name="getValue">return this.parent.parent._message.getText();</method></netparam>
-			<netparam name="email"><method name="getValue">return this.parent.parent._recipient.getText();</method></netparam>
+			<netparam name="email"><method name="getValue">return parent.parent.email;</method></netparam>
 			<netparam name="subject"><method name="getValue">return this.parent.parent._subject.getText();</method></netparam>
 			<netparam name="roomid"><method name="getValue">return hib.currentroomid;</method></netparam>
 			<netparam name="conferencedomain"><method name="getValue">return hib.conferencedomain;</method></netparam>

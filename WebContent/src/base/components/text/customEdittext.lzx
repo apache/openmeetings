@@ -31,6 +31,7 @@
 	<attribute name="regexpType" value="none" type="string" />
 	<attribute name="regexpLabelid" type="number" />
 	<attribute name="preText" value="" type="string" />
+    <attribute name="emailRegEx" type="string" value=""/>
 	
 	<event name="onafterCheck" />
 
@@ -39,7 +40,10 @@
     </handler>
     
     <handler name="oninit">
+    <![CDATA[
+    	emailRegEx = "^[_a-zA-Z0-9-]+(\.[_a-zA-Z0-9-]+)*@([a-zA-Z0-9-]+\.)+([a-zA-Z]{1,3})$";
     	//this.field.setAttribute("bgcolor",0xFFFFFF);
+    ]]>
     </handler>
     
     <handler name="ontext" args="txt">
@@ -157,7 +161,7 @@
 				var fieldValue = this.getText();
 				if (this.regexpType=="email") {
 					//var regExpV = ".+\\@(\\[?)[a-zA-Z0-9\\-\\.]+\\.([a-zA-Z]{2,3}|[0-9]{1,3})(\\]?)";
-					var regExpV = "^[_a-zA-Z0-9-]+(\.[_a-zA-Z0-9-]+)*@([a-zA-Z0-9-]+\.)+([a-zA-Z]{1,3})$";
+					var regExpV = this.emailRegEx;
 					//var regExpV = "^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$";
 					this.regexpLabelid = 519;
 				} else if (this.regexpType=="date"){
