@@ -32,7 +32,7 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<wicket-dashboard.version>0.10</wicket-dashboard.version>
-		<select2.version>2.2.2</select2.version>
+		<select2.version>2.2.3</select2.version>
 		<dnd.version>0.6.0</dnd.version>
 		<commons-io.version>2.4</commons-io.version>
 		<commons-fileupload.version>1.3</commons-fileupload.version>
@@ -192,6 +192,25 @@
 					<skip>${om.quick.build}</skip>
 				</configuration>
 			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>wagon-maven-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>download-test-data</id>
+						<phase>process-test-resources</phase>
+						<goals>
+							<goal>download</goal>
+						</goals>
+						<configuration>
+							<url>https://openmeetings.googlecode.com/svn/repository</url>
+							<includes>backup_*.zip</includes>
+							<toDir>${project.build.directory}/old-backups</toDir>
+							<skip>${maven.test.skip}</skip>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
 		</plugins>
 		<testResources>
 			<testResource>
@@ -228,6 +247,19 @@
 										<versionRange>[2.8,)</versionRange>
 										<goals>
 											<goal>copy-dependencies</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore></ignore>
+									</action>
+								</pluginExecution>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>org.codehaus.mojo</groupId>
+										<artifactId>wagon-maven-plugin</artifactId>
+										<versionRange>[1.0-beta-5,)</versionRange>
+										<goals>
+											<goal>download</goal>
 										</goals>
 									</pluginExecutionFilter>
 									<action>

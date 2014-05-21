@@ -31,7 +31,6 @@
 	<description>TODO</description>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<jettison.version>1.3.5</jettison.version>
 	</properties>
 	<build>
 		<plugins>
@@ -51,9 +50,9 @@
 									<packages>org.apache.openmeetings.webservice</packages>
 								</group>
 							</groups>
-							<excludePackageNames>org.apache.openmeetings.webservice.cluster,org.apache.openmeetings.webservice.dto</excludePackageNames>
-							<reportOutputDirectory>${project.parent.build.directory}/site</reportOutputDirectory>
+							<reportOutputDirectory>../target/site</reportOutputDirectory>
 							<destDir>webservices</destDir>
+							<excludePackageNames>org.apache.openmeetings.webservice.cluster,org.apache.openmeetings.webservice.dto</excludePackageNames>
 						</configuration>
 					</execution>
 				</executions>
@@ -94,12 +93,11 @@
 		</dependency>
 		<dependency>
 			<groupId>org.apache.cxf</groupId>
-			<artifactId>cxf-bundle</artifactId>
+			<artifactId>cxf-rt-rs-extension-providers</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.codehaus.jettison</groupId>
 			<artifactId>jettison</artifactId>
-			<version>${jettison.version}</version>
 		</dependency>
 	</dependencies>
 </project>

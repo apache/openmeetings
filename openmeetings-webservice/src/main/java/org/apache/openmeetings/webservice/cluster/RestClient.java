@@ -58,19 +58,10 @@ public class RestClient {
 	
 	private String publicSID;
 
-//	private static String nameSpaceForSlaveDto = "http://room.conference.openmeetings.apache.org/xsd";
-	
-	private static String NAMESPACE_PREFIX = "http://services.axis.openmeetings.apache.org";
-
 	private String getUserServiceWsdl() {
 		return protocol + "://" + host + ":" + port + "/" + webapp
 				+ "/services/UserService?wsdl";
 	}
-//
-//	private String getRoomServiceEndPoint() {
-//		return protocol + "://" + host + ":" + port + "/" + webapp
-//				+ "/services/RoomService";
-//	}
 
 	/**
 	 * The observerInstance will be notified whenever a ping was completed
@@ -222,40 +213,4 @@ public class RestClient {
 			log.error("[kickUser failed]", err);
 		}
 	}
-
-	/**
-	 * Get and cast the element's text (if there is any)
-	 * 
-	 * @param resultElement
-	 * @param elementName
-	 * @param typeObject
-	 * @return
-	 */
-//	private <T> T getElementTextByName(OMElement resultElement, String elementName, Class<T> typeObject) {
-//		try {
-//			OMElement userIdElement = resultElement
-//					.getFirstChildWithName(new QName(nameSpaceForSlaveDto, elementName));
-//			if (userIdElement != null && userIdElement.getText() != null
-//					&& userIdElement.getText().length() > 0) {
-//				
-//				String defaultValue = userIdElement.getText();
-//				
-//				// Either this can be directly assigned or try to find a constructor
-//				// that handles it
-//				if (typeObject.isAssignableFrom(defaultValue.getClass())) {
-//					return typeObject.cast(defaultValue);
-//				}
-//				Constructor<T> c = typeObject.getConstructor(defaultValue
-//						.getClass());
-//				return c.newInstance(defaultValue);
-//				
-//			}
-//		} catch (Exception err) {
-//			//Catch any class cast exception, but log only
-//			log.error("[getElementTextByName]", err);
-//		}
-//		return null;
-//	}
-	
-	
 }

@@ -32,7 +32,6 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<openjpa.version>2.3.0</openjpa.version>
-		<simple-xml.version>2.7.1</simple-xml.version>
 		<asterisk-java.version>1.0.0.CI-SNAPSHOT</asterisk-java.version>
 		<commons-dbcp.version>1.4</commons-dbcp.version>
 		<derby.version>10.10.1.1</derby.version>
@@ -42,7 +41,6 @@
 		<dependency>
 			<groupId>org.apache.openmeetings</groupId>
 			<artifactId>openmeetings-util</artifactId>
-			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.openjpa</groupId>
@@ -57,7 +55,6 @@
 		<dependency>
 			<groupId>org.simpleframework</groupId>
 			<artifactId>simple-xml</artifactId>
-			<version>${simple-xml.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.asteriskjava</groupId>
@@ -127,6 +124,18 @@
 				        <version>${openjpa.version}</version>
 				    </dependency>
 				</dependencies>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<executions>
+					<execution>
+						<goals>
+							<goal>javadoc</goal>
+						</goals>
+						<phase>site</phase>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 		<pluginManagement>

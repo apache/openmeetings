@@ -43,9 +43,11 @@
 		<batik.version>1.7</batik.version>
 		<commons-transaction.version>1.2</commons-transaction.version>
 		<ical4j.version>1.0.5.2</ical4j.version>
-		<cxf.version>2.7.11</cxf.version>
+		<cxf.version>3.0.0</cxf.version>
 		<selenium.version>2.41.0</selenium.version>
 		<red5-client.version>1.0.2-RC2</red5-client.version>
+		<simple-xml.version>2.7.1</simple-xml.version>
+		<jettison.version>1.3.5</jettison.version>
 	</properties>
 	<modules>
 		<module>openmeetings-core</module>
@@ -322,34 +324,8 @@
 			</dependency>
 			<dependency>
 				<groupId>org.apache.cxf</groupId>
-				<artifactId>cxf-bundle</artifactId>
+				<artifactId>cxf-rt-rs-extension-providers</artifactId>
 				<version>${cxf.version}</version>
-				<exclusions>
-					<exclusion>
-						<groupId>org.springframework</groupId>
-						<artifactId>*</artifactId>
-					</exclusion>
-					<exclusion>
-						<groupId>antlr</groupId>
-						<artifactId>antlr</artifactId>
-					</exclusion>
-					<exclusion>
-						<groupId>aopalliance</groupId>
-						<artifactId>aopalliance</artifactId>
-					</exclusion>
-					<exclusion>
-						<groupId>asm</groupId>
-						<artifactId>asm</artifactId>
-					</exclusion>
-					<exclusion>
-						<groupId>commons-logging</groupId>
-						<artifactId>commons-logging</artifactId>
-					</exclusion>
-					<exclusion>
-						<groupId>org.apache.geronimo.specs</groupId>
-						<artifactId>geronimo-servlet_3.0_spec</artifactId>
-					</exclusion>
-				</exclusions>
 			</dependency>
 			<dependency>
 				<groupId>org.seleniumhq.selenium</groupId>
@@ -360,6 +336,32 @@
 					<exclusion>
 						<groupId>commons-logging</groupId>
 						<artifactId>commons-logging</artifactId>
+					</exclusion>
+				</exclusions>
+			</dependency>
+			<dependency>
+				<groupId>org.simpleframework</groupId>
+				<artifactId>simple-xml</artifactId>
+				<version>${simple-xml.version}</version>
+				<exclusions>
+					<exclusion>
+						<groupId>stax</groupId>
+						<artifactId>stax-api</artifactId>
+					</exclusion>
+					<exclusion>
+						<groupId>xpp3</groupId>
+						<artifactId>xpp3</artifactId>
+					</exclusion>
+				</exclusions>
+			</dependency>
+			<dependency>
+				<groupId>org.codehaus.jettison</groupId>
+				<artifactId>jettison</artifactId>
+				<version>${jettison.version}</version>
+				<exclusions>
+					<exclusion>
+						<groupId>stax</groupId>
+						<artifactId>stax-api</artifactId>
 					</exclusion>
 				</exclusions>
 			</dependency>
@@ -394,37 +396,11 @@
 	<build>
 		<plugins>
 			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-eclipse-plugin</artifactId>
-				<inherited>true</inherited>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-site-plugin</artifactId>
-				<inherited>true</inherited>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-surefire-plugin</artifactId>
-				<inherited>true</inherited>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-surefire-report-plugin</artifactId>
-				<inherited>true</inherited>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-jar-plugin</artifactId>
-				<inherited>true</inherited>
-			</plugin>
-			<plugin>
 				<groupId>org.apache.felix</groupId>
 				<artifactId>maven-bundle-plugin</artifactId>
-				<inherited>true</inherited>
 			</plugin>
 		</plugins>
-		<pluginManagement>
+ 		<pluginManagement>
 			<plugins>
 				<plugin>
 					<inherited>true</inherited>
@@ -606,3 +582,4 @@
 		</plugins>
 	</reporting>
 </project>
+

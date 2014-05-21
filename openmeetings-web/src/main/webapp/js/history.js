@@ -680,7 +680,7 @@ function goForwardOrBackInHistory(step)
     if(/webkit/i.test(u)){
         st(function(){
             var dr=document.readyState;
-            if(dr=="loaded"||dr=="complete"){i()}
+            if(dr=="loaded"||dr=="complete"){i();}
             else{st(arguments.callee,10);}},10);
     } else if((/mozilla/i.test(u)&&!/(compati)/.test(u)) || (/opera/i.test(u))){
         document.addEventListener("DOMContentLoaded",i,false);
