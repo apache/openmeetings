@@ -79,6 +79,17 @@
 				if (!canvas.isConference){
 					this.roomType = "restricted"; //FIXME
 				}
+                for (var eg in this.subviews) {
+                    this.subviews[eg].setAttribute('enabled', true);
+                }
+                _password.setAttribute('enabled', _ispasswordProtected.value);
+                var period = _valid.value == 2;
+                _valid_from.setAttribute('enabled', period);
+                _timeFrom.setAttribute('enabled', period);
+                _valid_to.setAttribute('enabled', period);
+                _timeTo.setAttribute('enabled', period);
+                _timeZone.setAttribute('enabled', period);
+                _url.setAttribute('enabled', false);
 			} else {
 	    		lz.ModeManager.release(this);
 			}
@@ -198,24 +209,22 @@
 
 		<!-- label: valid from -->		
 		<labelText x="4" labelid="530" y="284" fgcolor="${ ((parent._valid.value==2) ? 0x000000 : 0xCCCCCC ) }" />
-		<dateField x="120" y="282" name="_valid_from" setDefaultToday="true" enabled="${ ((parent._valid.value==2) ? true : false ) }" />
-		<customEdittext name="_timeFrom" enabled="${ ((parent._valid.value==2) ? true : false ) }"
+		<dateField x="120" y="282" name="_valid_from" setDefaultToday="true" enabled="${ parent._valid.value == 2 }" />
+		<customEdittext name="_timeFrom" enabled="${ parent._valid.value == 2 }"
 					width="50" x="232" y="282" text="$once{ getStringTime() }" regexpType="time" />	   
 		
 		<!-- label: valid to -->			
 		<labelText x="4" labelid="531" y="314" fgcolor="${ ((parent._valid.value==2) ? 0x000000 : 0xCCCCCC ) }" />
-		<dateField x="120" y="314" name="_valid_to" setDefaultToday="true" additionalDay="1" enabled="${ ((parent._valid.value==2) ? true : false ) }" />		
-		<customEdittext name="_timeTo" enabled="${ ((parent._valid.value==2) ? true : false ) }"
+		<dateField x="120" y="314" name="_valid_to" setDefaultToday="true" additionalDay="1" enabled="${ (parent._valid.value == 2) }" />		
+		<customEdittext name="_timeTo" enabled="${ parent._valid.value == 2 }"
 						width="50" x="232" y="314" text="$once{ getStringTime() }" regexpType="time" />				   
 
 		<labelText labelid="1143" width="200" y="344" fgcolor="${ ((parent._valid.value==2) ? 0x000000 : 0xCCCCCC ) }"  x="4" />
 		<resetCombobox name="_timeZone" editable="false" y="344" width="270" x="120"
-				enabled="${ ((parent._valid.value==2) ? true : false ) }"
-				fontsize="11" style="componentStyle"/>
+				enabled="${ parent._valid.value == 2 }" fontsize="11" style="componentStyle"/>
          
 		<labelText labelid="59" width="200" y="374" x="4" />
-        <resetCombobox name="_languages" editable="false" y="374" width="270" x="120"
-         			   fontsize="11" style="componentStyle">
+        <resetCombobox name="_languages" editable="false" y="374" width="270" x="120" fontsize="11" style="componentStyle">
             <labeldTextListItem datapath="languagesSet:/item" text="$path{ 'name/text()' }" value="$path{ 'language_id/text()' }"/>
         </resetCombobox>
 
@@ -242,7 +251,7 @@
 					new lz.errorPopup(canvas.main_content._content.inner,{error:canvas.getLabelName(519)});
 					return;
 				}
-                for (var eg in this.parent.subviews){
+                for (var eg in this.parent.subviews) {
                     this.parent.subviews[eg].setAttribute('enabled', false);
                 }
                 if (parent.display) {
@@ -269,7 +278,7 @@
 			<netparam name="language_id"><method name="getValue">return parent.parent._languages.getValue();</method></netparam>
 			<handler name="ondata" args="value">
 			<![CDATA[
-				if (value != null){
+				if (value != null) {
 		    		parent.setAttribute('visibility', 'hidden');
 				} else {
 					new lz.errorPopup(canvas.main_content._content.inner,{error:value});
@@ -303,7 +312,7 @@
 				//The onResult-Handler will be called be the rtmpconnection
 				if ($debug) Debug.write("sendInvitationHash : ",value);
 				if ($debug) Debug.write("sendInvitationHash : ", (typeof value));
-				if (typeof value == "object"){
+				if (typeof value == "object") {
 					if (parent.display) {
 						parent.send.setAttribute('enabled', true);
 						parent._message.setAttribute('enabled', true);
