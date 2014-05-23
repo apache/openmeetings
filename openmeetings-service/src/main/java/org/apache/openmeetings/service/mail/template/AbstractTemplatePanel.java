@@ -94,7 +94,7 @@ public abstract class AbstractTemplatePanel extends Panel {
 			ThreadContext.setRequestCycle(new RequestCycle(rctx));
 			
 			WebSession session = WebSession.get();
-			((IWebSession)session).setLanguage(1);
+			((IWebSession)session).setLanguage(langId);
 			ThreadContext.setSession(session);
 		}
 	}
