@@ -26,10 +26,10 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.apache.openmeetings.core.data.conference.RoomManager;
 import org.apache.openmeetings.core.data.whiteboard.EmoticonsManager;
 import org.apache.openmeetings.core.remote.red5.ScopeApplicationAdapter;
 import org.apache.openmeetings.core.remote.util.SessionVariablesUtil;
+import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.dao.server.ISessionManager;
 import org.apache.openmeetings.db.dao.user.IUserManager;
 import org.apache.openmeetings.db.entity.room.Client;
@@ -61,7 +61,7 @@ public class ChatService implements IPendingServiceCallback {
 	@Autowired
 	private EmoticonsManager emoticonsManager;
 	@Autowired
-	private RoomManager roomManager;
+	private RoomDao roomDao;
 	@Autowired
 	private IUserManager userManager;
 	
@@ -109,8 +109,7 @@ public class ChatService implements IPendingServiceCallback {
 			if (room_id == null) {
 				return 1; //TODO weird
 			}
-			Long user_level = userManager.getUserLevelByID(currentClient.getUser_id());
-			Room room = roomManager.getRoomById(user_level, room_id);
+			Room room = roomDao.get(room_id);
 			@SuppressWarnings("rawtypes")
 			ArrayList messageMap = (ArrayList) newMessage;
 			// adding delimiter space, cause otherwise an emoticon in the last
@@ -193,8 +192,7 @@ public class ChatService implements IPendingServiceCallback {
 			IConnection current = Red5.getConnectionLocal();
 			Client currentClient = this.sessionManager.getClientByStreamId(current.getClient().getId(), null);
 			Long room_id = currentClient.getRoom_id();
-			Long user_level = userManager.getUserLevelByID(currentClient.getUser_id());
-			Room room = roomManager.getRoomById(user_level, room_id);
+			Room room = roomDao.get(room_id);
 			log.debug("room_id: " + room_id);
 
 			@SuppressWarnings("rawtypes")
