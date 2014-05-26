@@ -31,7 +31,7 @@ BrowserHistoryUtils = {
             elm['on' + evType] = fn;
         }
     }
-}
+};
 
 BrowserHistory = (function() {
     // type of browser
@@ -217,7 +217,7 @@ BrowserHistory = (function() {
     function setHash(hash) {
        // It would be nice if we could use document.location.hash here,
        // but it's faulty sometimes.
-       if (hash == '') hash = '#'
+       if (hash == '') hash = '#';
        document.location.hash = hash;
     }
 

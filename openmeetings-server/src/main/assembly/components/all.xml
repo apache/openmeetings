@@ -70,6 +70,18 @@
 			</includes>
 		</fileSet>
 		<fileSet>
+			<directory>${project.parent.basedir}/openmeetings-web/target/openmeetings-web-${project.version}</directory><!-- FIXME should be implemented differently -->
+			<outputDirectory>${om.webapp}</outputDirectory>
+			<excludes>
+				<exclude>META-INF/**</exclude>
+				<exclude>WEB-INF/lib/aopalliance*</exclude>
+				<exclude>WEB-INF/lib/slf4j-*</exclude>
+				<exclude>WEB-INF/lib/spring-*</exclude>
+				<exclude>WEB-INF/lib/geronimo-jpa*</exclude>
+				<exclude>WEB-INF/lib/commons-fileupload*</exclude>
+			</excludes>
+		</fileSet>
+		<fileSet>
 			<directory>${project.parent.basedir}/openmeetings-web/target/openmeetings-web-${project.version}/WEB-INF/lib</directory><!-- FIXME should be implemented differently -->
 			<outputDirectory>lib</outputDirectory>
 			<includes>
@@ -78,25 +90,18 @@
 				<include>commons-fileupload*</include>
 			</includes>
 		</fileSet>
+		<fileSet>
+			<directory>target/site</directory>
+			<outputDirectory>${om.webapp}/docs</outputDirectory>
+		</fileSet>
+		<fileSet>
+			<directory>${project.parent.basedir}/openmeetings-webservice/target/apidocs</directory><!-- FIXME should be implemented differently -->
+			<outputDirectory>${om.webapp}/docs/webservices</outputDirectory>
+			<excludes>
+				<exclude>javadoc.sh</exclude>
+				<exclude>options</exclude>
+				<exclude>packages</exclude>
+			</excludes>
+		</fileSet>
 	</fileSets>
-	<dependencySets>
-		<dependencySet>
-			<includes>
-				<include>org.apache.openmeetings:openmeetings-web:war</include>
-			</includes>
-			<outputDirectory>${om.webapp}</outputDirectory>
-			<unpack>true</unpack>
-			<useProjectArtifact>false</useProjectArtifact>
-			<unpackOptions>
-				<excludes>
-					<exclude>META-INF/**</exclude>
-					<exclude>WEB-INF/lib/aopalliance*</exclude>
-					<exclude>WEB-INF/lib/slf4j-*</exclude>
-					<exclude>WEB-INF/lib/spring-*</exclude>
-					<exclude>WEB-INF/lib/geronimo-jpa*</exclude>
-					<exclude>WEB-INF/lib/commons-fileupload*</exclude>
-				</excludes>
-			</unpackOptions>
-		</dependencySet>
-	</dependencySets>
 </component>

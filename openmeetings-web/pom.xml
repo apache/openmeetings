@@ -37,6 +37,9 @@
 		<commons-io.version>2.4</commons-io.version>
 		<commons-fileupload.version>1.3</commons-fileupload.version>
 		<mysql.version>5.1.30</mysql.version>
+		<old-backups.dir>${project.build.directory}/old-backups</old-backups.dir>
+		<old-backups.dwnd.skip>${maven.test.skip}</old-backups.dwnd.skip>
+		<backup.to.check>backup_v_2_0_0_r1361497.zip</backup.to.check>
 	</properties>
 	<profiles>
 		<profile>
@@ -56,6 +59,15 @@
 			</dependencies>
 		</profile>
 		<profile>
+			<id>Skip download old backups</id>
+			<activation>
+				<file><exists>target/old-backups/${backup.to.check}</exists></file>
+			</activation>
+			<properties>
+				<old-backups.dwnd.skip>true</old-backups.dwnd.skip>
+			</properties>
+		</profile>
+		<profile>
 			<id>Quick</id>
 			<activation>
 				<property>
@@ -66,18 +78,12 @@
 			<properties>
 				<maven.test.skip>true</maven.test.skip>
 				<om.quick.build>true</om.quick.build>
+				<old-backups.dwnd.skip>true</old-backups.dwnd.skip>
 			</properties>
 		</profile>
 	</profiles>
 	<build>
 		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-site-plugin</artifactId>
-				<configuration>
-					<skip>true</skip>
-				</configuration>
-			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-war-plugin</artifactId>
@@ -87,6 +93,15 @@
 					<filteringDeploymentDescriptors>true</filteringDeploymentDescriptors>
 					<skip>${om.quick.build}</skip>
 				</configuration>
+				<executions>
+					<execution>
+						<id>create-war</id>
+						<phase>prepare-package</phase>
+						<goals>
+							<goal>exploded</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -94,7 +109,7 @@
 				<executions>
 					<execution>
 						<id>copy-dependencies</id>
-						<phase>package</phase>
+						<phase>prepare-package</phase>
 						<goals>
 							<goal>copy-dependencies</goal>
 						</goals>
@@ -184,12 +199,12 @@
 						<om.home>${project.build.directory}/test-root</om.home>
 						<languages.home>${project.basedir}/src/main/webapp/languages</languages.home>
 						<red5.root>red5.root</red5.root>
-						<backups.dir>${project.build.directory}/old-backups</backups.dir>
+						<backups.dir>${old-backups.dir}</backups.dir>
 					</systemPropertyVariables>
 					<additionalClasspathElements>
 						<additionalClasspathElement>${project.build.directory}/${project.build.finalName}/WEB-INF/classes</additionalClasspathElement>
 					</additionalClasspathElements>
-					<skip>${om.quick.build}</skip>
+					<skip>${maven.test.skip}</skip>
 				</configuration>
 			</plugin>
 			<plugin>
@@ -205,8 +220,8 @@
 						<configuration>
 							<url>https://openmeetings.googlecode.com/svn/repository</url>
 							<includes>backup_*.zip</includes>
-							<toDir>${project.build.directory}/old-backups</toDir>
-							<skip>${maven.test.skip}</skip>
+							<toDir>${old-backups.dir}</toDir>
+							<skip>${old-backups.dwnd.skip}</skip>
 						</configuration>
 					</execution>
 				</executions>

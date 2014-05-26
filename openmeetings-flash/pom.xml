@@ -38,20 +38,14 @@
 	<build>
 		<plugins>
 			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-site-plugin</artifactId>
-				<configuration>
-					<skip>true</skip>
-				</configuration>
-			</plugin>
-			<plugin>
 				<artifactId>maven-antrun-plugin</artifactId>
 				<executions>
 					<execution>
 						<phase>package</phase>
 						<configuration>
+							<exportAntProperties>true</exportAntProperties>
 							<target>
-								<ant antfile="${basedir}/../openlaszlo.xml" target="client.only"/>
+								<ant antfile="${basedir}/openlaszlo.xml" target="client.only"/>
 							</target>
 						</configuration>
 						<goals>

@@ -46,16 +46,16 @@ public class TestUserGroupAggregation extends AbstractJUnitDefaults {
 		assertTrue("Default user must belong to at least one organisation", orgUser.size() > 0);
 
 		for (Organisation orgUserObj : orgUser) {
-			log.error("testitNow: organisation Id: '" + orgUserObj.getOrganisation_id() + "'; name: '" + orgUserObj.getName() + "'");
+			log.debug("testitNow: organisation Id: '" + orgUserObj.getOrganisation_id() + "'; name: '" + orgUserObj.getName() + "'");
 		}
 
 		List<Organisation> orgUser2 = organisationManager.getRestOrganisationsByUserId(3,
 				1, 0, 100, "organisation_id", true);
 
-		log.error("testitNow: rest organisations count: " + orgUser2.size());
+		log.debug("testitNow: rest organisations count: " + orgUser2.size());
 
 		for (Organisation orgUserObj : orgUser2) {
-			log.error("testitNow: organisation Id: '" + orgUserObj.getOrganisation_id() + "'; name: '" + orgUserObj.getName() + "'");
+			log.debug("testitNow: organisation Id: '" + orgUserObj.getOrganisation_id() + "'; name: '" + orgUserObj.getName() + "'");
 		}
 		
 	}

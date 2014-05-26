@@ -43,18 +43,18 @@ public class TestAddGroup extends AbstractJUnitDefaults {
 		long organisation_id = organisationManager.addOrganisation(
 				"default", 1);
 
-		log.error("new organisation: " + organisation_id);
+		log.debug("new organisation: " + organisation_id);
 
 		long organisation_usersid = organisationManager
 				.addUserToOrganisation(new Long(1), organisation_id,
 						new Long(1));
 
-		log.error("new organisation_user: " + organisation_usersid);
+		log.debug("new organisation_user: " + organisation_usersid);
 
 		User us = usersDao.get(new Long(1));
 
-		log.error(us.getLastname());
-		log.error(us.getAdresses().getTown());
+		log.debug(us.getLastname());
+		log.debug(us.getAdresses().getTown());
 
 		/*
 		 * for (Iterator it = us.getAdresses().getEmails().iterator();

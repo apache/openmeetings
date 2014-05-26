@@ -42,7 +42,10 @@
 	<path id="laszlo46.lib">
 		<fileset dir="${laszlo46.home}/WEB-INF/lib" includes="*.jar" />
 	</path>
-	<target name="client.only" depends="compile.laszlo.main.as3,compile.laszlo.main,compile.laszlo.networktesting" />
+	
+	<target name="client.only" depends="compile.laszlo.main.as3, compile.laszlo.main, compile.laszlo.networktesting" unless="client-already-built">
+		<property name="client-already-built" value="true"/>
+	</target>
 
 	<target name="client.debug.only" depends="compile.laszlo.main.debug.as3,compile.laszlo.main.debug,compile.laszlo.networktesting.debug" />
 

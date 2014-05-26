@@ -41,8 +41,9 @@
 					<execution>
 						<goals>
 							<goal>javadoc</goal>
+							<goal>aggregate</goal>
 						</goals>
-						<phase>site</phase>
+						<phase>generate-resources</phase>
 						<configuration>
 							<groups>
 								<group>
@@ -50,21 +51,42 @@
 									<packages>org.apache.openmeetings.webservice</packages>
 								</group>
 							</groups>
-							<reportOutputDirectory>../target/site</reportOutputDirectory>
-							<destDir>webservices</destDir>
 							<excludePackageNames>org.apache.openmeetings.webservice.cluster,org.apache.openmeetings.webservice.dto</excludePackageNames>
 						</configuration>
 					</execution>
 				</executions>
 			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-site-plugin</artifactId>
-				<configuration>
-					<skip>true</skip>
-				</configuration>
-			</plugin>
 		</plugins>
+		<pluginManagement>
+			<plugins>
+				<!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
+				<plugin>
+					<groupId>org.eclipse.m2e</groupId>
+					<artifactId>lifecycle-mapping</artifactId>
+					<version>1.0.0</version>
+					<configuration>
+						<lifecycleMappingMetadata>
+							<pluginExecutions>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>org.apache.maven.plugins</groupId>
+										<artifactId>maven-javadoc-plugin</artifactId>
+										<versionRange>[2.9.1,)</versionRange>
+										<goals>
+											<goal>javadoc</goal>
+											<goal>aggregate</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore></ignore>
+									</action>
+								</pluginExecution>
+							</pluginExecutions>
+						</lifecycleMappingMetadata>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
 	</build>
 	<dependencies>
 		<dependency>

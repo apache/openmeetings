@@ -32,14 +32,25 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<server.dir>${project.build.directory}/red5-server</server.dir>
+		<languages.dir>${project.parent.basedir}/openmeetings-web/src/main/webapp/languages</languages.dir>
 		<dist.dir>${project.build.directory}/${project.build.finalName}</dist.dir>
 		<dist.webapps>${dist.dir}/webapps</dist.webapps>
 		<om.webapp>webapps/openmeetings</om.webapp>
 		<root.webapp>webapps/root</root.webapp>
 		<assembly.finalName>${project.build.finalName}</assembly.finalName>
 		<assembly.descriptor>server</assembly.descriptor>
+		<red5-server.file.name>red5-server-1.0.2-RELEASE-server.zip</red5-server.file.name><!-- FIXME duplicate variable -->
 	</properties>
 	<profiles>
+		<profile>
+			<id>Skip download red5-server</id>
+			<activation>
+				<file><exists>target/${red5-server.file.name}</exists></file>
+			</activation>
+			<properties>
+				<red5-server.dwnd.skip>true</red5-server.dwnd.skip>
+			</properties>
+		</profile>
 		<profile>
 			<id>Quick</id>
 			<activation>
@@ -51,6 +62,7 @@
 			<properties>
 				<maven.test.skip>true</maven.test.skip>
 				<om.quick.build>true</om.quick.build>
+				<red5-server.dwnd.skip>true</red5-server.dwnd.skip>
 				<assembly.finalName>server</assembly.finalName>
 				<assembly.descriptor>quick</assembly.descriptor>
 			</properties>
@@ -74,13 +86,6 @@
 	<build>
 		<plugins>
 			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-site-plugin</artifactId>
-				<configuration>
-					<skip>true</skip>
-				</configuration>
-			</plugin>
-			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>wagon-maven-plugin</artifactId>
 				<executions>
@@ -92,9 +97,9 @@
 						</goals>
 						<configuration>
 							<url>https://github.com/Red5/red5-server/releases/download</url>
-							<fromFile>v${red5-server.version}/red5-server-${red5-server.version}-server.zip</fromFile>
+							<fromFile>v${red5-server.version}/${red5-server.file.name}</fromFile>
 							<toDir>${project.build.directory}</toDir>
-							<skip>${om.quick.build}</skip>
+							<skip>${red5-server.dwnd.skip}</skip>
 						</configuration>
 					</execution>
 				</executions>
@@ -111,11 +116,58 @@
 						<phase>process-resources</phase>
 						<configuration>
 							<fileset>
-								<directory>${project.build.directory}/red5-server-${red5-server.version}-server.zip/red5-server-${red5-server.version}</directory>
+								<directory>${project.build.directory}/${red5-server.file.name}/red5-server-${red5-server.version}</directory>
 								<outputDirectory>${server.dir}</outputDirectory>
 							</fileset>
 							<skip>${om.quick.build}</skip>
 						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>xml-maven-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>generate-errors-doc</id>
+						<phase>generate-sources</phase>
+						<goals>
+							<goal>transform</goal>
+						</goals>
+						<configuration>
+							<transformationSets>
+								<transformationSet>
+									<dir>${languages.dir}</dir>
+									<includes>
+										<include>errorvalues.xml</include>
+									</includes>
+									<stylesheet>src/site/stylesheets/errortable.xsl</stylesheet>
+									<outputDir>${basedir}/src/site/xdoc</outputDir>
+									<parameters>
+										<parameter>
+											<name>languagesDir</name>
+											<value>${languages.dir}</value>
+										</parameter>
+									</parameters>
+								</transformationSet>
+							</transformationSets>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-site-plugin</artifactId>
+				<configuration>
+					<skip>false</skip>
+				</configuration>
+				<executions>
+					<execution>
+						<id>generate-site</id>
+						<phase>generate-resources</phase>
+						<goals>
+							<goal>site</goal>
+						</goals>
 					</execution>
 				</executions>
 			</plugin>
@@ -171,6 +223,32 @@
 										<versionRange>[1.2,)</versionRange>
 										<goals>
 											<goal>copy</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore></ignore>
+									</action>
+								</pluginExecution>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>org.codehaus.mojo</groupId>
+										<artifactId>xml-maven-plugin</artifactId>
+										<versionRange>[1.0,)</versionRange>
+										<goals>
+											<goal>transform</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore></ignore>
+									</action>
+								</pluginExecution>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>org.apache.maven.plugins</groupId>
+										<artifactId>maven-site-plugin</artifactId>
+										<versionRange>[3.3,)</versionRange>
+										<goals>
+											<goal>site</goal>
 										</goals>
 									</pluginExecutionFilter>
 									<action>

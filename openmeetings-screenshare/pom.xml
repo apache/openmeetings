@@ -64,14 +64,7 @@
 	</dependencies>
 	<build>
 		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-site-plugin</artifactId>
-				<configuration>
-					<skip>true</skip>
-				</configuration>
-			</plugin>
-			<plugin>
+			<!-- plugin>  FIXME review after http://jira.codehaus.org/browse/MWEBSTART-266 is fixed
 				<groupId>com.google.code.maven-replacer-plugin</groupId>
 				<artifactId>replacer</artifactId>
 				<executions>
@@ -149,7 +142,7 @@
 						</configuration>
 					</execution>
 				</executions>
-			</plugin>
+			</plugin-->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-dependency-plugin</artifactId>
@@ -174,7 +167,7 @@
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>webstart-maven-plugin</artifactId>
 				<executions>
-					<execution>
+					<!-- execution>  FIXME review after http://jira.codehaus.org/browse/MWEBSTART-266 is fixed
 						<id>generate-jnlp-template-for-signing</id>
 						<phase>process-resources</phase>
 						<goals>
@@ -212,10 +205,10 @@
 							</jnlp>
 							<makeArchive>false</makeArchive>
 						</configuration>
-					</execution>
+					</execution-->
 					<execution>
 						<id>generate-jnlp-and-sign-libs</id>
-						<phase>process-resources</phase>
+						<phase>package</phase>
 						<goals>
 							<goal>jnlp</goal>
 						</goals>
@@ -280,7 +273,7 @@
 					</execution>
 				</executions>
 			</plugin>
-			<plugin>
+			<!-- plugin>  FIXME review after http://jira.codehaus.org/browse/MWEBSTART-266 is fixed
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>truezip-maven-plugin</artifactId>
 				<executions>
@@ -322,7 +315,7 @@
 					<removeExistingSignatures>true</removeExistingSignatures>
 					<verbose>true</verbose>
 				</configuration>
-			</plugin>
+			</plugin-->
 		</plugins>
 		<pluginManagement>
 			<plugins>
