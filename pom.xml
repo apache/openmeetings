@@ -50,16 +50,16 @@
 		<jettison.version>1.3.5</jettison.version>
 	</properties>
 	<modules>
-		<module>openmeetings-core</module>
+		<module>openmeetings-util</module>
 		<module>openmeetings-db</module>
-		<module>openmeetings-flash</module>
+		<module>openmeetings-core</module>
 		<module>openmeetings-install</module>
+		<module>openmeetings-service</module>
+		<module>openmeetings-webservice</module>
+		<module>openmeetings-web</module>
+		<module>openmeetings-flash</module>
 		<module>openmeetings-screenshare</module>
 		<module>openmeetings-server</module>
-		<module>openmeetings-service</module>
-		<module>openmeetings-util</module>
-		<module>openmeetings-web</module>
-		<module>openmeetings-webservice</module>
 	</modules>
 	<profiles>
 		<profile>

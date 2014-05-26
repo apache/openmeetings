@@ -189,6 +189,25 @@
 				</executions>
 			</plugin>
 			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>wagon-maven-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>download-test-data</id>
+						<phase>process-resources</phase>
+						<goals>
+							<goal>download</goal>
+						</goals>
+						<configuration>
+							<url>https://openmeetings.googlecode.com/svn/repository</url>
+							<includes>backup_*.zip</includes>
+							<toDir>${old-backups.dir}</toDir>
+							<skip>${old-backups.dwnd.skip}</skip>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId><!-- maybe integration tests should be used -->
 				<inherited>true</inherited>
@@ -206,25 +225,6 @@
 					</additionalClasspathElements>
 					<skip>${maven.test.skip}</skip>
 				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>wagon-maven-plugin</artifactId>
-				<executions>
-					<execution>
-						<id>download-test-data</id>
-						<phase>process-test-resources</phase>
-						<goals>
-							<goal>download</goal>
-						</goals>
-						<configuration>
-							<url>https://openmeetings.googlecode.com/svn/repository</url>
-							<includes>backup_*.zip</includes>
-							<toDir>${old-backups.dir}</toDir>
-							<skip>${old-backups.dwnd.skip}</skip>
-						</configuration>
-					</execution>
-				</executions>
 			</plugin>
 		</plugins>
 		<testResources>
