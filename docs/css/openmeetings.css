@@ -14,74 +14,45 @@
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
-body {
-	color: #000000;
-	margin: 0;
-	background: #fafafa;
-	font: 10pt Verdana, Arial, Helvetica, sans-serif;
-	  
-}
-.active {
-	font-style: italic;
-}
-
-.mainbody {
-	margin-left: 40px;
-	margin-right: 40px;
-	-moz-box-shadow: 4px 0px 5px #666666;
-	-webkit-box-shadow: 4px 0px 5px #666666;
-	box-shadow: 4px 0px 5px #666666;
-}
-.superbody {
-	background: #FFFFFF;
-	-moz-box-shadow: -4px 0px 5px #666666;
-	-webkit-box-shadow: -4px 0px 5px #666666;
-	box-shadow: -4px 0px 5px #666666;
-}
-
-/* Box CSS  */
-div {
-	margin: 0;
-}
-
-
-.ro {
-	background: url(2b.png) top right no-repeat;
-}
-
-.lo {
-	background: url(1b.png) top left no-repeat;
-}
-
-.ru {
-	background: url(3b.png) bottom right no-repeat;
-}
-
-.lu {
-	background: url(4b.png) bottom left no-repeat;
-}
-
-ul {
-	margin-top: 0em;
-	padding-left: 1.5em;
-}
-
-.inhalt {
-	margin: 0;
-	padding: 0.5em 2.0em 1.5em 1.0em;
-}
-
-.inhalt p {
-	margin: 0;
-	padding: 0;
-}
-.xmlcode {
-	margin-left: 20px;
-	background-color: #eeeeee;
-	color: #0000ff;
-	margin-top: 10px;
+.carousel-caption .title, .carousel-caption .desc {
+	color: white;
+	display: block;
+	text-align: center;
+	text-shadow: rgba(0, 0, 0, 0.6) 0px 1px 2px;
 	margin-bottom: 10px;
 }
-#accordion.ui-accordion .ui-accordion-header a {
-	padding-left: 20px;
+.carousel-caption .title {
+	font-size: 24px;
+	font-weight: 500;
+	margin-top: 20px;
+}
+.feature.title {
+	display: block;
+	text-align: center;
+	font-size: 1.17em;
+	font-weight: bold;
+	margin-top: 20px;
+	margin-bottom: 10px;
+}
+.feature img {
+	float: left;
+	padding: 10px;
+	padding-right: 30px;
+}
+.feature .desc, .feature .p {
+	display: block;
+}
+.feature li {
+	position: relative;
+	left: 30px;
+	margin-right: 20px;
+}
+.feature li img {
+	float: none;
+	padding: 0;
+	padding-right: 10px;
+}
+iframe {
+	width: 100%;
+	min-height: 700px;
 }
