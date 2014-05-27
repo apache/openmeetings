@@ -25,7 +25,7 @@
 		<section name="OpenMeetings Plugin for Joomla">
 			<p>
 				Plugin for Joomla currently is not open source. 
-				Please contact <a href="commercial-support.html" target="_BLANK" rel="nofollow">Commercial Support</a> to get it. 
+				Please contact <a href="commercial-support.html" target="_blank" rel="nofollow">Commercial Support</a> to get it. 
 			</p>			
 		</section>
 		<section name="Features">
@@ -49,22 +49,12 @@
 		<section name="Demo video">			
 			<div>
 				<b>OpenMeetings Joomla Plugin Installation</b><br/>              
-				<object style="height: 360px; width: 640px">
-					<param name="movie" value="http://www.youtube.com/v/jt8ejgtHavc?version=3&amp;feature=player_detailpage"/>
-					<param name="allowFullScreen" value="true"/>
-					<param name="allowScriptAccess" value="always"/>
-					<embed src="http://www.youtube.com/v/jt8ejgtHavc?version=3&amp;feature=player_detailpage" type="application/x-shockwave-flash" allowfullscreen="true" allowScriptAccess="always" width="640" height="360"/>
-				</object> 
+				<iframe width="640" height="360" src="https://www.youtube.com/embed/jt8ejgtHavc?feature=player_embedded" frameborder="0" allowfullscreen=""></iframe>
 			</div>
 			<br/>
 			<div>
 				<b>OpenMeetings Integration with Joomla</b><br/>              
-				<object style="height: 360px; width: 640px">
-					<param name="movie" value="http://www.youtube.com/v/H61N0pfLusA?version=3&amp;feature=player_detailpage"/>
-					<param name="allowFullScreen" value="true"/>
-					<param name="allowScriptAccess" value="always"/>
-					<embed src="http://www.youtube.com/v/H61N0pfLusA?version=3&amp;feature=player_detailpage" type="application/x-shockwave-flash" allowfullscreen="true" allowScriptAccess="always" width="640" height="360"/>
-				</object> 
+				<iframe width="640" height="360" src="https://www.youtube.com/embed/H61N0pfLusA?feature=player_embedded" frameborder="0" allowfullscreen=""></iframe>
 			</div>
 		</section>
 	</body>
