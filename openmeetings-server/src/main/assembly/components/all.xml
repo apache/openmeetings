@@ -95,7 +95,7 @@
 			<outputDirectory>${om.webapp}/docs</outputDirectory>
 		</fileSet>
 		<fileSet>
-			<directory>${project.parent.basedir}/openmeetings-webservice/target/apidocs</directory><!-- FIXME should be implemented differently -->
+			<directory>${project.parent.basedir}/openmeetings-webservice/target/site/apidocs</directory><!-- FIXME should be implemented differently -->
 			<outputDirectory>${om.webapp}/docs/webservices</outputDirectory>
 			<excludes>
 				<exclude>javadoc.sh</exclude>
