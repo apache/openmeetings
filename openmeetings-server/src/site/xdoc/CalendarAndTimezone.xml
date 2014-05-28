@@ -51,22 +51,17 @@
 			name="Changing first day in week for calendar from Sunday to Monday">
 
 			<p>in the public/config.xml change the key: </p>
-			<div class="xmlcode">
-				&lt;!--
-				<br />
-				First day in the Week used by the Calendar
-				<br />
-				0 means Sunday
-				<br />
-				1 means Monday
-				<br />
-				this is the way how the Celendar inits a week
-				<br />
-				--&gt;
-				<br />
-				&lt;firstdayinweek&gt;0&lt;/firstdayinweek&gt;
-				<br />
-			</div>
+			<source>
+<![CDATA[
+<!--
+First day in the Week used by the Calendar
+0 means Sunday
+1 means Monday
+this is the way how the Celendar inits a week
+-->
+<firstdayinweek>0</firstdayinweek>
+]]>
+			</source>
 		</section>
 
 		<section

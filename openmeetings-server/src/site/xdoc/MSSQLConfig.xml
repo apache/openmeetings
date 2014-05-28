@@ -50,7 +50,7 @@
 				<ul>
 					<li>
 						You need to download the JDBC driver from Microsoft
-						<a href="http://www.microsoft.com/en-us/download/details.aspx?displaylang=en&amp;id=11774" target="_BLANK"
+						<a href="http://www.microsoft.com/en-us/download/details.aspx?displaylang=en&amp;id=11774" target="_blank"
 							rel="nofollow">http://www.microsoft.com/en-us/download/details.aspx?displaylang=en&amp;id=11774</a>
 						Unarchive appropriate file from it (sqljdbc.jar or sqljdbc4.jar) and place it into:
 						<tt>$red5/webapps/openmeetings/WEB-INF/lib/</tt>

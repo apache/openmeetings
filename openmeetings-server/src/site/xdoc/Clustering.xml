@@ -33,7 +33,7 @@
 			<ul>
 				<li>
 					Multiple OM servers should be set up as described in
-					<a href="installation.html" target="_BLANK">
+					<a href="installation.html" target="_blank">
 						<b>Installation</b>
 					</a>
 				</li>
@@ -45,8 +45,8 @@
 			</ul>
 		</section>
 		<section name="Database">
-			All servers should be configured to use the same database. It can be on the server or on the one node 
-			of the cluster. 
+			<p>All servers should be configured to use the same database. It can be on the server or on the one node 
+			of the cluster.</p> 
 			<ul>
 				<li>Add users who can connect to the database remotely</li>
 				<li>Update <tt>/opt/red5/webapps/openmeetings/WEB-INF/classes/META-INF/persistence.xml</tt>
@@ -57,8 +57,8 @@
 			</ul>
 		</section>
 		<section name="File systems">
-			If files and recordings using the same physical folders the files and recordings will be available for 
-			each node. You can do this using Samba or NFS, for example. For using NFS do the following:
+			<p>If files and recordings using the same physical folders the files and recordings will be available for 
+			each node. You can do this using Samba or NFS, for example. For using NFS do the following:</p>
 			<ul>
 				<li>Install NFS to the data server. In the file <tt>/etc/exports</tt> add the following lines:
 					<div class="xmlcode">
@@ -84,7 +84,7 @@
 			</ul> 
 		</section>
 		<section name="OM nodes configuration">
-			In the file <tt>/opt/red5/webapps/openmeetings/WEB-INF/openmeetings-applicationContext.xml</tt>:
+			<p>In the file <tt>/opt/red5/webapps/openmeetings/WEB-INF/openmeetings-applicationContext.xml</tt>:</p>
 			<ul>
 				<li>
 					For each node uncomment line:
@@ -102,7 +102,7 @@
 			</ul>
 		</section>
 		<section name="Configuring cluster in Administration">
-			Run red5 on each node. Login to the system as admin.
+			<p>Run red5 on each node. Login to the system as admin.</p>
 			<ul>
 				<li>Go to the <tt>Administration -&gt; Users</tt> and create Webservice user (only access via SOAP).</li>
 				<li>

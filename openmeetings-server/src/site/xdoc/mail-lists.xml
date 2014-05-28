@@ -42,13 +42,13 @@
 				<b>Note: </b>If your email bounces with status messages like "Delivery Status Notification" it is 
 				likely that you have send your mail as HTML mail. Apache does not like sending HTML emails, see:
 				<br/> 
-				<a href="http://www.apache.org/dev/contrib-email-tips.html#do-not-send-html-mail" target="_BLANK" rel="nofollow">http://www.apache.org/dev/contrib-email-tips.html#do-not-send-html-mail</a>
+				<a href="http://www.apache.org/dev/contrib-email-tips.html#do-not-send-html-mail" target="_blank" rel="nofollow">http://www.apache.org/dev/contrib-email-tips.html#do-not-send-html-mail</a>
 			</p>
 			
 			<p>
 				You can search the entire mailing list very easy by using markmail.com, by using the term 
 				"openmeetings" plus your search. Try yourself: <br/>
-				<a href="http://markmail.org/search/?q=openmeetings" target="_BLANK" rel="nofollow">http://markmail.org/search/?q=openmeetings</a>
+				<a href="http://markmail.org/search/?q=openmeetings" target="_blank" rel="nofollow">http://markmail.org/search/?q=openmeetings</a>
 			</p>
 
 			<table>

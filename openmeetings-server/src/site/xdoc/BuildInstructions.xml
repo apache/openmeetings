@@ -30,7 +30,7 @@
 			<p>
 				You can find Nightly Builds of the software at:
 				<a href="https://builds.apache.org/view/M-R/view/OpenMeetings/"
-					rel="nofollow" target="_BLANK">
+					rel="nofollow" target="_blank">
 					https://builds.apache.org/view/M-R/view/OpenMeetings/
 				</a>
 			</p>
@@ -46,53 +46,32 @@
 					<li>Apache ANT (minimum) 1.8.3</li>
 					<li>
 						SVN Command line client (Subversion 1.7 required!)
-						<a href="http://subversion.apache.org/packages.html" target="_BLANK"
+						<a href="http://subversion.apache.org/packages.html" target="_blank"
 							rel="nofollow">http://subversion.apache.org/packages.html</a>
 					</li>
 				</ul>
 			</div>
 
 			<p>Get the source: </p>
-			<div class="xmlcode">
-				svn checkout
-				https://svn.apache.org/repos/asf/openmeetings/trunk/singlewebapp/
-			</div>
+			<source><![CDATA[svn checkout https://svn.apache.org/repos/asf/openmeetings/trunk/singlewebapp/]]></source>
 			<p>Run the command: </p>
-			<div class="xmlcode">
-				ant
-			</div>
+			<source><![CDATA[ant ]]></source>
 			<p>There is no need to compile the client additionally! The ant task
 				does it all! You will find a directory dist that contains
 				OpenMeetings and a red5-server.
 			</p>
 			<p>To compile the client you can also use ant: </p>
-			<div class="xmlcode">
-				ant
-				<span style="margin-left: 200px;"># compiles a complete package into the folder dist
-				</span>
-				<br />
-				ant compile.laszlo.main
-				<span style="margin-left: 70px;"># compiles the client into main.as3.swf10.swf and
-					main.swf8.swf</span>
-				<br />
-				ant compile.laszlo.main.debug
-				<span style="margin-left: 30px;"># compiles the debug-client into
-					maindebug.as3.swf10.swf and maindebug.swf8.swf
-				</span>
-				<br />
-				ant -Ddb=&lt;name of DB&gt;
-				<span style="margin-left: 50px;"># will copy &lt;name of DB&gt;_persistense.xml to
-					persistense.xml
-				</span>
-				<br />
-				<span style="margin-left: 230px;">#(for ex. ant -Ddb=mysql will set mysql as default
-					DB)
-				</span>
-			</div>
+			<source>
+<![CDATA[
+ant                             # compiles a complete package into the folder dist
+ant compile.laszlo.main         # compiles the client into main.as3.swf10.swf and main.swf8.swf
+ant compile.laszlo.main.debug   # compiles the debug-client into maindebug.as3.swf10.swf and maindebug.swf8.swf
+ant -Ddb=<name of DB>           # will copy <name of DB>_persistense.xml to persistense.xml
+                                #(for ex. ant -Ddb=mysql will set mysql as default DB)
+]]>
+			</source>
 			<p>To compile just the openmeetings JAR file: </p>
-			<div class="xmlcode">
-				ant jar.only
-			</div>
+			<source><![CDATA[ant jar.only]]></source>
 			<p>
 				To run Junit tests using ANT see
 				<a href="JUnitTesting.html">JUnitTesting</a>
@@ -120,12 +99,12 @@
 					<li>Apache ANT (minimum) 1.8.3</li>
 					<li>
 						Subclipse 1.8 (Subversion 1.7 required!)
-						<a href="http://subclipse.tigris.org/" target="_BLANK" rel="nofollow">http://subclipse.tigris.org/
+						<a href="http://subclipse.tigris.org/" target="_blank" rel="nofollow">http://subclipse.tigris.org/
 						</a>
 					</li>
 					<li>
 						SVN Command line client (Subversion 1.7 required!)
-						<a href="http://subversion.apache.org/packages.html" target="_BLANK"
+						<a href="http://subversion.apache.org/packages.html" target="_blank"
 							rel="nofollow">http://subversion.apache.org/packages.html</a>
 					</li>
 					<li>Spring IDE for Eclipse (installable via Help &gt; Eclipse
@@ -136,7 +115,7 @@
 						New Software)
 						URL: http://www.apache.org/dist/ant/ivyde/updatesite
 						detailed steps can be found here:
-						<a href="http://ant.apache.org/ivy/ivyde/download.cgi" target="_BLANK"
+						<a href="http://ant.apache.org/ivy/ivyde/download.cgi" target="_blank"
 							rel="nofollow">http://ant.apache.org/ivy/ivyde/download.cgi</a>
 					</li>
 					<li>MySQL (or Postgres, or other Databases supported by openJPA)
@@ -162,9 +141,7 @@
 				<p>To download the required JARs for building and developing
 					OpenMeetings you need to run the ANT comand:
 				</p>
-				<div class="xmlcode">
-					ant -Ddb=&lt;your_DB&gt; prepare-eclipse
-				</div>
+				<source><![CDATA[ant -Ddb=<your_DB> prepare-eclipse]]></source>
 				<p>After the ANT command you need to press F5 and rebuild the
 					project from inside Eclipse
 				</p>
@@ -256,9 +233,7 @@
 				</p>
 				<div>
 					11) Please run
-					<div class="xmlcode">
-						ant prepare-eclipse
-					</div>
+					<source><![CDATA[ant prepare-eclipse]]></source>
 					to download all necessary jar files, and perform source
 					<tt>Refresh</tt>
 					to resolve all compilation issues.
@@ -287,14 +262,14 @@
 					Getting Started with OpenLaszlo, checkout
 					<a
 						href="http://www.openlaszlo.org/lps4.2/laszlo-explorer/index.jsp?lzr=swf8"
-						target="_BLANK" rel="nofollow">Laszlo-in-10-Minutes</a>
+						target="_blank" rel="nofollow">Laszlo-in-10-Minutes</a>
 					and the
-					<a href="http://www.openlaszlo.org/lps4.2/docs/" target="_BLANK"
+					<a href="http://www.openlaszlo.org/lps4.2/docs/" target="_blank"
 						rel="nofollow">Application
 						Developer's Guide
 					</a>
 					or try the
-					<a href="http://www.openlaszlo.org/getstarted" target="_BLANK"
+					<a href="http://www.openlaszlo.org/getstarted" target="_blank"
 						rel="nofollow">ScreenCast</a>
 				</li>
 				<li>
@@ -323,13 +298,13 @@
 				before starting the build process.
 				<br />
 				For Apache Ivy see:
-				<a href="http://ant.apache.org/ivy/faq.html" target="_BLANK" rel="nofollow">http://ant.apache.org/ivy/faq.html
+				<a href="http://ant.apache.org/ivy/faq.html" target="_blank" rel="nofollow">http://ant.apache.org/ivy/faq.html
 				</a>
 				<br />
 				For SVN Command Line Client (From CollabNet 1.7) see:
 				<a
 					href="https://ctf6latest.collab.net/internal-help/index.jsp?topic=/teamforge610/faq/client_proxy_settings.html"
-					target="_BLANK" rel="nofollow">https://ctf6latest.collab.net/internal-help/index.jsp?topic=/teamforge610/faq/client_proxy_settings.html
+					target="_blank" rel="nofollow">https://ctf6latest.collab.net/internal-help/index.jsp?topic=/teamforge610/faq/client_proxy_settings.html
 				</a>
 			</p>
 

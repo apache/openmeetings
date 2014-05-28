@@ -95,7 +95,7 @@
 					rel="nofollow">http://ffmpeg.arrozcru.org/builds/</a>. Pour Linux ou OSx vous devriez utiliser l'une des nombreuses instructions d'installation sur le web.  Vous devez activer libmp3lame !
 				</li>
 				<li>Installez <strong>SoX</strong> <a
-					href="http://sox.sourceforge.net/" target="_BLANK">http://sox.sourceforge.net/</a>.
+					href="http://sox.sourceforge.net/" target="_blank">http://sox.sourceforge.net/</a>.
 					Vous devez installer la dernière version ! SoX 12.xx ne fonctionnera PAS !
 				</li>
 			</ul>

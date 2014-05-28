@@ -74,9 +74,7 @@
 						</a> <br/>
 						edit the files in the folder <tt>xdocs</tt><br/>
 						then you run the command:
-						<div class="xmlcode">
-							ant anakia
-						</div>
+						<source><![CDATA[ant anakia]]></source>
 						control the output locally in the folder <tt>docs</tt><br/>
 						And then checkin into the SVN <i>both</i> the edited xml and generated html files.
 					</div>

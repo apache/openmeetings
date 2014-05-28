@@ -110,7 +110,7 @@
 					Szükséges a libmp3lame kóder engedélyezése/implementálása!
 				</li>
 				<li>Telepítse a <strong>SoX</strong> programot innen: <a
-					href="http://sox.sourceforge.net/" target="_BLANK">http://sox.sourceforge.net/</a>.
+					href="http://sox.sourceforge.net/" target="_blank">http://sox.sourceforge.net/</a>.
 					A SoX friss verzióit használja! SoX 12.xx nem/hibásan működik!
 				</li>
 			</ul>

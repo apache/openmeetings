@@ -118,7 +118,7 @@
 					Instructions on the Web. You need to enable libmp3lame!
 				</li>
 				<li>Install <strong>SoX</strong> <a
-					href="http://sox.sourceforge.net/" target="_BLANK">http://sox.sourceforge.net/</a>.
+					href="http://sox.sourceforge.net/" target="_blank">http://sox.sourceforge.net/</a>.
 					You should install SoX in a up to date copy! SoX 12.xx will NOT
 					work!
 				</li>

@@ -28,10 +28,10 @@
 		<section name="Drupal Plugin for OpenMeetings">
 			<p>
 				Plugin for Drupal currently is not open source. 
-				Please contact <a href="commercial-support.html" target="_BLANK" rel="nofollow">Commercial Support</a> to get it. 
+				Please contact <a href="commercial-support.html" target="_blank" rel="nofollow">Commercial Support</a> to get it. 
 				<br/>
 				A demo version+video of the Drupal plugin is available at
-				<a href="http://drupal.openmeetings.de/" target="_BLANK" rel="nofollow">drupal.openmeetings.de</a>.
+				<a href="http://drupal.openmeetings.de/" target="_blank" rel="nofollow">drupal.openmeetings.de</a>.
 			</p>
 		</section>
 		
@@ -40,7 +40,7 @@
 				You simply download the ZIP or TAR package and unzip it to Drupal "mod" directory.
 				<br/>
 				For a detailed description on how to install plugins in Drupal please review their 
-				<a href="http://drupal.org/documentation/install/modules-themes" target="_BLANK" rel="nofollow">handbook</a>.
+				<a href="http://drupal.org/documentation/install/modules-themes" target="_blank" rel="nofollow">handbook</a>.
 				<br />
 				Then you visit the module interface of Drupal, where you will find the new module.
 				You should switch it to "enabled" to get the "Configure" and "Permissions" buttons.

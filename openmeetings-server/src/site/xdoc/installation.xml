@@ -29,7 +29,7 @@
 			<p>
 				To update from past versions or migrate see <a href="Upgrade.html">Upgrade</a>.<br/>
 				If you are looking for commercial help have a look at
-				<a href="commercial-support.html" target="_BLANK" rel="nofollow">commercial support</a>.
+				<a href="commercial-support.html" target="_blank" rel="nofollow">commercial support</a>.
 			</p>
 			<div>
 				<a href="downloads.html" rel="nofollow">
@@ -40,7 +40,7 @@
 					<i>
 						Since Version 2.0 you can also install OpenMeetings from command line. Just cd to the unpacked 
 						archive and type ./admin.sh or admin.bat, please see
-						<a href="CommandLineAdmin.html" target="_BLANK" rel="nofollow">Command Line Admin</a>
+						<a href="CommandLineAdmin.html" target="_blank" rel="nofollow">Command Line Admin</a>
 						for more options
 					</i>
 				</p>
@@ -68,13 +68,13 @@
 						Install
 						<b>ImageMagick</b>
 						on the server, you can get more information on
-						<a href="http://www.imagemagick.org" rel="nofollow" target="_BLANK">http://www.imagemagick.org
+						<a href="http://www.imagemagick.org" rel="nofollow" target="_blank">http://www.imagemagick.org
 						</a>
 						regarding installation. The instructions
 						for installation can be
 						found there
 						<a href="http://www.imagemagick.org/script/binary-releases.php"
-							target="_BLANK" rel="nofollow">http://www.imagemagick.org/script/binary-releases.php
+							target="_blank" rel="nofollow">http://www.imagemagick.org/script/binary-releases.php
 						</a>
 						,
 						however on
@@ -92,7 +92,7 @@
 								<b>GhostScript</b>
 								on the server, you can get more
 								information on
-								<a href="http://www.ghostscript.com/download/gsdnld.html" target="_BLANK"
+								<a href="http://www.ghostscript.com/download/gsdnld.html" target="_blank"
 									rel="nofollow">
 									http://www.ghostscript.com/download/gsdnld.html
 								</a>
@@ -108,13 +108,13 @@
 								<b>SWFTools</b>
 								on the server, you can get more information
 								on
-								<a href="http://www.swftools.org/" target="_BLANK" rel="nofollow">http://www.swftools.org/
+								<a href="http://www.swftools.org/" target="_blank" rel="nofollow">http://www.swftools.org/
 								</a>
 								regarding installation. Some of the
 								Linux distributions already
 								have it in there package manager (see
 								<a href="http://packages.debian.org/unstable/utils/swftools"
-									target="_BLANK" rel="nofollow">http://packages.debian.org/unstable/utils/swftools
+									target="_blank" rel="nofollow">http://packages.debian.org/unstable/utils/swftools
 								</a>
 								), the
 								recommended version of SWFTools is 0.9 as prior version
@@ -132,7 +132,7 @@
 					<div style="margin-top: 10px; margin-bottom:10px">
 						<ul>
 							<li>
-								<a href="http://code.google.com/p/jodconverter/" target="_BLANK"
+								<a href="http://code.google.com/p/jodconverter/" target="_blank"
 									rel="nofollow">JODConverter</a>
 								installed (needed since v2.x)
 							</li>
@@ -156,7 +156,7 @@
 								. You should get FFMPEG in an up to date copy! OpenMeetings is
 								tested with FFMPEG Version 10.3 and latest build from GIT
 								For Windows you can download a Build for example from
-								<a href="http://ffmpeg.zeranoe.com/builds/" target="_BLANK"
+								<a href="http://ffmpeg.zeranoe.com/builds/" target="_blank"
 									rel="nofollow">http://ffmpeg.zeranoe.com/builds/ </a>
 								Linux or OSx Users should be able to use one of the various
 								Installation Instructions on the Web. You need to enable
@@ -165,7 +165,7 @@
 							<li>
 								Install
 								<b>SoX</b>
-								<a href="http://sox.sourceforge.net/" target="_BLANK" rel="nofollow">http://sox.sourceforge.net/
+								<a href="http://sox.sourceforge.net/" target="_blank" rel="nofollow">http://sox.sourceforge.net/
 								</a>
 								. You should install SoX in a up
 								to date copy! SoX 12.xx will NOT
