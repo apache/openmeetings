@@ -112,84 +112,80 @@
 					Example:
 				</p>
 				
-				<div class="xmlcode">
-					svn copy -r1453158 https://svn.apache.org/repos/asf/openmeetings/trunk/singlewebapp \<br/>
-						https://svn.apache.org/repos/asf/openmeetings/tags/2.1RC1 \<br/>
-						-m "Release candidate 1"
-				</div>
+				<source>
+svn copy -r1453158 https://svn.apache.org/repos/asf/openmeetings/trunk/singlewebapp \
+	https://svn.apache.org/repos/asf/openmeetings/tags/2.1RC1 \
+	-m "Release candidate 1"
+				</source>
 				
 
 				<p>Get the source from your TAG: </p>
-				<div class="xmlcode">
-					svn checkout https://svn.apache.org/repos/asf/openmeetings/tags/$BRANCHORTAG/<br />
-					$BRANCHORTAG should be replaced with your new TAG
-				</div>
+				<source>svn checkout https://svn.apache.org/repos/asf/openmeetings/tags/$BRANCHORTAG/</source>
+				<p>$BRANCHORTAG should be replaced with your new TAG</p>
 
 				<p>Edit the file build.properties change</p>
-				<div class="xmlcode">
-					project.status=SNAPSHOT
-				</div>
+				<source>project.status=SNAPSHOT</source>
 				<p>to</p>
-				<div class="xmlcode">
-					project.status=RELEASE
-				</div>
+				<source>project.status=RELEASE</source>
 				<p>Run the command: </p>
-				<div class="xmlcode">
-					ant dist-release
-				</div>
+				<source>ant dist-release</source>
 				<p>Test building the source on windows and OSx or Linux</p>
 				<p>Test running the binary's</p>
 				<p>Create MD5 checksums</p>
-				<div class="xmlcode">
-					#On OSX you might use this command to make a MD5 checksum and store it to a file<br />
-					md5 -r apache-openmeetings-XXX-src.zip >apache-openmeetings-XXX-src.zip.md5
-				</div>
-				<div class="xmlcode">
-					#To create MD5 hashes On Ubuntu:<br />
-					for f in `ls -1 *.tar.gz *.zip`; do md5sum $f > $f.md5; done<br/>
-					<br/>
-					#To check MD5 hashes On Ubuntu:<br />
-					for f in `ls -1 *.tar.gz *.zip`; do md5sum -c $f.md5; done
-				</div>
+				<source>
+#On OSX you might use this command to make a MD5 checksum and store it to a file
+md5 -r apache-openmeetings-XXX-src.zip >apache-openmeetings-XXX-src.zip.md5
+				</source>
+				<source>
+<![CDATA[
+#To create MD5 hashes On Ubuntu:
+for f in `ls -1 *.tar.gz *.zip`; do md5sum $f > $f.md5; done
+
+#To check MD5 hashes On Ubuntu:
+for f in `ls -1 *.tar.gz *.zip`; do md5sum -c $f.md5; done
+]]>
+				</source>
 				<p>
 					Create signatures with the your KEY for every file, the KEY must be available at:<br />
 					<a href="http://www.apache.org/dist/incubator/openmeetings/KEYS">
 						http://www.apache.org/dist/incubator/openmeetings/KEYS
 					</a>
 				</p>
-				<div class="xmlcode">
-					#To create signatures On Ubuntu:<br />
-					for f in `ls -1 *.tar.gz *.zip`; do gpg --armor --output $f.asc --detach-sig $f; done<br/>
-					<br/>
-					#To check signatures On Ubuntu:<br />
-					for f in `ls -1 *.tar.gz *.zip`; do gpg --verify $f.asc; done
-				</div>
+				<source>
+<![CDATA[
+#To create signatures On Ubuntu:
+for f in `ls -1 *.tar.gz *.zip`; do gpg --armor --output $f.asc --detach-sig $f; done
+
+#To check signatures On Ubuntu:
+for f in `ls -1 *.tar.gz *.zip`; do gpg --verify $f.asc; done
+]]>
+				</source>
 				
 				<p>
 					Commit artifacts you have created with KEYS file to the
 					<tt>https://dist.apache.org/repos/dist/dev/openmeetings/</tt>
 					Proposed file structure for "Release Candidate 1" of 2.1 will be:
 				</p>
-				<div class="xmlcode">
-					2.1<br />
-					2.1/rc1<br />
-					2.1/rc1/src<br />
-					2.1/rc1/src/apache-openmeetings-2.1.0-src.zip<br />
-					2.1/rc1/src/apache-openmeetings-2.1.0-src.tar.gz<br />
-					2.1/rc1/src/apache-openmeetings-2.1.0-src.zip.md5<br />
-					2.1/rc1/src/apache-openmeetings-2.1.0-src.zip.asc<br />
-					2.1/rc1/src/apache-openmeetings-2.1.0-src.tar.gz.md5<br />
-					2.1/rc1/src/apache-openmeetings-2.1.0-src.tar.gz.asc<br />
-					2.1/rc1/bin<br />
-					2.1/rc1/bin/apache-openmeetings-2.1.0.zip<br />
-					2.1/rc1/bin/apache-openmeetings-2.1.0.tar.gz<br />
-					2.1/rc1/bin/apache-openmeetings-2.1.0.zip.md5<br />
-					2.1/rc1/bin/apache-openmeetings-2.1.0.zip.asc<br />
-					2.1/rc1/bin/apache-openmeetings-2.1.0.tar.gz.md5<br />
-					2.1/rc1/bin/apache-openmeetings-2.1.0.tar.gz.asc<br />
-					2.1/rc1/CHANGELOG<br />
-					2.1/rc1/KEYS<br />
-				</div>
+				<source>
+2.1
+2.1/rc1
+2.1/rc1/src
+2.1/rc1/src/apache-openmeetings-2.1.0-src.zip
+2.1/rc1/src/apache-openmeetings-2.1.0-src.tar.gz
+2.1/rc1/src/apache-openmeetings-2.1.0-src.zip.md5
+2.1/rc1/src/apache-openmeetings-2.1.0-src.zip.asc
+2.1/rc1/src/apache-openmeetings-2.1.0-src.tar.gz.md5
+2.1/rc1/src/apache-openmeetings-2.1.0-src.tar.gz.asc
+2.1/rc1/bin
+2.1/rc1/bin/apache-openmeetings-2.1.0.zip
+2.1/rc1/bin/apache-openmeetings-2.1.0.tar.gz
+2.1/rc1/bin/apache-openmeetings-2.1.0.zip.md5
+2.1/rc1/bin/apache-openmeetings-2.1.0.zip.asc
+2.1/rc1/bin/apache-openmeetings-2.1.0.tar.gz.md5
+2.1/rc1/bin/apache-openmeetings-2.1.0.tar.gz.asc
+2.1/rc1/CHANGELOG
+2.1/rc1/KEYS
+				</source>
 			</subsection>
 
 			<subsection name="Step2 - VOTE and RESULT emails">
@@ -223,11 +219,11 @@
 
 			<subsection name="Step3 - Distribute and announce">
 				<p>If VOTEs positive: Upload the release </p>
-				<div class="xmlcode">
-					svn mv https://dist.apache.org/repos/dist/dev/openmeetings/2.1/rc3 \<br/>
-						https://dist.apache.org/repos/dist/release/openmeetings/2.1 \<br/>
-						-m "RC3 is released as 2.1"
-				</div>
+				<source>
+svn mv https://dist.apache.org/repos/dist/dev/openmeetings/2.1/rc3 \
+	https://dist.apache.org/repos/dist/release/openmeetings/2.1 \
+	-m "RC3 is released as 2.1"
+				</source>
 				<p>
 					Wait 24 hours (until all Apache mirrors have synced the packages)
 					and send an announcement to the mailing list + blog and any other

@@ -42,14 +42,10 @@
 				<li>
 					<ul>
 						<li>all tests:
-							<div class="xmlcode">
-								ant test
-							</div>
+							<source>ant test</source>
 						</li>
 						<li>subset of tests by mask:
-							<div class="xmlcode">
-								ant -Dtestcases=TestError* test
-							</div>
+							<source>ant -Dtestcases=TestError* test</source>
 						</li>
 					</ul>
 				</li>
@@ -57,9 +53,7 @@
 				<li>
 					<ul>
 						<li>
-							<div class="xmlcode">
-								ant -Ddb=&lt;your_DB&gt; prepare-eclipse
-							</div>
+							<source><![CDATA[ant -Ddb=<your_DB> prepare-eclipse]]></source>
 						</li>
 						<li>Start Eclipse </li>
 						<li>Load workspace with Openmeetings project (or refresh existing
@@ -89,15 +83,11 @@
 			<ul>
 				<li>Select Arguments tab </li>
 				<li>Add the following code to the VM section
-					<div class="xmlcode">
-						-javaagent:${workspace_loc:Openmeetings}/build/lib/om/openjpa-bundle-2.2.2.jar
-						-Dom.home=${workspace_loc:Openmeetings}/openmeetings-web/src/main/webapp/
-						-Dbackups.dir=${workspace_loc:Openmeetings}/build/lib/junit/backups
-					</div>
+					<source>-javaagent:${workspace_loc:Openmeetings}/build/lib/om/openjpa-bundle-2.2.2.jar -Dom.home=${workspace_loc:Openmeetings}/openmeetings-web/src/main/webapp/ -Dbackups.dir=${workspace_loc:Openmeetings}/build/lib/junit/backups</source>
 				</li>
 				<li>To avoid temporary files being created in OM root, modify
 					"Working Directory" as follows
-					<div class="xmlcode">${workspace_loc:Openmeetings}/build/junit</div>
+					<source>${workspace_loc:Openmeetings}/build/junit</source>
 				</li>
 			</ul>
 			<p>

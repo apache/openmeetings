@@ -37,50 +37,47 @@
 			</p>
 			<p>Sample URL: </p><a href="http://demo.openmeetings.de/openmeetings/services/UserService/getSession">http://demo.openmeetings.de/openmeetings/services/UserService/getSession</a>
 			<p>Result: </p>
-			<div class="xmlcode">
-				&lt;ns:getSessionResponse/&gt;<br/>
-				&lt;ns:return type="org.apache.openmeetings.hibernate.beans.basic.Sessiondata"/&gt;<br/>
-				<div style="margin-left:20px">
-					&lt;ax219:id&#62;156971&lt;/ax219:id/&gt;<br/>
-					&lt;ax219:language_id xsi:nil="true"//&gt;<br/>
-					&lt;ax219:organization_id xsi:nil="true"//&gt;<br/>
-					&lt;ax219:refresh_time&#62;2011-07-03T14:40:44.000Z&lt;/ax219:refresh_time/&gt;<br/>
-					&lt;ax219:sessionXml xsi:nil="true"//&gt;<br/>
-					&lt;ax219:session_id&#62;26584705202d7c1de6cc8e7e28890e3d&lt;/ax219:session_id/&gt;<br/>
-					&lt;ax219:starttermin_time&#62;2011-07-03T14:40:44.000Z&lt;/ax219:starttermin_time/&gt;<br/>
-					&lt;ax219:storePermanent xsi:nil="true"//&gt;<br/>
-					&lt;ax219:user_id xsi:nil="true"//&gt;<br/>
-				</div>
-				&lt;/ns:return/&gt;<br/>
-				&lt;/ns:getSessionResponse/&gt;<br/>
-			</div>
+			<source>
+<![CDATA[
+<ns:getSessionResponse>
+    <ns:return type="org.apache.openmeetings.hibernate.beans.basic.Sessiondata">
+        <ax219:id>156971</ax219:id>
+        <ax219:language_id xsi:nil="true"/>
+        <ax219:organization_id xsi:nil="true"/>
+        <ax219:refresh_time>2011-07-03T14:40:44.000Z</ax219:refresh_time>
+        <ax219:sessionXml xsi:nil="true"/>
+        <ax219:session_id>26584705202d7c1de6cc8e7e28890e3d</ax219:session_id>
+        <ax219:starttermin_time>2011-07-03T14:40:44.000Z</ax219:starttermin_time>
+        <ax219:storePermanent xsi:nil="true"/>
+        <ax219:user_id xsi:nil="true"/>
+    </ns:return>
+</ns:getSessionResponse>
+]]>
+			</source>
 			<p>To login a user the call to auth would be:</p>
 			<p>Sample URL: </p><a href="http://demo.openmeetings.de/openmeetings/services/UserService/loginUser?SID=26584705202d7c1de6cc8e7e28890e3d&#38;username=hans&#38;userpass=test">http://demo.openmeetings.de/openmeetings/services/UserService/loginUser?SID=26584705202d7c1de6cc8e7e28890e3d&#38;username=han&#38;userpass=test</a>
 			<p>Result: </p>
-			<div class="xmlcode">
-				&lt;ns:loginUserResponse/&gt;<br/>
-				<div style="margin-left:20px">
-				    &lt;ns:return&#62;-11&lt;/ns:return/&gt;<br/>
-				</div>
-				&lt;/ns:loginUserResponse/&gt;<br/>
-			</div>
+			<source>
+<![CDATA[
+<ns:loginUserResponse>
+    <ns:return>-11</ns:return>
+</ns:loginUserResponse>
+]]>
+			</source>
 			<p>=> It does return -10, which is the error id cause we will not write down a SOAP login to our public server in this wiki. However the correct way to check this error would be to invoke the call to get the localized error message. So we invoke the method to get the error via REST:</p>
 			<p>Sample URL: </p><a href="http://demo.openmeetings.de/openmeetings/services/UserService/getErrorByCode?SID=26584705202d7c1de6cc8e7e28890e3d&#38;errorid=-10&#38;language_id=1">http://demo.openmeetings.de/openmeetings/services/UserService/getErrorByCode?SID=26584705202d7c1de6cc8e7e28890e3d&#38;errorid=-10&#38;language_id=1</a>
 			<p>Result:</p>
-			<div class="xmlcode">
-				&lt;ns:getErrorByCodeResponse/&gt;<br/>
-				&lt;ns:return type="org.apache.openmeetings.db.dto.basic.ErrorResult"/&gt;<br/>
-				<div style="margin-left:20px">
-					&lt;ax218:errmessage&#62;Username not found&lt;/ax218:errmessage/&gt;<br/>
-					&lt;ax218:errorId&#62;-10&lt;/ax218:errorId/&gt;<br/>
-					&lt;ax218:errortype&#62;Error&lt;/ax218:errortype/&gt;<br/>
-				</div>
-				&lt;/ns:return/&gt;<br/>
-				&lt;/ns:getErrorByCodeResponse/&gt;<br/>
-			</div>
+			<source>
+<![CDATA[
+<ns:getErrorByCodeResponse>
+    <ns:return type="org.apache.openmeetings.db.dto.basic.ErrorResult">
+        <ax218:errmessage>Username not found</ax218:errmessage>
+        <ax218:errorId>-10</ax218:errorId>
+        <ax218:errortype>Error</ax218:errortype>
+    </ns:return>
+</ns:getErrorByCodeResponse>
+]]>
+			</source>
 		</section>
-
-
-
 	</body>
 </document>

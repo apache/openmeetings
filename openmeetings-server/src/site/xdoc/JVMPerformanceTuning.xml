@@ -31,28 +31,22 @@
 				JVM. It is called red5-highperf.sh. It is recommended to use that
 				script for production and high-load scenarios.
 			</p>
-			<div class="xmlcode">
-				#!/bin/bash
-				<br />
-				<br />
-				if [ -z "$RED5_HOME" ]; then export RED5_HOME=.; fi
-				<br />
-				<br />
-				# Previous option set
-				<br />
-				export JAVA_OPTS="-Xrs -Xms512M -Xmx1024M -Xss128K -XX:NewSize=256m
-				-XX:SurvivorRatio=16 -XX:MinHeapFreeRatio=20
-				-XX:+ExplicitGCInvokesConcurrent -Djava.net.preferIPv4Stack=true
-				-Xverify:none"
-				<br />
-				<br />
-				# start Red5
-				<br />
-				echo "Setting Hi Performance Options"
-				<br />
-				exec $RED5_HOME/red5.sh >> $RED5_HOME/log/jvm.stdout 2>&amp;1 &amp;
-				<br />
-			</div>
+			<source>
+<![CDATA[
+#!/bin/bash
+
+if [ -z "$RED5_HOME" ]; then export RED5_HOME=.; fi
+
+# Previous option set
+export JAVA_OPTS="-Xrs -Xms512M -Xmx1024M -Xss128K -XX:NewSize=256m \
+	-XX:SurvivorRatio=16 -XX:MinHeapFreeRatio=20 -XX:+ExplicitGCInvokesConcurrent \
+	-Djava.net.preferIPv4Stack=true -Xverify:none"
+
+# start Red5
+echo "Setting Hi Performance Options"
+exec $RED5_HOME/red5.sh >> $RED5_HOME/log/jvm.stdout 2>&1 &
+]]>
+			</source>
 
 			<p>You have to exclude the "-XX:+UseConcMarkSweepGC" param from the
 				default red5-highperf.sh to make it functional! However if you are a

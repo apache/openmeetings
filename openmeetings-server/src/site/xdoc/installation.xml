@@ -312,11 +312,7 @@
 				<li>
 					you can query a Mysql Database to get the schema_collection by
 					using this query:
-					<div class="xmlcode">
-						SELECT Table_name, TABLE_COLLATION FROM
-						information_schema.tables WHERE table_schema = 'openmeetings'
-						ORDER BY table_name DESC
-					</div>
+					<source><![CDATA[SELECT Table_name, TABLE_COLLATION FROM information_schema.tables WHERE table_schema = 'openmeetings' ORDER BY table_name DESC ]]></source>
 				</li>
 			</ul>
 		</section>

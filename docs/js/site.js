@@ -33,9 +33,10 @@ $(document).ready(function() {
 				var v = getMenu(a).height() != 0;
 				a.children('i').removeClass(v ? 'icon-chevron-down' : 'icon-chevron-right').addClass(v ? 'icon-chevron-right' : 'icon-chevron-down');
 			})
-			m.attr('id', a.attr('href').substr(1)).addClass('collapse in');
+			m.attr('id', a.attr('href').substr(1));
 			if (!m.find('li.active').length) {
-				m.collapse();
+				m.collapse('hide');
+				a.children('i').removeClass('icon-chevron-down').addClass('icon-chevron-right');
 			}
 		}
 	});

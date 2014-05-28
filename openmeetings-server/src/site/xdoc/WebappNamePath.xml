@@ -147,14 +147,13 @@
 				<strong>TOTAL</strong>
 				Openmeetings clean up:
 			</p>
-			<div class="xmlcode">
-				&lt;currentappname&gt;OpenMeetings&lt;/currentappname&gt;
-				<br />
-				&lt;currentappnameurl&gt;http://openmeetings.apache.org&lt;/currentappnameurl&gt;
-				<br />
-				&lt;currentappnamebugurl&gt;https://issues.apache.org/jira/browse/OPENMEETINGS&lt;/currentappnamebugurl&gt;
-				<br />
-			</div>
+			<source>
+<![CDATA[
+<currentappname>OpenMeetings</currentappname>
+<currentappnameurl>http://openmeetings.apache.org</currentappnameurl>
+<currentappnamebugurl>https://issues.apache.org/jira/browse/OPENMEETINGS</currentappnamebugurl>
+]]>
+			</source>
 
 		</section>
 
@@ -170,13 +169,9 @@
 				<strong>every</strong> instance <strong>should</strong> match the folder name in webapps dir)
 				</li>
 				<li>in case of java memory problems modify <tt>red5.sh</tt> add following line:<br/>
-					<div class="xmlcode">
-					export JAVA_OPTS="-XX:+CMSClassUnloadingEnabled -XX:+CMSPermGenSweepingEnabled -XX:MaxPermSize=128M"
-					</div>
+					<source>export JAVA_OPTS="-XX:+CMSClassUnloadingEnabled -XX:+CMSPermGenSweepingEnabled -XX:MaxPermSize=128M"</source>
 					or <tt>red5.bat</tt>:<br/>
-					<div class="xmlcode">
-					set JAVA_OPTS=-XX:+CMSClassUnloadingEnabled -XX:+CMSPermGenSweepingEnabled -XX:MaxPermSize=128M
-					</div>
+					<source>set JAVA_OPTS=-XX:+CMSClassUnloadingEnabled -XX:+CMSPermGenSweepingEnabled -XX:MaxPermSize=128M</source>
 				</li>
 			</ol>
 		</section>

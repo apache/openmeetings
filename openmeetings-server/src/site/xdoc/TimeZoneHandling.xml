@@ -65,29 +65,22 @@
 		
 		<section name="How to lookup timezone's">
 		
-		  <div class="xmlcode">
-		  
-                    String[] ids = TimeZone.getAvailableIDs();<br/>
-                    for (String id : ids) {<br/>
-                        
-                        <div style="margin-left:20px">
-                        TimeZone timeZone = TimeZone.getTimeZone(id);<br/>
-                        //TimeZone timeZone = timeRegistry.getTimeZone(id);<br/>
-                        <br/>
-                        Calendar cal = Calendar.getInstance();<br/>
-                                <div style="margin-left:20px">
-                                cal.setTimeZone(timeZone);<br/>
-                                // + cal.get(Calendar.DST_OFFSET)<br/>
-                                int offset = cal.get(Calendar.ZONE_OFFSET);<br/>
-                        <br/>
-                                int offsetInMinutes = offset/1000/60;<br/>
-                                <br/>
-                                System.out.println("name" + id + "name offset "+offsetInMinutes+"offset ");
-                                </div>
-                        </div>
-                    }
-		  
-		  </div>
+			<source>
+<![CDATA[
+String[] ids = TimeZone.getAvailableIDs();
+for (String id : ids) {
+    TimeZone timeZone = TimeZone.getTimeZone(id);
+    //TimeZone timeZone = timeRegistry.getTimeZone(id);
+    Calendar cal = Calendar.getInstance();
+    cal.setTimeZone(timeZone);
+    // + cal.get(Calendar.DST_OFFSET)
+    int offset = cal.get(Calendar.ZONE_OFFSET);
+    int offsetInMinutes = offset/1000/60;
+    
+    System.out.println("name" + id + "name offset "+offsetInMinutes+"offset ");
+}
+]]>
+			</source>
 		  
 		  
 		</section>

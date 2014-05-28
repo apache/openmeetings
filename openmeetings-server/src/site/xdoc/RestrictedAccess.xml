@@ -31,9 +31,7 @@
 			</p>
 			<p>$RED5_HOME/webapps/openmeetings/WEB-INF/red5-web.properties </p>
 			<p>Content: </p>
-			<div class="xmlcode">
-				webapp.virtualHosts=*,localhost, 127.0.0.1
-			</div>
+			<source>webapp.virtualHosts=*,localhost, 127.0.0.1</source>
 			Sample file:
 			<a
 				href="https://svn.apache.org/repos/asf/openmeetings/trunk/singlewebapp/openmeetings-web/src/main/webapp/WEB-INF/red5-web.properties"
@@ -48,14 +46,16 @@
 				tries to access the server using rtmp/RPC. This file is located: </p>
 			<p>$RED5_HOME/webapps/root/crossdomain.xml </p>
 			<p>Content: </p>
-			<div class="xmlcode">
-				&lt;?xml version="1.0"?&gt;<br/>
-				&lt;cross-domain-policy&gt;<br/>
-				        &lt;site-control permitted-cross-domain-policies="all"/&gt;<br/>
-				        &lt;allow-access-from domain="localhost" to-ports="20-65535"/&gt;<br/>
-				        &lt;allow-access-from domain="*.local" to-ports="20-65535"/&gt;<br/>
-				&lt;/cross-domain-policy&gt;<br/>
-			</div>
+			<source>
+<![CDATA[
+<?xml version="1.0"?>
+<cross-domain-policy>
+    <site-control permitted-cross-domain-policies="all"/>
+    <allow-access-from domain="localhost" to-ports="20-65535"/>
+    <allow-access-from domain="*.local" to-ports="20-65535"/>
+</cross-domain-policy>
+]]>
+			</source>
 			
             <p>
 				Sample file:

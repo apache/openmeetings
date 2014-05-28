@@ -41,11 +41,7 @@
 						Create database for OpenMeetings using a pagesize bigger or equal
 						8K, sample query:
 						<br />
-						<div class="xmlcode">
-							CREATE DATABASE openmeet AUTOMATIC STORAGE YES ON 'C:' DBPATH ON 'C:'
-							USING CODESET UTF-8 TERRITORY DE COLLATE USING System PAGESIZE 16
-							K
-						</div>
+						<source><![CDATA[CREATE DATABASE openmeet AUTOMATIC STORAGE YES ON 'C:' DBPATH ON 'C:' USING CODESET UTF-8 TERRITORY DE COLLATE USING System PAGESIZE 16 K]]></source>
 					</li>
 					<li>If you encounter issues, you can drop the db again and delete
 						the file $red5/webapps/openmeetings/conf/install.xml and then run

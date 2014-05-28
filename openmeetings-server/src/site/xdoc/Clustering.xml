@@ -51,7 +51,7 @@
 				<li>Add users who can connect to the database remotely</li>
 				<li>Update <tt>/opt/red5/webapps/openmeetings/WEB-INF/classes/META-INF/persistence.xml</tt>
 					set correct server address, login and password. Also add the following section:
-					<div class="xmlcode">&lt;property name="openjpa.RemoteCommitProvider" value="tcp(Addresses=10.1.1.1;10.1.1.2)" /&gt;</div>
+					<source><![CDATA[<property name="openjpa.RemoteCommitProvider" value="tcp(Addresses=10.1.1.1;10.1.1.2)" />]]></source>
 					Instead of the 10.1.1.1 and 10.1.1.2 set semicolon separated IPs of all nodes of the cluster.
 				</li>
 			</ul>
@@ -61,25 +61,23 @@
 			each node. You can do this using Samba or NFS, for example. For using NFS do the following:</p>
 			<ul>
 				<li>Install NFS to the data server. In the file <tt>/etc/exports</tt> add the following lines:
-					<div class="xmlcode">
-						/opt/red5/webapps/openmeetings/upload 10.1.1.2(rw,sync,no_subtree_check,no_root_squash)<br/>
-						/opt/red5/webapps/openmeetings/streams 10.1.1.2(rw,sync,no_subtree_check,no_root_squash)
-					</div>
+					<source>
+/opt/red5/webapps/openmeetings/upload 10.1.1.2(rw,sync,no_subtree_check,no_root_squash)
+/opt/red5/webapps/openmeetings/streams 10.1.1.2(rw,sync,no_subtree_check,no_root_squash)
+					</source>
 					Here 10.1.1.2 - is node ip for NFS remote access. Add these lines for all nodes except node with 
 					folders.
 				</li>
 				<li>
 					Install NFS common tools to other nodes. In the file <tt>/etc/fstab</tt> do the following:
-					<div class="xmlcode">
-						10.1.1.1:/opt/red5/webapps/openmeetings/upload/<br/>
-						/opt/red5/webapps/openmeetings/upload nfs timeo=50,hard,intr<br/>
-						10.1.1.1:/opt/red5/webapps/openmeetings/streams/<br/>
-						/opt/red5/webapps/openmeetings/streams nfs timeo=50,hard,intr
-					</div>
+					<source>
+10.1.1.1:/opt/red5/webapps/openmeetings/upload/
+/opt/red5/webapps/openmeetings/upload nfs timeo=50,hard,intr
+10.1.1.1:/opt/red5/webapps/openmeetings/streams/
+/opt/red5/webapps/openmeetings/streams nfs timeo=50,hard,intr
+					</source>
 					Here 10.1.1.1 – data server ip. And run the command:
-					<div class="xmlcode">
-						mount -a
-					</div>
+					<source>mount -a</source>
 				</li>
 			</ul> 
 		</section>
@@ -88,10 +86,12 @@
 			<ul>
 				<li>
 					For each node uncomment line:
-					<div class="xmlcode">
-						&lt;!-- Need to be uncommented and set to the real ID if in cluster mode--&gt;<br/>
-						&lt;property name="serverId" value="1" /&gt;
-					</div>
+					<source>
+<![CDATA[
+<!-- Need to be uncommented and set to the real ID if in cluster mode-->
+<property name="serverId" value="1" />
+]]>
+					</source>
 					and input the unique value for each node.
 				</li>
 				<li> 
@@ -107,16 +107,16 @@
 				<li>Go to the <tt>Administration -&gt; Users</tt> and create Webservice user (only access via SOAP).</li>
 				<li>
 					Go to the <tt>Administration -&gt; Servers</tt> and add all cluster nodes with the following settings:
-					<div class="xmlcode">
-						Server Name = node name;<br/>
-						Active = check the checkbox. If the checkbox is checked it means node is active and you can use this node;<br/>
-						Server Address = node ip;<br/>
-						HTTP Port = 5080 - port for http part of Openmeetings;<br/>
-						User (SOAP Access) = login of Webservice user from the previous step;<br/>
-						Password = password of Webservise user;<br/>
-						Webapp path = openmeetings - path where OM installed on this node, it would be better if this path will be the same for all nodes;<br/>
-						Protocol = http.
-					</div>
+					<source>
+Server Name = node name;
+Active = check the checkbox. If the checkbox is checked it means node is active and you can use this node;
+Server Address = node ip;
+HTTP Port = 5080 - port for http part of Openmeetings;
+User (SOAP Access) = login of Webservice user from the previous step;
+Password = password of Webservise user;
+Webapp path = openmeetings - path where OM installed on this node, it would be better if this path will be the same for all nodes;
+Protocol = http.
+					</source>
 				</li> 
 			</ul>
 			<img src="images/cluster1.png" alt="" width="650" height="461" />
