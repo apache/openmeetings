@@ -32,6 +32,7 @@
 	<description>TODO</description>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<maven.build.timestamp.format>yyyy/MM/dd HH:mm</maven.build.timestamp.format>
 		<wicket.mode>DEPLOYMENT</wicket.mode>
 		<db>derby</db>
 		<spring.version>4.0.3.RELEASE</spring.version>
@@ -406,6 +407,22 @@
 					<skip>true</skip>
 				</configuration>
 			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>buildnumber-maven-plugin</artifactId>
+				<executions>
+					<execution>
+						<phase>validate</phase>
+						<goals>
+							<goal>create</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<doCheck>false</doCheck>
+					<doUpdate>true</doUpdate>
+				</configuration>
+			</plugin>
 		</plugins>
  		<pluginManagement>
 			<plugins>
@@ -441,6 +458,10 @@
 								<addDefaultImplementationEntries>true</addDefaultImplementationEntries>
 							</manifest>
 							<manifestEntries>
+								<Built-By>OpenMeetings - http://openmeetings.apache.org</Built-By>
+								<Built-On>${maven.build.timestamp}</Built-On>
+								<Svn-Revision>${buildNumber}</Svn-Revision>
+								<Product-Version>${project.version}</Product-Version>
 							</manifestEntries>
 						</archive>
 					</configuration>

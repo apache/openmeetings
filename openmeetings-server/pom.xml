@@ -43,16 +43,6 @@
 	</properties>
 	<profiles>
 		<profile>
-			<id>Skip download red5-server</id>
-			<activation>
-				<file><exists>target/${red5-server.file.name}</exists></file>
-				<property><name>!forceDownload</name></property>
-			</activation>
-			<properties>
-				<red5-server.dwnd.skip>true</red5-server.dwnd.skip>
-			</properties>
-		</profile>
-		<profile>
 			<id>Quick</id>
 			<activation>
 				<property>

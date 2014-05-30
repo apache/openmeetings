@@ -38,7 +38,6 @@
 		<commons-fileupload.version>1.3</commons-fileupload.version>
 		<mysql.version>5.1.30</mysql.version>
 		<old-backups.dir>${project.build.directory}/old-backups</old-backups.dir>
-		<old-backups.dwnd.skip>${maven.test.skip}</old-backups.dwnd.skip>
 		<backup.to.check>backup_v_2_0_0_r1361497.zip</backup.to.check>
 	</properties>
 	<profiles>
@@ -57,16 +56,6 @@
 					<version>${mysql.version}</version>
 				</dependency>
 			</dependencies>
-		</profile>
-		<profile>
-			<id>Skip download old backups</id>
-			<activation>
-				<file><exists>target/old-backups/${backup.to.check}</exists></file>
-				<property><name>!forceDownload</name></property>
-			</activation>
-			<properties>
-				<old-backups.dwnd.skip>true</old-backups.dwnd.skip>
-			</properties>
 		</profile>
 		<profile>
 			<id>Quick</id>
