@@ -62,6 +62,7 @@
 			<id>Skip download old backups</id>
 			<activation>
 				<file><exists>target/old-backups/${backup.to.check}</exists></file>
+				<property><name>!forceDownload</name></property>
 			</activation>
 			<properties>
 				<old-backups.dwnd.skip>true</old-backups.dwnd.skip>
