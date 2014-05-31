@@ -101,9 +101,9 @@
 			var std_time_offset = Math.round(std_time_offset);
 			var timeZoneJavaFormat = "Etc/GMT";
 			if (std_time_offset > 0) {
-				timeZoneJavaFormat += "+"+std_time_offset;
-			} else {
 				timeZoneJavaFormat += "-"+std_time_offset;
+			} else {
+				timeZoneJavaFormat += "+"+std_time_offset;
 			}
 			
 			if ($debug) Debug.write("timeZoneJavaFormat :: ",timeZoneJavaFormat);
