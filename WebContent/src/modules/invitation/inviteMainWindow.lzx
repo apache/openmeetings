@@ -29,7 +29,7 @@
 			docking="true" closable="false" width="464" x="200" y="100" height="465">
 		
 		<attribute name="roomType" value="conference" type="string" />
-		<attribute name="baseUrl" value="http://www.denic.de" type="string" />
+		<attribute name="baseUrl" value="" type="string" />
 		<attribute name="currentHash" value="" type="string" />
 		<attribute name="display" value="false" type="boolean" />
 		<attribute name="addTimezoneItemsDelegate" value="null"/>
@@ -75,6 +75,10 @@
 				this._ispasswordProtected.setValue(false);
 				this._timeFrom.setAttribute('text', getStringTime());
 				this._timeTo.setAttribute('text', getStringTime());
+				this.firstname = "";
+				this.lastname = "";
+				this.email = "";
+				this.display = false;
 				lz.ModeManager.makeModal(this);
 				if (!canvas.isConference){
 					this.roomType = "restricted"; //FIXME
@@ -125,6 +129,8 @@
 			<![CDATA[
 				var addr = parent.replaceAll(parent.replaceAll(getText(), "'", ""), "\"", "");
 				if ($debug) Debug.write("addr: ", addr);
+				parent.firstname = "";
+				parent.lastname = "";
 				var idx1 = addr.indexOf("<"), idx2 = addr.indexOf(">");
 				if (idx1 > -1 && idx2 > -1 && idx2 > idx1) {
 					parent.email = parent.trim(addr.substring(idx1 + 1, idx2));
