@@ -456,11 +456,12 @@ public class UserManager implements IUserManager {
 	public Long getUserLevelByID(Long user_id) {
 
 		try {
-			if (user_id == null)
-				return new Long(0);
+			if (user_id == null) {
+				return 0L;
+			}
 			// For direct access of linked users
-			if (user_id == -1) {
-				return new Long(1);
+			if (user_id < 0) {
+				return 1L;
 			}
 
 			TypedQuery<User> query = em
