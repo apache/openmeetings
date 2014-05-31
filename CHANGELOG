@@ -2,6 +2,28 @@ Apache OpenMeetings Change Log
 
 See http://issues.apache.org/jira/browse/OPENMEETINGS-* (where * is the number of the issue below)
 
+Release Notes - Openmeetings - Version 3.0.2
+================================================================================================================
+
+** Bug
+    * [OPENMEETINGS-604] - Pop up message remain same after quitting the room created by Book conference room option in the email
+    * [OPENMEETINGS-916] - Selected recording is not highlighted and should not be moved to other folder
+    * [OPENMEETINGS-976] - Cannot restore an erased key in administration\configuration\key
+    * [OPENMEETINGS-978] - It is impossible to start OM in offline mode
+    * [OPENMEETINGS-983] - Verification URL is not generated correctly for self register users
+    * [OPENMEETINGS-985] - Send Invitation functionality is broken
+    * [OPENMEETINGS-990] - error while playing recording
+    * [OPENMEETINGS-993] - Deleted rooms are now excluded from backup
+    * [OPENMEETINGS-994] - AllowRecording option lock normal user interaction in conference Room.
+    * [OPENMEETINGS-996] - send invitation - generate URL
+    * [OPENMEETINGS-997] - error installing with mssql 
+    * [OPENMEETINGS-1002] - OM theming should be consistent
+    * [OPENMEETINGS-1004] - Internal error is thrown when you search a user on the Search Users Tab
+
+** Improvement
+    * [OPENMEETINGS-982] - ApplicationContext recreation should be avoided
+
+
 Release Notes - Openmeetings - Version 3.0.1
 ================================================================================================================
 
