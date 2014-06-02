@@ -118,7 +118,10 @@ public class RoomsPanel extends UserPanel {
 					
 					@Override
 					protected byte[] getData(Attributes attributes) {
-						String uri = Application.getBean(UserDao.class).get(userId).getPictureuri();
+						String uri = null;
+						if (userId != null) {
+							uri = Application.getBean(UserDao.class).get(userId > 0 ? userId : -userId).getPictureuri();
+						}
 						File img = OmFileHelper.getUserProfilePicture(userId, uri);
 						try {
 							return IOUtils.toByteArray(new FileInputStream(img));
