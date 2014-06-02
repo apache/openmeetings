@@ -21,8 +21,6 @@ package org.apache.openmeetings.remote;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
 import java.util.Calendar;
-import java.util.Date;
-import java.util.TimeZone;
 
 import org.apache.openmeetings.data.conference.InvitationManager;
 import org.apache.openmeetings.data.user.UserManager;
@@ -63,6 +61,19 @@ public class InvitationService implements IPendingServiceCallback {
 		log.debug("InvitationService resultReceived" + arg0);
 	}
 
+	private Calendar getDate(String date, String time, String tzId) {
+		Calendar c = Calendar.getInstance(timezoneUtil.getTimeZone(tzId));
+		c.set(Calendar.YEAR, Integer.parseInt(date.substring(6)));
+		c.set(Calendar.MONTH, Integer.parseInt(date.substring(3, 5)) - 1);
+		c.set(Calendar.DAY_OF_MONTH, Integer.parseInt(date.substring(0, 2)));
+		c.set(Calendar.HOUR_OF_DAY, Integer.parseInt(time.substring(0, 2)));
+		c.set(Calendar.MINUTE, Integer.parseInt(time.substring(3, 5)));
+		c.set(Calendar.SECOND, 0);
+		c.set(Calendar.MILLISECOND, 0);
+		
+		return c;
+	}
+	
 	/**
 	 * send an invitation to another user by Mail
 	 * 
@@ -87,8 +98,8 @@ public class InvitationService implements IPendingServiceCallback {
 	public Object sendInvitationHash(String SID, String firstname, String lastname,
 			String message, String email, String subject,
 			Long room_id, String conferencedomain, Boolean isPasswordProtected,
-			String invitationpass, Integer valid, Date validFromDate,
-			String validFromTime, Date validToDate, String validToTime,
+			String invitationpass, Integer valid, String validFromDate,
+			String validFromTime, String validToDate, String validToTime,
 			Long language_id, String iCalTz, boolean sendMail) {
 
 		try {
@@ -98,49 +109,14 @@ public class InvitationService implements IPendingServiceCallback {
 			if (AuthLevelUtil.checkUserLevel(user_level)) {
 				log.debug("sendInvitationHash: ");
 	
-				Integer validFromHour = Integer.valueOf(
-						validFromTime.substring(0, 2)).intValue();
-				Integer validFromMinute = Integer.valueOf(
-						validFromTime.substring(3, 5)).intValue();
-	
-				Integer validToHour = Integer.valueOf(validToTime.substring(0, 2))
-						.intValue();
-				Integer validToMinute = Integer
-						.valueOf(validToTime.substring(3, 5)).intValue();
-	
-				log.info("validFromHour: " + validFromHour);
-				log.info("validFromMinute: " + validFromMinute);
-	
-				Calendar date = Calendar.getInstance();
-				date.setTime(validFromDate);
-				
-				TimeZone timeZone = timezoneUtil.getTimeZone(iCalTz);
-				
-				Calendar calFrom = Calendar.getInstance(timeZone);
-				calFrom.set(Calendar.YEAR, date.get(Calendar.YEAR));
-				calFrom.set(Calendar.MONTH, date.get(Calendar.MONTH));
-				calFrom.set(Calendar.DAY_OF_MONTH, date.get(Calendar.DAY_OF_MONTH));
-				calFrom.set(Calendar.HOUR_OF_DAY, validFromHour);
-				calFrom.set(Calendar.MINUTE, validFromMinute);
-				calFrom.set(Calendar.SECOND, 0);
-	
-				date.setTime(validToDate);
-				Calendar calTo = Calendar.getInstance(timeZone);
-				calTo.set(Calendar.YEAR, date.get(Calendar.YEAR));
-				calTo.set(Calendar.MONTH, date.get(Calendar.MONTH));
-				calTo.set(Calendar.DAY_OF_MONTH, date.get(Calendar.DAY_OF_MONTH));
-				calTo.set(Calendar.HOUR_OF_DAY, validToHour);
-				calTo.set(Calendar.MINUTE, validToMinute);
-				calTo.set(Calendar.SECOND, 0);
-	
-				Date dFrom = calFrom.getTime();
-				Date dTo = calTo.getTime();
+				Calendar calFrom = getDate(validFromDate, validFromTime, iCalTz);
+				Calendar calTo = getDate(validToDate, validToTime, iCalTz);
 	
 				User invitee = userDao.getContact(email, firstname, lastname, users_id);
 				Invitation invitation = invitationManager.getInvitation(invitee, roomDao.get(room_id),
 								isPasswordProtected, invitationpass, Valid.fromInt(valid)
 								, userDao.get(users_id), language_id,
-								dFrom, dTo, null);
+								calFrom.getTime(), calTo.getTime(), null);
 
 				if (invitation != null) {
 					if (sendMail) {

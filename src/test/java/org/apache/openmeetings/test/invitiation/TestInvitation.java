@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.test.invitiation;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import org.apache.openmeetings.data.user.UserManager;
@@ -49,8 +50,9 @@ public class TestInvitation extends AbstractJUnitDefaults {
 			
 			User us = (User) userManager.loginUser(sessionData.getSession_id(), username, userpass, null, null, false);
 			
+			String date = new SimpleDateFormat("dd.MM.yyyy").format(new Date());
 			invitationService.sendInvitationHash(sessionData.getSession_id(), "Testname", "Testlastname", "message", "sebawagner@apache.org", 
-					"subject", 1L, "", false, "", 1, new Date(), "12:00", new Date(), "14:00", 1L, us.getTimeZoneId(), true);
+					"subject", 1L, "", false, "", 1, date, "12:00", date, "14:00", 1L, us.getTimeZoneId(), true);
 			
 		} catch (Exception err) {
 			log.error("[testSendInvitationLink]", err);

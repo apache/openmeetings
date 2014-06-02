@@ -305,9 +305,9 @@
 			<netparam name="ispasswordProtected"><method name="getValue">return parent.parent._ispasswordProtected.value;</method></netparam>
 			<netparam name="password"><method name="getValue">return parent.parent._password.getText();</method></netparam>
 			<netparam name="valid"><method name="getValue">return parent.parent._valid.value;</method></netparam>
-			<netparam name="validFromDate"><method name="getValue">return parent.parent._valid_from.getDate();</method></netparam>
+			<netparam name="validFromDate"><method name="getValue">return parent.parent._valid_from.getText();</method></netparam>
 			<netparam name="validFromTime"><method name="getValue">return parent.parent._timeFrom.getText();</method></netparam>
-			<netparam name="validToDate"><method name="getValue">return parent.parent._valid_to.getDate();</method></netparam>
+			<netparam name="validToDate"><method name="getValue">return parent.parent._valid_to.getText();</method></netparam>
 			<netparam name="validToTime"><method name="getValue">return parent.parent._timeTo.getText();</method></netparam>
 			<netparam name="language_id"><method name="getValue">return parent.parent._languages.getValue();</method></netparam>
 			<netparam name="jNameTimeZone"><method name="getValue">return parent.parent._timeZone.getValue();</method></netparam>
