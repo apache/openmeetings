@@ -217,7 +217,7 @@
 			layout="axis:y;spacing:1" bgcolor="$once{ canvas.getThemeColor('menuBackgroundColor') }" >
 			
 			<conferencDropDownMenuItem labelid="213" command="cmd_invitation" 
-						enabled="${ canvas.ismoderator }" />
+						enabled="${ canvas.timeZonesLoaded &amp;&amp; canvas.ismoderator }" />
 			<horizontalDropDownSpacer />
 			<conferencDropDownMenuItem labelid="239" command="cmd_shareDesktop" 
 						enabled="${ classroot.btnRef.classroot.viewType != 'interview' &amp;&amp; canvas.ismoderator }" />			

@@ -59,6 +59,7 @@
 			} else {
 				lz.Timer.removeTimer(addTimezoneItemsDelegate);
 				addTimezoneItemsDelegate = null;
+				canvas.setAttribute("timeZonesLoaded", true);
 			}
 			if ($debug) Debug.write(":: addTimezoneItems :: ", itemCount);
 			lz.Timer.resetTimer(addTimezoneItemsDelegate, 500);
