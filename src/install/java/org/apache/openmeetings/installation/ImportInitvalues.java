@@ -60,11 +60,11 @@ import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.dao.room.RoomTypeDao;
 import org.apache.openmeetings.db.dao.room.SipDao;
 import org.apache.openmeetings.db.dao.server.OAuth2Dao;
-import org.apache.openmeetings.db.dao.user.AdminUserDao;
 import org.apache.openmeetings.db.dao.user.IUserManager;
 import org.apache.openmeetings.db.dao.user.OrganisationDao;
 import org.apache.openmeetings.db.dao.user.SalutationDao;
 import org.apache.openmeetings.db.dao.user.StateDao;
+import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.dao.user.UserLevelDao;
 import org.apache.openmeetings.db.entity.label.FieldLanguage;
 import org.apache.openmeetings.db.entity.label.Fieldlanguagesvalues;
@@ -89,7 +89,7 @@ public class ImportInitvalues {
 	@Autowired
 	private ConfigurationDao configurationDao;
 	@Autowired
-	private AdminUserDao usersDao;
+	private UserDao usersDao;
 	@Autowired
 	private FieldLanguageDao fieldLanguageDaoImpl;
 	@Autowired

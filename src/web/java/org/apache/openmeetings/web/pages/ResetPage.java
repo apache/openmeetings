@@ -18,7 +18,7 @@
  */
 package org.apache.openmeetings.web.pages;
 
-import org.apache.openmeetings.db.dao.user.AdminUserDao;
+import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.pages.auth.ResetPasswordDialog;
@@ -31,7 +31,7 @@ public class ResetPage extends BaseNotInitedPage {
 	public ResetPage(PageParameters pp){
 		String resetHash = pp.get(RESET_PARAM).toString();
 		if (resetHash != null){
-			Object user = Application.getBean(AdminUserDao.class).getUserByHash(resetHash);
+			Object user = Application.getBean(UserDao.class).getUserByHash(resetHash);
 			if (user instanceof User){
 				add(new ResetPasswordDialog("resetPassword", (User)user));
 			}else {

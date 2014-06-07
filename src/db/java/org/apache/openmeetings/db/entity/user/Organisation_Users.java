@@ -40,9 +40,7 @@ import org.simpleframework.xml.Root;
 
 @Entity
 @NamedQueries({
-	@NamedQuery(name="getOrganisation_UserByUserAndOrganisation",
-		query="SELECT ou FROM User u, IN(u.organisation_users) ou WHERE u.deleted = false AND u.user_id = :user_id AND ou.organisation.organisation_id = :organisation_id")
-	, @NamedQuery(name="deleteUsersFromOrganisation", query="DELETE FROM Organisation_Users c WHERE c.organisation.organisation_id = :id")
+	@NamedQuery(name="deleteUsersFromOrganisation", query="DELETE FROM Organisation_Users c WHERE c.organisation.organisation_id = :id")
 	, @NamedQuery(name="countOrganisationUsers", query="SELECT COUNT(c) FROM Organisation_Users c WHERE c.organisation.organisation_id = :id")
 	, @NamedQuery(name="getOrganisationUsersById", query="SELECT c FROM Organisation_Users c WHERE c.organisation_users_id = :id")
 	, @NamedQuery(name="getOrganisationUsersByOrgId", query="SELECT c FROM Organisation_Users c WHERE c.organisation.organisation_id = :id")
@@ -62,10 +60,6 @@ public class Organisation_Users implements Serializable, IDataProviderEntity {
 	@ForeignKey(enabled = true)
 	@Element(name="organisation_id", required=false)
 	private Organisation organisation;
-
-	// FIXME: Does not get updated if a new relation is stored in the user
-	@Column(name = "user_id")
-	private Long user_id;
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "user_id", insertable = true, updatable = true)
@@ -109,14 +103,6 @@ public class Organisation_Users implements Serializable, IDataProviderEntity {
 		this.organisation_users_id = organisation_users_id;
 	}
 
-	public Long getUser_id() {
-		return user_id;
-	}
-
-	public void setUser_id(Long user_id) {
-		this.user_id = user_id;
-	}
-
 	public Date getStarttime() {
 		return starttime;
 	}
@@ -149,45 +135,36 @@ public class Organisation_Users implements Serializable, IDataProviderEntity {
 		this.isModerator = isModerator;
 	}
 
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime
-				* result
-				+ ((organisation_users_id == null) ? 0 : organisation_users_id
-						.hashCode());
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj) {
-			return true;
-		}
-		if (obj == null) {
-			return false;
-		}
-		if (obj instanceof Organisation_Users) {
-			Organisation_Users other = (Organisation_Users) obj;
-			if (organisation_users_id == null) {
-				if (other.organisation_users_id != null) {
-					return false;
-				}
-			} else if (!organisation_users_id.equals(other.organisation_users_id)) {
-				return false;
-			}
-		} else {
-			return false;
-		}
-		return true;
-	}
-
 	public User getUser() {
 		return user;
 	}
 
 	public void setUser(User user) {
 		this.user = user;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((organisation_users_id == null) ? 0 : organisation_users_id.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Organisation_Users other = (Organisation_Users) obj;
+		if (organisation_users_id == null) {
+			if (other.organisation_users_id != null)
+				return false;
+		} else if (!organisation_users_id.equals(other.organisation_users_id))
+			return false;
+		return true;
 	}
 }

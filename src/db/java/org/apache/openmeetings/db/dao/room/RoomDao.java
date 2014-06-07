@@ -29,6 +29,8 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
+import org.apache.openjpa.persistence.OpenJPAPersistence;
+import org.apache.openjpa.persistence.OpenJPAQuery;
 import org.apache.openmeetings.db.dao.IDataProviderDao;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
@@ -59,12 +61,19 @@ public class RoomDao implements IDataProviderDao<Room> {
 	public Room get(long id) {
 		TypedQuery<Room> q = em.createNamedQuery("getRoomById", Room.class);
 		q.setParameter("id", id);
-		List<Room> l = q.getResultList();
+		@SuppressWarnings("unchecked")
+		OpenJPAQuery<Room> kq = OpenJPAPersistence.cast(q);
+		kq.getFetchPlan().addFetchGroup("roomModerators");
+		List<Room> l = kq.getResultList();
 		return l.isEmpty() ? null : l.get(0);
 	}
 
 	public List<Room> get() {
-		return em.createNamedQuery("getBackupRooms", Room.class).getResultList();
+		TypedQuery<Room> q = em.createNamedQuery("getBackupRooms", Room.class);
+		@SuppressWarnings("unchecked")
+		OpenJPAQuery<Room> kq = OpenJPAPersistence.cast(q);
+		kq.getFetchPlan().addFetchGroup("roomModerators");
+		return kq.getResultList();
 	}
 	
 	public List<Room> get(int start, int count) {

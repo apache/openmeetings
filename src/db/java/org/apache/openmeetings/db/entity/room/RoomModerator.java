@@ -40,10 +40,9 @@ import org.simpleframework.xml.Root;
 
 @Entity
 @NamedQueries({
-	@NamedQuery(name = "getRoomModeratorById", query = "select c from RoomModerator as c " +
-			"where c.roomModeratorsId = :roomModeratorsId"),
-	@NamedQuery(name = "getRoomModeratorByRoomId", query = "select c from RoomModerator as c "
-			+ "where c.roomId = :roomId AND c.deleted <> :deleted"),
+	@NamedQuery(name = "getRoomModeratorById", query = "select c from RoomModerator as c where c.roomModeratorsId = :roomModeratorsId"),
+	@NamedQuery(name = "getRoomModeratorsByIds", query = "select c from RoomModerator as c where c.roomModeratorsId IN :ids"),
+	@NamedQuery(name = "getRoomModeratorByRoomId", query = "select c from RoomModerator as c where c.roomId = :roomId AND c.deleted = false"),
 	@NamedQuery(name = "getRoomModeratorByUserAndRoomId", query = "select c from RoomModerator as c "
 			+ "where c.roomId = :roomId "
 			+ "AND c.deleted <> :deleted "

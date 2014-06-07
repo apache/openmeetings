@@ -224,8 +224,7 @@ public class UserWebServiceFacade extends BaseWebService {
 
 	public UserSearchResult getUsersByOrganisation(String SID, long organisation_id, int start, int max, String orderby,
 			boolean asc) throws AxisFault {
-		return new UserSearchResult(getBean(UserWebService.class)
-				.getUsersByOrganisation(SID, organisation_id, start, max, orderby, asc));
+		return getBean(UserWebService.class).getUsersByOrganisation(SID, organisation_id, start, max, orderby, asc);
 	}
 
 	public Boolean kickUserByPublicSID(String SID, String publicSID)

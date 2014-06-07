@@ -40,6 +40,9 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import org.apache.openjpa.persistence.ElementDependent;
+import org.apache.openjpa.persistence.FetchAttribute;
+import org.apache.openjpa.persistence.FetchGroup;
+import org.apache.openjpa.persistence.FetchGroups;
 import org.apache.openjpa.persistence.jdbc.ForeignKey;
 import org.apache.openmeetings.db.entity.IDataProviderEntity;
 import org.simpleframework.xml.Element;
@@ -47,6 +50,9 @@ import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Root;
 
 @Entity
+@FetchGroups({
+	@FetchGroup(name = "roomModerators", attributes = { @FetchAttribute(name = "moderators")})
+})
 @NamedQueries({
 	@NamedQuery(name = "getNondeletedRooms", query = "SELECT r FROM Room r WHERE r.deleted = false"),
 	@NamedQuery(name = "getPublicRooms", query = "SELECT r from Room r "
@@ -72,7 +78,7 @@ import org.simpleframework.xml.Root;
 	@NamedQuery(name = "getRoomById", query = "SELECT r FROM Room r WHERE r.deleted = false AND r.rooms_id = :id"),
 	@NamedQuery(name = "getSipRoomIdsByIds", query = "SELECT r.rooms_id FROM Room r WHERE r.deleted = false AND r.sipEnabled = true AND r.rooms_id IN :ids"),
 	@NamedQuery(name = "countRooms", query = "SELECT COUNT(r) FROM Room r WHERE r.deleted = false"),
-	@NamedQuery(name = "getBackupRooms", query = "SELECT r FROM Room r LEFT JOIN FETCH r.moderators ORDER BY r.rooms_id"),
+	@NamedQuery(name = "getBackupRooms", query = "SELECT r FROM Room r ORDER BY r.rooms_id"),
 	@NamedQuery(name = "getRoomsCapacityByIds", query = "SELECT SUM(r.numberOfPartizipants) FROM Room r WHERE r.deleted = false AND r.rooms_id IN :ids")
 	, @NamedQuery(name = "getOrganisationRooms", query = "SELECT DISTINCT c.room FROM RoomOrganisation c LEFT JOIN FETCH c.room "
 				+ "WHERE c.organisation.organisation_id = :orgId AND c.deleted = false AND c.room.deleted = false AND c.room.appointment = false "
@@ -236,7 +242,7 @@ public class Room implements Serializable, IDataProviderEntity {
 	@JoinColumn(name = "roomId")
 	@ForeignKey(enabled = true)
 	@ElementList(name = "room_moderators", required=false)
-	private List<RoomModerator> moderators;
+	private List<RoomModerator> moderators = new ArrayList<RoomModerator>();
 
 	@Column(name = "sip_enabled")
 	@Element(data = true, required = false)
@@ -520,7 +526,9 @@ public class Room implements Serializable, IDataProviderEntity {
 	}
 
 	public void setModerators(List<RoomModerator> moderators) {
-		this.moderators = moderators;
+		if (moderators != null) {
+			this.moderators = moderators;
+		}
 	}
 
 	public Boolean getChatModerated() {

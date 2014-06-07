@@ -25,6 +25,7 @@ import java.util.Set;
 import org.apache.openmeetings.data.user.UserManager;
 import org.apache.openmeetings.db.dao.room.PollDao;
 import org.apache.openmeetings.db.dao.server.ISessionManager;
+import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.room.Client;
 import org.apache.openmeetings.db.entity.room.PollType;
 import org.apache.openmeetings.db.entity.room.RoomPoll;
@@ -54,6 +55,8 @@ public class PollService implements IPendingServiceCallback {
 	private ISessionManager sessionManager;
 	@Autowired
 	private UserManager userManager;
+	@Autowired
+	private UserDao userDao;
 	@Autowired
 	private ScopeApplicationAdapter scopeApplicationAdapter;
 	@Autowired
@@ -149,7 +152,7 @@ public class PollService implements IPendingServiceCallback {
 						// continue;
 					} else {
 						if (rcl.getRoom_id() != null && rcl.getRoom_id().equals(rc.getRoom_id())
-								&& userManager.getUserById(rcl.getUser_id())!=null) {
+								&& userDao.get(rcl.getUser_id())!=null) {
 							((IServiceCapableConnection) conn).invoke(
 									clientFunction, obj,
 									scopeApplicationAdapter);
@@ -186,7 +189,7 @@ public class PollService implements IPendingServiceCallback {
 				return -1;
 			}
 			
-			if(userManager.getUserById(rc.getUser_id())==null){
+			if(userDao.get(rc.getUser_id())==null){
 				log.debug("vote: Invited users can not vote");
 				return -1;
 			}
@@ -210,7 +213,7 @@ public class PollService implements IPendingServiceCallback {
 				// Is boolean Question
 				rpA.setAnswer(new Boolean(pollvalue == 1));
 			}
-			rpA.setVotedUser(userManager.getUserById(rc.getUser_id()));
+			rpA.setVotedUser(userDao.get(rc.getUser_id()));
 			rpA.setVoteDate(new Date());
 			rpA.setRoomPoll(roomP);
 			roomP.getRoomPollAnswerList().add(rpA);
@@ -248,7 +251,7 @@ public class PollService implements IPendingServiceCallback {
 					.getClientByStreamId(streamid, null);
 
 			long roomId = rc.getRoom_id();
-			if(userManager.getUserById(rc.getUser_id())==null){
+			if(userDao.get(rc.getUser_id())==null){
 				log.debug("checkHasVoted: Invited users can not vote");
 				return -1;
 			}

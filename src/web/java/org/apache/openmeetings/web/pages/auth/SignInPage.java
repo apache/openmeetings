@@ -48,10 +48,11 @@ import javax.net.ssl.X509TrustManager;
 import org.apache.commons.io.IOUtils;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.server.OAuth2Dao;
-import org.apache.openmeetings.db.dao.user.AdminUserDao;
 import org.apache.openmeetings.db.dao.user.IUserManager;
+import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.server.OAuthServer;
 import org.apache.openmeetings.db.entity.user.User;
+import org.apache.openmeetings.db.entity.user.User.Type;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.pages.BaseInitedPage;
@@ -67,6 +68,7 @@ import org.apache.wicket.request.Url;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.flow.RedirectToUrlException;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.apache.wicket.util.string.StringValue;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 
@@ -85,38 +87,37 @@ public class SignInPage extends BaseInitedPage {
 	
 	public SignInPage(PageParameters p) {
 		super();
-		if (p != null) {
-			if (p.get("oauthid").toString() != null) { // oauth2 login
-				try {
-					long serverId = Long.valueOf(p.get("oauthid").toString());
-					OAuthServer server = getBean(OAuth2Dao.class).get(serverId);
-					log.debug("OAuthServer=" + server);
-					if (server == null) {
-						log.warn("OAuth server id=" + serverId + " not found");
-						return;
-					}
-					
-					if (p.get("code").toString() != null) { // got code
-						String code = p.get("code").toString();
-						log.debug("OAuth response code=" + code);
-					 	AuthInfo authInfo = getToken(code, server);
-					 	if (authInfo == null) return;
-					 	log.debug("OAuthInfo=" + authInfo);
-					 	Map<String, String> authParams = getAuthParams(authInfo.accessToken, code, server);
-					 	if (authParams != null) {
-					 		loginViaOAuth2(authParams, serverId);
-					 	}
-					} else { // redirect to get code
-						String redirectUrl = prepareUrlParams(server.getRequestKeyUrl(), server.getClientId(), 
-								null, null, getRedirectUri(server, this), null);
-						log.debug("redirectUrl=" + redirectUrl);
-						throw new RedirectToUrlException(redirectUrl);
-					}
-				} catch (IOException e) {
-					log.error("OAuth2 login error", e);
-				} catch (NoSuchAlgorithmException e) {
-					log.error("OAuth2 login error", e);
+		StringValue oauthid = p.get("oauthid");
+		if (!oauthid.isEmpty()) { // oauth2 login
+			try {
+				long serverId = oauthid.toLong(-1);
+				OAuthServer server = getBean(OAuth2Dao.class).get(serverId);
+				log.debug("OAuthServer=" + server);
+				if (server == null) {
+					log.warn("OAuth server id=" + serverId + " not found");
+					return;
 				}
+				
+				if (p.get("code").toString() != null) { // got code
+					String code = p.get("code").toString();
+					log.debug("OAuth response code=" + code);
+				 	AuthInfo authInfo = getToken(code, server);
+				 	if (authInfo == null) return;
+				 	log.debug("OAuthInfo=" + authInfo);
+				 	Map<String, String> authParams = getAuthParams(authInfo.accessToken, code, server);
+				 	if (authParams != null) {
+				 		loginViaOAuth2(authParams, serverId);
+				 	}
+				} else { // redirect to get code
+					String redirectUrl = prepareUrlParams(server.getRequestKeyUrl(), server.getClientId(), 
+							null, null, getRedirectUri(server, this), null);
+					log.debug("redirectUrl=" + redirectUrl);
+					throw new RedirectToUrlException(redirectUrl);
+				}
+			} catch (IOException e) {
+				log.error("OAuth2 login error", e);
+			} catch (NoSuchAlgorithmException e) {
+				log.error("OAuth2 login error", e);
 			}
 		}
 		
@@ -131,7 +132,7 @@ public class SignInPage extends BaseInitedPage {
 	}
 	
 	public SignInPage() {
-		this(null);
+		this(new PageParameters());
 	}
 	
 	@Override
@@ -316,7 +317,7 @@ public class SignInPage extends BaseInitedPage {
 	}
 	
 	private void loginViaOAuth2(Map<String, String> params, long serverId) throws IOException, NoSuchAlgorithmException {
-		AdminUserDao userDao = getBean(AdminUserDao.class);
+		UserDao userDao = getBean(UserDao.class);
 		IUserManager userManager = getBean(IUserManager.class); 
 		ConfigurationDao configurationDao = getBean(ConfigurationDao.class);
 		String login = params.get("login");
@@ -325,7 +326,7 @@ public class SignInPage extends BaseInitedPage {
 		String firstname = params.get("firstname");
 		if (firstname == null) firstname = "";
 		if (lastname == null) lastname = "";
-		User user = userDao.getUserByName(login);
+		User user = userDao.getUserByName(login, Type.oauth);
 		// generate random password
 		byte[] rawPass = new byte[16];
 		Random rnd = new Random();
@@ -343,12 +344,13 @@ public class SignInPage extends BaseInitedPage {
 				throw new RuntimeException("Couldn't register new oauth user");
 			}
 			user = userDao.get(res);
+			user.setType(Type.oauth);
 			user.setExternalUserType("oauth2." + serverId);
 			userDao.update(user, null);
 		} else { // just change password
 			// check user type before changing password, it must be match oauthServerId
 			if (!("oauth2." + serverId).equals(user.getExternalUserType())) {
-				log.error("User already registered!");
+				log.error("User already registered! with different OAuth server");
 				return;
 			}
 			user = userDao.update(user, pass, -1);

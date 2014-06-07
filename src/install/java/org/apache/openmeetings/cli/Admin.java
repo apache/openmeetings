@@ -52,7 +52,7 @@ import org.apache.openmeetings.backup.BackupImport;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.file.FileExplorerItemDao;
 import org.apache.openmeetings.db.dao.record.FlvRecordingDao;
-import org.apache.openmeetings.db.dao.user.AdminUserDao;
+import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.file.FileExplorerItem;
 import org.apache.openmeetings.db.entity.record.FlvRecording;
 import org.apache.openmeetings.db.entity.user.User;
@@ -349,7 +349,7 @@ public class Admin {
 						long invalid = 0;
 						long deleted = 0;
 						ClassPathXmlApplicationContext ctx = getApplicationContext(ctxName);
-						AdminUserDao udao = ctx.getBean(AdminUserDao.class);
+						UserDao udao = ctx.getBean(UserDao.class);
 						for (File profile : profiles.listFiles()) {
 							long pSize = OmFileHelper.getSize(profile);
 							long userId = getUserIdByProfile(profile.getName());
@@ -369,7 +369,7 @@ public class Admin {
 							}
 						}
 						long missing = 0;
-						for (User u : udao.getAllUsersDeleted()) {
+						for (User u : udao.getAllBackupUsers()) {
 							if (!u.getDeleted() && u.getPictureuri() != null && !new File(OmFileHelper.getUploadProfilesUserDir(u.getUser_id()), u.getPictureuri()).exists()) {
 								missing++;
 							}

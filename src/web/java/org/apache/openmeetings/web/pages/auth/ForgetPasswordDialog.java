@@ -26,7 +26,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
-import org.apache.openmeetings.db.dao.user.AdminUserDao;
+import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.mail.MailHandler;
 import org.apache.openmeetings.util.crypt.ManageCryptStyle;
@@ -119,13 +119,13 @@ public class ForgetPasswordDialog extends AbstractFormDialog<String> {
 			
 			@Override
 			protected void onValidate() {
-				AdminUserDao dao = getBean(AdminUserDao.class);
+				UserDao dao = getBean(UserDao.class);
 				String n = nameField.getConvertedInput();
 				if (n != null) {
 					if (type == Type.email && null == dao.getUserByEmail(n)) {
 						error(WebSession.getString(318));
 					}
-					if (type == Type.login && null == dao.getUserByName(n)) {
+					if (type == Type.login && null == dao.getUserByName(n, User.Type.user)) {
 						error(WebSession.getString(320));
 					}
 				}
@@ -202,7 +202,7 @@ public class ForgetPasswordDialog extends AbstractFormDialog<String> {
 	 */
 	private Long resetUser(String email, String username, String appLink) {
 		try {
-			AdminUserDao userDao = getBean(AdminUserDao.class);
+			UserDao userDao = getBean(UserDao.class);
 			log.debug("resetUser " + email);
 
 			// check if Mail given
@@ -216,7 +216,7 @@ public class ForgetPasswordDialog extends AbstractFormDialog<String> {
 					return new Long(-9);
 				}
 			} else if (username.length() > 0) {
-				User us = userDao.getUserByName(username);
+				User us = userDao.getUserByName(username, User.Type.user);
 				if (us != null) {
 					sendHashByUser(us, appLink, userDao);
 					return new Long(-4);
@@ -231,7 +231,7 @@ public class ForgetPasswordDialog extends AbstractFormDialog<String> {
 		return new Long(-2);
 	}
 
-	private void sendHashByUser(User us, String appLink, AdminUserDao userDao) throws Exception {
+	private void sendHashByUser(User us, String appLink, UserDao userDao) throws Exception {
 		String loginData = us.getLogin() + new Date();
 		log.debug("User: " + us.getLogin());
 		us.setResethash(ManageCryptStyle.getInstanceOfCrypt().createPassPhrase(loginData));

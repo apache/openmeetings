@@ -26,7 +26,7 @@ import org.apache.openmeetings.data.user.UserManager;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.dao.server.SessiondataDao;
-import org.apache.openmeetings.db.dao.user.AdminUserDao;
+import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.dto.room.RoomDTO;
 import org.apache.openmeetings.db.entity.room.Invitation;
 import org.apache.openmeetings.db.entity.room.Invitation.Valid;
@@ -56,7 +56,7 @@ public class JabberWebService {
 	@Autowired
 	private UserManager userManager;
 	@Autowired
-	private AdminUserDao userDao;
+	private UserDao userDao;
 	@Autowired
 	private SessiondataDao sessiondataDao;
 	@Autowired
@@ -92,7 +92,7 @@ public class JabberWebService {
 		}
 
 		Long users_id = sessiondataDao.checkSession(SID);
-		User u = userManager.getUserById(users_id);
+		User u = userDao.get(users_id);
 		for (Organisation_Users ou : u.getOrganisation_users()) {
 			List<RoomOrganisation> rol = conferenceService.getRoomsByOrganisationWithoutType(SID
 					, ou.getOrganisation().getOrganisation_id().longValue());

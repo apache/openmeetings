@@ -38,8 +38,8 @@ import org.apache.openmeetings.db.dao.server.ISessionManager;
 import org.apache.openmeetings.db.dao.server.LdapConfigDao;
 import org.apache.openmeetings.db.dao.server.SOAPLoginDao;
 import org.apache.openmeetings.db.dao.server.SessiondataDao;
-import org.apache.openmeetings.db.dao.user.AdminUserDao;
 import org.apache.openmeetings.db.dao.user.StateDao;
+import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.basic.Configuration;
 import org.apache.openmeetings.db.entity.room.Client;
 import org.apache.openmeetings.db.entity.server.RemoteSessionObject;
@@ -88,7 +88,7 @@ public class MainService implements IPendingServiceCallback {
 	@Autowired
 	private ConferenceLogDao conferenceLogDao;
 	@Autowired
-	private AdminUserDao usersDao;
+	private UserDao usersDao;
 	@Autowired
 	private LdapConfigDao ldapConfigDao;
 	@Autowired
@@ -339,8 +339,7 @@ public class MainService implements IPendingServiceCallback {
 						// If so we need to check that we create this user in
 						// OpenMeetings and update its record
 
-						User user = userManager.getUserByExternalIdAndType(
-								userObject.getExternalUserId(),
+						User user = usersDao.getExternalUser(userObject.getExternalUserId(),
 								userObject.getExternalUserType());
 
 						if (user == null) {
@@ -364,7 +363,7 @@ public class MainService implements IPendingServiceCallback {
 						} else {
 							user.setPictureuri(userObject.getPictureUrl());
 
-							userManager.updateUser(user);
+							usersDao.update(user, users_id);
 
 							currentClient.setUser_id(user.getUser_id());
 							SessionVariablesUtil.setUserId(current.getClient(), user.getUser_id());
@@ -408,7 +407,7 @@ public class MainService implements IPendingServiceCallback {
 			
 			Long defaultRpcUserid = configurationDao.getConfValue(
 					"default.rpc.userid", Long.class, "-1");
-			User defaultRpcUser = userManager.getUserById(defaultRpcUserid);
+			User defaultRpcUser = usersDao.get(defaultRpcUserid);
 			
 			User user = new User();
 			user.setOrganisation_users(defaultRpcUser.getOrganisation_users());

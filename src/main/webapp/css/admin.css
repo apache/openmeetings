@@ -274,6 +274,14 @@ table.adminListTable td div.four_column_layout_divcolumn4 {
 	height: 20px;
 	margin: 2px 2px;
 }
+.adminForm .input {
+	display: block;
+	float: left;
+	font-size: 14px;
+	padding: 0px 0px;
+	width: 280px;
+	margin: 2px 2px;
+}
 .adminForm input[type=checkbox], .adminForm input[type=radio] {
 	width: auto;
 }
@@ -348,4 +356,10 @@ table.adminListTable td div.four_column_layout_divcolumn4 {
 	width: 480px;
 	bottom: 16px;
 	z-index:999;
+}
+.adminForm .newItem {
+	padding-left: 25px;
+	background-image: url(images/new.png);
+	background-repeat: no-repeat;
+	background-position: 5px;
 }

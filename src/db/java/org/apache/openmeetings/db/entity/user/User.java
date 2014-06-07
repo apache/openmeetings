@@ -37,7 +37,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -69,9 +68,13 @@ import org.simpleframework.xml.Root;
  * 
  */
 @Entity
-@FetchGroups({ @FetchGroup(name = "backupexport", attributes = { @FetchAttribute(name = "password") }) })
+@FetchGroups({
+	@FetchGroup(name = "backupexport", attributes = { @FetchAttribute(name = "password") })
+	, @FetchGroup(name = "orgUsers", attributes = { @FetchAttribute(name = "organisation_users")})
+})
 @NamedQueries({
-	@NamedQuery(name = "getUserById", query = "select c from User c where c.user_id = :user_id"),
+	@NamedQuery(name = "getUserById", query = "SELECT u FROM User u WHERE u.user_id = :id"),
+	@NamedQuery(name = "getUsersByIds", query = "select c from User c where c.user_id IN :ids"),
 	@NamedQuery(name = "checkUserLogin", query = "SELECT COUNT(u) FROM User u WHERE ((:id > 0 AND u.user_id <> :id) OR (:id = 0)) "
 			+ "AND u.login = :login AND u.deleted = false"),
 	@NamedQuery(name = "checkUserEmail", query = "SELECT COUNT(u) FROM User u WHERE ((:id > 0 AND u.user_id <> :id) OR (:id = 0)) "
@@ -103,7 +106,8 @@ public class User implements Serializable, IDataProviderEntity {
 	
 	public enum Type {
 		user
-		, ldap //should we add it???
+		, ldap
+		, oauth
 		, external
 		, contact
 	}
@@ -189,7 +193,7 @@ public class User implements Serializable, IDataProviderEntity {
 	@Element(data = true, required = false)
 	private String activatehash;
 
-	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinColumn(name = "adresses_id", insertable = true, updatable = true)
 	@ForeignKey(enabled = true)
 	@Element(name = "address", required = false)
@@ -198,7 +202,7 @@ public class User implements Serializable, IDataProviderEntity {
 	@Transient
 	private Userlevel userlevel;
 
-	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "user_id", insertable = true, updatable = true)
 	@ElementList(name = "organisations", required = false)
 	@ElementDependent
@@ -280,18 +284,18 @@ public class User implements Serializable, IDataProviderEntity {
 	public void setAdresses(String street, String zip, String town,
 			State state, String additionalname, String comment, String fax,
 			String phone, String email) {
-		if (this.adresses == null) {
-			this.adresses = new Address();
+		if (adresses == null) {
+			adresses = new Address();
 		}
-		this.adresses.setStreet(street);
-		this.adresses.setZip(zip);
-		this.adresses.setTown(town);
-		this.adresses.setStates(state);
-		this.adresses.setAdditionalname(additionalname);
-		this.adresses.setComment(comment);
-		this.adresses.setFax(fax);
-		this.adresses.setPhone(phone);
-		this.adresses.setEmail(email);
+		adresses.setStreet(street);
+		adresses.setZip(zip);
+		adresses.setTown(town);
+		adresses.setStates(state);
+		adresses.setAdditionalname(additionalname);
+		adresses.setComment(comment);
+		adresses.setFax(fax);
+		adresses.setPhone(phone);
+		adresses.setEmail(email);
 	}
 
 	public Date getAge() {
@@ -468,11 +472,13 @@ public class User implements Serializable, IDataProviderEntity {
 	}
 
 	public List<Organisation_Users> getOrganisation_users() {
+		if (organisation_users == null) {
+			organisation_users = new ArrayList<Organisation_Users>();
+		}
 		return organisation_users;
 	}
 
-	public void setOrganisation_users(
-			List<Organisation_Users> organisation_users) {
+	public void setOrganisation_users(List<Organisation_Users> organisation_users) {
 		if (organisation_users != null) {
 			this.organisation_users = organisation_users;
 		}

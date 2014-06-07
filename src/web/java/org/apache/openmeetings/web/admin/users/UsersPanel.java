@@ -21,7 +21,7 @@ package org.apache.openmeetings.web.admin.users;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 
-import org.apache.openmeetings.db.dao.user.AdminUserDao;
+import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.web.admin.AdminPanel;
 import org.apache.openmeetings.web.admin.SearchableDataView;
@@ -64,13 +64,13 @@ public class UsersPanel extends AdminPanel {
 	public UsersPanel(String id) {
 		super(id);
 
-		final SearchableDataView<User> dataView = new SearchableDataView<User>("userList"
-				, new SearchableDataProvider<User>(AdminUserDao.class)) {
+		final SearchableDataView<User> dataView = new SearchableDataView<User>("userList", new SearchableDataProvider<User>(UserDao.class)) {
 			private static final long serialVersionUID = 8715559628755439596L;
 
 			@Override
 			protected void populateItem(Item<User> item) {
-				final User u = item.getModelObject();
+				User u = item.getModelObject();
+				final long userId = u.getUser_id();
 				item.add(new Label("userId", "" + u.getUser_id()));
 				item.add(new Label("login", u.getLogin()));
 				item.add(new Label("firstName", u.getFirstname()));
@@ -79,7 +79,7 @@ public class UsersPanel extends AdminPanel {
 					private static final long serialVersionUID = -8069413566800571061L;
 
 					protected void onEvent(AjaxRequestTarget target) {
-						form.setModelObject(u);
+						form.setModelObject(getBean(UserDao.class).get(userId));
 						form.hideNewRecord();
 						target.add(form, listContainer);
 						//re-initialize height
@@ -87,7 +87,7 @@ public class UsersPanel extends AdminPanel {
 					}
 				});
 				item.add(AttributeModifier.append("class", "clickable ui-widget-content"
-						+ (u.getUser_id().equals(form.getModelObject().getUser_id()) ? " selected" : "")));
+						+ (u.getUser_id().equals(form.getModelObject().getUser_id()) ? " ui-state-active" : "")));
 			}
 		};
 		add(listContainer.add(dataView).setOutputMarkupId(true));
@@ -107,7 +107,7 @@ public class UsersPanel extends AdminPanel {
 		add(container.orderLinks);
 		add(navigator);
 
-		AdminUserDao usersDaoImpl = getBean(AdminUserDao.class);
+		UserDao usersDaoImpl = getBean(UserDao.class);
 		form = new UserForm("form", listContainer, usersDaoImpl.getNewUserInstance(usersDaoImpl.get(getUserId())), warning);
 		form.showNewRecord();
 		add(form, warning);

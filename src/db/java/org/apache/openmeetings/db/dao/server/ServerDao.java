@@ -27,7 +27,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
 import org.apache.openmeetings.db.dao.IDataProviderDao;
-import org.apache.openmeetings.db.dao.user.AdminUserDao;
+import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.server.Server;
 import org.apache.openmeetings.util.DaoHelper;
 import org.apache.openmeetings.util.OpenmeetingsVariables;
@@ -53,7 +53,7 @@ public class ServerDao implements IDataProviderDao<Server> {
 	private EntityManager em;
 
 	@Autowired
-	private AdminUserDao usersDao;
+	private UserDao usersDao;
 	
 	/**
 	 * Get a list of all available servers

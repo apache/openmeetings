@@ -18,12 +18,12 @@
  */
 package org.apache.openmeetings.web.admin.rooms;
 
+import static org.apache.openmeetings.web.app.Application.getBean;
+
 import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.entity.room.Room;
-import org.apache.openmeetings.web.admin.AddUsersDialog;
 import org.apache.openmeetings.web.admin.AdminPanel;
 import org.apache.openmeetings.web.admin.SearchableDataView;
-import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.PagedEntityListPanel;
 import org.apache.openmeetings.web.data.DataViewContainer;
 import org.apache.openmeetings.web.data.OmOrderByBorder;
@@ -31,15 +31,12 @@ import org.apache.openmeetings.web.data.SearchableDataProvider;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.repeater.Item;
 
 public class RoomsPanel extends AdminPanel {
 	private static final long serialVersionUID = -1L;
-	private final AddUsersDialog addModeratorsDialog;
 	final WebMarkupContainer listContainer = new WebMarkupContainer("listContainer");
 	private RoomForm form;
 	
@@ -57,7 +54,8 @@ public class RoomsPanel extends AdminPanel {
 
 			@Override
 			protected void populateItem(final Item<Room> item) {
-				final Room room = item.getModelObject();
+				Room room = item.getModelObject();
+				final long roomId = room.getRooms_id();
 				item.add(new Label("rooms_id", "" + room.getRooms_id()));
 				item.add(new Label("name", "" + room.getName()));
 				item.add(new Label("ispublic", "" + room.getIspublic()));
@@ -66,14 +64,14 @@ public class RoomsPanel extends AdminPanel {
 
 					protected void onEvent(AjaxRequestTarget target) {
 						form.hideNewRecord();
-						form.setModelObject(room);
+						form.setModelObject(getBean(RoomDao.class).get(roomId));
 						form.updateView(target);
 						target.add(form, listContainer);
 						target.appendJavaScript("omRoomPanelInit();");
 					}
 				});
 				item.add(AttributeModifier.replace("class", "clickable ui-widget-content"
-						+ (room.getRooms_id().equals(form.getModelObject().getRooms_id()) ? " selected" : "")));
+						+ (room.getRooms_id().equals(form.getModelObject().getRooms_id()) ? " ui-state-active" : "")));
 			}
 		};
 		
@@ -93,29 +91,6 @@ public class RoomsPanel extends AdminPanel {
 		add(container.orderLinks);
 		add(navigator);
 
-		final AjaxButton addModerator = new AjaxButton("addModerator") {
-			private static final long serialVersionUID = 1L;
-			
-			@Override
-			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-        		addModeratorsDialog.open(target);
-			}
-		};
-		
-		form = new RoomForm("form", listContainer, new Room()){
-			private static final long serialVersionUID = 3186201157375166657L;
-
-			@Override
-			protected void onModelChanged() {
-				super.onModelChanged();
-				boolean roomEmpty = (getModelObject() == null || getModelObject().getRooms_id() == null);
-				addModerator.add(AttributeModifier.replace("class", roomEmpty ? "formNewButton disabled" : "formNewButton"));
-				addModerator.setEnabled(!roomEmpty);
-			}
-			
-		};
-		
-        add(form.add(addModerator.setOutputMarkupId(true)));
-        add(addModeratorsDialog = new AddUsersDialog("addModerators", WebSession.getString(821), form, true));
+        add(form = new RoomForm("form", listContainer, new Room()));
 	}
 }

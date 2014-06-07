@@ -1040,6 +1040,8 @@
 			<jvmarg value="-Dbasedir=${basedir}" />
 			<jvmarg value="-Dred5.config_root=${red5.root}/conf" />
 			<jvmarg value="-Dbackups.dir=${junit.backups.dir}" />
+			<!--jvmarg value="-Xdebug"/>
+			<jvmarg value="-Xrunjdwp:transport=dt_socket,address=8787,server=y,suspend=n"/-->
 			<formatter type="${junit.test.formatter}" />
 			<batchtest todir="${junit.report.dir}">
 				<fileset dir="${main.out.dir}">

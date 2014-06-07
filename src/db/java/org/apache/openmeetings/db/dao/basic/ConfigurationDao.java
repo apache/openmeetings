@@ -32,13 +32,12 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
-import javax.annotation.Resource;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
 import org.apache.openmeetings.db.dao.IDataProviderDao;
-import org.apache.openmeetings.db.dao.user.AdminUserDao;
+import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.basic.Configuration;
 import org.apache.openmeetings.util.DaoHelper;
 import org.red5.logging.Red5LoggerFactory;
@@ -66,8 +65,7 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 	@PersistenceContext
 	private EntityManager em;
 
-	@Resource(name = "adminUserDao")
-	private AdminUserDao adminUserDao;
+	private UserDao userDao;
 
 	/**
 	 * @deprecated Dao's are not the place to store session variables, also
@@ -146,14 +144,10 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 		}
 	}
 
-	public List<Configuration> getConfigurations(int start, int max,
-			String orderby, boolean asc) {
+	public List<Configuration> getConfigurations(int start, int max, String orderby, boolean asc) {
 		try {
 
-			String query = "SELECT c FROM Configuration c " //
-					+ "LEFT JOIN FETCH c.user " //
-					+ "WHERE c.deleted = false " //
-					+ "ORDER BY " + orderby;
+			String query = "SELECT c FROM Configuration c LEFT JOIN FETCH c.user WHERE c.deleted = false ORDER BY " + orderby;
 
 			if (asc) {
 				query += " ASC";
@@ -281,7 +275,7 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 			em.persist(entity);
 		} else {
 			if (userId != null) {
-				entity.setUser(adminUserDao.get(userId));
+				entity.setUser(userDao.get(userId));
 			}
 			entity.setDeleted(deleted);
 			entity.setUpdatetime(new Date());

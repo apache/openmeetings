@@ -416,7 +416,7 @@ public class LdapLoginManagement implements ILdapLoginManagement {
 		User u = null;
 
 		try {
-			u = userManager.getUserByLogin(user);
+			u = usersDao.getUserByName(user, User.Type.ldap);
 		} catch (Exception e) {
 			log.error("Error retrieving Userdata : " + e.getMessage());
 		}
@@ -509,7 +509,7 @@ public class LdapLoginManagement implements ILdapLoginManagement {
 				}
 
 				// Return UserObject
-				User u2 = userManager.getUserById(userid);
+				User u2 = usersDao.get(userid);
 
 				if (u2 == null) {
 					return new Long(-1);
@@ -518,7 +518,7 @@ public class LdapLoginManagement implements ILdapLoginManagement {
 				u2.setType(Type.ldap);
 
 				// initialize lazy collection
-				userManager.refreshUserObject(u2);
+				usersDao.update(u2, u2.getUser_id());
 
 				log.debug("getUserbyId : " + userid + " : " + u2.getLogin());
 

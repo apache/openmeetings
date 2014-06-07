@@ -28,7 +28,6 @@ import org.apache.openmeetings.cluster.SlaveHTTPConnectionManager;
 import org.apache.openmeetings.data.basic.FieldManager;
 import org.apache.openmeetings.data.conference.InvitationManager;
 import org.apache.openmeetings.data.conference.RoomManager;
-import org.apache.openmeetings.data.user.OrganisationManager;
 import org.apache.openmeetings.data.user.UserManager;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.calendar.AppointmentCategoryDao;
@@ -40,19 +39,17 @@ import org.apache.openmeetings.db.dao.room.RoomTypeDao;
 import org.apache.openmeetings.db.dao.server.ISessionManager;
 import org.apache.openmeetings.db.dao.server.ServerDao;
 import org.apache.openmeetings.db.dao.server.SessiondataDao;
-import org.apache.openmeetings.db.dao.user.AdminUserDao;
 import org.apache.openmeetings.db.dao.user.IUserService;
 import org.apache.openmeetings.db.dao.user.PrivateMessageFolderDao;
 import org.apache.openmeetings.db.dao.user.PrivateMessagesDao;
 import org.apache.openmeetings.db.dao.user.SalutationDao;
 import org.apache.openmeetings.db.dao.user.UserContactsDao;
-import org.apache.openmeetings.db.dto.basic.SearchResult;
+import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
 import org.apache.openmeetings.db.entity.calendar.MeetingMember;
 import org.apache.openmeetings.db.entity.room.Client;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.server.Server;
-import org.apache.openmeetings.db.entity.user.Organisation;
 import org.apache.openmeetings.db.entity.user.Salutation;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.UserContact;
@@ -94,13 +91,11 @@ public class UserService implements IUserService {
 	@Autowired
 	private UserManager userManager;
 	@Autowired
-	private AdminUserDao userDao;
+	private UserDao userDao;
 	@Autowired
 	private FieldManager fieldManager;
 	@Autowired
 	private SalutationDao salutationmanagement;
-	@Autowired
-	private OrganisationManager organisationManager;
 	@Autowired
 	private RoomManager roomManager;
 	@Autowired
@@ -111,8 +106,6 @@ public class UserService implements IUserService {
 	private PrivateMessagesDao privateMessagesDao;
 	@Autowired
 	private PrivateMessageFolderDao privateMessageFolderDao;
-	@Autowired
-	private AdminUserDao usersDao;
 	@Autowired
 	private UserContactsDao userContactsDao;
 	@Autowired
@@ -140,7 +133,10 @@ public class UserService implements IUserService {
 	public User getUserById(String SID, long user_id) {
 		Long users_id = sessiondataDao.checkSession(SID);
 		Long user_level = userManager.getUserLevelByID(users_id);
-		return userManager.checkAdmingetUserById(user_level, user_id);
+		if (AuthLevelUtil.checkUserLevel(user_level)) {
+			return userDao.get(user_id);
+		}
+		return null;
 	}
 
 	/**
@@ -170,67 +166,6 @@ public class UserService implements IUserService {
 	}
 
 	/**
-	 * get a list of all users of an organisation
-	 * 
-	 * @param SID
-	 * @param organisation_id
-	 * @param start
-	 * @param max
-	 * @param orderby
-	 * @param asc
-	 * @return list of all users of an organisation
-	 */
-	public List<User> getOrgUserList(String SID, long organisation_id,
-			int start, int max, String orderby, boolean asc) {
-		return organisationManager.getUsersByOrganisationId(organisation_id,
-				start, max, orderby, asc);
-	}
-
-	public List<User> getUserListByModForm(String SID) {
-		Long users_id = sessiondataDao.checkSession(SID);
-		Long user_level = userManager.getUserLevelByID(users_id);
-		return userManager.getUserByMod(user_level, users_id);
-	}
-
-	/**
-	 * get a list of all organisations of an user
-	 * 
-	 * @param SID
-	 * @param client_user
-	 * @param start
-	 * @param max
-	 * @param orderby
-	 * @param asc
-	 * @return list of all organisations of an user
-	 */
-	public List<Organisation> getOrganisationListByUser(String SID,
-			long client_user, int start, int max, String orderby, boolean asc) {
-		Long users_id = sessiondataDao.checkSession(SID);
-		long user_level = userManager.getUserLevelByID(users_id);
-		return organisationManager.getOrganisationsByUserId(user_level,
-				client_user, start, max, orderby, asc);
-	}
-
-	/**
-	 * gets a list of all not assigned organisations of a user
-	 * 
-	 * @param SID
-	 * @param client_user
-	 * @param start
-	 * @param max
-	 * @param orderby
-	 * @param asc
-	 * @return list of all not assigned organisations of a user
-	 */
-	public List<Organisation> getRestOrganisationListByUser(String SID,
-			long client_user, int start, int max, String orderby, boolean asc) {
-		Long users_id = sessiondataDao.checkSession(SID);
-		Long user_level = userManager.getUserLevelByID(users_id);
-		return organisationManager.getRestOrganisationsByUserId(user_level,
-				client_user, start, max, orderby, asc);
-	}
-
-	/**
 	 * gets a whole user-list(admin-role only)
 	 * 
 	 * @param SID
@@ -239,12 +174,13 @@ public class UserService implements IUserService {
 	 * @param orderby
 	 * @return whole user-list
 	 */
-	public SearchResult<User> getUserList(String SID, int start, int max,
-			String orderby, boolean asc) {
+	public List<User> getUserList(String SID, int start, int max, String orderby, boolean asc) {
 		Long users_id = sessiondataDao.checkSession(SID);
 		Long user_level = userManager.getUserLevelByID(users_id);
-		return userManager
-				.getUsersList(user_level, start, max, orderby, asc);
+		if (AuthLevelUtil.checkAdminLevel(user_level)) {
+			return userDao.get("", start, max, orderby + (asc ? " ASC" : " DESC"));
+		}
+		return null;
 	}
 
 	/**
@@ -316,13 +252,13 @@ public class UserService implements IUserService {
 			// users only
 			if (AuthLevelUtil.checkUserLevel(user_level)) {
 
-				User us = userManager.getUserById(users_id);
+				User us = userDao.get(users_id);
 
 				us.setTimeZoneId(timezoneUtil.getTimezoneByInternalJName(jname).getID());
 				us.setForceTimeZoneCheck(false);
 				us.setUpdatetime(new Date());
 
-				userManager.updateUser(us);
+				userDao.update(us, users_id);
 				
 				return us;
 
@@ -438,7 +374,7 @@ public class UserService implements IUserService {
 			Long user_level = userManager.getUserLevelByID(users_id);
 			// users only
 			if (AuthLevelUtil.checkUserLevel(user_level)) {
-				User from = userManager.getUserById(users_id);
+				User from = userDao.get(users_id);
 				TimeZone timezone = timezoneUtil.getTimeZone(from);
 
 				Date start = createCalendarDate(timezone, validFromDate, validFromTime);

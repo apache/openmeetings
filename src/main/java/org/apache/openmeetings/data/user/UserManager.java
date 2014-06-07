@@ -31,21 +31,18 @@ import java.util.TimeZone;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
-import javax.persistence.NonUniqueResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
 
 import org.apache.openmeetings.data.basic.FieldManager;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.server.ISessionManager;
 import org.apache.openmeetings.db.dao.server.SessiondataDao;
-import org.apache.openmeetings.db.dao.user.AdminUserDao;
 import org.apache.openmeetings.db.dao.user.IUserManager;
+import org.apache.openmeetings.db.dao.user.OrganisationDao;
+import org.apache.openmeetings.db.dao.user.OrganisationUserDao;
 import org.apache.openmeetings.db.dao.user.StateDao;
+import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.dto.basic.SearchResult;
 import org.apache.openmeetings.db.entity.room.Client;
 import org.apache.openmeetings.db.entity.server.Sessiondata;
@@ -90,9 +87,11 @@ public class UserManager implements IUserManager {
 	@Autowired
 	private StateDao statemanagement;
 	@Autowired
-	private OrganisationManager organisationManager;
+	private OrganisationDao orgDao;
 	@Autowired
-	private AdminUserDao usersDao;
+	private OrganisationUserDao orgUserDao;
+	@Autowired
+	private UserDao usersDao;
 	@Autowired
 	private EmailManager emailManagement;
 	@Autowired
@@ -103,49 +102,6 @@ public class UserManager implements IUserManager {
 	private ISessionManager sessionManager;
 	@Autowired
 	private TimezoneUtil timezoneUtil;
-
-	/**
-	 * query for a list of users
-	 * 
-	 * @param users_id
-	 * @param user_level
-	 * @param start
-	 * @param max
-	 * @param orderby
-	 * @return
-	 */
-	public SearchResult<User> getUsersList(long user_level, int start, int max,
-			String orderby, boolean asc) {
-		try {
-			if (AuthLevelUtil.checkAdminLevel(user_level)) {
-				SearchResult<User> sresult = new SearchResult<User>();
-				sresult.setObjectName(User.class.getName());
-				sresult.setRecords(usersDao.count());
-
-				// get all users
-				CriteriaBuilder cb = em.getCriteriaBuilder();
-				CriteriaQuery<User> cq = cb.createQuery(User.class);
-				Root<User> c = cq.from(User.class);
-				Predicate condition = cb.equal(c.get("deleted"), false);
-				cq.where(condition);
-				cq.distinct(asc);
-				if (asc) {
-					cq.orderBy(cb.asc(c.get(orderby)));
-				} else {
-					cq.orderBy(cb.desc(c.get(orderby)));
-				}
-				TypedQuery<User> q = em.createQuery(cq);
-				q.setFirstResult(start);
-				q.setMaxResults(max);
-				List<User> ll = q.getResultList();
-				sresult.setResult(ll);
-				return sresult;
-			}
-		} catch (Exception ex2) {
-			log.error("[getUsersList] " + ex2);
-		}
-		return null;
-	}
 
 	public SearchResult<User> getAllUserByRange(String search, int start, int max,
 			String orderby, boolean asc) {
@@ -163,7 +119,7 @@ public class UserManager implements IUserManager {
 			} else {
 				sort += " DESC ";
 			}
-			String hql = DaoHelper.getSearchQuery("User", "u", search, true, false, sort, AdminUserDao.searchFields);
+			String hql = DaoHelper.getSearchQuery("User", "u", search, true, false, sort, UserDao.searchFields);
 
 			log.debug("Show HQL: " + hql);
 
@@ -185,25 +141,6 @@ public class UserManager implements IUserManager {
 			log.error("[getAllUserByRange] ", ex2);
 			ex2.printStackTrace();
 		}
-		return null;
-	}
-
-	/**
-	 * 
-	 * @param user_level
-	 * @param user_id
-	 * @return
-	 */
-	public User checkAdmingetUserById(long user_level, long user_id) {
-		// FIXME: We have to check here for the User only cause the
-		// Org-Moderator otherwise cannot access it
-		if (AuthLevelUtil.checkUserLevel(user_level)) {
-			return usersDao.get(user_id);
-		}
-		return null;
-	}
-
-	public List<User> getUserByMod(Long user_level, long user_id) {
 		return null;
 	}
 
@@ -236,9 +173,6 @@ public class UserManager implements IUserManager {
 				return new Long(-10);
 			} else {
 				User users = ll.get(0);
-
-				// Refresh User Object
-				users = refreshUserObject(users);
 
 				if (usersDao.verifyPassword(users.getUser_id(), userpass)) {
 					Boolean bool = sessiondataDao.updateUser(SID, users.getUser_id(), storePermanent, users.getLanguage_id());
@@ -282,17 +216,6 @@ public class UserManager implements IUserManager {
 		return new Long(-1);
 	}
 
-	public User refreshUserObject(User us) {
-		try {
-
-			us = em.merge(us);
-			return us;
-		} catch (Exception ex2) {
-			log.error("[loginUser]: ", ex2);
-		}
-		return null;
-	}
-
 	public User loginUserByRemoteHash(String SID, String remoteHash) {
 		try {
 
@@ -301,7 +224,7 @@ public class UserManager implements IUserManager {
 
 			if (sessionData != null) {
 
-				User u = getUserById(sessionData.getUser_id());
+				User u = usersDao.get(sessionData.getUser_id());
 
 				sessiondataDao.updateUserWithoutSession(SID, u.getUser_id());
 
@@ -514,9 +437,7 @@ public class UserManager implements IUserManager {
 					log.debug("user_id, organisation_id" + user_id + ", "
 							+ organisation_id);
 
-					Organisation_Users ou = organisationManager
-							.getOrganisation_UserByUserAndOrganisation(user_id,
-									organisation_id);
+					Organisation_Users ou = orgUserDao.getByOrganizationAndUser(organisation_id, user_id);
 
 					log.debug("ou: " + ou);
 
@@ -573,8 +494,7 @@ public class UserManager implements IUserManager {
 		String baseURL = configurationDao.getBaseUrl();
 		boolean sendConfirmation = baseURL != null
 				&& !baseURL.isEmpty()
-				&& 1 == configurationDao.getConfValue(
-						"sendEmailWithVerficationCode", Integer.class, "0");
+				&& 1 == configurationDao.getConfValue("sendEmailWithVerficationCode", Integer.class, "0");
 		
 		return registerUser(login, Userpass, lastname, firstname, email, age,
 				street, additionalname, fax, zip, states_id, town, language_id,
@@ -854,40 +774,13 @@ public class UserManager implements IUserManager {
 			if (orgIds != null) {
 				List<Organisation_Users> orgList = users.getOrganisation_users();
 				for (Long orgId : orgIds) {
-					orgList.add(organisationManager.getOrgUser(orgId, null));
+					orgList.add(new Organisation_Users(orgDao.get(orgId)));
 				}
 			}
-			return addUser(users);
+			return usersDao.update(users, null).getUser_id();
 
 		} catch (Exception ex2) {
 			log.error("[registerUser]", ex2);
-		}
-		return null;
-	}
-
-	public User getUserByExternalIdAndType(String externalUserId,
-			String externalUserType) {
-
-		try {
-
-			String hql = "select c from User as c "
-					+ "where c.externalUserId LIKE :externalUserId "
-					+ "AND c.externalUserType LIKE :externalUserType "
-					+ "AND c.deleted <> :deleted";
-
-			TypedQuery<User> query = em.createQuery(hql, User.class);
-			query.setParameter("externalUserId", externalUserId);
-			query.setParameter("externalUserType", externalUserType);
-			query.setParameter("deleted", true);
-
-			List<User> users = query.getResultList();
-
-			if (users.size() > 0) {
-				return users.get(0);
-			}
-
-		} catch (Exception ex2) {
-			log.error("[getUserByExternalIdAndType]", ex2);
 		}
 		return null;
 	}
@@ -951,132 +844,6 @@ public class UserManager implements IUserManager {
 		}
 		return null;
 	}
-
-	public Long addUser(User usr) {
-		try {
-			em.persist(usr);
-			//em.refresh(usr);
-			em.flush();
-
-			return usr.getUser_id();
-		} catch (Exception ex2) {
-			log.error("[addUser]", ex2);
-		}
-		return null;
-	}
-
-	/**
-	 * 
-	 * Find User by Id
-	 */
-	// -----------------------------------------------------------------------------------------------------
-	public User getUserById(Long id) {
-		log.debug("Usermanagement.getUserById");
-
-		if (id == null || id <= 0) {
-			return null;
-		}
-		CriteriaBuilder cb = em.getCriteriaBuilder();
-		CriteriaQuery<User> cq = cb.createQuery(User.class);
-		Root<User> c = cq.from(User.class);
-		Predicate condition = cb.equal(c.get("deleted"), false);
-		Predicate subCondition = cb.equal(c.get("user_id"), id);
-		cq.where(condition, subCondition);
-		TypedQuery<User> q = em.createQuery(cq);
-		User u = null;
-		try {
-			u = q.getSingleResult();
-		} catch (NoResultException e) {
-			// u=null}
-		} catch (NonUniqueResultException ex) {
-		}
-
-		return u;
-	}
-
-	public User getUserByIdAndDeleted(Long id) throws Exception {
-		log.debug("Usermanagement.getUserById");
-
-		CriteriaBuilder cb = em.getCriteriaBuilder();
-		CriteriaQuery<User> cq = cb.createQuery(User.class);
-		Root<User> c = cq.from(User.class);
-		Predicate condition = cb.equal(c.get("user_id"), id);
-		cq.where(condition);
-		TypedQuery<User> q = em.createQuery(cq);
-		User u = null;
-		try {
-			u = q.getSingleResult();
-		} catch (NoResultException e) {
-			// u=null}
-		}
-
-		return u;
-
-	}
-
-	// -----------------------------------------------------------------------------------------------------
-
-	/**
-	 * @author o.becherer Find User by LoginName (test existence of a active
-	 *         user with login - name
-	 */
-	// -----------------------------------------------------------------------------------------------------
-	public User getUserByLogin(String login) throws Exception {
-		log.debug("Usermanagement.getUserByLogin : " + login);
-
-		CriteriaBuilder cb = em.getCriteriaBuilder();
-		CriteriaQuery<User> cq = cb.createQuery(User.class);
-		Root<User> c = cq.from(User.class);
-		Predicate condition = cb.equal(c.get("deleted"), false);
-		Predicate subCondition = cb.equal(c.get("login"), login);
-		cq.where(condition, subCondition);
-		TypedQuery<User> q = em.createQuery(cq);
-		User u = null;
-		try {
-			u = q.getSingleResult();
-		} catch (NoResultException e) {
-			// u=null}
-		}
-
-		return u;
-
-	}
-
-	// -----------------------------------------------------------------------------------------------------
-
-	/**
-	 * @author swagner Find User by LoginName or EMail (test existence of a
-	 *         active user with login - name
-	 */
-	// -----------------------------------------------------------------------------------------------------
-	public User getUserByLoginOrEmail(String userOrEmail) throws Exception {
-		// log.debug("Usermanagement.getUserByLoginOrEmail : " + userOrEmail);
-
-		String hql = "SELECT c from User AS c "
-				+ "WHERE "
-				+ "(c.login LIKE :userOrEmail OR c.adresses.email LIKE :userOrEmail  ) "
-				+ "AND c.externalUserId IS NULL " + "AND c.deleted <> :deleted";
-
-		TypedQuery<User> query = em.createQuery(hql, User.class);
-		query.setParameter("userOrEmail", userOrEmail);
-		query.setParameter("deleted", true);
-
-		List<User> ll = query.getResultList();
-
-		if (ll.size() > 1) {
-			log.error("ALERT :: There are two users in the database that have either same login or Email ");
-			return ll.get(0);
-			// throw new
-			// Exception("ALERT :: There are two users in the database that have either same login or Email ");
-		} else if (ll.size() == 1) {
-			return ll.get(0);
-		} else {
-			return null;
-		}
-
-	}
-
-	// -----------------------------------------------------------------------------------------------------
 
 	/**
 	 * @param admin
@@ -1157,9 +924,5 @@ public class UserManager implements IUserManager {
 			log.error("[kickUserByStreamId]", err);
 		}
 		return null;
-	}
-
-	public void updateUser(User user) {
-		usersDao.update(user, null);
 	}
 }

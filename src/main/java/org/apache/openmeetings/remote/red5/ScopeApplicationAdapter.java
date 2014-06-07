@@ -1667,7 +1667,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 			log.debug("UDPATE SESSION " + SID + ", " + userId);
 			sessiondataDao.updateUserWithoutSession(SID, userId);
 
-			User user = userManager.getUserById(userId);
+			User user = usersDao.get(userId);
 
 			if (user != null) {
 				currentClient.setExternalUserId(user.getExternalUserId());

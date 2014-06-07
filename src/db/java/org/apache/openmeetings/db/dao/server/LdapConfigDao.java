@@ -29,7 +29,7 @@ import javax.persistence.PersistenceException;
 import javax.persistence.TypedQuery;
 
 import org.apache.openmeetings.db.dao.IDataProviderDao;
-import org.apache.openmeetings.db.dao.user.AdminUserDao;
+import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.server.LdapConfig;
 import org.apache.openmeetings.util.DaoHelper;
 import org.apache.openmeetings.util.OpenmeetingsVariables;
@@ -55,7 +55,7 @@ public class LdapConfigDao implements IDataProviderDao<LdapConfig> {
 	private EntityManager em;
 
 	@Autowired
-	private AdminUserDao usersDao;
+	private UserDao usersDao;
 
 	public Long addLdapConfig(String name, Boolean addDomainToUserName,
 			String configFileName, String domain, Long insertedby,

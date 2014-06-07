@@ -38,6 +38,7 @@ import org.apache.openmeetings.db.dao.room.RoomTypeDao;
 import org.apache.openmeetings.db.dao.server.ISessionManager;
 import org.apache.openmeetings.db.dao.server.ServerDao;
 import org.apache.openmeetings.db.dao.server.SessiondataDao;
+import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.dto.basic.SearchResult;
 import org.apache.openmeetings.db.dto.server.ServerDTO;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
@@ -74,6 +75,8 @@ public class ConferenceService {
 	private SessiondataDao sessiondataDao;
 	@Autowired
 	private UserManager userManager;
+	@Autowired
+	private UserDao userDao;
 	@Autowired
 	private RoomManager roomManager;
 	@Autowired
@@ -308,7 +311,7 @@ public class ConferenceService {
 
 			returnMap.put("appointment", appointment);
 
-			User us = userManager.getUserById(currentClient.getUser_id());
+			User us = userDao.get(currentClient.getUser_id());
 			TimeZone timezone = timezoneUtil.getTimeZone(us);
 
 			returnMap.put("appointment", appointment);
@@ -417,7 +420,7 @@ public class ConferenceService {
 		Long users_id = sessiondataDao.checkSession(SID);
 		Long user_level = userManager.getUserLevelByID(users_id);
 		if (AuthLevelUtil.checkUserLevel(user_level)) {
-			User user = userManager.getUserById(users_id);
+			User user = userDao.get(users_id);
 			return roomTypeDao.getAll(user == null
 					? cfgDao.getConfValue(CONFIG_DEFAUT_LANG_KEY, Long.class, "1") : user.getLanguage_id());
 		}
@@ -499,7 +502,7 @@ public class ConferenceService {
 
 			if (AuthLevelUtil.checkUserLevel(user_level)) {
 
-				return roomModeratorsDao.getRoomModeratorByRoomId(roomId);
+				return roomModeratorsDao.getByRoomId(roomId);
 
 			}
 

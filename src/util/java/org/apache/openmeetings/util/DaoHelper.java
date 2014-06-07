@@ -19,32 +19,49 @@
 package org.apache.openmeetings.util;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.wicket.util.string.Strings;
 
 public class DaoHelper {
 
 	public static String getSearchQuery(String table, String alias, String search, boolean filterDeleted, boolean count, String sort, String... fields) {
-		return getSearchQuery(table, alias, search, filterDeleted, count, null, sort, fields);
+		return getSearchQuery(table, alias, search, false, filterDeleted, count, sort, fields);
+	}
+	public static String getSearchQuery(String table, String alias, String search, boolean distinct, boolean filterDeleted, boolean count, String sort, String... fields) {
+		return getSearchQuery(table, alias, null, search, distinct, filterDeleted, count, null, sort, fields);
 	}
 	
-	public static String getSearchQuery(String table, String alias, String search, boolean filterDeleted, boolean count, String additionalWhere, String sort, String... fields) {
+	public static String getSearchQuery(String table, String alias, String join, String search, boolean filterDeleted, boolean count, String additionalWhere, String sort, String... fields) {
+		return getSearchQuery(table, alias, join, search, filterDeleted, count, additionalWhere, sort, fields);
+	}
+	
+	public static String getSearchQuery(String table, String alias, String join, String search, boolean distinct, boolean filterDeleted, boolean count, String additionalWhere, String sort, String... fields) {
 		StringBuilder sb = new StringBuilder("SELECT ");
 		if (count) {
-			sb.append("COUNT(").append(alias).append(")");
-		} else {
-			sb.append(alias);
+			sb.append("COUNT(");
 		}
-		sb.append(" FROM ").append(table).append(" ").append(alias).append(" WHERE 1 = 1 ");
+		if (distinct) {
+			sb.append("DISTINCT ");
+		}
+		sb.append(alias);
+		if (count) {
+			sb.append(")");
+		}
+		sb.append(" FROM ").append(table).append(" ").append(alias);
+		if (!Strings.isEmpty(join)) {
+			sb.append(" ").append(join);
+		}
+		sb.append(" WHERE 1 = 1 ");
 		if (filterDeleted) {
 			sb.append("AND ").append(alias).append(".deleted = false ");
 		}
-		StringBuilder where = DaoHelper.getWhereClause(search, alias, fields);
-		if (where.length() > 0) {
+		StringBuilder where = getWhereClause(search, alias, fields);
+		if (!Strings.isEmpty(where)) {
 			sb.append("AND ").append(where);
 		}
-		if (additionalWhere != null && !additionalWhere.trim().isEmpty()) {
+		if (!Strings.isEmpty(additionalWhere)) {
 			sb.append("AND ").append(additionalWhere);
 		}
-		if (sort != null && !sort.trim().isEmpty()) {
+		if (!Strings.isEmpty(sort)) {
 			sb.append(" ORDER BY ").append(alias).append(".").append(sort);
 		}
 		return sb.toString();

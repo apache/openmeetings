@@ -19,12 +19,10 @@
 package org.apache.openmeetings.test;
 
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 
 import java.util.Date;
 import java.util.List;
 
-import org.apache.openmeetings.data.user.UserManager;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
 import org.apache.openmeetings.db.dao.calendar.AppointmentReminderTypDao;
@@ -58,8 +56,6 @@ public abstract class AbstractJUnitDefaults extends AbstractSpringTest {
 	@Autowired
 	private RoomTypeDao roomTypeDao;
 	@Autowired
-	private UserManager userManager;
-	@Autowired
 	private UserDao userDao;
 	@Autowired
 	private ImportInitvalues importInitvalues;
@@ -72,6 +68,7 @@ public abstract class AbstractJUnitDefaults extends AbstractSpringTest {
 	@Before
 	public void setUp() throws Exception {
 		super.setUp();
+		configurationDao.getCryptKey();
         if (userDao.count() < 1) {
             makeDefaultScheme();
             log.info("Default scheme created successfully");
@@ -152,7 +149,7 @@ public abstract class AbstractJUnitDefaults extends AbstractSpringTest {
 		return ap;
 	}
 
-	public User createUser(int rnd) throws Exception {
+	public User getUser(int rnd) throws Exception {
 		User u = new User();
 		// add user
 		u.setFirstname("firstname" + rnd);
@@ -160,10 +157,13 @@ public abstract class AbstractJUnitDefaults extends AbstractSpringTest {
 		u.setLogin("login" + rnd);
 		u.updatePassword(configurationDao, "pass" + rnd);
 		u.setLanguage_id(1L);
-		Long user_id = userManager.addUser(u);
-		assertTrue("Cann't add user", user_id > 0);
-		u = userManager.getUserByIdAndDeleted(user_id);
-		assertNotNull("User should not be null", u);
+		return u;
+	}
+
+	public User createUser(int rnd) throws Exception {
+		User u = getUser(rnd);
+		u = userDao.update(u, null);
+		assertNotNull("Can't add user", u);
 		return u;
 	}
 
@@ -180,7 +180,7 @@ public abstract class AbstractJUnitDefaults extends AbstractSpringTest {
 	public User createUserContact(int rnd, Long ownerId) {
 		User user = userDao.getContact("email" + rnd, "firstname" + rnd, "lastname" + rnd, ownerId);
 		user = userDao.update(user, ownerId);
-		assertNotNull("Cann't add user", user);
+		assertNotNull("Can't add user contact", user);
 		return user;
 	}
 

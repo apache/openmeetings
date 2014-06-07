@@ -406,7 +406,7 @@ public class MessagesContactsPanel extends UserPanel {
 					if (cssClass.length() > 0) {
 						cssClass.append(" ");
 					}
-					cssClass.append("selected");
+					cssClass.append("ui-state-active");
 				}
 				item.add(AttributeModifier.replace("class", cssClass.toString()));
 			}

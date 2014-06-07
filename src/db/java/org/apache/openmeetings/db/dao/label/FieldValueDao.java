@@ -67,15 +67,7 @@ public class FieldValueDao implements IDataProviderDao<Fieldvalues> {
 	}
 	
 	public List<Fieldvalues> get(Long language_id, String search, int start, int count, String sort) {
-		String sql = DaoHelper.getSearchQuery(
-				"Fieldlanguagesvalues"
-				, "flv"
-				, search
-				, true
-				, false
-				, "flv.fieldvalues.deleted = false AND flv.language_id = :lang"
-				, sort
-				, searchFields);
+		String sql = DaoHelper.getSearchQuery("Fieldlanguagesvalues", "flv", null, search, true, false, "flv.fieldvalues.deleted = false AND flv.language_id = :lang", sort, searchFields);
 		TypedQuery<Fieldlanguagesvalues> q = em.createQuery(sql, Fieldlanguagesvalues.class);
 		q.setParameter("lang", language_id);
 		q.setFirstResult(start);
@@ -121,15 +113,7 @@ public class FieldValueDao implements IDataProviderDao<Fieldvalues> {
 	}
 	
 	public long count(Long language_id, String search) {
-		String sql = DaoHelper.getSearchQuery(
-				"Fieldlanguagesvalues"
-				, "flv"
-				, search
-				, true
-				, true
-				, "flv.fieldvalues.deleted = false AND flv.language_id = :lang"
-				, null
-				, searchFields);
+		String sql = DaoHelper.getSearchQuery("Fieldlanguagesvalues", "flv", null, search, true, true, "flv.fieldvalues.deleted = false AND flv.language_id = :lang", null, searchFields);
 		TypedQuery<Long> q = em.createQuery(sql, Long.class);
 		q.setParameter("lang", language_id);
 		return q.getSingleResult();

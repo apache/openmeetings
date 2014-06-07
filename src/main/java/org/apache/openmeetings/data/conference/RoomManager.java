@@ -20,6 +20,7 @@ package org.apache.openmeetings.data.conference;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -35,16 +36,17 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import org.apache.openmeetings.data.basic.FieldManager;
-import org.apache.openmeetings.data.user.OrganisationManager;
 import org.apache.openmeetings.db.dao.room.IRoomManager;
 import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.dao.room.RoomModeratorsDao;
 import org.apache.openmeetings.db.dao.room.RoomTypeDao;
 import org.apache.openmeetings.db.dao.room.SipDao;
 import org.apache.openmeetings.db.dao.server.ISessionManager;
+import org.apache.openmeetings.db.dao.user.OrganisationDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.dto.basic.SearchResult;
 import org.apache.openmeetings.db.entity.room.Room;
+import org.apache.openmeetings.db.entity.room.RoomModerator;
 import org.apache.openmeetings.db.entity.room.RoomOrganisation;
 import org.apache.openmeetings.db.entity.user.Organisation_Users;
 import org.apache.openmeetings.db.entity.user.User;
@@ -67,7 +69,7 @@ public class RoomManager implements IRoomManager {
 	private EntityManager em;
 
 	@Autowired
-	private OrganisationManager organisationManager;
+	private OrganisationDao orgDao;
 	@Autowired
 	private RoomModeratorsDao roomModeratorsDao;
 	@Autowired
@@ -513,6 +515,25 @@ public class RoomManager implements IRoomManager {
     	return r == null || r.getConfno() == null ? null : sipDao.countUsers(r.getConfno());
     }
 
+    private List<RoomModerator> getModerators(List<Map<String, Object>> list, Long roomId) {
+		List<RoomModerator> result = new ArrayList<RoomModerator>();
+
+		for (Map<String, Object> roomModeratorObj : list) {
+			Long roomModeratorsId = roomModeratorObj.containsKey("roomModeratorsId") ? Long.parseLong(roomModeratorObj.get("roomModeratorsId").toString()) : null;
+			Long userId = Long.parseLong(roomModeratorObj.get("userId").toString());
+			Boolean isSuperModerator = Boolean.parseBoolean(roomModeratorObj.get("isSuperModerator").toString());
+
+			RoomModerator rm = new RoomModerator();
+			rm.setRoomModeratorsId(roomModeratorsId);
+			rm.setRoomId(roomId);
+			rm.setUser(usersDao.get(userId));
+			rm.setIsSuperModerator(isSuperModerator);
+			
+			result.add(rm);
+		}
+		return result;
+    }
+
 	/**
 	 * adds a new Record to the table rooms
 	 * @param name
@@ -588,13 +609,14 @@ public class RoomManager implements IRoomManager {
 
 				if (organisations != null) {
 					Long t = this.updateRoomOrganisations(organisations, r);
-					if (t == null)
+					if (t == null) {
 						return null;
+					}
 				}
 
 				if (roomModerators != null) {
-					roomModeratorsDao.addRoomModeratorByUserList(
-							roomModerators, r.getRooms_id());
+					r.setModerators(getModerators(roomModerators, r.getRooms_id()));
+					r = roomDao.update(r, ownerId);
 				}
 
 				return r.getRooms_id();
@@ -638,8 +660,8 @@ public class RoomManager implements IRoomManager {
 				this.addRoomToOrganisation(3, returnId, organisation_id);
 
 				if (roomModerators != null) {
-					roomModeratorsDao.addRoomModeratorByUserList(
-							roomModerators, r.getRooms_id());
+					r.setModerators(getModerators(roomModerators, r.getRooms_id()));
+					r = roomDao.update(r, null);
 				}
 
 				return returnId;
@@ -708,13 +730,14 @@ public class RoomManager implements IRoomManager {
 
 			if (organisations != null) {
 				Long t = this.updateRoomOrganisations(organisations, r);
-				if (t == null)
+				if (t == null) {
 					return null;
+				}
 			}
 
 			if (roomModerators != null) {
-				roomModeratorsDao.addRoomModeratorByUserList(roomModerators,
-						r.getRooms_id());
+				r.setModerators(getModerators(roomModerators, r.getRooms_id()));
+				r = roomDao.update(r, null);
 			}
 
 			return returnId;
@@ -740,8 +763,7 @@ public class RoomManager implements IRoomManager {
 				log.debug("addRoomToOrganisation rooms '"
 						+ rOrganisation.getRoom().getName() + "'");
 				rOrganisation.setStarttime(new Date());
-				rOrganisation.setOrganisation(organisationManager
-						.getOrganisationById(organisation_id));
+				rOrganisation.setOrganisation(orgDao.get(organisation_id));
 				rOrganisation.setDeleted(false);
 
 				rOrganisation = em.merge(rOrganisation);
@@ -1081,16 +1103,17 @@ public class RoomManager implements IRoomManager {
 			r.setAutoVideoSelect(autoVideoSelect);
 			r.setPin(conferencePin);
 			r.setSipEnabled(sipEnabled);
-			roomDao.update(r, ownerId);
+			r = roomDao.update(r, ownerId);
 
 			if (organisations != null) {
 				Long t = this.updateRoomOrganisations(organisations, r);
-				if (t == null)
+				if (t == null) {
 					return null;
+				}
 			}
 			if (roomModerators != null) {
-				roomModeratorsDao.updateRoomModeratorByUserList(roomModerators,
-						r.getRooms_id());
+				r.setModerators(getModerators(roomModerators, r.getRooms_id()));
+				r = roomDao.update(r, null);
 			}
 
 			return r.getRooms_id();
@@ -1130,7 +1153,7 @@ public class RoomManager implements IRoomManager {
 					em.persist(r);
 				} else {
 					if (!em.contains(r)) {
-						em.merge(r);
+						r = em.merge(r);
 					}
 				}
 
@@ -1138,8 +1161,8 @@ public class RoomManager implements IRoomManager {
 				// update as Moderator
 
 				if (roomModerators != null) {
-					roomModeratorsDao.updateRoomModeratorByUserList(
-							roomModerators, r.getRooms_id());
+					r.setModerators(getModerators(roomModerators, r.getRooms_id()));
+					r = roomDao.update(r, null);
 				}
 
 				return r.getRooms_id();

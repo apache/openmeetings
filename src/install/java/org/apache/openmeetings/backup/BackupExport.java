@@ -50,11 +50,11 @@ import org.apache.openmeetings.db.dao.server.LdapConfigDao;
 import org.apache.openmeetings.db.dao.server.OAuth2Dao;
 import org.apache.openmeetings.db.dao.server.ServerDao;
 import org.apache.openmeetings.db.dao.server.SessiondataDao;
-import org.apache.openmeetings.db.dao.user.AdminUserDao;
 import org.apache.openmeetings.db.dao.user.OrganisationDao;
 import org.apache.openmeetings.db.dao.user.PrivateMessageFolderDao;
 import org.apache.openmeetings.db.dao.user.PrivateMessagesDao;
 import org.apache.openmeetings.db.dao.user.UserContactsDao;
+import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.basic.ChatMessage;
 import org.apache.openmeetings.db.entity.basic.Configuration;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
@@ -108,7 +108,7 @@ public class BackupExport {
 	@Autowired
 	private FlvRecordingDao flvRecordingDao;
 	@Autowired
-	private AdminUserDao usersDao;
+	private UserDao usersDao;
 	@Autowired
 	private MeetingMemberDao meetingMemberDao;
 	@Autowired
@@ -153,7 +153,7 @@ public class BackupExport {
 		/*
 		 * ##################### Backup Users
 		 */
-		exportUsers(backup_dir, usersDao.getAllUsersDeleted());
+		exportUsers(backup_dir, usersDao.getAllBackupUsers());
 
 		/*
 		 * ##################### Backup Room

@@ -18,24 +18,29 @@
  */
 package org.apache.openmeetings.axis.services;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 import org.apache.axis2.AxisFault;
 import org.apache.openmeetings.data.basic.FieldManager;
-import org.apache.openmeetings.data.user.OrganisationManager;
 import org.apache.openmeetings.data.user.UserManager;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.basic.ErrorDao;
 import org.apache.openmeetings.db.dao.label.FieldLanguagesValuesDao;
 import org.apache.openmeetings.db.dao.server.SOAPLoginDao;
 import org.apache.openmeetings.db.dao.server.SessiondataDao;
-import org.apache.openmeetings.db.dao.user.AdminUserDao;
+import org.apache.openmeetings.db.dao.user.OrganisationDao;
+import org.apache.openmeetings.db.dao.user.OrganisationUserDao;
+import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.dto.basic.ErrorResult;
 import org.apache.openmeetings.db.dto.basic.SearchResult;
+import org.apache.openmeetings.db.dto.user.UserSearchResult;
 import org.apache.openmeetings.db.entity.basic.ErrorType;
 import org.apache.openmeetings.db.entity.basic.ErrorValue;
 import org.apache.openmeetings.db.entity.server.RemoteSessionObject;
 import org.apache.openmeetings.db.entity.server.Sessiondata;
+import org.apache.openmeetings.db.entity.user.Organisation;
+import org.apache.openmeetings.db.entity.user.Organisation_Users;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.remote.MainService;
 import org.apache.openmeetings.util.AuthLevelUtil;
@@ -69,11 +74,13 @@ public class UserWebService {
 	@Autowired
 	private ErrorDao errorDao;
 	@Autowired
-	private OrganisationManager organisationManager;
+	private OrganisationDao orgDao;
+	@Autowired
+	private OrganisationUserDao orgUserDao;
 	@Autowired
 	private SOAPLoginDao soapLoginDao;
 	@Autowired
-	private AdminUserDao usersDao;
+	private UserDao userDao;
 	@Autowired
 	private MainService mainService;
 	@Autowired
@@ -216,13 +223,13 @@ public class UserWebService {
 					return user_id;
 				}
 
-				User user = userManagement.getUserById(user_id);
+				User user = userDao.get(user_id);
 
 				// activate the User
 				user.setStatus(1);
 				user.setUpdatetime(new Date());
 
-				userManagement.updateUser(user);
+				userDao.update(user, users_id);
 
 				return user_id;
 
@@ -298,13 +305,13 @@ public class UserWebService {
 					return user_id;
 				}
 
-				User user = userManagement.getUserById(user_id);
+				User user = userDao.get(user_id);
 
 				// activate the User
 				user.setStatus(1);
 				user.setUpdatetime(new Date());
 
-				userManagement.updateUser(user);
+				userDao.update(user, users_id);
 
 				return user_id;
 
@@ -373,8 +380,7 @@ public class UserWebService {
 
 			if (AuthLevelUtil.checkAdminLevel(user_level)) {
 
-				User testUser = userManagement.getUserByExternalIdAndType(
-						externalUserId, externalUserType);
+				User testUser = userDao.getExternalUser(externalUserId, externalUserType);
 
 				if (testUser != null) {
 					throw new Exception("User does already exist!");
@@ -391,7 +397,7 @@ public class UserWebService {
 					return user_id;
 				}
 
-				User user = userManagement.getUserById(user_id);
+				User user = userDao.get(user_id);
 
 				// activate the User
 				user.setStatus(1);
@@ -399,7 +405,7 @@ public class UserWebService {
 				user.setExternalUserId(externalUserId);
 				user.setExternalUserType(externalUserType);
 
-				userManagement.updateUser(user);
+				userDao.update(user, users_id);
 
 				return user_id;
 
@@ -433,7 +439,7 @@ public class UserWebService {
 			if (AuthLevelUtil.checkAdminLevel(user_level)) {
 
 				// Setting user deleted
-				usersDao.deleteUserID(userId);
+				userDao.deleteUserID(userId);
 
 				return userId;
 
@@ -469,13 +475,12 @@ public class UserWebService {
 
 			if (AuthLevelUtil.checkAdminLevel(user_level)) {
 
-				User userExternal = userManagement.getUserByExternalIdAndType(
-						externalUserId, externalUserType);
+				User userExternal = userDao.getExternalUser(externalUserId, externalUserType);
 
 				Long userId = userExternal.getUser_id();
 
 				// Setting user deleted
-				usersDao.deleteUserID(userId);
+				userDao.deleteUserID(userId);
 
 				return userId;
 
@@ -1024,10 +1029,12 @@ public class UserWebService {
 			Long users_id = sessiondataDao.checkSession(SID);
 			Long user_level = userManagement.getUserLevelByID(users_id);
 			if (AuthLevelUtil.checkWebServiceLevel(user_level)) {
-
-				return organisationManager.addUserToOrganisation(user_id,
-						organisation_id, users_id);
-
+				if (!orgUserDao.isUserInOrganization(organisation_id, user_id)) {
+					User u = userDao.get(user_id);
+					u.getOrganisation_users().add(new Organisation_Users(orgDao.get(organisation_id)));
+					userDao.update(u, users_id);
+				}
+				return user_id;
 			} else {
 				return new Long(-26);
 			}
@@ -1054,22 +1061,25 @@ public class UserWebService {
 	 *            asc or desc
 	 * @return - users found
 	 */
-	public SearchResult<User> getUsersByOrganisation(String SID,
+	public UserSearchResult getUsersByOrganisation(String SID,
 			long organisation_id, int start, int max, String orderby,
 			boolean asc) {
 		try {
 			Long users_id = sessiondataDao.checkSession(SID);
 			Long user_level = userManagement.getUserLevelByID(users_id);
+			SearchResult<User> result = new SearchResult<User>();
+			result.setObjectName(User.class.getName());
 			if (AuthLevelUtil.checkWebServiceLevel(user_level)) {
-				return organisationManager
-						.getUsersSearchResultByOrganisationId(organisation_id,
-								start, max, orderby, asc);
+				result.setRecords(orgUserDao.count(organisation_id));
+				result.setResult(new ArrayList<User>());
+				for (Organisation_Users ou : orgUserDao.get(organisation_id, null, start, max, orderby + " " + (asc ? "ASC" : "DESC"))) {
+					result.getResult().add(ou.getUser());
+				}
 			} else {
 				log.error("Need Administration Account");
-				SearchResult<User> sResult = new SearchResult<User>();
-				sResult.setErrorId(-26L);
-				return sResult;
+				result.setErrorId(-26L);
 			}
+			return new UserSearchResult(result);
 		} catch (Exception err) {
 			log.error("getUsersByOrganisation", err);
 		}
@@ -1116,7 +1126,9 @@ public class UserWebService {
 		Long users_id = sessiondataDao.checkSession(SID);
 		Long user_level = userManagement.getUserLevelByID(users_id);
 		if (AuthLevelUtil.checkWebServiceLevel(user_level)) {
-			return organisationManager.addOrganisation(name, users_id);
+			Organisation o = new Organisation();
+			o.setName(name);
+			return orgDao.update(o, users_id).getOrganisation_id();
 		}
 		log.error("Could not create organization");
 		return -1L;

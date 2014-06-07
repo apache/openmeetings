@@ -130,20 +130,15 @@ html, body {
 .help.support h3 {
 	margin-bottom: 5px;
 }
-div.tableWrapper {
-	background-color: #FFFFFF;
-	border: solid 1px #aacfe4;
-	width: 536px;
-	height: 500px;
-	overflow-y: scroll;
-}
-
-div.tableWrapperSmall {
+.tableWrapper, .tableWrapperSmall {
 	background-color: #FFFFFF;
 	border: solid 1px #aacfe4;
 	width: 536px;
 	height: 100px;
 	overflow-y: scroll;
+}
+.tableWrapper {
+	height: 500px;
 }
 
 .formelementradiobox {
@@ -182,7 +177,7 @@ div.tableWrapperSmall {
 	display: inline-block;
 }
 
-.pagedEntityListPanel select {
+.pagedEntityListPanel select, .adminForm .pagedEntityListPanel select {
 	padding: 0px 0px;
 	border: solid 1px #aacfe4;
 	width: 60px;
@@ -190,8 +185,20 @@ div.tableWrapperSmall {
 	display: inline;
 	float: none;
 }
-
-.pagedEntityListPanel input {
+.searchForm input[type="text"], .adminForm .searchForm input[type="text"] {
+	width: 140px;
+	float: none;
+	display: inline-block;
+}
+.searchForm input[type="submit"], .adminForm .searchForm input[type="submit"] {
+	width: auto;
+	float: none;
+	display: inline-block;
+	border: 2px outset buttonface;
+	padding: 1px 6px;
+	font-size: 12px;
+}
+.pagedEntityListPanel input, .adminForm .pagedEntityListPanel input {
 	font-size: 14px;
 	padding: 0px 0px;
 	border: solid 1px #aacfe4;
@@ -377,9 +384,6 @@ div.tableWrapperSmall {
 	background-image: url(images/world_link.png);
 	background-repeat: no-repeat;
 }
-.selected .recording.item {
-	background-color: #0099FF;
-}
 .recording.item {
 	position: relative;
 }
@@ -522,9 +526,6 @@ select.messages.selector {
 	top: -9999px;
 	width: 1px;
 	height: 1px;
-}
-#messagesTable tr.selected {
-	background-color: #d7ebf9;
 }
 #messagesTable tr.unread {
 	font-weight: bold;
