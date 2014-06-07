@@ -271,7 +271,8 @@ public class SignInDialog extends AbstractFormDialog<String> {
 					protected void populateItem(final ListItem<OAuthServer> item) {
 						Button btn = new Button("oauthBtn");
 						Image icon = new Image("icon", new Model<String>());
-						icon.setVisible(!Strings.isEmpty(item.getModelObject().getIconUrl()));
+						icon.setVisible(item.getModelObject().getIconUrl() != null && 
+								!"".equals(item.getModelObject().getIconUrl()));
 						icon.add(new AttributeModifier("src", new AbstractReadOnlyModel<String>() {
 
 							private static final long serialVersionUID = 7257002837120721882L;

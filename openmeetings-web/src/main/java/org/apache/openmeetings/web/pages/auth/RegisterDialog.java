@@ -32,9 +32,9 @@ import java.util.TimeZone;
 
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.label.FieldLanguageDao;
-import org.apache.openmeetings.db.dao.user.AdminUserDao;
 import org.apache.openmeetings.db.dao.user.IUserManager;
 import org.apache.openmeetings.db.dao.user.StateDao;
+import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.label.FieldLanguage;
 import org.apache.openmeetings.db.entity.user.State;
 import org.apache.openmeetings.util.CalendarPatterns;
@@ -274,10 +274,10 @@ public class RegisterDialog extends AbstractFormDialog<String> {
 					|| !passwordField.getConvertedInput().equals(confirmPassword.getConvertedInput())) {
 				error(WebSession.getString(232));
 			}
-			if (!getBean(AdminUserDao.class).checkUserEMail(emailField.getConvertedInput(), null)) {
+			if (!getBean(UserDao.class).checkUserEMail(emailField.getConvertedInput(), null)) {
 				error(WebSession.getString(1000));
 			}
-			if (!getBean(AdminUserDao.class).checkUserLogin(loginField.getConvertedInput(), null)) {
+			if (!getBean(UserDao.class).checkUserLogin(loginField.getConvertedInput(), null)) {
 				error(WebSession.getString(105));
 			}
 		}

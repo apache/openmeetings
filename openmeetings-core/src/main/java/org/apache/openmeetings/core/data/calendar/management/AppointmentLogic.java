@@ -41,7 +41,7 @@ import org.apache.openmeetings.db.dao.room.IInvitationManager;
 import org.apache.openmeetings.db.dao.room.InvitationDao;
 import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.dao.room.RoomTypeDao;
-import org.apache.openmeetings.db.dao.user.AdminUserDao;
+import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
 import org.apache.openmeetings.db.entity.calendar.MeetingMember;
 import org.apache.openmeetings.db.entity.room.Invitation;
@@ -79,7 +79,7 @@ public class AppointmentLogic {
 	@Autowired
 	private RoomManager roomManager;
 	@Autowired
-	private AdminUserDao userDao;
+	private UserDao userDao;
 	@Autowired
 	private MeetingMemberDao meetingMemberDao;
 	@Autowired

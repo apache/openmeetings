@@ -18,6 +18,9 @@
  */
 package org.apache.openmeetings.web.admin.groups;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.openmeetings.db.dao.user.OrganisationUserDao;
 import org.apache.openmeetings.db.entity.user.Organisation_Users;
 import org.apache.openmeetings.db.entity.user.User;
@@ -27,57 +30,49 @@ import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.ConfirmCallListener;
 import org.apache.openmeetings.web.common.PagedEntityListPanel;
 import org.apache.openmeetings.web.data.SearchableDataProvider;
-import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
+import org.apache.wicket.ajax.form.OnChangeAjaxBehavior;
+import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.repeater.Item;
-import org.apache.wicket.model.Model;
 
 public class GroupUsersPanel extends Panel {
-	private static final long serialVersionUID = -1813488722913433227L;
+	private static final long serialVersionUID = 1L;
 	private long organisationId;
-	
-	public static String getUser(User u) {
-		return u.getLogin() + " [" + u.getFirstname() + ", " + u.getLastname() + "]";
-	}
+	private List<Organisation_Users> users2add = new ArrayList<Organisation_Users>();
 	
 	public GroupUsersPanel(String id, long orgId) {
 		super(id);
 		this.organisationId = orgId;
 		setOutputMarkupId(true);
 		
-		SearchableDataView<Organisation_Users> dataView = new SearchableDataView<Organisation_Users>("userList", new SearchableDataProvider<Organisation_Users>(OrganisationUserDao.class){
+		SearchableDataView<Organisation_Users> dataView = new SearchableDataView<Organisation_Users>("userList", new OrgUserDataProvider()) {
 			private static final long serialVersionUID = 1L;
-
-			protected OrganisationUserDao getDao() {
-				return (OrganisationUserDao)super.getDao();
-			}
-			
-			public long size() {
-				return search == null ? getDao().count(organisationId) : getDao().count(organisationId, search);
-			}
-			
-			public java.util.Iterator<? extends Organisation_Users> iterator(long first, long count) {
-				return (search == null && getSort() == null
-						? getDao().get(organisationId, (int)first, (int)count)
-						: getDao().get(organisationId, search, (int)first, (int)count, getSortStr())).iterator();
-			}
-		}) {
-			private static final long serialVersionUID = 8715559628755439596L;
 
 			@Override
 			protected void populateItem(Item<Organisation_Users> item) {
 				final Organisation_Users orgUser = item.getModelObject();
 				User u = orgUser.getUser();
-				if (u != null) {
-					item.add(new Label("label", Model.of(getUser(u))));
-				} else {
-					item.add(new Label("label", Model.of("")));
+				item.add(new CheckBox("isModerator").add(new OnChangeAjaxBehavior() {
+					private static final long serialVersionUID = 1L;
+
+					@Override
+					protected void onUpdate(AjaxRequestTarget target) {
+						if (orgUser.getOrganisation_users_id() != null) {
+							Application.getBean(OrganisationUserDao.class).update(orgUser, WebSession.getUserId());
+						}
+					}
+				}));
+				Label label = new Label("label", u == null ? "" : GroupForm.formatUser(u));
+				if (orgUser.getOrganisation_users_id() == null) {
+					label.add(AttributeAppender.append("class", "newItem"));
 				}
+				item.add(label);
 				item.add(new WebMarkupContainer("deleteUserBtn").add(new AjaxEventBehavior("onclick"){
 					private static final long serialVersionUID = 1L;
 
@@ -89,16 +84,25 @@ public class GroupUsersPanel extends Panel {
 					
 					@Override
 					protected void onEvent(AjaxRequestTarget target) {
-						Application.getBean(OrganisationUserDao.class).delete(orgUser, WebSession.getUserId());
+						if (orgUser.getOrganisation_users_id() == null) {
+							for (int i = 0; i < users2add.size(); ++i) {
+								//FIXME ineffective
+								if (users2add.get(i).getUser().getUser_id().equals(orgUser.getUser().getUser_id())) {
+									users2add.remove(i);
+									break;
+								}
+							}
+						} else {
+							Application.getBean(OrganisationUserDao.class).delete(orgUser, WebSession.getUserId());
+						}
 						target.add(GroupUsersPanel.this);
 					}
-				})); 
-				item.add(AttributeModifier.append("class", ((item.getIndex() % 2 == 1) ? "even" : "odd")));
+				}));
 			}
 		};
 		add(dataView).setOutputMarkupId(true);
 		add(new PagedEntityListPanel("navigator", dataView) {
-			private static final long serialVersionUID = 5097048616003411362L;
+			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected void onEvent(AjaxRequestTarget target) {
@@ -109,5 +113,36 @@ public class GroupUsersPanel extends Panel {
 	
 	void update(long orgId) {
 		organisationId = orgId;
+		users2add.clear();
+	}
+	
+	List<Organisation_Users> getUsers2add() {
+		return users2add;
+	}
+	
+	private class OrgUserDataProvider extends SearchableDataProvider<Organisation_Users> {
+		private static final long serialVersionUID = 1L;
+
+		OrgUserDataProvider() {
+			super(OrganisationUserDao.class);
+		}
+		
+		protected OrganisationUserDao getDao() {
+			return (OrganisationUserDao)super.getDao();
+		}
+		
+		public long size() {
+			return users2add.size() + (search == null ? getDao().count(organisationId) : getDao().count(organisationId, search));
+		}
+		
+		public java.util.Iterator<? extends Organisation_Users> iterator(long first, long count) {
+			List<Organisation_Users> list = new ArrayList<Organisation_Users>();
+			list.addAll(users2add);
+			list.addAll(search == null && getSort() == null
+					? getDao().get(organisationId, (int)first, (int)count)
+					: getDao().get(organisationId, search, (int)first, (int)count, getSortStr()));
+			
+			return list.iterator();
+		}
 	}
 }

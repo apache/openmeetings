@@ -48,7 +48,7 @@ import org.apache.openmeetings.db.dao.room.InvitationDao;
 import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.dao.server.ISessionManager;
 import org.apache.openmeetings.db.dao.server.SessiondataDao;
-import org.apache.openmeetings.db.dao.user.AdminUserDao;
+import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.dao.user.IUserManager;
 import org.apache.openmeetings.db.dto.file.RecordingObject;
 import org.apache.openmeetings.db.dto.room.RoomSearchResult;
@@ -102,7 +102,7 @@ public class RoomWebService {
 	@Autowired
 	private IUserManager userManager;
 	@Autowired
-	private AdminUserDao userDao;
+	private UserDao userDao;
 	@Autowired
 	private RoomManager roomManager;
 	@Autowired

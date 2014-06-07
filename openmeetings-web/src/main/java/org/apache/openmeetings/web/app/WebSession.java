@@ -45,7 +45,6 @@ import org.apache.openmeetings.db.dao.label.FieldLanguageDao;
 import org.apache.openmeetings.db.dao.label.FieldLanguagesValuesDao;
 import org.apache.openmeetings.db.dao.server.SOAPLoginDao;
 import org.apache.openmeetings.db.dao.server.SessiondataDao;
-import org.apache.openmeetings.db.dao.user.AdminUserDao;
 import org.apache.openmeetings.db.dao.user.ILdapLoginManagement;
 import org.apache.openmeetings.db.dao.user.IUserManager;
 import org.apache.openmeetings.db.dao.user.StateDao;
@@ -192,7 +191,7 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 			if (sd != null && sd.getSessionXml() != null) {
 				RemoteSessionObject remoteUser = RemoteSessionObject.fromXml(sd.getSessionXml());
 				if (remoteUser != null && !Strings.isEmpty(remoteUser.getExternalUserId())) {
-					AdminUserDao userDao = getBean(AdminUserDao.class);
+					UserDao userDao = getBean(UserDao.class);
 					User user = userDao.getExternalUser(remoteUser.getExternalUserId(), remoteUser.getExternalUserType());
 					if (user == null) {
 						user = userDao.getNewUserInstance(null);

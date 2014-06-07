@@ -154,7 +154,7 @@ public class FlvRecordingDao {
 
 			return query.getResultList();
 		} catch (Exception ex2) {
-			log.error("[getFlvRecordings]: ", ex2);
+			log.error("[getAllFlvRecordings]: ", ex2);
 		}
 		return null;
 	}
@@ -244,7 +244,7 @@ public class FlvRecordingDao {
 
 			update(fId);
 		} catch (Exception ex2) {
-			log.error("[deleteFileExplorerItem]: ", ex2);
+			log.error("[updateFlvRecordingEndTime]: ", ex2);
 		}
 	}
 

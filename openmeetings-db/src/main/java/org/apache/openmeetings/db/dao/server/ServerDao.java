@@ -18,6 +18,8 @@
  */
 package org.apache.openmeetings.db.dao.server;
 
+import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+
 import java.util.Date;
 import java.util.List;
 
@@ -27,7 +29,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
 import org.apache.openmeetings.db.dao.IDataProviderDao;
-import org.apache.openmeetings.db.dao.user.AdminUserDao;
+import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.server.Server;
 import org.apache.openmeetings.util.DaoHelper;
 import org.apache.openmeetings.util.OpenmeetingsVariables;
@@ -45,15 +47,14 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Transactional
 public class ServerDao implements IDataProviderDao<Server> {
-	private static final Logger log = Red5LoggerFactory.getLogger(
-			ServerDao.class, OpenmeetingsVariables.webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(ServerDao.class, webAppRootKey);
 	public final static String[] searchFields = { "name", "address", "comment" };
 
 	@PersistenceContext
 	private EntityManager em;
 
 	@Autowired
-	private AdminUserDao usersDao;
+	private UserDao usersDao;
 	
 	/**
 	 * Get a list of all available servers

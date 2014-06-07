@@ -19,12 +19,12 @@
 package org.apache.openmeetings.test.domain;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
-import java.util.List;
-
-import org.apache.openmeetings.core.data.user.OrganisationManager;
-import org.apache.openmeetings.db.entity.user.Organisation;
+import org.apache.openmeetings.db.dao.user.UserDao;
+import org.apache.openmeetings.db.entity.user.Organisation_Users;
+import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.test.AbstractJUnitDefaults;
 import org.junit.Test;
 import org.red5.logging.Red5LoggerFactory;
@@ -35,28 +35,17 @@ public class TestUserGroupAggregation extends AbstractJUnitDefaults {
 	private static final Logger log = Red5LoggerFactory.getLogger(TestUserGroupAggregation.class, webAppRootKey);
 
 	@Autowired
-	private OrganisationManager organisationManager;
+	private UserDao userDao;
 
 	@Test
 	public void testitNow() {
+		User u = userDao.get(1L);
 
-		List<Organisation> orgUser = organisationManager.getOrganisationsByUserId(3, 1, 0,
-				100, "organisation_id", true);
+		assertNotNull("Organisation list for default user must not be null", u.getOrganisation_users());
+		assertTrue("Default user must belong to at least one organisation", u.getOrganisation_users().size() > 0);
 
-		assertTrue("Default user must belong to at least one organisation", orgUser.size() > 0);
-
-		for (Organisation orgUserObj : orgUser) {
-			log.debug("testitNow: organisation Id: '" + orgUserObj.getOrganisation_id() + "'; name: '" + orgUserObj.getName() + "'");
+		for (Organisation_Users orgUserObj : u.getOrganisation_users()) {
+			log.error("testitNow: organisation Id: '" + orgUserObj.getOrganisation().getOrganisation_id() + "'; name: '" + orgUserObj.getOrganisation().getName() + "'");
 		}
-
-		List<Organisation> orgUser2 = organisationManager.getRestOrganisationsByUserId(3,
-				1, 0, 100, "organisation_id", true);
-
-		log.debug("testitNow: rest organisations count: " + orgUser2.size());
-
-		for (Organisation orgUserObj : orgUser2) {
-			log.debug("testitNow: organisation Id: '" + orgUserObj.getOrganisation_id() + "'; name: '" + orgUserObj.getName() + "'");
-		}
-		
 	}
 }

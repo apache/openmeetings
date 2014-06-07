@@ -144,7 +144,7 @@ public class LangPanel extends AdminPanel {
 					}
 				});
 				item.add(AttributeModifier.append("class", "clickable ui-widget-content"
-						+ (fv.getFieldvalues_id().equals(form.getModelObject().getFieldvalues().getFieldvalues_id()) ? " selected" : "")));
+						+ (fv.getFieldvalues_id().equals(form.getModelObject().getFieldvalues().getFieldvalues_id()) ? " ui-state-active" : "")));
 			}
 		};
 

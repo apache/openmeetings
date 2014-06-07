@@ -19,9 +19,12 @@
 package org.apache.openmeetings.test.domain;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+import static org.junit.Assert.assertNotNull;
 
-import org.apache.openmeetings.core.data.user.OrganisationManager;
+import org.apache.openmeetings.db.dao.user.OrganisationDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
+import org.apache.openmeetings.db.entity.user.Organisation;
+import org.apache.openmeetings.db.entity.user.Organisation_Users;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.test.AbstractJUnitDefaults;
 import org.junit.Test;
@@ -33,38 +36,25 @@ public class TestAddGroup extends AbstractJUnitDefaults {
 	private static final Logger log = Red5LoggerFactory.getLogger(TestAddGroup.class, webAppRootKey);
 
 	@Autowired
-	private OrganisationManager organisationManager;
+	private OrganisationDao orgDao;
 	@Autowired
 	private UserDao usersDao;
 
 	@Test
 	public void testAddingGroup() {
+		Organisation o = new Organisation();
+		o.setName("default");
+		o = orgDao.update(o, null);
+		assertNotNull("Id of organisation created should not be null", o.getOrganisation_id());
 
-		long organisation_id = organisationManager.addOrganisation(
-				"default", 1);
+		User us = usersDao.get(1L);
+		assertNotNull("User should exist", us);
+		
+		assertNotNull("Organisation User list should exist", us.getOrganisation_users());
+		us.getOrganisation_users().add(new Organisation_Users(o));
+		us = usersDao.update(us, null);
 
-		log.debug("new organisation: " + organisation_id);
-
-		long organisation_usersid = organisationManager
-				.addUserToOrganisation(new Long(1), organisation_id,
-						new Long(1));
-
-		log.debug("new organisation_user: " + organisation_usersid);
-
-		User us = usersDao.get(new Long(1));
-
-		log.debug(us.getLastname());
-		log.debug(us.getAdresses().getTown());
-
-		/*
-		 * for (Iterator it = us.getAdresses().getEmails().iterator();
-		 * it.hasNext();){ Adresses_Emails addrMails = (Adresses_Emails)
-		 * it.next(); log.error(addrMails.getMail().getEmail()); }
-		 * log.error("size of domains: "+us.getOrganisation_users().size()); for
-		 * (Iterator it2 = us.getOrganisation_users().iterator();
-		 * it2.hasNext();){ Organisation_Users orgUsers = (Organisation_Users)
-		 * it2.next(); log.error(orgUsers.getOrganisation().getName()); }
-		 */
+		log.error(us.getLastname());
+		log.error(us.getAdresses().getTown());
 	}
-
 }

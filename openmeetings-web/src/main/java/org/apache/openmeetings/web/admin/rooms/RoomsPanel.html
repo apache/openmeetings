@@ -86,9 +86,6 @@
 				            </div>
 				            <div class="formelement">
 				                <div class="info-text"><wicket:ommessage key="828" /></div>
-                                <br/>
-                                <div class="info-text"><wicket:ommessage key="191" /></div>
-                                <br/>
 				                <label><wicket:ommessage key="191" /></label><select wicket:id="roomOrganisations" style="height: 80px"/>
 				            </div>
 				        </fieldset>
@@ -206,36 +203,36 @@
 						<fieldset class="ui-widget-content">
                             <div class="formelement">
 				            	<div class="info-text"><wicket:ommessage key="823" /></div>
-                                <br/>
 				                <label><wicket:ommessage key="640" /></label><input type="checkbox" class="formcheckbox" wicket:id="isModeratedRoom" />
-                                <form><div wicket:id="addModerator" class="formNewButton disabled" wicket:ommessage="title:821"><input/></div></form>
 				            </div>
 	                        <div class="formelement">
-					            <wicket:ommessage key="816" />
+					            <label><wicket:ommessage key="816" /></label><input type="hidden" wicket:id="moderator2add" class="input"/>
 				            </div>
-							<table class="adminListTableSmall">
-								<thead>
-									<tr>
-										<th class="three_column_layout_column1 ui-widget-header"><wicket:ommessage key="817" /></th>
-										<th class="three_column_layout_column2 ui-widget-header"><wicket:ommessage key="818" /></th>
-										<th class="three_column_layout_column3 ui-widget-header"><wicket:ommessage key="819" /></th>
-										<th class="three_column_layout_column4 ui-widget-header"><wicket:ommessage key="820" /></th>
-										<th class="three_column_layout_column5 ui-widget-header"><wicket:ommessage key="827" /></th>
-									</tr>	
-								</thead>
-							</table>
-							<div class="tableWrapperSmall" id="adminTableSmall">
+				            <div wicket:id="moderatorContainer">
 								<table class="adminListTableSmall">
-									<tbody wicket:id="moderatorContainer">		
-							    		<tr wicket:id="moderators">
-											<td class="three_column_layout_column1"><div class="three_column_layout_divcolumn1"><span wicket:id="isSuperModerator"></span></div></td>
-											<td class="three_column_layout_column2"><div class="three_column_layout_divcolumn2"><span wicket:id="userId"></span></div></td>
-											<td class="three_column_layout_column3"><div class="three_column_layout_divcolumn3"><span wicket:id="uName"></span></div></td>
-											<td class="three_column_layout_column4"><div class="three_column_layout_divcolumn4"><span wicket:id="email"></span></div></td>
-					                        <td style="width: 50px"><div style="width: 50px"><div class="formCancelButton" wicket:id="delete" wicket:ommessage="title:274"><input/></div></div></td>
-										</tr>
-									</tbody>
+									<thead>
+										<tr>
+											<th class="three_column_layout_column1 ui-widget-header" style="overflow: hidden;" wicket:ommessage="title:817"><wicket:ommessage key="817" /></th>
+											<th class="three_column_layout_column2 ui-widget-header"><wicket:ommessage key="818" /></th>
+											<th class="three_column_layout_column3 ui-widget-header"><wicket:ommessage key="819" /></th>
+											<th class="three_column_layout_column4 ui-widget-header"><wicket:ommessage key="820" /></th>
+											<th class="three_column_layout_column5 ui-widget-header"><wicket:ommessage key="827" /></th>
+										</tr>	
+									</thead>
 								</table>
+								<div class="tableWrapperSmall" id="adminTableSmall">
+									<table class="adminListTableSmall">
+										<tbody>		
+								    		<tr wicket:id="moderators">
+												<td class="three_column_layout_column1"><div class="three_column_layout_divcolumn1"><input type="checkbox" wicket:id="isSuperModerator"/></div></td>
+												<td class="three_column_layout_column2"><div class="three_column_layout_divcolumn2"><span wicket:id="userId"></span></div></td>
+												<td class="three_column_layout_column3"><div class="three_column_layout_divcolumn3"><span wicket:id="uName"></span></div></td>
+												<td class="three_column_layout_column4"><div class="three_column_layout_divcolumn4" style="overflow: hidden;"><span wicket:id="email"></span></div></td>
+						                        <td style="width: 50px"><div style="width: 50px"><div class="formCancelButton" wicket:id="delete" wicket:ommessage="title:274"><input/></div></div></td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
 							</div>
 						</fieldset>
 					    <!--SIP Settings -->
@@ -262,6 +259,5 @@
 				</form>
 			</div>
 		</div>
-		<div wicket:id="addModerators"></div>
 	</wicket:panel>
 </html>

@@ -18,6 +18,8 @@
  */
 package org.apache.openmeetings.db.dao.server;
 
+import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -29,7 +31,7 @@ import javax.persistence.PersistenceException;
 import javax.persistence.TypedQuery;
 
 import org.apache.openmeetings.db.dao.IDataProviderDao;
-import org.apache.openmeetings.db.dao.user.AdminUserDao;
+import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.server.LdapConfig;
 import org.apache.openmeetings.util.DaoHelper;
 import org.apache.openmeetings.util.OpenmeetingsVariables;
@@ -47,15 +49,14 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Transactional
 public class LdapConfigDao implements IDataProviderDao<LdapConfig> {
-	private static final Logger log = Red5LoggerFactory.getLogger(
-			LdapConfigDao.class, OpenmeetingsVariables.webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(LdapConfigDao.class, webAppRootKey);
 	public final static String[] searchFields = {"name", "configFileName", "domain", "comment"};
 
 	@PersistenceContext
 	private EntityManager em;
 
 	@Autowired
-	private AdminUserDao usersDao;
+	private UserDao usersDao;
 
 	public Long addLdapConfig(String name, Boolean addDomainToUserName,
 			String configFileName, String domain, Long insertedby,

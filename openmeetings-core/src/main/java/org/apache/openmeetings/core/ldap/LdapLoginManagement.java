@@ -35,10 +35,10 @@ import org.apache.openmeetings.core.remote.util.SessionVariablesUtil;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.server.LdapConfigDao;
 import org.apache.openmeetings.db.dao.server.SessiondataDao;
-import org.apache.openmeetings.db.dao.user.AdminUserDao;
 import org.apache.openmeetings.db.dao.user.ILdapLoginManagement;
 import org.apache.openmeetings.db.dao.user.IUserManager;
 import org.apache.openmeetings.db.dao.user.StateDao;
+import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.room.Client;
 import org.apache.openmeetings.db.entity.server.LdapConfig;
 import org.apache.openmeetings.db.entity.user.State;
@@ -71,7 +71,7 @@ public class LdapLoginManagement implements ILdapLoginManagement {
 	@Autowired
 	private LdapConfigDao ldapConfigDao;
 	@Autowired
-	private AdminUserDao usersDao;
+	private UserDao usersDao;
 	@Autowired
 	private TimezoneUtil timezoneUtil;
 
@@ -416,7 +416,7 @@ public class LdapLoginManagement implements ILdapLoginManagement {
 		User u = null;
 
 		try {
-			u = usersDao.getUserByLogin(user);
+			u = usersDao.getUserByName(user, User.Type.ldap);
 		} catch (Exception e) {
 			log.error("Error retrieving Userdata : " + e.getMessage());
 		}

@@ -21,10 +21,8 @@ package org.apache.openmeetings.web.admin.groups;
 import org.apache.openmeetings.db.dao.user.OrganisationDao;
 import org.apache.openmeetings.db.entity.user.Organisation;
 import org.apache.openmeetings.db.entity.user.Organisation_Users;
-import org.apache.openmeetings.web.admin.AddUsersDialog;
 import org.apache.openmeetings.web.admin.AdminPanel;
 import org.apache.openmeetings.web.admin.SearchableDataView;
-import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.PagedEntityListPanel;
 import org.apache.openmeetings.web.data.DataViewContainer;
 import org.apache.openmeetings.web.data.OmOrderByBorder;
@@ -32,22 +30,19 @@ import org.apache.openmeetings.web.data.SearchableDataProvider;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.repeater.Item;
 
 /**
  * Modify/ CRUD operations for {@link Organisation} and
  * {@link Organisation_Users}
  * 
- * @author swag
+ * @author swagner
  * 
  */
 public class GroupsPanel extends AdminPanel {
-	private static final long serialVersionUID = -5170400556006464830L;
-	private AddUsersDialog addUsersDialog;
+	private static final long serialVersionUID = 1L;
 	private GroupForm form;
 	
 	@Override
@@ -60,46 +55,14 @@ public class GroupsPanel extends AdminPanel {
 	public GroupsPanel(String id) {
 		super(id);
 		final WebMarkupContainer listContainer = new WebMarkupContainer("listContainer");
-        final AjaxButton addUsersBtn = new AjaxButton("addUsersBtn") {
-			private static final long serialVersionUID = 1L;
-        	@Override
-        	protected void onSubmit(AjaxRequestTarget target, Form<?> form1) {
-        		if (form.getModelObject().getOrganisation_id() != null) {
-        			addUsersDialog.open(target);
-        		}
-        	}
-        };
         
 		//Adding the Group Form
-		form = new GroupForm("form", listContainer, new Organisation()){
-			private static final long serialVersionUID = 1L;
-
-			private AjaxButton processAddClass() {
-				boolean orgSaved = getModelObject().getOrganisation_id() != null;
-				addUsersBtn.add(AttributeModifier.replace("class", orgSaved ? "formNewButton" : "formNewButton disabled"));
-				addUsersBtn.setEnabled(orgSaved);
-				return addUsersBtn;
-			}
-			
-			@Override
-			protected void onModelChanged() {
-				super.onModelChanged();
-				processAddClass();
-			}
-			
-			@Override
-			public void updateView(AjaxRequestTarget target) {
-				super.updateView(target);
-				target.add(processAddClass());
-			}
-		};
-        add(form.add(addUsersBtn.setOutputMarkupId(true)));
-        addUsersDialog = new AddUsersDialog("addUsers",WebSession.getString(180), form, true);
-		add(addUsersDialog.setOutputMarkupId(true));
+		form = new GroupForm("form", listContainer, new Organisation());
+        add(form);
 
         //List view
         SearchableDataView<Organisation> dataView = new SearchableDataView<Organisation>("groupList", new SearchableDataProvider<Organisation>(OrganisationDao.class)) {
-			private static final long serialVersionUID = 8715559628755439596L;
+			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected void populateItem(Item<Organisation> item) {
@@ -118,7 +81,7 @@ public class GroupsPanel extends AdminPanel {
 					}
 				});
 				item.add(AttributeModifier.append("class", "clickable ui-widget-content"
-						+ (o.getOrganisation_id().equals(form.getModelObject().getOrganisation_id()) ? " selected" : "")));
+						+ (o.getOrganisation_id().equals(form.getModelObject().getOrganisation_id()) ? " ui-state-active" : "")));
 			}
 		};
 

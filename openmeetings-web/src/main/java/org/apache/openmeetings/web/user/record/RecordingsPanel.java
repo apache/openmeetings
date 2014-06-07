@@ -279,7 +279,7 @@ public class RecordingsPanel extends UserPanel {
 				protected String getOtherStyleClass(FlvRecording r) {
 					String style = getRecordingStyle(r, super.getOtherStyleClass(r));
 					if (isSelected()) {
-						style += " selected";
+						style += " ui-state-active";
 					}
 					return style;
 				}

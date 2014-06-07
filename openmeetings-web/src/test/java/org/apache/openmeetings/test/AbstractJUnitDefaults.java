@@ -20,7 +20,6 @@ package org.apache.openmeetings.test;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.configKeyCryptClassName;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.util.Date;
@@ -74,6 +73,7 @@ public abstract class AbstractJUnitDefaults extends AbstractSpringTest {
 	@Before
 	public void setUp() throws Exception {
 		super.setUp();
+		configurationDao.getCryptKey();
         if (userDao.count() < 1) {
             makeDefaultScheme();
             log.info("Default scheme created successfully");
@@ -160,7 +160,7 @@ public abstract class AbstractJUnitDefaults extends AbstractSpringTest {
 		return ap;
 	}
 
-	public User createUser(int rnd) throws Exception {
+	public User getUser(int rnd) throws Exception {
 		User u = new User();
 		// add user
 		u.setFirstname("firstname" + rnd);
@@ -168,10 +168,13 @@ public abstract class AbstractJUnitDefaults extends AbstractSpringTest {
 		u.setLogin("login" + rnd);
 		u.updatePassword(configurationDao, "pass" + rnd);
 		u.setLanguage_id(1L);
+		return u;
+	}
+
+	public User createUser(int rnd) throws Exception {
+		User u = getUser(rnd);
 		u = userDao.update(u, null);
-		assertTrue("Cann't add user", u != null && u.getUser_id() > 0);
-		u = userDao.get(u.getUser_id());
-		assertNotNull("User should not be null", u);
+		assertNotNull("Can't add user", u);
 		return u;
 	}
 

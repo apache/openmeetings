@@ -53,24 +53,21 @@
 				<form wicket:id="form" class="adminForm">
 					<div wicket:id="buttons"></div>
 					<div class="scrollcontent" id="adminForm">
-					    <fieldset class="ui-widget-content">
-					        <legend class="ui-widget-header"><wicket:ommessage key="170" /></legend>
-                               <div class="formelement">
-                                   <label><wicket:ommessage key="171" /></label><input type="text" wicket:id="name" />
-                               </div>
-                               <div class="formelement">
-                                   <label style="font-weight: bold;"><wicket:ommessage key="273" /></label>
-                                   <form><div wicket:id="addUsersBtn" class="formNewButton disabled" wicket:ommessage="title:178"><input/></div></form>
-                               </div>
-                               <div class="formelement">
-                                   <div wicket:id="users"></div>
-                               </div>
-					    </fieldset>
+						<fieldset class="ui-widget-content">
+							<legend class="ui-widget-header"><wicket:ommessage key="170" /></legend>
+							<div class="formelement">
+								<label><wicket:ommessage key="171" /></label><input type="text" wicket:id="name" />
+							</div>
+							<div class="formelement">
+								<label style="font-weight: bold;"><wicket:ommessage key="178" /></label><input type="hidden" wicket:id="user2add" class="input"/>
+							</div>
+							<div class="formelement">
+								<div wicket:id="users"></div>
+							</div>
+						</fieldset>
 					</div>
 				</form>
 			</div>
-		</div>
-		<div wicket:id="addUsers">
 		</div>
 	</wicket:panel>
 </html>

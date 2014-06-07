@@ -502,7 +502,7 @@ public class ConferenceService {
 
 			if (AuthLevelUtil.checkUserLevel(user_level)) {
 
-				return roomModeratorsDao.getRoomModeratorByRoomId(roomId);
+				return roomModeratorsDao.getByRoomId(roomId);
 
 			}
 

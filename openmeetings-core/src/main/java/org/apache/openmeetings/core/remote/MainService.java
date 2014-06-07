@@ -40,9 +40,9 @@ import org.apache.openmeetings.db.dao.server.ISessionManager;
 import org.apache.openmeetings.db.dao.server.LdapConfigDao;
 import org.apache.openmeetings.db.dao.server.SOAPLoginDao;
 import org.apache.openmeetings.db.dao.server.SessiondataDao;
-import org.apache.openmeetings.db.dao.user.AdminUserDao;
 import org.apache.openmeetings.db.dao.user.IUserManager;
 import org.apache.openmeetings.db.dao.user.StateDao;
+import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.basic.Configuration;
 import org.apache.openmeetings.db.entity.room.Client;
 import org.apache.openmeetings.db.entity.server.RemoteSessionObject;
@@ -87,7 +87,7 @@ public class MainService implements IPendingServiceCallback {
 	@Autowired
 	private ConferenceLogDao conferenceLogDao;
 	@Autowired
-	private AdminUserDao usersDao;
+	private UserDao usersDao;
 	@Autowired
 	private LdapConfigDao ldapConfigDao;
 	@Autowired

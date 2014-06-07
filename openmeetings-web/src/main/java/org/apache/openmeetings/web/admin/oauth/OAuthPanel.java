@@ -64,7 +64,7 @@ public class OAuthPanel extends AdminPanel {
 					}
 				});
 				item.add(AttributeModifier.replace("class", "clickable ui-widget-content"
-						+ (server.getId().equals(form.getModelObject().getId()) ? " selected" : "")));
+						+ (server.getId().equals(form.getModelObject().getId()) ? " ui-state-active" : "")));
 			}
 			
 		};

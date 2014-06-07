@@ -28,7 +28,7 @@ import static org.apache.wicket.validation.validator.StringValidator.minimumLeng
 import java.util.Arrays;
 
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
-import org.apache.openmeetings.db.dao.user.AdminUserDao;
+import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Type;
 import org.apache.openmeetings.web.admin.AdminBaseForm;
@@ -82,7 +82,7 @@ public class UserForm extends AdminBaseForm<User> {
 	protected void onSaveSubmit(AjaxRequestTarget target, Form<?> form) {
 		User u = getModelObject();
 		try {
-			u = getBean(AdminUserDao.class).update(u, generalForm.getPasswordField().getConvertedInput(), getUserId());
+			u = getBean(UserDao.class).update(u, generalForm.getPasswordField().getConvertedInput(), getUserId());
 		} catch (Exception e) {
 			// FIXME update feedback with the error details
 		}
@@ -98,7 +98,7 @@ public class UserForm extends AdminBaseForm<User> {
 
 	@Override
 	protected void onNewSubmit(AjaxRequestTarget target, Form<?> form) {
-		AdminUserDao usersDaoImpl = getBean(AdminUserDao.class);
+		UserDao usersDaoImpl = getBean(UserDao.class);
 		setModelObject(usersDaoImpl.getNewUserInstance(usersDaoImpl.get(getUserId())));
 		target.add(this);
 		target.appendJavaScript("omUserPanelInit();");
@@ -108,7 +108,7 @@ public class UserForm extends AdminBaseForm<User> {
 	protected void onRefreshSubmit(AjaxRequestTarget target, Form<?> form) {
 		User user = getModelObject();
 		if (user.getUser_id() != null) {
-			user = getBean(AdminUserDao.class).get(user.getUser_id());
+			user = getBean(UserDao.class).get(user.getUser_id());
 		} else {
 			user = new User();
 		}
@@ -119,7 +119,7 @@ public class UserForm extends AdminBaseForm<User> {
 
 	@Override
 	protected void onDeleteSubmit(AjaxRequestTarget target, Form<?> form) {
-		AdminUserDao usersDaoImpl = getBean(AdminUserDao.class);
+		UserDao usersDaoImpl = getBean(UserDao.class);
 		usersDaoImpl.delete(this.getModelObject(), getUserId());
 		this.setModelObject(usersDaoImpl.getNewUserInstance(usersDaoImpl.get(getUserId())));
 		target.add(listContainer);
@@ -199,7 +199,7 @@ public class UserForm extends AdminBaseForm<User> {
 
 	@Override
 	protected void onValidate() {
-		if(!getBean(AdminUserDao.class).checkUserLogin(login.getConvertedInput(), getModelObject().getUser_id())) {
+		if(!getBean(UserDao.class).checkUserLogin(login.getConvertedInput(), getModelObject().getUser_id())) {
 			error(WebSession.getString(105));
 		}
 	}

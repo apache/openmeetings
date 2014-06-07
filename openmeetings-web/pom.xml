@@ -203,7 +203,7 @@
 				<inherited>true</inherited>
 				<configuration>
 					<workingDirectory>${project.build.directory}</workingDirectory>
-					<excludedGroups>org.apache.openmeetings.test.selenium.SeleniumTests</excludedGroups>
+					<excludedGroups>org.apache.openmeetings.test.selenium.SeleniumTests,org.apache.openmeetings.test.selenium.HeavyTests</excludedGroups>
 					<systemPropertyVariables>
 						<om.home>${project.build.directory}/test-root</om.home>
 						<languages.home>${project.basedir}/src/main/webapp/languages</languages.home>

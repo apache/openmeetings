@@ -23,24 +23,30 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.util.List;
+import java.util.Random;
 
-import org.apache.openmeetings.core.data.user.OrganisationManager;
-import org.apache.openmeetings.db.dao.user.AdminUserDao;
+import org.apache.openmeetings.db.dao.user.OrganisationDao;
+import org.apache.openmeetings.db.dao.user.OrganisationUserDao;
+import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.user.Organisation;
 import org.apache.openmeetings.db.entity.user.Organisation_Users;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.test.AbstractJUnitDefaults;
+import org.apache.openmeetings.test.selenium.HeavyTests;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class TestUserOrganisation extends AbstractJUnitDefaults {
 	@Autowired
-	private OrganisationManager orgManagement;
+	private OrganisationUserDao orgUserDao;
 	@Autowired
-	private AdminUserDao usersDao;
+	private OrganisationDao orgDao;
+	@Autowired
+	private UserDao usersDao;
+	public static final String ORG_NAME = "Test Org";
 	
 	private User getValidUser() {
-		for (User u : usersDao.getAllUsers()) {
+		for (User u : usersDao.getAllBackupUsers()) {
 			if (!u.getDeleted() && u.getOrganisation_users().size() > 0) {
 				return u;
 			}
@@ -53,29 +59,41 @@ public class TestUserOrganisation extends AbstractJUnitDefaults {
 	public void getUsersByOrganisationId() {
 		User u = getValidUser();
 		Long orgId = u.getOrganisation_users().get(0).getOrganisation().getOrganisation_id();
-		List<User> ul = orgManagement.getUsersByOrganisationId(orgId, 0, 9999, "login", true);
+		List<Organisation_Users> ul = orgUserDao.get(orgId, 0, 9999);
 		assertTrue("Default Organisation should contain at least 1 user: " + ul.size(), ul.size() > 0);
 		
-		Organisation_Users ou = orgManagement.getOrganisation_UserByUserAndOrganisation(u.getUser_id(), orgId);
+		Organisation_Users ou = orgUserDao.getByOrganizationAndUser(orgId, u.getUser_id());
 		assertNotNull("Unable to found [organisation, user] pair - [" + orgId + "," + u.getUser_id() + "]", ou);
 	}
 	
 	@Test
 	public void addOrganisation() {
-		Long orgId = orgManagement.addOrganisation("Test Org", 1); //inserted by not checked
+		Organisation o = new Organisation();
+		o.setName(ORG_NAME);
+		Long orgId = orgDao.update(o, null).getOrganisation_id(); //inserted by not checked
 		assertNotNull("New Organisation have valid id", orgId);
 		
-		List<User> ul = orgManagement.getUsersByOrganisationId(orgId, 0, 9999, "login", true);
+		List<Organisation_Users> ul = orgUserDao.get(orgId, 0, 9999);
 		assertTrue("New Organisation should contain NO users: " + ul.size(), ul.size() == 0);
-		
-		boolean found = false;
-		List<Organisation> restL = orgManagement.getRestOrganisationsByUserId(3, 1, 0, 9999, "name", true);
-		for (Organisation o : restL) {
-			if (orgId.equals(o.getOrganisation_id())) {
-				found = true;
-				break;
-			}
+	}
+
+	@Test
+	@HeavyTests
+	public void add10kUsers() throws Exception {
+		List<Organisation> orgs = orgDao.get(ORG_NAME, 0, 1, null);
+		Organisation o = null;
+		if (orgs == null || orgs.isEmpty()) {
+			o = new Organisation();
+			o.setName(ORG_NAME);
+			o = orgDao.update(o, null);
+		} else {
+			o = orgs.get(0);
 		}
-		assertTrue("New organisation should not be included into organisation list of any user", found);
+		Random rnd = new Random();
+		for (int i = 0; i < 10000; ++i) {
+			User u = createUser(rnd.nextInt());
+			u.getOrganisation_users().add(new Organisation_Users(o));
+			usersDao.update(u, null);
+		}
 	}
 }

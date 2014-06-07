@@ -21,18 +21,17 @@ package org.apache.openmeetings.web.admin.groups;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 
-import java.util.List;
-
-import org.apache.openmeetings.db.dao.user.AdminUserDao;
 import org.apache.openmeetings.db.dao.user.OrganisationDao;
+import org.apache.openmeetings.db.dao.user.OrganisationUserDao;
 import org.apache.openmeetings.db.entity.user.Organisation;
 import org.apache.openmeetings.db.entity.user.Organisation_Users;
 import org.apache.openmeetings.db.entity.user.User;
-import org.apache.openmeetings.web.admin.AdminCommonUserForm;
-import org.apache.openmeetings.web.app.Application;
+import org.apache.openmeetings.web.admin.AdminBaseForm;
+import org.apache.openmeetings.web.admin.AdminUserChoiceProvider;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormValidatingBehavior;
+import org.apache.wicket.ajax.form.OnChangeAjaxBehavior;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.RequiredTextField;
@@ -40,10 +39,17 @@ import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.util.time.Duration;
 
-public class GroupForm extends AdminCommonUserForm<Organisation> {
+import com.vaynberg.wicket.select2.Select2Choice;
+
+public class GroupForm extends AdminBaseForm<Organisation> {
 	private static final long serialVersionUID = -1720731686053912700L;
 	private GroupUsersPanel usersPanel;
 	private WebMarkupContainer groupList;
+	private Select2Choice<User> userToadd = null;
+	
+	static String formatUser(User choice) {
+		return String.format("%s [%s %s]", choice.getLogin(), choice.getFirstname(), choice.getLastname());
+	}
 	
 	public GroupForm(String id, WebMarkupContainer groupList, Organisation organisation) {
 		super(id, new CompoundPropertyModel<Organisation>(organisation));
@@ -54,49 +60,62 @@ public class GroupForm extends AdminCommonUserForm<Organisation> {
 		usersPanel = new GroupUsersPanel("users", getOrgId());
 		add(usersPanel);
 
+		add(userToadd = new Select2Choice<User>("user2add", Model.of((User)null), new AdminUserChoiceProvider() {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected String getDisplayText(User choice) {
+				return formatUser(choice);
+			}
+		}));
+		userToadd.add(new OnChangeAjaxBehavior() {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void onUpdate(AjaxRequestTarget target) {
+				Organisation o = GroupForm.this.getModelObject();
+				User u = userToadd.getModelObject();
+				boolean found = false;
+				if (o.getOrganisation_id() != null) {
+					found = null != getBean(OrganisationUserDao.class).getByOrganizationAndUser(o.getOrganisation_id(), u.getUser_id());
+				}
+				if (!found && u != null) {
+					for (Organisation_Users ou : usersPanel.getUsers2add()) {
+						if (ou.getUser().getUser_id().equals(u.getUser_id())) {
+							found = true;
+							break;
+						}
+					}
+					if (!found) {
+						Organisation_Users ou = new Organisation_Users(o);
+						ou.setUser(u);
+						usersPanel.getUsers2add().add(new Organisation_Users(o));
+
+						userToadd.setModelObject(null);
+						target.add(usersPanel, userToadd);
+					}
+				}
+			}
+		});
 		// attach an ajax validation behavior to all form component's keydown
 		// event and throttle it down to once per second
 		AjaxFormValidatingBehavior.addToAllFormComponents(this, "keydown", Duration.ONE_SECOND);
 	}
 	
-	@Override
 	public void updateView(AjaxRequestTarget target) {
+		userToadd.setModelObject(null);
 		usersPanel.update(getOrgId());
 		target.add(this, groupList);
 		target.appendJavaScript("groupsInit();");
 	}
 
-	@Override
-	public void submitView(AjaxRequestTarget target, List<User> usersToAdd) {
-		// TODO Auto-generated method stub
-		AdminUserDao userDao = Application.getBean(AdminUserDao.class);
-		Organisation organisation = getModelObject();
-		for (User u : usersToAdd) {
-			List<Organisation_Users> orgUsers = u.getOrganisation_users();
-			boolean found = false;
-			for (Organisation_Users ou : orgUsers) {
-				if (ou.getOrganisation().getOrganisation_id().equals(organisation.getOrganisation_id())) {
-					found = true;
-					break;
-				}
-			}
-			if (!found) {
-				Organisation_Users orgUser = new Organisation_Users(organisation);
-				orgUser.setDeleted(false);
-				orgUsers.add(orgUser);
-				userDao.update(u, WebSession.getUserId());
-			}
-		}
-		target.add(usersPanel);
-	}
-	
 	private long getOrgId() {
 		return getModelObject().getOrganisation_id() != null ? getModelObject().getOrganisation_id() : 0;
 	}
 	
 	@Override
 	protected void onNewSubmit(AjaxRequestTarget target, Form<?> f) {
-		this.setModelObject(new Organisation());
+		setModelObject(new Organisation());
 		updateView(target);
 	}
 	
@@ -108,20 +127,23 @@ public class GroupForm extends AdminCommonUserForm<Organisation> {
 		} else {
 			org = new Organisation();
 		}
-		this.setModelObject(org);
+		setModelObject(org);
 		updateView(target);
 	}
 	
 	@Override
 	protected void onDeleteSubmit(AjaxRequestTarget target, Form<?> form) {
 		getBean(OrganisationDao.class).delete(getModelObject(), getUserId());
-		this.setModelObject(new Organisation());
+		setModelObject(new Organisation());
 		updateView(target);
 	}
 	
 	@Override
 	protected void onSaveSubmit(AjaxRequestTarget target, Form<?> form) {
-		getBean(OrganisationDao.class).update(getModelObject(), getUserId());
+		Organisation o = getModelObject();
+		o = getBean(OrganisationDao.class).update(o, getUserId());
+		setModelObject(o);
+		getBean(OrganisationUserDao.class).update(usersPanel.getUsers2add(), getUserId());
 		hideNewRecord();
 		updateView(target);
 	}

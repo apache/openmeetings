@@ -24,7 +24,6 @@ import java.util.List;
 
 import org.apache.openmeetings.core.data.basic.FieldManager;
 import org.apache.openmeetings.core.data.conference.RoomManager;
-import org.apache.openmeetings.core.data.user.OrganisationManager;
 import org.apache.openmeetings.core.mail.MailHandler;
 import org.apache.openmeetings.core.remote.red5.ScopeApplicationAdapter;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
@@ -37,16 +36,15 @@ import org.apache.openmeetings.db.dao.room.RoomTypeDao;
 import org.apache.openmeetings.db.dao.server.ISessionManager;
 import org.apache.openmeetings.db.dao.server.ServerDao;
 import org.apache.openmeetings.db.dao.server.SessiondataDao;
-import org.apache.openmeetings.db.dao.user.AdminUserDao;
 import org.apache.openmeetings.db.dao.user.IUserManager;
 import org.apache.openmeetings.db.dao.user.IUserService;
 import org.apache.openmeetings.db.dao.user.PrivateMessageFolderDao;
 import org.apache.openmeetings.db.dao.user.PrivateMessagesDao;
 import org.apache.openmeetings.db.dao.user.SalutationDao;
 import org.apache.openmeetings.db.dao.user.UserContactsDao;
+import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.room.Client;
 import org.apache.openmeetings.db.entity.server.Server;
-import org.apache.openmeetings.db.entity.user.Organisation;
 import org.apache.openmeetings.db.entity.user.Salutation;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.UserContact;
@@ -84,13 +82,11 @@ public class UserService implements IUserService {
 	@Autowired
 	private IUserManager userManager;
 	@Autowired
-	private AdminUserDao userDao;
+	private UserDao userDao;
 	@Autowired
 	private FieldManager fieldManager;
 	@Autowired
 	private SalutationDao salutationmanagement;
-	@Autowired
-	private OrganisationManager organisationManager;
 	@Autowired
 	private RoomManager roomManager;
 	@Autowired
@@ -156,61 +152,6 @@ public class UserService implements IUserService {
 	 */
 	public List<Salutation> getUserSalutations(String SID, long language_id) {
 		return salutationmanagement.getUserSalutations(language_id);
-	}
-
-	/**
-	 * get a list of all users of an organisation
-	 * 
-	 * @param SID
-	 * @param organisation_id
-	 * @param start
-	 * @param max
-	 * @param orderby
-	 * @param asc
-	 * @return list of all users of an organisation
-	 */
-	public List<User> getOrgUserList(String SID, long organisation_id,
-			int start, int max, String orderby, boolean asc) {
-		return organisationManager.getUsersByOrganisationId(organisation_id,
-				start, max, orderby, asc);
-	}
-
-	/**
-	 * get a list of all organisations of an user
-	 * 
-	 * @param SID
-	 * @param client_user
-	 * @param start
-	 * @param max
-	 * @param orderby
-	 * @param asc
-	 * @return list of all organisations of an user
-	 */
-	public List<Organisation> getOrganisationListByUser(String SID,
-			long client_user, int start, int max, String orderby, boolean asc) {
-		Long users_id = sessiondataDao.checkSession(SID);
-		long user_level = userManager.getUserLevelByID(users_id);
-		return organisationManager.getOrganisationsByUserId(user_level,
-				client_user, start, max, orderby, asc);
-	}
-
-	/**
-	 * gets a list of all not assigned organisations of a user
-	 * 
-	 * @param SID
-	 * @param client_user
-	 * @param start
-	 * @param max
-	 * @param orderby
-	 * @param asc
-	 * @return list of all not assigned organisations of a user
-	 */
-	public List<Organisation> getRestOrganisationListByUser(String SID,
-			long client_user, int start, int max, String orderby, boolean asc) {
-		Long users_id = sessiondataDao.checkSession(SID);
-		Long user_level = userManager.getUserLevelByID(users_id);
-		return organisationManager.getRestOrganisationsByUserId(user_level,
-				client_user, start, max, orderby, asc);
 	}
 
 	/**

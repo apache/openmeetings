@@ -24,32 +24,34 @@ import static org.apache.openmeetings.web.app.WebSession.getUserId;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 
 import org.apache.openmeetings.db.dao.room.RoomDao;
-import org.apache.openmeetings.db.dao.room.RoomModeratorsDao;
 import org.apache.openmeetings.db.dao.room.RoomTypeDao;
 import org.apache.openmeetings.db.dao.server.ISessionManager;
 import org.apache.openmeetings.db.dao.user.IUserService;
 import org.apache.openmeetings.db.dao.user.OrganisationDao;
+import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.room.Client;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.room.RoomModerator;
 import org.apache.openmeetings.db.entity.room.RoomOrganisation;
 import org.apache.openmeetings.db.entity.room.RoomType;
+import org.apache.openmeetings.db.entity.user.Address;
 import org.apache.openmeetings.db.entity.user.Organisation;
 import org.apache.openmeetings.db.entity.user.User;
-import org.apache.openmeetings.web.admin.AdminCommonUserForm;
+import org.apache.openmeetings.web.admin.AdminBaseForm;
+import org.apache.openmeetings.web.admin.AdminUserChoiceProvider;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.ConfirmCallListener;
-import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
 import org.apache.wicket.ajax.form.AjaxFormValidatingBehavior;
+import org.apache.wicket.ajax.form.OnChangeAjaxBehavior;
 import org.apache.wicket.ajax.markup.html.form.AjaxCheckBox;
+import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.CheckBox;
@@ -64,21 +66,25 @@ import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.CompoundPropertyModel;
+import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.util.time.Duration;
 
-public class RoomForm extends AdminCommonUserForm<Room> {
+import com.vaynberg.wicket.select2.Response;
+import com.vaynberg.wicket.select2.Select2Choice;
+
+public class RoomForm extends AdminBaseForm<Room> {
 	private static final long serialVersionUID = 1L;
 	private final static List<Long> DROPDOWN_NUMBER_OF_PARTICIPANTS = Arrays.asList(2L, 4L, 6L, 8L, 10L, 12L, 14L, 16L, 20L, 25L, 32L, 50L,
 			100L, 150L, 200L, 500L, 1000L);
 	private final WebMarkupContainer roomList;
 	private final TextField<String> pin;
-	final WebMarkupContainer moderatorContainer;
-	final WebMarkupContainer clientsContainer;
-	final ListView<RoomModerator> moderators;
-	final ListView<Client> clients;
-	List<RoomModerator> moderatorsInRoom = null;
-	List<Client> clientsInRoom = null;
+	private final WebMarkupContainer moderatorContainer = new WebMarkupContainer("moderatorContainer");
+	private final WebMarkupContainer clientsContainer = new WebMarkupContainer("clientsContainer");
+	private final ListView<Client> clients;
+	private List<Client> clientsInRoom = null;
+	private IModel<User> moderator2add = Model.of((User)null);
 	
 	public RoomForm(String id, WebMarkupContainer roomList, final Room room) {
 		super(id, new CompoundPropertyModel<Room>(room));
@@ -146,8 +152,7 @@ public class RoomForm extends AdminCommonUserForm<Room> {
 		add(new CheckBox("autoVideoSelect"));	
 		
 		// Users in this Room 
-		clientsContainer = new WebMarkupContainer("clientsContainer");
-		clients = new ListView<Client>("clients", clientsInRoom){
+		clients = new ListView<Client>("clients", clientsInRoom) {
 			private static final long serialVersionUID = 8542589945574690054L;
 
 			@Override
@@ -156,67 +161,103 @@ public class RoomForm extends AdminCommonUserForm<Room> {
 				item.add(new Label("clientId", "" + client.getId()))
 					.add(new Label("clientLogin", "" + client.getUsername()))
 					.add(new WebMarkupContainer("clientDelete").add(new AjaxEventBehavior("onclick"){
-
-					private static final long serialVersionUID = 1L;
-
-					@Override
-					protected void updateAjaxAttributes(AjaxRequestAttributes attributes) {
-						super.updateAjaxAttributes(attributes);
-						attributes.getAjaxCallListeners().add(new ConfirmCallListener(833L));
-					}
-					
-					@Override
-					protected void onEvent(AjaxRequestTarget target) {
-						Client c = item.getModelObject();
-						getBean(IUserService.class).kickUserByStreamId(getSid(), c.getStreamid()
-								, c.getServer() == null ? 0 : c.getServer().getId());
+						private static final long serialVersionUID = 1L;
+	
+						@Override
+						protected void updateAjaxAttributes(AjaxRequestAttributes attributes) {
+							super.updateAjaxAttributes(attributes);
+							attributes.getAjaxCallListeners().add(new ConfirmCallListener(833L));
+						}
 						
-						updatClients(target);
-					}
-				}));
+						@Override
+						protected void onEvent(AjaxRequestTarget target) {
+							Client c = item.getModelObject();
+							getBean(IUserService.class).kickUserByStreamId(getSid(), c.getStreamid()
+									, c.getServer() == null ? 0 : c.getServer().getId());
+							
+							updateClients(target);
+						}
+					}));
 			}
 		};
 		add(clientsContainer.add(clients.setOutputMarkupId(true)).setOutputMarkupId(true));
 		
 		// Moderators
-		moderators =	new ListView<RoomModerator>("moderators", moderatorsInRoom) {
-			private static final long serialVersionUID = -7935197812421549677L;
+		final Select2Choice<User> moderatorChoice = new Select2Choice<User>("moderator2add", moderator2add, new AdminUserChoiceProvider() {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void query(String term, int page, Response<User> response) {
+				response.addAll(getBean(UserDao.class).get(term, false, page * PAGE_SIZE, PAGE_SIZE));
+				response.setHasMore(PAGE_SIZE == response.getResults().size());
+			}
+
+			@Override
+			protected String getDisplayText(User choice) {
+				Address a = choice.getAdresses();
+				return String.format("\"%s %s\" <%s>", choice.getFirstname(), choice.getLastname(), a == null ? "" : a.getEmail());
+			}
+		});
+		add(moderatorChoice.add(new OnChangeAjaxBehavior() {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void onUpdate(AjaxRequestTarget target) {
+				Room r = RoomForm.this.getModelObject();
+				User u = moderator2add.getObject();
+				boolean found = false;
+				if (u != null) {
+					for (RoomModerator rm : r.getModerators()) {
+						if (rm.getUser().getUser_id().equals(u.getUser_id())) {
+							found = true;
+							break;
+						}
+					}
+					if (!found) {
+						RoomModerator rm = new RoomModerator();
+						rm.setRoomId(r.getRooms_id());
+						rm.setUser(u);
+						r.getModerators().add(0, rm);
+						moderator2add.setObject(null);
+						target.add(moderatorContainer, moderatorChoice);
+					}
+				}
+			}
+		}).setOutputMarkupId(true));
+		add(moderatorContainer.add(new ListView<RoomModerator>("moderators") {
+			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected void populateItem(final ListItem<RoomModerator> item) {
-				final RoomModerator moderator = item.getModelObject();
-				item.add(new Label("isSuperModerator", "" + moderator.getIsSuperModerator()))
+				RoomModerator moderator = item.getModelObject();
+				Label name = new Label("uName", moderator.getUser().getFirstname() + " " + moderator.getUser().getLastname());
+				if (moderator.getRoomModeratorsId() == 0) {
+					name.add(AttributeAppender.append("class", "newItem"));
+				}
+				item.add(new CheckBox("isSuperModerator", new PropertyModel<Boolean>(moderator, "isSuperModerator")))
 					.add(new Label("userId", "" + moderator.getUser().getUser_id()))
-					.add(new Label("uName", "" + moderator.getUser().getFirstname() + " " + moderator.getUser().getLastname()))
-					.add(new Label("email", ""+ moderator.getUser().getAdresses().getEmail()))
+					.add(name)
+					.add(new Label("email", moderator.getUser().getAdresses().getEmail()))
 					.add(new WebMarkupContainer("delete").add(new AjaxEventBehavior("onclick"){
-					private static final long serialVersionUID = 1L;
-
-					@Override
-					protected void updateAjaxAttributes(AjaxRequestAttributes attributes) {
-						super.updateAjaxAttributes(attributes);
-						attributes.getAjaxCallListeners().add(new ConfirmCallListener(833L));
-					}
-					
-					@Override
-					protected void onEvent(AjaxRequestTarget target) {
-						Application.getBean(RoomModeratorsDao.class).removeRoomModeratorByUserId(moderator.getRoomModeratorsId());
-						updateModerators(target);
-					}
-				})); 
-
-				item.add(AttributeModifier.replace("class", (item.getIndex() % 2 == 1) ? "even" : "odd"));
+						private static final long serialVersionUID = 1L;
+	
+						@Override
+						protected void updateAjaxAttributes(AjaxRequestAttributes attributes) {
+							super.updateAjaxAttributes(attributes);
+							attributes.getAjaxCallListeners().add(new ConfirmCallListener(833L));
+						}
+						
+						@Override
+						protected void onEvent(AjaxRequestTarget target) {
+							RoomForm.this.getModelObject().getModerators().remove(item.getIndex());
+							target.add(moderatorContainer);
+						}
+					}));
 			}
-		};
+		}).setOutputMarkupId(true));
 
-		// FIXME: Room user moderator list
-		CheckBox isModeratedRoom = new CheckBox("isModeratedRoom");
-        add(isModeratedRoom.setOutputMarkupId(true));
+        add(new CheckBox("isModeratedRoom"));
 
-		moderatorContainer = new WebMarkupContainer("moderatorContainer");
-		
-		add(moderatorContainer.add(moderators).setOutputMarkupId(true));
-		
 		add(new TextField<String>("confno").setEnabled(false));
 		add(pin = new TextField<String>("pin"));
 		pin.setEnabled(room.isSipEnabled());
@@ -235,15 +276,7 @@ public class RoomForm extends AdminCommonUserForm<Room> {
 		AjaxFormValidatingBehavior.addToAllFormComponents(this, "keydown", Duration.ONE_SECOND);
 	}
 
-	void updateModerators(AjaxRequestTarget target) {
-		long roomId = (getModelObject().getRooms_id() != null ? getModelObject().getRooms_id() : 0);  
-		RoomModeratorsDao moderatorsDao = getBean(RoomModeratorsDao.class);
-		final List<RoomModerator> moderatorsInRoom = moderatorsDao.getRoomModeratorByRoomId(roomId);
-		moderators.setDefaultModelObject(moderatorsInRoom);
-		target.add(moderatorContainer);
-	}
-	
-	void updatClients(AjaxRequestTarget target) {
+	void updateClients(AjaxRequestTarget target) {
 		long roomId = (getModelObject().getRooms_id() != null ? getModelObject().getRooms_id() : 0);  
 		final List<Client> clientsInRoom = Application.getBean(ISessionManager.class).getClientListByRoom(roomId);
 		clients.setDefaultModelObject(clientsInRoom);
@@ -252,7 +285,16 @@ public class RoomForm extends AdminCommonUserForm<Room> {
 	
 	@Override
 	protected void onSaveSubmit(AjaxRequestTarget target, Form<?> form) {
-		getBean(RoomDao.class).update(getModelObject(), getUserId());
+		Room r = getModelObject();
+		boolean newRoom = r.getRooms_id() == null;
+		r = getBean(RoomDao.class).update(r, getUserId());
+		if (newRoom) {
+			for (RoomModerator rm : r.getModerators()) {
+				rm.setRoomId(r.getRooms_id());
+			}
+			// FIXME double update
+			getBean(RoomDao.class).update(getModelObject(), getUserId());
+		}
 		hideNewRecord();
 		updateView(target);
 	}
@@ -294,6 +336,7 @@ public class RoomForm extends AdminCommonUserForm<Room> {
 	protected void onDeleteSubmit(AjaxRequestTarget target, Form<?> form) {
 		getBean(RoomDao.class).delete(getModelObject(), getUserId());
 		target.add(roomList);
+		setModelObject(new Room());
 		updateView(target);
 	}
 
@@ -302,42 +345,11 @@ public class RoomForm extends AdminCommonUserForm<Room> {
 		// TODO Auto-generated method stub
 	}
 
-	@Override
 	public void updateView(AjaxRequestTarget target) {
 		target.add(this);
 		target.add(roomList);
 		target.add(pin.setEnabled(getModelObject().isSipEnabled()));
-		updateModerators(target);
-		updatClients(target);
+		updateClients(target);
 		target.appendJavaScript("omRoomPanelInit();");
-	}
-
-	@Override
-	public void submitView(AjaxRequestTarget target, List<User> usersToAdd) {
-		// TODO Auto-generated method stub
-		long roomId = getModelObject().getRooms_id();
-		RoomModeratorsDao moderatorsDao = getBean(RoomModeratorsDao.class);
-		List<RoomModerator> moderators = moderatorsDao.getRoomModeratorByRoomId(roomId);
-		moderatorsInRoom = (moderatorsInRoom == null) ? new ArrayList<RoomModerator>() : moderatorsInRoom;
-		for (User u : usersToAdd) {
-			boolean found = false;
-			for ( RoomModerator rm : moderators) {
-				if (rm.getUser().getUser_id().equals(u.getUser_id())) {
-					found = true;
-					break;
-				}
-			}
-			if (!found) {
-				RoomModerator rModerator = new RoomModerator();
-				rModerator.setUser(u);
-				rModerator.setIsSuperModerator(false);
-				rModerator.setStarttime(new Date());
-				rModerator.setDeleted(false);
-				rModerator.setRoomId(roomId);
-				moderatorsInRoom.add(rModerator);
-				moderatorsDao.addRoomModeratorByUserId(u, false, roomId);
-			}
-		}
-		updateModerators(target);
 	}
 }

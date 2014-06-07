@@ -72,7 +72,7 @@ import org.simpleframework.xml.Root;
 			+ "where c.externalRoomId = :externalRoomId AND c.externalRoomType = :externalRoomType "
 			+ "AND rt.roomtypes_id = :roomtypes_id AND c.deleted <> :deleted"),
 	@NamedQuery(name = "getPublicRoomsOrdered", query = "SELECT r from Room r WHERE r.ispublic= true AND r.deleted= false AND r.appointment = false ORDER BY r.name ASC"),
-	@NamedQuery(name = "getRoomById", query = "SELECT r FROM Room r WHERE r.deleted = false AND r.rooms_id = :id"),
+	@NamedQuery(name = "getRoomById", query = "SELECT r FROM Room r LEFT JOIN FETCH r.moderators WHERE r.deleted = false AND r.rooms_id = :id"),
 	@NamedQuery(name = "getSipRoomIdsByIds", query = "SELECT r.rooms_id FROM Room r WHERE r.deleted = false AND r.sipEnabled = true AND r.rooms_id IN :ids"),
 	@NamedQuery(name = "countRooms", query = "SELECT COUNT(r) FROM Room r WHERE r.deleted = false"),
 	@NamedQuery(name = "getBackupRooms", query = "SELECT r FROM Room r LEFT JOIN FETCH r.moderators ORDER BY r.rooms_id"),
@@ -241,7 +241,7 @@ public class Room implements Serializable, IDataProviderEntity {
 	@JoinColumn(name = "roomId")
 	@ForeignKey(enabled = true)
 	@ElementList(name = "room_moderators", required=false)
-	private List<RoomModerator> moderators;
+	private List<RoomModerator> moderators = new ArrayList<RoomModerator>();
 
 	@Column(name = "sip_enabled")
 	@Element(data = true, required = false)
@@ -525,7 +525,9 @@ public class Room implements Serializable, IDataProviderEntity {
 	}
 
 	public void setModerators(List<RoomModerator> moderators) {
-		this.moderators = moderators;
+		if (moderators != null) {
+			this.moderators = moderators;
+		}
 	}
 
 	public Boolean getChatModerated() {

@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.db.dao.user;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -54,7 +55,8 @@ public class OrganisationUserDao implements IDataProviderDao<Organisation_Users>
 	}
 	
 	public List<Organisation_Users> get(long orgId, String search, int start, int count, String sort) {
-		TypedQuery<Organisation_Users> q = em.createQuery(DaoHelper.getSearchQuery("Organisation_Users", "ou", search, false, false, sort, searchFields), Organisation_Users.class);
+		TypedQuery<Organisation_Users> q = em.createQuery(DaoHelper.getSearchQuery("Organisation_Users", "ou", null, search, false, false, "ou.organisation.organisation_id = :orgId", sort, searchFields), Organisation_Users.class);
+		q.setParameter("orgId", orgId);
 		q.setFirstResult(start);
 		q.setMaxResults(count);
 		return q.getResultList();
@@ -65,19 +67,22 @@ public class OrganisationUserDao implements IDataProviderDao<Organisation_Users>
 		q.setParameter("id", orgId);
 		q.setFirstResult(start);
 		q.setMaxResults(count);
-
-		// This refresh is necessary because after saving the user entity the
-		// user_id is somehow not
-		// filled into the Organisation_Users, this might be fixed by
-		// implementing another
-		// JOIN or mapping strategy
-		List<Organisation_Users> orgUserList = q.getResultList();
-		for (Organisation_Users ou : orgUserList) {
-			em.refresh(ou);
-		}
-		return orgUserList;
+		return q.getResultList();
 	}
 
+	public Organisation_Users getByOrganizationAndUser(long orgId, long userId) {
+		try {
+			List<Organisation_Users> list = em.createNamedQuery("isUserInOrganization", Organisation_Users.class)
+					.setParameter("orgId", orgId).setParameter("userId", userId).getResultList();
+			if (list != null && !list.isEmpty()) {
+				return list.get(0);
+			}
+		} catch (Exception e) {
+			//no-op
+		}
+		return null;
+	}
+	
 	public boolean isUserInOrganization(long orgId, long userId) {
 		return em.createNamedQuery("isUserInOrganization", Organisation_Users.class)
 				.setParameter("orgId", orgId).setParameter("userId", userId).getResultList().size() > 0;
@@ -102,23 +107,31 @@ public class OrganisationUserDao implements IDataProviderDao<Organisation_Users>
 		return q.getSingleResult();
 	}
 
+	public void update(List<Organisation_Users> list, Long userId) {
+		for (Organisation_Users ou : list) {
+			update(ou, userId);
+		}
+	}
+	
 	public Organisation_Users update(Organisation_Users entity, Long userId) {
-		//if (entity.getOrganisation_users_id())// TODO Auto-generated method stub
+		if (entity.getOrganisation_users_id() == null) {
+			entity.setStarttime(new Date());
+			em.persist(entity);
+		} else {
+			entity.setUpdatetime(new Date());
+			entity = em.merge(entity);
+		}
 		return entity;
 	}
 
 	public void delete(Organisation_Users entity, Long userId) {
 		if (entity.getOrganisation_users_id() != null) {
-			User u = usersDao.get(entity.getUser_id());
+			User u = usersDao.get(entity.getUser().getUser_id());
 			int idx = u.getOrganisation_users().indexOf(entity);
 			//entity has been detached need to re-fetch
 			Organisation_Users ou = u.getOrganisation_users().remove(idx);
 			em.remove(ou);
 			usersDao.update(u, userId);
 		}
-	}
-
-	public void add() {
-		
 	}
 }

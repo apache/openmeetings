@@ -37,7 +37,7 @@ import javax.servlet.ServletContext;
 import org.apache.openmeetings.core.IApplication;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.label.FieldLanguagesValuesDao;
-import org.apache.openmeetings.db.dao.user.AdminUserDao;
+import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.room.Invitation;
 import org.apache.openmeetings.db.entity.user.User.Type;
 import org.apache.openmeetings.util.InitializationContainer;
@@ -277,7 +277,7 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 		if (!isInstalled) {
 			if (InitializationContainer.initComplete) {
 				//TODO can also check crypt class here
-				isInstalled = result = get()._getBean(AdminUserDao.class).count() > 0
+				isInstalled = result = get()._getBean(UserDao.class).count() > 0
 						&& get()._getBean(FieldLanguagesValuesDao.class).count() > 0;
 			}
 		}

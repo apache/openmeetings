@@ -39,7 +39,7 @@ import org.apache.openmeetings.db.dao.calendar.AppointmentReminderTypDao;
 import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.dao.room.RoomTypeDao;
 import org.apache.openmeetings.db.dao.server.SessiondataDao;
-import org.apache.openmeetings.db.dao.user.AdminUserDao;
+import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.dao.user.IUserManager;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
 import org.apache.openmeetings.db.entity.calendar.AppointmentCategory;
@@ -76,7 +76,7 @@ public class CalendarWebService {
 	@Autowired
 	private IUserManager userManager;
 	@Autowired
-	private AdminUserDao userDao;
+	private UserDao userDao;
 	@Autowired
 	private RoomManager roomManager;
 	@Autowired
