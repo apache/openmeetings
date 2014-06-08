@@ -25,6 +25,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.apache.openmeetings.converter.BaseConverter;
 import org.apache.openmeetings.data.flvrecord.converter.FlvInterviewConverterTask;
 import org.apache.openmeetings.data.flvrecord.converter.FlvInterviewReConverterTask;
 import org.apache.openmeetings.data.flvrecord.converter.FlvRecorderConverterTask;
@@ -317,6 +318,13 @@ public class FLVRecorderService implements IPendingServiceCallback {
 				}
 			}
 
+			FlvRecordingMetaData metaData = metaDataDao.get(flvRecordingMetaDataId);
+			BaseConverter.printMetaInfo(metaData, "Stopping the stream");
+			// Manually call finish on the stream so that there is no endless loop waiting in the FlvRecorderConverter waiting for the stream to finish
+			// this would normally happen in the Listener
+			metaData.setStreamStatus(listenerAdapter == null && metaData.getStreamStatus() == Status.STARTED ? Status.STOPPED : Status.STOPPING);
+			log.debug("Stopping the stream :: New status == " + metaData.getStreamStatus());
+			metaDataDao.update(metaData);
 			if (listenerAdapter == null) {
 				log.debug("Stream Not Found :: " + flvRecordingMetaDataId);
 				log.debug("Available Streams :: " + streamListeners.size());
@@ -324,20 +332,7 @@ public class FLVRecorderService implements IPendingServiceCallback {
 				for (Long entryKey : streamListeners.keySet()) {
 					log.debug("Stored flvRecordingMetaDataId in Map: " + entryKey);
 				}
-
-				// Manually call finish on the stream so that there is no endless loop waiting
-				// in the FlvRecorderConverter waiting for the stream to finish
-				// this would normally happen in the Listener
-				FlvRecordingMetaData metaData = metaDataDao.get(flvRecordingMetaDataId);
-				if (metaData.getStreamStatus() == Status.STARTED) {
-					metaData.setStreamStatus(Status.STOPPED);
-					metaDataDao.update(metaData);
-				}
 				throw new IllegalStateException("Could not find Listener to stop! flvRecordingMetaDataId " + flvRecordingMetaDataId);
-			} else {
-				FlvRecordingMetaData metaData = metaDataDao.get(flvRecordingMetaDataId);
-				metaData.setStreamStatus(Status.STOPPING);
-				metaDataDao.update(metaData);
 			}
 
 			listenerAdapter.closeStream();

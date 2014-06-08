@@ -142,6 +142,17 @@ public abstract class BaseConverter {
 		return argv;
 	}
 	
+	public static void printMetaInfo(FlvRecordingMetaData metaData, String prefix) {
+		if (log.isDebugEnabled()) {
+			log.debug(String.format("### %s:: stream with id %s; current status: %s ", prefix, metaData.getFlvRecordingMetaDataId(), metaData.getStreamStatus()));
+			File metaDir = getStreamsSubDir(metaData.getFlvRecording().getRoom_id());
+			File metaFlv = new File(metaDir, metaData.getStreamName() + ".flv");
+			File metaSer = new File(metaDir, metaData.getStreamName() + ".flv.ser");
+			log.debug(String.format("### %:: Flv file [%s] exists ? %s; size: %s, lastModified: %s ", prefix, metaFlv.getPath(), metaFlv.exists(), metaFlv.length(), metaFlv.lastModified()));
+			log.debug(String.format("### %:: Ser file [%s] exists ? %s; size: %s, lastModified: %s ", prefix, metaSer.getPath(), metaSer.exists(), metaSer.length(), metaSer.lastModified()));
+		}
+	}
+	
 	protected FlvRecordingMetaData waitForTheStream(long metaId) throws InterruptedException {
 		FlvRecordingMetaData metaData = metaDataDao.get(metaId);
 		if (metaData.getStreamStatus() != Status.STOPPED) {
@@ -154,15 +165,11 @@ public abstract class BaseConverter {
 				metaData = metaDataDao.get(metaId);
 				
 				if (metaData.getStreamStatus() == Status.STOPPED) {
-					log.debug("### Stream now written Thread continue - " );
+					printMetaInfo(metaData, "Stream now written");
+					log.debug("### Thread continue ... " );
 					doWait = false;
 				} else if (++counter % 1000 == 0) {
-					log.debug(String.format("### Still waiting for the stream with id %s; current status: %s ", metaId, metaData.getStreamStatus()));
-					File metaDir = getStreamsSubDir(metaData.getFlvRecording().getRoom_id());
-					File metaFlv = new File(metaDir, metaData.getStreamName() + ".flv");
-					File metaSer = new File(metaDir, metaData.getStreamName() + ".flv.ser");
-					log.debug(String.format("### Still waiting:: Flv file [%s] exists ? %s; size: %s, lastModified: %s ", metaFlv.getPath(), metaFlv.exists(), metaFlv.length(), metaFlv.lastModified()));
-					log.debug(String.format("### Still waiting:: Ser file [%s] exists ? %s; size: %s, lastModified: %s ", metaSer.getPath(), metaSer.exists(), metaSer.length(), metaSer.lastModified()));
+					printMetaInfo(metaData, "Still waiting");
 				}
 				
 				Thread.sleep(100L);
@@ -202,7 +209,7 @@ public abstract class BaseConverter {
 	
 				metaData.setAudioIsValid(false);
 				if (inputFlvFile.exists()) {
-					String[] argv = new String[] {getPathToFFMPEG(), "-async", "1", "-i", inputFlvFile.getCanonicalPath(), outputWav};
+					String[] argv = new String[] {getPathToFFMPEG(), "-y", "-async", "1", "-i", inputFlvFile.getCanonicalPath(), outputWav};
 	
 					returnLog.add(ProcessHelper.executeScript("stripAudioFromFLVs", argv));
 	
@@ -301,7 +308,7 @@ public abstract class BaseConverter {
 		String path = file.getCanonicalPath();
 		String mp4path = path + MP4_EXTENSION;
 		String[] argv = new String[] {
-				getPathToFFMPEG(), //
+				getPathToFFMPEG(), "-y",
 				"-i", path,
 				"-c:v", "libx264",
 				"-crf", "24",
@@ -316,7 +323,7 @@ public abstract class BaseConverter {
 		returnLog.add(ProcessHelper.executeScript("generate MP4", argv));
 		
 		argv = new String[] {
-				getPathToFFMPEG(), //
+				getPathToFFMPEG(), "-y",
 				"-i", mp4path,
 				"-vcodec", "libtheora",
 				"-acodec", "libvorbis",

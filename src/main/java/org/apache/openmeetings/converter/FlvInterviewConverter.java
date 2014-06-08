@@ -182,7 +182,7 @@ public class FlvInterviewConverter extends BaseConverter {
 					 * CHECK FILE:
 					 * ffmpeg -i rec_316_stream_567_2013_08_28_11_51_45.flv -v error -f null file.null
 					 */ 
-					String[] args = new String[] {getPathToFFMPEG()
+					String[] args = new String[] {getPathToFFMPEG(), "-y"
 							, "-i", path
 							, "-an" // only input files with video will be treated as video sources
 							, "-v", "error"
@@ -206,6 +206,7 @@ public class FlvInterviewConverter extends BaseConverter {
 			boolean shortest = false;
 			List<String> args = new ArrayList<String>();
 			args.add(getPathToFFMPEG());
+			args.add("-y"); 
 			for (int i = 0; i < 2; ++i) {
 				/*
 				 * INSERT BLANK INSTEAD OF BAD PAD:
@@ -260,7 +261,7 @@ public class FlvInterviewConverter extends BaseConverter {
 			flvRecording.setPreviewImage(hashFileFullNameJPEG);
 
 			String[] argv_previewFLV = new String[] { //
-					getPathToFFMPEG(), //
+					getPathToFFMPEG(), "-y", //
 					"-i", outputFullFlv, //
 					"-vcodec", "mjpeg", //
 					"-vframes", "100", "-an", //
@@ -274,7 +275,7 @@ public class FlvInterviewConverter extends BaseConverter {
 			String alternateDownloadFullName = new File(streamFolderGeneral, alternateDownloadName).getCanonicalPath();
 			deleteFileIfExists(alternateDownloadFullName);
 
-			String[] argv_alternateDownload = new String[] { getPathToFFMPEG(), "-i", outputFullFlv, alternateDownloadFullName };
+			String[] argv_alternateDownload = new String[] { getPathToFFMPEG(), "-y", "-i", outputFullFlv, alternateDownloadFullName };
 
 			returnLog.add(ProcessHelper.executeScript("alternateDownload", argv_alternateDownload));
 

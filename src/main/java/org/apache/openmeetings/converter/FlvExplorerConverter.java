@@ -85,7 +85,7 @@ public class FlvExplorerConverter extends BaseConverter {
 
 			fileExplorerItem.setIsVideo(true);
 
-			String[] argv_fullFLV = new String[] { getPathToFFMPEG(), "-i", moviePath,
+			String[] argv_fullFLV = new String[] { getPathToFFMPEG(), "-y", "-i", moviePath,
 					"-ar", "22050", "-acodec", "libmp3lame", "-ab", "32k",
 					"-vcodec", "flv",
 					outputFullFlv.getCanonicalPath() };
@@ -110,7 +110,7 @@ public class FlvExplorerConverter extends BaseConverter {
 
 			fileExplorerItem.setPreviewImage(hashFileFullNameJPEG);
 
-			String[] argv_previewFLV = new String[] { getPathToFFMPEG(), "-i",
+			String[] argv_previewFLV = new String[] { getPathToFFMPEG(), "-y", "-i",
 					outputFullFlv.getCanonicalPath(), "-vcodec", "mjpeg", "-vframes", "1", "-an",
 					"-f", "rawvideo", "-s", flvWidth + "x" + flvHeight,
 					outPutJpeg.getCanonicalPath() };
