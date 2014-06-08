@@ -89,7 +89,7 @@ public class GroupForm extends AdminBaseForm<Organisation> {
 					if (!found) {
 						Organisation_Users ou = new Organisation_Users(o);
 						ou.setUser(u);
-						usersPanel.getUsers2add().add(new Organisation_Users(o));
+						usersPanel.getUsers2add().add(ou);
 
 						userToadd.setModelObject(null);
 						target.add(usersPanel, userToadd);
