@@ -68,9 +68,12 @@ import org.simpleframework.xml.Root;
  * 
  */
 @Entity
-@FetchGroups({ @FetchGroup(name = "backupexport", attributes = { @FetchAttribute(name = "password") }) })
+@FetchGroups({
+	@FetchGroup(name = "backupexport", attributes = { @FetchAttribute(name = "password") })
+	, @FetchGroup(name = "orgUsers", attributes = { @FetchAttribute(name = "organisation_users")})
+})
 @NamedQueries({
-	@NamedQuery(name = "getUserById", query = "SELECT u FROM User u LEFT JOIN FETCH u.organisation_users WHERE u.user_id = :id"),
+	@NamedQuery(name = "getUserById", query = "SELECT u FROM User u WHERE u.user_id = :id"),
 	@NamedQuery(name = "getUsersByIds", query = "select c from User c where c.user_id IN :ids"),
 	@NamedQuery(name = "checkUserLogin", query = "SELECT COUNT(u) FROM User u WHERE ((:id > 0 AND u.user_id <> :id) OR (:id = 0)) "
 			+ "AND u.login = :login AND u.deleted = false"),
@@ -469,6 +472,9 @@ public class User implements Serializable, IDataProviderEntity {
 	}
 
 	public List<Organisation_Users> getOrganisation_users() {
+		if (organisation_users == null) {
+			organisation_users = new ArrayList<Organisation_Users>();
+		}
 		return organisation_users;
 	}
 
