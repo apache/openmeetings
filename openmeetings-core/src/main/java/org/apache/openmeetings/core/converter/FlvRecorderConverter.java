@@ -135,7 +135,7 @@ public class FlvRecorderConverter extends BaseConverter {
 			flvRecording.setFlvWidth(flvWidth);
 			flvRecording.setFlvHeight(flvHeight);
 
-			String[] argv_fullFLV = new String[] { getPathToFFMPEG(), //
+			String[] argv_fullFLV = new String[] { getPathToFFMPEG(), "-y",//
 					"-itsoffset", getDifference(screenMetaData.getRecordStart(), screenMetaData.getFlvRecording().getRecordStart()),
 					"-i", inputScreenFullFlv, "-i", outputFullWav, "-ar", "22050", //
 					"-acodec", "libmp3lame", //
@@ -160,7 +160,7 @@ public class FlvRecorderConverter extends BaseConverter {
 			flvRecording.setPreviewImage(hashFileFullNameJPEG);
 
 			String[] argv_previewFLV = new String[] { //
-					getPathToFFMPEG(), //
+					getPathToFFMPEG(), "-y",//
 					"-i", outputFullFlv, //
 					"-vcodec", "mjpeg", //
 					"-vframes", "1", "-an", //
@@ -173,7 +173,7 @@ public class FlvRecorderConverter extends BaseConverter {
 			String alternateDownloadName = "flvRecording_" + flvRecording.getFlvRecordingId() + ".avi";
 			String alternateDownloadFullName = streamFolderGeneralName + alternateDownloadName;
 
-			String[] argv_alternateDownload = new String[] { getPathToFFMPEG(), "-i", outputFullFlv, "-vcodec",
+			String[] argv_alternateDownload = new String[] { getPathToFFMPEG(), "-y", "-i", outputFullFlv, "-vcodec",
 					"copy", alternateDownloadFullName };
 
 			returnLog.add(ProcessHelper.executeScript("alternateDownload", argv_alternateDownload));
