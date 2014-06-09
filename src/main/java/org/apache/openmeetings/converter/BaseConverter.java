@@ -148,8 +148,8 @@ public abstract class BaseConverter {
 			File metaDir = getStreamsSubDir(metaData.getFlvRecording().getRoom_id());
 			File metaFlv = new File(metaDir, metaData.getStreamName() + ".flv");
 			File metaSer = new File(metaDir, metaData.getStreamName() + ".flv.ser");
-			log.debug(String.format("### %:: Flv file [%s] exists ? %s; size: %s, lastModified: %s ", prefix, metaFlv.getPath(), metaFlv.exists(), metaFlv.length(), metaFlv.lastModified()));
-			log.debug(String.format("### %:: Ser file [%s] exists ? %s; size: %s, lastModified: %s ", prefix, metaSer.getPath(), metaSer.exists(), metaSer.length(), metaSer.lastModified()));
+			log.debug(String.format("### %s:: Flv file [%s] exists ? %s; size: %s, lastModified: %s ", prefix, metaFlv.getPath(), metaFlv.exists(), metaFlv.length(), metaFlv.lastModified()));
+			log.debug(String.format("### %s:: Ser file [%s] exists ? %s; size: %s, lastModified: %s ", prefix, metaSer.getPath(), metaSer.exists(), metaSer.length(), metaSer.lastModified()));
 		}
 	}
 	
