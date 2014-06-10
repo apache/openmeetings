@@ -28,7 +28,6 @@ import org.apache.openmeetings.cluster.SlaveHTTPConnectionManager;
 import org.apache.openmeetings.data.basic.FieldManager;
 import org.apache.openmeetings.data.conference.InvitationManager;
 import org.apache.openmeetings.data.conference.RoomManager;
-import org.apache.openmeetings.data.user.UserManager;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.calendar.AppointmentCategoryDao;
 import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
@@ -89,8 +88,6 @@ public class UserService implements IUserService {
 	@Autowired
 	private ConfigurationDao configurationDao;
 	@Autowired
-	private UserManager userManager;
-	@Autowired
 	private UserDao userDao;
 	@Autowired
 	private FieldManager fieldManager;
@@ -132,8 +129,7 @@ public class UserService implements IUserService {
 	 */
 	public User getUserById(String SID, long user_id) {
 		Long users_id = sessiondataDao.checkSession(SID);
-		Long user_level = userManager.getUserLevelByID(users_id);
-		if (AuthLevelUtil.checkUserLevel(user_level)) {
+		if (AuthLevelUtil.hasUserLevel(userDao.getRights(users_id))) {
 			return userDao.get(user_id);
 		}
 		return null;
@@ -176,8 +172,7 @@ public class UserService implements IUserService {
 	 */
 	public List<User> getUserList(String SID, int start, int max, String orderby, boolean asc) {
 		Long users_id = sessiondataDao.checkSession(SID);
-		Long user_level = userManager.getUserLevelByID(users_id);
-		if (AuthLevelUtil.checkAdminLevel(user_level)) {
+		if (AuthLevelUtil.hasAdminLevel(userDao.getRights(users_id))) {
 			return userDao.get("", start, max, orderby + (asc ? " ASC" : " DESC"));
 		}
 		return null;
@@ -197,9 +192,8 @@ public class UserService implements IUserService {
 	public Boolean kickUserByStreamId(String SID, String streamid, long serverId) {
 		try {
 			Long users_id = sessiondataDao.checkSession(SID);
-			Long user_level = userManager.getUserLevelByID(users_id);
 			// admins only
-			if (AuthLevelUtil.checkAdminLevel(user_level)) {
+			if (AuthLevelUtil.hasAdminLevel(userDao.getRights(users_id))) {
 
 				if (serverId == 0) {
 
@@ -248,9 +242,8 @@ public class UserService implements IUserService {
 	public User updateUserSelfTimeZone(String SID, String jname) {
 		try {
 			Long users_id = sessiondataDao.checkSession(SID);
-			Long user_level = userManager.getUserLevelByID(users_id);
 			// users only
-			if (AuthLevelUtil.checkUserLevel(user_level)) {
+			if (AuthLevelUtil.hasUserLevel(userDao.getRights(users_id))) {
 
 				User us = userDao.get(users_id);
 
@@ -274,9 +267,8 @@ public class UserService implements IUserService {
 			String domain, String port, String webapp) {
 		try {
 			Long users_id = sessiondataDao.checkSession(SID);
-			Long user_level = userManager.getUserLevelByID(users_id);
 			// users only
-			if (AuthLevelUtil.checkUserLevel(user_level)) {
+			if (AuthLevelUtil.hasUserLevel(userDao.getRights(users_id))) {
 				return ContactsHelper.addUserToContactList(userToAdd_id);
 			}
 		} catch (Exception err) {
@@ -288,9 +280,8 @@ public class UserService implements IUserService {
 	public List<UserContact> getPendingUserContacts(String SID) {
 		try {
 			Long users_id = sessiondataDao.checkSession(SID);
-			Long user_level = userManager.getUserLevelByID(users_id);
 			// users only
-			if (AuthLevelUtil.checkUserLevel(user_level)) {
+			if (AuthLevelUtil.hasUserLevel(userDao.getRights(users_id))) {
 
 				List<UserContact> uList = userContactsDao
 						.getContactRequestsByUserAndStatus(users_id, true);
@@ -307,9 +298,8 @@ public class UserService implements IUserService {
 	public List<UserContact> getUserContacts(String SID) {
 		try {
 			Long users_id = sessiondataDao.checkSession(SID);
-			Long user_level = userManager.getUserLevelByID(users_id);
 			// users only
-			if (AuthLevelUtil.checkUserLevel(user_level)) {
+			if (AuthLevelUtil.hasUserLevel(userDao.getRights(users_id))) {
 
 				List<UserContact> uList = userContactsDao
 						.getContactsByUserAndStatus(users_id, false);
@@ -326,9 +316,8 @@ public class UserService implements IUserService {
 	public Integer removeContactUser(String SID, Long userContactId) {
 		try {
 			Long users_id = sessiondataDao.checkSession(SID);
-			Long user_level = userManager.getUserLevelByID(users_id);
 			// users only
-			if (AuthLevelUtil.checkUserLevel(user_level)) {
+			if (AuthLevelUtil.hasUserLevel(userDao.getRights(users_id))) {
 
 				UserContact userContacts = userContactsDao
 						.get(userContactId);
@@ -371,9 +360,8 @@ public class UserService implements IUserService {
 		try {
 
 			Long users_id = sessiondataDao.checkSession(SID);
-			Long user_level = userManager.getUserLevelByID(users_id);
 			// users only
-			if (AuthLevelUtil.checkUserLevel(user_level)) {
+			if (AuthLevelUtil.hasUserLevel(userDao.getRights(users_id))) {
 				User from = userDao.get(users_id);
 				TimeZone timezone = timezoneUtil.getTimeZone(from);
 
@@ -449,9 +437,8 @@ public class UserService implements IUserService {
 	public Boolean checkUserIsInContactList(String SID, Long user_id) {
 		try {
 			Long users_id = sessiondataDao.checkSession(SID);
-			Long user_level = userManager.getUserLevelByID(users_id);
 			// users only
-			if (AuthLevelUtil.checkUserLevel(user_level)) {
+			if (AuthLevelUtil.hasUserLevel(userDao.getRights(users_id))) {
 
 				List<UserContact> uList = userContactsDao
 						.getContactsByUserAndStatus(users_id, false);
@@ -478,10 +465,9 @@ public class UserService implements IUserService {
 			Boolean shareCalendar) {
 		try {
 			Long users_id = sessiondataDao.checkSession(SID);
-			Long user_level = userManager.getUserLevelByID(users_id);
 
 			// users only
-			if (AuthLevelUtil.checkUserLevel(user_level)) {
+			if (AuthLevelUtil.hasUserLevel(userDao.getRights(users_id))) {
 
 				UserContact userContacts = userContactsDao
 						.get(userContactId);
@@ -512,9 +498,8 @@ public class UserService implements IUserService {
 	public Boolean kickUserByPublicSID(String SID, String publicSID) {
 		try {
 			Long users_id = sessiondataDao.checkSession(SID);
-			Long user_level = userManager.getUserLevelByID(users_id);
 			// users only
-			if (AuthLevelUtil.checkUserLevel(user_level)) {
+			if (AuthLevelUtil.hasUserLevel(userDao.getRights(users_id))) {
 
 				Client rcl = this.sessionManager.getClientByPublicSID(
 						publicSID, false, null);

@@ -55,7 +55,7 @@ import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.wicketstuff.urlfragment.UrlFragment;
 
-@AuthorizeInstantiation("USER")
+@AuthorizeInstantiation({"Admin", "Dashboard", "Room"})
 public class MainPage extends BaseInitedPage {
 	private static final long serialVersionUID = 6421960759218157999L;
 	private static final Logger log = Red5LoggerFactory.getLogger(MainPage.class, webAppRootKey);

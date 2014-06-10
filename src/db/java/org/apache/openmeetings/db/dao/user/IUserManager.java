@@ -20,20 +20,18 @@ package org.apache.openmeetings.db.dao.user;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 import java.util.TimeZone;
 
-import org.apache.openmeetings.db.entity.room.Client;
-import org.red5.server.api.IClient;
+import org.apache.openmeetings.db.entity.user.User.Right;
 
 //FIXME HACK to bypass cross project compilation
 public interface IUserManager {
-	Long registerUserInit(long user_level, long level_id, int availible,
-			int status, String login, String password, String lastname,
+	Long registerUserInit(Set<Right> rights, String login, String password, String lastname,
 			String firstname, String email, Date age, String street,
 			String additionalname, String fax, String zip, long states_id,
 			String town, long language_id, boolean sendWelcomeMessage,
-			List<Long> organisations, String phone, boolean sendSMS,
-			Boolean sendConfirmation,
+			List<Long> organisations, String phone, boolean sendSMS, Boolean sendConfirmation,
 			TimeZone timezone, Boolean forceTimeZoneCheck,
 			String userOffers, String userSearchs, Boolean showContactData,
 			Boolean showContactDataToContacts, String activatedHash) throws Exception;
@@ -43,7 +41,4 @@ public interface IUserManager {
 			String street, String additionalname, String fax, String zip,
 			long states_id, String town, long language_id, String phone, boolean sendSMS, 
 			boolean generateSipUserData, String jNameTimeZone);
-	
-	Object loginUser(String SID, String userOrEmail, String userpass,
-			Client currentClient, IClient client, Boolean storePermanent);
 }

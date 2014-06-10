@@ -58,8 +58,8 @@ public class NavigationDao {
 
 	}
 
-	public List<Naviglobal> getMainMenu(long user_level, long USER_ID, long language_id) {
-		List<Naviglobal> ll = getMainMenu(user_level, USER_ID);
+	public List<Naviglobal> getMainMenu(boolean admin, long USER_ID, long language_id) {
+		List<Naviglobal> ll = getMainMenu(admin, USER_ID);
 		for (Naviglobal navigl : ll) {
 			navigl.setLabel(labelDao.get(navigl.getFieldvalues_id(), language_id));
 			navigl.setTooltip(labelDao.get(navigl.getTooltip_fieldvalues_id(), language_id));
@@ -71,10 +71,10 @@ public class NavigationDao {
 		return ll;
 	}
 
-	public List<Naviglobal> getMainMenu(long user_level, long USER_ID) {
+	public List<Naviglobal> getMainMenu(boolean admin, long USER_ID) {
 		try {
 			TypedQuery<Naviglobal> query = em.createNamedQuery("getNavigation", Naviglobal.class);
-			query.setParameter("level_id", user_level);
+			query.setParameter("level_id", admin ? 3L : 1L);
 			List<Naviglobal> navi = query.getResultList();
 			return navi;
 		} catch (Exception ex2) {

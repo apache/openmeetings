@@ -24,11 +24,15 @@ import java.io.Serializable;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
+import javax.persistence.CollectionTable;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -97,12 +101,21 @@ import org.simpleframework.xml.Root;
 	@NamedQuery(name = "getNondeletedUsers", query = "SELECT u FROM User u WHERE u.deleted = false"),
 	@NamedQuery(name = "countNondeletedUsers", query = "SELECT COUNT(u) FROM User u WHERE u.deleted = false"),
 	@NamedQuery(name = "getUsersByOrganisationId", query = "SELECT u FROM User u WHERE u.deleted = false AND u.organisation_users.organisation.organisation_id = :organisation_id"), 
-	@NamedQuery(name = "getExternalUser", query = "SELECT u FROM User u WHERE u.deleted = false AND u.externalUserId LIKE :externalId AND u.externalUserType LIKE :externalType") 
+	@NamedQuery(name = "getExternalUser", query = "SELECT u FROM User u WHERE u.deleted = false AND u.externalUserId LIKE :externalId AND u.externalUserType LIKE :externalType"),
+	@NamedQuery(name = "getUserByLoginOrEmail", query = "SELECT u from User u WHERE u.deleted = false AND u.type = :type AND (u.login = :userOrEmail OR u.adresses.email = :userOrEmail)")
 })
 @Table(name = "om_user")
 @Root(name = "user")
 public class User implements Serializable, IDataProviderEntity {
 	private static final long serialVersionUID = -2265479712596674065L;
+	
+	public enum Right {
+		Admin			// access to Admin module
+		, Room			// enter the room
+		, Dashboard		// access the dashboard
+		, Login			// login to Om internal DB
+		, Soap			// use rest/soap calls
+	}
 	
 	public enum Type {
 		user
@@ -122,10 +135,6 @@ public class User implements Serializable, IDataProviderEntity {
 	@Element(data = true, required = false)
 	private Date age;
 
-	@Column(name = "availible")
-	@Element(data = true, required = false)
-	private Integer availible;
-
 	@Column(name = "firstname")
 	@Element(data = true, required = false)
 	private String firstname;
@@ -141,10 +150,6 @@ public class User implements Serializable, IDataProviderEntity {
 	@Element(data = true, required = false)
 	private Long lasttrans;
 
-	@Column(name = "level_id")
-	@Element(data = true, required = false)
-	private Long level_id;
-
 	@Column(name = "login")
 	@Element(data = true, required = false)
 	private String login;
@@ -158,10 +163,6 @@ public class User implements Serializable, IDataProviderEntity {
 	@Column(name = "regdate")
 	@Element(data = true, required = false)
 	private Date regdate;
-
-	@Column(name = "status")
-	@Element(data = true, required = false)
-	private Integer status;
 
 	@Column(name = "salutations_id")
 	@Element(name = "title_id", data = true, required = false)
@@ -198,9 +199,6 @@ public class User implements Serializable, IDataProviderEntity {
 	@ForeignKey(enabled = true)
 	@Element(name = "address", required = false)
 	private Address adresses;
-
-	@Transient
-	private Userlevel userlevel;
 
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "user_id", insertable = true, updatable = true)
@@ -265,6 +263,17 @@ public class User implements Serializable, IDataProviderEntity {
 	@Element(data = true, required = false)
 	private Long ownerId;
 	
+	@ElementCollection(fetch = FetchType.EAGER)
+	@Column(name = "right")
+	@CollectionTable(name = "om_user_right", joinColumns = @JoinColumn(name = "user_id"))
+	@Enumerated(EnumType.STRING)
+	@ElementList(name="rights", data = true, required = false)
+	private Set<Right> rights = new HashSet<User.Right>();
+	
+	@Column(name = "domain_id")
+	@Element(data = true, required = false)
+	private Long domainId; // LDAP config id for LDAP, OAuth server id for OAuth
+	
 	public Long getUser_id() {
 		return user_id;
 	}
@@ -281,37 +290,12 @@ public class User implements Serializable, IDataProviderEntity {
 		this.adresses = adresses;
 	}
 
-	public void setAdresses(String street, String zip, String town,
-			State state, String additionalname, String comment, String fax,
-			String phone, String email) {
-		if (adresses == null) {
-			adresses = new Address();
-		}
-		adresses.setStreet(street);
-		adresses.setZip(zip);
-		adresses.setTown(town);
-		adresses.setStates(state);
-		adresses.setAdditionalname(additionalname);
-		adresses.setComment(comment);
-		adresses.setFax(fax);
-		adresses.setPhone(phone);
-		adresses.setEmail(email);
-	}
-
 	public Date getAge() {
 		return age;
 	}
 
 	public void setAge(Date age) {
 		this.age = age == null ? new Date() :age;
-	}
-
-	public Integer getAvailible() {
-		return availible;
-	}
-
-	public void setAvailible(Integer availible) {
-		this.availible = availible;
 	}
 
 	public String getFirstname() {
@@ -344,14 +328,6 @@ public class User implements Serializable, IDataProviderEntity {
 
 	public void setLasttrans(Long lasttrans) {
 		this.lasttrans = lasttrans;
-	}
-
-	public Long getLevel_id() {
-		return level_id;
-	}
-
-	public void setLevel_id(Long level_id) {
-		this.level_id = level_id;
 	}
 
 	public String getLogin() {
@@ -407,28 +383,12 @@ public class User implements Serializable, IDataProviderEntity {
 		this.regdate = regdate;
 	}
 
-	public Integer getStatus() {
-		return status;
-	}
-
-	public void setStatus(Integer status) {
-		this.status = status;
-	}
-
 	public Long getSalutations_id() {
 		return salutations_id;
 	}
 
 	public void setSalutations_id(Long salutations_id) {
 		this.salutations_id = salutations_id;
-	}
-
-	public Userlevel getUserlevel() {
-		return userlevel;
-	}
-
-	public void setUserlevel(Userlevel userlevel) {
-		this.userlevel = userlevel;
 	}
 
 	public Date getStarttime() {
@@ -607,13 +567,29 @@ public class User implements Serializable, IDataProviderEntity {
 		this.ownerId = ownerId;
 	}
 
+	public Set<Right> getRights() {
+		return rights;
+	}
+
+	public void setRights(Set<Right> rights) {
+		this.rights = rights;
+	}
+
+	public Long getDomainId() {
+		return domainId;
+	}
+
+	public void setDomainId(Long domainId) {
+		this.domainId = domainId;
+	}
+
 	@Override
 	public String toString() {
 		return "User [user_id=" + user_id + ", firstname=" + firstname
 				+ ", lastname=" + lastname + ", login=" + login
 				+ ", pictureuri=" + pictureuri + ", deleted=" + deleted
 				+ ", language_id=" + language_id + ", adresses=" + adresses
-				+ ", externalUserId=" + externalUserId + ", externalUserType="
+				+ ", externalId=" + externalUserId + ", externalType="
 				+ externalUserType + ", type=" + type + "]";
 	}
 }

@@ -28,7 +28,6 @@ import java.util.LinkedHashMap;
 import org.apache.axis2.AxisFault;
 import org.apache.openmeetings.data.file.FileProcessor;
 import org.apache.openmeetings.data.file.FileUtils;
-import org.apache.openmeetings.data.user.UserManager;
 import org.apache.openmeetings.db.dao.file.FileExplorerItemDao;
 import org.apache.openmeetings.db.dao.server.SessiondataDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
@@ -62,8 +61,6 @@ public class FileWebService {
 			FileWebService.class, OpenmeetingsVariables.webAppRootKey);
 	@Autowired
 	private SessiondataDao sessiondataDao;
-	@Autowired
-	private UserManager userManager;
 	@Autowired
 	private UserDao userDao;
 	@Autowired
@@ -118,9 +115,8 @@ public class FileWebService {
 		try {
 
 			Long users_id = sessiondataDao.checkSession(SID);
-			Long User_level = userManager.getUserLevelByID(users_id);
 
-			if (AuthLevelUtil.checkWebServiceLevel(User_level)) {
+			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(users_id))) {
 
 				URL url = new URL(path);
 				URLConnection uc = url.openConnection();
@@ -203,9 +199,8 @@ public class FileWebService {
 		try {
 
 			Long users_id = sessiondataDao.checkSession(SID);
-			Long User_level = userManager.getUserLevelByID(users_id);
 
-			if (AuthLevelUtil.checkWebServiceLevel(User_level)) {
+			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(users_id))) {
 
 				URL url = new URL(path);
 				URLConnection uc = url.openConnection();
@@ -275,9 +270,8 @@ public class FileWebService {
 		try {
 
 			Long users_id = sessiondataDao.checkSession(SID);
-			Long User_level = userManager.getUserLevelByID(users_id);
 
-			if (AuthLevelUtil.checkWebServiceLevel(User_level)) {
+			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(users_id))) {
 
 				User userExternal = userDao.getExternalUser(externalUserId, externalType);
 
@@ -341,9 +335,8 @@ public class FileWebService {
 		try {
 
 			Long users_id = sessiondataDao.checkSession(SID);
-			Long User_level = userManager.getUserLevelByID(users_id);
 
-			if (AuthLevelUtil.checkWebServiceLevel(User_level)) {
+			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(users_id))) {
 
 				log.debug("addFolder " + parentFileExplorerItemId);
 
@@ -399,8 +392,7 @@ public class FileWebService {
 			String fileName, Long room_id, Boolean isOwner) throws AxisFault {
 		try {
 			Long users_id = sessiondataDao.checkSession(SID);
-			Long user_level = userManager.getUserLevelByID(users_id);
-			if (AuthLevelUtil.checkUserLevel(user_level)) {
+			if (AuthLevelUtil.hasUserLevel(userDao.getRights(users_id))) {
 
 				log.debug("addFolder " + parentFileExplorerItemId);
 
@@ -455,9 +447,8 @@ public class FileWebService {
 		try {
 
 			Long users_id = sessiondataDao.checkSession(SID);
-			Long User_level = userManager.getUserLevelByID(users_id);
 
-			if (AuthLevelUtil.checkWebServiceLevel(User_level)) {
+			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(users_id))) {
 
 				fileExplorerItemDao.deleteFileExplorerItemByExternalIdAndType(
 						externalFilesid, externalType);
@@ -486,9 +477,8 @@ public class FileWebService {
 		try {
 
 			Long users_id = sessiondataDao.checkSession(SID);
-			Long User_level = userManager.getUserLevelByID(users_id);
 
-			if (AuthLevelUtil.checkWebServiceLevel(User_level)) {
+			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(users_id))) {
 
 				fileExplorerItemDao.deleteFileExplorerItem(fileExplorerItemId);
 
@@ -516,9 +506,8 @@ public class FileWebService {
 		try {
 
 			Long users_id = sessiondataDao.checkSession(SID);
-			Long User_level = userManager.getUserLevelByID(users_id);
 
-			if (AuthLevelUtil.checkUserLevel(User_level)) {
+			if (AuthLevelUtil.hasUserLevel(userDao.getRights(users_id))) {
 
 				// TODO: Check if user has access or not to the file
 
@@ -564,9 +553,8 @@ public class FileWebService {
 		try {
 
 			Long users_id = sessiondataDao.checkSession(SID);
-			Long user_level = userManager.getUserLevelByID(users_id);
 
-			if (AuthLevelUtil.checkWebServiceLevel(user_level)) {
+			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(users_id))) {
 
 				File working_dir = new File(OmFileHelper.getUploadProfilesDir(), parentFolder);
 				log.debug("############# working_dir : " + working_dir);
@@ -610,10 +598,8 @@ public class FileWebService {
 		try {
 
 			Long webservice_users_id = sessiondataDao.checkSession(SID);
-			Long user_level = userManager
-					.getUserLevelByID(webservice_users_id);
 
-			if (AuthLevelUtil.checkWebServiceLevel(user_level)) {
+			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(webservice_users_id))) {
 
 				log.debug("room_id " + room_id);
 
@@ -681,9 +667,8 @@ public class FileWebService {
 		try {
 
 			Long users_id = sessiondataDao.checkSession(SID);
-			Long user_level = userManager.getUserLevelByID(users_id);
 
-			if (AuthLevelUtil.checkUserLevel(user_level)) {
+			if (AuthLevelUtil.hasUserLevel(userDao.getRights(users_id))) {
 
 				log.debug("room_id " + room_id);
 
@@ -758,10 +743,8 @@ public class FileWebService {
 		try {
 
 			Long webservice_users_id = sessiondataDao.checkSession(SID);
-			Long user_level = userManager
-					.getUserLevelByID(webservice_users_id);
 
-			if (AuthLevelUtil.checkWebServiceLevel(user_level)) {
+			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(webservice_users_id))) {
 
 				log.debug("parentFileExplorerItemId "
 						+ parentFileExplorerItemId);
@@ -808,9 +791,8 @@ public class FileWebService {
 		try {
 
 			Long users_id = sessiondataDao.checkSession(SID);
-			Long user_level = userManager.getUserLevelByID(users_id);
 
-			if (AuthLevelUtil.checkUserLevel(user_level)) {
+			if (AuthLevelUtil.hasUserLevel(userDao.getRights(users_id))) {
 
 				log.debug("parentFileExplorerItemId "
 						+ parentFileExplorerItemId);
@@ -853,10 +835,8 @@ public class FileWebService {
 		try {
 
 			Long webservice_users_id = sessiondataDao.checkSession(SID);
-			Long user_level = userManager
-					.getUserLevelByID(webservice_users_id);
 
-			if (AuthLevelUtil.checkWebServiceLevel(user_level)) {
+			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(webservice_users_id))) {
 
 				log.debug("deleteFileOrFolder " + fileExplorerItemId);
 
@@ -889,9 +869,8 @@ public class FileWebService {
 		try {
 
 			Long users_id = sessiondataDao.checkSession(SID);
-			Long user_level = userManager.getUserLevelByID(users_id);
 
-			if (AuthLevelUtil.checkUserLevel(user_level)) {
+			if (AuthLevelUtil.hasUserLevel(userDao.getRights(users_id))) {
 
 				// TODO: check if this user is allowed to change this file
 				/*
@@ -945,10 +924,8 @@ public class FileWebService {
 		try {
 
 			Long webservice_users_id = sessiondataDao.checkSession(SID);
-			Long user_level = userManager
-					.getUserLevelByID(webservice_users_id);
 
-			if (AuthLevelUtil.checkWebServiceLevel(user_level)) {
+			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(webservice_users_id))) {
 
 				log.debug("deleteFileOrFolder " + fileExplorerItemId);
 
@@ -1004,9 +981,8 @@ public class FileWebService {
 		try {
 
 			Long users_id = sessiondataDao.checkSession(SID);
-			Long user_level = userManager.getUserLevelByID(users_id);
 
-			if (AuthLevelUtil.checkUserLevel(user_level)) {
+			if (AuthLevelUtil.hasUserLevel(userDao.getRights(users_id))) {
 				
 				// A test is required that checks if the user is allowed to move the file
 

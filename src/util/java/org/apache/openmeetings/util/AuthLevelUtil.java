@@ -18,21 +18,53 @@
  */
 package org.apache.openmeetings.util;
 
+import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+
+import java.util.Set;
+
+import org.apache.openmeetings.db.entity.user.Organisation_Users;
+import org.apache.openmeetings.db.entity.user.User;
+import org.apache.openmeetings.db.entity.user.User.Right;
+import org.red5.logging.Red5LoggerFactory;
+import org.slf4j.Logger;
+
 public class AuthLevelUtil {
-	 
-	public static boolean checkUserLevel(Long user_level) {
-		return user_level == 1 || user_level == 2 || user_level == 3 || user_level == 4;
+	private static final Logger log = Red5LoggerFactory.getLogger(AuthLevelUtil.class, webAppRootKey);
+	
+	private static boolean check(Set<Right> rights, Right level) {
+		boolean result = rights.contains(level);
+		log.debug(String.format("Level %s :: %s", level, result ? "[GRANTED]" : "[DENIED]"));
+		return result;
 	}
 	
-	public static boolean checkModLevel(Long user_level) {
-		return user_level == 2 || user_level == 3;
+	public static boolean hasUserLevel(Set<Right> rights) {
+		return check(rights, Right.Room);
 	}
-	
-	public static boolean checkAdminLevel(Long user_level) {
-		return user_level == 3;
+
+	public static boolean hasModLevel(User u, Long orgId) {
+		boolean result = hasAdminLevel(u.getRights());
+		if (!result && orgId != null) {
+			for (Organisation_Users ou : u.getOrganisation_users()) {
+				if (orgId.equals(ou.getOrganisation().getOrganisation_id())) {
+					if (Boolean.TRUE.equals(ou.getIsModerator())) {
+						result = true;
+					}
+					break;
+				}
+			}
+		}
+		return result;
 	}
-	
-	public static boolean checkWebServiceLevel(Long user_level) {
-		return user_level == 3 || user_level == 4;
+
+	public static boolean hasAdminLevel(Set<Right> rights) {
+		return check(rights, Right.Admin);
+	}
+
+	public static boolean hasWebServiceLevel(Set<Right> rights) {
+		return check(rights, Right.Soap);
+	}
+
+	public static boolean hasLoginLevel(Set<Right> rights) {
+		return check(rights, Right.Login);
 	}
 }

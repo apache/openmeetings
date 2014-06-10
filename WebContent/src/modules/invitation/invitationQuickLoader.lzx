@@ -121,7 +121,7 @@
 			var lName = invitee.lastname == null ? email : invitee.lastname;
 			
 			canvas.setAttribute('currentuser', email);
-			canvas.setAttribute('user_id', -1);
+			canvas.setAttribute('user_id', -invitee.user_id);
 			canvas.setAttribute('firstName', fName);
 			canvas.setAttribute('lastName', lName);
 			canvas.setAttribute('mail', email);

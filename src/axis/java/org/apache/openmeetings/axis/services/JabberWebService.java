@@ -22,7 +22,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.openmeetings.data.conference.InvitationManager;
-import org.apache.openmeetings.data.user.UserManager;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.dao.server.SessiondataDao;
@@ -53,8 +52,6 @@ public class JabberWebService {
 	private static final Logger log = Red5LoggerFactory.getLogger(
 			JabberWebService.class, OpenmeetingsVariables.webAppRootKey);
 
-	@Autowired
-	private UserManager userManager;
 	@Autowired
 	private UserDao userDao;
 	@Autowired
@@ -119,10 +116,9 @@ public class JabberWebService {
 	 * @return number of users as int
 	 */
 	public int getUserCount(String SID, Long roomId) {
-		Long users_id = this.sessiondataDao.checkSession(SID);
-		Long user_level = this.userManager.getUserLevelByID(users_id);
+		Long users_id = sessiondataDao.checkSession(SID);
 
-		if (AuthLevelUtil.checkUserLevel(user_level)) {
+		if (AuthLevelUtil.hasUserLevel(userDao.getRights(users_id))) {
 			return conferenceService.getRoomClientsListByRoomId(roomId).size();
 		}
 		return -1;
@@ -138,14 +134,12 @@ public class JabberWebService {
 	 * @return hash to enter the room
 	 */
 	public String getInvitationHash(String SID, String username, Long room_id) {
-		Long users_id = this.sessiondataDao.checkSession(SID);
-		Long user_level = this.userManager.getUserLevelByID(users_id);
+		Long users_id = sessiondataDao.checkSession(SID);
 		
-		if (AuthLevelUtil.checkUserLevel(user_level)) {
+		if (AuthLevelUtil.hasUserLevel(userDao.getRights(users_id))) {
 			User invitee = userDao.getContact(username, username, username, users_id);
 			Invitation invitation = invitationManager.getInvitation(invitee, roomDao.get(room_id),
-							false, "", Valid.OneTime
-							, userDao.get(users_id), 1L, null, null, null);
+							false, "", Valid.OneTime, userDao.get(users_id), 1L, null, null, null);
 	
 			return ((invitation == null) ? null : invitation.getHash());
 		} else {

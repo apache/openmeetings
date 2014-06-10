@@ -47,10 +47,12 @@ import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.entity.user.Address;
 import org.apache.openmeetings.db.entity.user.Organisation_Users;
 import org.apache.openmeetings.db.entity.user.User;
+import org.apache.openmeetings.db.entity.user.User.Right;
 import org.apache.openmeetings.db.entity.user.User.Type;
 import org.apache.openmeetings.db.util.TimezoneUtil;
 import org.apache.openmeetings.util.AuthLevelUtil;
 import org.apache.openmeetings.util.DaoHelper;
+import org.apache.openmeetings.util.OmException;
 import org.apache.openmeetings.util.crypt.ManageCryptStyle;
 import org.apache.wicket.util.string.Strings;
 import org.red5.logging.Red5LoggerFactory;
@@ -76,33 +78,36 @@ public class UserDao implements IDataProviderDao<User> {
 	@Autowired
 	private ConfigurationDao cfgDao;
 	@Autowired
-	private StateDao stateDaoImpl;
+	private StateDao stateDao;
 	@Autowired
 	private TimezoneUtil timezoneUtil;
 
+	public static Set<Right> getDefaultRights() {
+		Set<Right> rights = new HashSet<User.Right>();
+		rights.add(Right.Login);
+		rights.add(Right.Dashboard);
+		rights.add(Right.Room);
+		return rights;
+	}
 	/**
 	 * Get a new instance of the {@link User} entity, with all default values
 	 * set
 	 * 
-	 * @param currentUser
-	 *            the timezone of the current user is copied to the new default
-	 *            one (if the current user has one)
-	 * @return
+	 * @param currentUser - the user to copy time zone from
+	 * @return new User instance
 	 */
 	public User getNewUserInstance(User currentUser) {
 		User user = new User();
-		user.setSalutations_id(1L); // TODO: Fix default selection to be
-									// configurable
-		user.setLevel_id(1L);
+		user.setSalutations_id(1L); // TODO: Fix default selection to be configurable
+		user.setRights(getDefaultRights());
 		user.setLanguage_id(cfgDao.getConfValue(CONFIG_DEFAUT_LANG_KEY, Long.class, "1"));
 		user.setTimeZoneId(timezoneUtil.getTimeZone(currentUser).getID());
 		user.setForceTimeZoneCheck(false);
 		user.setSendSMS(false);
 		user.setAge(new Date());
 		Address adresses = new Address();
-		adresses.setStates(stateDaoImpl.getStateById(1L));
+		adresses.setStates(stateDao.getStateById(1L));
 		user.setAdresses(adresses);
-		user.setStatus(1);
 		user.setShowContactData(false);
 		user.setShowContactDataToContacts(false);
 
@@ -348,7 +353,7 @@ public class UserDao implements IDataProviderDao<User> {
 		return count == 0;
 	}
 	
-	public User getUserByName(String login, Type type) {
+	public User getByName(String login, Type type) {
 		User us = null;
 		try {
 			us = em.createNamedQuery("getUserByLogin", User.class)
@@ -537,5 +542,114 @@ public class UserDao implements IDataProviderDao<User> {
 
 	public List<User> get(String search, int start, int count, String order) {
 		return get(search, start, count, order, false, -1);
+	}
+	
+	public Set<Right> getRights(Long id) {
+		Set<Right> rights = new HashSet<Right>();
+
+		if (id == null) {
+			return rights;
+		}
+		// For direct access of linked users
+		if (id < 0) {
+			rights.add(Right.Room);
+			return rights;
+		}
+
+		User u = get(id);
+		if (u != null) {
+			return u.getRights();
+		}
+		return rights;
+	}
+	
+	/**
+	 * login logic
+	 * 
+	 * @param SID
+	 * @param Username
+	 * @param Userpass
+	 * @return
+	 */
+	public User login(String userOrEmail, String userpass) throws OmException {
+		List<User> users = em.createNamedQuery("getUserByLoginOrEmail", User.class)
+				.setParameter("userOrEmail", userOrEmail)
+				.setParameter("type", Type.user)
+				.getResultList();
+
+		log.debug("debug SIZE: " + users.size());
+
+		if (users.size() == 0) {
+			throw new OmException(-10L);
+		}
+		User u = users.get(0);
+
+		if (!verifyPassword(u.getUser_id(), userpass)) {
+			throw new OmException(-11L);
+		}
+		// Check if activated
+		if (!AuthLevelUtil.hasLoginLevel(u.getRights())) {
+			throw new OmException(-41L);
+		}
+		log.debug("loginUser " + u.getOrganisation_users());
+		if (u.getOrganisation_users().isEmpty()) {
+			throw new OmException("No Organization assigned to user");
+		}
+		
+		u.setLastlogin(new Date());
+		return update(u, u.getUser_id());
+	}
+	
+	public Address getAddress(String street, String zip, String town, long states_id, String additionalname, String fax, String phone, String email) {
+		Address a =  new Address();
+		a.setStreet(street);
+		a.setZip(zip);
+		a.setTown(town);
+		a.setStates(stateDao.getStateById(states_id));
+		a.setAdditionalname(additionalname);
+		a.setComment("");
+		a.setFax(fax);
+		a.setPhone(phone);
+		a.setEmail(email);
+		return a;
+	}
+	
+	public User addUser(Set<Right> rights, String firstname, String login, String lastname, long language_id,
+			String userpass, Address adress, boolean sendSMS, Date age, String hash, TimeZone timezone,
+			Boolean forceTimeZoneCheck, String userOffers, String userSearchs, Boolean showContactData,
+			Boolean showContactDataToContacts, String externalId, String externalType, List<Organisation_Users> orgList, String pictureuri) throws NoSuchAlgorithmException {
+		
+		User u = new User();
+		u.setFirstname(firstname);
+		u.setLogin(login);
+		u.setLastname(lastname);
+		u.setAge(age);
+		u.setAdresses(adress);
+		u.setSendSMS(sendSMS);
+		u.setRights(rights);
+		u.setLastlogin(new Date());
+		u.setLasttrans(new Long(0));
+		u.setSalutations_id(1L);
+		u.setStarttime(new Date());
+		u.setActivatehash(hash);
+		u.setTimeZoneId(timezone.getID());
+		u.setForceTimeZoneCheck(forceTimeZoneCheck);
+		u.setExternalUserId(externalId);
+		u.setExternalUserType(externalType);
+
+		u.setUserOffers(userOffers);
+		u.setUserSearchs(userSearchs);
+		u.setShowContactData(showContactData);
+		u.setShowContactDataToContacts(showContactDataToContacts);
+
+		// this is needed cause the language is not a needed data at registering
+		u.setLanguage_id(language_id != 0 ? language_id : null);
+		u.updatePassword(cfgDao, userpass);
+		u.setRegdate(new Date());
+		u.setDeleted(false);
+		u.setPictureuri(pictureuri);
+		u.setOrganisation_users(orgList);
+		
+		return update(u, null);
 	}
 }

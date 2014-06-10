@@ -19,7 +19,6 @@
 package org.apache.openmeetings.web.app;
 
 import static java.text.DateFormat.SHORT;
-import static org.apache.openmeetings.util.AuthLevelUtil.checkAdminLevel;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DASHBOARD_SHOW_MYROOMS_KEY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DASHBOARD_SHOW_RSS_KEY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAUT_LANG_KEY;
@@ -31,6 +30,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
@@ -45,7 +45,6 @@ import org.apache.openmeetings.db.dao.label.FieldLanguagesValuesDao;
 import org.apache.openmeetings.db.dao.server.SOAPLoginDao;
 import org.apache.openmeetings.db.dao.server.SessiondataDao;
 import org.apache.openmeetings.db.dao.user.ILdapLoginManagement;
-import org.apache.openmeetings.db.dao.user.IUserManager;
 import org.apache.openmeetings.db.dao.user.StateDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.label.FieldLanguage;
@@ -54,7 +53,10 @@ import org.apache.openmeetings.db.entity.server.SOAPLogin;
 import org.apache.openmeetings.db.entity.server.Sessiondata;
 import org.apache.openmeetings.db.entity.user.State;
 import org.apache.openmeetings.db.entity.user.User;
+import org.apache.openmeetings.db.entity.user.User.Right;
+import org.apache.openmeetings.db.entity.user.User.Type;
 import org.apache.openmeetings.db.util.TimezoneUtil;
+import org.apache.openmeetings.util.OmException;
 import org.apache.openmeetings.web.pages.SwfPage;
 import org.apache.openmeetings.web.user.dashboard.PrivateRoomsWidgetDescriptor;
 import org.apache.openmeetings.web.user.dashboard.RssWidgetDescriptor;
@@ -83,7 +85,7 @@ public class WebSession extends AbstractAuthenticatedWebSession {
 	public static int MILLIS_IN_MINUTE = 60000;
 	//private static final Map<String, Locale> LNG_TO_LOCALE_MAP = new HashMap<String, Locale> ();
 	private long userId = -1;
-	private long userLevel = -1; //TODO renew somehow on user edit !!!!
+	private Set<Right> rights = new HashSet<User.Right>(); //TODO renew somehow on user edit !!!!
 	private long languageId = -1; //TODO renew somehow on user edit !!!!
 	private String SID = null;
 	private OmUrlFragment area = null;
@@ -114,7 +116,7 @@ public class WebSession extends AbstractAuthenticatedWebSession {
 	public void invalidate() {
 		super.invalidate();
 		userId = -1;
-		userLevel = -1;
+		rights.clear();
 		SID = null;
 		sdf = null;
 		recordingId = null;
@@ -150,15 +152,9 @@ public class WebSession extends AbstractAuthenticatedWebSession {
 		} catch (Exception e) {
 			//no-op, will continue to sign-in page
 		}
-		Roles r = null;
-		if (externalType != null) {
-			invalidate();
-		}
-		if (isSignedIn()) {
-			r = new Roles(Roles.USER);
-			if (checkAdminLevel(userLevel)) {
-				r.add(Roles.ADMIN);
-			}
+		Roles r = new Roles();
+		for (Right right : rights) {
+			r.add(right.name());
 		}
 		return r;
 	}
@@ -169,9 +165,15 @@ public class WebSession extends AbstractAuthenticatedWebSession {
 			IAuthenticationStrategy strategy = getAuthenticationStrategy();
 			// get username and password from persistence store
 			String[] data = strategy.load();
-			if ((data != null) && (data.length > 2)) {
+			if (data != null && data.length > 3 && data[2] != null) {
+				Long domainId = null;
+				try {
+					domainId = Long.parseLong(data[3]);
+				} catch (Exception e) {
+					//no-op
+				}
 				// try to sign in the user
-				if (!signIn(data[0], data[1], data[2])) {
+				if (!signIn(data[0], data[1], Type.valueOf(data[2]), domainId)) {
 					// the loaded credentials are wrong. erase them.
 					strategy.remove();
 				}
@@ -199,6 +201,7 @@ public class WebSession extends AbstractAuthenticatedWebSession {
 						user.setLogin(remoteUser.getUsername()); //FIXME check if login UNIQUE
 						user.setExternalUserId(remoteUser.getExternalUserId());
 						user.setExternalUserType(remoteUser.getExternalUserType());
+						user.getRights().add(Right.Room);
 						user.getAdresses().setEmail(remoteUser.getEmail());
 						user.setPictureuri(remoteUser.getPictureUrl());
 					} else {
@@ -225,7 +228,7 @@ public class WebSession extends AbstractAuthenticatedWebSession {
 	
 	private void setUser(User u) {
 		userId = u.getUser_id();
-		userLevel = u.getLevel_id();
+		rights = Collections.unmodifiableSet(u.getRights());
 		languageId = u.getLanguage_id();
 		externalType = u.getExternalUserType();
 		tz = getBean(TimezoneUtil.class).getTimeZone(u);
@@ -237,25 +240,30 @@ public class WebSession extends AbstractAuthenticatedWebSession {
 		}
 	}
 	
-	public boolean signIn(String login, String password, String ldapConfigFileName) {
+	public boolean signIn(String login, String password, Type type, Long domainId) {
 		Sessiondata sessData = getBean(SessiondataDao.class).startsession();
 		SID = sessData.getSession_id();
-		Object _u = Strings.isEmpty(ldapConfigFileName)
-				? getBean(IUserManager.class).loginUser(SID, login, password, null, null, false)
-				: getBean(ILdapLoginManagement.class).doLdapLogin(login, password, null, null, SID, ldapConfigFileName);
-		
-		if (_u instanceof User) {
-			User u = (User)_u;
-			/* we will allow login in case user 'guess' the password
-			if (!checkAdminLevel(u.getLevel_id()) && Type.ldap == u.getType() && Strings.isEmpty(ldapConfigFileName)) {
-				//user is LDAP and is not admin, then authentication should be done on the LDAP server (even if the LDAP server is down)
-				return false;
+		try {
+			User u = null;
+			switch (type) {
+				case ldap:
+					u = getBean(ILdapLoginManagement.class).login(login, password, domainId);
+					break;
+				case user:
+					/* we will allow login against internal DB in case user 'guess' LDAP password */
+					u = getBean(UserDao.class).login(login, password);
+					break;
+				case oauth:
+					// we did all the checks at this stage, just set the user
+					u = getBean(UserDao.class).getByName(login, Type.oauth);
+					break;
+				default:
+					throw new OmException(-1L);
 			}
-			*/
 			setUser(u);
 			return true;
-		} else if (_u instanceof Long) {
-			loginError = (Long)_u;
+		} catch (OmException oe) {
+			loginError = oe.getCode() == null ? -1 : oe.getCode();
 		}
 		return false;
 	}
@@ -348,8 +356,8 @@ public class WebSession extends AbstractAuthenticatedWebSession {
 		return get().sdf;
 	}
 	
-	public static long getUserLevel() {
-		return get().userLevel;
+	public static Set<Right> getRights() {
+		return get().rights;
 	}
 
 	public OmUrlFragment getArea() {

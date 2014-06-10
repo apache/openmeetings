@@ -21,6 +21,7 @@ package org.apache.openmeetings.test.user;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import java.util.List;
@@ -40,6 +41,11 @@ public class TestUserContact extends AbstractWicketTester {
 	@Autowired
 	private OrganisationDao orgDao;
 	Random random = new Random();
+	
+	@Test
+	public void testGetUser() throws Exception {
+		assertNull("Null should be returned in case User does not exist", userDao.get(Long.MAX_VALUE));
+	}
 	
 	@Test
 	public void createUserWithOrganisation() throws Exception {

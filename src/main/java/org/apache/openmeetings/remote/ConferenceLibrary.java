@@ -26,11 +26,11 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.transaction.util.FileHelper;
-import org.apache.openmeetings.data.user.UserManager;
 import org.apache.openmeetings.data.whiteboard.WhiteboardManager;
 import org.apache.openmeetings.db.dao.file.FileExplorerItemDao;
 import org.apache.openmeetings.db.dao.server.ISessionManager;
 import org.apache.openmeetings.db.dao.server.SessiondataDao;
+import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.dto.file.LibraryPresentation;
 import org.apache.openmeetings.db.entity.file.FileExplorerItem;
 import org.apache.openmeetings.db.entity.room.Client;
@@ -66,7 +66,7 @@ public class ConferenceLibrary implements IPendingServiceCallback {
 	@Autowired
 	private SessiondataDao sessiondataDao;
 	@Autowired
-	private UserManager userManager;
+	private UserDao userDao;
 	@Autowired
 	private FileExplorerItemDao fileExplorerItemDao;
 	@Autowired
@@ -80,12 +80,10 @@ public class ConferenceLibrary implements IPendingServiceCallback {
 		try {
 
 			Long users_id = sessiondataDao.checkSession(SID);
-			Long user_level = userManager.getUserLevelByID(users_id);
 
 			log.debug("#############users_id : " + users_id);
-			log.debug("#############user_level : " + user_level);
 
-			if (AuthLevelUtil.checkUserLevel(user_level)) {
+			if (AuthLevelUtil.hasUserLevel(userDao.getRights(users_id))) {
 
 				File working_dir = new File(OmFileHelper.getUploadFilesDir(), parentFolder);
 				log.debug("############# working_dir : " + working_dir);
@@ -123,8 +121,7 @@ public class ConferenceLibrary implements IPendingServiceCallback {
 			Object tObjectRef) {
 		try {
 			Long users_id = sessiondataDao.checkSession(SID);
-			Long user_level = userManager.getUserLevelByID(users_id);
-			if (AuthLevelUtil.checkUserLevel(user_level)) {
+			if (AuthLevelUtil.hasUserLevel(userDao.getRights(users_id))) {
 				// LinkedHashMap tObject = (LinkedHashMap)t;
 				// ArrayList tObject = (ArrayList)t;
 
@@ -174,9 +171,8 @@ public class ConferenceLibrary implements IPendingServiceCallback {
 			Long fileExplorerItemId, Long whiteboardId) {
 		try {
 			Long users_id = sessiondataDao.checkSession(SID);
-			Long user_level = userManager.getUserLevelByID(users_id);
 
-			if (AuthLevelUtil.checkUserLevel(user_level)) {
+			if (AuthLevelUtil.hasUserLevel(userDao.getRights(users_id))) {
 
 				IConnection current = Red5.getConnectionLocal();
 				Client currentClient = this.sessionManager
@@ -255,8 +251,7 @@ public class ConferenceLibrary implements IPendingServiceCallback {
 	public ArrayList loadChartObject(String SID, Long room_id, String fileName) {
 		try {
 			Long users_id = sessiondataDao.checkSession(SID);
-			Long user_level = userManager.getUserLevelByID(users_id);
-			if (AuthLevelUtil.checkUserLevel(user_level)) {
+			if (AuthLevelUtil.hasUserLevel(userDao.getRights(users_id))) {
 				return LibraryChartLoader.getInstance().loadChart(OmFileHelper.getUploadRoomDir(room_id.toString()),
 						fileName);
 			}
@@ -275,9 +270,8 @@ public class ConferenceLibrary implements IPendingServiceCallback {
 		try {
 
 			Long users_id = sessiondataDao.checkSession(SID);
-			Long user_level = userManager.getUserLevelByID(users_id);
 
-			if (AuthLevelUtil.checkUserLevel(user_level)) {
+			if (AuthLevelUtil.hasUserLevel(userDao.getRights(users_id))) {
 
 				IConnection current = Red5.getConnectionLocal();
 				String streamid = current.getClient().getId();

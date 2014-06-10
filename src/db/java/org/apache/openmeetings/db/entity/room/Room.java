@@ -55,15 +55,7 @@ import org.simpleframework.xml.Root;
 })
 @NamedQueries({
 	@NamedQuery(name = "getNondeletedRooms", query = "SELECT r FROM Room r WHERE r.deleted = false"),
-	@NamedQuery(name = "getPublicRooms", query = "SELECT r from Room r "
-			+ "JOIN r.roomtype as rt "
-			+ "WHERE r.ispublic=:ispublic and r.deleted=:deleted and rt.roomtypes_id=:roomtypes_id"),
-	@NamedQuery(name = "getPublicRoomsWithoutType", query = "SELECT r from Room r " + "WHERE "
-						+ "r.ispublic = :ispublic and r.deleted <> :deleted "
-						+ "ORDER BY r.name ASC"),
-	@NamedQuery(name = "getAppointedMeetings", query = "SELECT r from Room r "
-			+ "JOIN r.roomtype as rt " + "WHERE "
-			+ "r.deleted=:deleted and r.appointment=:appointed"),	
+	@NamedQuery(name = "getPublicRooms", query = "SELECT r from Room r WHERE r.ispublic = true and r.deleted = false and r.roomtype.roomtypes_id = :typeId"),
 	@NamedQuery(name = "getRoomByOwnerAndTypeId", query = "select c from Room as c "
 					+ "where c.ownerId = :ownerId "
 					+ "AND c.roomtype.roomtypes_id = :roomtypesId "

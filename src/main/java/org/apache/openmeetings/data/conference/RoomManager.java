@@ -48,9 +48,6 @@ import org.apache.openmeetings.db.dto.basic.SearchResult;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.room.RoomModerator;
 import org.apache.openmeetings.db.entity.room.RoomOrganisation;
-import org.apache.openmeetings.db.entity.user.Organisation_Users;
-import org.apache.openmeetings.db.entity.user.User;
-import org.apache.openmeetings.util.AuthLevelUtil;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -86,43 +83,6 @@ public class RoomManager implements IRoomManager {
 	private RoomTypeDao roomTypeDao;
 
 	/**
-	 * get a room object if user level
-	 * 
-	 * @param user_level
-	 * @param rooms_id
-	 * @return
-	 */
-	public Room getRoomById(long user_level, long rooms_id) {
-		try {
-			if (AuthLevelUtil.checkUserLevel(user_level)) {
-				return roomDao.get(rooms_id);
-			} else
-				log.error("getRoombyId : Userlevel" + user_level
-						+ " not allowed");
-		} catch (Exception ex2) {
-			log.error("[getRoomById] ", ex2);
-		}
-		return null;
-	}
-
-	public Room getRoomWithCurrentUsersById(long user_level, long rooms_id) {
-		try {
-			if (AuthLevelUtil.checkUserLevel(user_level)) {
-				Room room = roomDao.get(rooms_id);
-
-				if (room != null) {
-					room.setCurrentusers(sessionManager.getClientListByRoom(room.getRooms_id()));
-
-					return room;
-				}
-			}
-		} catch (Exception ex2) {
-			log.error("[getRoomWithCurrentUsersById] ", ex2);
-		}
-		return null;
-	}
-
-	/**
 	 * Get a Rooms-Object or NULL
 	 * 
 	 * @param externalRoomId
@@ -150,99 +110,67 @@ public class RoomManager implements IRoomManager {
 		return null;
 	}
 
-	public Room getRoomByExternalId(long user_level, Long externalRoomId,
-			String externalRoomType, long roomtypes_id) {
+	public SearchResult<Room> getRooms(int start, int max, String orderby, boolean asc, String search) {
 		try {
-			if (AuthLevelUtil.checkUserLevel(user_level)) {
-				return this.getRoomByExternalId(externalRoomId,
-						externalRoomType, roomtypes_id);
-			} else
-				log.error("getRoombyExternalId : Userlevel" + user_level
-						+ " not allowed");
-		} catch (Exception ex2) {
-			log.error("[getRoomByExternalId] ", ex2);
-		}
-		return null;
-	}
-
-	public SearchResult<Room> getRooms(long user_level, int start, int max,
-			String orderby, boolean asc, String search) {
-		try {
-			if (AuthLevelUtil.checkAdminLevel(user_level)) {
-				SearchResult<Room> sResult = new SearchResult<Room>();
-				sResult.setRecords(this.selectMaxFromRooms(search));
-				sResult.setObjectName(Room.class.getName());
-				sResult.setResult(this.getRoomsInternatlByHQL(start, max,
-						orderby, asc, search));
-				return sResult;
-			}
+			SearchResult<Room> sResult = new SearchResult<Room>();
+			sResult.setRecords(this.selectMaxFromRooms(search));
+			sResult.setObjectName(Room.class.getName());
+			sResult.setResult(this.getRoomsInternatlByHQL(start, max,
+					orderby, asc, search));
+			return sResult;
 		} catch (Exception ex2) {
 			log.error("[getRooms] ", ex2);
 		}
 		return null;
 	}
 	
-	public SearchResult<Room> getRoomsWithCurrentUsers(long user_level, int start,
-			int max, String orderby, boolean asc) {
+	public SearchResult<Room> getRoomsWithCurrentUsers(int start, int max, String orderby, boolean asc) {
 		try {
-			if (AuthLevelUtil.checkAdminLevel(user_level)) {
-				SearchResult<Room> sResult = new SearchResult<Room>();
-				sResult.setRecords(this.selectMaxFromRooms(""));
-				sResult.setObjectName(Room.class.getName());
+			SearchResult<Room> sResult = new SearchResult<Room>();
+			sResult.setRecords(this.selectMaxFromRooms(""));
+			sResult.setObjectName(Room.class.getName());
 
-				List<Room> rooms = this.getRoomsInternatl(start, max, orderby,
-						asc);
+			List<Room> rooms = this.getRoomsInternatl(start, max, orderby,
+					asc);
 
-				for (Room room : rooms) {
-					room.setCurrentusers(sessionManager.getClientListByRoom(room.getRooms_id()));
-				}
-
-				sResult.setResult(rooms);
-				return sResult;
+			for (Room room : rooms) {
+				room.setCurrentusers(sessionManager.getClientListByRoom(room.getRooms_id()));
 			}
+
+			sResult.setResult(rooms);
+			return sResult;
 		} catch (Exception ex2) {
 			log.error("[getRooms] ", ex2);
 		}
 		return null;
 	}
 
-	public List<Room> getRoomsWithCurrentUsersByList(long user_level,
-			int start, int max, String orderby, boolean asc) {
+	public List<Room> getRoomsWithCurrentUsersByList(int start, int max, String orderby, boolean asc) {
 		try {
-			if (AuthLevelUtil.checkAdminLevel(user_level)) {
+			List<Room> rooms = this.getRoomsInternatl(start, max, orderby,
+					asc);
 
-				List<Room> rooms = this.getRoomsInternatl(start, max, orderby,
-						asc);
-
-				for (Room room : rooms) {
-					room.setCurrentusers(sessionManager.getClientListByRoom(room.getRooms_id()));
-				}
-
-				return rooms;
-
+			for (Room room : rooms) {
+				room.setCurrentusers(sessionManager.getClientListByRoom(room.getRooms_id()));
 			}
+
+			return rooms;
 		} catch (Exception ex2) {
 			log.error("[getRooms] ", ex2);
 		}
 		return null;
 	}
 
-	public List<Room> getRoomsWithCurrentUsersByListAndType(long user_level,
-			int start, int max, String orderby, boolean asc,
-			String externalRoomType) {
+	public List<Room> getRoomsWithCurrentUsersByListAndType(int start, int max, String orderby, boolean asc, String externalRoomType) {
 		try {
-			if (AuthLevelUtil.checkAdminLevel(user_level)) {
+			List<Room> rooms = this.getRoomsInternatlbyType(start, max,
+					orderby, asc, externalRoomType);
 
-				List<Room> rooms = this.getRoomsInternatlbyType(start, max,
-						orderby, asc, externalRoomType);
-
-				for (Room room : rooms) {
-					room.setCurrentusers(sessionManager.getClientListByRoom(room.getRooms_id()));
-				}
-
-				return rooms;
-
+			for (Room room : rooms) {
+				room.setCurrentusers(sessionManager.getClientListByRoom(room.getRooms_id()));
 			}
+
+			return rooms;
 		} catch (Exception ex2) {
 			log.error("[getRooms] ", ex2);
 		}
@@ -390,45 +318,19 @@ public class RoomManager implements IRoomManager {
 		return null;
 	}
 
-	public List<RoomOrganisation> getOrganisationsByRoom(long user_level,
-			long rooms_id) {
+	public List<RoomOrganisation> getOrganisationsByRoom(long rooms_id) {
 		try {
-			if (AuthLevelUtil.checkUserLevel(user_level)) {
-				String hql = "select c from RoomOrganisation as c "
-						+ "where c.room.rooms_id = :rooms_id "
-						+ "AND c.deleted <> :deleted";
-				TypedQuery<RoomOrganisation> q = em.createQuery(hql, RoomOrganisation.class);
+			String hql = "select c from RoomOrganisation as c "
+					+ "where c.room.rooms_id = :rooms_id "
+					+ "AND c.deleted <> :deleted";
+			TypedQuery<RoomOrganisation> q = em.createQuery(hql, RoomOrganisation.class);
 
-				q.setParameter("rooms_id", rooms_id);
-				q.setParameter("deleted", true);
-				List<RoomOrganisation> ll = q.getResultList();
-				return ll;
-			}
+			q.setParameter("rooms_id", rooms_id);
+			q.setParameter("deleted", true);
+			List<RoomOrganisation> ll = q.getResultList();
+			return ll;
 		} catch (Exception ex2) {
 			log.error("[getOrganisationsByRoom] ", ex2);
-		}
-		return null;
-	}
-
-	/**
-	 * get all rooms which are availible for public
-	 * 
-	 * @param user_level
-	 * @param roomtypes_id
-	 * @return
-	 */
-	public List<Room> getPublicRooms(long user_level, long roomtypes_id) {
-		try {
-			if (AuthLevelUtil.checkUserLevel(user_level)) {
-				TypedQuery<Room> q = em.createNamedQuery("getPublicRooms", Room.class);
-				q.setParameter("ispublic", true);
-				q.setParameter("deleted", false);
-				q.setParameter("roomtypes_id", new Long(roomtypes_id));
-				List<Room> ll = q.getResultList();
-				return ll;
-			}
-		} catch (Exception ex2) {
-			log.error("[getRoomsByOrganisation] ", ex2);
 		}
 		return null;
 	}
@@ -464,43 +366,6 @@ public class RoomManager implements IRoomManager {
 			log.error("[getRoomsByIds] ", ex2);
 		}
 		return null;
-	}
-
-	public List<Room> getPublicRoomsWithoutType(long user_level) {
-		try {
-			if (AuthLevelUtil.checkUserLevel(user_level)) {
-				TypedQuery<Room> q = em.createNamedQuery("getPublicRoomsWithoutType", Room.class);
-				q.setParameter("ispublic", true);
-				q.setParameter("deleted", true);
-				List<Room> ll = q.getResultList();
-				return ll;
-			}
-		} catch (Exception ex2) {
-			log.error("[getPublicRoomsWithoutType] ", ex2);
-			ex2.printStackTrace();
-		}
-		return null;
-	}
-
-	/**
-	 * Get Appointed Meetings
-	 */
-	// ---------------------------------------------------------------------------------------------
-	public List<Room> getAppointedMeetings(Long userid, Long user_level) {
-		log.debug("Roommanagement.getAppointedMeetings");
-
-		try {
-			if (AuthLevelUtil.checkUserLevel(user_level)) {
-				TypedQuery<Room> q = em.createNamedQuery("getAppointedMeetings", Room.class);
-				q.setParameter("appointed", true);
-				q.setParameter("deleted", false);
-				return q.getResultList();
-			}
-		} catch (Exception ex2) {
-			log.error("[getAppointedMeetings] ", ex2);
-		}
-		return null;
-
 	}
 
 	// ---------------------------------------------------------------------------------------------
@@ -546,7 +411,7 @@ public class RoomManager implements IRoomManager {
 	 * @param hideWhiteboard TODO
 	 * @return id of the newly created room or NULL
 	 */
-	public Long addRoom(long user_level, String name, long roomtypes_id,
+	public Long addRoom(String name, long roomtypes_id,
 			String comment, Long numberOfPartizipants, boolean ispublic,
 			List<Integer> organisations, Boolean appointment, Boolean isDemoRoom,
 			Integer demoTime, Boolean isModeratedRoom,
@@ -560,112 +425,64 @@ public class RoomManager implements IRoomManager {
 			, boolean filesOpened, boolean autoVideoSelect, boolean sipEnabled) {
 
 		try {
-			if (AuthLevelUtil.checkAdminLevel(user_level)) {
+			Room r = new Room();
+			r.setName(name);
+			r.setComment(comment);
+			r.setStarttime(new Date());
+			r.setNumberOfPartizipants(numberOfPartizipants);
+			r.setRoomtype(roomTypeDao.get(roomtypes_id));
+			r.setIspublic(ispublic);
+			r.setAllowUserQuestions(allowUserQuestions);
+			r.setIsAudioOnly(isAudioOnly);
+			r.setAllowFontStyles(allowFontStyles);
 
-				Room r = new Room();
-				r.setName(name);
-				r.setComment(comment);
-				r.setStarttime(new Date());
-				r.setNumberOfPartizipants(numberOfPartizipants);
-				r.setRoomtype(roomTypeDao.get(roomtypes_id));
-				r.setIspublic(ispublic);
-				r.setAllowUserQuestions(allowUserQuestions);
-				r.setIsAudioOnly(isAudioOnly);
-				r.setAllowFontStyles(allowFontStyles);
+			r.setAppointment(appointment);
 
-				r.setAppointment(appointment);
+			r.setIsDemoRoom(isDemoRoom);
+			r.setDemoTime(demoTime);
 
-				r.setIsDemoRoom(isDemoRoom);
-				r.setDemoTime(demoTime);
+			r.setIsModeratedRoom(isModeratedRoom);
+			r.setHideTopBar(hideTopBar);
 
-				r.setIsModeratedRoom(isModeratedRoom);
-				r.setHideTopBar(hideTopBar);
+			r.setDeleted(false);
 
-				r.setDeleted(false);
+			r.setIsClosed(isClosed);
+			r.setRedirectURL(redirectURL);
 
-				r.setIsClosed(isClosed);
-				r.setRedirectURL(redirectURL);
+			r.setOwnerId(ownerId);
 
-				r.setOwnerId(ownerId);
+			r.setWaitForRecording(waitForRecording);
+			r.setAllowRecording(allowRecording);
+			
+			r.setHideChat(hideChat);
+			r.setHideActivitiesAndActions(hideActivitiesAndActions);
+			r.setHideActionsMenu(hideActionsMenu);
+			r.setHideFilesExplorer(hideFilesExplorer);
+			r.setHideScreenSharing(hideScreenSharing);	
+			r.setHideWhiteboard(hideWhiteboard);
+			r.setShowMicrophoneStatus(showMicrophoneStatus);
+			r.setChatModerated(chatModerated);
+			r.setChatOpened(chatOpened);
+			r.setFilesOpened(filesOpened);
+			r.setAutoVideoSelect(autoVideoSelect);
+			r.setSipEnabled(sipEnabled);
+			r.setPin(conferencePin);
+			
+			r = roomDao.update(r, ownerId);
 
-				r.setWaitForRecording(waitForRecording);
-				r.setAllowRecording(allowRecording);
-				
-				r.setHideChat(hideChat);
-				r.setHideActivitiesAndActions(hideActivitiesAndActions);
-				r.setHideActionsMenu(hideActionsMenu);
-				r.setHideFilesExplorer(hideFilesExplorer);
-				r.setHideScreenSharing(hideScreenSharing);	
-				r.setHideWhiteboard(hideWhiteboard);
-				r.setShowMicrophoneStatus(showMicrophoneStatus);
-				r.setChatModerated(chatModerated);
-				r.setChatOpened(chatOpened);
-				r.setFilesOpened(filesOpened);
-				r.setAutoVideoSelect(autoVideoSelect);
-				r.setSipEnabled(sipEnabled);
-				r.setPin(conferencePin);
-				
+			if (organisations != null) {
+				Long t = this.updateRoomOrganisations(organisations, r);
+				if (t == null) {
+					return null;
+				}
+			}
+
+			if (roomModerators != null) {
+				r.setModerators(getModerators(roomModerators, r.getRooms_id()));
 				r = roomDao.update(r, ownerId);
-
-				if (organisations != null) {
-					Long t = this.updateRoomOrganisations(organisations, r);
-					if (t == null) {
-						return null;
-					}
-				}
-
-				if (roomModerators != null) {
-					r.setModerators(getModerators(roomModerators, r.getRooms_id()));
-					r = roomDao.update(r, ownerId);
-				}
-
-				return r.getRooms_id();
 			}
-		} catch (Exception ex2) {
-			log.error("[addRoom] ", ex2);
-		}
-		return null;
-	}
 
-	public Long addRoomByMod(long user_level, String name, long roomtypes_id,
-			String comment, Long numberOfPartizipants, boolean ispublic,
-			Long organisation_id, Boolean appointment, Boolean isDemoRoom,
-			Integer demoTime, Boolean isModeratedRoom,
-			List<Map<String, Object>> roomModerators, Boolean allowUserQuestions) {
-
-		log.debug("addRoom");
-
-		try {
-			if (AuthLevelUtil.checkModLevel(user_level)) {
-				Room r = new Room();
-				r.setName(name);
-				r.setComment(comment);
-				r.setStarttime(new Date());
-				r.setNumberOfPartizipants(numberOfPartizipants);
-				r.setRoomtype(roomTypeDao.get(roomtypes_id));
-				r.setIspublic(ispublic);
-
-				r.setAllowUserQuestions(allowUserQuestions);
-				r.setAppointment(appointment);
-
-				r.setIsDemoRoom(isDemoRoom);
-				r.setDemoTime(demoTime);
-
-				r.setIsModeratedRoom(isModeratedRoom);
-
-				r.setDeleted(false);
-				r = em.merge(r);
-				long returnId = r.getRooms_id();
-
-				this.addRoomToOrganisation(3, returnId, organisation_id);
-
-				if (roomModerators != null) {
-					r.setModerators(getModerators(roomModerators, r.getRooms_id()));
-					r = roomDao.update(r, null);
-				}
-
-				return returnId;
-			}
+			return r.getRooms_id();
 		} catch (Exception ex2) {
 			log.error("[addRoom] ", ex2);
 		}
@@ -754,22 +571,20 @@ public class RoomManager implements IRoomManager {
 	 * @param organisation_id
 	 * @return the id of the newly created Rooms_Organisation or NULL
 	 */
-	public Long addRoomToOrganisation(long user_level, long rooms_id,
+	public Long addRoomToOrganisation(long rooms_id,
 			long organisation_id) {
 		try {
-			if (AuthLevelUtil.checkAdminLevel(user_level)) {
-				RoomOrganisation rOrganisation = new RoomOrganisation();
-				rOrganisation.setRoom(roomDao.get(rooms_id));
-				log.debug("addRoomToOrganisation rooms '"
-						+ rOrganisation.getRoom().getName() + "'");
-				rOrganisation.setStarttime(new Date());
-				rOrganisation.setOrganisation(orgDao.get(organisation_id));
-				rOrganisation.setDeleted(false);
+			RoomOrganisation rOrganisation = new RoomOrganisation();
+			rOrganisation.setRoom(roomDao.get(rooms_id));
+			log.debug("addRoomToOrganisation rooms '"
+					+ rOrganisation.getRoom().getName() + "'");
+			rOrganisation.setStarttime(new Date());
+			rOrganisation.setOrganisation(orgDao.get(organisation_id));
+			rOrganisation.setDeleted(false);
 
-				rOrganisation = em.merge(rOrganisation);
-				long returnId = rOrganisation.getRooms_organisation_id();
-				return returnId;
-			}
+			rOrganisation = em.merge(rOrganisation);
+			long returnId = rOrganisation.getRooms_organisation_id();
+			return returnId;
 		} catch (Exception ex2) {
 			log.error("[addRoomToOrganisation] ", ex2);
 		}
@@ -811,19 +626,14 @@ public class RoomManager implements IRoomManager {
 	 * @param roomtypes_id
 	 * @return
 	 */
-	public List<RoomOrganisation> getRoomsOrganisationByOrganisationIdAndRoomType(
-			long user_level, long organisation_id, long roomtypes_id) {
+	public List<RoomOrganisation> getRoomsOrganisationByOrganisationIdAndRoomType(long organisation_id, long roomtypes_id) {
 		try {
-			if (AuthLevelUtil.checkUserLevel(user_level)) {
-				TypedQuery<RoomOrganisation> q = em.
-						createNamedQuery("getRoomsOrganisationByOrganisationIdAndRoomType", RoomOrganisation.class);
-				q.setParameter("roomtypes_id", roomtypes_id);
-				q.setParameter("organisation_id", organisation_id);
-				q.setParameter("deleted", true);
-				return q.getResultList();
-			} else {
-				log.error("[notauthentificated] " + user_level);
-			}
+			TypedQuery<RoomOrganisation> q = em.
+					createNamedQuery("getRoomsOrganisationByOrganisationIdAndRoomType", RoomOrganisation.class);
+			q.setParameter("roomtypes_id", roomtypes_id);
+			q.setParameter("organisation_id", organisation_id);
+			q.setParameter("deleted", true);
+			return q.getResultList();
 		} catch (Exception ex2) {
 			log.error("[getRoomsByOrganisation] ", ex2);
 		}
@@ -836,23 +646,17 @@ public class RoomManager implements IRoomManager {
 	 * @param organisation_id
 	 * @return list of Rooms_Organisation with Rooms as Sub-Objects or null
 	 */
-	public List<RoomOrganisation> getRoomsOrganisationByOrganisationId(
-			long user_level, long organisation_id) {
+	public List<RoomOrganisation> getRoomsOrganisationByOrganisationId(long organisation_id) {
 		try {
-			if (AuthLevelUtil.checkUserLevel(user_level)) {
+			TypedQuery<RoomOrganisation> query = em.
+					createNamedQuery("getRoomsOrganisationByOrganisationId", RoomOrganisation.class);
 
-				TypedQuery<RoomOrganisation> query = em.
-						createNamedQuery("getRoomsOrganisationByOrganisationId", RoomOrganisation.class);
+			query.setParameter("organisation_id", organisation_id);
+			query.setParameter("deleted", true);
 
-				query.setParameter("organisation_id", organisation_id);
-				query.setParameter("deleted", true);
+			List<RoomOrganisation> ll = query.getResultList();
 
-				List<RoomOrganisation> ll = query.getResultList();
-
-				return ll;
-			} else {
-				log.error("[notauthentificated] " + user_level);
-			}
+			return ll;
 		} catch (Exception ex2) {
 			log.error("[getPublicRoomsWithoutType] ", ex2);
 			ex2.printStackTrace();
@@ -860,20 +664,15 @@ public class RoomManager implements IRoomManager {
 		return null;
 	}
 
-	public SearchResult<RoomOrganisation> getRoomsOrganisationByOrganisationId(long user_level,
-			long organisation_id, int start, int max, String orderby,
+	public SearchResult<RoomOrganisation> getRoomsOrganisationsByOrganisationId(long organisation_id, int start, int max, String orderby,
 			boolean asc) {
 		try {
-			if (AuthLevelUtil.checkModLevel(user_level)) {
-
-				SearchResult<RoomOrganisation> sResult = new SearchResult<RoomOrganisation>();
-				sResult.setObjectName(RoomOrganisation.class.getName());
-				sResult.setRecords(this.selectMaxFromRoomsByOrganisation(
-						organisation_id).longValue());
-				sResult.setResult(this.getRoomsOrganisationByOrganisationId(
-						organisation_id, start, max, orderby, asc));
-				return sResult;
-			}
+			SearchResult<RoomOrganisation> sResult = new SearchResult<RoomOrganisation>();
+			sResult.setObjectName(RoomOrganisation.class.getName());
+			sResult.setRecords(this.selectMaxFromRoomsByOrganisation(
+					organisation_id).longValue());
+			sResult.setResult(getRoomsOrganisationByOrganisationId(organisation_id, start, max, orderby, asc));
+			return sResult;
 		} catch (Exception ex2) {
 			log.error("[getRoomsByOrganisation] ", ex2);
 		}
@@ -975,80 +774,6 @@ public class RoomManager implements IRoomManager {
 		return null;
 	}
 
-	/**
-	 * 
-	 * @param user_id
-	 * @param rooms_id
-	 * @return
-	 */
-	private boolean checkUserOrgRoom(long user_id, long rooms_id) {
-		try {
-
-			User us = usersDao.get(user_id);
-			List<Organisation_Users> s = us.getOrganisation_users();
-
-			for (Iterator<Organisation_Users> it = s.iterator(); it.hasNext();) {
-				Organisation_Users orgUsers = it.next();
-				long organisation_id = orgUsers.getOrganisation()
-						.getOrganisation_id();
-				List<RoomOrganisation> ll = this
-						.getRoomsOrganisationByOrganisationId(3,
-								organisation_id);
-				for (Iterator<RoomOrganisation> it2 = ll.iterator(); it2
-						.hasNext();) {
-					RoomOrganisation roomOrg = it2.next();
-					if (roomOrg.getRoom().getRooms_id() == rooms_id) {
-						return true;
-					}
-				}
-			}
-
-		} catch (Exception ex2) {
-			log.error("[checkUserOrgRoom] ", ex2);
-		}
-		return false;
-	}
-
-	/**
-	 * 
-	 * @param user_id
-	 * @param user_level
-	 * @param rooms_id
-	 * @param roomtypes_id
-	 * @param name
-	 * @param ispublic
-	 * @param comment
-	 * @return
-	 */
-	public Room updateRoomsSelf(long user_id, long user_level, long rooms_id,
-			long roomtypes_id, String name, boolean ispublic, String comment) {
-		try {
-			if (AuthLevelUtil.checkModLevel(user_level)) {
-
-				if (this.checkUserOrgRoom(user_id, rooms_id)) {
-
-					Room r = roomDao.get(rooms_id);
-					r.setComment(comment);
-					r.setIspublic(ispublic);
-					r.setName(name);
-					r.setRoomtype(roomTypeDao.get(roomtypes_id));
-					r.setUpdatetime(new Date());
-
-					if (r.getRooms_id() == null) {
-						em.persist(r);
-					} else {
-						if (!em.contains(r)) {
-							em.merge(r);
-						}
-					}
-				}
-			}
-		} catch (Exception ex2) {
-			log.error("[updateRoom] ", ex2);
-		}
-		return null;
-	}
-
 	public Long updateRoomInternal(long rooms_id, long roomtypes_id,
 			String name, boolean ispublic, String comment,
 			Long numberOfPartizipants, List<Integer> organisations,
@@ -1123,56 +848,6 @@ public class RoomManager implements IRoomManager {
 		return null;
 	}
 
-	public Long updateRoomByMod(long user_level, long rooms_id,
-			long roomtypes_id, String name, boolean ispublic, String comment,
-			Long numberOfPartizipants, Long organisations, Boolean appointment,
-			Boolean isDemoRoom, Integer demoTime, Boolean isModeratedRoom,
-			List<Map<String, Object>> roomModerators, Boolean allowUserQuestions) {
-		try {
-			log.debug("*** updateRoom numberOfPartizipants: "
-					+ numberOfPartizipants);
-			if (AuthLevelUtil.checkModLevel(user_level)) {
-				Room r = roomDao.get(rooms_id);
-				r.setComment(comment);
-
-				r.setIspublic(ispublic);
-				r.setNumberOfPartizipants(numberOfPartizipants);
-				r.setName(name);
-				r.setRoomtype(roomTypeDao.get(roomtypes_id));
-				r.setUpdatetime(new Date());
-				r.setAllowUserQuestions(allowUserQuestions);
-
-				r.setIsDemoRoom(isDemoRoom);
-				r.setDemoTime(demoTime);
-
-				r.setAppointment(appointment);
-
-				r.setIsModeratedRoom(isModeratedRoom);
-
-				if (r.getRooms_id() == null) {
-					em.persist(r);
-				} else {
-					if (!em.contains(r)) {
-						r = em.merge(r);
-					}
-				}
-
-				// FIXME: Organizations will not be changed when you do an
-				// update as Moderator
-
-				if (roomModerators != null) {
-					r.setModerators(getModerators(roomModerators, r.getRooms_id()));
-					r = roomDao.update(r, null);
-				}
-
-				return r.getRooms_id();
-			}
-		} catch (Exception ex2) {
-			log.error("[updateRoom] ", ex2);
-		}
-		return null;
-	}
-
 	@SuppressWarnings("rawtypes")
 	private boolean checkRoomAlreadyInOrg(Long orgid, List organisations)
 			throws Exception {
@@ -1195,10 +870,8 @@ public class RoomManager implements IRoomManager {
 		return false;
 	}
 
-	private Long updateRoomOrganisations(List<Integer> organisations, Room room)
-			throws Exception {
-		List<RoomOrganisation> roomOrganisations = this.getOrganisationsByRoom(3,
-				room.getRooms_id());
+	private Long updateRoomOrganisations(List<Integer> organisations, Room room) throws Exception {
+		List<RoomOrganisation> roomOrganisations = getOrganisationsByRoom(room.getRooms_id());
 
 		List<Long> roomsToAdd = new LinkedList<Long>();
 		List<Long> roomsToDel = new LinkedList<Long>();
@@ -1223,12 +896,11 @@ public class RoomManager implements IRoomManager {
 
 		for (Iterator<Long> it = roomsToAdd.iterator(); it.hasNext();) {
 			Long orgIdToAdd = it.next();
-			this.addRoomToOrganisation(3, room.getRooms_id(), orgIdToAdd);
+			addRoomToOrganisation(room.getRooms_id(), orgIdToAdd);
 		}
 		for (Iterator<Long> it = roomsToDel.iterator(); it.hasNext();) {
 			Long orgToDel = it.next();
-			this.deleteRoomFromOrganisationByRoomAndOrganisation(
-					room.getRooms_id(), orgToDel);
+			deleteRoomFromOrganisationByRoomAndOrganisation(room.getRooms_id(), orgToDel);
 		}
 
 		return new Long(1);
@@ -1239,13 +911,11 @@ public class RoomManager implements IRoomManager {
 	 * 
 	 * @param rooms_id
 	 */
-	public Long deleteRoomById(long user_level, long rooms_id) {
+	public Long deleteRoomById(long rooms_id) {
 		try {
-			if (AuthLevelUtil.checkWebServiceLevel(user_level)) {
-				this.deleteAllRoomsOrganisationOfRoom(rooms_id);
-				roomDao.delete(roomDao.get(rooms_id), -1L);
-				return rooms_id;
-			}
+			deleteAllRoomsOrganisationOfRoom(rooms_id);
+			roomDao.delete(roomDao.get(rooms_id), -1L);
+			return rooms_id;
 		} catch (Exception ex2) {
 			log.error("[deleteRoomById] ", ex2);
 		}
@@ -1275,13 +945,9 @@ public class RoomManager implements IRoomManager {
 	 * 
 	 * @param organisation_id
 	 */
-	@SuppressWarnings("rawtypes")
 	public void deleteAllRoomsOrganisationOfOrganisation(long organisation_id) {
 		try {
-			List ll = this.getRoomsOrganisationByOrganisationId(3,
-					organisation_id);
-			for (Iterator it = ll.iterator(); it.hasNext();) {
-				RoomOrganisation rOrg = (RoomOrganisation) it.next();
+			for (RoomOrganisation rOrg : getRoomsOrganisationByOrganisationId(organisation_id)) {
 				this.deleteRoomsOrganisation(rOrg);
 			}
 		} catch (Exception ex2) {
@@ -1385,7 +1051,7 @@ public class RoomManager implements IRoomManager {
 			} else {
 				log.debug("Could not find room " + ownerId + " || " + roomtypesId);
 				
-				Long rooms_id = this.addRoom(3L, roomName, roomtypesId,
+				Long rooms_id = addRoom(roomName, roomtypesId,
 						"My Rooms of ownerId " + ownerId,
 						(roomtypesId == 1) ? 25L : 150L, // numberOfPartizipants
 						false, // ispublic

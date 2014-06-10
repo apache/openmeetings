@@ -30,7 +30,6 @@ import org.apache.openmeetings.data.flvrecord.converter.FlvInterviewConverterTas
 import org.apache.openmeetings.data.flvrecord.converter.FlvInterviewReConverterTask;
 import org.apache.openmeetings.data.flvrecord.converter.FlvRecorderConverterTask;
 import org.apache.openmeetings.data.flvrecord.listener.StreamListener;
-import org.apache.openmeetings.data.user.UserManager;
 import org.apache.openmeetings.db.dao.record.FlvRecordingDao;
 import org.apache.openmeetings.db.dao.record.FlvRecordingLogDao;
 import org.apache.openmeetings.db.dao.record.FlvRecordingMetaDataDao;
@@ -74,7 +73,7 @@ public class FLVRecorderService implements IPendingServiceCallback {
 	@Autowired
 	private FlvRecordingDao flvRecordingDaoImpl;
 	@Autowired
-	private UserDao usersDaoImpl;
+	private UserDao userDao;
 	@Autowired
 	private RoomDao roomDao;
 	@Autowired
@@ -89,8 +88,6 @@ public class FLVRecorderService implements IPendingServiceCallback {
 	private FlvRecordingDao recordingDao;
 	@Autowired
 	private SessiondataDao sessiondataDao;
-	@Autowired
-	private UserManager userManager;
 	@Autowired
 	private ScopeApplicationAdapter scopeApplicationAdapter;
 	@Autowired
@@ -537,8 +534,7 @@ public class FLVRecorderService implements IPendingServiceCallback {
 			Integer rightSideTime) {
 		try {
 			Long users_id = sessiondataDao.checkSession(SID);
-			Long user_level = userManager.getUserLevelByID(users_id);
-			if (AuthLevelUtil.checkUserLevel(user_level)) {
+			if (AuthLevelUtil.hasUserLevel(userDao.getRights(users_id))) {
 
 				log.debug("updateFileOrFolderName " + flvRecordingId);
 

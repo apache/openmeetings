@@ -124,12 +124,10 @@ public class RoomWebService {
 		try {
 
 			Long users_id = sessiondataDao.checkSession(SID);
-			Long User_level = userManager.getUserLevelByID(users_id);
 
-			if (AuthLevelUtil.checkWebServiceLevel(User_level)) {
+			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(users_id))) {
 
-				List<Room> roomList = roomManager.getPublicRooms(
-						User_level, roomtypes_id);
+				List<Room> roomList = roomDao.getPublicRooms(roomtypes_id);
 				// We need to re-marshal the Rooms object cause Axis2 cannot use
 				// our objects
 				if (roomList != null && roomList.size() != 0) {
@@ -171,9 +169,8 @@ public class RoomWebService {
 		try {
 
 			Long users_id = sessiondataDao.checkSession(SID);
-			Long user_level = userManager.getUserLevelByID(users_id);
 
-			if (AuthLevelUtil.checkWebServiceLevel(user_level)) {
+			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(users_id))) {
 				return flvRecordingDao.delete(flvRecordingId);
 			}
 
@@ -199,9 +196,8 @@ public class RoomWebService {
 			String externalUserId, String externalUserType) throws AxisFault {
 		try {
 			Long users_id = sessiondataDao.checkSession(SID);
-			Long user_level = userManager.getUserLevelByID(users_id);
 
-			if (AuthLevelUtil.checkWebServiceLevel(user_level)) {
+			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(users_id))) {
 				return flvRecordingDao.getFlvRecordingByExternalUserId(externalUserId, externalUserType);
 			}
 
@@ -230,9 +226,8 @@ public class RoomWebService {
 		try {
 
 			Long users_id = sessiondataDao.checkSession(SID);
-			Long user_level = userManager.getUserLevelByID(users_id);
 
-			if (AuthLevelUtil.checkWebServiceLevel(user_level)) {
+			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(users_id))) {
 				List<FlvRecording> recordingList = flvRecordingDao
 						.getFlvRecordingByExternalRoomTypeAndCreator(
 								externalRoomType, insertedBy);
@@ -277,11 +272,9 @@ public class RoomWebService {
 		try {
 
 			Long users_id = sessiondataDao.checkSession(SID);
-			Long user_level = userManager.getUserLevelByID(users_id);
 
-			if (AuthLevelUtil.checkWebServiceLevel(user_level)) {
-				return flvRecordingDao
-						.getFlvRecordingByExternalRoomType(externalRoomType);
+			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(users_id))) {
+				return flvRecordingDao.getFlvRecordingByExternalRoomType(externalRoomType);
 
 			}
 
@@ -307,11 +300,9 @@ public class RoomWebService {
 		try {
 
 			Long users_id = sessiondataDao.checkSession(SID);
-			Long user_level = userManager.getUserLevelByID(users_id);
 
-			if (AuthLevelUtil.checkWebServiceLevel(user_level)) {
-				List<FlvRecording> recordingList = flvRecordingDao
-						.getFlvRecordingByExternalRoomType(externalRoomType);
+			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(users_id))) {
+				List<FlvRecording> recordingList = flvRecordingDao.getFlvRecordingByExternalRoomType(externalRoomType);
 
 				// We need to re-marshal the Rooms object cause Axis2 cannot use
 				// our objects
@@ -355,9 +346,8 @@ public class RoomWebService {
 		try {
 
 			Long users_id = sessiondataDao.checkSession(SID);
-			Long user_level = userManager.getUserLevelByID(users_id);
 
-			if (AuthLevelUtil.checkWebServiceLevel(user_level)) {
+			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(users_id))) {
 
 				List<FlvRecording> recordingList = flvRecordingDao
 						.getFlvRecordingByRoomId(roomId);
@@ -417,9 +407,8 @@ public class RoomWebService {
 		List<RoomCountBean> roomBeans = new ArrayList<RoomCountBean>();
 		try {
 			Long users_id = sessiondataDao.checkSession(SID);
-			Long user_level = userManager.getUserLevelByID(users_id);
 
-			if (AuthLevelUtil.checkWebServiceLevel(user_level)) {
+			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(users_id))) {
 				List<Integer> roomIds = new ArrayList<Integer>();
 
 				if (roomId != null) {
@@ -476,11 +465,10 @@ public class RoomWebService {
 	public RoomReturn getRoomWithClientObjectsById(String SID, long rooms_id) throws AxisFault {
 		try {
 			Long users_id = sessiondataDao.checkSession(SID);
-			Long user_level = userManager.getUserLevelByID(users_id);
 
-			if (AuthLevelUtil.checkWebServiceLevel(user_level)) {
+			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(users_id))) {
 
-				Room room = roomManager.getRoomById(user_level, rooms_id);
+				Room room = roomDao.get(rooms_id);
 
 				RoomReturn roomReturn = new RoomReturn();
 
@@ -598,9 +586,8 @@ public class RoomWebService {
 			Integer filesPanelWidth) {
 		try {
 			Long users_id = sessiondataDao.checkSession(SID);
-			Long user_level = userManager.getUserLevelByID(users_id);
-			if (AuthLevelUtil.checkWebServiceLevel(user_level)) {
-				return roomManager.addRoom(3L, name, roomtypes_id, comment,
+			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(users_id))) {
+				return roomManager.addRoom(name, roomtypes_id, comment,
 						numberOfPartizipants, ispublic, null, false, false,
 						null, false, null, true, false, false, false //isClosed
 						, "", "",
@@ -662,9 +649,8 @@ public class RoomWebService {
 			Integer demoTime, Boolean isModeratedRoom) {
 		try {
 			Long users_id = sessiondataDao.checkSession(SID);
-			Long user_level = userManager.getUserLevelByID(users_id);
-			if (AuthLevelUtil.checkWebServiceLevel(user_level)) {
-				return roomManager.addRoom(3L, name, roomtypes_id, comment,
+			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(users_id))) {
+				return roomManager.addRoom(name, roomtypes_id, comment,
 						numberOfPartizipants, ispublic, null, appointment,
 						isDemoRoom, demoTime, isModeratedRoom, null, true,
 						false, true, false //isClosed
@@ -732,9 +718,8 @@ public class RoomWebService {
 			Boolean allowUserQuestions) {
 		try {
 			Long users_id = sessiondataDao.checkSession(SID);
-			Long user_level = userManager.getUserLevelByID(users_id);
-			if (AuthLevelUtil.checkWebServiceLevel(user_level)) {
-				return roomManager.addRoom(3L, name, roomtypes_id, comment,
+			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(users_id))) {
+				return roomManager.addRoom(name, roomtypes_id, comment,
 						numberOfPartizipants, ispublic, null, appointment,
 						isDemoRoom, demoTime, isModeratedRoom, null,
 						allowUserQuestions, false, true, false //isClosed
@@ -805,9 +790,8 @@ public class RoomWebService {
 			Boolean allowUserQuestions, Boolean isAudioOnly) throws AxisFault {
 		try {
 			Long users_id = sessiondataDao.checkSession(SID);
-			Long user_level = userManager.getUserLevelByID(users_id);
-			if (AuthLevelUtil.checkWebServiceLevel(user_level)) {
-				return roomManager.addRoom(3L, name, roomtypes_id, comment,
+			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(users_id))) {
+				return roomManager.addRoom(name, roomtypes_id, comment,
 						numberOfPartizipants, ispublic, null, appointment,
 						isDemoRoom, demoTime, isModeratedRoom, null,
 						allowUserQuestions, isAudioOnly, true, false //isClosed
@@ -898,9 +882,8 @@ public class RoomWebService {
 			Boolean hideWhiteboard) throws AxisFault {
 		try {
 			Long users_id = sessiondataDao.checkSession(SID);
-			Long user_level = userManager.getUserLevelByID(users_id);
-			if (AuthLevelUtil.checkWebServiceLevel(user_level)) {
-				return roomManager.addRoom(3L, name, roomtypes_id, comment,
+			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(users_id))) {
+				return roomManager.addRoom(name, roomtypes_id, comment,
 						numberOfPartizipants, ispublic, null, appointment,
 						isDemoRoom, demoTime, isModeratedRoom, null,
 						allowUserQuestions, isAudioOnly, true, false //isClosed
@@ -971,8 +954,7 @@ public class RoomWebService {
 			String externalRoomType) throws AxisFault {
 		try {
 			Long users_id = sessiondataDao.checkSession(SID);
-			Long user_level = userManager.getUserLevelByID(users_id);
-			if (AuthLevelUtil.checkWebServiceLevel(user_level)) {
+			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(users_id))) {
 				Room room = conferenceService.getRoomByExternalId(SID,
 						externalRoomId, externalRoomType, roomtypes_id);
 				Long roomId = null;
@@ -1038,8 +1020,7 @@ public class RoomWebService {
 			Integer filesPanelWidth, Boolean appointment) {
 		try {
 			Long users_id = sessiondataDao.checkSession(SID);
-			Long user_level = userManager.getUserLevelByID(users_id);
-			if (AuthLevelUtil.checkWebServiceLevel(user_level)) {
+			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(users_id))) {
 				return roomManager.updateRoomInternal(rooms_id,
 						roomtypes_id, name, ispublic, comment,
 						numberOfPartizipants, null, appointment, false, null,
@@ -1104,8 +1085,7 @@ public class RoomWebService {
 			Integer demoTime, Boolean isModeratedRoom) {
 		try {
 			Long users_id = sessiondataDao.checkSession(SID);
-			Long user_level = userManager.getUserLevelByID(users_id);
-			if (AuthLevelUtil.checkWebServiceLevel(user_level)) {
+			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(users_id))) {
 				return roomManager.updateRoomInternal(room_id, roomtypes_id,
 						name, ispublic, comment, numberOfPartizipants, null,
 						appointment, isDemoRoom, demoTime, isModeratedRoom,
@@ -1173,8 +1153,7 @@ public class RoomWebService {
 			Boolean allowUserQuestions) {
 		try {
 			Long users_id = sessiondataDao.checkSession(SID);
-			Long user_level = userManager.getUserLevelByID(users_id);
-			if (AuthLevelUtil.checkWebServiceLevel(user_level)) {
+			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(users_id))) {
 				return roomManager.updateRoomInternal(room_id, roomtypes_id,
 						name, ispublic, comment, numberOfPartizipants, null,
 						appointment, isDemoRoom, demoTime, isModeratedRoom,
@@ -1265,8 +1244,7 @@ public class RoomWebService {
 			Boolean hideWhiteboard) {
 		try {
 			Long users_id = sessiondataDao.checkSession(SID);
-			Long user_level = userManager.getUserLevelByID(users_id);
-			if (AuthLevelUtil.checkWebServiceLevel(user_level)) {
+			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(users_id))) {
 				return roomManager.updateRoomInternal(room_id, roomtypes_id,
 						name, ispublic, comment, numberOfPartizipants, null,
 						appointment, isDemoRoom, demoTime, isModeratedRoom,
@@ -1370,8 +1348,7 @@ public class RoomWebService {
 			Integer demoTime, Boolean isModeratedRoom, String externalRoomType) {
 		try {
 			Long users_id = sessiondataDao.checkSession(SID);
-			Long user_level = userManager.getUserLevelByID(users_id);
-			if (AuthLevelUtil.checkWebServiceLevel(user_level)) {
+			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(users_id))) {
 				return roomManager.addExternalRoom(name, roomtypes_id,
 						comment, numberOfPartizipants, ispublic, null,
 						appointment, isDemoRoom, demoTime, isModeratedRoom,
@@ -1431,8 +1408,7 @@ public class RoomWebService {
 			Boolean isAudioOnly) {
 		try {
 			Long users_id = sessiondataDao.checkSession(SID);
-			Long user_level = userManager.getUserLevelByID(users_id);
-			if (AuthLevelUtil.checkWebServiceLevel(user_level)) {
+			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(users_id))) {
 				return roomManager.addExternalRoom(name, roomtypes_id,
 						comment, numberOfPartizipants, ispublic, null,
 						appointment, isDemoRoom, demoTime, isModeratedRoom,
@@ -1497,8 +1473,7 @@ public class RoomWebService {
 			Boolean waitForRecording, Boolean allowRecording) {
 		try {
 			Long users_id = sessiondataDao.checkSession(SID);
-			Long user_level = userManager.getUserLevelByID(users_id);
-			if (AuthLevelUtil.checkWebServiceLevel(user_level)) {
+			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(users_id))) {
 				return roomManager.addExternalRoom(name, roomtypes_id,
 						comment, numberOfPartizipants, ispublic, null,
 						appointment, isDemoRoom, demoTime, isModeratedRoom,
@@ -1570,8 +1545,7 @@ public class RoomWebService {
 			Boolean allowRecording, Boolean hideTopBar) {
 		try {
 			Long users_id = sessiondataDao.checkSession(SID);
-			Long user_level = userManager.getUserLevelByID(users_id);
-			if (AuthLevelUtil.checkWebServiceLevel(user_level)) {
+			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(users_id))) {
 				return roomManager.addExternalRoom(name, roomtypes_id,
 						comment, numberOfPartizipants, ispublic, null,
 						appointment, isDemoRoom, demoTime, isModeratedRoom,
@@ -1628,9 +1602,8 @@ public class RoomWebService {
 			String validToTime) throws AxisFault {
 		try {
 			Long users_id = sessiondataDao.checkSession(SID);
-			Long user_level = userManager.getUserLevelByID(users_id);
 
-			if (AuthLevelUtil.checkWebServiceLevel(user_level)) {
+			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(users_id))) {
 
 				Date dFrom = null;
 				Date dTo = null;
@@ -1755,9 +1728,8 @@ public class RoomWebService {
 			Long language_id, Boolean sendMail) throws AxisFault {
 		try {
 			Long users_id = sessiondataDao.checkSession(SID);
-			Long user_level = userManager.getUserLevelByID(users_id);
 
-			if (AuthLevelUtil.checkWebServiceLevel(user_level)) {
+			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(users_id))) {
 
 				Date dFrom = null;
 				Date dTo = null;
@@ -1882,9 +1854,8 @@ public class RoomWebService {
 			Long language_id, Boolean sendMail) throws AxisFault {
 		try {
 			Long users_id = sessiondataDao.checkSession(SID);
-			Long user_level = userManager.getUserLevelByID(users_id);
 
-			if (AuthLevelUtil.checkWebServiceLevel(user_level)) {
+			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(users_id))) {
 
 				Calendar calFrom = Calendar.getInstance();
 				calFrom.setTime(fromDate);
@@ -1903,8 +1874,7 @@ public class RoomWebService {
 				User invitee = userDao.getContact(email, users_id);
 				Invitation invitation = invitationManager.getInvitation(invitee, roomDao.get(room_id),
 								isPasswordProtected, invitationpass, Valid.fromInt(valid)
-								, userDao.get(users_id), language_id,
-								dFrom, dTo, null);
+								, userDao.get(users_id), language_id, dFrom, dTo, null);
 
 				if (invitation != null) {
 					if (sendMail) {
@@ -2117,9 +2087,8 @@ public class RoomWebService {
 			String redirectURL) throws AxisFault {
 		try {
 			Long users_id = sessiondataDao.checkSession(SID);
-			Long user_level = userManager.getUserLevelByID(users_id);
 
-			if (AuthLevelUtil.checkWebServiceLevel(user_level)) {
+			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(users_id))) {
 				int validFromHour = Integer.valueOf(validFromTime.substring(0, 2)).intValue();
 				int validFromMinute = Integer.valueOf(validFromTime.substring(3, 5)).intValue();
 
@@ -2248,9 +2217,8 @@ public class RoomWebService {
 			throws AxisFault {
 		try {
 			Long users_id = sessiondataDao.checkSession(SID);
-			Long user_level = userManager.getUserLevelByID(users_id);
 
-			if (AuthLevelUtil.checkWebServiceLevel(user_level)) {
+			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(users_id))) {
 				Appointment a = appointmentLogic.getAppointmentByRoom(room_id);
 
 				if (email == null || a == null) {
@@ -2299,11 +2267,10 @@ public class RoomWebService {
 			throws AxisFault {
 		try {
 			Long users_id = sessiondataDao.checkSession(SID);
-			Long user_level = userManager.getUserLevelByID(users_id);
 
 			log.debug("closeRoom 1 " + room_id);
 
-			if (AuthLevelUtil.checkWebServiceLevel(user_level)) {
+			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(users_id))) {
 
 				log.debug("closeRoom 2 " + status);
 
@@ -2342,8 +2309,7 @@ public class RoomWebService {
 			throws AxisFault {
 		try {
 			Long users_id = sessiondataDao.checkSession(SID);
-			Long user_level = userManager.getUserLevelByID(users_id);
-			if (AuthLevelUtil.checkWebServiceLevel(user_level)) {
+			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(users_id))) {
 				log.debug(String.format("modifyRoomParameter[%s]: %s = %s", room_id, paramName, paramValue));
 				Room r = roomDao.get(room_id);
 				BeanWrapper rw = new BeanWrapperImpl(r);
@@ -2372,10 +2338,9 @@ public class RoomWebService {
 	public Long addRoomToOrg(String SID, Long rooms_id, Long organisation_id) {
 		try {
 			Long users_id = sessiondataDao.checkSession(SID);
-			Long user_level = userManager.getUserLevelByID(users_id);
-			if (AuthLevelUtil.checkWebServiceLevel(user_level)) {
+			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(users_id))) {
 				if (null == roomManager.getRoomsOrganisationByOrganisationIdAndRoomId(organisation_id, rooms_id)) {
-					return roomManager.addRoomToOrganisation(user_level, rooms_id, organisation_id);
+					return roomManager.addRoomToOrganisation(rooms_id, organisation_id);
 				}
 			}
 		} catch (Exception err) {

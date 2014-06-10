@@ -23,7 +23,6 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import java.util.Calendar;
 
 import org.apache.openmeetings.data.conference.InvitationManager;
-import org.apache.openmeetings.data.user.UserManager;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.calendar.IInvitationManager.MessageType;
 import org.apache.openmeetings.db.dao.room.RoomDao;
@@ -48,8 +47,6 @@ public class InvitationService implements IPendingServiceCallback {
 	private ConfigurationDao configurationDao;
 	@Autowired
 	private UserDao userDao;
-	@Autowired
-	private UserManager userManager;
 	@Autowired
 	private InvitationManager invitationManager;
 	@Autowired
@@ -78,7 +75,8 @@ public class InvitationService implements IPendingServiceCallback {
 	 * send an invitation to another user by Mail
 	 * 
 	 * @param SID
-	 * @param username
+	 * @param firstname
+	 * @param lastname
 	 * @param message
 	 * @param email
 	 * @param subject
@@ -104,9 +102,8 @@ public class InvitationService implements IPendingServiceCallback {
 
 		try {
 			Long users_id = sessiondataDao.checkSession(SID);
-			Long user_level = userManager.getUserLevelByID(users_id);
 
-			if (AuthLevelUtil.checkUserLevel(user_level)) {
+			if (AuthLevelUtil.hasUserLevel(userDao.getRights(users_id))) {
 				log.debug("sendInvitationHash: ");
 	
 				Calendar calFrom = getDate(validFromDate, validFromTime, iCalTz);
@@ -141,9 +138,8 @@ public class InvitationService implements IPendingServiceCallback {
 	public String sendInvitationByHash(String SID, String invitationHash, String message, String subject
 			, Long language_id) throws Exception {
 		Long users_id = sessiondataDao.checkSession(SID);
-		Long user_level = userManager.getUserLevelByID(users_id);
 
-		if (AuthLevelUtil.checkUserLevel(user_level)) {
+		if (AuthLevelUtil.hasUserLevel(userDao.getRights(users_id))) {
 			Invitation inv = (Invitation)invitationManager.getInvitationByHashCode(invitationHash, true);
 			inv.getInvitee().setLanguage_id(language_id);
 			invitationManager.sendInvitionLink(inv, MessageType.Create, subject, message, false);

@@ -21,6 +21,7 @@ package org.apache.openmeetings.web.common;
 import org.apache.openmeetings.db.dao.basic.NavigationDao;
 import org.apache.openmeetings.db.entity.basic.Naviglobal;
 import org.apache.openmeetings.db.entity.basic.Navimain;
+import org.apache.openmeetings.util.AuthLevelUtil;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.pages.MainPage;
@@ -47,7 +48,7 @@ public class MenuPanel extends BasePanel {
 		setMarkupId(id);
 		
 		final NavigationDao man = Application.getBean(NavigationDao.class);
-		add(new ListView<Naviglobal>("mainItem", man.getMainMenu(WebSession.getUserLevel(), WebSession.getUserId(), WebSession.getLanguage())) {
+		add(new ListView<Naviglobal>("mainItem", man.getMainMenu(AuthLevelUtil.hasAdminLevel(WebSession.getRights()), WebSession.getUserId(), WebSession.getLanguage())) {
 			private static final long serialVersionUID = 2173926553418745231L;
 
 			@Override

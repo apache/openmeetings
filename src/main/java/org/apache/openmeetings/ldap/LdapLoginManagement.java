@@ -37,17 +37,15 @@ import org.apache.openmeetings.db.dao.server.SessiondataDao;
 import org.apache.openmeetings.db.dao.user.ILdapLoginManagement;
 import org.apache.openmeetings.db.dao.user.StateDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
-import org.apache.openmeetings.db.entity.room.Client;
 import org.apache.openmeetings.db.entity.server.LdapConfig;
 import org.apache.openmeetings.db.entity.user.State;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Type;
 import org.apache.openmeetings.db.util.TimezoneUtil;
 import org.apache.openmeetings.ldap.config.ConfigReader;
-import org.apache.openmeetings.remote.util.SessionVariablesUtil;
+import org.apache.openmeetings.util.OmException;
 import org.apache.openmeetings.util.OmFileHelper;
 import org.red5.logging.Red5LoggerFactory;
-import org.red5.server.api.IClient;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -229,15 +227,14 @@ public class LdapLoginManagement implements ILdapLoginManagement {
 	 * 
 	 */
 	// ----------------------------------------------------------------------------------------
-	public Object doLdapLogin(String user, String passwd,
-			Client currentClient, IClient client, String SID, String domain) {
+	public User login(String user, String passwd, Long domainId) throws OmException {
 		log.debug("LdapLoginmanagement.doLdapLogin");
 
 		// Retrieve Configuration Data
 		HashMap<String, String> configData;
 
 		try {
-			configData = getLdapConfigData(domain);
+			configData = getLdapConfigData(ldapConfigDao.get(domainId).getConfigFileName());
 		} catch (Exception e) {
 			log.error("Error on LdapAuth : " + e.getMessage());
 			return null;
@@ -394,8 +391,10 @@ public class LdapLoginManagement implements ILdapLoginManagement {
 			try {
 				if (!lAuth.authenticateUser(ldapUserDN, passwd)) {
 					log.error(ldapUserDN + " not authenticated.");
-					return new Long(-11);
+					throw new OmException(-11L);
 				}
+			} catch (OmException oe) {
+				throw oe;
 			} catch (Exception e) {
 				log.error("Error on LdapAuth : " + e.getMessage());
 				return null;
@@ -403,8 +402,10 @@ public class LdapLoginManagement implements ILdapLoginManagement {
 		} else {
 			try {
 				if (!lAuth.authenticateUser(user, passwd)) {
-					return new Long(-11);
+					throw new OmException(-11L);
 				}
+			} catch (OmException oe) {
+				throw oe;
 			} catch (Exception e) {
 				log.error("Error on LdapAuth : " + e.getMessage());
 				return null;
@@ -416,7 +417,7 @@ public class LdapLoginManagement implements ILdapLoginManagement {
 		User u = null;
 
 		try {
-			u = usersDao.getUserByName(user, User.Type.ldap);
+			u = usersDao.getByName(user, User.Type.ldap);
 		} catch (Exception e) {
 			log.error("Error retrieving Userdata : " + e.getMessage());
 		}
@@ -459,7 +460,7 @@ public class LdapLoginManagement implements ILdapLoginManagement {
 
 		if (result == null || result.size() < 1) {
 			log.error("Error on Ldap request - no result for user " + user);
-			return new Long(-10);
+			throw new OmException(-10L);
 		}
 		
 		if (result.size() > 1) {
@@ -489,30 +490,11 @@ public class LdapLoginManagement implements ILdapLoginManagement {
 				}
 				log.debug("New User ID : " + userid);
 
-				// If invoked via SOAP this is NULL
-				if (currentClient != null) {
-					currentClient.setUser_id(userid);
-					SessionVariablesUtil.setUserId(client, userid);
-				}
-
-				// Update Session
-				Boolean bool = sessiondataDao.updateUser(SID, userid);
-
-				if (bool == null) {
-					// Exception
-					log.error("Error on Updating Session");
-					return new Long(-1);
-				} else if (!bool) {
-					// invalid Session-Object
-					log.error("Invalid Session Object");
-					return new Long(-35);
-				}
-
 				// Return UserObject
 				User u2 = usersDao.get(userid);
 
 				if (u2 == null) {
-					return new Long(-1);
+					throw new OmException(-1L);
 				}
 
 				u2.setType(Type.ldap);
@@ -525,29 +507,11 @@ public class LdapLoginManagement implements ILdapLoginManagement {
 				return u2;
 			} catch (Exception e) {
 				log.error("Error on Working Userdata : ", e);
-				return new Long(-1);
+				throw new OmException(-1L);
 			}
 		} else {
 			// User exists, just update necessary values
 			log.debug("User already exists -> Update of current passwd");
-
-			// If invoked via SOAP this is NULL
-			if (currentClient != null) {
-				currentClient.setUser_id(u.getUser_id());
-			}
-
-			// Update Session
-			Boolean bool = sessiondataDao.updateUser(SID, u.getUser_id());
-
-			if (bool == null) {
-				// Exception
-				log.error("Error on Updating Session");
-				return new Long(-1);
-			} else if (!bool) {
-				// invalid Session-Object
-				log.error("Invalid Session Object");
-				return new Long(-35);
-			}
 
 			try {
 				// Update password (could have changed in LDAP)
@@ -561,7 +525,7 @@ public class LdapLoginManagement implements ILdapLoginManagement {
 				usersDao.update(u, null);
 			} catch (Exception e) {
 				log.error("Error updating user : " + e.getMessage());
-				return new Long(-1);
+				throw new OmException(-1L);
 			}
 
 			return u;
@@ -656,8 +620,6 @@ public class LdapLoginManagement implements ILdapLoginManagement {
 			iCalTz = userdata.get(ldapAttrs.get("timezoneAttr"));
 		}
 		
-		iCalTz = timezoneUtil.getTimeZone(iCalTz).getID();
-
 		String town = "town";
 		if (userdata.containsKey(ldapAttrs.get("townAttr"))
 				&& userdata.get(ldapAttrs.get("townAttr")) != null)
@@ -670,11 +632,7 @@ public class LdapLoginManagement implements ILdapLoginManagement {
 			// Check if LDAP Users get a SIP Account Issue 1099
 
 			newUserId = userManager.registerUserInit(
-					2,// user_level
-					1,// level_id
-					1,// available
-					1,// status
-					login,// loginname
+					UserDao.getDefaultRights(), login,// loginname
 					passwd,// passwd
 					lastname, firstname, email, 
 					new java.util.Date(), //age
@@ -682,18 +640,17 @@ public class LdapLoginManagement implements ILdapLoginManagement {
 					additionalname, fax, zip, state_id, town, 
 					configurationDao.getConfValue(CONFIG_DEFAUT_LANG_KEY, Long.class, "1"), // language_id
 					false, // sendWelcomeMessage
-					Arrays.asList(configurationDao.getConfValue(
-							"default_domain_id", Long.class, null)), // organozation
-																		// Ids
+					Arrays.asList(configurationDao.getConfValue("default_domain_id", Long.class, null)), // organozation Ids
 					phone, 
 					false,
 					false,// send verification code
-					iCalTz, 
+					timezoneUtil.getTimeZone(iCalTz), 
 					false, // forceTimeZoneCheck
 					"", //userOffers
 					"", //userSearchs
 					false, //showContactData
-					true //showContactDataToContacts
+					true, //showContactDataToContacts
+					null
 					);
 			
 			User user = usersDao.get(newUserId);

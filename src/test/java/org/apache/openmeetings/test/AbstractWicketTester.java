@@ -22,6 +22,7 @@ import static org.apache.openmeetings.web.app.Application.getWicketTester;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import org.apache.openmeetings.db.entity.user.User.Type;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.wicket.util.tester.WicketTester;
 import org.junit.After;
@@ -39,9 +40,9 @@ public class AbstractWicketTester extends AbstractJUnitDefaults {
 
 	public void login(String login, String password) {
 		if (login != null && password != null) {
-			WebSession.get().signIn(login, password, "");
+			WebSession.get().signIn(login, password, Type.user, null);
 		} else {
-			WebSession.get().signIn(username, userpass, "");
+			WebSession.get().signIn(username, userpass, Type.user, null);
 		}
 		assertTrue("Web session is not signed in for user: " + (login != null ? login : username), WebSession.get().isSignedIn());
 	}

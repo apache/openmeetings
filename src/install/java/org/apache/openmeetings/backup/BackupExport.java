@@ -28,6 +28,7 @@ import java.io.OutputStreamWriter;
 import java.net.URI;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -70,6 +71,7 @@ import org.apache.openmeetings.db.entity.user.Organisation;
 import org.apache.openmeetings.db.entity.user.PrivateMessage;
 import org.apache.openmeetings.db.entity.user.State;
 import org.apache.openmeetings.db.entity.user.User;
+import org.apache.openmeetings.db.entity.user.User.Right;
 import org.apache.openmeetings.util.AuthLevelUtil;
 import org.apache.openmeetings.util.CalendarPatterns;
 import org.apache.openmeetings.util.OmFileHelper;
@@ -136,9 +138,7 @@ public class BackupExport {
 	@Autowired
 	private RoomOrganisationDao roomOrganisationDao;
 
-	public void performExport(File filePath, File backup_dir,
-			boolean includeFiles) throws Exception {
-
+	public void performExport(File filePath, File backup_dir, boolean includeFiles) throws Exception {
 		if (!backup_dir.exists()) {
 			backup_dir.mkdirs();
 		}
@@ -378,9 +378,7 @@ public class BackupExport {
 			File[] files = sourceDir.listFiles();
 			for (File file : files) {
 				if (file.isDirectory()) {
-					if (!file.getName().equals("backup")
-							&& !file.getName().equals("import")) {
-
+					if (!file.getName().equals("backup") && !file.getName().equals("import")) {
 						log.debug("### " + file.getName());
 
 						FileHelper.copyRec(file, new File(targetRootDir, file.getName()));
@@ -406,11 +404,8 @@ public class BackupExport {
 		log.debug("---Done");
 	}
 	
-	private <T> void writeList(Serializer ser, File backup_dir,
-			String fileName, String listElement, List<T> list) throws Exception {
-		
-		FileOutputStream fos = new FileOutputStream(new File(backup_dir,
-				fileName));
+	private <T> void writeList(Serializer ser, File backup_dir, String fileName, String listElement, List<T> list) throws Exception {
+		FileOutputStream fos = new FileOutputStream(new File(backup_dir, fileName));
 		writeList(ser, fos, listElement, list);
 	}
 	
@@ -434,10 +429,10 @@ public class BackupExport {
 	}
 
 	public void exportUsers(File backup_dir, List<User> list) throws Exception {
-		FileOutputStream fos
-			= new FileOutputStream(new File(backup_dir, "users.xml"));
+		FileOutputStream fos = new FileOutputStream(new File(backup_dir, "users.xml"));
 		exportUsers(fos, list);
 	}
+	
 	public void exportUsers(OutputStream os, List<User> list) throws Exception {
 		Registry registry = new Registry();
 		Strategy strategy = new RegistryStrategy(registry);
@@ -458,31 +453,26 @@ public class BackupExport {
 	 * javax.servlet.http.HttpServlet#doPost(javax.servlet.http.HttpServletRequest
 	 * , javax.servlet.http.HttpServletResponse)
 	 */
-	public void service(HttpServletRequest httpServletRequest,
-			HttpServletResponse httpServletResponse, ServletContext servletCtx)
-			throws ServletException, IOException {
-
-		String sid = httpServletRequest.getParameter("sid");
+	public void service(HttpServletRequest request, HttpServletResponse response, ServletContext ctx) throws ServletException, IOException {
+		String sid = request.getParameter("sid");
 		if (sid == null) {
 			sid = "default";
 		}
 		log.debug("sid: " + sid);
 
 		Long users_id = sessiondataDao.checkSession(sid);
-		Long user_level = usersDao.get(users_id).getLevel_id();
+		Set<Right> rights = usersDao.get(users_id).getRights();
 
 		log.debug("users_id: " + users_id);
-		log.debug("user_level: " + user_level);
+		log.debug("user_level: " + rights);
 
-		if (AuthLevelUtil.checkAdminLevel(user_level)) {
+		if (AuthLevelUtil.hasAdminLevel(rights)) {
 			// if (true) {
 
-			String includeFileOption = httpServletRequest
-					.getParameter("includeFileOption");
+			String includeFileOption = request.getParameter("includeFileOption");
 			boolean includeFiles = includeFileOption == null || "yes".equals(includeFileOption);
 
-			String moduleName = httpServletRequest
-					.getParameter("moduleName");
+			String moduleName = request.getParameter("moduleName");
 			if (moduleName == null) {
 				moduleName = "moduleName";
 			}
@@ -506,16 +496,13 @@ public class BackupExport {
 				try {
 					performExport(backupFile, backup_dir, includeFiles);
 
-					httpServletResponse.reset();
-					httpServletResponse.resetBuffer();
-					httpServletResponse
-					.setContentType("APPLICATION/OCTET-STREAM");
-					httpServletResponse.setHeader("Content-Disposition",
-							"attachment; filename=\"" + requestedFile + "\"");
-					httpServletResponse.setHeader("Content-Length",
-							"" + backupFile.length());
+					response.reset();
+					response.resetBuffer();
+					response.setContentType("APPLICATION/OCTET-STREAM");
+					response.setHeader("Content-Disposition", "attachment; filename=\"" + requestedFile + "\"");
+					response.setHeader("Content-Length", "" + backupFile.length());
 
-					OutputStream out = httpServletResponse.getOutputStream();
+					OutputStream out = response.getOutputStream();
 					OmFileHelper.copyFile(backupFile, out);
 
 					out.flush();

@@ -29,11 +29,11 @@ import java.util.LinkedList;
 import java.util.Map;
 
 import org.apache.commons.collections.ComparatorUtils;
-import org.apache.openmeetings.data.user.UserManager;
 import org.apache.openmeetings.data.whiteboard.WhiteBoardObjectListManagerById;
 import org.apache.openmeetings.data.whiteboard.WhiteBoardObjectSyncManager;
 import org.apache.openmeetings.db.dao.server.ISessionManager;
 import org.apache.openmeetings.db.dao.server.SessiondataDao;
+import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.dto.room.Cliparts;
 import org.apache.openmeetings.db.dto.room.WhiteboardObject;
 import org.apache.openmeetings.db.dto.room.WhiteboardObjectList;
@@ -61,7 +61,7 @@ public class WhiteBoardService implements IPendingServiceCallback {
 	private static final Logger log = Red5LoggerFactory.getLogger(
 			WhiteBoardService.class, "openmeetings");
 	@Autowired
-	private UserManager userManager;
+	private UserDao userDao;
 	@Autowired
 	private final ScopeApplicationAdapter scopeApplicationAdapter = null;
 	@Autowired
@@ -195,9 +195,8 @@ public class WhiteBoardService implements IPendingServiceCallback {
 					.getClientByStreamId(streamid, null);
 
 			Long users_id = sessiondataDao.checkSession(SID);
-			Long user_level = userManager.getUserLevelByID(users_id);
 
-			if (AuthLevelUtil.checkUserLevel(user_level)) {
+			if (AuthLevelUtil.hasUserLevel(userDao.getRights(users_id))) {
 
 				if (currentClient.getIsMod()) {
 					Client rcl = this.sessionManager
@@ -237,9 +236,8 @@ public class WhiteBoardService implements IPendingServiceCallback {
 					.getClientByStreamId(streamid, null);
 
 			Long users_id = sessiondataDao.checkSession(SID);
-			Long user_level = userManager.getUserLevelByID(users_id);
 
-			if (AuthLevelUtil.checkUserLevel(user_level)) {
+			if (AuthLevelUtil.hasUserLevel(userDao.getRights(users_id))) {
 
 				if (currentClient.getIsMod()) {
 					Client rcl = this.sessionManager
@@ -279,9 +277,8 @@ public class WhiteBoardService implements IPendingServiceCallback {
 					.getClientByStreamId(streamid, null);
 
 			Long users_id = sessiondataDao.checkSession(SID);
-			Long user_level = userManager.getUserLevelByID(users_id);
 
-			if (AuthLevelUtil.checkUserLevel(user_level)) {
+			if (AuthLevelUtil.hasUserLevel(userDao.getRights(users_id))) {
 
 				if (currentClient.getIsMod()) {
 					Client rcl = this.sessionManager
@@ -321,9 +318,8 @@ public class WhiteBoardService implements IPendingServiceCallback {
 					.getClientByStreamId(streamid, null);
 
 			Long users_id = sessiondataDao.checkSession(SID);
-			Long user_level = userManager.getUserLevelByID(users_id);
 
-			if (AuthLevelUtil.checkUserLevel(user_level)) {
+			if (AuthLevelUtil.hasUserLevel(userDao.getRights(users_id))) {
 				if (currentClient.getIsMod()) {
 					Client rcl = this.sessionManager
 							.getClientByPublicSID(publicSID, false, null);

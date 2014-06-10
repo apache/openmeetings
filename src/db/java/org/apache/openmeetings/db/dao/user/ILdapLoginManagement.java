@@ -18,11 +18,10 @@
  */
 package org.apache.openmeetings.db.dao.user;
 
-import org.apache.openmeetings.db.entity.room.Client;
-import org.red5.server.api.IClient;
+import org.apache.openmeetings.db.entity.user.User;
+import org.apache.openmeetings.util.OmException;
 
 //FIXME HACK to bypass cross project compilation
 public interface ILdapLoginManagement {
-	Object doLdapLogin(String user, String passwd,
-			Client currentClient, IClient client, String SID, String domain);
+	User login(String user, String passwd, Long domainId) throws OmException;
 }

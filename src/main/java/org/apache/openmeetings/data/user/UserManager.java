@@ -22,15 +22,16 @@ import static org.apache.openmeetings.db.util.UserHelper.getMinLoginLength;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SOAP_REGISTER_KEY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 import java.util.TimeZone;
 
 import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
@@ -49,18 +50,16 @@ import org.apache.openmeetings.db.entity.server.Sessiondata;
 import org.apache.openmeetings.db.entity.user.Address;
 import org.apache.openmeetings.db.entity.user.Organisation_Users;
 import org.apache.openmeetings.db.entity.user.User;
+import org.apache.openmeetings.db.entity.user.User.Right;
 import org.apache.openmeetings.db.entity.user.Userdata;
-import org.apache.openmeetings.db.entity.user.Userlevel;
 import org.apache.openmeetings.db.util.TimezoneUtil;
 import org.apache.openmeetings.mail.MailHandler;
 import org.apache.openmeetings.remote.red5.ScopeApplicationAdapter;
-import org.apache.openmeetings.remote.util.SessionVariablesUtil;
 import org.apache.openmeetings.util.AuthLevelUtil;
 import org.apache.openmeetings.util.CalendarPatterns;
 import org.apache.openmeetings.util.DaoHelper;
 import org.apache.openmeetings.util.crypt.ManageCryptStyle;
 import org.red5.logging.Red5LoggerFactory;
-import org.red5.server.api.IClient;
 import org.red5.server.api.scope.IScope;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -144,78 +143,6 @@ public class UserManager implements IUserManager {
 		return null;
 	}
 
-	/**
-	 * login logic
-	 * 
-	 * @param SID
-	 * @param Username
-	 * @param Userpass
-	 * @return
-	 */
-	public Object loginUser(String SID, String userOrEmail, String userpass,
-			Client currentClient, IClient client, Boolean storePermanent) {
-		try {
-			log.debug("Login user SID : " + SID + " Stored Permanent: " + storePermanent);
-			String hql = "SELECT c from User AS c "
-					+ "WHERE "
-					+ "(c.login LIKE :userOrEmail OR c.adresses.email LIKE :userOrEmail  ) "
-					+ "AND c.deleted <> :deleted";
-
-			TypedQuery<User> query = em.createQuery(hql, User.class);
-			query.setParameter("userOrEmail", userOrEmail);
-			query.setParameter("deleted", true);
-
-			List<User> ll = query.getResultList();
-
-			log.debug("debug SIZE: " + ll.size());
-
-			if (ll.size() == 0) {
-				return new Long(-10);
-			} else {
-				User users = ll.get(0);
-
-				if (usersDao.verifyPassword(users.getUser_id(), userpass)) {
-					Boolean bool = sessiondataDao.updateUser(SID, users.getUser_id(), storePermanent, users.getLanguage_id());
-					if (bool == null) {
-						// Exception
-						return new Long(-1);
-					} else if (!bool) {
-						// invalid Session-Object
-						return new Long(-35);
-					}
-
-					// Check if activated
-					if (users.getStatus() != null && users.getStatus().equals(0)) {
-						return -41L;
-					}
-
-					users.setUserlevel(getUserLevel(users.getLevel_id()));
-					updateLastLogin(users);
-					// If invoked via SOAP this is NULL
-					if (currentClient != null) {
-						currentClient.setUser_id(users.getUser_id());
-						SessionVariablesUtil.setUserId(client, users.getUser_id());
-					}
-
-					log.debug("loginUser " + users.getOrganisation_users());
-					if (!users.getOrganisation_users().isEmpty()) {
-						log.debug("loginUser size " + users.getOrganisation_users().size());
-					} else {
-						throw new Exception("No Organization assigned to user");
-					}
-
-					return users;
-				} else {
-					return new Long(-11);
-				}
-			}
-
-		} catch (Exception ex2) {
-			log.error("[loginUser]: ", ex2);
-		}
-		return new Long(-1);
-	}
-
 	public User loginUserByRemoteHash(String SID, String remoteHash) {
 		try {
 
@@ -240,21 +167,6 @@ public class UserManager implements IUserManager {
 	public Long logout(String SID, long USER_ID) {
 		sessiondataDao.updateUser(SID, 0, false, null);
 		return new Long(-12);
-	}
-
-	private void updateLastLogin(User us) {
-		try {
-			us.setLastlogin(new Date());
-			if (us.getUser_id() == null) {
-				em.persist(us);
-			} else {
-				if (!em.contains(us)) {
-					em.merge(us);
-				}
-			}
-		} catch (Exception ex2) {
-			log.error("updateLastLogin", ex2);
-		}
 	}
 
 	public List<Userdata> getUserdataDashBoard(Long user_id) {
@@ -353,114 +265,6 @@ public class UserManager implements IUserManager {
 		return ret;
 	}
 
-	private Userlevel getUserLevel(Long level_id) {
-		Userlevel userlevel = new Userlevel();
-		try {
-			TypedQuery<Userlevel> query = em
-					.createQuery("select c from Userlevel as c where c.level_id = :level_id AND c.deleted <> :deleted", Userlevel.class);
-			query.setParameter("level_id", level_id.longValue());
-			query.setParameter("deleted", true);
-			for(Iterator<Userlevel> it2 = query.getResultList().iterator(); it2
-					.hasNext();) {
-				userlevel = it2.next();
-			}
-		} catch (Exception ex2) {
-			log.error("[getUserLevel]", ex2);
-		}
-		return userlevel;
-	}
-
-	/**
-	 * get user-role 1 - user 2 - moderator 3 - admin
-	 * 
-	 * @param user_id
-	 * @return
-	 */
-	public Long getUserLevelByID(Long user_id) {
-
-		try {
-			if (user_id == null) {
-				return 0L;
-			}
-			// For direct access of linked users
-			if (user_id < 0) {
-				return 1L;
-			}
-
-			TypedQuery<User> query = em
-					.createQuery("select c from User as c where c.user_id = :user_id AND c.deleted <> true", User.class);
-			query.setParameter("user_id", user_id);
-			User us = null;
-			try {
-				us = query.getSingleResult();
-			} catch (NoResultException e) {
-				// u=null}
-			}
-
-			if (us != null) {
-				return us.getLevel_id();
-			} else {
-				return -1L;
-			}
-		} catch (Exception ex2) {
-			log.error("[getUserLevelByID]", ex2);
-		}
-		return null;
-	}
-
-	public Long getUserLevelByIdAndOrg(Long user_id, Long organisation_id) {
-
-		try {
-			if (user_id == null)
-				return new Long(0);
-			// For direct access of linked users
-			if (user_id == -1) {
-				return new Long(1);
-			}
-
-			TypedQuery<User> query = em
-					.createQuery("select c from User as c where c.user_id = :user_id AND c.deleted <> true", User.class);
-			query.setParameter("user_id", user_id);
-			User us = null;
-			try {
-				us = query.getSingleResult();
-			} catch (NoResultException e) {
-				// u=null}
-			}
-
-			if (us != null) {
-
-				if (us.getLevel_id() > 2) {
-					return us.getLevel_id();
-				} else {
-
-					log.debug("user_id, organisation_id" + user_id + ", "
-							+ organisation_id);
-
-					Organisation_Users ou = orgUserDao.getByOrganizationAndUser(organisation_id, user_id);
-
-					log.debug("ou: " + ou);
-
-					if (ou != null) {
-						if (ou.getIsModerator() != null && ou.getIsModerator()) {
-							return 2L;
-						} else {
-							return us.getLevel_id();
-						}
-					} else {
-						return us.getLevel_id();
-					}
-				}
-
-			} else {
-				return -1L;
-			}
-		} catch (Exception ex2) {
-			log.error("[getUserLevelByID]", ex2);
-		}
-		return null;
-	}
-
 	/**
 	 * Method to register a new User, User will automatically be added to the
 	 * default user_level(1) new users will be automatically added to the
@@ -523,12 +327,11 @@ public class UserManager implements IUserManager {
 				
 				// TODO: Read and generate SIP-Data via RPC-Interface Issue 1098
 
-				Long user_id = this.registerUserInit(3, 1, 0, 1, login,
+				Long user_id = registerUserInit(UserDao.getDefaultRights(), login,
 						Userpass, lastname, firstname, email, age, street,
 						additionalname, fax, zip, states_id, town, language_id,
-						true, Arrays.asList(configurationDao.getConfValue(
-								"default_domain_id", Long.class, null)), phone,
-						sendSMS, sendConfirmation, jNameTimeZone, false, "", "", false, true);
+						true, Arrays.asList(configurationDao.getConfValue("default_domain_id", Long.class, null)), phone,
+						sendSMS, sendConfirmation, timezoneUtil.getTimeZone(jNameTimeZone), false, "", "", false, true, null);
 
 				if (user_id > 0 && sendConfirmation) {
 					return new Long(-40);
@@ -542,52 +345,6 @@ public class UserManager implements IUserManager {
 		return null;
 	}
 
-	/**
-	 * Adds a user including his adress-data,auth-date,mail-data
-	 * 
-	 * @param user_level
-	 * @param level_id
-	 * @param availible
-	 * @param status
-	 * @param login
-	 * @param password
-	 * @param lastname
-	 * @param firstname
-	 * @param email
-	 * @param age
-	 * @param street
-	 * @param additionalname
-	 * @param fax
-	 * @param zip
-	 * @param states_id
-	 * @param town
-	 * @param language_id
-	 * @param phone
-	 * @return new users_id OR null if an exception, -1 if an error, -4 if mail
-	 *         already taken, -5 if username already taken, -3 if login or pass
-	 *         or mail is empty
-	 */
-	public Long registerUserInit(long user_level, long level_id, int availible,
-			int status, String login, String password, String lastname,
-			String firstname, String email, Date age, String street,
-			String additionalname, String fax, String zip, long states_id,
-			String town, long language_id, boolean sendWelcomeMessage,
-			List<Long> organisations, String phone, boolean sendSMS,
-			Boolean sendConfirmation, String iCalTz, Boolean forceTimeZoneCheck,
-			String userOffers, String userSearchs, Boolean showContactData,
-			Boolean showContactDataToContacts) throws Exception {
-		return registerUserInit(user_level, level_id, availible,
-				status, login, password, lastname,
-				firstname, email, age, street,
-				additionalname, fax, zip, states_id,
-				town, language_id, sendWelcomeMessage,
-				organisations, phone, sendSMS, sendConfirmation,
-				timezoneUtil.getTimeZone(iCalTz), 
-				forceTimeZoneCheck,
-				userOffers, userSearchs, showContactData,
-				showContactDataToContacts, null);
-	}
-	
 	/**
 	 * @param user_level
 	 * @param level_id
@@ -622,8 +379,7 @@ public class UserManager implements IUserManager {
 	 *         or mail is empty
 	 * @throws Exception
 	 */
-	public Long registerUserInit(long user_level, long level_id, int availible,
-			int status, String login, String password, String lastname,
+	public Long registerUserInit(Set<Right> rights, String login, String password, String lastname,
 			String firstname, String email, Date age, String street,
 			String additionalname, String fax, String zip, long states_id,
 			String town, long language_id, boolean sendWelcomeMessage,
@@ -632,217 +388,68 @@ public class UserManager implements IUserManager {
 			String userOffers, String userSearchs, Boolean showContactData,
 			Boolean showContactDataToContacts, String activatedHash) throws Exception {
 		// TODO: make phone number persistent
-		// User Level must be at least Admin
-		// Moderators will get a temp update of there UserLevel to add Users to
-		// their Group
-		if (AuthLevelUtil.checkModLevel(user_level)) {
-			// Check for required data
-			if (login.length() >= getMinLoginLength(configurationDao)) {
-				// Check for duplicates
-				boolean checkName = usersDao.checkUserLogin(login, null);
-				boolean checkEmail = usersDao.checkUserEMail(email, null);
-				if (checkName && checkEmail) {
+		// Check for required data
+		if (login.length() >= getMinLoginLength(configurationDao)) {
+			// Check for duplicates
+			boolean checkName = usersDao.checkUserLogin(login, null);
+			boolean checkEmail = usersDao.checkUserEMail(email, null);
+			if (checkName && checkEmail) {
 
-					String link = configurationDao.getBaseUrl();
-					String hash = activatedHash;
-					if (hash == null){
-						hash = ManageCryptStyle.getInstanceOfCrypt().createPassPhrase(login
-								+ CalendarPatterns.getDateWithTimeByMiliSeconds(new Date()));
-					}
-					link += "activate?u=" + hash;
+				String link = configurationDao.getBaseUrl();
+				String hash = activatedHash;
+				if (hash == null){
+					hash = ManageCryptStyle.getInstanceOfCrypt().createPassPhrase(login
+							+ CalendarPatterns.getDateWithTimeByMiliSeconds(new Date()));
+				}
+				link += "activate?u=" + hash;
 
-					if (sendWelcomeMessage && email.length() != 0) {
-						String sendMail = emailManagement.sendMail(login,
-								password, email, link, sendConfirmation);
-						if (!sendMail.equals("success"))
-							return new Long(-19);
-					}
-					Address adr =  new Address();
-					adr.setStreet(street);
-					adr.setZip(zip);
-					adr.setTown(town);
-					adr.setStates(statemanagement.getStateById(states_id));
-					adr.setAdditionalname(additionalname);
-					adr.setComment("");
-					adr.setFax(fax);
-					adr.setPhone(phone);
-					adr.setEmail(email);
+				if (sendWelcomeMessage && email.length() != 0) {
+					String sendMail = emailManagement.sendMail(login,
+							password, email, link, sendConfirmation);
+					if (!sendMail.equals("success"))
+						return new Long(-19);
+				}
+				Address adr =  usersDao.getAddress(street, zip, town, states_id, additionalname, fax, phone, email);
 
-					// If this user needs first to click his E-Mail verification
-					// code then set the status to 0
-					if (sendConfirmation) {
-						status = 0;
-					}
+				// If this user needs first to click his E-Mail verification
+				// code then set the status to 0
+				if (sendConfirmation && rights.contains(Right.Login)) {
+					rights.remove(Right.Login);
+				}
 
-					Long user_id = addUser(level_id, availible, status,
-							firstname, login, lastname, language_id, password,
-							adr, sendSMS, age, hash, timezone,
-							forceTimeZoneCheck, userOffers, userSearchs,
-							showContactData, showContactDataToContacts, organisations);
-					log.debug("Added user-Id " + user_id);
-					if (user_id == null) {
-						return new Long(-111);
-					}
+				List<Organisation_Users> orgList = new ArrayList<Organisation_Users>();
+				for (Long id : organisations) {
+					orgList.add(new Organisation_Users(orgDao.get(id)));
+				}
+				User u = usersDao.addUser(rights, firstname, login, lastname, language_id,
+						password, adr, sendSMS, age, hash, timezone,
+						forceTimeZoneCheck, userOffers, userSearchs, showContactData,
+						showContactDataToContacts, null, null, orgList, null);
+				if (u == null) {
+					return -111L;
+				}
+				log.debug("Added user-Id " + u.getUser_id());
 
-					/*
-					 * Long adress_emails_id =
-					 * emailManagement.registerEmail(email, address_id,""); if
-					 * (adress_emails_id==null) { return new Long(-112); }
-					 */
+				/*
+				 * Long adress_emails_id =
+				 * emailManagement.registerEmail(email, address_id,""); if
+				 * (adress_emails_id==null) { return new Long(-112); }
+				 */
 
-					if (adr.getAdresses_id() > 0 && user_id > 0) {
-						return user_id;
-					} else {
-						return new Long(-16);
-					}
+				if (adr.getAdresses_id() > 0 && u.getUser_id() > 0) {
+					return u.getUser_id();
 				} else {
-					if (!checkName) {
-						return new Long(-15);
-					} else if (!checkEmail) {
-						return new Long(-17);
-					}
+					return -16L;
 				}
 			} else {
-				return new Long(-13);
-			}
-		}
-		return new Long(-1);
-	}
-
-	/**
-	 * @author swagner This Methdo adds a User to the User-Table
-	 * @param level_id
-	 *            The User Level, 1=User, 2=GroupAdmin/Moderator,
-	 *            3=SystemAdmin/Admin
-	 * @param availible
-	 *            The user is activated
-	 * @param status
-	 *            The user is not blocked by System admins
-	 * @param firstname
-	 * @param login
-	 *            Username for login
-	 * @param lastname
-	 * @param language_id
-	 * @param Userpass
-	 *            is MD5-crypted
-	 * @param Address adress
-	 * @return user_id or error null
-	 */
-	public Long addUser(long level_id, int availible, int status,
-			String firstname, String login, String lastname, long language_id,
-			String userpass, Address adress, boolean sendSMS, Date age, String hash,
-			TimeZone timezone,
-			Boolean forceTimeZoneCheck, String userOffers, String userSearchs,
-			Boolean showContactData, Boolean showContactDataToContacts, List<Long> orgIds) {
-		try {
-
-			User users = new User();
-			users.setFirstname(firstname);
-			users.setLogin(login);
-			users.setLastname(lastname);
-			users.setAge(age);
-			users.setAdresses(adress);
-			users.setSendSMS(sendSMS);
-			users.setAvailible(availible);
-			users.setLastlogin(new Date());
-			users.setLasttrans(new Long(0));
-			users.setLevel_id(level_id);
-			users.setStatus(status);
-			users.setSalutations_id(1L);
-			users.setStarttime(new Date());
-			users.setActivatehash(hash);
-			users.setTimeZoneId(timezone.getID());
-			users.setForceTimeZoneCheck(forceTimeZoneCheck);
-
-			users.setUserOffers(userOffers);
-			users.setUserSearchs(userSearchs);
-			users.setShowContactData(showContactData);
-			users.setShowContactDataToContacts(showContactDataToContacts);
-
-			// this is needed cause the language is not a needed data at
-			// registering
-			if (language_id != 0) {
-				users.setLanguage_id(language_id);
-			} else {
-				users.setLanguage_id(null);
-			}
-			users.updatePassword(configurationDao, userpass);
-			users.setRegdate(new Date());
-			users.setDeleted(false);
-			
-			//new user add organizations without checks
-			if (orgIds != null) {
-				List<Organisation_Users> orgList = users.getOrganisation_users();
-				for (Long orgId : orgIds) {
-					orgList.add(new Organisation_Users(orgDao.get(orgId)));
+				if (!checkName) {
+					return -15L;
+				} else if (!checkEmail) {
+					return -17L;
 				}
 			}
-			return usersDao.update(users, null).getUser_id();
-
-		} catch (Exception ex2) {
-			log.error("[registerUser]", ex2);
 		}
-		return null;
-	}
-
-	public Long addUserWithExternalKey(long level_id, int availible,
-			int status, String firstname, String login, String lastname,
-			long language_id, boolean emptyPass, String userpass, Address address, Date age,
-			String hash, String externalUserId, String externalUserType,
-			boolean generateSipUserData, String email, String iCalTz,
-			String pictureuri) {
-		try {
-			User users = new User();
-			users.setFirstname(firstname);
-			users.setLogin(login);
-			users.setLastname(lastname);
-			users.setAge(age);
-
-			if (address != null) {
-				users.setAdresses(address);
-			} else {
-				users.setAdresses("", "", "", statemanagement.getStateById(1L), "", "", "", "", email);
-			}
-
-			users.setAvailible(availible);
-			users.setLastlogin(new Date());
-			users.setLasttrans(new Long(0));
-			users.setLevel_id(level_id);
-			users.setStatus(status);
-			users.setSalutations_id(1L);
-			users.setStarttime(new Date());
-			users.setActivatehash(hash);
-			users.setPictureuri(pictureuri);
-			users.setTimeZoneId(timezoneUtil.getTimeZone(iCalTz).getID());
-
-			users.setExternalUserId(externalUserId);
-			users.setExternalUserType(externalUserType);
-
-			// this is needed cause the language is not a needed data at
-			// registering
-			if (language_id != 0) {
-				users.setLanguage_id(new Long(language_id));
-			} else {
-				users.setLanguage_id(null);
-			}
-			users.updatePassword(configurationDao, userpass, emptyPass);
-			users.setRegdate(new Date());
-			users.setDeleted(false);
-
-			em.persist(users);
-
-			em.refresh(users);
-
-			// em.flush();
-
-			long user_id = users.getUser_id();
-
-			return user_id;
-
-		} catch (Exception ex2) {
-			log.error("[addUserWithExternalKey]", ex2);
-		}
-		return null;
+		return -1L;
 	}
 
 	/**
@@ -853,10 +460,9 @@ public class UserManager implements IUserManager {
 	public Boolean kickUserByStreamId(String SID, Long room_id) {
 		try {
 			Long users_id = sessiondataDao.checkSession(SID);
-			Long user_level = getUserLevelByID(users_id);
 
 			// admins only
-			if (AuthLevelUtil.checkAdminLevel(user_level)) {
+			if (AuthLevelUtil.hasAdminLevel(usersDao.getRights(users_id))) {
 
 				sessiondataDao.clearSessionByRoomId(room_id);
 
@@ -891,10 +497,9 @@ public class UserManager implements IUserManager {
 	public Boolean kickUserByPublicSID(String SID, String publicSID) {
 		try {
 			Long users_id = sessiondataDao.checkSession(SID);
-			Long user_level = getUserLevelByID(users_id);
 
 			// admins only
-			if (AuthLevelUtil.checkWebServiceLevel(user_level)) {
+			if (AuthLevelUtil.hasWebServiceLevel(usersDao.getRights(users_id))) {
 
 				Client rcl = sessionManager
 						.getClientByPublicSID(publicSID, false, null);

@@ -26,16 +26,18 @@ import static org.apache.openmeetings.util.OmFileHelper.profileImagePrefix;
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.Set;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.openmeetings.data.user.UserManager;
 import org.apache.openmeetings.db.dao.file.FileExplorerItemDao;
 import org.apache.openmeetings.db.dao.server.SessiondataDao;
+import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.file.FileExplorerItem;
+import org.apache.openmeetings.db.entity.user.User.Right;
 import org.apache.openmeetings.servlet.BaseHttpServlet;
 import org.apache.openmeetings.servlet.ServerNotInitializedException;
 import org.apache.openmeetings.util.OmFileHelper;
@@ -98,9 +100,9 @@ public class DownloadHandler extends BaseHttpServlet {
 			log.debug("sid: " + sid);
 
 			Long users_id = getBean(SessiondataDao.class).checkSession(sid);
-			Long user_level = getBean(UserManager.class).getUserLevelByID(users_id);
+			Set<Right> rights = getBean(UserDao.class).getRights(users_id);
 
-			if (user_level != null && user_level > 0) {
+			if (rights != null && !rights.isEmpty()) {
 				String room_id = httpServletRequest.getParameter("room_id");
 				if (room_id == null) {
 					room_id = "default";

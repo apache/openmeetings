@@ -18,8 +18,8 @@
  */
 package org.apache.openmeetings.test.navi;
 
-import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import java.util.List;
 
@@ -38,7 +38,7 @@ public class TestNavi extends AbstractJUnitDefaults {
 	@Test
 	public void testGetNavi(){
 		
-        List<Naviglobal> ll = navimanagement.getMainMenu(3L, 1L, 1L);
+        List<Naviglobal> ll = navimanagement.getMainMenu(true, 1L, 1L);
 
         assertTrue("GlobalNavi size should be greater than zero: " + ll.size(), ll.size() > 0);
         System.out.println("NaviGlobal size: " + ll.size());
