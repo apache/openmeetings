@@ -25,6 +25,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -42,7 +43,8 @@ import org.apache.openmeetings.core.remote.PrintService;
 import org.apache.openmeetings.core.servlet.BaseHttpServlet;
 import org.apache.openmeetings.core.servlet.ServerNotInitializedException;
 import org.apache.openmeetings.db.dao.server.SessiondataDao;
-import org.apache.openmeetings.db.dao.user.IUserManager;
+import org.apache.openmeetings.db.dao.user.UserDao;
+import org.apache.openmeetings.db.entity.user.User.Right;
 import org.apache.openmeetings.util.CalendarPatterns;
 import org.apache.openmeetings.util.OmFileHelper;
 import org.apache.openmeetings.util.OpenmeetingsVariables;
@@ -94,12 +96,11 @@ public class ExportToImage extends BaseHttpServlet {
 			}
 
 			Long users_id = getBean(SessiondataDao.class).checkSession(sid);
-			Long user_level = getBean(IUserManager.class).getUserLevelByID(users_id);
+			Set<Right> rights = getBean(UserDao.class).getRights(users_id);
 
 			log.debug("users_id: " + users_id);
-			log.debug("user_level: " + user_level);
 
-			if (user_level != null && user_level > 0 && hash != "") {
+			if (rights != null && !rights.isEmpty() && hash != "") {
 
 				PrintBean pBean = PrintService.getPrintItemByHash(hash);
 

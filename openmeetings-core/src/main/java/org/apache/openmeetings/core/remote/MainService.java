@@ -27,6 +27,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.TimeZone;
 
 import org.apache.openmeetings.core.data.conference.RoomManager;
@@ -48,9 +49,12 @@ import org.apache.openmeetings.db.entity.room.Client;
 import org.apache.openmeetings.db.entity.server.RemoteSessionObject;
 import org.apache.openmeetings.db.entity.server.SOAPLogin;
 import org.apache.openmeetings.db.entity.server.Sessiondata;
+import org.apache.openmeetings.db.entity.user.Address;
 import org.apache.openmeetings.db.entity.user.User;
+import org.apache.openmeetings.db.entity.user.User.Right;
 import org.apache.openmeetings.db.entity.user.Userdata;
-import org.apache.openmeetings.util.AuthLevelUtil;
+import org.apache.openmeetings.db.util.AuthLevelUtil;
+import org.apache.openmeetings.db.util.TimezoneUtil;
 import org.apache.openmeetings.util.OpenmeetingsVariables;
 import org.apache.wicket.util.string.Strings;
 import org.red5.logging.Red5LoggerFactory;
@@ -87,7 +91,7 @@ public class MainService implements IPendingServiceCallback {
 	@Autowired
 	private ConferenceLogDao conferenceLogDao;
 	@Autowired
-	private UserDao usersDao;
+	private UserDao userDao;
 	@Autowired
 	private LdapConfigDao ldapConfigDao;
 	@Autowired
@@ -96,6 +100,8 @@ public class MainService implements IPendingServiceCallback {
 	private LdapLoginManagement ldapLoginManagement;
 	@Autowired
 	private MailHandler mailHandler;
+	@Autowired
+	private TimezoneUtil timezoneUtil;
 
 	// External User Types
 	public static final String EXTERNAL_USER_TYPE_LDAP = "LDAP";
@@ -111,9 +117,9 @@ public class MainService implements IPendingServiceCallback {
 	public User getUser(String SID, int USER_ID) {
 		User users = new User();
 		Long users_id = sessiondataDao.checkSession(SID);
-		long user_level = userManager.getUserLevelByID(users_id);
-		if (user_level > 2) {
-			users = usersDao.get(new Long(USER_ID));
+		Set<Right> rights = userDao.getRights(users_id);
+		if (AuthLevelUtil.hasAdminLevel(rights) || AuthLevelUtil.hasWebServiceLevel(rights)) {
+			users = userDao.get(new Long(USER_ID));
 		} else {
 			users.setFirstname("No rights to do this");
 		}
@@ -158,7 +164,7 @@ public class MainService implements IPendingServiceCallback {
 
 	public User loginWicket(String SID, String wicketSID, Long wicketroomid) {
 		Long userId = sessiondataDao.checkSession(wicketSID);
-		User u = userId == null ? null : usersDao.get(userId);
+		User u = userId == null ? null : userDao.get(userId);
 		if (u != null) {
 			IConnection current = Red5.getConnectionLocal();
 			String streamId = current.getClient().getId();
@@ -315,8 +321,7 @@ public class MainService implements IPendingServiceCallback {
 	public Long loginUserByRemote(String SID) {
 		try {
 			Long users_id = sessiondataDao.checkSession(SID);
-			Long user_level = userManager.getUserLevelByID(users_id);
-			if (AuthLevelUtil.checkWebServiceLevel(user_level)) {
+			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(users_id))) {
 				Sessiondata sd = sessiondataDao.getSessionByHash(SID);
 				if (sd == null || sd.getSessionXml() == null) {
 					return new Long(-37);
@@ -336,31 +341,26 @@ public class MainService implements IPendingServiceCallback {
 						// If so we need to check that we create this user in
 						// OpenMeetings and update its record
 
-						User user = usersDao.getExternalUser(userObject.getExternalUserId(),
-								userObject.getExternalUserType());
+						User user = userDao.getExternalUser(userObject.getExternalUserId(), userObject.getExternalUserType());
 
 						if (user == null) {
 							String iCalTz = configurationDao.getConfValue("default.timezone", String.class, "");
 
-							long userId = userManager
-									.addUserWithExternalKey(1, 0, 0,
-											userObject.getFirstname(),
-											userObject.getUsername(),
-											userObject.getLastname(), 1L,
-											true, "", // password is empty by default
-											null, null, "",
-											userObject.getExternalUserId(),
-											userObject.getExternalUserType(),
-											true, userObject.getEmail(),
-											iCalTz,
-											userObject.getPictureUrl());
+							Address a = userDao.getAddress(null, null, null, 1L, null, null, null, userObject.getEmail());
 
+							User u = userDao.addUser(UserDao.getDefaultRights(), userObject.getFirstname(), userObject.getUsername(),
+											userObject.getLastname(), 1L, "" // password is empty by default
+											, a, false, null, null, timezoneUtil.getTimeZone(iCalTz), false
+											, null, null, false, false, userObject.getExternalUserId()
+											, userObject.getExternalUserType(), null, userObject.getPictureUrl());
+
+							long userId = u.getUser_id();
 							currentClient.setUser_id(userId);
 							SessionVariablesUtil.setUserId(current.getClient(), userId);
 						} else {
 							user.setPictureuri(userObject.getPictureUrl());
 
-							usersDao.update(user, users_id);
+							userDao.update(user, users_id);
 
 							currentClient.setUser_id(user.getUser_id());
 							SessionVariablesUtil.setUserId(current.getClient(), user.getUser_id());
@@ -404,7 +404,7 @@ public class MainService implements IPendingServiceCallback {
 			
 			Long defaultRpcUserid = configurationDao.getConfValue(
 					"default.rpc.userid", Long.class, "-1");
-			User defaultRpcUser = usersDao.get(defaultRpcUserid);
+			User defaultRpcUser = userDao.get(defaultRpcUserid);
 			
 			User user = new User();
 			user.setOrganisation_users(defaultRpcUser.getOrganisation_users());
@@ -455,27 +455,9 @@ public class MainService implements IPendingServiceCallback {
 		return null;
 	}
 
-	/**
-	 * logs a user out and deletes his account
-	 * 
-	 * @param SID
-	 * @return - id of user being deleted, or error code
-	 */
-	public Long deleteUserIDSelf(String SID) {
-		Long users_id = sessiondataDao.checkSession(SID);
-		long user_level = userManager.getUserLevelByID(users_id);
-		if (user_level >= 1) {
-			userManager.logout(SID, users_id);
-			return usersDao.deleteUserID(users_id);
-		} else {
-			return new Long(-10);
-		}
-	}
-
 	public List<Userdata> getUserdata(String SID) {
 		Long users_id = sessiondataDao.checkSession(SID);
-		Long user_level = userManager.getUserLevelByID(users_id);
-		if (AuthLevelUtil.checkUserLevel(user_level)) {
+		if (AuthLevelUtil.hasUserLevel(userDao.getRights(users_id))) {
 			return userManager.getUserdataDashBoard(users_id);
 		}
 		return null;
@@ -493,8 +475,7 @@ public class MainService implements IPendingServiceCallback {
 	public LinkedHashMap<Integer, Client> getUsersByDomain(String SID,
 			String domain) {
 		Long users_id = sessiondataDao.checkSession(SID);
-		Long user_level = userManager.getUserLevelByID(users_id);
-		if (AuthLevelUtil.checkUserLevel(user_level)) {
+		if (AuthLevelUtil.hasUserLevel(userDao.getRights(users_id))) {
 			LinkedHashMap<Integer, Client> lMap = new LinkedHashMap<Integer, Client>();
 			// Integer counter = 0;
 			// for (Iterator<String> it =
@@ -514,8 +495,7 @@ public class MainService implements IPendingServiceCallback {
 	public int closeRoom(String SID, Long room_id, Boolean status) {
 		try {
 			Long users_id = sessiondataDao.checkSession(SID);
-			Long user_level = userManager.getUserLevelByID(users_id);
-			if (AuthLevelUtil.checkUserLevel(user_level)) {
+			if (AuthLevelUtil.hasUserLevel(userDao.getRights(users_id))) {
 
 				roomManager.closeRoom(room_id, status);
 

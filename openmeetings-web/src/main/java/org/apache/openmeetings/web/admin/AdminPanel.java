@@ -21,7 +21,7 @@ package org.apache.openmeetings.web.admin;
 import org.apache.openmeetings.web.common.BasePanel;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 
-@AuthorizeInstantiation("ADMIN")
+@AuthorizeInstantiation("Admin")
 public abstract class AdminPanel extends BasePanel {
 	private static final long serialVersionUID = 6811243474361803279L;
 

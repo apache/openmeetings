@@ -37,8 +37,8 @@ import org.apache.openmeetings.db.dao.basic.ErrorDao;
 import org.apache.openmeetings.db.dao.label.FieldLanguagesValuesDao;
 import org.apache.openmeetings.db.dao.server.SOAPLoginDao;
 import org.apache.openmeetings.db.dao.server.SessiondataDao;
-import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.dao.user.IUserManager;
+import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.dao.user.OrganisationDao;
 import org.apache.openmeetings.db.dao.user.OrganisationUserDao;
 import org.apache.openmeetings.db.dto.basic.ErrorResult;
@@ -51,7 +51,9 @@ import org.apache.openmeetings.db.entity.server.Sessiondata;
 import org.apache.openmeetings.db.entity.user.Organisation;
 import org.apache.openmeetings.db.entity.user.Organisation_Users;
 import org.apache.openmeetings.db.entity.user.User;
-import org.apache.openmeetings.util.AuthLevelUtil;
+import org.apache.openmeetings.db.entity.user.User.Right;
+import org.apache.openmeetings.db.util.AuthLevelUtil;
+import org.apache.openmeetings.util.OmException;
 import org.apache.openmeetings.webservice.dto.ServiceException;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -90,7 +92,7 @@ public class UserWebService {
 	@Autowired
 	private SOAPLoginDao soapLoginDao;
 	@Autowired
-	private UserDao usersDao;
+	private UserDao userDao;
 	@Autowired
 	private MainService mainService;
 	@Autowired
@@ -122,20 +124,30 @@ public class UserWebService {
 	 */
 	public Long loginUser(String SID, String username, String userpass) {
 		try {
-			Object obj = userManagement.loginUser(SID, username, userpass, null, null, false);
-			if (obj == null) {
-				return new Long(-1);
+			log.debug("Login user SID : " + SID);
+			User u = userDao.login(username, userpass);
+			if (u == null) {
+				return -1L;
 			}
-			String objName = obj.getClass().getName();
-			if (objName.equals("java.lang.Long")) {
-				return (Long) obj;
-			} else {
-				return new Long(1);
+			
+			Boolean bool = sessiondataDao.updateUser(SID, u.getUser_id(), false, u.getLanguage_id());
+			if (bool == null) {
+				// Exception
+				return -1L;
+			} else if (!bool) {
+				// invalid Session-Object
+				return -35L;
+			}
+			
+			return u.getUser_id();
+		} catch (OmException oe) {
+			if (oe.getCode() != null) {
+				return oe.getCode();
 			}
 		} catch (Exception err) {
 			log.error("[loginUser]", err);
 		}
-		return new Long(-1);
+		return -1L;
 	}
 
 	/**
@@ -177,7 +189,7 @@ public class UserWebService {
 	}
 
 	/**
-	 * Adds a new Usre like through the Frontend, but also does activates the
+	 * Adds a new User like through the Frontend, but also does activates the
 	 * Account To do SSO see the methods to create a hash and use those ones!
 	 * 
 	 * @param SID
@@ -217,9 +229,8 @@ public class UserWebService {
 			throws ServiceException {
 		try {
 			Long users_id = sessiondataDao.checkSession(SID);
-			Long user_level = userManagement.getUserLevelByID(users_id);
 
-			if (AuthLevelUtil.checkWebServiceLevel(user_level)) {
+			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(users_id))) {
 
 				String jName_timeZone = configurationDao.getConfValue("default.timezone", String.class, "");
 
@@ -233,13 +244,15 @@ public class UserWebService {
 					return user_id;
 				}
 
-				User user = usersDao.get(user_id);
+				User user = userDao.get(user_id);
 
 				// activate the User
-				user.setStatus(1);
+				user.getRights().add(Right.Dashboard);
+				user.getRights().add(Right.Login);
+				user.getRights().add(Right.Room);
 				user.setUpdatetime(new Date());
 
-				usersDao.update(user, users_id);
+				userDao.update(user, users_id);
 
 				return user_id;
 
@@ -291,13 +304,11 @@ public class UserWebService {
 	public Long addNewUserWithTimeZone(String SID, String username,
 			String userpass, String lastname, String firstname, String email,
 			String additionalname, String street, String zip, String fax,
-			long states_id, String town, long language_id,
-			String jNameTimeZone) throws ServiceException {
+			long states_id, String town, long language_id, String jNameTimeZone) throws ServiceException {
 		try {
 			Long users_id = sessiondataDao.checkSession(SID);
-			Long user_level = userManagement.getUserLevelByID(users_id);
 
-			if (AuthLevelUtil.checkWebServiceLevel(user_level)) {
+			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(users_id))) {
 
 				Long user_id = userManagement.registerUser(username, userpass,
 						lastname, firstname, email, new Date(), street,
@@ -316,13 +327,13 @@ public class UserWebService {
 					return user_id;
 				}
 
-				User user = usersDao.get(user_id);
+				User user = userDao.get(user_id);
 
 				// activate the User
-				user.setStatus(1);
+				user.getRights().add(Right.Login);
 				user.setUpdatetime(new Date());
 
-				usersDao.update(user, users_id);
+				userDao.update(user, users_id);
 
 				return user_id;
 
@@ -387,11 +398,10 @@ public class UserWebService {
 			throws ServiceException {
 		try {
 			Long users_id = sessiondataDao.checkSession(SID);
-			Long user_level = userManagement.getUserLevelByID(users_id);
 
-			if (AuthLevelUtil.checkAdminLevel(user_level)) {
+			if (AuthLevelUtil.hasAdminLevel(userDao.getRights(users_id))) {
 
-				User testUser = usersDao.getExternalUser(externalUserId, externalUserType);
+				User testUser = userDao.getExternalUser(externalUserId, externalUserType);
 
 				if (testUser != null) {
 					throw new Exception("User does already exist!");
@@ -408,15 +418,15 @@ public class UserWebService {
 					return user_id;
 				}
 
-				User user = usersDao.get(user_id);
+				User user = userDao.get(user_id);
 
 				// activate the User
-				user.setStatus(1);
+				user.getRights().add(Right.Login);
 				user.setUpdatetime(new Date());
 				user.setExternalUserId(externalUserId);
 				user.setExternalUserType(externalUserType);
 
-				usersDao.update(user, users_id);
+				userDao.update(user, users_id);
 
 				return user_id;
 
@@ -445,12 +455,11 @@ public class UserWebService {
 	public Long deleteUserById(String SID, Long userId) throws ServiceException {
 		try {
 			Long users_id = sessiondataDao.checkSession(SID);
-			Long user_level = userManagement.getUserLevelByID(users_id);
 
-			if (AuthLevelUtil.checkAdminLevel(user_level)) {
+			if (AuthLevelUtil.hasAdminLevel(userDao.getRights(users_id))) {
 
 				// Setting user deleted
-				usersDao.deleteUserID(userId);
+				userDao.deleteUserID(userId);
 
 				return userId;
 
@@ -482,16 +491,15 @@ public class UserWebService {
 			String externalUserId, String externalUserType) throws ServiceException {
 		try {
 			Long users_id = sessiondataDao.checkSession(SID);
-			Long user_level = userManagement.getUserLevelByID(users_id);
 
-			if (AuthLevelUtil.checkAdminLevel(user_level)) {
+			if (AuthLevelUtil.hasAdminLevel(userDao.getRights(users_id))) {
 
-				User userExternal = usersDao.getExternalUser(externalUserId, externalUserType);
+				User userExternal = userDao.getExternalUser(externalUserId, externalUserType);
 
 				Long userId = userExternal.getUser_id();
 
 				// Setting user deleted
-				usersDao.deleteUserID(userId);
+				userDao.deleteUserID(userId);
 
 				return userId;
 
@@ -544,8 +552,7 @@ public class UserWebService {
 			throws ServiceException {
 		try {
 			Long users_id = sessiondataDao.checkSession(SID);
-			Long user_level = userManagement.getUserLevelByID(users_id);
-			if (AuthLevelUtil.checkWebServiceLevel(user_level)) {
+			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(users_id))) {
 
 				RemoteSessionObject remoteSessionObject = new RemoteSessionObject(
 						username, firstname, lastname, profilePictureUrl,
@@ -636,8 +643,7 @@ public class UserWebService {
 		log.debug("UserService.setUserObjectAndGenerateRoomHashByURL");
 		try {
 			Long users_id = sessiondataDao.checkSession(SID);
-			Long user_level = userManagement.getUserLevelByID(users_id);
-			if (AuthLevelUtil.checkWebServiceLevel(user_level)) {
+			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(users_id))) {
 
 				RemoteSessionObject remoteSessionObject = new RemoteSessionObject(
 						username, firstname, lastname, profilePictureUrl,
@@ -730,8 +736,7 @@ public class UserWebService {
 			int showAudioVideoTestAsInt, int allowRecording) {
 		try {
 			Long users_id = sessiondataDao.checkSession(SID);
-			Long user_level = userManagement.getUserLevelByID(users_id);
-			if (AuthLevelUtil.checkWebServiceLevel(user_level)) {
+			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(users_id))) {
 
 				RemoteSessionObject remoteSessionObject = new RemoteSessionObject(
 						username, firstname, lastname, profilePictureUrl,
@@ -817,8 +822,7 @@ public class UserWebService {
 
 		try {
 			Long users_id = sessiondataDao.checkSession(SID);
-			Long user_level = userManagement.getUserLevelByID(users_id);
-			if (AuthLevelUtil.checkWebServiceLevel(user_level)) {
+			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(users_id))) {
 
 				RemoteSessionObject remoteSessionObject = new RemoteSessionObject(
 						username, firstname, lastname, profilePictureUrl,
@@ -845,16 +849,12 @@ public class UserWebService {
 				}
 
 			} else {
-
-				log.debug("Invalid access via SOAP " + SID + " UserD"
-						+ users_id + " " + user_level);
-
-				return "" + new Long(-26);
+				return "" + -26L;
 			}
 		} catch (Exception err) {
 			log.error("setUserObjectWithAndGenerateRoomHash", err);
 		}
-		return "" + new Long(-1);
+		return "" + -1L;
 	}
 
 	/**
@@ -908,8 +908,7 @@ public class UserWebService {
 			int showAudioVideoTestAsInt, int showNickNameDialogAsInt) {
 		try {
 			Long users_id = sessiondataDao.checkSession(SID);
-			Long user_level = userManagement.getUserLevelByID(users_id);
-			if (AuthLevelUtil.checkWebServiceLevel(user_level)) {
+			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(users_id))) {
 
 				RemoteSessionObject remoteSessionObject = new RemoteSessionObject(
 						username, firstname, lastname, profilePictureUrl,
@@ -984,8 +983,7 @@ public class UserWebService {
 			String externalUserId, String externalUserType, Long recording_id) {
 		try {
 			Long users_id = sessiondataDao.checkSession(SID);
-			Long user_level = userManagement.getUserLevelByID(users_id);
-			if (AuthLevelUtil.checkWebServiceLevel(user_level)) {
+			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(users_id))) {
 
 				RemoteSessionObject remoteSessionObject = new RemoteSessionObject(
 						username, firstname, "", "", "", externalUserId,
@@ -1038,12 +1036,11 @@ public class UserWebService {
 			Long organisation_id, Long insertedby) {
 		try {
 			Long users_id = sessiondataDao.checkSession(SID);
-			Long user_level = userManagement.getUserLevelByID(users_id);
-			if (AuthLevelUtil.checkWebServiceLevel(user_level)) {
+			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(users_id))) {
 				if (!orgUserDao.isUserInOrganization(organisation_id, user_id)) {
-					User u = usersDao.get(user_id);
+					User u = userDao.get(user_id);
 					u.getOrganisation_users().add(new Organisation_Users(orgDao.get(organisation_id)));
-					usersDao.update(u, users_id);
+					userDao.update(u, users_id);
 				}
 				return user_id;
 			} else {
@@ -1077,10 +1074,9 @@ public class UserWebService {
 			boolean asc) {
 		try {
 			Long users_id = sessiondataDao.checkSession(SID);
-			Long user_level = userManagement.getUserLevelByID(users_id);
 			SearchResult<User> result = new SearchResult<User>();
 			result.setObjectName(User.class.getName());
-			if (AuthLevelUtil.checkWebServiceLevel(user_level)) {
+			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(users_id))) {
 				result.setRecords(orgUserDao.count(organisation_id));
 				result.setResult(new ArrayList<User>());
 				for (Organisation_Users ou : orgUserDao.get(organisation_id, null, start, max, orderby + " " + (asc ? "ASC" : "DESC"))) {
@@ -1135,8 +1131,7 @@ public class UserWebService {
 	 */
 	public Long addOrganisation(String SID, String name) throws ServiceException {
 		Long users_id = sessiondataDao.checkSession(SID);
-		Long user_level = userManagement.getUserLevelByID(users_id);
-		if (AuthLevelUtil.checkWebServiceLevel(user_level)) {
+		if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(users_id))) {
 			Organisation o = new Organisation();
 			o.setName(name);
 			return orgDao.update(o, users_id).getOrganisation_id();

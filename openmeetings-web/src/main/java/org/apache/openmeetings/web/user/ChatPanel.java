@@ -29,11 +29,12 @@ import java.util.Date;
 import org.apache.openmeetings.db.dao.basic.ChatDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.basic.ChatMessage;
-import org.apache.openmeetings.web.common.UserPanel;
+import org.apache.openmeetings.web.common.BasePanel;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.json.JSONException;
 import org.apache.wicket.ajax.json.JSONObject;
+import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
@@ -54,7 +55,8 @@ import com.googlecode.wicket.jquery.ui.form.button.AjaxButton;
 import com.googlecode.wicket.jquery.ui.plugins.emoticons.EmoticonsBehavior;
 import com.googlecode.wicket.jquery.ui.plugins.wysiwyg.WysiwygEditor;
 
-public class ChatPanel extends UserPanel {
+@AuthorizeInstantiation({"Dashboard", "Room"})
+public class ChatPanel extends BasePanel {
 	private static final Logger log = Red5LoggerFactory.getLogger(ChatPanel.class, webAppRootKey);
 	private static final long serialVersionUID = -9144707674886211557L;
 	private static final String MESSAGE_AREA_ID = "messageArea";

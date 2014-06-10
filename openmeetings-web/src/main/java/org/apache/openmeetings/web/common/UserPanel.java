@@ -30,7 +30,7 @@ import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 
-@AuthorizeInstantiation("USER")
+@AuthorizeInstantiation("Dashboard")
 public abstract class UserPanel extends BasePanel {
 	private static final long serialVersionUID = 8607846885689465360L;
 

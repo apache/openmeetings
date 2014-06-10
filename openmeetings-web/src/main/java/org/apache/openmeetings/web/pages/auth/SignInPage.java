@@ -33,6 +33,7 @@ import java.net.URLEncoder;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
@@ -172,8 +173,7 @@ public class SignInPage extends BaseInitedPage {
 	}
 		
 	public static String getRedirectUri(OAuthServer server, Component component) {
-		String baseUrl = RequestCycle.get().getUrlRenderer().renderFullUrl(
-			    Url.parse(component.urlFor(SignInPage.class,null).toString()));
+		String baseUrl = RequestCycle.get().getUrlRenderer().renderFullUrl(Url.parse(component.urlFor(SignInPage.class,null).toString()));
 		
 		return baseUrl + "?oauthid=" + server.getId();
 	}
@@ -326,7 +326,7 @@ public class SignInPage extends BaseInitedPage {
 		String firstname = params.get("firstname");
 		if (firstname == null) firstname = "";
 		if (lastname == null) lastname = "";
-		User user = userDao.getUserByName(login, Type.oauth);
+		User user = userDao.getByName(login, Type.oauth);
 		// generate random password
 		byte[] rawPass = new byte[16];
 		Random rnd = new Random();
@@ -345,18 +345,19 @@ public class SignInPage extends BaseInitedPage {
 			}
 			user = userDao.get(res);
 			user.setType(Type.oauth);
-			user.setExternalUserType("oauth2." + serverId);
+			user.setDomainId(serverId);
 			userDao.update(user, null);
 		} else { // just change password
 			// check user type before changing password, it must be match oauthServerId
-			if (!("oauth2." + serverId).equals(user.getExternalUserType())) {
+			if (user.getDomainId() == null || serverId != user.getDomainId()) {
 				log.error("User already registered! with different OAuth server");
 				return;
 			}
+			user.setLastlogin(new Date());
 			user = userDao.update(user, pass, -1);
 		}
 		
-		if (WebSession.get().signIn(login, pass, null)) {
+		if (WebSession.get().signIn(login, pass, Type.oauth, serverId)) {
  			setResponsePage(Application.get().getHomePage());
 		} else {
 			log.error("Failed to login via OAuth2!");

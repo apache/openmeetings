@@ -22,6 +22,7 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
 import java.util.Date;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.openmeetings.core.converter.BaseConverter;
@@ -43,7 +44,7 @@ import org.apache.openmeetings.db.entity.record.FlvRecording;
 import org.apache.openmeetings.db.entity.record.FlvRecordingMetaData;
 import org.apache.openmeetings.db.entity.record.FlvRecordingMetaData.Status;
 import org.apache.openmeetings.db.entity.room.Client;
-import org.apache.openmeetings.util.AuthLevelUtil;
+import org.apache.openmeetings.db.util.AuthLevelUtil;
 import org.apache.openmeetings.util.CalendarPatterns;
 import org.red5.logging.Red5LoggerFactory;
 import org.red5.server.api.IConnection;
@@ -73,7 +74,7 @@ public class FLVRecorderService implements IPendingServiceCallback {
 	@Autowired
 	private FlvRecordingDao flvRecordingDaoImpl;
 	@Autowired
-	private UserDao usersDaoImpl;
+	private UserDao userDao;
 	@Autowired
 	private RoomDao roomDao;
 	@Autowired
@@ -532,8 +533,7 @@ public class FLVRecorderService implements IPendingServiceCallback {
 			Integer rightSideTime) {
 		try {
 			Long users_id = sessiondataDao.checkSession(SID);
-			Long user_level = userManager.getUserLevelByID(users_id);
-			if (AuthLevelUtil.checkUserLevel(user_level)) {
+			if (AuthLevelUtil.hasUserLevel(userDao.getRights(users_id))) {
 
 				log.debug("updateFileOrFolderName " + flvRecordingId);
 

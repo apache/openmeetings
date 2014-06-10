@@ -47,6 +47,7 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.basic.ErrorDao;
@@ -65,7 +66,6 @@ import org.apache.openmeetings.db.dao.user.OrganisationDao;
 import org.apache.openmeetings.db.dao.user.SalutationDao;
 import org.apache.openmeetings.db.dao.user.StateDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
-import org.apache.openmeetings.db.dao.user.UserLevelDao;
 import org.apache.openmeetings.db.entity.label.FieldLanguage;
 import org.apache.openmeetings.db.entity.label.Fieldlanguagesvalues;
 import org.apache.openmeetings.db.entity.label.Fieldvalues;
@@ -74,6 +74,7 @@ import org.apache.openmeetings.db.entity.room.RoomOrganisation;
 import org.apache.openmeetings.db.entity.server.OAuthServer;
 import org.apache.openmeetings.db.entity.server.OAuthServer.RequestMethod;
 import org.apache.openmeetings.db.entity.user.Organisation;
+import org.apache.openmeetings.db.entity.user.User.Right;
 import org.apache.openmeetings.db.util.TimezoneUtil;
 import org.apache.openmeetings.util.OmFileHelper;
 import org.dom4j.Document;
@@ -117,8 +118,6 @@ public class ImportInitvalues {
 	@Autowired
 	private RoomTypeDao roomTypeDao;
 	@Autowired
-	private UserLevelDao userLevelDao;
-	@Autowired
 	private OrganisationDao organisationDao;
 	@Autowired
 	private IUserManager userManager;
@@ -130,14 +129,6 @@ public class ImportInitvalues {
 
 	public int getProgress() {
 		return progress;
-	}
-	
-	public void loadUserLevels() {
-		userLevelDao.addUserLevel("User", 1);
-		userLevelDao.addUserLevel("Moderator", 2);
-		userLevelDao.addUserLevel("Admin", 3);
-		userLevelDao.addUserLevel("Web-Service (only access via SOAP)", 4);
-		log.debug("UserLevels ADDED");
 	}
 	
 	public void loadMainMenu() {
@@ -651,20 +642,20 @@ public class ImportInitvalues {
 		org.setStarttime(new Date());
 		org = organisationDao.update(org, null);
 
-		Long user_id = userManager.registerUserInit(new Long(3), 3, 1,
-				1, cfg.username, cfg.password, "lastname", "firstname", cfg.email,
-				new java.util.Date(), "street", "no", "fax", "zip", 1,
-				"town", default_lang_id, false,
-				Arrays.asList(org.getOrganisation_id()), "phone", false, false,
-				timezoneUtil.getTimeZone(cfg.ical_timeZone),
-				false, "", "", false, true, null);
+		Set<Right> rights = UserDao.getDefaultRights();
+		rights.add(Right.Admin);
+		rights.add(Right.Soap);
+		Long user_id = userManager.registerUserInit(UserDao.getDefaultRights(), cfg.username, cfg.password, "lastname"
+				, "firstname", cfg.email, new Date() /* age/birthday */, "street", "no", "fax", "zip", 1
+				, "town", default_lang_id, false /* sendWelcomeMessage */
+				, Arrays.asList(org.getOrganisation_id()), "phone", false, false, timezoneUtil.getTimeZone(cfg.ical_timeZone),
+				false /* forceTimeZoneCheck */, "" /* userOffers */, "" /* userSearchs */, false /* showContactData */,
+				true /* showContactDataToContacts */, null);
 
 		log.debug("Installation - User Added user-Id " + user_id);
 
 		if (user_id < 0) {
-			throw new Exception(
-					"Could not add user user returns a negative error message: "
-							+ user_id);
+			throw new Exception("Could not add user user returns a negative error message: " + user_id);
 		}
 	}
 
@@ -952,8 +943,6 @@ public class ImportInitvalues {
 			log.debug("System contains users, no need to install data one more time.");
 		}
 		sipDao.delete();
-		progress = 3;
-		loadUserLevels();
 		progress = 6;
 		loadMainMenu();
 		progress = 9;

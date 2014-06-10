@@ -20,6 +20,7 @@ package org.apache.openmeetings.web.app;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
+import org.apache.openmeetings.db.entity.user.User.Type;
 import org.apache.wicket.authentication.strategy.DefaultAuthenticationStrategy;
 import org.apache.wicket.util.string.Strings;
 import org.red5.logging.Red5LoggerFactory;
@@ -30,68 +31,63 @@ public class OmAuthenticationStrategy extends DefaultAuthenticationStrategy {
 	private static final String VALUE_SEPARATOR = "-sep-";
 	private static final String COOKIE_KEY = "LoggedIn";
 	private static final Logger log = Red5LoggerFactory.getLogger(OmAuthenticationStrategy.class, webAppRootKey);
-	/** The cookie name to store the username/password/domain */
+	/** The cookie name to store the username/password/type/domain */
 	private final String cookieKey;
-	
+
 	public OmAuthenticationStrategy() {
 		super(COOKIE_KEY);
 		cookieKey = COOKIE_KEY;
 	}
-	
+
 	/**
 	 * @see org.apache.wicket.authentication.IAuthenticationStrategy#load()
 	 */
 	@Override
-	public String[] load()
-	{
+	public String[] load() {
 		String value = getCookieUtils().load(cookieKey);
-		if (Strings.isEmpty(value) == false)
-		{
-			try
-			{
+		if (Strings.isEmpty(value) == false) {
+			try {
 				value = getCrypt().decryptUrlSafe(value);
-			}
-			catch (RuntimeException e)
-			{
-				log.info(
-					"Error decrypting login cookie: {}. The cookie will be deleted. Possible cause is that a session-relative encryption key was used to encrypt this cookie while this decryption attempt is happening in a different session, eg user coming back to the application after session expiration",
-					cookieKey);
+			} catch (RuntimeException e) {
+				log.info("Error decrypting login cookie: {}. The cookie will be deleted. Possible cause is that a "
+						+ "session-relative encryption key was used to encrypt this cookie while this decryption attempt "
+						+ "is happening in a different session, eg user coming back to the application after session expiration",
+						cookieKey);
 				getCookieUtils().remove(cookieKey);
 				value = null;
 			}
-			if (Strings.isEmpty(value) == false)
-			{
+			if (!Strings.isEmpty(value)) {
 				String username = null;
 				String password = null;
-				String domain = null;
+				String type = null;
+				String domainId = null;
 
 				String[] values = value.split(VALUE_SEPARATOR);
-				if ((values.length > 0) && (Strings.isEmpty(values[0]) == false))
-				{
+				if (values.length > 0 && !Strings.isEmpty(values[0])) {
 					username = values[0];
 				}
-				if ((values.length > 1) && (Strings.isEmpty(values[1]) == false))
-				{
+				if (values.length > 1 && !Strings.isEmpty(values[1])) {
 					password = values[1];
 				}
-				if ((values.length > 2) && (Strings.isEmpty(values[2]) == false))
-				{
-					domain = values[2];
+				if (values.length > 2 && !Strings.isEmpty(values[2])) {
+					type = values[2];
+				}
+				if (values.length > 3 && !Strings.isEmpty(values[3])) {
+					domainId = values[3];
 				}
 
-				return new String[] { username, password, domain };
+				return new String[] { username, password, type, domainId };
 			}
 		}
 
 		return null;
 	}
 
-	public void save(final String username, final String password, final String domain) {
-		String value = username + VALUE_SEPARATOR + password + VALUE_SEPARATOR + domain;
-
-		String encryptedValue = getCrypt().encryptUrlSafe(value);
-
-		getCookieUtils().save(cookieKey, encryptedValue);
-
+	public void save(final String username, final String password, final Type type, final Long domainId) {
+		if (type != Type.oauth) {
+			String value = username + VALUE_SEPARATOR + password + VALUE_SEPARATOR + type.name() + VALUE_SEPARATOR + domainId;
+			String encryptedValue = getCrypt().encryptUrlSafe(value);
+			getCookieUtils().save(cookieKey, encryptedValue);
+		}
 	}
 }

@@ -67,7 +67,6 @@
 		<class>org.apache.openmeetings.db.entity.user.Salutation</class>
 		<class>org.apache.openmeetings.db.entity.user.UserContact</class>
 		<class>org.apache.openmeetings.db.entity.user.Userdata</class>
-		<class>org.apache.openmeetings.db.entity.user.Userlevel</class>
 		<class>org.apache.openmeetings.db.entity.user.User</class>
 		<class>org.apache.openmeetings.db.entity.file.FileExplorerItem</class>
 		<class>org.apache.openmeetings.db.entity.user.AsteriskSipUser</class>

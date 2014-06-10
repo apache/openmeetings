@@ -22,6 +22,8 @@ import java.util.Date;
 
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.user.User;
+import org.apache.openmeetings.db.entity.user.User.Right;
+import org.apache.openmeetings.db.util.AuthLevelUtil;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
@@ -34,9 +36,9 @@ public class ActivatePage extends BaseNotInitedPage {
 		if (userHash != null) {
 			User user = Application.getBean(UserDao.class).getUserByActivationHash(userHash);
 
-			if (user != null && user.getStatus() == 0) {
+			if (!AuthLevelUtil.hasLoginLevel(user.getRights())) {
 				// activate
-				user.setStatus(1);
+				user.getRights().add(Right.Login);
 				user.setUpdatetime(new Date());
 
 				Application.getBean(UserDao.class).update(user, null);

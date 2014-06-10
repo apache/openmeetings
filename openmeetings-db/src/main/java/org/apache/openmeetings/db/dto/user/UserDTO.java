@@ -18,15 +18,18 @@
  */
 package org.apache.openmeetings.db.dto.user;
 
+import java.util.Set;
+
 import org.apache.openmeetings.db.entity.user.Address;
 import org.apache.openmeetings.db.entity.user.User;
+import org.apache.openmeetings.db.entity.user.User.Right;
 import org.apache.openmeetings.db.entity.user.User.Type;
 
 public class UserDTO {
 	private Long id;
 	private String firstname;
 	private String lastname;
-	private Long level_id;
+	private Set<Right> rights;
 	private String login;
 	private Long language_id;
 	private Address adresses;
@@ -37,7 +40,7 @@ public class UserDTO {
 		id = u.getUser_id();
 		firstname = u.getFirstname();
 		lastname = u.getLastname();
-		level_id = u.getLevel_id();
+		rights = u.getRights();
 		login = u.getLogin();
 		language_id = u.getLanguage_id();
 		adresses = u.getAdresses();
@@ -69,12 +72,12 @@ public class UserDTO {
 		this.lastname = lastname;
 	}
 
-	public Long getLevel_id() {
-		return level_id;
+	public Set<Right> getRights() {
+		return rights;
 	}
 
-	public void setLevel_id(Long level_id) {
-		this.level_id = level_id;
+	public void setRights(Set<Right> rights) {
+		this.rights = rights;
 	}
 
 	public String getLogin() {

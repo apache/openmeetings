@@ -25,11 +25,14 @@ import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import static org.apache.wicket.datetime.markup.html.basic.DateLabel.forDatePattern;
 import static org.apache.wicket.validation.validator.StringValidator.minimumLength;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.user.User;
+import org.apache.openmeetings.db.entity.user.User.Right;
 import org.apache.openmeetings.db.entity.user.User.Type;
 import org.apache.openmeetings.web.admin.AdminBaseForm;
 import org.apache.openmeetings.web.app.WebSession;
@@ -42,7 +45,6 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.panel.IMarkupSourcingStrategy;
 import org.apache.wicket.markup.html.panel.PanelMarkupSourcingStrategy;
@@ -51,6 +53,9 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.util.time.Duration;
 
 import com.googlecode.wicket.jquery.ui.widget.dialog.MessageDialog;
+import com.vaynberg.wicket.select2.Response;
+import com.vaynberg.wicket.select2.Select2MultiChoice;
+import com.vaynberg.wicket.select2.TextChoiceProvider;
 
 /**
  * CRUD operations in form for {@link User}
@@ -145,54 +150,36 @@ public class UserForm extends AdminBaseForm<User> {
 
 		add(new CheckBox("forceTimeZoneCheck"));
 
-		final String field159 = WebSession.getString(159);
-		final String field160 = WebSession.getString(160);
-
-		add(new DropDownChoice<Integer>("status", Arrays.asList(0, 1), new IChoiceRenderer<Integer>() {
-
+		add(new Select2MultiChoice<Right>("rights", null, new TextChoiceProvider<Right>() {
 			private static final long serialVersionUID = 1L;
 
-			public Object getDisplayValue(Integer id) {
-				if (id.equals(0)) {
-					return field159;
-				} else if (id.equals(1)) {
-					return field160;
+			@Override
+			protected String getDisplayText(Right choice) {
+				return choice.name();
+			}
+
+			@Override
+			protected Object getId(Right choice) {
+				return choice.name();
+			}
+
+			@Override
+			public void query(String term, int page, Response<Right> response) {
+				for (Right r : Right.values()) {
+					if (r.name().contains(term)) {
+						response.add(r);
+					}
 				}
-				return null;
 			}
 
-			public String getIdValue(Integer id, int index) {
-				return "" + id;
-			}
-
-		}));
-
-		final String field166 = WebSession.getString(166);
-		final String field167 = WebSession.getString(167);
-		final String field168 = WebSession.getString(168);
-		final String field1311 = WebSession.getString(1311);
-
-		add(new DropDownChoice<Long>("level_id", Arrays.asList(1L, 2L, 3L, 4L), new IChoiceRenderer<Long>() {
-
-			private static final long serialVersionUID = 1L;
-
-			public Object getDisplayValue(Long id) {
-				if (id.equals(1L)) {
-					return field166;
-				} else if (id.equals(2L)) {
-					return field167;
-				} else if (id.equals(3L)) {
-					return field168;
-				} else if (id.equals(4L)) {
-					return field1311;
+			@Override
+			public Collection<Right> toChoices(Collection<String> ids) {
+				Collection<Right> rights = new ArrayList<User.Right>(ids.size());
+				for (String id : ids) {
+					rights.add(Right.valueOf(id));
 				}
-				return null;
+				return rights;
 			}
-
-			public String getIdValue(Long id, int index) {
-				return "" + id;
-			}
-
 		}));
 		add(new ComunityUserForm("comunity", getModel()));
 	}

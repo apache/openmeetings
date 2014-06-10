@@ -18,43 +18,38 @@
  */
 package org.apache.openmeetings.test.invitiation;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import org.apache.openmeetings.core.remote.InvitationService;
 import org.apache.openmeetings.core.remote.MainService;
-import org.apache.openmeetings.db.dao.user.IUserManager;
+import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.server.Sessiondata;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.test.AbstractJUnitDefaults;
+import org.apache.openmeetings.webservice.UserWebService;
 import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class TestInvitation extends AbstractJUnitDefaults {
-
-	private static final Logger log = LoggerFactory.getLogger(TestInvitation.class);
-	
 	@Autowired
 	private InvitationService invitationService;
 	@Autowired
 	private MainService mService;
 	@Autowired
-	private IUserManager userManager;
+	private UserWebService userWebService;
+	@Autowired
+	private UserDao userDao;
 	
 	@Test
 	public void testSendInvitationLink() {
-		try {
-			Sessiondata sessionData = mService.getsessiondata();
-			
-			User us = (User) userManager.loginUser(sessionData.getSession_id(), username, userpass, null, null, false);
-			
-			invitationService.sendInvitationHash(sessionData.getSession_id(), username, "message", "sebawagner@apache.org", 
-					"subject", 1L, "", false, "", 1, new Date(), "12:00", new Date(), "14:00", 1L, us.getTimeZoneId(), true);
-			
-		} catch (Exception err) {
-			log.error("[testSendInvitationLink]", err);
-		}
+		Sessiondata sessionData = mService.getsessiondata();
+		
+		Long uid = userWebService.loginUser(sessionData.getSession_id(), username, userpass);
+		User us = userDao.get(uid);
+		
+		String date = new SimpleDateFormat("dd.MM.yyyy").format(new Date());
+		invitationService.sendInvitationHash(sessionData.getSession_id(), "Testname", "Testlastname", "message", "sebawagner@apache.org", 
+				"subject", 1L, "", false, "", 1, date, "12:00", date, "14:00", 1L, us.getTimeZoneId(), true);
 	}
-
 }

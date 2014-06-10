@@ -34,6 +34,7 @@ import org.apache.openmeetings.db.dao.server.OAuth2Dao;
 import org.apache.openmeetings.db.entity.basic.ErrorValue;
 import org.apache.openmeetings.db.entity.server.LdapConfig;
 import org.apache.openmeetings.db.entity.server.OAuthServer;
+import org.apache.openmeetings.db.entity.user.User.Type;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.OmAuthenticationStrategy;
 import org.apache.openmeetings.web.app.WebSession;
@@ -63,7 +64,6 @@ import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.apache.wicket.util.string.Strings;
 
 import com.googlecode.wicket.jquery.core.JQueryBehavior;
 import com.googlecode.wicket.jquery.core.Options;
@@ -84,7 +84,6 @@ public class SignInDialog extends AbstractFormDialog<String> {
     private RegisterDialog r;
     private ForgetPasswordDialog f;
     private LdapConfig domain;
-    private String ldapConfigFileName;
     private FeedbackPanel feedback = new FeedbackPanel("feedback");
     
 	public SignInDialog(String id) {
@@ -182,16 +181,16 @@ public class SignInDialog extends AbstractFormDialog<String> {
 
 	@Override
 	protected void onSubmit(AjaxRequestTarget target) {
-		ldapConfigFileName = domain.getConfigFileName() == null ? "" : domain.getConfigFileName();
 		if (domain.getAddDomainToUserName()) {
 			login = login + "@" + domain.getDomain();
 		}
 		OmAuthenticationStrategy strategy = getAuthenticationStrategy();
 		WebSession ws = WebSession.get();
-		if (ws.signIn(login, password, ldapConfigFileName)) {
+		Type type = domain.getLdapConfigId() > 0 ? Type.ldap : Type.user;
+		if (ws.signIn(login, password, type, domain.getLdapConfigId())) {
  			setResponsePage(Application.get().getHomePage());
 			if (rememberMe) {
-				strategy.save(login, password, ldapConfigFileName);
+				strategy.save(login, password, type, domain.getLdapConfigId());
 			} else {
 				strategy.remove();
 			}
@@ -285,16 +284,16 @@ public class SignInDialog extends AbstractFormDialog<String> {
 						}));
 						btn.add(icon);
 						btn.add(new Label("label", item.getModelObject().getName()))
-						.add(new AjaxEventBehavior("click") {
-							private static final long serialVersionUID = 1L;
-							
-							@Override
-							protected void onEvent(AjaxRequestTarget target) {
-								PageParameters parameters = new PageParameters();
-								parameters.add("oauthid", item.getModelObject().getId());
-								setResponsePage(SignInPage.class, parameters);
-							}
-						});
+							.add(new AjaxEventBehavior("click") {
+								private static final long serialVersionUID = 1L;
+								
+								@Override
+								protected void onEvent(AjaxRequestTarget target) {
+									PageParameters parameters = new PageParameters();
+									parameters.add("oauthid", item.getModelObject().getId());
+									setResponsePage(SignInPage.class, parameters);
+								}
+							});
 						item.add(btn);
 					}
 				}).setVisible(allowOAuthLogin()));

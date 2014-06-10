@@ -104,6 +104,10 @@ public class RoomDao implements IDataProviderDao<Room> {
 		return em.createNamedQuery("getPublicRoomsOrdered", Room.class).getResultList();
 	}
 	
+	public List<Room> getPublicRooms(Long typeId) {
+		return em.createNamedQuery("getPublicRooms", Room.class).setParameter("typeId", typeId).getResultList();
+	}
+	
 	public List<Long> getSipRooms(List<Long> ids) {
 		TypedQuery<Long> q = em.createNamedQuery("getSipRoomIdsByIds", Long.class);
 		q.setParameter("ids", ids);

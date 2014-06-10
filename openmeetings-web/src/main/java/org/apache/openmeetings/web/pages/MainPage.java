@@ -24,7 +24,6 @@ import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.Application.removeOnlineUser;
 import static org.apache.openmeetings.web.app.WebSession.getLanguage;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
-import static org.apache.openmeetings.web.app.WebSession.getUserLevel;
 import static org.apache.openmeetings.web.util.OmUrlFragment.CHILD_ID;
 import static org.apache.openmeetings.web.util.OmUrlFragment.PROFILE_EDIT;
 import static org.apache.openmeetings.web.util.OmUrlFragment.PROFILE_MESSAGES;
@@ -36,6 +35,7 @@ import java.util.List;
 import org.apache.openmeetings.db.dao.basic.NavigationDao;
 import org.apache.openmeetings.db.entity.basic.Naviglobal;
 import org.apache.openmeetings.db.entity.basic.Navimain;
+import org.apache.openmeetings.db.util.AuthLevelUtil;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.Client;
 import org.apache.openmeetings.web.app.WebSession;
@@ -68,7 +68,7 @@ import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.wicketstuff.urlfragment.UrlFragment;
 
-@AuthorizeInstantiation("USER")
+@AuthorizeInstantiation({"Admin", "Dashboard", "Room"})
 public class MainPage extends BaseInitedPage {
 	private static final long serialVersionUID = 6421960759218157999L;
 	private static final Logger log = Red5LoggerFactory.getLogger(MainPage.class, webAppRootKey);
@@ -168,7 +168,7 @@ public class MainPage extends BaseInitedPage {
 	
 	private List<MenuItem> getMainMenu() {
 		List<MenuItem> menu = new ArrayList<MenuItem>();
-		for (Naviglobal gl : getBean(NavigationDao.class).getMainMenu(getUserLevel(), getUserId(), getLanguage())) {
+		for (Naviglobal gl : getBean(NavigationDao.class).getMainMenu(AuthLevelUtil.hasAdminLevel(WebSession.getRights()), getUserId(), getLanguage())) {
 			MenuItem g = new MenuItem(gl.getLabel().getValue()) {
 				private static final long serialVersionUID = 1L;
 

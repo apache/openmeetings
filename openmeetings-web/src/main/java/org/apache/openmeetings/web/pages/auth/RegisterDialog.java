@@ -196,10 +196,11 @@ public class RegisterDialog extends AbstractFormDialog<String> {
 				login + CalendarPatterns.getDateWithTimeByMiliSeconds(new Date()));
 
 		try {
-			getBean(IUserManager.class).registerUserInit(3, 1, 0, 1, login, password, lastName, firstName, email,
-					null /* age/birthday */, "" /* street */, "" /* additionalname */, "" /* fax */, "" /* zip */, state.getState_id(),
-					"" /* town */, lang.getLanguage_id(), true /* sendWelcomeMessage */,
-					Arrays.asList(getBean(ConfigurationDao.class).getConfValue("default_domain_id", Long.class, null)),
+			getBean(IUserManager.class).registerUserInit(UserDao.getDefaultRights(), login, password, lastName
+					, firstName, email, null /* age/birthday */, "" /* street */
+					, "" /* additionalname */, "" /* fax */, "" /* zip */, state.getState_id()
+					, "" /* town */, lang.getLanguage_id(), true /* sendWelcomeMessage */
+					, Arrays.asList(getBean(ConfigurationDao.class).getConfValue("default_domain_id", Long.class, null)),
 					"" /* phone */, false, sendConfirmation, TimeZone.getTimeZone(tzModel.getObject()),
 					false /* forceTimeZoneCheck */, "" /* userOffers */, "" /* userSearchs */, false /* showContactData */,
 					true /* showContactDataToContacts */, hash);

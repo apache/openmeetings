@@ -48,47 +48,47 @@ import org.simpleframework.xml.Root;
 @Table(name = "ldapconfig")
 @Root(name="ldapconfig")
 public class LdapConfig implements Serializable, IDataProviderEntity {
-	private static final long serialVersionUID = 2839158519803993035L;
+	private static final long serialVersionUID = 1L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="id")
-	public long ldapConfigId = 0L;
+	private long ldapConfigId = 0L;
 	
 	@Column(name="name")
 	@Element(data=true)
-	public String name;
+	private String name;
 	
 	@Column(name="config_file_name")
 	@Element(data=true, required = false)
-	public String configFileName;
+	private String configFileName;
 	
 	@Column(name="add_domain_to_user_name")
 	@Element(data=true)
-	public boolean addDomainToUserName;
+	private boolean addDomainToUserName;
 	
 	@Column(name="domain")
 	@Element(data=true, required = false)
-	public String domain;
+	private String domain;
 	
 	@Column(name="is_active")
 	@Element(data=true)
-	public boolean isActive;
+	private boolean isActive;
 	
 	@Column(name="inserted")
-	public Date inserted;
+	private Date inserted;
 	
 	@Column(name="updated")
-	public Date updated;
+	private Date updated;
 	
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name="insertedby_id", updatable=true, insertable=true)
 	@ForeignKey(enabled = true)
-	public User insertedby;
+	private User insertedby;
 	
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name="updatedby_id", updatable=true, insertable=true)
 	@ForeignKey(enabled = true)
-	public User updatedby;
+	private User updatedby;
 	
 	@Column(name="deleted")
 	private boolean deleted;

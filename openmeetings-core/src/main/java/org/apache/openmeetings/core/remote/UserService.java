@@ -48,8 +48,8 @@ import org.apache.openmeetings.db.entity.server.Server;
 import org.apache.openmeetings.db.entity.user.Salutation;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.UserContact;
+import org.apache.openmeetings.db.util.AuthLevelUtil;
 import org.apache.openmeetings.db.util.TimezoneUtil;
-import org.apache.openmeetings.util.AuthLevelUtil;
 import org.apache.openmeetings.util.OpenmeetingsVariables;
 import org.red5.logging.Red5LoggerFactory;
 import org.red5.server.api.scope.IScope;
@@ -121,8 +121,7 @@ public class UserService implements IUserService {
 	 */
 	public User getUserById(String SID, long user_id) {
 		Long users_id = sessiondataDao.checkSession(SID);
-		Long user_level = userManager.getUserLevelByID(users_id);
-		if (AuthLevelUtil.checkUserLevel(user_level)) {
+		if (AuthLevelUtil.hasUserLevel(userDao.getRights(users_id))) {
 			return userDao.get(user_id);
 		}
 		return null;
@@ -165,8 +164,7 @@ public class UserService implements IUserService {
 	 */
 	public List<User> getUserList(String SID, int start, int max, String orderby, boolean asc) {
 		Long users_id = sessiondataDao.checkSession(SID);
-		Long user_level = userManager.getUserLevelByID(users_id);
-		if (AuthLevelUtil.checkAdminLevel(user_level)) {
+		if (AuthLevelUtil.hasAdminLevel(userDao.getRights(users_id))) {
 			return userDao.get("", start, max, orderby + (asc ? " ASC" : " DESC"));
 		}
 		return null;
@@ -186,9 +184,8 @@ public class UserService implements IUserService {
 	public Boolean kickUserByStreamId(String SID, String streamid, long serverId) {
 		try {
 			Long users_id = sessiondataDao.checkSession(SID);
-			Long user_level = userManager.getUserLevelByID(users_id);
 			// admins only
-			if (AuthLevelUtil.checkAdminLevel(user_level)) {
+			if (AuthLevelUtil.hasAdminLevel(userDao.getRights(users_id))) {
 
 				if (serverId == 0) {
 
@@ -237,9 +234,8 @@ public class UserService implements IUserService {
 	public User updateUserSelfTimeZone(String SID, String jname) {
 		try {
 			Long users_id = sessiondataDao.checkSession(SID);
-			Long user_level = userManager.getUserLevelByID(users_id);
 			// users only
-			if (AuthLevelUtil.checkUserLevel(user_level)) {
+			if (AuthLevelUtil.hasUserLevel(userDao.getRights(users_id))) {
 
 				User us = userDao.get(users_id);
 
@@ -261,9 +257,8 @@ public class UserService implements IUserService {
 	public List<UserContact> getPendingUserContacts(String SID) {
 		try {
 			Long users_id = sessiondataDao.checkSession(SID);
-			Long user_level = userManager.getUserLevelByID(users_id);
 			// users only
-			if (AuthLevelUtil.checkUserLevel(user_level)) {
+			if (AuthLevelUtil.hasUserLevel(userDao.getRights(users_id))) {
 
 				List<UserContact> uList = userContactsDao
 						.getContactRequestsByUserAndStatus(users_id, true);
@@ -280,9 +275,8 @@ public class UserService implements IUserService {
 	public List<UserContact> getUserContacts(String SID) {
 		try {
 			Long users_id = sessiondataDao.checkSession(SID);
-			Long user_level = userManager.getUserLevelByID(users_id);
 			// users only
-			if (AuthLevelUtil.checkUserLevel(user_level)) {
+			if (AuthLevelUtil.hasUserLevel(userDao.getRights(users_id))) {
 
 				List<UserContact> uList = userContactsDao
 						.getContactsByUserAndStatus(users_id, false);
@@ -299,9 +293,8 @@ public class UserService implements IUserService {
 	public Integer removeContactUser(String SID, Long userContactId) {
 		try {
 			Long users_id = sessiondataDao.checkSession(SID);
-			Long user_level = userManager.getUserLevelByID(users_id);
 			// users only
-			if (AuthLevelUtil.checkUserLevel(user_level)) {
+			if (AuthLevelUtil.hasUserLevel(userDao.getRights(users_id))) {
 
 				UserContact userContacts = userContactsDao
 						.get(userContactId);
@@ -322,9 +315,8 @@ public class UserService implements IUserService {
 	public Boolean checkUserIsInContactList(String SID, Long user_id) {
 		try {
 			Long users_id = sessiondataDao.checkSession(SID);
-			Long user_level = userManager.getUserLevelByID(users_id);
 			// users only
-			if (AuthLevelUtil.checkUserLevel(user_level)) {
+			if (AuthLevelUtil.hasUserLevel(userDao.getRights(users_id))) {
 
 				List<UserContact> uList = userContactsDao
 						.getContactsByUserAndStatus(users_id, false);
@@ -351,10 +343,9 @@ public class UserService implements IUserService {
 			Boolean shareCalendar) {
 		try {
 			Long users_id = sessiondataDao.checkSession(SID);
-			Long user_level = userManager.getUserLevelByID(users_id);
 
 			// users only
-			if (AuthLevelUtil.checkUserLevel(user_level)) {
+			if (AuthLevelUtil.hasUserLevel(userDao.getRights(users_id))) {
 
 				UserContact userContacts = userContactsDao
 						.get(userContactId);
@@ -385,9 +376,8 @@ public class UserService implements IUserService {
 	public Boolean kickUserByPublicSID(String SID, String publicSID) {
 		try {
 			Long users_id = sessiondataDao.checkSession(SID);
-			Long user_level = userManager.getUserLevelByID(users_id);
 			// users only
-			if (AuthLevelUtil.checkUserLevel(user_level)) {
+			if (AuthLevelUtil.hasUserLevel(userDao.getRights(users_id))) {
 
 				Client rcl = this.sessionManager.getClientByPublicSID(
 						publicSID, false, null);

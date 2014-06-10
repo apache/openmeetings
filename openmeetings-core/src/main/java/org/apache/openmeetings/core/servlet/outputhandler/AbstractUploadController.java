@@ -18,13 +18,16 @@
  */
 package org.apache.openmeetings.core.servlet.outputhandler;
 
+import java.util.Set;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.server.SessiondataDao;
-import org.apache.openmeetings.db.dao.user.IUserManager;
-import org.apache.openmeetings.util.AuthLevelUtil;
+import org.apache.openmeetings.db.dao.user.UserDao;
+import org.apache.openmeetings.db.entity.user.User.Right;
+import org.apache.openmeetings.db.util.AuthLevelUtil;
 import org.apache.openmeetings.util.OpenmeetingsVariables;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -38,7 +41,7 @@ public abstract class AbstractUploadController {
 	@Autowired
 	protected SessiondataDao sessiondataDao;
 	@Autowired
-	protected IUserManager userManager;
+	protected UserDao userDao;
 	@Autowired
 	protected ConfigurationDao configurationDao;
 	
@@ -62,14 +65,12 @@ public abstract class AbstractUploadController {
 			log.debug("sid: " + sid);
 
 			Long userId = sessiondataDao.checkSession(sid);
-			Long userLevel = userManager.getUserLevelByID(userId);
-			log.debug("userId = " + userId + ", userLevel = " + userLevel);
+			Set<Right> rights = userDao.getRights(userId);
+			log.debug("userId = " + userId);
 			info.userId = userId;
 
-			if ((admin && !AuthLevelUtil.checkAdminLevel(userLevel))
-					|| (!admin && userLevel <= 0)) {
-				throw new ServletException("Insufficient permissions "
-						+ userLevel);
+			if ((admin && !AuthLevelUtil.hasAdminLevel(rights)) || (!admin && rights.isEmpty())) {
+				throw new ServletException("Insufficient permissions " + rights);
 			}
 
 			String publicSID = request.getParameter("publicSID");

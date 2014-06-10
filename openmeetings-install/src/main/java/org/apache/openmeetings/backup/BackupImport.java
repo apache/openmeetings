@@ -101,6 +101,7 @@ import org.apache.openmeetings.db.entity.user.PrivateMessage;
 import org.apache.openmeetings.db.entity.user.PrivateMessageFolder;
 import org.apache.openmeetings.db.entity.user.State;
 import org.apache.openmeetings.db.entity.user.User;
+import org.apache.openmeetings.db.entity.user.User.Right;
 import org.apache.openmeetings.db.entity.user.User.Type;
 import org.apache.openmeetings.db.entity.user.UserContact;
 import org.apache.openmeetings.db.util.TimezoneUtil;
@@ -840,14 +841,14 @@ public class BackupImport {
 		List<User> list = new ArrayList<User>();
 		InputNode root = NodeBuilder.read(new StringReader(sw.toString()));
 		InputNode root1 = NodeBuilder.read(new StringReader(sw.toString())); //HACK to handle Address inside user
-		InputNode root2 = NodeBuilder.read(new StringReader(sw.toString())); //HACK to handle old om_time_zone
+		InputNode root2 = NodeBuilder.read(new StringReader(sw.toString())); //HACK to handle old om_time_zone, level_id, status
 		InputNode listNode = root.getNext();
 		InputNode listNode1 = root1.getNext(); //HACK to handle Address inside user
 		InputNode listNode2 = root2.getNext(); //HACK to handle old om_time_zone
 		if (listNodeName.equals(listNode.getName())) {
 			InputNode item = listNode.getNext();
 			InputNode item1 = listNode1.getNext(); //HACK to handle Address inside user
-			InputNode item2 = listNode2.getNext(); //HACK to handle old om_time_zone
+			InputNode item2 = listNode2.getNext(); //HACK to handle old om_time_zone, level_id, status
 			while (item != null) {
 				User u = ser.read(User.class, item, false);
 				
@@ -863,13 +864,34 @@ public class BackupImport {
 						item1 = listNode1.getNext(); //HACK to handle Address inside user
 					} while (item1 != null && !"user".equals(item1.getName()));
 				}
+				String level_id = null, status = null;
 				do {
 					if (u.getTimeZoneId() == null && "omTimeZone".equals(item2.getName())) {
 						String jName = item2.getValue();
 						u.setTimeZoneId(jName == null ? null : tzUtil.getTimezoneByInternalJName(jName).getID());
 					}
-					item2 = listNode2.getNext(); //HACK to handle old om_time_zone
+					if ("level_id".equals(item2.getName())) {
+						level_id = item2.getValue();
+					}
+					if ("status".equals(item2.getName())) {
+						status = item2.getValue();
+					}
+					item2 = listNode2.getNext(); //HACK to handle old om_time_zone, level_id, status
 				} while (item2 != null && !"user".equals(item2.getName()));
+				if (u.getRights().isEmpty()) {
+					u.getRights().add(Right.Room);
+					if ("1".equals(status)) {
+						u.getRights().add(Right.Dashboard);
+						u.getRights().add(Right.Login);
+					}
+					if ("3".equals(level_id)) {
+						u.getRights().add(Right.Admin);
+						u.getRights().add(Right.Soap);
+					}
+					if ("4".equals(level_id)) {
+						u.getRights().add(Right.Soap);
+					}
+				}
 				// check that email is unique
 				if (u.getAdresses() != null && u.getAdresses().getEmail() != null) {
 					if (userEmailMap.containsKey(u.getAdresses().getEmail())) {

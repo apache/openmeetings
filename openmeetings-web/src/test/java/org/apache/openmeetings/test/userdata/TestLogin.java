@@ -20,27 +20,21 @@ package org.apache.openmeetings.test.userdata;
 
 import static org.junit.Assert.assertNotNull;
 
-import org.apache.openmeetings.core.remote.MainService;
-import org.apache.openmeetings.db.dao.user.IUserManager;
-import org.apache.openmeetings.db.entity.server.Sessiondata;
+import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.test.AbstractJUnitDefaults;
+import org.apache.openmeetings.util.OmException;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class TestLogin extends AbstractJUnitDefaults {
 	
 	@Autowired
-	private MainService mService;
-	
-	@Autowired
-	private IUserManager userManager;
+	private UserDao userDao;
 
 	@Test
-	public void testTestLogin(){
-		Sessiondata sessionData = mService.getsessiondata();
-		
-		User us = (User) userManager.loginUser(sessionData.getSession_id(), username, userpass, null, null, false);
+	public void testTestLogin() throws OmException {
+		User us = userDao.login(username, userpass);
 		
 		assertNotNull("User is unable to login", us);
 		

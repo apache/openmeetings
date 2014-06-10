@@ -43,6 +43,9 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import org.apache.openjpa.persistence.ElementDependent;
+import org.apache.openjpa.persistence.FetchAttribute;
+import org.apache.openjpa.persistence.FetchGroup;
+import org.apache.openjpa.persistence.FetchGroups;
 import org.apache.openjpa.persistence.jdbc.ForeignKey;
 import org.apache.openmeetings.db.entity.IDataProviderEntity;
 import org.simpleframework.xml.Element;
@@ -50,17 +53,12 @@ import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Root;
 
 @Entity
+@FetchGroups({
+	@FetchGroup(name = "roomModerators", attributes = { @FetchAttribute(name = "moderators")})
+})
 @NamedQueries({
 	@NamedQuery(name = "getNondeletedRooms", query = "SELECT r FROM Room r WHERE r.deleted = false"),
-	@NamedQuery(name = "getPublicRooms", query = "SELECT r from Room r "
-			+ "JOIN r.roomtype as rt "
-			+ "WHERE r.ispublic=:ispublic and r.deleted=:deleted and rt.roomtypes_id=:roomtypes_id"),
-	@NamedQuery(name = "getPublicRoomsWithoutType", query = "SELECT r from Room r " + "WHERE "
-						+ "r.ispublic = :ispublic and r.deleted <> :deleted "
-						+ "ORDER BY r.name ASC"),
-	@NamedQuery(name = "getAppointedMeetings", query = "SELECT r from Room r "
-			+ "JOIN r.roomtype as rt " + "WHERE "
-			+ "r.deleted=:deleted and r.appointment=:appointed"),	
+	@NamedQuery(name = "getPublicRooms", query = "SELECT r from Room r WHERE r.ispublic = true and r.deleted = false and r.roomtype.roomtypes_id = :typeId"),
 	@NamedQuery(name = "getRoomByOwnerAndTypeId", query = "select c from Room as c "
 					+ "where c.ownerId = :ownerId "
 					+ "AND c.roomtype.roomtypes_id = :roomtypesId "
@@ -72,10 +70,10 @@ import org.simpleframework.xml.Root;
 			+ "where c.externalRoomId = :externalRoomId AND c.externalRoomType = :externalRoomType "
 			+ "AND rt.roomtypes_id = :roomtypes_id AND c.deleted <> :deleted"),
 	@NamedQuery(name = "getPublicRoomsOrdered", query = "SELECT r from Room r WHERE r.ispublic= true AND r.deleted= false AND r.appointment = false ORDER BY r.name ASC"),
-	@NamedQuery(name = "getRoomById", query = "SELECT r FROM Room r LEFT JOIN FETCH r.moderators WHERE r.deleted = false AND r.rooms_id = :id"),
+	@NamedQuery(name = "getRoomById", query = "SELECT r FROM Room r WHERE r.deleted = false AND r.rooms_id = :id"),
 	@NamedQuery(name = "getSipRoomIdsByIds", query = "SELECT r.rooms_id FROM Room r WHERE r.deleted = false AND r.sipEnabled = true AND r.rooms_id IN :ids"),
 	@NamedQuery(name = "countRooms", query = "SELECT COUNT(r) FROM Room r WHERE r.deleted = false"),
-	@NamedQuery(name = "getBackupRooms", query = "SELECT r FROM Room r LEFT JOIN FETCH r.moderators ORDER BY r.rooms_id"),
+	@NamedQuery(name = "getBackupRooms", query = "SELECT r FROM Room r ORDER BY r.rooms_id"),
 	@NamedQuery(name = "getRoomsCapacityByIds", query = "SELECT SUM(r.numberOfPartizipants) FROM Room r WHERE r.deleted = false AND r.rooms_id IN :ids")
 	, @NamedQuery(name = "getOrganisationRooms", query = "SELECT DISTINCT c.room FROM RoomOrganisation c LEFT JOIN FETCH c.room "
 				+ "WHERE c.organisation.organisation_id = :orgId AND c.deleted = false AND c.room.deleted = false AND c.room.appointment = false "

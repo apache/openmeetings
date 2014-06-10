@@ -40,6 +40,7 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.json.JSONArray;
 import org.apache.wicket.ajax.json.JSONException;
 import org.apache.wicket.ajax.json.JSONObject;
+import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
@@ -53,6 +54,7 @@ import org.apache.wicket.request.resource.ResourceReference;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 
+@AuthorizeInstantiation("Room")
 public class RoomPanel extends BasePanel {
 	private static final long serialVersionUID = 1L;
 	private static final Logger log = Red5LoggerFactory.getLogger(RoomPanel.class, webAppRootKey);

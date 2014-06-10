@@ -28,9 +28,9 @@ import javax.ws.rs.core.MediaType;
 import org.apache.cxf.feature.Features;
 import org.apache.openmeetings.db.dao.server.ServerDao;
 import org.apache.openmeetings.db.dao.server.SessiondataDao;
-import org.apache.openmeetings.db.dao.user.IUserManager;
+import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.server.Server;
-import org.apache.openmeetings.util.AuthLevelUtil;
+import org.apache.openmeetings.db.util.AuthLevelUtil;
 import org.apache.openmeetings.webservice.dto.ServiceException;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -54,7 +54,7 @@ public class ServerWebService {
 	@Autowired
 	private SessiondataDao sessiondataDao;
 	@Autowired
-	private IUserManager userManager;
+	private UserDao userDao;
 	@Autowired
 	private ServerDao serversDao;
 
@@ -72,9 +72,8 @@ public class ServerWebService {
 	public Server[] getServers(String SID, int start, int max) throws ServiceException {
 		log.debug("getServers enter");
 		Long users_id = sessiondataDao.checkSession(SID);
-		Long user_level = userManager.getUserLevelByID(users_id);
 
-		if (AuthLevelUtil.checkWebServiceLevel(user_level)) {
+		if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(users_id))) {
 			return serversDao.get(start, max).toArray(new Server[0]);
 		} else {
 			log.warn("Insuffisient permissions");
@@ -93,9 +92,8 @@ public class ServerWebService {
 	public int getServerCount(String SID) throws ServiceException {
 		log.debug("getServerCount enter");
 		Long users_id = sessiondataDao.checkSession(SID);
-		Long user_level = userManager.getUserLevelByID(users_id);
 
-		if (AuthLevelUtil.checkWebServiceLevel(user_level)) {
+		if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(users_id))) {
 			return (int) serversDao.count();
 		} else {
 			log.warn("Insuffisient permissions");
@@ -135,9 +133,8 @@ public class ServerWebService {
 			Boolean active, String comment) throws ServiceException {
 		log.debug("saveServerCount enter");
 		Long users_id = sessiondataDao.checkSession(SID);
-		Long user_level = userManager.getUserLevelByID(users_id);
 
-		if (AuthLevelUtil.checkWebServiceLevel(user_level)) {
+		if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(users_id))) {
 			Server s = serversDao.get(id);
 			if (s == null) {
 				s = new Server();
@@ -170,9 +167,8 @@ public class ServerWebService {
 	public boolean deleteServer(String SID, long id) throws ServiceException {
 		log.debug("saveServerCount enter");
 		Long users_id = sessiondataDao.checkSession(SID);
-		Long user_level = userManager.getUserLevelByID(users_id);
 
-		if (AuthLevelUtil.checkWebServiceLevel(user_level)) {
+		if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(users_id))) {
 			Server s = serversDao.get(id);
 			if (s != null) {
 				serversDao.delete(s, users_id);
