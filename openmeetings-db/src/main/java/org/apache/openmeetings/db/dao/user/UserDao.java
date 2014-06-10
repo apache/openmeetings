@@ -235,7 +235,7 @@ public class UserDao implements IDataProviderDao<User> {
 		if (user_id > 0) {
 			OpenJPAEntityManager oem = OpenJPAPersistence.cast(em);
 			boolean qrce = oem.getFetchPlan().getQueryResultCacheEnabled();
-			oem.getFetchPlan().setQueryResultCacheEnabled(false);
+			oem.getFetchPlan().setQueryResultCacheEnabled(false); //FIXME update in cache during update
 			TypedQuery<User> q = oem.createNamedQuery("getUserById", User.class).setParameter("id", user_id);
 			@SuppressWarnings("unchecked")
 			OpenJPAQuery<User> kq = OpenJPAPersistence.cast(q);
@@ -243,7 +243,11 @@ public class UserDao implements IDataProviderDao<User> {
 			if (force) {
 				kq.getFetchPlan().addFetchGroup("backupexport");
 			}
-			u = kq.getSingleResult();
+			try {
+				u = kq.getSingleResult();
+			} catch (NoResultException ne) {
+				//no-op
+			}
 			oem.getFetchPlan().setQueryResultCacheEnabled(qrce);
 		} else {
 			log.info("[get] " + "Info: No USER_ID given");
