@@ -33,12 +33,8 @@ import java.util.UUID;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
-import javax.persistence.TypedQuery;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.openjpa.persistence.OpenJPAEntityManager;
-import org.apache.openjpa.persistence.OpenJPAPersistence;
-import org.apache.openjpa.persistence.OpenJPAQuery;
 import org.apache.openmeetings.db.dao.IDataProviderDao;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.entity.user.Address;
@@ -48,11 +44,9 @@ import org.apache.openmeetings.db.entity.user.User.Type;
 import org.apache.openmeetings.db.util.TimezoneUtil;
 import org.apache.openmeetings.util.DaoHelper;
 import org.apache.openmeetings.util.crypt.ManageCryptStyle;
-import org.apache.wicket.util.string.Strings;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
  * CRUD operations for {@link User}
@@ -235,7 +229,7 @@ public class UserDao implements IDataProviderDao<User> {
 		if (user_id > 0) {
 			OpenJPAEntityManager oem = OpenJPAPersistence.cast(em);
 			boolean qrce = oem.getFetchPlan().getQueryResultCacheEnabled();
-			oem.getFetchPlan().setQueryResultCacheEnabled(false);
+			oem.getFetchPlan().setQueryResultCacheEnabled(false); //FIXME update in cache during update
 			TypedQuery<User> q = oem.createNamedQuery("getUserById", User.class).setParameter("id", user_id);
 			@SuppressWarnings("unchecked")
 			OpenJPAQuery<User> kq = OpenJPAPersistence.cast(q);
@@ -243,7 +237,11 @@ public class UserDao implements IDataProviderDao<User> {
 			if (force) {
 				kq.getFetchPlan().addFetchGroup("backupexport");
 			}
-			u = kq.getSingleResult();
+			try {
+				u = kq.getSingleResult();
+			} catch (NoResultException ne) {
+				//no-op
+			}
 			oem.getFetchPlan().setQueryResultCacheEnabled(qrce);
 		} else {
 			log.info("[get] " + "Info: No USER_ID given");
