@@ -156,7 +156,6 @@
 			</handler>
 			<handler name="onafterCheck">
 				if (!isvalidInput) {
-					this.setAttribute('text', "");
 					parent.email = null;
 					parent.firstname = null;
 					parent.lastname = null;
@@ -187,10 +186,6 @@
 		
 		<!-- label: message -->
 		<labelText labelid="217" y="82" width="120" />
-		<!--
-		<customEdittext name="_message" width="340" x="120" y="82" height="100" 
-						multiline="true" />
-		 -->
 		<customScrollEdittext name="_message" width="340" x="120" y="82" height="100" />	
 		
 							  
@@ -241,7 +236,6 @@
 			<handler name="onclick">
 			<![CDATA[
 				if (parent.email == null) {
-					new lz.errorPopup(canvas.main_content._content.inner,{error:canvas.getLabelName(519)});
 					return;
 				}
         		parent.display = true;
@@ -255,7 +249,6 @@
 			<handler name="onclick">
 			<![CDATA[
 				if (parent.email == null) {
-					new lz.errorPopup(canvas.main_content._content.inner,{error:canvas.getLabelName(519)});
 					return;
 				}
                 for (var eg in this.parent.subviews) {
