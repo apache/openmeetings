@@ -285,9 +285,9 @@ public class FLVRecorderService implements IPendingServiceCallback {
 	 * 
 	 * @param conn
 	 */
-	public synchronized void stopRecordingShow(IConnection conn, String broadcastId, Long flvRecordingMetaDataId) {
+	public synchronized void stopRecordingShow(IConnection conn, String broadcastId, Long metaId) {
 		try {
-			if (flvRecordingMetaDataId == null) {
+			if (metaId == null) {
 				// this should be fixed, can be useful for debugging, after all this is an error
 				// but we don't want the application to completely stop the process
 				log.error("flvRecordingMetaDataId is null");
@@ -298,9 +298,9 @@ public class FLVRecorderService implements IPendingServiceCallback {
 
 			Object streamToClose = scopeApplicationAdapter.getBroadcastStream(conn.getScope(), broadcastId);
 
-			StreamListener listenerAdapter = streamListeners.get(flvRecordingMetaDataId);
+			StreamListener listenerAdapter = streamListeners.get(metaId);
 
-			log.debug("Stream Closing :: " + flvRecordingMetaDataId);
+			log.debug("Stream Closing :: " + metaId);
 
 			ClientBroadcastStream stream = (ClientBroadcastStream) streamToClose;
 
@@ -315,25 +315,30 @@ public class FLVRecorderService implements IPendingServiceCallback {
 				}
 			}
 
-			FlvRecordingMetaData metaData = metaDataDao.get(flvRecordingMetaDataId);
+			FlvRecordingMetaData metaData = metaDataDao.get(metaId);
 			BaseConverter.printMetaInfo(metaData, "Stopping the stream");
 			// Manually call finish on the stream so that there is no endless loop waiting in the FlvRecorderConverter waiting for the stream to finish
 			// this would normally happen in the Listener
-			metaData.setStreamStatus(listenerAdapter == null && metaData.getStreamStatus() == Status.STARTED ? Status.STOPPED : Status.STOPPING);
-			log.debug("Stopping the stream :: New status == " + metaData.getStreamStatus());
+			Status s = metaData.getStreamStatus();
+			if (Status.NONE == s) {
+				log.debug("Stream was not started, no need to stop :: stream with id " + metaId);
+			} else {
+				metaData.setStreamStatus(listenerAdapter == null && s == Status.STARTED ? Status.STOPPED : Status.STOPPING);
+				log.debug("Stopping the stream :: New status == " + metaData.getStreamStatus());
+			}
 			metaDataDao.update(metaData);
 			if (listenerAdapter == null) {
-				log.debug("Stream Not Found :: " + flvRecordingMetaDataId);
+				log.debug("Stream Not Found :: " + metaId);
 				log.debug("Available Streams :: " + streamListeners.size());
 
 				for (Long entryKey : streamListeners.keySet()) {
 					log.debug("Stored flvRecordingMetaDataId in Map: " + entryKey);
 				}
-				throw new IllegalStateException("Could not find Listener to stop! flvRecordingMetaDataId " + flvRecordingMetaDataId);
+				throw new IllegalStateException("Could not find Listener to stop! flvRecordingMetaDataId " + metaId);
 			}
 
 			listenerAdapter.closeStream();
-			streamListeners.remove(flvRecordingMetaDataId);
+			streamListeners.remove(metaId);
 
 		} catch (Exception err) {
 			log.error("[stopRecordingShow]", err);
