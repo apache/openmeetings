@@ -21,7 +21,6 @@ package org.apache.openmeetings.web.user.rooms;
 
 import org.apache.openmeetings.web.common.BasePanel;
 import org.apache.wicket.RuntimeConfigurationType;
-import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
@@ -33,7 +32,6 @@ import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.apache.wicket.request.resource.ResourceReference;
 import org.apache.wicket.util.string.StringValue;
 
-@AuthorizeInstantiation("Room")
 public class RoomPanel extends BasePanel {
 	private static final long serialVersionUID = 2308988314987829510L;
 	
