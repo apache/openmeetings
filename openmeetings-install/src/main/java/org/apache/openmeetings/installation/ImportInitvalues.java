@@ -645,7 +645,7 @@ public class ImportInitvalues {
 		Set<Right> rights = UserDao.getDefaultRights();
 		rights.add(Right.Admin);
 		rights.add(Right.Soap);
-		Long user_id = userManager.registerUserInit(UserDao.getDefaultRights(), cfg.username, cfg.password, "lastname"
+		Long user_id = userManager.registerUserInit(rights, cfg.username, cfg.password, "lastname"
 				, "firstname", cfg.email, new Date() /* age/birthday */, "street", "no", "fax", "zip", 1
 				, "town", default_lang_id, false /* sendWelcomeMessage */
 				, Arrays.asList(org.getOrganisation_id()), "phone", false, false, timezoneUtil.getTimeZone(cfg.ical_timeZone),
