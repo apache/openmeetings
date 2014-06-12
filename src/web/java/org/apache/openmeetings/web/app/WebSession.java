@@ -116,7 +116,7 @@ public class WebSession extends AbstractAuthenticatedWebSession {
 	public void invalidate() {
 		super.invalidate();
 		userId = -1;
-		rights.clear();
+		rights = new HashSet<User.Right>();
 		SID = null;
 		sdf = null;
 		recordingId = null;
