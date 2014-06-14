@@ -55,4 +55,18 @@
 			&lt;/dependency&gt;
 		</xsl:text>
 	</xsl:template>
+    <xsl:template match="//*[@name='commons-modeler']">
+		<xsl:text disable-output-escaping="yes">
+			&lt;dependency org="commons-modeler" name="commons-modeler" rev="2.0.1" &gt;
+				&lt;include type="jar" /&gt;
+			&lt;/dependency&gt;
+		</xsl:text>
+	</xsl:template>
+    <xsl:template match="//*[@name='xmlrpc']">
+		<xsl:text disable-output-escaping="yes">
+			&lt;dependency org="xmlrpc" name="xmlrpc" rev="2.0.1" &gt;
+				&lt;include type="jar" /&gt;
+			&lt;/dependency&gt;
+		</xsl:text>
+	</xsl:template>
 </xsl:stylesheet>
