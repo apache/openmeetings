@@ -649,7 +649,9 @@ public class UserDao implements IDataProviderDao<User> {
 
 		// this is needed cause the language is not a needed data at registering
 		u.setLanguage_id(language_id != 0 ? language_id : null);
-		u.updatePassword(cfgDao, userpass);
+		if (!Strings.isEmpty(userpass)) {
+			u.updatePassword(cfgDao, userpass);
+		}
 		u.setRegdate(new Date());
 		u.setDeleted(false);
 		u.setPictureuri(pictureuri);
