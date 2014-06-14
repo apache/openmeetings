@@ -351,7 +351,10 @@ public class MainService implements IPendingServiceCallback {
 
 							Address a = userDao.getAddress(null, null, null, 1L, null, null, null, userObject.getEmail());
 
-							User u = userDao.addUser(UserDao.getDefaultRights(), userObject.getFirstname(), userObject.getUsername(),
+							Set<Right> rights = UserDao.getDefaultRights();
+							rights.remove(Right.Login);
+							rights.remove(Right.Dashboard);
+							User u = userDao.addUser(rights, userObject.getFirstname(), userObject.getUsername(),
 											userObject.getLastname(), 1L, "" // password is empty by default
 											, a, false, null, null, timezoneUtil.getTimeZone(iCalTz), false
 											, null, null, false, false, userObject.getExternalUserId()
