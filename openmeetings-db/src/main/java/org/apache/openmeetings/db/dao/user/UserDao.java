@@ -534,10 +534,15 @@ public class UserDao implements IDataProviderDao<User> {
 	}
 
 	public User getExternalUser(String extId, String extType) {
-		return em.createNamedQuery("getExternalUser", User.class)
+		User u = null;
+		try {
+			u = em.createNamedQuery("getExternalUser", User.class)
 				.setParameter("externalId", extId)
 				.setParameter("externalType", extType)
 				.getSingleResult();
+		} catch (NoResultException ex) {
+		}
+		return u;
 	}
 
 	public List<User> get(String search, int start, int count, String order) {
@@ -644,7 +649,9 @@ public class UserDao implements IDataProviderDao<User> {
 
 		// this is needed cause the language is not a needed data at registering
 		u.setLanguage_id(language_id != 0 ? language_id : null);
-		u.updatePassword(cfgDao, userpass);
+		if (!Strings.isEmpty(userpass)) {
+			u.updatePassword(cfgDao, userpass);
+		}
 		u.setRegdate(new Date());
 		u.setDeleted(false);
 		u.setPictureuri(pictureuri);
