@@ -534,10 +534,15 @@ public class UserDao implements IDataProviderDao<User> {
 	}
 
 	public User getExternalUser(String extId, String extType) {
-		return em.createNamedQuery("getExternalUser", User.class)
+		User u = null;
+		try {
+			u = em.createNamedQuery("getExternalUser", User.class)
 				.setParameter("externalId", extId)
 				.setParameter("externalType", extType)
 				.getSingleResult();
+		} catch (NoResultException ex) {
+		}
+		return u;
 	}
 
 	public List<User> get(String search, int start, int count, String order) {
