@@ -42,6 +42,7 @@ import org.apache.openmeetings.db.entity.basic.Configuration;
 import org.apache.openmeetings.util.DaoHelper;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
@@ -65,6 +66,7 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 	@PersistenceContext
 	private EntityManager em;
 
+	@Autowired
 	private UserDao userDao;
 
 	/**
