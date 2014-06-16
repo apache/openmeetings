@@ -153,6 +153,9 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 		} catch (Exception e) {
 			//no-op, will continue to sign-in page
 		}
+		if (rights.isEmpty()) {
+			isSignedIn();
+		}
 		Roles r = new Roles();
 		for (Right right : rights) {
 			r.add(right.name());
