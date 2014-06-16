@@ -86,6 +86,11 @@
 			interview = 'true' == tla.parameters['interview'];
 			var _fps:int = parseInt(tla.parameters['fps']);
 			FPS = interview ? 24 : (isNaN(_fps) ? 30 : _fps);
+			
+			var lbls:Array = JSON.parse(tla.parameters['labels']) as Array;
+			for (var i:int = 0; i < lbls.length; ++i) {
+				labels[lbls[i].id] = lbls[i].value;
+			}
 		}
 
 		private function selectListItem(combo:ComboBox, selected:int):void {
@@ -175,12 +180,7 @@
 			var resI:Object = ress.dataProvider.getItemAt(idx > -1 ? idx : 0);
 			setResolution(resI.width, resI.height);
 
-			var lbls:Array = JSON.parse(tla.parameters['labels']) as Array;
-			for (i = 0; i < lbls.length; ++i) {
-				labels[lbls[i].id] = lbls.value;
-			}
 			remember.selected = true == getStoredProp("savecamdata");
-
 		}
 
 		public function getLabel(id:int):String {
@@ -302,11 +302,11 @@
 
 	<s:Group id="mainSetupGroup" width="{APP_WIDTH}">
 		<s:layout>
-			<s:VerticalLayout/>
+			<s:VerticalLayout paddingLeft="5" paddingRight="5"/>
 		</s:layout>
 		<mx:Text width="100%" fontWeight="bold" text="{getLabel(758)}"/>
 		<s:HGroup>
-			<s:VGroup>
+			<s:VGroup width="{LEFT_WIDTH}">
 				<mx:Text text="{getLabel(447)}"/>
 				<mx:ComboBox id="modes" width="{LEFT_WIDTH}" change="modeChanged(event)"/>
 				<s:VGroup id="av">
@@ -319,7 +319,7 @@
 						<mx:ComboBox id="mics" width="{LEFT_WIDTH}"/>
 					</s:VGroup>
 					<s:VGroup id="resGroup">
-						<s:Group><mx:Text text="{getLabel(1429)}"/><mx:Image x="260" source="assets/error.png" toolTip="{getLabel(1430)}"/></s:Group>
+						<s:Group><mx:Text text="{getLabel(1429)}"/><mx:Image x="260" source="../images/error.png" toolTip="{getLabel(1430)}"/></s:Group>
 						<mx:ComboBox id="ress" width="{LEFT_WIDTH}" change="resChanged(event)"/>
 					</s:VGroup>
 					<s:Group width="100%">
@@ -343,7 +343,7 @@
 								<s:stroke><s:SolidColorStroke color="black" weight="2"/></s:stroke>
 							</s:Rect>
 						</s:Graphic>
-						<mx:Image id="fill" source="assets/level_meter.png" x="2" y="1" z="3" width="0"/>
+						<mx:Image id="fill" source="../images/level_meter.png" x="2" y="1" z="3" width="0"/>
 						<mx:Text text="{getLabel(767)}" x="0" z="5"/>
 					</s:Group>
 					<s:Group width="100%">
@@ -353,7 +353,7 @@
 				</s:VGroup>
 			</s:Group>
 		</s:HGroup>
-		<s:HGroup><mx:Image source="assets/info.png"/><mx:Text text="{getLabel(765)}"/></s:HGroup>
+		<s:HGroup><mx:Image source="../images/info.png"/><mx:Text text="{getLabel(765)}" width="{APP_WIDTH - 70}"/></s:HGroup>
 		<s:Group width="100%">
 			<s:layout><s:HorizontalLayout horizontalAlign="right"/></s:layout>
 			<s:Button id="cancel" label="{getLabel(918)}"/>

@@ -21,7 +21,7 @@ package org.apache.openmeetings.web.pages;
 import static org.apache.openmeetings.web.app.Application.getBean;
 
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
-import org.apache.openmeetings.web.room.SwfRoomPanel;
+import org.apache.openmeetings.web.room.SwfPanel;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
@@ -34,7 +34,7 @@ public class SwfPage extends BaseNotInitedPage {
 
 	public SwfPage(PageParameters pp) {
 		add(new Label("titleAppName", getBean(ConfigurationDao.class).getAppName()));
-		add(new SwfRoomPanel("room", pp));
+		add(new SwfPanel("room", pp));
 	}
 	
 }

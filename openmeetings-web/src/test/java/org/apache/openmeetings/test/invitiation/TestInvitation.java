@@ -22,7 +22,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import org.apache.openmeetings.core.remote.InvitationService;
-import org.apache.openmeetings.core.remote.MainService;
+import org.apache.openmeetings.db.dao.server.SessiondataDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.server.Sessiondata;
 import org.apache.openmeetings.db.entity.user.User;
@@ -35,7 +35,7 @@ public class TestInvitation extends AbstractJUnitDefaults {
 	@Autowired
 	private InvitationService invitationService;
 	@Autowired
-	private MainService mService;
+	private SessiondataDao sessDao;
 	@Autowired
 	private UserWebService userWebService;
 	@Autowired
@@ -43,7 +43,7 @@ public class TestInvitation extends AbstractJUnitDefaults {
 	
 	@Test
 	public void testSendInvitationLink() {
-		Sessiondata sessionData = mService.getsessiondata();
+		Sessiondata sessionData = sessDao.startsession();
 		
 		Long uid = userWebService.loginUser(sessionData.getSession_id(), username, userpass);
 		User us = userDao.get(uid);

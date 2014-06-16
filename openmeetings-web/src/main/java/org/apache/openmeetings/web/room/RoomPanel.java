@@ -30,7 +30,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
+import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
+import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Right;
 import org.apache.openmeetings.web.app.Application;
@@ -74,24 +76,39 @@ public class RoomPanel extends BasePanel {
 		@Override
 		protected void respond(AjaxRequestTarget target) {
 			target.appendJavaScript("roomMessage(" + userList(roomId, c) + ");");
+			target.appendJavaScript("setHeight();");
+			//TODO SID etc
+			Room r = getBean(RoomDao.class).get(roomId);
+			target.appendJavaScript(String.format("initVideo('%s', %s, %s, %s, %s);", "sid"
+					, r.getRooms_id()
+					, r.getIsAudioOnly()
+					, 4L == r.getRoomtype().getRoomtypes_id()
+					, getStringLabels(448, 449, 450, 451, 758, 447, 52, 53, 1429, 1430, 775, 452, 767, 764, 765, 918, 54, 761, 762).toString()
+					));
+			
 		}
 	};
 	
 	public RoomPanel(String id, long _roomId) {
 		super(id);
 		this.roomId = _roomId;
-		add(new MenuPanel("roomMenu", getMenu()));
-		add(aab, AttributeAppender.append("style", "height: 100%;")/*, new AbstractAjaxTimerBehavior(Duration.seconds(10)) {
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			protected void onTimer(AjaxRequestTarget target) {
-				// re-request user list to avoid possible issues
-				//target.appendJavaScript("roomMessage(" + userList(roomId, c) + ");"); //TODO is it nessesary ??
-			}
-		}*/);
+		Room r = getBean(RoomDao.class).get(roomId);
+		add(new MenuPanel("roomMenu", getMenu()).setVisible(!r.getHideTopBar()));
+		add(aab, AttributeAppender.append("style", "height: 100%;"));
 	}
 
+	private JSONArray getStringLabels(long... ids) {
+		JSONArray arr = new JSONArray();
+		try {
+		for (long id : ids) {
+			arr.put(new JSONObject().put("id", id).put("value", WebSession.getString(id)));
+		}
+		} catch (JSONException e) {
+			log.error("", e);
+		}
+		return arr;
+	}
+	
 	@Override
 	protected void onBeforeRender() {
 		super.onBeforeRender();

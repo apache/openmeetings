@@ -128,22 +128,6 @@ public class UserService implements IUserService {
 	}
 
 	/**
-	 * refreshes the current SID
-	 * 
-	 * @param SID
-	 * @return "ok" string in case of success, "error" string in case of the error
-	 */
-	public String refreshSession(String SID) {
-		try {
-			sessiondataDao.checkSession(SID);
-			return "ok";
-		} catch (Exception err) {
-			log.error("[refreshSession]", err);
-		}
-		return "error";
-	}
-
-	/**
 	 * get all availible Salutations
 	 * 
 	 * @param SID

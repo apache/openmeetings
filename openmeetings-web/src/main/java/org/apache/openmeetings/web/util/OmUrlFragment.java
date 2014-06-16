@@ -40,7 +40,6 @@ import org.apache.openmeetings.web.admin.servers.ServersPanel;
 import org.apache.openmeetings.web.admin.users.UsersPanel;
 import org.apache.openmeetings.web.common.BasePanel;
 import org.apache.openmeetings.web.room.RoomPanel;
-import org.apache.openmeetings.web.room.SwfRoomPanel;
 import org.apache.openmeetings.web.user.calendar.CalendarPanel;
 import org.apache.openmeetings.web.user.dashboard.OmDashboardPanel;
 import org.apache.openmeetings.web.user.profile.SettingsPanel;
@@ -264,7 +263,6 @@ public class OmUrlFragment implements Serializable {
 						pp.add("wicketsid", getSid());
 						pp.add("wicketroomid", roomId);
 						pp.add("language", getLanguage());
-						basePanel = new SwfRoomPanel(CHILD_ID, pp);
 						basePanel = new RoomPanel(CHILD_ID, roomId);
 					}
 				} catch(NumberFormatException ne) {

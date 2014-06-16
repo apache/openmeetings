@@ -31,16 +31,15 @@ import javax.ws.rs.core.MediaType;
 
 import org.apache.cxf.feature.Features;
 import org.apache.openmeetings.core.data.basic.FieldManager;
-import org.apache.openmeetings.core.remote.MainService;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.basic.ErrorDao;
 import org.apache.openmeetings.db.dao.label.FieldLanguagesValuesDao;
 import org.apache.openmeetings.db.dao.server.SOAPLoginDao;
 import org.apache.openmeetings.db.dao.server.SessiondataDao;
 import org.apache.openmeetings.db.dao.user.IUserManager;
-import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.dao.user.OrganisationDao;
 import org.apache.openmeetings.db.dao.user.OrganisationUserDao;
+import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.dto.basic.ErrorResult;
 import org.apache.openmeetings.db.dto.basic.SearchResult;
 import org.apache.openmeetings.db.dto.user.UserSearchResult;
@@ -94,7 +93,7 @@ public class UserWebService {
 	@Autowired
 	private UserDao userDao;
 	@Autowired
-	private MainService mainService;
+	private SessiondataDao sessionDao;
 	@Autowired
 	private FieldLanguagesValuesDao labelDao;
 
@@ -108,7 +107,7 @@ public class UserWebService {
 	@Path("/session")
 	public Sessiondata getSession() {
 		log.debug("SPRING LOADED getSession -- ");
-		return mainService.getsessiondata();
+		return sessionDao.startsession();
 	}
 
 	/**

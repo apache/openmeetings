@@ -143,15 +143,6 @@ public class MainService implements IPendingServiceCallback {
 		return null;
 	}
 
-	/**
-	 * load this session id before doing anything else
-	 * 
-	 * @return a unique session identifier
-	 */
-	public Sessiondata getsessiondata() {
-		return sessiondataDao.startsession();
-	}
-
 	public Long setCurrentUserOrganization(String SID, Long organization_id) {
 		try {
 			sessiondataDao.updateUserOrg(SID, organization_id);

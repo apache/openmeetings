@@ -47,3 +47,7 @@
 .room.sidebar.left .user.list .user.current {
 	font-weight: bold;
 }
+.ui-dialog.video, .ui-dialog.video .ui-dialog-titlebar, .ui-dialog.video .video.ui-dialog-content {
+	padding: 0;
+	overflow: hidden;
+}

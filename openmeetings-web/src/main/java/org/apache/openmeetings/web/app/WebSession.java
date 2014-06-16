@@ -264,6 +264,9 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 				default:
 					throw new OmException(-1L);
 			}
+			if (u == null) {
+				return false;
+			}
 			setUser(u);
 			return true;
 		} catch (OmException oe) {

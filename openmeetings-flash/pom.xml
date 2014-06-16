@@ -30,7 +30,6 @@
 	<description>TODO</description>
 	<properties>
 		<openlaszlo>${project.build.directory}/openlaszlo</openlaszlo>
-		<laszlo.home>${openlaszlo}/openlaszlo</laszlo.home>
 		<laszlo46.home>${openlaszlo}/openlaszlo46</laszlo46.home>
 		<out.dir.swf>${project.build.directory}</out.dir.swf>
 		<webcontent.base.dir>${project.basedir}/src/main</webcontent.base.dir>

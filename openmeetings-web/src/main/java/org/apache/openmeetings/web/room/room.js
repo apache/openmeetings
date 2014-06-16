@@ -74,6 +74,48 @@ function roomMessage(m) {
 	}
 }
 
+function initVideo(sid, roomid, audioOnly, interview, labels) {
+	var options = {sid: sid, roomid: roomid, audioOnly: audioOnly, interview: interview, bgcolor: "#ffffff"
+		, width: 570, height: 900
+		, resolutions: JSON.stringify([{label: "4:3 (~6 KByte/sec)", width: 40, height: 30}
+			, {label: "4:3 (~12 KByte/sec)", width: 80, height: 60}
+			, {label: "4:3 (~20 KByte/sec)", width: 120, height: 90, default: true}
+			, {label: "QQVGA 4:3 (~36 KByte/sec)", width: 160, height: 120}
+			, {label: "4:3 (~40 KByte/sec)", width: 240, height: 180}
+			, {label: "HVGA 4:3 (~56 KByte/sec)", width: 320, height: 240}
+			, {label: "4:3  (~60 KByte/sec)", width: 480, height: 360}
+			, {label: "4:3 (~68 KByte/sec)", width: 640, height: 480}
+			, {label: "XGA 4:3", width: 1024, height: 768}
+			, {label: "16:9", width: 256, height: 150}
+			, {label: "WQVGA 9:5", width: 432, height: 240}
+			, {label: "pseudo 16:9", width: 480, height: 234}
+			, {label: "16:9", width: 512, height: 300}
+			, {label: "nHD 16:9", width: 640, height: 360}
+			, {label: "16:9", width: 1024, height: 600}])
+		, labels: JSON.stringify(labels)
+		};
+	var type = 'application/x-shockwave-flash';
+	var src = 'public/main.swf?cache' + new Date().getTime();
+	var r = $('<div class="video">');
+	var o = $('<object>').attr('type', type).attr('data', src).attr('width', options.width).attr('height', options.height);
+	o.append($('<param>').attr('name', 'quality').attr('value', 'best'));
+	o.append($('<param>').attr('name', 'wmode').attr('value', 'transparent'));
+	o.append($('<param>').attr('name', 'allowscriptaccess').attr('value', 'sameDomain'));
+	o.append($('<param>').attr('name', 'allowfullscreen').attr('value', 'false'));
+	o.append($('<param>').attr('name', 'flashvars').attr('value', $.param(options)));
+	$('#roomMenu').parent().append(r.append(o));
+	/*
+			.attr('wmode', 'window').attr('allowfullscreen', true)
+			.attr('width', options.width).attr('height', options.height)
+			.attr('id', 'lzapp').attr('name', 'lzapp')
+			.attr('flashvars', escape($.param(options)))
+			.attr('swliveconnect', true).attr('align', 'middle')
+			.attr('allowscriptaccess', 'sameDomain').attr('type', 'application/x-shockwave-flash')
+			.attr('pluginspage', 'http://www.macromedia.com/go/getflashplayer')
+	*/
+	r.dialog({ width: options.width, height: options.height, dialogClass: "video" });
+}
+
 function setHeight() {
 	var h = $(document).height() - $('#roomMenu').height();
 	$(".room.sidebar.left").height(h);
@@ -81,7 +123,6 @@ function setHeight() {
 }
 
 $(document).ready(function() {
-	setHeight();
 	$(window).on('resize.openmeetings', function() {
 		setHeight();
 	});

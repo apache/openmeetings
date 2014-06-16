@@ -18,7 +18,7 @@
  */
 package org.apache.openmeetings.test.userdata;
 
-import org.apache.openmeetings.core.remote.MainService;
+import org.apache.openmeetings.db.dao.server.SessiondataDao;
 import org.apache.openmeetings.db.entity.server.Sessiondata;
 import org.apache.openmeetings.test.AbstractJUnitDefaults;
 import org.apache.openmeetings.util.crypt.ManageCryptStyle;
@@ -27,11 +27,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 public class TestAuth extends AbstractJUnitDefaults {
 	@Autowired
-	private MainService mService;
+	private SessiondataDao sessionDao;
 
 	@Test
 	public void testTestAuth() {
-		Sessiondata sessionData = mService.getsessiondata();
+		Sessiondata sessionData = sessionDao.startsession();
 
 		System.out.println("sessionData: " + sessionData.getSession_id());
 

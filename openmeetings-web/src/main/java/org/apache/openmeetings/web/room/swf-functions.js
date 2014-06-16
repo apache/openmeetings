@@ -16,9 +16,6 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-function getAppletStatus() {
-	return false;
-}
 
 function initSwf(swfurl) {
 	var general = {
@@ -42,11 +39,4 @@ function initSwf(swfurl) {
 		.attr('allowscriptaccess', 'sameDomain').attr('type', 'application/x-shockwave-flash')
 		.attr('pluginspage', 'http://www.macromedia.com/go/getflashplayer');
 	$('#swfloading').after($('<div id="lzappContainer">').append(embed)).width('1px').height('1px');
-}
-
-function roomExit() {
-	$('#header, #topControls, #chatPanel').show();
-	$('div[id="contents"], div[id="contents"] > div').css('height', 'auto');
-	window.location.hash = "#rooms/public";
-	$('#lzappContainer').remove();
 }

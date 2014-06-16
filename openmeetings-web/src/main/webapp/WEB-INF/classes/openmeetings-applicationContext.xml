@@ -81,7 +81,6 @@
 	<!-- Start of Services -->
 	<bean id="xmlcrm.service" class="org.apache.openmeetings.core.remote.MainService" />
 	<bean id="printservice.service" class="org.apache.openmeetings.core.remote.PrintService" />
-	<bean id="pollservice.service" class="org.apache.openmeetings.core.remote.PollService" />
 	<bean id="languageservice.service" class="org.apache.openmeetings.core.remote.LanguageService" />
 	<bean id="invitationservice.service" class="org.apache.openmeetings.core.remote.InvitationService" />
 	<bean id="whiteboardservice.service" class="org.apache.openmeetings.core.remote.WhiteBoardService" />
