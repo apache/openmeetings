@@ -20,9 +20,9 @@ package org.apache.openmeetings.screen.webstart;
 
 import org.red5.client.net.rtmp.ClientExceptionHandler;
 import org.red5.client.net.rtmpt.RTMPTClient;
+import org.red5.server.net.ICommand;
 import org.red5.server.net.rtmp.Channel;
 import org.red5.server.net.rtmp.RTMPConnection;
-import org.red5.server.net.rtmp.codec.RTMP;
 import org.red5.server.net.rtmp.message.Header;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,16 +46,16 @@ public class RTMPTScreenShare extends RTMPTClient implements ClientExceptionHand
 	//
 	// ------------------------------------------------------------------------
 	@Override
-	public void connectionOpened(RTMPConnection conn, RTMP rtmp) {
+	public void connectionOpened(RTMPConnection conn) {
 		logger.debug("connection opened");
-		super.connectionOpened(conn, rtmp);
+		super.connectionOpened(conn);
 		this.conn = conn;
 	}
 
 	@Override
-	public void connectionClosed(RTMPConnection conn, RTMP rtmp) {
+	public void connectionClosed(RTMPConnection conn) {
 		logger.debug("connection closed");
-		super.connectionClosed(conn, rtmp);
+		super.connectionClosed(conn);
 		if (core.isAudioNotify()) {
 			AudioTone.play();
 		}
@@ -63,12 +63,11 @@ public class RTMPTScreenShare extends RTMPTClient implements ClientExceptionHand
 	}
 
 	@Override
-	protected void onInvoke(RTMPConnection conn, Channel channel, Header source, org.red5.server.net.rtmp.event.Notify invoke, RTMP rtmp) {
-		super.onInvoke(conn, channel, source, invoke, rtmp);
-
-		core.onInvoke(conn, channel, source, invoke, rtmp);
+	protected void onCommand(RTMPConnection conn, Channel channel, Header source, ICommand command) {
+		super.onCommand(conn, channel, source, command);
+		core.onCommand(conn, channel, source, command);
 	}
-
+	
 	@Override
 	public void handleException(Throwable throwable) {
 		logger.error("{}", new Object[] { throwable.getCause() });

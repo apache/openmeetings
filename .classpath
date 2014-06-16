@@ -36,9 +36,32 @@
 	</classpathentry>
 	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="con" path="org.apache.ivyde.eclipse.cpcontainer.IVYDE_CONTAINER/?project=Openmeetings+3.0.x&amp;ivyXmlPath=ivy.xml&amp;confs=*&amp;ivySettingsPath=%24%7Bworkspace_loc%3AOpenmeetings+3.0.x%2Fivysettings.xml%7D&amp;loadSettingsOnDemand=false&amp;propertyFiles="/>
-	<classpathentry kind="con" path="org.apache.ivyde.eclipse.cpcontainer.IVYDE_CONTAINER/?project=Openmeetings+3.0.x&amp;ivyXmlPath=build%2Fred5%2Fserver%2Fivy.xml&amp;confs=default%2Cjava6&amp;ivySettingsPath=%24%7Bworkspace_loc%3AOpenmeetings+3.0.x%7D%2Fbuild%2Fred5%2Fserver%2Fivysettings.xml&amp;loadSettingsOnDemand=false&amp;propertyFiles="/>
-	<classpathentry kind="lib" path="build/red5/server/dist/red5.jar" sourcepath="build/red5/server/src"/>
-	<classpathentry kind="lib" path="build/red5/client/dist/red5-client.jar" sourcepath="build/red5/client/src"/>
 	<classpathentry kind="lib" path="build/lib/java_16_tools.jar"/>
+	<classpathentry kind="lib" path="build/red5/server/dist/lib/red5-io-1.0.3.jar"/>
+	<classpathentry kind="lib" path="build/red5/server/dist/red5-server.jar" sourcepath="build/red5/server/src/main/java"/>
+	<classpathentry kind="lib" path="build/red5/server/dist/lib/slf4j-api-1.7.5.jar"/>
+	<classpathentry kind="lib" path="build/red5/server/dist/lib/spring-core-4.0.3.RELEASE.jar"/>
+	<classpathentry kind="lib" path="build/red5/server/dist/lib/spring-beans-4.0.3.RELEASE.jar"/>
+	<classpathentry kind="lib" path="build/red5/server/dist/lib/mina-core-2.0.7.jar"/>
+	<classpathentry kind="lib" path="build/red5/server/dist/lib/quartz-2.1.7.jar"/>
+	<classpathentry kind="lib" path="build/red5/server/dist/lib/log4j-over-slf4j-1.7.5.jar"/>
+	<classpathentry kind="lib" path="build/red5/server/dist/lib/commons-collections-20040616.jar"/>
+	<classpathentry kind="lib" path="build/red5/server/dist/lib/spring-web-4.0.3.RELEASE.jar"/>
+	<classpathentry kind="lib" path="build/red5/server/dist/lib/commons-beanutils-1.8.3.jar"/>
+	<classpathentry kind="lib" path="build/red5/server/dist/lib/commons-lang3-3.1.jar"/>
+	<classpathentry kind="lib" path="build/red5/server/dist/lib/logback-core-1.0.13.jar"/>
+	<classpathentry kind="lib" path="build/red5/server/dist/lib/logback-classic-1.0.13.jar"/>
+	<classpathentry kind="lib" path="build/red5/server/dist/lib/spring-expression-4.0.3.RELEASE.jar"/>
+	<classpathentry kind="lib" path="build/red5/server/dist/lib/spring-context-4.0.3.RELEASE.jar"/>
+	<classpathentry kind="lib" path="build/red5/server/dist/lib/spring-context-support-4.0.3.RELEASE.jar"/>
+	<classpathentry kind="lib" path="build/red5/server/dist/lib/aopalliance-1.0.jar"/>
+	<classpathentry kind="lib" path="build/red5/server/dist/lib/spring-aop-4.0.3.RELEASE.jar"/>
+	<classpathentry kind="lib" path="build/red5/server/dist/lib/spring-test-4.0.3.RELEASE.jar"/>
+	<classpathentry kind="lib" path="build/red5/server/dist/lib/commons-pool-1.5.6.jar"/>
+	<classpathentry kind="lib" path="build/red5/server/dist/lib/ehcache-core-2.5.0.jar"/>
+	<classpathentry kind="lib" path="build/red5/server/dist/plugins/tomcat-embed-core-7.0.50.jar"/>
+	<classpathentry kind="lib" path="build/red5/server/dist/lib/bcprov-jdk15on-1.47.jar"/>
+	<classpathentry kind="lib" path="build/red5/server/dist/lib/cglib-nodep-2.2.2.jar"/>
+	<classpathentry kind="lib" path="build/red5/client/dist/red5-client-1.0.2-RC2.jar" sourcepath="build/red5/client/src/main/java"/>
 	<classpathentry kind="output" path="build/classes/eclipse"/>
 </classpath>

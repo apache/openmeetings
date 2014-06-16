@@ -46,9 +46,9 @@ import org.red5.io.utils.ObjectMap;
 import org.red5.server.api.event.IEvent;
 import org.red5.server.api.service.IPendingServiceCall;
 import org.red5.server.api.service.IPendingServiceCallback;
+import org.red5.server.net.ICommand;
 import org.red5.server.net.rtmp.Channel;
 import org.red5.server.net.rtmp.RTMPConnection;
-import org.red5.server.net.rtmp.codec.RTMP;
 import org.red5.server.net.rtmp.event.Notify;
 import org.red5.server.net.rtmp.message.Header;
 import org.red5.server.net.rtmp.status.StatusCodes;
@@ -306,7 +306,11 @@ public class CoreScreenShare implements IPendingServiceCallback, INetStreamEvent
 		this.readyToRecord = readyToRecord;
 	}
 	
-	protected void onInvoke(RTMPConnection conn, Channel channel, Header source, org.red5.server.net.rtmp.event.Notify invoke, RTMP rtmp) {
+	protected void onCommand(RTMPConnection conn, Channel channel, Header source, ICommand command) {
+		if (!(command instanceof Notify)) {
+			return;
+		}
+		Notify invoke = (Notify)command;
 		if (invoke.getType() == IEvent.Type.STREAM_DATA) {
 			return;
 		}
