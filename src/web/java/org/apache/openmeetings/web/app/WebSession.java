@@ -152,6 +152,9 @@ public class WebSession extends AbstractAuthenticatedWebSession {
 		} catch (Exception e) {
 			//no-op, will continue to sign-in page
 		}
+		if (rights.isEmpty()) {
+			isSignedIn();
+		}
 		Roles r = new Roles();
 		for (Right right : rights) {
 			r.add(right.name());
@@ -259,6 +262,9 @@ public class WebSession extends AbstractAuthenticatedWebSession {
 					break;
 				default:
 					throw new OmException(-1L);
+			}
+			if (u == null) {
+				return false;
 			}
 			setUser(u);
 			return true;
