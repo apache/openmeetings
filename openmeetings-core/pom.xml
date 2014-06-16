@@ -41,6 +41,23 @@
 			<url>http://smslib.org/maven2/v3</url>
 		</repository>
 	</repositories>
+	<profiles>
+		<profile>
+			<id>Quick</id>
+			<activation>
+				<property>
+					<name>quick</name>
+					<value>true</value>
+				</property>
+			</activation>
+			<properties>
+				<maven.test.skip>true</maven.test.skip>
+				<om.quick.build>true</om.quick.build>
+				<old-backups.dwnd.skip>true</old-backups.dwnd.skip>
+				<wicket.mode>DEVELOPMENT</wicket.mode>
+			</properties>
+		</profile>
+	</profiles>
 	<build>
 		<plugins>
 			<plugin>

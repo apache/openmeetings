@@ -441,9 +441,6 @@ public class ImportInitvalues {
 						null,
 						"Default selection in ScreenSharing Quality:\n 0 - bigger frame rate, no resize\n 1 - no resize\n 2 - size == 1/2 of selected area\n 3 - size == 3/8 of selected area");
 
-		configurationDao.add("default.dashboard.tab", "0", null,
-				"Default selection in Dashboard tabs as tab-index-id");
-
 		configurationDao.add(CONFIG_DASHBOARD_SHOW_MYROOMS_KEY, "1", null, "Show My Rooms Tab");
 
 		configurationDao.add("dashboard.show.chat", "1", null, "Show Chat Tab");

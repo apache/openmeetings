@@ -34,11 +34,13 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<maven.build.timestamp.format>yyyy/MM/dd HH:mm</maven.build.timestamp.format>
 		<wicket.mode>DEPLOYMENT</wicket.mode>
+		<om.quick.build>false</om.quick.build>
 		<db>derby</db>
 		<spring.version>4.0.3.RELEASE</spring.version>
 		<junit.version>4.11</junit.version>
 		<maven.javadoc.version>2.9.1</maven.javadoc.version>
 		<maven.surefire.version>2.17</maven.surefire.version>
+		<maven-site.version>3.3</maven-site.version>
 		<wicket.version>6.15.0</wicket.version>
 		<red5-server.version>1.0.2-RELEASE</red5-server.version>
 		<batik.version>1.7</batik.version>
@@ -64,6 +66,20 @@
 	</modules>
 	<profiles>
 		<profile>
+			<id>Quick</id>
+			<activation>
+				<property>
+					<name>quick</name>
+					<value>true</value>
+				</property>
+			</activation>
+			<properties>
+				<maven.test.skip>true</maven.test.skip>
+				<om.quick.build>true</om.quick.build>
+				<old-backups.dwnd.skip>true</old-backups.dwnd.skip>
+				<red5-server.dwnd.skip>true</red5-server.dwnd.skip>
+				<wicket.mode>DEVELOPMENT</wicket.mode>
+			</properties>
 		</profile>
 	</profiles>
 	<url>http://openmeetings.apache.org</url>
@@ -479,7 +495,7 @@
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-site-plugin</artifactId>
-					<version>3.3</version>
+					<version>${maven-site.version}</version>
 					<configuration>
 						<generatedSiteDirectory>${project.build.directory}/generated-site</generatedSiteDirectory>
 					</configuration>
@@ -590,6 +606,16 @@
 					<groupId>org.codehaus.mojo</groupId>
 					<artifactId>xml-maven-plugin</artifactId>
 					<version>1.0</version>
+				</plugin>
+				<plugin>
+					<groupId>org.codehaus.mojo</groupId>
+					<artifactId>buildnumber-maven-plugin</artifactId>
+					<version>1.3</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-clean-plugin</artifactId>
+					<version>2.5</version>
 				</plugin>
 			</plugins>
 		</pluginManagement>

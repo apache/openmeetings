@@ -22,12 +22,17 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.openmeetings.web.app.Application.addUserToRoom;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.Application.getRoomUsers;
+import static org.apache.openmeetings.web.util.OmUrlFragment.ROOMS_PUBLIC;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_REDIRECT_URL_FOR_EXTERNAL_KEY;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_APPLICATION_BASE_URL;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.user.User;
+import org.apache.openmeetings.db.entity.user.User.Right;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.Client;
 import org.apache.openmeetings.web.app.WebSession;
@@ -35,6 +40,7 @@ import org.apache.openmeetings.web.common.BasePanel;
 import org.apache.openmeetings.web.common.menu.MenuItem;
 import org.apache.openmeetings.web.common.menu.MenuPanel;
 import org.apache.openmeetings.web.common.menu.RoomMenuItem;
+import org.apache.openmeetings.web.pages.MainPage;
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.json.JSONArray;
@@ -49,8 +55,10 @@ import org.apache.wicket.markup.head.PriorityHeaderItem;
 import org.apache.wicket.protocol.ws.IWebSocketSettings;
 import org.apache.wicket.protocol.ws.api.registry.IWebSocketConnectionRegistry;
 import org.apache.wicket.protocol.ws.api.registry.PageIdKey;
+import org.apache.wicket.request.flow.RedirectToUrlException;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.apache.wicket.request.resource.ResourceReference;
+import org.apache.wicket.util.string.Strings;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 
@@ -157,7 +165,22 @@ public class RoomPanel extends BasePanel {
 	private List<MenuItem> getMenu() {
 		//TODO hide/show
 		List<MenuItem> menu = new ArrayList<MenuItem>();
-		menu.add(new RoomMenuItem(WebSession.getString(308), WebSession.getString(309), "room menu exit"));
+		menu.add(new RoomMenuItem(WebSession.getString(308), WebSession.getString(309), "room menu exit") {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void onClick(MainPage page, AjaxRequestTarget target) {
+				if (WebSession.getRights().contains(Right.Dashboard)) {
+					page.updateContents(ROOMS_PUBLIC, target);
+				} else {
+					String url = getBean(ConfigurationDao.class).getConfValue(CONFIG_REDIRECT_URL_FOR_EXTERNAL_KEY, String.class, "");
+					if (Strings.isEmpty(url)) {
+						url = getBean(ConfigurationDao.class).getConfValue(CONFIG_APPLICATION_BASE_URL, String.class, "");
+					}
+					throw new RedirectToUrlException(url);
+				}
+			}
+		});
 		MenuItem files = new RoomMenuItem(WebSession.getString(245));
 		List<RoomMenuItem> fileItems = new ArrayList<RoomMenuItem>();
 		fileItems.add(new RoomMenuItem(WebSession.getString(15)));

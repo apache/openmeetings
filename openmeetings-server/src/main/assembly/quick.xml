@@ -82,7 +82,7 @@
 			</includes>
 		</fileSet>
 		<fileSet>
-			<directory>${project.parent.basedir}/openmeetings-web/target</directory>
+			<directory>${project.parent.basedir}/openmeetings-web/target/openmeetings-web-${project.version}/WEB-INF/lib</directory>
 			<outputDirectory>${om.webapp}/WEB-INF/lib</outputDirectory>
 			<includes>
 				<include>openmeetings-*.jar</include>

@@ -47,6 +47,7 @@
 							<target>
 								<ant antfile="${basedir}/openlaszlo.xml" target="client.only"/>
 							</target>
+							<skip>${om.quick.build}</skip>
 						</configuration>
 						<goals>
 							<goal>run</goal>

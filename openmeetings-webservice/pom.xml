@@ -39,11 +39,6 @@
 				<artifactId>maven-javadoc-plugin</artifactId>
 				<executions>
 					<execution>
-						<goals>
-							<goal>javadoc</goal>
-							<goal>aggregate</goal>
-						</goals>
-						<phase>generate-resources</phase>
 						<configuration>
 							<groups>
 								<group>
@@ -52,7 +47,13 @@
 								</group>
 							</groups>
 							<excludePackageNames>org.apache.openmeetings.webservice.cluster,org.apache.openmeetings.webservice.dto</excludePackageNames>
+							<skip>${om.quick.build}</skip>
 						</configuration>
+						<goals>
+							<goal>javadoc</goal>
+							<goal>aggregate</goal>
+						</goals>
+						<phase>generate-resources</phase>
 					</execution>
 				</executions>
 			</plugin>

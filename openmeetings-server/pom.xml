@@ -35,6 +35,7 @@
 		<languages.dir>${project.parent.basedir}/openmeetings-web/src/main/webapp/languages</languages.dir>
 		<dist.dir>${project.build.directory}/${project.build.finalName}</dist.dir>
 		<dist.webapps>${dist.dir}/webapps</dist.webapps>
+		<dist.om.dir>${dist.webapps}/openmeetings</dist.om.dir>
 		<om.webapp>webapps/openmeetings</om.webapp>
 		<root.webapp>webapps/root</root.webapp>
 		<assembly.finalName>${project.build.finalName}</assembly.finalName>
@@ -51,12 +52,55 @@
 				</property>
 			</activation>
 			<properties>
-				<maven.test.skip>true</maven.test.skip>
-				<om.quick.build>true</om.quick.build>
-				<red5-server.dwnd.skip>true</red5-server.dwnd.skip>
 				<assembly.finalName>server</assembly.finalName>
 				<assembly.descriptor>quick</assembly.descriptor>
 			</properties>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-clean-plugin</artifactId>
+						<executions>
+							<execution>
+								<id>quick-clean</id>
+								<phase>initialize</phase>
+								<goals>
+									<goal>clean</goal>
+								</goals>
+								<configuration>
+									<excludeDefaultDirectories>true</excludeDefaultDirectories>
+									<filesets>
+										<fileset>
+											<directory>${dist.om.dir}</directory>
+											<includes>
+												<include>css/**</include>
+												<include>js/**</include>
+												<include>images/**</include>
+												<include>WEB-INF/**</include>
+											</includes>
+										</fileset>
+										<fileset>
+											<directory>${dist.om.dir}/WEB-INF/lib</directory>
+											<includes>
+												<include>openmeetings-*.jar</include>
+											</includes>
+										</fileset>
+										<fileset>
+											<directory>${dist.om.dir}/WEB-INF/classes</directory>
+											<includes>
+												<include>**/*.html</include>
+												<include>**/*.js</include>
+												<include>**/*.css</include>
+												<include>**/*.xml</include>
+											</includes>
+										</fileset>
+									</filesets>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
 		</profile>
 		<profile>
 			<id>Unpacked</id>
@@ -68,7 +112,6 @@
 			</activation>
 			<properties>
 				<maven.test.skip>true</maven.test.skip>
-				<om.quick.build>false</om.quick.build>
 				<assembly.finalName>server</assembly.finalName>
 				<assembly.descriptor>unpacked</assembly.descriptor>
 			</properties>
@@ -142,6 +185,7 @@
 									</parameters>
 								</transformationSet>
 							</transformationSets>
+							<skip>${om.quick.build}</skip>
 						</configuration>
 					</execution>
 				</executions>
@@ -150,7 +194,7 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-site-plugin</artifactId>
 				<configuration>
-					<skip>false</skip>
+					<skip>${om.quick.build}</skip>
 				</configuration>
 				<executions>
 					<execution>
