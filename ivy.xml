@@ -312,6 +312,9 @@
 		<dependency org="org.seleniumhq.selenium" name="selenium-java" conf="openmeetings->*" rev="2.35.0" >
 			<include type="jar" />
 		</dependency>
+		<dependency org="org.apache.directory.api" name="api-all" rev="1.0.0-M22" conf="openmeetings->*" >
+			<include type="jar" />
+		</dependency>
 
 		<!-- include type="bundle" / FIXME unable to get openjpa without  sources -->
 		<dependency org="org.mnode.ical4j" name="ical4j" rev="1.0.5" conf="openmeetings.ext->*" transitive="false"/>
@@ -405,6 +408,7 @@
 		<exclude org="javax.servlet" module="servlet-api" type="*" ext="*" conf="*" matcher="exact"/>		
 		<exclude org="cglib" module="cglib-nodep" type="*" ext="*" conf="*" matcher="exact"/>
 		<exclude org="pull-parser" module="pull-parser" type="*" ext="*" conf="*" matcher="exact"/>
+		<exclude org="org.apache.mina" module="mina-core" type="*" ext="*" conf="*" matcher="exact"/>
 	</dependencies>
 </ivy-module>
 

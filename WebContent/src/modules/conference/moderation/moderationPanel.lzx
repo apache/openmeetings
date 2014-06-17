@@ -63,6 +63,7 @@
 	            this.mod_btn.destroy();
 	        }
 	        this._roomName.setAttribute("text",this.roomName);
+	        if ($debug) Debug.write("moderationPanel.init: ", !canvas.currentRoomObj.hideScreenSharing && (canvas.ismoderator || canvas.becomemoderator || canvas.isAllowedToScreenShare), canvas.currentRoomObj);
         ]]>
     </handler>
     
@@ -104,9 +105,8 @@
         <labelTooltip inittwice="true" labelid="906" />      
     </miniIconsNew>
     
-    <miniIconsNew name="_doShare" y="6" innerResource="start_screensharing_rsc" width="16" height="16" 
-    			showhandcursor="true"
-               visible="${canvas.currentRoomObj.hideScreenSharing ? false : ((canvas.becomemoderator) ? true : ((canvas.isAllowedToScreenShare) ? true : false )) }" >
+    <miniIconsNew name="_doShare" y="6" innerResource="start_screensharing_rsc" width="16" height="16" showhandcursor="true"
+               visible="${ !canvas.currentRoomObj.hideScreenSharing &amp;&amp; (canvas.ismoderator || canvas.becomemoderator || canvas.isAllowedToScreenShare) }" >
         <handler name="onclick">
             this.parent.checkForApplyScreen("no");
         </handler>
