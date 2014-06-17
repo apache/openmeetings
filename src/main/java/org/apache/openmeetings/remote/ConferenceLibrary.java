@@ -23,7 +23,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 
 import org.apache.commons.transaction.util.FileHelper;
 import org.apache.openmeetings.data.whiteboard.WhiteboardManager;
@@ -212,8 +211,7 @@ public class ConferenceLibrary implements IPendingServiceCallback {
 				sendObject.put("roomitems", roomItems);
 
 				// Notify all Clients of that Scope (Room)
-				for (Set<IConnection> conset : current.getScope().getConnections()) {
-				for (IConnection conn : conset) {
+				for (IConnection conn : current.getScope().getClientConnections()) {
 					if (conn != null) {
 						if (conn instanceof IServiceCapableConnection) {
 							Client rcl = this.sessionManager
@@ -230,7 +228,6 @@ public class ConferenceLibrary implements IPendingServiceCallback {
 							}
 						}
 					}
-				}
 				}
 			}
 		} catch (Exception err) {

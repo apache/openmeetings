@@ -25,7 +25,6 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
 
 import org.apache.openmeetings.data.user.UserManager;
 import org.apache.openmeetings.data.whiteboard.EmoticonsManager;
@@ -157,8 +156,7 @@ public class ChatService implements IPendingServiceCallback {
 			log.debug("SET CHATROOM: " + room_id);
 
 			//broadcast to everybody in the room/domain
-			for (Set<IConnection> conset : current.getScope().getConnections()) {
-			for (IConnection conn : conset) {
+			for (IConnection conn : current.getScope().getClientConnections()) {
 				if (conn != null) {
 					if (conn instanceof IServiceCapableConnection) {
 						
@@ -179,7 +177,6 @@ public class ChatService implements IPendingServiceCallback {
 						((IServiceCapableConnection) conn).invoke("sendVarsToMessageWithClient",new Object[] { hsm }, this);
     			 	}
     			}
-			}
 			}
 		} catch (Exception err) {
 			log.error("[ChatService sendMessageWithClient] ",err);
@@ -216,8 +213,7 @@ public class ChatService implements IPendingServiceCallback {
 			hsm.put("message", newMessage);
 
 			// broadcast to everybody in the room/domain
-			for (Set<IConnection> conset : current.getScope().getConnections()) {
-			for (IConnection conn : conset) {
+			for (IConnection conn : current.getScope().getClientConnections()) {
 				if (conn != null) {
 					if (conn instanceof IServiceCapableConnection) {
 						IClient client = conn.getClient();
@@ -238,7 +234,6 @@ public class ChatService implements IPendingServiceCallback {
 						}
 					}
 				}
-			}
 			}
 		} catch (Exception err) {
 			log.error("[ChatService sendMessageWithClient] ", err);

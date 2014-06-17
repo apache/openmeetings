@@ -571,10 +571,10 @@ public class UserDao implements IDataProviderDao<User> {
 	/**
 	 * login logic
 	 * 
-	 * @param SID
-	 * @param Username
-	 * @param Userpass
-	 * @return
+	 * @param userOrEmail: login or email of the user being tested
+	 * @param userpass: password of the user being tested
+	 * @return User object in case of successful login
+	 * @throws OmException in case of any issue 
 	 */
 	public User login(String userOrEmail, String userpass) throws OmException {
 		List<User> users = em.createNamedQuery("getUserByLoginOrEmail", User.class)

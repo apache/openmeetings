@@ -44,7 +44,6 @@ import org.apache.openmeetings.db.dao.label.FieldLanguageDao;
 import org.apache.openmeetings.db.dao.label.FieldLanguagesValuesDao;
 import org.apache.openmeetings.db.dao.server.SOAPLoginDao;
 import org.apache.openmeetings.db.dao.server.SessiondataDao;
-import org.apache.openmeetings.db.dao.user.ILdapLoginManagement;
 import org.apache.openmeetings.db.dao.user.StateDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.label.FieldLanguage;
@@ -56,6 +55,7 @@ import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Right;
 import org.apache.openmeetings.db.entity.user.User.Type;
 import org.apache.openmeetings.db.util.TimezoneUtil;
+import org.apache.openmeetings.ldap.LdapLoginManagement;
 import org.apache.openmeetings.util.OmException;
 import org.apache.openmeetings.web.pages.SwfPage;
 import org.apache.openmeetings.web.user.dashboard.PrivateRoomsWidgetDescriptor;
@@ -250,7 +250,7 @@ public class WebSession extends AbstractAuthenticatedWebSession {
 			User u = null;
 			switch (type) {
 				case ldap:
-					u = getBean(ILdapLoginManagement.class).login(login, password, domainId);
+					u = getBean(LdapLoginManagement.class).login(login, password, domainId);
 					break;
 				case user:
 					/* we will allow login against internal DB in case user 'guess' LDAP password */

@@ -22,29 +22,37 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAUT_L
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Random;
-import java.util.UUID;
-import java.util.Vector;
+import java.io.FileInputStream;
+import java.util.Date;
+import java.util.Properties;
+import java.util.Set;
 
-import org.apache.openmeetings.data.user.UserManager;
+import org.apache.directory.api.ldap.model.cursor.EntryCursor;
+import org.apache.directory.api.ldap.model.entry.Attribute;
+import org.apache.directory.api.ldap.model.entry.Entry;
+import org.apache.directory.api.ldap.model.exception.LdapAuthenticationException;
+import org.apache.directory.api.ldap.model.exception.LdapException;
+import org.apache.directory.api.ldap.model.exception.LdapInvalidAttributeValueException;
+import org.apache.directory.api.ldap.model.exception.LdapInvalidDnException;
+import org.apache.directory.api.ldap.model.message.SearchScope;
+import org.apache.directory.api.ldap.model.name.Dn;
+import org.apache.directory.ldap.client.api.LdapConnection;
+import org.apache.directory.ldap.client.api.LdapNetworkConnection;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.server.LdapConfigDao;
-import org.apache.openmeetings.db.dao.server.SessiondataDao;
-import org.apache.openmeetings.db.dao.user.ILdapLoginManagement;
+import org.apache.openmeetings.db.dao.user.OrganisationDao;
 import org.apache.openmeetings.db.dao.user.StateDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.server.LdapConfig;
-import org.apache.openmeetings.db.entity.user.State;
+import org.apache.openmeetings.db.entity.user.Address;
+import org.apache.openmeetings.db.entity.user.Organisation_Users;
 import org.apache.openmeetings.db.entity.user.User;
+import org.apache.openmeetings.db.entity.user.User.Right;
 import org.apache.openmeetings.db.entity.user.User.Type;
 import org.apache.openmeetings.db.util.TimezoneUtil;
-import org.apache.openmeetings.ldap.config.ConfigReader;
 import org.apache.openmeetings.util.OmException;
 import org.apache.openmeetings.util.OmFileHelper;
+import org.apache.wicket.util.string.Strings;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,171 +63,94 @@ import org.springframework.beans.factory.annotation.Autowired;
  * @author o.becherer
  * 
  */
-public class LdapLoginManagement implements ILdapLoginManagement {
+public class LdapLoginManagement {
 	private static final Logger log = Red5LoggerFactory.getLogger(LdapLoginManagement.class, webAppRootKey);
+	// ConfigConstants
+	private static final String CONFIGKEY_LDAP_HOST = "ldap_conn_host";
+	private static final String CONFIGKEY_LDAP_PORT = "ldap_conn_port";
+	private static final String CONFIGKEY_LDAP_SECURE = "ldap_conn_secure";
+	private static final String CONFIGKEY_LDAP_ADMIN_DN = "ldap_admin_dn";
+	private static final String CONFIGKEY_LDAP_ADMIN_PASSWD = "ldap_passwd";
+	private static final String CONFIGKEY_LDAP_AUTH_TYPE = "ldap_auth_type";
+	private static final String CONFIGKEY_LDAP_PROV_TYPE = "ldap_provisionning";
 
+	private static final String CONFIGKEY_LDAP_SYNC_PASSWD_OM = "ldap_sync_password_to_om"; // 'true' or 'false'
+	private static final String CONFIGKEY_LDAP_USE_LOWER_CASE = "ldap_use_lower_case";
+	private static final String CONFIGKEY_LDAP_TIMEZONE_NAME = "ldap_user_timezone";
+	private static final String CONFIGKEY_LDAP_SEARCH_BASE = "ldap_search_base";
+	private static final String CONFIGKEY_LDAP_SEARCH_QUERY = "ldap_search_query";
+	private static final String CONFIGKEY_LDAP_USERDN_FORMAT = "ldap_userdn_format";
+	private static final String CONFIGKEY_LDAP_USE_ADMIN_4ATTRS = "ldap_use_admin_to_get_attrs";
+	
+	// LDAP custom attribute mapping keys
+	private static final String CONFIGKEY_LDAP_KEY_LASTNAME = "ldap_user_attr_lastname";
+	private static final String CONFIGKEY_LDAP_KEY_FIRSTNAME = "ldap_user_attr_firstname";
+	private static final String CONFIGKEY_LDAP_KEY_MAIL = "ldap_user_attr_mail";
+	private static final String CONFIGKEY_LDAP_KEY_STREET = "ldap_user_attr_street";
+	private static final String CONFIGKEY_LDAP_KEY_ADDITIONAL_NAME = "ldap_user_attr_additionalname";
+	private static final String CONFIGKEY_LDAP_KEY_FAX = "ldap_user_attr_fax";
+	private static final String CONFIGKEY_LDAP_KEY_ZIP = "ldap_user_attr_zip";
+	private static final String CONFIGKEY_LDAP_KEY_COUNTRY = "ldap_user_attr_country";
+	private static final String CONFIGKEY_LDAP_KEY_TOWN = "ldap_user_attr_town";
+	private static final String CONFIGKEY_LDAP_KEY_PHONE = "ldap_user_attr_phone";
+	private static final String CONFIGKEY_LDAP_PICTURE_URI = "ldap_user_picture_uri";
+
+	// LDAP default attributes mapping
+	private static final String LDAP_KEY_LASTNAME = "sn";
+	private static final String LDAP_KEY_FIRSTNAME = "givenName";
+	private static final String LDAP_KEY_MAIL = "mail";
+	private static final String LDAP_KEY_STREET = "streetAddress";
+	private static final String LDAP_KEY_ADDITIONAL_NAME = "description";
+	private static final String LDAP_KEY_FAX = "facsimileTelephoneNumber";
+	private static final String LDAP_KEY_ZIP = "postalCode";
+	private static final String LDAP_KEY_COUNTRY = "co";
+	private static final String LDAP_KEY_TOWN = "l";
+	private static final String LDAP_KEY_PHONE = "telephoneNumber";
+	private static final String LDAP_KEY_TIMEZONE = "timezone";
+	private static final String LDAP_KEY_PICTURE_URI = "pictureUri";
+
+	public enum AuthType {
+		NONE
+		, SEARCHANDBIND
+		, SIMPLEBIND
+	}
+	
+	public enum Provisionning {
+		NONE
+		, AUTOUPDATE
+		, AUTOCREATE
+	}
+	
 	@Autowired
-	private SessiondataDao sessiondataDao;
+	private ConfigurationDao cfgDao;
 	@Autowired
-	private ConfigurationDao configurationDao;
-	@Autowired
-	private UserManager userManager;
-	@Autowired
-	private StateDao statemanagement;
+	private StateDao stateDao;
 	@Autowired
 	private LdapConfigDao ldapConfigDao;
 	@Autowired
-	private UserDao usersDao;
+	private UserDao userDao;
+	@Autowired
+	private OrganisationDao orgDao;
 	@Autowired
 	private TimezoneUtil timezoneUtil;
 
-	// ConfigConstants
-	public static final String CONFIGKEY_LDAP_URL = "ldap_conn_url";
-	public static final String CONFIGKEY_LDAP_ADMIN_DN = "ldap_admin_dn";
-	public static final String CONFIGKEY_LDAP_ADMIN_PASSWD = "ldap_passwd";
-	public static final String CONFIGKEY_LDAP_SEARCH_SCOPE = "ldap_search_base";
-	public static final String CONFIGKEY_LDAP_SERVER_TYPE = "ldap_server_type"; // for OpenLDAP use only
-	public static final String CONFIGKEY_LDAP_AUTH_TYPE = "ldap_auth_type";
-
-	public static final String CONFIGKEY_LDAP_FIELDNAME_USER_PRINCIPAL = "field_user_principal";
-	public static final String CONFIGKEY_LDAP_SYNC_PASSWD_OM = "ldap_sync_password_to_om"; // 'yes' or 'no'
-
-	public static final String CONFIGKEY_LDAP_USE_LOWER_CASE = "ldap_use_lower_case";
-	
-	public static final String CONFIGKEY_LDAP_TIMEZONE_NAME = "ldap_user_timezone";
-	
-	/*
-	//for future use (lemeur)
-	public static final String CONFIGKEY_LDAP_USER_EXTRAFILTER = "ldap_user_extrafilter";
-	public static final String CONFIGKEY_LDAP_GROUP_FILTER_NUM = "ldap_group_filter_num";
-	public static final String CONFIGKEY_LDAP_GROUP_FILTER_NAME_PREFIX = "ldap_group_filter_name_";
-	public static final String CONFIGKEY_LDAP_GROUP_FILTER_BASE_PREFIX = "ldap_group_filter_base_";
-	public static final String CONFIGKEY_LDAP_GROUP_FILTER_TYPE_PREFIX = "ldap_group_filter_type_";
-	public static final String CONFIGKEY_LDAP_GROUP_FILTER_TEXT_PREFIX = "ldap_group_filter_text_";
-	*/
-	public static final String CONFIGKEY_LDAP_FILTER_ADD = "ldap_filter_add";
-
-	// LDAP default attributes mapping
-	public static final String LDAP_KEY_LASTNAME = "sn";
-	public static final String LDAP_KEY_FIRSTNAME = "givenName";
-	public static final String LDAP_KEY_MAIL = "mail";
-	public static final String LDAP_KEY_STREET = "streetAddress";
-	public static final String LDAP_KEY_ADDITIONAL_NAME = "description";
-	public static final String LDAP_KEY_FAX = "facsimileTelephoneNumber";
-	public static final String LDAP_KEY_ZIP = "postalCode";
-	public static final String LDAP_KEY_COUNTRY = "co";
-	public static final String LDAP_KEY_TOWN = "l";
-	public static final String LDAP_KEY_PHONE = "telephoneNumber";
-	public static final String LDAP_KEY_TIMEZONE = "timezone";
-	public static final String LDAP_KEY_PICTURE_URI = "pictureUri";
-
-	// LDAP custom attribute mapping keys
-	public static final String CONFIGKEY_LDAP_KEY_LASTNAME = "ldap_user_attr_lastname";
-	public static final String CONFIGKEY_LDAP_KEY_FIRSTNAME = "ldap_user_attr_firstname";
-	public static final String CONFIGKEY_LDAP_KEY_MAIL = "ldap_user_attr_mail";
-	public static final String CONFIGKEY_LDAP_KEY_STREET = "ldap_user_attr_street";
-	public static final String CONFIGKEY_LDAP_KEY_ADDITIONAL_NAME = "ldap_user_attr_additionalname";
-	public static final String CONFIGKEY_LDAP_KEY_FAX = "ldap_user_attr_fax";
-	public static final String CONFIGKEY_LDAP_KEY_ZIP = "ldap_user_attr_zip";
-	public static final String CONFIGKEY_LDAP_KEY_COUNTRY = "ldap_user_attr_country";
-	public static final String CONFIGKEY_LDAP_KEY_TOWN = "ldap_user_attr_town";
-	public static final String CONFIGKEY_LDAP_KEY_PHONE = "ldap_user_attr_phone";
-	public static final String CONFIGKEY_LDAP_PICTURE_URI = "ldap_user_picture_uri";
-
-	/**
-	 * Determine if is a supported Auth Type
-	 * 
-	 * @param authType
-	 */
-	// -------------------------------------------------------------------------------------------------------
-	public static boolean isValidAuthType(String authType) {
-		log.debug("isValidAuthType");
-
-		if (authType != null) {
-			if (!authType.isEmpty()) {
-				if (authType
-						.equalsIgnoreCase(LdapAuthBase.LDAP_AUTH_TYPE_SIMPLE))
-					return true;
-				if (authType.equalsIgnoreCase(LdapAuthBase.LDAP_AUTH_TYPE_NONE))
-					return true;
-			}
-		}
-
-		return false;
-
+	private Dn getUserDn(Properties config, String user) throws LdapInvalidDnException {
+		return new Dn(String.format(config.getProperty(CONFIGKEY_LDAP_USERDN_FORMAT, "%s"), user));
 	}
-
-	// -------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Ldap Password Synch to OM DB set active ? defaults to true in case of
-	 * error so as to keep old behaviour
-	 */
-	public boolean getLdapPwdSynchStatus(Long ldapConfigId) { // TIBO
-		// Retrieve Configuration Data
-		HashMap<String, String> configData;
-
-		LdapConfig ldapConfig = ldapConfigDao.get(ldapConfigId);
-
-		try {
-			configData = getLdapConfigData(ldapConfig.getConfigFileName());
-		} catch (Exception e) {
-			log.error("Error on getLdapPwdSynchStatus : " + e.getMessage());
-			return true;
-		}
-
-		if (configData == null || configData.size() < 1) {
-			log.error("Error on getLdapPwdSynchStatus : Configurationdata couldnt be retrieved!");
-			return true;
-		}
-
-		// Connection URL
-		String ldap_synch_passwd_to_om = configData
-				.get(CONFIGKEY_LDAP_SYNC_PASSWD_OM);
-		if (ldap_synch_passwd_to_om.equals("no")) {
-			log.debug("getLdapPwdSynchStatus: returns FALSE (val="
-					+ ldap_synch_passwd_to_om + ")");
-			return false;
+	
+	private void bindAdmin(LdapConnection conn, String admin, String pass) throws LdapException {
+		if (!Strings.isEmpty(admin)) {
+			conn.bind(admin, pass);
 		} else {
-			log.debug("getLdapPwdSynchStatus: returns TRUE (val="
-					+ ldap_synch_passwd_to_om + ")");
-			return true;
+			conn.bind();
 		}
 	}
-
-	/**
-	 * Retrieving LdapData from Config
-	 */
-	// ----------------------------------------------------------------------------------------
-	public HashMap<String, String> getLdapConfigData(String ldapConfigfileName)
-			throws Exception {
-		log.debug("LdapLoginmanagement.getLdapConfigData");
-
-		return readConfig(new File(OmFileHelper.getConfDir(), ldapConfigfileName));
+	
+	private String getAttr(Properties config, Entry entry, String aliasCode, String defaultAlias) throws LdapInvalidAttributeValueException {
+		String alias = config.getProperty(aliasCode, "");
+		Attribute a = entry.get(Strings.isEmpty(alias) ? defaultAlias : alias);
+		return a == null ? null : a.getString();
 	}
-
-	// ----------------------------------------------------------------------------------------
-
-	/**
-	 * Reading Ldap Config via ConfigReader
-	 */
-	// ----------------------------------------------------------------------------------------
-	private HashMap<String, String> readConfig(File config)
-			throws Exception {
-		log.debug("LdapLoginmanagement.readConfig : " + config);
-
-		if (!config.isFile())
-			return null;
-
-		ConfigReader reader = new ConfigReader();
-		reader.readConfig(config);
-
-		return reader.getConfigMap();
-
-	}
-
-	// ----------------------------------------------------------------------------------------
-
 	/**
 	 * Ldap Login
 	 * 
@@ -230,543 +161,189 @@ public class LdapLoginManagement implements ILdapLoginManagement {
 	public User login(String user, String passwd, Long domainId) throws OmException {
 		log.debug("LdapLoginmanagement.doLdapLogin");
 
-		// Retrieve Configuration Data
-		HashMap<String, String> configData;
-
+		Properties config = new Properties();
 		try {
-			configData = getLdapConfigData(ldapConfigDao.get(domainId).getConfigFileName());
+			LdapConfig ldapConfig = ldapConfigDao.get(domainId);
+			config.load(new FileInputStream(new File(OmFileHelper.getConfDir(), ldapConfig.getConfigFileName())));
 		} catch (Exception e) {
-			log.error("Error on LdapAuth : " + e.getMessage());
+			log.error("Error on LdapLogin : Configurationdata couldnt be retrieved!");
 			return null;
 		}
-
-		if (configData == null || configData.size() < 1) {
+		if (config.isEmpty()) {
 			log.error("Error on LdapLogin : Configurationdata couldnt be retrieved!");
 			return null;
 		}
 
-		// Connection URL
-		String ldap_url = configData.get(CONFIGKEY_LDAP_URL);
-
-		// for OpenLDAP only
-		// LDAP SERVER TYPE to search accordingly
-		String ldap_server_type = configData.get(CONFIGKEY_LDAP_SERVER_TYPE);
-
-		// Username for LDAP SERVER himself
-		String ldap_admin_dn = configData.get(CONFIGKEY_LDAP_ADMIN_DN);
-
-		// Password for LDAP SERVER himself
-		String ldap_passwd = configData.get(CONFIGKEY_LDAP_ADMIN_PASSWD);
-
-		// SearchScope for retrievment of userdata
-		String ldap_search_scope = configData.get(CONFIGKEY_LDAP_SEARCH_SCOPE);
-
-		// FieldName for Users's Principal Name
-		String ldap_fieldname_user_principal = configData
-				.get(CONFIGKEY_LDAP_FIELDNAME_USER_PRINCIPAL);
-
-		// Wether or not we'll store Ldap passwd into OM db
-		boolean ldap_sync_passwd_to_om = "no".equals(configData.get(CONFIGKEY_LDAP_SYNC_PASSWD_OM));
-
-		/*
-		//for future use (lemeur)
-		// Ldap user filter to refine the search
-		String ldap_user_extrafilter = configData.get(CONFIGKEY_LDAP_USER_EXTRAFILTER);
-		
-		// Count of Ldap group filters 
-		String ldap_group_filter_num = configData.get(CONFIGKEY_LDAP_GROUP_FILTER_NUM);
-		
-		// Prefix name of Ldap group filter name
-		String ldap_group_filter_name_prefix = configData.get(CONFIGKEY_LDAP_GROUP_FILTER_NAME_PREFIX);
-		
-		// Prefix name of Ldap group filter base
-		String ldap_group_filter_base_prefix = configData.get(CONFIGKEY_LDAP_GROUP_FILTER_NAME_PREFIX);
-		
-		// Prefix name of Ldap group filter type
-		String ldap_group_filter_type_prefix = configData.get(CONFIGKEY_LDAP_GROUP_FILTER_TYPE_PREFIX);
-		
-		// Prefix name of Ldap group filter text
-		String ldap_group_filter_text_prefix = configData.get(CONFIGKEY_LDAP_GROUP_FILTER_TEXT_PREFIX);
-		*/
-
-		// Get custom Ldap attributes mapping
-		String ldap_user_attr_lastname = configData.get(CONFIGKEY_LDAP_KEY_LASTNAME);
-		String ldap_user_attr_firstname = configData.get(CONFIGKEY_LDAP_KEY_FIRSTNAME);
-		String ldap_user_attr_mail = configData.get(CONFIGKEY_LDAP_KEY_MAIL);
-		String ldap_user_attr_street = configData.get(CONFIGKEY_LDAP_KEY_STREET);
-		String ldap_user_attr_additional_name = configData.get(CONFIGKEY_LDAP_KEY_ADDITIONAL_NAME);
-		String ldap_user_attr_fax = configData.get(CONFIGKEY_LDAP_KEY_FAX);
-		String ldap_user_attr_zip = configData.get(CONFIGKEY_LDAP_KEY_ZIP);
-		String ldap_user_attr_country = configData.get(CONFIGKEY_LDAP_KEY_COUNTRY);
-		String ldap_user_attr_town = configData.get(CONFIGKEY_LDAP_KEY_TOWN);
-		String ldap_user_attr_phone = configData.get(CONFIGKEY_LDAP_KEY_PHONE);
-		String ldap_user_attr_timezone = configData.get(CONFIGKEY_LDAP_TIMEZONE_NAME);
-		String ldap_user_picture_uri = configData.get(CONFIGKEY_LDAP_PICTURE_URI);
-		String ldap_use_lower_case = configData.get(CONFIGKEY_LDAP_USE_LOWER_CASE);
-		String ldap_auth_type = configData.get(CONFIGKEY_LDAP_AUTH_TYPE);
-		String ldap_filter_add = configData.get(CONFIGKEY_LDAP_FILTER_ADD);
-		
-		if (ldap_use_lower_case != null && ldap_use_lower_case.equals("true")) {
+		String ldap_use_lower_case = config.getProperty(CONFIGKEY_LDAP_USE_LOWER_CASE, "false");
+		if ("true".equals(ldap_use_lower_case)) {
 			user = user.toLowerCase();
 		}
 
-		if (ldap_user_attr_lastname == null) {
-			ldap_user_attr_lastname = LDAP_KEY_LASTNAME;
-		}
-		if (ldap_user_attr_firstname == null) {
-			ldap_user_attr_firstname = LDAP_KEY_FIRSTNAME;
-		}
-		if (ldap_user_attr_mail == null) {
-			ldap_user_attr_mail = LDAP_KEY_MAIL;
-		}
-		if (ldap_user_attr_street == null) {
-			ldap_user_attr_street = LDAP_KEY_STREET;
-		}
-		if (ldap_user_attr_additional_name == null) {
-			ldap_user_attr_additional_name = LDAP_KEY_ADDITIONAL_NAME;
-		}
-		if (ldap_user_attr_fax == null) {
-			ldap_user_attr_fax = LDAP_KEY_FAX;
-		}
-		if (ldap_user_attr_zip == null) {
-			ldap_user_attr_zip = LDAP_KEY_ZIP;
-		}
-		if (ldap_user_attr_country == null) {
-			ldap_user_attr_country = LDAP_KEY_COUNTRY;
-		}
-		if (ldap_user_attr_town == null) {
-			ldap_user_attr_town = LDAP_KEY_TOWN;
-		}
-		if (ldap_user_attr_phone == null) {
-			ldap_user_attr_phone = LDAP_KEY_PHONE;
-		}
-		if (ldap_user_attr_timezone == null) {
-			ldap_user_attr_timezone = LDAP_KEY_TIMEZONE;
-		}
-		if (ldap_auth_type == null) {
-			ldap_auth_type = "";
-		}
-		if (ldap_filter_add == null) {
-			ldap_filter_add = "";
-		}
-		
-		if (!isValidAuthType(ldap_auth_type)) {
-			log.error("ConfigKey in Ldap Config contains invalid auth type : '"
-					+ ldap_auth_type + "' -> Defaulting to "
-					+ LdapAuthBase.LDAP_AUTH_TYPE_SIMPLE);
-			ldap_auth_type = LdapAuthBase.LDAP_AUTH_TYPE_SIMPLE;
-		}
-
-		// Filter for Search of UserData
-		String ldap_search_filter = "(" + ldap_fieldname_user_principal + "=" + user + ")";
-		if (!"".equals(ldap_filter_add)) {
-			ldap_filter_add = ldap_filter_add.replaceAll(":", "=");
-			ldap_search_filter = "(&(" + ldap_filter_add + ")(" + ldap_fieldname_user_principal + "=" + user + "))";
-		}
-
-		log.debug("Searching userdata with LDAP Search Filter :" + ldap_search_filter);
-
-		// replace : -> in config = are replaced by : to be able to build valid
-		// key=value pairs
-		ldap_search_scope = ldap_search_scope.replaceAll(":", "=");
-		ldap_admin_dn = ldap_admin_dn.replaceAll(":", "=");
-
-		LdapAuthBase lAuth = new LdapAuthBase(ldap_url, ldap_admin_dn, ldap_passwd, ldap_auth_type);
-
-		log.debug("authenticating admin...");
-		lAuth.authenticateUser(ldap_admin_dn, ldap_passwd);
-
-		log.debug("Checking server type...");
-		// for OpenLDAP only
-		if (ldap_server_type.equalsIgnoreCase("OpenLDAP")) {
-			String ldapUserDN = user;
-			log.debug("LDAP server is OpenLDAP");
-			log.debug("LDAP search base: " + ldap_search_scope);
-			HashMap<String, String> uidCnDictionary = lAuth.getUidCnHashMap(
-					ldap_search_scope, ldap_search_filter, ldap_fieldname_user_principal);
-			if (uidCnDictionary.get(user) != null) {
-				ldapUserDN = uidCnDictionary.get(user) + "," + ldap_search_scope;
-				log.debug("Authentication with DN: " + ldapUserDN);
-			}
-			try {
-				if (!lAuth.authenticateUser(ldapUserDN, passwd)) {
-					log.error(ldapUserDN + " not authenticated.");
-					throw new OmException(-11L);
-				}
-			} catch (OmException oe) {
-				throw oe;
-			} catch (Exception e) {
-				log.error("Error on LdapAuth : " + e.getMessage());
-				return null;
-			}
-		} else {
-			try {
-				if (!lAuth.authenticateUser(user, passwd)) {
-					throw new OmException(-11L);
-				}
-			} catch (OmException oe) {
-				throw oe;
-			} catch (Exception e) {
-				log.error("Error on LdapAuth : " + e.getMessage());
-				return null;
-			}
-		}
-
-		// check if user already exists
-
-		User u = null;
-
+		String ldap_auth_type = config.getProperty(CONFIGKEY_LDAP_AUTH_TYPE, "");
+		AuthType type = AuthType.SIMPLEBIND;
 		try {
-			u = usersDao.getByName(user, User.Type.ldap);
+			type = AuthType.valueOf(ldap_auth_type);
 		} catch (Exception e) {
-			log.error("Error retrieving Userdata : " + e.getMessage());
+			log.error("ConfigKey in Ldap Config contains invalid auth type : '%s' -> Defaulting to %s", ldap_auth_type, type);
 		}
 		
-		// Attributes to retrieve from ldap to either create or update the user
-		List<String> attributes = new ArrayList<String>();
-		attributes.add(ldap_user_attr_lastname); // Lastname
-		attributes.add(ldap_user_attr_firstname); // Firstname
-		attributes.add(ldap_user_attr_mail);// mail
-		attributes.add(ldap_user_attr_street); // Street
-		attributes.add(ldap_user_attr_additional_name); // Additional name
-		attributes.add(ldap_user_attr_fax); // Fax
-		attributes.add(ldap_user_attr_zip); // ZIP
-		attributes.add(ldap_user_attr_country); // Country
-		attributes.add(ldap_user_attr_town); // Town
-		attributes.add(ldap_user_attr_phone); // Phone
-		attributes.add(ldap_user_attr_timezone); // timezone
-		if (ldap_user_picture_uri != null) {
-			attributes.add(ldap_user_picture_uri); //picture uri
+		String ldap_prov_type = config.getProperty(CONFIGKEY_LDAP_PROV_TYPE, "");
+		Provisionning prov = Provisionning.AUTOCREATE;
+		try {
+			prov = Provisionning.valueOf(ldap_prov_type);
+		} catch (Exception e) {
+			log.error("ConfigKey in Ldap Config contains invalid provisionning type : '%s' -> Defaulting to %s", ldap_prov_type, prov);
 		}
 		
-		HashMap<String, String> ldapAttrs = new HashMap<String, String>();
-		ldapAttrs.put("lastnameAttr", ldap_user_attr_lastname);
-		ldapAttrs.put("firstnameAttr", ldap_user_attr_firstname);
-		ldapAttrs.put("mailAttr", ldap_user_attr_mail);
-		ldapAttrs.put("streetAttr", ldap_user_attr_street);
-		ldapAttrs.put("additionalNameAttr", ldap_user_attr_additional_name);
-		ldapAttrs.put("faxAttr", ldap_user_attr_fax);
-		ldapAttrs.put("zipAttr", ldap_user_attr_zip);
-		ldapAttrs.put("countryAttr", ldap_user_attr_country);
-		ldapAttrs.put("townAttr", ldap_user_attr_town);
-		ldapAttrs.put("phoneAttr", ldap_user_attr_phone);
-		ldapAttrs.put("timezoneAttr", ldap_user_attr_timezone);
-		if (ldap_user_picture_uri != null) {
-			ldapAttrs.put("pictureUri", ldap_user_picture_uri);
-		}
-
-		Vector<HashMap<String, String>> result = lAuth.getData(
-				ldap_search_scope, ldap_search_filter, attributes);
-
-		if (result == null || result.size() < 1) {
-			log.error("Error on Ldap request - no result for user " + user);
-			throw new OmException(-10L);
-		}
-		
-		if (result.size() > 1) {
-			log.error("Error on Ldap request - more than one result for user " + user);
+		if (AuthType.NONE == type && Provisionning.NONE == prov) {
+			log.error("Both AuthType and Provisionning are NONE!");
 			return null;
 		}
-		
-		HashMap<String, String> userData = result.get(0);
-
-
-		// User not existant in local database -> take over data for referential
-		// integrity
-		if (u == null) {
-			log.debug("user doesnt exist local -> create new");
-
-			try {
-				// Create User with LdapData
-				Long userid;
-				if (ldap_sync_passwd_to_om) {
-					Random r = new Random();
-					String token = UUID.randomUUID().toString() + Long.toString(Math.abs(r.nextLong()), 36);
-					log.debug("Synching Ldap user to OM DB with RANDOM password: " + token);
-					userid = createUserFromLdapData(userData, token, user, ldapAttrs);
-				} else {
-					log.debug("Synching Ldap user to OM DB with password");
-					userid = createUserFromLdapData(userData, passwd, user, ldapAttrs);
-				}
-				log.debug("New User ID : " + userid);
-
-				// Return UserObject
-				User u2 = usersDao.get(userid);
-
-				if (u2 == null) {
-					throw new OmException(-1L);
-				}
-
-				u2.setType(Type.ldap);
-
-				// initialize lazy collection
-				usersDao.update(u2, u2.getUser_id());
-
-				log.debug("getUserbyId : " + userid + " : " + u2.getLogin());
-
-				return u2;
-			} catch (Exception e) {
-				log.error("Error on Working Userdata : ", e);
-				throw new OmException(-1L);
-			}
-		} else {
-			// User exists, just update necessary values
-			log.debug("User already exists -> Update of current passwd");
-
-			try {
-				// Update password (could have changed in LDAP)
-				if (ldap_sync_passwd_to_om) {
-					u.updatePassword(configurationDao, passwd);
-				}
-				
-				//update all other attributes in case ldap provides some and the parameter is configured
-				updateUserFromLdap(userData, ldapAttrs, u);
-
-				usersDao.update(u, null);
-			} catch (Exception e) {
-				log.error("Error updating user : " + e.getMessage());
-				throw new OmException(-1L);
-			}
-
-			return u;
-
-		}
-	}
-	
-	// ----------------------------------------------------------------------------------------
-
-	/**
-	 * Creation on User with LDAP - Data AutoCreation of Country if does not exist
-	 * Added to default organization
-	 */
-	// ----------------------------------------------------------------------------------------
-	private Long createUserFromLdapData(HashMap<String, String> userdata,
-			String passwd, String login, HashMap<String, String> ldapAttrs)
-			throws Exception {
-		log.debug("LdapLoginmanagement.createUserFromLdapData");
-
-		// Retrieve Data from LDAP - Data
-
-		String lastname = "lastname";
-		if (userdata.containsKey(ldapAttrs.get("lastnameAttr"))
-				&& userdata.get(ldapAttrs.get("lastnameAttr")) != null)
-			lastname = userdata.get(ldapAttrs.get("lastnameAttr"));
-
-		String firstname = "firstname";
-		if (userdata.containsKey(ldapAttrs.get("firstnameAttr"))
-				&& userdata.get(ldapAttrs.get("firstnameAttr")) != null)
-			firstname = userdata.get(ldapAttrs.get("firstnameAttr"));
-
-		String email = "email";
-		if (userdata.containsKey(ldapAttrs.get("mailAttr"))
-				&& userdata.get(ldapAttrs.get("mailAttr")) != null)
-			email = userdata.get(ldapAttrs.get("mailAttr"));
-
-		String street = "street";
-		if (userdata.containsKey(ldapAttrs.get("streetAttr"))
-				&& userdata.get(ldapAttrs.get("streetAttr")) != null)
-			street = userdata.get(ldapAttrs.get("streetAttr"));
-
-		String additionalname = "additionalname";
-		if (userdata.containsKey(ldapAttrs.get("additionalNameAttr"))
-				&& userdata.get(ldapAttrs.get("additionalNameAttr")) != null)
-			additionalname = userdata.get(ldapAttrs.get("additionalNameAttr"));
-
-		String fax = "fax";
-		if (userdata.containsKey(ldapAttrs.get("faxAttr"))
-				&& userdata.get(ldapAttrs.get("faxAttr")) != null)
-			fax = userdata.get(ldapAttrs.get("faxAttr"));
-
-		String zip = "zip";
-		if (userdata.containsKey(ldapAttrs.get("zipAttr"))
-				&& userdata.get(ldapAttrs.get("zipAttr")) != null)
-			zip = userdata.get(ldapAttrs.get("zipAttr"));
-
-		long state_id = -1;
-		String state = null;
-		if (userdata.containsKey(ldapAttrs.get("countryAttr"))
-				&& userdata.get(ldapAttrs.get("countryAttr")) != null)
-			state = userdata.get(ldapAttrs.get("countryAttr"));
-		
-		if (state != null) {
-			// Lookup for states
-			State oneState = statemanagement.getStateByName(state);
-			if (oneState != null) {
-				state_id = oneState.getState_id();
-			}
-		}
-
-		// Create Country
-		if (state_id < 0) {
-			Long id = statemanagement.addState(state);
-			if (id != null)
-				state_id = id;
-
-		}
-		
-
-		String phone = "phone";
-		if (userdata.containsKey(ldapAttrs.get("phoneAttr"))
-				&& userdata.get(ldapAttrs.get("phoneAttr")) != null)
-			phone = userdata.get(ldapAttrs.get("phoneAttr"));
-		
-		String pictureUri = "pictureUri";
-		if (userdata.containsKey(ldapAttrs.get("pictureUri"))
-				&& userdata.get(ldapAttrs.get("pictureUri")) != null)
-			pictureUri = userdata.get(ldapAttrs.get("pictureUri"));
-
-		String iCalTz = "";
-		if (userdata.containsKey(ldapAttrs.get("timezoneAttr")) && userdata.get(ldapAttrs.get("timezoneAttr")) != null) {
-			iCalTz = userdata.get(ldapAttrs.get("timezoneAttr"));
-		}
-		
-		String town = "town";
-		if (userdata.containsKey(ldapAttrs.get("townAttr"))
-				&& userdata.get(ldapAttrs.get("townAttr")) != null)
-			town = userdata.get(ldapAttrs.get("townAttr"));
-
-		Long newUserId = null;
-
+		boolean useAdminForAttrs = true;
 		try {
-
-			// Check if LDAP Users get a SIP Account Issue 1099
-
-			newUserId = userManager.registerUserInit(
-					UserDao.getDefaultRights(), login,// loginname
-					passwd,// passwd
-					lastname, firstname, email, 
-					new java.util.Date(), //age
-					street,
-					additionalname, fax, zip, state_id, town, 
-					configurationDao.getConfValue(CONFIG_DEFAUT_LANG_KEY, Long.class, "1"), // language_id
-					false, // sendWelcomeMessage
-					Arrays.asList(configurationDao.getConfValue("default_domain_id", Long.class, null)), // organozation Ids
-					phone, 
-					false,
-					false,// send verification code
-					timezoneUtil.getTimeZone(iCalTz), 
-					false, // forceTimeZoneCheck
-					"", //userOffers
-					"", //userSearchs
-					false, //showContactData
-					true, //showContactDataToContacts
-					null
-					);
-			
-			User user = usersDao.get(newUserId);
-			user.setPictureuri(pictureUri);
-			usersDao.update(user, null);
-
+			useAdminForAttrs = "true".equals(config.getProperty(CONFIGKEY_LDAP_USE_ADMIN_4ATTRS, ""));
 		} catch (Exception e) {
-			log.error("Error creating user : " + e.getMessage());
+			//no-op
+		}
+		if (AuthType.NONE == type && !useAdminForAttrs) {
+			log.error("Unable to get Attributes, please change Auth type and/or Use Admin to get attributes");
+			return null;
 		}
 
-		if (newUserId == -1) {
-			log.error("Error occured creating user");
-		} else if (newUserId == -15) {
-			log.error("Error creating user : username already exists!");
-		} else if (newUserId == -17) {
-			log.error("Error creating user : email already exists!");
-		} else if (newUserId == -3) {
-			log.error("Error creating user : missing values");
-		} else {
-			log.debug("User Created!");
-		}
+		// Connection URL
+		String ldap_host = config.getProperty(CONFIGKEY_LDAP_HOST);
+		int ldap_port = Integer.parseInt(config.getProperty(CONFIGKEY_LDAP_PORT, "389"));
+		boolean ldap_secure = "true".equals(config.getProperty(CONFIGKEY_LDAP_SECURE, "false"));
 
-		return newUserId;
+		// Username for LDAP SERVER himself
+		String ldap_admin_dn = config.getProperty(CONFIGKEY_LDAP_ADMIN_DN);
+
+		// Password for LDAP SERVER himself
+		String ldap_admin_passwd = config.getProperty(CONFIGKEY_LDAP_ADMIN_PASSWD);
+
+		User u = null;
+		LdapConnection conn = null;
+		try {
+			boolean authenticated = true;
+			conn = new LdapNetworkConnection(ldap_host, ldap_port, ldap_secure);
+			Dn userDn = null;
+			Entry entry = null;
+			switch (type) {
+				case SEARCHANDBIND:
+				{
+					bindAdmin(conn, ldap_admin_dn, ldap_admin_passwd);
+					Dn baseDn = new Dn(config.getProperty(CONFIGKEY_LDAP_SEARCH_BASE, ""));
+					String searchQ = String.format(config.getProperty(CONFIGKEY_LDAP_SEARCH_QUERY, "%s"), user);
+					EntryCursor cursor = conn.search(baseDn, searchQ, SearchScope.ONELEVEL, "*");
+					while (cursor.next()) {
+						if (userDn != null) {
+							throw new OmException(-1L); //more than 1 user found in LDAP
+						}
+						Entry e = cursor.get();
+						userDn = e.getDn();
+						if (useAdminForAttrs) {
+							entry = e;
+						}
+					}
+					cursor.close();
+					if (userDn == null) {
+						throw new OmException(-11L);  //NONE users found in LDAP
+					}
+					conn.bind(userDn, passwd);
+				}
+					break;
+				case SIMPLEBIND:
+				{
+					userDn = getUserDn(config, user);
+					conn.bind(userDn, passwd);
+				}
+					break;
+				case NONE:
+				default:
+					authenticated = false;
+					break;
+			}
+			u = authenticated ? userDao.getByName(user, Type.ldap) : userDao.login(user, passwd);
+			if (u == null && Provisionning.AUTOCREATE != prov) {
+				throw new OmException(-11L);
+			} else if (u != null && !domainId.equals(u.getDomainId())) {
+				throw new OmException(-11L);
+			}
+			if (authenticated && entry == null) {
+				if (useAdminForAttrs) {
+					bindAdmin(conn, ldap_admin_dn, ldap_admin_passwd);
+				}
+				entry = conn.lookup(userDn);
+			}
+			switch (prov) {
+				case AUTOUPDATE:
+				case AUTOCREATE:
+					if (entry == null) {
+						throw new OmException(-11L);
+					}
+					if (u == null) {
+						Set<Right> rights = UserDao.getDefaultRights();
+						rights.remove(Right.Login);
+
+						u = new User();
+						u.setType(Type.ldap);
+						u.setRights(rights);
+						u.setDomainId(domainId);
+						u.getOrganisation_users().add(new Organisation_Users(orgDao.get(cfgDao.getConfValue("default_domain_id", Long.class, "-1"))));
+						u.setLogin(user);
+						u.setAge(new Date());
+						u.setShowContactDataToContacts(true);
+						u.setAdresses(new Address());
+						u.setLanguage_id(cfgDao.getConfValue(CONFIG_DEFAUT_LANG_KEY, Long.class, "1"));
+						u.setSalutations_id(1L);
+					}
+					if ("true".equals(config.getProperty(CONFIGKEY_LDAP_SYNC_PASSWD_OM, ""))) {
+						u.updatePassword(cfgDao, passwd);
+					}
+					u.setLastname(getAttr(config, entry, CONFIGKEY_LDAP_KEY_LASTNAME, LDAP_KEY_LASTNAME));
+					u.setFirstname(getAttr(config, entry, CONFIGKEY_LDAP_KEY_FIRSTNAME, LDAP_KEY_FIRSTNAME));
+					u.getAdresses().setEmail(getAttr(config, entry, CONFIGKEY_LDAP_KEY_MAIL, LDAP_KEY_MAIL));
+					u.getAdresses().setStreet(getAttr(config, entry, CONFIGKEY_LDAP_KEY_STREET, LDAP_KEY_STREET));
+					u.getAdresses().setAdditionalname(getAttr(config, entry, CONFIGKEY_LDAP_KEY_ADDITIONAL_NAME, LDAP_KEY_ADDITIONAL_NAME));
+					u.getAdresses().setFax(getAttr(config, entry, CONFIGKEY_LDAP_KEY_FAX, LDAP_KEY_FAX));
+					u.getAdresses().setZip(getAttr(config, entry, CONFIGKEY_LDAP_KEY_ZIP, LDAP_KEY_ZIP));
+					u.getAdresses().setStates(stateDao.getStateByName(getAttr(config, entry, CONFIGKEY_LDAP_KEY_COUNTRY, LDAP_KEY_COUNTRY)));
+					u.getAdresses().setTown(getAttr(config, entry, CONFIGKEY_LDAP_KEY_TOWN, LDAP_KEY_TOWN));
+					u.getAdresses().setPhone(getAttr(config, entry, CONFIGKEY_LDAP_KEY_PHONE, LDAP_KEY_PHONE));
+					String tz = getAttr(config, entry, CONFIGKEY_LDAP_TIMEZONE_NAME, LDAP_KEY_TIMEZONE);
+					if (tz == null) {
+						tz = config.getProperty(CONFIGKEY_LDAP_TIMEZONE_NAME, null);
+					}
+					u.setTimeZoneId(timezoneUtil.getTimeZone(tz).getID());
+					String picture = getAttr(config, entry, CONFIGKEY_LDAP_PICTURE_URI, LDAP_KEY_PICTURE_URI);
+					if (picture == null) {
+						picture = config.getProperty(CONFIGKEY_LDAP_PICTURE_URI, null);
+					}
+					u.setPictureuri(picture);
+					
+					u = userDao.update(u, null);
+					break;
+				case NONE:
+				default:
+					break;
+			}
+		} catch (LdapAuthenticationException ae) {
+			log.error("Not authenticated.", ae);
+			throw new OmException(-11L);
+		} catch (OmException e) {
+			throw e;
+		} catch (Exception e) {
+			throw new OmException(e);
+		} finally {
+			if (conn != null) {
+				try {
+					conn.unBind();
+					conn.close();
+				} catch (Exception e) {
+					throw new OmException(e);
+				}
+			}
+		}
+		return u;
 	}
-
-	public void updateUserFromLdap(HashMap<String, String> userdata,
-				HashMap<String, String> ldapAttrs, User user)
-			throws Exception {
-		log.debug("LdapLoginmanagement.createUserFromLdapData");
-	
-		// Retrieve Data from LDAP - Data
-	
-		if (userdata.containsKey(ldapAttrs.get("lastnameAttr")) && userdata.get(ldapAttrs.get("lastnameAttr")) != null)
-			user.setLastname(userdata.get(ldapAttrs.get("lastnameAttr")));
-	
-		if (userdata.containsKey(ldapAttrs.get("firstnameAttr")) && userdata.get(ldapAttrs.get("firstnameAttr")) != null)
-			user.setFirstname(userdata.get(ldapAttrs.get("firstnameAttr")));
-	
-		if (userdata.containsKey(ldapAttrs.get("mailAttr")) && userdata.get(ldapAttrs.get("mailAttr")) != null) {
-			if (user.getAdresses() != null) {
-				user.getAdresses().setEmail(userdata.get(ldapAttrs.get("mailAttr")));
-			}
-		}
-			
-		if (userdata.containsKey(ldapAttrs.get("streetAttr")) && userdata.get(ldapAttrs.get("streetAttr")) != null) {
-			if (user.getAdresses() != null) { 
-				user.getAdresses().setStreet(userdata.get(ldapAttrs.get("streetAttr")));
-			}
-		}
-		
-		if (userdata.containsKey(ldapAttrs.get("additionalNameAttr")) && userdata.get(ldapAttrs.get("additionalNameAttr")) != null) {
-			if (user.getAdresses() != null) { 
-				user.getAdresses().setAdditionalname(userdata.get(ldapAttrs.get("additionalNameAttr")));
-			}
-		}
-	
-		if (userdata.containsKey(ldapAttrs.get("faxAttr")) && userdata.get(ldapAttrs.get("faxAttr")) != null) {
-			if (user.getAdresses() != null) {
-				user.getAdresses().setFax(userdata.get(ldapAttrs.get("faxAttr")));
-			}
-		}
-	
-		if (userdata.containsKey(ldapAttrs.get("zipAttr")) && userdata.get(ldapAttrs.get("zipAttr")) != null) {
-			if (user.getAdresses() != null) {
-				user.getAdresses().setZip(userdata.get(ldapAttrs.get("zipAttr")));
-			}
-		}
-	
-		long state_id = -1;
-		String state = null;
-		if (userdata.containsKey(ldapAttrs.get("countryAttr")) && userdata.get(ldapAttrs.get("countryAttr")) != null) {
-			state = userdata.get(ldapAttrs.get("countryAttr"));
-		}
-		
-		if (state != null) {
-			// Lookup for states
-			State oneState = statemanagement.getStateByName(state);
-			if (oneState != null) {
-				state_id = oneState.getState_id();
-			}
-		}
-		// Create Country if not found
-		if (state_id < 0) {
-			Long id = statemanagement.addState(state);
-			if (id != null) {
-				state_id = id;
-			}
-
-		}
-		if (user.getAdresses() != null && state_id > 0) {
-			user.getAdresses().setStates(statemanagement.getStateById(state_id));
-		}
-		
-		if (userdata.containsKey(ldapAttrs.get("townAttr")) && userdata.get(ldapAttrs.get("townAttr")) != null) {
-			if (user.getAdresses() != null) {
-				user.getAdresses().setTown(userdata.get(ldapAttrs.get("townAttr")));
-			}
-		}
-
-		if (userdata.containsKey(ldapAttrs.get("phoneAttr")) && userdata.get(ldapAttrs.get("phoneAttr")) != null) {
-			if (user.getAdresses() != null) {
-				user.getAdresses().setPhone(userdata.get(ldapAttrs.get("phoneAttr")));
-			}
-		}
-		
-		if (userdata.containsKey(ldapAttrs.get("pictureUri")) && userdata.get(ldapAttrs.get("pictureUri")) != null) {
-			user.setPictureuri(userdata.get(ldapAttrs.get("pictureUri")));
-		}
-	
-		String iCalTz = "";
-		if (userdata.containsKey(ldapAttrs.get("timezoneAttr")) && userdata.get(ldapAttrs.get("timezoneAttr")) != null) {
-			iCalTz = userdata.get(ldapAttrs.get("timezoneAttr"));
-		}
-		
-		iCalTz = timezoneUtil.getTimeZone(iCalTz).getID();
-		user.setTimeZoneId(iCalTz);	
-	}
-	
 }
