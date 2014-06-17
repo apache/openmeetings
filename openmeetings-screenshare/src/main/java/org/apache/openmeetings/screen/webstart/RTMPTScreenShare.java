@@ -66,7 +66,7 @@ public class RTMPTScreenShare extends RTMPTClient implements ClientExceptionHand
 		// TODO Auto-generated method stub
 		super.onCommand(conn, channel, source, command);
 		
-		core.onInvoke(conn, channel, source, command);
+		core.onCommand(conn, channel, source, command);
 	}
 
 	@Override

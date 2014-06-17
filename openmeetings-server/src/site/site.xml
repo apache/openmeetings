@@ -64,9 +64,11 @@
 				<item name="Wiki" href="http://cwiki.apache.org/confluence/display/OPENMEETINGS/" />
 			</item>
 			<item name="Development" href="#dev">
-				<item name="Source Code" href="/svn.html" />
-				<item name="Bugs / Issues (JIRA)" href="http://issues.apache.org/jira/browse/OPENMEETINGS" />
+				<item name="Source Code" href="/source-repository.html" />
+				<item name="Bugs / Issues" href="/issue-tracking.html" />
 				<item name="Dependencies" href="/dependencies.html" />
+				<item name="Dependency Management" href="/dependency-management.html" />
+				<item name="Continuous Integration" href="/integration.html" />
 				<item name="Build Instructions" href="/BuildInstructions.html" />
 				<item name="JUnit Testing" href="/JUnitTesting.html" />
 				<item name="Manual Testing" href="/ManualTesting.html" />

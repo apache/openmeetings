@@ -99,24 +99,79 @@
 		<system>jira</system>
 		<url>http://issues.apache.org/jira/browse/OPENMEETINGS</url>
 	</issueManagement>
+	<ciManagement>
+		<system>jenkins</system>
+		<url>https://builds.apache.org/view/M-R/view/OpenMeetings/job/openmeetings/</url>
+	</ciManagement>
 	<developers>
 		<developer>
 			<id>sebawagner</id>
 			<name>Sebastian Wagner</name>
 			<email>sebawagner@apache.org</email>
+			<url>https://twitter.com/#!/dead_lock</url>
 		</developer>
 		<developer>
-			<id>solomax</id>
-			<name>Maxim Solodovnik</name>
-			<email>solomax@apache.org</email>
+			<id>sebawagner</id>
+			<name>Sebastian Wagner</name>
+			<email>sebawagner@apache.org</email>
+			<url>https://twitter.com/#!/dead_lock</url>
 		</developer>
 		<developer>
 			<id>vdegtyarev</id>
 			<name>Vasiliy Degtyarev</name>
 			<email>vdegtyarev@apache.org</email>
 		</developer>
-		<!-- TODO -->
+		<developer>
+			<name>Alexei Fedotov</name>
+		</developer>
+		<developer>
+			<name>Evgeny Rovinsky</name>
+		</developer>
+		<developer>
+			<name>Oliver Becherer</name>
+		</developer>
+		<developer>
+			<name>Eugen Schwert</name>
+		</developer>
+		<developer>
+			<name>Sascha Xander</name>
+		</developer>
+		<developer>
+			<name>Johnny Strom</name>
+		</developer>
+		<developer>
+			<name>Timur Tleukenov</name>
+		</developer>
+		<developer>
+			<name>Alvaro Bustos</name>
+		</developer>
+		<developer>
+			<name>George Kirkham</name>
+		</developer>
+		<developer>
+			<name>Stephen Cottham</name>
+		</developer>
+		<developer>
+			<name>Irina Arkhipets</name>
+		</developer>
+		<developer>
+			<name>Denis Kandrov</name>
+		</developer>
+		<developer>
+			<name>Yulia Algaer</name>
+		</developer>
+		<developer>
+			<name>Artyom Horuzhenko</name>
+		</developer>
 	</developers>
+	<contributors>
+		<contributor>
+			<name>Michael Wuttke</name>
+		</contributor>
+		<contributor>
+			<name>Thibault Le Meur</name>
+		</contributor>
+	</contributors>
 	<scm>
 		<connection>scm:svn:https://svn.apache.org/repos/asf/openmeetings/trunk/singlewebapp</connection>
 		<developerConnection>scm:svn:https://svn.apache.org/repos/asf/openmeetings/trunk/singlewebapp</developerConnection>
@@ -125,21 +180,28 @@
 	</scm>
 	<mailingLists>
 		<mailingList>
-			<name>Openmeetings User List</name>
+			<name>User List</name>
 			<post>user@openmeetings.apache.org</post>
 			<subscribe>user-subscribe@openmeetings.apache.org</subscribe>
 			<unsubscribe>user-unsubscribe@openmeetings.apache.org</unsubscribe>
 			<archive>http://mail-archives.apache.org/mod_mbox/openmeetings-user</archive>
 		</mailingList>
 		<mailingList>
-			<name>Openmeetings Development List</name>
+			<name>Spanish User List</name>
+			<post>user-espanol@openmeetings.apache.org</post>
+			<subscribe>user-espanol-subscribe@openmeetings.apache.org</subscribe>
+			<unsubscribe>user-espanol-unsubscribe@openmeetings.apache.org</unsubscribe>
+			<archive>http://mail-archives.apache.org/mod_mbox/openmeetings-user-espanol</archive>
+		</mailingList>
+		<mailingList>
+			<name>Development List</name>
 			<post>dev@openmeetings.apache.org</post>
 			<subscribe>dev-subscribe@openmeetings.apache.org</subscribe>
 			<unsubscribe>dev-unsubscribe@openmeetings.apache.org</unsubscribe>
 			<archive>http://mail-archives.apache.org/mod_mbox/openmeetings-dev</archive>
 		</mailingList>
 		<mailingList>
-			<name>Openmeetings commit List</name>
+			<name>Commits List</name>
 			<subscribe>commits-subscribe@openmeetings.apache.org</subscribe>
 			<unsubscribe>commits-unsubscribe@openmeetings.apache.org</unsubscribe>
 			<archive>http://mail-archives.apache.org/mod_mbox/openmeetings-commits/</archive>
@@ -233,6 +295,10 @@
 				<artifactId>red5-client</artifactId>
 				<version>${red5-client.version}</version>
 				<exclusions>
+					<exclusion>
+						<groupId>org</groupId>
+						<artifactId>jaudiotagger</artifactId>
+					</exclusion>
 					<exclusion>
 						<groupId>org.apache.mina</groupId>
 						<artifactId>mina-core</artifactId>

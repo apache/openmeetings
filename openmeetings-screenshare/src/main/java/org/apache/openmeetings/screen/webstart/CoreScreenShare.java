@@ -317,7 +317,7 @@ public class CoreScreenShare implements IPendingServiceCallback, INetStreamEvent
 		this.readyToRecord = readyToRecord;
 	}
 	
-	protected void onInvoke(RTMPConnection conn, Channel channel, Header source, ICommand command) {
+	protected void onCommand(RTMPConnection conn, Channel channel, Header source, ICommand command) {
 		if (!(command instanceof Notify)) {
 			return;
 		}
