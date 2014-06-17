@@ -149,5 +149,10 @@
 			<artifactId>wicket-core</artifactId>
 			<version>${wicket.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>org.apache.directory.api</groupId>
+			<artifactId>api-all</artifactId>
+			<version>1.0.0-M22</version>
+		</dependency>
 	</dependencies>
 </project>

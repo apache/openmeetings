@@ -46,6 +46,12 @@
 			<groupId>org.red5</groupId>
 			<artifactId>red5-io</artifactId>
 			<version>1.0.3</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org</groupId>
+					<artifactId>jaudiotagger</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency><!-- FIXME should be removed later -->
 			<groupId>org.red5</groupId>

@@ -40,12 +40,12 @@ import java.util.Set;
 import java.util.TimeZone;
 
 import org.apache.openmeetings.core.IWebSession;
+import org.apache.openmeetings.core.ldap.LdapLoginManagement;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.label.FieldLanguageDao;
 import org.apache.openmeetings.db.dao.label.FieldLanguagesValuesDao;
 import org.apache.openmeetings.db.dao.server.SOAPLoginDao;
 import org.apache.openmeetings.db.dao.server.SessiondataDao;
-import org.apache.openmeetings.db.dao.user.ILdapLoginManagement;
 import org.apache.openmeetings.db.dao.user.StateDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.label.FieldLanguage;
@@ -251,7 +251,7 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 			User u = null;
 			switch (type) {
 				case ldap:
-					u = getBean(ILdapLoginManagement.class).login(login, password, domainId);
+					u = getBean(LdapLoginManagement.class).login(login, password, domainId);
 					break;
 				case user:
 					/* we will allow login against internal DB in case user 'guess' LDAP password */

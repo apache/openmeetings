@@ -21,8 +21,6 @@ package org.apache.openmeetings.core.remote;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
 import java.util.Calendar;
-import java.util.Date;
-import java.util.TimeZone;
 
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.room.IInvitationManager;

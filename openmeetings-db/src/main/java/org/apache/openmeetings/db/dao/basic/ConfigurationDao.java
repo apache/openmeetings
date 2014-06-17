@@ -32,7 +32,6 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
-import javax.annotation.Resource;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
