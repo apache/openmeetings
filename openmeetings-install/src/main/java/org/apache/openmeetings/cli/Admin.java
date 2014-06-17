@@ -293,7 +293,7 @@ public class Admin {
 					} else {
 						f = new File(file);
 					}
-					boolean includeFiles = Boolean.parseBoolean(cmdl.getOptionValue("exclude-files", "true"));
+					boolean includeFiles = !cmdl.hasOption("exclude-files");
 					File backup_dir = new File(OmFileHelper.getUploadTempDir(), "" + System.currentTimeMillis());
 					backup_dir.mkdirs();
 					
@@ -437,7 +437,7 @@ public class Admin {
 						report.append("Recordings allocates: ").append(OmFileHelper.getHumanSize(sectionSize)).append("\n");
 						long size = OmFileHelper.getSize(hibernateDir);
 						long restSize = sectionSize - size;
-						FlvRecordingDao recordDao = ctx.getBean(FlvRecordingDao.class);
+						FlvRecordingDao recordDao = getApplicationContext(ctxName).getBean(FlvRecordingDao.class);
 						long[] params = {0, 0}; // [0] == deleted [1] == missing
 						for (FlvRecording rec : recordDao.getAllFlvRecordings()) {
 							checkRecordingFile(hibernateDir, rec.getFileHash(), rec.getDeleted(), params, cleanup);
@@ -593,8 +593,10 @@ public class Admin {
 	}
 	
 	private void immediateDropDB(ConnectionProperties props) throws Exception {
-		ctx.destroy();
-		ctx = null;
+		if (ctx != null) {
+			ctx.destroy();
+			ctx = null;
+		}
     	JDBCConfigurationImpl conf = new JDBCConfigurationImpl();
         try {
         	conf.setPropertiesFile(new File(OmFileHelper.getWebinfDir(), PERSISTENCE_NAME));
