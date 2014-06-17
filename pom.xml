@@ -103,6 +103,9 @@
 		<system>jenkins</system>
 		<url>https://builds.apache.org/view/M-R/view/OpenMeetings/job/openmeetings/</url>
 	</ciManagement>
+	<prerequisites>
+		<maven>3.2.1</maven>
+	</prerequisites>
 	<developers>
 		<developer>
 			<id>sebawagner</id>

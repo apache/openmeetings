@@ -43,6 +43,7 @@ import org.slf4j.Logger;
 
 public abstract class BaseStreamWriter implements Runnable {
 	private static final Logger log = Red5LoggerFactory.getLogger(BaseStreamWriter.class, webAppRootKey);
+	public final static int TIME_TO_WAIT_FOR_FRAME = 15 * 60 * 1000; //15 minutes
 	protected int startTimeStamp = -1;
 	protected long initialDelta = 0;
 
@@ -123,18 +124,24 @@ public abstract class BaseStreamWriter implements Runnable {
 	}
 
 	public void run() {
+		long lastPackedRecieved = 0;
+		long counter = 0;
 		while (!stopping) {
 			try {
 				CachedEvent item = queue.poll(100, TimeUnit.MICROSECONDS);
 				if (item != null) {
+					lastPackedRecieved = System.currentTimeMillis();
 					if (dostopping) {
 						log.trace("metadatId: {} :: Recording stopped but still packets to write to file!", metaDataId);
 					}
 
 					packetReceived(item);
-				} else if (dostopping) {
+				} else if (dostopping || lastPackedRecieved + TIME_TO_WAIT_FOR_FRAME < System.currentTimeMillis()) {
 					stopping = true;
 					closeStream();
+				}
+				if (++counter % 1000 == 0) {
+					log.debug("Stream writer is still listening:: " + file.getName());;
 				}
 			} catch (InterruptedException e) {
 				log.error("[run]", e);

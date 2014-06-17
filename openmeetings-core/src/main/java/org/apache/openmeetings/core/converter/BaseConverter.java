@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.core.converter;
 
+import static org.apache.openmeetings.core.data.flvrecord.listener.async.BaseStreamWriter.TIME_TO_WAIT_FOR_FRAME;
 import static org.apache.openmeetings.util.OmFileHelper.MP4_EXTENSION;
 import static org.apache.openmeetings.util.OmFileHelper.OGG_EXTENSION;
 import static org.apache.openmeetings.util.OmFileHelper.getRecording;
@@ -142,12 +143,22 @@ public abstract class BaseConverter {
 		return argv;
 	}
 	
+	private static File getMetaFlv(FlvRecordingMetaData metaData) {
+		File metaDir = getStreamsSubDir(metaData.getFlvRecording().getRoom_id());
+		return new File(metaDir, metaData.getStreamName() + ".flv");
+	}
+	
+	private static File getMetaFlvSer(FlvRecordingMetaData metaData) {
+		File metaDir = getStreamsSubDir(metaData.getFlvRecording().getRoom_id());
+		return new File(metaDir, metaData.getStreamName() + ".flv.ser");
+	}
+	
 	public static void printMetaInfo(FlvRecordingMetaData metaData, String prefix) {
 		if (log.isDebugEnabled()) {
-			log.debug(String.format("### %s:: stream with id %s; current status: %s ", prefix, metaData.getFlvRecordingMetaDataId(), metaData.getStreamStatus()));
-			File metaDir = getStreamsSubDir(metaData.getFlvRecording().getRoom_id());
-			File metaFlv = new File(metaDir, metaData.getStreamName() + ".flv");
-			File metaSer = new File(metaDir, metaData.getStreamName() + ".flv.ser");
+			log.debug(String.format("### %s:: recording id %s; stream with id %s; current status: %s ", prefix, metaData.getFlvRecording().getFlvRecordingId()
+					, metaData.getFlvRecordingMetaDataId(), metaData.getStreamStatus()));
+			File metaFlv = getMetaFlv(metaData);
+			File metaSer = getMetaFlvSer(metaData);
 			log.debug(String.format("### %s:: Flv file [%s] exists ? %s; size: %s, lastModified: %s ", prefix, metaFlv.getPath(), metaFlv.exists(), metaFlv.length(), metaFlv.lastModified()));
 			log.debug(String.format("### %s:: Ser file [%s] exists ? %s; size: %s, lastModified: %s ", prefix, metaSer.getPath(), metaSer.exists(), metaSer.length(), metaSer.lastModified()));
 		}
@@ -159,6 +170,7 @@ public abstract class BaseConverter {
 			log.debug("### meta Stream not yet written to disk " + metaId);
 			boolean doWait = true;
 			long counter = 0;
+			long maxTimestamp = 0;
 			while(doWait) {
 				log.trace("### Stream not yet written Thread Sleep - " + metaId);
 				
@@ -168,7 +180,35 @@ public abstract class BaseConverter {
 					printMetaInfo(metaData, "Stream now written");
 					log.debug("### Thread continue ... " );
 					doWait = false;
-				} else if (++counter % 1000 == 0) {
+					break;
+				} else {
+					File metaFlv = getMetaFlv(metaData);
+					if (metaFlv.exists()) {
+						if (maxTimestamp < metaFlv.lastModified()) {
+							maxTimestamp = metaFlv.lastModified();
+						}
+					}
+					File metaSer = getMetaFlvSer(metaData);
+					if (metaSer.exists()) {
+						if (maxTimestamp < metaSer.lastModified()) {
+							maxTimestamp = metaSer.lastModified();
+						}
+						if (maxTimestamp + TIME_TO_WAIT_FOR_FRAME < System.currentTimeMillis()) {
+							// long time without any update, closing
+							/*
+							try {
+								if (FLVWriter.repair(metaSer.getCanonicalPath(), null, null) && !metaSer.exists()) {
+									metaData.setStreamStatus(Status.STOPPED);
+									metaDataDao.update(metaData);
+								}
+							} catch (IOException e) {
+								log.error("### Error while file repairing ... ", e);
+							} 
+							*/
+						}
+					}
+				}
+				if (++counter % 1000 == 0) {
 					printMetaInfo(metaData, "Still waiting");
 				}
 				
