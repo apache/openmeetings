@@ -22,6 +22,7 @@ import static org.apache.openmeetings.web.app.Application.getBean;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.user.User;
@@ -45,7 +46,11 @@ public abstract class AdminUserChoiceProvider extends TextChoiceProvider<User> {
 	}
 
 	@Override
-	public Collection<User> toChoices(Collection<String> ids) {
+	public Collection<User> toChoices(Collection<String> _ids) {
+		List<Long> ids = new ArrayList<Long>();
+		for (String id : _ids) {
+			ids.add(Long.valueOf(id));
+		}
 		return new ArrayList<User>(getBean(UserDao.class).get(ids));
 	}
 }
