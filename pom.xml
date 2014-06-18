@@ -110,33 +110,44 @@
 		<developer>
 			<id>sebawagner</id>
 			<name>Sebastian Wagner</name>
-			<email>sebawagner AT apache DOT org</email>
+			<email>seba.wagner@gmail.com</email>
 			<url>https://twitter.com/#!/dead_lock</url>
 			<roles>
 				<role>chair</role>
 				<role>architect</role>
 				<role>developer</role>
+				<role>pmc</role>
 			</roles>
 		</developer>
 		<developer>
 			<id>solomax</id>
 			<name>Maxim Solodovnik</name>
-			<email>solomax AT apache DOT org</email>
+			<email>solomax666@gmail.com</email>
 			<roles>
 				<role>architect</role>
 				<role>developer</role>
+				<role>pmc</role>
 			</roles>
 		</developer>
 		<developer>
 			<id>vdegtyarev</id>
 			<name>Vasiliy Degtyarev</name>
-			<email>vdegtyarev AT apache DOT org</email>
+			<email>vdegtyarev@apache.org</email>
 			<roles>
 				<role>developer</role>
+				<role>tester</role>
+				<role>pmc</role>
 			</roles>
 		</developer>
 		<developer>
+			<id>aaf</id>
 			<name>Alexei Fedotov</name>
+			<email>alexei.fedotov@gmail.com</email>
+			<organizationUrl>http://dataved.ru</organizationUrl>
+			<roles>
+				<role>support</role>
+				<role>pmc</role>
+			</roles>
 		</developer>
 		<developer>
 			<name>Evgeny Rovinsky</name>
@@ -167,6 +178,10 @@
 		</developer>
 		<developer>
 			<name>Irina Arkhipets</name>
+			<roles>
+				<role>support</role>
+				<role>pmc</role>
+			</roles>
 		</developer>
 		<developer>
 			<name>Denis Kandrov</name>
@@ -187,6 +202,8 @@
 		</contributor>
 		<contributor>
 			<name>Peter Dähn</name>
+			<organization>VCRP</organization>
+			<organizationUrl>http://www.vcrp.de</organizationUrl>
 		</contributor>
 	</contributors>
 	<scm>
