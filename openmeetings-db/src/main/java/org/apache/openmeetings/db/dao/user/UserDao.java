@@ -295,7 +295,7 @@ public class UserDao implements IDataProviderDao<User> {
 		return null;
 	}
 
-	public List<User> get(Collection<String> ids) {
+	public List<User> get(Collection<Long> ids) {
 		return em.createNamedQuery("getUsersByIds", User.class).setParameter("ids", ids).getResultList();
 	}
 

@@ -46,7 +46,7 @@ public class RoomModeratorsDao {
 		return null;
 	}
 	
-	public List<RoomModerator> get(Collection<String> ids) {
+	public List<RoomModerator> get(Collection<Long> ids) {
 		return em.createNamedQuery("getRoomModeratorsByIds", RoomModerator.class).setParameter("ids", ids).getResultList();
 	}
 
