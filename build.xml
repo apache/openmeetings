@@ -1205,24 +1205,28 @@
 		<delete>
 			<fileset dir="${red5.server.lib}" includes="jaudiotagger*.jar" />
 		</delete>
+		<!-- FIXME need to be removed as soon as red5 1.0.3 will be released -->
+		<delete>
+			<fileset dir="${red5.server.lib}" includes="red5-io*.jar" />
+		</delete>
+		<antcall target="-retrieve" inheritAll="true" inheritRefs="true">
+			<param name="ivy.conf.name" value="red5-io" />
+			<param name="ivy.lib.location" value="${red5.server.lib}" />
+			<param name="ivy.transitive" value="false" />
+		</antcall>
 		<antcall target="-patch-red5-server-start-script"/> 
 	</target>
 	
 	<!-- Check for the Red5 client libraries -->
 	<target name="-retrieve-red5-client" unless="red5.client.installed" description="Retrieves the libraries if needed" depends="-retrieve-red5-server,-jgit-task">
-		<!-- Needs an empty dir to checkout to -->
-		<delete dir="${red5.client.dir}"></delete>
-		<git-clone uri="https://github.com/Red5/red5-client.git" dest="${red5.client.dir}" branch="v${red5.client.version}"/>
-		<artifact:mvn pom="${red5.client.dir}/pom.xml" mavenVersion="${maven.version}" fork="true" dir="${red5.client.dir}">
-			<jvmarg value="-Dmaven.buildNumber.doUpdate=false" />
-			<!--jvmarg value="-Dassembly.skipAssembly=true" /-->
-			<arg value="clean"/>
-			<arg value="install"/>
-			<jvmarg value="-Dmaven.test.skip=true" />
-		</artifact:mvn>
-		<copy todir="${red5.client.lib}" overwrite="true" force="true">
-			<fileset dir="${red5.client.dir}/target" includes="red5-client-${red5.client.version}.jar" />
-		</copy>
+		<delete>
+			<fileset dir="${red5.client.lib}" includes="*" />
+		</delete>
+		<antcall target="-retrieve" inheritAll="true" inheritRefs="true">
+			<param name="ivy.conf.name" value="red5-client" />
+			<param name="ivy.lib.location" value="${red5.client.lib}" />
+			<param name="ivy.transitive" value="false" />
+		</antcall>
 
 		<echo message="Red5 Client build" />
 	</target>

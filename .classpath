@@ -37,7 +37,7 @@
 	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="con" path="org.apache.ivyde.eclipse.cpcontainer.IVYDE_CONTAINER/?project=Openmeetings+3.0.x&amp;ivyXmlPath=ivy.xml&amp;confs=*&amp;ivySettingsPath=%24%7Bworkspace_loc%3AOpenmeetings+3.0.x%2Fivysettings.xml%7D&amp;loadSettingsOnDemand=false&amp;propertyFiles="/>
 	<classpathentry kind="lib" path="build/lib/java_16_tools.jar"/>
-	<classpathentry kind="lib" path="build/red5/server/dist/lib/red5-io-1.0.3.jar"/>
+	<classpathentry kind="lib" path="build/red5/server/dist/lib/red5-io-jar-1.0.4-SNAPSHOT.jar"/>
 	<classpathentry kind="lib" path="build/red5/server/dist/red5-server.jar" sourcepath="build/red5/server/src/main/java"/>
 	<classpathentry kind="lib" path="build/red5/server/dist/lib/slf4j-api-1.7.5.jar"/>
 	<classpathentry kind="lib" path="build/red5/server/dist/lib/spring-core-4.0.3.RELEASE.jar"/>
@@ -62,6 +62,6 @@
 	<classpathentry kind="lib" path="build/red5/server/dist/plugins/tomcat-embed-core-7.0.50.jar"/>
 	<classpathentry kind="lib" path="build/red5/server/dist/lib/bcprov-jdk15on-1.47.jar"/>
 	<classpathentry kind="lib" path="build/red5/server/dist/lib/cglib-nodep-2.2.2.jar"/>
-	<classpathentry kind="lib" path="build/red5/client/dist/red5-client-1.0.2-RC2.jar" sourcepath="build/red5/client/src/main/java"/>
+	<classpathentry kind="lib" path="build/red5/client/dist/red5-client-jar-1.0.2-RC2.jar"/>
 	<classpathentry kind="output" path="build/classes/eclipse"/>
 </classpath>

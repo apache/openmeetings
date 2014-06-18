@@ -39,6 +39,7 @@
 		<conf name="mysql" description="MySQL JDBC driver" />
 		<conf name="mvn" description="Maven Ant task to build Red5" />
 		<conf name="red5-client" description="Red5 Client/Server for screensharing" />
+		<conf name="red5-io" description="Red5 io library" />
 		<conf name="jgit" description="JGit Ant task to retirieve Red5" />
 	</configurations>
 	<dependencies>
@@ -405,6 +406,16 @@
 			<exclude org="org.apache.ant"/>
 		</dependency>
 
+		<!-- red5-client -->
+		<dependency org="org.red5" name="red5-client" conf="red5-client->*" rev="1.0.2-RC2" transitive="false" >
+			<include type="jar" />
+		</dependency>
+		
+		<!-- red5-io -->
+		<dependency org="org.red5" name="red5-io" conf="red5-io->*" rev="1.0.4-SNAPSHOT" transitive="false" >
+			<include type="jar" />
+		</dependency>
+		
 		<exclude org="javax.servlet" module="servlet-api" type="*" ext="*" conf="*" matcher="exact"/>		
 		<exclude org="cglib" module="cglib-nodep" type="*" ext="*" conf="*" matcher="exact"/>
 		<exclude org="pull-parser" module="pull-parser" type="*" ext="*" conf="*" matcher="exact"/>
