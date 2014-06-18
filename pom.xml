@@ -112,16 +112,28 @@
 			<name>Sebastian Wagner</name>
 			<email>sebawagner AT apache DOT org</email>
 			<url>https://twitter.com/#!/dead_lock</url>
+			<roles>
+				<role>chair</role>
+				<role>architect</role>
+				<role>developer</role>
+			</roles>
 		</developer>
 		<developer>
 			<id>solomax</id>
 			<name>Maxim Solodovnik</name>
 			<email>solomax AT apache DOT org</email>
+			<roles>
+				<role>architect</role>
+				<role>developer</role>
+			</roles>
 		</developer>
 		<developer>
 			<id>vdegtyarev</id>
 			<name>Vasiliy Degtyarev</name>
 			<email>vdegtyarev AT apache DOT org</email>
+			<roles>
+				<role>developer</role>
+			</roles>
 		</developer>
 		<developer>
 			<name>Alexei Fedotov</name>
