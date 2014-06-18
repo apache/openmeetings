@@ -110,19 +110,18 @@
 		<developer>
 			<id>sebawagner</id>
 			<name>Sebastian Wagner</name>
-			<email>sebawagner@apache.org</email>
+			<email>sebawagner AT apache DOT org</email>
 			<url>https://twitter.com/#!/dead_lock</url>
 		</developer>
 		<developer>
-			<id>sebawagner</id>
-			<name>Sebastian Wagner</name>
-			<email>sebawagner@apache.org</email>
-			<url>https://twitter.com/#!/dead_lock</url>
+			<id>solomax</id>
+			<name>Maxim Solodovnik</name>
+			<email>solomax AT apache DOT org</email>
 		</developer>
 		<developer>
 			<id>vdegtyarev</id>
 			<name>Vasiliy Degtyarev</name>
-			<email>vdegtyarev@apache.org</email>
+			<email>vdegtyarev AT apache DOT org</email>
 		</developer>
 		<developer>
 			<name>Alexei Fedotov</name>
@@ -173,6 +172,9 @@
 		</contributor>
 		<contributor>
 			<name>Thibault Le Meur</name>
+		</contributor>
+		<contributor>
+			<name>Peter Dähn</name>
 		</contributor>
 	</contributors>
 	<scm>
