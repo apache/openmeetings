@@ -384,6 +384,7 @@ public class BackupImport {
 	
 			registry.bind(User.class, new UserConverter(usersDao, usersMap));
 			registry.bind(Room.class, new RoomConverter(roomDao, roomsMap));
+			registry.bind(Date.class, DateConverter.class);
 			
 			List<ChatMessage> list = readList(serializer, f, "chat_messages.xml", "chat_messages", ChatMessage.class, true);
 			for (ChatMessage m : list) {
@@ -812,7 +813,7 @@ public class BackupImport {
 		//add existence email from database
 		List<User>  users = usersDao.getAllUsers();
 		for (User u : users){
-			if (u.getAdresses() == null || u.getAdresses().getEmail() == null) {
+			if (u.getAdresses() == null || u.getAdresses().getEmail() == null || Type.user != u.getType()) {
 				continue;
 			}
 			userEmailMap.put(u.getAdresses().getEmail(), -1);
@@ -893,9 +894,9 @@ public class BackupImport {
 					}
 				}
 				// check that email is unique
-				if (u.getAdresses() != null && u.getAdresses().getEmail() != null) {
+				if (u.getAdresses() != null && u.getAdresses().getEmail() != null && Type.user == u.getType()) {
 					if (userEmailMap.containsKey(u.getAdresses().getEmail())) {
-						log.warn("Email is dublicated for user " + u.toString());
+						log.warn("Email is duplicated for user " + u.toString());
 						String updateEmail = "modified_by_import_<" + list.size() + ">" + u.getAdresses().getEmail();
 						u.getAdresses().setEmail(updateEmail);
 					}
