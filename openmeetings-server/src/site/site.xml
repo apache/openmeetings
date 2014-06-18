@@ -127,7 +127,7 @@
 					<item name="Navigation" href="/Navigation.html" />
 					<item name="Calendar and timezone" href="/CalendarAndTimezone.html" />
 					<item name="Custom room type" href="/CustomRoomTypeHowTo.html" />
-					<item name="Custom ctypt mechanism" href="/CustomCryptMechanism.html" />
+					<item name="Custom crypt mechanism" href="/CustomCryptMechanism.html" />
 					<item name="General Configuration" href="/GeneralConfiguration.html" />
 				</item>
 				<item name="Security" href="#security">
