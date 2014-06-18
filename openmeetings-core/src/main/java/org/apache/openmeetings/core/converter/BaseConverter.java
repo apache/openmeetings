@@ -194,8 +194,8 @@ public abstract class BaseConverter {
 							maxTimestamp = metaSer.lastModified();
 						}
 						if (maxTimestamp + TIME_TO_WAIT_FOR_FRAME < System.currentTimeMillis()) {
-							// long time without any update, closing
 							/*
+							log.debug("### long time without any update, closing ... ");
 							try {
 								if (FLVWriter.repair(metaSer.getCanonicalPath(), null, null) && !metaSer.exists()) {
 									metaData.setStreamStatus(Status.STOPPED);
