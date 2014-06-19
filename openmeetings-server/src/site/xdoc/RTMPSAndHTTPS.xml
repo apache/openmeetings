@@ -93,27 +93,26 @@ Enter key password for <red5>
 					</source>
 				</li>
 		
-				<li>Generate a CSR: keytool -certreq -keyalg RSA -alias red5 -file
-					red5.csr -keystore red5/conf/keystore
+				<li>Generate a CSR: <source><![CDATA[keytool -certreq -keyalg RSA -alias red5 -file red5.csr -keystore red5/conf/keystore]]></source>
 				</li>
 				<li>Submit CSR to your CA of choice and receive a signed certificate
 				</li>
 				<li>Import your chosen CA's root certificate into the keystore (may
 					need to download it from their site - make sure to get the root CA and
-					not the intermediate one): keytool -import -alias root -keystore
-					red5/conf/keystore
-					-trustcacerts -file root.crt (note: you may receive a warning that
-					the certificate already exists in the system wide keystore - import
+					not the intermediate one): 
+					<source><![CDATA[keytool -import -alias root -keystore red5/conf/keystore -trustcacerts -file root.crt]]></source>
+					(note: you may receive a warning that the certificate already exists in the system wide keystore - import
 					anyway)
 				</li>
 				<li>Import the intermediate certificate(s) you normally receive with
 					the certificate:
-					keytool -import -alias intermed -keystore red5/conf/keystore -trustcacerts
-					-file intermediate.crt
+					<source><![CDATA[keytool -import -alias intermed -keystore red5/conf/keystore -trustcacerts -file intermediate.crt]]></source>
 				</li>
-				<li>Import the certificate you received: keytool -import -alias red5
-					-keystore red5/conf/keystore -trustcacerts -file
-					demo.openmeetings.de.crt
+				<li>Import the certificate you received:
+					<source><![CDATA[keytool -import -alias red5 -keystore red5/conf/keystore -trustcacerts -file demo.openmeetings.de.crt]]></source>
+				</li>
+				<li>Please NOTE according to this <a href="http://javarevisited.blogspot.com/2012/09/difference-between-truststore-vs-keyStore-Java-SSL.html">http://javarevisited.blogspot.com/2012/09/difference-between-truststore-vs-keyStore-Java-SSL.html</a>
+					guide you can split keystore and truststore
 				</li>
                 <li>
                 Create additional certificate as described above.
@@ -130,24 +129,20 @@ Enter key password for <red5>
 		      Uncomment <tt>&lt;!-- RTMPS --&gt;</tt> section in <tt>red5/conf/red5-core.xml</tt>
 		      </li>
 
-				<li>
-					Edit <tt>red5/conf/red5.properties</tt> and set
-					<tt>rtmps.port=5443</tt>
-					and
-					<tt>rtmps.keystorepass=password</tt>
-					(password = password you set on your new
-					keystore)
+				<li> Default RTMPS port is 8443, you can change it by editing <tt>red5/conf/red5.properties</tt> and change the port here: <tt>rtmps.port=8443</tt><br/>
+					Please set <tt>rtmps.keystorepass=password</tt> and <tt>rtmps.truststorepass=password</tt>
+					(password = password you set on your new keystore(s))
 				</li>
 			
 				<li>
-					Edit red5/webapps/openmeetings/public/config.xml and set
-					<tt>&lt;rtmpsslport&gt;5443&lt;/rtmpsslport&gt;</tt>
-					,
-					<tt>&lt;useSSL&gt;yes&lt;/useSSL&gt;</tt>
-					and
+					Edit <tt>red5/webapps/openmeetings/public/config.xml</tt> and set<br/>
+					<tt>&lt;rtmpsslport&gt;8443&lt;/rtmpsslport&gt;</tt>,<br/>
+					<tt>&lt;useSSL&gt;yes&lt;/useSSL&gt;</tt> and<br/>
 					<tt>&lt;proxyType&gt;best&lt;/proxyType&gt;</tt>
 				</li>
-
+				<li>Please NOTE https port set in <tt>red5/conf/red5.properties</tt> should be in sync with the one set in 
+					<tt>red5/webapps/openmeetings/public/config.xml</tt>
+				</li>
 				<li>Restart red5 and try to connect - your connection should now be
 					made via RTMPS (close port 1935 to be sure)
 				</li>   
@@ -171,26 +166,28 @@ Enter key password for <red5>
 					UNComment <tt>Tomcat with SSL enabled</tt> section
 				</li>
 				<li>
-					Edit red5/webapps/openmeetings/public/config.xml and set
+					Edit <tt>red5/webapps/openmeetings/public/config.xml</tt> and set
 					<tt>&lt;protocol&gt;https&lt;/protocol&gt;</tt>
 				</li>
 				<li>
-					Edit red5/webapps/openmeetings/public/config.xml and set
-					<tt>red5httpport</tt> to <tt>https</tt> port
+					Edit <tt>red5/webapps/openmeetings/public/config.xml</tt> and set
+					<tt>&lt;red5httpport&gt;5443&lt;/red5httpport&gt;</tt> port
 				</li>
-				<li>In webapps/openmeetings/WEB-INF/conf/axis2.xml add (below the existing http transportReceiver (around line 225))
+				<li>In <tt>webapps/openmeetings/WEB-INF/conf/axis2.xml</tt> add (below the existing http transportReceiver (around line 225))
 				<source>
 <![CDATA[
 <transportReceiver name="https" class="org.apache.axis2.transport.http.AxisServletListener">
-    <parameter name="port">443</parameter>
+    <parameter name="port">5443</parameter>
 </transportReceiver>
 ]]>
 				</source>
 				</li>
-				<li>Edit red5/conf/red5.properties and set <tt>https.port=443</tt> </li>
+				<li>Please NOTE https port set in <tt>red5/conf/red5.properties</tt> should be in sync with the one set
+					in <tt>red5/webapps/openmeetings/public/config.xml</tt> and <tt>webapps/openmeetings/WEB-INF/conf/axis2.xml</tt>
+				</li>
 				<li>
 					Restart red5 and try to connect to
-					<a href="https://your.server" rel="nofollow">https://your.server</a>
+					<a href="https://your.server:5443" rel="nofollow">https://your.server:5443</a>
 					- you should be redirected to the OpenMeetings
 					app and all access should be via HTTPS or RTMPS (close port 5080 to
 					be sure).
@@ -210,4 +207,3 @@ Enter key password for <red5>
 	</body>
 
 </document>
-
