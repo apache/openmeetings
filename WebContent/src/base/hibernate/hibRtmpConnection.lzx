@@ -813,7 +813,13 @@
 				if (value.timeZoneId != null) {
 					canvas.timeZoneId = value.timeZoneId;
 				}
- 				canvas.becomemoderator = value.level_id >= 2;
+				if (value.rights != null) {
+					for (var i = 0; i < value.rights.length; ++i) {
+						if ('Admin' == value.rights[i]) {
+							canvas.becomemoderator = true;
+						}
+					}
+				}
 				if (value.sessionData == null) {
 					if ($debug) Debug.write("No Language Found to assign");
 					return;

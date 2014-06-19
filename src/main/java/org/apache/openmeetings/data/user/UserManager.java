@@ -272,7 +272,6 @@ public class UserManager implements IUserManager {
 	 * default_domain_id
 	 * 
 	 * @param user_level
-	 * @param level_id
 	 * @param availible
 	 * @param status
 	 * @param login
@@ -347,7 +346,6 @@ public class UserManager implements IUserManager {
 
 	/**
 	 * @param user_level
-	 * @param level_id
 	 * @param availible
 	 * @param status
 	 * @param login
