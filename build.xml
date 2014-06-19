@@ -1174,10 +1174,7 @@
 	<target name="-retrieve-red5-server" unless="red5.server.installed" description="Retrieves the libraries if needed" depends="-ant-task,-maven-task,-jgit-task">
 		<!-- Needs an empty dir to checkout to -->
 		<delete dir="${red5.server.dir}"></delete>
-		<git-clone uri="https://github.com/Red5/red5-server.git" dest="${red5.server.dir}" branch="v${red5.server.version}"/>
-		<copy todir="${red5.server.dir}/src/main/assembly" overwrite="true" force="true">
-			<fileset dir="${webcontent.base.dir}/red5" includes="server.xml" />
-		</copy>
+		<git-clone uri="https://github.com/Red5/red5-server.git" dest="${red5.server.dir}"/><!--  branch="v${red5.server.version}" -->
 		<artifact:mvn pom="${red5.server.dir}/pom.xml" mavenVersion="${maven.version}" fork="true" dir="${red5.server.dir}">
 			<jvmarg value="-Dmaven.buildNumber.doUpdate=false" />
 			<!--jvmarg value="-Dassembly.skipAssembly=true" /-->
@@ -1197,7 +1194,7 @@
 		<delete dir="${red5.lib}/webapps/vod" />
 		<copy file="${webcontent.base.dir}/red5/index.html" todir="${red5.lib}/webapps/root" overwrite="true" force="true" />
 		<copy todir="${red5.lib}" overwrite="true" force="true">
-			<fileset dir="${webcontent.base.dir}/red5" includes="red5*,admin.*,network_test.sh" excludes="red5-core.xml,red5.properties"/>
+			<fileset dir="${webcontent.base.dir}/red5" includes="red5*,admin.*,network_test.sh"/>
 		</copy>
 		<!-- FIXME need to be removed as soon as JAudioTagger (will be officially Dual Licensed) -->
 		<xslt in="${red5.lib}/conf/red5-common.xml" out="${red5.lib}/conf/red5-common1.xml" style="build-jaudiotagger.xsl" />
@@ -1205,26 +1202,6 @@
 		<delete>
 			<fileset dir="${red5.server.lib}" includes="jaudiotagger*.jar" />
 		</delete>
-		<!-- FIXME need to be removed as soon as red5 1.0.3 will be released -->
-		<copy todir="${red5.lib}/conf" overwrite="true" force="true">
-			<fileset dir="${webcontent.base.dir}/red5" includes="jee-container.xml,red5-core.xml,red5.properties"/>
-		</copy>
-		<delete>
-			<fileset dir="${red5.server.lib}" includes="red5-io*.jar" />
-		</delete>
-		<delete>
-			<fileset dir="${red5.lib}/plugins" includes="tomcatplugin-*.jar" />
-		</delete>
-		<antcall target="-retrieve" inheritAll="true" inheritRefs="true">
-			<param name="ivy.conf.name" value="red5-io" />
-			<param name="ivy.lib.location" value="${red5.server.lib}" />
-			<param name="ivy.transitive" value="false" />
-		</antcall>
-		<antcall target="-retrieve" inheritAll="true" inheritRefs="true">
-			<param name="ivy.conf.name" value="red5-tomcat" />
-			<param name="ivy.lib.location" value="${red5.lib}/plugins" />
-			<param name="ivy.transitive" value="false" />
-		</antcall>
 		<antcall target="-patch-red5-server-start-script"/> 
 	</target>
 	
