@@ -22,7 +22,6 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -373,7 +372,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 	
 						String recordingName = "Recording " + CalendarPatterns.getDateWithTimeByMiliSeconds(new Date());
 	
-						flvRecorderService.recordMeetingStream(recordingName, "", false);
+						flvRecorderService.recordMeetingStream(current, recordingName, "", false);
 					} else {
 						log.warn("Recording is already started for the client id=" + currentClient.getId() + ". Second request is ignored.");
 					}
@@ -2311,14 +2310,12 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 		try {
 			IConnection current = Red5.getConnectionLocal();
 
-			for (Set<IConnection> conset : current.getScope().getConnections()) {
-				for (IConnection conn : conset) {
-					if (conn != null) {
-						Client rcl = sessionManager.getClientByStreamId(conn.getClient().getId(), null);
-	
-						if (rcl.getIsRecording() != null && rcl.getIsRecording()) {
-							return true;
-						}
+			for (IConnection conn : current.getScope().getClientConnections()) {
+				if (conn != null) {
+					Client rcl = sessionManager.getClientByStreamId(conn.getClient().getId(), null);
+
+					if (rcl.getIsRecording() != null && rcl.getIsRecording()) {
+						return true;
 					}
 				}
 			}
@@ -2339,15 +2336,12 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 			log.debug("-----------  startInterviewRecording");
 			IConnection current = Red5.getConnectionLocal();
 
-			Collection<Set<IConnection>> concolset = current.getScope().getConnections();
-			for (Set<IConnection> conset : concolset) {
-				for (IConnection conn : conset) {
-					if (conn != null) {
-						Client rcl = sessionManager.getClientByStreamId(conn.getClient().getId(), null);
-	
-						if (rcl != null && rcl.getIsRecording() != null && rcl.getIsRecording()) {
-							return false;
-						}
+			for (IConnection conn : current.getScope().getClientConnections()) {
+				if (conn != null) {
+					Client rcl = sessionManager.getClientByStreamId(conn.getClient().getId(), null);
+
+					if (rcl != null && rcl.getIsRecording() != null && rcl.getIsRecording()) {
+						return false;
 					}
 				}
 			}
@@ -2361,28 +2355,26 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 			Map<String, String> interviewStatus = new HashMap<String, String>();
 			interviewStatus.put("action", "start");
 
-			for (Set<IConnection> conset : concolset) {
-				for (IConnection conn : conset) {
-					if (conn != null) {
-						IClient client = conn.getClient();
-						if (SessionVariablesUtil.isScreenClient(client)) {
-							// screen sharing clients do not receive events
-							continue;
-						} else if (SessionVariablesUtil.isAVClient(client)) {
-							// AVClients or potential AVClients do not receive events
-							continue;
-						}
-	
-						((IServiceCapableConnection) conn).invoke(
-								"interviewStatus",
-								new Object[] { interviewStatus }, this);
-						log.debug("-- interviewStatus" + interviewStatus);
+			for (IConnection conn : current.getScope().getClientConnections()) {
+				if (conn != null) {
+					IClient client = conn.getClient();
+					if (SessionVariablesUtil.isScreenClient(client)) {
+						// screen sharing clients do not receive events
+						continue;
+					} else if (SessionVariablesUtil.isAVClient(client)) {
+						// AVClients or potential AVClients do not receive events
+						continue;
 					}
+
+					((IServiceCapableConnection) conn).invoke(
+							"interviewStatus",
+							new Object[] { interviewStatus }, this);
+					log.debug("-- startInterviewRecording " + interviewStatus);
 				}
 			}
 			String recordingName = "Interview " + CalendarPatterns.getDateWithTimeByMiliSeconds(new Date());
 
-			flvRecorderService.recordMeetingStream(recordingName, "", true);
+			flvRecorderService.recordMeetingStream(current, recordingName, "", true);
 
 			return true;
 		} catch (Exception err) {

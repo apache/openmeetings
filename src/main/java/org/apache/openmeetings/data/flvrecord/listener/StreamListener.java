@@ -61,11 +61,11 @@ public class StreamListener implements IStreamListener {
 			}
 
 			if (log.isTraceEnabled()) {
-				log.trace("Packet recieved. type: {} frame type: {}", cachedEvent.getDataType(), cachedEvent.getFrameType());
+				log.trace("##REC:: Packet recieved. type: {} frame type: {}", cachedEvent.getDataType(), cachedEvent.getFrameType());
 			}
 			streamWriter.append(cachedEvent);
 		} catch (Exception e) {
-			log.error("[packetReceived]", e);
+			log.error("##REC:: [packetReceived]", e);
 		}
 	}
 

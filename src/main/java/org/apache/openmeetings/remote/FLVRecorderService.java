@@ -97,40 +97,15 @@ public class FLVRecorderService implements IPendingServiceCallback {
 	public void resultReceived(IPendingServiceCall arg0) {
 	}
 
-	public Client checkForRecording() {
-		try {
-
-			IConnection current = Red5.getConnectionLocal();
-			String streamid = current.getClient().getId();
-
-			log.debug("getCurrentRoomClient -2- " + streamid);
-
-			Client currentClient = sessionManager.getClientByStreamId(streamid, null);
-
-			for (Client rcl : sessionManager.getClientListByRoom(currentClient.getRoom_id())) {
-				if (rcl.getIsRecording()) {
-					return rcl;
-				}
-			}
-
-			return null;
-
-		} catch (Exception err) {
-			log.error("[checkForRecording]", err);
-		}
-		return null;
-	}
-	
 	private static String generateFileName(Long flvRecording_id, String streamid) throws Exception {
 		String dateString = CalendarPatterns.getTimeForStreamId(new Date());
 		return "rec_" + flvRecording_id + "_stream_" + streamid + "_" + dateString;
 	}
 
-	public String recordMeetingStream(String roomRecordingName, String comment, Boolean isInterview) {
+	public String recordMeetingStream(IConnection current, String roomRecordingName, String comment, Boolean isInterview) {
 		try {
-			log.debug(":: recordMeetingStream ::");
+			log.debug("##REC:: recordMeetingStream ::");
 
-			IConnection current = Red5.getConnectionLocal();
 			Client currentClient = sessionManager.getClientByStreamId(current.getClient().getId(), null);
 			Long room_id = currentClient.getRoom_id();
 
@@ -159,6 +134,7 @@ public class FLVRecorderService implements IPendingServiceCallback {
 			flvRecording = recordingDao.update(flvRecording);
 			// Receive flvRecordingId
 			Long flvRecordingId = flvRecording.getFlvRecordingId();
+			log.debug("##REC:: recording created by USER: " + currentClient.getUser_id());
 
 			// Update Client and set Flag
 			currentClient.setIsRecording(true);
@@ -210,16 +186,16 @@ public class FLVRecorderService implements IPendingServiceCallback {
 								isVideoOnly = true;
 							}
 
-							Long flvRecordingMetaDataId = metaDataDao.addFlvRecordingMetaData(flvRecordingId,
+							Long metaId = metaDataDao.addFlvRecordingMetaData(flvRecordingId,
 									rcl.getFirstname() + " " + rcl.getLastname(), now, isAudioOnly, isVideoOnly, false, streamName,
 									rcl.getInterviewPodId());
 
-							rcl.setFlvRecordingMetaDataId(flvRecordingMetaDataId);
+							rcl.setFlvRecordingMetaDataId(metaId);
 
 							sessionManager.updateClientByStreamId(rcl.getStreamid(), rcl, false, null);
 
 							// Start FLV recording
-							recordShow(conn, String.valueOf(rcl.getBroadCastID()).toString(), streamName, flvRecordingMetaDataId, !isAudioOnly,
+							recordShow(conn, String.valueOf(rcl.getBroadCastID()).toString(), streamName, metaId, !isAudioOnly,
 									isInterview);
 						}
 					}
@@ -239,11 +215,10 @@ public class FLVRecorderService implements IPendingServiceCallback {
 	 * @param conn
 	 * @param broadcastid
 	 * @param streamName
-	 * @param flvRecordingMetaDataId
+	 * @param metaId
 	 * @throws Exception
 	 */
-	private synchronized void recordShow(IConnection conn, String broadcastid, String streamName, Long flvRecordingMetaDataId,
-			boolean isScreenData, Boolean isInterview) throws Exception {
+	private synchronized void recordShow(IConnection conn, String broadcastid, String streamName, Long metaId, boolean isScreenData, Boolean isInterview) throws Exception {
 		try {
 			log.debug("Recording show for: " + conn.getScope().getContextPath());
 			log.debug("Name of CLient and Stream to be recorded: " + broadcastid);
@@ -261,13 +236,12 @@ public class FLVRecorderService implements IPendingServiceCallback {
 			log.debug("### stream " + stream);
 			log.debug("### streamName " + streamName);
 			log.debug("### conn.getScope() " + conn.getScope());
-			log.debug("### flvRecordingMetaDataId " + flvRecordingMetaDataId);
+			log.debug("### flvRecordingMetaDataId " + metaId);
 			log.debug("### isScreenData " + isScreenData);
 			log.debug("### isInterview " + isInterview);
-			StreamListener streamListener = new StreamListener(!isScreenData, streamName, conn.getScope(),
-					flvRecordingMetaDataId, isScreenData, isInterview, metaDataDao, metaDeltaDao);
+			StreamListener streamListener = new StreamListener(!isScreenData, streamName, conn.getScope(), metaId, isScreenData, isInterview, metaDataDao, metaDeltaDao);
 
-			streamListeners.put(flvRecordingMetaDataId, streamListener);
+			streamListeners.put(metaId, streamListener);
 
 			stream.addStreamListener(streamListener);
 			// Just for Debug Purpose

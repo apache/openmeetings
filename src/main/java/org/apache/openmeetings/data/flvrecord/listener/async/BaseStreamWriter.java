@@ -80,13 +80,13 @@ public abstract class BaseStreamWriter implements Runnable {
 		try {
 			init();
 		} catch (IOException ex) {
-			log.error("[BaseStreamWriter] Could not start Thread", ex);
+			log.error("##REC:: [BaseStreamWriter] Could not init Thread", ex);
 		}
-		open();
-
 		FlvRecordingMetaData metaData = metaDataDao.get(metaDataId);
 		metaData.setStreamStatus(Status.STARTED);
 		metaDataDao.update(metaData);
+		
+		open();
 	}
 
 	/**
@@ -124,12 +124,14 @@ public abstract class BaseStreamWriter implements Runnable {
 	}
 
 	public void run() {
-		long lastPackedRecieved = 0;
+		log.debug("##REC:: stream writer started");
+		long lastPackedRecieved = Long.MAX_VALUE - TIME_TO_WAIT_FOR_FRAME - 1;
 		long counter = 0;
 		while (!stopping) {
 			try {
 				CachedEvent item = queue.poll(100, TimeUnit.MICROSECONDS);
 				if (item != null) {
+					log.trace("##REC:: got packet"); 
 					lastPackedRecieved = System.currentTimeMillis();
 					if (dostopping) {
 						log.trace("metadatId: {} :: Recording stopped but still packets to write to file!", metaDataId);
@@ -140,13 +142,14 @@ public abstract class BaseStreamWriter implements Runnable {
 					stopping = true;
 					closeStream();
 				}
-				if (++counter % 1000 == 0) {
-					log.debug("Stream writer is still listening:: " + file.getName());;
+				if (++counter % 5000 == 0) {
+					log.debug("##REC:: Stream writer is still listening:: " + file.getName());;
 				}
 			} catch (InterruptedException e) {
-				log.error("[run]", e);
+				log.error("##REC:: [run]", e);
 			}
 		}
+		log.debug("##REC:: stream writer stopped");
 	}
 
 	/**
@@ -170,11 +173,11 @@ public abstract class BaseStreamWriter implements Runnable {
 		// Write the complete Bit to the meta data, the converter task will wait for this bit!
 		try {
 			FlvRecordingMetaData metaData = metaDataDao.get(metaDataId);
-			log.debug("Stream Status was: {} has been written for: {}", metaData.getStreamStatus(), metaDataId);
+			log.debug("##REC:: Stream Status was: {} has been written for: {}", metaData.getStreamStatus(), metaDataId);
 			metaData.setStreamStatus(Status.STOPPED);
 			metaDataDao.update(metaData);
 		} catch (Exception err) {
-			log.error("[closeStream, complete Bit]", err);
+			log.error("##REC:: [closeStream, complete Bit]", err);
 		}
 	}
 
@@ -184,8 +187,9 @@ public abstract class BaseStreamWriter implements Runnable {
 		}
 		try {
 			queue.put(streampacket);
+			log.trace("##REC:: Q put, successful: " + queue.size());
 		} catch (InterruptedException ignored) {
-			log.error("[append]", ignored);
+			log.error("##REC:: [append]", ignored);
 		}
 	}
 

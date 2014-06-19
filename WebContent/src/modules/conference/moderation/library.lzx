@@ -28,6 +28,5 @@
    	<include href="applyForModeration.lzx" />
    	<include href="moderationPanel.lzx" />
    	<include href="responseForModeration.lzx" />
-	<include href="recordingStartWin.lzx"/>
 	
 </library>
