@@ -184,18 +184,16 @@ public abstract class BaseConverter {
 					break;
 				} else {
 					File metaFlv = getMetaFlv(metaData);
-					if (metaFlv.exists()) {
-						if (maxTimestamp < metaFlv.lastModified()) {
-							maxTimestamp = metaFlv.lastModified();
-						}
+					if (metaFlv.exists() && maxTimestamp < metaFlv.lastModified()) {
+						maxTimestamp = metaFlv.lastModified();
 					}
 					File metaSer = getMetaFlvSer(metaData);
-					if (metaSer.exists()) {
-						if (maxTimestamp < metaSer.lastModified()) {
-							maxTimestamp = metaSer.lastModified();
-						}
-						if (maxTimestamp + TIME_TO_WAIT_FOR_FRAME < System.currentTimeMillis()) {
-							log.debug("### long time without any update, closing ... ");
+					if (metaSer.exists() && maxTimestamp < metaSer.lastModified()) {
+						maxTimestamp = metaSer.lastModified();
+					}
+					if (maxTimestamp + TIME_TO_WAIT_FOR_FRAME < System.currentTimeMillis()) {
+						if (metaSer.exists()) {
+							log.debug("### long time without any update, trying to repair ... ");
 							try {
 								if (FLVWriter.repair(metaSer.getCanonicalPath(), null, null) && !metaSer.exists()) {
 									metaData.setStreamStatus(Status.STOPPED);
@@ -203,7 +201,11 @@ public abstract class BaseConverter {
 								}
 							} catch (IOException e) {
 								log.error("### Error while file repairing ... ", e);
-							} 
+							}
+						} else {
+							log.debug("### long time without any update, closing ... ");
+							metaData.setStreamStatus(Status.STOPPED);
+							metaDataDao.update(metaData);
 						}
 					}
 				}
