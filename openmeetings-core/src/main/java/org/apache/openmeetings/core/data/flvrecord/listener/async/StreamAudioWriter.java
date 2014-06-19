@@ -65,18 +65,18 @@ public class StreamAudioWriter extends BaseStreamWriter {
 			// We only care about audio at this moment
 			if (isInterview || TYPE_AUDIO == streampacket.getDataType()) {
 				if (streampacket.getTimestamp() <= 0) {
-					log.warn("Negative TimeStamp");
+					log.warn("##REC:: Negative TimeStamp");
 					return;
 				}
 				// we should not skip audio data in case it is Audio only interview
 				if (isInterview && isScreenData && startTimeStamp == -1 && KEYFRAME != streampacket.getFrameType()) {
 					//skip until keyframe
-					log.trace("no KEYFRAME, skipping");
+					log.trace("##REC:: no KEYFRAME, skipping");
 					return;
 				}
 				IoBuffer data = streampacket.getData().asReadOnlyBuffer();
 				if (data.limit() == 0) {
-					log.trace("data.limit() == 0 ");
+					log.trace("##REC:: data.limit() == 0 ");
 					return;
 				}
 
@@ -165,7 +165,7 @@ public class StreamAudioWriter extends BaseStreamWriter {
 					metaDeltaDao.addFlvRecordingMetaDelta(metaDelta);
 				}
 
-				log.trace("timeStamp :: " + timeStamp);
+				log.trace("##REC:: timeStamp :: " + timeStamp);
 				ITag tag = new Tag();
 				tag.setDataType(streampacket.getDataType());
 
@@ -178,7 +178,7 @@ public class StreamAudioWriter extends BaseStreamWriter {
 
 			}
 		} catch (Exception e) {
-			log.error("[packetReceived]", e);
+			log.error("##REC:: [packetReceived]", e);
 		}
 	}
 
@@ -189,19 +189,18 @@ public class StreamAudioWriter extends BaseStreamWriter {
 			// Screen Data, cause there is no!
 
 			Date virtualTime = lastcurrentTime;
-			log.debug("virtualTime: " + virtualTime);
-			log.debug("startedSessionTimeDate: " + startedSessionTimeDate);
+			log.debug("##REC:: virtualTime: " + virtualTime);
+			log.debug("##REC:: startedSessionTimeDate: " + startedSessionTimeDate);
 
-			long deltaRecordingTime = virtualTime == null ? 0 : virtualTime.getTime()
-					- startedSessionTimeDate.getTime();
+			long deltaRecordingTime = virtualTime == null ? 0 : virtualTime.getTime() - startedSessionTimeDate.getTime();
 
-			log.debug("lastTimeStamp :closeStream: " + lastTimeStamp);
-			log.debug("lastStreamPacketTimeStamp :closeStream: " + lastStreamPacketTimeStamp);
-			log.debug("deltaRecordingTime :closeStream: " + deltaRecordingTime);
+			log.debug("##REC:: lastTimeStamp :closeStream: " + lastTimeStamp);
+			log.debug("##REC:: lastStreamPacketTimeStamp :closeStream: " + lastStreamPacketTimeStamp);
+			log.debug("##REC:: deltaRecordingTime :closeStream: " + deltaRecordingTime);
 
 			long deltaTimePaddingEnd = deltaRecordingTime - lastTimeStamp - initialDelta;
 
-			log.debug("deltaTimePaddingEnd :: " + deltaTimePaddingEnd);
+			log.debug("##REC:: deltaTimePaddingEnd :: " + deltaTimePaddingEnd);
 
 			FlvRecordingMetaDelta metaDelta = new FlvRecordingMetaDelta();
 
@@ -218,7 +217,7 @@ public class StreamAudioWriter extends BaseStreamWriter {
 
 			metaDeltaDao.addFlvRecordingMetaDelta(metaDelta);
 		} catch (Exception err) {
-			log.error("[internalCloseStream]", err);
+			log.error("##REC:: [internalCloseStream]", err);
 		}
 	}
 }
