@@ -49,7 +49,7 @@ You can find all this configuration in your red5-Config in: $RED5_HOME/conf/red5
  -->
 <rtmpport>1935</rtmpport>
 
-<rtmpsslport>443</rtmpsslport>
+<rtmpsslport>8443</rtmpsslport>
 <!--
 Wether it should try to connect to rtmps first or not
 Valid values: yes / no

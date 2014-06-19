@@ -31,6 +31,7 @@
 			<url name="googlecode" m2compatible="true">
 				<artifact pattern="https://openlaszlo-openmeetings-integration.googlecode.com/svn/repository/[artifact](-[revision]).[ext]" />
 				<artifact pattern="https://openmeetings.googlecode.com/svn/repository/[artifact](-[revision]).[ext]" />
+				<artifact pattern="https://openmeetings.googlecode.com/svn/repository/[organisation]/[artifact]/[revision]/[artifact](-[revision]).[ext]" />
 				<artifact pattern="https://red5.googlecode.com/svn/repository/[organisation]/[artifact]/[revision]/[artifact](-[revision]).[ext]" />
 			</url>
 			<url name="smslib" m2compatible="true">
