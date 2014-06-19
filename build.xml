@@ -135,7 +135,7 @@
 		<echo>Ant version is ${ant.version}</echo> <!-- output Ant version -->
 	</target>
 
-	<target name="prepare.mkdir" depends="-java6or7.check">
+	<target name="prepare.mkdir" depends="-java7.check">
 		<mkdir dir="${red5.server.lib}" />
 		<mkdir dir="${red5.lib}/log" />
 		<mkdir dir="${red5.client.dir}/dist" />
@@ -1396,7 +1396,7 @@
 		<ivy:cleancache />
 	</target>
 
-	<target name="prepare-eclipse" if="java6.installed" description="Layout various files necessary for development" depends="-java6or7.check">
+	<target name="prepare-eclipse" if="java7.installed" description="Layout various files necessary for development" depends="-java7.check">
 		<antcall target="-retrieve-mainlibs" inheritAll="true" inheritRefs="true" />
 		<antcall target="-retrieve-om" inheritAll="true" inheritRefs="true" />
 		<antcall target="-retrieve-junit" inheritAll="true" inheritRefs="true" />
@@ -1409,21 +1409,20 @@
 		<antcall target="-process-db" inheritAll="true" inheritRefs="true" />
 	</target>
 	
-	<target name="-java6or7.check" unless="java6.installed" depends="info">
-		<condition property="java6.installed" value="true">
+	<target name="-java7.check" unless="java6.installed" depends="info">
+		<condition property="java7.installed" value="true">
 			<and>
 				<or>
-					<equals arg1="${java.specification.version}" arg2="1.6" />
 					<equals arg1="${java.specification.version}" arg2="1.7" />
 				</or>
 				<matches string="${java.vm.specification.vendor}" pattern=".*[sun,oracle].*" casesensitive="false" singleline="true" />
 			</and>
 		</condition>
 		<echo message="Using Java ${java.version} specification: ${java.specification.version}" />
-		<fail message="Unsupported Java version - detected: ${java.version} Only Sun/Oracle Java compiler version 6 or 7 supported.">
+		<fail message="Unsupported Java version - detected: ${java.version} Only Sun/Oracle Java compiler version 7 supported.">
 			<condition>
 				<not>
-					<equals arg1="${java6.installed}" arg2="true" />
+					<equals arg1="${java7.installed}" arg2="true" />
 				</not>
 			</condition>
 		</fail>
