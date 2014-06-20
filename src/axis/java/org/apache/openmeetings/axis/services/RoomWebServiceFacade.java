@@ -606,7 +606,7 @@ public class RoomWebServiceFacade extends BaseWebService {
 		return getBean(RoomWebService.class).closeRoom(SID, room_id, status);
 	}
 
-	public int modifyRoomParameter(String SID, Long room_id, String paramName, Object paramValue) throws AxisFault {
+	public int modifyRoomParameter(String SID, Long room_id, String paramName, String paramValue) throws AxisFault {
 		return getBean(RoomWebService.class).modifyRoomParameter(SID, room_id, paramName, paramValue);
 	}
 	

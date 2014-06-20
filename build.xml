@@ -685,7 +685,7 @@
 		<antcall target="prepare.mkdir" inheritAll="true" inheritRefs="true"/>
 		<echo message="Compile main to ${main.out.dir}" />
 		<javac debug="on" debuglevel="lines,vars,source" destdir="${main.out.dir}" includeantruntime="false"
-			source="1.6" target="1.6">
+			source="1.7" target="1.7">
 			<src path="${src.base.dir}/axis/java" />
 			<src path="${src.base.dir}/db/java" />
 			<src path="${src.base.dir}/doc/java" />

@@ -40,6 +40,7 @@ import org.apache.openmeetings.db.dao.calendar.AppointmentReminderTypDao;
 import org.apache.openmeetings.db.dao.calendar.IInvitationManager.MessageType;
 import org.apache.openmeetings.db.dao.record.FlvRecordingDao;
 import org.apache.openmeetings.db.dao.room.RoomDao;
+import org.apache.openmeetings.db.dao.room.RoomTypeDao;
 import org.apache.openmeetings.db.dao.server.ISessionManager;
 import org.apache.openmeetings.db.dao.server.SessiondataDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
@@ -103,6 +104,8 @@ public class RoomWebService {
 	private ISessionManager sessionManager;
 	@Autowired
 	private RoomDao roomDao;
+	@Autowired
+	private RoomTypeDao roomTypeDao;
 	@Autowired
 	private TimezoneUtil timezoneUtil;
 
@@ -2298,22 +2301,39 @@ public class RoomWebService {
 	/**
 	 * Method to update arbitrary room parameter.
 	 * 
-	 * @param SID The SID of the User. This SID must be marked as Loggedin
+	 * @param SID The SID of the User. This SID must be marked as logged in
 	 * @param room_id the room id
-	 * @param paramName
-	 * @param paramValue
+	 * @param paramName the name of parameter to be updated, please NOTE rooms_id is not updatable as well as fields of type {@link Date} and {@link List}
+	 * @param paramValue the value to be set, please use "type id" to set room type 
 	 * @return 1 in case of success, -2 if permissions are insufficient
 	 * @throws AxisFault if any error occurred
 	 */
-	public int modifyRoomParameter(String SID, Long room_id, String paramName, Object paramValue)
+	public int modifyRoomParameter(String SID, Long room_id, String paramName, String paramValue)
 			throws AxisFault {
 		try {
+			if ("rooms_id".equals(paramName)) {
+				throw new AxisFault("Non modifiable parameter");
+			}
 			Long users_id = sessiondataDao.checkSession(SID);
 			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(users_id))) {
 				log.debug(String.format("modifyRoomParameter[%s]: %s = %s", room_id, paramName, paramValue));
 				Room r = roomDao.get(room_id);
 				BeanWrapper rw = new BeanWrapperImpl(r);
-				rw.setPropertyValue(paramName, paramValue);
+				Class<?> valueClass = rw.getPropertyType(paramName);
+				Object val = null;
+				//don't like this code
+				if (valueClass.isAssignableFrom(String.class)) {
+					val = paramValue;
+				} else if (valueClass.isAssignableFrom(Boolean.class)) {
+					val = Boolean.parseBoolean(paramValue);
+				} else if (valueClass.isAssignableFrom(RoomType.class)) {
+					val = roomTypeDao.get(Long.parseLong(paramValue));
+				} else if (valueClass.isAssignableFrom(Long.class)) {
+					val = Long.parseLong(paramValue);
+				} else if (valueClass.isAssignableFrom(Integer.class)) {
+					val = Integer.parseInt(paramValue);
+				}
+				rw.setPropertyValue(paramName, val);
 				roomDao.update(r, users_id);
 			} else {
 				return -2;

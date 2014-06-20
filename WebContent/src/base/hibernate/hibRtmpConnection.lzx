@@ -820,6 +820,7 @@
 						}
 					}
 				}
+				if ($debug) Debug.write("hibRtmpConnection::loginWicket -> canvas.becomemoderator", canvas.becomemoderator);
 				if (value.sessionData == null) {
 					if ($debug) Debug.write("No Language Found to assign");
 					return;

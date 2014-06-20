@@ -32,7 +32,7 @@
 	    <all-permissions/>
 	</security>	
 	<resources> 
-		<j2se version='1.5+'/>
+		<j2se version='1.7+'/>
 $LIBRARIES
     </resources> 
     <application-desc main-class='$startUpClass'>

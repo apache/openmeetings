@@ -86,8 +86,8 @@ public class ScreenSharerFrame extends JFrame {
 	private NumberSpinner spinnerY;
 	private NumberSpinner spinnerWidth;
 	private NumberSpinner spinnerHeight;
-	private JComboBox comboQuality;
-	private JComboBox comboFPS;
+	private JComboBox<KeyValue<ScreenQuality>> comboQuality;
+	private JComboBox<KeyValue<Integer>> comboFPS;
 	private JTextField textPublishHost;
 	private JTextField textPublishApp;
 	private JTextField textPublishId;
@@ -439,7 +439,7 @@ public class ScreenSharerFrame extends JFrame {
 		labelQuality.setBounds(250, 140, 200, 24);
 		panelScreen.add(labelQuality);
 		
-		comboQuality = new JComboBox();
+		comboQuality = new JComboBox<KeyValue<ScreenQuality>>();
 		comboQuality.addItem(new KeyValue<ScreenQuality>(getTextLabel(textLabels, 19), ScreenQuality.VeryHigh)); //#id 1090
 		comboQuality.addItem(new KeyValue<ScreenQuality>(getTextLabel(textLabels, 20), ScreenQuality.High)); //#id 1091
 		comboQuality.addItem(new KeyValue<ScreenQuality>(getTextLabel(textLabels, 21), ScreenQuality.Medium)); //#id 1092
@@ -454,7 +454,7 @@ public class ScreenSharerFrame extends JFrame {
 		}); 
 		comboQuality.setSelectedIndex(core.defaultQuality);
 		panelScreen.add(comboQuality);
-		comboFPS = new JComboBox();
+		comboFPS = new JComboBox<KeyValue<Integer>>();
 		comboFPS.addItem(new KeyValue<Integer>("2 FPS", 2));
 		comboFPS.addItem(new KeyValue<Integer>("5 FPS", 5));
 		comboFPS.addItem(new KeyValue<Integer>("10 FPS", 10));
