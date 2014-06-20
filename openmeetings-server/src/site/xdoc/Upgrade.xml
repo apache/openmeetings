@@ -86,7 +86,7 @@
 				<li><tt>./admin.sh -v -b -file ../backup_today.zip</tt></li>
 				<li>Delete/move folder with existing installation of OM</li>
 				<li>Unzip new version of OM into the same folder</li>
-				<li><tt>./admin.sh -v -i -file ../backup_today.zip --drop --skip-default-room</tt> (Optionally you can specify
+				<li><tt>./admin.sh -v -i -file ../backup_today.zip --drop --skip-default-rooms</tt> (Optionally you can specify
 					additional parameters like DB host/user/pass/instance etc.)</li>
 				<li>Start Openmeetings</li>
 				<li>go to http://localhost:5080/openmeetings</li>

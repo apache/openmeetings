@@ -65,10 +65,6 @@
 			<ol>
 				<li>
 					Create a new keystore and key, use the same password for both:<br/>
-					(copied from
-					<a
-						href="http://trac.red5.org/wiki/Documentation/Tutorials/Red5DeveloperTips/SSLTLS%29:"
-						rel="nofollow">http://trac.red5.org/wiki/Documentation/Tutorials/Red5DeveloperTips/SSLTLS):</a>
 					<source>
 <![CDATA[
 keytool -keysize 2048 -genkey -alias red5 -keyalg RSA -keystore red5/conf/keystore
