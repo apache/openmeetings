@@ -37,10 +37,8 @@
 				To lookup the labelids in the GUI you can simply run OpenMeetings
 				client with the debug enabled. That way every text-string has the
 				labelid in brackets additionally in the textfield. To start the
-				client in debug mode just add the param ?swf=maindebug.swf8.swf to
-				the URL. Example:
-				<a href="http://localhost:5080/openmeetings/?swf=maindebug.swf8.swf"
-					rel="nofollow">http://localhost:5080/openmeetings/?swf=maindebug.swf8.swf</a>
+				client in debug mode please check "Tips and Tricks" section of 
+				<a href="installation.html" rel="nofollow">Installation guide</a>
 			</p>
 		</section>
 

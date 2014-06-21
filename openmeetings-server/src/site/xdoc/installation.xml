@@ -186,22 +186,6 @@
 			</p>
 		</section>
 
-		<section name="VMWare">
-			<ul>
-				<li>
-					See
-					<a href="http://nightly.openmeetings.de/openmeetings/builds/vmware/"
-						rel="nofollow">http://nightly.openmeetings.de/openmeetings/builds/vmware/</a>
-				</li>
-				<li>
-					VMWare 1.6.1
-					<a
-						href="http://openstudio.no-ip.info/2011/01/openmeetings-1-6-rc1-vmware-appliance-using-ubuntu-server-10-04-lts/"
-						rel="nofollow">blog-entry</a>
-				</li>
-			</ul>
-		</section>
-
 		<section name="Hardware Requirements">
 			<ul>
 				<li>
@@ -262,11 +246,6 @@
 				</li>
 				<li>
 					<a
-						href="http://aitinet.com/blog/wp-content/uploads/2009/08/TUTORIAL-PARA-INSTALACAO-DO-RED5-E-OPENMEETINGS-NO-LINUX-DEBIAN-LENNY-51.pdf"
-						rel="nofollow">Portuguese Version for Debian Installation of 0.9 RC1</a>
-				</li>
-				<li>
-					<a
 						href="https://cwiki.apache.org/confluence/display/OPENMEETINGS/Tutorials+for+installing+OpenMeetings+and+Tools"
 						rel="nofollow">Automatic script installation for Ubuntu/Debian (beta)</a>
 				</li>
@@ -283,31 +262,25 @@
 		<section name="Tips and Tricks">
 			<ul>
 				<li>
-					Use the Debug-Application: Enter in your browser
-					<a
-						href="http://$RED-HOST:$RED5-PORT/openmeetings/?swf=maindebug.as3.swf11.swf"
-						rel="nofollow">http://$RED-HOST:$RED5-PORT/openmeetings/?swf=maindebug.as3.swf11.swf
-					</a>
-					for example
-					<a href="http://localhost:5080/openmeetings/?swf=maindebug.as3.swf11.swf"
-						rel="nofollow">http://localhost:5080/openmeetings/?swf=maindebug.as3.swf11.swf
-					</a>
+					Use the Debug-Application: open <tt>$RED5_HOME/webapps/openmeetings/WEB-INF/web.xml</tt> change
+					<source><![CDATA[
+<init-param>
+	<param-name>configuration</param-name>
+	<param-value>DEPLOYMENT</param-value>
+</init-param>
+					]]></source> to be
+					<source><![CDATA[
+<init-param>
+	<param-name>configuration</param-name>
+	<param-value>DEVELOPMENT</param-value>
+</init-param>
+					]]></source> 
+					then access your OM installation
 				</li>
-				<li>If you have Problems with conversion-jobs check your Red5-Log
-					output. There will be error Messages which help you. You must
+				<li>If you have Problems with conversion-jobs check your openmeetings log
+					output (available at <tt>$RED5_HOME/log/openmeetings.log</tt>). There will be error Messages which help you. You must
 					install OpenOffice, ImageMagick, GhostScript and SWFTools to run
 					all conversion-Jobs correctly.
-				</li>
-				<li>if you have problems in converting Files check the Batch-Scripts
-					in $OPENMEETINGS_HOME/jod
-				</li>
-				<li>
-					If you want to use red5 as a service (without red5.bat), you need
-					to move red5\wrapper\wrapper.exe to red5\wrapper.exe. Then change
-					some path in conf\wrapper.conf (like ..\lib\foo.jar to
-					lib\foo.jar). And finally change the register key in
-					HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Red5\ImagePath
-					to point to the new wrapper.
 				</li>
 				<li>
 					you can query a Mysql Database to get the schema_collection by

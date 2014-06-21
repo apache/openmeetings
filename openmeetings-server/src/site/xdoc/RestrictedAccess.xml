@@ -57,22 +57,15 @@
 ]]>
 			</source>
 			
-            <p>
-				Sample file:
-				<a
-					href="http://code.google.com/p/red5/source/browse/java/server/trunk/webapps/root/crossdomain.xml"
-					rel="nofollow">http://code.google.com/p/red5/source/browse/java/server/trunk/webapps/root/crossdomain.xml
+			<p>
+				If you accessing your application behind an Apache Webservre (using
+				mod_proxy or mod_jk2) be careful to make the crossdomain.xml
+				accessible. Flash will always search for this file in the www-root
+				directory of every URL you connect to. You might use
+				<a href="https://addons.mozilla.org/de/firefox/addon/firebug/" rel="nofollow">FireBug
 				</a>
+				for example to lookup requests.
 			</p>
-				<p>
-					If you accessing your application behind an Apache Webservre (using
-					mod_proxy or mod_jk2) be careful to make the crossdomain.xml
-					accessible. Flash will always search for this file in the www-root
-					directory of every URL you connect to. You might use
-					<a href="https://addons.mozilla.org/de/firefox/addon/firebug/" rel="nofollow">FireBug
-					</a>
-					for example to lookup requests.
-				</p>
 
 		</section>
 

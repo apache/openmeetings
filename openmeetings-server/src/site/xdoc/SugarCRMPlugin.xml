@@ -34,11 +34,6 @@
 				<a href="http://www.sugarforge.org/projects/openmeetings/" target="_blank" rel="nofollow">SugarCRM Plugin database</a>
 				.
 			</p>
-			<p>
-				A demo version of the SugarCRM plugin is available at
-				<a href="http://demo.e-schwert.de/sugarcrm/" target="_blank" rel="nofollow">demo.e-schwert.de</a>
-				. Username: demo Password: Demouser55
-			</p>
 		</section>
 
 		<section name="Features">
@@ -60,7 +55,7 @@
 			<p>In SugarCRM's administration web-interface you will find the
 				module loader.
 			</p>
-			<a class="fancybox-buttons" href="images/moodle_plugin_conference.png">
+			<a class="fancybox-buttons" href="images/SugarCRM_Installation.png">
 				<img src="images/SugarCRM_Installation.png" alt="" width="640" height="320" />
 			</a>
 			<ol>
@@ -72,13 +67,7 @@
 
 		<section name="Demo video">
 			<p>The demo video of SugarCRM plugin show you the plugin in action </p>
-			<object style="height: 390px; width: 640px">
-				<param name="movie" value="http://www.youtube.com/v/xrDbcXqxDq8?version=3&amp;feature=player_detailpage" />
-				<param name="allowFullScreen" value="true" />
-				<param name="allowScriptAccess" value="always" />
-				<iframe width="640" height="360" src="https://www.youtube.com/embed/xrDbcXqxDq8?feature=player_embedded"
-					frameborder="0" allowfullscreen=""></iframe>
-			</object>
+			<iframe width="640" height="390" src="http://www.youtube.com/embed/xrDbcXqxDq8" frameborder="0" allowfullscreen=""></iframe>
 		</section>
 
 	</body>

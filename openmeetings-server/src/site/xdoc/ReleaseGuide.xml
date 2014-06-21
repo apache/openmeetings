@@ -76,7 +76,7 @@
 					<br />
 					Add the fingerprint string (something like "BF13 CF11 F9C9 0CBE
 					4413 09AB 0055 16BF 93A3 0395") to your profile at
-					<a href="http://id.apache-org" target="_blank" rel="nofollow">id.apache-org</a>
+					<a href="https://id.apache.org/" target="_blank" rel="nofollow">https://id.apache.org/</a>
 					<br />
 					Wait for 6-8 hours, the server will search for a public key based
 					on your fingerprint, if success it will create a file with your

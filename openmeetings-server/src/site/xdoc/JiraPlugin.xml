@@ -46,13 +46,7 @@
 
 		<section name="Demo video">
 			<p>The demo video of Jira plugin show you the plugin in action </p>
-			<object style="height: 390px; width: 640px">
-				<param name="movie" value="http://www.youtube.com/v/xBdYj-OZvlc?version=3&amp;feature=player_detailpage" />
-				<param name="allowFullScreen" value="true" />
-				<param name="allowScriptAccess" value="always" />
-				<iframe width="640" height="360" src="https://www.youtube.com/embed/xBdYj-OZvlc?feature=player_embedded"
-					frameborder="0" allowfullscreen=""></iframe>
-			</object>
+			<iframe width="640" height="390" src="http://www.youtube.com/embed/xBdYj-OZvlc" frameborder="0" allowfullscreen=""></iframe>
 		</section>
 
 	</body>

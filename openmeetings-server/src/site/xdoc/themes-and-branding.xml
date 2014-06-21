@@ -37,17 +37,18 @@
 
 		<section name="Editing the theme">
 
-			<p>You can find the default theme in the SVN: </p>
+			<p>To modify default theme used by OM please open following file in the SVN: </p>
 			<p>
 				<a
-					href="https://svn.apache.org/repos/asf/openmeetings/trunk/singlewebapp/openmeetings-web/src/main/webapp/openmeetings/public/theme.xml"
-					target="_blank" rel="nofollow">https://svn.apache.org/repos/asf/openmeetings/trunk/singlewebapp/openmeetings-web/src/main/webapp/openmeetings/public/theme.xml
+					href="https://svn.apache.org/repos/asf/openmeetings/trunk/singlewebapp/openmeetings-web/src/main/webapp/css/theme_om/jquery-ui-1.10.4.custom.css"
+					target="_blank" rel="nofollow">https://svn.apache.org/repos/asf/openmeetings/trunk/singlewebapp/openmeetings-web/src/main/webapp/css/theme_om/jquery-ui-1.10.4.custom.css
 				</a>
 			</p>
+			<p>and follow to link following "To view and modify this theme, visit" text in css comments</p>
 			<p>
 				Or if you already installed OpenMeetings on your machine at:
 				<br />
-				<tt>/webapps/openmeetings/public/theme.xml</tt>
+				<tt>/webapps/openmeetings/css/theme_om/jquery-ui-1.10.4.custom.css</tt>
 				<br />
 				The file contains border, background and font color definitions as
 				well as paths to icons that are loaded at runtime.
@@ -56,7 +57,7 @@
 				(eventually clear the browser cache) to see updates based on
 				modification in your theme.
 			</p>
-
+			<p>All other elements might be styled by modifying CSS files in <tt>/webapps/openmeetings/css</tt> folder</p>
 
 		</section>
 

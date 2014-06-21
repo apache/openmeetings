@@ -29,9 +29,6 @@
 			<p>
 				Plugin for Drupal currently is not open source. 
 				Please contact <a href="commercial-support.html" target="_blank" rel="nofollow">Commercial Support</a> to get it. 
-				<br/>
-				A demo version+video of the Drupal plugin is available at
-				<a href="http://drupal.openmeetings.de/" target="_blank" rel="nofollow">drupal.openmeetings.de</a>.
 			</p>
 		</section>
 		
@@ -71,6 +68,11 @@
 			</a>
 		</section>
 		
+		<section name="Demo video">
+			<p>The demo video of Drupal plugin show you the plugin in action </p>
+			<iframe width="640" height="390" src="http://www.youtube.com/embed/LmMIKFCLRV4" frameborder="0" allowfullscreen=""></iframe>
+			<iframe width="640" height="390" src="http://www.youtube.com/embed/k5PF3vdVUn0" frameborder="0" allowfullscreen=""></iframe>
+		</section>
 	</body>
 
 </document>

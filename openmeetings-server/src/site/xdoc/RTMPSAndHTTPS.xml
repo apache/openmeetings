@@ -183,10 +183,8 @@ Enter key password for <red5>
 				</li>
 				<li>
 					Restart red5 and try to connect to
-					<a href="https://your.server:5443" rel="nofollow">https://your.server:5443</a>
-					- you should be redirected to the OpenMeetings
-					app and all access should be via HTTPS or RTMPS (close port 5080 to
-					be sure).
+					<u>https://your.server:5443</u> - you should be redirected to the OpenMeetings
+					app and all access should be via HTTPS or RTMPS (close port 5080 to be sure).
 				</li>
             </ol>
             
