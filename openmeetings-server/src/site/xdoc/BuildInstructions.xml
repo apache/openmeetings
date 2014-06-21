@@ -261,19 +261,17 @@ ant -Ddb=<name of DB>           # will copy <name of DB>_persistense.xml to pers
 				<li>
 					Getting Started with OpenLaszlo, checkout
 					<a
-						href="http://www.openlaszlo.org/lps4.2/laszlo-explorer/index.jsp?lzr=swf8"
+						href="http://www.openlaszlo.org/demos#Laszlo10"
 						target="_blank" rel="nofollow">Laszlo-in-10-Minutes</a>
 					and the
-					<a href="http://www.openlaszlo.org/lps4.2/docs/" target="_blank"
-						rel="nofollow">Application
-						Developer's Guide
-					</a>
+					<a href="http://www.openlaszlo.org/taxonomy/term/14" target="_blank"
+						rel="nofollow">Application Developer's Guide</a>
 					or try the
 					<a href="http://www.openlaszlo.org/getstarted" target="_blank"
 						rel="nofollow">ScreenCast</a>
 				</li>
 				<li>
-					<a href="http://openmeetings.apache.org/svn.html">
+					<a href="http://openmeetings.apache.org/source-repository.html">
 						browse SVN source
 					</a>
 				</li>
@@ -281,7 +279,7 @@ ant -Ddb=<name of DB>           # will copy <name of DB>_persistense.xml to pers
 
 		</section>
 
-		<section name="Tipps and Gotchas">
+		<section name="Tips and Gotchas">
 
 			<p>When you want to develop only client side there are handy ANT
 				tasks so that you only rebuild the SWFs, same for the Java side.

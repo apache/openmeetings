@@ -42,6 +42,12 @@
 		<assembly.descriptor>server</assembly.descriptor>
 		<red5-server.file.name>red5-server-1.0.2-RELEASE-server.zip</red5-server.file.name><!-- FIXME duplicate variable -->
 	</properties>
+	<scm>
+		<connection>scm:svn:https://svn.apache.org/repos/asf/openmeetings/trunk/singlewebapp</connection>
+		<developerConnection>scm:svn:https://svn.apache.org/repos/asf/openmeetings/trunk/singlewebapp</developerConnection>
+		<url>https://svn.apache.org/viewvc/openmeetings/trunk/singlewebapp</url>
+		<tag>HEAD</tag>
+	</scm>
 	<profiles>
 		<profile>
 			<id>Quick</id>

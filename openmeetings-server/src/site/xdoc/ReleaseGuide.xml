@@ -76,8 +76,7 @@
 					<br />
 					Add the fingerprint string (something like "BF13 CF11 F9C9 0CBE
 					4413 09AB 0055 16BF 93A3 0395") to your profile at
-					<a href="http://id.apche-org" target="_blank" rel="nofollow">id.apche-org
-					</a>
+					<a href="http://id.apache-org" target="_blank" rel="nofollow">id.apache-org</a>
 					<br />
 					Wait for 6-8 hours, the server will search for a public key based
 					on your fingerprint, if success it will create a file with your
@@ -147,8 +146,8 @@ for f in `ls -1 *.tar.gz *.zip`; do md5sum -c $f.md5; done
 				</source>
 				<p>
 					Create signatures with the your KEY for every file, the KEY must be available at:<br />
-					<a href="http://www.apache.org/dist/incubator/openmeetings/KEYS">
-						http://www.apache.org/dist/incubator/openmeetings/KEYS
+					<a href="https://svn.apache.org/repos/asf/openmeetings/project/KEYS">
+						https://svn.apache.org/repos/asf/openmeetings/project/KEYS
 					</a>
 				</p>
 				<source>

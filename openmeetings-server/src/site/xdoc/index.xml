@@ -12,9 +12,8 @@
    See the License for the specific language governing permissions and
    limitations under the License.
  -->
-<document xmlns="http://maven.apache.org/XDOC/2.0"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/XDOC/2.0 http://maven.apache.org/xsd/xdoc-2.0.xsd">
+<document xmlns="http://maven.apache.org/XDOC/2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/XDOC/2.0 http://maven.apache.org/xsd/xdoc-2.0.xsd">
 	<properties>
 		<title>Home</title>
 		<author email="sebawagner@apache.org">
@@ -28,7 +27,7 @@
 			<div id="slider">
 				<div class="carousel-inner">
 					<div class="item active">
-						<img src="images/cut_conference_room.png" alt="Conference Room"/>
+						<img src="images/cut_conference_room.png" alt="Conference Room" />
 						<span class="carousel-caption">
 							<span class="title">Audio/Video Conferencing</span>
 							<span class="desc">OpenMeetings enables you to make Audio/Video conferencing.</span>
@@ -38,14 +37,16 @@
 						<img src="images/cut_integrated_calendar.png" alt="Calendar" />
 						<span class="carousel-caption">
 							<span class="title">Calendar</span>
-							<span class="desc">You can create meetings with the integrated calendar, conference rooms and invitations are automatically send to everybody</span>
+							<span class="desc">You can create meetings with the integrated calendar, conference rooms and invitations are
+								automatically send to everybody</span>
 						</span>
 					</div>
 					<div class="item">
 						<img src="images/cut_file_explorer.png" alt="File Explorer" />
 						<span class="carousel-caption">
 							<span class="title">File Explorer</span>
-							<span class="desc">Each room has its own File-Explorer. Each user has his own private drive and additionally there is a public drive to share files with other participants</span>
+							<span class="desc">Each room has its own File-Explorer. Each user has his own private drive and additionally there
+								is a public drive to share files with other participants</span>
 						</span>
 					</div>
 					<div class="item">
@@ -53,7 +54,9 @@
 						<span class="carousel-caption">
 							<span class="title">Integration API</span>
 							<span class="desc">There is a SOAP/REST API to integrate into your website or intranet, as well
-								as LDAP/ADS connectors and VoIP/Asterisk integration modules</span>
+								as LDAP/ADS
+								connectors and VoIP/Asterisk integration modules
+							</span>
 						</span>
 					</div>
 					<div class="item">
@@ -61,7 +64,9 @@
 						<span class="carousel-caption">
 							<span class="title">Private messages and contacts</span>
 							<span class="desc">From the private message center you can send invitations by email
-								and attach meeting invitations to every email</span>
+								and attach meeting invitations
+								to every email
+							</span>
 						</span>
 					</div>
 					<div class="item">
@@ -69,7 +74,9 @@
 						<span class="carousel-caption">
 							<span class="title">Administration and Configuration</span>
 							<span class="desc">You can configure users, rooms, usergroups, config settings or
-								edit labels with a Web-Frontend integrated in the application</span>
+								edit labels with a Web-Frontend
+								integrated in the application
+							</span>
 						</span>
 					</div>
 					<div class="item">
@@ -77,8 +84,10 @@
 						<span class="carousel-caption">
 							<span class="title">Screen sharing and Recording</span>
 							<span class="desc">You can do screen sharing as well as recording of whole sessions
-								including audio/video. Recordings can be downloaded as AVI/FLV or
-								watched online in the integrated player.</span>
+								including audio/video.
+								Recordings can be downloaded as AVI/FLV or
+								watched online in the integrated player.
+							</span>
 						</span>
 					</div>
 				</div>
@@ -95,90 +104,72 @@
 
 			<p>
 				OpenMeetings is a project of the Apache, the old project
-				website at
-				<a href="http://code.google.com/p/openmeetings/" target="_blank">GoogleCode
-				</a>
-				will receive no updates anymore. The website at Apache is the only
-				place that receives updates.
+				website at <a href="http://code.google.com/p/openmeetings/" target="_blank">GoogleCode</a>
+				will receive no updates anymore. The website at Apache is the only place that receives updates.
 			</p>
 
 		</section>
 
 		<section name="News">
-
 			<p>
-			    <strong>
-                    Version 3.0.2 released! See <a href="downloads.html">Downloads page</a>. 
-                    (2014-06-04)
-                </strong>
-                <br />
-			    <strong>
-                    Version 3.0.1 released! See <a href="downloads.html">Downloads page</a>. 
-                    (2014-04-18)
-                </strong>
-                <br />
-			    <strong>
-                    Version 3.0.0 released! See <a href="downloads.html">Downloads page</a>. 
-                    (2014-03-07)
-                </strong>
-                <br />
-			    <strong>
-                    Version 2.2.0 released! See <a href="downloads.html">Downloads page</a>. 
-                    (2013-12-12)
-                </strong>
-                <br />
-			    <strong>
-                    Version 2.1.1 released! See <a href="https://blogs.apache.org/openmeetings/entry/apache_openmeetings_2_1_11" target="_blank">Project Blog</a> or <a href="downloads.html">Downloads page</a>. 
-                    (2013-07-06)
-                </strong>
-                <br />
-			    <strong>
-					OpenMeetings 2.1.0 is released! Please check <a href="downloads.html">Downloads page</a>. 
-					(2013-04-01)
-				</strong>
-				<br />
-			    <strong>
-					OpenMeetings new URL, update your filters!
-					<a href="http://openmeetings.apache.org">openmeetings.apache.org</a> is the new home. 
-					(2013-01-28)
-				</strong>
-				<br />
-			    <strong>
-					OpenMeetings on the road to graduate from the Incubator
+				<strong>Version 3.0.2 released!</strong> See <a href="downloads.html">Downloads page</a>. (2014-06-04)
+			</p>
+			<p>
+				<strong>Version 3.0.1 released!</strong> See <a href="downloads.html">Downloads page</a>. (2014-04-18)
+			</p>
+			<p>
+				<strong>Version 3.0.0 released!</strong> See <a href="downloads.html">Downloads page</a>. (2014-03-07)
+			</p>
+			<p>
+				<strong>Version 2.2.0 released!</strong> See <a href="downloads.html">Downloads page</a>. (2013-12-12)
+			</p>
+			<p>
+				<strong>Version 2.1.1 released!</strong> See <a href="https://blogs.apache.org/openmeetings/entry/apache_openmeetings_2_1_11" target="_blank">Project Blog</a>
+					or <a href="downloads.html">Downloads page</a>. (2013-07-06)
+			</p>
+			<p>
+				<strong>OpenMeetings 2.1.0 is released!</strong> Please check <a href="downloads.html">Downloads page</a>. (2013-04-01)
+			</p>
+			<p>
+				<strong>OpenMeetings new URL, update your filters!</strong>
+					<a href="http://openmeetings.apache.org">openmeetings.apache.org</a> is the new home. (2013-01-28)
+			</p>
+			<p>
+				<strong>OpenMeetings on the road to graduate from the Incubator</strong>
 					<a href="https://blogs.apache.org/openmeetings/entry/openmeetings_on_the_road_to" target="_blank" rel="nofollow">at our blog</a>
 					(2012-12-07)
-				</strong>
-				<br />
-				<strong>
-					Some slides from our Fast Feather Track at the ApacheCon Europe 2012 
-					<a href="https://blogs.apache.org/openmeetings/entry/openmeetings_apachecon_presentation_slide" target="_blank" rel="nofollow">at our blog</a>
-					(2012-11-18)
-				</strong>
-				<br />
-				<strong>
-					Update: Builds are available at
+			</p>
+			<p>
+				<strong>Some slides from our Fast Feather Track at the ApacheCon Europe 2012</strong>
+					<a href="https://blogs.apache.org/openmeetings/entry/openmeetings_apachecon_presentation_slide" target="_blank"
+						rel="nofollow">at our blog</a> (2012-11-18)
+			</p>
+			<p>
+				<strong>Update: Builds are available at</strong>
 					<a href="https://builds.apache.org/view/M-R/view/OpenMeetings/" target="_blank" rel="nofollow">builds.apache.org</a>
 					(2012-08-03)
-				</strong>
-				<br />
+			</p>
+			<p>
 				<strong>
-					<a href="https://blogs.apache.org/openmeetings/entry/apache_openmeetings_2_0_incubating" target="_blank" rel="nofollow">Version 2.0 released</a>
+					<a href="https://blogs.apache.org/openmeetings/entry/apache_openmeetings_2_0_incubating" target="_blank" rel="nofollow">Version
+						2.0 released</a>
 					(2012-07-26)
 				</strong>
-				<br />
+			</p>
+			<p>
 				<strong>New committer: Timur Tleukenov (2012-03-06)</strong>
-				<br />
+			</p>
+			<p>
 				<strong>
-					<a href="http://demo.openmeetings.de" target="_blank" rel="nofollow">Demo
-						server</a>
+					<a href="https://demo-openmeetings.apache.org/openmeetings" target="_blank" rel="nofollow">Demo server</a>
 					updated to r1236172 (2012-01-26)
 				</strong>
-				<br />
+			</p>
+			<p>
 				<strong>New committer: German Grekhov (2011-12-26)</strong>
-				<br />
-				<strong>OpenMeetings has been accepted into the Apache Incubator
-					(2011-11-12).
-				</strong>
+			</p>
+			<p>
+				<strong>OpenMeetings has been accepted into the Apache Incubator (2011-11-12).</strong>
 			</p>
 
 		</section>
@@ -193,8 +184,7 @@
 			<div>
 				<strong>Users!</strong>
 				<blockquote>
-					We'd love to have you involved. Check out the
-					<a href="get-involved.html">Get involved</a>.
+					We'd love to have you involved. Check out the <a href="get-involved.html">Get involved</a>.
 				</blockquote>
 			</div>
 		</section>
@@ -204,11 +194,12 @@
 			<div class="feature clearfix">
 				<span class="feature title">Audio and Video Conferencing</span>
 
-				<img src="images/Features_Screen_Conference_Room_Thumb.png" title="OpenMeetings Conference Room"
-					width="250" height="175" />
+				<img src="images/Features_Screen_Conference_Room_Thumb.png" title="OpenMeetings Conference Room" width="250"
+					height="175" />
 				<span class="desc">
 					<span class="p">There are four options to use OpenMeetings audio/video functions,
-						which you can select during a conference session.</span>
+						which you can select during a conference session.
+					</span>
 					<ul>
 						<li>audio + video</li>
 						<li>audio only</li>
@@ -216,8 +207,8 @@
 						<li>picture only</li>
 					</ul>
 					<span class="p">Additional you can change video-/audio-quality, choose multiple
-						camera resolutions (4:3, 16:9 or 3:2)
-						and choose your input devices.</span>
+						camera resolutions (4:3, 16:9 or 3:2) and choose your input devices.
+					</span>
 				</span>
 			</div>
 
@@ -225,22 +216,18 @@
 				<span class="feature title">Meeting recording and Screen sharing</span>
 
 				<span class="desc" style="float: left;">
-					<img src="images/desktopsharing.png" title="Screensharing-recording"
-						style="float:none; display: block; width: 140px; height: 150px" />
+					<img src="images/desktopsharing.png" title="Screensharing-recording" style="float:none; display: block; width: 140px; height: 150px" />
 					<img src="images/recordings_timeleine.png" title="Device" style="float:none; display: block; width: 200px; height: 115px" />
 				</span>
 				<span class="desc" style="margin-top: 50px;">
 					<ul>
 						<li>Recorded sessions contain everything including sound recorded
-							from all audio streams in exactly the way you've seen it in the
-							conference.
+							from all audio streams in exactly the way you've seen it in the conference.
 						</li>
 						<li>Recorded sessions can be downloaded as AVI/FLV files.</li>
 						<li>Possibility to select a screen area for sharing.</li>
 						<li>Different quality steps for Screensharing.</li>
-						<li>Watch and organize recordings in an integrated Drag and Drop
-							File-Explorer
-						</li>
+						<li>Watch and organize recordings in an integrated Drag and Drop File-Explorer</li>
 					</ul>
 				</span>
 			</div>
@@ -248,37 +235,55 @@
 			<div class="feature clearfix">
 				<span class="feature title">File Explorer</span>
 
-				<img src="images/file_smal.png" title="File Explorer"
-					width="135" height="200" />
+				<img src="images/file_smal.png" title="File Explorer" width="135" height="200" />
 				<span class="desc">
 					<span class="p">Advanced File-Explorer in every conference room, Drag and Drop
-					interface for managing uploaded files, including the possibility to
-					create a document tree with folders.</span>
-					<br/>
-					<span class="p">Private and Public Drive in File-Explorer. The File-Explorer has two
-					different views, one is the <b>Private Drive</b> and the other the
-					<b>Public Drive</b> . The Private Drive always contains the same files.
-					Those files are visible only to the user currently loggedin. The Public Drive is not
-					bound to the user, but to the conference room instead. All users in the conference room
-					have access to the Public Drive.</span>
+						interface for managing uploaded files, including the possibility to
+						create a document tree with folders.
+					</span>
+					<br />
+					<span class="p">
+						Private and Public Drive in File-Explorer. The File-Explorer has two different views, one is the
+						<b>Private Drive</b> and the other the <b>Public Drive</b>. The Private Drive always contains the same files.
+						Those files are visible only to the user currently loggedin. The Public Drive is not
+						bound to the user, but to the conference room instead. All users in the conference room
+						have access to the Public Drive.
+					</span>
 				</span>
 			</div>
 
 			<div class="feature clearfix">
 				<span class="feature title">Moderating System</span>
 
-				<img src="images/right_management.png" title="Right management"
-					width="135" height="216" />
+				<img src="images/right_management.png" title="Right management" width="135" height="216" />
 				<span class="desc">
-					<span class="p">During a conference, the moderator can adjust the user permission
-					to every user individually.</span>
+					<span class="p">During a conference, the moderator can adjust the user permission to every user individually.
+					</span>
 					<ul>
-						<li><img class="alignnone" title="Allow modaration" src="images/user_add.png" alt="" /> Allow/Deny moderation</li>
-						<li><img class="alignnone" title="Whiteboard Access" src="images/pencil_add.png" alt="" />Allow/Deny to draw on white board</li>
-						<li><img class="alignnone" title="Screenshare" src="images/monitor_add.png" alt="" />Allow/Deny screen-sharing/record screen</li>
-						<li><img class="alignnone" title="Remote control" src="images/mouse_add.png" alt="" />Allow/Deny Remote Control Screen</li>
-						<li><img class="alignnone" title="Remote control" src="images/micro_small.png" alt="" />Give exclusive audio to others or self</li>
-						<li><img class="alignnone" title="Video Audio" src="images/audio_and_video.png" alt="" />(Re-) Start Audio, Video or Device settings</li>
+						<li>
+							<img class="alignnone" title="Allow modaration" src="images/user_add.png" alt="" />
+							Allow/Deny moderation
+						</li>
+						<li>
+							<img class="alignnone" title="Whiteboard Access" src="images/pencil_add.png" alt="" />
+							Allow/Deny to draw on white board
+						</li>
+						<li>
+							<img class="alignnone" title="Screenshare" src="images/monitor_add.png" alt="" />
+							Allow/Deny screen-sharing/record screen
+						</li>
+						<li>
+							<img class="alignnone" title="Remote control" src="images/mouse_add.png" alt="" />
+							Allow/Deny Remote Control Screen
+						</li>
+						<li>
+							<img class="alignnone" title="Remote control" src="images/micro_small.png" alt="" />
+							Give exclusive audio to others or self
+						</li>
+						<li>
+							<img class="alignnone" title="Video Audio" src="images/audio_and_video.png" alt="" />
+							(Re-) Start Audio, Video or Device settings
+						</li>
 					</ul>
 				</span>
 			</div>
@@ -287,27 +292,31 @@
 				<span class="feature title">Multi-Whiteboard and Chat</span>
 
 				<span class="desc" style="float: left;">
-					<img src="images/whiteboard.png" title="Whiteboard"
-						style="float:none; display: block; width: 240px; height: 165px" />
+					<img src="images/whiteboard.png" title="Whiteboard" style="float:none; display: block; width: 240px; height: 165px" />
 					<img src="images/chat.png" title="Chat in Conference Room" style="float:none; display: block; width: 240px; height: 68px" />
 				</span>
 				<span class="desc" style="margin-top: 50px;">
-					<span class="p">Multi-Whiteboard, you can add new whiteboard instances, each
-						white board can have the full range of tools and documents inside.
+					<span class="p">
+						Multi-Whiteboard, you can add new whiteboard instances, each
+						white board can have the full range of tools and
+						documents inside.
 						<br />
 						<br />
 						Save white boards. You can save each whiteboard instance as a file.
-						The file is located in the File-Explorer and can be drag n' drop'ed
+						The file is located in the File-Explorer and
+						can be drag n' drop'ed
 						to the white board again and organized like any other document,
 						image or folder.
 						<br />
 						<br />
 						White board with drawing, writing, Drag n' Drop, Resizing, Images
-						(Drag n' Drop from File-Explorer), Symbol(s)/Cliparts .
+						(Drag n' Drop from File-Explorer),
+						Symbol(s)/Cliparts .
 						<br />
 						<br />
 						Full-fit does rescale the document on the screen to be 100% visible
-						on all screens no matter what kind of screen resolution different users have.
+						on all screens no matter what kind of screen
+						resolution different users have.
 						<br />
 						<br />
 						You can import from a wide range of document formats (PDF, DOC, ODT, PPT, et cetera...)
@@ -318,21 +327,22 @@
 			<div class="feature clearfix">
 				<span class="feature title">User and room management</span>
 
-				<img src="images/dashboard.png" title="Dashboard with MyRooms"
-					width="250" height="130" />
+				<img src="images/dashboard.png" title="Dashboard with MyRooms" width="250" height="130" />
 				<span class="desc">
-					<span class="p">You can manage users and multiple organizations in a single
-					OpenMeetings instance. You can also create users that only have
-					access via the SOAP-API.
-					<br />
-					<br />
-					MyRooms section. Each user has by default 2 personal rooms that are
-					always accessible exclusively for that user. There are buttons to
-					enter those rooms from the Dashboard.
-					<br />
-					<br />
-					You can assign conference room to all users, or you can assign them
-					only to specific user-groups.</span>
+					<span class="p">
+						You can manage users and multiple organizations in a single
+						OpenMeetings instance. You can also create users that only have
+						access via the SOAP-API.
+						<br />
+						<br />
+						MyRooms section. Each user has by default 2 personal rooms that are
+						always accessible exclusively for that user. There are buttons to
+						enter those rooms from the Dashboard.
+						<br />
+						<br />
+						You can assign conference room to all users, or you can assign them
+						only to specific user-groups.
+					</span>
 				</span>
 			</div>
 
@@ -341,14 +351,16 @@
 
 				<img src="images/privat_messages.png" title="Private Messages and Contact Search" width="230" height="125" />
 				<span class="desc">
-					<span class="p">Send users messages and organize them in folders. You can book
-					conference rooms by sending private messages. The booked event
-					automatically is in your and the participants calendar, changes to
-					that event will be populated to all users booked to the event.
-					<br />
-					<br />
-					User contacts, you can search users and add them to your contacts. You
-					can even give them the right to see your calendar.</span>
+					<span class="p">
+						Send users messages and organize them in folders. You can book
+						conference rooms by sending private messages. The booked event
+						automatically is in your and the participants calendar, changes to
+						that event will be populated to all users booked to the event.
+						<br />
+						<br />
+						User contacts, you can search users and add them to your contacts. You
+						can even give them the right to see your calendar.
+					</span>
 				</span>
 			</div>
 
@@ -359,8 +371,9 @@
 				<span class="desc">
 					<ul>
 						<li>Plan your conferencing and invite attendees from OpenMeetings or External.</li>
-						<li>The invited attendees will recieve an E-mail with details to the meetings and a link with a 
-							secure hash to the conference room.</li>
+						<li>The invited attendees will recieve an E-mail with details to the meetings and a link with a
+							secure hash to the conference room.
+						</li>
 						<li>Share your calendar with your contacts.</li>
 					</ul>
 				</span>
@@ -371,11 +384,13 @@
 
 				<img src="images/poll.png" title="Create a poll" width="250" height="250" />
 				<span class="desc">
-					<span class="p">You can create a poll with yes/no or 1-10 questions, let the
-					user vote and see the voting results.
-					<br />
-					<br />
-					Polls can be stored and results viewed as pie-chart</span>
+					<span class="p">
+						You can create a poll with yes/no or 1-10 questions, let the
+						user vote and see the voting results.
+						<br />
+						<br />
+						Polls can be stored and results viewed as pie-chart
+					</span>
 				</span>
 			</div>
 
@@ -385,8 +400,9 @@
 				<img src="images/backup.png" title="Backup" width="250" />
 				<span class="desc">
 					<span class="p">You can backup all user-generated data including files
-					uploaded by the users in a single ZIP file and import that ZIP into
-					a new installation of OpenMeetings again.</span>
+						uploaded by the users in a single ZIP file and import that ZIP into
+						a new installation of OpenMeetings again.
+					</span>
 				</span>
 			</div>
 		</section>

@@ -45,7 +45,7 @@
 				<li>
 					Information on access to the project source code is
 					available
-					<a href="svn.html">here</a>
+					<a href="source-repository.html">here</a>
 					.
 				</li>
 				<li>
@@ -67,17 +67,14 @@
 
 		</section>
 
-		<section name="Which taks could I potentially work on?">
+		<section name="Which tasks could I potentially work on?">
 
 			<p>
-				No matter if you want to share your experiences, improve
-				documentation, localization, code Java, ActionScript or PHP, there
-				are dozens of areas where you can find task to work on and share
-				with others.
+				No matter if you want to share your experiences, improve documentation, localization, code Java
+				, ActionScript or PHP, there are dozens of areas where you can find task to work on and share
+				with others.<br />
 				<br />
-				<br />
-				We tried to collect a list of ideas in our wiki:
-				<br />
+				We tried to collect a list of ideas in our wiki:<br />
 				<a
 					href="https://cwiki.apache.org/confluence/display/OPENMEETINGS/New+committers+and+developers+task+idea+list"
 					target="_blank">https://cwiki.apache.org/confluence/display/OPENMEETINGS/New+committers+and+developers+task+idea+list
