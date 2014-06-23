@@ -166,7 +166,7 @@ public class UserDao implements IDataProviderDao<User> {
 	}
 
 	public long count(String search) {
-		return count(search, true, -1);
+		return count(search, false, -1);
 	}
 	
 	public long count(String search, long currentUserId) {
