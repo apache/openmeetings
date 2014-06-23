@@ -44,7 +44,7 @@ public class ConferenceLogTypeDao {
 			confLogType.setEventType(eventType);
 			confLogType.setInserted(new Date());
 			confLogType = em.merge(confLogType);
-			return confLogType.getConferenceLogTypeId();
+			return confLogType.getId();
 		} catch (Exception ex2) {
 			log.error("[addConferenceLogType]: ", ex2);
 		}

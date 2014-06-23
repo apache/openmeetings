@@ -18,7 +18,6 @@
  */
 package org.apache.openmeetings.db.entity.log;
 
-import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -32,17 +31,16 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import org.apache.openjpa.persistence.jdbc.ForeignKey;
-
-
+import org.apache.openmeetings.db.entity.IDataProviderEntity;
 
 @Entity
 @Table(name = "conferencelog")
-public class ConferenceLog implements Serializable {
-	private static final long serialVersionUID = 147341496943518159L;
+public class ConferenceLog implements IDataProviderEntity {
+	private static final long serialVersionUID = 1L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="id")
-	private long conferenceLogId;
+	private Long id;
 	
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name="conferencelogtype_id", updatable=true, insertable=true)
@@ -86,11 +84,11 @@ public class ConferenceLog implements Serializable {
 	@Column(name="lastname")
 	private String lastname;
 	
-	public long getConferenceLogId() {
-		return conferenceLogId;
+	public Long getId() {
+		return id;
 	}
-	public void setConferenceLogId(long conferenceLogId) {
-		this.conferenceLogId = conferenceLogId;
+	public void setId(Long id) {
+		this.id = id;
 	}
 	
 	public ConferenceLogType getConferenceLogType() {

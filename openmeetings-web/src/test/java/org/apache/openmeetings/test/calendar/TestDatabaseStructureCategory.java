@@ -51,7 +51,7 @@ public class TestDatabaseStructureCategory extends AbstractJUnitDefaults {
 			log.debug("Anzahl: " + appointmentCategory.size());
 
 			for (int x = 0; x < appointmentCategory.size(); x++) {
-				log.debug("id: " + appointmentCategory.get(x).getCategoryId());
+				log.debug("id: " + appointmentCategory.get(x).getId());
 
 			}
 

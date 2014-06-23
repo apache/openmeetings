@@ -18,13 +18,13 @@
  */
 package org.apache.openmeetings.web.room;
 
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_APPLICATION_BASE_URL;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_REDIRECT_URL_FOR_EXTERNAL_KEY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.openmeetings.web.app.Application.addUserToRoom;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.Application.getRoomUsers;
 import static org.apache.openmeetings.web.util.OmUrlFragment.ROOMS_PUBLIC;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_REDIRECT_URL_FOR_EXTERNAL_KEY;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_APPLICATION_BASE_URL;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,6 +54,7 @@ import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 import org.apache.wicket.markup.head.PriorityHeaderItem;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.protocol.ws.IWebSocketSettings;
 import org.apache.wicket.protocol.ws.api.registry.IWebSocketConnectionRegistry;
 import org.apache.wicket.protocol.ws.api.registry.PageIdKey;
@@ -63,6 +64,7 @@ import org.apache.wicket.request.resource.ResourceReference;
 import org.apache.wicket.util.string.Strings;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
+import org.wicketstuff.whiteboard.WhiteboardBehavior;
 
 @AuthorizeInstantiation("Room")
 public class RoomPanel extends BasePanel {
@@ -80,7 +82,7 @@ public class RoomPanel extends BasePanel {
 			//TODO SID etc
 			Room r = getBean(RoomDao.class).get(roomId);
 			target.appendJavaScript(String.format("initVideo('%s', %s, %s, %s, %s);", "sid"
-					, r.getRooms_id()
+					, r.getId()
 					, r.getIsAudioOnly()
 					, 4L == r.getRoomtype().getRoomtypes_id()
 					, getStringLabels(448, 449, 450, 451, 758, 447, 52, 53, 1429, 1430, 775, 452, 767, 764, 765, 918, 54, 761, 762).toString()
@@ -94,6 +96,9 @@ public class RoomPanel extends BasePanel {
 		this.roomId = _roomId;
 		Room r = getBean(RoomDao.class).get(roomId);
 		add(new MenuPanel("roomMenu", getMenu()).setVisible(!r.getHideTopBar()));
+		WebMarkupContainer wb = new WebMarkupContainer("whiteboard");
+		add(wb.setOutputMarkupId(true));
+		add(new WhiteboardBehavior("1", wb.getMarkupId(), null, null, null));
 		add(aab, AttributeAppender.append("style", "height: 100%;"));
 	}
 
@@ -120,7 +125,7 @@ public class RoomPanel extends BasePanel {
 		User u = getBean(UserDao.class).get(c.getUserId());
 		return new JSONObject()
 			.put("uid", c.getUid())
-			.put("id", u.getUser_id())
+			.put("id", u.getId())
 			.put("firstname", u.getFirstname())
 			.put("lastname", u.getLastname())
 			.put("email", u.getAdresses() == null ? null : u.getAdresses().getEmail())

@@ -61,7 +61,7 @@ import org.apache.openmeetings.screen.webstart.gui.ScreenDimensions.ScreenQualit
 import org.slf4j.Logger;
 
 public class ScreenSharerFrame extends JFrame {
-	private static final long serialVersionUID = 6892639796386017437L;
+	private static final long serialVersionUID = 1L;
 	private static final Logger logger = getLogger(ScreenSharerFrame.class);
 	
 	private JPanel contentPane;
@@ -115,7 +115,7 @@ public class ScreenSharerFrame extends JFrame {
 	private JCheckBox audioNotify;
 	
 	private class PublishTextField extends JTextField {
-		private static final long serialVersionUID = -2104245360975135871L;
+		private static final long serialVersionUID = 1L;
 
 		PublishTextField() {
 			getDocument().addDocumentListener(
@@ -173,7 +173,7 @@ public class ScreenSharerFrame extends JFrame {
 	
 	//this implementation will not allow to Enable Panel in runtime
 	private class DisabledPanel extends JPanel {
-		private static final long serialVersionUID = -2679640611165728979L;
+		private static final long serialVersionUID = 1L;
 
 		@Override
 		public void setEnabled(boolean enabled) {
@@ -185,7 +185,7 @@ public class ScreenSharerFrame extends JFrame {
 	}
 	
 	private class VerticalSlider extends MouseListenerable {
-		private static final long serialVersionUID = 6388951979741767971L;
+		private static final long serialVersionUID = 1L;
 
 		public VerticalSlider() {
 			ImageIcon iUp = new ImageIcon(ScreenSharerFrame.class.getResource("/org/apache/openmeetings/screen/up.png"));
@@ -201,7 +201,7 @@ public class ScreenSharerFrame extends JFrame {
 	}
 	
 	private class HorizontalSlider extends MouseListenerable {
-		private static final long serialVersionUID = 4630712955901760443L;
+		private static final long serialVersionUID = 1L;
 
 		public HorizontalSlider() {
 			ImageIcon iLeft = new ImageIcon(ScreenSharerFrame.class.getResource("/org/apache/openmeetings/screen/previous.png"));

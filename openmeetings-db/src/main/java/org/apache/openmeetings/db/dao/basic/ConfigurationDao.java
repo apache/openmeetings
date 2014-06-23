@@ -42,6 +42,7 @@ import org.apache.openmeetings.db.entity.basic.Configuration;
 import org.apache.openmeetings.util.DaoHelper;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
@@ -65,6 +66,7 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 	@PersistenceContext
 	private EntityManager em;
 
+	@Autowired
 	private UserDao userDao;
 
 	/**
@@ -226,7 +228,7 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 	public Configuration update(Configuration entity, Long userId, boolean deleted) {
 		String key = entity.getConf_key();
 		String value = entity.getConf_value();
-		if (entity.getConfiguration_id() == null || entity.getConfiguration_id() <= 0) {
+		if (entity.getId() == null || entity.getId() <= 0) {
 			entity.setStarttime(new Date());
 			entity.setDeleted(deleted);
 			em.persist(entity);

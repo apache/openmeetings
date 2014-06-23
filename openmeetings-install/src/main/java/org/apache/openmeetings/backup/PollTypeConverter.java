@@ -40,6 +40,6 @@ public class PollTypeConverter extends OmConverter<PollType> {
 
 	public void write(OutputNode node, PollType value) throws Exception {
 		node.setData(true);
-		node.setValue(value == null ? "0" : "" + value.getPollTypesId());
+		node.setValue(value == null ? "0" : "" + value.getId());
 	}
 }

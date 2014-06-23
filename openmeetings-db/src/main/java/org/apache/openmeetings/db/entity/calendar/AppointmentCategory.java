@@ -18,7 +18,6 @@
  */
 package org.apache.openmeetings.db.entity.calendar;
 
-import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -33,16 +32,17 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import org.apache.openjpa.persistence.jdbc.ForeignKey;
+import org.apache.openmeetings.db.entity.IDataProviderEntity;
 import org.apache.openmeetings.db.entity.user.User;
 
 @Entity
 @Table(name = "appointmentcategory")
-public class AppointmentCategory implements Serializable {
-	private static final long serialVersionUID = 595713649933692774L;
+public class AppointmentCategory implements IDataProviderEntity {
+	private static final long serialVersionUID = 1L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="id")
-	private Long categoryId;
+	private Long id;
 	
 	@Column(name="name")
 	private String name;
@@ -65,11 +65,11 @@ public class AppointmentCategory implements Serializable {
 	@Column(name="comment_field", length=2048)
 	private String comment;
 	
-	public Long getCategoryId() {
-		return categoryId;
+	public Long getId() {
+		return id;
 	}
-	public void setCategoryId(Long categoryId) {
-		this.categoryId = categoryId;
+	public void setId(Long id) {
+		this.id = id;
 	}
 	
 	public String getName() {
@@ -113,6 +113,4 @@ public class AppointmentCategory implements Serializable {
 	public void setComment(String comment) {
 		this.comment = comment;
 	}
-	
-
 }

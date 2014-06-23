@@ -33,7 +33,7 @@ import ro.fortsoft.wicket.dashboard.web.WidgetView;
 import com.googlecode.wicket.jquery.ui.form.button.Button;
 
 public class StartWidgetView extends WidgetView {
-	private static final long serialVersionUID = -3886388347737468022L;
+	private static final long serialVersionUID = 1L;
 
 	public StartWidgetView(String id, Model<Widget> model) {
 		super(id, model);

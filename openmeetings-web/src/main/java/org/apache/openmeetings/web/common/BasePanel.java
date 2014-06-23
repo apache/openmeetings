@@ -24,7 +24,7 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.panel.Panel;
 
 public abstract class BasePanel extends Panel {
-	private static final long serialVersionUID = 8663740955529405678L;
+	private static final long serialVersionUID = 1L;
 
 	public BasePanel(String id) {
 		super(id);

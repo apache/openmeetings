@@ -236,7 +236,7 @@ public class InvitationManager implements IInvitationManager {
 		
 		if (ical) {
 			String username = i.getInvitee().getLogin();
-			boolean isOwner = owner.getUser_id() == i.getInvitee().getUser_id();
+			boolean isOwner = owner.getId() == i.getInvitee().getId();
 			IcalHandler handler = new IcalHandler(MessageType.Cancel == type ? IcalHandler.ICAL_METHOD_CANCEL : IcalHandler.ICAL_METHOD_REQUEST);
 
 			HashMap<String, String> attendeeList = handler.getAttendeeData(email, username, isOwner);
@@ -402,7 +402,7 @@ public class InvitationManager implements IInvitationManager {
 			log.error("Appointment doesn't have reminder set!");
 			return;
 		}
-		long remindType = a.getRemind().getTypId();
+		long remindType = a.getRemind().getId();
 		if (remindType < 2) {
 			log.error("MeetingMember should not have invitation!");
 			return;

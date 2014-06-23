@@ -61,7 +61,7 @@ public class PollDao {
 
 		em.persist(pt);
 		
-		return pt.getPollTypesId();
+		return pt.getId();
 	}
 	
 	public List<PollType> getPollTypes() {

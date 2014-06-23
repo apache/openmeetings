@@ -56,7 +56,7 @@ import org.w3c.dom.Element;
 
 public class ExportToImage extends BaseHttpServlet {
 	
-	private static final long serialVersionUID = -3535998254746084297L;
+	private static final long serialVersionUID = 1L;
 	
 	private static final Logger log = Red5LoggerFactory.getLogger(
 			ExportToImage.class, OpenmeetingsVariables.webAppRootKey);

@@ -18,7 +18,6 @@
  */
 package org.apache.openmeetings.db.entity.label;
 
-import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -42,27 +41,27 @@ import org.apache.openmeetings.db.entity.IDataProviderEntity;
 	@NamedQuery(name = "allFieldLanguageValues", query = "SELECT flv FROM Fieldlanguagesvalues flv "
 		+ "WHERE flv.deleted = false "
 		+ "		AND flv.fieldvalues.deleted = false "
-		+ "		AND flv.language_id = :language_id ORDER BY flv.fieldvalues.fieldvalues_id ASC")
-	, @NamedQuery(name="allFieldValuesIds", query = "SELECT flv.fieldvalues.fieldvalues_id FROM Fieldlanguagesvalues flv "
+		+ "		AND flv.language_id = :language_id ORDER BY flv.fieldvalues.id ASC")
+	, @NamedQuery(name="allFieldValuesIds", query = "SELECT flv.fieldvalues.id FROM Fieldlanguagesvalues flv "
 		+ "WHERE flv.deleted = false "
 		+ "		AND flv.fieldvalues.deleted = false "
 		+ "		AND flv.language_id = :language_id")
 	, @NamedQuery(name="allNotTranslatedValues", query = "SELECT flv FROM Fieldlanguagesvalues flv "
 		+ "WHERE flv.deleted = false "
 		+ "		AND flv.fieldvalues.deleted = false "
-		+ "		AND flv.language_id = 1 AND flv.fieldvalues.fieldvalues_id NOT IN (:id_list)")
+		+ "		AND flv.language_id = 1 AND flv.fieldvalues.id NOT IN (:id_list)")
 	, @NamedQuery(name="getFieldLanguagesValuesById"
-		, query = "SELECT f FROM Fieldlanguagesvalues f WHERE f.fieldlanguagesvalues_id = :id")
+		, query = "SELECT f FROM Fieldlanguagesvalues f WHERE f.id = :id")
 	, @NamedQuery(name="getFieldLanguagesValuesByValueAndLang"
-		, query = "SELECT f FROM Fieldlanguagesvalues f WHERE f.fieldvalues.fieldvalues_id = :fieldValuesId AND f.language_id = :lang AND f.deleted = false")
+		, query = "SELECT f FROM Fieldlanguagesvalues f WHERE f.fieldvalues.id = :fieldValuesId AND f.language_id = :lang AND f.deleted = false")
 })
 @Table(name = "fieldlanguagesvalues")
-public class Fieldlanguagesvalues implements Serializable, IDataProviderEntity {
-	private static final long serialVersionUID = 1965055047163639210L;
+public class Fieldlanguagesvalues implements IDataProviderEntity {
+	private static final long serialVersionUID = 1L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="id")
-	private Long fieldlanguagesvalues_id;
+	private Long id;
 	
 	@Column(name="language_id")
 	private Long language_id;
@@ -89,11 +88,11 @@ public class Fieldlanguagesvalues implements Serializable, IDataProviderEntity {
 		super();
 	}
 	
-	public Long getFieldlanguagesvalues_id() {
-		return fieldlanguagesvalues_id;
+	public Long getId() {
+		return id;
 	}
-	public void setFieldlanguagesvalues_id(Long fieldlanguagesvalues_id) {
-		this.fieldlanguagesvalues_id = fieldlanguagesvalues_id;
+	public void setId(Long id) {
+		this.id = id;
 	}
 	
 	public Date getStarttime() {

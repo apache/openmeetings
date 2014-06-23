@@ -35,7 +35,6 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
-import org.apache.openmeetings.core.data.basic.FieldManager;
 import org.apache.openmeetings.db.dao.room.IRoomManager;
 import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.dao.room.RoomModeratorsDao;
@@ -73,8 +72,6 @@ public class RoomManager implements IRoomManager {
 	private UserDao usersDao;
 	@Autowired
 	private ISessionManager sessionManager;
-	@Autowired
-	private FieldManager fieldManager;
     @Autowired
 	private RoomDao roomDao;
     @Autowired
@@ -134,7 +131,7 @@ public class RoomManager implements IRoomManager {
 					asc);
 
 			for (Room room : rooms) {
-				room.setCurrentusers(sessionManager.getClientListByRoom(room.getRooms_id()));
+				room.setCurrentusers(sessionManager.getClientListByRoom(room.getId()));
 			}
 
 			sResult.setResult(rooms);
@@ -151,7 +148,7 @@ public class RoomManager implements IRoomManager {
 					asc);
 
 			for (Room room : rooms) {
-				room.setCurrentusers(sessionManager.getClientListByRoom(room.getRooms_id()));
+				room.setCurrentusers(sessionManager.getClientListByRoom(room.getId()));
 			}
 
 			return rooms;
@@ -167,7 +164,7 @@ public class RoomManager implements IRoomManager {
 					orderby, asc, externalRoomType);
 
 			for (Room room : rooms) {
-				room.setCurrentusers(sessionManager.getClientListByRoom(room.getRooms_id()));
+				room.setCurrentusers(sessionManager.getClientListByRoom(room.getId()));
 			}
 
 			return rooms;
@@ -321,7 +318,7 @@ public class RoomManager implements IRoomManager {
 	public List<RoomOrganisation> getOrganisationsByRoom(long rooms_id) {
 		try {
 			String hql = "select c from RoomOrganisation as c "
-					+ "where c.room.rooms_id = :rooms_id "
+					+ "where c.room.id = :rooms_id "
 					+ "AND c.deleted <> :deleted";
 			TypedQuery<RoomOrganisation> q = em.createQuery(hql, RoomOrganisation.class);
 
@@ -350,7 +347,7 @@ public class RoomManager implements IRoomManager {
 				if (i != 0) {
 					queryString += " OR ";
 				}
-				queryString += " r.rooms_id = " + room_id;
+				queryString += " r.id = " + room_id;
 				i++;
 			}
 
@@ -478,11 +475,11 @@ public class RoomManager implements IRoomManager {
 			}
 
 			if (roomModerators != null) {
-				r.setModerators(getModerators(roomModerators, r.getRooms_id()));
+				r.setModerators(getModerators(roomModerators, r.getId()));
 				r = roomDao.update(r, ownerId);
 			}
 
-			return r.getRooms_id();
+			return r.getId();
 		} catch (Exception ex2) {
 			log.error("[addRoom] ", ex2);
 		}
@@ -543,7 +540,7 @@ public class RoomManager implements IRoomManager {
 
 			r = em.merge(r);
 
-			long returnId = r.getRooms_id();
+			long returnId = r.getId();
 
 			if (organisations != null) {
 				Long t = this.updateRoomOrganisations(organisations, r);
@@ -553,7 +550,7 @@ public class RoomManager implements IRoomManager {
 			}
 
 			if (roomModerators != null) {
-				r.setModerators(getModerators(roomModerators, r.getRooms_id()));
+				r.setModerators(getModerators(roomModerators, r.getId()));
 				r = roomDao.update(r, null);
 			}
 
@@ -583,37 +580,10 @@ public class RoomManager implements IRoomManager {
 			rOrganisation.setDeleted(false);
 
 			rOrganisation = em.merge(rOrganisation);
-			long returnId = rOrganisation.getRooms_organisation_id();
+			long returnId = rOrganisation.getId();
 			return returnId;
 		} catch (Exception ex2) {
 			log.error("[addRoomToOrganisation] ", ex2);
-		}
-		return null;
-	}
-
-	/**
-	 * 
-	 * @param rooms_organisation_id
-	 * @return
-	 */
-	public RoomOrganisation getRoomsOrganisationById(
-			long rooms_organisation_id) {
-		try {
-			CriteriaBuilder cb = em.getCriteriaBuilder();
-			CriteriaQuery<RoomOrganisation> cq = cb
-					.createQuery(RoomOrganisation.class);
-			Root<RoomOrganisation> c = cq.from(RoomOrganisation.class);
-			Predicate condition = cb.equal(c.get("rooms_organisation_id"),
-					rooms_organisation_id);
-			cq.where(condition);
-			TypedQuery<RoomOrganisation> q = em.createQuery(cq);
-			List<RoomOrganisation> ll = q.getResultList();
-
-			if (ll.size() > 0) {
-				return ll.get(0);
-			}
-		} catch (Exception ex2) {
-			log.error("[getRoomsByOrganisation] ", ex2);
 		}
 		return null;
 	}
@@ -659,7 +629,6 @@ public class RoomManager implements IRoomManager {
 			return ll;
 		} catch (Exception ex2) {
 			log.error("[getPublicRoomsWithoutType] ", ex2);
-			ex2.printStackTrace();
 		}
 		return null;
 	}
@@ -708,9 +677,7 @@ public class RoomManager implements IRoomManager {
 			long organisation_id, int start, int max, String orderby,
 			boolean asc) {
 		try {
-			String hql = "select c from RoomOrganisation as c "
-					+ "where c.organisation.organisation_id = :organisation_id "
-					+ "AND c.deleted <> :deleted";
+			String hql = "select c from RoomOrganisation as c where c.organisation.id = :organisation_id AND c.deleted <> :deleted";
 			if (orderby.startsWith("c.")) {
 				hql += "ORDER BY " + orderby;
 			} else {
@@ -837,11 +804,11 @@ public class RoomManager implements IRoomManager {
 				}
 			}
 			if (roomModerators != null) {
-				r.setModerators(getModerators(roomModerators, r.getRooms_id()));
+				r.setModerators(getModerators(roomModerators, r.getId()));
 				r = roomDao.update(r, null);
 			}
 
-			return r.getRooms_id();
+			return r.getId();
 		} catch (Exception ex2) {
 			log.error("[updateRoom] ", ex2);
 		}
@@ -853,7 +820,7 @@ public class RoomManager implements IRoomManager {
 			throws Exception {
 		for (Iterator it = organisations.iterator(); it.hasNext();) {
 			RoomOrganisation rOrganisation = (RoomOrganisation) it.next();
-			if (rOrganisation.getOrganisation().getOrganisation_id()
+			if (rOrganisation.getOrganisation().getId()
 					.equals(orgid))
 				return true;
 		}
@@ -871,7 +838,7 @@ public class RoomManager implements IRoomManager {
 	}
 
 	private Long updateRoomOrganisations(List<Integer> organisations, Room room) throws Exception {
-		List<RoomOrganisation> roomOrganisations = getOrganisationsByRoom(room.getRooms_id());
+		List<RoomOrganisation> roomOrganisations = getOrganisationsByRoom(room.getId());
 
 		List<Long> roomsToAdd = new LinkedList<Long>();
 		List<Long> roomsToDel = new LinkedList<Long>();
@@ -886,7 +853,7 @@ public class RoomManager implements IRoomManager {
 		for (Iterator<RoomOrganisation> it = roomOrganisations.iterator(); it.hasNext();) {
 			RoomOrganisation rOrganisation = it.next();
 			Long orgIdToDel = rOrganisation.getOrganisation()
-					.getOrganisation_id();
+					.getId();
 			if (!this.checkRoomShouldByDeleted(orgIdToDel, organisations))
 				roomsToDel.add(orgIdToDel);
 		}
@@ -896,11 +863,11 @@ public class RoomManager implements IRoomManager {
 
 		for (Iterator<Long> it = roomsToAdd.iterator(); it.hasNext();) {
 			Long orgIdToAdd = it.next();
-			addRoomToOrganisation(room.getRooms_id(), orgIdToAdd);
+			addRoomToOrganisation(room.getId(), orgIdToAdd);
 		}
 		for (Iterator<Long> it = roomsToDel.iterator(); it.hasNext();) {
 			Long orgToDel = it.next();
-			deleteRoomFromOrganisationByRoomAndOrganisation(room.getRooms_id(), orgToDel);
+			deleteRoomFromOrganisationByRoomAndOrganisation(room.getId(), orgToDel);
 		}
 
 		return new Long(1);
@@ -955,22 +922,6 @@ public class RoomManager implements IRoomManager {
 		}
 	}
 
-	/**
-	 * Delete a Rooms_Organisation by its id
-	 * 
-	 * @param rooms_organisation_id
-	 */
-	public Long deleteRoomsOrganisationByID(long rooms_organisation_id) {
-		try {
-			RoomOrganisation rOrg = this
-					.getRoomsOrganisationById(rooms_organisation_id);
-			return this.deleteRoomsOrganisation(rOrg);
-		} catch (Exception ex2) {
-			log.error("[deleteRoomsOrganisationByID] ", ex2);
-		}
-		return null;
-	}
-
 	private Long deleteRoomFromOrganisationByRoomAndOrganisation(long rooms_id,
 			long organisation_id) {
 		try {
@@ -993,14 +944,14 @@ public class RoomManager implements IRoomManager {
 		try {
 			rOrg.setDeleted(true);
 			rOrg.setUpdatetime(new Date());
-			if (rOrg.getRooms_organisation_id() == null) {
+			if (rOrg.getId() == null) {
 				em.persist(rOrg);
 			} else {
 				if (!em.contains(rOrg)) {
 					em.merge(rOrg);
 				}
 			}
-			return rOrg.getRooms_organisation_id();
+			return rOrg.getId();
 		} catch (Exception ex2) {
 			log.error("[deleteRoomsOrganisation] ", ex2);
 		}

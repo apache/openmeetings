@@ -18,7 +18,6 @@
  */
 package org.apache.openmeetings.db.entity.label;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -35,13 +34,14 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.apache.openmeetings.db.entity.IDataProviderEntity;
+
 @Entity
 @Table(name = "fieldlanguage")
-public class FieldLanguage implements Serializable, IDataProviderEntity {
-	private static final long serialVersionUID = 3501643212388395425L;
+public class FieldLanguage implements IDataProviderEntity {
+	private static final long serialVersionUID = 1L;
 	@Id
 	@Column(name="id")
-	private Long language_id;
+	private Long id;
 	
 	@Column(name="name")
 	private String name;
@@ -65,11 +65,11 @@ public class FieldLanguage implements Serializable, IDataProviderEntity {
 	@JoinColumn(name = "language_id", insertable = true, updatable = true)
 	private Collection<Fieldlanguagesvalues> languageValues;
 	
-	public Long getLanguage_id() {
-		return language_id;
+	public Long getId() {
+		return id;
 	}
-	public void setLanguage_id(Long language_id) {
-		this.language_id = language_id;
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public String getName() {
@@ -126,14 +126,14 @@ public class FieldLanguage implements Serializable, IDataProviderEntity {
 		Collection<Fieldlanguagesvalues> langVals = getLanguageValues();
 		Map<Long, Fieldlanguagesvalues> result = new Hashtable<Long, Fieldlanguagesvalues>(langVals.size());
 		for (Fieldlanguagesvalues flv : langVals) {
-			result.put(flv.getFieldvalues().getFieldvalues_id(), flv);
+			result.put(flv.getFieldvalues().getId(), flv);
 		}
 		return result;
 	}
 	
 	@Override
 	public String toString() {
-		return "FieldLanguage [id=" + language_id + ", name=" + name + ", deleted=" + deleted + ", rtl=" + rtl + ", code=" + code
+		return "FieldLanguage [id=" + id + ", name=" + name + ", deleted=" + deleted + ", rtl=" + rtl + ", code=" + code
 				+ "]";
 	}
 }

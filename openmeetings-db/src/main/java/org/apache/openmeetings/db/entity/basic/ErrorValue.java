@@ -18,7 +18,6 @@
  */
 package org.apache.openmeetings.db.entity.basic;
 
-import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -28,18 +27,20 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
+import org.apache.openmeetings.db.entity.IDataProviderEntity;
+
 @Entity
 @NamedQueries({
-	@NamedQuery(name = "getErrorValueById", query = "SELECT e FROM ErrorValue e WHERE e.errorvalues_id = :id AND e.deleted = false")
+	@NamedQuery(name = "getErrorValueById", query = "SELECT e FROM ErrorValue e WHERE e.id = :id AND e.deleted = false")
 })
 @Table(name = "errorvalue")
-public class ErrorValue implements Serializable {
-	private static final long serialVersionUID = -1892810463706968018L;
+public class ErrorValue implements IDataProviderEntity {
+	private static final long serialVersionUID = 1L;
 
 	@Id
 	@Column(name = "id")
-	private Long errorvalues_id;
-	
+	private Long id;
+
 	@Column(name = "errortype_id")
 	private Long errortype_id;
 	
@@ -55,12 +56,12 @@ public class ErrorValue implements Serializable {
 	@Column(name = "deleted")
 	private boolean deleted;
 
-	public Long getErrorvalues_id() {
-		return errorvalues_id;
+	public Long getId() {
+		return id;
 	}
 
-	public void setErrorvalues_id(Long errorvalues_id) {
-		this.errorvalues_id = errorvalues_id;
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public Date getStarttime() {

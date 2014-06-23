@@ -45,7 +45,7 @@ import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.RepeatingView;
 
 public class ConnectionsPanel extends AdminPanel {
-	private static final long serialVersionUID = -5074847509312630580L;
+	private static final long serialVersionUID = 1L;
 
 	public ConnectionsPanel(String id) {
 		super(id);
@@ -70,7 +70,7 @@ public class ConnectionsPanel extends AdminPanel {
 		final WebMarkupContainer container = new WebMarkupContainer("container");
 		final WebMarkupContainer details = new WebMarkupContainer("details");
 		SearchableDataView<Client> dataView = new SearchableDataView<Client>("clientList", sdp) {
-			private static final long serialVersionUID = 2863400959190625386L;
+			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected void populateItem(final Item<Client> item) {
@@ -81,7 +81,7 @@ public class ConnectionsPanel extends AdminPanel {
 				item.add(new Label("scope", c.getScope()));
 				item.add(new Label("server", c.getServer() == null ? "no cluster" : c.getServer().getAddress())); //FIXME localization
 				item.add(new ConfirmableAjaxLink("kick", 605) {
-					private static final long serialVersionUID = 1860369399943234763L;
+					private static final long serialVersionUID = 1L;
 
 					@Override
 					public void onClick(AjaxRequestTarget target) {
@@ -92,7 +92,7 @@ public class ConnectionsPanel extends AdminPanel {
 					}
 				}.setEnabled(!TRUE.equals(c.getIsScreenClient()) && !TRUE.equals(c.getIsAVClient())));
 				item.add(new AjaxEventBehavior("onclick") {
-					private static final long serialVersionUID = 9180559138402389613L;
+					private static final long serialVersionUID = 1L;
 
 					@Override
 					protected void onEvent(AjaxRequestTarget target) {
@@ -126,7 +126,7 @@ public class ConnectionsPanel extends AdminPanel {
 		add(container.add(dataView).setOutputMarkupId(true), details.setVisible(false).setOutputMarkupPlaceholderTag(true));
 		
 		add(new PagedEntityListPanel("navigator", dataView) {
-			private static final long serialVersionUID = 5097048616003411362L;
+			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected void onEvent(AjaxRequestTarget target) {

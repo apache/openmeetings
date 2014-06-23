@@ -42,7 +42,7 @@ import org.apache.wicket.util.time.Duration;
 import com.vaynberg.wicket.select2.Select2Choice;
 
 public class GroupForm extends AdminBaseForm<Organisation> {
-	private static final long serialVersionUID = -1720731686053912700L;
+	private static final long serialVersionUID = 1L;
 	private GroupUsersPanel usersPanel;
 	private WebMarkupContainer groupList;
 	private Select2Choice<User> userToadd = null;
@@ -76,12 +76,12 @@ public class GroupForm extends AdminBaseForm<Organisation> {
 				Organisation o = GroupForm.this.getModelObject();
 				User u = userToadd.getModelObject();
 				boolean found = false;
-				if (o.getOrganisation_id() != null) {
-					found = null != getBean(OrganisationUserDao.class).getByOrganizationAndUser(o.getOrganisation_id(), u.getUser_id());
+				if (o.getId() != null) {
+					found = null != getBean(OrganisationUserDao.class).getByOrganizationAndUser(o.getId(), u.getId());
 				}
 				if (!found && u != null) {
 					for (Organisation_Users ou : usersPanel.getUsers2add()) {
-						if (ou.getUser().getUser_id().equals(u.getUser_id())) {
+						if (ou.getUser().getId().equals(u.getId())) {
 							found = true;
 							break;
 						}
@@ -110,7 +110,7 @@ public class GroupForm extends AdminBaseForm<Organisation> {
 	}
 
 	private long getOrgId() {
-		return getModelObject().getOrganisation_id() != null ? getModelObject().getOrganisation_id() : 0;
+		return getModelObject().getId() != null ? getModelObject().getId() : 0;
 	}
 	
 	@Override
@@ -122,8 +122,8 @@ public class GroupForm extends AdminBaseForm<Organisation> {
 	@Override
 	protected void onRefreshSubmit(AjaxRequestTarget target, Form<?> form) {
 		Organisation org = getModelObject();
-		if (org.getOrganisation_id() != null) {
-			org = getBean(OrganisationDao.class).get(org.getOrganisation_id());
+		if (org.getId() != null) {
+			org = getBean(OrganisationDao.class).get(org.getId());
 		} else {
 			org = new Organisation();
 		}

@@ -37,7 +37,7 @@ public class RoomOrganisationDao {
 	}
 
 	public RoomOrganisation update(RoomOrganisation entity, Long userId) {
-		if (entity.getRooms_organisation_id() == null) {
+		if (entity.getId() == null) {
 			entity.setStarttime(new Date());
 			em.persist(entity);
 		} else {

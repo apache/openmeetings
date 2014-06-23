@@ -118,19 +118,19 @@ public class FlvInterviewConverter extends BaseConverter {
 		FlvRecording flvRecording = null;
 		try {
 			flvRecording = recordingDao.get(flvRecordingId);
-			log.debug("flvRecording " + flvRecording.getFlvRecordingId());
+			log.debug("flvRecording " + flvRecording.getId());
 
 			List<ConverterProcessResult> returnLog = new ArrayList<ConverterProcessResult>();
 			List<String> listOfFullWaveFiles = new LinkedList<String>();
 			File streamFolder = getStreamFolder(flvRecording);
-			List<FlvRecordingMetaData> metaDataList = metaDataDao.getAudioMetaDataByRecording(flvRecording.getFlvRecordingId());
+			List<FlvRecordingMetaData> metaDataList = metaDataDao.getAudioMetaDataByRecording(flvRecording.getId());
 	
 			stripAudioFirstPass(flvRecording, returnLog, listOfFullWaveFiles, streamFolder, metaDataList);
 		
 			// Merge Wave to Full Length
 			File streamFolderGeneral = getStreamsHibernateDir();
 
-			String hashFileFullName = "INTERVIEW_" + flvRecording.getFlvRecordingId() + "_FINAL_WAVE.wav";
+			String hashFileFullName = "INTERVIEW_" + flvRecording.getId() + "_FINAL_WAVE.wav";
 			String outputFullWav = streamFolder.getAbsolutePath() + File.separatorChar + hashFileFullName;
 			deleteFileIfExists(outputFullWav);
 
@@ -239,7 +239,7 @@ public class FlvInterviewConverter extends BaseConverter {
 			args.add("-qmax"); args.add("1");
 			args.add("-qmin"); args.add("1");
 			args.add("-y");
-			String hashFileFullNameFlv = "flvRecording_" + flvRecording.getFlvRecordingId() + ".flv";
+			String hashFileFullNameFlv = "flvRecording_" + flvRecording.getId() + ".flv";
 			String outputFullFlv = new File(streamFolderGeneral, hashFileFullNameFlv).getCanonicalPath();
 			args.add(outputFullFlv);
 			// TODO additional flag to 'quiet' output should be added
@@ -254,7 +254,7 @@ public class FlvInterviewConverter extends BaseConverter {
 			// ffmpeg -i movie.flv -vcodec mjpeg -vframes 1 -an -f rawvideo -s
 			// 320x240 movie.jpg
 
-			String hashFileFullNameJPEG = "flvRecording_" + flvRecording.getFlvRecordingId() + ".jpg";
+			String hashFileFullNameJPEG = "flvRecording_" + flvRecording.getId() + ".jpg";
 			String outPutJpeg = new File(streamFolderGeneral, hashFileFullNameJPEG).getCanonicalPath();
 			deleteFileIfExists(outPutJpeg);
 
@@ -271,7 +271,7 @@ public class FlvInterviewConverter extends BaseConverter {
 
 			returnLog.add(ProcessHelper.executeScript("generateFullFLV", argv_previewFLV));
 
-			String alternateDownloadName = "flvRecording_" + flvRecording.getFlvRecordingId() + ".avi";
+			String alternateDownloadName = "flvRecording_" + flvRecording.getId() + ".avi";
 			String alternateDownloadFullName = new File(streamFolderGeneral, alternateDownloadName).getCanonicalPath();
 			deleteFileIfExists(alternateDownloadFullName);
 
@@ -285,7 +285,7 @@ public class FlvInterviewConverter extends BaseConverter {
 			convertToMp4(flvRecording, returnLog);
 			flvRecording.setStatus(FlvRecording.Status.PROCESSED);
 
-			logDao.deleteByRecordingId(flvRecording.getFlvRecordingId());
+			logDao.deleteByRecordingId(flvRecording.getId());
 
 			for (ConverterProcessResult returnMap : returnLog) {
 				logDao.addFLVRecordingLog("generateFFMPEG", flvRecording, returnMap);

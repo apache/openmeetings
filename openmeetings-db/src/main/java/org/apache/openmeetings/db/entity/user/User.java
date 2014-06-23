@@ -20,7 +20,6 @@ package org.apache.openmeetings.db.entity.user;
 
 import static org.apache.openmeetings.db.util.UserHelper.invalidPassword;
 
-import java.io.Serializable;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -77,37 +76,35 @@ import org.simpleframework.xml.Root;
 	, @FetchGroup(name = "orgUsers", attributes = { @FetchAttribute(name = "organisation_users")})
 })
 @NamedQueries({
-	@NamedQuery(name = "getUserById", query = "SELECT u FROM User u WHERE u.user_id = :id"),
-	@NamedQuery(name = "getUsersByIds", query = "select c from User c where c.user_id IN :ids"),
-	@NamedQuery(name = "checkUserLogin", query = "SELECT COUNT(u) FROM User u WHERE ((:id > 0 AND u.user_id <> :id) OR (:id = 0)) "
+	@NamedQuery(name = "getUserById", query = "SELECT u FROM User u WHERE u.id = :id"),
+	@NamedQuery(name = "getUsersByIds", query = "select c from User c where c.id IN :ids"),
+	@NamedQuery(name = "checkUserLogin", query = "SELECT COUNT(u) FROM User u WHERE ((:id > 0 AND u.id <> :id) OR (:id = 0)) "
 			+ "AND u.login = :login AND u.deleted = false"),
-	@NamedQuery(name = "checkUserEmail", query = "SELECT COUNT(u) FROM User u WHERE ((:id > 0 AND u.user_id <> :id) OR (:id = 0)) "
+	@NamedQuery(name = "checkUserEmail", query = "SELECT COUNT(u) FROM User u WHERE ((:id > 0 AND u.id <> :id) OR (:id = 0)) "
 			+ "AND u.adresses.email = :email AND u.deleted = false AND u.type <> :type"),
 	@NamedQuery(name = "getUserByLogin", query = "SELECT u FROM User u WHERE u.deleted = false AND u.type = :type AND u.login = :login"),
 	@NamedQuery(name = "getUserByEmail", query = "SELECT u FROM User u WHERE u.deleted = false AND u.type = :type AND u.adresses.email = :email"),
 	@NamedQuery(name = "getUserByHash",  query = "SELECT u FROM User u WHERE u.deleted = false AND u.type = :type AND u.resethash = :resethash"),
 	@NamedQuery(name = "getContactByEmailAndUser", query = "SELECT u FROM User u WHERE u.deleted = false AND u.adresses.email = :email AND u.type = :type AND u.ownerId = :ownerId"), 
-	@NamedQuery(name = "selectMaxFromUsersWithSearch", query = "select count(c.user_id) from User c "
+	@NamedQuery(name = "selectMaxFromUsersWithSearch", query = "select count(c.id) from User c "
 			+ "where c.deleted = false " + "AND ("
 			+ "lower(c.login) LIKE :search "
 			+ "OR lower(c.firstname) LIKE :search "
 			+ "OR lower(c.lastname) LIKE :search )"),
-	@NamedQuery(name = "getAllUsers", query = "SELECT u FROM User u ORDER BY u.user_id"),
-	@NamedQuery(name = "checkPassword", query = "select count(c.user_id) from User c "
-			+ "where c.deleted = false " //
-			+ "AND c.user_id = :userId " //
+	@NamedQuery(name = "getAllUsers", query = "SELECT u FROM User u ORDER BY u.id"),
+	@NamedQuery(name = "checkPassword", query = "select count(c.id) from User c where c.deleted = false AND c.id = :userId " //
 			+ "AND c.password LIKE :password"), //
-	@NamedQuery(name = "updatePassword", query = "UPDATE User u SET u.password = :password WHERE u.user_id = :userId"), //
+	@NamedQuery(name = "updatePassword", query = "UPDATE User u SET u.password = :password WHERE u.id = :userId"), //
 	@NamedQuery(name = "getNondeletedUsers", query = "SELECT u FROM User u WHERE u.deleted = false"),
 	@NamedQuery(name = "countNondeletedUsers", query = "SELECT COUNT(u) FROM User u WHERE u.deleted = false"),
-	@NamedQuery(name = "getUsersByOrganisationId", query = "SELECT u FROM User u WHERE u.deleted = false AND u.organisation_users.organisation.organisation_id = :organisation_id"), 
+	@NamedQuery(name = "getUsersByOrganisationId", query = "SELECT u FROM User u WHERE u.deleted = false AND u.organisation_users.organisation.id = :organisation_id"), 
 	@NamedQuery(name = "getExternalUser", query = "SELECT u FROM User u WHERE u.deleted = false AND u.externalUserId LIKE :externalId AND u.externalUserType LIKE :externalType"),
 	@NamedQuery(name = "getUserByLoginOrEmail", query = "SELECT u from User u WHERE u.deleted = false AND u.type = :type AND (u.login = :userOrEmail OR u.adresses.email = :userOrEmail)")
 })
 @Table(name = "om_user")
 @Root(name = "user")
-public class User implements Serializable, IDataProviderEntity {
-	private static final long serialVersionUID = -2265479712596674065L;
+public class User implements IDataProviderEntity {
+	private static final long serialVersionUID = 1L;
 	
 	public enum Right {
 		Admin			// access to Admin module
@@ -128,8 +125,8 @@ public class User implements Serializable, IDataProviderEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
-	@Element(data = true)
-	private Long user_id;
+	@Element(data = true, name = "user_id")
+	private Long id;
 
 	@Column(name = "age")
 	@Element(data = true, required = false)
@@ -274,12 +271,12 @@ public class User implements Serializable, IDataProviderEntity {
 	@Element(data = true, required = false)
 	private Long domainId; // LDAP config id for LDAP, OAuth server id for OAuth
 	
-	public Long getUser_id() {
-		return user_id;
+	public Long getId() {
+		return id;
 	}
 
-	public void setUser_id(Long user_id) {
-		this.user_id = user_id;
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public Address getAdresses() {
@@ -585,7 +582,7 @@ public class User implements Serializable, IDataProviderEntity {
 
 	@Override
 	public String toString() {
-		return "User [user_id=" + user_id + ", firstname=" + firstname
+		return "User [user_id=" + id + ", firstname=" + firstname
 				+ ", lastname=" + lastname + ", login=" + login
 				+ ", pictureuri=" + pictureuri + ", deleted=" + deleted
 				+ ", language_id=" + language_id + ", adresses=" + adresses

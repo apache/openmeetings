@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.web.common;
 
+import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.openmeetings.web.app.Application.getBean;
 
 import java.util.List;
@@ -34,9 +35,12 @@ import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.markup.html.form.upload.FileUploadField;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.util.lang.Bytes;
+import org.red5.logging.Red5LoggerFactory;
+import org.slf4j.Logger;
 
 public class UploadableProfileImagePanel extends ProfileImagePanel {
 	private static final long serialVersionUID = 1L;
+	private static final Logger log = Red5LoggerFactory.getLogger(UploadableProfileImagePanel.class, webAppRootKey);
 	private FileUploadField fileUploadField;
 	
 	public UploadableProfileImagePanel(String id, final long userId) {
@@ -61,7 +65,7 @@ public class UploadableProfileImagePanel extends ProfileImagePanel {
 		}));
 		form.add(new UploadProgressBar("progress", form, fileUploadField));
 		fileUploadField.add(new AjaxFormSubmitBehavior(form, "onchange") {
-			private static final long serialVersionUID = 2160216679027859231L;
+			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected void onSubmit(AjaxRequestTarget target) {
@@ -72,11 +76,10 @@ public class UploadableProfileImagePanel extends ProfileImagePanel {
 						boolean asIs = sf.isAsIs();
 						try {
 							//FIXME need to work with InputStream !!!
-							getBean(GenerateImage.class)
-								.convertImageUserProfile(fu.writeToTempFile(), userId, asIs);
+							getBean(GenerateImage.class).convertImageUserProfile(fu.writeToTempFile(), userId, asIs);
 						} catch (Exception e) {
 							// TODO display error
-							e.printStackTrace();
+							log.error("Error", e);
 						}
 					} else {
 						//TODO display error

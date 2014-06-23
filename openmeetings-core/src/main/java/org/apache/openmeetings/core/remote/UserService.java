@@ -22,7 +22,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
-import org.apache.openmeetings.core.data.basic.FieldManager;
 import org.apache.openmeetings.core.data.conference.RoomManager;
 import org.apache.openmeetings.core.mail.MailHandler;
 import org.apache.openmeetings.core.remote.red5.ScopeApplicationAdapter;
@@ -83,8 +82,6 @@ public class UserService implements IUserService {
 	private IUserManager userManager;
 	@Autowired
 	private UserDao userDao;
-	@Autowired
-	private FieldManager fieldManager;
 	@Autowired
 	private SalutationDao salutationmanagement;
 	@Autowired
@@ -307,7 +304,7 @@ public class UserService implements IUserService {
 
 				for (UserContact userContact : uList) {
 
-					if (userContact.getContact().getUser_id().equals(user_id)) {
+					if (userContact.getContact().getId().equals(user_id)) {
 						return true;
 					}
 

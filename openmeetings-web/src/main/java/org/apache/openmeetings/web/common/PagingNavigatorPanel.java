@@ -39,7 +39,7 @@ public abstract class PagingNavigatorPanel extends Panel {
 		f.add(new OmPagingNavigator("navigator", dataView).setOutputMarkupId(true))
 			.add(new DropDownChoice<Integer>("entitiesPerPage", new PropertyModel<Integer>(this, "entitiesPerPage"), numbers)
 				.add(new AjaxFormComponentUpdatingBehavior("onchange") {
-					private static final long serialVersionUID = -7754441983330112248L;
+					private static final long serialVersionUID = 1L;
 	
 					@Override
 					protected void onUpdate(AjaxRequestTarget target) {

@@ -25,7 +25,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletResponse;
 
 public abstract class BaseHttpServlet extends HttpServlet {
-	private static final long serialVersionUID = -2713422496723115524L;
+	private static final long serialVersionUID = 1L;
 	
 	private BeanUtil beanUtil = new BeanUtil();
 

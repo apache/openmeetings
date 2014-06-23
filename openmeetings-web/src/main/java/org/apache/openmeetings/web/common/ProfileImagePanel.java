@@ -38,7 +38,7 @@ import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 
 public class ProfileImagePanel extends BasePanel {
-	private static final long serialVersionUID = 1119719397241677937L;
+	private static final long serialVersionUID = 1L;
 	private static final Logger log = Red5LoggerFactory.getLogger(ProfileImagePanel.class, webAppRootKey);
 	protected final WebMarkupContainer profile;
 	
@@ -57,7 +57,7 @@ public class ProfileImagePanel extends BasePanel {
 			profile.add(new Image("img", WebSession.getString(5L)).add(AttributeModifier.replace("src", uri)));
 		} else {
 			profile.add(new Image("img", new ByteArrayResource("image/jpeg") {
-				private static final long serialVersionUID = 6039580072791941591L;
+				private static final long serialVersionUID = 1L;
 
 				@Override
 				protected ResourceResponse newResourceResponse(Attributes attributes) {

@@ -23,7 +23,7 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.request.IRequestParameters;
 
 public abstract class BaseNotInitedPage extends BasePage {
-	private static final long serialVersionUID = 5716753033219700254L;
+	private static final long serialVersionUID = 1L;
 	private static final InstallationConfig installCfg = new InstallationConfig(); 
 
 

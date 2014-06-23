@@ -125,7 +125,7 @@ public abstract class BaseConverter {
 			List<String> listOfFullWaveFiles, File streamFolder)
 	{
 		stripAudioFirstPass(flvRecording, returnLog, listOfFullWaveFiles, streamFolder
-				, metaDataDao.getAudioMetaDataByRecording(flvRecording.getFlvRecordingId()));
+				, metaDataDao.getAudioMetaDataByRecording(flvRecording.getId()));
 	}
 	
 	private String[] addSoxPad(List<ConverterProcessResult> returnLog, String job, double length, double position, String inFile, String outFile) {
@@ -155,8 +155,8 @@ public abstract class BaseConverter {
 	
 	public static void printMetaInfo(FlvRecordingMetaData metaData, String prefix) {
 		if (log.isDebugEnabled()) {
-			log.debug(String.format("### %s:: recording id %s; stream with id %s; current status: %s ", prefix, metaData.getFlvRecording().getFlvRecordingId()
-					, metaData.getFlvRecordingMetaDataId(), metaData.getStreamStatus()));
+			log.debug(String.format("### %s:: recording id %s; stream with id %s; current status: %s ", prefix, metaData.getFlvRecording().getId()
+					, metaData.getId(), metaData.getStreamStatus()));
 			File metaFlv = getMetaFlv(metaData);
 			File metaSer = getMetaFlvSer(metaData);
 			log.debug(String.format("### %s:: Flv file [%s] exists ? %s; size: %s, lastModified: %s ", prefix, metaFlv.getPath(), metaFlv.exists(), metaFlv.length(), metaFlv.lastModified()));
@@ -230,7 +230,7 @@ public abstract class BaseConverter {
 			log.debug("###################################################");
 	
 			for (FlvRecordingMetaData metaData : metaDataList) {
-				long metaId = metaData.getFlvRecordingMetaDataId();
+				long metaId = metaData.getId();
 				log.debug("### processing metadata: " + metaId);
 				if (metaData.getStreamStatus() == Status.NONE) {
 					log.debug("Stream has not been started, error in recording " + metaId);
@@ -294,7 +294,7 @@ public abstract class BaseConverter {
 						}
 	
 						if (argv_sox != null) {
-							log.debug("START fillGap ################# Delta-ID :: " + metaDelta.getFlvRecordingMetaDeltaId());
+							log.debug("START fillGap ################# Delta-ID :: " + metaDelta.getId());
 	
 							metaDeltaDao.updateFlvRecordingMetaDelta(metaDelta);
 							counter++;

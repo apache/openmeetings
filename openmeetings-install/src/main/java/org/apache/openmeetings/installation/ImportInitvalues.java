@@ -645,7 +645,7 @@ public class ImportInitvalues {
 		Long user_id = userManager.registerUserInit(rights, cfg.username, cfg.password, "lastname"
 				, "firstname", cfg.email, new Date() /* age/birthday */, "street", "no", "fax", "zip", 1
 				, "town", default_lang_id, false /* sendWelcomeMessage */
-				, Arrays.asList(org.getOrganisation_id()), "phone", false, false, timezoneUtil.getTimeZone(cfg.ical_timeZone),
+				, Arrays.asList(org.getId()), "phone", false, false, timezoneUtil.getTimeZone(cfg.ical_timeZone),
 				false /* forceTimeZoneCheck */, "" /* userOffers */, "" /* userSearchs */, false /* showContactData */,
 				true /* showContactDataToContacts */, null);
 
@@ -815,7 +815,7 @@ public class ImportInitvalues {
 				// Only do that for the first field-set
 				if (!fieldCache.containsKey(id)) {
 					fv = new Fieldvalues();
-					fv.setFieldvalues_id(id);
+					fv.setId(id);
 					fv.setStarttime(new Date());
 					fv.setName(name);
 					fv.setDeleted(false);
@@ -827,7 +827,7 @@ public class ImportInitvalues {
 				Fieldlanguagesvalues flv = new Fieldlanguagesvalues();
 				flv.setStarttime(new Date());
 				flv.setValue(value);
-				flv.setLanguage_id(lang.getLanguage_id());
+				flv.setLanguage_id(lang.getId());
 				flv.setFieldvalues(fv);
 				flv.setDeleted(false);
 				flvMap.put(id, flv);

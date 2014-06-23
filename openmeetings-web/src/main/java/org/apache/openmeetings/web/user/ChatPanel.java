@@ -58,7 +58,7 @@ import com.googlecode.wicket.jquery.ui.plugins.wysiwyg.WysiwygEditor;
 @AuthorizeInstantiation({"Dashboard", "Room"})
 public class ChatPanel extends BasePanel {
 	private static final Logger log = Red5LoggerFactory.getLogger(ChatPanel.class, webAppRootKey);
-	private static final long serialVersionUID = -9144707674886211557L;
+	private static final long serialVersionUID = 1L;
 	private static final String MESSAGE_AREA_ID = "messageArea";
 	
 	private JSONObject getMessage(ChatMessage m) throws JSONException {
@@ -80,7 +80,7 @@ public class ChatPanel extends BasePanel {
 		setMarkupId(id);
 
 		add(new Behavior() {
-			private static final long serialVersionUID = -2205036360048419129L;
+			private static final long serialVersionUID = 1L;
 
 			@Override
 			public void renderHead(Component component, IHeaderResponse response) {

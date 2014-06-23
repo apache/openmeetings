@@ -18,7 +18,6 @@
  */
 package org.apache.openmeetings.db.entity.basic;
 
-import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
@@ -37,22 +36,23 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import org.apache.openjpa.persistence.jdbc.ForeignKey;
+import org.apache.openmeetings.db.entity.IDataProviderEntity;
 import org.apache.openmeetings.db.entity.label.Fieldlanguagesvalues;
 
 @Entity
 @NamedQueries({
-		@NamedQuery(name = "getNavigation", query = "SELECT DISTINCT ng from Naviglobal ng " + "LEFT JOIN ng.mainnavi nm "
-				+ "WHERE nm.deleted = false " + "AND ng.level_id <= :level_id " + "AND nm.level_id <= :level_id "
-				+ "AND ng.deleted = false " + "order by ng.naviorder, nm.naviorder"),
-		@NamedQuery(name = "getNavigationById", query = "SELECT ng from Naviglobal ng WHERE ng.global_id = :global_id") })
+		@NamedQuery(name = "getNavigation", query = "SELECT DISTINCT ng from Naviglobal ng LEFT JOIN ng.mainnavi nm "
+				+ "WHERE nm.deleted = false AND ng.level_id <= :level_id AND nm.level_id <= :level_id "
+				+ "AND ng.deleted = false order by ng.naviorder, nm.naviorder"),
+		@NamedQuery(name = "getNavigationById", query = "SELECT ng from Naviglobal ng WHERE ng.id = :id") })
 @Table(name = "naviglobal")
-public class Naviglobal implements Serializable {
+public class Naviglobal implements IDataProviderEntity {
+	private static final long serialVersionUID = 1L;
 
-	private static final long serialVersionUID = 515828033813767719L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
-	private Long global_id;
+	private Long id;
 
 	@Column(name = "name")
 	private String name;
@@ -104,6 +104,14 @@ public class Naviglobal implements Serializable {
 	@Transient
 	private Fieldlanguagesvalues tooltip;
 
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
 	public String getAction() {
 		return action;
 	}
@@ -118,14 +126,6 @@ public class Naviglobal implements Serializable {
 
 	public void setComment(String comment) {
 		this.comment = comment;
-	}
-
-	public Long getGlobal_id() {
-		return global_id;
-	}
-
-	public void setGlobal_id(Long global_id) {
-		this.global_id = global_id;
 	}
 
 	public String getIcon() {
@@ -242,7 +242,7 @@ public class Naviglobal implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Naviglobal [global_id=" + global_id + ", name=" + name + ", action=" + action + ", naviorder=" + naviorder + ", deleted="
+		return "Naviglobal [id=" + id + ", name=" + name + ", action=" + action + ", naviorder=" + naviorder + ", deleted="
 				+ deleted + ", fieldvalues_id=" + fieldvalues_id + ", tooltip_fieldvalues_id=" + tooltip_fieldvalues_id + "]";
 	}
 

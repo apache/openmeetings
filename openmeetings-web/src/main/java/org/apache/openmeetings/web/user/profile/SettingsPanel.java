@@ -36,7 +36,7 @@ import com.googlecode.wicket.jquery.core.JQueryBehavior;
 import com.googlecode.wicket.jquery.core.Options;
 
 public class SettingsPanel extends UserPanel {
-	private static final long serialVersionUID = -830146821166434373L;
+	private static final long serialVersionUID = 1L;
 	public static final int PROFILE_TAB_ID = 0;
 	public static final int MESSAGES_TAB_ID = 1;
 	public static final int EDIT_PROFILE_TAB_ID = 2;

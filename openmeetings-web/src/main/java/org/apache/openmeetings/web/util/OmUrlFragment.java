@@ -48,7 +48,7 @@ import org.apache.openmeetings.web.user.rooms.RoomsSelectorPanel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 public class OmUrlFragment implements Serializable {
-	private static final long serialVersionUID = 7382435810352033914L;
+	private static final long serialVersionUID = 1L;
 	private AreaKeys area = AreaKeys.user;
 	private String type = "";
 	public static final String CHILD_ID = "child";

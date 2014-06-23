@@ -18,7 +18,6 @@
  */
 package org.apache.openmeetings.db.entity.calendar;
 
-import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -40,6 +39,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.apache.openjpa.persistence.jdbc.ForeignKey;
+import org.apache.openmeetings.db.entity.IDataProviderEntity;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.user.User;
 import org.simpleframework.xml.Element;
@@ -57,12 +57,12 @@ import org.simpleframework.xml.Root;
 			+ "		OR (a.end BETWEEN :starttime AND :endtime) "
 			+ "		OR (a.start < :starttime AND a.end > :endtime) "
 			+ "	)"
-			+ "	AND a.owner.user_id = :userId"
+			+ "	AND a.owner.id = :userId"
     	)
     , @NamedQuery(name="joinedAppointmentsInRange",
 		query="SELECT a FROM MeetingMember mm INNER JOIN mm.appointment a "
-			+ "WHERE mm.deleted = false AND mm.user.user_id <> a.owner.user_id AND mm.user.user_id = :userId "
-			+ "	AND a.id NOT IN (SELECT a.id FROM Appointment a WHERE a.owner.user_id = :userId)"
+			+ "WHERE mm.deleted = false AND mm.user.id <> a.owner.id AND mm.user.id = :userId "
+			+ "	AND a.id NOT IN (SELECT a.id FROM Appointment a WHERE a.owner.id = :userId)"
 			+ "	AND mm.connectedEvent = false " //TODO review: isConnectedEvent is set for the MeetingMember if event is created from "Private Messages", it is weird
 			+ "	AND ( "
 			+ "		(a.start BETWEEN :starttime AND :endtime) "
@@ -74,19 +74,19 @@ import org.simpleframework.xml.Root;
 		query="SELECT a FROM Appointment a "
 			//only ReminderType simple mail is concerned!
 			+ "WHERE a.deleted = false AND a.reminderEmailSend = false"
-			+ " AND (a.remind.typId = 2 OR a.remind.typId = 3) "
+			+ " AND (a.remind.id = 2 OR a.remind.id = 3) "
 			+ "	AND ( "
 			+ "		(a.start BETWEEN :starttime AND :endtime) "
 			+ "		OR (a.end BETWEEN :starttime AND :endtime) "
 			+ "		OR (a.start < :starttime AND a.end > :endtime) "
 			+ "	)"
     	)
-    , @NamedQuery(name="getAppointmentByRoomId", query="SELECT a FROM Appointment a WHERE a.deleted = false AND a.room.rooms_id = :room_id")
+    , @NamedQuery(name="getAppointmentByRoomId", query="SELECT a FROM Appointment a WHERE a.deleted = false AND a.room.id = :room_id")
 	//TODO this query returns duplicates if the user books an appointment with
 	//his own user as second meeting-member, swagner 19.02.2012
     , @NamedQuery(name="appointmentsInRangeByUser",
 		query="SELECT a FROM MeetingMember mm, IN(mm.appointment) a "
-			+ "WHERE mm.deleted = false AND mm.user.user_id <> a.owner.user_id AND mm.user.user_id = :userId "
+			+ "WHERE mm.deleted = false AND mm.user.id <> a.owner.id AND mm.user.id = :userId "
 			+ "	AND ( "
 			+ "		(a.start BETWEEN :starttime AND :endtime) "
 			+ "		OR (a.end BETWEEN :starttime AND :endtime) "
@@ -95,7 +95,7 @@ import org.simpleframework.xml.Root;
 	    )
     , @NamedQuery(name="appointedRoomsInRangeByUser",
 		query="SELECT a.room FROM MeetingMember mm, IN(mm.appointment) a "
-			+ "WHERE mm.deleted <> true AND mm.user.user_id <> a.owner.user_id AND mm.user.user_id = :userId "
+			+ "WHERE mm.deleted <> true AND mm.user.id <> a.owner.id AND mm.user.id = :userId "
 			+ "	AND ( "
 			+ "		(a.start BETWEEN :starttime AND :endtime) "
 			+ "		OR (a.end BETWEEN :starttime AND :endtime) "
@@ -104,8 +104,8 @@ import org.simpleframework.xml.Root;
 	    )
 })
 @Root(name="appointment")
-public class Appointment implements Serializable {
-	private static final long serialVersionUID = 2016808778885761525L;
+public class Appointment implements IDataProviderEntity {
+	private static final long serialVersionUID = 1L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")

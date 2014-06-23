@@ -18,7 +18,6 @@
  */
 package org.apache.openmeetings.db.entity.basic;
 
-import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -43,12 +42,13 @@ import org.simpleframework.xml.Root;
 @Entity
 @NamedQueries({
 	@NamedQuery(name = "getChatMessageById", query = "SELECT c FROM ChatMessage c WHERE c.id = :id")
-	, @NamedQuery(name = "getChatMessagesByUser", query = "SELECT DISTINCT c FROM ChatMessage c WHERE c.fromUser.user_id = :userId OR c.toUser.user_id = :userId ORDER BY c.sent ASC")
+	, @NamedQuery(name = "getChatMessagesByUser", query = "SELECT DISTINCT c FROM ChatMessage c WHERE c.fromUser.id = :userId OR c.toUser.id = :userId ORDER BY c.sent ASC")
 	, @NamedQuery(name = "getGlobalChatMessages", query = "SELECT DISTINCT c FROM ChatMessage c WHERE c.toUser IS NULL ORDER BY c.sent ASC")
-})@Table(name = "chat")
+})
+@Table(name = "chat")
 @Root(name = "ChatMessage")
-public class ChatMessage implements Serializable, IDataProviderEntity {
-	private static final long serialVersionUID = 4248081997318897605L;
+public class ChatMessage implements IDataProviderEntity {
+	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -83,11 +83,11 @@ public class ChatMessage implements Serializable, IDataProviderEntity {
 	@Element(name = "sent", data = true, required = false)
 	private Date sent;
 
-	public long getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 

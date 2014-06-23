@@ -35,7 +35,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
-import org.apache.openmeetings.core.data.basic.FieldManager;
 import org.apache.openmeetings.core.mail.MailHandler;
 import org.apache.openmeetings.core.remote.red5.ScopeApplicationAdapter;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
@@ -82,8 +81,6 @@ public class UserManager implements IUserManager {
 	private SessiondataDao sessiondataDao;
 	@Autowired
 	private ConfigurationDao configurationDao;
-	@Autowired
-	private FieldManager fieldManager;
 	@Autowired
 	private StateDao statemanagement;
 	@Autowired
@@ -139,7 +136,6 @@ public class UserManager implements IUserManager {
 
 		} catch (Exception ex2) {
 			log.error("[getAllUserByRange] ", ex2);
-			ex2.printStackTrace();
 		}
 		return null;
 	}
@@ -154,7 +150,7 @@ public class UserManager implements IUserManager {
 
 				User u = usersDao.get(sessionData.getUser_id());
 
-				sessiondataDao.updateUserWithoutSession(SID, u.getUser_id());
+				sessiondataDao.updateUserWithoutSession(SID, u.getId());
 
 				return u;
 			}
@@ -427,7 +423,7 @@ public class UserManager implements IUserManager {
 				if (u == null) {
 					return -111L;
 				}
-				log.debug("Added user-Id " + u.getUser_id());
+				log.debug("Added user-Id " + u.getId());
 
 				/*
 				 * Long adress_emails_id =
@@ -435,8 +431,8 @@ public class UserManager implements IUserManager {
 				 * (adress_emails_id==null) { return new Long(-112); }
 				 */
 
-				if (adr.getAdresses_id() > 0 && u.getUser_id() > 0) {
-					return u.getUser_id();
+				if (adr.getAdresses_id() > 0 && u.getId() > 0) {
+					return u.getId();
 				} else {
 					return -16L;
 				}

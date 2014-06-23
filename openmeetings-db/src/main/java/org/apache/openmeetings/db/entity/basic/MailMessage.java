@@ -37,12 +37,13 @@ import org.apache.openmeetings.db.entity.IDataProviderEntity;
 @Entity
 @NamedQueries({
 	@NamedQuery(name = "getMailMessageById", query = "SELECT m FROM MailMessage m WHERE m.id = :id")
-	, @NamedQuery(name = "getMailMessages"
-		, query = "SELECT m FROM MailMessage m WHERE m.status = :status ORDER BY m.updated, m.inserted")
+	, @NamedQuery(name = "getMailMessages", query = "SELECT m FROM MailMessage m WHERE m.status = :status ORDER BY m.updated, m.inserted")
 	, @NamedQuery(name = "countMailMessages", query = "SELECT COUNT(m) FROM MailMessage m WHERE m.status = :status")
 })
 @Table(name = "email_queue")
 public class MailMessage implements IDataProviderEntity {
+	private static final long serialVersionUID = 1L;
+
 	public enum Status {
 		NONE
 		, SENDING

@@ -45,7 +45,7 @@ public class TestAddGroup extends AbstractJUnitDefaults {
 		Organisation o = new Organisation();
 		o.setName("default");
 		o = orgDao.update(o, null);
-		assertNotNull("Id of organisation created should not be null", o.getOrganisation_id());
+		assertNotNull("Id of organisation created should not be null", o.getId());
 
 		User us = usersDao.get(1L);
 		assertNotNull("User should exist", us);

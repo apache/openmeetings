@@ -81,7 +81,7 @@ public abstract class RecordingResourceReference extends ResourceReference {
 			
 			private IResourceStream getResourceStream() {
 				return file == null ? null : new FileResourceStream(file) {
-					private static final long serialVersionUID = 2546785247219805747L;
+					private static final long serialVersionUID = 1L;
 					private transient BoundedInputStream bi;
 
 					@Override

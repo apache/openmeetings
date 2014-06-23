@@ -77,8 +77,8 @@ public class UserChoiceProvider extends ChoiceProvider<User> {
 	}
 
 	protected Object getId(User u) {
-		String id = "" + u.getUser_id();
-		if (u.getUser_id() == null) {
+		String id = "" + u.getId();
+		if (u.getId() == null) {
 			newContacts.put(u.getLogin(), u);
 			id = u.getLogin();
 		}

@@ -51,12 +51,9 @@ public class AppointmentReminderTypDao {
 		try {
 			log.debug("AppointmentReminderTypById: " + typId);
 
-			String hql = "select app from AppointmentReminderTyps app "
-					+ "WHERE app.deleted <> :deleted "
-					+ "AND app.typId = :typId";
+			String hql = "select app from AppointmentReminderTyps app WHERE app.deleted = false AND app.id = :typId";
 
 			TypedQuery<AppointmentReminderTyps> query = em.createQuery(hql, AppointmentReminderTyps.class);
-			query.setParameter("deleted", true);
 			query.setParameter("typId", typId);
 
 			AppointmentReminderTyps appointmentReminderTyps = null;
@@ -79,7 +76,7 @@ public class AppointmentReminderTypDao {
 			ac.setName(name);
 			ac.setUpdatetime(new Date());
 
-			if (ac.getTypId() == null) {
+			if (ac.getId() == null) {
 				em.persist(ac);
 			} else {
 				if (!em.contains(ac)) {
@@ -106,7 +103,7 @@ public class AppointmentReminderTypDao {
 			ac.setFieldvalues_id(fieldvalues_id);
 
 			ac = em.merge(ac);
-			Long category_id = ac.getTypId();
+			Long category_id = ac.getId();
 
 			return category_id;
 		} catch (Exception ex2) {
@@ -118,8 +115,7 @@ public class AppointmentReminderTypDao {
 	public Long deleteAppointmentReminderTyp(Long typId) {
 		try {
 
-			AppointmentReminderTyps ac = this
-					.get(typId);
+			AppointmentReminderTyps ac = get(typId);
 
 			log.debug("ac: " + ac);
 
@@ -130,7 +126,7 @@ public class AppointmentReminderTypDao {
 			ac.setUpdatetime(new Date());
 			ac.setDeleted(true);
 
-			if (ac.getTypId() == null) {
+			if (ac.getId() == null) {
 				em.persist(ac);
 			} else {
 				if (!em.contains(ac)) {
@@ -150,17 +146,13 @@ public class AppointmentReminderTypDao {
 
 		try {
 
-			String hql = "select a from AppointmentReminderTyps a "
-					+ "WHERE a.deleted <> :deleted ";
+			String hql = "select a from AppointmentReminderTyps a WHERE a.deleted = false ";
 
 			TypedQuery<AppointmentReminderTyps> query = em.createQuery(hql, AppointmentReminderTyps.class);
-			query.setParameter("deleted", true);
 
-			List<AppointmentReminderTyps> listAppointmentReminderTyp = query
-					.getResultList();
+			List<AppointmentReminderTyps> listAppointmentReminderTyp = query.getResultList();
 			for (AppointmentReminderTyps ti : listAppointmentReminderTyp) {
-				ti.setLabel(fieldLanguagesValuesDao.get(
-						ti.getFieldvalues_id(), language_id));
+				ti.setLabel(fieldLanguagesValuesDao.get(ti.getFieldvalues_id(), language_id));
 			}
 
 			return listAppointmentReminderTyp;

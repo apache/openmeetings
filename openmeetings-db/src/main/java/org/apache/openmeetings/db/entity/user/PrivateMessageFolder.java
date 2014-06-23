@@ -18,7 +18,6 @@
  */
 package org.apache.openmeetings.db.entity.user;
 
-import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -35,13 +34,13 @@ import org.simpleframework.xml.Root;
 @Entity
 @Table(name = "private_messages_folder")
 @Root(name="privatemessagefolder")
-public class PrivateMessageFolder implements Serializable, IDataProviderEntity {
-	private static final long serialVersionUID = 3689814412815025816L;
+public class PrivateMessageFolder implements IDataProviderEntity {
+	private static final long serialVersionUID = 1L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name="id")
-	@Element(data=true)
-	private long privateMessageFolderId;
+	@Column(name = "id")
+	@Element(data = true, name = "privateMessageFolderId")
+	private Long id;
 	
 	@Column(name="folder_name")
 	@Element(data=true)
@@ -57,11 +56,11 @@ public class PrivateMessageFolder implements Serializable, IDataProviderEntity {
 	@Column(name="updated")
 	private Date updated;
 	
-	public long getPrivateMessageFolderId() {
-		return privateMessageFolderId;
+	public Long getId() {
+		return id;
 	}
-	public void setPrivateMessageFolderId(long privateMessageFolderId) {
-		this.privateMessageFolderId = privateMessageFolderId;
+	public void setId(Long id) {
+		this.id = id;
 	}
 	
 	public String getFolderName() {

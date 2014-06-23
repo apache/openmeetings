@@ -18,7 +18,6 @@
  */
 package org.apache.openmeetings.db.entity.calendar;
 
-import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.CascadeType;
@@ -35,6 +34,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
 import org.apache.openjpa.persistence.jdbc.ForeignKey;
+import org.apache.openmeetings.db.entity.IDataProviderEntity;
 import org.apache.openmeetings.db.entity.room.Invitation;
 import org.apache.openmeetings.db.entity.user.User;
 import org.simpleframework.xml.Element;
@@ -50,8 +50,8 @@ import org.simpleframework.xml.Root;
     		, query="SELECT mm.id FROM MeetingMember mm WHERE mm.deleted = false AND mm.appointment.id = :id")
 })
 @Root(name = "meetingmember")
-public class MeetingMember implements Serializable {
-	private static final long serialVersionUID = -3864571325368787524L;
+public class MeetingMember implements IDataProviderEntity {
+	private static final long serialVersionUID = 1L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")

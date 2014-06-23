@@ -327,7 +327,7 @@ public class CalendarWebService {
 			if (AuthLevelUtil.hasUserLevel(rights)) {
 
 				Appointment a = appointmentDao.get(appointmentId);
-				if (!AuthLevelUtil.hasAdminLevel(rights) && !a.getOwner().getUser_id().equals(users_id)) {
+				if (!AuthLevelUtil.hasAdminLevel(rights) && !a.getOwner().getId().equals(users_id)) {
 					throw new ServiceException("The Appointment cannot be updated by the given user");
 				}
 				if (!a.getStart().equals(appointmentstart) || !a.getEnd().equals(appointmentend)) {
@@ -339,7 +339,6 @@ public class CalendarWebService {
 			}
 		} catch (Exception err) {
 			log.error("[updateAppointment]", err);
-			err.printStackTrace();
 		}
 		return null;
 
@@ -415,7 +414,7 @@ public class CalendarWebService {
 			} else if (AuthLevelUtil.hasUserLevel(rights)) {
 				// check if the appointment belongs to the current user
 				Appointment a = appointmentDao.get(appointmentId);
-				if (!a.getOwner().getUser_id().equals(users_id)) {
+				if (!a.getOwner().getId().equals(users_id)) {
 					throw new ServiceException("The Appointment cannot be updated by the given user");
 				}
 			} else {
@@ -481,7 +480,7 @@ public class CalendarWebService {
 				// fine
 			} else if (AuthLevelUtil.hasUserLevel(rights)) {
 				// check if the appointment belongs to the current user
-				if (!a.getOwner().getUser_id().equals(users_id)) {
+				if (!a.getOwner().getId().equals(users_id)) {
 					throw new ServiceException("The Appointment cannot be updated by the given user");
 				}
 			} else {

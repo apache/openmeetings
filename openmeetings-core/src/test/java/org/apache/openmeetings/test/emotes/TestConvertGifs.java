@@ -71,7 +71,7 @@ public class TestConvertGifs extends TestCase {
 			System.out.println("batString "+batString);
 			
 		} catch (Exception err) {
-			err.printStackTrace();
+			log.error("Error", err);
 		}
 	}
 	
@@ -119,7 +119,7 @@ public class TestConvertGifs extends TestCase {
 			System.out.println("batString "+batString);
 			
 		} catch (Exception err) {
-			err.printStackTrace();
+			log.error("Error", err);
 		}
 	}
 }

@@ -79,7 +79,7 @@ public class ContactsHelper {
 
 		contact = dao.get(userContactId);
 
-		dao.addUserContact(contact.getOwner().getUser_id(), getUserId(), false, "");
+		dao.addUserContact(contact.getOwner().getId(), getUserId(), false, "");
 
 		User user = contact.getOwner();
 

@@ -160,14 +160,14 @@ public class RoomDao implements IDataProviderDao<Room> {
 	}
 	
 	public Room update(Room entity, Long userId) {
-		if (entity.getRooms_id() == null) {
+		if (entity.getId() == null) {
 			entity.setStarttime(new Date());
 			em.persist(entity);
 		} else {
 			entity.setUpdatetime(new Date());
 		}
 		if (entity.isSipEnabled() && isSipEnabled()) {
-			String sipNumber = getSipNumber(entity.getRooms_id());
+			String sipNumber = getSipNumber(entity.getId());
 			if (!sipNumber.equals(entity.getConfno())) {
 				entity.setConfno(sipNumber);
 			}

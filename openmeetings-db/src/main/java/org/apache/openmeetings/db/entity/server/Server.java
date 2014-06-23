@@ -18,7 +18,6 @@
  */
 package org.apache.openmeetings.db.entity.server;
 
-import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -59,9 +58,9 @@ import org.simpleframework.xml.Root;
 @Root
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
-public class Server implements Serializable, IDataProviderEntity {
+public class Server implements IDataProviderEntity {
 
-	private static final long serialVersionUID = -6822732074549167727L;
+	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

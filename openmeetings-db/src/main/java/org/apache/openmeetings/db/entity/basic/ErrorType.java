@@ -18,7 +18,6 @@
  */
 package org.apache.openmeetings.db.entity.basic;
 
-import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -28,20 +27,20 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
+import org.apache.openmeetings.db.entity.IDataProviderEntity;
+
 @Entity
 @NamedQueries({
-	@NamedQuery(name = "getErrorTypes", query = "select c from ErrorType as c "
-					+ "WHERE c.deleted <> :deleted"),
-	@NamedQuery(name = "getErrorType", query = "select c from ErrorType as c "
-					+ "WHERE c.deleted <> :deleted AND c.errortype_id = :errortype_id")
+	@NamedQuery(name = "getErrorTypes", query = "select c from ErrorType as c WHERE c.deleted = false"),
+	@NamedQuery(name = "getErrorType", query = "select c from ErrorType as c WHERE c.deleted = false AND c.id = :id")
 })
 @Table(name = "errortypes")
-public class ErrorType implements Serializable {
-	private static final long serialVersionUID = 1519570470483604258L;
+public class ErrorType implements IDataProviderEntity {
+	private static final long serialVersionUID = 1L;
 
 	@Id
 	@Column(name = "id")
-	private Long errortype_id;
+	private Long id;
 
 	@Column(name = "fieldvalues_id")
 	private Long fieldvalues_id;
@@ -55,12 +54,12 @@ public class ErrorType implements Serializable {
 	@Column(name = "deleted")
 	private boolean deleted;
 
-	public Long getErrortype_id() {
-		return errortype_id;
+	public Long getId() {
+		return id;
 	}
 
-	public void setErrortype_id(Long errortype_id) {
-		this.errortype_id = errortype_id;
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public Date getStarttime() {

@@ -24,7 +24,7 @@ import org.apache.wicket.extensions.ajax.markup.html.repeater.data.sort.AjaxFall
 import org.apache.wicket.extensions.markup.html.repeater.data.sort.OrderByLink.CssProvider;
 
 public class OmOrderByBorder<T extends IDataProviderEntity> extends AjaxFallbackOrderByBorder<String> {
-	private static final long serialVersionUID = -867341109912297431L;
+	private static final long serialVersionUID = 1L;
 	private DataViewContainer<T> container;
 	
 	public OmOrderByBorder(final String id, final String property, DataViewContainer<T> container) {
@@ -40,11 +40,11 @@ public class OmOrderByBorder<T extends IDataProviderEntity> extends AjaxFallback
 	@Override
 	protected void onAjaxClick(AjaxRequestTarget target) {
 		target.add(container.container, container.navigator);
-		target.add(container.orderLinks);
+		target.add(container.getLinks());
 	}
 	
 	static class SortIconCssProvider extends CssProvider<String> {
-		private static final long serialVersionUID = 60178231250586887L;
+		private static final long serialVersionUID = 1L;
 
 		public SortIconCssProvider() {
 			super("ui-icon ui-icon-carat-1-n sort-icon", "ui-icon ui-icon-carat-1-s sort-icon", "ui-icon ui-icon-carat-2-n-s sort-icon");

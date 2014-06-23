@@ -60,23 +60,23 @@ public class FlvRecorderConverter extends BaseConverter {
 			}
 
 			flvRecording = recordingDao.get(flvRecordingId);
-			log.debug("flvRecording " + flvRecording.getFlvRecordingId());
+			log.debug("flvRecording " + flvRecording.getId());
 
 			List<ConverterProcessResult> returnLog = new ArrayList<ConverterProcessResult>();
 			List<String> listOfFullWaveFiles = new LinkedList<String>();
 			File streamFolder = getStreamFolder(flvRecording);
 			
-			FlvRecordingMetaData screenMetaData = metaDataDao.getScreenMetaDataByRecording(flvRecording.getFlvRecordingId());
+			FlvRecordingMetaData screenMetaData = metaDataDao.getScreenMetaDataByRecording(flvRecording.getId());
 
 			if (screenMetaData == null) {
-				throw new Exception("screenMetaData is Null FlvRecordingId " + flvRecording.getFlvRecordingId());
+				throw new Exception("screenMetaData is Null FlvRecordingId " + flvRecording.getId());
 			}
 
 			if (screenMetaData.getStreamStatus() == Status.NONE) {
 				throw new Exception("Stream has not been started, error in recording");
 			}
 
-			screenMetaData = waitForTheStream(screenMetaData.getFlvRecordingMetaDataId());
+			screenMetaData = waitForTheStream(screenMetaData.getId());
 
 			stripAudioFirstPass(flvRecording, returnLog, listOfFullWaveFiles, streamFolder);
 
@@ -112,7 +112,7 @@ public class FlvRecorderConverter extends BaseConverter {
 			String inputScreenFullFlv = new File(streamFolder, screenMetaData.getStreamName() + ".flv")
 					.getCanonicalPath();
 
-			String hashFileFullNameFlv = "flvRecording_" + flvRecording.getFlvRecordingId() + ".flv";
+			String hashFileFullNameFlv = "flvRecording_" + flvRecording.getId() + ".flv";
 			String outputFullFlv = streamFolderGeneralName + hashFileFullNameFlv;
 
 			// ffmpeg -vcodec flv -qscale 9.5 -r 25 -ar 22050 -ab 32k -s 320x240
@@ -154,7 +154,7 @@ public class FlvRecorderConverter extends BaseConverter {
 			// ffmpeg -i movie.flv -vcodec mjpeg -vframes 1 -an -f rawvideo -s
 			// 320x240 movie.jpg
 
-			String hashFileFullNameJPEG = "flvRecording_" + flvRecording.getFlvRecordingId() + ".jpg";
+			String hashFileFullNameJPEG = "flvRecording_" + flvRecording.getId() + ".jpg";
 			String outPutJpeg = streamFolderGeneralName + hashFileFullNameJPEG;
 
 			flvRecording.setPreviewImage(hashFileFullNameJPEG);
@@ -170,7 +170,7 @@ public class FlvRecorderConverter extends BaseConverter {
 
 			returnLog.add(ProcessHelper.executeScript("previewFullFLV", argv_previewFLV));
 
-			String alternateDownloadName = "flvRecording_" + flvRecording.getFlvRecordingId() + ".avi";
+			String alternateDownloadName = "flvRecording_" + flvRecording.getId() + ".avi";
 			String alternateDownloadFullName = streamFolderGeneralName + alternateDownloadName;
 
 			String[] argv_alternateDownload = new String[] { getPathToFFMPEG(), "-y", "-i", outputFullFlv, "-vcodec",

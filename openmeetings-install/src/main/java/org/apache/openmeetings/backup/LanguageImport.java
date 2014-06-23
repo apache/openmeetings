@@ -80,7 +80,7 @@ public class LanguageImport {
 
 		if (fv == null) {
 			fv = new Fieldvalues();
-			fv.setFieldvalues_id(fieldvalues_id);
+			fv.setId(fieldvalues_id);
 			fv.setName(fieldName);
 			fv = fieldValueDao.update(fv, userId);
 		}

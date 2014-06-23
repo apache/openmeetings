@@ -34,7 +34,7 @@ public class TestPollManagement extends AbstractJUnitDefaults {
 	public void addPollType() {
 		long maxId = 1;
 		for (PollType pt : pollManager.getPollTypes()) {
-			maxId = Math.max(maxId, pt.getPollTypesId());
+			maxId = Math.max(maxId, pt.getId());
 		}
 		assertNotNull("Poll created is null", pollManager.addPollType(26L, false));
 	}

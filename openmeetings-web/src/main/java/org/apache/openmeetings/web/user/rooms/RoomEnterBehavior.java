@@ -25,7 +25,7 @@ import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 
 public class RoomEnterBehavior extends AjaxEventBehavior {
-	private static final long serialVersionUID = -5195740583653865055L;
+	private static final long serialVersionUID = 1L;
 	private final long roomid;
 	
 	public RoomEnterBehavior(long roomid) {

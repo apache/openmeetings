@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.test.config;
 
+import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
@@ -27,12 +28,12 @@ import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.entity.basic.Configuration;
 import org.apache.openmeetings.test.AbstractJUnitDefaults;
 import org.junit.Test;
+import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class TestConfig extends AbstractJUnitDefaults {
-	private static final Logger log = LoggerFactory.getLogger(TestConfig.class);
+	private static final Logger log = Red5LoggerFactory.getLogger(TestConfig.class, webAppRootKey);
 
 	@Autowired
 	private ConfigurationDao configurationDao;
@@ -55,10 +56,10 @@ public class TestConfig extends AbstractJUnitDefaults {
 			List<Configuration> list = configurationDao.get(4, 6);
 
 			for (Configuration conf : list) {
-				System.err.println("conf.getConf_key() " + conf.getConf_key());
-				System.err.println("conf.getUser() " + conf.getUser());
+				log.error("conf.getConf_key() " + conf.getConf_key());
+				log.error("conf.getUser() " + conf.getUser());
 				if (conf.getUser() != null) {
-					System.err.println("conf.getUsers() " + conf.getUser().getLogin());
+					log.error("conf.getUsers() " + conf.getUser().getLogin());
 				}
 			}
 

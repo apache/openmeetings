@@ -29,7 +29,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
 public class ComunityUserForm extends Form<User> {
-	private static final long serialVersionUID = -4487619335283747717L;
+	private static final long serialVersionUID = 1L;
 
 	public ComunityUserForm(String id, IModel<User> model) {
 		super(id, model);

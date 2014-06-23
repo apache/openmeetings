@@ -18,14 +18,18 @@
  */
 package org.apache.openmeetings.test.emotes;
 
+import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+
 import java.util.LinkedList;
 
 import junit.framework.TestCase;
 
 import org.junit.Test;
+import org.red5.logging.Red5LoggerFactory;
+import org.slf4j.Logger;
 
 public class TestChatParsing extends TestCase {
-	
+	private static final Logger log = Red5LoggerFactory.getLogger(TestChatParsing.class, webAppRootKey);
 	public static LinkedList<LinkedList<String>> emotfilesList = new LinkedList<LinkedList<String>>();
 	
 	@Test
@@ -37,7 +41,7 @@ public class TestChatParsing extends TestCase {
 			this.loadEmot(filePath);
 			
 		} catch (Exception err) {
-			err.printStackTrace();
+			log.error("Error", err);
 		}
 	}
 	
@@ -61,8 +65,7 @@ public class TestChatParsing extends TestCase {
 		    
 		    System.out.println("loadEmot completed");
 		} catch (Exception err) {
-			System.out.println("[loadEmot]"+err);
-			err.printStackTrace();
+			log.error("Error", err);
 		}
 	}	
 

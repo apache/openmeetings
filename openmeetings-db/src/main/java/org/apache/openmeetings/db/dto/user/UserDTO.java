@@ -37,7 +37,7 @@ public class UserDTO {
 	private Type type = Type.user;
 
 	public UserDTO(User u) {
-		id = u.getUser_id();
+		id = u.getId();
 		firstname = u.getFirstname();
 		lastname = u.getLastname();
 		rights = u.getRights();

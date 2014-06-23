@@ -67,7 +67,7 @@ public class ConferenceLogDao {
 			confLog.setEmail(email);
 			
 			confLog = em.merge(confLog);
-			Long confLogId = confLog.getConferenceLogId();
+			Long confLogId = confLog.getId();
 
 			return confLogId;
 		} catch (Exception ex2) {

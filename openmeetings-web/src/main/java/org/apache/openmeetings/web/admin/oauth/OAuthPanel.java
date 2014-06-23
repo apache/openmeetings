@@ -38,13 +38,12 @@ public class OAuthPanel extends AdminPanel {
 	final WebMarkupContainer listContainer = new WebMarkupContainer("listContainer");
 	private OAuthForm form;
 
-	@SuppressWarnings("unchecked")
 	public OAuthPanel(String id) {
 		super(id);
 		SearchableDataView<OAuthServer> dataView = new SearchableDataView<OAuthServer>("oauthServersList",
 				new SearchableDataProvider<OAuthServer>(OAuth2Dao.class)) {
 
-			private static final long serialVersionUID = -7701640237947383416L;
+			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected void populateItem(Item<OAuthServer> item) {
@@ -53,7 +52,7 @@ public class OAuthPanel extends AdminPanel {
 				item.add(new Label("name", server.getName()));
 				item.add(new AjaxEventBehavior("onclick") {
 
-					private static final long serialVersionUID = 7380727643346943181L;
+					private static final long serialVersionUID = 1L;
 
 					@Override
 					protected void onEvent(AjaxRequestTarget target) {
@@ -79,9 +78,9 @@ public class OAuthPanel extends AdminPanel {
 			}
 		};
 		DataViewContainer<OAuthServer> container = new DataViewContainer<OAuthServer>(listContainer, dataView, navigator);
-		container.setLinks(new OmOrderByBorder<OAuthServer>("orderById", "oauthServerId", container),
-						   new OmOrderByBorder<OAuthServer>("orderByName", "name", container));
-		add(container.orderLinks);
+		container.addLink(new OmOrderByBorder<OAuthServer>("orderById", "oauthServerId", container))
+			.addLink(new OmOrderByBorder<OAuthServer>("orderByName", "name", container));
+		add(container.getLinks());
 		add(navigator);
 		
 		form = new OAuthForm("form", listContainer, new OAuthServer());

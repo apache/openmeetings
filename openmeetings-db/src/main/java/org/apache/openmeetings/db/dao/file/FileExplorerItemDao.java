@@ -27,7 +27,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
 import org.apache.openmeetings.db.entity.file.FileExplorerItem;
-import org.apache.openmeetings.util.OpenmeetingsVariables;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.transaction.annotation.Transactional;
@@ -39,9 +39,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class FileExplorerItemDao {
 
-    private static final Logger log = Red5LoggerFactory.getLogger(
-            FileExplorerItemDao.class,
-            OpenmeetingsVariables.webAppRootKey);
+    private static final Logger log = Red5LoggerFactory.getLogger(FileExplorerItemDao.class, webAppRootKey);
 	@PersistenceContext
 	private EntityManager em;
 
@@ -73,7 +71,7 @@ public class FileExplorerItemDao {
             fileItem.setExternalType(externalType);
 
 			fileItem = em.merge(fileItem);
-			Long fileItemId = fileItem.getFileExplorerItemId();
+			Long fileItemId = fileItem.getId();
 
             log.debug(".add(): file " + fileName + " added as " + fileItemId);
             return fileItemId;
@@ -87,7 +85,7 @@ public class FileExplorerItemDao {
         try {
 
 			fileItem = em.merge(fileItem);
-			Long fileItemId = fileItem.getFileExplorerItemId();
+			Long fileItemId = fileItem.getId();
 
             return fileItemId;
         } catch (Exception ex2) {
@@ -100,13 +98,11 @@ public class FileExplorerItemDao {
             Long room_id, Long ownerId) {
         log.debug(".getFileExplorerItemsByRoomAndOwner() started");
         try {
-            String hql = "SELECT c FROM FileExplorerItem c "
-                    + "WHERE c.deleted <> :deleted "
+            String hql = "SELECT c FROM FileExplorerItem c WHERE c.deleted = false "
                     + "AND c.room_id = :room_id " + "AND c.ownerId = :ownerId "
                     + "ORDER BY c.isFolder DESC, c.fileName ";
 
 			TypedQuery<FileExplorerItem> query = em.createQuery(hql, FileExplorerItem.class);
-			query.setParameter("deleted", true);
 			query.setParameter("room_id",room_id);
 			query.setParameter("ownerId",ownerId);
 			
@@ -125,14 +121,13 @@ public class FileExplorerItemDao {
         try {
 
 			String hql = "SELECT c FROM FileExplorerItem c " +
-					"WHERE c.deleted <> :deleted " +
+					"WHERE c.deleted = false " +
 					"AND c.room_id = :room_id " +
 					"AND c.ownerId IS NULL " +
 					"AND c.parentFileExplorerItemId = :parentFileExplorerItemId " +
 					"ORDER BY c.isFolder DESC, c.fileName ";
 			
 			TypedQuery<FileExplorerItem> query = em.createQuery(hql, FileExplorerItem.class);
-			query.setParameter("deleted", true);
 			query.setParameter("room_id",room_id);
 			query.setParameter("parentFileExplorerItemId", parentFileExplorerItemId);
 			
@@ -151,13 +146,12 @@ public class FileExplorerItemDao {
         try {
 
             String hql = "SELECT c FROM FileExplorerItem c "
-                    + "WHERE c.deleted <> :deleted "
+                    + "WHERE c.deleted = false "
                     + "AND c.ownerId = :ownerId "
                     + "AND c.parentFileExplorerItemId = :parentFileExplorerItemId "
                     + "ORDER BY c.isFolder DESC, c.fileName ";
 
 			TypedQuery<FileExplorerItem> query = em.createQuery(hql, FileExplorerItem.class);
-			query.setParameter("deleted", true);
 			query.setParameter("ownerId",ownerId);
 			query.setParameter("parentFileExplorerItemId", parentFileExplorerItemId);
 			
@@ -176,12 +170,11 @@ public class FileExplorerItemDao {
         try {
 
             String hql = "SELECT c FROM FileExplorerItem c "
-                    + "WHERE c.deleted <> :deleted "
+                    + "WHERE c.deleted = false "
                     + "AND c.parentFileExplorerItemId = :parentFileExplorerItemId "
                     + "ORDER BY c.isFolder DESC, c.fileName ";
 
 			TypedQuery<FileExplorerItem> query = em.createQuery(hql, FileExplorerItem.class);
-			query.setParameter("deleted", true);
 			query.setParameter("parentFileExplorerItemId", parentFileExplorerItemId);
 			
             FileExplorerItem[] fileExplorerList = query.getResultList().toArray(new FileExplorerItem[0]);
@@ -196,7 +189,7 @@ public class FileExplorerItemDao {
     public FileExplorerItem getFileExplorerItemsByHash(String hash) {
         try {
 
-			TypedQuery<FileExplorerItem> query = em.createNamedQuery("getByHash", FileExplorerItem.class);
+			TypedQuery<FileExplorerItem> query = em.createNamedQuery("getFileByHash", FileExplorerItem.class);
 			query.setParameter("fileHash", hash);
 			
 			FileExplorerItem fileExplorerList = null;
@@ -215,8 +208,8 @@ public class FileExplorerItemDao {
     public FileExplorerItem getFileExplorerItemsById(Long fileExplorerItemId) {
         try {
 
-			TypedQuery<FileExplorerItem> query = em.createNamedQuery("getById", FileExplorerItem.class);
-			query.setParameter("fileExplorerItemId", fileExplorerItemId);
+			TypedQuery<FileExplorerItem> query = em.createNamedQuery("getFileById", FileExplorerItem.class);
+			query.setParameter("id", fileExplorerItemId);
 			
 			FileExplorerItem fileExplorerList = null;
 			try {
@@ -280,13 +273,12 @@ public class FileExplorerItemDao {
 
         try {
 
-            FileExplorerItem fId = this
-                    .getFileExplorerItemsById(fileExplorerItemId);
+            FileExplorerItem fId = getFileExplorerItemsById(fileExplorerItemId);
 
             fId.setDeleted(true);
             fId.setUpdated(new Date());
 
-			if (fId.getFileExplorerItemId() == 0) {
+			if (fId.getId() == null) {
 				em.persist(fId);
 		    } else {
 		    	if (!em.contains(fId)) {
@@ -303,8 +295,7 @@ public class FileExplorerItemDao {
 
         try {
 
-            FileExplorerItem fId = this
-                    .getFileExplorerItemsByExternalIdAndType(externalFilesid, externalType);
+            FileExplorerItem fId = getFileExplorerItemsByExternalIdAndType(externalFilesid, externalType);
 
             if (fId == null) {
             	throw new Exception("externalFilesid: "+externalFilesid+" and externalType: "+externalType+" Not found");
@@ -313,7 +304,7 @@ public class FileExplorerItemDao {
             fId.setDeleted(true);
             fId.setUpdated(new Date());
 
-			if (fId.getFileExplorerItemId() == 0) {
+			if (fId.getId() == null) {
 				em.persist(fId);
 		    } else {
 		    	if (!em.contains(fId)) {
@@ -340,7 +331,7 @@ public class FileExplorerItemDao {
             fId.setFileName(fileName);
             fId.setUpdated(new Date());
 
-			if (fId.getFileExplorerItemId() == 0) {
+			if (fId.getId() == null) {
 				em.persist(fId);
 		    } else {
 		    	if (!em.contains(fId)) {
@@ -357,7 +348,7 @@ public class FileExplorerItemDao {
         try {
             // fId.setUpdated(new Date());
 
-			if (fId.getFileExplorerItemId() == 0) {
+			if (fId.getId() == null) {
 				em.persist(fId);
 		    } else {
 		    	if (!em.contains(fId)) {
@@ -380,8 +371,7 @@ public class FileExplorerItemDao {
         log.debug(".moveFile() started");
         try {
 
-            FileExplorerItem fId = this
-                    .getFileExplorerItemsById(fileExplorerItemId);
+            FileExplorerItem fId = getFileExplorerItemsById(fileExplorerItemId);
 
             fId.setParentFileExplorerItemId(parentFileExplorerItemId);
 
@@ -400,7 +390,7 @@ public class FileExplorerItemDao {
 
             fId.setUpdated(new Date());
 
-			if (fId.getFileExplorerItemId() == 0) {
+			if (fId.getId() == null) {
 				em.persist(fId);
 		    } else {
 		    	if (!em.contains(fId)) {

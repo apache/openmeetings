@@ -31,7 +31,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "soaplogin")
 public class SOAPLogin implements Serializable {
-	private static final long serialVersionUID = 5101010700038221434L;
+	private static final long serialVersionUID = 1L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="id")

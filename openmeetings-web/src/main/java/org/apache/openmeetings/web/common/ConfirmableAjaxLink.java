@@ -22,7 +22,7 @@ import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 
 public abstract class ConfirmableAjaxLink extends AjaxLink<Void> {
-	private static final long serialVersionUID = 7301747891668537168L;
+	private static final long serialVersionUID = 1L;
 	private long confirmId;
 
 	public ConfirmableAjaxLink(String id, long confirmId) {

@@ -40,33 +40,33 @@ import org.simpleframework.xml.Root;
 @Entity
 @NamedQueries({
 	@NamedQuery(name = "deleteUserContact", query = "delete from UserContact u where u.userContactId = :userContactDeleteId"),
-	@NamedQuery(name = "deleteAllUserContacts", query = "delete from UserContact u where u.owner.user_id = :ownerId"),
+	@NamedQuery(name = "deleteAllUserContacts", query = "delete from UserContact u where u.owner.id = :ownerId"),
 	@NamedQuery(name = "checkUserContacts", query = "select count(c.userContactId) from UserContact c " +
-			"where c.contact.user_id = :user_id AND c.owner.user_id = :ownerId "),
+			"where c.contact.id = :user_id AND c.owner.id = :ownerId "),
 	@NamedQuery(name = "getContactsByHash", query = "select c from UserContact c " +
 			"where c.hash like :hash "),
 	@NamedQuery(name = "getContactsByUserAndStatus", query = "select c from UserContact c " +
-			"where c.owner.user_id = :ownerId " +
+			"where c.owner.id = :ownerId " +
 			"AND c.pending = :pending " +
 			"AND c.contact.deleted <> true"),
 	@NamedQuery(name = "getUserContactByShareCalendar", query = "select c from UserContact c "
-			+ "where c.contact.user_id = :userId "
-			+ "AND c.owner.user_id = :contactId "
+			+ "where c.contact.id = :userId "
+			+ "AND c.owner.id = :contactId "
 			+ "AND c.shareCalendar = :shareCalendar "
 			+ "AND c.contact.deleted <> true"),
 	@NamedQuery(name = "getContactsByShareCalendar", query = "select c from UserContact c " +
-			"where c.contact.user_id = :contactId " +
+			"where c.contact.id = :contactId " +
 			"AND c.shareCalendar = :shareCalendar " +
 			"AND c.contact.deleted <> true"),
 	@NamedQuery(name = "getContactRequestsByUserAndStatus", query = "select c from UserContact c " +
-			"where c.contact.user_id = :user_id " +
+			"where c.contact.id = :user_id " +
 			"AND c.pending = :pending " +
 			"AND c.contact.deleted <> true"),
 	@NamedQuery(name = "getContactsByUser", query = "SELECT c FROM UserContact c " +
-			"WHERE c.contact.user_id = :user_id " +
+			"WHERE c.contact.id = :user_id " +
 			"AND c.contact.deleted <> true ORDER BY c.pending DESC"),
 	@NamedQuery(name = "countContactsByUser", query = "select COUNT(c) from UserContact c " +
-			"where c.contact.user_id = :user_id " +
+			"where c.contact.id = :user_id " +
 			"AND c.contact.deleted <> true"),
 	@NamedQuery(name = "getUserContactsById", query = "SELECT c FROM UserContact c WHERE c.userContactId = :userContactId"),
 	@NamedQuery(name = "getUserContacts", query = "SELECT c FROM UserContact c ORDER BY c.userContactId")
@@ -74,7 +74,7 @@ import org.simpleframework.xml.Root;
 @Table(name = "user_contact")
 @Root(name="usercontact")
 public class UserContact implements Serializable {
-	private static final long serialVersionUID = 2391405538978996206L;
+	private static final long serialVersionUID = 1L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="id")

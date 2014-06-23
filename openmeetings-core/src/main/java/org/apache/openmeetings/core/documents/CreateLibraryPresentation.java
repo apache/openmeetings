@@ -19,6 +19,7 @@
 package org.apache.openmeetings.core.documents;
 
 import static org.apache.openmeetings.util.OmFileHelper.thumbImagePrefix;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -31,8 +32,12 @@ import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 import org.dom4j.io.XMLWriter;
+import org.red5.logging.Red5LoggerFactory;
+import org.slf4j.Logger;
 
 public class CreateLibraryPresentation {
+	private static final Logger log = Red5LoggerFactory.getLogger(CreateLibraryPresentation.class, webAppRootKey);
+	
 	public static ConverterProcessResult generateXMLDocument(File targetDirectory, String originalDocument, 
 			String pdfDocument, String swfDocument){
 		ConverterProcessResult returnMap = new ConverterProcessResult();
@@ -99,7 +104,7 @@ public class CreateLibraryPresentation {
 	        
 			return returnMap;
 		} catch (Exception err) {
-			err.printStackTrace();
+			log.error("Error while generateXMLDocument", err);
 			returnMap.setError(err.getMessage());
 			returnMap.setExitValue("-1");
 			return returnMap;

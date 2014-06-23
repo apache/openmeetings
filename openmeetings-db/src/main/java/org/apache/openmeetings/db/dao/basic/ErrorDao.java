@@ -41,15 +41,15 @@ public class ErrorDao {
 	@PersistenceContext
 	private EntityManager em;
 
-	public Long addErrorType(Long errortype_id, Long fieldvalues_id) {
+	public Long addErrorType(Long id, Long labelId) {
 		try {
 			ErrorType eType = new ErrorType();
-			eType.setErrortype_id(errortype_id);
+			eType.setId(id);
 			eType.setStarttime(new Date());
 			eType.setDeleted(false);
-			eType.setFieldvalues_id(fieldvalues_id);
+			eType.setFieldvalues_id(labelId);
 			eType = em.merge(eType);
-			Long newerrortype_id = eType.getErrortype_id();
+			Long newerrortype_id = eType.getId();
 			return newerrortype_id;
 		} catch (Exception ex2) {
 			log.error("[addErrorType]: ", ex2);
@@ -60,7 +60,6 @@ public class ErrorDao {
 	public List<ErrorType> getErrorTypes() {
 		try {
 			TypedQuery<ErrorType> query = em.createNamedQuery("getErrorTypes", ErrorType.class);
-			query.setParameter("deleted", true);
 			List<ErrorType> ll = query.getResultList();
 			return ll;
 		} catch (Exception ex2) {
@@ -69,43 +68,41 @@ public class ErrorDao {
 		return null;
 	}
 
-	public ErrorType getErrorType(Long errortype_id) {
+	public ErrorType getErrorType(Long typeId) {
 		try {
 			TypedQuery<ErrorType> query = em.createNamedQuery("getErrorType", ErrorType.class);
-			query.setParameter("deleted", true);
-			query.setParameter("errortype_id", errortype_id);
+			query.setParameter("id", typeId);
 			return query.getSingleResult();
 		} catch (Exception ex2) {
-			log.error("[getErrorType(" + errortype_id + ")]", ex2);
+			log.error("[getErrorType(" + typeId + ")]", ex2);
 		}
 		return null;
 	}
 
-	public Long addErrorValues(Long errorvalues_id, Long errortype_id,
-			Long fieldvalues_id) {
+	public Long addErrorValues(Long id, Long typeId, Long labelId) {
 		try {
 			ErrorValue eValue = new ErrorValue();
-			eValue.setErrorvalues_id(errorvalues_id);
-			eValue.setErrortype_id(errortype_id);
+			eValue.setId(id);
+			eValue.setErrortype_id(typeId);
 			eValue.setDeleted(false);
 			eValue.setStarttime(new Date());
-			eValue.setFieldvalues_id(fieldvalues_id);
+			eValue.setFieldvalues_id(labelId);
 			eValue = em.merge(eValue);
-			return eValue.getErrorvalues_id();
+			return eValue.getId();
 		} catch (Exception ex2) {
 			log.error("[addErrorValues]: ", ex2);
 		}
 		return null;
 	}
 
-	public Long getErrorValueById(Long errortype_id, Long fieldvalues_id) {
+	public Long getErrorValueById(Long typeId, Long labelId) {
 		try {
 			ErrorValue eValue = new ErrorValue();
-			eValue.setErrortype_id(errortype_id);
+			eValue.setErrortype_id(typeId);
 			eValue.setStarttime(new Date());
-			eValue.setFieldvalues_id(fieldvalues_id);
+			eValue.setFieldvalues_id(labelId);
 			eValue = em.merge(eValue);
-			Long newerrorvalues_id = eValue.getErrorvalues_id();
+			Long newerrorvalues_id = eValue.getId();
 			return newerrorvalues_id;
 		} catch (Exception ex2) {
 			log.error("[getErrorValueById]: ", ex2);
@@ -113,14 +110,14 @@ public class ErrorDao {
 		return null;
 	}
 
-	public Long updateErrorValues(Long errortype_id, Long fieldvalues_id) {
+	public Long updateErrorValues(Long errortype_id, Long labelId) {
 		try {
 			ErrorValue eValue = new ErrorValue();
 			eValue.setErrortype_id(errortype_id);
 			eValue.setStarttime(new Date());
-			eValue.setFieldvalues_id(fieldvalues_id);
+			eValue.setFieldvalues_id(labelId);
 			eValue = em.merge(eValue);
-			Long newerrorvalues_id = eValue.getErrorvalues_id();
+			Long newerrorvalues_id = eValue.getId();
 			return newerrorvalues_id;
 		} catch (Exception ex2) {
 			log.error("[addErrorType]: ", ex2);

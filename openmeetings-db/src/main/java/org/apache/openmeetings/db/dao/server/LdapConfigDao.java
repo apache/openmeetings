@@ -78,9 +78,9 @@ public class LdapConfigDao implements IDataProviderDao<LdapConfig> {
 			log.debug("addLdapConfig :2: " + insertedby);
 
 			ldapConfig = em.merge(ldapConfig);
-			Long ldapConfigId = ldapConfig.getLdapConfigId();
+			Long ldapConfigId = ldapConfig.getId();
 
-			if (ldapConfigId > 0) {
+			if (ldapConfigId != null) {
 				return ldapConfigId;
 			} else {
 				throw new Exception("Could not store SOAPLogin");
@@ -99,9 +99,9 @@ public class LdapConfigDao implements IDataProviderDao<LdapConfig> {
 			ldapConfig.setInserted(new Date());
 
 			ldapConfig = em.merge(ldapConfig);
-			Long ldapConfigId = ldapConfig.getLdapConfigId();
+			Long ldapConfigId = ldapConfig.getId();
 
-			if (ldapConfigId > 0) {
+			if (ldapConfigId != null) {
 				return ldapConfigId;
 			} else {
 				throw new Exception("Could not store SOAPLogin");
@@ -118,7 +118,7 @@ public class LdapConfigDao implements IDataProviderDao<LdapConfig> {
 			Long updatedby, Boolean isActive) {
 		try {
 
-			LdapConfig ldapConfig = this.get(ldapConfigId);
+			LdapConfig ldapConfig = get(ldapConfigId);
 
 			if (ldapConfig == null) {
 				return -1L;
@@ -139,7 +139,7 @@ public class LdapConfigDao implements IDataProviderDao<LdapConfig> {
 			log.debug("updateLdapConfig :2: " + updatedby);
 
 			ldapConfig = em.merge(ldapConfig);
-			ldapConfigId = ldapConfig.getLdapConfigId();
+			ldapConfigId = ldapConfig.getId();
 
 			return ldapConfigId;
 
@@ -152,14 +152,11 @@ public class LdapConfigDao implements IDataProviderDao<LdapConfig> {
 	public LdapConfig get(long ldapConfigId) {
 		try {
 
-			String hql = "select c from LdapConfig c "
-					+ "WHERE c.ldapConfigId = :ldapConfigId "
-					+ "AND c.deleted = :deleted";
+			String hql = "select c from LdapConfig c WHERE c.id = :id AND c.deleted = false";
 
 			TypedQuery<LdapConfig> query = em
 					.createQuery(hql, LdapConfig.class);
-			query.setParameter("ldapConfigId", ldapConfigId);
-			query.setParameter("deleted", false);
+			query.setParameter("id", ldapConfigId);
 
 			LdapConfig ldapConfig = null;
 			try {
@@ -190,7 +187,7 @@ public class LdapConfigDao implements IDataProviderDao<LdapConfig> {
 		LdapConfig ldapConfig = new LdapConfig();
 		
 		ldapConfig.setName("local DB [internal]");
-		ldapConfig.setLdapConfigId(-1);
+		ldapConfig.setId(-1L);
 
 		List<LdapConfig> result = new ArrayList<LdapConfig>();
 		result.add(ldapConfig);
@@ -214,10 +211,7 @@ public class LdapConfigDao implements IDataProviderDao<LdapConfig> {
 	
 	public long count() {
 		try {
-			TypedQuery<Long> query = em
-					.createQuery(
-							"select count(c.ldapConfigId) from LdapConfig c where c.deleted = false",
-							Long.class);
+			TypedQuery<Long> query = em.createQuery("select count(c.id) from LdapConfig c where c.deleted = false", Long.class);
 			List<Long> ll = query.getResultList();
 			log.debug("selectMaxFromLdapConfig" + ll.get(0));
 			return ll.get(0);
@@ -234,7 +228,7 @@ public class LdapConfigDao implements IDataProviderDao<LdapConfig> {
 	
 	public LdapConfig update(LdapConfig entity, Long userId) {
 		try {
-			if (entity.getLdapConfigId() <= 0) {
+			if (entity.getId() == null) {
 				entity.setInserted(new Date());
 				if (userId != null) {
 					entity.setInsertedby(usersDao.get(userId));
@@ -256,7 +250,7 @@ public class LdapConfigDao implements IDataProviderDao<LdapConfig> {
 	}
 
 	public void delete(LdapConfig entity, Long userId) {
-		if (entity.getLdapConfigId() >= 0) {
+		if (entity.getId() != null) {
 			entity.setUpdated(new Date());
 			if (userId != null) {
 				entity.setUpdatedby(usersDao.get(userId));

@@ -18,7 +18,6 @@
  */
 package org.apache.openmeetings.db.entity.room;
 
-import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -67,13 +66,13 @@ import org.apache.openmeetings.util.CalendarPatterns;
 @Table(name = "client")
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
-public class Client implements IDataProviderEntity, Serializable {
-	private static final long serialVersionUID = -5980636447877077730L;
+public class Client implements IDataProviderEntity {
+	private static final long serialVersionUID = 1L;
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
-	private long id;
+	private Long id;
 	
 	/**
 	 * @see Client#getUsername()
@@ -431,11 +430,11 @@ public class Client implements IDataProviderEntity, Serializable {
 		this.lastname = lastname;
 	}
 	
-	public long getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 

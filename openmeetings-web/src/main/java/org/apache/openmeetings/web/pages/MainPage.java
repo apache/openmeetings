@@ -70,7 +70,7 @@ import org.wicketstuff.urlfragment.UrlFragment;
 
 @AuthorizeInstantiation({"Admin", "Dashboard", "Room"})
 public class MainPage extends BaseInitedPage {
-	private static final long serialVersionUID = 6421960759218157999L;
+	private static final long serialVersionUID = 1L;
 	private static final Logger log = Red5LoggerFactory.getLogger(MainPage.class, webAppRootKey);
 	private final MenuPanel menu;
 	private final WebMarkupContainer topLinks = new WebMarkupContainer("topLinks");
@@ -86,7 +86,7 @@ public class MainPage extends BaseInitedPage {
 		add(contents.add(new WebMarkupContainer(CHILD_ID)).setOutputMarkupId(true).setMarkupId("contents"));
 		add(menu.setVisible(false), topLinks.setVisible(false).setOutputMarkupPlaceholderTag(true).setMarkupId("topLinks"));
 		topLinks.add(new AjaxLink<Void>("messages") {
-			private static final long serialVersionUID = 4065339709905366840L;
+			private static final long serialVersionUID = 1L;
 
 			@Override
 			public void onClick(AjaxRequestTarget target) {
@@ -94,7 +94,7 @@ public class MainPage extends BaseInitedPage {
 			}
 		});
 		topLinks.add(new ConfirmableAjaxLink("logout", 634L) {
-			private static final long serialVersionUID = -2994610981053570537L;
+			private static final long serialVersionUID = 1L;
 
 			@Override
 			public void onClick(AjaxRequestTarget target) {
@@ -103,7 +103,7 @@ public class MainPage extends BaseInitedPage {
 			}
 		});
 		topLinks.add(new AjaxLink<Void>("profile") {
-			private static final long serialVersionUID = 4065339709905366840L;
+			private static final long serialVersionUID = 1L;
 
 			@Override
 			public void onClick(AjaxRequestTarget target) {
@@ -112,7 +112,7 @@ public class MainPage extends BaseInitedPage {
 		});
 		final AboutDialog about = new AboutDialog("aboutDialog");
 		topLinks.add(new AjaxLink<Void>("about") {
-			private static final long serialVersionUID = 4065339709905366840L;
+			private static final long serialVersionUID = 1L;
 
 			@Override
 			public void onClick(AjaxRequestTarget target) {
@@ -130,7 +130,7 @@ public class MainPage extends BaseInitedPage {
 		
 		add(new ChatPanel("chatPanel"));
 		add(new WebSocketBehavior() {
-			private static final long serialVersionUID = -3311970325911992958L;
+			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected void onConnect(ConnectedMessage message) {

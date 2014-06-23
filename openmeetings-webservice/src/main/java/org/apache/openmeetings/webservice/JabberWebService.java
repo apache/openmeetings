@@ -102,7 +102,7 @@ public class JabberWebService {
 		User u = userDao.get(users_id);
 		for (Organisation_Users ou : u.getOrganisation_users()) {
 			List<RoomOrganisation> rol = conferenceService.getRoomsByOrganisationWithoutType(SID
-					, ou.getOrganisation().getOrganisation_id().longValue());
+					, ou.getOrganisation().getId().longValue());
 			if (rol != null) {
 				for (RoomOrganisation ro : rol) {
 					rl.add(ro.getRoom());

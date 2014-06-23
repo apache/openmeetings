@@ -36,7 +36,7 @@ import org.apache.wicket.util.string.StringValue;
 import org.wicketstuff.urlfragment.AsyncUrlFragmentAwarePage;
 
 public abstract class BasePage extends AsyncUrlFragmentAwarePage {
-	private static final long serialVersionUID = -6237917782433412496L;
+	private static final long serialVersionUID = 1L;
 	private final Map<String, String> options;
 	private final HeaderPanel header;
 

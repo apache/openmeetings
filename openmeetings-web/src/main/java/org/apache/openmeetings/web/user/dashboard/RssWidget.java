@@ -27,7 +27,7 @@ import ro.fortsoft.wicket.dashboard.WidgetLocation;
 import ro.fortsoft.wicket.dashboard.web.WidgetView;
 
 public class RssWidget extends AbstractWidget {
-	private static final long serialVersionUID = 8866852061674736808L;
+	private static final long serialVersionUID = 1L;
 
 	public RssWidget() {
 		super();

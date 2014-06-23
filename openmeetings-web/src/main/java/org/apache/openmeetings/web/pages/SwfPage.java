@@ -26,7 +26,7 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 public class SwfPage extends BaseNotInitedPage {
-	private static final long serialVersionUID = 6492618860620779445L;
+	private static final long serialVersionUID = 1L;
 
 	public SwfPage() {
 		this(new PageParameters());

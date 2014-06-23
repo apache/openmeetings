@@ -25,7 +25,7 @@ import java.io.File;
 import org.apache.openmeetings.db.entity.record.FlvRecording;
 
 public class AviRecordingResourceReference extends RecordingResourceReference {
-	private static final long serialVersionUID = 6181482949621024822L;
+	private static final long serialVersionUID = 1L;
 
 	public AviRecordingResourceReference() {
 		super(AviRecordingResourceReference.class);

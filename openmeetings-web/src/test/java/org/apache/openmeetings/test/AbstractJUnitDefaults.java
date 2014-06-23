@@ -46,8 +46,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 public abstract class AbstractJUnitDefaults extends AbstractSpringTest {
 	private static final Logger log = Red5LoggerFactory.getLogger(AbstractJUnitDefaults.class);
 	
-	protected static final String username = "swagner";
-	protected static final String userpass = "qweqwe";
+	protected static final String username = "admin";
+	protected static final String userpass = "12345";
 	private static final String orgname = "smoketest";
 	private static final String timeZone = "Europe/Berlin";
 	private static final String useremail = "junit@openmeetings.apache.org";

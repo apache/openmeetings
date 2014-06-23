@@ -59,7 +59,7 @@ import com.googlecode.wicket.jquery.ui.widget.dialog.MessageDialog;
 
 public class ForgetPasswordDialog extends AbstractFormDialog<String> {
 	private static final Logger log = Red5LoggerFactory.getLogger(ForgetPasswordDialog.class, webAppRootKey);
-	private static final long serialVersionUID = 8494008571497363018L;
+	private static final long serialVersionUID = 1L;
 	private String sendLbl = WebSession.getString(317);
 	private DialogButton send = new DialogButton(sendLbl);
 	private DialogButton cancel = new DialogButton(WebSession.getString(122));
@@ -79,7 +79,7 @@ public class ForgetPasswordDialog extends AbstractFormDialog<String> {
 	public ForgetPasswordDialog(String id) {
 		super(id, WebSession.getString(312));
 		add(form = new Form<String>("form") {
-			private static final long serialVersionUID = 6340692639510268144L;
+			private static final long serialVersionUID = 1L;
 			private IModel<String> lblModel = Model.of(WebSession.getString(315));
 			private Label label = new Label("label", lblModel);
 			
@@ -93,7 +93,7 @@ public class ForgetPasswordDialog extends AbstractFormDialog<String> {
 						.add(new Radio<Type>("login", Model.of(Type.login)).setOutputMarkupId(true))
 						.setOutputMarkupId(true));
 				rg.add(new AjaxFormChoiceComponentUpdatingBehavior() {
-					private static final long serialVersionUID = 5814272716387415523L;
+					private static final long serialVersionUID = 1L;
 
 					@Override
 					protected void onUpdate(AjaxRequestTarget target) {
@@ -103,7 +103,7 @@ public class ForgetPasswordDialog extends AbstractFormDialog<String> {
 					}
 				});
 				add(new AjaxButton("submit") { //FAKE button so "submit-on-enter" works as expected
-					private static final long serialVersionUID = 5257502637636428620L;
+					private static final long serialVersionUID = 1L;
 
 					@Override
 					protected void onSubmit(AjaxRequestTarget target, Form<?> form) {

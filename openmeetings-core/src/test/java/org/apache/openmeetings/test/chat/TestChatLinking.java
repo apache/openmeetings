@@ -18,14 +18,19 @@
  */
 package org.apache.openmeetings.test.chat;
 
+import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import junit.framework.TestCase;
 
 import org.junit.Test;
+import org.red5.logging.Red5LoggerFactory;
+import org.slf4j.Logger;
 
 public class TestChatLinking extends TestCase {
+	private static final Logger log = Red5LoggerFactory.getLogger(TestChatLinking.class, webAppRootKey);
 	
 	@Test
 	public void testChatParser(){
@@ -36,7 +41,7 @@ public class TestChatLinking extends TestCase {
 			System.out.println(link(text));
 			
 		} catch (Exception err) {
-			err.printStackTrace();
+			log.error("Error", err);
 		}
 	}
 	
@@ -75,7 +80,7 @@ public class TestChatLinking extends TestCase {
 			return tReturn;
 			
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.error("Error", e);
 		}
 		return "";
 	}

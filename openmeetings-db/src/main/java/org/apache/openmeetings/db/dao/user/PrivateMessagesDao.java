@@ -93,7 +93,7 @@ public class PrivateMessagesDao implements IDataProviderDao<PrivateMessage> {
 	}
 	
 	public PrivateMessage update(PrivateMessage entity, Long userId) {
-		if (entity.getId() < 1) {
+		if (entity.getId() == null) {
 			entity.setInserted(new Date());
 			em.persist(entity);
 	    } else {
@@ -105,7 +105,7 @@ public class PrivateMessagesDao implements IDataProviderDao<PrivateMessage> {
 	private String getQuery(boolean isCount, String search, String orderBy, boolean asc) {
 		StringBuilder hql = new StringBuilder("SELECT ");
 		hql.append(isCount ? "COUNT(" : "").append("m").append(isCount ? ")" : "")
-			.append(" FROM PrivateMessage m WHERE m.owner.user_id = :ownerId ")
+			.append(" FROM PrivateMessage m WHERE m.owner.id = :ownerId ")
 			.append(" AND m.folderId = :folderId ");
 		
 		if (!StringUtils.isEmpty(search)) {

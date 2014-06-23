@@ -21,11 +21,7 @@ package org.apache.openmeetings.db.dto.file;
 import java.io.Serializable;
 
 public class RecordingContainerData implements Serializable {
-	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -7211000652612571746L;
+	private static final long serialVersionUID = 1L;
 	
 	private long userHomeSize;
 	private long publicFileSize;

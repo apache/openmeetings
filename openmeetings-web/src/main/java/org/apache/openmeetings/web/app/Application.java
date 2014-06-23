@@ -353,7 +353,7 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 					link += "&language=" + i.getInvitee().getLanguage_id().toString();
 				}
 			} else {
-				link = getRoomUrlFragment(i.getRoom().getRooms_id()).getLink();
+				link = getRoomUrlFragment(i.getRoom().getId()).getLink();
 			}
 		}
 		return link;

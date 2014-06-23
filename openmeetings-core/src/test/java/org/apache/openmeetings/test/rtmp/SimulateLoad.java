@@ -18,13 +18,13 @@
  */
 package org.apache.openmeetings.test.rtmp;
 
+import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+
+import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class SimulateLoad extends Thread {
-
-	private static final Logger log = LoggerFactory
-			.getLogger(SimulateLoad.class);
+	private static final Logger log = Red5LoggerFactory.getLogger(SimulateLoad.class, webAppRootKey);
 
 	private LoadTestRtmpClient loadTestRtmpClient;
 	private boolean testRunning = true;
@@ -53,7 +53,6 @@ public class SimulateLoad extends Thread {
 			System.err.println("started ");
 
 		} catch (Exception er) {
-			er.printStackTrace();
 			log.error("Error", er);
 		}
 	}
@@ -77,12 +76,12 @@ public class SimulateLoad extends Thread {
 				try {
 					Thread.sleep(200);
 				} catch (InterruptedException e) {
-					e.printStackTrace();
+					log.error("Error", e);
 				}
 			}
 
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.error("Error", e);
 		}
 	}
 

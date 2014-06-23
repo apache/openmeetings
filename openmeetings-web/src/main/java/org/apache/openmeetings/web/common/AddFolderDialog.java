@@ -55,7 +55,7 @@ public abstract class AddFolderDialog extends AbstractFormDialog<String> {
 				title.setLabel(Model.of(WebSession.getString(572)));
 				add(feedback.setOutputMarkupId(true));
 				add(new AjaxButton("submit") { //FAKE button so "submit-on-enter" works as expected
-					private static final long serialVersionUID = -3612671587183668912L;
+					private static final long serialVersionUID = 1L;
 
 					@Override
 					protected void onSubmit(AjaxRequestTarget target, Form<?> form) {

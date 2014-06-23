@@ -61,7 +61,7 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 
 public class GeneralUserForm extends Form<User> {
-	private static final long serialVersionUID = 5360667099083510234L;
+	private static final long serialVersionUID = 1L;
 	private Salutation salutation;
 	private FieldLanguage lang;
 	private PasswordTextField passwordField;
@@ -84,7 +84,7 @@ public class GeneralUserForm extends Form<User> {
 				, salutDao.getUserSalutations(getLanguage())
 				, new ChoiceRenderer<Salutation>("label.value", "salutations_id"))
 			.add(new AjaxFormComponentUpdatingBehavior("onchange") {
-				private static final long serialVersionUID = -6748844721645465468L;
+				private static final long serialVersionUID = 1L;
 
 				@Override
 				protected void onUpdate(AjaxRequestTarget target) {
@@ -99,13 +99,13 @@ public class GeneralUserForm extends Form<User> {
 		add(new DropDownChoice<FieldLanguage>("language"
 				, new PropertyModel<FieldLanguage>(this, "lang")
 				, langDao.getLanguages()
-				, new ChoiceRenderer<FieldLanguage>("name", "language_id"))
+				, new ChoiceRenderer<FieldLanguage>("name", "id"))
 			.add(new AjaxFormComponentUpdatingBehavior("onchange") {
-				private static final long serialVersionUID = 2072021284702632856L;
+				private static final long serialVersionUID = 1L;
 
 				@Override
 				protected void onUpdate(AjaxRequestTarget target) {
-					GeneralUserForm.this.getModelObject().setLanguage_id(lang.getLanguage_id());
+					GeneralUserForm.this.getModelObject().setLanguage_id(lang.getId());
 				}
 			}));
 
@@ -147,13 +147,13 @@ public class GeneralUserForm extends Form<User> {
 		}
 		ListMultipleChoice<Organisation_Users> orgChoiceList = new ListMultipleChoice<Organisation_Users>(
 				"organisation_users", orgUsers,
-				new ChoiceRenderer<Organisation_Users>("organisation.name", "organisation.organisation_id"));
+				new ChoiceRenderer<Organisation_Users>("organisation.name", "organisation.id"));
 		add(orgChoiceList.setEnabled(isAdminForm));
 	}
 
 	@Override
 	protected void onValidate() {
-		if(!getBean(UserDao.class).checkUserEMail(email.getConvertedInput(), getModelObject().getUser_id())) {
+		if(!getBean(UserDao.class).checkUserEMail(email.getConvertedInput(), getModelObject().getId())) {
 			error(WebSession.getString(1000));
 		}
 		super.onValidate();

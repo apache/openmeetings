@@ -49,7 +49,7 @@ public class NavigationDao {
 	public Naviglobal getGlobalMenuEntry(long globalId) {
 		try {
 			TypedQuery<Naviglobal> query = em.createNamedQuery("getNavigationById", Naviglobal.class);
-			query.setParameter("global_id", globalId);
+			query.setParameter("id", globalId);
 			return query.getSingleResult();
 		} catch (Exception ex2) {
 			log.error("getGlobalMenuEntry", ex2);
@@ -72,73 +72,58 @@ public class NavigationDao {
 	}
 
 	public List<Naviglobal> getMainMenu(boolean admin, long USER_ID) {
-		try {
-			TypedQuery<Naviglobal> query = em.createNamedQuery("getNavigation", Naviglobal.class);
-			query.setParameter("level_id", admin ? 3L : 1L);
-			List<Naviglobal> navi = query.getResultList();
-			return navi;
-		} catch (Exception ex2) {
-			log.error("getMainMenu", ex2);
-		}
-		return null;
+		TypedQuery<Naviglobal> query = em.createNamedQuery("getNavigation", Naviglobal.class);
+		query.setParameter("level_id", admin ? 3L : 1L);
+		List<Naviglobal> navi = query.getResultList();
+		return navi;
 	}
 
 	public void addGlobalStructure(String action, int naviorder, long fieldvalues_id, boolean isleaf, boolean isopen, long level_id,
 			String name, boolean deleted, Long tooltip_fieldvalues_id) {
-		try {
-			Naviglobal ng = new Naviglobal();
-			ng.setAction(action);
-			ng.setComment("");
-			ng.setIcon("");
-			ng.setNaviorder(naviorder);
-			ng.setFieldvalues_id(fieldvalues_id);
-			ng.setIsleaf(isleaf);
-			ng.setIsopen(isopen);
-			ng.setDeleted(deleted);
-			ng.setLevel_id(level_id);
-			ng.setName(name);
-			ng.setStarttime(new Date());
-			ng.setTooltip_fieldvalues_id(tooltip_fieldvalues_id);
-			// CriteriaBuilder crit = em.getCriteriaBuilder();
+		Naviglobal ng = new Naviglobal();
+		ng.setAction(action);
+		ng.setComment("");
+		ng.setIcon("");
+		ng.setNaviorder(naviorder);
+		ng.setFieldvalues_id(fieldvalues_id);
+		ng.setIsleaf(isleaf);
+		ng.setIsopen(isopen);
+		ng.setDeleted(deleted);
+		ng.setLevel_id(level_id);
+		ng.setName(name);
+		ng.setStarttime(new Date());
+		ng.setTooltip_fieldvalues_id(tooltip_fieldvalues_id);
+		// CriteriaBuilder crit = em.getCriteriaBuilder();
 
-			em.merge(ng);
-
-		} catch (Exception ex2) {
-			log.error("addGlobalStructure", ex2);
-		}
+		em.persist(ng);
 	}
 
 	public void addMainStructure(String action, String params, int naviorder, long fieldvalues_id, boolean isleaf, boolean isopen,
 			long level_id, String name, long global_id, boolean deleted, Long tooltip_fieldvalues_id) {
-		try {
-			Naviglobal ng = getGlobalMenuEntry(global_id);
-			List<Navimain> mainEntries = ng.getMainnavi();
-			mainEntries = (mainEntries == null) ? new ArrayList<Navimain>() : mainEntries;
+		Naviglobal ng = getGlobalMenuEntry(global_id);
+		List<Navimain> mainEntries = ng.getMainnavi();
+		mainEntries = (mainEntries == null) ? new ArrayList<Navimain>() : mainEntries;
 
-			Navimain nm = new Navimain();
-			nm.setAction(action);
-			nm.setParams(params);
-			nm.setComment("");
-			nm.setIcon("");
-			nm.setFieldvalues_id(fieldvalues_id);
-			nm.setIsleaf(isleaf);
-			nm.setNaviorder(naviorder);
-			nm.setIsopen(isopen);
-			nm.setLevel_id(level_id);
-			nm.setName(name);
-			nm.setDeleted(deleted);
-			nm.setGlobal_id(global_id);
-			nm.setStarttime(new Date());
-			nm.setTooltip_fieldvalues_id(tooltip_fieldvalues_id);
+		Navimain nm = new Navimain();
+		nm.setAction(action);
+		nm.setParams(params);
+		nm.setComment("");
+		nm.setIcon("");
+		nm.setFieldvalues_id(fieldvalues_id);
+		nm.setIsleaf(isleaf);
+		nm.setNaviorder(naviorder);
+		nm.setIsopen(isopen);
+		nm.setLevel_id(level_id);
+		nm.setName(name);
+		nm.setDeleted(deleted);
+		nm.setGlobal_id(global_id);
+		nm.setStarttime(new Date());
+		nm.setTooltip_fieldvalues_id(tooltip_fieldvalues_id);
 
-			mainEntries.add(nm);
-			ng.setMainnavi(mainEntries);
+		mainEntries.add(nm);
+		ng.setMainnavi(mainEntries);
 
-			em.merge(ng);
-
-		} catch (Exception ex2) {
-			log.error("addMainStructure", ex2);
-		}
+		em.persist(ng);
 	}
 
 }

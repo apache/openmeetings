@@ -36,7 +36,7 @@ public abstract class AdminUserChoiceProvider extends TextChoiceProvider<User> {
 
 	@Override
 	protected Object getId(User choice) {
-		return choice.getUser_id();
+		return choice.getId();
 	}
 
 	@Override

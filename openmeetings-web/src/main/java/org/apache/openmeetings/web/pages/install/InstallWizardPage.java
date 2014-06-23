@@ -27,7 +27,7 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.protocol.http.request.WebClientInfo;
 
 public class InstallWizardPage extends BaseNotInitedPage {
-	private static final long serialVersionUID = -438388395397826138L;
+	private static final long serialVersionUID = 1L;
 	private InstallWizard wizard = null;
 
 	public InstallWizardPage() {

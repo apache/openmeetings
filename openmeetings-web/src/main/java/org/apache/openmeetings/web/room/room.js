@@ -117,9 +117,10 @@ function initVideo(sid, roomid, audioOnly, interview, labels) {
 }
 
 function setHeight() {
-	var h = $(document).height() - $('#roomMenu').height();
+	var h = $(window).height() - $('#roomMenu').height();
 	$(".room.sidebar.left").height(h);
 	$(".room.wb.area").height(h);
+	$(".room.wb.area .wb").height(h);
 }
 
 $(document).ready(function() {

@@ -48,6 +48,6 @@ public class OrganisationConverter extends OmConverter<Organisation> {
 
 	public void write(OutputNode node, Organisation value) throws Exception {
 		node.setData(true);
-		node.setValue(value == null ? "0" : "" + value.getOrganisation_id());
+		node.setValue(value == null ? "0" : "" + value.getId());
 	}
 }

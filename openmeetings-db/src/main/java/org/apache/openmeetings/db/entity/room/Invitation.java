@@ -18,7 +18,6 @@
  */
 package org.apache.openmeetings.db.entity.room;
 
-import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.CascadeType;
@@ -37,6 +36,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
 import org.apache.openjpa.persistence.jdbc.ForeignKey;
+import org.apache.openmeetings.db.entity.IDataProviderEntity;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
 import org.apache.openmeetings.db.entity.user.User;
 
@@ -50,7 +50,7 @@ import org.apache.openmeetings.db.entity.user.User;
 					+ "WHERE i.appointment.id = :appointmentId  ")
 })
 @Table(name = "invitations")
-public class Invitation implements Serializable {
+public class Invitation implements IDataProviderEntity {
 	private static final long serialVersionUID = 1L;
 
 	public enum MessageType {

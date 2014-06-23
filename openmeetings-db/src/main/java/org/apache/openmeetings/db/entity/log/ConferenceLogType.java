@@ -18,7 +18,6 @@
  */
 package org.apache.openmeetings.db.entity.log;
 
-import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -30,18 +29,20 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
+import org.apache.openmeetings.db.entity.IDataProviderEntity;
+
 @Entity
 @NamedQueries({
 	@NamedQuery(name = "getConferenceLogTypeByEventName", query = "select a from ConferenceLogType a " +
 					"WHERE a.eventType = :eventType")
 })
 @Table(name = "conferencelogtype")
-public class ConferenceLogType implements Serializable {
-	private static final long serialVersionUID = 4388958579350356294L;
+public class ConferenceLogType implements IDataProviderEntity {
+	private static final long serialVersionUID = 1L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="id")
-	private long conferenceLogTypeId;
+	private Long id;
 	
 	@Column(name="eventtype")
 	private String eventType;
@@ -52,11 +53,11 @@ public class ConferenceLogType implements Serializable {
 	@Column(name="insertedby")
 	private long insertedby;
 	
-	public long getConferenceLogTypeId() {
-		return conferenceLogTypeId;
+	public Long getId() {
+		return id;
 	}
-	public void setConferenceLogTypeId(long conferenceLogTypeId) {
-		this.conferenceLogTypeId = conferenceLogTypeId;
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public String getEventType() {

@@ -122,7 +122,7 @@ public class RoomForm extends AdminBaseForm<Room> {
 		ListMultipleChoice<RoomOrganisation> orgChoiceList = new ListMultipleChoice<RoomOrganisation>(
 				"roomOrganisations", orgRooms,
 				new ChoiceRenderer<RoomOrganisation>("organisation.name",
-						"organisation.organisation_id"));
+						"organisation.id"));
 		orgChoiceList.setMaxRows(6);
 		add(orgChoiceList);
 
@@ -153,7 +153,7 @@ public class RoomForm extends AdminBaseForm<Room> {
 		
 		// Users in this Room 
 		clients = new ListView<Client>("clients", clientsInRoom) {
-			private static final long serialVersionUID = 8542589945574690054L;
+			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected void populateItem(final ListItem<Client> item) {
@@ -208,14 +208,14 @@ public class RoomForm extends AdminBaseForm<Room> {
 				boolean found = false;
 				if (u != null) {
 					for (RoomModerator rm : r.getModerators()) {
-						if (rm.getUser().getUser_id().equals(u.getUser_id())) {
+						if (rm.getUser().getId().equals(u.getId())) {
 							found = true;
 							break;
 						}
 					}
 					if (!found) {
 						RoomModerator rm = new RoomModerator();
-						rm.setRoomId(r.getRooms_id());
+						rm.setRoomId(r.getId());
 						rm.setUser(u);
 						r.getModerators().add(0, rm);
 						moderator2add.setObject(null);
@@ -235,7 +235,7 @@ public class RoomForm extends AdminBaseForm<Room> {
 					name.add(AttributeAppender.append("class", "newItem"));
 				}
 				item.add(new CheckBox("isSuperModerator", new PropertyModel<Boolean>(moderator, "isSuperModerator")))
-					.add(new Label("userId", "" + moderator.getUser().getUser_id()))
+					.add(new Label("userId", "" + moderator.getUser().getId()))
 					.add(name)
 					.add(new Label("email", moderator.getUser().getAdresses().getEmail()))
 					.add(new WebMarkupContainer("delete").add(new AjaxEventBehavior("onclick"){
@@ -277,7 +277,7 @@ public class RoomForm extends AdminBaseForm<Room> {
 	}
 
 	void updateClients(AjaxRequestTarget target) {
-		long roomId = (getModelObject().getRooms_id() != null ? getModelObject().getRooms_id() : 0);  
+		long roomId = (getModelObject().getId() != null ? getModelObject().getId() : 0);  
 		final List<Client> clientsInRoom = Application.getBean(ISessionManager.class).getClientListByRoom(roomId);
 		clients.setDefaultModelObject(clientsInRoom);
 		target.add(clientsContainer);
@@ -286,11 +286,11 @@ public class RoomForm extends AdminBaseForm<Room> {
 	@Override
 	protected void onSaveSubmit(AjaxRequestTarget target, Form<?> form) {
 		Room r = getModelObject();
-		boolean newRoom = r.getRooms_id() == null;
+		boolean newRoom = r.getId() == null;
 		r = getBean(RoomDao.class).update(r, getUserId());
 		if (newRoom) {
 			for (RoomModerator rm : r.getModerators()) {
-				rm.setRoomId(r.getRooms_id());
+				rm.setRoomId(r.getId());
 			}
 			// FIXME double update
 			getBean(RoomDao.class).update(getModelObject(), getUserId());
@@ -318,8 +318,8 @@ public class RoomForm extends AdminBaseForm<Room> {
 	@Override
 	protected void onRefreshSubmit(AjaxRequestTarget target, Form<?> form) {
 		Room r = getModelObject();
-		if (r.getRooms_id() != null) {
-			r = getBean(RoomDao.class).get(r.getRooms_id());
+		if (r.getId() != null) {
+			r = getBean(RoomDao.class).get(r.getId());
 		} else {
 			r = new Room();
 		}

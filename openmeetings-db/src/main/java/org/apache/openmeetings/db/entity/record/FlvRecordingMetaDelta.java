@@ -18,7 +18,6 @@
  */
 package org.apache.openmeetings.db.entity.record;
 
-import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -27,18 +26,20 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+
+import org.apache.openmeetings.db.entity.IDataProviderEntity;
 /**
  * 
  *
  */
 @Entity
 @Table(name = "flvrecording_meta_delta")
-public class FlvRecordingMetaDelta implements Serializable {
-	private static final long serialVersionUID = -733483974696234137L;
+public class FlvRecordingMetaDelta implements IDataProviderEntity {
+	private static final long serialVersionUID = 1L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="id")
-	private long flvRecordingMetaDeltaId;
+	private Long id;
 	
 	@Column(name="flvrecording_metadata_id")
 	private Long flvRecordingMetaDataId;
@@ -91,11 +92,11 @@ public class FlvRecordingMetaDelta implements Serializable {
 	@Column(name="debug_status")
 	private String debugStatus;
 	
-	public long getFlvRecordingMetaDeltaId() {
-		return flvRecordingMetaDeltaId;
+	public Long getId() {
+		return id;
 	}
-	public void setFlvRecordingMetaDeltaId(long flvRecordingMetaDeltaId) {
-		this.flvRecordingMetaDeltaId = flvRecordingMetaDeltaId;
+	public void setId(Long id) {
+		this.id = id;
 	}
 	
 	public Long getFlvRecordingMetaDataId() {

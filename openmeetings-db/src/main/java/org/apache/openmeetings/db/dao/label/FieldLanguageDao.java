@@ -41,7 +41,7 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Transactional
 public class FieldLanguageDao implements Serializable {
-	private static final long serialVersionUID = -2714490167956230305L;
+	private static final long serialVersionUID = 1L;
 
 	private static final Logger log = Red5LoggerFactory.getLogger(FieldLanguageDao.class, webAppRootKey);
 
@@ -49,14 +49,14 @@ public class FieldLanguageDao implements Serializable {
 	private EntityManager em;
 
 	public long getNextAvailableId() {
-		TypedQuery<Long> q = em.createQuery("SELECT MAX(fl.language_id) from FieldLanguage fl", Long.class);
-		return q.getSingleResult() + 1;
+		TypedQuery<Long> q = em.createQuery("SELECT MAX(fl.id) from FieldLanguage fl", Long.class);
+		return q.getSingleResult() + 1L;
 	}
 	
 	public FieldLanguage addLanguage(int langId, String langName, Boolean langRtl, String code) {
 		try {
 			FieldLanguage fl = new FieldLanguage();
-			fl.setLanguage_id((long)langId);
+			fl.setId((long)langId);
 			fl.setStarttime(new Date());
 			fl.setDeleted(false);
 			fl.setName(langName);
@@ -66,7 +66,7 @@ public class FieldLanguageDao implements Serializable {
 			fl = em.merge(fl);
 
 			//Eagerly FETCH values list
-			TypedQuery<FieldLanguage> q = em.createQuery("select fl from FieldLanguage fl LEFT JOIN FETCH fl.languageValues WHERE fl.language_id = :langId", FieldLanguage.class);
+			TypedQuery<FieldLanguage> q = em.createQuery("select fl from FieldLanguage fl LEFT JOIN FETCH fl.languageValues WHERE fl.id = :langId", FieldLanguage.class);
 			q.setParameter("langId", langId);
 			List<FieldLanguage> results = q.getResultList();
 			
@@ -93,21 +93,20 @@ public class FieldLanguageDao implements Serializable {
 	}
 
 	public void update(FieldLanguage fl) {
-		if (fl.getLanguage_id() == null) {
+		if (fl.getId() == null) {
 			em.persist(fl);
 		} else {
 			em.merge(fl);
 		}
 	}
 
-	public FieldLanguage getFieldLanguageById(Long language_id) {
+	public FieldLanguage getFieldLanguageById(Long id) {
 		try {
 			String hql = "select c from FieldLanguage as c "
-					+ "WHERE c.deleted <> :deleted "
-					+ "AND c.language_id = :language_id";
+					+ "WHERE c.deleted = false "
+					+ "AND c.id = :id";
 			TypedQuery<FieldLanguage> query = em.createQuery(hql, FieldLanguage.class);
-			query.setParameter("deleted", true);
-			query.setParameter("language_id", language_id);
+			query.setParameter("id", id);
 			FieldLanguage fl = null;
 			try {
 				fl = query.getSingleResult();
@@ -122,10 +121,8 @@ public class FieldLanguageDao implements Serializable {
 
 	public List<FieldLanguage> getLanguages() {
 		try {
-			String hql = "select c from FieldLanguage as c "
-					+ "WHERE c.deleted <> :deleted ";
+			String hql = "select c from FieldLanguage as c WHERE c.deleted = false ";
 			TypedQuery<FieldLanguage> query = em.createQuery(hql, FieldLanguage.class);
-			query.setParameter("deleted", true);
 			List<FieldLanguage> ll = query.getResultList();
 			return ll;
 		} catch (Exception ex2) {

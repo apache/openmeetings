@@ -144,7 +144,7 @@ public class FieldLanguagesValuesDao implements IDataProviderDao<Fieldlanguagesv
 	 */
 	public Fieldlanguagesvalues update(Fieldlanguagesvalues entity, Long userId) {
 		entity.setUpdatetime(new Date());
-		if (entity.getFieldlanguagesvalues_id() == null) {
+		if (entity.getId() == null) {
 			em.persist(entity);
 		} else {
 			entity = em.merge(entity);

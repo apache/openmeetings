@@ -18,7 +18,6 @@
  */
 package org.apache.openmeetings.db.entity.calendar;
 
-import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -33,6 +32,7 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import org.apache.openjpa.persistence.jdbc.ForeignKey;
+import org.apache.openmeetings.db.entity.IDataProviderEntity;
 import org.apache.openmeetings.db.entity.label.Fieldlanguagesvalues;
 import org.apache.openmeetings.db.entity.user.User;
 import org.simpleframework.xml.Element;
@@ -40,12 +40,12 @@ import org.simpleframework.xml.Element;
 
 @Entity
 @Table(name = "appointmentremindertyps")
-public class AppointmentReminderTyps implements Serializable {
-	private static final long serialVersionUID = -6543593995706839669L;
+public class AppointmentReminderTyps implements IDataProviderEntity {
+	private static final long serialVersionUID = 1L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="id")
-	private Long typId;
+	private Long id;
 	
 	@Column(name="name")
 	private String name;
@@ -71,11 +71,11 @@ public class AppointmentReminderTyps implements Serializable {
 	@Transient
 	private Fieldlanguagesvalues label;
 	
-	public Long getTypId() {
-		return typId;
+	public Long getId() {
+		return id;
 	}
-	public void setTypId(Long typId) {
-		this.typId = typId;
+	public void setId(Long id) {
+		this.id = id;
 	}
 	
 	public String getName() {

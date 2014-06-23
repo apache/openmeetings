@@ -43,7 +43,7 @@ import com.googlecode.wicket.jquery.ui.widget.dialog.DialogIcon;
 import com.googlecode.wicket.jquery.ui.widget.dialog.MessageDialog;
 
 public class UsersPanel extends AdminPanel {
-	private static final long serialVersionUID = -4463107742579790120L;
+	private static final long serialVersionUID = 1L;
 	final WebMarkupContainer listContainer = new WebMarkupContainer("listContainer");
 	private final MessageDialog warning = new MessageDialog("warning", WebSession.getString(797), WebSession.getString(343), DialogButtons.OK, DialogIcon.WARN) {
 		private static final long serialVersionUID = 1L;
@@ -60,23 +60,22 @@ public class UsersPanel extends AdminPanel {
 
 	private UserForm form;
 
-	@SuppressWarnings("unchecked")
 	public UsersPanel(String id) {
 		super(id);
 
 		final SearchableDataView<User> dataView = new SearchableDataView<User>("userList", new SearchableDataProvider<User>(UserDao.class)) {
-			private static final long serialVersionUID = 8715559628755439596L;
+			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected void populateItem(Item<User> item) {
 				User u = item.getModelObject();
-				final long userId = u.getUser_id();
-				item.add(new Label("userId", "" + u.getUser_id()));
+				final long userId = u.getId();
+				item.add(new Label("userId", "" + u.getId()));
 				item.add(new Label("login", u.getLogin()));
 				item.add(new Label("firstName", u.getFirstname()));
 				item.add(new Label("lastName", u.getLastname()));
 				item.add(new AjaxEventBehavior("onclick") {
-					private static final long serialVersionUID = -8069413566800571061L;
+					private static final long serialVersionUID = 1L;
 
 					protected void onEvent(AjaxRequestTarget target) {
 						form.setModelObject(getBean(UserDao.class).get(userId));
@@ -87,12 +86,12 @@ public class UsersPanel extends AdminPanel {
 					}
 				});
 				item.add(AttributeModifier.append("class", "clickable ui-widget-content"
-						+ (u.getUser_id().equals(form.getModelObject().getUser_id()) ? " ui-state-active" : "")));
+						+ (u.getId().equals(form.getModelObject().getId()) ? " ui-state-active" : "")));
 			}
 		};
 		add(listContainer.add(dataView).setOutputMarkupId(true));
 		PagedEntityListPanel navigator = new PagedEntityListPanel("navigator", dataView) {
-			private static final long serialVersionUID = 5097048616003411362L;
+			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected void onEvent(AjaxRequestTarget target) {
@@ -100,11 +99,11 @@ public class UsersPanel extends AdminPanel {
 			}
 		};
 		DataViewContainer<User> container = new DataViewContainer<User>(listContainer, dataView, navigator);
-		container.setLinks(new OmOrderByBorder<User>("orderById", "user_id", container)
-				, new OmOrderByBorder<User>("orderByLogin", "login", container)
-				, new OmOrderByBorder<User>("orderByFirstName", "firstname", container)
-				, new OmOrderByBorder<User>("orderByLastName", "lastname", container));
-		add(container.orderLinks);
+		container.addLink(new OmOrderByBorder<User>("orderById", "user_id", container))
+			.addLink(new OmOrderByBorder<User>("orderByLogin", "login", container))
+			.addLink(new OmOrderByBorder<User>("orderByFirstName", "firstname", container))
+			.addLink(new OmOrderByBorder<User>("orderByLastName", "lastname", container));
+		add(container.getLinks());
 		add(navigator);
 
 		UserDao usersDaoImpl = getBean(UserDao.class);

@@ -35,7 +35,7 @@ import com.googlecode.wicket.jquery.ui.widget.dialog.AbstractDialog;
 import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
 
 public class AboutDialog extends AbstractDialog<String> {
-	private static final long serialVersionUID = 1400355222295594321L;
+	private static final long serialVersionUID = 1L;
 	
 	public AboutDialog(String id) {
 		super(id, WebSession.getString(1549));

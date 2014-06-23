@@ -42,7 +42,7 @@ public class ProfileForm extends Form<User> {
 		super(id, new CompoundPropertyModel<User>(getBean(UserDao.class).get(getUserId())));
 		
 		add(new FormSaveRefreshPanel<User>("buttons", this) {
-			private static final long serialVersionUID = 6578425915881674309L;
+			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected void onSaveSubmit(AjaxRequestTarget target, Form<?> form) {
@@ -64,8 +64,8 @@ public class ProfileForm extends Form<User> {
 			@Override
 			protected void onRefreshSubmit(AjaxRequestTarget target, Form<?> form) {
 				User user = getModelObject();
-				if (user.getUser_id() != null) {
-					user = getBean(UserDao.class).get(user.getUser_id());
+				if (user.getId() != null) {
+					user = getBean(UserDao.class).get(user.getId());
 				} else {
 					user = new User();
 				}

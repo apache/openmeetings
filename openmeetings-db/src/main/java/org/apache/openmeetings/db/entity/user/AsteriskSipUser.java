@@ -37,7 +37,7 @@ import org.simpleframework.xml.Root;
 @Table(name = "sipusers")
 @Root(name="asterisksipuser")
 public class AsteriskSipUser implements Serializable {
-	private static final long serialVersionUID = -565831761546365623L;
+	private static final long serialVersionUID = 1L;
 	@XmlType(namespace="org.apache.openmeetings.user.asterisk")
 	public enum Type {
 		friend,

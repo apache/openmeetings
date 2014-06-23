@@ -250,8 +250,8 @@ public class BackupImport {
 				if (cfg != null && !cfg.isDeleted()) {
 					log.warn("Non deleted configuration with same key is found! old value: {}, new value: {}", cfg.getConf_value(), c.getConf_value());
 				}
-				c.setConfiguration_id(cfg == null ? null : cfg.getConfiguration_id());
-				if (c.getUser() != null && c.getUser().getUser_id() == null) {
+				c.setId(cfg == null ? null : cfg.getId());
+				if (c.getUser() != null && c.getUser().getId() == null) {
 					c.setUser(null);
 				}
 				if (CONFIG_CRYPT_KEY.equals(c.getConf_key())) {
@@ -273,10 +273,10 @@ public class BackupImport {
 		{
 			List<Organisation> list = readList(simpleSerializer, f, "organizations.xml", "organisations", Organisation.class);
 			for (Organisation o : list) {
-				long oldId = o.getOrganisation_id();
-				o.setOrganisation_id(null);
+				long oldId = o.getId();
+				o.setId(null);
 				o = organisationDao.update(o, null);
-				organisationsMap.put(oldId, o.getOrganisation_id());
+				organisationsMap.put(oldId, o.getId());
 			}
 		}
 
@@ -307,13 +307,13 @@ public class BackupImport {
 				}
 				
 				u.setStarttime(new Date());
-				long userId = u.getUser_id();
-				u.setUser_id(null);
+				long userId = u.getId();
+				u.setId(null);
 				if (u.getSipUser() != null && u.getSipUser().getId() != 0) {
 					u.getSipUser().setId(0);
 				}
 				usersDao.update(u, -1L);
-				usersMap.put(userId, u.getUser_id());
+				usersMap.put(userId, u.getId());
 			}
 		}
 
@@ -334,20 +334,20 @@ public class BackupImport {
 			
 			List<Room> list = readList(serializer, f, "rooms.xml", "rooms", Room.class);
 			for (Room r : list) {
-				Long roomId = r.getRooms_id();
+				Long roomId = r.getId();
 
 				// We need to reset ids as openJPA reject to store them otherwise
-				r.setRooms_id(null);
+				r.setId(null);
 				if (r.getModerators() != null) {
 					for (Iterator<RoomModerator> i = r.getModerators().iterator(); i.hasNext();) {
 						RoomModerator rm = i.next();
-						if (rm.getUser().getUser_id() == null) {
+						if (rm.getUser().getId() == null) {
 							i.remove();
 						}
 					}
 				}
 				r = roomDao.update(r, null);
-				roomsMap.put(roomId, r.getRooms_id());
+				roomsMap.put(roomId, r.getId());
 			}
 		}
 
@@ -367,7 +367,7 @@ public class BackupImport {
 			for (RoomOrganisation ro : list) {
 				if (!ro.getDeleted()) {
 					// We need to reset this as openJPA reject to store them otherwise
-					ro.setRooms_organisation_id(null);
+					ro.setId(null);
 					roomOrganisationDao.update(ro, null);
 				}
 			}
@@ -413,10 +413,10 @@ public class BackupImport {
 
 				// We need to reset this as openJPA reject to store them otherwise
 				a.setId(null);
-				if (a.getOwner() != null && a.getOwner().getUser_id() == null) {
+				if (a.getOwner() != null && a.getOwner().getId() == null) {
 					a.setOwner(null);
 				}
-				if (a.getRoom() != null && a.getRoom().getRooms_id() == null) {
+				if (a.getRoom() != null && a.getRoom().getId() == null) {
 					a.setRoom(null);
 				}
 				Long newAppId = appointmentDao.addAppointmentObj(a);
@@ -486,7 +486,7 @@ public class BackupImport {
 			
 			List<FlvRecording> list = readList(serializer, f, "flvRecordings.xml", "flvrecordings", FlvRecording.class, true);
 			for (FlvRecording fr : list) {
-				fr.setFlvRecordingId(0);
+				fr.setId(null);
 				if (fr.getRoom_id() != null) {
 					fr.setRoom_id(roomsMap.get(fr.getRoom_id()));
 				}
@@ -495,7 +495,7 @@ public class BackupImport {
 				}
 				if (fr.getFlvRecordingMetaData() != null) {
 					for (FlvRecordingMetaData meta : fr.getFlvRecordingMetaData()) {
-						meta.setFlvRecordingMetaDataId(0);
+						meta.setId(null);
 						meta.setFlvRecording(fr);
 					}
 				}
@@ -511,10 +511,10 @@ public class BackupImport {
 			List<PrivateMessageFolder> list = readList(simpleSerializer, f, "privateMessageFolder.xml"
 				, "privatemessagefolders", PrivateMessageFolder.class, true);
 			for (PrivateMessageFolder p : list) {
-				Long folderId = p.getPrivateMessageFolderId();
+				Long folderId = p.getId();
 				PrivateMessageFolder storedFolder = privateMessageFolderDao.get(folderId);
 				if (storedFolder == null) {
-					p.setPrivateMessageFolderId(0);
+					p.setId(null);
 					Long newFolderId = privateMessageFolderDao.addPrivateMessageFolderObj(p);
 					messageFoldersMap.put(folderId, newFolderId);
 				}
@@ -537,9 +537,9 @@ public class BackupImport {
 				Long ucId = uc.getUserContactId();
 				UserContact storedUC = userContactsDao.get(ucId);
 
-				if (storedUC == null && uc.getContact() != null && uc.getContact().getUser_id() != null) {
+				if (storedUC == null && uc.getContact() != null && uc.getContact().getId() != null) {
 					uc.setUserContactId(0);
-					if (uc.getOwner() != null && uc.getOwner().getUser_id() == null) {
+					if (uc.getOwner() != null && uc.getOwner().getId() == null) {
 						uc.setOwner(null);
 					}
 					Long newId = userContactsDao.addUserContactObj(uc);
@@ -571,24 +571,24 @@ public class BackupImport {
 				
 			}
 			for (PrivateMessage p : list) {
-				p.setId(0);
+				p.setId(null);
 				p.setFolderId(getNewId(p.getFolderId(), Maps.MESSAGEFOLDERS));
 				p.setUserContactId(getNewId(p.getUserContactId(), Maps.USERCONTACTS));
-				if (p.getRoom() != null && p.getRoom().getRooms_id() == null) {
+				if (p.getRoom() != null && p.getRoom().getId() == null) {
 					p.setRoom(null);
 				}
-				if (p.getTo() != null && p.getTo().getUser_id() == null) {
+				if (p.getTo() != null && p.getTo().getId() == null) {
 					p.setTo(null);
 				}
-				if (p.getFrom() != null && p.getFrom().getUser_id() == null) {
+				if (p.getFrom() != null && p.getFrom().getId() == null) {
 					p.setFrom(null);
 				}
-				if (p.getOwner() != null && p.getOwner().getUser_id() == null) {
+				if (p.getOwner() != null && p.getOwner().getId() == null) {
 					p.setOwner(null);
 				}
-				if (oldBackup && p.getOwner() != null && p.getOwner().getUser_id() != null 
-						&& p.getFrom() != null && p.getFrom().getUser_id() != null 
-						&& p.getOwner().getUser_id() == p.getFrom().getUser_id())
+				if (oldBackup && p.getOwner() != null && p.getOwner().getId() != null 
+						&& p.getFrom() != null && p.getFrom().getId() != null 
+						&& p.getOwner().getId() == p.getFrom().getId())
 				{
 					p.setFolderId(SENT_FOLDER_ID);
 				}
@@ -613,7 +613,7 @@ public class BackupImport {
 			List<FileExplorerItem> list = readList(serializer, f, "fileExplorerItems.xml", "fileExplorerItems", FileExplorerItem.class, true);
 			for (FileExplorerItem file : list) {
 				// We need to reset this as openJPA reject to store them otherwise
-				file.setFileExplorerItemId(0);
+				file.setId(null);
 				Long roomId = file.getRoom_id();
 				file.setRoom_id(roomsMap.containsKey(roomId) ? roomsMap.get(roomId) : null);
 				if (file.getOwnerId() != null) {
@@ -641,15 +641,15 @@ public class BackupImport {
 			
 			List<RoomPoll> list = readList(serializer, f, "roompolls.xml", "roompolls", RoomPoll.class, true);
 			for (RoomPoll rp : list) {
-				if (rp.getRoom() == null || rp.getRoom().getRooms_id() == null) {
+				if (rp.getRoom() == null || rp.getRoom().getId() == null) {
 					//room was deleted
 					continue;
 				}
-				if (rp.getCreatedBy() == null || rp.getCreatedBy().getUser_id() == null) {
+				if (rp.getCreatedBy() == null || rp.getCreatedBy().getId() == null) {
 					rp.setCreatedBy(null);
 				}
 				for (RoomPollAnswers rpa : rp.getRoomPollAnswerList()) {
-					if (rpa.getVotedUser() == null || rpa.getVotedUser().getUser_id() == null) {
+					if (rpa.getVotedUser() == null || rpa.getVotedUser().getId() == null) {
 						rpa.setVotedUser(null);
 					}
 				}
@@ -757,7 +757,7 @@ public class BackupImport {
 				if (mm.getUser() == null) {
 					mm.setUser(new User());
 				}
-				if (mm.getUser().getUser_id() == null) {
+				if (mm.getUser().getId() == null) {
 					//HACK to handle external attendee's firstname, lastname, email
 					boolean contactValid = false;
 					do {

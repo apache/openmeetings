@@ -55,8 +55,6 @@ public class TestInterpolation extends TestCase {
 //			
 		} catch (Exception er) {
 			log.error("ERROR ", er);
-			System.out.println("Error exporting: " + er);
-			er.printStackTrace();
 		}
 	}
 

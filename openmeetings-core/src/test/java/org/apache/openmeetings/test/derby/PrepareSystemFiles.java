@@ -18,11 +18,15 @@
  */
 package org.apache.openmeetings.test.derby;
 
+import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+
 import java.io.File;
 
 import org.apache.openmeetings.cli.ConnectionProperties;
 import org.apache.openmeetings.cli.ConnectionPropertiesPatcher;
 import org.apache.openmeetings.util.OmFileHelper;
+import org.red5.logging.Red5LoggerFactory;
+import org.slf4j.Logger;
 
 /**
  * This file is called from command line to patch the derby configuration 
@@ -32,6 +36,7 @@ import org.apache.openmeetings.util.OmFileHelper;
  *
  */
 public class PrepareSystemFiles {
+	private static final Logger log = Red5LoggerFactory.getLogger(PrepareSystemFiles.class, webAppRootKey);
 	
 	public static void main(String... args) {
 		try {
@@ -61,7 +66,7 @@ public class PrepareSystemFiles {
 					, "secret"
 					);
 		} catch (Exception err) {
-			err.printStackTrace();
+			log.error("Error", err);
 		}
 	}
 

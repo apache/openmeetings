@@ -188,7 +188,7 @@ public class MessageDialog extends AbstractFormDialog<PrivateMessage> {
 		PrivateMessagesDao msgDao = getBean(PrivateMessagesDao.class);
 		for (User to : modelTo.getObject()) {
 			UserDao userDao = getBean(UserDao.class); 
-			if (to.getUser_id() == null) {
+			if (to.getId() == null) {
 				userDao.update(to, getUserId());
 			}
 			//to send

@@ -44,17 +44,14 @@ public class AppointmentCategoryDao {
 	@Autowired
 	private UserDao usersDao;
 
-	public AppointmentCategory get(Long categoryId) {
+	public AppointmentCategory get(Long id) {
 		try {
-			log.debug("getAppointmentCategoryById: " + categoryId);
+			log.debug("getAppointmentCategoryById: " + id);
 
-			String hql = "select app from AppointmentCategory app "
-					+ "WHERE app.deleted <> :deleted "
-					+ "AND app.categoryId = :categoryId";
+			String hql = "select app from AppointmentCategory app WHERE app.deleted = false AND app.id = :id";
 
 			TypedQuery<AppointmentCategory> query = em.createQuery(hql, AppointmentCategory.class);
-			query.setParameter("deleted", true);
-			query.setParameter("categoryId", categoryId);
+			query.setParameter("id", id);
 
 			AppointmentCategory appointCategory = null;
 			try {
@@ -64,7 +61,7 @@ public class AppointmentCategoryDao {
 
 			return appointCategory;
 		} catch (Exception ex2) {
-			log.error("[getAppointmentCategoryById]: " + ex2);
+			log.error("[get]: " + ex2);
 		}
 		return null;
 	}
@@ -72,13 +69,12 @@ public class AppointmentCategoryDao {
 	public Long updateAppointmentCategory(Long categoryId, String name) {
 		try {
 
-			AppointmentCategory ac = this
-					.get(categoryId);
+			AppointmentCategory ac = get(categoryId);
 
 			ac.setName(name);
 			ac.setUpdatetime(new Date());
 
-			if (ac.getCategoryId() == null) {
+			if (ac.getId() == null) {
 				em.persist(ac);
 			} else {
 				if (!em.contains(ac)) {
@@ -105,7 +101,7 @@ public class AppointmentCategoryDao {
 			ac.setComment(comment);
 
 			ac = em.merge(ac);
-			Long category_id = ac.getCategoryId();
+			Long category_id = ac.getId();
 
 			return category_id;
 		} catch (Exception ex2) {
@@ -117,8 +113,7 @@ public class AppointmentCategoryDao {
 	public Long deleteAppointmentCategory(Long categoryId) {
 		try {
 
-			AppointmentCategory ac = this
-					.get(categoryId);
+			AppointmentCategory ac = get(categoryId);
 
 			log.debug("ac: " + ac);
 
@@ -128,7 +123,7 @@ public class AppointmentCategoryDao {
 			}
 			ac.setUpdatetime(new Date());
 			ac.setDeleted(true);
-			if (ac.getCategoryId() == null) {
+			if (ac.getId() == null) {
 				em.persist(ac);
 			} else {
 				if (!em.contains(ac)) {
@@ -145,14 +140,11 @@ public class AppointmentCategoryDao {
 	public List<AppointmentCategory> getAppointmentCategoryList() {
 		try {
 
-			String hql = "select a from AppointmentCategory a "
-					+ "WHERE a.deleted <> :deleted ";
+			String hql = "select a from AppointmentCategory a WHERE a.deleted = false ";
 
 			TypedQuery<AppointmentCategory> query = em.createQuery(hql, AppointmentCategory.class);
-			query.setParameter("deleted", true);
 
-			List<AppointmentCategory> listAppointmentCategory = query
-					.getResultList();
+			List<AppointmentCategory> listAppointmentCategory = query.getResultList();
 
 			return listAppointmentCategory;
 		} catch (Exception ex2) {

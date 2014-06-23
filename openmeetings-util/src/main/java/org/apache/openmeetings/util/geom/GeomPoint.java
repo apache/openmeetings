@@ -33,7 +33,7 @@ import org.slf4j.Logger;
  */
 
 public class GeomPoint extends Point {
-	private static final long serialVersionUID = 5729830653403076829L;
+	private static final long serialVersionUID = 1L;
 	@SuppressWarnings("unused")
 	private static final Logger log = Red5LoggerFactory.getLogger(GeomPoint.class, OpenmeetingsVariables.webAppRootKey);
 

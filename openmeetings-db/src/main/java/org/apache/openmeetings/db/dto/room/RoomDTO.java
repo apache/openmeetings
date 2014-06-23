@@ -34,7 +34,7 @@ public class RoomDTO {
 	}
 	
 	public RoomDTO(Room r) {
-		id = r.getRooms_id();
+		id = r.getId();
 		name = r.getName();
 		comment = r.getComment();
 		roomtype = r.getRoomtype();

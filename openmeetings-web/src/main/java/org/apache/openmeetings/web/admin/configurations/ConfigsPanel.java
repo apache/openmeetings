@@ -40,7 +40,7 @@ import org.apache.wicket.markup.repeater.Item;
  * 
  */
 public class ConfigsPanel extends AdminPanel {
-	private static final long serialVersionUID = -1L;
+	private static final long serialVersionUID = 1L;
 	private ConfigForm form;
 	private final WebMarkupContainer listContainer = new WebMarkupContainer("listContainer");
 	
@@ -50,22 +50,21 @@ public class ConfigsPanel extends AdminPanel {
 		target.appendJavaScript("omConfigPanelInit();");
 	}
 
-	@SuppressWarnings("unchecked")
 	public ConfigsPanel(String id) {
 		super(id);
 		
 		SearchableDataView<Configuration> dataView = new SearchableDataView<Configuration>("configList"
 			, new SearchableDataProvider<Configuration>(ConfigurationDao.class)) {
-			private static final long serialVersionUID = 8715559628755439596L;
+			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected void populateItem(final Item<Configuration> item) {
 				final Configuration c = item.getModelObject();
-				item.add(new Label("configuration_id", c.getConfiguration_id()));
+				item.add(new Label("id", c.getId()));
 				item.add(new Label("conf_key", c.getConf_key()));
 				item.add(new Label("conf_value", c.getConf_value()));
 				item.add(new AjaxEventBehavior("onclick") {
-					private static final long serialVersionUID = -8069413566800571061L;
+					private static final long serialVersionUID = 1L;
 
 					protected void onEvent(AjaxRequestTarget target) {
 						form.hideNewRecord();
@@ -75,12 +74,12 @@ public class ConfigsPanel extends AdminPanel {
 					}
 				});
 				item.add(AttributeModifier.replace("class", "clickable ui-widget-content"
-						+ (c.getConfiguration_id().equals(form.getModelObject().getConfiguration_id()) ? " ui-state-default" : "")));
+						+ (c.getId().equals(form.getModelObject().getId()) ? " ui-state-default" : "")));
 			}
 		};
 		add(listContainer.add(dataView).setOutputMarkupId(true));
 		PagedEntityListPanel navigator = new PagedEntityListPanel("navigator", dataView) {
-			private static final long serialVersionUID = 5097048616003411362L;
+			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected void onEvent(AjaxRequestTarget target) {
@@ -88,10 +87,10 @@ public class ConfigsPanel extends AdminPanel {
 			}
 		};
 		DataViewContainer<Configuration> container = new DataViewContainer<Configuration>(listContainer, dataView, navigator);
-		container.setLinks(new OmOrderByBorder<Configuration>("orderById", "configuration_id", container)
-				, new OmOrderByBorder<Configuration>("orderByKey", "conf_key", container)
-				, new OmOrderByBorder<Configuration>("orderByValue", "conf_value", container));
-		add(container.orderLinks);
+		container.addLink(new OmOrderByBorder<Configuration>("orderById", "configuration_id", container))
+			.addLink(new OmOrderByBorder<Configuration>("orderByKey", "conf_key", container))
+			.addLink(new OmOrderByBorder<Configuration>("orderByValue", "conf_value", container));
+		add(container.getLinks());
 		add(navigator);
 		
 		form = new ConfigForm("form", listContainer, new Configuration());

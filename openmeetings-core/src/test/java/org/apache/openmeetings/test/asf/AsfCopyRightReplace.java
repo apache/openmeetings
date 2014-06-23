@@ -18,6 +18,8 @@
  */
 package org.apache.openmeetings.test.asf;
 
+import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -27,7 +29,11 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.StringWriter;
 
+import org.red5.logging.Red5LoggerFactory;
+import org.slf4j.Logger;
+
 public class AsfCopyRightReplace {
+	private static final Logger log = Red5LoggerFactory.getLogger(AsfCopyRightReplace.class, webAppRootKey);
 
 	String asf_copyright = "/*\n"
 			+ " * Licensed to the Apache Software Foundation (ASF) under one\n"
@@ -166,7 +172,7 @@ public class AsfCopyRightReplace {
 			out.close();
 
 		} catch (Exception err) {
-			err.printStackTrace();
+			log.error("Error while scanAndWriteXMLFile", err);
 		}
 	}
 
@@ -203,7 +209,7 @@ public class AsfCopyRightReplace {
 			out.close();
 
 		} catch (Exception err) {
-			err.printStackTrace();
+			log.error("Error while scanAndWriteJavaFile", err);
 		}
 	}
 

@@ -31,11 +31,11 @@ import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.model.Model;
 
 public class UserProfilePanel extends UserPanel {
-	private static final long serialVersionUID = 137157820964246251L;
+	private static final long serialVersionUID = 1L;
 
 	private String getAddress(User u) {
 		String result = "";
-		if (getUserId() == u.getUser_id() || Boolean.TRUE.equals(u.getShowContactData())) {
+		if (getUserId() == u.getId() || Boolean.TRUE.equals(u.getShowContactData())) {
 			//FIXME, more details should be added
 			if (u.getAdresses() != null) {
 				result = u.getAdresses().getStreet();

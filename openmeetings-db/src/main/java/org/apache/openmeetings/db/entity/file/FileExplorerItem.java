@@ -18,7 +18,6 @@
  */
 package org.apache.openmeetings.db.entity.file;
 
-import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -30,24 +29,25 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
+import org.apache.openmeetings.db.entity.IDataProviderEntity;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
 
 @Entity
 @NamedQueries({
-	@NamedQuery(name="getAllFiles", query="SELECT c FROM FileExplorerItem c ORDER BY c.fileExplorerItemId")
-    , @NamedQuery(name="getById", query="SELECT c FROM FileExplorerItem c WHERE c.fileExplorerItemId = :fileExplorerItemId")
-    , @NamedQuery(name="getByHash", query="SELECT c FROM FileExplorerItem c WHERE c.fileHash = :fileHash")
+	@NamedQuery(name="getAllFiles", query="SELECT c FROM FileExplorerItem c ORDER BY c.id")
+    , @NamedQuery(name="getFileById", query="SELECT c FROM FileExplorerItem c WHERE c.id = :id")
+    , @NamedQuery(name="getFileByHash", query="SELECT c FROM FileExplorerItem c WHERE c.fileHash = :fileHash")
 })
 @Table(name = "fileexploreritem")
 @Root
-public class FileExplorerItem implements Serializable {
-	private static final long serialVersionUID = 242843782142620566L;
+public class FileExplorerItem implements IDataProviderEntity {
+	private static final long serialVersionUID = 1L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name="id")
-	@Element(data=true)
-	private long fileExplorerItemId;
+	@Column(name = "id")
+	@Element(data = true, name = "fileExplorerItemId")
+	private Long id;
 	
 	@Column(name="filename")
 	@Element(data=true, required = false)
@@ -137,11 +137,11 @@ public class FileExplorerItem implements Serializable {
     private String externalType;
 
 		
-	public long getFileExplorerItemId() {
-		return fileExplorerItemId;
+	public Long getId() {
+		return id;
 	}
-	public void setFileExplorerItemId(long fileExplorerItemId) {
-		this.fileExplorerItemId = fileExplorerItemId;
+	public void setId(Long id) {
+		this.id = id;
 	}
 	
 	public String getFileName() {

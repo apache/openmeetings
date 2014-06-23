@@ -146,7 +146,7 @@ public class AppointmentDao {
 
 	public Appointment update(Appointment a, Long userId) {
 		Room r = a.getRoom();
-		if (r.getRooms_id() == null) {
+		if (r.getId() == null) {
 			r.setName(a.getTitle());
 			r.setNumberOfPartizipants(cfgDao.getConfValue("calendar.conference.rooms.default.size", Long.class, "50"));
 		}
@@ -210,8 +210,7 @@ public class AppointmentDao {
 	public List<Appointment> getAppointmentsByRoomId(Long roomId) {
 		try {
 
-			String hql = "select a from Appointment a "
-					+ "WHERE a.room.rooms_id = :roomId ";
+			String hql = "select a from Appointment a WHERE a.room.id = :roomId ";
 
 			TypedQuery<Appointment> query = em.createQuery(hql,
 					Appointment.class);
@@ -374,14 +373,13 @@ public class AppointmentDao {
 		try {
 
 			String hql = "select a from Appointment a "
-					+ "WHERE a.deleted <> :deleted "
-					+ "AND a.owner.user_id = :user_id "
-					+ "AND a.room.rooms_id = :rooms_id ";
+					+ "WHERE a.deleted = false "
+					+ "AND a.owner.id = :user_id "
+					+ "AND a.room.id = :rooms_id ";
 
 			TypedQuery<Appointment> query = em.createQuery(hql,
 					Appointment.class);
 
-			query.setParameter("deleted", true);
 			query.setParameter("user_id", user_id);
 			query.setParameter("rooms_id", rooms_id);
 

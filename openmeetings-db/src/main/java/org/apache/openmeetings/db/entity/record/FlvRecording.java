@@ -18,7 +18,6 @@
  */
 package org.apache.openmeetings.db.entity.record;
 
-import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
@@ -42,6 +41,7 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
+import org.apache.openmeetings.db.entity.IDataProviderEntity;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.user.User;
 import org.simpleframework.xml.Element;
@@ -65,11 +65,11 @@ import org.simpleframework.xml.Root;
  */
 @Entity
 @NamedQueries({ 
-	@NamedQuery(name = "getRecordingById", query = "SELECT f FROM FlvRecording f WHERE f.flvRecordingId = :id") 
+	@NamedQuery(name = "getRecordingById", query = "SELECT f FROM FlvRecording f WHERE f.id = :id") 
 	, @NamedQuery(name = "getRecordingByHash", query = "SELECT f FROM FlvRecording f WHERE f.fileHash = :fileHash") 
 	, @NamedQuery(name = "getRecordingsByExternalUser", query = "SELECT NEW org.apache.openmeetings.db.dto.file.RecordingObject(c) "
 			+ "FROM FlvRecording c, User u "
-			+ "WHERE c.insertedBy = u.user_id AND u.externalUserId = :externalUserId  AND u.externalUserType = :externalUserType "
+			+ "WHERE c.insertedBy = u.id AND u.externalUserId = :externalUserId  AND u.externalUserType = :externalUserType "
 			+ "AND c.deleted = false") 
 	, @NamedQuery(name = "getRecordingsPublic", query = "SELECT f FROM FlvRecording f WHERE f.deleted = false AND f.ownerId IS NULL "
 			+ "AND f.organization_id IS NULL AND (f.parentFileExplorerItemId IS NULL OR f.parentFileExplorerItemId = 0) "
@@ -86,8 +86,8 @@ import org.simpleframework.xml.Root;
 @Root(name = "flvrecording")
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
-public class FlvRecording implements Serializable {
-	private static final long serialVersionUID = -2234874663310617072L;
+public class FlvRecording implements IDataProviderEntity {
+	private static final long serialVersionUID = 1L;
 	
 	@XmlType(namespace="org.apache.openmeetings.record")
 	public enum Status {
@@ -99,8 +99,8 @@ public class FlvRecording implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
-	@Element(data = true)
-	private long flvRecordingId;
+	@Element(data = true, name = "flvRecordingId")
+	private Long id;
 
 	@Column(name = "filename")
 	@Element(data = true, required = false)
@@ -232,12 +232,12 @@ public class FlvRecording implements Serializable {
 	@Transient
 	private List<FlvRecordingLog> flvRecordingLog;
 
-	public long getFlvRecordingId() {
-		return flvRecordingId;
+	public Long getId() {
+		return id;
 	}
 
-	public void setFlvRecordingId(long flvRecordingId) {
-		this.flvRecordingId = flvRecordingId;
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public String getFileName() {

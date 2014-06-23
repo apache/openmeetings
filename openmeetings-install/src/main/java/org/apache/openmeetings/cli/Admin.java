@@ -370,7 +370,7 @@ public class Admin {
 						}
 						long missing = 0;
 						for (User u : udao.getAllBackupUsers()) {
-							if (!u.getDeleted() && u.getPictureuri() != null && !new File(OmFileHelper.getUploadProfilesUserDir(u.getUser_id()), u.getPictureuri()).exists()) {
+							if (!u.getDeleted() && u.getPictureuri() != null && !new File(OmFileHelper.getUploadProfilesUserDir(u.getId()), u.getPictureuri()).exists()) {
 								missing++;
 							}
 						}

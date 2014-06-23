@@ -75,7 +75,7 @@ import org.slf4j.Logger;
 public class LangPanel extends AdminPanel {
 	private static final Logger log = Red5LoggerFactory.getLogger(LangPanel.class, webAppRootKey);
 	
-	private static final long serialVersionUID = 5904180813198016592L;
+	private static final long serialVersionUID = 1L;
 
 	FieldLanguage language;
 	final WebMarkupContainer listContainer;
@@ -90,7 +90,6 @@ public class LangPanel extends AdminPanel {
 		target.appendJavaScript("labelsInit();");
 	}
 
-	@SuppressWarnings("unchecked")
 	public LangPanel(String id) {
 		super(id);
 		// Create feedback panels
@@ -99,15 +98,14 @@ public class LangPanel extends AdminPanel {
 		language = langDao.getFieldLanguageById(1L);
 
 		Fieldlanguagesvalues flv = new Fieldlanguagesvalues();
-		flv.setLanguage_id(language.getLanguage_id());
+		flv.setLanguage_id(language.getId());
 		final LabelsForm form = new LabelsForm("form", this, flv);
 		form.showNewRecord();
 		add(form);
 
-		final SearchableDataView<Fieldvalues> dataView = new SearchableDataView<Fieldvalues>(
-				"langList"
+		final SearchableDataView<Fieldvalues> dataView = new SearchableDataView<Fieldvalues>("langList"
 				, new SearchableDataProvider<Fieldvalues>(FieldValueDao.class) {
-					private static final long serialVersionUID = -6822789354860988626L;
+					private static final long serialVersionUID = 1L;
 
 					@Override
 					protected FieldValueDao getDao() {
@@ -116,25 +114,25 @@ public class LangPanel extends AdminPanel {
 					
 					@Override
 					public long size() {
-						return search == null ? getDao().count() : getDao().count(language.getLanguage_id(), search);
+						return search == null ? getDao().count() : getDao().count(language.getId(), search);
 					}
 					
 					public Iterator<? extends Fieldvalues> iterator(long first, long count) {
 						return (search == null && getSort() == null
-								? getDao().get(language.getLanguage_id(), (int)first, (int)count)
-								: getDao().get(language.getLanguage_id(), search, (int)first, (int)count, getSortStr())).iterator();
+								? getDao().get(language.getId(), (int)first, (int)count)
+								: getDao().get(language.getId(), search, (int)first, (int)count, getSortStr())).iterator();
 					}
 				}) {
-			private static final long serialVersionUID = 8715559628755439596L;
+			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected void populateItem(final Item<Fieldvalues> item) {
 				final Fieldvalues fv = item.getModelObject();
-				item.add(new Label("lblId", "" + fv.getFieldvalues_id()));
+				item.add(new Label("lblId", "" + fv.getId()));
 				item.add(new Label("name", fv.getName()));
 				item.add(new Label("value", fv.getFieldlanguagesvalue() != null ? fv.getFieldlanguagesvalue().getValue() : null));
 				item.add(new AjaxEventBehavior("onclick") {
-					private static final long serialVersionUID = -8069413566800571061L;
+					private static final long serialVersionUID = 1L;
 
 					protected void onEvent(AjaxRequestTarget target) {
 						form.setModelObject(fv.getFieldlanguagesvalue());
@@ -143,15 +141,15 @@ public class LangPanel extends AdminPanel {
 						target.appendJavaScript("labelsInit();");
 					}
 				});
-				item.add(AttributeModifier.append("class", "clickable ui-widget-content"
-						+ (fv.getFieldvalues_id().equals(form.getModelObject().getFieldvalues().getFieldvalues_id()) ? " ui-state-active" : "")));
+				Long formFvId = form.getModelObject().getFieldvalues() == null ? null : form.getModelObject().getFieldvalues().getId();
+				item.add(AttributeModifier.append("class", "clickable ui-widget-content" + (fv.getId().equals(formFvId) ? " ui-state-active" : "")));
 			}
 		};
 
 		listContainer = new WebMarkupContainer("listContainer");
 		add(listContainer.add(dataView).setOutputMarkupId(true));
 		PagedEntityListPanel navigator = new PagedEntityListPanel("navigator", dataView) {
-			private static final long serialVersionUID = 5097048616003411362L;
+			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected void onEvent(AjaxRequestTarget target) {
@@ -160,17 +158,17 @@ public class LangPanel extends AdminPanel {
 			}
 		};
 		DataViewContainer<Fieldvalues> container = new DataViewContainer<Fieldvalues>(listContainer, dataView, navigator);
-		container.setLinks(new OmOrderByBorder<Fieldvalues>("orderById", "fieldvalues.fieldvalues_id", container)
-				, new OmOrderByBorder<Fieldvalues>("orderByName", "fieldvalues.name", container)
-				, new OmOrderByBorder<Fieldvalues>("orderByValue", "value", container));
-		add(container.orderLinks);
+		container.addLink(new OmOrderByBorder<Fieldvalues>("orderById", "fieldvalues.id", container))
+			.addLink(new OmOrderByBorder<Fieldvalues>("orderByName", "fieldvalues.name", container))
+			.addLink(new OmOrderByBorder<Fieldvalues>("orderByValue", "value", container));
+		add(container.getLinks());
 		add(navigator);
 		langForm = new LangForm("langForm", listContainer, this);
 		fileUploadField = new FileUploadField("fileInput");
 		langForm.add(fileUploadField);
 		langForm.add(new UploadProgressBar("progress", langForm, fileUploadField));
 		fileUploadField.add(new AjaxFormSubmitBehavior(langForm, "onchange") {
-			private static final long serialVersionUID = 2160216679027859231L;
+			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected void onSubmit(AjaxRequestTarget target) {
@@ -181,7 +179,7 @@ public class LangPanel extends AdminPanel {
 						return;
 					}
 					getBean(LanguageImport.class)
-						.addLanguageByDocument(language.getLanguage_id(), download.getInputStream(), getUserId());
+						.addLanguageByDocument(language.getId(), download.getInputStream(), getUserId());
 				} catch (Exception e) {
 					log.error("Exception on panel language editor import ", e);
 					importFeedback.error(e);
@@ -201,9 +199,9 @@ public class LangPanel extends AdminPanel {
 
 			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
 
-				final List<Fieldlanguagesvalues> flvList = getBean(FieldLanguagesValuesDao.class).getMixedFieldValuesList(language.getLanguage_id());
+				final List<Fieldlanguagesvalues> flvList = getBean(FieldLanguagesValuesDao.class).getMixedFieldValuesList(language.getId());
 
-				FieldLanguage fl = getBean(FieldLanguageDao.class).getFieldLanguageById(language.getLanguage_id());
+				FieldLanguage fl = getBean(FieldLanguageDao.class).getFieldLanguageById(language.getId());
 				if (fl != null && flvList != null) {
 					download.setFileName(fl.getName() + ".xml");
 					download.setResourceStream(new AbstractResourceStream() {
@@ -213,7 +211,7 @@ public class LangPanel extends AdminPanel {
 						
 						public InputStream getInputStream() throws ResourceStreamNotFoundException {
 							try {
-								Document doc = createDocument(flvList, getBean(FieldLanguagesValuesDao.class).getUntranslatedFieldValuesList(language.getLanguage_id()));
+								Document doc = createDocument(flvList, getBean(FieldLanguagesValuesDao.class).getUntranslatedFieldValuesList(language.getId()));
 								sw = new StringWriter();
 								LangExport.serializetoXML(sw, "UTF-8", doc);
 								is = new ByteArrayInputStream(sw.toString().getBytes());
@@ -261,7 +259,7 @@ public class LangPanel extends AdminPanel {
 
 		for (Fieldlanguagesvalues flv : flvList) {
 			Element eTemp = root.addElement("string")
-					.addAttribute("id", flv.getFieldvalues().getFieldvalues_id().toString())
+					.addAttribute("id", flv.getFieldvalues().getId().toString())
 					.addAttribute("name", flv.getFieldvalues().getName());
 			Element value = eTemp.addElement("value");
 			value.addText(flv.getValue());
@@ -272,7 +270,7 @@ public class LangPanel extends AdminPanel {
 			root.addComment("Untranslated strings");
 			for (Fieldlanguagesvalues flv : untranslatedList) {
 				Element eTemp = root.addElement("string")
-						.addAttribute("id", flv.getFieldvalues().getFieldvalues_id().toString())
+						.addAttribute("id", flv.getFieldvalues().getId().toString())
 						.addAttribute("name", flv.getFieldvalues().getName());
 				Element value = eTemp.addElement("value");
 				value.addText(flv.getValue());

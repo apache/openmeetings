@@ -74,7 +74,7 @@ import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 
 public class SignInPage extends BaseInitedPage {
-	private static final long serialVersionUID = -3843571657066167592L;
+	private static final long serialVersionUID = 1L;
 	private static final Logger log = Red5LoggerFactory.getLogger(SignInPage.class, webAppRootKey);
 	private SignInDialog d;
 	

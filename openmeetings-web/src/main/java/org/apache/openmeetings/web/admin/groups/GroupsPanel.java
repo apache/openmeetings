@@ -51,7 +51,6 @@ public class GroupsPanel extends AdminPanel {
 		target.appendJavaScript("groupsInit();");
 	}
 
-	@SuppressWarnings("unchecked")
 	public GroupsPanel(String id) {
 		super(id);
 		final WebMarkupContainer listContainer = new WebMarkupContainer("listContainer");
@@ -67,10 +66,10 @@ public class GroupsPanel extends AdminPanel {
 			@Override
 			protected void populateItem(Item<Organisation> item) {
 				final Organisation o = item.getModelObject();
-				item.add(new Label("organisation_id", "" + o.getOrganisation_id()));
+				item.add(new Label("id", "" + o.getId()));
 				item.add(new Label("name", "" + o.getName()));
 				item.add(new AjaxEventBehavior("onclick") {
-					private static final long serialVersionUID = -8069413566800571061L;
+					private static final long serialVersionUID = 1L;
 
 					protected void onEvent(AjaxRequestTarget target) {
 						form.hideNewRecord();
@@ -81,14 +80,14 @@ public class GroupsPanel extends AdminPanel {
 					}
 				});
 				item.add(AttributeModifier.append("class", "clickable ui-widget-content"
-						+ (o.getOrganisation_id().equals(form.getModelObject().getOrganisation_id()) ? " ui-state-active" : "")));
+						+ (o.getId().equals(form.getModelObject().getId()) ? " ui-state-active" : "")));
 			}
 		};
 
 		//Paging
 		add(listContainer.add(dataView).setOutputMarkupId(true));
 		PagedEntityListPanel navigator = new PagedEntityListPanel("navigator", dataView) {
-			private static final long serialVersionUID = 5097048616003411362L;
+			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected void onEvent(AjaxRequestTarget target) {
@@ -96,9 +95,9 @@ public class GroupsPanel extends AdminPanel {
 			}
 		};
 		DataViewContainer<Organisation> container = new DataViewContainer<Organisation>(listContainer, dataView, navigator);
-		container.setLinks(new OmOrderByBorder<Organisation>("orderById", "organisation_id", container)
-				, new OmOrderByBorder<Organisation>("orderByName", "name", container));
-		add(container.orderLinks);
+		container.addLink(new OmOrderByBorder<Organisation>("orderById", "id", container))
+			.addLink(new OmOrderByBorder<Organisation>("orderByName", "name", container));
+		add(container.getLinks());
 		add(navigator);
 	}
 }

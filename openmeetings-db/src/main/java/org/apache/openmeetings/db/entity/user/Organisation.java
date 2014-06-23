@@ -18,7 +18,6 @@
  */
 package org.apache.openmeetings.db.entity.user;
 
-import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -37,24 +36,24 @@ import org.simpleframework.xml.Root;
 @Entity
 @NamedQueries({
 	@NamedQuery(name="getOrganisationById",
-		query="SELECT c FROM Organisation AS c WHERE c.organisation_id = :organisation_id AND c.deleted = :deleted")
+		query="SELECT c FROM Organisation AS c WHERE c.id = :organisation_id AND c.deleted = :deleted")
 	, @NamedQuery(name="getAnyOrganisationById",
-		query="SELECT c FROM Organisation AS c WHERE c.organisation_id = :organisation_id")
+		query="SELECT c FROM Organisation AS c WHERE c.id = :organisation_id")
 	, @NamedQuery(name="getOrganisationsByUserId",
-		query="SELECT ou.organisation FROM User u, IN(u.organisation_users) ou WHERE u.deleted = false AND u.user_id = :user_id")
-	, @NamedQuery(name="getNondeletedOrganisations", query="SELECT o FROM Organisation o WHERE o.deleted = false ORDER BY o.organisation_id")
+		query="SELECT ou.organisation FROM User u, IN(u.organisation_users) ou WHERE u.deleted = false AND u.id = :user_id")
+	, @NamedQuery(name="getNondeletedOrganisations", query="SELECT o FROM Organisation o WHERE o.deleted = false ORDER BY o.id")
 	, @NamedQuery(name="countOrganisations", query="SELECT COUNT(c) FROM Organisation AS c WHERE c.deleted = false")
 })
 @Table(name = "organisation")
 @Root(name="organisation")
-public class Organisation implements Serializable, IDataProviderEntity {
-	private static final long serialVersionUID = 99123580264065654L;
+public class Organisation implements IDataProviderEntity {
+	private static final long serialVersionUID = 1L;
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name="id")
-	@Element(data=true)
-	private Long organisation_id;
+	@Column(name = "id")
+	@Element(data = true, name = "organisation_id")
+	private Long id;
 	
 	@Column(name="name")
 	@Element(data=true)
@@ -91,11 +90,11 @@ public class Organisation implements Serializable, IDataProviderEntity {
 		this.name = name;
 	}
 
-	public Long getOrganisation_id() {
-		return organisation_id;
+	public Long getId() {
+		return id;
 	}
-	public void setOrganisation_id(Long organisation_id) {
-		this.organisation_id = organisation_id;
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public Long getUpdatedby() {

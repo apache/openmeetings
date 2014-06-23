@@ -66,7 +66,7 @@ public class FlvRecordingMetaDeltaDao {
 		try { 
 			
 			flvRecordingMetaDelta = em.merge(flvRecordingMetaDelta);
-			Long flvRecordingMetaDeltaId = flvRecordingMetaDelta.getFlvRecordingMetaDeltaId();
+			Long flvRecordingMetaDeltaId = flvRecordingMetaDelta.getId();
 			
 			log.debug("flvRecordingMetaDeltaId "+flvRecordingMetaDeltaId);
 			

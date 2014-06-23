@@ -44,7 +44,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Table(name = "sessiondata")
 @XmlRootElement
 public class Sessiondata implements Serializable {
-	private static final long serialVersionUID = 1928177917452866750L;
+	private static final long serialVersionUID = 1L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="id")

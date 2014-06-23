@@ -18,7 +18,6 @@
  */
 package org.apache.openmeetings.db.entity.record;
 
-import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -35,6 +34,7 @@ import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlType;
 
 import org.apache.openjpa.persistence.jdbc.ForeignKey;
+import org.apache.openmeetings.db.entity.IDataProviderEntity;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
 
@@ -50,7 +50,7 @@ import org.simpleframework.xml.Root;
 @Entity
 @Table(name = "flvrecording_metadata")
 @Root(name = "flvrecordingmetadata")
-public class FlvRecordingMetaData implements Serializable {
+public class FlvRecordingMetaData implements IDataProviderEntity {
 	private static final long serialVersionUID = 1L;
 	@XmlType(namespace="org.apache.openmeetings.record.meta")
 	public enum Status {
@@ -63,8 +63,8 @@ public class FlvRecordingMetaData implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
-	@Element(data = true, required = false)
-	private long flvRecordingMetaDataId;
+	@Element(data = true, required = false, name = "flvRecordingMetaDataId")
+	private Long id;
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "flvrecording_id", nullable = true)
@@ -142,12 +142,12 @@ public class FlvRecordingMetaData implements Serializable {
 	@Enumerated(EnumType.STRING)
 	private Status streamStatus = Status.NONE;
 
-	public long getFlvRecordingMetaDataId() {
-		return flvRecordingMetaDataId;
+	public Long getId() {
+		return id;
 	}
 
-	public void setFlvRecordingMetaDataId(long flvRecordingMetaDataId) {
-		this.flvRecordingMetaDataId = flvRecordingMetaDataId;
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public FlvRecording getFlvRecording() {

@@ -82,7 +82,7 @@ public class RecordingErrorsDialog extends AbstractDialog<FlvRecording> {
 	@Override
 	protected void onOpen(AjaxRequestTarget target) {
 		FlvRecording f = getModelObject();
-		List<FlvRecordingLog> logs = getBean(FlvRecordingLogDao.class).getByRecordingId(f.getFlvRecordingId());
+		List<FlvRecordingLog> logs = getBean(FlvRecordingLogDao.class).getByRecordingId(f.getId());
 		if (f.getFileHash() == null) {
 			message.setVisible(true);
 			message.setDefaultModelObject(WebSession.getString(888));

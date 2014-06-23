@@ -18,6 +18,8 @@
  */
 package org.apache.openmeetings.test.calendar;
 
+import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -62,7 +64,6 @@ import net.fortuna.ical4j.util.UidGenerator;
 
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.test.AbstractJUnitDefaults;
-import org.apache.openmeetings.util.OpenmeetingsVariables;
 import org.apache.openmeetings.util.mail.ByteArrayDataSource;
 import org.apache.openmeetings.util.mail.IcalHandler;
 import org.apache.openmeetings.util.mail.SmtpAuthenticator;
@@ -72,10 +73,7 @@ import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class TestSendIcalMessage extends AbstractJUnitDefaults {
-
-	private static final Logger log = Red5LoggerFactory.getLogger(
-			TestAppointmentSchedulerTask.class,
-			OpenmeetingsVariables.webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(TestSendIcalMessage.class, webAppRootKey);
 
 	@Autowired
 	private ConfigurationDao configurationDao;
@@ -132,7 +130,7 @@ public class TestSendIcalMessage extends AbstractJUnitDefaults {
 			meeting.getProperties().add(uid);
 		} catch (SocketException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.error("Error", e);
 		}
 
 		// add attendees..
@@ -175,18 +173,12 @@ public class TestSendIcalMessage extends AbstractJUnitDefaults {
 			
 			sendIcalMessage();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.error("Error", e);
 		} catch (ValidationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.error("Error", e);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.error("Error", e);
 		}
-		
-		
-
 	}
 
 	

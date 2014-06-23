@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.web.admin.labels;
 
+import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.openmeetings.web.app.Application.getBean;
 
 import org.apache.openmeetings.db.dao.label.FieldLanguageDao;
@@ -34,6 +35,8 @@ import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.util.time.Duration;
+import org.red5.logging.Red5LoggerFactory;
+import org.slf4j.Logger;
 
 /**
  * Modify the language selection, add/delete {@link FieldLanguage}
@@ -42,7 +45,8 @@ import org.apache.wicket.util.time.Duration;
  * 
  */
 public class LangForm extends Form<Void> {
-	private static final long serialVersionUID = 2837702941211636609L;
+	private static final long serialVersionUID = 1L;
+	private static final Logger log = Red5LoggerFactory.getLogger(LangForm.class, webAppRootKey);
 	private DropDownChoice<FieldLanguage> languages;
 
 	public void updateLanguages(AjaxRequestTarget target) {
@@ -69,10 +73,10 @@ public class LangForm extends Form<Void> {
 		languages = new DropDownChoice<FieldLanguage>("language"
 				, new PropertyModel<FieldLanguage>(langPanel, "language")
 				, langDao.getLanguages()
-				, new ChoiceRenderer<FieldLanguage>("name", "language_id"));
+				, new ChoiceRenderer<FieldLanguage>("name", "id"));
 				
 		languages.add(new AjaxFormComponentUpdatingBehavior("onchange") {
-			private static final long serialVersionUID = -2055912815073387536L;
+			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected void onUpdate(AjaxRequestTarget target) {
@@ -82,7 +86,7 @@ public class LangForm extends Form<Void> {
 		add(languages);
 
 		add(new WebMarkupContainer("deleteLangBtn").add(new AjaxEventBehavior("onclick"){
-			private static final long serialVersionUID = -1650946343073068686L;
+			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected void updateAjaxAttributes(AjaxRequestAttributes attributes) {
@@ -98,7 +102,7 @@ public class LangForm extends Form<Void> {
 					langDao.update(langPanel.language);
 				} catch (Exception e) {
 					// TODO add feedback message
-					e.printStackTrace();
+					log.error("Error", e);
 				}
 				languages.setChoices(langDao.getLanguages());
 				target.add(languages);

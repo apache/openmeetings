@@ -41,6 +41,6 @@ public class AppointmentCategoryConverter  extends OmConverter<AppointmentCatego
 	public void write(OutputNode node, AppointmentCategory value)
 			throws Exception {
 		node.setData(true);
-		node.setValue(value == null ? "0" : "" + value.getCategoryId());
+		node.setValue(value == null ? "0" : "" + value.getId());
 	}
 }

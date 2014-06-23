@@ -59,11 +59,11 @@ public class VideoPlayer extends Panel {
 	public VideoPlayer update(AjaxRequestTarget target, FlvRecording r) {
 		boolean videoExists = r != null && getMp4Recording(r.getFileHash()).exists();
 		if (videoExists) {
-			PageParameters pp = new PageParameters().add("id", r.getFlvRecordingId());
+			PageParameters pp = new PageParameters().add("id", r.getId());
 			playerModel.setObject(Arrays.asList(
 					new MediaSource("" + getRequestCycle().urlFor(mp4res, pp), "video/mp4")
 					, new MediaSource("" + getRequestCycle().urlFor(oggres, pp), "video/ogg")));
-			player.recId = r.getFlvRecordingId();
+			player.recId = r.getId();
 		}
 		container.setVisible(videoExists);
 		if (target != null) {

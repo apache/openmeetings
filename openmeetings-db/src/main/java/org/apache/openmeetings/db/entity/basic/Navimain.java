@@ -18,7 +18,6 @@
  */
 package org.apache.openmeetings.db.entity.basic;
 
-import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -29,17 +28,19 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import org.apache.openmeetings.db.entity.IDataProviderEntity;
 import org.apache.openmeetings.db.entity.label.Fieldlanguagesvalues;
 
 @Entity
 @Table(name = "navimain")
-public class Navimain implements Serializable {
-	private static final long serialVersionUID = 1691787896183701877L;
+public class Navimain implements IDataProviderEntity {
+	private static final long serialVersionUID = 1L;
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
-	private Long main_id;
-
+	private Long id;
+	
 	@Column(name = "global_id")
 	private Long global_id;
 
@@ -91,6 +92,14 @@ public class Navimain implements Serializable {
 	@Column(name = "tooltip_fieldvalues_id")
 	private Long tooltip_fieldvalues_id;
 
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
 	public String getAction() {
 		return action;
 	}
@@ -121,14 +130,6 @@ public class Navimain implements Serializable {
 
 	public void setComment(String comment) {
 		this.comment = comment;
-	}
-
-	public Long getMain_id() {
-		return main_id;
-	}
-
-	public void setMain_id(Long main_id) {
-		this.main_id = main_id;
 	}
 
 	public String getIcon() {
@@ -237,7 +238,7 @@ public class Navimain implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Navimain [main_id=" + main_id + ", global_id=" + global_id + ", name=" + name + ", action=" + action + ", params=" + params
+		return "Navimain [id=" + id + ", global_id=" + global_id + ", name=" + name + ", action=" + action + ", params=" + params
 				+ ", naviorder=" + naviorder + ", fieldvalues_id=" + fieldvalues_id + ", deleted=" + deleted + ", tooltip_fieldvalues_id="
 				+ tooltip_fieldvalues_id + "]";
 	}

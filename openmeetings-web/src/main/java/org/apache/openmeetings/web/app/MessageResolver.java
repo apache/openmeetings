@@ -28,7 +28,7 @@ import org.apache.wicket.markup.parser.filter.WicketTagIdentifier;
 import org.apache.wicket.markup.resolver.WicketMessageResolver;
 
 public class MessageResolver extends WicketMessageResolver {
-	private static final long serialVersionUID = -5755259669383826988L;
+	private static final long serialVersionUID = 1L;
 	private final static String TAG_NAME = "ommessage";
 	
 	static	{

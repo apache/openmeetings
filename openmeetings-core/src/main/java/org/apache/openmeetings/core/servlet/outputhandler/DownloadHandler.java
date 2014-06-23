@@ -47,7 +47,7 @@ import org.slf4j.Logger;
 
 public class DownloadHandler extends BaseHttpServlet {
 	
-	private static final long serialVersionUID = 7243653203578587544L;
+	private static final long serialVersionUID = 1L;
 
 	private static final Logger log = Red5LoggerFactory.getLogger(
 			DownloadHandler.class, OpenmeetingsVariables.webAppRootKey);

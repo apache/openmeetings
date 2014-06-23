@@ -48,6 +48,6 @@ public class RoomConverter extends OmConverter<Room> {
 
 	public void write(OutputNode node, Room value) throws Exception {
 		node.setData(true);
-		node.setValue(value == null ? "0" : "" + value.getRooms_id());
+		node.setValue(value == null ? "0" : "" + value.getId());
 	}
 }

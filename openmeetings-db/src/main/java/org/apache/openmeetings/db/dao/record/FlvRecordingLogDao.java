@@ -54,7 +54,7 @@ public class FlvRecordingLogDao {
 			List<FlvRecordingLog> flvRecordingLogs = getByRecordingId(flvRecordingId);
 			
 			for (FlvRecordingLog flvRecordingLog : flvRecordingLogs) {
-				flvRecordingLog = em.find(FlvRecordingLog.class, flvRecordingLog.getFlvRecordingLogId());
+				flvRecordingLog = em.find(FlvRecordingLog.class, flvRecordingLog.getId());
 				em.remove(flvRecordingLog);
 			}
 			
@@ -73,7 +73,7 @@ public class FlvRecordingLogDao {
 			flvRecordingLog.setMsgType(msgType);
 			
 			flvRecordingLog = em.merge(flvRecordingLog);
-			Long flvRecordingLogId = flvRecordingLog.getFlvRecordingLogId();
+			Long flvRecordingLogId = flvRecordingLog.getId();
 			
 			return flvRecordingLogId;
 		} catch (Exception ex2) {

@@ -49,7 +49,7 @@ import com.googlecode.wicket.jquery.ui.widget.dialog.DialogIcon;
 import com.googlecode.wicket.jquery.ui.widget.dialog.MessageDialog;
 
 public class ResetPasswordDialog extends AbstractFormDialog<String> {
-	private static final long serialVersionUID = -523469331995677748L;
+	private static final long serialVersionUID = 1L;
 	private String resetLbl = WebSession.getString(327);
 	private DialogButton resetBtn = new DialogButton(resetLbl);
 	private Form<String> form;
@@ -62,7 +62,7 @@ public class ResetPasswordDialog extends AbstractFormDialog<String> {
 		super(id, WebSession.getString(325));
 		this.user = user;
 		add(form = new Form<String>("form"){
-			private static final long serialVersionUID = -4553809631029292229L;
+			private static final long serialVersionUID = 1L;
 			private TextField<String> login;
 			private PasswordTextField confirmPassword;
 			{
@@ -80,7 +80,7 @@ public class ResetPasswordDialog extends AbstractFormDialog<String> {
 				confirmPassword.setRequired(true).add(minimumLength(getMinPasswdLength(cfgDao)));
 
 				add(new AjaxButton("submit") { //FAKE button so "submit-on-enter" works as expected
-					private static final long serialVersionUID = 5257502637636428620L;
+					private static final long serialVersionUID = 1L;
 
 					@Override
 					protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
@@ -156,7 +156,7 @@ public class ResetPasswordDialog extends AbstractFormDialog<String> {
 	@Override
 	protected void onSubmit(AjaxRequestTarget target) {
 		try {
-			getBean(UserDao.class).update(user, password.getConvertedInput(), user.getUser_id());
+			getBean(UserDao.class).update(user, password.getConvertedInput(), user.getId());
 		} catch (Exception e) {
 			error(e.getMessage());
 		}
@@ -175,7 +175,7 @@ public class ResetPasswordDialog extends AbstractFormDialog<String> {
 	protected void onInitialize() {
 		super.onInitialize();
 		add(new JQueryBehavior(JQueryWidget.getSelector(this), "dialog") {
-			private static final long serialVersionUID = -8870674570404919597L;
+			private static final long serialVersionUID = 1L;
 
 			@Override
             protected String $()

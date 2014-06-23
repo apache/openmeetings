@@ -24,7 +24,7 @@ import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.web.app.WebSession;
 
 public abstract class BaseInitedPage extends BasePage {
-	private static final long serialVersionUID = 5716753033219700254L;
+	private static final long serialVersionUID = 1L;
 
 	@Override
 	protected String getApplicationName() {

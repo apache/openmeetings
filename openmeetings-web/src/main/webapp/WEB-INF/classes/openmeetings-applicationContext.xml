@@ -81,14 +81,12 @@
 	<!-- Start of Services -->
 	<bean id="xmlcrm.service" class="org.apache.openmeetings.core.remote.MainService" />
 	<bean id="printservice.service" class="org.apache.openmeetings.core.remote.PrintService" />
-	<bean id="languageservice.service" class="org.apache.openmeetings.core.remote.LanguageService" />
 	<bean id="invitationservice.service" class="org.apache.openmeetings.core.remote.InvitationService" />
 	<bean id="whiteboardservice.service" class="org.apache.openmeetings.core.remote.WhiteBoardService" />
 	<bean id="userservice.service" class="org.apache.openmeetings.core.remote.UserService" />
 	<bean id="fileservice.service" class="org.apache.openmeetings.core.remote.ConferenceLibrary" />
 	<bean id="openmeetings.FileProcessor" class="org.apache.openmeetings.core.data.file.FileProcessor" />
 	<bean id="openmeetings.FlvExplorerConverter" class="org.apache.openmeetings.core.converter.FlvExplorerConverter" />
-	<bean id="errorservice.service" class="org.apache.openmeetings.core.remote.ErrorService" />
 	<bean id="conferenceservice.service" class="org.apache.openmeetings.core.remote.ConferenceService" />
 	<bean id="chatservice.service" class="org.apache.openmeetings.core.remote.ChatService" />
 	<bean id="flvrecorderservice.service" class="org.apache.openmeetings.core.remote.FLVRecorderService" />
@@ -250,7 +248,6 @@
 	<bean id="fieldLanguageDaoImpl" class="org.apache.openmeetings.db.dao.label.FieldLanguageDao" />
 	<bean id="fieldValueDaoImpl" class="org.apache.openmeetings.db.dao.label.FieldValueDao" />
 	<bean id="fieldLanguagesValuesDAO" class="org.apache.openmeetings.db.dao.label.FieldLanguagesValuesDao" />
-	<bean id="fieldmanagment" class="org.apache.openmeetings.core.data.basic.FieldManager" />
 	<bean id="configurationDaoImpl" class="org.apache.openmeetings.db.dao.basic.ConfigurationDao" />
 	<bean id="appointmentDao" class="org.apache.openmeetings.db.dao.calendar.AppointmentDao" />
 	<bean id="appointmentLogic" class="org.apache.openmeetings.core.data.calendar.management.AppointmentLogic" />

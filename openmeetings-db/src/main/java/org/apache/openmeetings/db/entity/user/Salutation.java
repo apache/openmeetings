@@ -43,7 +43,7 @@ import org.simpleframework.xml.Root;
 })
 @Root
 public class Salutation implements Serializable {
-	private static final long serialVersionUID = -5806449519074435223L;
+	private static final long serialVersionUID = 1L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="id")

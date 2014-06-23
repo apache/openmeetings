@@ -126,7 +126,7 @@ public class FlvRecordingDao {
 
 			log.debug("getFlvRecordingByExternalRoomType :externalRoomType: " + externalRoomType);
 
-			String hql = "SELECT c FROM FlvRecording c, Room r WHERE c.room_id = r.rooms_id "
+			String hql = "SELECT c FROM FlvRecording c, Room r WHERE c.room_id = r.id "
 					+ "AND r.externalRoomType LIKE :externalRoomType AND c.insertedBy LIKE :insertedBy "
 					+ "AND c.deleted = false";
 
@@ -164,7 +164,7 @@ public class FlvRecordingDao {
 
 			log.debug("getFlvRecordingByExternalRoomType :externalRoomType: " + externalRoomType);
 
-			String hql = "SELECT c FROM FlvRecording c, Room r " + "WHERE c.room_id = r.rooms_id "
+			String hql = "SELECT c FROM FlvRecording c, Room r " + "WHERE c.room_id = r.id "
 					+ "AND r.externalRoomType LIKE :externalRoomType " + "AND c.deleted <> :deleted ";
 
 			TypedQuery<FlvRecording> query = em.createQuery(hql, FlvRecording.class);
@@ -264,7 +264,7 @@ public class FlvRecordingDao {
 	}
 
 	public boolean delete(FlvRecording f) {
-		if (f == null || f.getFlvRecordingId() == 0) {
+		if (f == null || f.getId() == null) {
 			return false;
 		}
 		f.setDeleted(true);
@@ -274,7 +274,7 @@ public class FlvRecordingDao {
 	
 	public FlvRecording update(FlvRecording f) {
 		try {
-			if (f.getFlvRecordingId() == 0) {
+			if (f.getId() == null) {
 				f.setInserted(new Date());
 				em.persist(f);
 			} else {
@@ -313,7 +313,7 @@ public class FlvRecordingDao {
 			
 			//get all organizations the user can view
 			for (Organisation_Users ou : userDao.get(userId).getOrganisation_users()) {
-				List<FlvRecording>publicFlvRecordings = getFlvRecordingRootByPublic(ou.getOrganisation().getOrganisation_id());
+				List<FlvRecording>publicFlvRecordings = getFlvRecordingRootByPublic(ou.getOrganisation().getId());
 				//get sizes
 				for (FlvRecording publicFlvRecording : publicFlvRecordings) {
 					publicFileSize += getRecordingSize(publicFlvRecording);
@@ -346,7 +346,7 @@ public class FlvRecordingDao {
 		if (isRecordingExists(r.getFileHash() + OGG_EXTENSION)) {
 			size += getOggRecording(r.getFileHash()).length();
 		}
-		for (FlvRecording flvRecording : getFlvRecordingByParent(r.getFlvRecordingId())) {
+		for (FlvRecording flvRecording : getFlvRecordingByParent(r.getId())) {
 			size += getRecordingSize(flvRecording);
 		}
 		return size;

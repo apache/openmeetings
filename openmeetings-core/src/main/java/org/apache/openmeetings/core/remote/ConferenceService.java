@@ -119,7 +119,7 @@ public class ConferenceService {
 					if (!orgRoom.getRoom().getAppointment()) {
 						orgRoom.getRoom().setCurrentusers(
 								this.getRoomClientsListByRoomId(orgRoom.getRoom()
-										.getRooms_id()));
+										.getId()));
 						filtered.add(orgRoom);
 					}
 				}
@@ -140,7 +140,7 @@ public class ConferenceService {
 				List<RoomOrganisation> roomOrgsList = roomManager.getRoomsOrganisationByOrganisationId(organisation_id);
 				
 				for (RoomOrganisation roomOrg : roomOrgsList) {
-					roomOrg.getRoom().setCurrentusers(sessionManager.getClientListByRoom(roomOrg.getRoom().getRooms_id()));
+					roomOrg.getRoom().setCurrentusers(sessionManager.getClientListByRoom(roomOrg.getRoom().getId()));
 				}
 	
 				return roomOrgsList;
@@ -196,7 +196,7 @@ public class ConferenceService {
 	
 					if (!rooms.getAppointment()) {
 						rooms.setCurrentusers(this.getRoomClientsListByRoomId(rooms
-								.getRooms_id()));
+								.getId()));
 						filtered.add(rooms);
 					}
 				}
@@ -218,7 +218,7 @@ public class ConferenceService {
 				List<Room> roomList = roomDao.getPublicRooms();
 				
 				for (Room room : roomList) {
-					room.setCurrentusers(sessionManager.getClientListByRoom(room.getRooms_id()));
+					room.setCurrentusers(sessionManager.getClientListByRoom(room.getId()));
 				}
 	
 				return roomList;
@@ -339,7 +339,7 @@ public class ConferenceService {
 				for (int i = 0; i < points.size(); i++) {
 					Appointment ment = points.get(i);
 
-					Long rooms_id = ment.getRoom().getRooms_id();
+					Long rooms_id = ment.getRoom().getId();
 					Room rooom = roomDao.get(rooms_id);
 
 					if (!rooom.getRoomtype().getRoomtypes_id()
@@ -347,7 +347,7 @@ public class ConferenceService {
 						continue;
 
 					rooom.setCurrentusers(getRoomClientsListByRoomId(rooom
-							.getRooms_id()));
+							.getId()));
 					result.add(rooom);
 				}
 			}
@@ -377,11 +377,11 @@ public class ConferenceService {
 					for (int i = 0; i < appointments.size(); i++) {
 						Appointment ment = appointments.get(i);
 
-						Long rooms_id = ment.getRoom().getRooms_id();
+						Long rooms_id = ment.getRoom().getId();
 						Room rooom = roomDao.get(rooms_id);
 
 						rooom.setCurrentusers(this
-								.getRoomClientsListByRoomId(rooom.getRooms_id()));
+								.getRoomClientsListByRoomId(rooom.getId()));
 						result.add(rooom);
 					}
 				}
@@ -429,7 +429,7 @@ public class ConferenceService {
 		Long users_id = sessiondataDao.checkSession(SID);
 		if (AuthLevelUtil.hasUserLevel(userDao.getRights(users_id))) {
 			room = roomDao.get(rooms_id);
-			room.setCurrentusers(sessionManager.getClientListByRoom(room.getRooms_id()));
+			room.setCurrentusers(sessionManager.getClientListByRoom(room.getId()));
 		}
 		return room;
 	}
@@ -496,7 +496,6 @@ public class ConferenceService {
 
 		} catch (Exception err) {
 			log.error("[getRoomModeratorsByRoomId]", err);
-			err.printStackTrace();
 		}
 
 		return null;

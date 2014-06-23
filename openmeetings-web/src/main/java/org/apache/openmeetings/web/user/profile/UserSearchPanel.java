@@ -55,7 +55,7 @@ import com.googlecode.wicket.jquery.ui.plugins.fixedheadertable.FixedHeaderTable
 import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
 
 public class UserSearchPanel extends UserPanel {
-	private static final long serialVersionUID = -3604291982438458598L;
+	private static final long serialVersionUID = 1L;
 	private final static List<Integer> itemsPerPage = Arrays.asList(10, 25, 50, 75, 100, 200, 500, 1000, 2500, 5000);
 	private String text;
 	private String search;
@@ -75,13 +75,13 @@ public class UserSearchPanel extends UserPanel {
 		super(id);
 		
 		add(new Form<Void>("form") {
-			private static final long serialVersionUID = 3171252669473438834L;
+			private static final long serialVersionUID = 1L;
 			{
 				add(new TextField<String>("text", new PropertyModel<String>(UserSearchPanel.this, "text")));
 				add(new TextField<String>("offer", new PropertyModel<String>(UserSearchPanel.this, "offer")));
 				add(new TextField<String>("search", new PropertyModel<String>(UserSearchPanel.this, "search")));
 				add(new AjaxFormSubmitBehavior(this, "onsubmit") {
-					private static final long serialVersionUID = -5767210068168188960L;
+					private static final long serialVersionUID = 1L;
 
 					@Override
 					protected void onSubmit(AjaxRequestTarget target) {
@@ -102,7 +102,7 @@ public class UserSearchPanel extends UserPanel {
 			}
 		});
 		IDataProvider<User> dp = new IDataProvider<User>() {
-			private static final long serialVersionUID = -1757645522251197822L;
+			private static final long serialVersionUID = 1L;
 
 			public void detach() {
 			}
@@ -123,20 +123,20 @@ public class UserSearchPanel extends UserPanel {
 		};
 		final UserInfoDialog d = new UserInfoDialog("infoDialog", newMessage);
 		final DataView<User> dv = new DataView<User>("users", dp) {
-			private static final long serialVersionUID = -3314136686941736574L;
+			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected void populateItem(Item<User> item) {
 				final UserContactsDao contactsDao = getBean(UserContactsDao.class);
 				User u = item.getModelObject();
-				final long userId = u.getUser_id();
+				final long userId = u.getId();
 				item.add(new WebMarkupContainer("status").add(AttributeModifier.append("class", isUserOnline(userId) ? "online" : "offline")));
 				item.add(new Label("name", getName(u)));
 				item.add(new Label("tz", getBean(TimezoneUtil.class).getTimeZone(u).getID()));
 				item.add(new Label("offer", u.getUserOffers()));
 				item.add(new Label("search", u.getUserSearchs()));
 				item.add(new WebMarkupContainer("view").add(new AjaxEventBehavior("onclick") {
-					private static final long serialVersionUID = 7223188816617664993L;
+					private static final long serialVersionUID = 1L;
 
 					@Override
 					protected void onEvent(AjaxRequestTarget target) {

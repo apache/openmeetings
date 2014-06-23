@@ -136,7 +136,7 @@ public class FLVRecorderService implements IPendingServiceCallback {
 			flvRecording.setStatus(FlvRecording.Status.PROCESSING);
 			flvRecording = recordingDao.update(flvRecording);
 			// Receive flvRecordingId
-			Long flvRecordingId = flvRecording.getFlvRecordingId();
+			Long flvRecordingId = flvRecording.getId();
 			log.debug("##REC:: recording created by USER: " + currentClient.getUser_id());
 
 			// Update Client and set Flag

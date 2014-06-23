@@ -18,15 +18,20 @@
  */
 package org.apache.openmeetings.test.xsd;
 
+import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+
 import java.io.File;
 import java.io.FilenameFilter;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.red5.logging.Red5LoggerFactory;
+import org.slf4j.Logger;
+
 import com.thaiopensource.relaxng.translate.Driver;
 
 public class GenerateWebsiteXsd {
-
+	private static final Logger log = Red5LoggerFactory.getLogger(GenerateWebsiteXsd.class, webAppRootKey);
 	private static String WEBSITE_ROOT_DIR = "xdocs";
 
 	public static void main(String... args) {
@@ -69,7 +74,7 @@ public class GenerateWebsiteXsd {
 			Driver.main(allfilesPlusXSD.toArray(new String[0]));
 
 		} catch (Exception err) {
-			err.printStackTrace();
+			log.error("Error", err);
 		}
 	}
 

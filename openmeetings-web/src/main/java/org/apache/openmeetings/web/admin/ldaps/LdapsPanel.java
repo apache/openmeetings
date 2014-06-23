@@ -40,7 +40,7 @@ import org.apache.wicket.markup.repeater.Item;
  * 
  */
 public class LdapsPanel extends AdminPanel {
-	private static final long serialVersionUID = -1L;
+	private static final long serialVersionUID = 1L;
 	final WebMarkupContainer listContainer = new WebMarkupContainer("listContainer");
 	private LdapForm form;
 	
@@ -50,21 +50,20 @@ public class LdapsPanel extends AdminPanel {
 		target.appendJavaScript("omLdapPanelInit();");
 	}
 
-	@SuppressWarnings("unchecked")
 	public LdapsPanel(String id) {
 		super(id);
 		SearchableDataView<LdapConfig> dataView = new SearchableDataView<LdapConfig>("ldapList"
 			, new SearchableDataProvider<LdapConfig>(LdapConfigDao.class)) {
-			private static final long serialVersionUID = 8715559628755439596L;
+			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected void populateItem(final Item<LdapConfig> item) {
 				final LdapConfig lc = item.getModelObject();
-				item.add(new Label("ldapConfigId", "" + lc.getLdapConfigId()));
+				item.add(new Label("ldapConfigId", "" + lc.getId()));
 				item.add(new Label("name", "" + lc.getName()));
 				item.add(new Label("configFileName", "" + lc.getConfigFileName()));
 				item.add(new AjaxEventBehavior("onclick") {
-					private static final long serialVersionUID = -8069413566800571061L;
+					private static final long serialVersionUID = 1L;
 
 					protected void onEvent(AjaxRequestTarget target) {
 						form.setModelObject(lc);
@@ -74,12 +73,12 @@ public class LdapsPanel extends AdminPanel {
 					}
 				});
 				item.add(AttributeModifier.replace("class", "clickable ui-widget-content"
-						+ (lc.getLdapConfigId() == form.getModelObject().getLdapConfigId() ? " ui-state-active" : "")));
+						+ (lc.getId() == form.getModelObject().getId() ? " ui-state-active" : "")));
 			}
 		};
 		add(listContainer.add(dataView).setOutputMarkupId(true));
 		PagedEntityListPanel navigator = new PagedEntityListPanel("navigator", dataView) {
-			private static final long serialVersionUID = -1L;
+			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected void onEvent(AjaxRequestTarget target) {
@@ -87,10 +86,10 @@ public class LdapsPanel extends AdminPanel {
 			}
 		};
 		DataViewContainer<LdapConfig> container = new DataViewContainer<LdapConfig>(listContainer, dataView, navigator);
-		container.setLinks(new OmOrderByBorder<LdapConfig>("orderById", "ldapConfigId", container)
-				, new OmOrderByBorder<LdapConfig>("orderByName", "name", container)
-				, new OmOrderByBorder<LdapConfig>("orderByFile", "configFileName", container));
-		add(container.orderLinks);
+		container.addLink(new OmOrderByBorder<LdapConfig>("orderById", "ldapConfigId", container))
+			.addLink(new OmOrderByBorder<LdapConfig>("orderByName", "name", container))
+			.addLink(new OmOrderByBorder<LdapConfig>("orderByFile", "configFileName", container));
+		add(container.getLinks());
 		add(navigator);
 		
 		form = new LdapForm("form", listContainer, new LdapConfig());

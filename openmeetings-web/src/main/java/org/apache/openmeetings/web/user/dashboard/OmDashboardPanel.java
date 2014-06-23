@@ -26,7 +26,7 @@ import ro.fortsoft.wicket.dashboard.Dashboard;
 import ro.fortsoft.wicket.dashboard.web.DashboardPanel;
 
 public class OmDashboardPanel extends UserPanel {
-	private static final long serialVersionUID = 7815949875883825949L;
+	private static final long serialVersionUID = 1L;
 
 	public OmDashboardPanel(String id) {
 		super(id);

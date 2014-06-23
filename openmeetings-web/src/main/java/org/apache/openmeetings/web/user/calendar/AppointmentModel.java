@@ -31,7 +31,7 @@ import com.googlecode.wicket.jquery.ui.calendar.CalendarModel;
 import com.googlecode.wicket.jquery.ui.calendar.ICalendarVisitor;
 
 public class AppointmentModel extends CalendarModel implements ICalendarVisitor {
-	private static final long serialVersionUID = -8707880381422490413L;
+	private static final long serialVersionUID = 1L;
 
 	public void visit(CalendarEvent event) {
 		//every event can be customized

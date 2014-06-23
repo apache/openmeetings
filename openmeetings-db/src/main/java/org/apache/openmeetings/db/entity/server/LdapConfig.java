@@ -18,7 +18,6 @@
  */
 package org.apache.openmeetings.db.entity.server;
 
-import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -43,16 +42,16 @@ import org.simpleframework.xml.Root;
 @Entity
 @NamedQueries({
 	@NamedQuery(name="getNondeletedLdapConfigs", query="SELECT u FROM LdapConfig u WHERE u.deleted = false")
-	, @NamedQuery(name="getActiveLdapConfigs", query="SELECT c FROM LdapConfig c WHERE c.deleted = false AND c.isActive = :isActive ORDER BY c.ldapConfigId")
+	, @NamedQuery(name="getActiveLdapConfigs", query="SELECT c FROM LdapConfig c WHERE c.deleted = false AND c.isActive = :isActive ORDER BY c.id")
 })
 @Table(name = "ldapconfig")
 @Root(name="ldapconfig")
-public class LdapConfig implements Serializable, IDataProviderEntity {
+public class LdapConfig implements IDataProviderEntity {
 	private static final long serialVersionUID = 1L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="id")
-	private long ldapConfigId = 0L;
+	private Long id;
 	
 	@Column(name="name")
 	@Element(data=true)
@@ -98,11 +97,11 @@ public class LdapConfig implements Serializable, IDataProviderEntity {
 	@Element(data = true, required = false)
 	private String comment;
 
-	public long getLdapConfigId() {
-		return ldapConfigId;
+	public Long getId() {
+		return id;
 	}
-	public void setLdapConfigId(long ldapConfigId) {
-		this.ldapConfigId = ldapConfigId;
+	public void setId(Long id) {
+		this.id = id;
 	}
     
 	public String getName() {

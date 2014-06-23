@@ -26,7 +26,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
 public class UserForm extends GeneralUserForm {
-	private static final long serialVersionUID = 1305752513494262480L;
+	private static final long serialVersionUID = 1L;
 	private final PasswordTextField confirmPassword;
 	
 	public UserForm(String id, IModel<User> model) {

@@ -30,7 +30,6 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import org.apache.cxf.feature.Features;
-import org.apache.openmeetings.core.data.basic.FieldManager;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.basic.ErrorDao;
 import org.apache.openmeetings.db.dao.label.FieldLanguagesValuesDao;
@@ -81,8 +80,6 @@ public class UserWebService {
 	@Autowired
 	private IUserManager userManagement;
 	@Autowired
-	private FieldManager fieldManager;
-	@Autowired
 	private ErrorDao errorDao;
 	@Autowired
 	private OrganisationDao orgDao;
@@ -129,7 +126,7 @@ public class UserWebService {
 				return -1L;
 			}
 			
-			Boolean bool = sessiondataDao.updateUser(SID, u.getUser_id(), false, u.getLanguage_id());
+			Boolean bool = sessiondataDao.updateUser(SID, u.getId(), false, u.getLanguage_id());
 			if (bool == null) {
 				// Exception
 				return -1L;
@@ -138,7 +135,7 @@ public class UserWebService {
 				return -35L;
 			}
 			
-			return u.getUser_id();
+			return u.getId();
 		} catch (OmException oe) {
 			if (oe.getCode() != null) {
 				return oe.getCode();
@@ -495,7 +492,7 @@ public class UserWebService {
 
 				User userExternal = userDao.getExternalUser(externalUserId, externalUserType);
 
-				Long userId = userExternal.getUser_id();
+				Long userId = userExternal.getId();
 
 				// Setting user deleted
 				userDao.deleteUserID(userId);
@@ -1133,7 +1130,7 @@ public class UserWebService {
 		if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(users_id))) {
 			Organisation o = new Organisation();
 			o.setName(name);
-			return orgDao.update(o, users_id).getOrganisation_id();
+			return orgDao.update(o, users_id).getId();
 		}
 		log.error("Could not create organization");
 		return -1L;

@@ -30,7 +30,7 @@ class WindowClosingAdapter extends WindowAdapter {
 }
 
 public class KeyCodesTest extends Frame implements KeyListener {
-	private static final long serialVersionUID = -1706968644784929402L;
+	private static final long serialVersionUID = 1L;
 	String msg1 = "";
 	String msg2 = "";
 

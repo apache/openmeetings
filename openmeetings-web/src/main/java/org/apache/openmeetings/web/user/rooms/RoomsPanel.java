@@ -46,7 +46,7 @@ import org.apache.wicket.util.io.IOUtils;
 import com.googlecode.wicket.jquery.ui.form.button.Button;
 
 public class RoomsPanel extends UserPanel {
-	private static final long serialVersionUID = -892281210307880052L;
+	private static final long serialVersionUID = 1L;
 	private final WebMarkupContainer clientsContainer = new WebMarkupContainer("clientsContainer");
 	private final WebMarkupContainer details = new WebMarkupContainer("details");
 	private final ListView<Client> clients;
@@ -59,7 +59,7 @@ public class RoomsPanel extends UserPanel {
 	public RoomsPanel(String id, List<Room> rooms) {
 		super(id);
 		add(new ListView<Room>("list", rooms) {
-			private static final long serialVersionUID = 9189085478336224890L;
+			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected void populateItem(ListItem<Room> item) {
@@ -70,23 +70,23 @@ public class RoomsPanel extends UserPanel {
 					
 					@Override
 					protected void onEvent(AjaxRequestTarget target) {
-						roomId = r.getRooms_id();
+						roomId = r.getId();
 						updateRoomDetails(target);
 					}
 				}));
 				roomContainer.add(new Label("roomName", r.getName()));
-				final IModel<Integer> curUsersModel = new Model<Integer>(Application.getBean(ISessionManager.class).getClientListByRoom(r.getRooms_id()).size()); 
+				final IModel<Integer> curUsersModel = new Model<Integer>(Application.getBean(ISessionManager.class).getClientListByRoom(r.getId()).size()); 
 				final Label curUsers = new Label("curUsers", curUsersModel);
 				roomContainer.add(curUsers.setOutputMarkupId(true));
 				roomContainer.add(new Label("totalUsers", r.getNumberOfPartizipants()));
-				item.add(new Button("enter").add(new RoomEnterBehavior(r.getRooms_id())));
+				item.add(new Button("enter").add(new RoomEnterBehavior(r.getId())));
 				roomContainer.add(new AjaxLink<Void>("refresh") {
-					private static final long serialVersionUID = -3426813755917489787L;
+					private static final long serialVersionUID = 1L;
 
 					@Override
 					public void onClick(AjaxRequestTarget target) {
-						roomId = r.getRooms_id();
-						curUsersModel.setObject(Application.getBean(ISessionManager.class).getClientListByRoom(r.getRooms_id()).size());
+						roomId = r.getId();
+						curUsersModel.setObject(Application.getBean(ISessionManager.class).getClientListByRoom(r.getId()).size());
 						target.add(curUsers);
 						updateRoomDetails(target);
 					}
@@ -100,14 +100,14 @@ public class RoomsPanel extends UserPanel {
 		details.add(new Label("roomName", roomName));
 		details.add(new Label("roomComment", roomComment));
 		clients = new ListView<Client>("clients", clientsInRoom){
-			private static final long serialVersionUID = 8542589945574690054L;
+			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected void populateItem(final ListItem<Client> item) {
 				Client client = item.getModelObject();
 				final Long userId = client.getUser_id();
 				item.add(new Image("clientImage", new ByteArrayResource("image/jpeg") {
-					private static final long serialVersionUID = 6039580072791941591L;
+					private static final long serialVersionUID = 1L;
 
 					@Override
 					protected ResourceResponse newResourceResponse(Attributes attributes) {
@@ -141,7 +141,7 @@ public class RoomsPanel extends UserPanel {
 		final List<Client> clientsInRoom = Application.getBean(ISessionManager.class).getClientListByRoom(roomId);
 		clients.setDefaultModelObject(clientsInRoom);
 		Room room = Application.getBean(RoomDao.class).get(roomId);
-		roomID.setObject(room.getRooms_id());
+		roomID.setObject(room.getId());
 		roomName.setObject(room.getName());
 		roomComment.setObject(room.getComment());
 		target.add(clientsContainer, details);

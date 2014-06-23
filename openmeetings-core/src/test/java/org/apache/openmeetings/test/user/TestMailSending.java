@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.test.user;
 
+import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
@@ -35,6 +36,8 @@ import javax.mail.util.ByteArrayDataSource;
 
 import org.apache.openmeetings.util.mail.SmtpAuthenticator;
 import org.junit.Test;
+import org.red5.logging.Red5LoggerFactory;
+import org.slf4j.Logger;
 
 import com.sun.mail.util.MailSSLSocketFactory;
 
@@ -44,6 +47,7 @@ import com.sun.mail.util.MailSSLSocketFactory;
  *
  */
 public class TestMailSending {
+	private static final Logger log = Red5LoggerFactory.getLogger(TestMailSending.class, webAppRootKey);
 	
 	//Example GMail email server data
 	private String smtpServer = "smtp.gmail.com";
@@ -67,7 +71,7 @@ public class TestMailSending {
 			Transport.send(getMimeMessage());
 			
 		} catch (Exception err) {
-			err.printStackTrace();
+			log.error("Error", err);
 		}
 		assertTrue(true);
 	}

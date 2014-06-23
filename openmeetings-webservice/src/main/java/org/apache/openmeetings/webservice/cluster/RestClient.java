@@ -95,7 +95,7 @@ public class RestClient {
 		try {
 			rClient.loginUser(Action.KICK_USER);
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.error("Error", e);
 		}
 	}
 

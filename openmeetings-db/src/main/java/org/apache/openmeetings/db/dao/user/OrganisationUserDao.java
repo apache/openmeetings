@@ -55,7 +55,7 @@ public class OrganisationUserDao implements IDataProviderDao<Organisation_Users>
 	}
 	
 	public List<Organisation_Users> get(long orgId, String search, int start, int count, String sort) {
-		TypedQuery<Organisation_Users> q = em.createQuery(DaoHelper.getSearchQuery("Organisation_Users", "ou", null, search, false, false, "ou.organisation.organisation_id = :orgId", sort, searchFields), Organisation_Users.class);
+		TypedQuery<Organisation_Users> q = em.createQuery(DaoHelper.getSearchQuery("Organisation_Users", "ou", null, search, false, false, "ou.organisation.id = :orgId", sort, searchFields), Organisation_Users.class);
 		q.setParameter("orgId", orgId);
 		q.setFirstResult(start);
 		q.setMaxResults(count);
@@ -114,7 +114,7 @@ public class OrganisationUserDao implements IDataProviderDao<Organisation_Users>
 	}
 	
 	public Organisation_Users update(Organisation_Users entity, Long userId) {
-		if (entity.getOrganisation_users_id() == null) {
+		if (entity.getId() == null) {
 			entity.setStarttime(new Date());
 			em.persist(entity);
 		} else {
@@ -125,8 +125,8 @@ public class OrganisationUserDao implements IDataProviderDao<Organisation_Users>
 	}
 
 	public void delete(Organisation_Users entity, Long userId) {
-		if (entity.getOrganisation_users_id() != null) {
-			User u = usersDao.get(entity.getUser().getUser_id());
+		if (entity.getId() != null) {
+			User u = usersDao.get(entity.getUser().getId());
 			int idx = u.getOrganisation_users().indexOf(entity);
 			//entity has been detached need to re-fetch
 			Organisation_Users ou = u.getOrganisation_users().remove(idx);

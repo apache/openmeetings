@@ -147,7 +147,7 @@ public class CalendarPanel extends UserPanel {
 		options.set("dayNamesShort", shortDays.toString());
 		
 		calendar = new Calendar("calendar", new AppointmentModel(), options) {
-			private static final long serialVersionUID = 8442068089963449950L;
+			private static final long serialVersionUID = 1L;
 			
 			@Override
 			protected void onInitialize() {

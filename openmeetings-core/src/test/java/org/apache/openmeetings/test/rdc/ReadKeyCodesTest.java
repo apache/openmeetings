@@ -22,7 +22,7 @@ import java.awt.*;
 import java.awt.event.*;
 
 public class ReadKeyCodesTest extends Frame implements KeyListener {
-	private static final long serialVersionUID = -1722917067803656922L;
+	private static final long serialVersionUID = 1L;
 	String msg1 = "";
 	String msg2 = "";
 

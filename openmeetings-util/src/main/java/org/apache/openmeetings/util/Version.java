@@ -44,7 +44,7 @@ public class Version {
 			try {
 				version = getAttributes().getValue("Product-Version");
 			} catch (Exception e) {
-				e.printStackTrace();
+				log.error("Error", e);
 			}
 		}
 		return version;
@@ -55,7 +55,7 @@ public class Version {
 			try {
 				revision = getAttributes().getValue("Svn-Revision");
 			} catch (Exception e) {
-				e.printStackTrace();
+				log.error("Error", e);
 			}
 		}
 		return revision;
@@ -66,7 +66,7 @@ public class Version {
 			try {
 				buildDate = getAttributes().getValue("Built-On");
 			} catch (Exception e) {
-				e.printStackTrace();
+				log.error("Error", e);
 			}
 		}
 		return buildDate;

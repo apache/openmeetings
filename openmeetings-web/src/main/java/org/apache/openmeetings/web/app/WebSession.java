@@ -82,7 +82,7 @@ import ro.fortsoft.wicket.dashboard.WidgetFactory;
 import ro.fortsoft.wicket.dashboard.web.DashboardContext;
 
 public class WebSession extends AbstractAuthenticatedWebSession implements IWebSession {
-	private static final long serialVersionUID = 1123393236459095315L;
+	private static final long serialVersionUID = 1L;
 	public static int MILLIS_IN_MINUTE = 60000;
 	//private static final Map<String, Locale> LNG_TO_LOCALE_MAP = new HashMap<String, Locale> ();
 	private long userId = -1;
@@ -220,7 +220,7 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 					//soapLogin.setClientURL(clientURL); //FIXME
 					soapDao.update(soapLogin);
 
-					sessionDao.updateUser(SID, user.getUser_id());
+					sessionDao.updateUser(SID, user.getId());
 					setUser(user);
 					recordingId = soapLogin.getRoomRecordingId();
 					return true;
@@ -231,7 +231,7 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 	}
 	
 	private void setUser(User u) {
-		userId = u.getUser_id();
+		userId = u.getId();
 		rights = Collections.unmodifiableSet(u.getRights());
 		languageId = u.getLanguage_id();
 		externalType = u.getExternalUserType();

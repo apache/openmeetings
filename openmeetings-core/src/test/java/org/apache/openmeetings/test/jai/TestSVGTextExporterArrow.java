@@ -98,11 +98,6 @@ public class TestSVGTextExporterArrow extends TestCase {
 	        svgGenerator.stream(out, useCSS);
 		} catch (Exception er) {
 			log.error("ERROR ", er);
-			System.out.println("Error exporting: " + er);
-			er.printStackTrace();
 		}
 	}
-	
-	
-
 }

@@ -443,10 +443,10 @@ public class RoomWebService {
 
 				for (Room room : rooms) {
 					RoomCountBean rCountBean = new RoomCountBean();
-					rCountBean.setRoomId(room.getRooms_id());
+					rCountBean.setRoomId(room.getId());
 					rCountBean.setRoomName(room.getName());
 					rCountBean.setMaxUser(room.getNumberOfPartizipants().intValue());
-					rCountBean.setRoomCount(sessionManager.getClientListByRoom(room.getRooms_id()).size());
+					rCountBean.setRoomCount(sessionManager.getClientListByRoom(room.getId()).size());
 
 					roomBeans.add(rCountBean);
 				}
@@ -494,10 +494,10 @@ public class RoomWebService {
 				roomReturn.setCreated(room.getStarttime());
 				roomReturn.setCreator(null);
 				roomReturn.setName(room.getName());
-				roomReturn.setRoom_id(room.getRooms_id());
+				roomReturn.setRoom_id(room.getId());
 
 				List<Client> map = sessionManager
-						.getClientListByRoom(room.getRooms_id());
+						.getClientListByRoom(room.getId());
 
 				RoomUser[] roomUsers = new RoomUser[map.size()];
 
@@ -984,7 +984,7 @@ public class RoomWebService {
 							null, externalRoomId, externalRoomType, true,
 							false, true, false, "", false, true, false);
 				} else {
-					roomId = room.getRooms_id();
+					roomId = room.getId();
 				}
 				return roomId;
 			}
@@ -1944,7 +1944,7 @@ public class RoomWebService {
 
 				RoomReturn roomReturn = new RoomReturn();
 
-				roomReturn.setRoom_id(room.getRooms_id());
+				roomReturn.setRoom_id(room.getId());
 				roomReturn.setName(room.getName());
 
 				roomReturn.setCreator("SOAP");
@@ -2011,7 +2011,7 @@ public class RoomWebService {
 
 				RoomReturn roomReturn = new RoomReturn();
 
-				roomReturn.setRoom_id(room.getRooms_id());
+				roomReturn.setRoom_id(room.getId());
 				roomReturn.setName(room.getName());
 
 				roomReturn.setCreator("SOAP");

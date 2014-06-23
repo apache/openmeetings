@@ -31,20 +31,22 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.apache.openjpa.persistence.jdbc.ForeignKey;
+import org.apache.openmeetings.db.entity.IDataProviderEntity;
 import org.apache.openmeetings.db.entity.label.Fieldvalues;
 
 @Entity
 @NamedQueries({
 	@NamedQuery(name = "getPollTypes", query = "SELECT pt FROM PollType pt"),
-	@NamedQuery(name = "getPollType", query = "SELECT pt FROM PollType pt " +
-			"WHERE pt.pollTypesId = :pollTypesId")		
+	@NamedQuery(name = "getPollType", query = "SELECT pt FROM PollType pt WHERE pt.id = :pollTypesId")		
 })
 @Table(name = "poll_types")
-public class PollType {
+public class PollType implements IDataProviderEntity {
+	private static final long serialVersionUID = 1L;
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
-	private Long pollTypesId;
+	private Long id;
 	
 	@OneToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "fieldvalues_id")
@@ -57,14 +59,14 @@ public class PollType {
 	/**
 	 * @return the pollTypesId
 	 */
-	public Long getPollTypesId() {
-		return pollTypesId;
+	public Long getId() {
+		return id;
 	}
 	/**
-	 * @param pollTypesId the pollTypesId to set
+	 * @param id the pollTypesId to set
 	 */
-	public void setPollTypesId(Long pollTypesId) {
-		this.pollTypesId = pollTypesId;
+	public void setId(Long id) {
+		this.id = id;
 	}
 	/**
 	 * @return the isNumericAnswer

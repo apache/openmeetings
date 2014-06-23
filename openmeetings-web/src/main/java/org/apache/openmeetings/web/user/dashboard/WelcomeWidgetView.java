@@ -41,7 +41,7 @@ import ro.fortsoft.wicket.dashboard.Widget;
 import ro.fortsoft.wicket.dashboard.web.WidgetView;
 
 public class WelcomeWidgetView extends WidgetView {
-	private static final long serialVersionUID = -6257866996099503210L;
+	private static final long serialVersionUID = 1L;
 
 	public WelcomeWidgetView(String id, Model<Widget> model) {
 		super(id, model);
@@ -53,7 +53,7 @@ public class WelcomeWidgetView extends WidgetView {
 		add(new Label("lastname", Model.of(u.getLastname())));
 		add(new Label("tz", Model.of(u.getTimeZoneId())));
 		add(new AjaxLink<Void>("openUnread") {
-			private static final long serialVersionUID = -1847619557485964386L;
+			private static final long serialVersionUID = 1L;
 
 			@Override
 			public void onClick(AjaxRequestTarget target) {
@@ -61,7 +61,7 @@ public class WelcomeWidgetView extends WidgetView {
 			}
 		}.add(new Label("unread", Model.of("" + getBean(PrivateMessagesDao.class).count(getUserId(), INBOX_FOLDER_ID, null)))));
 		add(new AjaxLink<Void>("editProfile") {
-			private static final long serialVersionUID = -1847619557485964386L;
+			private static final long serialVersionUID = 1L;
 
 			@Override
 			public void onClick(AjaxRequestTarget target) {
@@ -69,7 +69,7 @@ public class WelcomeWidgetView extends WidgetView {
 			}
 		});
 		add(new Link<Void>("netTest") {
-			private static final long serialVersionUID = -9055312659797800331L;
+			private static final long serialVersionUID = 1L;
 
 			@Override
 			public void onClick() {

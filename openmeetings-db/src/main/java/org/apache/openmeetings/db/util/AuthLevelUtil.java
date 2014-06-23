@@ -45,7 +45,7 @@ public class AuthLevelUtil {
 		boolean result = hasAdminLevel(u.getRights());
 		if (!result && orgId != null) {
 			for (Organisation_Users ou : u.getOrganisation_users()) {
-				if (orgId.equals(ou.getOrganisation().getOrganisation_id())) {
+				if (orgId.equals(ou.getOrganisation().getId())) {
 					if (Boolean.TRUE.equals(ou.getIsModerator())) {
 						result = true;
 					}

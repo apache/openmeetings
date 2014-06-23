@@ -18,7 +18,6 @@
  */
 package org.apache.openmeetings.db.entity.label;
 
-import java.io.Serializable;
 import java.util.Date;
 import java.util.Set;
 
@@ -39,16 +38,15 @@ import org.apache.openmeetings.db.entity.IDataProviderEntity;
 @NamedQueries({
 	@NamedQuery(name = "getFieldCount", query = "SELECT COUNT(fv) FROM Fieldvalues fv WHERE fv.deleted = false ")
 	, @NamedQuery(name = "getFieldByIdAndLanguage", query = "SELECT fv FROM Fieldvalues fv " +
-		"LEFT OUTER JOIN FETCH fv.fieldlanguagesvalues WHERE " +
-		"fv.fieldvalues_id = :id AND fv.deleted = false")
+		"LEFT OUTER JOIN FETCH fv.fieldlanguagesvalues WHERE fv.id = :id AND fv.deleted = false")
 	, @NamedQuery(name = "getFieldByLanguage", query = "SELECT fv FROM Fieldvalues fv WHERE fv.deleted = false") //FIXME no language yet
 })
 @Table(name = "fieldvalues")
-public class Fieldvalues implements Serializable, IDataProviderEntity {
-	private static final long serialVersionUID = -3439614511218028085L;
+public class Fieldvalues implements IDataProviderEntity {
+	private static final long serialVersionUID = 1L;
 	@Id
 	@Column(name="id")
-	private Long fieldvalues_id;
+	private Long id;
 	
 	@Column(name="name")
 	private String name;
@@ -73,11 +71,11 @@ public class Fieldvalues implements Serializable, IDataProviderEntity {
 		super();
 	}
 	
-	public Long getFieldvalues_id() {
-		return fieldvalues_id;
+	public Long getId() {
+		return id;
 	}
-	public void setFieldvalues_id(Long fieldvalues_id) {
-		this.fieldvalues_id = fieldvalues_id;
+	public void setId(Long id) {
+		this.id = id;
 	}	
 
 	public String getName() {

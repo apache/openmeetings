@@ -39,14 +39,14 @@ import org.apache.wicket.model.CompoundPropertyModel;
  * 
  */
 public class LabelsForm extends AdminBaseForm<Fieldlanguagesvalues> {
-	private static final long serialVersionUID = -1309878909524329047L;
+	private static final long serialVersionUID = 1L;
 	private LangPanel panel;
 	
 	public LabelsForm(String id, LangPanel panel, Fieldlanguagesvalues fieldlanguagesvalues) {
 		super(id, new CompoundPropertyModel<Fieldlanguagesvalues>(fieldlanguagesvalues));
 		this.panel = panel;
 		
-		add(new Label("fieldvalues.fieldvalues_id"));
+		add(new Label("fieldvalues.id"));
 		add(new TextField<String>("fieldvalues.name"));
 		add(new TextArea<String>("value"));
 	}
@@ -54,7 +54,7 @@ public class LabelsForm extends AdminBaseForm<Fieldlanguagesvalues> {
 	@Override
 	protected void onNewSubmit(AjaxRequestTarget target, Form<?> f) {
 		Fieldlanguagesvalues flv = new Fieldlanguagesvalues();
-		flv.setLanguage_id(panel.language.getLanguage_id());
+		flv.setLanguage_id(panel.language.getId());
 		this.setModelObject(flv);
 		target.add(this);
 		target.appendJavaScript("labelsInit();");
@@ -63,9 +63,8 @@ public class LabelsForm extends AdminBaseForm<Fieldlanguagesvalues> {
 	@Override
 	protected void onRefreshSubmit(AjaxRequestTarget target, Form<?> form) {
 		Fieldlanguagesvalues flv = getModelObject();
-		if (flv.getFieldlanguagesvalues_id() != null) {
-			flv = Application.getBean(FieldLanguagesValuesDao.class)
-					.get(getModelObject().getFieldlanguagesvalues_id());
+		if (flv.getId() != null) {
+			flv = Application.getBean(FieldLanguagesValuesDao.class).get(getModelObject().getId());
 		} else {
 			flv = new Fieldlanguagesvalues();
 		}

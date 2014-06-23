@@ -92,7 +92,7 @@ public class FieldValueDao implements IDataProviderDao<Fieldvalues> {
 		List<Fieldvalues> result = q.getResultList();
 		for (Fieldvalues fv : result) {
 			//FIXME ineffective !!!!!!!!!!!!!!!!!!!!
-			Fieldlanguagesvalues flv = flvDaoImpl.get(fv.getFieldvalues_id(), language_id);
+			Fieldlanguagesvalues flv = flvDaoImpl.get(fv.getId(), language_id);
 			if (flv == null) {
 				flv = new Fieldlanguagesvalues();
 				flv.setLanguage_id(language_id);
@@ -121,8 +121,8 @@ public class FieldValueDao implements IDataProviderDao<Fieldvalues> {
 	
 	public Fieldvalues update(Fieldvalues entity, Long userId) {
 		entity.setDeleted(false);
-		if (entity.getFieldvalues_id() == null) {
-			entity.setFieldvalues_id(count() + 1);
+		if (entity.getId() == null) {
+			entity.setId(count() + 1);
 			entity.setStarttime(new Date());
 			em.persist(entity);
 		} else {

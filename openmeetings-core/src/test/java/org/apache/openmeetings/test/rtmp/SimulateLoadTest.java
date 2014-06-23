@@ -18,13 +18,17 @@
  */
 package org.apache.openmeetings.test.rtmp;
 
+import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Test;
+import org.red5.logging.Red5LoggerFactory;
+import org.slf4j.Logger;
 
 public class SimulateLoadTest {
-
+	private static final Logger log = Red5LoggerFactory.getLogger(SimulateLoadTest.class, webAppRootKey);
 	private int numberOfClients = 25;
 	private List<SimulateLoad> simulateLoadList = new ArrayList<SimulateLoad>();
 
@@ -57,14 +61,14 @@ public class SimulateLoadTest {
 				Thread.sleep(100);
 			}
 
-			System.err.println("Clients initialized");
+			log.error("Clients initialized");
 
 			for (SimulateLoad simulateLoad : simulateLoadList) {
 				simulateLoad.start();
 				Thread.sleep(50);
 			}
 
-			System.err.println("Clients started");
+			log.error("Clients started");
 
 			boolean running = true;
 			while (running) {
@@ -79,7 +83,7 @@ public class SimulateLoadTest {
 				try {
 					Thread.sleep(200);
 				} catch (InterruptedException e) {
-					e.printStackTrace();
+					log.error("Error", e);
 				}
 			}
 
@@ -87,7 +91,7 @@ public class SimulateLoadTest {
 
 			for (SimulateLoad simulateLoad : simulateLoadList) {
 				overallTime += simulateLoad.getAverageTime();
-				System.err.println("Number of calls: "
+				log.error("Number of calls: "
 						+ simulateLoad.getNumberOfCalls() + "overallTime: "
 						+ overallTime + " averageTime"
 						+ simulateLoad.getAverageTime());
@@ -96,10 +100,10 @@ public class SimulateLoadTest {
 			double deltaAllClients = overallTime
 					/ Integer.valueOf(simulateLoadList.size()).doubleValue();
 
-			System.err.println("Average time per call: " + deltaAllClients);
+			log.error("Average time per call: " + deltaAllClients);
 
 		} catch (Exception err) {
-			err.printStackTrace();
+			log.error("Error", err);
 		}
 
 	}

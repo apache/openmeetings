@@ -27,7 +27,7 @@ import ro.fortsoft.wicket.dashboard.Widget;
 import ro.fortsoft.wicket.dashboard.web.WidgetView;
 
 public class PrivateRoomsWidgetView extends WidgetView {
-	private static final long serialVersionUID = 6950427893821991173L;
+	private static final long serialVersionUID = 1L;
 
 	public PrivateRoomsWidgetView(String id, Model<Widget> model) {
 		super(id, model);

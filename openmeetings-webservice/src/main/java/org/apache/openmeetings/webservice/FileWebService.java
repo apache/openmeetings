@@ -139,7 +139,7 @@ public class FileWebService {
 				hs.put("user", externalUser);
 
 				ConverterProcessResultList returnError = fileProcessor
-						.processFile(externalUser.getUser_id(), room_id,
+						.processFile(externalUser.getId(), room_id,
 								isOwner, inputstream, parentFolderId,
 								fileSystemName,
 								externalFileId, externalType);
@@ -223,7 +223,7 @@ public class FileWebService {
 				hs.put("user", internalUser);
 
 				ConverterProcessResultList returnError = fileProcessor
-						.processFile(internalUser.getUser_id(), room_id,
+						.processFile(internalUser.getId(), room_id,
 								isOwner, inputstream, parentFolderId,
 								fileSystemName, 
 								externalFileId, externalType);
@@ -285,7 +285,7 @@ public class FileWebService {
 
 				User userExternal = userDao.getExternalUser(externalUserId, externalType);
 
-				Long userId = userExternal.getUser_id();
+				Long userId = userExternal.getId();
 
 				log.debug("addFolder " + parentFileExplorerItemId);
 

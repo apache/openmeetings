@@ -18,7 +18,6 @@
  */
 package org.apache.openmeetings.db.entity.room;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -64,32 +63,32 @@ import org.simpleframework.xml.Root;
 					+ "AND c.roomtype.roomtypes_id = :roomtypesId "
 					+ "AND c.deleted <> :deleted"),	
 										
-	@NamedQuery(name = "selectMaxFromRooms", query = "select count(c.rooms_id) from Room c "
+	@NamedQuery(name = "selectMaxFromRooms", query = "select count(c.id) from Room c "
 			+ "where c.deleted <> true AND c.name LIKE :search "),
 	@NamedQuery(name = "getRoomByExternalId", query = "select c from Room as c JOIN c.roomtype as rt "
 			+ "where c.externalRoomId = :externalRoomId AND c.externalRoomType = :externalRoomType "
 			+ "AND rt.roomtypes_id = :roomtypes_id AND c.deleted <> :deleted"),
 	@NamedQuery(name = "getPublicRoomsOrdered", query = "SELECT r from Room r WHERE r.ispublic= true AND r.deleted= false AND r.appointment = false ORDER BY r.name ASC"),
-	@NamedQuery(name = "getRoomById", query = "SELECT r FROM Room r WHERE r.deleted = false AND r.rooms_id = :id"),
-	@NamedQuery(name = "getSipRoomIdsByIds", query = "SELECT r.rooms_id FROM Room r WHERE r.deleted = false AND r.sipEnabled = true AND r.rooms_id IN :ids"),
+	@NamedQuery(name = "getRoomById", query = "SELECT r FROM Room r WHERE r.deleted = false AND r.id = :id"),
+	@NamedQuery(name = "getSipRoomIdsByIds", query = "SELECT r.id FROM Room r WHERE r.deleted = false AND r.sipEnabled = true AND r.id IN :ids"),
 	@NamedQuery(name = "countRooms", query = "SELECT COUNT(r) FROM Room r WHERE r.deleted = false"),
-	@NamedQuery(name = "getBackupRooms", query = "SELECT r FROM Room r ORDER BY r.rooms_id"),
-	@NamedQuery(name = "getRoomsCapacityByIds", query = "SELECT SUM(r.numberOfPartizipants) FROM Room r WHERE r.deleted = false AND r.rooms_id IN :ids")
+	@NamedQuery(name = "getBackupRooms", query = "SELECT r FROM Room r ORDER BY r.id"),
+	@NamedQuery(name = "getRoomsCapacityByIds", query = "SELECT SUM(r.numberOfPartizipants) FROM Room r WHERE r.deleted = false AND r.id IN :ids")
 	, @NamedQuery(name = "getOrganisationRooms", query = "SELECT DISTINCT c.room FROM RoomOrganisation c LEFT JOIN FETCH c.room "
-				+ "WHERE c.organisation.organisation_id = :orgId AND c.deleted = false AND c.room.deleted = false AND c.room.appointment = false "
+				+ "WHERE c.organisation.id = :orgId AND c.deleted = false AND c.room.deleted = false AND c.room.appointment = false "
 				+ "AND c.organisation.deleted = false ORDER BY c.room.name ASC")
 })
 @Table(name = "room")
 @Root(name = "room")
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
-public class Room implements Serializable, IDataProviderEntity {
-	private static final long serialVersionUID = -2860312283159251568L;
+public class Room implements IDataProviderEntity {
+	private static final long serialVersionUID = 1L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
 	@Element(data = true, required=false)
-	private Long rooms_id;
+	private Long id;
 
 	@Column(name = "name")
 	@Element(data = true, required=false)
@@ -278,12 +277,12 @@ public class Room implements Serializable, IDataProviderEntity {
 		this.name = name;
 	}
 
-	public Long getRooms_id() {
-		return rooms_id;
+	public Long getId() {
+		return id;
 	}
 
-	public void setRooms_id(Long rooms_id) {
-		this.rooms_id = rooms_id;
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public RoomType getRoomtype() {

@@ -23,6 +23,8 @@ package org.apache.openmeetings.test;
  * Intern, SETLabs, Infosys Technologies Ltd. May 2004 - Jul 2004
  * Ecole des Mines de Nantes, France
  */
+import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
@@ -42,6 +44,9 @@ import javax.swing.text.html.HTMLEditorKit;
 import javax.swing.text.html.StyleSheet;
 import javax.swing.text.html.parser.ParserDelegator;
 
+import org.red5.logging.Red5LoggerFactory;
+import org.slf4j.Logger;
+
 /**
  * A "HTML" JEditorPane embedded with a special HTMLDocument that detects urls
  * and displays them as hyperlinks. When CTRL is pressed, the urls are
@@ -51,7 +56,8 @@ import javax.swing.text.html.parser.ParserDelegator;
  *  
  */
 public class EditorPaneLinkDetector extends JEditorPane {
-	private static final long serialVersionUID = 2811878994346374017L;
+	private static final long serialVersionUID = 1L;
+	private static final Logger log = Red5LoggerFactory.getLogger(EditorPaneLinkDetector.class, webAppRootKey);
 
 	/**
 	 * Creates a <code>EditorPaneLinkDetector</code>.
@@ -105,11 +111,13 @@ public class EditorPaneLinkDetector extends JEditorPane {
 			public void keyPressed(KeyEvent e) {
 				
 				if (e.getKeyCode() == KeyEvent.VK_CONTROL) {
-					if (isEditable())
+					if (isEditable()) {
 						setEditable(false);
+					}
 				} else {
-					if (!isEditable())
+					if (!isEditable()) {
 						setEditable(true);
+					}
 				}
 
 			}
@@ -125,11 +133,7 @@ public class EditorPaneLinkDetector extends JEditorPane {
 	}
 
 	protected class HTMLDocLinkDetector extends HTMLDocument {
-
-		/**
-		 * 
-		 */
-		private static final long serialVersionUID = 1226244167782160437L;
+		private static final long serialVersionUID = 1L;
 
 		public HTMLDocLinkDetector(StyleSheet ss) {
 			super(ss);
@@ -170,7 +174,7 @@ public class EditorPaneLinkDetector extends JEditorPane {
 				else
 					createLink(e);
 			} catch (IOException ex) {
-				ex.printStackTrace();
+				log.error("Error", ex);
 			}
 			setCaretPosition(Math.min(caretPos, getLength()));
 		}

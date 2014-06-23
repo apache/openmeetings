@@ -80,7 +80,7 @@ import com.googlecode.wicket.jquery.ui.plugins.fixedheadertable.FixedHeaderTable
 import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
 
 public class MessagesContactsPanel extends UserPanel {
-	private static final long serialVersionUID = 8098087441571734957L;
+	private static final long serialVersionUID = 1L;
 	private final static long MOVE_CHOOSE = -1;
 	private final static int SELECT_CHOOSE = 1252;
 	private final static int SELECT_ALL = 1239;
@@ -127,7 +127,7 @@ public class MessagesContactsPanel extends UserPanel {
 		});
 	private static PrivateMessageFolder NOT_MOVE_FOLDER = new PrivateMessageFolder();
 	static {
-		NOT_MOVE_FOLDER.setPrivateMessageFolderId(MOVE_CHOOSE);
+		NOT_MOVE_FOLDER.setId(MOVE_CHOOSE);
 		NOT_MOVE_FOLDER.setFolderName(WebSession.getString(1243));
 	}
 	private final DropDownChoice<PrivateMessageFolder> moveDropDown = new DropDownChoice<PrivateMessageFolder>("msgMove", Model.of(NOT_MOVE_FOLDER)
@@ -140,7 +140,7 @@ public class MessagesContactsPanel extends UserPanel {
 			}
 
 			public String getIdValue(PrivateMessageFolder object, int index) {
-				return "" + object.getPrivateMessageFolderId();
+				return "" + object.getId();
 			}
 		});
 	private WebMarkupContainer selectedFolder;
@@ -157,7 +157,7 @@ public class MessagesContactsPanel extends UserPanel {
 	
 	private void setFolderClass(ListItem<PrivateMessageFolder> folder) {
 		folder.add(AttributeAppender.replace("class", "email folder clickable"));
-		if (folder.getModelObject().getPrivateMessageFolderId() == selectedFolderModel.getObject()) {
+		if (folder.getModelObject().getId() == selectedFolderModel.getObject()) {
 			selectFolder(folder);
 		}
 	}
@@ -208,7 +208,7 @@ public class MessagesContactsPanel extends UserPanel {
 			updateTable(target);
 			target.add(folders, unread, selectDropDown, moveDropDown);
 			target.add(dataContainer.container, dataContainer.navigator);
-			target.add(dataContainer.orderLinks);
+			target.add(dataContainer.getLinks());
 		}
 	}
 	
@@ -240,7 +240,6 @@ public class MessagesContactsPanel extends UserPanel {
 		}
 	}
 	
-	@SuppressWarnings("unchecked")
 	public MessagesContactsPanel(String id) {
 		super(id);
 		foldersModel = Model.ofList(getBean(PrivateMessageFolderDao.class).get(0, Integer.MAX_VALUE));
@@ -338,7 +337,7 @@ public class MessagesContactsPanel extends UserPanel {
 
 					@Override
 					protected void onEvent(AjaxRequestTarget target) {
-						selectFolder(item, item.getModelObject().getPrivateMessageFolderId(), target);
+						selectFolder(item, item.getModelObject().getId(), target);
 					}
 				});
 				setFolderClass(item);
@@ -412,7 +411,7 @@ public class MessagesContactsPanel extends UserPanel {
 			}
 		};
 		PagedEntityListPanel navigator = new PagedEntityListPanel("navigator", dv) {
-			private static final long serialVersionUID = 5097048616003411362L;
+			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected void onEvent(AjaxRequestTarget target) {
@@ -421,11 +420,11 @@ public class MessagesContactsPanel extends UserPanel {
 			}
 		};
 		dataContainer = new DataViewContainer<PrivateMessage>(container, dv, navigator);
-		dataContainer.setLinks(new OmOrderByBorder<PrivateMessage>("orderById", "id", dataContainer)
-				, new OmOrderByBorder<PrivateMessage>("orderByFrom", "from.lastname", dataContainer)
-				, new OmOrderByBorder<PrivateMessage>("orderBySubject", "subject", dataContainer)
-				, new OmOrderByBorder<PrivateMessage>("orderBySend", "inserted", dataContainer));
-		add(dataContainer.orderLinks);
+		dataContainer.addLink(new OmOrderByBorder<PrivateMessage>("orderById", "id", dataContainer))
+			.addLink(new OmOrderByBorder<PrivateMessage>("orderByFrom", "from.lastname", dataContainer))
+			.addLink(new OmOrderByBorder<PrivateMessage>("orderBySubject", "subject", dataContainer))
+			.addLink(new OmOrderByBorder<PrivateMessage>("orderBySend", "inserted", dataContainer));
+		add(dataContainer.getLinks());
 		add(navigator);
 		
 		add(unread.setOutputMarkupId(true));
@@ -506,7 +505,7 @@ public class MessagesContactsPanel extends UserPanel {
 
 			@Override
 			protected void onUpdate(AjaxRequestTarget target) {
-				long folderId = moveDropDown.getModelObject().getPrivateMessageFolderId();
+				long folderId = moveDropDown.getModelObject().getId();
 				if (folderId != MOVE_CHOOSE) {
 					getBean(PrivateMessagesDao.class).moveMailsToFolder(selectedMessages, folderId);
 				}
@@ -549,13 +548,13 @@ public class MessagesContactsPanel extends UserPanel {
 			protected void populateItem(Item<UserContact> item) {
 				UserContact uc = item.getModelObject();
 				final long contactId = uc.getUserContactId();
-				final long userId = uc.getOwner().getUser_id();
+				final long userId = uc.getOwner().getId();
 				if (uc.getPending()) {
 					item.add(AttributeModifier.append("class", "unread"));
 				}
 				item.add(new Label("name", getName(uc)));	
 				item.add(new WebMarkupContainer("accept").add(new AjaxEventBehavior("onclick") {
-					private static final long serialVersionUID = 7223188816617664993L;
+					private static final long serialVersionUID = 1L;
 
 					@Override
 					protected void onEvent(AjaxRequestTarget target) {

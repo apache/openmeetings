@@ -44,14 +44,12 @@ import org.simpleframework.xml.Root;
 	@NamedQuery(name = "getRoomModeratorsByIds", query = "select c from RoomModerator as c where c.roomModeratorsId IN :ids"),
 	@NamedQuery(name = "getRoomModeratorByRoomId", query = "select c from RoomModerator as c where c.roomId = :roomId AND c.deleted = false"),
 	@NamedQuery(name = "getRoomModeratorByUserAndRoomId", query = "select c from RoomModerator as c "
-			+ "where c.roomId = :roomId "
-			+ "AND c.deleted <> :deleted "
-			+ "AND c.user.user_id = :user_id")
+			+ "where c.roomId = :roomId AND c.deleted false AND c.user.id = :user_id")
 })
 @Table(name = "rooms_moderator")
 @Root(name = "room_moderator")
 public class RoomModerator implements Serializable {
-	private static final long serialVersionUID = 5407758673591515018L;
+	private static final long serialVersionUID = 1L;
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

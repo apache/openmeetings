@@ -18,9 +18,15 @@
  */
 package org.apache.openmeetings.util.crypt;
 
+import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+
 import java.security.NoSuchAlgorithmException;
 
+import org.red5.logging.Red5LoggerFactory;
+import org.slf4j.Logger;
+
 public class MD5Implementation implements ICryptString {
+	private static final Logger log = Red5LoggerFactory.getLogger(MD5Implementation.class, webAppRootKey);
 
 	/*
 	 * (non-Javadoc)
@@ -31,7 +37,7 @@ public class MD5Implementation implements ICryptString {
 		try {
 			passPhrase = MD5.do_checksum(userGivenPass);
 		} catch (NoSuchAlgorithmException e) {
-			e.printStackTrace();
+			log.error("Error", e);
 		}
 		return passPhrase;
 	}

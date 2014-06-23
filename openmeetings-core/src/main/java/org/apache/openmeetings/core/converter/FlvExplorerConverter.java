@@ -61,7 +61,7 @@ public class FlvExplorerConverter extends BaseConverter {
 		try {
 			FileExplorerItem fileExplorerItem = fileExplorerItemDaoImpl.getFileExplorerItemsById(fileExplorerItemId);
 
-			log.debug("fileExplorerItem " + fileExplorerItem.getFileExplorerItemId());
+			log.debug("fileExplorerItem " + fileExplorerItem.getId());
 
 			//  Convert to FLV
 			return convertToFLV(fileExplorerItem, moviePath);
@@ -80,7 +80,7 @@ public class FlvExplorerConverter extends BaseConverter {
 	private List<ConverterProcessResult> convertToFLV(FileExplorerItem fileExplorerItem, String moviePath) {
 		List<ConverterProcessResult> returnLog = new ArrayList<ConverterProcessResult>();
 		try {
-			String name = "UPLOADFLV_" + fileExplorerItem.getFileExplorerItemId();
+			String name = "UPLOADFLV_" + fileExplorerItem.getId();
 			File outputFullFlv = new File(getStreamsHibernateDir(), name + ".flv");
 
 			fileExplorerItem.setIsVideo(true);
@@ -92,7 +92,7 @@ public class FlvExplorerConverter extends BaseConverter {
 			// "-s", flvWidth + "x" + flvHeight, 
 
 			ConverterProcessResult returnMapConvertFLV = ProcessHelper.executeScript("uploadFLV ID :: "
-					+ fileExplorerItem.getFileExplorerItemId(), argv_fullFLV);
+					+ fileExplorerItem.getId(), argv_fullFLV);
 			
 			//Parse the width height from the FFMPEG output
 			FlvDimension flvDimension = getFlvDimension(returnMapConvertFLV.getError());
@@ -105,7 +105,7 @@ public class FlvExplorerConverter extends BaseConverter {
 
 			returnLog.add(returnMapConvertFLV);
 
-			String hashFileFullNameJPEG = "UPLOADFLV_" + fileExplorerItem.getFileExplorerItemId() + ".jpg";
+			String hashFileFullNameJPEG = "UPLOADFLV_" + fileExplorerItem.getId() + ".jpg";
 			File outPutJpeg = new File(getStreamsHibernateDir(), name + ".jpg");
 
 			fileExplorerItem.setPreviewImage(hashFileFullNameJPEG);
@@ -115,9 +115,7 @@ public class FlvExplorerConverter extends BaseConverter {
 					"-f", "rawvideo", "-s", flvWidth + "x" + flvHeight,
 					outPutJpeg.getCanonicalPath() };
 
-			returnLog.add(ProcessHelper.executeScript("previewUpload ID :: "
-							+ fileExplorerItem.getFileExplorerItemId(),
-							argv_previewFLV));
+			returnLog.add(ProcessHelper.executeScript("previewUpload ID :: " + fileExplorerItem.getId(), argv_previewFLV));
 
 			fileExplorerItemDaoImpl.updateFileOrFolder(fileExplorerItem);
 

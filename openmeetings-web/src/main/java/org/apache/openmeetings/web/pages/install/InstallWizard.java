@@ -394,7 +394,7 @@ public class InstallWizard extends Wizard {
 	}
 	
 	private static class SelectOption implements Serializable {
-		private static final long serialVersionUID = 2559982745410615390L;
+		private static final long serialVersionUID = 1L;
 		private static SelectOption NO = new SelectOption("0", "No");
 		private static SelectOption NO_TEXT = new SelectOption("no", "No");
 		private static SelectOption YES = new SelectOption("1", "Yes");
@@ -410,7 +410,7 @@ public class InstallWizard extends Wizard {
 	}
 
 	private abstract class WizardDropDown<T>  extends DropDownChoice<T> {
-		private static final long serialVersionUID = 8870736740532631296L;
+		private static final long serialVersionUID = 1L;
 		T option;
 		IModel<Object> propModel;
 		
@@ -453,7 +453,7 @@ public class InstallWizard extends Wizard {
 	}
 	
 	private class SelectOptionDropDown extends WizardDropDown<SelectOption> {
-		private static final long serialVersionUID = -1433015274371279328L;
+		private static final long serialVersionUID = 1L;
 
 		SelectOptionDropDown(String id) {
 			super(id);
@@ -470,7 +470,7 @@ public class InstallWizard extends Wizard {
 	}
 	
 	private final class YesNoDropDown extends SelectOptionDropDown {
-		private static final long serialVersionUID = 578375825530725477L;
+		private static final long serialVersionUID = 1L;
 		
 		YesNoDropDown(String id) {
 			super(id);
@@ -481,7 +481,7 @@ public class InstallWizard extends Wizard {
 	}
 	
 	private final class YesNoTextDropDown extends SelectOptionDropDown {
-		private static final long serialVersionUID = 578375825530725477L;
+		private static final long serialVersionUID = 1L;
 		
 		YesNoTextDropDown(String id) {
 			super(id);
@@ -492,7 +492,7 @@ public class InstallWizard extends Wizard {
 	}
 	
 	private final class LangDropDown extends SelectOptionDropDown {
-		private static final long serialVersionUID = -2826765890538795285L;
+		private static final long serialVersionUID = 1L;
 
 		public LangDropDown(String id) throws Exception {
 			super(id);

@@ -18,7 +18,6 @@
  */
 package org.apache.openmeetings.db.entity.record;
 
-import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -33,18 +32,20 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+
+import org.apache.openmeetings.db.entity.IDataProviderEntity;
 @Entity
 @NamedQueries({ 
-	@NamedQuery(name = "getRecordingLogsByRecording", query = "SELECT fl FROM FlvRecordingLog fl WHERE fl.flvRecording.flvRecordingId = :recId")
-	, @NamedQuery(name = "countErrorRecordingLogsByRecording", query = "SELECT COUNT(fl) FROM FlvRecordingLog fl WHERE fl.flvRecording.flvRecordingId = :recId AND fl.exitValue <> '0'")
+	@NamedQuery(name = "getRecordingLogsByRecording", query = "SELECT fl FROM FlvRecordingLog fl WHERE fl.flvRecording.id = :recId")
+	, @NamedQuery(name = "countErrorRecordingLogsByRecording", query = "SELECT COUNT(fl) FROM FlvRecordingLog fl WHERE fl.flvRecording.id = :recId AND fl.exitValue <> '0'")
 })
 @Table(name = "flvrecording_log")
-public class FlvRecordingLog implements Serializable {
-	private static final long serialVersionUID = -2577533628675416706L;
+public class FlvRecordingLog implements IDataProviderEntity {
+	private static final long serialVersionUID = 1L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="id")
-	private long flvRecordingLogId;
+	private Long id;
 	
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name="flvrecording_id", nullable=true)
@@ -63,11 +64,11 @@ public class FlvRecordingLog implements Serializable {
 	@Column(name="exit_value")
 	private String exitValue;
 	
-	public long getFlvRecordingLogId() {
-		return flvRecordingLogId;
+	public Long getId() {
+		return id;
 	}
-	public void setFlvRecordingLogId(long flvRecordingLogId) {
-		this.flvRecordingLogId = flvRecordingLogId;
+	public void setId(Long id) {
+		this.id = id;
 	}
 	
 	public FlvRecording getFlvRecording() {

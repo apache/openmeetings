@@ -41,7 +41,7 @@ import ro.fortsoft.wicket.dashboard.Widget;
 import ro.fortsoft.wicket.dashboard.web.WidgetView;
 
 public class RssWidgetView extends WidgetView {
-	private static final long serialVersionUID = -6257866996099503210L;
+	private static final long serialVersionUID = 1L;
 	private RSSFeedBehavior feed1; 
 	private RSSFeedBehavior feed2; 
 
@@ -60,7 +60,7 @@ public class RssWidgetView extends WidgetView {
 	}
 	
 	class RSSFeedBehavior extends AbstractAjaxBehavior {
-		private static final long serialVersionUID = 721009368063152450L;
+		private static final long serialVersionUID = 1L;
 		private String url;
 
 		RSSFeedBehavior(String url) {
@@ -69,7 +69,7 @@ public class RssWidgetView extends WidgetView {
 		
 		public void onRequest() {
 			ResourceStreamRequestHandler handler = new ResourceStreamRequestHandler(new AbstractResourceStream() {
-				private static final long serialVersionUID = -322593118428697261L;
+				private static final long serialVersionUID = 1L;
 				HttpURLConnection con;
 				
 				public InputStream getInputStream() throws ResourceStreamNotFoundException {

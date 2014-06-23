@@ -23,7 +23,7 @@ import org.apache.wicket.ajax.attributes.AjaxCallListener;
 import org.apache.wicket.core.util.string.JavaScriptUtils;
 
 public class ConfirmCallListener extends AjaxCallListener {
-	private static final long serialVersionUID = 7355235720213137963L;
+	private static final long serialVersionUID = 1L;
 
 	public ConfirmCallListener(long id) {
 		this(id, "");

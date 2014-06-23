@@ -163,9 +163,9 @@ public class MainService implements IPendingServiceCallback {
 			
 			if (!u.getOrganisation_users().isEmpty()) {
 				u.setSessionData(sessiondataDao.getSessionByHash(wicketSID));
-				currentClient.setUser_id(u.getUser_id());
+				currentClient.setUser_id(u.getId());
 				currentClient.setRoom_id(wicketroomid);
-				SessionVariablesUtil.setUserId(current.getClient(), u.getUser_id());
+				SessionVariablesUtil.setUserId(current.getClient(), u.getId());
 			
 				currentClient.setUsername(u.getLogin());
 				currentClient.setFirstname(u.getFirstname());
@@ -348,7 +348,7 @@ public class MainService implements IPendingServiceCallback {
 											, null, null, false, false, userObject.getExternalUserId()
 											, userObject.getExternalUserType(), null, userObject.getPictureUrl());
 
-							long userId = u.getUser_id();
+							long userId = u.getId();
 							currentClient.setUser_id(userId);
 							SessionVariablesUtil.setUserId(current.getClient(), userId);
 						} else {
@@ -356,8 +356,8 @@ public class MainService implements IPendingServiceCallback {
 
 							userDao.update(user, users_id);
 
-							currentClient.setUser_id(user.getUser_id());
-							SessionVariablesUtil.setUserId(current.getClient(), user.getUser_id());
+							currentClient.setUser_id(user.getId());
+							SessionVariablesUtil.setUserId(current.getClient(), user.getId());
 						}
 					}
 

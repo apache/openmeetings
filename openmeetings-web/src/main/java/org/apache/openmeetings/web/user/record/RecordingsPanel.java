@@ -63,7 +63,7 @@ import wicketdnd.Reject;
 import wicketdnd.Transfer;
 
 public class RecordingsPanel extends UserPanel {
-	private static final long serialVersionUID = 1321258690447136958L;
+	private static final long serialVersionUID = 1L;
 	private final WebMarkupContainer trees = new WebMarkupContainer("tree-container");
 	private final WebMarkupContainer sizes = new WebMarkupContainer("sizes");
 	private final VideoPlayer video = new VideoPlayer("video");
@@ -76,7 +76,7 @@ public class RecordingsPanel extends UserPanel {
 	
 	public RecordingsPanel(String id) {
 		super(id);
-		rm.getObject().setFlvRecordingId(Long.MIN_VALUE);
+		rm.getObject().setId(Long.MIN_VALUE);
 		final AddFolderDialog addFolder = new AddFolderDialog("addFolder", WebSession.getString(712)) {
 			private static final long serialVersionUID = 1L;
 
@@ -91,7 +91,7 @@ public class RecordingsPanel extends UserPanel {
 				f.setIsPresentation(false);
 				f.setIsRecording(true);
 				FlvRecording p = rm.getObject();
-				long parentId = p.getFlvRecordingId();
+				long parentId = p.getId();
 				if (p.isFolder()) {
 					f.setParentFileExplorerItemId(parentId);
 				}
@@ -123,7 +123,7 @@ public class RecordingsPanel extends UserPanel {
 
 			@Override
 			public void onClick(AjaxRequestTarget target) {
-				long id = rm.getObject().getFlvRecordingId();
+				long id = rm.getObject().getId();
 				if (id > 0) {
 					getBean(FlvRecordingDao.class).delete(rm.getObject());
 				}
@@ -146,7 +146,7 @@ public class RecordingsPanel extends UserPanel {
 		treesView.add(new RecordingTree(treesView.newChildId(), new PublicRecordingTreeProvider(null, null)));
 		for (Organisation_Users ou : getBean(UserDao.class).get(getUserId()).getOrganisation_users()) {
 			Organisation o = ou.getOrganisation();
-			treesView.add(new RecordingTree(treesView.newChildId(), new PublicRecordingTreeProvider(o.getOrganisation_id(), o.getName())));
+			treesView.add(new RecordingTree(treesView.newChildId(), new PublicRecordingTreeProvider(o.getId(), o.getName())));
 		}
 		add(trees.add(treesView).setOutputMarkupId(true));
 		updateSizes();
@@ -171,7 +171,7 @@ public class RecordingsPanel extends UserPanel {
 	
 	//FIXME need to be generalized to use as Room files explorer
 	class RecordingTree extends DefaultNestedTree<FlvRecording> {
-		private static final long serialVersionUID = 2527395034256868022L;
+		private static final long serialVersionUID = 1L;
 
 		public RecordingTree(String id, ITreeProvider<FlvRecording> tp) {
 			super(id, tp);
@@ -181,13 +181,13 @@ public class RecordingsPanel extends UserPanel {
 		@Override
 		protected Component newContentComponent(String id, IModel<FlvRecording> node) {
 			return new Folder<FlvRecording>(id, this, node) {
-				private static final long serialVersionUID = 1020976220467419084L;
+				private static final long serialVersionUID = 1L;
 
 				@Override
 				protected Component newLabelComponent(String id, final IModel<FlvRecording> lm) {
 					FlvRecording r = lm.getObject();
-					Component result = r.isFolder() || r.getFlvRecordingId() < 1 ? new RecordingPanel(id, lm) : new RecordingItemPanel(id, lm, errorsDialog);
-					if (r.getFlvRecordingId() > 0) {
+					Component result = r.isFolder() || r.getId() < 1 ? new RecordingPanel(id, lm) : new RecordingItemPanel(id, lm, errorsDialog);
+					if (r.getId() > 0) {
 						result.add(new DragSource(Operation.MOVE) {
 							private static final long serialVersionUID = 1L;
 
@@ -202,14 +202,14 @@ public class RecordingsPanel extends UserPanel {
 							}
 						}.drag("div"));
 					}
-					if (r.getFlvRecordingId() < 0 || r.isFolder()) {
+					if (r.getId() < 0 || r.isFolder()) {
 						result.add(new DropTarget(Operation.MOVE) {
 							private static final long serialVersionUID = 1L;
 
 							@Override
 							public void onDrop(AjaxRequestTarget target, Transfer transfer, Location location) throws Reject {
 								FlvRecording p = lm.getObject();
-								long pid = p.getFlvRecordingId();
+								long pid = p.getId();
 								FlvRecording r = transfer.getData();
 								r.setParentFileExplorerItemId(pid > 0 ? pid : null);
 								r.setOrganization_id(p.getOrganization_id());
@@ -224,7 +224,7 @@ public class RecordingsPanel extends UserPanel {
 				
 				@Override
 				protected boolean isSelected() {
-					return getModelObject().getFlvRecordingId() == rm.getObject().getFlvRecordingId();
+					return getModelObject().getId() == rm.getObject().getId();
 				}
 				
 				@Override
@@ -259,9 +259,9 @@ public class RecordingsPanel extends UserPanel {
 				
 				private String getRecordingStyle(FlvRecording r, String def) {
 					String style;
-					if (r.getFlvRecordingId() == 0) {
+					if (r.getId() == 0) {
 						style = "my-recordings om-icon";
-					} else if (r.getFlvRecordingId() < 0) {
+					} else if (r.getId() < 0) {
 						style = "public-recordings om-icon";
 					} else if (r.isFolder()) {
 						style = def;
@@ -307,14 +307,14 @@ public class RecordingsPanel extends UserPanel {
 
 		public Iterator<? extends FlvRecording> getRoots() {
 			FlvRecording r = new FlvRecording();
-			r.setFlvRecordingId(0);
+			r.setId(0L);
 			r.setFileName(WebSession.getString(860));
 			r.setOwnerId(getUserId());
 			return Arrays.asList(r).iterator();
 		}
 		
 		public Iterator<? extends FlvRecording> getChildren(FlvRecording node) {
-			if (node.getFlvRecordingId() == 0) {
+			if (node.getId() == 0) {
 				return getBean(FlvRecordingDao.class).getFlvRecordingRootByOwner(getUserId()).iterator();
 			} else {
 				return super.getChildren(node);
@@ -323,7 +323,7 @@ public class RecordingsPanel extends UserPanel {
 	}
 	
 	class PublicRecordingTreeProvider extends RecordingTreeProvider {
-		private static final long serialVersionUID = 5502610991599632079L;
+		private static final long serialVersionUID = 1L;
 		private final Long orgId;
 		private final String name;
 
@@ -334,7 +334,7 @@ public class RecordingsPanel extends UserPanel {
 		
 		public Iterator<? extends FlvRecording> getRoots() {
 			FlvRecording r = new FlvRecording();
-			r.setFlvRecordingId(orgId == null ? -1 : -orgId);
+			r.setId(orgId == null ? -1 : -orgId);
 			r.setOrganization_id(orgId);
 			r.setOwnerId(null);
 			String pub = WebSession.getString(861);
@@ -343,7 +343,7 @@ public class RecordingsPanel extends UserPanel {
 		}
 		
 		public Iterator<? extends FlvRecording> getChildren(FlvRecording node) {
-			if (node.getFlvRecordingId() < 0) {
+			if (node.getId() < 0) {
 				return getBean(FlvRecordingDao.class).getFlvRecordingRootByPublic(orgId).iterator();
 			} else {
 				return super.getChildren(node);
@@ -359,11 +359,11 @@ public class RecordingsPanel extends UserPanel {
 		}
 
 		public boolean hasChildren(FlvRecording node) {
-			return node.getFlvRecordingId() <= 0 || node.isFolder();
+			return node.getId() <= 0 || node.isFolder();
 		}
 
 		public Iterator<? extends FlvRecording> getChildren(FlvRecording node) {
-			return getBean(FlvRecordingDao.class).getFlvRecordingByParent(node.getFlvRecordingId()).iterator();
+			return getBean(FlvRecordingDao.class).getFlvRecordingByParent(node.getId()).iterator();
 		}
 
 		public IModel<FlvRecording> model(FlvRecording object) {

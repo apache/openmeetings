@@ -144,7 +144,7 @@ public class FlvRecordingMetaDataDao {
 			flvRecordingMetaData.setInteriewPodId(interiewPodId);
 
 			flvRecordingMetaData = em.merge(flvRecordingMetaData);
-			Long flvRecordingMetaDataId = flvRecordingMetaData.getFlvRecordingMetaDataId();
+			Long flvRecordingMetaDataId = flvRecordingMetaData.getId();
 
 			return flvRecordingMetaDataId;
 
@@ -158,7 +158,7 @@ public class FlvRecordingMetaDataDao {
 		try {
 
 			flvRecordingMetaData = em.merge(flvRecordingMetaData);
-			Long flvRecordingMetaDataId = flvRecordingMetaData.getFlvRecordingMetaDataId();
+			Long flvRecordingMetaDataId = flvRecordingMetaData.getId();
 
 			return flvRecordingMetaDataId;
 
@@ -201,7 +201,7 @@ public class FlvRecordingMetaDataDao {
 
 	public Long update(FlvRecordingMetaData flvRecordingMetaData) {
 		try {
-			if (flvRecordingMetaData.getFlvRecordingMetaDataId() == 0) {
+			if (flvRecordingMetaData.getId() == 0) {
 				em.persist(flvRecordingMetaData);
 			} else {
 				if (!em.contains(flvRecordingMetaData)) {

@@ -23,7 +23,7 @@ import org.apache.wicket.authroles.authorization.strategies.role.annotations.Aut
 
 @AuthorizeInstantiation("Admin")
 public abstract class AdminPanel extends BasePanel {
-	private static final long serialVersionUID = 6811243474361803279L;
+	private static final long serialVersionUID = 1L;
 
 	public AdminPanel(String id) {
 		super(id);

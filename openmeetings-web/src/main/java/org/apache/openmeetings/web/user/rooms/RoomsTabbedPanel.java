@@ -44,25 +44,25 @@ public class RoomsTabbedPanel extends UserPanel {
 		
 		User u = getBean(UserDao.class).get(getUserId());
 		add(new ListView<Organisation_Users>("orgTabs", u.getOrganisation_users()) {
-			private static final long serialVersionUID = -145637079945252731L;
+			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected void populateItem(ListItem<Organisation_Users> item) {
 				Organisation org = item.getModelObject().getOrganisation();
 				item.add(new WebMarkupContainer("link")
 					.add(new Label("name", Model.of(org.getName())))
-					.add(new AttributeModifier("href", "#org" + org.getOrganisation_id())));
+					.add(new AttributeModifier("href", "#org" + org.getId())));
 			}
 		});
 		add(new ListView<Organisation_Users>("orgRooms", u.getOrganisation_users()) {
-			private static final long serialVersionUID = 9039932126334250798L;
+			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected void populateItem(ListItem<Organisation_Users> item) {
 				Organisation org = item.getModelObject().getOrganisation();
 				item.add(new RoomsPanel("rooms"
-					, getBean(RoomDao.class).getOrganisationRooms(org.getOrganisation_id()))
-					.setMarkupId("org" + org.getOrganisation_id())).setRenderBodyOnly(true);
+					, getBean(RoomDao.class).getOrganisationRooms(org.getId()))
+					.setMarkupId("org" + org.getId())).setRenderBodyOnly(true);
 			}
 		});
 		add(new JQueryBehavior("#orgTabs", "tabs"));

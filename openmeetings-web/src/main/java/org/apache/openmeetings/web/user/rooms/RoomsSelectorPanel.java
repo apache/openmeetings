@@ -26,7 +26,7 @@ import org.apache.openmeetings.web.util.OmUrlFragment.MenuParams;
 import org.apache.wicket.markup.html.basic.Label;
 
 public class RoomsSelectorPanel extends UserPanel {
-	private static final long serialVersionUID = -3246259803623925341L;
+	private static final long serialVersionUID = 1L;
 
 	public RoomsSelectorPanel(String id, MenuParams param) {
 		super(id);

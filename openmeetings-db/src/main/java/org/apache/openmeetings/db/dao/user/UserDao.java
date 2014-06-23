@@ -137,7 +137,7 @@ public class UserDao implements IDataProviderDao<User> {
 		if (filterContacts) {
 			params.put("ownerId", ownerId);
 			params.put("contact", Type.contact);
-			return "((u.type <> :contact AND ou.organisation.organisation_id IN (SELECT ou.organisation.organisation_id FROM Organisation_Users ou WHERE ou.user.user_id = :ownerId)) "
+			return "((u.type <> :contact AND ou.organisation.id IN (SELECT ou.organisation.id FROM Organisation_Users ou WHERE ou.user.id = :ownerId)) "
 				+ "OR (u.type = :contact AND u.ownerId = :ownerId))";
 		}
 		return null;
@@ -206,7 +206,7 @@ public class UserDao implements IDataProviderDao<User> {
 				ou.setUser(u);
 			}
 		}
-		if (u.getUser_id() == null) {
+		if (u.getId() == null) {
 			u.setStarttime(new Date());
 			em.persist(u);
 		} else {
@@ -224,7 +224,7 @@ public class UserDao implements IDataProviderDao<User> {
 		User u = update(user, updatedBy);
 		if (password != null && !password.isEmpty()) {
 			//OpenJPA is not allowing to set fields not being fetched before
-			User u1 = get(u.getUser_id(), true);
+			User u1 = get(u.getId(), true);
 			u1.updatePassword(cfgDao, password);
 			update(u1, updatedBy);
 		}
@@ -232,7 +232,7 @@ public class UserDao implements IDataProviderDao<User> {
 	}
 	
 	public void delete(User u, Long userId) {
-		deleteUserID(u.getUser_id());
+		deleteUserID(u.getId());
 	}
 
 	public User get(long user_id) {
@@ -280,14 +280,14 @@ public class UserDao implements IDataProviderDao<User> {
 					adr.setDeleted(true);
 				}
 
-				if (us.getUser_id() == null) {
+				if (us.getId() == null) {
 					em.persist(us);
 				} else {
 					if (!em.contains(us)) {
 						em.merge(us);
 					}
 				}
-				return us.getUser_id();
+				return us.getId();
 			}
 		} catch (Exception ex2) {
 			log.error("[deleteUserID]", ex2);
@@ -451,19 +451,19 @@ public class UserDao implements IDataProviderDao<User> {
 		User to = null;
 		try {
 			to = em.createNamedQuery("getContactByEmailAndUser", User.class)
-					.setParameter("email", email).setParameter("type", User.Type.contact).setParameter("ownerId", owner.getUser_id()).getSingleResult();
+					.setParameter("email", email).setParameter("type", User.Type.contact).setParameter("ownerId", owner.getId()).getSingleResult();
 		} catch (Exception e) {
 			//no-op
 		}
 		if (to == null) {
 			to = new User();
 			to.setType(Type.contact);
-			String login = owner.getUser_id() + "_" + email; //UserId prefix is used to ensure unique login
+			String login = owner.getId() + "_" + email; //UserId prefix is used to ensure unique login
 			to.setLogin(login.length() < getMinLoginLength(cfgDao) ? UUID.randomUUID().toString() : login);
 			to.setFirstname(firstName);
 			to.setLastname(lastName);
 			to.setLanguage_id(null == langId ? owner.getLanguage_id() : langId);
-			to.setOwnerId(owner.getUser_id());
+			to.setOwnerId(owner.getId());
 			to.setAdresses(new Address());
 			to.getAdresses().setEmail(email);
 			to.setTimeZoneId(null == tzId ? owner.getTimeZoneId() : tzId);
@@ -589,7 +589,7 @@ public class UserDao implements IDataProviderDao<User> {
 		}
 		User u = users.get(0);
 
-		if (!verifyPassword(u.getUser_id(), userpass)) {
+		if (!verifyPassword(u.getId(), userpass)) {
 			throw new OmException(-11L);
 		}
 		// Check if activated
@@ -602,7 +602,7 @@ public class UserDao implements IDataProviderDao<User> {
 		}
 		
 		u.setLastlogin(new Date());
-		return update(u, u.getUser_id());
+		return update(u, u.getId());
 	}
 	
 	public Address getAddress(String street, String zip, String town, long states_id, String additionalname, String fax, String phone, String email) {

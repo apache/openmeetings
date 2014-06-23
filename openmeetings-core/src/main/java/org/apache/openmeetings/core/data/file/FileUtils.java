@@ -74,8 +74,7 @@ public class FileUtils {
 			fileExplorerItemDao.updateFileOrFolder(fileExplorerItem);
 
 			FileExplorerItem[] childElements = fileExplorerItemDao
-					.getFileExplorerItemsByParent(fileExplorerItem
-							.getFileExplorerItemId());
+					.getFileExplorerItemsByParent(fileExplorerItem.getId());
 
 			for (FileExplorerItem childExplorerItem : childElements) {
 
@@ -102,8 +101,7 @@ public class FileUtils {
 			fileExplorerItemDao.updateFileOrFolder(fileExplorerItem);
 
 			FileExplorerItem[] childElements = fileExplorerItemDao
-					.getFileExplorerItemsByParent(fileExplorerItem
-							.getFileExplorerItemId());
+					.getFileExplorerItemsByParent(fileExplorerItem.getId());
 
 			for (FileExplorerItem childExplorerItem : childElements) {
 

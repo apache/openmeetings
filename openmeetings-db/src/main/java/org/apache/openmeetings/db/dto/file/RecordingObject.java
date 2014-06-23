@@ -25,7 +25,7 @@ import org.apache.openmeetings.db.entity.record.FlvRecording;
 
 public class RecordingObject {
 
-	private long flvRecordingId;
+	private Long id;
 	
 	private String fileName;
 	private String alternateDownload;
@@ -68,7 +68,7 @@ public class RecordingObject {
 	public RecordingObject() {}
 	
 	public RecordingObject(FlvRecording customObject) {
-		this.flvRecordingId = customObject.getFlvRecordingId();
+		this.id = customObject.getId();
 		
 		this.fileName = customObject.getFileName();
 		this.alternateDownload = customObject.getAlternateDownload();
@@ -109,12 +109,12 @@ public class RecordingObject {
 		this.progressPostProcessing = customObject.getProgressPostProcessing();
 	}
 
-	public long getFlvRecordingId() {
-		return flvRecordingId;
+	public long getId() {
+		return id;
 	}
 
-	public void setFlvRecordingId(long flvRecordingId) {
-		this.flvRecordingId = flvRecordingId;
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public String getFileName() {

@@ -101,7 +101,7 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 	//@Override
 	public void setModelObjectWithAjaxTarget(Appointment object, AjaxRequestTarget target) {
 		form.setModelObject(object);
-		form.setEnabled(object.getOwner() == null || getUserId() == object.getOwner().getUser_id());
+		form.setEnabled(object.getOwner() == null || getUserId() == object.getOwner().getId());
 		log.debug(" -- setModelObjectWithAjaxTarget -- Current model " + object);
 		if (object.getId() != null) {
 			delete.setVisible(isOwner(object), target);
@@ -164,7 +164,7 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 		if (delete.equals(button)) {
 			confirmDelete.open(target);
 		} else if (enterRoom.equals(button)) {
-			RoomEnterBehavior.roomEnter((MainPage)getPage(), target, getModelObject().getRoom().getRooms_id());
+			RoomEnterBehavior.roomEnter((MainPage)getPage(), target, getModelObject().getRoom().getId());
 		}
 	}
 	
@@ -179,25 +179,25 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
         final List<MeetingMember> attendees = a.getMeetingMembers() == null ? new ArrayList<MeetingMember>() : a.getMeetingMembers();
         Set<Long> currentIds = new HashSet<Long>();
         for (User u : attendeesModel.getObject()) {
-        	if (u.getUser_id() != null) {
-        		currentIds.add(u.getUser_id());
+        	if (u.getId() != null) {
+        		currentIds.add(u.getId());
         	}
         }
         
         //remove users
         for (Iterator<MeetingMember> i = attendees.iterator(); i.hasNext();) {
         	MeetingMember m = i.next();
-        	if (!currentIds.contains(m.getUser().getUser_id())) {
+        	if (!currentIds.contains(m.getUser().getId())) {
         		i.remove();
         	}
         }
         Set<Long> originalIds = new HashSet<Long>();
         for (MeetingMember m : attendees) {
-        	originalIds.add(m.getUser().getUser_id());
+        	originalIds.add(m.getUser().getId());
         }
         //add users
         for (User u : attendeesModel.getObject()) {
-        	if (u.getUser_id() == null || !originalIds.contains(u.getUser_id())) {
+        	if (u.getId() == null || !originalIds.contains(u.getId())) {
         		MeetingMember mm = new MeetingMember();
         		mm.setUser(u);
         		mm.setDeleted(false);
@@ -214,7 +214,7 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 	}
 	
 	private boolean isOwner(Appointment object) {
-		return object.getOwner() != null && getUserId() == object.getOwner().getUser_id();
+		return object.getOwner() != null && getUserId() == object.getOwner().getId();
 	}
 	
 	private class AppointmentForm extends Form<Appointment> {
@@ -303,7 +303,7 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 			room.setOutputMarkupId(true);
 			add(room);
 			add(new AjaxCheckBox("createRoom", new PropertyModel<Boolean>(this, "createRoom")) {
-				private static final long serialVersionUID = -3743113990890386035L;
+				private static final long serialVersionUID = 1L;
 
 				@Override
 				protected void onUpdate(AjaxRequestTarget target) {
@@ -312,7 +312,7 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 				}
 			});
 			add(new AjaxCheckBox("passwordProtected") {
-				private static final long serialVersionUID = 6041200584296439976L;
+				private static final long serialVersionUID = 1L;
 
 				@Override
 				protected void onUpdate(AjaxRequestTarget target) {
@@ -337,7 +337,7 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 			RoomDao dao = getBean(RoomDao.class);
 			result.addAll(dao.getPublicRooms());
 			for (Organisation_Users ou : getBean(UserDao.class).get(getUserId()).getOrganisation_users()) {
-				result.addAll(dao.getOrganisationRooms(ou.getOrganisation().getOrganisation_id()));
+				result.addAll(dao.getOrganisationRooms(ou.getOrganisation().getId()));
 			}
 			if (getModelObject().getRoom() != null && getModelObject().getRoom().getAppointment()) { //FIXME review
 				result.add(getModelObject().getRoom());

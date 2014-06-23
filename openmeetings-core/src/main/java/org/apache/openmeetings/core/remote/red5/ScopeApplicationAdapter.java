@@ -22,7 +22,6 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -1466,12 +1465,12 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 					if (member.getUser() != null) {
 						log.debug("checking user " + member.getUser().getFirstname()
 								+ " for moderator role - ID : "
-								+ member.getUser().getUser_id());
+								+ member.getUser().getId());
 
-						if (member.getUser().getUser_id().equals(userIdInRoomClient)) {
+						if (member.getUser().getId().equals(userIdInRoomClient)) {
 							found = true;
 
-							if (ment.getOwner().getUser_id() == member.getUser().getUser_id()) {
+							if (ment.getOwner().getId() == member.getUser().getId()) {
 								log.debug("User "
 										+ userIdInRoomClient
 										+ " is moderator due to flag in MeetingMember record");

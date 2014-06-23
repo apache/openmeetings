@@ -25,14 +25,17 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import org.apache.openmeetings.db.entity.IDataProviderEntity;
+
 @Entity
 @Table(name = "whiteboard_item")
-public class WhiteboardItem {
-	
+public class WhiteboardItem implements IDataProviderEntity {
+	private static final long serialVersionUID = 1L;
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
-	private long id;
+	private Long id;
 	
 	@Column(name = "keyx")
 	private String key;
@@ -40,11 +43,11 @@ public class WhiteboardItem {
 	@Column(name = "value")
 	private String value;
 
-	public long getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 

@@ -18,11 +18,17 @@
  */
 package org.apache.openmeetings.test.xsd;
 
+import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+
 import java.io.File;
+
+import org.red5.logging.Red5LoggerFactory;
+import org.slf4j.Logger;
 
 import com.thaiopensource.relaxng.translate.Driver;
 
 public class GenerateConfigXsd {
+	private static final Logger log = Red5LoggerFactory.getLogger(GenerateConfigXsd.class, webAppRootKey);
 	
 	public static void main(String... args) {
 		new GenerateConfigXsd();
@@ -39,7 +45,7 @@ public class GenerateConfigXsd {
 			Driver.main(args);
 			
 		} catch (Exception err) {
-			err.printStackTrace();
+			log.error("Error", err);
 		}
 	}
 

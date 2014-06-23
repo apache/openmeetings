@@ -35,27 +35,27 @@ public class TestUserCount extends AbstractWicketTester {
 	Random random = new Random();
 
 	@Test
-	public void testCountSearchUsres() throws Exception {
+	public void testCountSearchUsers() throws Exception {
 		User u = createUser(random.nextInt());
 		assertTrue("Account of search users should be one", userDao.count(u.getFirstname()) == 1);
 	}
 
 	@Test
-	public void testCountFilteredUsres() throws Exception {
+	public void testCountFilteredUsers() throws Exception {
 		User u = createUser(random.nextInt());
-		User contact = createUserContact(random.nextInt(), u.getUser_id());
-		assertTrue("Account of filtered user should be one", userDao.count(contact.getFirstname(), true, u.getUser_id()) == 1);
+		User contact = createUserContact(random.nextInt(), u.getId());
+		assertTrue("Account of filtered user should be one", userDao.count(contact.getFirstname(), true, u.getId()) == 1);
 	}
 
 	@Test
-	public void testCountUnfilteredUsres() throws Exception {
+	public void testCountUnfilteredUsers() throws Exception {
 		User u = createUser(random.nextInt());
-		createUserContact(random.nextInt(), u.getUser_id());
+		createUserContact(random.nextInt(), u.getId());
 		assertTrue("Account of unfiltered should be more then one", userDao.count("firstname", false, getUserId()) > 1);
 	}
 		
 	@Test
-	public void testCountAllUsres() throws Exception {
+	public void testCountAllUsers() throws Exception {
 		assertTrue("Account of users should be positive", userDao.count() > 0);
 	}
 }

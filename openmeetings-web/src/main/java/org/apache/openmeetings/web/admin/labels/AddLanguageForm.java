@@ -30,14 +30,18 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+import org.red5.logging.Red5LoggerFactory;
+import org.slf4j.Logger;
 
+import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 /**
  * 
  * @author solomax, swagner
  * 
  */
 public class AddLanguageForm extends Form<Void> {
-	private static final long serialVersionUID = 8743289610974962636L;
+	private static final long serialVersionUID = 1L;
+	private static final Logger log = Red5LoggerFactory.getLogger(AddLanguageForm.class, webAppRootKey);
 	private String newLanguageName;
 	private String newLanguageISO;
 	
@@ -48,14 +52,14 @@ public class AddLanguageForm extends Form<Void> {
 		add(new RequiredTextField<String>("iso", new PropertyModel<String>(this, "newLanguageISO")));
 		
 		add(new AjaxButton("add", Model.of(WebSession.getString(366L)), this) {
-			private static final long serialVersionUID = -552597041751688740L;
+			private static final long serialVersionUID = 1L;
 
 			@Override
 			public void onSubmit(AjaxRequestTarget target, Form<?> form) {
 				FieldLanguageDao langDao = Application.getBean(FieldLanguageDao.class);
 				
 				FieldLanguage fl = new FieldLanguage();
-				fl.setLanguage_id(langDao.getNextAvailableId());
+				fl.setId(langDao.getNextAvailableId());
 				fl.setStarttime(new Date());
 				fl.setDeleted(false);
 				fl.setName(newLanguageName);
@@ -66,7 +70,7 @@ public class AddLanguageForm extends Form<Void> {
 					langDao.update(fl);
 				} catch (Exception e) {
 					// TODO add feedback message
-					e.printStackTrace();
+					log.error("Error while adding language", e);
 				}
 
 				langPanel.getLangForm().updateLanguages(target);

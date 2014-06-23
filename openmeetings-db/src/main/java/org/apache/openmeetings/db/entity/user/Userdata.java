@@ -32,7 +32,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "user_data")
 public class Userdata implements Serializable {
-	private static final long serialVersionUID = 8365799229794940172L;
+	private static final long serialVersionUID = 1L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="id")

@@ -88,7 +88,7 @@ public class FillLabels extends AbstractJUnitDefaults {
 		FieldLanguage prevLanguage = null;
 		long prevCount = -1;
 		for (FieldLanguage l : fieldLanguageDao.getLanguages()) {
-			long count = fieldValueDao.count(l.getLanguage_id(), null);
+			long count = fieldValueDao.count(l.getId(), null);
 			if (prevLanguage != null) {
 				assertEquals(String.format("Language: %s contains %d labels while %s contains %d labels"
 						, prevLanguage.getCode(), prevCount, l.getCode(), count), prevCount, count);
@@ -161,7 +161,7 @@ public class FillLabels extends AbstractJUnitDefaults {
 			String fieldName = itemObject.attribute("name").getText();
 			String value = itemObject.element("value").getText();
 			Fieldvalues fLabel = new Fieldvalues();
-			fLabel.setFieldvalues_id(fieldvalues_id);
+			fLabel.setId(fieldvalues_id);
 			fLabel.setName(fieldName);
 			Fieldlanguagesvalues fValue = new Fieldlanguagesvalues();
 			fValue.setValue(value);
@@ -187,7 +187,7 @@ public class FillLabels extends AbstractJUnitDefaults {
 
 		for (Entry<Long, Fieldlanguagesvalues> entryLabel : labelsArray.entrySet()) {
 			Element eTemp = root.addElement("string")
-					.addAttribute("id", entryLabel.getValue().getFieldvalues().getFieldvalues_id().toString())
+					.addAttribute("id", entryLabel.getValue().getFieldvalues().getId().toString())
 					.addAttribute("name", entryLabel.getValue().getFieldvalues().getName());
 			Element value = eTemp.addElement("value");
 			value.addText(entryLabel.getValue().getValue());
