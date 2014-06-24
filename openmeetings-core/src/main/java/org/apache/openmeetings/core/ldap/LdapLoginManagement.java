@@ -237,7 +237,8 @@ public class LdapLoginManagement {
 					EntryCursor cursor = conn.search(baseDn, searchQ, SearchScope.ONELEVEL, "*");
 					while (cursor.next()) {
 						if (userDn != null) {
-							throw new OmException(-1L); //more than 1 user found in LDAP
+							log.error("more than 1 user found in LDAP");
+							throw new OmException(-1L);
 						}
 						Entry e = cursor.get();
 						userDn = e.getDn();
@@ -247,7 +248,8 @@ public class LdapLoginManagement {
 					}
 					cursor.close();
 					if (userDn == null) {
-						throw new OmException(-11L);  //NONE users found in LDAP
+						log.error("NONE users found in LDAP");
+						throw new OmException(-11L);
 					}
 					conn.bind(userDn, passwd);
 				}
@@ -265,8 +267,10 @@ public class LdapLoginManagement {
 			}
 			u = authenticated ? userDao.getByName(user, Type.ldap) : userDao.login(user, passwd);
 			if (u == null && Provisionning.AUTOCREATE != prov) {
+				log.error("User not found in OM DB and Provisionning.AUTOCREATE was not set");
 				throw new OmException(-11L);
 			} else if (u != null && !domainId.equals(u.getDomainId())) {
+				log.error("User found in OM DB, but domains are differ");
 				throw new OmException(-11L);
 			}
 			if (authenticated && entry == null) {
@@ -279,6 +283,7 @@ public class LdapLoginManagement {
 				case AUTOUPDATE:
 				case AUTOCREATE:
 					if (entry == null) {
+						log.error("LDAP entry is null, search or lookup by Dn failed");
 						throw new OmException(-11L);
 					}
 					if (u == null) {
@@ -333,6 +338,7 @@ public class LdapLoginManagement {
 		} catch (OmException e) {
 			throw e;
 		} catch (Exception e) {
+			log.error("Unexpected exception.", e);
 			throw new OmException(e);
 		} finally {
 			if (conn != null) {
@@ -340,6 +346,7 @@ public class LdapLoginManagement {
 					conn.unBind();
 					conn.close();
 				} catch (Exception e) {
+					log.error("Unexpected exception.", e);
 					throw new OmException(e);
 				}
 			}
