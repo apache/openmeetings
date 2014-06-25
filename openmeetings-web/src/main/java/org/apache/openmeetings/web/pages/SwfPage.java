@@ -33,8 +33,11 @@ public class SwfPage extends BaseNotInitedPage {
 	}
 
 	public SwfPage(PageParameters pp) {
-		add(new Label("titleAppName", getBean(ConfigurationDao.class).getAppName()));
 		add(new SwfPanel("room", pp));
 	}
-	
+
+	@Override
+	protected String getApplicationName() {
+		return getBean(ConfigurationDao.class).getAppName();
+	}
 }
