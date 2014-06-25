@@ -22,19 +22,21 @@ import static org.apache.openmeetings.web.app.Application.getBean;
 
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.web.user.rooms.RoomPanel;
-import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 public class SwfPage extends BaseNotInitedPage {
-	private static final long serialVersionUID = 6492618860620779445L;
+	private static final long serialVersionUID = 1L;
 
 	public SwfPage() {
 		this(new PageParameters());
 	}
 
 	public SwfPage(PageParameters pp) {
-		add(new Label("titleAppName", getBean(ConfigurationDao.class).getAppName()));
 		add(new RoomPanel("room", pp));
 	}
-	
+
+	@Override
+	protected String getApplicationName() {
+		return getBean(ConfigurationDao.class).getAppName();
+	}
 }
