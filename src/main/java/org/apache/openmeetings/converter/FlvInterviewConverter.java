@@ -190,7 +190,7 @@ public class FlvInterviewConverter extends BaseConverter {
 							, "file.null"};
 					ConverterProcessResult r = ProcessHelper.executeScript("checkFlvPod_" + pod , args);
 					returnLog.add(r);
-					if ("".equals(r.getError())) {
+					if ("0".equals(r.getExitValue())) {
 						pods[pod - 1] = path;
 					}
 					found = true;
