@@ -87,7 +87,7 @@ public class Room implements IDataProviderEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
-	@Element(data = true, required=false)
+	@Element(data = true, required = false, name = "rooms_id")
 	private Long id;
 
 	@Column(name = "name")

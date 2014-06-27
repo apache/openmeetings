@@ -89,7 +89,7 @@ public class FileItemTree<T extends FileItem> extends DefaultNestedTree<T> {
 							FileItem p = lm.getObject();
 							long pid = p.getId();
 							T f = transfer.getData();
-							f.setParentItemId(pid > 0 ? pid : null);
+							f.setParentItemId(pid > 0 ? pid : null); //FIXME need to disable drop to self
 							f.setOwnerId(p.getOwnerId());
 							f.setRoomId(p.getRoomId());
 							if (f instanceof FlvRecording) {
@@ -108,7 +108,7 @@ public class FileItemTree<T extends FileItem> extends DefaultNestedTree<T> {
 			
 			@Override
 			protected boolean isSelected() {
-				return getModelObject().getId() == treePanel.rm.getObject().getId();
+				return getModelObject().getId() == treePanel.selectedFile.getObject().getId();
 			}
 			
 			@Override
@@ -121,7 +121,7 @@ public class FileItemTree<T extends FileItem> extends DefaultNestedTree<T> {
 				T r = getModelObject();
 				treePanel.selected.resetSelected(target);
 				selectedItem.setObject(r);
-				treePanel.rm.setObject(r);
+				treePanel.selectedFile.setObject(r);
 				treePanel.selected = FileItemTree.this;
 				if (Type.Folder == r.getType()) {
 					if (getState(r) == State.COLLAPSED) {

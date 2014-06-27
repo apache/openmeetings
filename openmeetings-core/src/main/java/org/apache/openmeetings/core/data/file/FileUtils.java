@@ -29,88 +29,72 @@ import org.apache.openmeetings.db.dao.file.FileExplorerItemDao;
 import org.apache.openmeetings.db.entity.file.FileExplorerItem;
 import org.apache.openmeetings.db.entity.file.FileItem.Type;
 import org.apache.openmeetings.util.OmFileHelper;
-import org.apache.openmeetings.util.OpenmeetingsVariables;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class FileUtils {
-	private static final Logger log = Red5LoggerFactory.getLogger(
-			FileProcessor.class, OpenmeetingsVariables.webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(FileProcessor.class, webAppRootKey);
 
 	@Autowired
 	private FileExplorerItemDao fileExplorerItemDao;
 
-	public long getSizeOfDirectoryAndSubs(FileExplorerItem fileExplorerItem) {
+	public long getSizeOfDirectoryAndSubs(FileExplorerItem file) {
 		try {
-
 			long fileSize = 0;
 
 			File base = OmFileHelper.getUploadFilesDir();
-			if (Type.Image == fileExplorerItem.getType()) {
+			if (Type.Image == file.getType()) {
 
-				File tFile = new File(base, fileExplorerItem.getFileHash());
+				File tFile = new File(base, file.getFileHash());
 				if (tFile.exists()) {
 					fileSize += tFile.length();
 				}
 
-				File thumbFile = new File(base, thumbImagePrefix + fileExplorerItem.getFileHash());
+				File thumbFile = new File(base, thumbImagePrefix + file.getFileHash());
 				if (thumbFile.exists()) {
 					fileSize += thumbFile.length();
 				}
-
 			}
 
-			if (Type.Presentation == fileExplorerItem.getType()) {
-
-				File tFolder = new File(base, fileExplorerItem.getFileHash());
+			if (Type.Presentation == file.getType()) {
+				File tFolder = new File(base, file.getFileHash());
 
 				if (tFolder.exists()) {
 					fileSize += OmFileHelper.getSize(tFolder);
 				}
-
 			}
 
 			log.debug("calling [1] FileExplorerItemDaoImpl.updateFileOrFolder()");
-			fileExplorerItemDao.update(fileExplorerItem);
+			fileExplorerItemDao.update(file);
 
-			FileExplorerItem[] childElements = fileExplorerItemDao
-					.getFileExplorerItemsByParent(fileExplorerItem.getId());
+			FileExplorerItem[] childElements = fileExplorerItemDao.getByParent(file.getId()).toArray(new FileExplorerItem[0]);
 
 			for (FileExplorerItem childExplorerItem : childElements) {
-
 				fileSize += this.getSizeOfDirectoryAndSubs(childExplorerItem);
-
 			}
 
 			return fileSize;
-
 		} catch (Exception err) {
 			log.error("[getSizeOfDirectoryAndSubs] ", err);
 		}
 		return 0;
 	}
 
-	public void setFileToOwnerOrRoomByParent(FileExplorerItem fileExplorerItem,
-			Long users_id, Long room_id) {
+	public void setFileToOwnerOrRoomByParent(FileExplorerItem file, Long users_id, Long room_id) {
 		try {
-
-			fileExplorerItem.setOwnerId(users_id);
-			fileExplorerItem.setRoomId(room_id);
+			file.setOwnerId(users_id);
+			file.setRoomId(room_id);
 
 			log.debug("calling [2] FileExplorerItemDaoImpl.updateFileOrFolder()");
-			fileExplorerItemDao.update(fileExplorerItem);
+			fileExplorerItemDao.update(file);
 
-			FileExplorerItem[] childElements = fileExplorerItemDao
-					.getFileExplorerItemsByParent(fileExplorerItem.getId());
+			FileExplorerItem[] childElements = fileExplorerItemDao.getByParent(file.getId()).toArray(new FileExplorerItem[0]);
 
 			for (FileExplorerItem childExplorerItem : childElements) {
-
-				this.setFileToOwnerOrRoomByParent(childExplorerItem, users_id,
-						room_id);
-
+				setFileToOwnerOrRoomByParent(childExplorerItem, users_id, room_id);
 			}
-
 		} catch (Exception err) {
 			log.error("[setFileToOwnerOrRoomByParent] ", err);
 		}

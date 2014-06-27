@@ -78,7 +78,7 @@ public class UserContact implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="id")
-	@Element(data=true)
+	@Element(data = true, name = "userContactId")
 	private long userContactId;
 	
 	@ManyToOne(fetch = FetchType.EAGER)

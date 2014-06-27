@@ -52,7 +52,7 @@ public abstract class FileItem implements IDataProviderEntity {
 	private Long parentItemId;
 
 	@Column(name = "room_id")
-	@Element(data = true, required = false)
+	@Element(data = true, required = false, name = "room_id")
 	private Long roomId;
 
 	// OwnerID => only set if its directly root in Owner Directory, other Folders and Files

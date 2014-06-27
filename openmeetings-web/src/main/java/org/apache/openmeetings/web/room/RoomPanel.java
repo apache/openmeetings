@@ -24,15 +24,26 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.openmeetings.web.app.Application.addUserToRoom;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.Application.getRoomUsers;
+import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import static org.apache.openmeetings.web.util.OmUrlFragment.ROOMS_PUBLIC;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
+import org.apache.openmeetings.db.dao.file.FileExplorerItemDao;
 import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
+import org.apache.openmeetings.db.entity.file.FileExplorerItem;
+import org.apache.openmeetings.db.entity.file.FileItem;
+import org.apache.openmeetings.db.entity.file.FileItem.Type;
+import org.apache.openmeetings.db.entity.record.FlvRecording;
 import org.apache.openmeetings.db.entity.room.Room;
+import org.apache.openmeetings.db.entity.user.Organisation;
+import org.apache.openmeetings.db.entity.user.Organisation_Users;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Right;
 import org.apache.openmeetings.web.app.Application;
@@ -42,6 +53,10 @@ import org.apache.openmeetings.web.common.BasePanel;
 import org.apache.openmeetings.web.common.menu.MenuItem;
 import org.apache.openmeetings.web.common.menu.MenuPanel;
 import org.apache.openmeetings.web.common.menu.RoomMenuItem;
+import org.apache.openmeetings.web.common.tree.FileItemTree;
+import org.apache.openmeetings.web.common.tree.FileTreePanel;
+import org.apache.openmeetings.web.common.tree.MyRecordingTreeProvider;
+import org.apache.openmeetings.web.common.tree.PublicRecordingTreeProvider;
 import org.apache.openmeetings.web.pages.MainPage;
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -50,11 +65,14 @@ import org.apache.wicket.ajax.json.JSONException;
 import org.apache.wicket.ajax.json.JSONObject;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.behavior.AttributeAppender;
+import org.apache.wicket.extensions.markup.html.repeater.tree.ITreeProvider;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 import org.apache.wicket.markup.head.PriorityHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.protocol.ws.IWebSocketSettings;
 import org.apache.wicket.protocol.ws.api.registry.IWebSocketConnectionRegistry;
 import org.apache.wicket.protocol.ws.api.registry.PageIdKey;
@@ -95,9 +113,13 @@ public class RoomPanel extends BasePanel {
 	};
 	
 	public RoomPanel(String id, long _roomId) {
+		this(id, getBean(RoomDao.class).get(_roomId));
+		
+	}
+	
+	public RoomPanel(String id, Room r) {
 		super(id);
-		this.roomId = _roomId;
-		Room r = getBean(RoomDao.class).get(roomId);
+		this.roomId = r.getId();
 		add(new MenuPanel("roomMenu", getMenu()).setVisible(!r.getHideTopBar()));
 		WebMarkupContainer wb = new WebMarkupContainer("whiteboard");
 		add(wb.setOutputMarkupId(true));
@@ -105,7 +127,55 @@ public class RoomPanel extends BasePanel {
 		add(aab, AttributeAppender.append("style", "height: 100%;"));
 		boolean showFiles = !r.getHideFilesExplorer();
 		add(new WebMarkupContainer("flink").setVisible(showFiles));
-		add(new WebMarkupContainer("ftab").setVisible(showFiles));
+		add(new WebMarkupContainer("ftab").add(new FileTreePanel("tree") {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void updateSizes() {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void update(AjaxRequestTarget target, FileItem f) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void defineTrees() {
+				FileExplorerItem f = new FileExplorerItem();
+				f.setOwnerId(getUserId());
+				selectedFile.setObject(f);
+				treesView.add(selected = new FileItemTree<FileExplorerItem>(treesView.newChildId(), this, new FilesTreeProvider(null)));
+				treesView.add(new FileItemTree<FileExplorerItem>(treesView.newChildId(), this, new FilesTreeProvider(roomId)));
+				treesView.add(new FileItemTree<FlvRecording>(treesView.newChildId(), this, new MyRecordingTreeProvider()));
+				treesView.add(new FileItemTree<FlvRecording>(treesView.newChildId(), this, new PublicRecordingTreeProvider(null, null)));
+				for (Organisation_Users ou : getBean(UserDao.class).get(getUserId()).getOrganisation_users()) {
+					Organisation o = ou.getOrganisation();
+					treesView.add(new FileItemTree<FlvRecording>(treesView.newChildId(), this, new PublicRecordingTreeProvider(o.getId(), o.getName())));
+				}
+			}
+			
+			@Override
+			public void createFolder(String name) {
+				if (selectedFile.getObject() instanceof FlvRecording) {
+					createRecordingFolder(name);
+				} else {
+					FileExplorerItem f = new FileExplorerItem();
+					f.setFileName(name);
+					f.setInsertedBy(getUserId());
+					f.setInserted(new Date());
+					f.setType(Type.Folder);;
+					FileItem p = selectedFile.getObject();
+					long parentId = p.getId();
+					f.setParentItemId(Type.Folder == p.getType() && parentId > 0 ? parentId : null);
+					f.setOwnerId(p.getOwnerId());
+					f.setRoomId(p.getRoomId());
+					getBean(FileExplorerItemDao.class).update(f);
+				}
+			}
+		}).setVisible(showFiles));
 		add(new JQueryBehavior(".room.sidebar.left .tabs", "tabs", new Options("active", showFiles && r.isFilesOpened() ? "ftab" : "utab")) {
 			private static final long serialVersionUID = 1L;
 
@@ -265,4 +335,54 @@ public class RoomPanel extends BasePanel {
 		response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forReference(newResourceReference())));
 		response.render(OnDomReadyHeaderItem.forScript(aab.getCallbackScript()));
 	}
+
+	class FilesTreeProvider implements ITreeProvider<FileExplorerItem> {
+		private static final long serialVersionUID = 1L;
+		Long roomId = null;
+
+		FilesTreeProvider(Long roomId) {
+			this.roomId = roomId;
+		}
+		
+		public void detach() {
+			// TODO LDM should be used
+		}
+
+		public boolean hasChildren(FileExplorerItem node) {
+			return node.getId() <= 0 || Type.Folder == node.getType();
+		}
+
+		public Iterator<? extends FileExplorerItem> getChildren(FileExplorerItem node) {
+			FileExplorerItemDao dao = getBean(FileExplorerItemDao.class);
+			List<FileExplorerItem> list = null;
+			if (node.getId() == 0) {
+				list = dao.getByOwner(node.getOwnerId());
+			} else if (node.getId() < 0) {
+				list = dao.getByRoom(roomId);
+			} else {
+				list = dao.getByParent(node.getId());
+			}
+			return list.iterator();
+		}
+
+		public IModel<FileExplorerItem> model(FileExplorerItem object) {
+			// TODO LDM should be used
+			return Model.of(object);
+		}
+
+		@Override
+		public Iterator<? extends FileExplorerItem> getRoots() {
+			FileExplorerItem f = new FileExplorerItem();
+			f.setRoomId(roomId);
+			if (roomId == null) {
+				f.setId(0L);
+				f.setOwnerId(getUserId());
+				f.setFileName(WebSession.getString(706));
+			} else {
+				f.setId(-roomId);
+				f.setFileName(WebSession.getString(707));
+			}
+			return Arrays.asList(f).iterator();
+		}
+	}		
 }

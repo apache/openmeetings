@@ -109,8 +109,7 @@ public class FileExplorerItemDao {
         return null;
     }
 
-	public List<FileExplorerItem> getFileExplorerItemsByRoomAndOwner(
-            Long room_id, Long ownerId) {
+	public List<FileExplorerItem> getFileExplorerItemsByRoomAndOwner(Long room_id, Long ownerId) {
         log.debug(".getFileExplorerItemsByRoomAndOwner() started");
         try {
 			TypedQuery<FileExplorerItem> query = em.createNamedQuery("getFilesByRoomAndOwner", FileExplorerItem.class);
@@ -126,54 +125,28 @@ public class FileExplorerItemDao {
         return null;
     }
 
-    public FileExplorerItem[] getFileExplorerItemsByRoom(Long room_id,
-            Long parentFileExplorerItemId) {
+    public List<FileExplorerItem> getByRoom(Long room_id) {
         log.debug("getFileExplorerItemsByRoom room_id :: "+room_id);
-        try {
-			TypedQuery<FileExplorerItem> query = em.createNamedQuery("getFilesByRoom", FileExplorerItem.class);
-			query.setParameter("roomId",room_id);
-			query.setParameter("parentItemId", parentFileExplorerItemId);
-			
-	        FileExplorerItem[] fileExplorerList = query.getResultList().toArray(new FileExplorerItem[0]);
-			
-			return fileExplorerList;
-        } catch (Exception ex2) {
-            log.error("[getFileExplorerRootItemsByRoom]: ", ex2);
-        }
-        return null;
+		TypedQuery<FileExplorerItem> query = em.createNamedQuery("getFilesByRoom", FileExplorerItem.class);
+		query.setParameter("roomId",room_id);
+		
+		return query.getResultList();
     }
 
-    public FileExplorerItem[] getFileExplorerItemsByOwner(Long ownerId,
-            Long parentFileExplorerItemId) {
+    public List<FileExplorerItem> getByOwner(Long ownerId) {
         log.debug(".getFileExplorerItemsByOwner() started");
-        try {
-			TypedQuery<FileExplorerItem> query = em.createNamedQuery("getFilesByOwner", FileExplorerItem.class);
-			query.setParameter("ownerId",ownerId);
-			query.setParameter("parentItemId", parentFileExplorerItemId);
-			
-            FileExplorerItem[] fileExplorerList = query.getResultList().toArray(new FileExplorerItem[0]);
-
-            return fileExplorerList;
-        } catch (Exception ex2) {
-            log.error("[getFileExplorerRootItemsByOwner]: ", ex2);
-        }
-        return null;
+		TypedQuery<FileExplorerItem> query = em.createNamedQuery("getFilesByOwner", FileExplorerItem.class);
+		query.setParameter("ownerId",ownerId);
+		
+        return query.getResultList();
     }
 
-    public FileExplorerItem[] getFileExplorerItemsByParent(
-            Long parentFileExplorerItemId) {
+    public List<FileExplorerItem> getByParent(Long parentId) {
         log.debug(".getFileExplorerItemsByParent() started");
-        try {
-			TypedQuery<FileExplorerItem> query = em.createNamedQuery("getFilesByParent", FileExplorerItem.class);
-			query.setParameter("parentItemId", parentFileExplorerItemId);
-			
-            FileExplorerItem[] fileExplorerList = query.getResultList().toArray(new FileExplorerItem[0]);
-
-            return fileExplorerList;
-        } catch (Exception ex2) {
-            log.error("[getFileExplorerRootItemsByOwner]: ", ex2);
-        }
-        return null;
+		TypedQuery<FileExplorerItem> query = em.createNamedQuery("getFilesByParent", FileExplorerItem.class);
+		query.setParameter("parentItemId", parentId);
+		
+        return query.getResultList();
     }
 
     public FileExplorerItem getFileExplorerItemsByHash(String hash) {
@@ -195,11 +168,11 @@ public class FileExplorerItemDao {
         return null;
     }
     
-    public FileExplorerItem get(Long fileExplorerItemId) {
+    public FileExplorerItem get(Long fileId) {
         try {
 
 			TypedQuery<FileExplorerItem> query = em.createNamedQuery("getFileById", FileExplorerItem.class);
-			query.setParameter("id", fileExplorerItemId);
+			query.setParameter("id", fileId);
 			
 			FileExplorerItem fileExplorerList = null;
 			try {
@@ -251,11 +224,11 @@ public class FileExplorerItemDao {
     }    
 
     /**
-     * @param fileExplorerItemId
+     * @param fileId
      */
-    public void delete(Long fileExplorerItemId) {
+    public void delete(Long fileId) {
         log.debug(".delete() started");
-        delete(get(fileExplorerItemId));
+        delete(get(fileId));
     }
     
     public void delete(FileExplorerItem f) {
@@ -286,15 +259,15 @@ public class FileExplorerItemDao {
     }
 
     /**
-     * @param fileExplorerItemId
+     * @param fileId
      * @param fileName
      */
-    public void updateFileOrFolderName(Long fileExplorerItemId, String fileName) {
+    public void updateFileOrFolderName(Long fileId, String fileName) {
         log.debug(".updateFileOrFolderName() started");
 
         try {
 
-            FileExplorerItem fId = get(fileExplorerItemId);
+            FileExplorerItem fId = get(fileId);
 
             fId.setFileName(fileName);
             fId.setUpdated(new Date());
@@ -319,21 +292,19 @@ public class FileExplorerItemDao {
     }
 
     /**
-     * @param fileExplorerItemId
+     * @param fileId
      * @param newParentFileExplorerItemId
      * @param isOwner
      */
-    public void moveFile(Long fileExplorerItemId,
-            Long parentFileExplorerItemId, Long room_id, Boolean isOwner,
-            Long ownerId) {
+    public void moveFile(Long fileId, Long parentId, Long room_id, Boolean isOwner, Long ownerId) {
         log.debug(".moveFile() started");
         try {
 
-            FileExplorerItem fId = get(fileExplorerItemId);
+            FileExplorerItem fId = get(fileId);
 
-            fId.setParentItemId(parentFileExplorerItemId);
+            fId.setParentItemId(parentId);
 
-            if (parentFileExplorerItemId == 0) {
+            if (parentId == 0) {
                 if (isOwner) {
                     // move to personal Folder
                     fId.setOwnerId(ownerId);

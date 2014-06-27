@@ -22,13 +22,10 @@ import static org.apache.openmeetings.util.OmFileHelper.getHumanSize;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 
-import java.util.Date;
-
 import org.apache.openmeetings.db.dao.record.FlvRecordingDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.dto.file.RecordingContainerData;
 import org.apache.openmeetings.db.entity.file.FileItem;
-import org.apache.openmeetings.db.entity.file.FileItem.Type;
 import org.apache.openmeetings.db.entity.record.FlvRecording;
 import org.apache.openmeetings.db.entity.user.Organisation;
 import org.apache.openmeetings.db.entity.user.Organisation_Users;
@@ -51,7 +48,7 @@ public class RecordingsPanel extends UserPanel {
 
 			@Override
 			public void defineTrees() {
-				rm.setObject(new FlvRecording());
+				selectedFile.setObject(new FlvRecording());
 				treesView.add(selected = new FileItemTree<FlvRecording>(treesView.newChildId(), this, new MyRecordingTreeProvider()));
 				treesView.add(new FileItemTree<FlvRecording>(treesView.newChildId(), this, new PublicRecordingTreeProvider(null, null)));
 				for (Organisation_Users ou : getBean(UserDao.class).get(getUserId()).getOrganisation_users()) {
@@ -77,20 +74,7 @@ public class RecordingsPanel extends UserPanel {
 			
 			@Override
 			public void createFolder(String name) {
-				FlvRecording f = new FlvRecording();
-				f.setFileName(name);
-				f.setInsertedBy(getUserId());
-				f.setInserted(new Date());
-				f.setType(Type.Folder);;
-				FlvRecording p = (FlvRecording)rm.getObject();
-				long parentId = p.getId();
-				if (Type.Folder == p.getType()) {
-					f.setParentItemId(parentId);
-				}
-				f.setOwnerId(p.getOwnerId());
-				f.setOrganization_id(p.getOrganization_id());
-				getBean(FlvRecordingDao.class).update(f);
-				
+				createRecordingFolder(name);
 			}
 		});
 		add(video, info);

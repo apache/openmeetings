@@ -19,11 +19,15 @@
 package org.apache.openmeetings.web.common.tree;
 
 import static org.apache.openmeetings.web.app.Application.getBean;
+import static org.apache.openmeetings.web.app.WebSession.getUserId;
+
+import java.util.Date;
 
 import org.apache.openmeetings.db.dao.file.FileExplorerItemDao;
 import org.apache.openmeetings.db.dao.record.FlvRecordingDao;
 import org.apache.openmeetings.db.entity.file.FileExplorerItem;
 import org.apache.openmeetings.db.entity.file.FileItem;
+import org.apache.openmeetings.db.entity.file.FileItem.Type;
 import org.apache.openmeetings.db.entity.record.FlvRecording;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.AddFolderDialog;
@@ -50,7 +54,7 @@ public abstract class FileTreePanel extends Panel {
 	private static final long serialVersionUID = 1L;
 	final WebMarkupContainer trees = new WebMarkupContainer("tree-container");
 	private final WebMarkupContainer sizes = new WebMarkupContainer("sizes");
-	protected final IModel<FileItem> rm = new CompoundPropertyModel<FileItem>((FileItem)null);
+	protected final IModel<FileItem> selectedFile = new CompoundPropertyModel<FileItem>((FileItem)null);
 	protected final IModel<String> homeSize = Model.of((String)null);
 	protected final IModel<String> publicSize = Model.of((String)null);
 	final ConvertingErrorsDialog errorsDialog = new ConvertingErrorsDialog("errors", Model.of((FlvRecording)null));
@@ -60,7 +64,7 @@ public abstract class FileTreePanel extends Panel {
 	public FileTreePanel(String id) {
 		super(id);
 		defineTrees();
-		rm.getObject().setId(Long.MIN_VALUE);
+		selectedFile.getObject().setId(Long.MIN_VALUE);
 		final AddFolderDialog addFolder = new AddFolderDialog("addFolder", WebSession.getString(712)) {
 			private static final long serialVersionUID = 1L;
 
@@ -92,16 +96,7 @@ public abstract class FileTreePanel extends Panel {
 
 			@Override
 			public void onClick(AjaxRequestTarget target) {
-				FileItem f = rm.getObject();
-				long id = f.getId();
-				if (id > 0) {
-					if (f instanceof FlvRecording) {
-						getBean(FlvRecordingDao.class).delete((FlvRecording)f);
-					} else {
-						getBean(FileExplorerItemDao.class).delete((FileExplorerItem)f);
-					}
-				}
-				target.add(trees); //FIXME add correct refresh
+				delete(selectedFile.getObject(), target);
 			}
 		};
 		trash.add(new WebMarkupContainer("drop-center").setOutputMarkupId(true)).add(new DropTarget(Operation.MOVE) {
@@ -109,9 +104,8 @@ public abstract class FileTreePanel extends Panel {
 
 			@Override
 			public void onDrop(AjaxRequestTarget target, Transfer transfer, Location location) throws Reject {
-				FlvRecording r = transfer.getData();
-				getBean(FlvRecordingDao.class).delete(r);
-				target.add(trees); //FIXME add correct refresh
+				FileItem f = transfer.getData();
+				delete(f, target);
 			}
 		}.dropCenter("span"));
 		add(trash/*.add(new WindowsTheme())*/); //TODO check theme here
@@ -127,6 +121,34 @@ public abstract class FileTreePanel extends Panel {
 			}
 		});
 		add(errorsDialog);
+	}
+	
+	void delete(FileItem f, AjaxRequestTarget target) {
+		long id = f.getId();
+		if (id > 0) {
+			if (f instanceof FlvRecording) {
+				getBean(FlvRecordingDao.class).delete((FlvRecording)f);
+			} else {
+				getBean(FileExplorerItemDao.class).delete((FileExplorerItem)f);
+			}
+		}
+		target.add(trees); //FIXME add correct refresh
+	}
+	
+	public void createRecordingFolder(String name) {
+		FlvRecording f = new FlvRecording();
+		f.setFileName(name);
+		f.setInsertedBy(getUserId());
+		f.setInserted(new Date());
+		f.setType(Type.Folder);;
+		FlvRecording p = (FlvRecording)selectedFile.getObject();
+		long parentId = p.getId();
+		if (Type.Folder == p.getType()) {
+			f.setParentItemId(parentId);
+		}
+		f.setOwnerId(p.getOwnerId());
+		f.setOrganization_id(p.getOrganization_id());
+		getBean(FlvRecordingDao.class).update(f);
 	}
 	
 	public abstract void defineTrees();

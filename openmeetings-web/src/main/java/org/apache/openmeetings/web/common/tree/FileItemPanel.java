@@ -33,6 +33,7 @@ import org.apache.wicket.model.IModel;
 
 public class FileItemPanel extends FolderPanel {
 	private static final long serialVersionUID = 1L;
+	private final WebMarkupContainer errors = new WebMarkupContainer("errors");
 
 	public FileItemPanel(String id, final IModel<? extends FileItem> model, final ConvertingErrorsDialog errorsDialog) {
 		super(id, model);
@@ -40,7 +41,7 @@ public class FileItemPanel extends FolderPanel {
 			FlvRecording r = (FlvRecording)model.getObject();
 			long errorCount = getBean(FlvRecordingLogDao.class).countErrors(r.getId());
 			boolean visible = errorCount != 0 || (Status.PROCESSING != r.getStatus() && !isRecordingExists(r.getFileHash() + MP4_EXTENSION));
-			item.add(new WebMarkupContainer("errors").add(new AjaxEventBehavior("click") {
+			errors.add(new AjaxEventBehavior("click") {
 				private static final long serialVersionUID = 1L;
 	
 				@Override
@@ -48,7 +49,10 @@ public class FileItemPanel extends FolderPanel {
 					errorsDialog.setDefaultModel(model);
 					errorsDialog.open(target);
 				}
-			}).setVisible(visible));
+			}).setVisible(visible);
+		} else {
+			errors.setVisible(false);
 		}
+		item.add(errors);
 	}
 }

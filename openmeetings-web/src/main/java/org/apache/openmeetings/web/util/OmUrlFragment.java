@@ -20,14 +20,14 @@ package org.apache.openmeetings.web.util;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_LANDING_ZONE;
 import static org.apache.openmeetings.web.app.Application.getBean;
-import static org.apache.openmeetings.web.app.WebSession.getLanguage;
-import static org.apache.openmeetings.web.app.WebSession.getSid;
 import static org.apache.openmeetings.web.user.profile.SettingsPanel.EDIT_PROFILE_TAB_ID;
 import static org.apache.openmeetings.web.user.profile.SettingsPanel.MESSAGES_TAB_ID;
 
 import java.io.Serializable;
 
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
+import org.apache.openmeetings.db.dao.room.RoomDao;
+import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.web.admin.backup.BackupPanel;
 import org.apache.openmeetings.web.admin.configurations.ConfigsPanel;
 import org.apache.openmeetings.web.admin.connection.ConnectionsPanel;
@@ -45,7 +45,6 @@ import org.apache.openmeetings.web.user.dashboard.OmDashboardPanel;
 import org.apache.openmeetings.web.user.profile.SettingsPanel;
 import org.apache.openmeetings.web.user.record.RecordingsPanel;
 import org.apache.openmeetings.web.user.rooms.RoomsSelectorPanel;
-import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 public class OmUrlFragment implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -259,14 +258,16 @@ public class OmUrlFragment implements Serializable {
 				try {
 					Long roomId = Long.parseLong(type);
 					if (roomId != null) {
-						PageParameters pp = new PageParameters();
-						pp.add("wicketsid", getSid());
-						pp.add("wicketroomid", roomId);
-						pp.add("language", getLanguage());
-						basePanel = new RoomPanel(CHILD_ID, roomId);
+						Room r = getBean(RoomDao.class).get(roomId);
+						if (r != null) {
+							basePanel = new RoomPanel(CHILD_ID, r);
+						}
 					}
 				} catch(NumberFormatException ne) {
 					//skip it, bad roomid passed
+				}
+				if (basePanel == null) {
+					basePanel = new OmDashboardPanel(CHILD_ID);
 				}
 				break;
 			case rooms:

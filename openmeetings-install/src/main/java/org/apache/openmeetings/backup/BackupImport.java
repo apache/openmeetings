@@ -602,6 +602,9 @@ public class BackupImport {
 				if (file.getOwnerId() != null) {
 					file.setOwnerId(usersMap.get(file.getOwnerId()));
 				}
+				if (file.getParentItemId() != null && file.getParentItemId() <= 0L) {
+					file.setParentItemId(null);
+				}
 				fileExplorerItemDao.addFileExplorerItem(file);
 			}
 		}

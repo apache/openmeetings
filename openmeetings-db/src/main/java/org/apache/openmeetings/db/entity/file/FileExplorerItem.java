@@ -38,9 +38,9 @@ import org.simpleframework.xml.Root;
 	, @NamedQuery(name = "getFilesByRoomAndOwner", query = "SELECT c FROM FileExplorerItem c WHERE c.deleted = false "
 			+ " AND c.roomId = :roomId AND c.ownerId = :ownerId ORDER BY c.type ASC, c.fileName ")
 	, @NamedQuery(name = "getFilesByRoom", query = "SELECT c FROM FileExplorerItem c WHERE c.deleted = false AND c.roomId = :roomId " +
-			"AND c.ownerId IS NULL AND c.parentItemId = :parentItemId ORDER BY c.type ASC, c.fileName ")
+			"AND c.ownerId IS NULL AND c.parentItemId IS NULL ORDER BY c.type ASC, c.fileName ")
 	, @NamedQuery(name = "getFilesByOwner", query = "SELECT c FROM FileExplorerItem c WHERE c.deleted = false AND c.ownerId = :ownerId "
-			+ "AND c.parentItemId = :parentItemId ORDER BY c.type ASC, c.fileName ")
+			+ "AND c.parentItemId IS NULL ORDER BY c.type ASC, c.fileName ")
 	, @NamedQuery(name = "getFilesByParent", query = "SELECT c FROM FileExplorerItem c WHERE c.deleted = false "
 			+ "AND c.parentItemId = :parentItemId ORDER BY c.type ASC, c.fileName ")
 	, @NamedQuery(name = "getFileExternal", query = "SELECT c FROM FileExplorerItem c WHERE c.externalFileId = :externalFileId "
