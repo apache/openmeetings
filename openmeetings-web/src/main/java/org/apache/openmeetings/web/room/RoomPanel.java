@@ -66,6 +66,9 @@ import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.wicketstuff.whiteboard.WhiteboardBehavior;
 
+import com.googlecode.wicket.jquery.core.JQueryBehavior;
+import com.googlecode.wicket.jquery.core.Options;
+
 @AuthorizeInstantiation("Room")
 public class RoomPanel extends BasePanel {
 	private static final long serialVersionUID = 1L;
@@ -100,6 +103,17 @@ public class RoomPanel extends BasePanel {
 		add(wb.setOutputMarkupId(true));
 		add(new WhiteboardBehavior("1", wb.getMarkupId(), null, null, null));
 		add(aab, AttributeAppender.append("style", "height: 100%;"));
+		boolean showFiles = !r.getHideFilesExplorer();
+		add(new WebMarkupContainer("flink").setVisible(showFiles));
+		add(new WebMarkupContainer("ftab").setVisible(showFiles));
+		add(new JQueryBehavior(".room.sidebar.left .tabs", "tabs", new Options("active", showFiles && r.isFilesOpened() ? "ftab" : "utab")) {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void renderScript(JavaScriptHeaderItem script, IHeaderResponse response) {
+				response.render(new PriorityHeaderItem(script));
+			}
+		});
 	}
 
 	private JSONArray getStringLabels(long... ids) {
@@ -230,6 +244,7 @@ public class RoomPanel extends BasePanel {
 	public void onMenuPanelLoad(AjaxRequestTarget target) {
 		target.add(getMainPage().getHeader().setVisible(false), getMainPage().getMenu().setVisible(false)
 				, getMainPage().getTopLinks().setVisible(false));
+		target.appendJavaScript("roomLoad();");
 	}
 	
 	@Override

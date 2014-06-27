@@ -20,11 +20,10 @@ package org.apache.openmeetings.db.dto.file;
 
 import java.util.Date;
 
+import org.apache.openmeetings.db.entity.file.FileItem.Type;
 import org.apache.openmeetings.db.entity.record.FlvRecording;
 
-
 public class RecordingObject {
-
 	private Long id;
 	
 	private String fileName;
@@ -32,15 +31,12 @@ public class RecordingObject {
 	private String fileHash;
 	private String comment;
 	
-	private Long parentFileExplorerItemId;
+	private Long parentItemId;
 	private Long room_id;
 	private Long ownerId;//OwnerID => only set if its directly root in Owner Directory, other Folders and Files
 	//maybe are also in a Home directory but just because their parent is
 	
-	private Boolean isFolder;
-	private Boolean isImage;
-	private Boolean isPresentation;
-	private Boolean isRecording;
+	private Type type;
 	
 	private Date recordStart;
 	private Date recordEnd;
@@ -75,15 +71,12 @@ public class RecordingObject {
 		this.fileHash = customObject.getFileHash();
 		this.comment = customObject.getComment();
 		
-		this.parentFileExplorerItemId = customObject.getParentFileExplorerItemId();
-		this.room_id = customObject.getRoom_id();
+		this.parentItemId = customObject.getParentItemId();
+		this.room_id = customObject.getRoomId();
 		this.ownerId = customObject.getOwnerId();//OwnerID => only set if its directly root in Owner Directory, other Folders and Files
 		//maybe are also in a Home directory but just because their parent is
 		
-		this.isFolder = customObject.isFolder();
-		this.isImage = customObject.getIsImage();
-		this.isPresentation = customObject.getIsPresentation();
-		this.isRecording = customObject.getIsRecording();
+		this.type = customObject.getType();
 		
 		this.recordStart = customObject.getRecordStart();
 		this.recordEnd = customObject.getRecordEnd();
@@ -91,7 +84,7 @@ public class RecordingObject {
 		this.insertedBy = customObject.getInsertedBy();
 		this.inserted = customObject.getInserted();
 		this.updated = customObject.getUpdated();
-		this.deleted = customObject.getDeleted();
+		this.deleted = customObject.isDeleted();
 		
 		this.width = customObject.getWidth();
 		this.height = customObject.getHeight();
@@ -149,12 +142,12 @@ public class RecordingObject {
 		this.comment = comment;
 	}
 
-	public Long getParentFileExplorerItemId() {
-		return parentFileExplorerItemId;
+	public Long getParentItemId() {
+		return parentItemId;
 	}
 
-	public void setParentFileExplorerItemId(Long parentFileExplorerItemId) {
-		this.parentFileExplorerItemId = parentFileExplorerItemId;
+	public void setParentItemId(Long parentItemId) {
+		this.parentItemId = parentItemId;
 	}
 
 	public Long getRoom_id() {
@@ -173,36 +166,12 @@ public class RecordingObject {
 		this.ownerId = ownerId;
 	}
 
-	public Boolean getIsFolder() {
-		return isFolder;
+	public Type getType() {
+		return type;
 	}
 
-	public void setIsFolder(Boolean isFolder) {
-		this.isFolder = isFolder;
-	}
-
-	public Boolean getIsImage() {
-		return isImage;
-	}
-
-	public void setIsImage(Boolean isImage) {
-		this.isImage = isImage;
-	}
-
-	public Boolean getIsPresentation() {
-		return isPresentation;
-	}
-
-	public void setIsPresentation(Boolean isPresentation) {
-		this.isPresentation = isPresentation;
-	}
-
-	public Boolean getIsRecording() {
-		return isRecording;
-	}
-
-	public void setIsRecording(Boolean isRecording) {
-		this.isRecording = isRecording;
+	public void setType(Type type) {
+		this.type = type;
 	}
 
 	public Date getRecordStart() {

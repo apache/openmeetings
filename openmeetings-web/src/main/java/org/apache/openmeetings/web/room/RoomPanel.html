@@ -22,7 +22,13 @@
 <wicket:panel>
 	<div wicket:id="roomMenu"></div>
 	<div class="room sidebar left">
-		<div class="user list">
+		<div class="tabs">
+			<ul>
+				<li><a href="#utab"><wicket:ommessage key="613"/></a></li>
+				<li><a wicket:id="flink" href="#ftab"><wicket:ommessage key="614"/></a></li>
+			</ul>
+			<div id="utab"><div class="user list"></div></div>
+			<div wicket:id="ftab" id="ftab"><div class="file list"></div></div>
 		</div>
 	</div>
 	<div class="room wb area">

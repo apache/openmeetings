@@ -27,7 +27,10 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
 import org.apache.openmeetings.db.entity.file.FileExplorerItem;
+import org.apache.openmeetings.db.entity.file.FileItem.Type;
+
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.transaction.annotation.Transactional;
@@ -55,18 +58,30 @@ public class FileExplorerItemDao {
             fileItem.setFileName(fileName);
             fileItem.setFileHash(fileHash);
             fileItem.setDeleted(false);
-            fileItem.setParentFileExplorerItemId(parentFileExplorerItemId);
+            fileItem.setParentItemId(parentFileExplorerItemId);
             fileItem.setOwnerId(ownerId);
-            fileItem.setRoom_id(room_id);
+            fileItem.setRoomId(room_id);
             fileItem.setInserted(new Date());
             fileItem.setInsertedBy(insertedBy);
-            fileItem.setIsFolder(isFolder);
-            fileItem.setIsImage(isImage);
-            fileItem.setIsPresentation(isPresentation);
+            Type t = null;
+            if (isStoredWmlFile) {
+            	t = Type.WmlFile;
+            }
+            if (isChart) {
+            	t = Type.PollChart;
+            }
+            if (isImage) {
+            	t = Type.Image;
+            }
+            if (isPresentation) {
+            	t = Type.Presentation;
+            }
+            if (isFolder) {
+            	t = Type.Folder;
+            }
+            fileItem.setType(t);
             fileItem.setUpdated(new Date());
             fileItem.setWmlFilePath(wmlFilePath);
-            fileItem.setIsStoredWmlFile(isStoredWmlFile);
-            fileItem.setIsChart(isChart);
             fileItem.setExternalFileId(externalFileId);
             fileItem.setExternalType(externalType);
 
@@ -98,11 +113,7 @@ public class FileExplorerItemDao {
             Long room_id, Long ownerId) {
         log.debug(".getFileExplorerItemsByRoomAndOwner() started");
         try {
-            String hql = "SELECT c FROM FileExplorerItem c WHERE c.deleted = false "
-                    + "AND c.room_id = :room_id " + "AND c.ownerId = :ownerId "
-                    + "ORDER BY c.isFolder DESC, c.fileName ";
-
-			TypedQuery<FileExplorerItem> query = em.createQuery(hql, FileExplorerItem.class);
+			TypedQuery<FileExplorerItem> query = em.createNamedQuery("getFilesByRoomAndOwner", FileExplorerItem.class);
 			query.setParameter("room_id",room_id);
 			query.setParameter("ownerId",ownerId);
 			
@@ -119,17 +130,9 @@ public class FileExplorerItemDao {
             Long parentFileExplorerItemId) {
         log.debug("getFileExplorerItemsByRoom room_id :: "+room_id);
         try {
-
-			String hql = "SELECT c FROM FileExplorerItem c " +
-					"WHERE c.deleted = false " +
-					"AND c.room_id = :room_id " +
-					"AND c.ownerId IS NULL " +
-					"AND c.parentFileExplorerItemId = :parentFileExplorerItemId " +
-					"ORDER BY c.isFolder DESC, c.fileName ";
-			
-			TypedQuery<FileExplorerItem> query = em.createQuery(hql, FileExplorerItem.class);
-			query.setParameter("room_id",room_id);
-			query.setParameter("parentFileExplorerItemId", parentFileExplorerItemId);
+			TypedQuery<FileExplorerItem> query = em.createNamedQuery("getFilesByRoom", FileExplorerItem.class);
+			query.setParameter("roomId",room_id);
+			query.setParameter("parentItemId", parentFileExplorerItemId);
 			
 	        FileExplorerItem[] fileExplorerList = query.getResultList().toArray(new FileExplorerItem[0]);
 			
@@ -144,16 +147,9 @@ public class FileExplorerItemDao {
             Long parentFileExplorerItemId) {
         log.debug(".getFileExplorerItemsByOwner() started");
         try {
-
-            String hql = "SELECT c FROM FileExplorerItem c "
-                    + "WHERE c.deleted = false "
-                    + "AND c.ownerId = :ownerId "
-                    + "AND c.parentFileExplorerItemId = :parentFileExplorerItemId "
-                    + "ORDER BY c.isFolder DESC, c.fileName ";
-
-			TypedQuery<FileExplorerItem> query = em.createQuery(hql, FileExplorerItem.class);
+			TypedQuery<FileExplorerItem> query = em.createNamedQuery("getFilesByOwner", FileExplorerItem.class);
 			query.setParameter("ownerId",ownerId);
-			query.setParameter("parentFileExplorerItemId", parentFileExplorerItemId);
+			query.setParameter("parentItemId", parentFileExplorerItemId);
 			
             FileExplorerItem[] fileExplorerList = query.getResultList().toArray(new FileExplorerItem[0]);
 
@@ -168,14 +164,8 @@ public class FileExplorerItemDao {
             Long parentFileExplorerItemId) {
         log.debug(".getFileExplorerItemsByParent() started");
         try {
-
-            String hql = "SELECT c FROM FileExplorerItem c "
-                    + "WHERE c.deleted = false "
-                    + "AND c.parentFileExplorerItemId = :parentFileExplorerItemId "
-                    + "ORDER BY c.isFolder DESC, c.fileName ";
-
-			TypedQuery<FileExplorerItem> query = em.createQuery(hql, FileExplorerItem.class);
-			query.setParameter("parentFileExplorerItemId", parentFileExplorerItemId);
+			TypedQuery<FileExplorerItem> query = em.createNamedQuery("getFilesByParent", FileExplorerItem.class);
+			query.setParameter("parentItemId", parentFileExplorerItemId);
 			
             FileExplorerItem[] fileExplorerList = query.getResultList().toArray(new FileExplorerItem[0]);
 
@@ -205,7 +195,7 @@ public class FileExplorerItemDao {
         return null;
     }
     
-    public FileExplorerItem getFileExplorerItemsById(Long fileExplorerItemId) {
+    public FileExplorerItem get(Long fileExplorerItemId) {
         try {
 
 			TypedQuery<FileExplorerItem> query = em.createNamedQuery("getFileById", FileExplorerItem.class);
@@ -228,12 +218,7 @@ public class FileExplorerItemDao {
         log.debug(".getFileExplorerItemsByExternalIdAndType() started");
 
         try {
-
-            String hql = "SELECT c FROM FileExplorerItem c "
-                    + "WHERE c.externalFileId = :externalFileId " +
-            		"AND c.externalType LIKE :externalType";
-
-			TypedQuery<FileExplorerItem> query = em.createQuery(hql, FileExplorerItem.class);
+			TypedQuery<FileExplorerItem> query = em.createNamedQuery("getFileExternal", FileExplorerItem.class);
 			query.setParameter("externalFileId", externalFileId);
 			query.setParameter("externalType", externalType);
 			
@@ -268,26 +253,16 @@ public class FileExplorerItemDao {
     /**
      * @param fileExplorerItemId
      */
-    public void deleteFileExplorerItem(Long fileExplorerItemId) {
-        log.debug(".deleteFileExplorerItem() started");
+    public void delete(Long fileExplorerItemId) {
+        log.debug(".delete() started");
+        delete(get(fileExplorerItemId));
+    }
+    
+    public void delete(FileExplorerItem f) {
+        f.setDeleted(true);
+        f.setUpdated(new Date());
 
-        try {
-
-            FileExplorerItem fId = getFileExplorerItemsById(fileExplorerItemId);
-
-            fId.setDeleted(true);
-            fId.setUpdated(new Date());
-
-			if (fId.getId() == null) {
-				em.persist(fId);
-		    } else {
-		    	if (!em.contains(fId)) {
-		    		em.merge(fId);
-			    }
-			}
-        } catch (Exception ex2) {
-            log.error("[deleteFileExplorerItem]: ", ex2);
-        }
+        update(f);
     }
     
     public void deleteFileExplorerItemByExternalIdAndType(Long externalFilesid, String externalType) {
@@ -304,13 +279,7 @@ public class FileExplorerItemDao {
             fId.setDeleted(true);
             fId.setUpdated(new Date());
 
-			if (fId.getId() == null) {
-				em.persist(fId);
-		    } else {
-		    	if (!em.contains(fId)) {
-		    		em.merge(fId);
-			    }
-			}
+            update(fId);
         } catch (Exception ex2) {
             log.error("[deleteFileExplorerItemByExternalIdAndType]: ", ex2);
         }
@@ -325,39 +294,28 @@ public class FileExplorerItemDao {
 
         try {
 
-            FileExplorerItem fId = this
-                    .getFileExplorerItemsById(fileExplorerItemId);
+            FileExplorerItem fId = get(fileExplorerItemId);
 
             fId.setFileName(fileName);
             fId.setUpdated(new Date());
 
-			if (fId.getId() == null) {
-				em.persist(fId);
-		    } else {
-		    	if (!em.contains(fId)) {
-		    		em.merge(fId);
-			    }
-			}
+            update(fId);
         } catch (Exception ex2) {
             log.error("[updateFileOrFolderName]: ", ex2);
         }
     }
 
-    public void updateFileOrFolder(FileExplorerItem fId) {
-        log.debug(".updateFileOrFolder() started");
-        try {
-            // fId.setUpdated(new Date());
+    public FileExplorerItem update(FileExplorerItem f) {
+        // fId.setUpdated(new Date());
 
-			if (fId.getId() == null) {
-				em.persist(fId);
-		    } else {
-		    	if (!em.contains(fId)) {
-		    		em.merge(fId);
-			    }
-			}
-        } catch (Exception ex2) {
-            log.error("[updateFileOrFolder]: ", ex2);
-        }
+		if (f.getId() == null) {
+			em.persist(f);
+	    } else {
+	    	if (!em.contains(f)) {
+	    		f = em.merge(f);
+		    }
+		}
+		return f;
     }
 
     /**
@@ -371,9 +329,9 @@ public class FileExplorerItemDao {
         log.debug(".moveFile() started");
         try {
 
-            FileExplorerItem fId = getFileExplorerItemsById(fileExplorerItemId);
+            FileExplorerItem fId = get(fileExplorerItemId);
 
-            fId.setParentFileExplorerItemId(parentFileExplorerItemId);
+            fId.setParentItemId(parentFileExplorerItemId);
 
             if (parentFileExplorerItemId == 0) {
                 if (isOwner) {
@@ -382,7 +340,7 @@ public class FileExplorerItemDao {
                 } else {
                     // move to public room folder
                     fId.setOwnerId(null);
-                    fId.setRoom_id(room_id);
+                    fId.setRoomId(room_id);
                 }
             } else {
                 fId.setOwnerId(null);

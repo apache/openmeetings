@@ -76,7 +76,7 @@ public class FlvRecordingDao {
 		return null;
 	}
 
-	public FlvRecording getRecordingByHash(String hash) {
+	public FlvRecording getByHash(String hash) {
 		try {
 			TypedQuery<FlvRecording> query = em.createNamedQuery("getRecordingByHash", FlvRecording.class);
 			query.setParameter("fileHash", hash);
@@ -88,16 +88,6 @@ public class FlvRecordingDao {
 			}
 		} catch (Exception ex2) {
 			log.error("[getRecordingByHash]: ", ex2);
-		}
-		return null;
-	}
-
-	public List<FlvRecording> getFlvRecordings() {
-		try {
-			return em.createQuery("SELECT c FROM FlvRecording c WHERE c.deleted = false", FlvRecording.class)
-					.getResultList();
-		} catch (Exception ex2) {
-			log.error("[getFlvRecordings]: ", ex2);
 		}
 		return null;
 	}
@@ -126,11 +116,7 @@ public class FlvRecordingDao {
 
 			log.debug("getFlvRecordingByExternalRoomType :externalRoomType: " + externalRoomType);
 
-			String hql = "SELECT c FROM FlvRecording c, Room r WHERE c.room_id = r.id "
-					+ "AND r.externalRoomType LIKE :externalRoomType AND c.insertedBy LIKE :insertedBy "
-					+ "AND c.deleted = false";
-
-			TypedQuery<FlvRecording> query = em.createQuery(hql, FlvRecording.class);
+			TypedQuery<FlvRecording> query = em.createNamedQuery("getRecordingsByExternalRoomTypeAndOwner", FlvRecording.class);
 			query.setParameter("externalRoomType", externalRoomType);
 			query.setParameter("insertedBy", insertedBy);
 			query.setParameter("deleted", true);
@@ -146,11 +132,9 @@ public class FlvRecordingDao {
 		return null;
 	}
 
-	public List<FlvRecording> getAllFlvRecordings() {
+	public List<FlvRecording> get() {
 		try {
-			String hql = "SELECT c FROM FlvRecording c LEFT JOIN FETCH c.flvRecordingMetaData ORDER BY c.flvRecordingId";
-
-			TypedQuery<FlvRecording> query = em.createQuery(hql, FlvRecording.class);
+			TypedQuery<FlvRecording> query = em.createNamedQuery("getRecordingsAll", FlvRecording.class);
 
 			return query.getResultList();
 		} catch (Exception ex2) {
@@ -161,15 +145,10 @@ public class FlvRecordingDao {
 
 	public List<FlvRecording> getFlvRecordingByExternalRoomType(String externalRoomType) {
 		try {
-
 			log.debug("getFlvRecordingByExternalRoomType :externalRoomType: " + externalRoomType);
 
-			String hql = "SELECT c FROM FlvRecording c, Room r " + "WHERE c.room_id = r.id "
-					+ "AND r.externalRoomType LIKE :externalRoomType " + "AND c.deleted <> :deleted ";
-
-			TypedQuery<FlvRecording> query = em.createQuery(hql, FlvRecording.class);
+			TypedQuery<FlvRecording> query = em.createQuery("getRecordingsByExternalRoomType", FlvRecording.class);
 			query.setParameter("externalRoomType", externalRoomType);
-			query.setParameter("deleted", true);
 
 			List<FlvRecording> flvRecordingList = query.getResultList();
 
@@ -196,11 +175,7 @@ public class FlvRecordingDao {
 
 	public List<FlvRecording> getFlvRecordingByRoomId(Long room_id) {
 		try {
-
-			String hql = "SELECT c FROM FlvRecording c " + "WHERE c.deleted <> :deleted " + "AND c.room_id = :room_id "
-					+ "ORDER BY c.folder DESC, c.fileName ";
-
-			TypedQuery<FlvRecording> query = em.createQuery(hql, FlvRecording.class);
+			TypedQuery<FlvRecording> query = em.createNamedQuery("getRecordingsByRoom", FlvRecording.class);
 			query.setParameter("deleted", true);
 			query.setParameter("room_id", room_id);
 
@@ -215,14 +190,8 @@ public class FlvRecordingDao {
 
 	public List<FlvRecording> getFlvRecordingByParent(Long parentFileExplorerItemId) {
 		try {
-
-			String hql = "SELECT c FROM FlvRecording c " + "WHERE c.deleted <> :deleted "
-					+ "AND c.parentFileExplorerItemId = :parentFileExplorerItemId "
-					+ "ORDER BY c.folder DESC, c.fileName ";
-
-			TypedQuery<FlvRecording> query = em.createQuery(hql, FlvRecording.class);
-			query.setParameter("deleted", true);
-			query.setParameter("parentFileExplorerItemId", parentFileExplorerItemId);
+			TypedQuery<FlvRecording> query = em.createNamedQuery("getRecordingsByParent", FlvRecording.class);
+			query.setParameter("parentItemId", parentFileExplorerItemId);
 
 			List<FlvRecording> flvRecordingList = query.getResultList();
 

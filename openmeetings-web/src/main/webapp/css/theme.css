@@ -283,24 +283,23 @@ html, body {
 #feedcontainer {
 	overflow: auto;
 }
-.recording {
+.file.tree.container {
+	border: 1px solid #ccc;
+}
+.file.tree {
 	width: 100%;
 	display: inline-block;
 }
-.recording .files {
-	width: 250px;
-	border: 1px solid #ccc;
-}
-.recording .files .trees {
+.file.tree .trees {
 	min-height: 400px;
 	max-height: 600px;
 	overflow-x: hidden;
 	overflow-y: auto;
 }
-.recording .files .sizes table, .recording .files .info table {
+.file.tree .files .sizes table, .file.tree .files .info table {
 	width: 100%;
 }
-.recording .files .info input {
+.file.tree .files .info input {
 	width: 100%;
 	padding-right: 5px;
 	padding-left: 5px;
@@ -377,43 +376,53 @@ html, body {
 	background-image: url(images/film_processing.png);
 	background-repeat: no-repeat;
 }
-.my-recordings.om-icon {
+.file.om-icon {
 	padding-left: 18px;
+	background-repeat: no-repeat;
+}
+.my.file.om-icon {
 	background-image: url(images/house_link.png);
-	background-repeat: no-repeat;
 }
-.public-recordings.om-icon {
-	padding-left: 18px;
+.public.file.om-icon {
 	background-image: url(images/world_link.png);
-	background-repeat: no-repeat;
 }
-.selected .recording.item {
+.image.file.om-icon {
+	background-image: url(images/photo.png);
+}
+.chart.file.om-icon {
+	background-image: url(images/chart_pie.png);
+}
+.wml.file.om-icon {
+	background-image: url(images/map.png);
+}
+.doc.file.om-icon {
+	background-image: url(images/report.png);
+}
+.selected .file.item {
 	background-color: #0099FF;
 }
-.recording.item {
+.file.item {
 	position: relative;
+	display: inline-block;
 }
-.recording.item .name {
+.file.item .name {
 	color: black;
 }
-.recording.item .errors {
-	position: absolute;
-	right: 0px;
+.file.item .errors {
 	background-image: url(images/script_error.png);
 	width: 16px;
 	height: 16px;
 	background-repeat: no-repeat;
-	padding-right: 20px;
 }
-.recording.dialog.errors {
+.file.tree .dialog.errors {
 	width: 600px;
 	height: 500px;
 	font-size: small;
 }
-.recording.dialog.errors .alert {
+.file.tree .dialog.errors .alert {
 	color: red;
 }
-.recording.dialog.errors .message {
+.file.tree .dialog.errors .message {
 	display: block;
     unicode-bidi: embed;
     font-family: monospace;

@@ -148,8 +148,7 @@ public class FileWebService {
 				// httpServletResponse.getWriter().print(returnError);
 				hs.put("message", "library");
 				hs.put("action", "newFile");
-				hs.put("fileExplorerItem", fileExplorerItemDao
-						.getFileExplorerItemsById(returnError.getFileExplorerItemId()));
+				hs.put("fileExplorerItem", fileExplorerItemDao.get(returnError.getFileExplorerItemId()));
 				hs.put("error", returnError.getLogMessage());
 				hs.put("fileName", returnError.getCompleteName());
 				
@@ -232,8 +231,7 @@ public class FileWebService {
 				// httpServletResponse.getWriter().print(returnError);
 				hs.put("message", "library");
 				hs.put("action", "newFile");
-				hs.put("fileExplorerItem", fileExplorerItemDao
-						.getFileExplorerItemsById(returnError.getFileExplorerItemId()));
+				hs.put("fileExplorerItem", fileExplorerItemDao.get(returnError.getFileExplorerItemId()));
 				hs.put("error", returnError);
 				hs.put("fileName", returnError.getCompleteName());
 				
@@ -490,7 +488,7 @@ public class FileWebService {
 
 			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(users_id))) {
 
-				fileExplorerItemDao.deleteFileExplorerItem(fileExplorerItemId);
+				fileExplorerItemDao.delete(fileExplorerItemId);
 
 			}
 
@@ -521,7 +519,7 @@ public class FileWebService {
 
 				// TODO: Check if user has access or not to the file
 
-				fileExplorerItemDao.deleteFileExplorerItem(fileExplorerItemId);
+				fileExplorerItemDao.delete(fileExplorerItemId);
 
 			}
 
@@ -944,8 +942,7 @@ public class FileWebService {
 								newParentFileExplorerItemId, room_id, isOwner,
 								owner_id);
 
-				FileExplorerItem fileExplorerItem = fileExplorerItemDao
-						.getFileExplorerItemsById(fileExplorerItemId);
+				FileExplorerItem fileExplorerItem = fileExplorerItemDao.get(fileExplorerItemId);
 
 				if (moveToHome) {
 					// set this file and all subfiles and folders the ownerId
@@ -1003,8 +1000,7 @@ public class FileWebService {
 								newParentFileExplorerItemId, room_id, isOwner,
 								users_id);
 
-				FileExplorerItem fileExplorerItem = fileExplorerItemDao
-						.getFileExplorerItemsById(fileExplorerItemId);
+				FileExplorerItem fileExplorerItem = fileExplorerItemDao.get(fileExplorerItemId);
 
 				if (moveToHome) {
 					// set this file and all subfiles and folders the ownerId

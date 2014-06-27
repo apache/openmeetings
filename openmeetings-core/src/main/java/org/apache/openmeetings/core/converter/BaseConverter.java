@@ -82,7 +82,7 @@ public abstract class BaseConverter {
 	}
 	
 	protected File getStreamFolder(FlvRecording flvRecording) {
-		return getStreamsSubDir(flvRecording.getRoom_id());
+		return getStreamsSubDir(flvRecording.getRoomId());
 	}
 	
 	protected String getDifference(Date from, Date to) {
@@ -144,12 +144,12 @@ public abstract class BaseConverter {
 	}
 	
 	private static File getMetaFlv(FlvRecordingMetaData metaData) {
-		File metaDir = getStreamsSubDir(metaData.getFlvRecording().getRoom_id());
+		File metaDir = getStreamsSubDir(metaData.getFlvRecording().getRoomId());
 		return new File(metaDir, metaData.getStreamName() + ".flv");
 	}
 	
 	private static File getMetaFlvSer(FlvRecordingMetaData metaData) {
-		File metaDir = getStreamsSubDir(metaData.getFlvRecording().getRoom_id());
+		File metaDir = getStreamsSubDir(metaData.getFlvRecording().getRoomId());
 		return new File(metaDir, metaData.getStreamName() + ".flv.ser");
 	}
 	

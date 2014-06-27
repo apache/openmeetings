@@ -30,12 +30,21 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.apache.openmeetings.db.entity.IDataProviderEntity;
 
 @Entity
+@NamedQueries({
+	@NamedQuery(name = "getNextLanguageId", query = "SELECT MAX(fl.id) FROM FieldLanguage fl")
+	, @NamedQuery(name = "getFullLanguageById", query = "SELECT fl FROM FieldLanguage fl LEFT JOIN FETCH fl.languageValues WHERE fl.id = :id")
+	, @NamedQuery(name = "deleteAllLanguages", query = "DELETE FROM FieldLanguage")
+	, @NamedQuery(name = "getLanguageById", query = "SELECT c FROM FieldLanguage c WHERE c.deleted = false AND c.id = :id")
+	, @NamedQuery(name = "getLanguages", query = "SELECT c FROM FieldLanguage c WHERE c.deleted = false")
+})
 @Table(name = "fieldlanguage")
 public class FieldLanguage implements IDataProviderEntity {
 	private static final long serialVersionUID = 1L;

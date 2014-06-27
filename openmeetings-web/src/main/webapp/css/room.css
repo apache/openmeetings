@@ -44,6 +44,9 @@
 	padding-left: 5px;
     padding-top: 5px;
 }
+.room.sidebar.left .tabs, .room.sidebar.left .tabs #utab, .room.sidebar.left .tabs #ftab {
+	padding: 0;
+}
 .room.sidebar.left .user.list .user.current {
 	font-weight: bold;
 }

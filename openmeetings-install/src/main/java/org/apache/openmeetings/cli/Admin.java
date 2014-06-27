@@ -402,7 +402,7 @@ public class Admin {
 								} else {
 									invalid += fSize;
 								}
-							} else if (item.getDeleted()) {
+							} else if (item.isDeleted()) {
 								if (cleanup) {
 									FileHelper.removeRec(f);
 								} else {
@@ -412,7 +412,7 @@ public class Admin {
 						}
 						missing = 0;
 						for (FileExplorerItem item : fileDao.getFileExplorerItems()) {
-							if (!item.getDeleted() && item.getFileHash() != null && !new File(files, item.getFileHash()).exists()) {
+							if (!item.isDeleted() && item.getFileHash() != null && !new File(files, item.getFileHash()).exists()) {
 								missing++;
 							}
 						}
@@ -439,15 +439,15 @@ public class Admin {
 						long restSize = sectionSize - size;
 						FlvRecordingDao recordDao = getApplicationContext(ctxName).getBean(FlvRecordingDao.class);
 						long[] params = {0, 0}; // [0] == deleted [1] == missing
-						for (FlvRecording rec : recordDao.getAllFlvRecordings()) {
-							checkRecordingFile(hibernateDir, rec.getFileHash(), rec.getDeleted(), params, cleanup);
-							checkRecordingFile(hibernateDir, rec.getAlternateDownload(), rec.getDeleted(), params, cleanup);
-							checkRecordingFile(hibernateDir, rec.getPreviewImage(), rec.getDeleted(), params, cleanup);
+						for (FlvRecording rec : recordDao.get()) {
+							checkRecordingFile(hibernateDir, rec.getFileHash(), rec.isDeleted(), params, cleanup);
+							checkRecordingFile(hibernateDir, rec.getAlternateDownload(), rec.isDeleted(), params, cleanup);
+							checkRecordingFile(hibernateDir, rec.getPreviewImage(), rec.isDeleted(), params, cleanup);
 						}
 						long invalid = 0;
 						for (File f : hibernateDir.listFiles()) {
 							if (f.isFile() && f.getName().endsWith(".flv")) {
-								FlvRecording rec = recordDao.getRecordingByHash(f.getName());
+								FlvRecording rec = recordDao.getByHash(f.getName());
 								if (rec == null) {
 									cleanUpFile(invalid, cleanup, f);
 									String name = f.getName().substring(0, f.getName().length() - 5);

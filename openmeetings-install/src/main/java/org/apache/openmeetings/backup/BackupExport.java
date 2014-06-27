@@ -295,7 +295,7 @@ public class BackupExport {
 		 * ##################### Recordings
 		 */
 		{
-			List<FlvRecording> list = flvRecordingDao.getAllFlvRecordings();
+			List<FlvRecording> list = flvRecordingDao.get();
 			Registry registry = new Registry();
 			Strategy strategy = new RegistryStrategy(registry);
 			Serializer serializer = new Persister(strategy);

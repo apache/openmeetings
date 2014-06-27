@@ -84,7 +84,7 @@ public class VideoInfo extends Panel {
 	public VideoInfo update(AjaxRequestTarget target, FlvRecording r) {
 		rm.setObject(r == null ? new FlvRecording() : r);
 		try {
-			Room room = getBean(RoomDao.class).get(r.getRoom_id());
+			Room room = getBean(RoomDao.class).get(r.getRoomId());
 			roomName.setObject(room.getName());
 		} catch (Exception e) {
 			//no-op

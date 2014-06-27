@@ -41,7 +41,7 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
-import org.apache.openmeetings.db.entity.IDataProviderEntity;
+import org.apache.openmeetings.db.entity.file.FileItem;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.user.User;
 import org.simpleframework.xml.Element;
@@ -72,21 +72,30 @@ import org.simpleframework.xml.Root;
 			+ "WHERE c.insertedBy = u.id AND u.externalUserId = :externalUserId  AND u.externalUserType = :externalUserType "
 			+ "AND c.deleted = false") 
 	, @NamedQuery(name = "getRecordingsPublic", query = "SELECT f FROM FlvRecording f WHERE f.deleted = false AND f.ownerId IS NULL "
-			+ "AND f.organization_id IS NULL AND (f.parentFileExplorerItemId IS NULL OR f.parentFileExplorerItemId = 0) "
-			+ "ORDER BY f.folder DESC, f.fileName")
+			+ "AND f.organization_id IS NULL AND (f.parentItemId IS NULL OR f.parentItemId = 0) "
+			+ "ORDER BY f.type DESC, f.fileName")
 	, @NamedQuery(name = "getRecordingsByOrganization", query = "SELECT f FROM FlvRecording f WHERE f.deleted = false AND f.ownerId IS NULL "
-			+ "AND f.organization_id = :organization_id AND (f.parentFileExplorerItemId IS NULL OR f.parentFileExplorerItemId = 0) "
-			+ "ORDER BY f.folder DESC, f.fileName")
+			+ "AND f.organization_id = :organization_id AND (f.parentItemId IS NULL OR f.parentItemId = 0) "
+			+ "ORDER BY f.type DESC, f.fileName")
 	, @NamedQuery(name = "getRecordingsByOwner", query = "SELECT f FROM FlvRecording f WHERE f.deleted = false AND f.ownerId = :ownerId "
-			+ "AND (f.parentFileExplorerItemId IS NULL OR f.parentFileExplorerItemId = 0) "
-			+ "ORDER BY f.folder DESC, f.fileName ")
+			+ "AND (f.parentItemId IS NULL OR f.parentItemId = 0) "
+			+ "ORDER BY f.type DESC, f.fileName ")
 	, @NamedQuery(name = "resetRecordingProcessingStatus", query = "UPDATE FlvRecording f SET f.status = :error WHERE f.status = :processing")
+	, @NamedQuery(name = "getRecordingsAll", query = "SELECT c FROM FlvRecording c LEFT JOIN FETCH c.flvRecordingMetaData ORDER BY c.id")
+	, @NamedQuery(name = "getRecordingsByExternalRoomTypeAndOwner", query = "SELECT c FROM FlvRecording c, Room r WHERE c.roomId = r.id "
+			+ "AND r.externalRoomType LIKE :externalRoomType AND c.insertedBy LIKE :insertedBy AND c.deleted = false")
+	, @NamedQuery(name = "getRecordingsByExternalRoomType", query = "SELECT c FROM FlvRecording c, Room r WHERE c.roomId = r.id "
+			+ "AND r.externalRoomType LIKE :externalRoomType AND c.deleted = false")
+	, @NamedQuery(name = "getRecordingsByRoom", query = "SELECT c FROM FlvRecording c WHERE c.deleted = false AND c.roomId = :room_id "
+			+ "ORDER BY c.type ASC, c.fileName")
+	, @NamedQuery(name = "getRecordingsByParent", query = "SELECT c FROM FlvRecording c WHERE c.deleted = false AND c.parentItemId = :parentItemId "
+			+ "ORDER BY c.type ASC, c.fileName") 
 })
 @Table(name = "flvrecording")
 @Root(name = "flvrecording")
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
-public class FlvRecording implements IDataProviderEntity {
+public class FlvRecording extends FileItem {
 	private static final long serialVersionUID = 1L;
 	
 	@XmlType(namespace="org.apache.openmeetings.record")
@@ -102,52 +111,13 @@ public class FlvRecording implements IDataProviderEntity {
 	@Element(data = true, name = "flvRecordingId")
 	private Long id;
 
-	@Column(name = "filename")
-	@Element(data = true, required = false)
-	private String fileName;
-
 	@Column(name = "alternate_download")
 	@Element(data = true, required = false)
 	private String alternateDownload;
 
-	@Column(name = "filehash")
-	@Element(data = true, required = false)
-	private String fileHash;
-
 	@Column(name = "comment_field")
 	@Element(data = true, required = false)
 	private String comment;
-
-	@Column(name = "parent_fileexploreritem_id")
-	@Element(data = true, required = false)
-	private Long parentFileExplorerItemId;
-
-	@Column(name = "room_id")
-	@Element(data = true, required = false)
-	private Long room_id;
-
-	@Column(name = "owner_id")
-	@Element(data = true, required = false)
-	private Long ownerId;// OwnerID => only set if its directly root in Owner
-							// Directory, other Folders and Files
-							// maybe are also in a Home directory but just
-							// because their parent is
-
-	@Column(name = "is_folder")
-	@Element(data = true, required = false)
-	private boolean folder;
-
-	@Column(name = "is_image")
-	@Element(data = true, required = false)
-	private Boolean isImage;
-
-	@Column(name = "is_presentation")
-	@Element(data = true, required = false)
-	private Boolean isPresentation;
-
-	@Column(name = "is_recording")
-	@Element(data = true, required = false)
-	private Boolean isRecording;
 
 	@Column(name = "record_start")
 	@Element(data = true, required = false)
@@ -157,21 +127,6 @@ public class FlvRecording implements IDataProviderEntity {
 	@Element(data = true, required = false)
 	private Date recordEnd;
 
-	@Column(name = "inserted_by")
-	@Element(data = true, required = false)
-	private Long insertedBy;
-
-	@Column(name = "inserted")
-	@Element(data = true, required = false)
-	private Date inserted;
-
-	@Column(name = "updated")
-	private Date updated;
-
-	@Column(name = "deleted")
-	@Element(data = true, required = false)
-	private boolean deleted;
-
 	@Column(name = "width")
 	@Element(data = true, required = false)
 	private Integer width;
@@ -179,18 +134,6 @@ public class FlvRecording implements IDataProviderEntity {
 	@Column(name = "height")
 	@Element(data = true, required = false)
 	private Integer height;
-
-	@Column(name = "flv_width")
-	@Element(data = true, required = false)
-	private Integer flvWidth;
-
-	@Column(name = "flv_height")
-	@Element(data = true, required = false)
-	private Integer flvHeight;
-
-	@Column(name = "preview_image")
-	@Element(data = true, required = false)
-	private String previewImage;
 
 	@Column(name = "duration")
 	@Element(data = true, required = false)
@@ -240,116 +183,12 @@ public class FlvRecording implements IDataProviderEntity {
 		this.id = id;
 	}
 
-	public String getFileName() {
-		return fileName;
-	}
-
-	public void setFileName(String fileName) {
-		this.fileName = fileName;
-	}
-
 	public String getComment() {
 		return comment;
 	}
 
 	public void setComment(String comment) {
 		this.comment = comment;
-	}
-
-	public String getFileHash() {
-		return fileHash;
-	}
-
-	public void setFileHash(String fileHash) {
-		this.fileHash = fileHash;
-	}
-
-	public Long getParentFileExplorerItemId() {
-		return parentFileExplorerItemId;
-	}
-
-	public void setParentFileExplorerItemId(Long parentFileExplorerItemId) {
-		this.parentFileExplorerItemId = parentFileExplorerItemId;
-	}
-
-	public Long getRoom_id() {
-		return room_id;
-	}
-
-	public void setRoom_id(Long room_id) {
-		this.room_id = room_id;
-	}
-
-	public Long getOwnerId() {
-		return ownerId;
-	}
-
-	public void setOwnerId(Long ownerId) {
-		this.ownerId = ownerId;
-	}
-
-	public boolean isFolder() {
-		return folder;
-	}
-
-	public void setFolder(boolean folder) {
-		this.folder = folder;
-	}
-
-	public Boolean getIsImage() {
-		return isImage;
-	}
-
-	public void setIsImage(Boolean isImage) {
-		this.isImage = isImage;
-	}
-
-	public Boolean getIsPresentation() {
-		return isPresentation;
-	}
-
-	public void setIsPresentation(Boolean isPresentation) {
-		this.isPresentation = isPresentation;
-	}
-
-	public Boolean getIsRecording() {
-		return isRecording;
-	}
-
-	public void setIsRecording(Boolean isRecording) {
-		this.isRecording = isRecording;
-	}
-
-	public Long getInsertedBy() {
-		return insertedBy;
-	}
-
-	public void setInsertedBy(Long insertedBy) {
-		this.insertedBy = insertedBy;
-	}
-
-	public Date getInserted() {
-		return inserted;
-	}
-
-	public void setInserted(Date inserted) {
-		this.inserted = inserted;
-	}
-
-	public boolean getDeleted() {
-		return deleted;
-	}
-
-	public void setDeleted(boolean deleted) {
-		this.deleted = deleted;
-	}
-
-	public Date getUpdated() {
-		return updated;
-	}
-
-	public void setUpdated(Date updated) {
-		this.updated = updated;
 	}
 
 	public String getDuration() {
@@ -433,30 +272,6 @@ public class FlvRecording implements IDataProviderEntity {
 		this.height = height;
 	}
 
-	public Integer getFlvWidth() {
-		return flvWidth;
-	}
-
-	public void setFlvWidth(Integer flvWidth) {
-		this.flvWidth = flvWidth;
-	}
-
-	public Integer getFlvHeight() {
-		return flvHeight;
-	}
-
-	public void setFlvHeight(Integer flvHeight) {
-		this.flvHeight = flvHeight;
-	}
-
-	public String getPreviewImage() {
-		return previewImage;
-	}
-
-	public void setPreviewImage(String previewImage) {
-		this.previewImage = previewImage;
-	}
-
 	public String getAlternateDownload() {
 		return alternateDownload;
 	}
@@ -496,5 +311,4 @@ public class FlvRecording implements IDataProviderEntity {
 	public void setStatus(Status status) {
 		this.status = status;
 	}
-
 }

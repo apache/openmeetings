@@ -113,18 +113,35 @@ function initVideo(sid, roomid, audioOnly, interview, labels) {
 			.attr('allowscriptaccess', 'sameDomain').attr('type', 'application/x-shockwave-flash')
 			.attr('pluginspage', 'http://www.macromedia.com/go/getflashplayer')
 	*/
-	r.dialog({ width: options.width, height: options.height, dialogClass: "video" });
+	r.dialog({width: options.width, height: options.height, dialogClass: "video"});
 }
 
 function setHeight() {
 	var h = $(window).height() - $('#roomMenu').height();
 	$(".room.sidebar.left").height(h);
+	var p = $(".room.sidebar.left .tabs");
+	p.height(h - 5); //FIXME hacks
+	$(".user.list", p).height(h - $("ul", p).height() - 15); //FIXME hacks
 	$(".room.wb.area").height(h);
 	$(".room.wb.area .wb").height(h);
 }
 
 $(document).ready(function() {
 	$(window).on('resize.openmeetings', function() {
+		roomWidth = $(window).width();
 		setHeight();
 	});
 });
+
+var roomWidth = $(window).width();
+function roomLoad() {
+	$(".room.sidebar.left").resizable({
+		handles: "e"
+		, stop: function(event, ui) {
+			//TODO not really works, need to be investigated
+			var w = roomWidth - $(this).width() - 5;
+			$(".room.wb.area").width(w);
+			$(".room.wb.area .wb").width(w);
+		}
+	});
+}

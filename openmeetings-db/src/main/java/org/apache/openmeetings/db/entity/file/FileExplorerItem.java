@@ -18,8 +18,6 @@
  */
 package org.apache.openmeetings.db.entity.file;
 
-import java.util.Date;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -29,273 +27,87 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
-import org.apache.openmeetings.db.entity.IDataProviderEntity;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
 
 @Entity
 @NamedQueries({
-	@NamedQuery(name="getAllFiles", query="SELECT c FROM FileExplorerItem c ORDER BY c.id")
-    , @NamedQuery(name="getFileById", query="SELECT c FROM FileExplorerItem c WHERE c.id = :id")
-    , @NamedQuery(name="getFileByHash", query="SELECT c FROM FileExplorerItem c WHERE c.fileHash = :fileHash")
+	@NamedQuery(name = "getAllFiles", query = "SELECT c FROM FileExplorerItem c ORDER BY c.id")
+	, @NamedQuery(name = "getFileById", query = "SELECT c FROM FileExplorerItem c WHERE c.id = :id")
+	, @NamedQuery(name = "getFileByHash", query = "SELECT c FROM FileExplorerItem c WHERE c.fileHash = :fileHash")
+	, @NamedQuery(name = "getFilesByRoomAndOwner", query = "SELECT c FROM FileExplorerItem c WHERE c.deleted = false "
+			+ " AND c.roomId = :roomId AND c.ownerId = :ownerId ORDER BY c.type ASC, c.fileName ")
+	, @NamedQuery(name = "getFilesByRoom", query = "SELECT c FROM FileExplorerItem c WHERE c.deleted = false AND c.roomId = :roomId " +
+			"AND c.ownerId IS NULL AND c.parentItemId = :parentItemId ORDER BY c.type ASC, c.fileName ")
+	, @NamedQuery(name = "getFilesByOwner", query = "SELECT c FROM FileExplorerItem c WHERE c.deleted = false AND c.ownerId = :ownerId "
+			+ "AND c.parentItemId = :parentItemId ORDER BY c.type ASC, c.fileName ")
+	, @NamedQuery(name = "getFilesByParent", query = "SELECT c FROM FileExplorerItem c WHERE c.deleted = false "
+			+ "AND c.parentItemId = :parentItemId ORDER BY c.type ASC, c.fileName ")
+	, @NamedQuery(name = "getFileExternal", query = "SELECT c FROM FileExplorerItem c WHERE c.externalFileId = :externalFileId "
+			+ "AND c.externalType LIKE :externalType")
 })
 @Table(name = "fileexploreritem")
 @Root
-public class FileExplorerItem implements IDataProviderEntity {
+public class FileExplorerItem extends FileItem {
 	private static final long serialVersionUID = 1L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
 	@Element(data = true, name = "fileExplorerItemId")
 	private Long id;
-	
-	@Column(name="filename")
-	@Element(data=true, required = false)
-	private String fileName;
-	
-	@Column(name="filehash")
-	@Element(data=true, required = false)
-	private String fileHash;
-	
-	@Column(name="parent_fileexploreritem_id")
-	@Element(data=true)
-	private Long parentFileExplorerItemId;
-	
-	@Column(name="room_id")
-	@Element(data=true, required=false)
-	private Long room_id;
-	
-	@Column(name="owner_id")
-	@Element(data=true, required=false)
-	private Long ownerId;//OwnerID => only set if its directly root in Owner Directory, other Folders and Files
-	//maybe are also in a Home directory but just because their parent is
-	
-	@Column(name="is_folder")
-	@Element(data=true)
-	private Boolean isFolder;
-	
-	@Column(name="is_image")
-	@Element(data=true)
-	private Boolean isImage;
-	
-	@Column(name="is_presentation")
-	@Element(data=true)
-	private Boolean isPresentation;
-	
-	@Column(name="is_video")
-	@Element(data=true, required=false)
-	private Boolean isVideo;
-	
-	@Column(name="inserted_by")
-	@Element(data=true)
-	private Long insertedBy;
-	
-	@Column(name="inserted")
-	@Element(data=true)
-	private Date inserted;
-	
-	@Column(name="updated")
-	@Element(data=true)
-	private Date updated;
-	
-	@Column(name="deleted")
-	@Element(data=true)
-	private boolean deleted;
-	
-	@Column(name="filesize")
-	@Element(data=true, required=false)
-	private Long fileSize;
-	
-	@Column(name="flv_width")
-	@Element(data=true, required=false)
-	private Integer flvWidth;
-	
-	@Column(name="flv_height")
-	@Element(data=true, required=false)
-	private Integer flvHeight;
-	
-	@Column(name="preview_image")
-	@Element(data=true, required = false)
-	private String previewImage;
-	
-	@Column(name="wml_file_path")
-	@Element(data=true, required = false)
-	private String wmlFilePath;
-	
-	@Column(name="is_stored_wml_file")
-	@Element(data=true, required = false)
-	private Boolean isStoredWmlFile;
-	
-	@Column(name="is_chart")
-	@Element(data=true, required = false)
-    private Boolean isChart;
-    
-	@Column(name="external_file_id")
-    private Long externalFileId;
-	
-	@Column(name="external_type")
-    private String externalType;
 
-		
+	@Column(name = "filesize")
+	@Element(data = true, required = false)
+	private Long fileSize;
+
+	@Column(name = "wml_file_path")
+	@Element(data = true, required = false)
+	private String wmlFilePath;
+
+	@Column(name = "external_file_id")
+	private Long externalFileId;
+
+	@Column(name = "external_type")
+	private String externalType;
+
 	public Long getId() {
 		return id;
 	}
+
 	public void setId(Long id) {
 		this.id = id;
 	}
-	
-	public String getFileName() {
-		return fileName;
-	}
-	public void setFileName(String fileName) {
-		this.fileName = fileName;
-	}
-	
-	public String getFileHash() {
-		return fileHash;
-	}
-	public void setFileHash(String fileHash) {
-		this.fileHash = fileHash;
-	}
-	
-	public Long getParentFileExplorerItemId() {
-		return parentFileExplorerItemId;
-	}
-	public void setParentFileExplorerItemId(Long parentFileExplorerItemId) {
-		this.parentFileExplorerItemId = parentFileExplorerItemId;
-	}
-	
-	public Long getOwnerId() {
-		return ownerId;
-	}
-	public void setOwnerId(Long ownerId) {
-		this.ownerId = ownerId;
-	}
-	
-	public Long getRoom_id() {
-		return room_id;
-	}
-	public void setRoom_id(Long room_id) {
-		this.room_id = room_id;
-	}
-	
-	public Boolean getIsFolder() {
-		return isFolder;
-	}
-	public void setIsFolder(Boolean isFolder) {
-		this.isFolder = isFolder;
-	}
-	
-	public Boolean getIsImage() {
-		return isImage;
-	}
-	public void setIsImage(Boolean isImage) {
-		this.isImage = isImage;
-	}
-	
-	public Boolean getIsVideo() {
-		return isVideo;
-	}
-	public void setIsVideo(Boolean isVideo) {
-		this.isVideo = isVideo;
-	}
-	
-	public Boolean getIsPresentation() {
-		return isPresentation;
-	}
-	public void setIsPresentation(Boolean isPresentation) {
-		this.isPresentation = isPresentation;
-	}
-	
-	public Long getInsertedBy() {
-		return insertedBy;
-	}
-	public void setInsertedBy(Long insertedBy) {
-		this.insertedBy = insertedBy;
-	}
-	
-	public Date getInserted() {
-		return inserted;
-	}
-	public void setInserted(Date inserted) {
-		this.inserted = inserted;
-	}
 
-	public boolean getDeleted() {
-		return deleted;
-	}
-	public void setDeleted(boolean deleted) {
-		this.deleted = deleted;
-	}
-	
-	public Date getUpdated() {
-		return updated;
-	}
-	public void setUpdated(Date updated) {
-		this.updated = updated;
-	}
-	
 	public Long getFileSize() {
 		return fileSize;
 	}
+
 	public void setFileSize(Long fileSize) {
 		this.fileSize = fileSize;
 	}
-	
-	public Integer getFlvWidth() {
-		return flvWidth;
-	}
-	public void setFlvWidth(Integer flvWidth) {
-		this.flvWidth = flvWidth;
-	}
 
-	public Integer getFlvHeight() {
-		return flvHeight;
-	}
-	public void setFlvHeight(Integer flvHeight) {
-		this.flvHeight = flvHeight;
-	}
-
-	public String getPreviewImage() {
-		return previewImage;
-	}	
-	public void setPreviewImage(String previewImage) {
-		this.previewImage = previewImage;
-	}
-	
 	public String getWmlFilePath() {
 		return wmlFilePath;
 	}
+
 	public void setWmlFilePath(String wmlFilePath) {
 		this.wmlFilePath = wmlFilePath;
 	}
-	
-	public Boolean getIsStoredWmlFile() {
-		return isStoredWmlFile;
-	}
-	public void setIsStoredWmlFile(Boolean isStoredWmlFile) {
-		this.isStoredWmlFile = isStoredWmlFile;
-	}
 
-	public Boolean getIsChart() {
-        return isChart;
-    }
-    public void setIsChart(Boolean isChart) {
-        this.isChart = isChart;
-    }
-    
 	public Long getExternalFileId() {
 		return externalFileId;
 	}
+
 	public void setExternalFileId(Long externalFileId) {
 		this.externalFileId = externalFileId;
 	}
-	
+
 	public String getExternalType() {
 		return externalType;
 	}
+
 	public void setExternalType(String externalType) {
 		this.externalType = externalType;
 	}
-	
+
 }

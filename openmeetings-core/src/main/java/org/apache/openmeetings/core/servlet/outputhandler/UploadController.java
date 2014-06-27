@@ -41,6 +41,7 @@ import org.apache.openmeetings.core.remote.red5.ScopeApplicationAdapter;
 import org.apache.openmeetings.db.dao.file.FileExplorerItemDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.file.FileExplorerItem;
+import org.apache.openmeetings.db.entity.file.FileItem.Type;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.util.OmFileHelper;
 import org.apache.openmeetings.util.OpenmeetingsVariables;
@@ -122,8 +123,7 @@ public class UploadController extends AbstractUploadController {
 	    	uploadCompleteMessage.setAction("newFile");
 	    	
 	    	setFileExplorerItem(uploadCompleteMessage,
-					fileExplorerItemDao.getFileExplorerItemsById(
-							returnError.getFileExplorerItemId()));
+					fileExplorerItemDao.get(returnError.getFileExplorerItemId()));
 			
 			uploadCompleteMessage.setHasError(returnError.hasError());
 			//we only send the complete log to the client if there is really something 
@@ -143,15 +143,9 @@ public class UploadController extends AbstractUploadController {
     }
     
 	public void setFileExplorerItem(UploadCompleteMessage msg, FileExplorerItem fileExplorerItem) {
-		if (fileExplorerItem.getIsImage() != null) {
-			msg.setIsImage(fileExplorerItem.getIsImage());
-		}
-		if (fileExplorerItem.getIsVideo() != null) {
-			msg.setIsVideo(fileExplorerItem.getIsVideo());
-		}
-		if (fileExplorerItem.getIsPresentation() != null) {
-			msg.setIsPresentation(fileExplorerItem.getIsPresentation());
-		}
+		msg.setIsImage(Type.Image == fileExplorerItem.getType());
+		msg.setIsVideo(Type.Video == fileExplorerItem.getType());
+		msg.setIsPresentation(Type.Presentation == fileExplorerItem.getType());
 		msg.setFileSystemName(fileExplorerItem.getFileName());
 		msg.setFileHash(fileExplorerItem.getFileHash());
 	}

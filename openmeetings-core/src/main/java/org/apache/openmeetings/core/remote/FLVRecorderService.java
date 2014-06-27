@@ -39,6 +39,7 @@ import org.apache.openmeetings.db.dao.server.ISessionManager;
 import org.apache.openmeetings.db.dao.server.SessiondataDao;
 import org.apache.openmeetings.db.dao.user.IUserManager;
 import org.apache.openmeetings.db.dao.user.UserDao;
+import org.apache.openmeetings.db.entity.file.FileItem.Type;
 import org.apache.openmeetings.db.entity.record.FlvRecording;
 import org.apache.openmeetings.db.entity.record.FlvRecordingMetaData;
 import org.apache.openmeetings.db.entity.record.FlvRecordingMetaData.Status;
@@ -119,14 +120,11 @@ public class FLVRecorderService implements IPendingServiceCallback {
 			flvRecording.setFileHash("");
 			flvRecording.setFileName(roomRecordingName);
 			flvRecording.setInsertedBy(currentClient.getUser_id());
-			flvRecording.setFolder(false);
-			flvRecording.setIsImage(false);
-			flvRecording.setIsPresentation(false);
-			flvRecording.setIsRecording(true);
+			flvRecording.setType(Type.Recording);
 			flvRecording.setComment(comment);
 			flvRecording.setIsInterview(isInterview);
 
-			flvRecording.setRoom_id(room_id);
+			flvRecording.setRoomId(room_id);
 			flvRecording.setRecordStart(now);
 
 			flvRecording.setWidth(currentClient.getVWidth());

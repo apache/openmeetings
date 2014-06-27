@@ -49,7 +49,7 @@ public class FieldLanguageDao implements Serializable {
 	private EntityManager em;
 
 	public long getNextAvailableId() {
-		TypedQuery<Long> q = em.createQuery("SELECT MAX(fl.id) from FieldLanguage fl", Long.class);
+		TypedQuery<Long> q = em.createNamedQuery("getNextLanguageId", Long.class);
 		return q.getSingleResult() + 1L;
 	}
 	
@@ -66,8 +66,8 @@ public class FieldLanguageDao implements Serializable {
 			fl = em.merge(fl);
 
 			//Eagerly FETCH values list
-			TypedQuery<FieldLanguage> q = em.createQuery("select fl from FieldLanguage fl LEFT JOIN FETCH fl.languageValues WHERE fl.id = :langId", FieldLanguage.class);
-			q.setParameter("langId", langId);
+			TypedQuery<FieldLanguage> q = em.createNamedQuery("getFullLanguageById", FieldLanguage.class);
+			q.setParameter("id", langId);
 			List<FieldLanguage> results = q.getResultList();
 			
 			return results != null && !results.isEmpty() ? results.get(0) : null;
@@ -79,7 +79,7 @@ public class FieldLanguageDao implements Serializable {
 
 	public void emptyFieldLanguage() {
 		try {
-			TypedQuery<FieldLanguage> q = em.createQuery("delete from FieldLanguage", FieldLanguage.class);
+			TypedQuery<FieldLanguage> q = em.createNamedQuery("deleteAllLanguages", FieldLanguage.class);
 			q.executeUpdate();
 		} catch (Exception ex2) {
 			log.error("[emptyFieldLanguage]: ", ex2);
@@ -102,10 +102,7 @@ public class FieldLanguageDao implements Serializable {
 
 	public FieldLanguage getFieldLanguageById(Long id) {
 		try {
-			String hql = "select c from FieldLanguage as c "
-					+ "WHERE c.deleted = false "
-					+ "AND c.id = :id";
-			TypedQuery<FieldLanguage> query = em.createQuery(hql, FieldLanguage.class);
+			TypedQuery<FieldLanguage> query = em.createNamedQuery("getLanguageById", FieldLanguage.class);
 			query.setParameter("id", id);
 			FieldLanguage fl = null;
 			try {
@@ -121,8 +118,7 @@ public class FieldLanguageDao implements Serializable {
 
 	public List<FieldLanguage> getLanguages() {
 		try {
-			String hql = "select c from FieldLanguage as c WHERE c.deleted = false ";
-			TypedQuery<FieldLanguage> query = em.createQuery(hql, FieldLanguage.class);
+			TypedQuery<FieldLanguage> query = em.createNamedQuery("getLanguages", FieldLanguage.class);
 			List<FieldLanguage> ll = query.getResultList();
 			return ll;
 		} catch (Exception ex2) {

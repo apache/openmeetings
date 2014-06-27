@@ -32,6 +32,7 @@ import org.apache.openmeetings.core.converter.GenerateThumbs;
 import org.apache.openmeetings.core.documents.GeneratePDF;
 import org.apache.openmeetings.db.dao.file.FileExplorerItemDao;
 import org.apache.openmeetings.db.entity.file.FileExplorerItem;
+import org.apache.openmeetings.db.entity.file.FileItem.Type;
 import org.apache.openmeetings.util.OmFileHelper;
 import org.apache.openmeetings.util.OpenmeetingsVariables;
 import org.apache.openmeetings.util.StoredFile;
@@ -125,11 +126,10 @@ public class FileProcessor {
             fileHashName = newFileSystemName + ".flv";
         }
 
-        FileExplorerItem fileExplorerItem = fileExplorerItemDao.getFileExplorerItemsById(parentFolderId);
+        FileExplorerItem fileExplorerItem = fileExplorerItemDao.get(parentFolderId);
 
         if (fileExplorerItem != null) {
-            if (fileExplorerItem.getIsFolder() == null
-                    || !fileExplorerItem.getIsFolder()) {
+            if (Type.Folder != fileExplorerItem.getType()) {
                 parentFolderId = 0L;
             }
         }

@@ -29,6 +29,7 @@ import java.util.regex.Pattern;
 import org.apache.openmeetings.db.dao.file.FileExplorerItemDao;
 import org.apache.openmeetings.db.dao.record.FlvRecordingLogDao;
 import org.apache.openmeetings.db.entity.file.FileExplorerItem;
+import org.apache.openmeetings.db.entity.file.FileItem.Type;
 import org.apache.openmeetings.util.OpenmeetingsVariables;
 import org.apache.openmeetings.util.process.ConverterProcessResult;
 import org.apache.openmeetings.util.process.ProcessHelper;
@@ -59,7 +60,7 @@ public class FlvExplorerConverter extends BaseConverter {
 	public List<ConverterProcessResult> startConversion(Long fileExplorerItemId, String moviePath) {
 		List<ConverterProcessResult> returnLog = new ArrayList<ConverterProcessResult>();
 		try {
-			FileExplorerItem fileExplorerItem = fileExplorerItemDaoImpl.getFileExplorerItemsById(fileExplorerItemId);
+			FileExplorerItem fileExplorerItem = fileExplorerItemDaoImpl.get(fileExplorerItemId);
 
 			log.debug("fileExplorerItem " + fileExplorerItem.getId());
 
@@ -83,7 +84,7 @@ public class FlvExplorerConverter extends BaseConverter {
 			String name = "UPLOADFLV_" + fileExplorerItem.getId();
 			File outputFullFlv = new File(getStreamsHibernateDir(), name + ".flv");
 
-			fileExplorerItem.setIsVideo(true);
+			fileExplorerItem.setType(Type.Video);
 
 			String[] argv_fullFLV = new String[] { getPathToFFMPEG(), "-y", "-i", moviePath,
 					"-ar", "22050", "-acodec", "libmp3lame", "-ab", "32k",
@@ -117,7 +118,7 @@ public class FlvExplorerConverter extends BaseConverter {
 
 			returnLog.add(ProcessHelper.executeScript("previewUpload ID :: " + fileExplorerItem.getId(), argv_previewFLV));
 
-			fileExplorerItemDaoImpl.updateFileOrFolder(fileExplorerItem);
+			fileExplorerItemDaoImpl.update(fileExplorerItem);
 
 			for (ConverterProcessResult returnMap : returnLog) {
 				flvRecordingLogDaoImpl.addFLVRecordingLog("generateFFMPEG", null, returnMap);

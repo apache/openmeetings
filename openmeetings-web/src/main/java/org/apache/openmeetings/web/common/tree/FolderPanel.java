@@ -16,11 +16,15 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.web.user.record;
+package org.apache.openmeetings.web.common.tree;
 
 import static org.apache.openmeetings.web.app.Application.getBean;
 
+import org.apache.openmeetings.db.dao.file.FileExplorerItemDao;
 import org.apache.openmeetings.db.dao.record.FlvRecordingDao;
+import org.apache.openmeetings.db.entity.file.FileExplorerItem;
+import org.apache.openmeetings.db.entity.file.FileItem;
+import org.apache.openmeetings.db.entity.file.FileItem.Type;
 import org.apache.openmeetings.db.entity.record.FlvRecording;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.extensions.ajax.markup.html.AjaxEditableLabel;
@@ -32,15 +36,15 @@ import org.apache.wicket.model.Model;
 
 import wicketdnd.theme.WindowsTheme;
 
-public class RecordingPanel extends Panel {
+public class FolderPanel extends Panel {
 	private static final long serialVersionUID = 1L;
 	protected final WebMarkupContainer item = new WebMarkupContainer("item");
 
-	public RecordingPanel(String id, final IModel<FlvRecording> model) {
+	public FolderPanel(String id, final IModel<? extends FileItem> model) {
 		super(id, model);
-		FlvRecording r = model.getObject();
+		FileItem r = model.getObject();
 		add(new WindowsTheme());
-		item.add(r.isFolder() ? new AjaxEditableLabel<String>("name", Model.of(model.getObject().getFileName())) {
+		item.add(Type.Folder == r.getType() ? new AjaxEditableLabel<String>("name", Model.of(model.getObject().getFileName())) {
 			private static final long serialVersionUID = 1L;
 			
 			@Override
@@ -51,9 +55,13 @@ public class RecordingPanel extends Panel {
 			@Override
 			protected void onSubmit(AjaxRequestTarget target) {
 				super.onSubmit(target);
-				FlvRecording r = model.getObject();
-				r.setFileName(getEditor().getModelObject());
-				getBean(FlvRecordingDao.class).update(r);
+				FileItem fi = model.getObject();
+				fi.setFileName(getEditor().getModelObject());
+				if (fi instanceof FlvRecording) {
+					getBean(FlvRecordingDao.class).update((FlvRecording)fi);
+				} else {
+					getBean(FileExplorerItemDao.class).update((FileExplorerItem)fi);
+				}
 			}
 			
 			@Override

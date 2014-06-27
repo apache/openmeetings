@@ -16,13 +16,14 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.web.user.record;
+package org.apache.openmeetings.web.common.tree;
 
 import static org.apache.openmeetings.util.OmFileHelper.MP4_EXTENSION;
 import static org.apache.openmeetings.util.OmFileHelper.isRecordingExists;
 import static org.apache.openmeetings.web.app.Application.getBean;
 
 import org.apache.openmeetings.db.dao.record.FlvRecordingLogDao;
+import org.apache.openmeetings.db.entity.file.FileItem;
 import org.apache.openmeetings.db.entity.record.FlvRecording;
 import org.apache.openmeetings.db.entity.record.FlvRecording.Status;
 import org.apache.wicket.ajax.AjaxEventBehavior;
@@ -30,22 +31,24 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.model.IModel;
 
-public class RecordingItemPanel extends RecordingPanel {
+public class FileItemPanel extends FolderPanel {
 	private static final long serialVersionUID = 1L;
 
-	public RecordingItemPanel(String id, final IModel<FlvRecording> model, final RecordingErrorsDialog errorsDialog) {
+	public FileItemPanel(String id, final IModel<? extends FileItem> model, final ConvertingErrorsDialog errorsDialog) {
 		super(id, model);
-		FlvRecording r = model.getObject();
-		long errorCount = getBean(FlvRecordingLogDao.class).countErrors(r.getId());
-		boolean visible = errorCount != 0 || (Status.PROCESSING != r.getStatus() && !isRecordingExists(r.getFileHash() + MP4_EXTENSION));
-		item.add(new WebMarkupContainer("errors").add(new AjaxEventBehavior("click") {
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			protected void onEvent(AjaxRequestTarget target) {
-				errorsDialog.setDefaultModel(model);
-				errorsDialog.open(target);
-			}
-		}).setVisible(visible));
+		if (model.getObject() instanceof FlvRecording) {
+			FlvRecording r = (FlvRecording)model.getObject();
+			long errorCount = getBean(FlvRecordingLogDao.class).countErrors(r.getId());
+			boolean visible = errorCount != 0 || (Status.PROCESSING != r.getStatus() && !isRecordingExists(r.getFileHash() + MP4_EXTENSION));
+			item.add(new WebMarkupContainer("errors").add(new AjaxEventBehavior("click") {
+				private static final long serialVersionUID = 1L;
+	
+				@Override
+				protected void onEvent(AjaxRequestTarget target) {
+					errorsDialog.setDefaultModel(model);
+					errorsDialog.open(target);
+				}
+			}).setVisible(visible));
+		}
 	}
 }

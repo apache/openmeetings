@@ -82,7 +82,9 @@ import org.apache.openmeetings.db.entity.calendar.Appointment;
 import org.apache.openmeetings.db.entity.calendar.AppointmentCategory;
 import org.apache.openmeetings.db.entity.calendar.AppointmentReminderTyps;
 import org.apache.openmeetings.db.entity.calendar.MeetingMember;
+import org.apache.openmeetings.db.entity.file.FileItem;
 import org.apache.openmeetings.db.entity.file.FileExplorerItem;
+import org.apache.openmeetings.db.entity.file.FileItem.Type;
 import org.apache.openmeetings.db.entity.record.FlvRecording;
 import org.apache.openmeetings.db.entity.record.FlvRecordingMetaData;
 import org.apache.openmeetings.db.entity.room.PollType;
@@ -102,7 +104,6 @@ import org.apache.openmeetings.db.entity.user.PrivateMessageFolder;
 import org.apache.openmeetings.db.entity.user.State;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Right;
-import org.apache.openmeetings.db.entity.user.User.Type;
 import org.apache.openmeetings.db.entity.user.UserContact;
 import org.apache.openmeetings.db.util.TimezoneUtil;
 import org.apache.openmeetings.util.CalendarPatterns;
@@ -292,7 +293,7 @@ public class BackupImport {
 				if (u.getLogin() == null) {
 					continue;
 				}
-				if (u.getType() == Type.contact && u.getLogin().length() < minLoginLength) {
+				if (u.getType() == User.Type.contact && u.getLogin().length() < minLoginLength) {
 					u.setLogin(UUID.randomUUID().toString());
 				}
 				//FIXME: OPENMEETINGS-750
@@ -475,20 +476,11 @@ public class BackupImport {
 		 * ##################### Import Recordings
 		 */
 		{
-			Registry registry = new Registry();
-			Strategy strategy = new RegistryStrategy(registry);
-			RegistryMatcher matcher = new RegistryMatcher(); //TODO need to be removed in the later versions
-			Serializer serializer = new Persister(strategy, matcher);
-
-			matcher.bind(Long.class, LongTransform.class);
-			matcher.bind(Integer.class, IntegerTransform.class);
-			registry.bind(Date.class, DateConverter.class);
-			
-			List<FlvRecording> list = readList(serializer, f, "flvRecordings.xml", "flvrecordings", FlvRecording.class, true);
+			List<FlvRecording> list = readRecordingList(f, "flvRecordings.xml", "flvrecordings");
 			for (FlvRecording fr : list) {
 				fr.setId(null);
-				if (fr.getRoom_id() != null) {
-					fr.setRoom_id(roomsMap.get(fr.getRoom_id()));
+				if (fr.getRoomId() != null) {
+					fr.setRoomId(roomsMap.get(fr.getRoomId()));
 				}
 				if (fr.getOwnerId() != null) {
 					fr.setOwnerId(usersMap.get(fr.getOwnerId()));
@@ -601,21 +593,12 @@ public class BackupImport {
 		 * ##################### Import File-Explorer Items
 		 */
 		{
-			Registry registry = new Registry();
-			Strategy strategy = new RegistryStrategy(registry);
-			RegistryMatcher matcher = new RegistryMatcher(); //TODO need to be removed in the later versions
-			Serializer serializer = new Persister(strategy, matcher);
-
-			matcher.bind(Long.class, LongTransform.class);
-			matcher.bind(Integer.class, IntegerTransform.class);
-			registry.bind(Date.class, DateConverter.class);
-			
-			List<FileExplorerItem> list = readList(serializer, f, "fileExplorerItems.xml", "fileExplorerItems", FileExplorerItem.class, true);
+			List<FileExplorerItem> list = readFileExplorerItemList(f, "fileExplorerItems.xml", "fileExplorerItems");
 			for (FileExplorerItem file : list) {
 				// We need to reset this as openJPA reject to store them otherwise
 				file.setId(null);
-				Long roomId = file.getRoom_id();
-				file.setRoom_id(roomsMap.containsKey(roomId) ? roomsMap.get(roomId) : null);
+				Long roomId = file.getRoomId();
+				file.setRoomId(roomsMap.containsKey(roomId) ? roomsMap.get(roomId) : null);
 				if (file.getOwnerId() != null) {
 					file.setOwnerId(usersMap.get(file.getOwnerId()));
 				}
@@ -708,6 +691,128 @@ public class BackupImport {
 		return null;
 	}
 	
+	public List<FileExplorerItem> readFileExplorerItemList(File baseDir, String fileName, String listNodeName) throws Exception {
+		List<FileExplorerItem> list = new ArrayList<FileExplorerItem>();
+		File xml = new File(baseDir, fileName);
+		if (xml.exists()) {
+			Registry registry = new Registry();
+			Strategy strategy = new RegistryStrategy(registry);
+			RegistryMatcher matcher = new RegistryMatcher(); //TODO need to be removed in the later versions
+			Serializer ser = new Persister(strategy, matcher);
+
+			matcher.bind(Long.class, LongTransform.class);
+			matcher.bind(Integer.class, IntegerTransform.class);
+			registry.bind(Date.class, DateConverter.class);
+			
+			InputNode root = NodeBuilder.read(new FileInputStream(xml));
+			InputNode root1 = NodeBuilder.read(new FileInputStream(xml)); //HACK to handle old isFolder, isImage, isVideo, isRecording, isPresentation, isStoredWmlFile, isChart
+			InputNode listNode = root.getNext();
+			InputNode listNode1 = root1.getNext(); //HACK to handle old isFolder, isImage, isVideo, isRecording, isPresentation, isStoredWmlFile, isChart
+			if (listNodeName.equals(listNode.getName())) {
+				InputNode item = listNode.getNext();
+				InputNode item1 = listNode1.getNext(); //HACK to handle old isFolder, isImage, isVideo, isRecording, isPresentation, isStoredWmlFile, isChart
+				while (item != null) {
+					FileExplorerItem f = ser.read(FileExplorerItem.class, item, false);
+					
+					boolean isFolder = false, isImage = false, isVideo = false, isPresentation = false, isStoredWmlFile = false, isChart = false;
+					//HACK to handle old isFolder, isImage, isVideo, isRecording, isPresentation, isStoredWmlFile, isChart
+					do {
+						if ("isChart".equals(item1.getName()) && "true".equals(item1.getValue())) {
+							isChart = true;
+						}
+						if ("isImage".equals(item1.getName()) && "true".equals(item1.getValue())) {
+							isImage = true;
+						}
+						if ("isVideo".equals(item1.getName()) && "true".equals(item1.getValue())) {
+							isVideo = true;
+						}
+						if ("isRecording".equals(item1.getName()) && "true".equals(item1.getValue())) {
+							log.warn("Recording is stored in FileExplorer Items");
+							isVideo = true;
+						}
+						if ("isPresentation".equals(item1.getName()) && "true".equals(item1.getValue())) {
+							isPresentation = true;
+						}
+						if ("isStoredWmlFile".equals(item1.getName()) && "true".equals(item1.getValue())) {
+							isStoredWmlFile = true;
+						}
+						if ("isFolder".equals(item1.getName()) && "true".equals(item1.getValue())) {
+							isFolder = true;
+						}
+						item1 = listNode1.getNext(); //HACK to handle Address inside user
+					} while (item1 != null && !"fileExplorerItem".equals(item1.getName()));
+					
+					if (f.getType() == null) {
+						if (isChart) {
+							f.setType(Type.PollChart);
+						}
+						if (isImage) {
+							f.setType(Type.Image);
+						}
+						if (isVideo) {
+							f.setType(Type.Video);
+						}
+						if (isPresentation) {
+							f.setType(Type.Presentation);
+						}
+						if (isStoredWmlFile) {
+							f.setType(Type.WmlFile);
+						}
+						if (isFolder) {
+							f.setType(Type.Folder);
+						}
+					}
+					list.add(f);
+					item = listNode.getNext();
+				}
+			}
+		}
+		return list;
+	}
+	
+	public List<FlvRecording> readRecordingList(File baseDir, String fileName, String listNodeName) throws Exception {
+		List<FlvRecording> list = new ArrayList<FlvRecording>();
+		File xml = new File(baseDir, fileName);
+		if (xml.exists()) {
+			Registry registry = new Registry();
+			Strategy strategy = new RegistryStrategy(registry);
+			RegistryMatcher matcher = new RegistryMatcher(); //TODO need to be removed in the later versions
+			Serializer ser = new Persister(strategy, matcher);
+	
+			matcher.bind(Long.class, LongTransform.class);
+			matcher.bind(Integer.class, IntegerTransform.class);
+			registry.bind(Date.class, DateConverter.class);
+			
+			InputNode root = NodeBuilder.read(new FileInputStream(xml));
+			InputNode root1 = NodeBuilder.read(new FileInputStream(xml)); //HACK to handle old isFolder
+			InputNode listNode = root.getNext();
+			InputNode listNode1 = root1.getNext(); //HACK to handle old isFolder
+			if (listNodeName.equals(listNode.getName())) {
+				InputNode item = listNode.getNext();
+				InputNode item1 = listNode1.getNext(); //HACK to handle old isFolder
+				while (item != null) {
+					FlvRecording r = ser.read(FlvRecording.class, item, false);
+					
+					boolean isFolder = false;
+					//HACK to handle old isFolder
+					do {
+						if ("isFolder".equals(item1.getName()) && "true".equals(item1.getValue())) {
+							isFolder = true;
+						}
+						item1 = listNode1.getNext(); //HACK to handle Address inside user
+					} while (item1 != null && !"flvrecording".equals(item1.getName()));
+					
+					if (r.getType() == null) {
+						r.setType(isFolder ? FileItem.Type.Folder : FileItem.Type.Recording);
+					}
+					list.add(r);
+					item = listNode.getNext();
+				}
+			}
+		}
+		return list;
+	}
+	
 	public List<User> readUserList(InputStream xml, String listNodeName) throws Exception {
 		return readUserList(new InputSource(xml), listNodeName);
 	}
@@ -761,10 +866,10 @@ public class BackupImport {
 					//HACK to handle external attendee's firstname, lastname, email
 					boolean contactValid = false;
 					do {
-						if (Type.contact == mm.getUser().getType() && "firstname".equals(item1.getName())) {
+						if (User.Type.contact == mm.getUser().getType() && "firstname".equals(item1.getName())) {
 							mm.getUser().setFirstname(item1.getValue());
 						}
-						if (Type.contact == mm.getUser().getType() && "lastname".equals(item1.getName())) {
+						if (User.Type.contact == mm.getUser().getType() && "lastname".equals(item1.getName())) {
 							mm.getUser().setLastname(item1.getValue());
 						}
 						if ("email".equals(item1.getName())) {
@@ -813,7 +918,7 @@ public class BackupImport {
 		//add existence email from database
 		List<User>  users = usersDao.getAllUsers();
 		for (User u : users){
-			if (u.getAdresses() == null || u.getAdresses().getEmail() == null || Type.user != u.getType()) {
+			if (u.getAdresses() == null || u.getAdresses().getEmail() == null || User.Type.user != u.getType()) {
 				continue;
 			}
 			userEmailMap.put(u.getAdresses().getEmail(), -1);
@@ -894,7 +999,7 @@ public class BackupImport {
 					}
 				}
 				// check that email is unique
-				if (u.getAdresses() != null && u.getAdresses().getEmail() != null && Type.user == u.getType()) {
+				if (u.getAdresses() != null && u.getAdresses().getEmail() != null && User.Type.user == u.getType()) {
 					if (userEmailMap.containsKey(u.getAdresses().getEmail())) {
 						log.warn("Email is duplicated for user " + u.toString());
 						String updateEmail = "modified_by_import_<" + list.size() + ">" + u.getAdresses().getEmail();

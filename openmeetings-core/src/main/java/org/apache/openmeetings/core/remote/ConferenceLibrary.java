@@ -181,8 +181,7 @@ public class ConferenceLibrary implements IPendingServiceCallback {
 					return;
 				}
 
-				FileExplorerItem fileExplorerItem = fileExplorerItemDao
-						.getFileExplorerItemsById(fileExplorerItemId);
+				FileExplorerItem fileExplorerItem = fileExplorerItemDao.get(fileExplorerItemId);
 
 				ArrayList roomItems = libraryWmlLoader.loadWmlFile(fileExplorerItem.getWmlFilePath());
 

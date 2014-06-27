@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.web.user.record;
+package org.apache.openmeetings.web.common.tree;
 
 import static org.apache.openmeetings.util.OmFileHelper.MP4_EXTENSION;
 import static org.apache.openmeetings.util.OmFileHelper.isRecordingExists;
@@ -41,7 +41,7 @@ import org.apache.wicket.model.Model;
 import com.googlecode.wicket.jquery.ui.widget.dialog.AbstractDialog;
 import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
 
-public class RecordingErrorsDialog extends AbstractDialog<FlvRecording> {
+public class ConvertingErrorsDialog extends AbstractDialog<FlvRecording> {
 	private static final long serialVersionUID = 1L;
 	private final WebMarkupContainer container = new WebMarkupContainer("container");
 	private final Label message = new Label("message", Model.of((String)null));
@@ -74,7 +74,7 @@ public class RecordingErrorsDialog extends AbstractDialog<FlvRecording> {
 		return true;
 	}
 
-	public RecordingErrorsDialog(String id, IModel<FlvRecording> model) {
+	public ConvertingErrorsDialog(String id, IModel<FlvRecording> model) {
 		super(id, WebSession.getString(887), model);
 		add(container.add(message.setVisible(false), logView.setVisible(false)).setOutputMarkupId(true));
 	}
