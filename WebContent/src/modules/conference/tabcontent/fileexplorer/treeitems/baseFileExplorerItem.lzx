@@ -290,6 +290,12 @@
     		if (tWidth < 160) {
     			tWidth = 160;
     		}
+    		var _y = this._fileName.getAttributeRelative("y",canvas);
+    		var _x = this._fileName.getAttributeRelative("x",canvas);
+    		if (isNew) {
+    			_y = 65; 
+    			_x += 10;
+    		}
     		
     		var t = new lz.dynamicFileName(canvas,{
     			        parentFileExplorerItemId:fileExplorerItemId,
@@ -298,8 +304,8 @@
     			        text:this.fileName,
     			        isNew:isNew, //false means its a renaming
     			        refObj:this,width:tWidth+10,
-            		    x:this._fileName.getAttributeRelative("x",canvas),
-            		    y:this._fileName.getAttributeRelative("y",canvas)
+            		    x:_x,
+            		    y:_y
             		});
             		
             lz.Focus.setFocus(t,true);
