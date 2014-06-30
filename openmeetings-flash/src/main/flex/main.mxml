@@ -41,6 +41,8 @@
 		private var cam:Camera = null;
 		private var mic:Microphone = null;
 		private var FPS:int = 30;
+		private var bandwidth:int = 0;
+		private var quality:int = 100;
 		[Bindable]
 		private var interview:Boolean = false;
 		[Bindable]
@@ -224,12 +226,12 @@
 
 		private function cameraStatusHandler(event:StatusEvent):void {
 			debug("cameraStatusHandler! " + event);
+			cam.removeEventListener(StatusEvent.STATUS, cameraStatusHandler);
 			if (cam.muted) {
 				debug("Unable to connect to active camera.");
 			} else {
 				_attachCamera();
 			}
-			cam.removeEventListener(StatusEvent.STATUS, cameraStatusHandler);
 		}
 
 		private function attachCamera():void {
@@ -245,6 +247,7 @@
 				videoDisplay.attachCamera(cam);
 				cam.addEventListener(StatusEvent.STATUS, cameraStatusHandler);
 			} else {
+				//cam = null;
 				_attachCamera();
 			}
 		}
@@ -256,8 +259,15 @@
 				debug("Unable to connect to active camera.");
 			} else {
 				try {
-					//videoDisplay.stop();
 					//videoDisplay.attachCamera(null);
+					var width:int = ress.selectedItem == null ? 120 : ress.selectedItem.width;
+					var height:int = ress.selectedItem == null ? 90 : ress.selectedItem.height;
+					videoDisplay.width = width;
+					videoDisplay.height = height;
+
+					//cam.setQuality(bandwidth, quality);
+					//cam.setMode(width, height, FPS);
+					//videoDisplay.stop();
 					//cam.setMode(videoDisplay.width, videoDisplay.height, FPS);
 					//videoDisplay.attachCamera(cam);
 					debug("_attachCamera()::done");
@@ -280,8 +290,6 @@
 				debug("GLOBAL Y:: " + yPos);
 				playGroup.y = Math.max(yPos, videoScroller.height);
 				setDimensions(newWidth, newHeight);
-				videoDisplay.width = width;
-				videoDisplay.height = height;
 
 				attachCamera();
 			}
