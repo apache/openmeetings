@@ -31,7 +31,7 @@ public class DaoHelper {
 	}
 	
 	public static String getSearchQuery(String table, String alias, String join, String search, boolean filterDeleted, boolean count, String additionalWhere, String sort, String... fields) {
-		return getSearchQuery(table, alias, join, search, filterDeleted, count, additionalWhere, sort, fields);
+		return getSearchQuery(table, alias, join, search, false, filterDeleted, count, additionalWhere, sort, fields);
 	}
 	
 	public static String getSearchQuery(String table, String alias, String join, String search, boolean distinct, boolean filterDeleted, boolean count, String additionalWhere, String sort, String... fields) {
