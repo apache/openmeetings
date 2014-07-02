@@ -79,6 +79,7 @@ public class LdapLoginManagement {
 	private static final String CONFIGKEY_LDAP_TIMEZONE_NAME = "ldap_user_timezone";
 	private static final String CONFIGKEY_LDAP_SEARCH_BASE = "ldap_search_base";
 	private static final String CONFIGKEY_LDAP_SEARCH_QUERY = "ldap_search_query";
+	private static final String CONFIGKEY_LDAP_SEARCH_SCOPE = "ldap_search_scope";
 	private static final String CONFIGKEY_LDAP_USERDN_FORMAT = "ldap_userdn_format";
 	private static final String CONFIGKEY_LDAP_USE_ADMIN_4ATTRS = "ldap_use_admin_to_get_attrs";
 	
@@ -234,7 +235,8 @@ public class LdapLoginManagement {
 					bindAdmin(conn, ldap_admin_dn, ldap_admin_passwd);
 					Dn baseDn = new Dn(config.getProperty(CONFIGKEY_LDAP_SEARCH_BASE, ""));
 					String searchQ = String.format(config.getProperty(CONFIGKEY_LDAP_SEARCH_QUERY, "%s"), user);
-					EntryCursor cursor = conn.search(baseDn, searchQ, SearchScope.ONELEVEL, "*");
+					SearchScope scope = SearchScope.valueOf(config.getProperty(CONFIGKEY_LDAP_SEARCH_SCOPE, SearchScope.ONELEVEL.name()));
+					EntryCursor cursor = conn.search(baseDn, searchQ, scope, "*");
 					while (cursor.next()) {
 						if (userDn != null) {
 							log.error("more than 1 user found in LDAP");
