@@ -410,6 +410,7 @@
 			<include type="jar" />
 		</dependency>
 		
+		<exclude org="dom4j" module="dom4j" type="javadoc" ext="*" conf="*" matcher="exact"/>		
 		<exclude org="javax.servlet" module="servlet-api" type="*" ext="*" conf="*" matcher="exact"/>		
 		<exclude org="cglib" module="cglib-nodep" type="*" ext="*" conf="*" matcher="exact"/>
 		<exclude org="pull-parser" module="pull-parser" type="*" ext="*" conf="*" matcher="exact"/>
