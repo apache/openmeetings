@@ -24,7 +24,7 @@ import static org.apache.wicket.datetime.markup.html.basic.DateLabel.forDatePatt
 import org.apache.openmeetings.db.dao.server.LdapConfigDao;
 import org.apache.openmeetings.db.entity.server.LdapConfig;
 import org.apache.openmeetings.web.admin.AdminBaseForm;
-import org.apache.openmeetings.web.app.Application;
+import static org.apache.openmeetings.web.app.Application.getBean;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormValidatingBehavior;
@@ -49,14 +49,13 @@ public class LdapForm extends AdminBaseForm<LdapConfig> {
 	private static final long serialVersionUID = 1L;
 	private final WebMarkupContainer listContainer;
 
-	public LdapForm(String id, WebMarkupContainer listContainer,
-			final LdapConfig ldapConfig) {
+	public LdapForm(String id, WebMarkupContainer listContainer, final LdapConfig ldapConfig) {
 		super(id, new CompoundPropertyModel<LdapConfig>(ldapConfig));
 		setOutputMarkupId(true);
 		this.listContainer = listContainer;
 		
 		add(new RequiredTextField<String>("name").setLabel(Model.of(WebSession.getString(1108))));
-		add(new CheckBox("isActive"));
+		add(new CheckBox("active"));
 		add(forDatePattern("inserted", WEB_DATE_PATTERN));
 		add(new Label("insertedby.login"));
 		add(forDatePattern("updated", WEB_DATE_PATTERN));
@@ -73,10 +72,8 @@ public class LdapForm extends AdminBaseForm<LdapConfig> {
 
 	@Override
 	protected void onSaveSubmit(AjaxRequestTarget target, Form<?> form) {
-		Application.getBean(LdapConfigDao.class).update(getModelObject(),
-				WebSession.getUserId());
-		LdapConfig ldapConfig = Application.getBean(LdapConfigDao.class)
-				.get(getModelObject().getId());
+		getBean(LdapConfigDao.class).update(getModelObject(), WebSession.getUserId());
+		LdapConfig ldapConfig = getBean(LdapConfigDao.class).get(getModelObject().getId());
 		this.setModelObject(ldapConfig);
 		hideNewRecord();
 		target.add(this);
@@ -95,8 +92,7 @@ public class LdapForm extends AdminBaseForm<LdapConfig> {
 	protected void onRefreshSubmit(AjaxRequestTarget target, Form<?> form) {
 		LdapConfig ldapConfig = this.getModelObject();
 		if (ldapConfig.getId() <= 0) {
-			ldapConfig = Application.getBean(LdapConfigDao.class).get(
-					ldapConfig.getId());
+			ldapConfig = getBean(LdapConfigDao.class).get(ldapConfig.getId());
 		} else {
 			ldapConfig = new LdapConfig();
 		}
@@ -107,8 +103,7 @@ public class LdapForm extends AdminBaseForm<LdapConfig> {
 
 	@Override
 	protected void onDeleteSubmit(AjaxRequestTarget target, Form<?> form) {
-		Application.getBean(LdapConfigDao.class).delete(
-				this.getModelObject(), WebSession.getUserId());
+		getBean(LdapConfigDao.class).delete(getModelObject(), WebSession.getUserId());
 		this.setModelObject(new LdapConfig());
 		target.add(listContainer);
 		target.add(this);

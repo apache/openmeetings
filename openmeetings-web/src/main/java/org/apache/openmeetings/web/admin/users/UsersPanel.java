@@ -80,9 +80,7 @@ public class UsersPanel extends AdminPanel {
 					protected void onEvent(AjaxRequestTarget target) {
 						form.setModelObject(getBean(UserDao.class).get(userId));
 						form.hideNewRecord();
-						target.add(form, listContainer);
-						//re-initialize height
-						target.appendJavaScript("omUserPanelInit();");
+						form.update(target);
 					}
 				});
 				item.add(AttributeModifier.append("class", "clickable ui-widget-content"

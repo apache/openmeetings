@@ -83,7 +83,7 @@ public class SignInPage extends BaseInitedPage {
 	}
 	
 	static boolean allowOAuthLogin() {
-		return getBean(OAuth2Dao.class).getEnabledOAuthServers().size() > 0;
+		return getBean(OAuth2Dao.class).getActive().size() > 0;
 	}
 	
 	public SignInPage(PageParameters p) {

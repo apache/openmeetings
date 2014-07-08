@@ -22,7 +22,6 @@ import static org.apache.openmeetings.web.app.Application.getBean;
 
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.web.room.SwfPanel;
-import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 public class SwfPage extends BaseNotInitedPage {

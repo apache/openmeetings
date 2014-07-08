@@ -223,7 +223,7 @@ public class SignInDialog extends AbstractFormDialog<String> {
 			loginField.setLabel(Model.of(WebSession.getString(114)));
 			add(passField = new PasswordTextField("pass", new PropertyModel<String>(SignInDialog.this, "password")).setResetPassword(true));
 			passField.setLabel(Model.of(WebSession.getString(115)));
-			List<LdapConfig> ldaps = getBean(LdapConfigDao.class).getLdapConfigs();
+			List<LdapConfig> ldaps = getBean(LdapConfigDao.class).get();
 			int selectedLdap = getBean(ConfigurationDao.class).getConfValue(CONFIG_DEFAULT_LDAP_ID, Integer.class, "0");
 			domain = ldaps.get(selectedLdap < ldaps.size() && selectedLdap > 0 ? selectedLdap : 0);
 			add(new WebMarkupContainer("ldap")
@@ -263,7 +263,7 @@ public class SignInDialog extends AbstractFormDialog<String> {
 				}
 			});
 			add(new WebMarkupContainer("oauthContainer").add(
-				new ListView<OAuthServer>("oauthList", getBean(OAuth2Dao.class).getEnabledOAuthServers()) {
+				new ListView<OAuthServer>("oauthList", getBean(OAuth2Dao.class).getActive()) {
 					private static final long serialVersionUID = 1L;
 
 					@Override

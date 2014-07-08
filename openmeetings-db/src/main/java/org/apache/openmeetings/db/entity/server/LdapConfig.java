@@ -42,7 +42,9 @@ import org.simpleframework.xml.Root;
 @Entity
 @NamedQueries({
 	@NamedQuery(name="getNondeletedLdapConfigs", query="SELECT u FROM LdapConfig u WHERE u.deleted = false")
-	, @NamedQuery(name="getActiveLdapConfigs", query="SELECT c FROM LdapConfig c WHERE c.deleted = false AND c.isActive = :isActive ORDER BY c.id")
+	, @NamedQuery(name="getLdapConfigById", query="SELECT c FROM LdapConfig c WHERE c.id = :id AND c.deleted = false")
+	, @NamedQuery(name="countNondeletedLdapConfigs", query="SELECT COUNT(c.id) FROM LdapConfig c WHERE c.deleted = false")
+	, @NamedQuery(name="getActiveLdapConfigs", query="SELECT c FROM LdapConfig c WHERE c.deleted = false AND c.active = :isActive ORDER BY c.id")
 })
 @Table(name = "ldapconfig")
 @Root(name="ldapconfig")
@@ -50,48 +52,49 @@ public class LdapConfig implements IDataProviderEntity {
 	private static final long serialVersionUID = 1L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name="id")
+	@Column(name = "id")
+	@Element(data = true)
 	private Long id;
-	
-	@Column(name="name")
-	@Element(data=true)
+
+	@Column(name = "name")
+	@Element(data = true)
 	private String name;
-	
-	@Column(name="config_file_name")
-	@Element(data=true, required = false)
+
+	@Column(name = "config_file_name")
+	@Element(data = true, required = false)
 	private String configFileName;
-	
-	@Column(name="add_domain_to_user_name")
-	@Element(data=true)
+
+	@Column(name = "add_domain_to_user_name")
+	@Element(data = true)
 	private boolean addDomainToUserName;
-	
-	@Column(name="domain")
-	@Element(data=true, required = false)
+
+	@Column(name = "domain")
+	@Element(data = true, required = false)
 	private String domain;
-	
-	@Column(name="is_active")
-	@Element(data=true)
-	private boolean isActive;
-	
-	@Column(name="inserted")
+
+	@Column(name = "is_active")
+	@Element(data = true, name = "isActive")
+	private boolean active;
+
+	@Column(name = "inserted")
 	private Date inserted;
-	
-	@Column(name="updated")
+
+	@Column(name = "updated")
 	private Date updated;
-	
+
 	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name="insertedby_id", updatable=true, insertable=true)
+	@JoinColumn(name = "insertedby_id", updatable = true, insertable = true)
 	@ForeignKey(enabled = true)
 	private User insertedby;
-	
+
 	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name="updatedby_id", updatable=true, insertable=true)
+	@JoinColumn(name = "updatedby_id", updatable = true, insertable = true)
 	@ForeignKey(enabled = true)
 	private User updatedby;
-	
-	@Column(name="deleted")
+
+	@Column(name = "deleted")
 	private boolean deleted;
-	
+
 	@Lob
 	@Column(name = "comment_field", length = 2048)
 	@Element(data = true, required = false)
@@ -100,76 +103,87 @@ public class LdapConfig implements IDataProviderEntity {
 	public Long getId() {
 		return id;
 	}
+
 	public void setId(Long id) {
 		this.id = id;
 	}
-    
+
 	public String getName() {
 		return name;
 	}
+
 	public void setName(String name) {
 		this.name = name;
 	}
-    
+
 	public String getConfigFileName() {
 		return configFileName;
 	}
+
 	public void setConfigFileName(String configFileName) {
 		this.configFileName = configFileName;
 	}
-    
+
 	public boolean getAddDomainToUserName() {
 		return addDomainToUserName;
 	}
+
 	public void setAddDomainToUserName(boolean addDomainToUserName) {
 		this.addDomainToUserName = addDomainToUserName;
 	}
-    
+
 	public String getDomain() {
 		return domain;
 	}
+
 	public void setDomain(String domain) {
 		this.domain = domain;
 	}
-    
-	public boolean getIsActive() {
-		return isActive;
+
+	public boolean isActive() {
+		return active;
 	}
-	public void setIsActive(boolean isActive) {
-		this.isActive = isActive;
+
+	public void setActive(boolean active) {
+		this.active = active;
 	}
-	
+
 	public Date getInserted() {
 		return inserted;
 	}
+
 	public void setInserted(Date inserted) {
 		this.inserted = inserted;
 	}
-	
+
 	public Date getUpdated() {
 		return updated;
 	}
+
 	public void setUpdated(Date updated) {
 		this.updated = updated;
 	}
-	
+
 	public User getInsertedby() {
 		return insertedby;
 	}
+
 	public void setInsertedby(User insertedby) {
 		this.insertedby = insertedby;
 	}
-	
+
 	public User getUpdatedby() {
 		return updatedby;
 	}
+
 	public void setUpdatedby(User updatedby) {
 		this.updatedby = updatedby;
 	}
-	
+
 	public boolean getDeleted() {
 		return deleted;
 	}
+
 	public void setDeleted(boolean deleted) {
 		this.deleted = deleted;
 	}

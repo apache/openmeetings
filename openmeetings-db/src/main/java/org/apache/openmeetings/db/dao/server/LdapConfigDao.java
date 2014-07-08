@@ -67,7 +67,7 @@ public class LdapConfigDao implements IDataProviderDao<LdapConfig> {
 			ldapConfig.setConfigFileName(configFileName);
 			ldapConfig.setDeleted(false);
 			ldapConfig.setDomain(domain);
-			ldapConfig.setIsActive(isActive);
+			ldapConfig.setActive(isActive);
 			ldapConfig.setName(name);
 			ldapConfig.setInserted(new Date());
 			if (insertedby != null) {
@@ -128,7 +128,7 @@ public class LdapConfigDao implements IDataProviderDao<LdapConfig> {
 			ldapConfig.setConfigFileName(configFileName);
 			ldapConfig.setDeleted(false);
 			ldapConfig.setDomain(domain);
-			ldapConfig.setIsActive(isActive);
+			ldapConfig.setActive(isActive);
 			ldapConfig.setName(name);
 			ldapConfig.setUpdated(new Date());
 			if (updatedby != null) {
@@ -152,10 +152,7 @@ public class LdapConfigDao implements IDataProviderDao<LdapConfig> {
 	public LdapConfig get(long ldapConfigId) {
 		try {
 
-			String hql = "select c from LdapConfig c WHERE c.id = :id AND c.deleted = false";
-
-			TypedQuery<LdapConfig> query = em
-					.createQuery(hql, LdapConfig.class);
+			TypedQuery<LdapConfig> query = em.createNamedQuery("getLdapConfigById", LdapConfig.class);
 			query.setParameter("id", ldapConfigId);
 
 			LdapConfig ldapConfig = null;
@@ -172,7 +169,7 @@ public class LdapConfigDao implements IDataProviderDao<LdapConfig> {
 		return null;
 	}
 
-	public List<LdapConfig> getActiveLdapConfigs() {
+	public List<LdapConfig> getActive() {
 		log.debug("getActiveLdapConfigs");
 
 		// get all users
@@ -182,7 +179,7 @@ public class LdapConfigDao implements IDataProviderDao<LdapConfig> {
 		return query.getResultList();
 	}
 
-	public List<LdapConfig> getLdapConfigs() {
+	public List<LdapConfig> get() {
 		//Add localhost Domain
 		LdapConfig ldapConfig = new LdapConfig();
 		
@@ -191,7 +188,7 @@ public class LdapConfigDao implements IDataProviderDao<LdapConfig> {
 
 		List<LdapConfig> result = new ArrayList<LdapConfig>();
 		result.add(ldapConfig);
-		result.addAll(getActiveLdapConfigs());
+		result.addAll(getActive());
 		return result;
 	}
 
@@ -211,7 +208,7 @@ public class LdapConfigDao implements IDataProviderDao<LdapConfig> {
 	
 	public long count() {
 		try {
-			TypedQuery<Long> query = em.createQuery("select count(c.id) from LdapConfig c where c.deleted = false", Long.class);
+			TypedQuery<Long> query = em.createNamedQuery("countNondeletedLdapConfigs", Long.class);
 			List<Long> ll = query.getResultList();
 			log.debug("selectMaxFromLdapConfig" + ll.get(0));
 			return ll.get(0);
