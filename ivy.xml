@@ -312,7 +312,7 @@
 		<dependency org="org.seleniumhq.selenium" name="selenium-java" conf="openmeetings->*" rev="2.35.0" >
 			<include type="jar" />
 		</dependency>
-		<dependency org="org.apache.directory.api" name="api-all" rev="1.0.0-M22" conf="openmeetings->*" >
+		<dependency org="org.apache.directory.api" name="api-all" rev="1.0.0-M23" conf="openmeetings->*" >
 			<include type="jar" />
 		</dependency>
 
