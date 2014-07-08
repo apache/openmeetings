@@ -223,7 +223,7 @@ public class BackupExport {
 		 * ##################### LDAP Configs
 		 */
 		writeList(simpleSerializer, backup_dir, "ldapconfigs.xml",
-				"ldapconfigs", ldapConfigDao.getLdapConfigs());
+				"ldapconfigs", ldapConfigDao.get());
 
 		/*
 		 * ##################### Cluster servers

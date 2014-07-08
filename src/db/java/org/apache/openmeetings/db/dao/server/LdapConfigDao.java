@@ -175,7 +175,7 @@ public class LdapConfigDao implements IDataProviderDao<LdapConfig> {
 		return null;
 	}
 
-	public List<LdapConfig> getActiveLdapConfigs() {
+	public List<LdapConfig> getActive() {
 		log.debug("getActiveLdapConfigs");
 
 		// get all users
@@ -185,7 +185,7 @@ public class LdapConfigDao implements IDataProviderDao<LdapConfig> {
 		return query.getResultList();
 	}
 
-	public List<LdapConfig> getLdapConfigs() {
+	public List<LdapConfig> get() {
 		//Add localhost Domain
 		LdapConfig ldapConfig = new LdapConfig();
 		
@@ -194,7 +194,7 @@ public class LdapConfigDao implements IDataProviderDao<LdapConfig> {
 
 		List<LdapConfig> result = new ArrayList<LdapConfig>();
 		result.add(ldapConfig);
-		result.addAll(getActiveLdapConfigs());
+		result.addAll(getActive());
 		return result;
 	}
 

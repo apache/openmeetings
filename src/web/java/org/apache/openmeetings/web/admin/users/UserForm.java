@@ -28,9 +28,16 @@ import static org.apache.wicket.validation.validator.StringValidator.minimumLeng
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Hashtable;
+import java.util.List;
+import java.util.Map;
 
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
+import org.apache.openmeetings.db.dao.server.LdapConfigDao;
+import org.apache.openmeetings.db.dao.server.OAuth2Dao;
 import org.apache.openmeetings.db.dao.user.UserDao;
+import org.apache.openmeetings.db.entity.server.LdapConfig;
+import org.apache.openmeetings.db.entity.server.OAuthServer;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Right;
 import org.apache.openmeetings.db.entity.user.User.Type;
@@ -40,11 +47,13 @@ import org.apache.openmeetings.web.common.ComunityUserForm;
 import org.apache.openmeetings.web.common.GeneralUserForm;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormValidatingBehavior;
+import org.apache.wicket.ajax.form.OnChangeAjaxBehavior;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.panel.IMarkupSourcingStrategy;
 import org.apache.wicket.markup.html.panel.PanelMarkupSourcingStrategy;
@@ -65,10 +74,12 @@ import com.vaynberg.wicket.select2.TextChoiceProvider;
  */
 public class UserForm extends AdminBaseForm<User> {
 	private static final long serialVersionUID = 1L;
-	private WebMarkupContainer listContainer;
+	private final WebMarkupContainer listContainer;
+	private final WebMarkupContainer domain = new WebMarkupContainer("domain");
 	private GeneralUserForm generalForm;
-	private RequiredTextField<String> login;
-	private MessageDialog warning;
+	private final RequiredTextField<String> login = new RequiredTextField<String>("login");
+	private final MessageDialog warning;
+	private final DropDownChoice<Long> domainId = new DropDownChoice<Long>("domainId");
 
 	public UserForm(String id, WebMarkupContainer listContainer, final User user, MessageDialog warning) {
 		super(id, new CompoundPropertyModel<User>(user));
@@ -105,8 +116,7 @@ public class UserForm extends AdminBaseForm<User> {
 	protected void onNewSubmit(AjaxRequestTarget target, Form<?> form) {
 		UserDao usersDaoImpl = getBean(UserDao.class);
 		setModelObject(usersDaoImpl.getNewUserInstance(usersDaoImpl.get(getUserId())));
-		target.add(this);
-		target.appendJavaScript("omUserPanelInit();");
+		update(target);
 	}
 
 	@Override
@@ -118,18 +128,15 @@ public class UserForm extends AdminBaseForm<User> {
 			user = new User();
 		}
 		setModelObject(user);
-		target.add(this);
-		target.appendJavaScript("omUserPanelInit();");
+		update(target);
 	}
 
 	@Override
 	protected void onDeleteSubmit(AjaxRequestTarget target, Form<?> form) {
 		UserDao usersDaoImpl = getBean(UserDao.class);
 		usersDaoImpl.delete(this.getModelObject(), getUserId());
-		this.setModelObject(usersDaoImpl.getNewUserInstance(usersDaoImpl.get(getUserId())));
-		target.add(listContainer);
-		target.add(this);
-		target.appendJavaScript("omUserPanelInit();");
+		setModelObject(usersDaoImpl.getNewUserInstance(usersDaoImpl.get(getUserId())));
+		update(target);
 	}
 
 	/**
@@ -137,13 +144,21 @@ public class UserForm extends AdminBaseForm<User> {
 	 */
 	private void addFormFields() {
 		ConfigurationDao cfgDao = getBean(ConfigurationDao.class);
-		login = new RequiredTextField<String>("login");
 		login.setLabel(Model.of(WebSession.getString(132)));
 		add(login.add(minimumLength(getMinLoginLength(cfgDao))));
 
 		add(generalForm = new GeneralUserForm("general", getModel(), true));
 
-		add(new DropDownChoice<Type>("type", Arrays.asList(Type.values())));
+		add(new DropDownChoice<Type>("type", Arrays.asList(Type.values())).add(new OnChangeAjaxBehavior() {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void onUpdate(AjaxRequestTarget target) {
+				updateDomain(target);
+			}
+		}));
+		update(null);
+		add(domain.add(domainId).setOutputMarkupId(true).setOutputMarkupPlaceholderTag(true));
 		add(new Label("ownerId"));
 		add(forDatePattern("starttime", WEB_DATE_PATTERN));
 		add(forDatePattern("updatetime", WEB_DATE_PATTERN));
@@ -184,6 +199,48 @@ public class UserForm extends AdminBaseForm<User> {
 		add(new ComunityUserForm("comunity", getModel()));
 	}
 
+	public void updateDomain(AjaxRequestTarget target) {
+		User u = getModelObject();
+		final Map<Long, String> values = new Hashtable<Long, String>();
+		List<Long> ids = new ArrayList<Long>();
+		if (u.getType() == Type.ldap) {
+			for (LdapConfig c : getBean(LdapConfigDao.class).getActive()) {
+				ids.add(c.getLdapConfigId());
+				values.put(c.getLdapConfigId(), c.getName());
+			}
+		}
+		if (u.getType() == Type.oauth) {
+			for (OAuthServer s : getBean(OAuth2Dao.class).getActive()) {
+				ids.add(s.getId());
+				values.put(s.getId(), s.getName());
+			}
+		}
+		domainId.setChoices(ids);
+		domainId.setChoiceRenderer(new IChoiceRenderer<Long>() {
+			private static final long serialVersionUID = 1L;
+
+			public Object getDisplayValue(Long object) {
+				return values.get(object);
+			}
+
+			public String getIdValue(Long object, int index) {
+				return "" + object;
+			}
+		});
+		domain.setVisible(u.getType() == Type.ldap || u.getType() == Type.oauth);
+		if (target != null) {
+			target.add(domain);
+		}
+	}
+	
+	public void update(AjaxRequestTarget target) {
+		updateDomain(target);
+		if (target != null) {
+			target.add(this, listContainer);
+			target.appendJavaScript("omUserPanelInit();");
+		}
+	}
+	
 	@Override
 	protected void onValidate() {
 		if(!getBean(UserDao.class).checkUserLogin(login.getConvertedInput(), getModelObject().getUser_id())) {

@@ -37,7 +37,7 @@ public class OAuth2Dao implements IDataProviderDao<OAuthServer> {
 	@PersistenceContext
 	private EntityManager em;
 	
-	public List<OAuthServer> getEnabledOAuthServers() {
+	public List<OAuthServer> getActive() {
 		TypedQuery<OAuthServer> query = em.createNamedQuery("getEnabledOAuthServers", OAuthServer.class);
 		return query.getResultList();
 	}
