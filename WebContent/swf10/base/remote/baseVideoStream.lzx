@@ -236,6 +236,7 @@
 			}
 			videoStreamSettings.setQuality(camReference.bandwidth, camReference.quality);
 			videoStreamSettings.setKeyFrameInterval(camReference.keyFrameInterval);
+			if ($debug) Debug.write("::keyFrameInterval " + camReference.keyFrameInterval);
 			videoStreamSettings.setMode(camReference.width, camReference.height, camReference.fps);
 			this._ns.videoStreamSettings = videoStreamSettings;
 		}

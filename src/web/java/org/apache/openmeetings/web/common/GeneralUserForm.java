@@ -25,8 +25,10 @@ import static org.apache.openmeetings.web.app.WebSession.getLanguage;
 import static org.apache.wicket.validation.validator.StringValidator.minimumLength;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
+import org.apache.directory.api.util.Strings;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.label.FieldLanguageDao;
 import org.apache.openmeetings.db.dao.user.OrganisationDao;
@@ -49,7 +51,6 @@ import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.form.ListMultipleChoice;
 import org.apache.wicket.markup.html.form.PasswordTextField;
 import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.form.TextArea;
@@ -59,6 +60,10 @@ import org.apache.wicket.markup.html.panel.PanelMarkupSourcingStrategy;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+
+import com.vaynberg.wicket.select2.Response;
+import com.vaynberg.wicket.select2.Select2MultiChoice;
+import com.vaynberg.wicket.select2.TextChoiceProvider;
 
 public class GeneralUserForm extends Form<User> {
 	private static final long serialVersionUID = 5360667099083510234L;
@@ -135,7 +140,7 @@ public class GeneralUserForm extends Form<User> {
 				, new ChoiceRenderer<State>("name", "state_id")));
 		add(new TextArea<String>("adresses.comment"));
 
-		List<Organisation_Users> orgUsers;
+		final List<Organisation_Users> orgUsers;
 		if (isAdminForm) {
 			List<Organisation> orgList = getBean(OrganisationDao.class).get(0, Integer.MAX_VALUE);
 			orgUsers = new ArrayList<Organisation_Users>(orgList.size());
@@ -145,10 +150,41 @@ public class GeneralUserForm extends Form<User> {
 		} else {
 			orgUsers = getModelObject().getOrganisation_users();
 		}
-		ListMultipleChoice<Organisation_Users> orgChoiceList = new ListMultipleChoice<Organisation_Users>(
-				"organisation_users", orgUsers,
-				new ChoiceRenderer<Organisation_Users>("organisation.name", "organisation.organisation_id"));
-		add(orgChoiceList.setEnabled(isAdminForm));
+		add(new Select2MultiChoice<Organisation_Users>("organisation_users", null, new TextChoiceProvider<Organisation_Users>() {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected String getDisplayText(Organisation_Users choice) {
+				return choice.getOrganisation().getName();
+			}
+
+			@Override
+			protected Object getId(Organisation_Users choice) {
+				return choice.getOrganisation().getOrganisation_id();
+			}
+
+			@Override
+			public void query(String term, int page, Response<Organisation_Users> response) {
+				for (Organisation_Users ou : orgUsers) {
+					if (Strings.isEmpty(term) || (!Strings.isEmpty(term) && ou.getOrganisation().getName().contains(term))) {
+						response.add(ou);
+					}
+				}
+			}
+
+			@Override
+			public Collection<Organisation_Users> toChoices(Collection<String> _ids) {
+				List<Long> ids = new ArrayList<Long>();
+				for (String id : _ids) {
+					ids.add(Long.parseLong(id));
+				}
+				List<Organisation_Users> list = new ArrayList<Organisation_Users>();
+				for (Organisation o : getBean(OrganisationDao.class).get(ids)) {
+					list.add(new Organisation_Users(o));
+				}
+				return list;
+			}
+		}).setEnabled(isAdminForm));
 	}
 
 	@Override

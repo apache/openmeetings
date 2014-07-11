@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.db.dao.user;
 
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
@@ -74,6 +75,10 @@ public class OrganisationDao implements IDataProviderDao<Organisation> {
 		return q.getSingleResult();
 	}
 	
+	public List<Organisation> get(Collection<Long> ids) {
+		return em.createNamedQuery("getOrganisationsByIds", Organisation.class).setParameter("ids", ids).getResultList();
+	}
+
 	public Organisation update(Organisation entity, Long userId) {
 		if (entity.getOrganisation_id() == null) {
 			if (userId != null) {
