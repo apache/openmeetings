@@ -18,6 +18,8 @@
  */
 package org.apache.openmeetings.web.admin.groups;
 
+import static org.apache.openmeetings.web.app.Application.getBean;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,7 +27,6 @@ import org.apache.openmeetings.db.dao.user.OrganisationUserDao;
 import org.apache.openmeetings.db.entity.user.Organisation_Users;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.web.admin.SearchableDataView;
-import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.ConfirmCallListener;
 import org.apache.openmeetings.web.common.PagedEntityListPanel;
@@ -64,7 +65,7 @@ public class GroupUsersPanel extends Panel {
 					@Override
 					protected void onUpdate(AjaxRequestTarget target) {
 						if (orgUser.getId() != null) {
-							Application.getBean(OrganisationUserDao.class).update(orgUser, WebSession.getUserId());
+							getBean(OrganisationUserDao.class).update(orgUser, WebSession.getUserId());
 						}
 					}
 				}));
@@ -93,7 +94,7 @@ public class GroupUsersPanel extends Panel {
 								}
 							}
 						} else {
-							Application.getBean(OrganisationUserDao.class).delete(orgUser, WebSession.getUserId());
+							getBean(OrganisationUserDao.class).delete(orgUser, WebSession.getUserId());
 						}
 						target.add(GroupUsersPanel.this);
 					}

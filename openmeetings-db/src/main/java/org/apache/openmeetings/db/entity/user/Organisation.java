@@ -39,6 +39,8 @@ import org.simpleframework.xml.Root;
 		query="SELECT c FROM Organisation AS c WHERE c.id = :organisation_id AND c.deleted = :deleted")
 	, @NamedQuery(name="getAnyOrganisationById",
 		query="SELECT c FROM Organisation AS c WHERE c.id = :organisation_id")
+	, @NamedQuery(name="getOrganisationsByIds",
+		query="SELECT c FROM Organisation AS c WHERE c.id IN :ids")
 	, @NamedQuery(name="getOrganisationsByUserId",
 		query="SELECT ou.organisation FROM User u, IN(u.organisation_users) ou WHERE u.deleted = false AND u.id = :user_id")
 	, @NamedQuery(name="getNondeletedOrganisations", query="SELECT o FROM Organisation o WHERE o.deleted = false ORDER BY o.id")

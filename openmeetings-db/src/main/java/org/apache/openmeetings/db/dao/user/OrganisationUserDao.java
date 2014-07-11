@@ -121,17 +121,26 @@ public class OrganisationUserDao implements IDataProviderDao<Organisation_Users>
 			entity.setUpdatetime(new Date());
 			entity = em.merge(entity);
 		}
+		updateUser(entity, false, userId);
 		return entity;
 	}
 
-	public void delete(Organisation_Users entity, Long userId) {
-		if (entity.getId() != null) {
-			User u = usersDao.get(entity.getUser().getId());
-			int idx = u.getOrganisation_users().indexOf(entity);
-			//entity has been detached need to re-fetch
+	private void updateUser(Organisation_Users entity, boolean delete, Long userId) {
+		//entity has been detached need to re-fetch
+		User u = usersDao.get(entity.getUser().getId());
+		int idx = u.getOrganisation_users().indexOf(entity);
+		if (delete && idx > -1) {
 			Organisation_Users ou = u.getOrganisation_users().remove(idx);
 			em.remove(ou);
-			usersDao.update(u, userId);
+		} else if (!delete && idx < 0) {
+			u.getOrganisation_users().add(entity);
+		}
+		usersDao.update(u, userId);
+	}
+	
+	public void delete(Organisation_Users entity, Long userId) {
+		if (entity.getId() != null) {
+			updateUser(entity, true, userId);
 		}
 	}
 }
