@@ -509,7 +509,6 @@ public class FLVRecorderService implements IPendingServiceCallback {
 		try {
 			Long users_id = sessiondataDao.checkSession(SID);
 			if (AuthLevelUtil.hasUserLevel(userDao.getRights(users_id))) {
-
 				log.debug("updateFileOrFolderName " + flvRecordingId);
 
 				FlvRecording flvRecording = flvRecordingDaoImpl.get(flvRecordingId);
