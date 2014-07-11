@@ -37,7 +37,6 @@ import org.apache.openmeetings.db.dao.record.FlvRecordingMetaDeltaDao;
 import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.dao.server.ISessionManager;
 import org.apache.openmeetings.db.dao.server.SessiondataDao;
-import org.apache.openmeetings.db.dao.user.IUserManager;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.file.FileItem.Type;
 import org.apache.openmeetings.db.entity.record.FlvRecording;
@@ -89,8 +88,6 @@ public class FLVRecorderService implements IPendingServiceCallback {
 	private FlvRecordingDao recordingDao;
 	@Autowired
 	private SessiondataDao sessiondataDao;
-	@Autowired
-	private IUserManager userManager;
 	@Autowired
 	private ScopeApplicationAdapter scopeApplicationAdapter;
 	@Autowired
@@ -510,7 +507,6 @@ public class FLVRecorderService implements IPendingServiceCallback {
 		try {
 			Long users_id = sessiondataDao.checkSession(SID);
 			if (AuthLevelUtil.hasUserLevel(userDao.getRights(users_id))) {
-
 				log.debug("updateFileOrFolderName " + flvRecordingId);
 
 				FlvRecording flvRecording = flvRecordingDaoImpl.get(flvRecordingId);

@@ -46,7 +46,6 @@ import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.dao.server.ISessionManager;
 import org.apache.openmeetings.db.dao.server.ServerDao;
 import org.apache.openmeetings.db.dao.server.SessiondataDao;
-import org.apache.openmeetings.db.dao.user.IUserManager;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.dto.room.BrowserStatus;
 import org.apache.openmeetings.db.dto.room.RoomStatus;
@@ -97,8 +96,6 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 	private AppointmentLogic appointmentLogic;
 	@Autowired
 	private SessiondataDao sessiondataDao;
-	@Autowired
-	private IUserManager userManager;
 	@Autowired
 	private RoomManager roomManager;
 	@Autowired
@@ -527,11 +524,9 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 	 * @param currentClient
 	 * @param currentScope
 	 */
-	public synchronized void roomLeaveByScope(Client currentClient,
-			IScope currentScope, boolean removeUserFromSessionList) {
+	public synchronized void roomLeaveByScope(Client currentClient, IScope currentScope, boolean removeUserFromSessionList) {
 		try {
 			log.debug("currentClient " + currentClient);
-
 			Long room_id = currentClient.getRoom_id();
 
 			// Log the User
@@ -557,7 +552,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 				log.debug("*** roomLeave Current Client is Recording - stop that");
 				if (currentClient.getInterviewPodId() != null) {
 					//interview, TODO need better check
-					stopInterviewRecording();
+					_stopInterviewRecording(currentClient, currentScope);
 				} else {
 					flvRecorderService.stopRecordAndSave(currentScope, currentClient, null);
 
@@ -2431,14 +2426,22 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 	 * @return true if interview was found
 	 */
 	public synchronized Boolean stopInterviewRecording() {
+		IConnection current = Red5.getConnectionLocal();
+		Client currentClient = sessionManager.getClientByStreamId(current.getClient().getId(), null);
+		return _stopInterviewRecording(currentClient, current.getScope());
+	}
+	
+	/**
+	 * Stop the recording of the streams and send event to connected users of scope
+	 * 
+	 * @return true if interview was found
+	 */
+	private synchronized Boolean _stopInterviewRecording(Client currentClient, IScope currentScope) {
 		try {
 			log.debug("-----------  stopInterviewRecording");
-			IConnection current = Red5.getConnectionLocal();
+			Long flvRecordingId = currentClient.getFlvRecordingId();
 
-			Long flvRecordingId = checkRecordingClient(current);
-
-			Set<IConnection> conset = current.getScope().getClientConnections();
-			for (IConnection conn : conset) {
+			for (IConnection conn : currentScope.getClientConnections()) {
 				Long recordingId = checkRecordingClient(conn);
 				if (recordingId != null) {
 					flvRecordingId = recordingId;
@@ -2449,14 +2452,12 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 				return false;
 			}
 
-			Client currentClient = sessionManager.getClientByStreamId(current.getClient().getId(), null);
-
 			flvRecorderService.stopRecordAndSave(scope, currentClient, flvRecordingId);
 
 			Map<String, String> interviewStatus = new HashMap<String, String>();
 			interviewStatus.put("action", "stop");
 
-			for (IConnection conn : conset) {
+			for (IConnection conn : currentScope.getClientConnections()) {
 				if (conn != null) {
 					IClient client = conn.getClient();
 					if (SessionVariablesUtil.isScreenClient(client)) {
@@ -2466,9 +2467,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 						// AVClients or potential AVClients do not receive events
 						continue;
 					}
-					((IServiceCapableConnection) conn).invoke(
-							"interviewStatus",
-							new Object[] { interviewStatus }, this);
+					((IServiceCapableConnection) conn).invoke("interviewStatus", new Object[] { interviewStatus }, this);
 				}
 			}
 			return true;
