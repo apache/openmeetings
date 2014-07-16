@@ -31,7 +31,7 @@ import org.apache.openmeetings.db.dao.server.SessiondataDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.server.Server;
 import org.apache.openmeetings.db.util.AuthLevelUtil;
-import org.apache.openmeetings.webservice.dto.ServiceException;
+import org.apache.openmeetings.webservice.error.ServiceException;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;

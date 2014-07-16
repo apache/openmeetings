@@ -46,7 +46,7 @@
 									<packages>org.apache.openmeetings.webservice</packages>
 								</group>
 							</groups>
-							<excludePackageNames>org.apache.openmeetings.webservice.cluster,org.apache.openmeetings.webservice.dto</excludePackageNames>
+							<excludePackageNames>org.apache.openmeetings.webservice.cluster,org.apache.openmeetings.webservice.error</excludePackageNames>
 							<skip>${om.quick.build}</skip>
 						</configuration>
 						<goals>

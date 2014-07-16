@@ -247,17 +247,17 @@
 			<id>Red5</id>
 			<url>http://red5.googlecode.com/svn/repository</url>
 		</repository>
-		<!-- repository>
+		<repository>
 			<id>flex-mojos-repository</id>
-			<url>http://repository.sonatype.org/content/groups/flexgroup</url>
-		</repository-->
+			<url>https://oss.sonatype.org/content/groups/staging</url>
+		</repository>
 	</repositories>
-	<!-- pluginRepositories>
+	<pluginRepositories>
 		<pluginRepository>
 			<id>flex-mojos-plugin-repository</id>
-			<url>http://repository.sonatype.org/content/groups/flexgroup</url>
+			<url>https://oss.sonatype.org/content/groups/staging</url>
 		</pluginRepository>
-	</pluginRepositories-->
+	</pluginRepositories>
 	<dependencyManagement>
 		<dependencies>
 			<dependency>

@@ -48,7 +48,7 @@ import org.apache.openmeetings.util.OmFileHelper;
 import org.apache.openmeetings.util.StoredFile;
 import org.apache.openmeetings.util.process.ConverterProcessResultList;
 import org.apache.openmeetings.util.process.FileImportError;
-import org.apache.openmeetings.webservice.dto.ServiceException;
+import org.apache.openmeetings.webservice.error.ServiceException;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;

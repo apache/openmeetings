@@ -25,8 +25,8 @@
 		<relativePath>..</relativePath>
 	</parent>
 	<artifactId>openmeetings-flash</artifactId>
-	<!-- packaging>swf</packaging-->
-	<packaging>jar</packaging>
+	<packaging>swf</packaging>
+	<!-- packaging>jar</packaging-->
 	<name>Openmeetings Flash</name>
 	<description>TODO</description>
 	<properties>
@@ -36,10 +36,10 @@
 		<webcontent.base.dir>${project.basedir}/src/main</webcontent.base.dir>
 	</properties>
 	<build>
-		<!-- sourceDirectory>src/main/flex</sourceDirectory-->
+		<sourceDirectory>src/main/flex</sourceDirectory>
 		
 		<plugins>
-			<!-- plugin>
+			<plugin>
 				<groupId>net.flexmojos.oss</groupId>
 				<artifactId>flexmojos-maven-plugin</artifactId>
 				<version>7.1.0-SNAPSHOT</version>
@@ -60,8 +60,8 @@
 						<type>pom</type>
 					</dependency>
 				</dependencies>
-			</plugin-->
-			<plugin>
+			</plugin>
+			<!-- plugin>
 				<artifactId>maven-antrun-plugin</artifactId>
 				<executions>
 					<execution>
@@ -78,10 +78,10 @@
 						</goals>
 					</execution>
 				</executions>
-			</plugin>
+			</plugin-->
 		</plugins>
 	</build>
-	<!-- dependencies>
+	<dependencies>
 		<dependency>
 			<groupId>org.apache.flex</groupId>
 			<artifactId>framework</artifactId>
@@ -94,5 +94,5 @@
 			<version>11.9</version>
 			<type>swc</type>
 		</dependency>
-	</dependencies-->
+	</dependencies>
 </project>
