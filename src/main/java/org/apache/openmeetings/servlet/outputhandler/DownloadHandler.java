@@ -26,6 +26,7 @@ import static org.apache.openmeetings.util.OmFileHelper.profileImagePrefix;
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.net.URLEncoder;
 import java.util.Set;
 
 import javax.servlet.ServletException;
@@ -74,25 +75,20 @@ public class DownloadHandler extends BaseHttpServlet {
 	 * , javax.servlet.http.HttpServletResponse)
 	 */
 	@Override
-	protected void service(HttpServletRequest httpServletRequest,
-			HttpServletResponse httpServletResponse) throws ServletException,
-			IOException {
-
+	protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		try {
-			httpServletRequest.setCharacterEncoding("UTF-8");
+			request.setCharacterEncoding("UTF-8");
 
-			log.debug("\nquery = " + httpServletRequest.getQueryString());
-			log.debug("\n\nfileName = "
-					+ httpServletRequest.getParameter("fileName"));
-			log.debug("\n\nparentPath = "
-					+ httpServletRequest.getParameter("parentPath"));
+			log.debug("\nquery = " + request.getQueryString());
+			log.debug("\n\nfileName = " + request.getParameter("fileName"));
+			log.debug("\n\nparentPath = " + request.getParameter("parentPath"));
 
-			String queryString = httpServletRequest.getQueryString();
+			String queryString = request.getQueryString();
 			if (queryString == null) {
 				queryString = "";
 			}
 
-			String sid = httpServletRequest.getParameter("sid");
+			String sid = request.getParameter("sid");
 
 			if (sid == null) {
 				sid = "default";
@@ -103,31 +99,27 @@ public class DownloadHandler extends BaseHttpServlet {
 			Set<Right> rights = getBean(UserDao.class).getRights(users_id);
 
 			if (rights != null && !rights.isEmpty()) {
-				String room_id = httpServletRequest.getParameter("room_id");
+				String room_id = request.getParameter("room_id");
 				if (room_id == null) {
 					room_id = "default";
 				}
 
-				String moduleName = httpServletRequest
-						.getParameter("moduleName");
+				String moduleName = request.getParameter("moduleName");
 				if (moduleName == null) {
 					moduleName = "nomodule";
 				}
 
-				String parentPath = httpServletRequest
-						.getParameter("parentPath");
+				String parentPath = request.getParameter("parentPath");
 				if (parentPath == null) {
 					parentPath = "nomodule";
 				}
 
-				String requestedFile = httpServletRequest
-						.getParameter("fileName");
+				String requestedFile = request.getParameter("fileName");
 				if (requestedFile == null) {
 					requestedFile = "";
 				}
 				
-				String fileExplorerItemIdParam = httpServletRequest
-						.getParameter("fileExplorerItemId");
+				String fileExplorerItemIdParam = request.getParameter("fileExplorerItemId");
 				Long fileExplorerItemId = null;
 				if (fileExplorerItemIdParam != null) {
 					fileExplorerItemId = Long.parseLong(fileExplorerItemIdParam);
@@ -156,17 +148,17 @@ public class DownloadHandler extends BaseHttpServlet {
 					working_dir = OmFileHelper.getUploadProfilesUserDir(users_id);
 					logNonExistentFolder(working_dir);
 				} else if (moduleName.equals("remoteuserprofile")) {
-					String remoteUser_id = httpServletRequest.getParameter("remoteUserid");
+					String remoteUser_id = request.getParameter("remoteUserid");
 					working_dir = OmFileHelper.getUploadProfilesUserDir(remoteUser_id == null ? "0" : remoteUser_id);
 					logNonExistentFolder(working_dir);
 				} else if (moduleName.equals("remoteuserprofilebig")) {
-					String remoteUser_id = httpServletRequest.getParameter("remoteUserid");
+					String remoteUser_id = request.getParameter("remoteUserid");
 					working_dir = OmFileHelper.getUploadProfilesUserDir(remoteUser_id == null ? "0" : remoteUser_id);
 					logNonExistentFolder(working_dir);
 					
 					requestedFile = getBigProfileUserName(working_dir);
 				} else if (moduleName.equals("chat")) {
-					String remoteUser_id = httpServletRequest.getParameter("remoteUserid");
+					String remoteUser_id = request.getParameter("remoteUserid");
 					working_dir = OmFileHelper.getUploadProfilesUserDir(remoteUser_id == null ? "0" : remoteUser_id);
 					logNonExistentFolder(working_dir);
 
@@ -176,9 +168,7 @@ public class DownloadHandler extends BaseHttpServlet {
 				}
 
 				if (!moduleName.equals("nomodule")) {
-
-					log.debug("requestedFile: " + requestedFile
-							+ " current_dir: " + working_dir);
+					log.debug("requestedFile: " + requestedFile + " current_dir: " + working_dir);
 
 					File full_path = new File(working_dir, requestedFile);
 
@@ -230,8 +220,7 @@ public class DownloadHandler extends BaseHttpServlet {
 					}
 					// Requested file is outside OM webapp folder
 					File curDirFile = OmFileHelper.getOmHome();
-					if (!full_path.getCanonicalPath()
-							.startsWith(curDirFile.getCanonicalPath())) {
+					if (!full_path.getCanonicalPath().startsWith(curDirFile.getCanonicalPath())) {
 						throw new Exception("Invalid file requested: f2.cp == "
 								+ full_path.getCanonicalPath() + "; curDir.cp == "
 								+ curDirFile.getCanonicalPath());
@@ -241,33 +230,27 @@ public class DownloadHandler extends BaseHttpServlet {
 					int browserType = 0;
 
 					// Firefox and Opera browsers
-					if (httpServletRequest.getHeader("User-Agent") != null) {
-						if ((httpServletRequest.getHeader("User-Agent")
-								.contains("Firefox"))
-								|| (httpServletRequest.getHeader("User-Agent")
-										.contains("Opera"))) {
+					if (request.getHeader("User-Agent") != null) {
+						if ((request.getHeader("User-Agent").contains("Firefox")) || (request.getHeader("User-Agent").contains("Opera"))) {
 							browserType = 1;
 						}
 					}
 
 					log.debug("Detected browser type:" + browserType);
 
-					httpServletResponse.reset();
-					httpServletResponse.resetBuffer();
-					OutputStream out = httpServletResponse.getOutputStream();
+					response.reset();
+					response.resetBuffer();
+					OutputStream out = response.getOutputStream();
 
 					if (requestedFile.endsWith(".swf")) {
 						// trigger download to SWF => THIS is a workaround for
 						// Flash Player 10, FP 10 does not seem
 						// to accept SWF-Downloads with the Content-Disposition
 						// in the Header
-						httpServletResponse
-								.setContentType("application/x-shockwave-flash");
-						httpServletResponse.setHeader("Content-Length",
-								"" + full_path.length());
+						response.setContentType("application/x-shockwave-flash");
+						response.setHeader("Content-Length", "" + full_path.length());
 					} else {
-						httpServletResponse
-								.setContentType("APPLICATION/OCTET-STREAM");
+						response.setContentType("APPLICATION/OCTET-STREAM");
 						
 						String fileNameResult = requestedFile;
 						if (fileExplorerItemId != null && fileExplorerItemId > 0) {
@@ -281,21 +264,13 @@ public class DownloadHandler extends BaseHttpServlet {
 						}
 						
 						if (browserType == 0) {
-							httpServletResponse.setHeader(
-									"Content-Disposition",
-									"attachment; filename="
-											+ java.net.URLEncoder.encode(
-													fileNameResult, "UTF-8"));
+							response.setHeader("Content-Disposition", "attachment; filename=" + URLEncoder.encode(fileNameResult, "UTF-8"));
 						} else {
-							httpServletResponse.setHeader(
-									"Content-Disposition",
-									"attachment; filename*=UTF-8'en'"
-											+ java.net.URLEncoder.encode(
-													fileNameResult, "UTF-8"));
+							response.setHeader("Content-Disposition", "attachment; filename*=UTF-8'en'"
+											+ URLEncoder.encode(fileNameResult, "UTF-8"));
 						}
 
-						httpServletResponse.setHeader("Content-Length",
-								"" + full_path.length());
+						response.setHeader("Content-Length", "" + full_path.length());
 					}
 
 					OmFileHelper.copyFile(full_path, out);
