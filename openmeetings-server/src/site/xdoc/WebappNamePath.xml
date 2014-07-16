@@ -17,9 +17,7 @@
   xsi:schemaLocation="http://maven.apache.org/XDOC/2.0 http://maven.apache.org/xsd/xdoc-2.0.xsd">
 	<properties>
 		<title>Webapp Name / Path</title>
-		<author email="sebawagner@apache.org">
-			OpenMeetings Team
-		</author>
+		<author email="sebawagner@apache.org">OpenMeetings Team</author>
 	</properties>
 
 	<body>
@@ -29,8 +27,6 @@
 			<ol>
 				<li>create your logo image as PNG 40px height</li>
 				<li>replace <tt>/opt/red5/webapps/openmeetings/public/themes/basic-theme/general/logo.png</tt> with your logo file</li>
-				<li>(Advanced optional) you can modify <tt>/opt/red5/webapps/openmeetings/public/config.xml</tt> and modify <tt>appdisplay</tt> section: set position and display for the logo and/or name</li>
-				<li>(Advanced optional) you can modify <tt>/opt/red5/webapps/openmeetings/public/theme.xml</tt> (around line 57) and change image name/path</li>
 			</ol>
 		</section>
 		<section name="Renaming /openmeetings context">
@@ -44,9 +40,7 @@
 			<ol>
 				<li>stop openmmetings if it is running </li>
 				<li>
-					go to openmeetings install dir (for ex.
-					<tt>/opt/red5</tt>
-					)
+					go to openmeetings install dir (for ex. <tt>/opt/red5</tt>)
 				</li>
 				<li>
 					rename
@@ -70,20 +64,16 @@
 					find and modify
 					<tt>&lt;webAppRootKey&gt;openmeetings&lt;/webAppRootKey&gt;</tt>
 					to be
-					<tt>&lt;webAppRootKey&gt;</tt>
-					<strong>yourmeetings</strong>
-					<tt>&lt;/webAppRootKey&gt;</tt>
+					<tt>&lt;webAppRootKey&gt;<strong>yourmeetings</strong>&lt;/webAppRootKey&gt;</tt>
 				</li>
 				<li>
 					find and modify
 					<tt>&lt;httpRootKey&gt;/openmeetings/&lt;/httpRootKey&gt;</tt>
 					to be
-					<tt>&lt;httpRootKey&gt;</tt>
-					<strong>/yourmeetings/</strong>
-					<tt>&lt;/httpRootKey&gt;</tt>
+					<tt>&lt;httpRootKey&gt;<strong>/yourmeetings/</strong>&lt;/httpRootKey&gt;</tt>
 				</li>
 			</ol>
-			That's it
+			<p>That's it</p>
 		</section>
 
 		<section name="Changing hard-coded application name in string labels">
