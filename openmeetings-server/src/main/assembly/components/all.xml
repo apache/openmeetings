@@ -103,5 +103,14 @@
 				<exclude>packages</exclude>
 			</excludes>
 		</fileSet>
+		<fileSet>
+			<directory>${project.parent.basedir}/openmeetings-db/target/site/apidocs</directory><!-- FIXME should be implemented differently -->
+			<outputDirectory>${om.webapp}/docs/openmeetings-db/apidocs</outputDirectory>
+			<excludes>
+				<exclude>javadoc.sh</exclude>
+				<exclude>options</exclude>
+				<exclude>packages</exclude>
+			</excludes>
+		</fileSet>
 	</fileSets>
 </component>
