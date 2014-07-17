@@ -85,8 +85,24 @@
 		</antcall>
 	</target>
 
-	<target name="-compile.flex" description="compile flash application">
-		<exec dir="${flex.src.dir}" executable="${laszlo46.home}/WEB-INF/flexsdk/4.6.0/bin/mxmlc">
+	<condition property="isWindows">
+		<os family="windows" />
+	</condition>
+	
+	<condition property="isUnix">
+		<os family="unix" />
+	</condition>
+	
+	<target name="if_windows" if="isWindows">
+		<property name="mxmlc_bin" value="mxmlc.exe" />
+	</target>
+	
+	<target name="if_unix" if="isUnix">
+		<property name="mxmlc_bin" value="mxmlc" />
+	</target>
+	
+	<target name="-compile.flex" description="compile flash application" depends="if_windows, if_unix">
+		<exec dir="${flex.src.dir}" executable="${laszlo46.home}/WEB-INF/flexsdk/4.6.0/bin/${mxmlc_bin}">
 			<arg value="main.mxml"/>
 			<arg line="-output ${out.dir.swf}/main.swf"/>
 			<env key="PLAYERGLOBAL_HOME" value="${laszlo46.home}/WEB-INF/flexsdk/4.6.0/frameworks/libs/player"/>
