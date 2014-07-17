@@ -90,6 +90,9 @@ import org.simpleframework.xml.Root;
 			+ "ORDER BY c.type ASC, c.fileName")
 	, @NamedQuery(name = "getRecordingsByParent", query = "SELECT c FROM FlvRecording c WHERE c.deleted = false AND c.parentItemId = :parentItemId "
 			+ "ORDER BY c.type ASC, c.fileName") 
+	, @NamedQuery(name = "getRecordingsByExternalType", query = "SELECT rec FROM FlvRecording rec, Room r, User u "
+			+ "WHERE rec.deleted = false AND rec.room_id = r.rooms_id AND rec.insertedBy = u.user_id "
+					+ "AND (r.externalRoomType = :externalType OR u.externalUserType = :externalType)")
 })
 @Table(name = "flvrecording")
 @Root(name = "flvrecording")
