@@ -69,6 +69,10 @@ public class RoomWebServiceFacade extends BaseWebService {
 				.getFlvRecordingByExternalRoomTypeByList(SID, externalRoomType);
 	}
 
+	public List<FlvRecording> getRecordingsByExternalType(String SID, String externalType) throws AxisFault {
+		return getBean(RoomWebService.class).getRecordingsByExternalType(SID, externalType);
+	}
+
 	public FlvRecording[] getFlvRecordingByExternalRoomType(String SID, String externalRoomType) throws AxisFault {
 		return getBean(RoomWebService.class).getFlvRecordingByExternalRoomType(SID, externalRoomType);
 	}

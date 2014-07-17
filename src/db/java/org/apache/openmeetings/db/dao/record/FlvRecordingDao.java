@@ -182,6 +182,20 @@ public class FlvRecordingDao {
 		return null;
 	}
 
+	public List<FlvRecording> getRecordingsByExternalType(String externalType) {
+		try {
+			log.debug("getRecordingsByExternalType :externalType: " + externalType);
+
+			TypedQuery<FlvRecording> query = em.createNamedQuery("getRecordingsByExternalType", FlvRecording.class);
+			query.setParameter("externalType", externalType);
+
+			return query.getResultList();
+		} catch (Exception ex2) {
+			log.error("[getRecordingsByExternalType]: ", ex2);
+		}
+		return null;
+	}
+
 	public List<FlvRecording> getFlvRecordingRootByPublic(Long orgId) {
 		TypedQuery<FlvRecording> q = em.createNamedQuery(orgId == null ? "getRecordingsPublic" : "getRecordingsByOrganization", FlvRecording.class);
 		if (orgId != null) {

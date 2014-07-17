@@ -289,6 +289,31 @@ public class RoomWebService {
 	}
 
 	/**
+	 * Gets a list of recordings
+	 * 
+	 * @param SID
+	 *            The SID of the User. This SID must be marked as logged-in
+	 * @param externalType
+	 *            externalType specified when creating room or user
+	 * @return - list of flv recordings
+	 * @throws AxisFault
+	 */
+	public List<FlvRecording> getRecordingsByExternalType(String SID, String externalType) throws AxisFault {
+		try {
+			Long users_id = sessiondataDao.checkSession(SID);
+
+			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(users_id))) {
+				return flvRecordingDao.getRecordingsByExternalType(externalType);
+			}
+
+			return null;
+		} catch (Exception err) {
+			log.error("[getRecordingsByExternalType] ", err);
+			throw new AxisFault(err.getMessage());
+		}
+	}
+
+	/**
 	 * Gets a list of flv recordings
 	 * 
 	 * @param SID

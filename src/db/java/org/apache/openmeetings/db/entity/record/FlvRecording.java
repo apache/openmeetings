@@ -77,6 +77,9 @@ import org.simpleframework.xml.Root;
 			+ "AND (f.parentFileExplorerItemId IS NULL OR f.parentFileExplorerItemId = 0) "
 			+ "ORDER BY f.folder DESC, f.fileName ")
 	, @NamedQuery(name = "resetRecordingProcessingStatus", query = "UPDATE FlvRecording f SET f.status = :error WHERE f.status = :processing")
+	, @NamedQuery(name = "getRecordingsByExternalType", query = "SELECT rec FROM FlvRecording rec, Room r, User u "
+			+ "WHERE rec.deleted = false AND rec.room_id = r.rooms_id AND rec.insertedBy = u.user_id "
+					+ "AND (r.externalRoomType = :externalType OR u.externalUserType = :externalType)")
 })
 @Table(name = "flvrecording")
 @Root(name = "flvrecording")

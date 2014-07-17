@@ -34,23 +34,7 @@
 	<handler name="oninit">
 		<![CDATA[
 			if($debug) Debug.write("chatParticipants/picture_uri: ",this.picture_uri);
-			
-			if (this.picture_uri != null && this.picture_uri.startsWith("http")) {
-				
-				this._userpic.setAttribute('src',this.picture_uri);  
-				
-			} else {
-				
-				var downloadurl = canvas.getUrl() + 'DownloadHandler?fileName=CHAT'
-                        +'&moduleName=chat&parentPath=&room_id='
-                        +'&remoteUserid='+this.user_id
-                        +'&sid='+canvas.sessionId;
-                //Debug.write("downloadurl "+downloadurl);
-                this._userpic.setAttribute('src',downloadurl);  
-                
-			}
-	        
-	        //Debug.write("TIME: "+this.usertime);
+            this._userpic.setAttribute('src', canvas.getPictureUrl(this.picture_uri, '&moduleName=chat')); 
         ]]>
 	</handler>
 	
