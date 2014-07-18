@@ -31,5 +31,4 @@ public interface IScreenShare {
 	void createStream(IPendingServiceCallback callback);
 	void publish(int streamId, String name, String mode, INetStreamEventHandler handler);
 	void publishStreamData(int streamId, IMessage message);
-	void setCore(CoreScreenShare core);
 }

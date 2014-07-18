@@ -358,7 +358,7 @@ public class FLVRecorderService implements IPendingServiceCallback {
 			}
 
 			if (flvRecordingId != null) {
-				flvRecordingDaoImpl.updateFlvRecordingEndTime(flvRecordingId, new Date(), currentClient.getOrganization_id());
+				flvRecordingDaoImpl.updateFlvRecordingEndTime(flvRecordingId, new Date());
 
 				// Reset values
 				currentClient.setFlvRecordingId(null);

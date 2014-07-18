@@ -51,6 +51,16 @@
 		<fileSet>
 			<directory>${project.parent.basedir}/openmeetings-screenshare/target/jnlp</directory>
 			<outputDirectory>${om.webapp}/screenshare</outputDirectory>
+			<excludes>
+				<exclude>APPLICATION.jnlp</exclude>
+			</excludes>
+		</fileSet>
+		<fileSet>
+			<directory>${project.parent.basedir}/openmeetings-screenshare/target/jnlp</directory>
+			<outputDirectory>${om.webapp}/WEB-INF/classes</outputDirectory>
+			<includes>
+				<include>APPLICATION.jnlp</include>
+			</includes>
 		</fileSet>
 		<fileSet>
 			<directory>${project.parent.basedir}/openmeetings-flash/target</directory>

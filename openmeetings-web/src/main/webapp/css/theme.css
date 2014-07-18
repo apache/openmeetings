@@ -597,3 +597,10 @@ select.messages.selector {
 	margin: 10px;
 	max-width: 900px;
 }
+#topControls #wicketDebugBar {
+	right: initial;
+	top: initial;
+	z-index: 2;
+	bottom: 0;
+	position: fixed;
+}

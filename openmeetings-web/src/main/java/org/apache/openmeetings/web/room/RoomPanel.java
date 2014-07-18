@@ -19,22 +19,30 @@
 package org.apache.openmeetings.web.room;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_APPLICATION_BASE_URL;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_FLASH_PORT;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_FLASH_PROTOCOL;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_REDIRECT_URL_FOR_EXTERNAL_KEY;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SCREENSHARING_QUALITY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.openmeetings.web.app.Application.addUserToRoom;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.Application.getRoomUsers;
+import static org.apache.openmeetings.web.app.WebSession.getLanguage;
+import static org.apache.openmeetings.web.app.WebSession.getSid;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import static org.apache.openmeetings.web.util.OmUrlFragment.ROOMS_PUBLIC;
 
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.file.FileExplorerItemDao;
+import org.apache.openmeetings.db.dao.label.FieldLanguagesValuesDao;
 import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.file.FileExplorerItem;
@@ -58,7 +66,9 @@ import org.apache.openmeetings.web.common.tree.FileTreePanel;
 import org.apache.openmeetings.web.common.tree.MyRecordingTreeProvider;
 import org.apache.openmeetings.web.common.tree.PublicRecordingTreeProvider;
 import org.apache.openmeetings.web.pages.MainPage;
+import org.apache.openmeetings.web.util.AjaxDownload;
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
+import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.json.JSONArray;
 import org.apache.wicket.ajax.json.JSONException;
@@ -71,6 +81,7 @@ import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 import org.apache.wicket.markup.head.PriorityHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.protocol.ws.IWebSocketSettings;
@@ -79,6 +90,7 @@ import org.apache.wicket.protocol.ws.api.registry.PageIdKey;
 import org.apache.wicket.request.flow.RedirectToUrlException;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.apache.wicket.request.resource.ResourceReference;
+import org.apache.wicket.util.resource.StringResourceStream;
 import org.apache.wicket.util.string.Strings;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -86,6 +98,7 @@ import org.wicketstuff.whiteboard.WhiteboardBehavior;
 
 import com.googlecode.wicket.jquery.core.JQueryBehavior;
 import com.googlecode.wicket.jquery.core.Options;
+import com.googlecode.wicket.jquery.ui.form.button.Button;
 
 @AuthorizeInstantiation("Room")
 public class RoomPanel extends BasePanel {
@@ -112,9 +125,22 @@ public class RoomPanel extends BasePanel {
 		}
 	};
 	
+	private String getLabels(int ... ids) {
+		StringBuilder result = new StringBuilder();
+		boolean delim = false;
+		FieldLanguagesValuesDao labelDao = getBean(FieldLanguagesValuesDao.class);
+		for (int id : ids) {
+			if (delim) {
+				result.append(';');
+			}
+			result.append(labelDao.getString(id, getLanguage()));
+			delim = true;
+		}
+		return result.toString();
+	}
+	
 	public RoomPanel(String id, long _roomId) {
 		this(id, getBean(RoomDao.class).get(_roomId));
-		
 	}
 	
 	public RoomPanel(String id, Room r) {
@@ -184,6 +210,60 @@ public class RoomPanel extends BasePanel {
 				response.render(new PriorityHeaderItem(script));
 			}
 		});
+		add(new Label("roomName", r.getName()));
+		add(new Label("recording", "Recording started").setVisible(false)); //FIXME add/remove
+		add(new Button("ask")); //FIXME add/remove
+		final AjaxDownload download = new AjaxDownload(true) {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected String getFileName() {
+				return "public_" + roomId + ".jnlp";
+			}
+		};
+		add(download);
+		add(new Button("share").add(new AjaxEventBehavior("click") {
+			private static final long serialVersionUID = 1L;
+			
+			@Override
+			protected void onEvent(AjaxRequestTarget target) {
+				String app = "";
+				try {
+					ConfigurationDao cfgDao = getBean(ConfigurationDao.class);
+					app = IOUtils.toString(getClass().getClassLoader().getResourceAsStream("APPLICATION.jnlp"), "UTF-8");
+					String baseUrl = cfgDao.getBaseUrl();
+					URL url = new URL(baseUrl);
+					String path = url.getPath();
+					path = path.substring(1, path.indexOf('/', 2) + 1);
+					app = app.replace("$codebase", baseUrl + "screenshare")
+							.replace("$applicationName", cfgDao.getAppName())
+							.replace("$protocol", cfgDao.getConfValue(CONFIG_FLASH_PROTOCOL, String.class, ""))
+							.replace("$port", cfgDao.getConfValue(CONFIG_FLASH_PORT, String.class, ""))
+							.replace("$host", url.getHost())
+							.replace("$app", path + roomId)
+							.replace("$userId", "" + getUserId())
+							.replace("$publicSid", getSid())
+							.replace("$labels", "<![CDATA[" + getLabels(730,  731,  732,  733,  734
+									,  735,  737,  738,  739,  740
+									,  741,  742,  844,  869,  870
+									,  871,  872,  878, 1089, 1090
+									, 1091, 1092, 1093, 1465, 1466
+									, 1467, 1468, 1469, 1470, 1471
+									, 1472, 1473, 1474, 1475, 1476
+									, 1477, 1589) + "]]>")
+							.replace("$defaultQuality", cfgDao.getConfValue(CONFIG_SCREENSHARING_QUALITY, String.class, ""))
+							.replace("$allowRecording", "true") //FIXME add/remove
+							.replace("$allowPublishing", "true") //FIXME add/remove
+							.replace("$keystore", "<![CDATA[]]>") //FIXME add/remove
+							.replace("$password", "<![CDATA[]]>") //FIXME add/remove
+							;
+				} catch (Exception e) {
+					log.error("Unexpected error while creating jnlp file", e);
+				}
+				download.setResourceStream(new StringResourceStream(app, "application/x-java-jnlp-file"));
+				download.initiate(target);
+			}
+		})); //FIXME add/remove
 	}
 
 	private JSONArray getStringLabels(long... ids) {

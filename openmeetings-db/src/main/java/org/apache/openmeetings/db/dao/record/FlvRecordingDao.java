@@ -211,14 +211,13 @@ public class FlvRecordingDao {
 		return null;
 	}
 
-	public void updateFlvRecordingEndTime(Long flvRecordingId, Date recordEnd, Long organization_id) {
+	public void updateFlvRecordingEndTime(Long flvRecordingId, Date recordEnd) {
 		try {
 
 			FlvRecording fId = get(flvRecordingId);
 
 			fId.setProgressPostProcessing(0);
 			fId.setRecordEnd(recordEnd);
-			fId.setOrganization_id(organization_id);
 
 			update(fId);
 		} catch (Exception ex2) {

@@ -33,11 +33,8 @@ public class RTMPSScreenShare extends RTMPSClient implements ClientExceptionHand
 
 	private CoreScreenShare core = null;
 
-	public void setCore(CoreScreenShare core) {
+	public RTMPSScreenShare(CoreScreenShare core) {
 		this.core = core;
-	}
-	
-	private RTMPSScreenShare() {
 	};
 
 	@Override

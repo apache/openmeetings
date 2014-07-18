@@ -316,12 +316,6 @@ public class Client implements IDataProviderEntity {
 	private Long flvRecordingMetaDataId;
 	
 	/**
-	 * @see Client#getOrganization_id()
-	 */
-	@Column(name = "organization_id")
-	private Long organization_id;
-	
-	/**
 	 * @see Client#isStartRecording()
 	 */
 	@Column(name = "start_recording")
@@ -780,14 +774,6 @@ public class Client implements IDataProviderEntity {
 
 	public void setScreenPublishStarted(boolean screenPublishStarted) {
 		this.screenPublishStarted = screenPublishStarted;
-	}
-
-	public Long getOrganization_id() {
-		return organization_id;
-	}
-
-	public void setOrganization_id(Long organization_id) {
-		this.organization_id = organization_id;
 	}
 
 	public boolean isStartRecording() {

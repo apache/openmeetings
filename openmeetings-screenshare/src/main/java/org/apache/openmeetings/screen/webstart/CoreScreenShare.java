@@ -58,7 +58,11 @@ import org.slf4j.Logger;
 public class CoreScreenShare implements IPendingServiceCallback, INetStreamEventHandler {
 	private static final Logger log = getLogger(CoreScreenShare.class);
 
+	enum Protocol {
+		rtmp, rtmpt, rtmpe, rtmps
+	}
 	private IScreenShare instance = null;
+	private Protocol protocol;
 	private String host;
 	private String app;
 	private int port;
@@ -71,7 +75,6 @@ public class CoreScreenShare implements IPendingServiceCallback, INetStreamEvent
 
 	public int defaultQuality = 1;
 
-	public Long organization_id = 0L;
 	public Long user_id = null;
 	private boolean allowRecording = true;
 	private boolean allowPublishing = true;
@@ -105,17 +108,14 @@ public class CoreScreenShare implements IPendingServiceCallback, INetStreamEvent
 			}
 			String[] textArray = null;
 			if (args.length > 9) {
-				host = args[0];
-				app = args[1];
+				protocol = Protocol.valueOf(args[0]);
+				host = args[1];
 				port = Integer.parseInt(args[2]);
-				publishName = args[3];
-
-				String labelTexts = args[4];
-
-				organization_id = Long.parseLong(args[5]);
-
-				defaultQuality = Integer.parseInt(args[6]);
-				user_id = Long.parseLong(args[7]);
+				app = args[3];
+				user_id = Long.parseLong(args[4]);
+				publishName = args[5];
+				String labelTexts = args[6];
+				defaultQuality = Integer.parseInt(args[7]);
 				allowRecording = bool(args[8]);
 				allowPublishing = bool(args[9]);
 
@@ -130,15 +130,22 @@ public class CoreScreenShare implements IPendingServiceCallback, INetStreamEvent
 						log.debug(i + " :: " + textArray[i]);
 					}
 				}
-				instance = (IScreenShare)Class.forName(args[10]).newInstance();
-				instance.setCore(this);
-				if (instance instanceof RTMPSScreenShare) {
-					if (args.length < 12) {
-						System.exit(0);
-					}
-					RTMPSScreenShare client = (RTMPSScreenShare)instance;
-					client.setKeystoreBytes(Hex.decodeHex(args[11].toCharArray()));
-					client.setKeyStorePassword(args[12]);
+				switch (protocol) {
+					case rtmp:
+						instance = new RTMPScreenShare(this);
+						break;
+					case rtmpt:
+						instance = new RTMPTScreenShare(this);
+						break;
+					case rtmps:
+						RTMPSScreenShare client = new RTMPSScreenShare(this);
+						client.setKeystoreBytes(Hex.decodeHex(args[10].toCharArray()));
+						client.setKeyStorePassword(args[11]);
+						instance = client;
+						break;
+					case rtmpe:
+					default:
+						throw new Exception("Unsupported protocol");
 				}
 				log.debug(String.format("host: %s, app: %s, port: %s, publish: %s", host, port, app, publishName));
 			} else {
@@ -220,7 +227,6 @@ public class CoreScreenShare implements IPendingServiceCallback, INetStreamEvent
 			map.put("publishingApp", frame.getPublishApp());
 			map.put("publishingId", frame.getPublishId());
 
-			map.put("organization_id", organization_id);
 			map.put("user_id", user_id);
 
 			instance.invoke("setConnectionAsSharingClient", new Object[] { map }, this);

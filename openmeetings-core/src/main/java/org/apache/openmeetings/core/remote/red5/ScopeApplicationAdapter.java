@@ -315,8 +315,6 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 					currentClient.setStreamPublishStarted(true);
 				}
 
-				currentClient.setOrganization_id(Long.parseLong(map.get("organization_id").toString()));
-
 				sessionManager.updateClientByStreamId(current.getClient().getId(), currentClient, false, null);
 
 				Map returnMap = new HashMap();
@@ -1312,7 +1310,6 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 			Client currentClient = sessionManager.getClientByStreamId(streamid, null);
 			currentClient.setRoom_id(room_id);
 			currentClient.setRoomEnter(new Date());
-			currentClient.setOrganization_id(organization_id);
 
 			currentClient.setUsercolor(colorObj);
 

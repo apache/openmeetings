@@ -93,6 +93,10 @@
 									<value>*</value>
 								</replacement>
 								<replacement>
+									<token>$protocol</token>
+									<value>*</value>
+								</replacement>
+								<replacement>
 									<token>$host</token>
 									<value>*</value>
 								</replacement>
@@ -106,10 +110,6 @@
 								</replacement>
 								<replacement>
 									<token>$userId</token>
-									<value>*</value>
-								</replacement>
-								<replacement>
-									<token>$organizationId</token>
 									<value>*</value>
 								</replacement>
 								<replacement>
@@ -130,10 +130,6 @@
 								</replacement>
 								<replacement>
 									<token>$allowPublishing</token>
-									<value>*</value>
-								</replacement>
-								<replacement>
-									<token>$clientClass</token>
 									<value>*</value>
 								</replacement>
 								<replacement>

@@ -27,9 +27,10 @@
 }
 .room.menu.right {
 	position: absolute;
-	top: 5px;
+	top: 0px;
 	margin-right: 5px;
-	width: 100%;
+	right: 0px;
+	display: inline-block;
 }
 .room.menu.right .room {
 	float: right;
@@ -42,13 +43,18 @@
 .room.menu.right .room.recording {
 	color: red;
 }
-.room.menu.right .share {
-	background-image: url(images/monitor_go.png);
+.room.menu.right .icon {
 	width: 30px;
 	height: 30px;
 	background-repeat: no-repeat;
 	background-position: 5px 5px;
 	float: right;
+}
+.room.menu.right .icon.share {
+	background-image: url(images/monitor_go.png);
+}
+.room.menu.right .icon.ask {
+	background-image: url(images/user_add.png);
 }
 .room.sidebar.left {
 	min-width: 200px;

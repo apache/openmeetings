@@ -36,17 +36,16 @@
 		$dependencies
 	</resources>
 	<application-desc main-class='$mainClass'>
+		<argument>$protocol</argument>
 		<argument>$host</argument>
 		<argument>$port</argument>
 		<argument>$app</argument>
 		<argument>$userId</argument>
-		<argument>$organizationId</argument>
 		<argument>$publicSid</argument>
 		<argument>$labels</argument>
 		<argument>$defaultQuality</argument>
 		<argument>$allowRecording</argument>
 		<argument>$allowPublishing</argument>
-		<argument>$clientClass</argument>
 		<argument>$keystore</argument>
 		<argument>$password</argument>
 	</application-desc>

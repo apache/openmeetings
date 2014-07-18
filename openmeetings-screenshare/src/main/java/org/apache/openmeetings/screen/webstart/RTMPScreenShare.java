@@ -32,11 +32,8 @@ public class RTMPScreenShare extends RTMPClient implements ClientExceptionHandle
 
 	private CoreScreenShare core = null;
 
-	public void setCore(CoreScreenShare core) {
+	public RTMPScreenShare(CoreScreenShare core) {
 		this.core = core;
-	}
-	
-	private RTMPScreenShare() {
 	}
 
 	// ------------------------------------------------------------------------

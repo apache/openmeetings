@@ -26,7 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
-import org.apache.openmeetings.web.app.Application;
+import static org.apache.openmeetings.web.app.Application.getBean;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.basic.Label;
@@ -40,10 +40,7 @@ public class AboutDialog extends AbstractDialog<String> {
 	public AboutDialog(String id) {
 		super(id, WebSession.getString(1549));
 		
-		add(new Label("name", Application.getBean(ConfigurationDao.class).getConfValue(
-				"application.name"
-				, String.class
-				, ConfigurationDao.DEFAULT_APP_NAME)));
+		add(new Label("name", getBean(ConfigurationDao.class).getAppName()));
 		add(new Label("version", getVersion()));
 		add(new Label("revision", getRevision()));
 		add(new Label("buildDate", getBuildDate()));

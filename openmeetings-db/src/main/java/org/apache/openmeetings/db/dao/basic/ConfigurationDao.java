@@ -19,6 +19,7 @@
 package org.apache.openmeetings.db.dao.basic;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_APPLICATION_BASE_URL;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_APPLICATION_NAME;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_CRYPT_KEY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_MAX_UPLOAD_SIZE_KEY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.DEFAULT_BASE_URL;
@@ -179,7 +180,7 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 
 	public String getAppName() {
 		if (appName == null) {
-			appName = getConfValue("application.name", String.class, DEFAULT_APP_NAME);
+			appName = getConfValue(CONFIG_APPLICATION_NAME, String.class, DEFAULT_APP_NAME);
 		}
 		return appName;
 	}
@@ -244,7 +245,7 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 			configKeyCryptClassName = value;
 		} else if ("show.whiteboard.draw.status".equals(key)) {
 			whiteboardDrawStatus = "1".equals(value);
-		} else if ("application.name".equals(key)) {
+		} else if (CONFIG_APPLICATION_NAME.equals(key)) {
 			appName = value;
 		}
 		//TODO ensure entity returned is updated

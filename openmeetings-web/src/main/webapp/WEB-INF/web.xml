@@ -71,7 +71,7 @@
 		</init-param>
 		<init-param>
 			<param-name>ignorePaths</param-name>
-			<param-value>conf,css,default,docs,images,js,persistence,public,screensharing,streams,upload,uploadtemp,services,networktest.,file.,remotelog.,screen.,DownloadHandler</param-value>
+			<param-value>conf,css,default,docs,images,js,persistence,public,screenshare,streams,upload,uploadtemp,services,networktest.,file.,remotelog.,DownloadHandler</param-value>
 		</init-param>
 	</filter>
 	<filter-mapping>
