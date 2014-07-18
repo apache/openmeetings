@@ -89,6 +89,13 @@
 			</includes>
 		</fileSet>
 		<fileSet>
+			<directory>${project.parent.basedir}/openmeetings-web/target/openmeetings-web-${project.version}/WEB-INF/classes/META-INF</directory>
+			<outputDirectory>${om.webapp}/WEB-INF/classes/META-INF</outputDirectory>
+			<includes>
+				<include>*.xml</include>
+			</includes>
+		</fileSet>
+		<fileSet>
 			<directory>${project.parent.basedir}/openmeetings-webservice/target</directory>
 			<outputDirectory>${om.webapp}/WEB-INF/lib</outputDirectory>
 			<includes>

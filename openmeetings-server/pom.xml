@@ -33,13 +33,13 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<server.dir>${project.build.directory}/red5-server</server.dir>
 		<languages.dir>${project.parent.basedir}/openmeetings-web/src/main/webapp/languages</languages.dir>
-		<dist.dir>${project.build.directory}/${project.build.finalName}</dist.dir>
+		<assembly.finalName>${project.build.finalName}</assembly.finalName>
+		<assembly.descriptor>server</assembly.descriptor>
+		<dist.dir>${project.build.directory}/${assembly.finalName}</dist.dir>
 		<dist.webapps>${dist.dir}/webapps</dist.webapps>
 		<dist.om.dir>${dist.webapps}/openmeetings</dist.om.dir>
 		<om.webapp>webapps/openmeetings</om.webapp>
 		<root.webapp>webapps/root</root.webapp>
-		<assembly.finalName>${project.build.finalName}</assembly.finalName>
-		<assembly.descriptor>server</assembly.descriptor>
 		<red5-server.file.name>red5-server-1.0.2-RELEASE-server.zip</red5-server.file.name><!-- FIXME duplicate variable -->
 	</properties>
 	<scm>
@@ -82,7 +82,8 @@
 												<include>css/**</include>
 												<include>js/**</include>
 												<include>images/**</include>
-												<include>WEB-INF/**</include>
+												<include>WEB-INF/lib/openmeetings*</include>
+												<include>WEB-INF/classes/META-INF/*</include>
 											</includes>
 										</fileset>
 										<fileset>

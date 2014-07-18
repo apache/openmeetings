@@ -25,6 +25,31 @@
 	background-repeat: no-repeat;
 	background-position: 5px 5px;
 }
+.room.menu.right {
+	position: absolute;
+	top: 5px;
+	margin-right: 5px;
+	width: 100%;
+}
+.room.menu.right .room {
+	float: right;
+	padding-top: 5px;
+	padding-right: 5px;
+}
+.room.menu.right .room.name {
+	font-weight: bold;
+}
+.room.menu.right .room.recording {
+	color: red;
+}
+.room.menu.right .share {
+	background-image: url(images/monitor_go.png);
+	width: 30px;
+	height: 30px;
+	background-repeat: no-repeat;
+	background-position: 5px 5px;
+	float: right;
+}
 .room.sidebar.left {
 	min-width: 200px;
 	width: 20%;
