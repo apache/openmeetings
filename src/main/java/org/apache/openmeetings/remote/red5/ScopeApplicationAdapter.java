@@ -1106,11 +1106,9 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 	public synchronized Long applyForModeration(String publicSID) {
 		try {
 
-			Client currentClient = this.sessionManager
-					.getClientByPublicSID(publicSID, false, null);
+			Client currentClient = sessionManager.getClientByPublicSID(publicSID, false, null);
 
-			List<Client> currentModList = this.sessionManager
-					.getCurrentModeratorByRoom(currentClient.getRoom_id());
+			List<Client> currentModList = sessionManager.getCurrentModeratorByRoom(currentClient.getRoom_id());
 
 			if (currentModList.size() > 0) {
 				return 2L;
@@ -1118,11 +1116,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 				// No moderator in this room at the moment
 				Room room = roomDao.get(currentClient.getRoom_id());
 
-				if (room.getIsModeratedRoom()) {
-					return 3L;
-				} else {
-					return 1L;
-				}
+				return room.getIsModeratedRoom() ? 3L : 1L;
 			}
 
 		} catch (Exception err) {
@@ -1299,8 +1293,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 	 * @param colorObj - some color
 	 * @return RoomStatus object
 	 */
-	public synchronized RoomStatus setRoomValues(Long room_id,
-			Boolean becomeModerator, Boolean isSuperModerator,
+	public synchronized RoomStatus setRoomValues(Long room_id, Boolean becomeModerator, Boolean isSuperModerator,
 			Long organization_id, String colorObj) {
 		try {
 			log.debug("-----------  setRoomValues");
@@ -1330,8 +1323,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 			// This can be set without checking for Moderation Flag
 			currentClient.setIsSuperModerator(isSuperModerator);
 
-			this.sessionManager.updateClientByStreamId(streamid,
-					currentClient, true, null);
+			sessionManager.updateClientByStreamId(streamid, currentClient, true, null);
 
             Room room = roomDao.get(room_id);
             if (room.getShowMicrophoneStatus()) {
@@ -1351,17 +1343,14 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 			List<Client> clientListRoom = sessionManager.getClientListByRoom(room_id);
 
 			// appointed meeting or moderated Room? => Check Max Users first
-			if (room.getNumberOfPartizipants() != null
-					&& clientListRoom.size() > room.getNumberOfPartizipants()) {
+			if (room.getNumberOfPartizipants() != null && clientListRoom.size() > room.getNumberOfPartizipants()) {
 				roomStatus.setRoomFull(true);
 				return roomStatus;
 			}
 
 			// default logic for non regular rooms
 			if (room.getAppointment() == null || room.getAppointment() == false) {
-
 				if (room.getIsModeratedRoom()) {
-
 					// if this is a Moderated Room then the Room can be only
 					// locked off by the Moderator Bit
 					// List<RoomClient> clientModeratorListRoom =
@@ -1379,26 +1368,20 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 						// already somebody in the Room waiting
 
 						// Update the Client List
-						this.sessionManager.updateClientByStreamId(streamid,
-								currentClient, false, null);
+						sessionManager.updateClientByStreamId(streamid, currentClient, false, null);
 
-						List<Client> modRoomList = this.sessionManager
-								.getCurrentModeratorByRoom(currentClient.getRoom_id());
+						List<Client> modRoomList = sessionManager.getCurrentModeratorByRoom(currentClient.getRoom_id());
 						
 						//Sync message to everybody
 						syncMessageToCurrentScope("setNewModeratorByList", modRoomList, false);
-
 					} else {
 						// The current User is not a Teacher/Admin or whatever
 						// Role that should get the
 						// Moderation
 						currentClient.setIsMod(false);
 					}
-
 				} else {
-
-					// If this is a normal Room Moderator rules : first come,
-					// first draw ;-)
+					// If this is a normal Room Moderator rules : first come, first draw ;-)
 					log.debug("setRoomValues : Room"
 							+ room_id
 							+ " not appointed! Moderator rules : first come, first draw ;-)");
@@ -1412,12 +1395,9 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 							currentClient.setIsMod(true);
 
 							// Update the Client List
-							this.sessionManager.updateClientByStreamId(
-									streamid, currentClient, false, null);
+							sessionManager.updateClientByStreamId(streamid, currentClient, false, null);
 
-							List<Client> modRoomList = this.sessionManager
-									.getCurrentModeratorByRoom(currentClient
-											.getRoom_id());
+							List<Client> modRoomList = sessionManager.getCurrentModeratorByRoom(currentClient.getRoom_id());
 
 							// There is a need to send an extra Event here,
 							// cause at this moment there could be
@@ -1437,13 +1417,9 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 				}
 
 				// Update the Client List
-				this.sessionManager.updateClientByStreamId(streamid,
-						currentClient, false, null);
-
+				sessionManager.updateClientByStreamId(streamid, currentClient, false, null);
 			} else {
-
-				// If this is an Appointment then the Moderator will be set to
-				// the Invitor
+				// If this is an Appointment then the Moderator will be set to the Invitor
 
 				Appointment ment = appointmentLogic.getAppointmentByRoom(room_id);
 
@@ -1451,55 +1427,45 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 
 				boolean found = false;
 				boolean moderator_set = false;
+				// First check owner who is not in the members list
+				if (ment.getOwner().getUser_id().equals(userIdInRoomClient)) {
+					found = true;
+					log.debug("User "
+							+ userIdInRoomClient
+							+ " is moderator due to flag in MeetingMember record");
+					currentClient.setIsMod(true);
+					moderator_set = true;
 
-				// Check if current user is set to moderator
-				for (MeetingMember member : ment.getMeetingMembers()) {
+					// Update the Client List
+					sessionManager.updateClientByStreamId(streamid, currentClient, false, null);
 
-					// only persistent users can schedule a meeting
-					// user-id is only set for registered users
-					if (member.getUser() != null) {
-						log.debug("checking user " + member.getUser().getFirstname()
-								+ " for moderator role - ID : "
-								+ member.getUser().getUser_id());
+					List<Client> modRoomList = sessionManager.getCurrentModeratorByRoom(currentClient.getRoom_id());
 
-						if (member.getUser().getUser_id().equals(userIdInRoomClient)) {
-							found = true;
+					// There is a need to send an extra Event here, cause at this moment 
+					// there could be already somebody in the Room waiting
 
-							if (ment.getOwner().getUser_id() == member.getUser().getUser_id()) {
-								log.debug("User "
-										+ userIdInRoomClient
-										+ " is moderator due to flag in MeetingMember record");
-								currentClient.setIsMod(true);
-
-								// Update the Client List
-								sessionManager.updateClientByStreamId(streamid, currentClient, false, null);
-
-								List<Client> modRoomList = this.sessionManager
-										.getCurrentModeratorByRoom(currentClient
-												.getRoom_id());
-
-								// There is a need to send an extra Event here, cause at this moment 
-								// there could be already somebody in the Room waiting
-
-								//Sync message to everybody
-								syncMessageToCurrentScope("setNewModeratorByList", modRoomList, false);
-
-								moderator_set = true;
-								this.sessionManager.updateClientByStreamId(
-										streamid, currentClient, false, null);
-								break;
-							} else {
-								log.debug("User "
-										+ userIdInRoomClient
-										+ " is NOT moderator due to flag in MeetingMember record");
+					//Sync message to everybody
+					syncMessageToCurrentScope("setNewModeratorByList", modRoomList, false);
+				}
+				if (!found) {
+					// Check if current user is set to moderator
+					for (MeetingMember member : ment.getMeetingMembers()) {
+						// only persistent users can schedule a meeting
+						// user-id is only set for registered users
+						if (member.getUser() != null) {
+							log.debug("checking user " + member.getUser().getFirstname()
+									+ " for moderator role - ID : "
+									+ member.getUser().getUser_id());
+	
+							if (member.getUser().getUser_id().equals(userIdInRoomClient)) {
+								found = true;
+								log.debug("User " + userIdInRoomClient+ " is NOT moderator due to flag in MeetingMember record");
 								currentClient.setIsMod(false);
-								this.sessionManager.updateClientByStreamId(
-										streamid, currentClient, false, null);
+								sessionManager.updateClientByStreamId(streamid, currentClient, false, null);
 								break;
 							}
 						}
 					}
-
 				}
 
 				if (!found) {
@@ -1511,16 +1477,14 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 				} else {
 					// if current user is part of the member list, but moderator
 					// couldn't be retrieved : first come, first draw!
-					if (clientListRoom.size() == 1 && moderator_set == false) {
+					if (clientListRoom.size() == 1 && !moderator_set) {
 						log.debug("");
 						currentClient.setIsMod(true);
 
 						// Update the Client List
 						sessionManager.updateClientByStreamId(streamid, currentClient, false, null);
 
-						List<Client> modRoomList = this.sessionManager
-								.getCurrentModeratorByRoom(currentClient
-										.getRoom_id());
+						List<Client> modRoomList = sessionManager.getCurrentModeratorByRoom(currentClient.getRoom_id());
 
 						// There is a need to send an extra Event here, cause at
 						// this moment there could be
@@ -1529,8 +1493,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 						//Sync message to everybody
 						syncMessageToCurrentScope("setNewModeratorByList", modRoomList, false);
 						
-						this.sessionManager.updateClientByStreamId(streamid,
-								currentClient, false, null);
+						sessionManager.updateClientByStreamId(streamid, currentClient, false, null);
 					}
 				}
 
@@ -1540,8 +1503,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 			syncMessageToCurrentScope("addNewUser", currentClient, false);
 
 			//Status object for Shared Browsing
-			BrowserStatus browserStatus = (BrowserStatus) current.getScope()
-					.getAttribute("browserStatus");
+			BrowserStatus browserStatus = (BrowserStatus)current.getScope().getAttribute("browserStatus");
 
 			if (browserStatus == null) {
 				browserStatus = new BrowserStatus();
@@ -1721,10 +1683,9 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 	public synchronized List<Client> getCurrentModeratorList() {
 		try {
 			IConnection current = Red5.getConnectionLocal();
-			Client currentClient = this.sessionManager
-					.getClientByStreamId(current.getClient().getId(), null);
+			Client currentClient = sessionManager.getClientByStreamId(current.getClient().getId(), null);
 			Long room_id = currentClient.getRoom_id();
-			return this.sessionManager.getCurrentModeratorByRoom(room_id);
+			return sessionManager.getCurrentModeratorByRoom(room_id);
 		} catch (Exception err) {
 			log.error("[getCurrentModerator]", err);
 		}
