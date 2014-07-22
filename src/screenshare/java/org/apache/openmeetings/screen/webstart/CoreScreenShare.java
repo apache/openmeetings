@@ -69,6 +69,7 @@ public class CoreScreenShare implements IPendingServiceCallback, INetStreamEvent
 	private ScreenSharerFrame frame;
 
 	public int defaultQuality = 1;
+	public int defaultFPS = 10;
 
 	public Long organization_id = 0L;
 	public Long user_id = null;
@@ -105,7 +106,7 @@ public class CoreScreenShare implements IPendingServiceCallback, INetStreamEvent
 				log.debug("arg: " + arg);
 			}
 			String[] textArray = null;
-			if (args.length > 8) {
+			if (args.length > 9) {
 				host = args[0];
 				app = args[1];
 				port = Integer.parseInt(args[2]);
@@ -116,9 +117,10 @@ public class CoreScreenShare implements IPendingServiceCallback, INetStreamEvent
 				organization_id = Long.parseLong(args[5]);
 
 				defaultQuality = Integer.parseInt(args[6]);
-				user_id = Long.parseLong(args[7]);
-				allowRecording = bool(args[8]);
-				allowPublishing = bool(args[9]);
+				defaultFPS = Integer.parseInt(args[7]);
+				user_id = Long.parseLong(args[8]);
+				allowRecording = bool(args[9]);
+				allowPublishing = bool(args[10]);
 
 				if (labelTexts.length() > 0) {
 					textArray = labelTexts.split(";");

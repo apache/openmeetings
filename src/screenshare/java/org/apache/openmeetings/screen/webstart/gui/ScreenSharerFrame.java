@@ -468,8 +468,20 @@ public class ScreenSharerFrame extends JFrame {
 		        ScreenDimensions.FPS = ((KeyValue<Integer>)comboFPS.getSelectedItem()).getValue();
 		        calcRescaleFactors();
 			}
-		}); 
-		comboFPS.setSelectedIndex(2);
+		});
+		boolean fpsSelected = false;
+		for (int i = 0; i < comboFPS.getItemCount(); ++i) {
+			KeyValue<Integer> v = comboFPS.getItemAt(i);
+			if (core.defaultFPS == v.value) {
+				comboFPS.setSelectedIndex(i);
+				fpsSelected = true;
+				break;
+			}
+		}
+		if (!fpsSelected) {
+			comboFPS.addItem(new KeyValue<Integer>(core.defaultFPS + " FPS", core.defaultFPS));
+			comboFPS.setSelectedIndex(comboFPS.getItemCount() - 1);
+		}
 		comboFPS.setBounds(390, 170, 70, 24);
 		panelScreen.add(comboFPS);
 		

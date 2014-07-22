@@ -35,6 +35,8 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_PASS_MIN
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_REDIRECT_URL_FOR_EXTERNAL_KEY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_RSS_FEED1_KEY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_RSS_FEED2_KEY;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SCREENSHARING_FPS;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SCREENSHARING_QUALITY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SOAP_REGISTER_KEY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.USER_LOGIN_MINIMUM_LENGTH;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.USER_PASSWORD_MINIMUM_LENGTH;
@@ -434,12 +436,10 @@ public class ImportInitvalues {
 		configurationDao.add("show.facebook.login", "" + 0, null,
 				"Show Facebook Login");
 
-		configurationDao
-				.add(
-						"default.quality.screensharing",
-						"1",
-						null,
-						"Default selection in ScreenSharing Quality:\n 0 - bigger frame rate, no resize\n 1 - no resize\n 2 - size == 1/2 of selected area\n 3 - size == 3/8 of selected area");
+		configurationDao.add(CONFIG_SCREENSHARING_QUALITY, "1", null,
+				"Default selection in ScreenSharing Quality:\n 0 - bigger frame rate, no resize\n 1 - no resize\n 2 - size == 1/2 of selected area\n 3 - size == 3/8 of selected area");
+
+		configurationDao.add(CONFIG_SCREENSHARING_FPS, "10", null, "Default selection in ScreenSharing FPS");
 
 		configurationDao.add("default.dashboard.tab", "0", null,
 				"Default selection in Dashboard tabs as tab-index-id");

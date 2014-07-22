@@ -43,6 +43,7 @@ $LIBRARIES
     	<argument>$LABELSHARER</argument> 
     	<argument>$organization_id</argument> 
     	<argument>$default_quality_screensharing</argument>
+    	<argument>$default_fps_screensharing</argument>
     	<argument>$user_id</argument>   
     	<argument>$allowRecording</argument>
     	<argument>$allowPublishing</argument>
