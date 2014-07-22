@@ -125,6 +125,10 @@
 									<value>*</value>
 								</replacement>
 								<replacement>
+									<token>$defaultFps</token>
+									<value>*</value>
+								</replacement>
+								<replacement>
 									<token>$allowRecording</token>
 									<value>*</value>
 								</replacement>
@@ -182,6 +186,7 @@
 									<include>commons-codec:commons-codec</include>
 									<include>commons-beanutils:commons-beanutils</include>
 									<include>commons-collections:commons-collections</include>
+									<include>org.apache.commons:commons-lang3</include>
 									<include>org.apache.httpcomponents:httpclient</include>
 									<include>org.apache.httpcomponents:httpcore</include>
 									<include>org.bouncycastle:bcprov-jdk15on</include>
@@ -221,6 +226,7 @@
 									<include>commons-codec:commons-codec</include>
 									<include>commons-beanutils:commons-beanutils</include>
 									<include>commons-collections:commons-collections</include>
+									<include>org.apache.commons:commons-lang3</include>
 									<include>org.apache.httpcomponents:httpclient</include>
 									<include>org.apache.httpcomponents:httpcore</include>
 									<include>org.bouncycastle:bcprov-jdk15on</include>

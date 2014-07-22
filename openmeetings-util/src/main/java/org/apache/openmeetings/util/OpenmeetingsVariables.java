@@ -40,6 +40,7 @@ public class OpenmeetingsVariables {
 	public static final String CONFIG_FLASH_PROTOCOL = "flash.protocol";
 	public static final String CONFIG_FLASH_PORT = "flash.port";
 	public static final String CONFIG_SCREENSHARING_QUALITY = "default.quality.screensharing";
+	public static final String CONFIG_SCREENSHARING_FPS = "default.fps.screensharing";
 
 	public static int DEFAULT_MINUTES_REMINDER_SEND = 15;
 	public static String DEFAULT_BASE_URL = "http://localhost:5080/openmeetings/";

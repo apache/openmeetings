@@ -74,6 +74,7 @@ public class CoreScreenShare implements IPendingServiceCallback, INetStreamEvent
 	private ScreenSharerFrame frame;
 
 	public int defaultQuality = 1;
+	public int defaultFPS = 10;
 
 	public Long user_id = null;
 	private boolean allowRecording = true;
@@ -116,6 +117,7 @@ public class CoreScreenShare implements IPendingServiceCallback, INetStreamEvent
 				publishName = args[5];
 				String labelTexts = args[6];
 				defaultQuality = Integer.parseInt(args[7]);
+				defaultFPS = Integer.parseInt(args[7]);
 				allowRecording = bool(args[8]);
 				allowPublishing = bool(args[9]);
 
