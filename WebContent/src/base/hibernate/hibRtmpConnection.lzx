@@ -1768,6 +1768,8 @@
     <netRemoteCallHib name="roomConnect" funcname="roomConnect" >      
         <handler name="ondata" args="value">
             if ($debug) Debug.write("roomConnect: ",value);
+            canvas._videocontainer.addItem(value.connectedSince,value.isMod,value.streamid,value.username,
+                              '',value.formatedDate,value.userpos,value.usercolor,value);
         </handler>
     </netRemoteCallHib>
     

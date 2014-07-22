@@ -29,54 +29,48 @@
     
     <attribute name="sortType" value="alphabetical" type="string" />
     
-    <handler name="oninit">
-        <![CDATA[
-            this.initList();
-        ]]>
-    </handler>
+	<handler name="oninit">
+		this.initList();
+	</handler>
     
-    <method name="initialAddItem" args="object">
-        <![CDATA[
-            if ($debug) Debug.write("restrictedUserListInner::initialAddItem : ",object.publicSID);
-            
-            //Check for duplicates
-            if (object.isSuperModerator) {
-                object.lastname += " *";
+	<method name="initialAddItem" args="object">
+	<![CDATA[
+		if ($debug) Debug.write("restrictedUserListInner::initialAddItem : ",object.publicSID);
+		
+		if (object.isSuperModerator) {
+			object.lastname += " *";
+		}
+		
+		//Add item to list
+		if (this._table.renderList == null) {
+			this._table.renderList = new Array();
+		}
+		//Check for duplicates
+        var list = this._table.renderList;
+        for (var i = 0; i < list.length; ++i) {
+            if (list[i].publicSID == object.publicSID) {
+                //if ($debug) Debug.warn("Already on List, do not add twice");
+                return;
             }
-            
-            //Add item to list
-            if (this._table.renderList == null) {
-                this._table.renderList = new Array();
-            }
-            
-            object.isSelected = false;
-            this._table.renderList.push(object);
-        ]]>
-    </method>
+        }
+		
+		object.isSelected = false;
+		this._table.renderList.push(object);
+	]]>
+	</method>
     
-     <method name="addItem" args="object">
-        <![CDATA[
-            if ($debug) Debug.write("restrictedUserListInner::addItem: ",object.publicSID);
-            
-            //Check for duplicates
-            if (object.isSuperModerator) {
-                object.lastname += " *";
-            }
-            
-            object.selfItem = false;
-            //Add item to list
-            if (this._table.renderList == null) {
-                this._table.renderList = new Array();
-            }
-            
-            object.isSelected = false;
-            this._table.renderList.push(object);
-            this.sortUserList();
-            
-            this._table.scheduleRenderContent();
-            this.moderationPanel.updateIcons();
-        ]]>
-    </method>
+	<method name="addItem" args="object">
+	<![CDATA[
+		initialAddItem(object);
+		if ($debug) Debug.write("restrictedUserListInner::addItem: ", object.publicSID);
+		
+		object.selfItem = canvas.publicSID == object.publicSID;
+		this.sortUserList();
+		
+		this._table.scheduleRenderContent();
+		this.moderationPanel.updateIcons();
+	]]>
+	</method>
     
     <method name="sortAndRenderList">
         this.sortUserList();
