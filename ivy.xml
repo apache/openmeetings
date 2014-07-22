@@ -52,22 +52,22 @@
 		<dependency org="asm" name="asm" rev="3.1" transitive="false">
 			<include type="jar" />
 		</dependency>
-		<dependency org="org.springframework" name="spring-aspects" rev="4.0.3.RELEASE" transitive="false">
+		<dependency org="org.springframework" name="spring-aspects" rev="4.0.6.RELEASE" transitive="false">
 			<include type="jar" />
 		</dependency>
-		<dependency org="org.springframework" name="spring-jdbc" rev="4.0.3.RELEASE" transitive="false">
+		<dependency org="org.springframework" name="spring-jdbc" rev="4.0.6.RELEASE" transitive="false">
 			<include type="jar" />
 		</dependency>
-		<dependency org="org.springframework" name="spring-orm" rev="4.0.3.RELEASE" transitive="false">
+		<dependency org="org.springframework" name="spring-orm" rev="4.0.6.RELEASE" transitive="false">
 			<include type="jar" />
 		</dependency>
-		<dependency org="org.springframework" name="spring-tx" rev="4.0.3.RELEASE" transitive="false">
+		<dependency org="org.springframework" name="spring-tx" rev="4.0.6.RELEASE" transitive="false">
 			<include type="jar" />
 		</dependency>
-		<dependency org="org.springframework" name="spring-webmvc" rev="4.0.3.RELEASE" transitive="false">
+		<dependency org="org.springframework" name="spring-webmvc" rev="4.0.6.RELEASE" transitive="false">
 			<include type="jar" />
 		</dependency>
-		<dependency org="org.springframework" name="spring-context-support" rev="4.0.3.RELEASE" transitive="false">
+		<dependency org="org.springframework" name="spring-context-support" rev="4.0.6.RELEASE" transitive="false">
 			<include type="jar" />
 		</dependency>
 		<!-- include type="bundle" / FIXME unable to get openjpa without  sources -->
@@ -229,49 +229,49 @@
 		<dependency org="org.simpleframework" name="simple-xml" rev="2.7" conf="openmeetings->*" transitive="false">
 			<include type="jar" />
 		</dependency>
-		<dependency org="org.apache.wicket" name="wicket-request" rev="6.14.0" conf="openmeetings->*" transitive="false">
+		<dependency org="org.apache.wicket" name="wicket-request" rev="6.16.0" conf="openmeetings->*" transitive="false">
 			<include type="jar" />
 		</dependency>
-		<dependency org="org.apache.wicket" name="wicket-util" rev="6.14.0" conf="openmeetings->*" transitive="false">
+		<dependency org="org.apache.wicket" name="wicket-util" rev="6.16.0" conf="openmeetings->*" transitive="false">
 			<include type="jar" />
 		</dependency>
-		<dependency org="org.apache.wicket" name="wicket-core" rev="6.14.0" conf="openmeetings->*" transitive="false">
+		<dependency org="org.apache.wicket" name="wicket-core" rev="6.16.0" conf="openmeetings->*" transitive="false">
 			<include type="jar" />
 		</dependency>
-		<dependency org="org.apache.wicket" name="wicket-auth-roles" rev="6.14.0" conf="openmeetings->*" transitive="false">
+		<dependency org="org.apache.wicket" name="wicket-auth-roles" rev="6.16.0" conf="openmeetings->*" transitive="false">
 			<include type="jar" />
 		</dependency>
-		<dependency org="org.apache.wicket" name="wicket-ioc" rev="6.14.0" conf="openmeetings->*" transitive="false">
+		<dependency org="org.apache.wicket" name="wicket-ioc" rev="6.16.0" conf="openmeetings->*" transitive="false">
 			<include type="jar" />
 		</dependency>
-		<dependency org="org.apache.wicket" name="wicket-extensions" rev="6.14.0" conf="openmeetings->*" transitive="false">
+		<dependency org="org.apache.wicket" name="wicket-extensions" rev="6.16.0" conf="openmeetings->*" transitive="false">
 			<include type="jar" />
 		</dependency>
-		<dependency org="org.apache.wicket" name="wicket-datetime" rev="6.14.0" conf="openmeetings->*" transitive="false">
+		<dependency org="org.apache.wicket" name="wicket-datetime" rev="6.16.0" conf="openmeetings->*" transitive="false">
 			<include type="jar" />
 		</dependency>
 		<dependency org="joda-time" name="joda-time" rev="2.3" conf="openmeetings->*" transitive="false">
 			<include type="jar" />
 		</dependency>
-		<dependency org="org.apache.wicket" name="wicket-devutils" rev="6.14.0" conf="openmeetings->*" transitive="false">
+		<dependency org="org.apache.wicket" name="wicket-devutils" rev="6.16.0" conf="openmeetings->*" transitive="false">
 			<include type="jar" />
 		</dependency>
-		<dependency org="org.apache.wicket" name="wicket-native-websocket-core" rev="6.14.0" conf="openmeetings->*" transitive="false">
+		<dependency org="org.apache.wicket" name="wicket-native-websocket-core" rev="6.16.0" conf="openmeetings->*" transitive="false">
 			<include type="jar" />
 		</dependency>
-		<dependency org="org.apache.wicket" name="wicket-native-websocket-tomcat" rev="6.14.0" conf="openmeetings->*" transitive="false">
+		<dependency org="org.apache.wicket" name="wicket-native-websocket-tomcat" rev="6.16.0" conf="openmeetings->*" transitive="false">
 			<include type="jar" />
 		</dependency>
-		<dependency org="com.googlecode.wicket-jquery-ui" name="wicket-jquery-ui-core" rev="6.14.0" conf="openmeetings->*" transitive="false">
+		<dependency org="com.googlecode.wicket-jquery-ui" name="wicket-jquery-ui-core" rev="6.16.0" conf="openmeetings->*" transitive="false">
 			<include type="jar" />
 		</dependency>
-		<dependency org="com.googlecode.wicket-jquery-ui" name="wicket-jquery-ui" rev="6.14.0" conf="openmeetings->*" transitive="false">
+		<dependency org="com.googlecode.wicket-jquery-ui" name="wicket-jquery-ui" rev="6.16.0" conf="openmeetings->*" transitive="false">
             <include type="jar" />
         </dependency>
-		<dependency org="com.googlecode.wicket-jquery-ui" name="wicket-jquery-ui-calendar" rev="6.14.0" conf="openmeetings->*" transitive="false">
+		<dependency org="com.googlecode.wicket-jquery-ui" name="wicket-jquery-ui-calendar" rev="6.16.0" conf="openmeetings->*" transitive="false">
 			<include type="jar" />
 		</dependency>
-		<dependency org="com.googlecode.wicket-jquery-ui" name="wicket-jquery-ui-plugins" rev="6.14.0" conf="openmeetings->*" transitive="false">
+		<dependency org="com.googlecode.wicket-jquery-ui" name="wicket-jquery-ui-plugins" rev="6.16.0" conf="openmeetings->*" transitive="false">
 			<include type="jar" />
 		</dependency>
 		<dependency org="ro.fortsoft.wicket.dashboard" name="wicket-dashboard-core" rev="0.10" conf="openmeetings->*" transitive="false">
@@ -283,10 +283,10 @@
 		<dependency org="com.github.svenmeier.wicket-dnd" name="wicket-dnd" rev="0.6.0" conf="openmeetings->*" transitive="false">
 			<include type="jar" />
 		</dependency>
-		<dependency org="org.wicketstuff" name="wicketstuff-urlfragment" rev="6.14.0" conf="openmeetings->*" transitive="false">
+		<dependency org="org.wicketstuff" name="wicketstuff-urlfragment" rev="6.16.0" conf="openmeetings->*" transitive="false">
 			<include type="jar" />
 		</dependency>
-		<dependency org="org.wicketstuff" name="wicketstuff-html5" rev="6.14.0" conf="openmeetings->*" transitive="false">
+		<dependency org="org.wicketstuff" name="wicketstuff-html5" rev="6.16.0" conf="openmeetings->*" transitive="false">
 			<include type="jar" />
 		</dependency>
 		<dependency org="com.vaynberg.wicket.select2" name="wicket-select2" rev="2.2.2" conf="openmeetings->*" transitive="false">
