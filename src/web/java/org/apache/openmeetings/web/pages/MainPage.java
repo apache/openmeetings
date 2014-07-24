@@ -146,6 +146,10 @@ public class MainPage extends BaseInitedPage {
 	}
 	
 	public void updateContents(OmUrlFragment f, AjaxRequestTarget target) {
+		updateContents(f, target, true);
+	}
+	
+	public void updateContents(OmUrlFragment f, AjaxRequestTarget target, boolean updateFragment) {
 		BasePanel panel = getPanel(f.getArea(), f.getType());
 		if (panel != null) {
 			Component prev = contents.get(CHILD_ID);
@@ -153,8 +157,10 @@ public class MainPage extends BaseInitedPage {
 				((BasePanel)prev).cleanup(target);
 			}
 			target.add(contents.replace(panel));
-			UrlFragment uf = new UrlFragment(target);
-			uf.set(f.getArea().name(), f.getType());
+			if (updateFragment) {
+				UrlFragment uf = new UrlFragment(target);
+				uf.set(f.getArea().name(), f.getType());
+			}
 			panel.onMenuPanelLoad(target);
 		}
 		if (dev != null){
@@ -167,7 +173,7 @@ public class MainPage extends BaseInitedPage {
 		OmUrlFragment uf = getUrlFragment(params);
 		if (uf != null) {
 			areaBehavior.stop(target);
-			updateContents(uf, target);
+			updateContents(uf, target, false);
 		}
 	}
 }
