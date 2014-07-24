@@ -23,6 +23,8 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Date;
 import java.util.Properties;
 import java.util.Set;
@@ -163,12 +165,23 @@ public class LdapLoginManagement {
 		log.debug("LdapLoginmanagement.doLdapLogin");
 
 		Properties config = new Properties();
+		InputStream pis = null;
 		try {
 			LdapConfig ldapConfig = ldapConfigDao.get(domainId);
-			config.load(new FileInputStream(new File(OmFileHelper.getConfDir(), ldapConfig.getConfigFileName())));
+			pis = new FileInputStream(new File(OmFileHelper.getConfDir(), ldapConfig.getConfigFileName()));
+			config.load(pis);
 		} catch (Exception e) {
 			log.error("Error on LdapLogin : Configurationdata couldnt be retrieved!");
 			return null;
+		} finally {
+			if (pis != null) {
+				try {
+					pis.close();
+				} catch (IOException e) {
+					log.error("Error while closing ldap config file");
+					return null;
+				}
+			}
 		}
 		if (config.isEmpty()) {
 			log.error("Error on LdapLogin : Configurationdata couldnt be retrieved!");
