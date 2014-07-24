@@ -37,7 +37,7 @@
 	<handler name="oninit">
 		<![CDATA[
 		    if ($debug) Debug.write("this.picture_uri :: ",this.picture_uri);
-            this._userpic.setAttribute('src', canvas.getPictureUrl(this.refObj.picture_uri, '&moduleName=chat')); 
+            this._userpic.setAttribute('src', canvas.getPictureUrl(this.picture_uri, '&moduleName=chat&remoteUserid='+this.user_id)); 
 	        
 	        if(canvas.isrtl == 'true'){
 	         	if($debug) Debug.write("chatTabItemEmoticons RTL is set");

@@ -73,7 +73,7 @@
     
     <method name="fadeText" args="ignore=null"> 
         <![CDATA[
-            this._userpic.setAttribute('src', canvas.getPictureUrl(this.refObj.picture_uri, '&moduleName=chat')); 
+            this._userpic.setAttribute('src', canvas.getPictureUrl(this.refObj.picture_uri, '&moduleName=chat&remoteUserid='+this.user_id)); 
         ]]>          
     </method>
      
