@@ -75,6 +75,10 @@
                 <div class="navigation_comment"><i >Gets a list of flv recordings</i></div>
                 </div>
                                                <div>
+                <a href="#getRecordingsByExternalType"><b>getRecordingsByExternalType</b></a><br/>
+                <div class="navigation_comment"><i >Gets a list of recordings</i></div>
+                </div>
+                                               <div>
                 <a href="#getFlvRecordingByExternalRoomType"><b>getFlvRecordingByExternalRoomType</b></a><br/>
                 <div class="navigation_comment"><i >Gets a list of flv recordings</i></div>
                 </div>
@@ -530,6 +534,58 @@
     			    			<br/>
     			REST Sample Call/URL:<br/>
     			    			    				    								    				    												<a href="http://localhost:5080/openmeetings/services/RoomService/getFlvRecordingByExternalRoomTypeByList?SID=VALUE&externalRoomType=VALUE">http://localhost:5080/openmeetings/services/RoomService/getFlvRecordingByExternalRoomTypeByList?SID=VALUE&amp;externalRoomType=VALUE</a>
+    		  </div>
+    	   				    		      <div class="method">
+		        <div class="method_header">
+		        <div style="margin-left:10px">
+    			<a name="getRecordingsByExternalType" ><b>getRecordingsByExternalType</b></a>
+    			</div>
+    			</div>
+    			
+    			Method: <i>getRecordingsByExternalType (
+    			    			    			       			   String SID
+    			       			    			       			     , 
+    			       			   String externalType
+    			       			    			)
+    			</i><br/>
+    			<p>
+    			  Gets a list of recordings
+    			</p>
+    			<p>
+                  Return Type: java.util.List<org.apache.openmeetings.db.entity.record.FlvRecording>
+                </p>
+    			<p>Params:</p>
+    			    			
+    				    			<table rules="all" border="1">
+	    			   <thead>
+	    			   <tr>
+	    			     <th width="200" align="left">Type</th>
+	    			     <th width="200" align="left">Fieldname</th>
+	    			     <th width="400" align="left">Description</th>
+	    			   </tr>
+	    			   </thead>
+	    			   <tbody>
+	    			   	    			   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">SID</td>
+	                     <td valign="top">The SID of the User. This SID must be marked as logged-in</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">externalType</td>
+	                     <td valign="top">externalType specified when creating room or user</td>
+	                   </tr>
+	                   
+	                   	                   	                   </tbody>
+	    			</table>
+    			    			<br/>
+    			REST Sample Call/URL:<br/>
+    			    			    				    								    				    												<a href="http://localhost:5080/openmeetings/services/RoomService/getRecordingsByExternalType?SID=VALUE&externalType=VALUE">http://localhost:5080/openmeetings/services/RoomService/getRecordingsByExternalType?SID=VALUE&amp;externalType=VALUE</a>
     		  </div>
     	   				    		      <div class="method">
 		        <div class="method_header">

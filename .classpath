@@ -34,7 +34,6 @@
 			<attribute name="org.eclipse.jst.component.nondependency" value=""/>
 		</attributes>
 	</classpathentry>
-	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="con" path="org.apache.ivyde.eclipse.cpcontainer.IVYDE_CONTAINER/?project=Openmeetings+3.0.x&amp;ivyXmlPath=ivy.xml&amp;confs=*&amp;ivySettingsPath=%24%7Bworkspace_loc%3AOpenmeetings+3.0.x%2Fivysettings.xml%7D&amp;loadSettingsOnDemand=false&amp;propertyFiles="/>
 	<classpathentry kind="lib" path="build/lib/java_16_tools.jar"/>
 	<classpathentry kind="lib" path="build/red5/server/dist/lib/red5-io-1.0.4-SNAPSHOT.jar"/>
@@ -63,5 +62,10 @@
 	<classpathentry kind="lib" path="build/red5/server/dist/lib/bcprov-jdk15on-1.50.jar"/>
 	<classpathentry kind="lib" path="build/red5/server/dist/lib/cglib-nodep-2.2.2.jar"/>
 	<classpathentry kind="lib" path="build/red5/client/dist/red5-client-jar-1.0.2-RC2.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.7">
+		<attributes>
+			<attribute name="owner.project.facets" value="java"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="output" path="build/classes/eclipse"/>
 </classpath>

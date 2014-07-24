@@ -24,6 +24,8 @@ import static org.junit.Assert.fail;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 
 import org.apache.openmeetings.backup.BackupImport;
 import org.apache.openmeetings.data.conference.RoomManager;
@@ -76,8 +78,10 @@ public class TestOldBackups extends AbstractJUnitDefaults {
 		for (File backup : backupsHome.listFiles()) {
 			String name = backup.getName();
 			log.debug("Import of backup file : '" + name + "' is started ...");
+			InputStream is = null;
 			try {
-				backupController.performImport(new FileInputStream(backup));
+				is = new FileInputStream(backup);
+				backupController.performImport(is);
 				long newOrgCount = organisationDao.count();
 				long newUserCount = usersDao.count();
 				long newRoomCount = roomDao.count();
@@ -99,6 +103,14 @@ public class TestOldBackups extends AbstractJUnitDefaults {
 				meetingMembersCount = newMeetingMembersCount;
 			} catch (Exception e) {
 				throw new RuntimeException("Unexpected exception while importing backup: " + name, e);
+			} finally {
+				if (is != null) {
+					try {
+						is.close();
+					} catch (IOException e) {
+						throw new RuntimeException("Error while closing ldap config file", e);
+					}
+				}
 			}
 			log.debug("... Done.");
 		}

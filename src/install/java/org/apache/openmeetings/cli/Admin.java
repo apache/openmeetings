@@ -26,6 +26,8 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.USER_PASSWORD_M
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Date;
 import java.util.Map;
@@ -625,11 +627,21 @@ public class Admin {
 	}
 	
 	private void restoreOm(String ctxName, File backup) {
+		InputStream is = null;
 		try {
 			BackupImport importCtrl = getApplicationContext(ctxName).getBean(BackupImport.class);
-			importCtrl.performImport(new FileInputStream(backup));
+			is = new FileInputStream(backup);
+			importCtrl.performImport(is);
 		} catch (Exception e) {
 			handleError("Restore failed", e);
+		} finally {
+			if (is != null) {
+				try {
+					is.close();
+				} catch (IOException e) {
+					throw new RuntimeException("Error while closing ldap config file", e);
+				}
+			}
 		}
 	}
 	

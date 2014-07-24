@@ -236,14 +236,15 @@ public class ScreenController {
 	private void addKeystore(Context ctx) {
 		log.debug("RTMP Sharer Keystore :: start");
 		StringBuilder sb = new StringBuilder();
-		FileInputStream fis = null;
+		FileInputStream fis = null, ris = null;
 		try {
 			File conf = new File(OmFileHelper.getRootDir(), "conf");
 
 			File keyStore = new File(conf, "keystore.screen");
 			if (keyStore.exists()) {
 				Properties red5Props = new Properties();
-				red5Props.load(new FileInputStream(new File(conf, "red5.properties")));
+				ris = new FileInputStream(new File(conf, "red5.properties"));
+				red5Props.load(ris);
 				
 				byte keyBytes[] = new byte[(int)keyStore.length()];
 				fis = new FileInputStream(keyStore);
@@ -274,6 +275,13 @@ public class ScreenController {
 			if (fis != null) {
 				try {
 					fis.close();
+				} catch (IOException e) {
+					// no op
+				}
+			}
+			if (ris != null) {
+				try {
+					ris.close();
 				} catch (IOException e) {
 					// no op
 				}

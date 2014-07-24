@@ -85,8 +85,7 @@ public class IcalHandler {
 		
 		icsCalendar = new net.fortuna.ical4j.model.Calendar();
 
-		icsCalendar.getProperties().add(
-				new ProdId("-//Events Calendar//iCal4j 1.0//EN"));
+		icsCalendar.getProperties().add(new ProdId("-//Events Calendar//iCal4j 1.0//EN"));
 		icsCalendar.getProperties().add(Version.VERSION_2_0);
 		icsCalendar.getProperties().add(CalScale.GREGORIAN);
 		
@@ -117,8 +116,7 @@ public class IcalHandler {
 			HashMap<String, String> organizer, String uid, java.util.TimeZone normalTimeZone)
 			throws Exception {
 
-		TimeZoneRegistry registry = TimeZoneRegistryFactory.getInstance()
-				.createRegistry();
+		TimeZoneRegistry registry = TimeZoneRegistryFactory.getInstance().createRegistry();
 		
 		TimeZone timeZone = registry.getTimeZone(normalTimeZone.getID());
 
@@ -187,11 +185,7 @@ public class IcalHandler {
 		HashMap<String, String> oneRecord = new HashMap<String, String>();
 		oneRecord.put("uri", "mailto:" + emailAdress);
 		oneRecord.put("cn", displayName);
-
-		if (chair)
-			oneRecord.put("chair", "1");
-		else
-			oneRecord.put("chair", "0");
+		oneRecord.put("chair", chair ? "1" : "0");
 
 		return oneRecord;
 
@@ -205,14 +199,15 @@ public class IcalHandler {
 	// ------------------------------------------------------------------------------------------
 	public void writeDataToFile(String filerPath) throws Exception {
 
-		if (!filerPath.endsWith(".ics"))
+		if (!filerPath.endsWith(".ics")) {
 			filerPath = filerPath + ".ics";
+		}
 
 		FileOutputStream fout = new FileOutputStream(filerPath);
 
 		CalendarOutputter outputter = new CalendarOutputter();
 		outputter.output(icsCalendar, fout);
-
+		fout.close();
 	}
 
 	// ------------------------------------------------------------------------------------------
