@@ -50,7 +50,7 @@
   <logger name="org.apache.axis2.enterprise" level="ERROR"/>
   <logger name="httpclient.wire.header" level="ERROR"/>
   <logger name="org.apache.directory" level="INFO"/>
-  <logger name="org.apache.mina.filter.ssl.SslFilter" level="OFF"/>
+  <logger name="org.apache.mina.filter.ssl.SslFilter" level="ERROR"/>
   <root level="DEBUG">
     <appender-ref ref="FLOG2"/>
     <appender-ref ref="CONSOLE2"/>
