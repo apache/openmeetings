@@ -56,7 +56,7 @@
 					<dependency>
 						<groupId>org.apache.flex</groupId>
 						<artifactId>compiler</artifactId>
-						<version>4.12.1</version>
+						<version>4.12.1.20140427</version>
 						<type>pom</type>
 					</dependency>
 				</dependencies>
@@ -85,7 +85,7 @@
 		<dependency>
 			<groupId>org.apache.flex</groupId>
 			<artifactId>framework</artifactId>
-			<version>4.12.1</version>
+			<version>4.12.1.20140427</version>
 			<type>pom</type>
 		</dependency>
 		<dependency>

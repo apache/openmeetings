@@ -69,6 +69,7 @@
 				<item name="Bugs / Issues" href="/issue-tracking.html" />
 				<item name="Dependencies" href="/dependencies.html" />
 				<item name="Continuous Integration" href="/integration.html" />
+				<item name="Build Instructions 3.0.x" href="/BuildInstructions_3.0.x.html" />
 				<item name="Build Instructions" href="/BuildInstructions.html" />
 				<item name="JUnit Testing" href="/JUnitTesting.html" />
 				<item name="Manual Testing" href="/ManualTesting.html" />
