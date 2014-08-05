@@ -18,6 +18,8 @@
  */
 package org.apache.openmeetings.doc;
 
+import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.util.ArrayList;
@@ -26,6 +28,8 @@ import java.util.Map;
 
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
+import org.red5.logging.Red5LoggerFactory;
+import org.slf4j.Logger;
 
 import com.sun.javadoc.ClassDoc;
 import com.sun.javadoc.RootDoc;
@@ -33,6 +37,8 @@ import com.sun.javadoc.Tag;
 import com.sun.tools.doclets.standard.Standard;
 
 public class WebServiceDoclet extends Standard {
+	private static final Logger log = Red5LoggerFactory.getLogger(WebServiceDoclet.class, webAppRootKey);
+	
 	static final String baseTemplatePath = "xdocs";
 	static final String basePath = "docs";
 	static final String templateName = "ApiMethodsTemplate.vm";
@@ -98,7 +104,7 @@ public class WebServiceDoclet extends Standard {
 			
 
 		} catch (Exception err) {
-			err.printStackTrace();
+			log.error("[start]", err);
 		}
 
 		// No error processing done, simply return true.
