@@ -36,14 +36,14 @@
 		<wicket.mode>DEPLOYMENT</wicket.mode>
 		<om.quick.build>false</om.quick.build>
 		<db>derby</db>
-		<spring.version>4.0.3.RELEASE</spring.version>
+		<spring.version>4.0.6.RELEASE</spring.version>
 		<junit.version>4.11</junit.version>
 		<maven.javadoc.version>2.9.1</maven.javadoc.version>
 		<maven.surefire.version>2.17</maven.surefire.version>
 		<maven-site.version>3.4</maven-site.version>
 		<wicket.version>6.16.0</wicket.version>
 		<wicket.jqueryui.version>6.16.0</wicket.jqueryui.version>
-		<red5-server.version>1.0.2-RELEASE</red5-server.version>
+		<red5-server.version>1.0.3-RELEASE</red5-server.version>
 		<batik.version>1.7</batik.version>
 		<commons-transaction.version>1.2</commons-transaction.version>
 		<ical4j.version>1.0.5.2</ical4j.version>
@@ -586,7 +586,7 @@
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-assembly-plugin</artifactId>
-					<version>2.4</version>
+					<version>2.4.1</version>
 				</plugin>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>

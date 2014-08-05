@@ -27,6 +27,7 @@
 				<exclude>webapps/installer/**</exclude>
 				<exclude>webapps/live/**</exclude>
 				<exclude>webapps/vod/**</exclude>
+				<exclude>webapps/chat/**</exclude>
 				<exclude>webapps/root/index.html</exclude>
 				<exclude>*.sh</exclude>
 			</excludes>
