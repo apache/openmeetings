@@ -42,6 +42,7 @@ import org.apache.openmeetings.db.entity.record.FlvRecordingMetaData.Status;
 import org.apache.openmeetings.db.entity.record.FlvRecordingMetaDelta;
 import org.apache.openmeetings.util.process.ConverterProcessResult;
 import org.apache.openmeetings.util.process.ProcessHelper;
+import org.red5.io.flv.impl.FLVWriter;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -193,7 +194,6 @@ public abstract class BaseConverter {
 					if (maxTimestamp + TIME_TO_WAIT_FOR_FRAME < System.currentTimeMillis()) {
 						if (metaSer.exists()) {
 							log.debug("### long time without any update, trying to repair ... ");
-							/*
 							try {
 								if (FLVWriter.repair(metaSer.getCanonicalPath(), null, null) && !metaSer.exists()) {
 									metaData.setStreamStatus(Status.STOPPED);
@@ -202,7 +202,6 @@ public abstract class BaseConverter {
 							} catch (IOException e) {
 								log.error("### Error while file repairing ... ", e);
 							}
-							*/
 						} else {
 							log.debug("### long time without any update, closing ... ");
 							metaData.setStreamStatus(Status.STOPPED);
