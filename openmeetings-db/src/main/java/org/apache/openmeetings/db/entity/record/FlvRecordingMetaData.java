@@ -30,6 +30,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlType;
 
@@ -48,6 +50,14 @@ import org.simpleframework.xml.Root;
  * @author sebawagner
  */
 @Entity
+@NamedQueries({ 
+	@NamedQuery(name = "getMetaById", query = "SELECT c FROM FlvRecordingMetaData c WHERE c.id = :id")
+	, @NamedQuery(name = "getMetaByRecording", query = "SELECT c FROM FlvRecordingMetaData c WHERE c.flvRecording.id = :recordingId AND c.deleted = false")
+	, @NamedQuery(name = "getAudioMetaByRecording", query = "SELECT c FROM FlvRecordingMetaData c WHERE c.flvRecording.id = :recordingId "
+			+ "AND c.screenData = false AND c.streamStatus <> :none AND (c.isAudioOnly = true OR (c.isAudioOnly = false AND c.isVideoOnly = false))")
+	, @NamedQuery(name = "getScreenMetaByRecording", query = "SELECT c FROM FlvRecordingMetaData c WHERE c.flvRecording.id = :recordingId "
+			+ "AND c.screenData = true")
+})
 @Table(name = "flvrecording_metadata")
 @Root(name = "flvrecordingmetadata")
 public class FlvRecordingMetaData implements IDataProviderEntity {
@@ -129,10 +139,6 @@ public class FlvRecordingMetaData implements IDataProviderEntity {
 	@Column(name = "interiew_pod_id")
 	@Element(data = true, required = false)
 	private Integer interiewPodId;
-
-	@Column(name = "initial_gap_seconds")
-	@Element(data = true, required = false)
-	private Integer initialGapSeconds;
 
 	/**
 	 * this is only STOPPED when the asynchronous stream writer's have completed to write packets to the file.
@@ -276,14 +282,6 @@ public class FlvRecordingMetaData implements IDataProviderEntity {
 
 	public void setInteriewPodId(Integer interiewPodId) {
 		this.interiewPodId = interiewPodId;
-	}
-
-	public Integer getInitialGapSeconds() {
-		return initialGapSeconds;
-	}
-
-	public void setInitialGapSeconds(Integer initialGapSeconds) {
-		this.initialGapSeconds = initialGapSeconds;
 	}
 
 	public Status getStreamStatus() {

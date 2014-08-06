@@ -65,12 +65,10 @@ public class StreamVideoWriter extends BaseStreamWriter {
 
 			if (startedSessionScreenTimeDate == null) {
 				startedSessionScreenTimeDate = virtualTime;
-				// Calculate the delta between the initial start and the first packet data
-				initialDelta = startedSessionScreenTimeDate.getTime() - startedSessionTimeDate.getTime();
 
-				// This is important for the Interview Post Processing to get the time between starting the stream and
-				// the actual Access to the webcam by the Flash Security Dialog
-				metaDataDao.updateFlvRecordingMetaDataInitialGap(metaDataId, initialDelta);
+				FlvRecordingMetaData metaData = metaDataDao.get(metaDataId);
+				metaData.setRecordStart(virtualTime);
+				metaDataDao.update(metaData);
 			}
 
 			if (startTimeStamp == -1) {
@@ -96,14 +94,5 @@ public class StreamVideoWriter extends BaseStreamWriter {
 
 	@Override
 	protected void internalCloseStream() {
-		try {
-			// Add Delta in the beginning, this Delta is the Gap between the device chosen and when the User hits the
-			// button in the Flash Security Warning
-			FlvRecordingMetaData metaData = metaDataDao.get(metaDataId);
-			metaData.setRecordStart(new Date(metaData.getRecordStart().getTime() + initialDelta));
-			metaDataDao.update(metaData);
-		} catch (Exception err) {
-			log.error("[internalCloseStream]", err);
-		}
 	}
 }

@@ -250,7 +250,8 @@ public abstract class BaseConverter {
 	
 				metaData.setAudioIsValid(false);
 				if (inputFlvFile.exists()) {
-					String[] argv = new String[] {getPathToFFMPEG(), "-y", "-async", "1", "-i", inputFlvFile.getCanonicalPath(), outputWav};
+					String[] argv = new String[] {getPathToFFMPEG(), "-y", "-i", inputFlvFile.getCanonicalPath()
+							, "-af", "aresample=32k", outputWav};
 	
 					returnLog.add(ProcessHelper.executeScript("stripAudioFromFLVs", argv));
 	

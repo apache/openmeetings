@@ -27,6 +27,7 @@ import java.util.Date;
 import org.apache.mina.core.buffer.IoBuffer;
 import org.apache.openmeetings.db.dao.record.FlvRecordingMetaDataDao;
 import org.apache.openmeetings.db.dao.record.FlvRecordingMetaDeltaDao;
+import org.apache.openmeetings.db.entity.record.FlvRecordingMetaData;
 import org.apache.openmeetings.db.entity.record.FlvRecordingMetaDelta;
 import org.red5.io.ITag;
 import org.red5.io.flv.impl.Tag;
@@ -120,6 +121,10 @@ public class StreamAudioWriter extends BaseStreamWriter {
 
 					// That will be not bigger then long value
 					startTimeStamp = streampacket.getTimestamp();
+				
+					FlvRecordingMetaData metaData = metaDataDao.get(metaDataId);
+					metaData.setRecordStart(virtualTime);
+					metaDataDao.update(metaData);
 				}
 
 				lastStreamPacketTimeStamp = streampacket.getTimestamp();
