@@ -1200,6 +1200,13 @@
 		<!-- FIXME need to be removed as soon as JAudioTagger (will be officially Dual Licensed) -->
 		<xslt in="${red5.lib}/conf/red5-common.xml" out="${red5.lib}/conf/red5-common1.xml" style="build-jaudiotagger.xsl" />
 		<move file="${red5.lib}/conf/red5-common1.xml" tofile="${red5.lib}/conf/red5-common.xml" />
+		<copy file="${red5.server.dir}/src/main/server/conf/red5.properties" todir="${red5.lib}/conf" overwrite="true" force="true">
+			<filterchain>
+				<tokenfilter>
+					<replaceregex pattern="^[ \t]*rtmp.max_handling_time[ \t]*=.*$" replace="rtmp.max_handling_time=2000"/>
+				</tokenfilter>
+			</filterchain>
+		</copy>
 		<delete>
 			<fileset dir="${red5.server.lib}" includes="jaudiotagger*.jar" />
 		</delete>
