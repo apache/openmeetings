@@ -2,6 +2,77 @@ Apache OpenMeetings Change Log
 
 See http://issues.apache.org/jira/browse/OPENMEETINGS-* (where * is the number of the issue below)
 
+
+Release Notes - Openmeetings - Version 3.0.3
+================================================================================================================
+
+** Bug
+    * [OPENMEETINGS-270] - MemoryLeak / Dead-Lock in FlvRecorderConverter
+    * [OPENMEETINGS-292] - Inviting people during conference
+    * [OPENMEETINGS-409] - Interview Room (2)
+    * [OPENMEETINGS-452] - LDAP issue. Cannot relogin with user that already was logined before and then logged out
+    * [OPENMEETINGS-532] - Generated hash issue
+    * [OPENMEETINGS-616] - Openmeetings for Drupal got a 500 error
+    * [OPENMEETINGS-680] - The "," symbol is used for the multiple e-mail instead of standard ";" symbol
+    * [OPENMEETINGS-683] - Somtimes vido frame is not visible for other users in the room
+    * [OPENMEETINGS-686] - Recording faild when pause is used
+    * [OPENMEETINGS-697] - Authentification Ldap
+    * [OPENMEETINGS-809] - Global chat issues in rooms
+    * [OPENMEETINGS-888] - Room name is not translated correctly in the "My room" widget
+    * [OPENMEETINGS-915] - Regression in 3.0: Incorrect moderator list update in the room screen.
+    * [OPENMEETINGS-918] - Contacts should not be added to usergroup
+    * [OPENMEETINGS-931] - AD LDAP Authentication on empty install organization choice after first logon: empty list
+    * [OPENMEETINGS-986] - Oauth2.0 Logon Not Working
+    * [OPENMEETINGS-1007] - Users with externalUserId and externaluserType <> null can't login
+    * [OPENMEETINGS-1012] - Reverted timezone is set by default in invitation window
+    * [OPENMEETINGS-1013] - Profile pictures are not displayed to invited user
+    * [OPENMEETINGS-1015] - Browser time zone is not selected correctly in the invitation window until all java timezones are loaded
+    * [OPENMEETINGS-1019] - RemoteControl: problem with sql
+    * [OPENMEETINGS-1020] - create new user after adding user does not add to DB
+    * [OPENMEETINGS-1022] - cliAdmin is broken (NPE + exclude-files)
+    * [OPENMEETINGS-1023] - ChatMessages are not imported
+    * [OPENMEETINGS-1024] - Add user admin dropdown is broken when postgres is used
+    * [OPENMEETINGS-1026] - Moderator rights are not availble for admin user if enter to the room after simple user
+    * [OPENMEETINGS-1027] - Search button does not work for users
+    * [OPENMEETINGS-1029] - modifyRoomParameter SOAP/REST method is broken
+    * [OPENMEETINGS-1031] - The "New folder" dialogs moves to the bottom of the screen and becomes invisible
+    * [OPENMEETINGS-1032] - search variable in Language Editor produce java.lang.StackOverflowError
+    * [OPENMEETINGS-1034] - openmeetings start always fails with postgresql db on debian
+    * [OPENMEETINGS-1035] - "ant -Ddb=postgres" always fails
+    * [OPENMEETINGS-1037] - LDAP passwords are being printed to the log
+    * [OPENMEETINGS-1039] - Interview recording is broken if stop-on-close
+    * [OPENMEETINGS-1042] - .ppt file not open when i upload 
+    * [OPENMEETINGS-1048] - Appointement owner has no moderation rights
+    * [OPENMEETINGS-1050] - User list is missing room users
+    * [OPENMEETINGS-1052] - Room list not displayed after room exit
+
+** Improvement
+    * [OPENMEETINGS-360] - Email invited meeting participants to display name not email address
+    * [OPENMEETINGS-942] - Searching for contacts
+    * [OPENMEETINGS-971] - Restrict attendees suggestions
+    * [OPENMEETINGS-984] - Recording auto-repairing should be added
+    * [OPENMEETINGS-1017] - ACLs should be added to the User
+    * [OPENMEETINGS-1021] - Red5 should be updated to the latest stable version
+    * [OPENMEETINGS-1028] - Red5 should be updated to the latest stable version
+    * [OPENMEETINGS-1033] - Improve ldap auth type adding SearchScope variable in config file
+    * [OPENMEETINGS-1036] - Improve User Form for include LDAP domain
+    * [OPENMEETINGS-1040] - Select2 should be used to display/set user groups
+    * [OPENMEETINGS-1049] - no default value for the "Quality of the screen sharing"/default FPS
+
+** New Feature
+    * [OPENMEETINGS-442] - om LDAP users controlled with a group
+    * [OPENMEETINGS-1011] - long time to load openmeetings activity in moodle
+
+** Task
+    * [OPENMEETINGS-964] - LDAP login should be refactored
+
+** Test
+    * [OPENMEETINGS-1025] - Problem with convert recording by ffmpeg
+
+** Wish
+    * [OPENMEETINGS-861] - SOAP user for creating & using om rooms via moodle can log into GUI of OM
+
+
 Release Notes - Openmeetings - Version 3.0.2
 ================================================================================================================
 
