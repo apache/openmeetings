@@ -125,11 +125,7 @@ public class MessagesContactsPanel extends UserPanel {
 				return "" + object;
 			}
 		});
-	private static PrivateMessageFolder NOT_MOVE_FOLDER = new PrivateMessageFolder();
-	static {
-		NOT_MOVE_FOLDER.setPrivateMessageFolderId(MOVE_CHOOSE);
-		NOT_MOVE_FOLDER.setFolderName(WebSession.getString(1243));
-	}
+	private PrivateMessageFolder NOT_MOVE_FOLDER = new PrivateMessageFolder();
 	private final DropDownChoice<PrivateMessageFolder> moveDropDown = new DropDownChoice<PrivateMessageFolder>("msgMove", Model.of(NOT_MOVE_FOLDER)
 		, Arrays.asList(NOT_MOVE_FOLDER)
 		, new IChoiceRenderer<PrivateMessageFolder>() {
@@ -243,6 +239,8 @@ public class MessagesContactsPanel extends UserPanel {
 	@SuppressWarnings("unchecked")
 	public MessagesContactsPanel(String id) {
 		super(id);
+		NOT_MOVE_FOLDER.setPrivateMessageFolderId(MOVE_CHOOSE);
+		NOT_MOVE_FOLDER.setFolderName(WebSession.getString(1243));
 		foldersModel = Model.ofList(getBean(PrivateMessageFolderDao.class).get(0, Integer.MAX_VALUE));
 		updateMoveModel();
 		add(newMessage = new MessageDialog("newMessage", new CompoundPropertyModel<PrivateMessage>(new PrivateMessage())) {

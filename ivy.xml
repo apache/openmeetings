@@ -333,7 +333,7 @@
 		<!--  END OF OPENMEETINGS -->
 
 		<!--  START OF JUNIT -->
-		<dependency org="org.springframework" name="spring-test" rev="4.0.3.RELEASE" conf="junit->*" transitive="false">
+		<dependency org="org.springframework" name="spring-test" rev="4.0.6.RELEASE" conf="junit->*" transitive="false">
 			<include type="jar" />
 		</dependency>
 		<dependency org="ant-contrib" name="ant-contrib" rev="1.0b3" conf="junit->*" transitive="false">
