@@ -31,7 +31,7 @@
 				<div>
 					<p>To build a binary release of OpenMeetings you need: </p>
 					<ul>
-						<li>Sun JDK6</li>
+						<li>Sun JDK7</li>
 						<li>Apache ANT (minimum) 1.8.3</li>
 						<li>
 							SVN Command line client (Subversion 1.7 required!)
@@ -189,7 +189,7 @@ for f in `ls -1 *.tar.gz *.zip`; do gpg --verify $f.asc; done
 
 			<subsection name="Step2 - VOTE and RESULT emails">
 				<p>
-					Send a "VOTE" to the developer mailing list including links to release artefacts.<br />
+					Send a "VOTE" to the developer mailing list including links to release artifacts.<br />
 					A VOTE always contains two parts:<br />
 					Send an email to the developer mailing list with the subject line:<br />
 					[VOTE] Apache OpenMeetings x.xx release<br />

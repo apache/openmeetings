@@ -12,8 +12,8 @@
    See the License for the specific language governing permissions and
    limitations under the License.
  -->
-<document xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="website.xsd">
-
+<document xmlns="http://maven.apache.org/XDOC/2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/XDOC/2.0 http://maven.apache.org/xsd/xdoc-2.0.xsd">
 	<properties>
 		<title>Manual Testing</title>
 		<author email="iarkh@apache.org">
@@ -364,7 +364,7 @@
 				<li>
 					<b>Site integration tests</b>
 					<ol>
-						<li>Enter OpenMeetings room from Mooddle site </li>
+						<li>Enter OpenMeetings room from Moodle site </li>
 						<li>Check that recordings link are shown on the Moodle site </li>
 						<li>Enter OpenMeetings room from Joomla site </li>
 						<li>Check that recordings link are shown on the Joomla site </li>
@@ -440,11 +440,11 @@
 										<li>Check that A's screen looks correctly for users B and C and sound is OK in the room</li>
 										<li>Stop screen sharing by user A after 5 minutes</li>
 										<li>Repeat steps 2.1.1-2.1.7 3 times</li>
-										<li>Repeat steps 2.1.1-2.1.7 one more time, but choose “Very high quality” on the step 2.1.5</li>
-										<li>Repeat steps 2.1.1-2.1.7 one more time, but choose “Medium quality” on the step 2.1.5</li>
-										<li>Repeat steps 2.1.1-2.1.7 one more time, but choose “Low quality” on the step 2.1.5</li>
+										<li>Repeat steps 2.1.1-2.1.7 one more time, but choose "Very high quality" on the step 2.1.5</li>
+										<li>Repeat steps 2.1.1-2.1.7 one more time, but choose "Medium quality" on the step 2.1.5</li>
+										<li>Repeat steps 2.1.1-2.1.7 one more time, but choose "Low quality" on the step 2.1.5</li>
 										<li>Repeat steps 2.1.1-2.1.7 one more time, but choose some random height and width on the step 2.1.5</li>
-										<li>Repeat steps 2.1.1-2.1.7 one more time, but turn the “Notify on disconnect” switch on the step 2.1.5</li>									
+										<li>Repeat steps 2.1.1-2.1.7 one more time, but turn the "Notify on disconnect" switch on the step 2.1.5</li>									
 									</ol>
 								</li>
 								<li>
@@ -457,11 +457,11 @@
 										<li>Start recording session by user A, choose High quality</li>
 										<li>Stop recording session by user A after 5 minutes</li>
 										<li>Repeat steps 2.2.1-2.2.6 3 times</li>
-										<li>Repeat steps 2.2.1-2.2.6 one more time, but choose “Very high quality” on the step 2.2.5</li>
-										<li>Repeat steps 2.2.1-2.2.6 one more time, but choose “Medium quality” on the step 2.2.5</li>
-										<li>Repeat steps 2.2.1-2.2.6 one more time, but choose “Low quality” on the step 2.2.5</li>
+										<li>Repeat steps 2.2.1-2.2.6 one more time, but choose "Very high quality" on the step 2.2.5</li>
+										<li>Repeat steps 2.2.1-2.2.6 one more time, but choose "Medium quality" on the step 2.2.5</li>
+										<li>Repeat steps 2.2.1-2.2.6 one more time, but choose "Low quality" on the step 2.2.5</li>
 										<li>Repeat steps 2.2.1-2.2.6 one more time, but choose some random height and width on the step 2.2.5</li>
-										<li>Repeat steps 2.2.1-2.2.6 one more time, but turn the “Notify on disconnect” switch on the step 2.2.5</li>
+										<li>Repeat steps 2.2.1-2.2.6 one more time, but turn the "Notify on disconnect" switch on the step 2.2.5</li>
 										<li>Go to the A's recordings list and check that all the recordings are there, processed without errors and work as expected</li>
 									</ol>
 								</li>
