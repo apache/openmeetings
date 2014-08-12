@@ -36,158 +36,144 @@
         <section name="Setup Asterisk">
 			<div>
                 Run the commands
-                <blockquote>
-                    <i>
-                    sudo apt-get update<br/>
-                    sudo apt-get install asterisk asterisk-mysql
-                    </i>
-                </blockquote>
+				<source>
+<![CDATA[
+sudo apt-get update
+sudo apt-get install asterisk asterisk-mysql
+]]>
+				</source>
             </div>
             <div>
                 Ubuntu 10.04 has broken asterisk-mysql version. For other distribution next commands not needed:
-                <blockquote>
-                    <i>
-                        aptitude purge asterisk-mysql
-                        <br/>
-                        cd /tmp
-                        <br/>
-                        apt-get build-dep asterisk-mysql
-                        <br/>
-                        apt-get -b source asterisk-mysql
-                        <br/>
-                        dpkg -i asterisk-mysql_1.6.2.0-1_i386.deb
-                    </i>
-
-                </blockquote>
+				<source>
+<![CDATA[
+aptitude purge asterisk-mysql
+cd /tmp
+apt-get build-dep asterisk-mysql
+apt-get -b source asterisk-mysql
+dpkg -i asterisk-mysql_1.6.2.0-1_i386.deb
+]]>
+				</source>
             </div>
             <div>
                 Enable asterisk mysql realtime module:<br/><br/>
                 Add string
-                <blockquote>
-                    <i>load => res_config_mysql.so</i>
-                </blockquote>
+				<source>
+<![CDATA[
+load => res_config_mysql.so
+]]>
+				</source>
                 to the /etc/asterisk/modules.conf into the "modules" section.
             </div>
             <div>
                 Configure mysql realtime module:<br/><br/>
 
                 Create file /etc/asterisk/res_mysql.conf and add lines:
-                <blockquote>
-                    <i>[general]
-                        <br/>
-                        dbhost=127.0.0.1
-                        <br/>
-                        dbname=openmeetings
-                        <br/>
-                        dbuser=root
-                        <br/>
-                        dbpass=
-                        <br/>
-                        dbport=3306
-                    </i>
-
-                </blockquote>
+				<source>
+<![CDATA[
+[general]
+dbhost=127.0.0.1
+dbname=openmeetings
+dbuser=root
+dbpass=
+dbport=3306
+]]>
+				</source>
             </div>
             <div>
                 Add next lines into the /etc/asterisk/extconfig.conf:
-                <blockquote>
-                    <i>[settings]
-                        <br/>
-                        sipusers => mysql,general,sipusers
-                        <br/>
-                        sippeers => mysql,general,sipusers
-                        <br/>
-                        extensions => mysql,general,extensions
-                        <br/>
-                        meetme => mysql,general,meetme
-                    </i>
-
-                </blockquote>
+				<source>
+<![CDATA[
+[settings]
+sipusers => mysql,general,sipusers
+sippeers => mysql,general,sipusers
+extensions => mysql,general,extensions
+meetme => mysql,general,meetme
+]]>
+				</source>
             </div>
             <div>
                 Add next lines into the /etc/asterisk/extensions.conf:
-                <blockquote>
-                    <i>[rooms]
-                        <br/>
-                        switch => Realtime/@
-                    </i>
-
-                </blockquote>
+				<source>
+<![CDATA[
+[rooms]
+switch => Realtime/@
+]]>
+				</source>
             </div>
 
             <div>
                 Restart asterisk:
-                <blockquote>
-                    <i>service asterisk restart</i>
-                </blockquote>
+				<source>
+<![CDATA[
+service asterisk restart
+]]>
+				</source>
                 Insert, for example, SIP user with name 'test':
-                <blockquote>
-                    <i>
-                        INSERT INTO sipusers (allow, context, disallow, host, name, secret) VALUES ('ulaw' , 'rooms', NULL, 'dynamic' , 'test', '12345');
-                    </i>
-                </blockquote>
+				<source>
+<![CDATA[
+INSERT INTO sipusers (allow, context, disallow, host, name, secret) VALUES ('ulaw' , 'rooms', NULL, 'dynamic' , 'test', '12345');
+]]>
+				</source>
             </div>
 		</section>
 
         <section name="Setup red5sip transport">
             <div>
-                Download red5sip from<blockquote>http://red5phone.googlecode.com/svn/branches/red5sip</blockquote>
+                Download red5sip from<tt>http://red5phone.googlecode.com/svn/branches/red5sip</tt>
             </div>
             <p>
                 Build with Apache Ant
             </p>
             <div>
                 Install jsvc:
-                <blockquote>
-                    <i>apt-get install jsvc</i>
-                </blockquote>
+				<source>
+<![CDATA[
+apt-get install jsvc
+]]>
+				</source>
             </div>
             <div>
                 Insert proper values to the /opt/red5sip/settings.properties
 
-                <blockquote>
-                    <i>red5.host - red5 server address (127.0.0.1)
-                        <br/>
-                        sip.obproxy - asterisk adderss (127.0.0.1)
-                        <br/>
-                        sip.phone - sip phone number (test)
-                        <br/>
-                        sip.authid - sip auth id (test)
-                        <br/>
-                        sip.secret - sip password (12345)
-                        <br/>
-                        sip.realm - sip realm, "asterisk" by default
-                        <br/>
-                        sip.proxy -
-                        <br/>
-                        rooms - ids of openmeetings rooms, can be, for example, 2,3,5,6
-                    </i>
-
-                </blockquote>
+				<source>
+<![CDATA[
+red5.host - red5 server address (127.0.0.1)
+sip.obproxy - asterisk adderss (127.0.0.1)
+sip.phone - sip phone number (test)
+sip.authid - sip auth id (test)
+sip.secret - sip password (12345)
+sip.realm - sip realm, "asterisk" by default
+sip.proxy -
+rooms - ids of openmeetings rooms, can be, for example, 2,3,5,6
+]]>
+				</source>
             </div>
             <div>
                 Add red5sip to autostart:
-                <blockquote>
-                    <i>ln -s /opt/red5sip/red5sip.sh /etc/init.d/red5sip
-                        <br/>
-                        chmod a+x /etc/init.d/red5sip
-                        <br/>
-                        update-rc.d /etc/init.d/red5sip defaults
-                    </i>
-
-                </blockquote>
+				<source>
+<![CDATA[
+ln -s /opt/red5sip/red5sip.sh /etc/init.d/red5sip
+chmod a+x /etc/init.d/red5sip
+update-rc.d /etc/init.d/red5sip defaults
+]]>
+				</source>
             </div>
             <div>
                 Start openmeetings
-                <blockquote>
-                    <i>service red5 start</i>
-                </blockquote>
+				<source>
+<![CDATA[
+service red5 start
+]]>
+				</source>
             </div>
             <div>
                 Start red5sip
-                <blockquote>
-                    <i>service red5sip start</i>
-                </blockquote>
+				<source>
+<![CDATA[
+service red5sip start
+]]>
+				</source>
             </div>
         </section>
 	</body>
