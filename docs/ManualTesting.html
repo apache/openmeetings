@@ -661,6 +661,130 @@
 						<li>Check that recordings link are shown on the Drupal site </li>
 					</ol>
 				</li>
+				<li>
+					<b>Extended test plan for the recordings and screen sharing testing</b>
+					<ol>
+						<li><b>Interview room testing</b>
+							<ol>
+								<li>
+									Just a 5 minutes recording:
+									<ol>
+										<li>Enter a room with user A</li>
+										<li>Enter a room with user B</li>
+										<li>Open videos for both users</li>
+										<li>Start recording with user A</li>
+										<li>Wait for 5 minutes</li>
+										<li>Stop recording by user A</li>
+										<li>Repeat steps 1.1 – 1.6 3 times</li>
+										<li>Exit room</li>
+										<li>Wait some time</li>
+										<li>Check that all the recordings are processed and work as expected</li>
+										<li>there should not be a delay between the video and sound</li>
+									</ol>
+								</li>
+								<li>Just a 30 minutes recording: do steps 1.1.1-1.16 one time; then check the result recording</li>
+								<li>Just an 1 hour recording: do steps 1.1.1-1.16 one time; then check the result recording</li>
+								<li>
+									5-minutes recording: user exits the room before the recording gets stopped
+									<ol>
+										<li>Enter a room with user A</li>
+										<li>Enter a room with user B</li>
+										<li>Open videos for both users</li>
+										<li>Start recording with user A</li>
+										<li>Exit the room by user B</li>
+										<li>Stop recording by user A</li>
+										<li>Repeat steps 1.4.1 – 1.4.6 3 times</li>
+										<li>Exit room</li>
+										<li>Wait some time</li>
+										<li>Check that all the recordings are processed and work as expected</li>
+										<li>There should not be a delay between the video and sound</li>
+									</ol>
+								</li>
+								<li>
+									5-minutes recording: user A starts recording, user B stops
+									<ol>
+										<li>Enter a room with user A</li>
+										<li>Enter a room with user B</li>
+										<li>Open videos for both users</li>
+										<li>Start recording with user A</li>
+										<li>Stop recording by user B</li>
+										<li>Exit room</li>
+										<li>Wait some time</li>
+										<li>Check that all the recordings are processed as expected</li>
+									</ol>
+								</li>
+							</ol>
+						</li>
+						<li>
+							<b>Conference room testing</b>
+							<ol>				
+								<li>
+									Screen sharing
+									<ol>
+										<li>Enter a room with user A</li>
+										<li>Enter a room with user B</li>
+										<li>Enter a room by user C</li>
+										<li>Open videos for all the users</li>
+										<li>Start screen sharing session by user A, choose High quality</li>
+										<li>Check that A's screen looks correctly for users B and C and sound is OK in the room</li>
+										<li>Stop screen sharing by user A after 5 minutes</li>
+										<li>Repeat steps 2.1.1-2.1.7 3 times</li>
+										<li>Repeat steps 2.1.1-2.1.7 one more time, but choose “Very high quality” on the step 2.1.5</li>
+										<li>Repeat steps 2.1.1-2.1.7 one more time, but choose “Medium quality” on the step 2.1.5</li>
+										<li>Repeat steps 2.1.1-2.1.7 one more time, but choose “Low quality” on the step 2.1.5</li>
+										<li>Repeat steps 2.1.1-2.1.7 one more time, but choose some random height and width on the step 2.1.5</li>
+										<li>Repeat steps 2.1.1-2.1.7 one more time, but turn the “Notify on disconnect” switch on the step 2.1.5</li>									
+									</ol>
+								</li>
+								<li>
+									Recordings
+									<ol>
+										<li>Enter a room with user A</li>
+										<li>Enter a room with user B</li>
+										<li>Enter a room by user C</li>
+										<li>Open videos for all the users</li>
+										<li>Start recording session by user A, choose High quality</li>
+										<li>Stop recording session by user A after 5 minutes</li>
+										<li>Repeat steps 2.2.1-2.2.6 3 times</li>
+										<li>Repeat steps 2.2.1-2.2.6 one more time, but choose “Very high quality” on the step 2.2.5</li>
+										<li>Repeat steps 2.2.1-2.2.6 one more time, but choose “Medium quality” on the step 2.2.5</li>
+										<li>Repeat steps 2.2.1-2.2.6 one more time, but choose “Low quality” on the step 2.2.5</li>
+										<li>Repeat steps 2.2.1-2.2.6 one more time, but choose some random height and width on the step 2.2.5</li>
+										<li>Repeat steps 2.2.1-2.2.6 one more time, but turn the “Notify on disconnect” switch on the step 2.2.5</li>
+										<li>Go to the A's recordings list and check that all the recordings are there, processed without errors and work as expected</li>
+									</ol>
+								</li>
+								<li>
+									Recordings + screen sharing: user enters the room after recording is started
+									<ol>
+										<li>Enter conference room by user A</li>
+										<li>Start screen sharing and recordings with default parameters by user A</li>
+										<li>Enter the room by user B, check that screen sharing is OK. Wait 5 minutes</li>
+										<li>Enter the room by user C, check that screen sharing is OK. Wait 5 minutes</li>
+										<li>Exit the room by user B; wait 3 minutes</li>
+										<li>Exit the room by user C; wait 3 minutes</li>
+										<li>Exit the room by user A</li>
+										<li>Repeat steps 2.3.1-2.3.7 3 times</li>
+										<li>Go to the recordings list for user A and check that all the recordings are OK and work as expected</li>
+									</ol>
+								</li>
+								<li>
+									Stress test
+									<ol>
+										<li>Enter the room by the users A, B, C, D and E</li>
+										<li>Open A, B, C, D and E videos</li>
+										<li>Start screen sharing and recordings session with high quality by user A</li>
+										<li>Wait 30 minutes</li>
+										<li>Stop screen sharing</li>
+										<li>Go to A's recordings list and check that created recording is OK</li>
+										<li>Repeat steps 2.3.1-2.3.6 3 times</li>
+									</ol>
+								</li>
+							</ol>
+						</li>
+					</ol>
+				</li>
+
 			</ol>
                             </blockquote>
       </td></tr>
