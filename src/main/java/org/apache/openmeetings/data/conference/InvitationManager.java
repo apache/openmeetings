@@ -48,6 +48,7 @@ import org.apache.openmeetings.util.crypt.MD5;
 import org.apache.openmeetings.util.crypt.ManageCryptStyle;
 import org.apache.openmeetings.util.mail.IcalHandler;
 import org.apache.openmeetings.web.mail.template.InvitationTemplate;
+import org.apache.wicket.util.string.Strings;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -209,7 +210,7 @@ public class InvitationManager implements IInvitationManager {
 	private String formatMessage(Long langId, Appointment a, TimeZone tz, String invitorName) {
 		String message = fieldManager.getString(1151L, langId) + " " + a.getTitle();
 
-		if (a.getDescription() != null &&  a.getDescription().length() != 0) {
+		if (!Strings.isEmpty(a.getDescription())) {
 			message += fieldManager.getString(1152L, langId) + a.getDescription();
 		}
 
@@ -243,7 +244,7 @@ public class InvitationManager implements IInvitationManager {
 		try {
 			String message = fieldManager.getString(1157L, langId) + a.getTitle();
 
-			if (a.getDescription() != null && a.getDescription().length() != 0) {
+			if (!Strings.isEmpty(a.getDescription())) {
 				message += fieldManager.getString(1152L, langId) + a.getDescription();
 			}
 
@@ -282,7 +283,7 @@ public class InvitationManager implements IInvitationManager {
 		try {
 			String message = fieldManager.getString(1155L, langId) + " " + a.getTitle();
 
-			if (a.getDescription().length() != 0) {
+			if (!Strings.isEmpty(a.getDescription())) {
 				message += fieldManager.getString(1152L, langId) + a.getDescription();
 			}
 
@@ -374,7 +375,7 @@ public class InvitationManager implements IInvitationManager {
 					organizerAttendee, a.getIcalId(), timezoneUtil.getTimeZone(owner));
 
 			// Writing back meetingUid
-			if (a.getIcalId() == null || a.getIcalId().length() < 1) {
+			if (Strings.isEmpty(a.getIcalId())) {
 				a.setIcalId(meetingId);
 				// TODO should it be saved ???
 			}
@@ -393,7 +394,7 @@ public class InvitationManager implements IInvitationManager {
 	 * @return
 	 */
 	public boolean sendInvitationReminderSMS(String phone, String subject, long language_id) {
-		if (phone != null && phone.length() > 0) {
+		if (!Strings.isEmpty(phone)) {
 			log.debug("sendInvitationReminderSMS to " + phone + ": " + subject);
 			try {
 				return smsHandler.sendSMS(phone, subject, language_id);
