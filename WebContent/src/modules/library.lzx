@@ -25,7 +25,6 @@
 	<include href="settings/" />
 	<include href="invitation/" />
 	<include href="dashboard/" />
-	<include href="meetings/" />
     <include href="sipintegration/" />
 
 </library>

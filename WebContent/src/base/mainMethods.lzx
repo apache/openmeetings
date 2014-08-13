@@ -251,7 +251,6 @@
         
         this.setAttribute('dashboardModuleStartScreen',canvas.myConfigSet.getPointer().xpathQuery('config/dashboardModuleStartScreen/text()'));  
         this.setAttribute('dashboardModuleCalendar',canvas.myConfigSet.getPointer().xpathQuery('config/dashboardModuleCalendar/text()'));  
-        this.setAttribute('conferenceModuleRoomList',canvas.myConfigSet.getPointer().xpathQuery('config/conferenceModuleRoomList/text()'));  
         this.setAttribute('conferenceRoomModule',canvas.myConfigSet.getPointer().xpathQuery('config/conferenceRoomModule/text()'));  
         this.setAttribute('restrictedRoomModule',canvas.myConfigSet.getPointer().xpathQuery('config/restrictedRoomModule/text()'));  
         this.setAttribute('interviewRoomModule',canvas.myConfigSet.getPointer().xpathQuery('config/interviewRoomModule/text()'));  
@@ -503,9 +502,8 @@
                 } else if (stringSub=='showSipDialer') {
                     new lz.sipDialer(canvas.main_content._content.inner);
                 } else if (stringSub=='quit') {
-                    
-                    quicklinkAct('conferenceModuleRoomList')
-                
+                    canvas.thishib.disconnect();
+                    canvas.sendViaLocalConnection(canvas.vid_lc_name, "immediateExitRoom", [true,null]);
                 } else if( stringSub == "browser_open" ){
                     var browserPanelWidth  = canvas.browserPanelWidth;
                     var browserPanelHeight = canvas.browserPanelHeight;

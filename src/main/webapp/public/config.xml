@@ -283,11 +283,6 @@ To disable AEC please specify 0.
 <moderatorModuleRoom>roomModerate</moderatorModuleRoom>
 
 
-<!-- Conference Room Modules -->
-
-<conferenceModuleRoomList>allmeetings</conferenceModuleRoomList>
-
-
 <!-- #############################################
     Conference Room
     
