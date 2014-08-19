@@ -19,6 +19,10 @@
   
 -->
 <html xmlns:wicket="http://wicket.apache.org">
+	<wicket:head>
+		<link rel="stylesheet" type="text/css" href="css/kendo/kendo.common.min.css" media="all" />
+        <link rel="stylesheet" type="text/css" href="css/kendo/kendo.default.min.css" media="all" />
+	</wicket:head>
 	<wicket:panel>
 		<div class="formSaveBar ui-widget-header">
 			<div class="formSaveButton">
@@ -29,6 +33,6 @@
 			</div>
 			<wicket:child/>
 		</div>
-		<div wicket:id="feedback" class="adminFormsFeedbackPanel">[[ feedback ]]</div>
+		<div wicket:id="feedback" class="adminFormsFeedbackPanel"></div>
 	</wicket:panel>
 </html>

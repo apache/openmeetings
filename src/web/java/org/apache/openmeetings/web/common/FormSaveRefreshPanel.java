@@ -21,22 +21,24 @@ package org.apache.openmeetings.web.common;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.panel.FeedbackPanel;
+
+import com.googlecode.wicket.jquery.core.Options;
+import com.googlecode.wicket.kendo.ui.panel.KendoFeedbackPanel;
 
 public abstract class FormSaveRefreshPanel<T> extends BasePanel {
-	private static final long serialVersionUID = 6133794730008996211L;
-	protected final FeedbackPanel feedback;
+	private static final long serialVersionUID = 1L;
+	protected final KendoFeedbackPanel feedback;
 	
 	public FormSaveRefreshPanel(String id, Form<T> form) {
 		super(id);
 		setOutputMarkupId(true);
 
-		feedback = new FeedbackPanel("feedback");
+		feedback = new KendoFeedbackPanel("feedback", new Options("button", true));
 		add(feedback.setOutputMarkupId(true));
 
 		// add a save button that can be used to submit the form via ajax
 		add(new AjaxButton("ajax-save-button", form) {
-			private static final long serialVersionUID = 839803820502260006L;
+			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
@@ -55,7 +57,7 @@ public abstract class FormSaveRefreshPanel<T> extends BasePanel {
 
 		// add a refresh button that can be used to submit the form via ajax
 		add(new AjaxButton("ajax-refresh-button", form) {
-			private static final long serialVersionUID = 839803820502260006L;
+			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
