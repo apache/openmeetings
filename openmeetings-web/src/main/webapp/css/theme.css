@@ -113,8 +113,8 @@ html, body {
 	overflow-y: auto;
 }
 #chatMessage .wysiwyg-editor {
-	height: 50px;
-	max-height: 50px;
+	height: 70px;
+	max-height: 70px;
 }
 .clickable {
 	cursor: pointer;
