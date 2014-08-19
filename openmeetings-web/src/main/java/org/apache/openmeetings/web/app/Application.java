@@ -78,7 +78,7 @@ import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.mapper.info.PageComponentInfo;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.mapper.parameter.PageParametersEncoder;
-import org.apache.wicket.settings.IPageSettings;
+import org.apache.wicket.settings.PageSettings;
 import org.apache.wicket.util.collections.ConcurrentHashSet;
 import org.apache.wicket.util.tester.WicketTester;
 import org.slf4j.Logger;
@@ -101,7 +101,7 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 	protected void init() {
 		wicketApplicationName = super.getName();
 		getSecuritySettings().setAuthenticationStrategy(new OmAuthenticationStrategy());
-		IPageSettings pageSettings = getPageSettings();
+		PageSettings pageSettings = getPageSettings();
 		pageSettings.addComponentResolver(new MessageResolver());
 		pageSettings.addComponentResolver(new MessageTagHandler());
 		getMarkupSettings().setMarkupFactory(new MarkupFactory(){

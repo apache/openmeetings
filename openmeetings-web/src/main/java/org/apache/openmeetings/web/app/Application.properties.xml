@@ -20,6 +20,9 @@
 -->
 <!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
 <properties>
+	<entry key="OrderByLink.CSS.ascending">ui-icon ui-icon-carat-1-n sort-icon</entry>
+	<entry key="OrderByLink.CSS.descending">ui-icon ui-icon-carat-1-s sort-icon</entry>
+	<entry key="OrderByLink.CSS.none">ui-icon ui-icon-carat-2-n-s sort-icon</entry>
 	<entry key="install.wizard.welcome.panel"><![CDATA[
 	<ol>
 		<li>

@@ -351,7 +351,7 @@ table.adminListTable td div.four_column_layout_divcolumn4 {
     max-width: 1240px;
 }
 .adminFormsFeedbackPanel {
-	position:absolute;
+	position: fixed;
 	left:550px;
 	width: 480px;
 	bottom: 16px;

@@ -58,7 +58,6 @@ import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.form.ListMultipleChoice;
 import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.form.TextArea;
@@ -96,7 +95,7 @@ public class RoomForm extends AdminBaseForm<Room> {
 
 		add(new DropDownChoice<Long>("numberOfPartizipants", //
 				DROPDOWN_NUMBER_OF_PARTICIPANTS, //
-				new IChoiceRenderer<Long>() {
+				new ChoiceRenderer<Long>() {
 					private static final long serialVersionUID = 1L;
 					public Object getDisplayValue(Long id) {
 						return id;
@@ -273,7 +272,7 @@ public class RoomForm extends AdminBaseForm<Room> {
 		
 		// attach an ajax validation behavior to all form component's keydown
 		// event and throttle it down to once per second
-		AjaxFormValidatingBehavior.addToAllFormComponents(this, "keydown", Duration.ONE_SECOND);
+		add(new AjaxFormValidatingBehavior("keydown", Duration.ONE_SECOND));
 	}
 
 	void updateClients(AjaxRequestTarget target) {

@@ -61,8 +61,8 @@ import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Button;
+import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
-import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.repeater.Item;
@@ -114,7 +114,7 @@ public class MessagesContactsPanel extends UserPanel {
 	private final DropDownChoice<Integer> selectDropDown = new DropDownChoice<Integer>(
 		"msgSelect", Model.of(SELECT_CHOOSE)
 		, Arrays.asList(SELECT_CHOOSE, SELECT_ALL, SELECT_NONE, SELECT_UNREAD, SELECT_READ)
-		, new IChoiceRenderer<Integer>() {
+		, new ChoiceRenderer<Integer>() {
 			private static final long serialVersionUID = 1L;
 	
 			public Object getDisplayValue(Integer object) {
@@ -125,14 +125,10 @@ public class MessagesContactsPanel extends UserPanel {
 				return "" + object;
 			}
 		});
-	private static PrivateMessageFolder NOT_MOVE_FOLDER = new PrivateMessageFolder();
-	static {
-		NOT_MOVE_FOLDER.setId(MOVE_CHOOSE);
-		NOT_MOVE_FOLDER.setFolderName(WebSession.getString(1243));
-	}
+	private PrivateMessageFolder NOT_MOVE_FOLDER = new PrivateMessageFolder();
 	private final DropDownChoice<PrivateMessageFolder> moveDropDown = new DropDownChoice<PrivateMessageFolder>("msgMove", Model.of(NOT_MOVE_FOLDER)
 		, Arrays.asList(NOT_MOVE_FOLDER)
-		, new IChoiceRenderer<PrivateMessageFolder>() {
+		, new ChoiceRenderer<PrivateMessageFolder>() {
 			private static final long serialVersionUID = 1L;
 
 			public Object getDisplayValue(PrivateMessageFolder object) {
@@ -242,6 +238,8 @@ public class MessagesContactsPanel extends UserPanel {
 	
 	public MessagesContactsPanel(String id) {
 		super(id);
+		NOT_MOVE_FOLDER.setId(MOVE_CHOOSE);
+		NOT_MOVE_FOLDER.setFolderName(WebSession.getString(1243));
 		foldersModel = Model.ofList(getBean(PrivateMessageFolderDao.class).get(0, Integer.MAX_VALUE));
 		updateMoveModel();
 		add(newMessage = new MessageDialog("newMessage", new CompoundPropertyModel<PrivateMessage>(new PrivateMessage())) {

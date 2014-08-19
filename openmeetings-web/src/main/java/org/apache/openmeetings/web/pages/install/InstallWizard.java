@@ -52,7 +52,6 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.form.PasswordTextField;
 import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.form.TextField;
@@ -432,7 +431,7 @@ public class InstallWizard extends Wizard {
 		public TzDropDown(String id) throws Exception {
 			super(id);
 			setChoices(AVAILABLE_TIMEZONES);
-			setChoiceRenderer(new IChoiceRenderer<String>() {
+			setChoiceRenderer(new ChoiceRenderer<String>() {
 				private static final long serialVersionUID = 1L;
 				
 				public Object getDisplayValue(String object) {
