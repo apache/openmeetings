@@ -66,7 +66,7 @@ import com.vaynberg.wicket.select2.Select2MultiChoice;
 import com.vaynberg.wicket.select2.TextChoiceProvider;
 
 public class GeneralUserForm extends Form<User> {
-	private static final long serialVersionUID = 5360667099083510234L;
+	private static final long serialVersionUID = 1L;
 	private Salutation salutation;
 	private FieldLanguage lang;
 	private PasswordTextField passwordField;
@@ -80,16 +80,15 @@ public class GeneralUserForm extends Form<User> {
 		ConfigurationDao cfgDao = getBean(ConfigurationDao.class);
 		passwordField.setRequired(false).add(minimumLength(getMinPasswdLength(cfgDao)));
 
+		updateModelObject(getModelObject());
 		SalutationDao salutDao = getBean(SalutationDao.class);
 		FieldLanguageDao langDao = getBean(FieldLanguageDao.class);
-		salutation = salutDao.get(getModelObject().getSalutations_id(), getLanguage());
-		lang = langDao.getFieldLanguageById(getModelObject().getLanguage_id());
 		add(new DropDownChoice<Salutation>("salutation"
 				, new PropertyModel<Salutation>(this, "salutation")
 				, salutDao.getUserSalutations(getLanguage())
 				, new ChoiceRenderer<Salutation>("label.value", "salutations_id"))
 			.add(new AjaxFormComponentUpdatingBehavior("onchange") {
-				private static final long serialVersionUID = -6748844721645465468L;
+				private static final long serialVersionUID = 1L;
 
 				@Override
 				protected void onUpdate(AjaxRequestTarget target) {
@@ -106,7 +105,7 @@ public class GeneralUserForm extends Form<User> {
 				, langDao.getLanguages()
 				, new ChoiceRenderer<FieldLanguage>("name", "language_id"))
 			.add(new AjaxFormComponentUpdatingBehavior("onchange") {
-				private static final long serialVersionUID = 2072021284702632856L;
+				private static final long serialVersionUID = 1L;
 
 				@Override
 				protected void onUpdate(AjaxRequestTarget target) {
@@ -187,6 +186,11 @@ public class GeneralUserForm extends Form<User> {
 		}).setEnabled(isAdminForm));
 	}
 
+	public void updateModelObject(User u) {
+		salutation = getBean(SalutationDao.class).get(u.getSalutations_id(), getLanguage());
+		lang = getBean(FieldLanguageDao.class).getFieldLanguageById(u.getLanguage_id());
+	}
+	
 	@Override
 	protected void onValidate() {
 		if(!getBean(UserDao.class).checkUserEMail(email.getConvertedInput(), getModelObject().getUser_id())) {

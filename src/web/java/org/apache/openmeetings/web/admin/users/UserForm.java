@@ -95,6 +95,12 @@ public class UserForm extends AdminBaseForm<User> {
 	}
 
 	@Override
+	protected void onModelChanged() {
+		super.onModelChanged();
+		generalForm.updateModelObject(getModelObject());
+	}
+	
+	@Override
 	protected void onSaveSubmit(AjaxRequestTarget target, Form<?> form) {
 		User u = getModelObject();
 		try {
@@ -134,7 +140,7 @@ public class UserForm extends AdminBaseForm<User> {
 	@Override
 	protected void onDeleteSubmit(AjaxRequestTarget target, Form<?> form) {
 		UserDao usersDaoImpl = getBean(UserDao.class);
-		usersDaoImpl.delete(this.getModelObject(), getUserId());
+		usersDaoImpl.delete(getModelObject(), getUserId());
 		setModelObject(usersDaoImpl.getNewUserInstance(usersDaoImpl.get(getUserId())));
 		update(target);
 	}
