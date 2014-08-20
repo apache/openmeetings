@@ -373,44 +373,15 @@ public class ScreenSharerFrame extends JFrame {
 		JLabel bgScreen = new JLabel(imgBgScreen);
 		bgScreen.setBounds(vScreenX, vScreenY, width, height);
 		panelScreen.add(bgScreen);
-
-		//Spinner X
-		JLabel labelX = new JLabel();
-		labelX.setText(getTextLabel(textLabels, 7)); //#id 738
-		labelX.setBounds(250, 20, 150, 24);
-		panelScreen.add(labelX);
-
-		spinnerX = new NumberSpinner(ScreenDimensions.spinnerX, 0, ScreenDimensions.widthMax, 1);
-		spinnerX.setBounds(400, 20, 60, 24);
-		spinnerX.addChangeListener( new ChangeListener(){
-			public void stateChanged(ChangeEvent arg0) {
-				calcNewValueXSpin();
-			}
-		});
-		panelScreen.add(spinnerX);
-
-		//Spinner Y
-		JLabel labelY = new JLabel();
-		labelY.setText(getTextLabel(textLabels, 8)); //#id 739
-		labelY.setBounds(250, 50, 150, 24);
-		panelScreen.add(labelY);
-
-		spinnerY = new NumberSpinner(ScreenDimensions.spinnerY, 0, ScreenDimensions.heightMax, 1);
-		spinnerY.setBounds(400, 50, 60, 24);
-		spinnerY.addChangeListener( new ChangeListener(){
-			public void stateChanged(ChangeEvent arg0) {
-				calcNewValueYSpin();
-			}
-		});
-		panelScreen.add(spinnerY);
 		
+		//Spinner Width
 		JLabel vscreenWidthLabel = new JLabel();
 		vscreenWidthLabel.setText(getTextLabel(textLabels, 9)); //#id 740
-		vscreenWidthLabel.setBounds(250, 80, 150, 24);
+		vscreenWidthLabel.setBounds(250, 20, 150, 24);
 		panelScreen.add(vscreenWidthLabel);
 
 		spinnerWidth = new NumberSpinner(ScreenDimensions.spinnerWidth, 0, ScreenDimensions.widthMax, 1);
-		spinnerWidth.setBounds(400, 80, 60, 24);
+		spinnerWidth.setBounds(400, 20, 60, 24);
 		spinnerWidth.addChangeListener( new ChangeListener(){
 			public void stateChanged(ChangeEvent arg0) {
 				calcNewValueWidthSpin();
@@ -421,17 +392,47 @@ public class ScreenSharerFrame extends JFrame {
 		//Spinner Height
 		JLabel labelHeight = new JLabel();
 		labelHeight.setText(getTextLabel(textLabels, 10)); //#id 741
-		labelHeight.setBounds(250, 110, 150, 24);
+		labelHeight.setBounds(250, 50, 150, 24);
 		panelScreen.add(labelHeight);
 
 		spinnerHeight = new NumberSpinner(ScreenDimensions.spinnerHeight, 0, ScreenDimensions.heightMax, 1);
-		spinnerHeight.setBounds(400, 110, 60, 24);
+		spinnerHeight.setBounds(400, 50, 60, 24);
 		spinnerHeight.addChangeListener( new ChangeListener(){
 			public void stateChanged(ChangeEvent arg0) {
 				calcNewValueHeightSpin();
 			}
 		});
 		panelScreen.add(spinnerHeight);
+
+		//Spinner X
+		JLabel labelX = new JLabel();
+		labelX.setText(getTextLabel(textLabels, 7)); //#id 738
+		labelX.setBounds(250, 80, 150, 24);
+		panelScreen.add(labelX);
+
+		spinnerX = new NumberSpinner(ScreenDimensions.spinnerX, 0, ScreenDimensions.widthMax, 1);
+		spinnerX.setBounds(400, 80, 60, 24);
+		spinnerX.addChangeListener( new ChangeListener(){
+			public void stateChanged(ChangeEvent arg0) {
+				calcNewValueXSpin();
+			}
+		});
+		panelScreen.add(spinnerX);
+
+		//Spinner Y
+		JLabel labelY = new JLabel();
+		labelY.setText(getTextLabel(textLabels, 8)); //#id 739
+		labelY.setBounds(250, 110, 150, 24);
+		panelScreen.add(labelY);
+
+		spinnerY = new NumberSpinner(ScreenDimensions.spinnerY, 0, ScreenDimensions.heightMax, 1);
+		spinnerY.setBounds(400, 110, 60, 24);
+		spinnerY.addChangeListener( new ChangeListener(){
+			public void stateChanged(ChangeEvent arg0) {
+				calcNewValueYSpin();
+			}
+		});
+		panelScreen.add(spinnerY);
 		
 		//Quality
 		JLabel labelQuality = new JLabel();
@@ -468,7 +469,7 @@ public class ScreenSharerFrame extends JFrame {
 		        ScreenDimensions.FPS = ((KeyValue<Integer>)comboFPS.getSelectedItem()).getValue();
 		        calcRescaleFactors();
 			}
-		}); 
+		});
 		boolean fpsSelected = false;
 		for (int i = 0; i < comboFPS.getItemCount(); ++i) {
 			KeyValue<Integer> v = comboFPS.getItemAt(i);
