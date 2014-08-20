@@ -484,6 +484,7 @@ public class ScreenSharerFrame extends JFrame {
 			comboFPS.setSelectedIndex(comboFPS.getItemCount() - 1);
 		}
 		comboFPS.setBounds(390, 170, 70, 24);
+		comboFPS.setVisible(core.showFPS);
 		panelScreen.add(comboFPS);
 		
 		panelRecording.setBackground(Color.WHITE);

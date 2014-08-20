@@ -39,6 +39,7 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_REDIRECT
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_RSS_FEED1_KEY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_RSS_FEED2_KEY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SCREENSHARING_FPS;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SCREENSHARING_FPS_SHOW;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SCREENSHARING_QUALITY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SOAP_REGISTER_KEY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.USER_LOGIN_MINIMUM_LENGTH;
@@ -404,6 +405,7 @@ public class ImportInitvalues {
 				"Default selection in ScreenSharing Quality:\n 0 - bigger frame rate, no resize\n 1 - no resize\n 2 - size == 1/2 of selected area\n 3 - size == 3/8 of selected area");
 
 		cfgDao.add(CONFIG_SCREENSHARING_FPS, "10", null, "Default selection in ScreenSharing FPS");
+		cfgDao.add(CONFIG_SCREENSHARING_FPS_SHOW, "true", null, "Is screensharing FPS should be displayed or not (true/false)");
 		
 		cfgDao.add(CONFIG_DASHBOARD_SHOW_MYROOMS_KEY, "1", null, "Show My Rooms Tab");
 

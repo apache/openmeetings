@@ -97,7 +97,7 @@ public class UserForm extends AdminBaseForm<User> {
 	@Override
 	protected void onModelChanged() {
 		super.onModelChanged();
-		generalForm.updateModel(getModelObject());
+		generalForm.updateModelObject(getModelObject());
 	}
 	
 	@Override

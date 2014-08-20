@@ -75,6 +75,7 @@ public class CoreScreenShare implements IPendingServiceCallback, INetStreamEvent
 
 	public int defaultQuality = 1;
 	public int defaultFPS = 10;
+	public boolean showFPS = true;
 
 	public Long user_id = null;
 	private boolean allowRecording = true;
@@ -108,7 +109,7 @@ public class CoreScreenShare implements IPendingServiceCallback, INetStreamEvent
 				log.debug("arg: " + arg);
 			}
 			String[] textArray = null;
-			if (args.length > 9) {
+			if (args.length > 11) {
 				protocol = Protocol.valueOf(args[0]);
 				host = args[1];
 				port = Integer.parseInt(args[2]);
@@ -117,9 +118,10 @@ public class CoreScreenShare implements IPendingServiceCallback, INetStreamEvent
 				publishName = args[5];
 				String labelTexts = args[6];
 				defaultQuality = Integer.parseInt(args[7]);
-				defaultFPS = Integer.parseInt(args[7]);
-				allowRecording = bool(args[8]);
-				allowPublishing = bool(args[9]);
+				defaultFPS = Integer.parseInt(args[8]);
+				showFPS = bool(args[9]);
+				allowRecording = bool(args[10]);
+				allowPublishing = bool(args[11]);
 
 				if (labelTexts.length() > 0) {
 					textArray = labelTexts.split(";");
@@ -141,8 +143,8 @@ public class CoreScreenShare implements IPendingServiceCallback, INetStreamEvent
 						break;
 					case rtmps:
 						RTMPSScreenShare client = new RTMPSScreenShare(this);
-						client.setKeystoreBytes(Hex.decodeHex(args[10].toCharArray()));
-						client.setKeyStorePassword(args[11]);
+						client.setKeystoreBytes(Hex.decodeHex(args[12].toCharArray()));
+						client.setKeyStorePassword(args[13]);
 						instance = client;
 						break;
 					case rtmpe:

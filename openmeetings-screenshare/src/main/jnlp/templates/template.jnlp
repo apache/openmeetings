@@ -45,6 +45,7 @@
 		<argument>$labels</argument>
 		<argument>$defaultQuality</argument>
 		<argument>$defaultFps</argument>
+		<argument>$showFps</argument>
 		<argument>$allowRecording</argument>
 		<argument>$allowPublishing</argument>
 		<argument>$keystore</argument>

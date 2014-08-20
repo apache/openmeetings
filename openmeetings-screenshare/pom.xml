@@ -129,6 +129,10 @@
 									<value>*</value>
 								</replacement>
 								<replacement>
+									<token>$showFps</token>
+									<value>*</value>
+								</replacement>
+								<replacement>
 									<token>$allowRecording</token>
 									<value>*</value>
 								</replacement>
