@@ -19,6 +19,7 @@
 package org.apache.openmeetings.servlet.outputhandler;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SCREENSHARING_FPS;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SCREENSHARING_FPS_SHOW;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SCREENSHARING_QUALITY;
 
 import java.io.File;
@@ -61,7 +62,7 @@ public class ScreenController {
 	@Autowired
 	public SessiondataDao sessiondataDao;
 	@Autowired
-	public ConfigurationDao configurationDao;
+	public ConfigurationDao cfgDao;
 	@Autowired
 	public FieldManager fieldManager;
 
@@ -149,8 +150,7 @@ public class ScreenController {
 			}
 			log.debug("RTMP Sharer labels :: " + label_sharer);
 
-			ConnectionType conType
-				= ConnectionType.valueOf(request.getParameter("connectionType"));
+			ConnectionType conType = ConnectionType.valueOf(request.getParameter("connectionType"));
 
 			String startUpClass;
 			switch (conType) {
@@ -188,7 +188,7 @@ public class ScreenController {
 			boolean allowPublishing = (0 == sessionManager.getPublishingCount(roomId));
 			
 			Context ctx = new VelocityContext();
-			ctx.put("APP_NAME", configurationDao.getAppName());
+			ctx.put("APP_NAME", cfgDao.getAppName());
 			ctx.put("PUBLIC_SID", publicSID);
 			ctx.put("LABELSHARER", label_sharer);
 			addKeystore(ctx);
@@ -198,10 +198,9 @@ public class ScreenController {
 			ctx.put("codebase", baseURL + OmFileHelper.SCREENSHARING_DIR);
 			ctx.put("red5-host", rtmphostlocal);
 			ctx.put("red5-app", OpenmeetingsVariables.webAppRootKey + "/" + roomId);
-			ctx.put("default_quality_screensharing",
-					configurationDao.getConfValue(CONFIG_SCREENSHARING_QUALITY, String.class, "1"));
-			ctx.put("default_fps_screensharing",
-					configurationDao.getConfValue(CONFIG_SCREENSHARING_FPS, String.class, "10"));
+			ctx.put("default_quality_screensharing", cfgDao.getConfValue(CONFIG_SCREENSHARING_QUALITY, String.class, "1"));
+			ctx.put("default_fps_screensharing", cfgDao.getConfValue(CONFIG_SCREENSHARING_FPS, String.class, "10"));
+			ctx.put("show_screensharing_fps", cfgDao.getConfValue(CONFIG_SCREENSHARING_FPS_SHOW, Boolean.class, "true"));
 			//invited guest does not have valid user_id (have user_id == -1)
 			ctx.put("user_id", users_id);
 			ctx.put("port", port);
@@ -211,8 +210,7 @@ public class ScreenController {
 			String requestedFile = StringUtils.deleteWhitespace(domain + "_" + roomId) + ".jnlp";
 			response.setContentType("application/x-java-jnlp-file");
 			response.setCharacterEncoding("UTF-8");
-			response.setHeader("Content-Disposition",
-					"Inline; filename=\"" + requestedFile + "\"");
+			response.setHeader("Content-Disposition", "Inline; filename=\"" + requestedFile + "\"");
 
 			VelocityEngine ve = new VelocityEngine();
 			ve.setProperty(RuntimeConstants.RESOURCE_LOADER, "classpath"); 

@@ -38,6 +38,7 @@ public class OpenmeetingsVariables {
 	public static final String CONFIG_APPLICATION_BASE_URL = "application.base.url";
 	public static final String CONFIG_SCREENSHARING_QUALITY = "default.quality.screensharing";
 	public static final String CONFIG_SCREENSHARING_FPS = "default.fps.screensharing";
+	public static final String CONFIG_SCREENSHARING_FPS_SHOW = "screensharing.fps.show";
 
 	public static int DEFAULT_MINUTES_REMINDER_SEND = 15;
 	public static String DEFAULT_BASE_URL = "http://localhost:5080/openmeetings/";

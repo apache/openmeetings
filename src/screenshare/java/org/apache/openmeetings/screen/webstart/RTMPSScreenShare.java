@@ -41,11 +41,11 @@ public class RTMPSScreenShare extends RTMPSClient implements ClientExceptionHand
 
 	public static void main(String[] args) throws DecoderException {
 		RTMPSScreenShare client = new RTMPSScreenShare(args);
-		if (args.length < 12) {
+		if (args.length < 14) {
 			System.exit(0);
 		}
-		client.setKeystoreBytes(Hex.decodeHex(args[11].toCharArray()));
-		client.setKeyStorePassword(args[12]);
+		client.setKeystoreBytes(Hex.decodeHex(args[12].toCharArray()));
+		client.setKeyStorePassword(args[13]);
 	}
 	
 	@Override
