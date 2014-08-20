@@ -168,6 +168,16 @@ sippeers => odbc,asterisk,sipusers
 				<strong>Add the following section</strong>:<br />
 				<source>
 <![CDATA[
+; *****************************************************
+; The below dial plan is used to dial into a Openmeetings Conference room
+; The first line DB_EXISTS(openmeetings/room/ does not belong to the openmeetings application but is the name of astDB containing the astDB family/key pair and values
+; To Check if your astDB has been created do the following in a terminal window type the following:
+; asterisk –rx “database show”
+; If you do not receive an output with that resembles openmeetings/rooms/400## where “##” will equal the extension assigned when you created your room
+; If you do not receive the above output check your parameters in /opt/red5/webapps/openmeetings/WEB-INF/classes/openmeetings-applicationContext.xml
+; Go back into the Administrator Panel and remove the PIN number in each room save the record with no PIN number and then re-enter the pin again resave the record.
+; *****************************************************
+
 [rooms]
 exten => _400X!,1,GotoIf($[${DB_EXISTS(openmeetings/rooms/${EXTEN})}]?ok:notavail)
 exten => _400X!,n(ok),SET(PIN=${DB(openmeetings/rooms/${EXTEN})})

@@ -201,6 +201,12 @@
 					<td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> Default selection in ScreenSharing FPS. </td>
 					<td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> 3.0.3 </td>
 				</tr>
+				<tr>
+					<td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> screensharing.fps.show </td>
+					<td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> true </td>
+					<td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> Is screensharing FPS should be displayed or not (true/false). </td>
+					<td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> 3.0.3 </td>
+				</tr>
 			</table>
 		</section>
 
