@@ -4817,4 +4817,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
   <string id="1597" name="multiple_addresses">
     <value>Вы можете ввести адрес в формате: Имя1 Фамилия1 &lt;адрес1&gt; ИЛИ "Имя2 Фамилия2" &lt;адрес2&gt; ИЛИ 'Имя3 Фамилия3' &lt;адрес3&gt;</value>
   </string>
+  <string id="1598" name="security">
+    <value>Безопасность</value>
+  </string>
 </language>

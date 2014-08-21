@@ -4822,4 +4822,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
   <string id="1597" name="multiple_addresses">
     <value>You can enter address in the format: firstname1 lastname1 &lt;email1&gt; OR "firstname2 lastname2" &lt;email2&gt; OR 'firstname3 lastname3' &lt;email3&gt;</value>
   </string>
+  <string id="1598" name="security">
+    <value>Security</value>
+  </string>
 </language>

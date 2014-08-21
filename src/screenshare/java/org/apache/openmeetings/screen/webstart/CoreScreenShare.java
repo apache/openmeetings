@@ -84,6 +84,7 @@ public class CoreScreenShare implements IPendingServiceCallback, INetStreamEvent
 	public boolean isConnected = false;
 	private boolean readyToRecord = false;
 	private boolean audioNotify = false;
+	private boolean remoteEnabled = true;
 
 	public Map<Integer, Boolean> currentPressedKeys = new HashMap<Integer, Boolean>();
 
@@ -396,6 +397,9 @@ public class CoreScreenShare implements IPendingServiceCallback, INetStreamEvent
 	
 	public void sendRemoteCursorEvent(Object obj) {
 		try {
+			if (!remoteEnabled) {
+				return;
+			}
 			log.trace("#### sendRemoteCursorEvent ");
 			log.trace("Result Map Type "+obj.getClass().getName());
 
@@ -694,5 +698,13 @@ public class CoreScreenShare implements IPendingServiceCallback, INetStreamEvent
 
 	public void setAudioNotify(boolean audioNotify) {
 		this.audioNotify = audioNotify;
+	}
+
+	public boolean isRemoteEnabled() {
+		return remoteEnabled;
+	}
+
+	public void setRemoteEnabled(boolean remoteEnabled) {
+		this.remoteEnabled = remoteEnabled;
 	}
 }

@@ -79,7 +79,7 @@ public class ScreenController {
 			if (delim) {
 				result.append(';');
 			}
-			result.append(fieldManager.getFieldByIdAndLanguage((long)id, language_id).getValue());
+			result.append(fieldManager.getString((long)id, language_id));
 			delim = true;
 		}
 		return result.toString();
@@ -132,7 +132,7 @@ public class ScreenController {
 					, 1091, 1092, 1093, 1465, 1466
 					, 1467, 1468, 1469, 1470, 1471
 					, 1472, 1473, 1474, 1475, 1476
-					, 1477, 1589);
+					, 1477, 1589, 1598, 1078);
 			} catch (Exception e) {
 				log.error("Error resolving Language labels : ", e);
 			}
