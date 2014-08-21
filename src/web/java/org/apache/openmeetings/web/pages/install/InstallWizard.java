@@ -83,7 +83,7 @@ public class InstallWizard extends Wizard {
 	private Throwable th = null;
 	
 	public void initTzDropDown() {
-		paramsStep1.tzDropDown.init();
+		paramsStep1.tzDropDown.setOption();
 	}
 	
 	//onInit, applyState
@@ -424,7 +424,7 @@ public class InstallWizard extends Wizard {
 	private final class TzDropDown extends WizardDropDown<String> {
 		private static final long serialVersionUID = 1L;
 
-		public void init() {
+		public void setOption() {
 			List<String> tzList = AVAILABLE_TIMEZONES;
 			String tzId = WebSession.get().getClientTZCode();
 			option = AVAILABLE_TIMEZONE_SET.contains(tzId) ? tzId : tzList.get(0);
