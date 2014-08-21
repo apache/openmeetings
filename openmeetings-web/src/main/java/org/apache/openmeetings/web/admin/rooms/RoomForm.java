@@ -24,6 +24,7 @@ import static org.apache.openmeetings.web.app.WebSession.getUserId;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
 import org.apache.openmeetings.db.dao.room.RoomDao;
@@ -58,7 +59,6 @@ import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.form.ListMultipleChoice;
 import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.form.TextField;
@@ -68,10 +68,13 @@ import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.util.string.Strings;
 import org.apache.wicket.util.time.Duration;
 
 import com.vaynberg.wicket.select2.Response;
 import com.vaynberg.wicket.select2.Select2Choice;
+import com.vaynberg.wicket.select2.Select2MultiChoice;
+import com.vaynberg.wicket.select2.TextChoiceProvider;
 
 public class RoomForm extends AdminBaseForm<Room> {
 	private static final long serialVersionUID = 1L;
@@ -114,16 +117,45 @@ public class RoomForm extends AdminBaseForm<Room> {
 		add(new CheckBox("ispublic"));
 
 		List<Organisation> orgList = Application.getBean(OrganisationDao.class).get(0, Integer.MAX_VALUE);
-		List<RoomOrganisation> orgRooms = new ArrayList<RoomOrganisation>(orgList.size());
+		final List<RoomOrganisation> orgRooms = new ArrayList<RoomOrganisation>(orgList.size());
 		for (Organisation org : orgList) {
 			orgRooms.add(new RoomOrganisation(org));
 		}
-		ListMultipleChoice<RoomOrganisation> orgChoiceList = new ListMultipleChoice<RoomOrganisation>(
-				"roomOrganisations", orgRooms,
-				new ChoiceRenderer<RoomOrganisation>("organisation.name",
-						"organisation.id"));
-		orgChoiceList.setMaxRows(6);
-		add(orgChoiceList);
+		add(new Select2MultiChoice<RoomOrganisation>("roomOrganisations", null, new TextChoiceProvider<RoomOrganisation>() {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected String getDisplayText(RoomOrganisation choice) {
+				return choice.getOrganisation().getName();
+			}
+
+			@Override
+			protected Object getId(RoomOrganisation choice) {
+				return choice.getOrganisation().getId();
+			}
+
+			@Override
+			public void query(String term, int page, Response<RoomOrganisation> response) {
+				for (RoomOrganisation or : orgRooms) {
+					if (Strings.isEmpty(term) || (!Strings.isEmpty(term) && or.getOrganisation().getName().contains(term))) {
+						response.add(or);
+					}
+				}
+			}
+
+			@Override
+			public Collection<RoomOrganisation> toChoices(Collection<String> _ids) {
+				List<Long> ids = new ArrayList<Long>();
+				for (String id : _ids) {
+					ids.add(Long.parseLong(id));
+				}
+				List<RoomOrganisation> list = new ArrayList<RoomOrganisation>();
+				for (Organisation o : getBean(OrganisationDao.class).get(ids)) {
+					list.add(new RoomOrganisation(o));
+				}
+				return list;
+			}
+		}));
 
 		add(new CheckBox("isDemoRoom"));
 		TextField<Integer> demoTime = new TextField<Integer>("demoTime");
