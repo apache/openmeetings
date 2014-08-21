@@ -343,6 +343,7 @@ public class ScreenSharerFrame extends JFrame {
 					)
 		);
 		panelScreen.setLayout(null);
+		panelScreen.setBackground(Color.WHITE);
 		
 		int width = ScreenDimensions.width;
 		int height = ScreenDimensions.height;
@@ -590,7 +591,21 @@ public class ScreenSharerFrame extends JFrame {
 		});
 		panelPublish.add(btnStartStopPublish);
 		
-		panelScreen.setBackground(Color.WHITE);
+		JPanel panelSecurity = new JPanel();
+		panelSecurity.setLayout(null);
+		panelSecurity.setBackground(Color.WHITE);
+		tabbedPane.addTab(getTextLabel(textLabels, 37), null, panelSecurity, null); //#id 1598
+		
+		final JCheckBox remoteEnabled = new JCheckBox(getTextLabel(textLabels, 38)); //#id 1078
+		remoteEnabled.setBackground(Color.WHITE);
+		remoteEnabled.setSelected(core.isRemoteEnabled());
+		remoteEnabled.setBounds(10, 10, 450, 24);
+		remoteEnabled.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				core.setRemoteEnabled(remoteEnabled.isSelected());
+			}
+		});
+		panelSecurity.add(remoteEnabled);
 		
 		panelStatus.setBackground(SystemColor.control);
 		panelStatus.setLayout(null);

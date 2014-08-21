@@ -252,7 +252,7 @@ public class RoomPanel extends BasePanel {
 									, 1091, 1092, 1093, 1465, 1466
 									, 1467, 1468, 1469, 1470, 1471
 									, 1472, 1473, 1474, 1475, 1476
-									, 1477, 1589) + "]]>")
+									, 1477, 1589, 1598, 1078) + "]]>")
 							.replace("$defaultQuality", cfgDao.getConfValue(CONFIG_SCREENSHARING_QUALITY, String.class, ""))
 							.replace("$defaultFps", cfgDao.getConfValue(CONFIG_SCREENSHARING_FPS, String.class, ""))
 							.replace("$showFps", cfgDao.getConfValue(CONFIG_SCREENSHARING_FPS_SHOW, String.class, "true"))
