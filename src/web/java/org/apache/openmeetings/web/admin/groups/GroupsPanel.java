@@ -51,7 +51,6 @@ public class GroupsPanel extends AdminPanel {
 		target.appendJavaScript("groupsInit();");
 	}
 
-	@SuppressWarnings("unchecked")
 	public GroupsPanel(String id) {
 		super(id);
 		final WebMarkupContainer listContainer = new WebMarkupContainer("listContainer");
@@ -96,9 +95,9 @@ public class GroupsPanel extends AdminPanel {
 			}
 		};
 		DataViewContainer<Organisation> container = new DataViewContainer<Organisation>(listContainer, dataView, navigator);
-		container.setLinks(new OmOrderByBorder<Organisation>("orderById", "organisation_id", container)
-				, new OmOrderByBorder<Organisation>("orderByName", "name", container));
-		add(container.orderLinks);
+		container.addLink(new OmOrderByBorder<Organisation>("orderById", "organisation_id", container))
+			.addLink(new OmOrderByBorder<Organisation>("orderByName", "name", container));
+		add(container.getLinks());
 		add(navigator);
 	}
 }

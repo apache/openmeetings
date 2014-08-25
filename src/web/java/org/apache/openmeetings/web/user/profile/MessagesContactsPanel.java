@@ -204,7 +204,7 @@ public class MessagesContactsPanel extends UserPanel {
 			updateTable(target);
 			target.add(folders, unread, selectDropDown, moveDropDown);
 			target.add(dataContainer.container, dataContainer.navigator);
-			target.add(dataContainer.orderLinks);
+			target.add(dataContainer.getLinks());
 		}
 	}
 	
@@ -236,7 +236,6 @@ public class MessagesContactsPanel extends UserPanel {
 		}
 	}
 	
-	@SuppressWarnings("unchecked")
 	public MessagesContactsPanel(String id) {
 		super(id);
 		NOT_MOVE_FOLDER.setPrivateMessageFolderId(MOVE_CHOOSE);
@@ -419,11 +418,11 @@ public class MessagesContactsPanel extends UserPanel {
 			}
 		};
 		dataContainer = new DataViewContainer<PrivateMessage>(container, dv, navigator);
-		dataContainer.setLinks(new OmOrderByBorder<PrivateMessage>("orderById", "id", dataContainer)
-				, new OmOrderByBorder<PrivateMessage>("orderByFrom", "from.lastname", dataContainer)
-				, new OmOrderByBorder<PrivateMessage>("orderBySubject", "subject", dataContainer)
-				, new OmOrderByBorder<PrivateMessage>("orderBySend", "inserted", dataContainer));
-		add(dataContainer.orderLinks);
+		dataContainer.addLink(new OmOrderByBorder<PrivateMessage>("orderById", "id", dataContainer))
+			.addLink(new OmOrderByBorder<PrivateMessage>("orderByFrom", "from.lastname", dataContainer))
+			.addLink(new OmOrderByBorder<PrivateMessage>("orderBySubject", "subject", dataContainer))
+			.addLink(new OmOrderByBorder<PrivateMessage>("orderBySend", "inserted", dataContainer));
+		add(dataContainer.getLinks());
 		add(navigator);
 		
 		add(unread.setOutputMarkupId(true));

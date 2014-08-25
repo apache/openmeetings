@@ -90,7 +90,6 @@ public class LangPanel extends AdminPanel {
 		target.appendJavaScript("labelsInit();");
 	}
 
-	@SuppressWarnings("unchecked")
 	public LangPanel(String id) {
 		super(id);
 		// Create feedback panels
@@ -143,8 +142,8 @@ public class LangPanel extends AdminPanel {
 						target.appendJavaScript("labelsInit();");
 					}
 				});
-				item.add(AttributeModifier.append("class", "clickable ui-widget-content"
-						+ (fv.getFieldvalues_id().equals(form.getModelObject().getFieldvalues_id()) ? " ui-state-active" : "")));
+				Long formFvId = form.getModelObject().getFieldvalues() == null ? null : form.getModelObject().getFieldvalues().getFieldvalues_id();
+				item.add(AttributeModifier.append("class", "clickable ui-widget-content" + (fv.getFieldvalues_id().equals(formFvId) ? " ui-state-active" : "")));
 			}
 		};
 
@@ -160,10 +159,10 @@ public class LangPanel extends AdminPanel {
 			}
 		};
 		DataViewContainer<Fieldvalues> container = new DataViewContainer<Fieldvalues>(listContainer, dataView, navigator);
-		container.setLinks(new OmOrderByBorder<Fieldvalues>("orderById", "fieldvalues.fieldvalues_id", container)
-				, new OmOrderByBorder<Fieldvalues>("orderByName", "fieldvalues.name", container)
-				, new OmOrderByBorder<Fieldvalues>("orderByValue", "value", container));
-		add(container.orderLinks);
+		container.addLink(new OmOrderByBorder<Fieldvalues>("orderById", "fieldvalues.fieldvalues_id", container))
+			.addLink(new OmOrderByBorder<Fieldvalues>("orderByName", "fieldvalues.name", container))
+			.addLink(new OmOrderByBorder<Fieldvalues>("orderByValue", "value", container));
+		add(container.getLinks());
 		add(navigator);
 		langForm = new LangForm("langForm", listContainer, this);
 		fileUploadField = new FileUploadField("fileInput");

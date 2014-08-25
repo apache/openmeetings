@@ -38,7 +38,6 @@ public class OAuthPanel extends AdminPanel {
 	final WebMarkupContainer listContainer = new WebMarkupContainer("listContainer");
 	private OAuthForm form;
 
-	@SuppressWarnings("unchecked")
 	public OAuthPanel(String id) {
 		super(id);
 		SearchableDataView<OAuthServer> dataView = new SearchableDataView<OAuthServer>("oauthServersList",
@@ -79,9 +78,9 @@ public class OAuthPanel extends AdminPanel {
 			}
 		};
 		DataViewContainer<OAuthServer> container = new DataViewContainer<OAuthServer>(listContainer, dataView, navigator);
-		container.setLinks(new OmOrderByBorder<OAuthServer>("orderById", "oauthServerId", container),
-						   new OmOrderByBorder<OAuthServer>("orderByName", "name", container));
-		add(container.orderLinks);
+		container.addLink(new OmOrderByBorder<OAuthServer>("orderById", "oauthServerId", container))
+			.addLink(new OmOrderByBorder<OAuthServer>("orderByName", "name", container));
+		add(container.getLinks());
 		add(navigator);
 		
 		form = new OAuthForm("form", listContainer, new OAuthServer());

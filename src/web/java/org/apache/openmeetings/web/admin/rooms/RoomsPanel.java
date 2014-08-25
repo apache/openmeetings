@@ -46,7 +46,6 @@ public class RoomsPanel extends AdminPanel {
 		target.appendJavaScript("omRoomPanelInit();");
 	}
 
-	@SuppressWarnings("unchecked")
 	public RoomsPanel(String id) {
 		super(id);
 		SearchableDataView<Room> dataView = new SearchableDataView<Room>("roomList", new SearchableDataProvider<Room>(RoomDao.class)) {
@@ -85,10 +84,10 @@ public class RoomsPanel extends AdminPanel {
 			}
 		};
 		DataViewContainer<Room> container = new DataViewContainer<Room>(listContainer, dataView, navigator);
-		container.setLinks(new OmOrderByBorder<Room>("orderById", "rooms_id", container)
-				, new OmOrderByBorder<Room>("orderByName", "name", container)
-				, new OmOrderByBorder<Room>("orderByPublic", "ispublic", container));
-		add(container.orderLinks);
+		container.addLink(new OmOrderByBorder<Room>("orderById", "rooms_id", container))
+			.addLink(new OmOrderByBorder<Room>("orderByName", "name", container))
+			.addLink(new OmOrderByBorder<Room>("orderByPublic", "ispublic", container));
+		add(container.getLinks());
 		add(navigator);
 
         add(form = new RoomForm("form", listContainer, new Room()));

@@ -50,7 +50,6 @@ public class LdapsPanel extends AdminPanel {
 		target.appendJavaScript("omLdapPanelInit();");
 	}
 
-	@SuppressWarnings("unchecked")
 	public LdapsPanel(String id) {
 		super(id);
 		SearchableDataView<LdapConfig> dataView = new SearchableDataView<LdapConfig>("ldapList"
@@ -87,10 +86,10 @@ public class LdapsPanel extends AdminPanel {
 			}
 		};
 		DataViewContainer<LdapConfig> container = new DataViewContainer<LdapConfig>(listContainer, dataView, navigator);
-		container.setLinks(new OmOrderByBorder<LdapConfig>("orderById", "ldapConfigId", container)
-				, new OmOrderByBorder<LdapConfig>("orderByName", "name", container)
-				, new OmOrderByBorder<LdapConfig>("orderByFile", "configFileName", container));
-		add(container.orderLinks);
+		container.addLink(new OmOrderByBorder<LdapConfig>("orderById", "ldapConfigId", container))
+			.addLink(new OmOrderByBorder<LdapConfig>("orderByName", "name", container))
+			.addLink(new OmOrderByBorder<LdapConfig>("orderByFile", "configFileName", container));
+		add(container.getLinks());
 		add(navigator);
 		
 		form = new LdapForm("form", listContainer, new LdapConfig());

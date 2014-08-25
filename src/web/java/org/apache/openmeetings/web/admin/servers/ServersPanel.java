@@ -50,7 +50,6 @@ public class ServersPanel extends AdminPanel {
 		target.appendJavaScript("omServerPanelInit();");
 	}
 
-	@SuppressWarnings("unchecked")
 	public ServersPanel(String id) {
 		super(id);
 		SearchableDataView<Server> dataView = new SearchableDataView<Server>("serverList",
@@ -88,10 +87,10 @@ public class ServersPanel extends AdminPanel {
 			}
 		};
 		DataViewContainer<Server> container = new DataViewContainer<Server>(listContainer, dataView, navigator);
-		container.setLinks(new OmOrderByBorder<Server>("orderById", "id", container)
-				, new OmOrderByBorder<Server>("orderByName", "name", container)
-				, new OmOrderByBorder<Server>("orderByAddress", "address", container));
-		add(container.orderLinks);
+		container.addLink(new OmOrderByBorder<Server>("orderById", "id", container))
+			.addLink(new OmOrderByBorder<Server>("orderByName", "name", container))
+			.addLink(new OmOrderByBorder<Server>("orderByAddress", "address", container));
+		add(container.getLinks());
 		add(navigator);
 		
 		form = new ServerForm("form", listContainer, new Server());

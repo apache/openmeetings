@@ -302,7 +302,7 @@
 		<dependency org="com.googlecode.jsmpp" name="jsmpp" rev="2.1.0" conf="openmeetings->*" transitive="false">
 			<include type="jar" />
 		</dependency>
-		<dependency org="org.smslib" name="smslib" rev="3.5.3" conf="openmeetings->*" transitive="false">
+		<dependency org="org.smslib" name="smslib" rev="3.5.4" conf="openmeetings->*" transitive="false">
 			<include type="jar" />
 		</dependency>
 		<dependency org="org.asteriskjava" name="asterisk-java" rev="1.0.0.CI-20130102.214528-1134" conf="openmeetings->*" transitive="false">
@@ -316,10 +316,19 @@
 			<include type="jar" />
 		</dependency>
 		<!-- BEGIN openjpa -->
+		<dependency org="org.apache.geronimo.specs" name="geronimo-jms_1.1_spec" rev="1.1.1" conf="openmeetings->*" transitive="false" >
+			<include type="jar" />
+		</dependency>
 		<dependency org="net.sourceforge.serp" name="serp" rev="1.14.1" conf="openmeetings->*" transitive="false" >
 			<include type="jar" />
 		</dependency>
 		<dependency org="org.apache.xbean" name="xbean-asm4-shaded" rev="3.14" conf="openmeetings->*" transitive="false" />
+		<dependency org="org.apache.openjpa" name="openjpa-jdbc" rev="2.3.0" conf="openmeetings->*" transitive="false" >
+			<include type="jar" />
+		</dependency>
+		<dependency org="org.apache.openjpa" name="openjpa-jest" rev="2.3.0" conf="openmeetings->*" transitive="false" >
+			<include type="jar" />
+		</dependency>
 		<dependency org="org.apache.openjpa" name="openjpa-kernel" rev="2.3.0" conf="openmeetings->*" transitive="false" >
 			<include type="jar" />
 		</dependency>
@@ -332,12 +341,13 @@
 		<dependency org="org.apache.openjpa" name="openjpa-persistence-jdbc" rev="2.3.0" conf="openmeetings->*" transitive="false" >
 			<include type="jar" />
 		</dependency>
-		<dependency org="org.apache.openjpa" name="openjpa-jdbc" rev="2.3.0" conf="openmeetings->*" transitive="false" >
+		<dependency org="org.apache.openjpa" name="openjpa-slice" rev="2.3.0" conf="openmeetings->*" transitive="false" >
 			<include type="jar" />
 		</dependency>
-		<dependency org="org.apache.openjpa" name="openjpa" rev="2.3.0" conf="openmeetings->*" transitive="false" >
+		<dependency org="org.apache.openjpa" name="openjpa-xmlstore" rev="2.3.0" conf="openmeetings->*" transitive="false" >
 			<include type="jar" />
 		</dependency>
+		<dependency org="org.apache.openjpa" name="openjpa" rev="2.3.0" conf="openmeetings->*" transitive="false" />
 		<!-- END openjpa -->
 
 		<dependency org="org.mnode.ical4j" name="ical4j" rev="1.0.5" conf="openmeetings.ext->*" transitive="false"/>
@@ -436,6 +446,9 @@
 		<exclude org="cglib" module="cglib-nodep" type="*" ext="*" conf="*" matcher="exact"/>
 		<exclude org="pull-parser" module="pull-parser" type="*" ext="*" conf="*" matcher="exact"/>
 		<exclude org="org.apache.mina" module="mina-core" type="*" ext="*" conf="*" matcher="exact"/>
+		<exclude org="com.ibm.websphere" module="websphere_uow_api" type="*" ext="*" conf="*" matcher="exact"/>
+		<exclude org="commons-pool" module="commons-pool" type="*" ext="*" conf="*" matcher="exact"/>
+		<exclude org="org.apache.commons" module="commons-lang3" type="*" ext="*" conf="*" matcher="exact"/>
 	</dependencies>
 </ivy-module>
 

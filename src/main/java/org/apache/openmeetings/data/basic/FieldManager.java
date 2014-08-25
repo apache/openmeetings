@@ -68,40 +68,13 @@ public class FieldManager {
 	
 	public String getString(Long fieldvalues_id, Long language_id) {
 		String result = null;
-		Fieldlanguagesvalues flv = getFieldByIdAndLanguage(fieldvalues_id, language_id);
+		Fieldlanguagesvalues flv = fieldLanguagesValuesDAO.get(fieldvalues_id, language_id);
 		if (flv != null) {
 			result = performReplace(flv).getValue();
 		}
 		return result;
 	}
 	
-	public Fieldlanguagesvalues getFieldByIdAndLanguage(Long fieldvalues_id,
-			Long language_id) {
-		try {
-
-			String hql = "select f from Fieldlanguagesvalues as f "
-					+ "WHERE f.language_id = :language_id "
-					+ "AND f.fieldvalues_id = :fieldvalues_id";
-
-			Fieldlanguagesvalues flv = null;
-
-			TypedQuery<Fieldlanguagesvalues> query = em.createQuery(hql, Fieldlanguagesvalues.class);
-
-			query.setParameter("fieldvalues_id", fieldvalues_id);
-			query.setParameter("language_id", language_id);
-			List<Fieldlanguagesvalues> fList = query.getResultList();
-
-			if (fList.size() > 0) {
-				flv = fList.get(0); //replace should not be performed here to enable string editing via admin
-			}
-
-			return flv;
-		} catch (Exception ex2) {
-			log.error("[getFieldByIdAndLanguage]: ", ex2);
-		}
-		return null;
-	}
-
 	public List<Fieldlanguagesvalues> getAllFieldsByLanguage(Long language_id) {
 		try {
 
@@ -219,7 +192,7 @@ public class FieldManager {
 					Fieldlanguagesvalues toAdd = new Fieldlanguagesvalues();
 					toAdd.setFieldlanguagesvalues_id(remote
 							.getFieldlanguagesvalues_id());
-					toAdd.setFieldvalues_id(remote.getFieldvalues_id());
+					toAdd.setFieldvalues(remote.getFieldvalues());
 					toAdd.setLanguage_id(remote.getLanguage_id());
 
 					String[] splitted = remote.getValue().split(" ");
@@ -332,7 +305,7 @@ public class FieldManager {
 		Fieldlanguagesvalues r = new Fieldlanguagesvalues();
 		r.setDeleted(f.getDeleted());
 		r.setFieldlanguagesvalues_id(f.getFieldlanguagesvalues_id());
-		r.setFieldvalues_id(f.getFieldvalues_id());
+		r.setFieldvalues(f.getFieldvalues());
 		r.setLanguage_id(f.getLanguage_id());
 		r.setStarttime(f.getStarttime());
 		r.setUpdatetime(f.getUpdatetime());

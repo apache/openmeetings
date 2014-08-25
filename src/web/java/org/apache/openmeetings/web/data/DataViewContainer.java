@@ -19,6 +19,8 @@
 package org.apache.openmeetings.web.data;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.openmeetings.db.entity.IDataProviderEntity;
 import org.apache.openmeetings.web.admin.SearchableDataView;
@@ -30,7 +32,7 @@ public class DataViewContainer<T extends IDataProviderEntity> implements Seriali
 	public WebMarkupContainer container;
 	public SearchableDataView<T> view;
 	public PagedEntityListPanel navigator;
-	public OmOrderByBorder<T>[] orderLinks;
+	private List<OmOrderByBorder<T>> orderLinks = new ArrayList<OmOrderByBorder<T>>();
 	
 	public DataViewContainer(WebMarkupContainer container, SearchableDataView<T> view, PagedEntityListPanel navigator) {
 		this.container = container;
@@ -38,8 +40,14 @@ public class DataViewContainer<T extends IDataProviderEntity> implements Seriali
 		this.navigator = navigator;
 	}
 	
-	//TODO refactor to remove warnings
-	public void setLinks(OmOrderByBorder<T>... orderLinks) {
-		this.orderLinks = orderLinks;
+	public DataViewContainer<T> addLink(OmOrderByBorder<T> link) {
+		orderLinks.add(link);
+		return this;
+	}
+	
+	public OmOrderByBorder<T>[] getLinks() {
+		@SuppressWarnings("unchecked")
+		OmOrderByBorder<T>[] a = new OmOrderByBorder[0];
+		return orderLinks.toArray(a);
 	}
 }

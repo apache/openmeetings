@@ -162,7 +162,6 @@ public class FillLabels extends AbstractJUnitDefaults {
 			String fieldName = itemObject.attribute("name").getText();
 			String value = itemObject.element("value").getText();
 			Fieldlanguagesvalues fValue = new Fieldlanguagesvalues();
-			fValue.setFieldvalues_id(fieldvalues_id);
 			fValue.setValue(value);
 			Fieldvalues fLabel = new Fieldvalues();
 			fLabel.setName(fieldName);
@@ -188,7 +187,7 @@ public class FillLabels extends AbstractJUnitDefaults {
 
 		for (Entry<Long, Fieldlanguagesvalues> entryLabel : labelsArray.entrySet()) {
 			Element eTemp = root.addElement("string")
-					.addAttribute("id", entryLabel.getValue().getFieldvalues_id().toString())
+					.addAttribute("id", entryLabel.getValue().getFieldvalues().getFieldvalues_id().toString())
 					.addAttribute("name", entryLabel.getValue().getFieldvalues().getName());
 			Element value = eTemp.addElement("value");
 			value.addText(entryLabel.getValue().getValue());

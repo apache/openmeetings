@@ -40,7 +40,7 @@ public class OmOrderByBorder<T extends IDataProviderEntity> extends AjaxFallback
 	@Override
 	protected void onAjaxClick(AjaxRequestTarget target) {
 		target.add(container.container, container.navigator);
-		target.add(container.orderLinks);
+		target.add(container.getLinks());
 	}
 	
 	static class SortIconCssProvider extends CssProvider<String> {

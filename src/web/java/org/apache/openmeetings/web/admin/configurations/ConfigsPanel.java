@@ -50,7 +50,6 @@ public class ConfigsPanel extends AdminPanel {
 		target.appendJavaScript("omConfigPanelInit();");
 	}
 
-	@SuppressWarnings("unchecked")
 	public ConfigsPanel(String id) {
 		super(id);
 		
@@ -88,10 +87,10 @@ public class ConfigsPanel extends AdminPanel {
 			}
 		};
 		DataViewContainer<Configuration> container = new DataViewContainer<Configuration>(listContainer, dataView, navigator);
-		container.setLinks(new OmOrderByBorder<Configuration>("orderById", "configuration_id", container)
-				, new OmOrderByBorder<Configuration>("orderByKey", "conf_key", container)
-				, new OmOrderByBorder<Configuration>("orderByValue", "conf_value", container));
-		add(container.orderLinks);
+		container.addLink(new OmOrderByBorder<Configuration>("orderById", "configuration_id", container))
+			.addLink(new OmOrderByBorder<Configuration>("orderByKey", "conf_key", container))
+			.addLink(new OmOrderByBorder<Configuration>("orderByValue", "conf_value", container));
+		add(container.getLinks());
 		add(navigator);
 		
 		form = new ConfigForm("form", listContainer, new Configuration());

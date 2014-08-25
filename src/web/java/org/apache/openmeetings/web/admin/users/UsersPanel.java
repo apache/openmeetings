@@ -60,7 +60,6 @@ public class UsersPanel extends AdminPanel {
 
 	private UserForm form;
 
-	@SuppressWarnings("unchecked")
 	public UsersPanel(String id) {
 		super(id);
 
@@ -98,11 +97,11 @@ public class UsersPanel extends AdminPanel {
 			}
 		};
 		DataViewContainer<User> container = new DataViewContainer<User>(listContainer, dataView, navigator);
-		container.setLinks(new OmOrderByBorder<User>("orderById", "user_id", container)
-				, new OmOrderByBorder<User>("orderByLogin", "login", container)
-				, new OmOrderByBorder<User>("orderByFirstName", "firstname", container)
-				, new OmOrderByBorder<User>("orderByLastName", "lastname", container));
-		add(container.orderLinks);
+		container.addLink(new OmOrderByBorder<User>("orderById", "user_id", container))
+			.addLink(new OmOrderByBorder<User>("orderByLogin", "login", container))
+			.addLink(new OmOrderByBorder<User>("orderByFirstName", "firstname", container))
+			.addLink(new OmOrderByBorder<User>("orderByLastName", "lastname", container));
+		add(container.getLinks());
 		add(navigator);
 
 		UserDao usersDaoImpl = getBean(UserDao.class);

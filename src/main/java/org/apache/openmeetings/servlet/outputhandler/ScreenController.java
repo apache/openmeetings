@@ -21,6 +21,7 @@ package org.apache.openmeetings.servlet.outputhandler;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SCREENSHARING_FPS;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SCREENSHARING_FPS_SHOW;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SCREENSHARING_QUALITY;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -54,8 +55,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 public class ScreenController {
-	private static final Logger log = Red5LoggerFactory.getLogger(
-			ScreenController.class, OpenmeetingsVariables.webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(ScreenController.class, webAppRootKey);
 
 	@Autowired
 	private ISessionManager sessionManager;

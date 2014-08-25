@@ -131,7 +131,7 @@
 		<pathelement path="${main.out.dir}" />
 	</path>
 
-	<target name="info" unless="java6.installed">
+	<target name="info" unless="java7.installed">
 		<echo>Ant version is ${ant.version}</echo> <!-- output Ant version -->
 	</target>
 
@@ -1266,6 +1266,7 @@
 			<fileset dir="${om.lib.dir}" includes="httpcore-jar*.jar" />
 			<fileset dir="${om.lib.dir}" includes="httpclient-jar*.jar" />
 			<fileset dir="${om.lib.dir}" includes="slf4j-api*.jar" />
+			<fileset dir="${om.lib.dir}" includes="stax-api-jar-1.0.jar" />
 			<fileset dir="${om.lib.dir}" includes="*-source*.jar" />
 			<fileset dir="${om.lib.dir}" includes="*-javadoc*.jar" />
 		</delete>
@@ -1417,17 +1418,18 @@
 		<antcall target="-process-db" inheritAll="true" inheritRefs="true" />
 	</target>
 	
-	<target name="-java7.check" unless="java6.installed" depends="info">
+	<target name="-java7.check" unless="java7.installed" depends="info">
 		<condition property="java7.installed" value="true">
 			<and>
 				<or>
 					<equals arg1="${java.specification.version}" arg2="1.7" />
+					<equals arg1="${java.specification.version}" arg2="1.8" />
 				</or>
 				<matches string="${java.vm.specification.vendor}" pattern=".*[sun,oracle].*" casesensitive="false" singleline="true" />
 			</and>
 		</condition>
 		<echo message="Using Java ${java.version} specification: ${java.specification.version}" />
-		<fail message="Unsupported Java version - detected: ${java.version} Only Sun/Oracle Java compiler version 7 supported.">
+		<fail message="Unsupported Java version - detected: ${java.version} Only Sun/Oracle Java compiler version 7 or 8 are supported.">
 			<condition>
 				<not>
 					<equals arg1="${java7.installed}" arg2="true" />

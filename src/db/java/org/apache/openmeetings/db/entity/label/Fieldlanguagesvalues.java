@@ -54,7 +54,7 @@ import org.apache.openmeetings.db.entity.IDataProviderEntity;
 	, @NamedQuery(name="getFieldLanguagesValuesById"
 		, query = "SELECT f FROM Fieldlanguagesvalues f WHERE f.fieldlanguagesvalues_id = :id")
 	, @NamedQuery(name="getFieldLanguagesValuesByValueAndLang"
-		, query = "SELECT f FROM Fieldlanguagesvalues f WHERE f.fieldvalues_id = :fieldValuesId AND f.language_id = :lang AND f.deleted = false")
+		, query = "SELECT f FROM Fieldlanguagesvalues f WHERE f.fieldvalues.fieldvalues_id = :fieldValuesId AND f.language_id = :lang AND f.deleted = false")
 })
 @Table(name = "fieldlanguagesvalues")
 public class Fieldlanguagesvalues implements Serializable, IDataProviderEntity {
@@ -63,9 +63,6 @@ public class Fieldlanguagesvalues implements Serializable, IDataProviderEntity {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="id")
 	private Long fieldlanguagesvalues_id;
-	
-	@Column(name="fieldvalues_id")
-	private Long fieldvalues_id;
 	
 	@Column(name="language_id")
 	private Long language_id;
@@ -120,13 +117,6 @@ public class Fieldlanguagesvalues implements Serializable, IDataProviderEntity {
 		this.deleted = deleted;
 	}
 	
-	public Long getFieldvalues_id() {
-		return fieldvalues_id;
-	}
-	public void setFieldvalues_id(Long fieldvalues_id) {
-		this.fieldvalues_id = fieldvalues_id;
-	}
-
 	public Long getLanguage_id() {
 		return language_id;
 	}
