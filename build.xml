@@ -1203,7 +1203,7 @@
 		<copy file="${red5.server.dir}/src/main/server/conf/red5.properties" todir="${red5.lib}/conf" overwrite="true" force="true">
 			<filterchain>
 				<tokenfilter>
-					<replaceregex pattern="^[ \t]*rtmp.max_handling_time[ \t]*=.*$" replace="rtmp.max_handling_time=2000"/>
+					<replaceregex pattern="^[ \t]*rtmp.max_handling_time[ \t]*=.*$" replace="rtmp.max_handling_time=${rtmp.max.time}"/>
 				</tokenfilter>
 			</filterchain>
 		</copy>
