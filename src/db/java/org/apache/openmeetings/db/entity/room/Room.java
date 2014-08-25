@@ -51,7 +51,7 @@ import org.simpleframework.xml.Root;
 
 @Entity
 @FetchGroups({
-	@FetchGroup(name = "roomModerators", attributes = { @FetchAttribute(name = "moderators")})
+	@FetchGroup(name = "roomModerators", attributes = { @FetchAttribute(name = "moderators"), @FetchAttribute(name = "roomOrganisations") })
 })
 @NamedQueries({
 	@NamedQuery(name = "getNondeletedRooms", query = "SELECT r FROM Room r WHERE r.deleted = false"),
@@ -248,7 +248,7 @@ public class Room implements Serializable, IDataProviderEntity {
 	@Element(data = true, required = false)
 	private String pin;
 	
-	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "rooms_id", insertable = true, updatable = true)
 	@ElementDependent
 	@org.simpleframework.xml.Transient

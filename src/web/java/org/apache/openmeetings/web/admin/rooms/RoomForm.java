@@ -120,7 +120,7 @@ public class RoomForm extends AdminBaseForm<Room> {
 		List<Organisation> orgList = Application.getBean(OrganisationDao.class).get(0, Integer.MAX_VALUE);
 		final List<RoomOrganisation> orgRooms = new ArrayList<RoomOrganisation>(orgList.size());
 		for (Organisation org : orgList) {
-			orgRooms.add(new RoomOrganisation(org));
+			orgRooms.add(new RoomOrganisation(org, getModelObject()));
 		}
 		add(new Select2MultiChoice<RoomOrganisation>("roomOrganisations", null, new TextChoiceProvider<RoomOrganisation>() {
 			private static final long serialVersionUID = 1L;
@@ -152,7 +152,7 @@ public class RoomForm extends AdminBaseForm<Room> {
 				}
 				List<RoomOrganisation> list = new ArrayList<RoomOrganisation>();
 				for (Organisation o : getBean(OrganisationDao.class).get(ids)) {
-					list.add(new RoomOrganisation(o));
+					list.add(new RoomOrganisation(o, RoomForm.this.getModelObject()));
 				}
 				return list;
 			}
