@@ -28,6 +28,7 @@ import ro.fortsoft.wicket.dashboard.web.WidgetView;
 
 public class RssWidget extends AbstractWidget {
 	private static final long serialVersionUID = 1L;
+	public static final String WIDGET_ID_RSS = "RssWidget";
 
 	public RssWidget() {
 		super();
@@ -39,6 +40,7 @@ public class RssWidget extends AbstractWidget {
 	public void init() {
 		super.init();
 		title = WebSession.getString(277L);
+		id = WIDGET_ID_RSS;
 	}
 	
 	public WidgetView createView(String viewId) {

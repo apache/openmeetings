@@ -39,6 +39,7 @@ public class WelcomeWidget extends AbstractWidget {
 	public void init() {
 		super.init();
 		title = WebSession.getString(1546L);
+		id = "WelcomeWidget";
 	}
 	
 	public WidgetView createView(String viewId) {

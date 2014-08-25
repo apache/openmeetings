@@ -26,10 +26,11 @@ import ro.fortsoft.wicket.dashboard.Widget;
 import ro.fortsoft.wicket.dashboard.WidgetLocation;
 import ro.fortsoft.wicket.dashboard.web.WidgetView;
 
-public class PrivateRoomsWidget extends AbstractWidget {
+public class MyRoomsWidget extends AbstractWidget {
 	private static final long serialVersionUID = 1L;
+	public static final String WIDGET_ID_MY_ROOMS = "MyRoomsWidget";
 
-	public PrivateRoomsWidget() {
+	public MyRoomsWidget() {
 		super();
 		location = new WidgetLocation(0, 1);
 		init();
@@ -39,9 +40,10 @@ public class PrivateRoomsWidget extends AbstractWidget {
 	public void init() {
 		super.init();
 		title = WebSession.getString(781L);
+		id = WIDGET_ID_MY_ROOMS;
 	}
 	
 	public WidgetView createView(String viewId) {
-		return new PrivateRoomsWidgetView(viewId, new Model<Widget>(this));
+		return new MyRoomsWidgetView(viewId, new Model<Widget>(this));
 	}
 }

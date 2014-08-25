@@ -49,7 +49,7 @@ import org.apache.openmeetings.web.pages.ResetPage;
 import org.apache.openmeetings.web.pages.SwfPage;
 import org.apache.openmeetings.web.pages.auth.SignInPage;
 import org.apache.openmeetings.web.pages.install.InstallWizardPage;
-import org.apache.openmeetings.web.user.dashboard.PrivateRoomsWidgetDescriptor;
+import org.apache.openmeetings.web.user.dashboard.MyRoomsWidgetDescriptor;
 import org.apache.openmeetings.web.user.dashboard.RssWidgetDescriptor;
 import org.apache.openmeetings.web.user.dashboard.StartWidgetDescriptor;
 import org.apache.openmeetings.web.user.dashboard.WelcomeWidgetDescriptor;
@@ -124,7 +124,7 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 		dashboardContext = new DashboardContext();
 		dashboardContext.setDashboardPersiter(new UserDashboardPersister());
 		WidgetRegistry widgetRegistry = dashboardContext.getWidgetRegistry();
-		widgetRegistry.registerWidget(new PrivateRoomsWidgetDescriptor());
+		widgetRegistry.registerWidget(new MyRoomsWidgetDescriptor());
 		widgetRegistry.registerWidget(new WelcomeWidgetDescriptor());
 		widgetRegistry.registerWidget(new StartWidgetDescriptor());
 		widgetRegistry.registerWidget(new RssWidgetDescriptor());

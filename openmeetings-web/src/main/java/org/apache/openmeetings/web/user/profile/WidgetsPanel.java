@@ -38,9 +38,8 @@ public class WidgetsPanel extends Panel {
 	private static final long serialVersionUID = 1L;
 
 	private Widget isDisplayed(WidgetDescriptor wd) {
-		//FIXME the only way to compare is By TITLE
 		for (Widget w : getDashboard().getWidgets()) {
-			if (w.getTitle().equals(wd.getName())) {
+			if (w.getClass().getName().equals(wd.getWidgetClassName())) {
 				return w;
 			}
 		}

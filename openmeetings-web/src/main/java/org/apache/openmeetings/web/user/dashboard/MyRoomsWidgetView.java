@@ -18,30 +18,20 @@
  */
 package org.apache.openmeetings.web.user.dashboard;
 
-import org.apache.openmeetings.web.app.WebSession;
+import static org.apache.openmeetings.web.common.UserPanel.getMyRooms;
 
-import ro.fortsoft.wicket.dashboard.WidgetDescriptor;
+import org.apache.openmeetings.web.user.rooms.RoomsPanel;
+import org.apache.wicket.model.Model;
 
-public class PrivateRoomsWidgetDescriptor implements WidgetDescriptor {
+import ro.fortsoft.wicket.dashboard.Widget;
+import ro.fortsoft.wicket.dashboard.web.WidgetView;
+
+public class MyRoomsWidgetView extends WidgetView {
 	private static final long serialVersionUID = 1L;
 
-	public String getName() {
-		return WebSession.getString(781L);
-	}
-
-	public String getProvider() {
-		return "Apache Openmeetings";
-	}
-
-	public String getDescription() {
-		return WebSession.getString(782L);
-	}
-
-	public String getWidgetClassName() {
-		return PrivateRoomsWidget.class.getName();
-	}
-
-	public String getTypeName() {
-		return "om.widget.privaterooms";
+	public MyRoomsWidgetView(String id, Model<Widget> model) {
+		super(id, model);
+		
+		add(new RoomsPanel("rooms", getMyRooms()));
 	}
 }

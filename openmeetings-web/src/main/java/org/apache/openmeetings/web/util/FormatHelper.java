@@ -30,8 +30,12 @@ public class FormatHelper {
 
 	// TODO check RIGHTS here (email might need to be hidden)
 	public static String formatUser(User u, boolean isHTMLEscape) {
-		String email = u.getAdresses() == null ? "" : u.getAdresses().getEmail();
-		String user = u == null ? "" : String.format("\"%s %s\" <%s>", u.getFirstname(), u.getLastname(), email);
-		return isHTMLEscape ? escapeHtml4(user) : user;
+		String user = "";
+		if (u != null) {
+			String email = u.getAdresses() == null ? "" : u.getAdresses().getEmail();
+			user = String.format("\"%s %s\" <%s>", u.getFirstname(), u.getLastname(), email);
+			user = isHTMLEscape ? escapeHtml4(user) : user;
+		}
+		return user;
 	}
 }
