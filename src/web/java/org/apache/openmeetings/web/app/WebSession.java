@@ -33,6 +33,7 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
@@ -58,11 +59,14 @@ import org.apache.openmeetings.db.util.TimezoneUtil;
 import org.apache.openmeetings.ldap.LdapLoginManagement;
 import org.apache.openmeetings.util.OmException;
 import org.apache.openmeetings.web.pages.SwfPage;
-import org.apache.openmeetings.web.user.dashboard.PrivateRoomsWidgetDescriptor;
+import org.apache.openmeetings.web.user.dashboard.MyRoomsWidget;
+import org.apache.openmeetings.web.user.dashboard.MyRoomsWidgetDescriptor;
+import org.apache.openmeetings.web.user.dashboard.RssWidget;
 import org.apache.openmeetings.web.user.dashboard.RssWidgetDescriptor;
 import org.apache.openmeetings.web.user.dashboard.StartWidgetDescriptor;
 import org.apache.openmeetings.web.user.dashboard.WelcomeWidgetDescriptor;
 import org.apache.openmeetings.web.util.OmUrlFragment;
+import org.apache.openmeetings.web.util.UserDashboard;
 import org.apache.wicket.RestartResponseAtInterceptPageException;
 import org.apache.wicket.authentication.IAuthenticationStrategy;
 import org.apache.wicket.authroles.authentication.AbstractAuthenticatedWebSession;
@@ -75,13 +79,13 @@ import org.apache.wicket.util.string.StringValue;
 import org.apache.wicket.util.string.Strings;
 
 import ro.fortsoft.wicket.dashboard.Dashboard;
-import ro.fortsoft.wicket.dashboard.DefaultDashboard;
 import ro.fortsoft.wicket.dashboard.Widget;
 import ro.fortsoft.wicket.dashboard.WidgetFactory;
 import ro.fortsoft.wicket.dashboard.web.DashboardContext;
 
 public class WebSession extends AbstractAuthenticatedWebSession {
 	private static final long serialVersionUID = 1123393236459095315L;
+	
 	public static int MILLIS_IN_MINUTE = 60000;
 	//private static final Map<String, Locale> LNG_TO_LOCALE_MAP = new HashMap<String, Locale> ();
 	private long userId = -1;
@@ -94,7 +98,7 @@ public class WebSession extends AbstractAuthenticatedWebSession {
 	public final static String ISO8601_FORMAT_STRING = "yyyy-MM-dd'T'HH:mm:ssZ";
 	private DateFormat ISO8601FORMAT = new SimpleDateFormat(ISO8601_FORMAT_STRING); //FIXME not thread safe
 	private DateFormat sdf;
-	private Dashboard dashboard;
+	private UserDashboard dashboard;
 	private Locale browserLocale = null;
 	private Long recordingId;
 	private Long loginError = null;
@@ -441,25 +445,59 @@ public class WebSession extends AbstractAuthenticatedWebSession {
 	
 	private void initDashboard() {
 		DashboardContext dashboardContext = getDashboardContext();
-		dashboard = dashboardContext.getDashboardPersiter().load();
+		dashboard = (UserDashboard)dashboardContext.getDashboardPersiter().load();
+		boolean existMyRoomWidget = false, existRssWidget = false;
+		ConfigurationDao cfgDao = getBean(ConfigurationDao.class);
+		boolean confShowMyRooms = 1 == cfgDao.getConfValue(CONFIG_DASHBOARD_SHOW_MYROOMS_KEY, Integer.class, "0");
+		boolean confShowRss = 1 == cfgDao.getConfValue(CONFIG_DASHBOARD_SHOW_RSS_KEY, Integer.class, "0");
+		boolean save = false;
+
+		WidgetFactory widgetFactory = dashboardContext.getWidgetFactory();
+
 		if (dashboard == null) {
-			dashboard = new DefaultDashboard("default", "Default");
-			
-			WidgetFactory widgetFactory = dashboardContext.getWidgetFactory();
+			dashboard = new UserDashboard("default", "Default");
+
 			dashboard.addWidget(widgetFactory.createWidget(new WelcomeWidgetDescriptor()));
 			dashboard.addWidget(widgetFactory.createWidget(new StartWidgetDescriptor()));
-			ConfigurationDao cfgDao = getBean(ConfigurationDao.class);
-			if (1 == cfgDao.getConfValue(CONFIG_DASHBOARD_SHOW_MYROOMS_KEY, Integer.class, "0")) {
-				dashboard.addWidget(widgetFactory.createWidget(new PrivateRoomsWidgetDescriptor()));
+			if (confShowMyRooms) {
+				dashboard.addWidget(widgetFactory.createWidget(new MyRoomsWidgetDescriptor()));
 			}
-			if (1 == cfgDao.getConfValue(CONFIG_DASHBOARD_SHOW_RSS_KEY, Integer.class, "0")) {
+			if (confShowRss) {
 				dashboard.addWidget(widgetFactory.createWidget(new RssWidgetDescriptor()));
 			}
-			dashboardContext.getDashboardPersiter().save(dashboard);
+			save = true;
 		} else {
-			for (Widget w : dashboard.getWidgets()) {
-				w.init();
+			for (Iterator<Widget> iter = dashboard.getWidgets().iterator(); iter.hasNext();) {
+				Widget w = iter.next();
+				// PrivateRoomWidget is stored in the profile of user. Now, Show_MyRooms_key is disable.
+				if (w.getClass().equals(MyRoomsWidget.class)) {
+					existMyRoomWidget = true;
+					if (!confShowMyRooms) {
+						iter.remove();
+					}
+				} else if ((w.getClass().equals(RssWidget.class))) {
+					// RssWidget is stored in the profile of user. Now, Show_RSS_Key is disable.
+					existRssWidget = true;
+					if (!confShowRss) {
+						iter.remove();
+					}
+				} else {
+					w.init();
+				}
 			}
+			// PrivateRoomWidget was deleted from profile and now it's enabled. It's added again to dashboard.
+			if (!existMyRoomWidget && confShowMyRooms && !dashboard.isWidgetMyRoomsDeleted()) {
+				dashboard.addWidget(widgetFactory.createWidget(new MyRoomsWidgetDescriptor()));
+				save = true;
+			}
+			// RssWidget was deleted from profile and now it's enabled. It's added again to dashboard.
+			if (!existRssWidget && confShowRss && !dashboard.isWidgetRssDeleted()) {
+				dashboard.addWidget(widgetFactory.createWidget(new RssWidgetDescriptor()));
+				save = true;
+			}
+		}
+		if (save) {
+			dashboardContext.getDashboardPersiter().save(dashboard);
 		}
 	}
 }

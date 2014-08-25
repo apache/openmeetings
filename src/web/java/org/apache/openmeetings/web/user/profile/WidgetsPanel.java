@@ -35,12 +35,11 @@ import ro.fortsoft.wicket.dashboard.WidgetDescriptor;
 import ro.fortsoft.wicket.dashboard.web.DashboardContext;
 
 public class WidgetsPanel extends Panel {
-	private static final long serialVersionUID = -3959536582694664524L;
+	private static final long serialVersionUID = 1L;
 
 	private Widget isDisplayed(WidgetDescriptor wd) {
-		//FIXME the only way to compare is By TITLE
 		for (Widget w : getDashboard().getWidgets()) {
-			if (w.getTitle().equals(wd.getName())) {
+			if (w.getClass().getName().equals(wd.getWidgetClassName())) {
 				return w;
 			}
 		}
@@ -59,7 +58,7 @@ public class WidgetsPanel extends Panel {
 				item.add(new Label("name", wd.getName()));
 				item.add(new Label("description", wd.getDescription()));
 				item.add(new AjaxCheckBox("display", Model.of(isDisplayed(wd) != null)) {
-					private static final long serialVersionUID = -7079665921153653164L;
+					private static final long serialVersionUID = 1L;
 
 					@Override
 					protected void onUpdate(AjaxRequestTarget target) {

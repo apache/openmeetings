@@ -27,7 +27,7 @@ import ro.fortsoft.wicket.dashboard.WidgetLocation;
 import ro.fortsoft.wicket.dashboard.web.WidgetView;
 
 public class WelcomeWidget extends AbstractWidget {
-	private static final long serialVersionUID = 8866852061674736808L;
+	private static final long serialVersionUID = 1L;
 
 	public WelcomeWidget() {
 		super();
@@ -39,6 +39,7 @@ public class WelcomeWidget extends AbstractWidget {
 	public void init() {
 		super.init();
 		title = WebSession.getString(1546L);
+		id = "WelcomeWidget";
 	}
 	
 	public WidgetView createView(String viewId) {
