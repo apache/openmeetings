@@ -71,7 +71,7 @@ public class RoomOrganisation implements IDataProviderEntity {
 	@Element(data = true, name = "rooms_organisation_id")
 	private Long id;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name="rooms_id", nullable=true)
 	@ForeignKey(enabled = true)
 	@Element(name="rooms_id", data=true, required=false)
@@ -93,8 +93,9 @@ public class RoomOrganisation implements IDataProviderEntity {
 	@Element(data=true)
 	private boolean deleted;
 
-	public RoomOrganisation(Organisation org) {
+	public RoomOrganisation(Organisation org, Room room) {
 		this.organisation = org;
+		this.room = room;
 	}
 
 	public RoomOrganisation() {

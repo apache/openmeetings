@@ -86,8 +86,11 @@ public abstract class BaseConverter {
 		return getStreamsSubDir(flvRecording.getRoomId());
 	}
 	
-	protected String getDifference(Date from, Date to) {
-		long millis = from.getTime() - to.getTime();
+	protected long diff(Date from, Date to) {
+		return from.getTime() - to.getTime();
+	}
+
+	protected String formatMillis(long millis) {
 		long hours = TimeUnit.MILLISECONDS.toHours(millis);
 		millis -= TimeUnit.HOURS.toMillis(hours);
 		long minutes = TimeUnit.MILLISECONDS.toMinutes(millis);
@@ -98,7 +101,7 @@ public abstract class BaseConverter {
 	}
 
 	protected void updateDuration(FlvRecording r) {
-		r.setDuration(getDifference(r.getRecordEnd(), r.getRecordStart()));
+		r.setDuration(formatMillis(diff(r.getRecordEnd(), r.getRecordStart())));
 	}
 	
 	protected void deleteFileIfExists(String name) {

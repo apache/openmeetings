@@ -42,6 +42,7 @@ import org.apache.openmeetings.db.entity.IDataProviderEntity;
 @Table(name = "flvrecording_log")
 public class FlvRecordingLog implements IDataProviderEntity {
 	private static final long serialVersionUID = 1L;
+	public static final int MAX_LOG_SIZE = 1 * 1024 * 1024;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="id")
@@ -58,7 +59,7 @@ public class FlvRecordingLog implements IDataProviderEntity {
 	private String msgType;
 	
 	@Lob
-	@Column(name="full_message", length = 1 * 1024 * 1024)
+	@Column(name="ful_message", length = MAX_LOG_SIZE)
 	private String fullMessage;
 	
 	@Column(name="exit_value")
@@ -96,7 +97,8 @@ public class FlvRecordingLog implements IDataProviderEntity {
 		return fullMessage;
 	}
 	public void setFullMessage(String fullMessage) {
-		this.fullMessage = fullMessage;
+		this.fullMessage = 
+				fullMessage == null || fullMessage.length() < MAX_LOG_SIZE ? fullMessage : fullMessage.substring(0,  MAX_LOG_SIZE);
 	}
 	
 	public String getExitValue() {

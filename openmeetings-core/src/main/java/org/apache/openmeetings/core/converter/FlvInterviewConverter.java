@@ -193,31 +193,36 @@ public class FlvInterviewConverter extends BaseConverter {
 					if ("0".equals(r.getExitValue())) {
 						//TODO need to remove smallest gap
 						
-						// stub to add
-						// ffmpeg -y -loop 1 -i /home/solomax/work/openmeetings/branches/3.0.x/dist/red5/webapps/openmeetings/streams/hibernate/default_interview_image.jpg -filter_complex '[0:0]scale=320:260' -c:v libx264 -t 00:00:29.059 -pix_fmt yuv420p out.flv
-						File podFB = new File(streamFolder, meta.getStreamName() + "_pod_" + pod + "_blank.flv");
-						String podPB = podFB.getCanonicalPath();
-						String[] argsPodB = new String[] { getPathToFFMPEG(), "-y" //
-								, "-loop", "1", "-i", defaultInterviewImageFile.getCanonicalPath() //
-								, "-filter_complex", String.format("[0:0]scale=%1$d:%2$d", flvWidth, flvHeight) //
-								, "-c:v", "libx264" //
-								, "-t", getDifference(meta.getRecordStart(), meta.getFlvRecording().getRecordStart()) //
-								, "-pix_fmt", "yuv420p" //
-								, podPB };
-						returnLog.add(ProcessHelper.executeScript("blankFlvPod_" + pod , argsPodB));
+						long diff = diff(meta.getRecordStart(), meta.getFlvRecording().getRecordStart());
+						if (diff != 0L) {
+							// stub to add
+							// ffmpeg -y -loop 1 -i /home/solomax/work/openmeetings/branches/3.0.x/dist/red5/webapps/openmeetings/streams/hibernate/default_interview_image.jpg -filter_complex '[0:0]scale=320:260' -c:v libx264 -t 00:00:29.059 -pix_fmt yuv420p out.flv
+							File podFB = new File(streamFolder, meta.getStreamName() + "_pod_" + pod + "_blank.flv");
+							String podPB = podFB.getCanonicalPath();
+							String[] argsPodB = new String[] { getPathToFFMPEG(), "-y" //
+									, "-loop", "1", "-i", defaultInterviewImageFile.getCanonicalPath() //
+									, "-filter_complex", String.format("[0:0]scale=%1$d:%2$d", flvWidth, flvHeight) //
+									, "-c:v", "libx264" //
+									, "-t", formatMillis(diff) //
+									, "-pix_fmt", "yuv420p" //
+									, podPB };
+							returnLog.add(ProcessHelper.executeScript("blankFlvPod_" + pod , argsPodB));
 						
-						//ffmpeg -y -i out.flv -i rec_15_stream_4_2014_07_15_20_41_03.flv -filter_complex '[0:0]setsar=1/1[sarfix];[1:0]scale=320:260,setsar=1/1[scale];[sarfix] [scale] concat=n=2:v=1:a=0 [v]' -map '[v]'  output1.flv
-						File podF = new File(streamFolder, meta.getStreamName() + "_pod_" + pod + ".flv");
-						String podP = podF.getCanonicalPath();
-						String[] argsPod = new String[] { getPathToFFMPEG(), "-y"//
-								, "-i", podPB //
-								, "-i", path //
-								, "-filter_complex", String.format("[0:0]setsar=1/1[sarfix];[1:0]scale=%1$d:%2$d,setsar=1/1[scale];[sarfix] [scale] concat=n=2:v=1:a=0 [v]", flvWidth, flvHeight) //
-								, "-map", "[v]" //
-								, podP };
-						returnLog.add(ProcessHelper.executeScript("shiftedFlvPod_" + pod , argsPod));
+							//ffmpeg -y -i out.flv -i rec_15_stream_4_2014_07_15_20_41_03.flv -filter_complex '[0:0]setsar=1/1[sarfix];[1:0]scale=320:260,setsar=1/1[scale];[sarfix] [scale] concat=n=2:v=1:a=0 [v]' -map '[v]'  output1.flv
+							File podF = new File(streamFolder, meta.getStreamName() + "_pod_" + pod + ".flv");
+							String podP = podF.getCanonicalPath();
+							String[] argsPod = new String[] { getPathToFFMPEG(), "-y"//
+									, "-i", podPB //
+									, "-i", path //
+									, "-filter_complex", String.format("[0:0]setsar=1/1[sarfix];[1:0]scale=%1$d:%2$d,setsar=1/1[scale];[sarfix] [scale] concat=n=2:v=1:a=0 [v]", flvWidth, flvHeight) //
+									, "-map", "[v]" //
+									, podP };
+							returnLog.add(ProcessHelper.executeScript("shiftedFlvPod_" + pod , argsPod));
 
-						pods[pod - 1] = podP;
+							pods[pod - 1] = podP;
+						} else {
+							pods[pod - 1] = path;
+						}
 					}
 					found = true;
 				}

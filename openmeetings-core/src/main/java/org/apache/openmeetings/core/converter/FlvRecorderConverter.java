@@ -136,7 +136,7 @@ public class FlvRecorderConverter extends BaseConverter {
 			flvRecording.setFlvHeight(flvHeight);
 
 			String[] argv_fullFLV = new String[] { getPathToFFMPEG(), "-y",//
-					"-itsoffset", getDifference(screenMetaData.getRecordStart(), screenMetaData.getFlvRecording().getRecordStart()),
+					"-itsoffset", formatMillis(diff(screenMetaData.getRecordStart(), screenMetaData.getFlvRecording().getRecordStart())),
 					"-i", inputScreenFullFlv, "-i", outputFullWav, "-ar", "22050", //
 					"-acodec", "libmp3lame", //
 					"-ab", "32k", //
