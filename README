@@ -12,7 +12,7 @@ Release Notes 3.0.3
 =============
 see CHANGELOG file for detailed log
 
-Service release 3 for 3.0.0, no new features were added
+Service release 3 for 3.0.0, no new features were added, please NOTE Java7 is required on both client and server from now on.
 
 
 Release Notes 3.0.2
