@@ -119,7 +119,7 @@ public class MainService implements IPendingServiceCallback {
 		Long users_id = sessiondataDao.checkSession(SID);
 		Set<Right> rights = userDao.getRights(users_id);
 		if (AuthLevelUtil.hasAdminLevel(rights) || AuthLevelUtil.hasWebServiceLevel(rights)) {
-			users = userDao.get(new Long(USER_ID));
+			users = userDao.get(USER_ID);
 		} else {
 			users.setFirstname("No rights to do this");
 		}

@@ -195,8 +195,9 @@ public class ChatString {
 
 	public static String link(String input) {
 		try {
-
-			String tReturn = "";
+			Pattern p = Pattern.compile(
+							"(^|[ \t\r\n])((ftp|http|https|gopher|mailto|news|nntp|telnet|wais|file|prospero|aim|webcal):(([A-Za-z0-9$_.+!*(),;/?:@&~=-])|%[A-Fa-f0-9]{2}){2,}(#([a-zA-Z0-9][a-zA-Z0-9$_.+!*(),;/?:@&~=%-]*))?([A-Za-z0-9$_+!*();/?:~-]))");
+			StringBuffer tReturn = new StringBuffer();
 
 			String parts[] = input.split(" ");
 
@@ -206,10 +207,7 @@ public class ChatString {
 
 				// System.out.println("Part 1 "+text);
 
-				Matcher matcher = Pattern
-						.compile(
-								"(^|[ \t\r\n])((ftp|http|https|gopher|mailto|news|nntp|telnet|wais|file|prospero|aim|webcal):(([A-Za-z0-9$_.+!*(),;/?:@&~=-])|%[A-Fa-f0-9]{2}){2,}(#([a-zA-Z0-9][a-zA-Z0-9$_.+!*(),;/?:@&~=%-]*))?([A-Za-z0-9$_+!*();/?:~-]))")
-						.matcher(text);
+				Matcher matcher = p.matcher(text);
 
 				if (matcher.find()) {
 					text = matcher
@@ -221,14 +219,14 @@ public class ChatString {
 				// System.out.println("Part 2 "+text);
 
 				if (t != 0) {
-					tReturn += " ";
+					tReturn.append(" ");
 				}
 
-				tReturn += text;
+				tReturn.append(text);
 
 			}
 
-			return tReturn;
+			return tReturn.toString();
 
 		} catch (Exception e) {
 			log.error("[link]", e);

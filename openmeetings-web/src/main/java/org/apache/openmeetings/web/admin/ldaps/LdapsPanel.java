@@ -73,7 +73,7 @@ public class LdapsPanel extends AdminPanel {
 					}
 				});
 				item.add(AttributeModifier.replace("class", "clickable ui-widget-content"
-						+ (lc.getId() == form.getModelObject().getId() ? " ui-state-active" : "")));
+						+ (lc.getId().equals(form.getModelObject().getId()) ? " ui-state-active" : "")));
 			}
 		};
 		add(listContainer.add(dataView).setOutputMarkupId(true));

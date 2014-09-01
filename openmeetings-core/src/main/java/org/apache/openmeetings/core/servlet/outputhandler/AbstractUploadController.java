@@ -45,7 +45,7 @@ public abstract class AbstractUploadController {
 	@Autowired
 	protected ConfigurationDao configurationDao;
 	
-	protected class UploadInfo {
+	protected static class UploadInfo {
 		MultipartFile file;
 		Long userId;
 		String sid;

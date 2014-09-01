@@ -559,8 +559,8 @@ public class Admin {
 		if (cfg.ical_timeZone == null) {
 			System.out.println("Please enter timezone, Possible timezones are:");
 			
-			for (String tzIcal : tzMap.keySet()) {
-				System.out.println(String.format("%1$-25s%2$s", "\"" + tzIcal + "\"", tzMap.get(tzIcal)));
+			for (Map.Entry<String,String> me : tzMap.entrySet()) {
+				System.out.println(String.format("%1$-25s%2$s", "\"" + me.getKey() + "\"", me.getValue()));
 			}
 			System.exit(1);
 		}

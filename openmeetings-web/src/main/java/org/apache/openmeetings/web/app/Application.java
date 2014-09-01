@@ -28,6 +28,7 @@ import static org.springframework.web.context.support.WebApplicationContextUtils
 
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
@@ -250,10 +251,10 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 	}
 	
 	public static long getRoom(Client c) {
-		for (long roomId : ROOMS.keySet()) {
-			Set<Client> clients = ROOMS.get(roomId);
+		for (Entry<Long, Set<Client>> me : ROOMS.entrySet()) {
+			Set<Client> clients = me.getValue();
 			if (clients.contains(c)) {
-				return roomId;
+				return me.getKey();
 			}
 		}
 		return -1;

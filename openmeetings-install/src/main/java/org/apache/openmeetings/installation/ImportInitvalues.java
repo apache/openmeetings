@@ -53,6 +53,7 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
@@ -561,9 +562,6 @@ public class ImportInitvalues {
 
 	public void loadInitUserAndOrganisation(InstallationConfig cfg) throws Exception {
 		Long default_lang_id = Long.parseLong(cfg.defaultLangId);
-		if (default_lang_id == null) {
-			default_lang_id = 1L;
-		}
 
 		// Add default group
 		Organisation org = new Organisation();
@@ -636,8 +634,7 @@ public class ImportInitvalues {
 		Iterator<Element> it = root.elementIterator("lang"); it.hasNext();) {
 			Element item = it.next();
 			String country = item.getText();
-			Integer id = Integer.valueOf(item.attribute("id").getValue())
-					.intValue();
+			Integer id = Integer.valueOf(item.attribute("id").getValue());
 
 			String rtl = item.attribute("rightToLeft").getValue();
 			String code = item.attribute("code").getValue();
@@ -687,10 +684,10 @@ public class ImportInitvalues {
 	public void loadLanguagesFile(String langName) throws Exception {
 		Map<Integer, Map<String, Object>> listlanguages = getLanguageFiles();
 		log.debug("Number of languages found: " + listlanguages.size());
-		for (int langId : listlanguages.keySet()) {
-			Map<String, Object> langMap = listlanguages.get(langId);
+		for (Entry<Integer, Map<String, Object>> me : listlanguages.entrySet()) {
+			Map<String, Object> langMap = me.getValue();
 			if (langName.equals(langMap.get("name"))) {
-				loadLanguagesFile(listlanguages, new Hashtable<Long, Fieldvalues>(3000), langId);
+				loadLanguagesFile(listlanguages, new Hashtable<Long, Fieldvalues>(3000), me.getKey());
 				break;
 			}
 		}
@@ -707,15 +704,14 @@ public class ImportInitvalues {
 
 		log.debug("loadInitLanguages rtl from xml: " + rtl);
 
-		Boolean langRtl = false;
-
-		if (rtl != null && rtl.equals("true")) {
-			langRtl = true;
-		}
+		Boolean langRtl = Boolean.TRUE.equals(rtl);
 
 		long ticks = System.currentTimeMillis();
 		FieldLanguage lang = fieldLanguageDaoImpl.addLanguage(langId, langName, langRtl, code);
-
+		if (lang == null) {
+			log.error("Failed to create language");
+			throw new Exception("Failed to create language");
+		}
 		SAXReader reader = new SAXReader();
 		Document document = reader.read(new File(
 				OmFileHelper.getLanguagesDir(), langName + ".xml"));
@@ -728,7 +724,7 @@ public class ImportInitvalues {
 			Element item = (Element) it.next();
 			// log.error(item.getName());
 
-			Long id = Long.valueOf(item.attributeValue("id")).longValue();
+			Long id = Long.valueOf(item.attributeValue("id"));
 			String name = item.attributeValue("name");
 			String value = "";
 
@@ -772,17 +768,6 @@ public class ImportInitvalues {
 		log.debug("Lang ADDED: " + lang + "; seconds passed: " + (System.currentTimeMillis() - ticks) / 1000);
 	}
 	
-	public static void main(String... args) {
-		int pr = 22;
-		int progressDelta = 50 - pr;
-		
-		double deltaProgressPerLanguageFile = new Double(progressDelta)/new Double(34);
-		
-		pr += (2 * deltaProgressPerLanguageFile);
-		
-		System.err.println("deltaProgressPerLanguageFile: "+deltaProgressPerLanguageFile +" "+ pr);
-	}
-
 	public void loadLanguagesFiles() throws Exception {
 		Map<Integer, Map<String, Object>> listlanguages = getLanguageFiles();
 

@@ -199,7 +199,7 @@ public class AppointmentLogic {
 			return;
 		}
 
-		long milliseconds = (minutesReminderSend * 60 * 1000);
+		long milliseconds = (minutesReminderSend * 60 * 1000L);
 		Calendar start = Calendar.getInstance();
 		if (milliseconds < 0) {
 			start.setTimeInMillis(start.getTimeInMillis() + milliseconds);

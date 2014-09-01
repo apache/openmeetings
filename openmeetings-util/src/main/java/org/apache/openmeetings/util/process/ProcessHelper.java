@@ -92,11 +92,11 @@ public class ProcessHelper {
 	}
 	
 	private static String getCommand(String[] argv) {
-		String tString = "";
+		StringBuffer tString = new StringBuffer();
 		for (int i = 0; i < argv.length; i++) {
-			tString += argv[i] + " ";
+			tString.append(argv[i]).append(" ");
 		}
-		return tString;
+		return tString.toString();
 	}
 	
 	private static void debugCommand(String desc, String[] argv) {

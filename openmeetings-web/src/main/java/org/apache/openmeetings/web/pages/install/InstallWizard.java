@@ -499,17 +499,17 @@ public class InstallWizard extends Wizard {
 			
 			List<SelectOption> list = new ArrayList<SelectOption>();
 			
-			for (Integer key : allLanguagesAll.keySet()) {
-				String langName = (String) allLanguagesAll.get(key).get("name");
-				String langCode = (String) allLanguagesAll.get(key).get("code");
-				SelectOption op = new SelectOption(key.toString(), langName);
+			for (Map.Entry<Integer,Map<String,Object>> me : allLanguagesAll.entrySet()) {
+				String langName = (String) me.getValue().get("name");
+				String langCode = (String) me.getValue().get("code");
+				SelectOption op = new SelectOption(me.getKey().toString(), langName);
 				if (langCode != null) {
 					if (getSession().getLocale().toString().startsWith(langCode)) {
 						option = op;
 					}
 					list.add(op);
 				}
-				if (option == null && key.toString().equals(cfg.defaultLangId)) {
+				if (option == null && me.getKey().toString().equals(cfg.defaultLangId)) {
 					option = op;
 				}
 			}

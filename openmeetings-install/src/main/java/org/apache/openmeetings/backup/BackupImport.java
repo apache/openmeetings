@@ -684,11 +684,13 @@ public class BackupImport {
 	}
 	
 	private Node getNode(Node doc, String name) {
-		NodeList nl = doc.getChildNodes();
-		for (int i = 0; i < nl.getLength(); ++i) {
-			Node node = nl.item(i);
-			if (node.getNodeType() == Node.ELEMENT_NODE && name.equals(node.getNodeName())) {
-				return node;
+		if (doc != null) {
+			NodeList nl = doc.getChildNodes();
+			for (int i = 0; i < nl.getLength(); ++i) {
+				Node node = nl.item(i);
+				if (node.getNodeType() == Node.ELEMENT_NODE && name.equals(node.getNodeName())) {
+					return node;
+				}
 			}
 		}
 		return null;
@@ -916,7 +918,6 @@ public class BackupImport {
 
 		DocumentBuilder dBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
 		Document doc = dBuilder.parse(xml);
-		NodeList nl = getNode(getNode(doc, "root"), listNodeName).getChildNodes();
 		userEmailMap.clear();
 		//add existence email from database
 		List<User>  users = usersDao.getAllUsers();
@@ -926,26 +927,30 @@ public class BackupImport {
 			}
 			userEmailMap.put(u.getAdresses().getEmail(), -1);
 		}
-		// one of the old OM version created 2 nodes "deleted" this code block handles this
-		for (int i = 0; i < nl.getLength(); ++i) {
-			Node user = nl.item(i);
-			NodeList nl1 = user.getChildNodes();
-			boolean deletedFound = false;
-			for (int j = 0; j < nl1.getLength(); ++j) {
-				Node node = nl1.item(j);
-				if (node.getNodeType() == Node.ELEMENT_NODE && "deleted".equals(node.getNodeName())) {
-					if (deletedFound) {
-						user.removeChild(node);
-						break;
+		Node nList = getNode(getNode(doc, "root"), listNodeName);
+		if (nList != null) {
+			NodeList nl = nList.getChildNodes();
+			// one of the old OM version created 2 nodes "deleted" this code block handles this
+			for (int i = 0; i < nl.getLength(); ++i) {
+				Node user = nl.item(i);
+				NodeList nl1 = user.getChildNodes();
+				boolean deletedFound = false;
+				for (int j = 0; j < nl1.getLength(); ++j) {
+					Node node = nl1.item(j);
+					if (node.getNodeType() == Node.ELEMENT_NODE && "deleted".equals(node.getNodeName())) {
+						if (deletedFound) {
+							user.removeChild(node);
+							break;
+						}
+						deletedFound = true;
 					}
-					deletedFound = true;
 				}
 			}
 		}
 		
 		StringWriter sw = new StringWriter();
 		Transformer xformer = TransformerFactory.newInstance().newTransformer();
-        xformer.transform(new DOMSource(doc), new StreamResult(sw));
+		xformer.transform(new DOMSource(doc), new StreamResult(sw));
         
 		List<User> list = new ArrayList<User>();
 		InputNode root = NodeBuilder.read(new StringReader(sw.toString()));

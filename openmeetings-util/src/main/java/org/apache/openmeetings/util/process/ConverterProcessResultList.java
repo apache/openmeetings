@@ -22,7 +22,6 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import static org.red5.logging.Red5LoggerFactory.getLogger;
 
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -104,36 +103,24 @@ public class ConverterProcessResultList {
 	 * @return
 	 */
 	public FileImportError[] convertToFileImportErrors() {
-		FileImportError[] fileImportErrors = new FileImportError[jobslist
-				.size()];
+		FileImportError[] errors = new FileImportError[jobslist.size()];
 
 		int i = 0;
 		// Axis need Objects or array of objects, Map won't work
-		for (Iterator<String> iter = jobslist.keySet().iterator(); iter
-				.hasNext();) {
+		for (Map.Entry<String, ConverterProcessResult> me : jobslist.entrySet()) {
 
-			ConverterProcessResult returnAttribute = jobslist.get(iter
-					.next());
+			ConverterProcessResult result = me.getValue();
 
-			fileImportErrors[i] = new FileImportError();
-			fileImportErrors[i]
-					.setCommand((returnAttribute.getCommand() != null) ? returnAttribute
-							.getCommand().toString() : "");
-			fileImportErrors[i]
-					.setError((returnAttribute.getError() != null) ? returnAttribute
-							.getError().toString() : "");
-			fileImportErrors[i]
-					.setExitValue((returnAttribute.getExitValue() != null) ? Integer
-							.valueOf(returnAttribute.getExitValue().toString())
-							.intValue() : 0);
-			fileImportErrors[i]
-					.setProcess((returnAttribute.getProcess() != null) ? returnAttribute
-							.getProcess().toString() : "");
+			errors[i] = new FileImportError();
+			errors[i].setCommand((result.getCommand() != null) ? result.getCommand().toString() : "");
+			errors[i].setError((result.getError() != null) ? result.getError().toString() : "");
+			errors[i].setExitValue((result.getExitValue() != null) ? Integer.valueOf(result.getExitValue().toString()) : 0);
+			errors[i].setProcess((result.getProcess() != null) ? result.getProcess().toString() : "");
 
 			i++;
 		}
 		
-		return fileImportErrors;
+		return errors;
 	}
 
 	public int size() {

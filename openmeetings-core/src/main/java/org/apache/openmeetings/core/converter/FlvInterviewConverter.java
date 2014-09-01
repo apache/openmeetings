@@ -39,7 +39,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 public class FlvInterviewConverter extends BaseConverter {
 	private static final Logger log = Red5LoggerFactory.getLogger(FlvInterviewConverter.class, webAppRootKey);
-	private class ReConverterParams {
+	private static class ReConverterParams {
 		private int leftSideLoud = 1;
 		private int rightSideLoud = 1;
 		private Integer leftSideTime = 0;

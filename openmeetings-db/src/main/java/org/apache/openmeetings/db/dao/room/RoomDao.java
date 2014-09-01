@@ -143,8 +143,8 @@ public class RoomDao implements IDataProviderDao<Room> {
 				.getResultList();
 	}
 	
-	public Long getRoomsCapacityByIds(List<Long> ids) {
-		return ids == null || ids.isEmpty() ? 0
+	public long getRoomsCapacityByIds(List<Long> ids) {
+		return ids == null || ids.isEmpty() ? 0L
 			: em.createNamedQuery("getRoomsCapacityByIds", Long.class).setParameter("ids", ids).getSingleResult();
 	}
 	
@@ -153,10 +153,10 @@ public class RoomDao implements IDataProviderDao<Room> {
 	}
 	
 	private String getSipNumber(long roomId) {
-        if (isSipEnabled()) {
-        	return cfgDao.getConfValue("red5sip.room_prefix", String.class, "400") + roomId;
-        }
-        return null;
+		if (isSipEnabled()) {
+			return cfgDao.getConfValue("red5sip.room_prefix", String.class, "400") + roomId;
+		}
+		return null;
 	}
 	
 	public Room update(Room entity, Long userId) {
@@ -168,7 +168,7 @@ public class RoomDao implements IDataProviderDao<Room> {
 		}
 		if (entity.isSipEnabled() && isSipEnabled()) {
 			String sipNumber = getSipNumber(entity.getId());
-			if (!sipNumber.equals(entity.getConfno())) {
+			if (sipNumber != null && !sipNumber.equals(entity.getConfno())) {
 				entity.setConfno(sipNumber);
 			}
 			sipDao.update(sipNumber, entity.getPin());

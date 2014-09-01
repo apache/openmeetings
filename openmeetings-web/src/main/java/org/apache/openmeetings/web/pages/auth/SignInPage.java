@@ -330,10 +330,10 @@ public class SignInPage extends BaseInitedPage {
 		// generate random password
 		byte[] rawPass = new byte[16];
 		Random rnd = new Random();
-		for (int i = 0; i < 16; i++) {
-			rawPass[i] = (byte) (97 + rnd.nextInt(25));
+		for (int i = 0; i < 25; i++) {
+			rawPass[i] = (byte) ('!' + rnd.nextInt(93));
 		}
-		String pass = new String(rawPass);
+		String pass = new String(rawPass, "UTF-8");
 		// check if the user already exists and register new one if it's needed
 		if (user == null) {
 			Integer defaultlangId = Integer.valueOf(configurationDao.getConfValue("default_lang_id", String.class, "1"));
@@ -354,7 +354,7 @@ public class SignInPage extends BaseInitedPage {
 				return;
 			}
 			user.setLastlogin(new Date());
-			user = userDao.update(user, pass, -1);
+			userDao.update(user, pass, -1);
 		}
 		
 		if (WebSession.get().signIn(login, pass, Type.oauth, serverId)) {

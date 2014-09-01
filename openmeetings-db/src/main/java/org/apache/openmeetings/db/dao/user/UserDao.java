@@ -144,8 +144,8 @@ public class UserDao implements IDataProviderDao<User> {
 	}
 	
 	private void setAdditionalParams(TypedQuery<?> q, Map<String, Object> params) {
-		for (String key : params.keySet()) {
-			q.setParameter(key, params.get(key));
+		for (Map.Entry<String, Object> me: params.entrySet()) {
+			q.setParameter(me.getKey(), me.getValue());
 		}
 	}
 

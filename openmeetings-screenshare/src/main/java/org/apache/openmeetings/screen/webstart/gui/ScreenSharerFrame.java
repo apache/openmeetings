@@ -137,7 +137,7 @@ public class ScreenSharerFrame extends JFrame {
 		}
 	}
 	
-	private class KeyValue<T> {
+	private static class KeyValue<T> {
 		private String key;
 		private T value;
 		
@@ -172,7 +172,7 @@ public class ScreenSharerFrame extends JFrame {
 	}
 	
 	//this implementation will not allow to Enable Panel in runtime
-	private class DisabledPanel extends JPanel {
+	private static class DisabledPanel extends JPanel {
 		private static final long serialVersionUID = 1L;
 
 		@Override
@@ -184,7 +184,7 @@ public class ScreenSharerFrame extends JFrame {
 		}
 	}
 	
-	private class VerticalSlider extends MouseListenerable {
+	private static class VerticalSlider extends MouseListenerable {
 		private static final long serialVersionUID = 1L;
 
 		public VerticalSlider() {
@@ -200,7 +200,7 @@ public class ScreenSharerFrame extends JFrame {
 		}
 	}
 	
-	private class HorizontalSlider extends MouseListenerable {
+	private static class HorizontalSlider extends MouseListenerable {
 		private static final long serialVersionUID = 1L;
 
 		public HorizontalSlider() {

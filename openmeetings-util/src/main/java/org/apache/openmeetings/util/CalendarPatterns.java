@@ -18,6 +18,8 @@
  */
 package org.apache.openmeetings.util;
 
+import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
@@ -31,12 +33,23 @@ import org.slf4j.Logger;
  *
  */
 public class CalendarPatterns {
+	private static final Logger log = Red5LoggerFactory.getLogger(CalendarPatterns.class, webAppRootKey);
 	
-	private static final Logger log = Red5LoggerFactory.getLogger(CalendarPatterns.class, "openmeetings");
-	
-	public static SimpleDateFormat dateFormat__ddMMyyyyHHmmss = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
-	public static SimpleDateFormat dateFormat__ddMMyyyy = new SimpleDateFormat("dd.MM.yyyy");
-	public static SimpleDateFormat dateFormat__ddMMyyyyBySeparator = new SimpleDateFormat("dd-MM-yyyy");
+	public static ThreadLocal<SimpleDateFormat> dateFormat__ddMMyyyyHHmmss = new ThreadLocal<SimpleDateFormat>() {
+		protected SimpleDateFormat initialValue() {
+			return new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
+		};
+	};
+	public static ThreadLocal<SimpleDateFormat> dateFormat__ddMMyyyy = new ThreadLocal<SimpleDateFormat>() {
+		protected SimpleDateFormat initialValue() {
+			return new SimpleDateFormat("dd.MM.yyyy");
+		};
+	};
+	public static ThreadLocal<SimpleDateFormat> dateFormat__ddMMyyyyBySeparator = new ThreadLocal<SimpleDateFormat>() {
+		protected SimpleDateFormat initialValue() {
+			return new SimpleDateFormat("dd-MM-yyyy");
+		};
+	};
     
     public static String getDateByMiliSeconds(Date t){
         SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
@@ -96,13 +109,13 @@ public class CalendarPatterns {
     		
     		Date resultDate = null;
     		
-    		resultDate = validDate(dateFormat__ddMMyyyyHHmmss, dateString);
+    		resultDate = validDate(dateFormat__ddMMyyyyHHmmss.get(), dateString);
     		
     		if ( resultDate != null ) {
     			return resultDate;
     		}
     		
-    		resultDate = validDate(dateFormat__ddMMyyyy, dateString);
+    		resultDate = validDate(dateFormat__ddMMyyyy.get(), dateString);
     		
     		if ( resultDate != null ) {
     			return resultDate;
@@ -185,7 +198,7 @@ public class CalendarPatterns {
     
     public static Date parseDate(String dateString) {
     	try {
-    		return dateFormat__ddMMyyyy.parse(dateString);
+    		return dateFormat__ddMMyyyy.get().parse(dateString);
     	} catch (Exception e) {
     		log.error("parseDate",e);
     	}
@@ -194,7 +207,7 @@ public class CalendarPatterns {
     
     public static Date parseDateBySeparator(String dateString) {
     	try {
-    		return dateFormat__ddMMyyyyBySeparator.parse(dateString);
+    		return dateFormat__ddMMyyyyBySeparator.get().parse(dateString);
     	} catch (Exception e) {
     		log.error("parseDate",e);
     	}
@@ -206,7 +219,7 @@ public class CalendarPatterns {
     		if (dateString == null || dateString.length()==0 || dateString.equals("null") ) {
         		return null;
         	}
-    		return dateFormat__ddMMyyyyHHmmss.parse(dateString);
+    		return dateFormat__ddMMyyyyHHmmss.get().parse(dateString);
     	} catch (Exception e) {
     		log.error("parseDate",e);
     	}

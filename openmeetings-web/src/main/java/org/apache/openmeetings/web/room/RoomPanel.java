@@ -34,6 +34,8 @@ import static org.apache.openmeetings.web.app.WebSession.getSid;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import static org.apache.openmeetings.web.util.OmUrlFragment.ROOMS_PUBLIC;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -230,9 +232,11 @@ public class RoomPanel extends BasePanel {
 			@Override
 			protected void onEvent(AjaxRequestTarget target) {
 				String app = "";
+				InputStream jnlp = null;
 				try {
 					ConfigurationDao cfgDao = getBean(ConfigurationDao.class);
-					app = IOUtils.toString(getClass().getClassLoader().getResourceAsStream("APPLICATION.jnlp"), "UTF-8");
+					jnlp = getClass().getClassLoader().getResourceAsStream("APPLICATION.jnlp");
+					app = IOUtils.toString(jnlp, "UTF-8");
 					String baseUrl = cfgDao.getBaseUrl();
 					URL url = new URL(baseUrl);
 					String path = url.getPath();
@@ -263,6 +267,12 @@ public class RoomPanel extends BasePanel {
 							;
 				} catch (Exception e) {
 					log.error("Unexpected error while creating jnlp file", e);
+				} finally {
+					if (jnlp != null) {
+						try {
+							jnlp.close();
+						} catch (IOException e) {}
+					}
 				}
 				download.setResourceStream(new StringResourceStream(app, "application/x-java-jnlp-file"));
 				download.initiate(target);

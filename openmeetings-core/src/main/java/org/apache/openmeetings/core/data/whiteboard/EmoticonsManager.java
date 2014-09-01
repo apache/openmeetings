@@ -21,6 +21,7 @@ package org.apache.openmeetings.core.data.whiteboard;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.io.IOException;
 import java.util.LinkedList;
 
 import org.apache.openmeetings.util.OmFileHelper;
@@ -47,22 +48,24 @@ public class EmoticonsManager {
 	private LinkedList<LinkedList<String>> emotfilesList = new LinkedList<LinkedList<String>>();
 
 	@SuppressWarnings("unchecked")
-	public void loadEmot(){
+	public void loadEmot() {
+		BufferedReader reader = null;
 		try {
 			XStream xStream = new XStream(new XppDriver());
 			xStream.setMode(XStream.NO_REFERENCES);
-			BufferedReader reader = new BufferedReader(new FileReader(new File(OmFileHelper.getPublicEmotionsDir(), "emotes.xml")));
-		    String xmlString = "";
-		    while (reader.ready()) {
-		    	xmlString += reader.readLine();
-		    }
-		    reader.close();
-		    emotfilesList = ChatString.replaceAllRegExp((LinkedList<LinkedList<String>>) xStream.fromXML(xmlString));
+			reader = new BufferedReader(new FileReader(new File(OmFileHelper.getPublicEmotionsDir(), "emotes.xml")));
+		    emotfilesList = ChatString.replaceAllRegExp((LinkedList<LinkedList<String>>) xStream.fromXML(reader));
 		    
 		    log.debug("##### loadEmot completed");
 		    
 		} catch (Exception err) {
 			log.error("[loadEmot]",err);
+		} finally {
+			if (reader != null) {
+				try {
+					reader.close();
+				} catch (IOException e) {}
+			}
 		}
 	}
 	

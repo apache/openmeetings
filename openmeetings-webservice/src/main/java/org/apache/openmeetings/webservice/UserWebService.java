@@ -126,11 +126,8 @@ public class UserWebService {
 				return -1L;
 			}
 			
-			Boolean bool = sessiondataDao.updateUser(SID, u.getId(), false, u.getLanguage_id());
-			if (bool == null) {
-				// Exception
-				return -1L;
-			} else if (!bool) {
+			boolean bool = sessiondataDao.updateUser(SID, u.getId(), false, u.getLanguage_id());
+			if (!bool) {
 				// invalid Session-Object
 				return -35L;
 			}

@@ -26,6 +26,8 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Option;
@@ -110,9 +112,9 @@ public class OmHelpFormatter extends HelpFormatter {
 				map.get(g).add(o);
 			}
 		}
-		for (String _key : map.keySet()) {
-			final String key = _key;
-			List<OmOption> options = map.get(key);
+		for (Map.Entry<String, List<OmOption>> me : map.entrySet()) {
+			final String key = me.getKey();
+			List<OmOption> options = me.getValue();
 			Collections.sort(options, new Comparator<OmOption>(){
 				public int compare(OmOption o1, OmOption o2) {
 					boolean o1opt = !o1.isOptional(key);
@@ -148,11 +150,11 @@ public class OmHelpFormatter extends HelpFormatter {
 		char[] delimiter = new char[width - 2];
 		Arrays.fill(delimiter, '-');
 
-		for (String key : optList.keySet()) {
-			if (GENERAL_OPTION_GROUP.equals(key)) {
+		for (Entry<String, List<OmOption>> me : optList.entrySet()) {
+			if (GENERAL_OPTION_GROUP.equals(me.getKey())) {
 				sb.append("General options:").append(getNewLine());
 			}
-			for (OmOption option : optList.get(key)) {
+			for (OmOption option : me.getValue()) {
 				StringBuilder optBuf = new StringBuilder(option.getHelpPrefix());
 
 				if (optBuf.length() < maxPrefixLength) {
@@ -163,7 +165,7 @@ public class OmHelpFormatter extends HelpFormatter {
 
 				int nextLineTabStop = maxPrefixLength + descPad;
 
-				if (option.isOptional(key)) {
+				if (option.isOptional(me.getKey())) {
 					optBuf.append(optional);
 				}
 				if (option.getDescription() != null) {
