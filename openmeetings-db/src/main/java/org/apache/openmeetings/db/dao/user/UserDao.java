@@ -327,9 +327,9 @@ public class UserDao implements IDataProviderDao<User> {
 		log.debug("checkUserLogin: login = {}, id = {}", login, id);
 		long count = em.createNamedQuery("checkUserLogin", Long.class)
 				.setParameter("login", login)
-				.setParameter("id", id == null ? 0 : id)
+				.setParameter("id", id == null ? 0L : id)
 				.getSingleResult();
-		return count == 0;
+		return count == 0L;
 	}
 
 	/**
@@ -345,12 +345,12 @@ public class UserDao implements IDataProviderDao<User> {
 		}
 		long count = em.createNamedQuery("checkUserEmail", Long.class)
 			.setParameter("email", email)
-			.setParameter("id", id == null ? 0 : id)
+			.setParameter("id", id == null ? 0L : id)
 			.setParameter("type", Type.contact)
 			.getSingleResult();
 		log.debug("size: " + count);
 
-		return count == 0;
+		return count == 0L;
 	}
 	
 	public User getByName(String login, Type type) {

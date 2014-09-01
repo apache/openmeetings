@@ -273,7 +273,7 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 			setUser(u);
 			return true;
 		} catch (OmException oe) {
-			loginError = oe.getCode() == null ? -1 : oe.getCode();
+			loginError = oe.getCode() == null ? -1L : oe.getCode();
 		}
 		return false;
 	}

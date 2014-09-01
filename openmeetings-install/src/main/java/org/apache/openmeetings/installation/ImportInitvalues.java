@@ -251,8 +251,7 @@ public class ImportInitvalues {
 
 	public void loadErrorMappingsFromXML() throws Exception {
 		SAXReader reader = new SAXReader();
-		Document document = reader.read(new File(
-				OmFileHelper.getLanguagesDir(), OmFileHelper.nameOfErrorFile));
+		Document document = reader.read(new File(OmFileHelper.getLanguagesDir(), OmFileHelper.nameOfErrorFile));
 
 		Element root = document.getRootElement();
 
@@ -266,24 +265,24 @@ public class ImportInitvalues {
 			Long errortype_id = null;
 
 			for (@SuppressWarnings("unchecked")
-			Iterator<Element> itSub = row.elementIterator("field"); itSub
-					.hasNext();) {
-
+			Iterator<Element> itSub = row.elementIterator("field"); itSub.hasNext();) {
 				Element field = itSub.next();
 
 				String name = field.attributeValue("name");
 				String text = field.getText();
 				// System.out.println("NAME | TEXT "+name+" | "+text);
-				if (name.equals("errorvalues_id"))
-					errorvalues_id = Long.valueOf(text).longValue();
-				if (name.equals("fieldvalues_id"))
-					fieldvalues_id = Long.valueOf(text).longValue();
-				if (name.equals("errortype_id"))
-					errortype_id = Long.valueOf(text).longValue();
+				if (name.equals("errorvalues_id")) {
+					errorvalues_id = Long.valueOf(text);
+				}
+				if (name.equals("fieldvalues_id")) {
+					fieldvalues_id = Long.valueOf(text);
+				}
+				if (name.equals("errortype_id")) {
+					errortype_id = Long.valueOf(text);
+				}
 			}
 
-			errorManagement.addErrorValues(errorvalues_id, errortype_id,
-					fieldvalues_id);
+			errorManagement.addErrorValues(errorvalues_id, errortype_id, fieldvalues_id);
 		}
 		log.debug("ErrorMappings ADDED");
 	}
@@ -704,7 +703,7 @@ public class ImportInitvalues {
 
 		log.debug("loadInitLanguages rtl from xml: " + rtl);
 
-		Boolean langRtl = Boolean.TRUE.equals(rtl);
+		boolean langRtl = Boolean.TRUE.toString().equals(rtl);
 
 		long ticks = System.currentTimeMillis();
 		FieldLanguage lang = fieldLanguageDaoImpl.addLanguage(langId, langName, langRtl, code);

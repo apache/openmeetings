@@ -291,7 +291,7 @@ public class SessionManager implements ISessionManager {
 				int start, int max, String orderby, boolean asc) {
 			SearchResult<Client> sResult = new SearchResult<Client>();
 			sResult.setObjectName(Client.class.getName());
-			sResult.setRecords(Long.valueOf(cache.size()).longValue());
+			sResult.setRecords(Long.valueOf(cache.size()));
 			sResult.setResult(cache.getClientsWithServer());
 			return sResult;
 		}

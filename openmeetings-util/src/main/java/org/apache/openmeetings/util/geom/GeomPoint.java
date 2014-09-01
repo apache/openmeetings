@@ -190,7 +190,7 @@ public class GeomPoint extends Point {
 			
 			// if the directional constants are equal, the lines are parallel,
 			// meaning there is no intersection point.
-			if( k1 == k2 ) return null;
+			if (java.lang.Double.compare(k1, k2) == 0) return null;
 		
 			//log.debug("neither");
 //			log.debug("k1: "+k1);

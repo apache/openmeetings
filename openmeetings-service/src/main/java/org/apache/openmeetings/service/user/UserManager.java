@@ -163,15 +163,15 @@ public class UserManager implements IUserManager {
 
 	public Long logout(String SID, long USER_ID) {
 		sessiondataDao.updateUser(SID, 0, false, null);
-		return new Long(-12);
+		return -12L;
 	}
 
 	public List<Userdata> getUserdataDashBoard(Long user_id) {
-		if (user_id.longValue() > 0) {
+		if (user_id != null && user_id.longValue() > 0) {
 			try {
 				TypedQuery<Userdata> query = em
 						.createQuery("select c from Userdata as c where c.user_id = :user_id AND c.deleted <> :deleted", Userdata.class);
-				query.setParameter("user_id", user_id.longValue());
+				query.setParameter("user_id", user_id);
 				query.setParameter("deleted", true);
 				List<Userdata> ll = query.getResultList();
 				return ll;
@@ -184,11 +184,11 @@ public class UserManager implements IUserManager {
 
 	public Userdata getUserdataByKey(Long user_id, String DATA_KEY) {
 		Userdata userdata = new Userdata();
-		if (user_id.longValue() > 0) {
+		if (user_id != null && user_id.longValue() > 0) {
 			try {
 				TypedQuery<Userdata> query = em
 						.createQuery("select c from Userdata as c where c.user_id = :user_id AND c.data_key = :data_key AND c.deleted <> :deleted", Userdata.class);
-				query.setParameter("user_id", user_id.longValue());
+				query.setParameter("user_id", user_id);
 				query.setParameter("data_key", DATA_KEY);
 				query.setParameter("deleted", true);
 				for (Iterator<Userdata> it2 = query.getResultList().iterator(); it2
@@ -213,7 +213,7 @@ public class UserManager implements IUserManager {
 					.setParameter("DATA_KEY", DATA_KEY)
 					.setParameter("USER_ID", USER_ID)
 					.setParameter("DATA", DATA)
-					.setParameter("updatetime", new Long(-1))
+					.setParameter("updatetime", -1L)
 					.setParameter("Comment", Comment)
 					.setParameter("DATA_ID", DATA_ID).executeUpdate();
 			res = "Success" + updatedEntities;
@@ -231,9 +231,9 @@ public class UserManager implements IUserManager {
 					+ "comment = :comment where user_id= :user_id AND data_key = :data_key";
 			int updatedEntities = em.createQuery(hqlUpdate)
 					.setParameter("data", DATA)
-					.setParameter("updatetime", new Long(-1))
+					.setParameter("updatetime", -1L)
 					.setParameter("comment", Comment)
-					.setParameter("user_id", USER_ID.longValue())
+					.setParameter("user_id", USER_ID)
 					.setParameter("data_key", DATA_KEY).executeUpdate();
 			res = "Success" + updatedEntities;
 		} catch (Exception ex2) {
@@ -251,10 +251,10 @@ public class UserManager implements IUserManager {
 		userdata.setStarttime(new Date());
 		userdata.setUpdatetime(null);
 		userdata.setComment(Comment);
-		userdata.setUser_id(new Long(USER_ID));
+		userdata.setUser_id(USER_ID);
 		userdata.setDeleted(false);
 		try {
-			userdata = em.merge(userdata);
+			em.merge(userdata);
 			ret = "success";
 		} catch (Exception ex2) {
 			log.error("addUserdata", ex2);
@@ -330,7 +330,7 @@ public class UserManager implements IUserManager {
 						sendSMS, sendConfirmation, timezoneUtil.getTimeZone(jNameTimeZone), false, "", "", false, true, null);
 
 				if (user_id > 0 && sendConfirmation) {
-					return new Long(-40);
+					return -40L;
 				}
 
 				return user_id;
@@ -402,7 +402,7 @@ public class UserManager implements IUserManager {
 					String sendMail = emailManagement.sendMail(login,
 							password, email, link, sendConfirmation);
 					if (!sendMail.equals("success"))
-						return new Long(-19);
+						return -19L;
 				}
 				Address adr =  usersDao.getAddress(street, zip, town, states_id, additionalname, fax, phone, email);
 

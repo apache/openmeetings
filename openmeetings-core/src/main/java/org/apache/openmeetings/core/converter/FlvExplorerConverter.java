@@ -30,7 +30,7 @@ import org.apache.openmeetings.db.dao.file.FileExplorerItemDao;
 import org.apache.openmeetings.db.dao.record.FlvRecordingLogDao;
 import org.apache.openmeetings.db.entity.file.FileExplorerItem;
 import org.apache.openmeetings.db.entity.file.FileItem.Type;
-import org.apache.openmeetings.util.OpenmeetingsVariables;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import org.apache.openmeetings.util.process.ConverterProcessResult;
 import org.apache.openmeetings.util.process.ProcessHelper;
 import org.red5.logging.Red5LoggerFactory;
@@ -39,8 +39,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 public class FlvExplorerConverter extends BaseConverter {
 
-	private static final Logger log = Red5LoggerFactory.getLogger(
-			FlvExplorerConverter.class, OpenmeetingsVariables.webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(FlvExplorerConverter.class, webAppRootKey);
 
 	// Spring loaded Beans
 	@Autowired
@@ -132,7 +131,6 @@ public class FlvExplorerConverter extends BaseConverter {
 	}
 	
 	private FlvDimension getFlvDimension(String txt) throws Exception {
-		
 		Pattern p = Pattern.compile("\\d{2,4}(x)\\d{2,4}");
 		
 		Matcher matcher = p.matcher(txt);
@@ -143,7 +141,6 @@ public class FlvExplorerConverter extends BaseConverter {
 			String[] resultions = foundResolution.split("x");
 			
 			return new FlvDimension(Integer.valueOf(resultions[0]).intValue(), Integer.valueOf(resultions[1]).intValue());
-			
 	    }
 		
 		return null;

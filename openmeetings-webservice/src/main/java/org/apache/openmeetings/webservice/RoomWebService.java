@@ -1653,15 +1653,11 @@ public class RoomWebService {
 				Date dTo = null;
 
 				if (valid == 2) {
-					Integer validFromHour = Integer.valueOf(
-							validFromTime.substring(0, 2)).intValue();
-					Integer validFromMinute = Integer.valueOf(
-							validFromTime.substring(3, 5)).intValue();
+					Integer validFromHour = Integer.valueOf(validFromTime.substring(0, 2));
+					Integer validFromMinute = Integer.valueOf(validFromTime.substring(3, 5));
 
-					Integer validToHour = Integer.valueOf(
-							validToTime.substring(0, 2)).intValue();
-					Integer validToMinute = Integer.valueOf(
-							validToTime.substring(3, 5)).intValue();
+					Integer validToHour = Integer.valueOf(validToTime.substring(0, 2));
+					Integer validToMinute = Integer.valueOf(validToTime.substring(3, 5));
 
 					log.info("validFromHour: " + validFromHour);
 					log.info("validFromMinute: " + validFromMinute);
@@ -1779,15 +1775,11 @@ public class RoomWebService {
 				Date dTo = null;
 
 				if (valid == 2) {
-					Integer validFromHour = Integer.valueOf(
-							validFromTime.substring(0, 2)).intValue();
-					Integer validFromMinute = Integer.valueOf(
-							validFromTime.substring(3, 5)).intValue();
+					Integer validFromHour = Integer.valueOf(validFromTime.substring(0, 2));
+					Integer validFromMinute = Integer.valueOf(validFromTime.substring(3, 5));
 
-					Integer validToHour = Integer.valueOf(
-							validToTime.substring(0, 2)).intValue();
-					Integer validToMinute = Integer.valueOf(
-							validToTime.substring(3, 5)).intValue();
+					Integer validToHour = Integer.valueOf(validToTime.substring(0, 2));
+					Integer validToMinute = Integer.valueOf(validToTime.substring(3, 5));
 
 					log.info("validFromHour: " + validFromHour);
 					log.info("validFromMinute: " + validFromMinute);

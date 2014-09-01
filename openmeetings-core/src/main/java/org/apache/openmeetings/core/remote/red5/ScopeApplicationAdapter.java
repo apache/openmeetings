@@ -130,9 +130,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 			getCryptKey();
 
 			// init your handler here
-
 			// The scheduled Jobs did go into the Spring-Managed Beans, see schedulerJobs.service.xml
-
 			// Spring Definition does not work here, its too early, Instance is not set yet
 			emoticonsManager.loadEmot();
 
@@ -141,8 +139,8 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 			}
 			
 			InitializationContainer.initComplete = true;
-		    Version.logOMStarted();
-		    recordingDao.resetProcessingStatus(); //we are starting so all processing recordings are now errors
+			Version.logOMStarted();
+			recordingDao.resetProcessingStatus(); //we are starting so all processing recordings are now errors
 		} catch (Exception err) {
 			log.error("[appStart]", err);
 		}
@@ -1134,11 +1132,9 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 			log.debug("-----------  getBroadCastId");
 			IConnection current = Red5.getConnectionLocal();
 			String streamid = current.getClient().getId();
-			Client currentClient = this.sessionManager
-					.getClientByStreamId(streamid, null);
+			Client currentClient = sessionManager.getClientByStreamId(streamid, null);
 			currentClient.setBroadCastID(broadCastCounter++);
-			this.sessionManager.updateClientByStreamId(streamid,
-					currentClient, false, null);
+			sessionManager.updateClientByStreamId(streamid, currentClient, false, null);
 			return currentClient.getBroadCastID();
 		} catch (Exception err) {
 			log.error("[getBroadCastId]", err);

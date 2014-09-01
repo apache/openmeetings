@@ -211,7 +211,7 @@ public class DownloadHandler extends BaseHttpServlet {
 
 					if (!full_path.exists() || !full_path.canRead()) {
 						if (!full_path.canRead()) {
-							log.debug("DownloadHandler: The request DEFAULT-file does not exist / has already been deleted");
+							log.debug("DownloadHandler: The request DEFAULT-file is not readable ");
 						} else {
 							log.debug("DownloadHandler: The request DEFAULT-file does not exist / has already been deleted");
 						}

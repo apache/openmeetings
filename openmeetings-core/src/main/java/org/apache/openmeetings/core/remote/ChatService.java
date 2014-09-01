@@ -171,7 +171,7 @@ public class ChatService implements IPendingServiceCallback {
 						if (rcl.getIsScreenClient() != null && rcl.getIsScreenClient()) {
     						continue;
     					}
-						if (needModeration && Boolean.TRUE != rcl.getIsMod() && Boolean.TRUE != rcl.getIsSuperModerator()) {
+						if (needModeration && !Boolean.TRUE.equals(rcl.getIsMod()) && !Boolean.TRUE.equals(rcl.getIsSuperModerator())) {
 							continue;
 						}
 						((IServiceCapableConnection) conn).invoke("sendVarsToMessageWithClient",new Object[] { hsm }, this);
@@ -279,7 +279,7 @@ public class ChatService implements IPendingServiceCallback {
 			List<HashMap<String,Object>> myChatList = myChats.get(room_id);
 			if (myChatList==null) myChatList = new LinkedList<HashMap<String,Object>>();
 			
-			if (Boolean.TRUE != currentClient.getIsMod() && Boolean.TRUE != currentClient.getIsSuperModerator()) {
+			if (!Boolean.TRUE.equals(currentClient.getIsMod()) && !Boolean.TRUE.equals(currentClient.getIsSuperModerator())) {
 				//current user is not moderator, chat history need to be filtered
 				List<HashMap<String,Object>> tmpChatList = new LinkedList<HashMap<String,Object>>(myChatList);
 				for (int i = tmpChatList.size() - 1; i > -1; --i) {

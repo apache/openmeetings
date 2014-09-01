@@ -430,7 +430,7 @@ public class RoomPanel extends BasePanel {
 		response.render(OnDomReadyHeaderItem.forScript(aab.getCallbackScript()));
 	}
 
-	class FilesTreeProvider implements ITreeProvider<FileExplorerItem> {
+	static class FilesTreeProvider implements ITreeProvider<FileExplorerItem> {
 		private static final long serialVersionUID = 1L;
 		Long roomId = null;
 

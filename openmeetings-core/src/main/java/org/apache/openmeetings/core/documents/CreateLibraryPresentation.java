@@ -43,30 +43,29 @@ public class CreateLibraryPresentation {
 		ConverterProcessResult returnMap = new ConverterProcessResult();
 		returnMap.setProcess("generateXMLDocument");		
 		try {
+			Document document = DocumentHelper.createDocument();
+			Element root = document.addElement("presentation");
 			
-	        Document document = DocumentHelper.createDocument();
-	        Element root = document.addElement( "presentation" );
-
-	        File file = new File(targetDirectory, originalDocument);
-	        root.addElement( "originalDocument" )
+			File file = new File(targetDirectory, originalDocument);
+			root.addElement("originalDocument")
 				.addAttribute("lastmod", (new Long(file.lastModified())).toString())
 				.addAttribute("size", (new Long(file.length())).toString())	        
-	            .addText( originalDocument );
+				.addText(originalDocument);
 	        
 	        if (pdfDocument!=null){
 	        	File pdfDocumentFile = new File(targetDirectory, pdfDocument);
-		        root.addElement( "pdfDocument" )
+		        root.addElement("pdfDocument")
 					.addAttribute("lastmod", (new Long(pdfDocumentFile.lastModified())).toString())
 					.addAttribute("size", (new Long(pdfDocumentFile.length())).toString())	   		        
-		            .addText( pdfDocument );
+					.addText(pdfDocument);
 	        }
 	        
 	        if (swfDocument!=null){
 	        	File swfDocumentFile = new File(targetDirectory, originalDocument);
-		        root.addElement( "swfDocument" )
+		        root.addElement("swfDocument")
 					.addAttribute("lastmod", (new Long(swfDocumentFile.lastModified())).toString())
-					.addAttribute("size", (new Long(swfDocumentFile.length())).toString())	  		        
-	            	.addText( swfDocument );	  
+					.addAttribute("size", (new Long(swfDocumentFile.length())).toString())
+					.addText(swfDocument);
 	        }
 	        
 	        Element thumbs = root.addElement( "thumbs" );
@@ -88,20 +87,18 @@ public class CreateLibraryPresentation {
 						thumbs.addElement( "thumb" )
 							.addAttribute("lastmod", (new Long(thumbfile.lastModified())).toString())
 							.addAttribute("size", (new Long(thumbfile.length())).toString())
-			            	.addText( allfiles[i] );
+							.addText(allfiles[i]);
 					}
 				}
 			}
-	        
-	        // lets write to a file
-	        XMLWriter writer = new XMLWriter(
-	            new FileOutputStream(new File(targetDirectory, OmFileHelper.libraryFileName))
-	        );
-	        writer.write( document );
-	        writer.close();
 			
-	        returnMap.setExitValue("0");
-	        
+			// lets write to a file
+			XMLWriter writer = new XMLWriter(new FileOutputStream(new File(targetDirectory, OmFileHelper.libraryFileName)));
+			writer.write(document);
+			writer.close();
+			
+			returnMap.setExitValue("0");
+			
 			return returnMap;
 		} catch (Exception err) {
 			log.error("Error while generateXMLDocument", err);

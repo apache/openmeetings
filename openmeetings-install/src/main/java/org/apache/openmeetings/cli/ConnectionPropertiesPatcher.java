@@ -99,7 +99,7 @@ public abstract class ConnectionPropertiesPatcher {
 		Document doc = getDocument(srcXml);
 		
 		Attr val = getConnectionProperties(doc);
-		val = patchAttribute(val, host, port, db, user, pass);
+		patchAttribute(val, host, port, db, user, pass);
 		
 		TransformerFactory transformerFactory = TransformerFactory.newInstance();
 		Transformer transformer = transformerFactory.newTransformer();

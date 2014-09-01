@@ -61,12 +61,10 @@ public class LanguageImport {
 		for (@SuppressWarnings("unchecked")
 		Iterator<Element> i = root.elementIterator(); i.hasNext();) {
 			Element itemObject = i.next();
-			Long fieldvalues_id = Long.valueOf(
-					itemObject.attribute("id").getText()).longValue();
+			Long fieldvalues_id = Long.valueOf(itemObject.attribute("id").getText());
 			String fieldName = itemObject.attribute("name").getText();
 			String value = itemObject.element("value").getText();
-			log.info("CHECK " + language_id + "," + fieldvalues_id + ","
-					+ fieldName + "," + value);
+			log.info("CHECK " + language_id + "," + fieldvalues_id + "," + fieldName + "," + value);
 			addFieldValueById(language_id, fieldvalues_id, fieldName, value, userId);
 		}
 

@@ -20,6 +20,8 @@ package org.apache.openmeetings.web.user.rooms;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 
 import org.apache.openmeetings.db.dao.room.RoomDao;
@@ -123,9 +125,17 @@ public class RoomsPanel extends UserPanel {
 							uri = Application.getBean(UserDao.class).get(userId > 0 ? userId : -userId).getPictureuri();
 						}
 						File img = OmFileHelper.getUserProfilePicture(userId, uri);
+						InputStream is = null;
 						try {
-							return IOUtils.toByteArray(new FileInputStream(img));
+							is = new FileInputStream(img);
+							return IOUtils.toByteArray(is);
 						} catch (Exception e) {
+						} finally {
+							if (is != null) {
+								try {
+									is.close();
+								} catch (IOException e) {}
+							}
 						}
 						return null;
 					}

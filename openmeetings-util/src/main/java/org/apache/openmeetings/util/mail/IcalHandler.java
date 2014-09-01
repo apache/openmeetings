@@ -203,11 +203,16 @@ public class IcalHandler {
 			filerPath = filerPath + ".ics";
 		}
 
-		FileOutputStream fout = new FileOutputStream(filerPath);
-
-		CalendarOutputter outputter = new CalendarOutputter();
-		outputter.output(icsCalendar, fout);
-		fout.close();
+		FileOutputStream fout = null;
+		try {
+			fout = new FileOutputStream(filerPath);
+			CalendarOutputter outputter = new CalendarOutputter();
+			outputter.output(icsCalendar, fout);
+		} finally {
+			if (fout != null) {
+				fout.close();
+			}
+		}
 	}
 
 	// ------------------------------------------------------------------------------------------
