@@ -59,7 +59,7 @@ public class RssWidgetView extends WidgetView {
 				+ "'" + feed2.getCallbackUrl() + "');")) ;
 	}
 	
-	class RSSFeedBehavior extends AbstractAjaxBehavior {
+	static class RSSFeedBehavior extends AbstractAjaxBehavior {
 		private static final long serialVersionUID = 1L;
 		private String url;
 
@@ -70,7 +70,7 @@ public class RssWidgetView extends WidgetView {
 		public void onRequest() {
 			ResourceStreamRequestHandler handler = new ResourceStreamRequestHandler(new AbstractResourceStream() {
 				private static final long serialVersionUID = 1L;
-				HttpURLConnection con;
+				transient HttpURLConnection con;
 				
 				public InputStream getInputStream() throws ResourceStreamNotFoundException {
 					try {
