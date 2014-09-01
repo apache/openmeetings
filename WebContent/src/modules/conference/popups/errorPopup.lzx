@@ -25,9 +25,9 @@
     x="$once{ parent.width/2 - this.width/2 }" height="160" width="324">
 
 	<attribute name="error" value="" type="string" />
-	
 	<attribute name="makeModal" value="false" type="boolean" />
-	
+	<attribute name="onCloseFunc" type="object" balue="null"/>
+		
 	<handler name="oninit">
 	   if (this.makeModal) {
 	       lz.ModeManager.makeModal(this);
@@ -35,10 +35,13 @@
 	</handler>
 	
 	<handler name="onclose">
-       if (this.makeModal) {
-           lz.ModeManager.releaseAll();
-       }
-    </handler>
+		if (this.makeModal) {
+			lz.ModeManager.releaseAll();
+		}
+		if (onCloseFunc != null) {
+			onCloseFunc();
+		}
+	</handler>
 
 	<view x="4" resource="warning_icon_rsc" y="24" />
 
