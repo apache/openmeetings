@@ -22,7 +22,9 @@ Release Notes - Openmeetings - Version 3.0.3
     * [OPENMEETINGS-915] - Regression in 3.0: Incorrect moderator list update in the room screen.
     * [OPENMEETINGS-918] - Contacts should not be added to usergroup
     * [OPENMEETINGS-931] - AD LDAP Authentication on empty install organization choice after first logon: empty list
+    * [OPENMEETINGS-953] - can not upload files while using Tomcat with SSL enabled
     * [OPENMEETINGS-986] - Oauth2.0 Logon Not Working
+    * [OPENMEETINGS-998] - Audio and Video of recordings are not in sync after a few minutes
     * [OPENMEETINGS-1007] - Users with externalUserId and externaluserType <> null can't login
     * [OPENMEETINGS-1012] - Reverted timezone is set by default in invitation window
     * [OPENMEETINGS-1013] - Profile pictures are not displayed to invited user
@@ -40,13 +42,24 @@ Release Notes - Openmeetings - Version 3.0.3
     * [OPENMEETINGS-1034] - openmeetings start always fails with postgresql db on debian
     * [OPENMEETINGS-1035] - "ant -Ddb=postgres" always fails
     * [OPENMEETINGS-1037] - LDAP passwords are being printed to the log
+    * [OPENMEETINGS-1038] - PrivateRoom Widget is displayed when dashboard.show.myrooms key is disabled
     * [OPENMEETINGS-1039] - Interview recording is broken if stop-on-close
     * [OPENMEETINGS-1042] - .ppt file not open when i upload 
     * [OPENMEETINGS-1048] - Appointement owner has no moderation rights
     * [OPENMEETINGS-1050] - User list is missing room users
     * [OPENMEETINGS-1052] - Room list not displayed after room exit
+    * [OPENMEETINGS-1059] - Language not loaded from user profile.
+    * [OPENMEETINGS-1060] - Strange view of warnings at User editing screen.
+    * [OPENMEETINGS-1061] - Font size list is not visible and availble in the global chat
+    * [OPENMEETINGS-1067] - "Move to folder.." item is not translated correctly on the "Contacts and messages" tab
+    * [OPENMEETINGS-1068] - Error is thrown and connection is closed when move event into Calendar view
+    * [OPENMEETINGS-1069] - Add/remove a user to the default moderator list not working properly
+    * [OPENMEETINGS-1070] - Strange view after auto logout from demo room
+    * [OPENMEETINGS-1076] - Export of localization to file not working.
+    * [OPENMEETINGS-1077] - Max participants in the room work incorrectly
 
 ** Improvement
+    * [OPENMEETINGS-96] - Possibility to deny remote control for all when sharing screen
     * [OPENMEETINGS-360] - Email invited meeting participants to display name not email address
     * [OPENMEETINGS-942] - Searching for contacts
     * [OPENMEETINGS-971] - Restrict attendees suggestions
@@ -71,6 +84,7 @@ Release Notes - Openmeetings - Version 3.0.3
 
 ** Wish
     * [OPENMEETINGS-861] - SOAP user for creating & using om rooms via moodle can log into GUI of OM
+    * [OPENMEETINGS-1066] - re-order fields on screen-sharing applet
 
 
 Release Notes - Openmeetings - Version 3.0.2
