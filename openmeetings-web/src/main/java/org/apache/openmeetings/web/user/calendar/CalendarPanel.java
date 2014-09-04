@@ -67,6 +67,7 @@ public class CalendarPanel extends UserPanel {
 	
 	@Override
 	public void onMenuPanelLoad(AjaxRequestTarget target) {
+		super.onMenuPanelLoad(target);
 	}
 
 	@Override

@@ -288,8 +288,9 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 	
 	public static String getString(long id) {
 		String s = getBean(FieldLanguagesValuesDao.class).getString(id, getLanguage());
-		return s == null ? "[Missing]" :
+		s = s == null ? "[Missing]" :
 			(STRINGS_WITH_APP.contains(id) ? s.replaceAll("\\$APP_NAME", getBean(ConfigurationDao.class).getAppName()) : s);
+		return s;// + (Application.get().getDebugSettings().isDevelopmentUtilitiesEnabled() ? "[" + id + "]" : "");
 	}
 	
 	public void setLanguage(long languageId) {

@@ -51,8 +51,6 @@ import org.apache.openmeetings.web.util.RoomTypeDropDown;
 import org.apache.openmeetings.web.util.UserMultiChoice;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxCheckBox;
-import org.apache.wicket.behavior.AttributeAppender;
-import org.apache.wicket.extensions.yui.calendar.DateTimeField;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
@@ -76,6 +74,7 @@ import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
 import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButtons;
 import com.googlecode.wicket.jquery.ui.widget.dialog.DialogIcon;
 import com.googlecode.wicket.jquery.ui.widget.dialog.MessageDialog;
+import com.googlecode.wicket.kendo.ui.form.datetime.DateTimePicker;
 
 public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 	private static final long serialVersionUID = 1L;
@@ -220,8 +219,8 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 	private class AppointmentForm extends Form<Appointment> {
 		private static final long serialVersionUID = 1L;
 		private boolean createRoom = true;
-		private DateTimeField start;
-		private DateTimeField end;
+		private DateTimePicker start;
+		private DateTimePicker end;
 		private final PasswordTextField pwd = new PasswordTextField("password");
 		private final Label owner = new Label("owner");
 
@@ -262,15 +261,14 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 				}
 			}
 			pwd.setEnabled(a.isPasswordProtected());
-			owner.setOutputMarkupId(true);
+			owner.setOutputMarkupPlaceholderTag(true).setOutputMarkupId(true);
 			owner.setDefaultModel(Model.of(FormatHelper.formatUser(a.getOwner())));
-			owner.setVisible(!isOwner(a));
+			owner.setVisible(a.getOwner() != null);
 		}
 		
 		public AppointmentForm(String id, IModel<Appointment> model) {
 			super(id, model);
 			setOutputMarkupId(true);
-			add(new AttributeAppender("class", new Model<String>("appointmentPopUp"), " "));
 			
 			add(feedback.setOutputMarkupId(true));
 			add(new RequiredTextField<String>("title").setLabel(Model.of(WebSession.getString(572))));
@@ -278,8 +276,8 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 			add(toolbar);
 			add(new WysiwygEditor("description", toolbar));
 			add(new TextField<String>("location"));
-			add(start = new DateTimeField("start"));
-			add(end = new DateTimeField("end"));
+			add(start = new DateTimePicker("start", "yyyy MMM dd", "HH:mm:ss")); //FIXME use user locale
+			add(end = new DateTimePicker("end", "yyyy MMM dd", "HH:mm:ss")); //FIXME use user locale
 			pwd.setEnabled(getModelObject().isPasswordProtected());
 			pwd.setOutputMarkupId(true);
 			add(pwd);

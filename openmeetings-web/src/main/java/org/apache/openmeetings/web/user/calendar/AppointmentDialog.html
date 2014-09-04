@@ -19,8 +19,12 @@
   
 -->
 <html xmlns:wicket="http://wicket.apache.org">
+	<wicket:head>
+		<link rel="stylesheet" type="text/css" href="css/kendo/kendo.common.min.css" media="all" />
+		<link rel="stylesheet" type="text/css" href="css/kendo/kendo.default.min.css" media="all" />
+	</wicket:head>
 	<wicket:panel>
-		<form wicket:id="appForm">
+		<form wicket:id="appForm" class="appointmentPopUp">
 			<span wicket:id="feedback"></span>
 			<table>
 				<tr>
@@ -29,11 +33,11 @@
 				</tr>
 				<tr>
 					<td><wicket:ommessage key="570" /></td>
-					<td><span wicket:id="start"></span></td>
+					<td><span class="date" wicket:id="start"></span></td>
 				</tr>
 				<tr>
 					<td><wicket:ommessage key="571" /></td>
-					<td><span wicket:id="end"></span></td>
+					<td><span class="date" wicket:id="end"></span></td>
 				</tr>
 				<tr>
 					<td><wicket:ommessage key="565" /></td>

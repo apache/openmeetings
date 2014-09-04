@@ -96,7 +96,7 @@ function initVideo(sid, roomid, audioOnly, interview, labels) {
 		};
 	var type = 'application/x-shockwave-flash';
 	var src = 'public/main.swf?cache' + new Date().getTime();
-	var r = $('<div class="video">');
+	var r = $('<div class="room video">');
 	var o = $('<object>').attr('type', type).attr('data', src).attr('width', options.width).attr('height', options.height);
 	o.append($('<param>').attr('name', 'quality').attr('value', 'best'));
 	o.append($('<param>').attr('name', 'wmode').attr('value', 'transparent'));

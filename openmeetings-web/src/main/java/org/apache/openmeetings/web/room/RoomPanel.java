@@ -115,6 +115,7 @@ public class RoomPanel extends BasePanel {
 			
 		}
 	};
+	private InvitationDialog invite = new InvitationDialog("invite");
 	
 	public RoomPanel(String id, long _roomId) {
 		this(id, getBean(RoomDao.class).get(_roomId));
@@ -199,6 +200,7 @@ public class RoomPanel extends BasePanel {
 				startSharing.respond(target);
 			}
 		}).add(new AttributeAppender("title", WebSession.getString(1480)))); //FIXME add/remove
+		add(invite);
 	}
 
 	private JSONArray getStringLabels(long... ids) {
@@ -291,6 +293,7 @@ public class RoomPanel extends BasePanel {
 
 			@Override
 			public void onClick(MainPage page, AjaxRequestTarget target) {
+				target.appendJavaScript("$('.room.video').dialog('destroy');");
 				if (WebSession.getRights().contains(Right.Dashboard)) {
 					page.updateContents(ROOMS_PUBLIC, target);
 				} else {
@@ -310,7 +313,14 @@ public class RoomPanel extends BasePanel {
 		
 		MenuItem actions = new RoomMenuItem(WebSession.getString(635));
 		List<RoomMenuItem> actionItems = new ArrayList<RoomMenuItem>();
-		actionItems.add(new RoomMenuItem(WebSession.getString(213), WebSession.getString(1489)));
+		actionItems.add(new RoomMenuItem(WebSession.getString(213), WebSession.getString(1489)) {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void onClick(MainPage page, AjaxRequestTarget target) {
+				invite.open(target);
+			}
+		});
 		actionItems.add(new RoomMenuItem(WebSession.getString(239), WebSession.getString(1480)) {
 			private static final long serialVersionUID = 1L;
 

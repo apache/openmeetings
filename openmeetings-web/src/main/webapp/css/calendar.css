@@ -53,6 +53,12 @@
 	float: left;
 }
 
+.appointmentPopUp td {
+	vertical-align: middle;
+}
+.appointmentPopUp td .date {
+	font-size: 12px;
+}
 .appointmentPopUp .attendeeContainer {
 	background-color: #FFFFFF;
 	border: solid 1px #aacfe4;
@@ -62,23 +68,6 @@
 	float: left;
 }
 
-.appointmentPopUp .attendeeContainer table td:FIRST-CHILD div {
-	width: 130px;
-	overflow: hidden;
-	text-overflow: ellipsis;
-	white-space: nowrap;
-}
-
-.appointmentPopUp .attendeeContainer table td:nth-child(2) div {
-	width: 260px;
-	overflow: hidden;
-	text-overflow: ellipsis;
-	white-space: nowrap;
-}
-
-.appointmentPopUp .attendeeContainer table td:nth-child(3) div {
-	width: 20px;
-}
 .appointment.attendees {
 	width: 100%;
 }
