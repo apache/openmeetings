@@ -28,6 +28,7 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
+import org.apache.wicket.util.string.Strings;
 
 /**
  * Loads the menu items into the main area
@@ -62,8 +63,11 @@ public class MenuPanel extends BasePanel {
 					link.add(new AttributeAppender("onclick", "return false;"));
 				}
 				item.add(link.add(new Label("label", gl.getName()).setRenderBodyOnly(true)));
-				if (gl.getCssClass() != null) {
+				if (!Strings.isEmpty(gl.getCssClass())) {
 					link.add(AttributeAppender.append("class", gl.getCssClass()));
+				}
+				if (!Strings.isEmpty(gl.getDesc())) {
+					link.add(AttributeAppender.append("title", gl.getDesc()));
 				}
 				item.add(new WebMarkupContainer("childItems")
 						.add(new ListView<MenuItem>("childItem", gl.getChildren()) {
