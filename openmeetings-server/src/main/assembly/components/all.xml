@@ -90,6 +90,7 @@
 				<exclude>WEB-INF/lib/spring-*</exclude>
 				<exclude>WEB-INF/lib/geronimo-jpa*</exclude>
 				<exclude>WEB-INF/lib/commons-fileupload*</exclude>
+				<exclude>WEB-INF/lib/commons-io*</exclude>
 			</excludes>
 		</fileSet>
 		<fileSet>
@@ -99,6 +100,7 @@
 				<include>spring-*</include>
 				<include>geronimo-jpa*</include>
 				<include>commons-fileupload*</include>
+				<include>commons-io*</include>
 			</includes>
 		</fileSet>
 		<fileSet>

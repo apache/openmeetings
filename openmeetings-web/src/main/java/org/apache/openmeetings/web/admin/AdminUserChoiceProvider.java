@@ -27,8 +27,8 @@ import java.util.List;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.user.User;
 
-import com.vaynberg.wicket.select2.Response;
-import com.vaynberg.wicket.select2.TextChoiceProvider;
+import org.wicketstuff.select2.Response;
+import org.wicketstuff.select2.TextChoiceProvider;
 
 public abstract class AdminUserChoiceProvider extends TextChoiceProvider<User> {
 	private static final long serialVersionUID = 1L;

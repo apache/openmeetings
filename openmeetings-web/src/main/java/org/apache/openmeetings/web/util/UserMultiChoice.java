@@ -27,7 +27,7 @@ import org.apache.wicket.markup.head.PriorityHeaderItem;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
 
-import com.vaynberg.wicket.select2.Select2MultiChoice;
+import org.wicketstuff.select2.Select2MultiChoice;
 
 public class UserMultiChoice extends Select2MultiChoice<User> {
 	private static final long serialVersionUID = 1L;

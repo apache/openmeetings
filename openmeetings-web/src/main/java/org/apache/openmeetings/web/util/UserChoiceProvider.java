@@ -34,8 +34,8 @@ import org.apache.wicket.validation.Validatable;
 import org.json.JSONException;
 import org.json.JSONWriter;
 
-import com.vaynberg.wicket.select2.ChoiceProvider;
-import com.vaynberg.wicket.select2.Response;
+import org.wicketstuff.select2.ChoiceProvider;
+import org.wicketstuff.select2.Response;
 
 public class UserChoiceProvider extends ChoiceProvider<User> {
 	private static final long serialVersionUID = 1L;

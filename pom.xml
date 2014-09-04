@@ -41,8 +41,7 @@
 		<maven.javadoc.version>2.9.1</maven.javadoc.version>
 		<maven.surefire.version>2.17</maven.surefire.version>
 		<maven-site.version>3.4</maven-site.version>
-		<wicket.version>7.0.0-M2</wicket.version>
-		<wicketstuff.version>6.16.0</wicketstuff.version>
+		<wicket.version>7.0.0-M3</wicket.version>
 		<wicket.jqueryui.version>7.0.0-SNAPSHOT</wicket.jqueryui.version>
 		<red5-server.version>1.0.3-RELEASE</red5-server.version>
 		<batik.version>1.7</batik.version>

@@ -32,7 +32,6 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<wicket-dashboard.version>0.11.0+wicket-7</wicket-dashboard.version>
-		<select2.version>2.2.3</select2.version>
 		<dnd.version>0.6.0</dnd.version>
 		<commons-io.version>2.4</commons-io.version>
 		<commons-fileupload.version>1.3</commons-fileupload.version>
@@ -370,22 +369,22 @@
 		<dependency>
 			<groupId>org.wicketstuff</groupId>
 			<artifactId>wicketstuff-urlfragment</artifactId>
-			<version>${wicketstuff.version}</version>
+			<version>${wicket.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.wicketstuff</groupId>
 			<artifactId>wicketstuff-html5</artifactId>
-			<version>${wicketstuff.version}</version>
+			<version>${wicket.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.wicketstuff</groupId>
 			<artifactId>wicketstuff-whiteboard</artifactId>
-			<version>${wicketstuff.version}</version>
+			<version>${wicket.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>com.vaynberg.wicket.select2</groupId>
-			<artifactId>wicket-select2</artifactId>
-			<version>${select2.version}</version>
+			<groupId>org.wicketstuff</groupId>
+			<artifactId>wicketstuff-select2</artifactId>
+			<version>${wicket.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.github.svenmeier.wicket-dnd</groupId>

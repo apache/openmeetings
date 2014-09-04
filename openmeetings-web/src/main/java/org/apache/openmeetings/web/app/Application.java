@@ -82,6 +82,7 @@ import org.apache.wicket.request.mapper.parameter.PageParametersEncoder;
 import org.apache.wicket.settings.PageSettings;
 import org.apache.wicket.util.collections.ConcurrentHashSet;
 import org.apache.wicket.util.tester.WicketTester;
+import org.wicketstuff.select2.ApplicationSettings;
 import org.slf4j.Logger;
 import org.springframework.web.context.support.XmlWebApplicationContext;
 
@@ -118,6 +119,9 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 		//chain of Resource Loaders, if not found it will search in Wicket's internal 
 		//Resource Loader for a the property key
 		getResourceSettings().getStringResourceLoaders().add(0, new LabelResourceLoader());
+		
+		
+		ApplicationSettings.get().setIncludeJqueryUI(false);
 		
 		super.init();
 		
