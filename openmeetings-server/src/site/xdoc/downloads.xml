@@ -26,31 +26,32 @@
 	<body>
 
 		<section name="Downloads">
-			<div>
+			<p>
 				All downloads can be verified using the Apache OpenMeetings code
-				signing <a href="https://www.apache.org/dist/openmeetings/3.0.2/KEYS">KEYS</a>.
-			</div>
+				signing <a href="https://www.apache.org/dist/openmeetings/3.0.3/KEYS">KEYS</a>, changes: <a 
+					href="https://www.apache.org/dist/openmeetings/3.0.3/CHANGELOG">CHANGELOG</a>.
+			</p>
 			<p>
 				All are available for download as source and binary.
 			</p>
 			
 			<subsection name="Latest Official Release">
 				<p>
-					Apache Openmeetings 3.0.2
+					Apache Openmeetings 3.0.3
 				</p>
 				<ul>
 					<li>
 						Binaries:
 						<ul>
 							<li>
-								<a href="http://www.apache.org/dyn/closer.cgi/openmeetings/3.0.2/bin/apache-openmeetings-3.0.2.zip">apache-openmeetings-3.0.2.zip</a>
-								<a href="http://www.apache.org/dist/openmeetings/3.0.2/bin/apache-openmeetings-3.0.2.zip.asc">[SIG]</a>
-								<a href="http://www.apache.org/dist/openmeetings/3.0.2/bin/apache-openmeetings-3.0.2.zip.md5">[MD5]</a>
+								<a href="http://www.apache.org/dyn/closer.cgi/openmeetings/3.0.3/bin/apache-openmeetings-3.0.3.zip">apache-openmeetings-3.0.3.zip</a>
+								<a href="http://www.apache.org/dist/openmeetings/3.0.3/bin/apache-openmeetings-3.0.3.zip.asc">[SIG]</a>
+								<a href="http://www.apache.org/dist/openmeetings/3.0.3/bin/apache-openmeetings-3.0.3.zip.md5">[MD5]</a>
 							</li>
 							<li>
-								<a href="http://www.apache.org/dyn/closer.cgi/openmeetings/3.0.2/bin/apache-openmeetings-3.0.2.tar.gz">apache-openmeetings-3.0.2.tar.gz</a>
-								<a href="http://www.apache.org/dist/openmeetings/3.0.2/bin/apache-openmeetings-3.0.2.tar.gz.asc">[SIG]</a>
-								<a href="http://www.apache.org/dist/openmeetings/3.0.2/bin/apache-openmeetings-3.0.2.tar.gz.md5">[MD5]</a>
+								<a href="http://www.apache.org/dyn/closer.cgi/openmeetings/3.0.3/bin/apache-openmeetings-3.0.3.tar.gz">apache-openmeetings-3.0.3.tar.gz</a>
+								<a href="http://www.apache.org/dist/openmeetings/3.0.3/bin/apache-openmeetings-3.0.3.tar.gz.asc">[SIG]</a>
+								<a href="http://www.apache.org/dist/openmeetings/3.0.3/bin/apache-openmeetings-3.0.3.tar.gz.md5">[MD5]</a>
 							</li>
 						</ul>
 					</li>
@@ -58,14 +59,14 @@
 						Sources:
 						<ul>
 							<li>
-								<a href="http://www.apache.org/dyn/closer.cgi/openmeetings/3.0.2/src/apache-openmeetings-3.0.2-src.zip">apache-openmeetings-3.0.2-src.zip</a>
-								<a href="http://www.apache.org/dist/openmeetings/3.0.2/src/apache-openmeetings-3.0.2-src.zip.asc">[SIG]</a>
-								<a href="http://www.apache.org/dist/openmeetings/3.0.2/src/apache-openmeetings-3.0.2-src.zip.md5">[MD5]</a>
+								<a href="http://www.apache.org/dyn/closer.cgi/openmeetings/3.0.3/src/apache-openmeetings-3.0.3-src.zip">apache-openmeetings-3.0.3-src.zip</a>
+								<a href="http://www.apache.org/dist/openmeetings/3.0.3/src/apache-openmeetings-3.0.3-src.zip.asc">[SIG]</a>
+								<a href="http://www.apache.org/dist/openmeetings/3.0.3/src/apache-openmeetings-3.0.3-src.zip.md5">[MD5]</a>
 							</li>
 							<li>
-								<a href="http://www.apache.org/dyn/closer.cgi/openmeetings/3.0.2/src/apache-openmeetings-3.0.2-src.tar.gz">apache-openmeetings-3.0.2-src.tar.gz</a>
-								<a href="http://www.apache.org/dist/openmeetings/3.0.2/src/apache-openmeetings-3.0.2-src.tar.gz.asc">[SIG]</a>
-								<a href="http://www.apache.org/dist/openmeetings/3.0.2/src/apache-openmeetings-3.0.2-src.tar.gz.md5">[MD5]</a>
+								<a href="http://www.apache.org/dyn/closer.cgi/openmeetings/3.0.3/src/apache-openmeetings-3.0.3-src.tar.gz">apache-openmeetings-3.0.3-src.tar.gz</a>
+								<a href="http://www.apache.org/dist/openmeetings/3.0.3/src/apache-openmeetings-3.0.3-src.tar.gz.asc">[SIG]</a>
+								<a href="http://www.apache.org/dist/openmeetings/3.0.3/src/apache-openmeetings-3.0.3-src.tar.gz.md5">[MD5]</a>
 							</li>
 						</ul>
 					</li>
@@ -87,7 +88,9 @@
 			<subsection name="Plugins / Non ASF downloads">
 			
 				<p>
-					If you are looking for more plugins for 3th party applications (Moodle, Drupal, Joomla, ...) check out <a href="http://code.google.com/a/apache-extras.org/hosting/search?q=openmeetings" target="_blank" rel="nofollow">apache-extras.org</a>.
+					If you are looking for more plugins for 3th party applications (Moodle, Drupal, Joomla, ...) check out 
+					<a href="http://code.google.com/a/apache-extras.org/hosting/search?q=openmeetings" target="_blank" rel="nofollow">apache-extras.org</a> or 
+					ask <a href="commercial-support.html">commercial support</a>.
 				</p>
 			
 				<p>
