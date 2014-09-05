@@ -31,13 +31,18 @@ import java.util.Collection;
 import java.util.List;
 
 import org.apache.openmeetings.db.dao.label.FieldLanguageDao;
+import org.apache.openmeetings.db.dao.room.InvitationDao;
 import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.label.FieldLanguage;
 import org.apache.openmeetings.db.entity.room.Invitation;
+import org.apache.openmeetings.db.entity.room.Invitation.MessageType;
 import org.apache.openmeetings.db.entity.room.Invitation.Valid;
 import org.apache.openmeetings.db.entity.user.User;
+import org.apache.openmeetings.db.entity.user.User.Type;
+import org.apache.openmeetings.service.room.InvitationManager;
 import org.apache.openmeetings.util.crypt.MD5;
+import org.apache.openmeetings.util.crypt.ManageCryptStyle;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.util.UserMultiChoice;
 import org.apache.wicket.ajax.AjaxEventBehavior;
@@ -140,9 +145,27 @@ public class InvitationDialog extends AbstractFormDialog<Invitation> {
 
 	@Override
 	protected void onSubmit(AjaxRequestTarget target) {
-		//TODO implement this
+		Invitation i = form.getModelObject();
 		for (User u : modelTo.getObject()) {
-			//getBean(InvitationManager)
+			i.setPassword(ManageCryptStyle.getInstanceOfCrypt().createPassPhrase(i.getPassword())); //FIXME should be hidden
+			//FIXME another HACK
+			Calendar d = Calendar.getInstance();
+			d.setTime(i.getValidFrom());
+			d.add(Calendar.MINUTE, -5);
+			i.setValidFrom(d.getTime());
+			
+			i.setInvitee(u);
+			if (Type.contact == u.getType()) {
+				//TODO not sure it is right
+				u.setLanguage_id(lang.getObject().getId());
+			}
+			getBean(InvitationDao.class).update(i);
+			try {
+				//FIXME getHash vs send
+				getBean(InvitationManager.class).sendInvitionLink(i, MessageType.Create, subject.getObject(), message.getObject(), false);
+			} catch (Exception e) {
+				log.error("error while processing ", e);
+			}
 		}
 	}
 	
