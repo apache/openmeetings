@@ -48,8 +48,7 @@ import org.simpleframework.xml.Root;
 		@NamedQuery(name = "getNondeletedConfiguration", query = "SELECT c FROM Configuration c  "
 				+ "LEFT JOIN FETCH c.user WHERE c.deleted = false"),
 		@NamedQuery(name = "getConfigurationById", query = "SELECT c FROM Configuration c "
-				+ "LEFT JOIN FETCH c.user "
-				+ "WHERE c.configuration_id = :configuration_id and c.deleted = false"),
+				+ "LEFT JOIN FETCH c.user WHERE c.id = :configuration_id and c.deleted = false"),
 		@NamedQuery(name = "countConfigurations", query = "SELECT COUNT(c) FROM Configuration c WHERE c.deleted = false")
 })
 @Table(name = "configuration")

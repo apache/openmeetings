@@ -331,8 +331,7 @@ public class BackupExport {
 		 * ##################### Config
 		 */
 		{
-			List<Configuration> list = configurationDao.getConfigurations(
-					0, Integer.MAX_VALUE, "c.configuration_id", true);
+			List<Configuration> list = configurationDao.getConfigurations(0, Integer.MAX_VALUE, "c.id", true);
 			Registry registry = new Registry();
 			registry.bind(State.class, StateConverter.class);
 			registry.bind(User.class, UserConverter.class);

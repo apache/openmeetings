@@ -157,8 +157,7 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 				query += " DESC";
 			}
 
-			TypedQuery<Configuration> q = em.createQuery(query,
-					Configuration.class);
+			TypedQuery<Configuration> q = em.createQuery(query, Configuration.class);
 			q.setFirstResult(start);
 			q.setMaxResults(max);
 			return q.getResultList();
