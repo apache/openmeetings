@@ -42,7 +42,6 @@
 		<maven.surefire.version>2.17</maven.surefire.version>
 		<maven-site.version>3.4</maven-site.version>
 		<wicket.version>7.0.0-M3</wicket.version>
-		<wicket.jqueryui.version>7.0.0-SNAPSHOT</wicket.jqueryui.version>
 		<red5-server.version>1.0.3-RELEASE</red5-server.version>
 		<batik.version>1.7</batik.version>
 		<commons-transaction.version>1.2</commons-transaction.version>
