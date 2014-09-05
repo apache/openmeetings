@@ -115,7 +115,7 @@ public class RoomPanel extends BasePanel {
 			
 		}
 	};
-	private InvitationDialog invite = new InvitationDialog("invite");
+	private final InvitationDialog invite;
 	
 	public RoomPanel(String id, long _roomId) {
 		this(id, getBean(RoomDao.class).get(_roomId));
@@ -124,6 +124,7 @@ public class RoomPanel extends BasePanel {
 	public RoomPanel(String id, Room r) {
 		super(id);
 		this.roomId = r.getId();
+		invite = new InvitationDialog("invite", roomId);
 		add(new MenuPanel("roomMenu", getMenu()).setVisible(!r.getHideTopBar()));
 		WebMarkupContainer wb = new WebMarkupContainer("whiteboard");
 		add(wb.setOutputMarkupId(true));
@@ -318,6 +319,7 @@ public class RoomPanel extends BasePanel {
 
 			@Override
 			public void onClick(MainPage page, AjaxRequestTarget target) {
+				invite.updateModel(target);
 				invite.open(target);
 			}
 		});

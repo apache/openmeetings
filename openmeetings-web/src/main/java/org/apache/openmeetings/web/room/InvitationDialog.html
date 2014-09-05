@@ -21,46 +21,56 @@
 <html xmlns:wicket="http://wicket.apache.org">
 <wicket:panel>
 	<form wicket:id="form">
-		<span wicket:id="feedback"></span>
 		<table>
-			<tr><!-- <label wicket:for="email" -->
-				<td><wicket:ommessage key="216" /></td><td><input type="text"/></td>
+			<tr>
+				<td><label wicket:for="recipients"><wicket:ommessage key="216" /></label></td>
+				<td><input type="hidden" wicket:id="recipients" class="input"/></td>
 			</tr>
 			<tr>
-				<td><wicket:ommessage key="215" /></td><td><input type="text"/></td>
+				<td><label wicket:for="subject"><wicket:ommessage key="215" /></label></td>
+				<td><input type="text" wicket:id="subject" class="input"/></td>
 			</tr>
 			<tr>
-				<td><wicket:ommessage key="217" /></td><td><textarea></textarea></td>
+				<td><label wicket:for="message"><wicket:ommessage key="217" /></label></td>
+				<td><textarea wicket:id="message" style="width: 280px; height: 70px;"></textarea></td>
 			</tr>
 			<tr>
-				<td colspan="2"><input type="checkbox"/><wicket:ommessage key="524" /></td>
+				<td colspan="2"><input wicket:id="passwordProtected" type="checkbox"/>&nbsp;<label 
+						wicket:for="passwordProtected"><wicket:ommessage key="524" /></label></td>
 			</tr>
 			<tr>
-				<td><wicket:ommessage key="525" /></td><td><input type="password"/></td>
+				<td><label wicket:for="password"><wicket:ommessage key="525" /></label></td>
+				<td><input wicket:id="password" type="password"/></td>
 			</tr>
 			<tr>
 				<td><wicket:ommessage key="526" /></td>
-				<td><div><input type="radio"><wicket:ommessage key="527" /></input>
-					<input type="radio"><wicket:ommessage key="528" /></input>
-					<input type="radio"><wicket:ommessage key="529" /></input></div>
+				<td>
+					<div wicket:id="valid">
+						<input type="radio" wicket:id="one"/><label wicket:for="one"><wicket:ommessage key="527" /></label>
+						<input type="radio" wicket:id="period"/><label wicket:for="period"><wicket:ommessage key="528" /></label>
+						<input type="radio" wicket:id="endless"/><label wicket:for="endless"><wicket:ommessage key="529" /></label>
+					</div>
 				</td>
 			</tr>
 			<tr>
-				<td><wicket:ommessage key="530" /></td><td></td>
+				<td><label wicket:for="validFrom"><wicket:ommessage key="530" /></label></td>
+				<td><span class="date time picker" wicket:id="validFrom"></span></td>
 			</tr>
 			<tr>
-				<td><wicket:ommessage key="531" /></td><td></td>
+				<td><label wicket:for="validTo"><wicket:ommessage key="531" /></label></td>
+				<td><span class="date time picker" wicket:id="validTo"></span></td>
 			</tr>
 			<tr>
-				<td><wicket:ommessage key="1143" /></td><td><select/></td>
+				<td><wicket:ommessage key="1143" /></td><td><select wicket:id="timeZoneId"/></td>
 			</tr>
 			<tr>
-				<td><wicket:ommessage key="59" /></td><td><select/></td>
+				<td><wicket:ommessage key="59" /></td><td><select wicket:id="language"/></td>
 			</tr>
 			<tr>
-				<td colspan="2"><input type="text" disabled="disabled"/></td>
+				<td colspan="2"><input type="text" disabled="disabled" style="width: 100%;"/></td>
 			</tr>
 		</table>
+		<span wicket:id="feedback"></span>
 	</form>
 </wicket:panel>
 </html>

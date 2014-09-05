@@ -100,31 +100,19 @@ public class FieldLanguageDao implements Serializable {
 		}
 	}
 
-	public FieldLanguage getFieldLanguageById(Long id) {
+	public FieldLanguage get(Long id) {
+		TypedQuery<FieldLanguage> query = em.createNamedQuery("getLanguageById", FieldLanguage.class);
+		query.setParameter("id", id);
+		FieldLanguage fl = null;
 		try {
-			TypedQuery<FieldLanguage> query = em.createNamedQuery("getLanguageById", FieldLanguage.class);
-			query.setParameter("id", id);
-			FieldLanguage fl = null;
-			try {
-				fl = query.getSingleResult();
-			} catch (NoResultException ex) {
-			}
-			return fl;
-		} catch (Exception ex2) {
-			log.error("[getLanguageById]: ", ex2);
+			fl = query.getSingleResult();
+		} catch (NoResultException ex) {
 		}
-		return null;
+		return fl;
 	}
 
-	public List<FieldLanguage> getLanguages() {
-		try {
-			TypedQuery<FieldLanguage> query = em.createNamedQuery("getLanguages", FieldLanguage.class);
-			List<FieldLanguage> ll = query.getResultList();
-			return ll;
-		} catch (Exception ex2) {
-			log.error("[getLanguages]: ", ex2);
-		}
-		return null;
+	public List<FieldLanguage> get() {
+		TypedQuery<FieldLanguage> query = em.createNamedQuery("getLanguages", FieldLanguage.class);
+		return query.getResultList();
 	}
-
 }

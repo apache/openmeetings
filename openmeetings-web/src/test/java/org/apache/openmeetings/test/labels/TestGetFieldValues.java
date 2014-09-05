@@ -45,7 +45,7 @@ public class TestGetFieldValues extends AbstractJUnitDefaults {
 
 	@Test
 	public void testCount() throws Exception {
-		int langCount = langDao.getLanguages().size();
+		int langCount = langDao.get().size();
 		assertTrue("Languages should not be empty: " + langCount, langCount > 0);
 		Fieldvalues fv = langValueDao.get(1L);
 		assertNotNull("Fieldvalues should not be null", fv);

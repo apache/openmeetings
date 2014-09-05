@@ -604,3 +604,14 @@ select.messages.selector {
 	bottom: 0;
 	position: fixed;
 }
+form .input {
+	display: block;
+	float: left;
+	font-size: 14px;
+	padding: 0px 0px;
+	width: 280px;
+	margin: 2px 2px;
+}
+.date.time.picker {
+	font-size: 12px;
+}

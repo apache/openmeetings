@@ -247,7 +247,7 @@ public class RegisterDialog extends AbstractFormDialog<String> {
 			emailField.setLabel(Model.of(WebSession.getString(119)));
 			emailField.add(RfcCompliantEmailAddressValidator.getInstance());
 			add(langField = new DropDownChoice<FieldLanguage>("lang", new PropertyModel<FieldLanguage>(
-					RegisterDialog.this, "lang"), getBean(FieldLanguageDao.class).getLanguages(),
+					RegisterDialog.this, "lang"), getBean(FieldLanguageDao.class).get(),
 					new ChoiceRenderer<FieldLanguage>("name", "id")));
 			langField.setRequired(true).setLabel(Model.of(WebSession.getString(111)));
 			add(tzDropDown.setRequired(true).setLabel(Model.of(WebSession.getString(1143))));

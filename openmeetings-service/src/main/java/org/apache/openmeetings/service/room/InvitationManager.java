@@ -230,7 +230,7 @@ public class InvitationManager implements IInvitationManager {
 		User owner = i.getInvitedBy();
 		
 		String invitorName = owner.getFirstname() + " " + owner.getLastname();
-		boolean isCanceled = (type==MessageType.Cancel); 
+		boolean isCanceled = (type == MessageType.Cancel); 
 		String template = InvitationTemplate.getEmail(i.getInvitee().getLanguage_id(), invitorName, message, invitation_link, isCanceled);
 		String email = i.getInvitee().getAdresses().getEmail();
 		String replyToEmail = owner.getAdresses().getEmail();
@@ -238,7 +238,7 @@ public class InvitationManager implements IInvitationManager {
 		if (ical) {
 			String username = i.getInvitee().getLogin();
 			boolean isOwner = owner.getId() == i.getInvitee().getId();
-			IcalHandler handler = new IcalHandler(MessageType.Cancel == type ? IcalHandler.ICAL_METHOD_CANCEL : IcalHandler.ICAL_METHOD_REQUEST);
+			IcalHandler handler = new IcalHandler(isCanceled ? IcalHandler.ICAL_METHOD_CANCEL : IcalHandler.ICAL_METHOD_REQUEST);
 
 			HashMap<String, String> attendeeList = handler.getAttendeeData(email, username, isOwner);
 

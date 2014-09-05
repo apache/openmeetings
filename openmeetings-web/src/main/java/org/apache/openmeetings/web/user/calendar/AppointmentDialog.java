@@ -97,7 +97,6 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 		return 650;
 	}
 	
-	//@Override
 	public void setModelObjectWithAjaxTarget(Appointment object, AjaxRequestTarget target) {
 		form.setModelObject(object);
 		form.setEnabled(object.getOwner() == null || getUserId() == object.getOwner().getId());
@@ -276,8 +275,8 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 			add(toolbar);
 			add(new WysiwygEditor("description", toolbar));
 			add(new TextField<String>("location"));
-			add(start = new DateTimePicker("start", "yyyy MMM dd", "HH:mm:ss")); //FIXME use user locale
-			add(end = new DateTimePicker("end", "yyyy MMM dd", "HH:mm:ss")); //FIXME use user locale
+			add(start = new DateTimePicker("start", "yyyy/MM/dd", "HH:mm:ss")); //FIXME use user locale
+			add(end = new DateTimePicker("end", "yyyy/MM/dd", "HH:mm:ss")); //FIXME use user locale
 			pwd.setEnabled(getModelObject().isPasswordProtected());
 			pwd.setOutputMarkupId(true);
 			add(pwd);

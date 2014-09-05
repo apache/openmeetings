@@ -102,7 +102,7 @@ public class GeneralUserForm extends Form<User> {
 
 		add(new DropDownChoice<FieldLanguage>("language"
 				, new PropertyModel<FieldLanguage>(this, "lang")
-				, langDao.getLanguages()
+				, langDao.get()
 				, new ChoiceRenderer<FieldLanguage>("name", "id"))
 			.add(new AjaxFormComponentUpdatingBehavior("onchange") {
 				private static final long serialVersionUID = 1L;
@@ -188,7 +188,7 @@ public class GeneralUserForm extends Form<User> {
 
 	public void updateModelObject(User u) {
 		salutation = getBean(SalutationDao.class).get(u.getSalutations_id(), getLanguage());
-		lang = getBean(FieldLanguageDao.class).getFieldLanguageById(u.getLanguage_id());
+		lang = getBean(FieldLanguageDao.class).get(u.getLanguage_id());
 	}
 	
 	@Override

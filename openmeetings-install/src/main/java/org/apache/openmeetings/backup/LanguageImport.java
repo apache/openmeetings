@@ -49,7 +49,7 @@ public class LanguageImport {
 			throws Exception {
 
 		// return null if no language availible
-		if (fieldLanguageDaoImpl.getFieldLanguageById(language_id) == null) {
+		if (fieldLanguageDaoImpl.get(language_id) == null) {
 			return null;
 		}
 

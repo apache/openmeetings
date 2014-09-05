@@ -51,7 +51,7 @@ public class LangForm extends Form<Void> {
 
 	public void updateLanguages(AjaxRequestTarget target) {
 		FieldLanguageDao langDao = getBean(FieldLanguageDao.class);
-		languages.setChoices(langDao.getLanguages());
+		languages.setChoices(langDao.get());
 		// add(languages);
 		target.add(languages);
 	}
@@ -72,7 +72,7 @@ public class LangForm extends Form<Void> {
 		
 		languages = new DropDownChoice<FieldLanguage>("language"
 				, new PropertyModel<FieldLanguage>(langPanel, "language")
-				, langDao.getLanguages()
+				, langDao.get()
 				, new ChoiceRenderer<FieldLanguage>("name", "id"));
 				
 		languages.add(new AjaxFormComponentUpdatingBehavior("onchange") {
@@ -104,7 +104,7 @@ public class LangForm extends Form<Void> {
 					// TODO add feedback message
 					log.error("Error", e);
 				}
-				languages.setChoices(langDao.getLanguages());
+				languages.setChoices(langDao.get());
 				target.add(languages);
 				// FIXME need to force update list container
 				target.add(listContainer);

@@ -87,7 +87,7 @@ public class FillLabels extends AbstractJUnitDefaults {
 	public void testCount() throws Exception {
 		FieldLanguage prevLanguage = null;
 		long prevCount = -1;
-		for (FieldLanguage l : fieldLanguageDao.getLanguages()) {
+		for (FieldLanguage l : fieldLanguageDao.get()) {
 			long count = fieldValueDao.count(l.getId(), null);
 			if (prevLanguage != null) {
 				assertEquals(String.format("Language: %s contains %d labels while %s contains %d labels"

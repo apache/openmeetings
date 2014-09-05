@@ -95,7 +95,7 @@ public class LangPanel extends AdminPanel {
 		// Create feedback panels
 		add(importFeedback.setOutputMarkupId(true));
 		FieldLanguageDao langDao = getBean(FieldLanguageDao.class);
-		language = langDao.getFieldLanguageById(1L);
+		language = langDao.get(1L);
 
 		Fieldlanguagesvalues flv = new Fieldlanguagesvalues();
 		flv.setLanguage_id(language.getId());
@@ -201,7 +201,7 @@ public class LangPanel extends AdminPanel {
 
 				final List<Fieldlanguagesvalues> flvList = getBean(FieldLanguagesValuesDao.class).getMixedFieldValuesList(language.getId());
 
-				FieldLanguage fl = getBean(FieldLanguageDao.class).getFieldLanguageById(language.getId());
+				FieldLanguage fl = getBean(FieldLanguageDao.class).get(language.getId());
 				if (fl != null && flvList != null) {
 					download.setFileName(fl.getName() + ".xml");
 					download.setResourceStream(new AbstractResourceStream() {

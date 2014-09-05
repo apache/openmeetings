@@ -56,9 +56,6 @@
 .appointmentPopUp td {
 	vertical-align: middle;
 }
-.appointmentPopUp td .date {
-	font-size: 12px;
-}
 .appointmentPopUp .attendeeContainer {
 	background-color: #FFFFFF;
 	border: solid 1px #aacfe4;
