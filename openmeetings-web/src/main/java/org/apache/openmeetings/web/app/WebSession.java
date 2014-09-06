@@ -290,7 +290,7 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 		String s = getBean(FieldLanguagesValuesDao.class).getString(id, getLanguage());
 		s = s == null ? "[Missing]" :
 			(STRINGS_WITH_APP.contains(id) ? s.replaceAll("\\$APP_NAME", getBean(ConfigurationDao.class).getAppName()) : s);
-		return s;// + (Application.get().getDebugSettings().isDevelopmentUtilitiesEnabled() ? "[" + id + "]" : "");
+		return s;// + (Application.get().getDebugSettings().isDevelopmentUtilitiesEnabled() ? " [" + id + "]" : "");
 	}
 	
 	public void setLanguage(long languageId) {
@@ -310,7 +310,7 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 	}
 	
 	public static FieldLanguage getLanguageObj() {
-		return getBean(FieldLanguageDao.class).getFieldLanguageById(getLanguage());
+		return getBean(FieldLanguageDao.class).get(getLanguage());
 	}
 	
 	public String getValidatedSid() {
@@ -394,7 +394,7 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 	}
 
 	public FieldLanguage getLanguageByBrowserLocale() {
-		List<FieldLanguage> languages = getBean(FieldLanguageDao.class).getLanguages();
+		List<FieldLanguage> languages = getBean(FieldLanguageDao.class).get();
 		for (FieldLanguage l : languages) {
 			if (getBrowserLocale().getLanguage().equals(new Locale(l.getCode()).getLanguage())){
 				return l;
