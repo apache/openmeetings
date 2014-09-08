@@ -199,7 +199,7 @@ exten => _400X!,n,Hangup
 ; *****************************************************
 
 [rooms-red5sip]
-exten => _400X!,1,GotoIf($[${DB_EXISTS(openmeetings/rooms/${EXTEN})}]?ok:notavil)
+exten => _400X!,1,GotoIf($[${DB_EXISTS(openmeetings/rooms/${EXTEN})}]?ok:notavail)
 exten => _400X!,n(ok),Confbridge(${EXTEN},default_bridge,red5sip_user)
 exten => _400X!,n(notavail),Hangup
 ]]>
