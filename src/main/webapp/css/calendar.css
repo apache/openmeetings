@@ -82,3 +82,7 @@
 .appointment.attendees {
 	width: 100%;
 }
+.appointment.attendees.select2-container-multi .select2-choices {
+	max-height: 100px;
+	overflow-y: auto;
+}
