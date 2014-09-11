@@ -141,18 +141,12 @@ public class RoomPanel extends BasePanel {
 				startSharing.respond(target);
 			}
 		};
-		applyModer = new RoomMenuItem(WebSession.getString(784), WebSession.getString(1481));
-		applyModer.setActive(false);
-		applyWB = new RoomMenuItem(WebSession.getString(785), WebSession.getString(1492));
-		applyWB.setActive(false);
-		applyAV = new RoomMenuItem(WebSession.getString(786), WebSession.getString(1482));
-		applyAV.setActive(false);
-		pollVote = new RoomMenuItem(WebSession.getString(42), WebSession.getString(1485));
-		pollVote.setActive(false);
-		pollResult = new RoomMenuItem(WebSession.getString(37), WebSession.getString(1484));
-		pollResult.setActive(false);
-		sipDialer = new RoomMenuItem(WebSession.getString(1447), WebSession.getString(1488));
-		sipDialer.setActive(false);
+		applyModer = new RoomMenuItem(WebSession.getString(784), WebSession.getString(1481), false);
+		applyWB = new RoomMenuItem(WebSession.getString(785), WebSession.getString(1492), false);
+		applyAV = new RoomMenuItem(WebSession.getString(786), WebSession.getString(1482), false);
+		pollVote = new RoomMenuItem(WebSession.getString(42), WebSession.getString(1485), false);
+		pollResult = new RoomMenuItem(WebSession.getString(37), WebSession.getString(1484), false);
+		sipDialer = new RoomMenuItem(WebSession.getString(1447), WebSession.getString(1488), false);
 		add((menuPanel = new MenuPanel("roomMenu", getMenu())).setVisible(!r.getHideTopBar()));
 		WebMarkupContainer wb = new WebMarkupContainer("whiteboard");
 		add(wb.setOutputMarkupId(true));
@@ -335,7 +329,8 @@ public class RoomPanel extends BasePanel {
 			}
 		};
 		User u = getBean(UserDao.class).get(getUserId());
-		exit.setActive(u.getType() != User.Type.external && u.getType() != User.Type.contact);
+		boolean externalUser = u.getType() == User.Type.external || u.getType() == User.Type.contact; //TODO check this
+		exit.setActive(!externalUser);
 		menu.add(exit);//TODO check this
 		MenuItem files = new RoomMenuItem(WebSession.getString(245));
 		List<RoomMenuItem> fileItems = new ArrayList<RoomMenuItem>();
@@ -345,7 +340,7 @@ public class RoomPanel extends BasePanel {
 		
 		MenuItem actions = new RoomMenuItem(WebSession.getString(635));
 		List<RoomMenuItem> actionItems = new ArrayList<RoomMenuItem>();
-		actionItems.add(new RoomMenuItem(WebSession.getString(213), WebSession.getString(1489)) {
+		actionItems.add(new RoomMenuItem(WebSession.getString(213), WebSession.getString(1489), !externalUser) {
 			private static final long serialVersionUID = 1L;
 
 			@Override

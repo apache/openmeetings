@@ -25,11 +25,16 @@ public class RoomMenuItem extends MenuItem {
 	private static final long serialVersionUID = 1L;
 
 	public RoomMenuItem(String name) {
-		super(name);
+		this(name, null);
 	}
 	
 	public RoomMenuItem(String name, String desc) {
+		this(name, desc, true);
+	}
+	
+	public RoomMenuItem(String name, String desc, boolean active) {
 		super(name, desc);
+		this.active = active;
 	}
 	
 	public RoomMenuItem(String name, String desc, String cssClass) {
