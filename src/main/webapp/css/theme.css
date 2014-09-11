@@ -288,6 +288,14 @@ html, body {
 	width: 250px;
 	border: 1px solid #ccc;
 }
+.trash-toolbar {
+	font-weight: bold;
+	line-height: 20px;
+	color: transparent;
+}
+.trash-toolbar-hover {
+	color: inherit;
+}
 .recording .files .trees {
 	min-height: 400px;
 	max-height: 600px;

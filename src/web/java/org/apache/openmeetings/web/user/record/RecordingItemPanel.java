@@ -33,18 +33,18 @@ import org.apache.wicket.model.IModel;
 public class RecordingItemPanel extends RecordingPanel {
 	private static final long serialVersionUID = 1L;
 
-	public RecordingItemPanel(String id, final IModel<FlvRecording> model, final RecordingErrorsDialog errorsDialog) {
-		super(id, model);
+	public RecordingItemPanel(String id, final IModel<FlvRecording> model, final RecordingsPanel treePanel) {
+		super(id, model, treePanel);
 		FlvRecording r = model.getObject();
 		long errorCount = getBean(FlvRecordingLogDao.class).countErrors(r.getFlvRecordingId());
 		boolean visible = errorCount != 0 || (Status.PROCESSING != r.getStatus() && !isRecordingExists(r.getFileHash() + MP4_EXTENSION));
-		item.add(new WebMarkupContainer("errors").add(new AjaxEventBehavior("click") {
+		drag.add(new WebMarkupContainer("errors").add(new AjaxEventBehavior("click") {
 			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected void onEvent(AjaxRequestTarget target) {
-				errorsDialog.setDefaultModel(model);
-				errorsDialog.open(target);
+				treePanel.errorsDialog.setDefaultModel(model);
+				treePanel.errorsDialog.open(target);
 			}
 		}).setVisible(visible));
 	}

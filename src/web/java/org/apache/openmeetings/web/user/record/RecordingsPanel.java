@@ -55,23 +55,20 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.util.time.Duration;
 
-import wicketdnd.DragSource;
-import wicketdnd.DropTarget;
-import wicketdnd.Location;
-import wicketdnd.Operation;
-import wicketdnd.Reject;
-import wicketdnd.Transfer;
+import com.googlecode.wicket.jquery.core.JQueryBehavior;
+import com.googlecode.wicket.jquery.core.Options;
+import com.googlecode.wicket.jquery.ui.interaction.droppable.Droppable;
 
 public class RecordingsPanel extends UserPanel {
 	private static final long serialVersionUID = 1321258690447136958L;
-	private final WebMarkupContainer trees = new WebMarkupContainer("tree-container");
+	final WebMarkupContainer trees = new WebMarkupContainer("tree-container");
 	private final WebMarkupContainer sizes = new WebMarkupContainer("sizes");
 	private final VideoPlayer video = new VideoPlayer("video");
 	private final VideoInfo info = new VideoInfo("info");
 	private final IModel<FlvRecording> rm = new CompoundPropertyModel<FlvRecording>(new FlvRecording());
 	private final IModel<String> homeSize = Model.of((String)null);
 	private final IModel<String> publicSize = Model.of((String)null);
-	private final RecordingErrorsDialog errorsDialog = new RecordingErrorsDialog("errors", Model.of((FlvRecording)null));
+	final RecordingErrorsDialog errorsDialog = new RecordingErrorsDialog("errors", Model.of((FlvRecording)null));
 	private RecordingTree selected;
 	
 	public RecordingsPanel(String id) {
@@ -102,7 +99,26 @@ public class RecordingsPanel extends UserPanel {
 			}
 		};
 		add(addFolder);
-		add(new WebMarkupContainer("create").add(new AjaxEventBehavior("onclick") {
+		Droppable<FlvRecording> trashToolbar = new Droppable<FlvRecording>("trash-toolbar") {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void onConfigure(JQueryBehavior behavior) {
+				super.onConfigure(behavior);
+				behavior.setOption("hoverClass", Options.asString("ui-state-hover trash-toolbar-hover"));
+				behavior.setOption("accept", Options.asString(".recorditem, .fileitem"));
+			}
+			
+			@Override
+			public void onDrop(AjaxRequestTarget target, Component component) {
+				Object o = component.getDefaultModelObject();
+				if (o instanceof FlvRecording) {
+					delete((FlvRecording)o, target);
+				}
+			}
+		};
+		add(trashToolbar);
+		trashToolbar.add(new WebMarkupContainer("create").add(new AjaxEventBehavior("onclick") {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -110,7 +126,7 @@ public class RecordingsPanel extends UserPanel {
 				addFolder.open(target);
 			}
 		}));
-		add(new WebMarkupContainer("refresh").add(new AjaxEventBehavior("onclick") {
+		trashToolbar.add(new WebMarkupContainer("refresh").add(new AjaxEventBehavior("onclick") {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -118,29 +134,14 @@ public class RecordingsPanel extends UserPanel {
 				target.add(trees); //FIXME add correct refresh
 			}
 		}));
-		ConfirmableAjaxLink trash = new ConfirmableAjaxLink("trash", 713) {
+		trashToolbar.add(new ConfirmableAjaxLink("trash", 713) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
 			public void onClick(AjaxRequestTarget target) {
-				long id = rm.getObject().getFlvRecordingId();
-				if (id > 0) {
-					getBean(FlvRecordingDao.class).delete(rm.getObject());
-				}
-				target.add(trees); //FIXME add correct refresh
+				delete(rm.getObject(), target);
 			}
-		};
-		trash.add(new WebMarkupContainer("drop-center").setOutputMarkupId(true)).add(new DropTarget(Operation.MOVE) {
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public void onDrop(AjaxRequestTarget target, Transfer transfer, Location location) throws Reject {
-				FlvRecording r = transfer.getData();
-				getBean(FlvRecordingDao.class).delete(r);
-				target.add(trees); //FIXME add correct refresh
-			}
-		}.dropCenter("span"));
-		add(trash/*.add(new WindowsTheme())*/); //TODO check theme here
+		});
 		RepeatingView treesView = new RepeatingView("tree");
 		treesView.add(selected = new RecordingTree(treesView.newChildId(), new MyRecordingTreeProvider()));
 		treesView.add(new RecordingTree(treesView.newChildId(), new PublicRecordingTreeProvider(null, null)));
@@ -161,6 +162,14 @@ public class RecordingsPanel extends UserPanel {
 		add(video, info, errorsDialog);
 	}
 
+	void delete(FlvRecording f, AjaxRequestTarget target) {
+		long id = f.getFlvRecordingId();
+		if (id > 0) {
+			getBean(FlvRecordingDao.class).delete(f);
+		}
+		target.add(trees); //FIXME add correct refresh
+	}
+	
 	private void updateSizes() {
 		RecordingContainerData sizeData = getBean(FlvRecordingDao.class).getRecordingContainerData(getUserId());
 		if (sizeData != null) {
@@ -186,40 +195,7 @@ public class RecordingsPanel extends UserPanel {
 				@Override
 				protected Component newLabelComponent(String id, final IModel<FlvRecording> lm) {
 					FlvRecording r = lm.getObject();
-					Component result = r.isFolder() || r.getFlvRecordingId() < 1 ? new RecordingPanel(id, lm) : new RecordingItemPanel(id, lm, errorsDialog);
-					if (r.getFlvRecordingId() > 0) {
-						result.add(new DragSource(Operation.MOVE) {
-							private static final long serialVersionUID = 1L;
-
-							@Override
-							public void onBeforeDrop(Component drag, Transfer transfer) throws Reject {
-								transfer.setData(lm.getObject());
-							};
-							
-							@Override
-							public void onAfterDrop(AjaxRequestTarget target, wicketdnd.Transfer transfer) {
-								transfer.setData(null);
-							}
-						}.drag("div"));
-					}
-					if (r.getFlvRecordingId() < 0 || r.isFolder()) {
-						result.add(new DropTarget(Operation.MOVE) {
-							private static final long serialVersionUID = 1L;
-
-							@Override
-							public void onDrop(AjaxRequestTarget target, Transfer transfer, Location location) throws Reject {
-								FlvRecording p = lm.getObject();
-								long pid = p.getFlvRecordingId();
-								FlvRecording r = transfer.getData();
-								r.setParentFileExplorerItemId(pid > 0 ? pid : null);
-								r.setOrganization_id(p.getOrganization_id());
-								r.setOwnerId(p.getOwnerId());
-								getBean(FlvRecordingDao.class).update(r);
-								target.add(trees); //FIXME add correct refresh
-							}
-						}.dropCenter("div"));
-					}
-					return result;
+					return r.isFolder() || r.getFlvRecordingId() < 1 ? new RecordingPanel(id, lm, RecordingsPanel.this) : new RecordingItemPanel(id, lm, RecordingsPanel.this);
 				}
 				
 				@Override
@@ -309,6 +285,7 @@ public class RecordingsPanel extends UserPanel {
 			FlvRecording r = new FlvRecording();
 			r.setFlvRecordingId(0);
 			r.setFileName(WebSession.getString(860));
+			r.setFolder(true);
 			r.setOwnerId(getUserId());
 			return Arrays.asList(r).iterator();
 		}
@@ -337,6 +314,7 @@ public class RecordingsPanel extends UserPanel {
 			r.setFlvRecordingId(orgId == null ? -1 : -orgId);
 			r.setOrganization_id(orgId);
 			r.setOwnerId(null);
+			r.setFolder(true);
 			String pub = WebSession.getString(861);
 			r.setFileName(orgId == null ? pub : String.format("%s (%s)", pub, name));
 			return Arrays.asList(r).iterator();

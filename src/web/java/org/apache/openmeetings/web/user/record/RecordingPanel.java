@@ -22,7 +22,10 @@ import static org.apache.openmeetings.web.app.Application.getBean;
 
 import org.apache.openmeetings.db.dao.record.FlvRecordingDao;
 import org.apache.openmeetings.db.entity.record.FlvRecording;
+import org.apache.wicket.Component;
+import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.extensions.ajax.markup.html.AjaxEditableLabel;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
@@ -30,17 +33,67 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
-import wicketdnd.theme.WindowsTheme;
+import com.googlecode.wicket.jquery.core.JQueryBehavior;
+import com.googlecode.wicket.jquery.core.Options;
+import com.googlecode.wicket.jquery.ui.interaction.draggable.Draggable;
+import com.googlecode.wicket.jquery.ui.interaction.droppable.Droppable;
 
 public class RecordingPanel extends Panel {
 	private static final long serialVersionUID = 1L;
-	protected final WebMarkupContainer item = new WebMarkupContainer("item");
+	protected final MarkupContainer drop;
+	protected final MarkupContainer drag;
 
-	public RecordingPanel(String id, final IModel<FlvRecording> model) {
+	public RecordingPanel(String id, final IModel<FlvRecording> model, final RecordingsPanel treePanel) {
 		super(id, model);
 		FlvRecording r = model.getObject();
-		add(new WindowsTheme());
-		item.add(r.isFolder() ? new AjaxEditableLabel<String>("name", Model.of(model.getObject().getFileName())) {
+		drop = r.isFolder() ? new Droppable<FlvRecording>("drop", model) {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void onConfigure(JQueryBehavior behavior) {
+				super.onConfigure(behavior);
+				behavior.setOption("hoverClass", Options.asString("ui-state-hover"));
+				behavior.setOption("accept", Options.asString(".recorditem"));
+			}
+			
+			@Override
+			public void onDrop(AjaxRequestTarget target, Component component) {
+				Object o = component.getDefaultModelObject();
+				if (o instanceof FlvRecording) {
+					FlvRecording p = (FlvRecording)drop.getDefaultModelObject();
+					FlvRecording f = (FlvRecording)o;
+					long pid = p.getFlvRecordingId();
+					//FIXME parent should not be moved to child !!!!!!!
+					if (pid == f.getFlvRecordingId()) {
+						return;
+					}
+					f.setParentFileExplorerItemId(pid > 0 ? pid : null);
+					f.setOwnerId(p.getOwnerId());
+					f.setRoom_id(p.getRoom_id());
+					f.setOrganization_id((p).getOrganization_id());
+					getBean(FlvRecordingDao.class).update(f);
+				}
+				target.add(treePanel.trees); //FIXME add correct refresh
+			}
+		} : new WebMarkupContainer("drop");
+		if (r.getFlvRecordingId() < 1) {
+			drag = new WebMarkupContainer("drag");
+		} else {
+			Draggable<FlvRecording> d = new Draggable<FlvRecording>("drag", model) {
+				private static final long serialVersionUID = 1L;
+
+				@Override
+				public void onConfigure(JQueryBehavior behavior) {
+					super.onConfigure(behavior);
+					behavior.setOption("revert", "treeRevert");
+					behavior.setOption("cursor", Options.asString("move"));
+				}
+			};
+			d.setContainment(".file.tree");
+			d.add(AttributeAppender.append("class", "recorditem"));
+			drag = d;
+		}
+		drag.add(r.getFlvRecordingId() < 1 || !r.isFolder() ? new Label("name", r.getFileName()) : new AjaxEditableLabel<String>("name", Model.of(model.getObject().getFileName())) {
 			private static final long serialVersionUID = 1L;
 			
 			@Override
@@ -51,16 +104,16 @@ public class RecordingPanel extends Panel {
 			@Override
 			protected void onSubmit(AjaxRequestTarget target) {
 				super.onSubmit(target);
-				FlvRecording r = model.getObject();
-				r.setFileName(getEditor().getModelObject());
-				getBean(FlvRecordingDao.class).update(r);
+				FlvRecording fi = model.getObject();
+				fi.setFileName(getEditor().getModelObject());
+				getBean(FlvRecordingDao.class).update(fi);
 			}
 			
 			@Override
 			public void onEdit(AjaxRequestTarget target) {
 				super.onEdit(target);
 			}
-		} : new Label("name", r.getFileName()));
-		add(item.setOutputMarkupId(true));
+		});
+		add(drop.add(drag).setOutputMarkupId(true));
 	}
 }

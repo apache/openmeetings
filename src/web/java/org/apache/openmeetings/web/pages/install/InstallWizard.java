@@ -340,7 +340,7 @@ public class InstallWizard extends Wizard {
 							);
 					} else {
 						progressBar.setModelObject(Application.get()._getBean(ImportInitvalues.class).getProgress());
-						progressBar.respond(target);
+						progressBar.refresh(target);
 						//TODO uncomment later target.add(value);
 						//TODO add current step result as info
 					}
