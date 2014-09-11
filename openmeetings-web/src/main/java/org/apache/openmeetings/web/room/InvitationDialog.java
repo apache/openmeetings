@@ -120,6 +120,8 @@ public class InvitationDialog extends AbstractFormDialog<Invitation> {
 		tzId.setObject(u.getTimeZoneId());
 		lang.setObject(getBean(FieldLanguageDao.class).get(u.getLanguage_id()));
 		form.setModelObject(i);
+		send.setEnabled(false, target);
+		generate.setEnabled(false, target);
 		target.add(form);
 	}
 
@@ -198,7 +200,9 @@ public class InvitationDialog extends AbstractFormDialog<Invitation> {
 		
 						@Override
 						protected void onUpdate(AjaxRequestTarget target) {
-							generate.setEnabled(modelTo.getObject().size() < 2, target);
+							Collection<User> to = modelTo.getObject();
+							send.setEnabled(to.size() > 0, target);
+							generate.setEnabled(to.size() == 1, target);
 						}
 					}));
 			add(new TextField<String>("subject", subject));
@@ -262,7 +266,7 @@ public class InvitationDialog extends AbstractFormDialog<Invitation> {
 		
 		@Override
 		protected void onValidate() {
-			if (from.getConvertedInput().after(to.getConvertedInput())) {
+			if (from.getConvertedInput() != null && to.getConvertedInput() != null && from.getConvertedInput().after(to.getConvertedInput())) {
 				error(WebSession.getString(1592));
 			}
 		}
