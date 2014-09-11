@@ -122,6 +122,14 @@ public class InvitationDialog extends AbstractFormDialog<Invitation> {
 		form.setModelObject(i);
 		target.add(form);
 	}
+
+	@Override
+	protected Form<?> getForm(DialogButton button) {
+		if (button.equals(generate) || button.equals(send)) {
+			return form;
+		}
+		return super.getForm(button);
+	}
 	
 	@Override
 	public InvitationForm getForm() {
@@ -143,6 +151,12 @@ public class InvitationDialog extends AbstractFormDialog<Invitation> {
 		target.add(feedback);
 	}
 
+	@Override
+	public void onClick(AjaxRequestTarget target, DialogButton button) {
+		// TODO Auto-generated method stub
+		super.onClick(target, button);
+	}
+	
 	@Override
 	protected void onSubmit(AjaxRequestTarget target) {
 		Invitation i = form.getModelObject();

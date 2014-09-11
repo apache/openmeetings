@@ -29,6 +29,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
+import org.apache.openmeetings.db.dao.label.FieldLanguagesValuesDao;
 import org.apache.openmeetings.db.dao.label.FieldValueDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.room.Client;
@@ -49,6 +50,8 @@ public class PollDao {
 	@Autowired
 	private FieldValueDao fieldValDao;
 	@Autowired
+	private FieldLanguagesValuesDao labelDao;
+	@Autowired
 	private UserDao userDao;
 	@Autowired
 	private RoomDao roomDao;
@@ -64,9 +67,12 @@ public class PollDao {
 		return pt.getId();
 	}
 	
-	public List<PollType> getPollTypes() {
-		return em.createNamedQuery("getPollTypes", PollType.class)
-				.getResultList();
+	public List<PollType> getPollTypes(long langId) {
+		List<PollType> l = em.createNamedQuery("getPollTypes", PollType.class).getResultList();
+		for (PollType t : l) {
+			t.getLabel().setFieldlanguagesvalue(labelDao.get(t.getLabel().getId(), langId));
+		}
+		return l;
 	}
 	
 	public PollType getPollType(Long typeId) {
@@ -78,11 +84,11 @@ public class PollDao {
 	public RoomPoll createPoll(Client rc, String pollName, String pollQuestion, Long pollTypeId) {
 		RoomPoll roomP = new RoomPoll();
 		
-		roomP.setCreatedBy(userDao.get(rc.getUser_id()));
+		roomP.setCreator(userDao.get(rc.getUser_id()));
 		roomP.setCreated(new Date());
-		roomP.setPollName(pollName);
-		roomP.setPollQuestion(pollQuestion);
-		roomP.setPollType(getPollType(pollTypeId));
+		roomP.setName(pollName);
+		roomP.setQuestion(pollQuestion);
+		roomP.setType(getPollType(pollTypeId));
 		roomP.setRoom(roomDao.get(rc.getRoom_id()));
 		
 		em.persist(roomP);
@@ -111,11 +117,11 @@ public class PollDao {
 		return false;
 	}
 
-	public boolean deletePoll(Long poll_id){
+	public boolean deletePoll(Long id){
 		try {
 			log.debug(" :: deletePoll :: ");
 			Query q = em.createNamedQuery("deletePoll");
-			q.setParameter("roomPollId", poll_id);
+			q.setParameter("id", id);
 			return q.executeUpdate() > 0;
 		} catch (Exception err) {
 			log.error("[deletePoll]", err);

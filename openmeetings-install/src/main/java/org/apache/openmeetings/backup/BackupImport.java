@@ -631,10 +631,10 @@ public class BackupImport {
 					//room was deleted
 					continue;
 				}
-				if (rp.getCreatedBy() == null || rp.getCreatedBy().getId() == null) {
-					rp.setCreatedBy(null);
+				if (rp.getCreator() == null || rp.getCreator().getId() == null) {
+					rp.setCreator(null);
 				}
-				for (RoomPollAnswers rpa : rp.getRoomPollAnswerList()) {
+				for (RoomPollAnswers rpa : rp.getAnswers()) {
 					if (rpa.getVotedUser() == null || rpa.getVotedUser().getId() == null) {
 						rpa.setVotedUser(null);
 					}
