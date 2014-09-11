@@ -19,8 +19,11 @@
 package org.apache.openmeetings.web.user.rooms;
 
 
+import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.BasePanel;
 import org.apache.wicket.RuntimeConfigurationType;
+import org.apache.wicket.ajax.AbstractAjaxTimerBehavior;
+import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
@@ -31,6 +34,7 @@ import org.apache.wicket.request.mapper.parameter.PageParametersEncoder;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.apache.wicket.request.resource.ResourceReference;
 import org.apache.wicket.util.string.StringValue;
+import org.apache.wicket.util.time.Duration;
 
 public class RoomPanel extends BasePanel {
 	private static final long serialVersionUID = 2308988314987829510L;
@@ -51,6 +55,14 @@ public class RoomPanel extends BasePanel {
 		String swf = (swfVal.isEmpty() ? getFlashFile() : swfVal.toString())
 				+ new PageParametersEncoder().encodePageParameters(pp);
 		add(new Label("init", String.format("initSwf('%s');", swf)).setEscapeModelStrings(false));
+		add(new AbstractAjaxTimerBehavior(Duration.minutes(5)) {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void onTimer(AjaxRequestTarget target) {
+				WebSession.getString(1L); //dummy call to keep session alive
+			}
+		});
 	}
 
 	private ResourceReference newResourceReference() {
