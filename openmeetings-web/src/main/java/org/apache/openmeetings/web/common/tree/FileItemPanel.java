@@ -35,8 +35,8 @@ public class FileItemPanel extends FolderPanel {
 	private static final long serialVersionUID = 1L;
 	private final WebMarkupContainer errors = new WebMarkupContainer("errors");
 
-	public FileItemPanel(String id, final IModel<? extends FileItem> model, final ConvertingErrorsDialog errorsDialog) {
-		super(id, model);
+	public FileItemPanel(String id, final IModel<? extends FileItem> model, final FileTreePanel fileTreePanel) {
+		super(id, model, fileTreePanel);
 		if (model.getObject() instanceof FlvRecording) {
 			FlvRecording r = (FlvRecording)model.getObject();
 			long errorCount = getBean(FlvRecordingLogDao.class).countErrors(r.getId());
@@ -46,13 +46,13 @@ public class FileItemPanel extends FolderPanel {
 	
 				@Override
 				protected void onEvent(AjaxRequestTarget target) {
-					errorsDialog.setDefaultModel(model);
-					errorsDialog.open(target);
+					fileTreePanel.errorsDialog.setDefaultModel(model);
+					fileTreePanel.errorsDialog.open(target);
 				}
 			}).setVisible(visible);
 		} else {
 			errors.setVisible(false);
 		}
-		item.add(errors);
+		drag.add(errors);
 	}
 }

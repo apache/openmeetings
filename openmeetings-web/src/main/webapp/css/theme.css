@@ -296,6 +296,14 @@ html, body {
 	overflow-x: hidden;
 	overflow-y: auto;
 }
+.trash-toolbar {
+	font-weight: bold;
+	line-height: 20px;
+	color: transparent;
+}
+.trash-toolbar-hover {
+	color: inherit;
+}
 .file.tree .files .sizes table, .file.tree .files .info table {
 	width: 100%;
 }
@@ -404,6 +412,7 @@ html, body {
 .file.item {
 	position: relative;
 	display: inline-block;
+	min-width: 150px;
 }
 .file.item .name {
 	color: black;

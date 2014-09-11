@@ -76,7 +76,7 @@ public class MainPage extends BaseInitedPage {
 	private final WebMarkupContainer topLinks = new WebMarkupContainer("topLinks");
 	private final MarkupContainer contents;
 	private final AbstractAjaxTimerBehavior areaBehavior;
-	private DebugBar dev = null;
+	private final Component dev;
 	
 	public MainPage(PageParameters pp) {
 		super();
@@ -121,10 +121,9 @@ public class MainPage extends BaseInitedPage {
 		});
 		add(about);
 		if (getApplication().getDebugSettings().isDevelopmentUtilitiesEnabled()) {
-		    add(dev = new DebugBar("dev"));
-		    dev.setOutputMarkupId(true);
+		    add((dev = new DebugBar("dev")).setOutputMarkupId(true));
 		} else {
-		    add(new EmptyPanel("dev").setVisible(false));
+		    add((dev = new EmptyPanel("dev")).setVisible(false));
 		}		
 		topLinks.add(new ExternalLink("bug", "https://issues.apache.org/jira/browse/OPENMEETINGS"));//FIXME hardcoded
 		

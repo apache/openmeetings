@@ -20,11 +20,7 @@ package org.apache.openmeetings.web.common.tree;
 
 import static org.apache.openmeetings.util.OmFileHelper.MP4_EXTENSION;
 import static org.apache.openmeetings.util.OmFileHelper.isRecordingExists;
-import static org.apache.openmeetings.web.app.Application.getBean;
 
-import org.apache.openmeetings.db.dao.file.FileExplorerItemDao;
-import org.apache.openmeetings.db.dao.record.FlvRecordingDao;
-import org.apache.openmeetings.db.entity.file.FileExplorerItem;
 import org.apache.openmeetings.db.entity.file.FileItem;
 import org.apache.openmeetings.db.entity.file.FileItem.Type;
 import org.apache.openmeetings.db.entity.record.FlvRecording;
@@ -37,13 +33,6 @@ import org.apache.wicket.extensions.markup.html.repeater.tree.content.Folder;
 import org.apache.wicket.markup.repeater.ReuseIfModelsEqualStrategy;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
-
-import wicketdnd.DragSource;
-import wicketdnd.DropTarget;
-import wicketdnd.Location;
-import wicketdnd.Operation;
-import wicketdnd.Reject;
-import wicketdnd.Transfer;
 
 public class FileItemTree<T extends FileItem> extends DefaultNestedTree<T> {
 	private static final long serialVersionUID = 1L;
@@ -64,46 +53,7 @@ public class FileItemTree<T extends FileItem> extends DefaultNestedTree<T> {
 			@Override
 			protected Component newLabelComponent(String id, final IModel<T> lm) {
 				FileItem r = lm.getObject();
-				Component result = Type.Folder == r.getType() || r.getId() < 1 ? new FolderPanel(id, lm) : new FileItemPanel(id, lm, treePanel.errorsDialog);
-				if (r.getId() > 0) {
-					result.add(new DragSource(Operation.MOVE) {
-						private static final long serialVersionUID = 1L;
-
-						@Override
-						public void onBeforeDrop(Component drag, Transfer transfer) throws Reject {
-							transfer.setData(lm.getObject());
-						};
-						
-						@Override
-						public void onAfterDrop(AjaxRequestTarget target, wicketdnd.Transfer transfer) {
-							transfer.setData(null);
-						}
-					}.drag("div"));
-				}
-				if (r.getId() < 0 || Type.Folder == r.getType()) {
-					result.add(new DropTarget(Operation.MOVE) {
-						private static final long serialVersionUID = 1L;
-
-						@Override
-						public void onDrop(AjaxRequestTarget target, Transfer transfer, Location location) throws Reject {
-							FileItem p = lm.getObject();
-							long pid = p.getId();
-							T f = transfer.getData();
-							f.setParentItemId(pid > 0 ? pid : null); //FIXME need to disable drop to self
-							f.setOwnerId(p.getOwnerId());
-							f.setRoomId(p.getRoomId());
-							if (f instanceof FlvRecording) {
-								FlvRecording r = (FlvRecording)f;
-								r.setOrganization_id(((FlvRecording)p).getOrganization_id());
-								getBean(FlvRecordingDao.class).update(r);
-							} else {
-								getBean(FileExplorerItemDao.class).update((FileExplorerItem)f);
-							}
-							target.add(treePanel.trees); //FIXME add correct refresh
-						}
-					}.dropCenter("div"));
-				}
-				return result;
+				return Type.Folder == r.getType() || r.getId() < 1 ? new FolderPanel(id, lm, treePanel) : new FileItemPanel(id, lm, treePanel);
 			}
 			
 			@Override

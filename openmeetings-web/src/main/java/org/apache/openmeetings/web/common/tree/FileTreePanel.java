@@ -32,6 +32,7 @@ import org.apache.openmeetings.db.entity.record.FlvRecording;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.AddFolderDialog;
 import org.apache.openmeetings.web.common.ConfirmableAjaxLink;
+import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.AjaxSelfUpdatingTimerBehavior;
@@ -44,11 +45,9 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.util.time.Duration;
 
-import wicketdnd.DropTarget;
-import wicketdnd.Location;
-import wicketdnd.Operation;
-import wicketdnd.Reject;
-import wicketdnd.Transfer;
+import com.googlecode.wicket.jquery.core.JQueryBehavior;
+import com.googlecode.wicket.jquery.core.Options;
+import com.googlecode.wicket.jquery.ui.interaction.droppable.Droppable;
 
 public abstract class FileTreePanel extends Panel {
 	private static final long serialVersionUID = 1L;
@@ -75,7 +74,26 @@ public abstract class FileTreePanel extends Panel {
 			}
 		};
 		add(addFolder);
-		add(new WebMarkupContainer("create").add(new AjaxEventBehavior("onclick") {
+		Droppable<FileItem> trashToolbar = new Droppable<FileItem>("trash-toolbar") {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void onConfigure(JQueryBehavior behavior) {
+				super.onConfigure(behavior);
+				behavior.setOption("hoverClass", Options.asString("ui-state-hover trash-toolbar-hover"));
+				behavior.setOption("accept", Options.asString(".recorditem, .fileitem"));
+			}
+			
+			@Override
+			public void onDrop(AjaxRequestTarget target, Component component) {
+				Object o = component.getDefaultModelObject();
+				if (o instanceof FileItem) {
+					delete((FileItem)o, target);
+				}
+			}
+		};
+		add(trashToolbar);
+		trashToolbar.add(new WebMarkupContainer("create").add(new AjaxEventBehavior("onclick") {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -83,7 +101,7 @@ public abstract class FileTreePanel extends Panel {
 				addFolder.open(target);
 			}
 		}));
-		add(new WebMarkupContainer("refresh").add(new AjaxEventBehavior("onclick") {
+		trashToolbar.add(new WebMarkupContainer("refresh").add(new AjaxEventBehavior("onclick") {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -91,24 +109,14 @@ public abstract class FileTreePanel extends Panel {
 				target.add(trees); //FIXME add correct refresh
 			}
 		}));
-		ConfirmableAjaxLink trash = new ConfirmableAjaxLink("trash", 713) {
+		trashToolbar.add(new ConfirmableAjaxLink("trash", 713) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
 			public void onClick(AjaxRequestTarget target) {
 				delete(selectedFile.getObject(), target);
 			}
-		};
-		trash.add(new WebMarkupContainer("drop-center").setOutputMarkupId(true)).add(new DropTarget(Operation.MOVE) {
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public void onDrop(AjaxRequestTarget target, Transfer transfer, Location location) throws Reject {
-				FileItem f = transfer.getData();
-				delete(f, target);
-			}
-		}.dropCenter("span"));
-		add(trash/*.add(new WindowsTheme())*/); //TODO check theme here
+		});
 		
 		add(trees.add(treesView).setOutputMarkupId(true));
 		updateSizes();

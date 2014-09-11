@@ -69,26 +69,27 @@ public class MenuPanel extends BasePanel {
 				if (!Strings.isEmpty(gl.getDesc())) {
 					link.add(AttributeAppender.append("title", gl.getDesc()));
 				}
-				item.add(new WebMarkupContainer("childItems")
-						.add(new ListView<MenuItem>("childItem", gl.getChildren()) {
-							private static final long serialVersionUID = 1L;
-		
-							@Override
-							protected void populateItem(ListItem<MenuItem> item) {
-								final MenuItem m = item.getModelObject();
-								item.add(new AjaxLink<Void>("link") {
-									private static final long serialVersionUID = 1L;
-									{
-										add(new Label("name", m.getName()));
-										add(new Label("description", m.getDesc()));
-									}
-									
-									public void onClick(AjaxRequestTarget target) {
-										m.onClick(getMainPage(), target);
-									}
-								});
-							}
-						}.setReuseItems(true)).setVisible(null != gl.getChildren()));
+				item.setVisible(gl.isActive());
+				item.add(new WebMarkupContainer("childItems").add(new ListView<MenuItem>("childItem", gl.getChildren()) {
+						private static final long serialVersionUID = 1L;
+	
+						@Override
+						protected void populateItem(ListItem<MenuItem> item) {
+							final MenuItem m = item.getModelObject();
+							item.setVisible(m.isActive());
+							item.add(new AjaxLink<Void>("link") {
+								private static final long serialVersionUID = 1L;
+								{
+									add(new Label("name", m.getName()));
+									add(new Label("description", m.getDesc()));
+								}
+								
+								public void onClick(AjaxRequestTarget target) {
+									m.onClick(getMainPage(), target);
+								}
+							});
+						}
+					}.setReuseItems(true)).setVisible(null != gl.getChildren()));
 			}
 		}.setReuseItems(true));
 		add(new MenuFunctionsBehavior(menuContainer.getMarkupId(), id));

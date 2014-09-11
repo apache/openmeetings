@@ -85,9 +85,11 @@ public class VideoInfo extends Panel {
 		FlvRecording r = _r == null ? new FlvRecording() : _r;
 		rm.setObject(r);
 		try {
-			Room room = getBean(RoomDao.class).get(r.getRoomId());
-			if (room != null) {
-				roomName.setObject(room.getName());
+			if (r.getRoomId() != null) {
+				Room room = getBean(RoomDao.class).get(r.getRoomId());
+				if (room != null) {
+					roomName.setObject(room.getName());
+				}
 			}
 		} catch (Exception e) {
 			//no-op
