@@ -79,13 +79,13 @@ public class SalutationDao {
 	 * @param language_id
 	 * @return
 	 */
-	public Salutation get(long id, long language_id) {
+	public Salutation get(Long id, long language_id) {
 		List<Salutation> ll = em.createNamedQuery("getSalutationById", Salutation.class)
 				.setParameter("id", id).getResultList();
 		for (Salutation ti : ll) {
 			ti.setLabel(fieldLangValDao.get(ti.getFieldvalues_id(), language_id));
 		}
-		return ll.get(0);
+		return ll.isEmpty() ? null : ll.get(0);
 	}
 	
 	/**
