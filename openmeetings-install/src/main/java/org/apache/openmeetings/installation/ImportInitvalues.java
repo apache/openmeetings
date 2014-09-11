@@ -507,7 +507,7 @@ public class ImportInitvalues {
 		r.setIsDemoRoom(false);
 		r.setDemoTime(null);
 
-		r.setIsModeratedRoom(false);
+		r.setModerated(false);
 		r.setHideTopBar(false);
 
 		r.setDeleted(false);

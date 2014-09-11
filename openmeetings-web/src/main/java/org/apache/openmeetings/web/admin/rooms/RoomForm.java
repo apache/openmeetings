@@ -261,10 +261,10 @@ public class RoomForm extends AdminBaseForm<Room> {
 			protected void populateItem(final ListItem<RoomModerator> item) {
 				RoomModerator moderator = item.getModelObject();
 				Label name = new Label("uName", moderator.getUser().getFirstname() + " " + moderator.getUser().getLastname());
-				if (moderator.getRoomModeratorsId() == 0) {
+				if (moderator.getId() == 0) {
 					name.add(AttributeAppender.append("class", "newItem"));
 				}
-				item.add(new CheckBox("isSuperModerator", new PropertyModel<Boolean>(moderator, "isSuperModerator")))
+				item.add(new CheckBox("superModerator", new PropertyModel<Boolean>(moderator, "superModerator")))
 					.add(new Label("userId", "" + moderator.getUser().getId()))
 					.add(name)
 					.add(new Label("email", moderator.getUser().getAdresses().getEmail()))
@@ -286,7 +286,7 @@ public class RoomForm extends AdminBaseForm<Room> {
 			}
 		}).setOutputMarkupId(true));
 
-        add(new CheckBox("isModeratedRoom"));
+        add(new CheckBox("moderated"));
 
 		add(new TextField<String>("confno").setEnabled(false));
 		add(pin = new TextField<String>("pin"));

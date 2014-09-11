@@ -32,6 +32,7 @@ import org.apache.openmeetings.db.entity.room.PollType;
 import org.apache.openmeetings.db.entity.room.RoomPoll;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.web.app.WebSession;
+import org.apache.openmeetings.web.room.message.PollCreated;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
@@ -40,9 +41,14 @@ import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
+import org.apache.wicket.protocol.ws.WebSocketSettings;
+import org.apache.wicket.protocol.ws.api.WebSocketPushBroadcaster;
 
+import com.googlecode.wicket.jquery.core.Options;
 import com.googlecode.wicket.jquery.ui.widget.dialog.AbstractFormDialog;
 import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
+import com.googlecode.wicket.kendo.ui.panel.KendoFeedbackPanel;
 
 public class CreatePollDialog extends AbstractFormDialog<RoomPoll> {
 	private static final long serialVersionUID = 1L;
@@ -50,6 +56,7 @@ public class CreatePollDialog extends AbstractFormDialog<RoomPoll> {
 	private final DialogButton cancel = new DialogButton(WebSession.getString(25));
 	private final long roomId;
 	private final PollForm form;
+	private final KendoFeedbackPanel feedback = new KendoFeedbackPanel("feedback", new Options("button", true));
 
 	public CreatePollDialog(String id, long roomId) {
 		super(id, WebSession.getString(18), new CompoundPropertyModel<RoomPoll>(new RoomPoll()));
@@ -84,24 +91,28 @@ public class CreatePollDialog extends AbstractFormDialog<RoomPoll> {
 
 	@Override
 	protected void onError(AjaxRequestTarget target) {
-		// TODO Auto-generated method stub
-		
+		target.add(feedback);
 	}
 
 	@Override
 	protected void onSubmit(AjaxRequestTarget target) {
-		// TODO Auto-generated method stub
-		
+		RoomPoll p = getBean(PollDao.class).update(form.getModelObject());
+		WebSocketSettings webSocketSettings = WebSocketSettings.Holder.get(getApplication());
+		WebSocketPushBroadcaster broadcaster = new WebSocketPushBroadcaster(webSocketSettings.getConnectionRegistry());
+		broadcaster.broadcastAll(getApplication(), new PollCreated(p.getId(), roomId));
 	}
 
 	private class PollForm extends Form<RoomPoll> {
 		private static final long serialVersionUID = 1L;
-
+		
 		public PollForm(String id, IModel<RoomPoll> model) {
 			super(id, model);
-			add(new RequiredTextField<String>("name"));
+			add(new RequiredTextField<String>("name").setLabel(Model.of(WebSession.getString(1410))));
 			add(new TextArea<String>("question"));
-			add(new DropDownChoice<PollType>("type", getBean(PollDao.class).getPollTypes(getLanguage()), new ChoiceRenderer<PollType>("label.fieldlanguagesvalue.value", "id")));
+			add(new DropDownChoice<PollType>("type", getBean(PollDao.class).getPollTypes(getLanguage())
+					, new ChoiceRenderer<PollType>("label.fieldlanguagesvalue.value", "id"))
+					.setRequired(true).setLabel(Model.of(WebSession.getString(21))));
+			add(feedback);
 		}
 	}
 }

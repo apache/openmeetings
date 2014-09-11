@@ -40,8 +40,8 @@ import org.simpleframework.xml.Root;
 
 @Entity
 @NamedQueries({
-	@NamedQuery(name = "getRoomModeratorById", query = "select c from RoomModerator as c where c.roomModeratorsId = :roomModeratorsId"),
-	@NamedQuery(name = "getRoomModeratorsByIds", query = "select c from RoomModerator as c where c.roomModeratorsId IN :ids"),
+	@NamedQuery(name = "getRoomModeratorById", query = "select c from RoomModerator as c where c.id = :id"),
+	@NamedQuery(name = "getRoomModeratorsByIds", query = "select c from RoomModerator as c where c.id IN :ids"),
 	@NamedQuery(name = "getRoomModeratorByRoomId", query = "select c from RoomModerator as c where c.roomId = :roomId AND c.deleted = false"),
 	@NamedQuery(name = "getRoomModeratorByUserAndRoomId", query = "select c from RoomModerator as c "
 			+ "where c.roomId = :roomId AND c.deleted false AND c.user.id = :user_id")
@@ -54,14 +54,14 @@ public class RoomModerator implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="id")
-	private long roomModeratorsId;
+	private Long id;
 	
 	@Column(name = "roomId")
 	private Long roomId;
 	
 	@Column(name="is_supermoderator")
 	@Element(name="is_supermoderator", data = true)
-	private Boolean isSuperModerator;
+	private boolean superModerator;
 	
 	@ManyToOne(fetch = FetchType.EAGER) 
 	@JoinColumn (name="user_id")
@@ -78,18 +78,18 @@ public class RoomModerator implements Serializable {
 	@Column(name = "deleted")
 	private boolean deleted;
 	
-	public long getRoomModeratorsId() {
-		return roomModeratorsId;
+	public Long getId() {
+		return id;
 	}
-	public void setRoomModeratorsId(long roomModeratorsId) {
-		this.roomModeratorsId = roomModeratorsId;
+	public void setId(Long id) {
+		this.id = id;
 	}
 	
-	public Boolean getIsSuperModerator() {
-		return isSuperModerator;
+	public boolean isSuperModerator() {
+		return superModerator;
 	}
-	public void setIsSuperModerator(Boolean isSuperModerator) {
-		this.isSuperModerator = isSuperModerator;
+	public void setSuperModerator(boolean superModerator) {
+		this.superModerator = superModerator;
 	}
 	
 	

@@ -55,7 +55,7 @@ public class RoomModeratorsDao {
 	}
 
 	public RoomModerator update(RoomModerator rm, Long userId) {
-		if (rm.getRoomModeratorsId() == 0) {
+		if (rm.getId() == 0) {
 			rm.setStarttime(new Date());
 			em.persist(rm);
 		} else {

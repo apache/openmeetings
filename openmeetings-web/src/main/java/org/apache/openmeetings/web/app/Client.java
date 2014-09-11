@@ -19,6 +19,8 @@
 package org.apache.openmeetings.web.app;
 
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.apache.wicket.protocol.ws.api.registry.IKey;
 
@@ -30,10 +32,14 @@ import org.apache.wicket.protocol.ws.api.registry.IKey;
 public class Client implements Serializable {
 	private static final long serialVersionUID = 1L;
 
+	public enum Right {
+		moderator
+	}
 	private String sessionId;
 	private int pageId;
 	private long userId;
 	private String uid;
+	private Set<Right> rights = new HashSet<Right>();
 
 	public Client() {
 	}
@@ -109,5 +115,13 @@ public class Client implements Serializable {
 		if (userId != other.userId)
 			return false;
 		return true;
+	}
+
+	public Set<Right> getRights() {
+		return rights;
+	}
+
+	public boolean hasRight(Right right) {
+		return rights.contains(Right.moderator) ? true : rights.contains(right);
 	}
 }

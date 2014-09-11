@@ -386,10 +386,10 @@ public class RoomManager implements IRoomManager {
 			Boolean isSuperModerator = Boolean.parseBoolean(roomModeratorObj.get("isSuperModerator").toString());
 
 			RoomModerator rm = new RoomModerator();
-			rm.setRoomModeratorsId(roomModeratorsId);
+			rm.setId(roomModeratorsId);
 			rm.setRoomId(roomId);
 			rm.setUser(usersDao.get(userId));
-			rm.setIsSuperModerator(isSuperModerator);
+			rm.setSuperModerator(isSuperModerator);
 			
 			result.add(rm);
 		}
@@ -438,7 +438,7 @@ public class RoomManager implements IRoomManager {
 			r.setIsDemoRoom(isDemoRoom);
 			r.setDemoTime(demoTime);
 
-			r.setIsModeratedRoom(isModeratedRoom);
+			r.setModerated(isModeratedRoom);
 			r.setHideTopBar(hideTopBar);
 
 			r.setDeleted(false);
@@ -523,7 +523,7 @@ public class RoomManager implements IRoomManager {
 			r.setIsDemoRoom(isDemoRoom);
 			r.setDemoTime(demoTime);
 
-			r.setIsModeratedRoom(isModeratedRoom);
+			r.setModerated(isModeratedRoom);
 
 			r.setDeleted(false);
 
@@ -773,7 +773,7 @@ public class RoomManager implements IRoomManager {
 
 			r.setAppointment(appointment);
 
-			r.setIsModeratedRoom(isModeratedRoom);
+			r.setModerated(isModeratedRoom);
 			r.setHideTopBar(hideTopBar);
 
 			r.setIsClosed(isClosed);

@@ -56,7 +56,6 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.markup.html.form.upload.FileUploadField;
-import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.util.resource.AbstractResourceStream;
 import org.apache.wicket.util.resource.ResourceStreamNotFoundException;
@@ -64,6 +63,9 @@ import org.dom4j.Document;
 import org.dom4j.Element;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
+
+import com.googlecode.wicket.jquery.core.Options;
+import com.googlecode.wicket.kendo.ui.panel.KendoFeedbackPanel;
 
 /**
  * Language Editor, add/insert/update {@link Fieldlanguagesvalues} and
@@ -81,8 +83,7 @@ public class LangPanel extends AdminPanel {
 	final WebMarkupContainer listContainer;
 	private LangForm langForm;
 	private FileUploadField fileUploadField;
-	// Create feedback panels
-	private final FeedbackPanel importFeedback = new FeedbackPanel("importFeedback");
+	private final KendoFeedbackPanel feedback = new KendoFeedbackPanel("feedback", new Options("button", true));
 	
 	@Override
 	public void onMenuPanelLoad(AjaxRequestTarget target) {
@@ -92,8 +93,7 @@ public class LangPanel extends AdminPanel {
 
 	public LangPanel(String id) {
 		super(id);
-		// Create feedback panels
-		add(importFeedback.setOutputMarkupId(true));
+		add(feedback);
 		FieldLanguageDao langDao = getBean(FieldLanguageDao.class);
 		language = langDao.get(1L);
 
@@ -175,18 +175,18 @@ public class LangPanel extends AdminPanel {
 				FileUpload download = fileUploadField.getFileUpload();
 				try {
 					if (download == null || download.getInputStream() == null) {
-						importFeedback.error("File is empty");
+						feedback.error("File is empty");
 						return;
 					}
 					getBean(LanguageImport.class)
 						.addLanguageByDocument(language.getId(), download.getInputStream(), getUserId());
 				} catch (Exception e) {
 					log.error("Exception on panel language editor import ", e);
-					importFeedback.error(e);
+					feedback.error(e);
 				}
 
 				// repaint the feedback panel so that it is hidden
-				target.add(importFeedback);
+				target.add(feedback);
 			}
 		});
 
@@ -233,13 +233,13 @@ public class LangPanel extends AdminPanel {
 				}
 				
 				// repaint the feedback panel so that it is hidden
-				target.add(importFeedback);
+				target.add(feedback);
 			}
 			
 			@Override
 			protected void onError(AjaxRequestTarget target, Form<?> form) {
 				// repaint the feedback panel so errors are shown
-				target.add(importFeedback);
+				target.add(feedback);
 			}
 			
 		});

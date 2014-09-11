@@ -27,6 +27,7 @@ import static org.apache.openmeetings.web.app.Application.getRoomUsers;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import static org.apache.openmeetings.web.util.OmUrlFragment.ROOMS_PUBLIC;
 
+import java.sql.ClientInfoStatus;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -35,6 +36,7 @@ import java.util.List;
 
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.file.FileExplorerItemDao;
+import org.apache.openmeetings.db.dao.room.PollDao;
 import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.file.FileExplorerItem;
@@ -42,10 +44,12 @@ import org.apache.openmeetings.db.entity.file.FileItem;
 import org.apache.openmeetings.db.entity.file.FileItem.Type;
 import org.apache.openmeetings.db.entity.record.FlvRecording;
 import org.apache.openmeetings.db.entity.room.Room;
+import org.apache.openmeetings.db.entity.room.RoomModerator;
 import org.apache.openmeetings.db.entity.user.Organisation;
 import org.apache.openmeetings.db.entity.user.Organisation_Users;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Right;
+import org.apache.openmeetings.db.util.AuthLevelUtil;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.Client;
 import org.apache.openmeetings.web.app.WebSession;
@@ -58,6 +62,7 @@ import org.apache.openmeetings.web.common.tree.FileTreePanel;
 import org.apache.openmeetings.web.common.tree.MyRecordingTreeProvider;
 import org.apache.openmeetings.web.common.tree.PublicRecordingTreeProvider;
 import org.apache.openmeetings.web.pages.MainPage;
+import org.apache.openmeetings.web.room.message.PollCreated;
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -66,6 +71,7 @@ import org.apache.wicket.ajax.json.JSONException;
 import org.apache.wicket.ajax.json.JSONObject;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.behavior.AttributeAppender;
+import org.apache.wicket.event.IEvent;
 import org.apache.wicket.extensions.markup.html.repeater.tree.ITreeProvider;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
@@ -76,6 +82,7 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.protocol.ws.WebSocketSettings;
+import org.apache.wicket.protocol.ws.api.event.WebSocketPushPayload;
 import org.apache.wicket.protocol.ws.api.registry.IWebSocketConnectionRegistry;
 import org.apache.wicket.protocol.ws.api.registry.PageIdKey;
 import org.apache.wicket.request.flow.RedirectToUrlException;
@@ -122,6 +129,7 @@ public class RoomPanel extends BasePanel {
 	private final RoomMenuItem applyModer;
 	private final RoomMenuItem applyWB;
 	private final RoomMenuItem applyAV;
+	private final RoomMenuItem pollCreate;
 	private final RoomMenuItem pollVote;
 	private final RoomMenuItem pollResult;
 	private final RoomMenuItem sipDialer;
@@ -144,6 +152,15 @@ public class RoomPanel extends BasePanel {
 		applyModer = new RoomMenuItem(WebSession.getString(784), WebSession.getString(1481), false);
 		applyWB = new RoomMenuItem(WebSession.getString(785), WebSession.getString(1492), false);
 		applyAV = new RoomMenuItem(WebSession.getString(786), WebSession.getString(1482), false);
+		boolean pollExists = getBean(PollDao.class).hasPoll(roomId);
+		pollCreate = new RoomMenuItem(WebSession.getString(24), WebSession.getString(1483), !pollExists) {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void onClick(MainPage page, AjaxRequestTarget target) {
+				createPoll.open(target);
+			}
+		};
 		pollVote = new RoomMenuItem(WebSession.getString(42), WebSession.getString(1485), false);
 		pollResult = new RoomMenuItem(WebSession.getString(37), WebSession.getString(1484), false);
 		sipDialer = new RoomMenuItem(WebSession.getString(1447), WebSession.getString(1488), false);
@@ -227,6 +244,17 @@ public class RoomPanel extends BasePanel {
 		add(createPoll = new CreatePollDialog("createPoll", roomId));
 	}
 
+	@Override
+	public void onEvent(IEvent<?> event) {
+		if (event.getPayload() instanceof WebSocketPushPayload) {
+			WebSocketPushPayload wsEvent = (WebSocketPushPayload) event.getPayload();
+			if (wsEvent.getMessage() instanceof PollCreated) {
+				//handleMessage(wsEvent.getHandler(), (PollCreated) wsEvent.getMessage());
+			}
+		}
+		super.onEvent(event);
+	}
+	
 	private JSONArray getStringLabels(long... ids) {
 		JSONArray arr = new JSONArray();
 		try {
@@ -243,6 +271,24 @@ public class RoomPanel extends BasePanel {
 	protected void onBeforeRender() {
 		super.onBeforeRender();
 		c = addUserToRoom(roomId, getPage().getPageId());
+		User u = getBean(UserDao.class).get(getUserId());
+		//TODO do we need to check OrgModerationRights ????
+		if (AuthLevelUtil.hasAdminLevel(u.getRights())) {
+			c.getRights().add(Client.Right.moderator);
+		} else {
+			Room r = getBean(RoomDao.class).get(roomId);
+			if (!r.isModerated() && 1 == getRoomUsers(roomId).size()) {
+				c.getRights().add(Client.Right.moderator);
+			} else if (r.isModerated()) {
+				//TODO why do we need supermoderator ????
+				for (RoomModerator rm : r.getModerators()) {
+					if (getUserId() == rm.getUser().getId()) {
+						c.getRights().add(Client.Right.moderator);
+						break;
+					}
+				}
+			}
+		}
 		sendRoom(roomId, addUser(c));
 	}
 	
@@ -353,14 +399,7 @@ public class RoomPanel extends BasePanel {
 		actionItems.add(applyModer); //FIXME enable/disable
 		actionItems.add(applyWB); //FIXME enable/disable
 		actionItems.add(applyAV); //FIXME enable/disable
-		actionItems.add(new RoomMenuItem(WebSession.getString(24), WebSession.getString(1483)) {
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public void onClick(MainPage page, AjaxRequestTarget target) {
-				createPoll.open(target);
-			}
-		});
+		actionItems.add(pollCreate);
 		actionItems.add(pollResult); //FIXME enable/disable
 		actionItems.add(pollVote); //FIXME enable/disable
 		actionItems.add(sipDialer);

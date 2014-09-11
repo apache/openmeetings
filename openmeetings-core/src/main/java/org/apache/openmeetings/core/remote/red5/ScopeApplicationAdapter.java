@@ -1112,7 +1112,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 				// No moderator in this room at the moment
 				Room room = roomDao.get(currentClient.getRoom_id());
 
-				return room.getIsModeratedRoom() ? 3L : 1L;
+				return room.isModerated() ? 3L : 1L;
 			}
 
 		} catch (Exception err) {
@@ -1219,7 +1219,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 			// not really - default logic
 			if (room.getAppointment() == null || room.getAppointment() == false) {
 
-				if (room.getIsModeratedRoom()) {
+				if (room.isModerated()) {
 
 					// if this is a Moderated Room then the Room can be only
 					// locked off by the Moderator Bit
@@ -1343,7 +1343,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 
 			// default logic for non regular rooms
 			if (room.getAppointment() == null || room.getAppointment() == false) {
-				if (room.getIsModeratedRoom()) {
+				if (room.isModerated()) {
 					// if this is a Moderated Room then the Room can be only
 					// locked off by the Moderator Bit
 					// List<RoomClient> clientModeratorListRoom =

@@ -100,8 +100,14 @@ public class PollDao {
 	}
 
 
-	public RoomPoll updatePoll(RoomPoll rp) {
-		return em.merge(rp);
+	public RoomPoll update(RoomPoll p) {
+		if (p.getId() == null) {
+			p.setCreated(new Date());
+			em.persist(p);
+		} else {
+			p =	em.merge(p);
+		}
+		return p;
 	}
 
 	public boolean closePoll(Long room_id){
@@ -198,7 +204,7 @@ public class PollDao {
 		} catch (NoResultException nre) {
 			//expected
 		} catch (Exception err) {
-			log.error("[getPoll]", err);
+			log.error("[hasVoted]", err);
 		}
 		return false;
 	}

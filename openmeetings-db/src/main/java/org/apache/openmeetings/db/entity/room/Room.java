@@ -147,8 +147,8 @@ public class Room implements IDataProviderEntity {
 	// If this is true all participants of a meeting have to wait for the
 	// moderator to come into the room
 	@Column(name = "ismoderatedroom")
-	@Element(data = true, required = false)
-	private Boolean isModeratedRoom;
+	@Element(name="isModeratedRoom", data = true, required = false)
+	private boolean moderated;
 
 	@Column(name = "allow_user_questions")
 	@Element(data = true, required = false)
@@ -365,12 +365,12 @@ public class Room implements IDataProviderEntity {
 		this.demoTime = demoTime;
 	}
 
-	public Boolean getIsModeratedRoom() {
-		return isModeratedRoom;
+	public boolean isModerated() {
+		return moderated;
 	}
 
-	public void setIsModeratedRoom(Boolean isModeratedRoom) {
-		this.isModeratedRoom = isModeratedRoom;
+	public void setModerated(boolean moderated) {
+		this.moderated = moderated;
 	}
 
 	public Long getExternalRoomId() {
