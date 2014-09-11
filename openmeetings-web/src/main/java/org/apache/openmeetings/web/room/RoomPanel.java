@@ -27,7 +27,7 @@ import static org.apache.openmeetings.web.app.Application.getRoomUsers;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import static org.apache.openmeetings.web.util.OmUrlFragment.ROOMS_PUBLIC;
 
-import java.sql.ClientInfoStatus;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -63,6 +63,8 @@ import org.apache.openmeetings.web.common.tree.MyRecordingTreeProvider;
 import org.apache.openmeetings.web.common.tree.PublicRecordingTreeProvider;
 import org.apache.openmeetings.web.pages.MainPage;
 import org.apache.openmeetings.web.room.message.PollCreated;
+import org.apache.openmeetings.web.room.message.RoomMessage;
+import org.apache.openmeetings.web.room.message.UserListMessage;
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -79,12 +81,16 @@ import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 import org.apache.wicket.markup.head.PriorityHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.list.ListItem;
+import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.protocol.ws.WebSocketSettings;
+import org.apache.wicket.protocol.ws.api.IWebSocketConnection;
 import org.apache.wicket.protocol.ws.api.event.WebSocketPushPayload;
 import org.apache.wicket.protocol.ws.api.registry.IWebSocketConnectionRegistry;
 import org.apache.wicket.protocol.ws.api.registry.PageIdKey;
+import org.apache.wicket.protocol.ws.concurrent.Executor;
 import org.apache.wicket.request.flow.RedirectToUrlException;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.apache.wicket.request.resource.ResourceReference;
@@ -109,7 +115,6 @@ public class RoomPanel extends BasePanel {
 
 		@Override
 		protected void respond(AjaxRequestTarget target) {
-			target.appendJavaScript("roomMessage(" + userList(roomId, c) + ");");
 			target.appendJavaScript("setHeight();");
 			//TODO SID etc
 			Room r = getBean(RoomDao.class).get(roomId);
@@ -119,7 +124,7 @@ public class RoomPanel extends BasePanel {
 					, 4L == r.getRoomtype().getRoomtypes_id()
 					, getStringLabels(448, 449, 450, 451, 758, 447, 52, 53, 1429, 1430, 775, 452, 767, 764, 765, 918, 54, 761, 762).toString()
 					));
-			
+			broadcast(roomId, new UserListMessage(c.getUserId(), roomId, UserListMessage.Type.enter));
 		}
 	};
 	private final InvitationDialog invite;
@@ -133,6 +138,8 @@ public class RoomPanel extends BasePanel {
 	private final RoomMenuItem pollVote;
 	private final RoomMenuItem pollResult;
 	private final RoomMenuItem sipDialer;
+	private final WebMarkupContainer userList = new WebMarkupContainer("userList");
+	private final ListView<RoomClient> users;
 	
 	public RoomPanel(String id, long _roomId) {
 		this(id, getBean(RoomDao.class).get(_roomId));
@@ -220,6 +227,19 @@ public class RoomPanel extends BasePanel {
 				}
 			}
 		}).setVisible(showFiles));
+		add(userList.add(users = new ListView<RoomClient>("user", getUsers()) {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void populateItem(ListItem<RoomClient> item) {
+				RoomClient rc = item.getModelObject();
+				item.setMarkupId(String.format("user%s", rc.c.getUid()));
+				item.add(new Label("name", rc.u.getFirstname() + " " + rc.u.getLastname()));
+				if (c != null && rc.c.getUid().equals(c.getUid())) {
+					item.add(AttributeAppender.append("class", "current"));
+				}
+			}
+		}.setReuseItems(true)).setOutputMarkupId(true));
 		add(new JQueryBehavior(".room.sidebar.left .tabs", "tabs", new Options("active", showFiles && r.isFilesOpened() ? "ftab" : "utab")) {
 			private static final long serialVersionUID = 1L;
 
@@ -249,7 +269,11 @@ public class RoomPanel extends BasePanel {
 		if (event.getPayload() instanceof WebSocketPushPayload) {
 			WebSocketPushPayload wsEvent = (WebSocketPushPayload) event.getPayload();
 			if (wsEvent.getMessage() instanceof PollCreated) {
-				//handleMessage(wsEvent.getHandler(), (PollCreated) wsEvent.getMessage());
+				//TODO check this menuPanel.modelChanged();
+				wsEvent.getHandler().add(menuPanel);
+			} else if (wsEvent.getMessage() instanceof UserListMessage) {
+				users.setList(getUsers());
+				wsEvent.getHandler().add(userList);
 			}
 		}
 		super.onEvent(event);
@@ -258,9 +282,9 @@ public class RoomPanel extends BasePanel {
 	private JSONArray getStringLabels(long... ids) {
 		JSONArray arr = new JSONArray();
 		try {
-		for (long id : ids) {
-			arr.put(new JSONObject().put("id", id).put("value", WebSession.getString(id)));
-		}
+			for (long id : ids) {
+				arr.put(new JSONObject().put("id", id).put("value", WebSession.getString(id)));
+			}
 		} catch (JSONException e) {
 			log.error("", e);
 		}
@@ -289,59 +313,27 @@ public class RoomPanel extends BasePanel {
 				}
 			}
 		}
-		sendRoom(roomId, addUser(c));
 	}
 	
-	public static JSONObject getUser(Client c, boolean current) throws JSONException {
-		User u = getBean(UserDao.class).get(c.getUserId());
-		return new JSONObject()
-			.put("uid", c.getUid())
-			.put("id", u.getId())
-			.put("firstname", u.getFirstname())
-			.put("lastname", u.getLastname())
-			.put("email", u.getAdresses() == null ? null : u.getAdresses().getEmail())
-			.put("current", current);
-	}
-	
-	public static String userList(long roomId, Client cur) {
-		try {
-			JSONArray ul = new JSONArray();
-			for (Client c : getRoomUsers(roomId)) {
-				ul.put(getUser(c, c.equals(cur)));
+	public static void broadcast(long roomId, final RoomMessage m) {
+		WebSocketSettings settings = WebSocketSettings.Holder.get(Application.get());
+		IWebSocketConnectionRegistry reg = settings.getConnectionRegistry();
+		Executor executor = settings.getWebSocketPushMessageExecutor();
+		for (Client c : getRoomUsers(roomId)) {
+			try {
+				final IWebSocketConnection wsConnection = reg.getConnection(Application.get(), c.getSessionId(), new PageIdKey(c.getPageId()));
+				executor.run(new Runnable()
+				{
+					@Override
+					public void run()
+					{
+						wsConnection.sendMessage(m);
+					}
+				});
+			} catch (Exception e) {
+				log.error("Error while sending message", e);
 			}
-			return new JSONObject()
-				.put("type", "room")
-				.put("msg", "users")
-				.put("timestamp", System.currentTimeMillis())
-				.put("users", ul).toString();
-		} catch (Exception e) {
-			log.error("Error while creating message", e);
 		}
-		return "{}";
-	}
-	
-	public static String addUser(Client c) {
-		try {
-			return new JSONObject()
-				.put("type", "room")
-				.put("msg", "addUser")
-				.put("user", getUser(c, false)).toString();
-		} catch (Exception e) {
-			log.error("Error while creating message", e);
-		}
-		return "{}";
-	}
-	
-	public static String removeUser(Client c) {
-		try {
-			return new JSONObject()
-				.put("type", "room")
-				.put("msg", "removeUser")
-				.put("uid", c.getUid()).toString();
-		} catch (Exception e) {
-			log.error("Error while creating message", e);
-		}
-		return "{}";
 	}
 	
 	public static void sendRoom(long roomId, String msg) {
@@ -362,7 +354,6 @@ public class RoomPanel extends BasePanel {
 
 			@Override
 			public void onClick(MainPage page, AjaxRequestTarget target) {
-				target.appendJavaScript("$('.room.video').dialog('destroy');");
 				if (WebSession.getRights().contains(Right.Dashboard)) {
 					page.updateContents(ROOMS_PUBLIC, target);
 				} else {
@@ -420,8 +411,7 @@ public class RoomPanel extends BasePanel {
 	public void cleanup(AjaxRequestTarget target) {
 		target.add(getMainPage().getHeader().setVisible(true), getMainPage().getMenu().setVisible(true)
 				, getMainPage().getTopLinks().setVisible(true));
-		target.appendJavaScript("$(window).off('resize.openmeetings');");
-		sendRoom(roomId, removeUser(c));
+		target.appendJavaScript("$(window).off('resize.openmeetings'); $('.room.video').dialog('destroy');");
 	}
 
 	private ResourceReference newResourceReference() {
@@ -435,6 +425,25 @@ public class RoomPanel extends BasePanel {
 		response.render(OnDomReadyHeaderItem.forScript(aab.getCallbackScript()));
 	}
 
+	private List<RoomClient> getUsers() {
+		List<RoomClient> list = new ArrayList<RoomPanel.RoomClient>();
+		for (Client c : getRoomUsers(roomId)) {
+			list.add(new RoomClient(c));
+		}
+		return list;
+	}
+	
+	static class RoomClient implements Serializable {
+		private static final long serialVersionUID = 1L;
+		private final Client c;
+		private final User u;
+		
+		RoomClient(Client c) {
+			this.c = c;
+			this.u = getBean(UserDao.class).get(c.getUserId());
+		}
+	}
+	
 	static class FilesTreeProvider implements ITreeProvider<FileExplorerItem> {
 		private static final long serialVersionUID = 1L;
 		Long roomId = null;

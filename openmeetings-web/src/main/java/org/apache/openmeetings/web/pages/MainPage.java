@@ -45,6 +45,7 @@ import org.apache.openmeetings.web.common.menu.MainMenuItem;
 import org.apache.openmeetings.web.common.menu.MenuItem;
 import org.apache.openmeetings.web.common.menu.MenuPanel;
 import org.apache.openmeetings.web.room.RoomPanel;
+import org.apache.openmeetings.web.room.message.UserListMessage;
 import org.apache.openmeetings.web.user.AboutDialog;
 import org.apache.openmeetings.web.user.ChatPanel;
 import org.apache.openmeetings.web.util.OmUrlFragment;
@@ -146,8 +147,8 @@ public class MainPage extends BaseInitedPage {
 				log.debug(String.format("WebSocketBehavior::onClose [session: %s, key: %s]", message.getSessionId(), message.getKey()));
 				long roomId = Application.getRoom(_c);
 				if (roomId > 0) {
-					Client c = Application.removeUserFromRoom(roomId, _c);
-					RoomPanel.sendRoom(roomId, RoomPanel.removeUser(c));
+					Application.removeUserFromRoom(roomId, _c);
+					RoomPanel.broadcast(roomId, new UserListMessage(_c.getUserId(), roomId, UserListMessage.Type.exit));
 				}
 			}
 		});

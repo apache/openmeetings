@@ -19,6 +19,13 @@
   
 -->
 <html xmlns:wicket="http://wicket.apache.org">
+<wicket:head>
+	<script type="text/javascript">
+		Wicket.Event.subscribe("/websocket/closed", function(jqEvent, msg) {
+			//FIXME add Error dialog should be displayed 
+		});
+	</script>
+</wicket:head>
 <wicket:panel>
 	<div wicket:id="roomMenu"></div>
 	<div class="room menu right">
@@ -33,7 +40,11 @@
 				<li><a href="#utab"><wicket:ommessage key="613"/></a></li>
 				<li><a wicket:id="flink" href="#ftab"><wicket:ommessage key="614"/></a></li>
 			</ul>
-			<div id="utab"><div class="user list"></div></div>
+			<div id="utab">
+				<div wicket:id="userList" class="user list">
+					<div wicket:id="user" class="user ui-corner-all ui-widget-content"><span wicket:id="name"></span></div>
+				</div>
+			</div>
 			<div wicket:id="ftab" id="ftab"><div class="file list" wicket:id="tree"></div></div>
 		</div>
 	</div>

@@ -18,14 +18,20 @@
  */
 package org.apache.openmeetings.web.room.message;
 
-public class UserEnter extends RoomMessage {
+public class UserListMessage extends RoomMessage {
 	private static final long serialVersionUID = 1L;
+	public enum Type {
+		enter
+		, exit
+	}
 	private final Long userId;
 	private final Long roomId;
+	private final Type type;
 
-	public UserEnter(Long userId, Long roomId) {
+	public UserListMessage(Long userId, Long roomId, Type type) {
 		this.userId = userId;
 		this.roomId = roomId;
+		this.type = type;
 	}
 
 	public long getPollId() {
@@ -34,5 +40,9 @@ public class UserEnter extends RoomMessage {
 
 	public Long getRoomId() {
 		return roomId;
+	}
+
+	public Type getType() {
+		return type;
 	}
 }
