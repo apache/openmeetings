@@ -274,6 +274,9 @@
 		<dependency org="com.googlecode.wicket-jquery-ui" name="wicket-kendo-ui" rev="6.17.0" conf="openmeetings->*" transitive="false">
 			<include type="jar" />
 		</dependency>
+		<dependency org="com.googlecode.wicket-jquery-ui" name="wicket-kendo-ui-theme-default" rev="6.17.0" conf="openmeetings->*" transitive="false">
+			<include type="jar" />
+		</dependency>
 		<dependency org="ro.fortsoft.wicket.dashboard" name="wicket-dashboard-core" rev="0.10" conf="openmeetings->*" transitive="false">
 			<include type="jar" />
 		</dependency>
