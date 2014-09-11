@@ -431,7 +431,7 @@
 		</dependency>
 
 		<!-- JGIT -->
-		<dependency org="org.eclipse.jgit" name="org.eclipse.jgit.ant" conf="jgit->*" rev="3.3.2.201404171909-r" transitive="true" >
+		<dependency org="org.eclipse.jgit" name="org.eclipse.jgit.ant" conf="jgit->*" rev="3.4.1.201406201815-r" transitive="true" >
 			<include type="jar" />
 			<exclude org="org.apache.ant"/>
 		</dependency>
