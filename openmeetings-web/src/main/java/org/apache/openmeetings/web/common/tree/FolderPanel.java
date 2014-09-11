@@ -98,7 +98,7 @@ public class FolderPanel extends Panel {
 					behavior.setOption("cursor", Options.asString("move"));
 				}
 			};
-			d.setContainment(".file.tree, .icons");
+			d.setContainment(".file.tree");
 			d.add(AttributeAppender.append("class", r instanceof FlvRecording ? "recorditem" : "fileitem"));
 			drag = d;
 		}
