@@ -138,22 +138,24 @@ public class BackupExport {
 	@Autowired
 	private RoomOrganisationDao roomOrganisationDao;
 
-	public void performExport(File filePath, File backup_dir, boolean includeFiles) throws Exception {
+	public void performExport(File filePath, File backup_dir, boolean includeFiles, ProgressHolder progressHolder) throws Exception {
 		if (!backup_dir.exists()) {
 			backup_dir.mkdirs();
 		}
 		Serializer simpleSerializer = new Persister();
 		
+		progressHolder.setProgress(0);
 		/*
 		 * ##################### Backup Organizations
 		 */
 		writeList(simpleSerializer, backup_dir, "organizations.xml",
 				"organisations", organisationDao.get(0, Integer.MAX_VALUE));
-
+		progressHolder.setProgress(5);
 		/*
 		 * ##################### Backup Users
 		 */
 		exportUsers(backup_dir, usersDao.getAllBackupUsers());
+		progressHolder.setProgress(10);
 
 		/*
 		 * ##################### Backup Room
@@ -167,6 +169,7 @@ public class BackupExport {
 			registry.bind(RoomType.class, RoomTypeConverter.class);
 			
 			writeList(serializer, backup_dir, "rooms.xml", "rooms", roomDao.get());
+			progressHolder.setProgress(15);
 		}
 
 		/*
@@ -182,6 +185,7 @@ public class BackupExport {
 			
 			writeList(serializer, backup_dir, "rooms_organisation.xml",
 					"room_organisations", roomOrganisationDao.get());
+			progressHolder.setProgress(20);
 		}
 
 		/*
@@ -202,6 +206,7 @@ public class BackupExport {
 			}
 			
 			writeList(serializer, backup_dir, "appointements.xml", "appointments", list);
+			progressHolder.setProgress(25);
 		}
 
 		/*
@@ -217,6 +222,7 @@ public class BackupExport {
 			
 			writeList(serializer, backup_dir, "meetingmembers.xml",
 					"meetingmembers", meetingMemberDao.getMeetingMembers());
+			progressHolder.setProgress(30);
 		}
 
 		/*
@@ -224,16 +230,19 @@ public class BackupExport {
 		 */
 		writeList(simpleSerializer, backup_dir, "ldapconfigs.xml",
 				"ldapconfigs", ldapConfigDao.get());
+		progressHolder.setProgress(35);
 
 		/*
 		 * ##################### Cluster servers
 		 */
 		writeList(simpleSerializer, backup_dir, "servers.xml", "servers", serverDao.get(0, Integer.MAX_VALUE));
+		progressHolder.setProgress(40);
 
 		/*
 		 * ##################### OAuth2 servers
 		 */
 		writeList(simpleSerializer, backup_dir, "oauth2servers.xml", "oauth2servers", auth2Dao.get(0, Integer.MAX_VALUE));
+		progressHolder.setProgress(45);
 
 		/*
 		 * ##################### Private Messages
@@ -252,6 +261,7 @@ public class BackupExport {
 			
 			writeList(serializer, backup_dir, "privateMessages.xml",
 					"privatemessages", list);
+			progressHolder.setProgress(50);
 		}
 
 		/*
@@ -259,6 +269,7 @@ public class BackupExport {
 		 */
 		writeList(simpleSerializer, backup_dir, "privateMessageFolder.xml",
 				"privatemessagefolders", privateMessageFolderDao.get(0, Integer.MAX_VALUE));
+		progressHolder.setProgress(55);
 
 		/*
 		 * ##################### User Contacts
@@ -272,6 +283,7 @@ public class BackupExport {
 			
 			writeList(serializer, backup_dir, "userContacts.xml",
 					"usercontacts", userContactsDao.getUserContacts());
+			progressHolder.setProgress(60);
 		}
 
 		/*
@@ -289,6 +301,7 @@ public class BackupExport {
 			
 			writeList(serializer, backup_dir, "fileExplorerItems.xml",
 					"fileExplorerItems", list);
+			progressHolder.setProgress(65);
 		}
 
 		/*
@@ -306,6 +319,7 @@ public class BackupExport {
 			
 			writeList(serializer, backup_dir, "flvRecordings.xml",
 					"flvrecordings", list);
+			progressHolder.setProgress(70);
 		}
 
 		/*
@@ -325,6 +339,7 @@ public class BackupExport {
 			}
 			
 			writeList(serializer, backup_dir, "roompolls.xml", "roompolls", list);
+			progressHolder.setProgress(75);
 		}
 
 		/*
@@ -344,6 +359,7 @@ public class BackupExport {
 			}
 			
 			writeList(serializer, backup_dir, "configs.xml", "configs", list);
+			progressHolder.setProgress(80);
 		}
 		
 		/*
@@ -362,6 +378,7 @@ public class BackupExport {
 			}
 			
 			writeList(serializer, backup_dir, "chat_messages.xml", "chat_messages", list);
+			progressHolder.setProgress(85);
 		}
 		if (includeFiles) {
 			/*
@@ -398,9 +415,11 @@ public class BackupExport {
 			File sourceDirRec = OmFileHelper.getStreamsHibernateDir();
 
 			FileHelper.copyRec(sourceDirRec, targetDirRec);
+			progressHolder.setProgress(90);
 		}
 
 		writeZipDir(backup_dir, filePath);
+		progressHolder.setProgress(100);
 		log.debug("---Done");
 	}
 	
@@ -494,7 +513,7 @@ public class BackupExport {
 				File backupFile = new File(backup_dir, requestedFile);
 
 				try {
-					performExport(backupFile, backup_dir, includeFiles);
+					performExport(backupFile, backup_dir, includeFiles, new ProgressHolder());
 
 					response.reset();
 					response.resetBuffer();

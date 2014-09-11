@@ -51,6 +51,7 @@ import org.apache.openjpa.lib.log.Log;
 import org.apache.openjpa.lib.log.LogFactoryImpl.LogImpl;
 import org.apache.openmeetings.backup.BackupExport;
 import org.apache.openmeetings.backup.BackupImport;
+import org.apache.openmeetings.backup.ProgressHolder;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.file.FileExplorerItemDao;
 import org.apache.openmeetings.db.dao.record.FlvRecordingDao;
@@ -300,7 +301,7 @@ public class Admin {
 					backup_dir.mkdirs();
 					
 					BackupExport export = getApplicationContext(ctxName).getBean(BackupExport.class);
-					export.performExport(f, backup_dir, includeFiles);
+					export.performExport(f, backup_dir, includeFiles, new ProgressHolder());
 					FileHelper.removeRec(backup_dir);
 					backup_dir.delete();
 				} catch (Exception e) {

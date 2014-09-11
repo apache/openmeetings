@@ -27,6 +27,7 @@ import java.util.Date;
 
 import org.apache.openmeetings.backup.BackupExport;
 import org.apache.openmeetings.backup.BackupImport;
+import org.apache.openmeetings.backup.ProgressHolder;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.util.CalendarPatterns;
 import org.apache.openmeetings.util.OmFileHelper;
@@ -34,6 +35,7 @@ import org.apache.openmeetings.web.admin.AdminPanel;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.util.AjaxDownload;
 import org.apache.openmeetings.web.util.BootstrapFileUploadBehavior;
+import org.apache.wicket.ajax.AbstractAjaxTimerBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormSubmitBehavior;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
@@ -47,8 +49,11 @@ import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.util.lang.Bytes;
 import org.apache.wicket.util.resource.FileResourceStream;
+import org.apache.wicket.util.time.Duration;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
+
+import com.googlecode.wicket.jquery.ui.widget.progressbar.ProgressBar;
 
 /**
  * Panel component to manage Backup Import/Export
@@ -72,8 +77,14 @@ public class BackupPanel extends AdminPanel {
 	 */
 	private class BackupForm extends Form<Void> {
 		private static final long serialVersionUID = 1L;
-		private FileUploadField fileUploadField;
-		private Model<Boolean> includeFilesInBackup = Model.of(true);
+		private final FileUploadField fileUploadField;
+		private final Model<Boolean> includeFilesInBackup = Model.of(true);
+		private final AbstractAjaxTimerBehavior timer;
+		private final ProgressBar progressBar;
+		private File backupFile;
+		private Throwable th = null;
+		private boolean started = false;
+		private ProgressHolder progressHolder;
 
 		public BackupForm(String id) {
 			super(id);
@@ -104,30 +115,20 @@ public class BackupPanel extends AdminPanel {
 
 				@Override
 				protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-
-					File working_dir = OmFileHelper.getUploadBackupDir();
-
+					File workingDir = OmFileHelper.getUploadBackupDir();
 					String dateString = "backup_" + CalendarPatterns.getTimeForStreamId(new Date());
+					File backupDir = new File(workingDir, dateString);
+					backupFile = new File(backupDir, dateString + ".zip");
+					th = null;
+					started = true;
+					progressHolder = new ProgressHolder();
 
-					File backup_dir = new File(working_dir, dateString);
-					File backupFile = new File(backup_dir, dateString + ".zip");
-
-					try {
-						getBean(BackupExport.class).performExport(
-								backupFile,
-								backup_dir,
-								includeFilesInBackup.getObject());
-
-						download.setFileName(backupFile.getName());
-						download.setResourceStream(new FileResourceStream(backupFile));
-						download.initiate(target);
-					} catch (Exception e) {
-						log.error("Exception on panel backup download ", e);
-						uploadFeedback.error(e);
-					}
+					timer.restart(target);
+					new Thread(new BackupProcess(getBean(BackupExport.class), backupDir, includeFilesInBackup.getObject(), progressHolder)
+						, "Openmeetings - " + dateString).start();
 
 					// repaint the feedback panel so that it is hidden
-					target.add(uploadFeedback);
+					target.add(uploadFeedback, progressBar.setVisible(true));
 				}
 
 				@Override
@@ -136,7 +137,41 @@ public class BackupPanel extends AdminPanel {
 					target.add(uploadFeedback);
 				}
 			});
+			add(timer = new AbstractAjaxTimerBehavior(Duration.ONE_SECOND) {
+				private static final long serialVersionUID = 1L;
 
+				@Override
+				protected void onTimer(AjaxRequestTarget target) {
+					if (!started) {
+						timer.stop(target);
+						return;
+					}
+					if (th != null) {
+						timer.stop(target);
+						//TODO change text, localize
+						progressBar.setVisible(false);
+						uploadFeedback.error(th);
+						target.add(uploadFeedback);
+					} else {
+						progressBar.setModelObject(progressHolder.getProgress());
+						progressBar.refresh(target);
+						//TODO add current step result as info
+					}
+				}
+			});
+			add((progressBar = new ProgressBar("dprogress", new Model<Integer>(0)) {
+				private static final long serialVersionUID = 1L;
+
+				@Override
+				protected void onComplete(AjaxRequestTarget target) {
+					timer.stop(target);
+					target.add(progressBar.setVisible(false));
+					
+					download.setFileName(backupFile.getName());
+					download.setResourceStream(new FileResourceStream(backupFile));
+					download.initiate(target);
+				}
+			}).setVisible(false).setOutputMarkupPlaceholderTag(true));
 			add(fileUploadField.add(new AjaxFormSubmitBehavior(this, "onchange") {
 				private static final long serialVersionUID = 1L;
 
@@ -167,6 +202,29 @@ public class BackupPanel extends AdminPanel {
 			add(new Label("cmdLineDesc", WebSession.getString(1505)).setEscapeModelStrings(false));
 		}
 
+		private class BackupProcess implements Runnable {
+			private BackupExport backup;
+			private File backupDir;
+			private boolean includeFiles;
+			private ProgressHolder progressHolder;
+			
+			public BackupProcess(BackupExport backup, File backupDir, boolean includeFiles, ProgressHolder progressHolder) {
+				this.backup = backup;
+				this.backupDir = backupDir;
+				this.includeFiles = includeFiles;
+				this.progressHolder = progressHolder;
+				th = null;
+			}
+			
+			public void run() {
+				try {
+					backup.performExport(backupFile, backupDir, includeFiles, progressHolder);
+				} catch (Exception e) {
+					log.error("Exception on panel backup download ", e);
+					th = e;
+				}
+			}
+		}
 	}
 
 	public BackupPanel(String id) {
