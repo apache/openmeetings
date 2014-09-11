@@ -600,6 +600,7 @@ public class ScreenSharerFrame extends JFrame {
 		remoteEnabled.setBackground(Color.WHITE);
 		remoteEnabled.setSelected(core.isRemoteEnabled());
 		remoteEnabled.setBounds(10, 10, 450, 24);
+		remoteEnabled.setEnabled(core.allowRemote);
 		remoteEnabled.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				core.setRemoteEnabled(remoteEnabled.isSelected());

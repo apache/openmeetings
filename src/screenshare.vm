@@ -45,6 +45,7 @@ $LIBRARIES
     	<argument>$default_quality_screensharing</argument>
     	<argument>$default_fps_screensharing</argument>
     	<argument>$show_screensharing_fps</argument>
+    	<argument>$allow_remote</argument>
     	<argument>$user_id</argument>   
     	<argument>$allowRecording</argument>
     	<argument>$allowPublishing</argument>

@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.servlet.outputhandler;
 
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SCREENSHARING_ALLOW_REMOTE;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SCREENSHARING_FPS;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SCREENSHARING_FPS_SHOW;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SCREENSHARING_QUALITY;
@@ -201,6 +202,7 @@ public class ScreenController {
 			ctx.put("default_quality_screensharing", cfgDao.getConfValue(CONFIG_SCREENSHARING_QUALITY, String.class, "1"));
 			ctx.put("default_fps_screensharing", cfgDao.getConfValue(CONFIG_SCREENSHARING_FPS, String.class, "10"));
 			ctx.put("show_screensharing_fps", cfgDao.getConfValue(CONFIG_SCREENSHARING_FPS_SHOW, Boolean.class, "true"));
+			ctx.put("allow_remote", cfgDao.getConfValue(CONFIG_SCREENSHARING_ALLOW_REMOTE, Boolean.class, "true"));
 			//invited guest does not have valid user_id (have user_id == -1)
 			ctx.put("user_id", users_id);
 			ctx.put("port", port);
