@@ -113,6 +113,10 @@
 									<value>*</value>
 								</replacement>
 								<replacement>
+									<token>$allowRemote</token>
+									<value>*</value>
+								</replacement>
+								<replacement>
 									<token>$allowRecording</token>
 									<value>*</value>
 								</replacement>
