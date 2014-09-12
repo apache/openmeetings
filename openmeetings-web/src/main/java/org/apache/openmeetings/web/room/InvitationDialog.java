@@ -20,6 +20,7 @@ package org.apache.openmeetings.web.room;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.openmeetings.web.app.Application.getBean;
+import static org.apache.openmeetings.web.app.Application.getInvitationLink;
 import static org.apache.openmeetings.web.app.WebSession.AVAILABLE_TIMEZONES;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 
@@ -30,6 +31,7 @@ import java.util.Calendar;
 import java.util.Collection;
 import java.util.List;
 
+import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.label.FieldLanguageDao;
 import org.apache.openmeetings.db.dao.room.InvitationDao;
 import org.apache.openmeetings.db.dao.room.RoomDao;
@@ -61,6 +63,7 @@ import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.util.CollectionModel;
+import org.apache.wicket.util.string.Strings;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 
@@ -85,6 +88,7 @@ public class InvitationDialog extends AbstractFormDialog<Invitation> {
 	private final IModel<String> tzId = Model.of((String)null);
 	private final IModel<FieldLanguage> lang = Model.of((FieldLanguage)null);
 	private final IModel<Collection<User>> modelTo = new CollectionModel<User>(new ArrayList<User>());
+	private final TextField<String> url = new TextField<String>("url", Model.of((String)null));
 
 	public InvitationDialog(String id, long roomId) {
 		super(id, WebSession.getString(214), new CompoundPropertyModel<Invitation>(new Invitation()));
@@ -119,6 +123,7 @@ public class InvitationDialog extends AbstractFormDialog<Invitation> {
 		modelTo.setObject(new ArrayList<User>());
 		tzId.setObject(u.getTimeZoneId());
 		lang.setObject(getBean(FieldLanguageDao.class).get(u.getLanguage_id()));
+		url.setModelObject(null);
 		form.setModelObject(i);
 		send.setEnabled(false, target);
 		generate.setEnabled(false, target);
@@ -155,34 +160,58 @@ public class InvitationDialog extends AbstractFormDialog<Invitation> {
 
 	@Override
 	public void onClick(AjaxRequestTarget target, DialogButton button) {
-		// TODO Auto-generated method stub
-		super.onClick(target, button);
+		//TODO need to be reviewed
+		if (button.equals(cancel)) {
+			super.onClick(target, button);
+		} else if (button.equals(generate)) {
+			Invitation i = create(modelTo.getObject().iterator().next());
+			form.setModelObject(i);
+			url.setModelObject(getInvitationLink(getBean(ConfigurationDao.class).getBaseUrl(), i));
+			target.add(url);
+		} else if (button.equals(send)) {
+			if (Strings.isEmpty(url.getModelObject())) {
+				for (User u : modelTo.getObject()) {
+					Invitation i = create(u);
+					try {
+						getBean(InvitationManager.class).sendInvitionLink(i, MessageType.Create, subject.getObject(), message.getObject(), false);
+					} catch (Exception e) {
+						log.error("error while sending invitation ", e);
+					}
+				}
+			} else {
+				//FIXME To might be changed and it would'n be reflected, might lead to misunderstandings
+				Invitation i = form.getModelObject();
+				try {
+					getBean(InvitationManager.class).sendInvitionLink(i, MessageType.Create, subject.getObject(), message.getObject(), false);
+				} catch (Exception e) {
+					log.error("error while sending invitation ", e);
+				}
+			}
+			super.onClick(target, button);
+		}
+	}
+	
+	private Invitation create(User u) {
+		Invitation i = form.getModelObject();
+		
+		i.setPassword(ManageCryptStyle.getInstanceOfCrypt().createPassPhrase(i.getPassword())); //FIXME should be hidden
+		//FIXME another HACK
+		Calendar d = Calendar.getInstance();
+		d.setTime(i.getValidFrom());
+		d.add(Calendar.MINUTE, -5);
+		i.setValidFrom(d.getTime());
+		
+		i.setInvitee(u);
+		if (Type.contact == u.getType()) {
+			//TODO not sure it is right
+			u.setLanguage_id(lang.getObject().getId());
+		}
+		return getBean(InvitationDao.class).update(i);
 	}
 	
 	@Override
 	protected void onSubmit(AjaxRequestTarget target) {
-		Invitation i = form.getModelObject();
-		for (User u : modelTo.getObject()) {
-			i.setPassword(ManageCryptStyle.getInstanceOfCrypt().createPassPhrase(i.getPassword())); //FIXME should be hidden
-			//FIXME another HACK
-			Calendar d = Calendar.getInstance();
-			d.setTime(i.getValidFrom());
-			d.add(Calendar.MINUTE, -5);
-			i.setValidFrom(d.getTime());
-			
-			i.setInvitee(u);
-			if (Type.contact == u.getType()) {
-				//TODO not sure it is right
-				u.setLanguage_id(lang.getObject().getId());
-			}
-			getBean(InvitationDao.class).update(i);
-			try {
-				//FIXME getHash vs send
-				getBean(InvitationManager.class).sendInvitionLink(i, MessageType.Create, subject.getObject(), message.getObject(), false);
-			} catch (Exception e) {
-				log.error("error while processing ", e);
-			}
-		}
+		//designed to be empty because of multiple submit buttons
 	}
 	
 	private class InvitationForm extends Form<Invitation> {
@@ -261,6 +290,7 @@ public class InvitationDialog extends AbstractFormDialog<Invitation> {
 					}
 				});
 			add(new DropDownChoice<FieldLanguage>("language", lang, getBean(FieldLanguageDao.class).get(), new ChoiceRenderer<FieldLanguage>("name", "id")));
+			add(url.setOutputMarkupId(true));
 			add(feedback);
 		}
 		
