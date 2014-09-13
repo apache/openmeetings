@@ -33,19 +33,21 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.apache.openjpa.persistence.jdbc.ForeignKey;
+import org.apache.openmeetings.db.entity.IDataProviderEntity;
 import org.apache.openmeetings.db.entity.user.User;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
 
 @Entity
 @NamedQueries({
-	@NamedQuery(name = "hasVoted", query = "SELECT rpa FROM RoomPollAnswers rpa WHERE rpa.roomPoll.room.id = :room_id " +
-				"AND rpa.votedUser.id = :userid AND rpa.roomPoll.archived = :archived")
+	@NamedQuery(name = "hasVoted", query = "SELECT rpa FROM RoomPollAnswer rpa WHERE rpa.roomPoll.room.id = :room_id " +
+				"AND rpa.votedUser.id = :userid AND rpa.roomPoll.archived = false")
 })
-@Table(name = "room_poll_answers")
+@Table(name = "room_poll_answer")
 @Root(name="roompollanswer")
-public class RoomPollAnswers {
-	
+public class RoomPollAnswer implements IDataProviderEntity {
+	private static final long serialVersionUID = 1L;
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")

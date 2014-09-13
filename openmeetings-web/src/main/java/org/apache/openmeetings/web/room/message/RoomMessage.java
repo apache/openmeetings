@@ -29,6 +29,7 @@ public class RoomMessage implements IWebSocketPushMessage, Serializable {
 		roomEnter
 		, roomExit
 		, pollCreated
+		, voted
 		, rightUpdated
 	}
 	private final Date timestamp;

@@ -35,7 +35,7 @@ import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.room.Client;
 import org.apache.openmeetings.db.entity.room.PollType;
 import org.apache.openmeetings.db.entity.room.RoomPoll;
-import org.apache.openmeetings.db.entity.room.RoomPollAnswers;
+import org.apache.openmeetings.db.entity.room.RoomPollAnswer;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,7 +60,7 @@ public class PollDao {
 		log.debug("Adding poll type: " + labelId + ", " + isNumeric);
 		PollType pt = new PollType();
 		pt.setLabel(fieldValDao.get(labelId));
-		pt.setIsNumericAnswer(isNumeric);
+		pt.setNumeric(isNumeric);
 
 		em.persist(pt);
 		
@@ -195,10 +195,9 @@ public class PollDao {
 	public boolean hasVoted(Long room_id, Long userid) {
 		try {
 			log.debug(" :: hasVoted :: " + room_id + ", " + userid);
-			TypedQuery<RoomPollAnswers> q = em.createNamedQuery("hasVoted", RoomPollAnswers.class);
+			TypedQuery<RoomPollAnswer> q = em.createNamedQuery("hasVoted", RoomPollAnswer.class);
 			q.setParameter("room_id", room_id);
 			q.setParameter("userid", userid);
-			q.setParameter("archived", false);
 			q.getSingleResult();
 			return true;
 		} catch (NoResultException nre) {

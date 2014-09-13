@@ -55,7 +55,7 @@ import org.simpleframework.xml.Root;
 				+ "WHERE rp.room.id = :room_id AND rp.archived = :archived"),
 		@NamedQuery(name = "hasPoll", query = "SELECT COUNT(rp) FROM RoomPoll rp "
 				+ "WHERE rp.room.id = :room_id AND rp.archived = :archived") })
-@Table(name = "room_polls")
+@Table(name = "room_poll")
 @Root(name = "roompoll")
 public class RoomPoll implements IDataProviderEntity {
 	private static final long serialVersionUID = 1L;
@@ -102,7 +102,7 @@ public class RoomPoll implements IDataProviderEntity {
 	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinColumn(name = "room_poll_id")
 	@ElementList(name = "roompollanswers", required = false)
-	private List<RoomPollAnswers> answers;
+	private List<RoomPollAnswer> answers;
 
 	/**
 	 * @return the creator
@@ -152,9 +152,9 @@ public class RoomPoll implements IDataProviderEntity {
 	/**
 	 * @return the answers
 	 */
-	public List<RoomPollAnswers> getAnswers() {
+	public List<RoomPollAnswer> getAnswers() {
 		if (answers == null) {
-			answers = new LinkedList<RoomPollAnswers>();
+			answers = new LinkedList<RoomPollAnswer>();
 		}
 		return answers;
 	}
@@ -163,7 +163,7 @@ public class RoomPoll implements IDataProviderEntity {
 	 * @param answers
 	 *            the answers to set
 	 */
-	public void setAnswers(List<RoomPollAnswers> answers) {
+	public void setAnswers(List<RoomPollAnswer> answers) {
 		this.answers = answers;
 	}
 

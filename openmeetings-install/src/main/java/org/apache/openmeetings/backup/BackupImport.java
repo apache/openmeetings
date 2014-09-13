@@ -92,7 +92,7 @@ import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.room.RoomModerator;
 import org.apache.openmeetings.db.entity.room.RoomOrganisation;
 import org.apache.openmeetings.db.entity.room.RoomPoll;
-import org.apache.openmeetings.db.entity.room.RoomPollAnswers;
+import org.apache.openmeetings.db.entity.room.RoomPollAnswer;
 import org.apache.openmeetings.db.entity.room.RoomType;
 import org.apache.openmeetings.db.entity.server.LdapConfig;
 import org.apache.openmeetings.db.entity.server.OAuthServer;
@@ -634,7 +634,7 @@ public class BackupImport {
 				if (rp.getCreator() == null || rp.getCreator().getId() == null) {
 					rp.setCreator(null);
 				}
-				for (RoomPollAnswers rpa : rp.getAnswers()) {
+				for (RoomPollAnswer rpa : rp.getAnswers()) {
 					if (rpa.getVotedUser() == null || rpa.getVotedUser().getId() == null) {
 						rpa.setVotedUser(null);
 					}

@@ -53,7 +53,7 @@
 		<class>org.apache.openmeetings.db.entity.log.ConferenceLogType</class>
 		<class>org.apache.openmeetings.db.entity.room.PollType</class>
 		<class>org.apache.openmeetings.db.entity.room.RoomPoll</class>
-		<class>org.apache.openmeetings.db.entity.room.RoomPollAnswers</class>
+		<class>org.apache.openmeetings.db.entity.room.RoomPollAnswer</class>
 		<class>org.apache.openmeetings.db.entity.room.Client</class>
 		<class>org.apache.openmeetings.db.entity.room.RoomModerator</class>
 		<class>org.apache.openmeetings.db.entity.room.Room</class>

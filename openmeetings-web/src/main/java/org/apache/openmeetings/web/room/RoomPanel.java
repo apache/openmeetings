@@ -63,6 +63,8 @@ import org.apache.openmeetings.web.common.tree.MyRecordingTreeProvider;
 import org.apache.openmeetings.web.common.tree.PublicRecordingTreeProvider;
 import org.apache.openmeetings.web.pages.MainPage;
 import org.apache.openmeetings.web.room.message.RoomMessage;
+import org.apache.openmeetings.web.room.poll.CreatePollDialog;
+import org.apache.openmeetings.web.room.poll.VoteDialog;
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -128,6 +130,7 @@ public class RoomPanel extends BasePanel {
 	};
 	private final InvitationDialog invite;
 	private final CreatePollDialog createPoll;
+	private final VoteDialog vote;
 	private final MenuPanel menuPanel;
 	private final RoomMenuItem exitMenuItem = new RoomMenuItem(WebSession.getString(308), WebSession.getString(309), "room menu exit") {
 		private static final long serialVersionUID = 1L;
@@ -176,7 +179,14 @@ public class RoomPanel extends BasePanel {
 			createPoll.open(target);
 		}
 	};
-	private final RoomMenuItem pollVoteMenuItem = new RoomMenuItem(WebSession.getString(42), WebSession.getString(1485), false);
+	private final RoomMenuItem pollVoteMenuItem = new RoomMenuItem(WebSession.getString(42), WebSession.getString(1485), false) {
+		private static final long serialVersionUID = 1L;
+
+		public void onClick(MainPage page, AjaxRequestTarget target) {
+			vote.updateModel(target);
+			vote.open(target);
+		}
+	};
 	private final RoomMenuItem pollResultMenuItem = new RoomMenuItem(WebSession.getString(37), WebSession.getString(1484), false);
 	private final RoomMenuItem sipDialerMenuItem = new RoomMenuItem(WebSession.getString(1447), WebSession.getString(1488), false);
 	private final WebMarkupContainer userList = new WebMarkupContainer("userList");
@@ -260,7 +270,7 @@ public class RoomPanel extends BasePanel {
 					item.add(AttributeAppender.append("class", "current"));
 				}
 			}
-		}.setReuseItems(true)).setOutputMarkupId(true));
+		}).setOutputMarkupId(true));
 		add(new JQueryBehavior(".room.sidebar.left .tabs", "tabs", new Options("active", showFiles && r.isFilesOpened() ? "ftab" : "utab")) {
 			private static final long serialVersionUID = 1L;
 
@@ -283,6 +293,7 @@ public class RoomPanel extends BasePanel {
 		}).setOutputMarkupPlaceholderTag(true).setVisible(false).add(new AttributeAppender("title", WebSession.getString(1480))));
 		add(invite = new InvitationDialog("invite", roomId));
 		add(createPoll = new CreatePollDialog("createPoll", roomId));
+		add(vote = new VoteDialog("vote", roomId));
 	}
 
 	@Override
@@ -293,6 +304,7 @@ public class RoomPanel extends BasePanel {
 				RoomMessage m = (RoomMessage)wsEvent.getMessage();
 				switch (m.getType()) {
 					case pollCreated:
+					case voted:
 					case rightUpdated:
 						updateUserMenuIcons(wsEvent.getHandler());
 						break;
@@ -396,8 +408,8 @@ public class RoomPanel extends BasePanel {
 		applyWbMenuItem.setActive(!moder);
 		applyAvMenuItem.setActive(!moder);
 		pollCreateMenuItem.setActive(moder);
-		pollVoteMenuItem.setActive(pollExists && notExternalUser);
-		pollResultMenuItem.setActive(pollExists && notExternalUser);
+		pollVoteMenuItem.setActive(pollExists && notExternalUser && !getBean(PollDao.class).hasVoted(roomId, getUserId()));
+		pollResultMenuItem.setActive(pollExists || getBean(PollDao.class).getArchivedPollList(roomId).size() > 0);
 		//TODO sip menus
 		handler.add(menuPanel, askBtn.setVisible(!moder), shareBtn.setVisible(shareVisible));
 	}
@@ -455,8 +467,8 @@ public class RoomPanel extends BasePanel {
 
 	private List<RoomClient> getUsers() {
 		List<RoomClient> list = new ArrayList<RoomPanel.RoomClient>();
-		for (Client c : getRoomUsers(roomId)) {
-			list.add(new RoomClient(c));
+		for (Client cl : getRoomUsers(roomId)) {
+			list.add(new RoomClient(cl));
 		}
 		return list;
 	}

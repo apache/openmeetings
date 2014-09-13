@@ -54,7 +54,7 @@ public class PollType implements IDataProviderEntity {
 	private Fieldvalues label;
 	
 	@Column(name = "numeric_answer")
-	private Boolean isNumericAnswer;
+	private boolean numeric;
 	
 	/**
 	 * @return the pollTypesId
@@ -69,18 +69,6 @@ public class PollType implements IDataProviderEntity {
 		this.id = id;
 	}
 	/**
-	 * @return the isNumericAnswer
-	 */
-	public Boolean getIsNumericAnswer() {
-		return isNumericAnswer;
-	}
-	/**
-	 * @param isNumericAnswer the isNumericAnswer to set
-	 */
-	public void setIsNumericAnswer(Boolean isNumericAnswer) {
-		this.isNumericAnswer = isNumericAnswer;
-	}
-	/**
 	 * @return the pollTypeLabelid
 	 */
 	public Fieldvalues getLabel() {
@@ -91,5 +79,13 @@ public class PollType implements IDataProviderEntity {
 	 */
 	public void setLabel(Fieldvalues label) {
 		this.label = label;
+	}
+	
+	public boolean isNumeric() {
+		return numeric;
+	}
+	
+	public void setNumeric(boolean numeric) {
+		this.numeric = numeric;
 	}
 }
