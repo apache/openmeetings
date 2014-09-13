@@ -19,8 +19,8 @@
 package org.apache.openmeetings.web.room;
 
 import static org.apache.openmeetings.web.app.Application.getBean;
-import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import static org.apache.openmeetings.web.app.WebSession.getLanguage;
+import static org.apache.openmeetings.web.app.WebSession.getUserId;
 
 import java.util.Arrays;
 import java.util.List;
@@ -32,7 +32,7 @@ import org.apache.openmeetings.db.entity.room.PollType;
 import org.apache.openmeetings.db.entity.room.RoomPoll;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.web.app.WebSession;
-import org.apache.openmeetings.web.room.message.PollCreated;
+import org.apache.openmeetings.web.room.message.RoomMessage;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
@@ -96,10 +96,10 @@ public class CreatePollDialog extends AbstractFormDialog<RoomPoll> {
 
 	@Override
 	protected void onSubmit(AjaxRequestTarget target) {
-		RoomPoll p = getBean(PollDao.class).update(form.getModelObject());
+		getBean(PollDao.class).update(form.getModelObject());
 		WebSocketSettings webSocketSettings = WebSocketSettings.Holder.get(getApplication());
 		WebSocketPushBroadcaster broadcaster = new WebSocketPushBroadcaster(webSocketSettings.getConnectionRegistry());
-		broadcaster.broadcastAll(getApplication(), new PollCreated(p.getId(), roomId));
+		broadcaster.broadcastAll(getApplication(), new RoomMessage(roomId, getUserId(), RoomMessage.Type.pollCreated));
 	}
 
 	private class PollForm extends Form<RoomPoll> {

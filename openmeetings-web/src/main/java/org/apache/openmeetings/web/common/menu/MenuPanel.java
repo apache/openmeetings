@@ -38,7 +38,7 @@ import org.apache.wicket.util.string.Strings;
  */
 public class MenuPanel extends BasePanel {
 	private static final long serialVersionUID = 1L;
-	private WebMarkupContainer menuContainer = new WebMarkupContainer("menuContainer");
+	private final WebMarkupContainer menuContainer = new WebMarkupContainer("menuContainer");
 
 	public MenuPanel(String id, List<MenuItem> menus) {
 		super(id);
@@ -50,7 +50,7 @@ public class MenuPanel extends BasePanel {
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			protected void populateItem(ListItem<MenuItem> item) {
+			protected void populateItem(final ListItem<MenuItem> item) {
 				final MenuItem gl = item.getModelObject();
 				AjaxLink<Void> link = new AjaxLink<Void>("link") {
 					private static final long serialVersionUID = 1L;
@@ -74,10 +74,10 @@ public class MenuPanel extends BasePanel {
 						private static final long serialVersionUID = 1L;
 	
 						@Override
-						protected void populateItem(ListItem<MenuItem> item) {
-							final MenuItem m = item.getModelObject();
-							item.setVisible(m.isActive());
-							item.add(new AjaxLink<Void>("link") {
+						protected void populateItem(final ListItem<MenuItem> item1) {
+							final MenuItem m = item1.getModelObject();
+							item1.setVisible(m.isActive());
+							item1.add(new AjaxLink<Void>("link") {
 								private static final long serialVersionUID = 1L;
 								{
 									add(new Label("name", m.getName()));
@@ -89,9 +89,9 @@ public class MenuPanel extends BasePanel {
 								}
 							});
 						}
-					}.setReuseItems(true)).setVisible(null != gl.getChildren()));
+					}).setVisible(null != gl.getChildren()));
 			}
-		}.setReuseItems(true));
+		});
 		add(new MenuFunctionsBehavior(menuContainer.getMarkupId(), id));
 	}
 }

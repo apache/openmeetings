@@ -25,13 +25,43 @@ import org.apache.wicket.protocol.ws.api.message.IWebSocketPushMessage;
 
 public class RoomMessage implements IWebSocketPushMessage, Serializable {
 	private static final long serialVersionUID = 1L;
+	public enum Type {
+		roomEnter
+		, roomExit
+		, pollCreated
+		, rightUpdated
+	}
 	private final Date timestamp;
+	private final Long sentUserId;
+	private final Long roomId;
+	private final Long userId;
+	private final Type type;
 
-	public RoomMessage() {
+	public RoomMessage(Long roomId, Long userId, Type type) {
 		this.timestamp = new Date();
+		this.sentUserId = getUserId();
+		this.roomId = roomId;
+		this.userId = userId;
+		this.type = type;
 	}
 	
 	public Date getTimestamp() {
 		return timestamp;
+	}
+
+	public Long getSentUserId() {
+		return sentUserId;
+	}
+
+	public Long getRoomId() {
+		return roomId;
+	}
+
+	public Long getUserId() {
+		return userId;
+	}
+
+	public Type getType() {
+		return type;
 	}
 }

@@ -62,9 +62,7 @@ import org.apache.openmeetings.web.common.tree.FileTreePanel;
 import org.apache.openmeetings.web.common.tree.MyRecordingTreeProvider;
 import org.apache.openmeetings.web.common.tree.PublicRecordingTreeProvider;
 import org.apache.openmeetings.web.pages.MainPage;
-import org.apache.openmeetings.web.room.message.PollCreated;
 import org.apache.openmeetings.web.room.message.RoomMessage;
-import org.apache.openmeetings.web.room.message.UserListMessage;
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -87,6 +85,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.protocol.ws.WebSocketSettings;
 import org.apache.wicket.protocol.ws.api.IWebSocketConnection;
+import org.apache.wicket.protocol.ws.api.WebSocketRequestHandler;
 import org.apache.wicket.protocol.ws.api.event.WebSocketPushPayload;
 import org.apache.wicket.protocol.ws.api.registry.IWebSocketConnectionRegistry;
 import org.apache.wicket.protocol.ws.api.registry.PageIdKey;
@@ -124,22 +123,66 @@ public class RoomPanel extends BasePanel {
 					, 4L == r.getRoomtype().getRoomtypes_id()
 					, getStringLabels(448, 449, 450, 451, 758, 447, 52, 53, 1429, 1430, 775, 452, 767, 764, 765, 918, 54, 761, 762).toString()
 					));
-			broadcast(roomId, new UserListMessage(c.getUserId(), roomId, UserListMessage.Type.enter));
+			broadcast(roomId, new RoomMessage(roomId, c.getUserId(), RoomMessage.Type.roomEnter));
 		}
 	};
 	private final InvitationDialog invite;
 	private final CreatePollDialog createPoll;
 	private final MenuPanel menuPanel;
-	private final RoomMenuItem shareItem;
-	private final RoomMenuItem applyModer;
-	private final RoomMenuItem applyWB;
-	private final RoomMenuItem applyAV;
-	private final RoomMenuItem pollCreate;
-	private final RoomMenuItem pollVote;
-	private final RoomMenuItem pollResult;
-	private final RoomMenuItem sipDialer;
+	private final RoomMenuItem exitMenuItem = new RoomMenuItem(WebSession.getString(308), WebSession.getString(309), "room menu exit") {
+		private static final long serialVersionUID = 1L;
+
+		@Override
+		public void onClick(MainPage page, AjaxRequestTarget target) {
+			if (WebSession.getRights().contains(Right.Dashboard)) {
+				page.updateContents(ROOMS_PUBLIC, target);
+			} else {
+				String url = getBean(ConfigurationDao.class).getConfValue(CONFIG_REDIRECT_URL_FOR_EXTERNAL_KEY, String.class, "");
+				if (Strings.isEmpty(url)) {
+					url = getBean(ConfigurationDao.class).getConfValue(CONFIG_APPLICATION_BASE_URL, String.class, "");
+				}
+				throw new RedirectToUrlException(url);
+			}
+		}
+	};
+	private final RoomMenuItem filesMenu = new RoomMenuItem(WebSession.getString(245), null, false);
+	private final RoomMenuItem actionsMenu = new RoomMenuItem(WebSession.getString(635), null, false);
+	private final RoomMenuItem inviteMenuItem = new RoomMenuItem(WebSession.getString(213), WebSession.getString(1489), false) {
+		private static final long serialVersionUID = 1L;
+
+		@Override
+		public void onClick(MainPage page, AjaxRequestTarget target) {
+			invite.updateModel(target);
+			invite.open(target);
+		}
+	};
+	private final RoomMenuItem shareMenuItem = new RoomMenuItem(WebSession.getString(239), WebSession.getString(1480), false) {
+		private static final long serialVersionUID = 1L;
+
+		@Override
+		public void onClick(MainPage page, AjaxRequestTarget target) {
+			startSharing.respond(target);
+		}
+	};
+	private final RoomMenuItem applyModerMenuItem = new RoomMenuItem(WebSession.getString(784), WebSession.getString(1481), false);
+	private final RoomMenuItem applyWbMenuItem = new RoomMenuItem(WebSession.getString(785), WebSession.getString(1492), false);
+	private final RoomMenuItem applyAvMenuItem = new RoomMenuItem(WebSession.getString(786), WebSession.getString(1482), false);
+	private final RoomMenuItem pollCreateMenuItem = new RoomMenuItem(WebSession.getString(24), WebSession.getString(1483), false) {
+		private static final long serialVersionUID = 1L;
+
+		@Override
+		public void onClick(MainPage page, AjaxRequestTarget target) {
+			createPoll.open(target);
+		}
+	};
+	private final RoomMenuItem pollVoteMenuItem = new RoomMenuItem(WebSession.getString(42), WebSession.getString(1485), false);
+	private final RoomMenuItem pollResultMenuItem = new RoomMenuItem(WebSession.getString(37), WebSession.getString(1484), false);
+	private final RoomMenuItem sipDialerMenuItem = new RoomMenuItem(WebSession.getString(1447), WebSession.getString(1488), false);
 	private final WebMarkupContainer userList = new WebMarkupContainer("userList");
 	private final ListView<RoomClient> users;
+	private final boolean showFiles;
+	private final Button shareBtn = new Button("share");
+	private final Button askBtn = new Button("ask");
 	
 	public RoomPanel(String id, long _roomId) {
 		this(id, getBean(RoomDao.class).get(_roomId));
@@ -148,35 +191,12 @@ public class RoomPanel extends BasePanel {
 	public RoomPanel(String id, Room r) {
 		super(id);
 		this.roomId = r.getId();
-		shareItem = new RoomMenuItem(WebSession.getString(239), WebSession.getString(1480)) {
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public void onClick(MainPage page, AjaxRequestTarget target) {
-				startSharing.respond(target);
-			}
-		};
-		applyModer = new RoomMenuItem(WebSession.getString(784), WebSession.getString(1481), false);
-		applyWB = new RoomMenuItem(WebSession.getString(785), WebSession.getString(1492), false);
-		applyAV = new RoomMenuItem(WebSession.getString(786), WebSession.getString(1482), false);
-		boolean pollExists = getBean(PollDao.class).hasPoll(roomId);
-		pollCreate = new RoomMenuItem(WebSession.getString(24), WebSession.getString(1483), !pollExists) {
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public void onClick(MainPage page, AjaxRequestTarget target) {
-				createPoll.open(target);
-			}
-		};
-		pollVote = new RoomMenuItem(WebSession.getString(42), WebSession.getString(1485), false);
-		pollResult = new RoomMenuItem(WebSession.getString(37), WebSession.getString(1484), false);
-		sipDialer = new RoomMenuItem(WebSession.getString(1447), WebSession.getString(1488), false);
 		add((menuPanel = new MenuPanel("roomMenu", getMenu())).setVisible(!r.getHideTopBar()));
 		WebMarkupContainer wb = new WebMarkupContainer("whiteboard");
 		add(wb.setOutputMarkupId(true));
 		add(new WhiteboardBehavior("1", wb.getMarkupId(), null, null, null));
 		add(aab, AttributeAppender.append("style", "height: 100%;"));
-		boolean showFiles = !r.getHideFilesExplorer();
+		showFiles = !r.getHideFilesExplorer();
 		add(new WebMarkupContainer("flink").setVisible(showFiles));
 		add(new WebMarkupContainer("ftab").add(new FileTreePanel("tree") {
 			private static final long serialVersionUID = 1L;
@@ -250,16 +270,16 @@ public class RoomPanel extends BasePanel {
 		});
 		add(new Label("roomName", r.getName()));
 		add(new Label("recording", "Recording started").setVisible(false)); //FIXME add/remove
-		add(new Button("ask")); //FIXME add/remove
+		add(askBtn.setOutputMarkupPlaceholderTag(true).setVisible(false).add(new AttributeAppender("title", WebSession.getString(906))));
 		add(startSharing = new StartSharingEventBehavior(roomId));
-		add(new Button("share").add(new AjaxEventBehavior("click") {
+		add(shareBtn.add(new AjaxEventBehavior("click") {
 			private static final long serialVersionUID = 1L;
 			
 			@Override
 			protected void onEvent(AjaxRequestTarget target) {
 				startSharing.respond(target);
 			}
-		}).add(new AttributeAppender("title", WebSession.getString(1480)))); //FIXME add/remove
+		}).setOutputMarkupPlaceholderTag(true).setVisible(false).add(new AttributeAppender("title", WebSession.getString(1480))));
 		add(invite = new InvitationDialog("invite", roomId));
 		add(createPoll = new CreatePollDialog("createPoll", roomId));
 	}
@@ -268,12 +288,23 @@ public class RoomPanel extends BasePanel {
 	public void onEvent(IEvent<?> event) {
 		if (event.getPayload() instanceof WebSocketPushPayload) {
 			WebSocketPushPayload wsEvent = (WebSocketPushPayload) event.getPayload();
-			if (wsEvent.getMessage() instanceof PollCreated) {
+			if (wsEvent.getMessage() instanceof RoomMessage) {
+				RoomMessage m = (RoomMessage)wsEvent.getMessage();
+				switch (m.getType()) {
+					case pollCreated:
+					case rightUpdated:
+						updateUserMenuIcons(wsEvent.getHandler());
+						break;
+					case roomEnter:
+						updateUserMenuIcons(wsEvent.getHandler());
+					case roomExit:
+						users.setList(getUsers());
+						wsEvent.getHandler().add(userList);
+						break;
+					default:
+						break;
+				}
 				//TODO check this menuPanel.modelChanged();
-				wsEvent.getHandler().add(menuPanel);
-			} else if (wsEvent.getMessage() instanceof UserListMessage) {
-				users.setList(getUsers());
-				wsEvent.getHandler().add(userList);
 			}
 		}
 		super.onEvent(event);
@@ -347,56 +378,53 @@ public class RoomPanel extends BasePanel {
 		}
 	}
 	
+	private void updateUserMenuIcons(WebSocketRequestHandler handler) {
+		boolean pollExists = getBean(PollDao.class).hasPoll(roomId);
+		User u = getBean(UserDao.class).get(getUserId());
+		boolean notExternalUser = u.getType() != User.Type.external && u.getType() != User.Type.contact;
+		exitMenuItem.setActive(notExternalUser);//TODO check this
+		filesMenu.setActive(showFiles);
+		Room r = getBean(RoomDao.class).get(roomId);
+		actionsMenu.setActive(!r.getHideActionsMenu());
+		boolean moder = c.hasRight(Client.Right.moderator);
+		inviteMenuItem.setActive(notExternalUser && moder);
+		//TODO add check "sharing started"
+		boolean shareVisible = 4 != r.getRoomtype().getRoomtypes_id() && moder; //FIXME hardcoded
+		shareMenuItem.setActive(shareVisible);
+		shareBtn.setVisible(shareMenuItem.isActive());
+		applyModerMenuItem.setActive(!moder);
+		applyWbMenuItem.setActive(!moder);
+		applyAvMenuItem.setActive(!moder);
+		pollCreateMenuItem.setActive(moder);
+		pollVoteMenuItem.setActive(pollExists && notExternalUser);
+		pollResultMenuItem.setActive(pollExists && notExternalUser);
+		//TODO sip menus
+		handler.add(menuPanel, askBtn.setVisible(!moder), shareBtn.setVisible(shareVisible));
+	}
+	
 	private List<MenuItem> getMenu() {
 		List<MenuItem> menu = new ArrayList<MenuItem>();
-		RoomMenuItem exit = new RoomMenuItem(WebSession.getString(308), WebSession.getString(309), "room menu exit") {
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public void onClick(MainPage page, AjaxRequestTarget target) {
-				if (WebSession.getRights().contains(Right.Dashboard)) {
-					page.updateContents(ROOMS_PUBLIC, target);
-				} else {
-					String url = getBean(ConfigurationDao.class).getConfValue(CONFIG_REDIRECT_URL_FOR_EXTERNAL_KEY, String.class, "");
-					if (Strings.isEmpty(url)) {
-						url = getBean(ConfigurationDao.class).getConfValue(CONFIG_APPLICATION_BASE_URL, String.class, "");
-					}
-					throw new RedirectToUrlException(url);
-				}
-			}
-		};
-		User u = getBean(UserDao.class).get(getUserId());
-		boolean externalUser = u.getType() == User.Type.external || u.getType() == User.Type.contact; //TODO check this
-		exit.setActive(!externalUser);
-		menu.add(exit);//TODO check this
-		MenuItem files = new RoomMenuItem(WebSession.getString(245));
+		exitMenuItem.setActive(false);
+		menu.add(exitMenuItem);
+		
 		List<RoomMenuItem> fileItems = new ArrayList<RoomMenuItem>();
 		fileItems.add(new RoomMenuItem(WebSession.getString(15), WebSession.getString(1479)));
-		files.setChildren(fileItems);
-		menu.add(files);
+		filesMenu.setChildren(fileItems);
+		menu.add(filesMenu);
 		
-		MenuItem actions = new RoomMenuItem(WebSession.getString(635));
 		List<RoomMenuItem> actionItems = new ArrayList<RoomMenuItem>();
-		actionItems.add(new RoomMenuItem(WebSession.getString(213), WebSession.getString(1489), !externalUser) {
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public void onClick(MainPage page, AjaxRequestTarget target) {
-				invite.updateModel(target);
-				invite.open(target);
-			}
-		});
-		actionItems.add(shareItem); //FIXME enable/disable
-		actionItems.add(applyModer); //FIXME enable/disable
-		actionItems.add(applyWB); //FIXME enable/disable
-		actionItems.add(applyAV); //FIXME enable/disable
-		actionItems.add(pollCreate);
-		actionItems.add(pollResult); //FIXME enable/disable
-		actionItems.add(pollVote); //FIXME enable/disable
-		actionItems.add(sipDialer);
+		actionItems.add(inviteMenuItem);
+		actionItems.add(shareMenuItem); //FIXME enable/disable
+		actionItems.add(applyModerMenuItem); //FIXME enable/disable
+		actionItems.add(applyWbMenuItem); //FIXME enable/disable
+		actionItems.add(applyAvMenuItem); //FIXME enable/disable
+		actionItems.add(pollCreateMenuItem);
+		actionItems.add(pollResultMenuItem); //FIXME enable/disable
+		actionItems.add(pollVoteMenuItem); //FIXME enable/disable
+		actionItems.add(sipDialerMenuItem);
 		actionItems.add(new RoomMenuItem(WebSession.getString(1126), WebSession.getString(1490)));
-		actions.setChildren(actionItems);
-		menu.add(actions);
+		actionsMenu.setChildren(actionItems);
+		menu.add(actionsMenu);
 		return menu;
 	}
 	
