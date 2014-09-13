@@ -123,7 +123,7 @@ public class RoomPanel extends BasePanel {
 					, 4L == r.getRoomtype().getRoomtypes_id()
 					, getStringLabels(448, 449, 450, 451, 758, 447, 52, 53, 1429, 1430, 775, 452, 767, 764, 765, 918, 54, 761, 762).toString()
 					));
-			broadcast(roomId, new RoomMessage(roomId, c.getUserId(), RoomMessage.Type.roomEnter));
+			broadcast(new RoomMessage(roomId, c.getUserId(), RoomMessage.Type.roomEnter));
 		}
 	};
 	private final InvitationDialog invite;
@@ -172,6 +172,7 @@ public class RoomPanel extends BasePanel {
 
 		@Override
 		public void onClick(MainPage page, AjaxRequestTarget target) {
+			createPoll.updateModel(target);
 			createPoll.open(target);
 		}
 	};
@@ -304,7 +305,6 @@ public class RoomPanel extends BasePanel {
 					default:
 						break;
 				}
-				//TODO check this menuPanel.modelChanged();
 			}
 		}
 		super.onEvent(event);
@@ -346,11 +346,11 @@ public class RoomPanel extends BasePanel {
 		}
 	}
 	
-	public static void broadcast(long roomId, final RoomMessage m) {
+	public static void broadcast(final RoomMessage m) {
 		WebSocketSettings settings = WebSocketSettings.Holder.get(Application.get());
 		IWebSocketConnectionRegistry reg = settings.getConnectionRegistry();
 		Executor executor = settings.getWebSocketPushMessageExecutor();
-		for (Client c : getRoomUsers(roomId)) {
+		for (Client c : getRoomUsers(m.getRoomId())) {
 			try {
 				final IWebSocketConnection wsConnection = reg.getConnection(Application.get(), c.getSessionId(), new PageIdKey(c.getPageId()));
 				executor.run(new Runnable()

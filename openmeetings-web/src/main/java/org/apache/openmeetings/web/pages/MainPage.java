@@ -148,7 +148,7 @@ public class MainPage extends BaseInitedPage {
 				long roomId = Application.getRoom(_c);
 				if (roomId > 0) {
 					Application.removeUserFromRoom(roomId, _c);
-					RoomPanel.broadcast(roomId, new RoomMessage(roomId, _c.getUserId(), RoomMessage.Type.roomExit));
+					RoomPanel.broadcast(new RoomMessage(roomId, _c.getUserId(), RoomMessage.Type.roomExit));
 				}
 			}
 		});

@@ -42,8 +42,6 @@ import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
-import org.apache.wicket.protocol.ws.WebSocketSettings;
-import org.apache.wicket.protocol.ws.api.WebSocketPushBroadcaster;
 
 import com.googlecode.wicket.jquery.core.Options;
 import com.googlecode.wicket.jquery.ui.widget.dialog.AbstractFormDialog;
@@ -97,9 +95,7 @@ public class CreatePollDialog extends AbstractFormDialog<RoomPoll> {
 	@Override
 	protected void onSubmit(AjaxRequestTarget target) {
 		getBean(PollDao.class).update(form.getModelObject());
-		WebSocketSettings webSocketSettings = WebSocketSettings.Holder.get(getApplication());
-		WebSocketPushBroadcaster broadcaster = new WebSocketPushBroadcaster(webSocketSettings.getConnectionRegistry());
-		broadcaster.broadcastAll(getApplication(), new RoomMessage(roomId, getUserId(), RoomMessage.Type.pollCreated));
+		RoomPanel.broadcast(new RoomMessage(roomId, getUserId(), RoomMessage.Type.pollCreated));
 	}
 
 	private class PollForm extends Form<RoomPoll> {
