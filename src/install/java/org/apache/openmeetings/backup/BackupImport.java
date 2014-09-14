@@ -444,7 +444,9 @@ public class BackupImport {
 		{
 			List<LdapConfig> list = readList(simpleSerializer, f, "ldapconfigs.xml", "ldapconfigs", LdapConfig.class, true);
 			for (LdapConfig c : list) {
-				ldapConfigDao.addLdapConfigByObject(c);
+				if (!"local DB [internal]".equals(c.getName())) {
+					ldapConfigDao.addLdapConfigByObject(c);
+				}
 			}
 		}
 

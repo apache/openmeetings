@@ -67,6 +67,7 @@ import org.apache.openmeetings.db.entity.room.PollType;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.room.RoomPoll;
 import org.apache.openmeetings.db.entity.room.RoomType;
+import org.apache.openmeetings.db.entity.server.LdapConfig;
 import org.apache.openmeetings.db.entity.user.Organisation;
 import org.apache.openmeetings.db.entity.user.PrivateMessage;
 import org.apache.openmeetings.db.entity.user.State;
@@ -228,8 +229,11 @@ public class BackupExport {
 		/*
 		 * ##################### LDAP Configs
 		 */
-		writeList(simpleSerializer, backup_dir, "ldapconfigs.xml",
-				"ldapconfigs", ldapConfigDao.get());
+		List<LdapConfig> ldapList = ldapConfigDao.get();
+		if (!ldapList.isEmpty()) {
+			ldapList.remove(0);
+		}
+		writeList(simpleSerializer, backup_dir, "ldapconfigs.xml", "ldapconfigs", ldapList);
 		progressHolder.setProgress(35);
 
 		/*
