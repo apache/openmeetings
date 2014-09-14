@@ -327,7 +327,7 @@ public class BackupExport {
 		 * ##################### Polls
 		 */
 		{
-			List<RoomPoll> list = pollManager.getPollListBackup();
+			List<RoomPoll> list = pollManager.get();
 			Registry registry = new Registry();
 			Strategy strategy = new RegistryStrategy(registry);
 			Serializer serializer = new Persister(strategy);

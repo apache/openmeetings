@@ -52,7 +52,7 @@ import org.simpleframework.xml.Root;
 				+ "WHERE rp.room.id = :room_id AND rp.archived = :archived"),
 		@NamedQuery(name = "getPollListBackup", query = "SELECT rp FROM RoomPoll rp ORDER BY rp.id"),
 		@NamedQuery(name = "getArchivedPollList", query = "SELECT rp FROM RoomPoll rp "
-				+ "WHERE rp.room.id = :room_id AND rp.archived = :archived"),
+				+ "WHERE rp.room.id = :room_id AND rp.archived = :archived ORDER BY rp.created"),
 		@NamedQuery(name = "hasPoll", query = "SELECT COUNT(rp) FROM RoomPoll rp "
 				+ "WHERE rp.room.id = :room_id AND rp.archived = :archived") })
 @Table(name = "room_poll")

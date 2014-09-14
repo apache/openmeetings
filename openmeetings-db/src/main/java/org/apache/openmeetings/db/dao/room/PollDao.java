@@ -32,7 +32,6 @@ import javax.persistence.TypedQuery;
 import org.apache.openmeetings.db.dao.label.FieldLanguagesValuesDao;
 import org.apache.openmeetings.db.dao.label.FieldValueDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
-import org.apache.openmeetings.db.entity.room.Client;
 import org.apache.openmeetings.db.entity.room.PollType;
 import org.apache.openmeetings.db.entity.room.RoomPoll;
 import org.apache.openmeetings.db.entity.room.RoomPollAnswer;
@@ -81,25 +80,6 @@ public class PollDao {
 		return q.getSingleResult();
 	}
 	
-	public RoomPoll createPoll(Client rc, String pollName, String pollQuestion, Long pollTypeId) {
-		RoomPoll roomP = new RoomPoll();
-		
-		roomP.setCreator(userDao.get(rc.getUser_id()));
-		roomP.setCreated(new Date());
-		roomP.setName(pollName);
-		roomP.setQuestion(pollQuestion);
-		roomP.setType(getPollType(pollTypeId));
-		roomP.setRoom(roomDao.get(rc.getRoom_id()));
-		
-		em.persist(roomP);
-		return roomP;
-	}
-	
-	public void savePollBackup(RoomPoll rp) {
-		em.persist(rp);
-	}
-
-
 	public RoomPoll update(RoomPoll p) {
 		if (p.getId() == null) {
 			p.setCreated(new Date());
@@ -150,7 +130,7 @@ public class PollDao {
 		return null;
 	}
 	
-	public List<RoomPoll> getPollListBackup() {
+	public List<RoomPoll> get() {
 		try {
 			TypedQuery<RoomPoll> q = em.createNamedQuery("getPollListBackup", RoomPoll.class);
 			return q.getResultList();
@@ -162,7 +142,7 @@ public class PollDao {
 		return null;
 	}
 	
-	public List<RoomPoll> getArchivedPollList(Long room_id) {
+	public List<RoomPoll> getArchived(Long room_id) {
 		try {
 			log.debug(" :: getPoll :: " + room_id);
 			TypedQuery<RoomPoll> q = em.createNamedQuery("getArchivedPollList",RoomPoll.class);

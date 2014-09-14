@@ -639,7 +639,7 @@ public class BackupImport {
 						rpa.setVotedUser(null);
 					}
 				}
-				pollManager.savePollBackup(rp);
+				pollManager.update(rp);
 			}
 		}
 		
