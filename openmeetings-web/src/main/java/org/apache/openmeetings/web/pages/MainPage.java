@@ -124,7 +124,7 @@ public class MainPage extends BaseInitedPage {
 		if (getApplication().getDebugSettings().isDevelopmentUtilitiesEnabled()) {
 		    add((dev = new DebugBar("dev")).setOutputMarkupId(true));
 		} else {
-		    add((dev = new EmptyPanel("dev")).setVisible(false));
+		    add((dev = new EmptyPanel("dev")).setOutputMarkupPlaceholderTag(true).setVisible(false));
 		}		
 		topLinks.add(new ExternalLink("bug", "https://issues.apache.org/jira/browse/OPENMEETINGS"));//FIXME hardcoded
 		
