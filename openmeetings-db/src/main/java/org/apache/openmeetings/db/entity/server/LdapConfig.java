@@ -53,7 +53,6 @@ public class LdapConfig implements IDataProviderEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
-	@Element(data = true)
 	private Long id;
 
 	@Column(name = "name")

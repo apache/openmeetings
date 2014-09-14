@@ -142,7 +142,7 @@ public class PollResultsDialog extends AbstractDialog<RoomPoll> {
 	}
 	
     private String[] getTicks(RoomPoll p) {
-		return p.getType().isNumeric()
+		return p != null && p.getType().isNumeric()
 				? new String[] {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10"}
 				: new String[] {WebSession.getString(34), WebSession.getString(35)};
     }
@@ -156,12 +156,12 @@ public class PollResultsDialog extends AbstractDialog<RoomPoll> {
 	}
 	
 	private Integer[] getValues(RoomPoll p) {
-		Integer[] values = initValues(p.getType().isNumeric() ? 10 : 2);
-		if (p.getType().isNumeric()) {
+		Integer[] values = initValues(p != null && p.getType().isNumeric() ? 10 : 2);
+		if (p != null && p.getType().isNumeric()) {
 			for (RoomPollAnswer a : p.getAnswers()) {
 				values[a.getPointList() - 1] ++;
 			}
-		} else {
+		} else if (p != null) {
 			for (RoomPollAnswer a : p.getAnswers()) {
 				values[a.getAnswer() ? 0 : 1] ++;
 			}
@@ -230,12 +230,12 @@ public class PollResultsDialog extends AbstractDialog<RoomPoll> {
 
 				@Override
 				public Object getDisplayValue(RoomPoll object) {
-					return String.format("%s%s", object.getName(), object.isArchived() ? "" : String.format(" (%s)", WebSession.getString(1413)));
+					return object == null ? "" : String.format("%s%s", object.getName(), object.isArchived() ? "" : String.format(" (%s)", WebSession.getString(1413)));
 				}
 
 				@Override
 				public String getIdValue(RoomPoll object, int index) {
-					return "" + object.getId();
+					return object == null ? "" : "" + object.getId();
 				}
 			})).add(new AjaxFormComponentUpdatingBehavior("change") {
 				private static final long serialVersionUID = 1L;
@@ -250,7 +250,10 @@ public class PollResultsDialog extends AbstractDialog<RoomPoll> {
 
 		public void updateModel(AjaxRequestTarget target) {
 			List<RoomPoll> list = new ArrayList<RoomPoll>();
-			list.add(getBean(PollDao.class).getPoll(roomId));
+			RoomPoll p = getBean(PollDao.class).getPoll(roomId);
+			if (p != null) {
+				list.add(p);
+			}
 			list.addAll(getBean(PollDao.class).getArchived(roomId));
 			select.setChoices(list);
 			select.setModelObject(list.isEmpty() ? null : list.get(0));
@@ -287,10 +290,10 @@ public class PollResultsDialog extends AbstractDialog<RoomPoll> {
 		
 		public void updateModel(RoomPoll poll, boolean redraw, AjaxRequestTarget target) {
 			setModelObject(poll);
-			name.setObject(VoteDialog.getName(poll.getCreator()));
-			count.setObject(poll.getAnswers().size());
+			name.setObject(poll == null ? "" : VoteDialog.getName(poll.getCreator()));
+			count.setObject(poll == null ? 0 : poll.getAnswers().size());
 			target.add(this);
-			close.setVisible(moderator && !poll.isArchived(), target);
+			close.setVisible(moderator && (poll != null && !poll.isArchived()), target);
 			delete.setVisible(moderator, target);
 			if (redraw) {
 				redraw(target);

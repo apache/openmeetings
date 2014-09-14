@@ -48,7 +48,7 @@ public abstract class FileItem implements IDataProviderEntity {
 	private String fileHash;
 
 	@Column(name = "parent_fileexploreritem_id")
-	@Element(data = true, name = "parentFileExplorerItemId")
+	@Element(data = true, name = "parentFileExplorerItemId", required = false)
 	private Long parentItemId;
 
 	@Column(name = "room_id")

@@ -69,7 +69,7 @@ public class VoteDialog extends AbstractFormDialog<RoomPollAnswer> {
 	}
 	
 	static String getName(User u) {
-		return getUserId() == u.getId() ? WebSession.getString(1411) : u.getFirstname() + " " + u.getLastname();
+		return u == null ? "" : getUserId() == u.getId() ? WebSession.getString(1411) : u.getFirstname() + " " + u.getLastname();
 	}
 	
 	public void updateModel(AjaxRequestTarget target) {
