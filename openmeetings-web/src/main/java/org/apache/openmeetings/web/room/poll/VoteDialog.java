@@ -79,6 +79,9 @@ public class VoteDialog extends AbstractFormDialog<RoomPollAnswer> {
 		a.setVotedUser(u);
 		user.setObject(getName(a.getRoomPoll().getCreator()));
 		form.setModelObject(a);
+		boolean typeNum = a.getRoomPoll() != null && a.getRoomPoll().getType() != null && a.getRoomPoll().getType().isNumeric();
+		form.typeBool.setVisible(!typeNum);
+		form.typeInt.setVisible(typeNum);
 		target.add(form);
 	}
 	
@@ -125,20 +128,19 @@ public class VoteDialog extends AbstractFormDialog<RoomPollAnswer> {
 	
 	private class PollAnswerForm extends Form<RoomPollAnswer> {
 		private static final long serialVersionUID = 1L;
+		private final WebMarkupContainer typeBool = new WebMarkupContainer("typeBool");
+		private final WebMarkupContainer typeInt = new WebMarkupContainer("typeInt");
 
 		PollAnswerForm(String id, IModel<RoomPollAnswer> model) {
 			super(id, model);
 			add(feedback);
 			add(new Label("user", user));
 			add(new Label("roomPoll.question"));
-			RoomPollAnswer a = getModelObject();
-			boolean typeNum = a.getRoomPoll() != null && a.getRoomPoll().getType() != null && a.getRoomPoll().getType().isNumeric();
-			add(new WebMarkupContainer("typeBool")
-				.add(new RadioGroup<Boolean>("answer").setRequired(true)
+			add(typeBool.add(new RadioGroup<Boolean>("answer").setRequired(true)
 						.add(new Radio<Boolean>("true", Model.of(Boolean.TRUE))).add(new Radio<Boolean>("false", Model.of(Boolean.FALSE)))
-				).setVisible(!typeNum));
-			add(new WebMarkupContainer("typeInt")
-				.add(new DropDownChoice<Integer>("pointList", answers).setRequired(true)).setVisible(typeNum));
+				).setOutputMarkupPlaceholderTag(true).setVisible(false));
+			add(typeInt.add(new DropDownChoice<Integer>("pointList", answers).setRequired(true))
+					.setOutputMarkupPlaceholderTag(true).setVisible(false));
 		}
 	}
 }

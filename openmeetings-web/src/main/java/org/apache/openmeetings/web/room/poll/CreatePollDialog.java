@@ -95,6 +95,7 @@ public class CreatePollDialog extends AbstractFormDialog<RoomPoll> {
 
 	@Override
 	protected void onSubmit(AjaxRequestTarget target) {
+		getBean(PollDao.class).closePoll(roomId);
 		getBean(PollDao.class).update(form.getModelObject());
 		RoomPanel.broadcast(new RoomMessage(roomId, getUserId(), RoomMessage.Type.pollCreated));
 	}
