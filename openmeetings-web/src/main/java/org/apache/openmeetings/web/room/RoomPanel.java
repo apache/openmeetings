@@ -314,6 +314,12 @@ public class RoomPanel extends BasePanel {
 				RoomMessage m = (RoomMessage)wsEvent.getMessage();
 				switch (m.getType()) {
 					case pollCreated:
+						if (getUserId() != m.getSentUserId()) {
+							vote.updateModel(wsEvent.getHandler());
+							vote.open(wsEvent.getHandler());
+						}
+					case pollClosed:
+					case pollDeleted:
 					case voted:
 					case rightUpdated:
 						updateUserMenuIcons(wsEvent.getHandler());

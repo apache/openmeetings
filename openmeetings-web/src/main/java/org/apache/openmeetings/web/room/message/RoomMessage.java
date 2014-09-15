@@ -21,6 +21,7 @@ package org.apache.openmeetings.web.room.message;
 import java.io.Serializable;
 import java.util.Date;
 
+import org.apache.openmeetings.web.app.WebSession;
 import org.apache.wicket.protocol.ws.api.message.IWebSocketPushMessage;
 
 public class RoomMessage implements IWebSocketPushMessage, Serializable {
@@ -29,6 +30,8 @@ public class RoomMessage implements IWebSocketPushMessage, Serializable {
 		roomEnter
 		, roomExit
 		, pollCreated
+		, pollClosed
+		, pollDeleted
 		, voted
 		, rightUpdated
 	}
@@ -40,7 +43,7 @@ public class RoomMessage implements IWebSocketPushMessage, Serializable {
 
 	public RoomMessage(Long roomId, Long userId, Type type) {
 		this.timestamp = new Date();
-		this.sentUserId = getUserId();
+		this.sentUserId = WebSession.getUserId();
 		this.roomId = roomId;
 		this.userId = userId;
 		this.type = type;

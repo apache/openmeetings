@@ -66,7 +66,7 @@ public class PollDao {
 		return pt.getId();
 	}
 	
-	public List<PollType> getPollTypes(long langId) {
+	public List<PollType> getTypes(long langId) {
 		List<PollType> l = em.createNamedQuery("getPollTypes", PollType.class).getResultList();
 		for (PollType t : l) {
 			t.getLabel().setFieldlanguagesvalue(labelDao.get(t.getLabel().getId(), langId));
@@ -74,7 +74,7 @@ public class PollDao {
 		return l;
 	}
 	
-	public PollType getPollType(Long typeId) {
+	public PollType getType(Long typeId) {
 		TypedQuery<PollType> q = em.createNamedQuery("getPollType", PollType.class);
 		q.setParameter("pollTypesId", typeId);
 		return q.getSingleResult();
@@ -90,7 +90,7 @@ public class PollDao {
 		return p;
 	}
 
-	public boolean closePoll(Long room_id){
+	public boolean close(Long room_id){
 		try {
 			log.debug(" :: closePoll :: ");
 			Query q = em.createNamedQuery("closePoll");
@@ -103,11 +103,11 @@ public class PollDao {
 		return false;
 	}
 
-	public boolean deletePoll(Long id){
+	public boolean delete(RoomPoll p){
 		try {
-			log.debug(" :: deletePoll :: ");
+			log.debug(" :: delete :: ");
 			Query q = em.createNamedQuery("deletePoll");
-			q.setParameter("id", id);
+			q.setParameter("id", p.getId());
 			return q.executeUpdate() > 0;
 		} catch (Exception err) {
 			log.error("[deletePoll]", err);
@@ -115,6 +115,11 @@ public class PollDao {
 		return false;
 	}
 
+	public RoomPoll get(Long id) {
+		List<RoomPoll> list = em.createNamedQuery("getPollById", RoomPoll.class).setParameter("id", id).getResultList();
+		return list.isEmpty() ? null : list.get(0);
+	}
+	
 	public RoomPoll getPoll(Long room_id) {
 		try {
 			log.debug(" :: getPoll :: " + room_id);

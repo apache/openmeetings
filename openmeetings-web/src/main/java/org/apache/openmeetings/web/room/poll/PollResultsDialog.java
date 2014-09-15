@@ -19,6 +19,7 @@
 package org.apache.openmeetings.web.room.poll;
 
 import static org.apache.openmeetings.web.app.Application.getBean;
+import static org.apache.openmeetings.web.app.WebSession.getUserId;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -28,6 +29,8 @@ import org.apache.openmeetings.db.dao.room.PollDao;
 import org.apache.openmeetings.db.entity.room.RoomPoll;
 import org.apache.openmeetings.db.entity.room.RoomPollAnswer;
 import org.apache.openmeetings.web.app.WebSession;
+import org.apache.openmeetings.web.room.RoomPanel;
+import org.apache.openmeetings.web.room.message.RoomMessage;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.markup.head.CssHeaderItem;
@@ -57,6 +60,9 @@ import br.com.digilabs.jqplot.elements.RendererOptions;
 
 import com.googlecode.wicket.jquery.ui.widget.dialog.AbstractDialog;
 import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
+import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButtons;
+import com.googlecode.wicket.jquery.ui.widget.dialog.DialogIcon;
+import com.googlecode.wicket.jquery.ui.widget.dialog.MessageDialog;
 
 /**
  * @author solomax
@@ -72,14 +78,55 @@ public class PollResultsDialog extends AbstractDialog<RoomPoll> {
 	private final DialogButton close = new DialogButton(WebSession.getString(1418));
 	private final DialogButton delete = new DialogButton(WebSession.getString(1420));
 	private boolean moderator = false;
+	private final MessageDialog closeConfirm;
+	private final MessageDialog deleteConfirm;
 
-	public PollResultsDialog(String id, long roomId) {
+	public PollResultsDialog(String id, long _roomId) {
 		super(id, WebSession.getString(37));
-		this.roomId = roomId;
+		this.roomId = _roomId;
 		add(selForm = new PollSelectForm("selForm"));
 		add(dispForm = new PollResultsForm("dispForm"));
+		add(closeConfirm = new MessageDialog("closeConfirm", WebSession.getString(1418), WebSession.getString(1419), DialogButtons.YES_NO, DialogIcon.WARN) {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void onClose(AjaxRequestTarget target, DialogButton button) {
+				// TODO should rights be additionally checked here????
+				if(button != null && button.match(LBL_YES)) {
+					Long id = dispForm.getModelObject().getId();
+					getBean(PollDao.class).close(roomId);
+					selForm.updateModel(target);
+
+					RoomPoll p = getBean(PollDao.class).get(id);
+					selForm.select.setModelObject(p);
+					dispForm.updateModel(p, false, target);
+					RoomPanel.broadcast(new RoomMessage(roomId, getUserId(), RoomMessage.Type.pollClosed));
+					//TODO result dialogs of other users should also be updated
+				}
+			}
+		});
+		add(deleteConfirm = new MessageDialog("deleteConfirm", WebSession.getString(1420), WebSession.getString(1421), DialogButtons.YES_NO, DialogIcon.WARN) {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void onClose(AjaxRequestTarget target, DialogButton button) {
+				// TODO should rights be additionally checked here????
+				if(button != null && button.match(LBL_YES)) {
+					getBean(PollDao.class).delete(dispForm.getModelObject());
+					selForm.updateModel(target);
+					dispForm.updateModel(selForm.select.getModelObject(), true, target);
+					RoomPanel.broadcast(new RoomMessage(roomId, getUserId(), RoomMessage.Type.pollDeleted));
+					//TODO result dialogs of other users should also be updated
+				}
+			}
+		});
 	}
 
+	@Override
+	public int getWidth() {
+		return 500;
+	}
+	
 	@Override
 	protected List<DialogButton> getButtons() {
 		return Arrays.asList(delete, close, cancel);
@@ -138,9 +185,20 @@ public class PollResultsDialog extends AbstractDialog<RoomPoll> {
     }
 
     @Override
-	public void onClose(AjaxRequestTarget target, DialogButton button) {
-	}
-	
+    public void onClick(AjaxRequestTarget target, DialogButton button) {
+    	if (close.equals(button)) {
+    		closeConfirm.open(target);
+    	} else if (delete.equals(button)) {
+    		deleteConfirm.open(target);
+    	} else {
+    		super.onClick(target, button);
+    	}
+    }
+    
+    @Override
+    public void onClose(AjaxRequestTarget target, DialogButton button) {
+    }
+    
     private String[] getTicks(RoomPoll p) {
 		return p != null && p.getType().isNumeric()
 				? new String[] {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10"}

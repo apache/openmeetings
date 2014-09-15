@@ -68,7 +68,7 @@ public class CreatePollDialog extends AbstractFormDialog<RoomPoll> {
 		User u = getBean(UserDao.class).get(getUserId());
 		p.setCreator(u);
 		p.setRoom(getBean(RoomDao.class).get(roomId));
-		p.setType(getBean(PollDao.class).getPollTypes(getLanguage()).get(0));
+		p.setType(getBean(PollDao.class).getTypes(getLanguage()).get(0));
 		form.setModelObject(p);
 		target.add(form);
 	}
@@ -95,7 +95,7 @@ public class CreatePollDialog extends AbstractFormDialog<RoomPoll> {
 
 	@Override
 	protected void onSubmit(AjaxRequestTarget target) {
-		getBean(PollDao.class).closePoll(roomId);
+		getBean(PollDao.class).close(roomId);
 		getBean(PollDao.class).update(form.getModelObject());
 		RoomPanel.broadcast(new RoomMessage(roomId, getUserId(), RoomMessage.Type.pollCreated));
 	}
@@ -107,7 +107,7 @@ public class CreatePollDialog extends AbstractFormDialog<RoomPoll> {
 			super(id, model);
 			add(new RequiredTextField<String>("name").setLabel(Model.of(WebSession.getString(1410))));
 			add(new TextArea<String>("question"));
-			add(new DropDownChoice<PollType>("type", getBean(PollDao.class).getPollTypes(getLanguage())
+			add(new DropDownChoice<PollType>("type", getBean(PollDao.class).getTypes(getLanguage())
 					, new ChoiceRenderer<PollType>("label.fieldlanguagesvalue.value", "id"))
 					.setRequired(true).setLabel(Model.of(WebSession.getString(21))));
 			add(feedback);

@@ -24,18 +24,18 @@ import org.simpleframework.xml.stream.InputNode;
 import org.simpleframework.xml.stream.OutputNode;
 
 public class PollTypeConverter extends OmConverter<PollType> {
-	private PollDao pollManager;
+	private PollDao pollDao;
 	
 	public PollTypeConverter() {
 		//default constructor is for export
 	}
 	
-	public PollTypeConverter(PollDao pollManagement) {
-		this.pollManager = pollManagement;
+	public PollTypeConverter(PollDao pollDao) {
+		this.pollDao = pollDao;
 	}
 	
 	public PollType read(InputNode node) throws Exception {
-		return pollManager.getPollType(getlongValue(node));
+		return pollDao.getType(getlongValue(node));
 	}
 
 	public void write(OutputNode node, PollType value) throws Exception {
