@@ -30,10 +30,10 @@
 	<name>Openmeetings Core</name>
 	<description>TODO</description>
 	<properties>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<velocity.version>1.7</velocity.version>
 		<smslib.version>3.5.4</smslib.version>
 		<derby.version>10.10.1.1</derby.version>
+		<site.basedir>${project.parent.basedir}</site.basedir>
 	</properties>
 	<repositories>
 		<repository>

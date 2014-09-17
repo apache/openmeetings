@@ -30,11 +30,11 @@
 	<name>Openmeetings Util</name>
 	<description>TODO</description>
 	<properties>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<dom4j.version>1.6.1</dom4j.version>
 		<mail.version>1.4.7</mail.version>
 		<commons-codec.version>1.8</commons-codec.version>
 		<servlet-api.version>2.5</servlet-api.version>
+		<site.basedir>${project.parent.basedir}</site.basedir>
 	</properties>
 	<build>
 		<plugins>

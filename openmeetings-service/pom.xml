@@ -30,7 +30,7 @@
 	<name>Openmeetings Service</name>
 	<description>TODO</description>
 	<properties>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<site.basedir>${project.parent.basedir}</site.basedir>
 	</properties>
 	<dependencies>
 		<dependency>

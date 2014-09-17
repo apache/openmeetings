@@ -30,7 +30,6 @@
 	<name>Openmeetings Server</name>
 	<description>TODO</description>
 	<properties>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<server.dir>${project.build.directory}/red5-server</server.dir>
 		<languages.dir>${project.parent.basedir}/openmeetings-web/src/main/webapp/languages</languages.dir>
 		<assembly.finalName>${project.build.finalName}</assembly.finalName>
@@ -41,6 +40,7 @@
 		<om.webapp>webapps/openmeetings</om.webapp>
 		<root.webapp>webapps/root</root.webapp>
 		<red5-server.file.name>red5-server-1.0.3-RELEASE-server.zip</red5-server.file.name><!-- FIXME duplicate variable -->
+		<skip.site.copy>true</skip.site.copy>
 	</properties>
 	<scm>
 		<connection>scm:svn:https://svn.apache.org/repos/asf/openmeetings/trunk/singlewebapp</connection>
@@ -194,22 +194,6 @@
 							</transformationSets>
 							<skip>${om.quick.build}</skip>
 						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-site-plugin</artifactId>
-				<configuration>
-					<skip>${om.quick.build}</skip>
-				</configuration>
-				<executions>
-					<execution>
-						<id>generate-site</id>
-						<phase>generate-resources</phase>
-						<goals>
-							<goal>site</goal>
-						</goals>
 					</execution>
 				</executions>
 			</plugin>

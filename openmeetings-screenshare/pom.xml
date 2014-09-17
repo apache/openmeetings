@@ -30,12 +30,12 @@
 	<name>Openmeetings Screen Sharing applet</name>
 	<description>A File to grab a screen and send it to a Server</description>
 	<properties>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<keystore.location>${project.build.directory}/screensharing_sign.keystore</keystore.location>
 		<key.password>secret</key.password>
 		<keystore.password>secret</keystore.password>
 		<keystore.type>jks</keystore.type>
 		<key.alias>screen</key.alias>
+		<site.basedir>${project.parent.basedir}</site.basedir>
 	</properties>
 	<dependencies>
 		<dependency>
