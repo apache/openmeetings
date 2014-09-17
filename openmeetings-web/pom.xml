@@ -37,6 +37,7 @@
 		<old-backups.dir>${project.build.directory}/old-backups</old-backups.dir>
 		<backup.to.check>backup_v_2_0_0_r1361497.zip</backup.to.check>
 		<site.basedir>${project.parent.basedir}</site.basedir>
+		<skip.site.copy>false</skip.site.copy>
 	</properties>
 	<profiles>
 		<profile>

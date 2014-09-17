@@ -34,6 +34,7 @@
 		<smslib.version>3.5.4</smslib.version>
 		<derby.version>10.10.1.1</derby.version>
 		<site.basedir>${project.parent.basedir}</site.basedir>
+		<skip.site.copy>false</skip.site.copy>
 	</properties>
 	<repositories>
 		<repository>

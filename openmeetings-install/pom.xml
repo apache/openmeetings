@@ -32,6 +32,7 @@
 	<properties>
 		<commons-cli.version>1.2</commons-cli.version>
 		<site.basedir>${project.parent.basedir}</site.basedir>
+		<skip.site.copy>false</skip.site.copy>
 	</properties>
 	<dependencies>
 		<dependency>

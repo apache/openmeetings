@@ -35,6 +35,7 @@
 		<out.dir.swf>${project.build.directory}</out.dir.swf>
 		<webcontent.base.dir>${project.basedir}/src/main</webcontent.base.dir>
 		<site.basedir>${project.parent.basedir}</site.basedir>
+		<skip.site.copy>false</skip.site.copy>
 	</properties>
 	<build>
 		<!-- sourceDirectory>src/main/flex</sourceDirectory-->

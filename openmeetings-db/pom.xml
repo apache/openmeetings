@@ -36,6 +36,7 @@
 		<derby.version>10.11.1.1</derby.version>
 		<postgresql.version>9.3-1102-jdbc41</postgresql.version>
 		<site.basedir>${project.parent.basedir}</site.basedir>
+		<skip.site.copy>false</skip.site.copy>
 	</properties>
 	<dependencies>
 		<dependency>

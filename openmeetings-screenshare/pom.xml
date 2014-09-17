@@ -36,6 +36,7 @@
 		<keystore.type>jks</keystore.type>
 		<key.alias>screen</key.alias>
 		<site.basedir>${project.parent.basedir}</site.basedir>
+		<skip.site.copy>false</skip.site.copy>
 	</properties>
 	<dependencies>
 		<dependency>

@@ -40,7 +40,6 @@
 		<om.webapp>webapps/openmeetings</om.webapp>
 		<root.webapp>webapps/root</root.webapp>
 		<red5-server.file.name>red5-server-1.0.3-RELEASE-server.zip</red5-server.file.name><!-- FIXME duplicate variable -->
-		<skip.site.copy>true</skip.site.copy>
 	</properties>
 	<url>http://openmeetings.apache.org</url>
 	<scm>

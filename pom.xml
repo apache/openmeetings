@@ -52,7 +52,7 @@
 		<simple-xml.version>2.7.1</simple-xml.version>
 		<jettison.version>1.3.5</jettison.version>
 		<site.basedir>${project.basedir}</site.basedir>
-		<skip.site.copy>false</skip.site.copy>
+		<skip.site.copy>true</skip.site.copy>
 	</properties>
 	<modules>
 		<module>openmeetings-util</module>

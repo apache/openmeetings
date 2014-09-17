@@ -35,6 +35,7 @@
 		<commons-codec.version>1.8</commons-codec.version>
 		<servlet-api.version>2.5</servlet-api.version>
 		<site.basedir>${project.parent.basedir}</site.basedir>
+		<skip.site.copy>false</skip.site.copy>
 	</properties>
 	<build>
 		<plugins>
