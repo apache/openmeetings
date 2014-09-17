@@ -373,10 +373,10 @@
 		<!--  END OF JUNIT -->
 		
 		<!--  START OF RAT -->
-		<dependency org="org.apache.rat" name="apache-rat-core" rev="0.10" conf="rat->*" transitive="false">
+		<dependency org="org.apache.rat" name="apache-rat-core" rev="0.11" conf="rat->*" transitive="false">
 			<include type="jar" />
 		</dependency>
-		<dependency org="org.apache.rat" name="apache-rat-tasks" rev="0.10" conf="rat->*" transitive="false">
+		<dependency org="org.apache.rat" name="apache-rat-tasks" rev="0.11" conf="rat->*" transitive="false">
 			<include type="jar" />
 		</dependency>
 		<!--  END OF RAT -->
