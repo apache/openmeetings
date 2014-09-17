@@ -31,7 +31,7 @@
 	<description>TODO</description>
 	<properties>
 		<server.dir>${project.build.directory}/red5-server</server.dir>
-		<languages.dir>${project.parent.basedir}/openmeetings-web/src/main/webapp/languages</languages.dir>
+		<languages.dir>../openmeetings-web/src/main/webapp/languages</languages.dir>
 		<assembly.finalName>${project.build.finalName}</assembly.finalName>
 		<assembly.descriptor>server</assembly.descriptor>
 		<dist.dir>${project.build.directory}/${assembly.finalName}</dist.dir>
@@ -187,7 +187,7 @@
 									<parameters>
 										<parameter>
 											<name>languagesDir</name>
-											<value>${languages.dir}</value>
+											<value>${project.baseUri}/${languages.dir}</value>
 										</parameter>
 									</parameters>
 								</transformationSet>
