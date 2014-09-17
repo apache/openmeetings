@@ -604,47 +604,17 @@
 					<doUpdate>true</doUpdate>
 				</configuration>
 			</plugin>
-			<!--plugin>
+			<plugin>
 				<groupId>org.apache.rat</groupId>
 				<artifactId>apache-rat-plugin</artifactId>
-				<executions>
+				<!--executions>
 					<execution>
 						<goals>
 							<goal>check</goal>
 						</goals>
 					</execution>
-				</executions>
-				<configuration>
-					<excludes></excludes>
-					<addDefaultLicenseMatchers>true</addDefaultLicenseMatchers>
-					<licenses>
-						<license implementation="org.apache.rat.analysis.license.SimplePatternBasedLicense">
-							<licenseFamilyCategory>MIT+GPL</licenseFamilyCategory>
-							<licenseFamilyName>MIT and GPL v2</licenseFamilyName>
-							<notes></notes>
-							<patterns>
-								<pattern>Dual licensed under the MIT or GPL Version 2 licenses.</pattern>
-							</patterns>
-						</license>
-						<license implementation="org.apache.rat.analysis.license.SimplePatternBasedLicense">
-							<licenseFamilyCategory>MIT</licenseFamilyCategory>
-							<licenseFamilyName>MIT</licenseFamilyName>
-							<notes></notes>
-							<patterns>
-								<pattern>Licensed MIT</pattern>
-							</patterns>
-						</license>
-					</licenses>
-					<licenseFamilies>
-						<licenseFamily implementation="org.apache.rat.license.SimpleLicenseFamily">
-							<familyName>MIT and GPL v2</familyName>
-						</licenseFamily>
-						<licenseFamily implementation="org.apache.rat.license.SimpleLicenseFamily">
-							<familyName>MIT</familyName>
-						</licenseFamily>
-					</licenseFamilies>
-				</configuration>
-			</plugin-->
+				</executions-->
+			</plugin>
 		</plugins>
  		<pluginManagement>
 			<plugins>
@@ -801,6 +771,36 @@
 					<groupId>org.apache.rat</groupId>
 					<artifactId>apache-rat-plugin</artifactId>
 					<version>0.11</version>
+					<configuration>
+						<excludes></excludes>
+						<addDefaultLicenseMatchers>true</addDefaultLicenseMatchers>
+						<licenses>
+							<license implementation="org.apache.rat.analysis.license.SimplePatternBasedLicense">
+								<licenseFamilyCategory>MIT+GPL</licenseFamilyCategory>
+								<licenseFamilyName>MIT and GPL v2</licenseFamilyName>
+								<notes></notes>
+								<patterns>
+									<pattern>Dual licensed under the MIT or GPL Version 2 licenses.</pattern>
+								</patterns>
+							</license>
+							<license implementation="org.apache.rat.analysis.license.SimplePatternBasedLicense">
+								<licenseFamilyCategory>MIT</licenseFamilyCategory>
+								<licenseFamilyName>MIT</licenseFamilyName>
+								<notes></notes>
+								<patterns>
+									<pattern>Licensed MIT</pattern>
+								</patterns>
+							</license>
+						</licenses>
+						<!--licenseFamilies>
+							<licenseFamily implementation="org.apache.rat.license.SimpleLicenseFamily">
+								<familyName>MIT and GPL v2</familyName>
+							</licenseFamily>
+							<licenseFamily implementation="org.apache.rat.license.SimpleLicenseFamily">
+								<familyName>MIT</familyName>
+							</licenseFamily>
+						</licenseFamilies-->
+				</configuration>
 				</plugin>
 				
 				<!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
