@@ -30,6 +30,12 @@
 		import mx.collections.ArrayCollection;
 		import mx.core.FlexGlobals;
 
+		import org.apache.openmeetings.OmVideo;
+
+		private static const MODE_N:String = "n";
+		private static const MODE_A:String = "a";
+		private static const MODE_V:String = "v";
+		private static const MODE_AV:String = "av";
 		private static const APP_WIDTH:int = 540;
 		private static const LEFT_WIDTH:int = 280;
 		private static const RIGHT_WIDTH:int = 240;
@@ -38,11 +44,13 @@
 		private var roomid:int;
 		private var audioOnly:Boolean = false;
 		private var labels:Object = new Object();
-		private var cam:Camera = null;
-		private var mic:Microphone = null;
-		private var FPS:int = 30;
+		private var FPS:int = 5;
 		private var bandwidth:int = 0;
 		private var quality:int = 100;
+		private var echoPath:int = 256;
+		private var echoSuppression:Boolean = true;
+		private var microphoneRateBest:int = 22;//5, 8, 11, 22, and 44
+		private var video:OmVideo;
 		[Bindable]
 		private var interview:Boolean = false;
 		[Bindable]
@@ -72,7 +80,7 @@
 			t.flush();
 		}
 
-		private function getStoredProp(prop:String):String {
+		private static function getStoredProp(prop:String):String {
 			//Initialize and get eventually stored property
 			var t:SharedObject = SharedObject.getLocal('userdata');
 			var g:Object = t.data;
@@ -88,7 +96,7 @@
 			interview = 'true' == tla.parameters['interview'];
 			var _fps:int = parseInt(tla.parameters['fps']);
 			FPS = interview ? 24 : (isNaN(_fps) ? 30 : _fps);
-			
+
 			var lbls:Array = JSON.parse(tla.parameters['labels']) as Array;
 			for (var i:int = 0; i < lbls.length; ++i) {
 				labels[lbls[i].id] = lbls[i].value;
@@ -98,13 +106,13 @@
 		private function selectListItem(combo:ComboBox, selected:int):void {
 			combo.callLater(function ():void {
 				if (combo.dataProvider && combo.dataProvider.length > 0) {
-					combo.selectedItem = combo.dataProvider.getItemAt(selected > -1 ? selected : 0);
+					combo.selectedItem = combo.dataProvider.getItemAt(selected < combo.dataProvider.length ? selected : 0);
 				}
 			});
 		}
 
 		private function getItemIdx(combo:ComboBox, data:String):int {
-			var idx:int = -1;
+			var idx:int = 0;
 			for (var i:int = 0; i < combo.dataProvider.length; ++i) {
 				if (combo.dataProvider[i].data == data) {
 					idx = i;
@@ -131,39 +139,43 @@
 			return foundStoredDev;
 		}
 
+		private function camAvail():Boolean {
+			return !audioOnly && Camera.names.length > 0;
+		}
+
+		private function micAvail():Boolean {
+			return Microphone.names.length > 0;
+		}
+
 		private function appInit():void {
-			var cameras:Array = Camera.names;
-			var foundedCam:int = fillDeviceList(cameras, cams, "cam");
-			selectListItem(cams, foundedCam);
-
-			var micros:Array = Microphone.names;
-			var foundedMic:int = fillDeviceList(micros, mics, "mic");
-			selectListItem(mics, foundedMic);
-
-			var addCams:Boolean = !audioOnly && cameras.length > 0;
-			var addMics:Boolean = micros.length > 0;
+			video = new OmVideo(videoDisplay);
 			var modItems:ArrayCollection = new ArrayCollection();
-			if (addCams && addMics) {
-				modItems.addItem({label: getLabel(448), data: "av"});
+			if (camAvail() && micAvail()) {
+				modItems.addItem({label: getLabel(448), data: MODE_AV});
 			}
-			if (addMics) {
-				modItems.addItem({label: getLabel(449), data: "a"});
+			if (micAvail()) {
+				var micros:Array = Microphone.names;
+				var foundedMic:int = fillDeviceList(micros, mics, "mic");
+				selectListItem(mics, foundedMic);
+				modItems.addItem({label: getLabel(449), data: MODE_A});
 			}
-			if (addCams) {
-				modItems.addItem({label: getLabel(450), data: "v"});
+			if (camAvail()) {
+				var cameras:Array = Camera.names;
+				var foundedCam:int = fillDeviceList(cameras, cams, "cam");
+				selectListItem(cams, foundedCam);
+				modItems.addItem({label: getLabel(450), data: MODE_V});
 			}
-			modItems.addItem({label: getLabel(451), data: "n"});
+			modItems.addItem({label: getLabel(451), data: MODE_N});
 			modes.dataProvider = modItems;
 
-			var idx:int = getItemIdx(modes, getStoredProp("avstored"));
-			debug("selected idx::" + idx);
-			selectListItem(modes, idx);
-			setMode(modes.dataProvider.getItemAt(idx > -1 ? idx : 0).data);
+			var avIdx:int = getItemIdx(modes, getStoredProp("avstored"));
+			debug("selected avIdx::" + avIdx);
+			selectListItem(modes, avIdx);
 
 			var tla:Object = FlexGlobals.topLevelApplication;
 			var resolutions:Array = JSON.parse(tla.parameters['resolutions']) as Array;
 			var resItems:ArrayCollection = new ArrayCollection();
-			idx = -1;
+			var idx:int = 0;
 			var storedWidth:int = parseInt(getStoredProp("width"));
 			var storedHeight:int = parseInt(getStoredProp("height"));
 			for (var i:int = 0; i < resolutions.length; ++i) {
@@ -180,7 +192,8 @@
 			ress.dataProvider = resItems;
 			selectListItem(ress, idx);
 			var resI:Object = ress.dataProvider.getItemAt(idx > -1 ? idx : 0);
-			setResolution(resI.width, resI.height);
+			setResolution(resI.width, resI.height, false);
+			setMode(modes.dataProvider.getItemAt(avIdx < modes.dataProvider.length ? avIdx : 0).data);
 
 			remember.selected = true == getStoredProp("savecamdata");
 		}
@@ -194,15 +207,15 @@
 			var micVisible:Boolean = true;
 			var textVisible:Boolean = false;
 			switch (mode) {
-				case "av":
+				case MODE_AV:
 					break;
-				case "a":
+				case MODE_A:
 					camVisible = false;
 					break;
-				case "v":
+				case MODE_V:
 					micVisible = false;
 					break;
-				case "n":
+				case MODE_N:
 					camVisible = false;
 					micVisible = false;
 					textVisible = true;
@@ -224,52 +237,97 @@
 			setMode(e.target.selectedItem.data);
 		}
 
-		private function cameraStatusHandler(event:StatusEvent):void {
-			debug("cameraStatusHandler! " + event);
-			cam.removeEventListener(StatusEvent.STATUS, cameraStatusHandler);
-			if (cam.muted) {
-				debug("Unable to connect to active camera.");
-			} else {
-				_attachCamera();
+		private function getMic():Microphone {
+			debug("Entering getMic ...");
+			var _micro:Microphone = null;
+			if (micGroup.visible) {
+				_micro = echoPath == 0 ? Microphone.getMicrophone(mics.selectedItem.data) : Microphone.getEnhancedMicrophone(mics.selectedItem.data);
+
+				if (_micro != null && echoPath == 256) {
+					var options:MicrophoneEnhancedOptions = new MicrophoneEnhancedOptions();
+					options.mode = MicrophoneEnhancedMode.FULL_DUPLEX;
+					options.echoPath = 256;
+					options.nonLinearProcessing = true;
+					_micro.enhancedOptions = options;
+					debug("echoPath set to 256 " + _micro.enhancedOptions);
+				}
+
+				if (_micro != null) {
+					_micro.codec = SoundCodec.NELLYMOSER;
+					_micro.framesPerPacket = 1;
+					_micro.setSilenceLevel(0, 2000);
+					debug("canvas.microphoneRateBest: " + microphoneRateBest);
+					_micro.rate = microphoneRateBest;
+					_micro.gain = 50;
+					// this has no effect if enhanced microphone is obtained
+					//Microphone setUseEchoSupression(bool)
+					debug("canvas.echoSuppression: " + echoSuppression);
+					_micro.setUseEchoSuppression(echoSuppression);
+				}
 			}
+			debug("... getMic DONE" + _micro);
+			return _micro;
 		}
 
-		private function attachCamera():void {
+		private function getCam():Camera {
+			debug("Entering getCam ...");
 			if (!videoDisplay.visible) {
+				return null;
+			}
+			var _camera:Camera = Camera.getCamera(cams.selectedItem.data);
+			if (_camera != null) {
+				if (interview) {
+					//we need a fixed frame rate for the videos to merge them later on
+					//_camera.setMode(video.width, video.height, 24, true);
+					debug("IS INTERVIEW ");
+					_camera.setQuality(0, 98);
+				} else {
+					//_camera.setMode(video.width, video.height, FPS);
+					debug("IS NO INTERVIEW ");
+					_camera.setQuality(bandwidth, quality);
+				}
+			}
+			debug("... getCam DONE " + _camera);
+			return _camera;
+		}
+
+		//FIXME impossible to create test recording with mic only !!!!
+		private function attachCamera():void {
+			if (!camAvail()) {
 				return;
 			}
 			debug("Camera selected:: " + cams.selectedItem.data);
-			cam = Camera.getCamera(cams.selectedItem.data);
+			var cam:Camera = getCam();
 			debug("Camera selected:: " + cam);
-			mic = Microphone.getMicrophone(mics.selectedItem.data);
-			if (cam.muted) {
-				debug("Camera Muted");
-				videoDisplay.attachCamera(cam);
-				cam.addEventListener(StatusEvent.STATUS, cameraStatusHandler);
-			} else {
-				//cam = null;
-				_attachCamera();
+			//mic = getMic();
+			if (cam != null) {
+				if (cam.muted) {
+					debug("Camera Muted");
+					video.attachCamera(cam);
+					cam.addEventListener(StatusEvent.STATUS, function (event:StatusEvent):void {
+						debug("cameraStatusHandler! " + event);
+						cam.removeEventListener(StatusEvent.STATUS, arguments.callee);
+						if (cam.muted) {
+							debug("Unable to connect to active camera.");
+						} else {
+							_attachCamera(cam);
+						}
+					});
+				} else {
+					//cam = null;
+					_attachCamera(cam);
+				}
 			}
 		}
 
-		private function _attachCamera():void {
-			cam = Camera.getCamera(cams.selectedItem.data);
+		private function _attachCamera(cam:Camera):void {
 			debug("_attachCamera():: muted ? " + cam.muted);
 			if (cam.muted) {
 				debug("Unable to connect to active camera.");
 			} else {
 				try {
-					//videoDisplay.attachCamera(null);
-					var width:int = ress.selectedItem == null ? 120 : ress.selectedItem.width;
-					var height:int = ress.selectedItem == null ? 90 : ress.selectedItem.height;
-					videoDisplay.width = width;
-					videoDisplay.height = height;
-
-					//cam.setQuality(bandwidth, quality);
-					//cam.setMode(width, height, FPS);
-					//videoDisplay.stop();
-					//cam.setMode(videoDisplay.width, videoDisplay.height, FPS);
-					//videoDisplay.attachCamera(cam);
+					video.reset();
+					video.attachCamera(cam);
 					debug("_attachCamera()::done");
 				} catch (error:Error) {
 					debug("_attach:: " + error.message + "\n" + error.getStackTrace());
@@ -277,10 +335,11 @@
 			}
 		}
 
-		private function setResolution(width:int, height:int):void {
+		private function setResolution(width:int, height:int, attach:Boolean):void {
 			if (!interview) {
 				debug("onselect WxH :: " + width + "x" + height);
 
+				video.resize(width, height);
 				videoScroller.width = Math.min(width, RIGHT_WIDTH);
 				videoScroller.height = Math.min(height, 200);
 				var newWidth:int = Math.max(APP_WIDTH, APP_WIDTH + videoScroller.width - RIGHT_WIDTH);
@@ -290,13 +349,14 @@
 				debug("GLOBAL Y:: " + yPos);
 				playGroup.y = Math.max(yPos, videoScroller.height);
 				setDimensions(newWidth, newHeight);
-
-				attachCamera();
+				if (attach) {
+					attachCamera();
+				}
 			}
 		}
 
 		private function resChanged(e:Event):void {
-			setResolution(e.target.selectedItem.width, e.target.selectedItem.height);
+			setResolution(e.target.selectedItem.width, e.target.selectedItem.height, true);
 		}
 
 		private function camChanged(e:Event):void {
@@ -340,7 +400,7 @@
 			<s:Group id="videoGroup">
 				<s:Scroller id="videoScroller">
 					<s:Group id="videoScrollGroup">
-						<mx:VideoDisplay id="videoDisplay" width="0" height="0"/>
+						<mx:UIComponent id="videoDisplay" width="0" height="0" />
 					</s:Group>
 				</s:Scroller>
 				<s:VGroup id="playGroup">
@@ -369,5 +429,5 @@
 		</s:Group>
 		<s:CheckBox id="remember" label="{getLabel(762)}" />
 	</s:Group>
-	<s:TextArea id="traceArea" y="450" width="400" height="400" text="{debugStr}"/>
+	<s:TextArea id="traceArea" y="460" width="400" height="400" text="{debugStr}"/>
 </s:Application>
