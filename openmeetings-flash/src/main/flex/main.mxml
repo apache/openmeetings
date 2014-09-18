@@ -44,7 +44,7 @@
 		private var roomid:int;
 		private var audioOnly:Boolean = false;
 		private var labels:Object = new Object();
-		private var FPS:int = 5;
+		private var FPS:int;
 		private var bandwidth:int = 0;
 		private var quality:int = 100;
 		private var echoPath:int = 256;
@@ -95,7 +95,7 @@
 			audioOnly = 'true' == tla.parameters['audioOnly'];
 			interview = 'true' == tla.parameters['interview'];
 			var _fps:int = parseInt(tla.parameters['fps']);
-			FPS = interview ? 24 : (isNaN(_fps) ? 30 : _fps);
+			FPS = interview ? 24 : (isNaN(_fps) || _fps < 1 ? 30 : _fps);
 
 			var lbls:Array = JSON.parse(tla.parameters['labels']) as Array;
 			for (var i:int = 0; i < lbls.length; ++i) {
@@ -275,14 +275,14 @@
 				return null;
 			}
 			var _camera:Camera = Camera.getCamera(cams.selectedItem.data);
-			if (_camera != null) {
+			if (_camera != null && !_camera.muted) {
 				if (interview) {
 					//we need a fixed frame rate for the videos to merge them later on
-					//_camera.setMode(video.width, video.height, 24, true);
+					_camera.setMode(video.width, video.height, 24, true);
 					debug("IS INTERVIEW ");
 					_camera.setQuality(0, 98);
 				} else {
-					//_camera.setMode(video.width, video.height, FPS);
+					_camera.setMode(video.width, video.height, FPS);
 					debug("IS NO INTERVIEW ");
 					_camera.setQuality(bandwidth, quality);
 				}
