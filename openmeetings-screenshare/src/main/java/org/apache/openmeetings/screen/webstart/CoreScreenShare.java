@@ -155,6 +155,7 @@ public class CoreScreenShare implements IPendingServiceCallback, INetStreamEvent
 					default:
 						throw new Exception("Unsupported protocol");
 				}
+				instance.setServiceProvider(instance);
 				log.debug(String.format("host: %s, app: %s, port: %s, publish: %s", host, port, app, publishName));
 			} else {
 				System.exit(0);

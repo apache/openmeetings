@@ -27,6 +27,7 @@ public interface IScreenShare {
 	RTMPConnection getConnection();
 	void invoke(String method, Object[] params, IPendingServiceCallback callback);
 	void connect(String server, int port, String application, IPendingServiceCallback connectCallback);
+	void setServiceProvider(Object serviceProvider);
 	void disconnect();
 	void createStream(IPendingServiceCallback callback);
 	void publish(int streamId, String name, String mode, INetStreamEventHandler handler);
