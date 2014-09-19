@@ -63,7 +63,6 @@
 			-->
 		</property>
 	</bean>
-	<bean id="openmeetings.EmoticonsManager" class="org.apache.openmeetings.core.data.whiteboard.EmoticonsManager" />
 
 	<!-- Singletons for memory based cache -->
 	<bean id="openmeetings.HashMapStore" scope="singleton" class="org.apache.openmeetings.core.session.store.HashMapStore" />
@@ -90,7 +89,6 @@
 	<bean id="openmeetings.FileProcessor" class="org.apache.openmeetings.core.data.file.FileProcessor" />
 	<bean id="openmeetings.FlvExplorerConverter" class="org.apache.openmeetings.core.converter.FlvExplorerConverter" />
 	<bean id="conferenceservice.service" class="org.apache.openmeetings.core.remote.ConferenceService" />
-	<bean id="chatservice.service" class="org.apache.openmeetings.core.remote.ChatService" />
 	<bean id="flvrecorderservice.service" class="org.apache.openmeetings.core.remote.FLVRecorderService" />
 	<bean id="openmeetings.FlvRecorderConverterTask" class="org.apache.openmeetings.core.data.flvrecord.converter.FlvRecorderConverterTask" />
 	<bean id="openmeetings.FlvInterviewConverterTask" class="org.apache.openmeetings.core.data.flvrecord.converter.FlvInterviewConverterTask" />

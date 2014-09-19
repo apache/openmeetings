@@ -33,7 +33,6 @@ import java.util.Set;
 
 import org.apache.openmeetings.core.data.calendar.management.AppointmentLogic;
 import org.apache.openmeetings.core.data.conference.RoomManager;
-import org.apache.openmeetings.core.data.whiteboard.EmoticonsManager;
 import org.apache.openmeetings.core.data.whiteboard.WhiteboardManager;
 import org.apache.openmeetings.core.remote.FLVRecorderService;
 import org.apache.openmeetings.core.remote.WhiteBoardService;
@@ -83,8 +82,6 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 	@Autowired
 	private ISessionManager sessionManager;
 	@Autowired
-	private EmoticonsManager emoticonsManager;
-	@Autowired
 	private WhiteBoardService whiteBoardService;
 	@Autowired
 	private WhiteboardManager whiteboardManagement;
@@ -130,10 +127,6 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 			getCryptKey();
 
 			// init your handler here
-			// The scheduled Jobs did go into the Spring-Managed Beans, see schedulerJobs.service.xml
-			// Spring Definition does not work here, its too early, Instance is not set yet
-			emoticonsManager.loadEmot();
-
 			for (String scopeName : scope.getScopeNames()) {
 				log.debug("scopeName :: " + scopeName);
 			}
