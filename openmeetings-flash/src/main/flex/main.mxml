@@ -29,7 +29,6 @@
 	<fx:Script><![CDATA[
 		import mx.collections.ArrayCollection;
 		import mx.core.FlexGlobals;
-
 		import org.apache.openmeetings.OmVideo;
 
 		private static const MODE_N:String = "n";
@@ -51,6 +50,12 @@
 		private var echoSuppression:Boolean = true;
 		private var microphoneRateBest:int = 22;//5, 8, 11, 22, and 44
 		private var video:OmVideo;
+		private var recName:String;
+		private var codec:String = OmVideo.CODEC_H264;
+		private var protocol:String;
+		private var host:String;
+		private var port:String;
+		private var app:String;
 		[Bindable]
 		private var interview:Boolean = false;
 		[Bindable]
@@ -101,6 +106,10 @@
 			for (var i:int = 0; i < lbls.length; ++i) {
 				labels[lbls[i].id] = lbls[i].value;
 			}
+			protocol = tla.parameters['protocol'];
+			host = tla.parameters['host'];
+			port = tla.parameters['port'];
+			app = tla.parameters['app'];
 		}
 
 		private function selectListItem(combo:ComboBox, selected:int):void {
@@ -148,22 +157,22 @@
 		}
 
 		private function appInit():void {
-			video = new OmVideo(videoDisplay);
+			video = new OmVideo(videoDisplay, codec, protocol + "://" + host + ":" + port + "/" + app);
 			var modItems:ArrayCollection = new ArrayCollection();
 			if (camAvail() && micAvail()) {
 				modItems.addItem({label: getLabel(448), data: MODE_AV});
-			}
-			if (micAvail()) {
-				var micros:Array = Microphone.names;
-				var foundedMic:int = fillDeviceList(micros, mics, "mic");
-				selectListItem(mics, foundedMic);
-				modItems.addItem({label: getLabel(449), data: MODE_A});
 			}
 			if (camAvail()) {
 				var cameras:Array = Camera.names;
 				var foundedCam:int = fillDeviceList(cameras, cams, "cam");
 				selectListItem(cams, foundedCam);
 				modItems.addItem({label: getLabel(450), data: MODE_V});
+			}
+			if (micAvail()) {
+				var micros:Array = Microphone.names;
+				var foundedMic:int = fillDeviceList(micros, mics, "mic");
+				selectListItem(mics, foundedMic);
+				modItems.addItem({label: getLabel(449), data: MODE_A});
 			}
 			modItems.addItem({label: getLabel(451), data: MODE_N});
 			modes.dataProvider = modItems;
@@ -229,6 +238,8 @@
 			noAv.visible = textVisible;
 			startTest.visible = !textVisible;
 			videoGroup.visible = !textVisible;
+			videoScroller.visible = camVisible;
+			playGroup.visible = !textVisible;
 			resGroup.visible = interview ? false : camVisible;
 			attachCamera();
 		}
@@ -271,14 +282,15 @@
 
 		private function getCam():Camera {
 			debug("Entering getCam ...");
-			if (!videoDisplay.visible) {
+			if (!videoScroller.visible) {
 				return null;
 			}
 			var _camera:Camera = Camera.getCamera(cams.selectedItem.data);
 			if (_camera != null && !_camera.muted) {
+				//FIXME need to be unified
 				if (interview) {
 					//we need a fixed frame rate for the videos to merge them later on
-					_camera.setMode(video.width, video.height, 24, true);
+					_camera.setMode(video.width, video.height, 24);
 					debug("IS INTERVIEW ");
 					_camera.setQuality(0, 98);
 				} else {
@@ -291,7 +303,6 @@
 			return _camera;
 		}
 
-		//FIXME impossible to create test recording with mic only !!!!
 		private function attachCamera():void {
 			if (!camAvail()) {
 				return;
@@ -299,7 +310,6 @@
 			debug("Camera selected:: " + cams.selectedItem.data);
 			var cam:Camera = getCam();
 			debug("Camera selected:: " + cam);
-			//mic = getMic();
 			if (cam != null) {
 				if (cam.muted) {
 					debug("Camera Muted");
@@ -314,10 +324,28 @@
 						}
 					});
 				} else {
-					//cam = null;
 					_attachCamera(cam);
 				}
-			}
+			} else {
+				var mic:Microphone = getMic();
+				if (mic != null) {
+					if (mic.muted) {
+						var nc:NetConnection = new NetConnection();
+						nc.connect(null);
+						var ns:NetStream = new NetStream(nc);
+						ns.attachAudio(mic);
+						mic.addEventListener(StatusEvent.STATUS, function (event:StatusEvent):void {
+							debug("micStatusHandler! " + event);
+							mic.removeEventListener(StatusEvent.STATUS, arguments.callee);
+							ns.close();
+							nc.close();
+							if (mic.muted) {
+								debug("Unable to connect to active microphone.");
+							}
+						});
+					}
+				}
+ 			}
 		}
 
 		private function _attachCamera(cam:Camera):void {
@@ -366,7 +394,52 @@
 		private function startConf(e:Event):void {
 			store();
 		}
-		]]></fx:Script>
+
+		private function playTestRecording():void {
+			video.play(recName);
+		}
+
+		private function startTestRecording():void {
+			if (!noAv.visible) {
+				startTest.enabled = false;
+				play.enabled = false;
+				var counter:int = 5;
+				timerText.visible = true;
+				timerText.text = "5 sec";
+				var recTimer:Timer = new Timer(1000, counter);
+				var t:Date = new Date();
+				recName = "TEST_SETUP_" + t.getTime();
+				var mic:Microphone = getMic();
+				video.record(recName, getCam(), mic, function ():void {
+					mic.addEventListener(ActivityEvent.ACTIVITY, micActivityHandler);
+					//mic.onA
+					var micTimer:Timer = new Timer(100, 0);
+					micTimer.addEventListener(TimerEvent.TIMER, function (event:TimerEvent):void {
+						fill.width =  mic.activityLevel * RIGHT_WIDTH / 100;
+						trace("activity: " + mic.activityLevel);
+					});
+					recTimer.addEventListener(TimerEvent.TIMER, function (event:TimerEvent):void {
+						timerText.text = --counter + " sec";
+						if (counter == 0) {
+							timerText.visible = false;
+							startTest.enabled = true;
+							play.enabled = true;
+							playTestRecording();
+							micTimer.stop();
+							mic.removeEventListener(ActivityEvent.ACTIVITY, micActivityHandler);
+						}
+					});
+					recTimer.start();
+					micTimer.start();
+				});
+			}
+		}
+
+		function micActivityHandler(event:ActivityEvent):void{
+			//Do nothing, it just need to be there.
+		}
+	]]>
+	</fx:Script>
 
 	<s:Group id="mainSetupGroup" width="{APP_WIDTH}">
 		<s:layout>
@@ -392,7 +465,7 @@
 					</s:VGroup>
 					<s:Group width="100%">
 						<s:layout><s:HorizontalLayout horizontalAlign="right"/></s:layout>
-						<s:Button id="startTest" label="{getLabel(775)}"/>
+						<s:Button id="startTest" label="{getLabel(775)}" click="startTestRecording()"/><!--FIXME should be disabled until stream is attached-->
 					</s:Group>
 				</s:VGroup>
 				<mx:Text text="{getLabel(452)}" id="noAv" visible="false"/>
@@ -403,6 +476,8 @@
 						<mx:UIComponent id="videoDisplay" width="0" height="0" />
 					</s:Group>
 				</s:Scroller>
+				<s:Label id="timerText" height="20" width="45" x="{videoGroup.width - 60}" y="5" paddingLeft="5" paddingTop="5"
+				         visible="false" backgroundColor="0xf5f5f5" fontWeight="bold"><s:text></s:text></s:Label>
 				<s:VGroup id="playGroup">
 					<s:Group>
 						<s:Graphic x="0" z="1">
@@ -416,7 +491,7 @@
 					</s:Group>
 					<s:Group width="100%">
 						<s:layout><s:HorizontalLayout horizontalAlign="right"/></s:layout>
-						<s:Button id="play" label="{getLabel(764)}" enabled="false"/>
+						<s:Button id="play" label="{getLabel(764)}" enabled="false" click="playTestRecording()"/>
 					</s:Group>
 				</s:VGroup>
 			</s:Group>
