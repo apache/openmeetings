@@ -175,7 +175,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 				swfURL = conn.getConnectParams().get("swfUrl").toString();
 			}
 
-			Client rcm = this.sessionManager.addClientListItem(streamId,
+			Client rcm = sessionManager.addClientListItem(streamId,
 					conn.getScope().getName(), conn.getRemotePort(),
 					conn.getRemoteAddress(), swfURL, isAVClient, null);
 			
@@ -240,6 +240,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 					}
 				}
 			}
+			log.debug("-----------  screenSharerAction, return: " + returnMap);
 			return returnMap;
 		} catch (Exception err) {
 			log.error("[screenSharerAction]", err);
@@ -1136,12 +1137,10 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 			log.debug("-----------  getBroadCastId");
 			IConnection current = Red5.getConnectionLocal();
 			String streamid = current.getClient().getId();
-			Client currentClient = this.sessionManager
-					.getClientByStreamId(streamid, null);
-			currentClient.setBroadCastID(broadCastCounter++);
-			this.sessionManager.updateClientByStreamId(streamid,
-					currentClient, false, null);
-			return currentClient.getBroadCastID();
+			Client client = sessionManager.getClientByStreamId(streamid, null);
+			client.setBroadCastID(broadCastCounter++);
+			sessionManager.updateClientByStreamId(streamid, client, false, null);
+			return client.getBroadCastID();
 		} catch (Exception err) {
 			log.error("[getBroadCastId]", err);
 		}
@@ -1541,8 +1540,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 			log.debug("-----------  setUsernameReconnect");
 			IConnection current = Red5.getConnectionLocal();
 			String streamid = current.getClient().getId();
-			Client currentClient = this.sessionManager
-					.getClientByStreamId(streamid, null);
+			Client currentClient = sessionManager.getClientByStreamId(streamid, null);
 
 			currentClient.setUsername(username);
 			currentClient.setUser_id(userId);
@@ -1568,8 +1566,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 					currentClient.setPicture_uri(us.getPictureuri());
 				}
 			}
-			this.sessionManager.updateClientByStreamId(streamid,
-					currentClient, false, null);
+			sessionManager.updateClientByStreamId(streamid, currentClient, false, null);
 			return currentClient;
 		} catch (Exception err) {
 			log.error("[setUsername]", err);
@@ -1593,8 +1590,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 			log.debug("-----------  setUsernameAndSession");
 			IConnection current = Red5.getConnectionLocal();
 			String streamid = current.getClient().getId();
-			Client currentClient = this.sessionManager
-					.getClientByStreamId(streamid, null);
+			Client currentClient = sessionManager.getClientByStreamId(streamid, null);
 
 			currentClient.setUsername(username);
 			currentClient.setUser_id(userId);
@@ -1620,8 +1616,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 				// set Picture-URI
 				currentClient.setPicture_uri(us.getPictureuri());
 			}
-			this.sessionManager.updateClientByStreamId(streamid,
-					currentClient, false, null);
+			sessionManager.updateClientByStreamId(streamid, currentClient, false, null);
 			return currentClient;
 		} catch (Exception err) {
 			log.error("[setUsername]", err);

@@ -83,8 +83,8 @@
 					, MaxWait=10000
 					, TestOnBorrow=true
 					, poolPreparedStatements=true
-					, Username=postgres
-					, Password=1" />
+					, Username=omadmin
+					, Password=omadmin" />
 			<property name="openjpa.jdbc.SynchronizeMappings" value="buildSchema" />
 			<property name="openjpa.Log" value="DefaultLevel=WARN, Tool=INFO" />
 			<property name="openjpa.DataCache" value="true" />

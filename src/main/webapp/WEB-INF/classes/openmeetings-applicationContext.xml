@@ -92,6 +92,7 @@
 	<bean id="conferenceservice.service" class="org.apache.openmeetings.remote.ConferenceService" />
 	<bean id="chatservice.service" class="org.apache.openmeetings.remote.ChatService" />
 	<bean id="flvrecorderservice.service" class="org.apache.openmeetings.remote.FLVRecorderService" />
+	<bean id="mobile.service" class="org.apache.openmeetings.remote.MobileService" />
 	<bean id="openmeetings.FlvRecorderConverterTask" class="org.apache.openmeetings.data.flvrecord.converter.FlvRecorderConverterTask" />
 	<bean id="openmeetings.FlvInterviewConverterTask" class="org.apache.openmeetings.data.flvrecord.converter.FlvInterviewConverterTask" />
 	<bean id="openmeetings.FlvInterviewReConverterTask" class="org.apache.openmeetings.data.flvrecord.converter.FlvInterviewReConverterTask" />
