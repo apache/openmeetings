@@ -20,6 +20,7 @@
 -->
 <!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
 <properties>
+	<entry key="install.wizard.install.header">Installation</entry>
 	<entry key="install.wizard.welcome.panel"><![CDATA[
 	<ol>
 		<li>
