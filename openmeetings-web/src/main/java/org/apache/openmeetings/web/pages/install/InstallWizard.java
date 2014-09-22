@@ -130,8 +130,7 @@ public class InstallWizard extends Wizard {
 
 		public BaseStep(IDynamicWizardStep prev) {
 			super(prev);
-			//TODO localize
-			setTitleModel(Model.of(cfg.appName + " - Installation"));
+			setTitleModel(Model.of(cfg.appName + " - " + getString("install.wizard.install.header")));
             setSummaryModel(Model.of(""));
 		}
 	}
