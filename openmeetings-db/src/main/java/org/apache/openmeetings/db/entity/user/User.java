@@ -261,7 +261,7 @@ public class User implements IDataProviderEntity {
 	private Long ownerId;
 	
 	@ElementCollection(fetch = FetchType.EAGER)
-	@Column(name = "right")
+	@Column(name = "om_right")
 	@CollectionTable(name = "om_user_right", joinColumns = @JoinColumn(name = "user_id"))
 	@Enumerated(EnumType.STRING)
 	@ElementList(name="rights", data = true, required = false)
