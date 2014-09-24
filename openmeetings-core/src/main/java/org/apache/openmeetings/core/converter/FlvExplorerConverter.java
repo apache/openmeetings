@@ -47,7 +47,7 @@ public class FlvExplorerConverter extends BaseConverter {
 	@Autowired
 	private FlvRecordingLogDao flvRecordingLogDaoImpl;
 	
-	private class FlvDimension {
+	private static class FlvDimension {
 		public FlvDimension(int width, int height) {
 			this.width = width;
 			this.height = height;

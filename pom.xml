@@ -252,6 +252,16 @@
 			<id>flex-mojos-repository</id>
 			<url>https://oss.sonatype.org/content/groups/staging</url>
 		</repository>
+		<!-- repository>
+			<releases>
+				<enabled>false</enabled>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+        	<id>apache-snapshots</id>
+			<url>https://repository.apache.org/content/groups/snapshots</url>
+		</repository-->
 	</repositories>
 	<pluginRepositories>
 		<pluginRepository>

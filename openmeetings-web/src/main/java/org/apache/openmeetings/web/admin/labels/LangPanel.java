@@ -207,7 +207,7 @@ public class LangPanel extends AdminPanel {
 					download.setResourceStream(new AbstractResourceStream() {
 						private static final long serialVersionUID = 1L;
 						private StringWriter sw;
-						private InputStream is;
+						private transient InputStream is;
 						
 						public InputStream getInputStream() throws ResourceStreamNotFoundException {
 							try {

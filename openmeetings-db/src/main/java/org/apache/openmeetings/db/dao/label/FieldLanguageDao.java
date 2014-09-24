@@ -20,7 +20,6 @@ package org.apache.openmeetings.db.dao.label;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
-import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
@@ -40,9 +39,7 @@ import org.springframework.transaction.annotation.Transactional;
  * 
  */
 @Transactional
-public class FieldLanguageDao implements Serializable {
-	private static final long serialVersionUID = 1L;
-
+public class FieldLanguageDao {
 	private static final Logger log = Red5LoggerFactory.getLogger(FieldLanguageDao.class, webAppRootKey);
 
 	@PersistenceContext
