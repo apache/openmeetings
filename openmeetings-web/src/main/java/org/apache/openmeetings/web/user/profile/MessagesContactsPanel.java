@@ -71,6 +71,7 @@ import org.apache.wicket.markup.repeater.data.IDataProvider;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.model.util.ListModel;
 
 import ro.fortsoft.wicket.dashboard.web.util.ConfirmAjaxCallListener;
 
@@ -93,7 +94,7 @@ public class MessagesContactsPanel extends UserPanel {
 	private final Label pendingContacts = new Label("pendingContacts", Model.of(0L));
 	private final Label allContacts = new Label("allContacts", Model.of(0L));
 	private final IModel<Long> selectedFolderModel = Model.of(INBOX_FOLDER_ID);
-	private final IModel<List<? extends PrivateMessageFolder>> foldersModel;
+	private final IModel<List<PrivateMessageFolder>> foldersModel = new ListModel<PrivateMessageFolder>(null);
 	private final WebMarkupContainer inbox = new WebMarkupContainer("inbox");
 	private final WebMarkupContainer sent = new WebMarkupContainer("sent");
 	private final WebMarkupContainer trash = new WebMarkupContainer("trash");
@@ -240,7 +241,7 @@ public class MessagesContactsPanel extends UserPanel {
 		super(id);
 		NOT_MOVE_FOLDER.setId(MOVE_CHOOSE);
 		NOT_MOVE_FOLDER.setFolderName(WebSession.getString(1243));
-		foldersModel = Model.ofList(getBean(PrivateMessageFolderDao.class).get(0, Integer.MAX_VALUE));
+		foldersModel.setObject(getBean(PrivateMessageFolderDao.class).get(0, Integer.MAX_VALUE));
 		updateMoveModel();
 		add(newMessage = new MessageDialog("newMessage", new CompoundPropertyModel<PrivateMessage>(new PrivateMessage())) {
 			private static final long serialVersionUID = 1L;

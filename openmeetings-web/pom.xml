@@ -350,57 +350,57 @@
 		<dependency>
 			<groupId>com.googlecode.wicket-jquery-ui</groupId>
 			<artifactId>wicket-jquery-ui-core</artifactId>
-			<version>${wicket.version}</version>
+			<version>${wickets.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.googlecode.wicket-jquery-ui</groupId>
 			<artifactId>wicket-jquery-ui</artifactId>
-			<version>${wicket.version}</version>
+			<version>${wickets.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.googlecode.wicket-jquery-ui</groupId>
 			<artifactId>wicket-jquery-ui-calendar</artifactId>
-			<version>${wicket.version}</version>
+			<version>${wickets.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.googlecode.wicket-jquery-ui</groupId>
 			<artifactId>wicket-jquery-ui-plugins</artifactId>
-			<version>${wicket.version}</version>
+			<version>${wickets.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.googlecode.wicket-jquery-ui</groupId>
 			<artifactId>wicket-kendo-ui</artifactId>
-			<version>${wicket.version}</version>
+			<version>${wickets.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.googlecode.wicket-jquery-ui</groupId>
 			<artifactId>wicket-kendo-ui-theme-default</artifactId>
-			<version>${wicket.version}</version>
+			<version>${wickets.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.wicketstuff</groupId>
 			<artifactId>wicketstuff-urlfragment</artifactId>
-			<version>${wicket.version}</version>
+			<version>${wickets.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.wicketstuff</groupId>
 			<artifactId>wicketstuff-html5</artifactId>
-			<version>${wicket.version}</version>
+			<version>${wickets.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.wicketstuff</groupId>
 			<artifactId>wicketstuff-whiteboard</artifactId>
-			<version>${wicket.version}</version>
+			<version>${wickets.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.wicketstuff</groupId>
 			<artifactId>wicketstuff-select2</artifactId>
-			<version>${wicket.version}</version>
+			<version>${wickets.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.wicketstuff</groupId>
 			<artifactId>jqplot</artifactId>
-			<version>${wicket.version}</version>
+			<version>${wickets.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>commons-io</groupId>
