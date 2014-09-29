@@ -24,7 +24,8 @@ import static org.apache.openmeetings.web.app.WebSession.getUserTimeZone;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Date;
+
+import org.apache.openmeetings.db.entity.calendar.Appointment;
 
 import com.googlecode.wicket.jquery.core.Options;
 import com.googlecode.wicket.jquery.ui.calendar.CalendarEvent;
@@ -33,8 +34,9 @@ public class OmCalendarEvent extends CalendarEvent {
 	private static final long serialVersionUID = 1L;
 	private final DateFormat ISO8601;
 	
-	public OmCalendarEvent(int id, String title, Date start, Date end) {
-		super(id, title, start, end);
+	public OmCalendarEvent(Appointment a) {
+		super(a.getId().intValue(), a.getTitle(), a.getStart(), a.getEnd());
+		setEditable(AppointmentDialog.isOwner(a));
 		setAllDay(false);
 		ISO8601 = new SimpleDateFormat(ISO8601_FORMAT_STRING);
 		ISO8601.setCalendar(getCalendar());

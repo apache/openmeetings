@@ -274,7 +274,6 @@ html, body {
 	min-width: 150px;
 }
 #contents {
-	height: 100%;
 }
 #contents .dragbox-content {
 	min-height: 300px;
