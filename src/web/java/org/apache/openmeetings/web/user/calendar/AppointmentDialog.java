@@ -98,10 +98,9 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 		return 650;
 	}
 	
-	//@Override
 	public void setModelObjectWithAjaxTarget(Appointment object, AjaxRequestTarget target) {
 		form.setModelObject(object);
-		form.setEnabled(object.getOwner() == null || getUserId() == object.getOwner().getUser_id());
+		form.setEnabled(isOwner(object));
 		log.debug(" -- setModelObjectWithAjaxTarget -- Current model " + object);
 		if (object.getId() != null) {
 			delete.setVisible(isOwner(object), target);
@@ -213,7 +212,7 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 		calendar.refresh(target);
 	}
 	
-	private boolean isOwner(Appointment object) {
+	public static boolean isOwner(Appointment object) {
 		return object.getOwner() != null && getUserId() == object.getOwner().getUser_id();
 	}
 	

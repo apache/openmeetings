@@ -147,7 +147,7 @@ public class CalendarPanel extends UserPanel {
 		options.set("dayNamesShort", shortDays.toString());
 		
 		calendar = new Calendar("calendar", new AppointmentModel(), options) {
-			private static final long serialVersionUID = 8442068089963449950L;
+			private static final long serialVersionUID = 1L;
 			
 			@Override
 			protected void onInitialize() {
@@ -218,7 +218,10 @@ public class CalendarPanel extends UserPanel {
 			public void onEventDrop(AjaxRequestTarget target, int eventId, long delta, boolean allDay) {
 				AppointmentDao dao = getDao();
 				Appointment a = dao.get((long)eventId);
-				
+
+				if (!AppointmentDialog.isOwner(a)) {
+					return;
+				}
 				java.util.Calendar cal = WebSession.getCalendar();
 				cal.setTime(a.getStart());
 				cal.add(java.util.Calendar.MILLISECOND, (int)delta); //FIXME?
@@ -236,6 +239,9 @@ public class CalendarPanel extends UserPanel {
 			public void onEventResize(AjaxRequestTarget target, int eventId, long delta) {
 				AppointmentDao dao = getDao();
 				Appointment a = dao.get((long)eventId);
+				if (!AppointmentDialog.isOwner(a)) {
+					return;
+				}
 				java.util.Calendar cal = WebSession.getCalendar();
 				cal.setTime(a.getEnd());
 				cal.add(java.util.Calendar.MILLISECOND, (int)delta); //FIXME?
