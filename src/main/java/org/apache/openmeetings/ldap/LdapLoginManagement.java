@@ -29,6 +29,7 @@ import java.util.Date;
 import java.util.Properties;
 import java.util.Set;
 
+import org.apache.directory.api.ldap.model.cursor.CursorLdapReferralException;
 import org.apache.directory.api.ldap.model.cursor.EntryCursor;
 import org.apache.directory.api.ldap.model.entry.Attribute;
 import org.apache.directory.api.ldap.model.entry.Entry;
@@ -251,14 +252,18 @@ public class LdapLoginManagement {
 					SearchScope scope = SearchScope.valueOf(config.getProperty(CONFIGKEY_LDAP_SEARCH_SCOPE, SearchScope.ONELEVEL.name()));
 					EntryCursor cursor = conn.search(baseDn, searchQ, scope, "*");
 					while (cursor.next()) {
-						if (userDn != null) {
-							log.error("more than 1 user found in LDAP");
-							throw new OmException(-1L);
-						}
-						Entry e = cursor.get();
-						userDn = e.getDn();
-						if (useAdminForAttrs) {
-							entry = e;
+						try {
+							Entry e = cursor.get();
+							if (userDn != null) {
+								log.error("more than 1 user found in LDAP");
+								throw new OmException(-1L);
+							}
+							userDn = e.getDn();
+							if (useAdminForAttrs) {
+								entry = e;
+							}
+						} catch (CursorLdapReferralException cle) {
+							log.warn("Referral LDAP entry found, ignore it");
 						}
 					}
 					cursor.close();
