@@ -166,7 +166,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 				swfURL = conn.getConnectParams().get("swfUrl").toString();
 			}
 
-			Client rcm = this.sessionManager.addClientListItem(streamId,
+			Client rcm = sessionManager.addClientListItem(streamId,
 					conn.getScope().getName(), conn.getRemotePort(),
 					conn.getRemoteAddress(), swfURL, isAVClient, null);
 			
@@ -231,6 +231,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 					}
 				}
 			}
+			log.debug("-----------  screenSharerAction, return: " + returnMap);
 			return returnMap;
 		} catch (Exception err) {
 			log.error("[screenSharerAction]", err);
@@ -633,30 +634,25 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 			log.debug("-----------  streamPublishStart");
 			IConnection current = Red5.getConnectionLocal();
 			String streamid = current.getClient().getId();
-			Client currentClient = this.sessionManager
-					.getClientByStreamId(streamid, null);
+			Client currentClient = sessionManager.getClientByStreamId(streamid, null);
 
 			//We make a second object the has the reference to the object 
 			//that we will use to send to all participents
 			Client clientObjectSendToSync = currentClient;
 			
 			// Notify all the clients that the stream had been started
-			log.debug("start streamPublishStart broadcast start: "
-					+ stream.getPublishedName() + " CONN " + current);
+			log.debug("start streamPublishStart broadcast start: " + stream.getPublishedName() + " CONN " + current);
 
 			// In case its a screen sharing we start a new Video for that
 			if (currentClient.getIsScreenClient()) {
 
 				currentClient.setScreenPublishStarted(true);
 
-				this.sessionManager.updateClientByStreamId(current
-						.getClient().getId(), currentClient, false, null);
+				sessionManager.updateClientByStreamId(current.getClient().getId(), currentClient, false, null);
 			}
-			//If its an audio/video client then send the session object with the full 
-			//data to everybody
+			//If its an audio/video client then send the session object with the full data to everybody
 			else if (currentClient.getIsAVClient()) {
-				clientObjectSendToSync = this.sessionManager.getClientByPublicSID(
-											currentClient.getPublicSID(), false, null);
+				clientObjectSendToSync = sessionManager.getClientByPublicSID(currentClient.getPublicSID(), false, null);
 			}
 			
 			log.debug("newStream SEND: "+currentClient);
@@ -667,9 +663,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 				if (conn != null) {
 					if (conn instanceof IServiceCapableConnection) {
 						
-						Client rcl = this.sessionManager
-								.getClientByStreamId(conn.getClient()
-										.getId(), null);
+						Client rcl = sessionManager.getClientByStreamId(conn.getClient().getId(), null);
 						
 						if (rcl == null) {
 							log.debug("RCL IS NULL newStream SEND");
@@ -1125,10 +1119,10 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 			log.debug("-----------  getBroadCastId");
 			IConnection current = Red5.getConnectionLocal();
 			String streamid = current.getClient().getId();
-			Client currentClient = sessionManager.getClientByStreamId(streamid, null);
-			currentClient.setBroadCastID(broadCastCounter++);
-			sessionManager.updateClientByStreamId(streamid, currentClient, false, null);
-			return currentClient.getBroadCastID();
+			Client client = sessionManager.getClientByStreamId(streamid, null);
+			client.setBroadCastID(broadCastCounter++);
+			sessionManager.updateClientByStreamId(streamid, client, false, null);
+			return client.getBroadCastID();
 		} catch (Exception err) {
 			log.error("[getBroadCastId]", err);
 		}
@@ -1527,11 +1521,8 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 			log.debug("-----------  setUsernameReconnect");
 			IConnection current = Red5.getConnectionLocal();
 			String streamid = current.getClient().getId();
-			Client currentClient = this.sessionManager
-					.getClientByStreamId(streamid, null);
+			Client currentClient = sessionManager.getClientByStreamId(streamid, null);
 
-			currentClient.setUsername(username);
-			currentClient.setUser_id(userId);
 			SessionVariablesUtil.setUserId(current.getClient(), userId);
 			currentClient.setPicture_uri(picture_uri);
 			currentClient.setUserObject(userId, username, firstname, lastname);
@@ -1548,14 +1539,13 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 				if (us != null) {
 					currentClient.setExternalUserId(us.getExternalUserId());
 					currentClient.setExternalUserType(us.getExternalUserType());
-				}
-				if (us != null && us.getPictureuri() != null) {
-					// set Picture-URI
-					currentClient.setPicture_uri(us.getPictureuri());
+					if (us.getPictureuri() != null) {
+						// set Picture-URI
+						currentClient.setPicture_uri(us.getPictureuri());
+					}
 				}
 			}
-			this.sessionManager.updateClientByStreamId(streamid,
-					currentClient, false, null);
+			sessionManager.updateClientByStreamId(streamid, currentClient, false, null);
 			return currentClient;
 		} catch (Exception err) {
 			log.error("[setUsername]", err);
@@ -1579,8 +1569,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 			log.debug("-----------  setUsernameAndSession");
 			IConnection current = Red5.getConnectionLocal();
 			String streamid = current.getClient().getId();
-			Client currentClient = this.sessionManager
-					.getClientByStreamId(streamid, null);
+			Client currentClient = sessionManager.getClientByStreamId(streamid, null);
 
 			currentClient.setUsername(username);
 			currentClient.setUser_id(userId);
@@ -1606,8 +1595,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 				// set Picture-URI
 				currentClient.setPicture_uri(us.getPictureuri());
 			}
-			this.sessionManager.updateClientByStreamId(streamid,
-					currentClient, false, null);
+			sessionManager.updateClientByStreamId(streamid, currentClient, false, null);
 			return currentClient;
 		} catch (Exception err) {
 			log.error("[setUsername]", err);
