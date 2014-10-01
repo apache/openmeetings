@@ -180,7 +180,7 @@ of the red5-servlet
     h264
     If you want to use red5sip, set value to "h264"
  -->
-<codecType>h264</codecType>
+<codecType>h263</codecType>
  
 <!-- Camera Settings for the FramesPerSecond
     
