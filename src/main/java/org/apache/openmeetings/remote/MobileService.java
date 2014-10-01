@@ -1,9 +1,28 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License") +  you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
 package org.apache.openmeetings.remote;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
@@ -110,9 +129,10 @@ public class MobileService implements IPendingServiceCallback {
 						Map<String, Object> map = new Hashtable<String, Object>();
 						map.put("streamId", c.getStreamid());
 						map.put("broadCastId", c.getBroadCastID());
-						map.put("userId", c.getUser_id());
+						map.put("userId", c.getUser_id() == null ? "" : c.getUser_id());
 						map.put("firstname", c.getFirstname());
 						map.put("lastname", c.getLastname());
+						map.put("publicSid", c.getPublicSID());
 						result.add(map);
 					}
 				}
@@ -167,7 +187,7 @@ public class MobileService implements IPendingServiceCallback {
 		return result;
 	}
 	
-	public Map<String, Object> roomConnect(String SID, Long userId, String avMode, String width, String height) {
+	public Map<String, Object> roomConnect(String SID, Long userId) {
 		Map<String, Object> result = new Hashtable<String, Object>();
 		User u = userDao.get(userId);
 		Client c = scopeAdapter.setUsernameReconnect(SID, userId, u.getLogin(), u.getFirstname(), u.getLastname(), u.getPictureuri());
@@ -178,13 +198,10 @@ public class MobileService implements IPendingServiceCallback {
 		c.setRoomEnter(new Date());
 		c.setBroadCastID(broadcastId);
 		c.setIsBroadcasting(true);
-		c.setAvsettings(avMode);
-		c.setVWidth(Integer.parseInt(width));
-		c.setVHeight(Integer.parseInt(height));
 		sessionManager.updateClientByStreamId(c.getStreamid(), c, false, null);
 		result.put("broadcastId", broadcastId);
 
-		//FIXME make it async
+		//FIXME make it async + copy/paste
 		IConnection current = Red5.getConnectionLocal();
 		for (IConnection conn : current.getScope().getClientConnections()) {
 			if (conn != null) {
@@ -208,5 +225,34 @@ public class MobileService implements IPendingServiceCallback {
 			}
 		}
 		return result;
+	}
+
+	public void updateAvMode(String avMode, String width, String height) {
+		IConnection current = Red5.getConnectionLocal();
+		Client c = sessionManager.getClientByStreamId(current.getClient().getId(), null);
+		c.setAvsettings(avMode);
+		c.setVWidth(Integer.parseInt(width));
+		c.setVHeight(Integer.parseInt(height));
+		sessionManager.updateClientByStreamId(c.getStreamid(), c, false, null);
+		HashMap<String, Object> hsm = new HashMap<String, Object>();
+		hsm.put("client", c);
+		hsm.put("message", new String[]{"avsettings", "0", avMode});
+
+		//FIXME should be handled async + copy/paste
+		for (IConnection conn : current.getScope().getClientConnections()) {
+			if (conn != null) {
+				if (conn instanceof IServiceCapableConnection) {
+					IClient client = conn.getClient();
+					if (SessionVariablesUtil.isScreenClient(client)) {
+						// screen sharing clients do not receive events
+						continue;
+					} else if (SessionVariablesUtil.isAVClient(client)) {
+						// AVClients or potential AVClients do not receive events
+						continue;
+					}
+					((IServiceCapableConnection)conn).invoke("sendVarsToMessageWithClient", new Object[] { hsm }, this);
+				}
+			}
+		}
 	}
 }
