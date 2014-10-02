@@ -365,7 +365,7 @@ public class BackupImport {
 			
 			List<RoomOrganisation> list = readList(serializer, f, "rooms_organisation.xml", "room_organisations", RoomOrganisation.class);
 			for (RoomOrganisation ro : list) {
-				if (!ro.getDeleted()) {
+				if (!ro.getDeleted() && ro.getRoom() != null && ro.getOrganisation() != null && ro.getOrganisation().getOrganisation_id() != null) {
 					// We need to reset this as openJPA reject to store them otherwise
 					ro.setRooms_organisation_id(null);
 					roomOrganisationDao.update(ro, null);
