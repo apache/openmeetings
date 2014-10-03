@@ -71,6 +71,7 @@ import org.apache.openmeetings.web.room.message.RoomMessage;
 import org.apache.openmeetings.web.room.poll.CreatePollDialog;
 import org.apache.openmeetings.web.room.poll.PollResultsDialog;
 import org.apache.openmeetings.web.room.poll.VoteDialog;
+import org.apache.openmeetings.web.user.ChatPanel;
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -342,8 +343,10 @@ public class RoomPanel extends BasePanel {
 						updateUserMenuIcons(wsEvent.getHandler());
 						break;
 					case roomEnter:
+						wsEvent.getHandler().appendJavaScript(String.format("addChatTab('%1$s%2$d', '%3$s %2$d');", ChatPanel.ID_ROOM_PREFIX, roomId, WebSession.getString(406)));
 						updateUserMenuIcons(wsEvent.getHandler());
 					case roomExit:
+						//TODO check user/remove tab
 						users.setList(getUsers());
 						wsEvent.getHandler().add(userList);
 						break;

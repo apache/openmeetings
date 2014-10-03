@@ -22,7 +22,12 @@
 <wicket:panel>
 	<div id="chat">
 		<div id="controlBlock" onclick="toggleChat();"><div id="control" class="ui-icon ui-icon-carat-1-n sort-icon"></div></div>
-		<div wicket:id="messages"></div>
+		<div id="chatTabs">
+			<ul>
+				<li><a href="#chatTab-all"><wicket:ommessage key="1494"/></a></li>
+			</ul>
+			<div id="chatTab-all" class="messageArea"></div>
+		</div>
 		<form wicket:id="sendForm">
 			<div wicket:id="toolbarContainer"></div>
 			<table style="width: 100%">

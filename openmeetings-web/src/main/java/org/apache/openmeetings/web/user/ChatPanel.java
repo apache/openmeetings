@@ -40,7 +40,6 @@ import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 import org.apache.wicket.markup.head.PriorityHeaderItem;
-import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.protocol.ws.WebSocketSettings;
@@ -59,7 +58,20 @@ import com.googlecode.wicket.jquery.ui.plugins.wysiwyg.WysiwygEditor;
 public class ChatPanel extends BasePanel {
 	private static final Logger log = Red5LoggerFactory.getLogger(ChatPanel.class, webAppRootKey);
 	private static final long serialVersionUID = 1L;
-	private static final String MESSAGE_AREA_ID = "messageArea";
+	private static final String ID_TAB_PREFIX = "chatTab-";
+	private static final String ID_USER_PREFIX = ID_TAB_PREFIX + "u";
+	public static final String ID_ROOM_PREFIX = ID_TAB_PREFIX + "r";
+	private static final String ID_ALL = ID_TAB_PREFIX + "all";
+	
+	private String getScope(ChatMessage m) {
+		if (m.getToUser() != null) {
+			return ID_USER_PREFIX + m.getToUser().getId();
+		} else if (m.getToRoom() != null) {
+			return ID_ROOM_PREFIX + m.getToRoom().getId();
+		} else {
+			return ID_ALL;
+		}
+	}
 	
 	private JSONObject getMessage(ChatMessage m) throws JSONException {
 		String msg = m.getMessage();
@@ -68,6 +80,7 @@ public class ChatPanel extends BasePanel {
 			.put("type", "chat")
 			.put("msg", new JSONObject()
 				.put("id", m.getId())
+				.put("scope", getScope(m))
 				.put("message", msg)
 				.put("from", m.getFromUser().getFirstname() + " " + m.getFromUser().getLastname())
 				.put("sent", getDateFormat().format(m.getSent()))
@@ -92,7 +105,7 @@ public class ChatPanel extends BasePanel {
 						sb.append("addChatMessageInternal(").append(getMessage(m).toString()).append(");");
 					}
 					if (sb.length() > 0) {
-						sb.append("$('#").append(MESSAGE_AREA_ID).append("').emoticonize();");
+						sb.append("$('.messageArea').emoticonize();");
 						response.render(OnDomReadyHeaderItem.forScript(sb.toString()));
 					}
 				} catch (JSONException e) {
@@ -101,8 +114,7 @@ public class ChatPanel extends BasePanel {
 				super.renderHead(component, response);
 			}
 		});
-		add(new EmoticonsBehavior("#" + MESSAGE_AREA_ID));
-		add(new WebMarkupContainer("messages").setMarkupId(MESSAGE_AREA_ID));
+		add(new EmoticonsBehavior(".messageArea"));
 		ChatToolbar toolbar = new ChatToolbar("toolbarContainer");
 		final WysiwygEditor chatMessage = new WysiwygEditor("chatMessage", Model.of(""), toolbar);
 		add(new Form<Void>("sendForm").add(

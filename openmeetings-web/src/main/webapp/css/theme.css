@@ -87,6 +87,18 @@ html, body {
 	height: 10px;
 	background-color: #F2FAFF;
 }
+#chatPanel #chat #chatTabs.ui-tabs {
+	padding: 0;
+}
+#chatPanel #chat #chatTabs.ui-tabs .ui-tabs-nav {
+	padding: 0;
+}
+#chatPanel #chat #chatTabs..ui-tabs .ui-tabs-nav li {
+	margin: 0;
+}
+#chatPanel #chat #chatTabs.ui-tabs .ui-tabs-nav .ui-tabs-anchor {
+	padding: 2px .5em;
+}
 #chatPanel #chat #controlBlock {
 	background-color: #5294BB;
 }
@@ -98,17 +110,17 @@ html, body {
 	margin-left: 50%;
 	margin-right: 50%;
 }
-#chatPanel #chat #messageArea .date {
+#chatPanel #chat .messageArea .date {
     margin-right: 5px;
     font-style: italic;
     font-size: smaller;
 }
-#chatPanel #chat #messageArea .from {
+#chatPanel #chat .messageArea .from {
 	margin-left: 5px;
     margin-right: 5px;
 	font-weight: bold;
 }
-#messageArea {
+.messageArea {
 	height: 165px;
 	overflow-y: auto;
 }
