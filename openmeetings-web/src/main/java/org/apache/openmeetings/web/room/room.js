@@ -74,9 +74,8 @@ function roomMessage(m) {
 	}
 }
 
-function initVideo(sid, roomid, audioOnly, interview, labels) {
-	var options = {sid: sid, roomid: roomid, audioOnly: audioOnly, interview: interview, bgcolor: "#ffffff"
-		, width: 570, height: 900
+function initVideo(_options) {
+	var options = $.extend({bgcolor: "#ffffff", width: 570, height: 900
 		, resolutions: JSON.stringify([{label: "4:3 (~6 KByte/sec)", width: 40, height: 30}
 			, {label: "4:3 (~12 KByte/sec)", width: 80, height: 60}
 			, {label: "4:3 (~20 KByte/sec)", width: 120, height: 90, default: true}
@@ -92,8 +91,7 @@ function initVideo(sid, roomid, audioOnly, interview, labels) {
 			, {label: "16:9", width: 512, height: 300}
 			, {label: "nHD 16:9", width: 640, height: 360}
 			, {label: "16:9", width: 1024, height: 600}])
-		, labels: JSON.stringify(labels)
-		};
+		}, _options);
 	var type = 'application/x-shockwave-flash';
 	var src = 'public/main.swf?cache' + new Date().getTime();
 	var r = $('<div class="room video">');

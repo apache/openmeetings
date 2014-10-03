@@ -19,15 +19,20 @@
 package org.apache.openmeetings.web.room;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_APPLICATION_BASE_URL;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_FLASH_PORT;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_FLASH_PROTOCOL;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_REDIRECT_URL_FOR_EXTERNAL_KEY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.openmeetings.web.app.Application.addUserToRoom;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.Application.getRoomUsers;
+import static org.apache.openmeetings.web.app.WebSession.getSid;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import static org.apache.openmeetings.web.util.OmUrlFragment.ROOMS_PUBLIC;
 
 import java.io.Serializable;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -119,14 +124,26 @@ public class RoomPanel extends BasePanel {
 		protected void respond(AjaxRequestTarget target) {
 			target.appendJavaScript("setHeight();");
 			//TODO SID etc
-			Room r = getBean(RoomDao.class).get(roomId);
-			target.appendJavaScript(String.format("initVideo('%s', %s, %s, %s, %s);", "sid"
-					, r.getId()
-					, r.getIsAudioOnly()
-					, 4L == r.getRoomtype().getRoomtypes_id()
-					, getStringLabels(448, 449, 450, 451, 758, 447, 52, 53, 1429, 1430, 775, 452, 767, 764, 765, 918, 54, 761, 762).toString()
-					));
-			broadcast(new RoomMessage(roomId, c.getUserId(), RoomMessage.Type.roomEnter));
+			ConfigurationDao cfgDao = getBean(ConfigurationDao.class);
+			try {
+				URL url = new URL(cfgDao.getBaseUrl());
+				String path = url.getPath();
+				path = path.substring(1, path.indexOf('/', 2) + 1);
+				Room r = getBean(RoomDao.class).get(roomId);
+				target.appendJavaScript(String.format("initVideo(%s);", new JSONObject().put("sid", getSid())
+						.put("roomid", r.getId()).put("audioOnly", r.getIsAudioOnly())
+						.put("interview", 4L == r.getRoomtype().getRoomtypes_id()) //FIXME hardcoded
+						.put("protocol", cfgDao.getConfValue(CONFIG_FLASH_PROTOCOL, String.class, ""))
+						.put("host", url.getHost())
+						.put("port", cfgDao.getConfValue(CONFIG_FLASH_PORT, String.class, ""))
+						.put("app", path + roomId)
+						.put("labels", getStringLabels(448, 449, 450, 451, 758, 447, 52, 53, 1429, 1430, 775, 452, 767, 764, 765, 918, 54, 761, 762))
+						.toString()
+						));
+				broadcast(new RoomMessage(roomId, c.getUserId(), RoomMessage.Type.roomEnter));
+			} catch (MalformedURLException e) {
+				log.error("Error while constructing room parameters", e);
+			}
 		}
 	};
 	private final InvitationDialog invite;
@@ -338,7 +355,7 @@ public class RoomPanel extends BasePanel {
 		super.onEvent(event);
 	}
 	
-	private JSONArray getStringLabels(long... ids) {
+	private String getStringLabels(long... ids) {
 		JSONArray arr = new JSONArray();
 		try {
 			for (long id : ids) {
@@ -347,7 +364,7 @@ public class RoomPanel extends BasePanel {
 		} catch (JSONException e) {
 			log.error("", e);
 		}
-		return arr;
+		return arr.toString();
 	}
 	
 	@Override
