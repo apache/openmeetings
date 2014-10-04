@@ -1,0 +1,81 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License") +  you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+#chatPanel {
+	position: fixed;
+	z-index: 2000;
+	bottom: 0px;
+	right: 10px;
+	width: 600px;
+	height: 16px;
+}
+#chatPanel #chat {
+	height: 16px;
+	background-color: #F2FAFF; /*FIXME should be replaced with "ui" classes*/
+}
+#chatPanel #chat .btn-toolbar {
+	margin-top: 2px;
+	margin-bottom: 0;
+	margin-left: 5px;
+}
+#chatPanel #chat #chatTabs.ui-tabs {
+	padding: 0;
+}
+#chatPanel #chat #chatTabs.ui-tabs .ui-tabs-nav {
+	padding: 0;
+}
+#chatPanel #chat #chatTabs.ui-tabs .ui-tabs-nav li {
+	margin: 0;
+}
+#chatPanel #chat #chatTabs.ui-tabs .ui-tabs-nav li .ui-icon.ui-icon-close {
+	float: left;
+}
+#chatPanel #chat #chatTabs.ui-tabs .ui-tabs-nav .ui-tabs-anchor {
+	padding: 2px .5em;
+	float: left;
+}
+#chatPanel #chat #controlBlock {
+	background-color: #5294BB; /*FIXME should be replaced with "ui" classes*/
+}
+#chatPanel #chat #controlBlock:hover {
+	background-color: #2779aa; /*FIXME should be replaced with "ui" classes*/
+}
+#chatPanel #chat #controlBlock #control {
+	text-align: center;
+	margin-left: 50%;
+	margin-right: 50%;
+}
+#chatPanel #chat .messageArea .date {
+    margin-right: 5px;
+    font-style: italic;
+    font-size: smaller;
+}
+#chatPanel #chat .messageArea .from {
+	margin-left: 5px;
+    margin-right: 5px;
+	font-weight: bold;
+}
+.ui-tabs .ui-tabs-panel.messageArea {
+	height: 165px;
+	overflow-y: auto;
+	padding: 5px;
+}
+#chatMessage .wysiwyg-editor {
+	height: 70px;
+	max-height: 70px;
+}

@@ -82,9 +82,9 @@ import org.apache.wicket.request.mapper.parameter.PageParametersEncoder;
 import org.apache.wicket.settings.PageSettings;
 import org.apache.wicket.util.collections.ConcurrentHashSet;
 import org.apache.wicket.util.tester.WicketTester;
-import org.wicketstuff.select2.ApplicationSettings;
 import org.slf4j.Logger;
 import org.springframework.web.context.support.XmlWebApplicationContext;
+import org.wicketstuff.select2.ApplicationSettings;
 
 import ro.fortsoft.wicket.dashboard.WidgetRegistry;
 import ro.fortsoft.wicket.dashboard.web.DashboardContext;
@@ -268,8 +268,36 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 		return ROOMS.containsKey(roomId) ? ROOMS.get(roomId) : new HashSet<Client>();
 	}
 	
+	public static Set<Long> getUserRooms(long userId) {
+		Set<Long> result = new HashSet<Long>();
+		for (Entry<Long, Set<Client>> me : ROOMS.entrySet()) {
+			for (Client c : me.getValue()) {
+				if (c.getUserId() == userId) {
+					result.add(me.getKey());
+				}
+			}
+		}
+		return result;
+	}
+	
+	public static boolean isUserInRoom(long roomId, long userId) {
+		if (ROOMS.containsKey(roomId)) {
+			Set<Client> clients = ROOMS.get(roomId);
+			for (Client c : clients) {
+				if (c.getUserId() == userId) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+	
 	public static boolean isUserOnline(long userId) {
 		return ONLINE_USERS.containsKey(userId);
+	}
+	
+	public static Set<Client> getClients(long userId) {
+		return ONLINE_USERS.containsKey(userId) ? ONLINE_USERS.get(userId) : new HashSet<Client>();
 	}
 	
 	//TODO need more safe way FIXME

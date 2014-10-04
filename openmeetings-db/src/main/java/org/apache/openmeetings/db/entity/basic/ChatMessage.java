@@ -42,8 +42,13 @@ import org.simpleframework.xml.Root;
 @Entity
 @NamedQueries({
 	@NamedQuery(name = "getChatMessageById", query = "SELECT c FROM ChatMessage c WHERE c.id = :id")
-	, @NamedQuery(name = "getChatMessagesByUser", query = "SELECT DISTINCT c FROM ChatMessage c WHERE c.fromUser.id = :userId OR c.toUser.id = :userId ORDER BY c.sent ASC")
-	, @NamedQuery(name = "getGlobalChatMessages", query = "SELECT DISTINCT c FROM ChatMessage c WHERE c.toUser IS NULL ORDER BY c.sent ASC")
+	, @NamedQuery(name = "getChatMessages", query = "SELECT c FROM ChatMessage c ORDER BY c.id")
+	, @NamedQuery(name = "getGlobalChatMessages", query = "SELECT c FROM ChatMessage c WHERE c.toUser IS NULL AND c.toRoom IS NULL ORDER BY c.sent ASC")
+	, @NamedQuery(name = "getChatMessagesByRoom", query = "SELECT c FROM ChatMessage c WHERE c.toUser.id IS NULL AND c.toRoom.id = :roomId ORDER BY c.sent ASC")
+	, @NamedQuery(name = "getChatMessagesByUser", query = "SELECT c FROM ChatMessage c WHERE c.toUser IS NOT NULL AND c.toRoom IS NULL AND "
+			+ "(c.fromUser.id = :userId OR c.toUser.id = :userId) ORDER BY c.sent ASC")
+	, @NamedQuery(name = "getChatMessagesByUserTime", query = "SELECT c FROM ChatMessage c WHERE c.toUser IS NOT NULL AND c.toRoom IS NULL AND "
+			+ "(c.fromUser.id = :userId OR c.toUser.id = :userId) AND c.sent > :date ORDER BY c.sent ASC")
 })
 @Table(name = "chat")
 @Root(name = "ChatMessage")

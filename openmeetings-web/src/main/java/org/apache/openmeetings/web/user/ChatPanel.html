@@ -33,7 +33,10 @@
 			<table style="width: 100%">
 				<tr>
 					<td><div id="chatMessage" wicket:id="chatMessage"></div></td>
-					<td style="width: 50px"><div wicket:id="send"><wicket:ommessage key="220"/></div></td>
+					<td style="width: 50px">
+						<div wicket:id="send"><wicket:ommessage key="220"/></div>
+						<input type="hidden" wicket:id="activeTab" id="activeChatTab"/>
+					</td>
 				</tr>
 			</table>
 		</form>

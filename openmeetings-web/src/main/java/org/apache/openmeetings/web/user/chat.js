@@ -16,7 +16,8 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-var chatTabs, tabTemplate = "<li><a href='#{href}'>#{label}</a> <span class='ui-icon ui-icon-close' role='presentation'></span></li>";
+var chatTabs, tabTemplate = "<li><a href='#{href}'>#{label}</a></li>", closeBlock = "<span class='ui-icon ui-icon-close' role='presentation'></span>"
+	, closedHeight = "16px", openedHeight = "345px";
 $(function() {
 	Wicket.Event.subscribe("/websocket/message", function(jqEvent, msg) {
 		var m = jQuery.parseJSON(msg);
@@ -25,15 +26,14 @@ $(function() {
 				case "chat":
 					addChatMessage(m);
 					break;
-				case "room":
-					if (typeof(roomMessage) == "function") {
-						roomMessage(m);
-					}
-					break;
 			}
 		}
 	});
-	chatTabs = $("#chatTabs").tabs();
+	chatTabs = $("#chatTabs").tabs({
+		activate: function(event, ui) {
+			$('#activeChatTab').val(ui.newPanel[0].id);
+		}
+	});
 	// close icon: removing the tab on click
 	chatTabs.delegate("span.ui-icon-close", "click", function() {
 		var panelId = $(this).closest("li").remove().attr("aria-controls");
@@ -41,25 +41,49 @@ $(function() {
 		chatTabs.tabs("refresh");
 	});
 });
+function openChat() {
+	if ($('#chatPanel').height() < 20) {
+		$('#chat #controlBlock #control').removeClass('ui-icon-carat-1-n').addClass('ui-icon-carat-1-s');
+		$('#chatPanel, #chat').animate({height: openedHeight}, 1000);
+	}
+}
+function closeChat() {
+	var chat = $('#chatPanel');
+	if ($('#chatPanel').height() > 20) {
+		$('#chat #controlBlock #control').removeClass('ui-icon-carat-1-s').addClass('ui-icon-carat-1-n');
+		chat.animate({height: "16px"}, 1000);
+		$('#chatPanel, #chat').animate({height: closedHeight}, 1000);
+	}
+}
 function toggleChat() {
-	var chat = $('#chat');
-	$('#chat #controlBlock #control')
-		.removeClass('ui-icon-carat-1-' + (chat.height() < 20 ? 'n' : 's'))
-		.addClass('ui-icon-carat-1-' + (chat.height() < 20 ? 's' : 'n'));
-	chat.animate({ height: chat.height() < 20 ? "380px" : "16px" }, 1000);
+	if ($('#chatPanel').height() < 20) {
+		openChat();
+	} else {
+		closeChat();
+	}
+}
+function activateTab(id) {
+	chatTabs.tabs("option", "active", chatTabs.find('a[href="#' + id + '"]').parent().index());
 }
 function addChatTab(id, label) {
+	if ($('#' + id).length) {
+		return;
+	}
 	var li = $(tabTemplate.replace(/#\{href\}/g, "#" + id).replace(/#\{label\}/g, label));
+	if (id.indexOf("chatTab-r") != 0) {
+		li.append(closeBlock);
+	}
 	chatTabs.find(".ui-tabs-nav").append(li);
 	chatTabs.append("<div class='messageArea' id='" + id + "'></div>");
 	chatTabs.tabs("refresh");
+	activateTab(id);
 }
 function addChatMessageInternal(m) {
 	if (m && m.type == "chat") {
 		var msg = $('<div><span class="from">' + m.msg.from + '</span><span class="date">'
 				+ m.msg.sent + '</span>' + m.msg.message + '</div>');
 		if (!$('#' + m.msg.scope).length) {
-			addChatTab(m.scope, 'Test');
+			addChatTab(m.msg.scope, m.msg.scopeName);
 		}
 		$('#' + m.msg.scope).append(msg);
 		msg[0].scrollIntoView();

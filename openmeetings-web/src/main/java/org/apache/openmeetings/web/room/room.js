@@ -16,64 +16,6 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-
-function getUserId(uid) { return 'user' + uid; }
-
-function addUser(u, uld) {
-	var s = u.firstname + ' ' + u.lastname;
-	var d = $('<div class="user ui-corner-all ui-widget-content"></div>').attr('id', getUserId(u.uid))
-		.attr('data-id', u.id).text(s);
-	if (u.current) {
-		d.addClass('current');
-	}
-	uld.append(d);
-	//TODO add activity
-}
-
-function removeUser(id) {
-	$('#' + id).remove();//TODO replace with 'ends-with-id'
-	//TODO add activity
-}
-
-function roomMessage(m) {
-	if (m && m.type == "room") {
-		//TODO add timestamp support
-		switch (m.msg) {
-			case "users":
-				var uld = $('.user.list');
-				var ulist = [];
-				uld.children('[id^="user"]').each(function() {
-					ulist.push(this.id); 
-				});
-				for (var i = 0; i < m.users.length; ++i) {
-					var u = m.users[i];
-					var id = getUserId(u.uid);
-					if ($('#' + id).length == 0) {
-						addUser(u, uld);
-					} else {
-						var idx = ulist.indexOf(id);
-						if (idx > -1) {
-							ulist.splice(idx, 1);
-						}
-					}
-				}
-				for (var i = 0; i < ulist.length; ++i) {
-					removeUser(ulist[i]);
-				}
-				break;
-			case "addUser":
-				var id = getUserId(m.user.uid);
-				if ($('#' + id).length == 0) {
-					addUser(m.user, $('.user.list'));
-				}
-				break;
-			case "removeUser":
-				removeUser(getUserId(m.uid));
-				break;
-		}
-	}
-}
-
 function initVideo(_options) {
 	var options = $.extend({bgcolor: "#ffffff", width: 570, height: 900
 		, resolutions: JSON.stringify([{label: "4:3 (~6 KByte/sec)", width: 40, height: 30}
@@ -142,4 +84,9 @@ function roomLoad() {
 			$(".room.wb.area .wb").width(w);
 		}
 	});
+}
+function startPrivateChat(el) {
+	addChatTab('chatTab-u' + el.parent().parent().data("userid"), el.parent().parent().find('.user.name').text());
+	openChat();
+	$('#chatMessage .wysiwyg-editor').click();
 }

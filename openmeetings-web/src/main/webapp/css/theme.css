@@ -75,59 +75,6 @@ html, body {
 	font-size: 1em;
 	color: #FF0000;
 }
-
-#chatPanel {
-	position: fixed;
-	z-index: 2000;
-	bottom: 0px;
-	right: 10px;
-	width: 600px;
-}
-#chatPanel #chat {
-	height: 10px;
-	background-color: #F2FAFF;
-}
-#chatPanel #chat #chatTabs.ui-tabs {
-	padding: 0;
-}
-#chatPanel #chat #chatTabs.ui-tabs .ui-tabs-nav {
-	padding: 0;
-}
-#chatPanel #chat #chatTabs..ui-tabs .ui-tabs-nav li {
-	margin: 0;
-}
-#chatPanel #chat #chatTabs.ui-tabs .ui-tabs-nav .ui-tabs-anchor {
-	padding: 2px .5em;
-}
-#chatPanel #chat #controlBlock {
-	background-color: #5294BB;
-}
-#chatPanel #chat #controlBlock:hover {
-	background-color: #2779aa;
-}
-#chatPanel #chat #controlBlock #control {
-	text-align: center;
-	margin-left: 50%;
-	margin-right: 50%;
-}
-#chatPanel #chat .messageArea .date {
-    margin-right: 5px;
-    font-style: italic;
-    font-size: smaller;
-}
-#chatPanel #chat .messageArea .from {
-	margin-left: 5px;
-    margin-right: 5px;
-	font-weight: bold;
-}
-.messageArea {
-	height: 165px;
-	overflow-y: auto;
-}
-#chatMessage .wysiwyg-editor {
-	height: 70px;
-	max-height: 70px;
-}
 .clickable {
 	cursor: pointer;
 }

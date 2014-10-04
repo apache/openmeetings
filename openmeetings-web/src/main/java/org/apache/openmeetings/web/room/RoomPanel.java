@@ -71,7 +71,6 @@ import org.apache.openmeetings.web.room.message.RoomMessage;
 import org.apache.openmeetings.web.room.poll.CreatePollDialog;
 import org.apache.openmeetings.web.room.poll.PollResultsDialog;
 import org.apache.openmeetings.web.room.poll.VoteDialog;
-import org.apache.openmeetings.web.user.ChatPanel;
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -142,6 +141,7 @@ public class RoomPanel extends BasePanel {
 						.toString()
 						));
 				broadcast(new RoomMessage(roomId, c.getUserId(), RoomMessage.Type.roomEnter));
+				getMainPage().getChat().roomEnter(roomId, target);
 			} catch (MalformedURLException e) {
 				log.error("Error while constructing room parameters", e);
 			}
@@ -293,6 +293,8 @@ public class RoomPanel extends BasePanel {
 				RoomClient rc = item.getModelObject();
 				item.setMarkupId(String.format("user%s", rc.c.getUid()));
 				item.add(new Label("name", rc.u.getFirstname() + " " + rc.u.getLastname()));
+				item.add(AttributeAppender.append("data-userid", rc.u.getId()));
+				item.add(new WebMarkupContainer("privateChat").setVisible(getUserId() != rc.u.getId()));
 				if (c != null && rc.c.getUid().equals(c.getUid())) {
 					item.add(AttributeAppender.append("class", "current"));
 				}
@@ -343,7 +345,6 @@ public class RoomPanel extends BasePanel {
 						updateUserMenuIcons(wsEvent.getHandler());
 						break;
 					case roomEnter:
-						wsEvent.getHandler().appendJavaScript(String.format("addChatTab('%1$s%2$d', '%3$s %2$d');", ChatPanel.ID_ROOM_PREFIX, roomId, WebSession.getString(406)));
 						updateUserMenuIcons(wsEvent.getHandler());
 					case roomExit:
 						//TODO check user/remove tab
@@ -410,7 +411,7 @@ public class RoomPanel extends BasePanel {
 					}
 				});
 			} catch (Exception e) {
-				log.error("Error while sending message", e);
+				log.error("Error while broadcasting message to room", e);
 			}
 		}
 	}
@@ -421,7 +422,7 @@ public class RoomPanel extends BasePanel {
 			try {
 				reg.getConnection(Application.get(), c.getSessionId(), new PageIdKey(c.getPageId())).sendMessage(msg);
 			} catch (Exception e) {
-				log.error("Error while sending message", e);
+				log.error("Error while sending message to room", e);
 			}
 		}
 	}
@@ -486,7 +487,7 @@ public class RoomPanel extends BasePanel {
 	@Override
 	public void cleanup(AjaxRequestTarget target) {
 		target.add(getMainPage().getHeader().setVisible(true), getMainPage().getMenu().setVisible(true)
-				, getMainPage().getTopLinks().setVisible(true));
+				, getMainPage().getTopLinks().setVisible(true), getMainPage().getChat().setVisible(true));
 		target.appendJavaScript("$(window).off('resize.openmeetings'); $('.room.video').dialog('destroy');");
 	}
 

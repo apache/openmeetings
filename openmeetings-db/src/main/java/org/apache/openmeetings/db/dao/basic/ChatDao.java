@@ -38,8 +38,30 @@ public class ChatDao {
 				.getSingleResult();
 	}
 
-	//TODO additional methods should be added to get messages by external email
-	public List<ChatMessage> get(long userId, int start, int count) {
+	//for export
+	public List<ChatMessage> get(int start, int count) {
+		return em.createNamedQuery("getGlobalChatMessages", ChatMessage.class)
+				.setFirstResult(start)
+				.setMaxResults(count)
+				.getResultList();
+	}
+
+	public List<ChatMessage> getGlobal(int start, int count) {
+		return em.createNamedQuery("getGlobalChatMessages", ChatMessage.class)
+				.setFirstResult(start)
+				.setMaxResults(count)
+				.getResultList();
+	}
+	
+	public List<ChatMessage> getRoom(long roomId, int start, int count) {
+		return em.createNamedQuery("getChatMessagesByRoom", ChatMessage.class)
+				.setParameter("roomId", roomId)
+				.setFirstResult(start)
+				.setMaxResults(count)
+				.getResultList();
+	}
+	
+	public List<ChatMessage> getUser(long userId, int start, int count) {
 		return em.createNamedQuery("getChatMessagesByUser", ChatMessage.class)
 				.setParameter("userId", userId)
 				.setFirstResult(start)
@@ -47,8 +69,10 @@ public class ChatDao {
 				.getResultList();
 	}
 
-	public List<ChatMessage> get(int start, int count) {
-		return em.createNamedQuery("getGlobalChatMessages", ChatMessage.class)
+	public List<ChatMessage> getUserRecent(long userId, Date date, int start, int count) {
+		return em.createNamedQuery("getChatMessagesByUserTime", ChatMessage.class)
+				.setParameter("userId", userId)
+				.setParameter("date", date)
 				.setFirstResult(start)
 				.setMaxResults(count)
 				.getResultList();

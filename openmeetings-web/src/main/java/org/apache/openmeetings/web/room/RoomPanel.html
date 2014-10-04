@@ -42,7 +42,13 @@
 			</ul>
 			<div id="utab">
 				<div wicket:id="userList" class="user list">
-					<div wicket:id="user" class="user ui-corner-all ui-widget-content"><span wicket:id="name"></span></div>
+					<div wicket:id="user" class="user ui-corner-all ui-widget-content">
+						<div wicket:id="name" class="user name"></div>
+						<div class="user actions">
+							<span wicket:id="privateChat" class="private-chat om-icon align-right clickable" wicket:ommessage="title:1493" onclick="startPrivateChat($(this));"></span>
+							<div class="clear"></div>
+						</div>
+					</div>
 				</div>
 			</div>
 			<div wicket:id="ftab" id="ftab"><div class="file list" wicket:id="tree"></div></div>

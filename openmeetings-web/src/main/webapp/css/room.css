@@ -75,6 +75,19 @@
 	padding-left: 5px;
     padding-top: 5px;
 }
+.room.sidebar.left .user.list .user .user.name {
+	line-height: 18px;
+	height: 18px;
+	padding: 0;
+}
+.room.sidebar.left .user.list .user .user.actions {
+	position: relative;
+	height: 18px;
+	padding: 0;
+}
+.private-chat.om-icon {
+	background-image: url(images/page_edit.png);
+}
 .room.sidebar.left .tabs, .room.sidebar.left .tabs #utab, .room.sidebar.left .tabs #ftab {
 	padding: 0;
 }

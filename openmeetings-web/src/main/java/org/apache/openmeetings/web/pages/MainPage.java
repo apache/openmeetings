@@ -78,6 +78,7 @@ public class MainPage extends BaseInitedPage {
 	private final MarkupContainer contents;
 	private final AbstractAjaxTimerBehavior areaBehavior;
 	private final Component dev;
+	private final ChatPanel chat;
 	
 	public MainPage(PageParameters pp) {
 		super();
@@ -128,7 +129,7 @@ public class MainPage extends BaseInitedPage {
 		}		
 		topLinks.add(new ExternalLink("bug", "https://issues.apache.org/jira/browse/OPENMEETINGS"));//FIXME hardcoded
 		
-		add(new ChatPanel("chatPanel"));
+		add(chat = new ChatPanel("chatPanel"));
 		add(new WebSocketBehavior() {
 			private static final long serialVersionUID = 1L;
 
@@ -225,5 +226,9 @@ public class MainPage extends BaseInitedPage {
 
 	public WebMarkupContainer getTopLinks() {
 		return topLinks;
+	}
+
+	public ChatPanel getChat() {
+		return chat;
 	}
 }
