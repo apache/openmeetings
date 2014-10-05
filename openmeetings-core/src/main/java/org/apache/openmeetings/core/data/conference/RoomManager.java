@@ -451,7 +451,7 @@ public class RoomManager implements IRoomManager {
 			r.setWaitForRecording(waitForRecording);
 			r.setAllowRecording(allowRecording);
 			
-			r.setHideChat(hideChat);
+			r.setChatHidden(hideChat);
 			r.setHideActivitiesAndActions(hideActivitiesAndActions);
 			r.setHideActionsMenu(hideActionsMenu);
 			r.setHideFilesExplorer(hideFilesExplorer);
@@ -782,7 +782,7 @@ public class RoomManager implements IRoomManager {
 			r.setWaitForRecording(waitForRecording);
 			r.setAllowRecording(allowRecording);
 			
-			r.setHideChat(hideChat);
+			r.setChatHidden(hideChat);
 			r.setHideActivitiesAndActions(hideActivitiesAndActions);
 			r.setHideActionsMenu(hideActionsMenu);
 			r.setHideFilesExplorer(hideFilesExplorer);

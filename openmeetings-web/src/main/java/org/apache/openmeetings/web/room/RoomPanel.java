@@ -141,7 +141,7 @@ public class RoomPanel extends BasePanel {
 						.toString()
 						));
 				broadcast(new RoomMessage(roomId, c.getUserId(), RoomMessage.Type.roomEnter));
-				getMainPage().getChat().roomEnter(roomId, target);
+				getMainPage().getChat().roomEnter(r, target);
 			} catch (MalformedURLException e) {
 				log.error("Error while constructing room parameters", e);
 			}
@@ -226,7 +226,7 @@ public class RoomPanel extends BasePanel {
 		this(id, getBean(RoomDao.class).get(_roomId));
 	}
 	
-	public RoomPanel(String id, Room r) {
+	public RoomPanel(String id, final Room r) {
 		super(id);
 		this.roomId = r.getId();
 		add((menuPanel = new MenuPanel("roomMenu", getMenu())).setVisible(!r.getHideTopBar()));
@@ -294,7 +294,7 @@ public class RoomPanel extends BasePanel {
 				item.setMarkupId(String.format("user%s", rc.c.getUid()));
 				item.add(new Label("name", rc.u.getFirstname() + " " + rc.u.getLastname()));
 				item.add(AttributeAppender.append("data-userid", rc.u.getId()));
-				item.add(new WebMarkupContainer("privateChat").setVisible(getUserId() != rc.u.getId()));
+				item.add(new WebMarkupContainer("privateChat").setVisible(!r.isChatHidden() && getUserId() != rc.u.getId()));
 				if (c != null && rc.c.getUid().equals(c.getUid())) {
 					item.add(AttributeAppender.append("class", "current"));
 				}
@@ -414,6 +414,15 @@ public class RoomPanel extends BasePanel {
 				log.error("Error while broadcasting message to room", e);
 			}
 		}
+	}
+	
+	public static boolean isModerator(long userId, long roomId) {
+		for (Client c : getRoomUsers(roomId)) {
+			if (c.getUserId() == userId && c.hasRight(Client.Right.moderator)) {
+				return true;
+			}
+		}
+		return false;
 	}
 	
 	public static void sendRoom(long roomId, String msg) {

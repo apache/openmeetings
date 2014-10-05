@@ -21,13 +21,20 @@ package org.apache.openmeetings.web.user;
 import static org.apache.commons.lang3.StringEscapeUtils.unescapeXml;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.openmeetings.web.app.Application.getBean;
+import static org.apache.openmeetings.web.app.Application.getRoomUsers;
 import static org.apache.openmeetings.web.app.Application.getUserRooms;
 import static org.apache.openmeetings.web.app.Application.isUserInRoom;
 import static org.apache.openmeetings.web.app.WebSession.getDateFormat;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
+import static org.apache.openmeetings.web.room.RoomPanel.isModerator;
+import static org.apache.openmeetings.web.util.CallbackFunctionHelper.getNamedFunction;
+import static org.apache.wicket.ajax.attributes.CallbackParameter.explicit;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import org.apache.openmeetings.db.dao.basic.ChatDao;
 import org.apache.openmeetings.db.dao.room.RoomDao;
@@ -39,9 +46,10 @@ import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.Client;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.BasePanel;
-import org.apache.openmeetings.web.room.RoomPanel;
 import org.apache.wicket.Component;
+import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.json.JSONArray;
 import org.apache.wicket.ajax.json.JSONException;
 import org.apache.wicket.ajax.json.JSONObject;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
@@ -74,8 +82,32 @@ public class ChatPanel extends BasePanel {
 	private static final String ID_USER_PREFIX = ID_TAB_PREFIX + "u";
 	public static final String ID_ROOM_PREFIX = ID_TAB_PREFIX + "r";
 	private static final String ID_ALL = ID_TAB_PREFIX + "all";
+	private static final String PARAM_MSG_ID = "msgid";
+	private static final String PARAM_ROOM_ID = "roomid";
+	private final AbstractDefaultAjaxBehavior acceptMessage = new AbstractDefaultAjaxBehavior() {
+		private static final long serialVersionUID = 1L;
+
+		@Override
+		protected void respond(AjaxRequestTarget target) {
+			try {
+				long msgId = getRequest().getRequestParameters().getParameterValue(PARAM_MSG_ID).toLong(); 
+				long roomId = getRequest().getRequestParameters().getParameterValue(PARAM_ROOM_ID).toLong();
+				ChatDao dao = getBean(ChatDao.class);
+				ChatMessage m = dao.get(msgId);
+				if (m.isNeedModeration() && isModerator(getUserId(), roomId)) {
+					m.setNeedModeration(false);
+					dao.update(m);
+					sendRoom(m, getMessage(Arrays.asList(m)).put("mode",  "accept").toString());
+				} else {
+					log.error("It seems like we are being hacked!!!!");
+				}
+			} catch (Exception e) {
+				log.error("Unexpected exception while accepting chat message", e);
+			}
+		}
+	};
 	
-	private JSONObject setScope(JSONObject o, ChatMessage m, long curUserId) {
+	private static JSONObject setScope(JSONObject o, ChatMessage m, long curUserId) {
 		String scope, scopeName;
 		if (m.getToUser() != null) {
 			User u = curUserId == m.getToUser().getId() ? m.getFromUser() : m.getToUser();
@@ -84,6 +116,7 @@ public class ChatPanel extends BasePanel {
 		} else if (m.getToRoom() != null) {
 			scope = ID_ROOM_PREFIX + m.getToRoom().getId();
 			scopeName = String.format("%s %s", WebSession.getString(406), m.getToRoom().getId());
+			o.put("needModeration", m.isNeedModeration());
 		} else {
 			scope = ID_ALL;
 			scopeName = WebSession.getString(1494);
@@ -91,20 +124,24 @@ public class ChatPanel extends BasePanel {
 		return o.put("scope", scope).put("scopeName", scopeName);
 	}
 	
-	private JSONObject getMessage(ChatMessage m) throws JSONException {
-		return getMessage(m, getUserId());
+	public static JSONObject getMessage(List<ChatMessage> list) throws JSONException {
+		return getMessage(getUserId(), list);
 	}
 	
-	private JSONObject getMessage(ChatMessage m, long curUserId) throws JSONException {
-		String smsg = m.getMessage();
-		smsg = smsg == null ? smsg : " " + smsg.replaceAll("&nbsp;", " ") + " ";
+	private static JSONObject getMessage(long curUserId, List<ChatMessage> list) throws JSONException {
+		JSONArray arr = new JSONArray();
+		for (ChatMessage m : list) {
+			String smsg = m.getMessage();
+			smsg = smsg == null ? smsg : " " + smsg.replaceAll("&nbsp;", " ") + " ";
+			arr.put(setScope(new JSONObject(), m, curUserId)
+				.put("id", m.getId())
+				.put("message", smsg)
+				.put("from", m.getFromUser().getFirstname() + " " + m.getFromUser().getLastname())
+				.put("sent", getDateFormat().format(m.getSent())));
+		}
 		return new JSONObject()
 			.put("type", "chat")
-			.put("msg", setScope(new JSONObject(), m, curUserId)
-					.put("id", m.getId())
-					.put("message", smsg)
-					.put("from", m.getFromUser().getFirstname() + " " + m.getFromUser().getLastname())
-					.put("sent", getDateFormat().format(m.getSent())));
+			.put("msg", arr);
 	}
 
 	public ChatPanel(String id) {
@@ -113,30 +150,25 @@ public class ChatPanel extends BasePanel {
 		setOutputMarkupPlaceholderTag(true);
 		setMarkupId(id);
 
-		add(new Behavior() {
+		add(acceptMessage, new Behavior() {
 			private static final long serialVersionUID = 1L;
 
 			@Override
 			public void renderHead(Component component, IHeaderResponse response) {
 				ChatDao dao = getBean(ChatDao.class);
 				try {				
-					StringBuilder sb = new StringBuilder();
 					//FIXME limited count should be loaded with "earlier" link
-					for (ChatMessage m : dao.getGlobal(0, 30)) {
-						sb.append("addChatMessageInternal(").append(getMessage(m).toString()).append(");");
-					}
+					List<ChatMessage> list = new ArrayList<ChatMessage>(dao.getGlobal(0, 30));
 					for(Long roomId : getUserRooms(getUserId())) {
-						for (ChatMessage m : dao.getRoom(roomId, 0, 30)) {
-							sb.append("addChatMessageInternal(").append(getMessage(m).toString()).append(");");
-						}
+						Room r = getBean(RoomDao.class).get(roomId);
+						list.addAll(dao.getRoom(roomId, 0, 30, !r.isChatModerated() || isModerator(getUserId(), roomId)));
 					}
 					Calendar c = WebSession.getCalendar();
 					c.add(Calendar.HOUR_OF_DAY, -1);
-					for (ChatMessage m : dao.getUserRecent(getUserId(), c.getTime(), 0, 30)) {
-						sb.append("addChatMessageInternal(").append(getMessage(m).toString()).append(");");
-					}
-					if (sb.length() > 0) {
-						sb.append("$('.messageArea').emoticonize();");
+					list.addAll(dao.getUserRecent(getUserId(), c.getTime(), 0, 30));
+					if (list.size() > 0) {
+						StringBuilder sb = new StringBuilder();
+						sb.append("addChatMessage(").append(getMessage(list).toString()).append(");");
 						response.render(OnDomReadyHeaderItem.forScript(sb.toString()));
 					}
 				} catch (JSONException e) {
@@ -149,21 +181,16 @@ public class ChatPanel extends BasePanel {
 		add(new ChatForm("sendForm"));
 	}
 
-	public void roomEnter(long roomId, AjaxRequestTarget target) {
-		Room r = getBean(RoomDao.class).get(roomId);
-		if (r.isHideChat()) {
+	public void roomEnter(Room r, AjaxRequestTarget target) {
+		if (r.isChatHidden()) {
 			target.add(setVisible(false));
 			return;
 		}
-		StringBuilder sb = new StringBuilder(String.format("addChatTab('%1$s%2$d', '%3$s %2$d');", ID_ROOM_PREFIX, roomId, WebSession.getString(406)));
-		boolean added = false;
+		StringBuilder sb = new StringBuilder(String.format("addChatTab('%1$s%2$d', '%3$s %2$d');", ID_ROOM_PREFIX, r.getId(), WebSession.getString(406)));
 		sb.append(r.isChatOpened() ? "openChat();" : "closeChat();");
-		for (ChatMessage m : getBean(ChatDao.class).getRoom(roomId, 0, 30)) {
-			added = true;
-			sb.append("addChatMessageInternal(").append(getMessage(m).toString()).append(");");
-		}
-		if (added) {
-			sb.append("$('.messageArea').emoticonize();");
+		List<ChatMessage> list = getBean(ChatDao.class).getRoom(r.getId(), 0, 30, !r.isChatModerated() || isModerator(getUserId(), r.getId()));
+		if (list.size() > 0) {
+			sb.append("addChatMessage(").append(getMessage(list).toString()).append(");");
 		}
 		target.appendJavaScript(sb);
 	}
@@ -176,6 +203,20 @@ public class ChatPanel extends BasePanel {
 	public void renderHead(IHeaderResponse response) {
 		super.renderHead(response);
 		response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forReference(newResourceReference())));
+		response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forScript(getNamedFunction("acceptMessage", acceptMessage, explicit(PARAM_ROOM_ID), explicit(PARAM_MSG_ID)), "acceptMessage")));
+	}
+	
+	private void sendRoom(ChatMessage m, String msg) {
+		IWebSocketConnectionRegistry reg = WebSocketSettings.Holder.get(Application.get()).getConnectionRegistry();
+		for (Client c : getRoomUsers(m.getToRoom().getId())) {
+			try {
+				if (!m.isNeedModeration() || (m.isNeedModeration() && c.hasRight(Client.Right.moderator))) {
+					reg.getConnection(Application.get(), c.getSessionId(), new PageIdKey(c.getPageId())).sendMessage(msg);
+				}
+			} catch (Exception e) {
+				log.error("Error while sending message to room", e);
+			}
+		}
 	}
 	
 	private class ChatForm extends Form<Void> {
@@ -209,9 +250,10 @@ public class ChatPanel extends BasePanel {
 									if (isUserInRoom(r.getId(), getUserId())) {
 										m.setToRoom(r);
 									} else {
-										log.error("It seems like we being hacked!!!!");
+										log.error("It seems like we are being hacked!!!!");
 										return;
 									}
+									m.setNeedModeration(r.isChatModerated() && !isModerator(m.getFromUser().getId(), r.getId()));
 								} else if (scope.startsWith(ID_USER_PREFIX)) {
 									User u = getBean(UserDao.class).get(Long.parseLong(scope.substring(ID_USER_PREFIX.length())));
 									m.setToUser(u);
@@ -221,9 +263,9 @@ public class ChatPanel extends BasePanel {
 							//no-op
 						}
 						dao.update(m);
-						String msg = getMessage(m).toString();
+						String msg = getMessage(Arrays.asList(m)).toString();
 						if (m.getToRoom() != null) {
-							RoomPanel.sendRoom(m.getToRoom().getId(), msg);
+							sendRoom(m, msg);
 						} else if (m.getToUser() != null) {
 							IWebSocketConnectionRegistry reg = WebSocketSettings.Holder.get(Application.get()).getConnectionRegistry();
 							for (Client c : Application.getClients(getUserId())) {
@@ -233,7 +275,7 @@ public class ChatPanel extends BasePanel {
 									log.error("Error while sending message to room", e);
 								}
 							}
-							msg = getMessage(m, m.getToUser().getId()).toString();
+							msg = getMessage(m.getToUser().getId(), Arrays.asList(m)).toString();
 							for (Client c : Application.getClients(m.getToUser().getId())) {
 								try {
 									reg.getConnection(Application.get(), c.getSessionId(), new PageIdKey(c.getPageId())).sendMessage(msg);

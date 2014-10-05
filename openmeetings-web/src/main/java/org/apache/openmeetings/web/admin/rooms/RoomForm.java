@@ -169,7 +169,7 @@ public class RoomForm extends AdminBaseForm<Room> {
 		add(new CheckBox("allowRecording"));
 
 		add(new CheckBox("hideTopBar"));
-		add(new CheckBox("hideChat"));
+		add(new CheckBox("chatHidden"));
 		add(new CheckBox("hideActivitiesAndActions"));
 		add(new CheckBox("hideFilesExplorer"));
 		add(new CheckBox("hideActionsMenu"));

@@ -16,7 +16,10 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-var chatTabs, tabTemplate = "<li><a href='#{href}'>#{label}</a></li>", closeBlock = "<span class='ui-icon ui-icon-close' role='presentation'></span>"
+var chatTabs, tabTemplate = "<li><a href='#{href}'>#{label}</a></li>"
+	, msgTemplate = "<div id='chat-msg-id-#{id}'><span class='from'>#{from}</span><span class='date'>#{sent}</span>#{msg}</div>"
+	, acceptTemplate = "<span class='tick om-icon align-right clickable' data-msgid='#{msgid}' data-roomid='#{roomid}' onclick='var e=$(this);acceptMessage(e.data(\"roomid\"),e.data(\"msgid\"));e.parent().remove();'></span>"
+	, closeBlock = "<span class='ui-icon ui-icon-close' role='presentation'></span>"
 	, closedHeight = "16px", openedHeight = "345px";
 $(function() {
 	Wicket.Event.subscribe("/websocket/message", function(jqEvent, msg) {
@@ -66,7 +69,7 @@ function activateTab(id) {
 	chatTabs.tabs("option", "active", chatTabs.find('a[href="#' + id + '"]').parent().index());
 }
 function addChatTab(id, label) {
-	if ($('#' + id).length) {
+	if ($('#chat').length < 1 || $('#' + id).length > 0) {
 		return;
 	}
 	var li = $(tabTemplate.replace(/#\{href\}/g, "#" + id).replace(/#\{label\}/g, label));
@@ -78,20 +81,27 @@ function addChatTab(id, label) {
 	chatTabs.tabs("refresh");
 	activateTab(id);
 }
-function addChatMessageInternal(m) {
-	if (m && m.type == "chat") {
-		var msg = $('<div><span class="from">' + m.msg.from + '</span><span class="date">'
-				+ m.msg.sent + '</span>' + m.msg.message + '</div>');
-		if (!$('#' + m.msg.scope).length) {
-			addChatTab(m.msg.scope, m.msg.scopeName);
-		}
-		$('#' + m.msg.scope).append(msg);
-		msg[0].scrollIntoView();
-	}
-}
 function addChatMessage(m) {
-	if (m && m.type == "chat") {
-		addChatMessageInternal(m);
+	if ($('#chat').length > 0 && m && m.type == "chat") {
+		var msg;
+		for (var i = 0; i < m.msg.length; ++i) {
+			var cm = m.msg[i];
+			//needModeration
+			msg = $(msgTemplate.replace(/#\{id\}/g, cm.id).replace(/#\{from\}/g, cm.from).replace(/#\{sent\}/g, cm.sent).replace(/#\{msg\}/g, cm.message));
+			if (cm.needModeration) {
+				msg.append(acceptTemplate.replace(/#\{msgid\}/g, cm.id).replace(/#\{roomid\}/g, cm.scope.substring(9)));
+			}
+			if (!$('#' + cm.scope).length) {
+				addChatTab(cm.scope, cm.scopeName);
+			}
+			if (m.mode == "accept") {
+				$('#chat-msg-id-' + cm.id).remove();
+			}
+			$('#' + cm.scope).append(msg);
+		}
+		if (msg[0]) {
+			msg[0].scrollIntoView();
+		}
 		$('.messageArea').emoticonize();
 	}
 }

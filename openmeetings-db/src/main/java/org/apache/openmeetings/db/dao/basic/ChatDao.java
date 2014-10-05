@@ -53,9 +53,10 @@ public class ChatDao {
 				.getResultList();
 	}
 	
-	public List<ChatMessage> getRoom(long roomId, int start, int count) {
+	public List<ChatMessage> getRoom(long roomId, int start, int count, boolean all) {
 		return em.createNamedQuery("getChatMessagesByRoom", ChatMessage.class)
 				.setParameter("roomId", roomId)
+				.setParameter("all", all)
 				.setFirstResult(start)
 				.setMaxResults(count)
 				.getResultList();

@@ -44,7 +44,8 @@ import org.simpleframework.xml.Root;
 	@NamedQuery(name = "getChatMessageById", query = "SELECT c FROM ChatMessage c WHERE c.id = :id")
 	, @NamedQuery(name = "getChatMessages", query = "SELECT c FROM ChatMessage c ORDER BY c.id")
 	, @NamedQuery(name = "getGlobalChatMessages", query = "SELECT c FROM ChatMessage c WHERE c.toUser IS NULL AND c.toRoom IS NULL ORDER BY c.sent ASC")
-	, @NamedQuery(name = "getChatMessagesByRoom", query = "SELECT c FROM ChatMessage c WHERE c.toUser.id IS NULL AND c.toRoom.id = :roomId ORDER BY c.sent ASC")
+	, @NamedQuery(name = "getChatMessagesByRoom", query = "SELECT c FROM ChatMessage c WHERE c.toUser.id IS NULL AND c.toRoom.id = :roomId"
+			+ " AND (true = :all OR (false = :all AND c.needModeration = false)) ORDER BY c.sent ASC")
 	, @NamedQuery(name = "getChatMessagesByUser", query = "SELECT c FROM ChatMessage c WHERE c.toUser IS NOT NULL AND c.toRoom IS NULL AND "
 			+ "(c.fromUser.id = :userId OR c.toUser.id = :userId) ORDER BY c.sent ASC")
 	, @NamedQuery(name = "getChatMessagesByUserTime", query = "SELECT c FROM ChatMessage c WHERE c.toUser IS NOT NULL AND c.toRoom IS NULL AND "
@@ -88,6 +89,10 @@ public class ChatMessage implements IDataProviderEntity {
 	@Element(name = "sent", data = true, required = false)
 	private Date sent;
 
+	@Column(name = "need_moderation", nullable = false)
+	@Element(name = "needModeration", data = true, required = false)
+	private boolean needModeration;
+	
 	public Long getId() {
 		return id;
 	}
@@ -134,5 +139,13 @@ public class ChatMessage implements IDataProviderEntity {
 
 	public void setSent(Date sent) {
 		this.sent = sent;
+	}
+
+	public boolean isNeedModeration() {
+		return needModeration;
+	}
+
+	public void setNeedModeration(boolean needModeration) {
+		this.needModeration = needModeration;
 	}
 }

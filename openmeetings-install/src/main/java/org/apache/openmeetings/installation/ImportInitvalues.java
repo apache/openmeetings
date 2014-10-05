@@ -520,7 +520,7 @@ public class ImportInitvalues {
 		r.setWaitForRecording(false);
 		r.setAllowRecording(true);
 		
-		r.setHideChat(false);
+		r.setChatHidden(false);
 		r.setHideActivitiesAndActions(false);
 		r.setHideActionsMenu(false);
 		r.setHideFilesExplorer(false);

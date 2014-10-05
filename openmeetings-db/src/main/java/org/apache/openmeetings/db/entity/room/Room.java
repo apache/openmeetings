@@ -192,7 +192,7 @@ public class Room implements IDataProviderEntity {
 
 	@Column(name = "hide_chat")
 	@Element(name = "hideChat", data = true, required = false)
-	private boolean hideChat = false;
+	private boolean chatHidden = false;
 
 	@Column(name = "hide_activities_and_actions")
 	@Element(data = true, required = false)
@@ -220,7 +220,7 @@ public class Room implements IDataProviderEntity {
 
 	@Column(name = "chat_moderated")
 	@Element(data = true, required = false)
-	private Boolean chatModerated = false;
+	private boolean chatModerated = false;
 
 	@Column(name = "chat_opened")
 	@Element(data = true, required = false)
@@ -461,12 +461,12 @@ public class Room implements IDataProviderEntity {
 		this.hideTopBar = hideTopBar;
 	}
 
-	public boolean isHideChat() {
-		return hideChat;
+	public boolean isChatHidden() {
+		return chatHidden;
 	}
 
-	public void setHideChat(boolean hideChat) {
-		this.hideChat = hideChat;
+	public void setChatHidden(boolean chatHidden) {
+		this.chatHidden = chatHidden;
 	}
 
 	public Boolean getHideActivitiesAndActions() {
@@ -527,11 +527,11 @@ public class Room implements IDataProviderEntity {
 		}
 	}
 
-	public Boolean getChatModerated() {
+	public boolean isChatModerated() {
 		return chatModerated;
 	}
 
-	public void setChatModerated(Boolean chatModerated) {
+	public void setChatModerated(boolean chatModerated) {
 		this.chatModerated = chatModerated;
 	}
 
