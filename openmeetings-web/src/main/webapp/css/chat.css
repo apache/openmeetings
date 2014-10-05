@@ -26,7 +26,6 @@
 }
 #chatPanel #chat {
 	height: 16px;
-	background-color: #F2FAFF; /*FIXME should be replaced with "ui" classes*/
 }
 #chatPanel #chat .btn-toolbar {
 	margin-top: 2px;
@@ -48,12 +47,6 @@
 #chatPanel #chat #chatTabs.ui-tabs .ui-tabs-nav .ui-tabs-anchor {
 	padding: 2px .5em;
 	float: left;
-}
-#chatPanel #chat #controlBlock {
-	background-color: #5294BB; /*FIXME should be replaced with "ui" classes*/
-}
-#chatPanel #chat #controlBlock:hover {
-	background-color: #2779aa; /*FIXME should be replaced with "ui" classes*/
 }
 #chatPanel #chat #controlBlock #control {
 	text-align: center;
