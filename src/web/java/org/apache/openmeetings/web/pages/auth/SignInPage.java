@@ -27,6 +27,8 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
@@ -74,7 +76,7 @@ import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 
 public class SignInPage extends BaseInitedPage {
-	private static final long serialVersionUID = -3843571657066167592L;
+	private static final long serialVersionUID = 1L;
 	private static final Logger log = Red5LoggerFactory.getLogger(SignInPage.class, webAppRootKey);
 	private SignInDialog d;
 	
@@ -173,9 +175,15 @@ public class SignInPage extends BaseInitedPage {
 	}
 		
 	public static String getRedirectUri(OAuthServer server, Component component) {
-		String baseUrl = RequestCycle.get().getUrlRenderer().renderFullUrl(Url.parse(component.urlFor(SignInPage.class,null).toString()));
-		
-		return baseUrl + "?oauthid=" + server.getId();
+		String result = "";
+		try {
+			String base = getBean(ConfigurationDao.class).getBaseUrl();
+			URI uri = new URI(base + component.urlFor(SignInPage.class, new PageParameters().add("oauthid", server.getId())));
+			result = RequestCycle.get().getUrlRenderer().renderFullUrl(Url.parse(uri.normalize().toString()));
+		} catch (URISyntaxException e) {
+			log.error("Unexpected error while getting redirect URL", e);
+		}
+		return result;
 	}
 		
 	private void prepareConnection(URLConnection connection) {

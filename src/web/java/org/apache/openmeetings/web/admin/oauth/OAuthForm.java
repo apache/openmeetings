@@ -50,8 +50,7 @@ public class OAuthForm extends AdminBaseForm<OAuthServer> {
 		add(new TextField<String>("iconUrl").setLabel(Model.of(WebSession.getString(1575))));
 		add(new RequiredTextField<String>("clientId").setLabel(Model.of(WebSession.getString(1576))));
 		add(new RequiredTextField<String>("clientSecret").setLabel(Model.of(WebSession.getString(1577))));
-		redirectUriText = (TextField<String>) new TextField<String>("redirectUri", Model.of("")).setLabel(Model.of(WebSession.getString(1587)));
-		add(redirectUriText);
+		add(redirectUriText = (TextField<String>) new TextField<String>("redirectUri", Model.of("")).setLabel(Model.of(WebSession.getString(1587))));
 		add(new RequiredTextField<String>("requestKeyUrl").setLabel(Model.of(WebSession.getString(1578))));
 		add(new RequiredTextField<String>("requestTokenUrl").setLabel(Model.of(WebSession.getString(1579))));
 		add(new RequiredTextField<String>("requestTokenAttributes").setLabel(Model.of(WebSession.getString(1586))));
@@ -69,8 +68,7 @@ public class OAuthForm extends AdminBaseForm<OAuthServer> {
 	@Override
 	protected void onModelChanged() {
 		super.onModelChanged();
-		String redirectUri = SignInPage.getRedirectUri(getModelObject(), this);
-		redirectUriText.setModelObject(redirectUri);
+		redirectUriText.setModelObject(SignInPage.getRedirectUri(getModelObject(), this));
 	}
 
 	@Override
@@ -137,5 +135,4 @@ public class OAuthForm extends AdminBaseForm<OAuthServer> {
 		// TODO Auto-generated method stub
 		
 	}
-	
 }
