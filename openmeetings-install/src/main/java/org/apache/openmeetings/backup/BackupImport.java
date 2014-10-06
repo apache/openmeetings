@@ -80,7 +80,7 @@ import org.apache.openmeetings.db.entity.basic.ChatMessage;
 import org.apache.openmeetings.db.entity.basic.Configuration;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
 import org.apache.openmeetings.db.entity.calendar.AppointmentCategory;
-import org.apache.openmeetings.db.entity.calendar.AppointmentReminderTyps;
+import org.apache.openmeetings.db.entity.calendar.AppointmentReminderType;
 import org.apache.openmeetings.db.entity.calendar.MeetingMember;
 import org.apache.openmeetings.db.entity.file.FileItem;
 import org.apache.openmeetings.db.entity.file.FileExplorerItem;
@@ -404,7 +404,7 @@ public class BackupImport {
 	
 			registry.bind(AppointmentCategory.class, new AppointmentCategoryConverter(appointmentCategoryDaoImpl));
 			registry.bind(User.class, new UserConverter(usersDao, usersMap));
-			registry.bind(AppointmentReminderTyps.class, new AppointmentReminderTypeConverter(appointmentReminderTypDaoImpl));
+			registry.bind(AppointmentReminderType.class, new AppointmentReminderTypeConverter(appointmentReminderTypDaoImpl));
 			registry.bind(Room.class, new RoomConverter(roomDao, roomsMap));
 			registry.bind(Date.class, DateConverter.class);
 			

@@ -28,6 +28,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
@@ -39,8 +41,12 @@ import org.simpleframework.xml.Element;
 
 
 @Entity
-@Table(name = "appointmentremindertyps")
-public class AppointmentReminderTyps implements IDataProviderEntity {
+@NamedQueries({
+	@NamedQuery(name="getAppointmentReminderTypeById", query="SELECT app FROM AppointmentReminderType app WHERE app.deleted = false AND app.id = :typId")
+	, @NamedQuery(name="getAppointmentReminderTypes", query="SELECT a FROM AppointmentReminderType a WHERE a.deleted = false")
+})
+@Table(name = "appt_reminder_type")
+public class AppointmentReminderType implements IDataProviderEntity {
 	private static final long serialVersionUID = 1L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

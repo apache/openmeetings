@@ -49,7 +49,7 @@ import org.apache.openmeetings.db.dto.basic.SearchResult;
 import org.apache.openmeetings.db.entity.room.Client;
 import org.apache.openmeetings.db.entity.server.Sessiondata;
 import org.apache.openmeetings.db.entity.user.Address;
-import org.apache.openmeetings.db.entity.user.Organisation_Users;
+import org.apache.openmeetings.db.entity.user.OrganisationUser;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Right;
 import org.apache.openmeetings.db.entity.user.Userdata;
@@ -169,10 +169,8 @@ public class UserManager implements IUserManager {
 	public List<Userdata> getUserdataDashBoard(Long user_id) {
 		if (user_id != null && user_id.longValue() > 0) {
 			try {
-				TypedQuery<Userdata> query = em
-						.createQuery("select c from Userdata as c where c.user_id = :user_id AND c.deleted <> :deleted", Userdata.class);
+				TypedQuery<Userdata> query = em.createQuery("select c from Userdata as c where c.user_id = :user_id AND c.deleted = false", Userdata.class);
 				query.setParameter("user_id", user_id);
-				query.setParameter("deleted", true);
 				List<Userdata> ll = query.getResultList();
 				return ll;
 			} catch (Exception ex2) {
@@ -187,10 +185,9 @@ public class UserManager implements IUserManager {
 		if (user_id != null && user_id.longValue() > 0) {
 			try {
 				TypedQuery<Userdata> query = em
-						.createQuery("select c from Userdata as c where c.user_id = :user_id AND c.data_key = :data_key AND c.deleted <> :deleted", Userdata.class);
+						.createQuery("select c from Userdata as c where c.user_id = :user_id AND c.data_key = :data_key AND c.deleted = false", Userdata.class);
 				query.setParameter("user_id", user_id);
 				query.setParameter("data_key", DATA_KEY);
-				query.setParameter("deleted", true);
 				for (Iterator<Userdata> it2 = query.getResultList().iterator(); it2
 						.hasNext();) {
 					userdata = it2.next();
@@ -412,9 +409,9 @@ public class UserManager implements IUserManager {
 					rights.remove(Right.Login);
 				}
 
-				List<Organisation_Users> orgList = new ArrayList<Organisation_Users>();
+				List<OrganisationUser> orgList = new ArrayList<OrganisationUser>();
 				for (Long id : organisations) {
-					orgList.add(new Organisation_Users(orgDao.get(id)));
+					orgList.add(new OrganisationUser(orgDao.get(id)));
 				}
 				User u = usersDao.addUser(rights, firstname, login, lastname, language_id,
 						password, adr, sendSMS, age, hash, timezone,

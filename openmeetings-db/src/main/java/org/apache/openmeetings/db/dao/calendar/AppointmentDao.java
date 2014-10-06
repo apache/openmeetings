@@ -230,7 +230,7 @@ public class AppointmentDao {
 		a.setUpdated(new Date());
 		a.setDeleted(true);
 		a.setMeetingMembers(null);
-		if (Boolean.TRUE.equals(a.getRoom().getAppointment())) {
+		if (Boolean.TRUE.equals(a.getRoom().isAppointment())) {
 			a.getRoom().setDeleted(true);
 		}
 		update(a, userId);
@@ -369,28 +369,16 @@ public class AppointmentDao {
 
 	// ---------------------------------------------------------------------------------------------
 
-	public Appointment getAppointmentByRoomId(Long user_id, Long rooms_id) {
+	public Appointment getAppointmentByRoomId(Long userId, Long roomId) {
 		try {
+			TypedQuery<Appointment> query = em.createNamedQuery("getAppointmentByRoomId", Appointment.class);
 
-			String hql = "select a from Appointment a "
-					+ "WHERE a.deleted = false "
-					+ "AND a.owner.id = :user_id "
-					+ "AND a.room.id = :rooms_id ";
+			query.setParameter("userId", userId);
+			query.setParameter("roomId", roomId);
 
-			TypedQuery<Appointment> query = em.createQuery(hql,
-					Appointment.class);
+			List<Appointment> list = query.getResultList();
 
-			query.setParameter("user_id", user_id);
-			query.setParameter("rooms_id", rooms_id);
-
-			List<Appointment> listAppoints = query.getResultList();
-
-			if (listAppoints.size() > 0) {
-				return listAppoints.get(0);
-			}
-
-			return null;
-
+			return list.size() > 0 ? list.get(0) : null;
 		} catch (Exception e) {
 			log.error("[getAppointmentByRoomId]", e);
 			return null;

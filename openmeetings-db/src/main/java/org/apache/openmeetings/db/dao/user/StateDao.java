@@ -93,10 +93,8 @@ public class StateDao {
 	 */
 	public State getStateById(long state_id) {
 		try {
-			TypedQuery<State> query = em
-					.createNamedQuery("getStateById", State.class);
+			TypedQuery<State> query = em.createNamedQuery("getStateById", State.class);
 			query.setParameter("state_id", state_id);
-			query.setParameter("deleted", true);
 			List<State> ll = query.getResultList();
 			if (ll.size() > 0) {
 				return ll.get(0);
@@ -118,10 +116,8 @@ public class StateDao {
 			if (name == null) {
 				return null;
 			}
-			TypedQuery<State> query = em
-					.createNamedQuery("getStateByName", State.class);
+			TypedQuery<State> query = em.createNamedQuery("getStateByName", State.class);
 			query.setParameter("name", name.toLowerCase());
-			query.setParameter("deleted", true);
 			List<State> ll = query.getResultList();
 			if (ll.size() > 0) {
 				return ll.get(0);
@@ -139,9 +135,7 @@ public class StateDao {
 	 */
 	public List<State> getStates() {
 		try {
-			TypedQuery<State> query = em
-					.createNamedQuery("getStates", State.class);
-			query.setParameter("deleted", true);
+			TypedQuery<State> query = em.createNamedQuery("getStates", State.class);
 			List<State> ll = query.getResultList();
 			return ll;
 		} catch (Exception ex2) {

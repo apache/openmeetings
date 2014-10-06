@@ -86,7 +86,7 @@ import org.simpleframework.xml.Root;
 			+ "AND r.externalRoomType LIKE :externalRoomType AND c.insertedBy LIKE :insertedBy AND c.deleted = false")
 	, @NamedQuery(name = "getRecordingsByExternalRoomType", query = "SELECT c FROM FlvRecording c, Room r WHERE c.roomId = r.id "
 			+ "AND r.externalRoomType LIKE :externalRoomType AND c.deleted = false")
-	, @NamedQuery(name = "getRecordingsByRoom", query = "SELECT c FROM FlvRecording c WHERE c.deleted = false AND c.roomId = :room_id "
+	, @NamedQuery(name = "getRecordingsByRoom", query = "SELECT c FROM FlvRecording c WHERE c.deleted = false AND c.roomId = :roomId "
 			+ "ORDER BY c.type ASC, c.fileName")
 	, @NamedQuery(name = "getRecordingsByParent", query = "SELECT c FROM FlvRecording c WHERE c.deleted = false AND c.parentItemId = :parentItemId "
 			+ "ORDER BY c.type ASC, c.fileName") 

@@ -48,26 +48,26 @@ import org.simpleframework.xml.Root;
 	@NamedQuery(name = "getContactsByUserAndStatus", query = "select c from UserContact c " +
 			"where c.owner.id = :ownerId " +
 			"AND c.pending = :pending " +
-			"AND c.contact.deleted <> true"),
+			"AND c.contact.deleted = false"),
 	@NamedQuery(name = "getUserContactByShareCalendar", query = "select c from UserContact c "
 			+ "where c.contact.id = :userId "
 			+ "AND c.owner.id = :contactId "
 			+ "AND c.shareCalendar = :shareCalendar "
-			+ "AND c.contact.deleted <> true"),
+			+ "AND c.contact.deleted = false"),
 	@NamedQuery(name = "getContactsByShareCalendar", query = "select c from UserContact c " +
 			"where c.contact.id = :contactId " +
 			"AND c.shareCalendar = :shareCalendar " +
-			"AND c.contact.deleted <> true"),
+			"AND c.contact.deleted = false"),
 	@NamedQuery(name = "getContactRequestsByUserAndStatus", query = "select c from UserContact c " +
 			"where c.contact.id = :user_id " +
 			"AND c.pending = :pending " +
-			"AND c.contact.deleted <> true"),
+			"AND c.contact.deleted = false"),
 	@NamedQuery(name = "getContactsByUser", query = "SELECT c FROM UserContact c " +
 			"WHERE c.contact.id = :user_id " +
-			"AND c.contact.deleted <> true ORDER BY c.pending DESC"),
+			"AND c.contact.deleted = false ORDER BY c.pending DESC"),
 	@NamedQuery(name = "countContactsByUser", query = "select COUNT(c) from UserContact c " +
 			"where c.contact.id = :user_id " +
-			"AND c.contact.deleted <> true"),
+			"AND c.contact.deleted = false"),
 	@NamedQuery(name = "getUserContactsById", query = "SELECT c FROM UserContact c WHERE c.userContactId = :userContactId"),
 	@NamedQuery(name = "getUserContacts", query = "SELECT c FROM UserContact c ORDER BY c.userContactId")
 })

@@ -39,15 +39,15 @@ import org.simpleframework.xml.Root;
 
 @Entity
 @NamedQueries({
-	@NamedQuery(name="deleteUsersFromOrganisation", query="DELETE FROM Organisation_Users c WHERE c.organisation.id = :id")
-	, @NamedQuery(name="countOrganisationUsers", query="SELECT COUNT(c) FROM Organisation_Users c WHERE c.organisation.id = :id")
-	, @NamedQuery(name="getOrganisationUsersById", query="SELECT c FROM Organisation_Users c WHERE c.organisation_users_id = :id")
-	, @NamedQuery(name="getOrganisationUsersByOrgId", query="SELECT c FROM Organisation_Users c WHERE c.organisation.id = :id")
-	, @NamedQuery(name="isUserInOrganization", query="SELECT c FROM Organisation_Users c WHERE c.organisation.id = :orgId AND c.user.id = :userId")
+	@NamedQuery(name="deleteUsersFromOrganisation", query="DELETE FROM OrganisationUser c WHERE c.organisation.id = :id")
+	, @NamedQuery(name="countOrganisationUsers", query="SELECT COUNT(c) FROM OrganisationUser c WHERE c.organisation.id = :id")
+	, @NamedQuery(name="getOrganisationUsersById", query="SELECT c FROM OrganisationUser c WHERE c.id = :id")
+	, @NamedQuery(name="getOrganisationUsersByOrgId", query="SELECT c FROM OrganisationUser c WHERE c.organisation.id = :id")
+	, @NamedQuery(name="isUserInOrganization", query="SELECT c FROM OrganisationUser c WHERE c.organisation.id = :orgId AND c.user.id = :userId")
 })
-@Table(name = "organisation_users")
+@Table(name = "organisation_user")
 @Root(name="user_organisation")
-public class Organisation_Users implements IDataProviderEntity {
+public class OrganisationUser implements IDataProviderEntity {
 	private static final long serialVersionUID = 1L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -76,13 +76,13 @@ public class Organisation_Users implements IDataProviderEntity {
 	private boolean deleted;
 	
 	@Column(name = "is_moderator")
-	@Element(data=true, required=false)
+	@Element(data = true, required = false)
 	private Boolean isModerator;
 	
-	public Organisation_Users() {
+	public OrganisationUser() {
 	}
 	
-	public Organisation_Users(Organisation organisation) {
+	public OrganisationUser(Organisation organisation) {
 		this.organisation = organisation;
 	}
 	
@@ -158,7 +158,7 @@ public class Organisation_Users implements IDataProviderEntity {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Organisation_Users other = (Organisation_Users) obj;
+		OrganisationUser other = (OrganisationUser) obj;
 		if (id == null) {
 			if (other.id != null)
 				return false;

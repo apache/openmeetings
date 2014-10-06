@@ -32,11 +32,9 @@ import javax.persistence.Table;
 
 @Entity
 @NamedQueries({
-	@NamedQuery(name = "getStateById", query = "select c from State as c " +
-			"where c.state_id = :state_id AND c.deleted <> :deleted"),
-	@NamedQuery(name = "getStates", query = "select c from State as c where c.deleted <> :deleted"),
-	@NamedQuery(name = "getStateByName", query = "select c from State as c " +
-			"where lower(c.name) LIKE :name AND c.deleted <> :deleted")
+	@NamedQuery(name = "getStateById", query = "select c from State as c where c.state_id = :state_id AND c.deleted = false"),
+	@NamedQuery(name = "getStates", query = "select c from State as c where c.deleted = false"),
+	@NamedQuery(name = "getStateByName", query = "select c from State as c where lower(c.name) LIKE :name AND c.deleted = false")
 })
 @Table(name = "state")
 public class State implements Serializable {

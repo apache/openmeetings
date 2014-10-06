@@ -30,7 +30,7 @@ import javax.persistence.TypedQuery;
 
 import org.apache.openmeetings.db.dao.label.FieldLanguagesValuesDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
-import org.apache.openmeetings.db.entity.calendar.AppointmentReminderTyps;
+import org.apache.openmeetings.db.entity.calendar.AppointmentReminderType;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,31 +47,26 @@ public class AppointmentReminderTypDao {
 	@Autowired
 	private FieldLanguagesValuesDao fieldLanguagesValuesDao;
 
-	public AppointmentReminderTyps get(Long typId) {
+	public AppointmentReminderType get(Long typId) {
 		try {
-			log.debug("AppointmentReminderTypById: " + typId);
+			log.debug("AppointmentReminderTypeById: " + typId);
 
-			String hql = "select app from AppointmentReminderTyps app WHERE app.deleted = false AND app.id = :typId";
-
-			TypedQuery<AppointmentReminderTyps> query = em.createQuery(hql, AppointmentReminderTyps.class);
+			TypedQuery<AppointmentReminderType> query = em.createNamedQuery("getAppointmentReminderTypeById", AppointmentReminderType.class);
 			query.setParameter("typId", typId);
 
-			AppointmentReminderTyps appointmentReminderTyps = null;
 			try {
-				appointmentReminderTyps = query.getSingleResult();
+				return query.getSingleResult();
 			} catch (NoResultException ex) {
 			}
-
-			return appointmentReminderTyps;
 		} catch (Exception ex2) {
-			log.error("[getAppointmentReminderTypsById]: " + ex2);
+			log.error("[get]: " + ex2);
 		}
 		return null;
 	}
 
-	public Long updateAppointmentReminderTyps(Long typId, String name) {
+	public Long update(Long typId, String name) {
 		try {
-			AppointmentReminderTyps ac = get(typId);
+			AppointmentReminderType ac = get(typId);
 
 			ac.setName(name);
 			ac.setUpdatetime(new Date());
@@ -86,15 +81,15 @@ public class AppointmentReminderTypDao {
 
 			return typId;
 		} catch (Exception ex2) {
-			log.error("[updateAppointmentReminderTyps]: ", ex2);
+			log.error("[update]: ", ex2);
 		}
 		return null;
 	}
 
-	public Long addAppointmentReminderTyps(Long user_id, String name, long fieldvalues_id) {
+	public Long add(Long user_id, String name, long fieldvalues_id) {
 		try {
 
-			AppointmentReminderTyps ac = new AppointmentReminderTyps();
+			AppointmentReminderType ac = new AppointmentReminderType();
 
 			ac.setName(name);
 			ac.setStarttime(new Date());
@@ -107,15 +102,15 @@ public class AppointmentReminderTypDao {
 
 			return category_id;
 		} catch (Exception ex2) {
-			log.error("[addAppointmentReminderTyps]: ", ex2);
+			log.error("[add]: ", ex2);
 		}
 		return null;
 	}
 
-	public Long deleteAppointmentReminderTyp(Long typId) {
+	public Long delete(Long typId) {
 		try {
 
-			AppointmentReminderTyps ac = get(typId);
+			AppointmentReminderType ac = get(typId);
 
 			log.debug("ac: " + ac);
 
@@ -136,28 +131,24 @@ public class AppointmentReminderTypDao {
 
 			return typId;
 		} catch (Exception ex2) {
-			log.error("[deleteAppointmentReminderTyp]: " + ex2);
+			log.error("[delete]: " + ex2);
 		}
 		return null;
 	}
 
-	public List<AppointmentReminderTyps> getAppointmentReminderTypList(long language_id) {
-		log.debug("getAppointmenetReminderTypList");
-
+	public List<AppointmentReminderType> getList(long language_id) {
+		log.debug("getList");
 		try {
+			TypedQuery<AppointmentReminderType> query = em.createNamedQuery("getAppointmentReminderTypes", AppointmentReminderType.class);
 
-			String hql = "select a from AppointmentReminderTyps a WHERE a.deleted = false ";
-
-			TypedQuery<AppointmentReminderTyps> query = em.createQuery(hql, AppointmentReminderTyps.class);
-
-			List<AppointmentReminderTyps> listAppointmentReminderTyp = query.getResultList();
-			for (AppointmentReminderTyps ti : listAppointmentReminderTyp) {
+			List<AppointmentReminderType> listAppointmentReminderTyp = query.getResultList();
+			for (AppointmentReminderType ti : listAppointmentReminderTyp) {
 				ti.setLabel(fieldLanguagesValuesDao.get(ti.getFieldvalues_id(), language_id));
 			}
 
 			return listAppointmentReminderTyp;
 		} catch (Exception ex2) {
-			log.error("[getAppointmentReminderTypList]: " + ex2);
+			log.error("[getList]: " + ex2);
 		}
 		return null;
 	}

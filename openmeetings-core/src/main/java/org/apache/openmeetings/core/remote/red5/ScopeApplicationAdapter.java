@@ -1204,38 +1204,28 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 			Room room = roomDao.get(room_id);
 
 			// not really - default logic
-			if (room.getAppointment() == null || room.getAppointment() == false) {
+			if (!room.isAppointment() && room.isModerated()) {
+				// if this is a Moderated Room then the Room can be only
+				// locked off by the Moderator Bit
+				List<Client> clientModeratorListRoom = this.sessionManager
+						.getCurrentModeratorByRoom(room_id);
 
-				if (room.isModerated()) {
-
-					// if this is a Moderated Room then the Room can be only
-					// locked off by the Moderator Bit
-					List<Client> clientModeratorListRoom = this.sessionManager
-							.getCurrentModeratorByRoom(room_id);
-
-					// If there is no Moderator yet and we are asking for it
-					// then deny it
-					// cause at this moment, the user should wait untill a
-					// Moderator enters the Room
-					if (clientModeratorListRoom.size() == 0) {
-						return false;
-					} else {
-						return true;
-					}
-
+				// If there is no Moderator yet and we are asking for it
+				// then deny it
+				// cause at this moment, the user should wait untill a
+				// Moderator enters the Room
+				if (clientModeratorListRoom.size() == 0) {
+					return false;
 				} else {
 					return true;
 				}
-
 			} else {
-
 				// FIXME: TODO: For Rooms that are created as Appointment we
 				// have to check that too
 				// but I don't know yet the Logic behind it - swagner 19.06.2009
 				return true;
 
 			}
-
 		} catch (Exception err) {
 			log.error("[checkRoomValues]", err);
 		}
@@ -1329,7 +1319,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 			}
 
 			// default logic for non regular rooms
-			if (room.getAppointment() == null || room.getAppointment() == false) {
+			if (!room.isAppointment()) {
 				if (room.isModerated()) {
 					// if this is a Moderated Room then the Room can be only
 					// locked off by the Moderator Bit
@@ -1391,9 +1381,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 							// whatever Role that should get the Moderation
 							currentClient.setIsMod(false);
 						}
-
 					}
-
 				}
 
 				// Update the Client List

@@ -57,17 +57,17 @@ import org.simpleframework.xml.Root;
 })
 @NamedQueries({
 	@NamedQuery(name = "getNondeletedRooms", query = "SELECT r FROM Room r WHERE r.deleted = false"),
-	@NamedQuery(name = "getPublicRooms", query = "SELECT r from Room r WHERE r.ispublic = true and r.deleted = false and r.roomtype.roomtypes_id = :typeId"),
+	@NamedQuery(name = "getPublicRooms", query = "SELECT r from Room r WHERE r.ispublic = true and r.deleted = false and r.roomtype.id = :typeId"),
 	@NamedQuery(name = "getRoomByOwnerAndTypeId", query = "select c from Room as c "
 					+ "where c.ownerId = :ownerId "
-					+ "AND c.roomtype.roomtypes_id = :roomtypesId "
-					+ "AND c.deleted <> :deleted"),	
+					+ "AND c.roomtype.id = :roomtypesId "
+					+ "AND c.deleted = false"),	
 										
 	@NamedQuery(name = "selectMaxFromRooms", query = "select count(c.id) from Room c "
-			+ "where c.deleted <> true AND c.name LIKE :search "),
+			+ "where c.deleted = false AND c.name LIKE :search "),
 	@NamedQuery(name = "getRoomByExternalId", query = "select c from Room as c JOIN c.roomtype as rt "
 			+ "where c.externalRoomId = :externalRoomId AND c.externalRoomType = :externalRoomType "
-			+ "AND rt.roomtypes_id = :roomtypes_id AND c.deleted <> :deleted"),
+			+ "AND rt.id = :roomtypesId AND c.deleted = false"),
 	@NamedQuery(name = "getPublicRoomsOrdered", query = "SELECT r from Room r WHERE r.ispublic= true AND r.deleted= false AND r.appointment = false ORDER BY r.name ASC"),
 	@NamedQuery(name = "getRoomById", query = "SELECT r FROM Room r WHERE r.deleted = false AND r.id = :id"),
 	@NamedQuery(name = "getSipRoomIdsByIds", query = "SELECT r.id FROM Room r WHERE r.deleted = false AND r.sipEnabled = true AND r.id IN :ids"),
@@ -341,11 +341,11 @@ public class Room implements IDataProviderEntity {
 		this.numberOfPartizipants = numberOfPartizipants;
 	}
 
-	public Boolean getAppointment() {
+	public boolean isAppointment() {
 		return appointment;
 	}
 
-	public void setAppointment(Boolean appointment) {
+	public void setAppointment(boolean appointment) {
 		this.appointment = appointment;
 	}
 

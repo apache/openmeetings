@@ -48,7 +48,7 @@ import org.apache.openmeetings.db.dao.user.StateDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.server.LdapConfig;
 import org.apache.openmeetings.db.entity.user.Address;
-import org.apache.openmeetings.db.entity.user.Organisation_Users;
+import org.apache.openmeetings.db.entity.user.OrganisationUser;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Right;
 import org.apache.openmeetings.db.entity.user.User.Type;
@@ -314,7 +314,7 @@ public class LdapLoginManagement {
 						u.setType(Type.ldap);
 						u.setRights(rights);
 						u.setDomainId(domainId);
-						u.getOrganisation_users().add(new Organisation_Users(orgDao.get(cfgDao.getConfValue("default_domain_id", Long.class, "-1"))));
+						u.getOrganisationUsers().add(new OrganisationUser(orgDao.get(cfgDao.getConfValue("default_domain_id", Long.class, "-1"))));
 						u.setLogin(user);
 						u.setAge(new Date());
 						u.setShowContactDataToContacts(true);

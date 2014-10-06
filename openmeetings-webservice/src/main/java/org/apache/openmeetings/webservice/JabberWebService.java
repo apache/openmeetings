@@ -40,7 +40,7 @@ import org.apache.openmeetings.db.entity.room.Invitation;
 import org.apache.openmeetings.db.entity.room.Invitation.Valid;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.room.RoomOrganisation;
-import org.apache.openmeetings.db.entity.user.Organisation_Users;
+import org.apache.openmeetings.db.entity.user.OrganisationUser;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.util.AuthLevelUtil;
 import org.apache.openmeetings.db.util.TimezoneUtil;
@@ -100,7 +100,7 @@ public class JabberWebService {
 
 		Long users_id = sessiondataDao.checkSession(SID);
 		User u = userDao.get(users_id);
-		for (Organisation_Users ou : u.getOrganisation_users()) {
+		for (OrganisationUser ou : u.getOrganisationUsers()) {
 			List<RoomOrganisation> rol = conferenceService.getRoomsByOrganisationWithoutType(SID
 					, ou.getOrganisation().getId().longValue());
 			if (rol != null) {

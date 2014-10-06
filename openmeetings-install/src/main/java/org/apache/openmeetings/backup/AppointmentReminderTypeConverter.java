@@ -19,11 +19,11 @@
 package org.apache.openmeetings.backup;
 
 import org.apache.openmeetings.db.dao.calendar.AppointmentReminderTypDao;
-import org.apache.openmeetings.db.entity.calendar.AppointmentReminderTyps;
+import org.apache.openmeetings.db.entity.calendar.AppointmentReminderType;
 import org.simpleframework.xml.stream.InputNode;
 import org.simpleframework.xml.stream.OutputNode;
 
-public class AppointmentReminderTypeConverter extends OmConverter<AppointmentReminderTyps> {
+public class AppointmentReminderTypeConverter extends OmConverter<AppointmentReminderType> {
 	private AppointmentReminderTypDao appointmentReminderTypDaoImpl;
 	
 	public AppointmentReminderTypeConverter() {
@@ -34,11 +34,11 @@ public class AppointmentReminderTypeConverter extends OmConverter<AppointmentRem
 		this.appointmentReminderTypDaoImpl = appointmentReminderTypDaoImpl;
 	}
 	
-	public AppointmentReminderTyps read(InputNode node) throws Exception {
+	public AppointmentReminderType read(InputNode node) throws Exception {
 		return appointmentReminderTypDaoImpl.get(getlongValue(node));
 	}
 
-	public void write(OutputNode node, AppointmentReminderTyps value) throws Exception {
+	public void write(OutputNode node, AppointmentReminderType value) throws Exception {
 		node.setData(true);
 		node.setValue(value == null ? "0" : "" + value.getId());
 	}

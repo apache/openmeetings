@@ -24,7 +24,7 @@ import static org.junit.Assert.assertNotNull;
 import org.apache.openmeetings.db.dao.user.OrganisationDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.user.Organisation;
-import org.apache.openmeetings.db.entity.user.Organisation_Users;
+import org.apache.openmeetings.db.entity.user.OrganisationUser;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.test.AbstractJUnitDefaults;
 import org.junit.Test;
@@ -50,8 +50,8 @@ public class TestAddGroup extends AbstractJUnitDefaults {
 		User us = usersDao.get(1L);
 		assertNotNull("User should exist", us);
 		
-		assertNotNull("Organisation User list should exist", us.getOrganisation_users());
-		us.getOrganisation_users().add(new Organisation_Users(o));
+		assertNotNull("Organisation User list should exist", us.getOrganisationUsers());
+		us.getOrganisationUsers().add(new OrganisationUser(o));
 		us = usersDao.update(us, null);
 
 		log.error(us.getLastname());

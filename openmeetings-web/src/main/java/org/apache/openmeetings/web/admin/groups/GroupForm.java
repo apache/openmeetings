@@ -24,7 +24,7 @@ import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import org.apache.openmeetings.db.dao.user.OrganisationDao;
 import org.apache.openmeetings.db.dao.user.OrganisationUserDao;
 import org.apache.openmeetings.db.entity.user.Organisation;
-import org.apache.openmeetings.db.entity.user.Organisation_Users;
+import org.apache.openmeetings.db.entity.user.OrganisationUser;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.web.admin.AdminBaseForm;
 import org.apache.openmeetings.web.admin.AdminUserChoiceProvider;
@@ -79,14 +79,14 @@ public class GroupForm extends AdminBaseForm<Organisation> {
 					found = null != getBean(OrganisationUserDao.class).getByOrganizationAndUser(o.getId(), u.getId());
 				}
 				if (!found && u != null) {
-					for (Organisation_Users ou : usersPanel.getUsers2add()) {
+					for (OrganisationUser ou : usersPanel.getUsers2add()) {
 						if (ou.getUser().getId().equals(u.getId())) {
 							found = true;
 							break;
 						}
 					}
 					if (!found) {
-						Organisation_Users ou = new Organisation_Users(o);
+						OrganisationUser ou = new OrganisationUser(o);
 						ou.setUser(u);
 						usersPanel.getUsers2add().add(ou);
 

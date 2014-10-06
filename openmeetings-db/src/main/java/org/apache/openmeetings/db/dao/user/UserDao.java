@@ -45,7 +45,7 @@ import org.apache.openjpa.persistence.OpenJPAQuery;
 import org.apache.openmeetings.db.dao.IDataProviderDao;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.entity.user.Address;
-import org.apache.openmeetings.db.entity.user.Organisation_Users;
+import org.apache.openmeetings.db.entity.user.OrganisationUser;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Right;
 import org.apache.openmeetings.db.entity.user.User.Type;
@@ -122,7 +122,7 @@ public class UserDao implements IDataProviderDao<User> {
 	}
 	
 	private String getAdditionalJoin(boolean filterContacts) {
-		return filterContacts ? "LEFT JOIN u.organisation_users ou" : null;
+		return filterContacts ? "LEFT JOIN u.organisationUsers ou" : null;
 	}
 	
 	private String getAdditionalWhere(boolean excludeContacts, Map<String, Object> params) {
@@ -137,7 +137,7 @@ public class UserDao implements IDataProviderDao<User> {
 		if (filterContacts) {
 			params.put("ownerId", ownerId);
 			params.put("contact", Type.contact);
-			return "((u.type <> :contact AND ou.organisation.id IN (SELECT ou.organisation.id FROM Organisation_Users ou WHERE ou.user.id = :ownerId)) "
+			return "((u.type <> :contact AND ou.organisation.id IN (SELECT ou.organisation.id FROM OrganisationUser ou WHERE ou.user.id = :ownerId)) "
 				+ "OR (u.type = :contact AND u.ownerId = :ownerId))";
 		}
 		return null;
@@ -201,8 +201,8 @@ public class UserDao implements IDataProviderDao<User> {
 	}
 
 	public User update(User u, Long userId) {
-		if (u.getOrganisation_users() != null) {
-			for (Organisation_Users ou : u.getOrganisation_users()) {
+		if (u.getOrganisationUsers() != null) {
+			for (OrganisationUser ou : u.getOrganisationUsers()) {
 				ou.setUser(u);
 			}
 		}
@@ -268,10 +268,10 @@ public class UserDao implements IDataProviderDao<User> {
 		try {
 			if (userId != 0) {
 				User us = get(userId);
-				for (Organisation_Users ou : us.getOrganisation_users()){
+				for (OrganisationUser ou : us.getOrganisationUsers()){
 					em.remove(ou);
 				}
-				us.setOrganisation_users(null);
+				us.setOrganisationUsers(null);
 				us.setDeleted(true);
 				us.setUpdatetime(new Date());
 				us.setSipUser(null);
@@ -596,8 +596,8 @@ public class UserDao implements IDataProviderDao<User> {
 		if (!AuthLevelUtil.hasLoginLevel(u.getRights())) {
 			throw new OmException(-41L);
 		}
-		log.debug("loginUser " + u.getOrganisation_users());
-		if (u.getOrganisation_users().isEmpty()) {
+		log.debug("loginUser " + u.getOrganisationUsers());
+		if (u.getOrganisationUsers().isEmpty()) {
 			throw new OmException("No Organization assigned to user");
 		}
 		
@@ -622,7 +622,7 @@ public class UserDao implements IDataProviderDao<User> {
 	public User addUser(Set<Right> rights, String firstname, String login, String lastname, long language_id,
 			String userpass, Address adress, boolean sendSMS, Date age, String hash, TimeZone timezone,
 			Boolean forceTimeZoneCheck, String userOffers, String userSearchs, Boolean showContactData,
-			Boolean showContactDataToContacts, String externalId, String externalType, List<Organisation_Users> orgList, String pictureuri) throws NoSuchAlgorithmException {
+			Boolean showContactDataToContacts, String externalId, String externalType, List<OrganisationUser> orgList, String pictureuri) throws NoSuchAlgorithmException {
 		
 		User u = new User();
 		u.setFirstname(firstname);
@@ -655,7 +655,7 @@ public class UserDao implements IDataProviderDao<User> {
 		u.setRegdate(new Date());
 		u.setDeleted(false);
 		u.setPictureuri(pictureuri);
-		u.setOrganisation_users(orgList);
+		u.setOrganisationUsers(orgList);
 		
 		return update(u, null);
 	}

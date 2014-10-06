@@ -37,7 +37,7 @@ import org.apache.openmeetings.db.entity.room.Client;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.server.Sessiondata;
 import org.apache.openmeetings.db.entity.user.Organisation;
-import org.apache.openmeetings.db.entity.user.Organisation_Users;
+import org.apache.openmeetings.db.entity.user.OrganisationUser;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.core.remote.red5.ScopeApplicationAdapter;
 import org.apache.openmeetings.core.remote.util.SessionVariablesUtil;
@@ -171,7 +171,7 @@ public class MobileService implements IPendingServiceCallback {
 		}
 		
 		//private rooms
-		for (Organisation_Users ou : u.getOrganisation_users()) {
+		for (OrganisationUser ou : u.getOrganisationUsers()) {
 			Organisation org = ou.getOrganisation();
 			boolean first = true;
 			for (Room r : roomDao.getOrganisationRooms(org.getId())) {

@@ -36,7 +36,7 @@ import org.apache.openmeetings.db.dao.user.StateDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.label.FieldLanguage;
 import org.apache.openmeetings.db.entity.user.Organisation;
-import org.apache.openmeetings.db.entity.user.Organisation_Users;
+import org.apache.openmeetings.db.entity.user.OrganisationUser;
 import org.apache.openmeetings.db.entity.user.Salutation;
 import org.apache.openmeetings.db.entity.user.State;
 import org.apache.openmeetings.db.entity.user.User;
@@ -139,32 +139,32 @@ public class GeneralUserForm extends Form<User> {
 				, new ChoiceRenderer<State>("name", "state_id")));
 		add(new TextArea<String>("adresses.comment"));
 
-		final List<Organisation_Users> orgUsers;
+		final List<OrganisationUser> orgUsers;
 		if (isAdminForm) {
 			List<Organisation> orgList = getBean(OrganisationDao.class).get(0, Integer.MAX_VALUE);
-			orgUsers = new ArrayList<Organisation_Users>(orgList.size());
+			orgUsers = new ArrayList<OrganisationUser>(orgList.size());
 			for (Organisation org : orgList) {
-				orgUsers.add(new Organisation_Users(org));
+				orgUsers.add(new OrganisationUser(org));
 			}
 		} else {
-			orgUsers = getModelObject().getOrganisation_users();
+			orgUsers = getModelObject().getOrganisationUsers();
 		}
-		add(new Select2MultiChoice<Organisation_Users>("organisation_users", null, new TextChoiceProvider<Organisation_Users>() {
+		add(new Select2MultiChoice<OrganisationUser>("organisationUsers", null, new TextChoiceProvider<OrganisationUser>() {
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			protected String getDisplayText(Organisation_Users choice) {
+			protected String getDisplayText(OrganisationUser choice) {
 				return choice.getOrganisation().getName();
 			}
 
 			@Override
-			protected Object getId(Organisation_Users choice) {
+			protected Object getId(OrganisationUser choice) {
 				return choice.getOrganisation().getId();
 			}
 
 			@Override
-			public void query(String term, int page, Response<Organisation_Users> response) {
-				for (Organisation_Users ou : orgUsers) {
+			public void query(String term, int page, Response<OrganisationUser> response) {
+				for (OrganisationUser ou : orgUsers) {
 					if (Strings.isEmpty(term) || (!Strings.isEmpty(term) && ou.getOrganisation().getName().contains(term))) {
 						response.add(ou);
 					}
@@ -172,14 +172,14 @@ public class GeneralUserForm extends Form<User> {
 			}
 
 			@Override
-			public Collection<Organisation_Users> toChoices(Collection<String> _ids) {
+			public Collection<OrganisationUser> toChoices(Collection<String> _ids) {
 				List<Long> ids = new ArrayList<Long>();
 				for (String id : _ids) {
 					ids.add(Long.parseLong(id));
 				}
-				List<Organisation_Users> list = new ArrayList<Organisation_Users>();
+				List<OrganisationUser> list = new ArrayList<OrganisationUser>();
 				for (Organisation o : getBean(OrganisationDao.class).get(ids)) {
-					list.add(new Organisation_Users(o));
+					list.add(new OrganisationUser(o));
 				}
 				return list;
 			}

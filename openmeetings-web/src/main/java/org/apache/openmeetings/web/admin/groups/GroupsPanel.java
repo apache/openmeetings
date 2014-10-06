@@ -20,7 +20,7 @@ package org.apache.openmeetings.web.admin.groups;
 
 import org.apache.openmeetings.db.dao.user.OrganisationDao;
 import org.apache.openmeetings.db.entity.user.Organisation;
-import org.apache.openmeetings.db.entity.user.Organisation_Users;
+import org.apache.openmeetings.db.entity.user.OrganisationUser;
 import org.apache.openmeetings.web.admin.AdminPanel;
 import org.apache.openmeetings.web.admin.SearchableDataView;
 import org.apache.openmeetings.web.common.PagedEntityListPanel;
@@ -36,7 +36,7 @@ import org.apache.wicket.markup.repeater.Item;
 
 /**
  * Modify/ CRUD operations for {@link Organisation} and
- * {@link Organisation_Users}
+ * {@link OrganisationUser}
  * 
  * @author swagner
  * 

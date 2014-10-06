@@ -113,7 +113,7 @@ public class UserForm extends AdminBaseForm<User> {
 		target.add(this);
 		target.add(listContainer);
 		target.appendJavaScript("omUserPanelInit();");
-		if (u.getOrganisation_users().isEmpty()) {
+		if (u.getOrganisationUsers().isEmpty()) {
 			warning.open(target);
 		}
 	}

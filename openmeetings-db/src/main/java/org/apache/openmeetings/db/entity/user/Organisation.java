@@ -36,13 +36,13 @@ import org.simpleframework.xml.Root;
 @Entity
 @NamedQueries({
 	@NamedQuery(name="getOrganisationById",
-		query="SELECT c FROM Organisation AS c WHERE c.id = :organisation_id AND c.deleted = :deleted")
+		query="SELECT c FROM Organisation AS c WHERE c.id = :organisation_id AND c.deleted = false")
 	, @NamedQuery(name="getAnyOrganisationById",
 		query="SELECT c FROM Organisation AS c WHERE c.id = :organisation_id")
 	, @NamedQuery(name="getOrganisationsByIds",
 		query="SELECT c FROM Organisation AS c WHERE c.id IN :ids")
 	, @NamedQuery(name="getOrganisationsByUserId",
-		query="SELECT ou.organisation FROM User u, IN(u.organisation_users) ou WHERE u.deleted = false AND u.id = :user_id")
+		query="SELECT ou.organisation FROM User u, IN(u.organisationUsers) ou WHERE u.deleted = false AND u.id = :user_id")
 	, @NamedQuery(name="getNondeletedOrganisations", query="SELECT o FROM Organisation o WHERE o.deleted = false ORDER BY o.id")
 	, @NamedQuery(name="countOrganisations", query="SELECT COUNT(c) FROM Organisation AS c WHERE c.deleted = false")
 })

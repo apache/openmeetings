@@ -18,7 +18,6 @@
  */
 package org.apache.openmeetings.db.entity.room;
 
-import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -31,22 +30,22 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import org.apache.openmeetings.db.entity.IDataProviderEntity;
 import org.apache.openmeetings.db.entity.label.Fieldlanguagesvalues;
 import org.simpleframework.xml.Element;
 
 @Entity
 @NamedQueries({
-	@NamedQuery(name = "getAllRoomTypes", query = "select c from RoomType as c where c.deleted <> :deleted"),
-	@NamedQuery(name = "getRoomTypesById", query = "select c from RoomType as c " +
-			"where c.roomtypes_id = :roomtypes_id AND c.deleted <> :deleted")
+	@NamedQuery(name = "getAllRoomTypes", query = "select c from RoomType as c where c.deleted = false"),
+	@NamedQuery(name = "getRoomTypesById", query = "select c from RoomType as c WHERE c.id = :id AND c.deleted = false")
 })
 @Table(name = "roomtype")
-public class RoomType implements Serializable {
+public class RoomType implements IDataProviderEntity {
 	private static final long serialVersionUID = 1L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="id")
-	private Long roomtypes_id;
+	private Long id;
 	
 	@Column(name = "starttime")
 	private Date starttime;
@@ -75,11 +74,11 @@ public class RoomType implements Serializable {
 		this.name = name;
 	}
     
-	public Long getRoomtypes_id() {
-		return roomtypes_id;
+	public Long getId() {
+		return id;
 	}
-	public void setRoomtypes_id(Long roomtypes_id) {
-		this.roomtypes_id = roomtypes_id;
+	public void setId(Long id) {
+		this.id = id;
 	}
     
 	public Date getStarttime() {

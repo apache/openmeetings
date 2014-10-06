@@ -24,7 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.openmeetings.db.dao.user.OrganisationUserDao;
-import org.apache.openmeetings.db.entity.user.Organisation_Users;
+import org.apache.openmeetings.db.entity.user.OrganisationUser;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.web.admin.SearchableDataView;
 import org.apache.openmeetings.web.app.WebSession;
@@ -45,19 +45,19 @@ import org.apache.wicket.markup.repeater.Item;
 public class GroupUsersPanel extends Panel {
 	private static final long serialVersionUID = 1L;
 	private long organisationId;
-	private List<Organisation_Users> users2add = new ArrayList<Organisation_Users>();
+	private List<OrganisationUser> users2add = new ArrayList<OrganisationUser>();
 	
 	public GroupUsersPanel(String id, long orgId) {
 		super(id);
 		this.organisationId = orgId;
 		setOutputMarkupId(true);
 		
-		SearchableDataView<Organisation_Users> dataView = new SearchableDataView<Organisation_Users>("userList", new OrgUserDataProvider()) {
+		SearchableDataView<OrganisationUser> dataView = new SearchableDataView<OrganisationUser>("userList", new OrgUserDataProvider()) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			protected void populateItem(Item<Organisation_Users> item) {
-				final Organisation_Users orgUser = item.getModelObject();
+			protected void populateItem(Item<OrganisationUser> item) {
+				final OrganisationUser orgUser = item.getModelObject();
 				User u = orgUser.getUser();
 				item.add(new CheckBox("isModerator").add(new OnChangeAjaxBehavior() {
 					private static final long serialVersionUID = 1L;
@@ -117,11 +117,11 @@ public class GroupUsersPanel extends Panel {
 		users2add.clear();
 	}
 	
-	List<Organisation_Users> getUsers2add() {
+	List<OrganisationUser> getUsers2add() {
 		return users2add;
 	}
 	
-	private class OrgUserDataProvider extends SearchableDataProvider<Organisation_Users> {
+	private class OrgUserDataProvider extends SearchableDataProvider<OrganisationUser> {
 		private static final long serialVersionUID = 1L;
 
 		OrgUserDataProvider() {
@@ -136,8 +136,8 @@ public class GroupUsersPanel extends Panel {
 			return users2add.size() + (search == null ? getDao().count(organisationId) : getDao().count(organisationId, search));
 		}
 		
-		public java.util.Iterator<? extends Organisation_Users> iterator(long first, long count) {
-			List<Organisation_Users> list = new ArrayList<Organisation_Users>();
+		public java.util.Iterator<? extends OrganisationUser> iterator(long first, long count) {
+			List<OrganisationUser> list = new ArrayList<OrganisationUser>();
 			list.addAll(users2add);
 			list.addAll(search == null && getSort() == null
 					? getDao().get(organisationId, (int)first, (int)count)

@@ -37,11 +37,11 @@ import org.apache.openmeetings.db.dao.calendar.AppointmentReminderTypDao;
 import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
-import org.apache.openmeetings.db.entity.calendar.AppointmentReminderTyps;
+import org.apache.openmeetings.db.entity.calendar.AppointmentReminderType;
 import org.apache.openmeetings.db.entity.calendar.MeetingMember;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.room.RoomType;
-import org.apache.openmeetings.db.entity.user.Organisation_Users;
+import org.apache.openmeetings.db.entity.user.OrganisationUser;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.pages.MainPage;
@@ -228,7 +228,7 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 			super.onModelChanged();
 			
 			Appointment a = getModelObject();
-			List<AppointmentReminderTyps> remindTypes = getRemindTypes();
+			List<AppointmentReminderType> remindTypes = getRemindTypes();
 			if (a.getRemind() == null && !remindTypes.isEmpty()) {
 				a.setRemind(remindTypes.get(0));
 			}
@@ -281,11 +281,11 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 			pwd.setOutputMarkupId(true);
 			add(pwd);
 			
-			List<AppointmentReminderTyps> remindTypes = getRemindTypes();
-			add(new DropDownChoice<AppointmentReminderTyps>(
+			List<AppointmentReminderType> remindTypes = getRemindTypes();
+			add(new DropDownChoice<AppointmentReminderType>(
 					"remind"
 					, remindTypes
-					, new ChoiceRenderer<AppointmentReminderTyps>("label.value", "id")));
+					, new ChoiceRenderer<AppointmentReminderType>("label.value", "id")));
 			
 			final DropDownChoice<RoomType> roomType = new RoomTypeDropDown("room.roomtype");
 			roomType.setEnabled(createRoom);
@@ -324,8 +324,8 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 
 		}
 		
-		private List<AppointmentReminderTyps> getRemindTypes() {
-			return getBean(AppointmentReminderTypDao.class).getAppointmentReminderTypList(getLanguage());
+		private List<AppointmentReminderType> getRemindTypes() {
+			return getBean(AppointmentReminderTypDao.class).getList(getLanguage());
 		}
 		
 		private List<Room> getRoomList() {
@@ -333,10 +333,10 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 			List<Room> result = new ArrayList<Room>();
 			RoomDao dao = getBean(RoomDao.class);
 			result.addAll(dao.getPublicRooms());
-			for (Organisation_Users ou : getBean(UserDao.class).get(getUserId()).getOrganisation_users()) {
+			for (OrganisationUser ou : getBean(UserDao.class).get(getUserId()).getOrganisationUsers()) {
 				result.addAll(dao.getOrganisationRooms(ou.getOrganisation().getId()));
 			}
-			if (getModelObject().getRoom() != null && getModelObject().getRoom().getAppointment()) { //FIXME review
+			if (getModelObject().getRoom() != null && getModelObject().getRoom().isAppointment()) { //FIXME review
 				result.add(getModelObject().getRoom());
 			}
 			return result;

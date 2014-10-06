@@ -41,7 +41,6 @@ public class OrganisationDao implements IDataProviderDao<Organisation> {
 	public Organisation get(long id) {
 		TypedQuery<Organisation> query = em.createNamedQuery("getOrganisationById", Organisation.class);
 		query.setParameter("organisation_id", id);
-		query.setParameter("deleted", false);
 		Organisation o = null;
 		try {
 			o = query.getSingleResult();

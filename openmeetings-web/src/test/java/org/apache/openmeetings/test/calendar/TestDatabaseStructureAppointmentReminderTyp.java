@@ -24,7 +24,7 @@ import java.util.Calendar;
 import java.util.List;
 
 import org.apache.openmeetings.db.dao.calendar.AppointmentReminderTypDao;
-import org.apache.openmeetings.db.entity.calendar.AppointmentReminderTyps;
+import org.apache.openmeetings.db.entity.calendar.AppointmentReminderType;
 import org.apache.openmeetings.test.AbstractJUnitDefaults;
 import org.junit.Test;
 import org.red5.logging.Red5LoggerFactory;
@@ -35,7 +35,7 @@ public class TestDatabaseStructureAppointmentReminderTyp extends AbstractJUnitDe
 	private static final Logger log = Red5LoggerFactory.getLogger(TestDatabaseStructureAppointmentReminderTyp.class, webAppRootKey);
 
 	@Autowired
-	private AppointmentReminderTypDao appointmentReminderTypDaoImpl;
+	private AppointmentReminderTypDao reminderTypeDao;
 
 	@Test
 	public void testAddingGroup() {
@@ -47,17 +47,15 @@ public class TestDatabaseStructureAppointmentReminderTyp extends AbstractJUnitDe
 			cal.get(Calendar.DAY_OF_MONTH);
 			cal.getTime();
 
-			appointmentReminderTypDaoImpl.addAppointmentReminderTyps(1L,
-					"test 5 min", -1);
-			List<AppointmentReminderTyps> listAppoints = appointmentReminderTypDaoImpl
-					.getAppointmentReminderTypList(1);
+			reminderTypeDao.add(1L, "test 5 min", -1);
+			List<AppointmentReminderType> listAppoints = reminderTypeDao.getList(1);
 
 			log.debug("Anzahl: " + listAppoints.size());
 
-			for (AppointmentReminderTyps appoints : listAppoints) {
+			for (AppointmentReminderType appoints : listAppoints) {
 				// log.debug("Termin: "+appoints.getAppointmentName()+" startDate: "+appoints.getAppointmentStarttime()+
 				// " endDate: "+appoints.getAppointmentEndtime());
-				log.debug("AppointmentReminderTyps: " + appoints.getName());
+				log.debug("AppointmentReminderType: " + appoints.getName());
 			}
 
 			// for (Iterator<Appointment> iter =

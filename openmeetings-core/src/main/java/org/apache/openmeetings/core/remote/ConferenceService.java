@@ -102,13 +102,12 @@ public class ConferenceService {
 	 * @param organisation_id
 	 * @return - all available Rooms of this organization
 	 */
-	public List<RoomOrganisation> getRoomsByOrganisationAndType(String SID,
-			long organisation_id, long roomtypes_id) {
+	public List<RoomOrganisation> getRoomsByOrganisationAndType(String SID, long organisation_id, long roomtypesId) {
 		try {
 			Long users_id = sessiondataDao.checkSession(SID);
 			if (AuthLevelUtil.hasUserLevel(userDao.getRights(users_id))) {
 				log.debug("getRoomsByOrganisationAndType");
-				List<RoomOrganisation> roomOrgsList = roomManager.getRoomsOrganisationByOrganisationIdAndRoomType(organisation_id, roomtypes_id);
+				List<RoomOrganisation> roomOrgsList = roomManager.getRoomsOrganisationByOrganisationIdAndRoomType(organisation_id, roomtypesId);
 	
 				List<RoomOrganisation> filtered = new ArrayList<RoomOrganisation>();
 	
@@ -116,7 +115,7 @@ public class ConferenceService {
 						.hasNext();) {
 					RoomOrganisation orgRoom = iter.next();
 	
-					if (!orgRoom.getRoom().getAppointment()) {
+					if (!orgRoom.getRoom().isAppointment()) {
 						orgRoom.getRoom().setCurrentusers(
 								this.getRoomClientsListByRoomId(orgRoom.getRoom()
 										.getId()));
@@ -176,17 +175,17 @@ public class ConferenceService {
 	 * get a List of all public availible rooms (non-appointments)
 	 * 
 	 * @param SID
-	 * @param roomtypes_id
+	 * @param roomtypesId
 	 * @return - public rooms with given type, null in case of the error
 	 */
-	public List<Room> getRoomsPublic(String SID, Long roomtypes_id) {
+	public List<Room> getRoomsPublic(String SID, Long roomtypesId) {
 		try {
 			log.debug("getRoomsPublic");
 
 			Long users_id = sessiondataDao.checkSession(SID);
 			if (AuthLevelUtil.hasUserLevel(userDao.getRights(users_id))) {
 	
-				List<Room> roomList = roomDao.getPublicRooms(roomtypes_id);
+				List<Room> roomList = roomDao.getPublicRooms(roomtypesId);
 	
 				// Filter : no appointed meetings
 				List<Room> filtered = new ArrayList<Room>();
@@ -194,7 +193,7 @@ public class ConferenceService {
 				for (Iterator<Room> iter = roomList.iterator(); iter.hasNext();) {
 					Room rooms = iter.next();
 	
-					if (!rooms.getAppointment()) {
+					if (!rooms.isAppointment()) {
 						rooms.setCurrentusers(this.getRoomClientsListByRoomId(rooms
 								.getId()));
 						filtered.add(rooms);
@@ -256,7 +255,7 @@ public class ConferenceService {
 
 		Room room = roomDao.get(room_id);
 
-		if (room.getAppointment() == false)
+		if (room.isAppointment() == false)
 			return null;
 
 		try {
@@ -286,7 +285,7 @@ public class ConferenceService {
 	
 			Room room = roomDao.get(room_id);
 	
-			if (room.getAppointment() == false) {
+			if (room.isAppointment() == false) {
 				throw new IllegalStateException("Room has no appointment");
 			}
 		
@@ -342,7 +341,7 @@ public class ConferenceService {
 					Long rooms_id = ment.getRoom().getId();
 					Room rooom = roomDao.get(rooms_id);
 
-					if (!rooom.getRoomtype().getRoomtypes_id()
+					if (!rooom.getRoomtype().getId()
 							.equals(room_types_id))
 						continue;
 
@@ -439,13 +438,13 @@ public class ConferenceService {
 	 * @param SID
 	 * @param externalUserId
 	 * @param externalUserType
-	 * @param roomtypes_id
+	 * @param roomtypesId
 	 * @return - room with the given external id
 	 */
-	public Room getRoomByExternalId(String SID, Long externalUserId, String externalUserType, long roomtypes_id) {
+	public Room getRoomByExternalId(String SID, Long externalUserId, String externalUserType, long roomtypesId) {
 		Long users_id = sessiondataDao.checkSession(SID);
 		if (AuthLevelUtil.hasUserLevel(userDao.getRights(users_id))) {
-			return roomManager.getRoomByExternalId(externalUserId, externalUserType, roomtypes_id);
+			return roomManager.getRoomByExternalId(externalUserId, externalUserType, roomtypesId);
 		}
 		return null;
 	}

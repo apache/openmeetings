@@ -134,11 +134,11 @@ public class RoomWebService {
 	 * 
 	 * @param SID
 	 *            The SID of the User. This SID must be marked as Loggedin
-	 * @param roomtypes_id
+	 * @param roomtypesId
 	 * @return - list of public rooms
 	 * @throws ServiceException
 	 */
-	public Room[] getRoomsPublic(String SID, Long roomtypes_id)
+	public Room[] getRoomsPublic(String SID, Long roomtypesId)
 			throws ServiceException {
 		try {
 
@@ -146,7 +146,7 @@ public class RoomWebService {
 
 			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(users_id))) {
 
-				List<Room> roomList = roomDao.getPublicRooms(roomtypes_id);
+				List<Room> roomList = roomDao.getPublicRooms(roomtypesId);
 				// We need to re-marshal the Rooms object cause Axis2 cannot use
 				// our objects
 				if (roomList != null && roomList.size() != 0) {
@@ -596,7 +596,7 @@ public class RoomWebService {
 	 * @param SID
 	 *            The SID of the User. This SID must be marked as Loggedin
 	 * @param name
-	 * @param roomtypes_id
+	 * @param roomtypesId
 	 * @param comment
 	 * @param numberOfPartizipants
 	 * @param ispublic
@@ -618,7 +618,7 @@ public class RoomWebService {
 	 * @return - id of the room or error code
 	 */
 	@Deprecated
-	public Long addRoom(String SID, String name, Long roomtypes_id,
+	public Long addRoom(String SID, String name, Long roomtypesId,
 			String comment, Long numberOfPartizipants, Boolean ispublic,
 			Integer videoPodWidth, Integer videoPodHeight,
 			Integer videoPodXPosition, Integer videoPodYPosition,
@@ -631,7 +631,7 @@ public class RoomWebService {
 		try {
 			Long users_id = sessiondataDao.checkSession(SID);
 			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(users_id))) {
-				return roomManager.addRoom(name, roomtypes_id, comment,
+				return roomManager.addRoom(name, roomtypesId, comment,
 						numberOfPartizipants, ispublic, null, false, false,
 						null, false, null, true, false, false, false //isClosed
 						, "", "",
@@ -663,7 +663,7 @@ public class RoomWebService {
 	 *            The SID of the User. This SID must be marked as Loggedin
 	 * @param name
 	 *            Name of the Room
-	 * @param roomtypes_id
+	 * @param roomtypesId
 	 *            Type of that room (1 = Conference, 2 = Audience, 3 =
 	 *            Restricted, 4 = Interview)
 	 * @param comment
@@ -688,13 +688,13 @@ public class RoomWebService {
 	 * @return - id of the room or error code
 	 */
 	public Long addRoomWithModeration(String SID, String name,
-			Long roomtypes_id, String comment, Long numberOfPartizipants,
+			Long roomtypesId, String comment, Long numberOfPartizipants,
 			Boolean ispublic, Boolean appointment, Boolean isDemoRoom,
 			Integer demoTime, Boolean isModeratedRoom) {
 		try {
 			Long users_id = sessiondataDao.checkSession(SID);
 			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(users_id))) {
-				return roomManager.addRoom(name, roomtypes_id, comment,
+				return roomManager.addRoom(name, roomtypesId, comment,
 						numberOfPartizipants, ispublic, null, appointment,
 						isDemoRoom, demoTime, isModeratedRoom, null, true,
 						false, true, false //isClosed
@@ -728,7 +728,7 @@ public class RoomWebService {
 	 *            The SID of the User. This SID must be marked as Loggedin
 	 * @param name
 	 *            Name of the Room
-	 * @param roomtypes_id
+	 * @param roomtypesId
 	 *            Type of that room (1 = Conference, 2 = Audience, 3 =
 	 *            Restricted, 4 = Interview)
 	 * @param comment
@@ -756,14 +756,14 @@ public class RoomWebService {
 	 * @return - id of the room or error code
 	 */
 	public Long addRoomWithModerationAndQuestions(String SID, String name,
-			Long roomtypes_id, String comment, Long numberOfPartizipants,
+			Long roomtypesId, String comment, Long numberOfPartizipants,
 			Boolean ispublic, Boolean appointment, Boolean isDemoRoom,
 			Integer demoTime, Boolean isModeratedRoom,
 			Boolean allowUserQuestions) {
 		try {
 			Long users_id = sessiondataDao.checkSession(SID);
 			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(users_id))) {
-				return roomManager.addRoom(name, roomtypes_id, comment,
+				return roomManager.addRoom(name, roomtypesId, comment,
 						numberOfPartizipants, ispublic, null, appointment,
 						isDemoRoom, demoTime, isModeratedRoom, null,
 						allowUserQuestions, false, true, false //isClosed
@@ -797,7 +797,7 @@ public class RoomWebService {
 	 *            The SID of the User. This SID must be marked as Loggedin
 	 * @param name
 	 *            Name of the Room
-	 * @param roomtypes_id
+	 * @param roomtypesId
 	 *            Type of that room (1 = Conference, 2 = Audience, 3 =
 	 *            Restricted, 4 = Interview)
 	 * @param comment
@@ -828,14 +828,14 @@ public class RoomWebService {
 	 * @throws ServiceException
 	 */
 	public Long addRoomWithModerationQuestionsAndAudioType(String SID,
-			String name, Long roomtypes_id, String comment,
+			String name, Long roomtypesId, String comment,
 			Long numberOfPartizipants, Boolean ispublic, Boolean appointment,
 			Boolean isDemoRoom, Integer demoTime, Boolean isModeratedRoom,
 			Boolean allowUserQuestions, Boolean isAudioOnly) throws ServiceException {
 		try {
 			Long users_id = sessiondataDao.checkSession(SID);
 			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(users_id))) {
-				return roomManager.addRoom(name, roomtypes_id, comment,
+				return roomManager.addRoom(name, roomtypesId, comment,
 						numberOfPartizipants, ispublic, null, appointment,
 						isDemoRoom, demoTime, isModeratedRoom, null,
 						allowUserQuestions, isAudioOnly, true, false //isClosed
@@ -870,7 +870,7 @@ public class RoomWebService {
 	 *            The SID of the User. This SID must be marked as Loggedin
 	 * @param name
 	 *            Name of the Room
-	 * @param roomtypes_id
+	 * @param roomtypesId
 	 *            Type of that room (1 = Conference, 2 = Audience, 3 =
 	 *            Restricted, 4 = Interview)
 	 * @param comment
@@ -916,7 +916,7 @@ public class RoomWebService {
 	 * @throws ServiceException
 	 */
 	public Long addRoomWithModerationQuestionsAudioTypeAndHideOptions(
-			String SID, String name, Long roomtypes_id, String comment,
+			String SID, String name, Long roomtypesId, String comment,
 			Long numberOfPartizipants, Boolean ispublic, Boolean appointment,
 			Boolean isDemoRoom, Integer demoTime, Boolean isModeratedRoom,
 			Boolean allowUserQuestions, Boolean isAudioOnly,
@@ -927,7 +927,7 @@ public class RoomWebService {
 		try {
 			Long users_id = sessiondataDao.checkSession(SID);
 			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(users_id))) {
-				return roomManager.addRoom(name, roomtypes_id, comment,
+				return roomManager.addRoom(name, roomtypesId, comment,
 						numberOfPartizipants, ispublic, null, appointment,
 						isDemoRoom, demoTime, isModeratedRoom, null,
 						allowUserQuestions, isAudioOnly, true, false //isClosed
@@ -960,7 +960,7 @@ public class RoomWebService {
 	 *            The SID of the User. This SID must be marked as Loggedin
 	 * @param name
 	 *            Name of the room
-	 * @param roomtypes_id
+	 * @param roomtypesId
 	 *            Type of that room (1 = Conference, 2 = Audience, 3 =
 	 *            Restricted, 4 = Interview)
 	 * @param comment
@@ -992,7 +992,7 @@ public class RoomWebService {
 	 * @throws ServiceException
 	 */
 	public Long getRoomIdByExternalId(String SID, String name,
-			Long roomtypes_id, String comment, Long numberOfPartizipants,
+			Long roomtypesId, String comment, Long numberOfPartizipants,
 			Boolean ispublic, Boolean appointment, Boolean isDemoRoom,
 			Integer demoTime, Boolean isModeratedRoom, Long externalRoomId,
 			String externalRoomType) throws ServiceException {
@@ -1000,10 +1000,10 @@ public class RoomWebService {
 			Long users_id = sessiondataDao.checkSession(SID);
 			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(users_id))) {
 				Room room = conferenceService.getRoomByExternalId(SID,
-						externalRoomId, externalRoomType, roomtypes_id);
+						externalRoomId, externalRoomType, roomtypesId);
 				Long roomId = null;
 				if (room == null) {
-					roomId = roomManager.addExternalRoom(name, roomtypes_id,
+					roomId = roomManager.addExternalRoom(name, roomtypesId,
 							comment, numberOfPartizipants, ispublic, null,
 							appointment, isDemoRoom, demoTime, isModeratedRoom,
 							null, externalRoomId, externalRoomType, true,
@@ -1023,74 +1023,6 @@ public class RoomWebService {
 	}
 
 	/**
-	 * TODO: Fix Organization Issue deprecated use updateRoomWithModeration
-	 * 
-	 * @param SID
-	 *            The SID of the User. This SID must be marked as Loggedin
-	 * @param rooms_id
-	 * @param name
-	 * @param roomtypes_id
-	 * @param comment
-	 * @param numberOfPartizipants
-	 * @param ispublic
-	 * @param videoPodWidth
-	 * @param videoPodHeight
-	 * @param videoPodXPosition
-	 * @param videoPodYPosition
-	 * @param moderationPanelXPosition
-	 * @param showWhiteBoard
-	 * @param whiteBoardPanelXPosition
-	 * @param whiteBoardPanelYPosition
-	 * @param whiteBoardPanelHeight
-	 * @param whiteBoardPanelWidth
-	 * @param showFilesPanel
-	 * @param filesPanelXPosition
-	 * @param filesPanelYPosition
-	 * @param filesPanelHeight
-	 * @param filesPanelWidth
-	 * 
-	 * @return - id of the room updated or error code
-	 */
-	@Deprecated
-	public Long updateRoom(String SID, Long rooms_id, String name,
-			Long roomtypes_id, String comment, Long numberOfPartizipants,
-			Boolean ispublic, Integer videoPodWidth, Integer videoPodHeight,
-			Integer videoPodXPosition, Integer videoPodYPosition,
-			Integer moderationPanelXPosition, Boolean showWhiteBoard,
-			Integer whiteBoardPanelXPosition, Integer whiteBoardPanelYPosition,
-			Integer whiteBoardPanelHeight, Integer whiteBoardPanelWidth,
-			Boolean showFilesPanel, Integer filesPanelXPosition,
-			Integer filesPanelYPosition, Integer filesPanelHeight,
-			Integer filesPanelWidth, Boolean appointment) {
-		try {
-			Long users_id = sessiondataDao.checkSession(SID);
-			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(users_id))) {
-				return roomManager.updateRoomInternal(rooms_id,
-						roomtypes_id, name, ispublic, comment,
-						numberOfPartizipants, null, appointment, false, null,
-						false, null, true, false, true, false, "", "", null,
-						null, null, false, // hideTopBar
-						false, // hideChat
-						false, // hideActivitiesAndActions
-						false, // hideFilesExplorer
-						false, // hideActionsMenu
-						false, // hideScreenSharing
-						false, // hideWhiteboard
-						false, // showMicrophoneStatus
-						false, // chatModerated
-						false, // chatOpened
-						false, // filesOpened
-						false, // autoVideoSelect
-						false //sipEnabled
-						);
-			}
-		} catch (Exception err) {
-			log.error("[addRoom] ", err);
-		}
-		return new Long(-1);
-	}
-
-	/**
 	 * Updates a conference room by its room id
 	 * 
 	 * @param SID
@@ -1099,7 +1031,7 @@ public class RoomWebService {
 	 *            the room id to update
 	 * @param name
 	 *            new name of the room
-	 * @param roomtypes_id
+	 * @param roomtypesId
 	 *            new type of room (1 = Conference, 2 = Audience, 3 =
 	 *            Restricted, 4 = Interview)
 	 * @param comment
@@ -1124,13 +1056,13 @@ public class RoomWebService {
 	 * @return - id of the room updated or error code
 	 */
 	public Long updateRoomWithModeration(String SID, Long room_id, String name,
-			Long roomtypes_id, String comment, Long numberOfPartizipants,
+			Long roomtypesId, String comment, Long numberOfPartizipants,
 			Boolean ispublic, Boolean appointment, Boolean isDemoRoom,
 			Integer demoTime, Boolean isModeratedRoom) {
 		try {
 			Long users_id = sessiondataDao.checkSession(SID);
 			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(users_id))) {
-				return roomManager.updateRoomInternal(room_id, roomtypes_id,
+				return roomManager.updateRoomInternal(room_id, roomtypesId,
 						name, ispublic, comment, numberOfPartizipants, null,
 						appointment, isDemoRoom, demoTime, isModeratedRoom,
 						null, true, false, true, false, "", "", null, null, null,
@@ -1163,7 +1095,7 @@ public class RoomWebService {
 	 *            the room id to update
 	 * @param name
 	 *            new name of the room
-	 * @param roomtypes_id
+	 * @param roomtypesId
 	 *            new type of room (1 = Conference, 2 = Audience, 3 =
 	 *            Restricted, 4 = Interview)
 	 * @param comment
@@ -1191,14 +1123,14 @@ public class RoomWebService {
 	 * @return - id of the room updated or error code
 	 */
 	public Long updateRoomWithModerationAndQuestions(String SID, Long room_id,
-			String name, Long roomtypes_id, String comment,
+			String name, Long roomtypesId, String comment,
 			Long numberOfPartizipants, Boolean ispublic, Boolean appointment,
 			Boolean isDemoRoom, Integer demoTime, Boolean isModeratedRoom,
 			Boolean allowUserQuestions) {
 		try {
 			Long users_id = sessiondataDao.checkSession(SID);
 			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(users_id))) {
-				return roomManager.updateRoomInternal(room_id, roomtypes_id,
+				return roomManager.updateRoomInternal(room_id, roomtypesId,
 						name, ispublic, comment, numberOfPartizipants, null,
 						appointment, isDemoRoom, demoTime, isModeratedRoom,
 						null, allowUserQuestions, false, true, false, "", "",
@@ -1232,7 +1164,7 @@ public class RoomWebService {
 	 *            the room id to update
 	 * @param name
 	 *            new name of the room
-	 * @param roomtypes_id
+	 * @param roomtypesId
 	 *            new type of room (1 = Conference, 2 = Audience, 3 =
 	 *            Restricted, 4 = Interview)
 	 * @param comment
@@ -1278,7 +1210,7 @@ public class RoomWebService {
 	 * @return - id of the room updated or error code
 	 */
 	public Long updateRoomWithModerationQuestionsAudioTypeAndHideOptions(
-			String SID, Long room_id, String name, Long roomtypes_id,
+			String SID, Long room_id, String name, Long roomtypesId,
 			String comment, Long numberOfPartizipants, Boolean ispublic,
 			Boolean appointment, Boolean isDemoRoom, Integer demoTime,
 			Boolean isModeratedRoom, Boolean allowUserQuestions,
@@ -1289,7 +1221,7 @@ public class RoomWebService {
 		try {
 			Long users_id = sessiondataDao.checkSession(SID);
 			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(users_id))) {
-				return roomManager.updateRoomInternal(room_id, roomtypes_id,
+				return roomManager.updateRoomInternal(room_id, roomtypesId,
 						name, ispublic, comment, numberOfPartizipants, null,
 						appointment, isDemoRoom, demoTime, isModeratedRoom,
 						null, allowUserQuestions, isAudioOnly, true, false, "", "",
@@ -1359,7 +1291,7 @@ public class RoomWebService {
 	 *            The SID of the User. This SID must be marked as Loggedin
 	 * @param name
 	 *            new name of the room
-	 * @param roomtypes_id
+	 * @param roomtypesId
 	 *            new type of room (1 = Conference, 2 = Audience, 3 =
 	 *            Restricted, 4 = Interview)
 	 * @param comment
@@ -1387,13 +1319,13 @@ public class RoomWebService {
 	 * @return - id of the room added or error code
 	 */
 	public Long addRoomWithModerationAndExternalType(String SID, String name,
-			Long roomtypes_id, String comment, Long numberOfPartizipants,
+			Long roomtypesId, String comment, Long numberOfPartizipants,
 			Boolean ispublic, Boolean appointment, Boolean isDemoRoom,
 			Integer demoTime, Boolean isModeratedRoom, String externalRoomType) {
 		try {
 			Long users_id = sessiondataDao.checkSession(SID);
 			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(users_id))) {
-				return roomManager.addExternalRoom(name, roomtypes_id,
+				return roomManager.addExternalRoom(name, roomtypesId,
 						comment, numberOfPartizipants, ispublic, null,
 						appointment, isDemoRoom, demoTime, isModeratedRoom,
 						null, null, externalRoomType, true, false, true, false, "",
@@ -1412,7 +1344,7 @@ public class RoomWebService {
 	 *            The SID of the User. This SID must be marked as Loggedin
 	 * @param name
 	 *            new name of the room
-	 * @param roomtypes_id
+	 * @param roomtypesId
 	 *            new type of room (1 = Conference, 2 = Audience, 3 =
 	 *            Restricted, 4 = Interview)
 	 * @param comment
@@ -1445,7 +1377,7 @@ public class RoomWebService {
 	 * @return - id of the room added or error code
 	 */
 	public Long addRoomWithModerationExternalTypeAndAudioType(String SID,
-			String name, Long roomtypes_id, String comment,
+			String name, Long roomtypesId, String comment,
 			Long numberOfPartizipants, Boolean ispublic, Boolean appointment,
 			Boolean isDemoRoom, Integer demoTime, Boolean isModeratedRoom,
 			String externalRoomType, Boolean allowUserQuestions,
@@ -1453,7 +1385,7 @@ public class RoomWebService {
 		try {
 			Long users_id = sessiondataDao.checkSession(SID);
 			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(users_id))) {
-				return roomManager.addExternalRoom(name, roomtypes_id,
+				return roomManager.addExternalRoom(name, roomtypesId,
 						comment, numberOfPartizipants, ispublic, null,
 						appointment, isDemoRoom, demoTime, isModeratedRoom,
 						null, null, externalRoomType, allowUserQuestions,
@@ -1472,7 +1404,7 @@ public class RoomWebService {
 	 *            The SID of the User. This SID must be marked as Loggedin
 	 * @param name
 	 *            new name of the room
-	 * @param roomtypes_id
+	 * @param roomtypesId
 	 *            new type of room (1 = Conference, 2 = Audience, 3 =
 	 *            Restricted, 4 = Interview)
 	 * @param comment
@@ -1510,7 +1442,7 @@ public class RoomWebService {
 	 * @return - id of the room added or error code
 	 */
 	public Long addRoomWithModerationAndRecordingFlags(String SID, String name,
-			Long roomtypes_id, String comment, Long numberOfPartizipants,
+			Long roomtypesId, String comment, Long numberOfPartizipants,
 			Boolean ispublic, Boolean appointment, Boolean isDemoRoom,
 			Integer demoTime, Boolean isModeratedRoom, String externalRoomType,
 			Boolean allowUserQuestions, Boolean isAudioOnly,
@@ -1518,7 +1450,7 @@ public class RoomWebService {
 		try {
 			Long users_id = sessiondataDao.checkSession(SID);
 			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(users_id))) {
-				return roomManager.addExternalRoom(name, roomtypes_id,
+				return roomManager.addExternalRoom(name, roomtypesId,
 						comment, numberOfPartizipants, ispublic, null,
 						appointment, isDemoRoom, demoTime, isModeratedRoom,
 						null, null, externalRoomType, allowUserQuestions,
@@ -1541,7 +1473,7 @@ public class RoomWebService {
 	 *            The SID of the User. This SID must be marked as Loggedin
 	 * @param name
 	 *            new name of the room
-	 * @param roomtypes_id
+	 * @param roomtypesId
 	 *            new type of room (1 = Conference, 2 = Audience, 3 =
 	 *            Restricted, 4 = Interview)
 	 * @param comment
@@ -1581,7 +1513,7 @@ public class RoomWebService {
 	 * @return - id of the room added or error code
 	 */
 	public Long addRoomWithModerationExternalTypeAndTopBarOption(String SID,
-			String name, Long roomtypes_id, String comment,
+			String name, Long roomtypesId, String comment,
 			Long numberOfPartizipants, Boolean ispublic, Boolean appointment,
 			Boolean isDemoRoom, Integer demoTime, Boolean isModeratedRoom,
 			String externalRoomType, Boolean allowUserQuestions,
@@ -1590,7 +1522,7 @@ public class RoomWebService {
 		try {
 			Long users_id = sessiondataDao.checkSession(SID);
 			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(users_id))) {
-				return roomManager.addExternalRoom(name, roomtypes_id,
+				return roomManager.addExternalRoom(name, roomtypesId,
 						comment, numberOfPartizipants, ispublic, null,
 						appointment, isDemoRoom, demoTime, isModeratedRoom,
 						null, null, externalRoomType, allowUserQuestions,
@@ -2068,7 +2000,7 @@ public class RoomWebService {
 	 *            The SID of the User. This SID must be marked as Loggedin
 	 * @param name
 	 *            new name of the room
-	 * @param roomtypes_id
+	 * @param roomtypesId
 	 *            new type of room (1 = Conference, 2 = Audience, 3 =
 	 *            Restricted, 4 = Interview)
 	 * @param comment
@@ -2114,7 +2046,7 @@ public class RoomWebService {
 	 * @throws ServiceException
 	 */
 	public Long addRoomWithModerationAndExternalTypeAndStartEnd(String SID,
-			String name, Long roomtypes_id, String comment,
+			String name, Long roomtypesId, String comment,
 			Long numberOfPartizipants, Boolean ispublic, Boolean appointment,
 			Boolean isDemoRoom, Integer demoTime, Boolean isModeratedRoom,
 			String externalRoomType, String validFromDate,
@@ -2156,7 +2088,7 @@ public class RoomWebService {
 				log.info("validToDate: " + CalendarPatterns.getDateWithTimeByMiliSeconds(dTo));
 
 				Long rooms_id = roomManager.addExternalRoom(name,
-						roomtypes_id, comment, numberOfPartizipants, ispublic,
+						roomtypesId, comment, numberOfPartizipants, ispublic,
 						null, appointment, isDemoRoom, demoTime,
 						isModeratedRoom, null, null, externalRoomType, false, // allowUserQuestions
 						false, // isAudioOnly

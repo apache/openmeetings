@@ -29,7 +29,7 @@ import org.apache.openmeetings.db.dao.user.OrganisationDao;
 import org.apache.openmeetings.db.dao.user.OrganisationUserDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.user.Organisation;
-import org.apache.openmeetings.db.entity.user.Organisation_Users;
+import org.apache.openmeetings.db.entity.user.OrganisationUser;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.test.AbstractJUnitDefaults;
 import org.apache.openmeetings.test.selenium.HeavyTests;
@@ -47,7 +47,7 @@ public class TestUserOrganisation extends AbstractJUnitDefaults {
 	
 	private User getValidUser() {
 		for (User u : usersDao.getAllBackupUsers()) {
-			if (!u.getDeleted() && u.getOrganisation_users().size() > 0) {
+			if (!u.getDeleted() && u.getOrganisationUsers().size() > 0) {
 				return u;
 			}
 		}
@@ -58,11 +58,11 @@ public class TestUserOrganisation extends AbstractJUnitDefaults {
 	@Test
 	public void getUsersByOrganisationId() {
 		User u = getValidUser();
-		Long orgId = u.getOrganisation_users().get(0).getOrganisation().getId();
-		List<Organisation_Users> ul = orgUserDao.get(orgId, 0, 9999);
+		Long orgId = u.getOrganisationUsers().get(0).getOrganisation().getId();
+		List<OrganisationUser> ul = orgUserDao.get(orgId, 0, 9999);
 		assertTrue("Default Organisation should contain at least 1 user: " + ul.size(), ul.size() > 0);
 		
-		Organisation_Users ou = orgUserDao.getByOrganizationAndUser(orgId, u.getId());
+		OrganisationUser ou = orgUserDao.getByOrganizationAndUser(orgId, u.getId());
 		assertNotNull("Unable to found [organisation, user] pair - [" + orgId + "," + u.getId() + "]", ou);
 	}
 	
@@ -73,7 +73,7 @@ public class TestUserOrganisation extends AbstractJUnitDefaults {
 		Long orgId = orgDao.update(o, null).getId(); //inserted by not checked
 		assertNotNull("New Organisation have valid id", orgId);
 		
-		List<Organisation_Users> ul = orgUserDao.get(orgId, 0, 9999);
+		List<OrganisationUser> ul = orgUserDao.get(orgId, 0, 9999);
 		assertTrue("New Organisation should contain NO users: " + ul.size(), ul.size() == 0);
 	}
 
@@ -92,7 +92,7 @@ public class TestUserOrganisation extends AbstractJUnitDefaults {
 		Random rnd = new Random();
 		for (int i = 0; i < 10000; ++i) {
 			User u = createUser(rnd.nextInt());
-			u.getOrganisation_users().add(new Organisation_Users(o));
+			u.getOrganisationUsers().add(new OrganisationUser(o));
 			usersDao.update(u, null);
 		}
 	}

@@ -26,7 +26,6 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.openmeetings.web.app.Application.addUserToRoom;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.Application.getRoomUsers;
-import static org.apache.openmeetings.web.app.WebSession.getSid;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import static org.apache.openmeetings.web.util.OmUrlFragment.ROOMS_PUBLIC;
 
@@ -51,7 +50,7 @@ import org.apache.openmeetings.db.entity.record.FlvRecording;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.room.RoomModerator;
 import org.apache.openmeetings.db.entity.user.Organisation;
-import org.apache.openmeetings.db.entity.user.Organisation_Users;
+import org.apache.openmeetings.db.entity.user.OrganisationUser;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Right;
 import org.apache.openmeetings.db.util.AuthLevelUtil;
@@ -130,9 +129,8 @@ public class RoomPanel extends BasePanel {
 				String path = url.getPath();
 				path = path.substring(1, path.indexOf('/', 2) + 1);
 				Room r = getBean(RoomDao.class).get(roomId);
-				target.appendJavaScript(String.format("initVideo(%s);", new JSONObject().put("sid", getSid())
-						.put("roomid", r.getId()).put("audioOnly", r.getIsAudioOnly())
-						.put("interview", 4L == r.getRoomtype().getRoomtypes_id()) //FIXME hardcoded
+				target.appendJavaScript(String.format("initVideo(%s);", new JSONObject().put("audioOnly", r.getIsAudioOnly())
+						.put("interview", 4L == r.getRoomtype().getId()) //FIXME hardcoded
 						.put("protocol", cfgDao.getConfValue(CONFIG_FLASH_PROTOCOL, String.class, ""))
 						.put("host", url.getHost())
 						.put("port", cfgDao.getConfValue(CONFIG_FLASH_PORT, String.class, ""))
@@ -260,7 +258,7 @@ public class RoomPanel extends BasePanel {
 				treesView.add(new FileItemTree<FileExplorerItem>(treesView.newChildId(), this, new FilesTreeProvider(roomId)));
 				treesView.add(new FileItemTree<FlvRecording>(treesView.newChildId(), this, new MyRecordingTreeProvider()));
 				treesView.add(new FileItemTree<FlvRecording>(treesView.newChildId(), this, new PublicRecordingTreeProvider(null, null)));
-				for (Organisation_Users ou : getBean(UserDao.class).get(getUserId()).getOrganisation_users()) {
+				for (OrganisationUser ou : getBean(UserDao.class).get(getUserId()).getOrganisationUsers()) {
 					Organisation o = ou.getOrganisation();
 					treesView.add(new FileItemTree<FlvRecording>(treesView.newChildId(), this, new PublicRecordingTreeProvider(o.getId(), o.getName())));
 				}
@@ -447,7 +445,7 @@ public class RoomPanel extends BasePanel {
 		boolean moder = c.hasRight(Client.Right.moderator);
 		inviteMenuItem.setActive(notExternalUser && moder);
 		//TODO add check "sharing started"
-		boolean shareVisible = 4 != r.getRoomtype().getRoomtypes_id() && moder; //FIXME hardcoded
+		boolean shareVisible = 4 != r.getRoomtype().getId() && moder; //FIXME hardcoded
 		shareMenuItem.setActive(shareVisible);
 		shareBtn.setVisible(shareMenuItem.isActive());
 		applyModerMenuItem.setActive(!moder);

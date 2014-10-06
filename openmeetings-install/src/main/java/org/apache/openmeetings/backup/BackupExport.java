@@ -60,7 +60,7 @@ import org.apache.openmeetings.db.entity.basic.ChatMessage;
 import org.apache.openmeetings.db.entity.basic.Configuration;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
 import org.apache.openmeetings.db.entity.calendar.AppointmentCategory;
-import org.apache.openmeetings.db.entity.calendar.AppointmentReminderTyps;
+import org.apache.openmeetings.db.entity.calendar.AppointmentReminderType;
 import org.apache.openmeetings.db.entity.file.FileExplorerItem;
 import org.apache.openmeetings.db.entity.record.FlvRecording;
 import org.apache.openmeetings.db.entity.room.PollType;
@@ -201,7 +201,7 @@ public class BackupExport {
 	
 			registry.bind(AppointmentCategory.class, AppointmentCategoryConverter.class);
 			registry.bind(User.class, UserConverter.class);
-			registry.bind(AppointmentReminderTyps.class, AppointmentReminderTypeConverter.class);
+			registry.bind(AppointmentReminderType.class, AppointmentReminderTypeConverter.class);
 			registry.bind(Room.class, RoomConverter.class);
 			if (list != null && list.size() > 0) {
 				registry.bind(list.get(0).getStart().getClass(), DateConverter.class);

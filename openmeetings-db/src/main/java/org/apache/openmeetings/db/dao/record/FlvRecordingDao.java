@@ -39,7 +39,7 @@ import org.apache.openmeetings.db.dto.file.RecordingContainerData;
 import org.apache.openmeetings.db.dto.file.RecordingObject;
 import org.apache.openmeetings.db.entity.record.FlvRecording;
 import org.apache.openmeetings.db.entity.record.FlvRecording.Status;
-import org.apache.openmeetings.db.entity.user.Organisation_Users;
+import org.apache.openmeetings.db.entity.user.OrganisationUser;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -119,7 +119,6 @@ public class FlvRecordingDao {
 			TypedQuery<FlvRecording> query = em.createNamedQuery("getRecordingsByExternalRoomTypeAndOwner", FlvRecording.class);
 			query.setParameter("externalRoomType", externalRoomType);
 			query.setParameter("insertedBy", insertedBy);
-			query.setParameter("deleted", true);
 
 			List<FlvRecording> flvRecordingList = query.getResultList();
 
@@ -185,8 +184,7 @@ public class FlvRecordingDao {
 	public List<FlvRecording> getFlvRecordingByRoomId(Long room_id) {
 		try {
 			TypedQuery<FlvRecording> query = em.createNamedQuery("getRecordingsByRoom", FlvRecording.class);
-			query.setParameter("deleted", true);
-			query.setParameter("room_id", room_id);
+			query.setParameter("roomId", room_id);
 
 			List<FlvRecording> flvRecordingList = query.getResultList();
 
@@ -289,7 +287,7 @@ public class FlvRecordingDao {
 			long publicFileSize = 0;
 			
 			//get all organizations the user can view
-			for (Organisation_Users ou : userDao.get(userId).getOrganisation_users()) {
+			for (OrganisationUser ou : userDao.get(userId).getOrganisationUsers()) {
 				List<FlvRecording>publicFlvRecordings = getFlvRecordingRootByPublic(ou.getOrganisation().getId());
 				//get sizes
 				for (FlvRecording publicFlvRecording : publicFlvRecordings) {

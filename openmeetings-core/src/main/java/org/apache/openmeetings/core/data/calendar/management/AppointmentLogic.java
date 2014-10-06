@@ -111,7 +111,7 @@ public class AppointmentLogic {
 			throw new Exception("Room does not exist in database!");
 		}
 
-		if (!room.getAppointment()) {
+		if (!room.isAppointment()) {
 			throw new Exception("Room " + room.getName() + " isnt part of an appointed meeting");
 		}
 

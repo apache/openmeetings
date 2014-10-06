@@ -73,7 +73,7 @@ import org.simpleframework.xml.Root;
 @Entity
 @FetchGroups({
 	@FetchGroup(name = "backupexport", attributes = { @FetchAttribute(name = "password") })
-	, @FetchGroup(name = "orgUsers", attributes = { @FetchAttribute(name = "organisation_users")})
+	, @FetchGroup(name = "orgUsers", attributes = { @FetchAttribute(name = "organisationUsers")})
 })
 @NamedQueries({
 	@NamedQuery(name = "getUserById", query = "SELECT u FROM User u WHERE u.id = :id"),
@@ -97,7 +97,7 @@ import org.simpleframework.xml.Root;
 	@NamedQuery(name = "updatePassword", query = "UPDATE User u SET u.password = :password WHERE u.id = :userId"), //
 	@NamedQuery(name = "getNondeletedUsers", query = "SELECT u FROM User u WHERE u.deleted = false"),
 	@NamedQuery(name = "countNondeletedUsers", query = "SELECT COUNT(u) FROM User u WHERE u.deleted = false"),
-	@NamedQuery(name = "getUsersByOrganisationId", query = "SELECT u FROM User u WHERE u.deleted = false AND u.organisation_users.organisation.id = :organisation_id"), 
+	@NamedQuery(name = "getUsersByOrganisationId", query = "SELECT u FROM User u WHERE u.deleted = false AND u.organisationUsers.organisation.id = :organisation_id"), 
 	@NamedQuery(name = "getExternalUser", query = "SELECT u FROM User u WHERE u.deleted = false AND u.externalUserId LIKE :externalId AND u.externalUserType LIKE :externalType"),
 	@NamedQuery(name = "getUserByLoginOrEmail", query = "SELECT u from User u WHERE u.deleted = false AND u.type = :type AND (u.login = :userOrEmail OR u.adresses.email = :userOrEmail)")
 })
@@ -201,7 +201,7 @@ public class User implements IDataProviderEntity {
 	@JoinColumn(name = "user_id", insertable = true, updatable = true)
 	@ElementList(name = "organisations", required = false)
 	@ElementDependent
-	private List<Organisation_Users> organisation_users = new ArrayList<Organisation_Users>();
+	private List<OrganisationUser> organisationUsers = new ArrayList<OrganisationUser>();
 
 	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@PrimaryKeyJoinColumn(name="sip_user_id", referencedColumnName="id")
@@ -428,16 +428,16 @@ public class User implements IDataProviderEntity {
 		this.language_id = language_id;
 	}
 
-	public List<Organisation_Users> getOrganisation_users() {
-		if (organisation_users == null) {
-			organisation_users = new ArrayList<Organisation_Users>();
+	public List<OrganisationUser> getOrganisationUsers() {
+		if (organisationUsers == null) {
+			organisationUsers = new ArrayList<OrganisationUser>();
 		}
-		return organisation_users;
+		return organisationUsers;
 	}
 
-	public void setOrganisation_users(List<Organisation_Users> organisation_users) {
-		if (organisation_users != null) {
-			this.organisation_users = organisation_users;
+	public void setOrganisationUsers(List<OrganisationUser> organisationUsers) {
+		if (organisationUsers != null) {
+			this.organisationUsers = organisationUsers;
 		}
 	}
 

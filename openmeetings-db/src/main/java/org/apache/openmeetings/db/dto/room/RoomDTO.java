@@ -39,7 +39,7 @@ public class RoomDTO {
 		comment = r.getComment();
 		roomtype = r.getRoomtype();
 		numberOfPartizipants = r.getNumberOfPartizipants();
-		appointment = r.getAppointment();
+		appointment = r.isAppointment();
 		confno = r.getConfno();
 	}
 

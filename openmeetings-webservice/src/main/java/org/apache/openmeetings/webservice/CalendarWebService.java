@@ -43,7 +43,7 @@ import org.apache.openmeetings.db.dao.server.SessiondataDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
 import org.apache.openmeetings.db.entity.calendar.AppointmentCategory;
-import org.apache.openmeetings.db.entity.calendar.AppointmentReminderTyps;
+import org.apache.openmeetings.db.entity.calendar.AppointmentReminderType;
 import org.apache.openmeetings.db.entity.calendar.MeetingMember;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Right;
@@ -572,7 +572,7 @@ public class CalendarWebService {
 	 * @param SID
 	 * @return - all reminder types for calendar events
 	 */
-	public List<AppointmentReminderTyps> getAppointmentReminderTypList(
+	public List<AppointmentReminderType> getAppointmentReminderTypList(
 			String SID) {
 		log.debug("getAppointmentReminderTypList");
 
@@ -582,8 +582,8 @@ public class CalendarWebService {
 
 				User user = userDao.get(users_id);
 				long language_id = (user == null) ? 1 : user.getLanguage_id();
-				List<AppointmentReminderTyps> res = appointmentReminderTypDao
-						.getAppointmentReminderTypList(language_id);
+				List<AppointmentReminderType> res = appointmentReminderTypDao
+						.getList(language_id);
 
 				if (res == null || res.size() < 1) {
 					log.debug("no remindertyps found!");

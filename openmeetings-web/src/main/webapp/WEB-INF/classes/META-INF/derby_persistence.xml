@@ -36,11 +36,11 @@
 		<class>org.apache.openmeetings.db.entity.server.Server</class>
 		<class>org.apache.openmeetings.db.entity.calendar.Appointment</class>
 		<class>org.apache.openmeetings.db.entity.calendar.AppointmentCategory</class>
-		<class>org.apache.openmeetings.db.entity.calendar.AppointmentReminderTyps</class>
+		<class>org.apache.openmeetings.db.entity.calendar.AppointmentReminderType</class>
 		<class>org.apache.openmeetings.db.entity.calendar.MeetingMember</class>
 		<class>org.apache.openmeetings.db.entity.basic.ChatMessage</class>
 		<class>org.apache.openmeetings.db.entity.user.Organisation</class>
-		<class>org.apache.openmeetings.db.entity.user.Organisation_Users</class>
+		<class>org.apache.openmeetings.db.entity.user.OrganisationUser</class>
 		<class>org.apache.openmeetings.db.entity.record.FlvRecording</class>
 		<class>org.apache.openmeetings.db.entity.record.FlvRecordingLog</class>
 		<class>org.apache.openmeetings.db.entity.record.FlvRecordingMetaData</class>

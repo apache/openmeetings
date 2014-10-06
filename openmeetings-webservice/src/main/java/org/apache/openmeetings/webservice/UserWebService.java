@@ -47,7 +47,7 @@ import org.apache.openmeetings.db.entity.basic.ErrorValue;
 import org.apache.openmeetings.db.entity.server.RemoteSessionObject;
 import org.apache.openmeetings.db.entity.server.Sessiondata;
 import org.apache.openmeetings.db.entity.user.Organisation;
-import org.apache.openmeetings.db.entity.user.Organisation_Users;
+import org.apache.openmeetings.db.entity.user.OrganisationUser;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Right;
 import org.apache.openmeetings.db.util.AuthLevelUtil;
@@ -1032,7 +1032,7 @@ public class UserWebService {
 			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(users_id))) {
 				if (!orgUserDao.isUserInOrganization(organisation_id, user_id)) {
 					User u = userDao.get(user_id);
-					u.getOrganisation_users().add(new Organisation_Users(orgDao.get(organisation_id)));
+					u.getOrganisationUsers().add(new OrganisationUser(orgDao.get(organisation_id)));
 					userDao.update(u, users_id);
 				}
 				return user_id;
@@ -1072,7 +1072,7 @@ public class UserWebService {
 			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(users_id))) {
 				result.setRecords(orgUserDao.count(organisation_id));
 				result.setResult(new ArrayList<User>());
-				for (Organisation_Users ou : orgUserDao.get(organisation_id, null, start, max, orderby + " " + (asc ? "ASC" : "DESC"))) {
+				for (OrganisationUser ou : orgUserDao.get(organisation_id, null, start, max, orderby + " " + (asc ? "ASC" : "DESC"))) {
 					result.getResult().add(ou.getUser());
 				}
 			} else {

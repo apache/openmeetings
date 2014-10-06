@@ -161,7 +161,7 @@ public class MainService implements IPendingServiceCallback {
 			String streamId = current.getClient().getId();
 			Client currentClient = sessionManager.getClientByStreamId(streamId, null);
 			
-			if (!u.getOrganisation_users().isEmpty()) {
+			if (!u.getOrganisationUsers().isEmpty()) {
 				u.setSessionData(sessiondataDao.getSessionByHash(wicketSID));
 				currentClient.setUser_id(u.getId());
 				currentClient.setRoom_id(wicketroomid);
@@ -401,7 +401,7 @@ public class MainService implements IPendingServiceCallback {
 			User defaultRpcUser = userDao.get(defaultRpcUserid);
 			
 			User user = new User();
-			user.setOrganisation_users(defaultRpcUser.getOrganisation_users());
+			user.setOrganisationUsers(defaultRpcUser.getOrganisationUsers());
 			
 			return user;
 			

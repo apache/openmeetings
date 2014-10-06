@@ -41,6 +41,6 @@ public class RoomTypeConverter extends OmConverter<RoomType> {
 
 	public void write(OutputNode node, RoomType value) throws Exception {
 		node.setData(true);
-		node.setValue(value == null ? "0" : "" + value.getRoomtypes_id());
+		node.setValue(value == null ? "0" : "" + value.getId());
 	}
 }

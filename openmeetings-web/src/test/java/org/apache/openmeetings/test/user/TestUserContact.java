@@ -29,7 +29,7 @@ import java.util.Random;
 
 import org.apache.openmeetings.db.dao.user.OrganisationDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
-import org.apache.openmeetings.db.entity.user.Organisation_Users;
+import org.apache.openmeetings.db.entity.user.OrganisationUser;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.test.AbstractWicketTester;
 import org.junit.Test;
@@ -51,14 +51,14 @@ public class TestUserContact extends AbstractWicketTester {
 	public void createUserWithOrganisation() throws Exception {
 		int rnd = random.nextInt();
 		User u = getUser(rnd);
-		u.getOrganisation_users().add(new Organisation_Users(orgDao.get(1L)));
+		u.getOrganisationUsers().add(new OrganisationUser(orgDao.get(1L)));
 		u = userDao.update(u, null);
 		assertTrue("Password should be set as expected", userDao.verifyPassword(u.getId(), "pass" + rnd));
 		
 		User u1 = userDao.get(u.getId());
 		assertNotNull("Just created user should not be null", u1);
-		assertNotNull("Just created user should have non null org-users", u1.getOrganisation_users());
-		assertFalse("Just created user should have not empty org-users", u1.getOrganisation_users().isEmpty());
+		assertNotNull("Just created user should have non null org-users", u1.getOrganisationUsers());
+		assertFalse("Just created user should have not empty org-users", u1.getOrganisationUsers().isEmpty());
 	}
 	
 	@Test

@@ -28,7 +28,7 @@ import org.apache.openmeetings.db.dto.file.RecordingContainerData;
 import org.apache.openmeetings.db.entity.file.FileItem;
 import org.apache.openmeetings.db.entity.record.FlvRecording;
 import org.apache.openmeetings.db.entity.user.Organisation;
-import org.apache.openmeetings.db.entity.user.Organisation_Users;
+import org.apache.openmeetings.db.entity.user.OrganisationUser;
 import org.apache.openmeetings.web.common.UserPanel;
 import org.apache.openmeetings.web.common.tree.FileItemTree;
 import org.apache.openmeetings.web.common.tree.FileTreePanel;
@@ -51,7 +51,7 @@ public class RecordingsPanel extends UserPanel {
 				selectedFile.setObject(new FlvRecording());
 				treesView.add(selected = new FileItemTree<FlvRecording>(treesView.newChildId(), this, new MyRecordingTreeProvider()));
 				treesView.add(new FileItemTree<FlvRecording>(treesView.newChildId(), this, new PublicRecordingTreeProvider(null, null)));
-				for (Organisation_Users ou : getBean(UserDao.class).get(getUserId()).getOrganisation_users()) {
+				for (OrganisationUser ou : getBean(UserDao.class).get(getUserId()).getOrganisationUsers()) {
 					Organisation o = ou.getOrganisation();
 					treesView.add(new FileItemTree<FlvRecording>(treesView.newChildId(), this, new PublicRecordingTreeProvider(o.getId(), o.getName())));
 				}

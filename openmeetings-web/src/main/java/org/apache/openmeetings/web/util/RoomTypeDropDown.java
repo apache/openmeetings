@@ -38,6 +38,6 @@ public class RoomTypeDropDown extends DropDownChoice<RoomType> {
 	public RoomTypeDropDown(String id) {
 		super(id);
 		setChoices(getRoomTypes());
-		setChoiceRenderer(new ChoiceRenderer<RoomType>("label.value", "roomtypes_id"));
+		setChoiceRenderer(new ChoiceRenderer<RoomType>("label.value", "id"));
 	}
 }

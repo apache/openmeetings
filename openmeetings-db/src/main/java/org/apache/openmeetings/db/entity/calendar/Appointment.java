@@ -81,9 +81,8 @@ import org.simpleframework.xml.Root;
 			+ "		OR (a.start < :starttime AND a.end > :endtime) "
 			+ "	)"
     	)
-    , @NamedQuery(name="getAppointmentByRoomId", query="SELECT a FROM Appointment a WHERE a.deleted = false AND a.room.id = :room_id")
-	//TODO this query returns duplicates if the user books an appointment with
-	//his own user as second meeting-member, swagner 19.02.2012
+    , @NamedQuery(name="getAppointmentByRoomId", query="SELECT a FROM Appointment a WHERE a.deleted = false AND a.owner.id = :userId AND a.room.id = :roomId")
+	//TODO this query returns duplicates if the user books an appointment with his own user as second meeting-member, swagner 19.02.2012
     , @NamedQuery(name="appointmentsInRangeByUser",
 		query="SELECT a FROM MeetingMember mm, IN(mm.appointment) a "
 			+ "WHERE mm.deleted = false AND mm.user.id <> a.owner.id AND mm.user.id = :userId "
@@ -95,7 +94,7 @@ import org.simpleframework.xml.Root;
 	    )
     , @NamedQuery(name="appointedRoomsInRangeByUser",
 		query="SELECT a.room FROM MeetingMember mm, IN(mm.appointment) a "
-			+ "WHERE mm.deleted <> true AND mm.user.id <> a.owner.id AND mm.user.id = :userId "
+			+ "WHERE mm.deleted = false AND mm.user.id <> a.owner.id AND mm.user.id = :userId "
 			+ "	AND ( "
 			+ "		(a.start BETWEEN :starttime AND :endtime) "
 			+ "		OR (a.end BETWEEN :starttime AND :endtime) "
@@ -161,7 +160,7 @@ public class Appointment implements IDataProviderEntity {
 	@JoinColumn(name = "remind_id", nullable = true)
 	@ForeignKey(enabled = true)
 	@Element(name="typId", data=true, required=false)
-	private AppointmentReminderTyps remind;
+	private AppointmentReminderType remind;
 
 	@Column(name = "isdaily")
 	@Element(data=true, required = false)
@@ -287,11 +286,11 @@ public class Appointment implements IDataProviderEntity {
 		this.category = category;
 	}
 
-	public AppointmentReminderTyps getRemind() {
+	public AppointmentReminderType getRemind() {
 		return remind;
 	}
 
-	public void setRemind(AppointmentReminderTyps remind) {
+	public void setRemind(AppointmentReminderType remind) {
 		this.remind = remind;
 	}
 

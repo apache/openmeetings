@@ -85,16 +85,13 @@ public class RoomManager implements IRoomManager {
 	 * @param externalRoomId
 	 * @return Rooms-Object or NULL
 	 */
-	public Room getRoomByExternalId(Long externalRoomId,
-			String externalRoomType, long roomtypes_id) {
-		log.debug("getRoombyExternalId : " + externalRoomId + " - "
-				+ externalRoomType + " - " + roomtypes_id);
+	public Room getRoomByExternalId(Long externalRoomId, String externalRoomType, long roomtypesId) {
+		log.debug("getRoombyExternalId : " + externalRoomId + " - " + externalRoomType + " - " + roomtypesId);
 		try {
 			TypedQuery<Room> query = em.createNamedQuery("getRoomByExternalId", Room.class);
 			query.setParameter("externalRoomId", externalRoomId);
 			query.setParameter("externalRoomType", externalRoomType);
-			query.setParameter("roomtypes_id", roomtypes_id);
-			query.setParameter("deleted", true);
+			query.setParameter("roomtypesId", roomtypesId);
 			List<?> ll = query.getResultList();
 			if (ll.size() > 0) {
 				return (Room) ll.get(0);
@@ -203,8 +200,7 @@ public class RoomManager implements IRoomManager {
 	 * @param asc
 	 * @return
 	 */
-	public List<Room> getRoomsInternatl(int start, int max, String orderby,
-			boolean asc) {
+	public List<Room> getRoomsInternatl(int start, int max, String orderby, boolean asc) {
 		try {
 			CriteriaBuilder cb = em.getCriteriaBuilder();
 			CriteriaQuery<Room> cq = cb.createQuery(Room.class);
@@ -242,8 +238,7 @@ public class RoomManager implements IRoomManager {
 			String orderby, boolean asc, String search) {
 		try {
 
-			String hql = "select c from Room c "
-					+ "where c.deleted <> true AND c.name LIKE :search ";
+			String hql = "select c from Room c where c.deleted = false AND c.name LIKE :search ";
 
 			if (search.length() == 0) {
 				search = "%";
@@ -319,11 +314,10 @@ public class RoomManager implements IRoomManager {
 		try {
 			String hql = "select c from RoomOrganisation as c "
 					+ "where c.room.id = :rooms_id "
-					+ "AND c.deleted <> :deleted";
+					+ "AND c.deleted = false";
 			TypedQuery<RoomOrganisation> q = em.createQuery(hql, RoomOrganisation.class);
 
 			q.setParameter("rooms_id", rooms_id);
-			q.setParameter("deleted", true);
 			List<RoomOrganisation> ll = q.getResultList();
 			return ll;
 		} catch (Exception ex2) {
@@ -399,7 +393,7 @@ public class RoomManager implements IRoomManager {
 	/**
 	 * adds a new Record to the table rooms
 	 * @param name
-	 * @param roomtypes_id
+	 * @param roomtypesId
 	 * @param ispublic
 	 * @param hideActivitiesAndActions TODO
 	 * @param hideFilesExplorer TODO
@@ -408,7 +402,7 @@ public class RoomManager implements IRoomManager {
 	 * @param hideWhiteboard TODO
 	 * @return id of the newly created room or NULL
 	 */
-	public Long addRoom(String name, long roomtypes_id,
+	public Long addRoom(String name, long roomtypesId,
 			String comment, Long numberOfPartizipants, boolean ispublic,
 			List<Integer> organisations, Boolean appointment, Boolean isDemoRoom,
 			Integer demoTime, Boolean isModeratedRoom,
@@ -427,7 +421,7 @@ public class RoomManager implements IRoomManager {
 			r.setComment(comment);
 			r.setStarttime(new Date());
 			r.setNumberOfPartizipants(numberOfPartizipants);
-			r.setRoomtype(roomTypeDao.get(roomtypes_id));
+			r.setRoomtype(roomTypeDao.get(roomtypesId));
 			r.setIspublic(ispublic);
 			r.setAllowUserQuestions(allowUserQuestions);
 			r.setIsAudioOnly(isAudioOnly);
@@ -490,11 +484,29 @@ public class RoomManager implements IRoomManager {
 	 * adds/check a new Record to the table rooms with external fields
 	 * 
 	 * @param name
-	 * @param roomtypes_id
+	 * @param roomtypesId
+	 * @param comment
+	 * @param numberOfPartizipants
 	 * @param ispublic
+	 * @param organisations
+	 * @param appointment
+	 * @param isDemoRoom
+	 * @param demoTime
+	 * @param isModeratedRoom
+	 * @param roomModerators
+	 * @param externalRoomId
+	 * @param externalRoomType
+	 * @param allowUserQuestions
+	 * @param isAudioOnly
+	 * @param allowFontStyles
+	 * @param isClosed
+	 * @param redirectURL
+	 * @param waitForRecording
+	 * @param allowRecording
+	 * @param hideTopBar
 	 * @return id of (the newly created) room or NULL
 	 */
-	public Long addExternalRoom(String name, long roomtypes_id, String comment,
+	public Long addExternalRoom(String name, long roomtypesId, String comment,
 			Long numberOfPartizipants, boolean ispublic, List<Integer> organisations,
 			Boolean appointment, Boolean isDemoRoom, Integer demoTime,
 			Boolean isModeratedRoom, List<Map<String, Object>> roomModerators,
@@ -511,7 +523,7 @@ public class RoomManager implements IRoomManager {
 			r.setComment(comment);
 			r.setStarttime(new Date());
 			r.setNumberOfPartizipants(numberOfPartizipants);
-			r.setRoomtype(roomTypeDao.get(roomtypes_id));
+			r.setRoomtype(roomTypeDao.get(roomtypesId));
 			r.setIspublic(ispublic);
 
 			r.setAllowUserQuestions(allowUserQuestions);
@@ -591,18 +603,15 @@ public class RoomManager implements IRoomManager {
 	/**
 	 * get List of Rooms_Organisation by organisation and roomtype
 	 * 
-	 * @param user_level
 	 * @param organisation_id
-	 * @param roomtypes_id
+	 * @param roomtypesId
 	 * @return
 	 */
-	public List<RoomOrganisation> getRoomsOrganisationByOrganisationIdAndRoomType(long organisation_id, long roomtypes_id) {
+	public List<RoomOrganisation> getRoomsOrganisationByOrganisationIdAndRoomType(long organisation_id, long roomtypesId) {
 		try {
-			TypedQuery<RoomOrganisation> q = em.
-					createNamedQuery("getRoomsOrganisationByOrganisationIdAndRoomType", RoomOrganisation.class);
-			q.setParameter("roomtypes_id", roomtypes_id);
+			TypedQuery<RoomOrganisation> q = em.createNamedQuery("getRoomsOrganisationByOrganisationIdAndRoomType", RoomOrganisation.class);
+			q.setParameter("roomtypesId", roomtypesId);
 			q.setParameter("organisation_id", organisation_id);
-			q.setParameter("deleted", true);
 			return q.getResultList();
 		} catch (Exception ex2) {
 			log.error("[getRoomsByOrganisation] ", ex2);
@@ -622,7 +631,6 @@ public class RoomManager implements IRoomManager {
 					createNamedQuery("getRoomsOrganisationByOrganisationId", RoomOrganisation.class);
 
 			query.setParameter("organisation_id", organisation_id);
-			query.setParameter("deleted", true);
 
 			List<RoomOrganisation> ll = query.getResultList();
 
@@ -654,7 +662,6 @@ public class RoomManager implements IRoomManager {
 			TypedQuery<RoomOrganisation> q = em.createNamedQuery("selectMaxFromRoomsByOrganisation", RoomOrganisation.class);
 
 			q.setParameter("organisation_id", organisation_id);
-			q.setParameter("deleted", true);
 			List<RoomOrganisation> ll = q.getResultList();
 
 			return ll.size();
@@ -677,7 +684,7 @@ public class RoomManager implements IRoomManager {
 			long organisation_id, int start, int max, String orderby,
 			boolean asc) {
 		try {
-			String hql = "select c from RoomOrganisation as c where c.organisation.id = :organisation_id AND c.deleted <> :deleted";
+			String hql = "select c from RoomOrganisation as c where c.organisation.id = :organisation_id AND c.deleted = false";
 			if (orderby.startsWith("c.")) {
 				hql += "ORDER BY " + orderby;
 			} else {
@@ -692,7 +699,6 @@ public class RoomManager implements IRoomManager {
 			TypedQuery<RoomOrganisation> q = em.createQuery(hql, RoomOrganisation.class);
 
 			q.setParameter("organisation_id", organisation_id);
-			q.setParameter("deleted", true);
 			q.setFirstResult(start);
 			q.setMaxResults(max);
 			List<RoomOrganisation> ll = q.getResultList();
@@ -712,7 +718,6 @@ public class RoomManager implements IRoomManager {
 
 			q.setParameter("rooms_id", rooms_id);
 			q.setParameter("organisation_id", organisation_id);
-			q.setParameter("deleted", true);
 			List<RoomOrganisation> ll = q.getResultList();
 
 			if (ll.size() > 0) {
@@ -733,7 +738,6 @@ public class RoomManager implements IRoomManager {
 		try {
 			TypedQuery<RoomOrganisation> q = em.createNamedQuery("getRoomsOrganisationByRoomsId", RoomOrganisation.class);
 			q.setParameter("rooms_id", rooms_id);
-			q.setParameter("deleted", true);
 			return q.getResultList();
 		} catch (Exception ex2) {
 			log.error("[getRoomsByOrganisation] ", ex2);
@@ -741,7 +745,7 @@ public class RoomManager implements IRoomManager {
 		return null;
 	}
 
-	public Long updateRoomInternal(long rooms_id, long roomtypes_id,
+	public Long updateRoomInternal(long rooms_id, long roomtypesId,
 			String name, boolean ispublic, String comment,
 			Long numberOfPartizipants, List<Integer> organisations,
 			Boolean appointment, Boolean isDemoRoom, Integer demoTime,
@@ -762,7 +766,7 @@ public class RoomManager implements IRoomManager {
 			r.setIspublic(ispublic);
 			r.setNumberOfPartizipants(numberOfPartizipants);
 			r.setName(name);
-			r.setRoomtype(roomTypeDao.get(roomtypes_id));
+			r.setRoomtype(roomTypeDao.get(roomtypesId));
 			r.setUpdatetime(new Date());
 			r.setAllowUserQuestions(allowUserQuestions);
 			r.setIsAudioOnly(isAudioOnly);
@@ -991,7 +995,6 @@ public class RoomManager implements IRoomManager {
 			TypedQuery<Room> query = em.createNamedQuery("getRoomByOwnerAndTypeId", Room.class);
 			query.setParameter("ownerId", ownerId);
 			query.setParameter("roomtypesId", roomtypesId);
-			query.setParameter("deleted", true);
 			List<Room> ll = query.getResultList();
 			if (ll.size() > 0) {
 				room = ll.get(0);

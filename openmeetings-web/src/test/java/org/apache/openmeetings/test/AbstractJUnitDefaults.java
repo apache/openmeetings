@@ -32,7 +32,7 @@ import org.apache.openmeetings.db.dao.label.FieldLanguagesValuesDao;
 import org.apache.openmeetings.db.dao.room.RoomTypeDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
-import org.apache.openmeetings.db.entity.calendar.AppointmentReminderTyps;
+import org.apache.openmeetings.db.entity.calendar.AppointmentReminderType;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.room.RoomType;
 import org.apache.openmeetings.db.entity.user.User;
@@ -67,7 +67,7 @@ public abstract class AbstractJUnitDefaults extends AbstractSpringTest {
 	@Autowired
 	private FieldLanguagesValuesDao labelDao;
 	
-	private List<AppointmentReminderTyps> remindTypes;
+	private List<AppointmentReminderType> remindTypes;
 	private List<RoomType> roomTypes;
 
 	@Before
@@ -86,7 +86,7 @@ public abstract class AbstractJUnitDefaults extends AbstractSpringTest {
 		if (configKeyCryptClassName == null) {
 			assertNotNull("Crypt class name should not be null", configurationDao.getCryptKey());
 		}
-        remindTypes = reminderTypeDao.getAppointmentReminderTypList(1L);
+        remindTypes = reminderTypeDao.getList(1L);
         roomTypes = roomTypeDao.getAll(1L);
     }
 

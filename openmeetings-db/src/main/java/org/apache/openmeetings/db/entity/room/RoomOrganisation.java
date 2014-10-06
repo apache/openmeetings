@@ -42,24 +42,24 @@ import org.simpleframework.xml.Root;
 @NamedQueries({
 	@NamedQuery(name = "getAllRoomsOrganisations", query = "select ro from RoomOrganisation ro ORDER BY ro.id"),
 	@NamedQuery(name = "getRoomsOrganisationByOrganisationIdAndRoomType", query = "select c from RoomOrganisation as c "
-			+ "where c.room.roomtypes_id = :roomtypes_id AND c.organisation.id = :organisation_id "
-			+ "AND c.deleted <> :deleted"),
+			+ "where c.room.roomtype.id = :roomtypesId AND c.organisation.id = :organisation_id "
+			+ "AND c.deleted = false"),
 	@NamedQuery(name = "getRoomsOrganisationByOrganisationId", query = "SELECT c FROM RoomOrganisation c "
 			+ "LEFT JOIN FETCH c.room "
 			+ "WHERE c.organisation.id = :organisation_id "
-			+ "AND c.deleted <> :deleted AND c.room.deleted <> :deleted AND c.room.appointment = false "
-			+ "AND c.organisation.deleted <> :deleted "
+			+ "AND c.deleted = false AND c.room.deleted = false AND c.room.appointment = false "
+			+ "AND c.organisation.deleted = false "
 			+ "ORDER BY c.room.name ASC"),
 	@NamedQuery(name = "selectMaxFromRoomsByOrganisation", query = "select c from Rooms_Organisation as c "
 			+ "where c.organisation.id = :organisation_id "
-			+ "AND c.deleted <> :deleted"),
+			+ "AND c.deleted = false"),
 	@NamedQuery(name = "getRoomsOrganisationByOrganisationIdAndRoomId", query = "select c from RoomOrganisation as c "
 			+ "where c.room.id = :rooms_id "
 			+ "AND c.organisation.id = :organisation_id "
-			+ "AND c.deleted <> :deleted"),
+			+ "AND c.deleted = false"),
 	@NamedQuery(name = "getRoomsOrganisationByRoomsId", query = "select c from RoomOrganisation as c "
 			+ "where c.room.id = :rooms_id "
-			+ "AND c.deleted <> :deleted")
+			+ "AND c.deleted = false")
 })
 @Table(name = "rooms_organisation")
 @Root(name="room_organisation")
