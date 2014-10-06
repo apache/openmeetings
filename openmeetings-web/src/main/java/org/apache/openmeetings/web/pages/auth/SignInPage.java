@@ -67,8 +67,6 @@ import org.apache.wicket.markup.head.CssContentHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 import org.apache.wicket.request.IRequestParameters;
-import org.apache.wicket.request.Url;
-import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.flow.RedirectToUrlException;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.string.StringValue;
@@ -179,7 +177,7 @@ public class SignInPage extends BaseInitedPage {
 		try {
 			String base = getBean(ConfigurationDao.class).getBaseUrl();
 			URI uri = new URI(base + component.urlFor(SignInPage.class, new PageParameters().add("oauthid", server.getId())));
-			result = RequestCycle.get().getUrlRenderer().renderFullUrl(Url.parse(uri.normalize().toString()));
+			result = uri.normalize().toString();
 		} catch (URISyntaxException e) {
 			log.error("Unexpected error while getting redirect URL", e);
 		}
