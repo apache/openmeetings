@@ -23,7 +23,7 @@ import java.awt.event.MouseAdapter;
 import javax.swing.JLabel;
 
 public class MouseListenerable extends JLabel {
-	private static final long serialVersionUID = -6862930681858866872L;
+	private static final long serialVersionUID = 1L;
 
 	public void addListener(MouseAdapter listner) {
 		addMouseListener(listner);

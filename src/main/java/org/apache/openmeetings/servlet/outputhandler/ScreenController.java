@@ -25,7 +25,6 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SCREENSH
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
 import java.io.File;
-import java.io.FileFilter;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Properties;
@@ -139,39 +138,9 @@ public class ScreenController {
 			}
 			log.debug("Creating JNLP Template for TCP solution");
 
-			//libs
-			StringBuilder libs = new StringBuilder();
-			File screenShareDir = OmFileHelper.getScreenSharingDir();
-			for (File jar : screenShareDir.listFiles(new FileFilter() {
-				public boolean accept(File pathname) {
-					return pathname.getName().endsWith(".jar");
-				}
-			})) {
-				libs.append("\t\t<jar href=\"").append(jar.getName()).append("\"/>\n");
-			}
 			log.debug("RTMP Sharer labels :: " + label_sharer);
 
 			ConnectionType conType = ConnectionType.valueOf(request.getParameter("connectionType"));
-
-			String startUpClass;
-			switch (conType) {
-			case rtmp:
-				startUpClass = "org.apache.openmeetings.screen.webstart.RTMPScreenShare";
-				break;
-			case rtmps:
-				startUpClass = "org.apache.openmeetings.screen.webstart.RTMPSScreenShare";
-				break;
-			case rtmpt:
-				startUpClass = "org.apache.openmeetings.screen.webstart.RTMPTScreenShare";
-				break;
-			default:
-				throw new Exception("Unknown connection type");
-			}
-
-			String orgIdAsString = request.getParameter("organization_id");
-			if (orgIdAsString == null) {
-				throw new Exception("orgIdAsString is empty could not start sharer");
-			}
 
 			String port = request.getParameter("port");
 			if (port == null) {
@@ -189,25 +158,22 @@ public class ScreenController {
 			boolean allowPublishing = (0 == sessionManager.getPublishingCount(roomId));
 			
 			Context ctx = new VelocityContext();
-			ctx.put("APP_NAME", cfgDao.getAppName());
-			ctx.put("PUBLIC_SID", publicSID);
-			ctx.put("LABELSHARER", label_sharer);
-			addKeystore(ctx);
-			ctx.put("LIBRARIES", libs);
-			ctx.put("organization_id", orgIdAsString);
-			ctx.put("startUpClass", startUpClass);
 			ctx.put("codebase", baseURL + OmFileHelper.SCREENSHARING_DIR);
-			ctx.put("red5-host", rtmphostlocal);
-			ctx.put("red5-app", OpenmeetingsVariables.webAppRootKey + "/" + roomId);
-			ctx.put("default_quality_screensharing", cfgDao.getConfValue(CONFIG_SCREENSHARING_QUALITY, String.class, "1"));
-			ctx.put("default_fps_screensharing", cfgDao.getConfValue(CONFIG_SCREENSHARING_FPS, String.class, "10"));
-			ctx.put("show_screensharing_fps", cfgDao.getConfValue(CONFIG_SCREENSHARING_FPS_SHOW, Boolean.class, "true"));
-			ctx.put("allow_remote", cfgDao.getConfValue(CONFIG_SCREENSHARING_ALLOW_REMOTE, Boolean.class, "true"));
-			//invited guest does not have valid user_id (have user_id == -1)
-			ctx.put("user_id", users_id);
+			ctx.put("APP_NAME", cfgDao.getAppName());
+			ctx.put("protocol", conType.name());
+			ctx.put("host", rtmphostlocal);
 			ctx.put("port", port);
+			ctx.put("app", OpenmeetingsVariables.webAppRootKey + "/" + roomId);
+			ctx.put("userId", users_id);
+			ctx.put("publicSid", publicSID);
+			ctx.put("labels", label_sharer);
+			ctx.put("defaultQuality", cfgDao.getConfValue(CONFIG_SCREENSHARING_QUALITY, String.class, "1"));
+			ctx.put("defaultFps", cfgDao.getConfValue(CONFIG_SCREENSHARING_FPS, String.class, "10"));
+			ctx.put("showFps", cfgDao.getConfValue(CONFIG_SCREENSHARING_FPS_SHOW, Boolean.class, "true"));
+			ctx.put("allowRemote", cfgDao.getConfValue(CONFIG_SCREENSHARING_ALLOW_REMOTE, Boolean.class, "true"));
 			ctx.put("allowRecording", allowRecording);
 			ctx.put("allowPublishing", allowPublishing);
+			addKeystore(ctx);
 
 			String requestedFile = StringUtils.deleteWhitespace(domain + "_" + roomId) + ".jnlp";
 			response.setContentType("application/x-java-jnlp-file");
@@ -229,13 +195,9 @@ public class ScreenController {
 		}
 	}
 
-	private StringBuilder addArgument(StringBuilder sb, Object arg) {
-		return sb.append("\t\t<argument>").append(arg).append("</argument>\n");
-	}
-	
 	private void addKeystore(Context ctx) {
 		log.debug("RTMP Sharer Keystore :: start");
-		StringBuilder sb = new StringBuilder();
+		String keystore = "<![CDATA[]]>", password = "<![CDATA[]]>";
 		FileInputStream fis = null, ris = null;
 		try {
 			File conf = new File(OmFileHelper.getRootDir(), "conf");
@@ -250,7 +212,8 @@ public class ScreenController {
 				fis = new FileInputStream(keyStore);
 				fis.read(keyBytes);
 				
-				sb = addArgument(addArgument(sb, Hex.encodeHexString(keyBytes)), red5Props.getProperty("rtmps.keystorepass"));
+				keystore = Hex.encodeHexString(keyBytes);
+				password = red5Props.getProperty("rtmps.keystorepass");
 				
 				/*
 				KeyStore ksIn = KeyStore.getInstance(KeyStore.getDefaultType());
@@ -287,6 +250,7 @@ public class ScreenController {
 				}
 			}
 		}
-		ctx.put("KEYSTORE", sb);
+		ctx.put("keystore", keystore);
+		ctx.put("password", password);
 	}
 }

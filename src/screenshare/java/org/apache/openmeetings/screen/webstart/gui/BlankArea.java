@@ -23,7 +23,7 @@ import java.awt.Dimension;
 import java.awt.Color;
 
 public class BlankArea extends MouseListenerable {
-	private static final long serialVersionUID = 305723962144665147L;
+	private static final long serialVersionUID = 1L;
 	private Dimension minSize = new Dimension(100, 50);
 
     public BlankArea(Color color) {

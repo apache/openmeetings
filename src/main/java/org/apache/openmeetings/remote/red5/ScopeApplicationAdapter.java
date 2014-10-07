@@ -316,8 +316,6 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 					currentClient.setStreamPublishStarted(true);
 				}
 
-				currentClient.setOrganization_id(Long.parseLong(map.get("organization_id").toString()));
-
 				sessionManager.updateClientByStreamId(current.getClient().getId(), currentClient, false, null);
 
 				Map returnMap = new HashMap();

@@ -17,38 +17,39 @@
   specific language governing permissions and limitations
   under the License.
 -->
-<jnlp spec='1.0+' codebase='$codebase'> 
+<jnlp spec='1.0+' codebase='$codebase'>
 	<information> 
-		<title>Screen Sharing Application</title> 
+		<title>Screen Sharing Application</title>
 		<vendor>$APP_NAME</vendor> 
 		<homepage>http://openmeetings.apache.org/</homepage>
 		<icon href="icon.jpg" />
 		<icon kind="splash" href="splashicon.jpg" />
-		<description>ScreenViewer Client Application</description> 
-		<description kind="short">A File to grab a screen and send it to a Server</description> 
-		<offline-allowed/> 
+		<description>ScreenViewer Client Application</description>
+		<description kind="short">A File to grab a screen and send it to a Server</description>
+		<offline-allowed/>
 	</information>
 	<security>
-	    <all-permissions/>
-	</security>	
-	<resources> 
+		<all-permissions/>
+	</security>
+	<resources>
 		<j2se version='1.7+'/>
-$LIBRARIES
-    </resources> 
-    <application-desc main-class='$startUpClass'>
-    	<argument>$red5-host</argument> 
-    	<argument>$red5-app</argument> 
-    	<argument>$port</argument> 
-    	<argument>$PUBLIC_SID</argument>   
-    	<argument>$LABELSHARER</argument> 
-    	<argument>$organization_id</argument> 
-    	<argument>$default_quality_screensharing</argument>
-    	<argument>$default_fps_screensharing</argument>
-    	<argument>$show_screensharing_fps</argument>
-    	<argument>$allow_remote</argument>
-    	<argument>$user_id</argument>   
-    	<argument>$allowRecording</argument>
-    	<argument>$allowPublishing</argument>
-$KEYSTORE
-    </application-desc> 
-</jnlp> 
+		$dependencies
+	</resources>
+	<application-desc main-class='org.apache.openmeetings.screen.webstart.CoreScreenShare'>
+		<argument>$protocol</argument>
+		<argument>$host</argument>
+		<argument>$port</argument>
+		<argument>$app</argument>
+		<argument>$userId</argument>
+		<argument>$publicSid</argument>
+		<argument>$labels</argument>
+		<argument>$defaultQuality</argument>
+		<argument>$defaultFps</argument>
+		<argument>$showFps</argument>
+		<argument>$allowRemote</argument>
+		<argument>$allowRecording</argument>
+		<argument>$allowPublishing</argument>
+		<argument>$keystore</argument>
+		<argument>$password</argument>
+	</application-desc>
+</jnlp>

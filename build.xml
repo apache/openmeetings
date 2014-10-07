@@ -280,14 +280,14 @@
 
 	<!-- Copy any resource or configuration files -->
 	<target name="vmresources">
-		<copy todir="${main.out.dir}" includeEmptyDirs="yes">
+		<copy todir="${main.out.dir}" includeEmptyDirs="yes" force="true" overwrite="true">
 			<fileset dir="${src.base.dir}">
 				<include name="**/*.vm" />
 			</fileset>
 		</copy>
 	</target>
 	
-	<target name="resources" depends="vmresources">
+	<target name="resources" depends="prepare.jnlp">
 		<patternset id="xmlpng">
 			<include name="**/*.xml" />
 			<include name="**/*.png" />
@@ -314,7 +314,60 @@
 
 	<target name="web.only" depends="jar.web.only, web.copy"/>
 	
-	<target name="jar.web.only" depends="enhance.only.norefresh, current_revision, vmresources">
+	<target name="prepare.jnlp" depends="vmresources">
+		<copy todir="${screenshare.out.dir}" overwrite="true" force="true">
+			<fileset dir="${red5.server.lib}" includes="commons-codec*.jar" />
+			<fileset dir="${red5.server.lib}" includes="commons-beanutils*.jar" />
+			<fileset dir="${red5.server.lib}" includes="commons-collections*.jar" />
+			<fileset dir="${red5.server.lib}" includes="commons-lang3*.jar" />
+			<fileset dir="${red5.server.lib}" includes="httpclient*.jar" />
+			<fileset dir="${red5.server.lib}" includes="httpcore*.jar" />
+			<fileset dir="${red5.server.lib}" includes="bcprov*.jar" />
+			<fileset dir="${red5.server.lib}" includes="ehcache-core*.jar" />
+			<fileset dir="${red5.server.lib}" includes="slf4j-api*.jar" />
+			<fileset dir="${red5.server.lib}" includes="jcl-over-slf4j*.jar" />
+			<fileset dir="${red5.server.lib}" includes="spring-context-4*.jar" />
+			<fileset dir="${red5.server.lib}" includes="spring-core-*.jar" />
+			<fileset dir="${red5.server.lib}" includes="spring-beans-*.jar" />
+			<fileset dir="${red5.server.lib}" includes="logback*.jar" />
+			<fileset dir="${red5.server.lib}" includes="mina-core*.jar" />
+			<fileset dir="${red5.server.lib}" includes="com.springsource.slf4j.api*.jar" />
+			<fileset dir="${red5.server.lib}" includes="red5-io*.jar" />
+			<fileset dir="${red5.lib}" includes="red5-server.jar" />
+			<fileset dir="${red5.client.lib}" includes="red5*.jar" />
+		</copy>
+		<fileset id="screenshare.jars" dir="${screenshare.out.dir}" casesensitive="yes">
+			<include name="**/*.jar"/>
+		</fileset>
+		<pathconvert pathsep="&quot;/&gt;&lt;jar href=&quot;" targetos="unix" property="dependencies" refid="screenshare.jars">
+			<map from="${screenshare.out.dir}/" to=""/>
+		</pathconvert>
+		<echo>dependencies = &lt;jar href=&quot;${dependencies}&quot;/&gt;&lt;jar href=&quot;${project.distname}-screenshare-${jar.suffix}.jar&quot;/&gt;</echo>
+		<replace file="${main.out.dir}/screenshare.vm" token="$dependencies" value="&lt;jar href=&quot;${dependencies}&quot;/&gt;&lt;jar href=&quot;${project.distname}-screenshare-${jar.suffix}.jar&quot;/&gt;"/>
+		<mkdir dir="${main.out.dir}/JNLP-INF"/>
+		<property name="app.template.jnlp" value="${main.out.dir}/JNLP-INF/APPLICATION-TEMPLATE.JNLP"/>
+		<copy file="${main.out.dir}/screenshare.vm" tofile="${app.template.jnlp}" overwrite="true" force="true"/>
+		<replace file="${app.template.jnlp}" token="$codebase" value="*"/>
+		<replace file="${app.template.jnlp}" token="$codebase" value="*"/>
+		<replace file="${app.template.jnlp}" token="$APP_NAME" value="*"/>
+		<replace file="${app.template.jnlp}" token="$protocol" value="*"/>
+		<replace file="${app.template.jnlp}" token="$host" value="*"/>
+		<replace file="${app.template.jnlp}" token="$port" value="*"/>
+		<replace file="${app.template.jnlp}" token="$app" value="*"/>
+		<replace file="${app.template.jnlp}" token="$userId" value="*"/>
+		<replace file="${app.template.jnlp}" token="$publicSid" value="*"/>
+		<replace file="${app.template.jnlp}" token="$labels" value="*"/>
+		<replace file="${app.template.jnlp}" token="$defaultQuality" value="*"/>
+		<replace file="${app.template.jnlp}" token="$defaultFps" value="*"/>
+		<replace file="${app.template.jnlp}" token="$showFps" value="*"/>
+		<replace file="${app.template.jnlp}" token="$allowRemote" value="*"/>
+		<replace file="${app.template.jnlp}" token="$allowRecording" value="*"/>
+		<replace file="${app.template.jnlp}" token="$allowPublishing" value="*"/>
+		<replace file="${app.template.jnlp}" token="$keystore" value="*"/>
+		<replace file="${app.template.jnlp}" token="$password" value="*"/>
+	</target>
+		
+	<target name="jar.web.only" depends="enhance.only.norefresh, current_revision, prepare.jnlp">
 		<manifestclasspath property="jar.classpath" jarfile="${project.distname}-${jar.suffix}.jar">
 			<classpath refid="compile.classpath" />
 		</manifestclasspath>
@@ -447,6 +500,7 @@
 		<jar destfile="${screenshare.out.dir}/${project.distname}-screenshare-${jar.suffix}.jar">
 			<fileset dir="${main.out.dir}">
 				<include name="org/apache/openmeetings/screen/**" />
+				<include name="JNLP-INF/*" />
 				<include name="META-INF/LICENSE" />
 				<include name="META-INF/NOTICE" />
 			</fileset>
@@ -503,27 +557,6 @@
 	</target>
 	
 	<target name="signWebStartJars" depends="generateSignKey,jar.screen.share">
-		<copy todir="${screenshare.out.dir}" overwrite="true" force="true">
-			<fileset dir="${red5.server.lib}" includes="commons-codec*.jar" />
-			<fileset dir="${red5.server.lib}" includes="commons-beanutils*.jar" />
-			<fileset dir="${red5.server.lib}" includes="commons-collections*.jar" />
-			<fileset dir="${red5.server.lib}" includes="commons-lang3*.jar" />
-			<fileset dir="${red5.server.lib}" includes="httpclient*.jar" />
-			<fileset dir="${red5.server.lib}" includes="httpcore*.jar" />
-			<fileset dir="${red5.server.lib}" includes="bcprov*.jar" />
-			<fileset dir="${red5.server.lib}" includes="ehcache-core*.jar" />
-			<fileset dir="${red5.server.lib}" includes="slf4j-api*.jar" />
-			<fileset dir="${red5.server.lib}" includes="jcl-over-slf4j*.jar" />
-			<fileset dir="${red5.server.lib}" includes="spring-context-4*.jar" />
-			<fileset dir="${red5.server.lib}" includes="spring-core-*.jar" />
-			<fileset dir="${red5.server.lib}" includes="spring-beans-*.jar" />
-			<fileset dir="${red5.server.lib}" includes="logback*.jar" />
-			<fileset dir="${red5.server.lib}" includes="mina-core*.jar" />
-			<fileset dir="${red5.server.lib}" includes="com.springsource.slf4j.api*.jar" />
-			<fileset dir="${red5.server.lib}" includes="red5-io*.jar" />
-			<fileset dir="${red5.lib}" includes="red5-server.jar" />
-			<fileset dir="${red5.client.lib}" includes="red5*.jar" />
-		</copy>
 		<taskdef resource="net/sf/antcontrib/antlib.xml">
 			<classpath refid="check.classpath" />
 		</taskdef>

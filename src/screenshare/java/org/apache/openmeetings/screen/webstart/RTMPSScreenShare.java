@@ -18,8 +18,6 @@
  */
 package org.apache.openmeetings.screen.webstart;
 
-import org.apache.commons.codec.DecoderException;
-import org.apache.commons.codec.binary.Hex;
 import org.red5.client.net.rtmp.ClientExceptionHandler;
 import org.red5.client.net.rtmps.RTMPSClient;
 import org.red5.server.api.service.IPendingServiceCallback;
@@ -35,19 +33,10 @@ public class RTMPSScreenShare extends RTMPSClient implements ClientExceptionHand
 
 	private CoreScreenShare core = null;
 
-	private RTMPSScreenShare(String[] args) {
-		core = new CoreScreenShare(this, args);
+	public RTMPSScreenShare(CoreScreenShare core) {
+		this.core = core;
 	};
 
-	public static void main(String[] args) throws DecoderException {
-		RTMPSScreenShare client = new RTMPSScreenShare(args);
-		if (args.length < 15) {
-			System.exit(0);
-		}
-		client.setKeystoreBytes(Hex.decodeHex(args[13].toCharArray()));
-		client.setKeyStorePassword(args[14]);
-	}
-	
 	@Override
 	public void connect(String server, int port, String application,
 			IPendingServiceCallback connectCallback) {
@@ -85,7 +74,7 @@ public class RTMPSScreenShare extends RTMPSClient implements ClientExceptionHand
 		super.onCommand(conn, channel, source, command);
 		core.onCommand(conn, channel, source, command);
 	}
-	
+
 	@Override
 	public void handleException(Throwable throwable) {
 		logger.error("{}", new Object[] { throwable.getCause() });

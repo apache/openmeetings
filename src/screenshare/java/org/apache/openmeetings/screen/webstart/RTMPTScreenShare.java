@@ -32,14 +32,10 @@ public class RTMPTScreenShare extends RTMPTClient implements ClientExceptionHand
 
 	private CoreScreenShare core = null;
 
-	private RTMPTScreenShare(String[] args) {
-		core = new CoreScreenShare(this, args);
+	public RTMPTScreenShare(CoreScreenShare core) {
+		this.core = core;
 	};
 
-	public static void main(String[] args) {
-		new RTMPTScreenShare(args);
-	}
-	
 	// ------------------------------------------------------------------------
 	//
 	// Override
@@ -67,7 +63,7 @@ public class RTMPTScreenShare extends RTMPTClient implements ClientExceptionHand
 		super.onCommand(conn, channel, source, command);
 		core.onCommand(conn, channel, source, command);
 	}
-	
+
 	@Override
 	public void handleException(Throwable throwable) {
 		logger.error("{}", new Object[] { throwable.getCause() });

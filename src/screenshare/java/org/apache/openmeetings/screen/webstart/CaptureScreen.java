@@ -111,7 +111,7 @@ final class CaptureScreen extends Thread {
 						}
 						frames.offer(data);
 						se.createUnalteredFrame();
-					} catch (IOException e) {
+					} catch (Exception e) {
 						log.error("Error while encoding: ", e);
 					}
 				}

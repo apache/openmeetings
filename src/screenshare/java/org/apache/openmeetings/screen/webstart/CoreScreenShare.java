@@ -40,6 +40,7 @@ import java.awt.event.KeyEvent;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.commons.codec.binary.Hex;
 import org.apache.openmeetings.screen.webstart.gui.ScreenSharerFrame;
 import org.red5.client.net.rtmp.INetStreamEventHandler;
 import org.red5.io.utils.ObjectMap;
@@ -57,7 +58,11 @@ import org.slf4j.Logger;
 public class CoreScreenShare implements IPendingServiceCallback, INetStreamEventHandler {
 	private static final Logger log = getLogger(CoreScreenShare.class);
 
+	enum Protocol {
+		rtmp, rtmpt, rtmpe, rtmps
+	}
 	private IScreenShare instance = null;
+	private Protocol protocol;
 	private String host;
 	private String app;
 	private int port;
@@ -73,7 +78,6 @@ public class CoreScreenShare implements IPendingServiceCallback, INetStreamEvent
 	public boolean showFPS = true;
 	public boolean allowRemote = true;
 
-	public Long organization_id = 0L;
 	public Long user_id = null;
 	private boolean allowRecording = true;
 	private boolean allowPublishing = true;
@@ -101,30 +105,25 @@ public class CoreScreenShare implements IPendingServiceCallback, INetStreamEvent
 	//
 	// ------------------------------------------------------------------------
 
-	public CoreScreenShare(IScreenShare instance, String[] args) {
-		this.instance = instance;
-		
+	public CoreScreenShare(String[] args) {
 		try {
 			for (String arg : args) {
 				log.debug("arg: " + arg);
 			}
 			String[] textArray = null;
 			if (args.length > 12) {
-				host = args[0];
-				app = args[1];
+				protocol = Protocol.valueOf(args[0]);
+				host = args[1];
 				port = Integer.parseInt(args[2]);
-				publishName = args[3];
-
-				String labelTexts = args[4];
-
-				organization_id = Long.parseLong(args[5]);
-
-				defaultQuality = Integer.parseInt(args[6]);
-				defaultFPS = Integer.parseInt(args[7]);
-				showFPS = bool(args[8]);
-				allowRemote = bool(args[9]);
+				app = args[3];
+				user_id = Long.parseLong(args[4]);
+				publishName = args[5];
+				String labelTexts = args[6];
+				defaultQuality = Integer.parseInt(args[7]);
+				defaultFPS = Integer.parseInt(args[8]);
+				showFPS = bool(args[9]);
+				allowRemote = bool(args[10]);
 				remoteEnabled = allowRemote;
-				user_id = Long.parseLong(args[10]);
 				allowRecording = bool(args[11]);
 				allowPublishing = bool(args[12]);
 
@@ -139,9 +138,25 @@ public class CoreScreenShare implements IPendingServiceCallback, INetStreamEvent
 						log.debug(i + " :: " + textArray[i]);
 					}
 				}
-				log.debug("host: " + host + ", app: "
-						+ app + ", port: " + port + ", publish: "
-						+ publishName);
+				switch (protocol) {
+					case rtmp:
+						instance = new RTMPScreenShare(this);
+						break;
+					case rtmpt:
+						instance = new RTMPTScreenShare(this);
+						break;
+					case rtmps:
+						RTMPSScreenShare client = new RTMPSScreenShare(this);
+						client.setKeystoreBytes(Hex.decodeHex(args[13].toCharArray()));
+						client.setKeyStorePassword(args[14]);
+						instance = client;
+						break;
+					case rtmpe:
+					default:
+						throw new Exception("Unsupported protocol");
+				}
+				instance.setServiceProvider(instance);
+				log.debug(String.format("host: %s, app: %s, port: %s, publish: %s", host, port, app, publishName));
 			} else {
 				System.exit(0);
 			}
@@ -152,6 +167,10 @@ public class CoreScreenShare implements IPendingServiceCallback, INetStreamEvent
 		}
 	}
 
+	public static void main(String[] args) {
+		new CoreScreenShare(args);
+	}
+	
 	// ------------------------------------------------------------------------
 	//
 	// GUI
@@ -217,7 +236,6 @@ public class CoreScreenShare implements IPendingServiceCallback, INetStreamEvent
 			map.put("publishingApp", frame.getPublishApp());
 			map.put("publishingId", frame.getPublishId());
 
-			map.put("organization_id", organization_id);
 			map.put("user_id", user_id);
 
 			instance.invoke("setConnectionAsSharingClient", new Object[] { map }, this);
