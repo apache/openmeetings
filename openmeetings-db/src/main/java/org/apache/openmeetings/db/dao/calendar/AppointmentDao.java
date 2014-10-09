@@ -76,25 +76,6 @@ public class AppointmentDao {
 	 * insert, update, delete, select
 	 */
 
-	/**
-	 * @author o.becherer Retrievment of Appointment for room
-	 */
-	// -----------------------------------------------------------------------------------------------
-	public Appointment getAppointmentByRoom(Long room_id) throws Exception {
-		log.debug("AppointMentDaoImpl.getAppointmentByRoom");
-
-		TypedQuery<Appointment> query = em.createNamedQuery("getAppointmentByRoomId", Appointment.class);
-		query.setParameter("room_id", room_id);
-
-		List<Appointment> appoint = query.getResultList();
-
-		if (appoint.size() > 0) {
-			return appoint.get(0);
-		}
-
-		return null;
-	}
-
 	// -----------------------------------------------------------------------------------------------
 
 	public Appointment get(Long id) {
@@ -203,23 +184,6 @@ public class AppointmentDao {
 			return appointment.getId();
 		} else {
 			log.error("[updateAppointment] " + "Error: No AppointmentId given");
-		}
-		return null;
-	}
-
-	public List<Appointment> getAppointmentsByRoomId(Long roomId) {
-		try {
-
-			String hql = "select a from Appointment a WHERE a.room.id = :roomId ";
-
-			TypedQuery<Appointment> query = em.createQuery(hql,
-					Appointment.class);
-			query.setParameter("roomId", roomId);
-			List<Appointment> ll = query.getResultList();
-
-			return ll;
-		} catch (Exception e) {
-			log.error("[getAppointmentsByRoomId]", e);
 		}
 		return null;
 	}
@@ -369,9 +333,9 @@ public class AppointmentDao {
 
 	// ---------------------------------------------------------------------------------------------
 
-	public Appointment getAppointmentByRoomId(Long userId, Long roomId) {
+	public Appointment getAppointmentByOwnerRoom(Long userId, Long roomId) {
 		try {
-			TypedQuery<Appointment> query = em.createNamedQuery("getAppointmentByRoomId", Appointment.class);
+			TypedQuery<Appointment> query = em.createNamedQuery("getAppointmentByOwnerRoomId", Appointment.class);
 
 			query.setParameter("userId", userId);
 			query.setParameter("roomId", roomId);
@@ -385,4 +349,11 @@ public class AppointmentDao {
 		}
 	}
 
+	public Appointment getAppointmentByRoom(Long roomId) {
+		List<Appointment> list = em.createNamedQuery("getAppointmentByRoomId", Appointment.class)
+				.setParameter("roomId", roomId)
+				.getResultList();
+
+		return list.size() > 0 ? list.get(0) : null;
+	}
 }

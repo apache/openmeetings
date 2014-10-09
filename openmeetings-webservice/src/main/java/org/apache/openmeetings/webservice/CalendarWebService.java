@@ -510,13 +510,10 @@ public class CalendarWebService {
 
 				Appointment appointment = new Appointment();
 
-				Appointment appStored = appointmentDao.getAppointmentByRoomId(
-						users_id, room_id);
+				Appointment appStored = appointmentDao.getAppointmentByOwnerRoom(users_id, room_id);
 
-				appointment.setStart(appStored
-						.getStart());
-				appointment.setEnd(appStored
-						.getEnd());
+				appointment.setStart(appStored.getStart());
+				appointment.setEnd(appStored.getEnd());
 
 				return appointment;
 			}

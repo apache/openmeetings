@@ -76,7 +76,6 @@ class RTMPClientPublish extends RTMPClient implements IPendingServiceCallback, I
 	
 	@Override
 	protected void onCommand(RTMPConnection conn, Channel channel, Header source, ICommand command) {
-		// TODO Auto-generated method stub
 		super.onCommand(conn, channel, source, command);
 	}
 	

@@ -39,16 +39,20 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
+import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
 import org.apache.openmeetings.db.dao.file.FileExplorerItemDao;
 import org.apache.openmeetings.db.dao.room.PollDao;
 import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
+import org.apache.openmeetings.db.entity.calendar.Appointment;
+import org.apache.openmeetings.db.entity.calendar.MeetingMember;
 import org.apache.openmeetings.db.entity.file.FileExplorerItem;
 import org.apache.openmeetings.db.entity.file.FileItem;
 import org.apache.openmeetings.db.entity.file.FileItem.Type;
 import org.apache.openmeetings.db.entity.record.FlvRecording;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.room.RoomModerator;
+import org.apache.openmeetings.db.entity.room.RoomOrganisation;
 import org.apache.openmeetings.db.entity.user.Organisation;
 import org.apache.openmeetings.db.entity.user.OrganisationUser;
 import org.apache.openmeetings.db.entity.user.User;
@@ -70,6 +74,7 @@ import org.apache.openmeetings.web.room.message.RoomMessage;
 import org.apache.openmeetings.web.room.poll.CreatePollDialog;
 import org.apache.openmeetings.web.room.poll.PollResultsDialog;
 import org.apache.openmeetings.web.room.poll.VoteDialog;
+import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -108,6 +113,10 @@ import org.wicketstuff.whiteboard.WhiteboardBehavior;
 import com.googlecode.wicket.jquery.core.JQueryBehavior;
 import com.googlecode.wicket.jquery.core.Options;
 import com.googlecode.wicket.jquery.ui.form.button.Button;
+import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
+import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButtons;
+import com.googlecode.wicket.jquery.ui.widget.dialog.DialogIcon;
+import com.googlecode.wicket.jquery.ui.widget.dialog.MessageDialog;
 
 @AuthorizeInstantiation("Room")
 public class RoomPanel extends BasePanel {
@@ -115,6 +124,7 @@ public class RoomPanel extends BasePanel {
 	private static final Logger log = Red5LoggerFactory.getLogger(RoomPanel.class, webAppRootKey);
 	private long roomId;
 	private Client c;
+	private final WebMarkupContainer room = new WebMarkupContainer("roomContainer");
 	private final StartSharingEventBehavior startSharing;
 	private final AbstractDefaultAjaxBehavior aab = new AbstractDefaultAjaxBehavior() {
 		private static final long serialVersionUID = 1L;
@@ -155,15 +165,7 @@ public class RoomPanel extends BasePanel {
 
 		@Override
 		public void onClick(MainPage page, AjaxRequestTarget target) {
-			if (WebSession.getRights().contains(Right.Dashboard)) {
-				page.updateContents(ROOMS_PUBLIC, target);
-			} else {
-				String url = getBean(ConfigurationDao.class).getConfValue(CONFIG_REDIRECT_URL_FOR_EXTERNAL_KEY, String.class, "");
-				if (Strings.isEmpty(url)) {
-					url = getBean(ConfigurationDao.class).getConfValue(CONFIG_APPLICATION_BASE_URL, String.class, "");
-				}
-				throw new RedirectToUrlException(url);
-			}
+			exit(target);
 		}
 	};
 	private final RoomMenuItem filesMenu = new RoomMenuItem(WebSession.getString(245), null, false);
@@ -227,14 +229,64 @@ public class RoomPanel extends BasePanel {
 	public RoomPanel(String id, final Room r) {
 		super(id);
 		this.roomId = r.getId();
-		add((menuPanel = new MenuPanel("roomMenu", getMenu())).setVisible(!r.getHideTopBar()));
+		Component accessDenied = new WebMarkupContainer("accessDenied").setVisible(false);
+		boolean allowed = false;
+		String deniedMessage = null;
+		if (r.isAppointment()) {
+			Appointment a = getBean(AppointmentDao.class).getAppointmentByRoom(roomId);
+			if (a != null && !a.isDeleted()) {
+				allowed = a.getOwner().getId() == getUserId();
+				if (!allowed) {
+					for (MeetingMember mm : a.getMeetingMembers()) {
+						if (mm.getUser().getId() == getUserId()) {
+							allowed = true;
+							break;
+						}
+					}
+				}
+				/*
+				TODO need to be reviewed
+				Calendar c = WebSession.getCalendar();
+				if (c.getTime().after(a.getStart()) && c.getTime().before(a.getEnd())) {
+					allowed = true;
+				} else {
+					SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm"); //FIXME format
+					deniedMessage = WebSession.getString(1271) + String.format(" %s - %s", sdf.format(a.getStart()), sdf.format(a.getEnd()));
+				}
+				*/
+			}
+		} else {
+			allowed = r.getIspublic() || (r.getOwnerId() != null && r.getOwnerId() == getUserId());
+			if (!allowed) {
+				User u = getBean(UserDao.class).get(getUserId());
+				for (RoomOrganisation ro : r.getRoomOrganisations()) {
+					for (OrganisationUser ou : u.getOrganisationUsers()) {
+						if (ro.getOrganisation().getId() == ou.getOrganisation().getId()) {
+							allowed = true;
+							break;
+						}
+					}
+					if (allowed) {
+						break;
+					}
+				}
+			}
+		}
+		if (!allowed) {
+			if (deniedMessage == null) {
+				deniedMessage = WebSession.getString(1599);
+			}
+			accessDenied = new ExpiredMessageDialog("accessDenied", deniedMessage);
+			room.setVisible(false);
+		}
+		room.add((menuPanel = new MenuPanel("roomMenu", getMenu())).setVisible(!r.getHideTopBar()));
 		WebMarkupContainer wb = new WebMarkupContainer("whiteboard");
-		add(wb.setOutputMarkupId(true));
-		add(new WhiteboardBehavior("1", wb.getMarkupId(), null, null, null));
-		add(aab, AttributeAppender.append("style", "height: 100%;"));
+		room.add(wb.setOutputMarkupId(true));
+		room.add(new WhiteboardBehavior("1", wb.getMarkupId(), null, null, null));
+		room.add(aab);
 		showFiles = !r.getHideFilesExplorer();
-		add(new WebMarkupContainer("flink").setVisible(showFiles));
-		add(new WebMarkupContainer("ftab").add(new FileTreePanel("tree") {
+		room.add(new WebMarkupContainer("flink").setVisible(showFiles));
+		room.add(new WebMarkupContainer("ftab").add(new FileTreePanel("tree") {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -283,7 +335,7 @@ public class RoomPanel extends BasePanel {
 				}
 			}
 		}).setVisible(showFiles));
-		add(userList.add(users = new ListView<RoomClient>("user", getUsers()) {
+		room.add(userList.add(users = new ListView<RoomClient>("user", getUsers()) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -298,7 +350,7 @@ public class RoomPanel extends BasePanel {
 				}
 			}
 		}).setOutputMarkupId(true));
-		add(new JQueryBehavior(".room.sidebar.left .tabs", "tabs", new Options("active", showFiles && r.isFilesOpened() ? "ftab" : "utab")) {
+		room.add(new JQueryBehavior(".room.sidebar.left .tabs", "tabs", new Options("active", showFiles && r.isFilesOpened() ? "ftab" : "utab")) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -306,11 +358,11 @@ public class RoomPanel extends BasePanel {
 				response.render(new PriorityHeaderItem(script));
 			}
 		});
-		add(new Label("roomName", r.getName()));
-		add(new Label("recording", "Recording started").setVisible(false)); //FIXME add/remove
-		add(askBtn.setOutputMarkupPlaceholderTag(true).setVisible(false).add(new AttributeAppender("title", WebSession.getString(906))));
-		add(startSharing = new StartSharingEventBehavior(roomId));
-		add(shareBtn.add(new AjaxEventBehavior("click") {
+		room.add(new Label("roomName", r.getName()));
+		room.add(new Label("recording", "Recording started").setVisible(false)); //FIXME add/remove
+		room.add(askBtn.setOutputMarkupPlaceholderTag(true).setVisible(false).add(new AttributeAppender("title", WebSession.getString(906))));
+		room.add(startSharing = new StartSharingEventBehavior(roomId));
+		room.add(shareBtn.add(new AjaxEventBehavior("click") {
 			private static final long serialVersionUID = 1L;
 			
 			@Override
@@ -318,10 +370,11 @@ public class RoomPanel extends BasePanel {
 				startSharing.respond(target);
 			}
 		}).setOutputMarkupPlaceholderTag(true).setVisible(false).add(new AttributeAppender("title", WebSession.getString(1480))));
-		add(invite = new InvitationDialog("invite", roomId));
-		add(createPoll = new CreatePollDialog("createPoll", roomId));
-		add(vote = new VoteDialog("vote", roomId));
-		add(pollResults = new PollResultsDialog("pollResults", roomId));
+		room.add(invite = new InvitationDialog("invite", roomId));
+		room.add(createPoll = new CreatePollDialog("createPoll", roomId));
+		room.add(vote = new VoteDialog("vote", roomId));
+		room.add(pollResults = new PollResultsDialog("pollResults", roomId));
+		add(room, accessDenied);
 	}
 
 	@Override
@@ -372,21 +425,23 @@ public class RoomPanel extends BasePanel {
 	@Override
 	protected void onBeforeRender() {
 		super.onBeforeRender();
-		c = addUserToRoom(roomId, getPage().getPageId());
-		User u = getBean(UserDao.class).get(getUserId());
-		//TODO do we need to check OrgModerationRights ????
-		if (AuthLevelUtil.hasAdminLevel(u.getRights())) {
-			c.getRights().add(Client.Right.moderator);
-		} else {
-			Room r = getBean(RoomDao.class).get(roomId);
-			if (!r.isModerated() && 1 == getRoomUsers(roomId).size()) {
+		if (room.isVisible()) {
+			c = addUserToRoom(roomId, getPage().getPageId());
+			User u = getBean(UserDao.class).get(getUserId());
+			//TODO do we need to check OrgModerationRights ????
+			if (AuthLevelUtil.hasAdminLevel(u.getRights())) {
 				c.getRights().add(Client.Right.moderator);
-			} else if (r.isModerated()) {
-				//TODO why do we need supermoderator ????
-				for (RoomModerator rm : r.getModerators()) {
-					if (getUserId() == rm.getUser().getId()) {
-						c.getRights().add(Client.Right.moderator);
-						break;
+			} else {
+				Room r = getBean(RoomDao.class).get(roomId);
+				if (!r.isModerated() && 1 == getRoomUsers(roomId).size()) {
+					c.getRights().add(Client.Right.moderator);
+				} else if (r.isModerated()) {
+					//TODO why do we need supermoderator ????
+					for (RoomModerator rm : r.getModerators()) {
+						if (getUserId() == rm.getUser().getId()) {
+							c.getRights().add(Client.Right.moderator);
+							break;
+						}
 					}
 				}
 			}
@@ -494,7 +549,11 @@ public class RoomPanel extends BasePanel {
 	@Override
 	public void cleanup(AjaxRequestTarget target) {
 		target.add(getMainPage().getHeader().setVisible(true), getMainPage().getMenu().setVisible(true)
-				, getMainPage().getTopLinks().setVisible(true), getMainPage().getChat().setVisible(true));
+				, getMainPage().getTopLinks().setVisible(true));
+		Room r = getBean(RoomDao.class).get(roomId);
+		if (r.isChatHidden()) {
+			target.add(getMainPage().getChat().setVisible(true)); //FIXME chat is broken on this step
+		}
 		target.appendJavaScript("$(window).off('resize.openmeetings'); $('.room.video').dialog('destroy');");
 	}
 
@@ -506,7 +565,9 @@ public class RoomPanel extends BasePanel {
 	public void renderHead(IHeaderResponse response) {
 		super.renderHead(response);
 		response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forReference(newResourceReference())));
-		response.render(OnDomReadyHeaderItem.forScript(aab.getCallbackScript()));
+		if (room.isVisible()) {
+			response.render(OnDomReadyHeaderItem.forScript(aab.getCallbackScript()));
+		}
 	}
 
 	private List<RoomClient> getUsers() {
@@ -517,6 +578,18 @@ public class RoomPanel extends BasePanel {
 		return list;
 	}
 	
+	private void exit(AjaxRequestTarget target) {
+		if (WebSession.getRights().contains(Right.Dashboard)) {
+			getMainPage().updateContents(ROOMS_PUBLIC, target);
+		} else {
+			String url = getBean(ConfigurationDao.class).getConfValue(CONFIG_REDIRECT_URL_FOR_EXTERNAL_KEY, String.class, "");
+			if (Strings.isEmpty(url)) {
+				url = getBean(ConfigurationDao.class).getConfValue(CONFIG_APPLICATION_BASE_URL, String.class, "");
+			}
+			throw new RedirectToUrlException(url);
+		}
+	}
+
 	static class RoomClient implements Serializable {
 		private static final long serialVersionUID = 1L;
 		private final Client c;
@@ -577,5 +650,30 @@ public class RoomPanel extends BasePanel {
 			}
 			return Arrays.asList(f).iterator();
 		}
-	}		
+	}
+	
+	class ExpiredMessageDialog extends MessageDialog {
+		private static final long serialVersionUID = 1L;
+		public boolean autoOpen = false;
+		
+		public ExpiredMessageDialog(String id, String message) {
+			super(id, WebSession.getString(204), message, DialogButtons.OK, DialogIcon.ERROR);
+			autoOpen = true;
+		}
+		
+		public boolean isModal() {
+			return true;
+		}
+		
+		@Override
+		public void onConfigure(JQueryBehavior behavior) {
+			super.onConfigure(behavior);
+			behavior.setOption("autoOpen", autoOpen);
+		}
+		
+		@Override
+		public void onClose(AjaxRequestTarget target, DialogButton button) {
+			RoomPanel.this.exit(target);
+		}
+	}
 }

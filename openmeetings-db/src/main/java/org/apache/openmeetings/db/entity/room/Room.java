@@ -116,7 +116,7 @@ public class Room implements IDataProviderEntity {
 	private boolean deleted;
 
 	@Column(name = "ispublic")
-	@Element(data = true, required = false)
+	@Element(name = "ispublic", data = true, required = false)
 	private boolean ispublic;
 
 	@Column(name = "numberOfPartizipants")
@@ -317,11 +317,11 @@ public class Room implements IDataProviderEntity {
 		this.deleted = deleted;
 	}
 
-	public Boolean getIspublic() {
+	public boolean getIspublic() {
 		return ispublic;
 	}
 
-	public void setIspublic(Boolean ispublic) {
+	public void setIspublic(boolean ispublic) {
 		this.ispublic = ispublic;
 	}
 

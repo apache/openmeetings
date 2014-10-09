@@ -27,39 +27,42 @@
 	</script>
 </wicket:head>
 <wicket:panel>
-	<div wicket:id="roomMenu"></div>
-	<div class="room menu right">
-		<span wicket:id="ask" class="icon ask"></span>
-		<span wicket:id="share" class="icon share"></span>
-		<span wicket:id="recording" class="room recording"></span>
-		<span wicket:id="roomName" class="room name"></span>
-	</div>
-	<div class="room sidebar left">
-		<div class="tabs">
-			<ul>
-				<li><a href="#utab"><wicket:ommessage key="613"/></a></li>
-				<li><a wicket:id="flink" href="#ftab"><wicket:ommessage key="614"/></a></li>
-			</ul>
-			<div id="utab">
-				<div wicket:id="userList" class="user list">
-					<div wicket:id="user" class="user ui-corner-all ui-widget-content">
-						<div wicket:id="name" class="user name"></div>
-						<div class="user actions">
-							<span wicket:id="privateChat" class="private-chat om-icon align-right clickable" wicket:ommessage="title:1493" onclick="startPrivateChat($(this));"></span>
-							<div class="clear"></div>
+	<div wicket:id="roomContainer" style="height: 100%">
+		<div wicket:id="roomMenu"></div>
+		<div class="room menu right">
+			<span wicket:id="ask" class="icon ask"></span>
+			<span wicket:id="share" class="icon share"></span>
+			<span wicket:id="recording" class="room recording"></span>
+			<span wicket:id="roomName" class="room name"></span>
+		</div>
+		<div class="room sidebar left">
+			<div class="tabs">
+				<ul>
+					<li><a href="#utab"><wicket:ommessage key="613"/></a></li>
+					<li><a wicket:id="flink" href="#ftab"><wicket:ommessage key="614"/></a></li>
+				</ul>
+				<div id="utab">
+					<div wicket:id="userList" class="user list">
+						<div wicket:id="user" class="user ui-corner-all ui-widget-content">
+							<div wicket:id="name" class="user name"></div>
+							<div class="user actions">
+								<span wicket:id="privateChat" class="private-chat om-icon align-right clickable" wicket:ommessage="title:1493" onclick="startPrivateChat($(this));"></span>
+								<div class="clear"></div>
+							</div>
 						</div>
 					</div>
 				</div>
+				<div wicket:id="ftab" id="ftab"><div class="file list" wicket:id="tree"></div></div>
 			</div>
-			<div wicket:id="ftab" id="ftab"><div class="file list" wicket:id="tree"></div></div>
 		</div>
+		<div class="room wb area">
+			<div class="wb" wicket:id="whiteboard"></div>
+		</div>
+		<div wicket:id="invite"></div>
+		<div wicket:id="createPoll"></div>
+		<div wicket:id="vote"></div>
+		<div wicket:id="pollResults"></div>
 	</div>
-	<div class="room wb area">
-		<div class="wb" wicket:id="whiteboard"></div>
-	</div>
-	<div wicket:id="invite"></div>
-	<div wicket:id="createPoll"></div>
-	<div wicket:id="vote"></div>
-	<div wicket:id="pollResults"></div>
+	<div wicket:id="accessDenied"></div>
 </wicket:panel>
 </html>

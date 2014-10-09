@@ -186,12 +186,15 @@ public class ChatPanel extends BasePanel {
 			target.add(setVisible(false));
 			return;
 		}
-		StringBuilder sb = new StringBuilder(String.format("addChatTab('%1$s%2$d', '%3$s %2$d');", ID_ROOM_PREFIX, r.getId(), WebSession.getString(406)));
+		StringBuilder sb = new StringBuilder();
+		sb.append("$(function() {");
+		sb.append(String.format("addChatTab('%1$s%2$d', '%3$s %2$d');", ID_ROOM_PREFIX, r.getId(), WebSession.getString(406)));
 		sb.append(r.isChatOpened() ? "openChat();" : "closeChat();");
 		List<ChatMessage> list = getBean(ChatDao.class).getRoom(r.getId(), 0, 30, !r.isChatModerated() || isModerator(getUserId(), r.getId()));
 		if (list.size() > 0) {
 			sb.append("addChatMessage(").append(getMessage(list).toString()).append(");");
 		}
+		sb.append("});");
 		target.appendJavaScript(sb);
 	}
 	

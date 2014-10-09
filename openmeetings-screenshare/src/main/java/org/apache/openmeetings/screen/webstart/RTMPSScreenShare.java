@@ -71,9 +71,7 @@ public class RTMPSScreenShare extends RTMPSClient implements ClientExceptionHand
 
 	@Override
 	protected void onCommand(RTMPConnection conn, Channel channel, Header source, ICommand command) {
-		// TODO Auto-generated method stub
 		super.onCommand(conn, channel, source, command);
-		
 		core.onCommand(conn, channel, source, command);
 	}
 

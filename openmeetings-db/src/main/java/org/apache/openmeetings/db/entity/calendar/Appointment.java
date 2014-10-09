@@ -81,7 +81,8 @@ import org.simpleframework.xml.Root;
 			+ "		OR (a.start < :starttime AND a.end > :endtime) "
 			+ "	)"
     	)
-    , @NamedQuery(name="getAppointmentByRoomId", query="SELECT a FROM Appointment a WHERE a.deleted = false AND a.owner.id = :userId AND a.room.id = :roomId")
+    , @NamedQuery(name="getAppointmentByRoomId", query="SELECT a FROM Appointment a WHERE a.room.id = :roomId")
+    , @NamedQuery(name="getAppointmentByOwnerRoomId", query="SELECT a FROM Appointment a WHERE a.deleted = false AND a.owner.id = :userId AND a.room.id = :roomId")
 	//TODO this query returns duplicates if the user books an appointment with his own user as second meeting-member, swagner 19.02.2012
     , @NamedQuery(name="appointmentsInRangeByUser",
 		query="SELECT a FROM MeetingMember mm, IN(mm.appointment) a "
