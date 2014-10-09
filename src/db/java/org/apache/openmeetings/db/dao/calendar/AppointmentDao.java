@@ -79,7 +79,7 @@ public class AppointmentDao {
 	 * @author o.becherer Retrievment of Appointment for room
 	 */
 	// -----------------------------------------------------------------------------------------------
-	public Appointment getAppointmentByRoom(Long room_id) throws Exception {
+	public Appointment getAppointmentByRoom(Long room_id) {
 		log.debug("AppointMentDaoImpl.getAppointmentByRoom");
 
 		TypedQuery<Appointment> query = em.createNamedQuery("getAppointmentByRoomId", Appointment.class);

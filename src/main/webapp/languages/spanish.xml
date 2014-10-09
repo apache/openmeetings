@@ -4825,4 +4825,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
   <string id="1598" name="security">
     <value>Security</value>
   </string>
+  <string id="1599" name="security">
+    <value>Access denied. You have no rights to enter this room.</value>
+  </string>
 </language>

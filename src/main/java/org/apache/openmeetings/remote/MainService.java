@@ -34,7 +34,9 @@ import org.apache.openmeetings.data.conference.InvitationManager;
 import org.apache.openmeetings.data.conference.RoomManager;
 import org.apache.openmeetings.data.user.UserManager;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
+import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
 import org.apache.openmeetings.db.dao.log.ConferenceLogDao;
+import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.dao.server.ISessionManager;
 import org.apache.openmeetings.db.dao.server.LdapConfigDao;
 import org.apache.openmeetings.db.dao.server.SOAPLoginDao;
@@ -42,11 +44,16 @@ import org.apache.openmeetings.db.dao.server.SessiondataDao;
 import org.apache.openmeetings.db.dao.user.StateDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.basic.Configuration;
+import org.apache.openmeetings.db.entity.calendar.Appointment;
+import org.apache.openmeetings.db.entity.calendar.MeetingMember;
 import org.apache.openmeetings.db.entity.room.Client;
+import org.apache.openmeetings.db.entity.room.Room;
+import org.apache.openmeetings.db.entity.room.RoomOrganisation;
 import org.apache.openmeetings.db.entity.server.RemoteSessionObject;
 import org.apache.openmeetings.db.entity.server.SOAPLogin;
 import org.apache.openmeetings.db.entity.server.Sessiondata;
 import org.apache.openmeetings.db.entity.user.Address;
+import org.apache.openmeetings.db.entity.user.Organisation_Users;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Right;
 import org.apache.openmeetings.db.entity.user.Userdata;
@@ -93,6 +100,10 @@ public class MainService implements IPendingServiceCallback {
 	private ConferenceLogDao conferenceLogDao;
 	@Autowired
 	private UserDao userDao;
+	@Autowired
+	private RoomDao roomDao;
+	@Autowired
+	private AppointmentDao appointmentDao;
 	@Autowired
 	private LdapConfigDao ldapConfigDao;
 	@Autowired
@@ -168,7 +179,51 @@ public class MainService implements IPendingServiceCallback {
 	public User loginWicket(String SID, String wicketSID, Long wicketroomid) {
 		Long userId = sessiondataDao.checkSession(wicketSID);
 		User u = userId == null ? null : userDao.get(userId);
-		if (u != null) {
+		if (u != null && wicketroomid != null) {
+			boolean allowed = false;
+			Room r = roomDao.get(wicketroomid);
+			if (r.getAppointment() != null && r.getAppointment()) {
+				Appointment a = appointmentDao.getAppointmentByRoom(wicketroomid);
+				if (a != null && !a.isDeleted()) {
+					allowed = a.getOwner().getUser_id() == userId;
+					if (!allowed) {
+						for (MeetingMember mm : a.getMeetingMembers()) {
+							if (mm.getUser().getUser_id() == userId) {
+								allowed = true;
+								break;
+							}
+						}
+					}
+					/*
+					TODO need to be reviewed
+					Calendar c = WebSession.getCalendar();
+					if (c.getTime().after(a.getStart()) && c.getTime().before(a.getEnd())) {
+						allowed = true;
+					} else {
+						SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm"); //FIXME format
+						deniedMessage = WebSession.getString(1271) + String.format(" %s - %s", sdf.format(a.getStart()), sdf.format(a.getEnd()));
+					}
+					*/
+				}
+			} else {
+				allowed = r.getIspublic() || (r.getOwnerId() != null && r.getOwnerId() == userId);
+				if (!allowed) {
+					for (RoomOrganisation ro : r.getRoomOrganisations()) {
+						for (Organisation_Users ou : u.getOrganisation_users()) {
+							if (ro.getOrganisation().getOrganisation_id() == ou.getOrganisation().getOrganisation_id()) {
+								allowed = true;
+								break;
+							}
+						}
+						if (allowed) {
+							break;
+						}
+					}
+				}
+			}
+			if (!allowed) {
+				return null;
+			}
 			IConnection current = Red5.getConnectionLocal();
 			String streamId = current.getClient().getId();
 			Client currentClient = sessionManager.getClientByStreamId(streamId, null);
