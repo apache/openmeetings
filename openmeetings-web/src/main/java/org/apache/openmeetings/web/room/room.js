@@ -17,10 +17,10 @@
  * under the License.
  */
 function initVideo(_options) {
-	var options = $.extend({bgcolor: "#ffffff", width: 570, height: 900
+	var options = $.extend({bgcolor: "#ffffff"
 		, resolutions: JSON.stringify([{label: "4:3 (~6 KByte/sec)", width: 40, height: 30}
 			, {label: "4:3 (~12 KByte/sec)", width: 80, height: 60}
-			, {label: "4:3 (~20 KByte/sec)", width: 120, height: 90, default: true}
+			, {label: "4:3 (~20 KByte/sec)", width: 120, height: 90, "default": true}
 			, {label: "QQVGA 4:3 (~36 KByte/sec)", width: 160, height: 120}
 			, {label: "4:3 (~40 KByte/sec)", width: 240, height: 180}
 			, {label: "HVGA 4:3 (~56 KByte/sec)", width: 320, height: 240}
@@ -36,13 +36,13 @@ function initVideo(_options) {
 		}, _options);
 	var type = 'application/x-shockwave-flash';
 	var src = 'public/main.swf?cache' + new Date().getTime();
-	var r = $('<div class="room video">');
-	var o = $('<object>').attr('type', type).attr('data', src).attr('width', options.width).attr('height', options.height);
-	o.append($('<param>').attr('name', 'quality').attr('value', 'best'));
-	o.append($('<param>').attr('name', 'wmode').attr('value', 'transparent'));
-	o.append($('<param>').attr('name', 'allowscriptaccess').attr('value', 'sameDomain'));
-	o.append($('<param>').attr('name', 'allowfullscreen').attr('value', 'false'));
-	o.append($('<param>').attr('name', 'flashvars').attr('value', $.param(options)));
+	var r = $('<div class="room video">').attr("id", "video" + options.uid);
+	var o = $('<object>').attr('type', type).attr('data', src);
+	o.append($('<param>').attr('name', 'quality').attr('value', 'best'))
+		.append($('<param>').attr('name', 'wmode').attr('value', 'transparent'))
+		.append($('<param>').attr('name', 'allowscriptaccess').attr('value', 'sameDomain'))
+		.append($('<param>').attr('name', 'allowfullscreen').attr('value', 'false'))
+		.append($('<param>').attr('name', 'flashvars').attr('value', $.param(options)));
 	$('#roomMenu').parent().append(r.append(o));
 	/*
 			.attr('wmode', 'window').attr('allowfullscreen', true)
@@ -53,7 +53,7 @@ function initVideo(_options) {
 			.attr('allowscriptaccess', 'sameDomain').attr('type', 'application/x-shockwave-flash')
 			.attr('pluginspage', 'http://www.macromedia.com/go/getflashplayer')
 	*/
-	r.dialog({width: options.width, height: options.height, dialogClass: "video"});
+	r.dialog({dialogClass: "video"});
 }
 
 function setHeight() {

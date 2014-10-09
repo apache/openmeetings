@@ -139,7 +139,10 @@ public class RoomPanel extends BasePanel {
 				String path = url.getPath();
 				path = path.substring(1, path.indexOf('/', 2) + 1);
 				Room r = getBean(RoomDao.class).get(roomId);
-				target.appendJavaScript(String.format("initVideo(%s);", new JSONObject().put("audioOnly", r.getIsAudioOnly())
+				target.appendJavaScript(String.format("initVideo(%s);", new JSONObject()
+						.put("uid", c.getUid())
+						.put("audioOnly", r.getIsAudioOnly())
+						.put("SID", WebSession.getSid())
 						.put("interview", 4L == r.getRoomtype().getId()) //FIXME hardcoded
 						.put("protocol", cfgDao.getConfValue(CONFIG_FLASH_PROTOCOL, String.class, ""))
 						.put("host", url.getHost())
