@@ -22,32 +22,38 @@ import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 
 import org.apache.openmeetings.db.dao.user.UserDao;
+import org.apache.openmeetings.db.entity.user.Address;
+import org.apache.openmeetings.db.entity.user.State;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.ProfileImagePanel;
 import org.apache.openmeetings.web.common.UserPanel;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.model.Model;
 
 public class UserProfilePanel extends UserPanel {
 	private static final long serialVersionUID = 1L;
+	private final WebMarkupContainer address = new WebMarkupContainer("address");
+	private final Label addressDenied = new Label("addressDenied", "");
 
-	private String getAddress(User u) {
-		String result = "";
-		if (getUserId() == u.getId() || Boolean.TRUE.equals(u.getShowContactData())) {
-			//FIXME, more details should be added
-			if (u.getAdresses() != null) {
-				result = u.getAdresses().getStreet();
-			} else {
-				result = "[address]"; //FIXME
-			}
-		} else if (Boolean.TRUE.equals(u.getShowContactDataToContacts())) {
-			result = WebSession.getString(1269);
+	private void setAddress(User u) {
+		if (getUserId() == u.getId() || u.isShowContactData()) {
+			addressDenied.setVisible(false);
+			Address a = u.getAdresses() == null ? new Address() : u.getAdresses();
+			address.add(new Label("phone", a.getPhone()));
+			address.add(new Label("street", a.getStreet()));
+			address.add(new Label("additionalname", a.getAdditionalname()));
+			address.add(new Label("zip", a.getZip()));
+			address.add(new Label("town", a.getTown()));
+			State s = a.getStates();
+			address.add(new Label("state", s == null ? null : s.getName()));
+			address.add(new Label("address", a.getComment()));
 		} else {
-			result = WebSession.getString(1268);
+			address.setVisible(false);
+			addressDenied.setDefaultModelObject(WebSession.getString(u.isShowContactDataToContacts() ? 1269 : 1268));
 		}
-		return result;
 	}
 	
 	public UserProfilePanel(String id, long userId) {
@@ -61,6 +67,8 @@ public class UserProfilePanel extends UserPanel {
 		add(new Label("created", u.getRegdate()));
 		add(new TextArea<String>("offer", Model.of(u.getUserOffers())).setEnabled(false));
 		add(new TextArea<String>("interest", Model.of(u.getUserSearchs())).setEnabled(false));
-		add(new Label("address", getAddress(u)));
+		setAddress(u);
+		add(address);
+		add(addressDenied);
 	}
 }

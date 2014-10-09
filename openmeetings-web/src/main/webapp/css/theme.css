@@ -564,6 +564,13 @@ select.messages.selector {
 	margin: 10px;
 	max-width: 900px;
 }
+.user.info.panel legend {
+	font-style: italic;
+	text-align: right;
+}
+.user.info.panel fieldset table, .user.info.panel fieldset table textarea {
+	width: 100%;
+}
 #topControls #wicketDebugBar {
 	right: initial;
 	top: initial;

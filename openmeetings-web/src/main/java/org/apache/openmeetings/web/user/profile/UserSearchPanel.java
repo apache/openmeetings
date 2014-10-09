@@ -163,17 +163,15 @@ public class UserSearchPanel extends UserPanel {
 				//item.add(new TooltipBehavior(new Options("content", "TODO:: Picture will be displayed"))); //FIXME 
 			}
 		};
-		final PagingNavigatorPanel navPanel = new PagingNavigatorPanel("navigator", dv, itemsPerPage) {
+
+		add(d, container.add(dv, new PagingNavigatorPanel("navigator", dv, itemsPerPage, 100) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected void onEvent(AjaxRequestTarget target) {
 				refresh(target);
 			}
-		};
-		navPanel.setEntitiesPerPage(1000);
-
-		add(d, container.add(dv, navPanel).setOutputMarkupId(true));
+		}).setOutputMarkupId(true));
 	}
 	
 	private String getName(User u) {

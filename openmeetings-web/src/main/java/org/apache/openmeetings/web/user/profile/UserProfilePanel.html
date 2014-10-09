@@ -20,24 +20,68 @@
 -->
 <html xmlns:wicket="http://wicket.apache.org">
 <wicket:panel>
-	<table>
-		<tr>
-			<td><div wicket:id="img"></div></td>
-			<td>
-				<wicket:ommessage key="1164"/>&nbsp;<span wicket:id="firstname"></span>&nbsp;<span wicket:id="lastname"></span><br/>
-				<wicket:ommessage key="1165"/>&nbsp;<span wicket:id="tz"></span><br/>
-				<wicket:ommessage key="1296"/>&nbsp;<span wicket:id="created"></span>
-			</td>
-		</tr>
-		<tr>
-			<td colspan="2">
-				<b><wicket:ommessage key="1166"/></b><br/>
-				<wicket:ommessage key="1162"/><textarea wicket:id="offer"></textarea><br/>
-				<wicket:ommessage key="1163"/><textarea wicket:id="interest"></textarea><br/>
-				<b><wicket:ommessage key="1167"/></b><br/>
-				<wicket:ommessage key="1270"/>&nbsp;<div wicket:id="address"></div>
-			</td>
-		</tr>
-	</table>
+	<div class="user info panel">
+		<table>
+			<tr>
+				<td><div wicket:id="img"></div></td>
+				<td>
+					<table>
+						<tr>
+							<td><wicket:ommessage key="1164"/></td><td><span wicket:id="firstname"></span>&nbsp;<span wicket:id="lastname"></span></td>
+						</tr>
+						<tr>
+							<td><wicket:ommessage key="1165"/></td><td><span wicket:id="tz"></span></td>
+						</tr>
+						<tr>
+							<td><wicket:ommessage key="1296"/></td><td><span wicket:id="created"></span></td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+		</table>
+		<div>
+			<fieldset class="ui-widget-content">
+				<legend class="ui-widget-header"><wicket:ommessage key="1166"/></legend>
+				<table>
+					<tr>
+						<td><wicket:ommessage key="1162"/></td>
+						<td><textarea wicket:id="offer"></textarea></td>
+					</tr>
+					<tr>
+						<td><wicket:ommessage key="1163"/></td>
+						<td><textarea wicket:id="interest"></textarea></td>
+					</tr>
+				</table>
+			</fieldset> 
+		</div>
+		<div>
+			<fieldset class="ui-widget-content">
+				<legend class="ui-widget-header"><wicket:ommessage key="1167"/></legend>
+				<table wicket:id="address">
+					<tr>
+						<td><wicket:ommessage key="607" /></td>
+						<td><span wicket:id="phone"></span></td>
+					</tr>
+					<tr>
+						<td><wicket:ommessage key="139" /></td>
+						<td><span wicket:id="street"></span>&nbsp;<span wicket:id="additionalname"></span></td>
+					</tr>
+					<tr>
+						<td><wicket:ommessage key="140" /></td>
+						<td><span wicket:id="zip"></span>&nbsp;<span wicket:id="town"></span></td>
+					</tr>
+					<tr>
+						<td><wicket:ommessage key="141" /></td>
+						<td><span wicket:id="state"></span></td>
+					</tr>
+					<tr>
+						<td><wicket:ommessage key="142" /></td>
+						<td><span wicket:id="address"></span></td>
+					</tr>
+				</table>
+				<div wicket:id="addressDenied"></div>
+			</fieldset> 
+		</div>
+	</div>
 </wicket:panel>
 </html>

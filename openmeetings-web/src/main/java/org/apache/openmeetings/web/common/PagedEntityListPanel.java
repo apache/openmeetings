@@ -45,7 +45,6 @@ public abstract class PagedEntityListPanel extends BasePanel {
 				PagedEntityListPanel.this.onEvent(target);
 			}
 		};
-		dataView.setItemsPerPage(navPanel.getEntitiesPerPage());
 		
 		final SearchableDataProvider<? extends IDataProviderEntity> dp = dataView.getDataProvider();
 		Form<Void> searchForm = new Form<Void>("searchForm");

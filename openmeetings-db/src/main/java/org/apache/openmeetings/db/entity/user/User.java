@@ -243,13 +243,13 @@ public class User implements IDataProviderEntity {
 	@Element(data = true, required = false)
 	private String userSearchs;
 
-	@Column(name = "show_contact_data")
+	@Column(name = "show_contact_data", nullable = false)
 	@Element(data = true, required = false)
-	private Boolean showContactData;
+	private boolean showContactData;
 
-	@Column(name = "show_contact_data_to_contacts")
+	@Column(name = "show_contact_data_to_contacts", nullable = false)
 	@Element(data = true, required = false)
-	private Boolean showContactDataToContacts;
+	private boolean showContactDataToContacts;
 
 	@Column(name = "type")
 	@Element(data = true, required = false)
@@ -528,19 +528,19 @@ public class User implements IDataProviderEntity {
 		this.userSearchs = userSearchs;
 	}
 
-	public Boolean getShowContactData() {
+	public boolean isShowContactData() {
 		return showContactData;
 	}
 
-	public void setShowContactData(Boolean showContactData) {
+	public void setShowContactData(boolean showContactData) {
 		this.showContactData = showContactData;
 	}
 
-	public Boolean getShowContactDataToContacts() {
+	public boolean isShowContactDataToContacts() {
 		return showContactDataToContacts;
 	}
 
-	public void setShowContactDataToContacts(Boolean showContactDataToContacts) {
+	public void setShowContactDataToContacts(boolean showContactDataToContacts) {
 		this.showContactDataToContacts = showContactDataToContacts;
 	}
 
