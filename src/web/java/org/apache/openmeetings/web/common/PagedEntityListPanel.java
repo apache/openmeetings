@@ -31,7 +31,7 @@ import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.PropertyModel;
 
 public abstract class PagedEntityListPanel extends BasePanel {
-	private static final long serialVersionUID = -4280843184916302671L;
+	private static final long serialVersionUID = 1L;
 	private List<Integer> numbers = Arrays.asList(10, 25, 50, 75, 100, 200);
 	
 	public PagedEntityListPanel(String id, final SearchableDataView<? extends IDataProviderEntity> dataView) {
@@ -45,14 +45,13 @@ public abstract class PagedEntityListPanel extends BasePanel {
 				PagedEntityListPanel.this.onEvent(target);
 			}
 		};
-		dataView.setItemsPerPage(navPanel.getEntitiesPerPage());
 		
 		final SearchableDataProvider<? extends IDataProviderEntity> dp = dataView.getDataProvider();
 		Form<Void> searchForm = new Form<Void>("searchForm");
 		add(searchForm.setOutputMarkupId(true));
 		searchForm.add(new TextField<String>("searchText", new PropertyModel<String>(dp, "search")).setOutputMarkupId(true));
 		searchForm.add(new AjaxButton("search", searchForm) {
-			private static final long serialVersionUID = -1659023337945692814L;
+			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
