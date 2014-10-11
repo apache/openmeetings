@@ -310,12 +310,12 @@
 	<bean id="jabberWebService" class="org.apache.openmeetings.webservice.JabberWebService" />
 	<bean id="serverWebService" class="org.apache.openmeetings.webservice.ServerWebService" />
 	
-	<bean id="jsonProvider" class="org.apache.cxf.jaxrs.provider.json.JSONProvider">
-		<!-- (writeXsiType=false) -->
+	<!-- (writeXsiType=false) -->
+	<!-- bean id="jsonProvider" class="org.apache.cxf.jaxrs.provider.json.JSONProvider">
 		<property name="ignoreNamespaces" value="true" /> 
 	</bean>
-	<bean id="jaxbProvider" class="org.apache.cxf.jaxrs.provider.JAXBElementProvider"/>
-	<jaxrs:server id="serverRest" address="/rest">
+	<bean id="jaxbProvider" class="org.apache.cxf.jaxrs.provider.JAXBElementProvider"/-->
+	<jaxrs:server id="server" address="/">
 		<jaxrs:serviceBeans>
 			<ref bean="userWebService"/>
 			<ref bean="roomWebService"/>
@@ -324,23 +324,10 @@
 			<ref bean="jabberWebService"/>
 			<ref bean="serverWebService"/>
 		</jaxrs:serviceBeans>
-		<jaxrs:providers>
+		<!-- jaxrs:providers>
 			<ref bean="jaxbProvider"/>
-		</jaxrs:providers>
+		</jaxrs:providers-->
 	</jaxrs:server>
-	<!-- jaxrs:server id="serverJson" address="/json">
-		<jaxrs:serviceBeans>
-			<ref bean="userWebService"/>
-			<ref bean="roomWebService"/>
-			<ref bean="fileWebService"/>
-			<ref bean="calendarWebService"/>
-			<ref bean="jabberWebService"/>
-			<ref bean="serverWebService"/>
-		</jaxrs:serviceBeans>
-		<jaxrs:providers>
-			<ref bean="jsonProvider"/>
-		</jaxrs:providers>
-	</jaxrs:server-->
 	<jaxws:endpoint id="userServiceWS" address="/UserService"
 		implementor="#userWebService" 
 		endpointName="UserServiceEndpoint"

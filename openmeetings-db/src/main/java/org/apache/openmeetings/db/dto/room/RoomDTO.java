@@ -18,6 +18,9 @@
  */
 package org.apache.openmeetings.db.dto.room;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.room.RoomType;
 
@@ -97,5 +100,15 @@ public class RoomDTO {
 
 	public void setConfno(String confno) {
 		this.confno = confno;
+	}
+
+	public static List<RoomDTO> list(List<Room> l) {
+		List<RoomDTO> rList = new ArrayList<RoomDTO>();
+		if (l != null) {
+			for (Room r : l) {
+				rList.add(new RoomDTO(r));
+			}
+		}
+		return rList;
 	}
 }

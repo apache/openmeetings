@@ -24,7 +24,7 @@ import static org.apache.openmeetings.web.app.WebSession.getUserId;
 
 import org.apache.openmeetings.db.dao.record.FlvRecordingDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
-import org.apache.openmeetings.db.dto.file.RecordingContainerData;
+import org.apache.openmeetings.db.dto.record.RecordingContainerData;
 import org.apache.openmeetings.db.entity.file.FileItem;
 import org.apache.openmeetings.db.entity.record.FlvRecording;
 import org.apache.openmeetings.db.entity.user.Organisation;

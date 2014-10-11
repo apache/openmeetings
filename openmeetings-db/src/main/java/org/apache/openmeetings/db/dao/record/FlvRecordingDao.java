@@ -35,8 +35,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
 import org.apache.openmeetings.db.dao.user.UserDao;
-import org.apache.openmeetings.db.dto.file.RecordingContainerData;
-import org.apache.openmeetings.db.dto.file.RecordingObject;
+import org.apache.openmeetings.db.dto.record.RecordingContainerData;
 import org.apache.openmeetings.db.entity.record.FlvRecording;
 import org.apache.openmeetings.db.entity.record.FlvRecording.Status;
 import org.apache.openmeetings.db.entity.user.OrganisationUser;
@@ -92,15 +91,15 @@ public class FlvRecordingDao {
 		return null;
 	}
 
-	public List<RecordingObject> getFlvRecordingByExternalUserId(String externalUserId, String externalUserType) {
+	public List<FlvRecording> getFlvRecordingByExternalUserId(String externalUserId, String externalUserType) {
 		try {
 			log.debug("getFlvRecordingByExternalUserId :externalUserId: {}; externalType: {}", externalUserId, externalUserType);
 
-			TypedQuery<RecordingObject> query = em.createNamedQuery("getRecordingsByExternalUser", RecordingObject.class);
+			TypedQuery<FlvRecording> query = em.createNamedQuery("getRecordingsByExternalUser", FlvRecording.class);
 			query.setParameter("externalUserId", externalUserId);
 			query.setParameter("externalUserType", externalUserType);
 
-			List<RecordingObject> flvRecordingList = query.getResultList();
+			List<FlvRecording> flvRecordingList = query.getResultList();
 
 			log.debug("getFlvRecordingByExternalUserId :: " + flvRecordingList.size());
 

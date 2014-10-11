@@ -47,6 +47,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+import javax.xml.bind.annotation.XmlType;
 
 import org.apache.openjpa.persistence.ElementDependent;
 import org.apache.openjpa.persistence.FetchAttribute;
@@ -106,6 +107,7 @@ import org.simpleframework.xml.Root;
 public class User implements IDataProviderEntity {
 	private static final long serialVersionUID = 1L;
 	
+	@XmlType(namespace="org.apache.openmeetings.user.user.right")
 	public enum Right {
 		Admin			// access to Admin module
 		, Room			// enter the room
@@ -114,6 +116,7 @@ public class User implements IDataProviderEntity {
 		, Soap			// use rest/soap calls
 	}
 	
+	@XmlType(namespace="org.apache.openmeetings.user.user.type")
 	public enum Type {
 		user
 		, ldap

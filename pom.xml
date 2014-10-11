@@ -47,7 +47,7 @@
 		<batik.version>1.7</batik.version>
 		<commons-transaction.version>1.2</commons-transaction.version>
 		<ical4j.version>1.0.5.2</ical4j.version>
-		<cxf.version>3.0.0</cxf.version>
+		<cxf.version>3.0.1</cxf.version>
 		<selenium.version>2.42.2</selenium.version>
 		<red5-client.version>1.0.3-RELEASE</red5-client.version>
 		<simple-xml.version>2.7.1</simple-xml.version>

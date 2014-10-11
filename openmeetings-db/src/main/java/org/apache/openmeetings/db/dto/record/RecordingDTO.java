@@ -1,0 +1,133 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License") +  you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+package org.apache.openmeetings.db.dto.record;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import org.apache.openmeetings.db.entity.record.FlvRecording;
+
+public class RecordingDTO {
+	private Long id;
+	private String name;
+	private String flvName;
+	private String aviName;
+	private Long roomId;
+	private String status;
+	private boolean interview;
+	private Date start;
+	private Date end;
+
+	public RecordingDTO() {}
+	
+	public RecordingDTO(FlvRecording r) {
+		this.id = r.getId();
+		this.name = r.getFileName();
+		this.flvName = r.getFileHash();
+		this.aviName = r.getAlternateDownload();
+		this.roomId = r.getRoomId();
+		this.status = r.getStatus().name();
+		this.interview = r.getIsInterview();
+		this.start = r.getRecordStart();
+		this.end = r.getRecordEnd();
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getFlvName() {
+		return flvName;
+	}
+
+	public void setFlvName(String flvName) {
+		this.flvName = flvName;
+	}
+
+	public String getAviName() {
+		return aviName;
+	}
+
+	public void setAviName(String aviName) {
+		this.aviName = aviName;
+	}
+
+	public Long getRoomId() {
+		return roomId;
+	}
+
+	public void setRoomId(Long roomId) {
+		this.roomId = roomId;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
+	public boolean isInterview() {
+		return interview;
+	}
+
+	public void setInterview(boolean interview) {
+		this.interview = interview;
+	}
+
+	public Date getStart() {
+		return start;
+	}
+
+	public void setStart(Date start) {
+		this.start = start;
+	}
+
+	public Date getEnd() {
+		return end;
+	}
+
+	public void setEnd(Date end) {
+		this.end = end;
+	}
+	
+	public static List<RecordingDTO> list(List<FlvRecording> l) {
+		List<RecordingDTO> rList = new ArrayList<RecordingDTO>();
+		if (l != null) {
+			for (FlvRecording r : l) {
+				rList.add(new RecordingDTO(r));
+			}
+		}
+		return rList;
+	}
+}

@@ -23,6 +23,7 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import java.util.ArrayList;
 import java.util.Date;
 
+import javax.jws.WebMethod;
 import javax.jws.WebService;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -66,10 +67,10 @@ import org.springframework.beans.factory.annotation.Autowired;
  * @webservice UserService
  * 
  */
-@WebService
+@WebService(name = "UserService")
 @Features(features = "org.apache.cxf.feature.LoggingFeature")
 @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-@Path("/user")
+@Path("/UserService")
 public class UserWebService {
 	private static final Logger log = Red5LoggerFactory.getLogger(UserWebService.class, webAppRootKey);
 
@@ -101,7 +102,7 @@ public class UserWebService {
 	 * @return - creates new session
 	 */
 	@GET
-	@Path("/session")
+	@Path("/getSession")
 	public Sessiondata getSession() {
 		log.debug("SPRING LOADED getSession -- ");
 		return sessionDao.startsession();
