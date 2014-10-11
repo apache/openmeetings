@@ -30,7 +30,7 @@ import java.util.Iterator;
 
 import org.apache.openmeetings.db.dao.record.FlvRecordingDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
-import org.apache.openmeetings.db.dto.file.RecordingContainerData;
+import org.apache.openmeetings.db.dto.record.RecordingContainerData;
 import org.apache.openmeetings.db.entity.record.FlvRecording;
 import org.apache.openmeetings.db.entity.record.FlvRecording.Status;
 import org.apache.openmeetings.db.entity.user.Organisation;

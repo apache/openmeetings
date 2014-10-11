@@ -22,15 +22,14 @@ import java.util.Date;
 import java.util.List;
 
 import org.apache.axis2.AxisFault;
-import org.apache.openmeetings.db.dto.file.RecordingObject;
+import org.apache.openmeetings.db.dto.record.RecordingDTO;
+import org.apache.openmeetings.db.dto.room.RoomDTO;
 import org.apache.openmeetings.db.dto.room.RoomSearchResult;
-import org.apache.openmeetings.db.entity.record.FlvRecording;
-import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.room.RoomType;
 
 public class RoomWebServiceFacade extends BaseWebService {
 
-	public Room[] getRoomsPublic(String SID, Long roomtypes_id) throws AxisFault {
+	public List<RoomDTO> getRoomsPublic(String SID, Long roomtypes_id) throws AxisFault {
 		return getBean(RoomWebService.class).getRoomsPublic(SID, roomtypes_id);
 	}
 
@@ -50,12 +49,12 @@ public class RoomWebServiceFacade extends BaseWebService {
 				flvRecordingId);
 	}
 
-	public List<RecordingObject> getFlvRecordingByExternalUserId(String SID,
+	public List<RecordingDTO> getFlvRecordingByExternalUserId(String SID,
 			String externalUserId, String externalUserType) throws AxisFault {
 		return getBean(RoomWebService.class).getFlvRecordingByExternalUserId(SID, externalUserId, externalUserType);
 	}
 
-	public RecordingObject[] getFlvRecordingByExternalRoomTypeAndCreator(
+	public List<RecordingDTO> getFlvRecordingByExternalRoomTypeAndCreator(
 			String SID, String externalRoomType, Long insertedBy)
 			throws AxisFault {
 		return getBean(RoomWebService.class)
@@ -63,21 +62,20 @@ public class RoomWebServiceFacade extends BaseWebService {
 						externalRoomType, insertedBy);
 	}
 
-	public List<FlvRecording> getFlvRecordingByExternalRoomTypeByList(
-			String SID, String externalRoomType) throws AxisFault {
+	public List<RecordingDTO> getFlvRecordingByExternalRoomTypeByList(String SID, String externalRoomType) throws AxisFault {
 		return getBean(RoomWebService.class)
 				.getFlvRecordingByExternalRoomTypeByList(SID, externalRoomType);
 	}
 
-	public List<FlvRecording> getRecordingsByExternalType(String SID, String externalType) throws AxisFault {
+	public List<RecordingDTO> getRecordingsByExternalType(String SID, String externalType) throws AxisFault {
 		return getBean(RoomWebService.class).getRecordingsByExternalType(SID, externalType);
 	}
 
-	public FlvRecording[] getFlvRecordingByExternalRoomType(String SID, String externalRoomType) throws AxisFault {
+	public List<RecordingDTO> getFlvRecordingByExternalRoomType(String SID, String externalRoomType) throws AxisFault {
 		return getBean(RoomWebService.class).getFlvRecordingByExternalRoomType(SID, externalRoomType);
 	}
 
-	public FlvRecording[] getFlvRecordingByRoomId(String SID, Long roomId) throws AxisFault {
+	public List<RecordingDTO> getFlvRecordingByRoomId(String SID, Long roomId) throws AxisFault {
 		return getBean(RoomWebService.class).getFlvRecordingByRoomId(SID, roomId);
 	}
 
@@ -89,7 +87,7 @@ public class RoomWebServiceFacade extends BaseWebService {
 		return getBean(RoomWebService.class).getRoomCounters(SID, roomId);
 	}
 
-	public Room getRoomById(String SID, long rooms_id) throws AxisFault {
+	public RoomDTO getRoomById(String SID, long rooms_id) throws AxisFault {
 		return getBean(RoomWebService.class).getRoomById(SID, rooms_id);
 	}
 
@@ -105,55 +103,6 @@ public class RoomWebServiceFacade extends BaseWebService {
 
 	public RoomSearchResult getRoomsWithCurrentUsers(String SID, int start, int max, String orderby , boolean asc) throws AxisFault {
 		return getBean(RoomWebService.class).getRoomsWithCurrentUsers(SID, start, max, orderby, asc);
-	}
-
-	/**
-	 * TODO: Fix Organization Issue
-	 * 
-	 * @deprecated use addRoomWithModeration instead
-	 * 
-	 * @param SID
-	 * @param name
-	 * @param roomtypes_id
-	 * @param comment
-	 * @param numberOfPartizipants
-	 * @param ispublic
-	 * @param videoPodWidth
-	 * @param videoPodHeight
-	 * @param videoPodXPosition
-	 * @param videoPodYPosition
-	 * @param moderationPanelXPosition
-	 * @param showWhiteBoard
-	 * @param whiteBoardPanelXPosition
-	 * @param whiteBoardPanelYPosition
-	 * @param whiteBoardPanelHeight
-	 * @param whiteBoardPanelWidth
-	 * @param showFilesPanel
-	 * @param filesPanelXPosition
-	 * @param filesPanelYPosition
-	 * @param filesPanelHeight
-	 * @param filesPanelWidth
-	 * @return
-	 */
-	@Deprecated
-	public Long addRoom(String SID, String name, Long roomtypes_id,
-			String comment, Long numberOfPartizipants, Boolean ispublic,
-			Integer videoPodWidth, Integer videoPodHeight,
-			Integer videoPodXPosition, Integer videoPodYPosition,
-			Integer moderationPanelXPosition, Boolean showWhiteBoard,
-			Integer whiteBoardPanelXPosition, Integer whiteBoardPanelYPosition,
-			Integer whiteBoardPanelHeight, Integer whiteBoardPanelWidth,
-			Boolean showFilesPanel, Integer filesPanelXPosition,
-			Integer filesPanelYPosition, Integer filesPanelHeight,
-			Integer filesPanelWidth) throws AxisFault {
-		return getBean(RoomWebService.class).addRoom(SID, name, roomtypes_id,
-				comment, numberOfPartizipants, ispublic, videoPodWidth,
-				videoPodHeight, videoPodXPosition, videoPodYPosition,
-				moderationPanelXPosition, showWhiteBoard,
-				whiteBoardPanelXPosition, whiteBoardPanelYPosition,
-				whiteBoardPanelHeight, whiteBoardPanelWidth, showFilesPanel,
-				filesPanelXPosition, filesPanelYPosition, filesPanelHeight,
-				filesPanelWidth);
 	}
 
 	public Long addRoomWithModeration(String SID, String name,
@@ -231,56 +180,6 @@ public class RoomWebServiceFacade extends BaseWebService {
 				roomtypes_id, comment, numberOfPartizipants, ispublic,
 				appointment, isDemoRoom, demoTime, isModeratedRoom,
 				externalRoomId, externalRoomType);
-	}
-
-	/**
-	 * TODO: Fix Organization Issue
-	 * 
-	 * @deprecated use updateRoomWithModeration
-	 * 
-	 * @param SID
-	 * @param rooms_id
-	 * @param name
-	 * @param roomtypes_id
-	 * @param comment
-	 * @param numberOfPartizipants
-	 * @param ispublic
-	 * @param videoPodWidth
-	 * @param videoPodHeight
-	 * @param videoPodXPosition
-	 * @param videoPodYPosition
-	 * @param moderationPanelXPosition
-	 * @param showWhiteBoard
-	 * @param whiteBoardPanelXPosition
-	 * @param whiteBoardPanelYPosition
-	 * @param whiteBoardPanelHeight
-	 * @param whiteBoardPanelWidth
-	 * @param showFilesPanel
-	 * @param filesPanelXPosition
-	 * @param filesPanelYPosition
-	 * @param filesPanelHeight
-	 * @param filesPanelWidth
-	 * @return
-	 */
-	@Deprecated
-	public Long updateRoom(String SID, Long rooms_id, String name,
-			Long roomtypes_id, String comment, Long numberOfPartizipants,
-			Boolean ispublic, Integer videoPodWidth, Integer videoPodHeight,
-			Integer videoPodXPosition, Integer videoPodYPosition,
-			Integer moderationPanelXPosition, Boolean showWhiteBoard,
-			Integer whiteBoardPanelXPosition, Integer whiteBoardPanelYPosition,
-			Integer whiteBoardPanelHeight, Integer whiteBoardPanelWidth,
-			Boolean showFilesPanel, Integer filesPanelXPosition,
-			Integer filesPanelYPosition, Integer filesPanelHeight,
-			Integer filesPanelWidth, Boolean appointment) throws AxisFault {
-		return getBean(RoomWebService.class).updateRoom(SID, rooms_id, name,
-				roomtypes_id, comment, numberOfPartizipants, ispublic,
-				videoPodWidth, videoPodHeight, videoPodXPosition,
-				videoPodYPosition, moderationPanelXPosition, showWhiteBoard,
-				whiteBoardPanelXPosition, whiteBoardPanelYPosition,
-				whiteBoardPanelHeight, whiteBoardPanelWidth, showFilesPanel,
-				filesPanelXPosition, filesPanelYPosition, filesPanelHeight,
-				filesPanelWidth, appointment);
 	}
 
 	public Long updateRoomWithModeration(String SID, Long room_id, String name,

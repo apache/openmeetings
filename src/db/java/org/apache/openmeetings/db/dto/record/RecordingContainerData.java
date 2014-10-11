@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.db.dto.file;
+package org.apache.openmeetings.db.dto.record;
 
 import java.io.Serializable;
 

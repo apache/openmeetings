@@ -24,7 +24,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -44,11 +43,11 @@ import org.apache.openmeetings.db.dao.room.RoomTypeDao;
 import org.apache.openmeetings.db.dao.server.ISessionManager;
 import org.apache.openmeetings.db.dao.server.SessiondataDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
-import org.apache.openmeetings.db.dto.file.RecordingObject;
+import org.apache.openmeetings.db.dto.record.RecordingDTO;
+import org.apache.openmeetings.db.dto.room.RoomDTO;
 import org.apache.openmeetings.db.dto.room.RoomSearchResult;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
 import org.apache.openmeetings.db.entity.calendar.MeetingMember;
-import org.apache.openmeetings.db.entity.record.FlvRecording;
 import org.apache.openmeetings.db.entity.room.Client;
 import org.apache.openmeetings.db.entity.room.Invitation;
 import org.apache.openmeetings.db.entity.room.Invitation.Valid;
@@ -122,32 +121,12 @@ public class RoomWebService {
 	 * @return - list of public rooms
 	 * @throws AxisFault
 	 */
-	public Room[] getRoomsPublic(String SID, Long roomtypes_id)
-			throws AxisFault {
+	public List<RoomDTO> getRoomsPublic(String SID, Long roomtypes_id) throws AxisFault {
 		try {
-
 			Long users_id = sessiondataDao.checkSession(SID);
 
 			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(users_id))) {
-
-				List<Room> roomList = roomDao.getPublicRooms(roomtypes_id);
-				// We need to re-marshal the Rooms object cause Axis2 cannot use
-				// our objects
-				if (roomList != null && roomList.size() != 0) {
-					// roomsListObject.setRoomList(roomList);
-					Room[] roomItems = new Room[roomList.size()];
-					int count = 0;
-					for (Iterator<Room> it = roomList.iterator(); it.hasNext();) {
-						Room room = it.next();
-						room.setCurrentusers(null);
-						roomItems[count] = room;
-						count++;
-					}
-
-					return roomItems;
-				}
-				log.debug("roomList SIZE: " + roomList.size());
-
+				return RoomDTO.list(roomDao.getPublicRooms(roomtypes_id));
 			}
 			return null;
 		} catch (Exception err) {
@@ -167,22 +146,18 @@ public class RoomWebService {
 	 * @return - true if recording was deleted
 	 * @throws AxisFault
 	 */
-	public boolean deleteFlvRecording(String SID, Long flvRecordingId)
-			throws AxisFault {
+	public boolean deleteFlvRecording(String SID, Long flvRecordingId) throws AxisFault {
 		try {
-
 			Long users_id = sessiondataDao.checkSession(SID);
 
 			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(users_id))) {
 				return flvRecordingDao.delete(flvRecordingId);
 			}
-
+			return false;
 		} catch (Exception err) {
 			log.error("[deleteFlvRecording] ", err);
 			throw new AxisFault(err.getMessage());
 		}
-
-		return false;
 	}
 
 	/**
@@ -195,13 +170,13 @@ public class RoomWebService {
 	 * @return - list of flv recordings
 	 * @throws AxisFault
 	 */
-	public List<RecordingObject> getFlvRecordingByExternalUserId(String SID,
+	public List<RecordingDTO> getFlvRecordingByExternalUserId(String SID,
 			String externalUserId, String externalUserType) throws AxisFault {
 		try {
 			Long users_id = sessiondataDao.checkSession(SID);
 
 			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(users_id))) {
-				return flvRecordingDao.getFlvRecordingByExternalUserId(externalUserId, externalUserType);
+				return RecordingDTO.list(flvRecordingDao.getFlvRecordingByExternalUserId(externalUserId, externalUserType));
 			}
 
 			return null;
@@ -223,34 +198,14 @@ public class RoomWebService {
 	 * @return - list of flv recordings
 	 * @throws AxisFault
 	 */
-	public RecordingObject[] getFlvRecordingByExternalRoomTypeAndCreator(
+	public List<RecordingDTO> getFlvRecordingByExternalRoomTypeAndCreator(
 			String SID, String externalRoomType, Long insertedBy)
 			throws AxisFault {
 		try {
-
 			Long users_id = sessiondataDao.checkSession(SID);
 
 			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(users_id))) {
-				List<FlvRecording> recordingList = flvRecordingDao
-						.getFlvRecordingByExternalRoomTypeAndCreator(
-								externalRoomType, insertedBy);
-
-				// We need to re-marshal the Rooms object cause Axis2 cannot use
-				// our objects
-				if (recordingList != null && recordingList.size() != 0) {
-					// roomsListObject.setRoomList(roomList);
-					RecordingObject[] recordingListItems = new RecordingObject[recordingList.size()];
-					int count = 0;
-					for (Iterator<FlvRecording> it = recordingList.iterator(); it.hasNext();) {
-						FlvRecording flvRecording = it.next();
-						recordingListItems[count] = new RecordingObject(flvRecording);
-						count++;
-					}
-
-					return recordingListItems;
-				}
-
-				return null;
+				return RecordingDTO.list(flvRecordingDao.getFlvRecordingByExternalRoomTypeAndCreator(externalRoomType, insertedBy));
 			}
 
 			return null;
@@ -270,15 +225,13 @@ public class RoomWebService {
 	 * @return - list of flv recordings
 	 * @throws AxisFault
 	 */
-	public List<FlvRecording> getFlvRecordingByExternalRoomTypeByList(
+	public List<RecordingDTO> getFlvRecordingByExternalRoomTypeByList(
 			String SID, String externalRoomType) throws AxisFault {
 		try {
-
 			Long users_id = sessiondataDao.checkSession(SID);
 
 			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(users_id))) {
-				return flvRecordingDao.getFlvRecordingByExternalRoomType(externalRoomType);
-
+				return RecordingDTO.list(flvRecordingDao.getFlvRecordingByExternalRoomType(externalRoomType));
 			}
 
 			return null;
@@ -298,12 +251,12 @@ public class RoomWebService {
 	 * @return - list of flv recordings
 	 * @throws AxisFault
 	 */
-	public List<FlvRecording> getRecordingsByExternalType(String SID, String externalType) throws AxisFault {
+	public List<RecordingDTO> getRecordingsByExternalType(String SID, String externalType) throws AxisFault {
 		try {
 			Long users_id = sessiondataDao.checkSession(SID);
 
 			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(users_id))) {
-				return flvRecordingDao.getRecordingsByExternalType(externalType);
+				return RecordingDTO.list(flvRecordingDao.getRecordingsByExternalType(externalType));
 			}
 
 			return null;
@@ -323,33 +276,12 @@ public class RoomWebService {
 	 * @return - list of flv recordings
 	 * @throws AxisFault
 	 */
-	public FlvRecording[] getFlvRecordingByExternalRoomType(String SID,
-			String externalRoomType) throws AxisFault {
+	public List<RecordingDTO> getFlvRecordingByExternalRoomType(String SID, String externalRoomType) throws AxisFault {
 		try {
-
 			Long users_id = sessiondataDao.checkSession(SID);
 
 			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(users_id))) {
-				List<FlvRecording> recordingList = flvRecordingDao.getFlvRecordingByExternalRoomType(externalRoomType);
-
-				// We need to re-marshal the Rooms object cause Axis2 cannot use
-				// our objects
-				if (recordingList != null && recordingList.size() != 0) {
-					// roomsListObject.setRoomList(roomList);
-					FlvRecording[] recordingListItems = new FlvRecording[recordingList
-							.size()];
-					int count = 0;
-					for (Iterator<FlvRecording> it = recordingList.iterator(); it
-							.hasNext();) {
-						FlvRecording flvRecording = it.next();
-						recordingListItems[count] = flvRecording;
-						count++;
-					}
-
-					return recordingListItems;
-				}
-
-				return null;
+				return RecordingDTO.list(flvRecordingDao.getFlvRecordingByExternalRoomType(externalRoomType));
 			}
 
 			return null;
@@ -369,35 +301,12 @@ public class RoomWebService {
 	 * @return - list of recordings
 	 * @throws AxisFault
 	 */
-	public FlvRecording[] getFlvRecordingByRoomId(String SID, Long roomId)
-			throws AxisFault {
+	public List<RecordingDTO> getFlvRecordingByRoomId(String SID, Long roomId) throws AxisFault {
 		try {
-
 			Long users_id = sessiondataDao.checkSession(SID);
 
 			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(users_id))) {
-
-				List<FlvRecording> recordingList = flvRecordingDao
-						.getFlvRecordingByRoomId(roomId);
-
-				// We need to re-marshal the Rooms object cause Axis2 cannot use
-				// our objects
-				if (recordingList != null && recordingList.size() != 0) {
-					// roomsListObject.setRoomList(roomList);
-					FlvRecording[] recordingListItems = new FlvRecording[recordingList
-							.size()];
-					int count = 0;
-					for (Iterator<FlvRecording> it = recordingList.iterator(); it
-							.hasNext();) {
-						FlvRecording flvRecording = it.next();
-						recordingListItems[count] = flvRecording;
-						count++;
-					}
-
-					return recordingListItems;
-				}
-
-				return null;
+				return RecordingDTO.list(flvRecordingDao.getFlvRecordingByRoomId(roomId));
 			}
 
 			return null;
@@ -477,8 +386,8 @@ public class RoomWebService {
 	 * @param rooms_id - the room id
 	 * @return - room with the id given
 	 */
-	public Room getRoomById(String SID, long rooms_id) {
-		return conferenceService.getRoomById(SID, rooms_id);
+	public RoomDTO getRoomById(String SID, long rooms_id) {
+		return new RoomDTO(conferenceService.getRoomById(SID, rooms_id));
 	}
 
 	/**
@@ -571,74 +480,6 @@ public class RoomWebService {
 	}
 
 	// TODO: Add functions to get Users of a Room
-
-	/**
-	 * TODO: Fix Organization Issue
-	 * 
-	 * deprecated use addRoomWithModeration instead
-	 * 
-	 * @param SID
-	 *            The SID of the User. This SID must be marked as Loggedin
-	 * @param name
-	 * @param roomtypes_id
-	 * @param comment
-	 * @param numberOfPartizipants
-	 * @param ispublic
-	 * @param videoPodWidth
-	 * @param videoPodHeight
-	 * @param videoPodXPosition
-	 * @param videoPodYPosition
-	 * @param moderationPanelXPosition
-	 * @param showWhiteBoard
-	 * @param whiteBoardPanelXPosition
-	 * @param whiteBoardPanelYPosition
-	 * @param whiteBoardPanelHeight
-	 * @param whiteBoardPanelWidth
-	 * @param showFilesPanel
-	 * @param filesPanelXPosition
-	 * @param filesPanelYPosition
-	 * @param filesPanelHeight
-	 * @param filesPanelWidth
-	 * @return - id of the room or error code
-	 */
-	@Deprecated
-	public Long addRoom(String SID, String name, Long roomtypes_id,
-			String comment, Long numberOfPartizipants, Boolean ispublic,
-			Integer videoPodWidth, Integer videoPodHeight,
-			Integer videoPodXPosition, Integer videoPodYPosition,
-			Integer moderationPanelXPosition, Boolean showWhiteBoard,
-			Integer whiteBoardPanelXPosition, Integer whiteBoardPanelYPosition,
-			Integer whiteBoardPanelHeight, Integer whiteBoardPanelWidth,
-			Boolean showFilesPanel, Integer filesPanelXPosition,
-			Integer filesPanelYPosition, Integer filesPanelHeight,
-			Integer filesPanelWidth) {
-		try {
-			Long users_id = sessiondataDao.checkSession(SID);
-			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(users_id))) {
-				return roomManager.addRoom(name, roomtypes_id, comment,
-						numberOfPartizipants, ispublic, null, false, false,
-						null, false, null, true, false, false, false //isClosed
-						, "", "",
-						null, null, null, false, // hideTopBar
-						false, // hideChat
-						false, // hideActivitiesAndActions
-						false, // hideFilesExplorer
-						false, // hideActionsMenu
-						false, // hideScreenSharing
-						false, // hideWhiteboard
-						false, // showMicrophoneStatus
-						false, // chatModerated
-						false, // chatOpened
-						false, // filesOpened
-						false, // autoVideoSelect
-						false //sipEnabled
-						);
-			}
-		} catch (Exception err) {
-			log.error("[addRoom] ", err);
-		}
-		return new Long(-1);
-	}
 
 	/**
 	 * Create a conference room
@@ -1004,74 +845,6 @@ public class RoomWebService {
 			throw new AxisFault(err.getMessage());
 		}
 		// return new Long (-1);
-	}
-
-	/**
-	 * TODO: Fix Organization Issue deprecated use updateRoomWithModeration
-	 * 
-	 * @param SID
-	 *            The SID of the User. This SID must be marked as Loggedin
-	 * @param rooms_id
-	 * @param name
-	 * @param roomtypes_id
-	 * @param comment
-	 * @param numberOfPartizipants
-	 * @param ispublic
-	 * @param videoPodWidth
-	 * @param videoPodHeight
-	 * @param videoPodXPosition
-	 * @param videoPodYPosition
-	 * @param moderationPanelXPosition
-	 * @param showWhiteBoard
-	 * @param whiteBoardPanelXPosition
-	 * @param whiteBoardPanelYPosition
-	 * @param whiteBoardPanelHeight
-	 * @param whiteBoardPanelWidth
-	 * @param showFilesPanel
-	 * @param filesPanelXPosition
-	 * @param filesPanelYPosition
-	 * @param filesPanelHeight
-	 * @param filesPanelWidth
-	 * 
-	 * @return - id of the room updated or error code
-	 */
-	@Deprecated
-	public Long updateRoom(String SID, Long rooms_id, String name,
-			Long roomtypes_id, String comment, Long numberOfPartizipants,
-			Boolean ispublic, Integer videoPodWidth, Integer videoPodHeight,
-			Integer videoPodXPosition, Integer videoPodYPosition,
-			Integer moderationPanelXPosition, Boolean showWhiteBoard,
-			Integer whiteBoardPanelXPosition, Integer whiteBoardPanelYPosition,
-			Integer whiteBoardPanelHeight, Integer whiteBoardPanelWidth,
-			Boolean showFilesPanel, Integer filesPanelXPosition,
-			Integer filesPanelYPosition, Integer filesPanelHeight,
-			Integer filesPanelWidth, Boolean appointment) {
-		try {
-			Long users_id = sessiondataDao.checkSession(SID);
-			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(users_id))) {
-				return roomManager.updateRoomInternal(rooms_id,
-						roomtypes_id, name, ispublic, comment,
-						numberOfPartizipants, null, appointment, false, null,
-						false, null, true, false, true, false, "", "", null,
-						null, null, false, // hideTopBar
-						false, // hideChat
-						false, // hideActivitiesAndActions
-						false, // hideFilesExplorer
-						false, // hideActionsMenu
-						false, // hideScreenSharing
-						false, // hideWhiteboard
-						false, // showMicrophoneStatus
-						false, // chatModerated
-						false, // chatOpened
-						false, // filesOpened
-						false, // autoVideoSelect
-						false //sipEnabled
-						);
-			}
-		} catch (Exception err) {
-			log.error("[addRoom] ", err);
-		}
-		return new Long(-1);
 	}
 
 	/**
