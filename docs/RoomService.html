@@ -114,12 +114,6 @@
  Room-Object</i></div>
                 </div>
                                                <div>
-                <a href="#addRoom"><b>addRoom</b></a><br/>
-                <div class="navigation_comment"><i >TODO: Fix Organization Issue
- 
- deprecated use addRoomWithModeration instead</i></div>
-                </div>
-                                               <div>
                 <a href="#addRoomWithModeration"><b>addRoomWithModeration</b></a><br/>
                 <div class="navigation_comment"><i >Create a conference room</i></div>
                 </div>
@@ -142,10 +136,6 @@
                 <div class="navigation_comment"><i >Checks if a room with this exteralRoomId + externalRoomType does exist,
  if yes it returns the room id if not, it will create the room and then
  return the room id of the newly created room</i></div>
-                </div>
-                                               <div>
-                <a href="#updateRoom"><b>updateRoom</b></a><br/>
-                <div class="navigation_comment"><i >TODO: Fix Organization Issue deprecated use updateRoomWithModeration</i></div>
                 </div>
                                                <div>
                 <a href="#updateRoomWithModeration"><b>updateRoomWithModeration</b></a><br/>
@@ -272,7 +262,7 @@
  audience rooms.
     			</p>
     			<p>
-                  Return Type: org.apache.openmeetings.db.entity.room.Room[]
+                  Return Type: java.util.List<org.apache.openmeetings.db.dto.room.RoomDTO>
                 </p>
     			<p>Params:</p>
     			    			
@@ -378,7 +368,7 @@
     			  Gets a list of flv recordings
     			</p>
     			<p>
-                  Return Type: java.util.List<org.apache.openmeetings.db.dto.record.RecordingObject>
+                  Return Type: java.util.List<org.apache.openmeetings.db.dto.record.RecordingDTO>
                 </p>
     			<p>Params:</p>
     			    			
@@ -440,7 +430,7 @@
     			  Gets a list of flv recordings
     			</p>
     			<p>
-                  Return Type: org.apache.openmeetings.db.dto.record.RecordingObject[]
+                  Return Type: java.util.List<org.apache.openmeetings.db.dto.record.RecordingDTO>
                 </p>
     			<p>Params:</p>
     			    			
@@ -500,7 +490,7 @@
     			  Gets a list of flv recordings
     			</p>
     			<p>
-                  Return Type: java.util.List<org.apache.openmeetings.db.entity.record.FlvRecording>
+                  Return Type: java.util.List<org.apache.openmeetings.db.dto.record.RecordingDTO>
                 </p>
     			<p>Params:</p>
     			    			
@@ -552,7 +542,7 @@
     			  Gets a list of recordings
     			</p>
     			<p>
-                  Return Type: java.util.List<org.apache.openmeetings.db.entity.record.FlvRecording>
+                  Return Type: java.util.List<org.apache.openmeetings.db.dto.record.RecordingDTO>
                 </p>
     			<p>Params:</p>
     			    			
@@ -604,7 +594,7 @@
     			  Gets a list of flv recordings
     			</p>
     			<p>
-                  Return Type: org.apache.openmeetings.db.entity.record.FlvRecording[]
+                  Return Type: java.util.List<org.apache.openmeetings.db.dto.record.RecordingDTO>
                 </p>
     			<p>Params:</p>
     			    			
@@ -656,7 +646,7 @@
     			  Get list of recordings
     			</p>
     			<p>
-                  Return Type: org.apache.openmeetings.db.entity.record.FlvRecording[]
+                  Return Type: java.util.List<org.apache.openmeetings.db.dto.record.RecordingDTO>
                 </p>
     			<p>Params:</p>
     			    			
@@ -802,7 +792,7 @@
     			  returns a conference room object
     			</p>
     			<p>
-                  Return Type: org.apache.openmeetings.db.entity.room.Room
+                  Return Type: org.apache.openmeetings.db.dto.room.RoomDTO
                 </p>
     			<p>Params:</p>
     			    			
@@ -1055,250 +1045,6 @@
     			    			<br/>
     			REST Sample Call/URL:<br/>
     			    			    				    								    				    								    				    								    				    								    				    												<a href="http://localhost:5080/openmeetings/services/RoomService/getRoomsWithCurrentUsers?SID=VALUE&start=VALUE&max=VALUE&orderby=VALUE&asc=VALUE">http://localhost:5080/openmeetings/services/RoomService/getRoomsWithCurrentUsers?SID=VALUE&amp;start=VALUE&amp;max=VALUE&amp;orderby=VALUE&amp;asc=VALUE</a>
-    		  </div>
-    	   				    		      <div class="method">
-		        <div class="method_header">
-		        <div style="margin-left:10px">
-    			<a name="addRoom" ><b>addRoom</b></a>
-    			</div>
-    			</div>
-    			
-    			Method: <i>addRoom (
-    			    			    			       			   String SID
-    			       			    			       			     , 
-    			       			   String name
-    			       			    			       			     , 
-    			       			   Long roomtypes_id
-    			       			    			       			     , 
-    			       			   String comment
-    			       			    			       			     , 
-    			       			   Long numberOfPartizipants
-    			       			    			       			     , 
-    			       			   Boolean ispublic
-    			       			    			       			     , 
-    			       			   Integer videoPodWidth
-    			       			    			       			     , 
-    			       			   Integer videoPodHeight
-    			       			    			       			     , 
-    			       			   Integer videoPodXPosition
-    			       			    			       			     , 
-    			       			   Integer videoPodYPosition
-    			       			    			       			     , 
-    			       			   Integer moderationPanelXPosition
-    			       			    			       			     , 
-    			       			   Boolean showWhiteBoard
-    			       			    			       			     , 
-    			       			   Integer whiteBoardPanelXPosition
-    			       			    			       			     , 
-    			       			   Integer whiteBoardPanelYPosition
-    			       			    			       			     , 
-    			       			   Integer whiteBoardPanelHeight
-    			       			    			       			     , 
-    			       			   Integer whiteBoardPanelWidth
-    			       			    			       			     , 
-    			       			   Boolean showFilesPanel
-    			       			    			       			     , 
-    			       			   Integer filesPanelXPosition
-    			       			    			       			     , 
-    			       			   Integer filesPanelYPosition
-    			       			    			       			     , 
-    			       			   Integer filesPanelHeight
-    			       			    			       			     , 
-    			       			   Integer filesPanelWidth
-    			       			    			)
-    			</i><br/>
-    			<p>
-    			  TODO: Fix Organization Issue
- 
- deprecated use addRoomWithModeration instead
-    			</p>
-    			<p>
-                  Return Type: java.lang.Long
-                </p>
-    			<p>Params:</p>
-    			    			
-    				    			<table rules="all" border="1">
-	    			   <thead>
-	    			   <tr>
-	    			     <th width="200" align="left">Type</th>
-	    			     <th width="200" align="left">Fieldname</th>
-	    			     <th width="400" align="left">Description</th>
-	    			   </tr>
-	    			   </thead>
-	    			   <tbody>
-	    			   	    			   	    			   <tr>
-	                     <td valign="top">
-	                     		                     		String
-	                     		                     </td>
-	                     <td valign="top">SID</td>
-	                     <td valign="top">The SID of the User. This SID must be marked as Loggedin</td>
-	                   </tr>
-	                   
-	                   	                   	    			   <tr>
-	                     <td valign="top">
-	                     		                     		String
-	                     		                     </td>
-	                     <td valign="top">name</td>
-	                     <td valign="top"></td>
-	                   </tr>
-	                   
-	                   	                   	    			   <tr>
-	                     <td valign="top">
-	                     		                     		Long
-	                     		                     </td>
-	                     <td valign="top">roomtypes_id</td>
-	                     <td valign="top"></td>
-	                   </tr>
-	                   
-	                   	                   	    			   <tr>
-	                     <td valign="top">
-	                     		                     		String
-	                     		                     </td>
-	                     <td valign="top">comment</td>
-	                     <td valign="top"></td>
-	                   </tr>
-	                   
-	                   	                   	    			   <tr>
-	                     <td valign="top">
-	                     		                     		Long
-	                     		                     </td>
-	                     <td valign="top">numberOfPartizipants</td>
-	                     <td valign="top"></td>
-	                   </tr>
-	                   
-	                   	                   	    			   <tr>
-	                     <td valign="top">
-	                     		                     		Boolean
-	                     		                     </td>
-	                     <td valign="top">ispublic</td>
-	                     <td valign="top"></td>
-	                   </tr>
-	                   
-	                   	                   	    			   <tr>
-	                     <td valign="top">
-	                     		                     		Integer
-	                     		                     </td>
-	                     <td valign="top">videoPodWidth</td>
-	                     <td valign="top"></td>
-	                   </tr>
-	                   
-	                   	                   	    			   <tr>
-	                     <td valign="top">
-	                     		                     		Integer
-	                     		                     </td>
-	                     <td valign="top">videoPodHeight</td>
-	                     <td valign="top"></td>
-	                   </tr>
-	                   
-	                   	                   	    			   <tr>
-	                     <td valign="top">
-	                     		                     		Integer
-	                     		                     </td>
-	                     <td valign="top">videoPodXPosition</td>
-	                     <td valign="top"></td>
-	                   </tr>
-	                   
-	                   	                   	    			   <tr>
-	                     <td valign="top">
-	                     		                     		Integer
-	                     		                     </td>
-	                     <td valign="top">videoPodYPosition</td>
-	                     <td valign="top"></td>
-	                   </tr>
-	                   
-	                   	                   	    			   <tr>
-	                     <td valign="top">
-	                     		                     		Integer
-	                     		                     </td>
-	                     <td valign="top">moderationPanelXPosition</td>
-	                     <td valign="top"></td>
-	                   </tr>
-	                   
-	                   	                   	    			   <tr>
-	                     <td valign="top">
-	                     		                     		Boolean
-	                     		                     </td>
-	                     <td valign="top">showWhiteBoard</td>
-	                     <td valign="top"></td>
-	                   </tr>
-	                   
-	                   	                   	    			   <tr>
-	                     <td valign="top">
-	                     		                     		Integer
-	                     		                     </td>
-	                     <td valign="top">whiteBoardPanelXPosition</td>
-	                     <td valign="top"></td>
-	                   </tr>
-	                   
-	                   	                   	    			   <tr>
-	                     <td valign="top">
-	                     		                     		Integer
-	                     		                     </td>
-	                     <td valign="top">whiteBoardPanelYPosition</td>
-	                     <td valign="top"></td>
-	                   </tr>
-	                   
-	                   	                   	    			   <tr>
-	                     <td valign="top">
-	                     		                     		Integer
-	                     		                     </td>
-	                     <td valign="top">whiteBoardPanelHeight</td>
-	                     <td valign="top"></td>
-	                   </tr>
-	                   
-	                   	                   	    			   <tr>
-	                     <td valign="top">
-	                     		                     		Integer
-	                     		                     </td>
-	                     <td valign="top">whiteBoardPanelWidth</td>
-	                     <td valign="top"></td>
-	                   </tr>
-	                   
-	                   	                   	    			   <tr>
-	                     <td valign="top">
-	                     		                     		Boolean
-	                     		                     </td>
-	                     <td valign="top">showFilesPanel</td>
-	                     <td valign="top"></td>
-	                   </tr>
-	                   
-	                   	                   	    			   <tr>
-	                     <td valign="top">
-	                     		                     		Integer
-	                     		                     </td>
-	                     <td valign="top">filesPanelXPosition</td>
-	                     <td valign="top"></td>
-	                   </tr>
-	                   
-	                   	                   	    			   <tr>
-	                     <td valign="top">
-	                     		                     		Integer
-	                     		                     </td>
-	                     <td valign="top">filesPanelYPosition</td>
-	                     <td valign="top"></td>
-	                   </tr>
-	                   
-	                   	                   	    			   <tr>
-	                     <td valign="top">
-	                     		                     		Integer
-	                     		                     </td>
-	                     <td valign="top">filesPanelHeight</td>
-	                     <td valign="top"></td>
-	                   </tr>
-	                   
-	                   	                   	    			   <tr>
-	                     <td valign="top">
-	                     		                     		Integer
-	                     		                     </td>
-	                     <td valign="top">filesPanelWidth</td>
-	                     <td valign="top"></td>
-	                   </tr>
-	                   
-	                   	                   	                   </tbody>
-	    			</table>
-    			    			<br/>
-    			REST Sample Call/URL:<br/>
-    			    			    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    												<a href="http://localhost:5080/openmeetings/services/RoomService/addRoom?SID=VALUE&name=VALUE&roomtypes_id=VALUE&comment=VALUE&numberOfPartizipants=VALUE&ispublic=VALUE&videoPodWidth=VALUE&videoPodHeight=VALUE&videoPodXPosition=VALUE&videoPodYPosition=VALUE&moderationPanelXPosition=VALUE&showWhiteBoard=VALUE&whiteBoardPanelXPosition=VALUE&whiteBoardPanelYPosition=VALUE&whiteBoardPanelHeight=VALUE&whiteBoardPanelWidth=VALUE&showFilesPanel=VALUE&filesPanelXPosition=VALUE&filesPanelYPosition=VALUE&filesPanelHeight=VALUE&filesPanelWidth=VALUE">http://localhost:5080/openmeetings/services/RoomService/addRoom?SID=VALUE&amp;name=VALUE&amp;roomtypes_id=VALUE&amp;comment=VALUE&amp;numberOfPartizipants=VALUE&amp;ispublic=VALUE&amp;videoPodWidth=VALUE&amp;videoPodHeight=VALUE&amp;videoPodXPosition=VALUE&amp;videoPodYPosition=VALUE&amp;moderationPanelXPosition=VALUE&amp;showWhiteBoard=VALUE&amp;whiteBoardPanelXPosition=VALUE&amp;whiteBoardPanelYPosition=VALUE&amp;whiteBoardPanelHeight=VALUE&amp;whiteBoardPanelWidth=VALUE&amp;showFilesPanel=VALUE&amp;filesPanelXPosition=VALUE&amp;filesPanelYPosition=VALUE&amp;filesPanelHeight=VALUE&amp;filesPanelWidth=VALUE</a>
     		  </div>
     	   				    		      <div class="method">
 		        <div class="method_header">
@@ -2134,262 +1880,6 @@
     			    			<br/>
     			REST Sample Call/URL:<br/>
     			    			    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    												<a href="http://localhost:5080/openmeetings/services/RoomService/getRoomIdByExternalId?SID=VALUE&name=VALUE&roomtypes_id=VALUE&comment=VALUE&numberOfPartizipants=VALUE&ispublic=VALUE&appointment=VALUE&isDemoRoom=VALUE&demoTime=VALUE&isModeratedRoom=VALUE&externalRoomId=VALUE&externalRoomType=VALUE">http://localhost:5080/openmeetings/services/RoomService/getRoomIdByExternalId?SID=VALUE&amp;name=VALUE&amp;roomtypes_id=VALUE&amp;comment=VALUE&amp;numberOfPartizipants=VALUE&amp;ispublic=VALUE&amp;appointment=VALUE&amp;isDemoRoom=VALUE&amp;demoTime=VALUE&amp;isModeratedRoom=VALUE&amp;externalRoomId=VALUE&amp;externalRoomType=VALUE</a>
-    		  </div>
-    	   				    		      <div class="method">
-		        <div class="method_header">
-		        <div style="margin-left:10px">
-    			<a name="updateRoom" ><b>updateRoom</b></a>
-    			</div>
-    			</div>
-    			
-    			Method: <i>updateRoom (
-    			    			    			       			   String SID
-    			       			    			       			     , 
-    			       			   Long rooms_id
-    			       			    			       			     , 
-    			       			   String name
-    			       			    			       			     , 
-    			       			   Long roomtypes_id
-    			       			    			       			     , 
-    			       			   String comment
-    			       			    			       			     , 
-    			       			   Long numberOfPartizipants
-    			       			    			       			     , 
-    			       			   Boolean ispublic
-    			       			    			       			     , 
-    			       			   Integer videoPodWidth
-    			       			    			       			     , 
-    			       			   Integer videoPodHeight
-    			       			    			       			     , 
-    			       			   Integer videoPodXPosition
-    			       			    			       			     , 
-    			       			   Integer videoPodYPosition
-    			       			    			       			     , 
-    			       			   Integer moderationPanelXPosition
-    			       			    			       			     , 
-    			       			   Boolean showWhiteBoard
-    			       			    			       			     , 
-    			       			   Integer whiteBoardPanelXPosition
-    			       			    			       			     , 
-    			       			   Integer whiteBoardPanelYPosition
-    			       			    			       			     , 
-    			       			   Integer whiteBoardPanelHeight
-    			       			    			       			     , 
-    			       			   Integer whiteBoardPanelWidth
-    			       			    			       			     , 
-    			       			   Boolean showFilesPanel
-    			       			    			       			     , 
-    			       			   Integer filesPanelXPosition
-    			       			    			       			     , 
-    			       			   Integer filesPanelYPosition
-    			       			    			       			     , 
-    			       			   Integer filesPanelHeight
-    			       			    			       			     , 
-    			       			   Integer filesPanelWidth
-    			       			    			       			     , 
-    			       			   Boolean appointment
-    			       			    			)
-    			</i><br/>
-    			<p>
-    			  TODO: Fix Organization Issue deprecated use updateRoomWithModeration
-    			</p>
-    			<p>
-                  Return Type: java.lang.Long
-                </p>
-    			<p>Params:</p>
-    			    				<b>Warning:</b><i> Params in this method do not seem to be correctly documentated</i>
-    				<br/><br/>
-    			    			
-    				    			<table rules="all" border="1">
-	    			   <thead>
-	    			   <tr>
-	    			     <th width="200" align="left">Type</th>
-	    			     <th width="200" align="left">Fieldname</th>
-	    			     <th width="400" align="left">Description</th>
-	    			   </tr>
-	    			   </thead>
-	    			   <tbody>
-	    			   	    			   	    			   <tr>
-	                     <td valign="top">
-	                     		                     		String
-	                     		                     </td>
-	                     <td valign="top">SID</td>
-	                     <td valign="top">The SID of the User. This SID must be marked as Loggedin</td>
-	                   </tr>
-	                   
-	                   	                   	    			   <tr>
-	                     <td valign="top">
-	                     		                     		Long
-	                     		                     </td>
-	                     <td valign="top">rooms_id</td>
-	                     <td valign="top"></td>
-	                   </tr>
-	                   
-	                   	                   	    			   <tr>
-	                     <td valign="top">
-	                     		                     		String
-	                     		                     </td>
-	                     <td valign="top">name</td>
-	                     <td valign="top"></td>
-	                   </tr>
-	                   
-	                   	                   	    			   <tr>
-	                     <td valign="top">
-	                     		                     		Long
-	                     		                     </td>
-	                     <td valign="top">roomtypes_id</td>
-	                     <td valign="top"></td>
-	                   </tr>
-	                   
-	                   	                   	    			   <tr>
-	                     <td valign="top">
-	                     		                     		String
-	                     		                     </td>
-	                     <td valign="top">comment</td>
-	                     <td valign="top"></td>
-	                   </tr>
-	                   
-	                   	                   	    			   <tr>
-	                     <td valign="top">
-	                     		                     		Long
-	                     		                     </td>
-	                     <td valign="top">numberOfPartizipants</td>
-	                     <td valign="top"></td>
-	                   </tr>
-	                   
-	                   	                   	    			   <tr>
-	                     <td valign="top">
-	                     		                     		Boolean
-	                     		                     </td>
-	                     <td valign="top">ispublic</td>
-	                     <td valign="top"></td>
-	                   </tr>
-	                   
-	                   	                   	    			   <tr>
-	                     <td valign="top">
-	                     		                     		Integer
-	                     		                     </td>
-	                     <td valign="top">videoPodWidth</td>
-	                     <td valign="top"></td>
-	                   </tr>
-	                   
-	                   	                   	    			   <tr>
-	                     <td valign="top">
-	                     		                     		Integer
-	                     		                     </td>
-	                     <td valign="top">videoPodHeight</td>
-	                     <td valign="top"></td>
-	                   </tr>
-	                   
-	                   	                   	    			   <tr>
-	                     <td valign="top">
-	                     		                     		Integer
-	                     		                     </td>
-	                     <td valign="top">videoPodXPosition</td>
-	                     <td valign="top"></td>
-	                   </tr>
-	                   
-	                   	                   	    			   <tr>
-	                     <td valign="top">
-	                     		                     		Integer
-	                     		                     </td>
-	                     <td valign="top">videoPodYPosition</td>
-	                     <td valign="top"></td>
-	                   </tr>
-	                   
-	                   	                   	    			   <tr>
-	                     <td valign="top">
-	                     		                     		Integer
-	                     		                     </td>
-	                     <td valign="top">moderationPanelXPosition</td>
-	                     <td valign="top"></td>
-	                   </tr>
-	                   
-	                   	                   	    			   <tr>
-	                     <td valign="top">
-	                     		                     		Boolean
-	                     		                     </td>
-	                     <td valign="top">showWhiteBoard</td>
-	                     <td valign="top"></td>
-	                   </tr>
-	                   
-	                   	                   	    			   <tr>
-	                     <td valign="top">
-	                     		                     		Integer
-	                     		                     </td>
-	                     <td valign="top">whiteBoardPanelXPosition</td>
-	                     <td valign="top"></td>
-	                   </tr>
-	                   
-	                   	                   	    			   <tr>
-	                     <td valign="top">
-	                     		                     		Integer
-	                     		                     </td>
-	                     <td valign="top">whiteBoardPanelYPosition</td>
-	                     <td valign="top"></td>
-	                   </tr>
-	                   
-	                   	                   	    			   <tr>
-	                     <td valign="top">
-	                     		                     		Integer
-	                     		                     </td>
-	                     <td valign="top">whiteBoardPanelHeight</td>
-	                     <td valign="top"></td>
-	                   </tr>
-	                   
-	                   	                   	    			   <tr>
-	                     <td valign="top">
-	                     		                     		Integer
-	                     		                     </td>
-	                     <td valign="top">whiteBoardPanelWidth</td>
-	                     <td valign="top"></td>
-	                   </tr>
-	                   
-	                   	                   	    			   <tr>
-	                     <td valign="top">
-	                     		                     		Boolean
-	                     		                     </td>
-	                     <td valign="top">showFilesPanel</td>
-	                     <td valign="top"></td>
-	                   </tr>
-	                   
-	                   	                   	    			   <tr>
-	                     <td valign="top">
-	                     		                     		Integer
-	                     		                     </td>
-	                     <td valign="top">filesPanelXPosition</td>
-	                     <td valign="top"></td>
-	                   </tr>
-	                   
-	                   	                   	    			   <tr>
-	                     <td valign="top">
-	                     		                     		Integer
-	                     		                     </td>
-	                     <td valign="top">filesPanelYPosition</td>
-	                     <td valign="top"></td>
-	                   </tr>
-	                   
-	                   	                   	    			   <tr>
-	                     <td valign="top">
-	                     		                     		Integer
-	                     		                     </td>
-	                     <td valign="top">filesPanelHeight</td>
-	                     <td valign="top"></td>
-	                   </tr>
-	                   
-	                   	                   	    			   <tr>
-	                     <td valign="top">
-	                     		                     		Integer
-	                     		                     </td>
-	                     <td valign="top">filesPanelWidth</td>
-	                     <td valign="top"></td>
-	                   </tr>
-	                   
-	                   	                   	                   </tbody>
-	    			</table>
-    			    			<br/>
-    			REST Sample Call/URL:<br/>
-    			    			    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    												<a href="http://localhost:5080/openmeetings/services/RoomService/updateRoom?SID=VALUE&rooms_id=VALUE&name=VALUE&roomtypes_id=VALUE&comment=VALUE&numberOfPartizipants=VALUE&ispublic=VALUE&videoPodWidth=VALUE&videoPodHeight=VALUE&videoPodXPosition=VALUE&videoPodYPosition=VALUE&moderationPanelXPosition=VALUE&showWhiteBoard=VALUE&whiteBoardPanelXPosition=VALUE&whiteBoardPanelYPosition=VALUE&whiteBoardPanelHeight=VALUE&whiteBoardPanelWidth=VALUE&showFilesPanel=VALUE&filesPanelXPosition=VALUE&filesPanelYPosition=VALUE&filesPanelHeight=VALUE&filesPanelWidth=VALUE&appointment=VALUE">http://localhost:5080/openmeetings/services/RoomService/updateRoom?SID=VALUE&amp;rooms_id=VALUE&amp;name=VALUE&amp;roomtypes_id=VALUE&amp;comment=VALUE&amp;numberOfPartizipants=VALUE&amp;ispublic=VALUE&amp;videoPodWidth=VALUE&amp;videoPodHeight=VALUE&amp;videoPodXPosition=VALUE&amp;videoPodYPosition=VALUE&amp;moderationPanelXPosition=VALUE&amp;showWhiteBoard=VALUE&amp;whiteBoardPanelXPosition=VALUE&amp;whiteBoardPanelYPosition=VALUE&amp;whiteBoardPanelHeight=VALUE&amp;whiteBoardPanelWidth=VALUE&amp;showFilesPanel=VALUE&amp;filesPanelXPosition=VALUE&amp;filesPanelYPosition=VALUE&amp;filesPanelHeight=VALUE&amp;filesPanelWidth=VALUE&amp;appointment=VALUE</a>
     		  </div>
     	   				    		      <div class="method">
 		        <div class="method_header">
