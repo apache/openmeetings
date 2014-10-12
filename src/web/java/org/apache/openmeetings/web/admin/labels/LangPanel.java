@@ -207,8 +207,8 @@ public class LangPanel extends AdminPanel {
 					download.setFileName(fl.getName() + ".xml");
 					download.setResourceStream(new AbstractResourceStream() {
 						private static final long serialVersionUID = 1L;
-						private StringWriter sw;
-						private InputStream is;
+						private transient StringWriter sw;
+						private transient InputStream is;
 						
 						public InputStream getInputStream() throws ResourceStreamNotFoundException {
 							try {

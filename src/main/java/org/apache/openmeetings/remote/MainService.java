@@ -177,15 +177,18 @@ public class MainService implements IPendingServiceCallback {
 	}
 
 	public User loginWicket(String SID, String wicketSID, Long wicketroomid) {
+		log.debug("[loginWicket]");
 		Long userId = sessiondataDao.checkSession(wicketSID);
 		User u = userId == null ? null : userDao.get(userId);
 		if (u != null && wicketroomid != null) {
+			log.debug("[loginWicket] user and roomid are not empty: " + userId + ", " + wicketroomid);
 			boolean allowed = false;
 			Room r = roomDao.get(wicketroomid);
 			if (r.getAppointment() != null && r.getAppointment()) {
 				Appointment a = appointmentDao.getAppointmentByRoom(wicketroomid);
 				if (a != null && !a.isDeleted()) {
-					allowed = a.getOwner().getUser_id() == userId;
+					allowed = a.getOwner().getUser_id().equals(userId);
+					log.debug("[loginWicket] appointed room, isOwner ? " + allowed);
 					if (!allowed) {
 						for (MeetingMember mm : a.getMeetingMembers()) {
 							if (mm.getUser().getUser_id() == userId) {
@@ -206,11 +209,12 @@ public class MainService implements IPendingServiceCallback {
 					*/
 				}
 			} else {
-				allowed = r.getIspublic() || (r.getOwnerId() != null && r.getOwnerId() == userId);
+				allowed = r.getIspublic() || (r.getOwnerId() != null && r.getOwnerId().equals(userId));
+				log.debug("[loginWicket] public ? " + r.getIspublic() + ", ownedId ? " + r.getOwnerId() + " " + allowed);
 				if (!allowed) {
 					for (RoomOrganisation ro : r.getRoomOrganisations()) {
 						for (Organisation_Users ou : u.getOrganisation_users()) {
-							if (ro.getOrganisation().getOrganisation_id() == ou.getOrganisation().getOrganisation_id()) {
+							if (ro.getOrganisation().getOrganisation_id().equals(ou.getOrganisation().getOrganisation_id())) {
 								allowed = true;
 								break;
 							}
@@ -221,28 +225,27 @@ public class MainService implements IPendingServiceCallback {
 					}
 				}
 			}
-			if (!allowed) {
-				return null;
-			}
-			IConnection current = Red5.getConnectionLocal();
-			String streamId = current.getClient().getId();
-			Client currentClient = sessionManager.getClientByStreamId(streamId, null);
-			
-			if (!u.getOrganisation_users().isEmpty()) {
-				u.setSessionData(sessiondataDao.getSessionByHash(wicketSID));
-				currentClient.setUser_id(u.getUser_id());
-				currentClient.setRoom_id(wicketroomid);
-				SessionVariablesUtil.setUserId(current.getClient(), u.getUser_id());
-			
-				currentClient.setUsername(u.getLogin());
-				currentClient.setFirstname(u.getFirstname());
-				currentClient.setLastname(u.getLastname());
-				currentClient.setPicture_uri(u.getPictureuri());
-				sessionManager.updateClientByStreamId(streamId, currentClient, false, null);
+			if (allowed) {
+				IConnection current = Red5.getConnectionLocal();
+				String streamId = current.getClient().getId();
+				Client currentClient = sessionManager.getClientByStreamId(streamId, null);
 				
-				scopeApplicationAdapter.syncMessageToCurrentScope("roomConnect", currentClient, false);
+				if (!u.getOrganisation_users().isEmpty()) {
+					u.setSessionData(sessiondataDao.getSessionByHash(wicketSID));
+					currentClient.setUser_id(u.getUser_id());
+					currentClient.setRoom_id(wicketroomid);
+					SessionVariablesUtil.setUserId(current.getClient(), u.getUser_id());
 				
-				return u;
+					currentClient.setUsername(u.getLogin());
+					currentClient.setFirstname(u.getFirstname());
+					currentClient.setLastname(u.getLastname());
+					currentClient.setPicture_uri(u.getPictureuri());
+					sessionManager.updateClientByStreamId(streamId, currentClient, false, null);
+					
+					scopeApplicationAdapter.syncMessageToCurrentScope("roomConnect", currentClient, false);
+					
+					return u;
+				}
 			}
 		}
 		return null;

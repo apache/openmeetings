@@ -850,6 +850,8 @@
 					hib.currentdomainObj = value.organisation_users[0].organisation;
 				}
 				parent.getCurrentRoomClient.doCall();
+			} else {
+				new lz.labelerrorPopup(canvas, {errorlabelid: 1599});
 			}
 		]]>
 		</handler>

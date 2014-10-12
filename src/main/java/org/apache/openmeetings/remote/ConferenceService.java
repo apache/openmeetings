@@ -602,14 +602,14 @@ public class ConferenceService {
 				}
 				activeRoomsMap.put(server, roomIds);
 			}
-			for (Server server : activeRoomsMap.keySet()) {
-				List<Long> roomIds = activeRoomsMap.get(server);
+			for (Map.Entry<Server, List<Long>> entry : activeRoomsMap.entrySet()) {
+				List<Long> roomIds = entry.getValue();
 				Long capacity = roomDao.getRoomsCapacityByIds(roomIds);
 				if (minimum < 0 || capacity < minimum) {
 					minimum = capacity;
-					result = server;
+					result = entry.getKey();
 				}
-				log.debug("Checking server: " + server + " Number of rooms " + roomIds.size() + " RoomIds: "
+				log.debug("Checking server: " + entry.getKey() + " Number of rooms " + roomIds.size() + " RoomIds: "
 						+ roomIds + " max(Sum): " + capacity);
 			}
 			return result == null ? null : new ServerDTO(result);

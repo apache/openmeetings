@@ -56,7 +56,7 @@ import org.simpleframework.xml.Root;
 @Root
 public class Server implements Serializable, IDataProviderEntity {
 
-	private static final long serialVersionUID = -6822732074549167727L;
+	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -258,27 +258,6 @@ public class Server implements Serializable, IDataProviderEntity {
 	}
 
 	@Override
-	public boolean equals(Object obj) {
-		if (obj == null) {
-			return false;
-		}
-		if (!(obj instanceof Server)) {
-			return false;
-		} else {
-			Server s = (Server)obj;
-			return s.id == id && ((s.address != null && s.address.equals(address)) || (s.address == null && s.address == address));
-		}
-	}
-	
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + (int)id + (address == null ? 0 : address.hashCode());
-		return result;
-	}
-	
-	@Override
 	public String toString() {
 		return "Server [id=" + id + ", name=" + name + ", address=" + address
 				+ ", port=" + port + ", user=" + user + ", pass=" + pass
@@ -287,4 +266,37 @@ public class Server implements Serializable, IDataProviderEntity {
 				+ deleted + "]";
 	}
 
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((address == null) ? 0 : address.hashCode());
+		result = prime * result + (int) (id ^ (id >>> 32));
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
+		if (getClass() != obj.getClass()) {
+			return false;
+		}
+		Server other = (Server) obj;
+		if (address == null) {
+			if (other.address != null) {
+				return false;
+			}
+		} else if (!address.equals(other.address)) {
+			return false;
+		}
+		if (id != other.id) {
+			return false;
+		}
+		return true;
+	}
 }
