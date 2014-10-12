@@ -118,7 +118,8 @@
 			var invitee = canvas.thishib.currentInvitation.invitee;
 			var email = invitee.adresses.email;
 			var fName = invitee.firstname == null ? "" : invitee.firstname;
-			var lName = invitee.lastname == null ? email : invitee.lastname;
+			var lName = invitee.lastname == null || invitee.lastname == "" ? email : invitee.lastname;
+			//if ($debug) Debug.write("!!!!!!!!!!! invitee :: ", invitee);
 			
 			canvas.setAttribute('currentuser', email);
 			canvas.setAttribute('user_id', -invitee.user_id);
