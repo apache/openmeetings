@@ -237,7 +237,7 @@ public class InvitationManager implements IInvitationManager {
 		
 		if (ical) {
 			String username = i.getInvitee().getLogin();
-			boolean isOwner = owner.getId() == i.getInvitee().getId();
+			boolean isOwner = owner.getId().equals(i.getInvitee().getId());
 			IcalHandler handler = new IcalHandler(isCanceled ? IcalHandler.ICAL_METHOD_CANCEL : IcalHandler.ICAL_METHOD_REQUEST);
 
 			HashMap<String, String> attendeeList = handler.getAttendeeData(email, username, isOwner);

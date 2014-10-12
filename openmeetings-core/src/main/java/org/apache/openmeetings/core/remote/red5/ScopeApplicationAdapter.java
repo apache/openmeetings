@@ -154,9 +154,8 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 				isAVClient = Boolean.valueOf("" + params[0]);
 			}
 
-			log.debug("### Client connected to OpenMeetings, register Client StreamId: "
-					+ streamId + " scope " + conn.getScope().getName()+ " isAVClient "+isAVClient);
-			log.debug("params "+params);
+			log.debug("### Client connected to OpenMeetings, register Client StreamId: " + streamId + " scope "
+					+ conn.getScope().getName() + " isAVClient " + isAVClient + " params " + params);
 
 			// Set StreamId in Client
 			service.invoke("setId", new Object[] { streamId }, this);

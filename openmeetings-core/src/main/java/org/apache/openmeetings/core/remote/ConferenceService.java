@@ -52,7 +52,7 @@ import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.util.AuthLevelUtil;
 import org.apache.openmeetings.db.util.TimezoneUtil;
 import org.apache.openmeetings.util.CalendarPatterns;
-import org.apache.openmeetings.util.OpenmeetingsVariables;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import org.red5.logging.Red5LoggerFactory;
 import org.red5.server.api.IConnection;
 import org.red5.server.api.Red5;
@@ -65,9 +65,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  * 
  */
 public class ConferenceService {
-
-	private static final Logger log = Red5LoggerFactory.getLogger(
-			ConferenceService.class, OpenmeetingsVariables.webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(ConferenceService.class, webAppRootKey);
 
 	@Autowired
 	private AppointmentLogic appointmentLogic;
@@ -590,7 +588,7 @@ public class ConferenceService {
 
 			long minimum = -1;
 			Server result = null;
-			HashMap<Server, List<Long>> activeRoomsMap = new HashMap<Server, List<Long>>();
+			Map<Server, List<Long>> activeRoomsMap = new HashMap<Server, List<Long>>();
 			for (Server server : serverList) {
 				List<Long> roomIds = sessionManager.getActiveRoomIdsByServer(server);
 				if (roomIds.contains(roomId)) {
@@ -600,14 +598,14 @@ public class ConferenceService {
 				}
 				activeRoomsMap.put(server, roomIds);
 			}
-			for (Server server : activeRoomsMap.keySet()) {
-				List<Long> roomIds = activeRoomsMap.get(server);
+			for (Map.Entry<Server, List<Long>> entry : activeRoomsMap.entrySet()) {
+				List<Long> roomIds = entry.getValue();
 				Long capacity = roomDao.getRoomsCapacityByIds(roomIds);
 				if (minimum < 0 || capacity < minimum) {
 					minimum = capacity;
-					result = server;
+					result = entry.getKey();
 				}
-				log.debug("Checking server: " + server + " Number of rooms " + roomIds.size() + " RoomIds: "
+				log.debug("Checking server: " + entry.getKey() + " Number of rooms " + roomIds.size() + " RoomIds: "
 						+ roomIds + " max(Sum): " + capacity);
 			}
 			return result == null ? null : new ServerDTO(result);

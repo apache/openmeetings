@@ -238,7 +238,8 @@ public class RoomPanel extends BasePanel {
 		if (r.isAppointment()) {
 			Appointment a = getBean(AppointmentDao.class).getAppointmentByRoom(roomId);
 			if (a != null && !a.isDeleted()) {
-				allowed = a.getOwner().getId() == getUserId();
+				allowed = a.getOwner().getId().equals(getUserId());
+				log.debug("appointed room, isOwner ? " + allowed);
 				if (!allowed) {
 					for (MeetingMember mm : a.getMeetingMembers()) {
 						if (mm.getUser().getId() == getUserId()) {
@@ -259,7 +260,8 @@ public class RoomPanel extends BasePanel {
 				*/
 			}
 		} else {
-			allowed = r.getIspublic() || (r.getOwnerId() != null && r.getOwnerId() == getUserId());
+			allowed = r.getIspublic() || (r.getOwnerId() != null && r.getOwnerId().equals(getUserId()));
+			log.debug("public ? " + r.getIspublic() + ", ownedId ? " + r.getOwnerId() + " " + allowed);
 			if (!allowed) {
 				User u = getBean(UserDao.class).get(getUserId());
 				for (RoomOrganisation ro : r.getRoomOrganisations()) {
