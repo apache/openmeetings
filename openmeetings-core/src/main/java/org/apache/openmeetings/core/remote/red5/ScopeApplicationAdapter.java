@@ -155,7 +155,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 			}
 
 			log.debug("### Client connected to OpenMeetings, register Client StreamId: " + streamId + " scope "
-					+ conn.getScope().getName() + " isAVClient " + isAVClient + " params " + params);
+					+ conn.getScope().getName() + " isAVClient " + isAVClient);
 
 			// Set StreamId in Client
 			service.invoke("setId", new Object[] { streamId }, this);
@@ -403,9 +403,9 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
                         // as it will be already triggered
                         // in the result of this Function
                         // in the Client
-                    	Long id = Long.valueOf(rcl.getBroadCastID());
-                    	if (id != null && !broadcastList.contains(id)) {
-                    		broadcastList.add(id.intValue());
+                    	int id = (int)rcl.getBroadCastID();
+                    	if (!broadcastList.contains(id)) {
+                    		broadcastList.add(id);
                     	}
                     }
                 }

@@ -58,7 +58,7 @@ public class FileItemTree<T extends FileItem> extends DefaultNestedTree<T> {
 			
 			@Override
 			protected boolean isSelected() {
-				return getModelObject().getId() == treePanel.selectedFile.getObject().getId();
+				return getModelObject().getId().equals(treePanel.selectedFile.getObject().getId());
 			}
 			
 			@Override

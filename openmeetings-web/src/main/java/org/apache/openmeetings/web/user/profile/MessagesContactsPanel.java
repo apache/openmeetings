@@ -154,7 +154,7 @@ public class MessagesContactsPanel extends UserPanel {
 	
 	private void setFolderClass(ListItem<PrivateMessageFolder> folder) {
 		folder.add(AttributeAppender.replace("class", "email folder clickable"));
-		if (folder.getModelObject().getId() == selectedFolderModel.getObject()) {
+		if (folder.getModelObject().getId().equals(selectedFolderModel.getObject())) {
 			selectFolder(folder);
 		}
 	}

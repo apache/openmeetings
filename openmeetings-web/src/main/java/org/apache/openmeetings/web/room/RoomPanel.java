@@ -266,7 +266,7 @@ public class RoomPanel extends BasePanel {
 				User u = getBean(UserDao.class).get(getUserId());
 				for (RoomOrganisation ro : r.getRoomOrganisations()) {
 					for (OrganisationUser ou : u.getOrganisationUsers()) {
-						if (ro.getOrganisation().getId() == ou.getOrganisation().getId()) {
+						if (ro.getOrganisation().getId().equals(ou.getOrganisation().getId())) {
 							allowed = true;
 							break;
 						}
