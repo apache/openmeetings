@@ -90,6 +90,24 @@ public class ChatService implements IPendingServiceCallback {
 		return str_h+':'+str_m;
 	}
 
+	public void sendChatMessage(String message) {
+		IConnection current = Red5.getConnectionLocal();
+		Client client = sessionManager.getClientByStreamId(current.getClient().getId(), null);
+		List<String> msg = new ArrayList<String>();
+		msg.add("chat"); //'privatechat'
+		msg.add(""); //date-time
+		msg.add("newtextmessage");
+		msg.add(client.getUsername());
+		msg.add(message);
+		msg.add(client.getUsercolor());
+		msg.add(client.getPublicSID()); //om[6] = parent.parent.isPrivate ? parent.parent.parent.refObj.publicSID : canvas.publicSID;
+		msg.add("false");// canvas.isrtl;
+		msg.add("" + client.getUser_id());
+		Room room = roomDao.get(client.getRoom_id());
+		msg.add("" + (room.getChatModerated() && !(client.getIsMod() || client.getIsSuperModerator())));
+		sendMessageWithClient(msg);
+	}
+	
 	/**
 	 * sends a Chat-Message
 	 * to all members of the Chatroom
@@ -102,7 +120,7 @@ public class ChatService implements IPendingServiceCallback {
 	public int sendMessageWithClient(Object newMessage) {
 		try {
 			IConnection current = Red5.getConnectionLocal();
-			Client currentClient = this.sessionManager.getClientByStreamId(current.getClient().getId(), null);
+			Client currentClient = sessionManager.getClientByStreamId(current.getClient().getId(), null);
 			Long room_id = currentClient.getRoom_id();			
 			log.debug("room_id: " + room_id);
 			
