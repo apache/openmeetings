@@ -102,8 +102,8 @@ public class StartSharingEventBehavior extends AbstractDefaultAjaxBehavior {
 					.replace("$allowRemote", cfgDao.getConfValue(CONFIG_SCREENSHARING_ALLOW_REMOTE, String.class, "true"))
 					.replace("$allowRecording", "true") //FIXME add/remove
 					.replace("$allowPublishing", "true") //FIXME add/remove
-					.replace("$keystore", "<![CDATA[]]>") //FIXME add/remove
-					.replace("$password", "<![CDATA[]]>") //FIXME add/remove
+					.replace("$keystore", "--dummy--") //FIXME add/remove
+					.replace("$password", "--dummy--") //FIXME add/remove
 					;
 		} catch (Exception e) {
 			log.error("Unexpected error while creating jnlp file", e);
