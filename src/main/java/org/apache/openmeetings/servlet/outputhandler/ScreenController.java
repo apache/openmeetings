@@ -197,7 +197,7 @@ public class ScreenController {
 
 	private void addKeystore(Context ctx) {
 		log.debug("RTMP Sharer Keystore :: start");
-		String keystore = "<![CDATA[]]>", password = "<![CDATA[]]>";
+		String keystore = "--dummy--", password = "--dummy--";
 		FileInputStream fis = null, ris = null;
 		try {
 			File conf = new File(OmFileHelper.getRootDir(), "conf");
