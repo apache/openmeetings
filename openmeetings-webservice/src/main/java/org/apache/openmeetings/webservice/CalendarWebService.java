@@ -255,12 +255,11 @@ public class CalendarWebService {
 	 *            the reminder type of the calendar event
 	 * @param mmClient
 	 *            List of clients, comma separated string, <br/>
-	 *            sample: 1,firstname,lastname,hans.tier@gmail.com,1,Etc/GMT+1
+	 *            sample: '1,firstname,lastname,hans.tier@gmail.com,1,Etc/GMT+1'
 	 *            to add multiple clients you can use the same GET parameter in
 	 *            the URL multiple times, for example:
-	 *            &amp;mmClient=1,firstname,lastname,hans
-	 *            .tier@gmail.com,1,Etc/GMT+1&amp;mmClient
-	 *            =2,firstname,lastname,hans.tier@gmail.com,1,Etc/GMT+1
+	 *            &amp;mmClient='1,firstname,lastname,hans.tier@gmail.com,1,Etc/GMT+1'&amp;mmClient='2,firstname,lastname,hans.tier@gmail.com,1,Etc/GMT+1'
+	 *             (Please NOTE mmClient value is enclosed in single quotes)
 	 * @param roomType
 	 *            the room type for the calendar event
 	 * @param languageId
@@ -379,12 +378,11 @@ public class CalendarWebService {
 	 *            the reminder type of the calendar event
 	 * @param mmClient
 	 *            List of clients, comma separated string, <br/>
-	 *            sample: 1,firstname,lastname,hans.tier@gmail.com,1,Etc/GMT+1
+	 *            sample: '1,firstname,lastname,hans.tier@gmail.com,1,Etc/GMT+1'
 	 *            to add multiple clients you can use the same GET parameter in
 	 *            the URL multiple times, for example:
-	 *            &amp;mmClient=1,firstname,lastname,hans
-	 *            .tier@gmail.com,1,Etc/GMT+1&amp;mmClient
-	 *            =2,firstname,lastname,hans.tier@gmail.com,1,Etc/GMT+1
+	 *            &amp;mmClient='1,firstname,lastname,hans.tier@gmail.com,1,Etc/GMT+1'&amp;mmClient='2,firstname,lastname,hans.tier@gmail.com,1,Etc/GMT+1'
+	 *             (Please NOTE mmClient value is enclosed in single quotes)
 	 * @param roomType
 	 *            the room type for the calendar event
 	 * @param languageId
