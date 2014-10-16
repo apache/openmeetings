@@ -207,6 +207,12 @@
 					<td> Is remote control will be enabled while screensharing. Allowing remote control will be not possible in case it is set to 'false' (true/false). </td>
 					<td> 3.0.4 </td>
 				</tr>
+				<tr>
+					<td> calendar.firstday </td>
+					<td> 0 </td>
+					<td> The day that each week begins. The value must be a number that represents the day of the week. Sunday=0, Monday=1, Tuesday=2, etc. </td>
+					<td> 3.0.4 </td>
+				</tr>
 			</table>
 		</section>
 

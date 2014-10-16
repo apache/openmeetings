@@ -22,6 +22,7 @@ import static org.apache.openmeetings.db.dao.basic.ConfigurationDao.DEFAULT_MAX_
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_APPLICATION_BASE_URL;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_APPLICATION_NAME;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_APPOINTMENT_REMINDER_MINUTES;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_CALENDAR_FIRST_DAY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_CRYPT_KEY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DASHBOARD_SHOW_MYROOMS_KEY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DASHBOARD_SHOW_RSS_KEY;
@@ -465,6 +466,7 @@ public class ImportInitvalues {
 		cfgDao.add(CONFIG_FLASH_PROTOCOL, "rtmp", null, "Protocol for flash connections, can be rtmp, rtmpt, rtmpe, rtmps");
 		
 		cfgDao.add(CONFIG_FLASH_PORT, "1935", null, "Port for flash connections");
+		cfgDao.add(CONFIG_CALENDAR_FIRST_DAY, "0", null, "The day that each week begins. The value must be a number that represents the day of the week. Sunday=0, Monday=1, Tuesday=2, etc.");
 		
 		log.debug("Configurations ADDED");
 	}
