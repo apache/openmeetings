@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.web.user.calendar;
 
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_CALENDAR_FIRST_DAY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.getClientTimeZone;
@@ -26,6 +27,7 @@ import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
 import org.apache.openmeetings.db.dao.calendar.AppointmentReminderTypDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
@@ -130,12 +132,12 @@ public class CalendarPanel extends UserPanel {
 			// first week day must be Sunday
 			days.put(0, WebSession.getString(466));
 			shortDays.put(0, WebSession.getString(459));
-			for (int i=0; i < 12; i++){
+			for (int i = 0; i < 12; i++) {
 				monthes.put(i, WebSession.getString(469 + i));
 				shortMonthes.put(i, WebSession.getString(1556 + i));
-				if (i+1 < 7){
-					days.put(i+1, WebSession.getString(460 + i));
-					shortDays.put(i+1, WebSession.getString(453 + i));					
+				if (i + 1 < 7) {
+					days.put(i + 1, WebSession.getString(460 + i));
+					shortDays.put(i + 1, WebSession.getString(453 + i));
 				}
 			}
 		} catch (JSONException e) {
@@ -145,6 +147,7 @@ public class CalendarPanel extends UserPanel {
 		options.set("monthNamesShort", shortMonthes.toString());
 		options.set("dayNames", days.toString());
 		options.set("dayNamesShort", shortDays.toString());
+		options.set("firstDay", getBean(ConfigurationDao.class).getConfValue(CONFIG_CALENDAR_FIRST_DAY, String.class, "0"));
 		
 		calendar = new Calendar("calendar", new AppointmentModel(), options) {
 			private static final long serialVersionUID = 1L;
