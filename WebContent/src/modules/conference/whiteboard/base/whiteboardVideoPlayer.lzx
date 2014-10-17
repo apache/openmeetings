@@ -251,10 +251,8 @@
     </method>
     
     <method name="toggleStream">
-    	if (canvas.ismoderator) {
-    		if (this.isPaused) {
-    			this.startStreamPlay();
-    		}
+    	if (canvas.ismoderator &amp;&amp; this.isPaused) {
+   			this.startStreamPlay();
     	}
     </method>
 	
@@ -288,7 +286,7 @@
                 this.setAttribute("bgcolor",canvas.getThemeColor('baseMouseOvercolorizer'));
             </handler>
     		<handler name="onclick">
-    			if (canvas.ismoderator) {
+    			if (canvas.ismoderator &amp;&amp; parent.parent.isPaused) {
     			     parent.parent.startStreamPlay();
     			}
     		</handler>

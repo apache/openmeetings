@@ -19,12 +19,8 @@
   
 -->
 <library>
-	
-	<include href="conference/" />
-	<include href="chat/" />
-	<include href="settings/" />
-	<include href="invitation/" />
-	<include href="dashboard/" />
-    <include href="sipintegration/" />
-	<include href="lzrecordcontent" />
+	<!-- APL author sebawagner -->
+	<resource name="flv_recorder_play_small_rsc" src="resources/webstart_play_small.png" />
+	<resource name="flv_progress_pointer_rsc" src="resources/progress_pointer.swf" />
+	<resource name="flv_recorder_stop_small_rsc" src="resources/webstart_stop_small.png" />
 </library>
