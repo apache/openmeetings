@@ -37,8 +37,11 @@ import org.apache.directory.api.ldap.model.exception.LdapAuthenticationException
 import org.apache.directory.api.ldap.model.exception.LdapException;
 import org.apache.directory.api.ldap.model.exception.LdapInvalidAttributeValueException;
 import org.apache.directory.api.ldap.model.exception.LdapInvalidDnException;
+import org.apache.directory.api.ldap.model.message.AliasDerefMode;
+import org.apache.directory.api.ldap.model.message.SearchRequestImpl;
 import org.apache.directory.api.ldap.model.message.SearchScope;
 import org.apache.directory.api.ldap.model.name.Dn;
+import org.apache.directory.ldap.client.api.EntryCursorImpl;
 import org.apache.directory.ldap.client.api.LdapConnection;
 import org.apache.directory.ldap.client.api.LdapNetworkConnection;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
@@ -68,7 +71,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  */
 public class LdapLoginManagement {
 	private static final Logger log = Red5LoggerFactory.getLogger(LdapLoginManagement.class, webAppRootKey);
-	// ConfigConstants
+	// Config constants
 	private static final String CONFIGKEY_LDAP_HOST = "ldap_conn_host";
 	private static final String CONFIGKEY_LDAP_PORT = "ldap_conn_port";
 	private static final String CONFIGKEY_LDAP_SECURE = "ldap_conn_secure";
@@ -85,6 +88,7 @@ public class LdapLoginManagement {
 	private static final String CONFIGKEY_LDAP_SEARCH_SCOPE = "ldap_search_scope";
 	private static final String CONFIGKEY_LDAP_USERDN_FORMAT = "ldap_userdn_format";
 	private static final String CONFIGKEY_LDAP_USE_ADMIN_4ATTRS = "ldap_use_admin_to_get_attrs";
+	private static final String CONFIGKEY_LDAP_DEREF_MODE = "ldap_deref_mode";
 	
 	// LDAP custom attribute mapping keys
 	private static final String CONFIGKEY_LDAP_KEY_LASTNAME = "ldap_user_attr_lastname";
@@ -199,7 +203,7 @@ public class LdapLoginManagement {
 		try {
 			type = AuthType.valueOf(ldap_auth_type);
 		} catch (Exception e) {
-			log.error("ConfigKey in Ldap Config contains invalid auth type : '%s' -> Defaulting to %s", ldap_auth_type, type);
+			log.error(String.format("ConfigKey in Ldap Config contains invalid auth type : '%s' -> Defaulting to %s", ldap_auth_type, type));
 		}
 		
 		String ldap_prov_type = config.getProperty(CONFIGKEY_LDAP_PROV_TYPE, "");
@@ -207,7 +211,15 @@ public class LdapLoginManagement {
 		try {
 			prov = Provisionning.valueOf(ldap_prov_type);
 		} catch (Exception e) {
-			log.error("ConfigKey in Ldap Config contains invalid provisionning type : '%s' -> Defaulting to %s", ldap_prov_type, prov);
+			log.error(String.format("ConfigKey in Ldap Config contains invalid provisionning type : '%s' -> Defaulting to %s", ldap_prov_type, prov));
+		}
+		
+		String ldap_deref_mode = config.getProperty(CONFIGKEY_LDAP_DEREF_MODE, "");
+		AliasDerefMode derefMode = AliasDerefMode.DEREF_ALWAYS;
+		try {
+			derefMode = AliasDerefMode.getDerefMode(ldap_deref_mode);
+		} catch (Exception e) {
+			log.error(String.format("ConfigKey in Ldap Config contains invalid deref mode : '%s' -> Defaulting to %s", ldap_deref_mode, derefMode));
 		}
 		
 		if (AuthType.NONE == type && Provisionning.NONE == prov) {
@@ -250,7 +262,14 @@ public class LdapLoginManagement {
 					Dn baseDn = new Dn(config.getProperty(CONFIGKEY_LDAP_SEARCH_BASE, ""));
 					String searchQ = String.format(config.getProperty(CONFIGKEY_LDAP_SEARCH_QUERY, "%s"), user);
 					SearchScope scope = SearchScope.valueOf(config.getProperty(CONFIGKEY_LDAP_SEARCH_SCOPE, SearchScope.ONELEVEL.name()));
-					EntryCursor cursor = conn.search(baseDn, searchQ, scope, "*");
+			        
+					EntryCursor cursor = new EntryCursorImpl(conn.search(
+							new SearchRequestImpl()
+								.setBase(baseDn)
+								.setFilter(searchQ)
+								.setScope(scope)
+								.addAttributes("*")
+								.setDerefAliases(derefMode)));
 					while (cursor.next()) {
 						try {
 							Entry e = cursor.get();
