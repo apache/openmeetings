@@ -32,7 +32,6 @@
 	
 	<body>
 		<head>
-			<link rel="stylesheet" href="http://openmeetings.apache.org/css/openmeetings.css"/>
 			<script type="text/javascript" src="http://openmeetings.apache.org/js/site.js"></script>
 		</head>
 		

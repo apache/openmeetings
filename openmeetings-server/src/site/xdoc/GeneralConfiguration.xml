@@ -38,6 +38,35 @@
 					<th> availabe since OpenMeetings version </th>
 				</tr>
 				<tr>
+					<td> dashboard.show.myrooms </td>
+					<td> 0 or 1 </td>
+					<td> Dashboard: If the MyRooms widget should be visible or not </td>
+					<td> 1.9.x </td>
+				</tr>
+				<tr>
+					<td> dashboard.show.chat </td>
+					<td> 0 or 1 </td>
+					<td> Dashboard: If the Chat widget should be visible or not </td>
+					<td> 1.9.x </td>
+				</tr>
+				<tr>
+					<td> dashboard.show.rssfeed </td>
+					<td> 0 or 1 </td>
+					<td> Dashboard: If the RSS-Feed widget should be visible or not </td>
+					<td> 1.9.x </td>
+				</tr>
+				<tr>
+					<td> rss_feed1 </td>
+					<td> http-URL </td>
+					<td> Dashboard: ATOM-Feed URL for the dashboard RSS Tab </td>
+					<td> 1.9.x </td>
+				</tr>
+				<tr>
+					<td> rss_feed2 </td>
+					<td> http-URL </td>
+					<td> Dashboard: ATOM-Feed URL for the dashboard RSS Tab </td>
+				</tr>
+				<tr>
 					<td> user.login.minimum.length </td>
 					<td> 4 </td>
 					<td> minimum chars required for the login to create a user </td>

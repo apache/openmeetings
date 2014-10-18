@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+ -->
+<document xmlns="http://maven.apache.org/XDOC/2.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/XDOC/2.0 http://maven.apache.org/xsd/xdoc-2.0.xsd">
+	<properties>
+		<title>Call For Logo</title>
+		<author email="dev@openmeetings.apache.org">OpenMeetings Team</author>
+	</properties>
+	<body>
+		<section name="OpenMeetings Call For Logo">
+			<p>
+				As you may know, Apache Openmeetings is part of the Apache Software Foundation, which is a non-profit organization.
+				In order to celebrate The Apache Software Foundation's 15th Anniversary and promote the ASF's more than 200 projects,
+				Apache has launched an effort to get folks who use Apache projects to note that by including one or more of the newly-designed
+				"Powered By Apache" logos on their websites, documentation, marketing materials, etc.<br/><br/>
+
+				Guidelines for use are available here: <a href="http://apache.org/foundation/press/kit/">http://apache.org/foundation/press/kit</a><br/><br/>
+
+				Unfortunately we have no suitable logo for this :(<br/><br/>
+
+				This page is designed to test all proposed logo and choose the best one
+			</p>			
+		</section>
+		<section name="Preview">
+			<div class="powered-preview">
+			</div>
+		</section>
+		<section name="Logos">
+			<script type="text/javascript">
+			//<![CDATA[
+				function applyLogoBig(e) {
+					var ib = e.closest('table').find('.logo-big');
+					var bi = $('#bannerLeft img');
+					bi.attr('src', ib.attr('src'));
+					bi[0].scrollIntoView();
+				}
+				function applyLogoSmall(e) {
+					var pp = $('.powered-preview');
+					var l = pp.children('.powered-preview-logo');
+					if (!l.length) {
+						l = $("<div class='powered-preview-logo'></div>");
+						pp.append(l);
+					}
+					var ib = e.closest('table').find('.logo-square');
+					l.css('background-image', 'url(' + ib.attr('src') + ')');
+					l[0].scrollIntoView();
+				}
+			//]]>
+			</script>
+			<ol>
+				<li>
+					<table>
+						<tr>
+							<th colspan="3">Current Logo:</th>
+						</tr>
+						<tr>
+							<td>Big version</td>
+							<td><img class="logo-big" src="images/logo-2.jpg" alt="Apache OpenMeetings"/></td>
+							<td><button class="btn btn-primary" onclick="applyLogoBig($(this));"/>Apply</td>
+						</tr>
+						<tr>
+							<td>Square version</td>
+							<td><img class="logo-square" src="images/logos/logo_om1.png" alt="Square version" width="50"/></td>
+							<td><button class="btn btn-primary" onclick="applyLogoSmall($(this));"/>Apply</td>
+						</tr>
+						<tr>
+							<td>Author</td>
+							<td>Alvaro Bustos, Denis Kandrov</td>
+							<td>&nbsp;</td>
+						</tr>
+					</table>
+				</li>
+				<li>
+					<table>
+						<tr>
+							<th colspan="3">Logo 1:</th>
+						</tr>
+						<tr>
+							<td>Big version</td>
+							<td><img class="logo-big" src="images/logos/logo_om_big2.jpg" alt="Apache OpenMeetings"/></td>
+							<td><button class="btn btn-primary" onclick="applyLogoBig($(this));"/>Apply</td>
+						</tr>
+						<tr>
+							<td>Square version</td>
+							<td><img class="logo-square" src="images/logos/logo_om_small2.png" alt="Square version" width="50"/></td>
+							<td><button class="btn btn-primary" onclick="applyLogoSmall($(this));"/>Apply</td>
+						</tr>
+						<tr>
+							<td>Author</td>
+							<td>Alvaro Bustos</td>
+							<td>&nbsp;</td>
+						</tr>
+					</table>
+				</li>
+			</ol>
+		</section>
+	</body>
+</document>

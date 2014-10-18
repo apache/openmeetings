@@ -17,9 +17,7 @@
   xsi:schemaLocation="http://maven.apache.org/XDOC/2.0 http://maven.apache.org/xsd/xdoc-2.0.xsd">
 	<properties>
 		<title>Redmine Plugin</title>
-		<author email="solomax@apache.org">
-			OpenMeetings Team
-		</author>
+		<author email="dev@openmeetings.apache.org">OpenMeetings Team</author>
 	</properties>
 	<body>
 		<section name="OpenMeetings Plugin for Redmine">

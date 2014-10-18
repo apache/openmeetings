@@ -111,84 +111,104 @@
 		</section>
 
 		<section name="News">
-			<p>
-				<strong>Version 3.0.3 released!</strong> See <a href="downloads.html">Downloads page</a>. (2014-09-05)
-			</p>
-			<p>
-				<strong>Version 3.0.2 released!</strong> See <a href="downloads.html">Downloads page</a>. (2014-06-04)
-			</p>
-			<p>
-				<strong>Version 3.0.1 released!</strong> See <a href="downloads.html">Downloads page</a>. (2014-04-18)
-			</p>
-			<p>
-				<strong>Version 3.0.0 released!</strong> See <a href="downloads.html">Downloads page</a>. (2014-03-07)
-			</p>
-			<p>
-				<strong>Version 2.2.0 released!</strong> See <a href="downloads.html">Downloads page</a>. (2013-12-12)
-			</p>
-			<p>
-				<strong>Version 2.1.1 released!</strong> See <a href="https://blogs.apache.org/openmeetings/entry/apache_openmeetings_2_1_11" target="_blank">Project Blog</a>
-					or <a href="downloads.html">Downloads page</a>. (2013-07-06)
-			</p>
-			<p>
-				<strong>OpenMeetings 2.1.0 is released!</strong> Please check <a href="downloads.html">Downloads page</a>. (2013-04-01)
-			</p>
-			<p>
-				<strong>OpenMeetings new URL, update your filters!</strong>
-					<a href="http://openmeetings.apache.org">openmeetings.apache.org</a> is the new home. (2013-01-28)
-			</p>
-			<p>
-				<strong>OpenMeetings on the road to graduate from the Incubator</strong>
-					<a href="https://blogs.apache.org/openmeetings/entry/openmeetings_on_the_road_to" target="_blank" rel="nofollow">at our blog</a>
-					(2012-12-07)
-			</p>
-			<p>
-				<strong>Some slides from our Fast Feather Track at the ApacheCon Europe 2012</strong>
-					<a href="https://blogs.apache.org/openmeetings/entry/openmeetings_apachecon_presentation_slide" target="_blank"
-						rel="nofollow">at our blog</a> (2012-11-18)
-			</p>
-			<p>
-				<strong>Update: Builds are available at</strong>
-					<a href="https://builds.apache.org/view/M-R/view/OpenMeetings/" target="_blank" rel="nofollow">builds.apache.org</a>
-					(2012-08-03)
-			</p>
-			<p>
-				<strong>
+			<div class="bs-callout bs-callout-danger">
+				<b>Version 3.0.3 released!</b>
+				<span>Service release 3 for 3.0.0, no new features were added, <br/>
+					More than 60 issues are fixed, recordings stability is improved, LDAP support is enhanced<br/>
+					please check <a href="https://www.apache.org/dist/openmeetings/3.0.3/CHANGELOG">CHANGELOG</a> for details
+				</span>
+				<span> See <a href="downloads.html">Downloads page</a>.</span>
+				<span class="alert alert-error">please <b>NOTE</b> Java7 is required on both client and server from now on</span>
+				<span class="date">(2014-09-05)</span>
+			</div>
+			<div class="bs-callout bs-callout-info">
+				<b>Version 3.0.2 released!</b>
+				<span>See <a href="http://archive.apache.org/dist/openmeetings/3.0.2">Archived download</a>.</span>
+				<span class="date">(2014-06-04)</span>
+			</div>
+			<div class="bs-callout bs-callout-info">
+				<b>Version 3.0.1 released!</b>
+				<span>See <a href="http://archive.apache.org/dist/openmeetings/3.0.1">Archived download</a>.</span>
+				<span class="date">(2014-04-18)</span>
+			</div>
+			<div class="bs-callout bs-callout-info">
+				<b>Version 3.0.0 released!</b>
+				<span>See <a href="http://archive.apache.org/dist/openmeetings/3.0.0">Archived download</a>.</span>
+				<span class="date">(2014-03-07)</span>
+			</div>
+			<div class="bs-callout bs-callout-info">
+				<b>Version 2.2.0 released!</b>
+				<span>See <a href="http://archive.apache.org/dist/openmeetings/2.2.0">Archived download</a>.</span>
+				<span class="date">(2013-12-12)</span>
+			</div>
+			<div class="bs-callout bs-callout-info">
+				<b>Version 2.1.1 released!</b>
+				<span>See <a href="https://blogs.apache.org/openmeetings/entry/apache_openmeetings_2_1_11" target="_blank">Project Blog</a>
+					or <a href="http://archive.apache.org/dist/openmeetings/2.1.1">Archived download</a>.</span>
+				<span class="date">(2013-07-06)</span>
+			</div>
+			<div class="bs-callout bs-callout-info">
+				<b>OpenMeetings 2.1.0 is released!</b>
+				<span>Please check <a href="http://archive.apache.org/dist/openmeetings/2.1.0">Archived download</a>.</span>
+				<span class="date">(2013-04-01)</span>
+			</div>
+			<div class="bs-callout bs-callout-info">
+				<b>OpenMeetings new URL, update your filters!</b>
+				<span><a href="http://openmeetings.apache.org">openmeetings.apache.org</a> is the new home.</span>
+				<span class="date">(2013-01-28)</span>
+			</div>
+			<div class="bs-callout bs-callout-info">
+				<b>OpenMeetings on the road to graduate from the Incubator</b>
+				<span><a href="https://blogs.apache.org/openmeetings/entry/openmeetings_on_the_road_to" target="_blank" rel="nofollow">at our blog</a></span>
+				<span class="date">(2012-12-07)</span>
+			</div>
+			<div class="bs-callout bs-callout-info">
+				<b>Some slides from our Fast Feather Track at the ApacheCon Europe 2012</b>
+				<span><a href="https://blogs.apache.org/openmeetings/entry/openmeetings_apachecon_presentation_slide" target="_blank"
+						rel="nofollow">at our blog</a></span>
+				<span class="date">(2012-11-18)</span>
+			</div>
+			<div class="bs-callout bs-callout-info">
+				<b>Update: Builds are available at</b>
+				<span><a href="https://builds.apache.org/view/M-R/view/OpenMeetings/" target="_blank" rel="nofollow">builds.apache.org</a></span>
+				<span class="date">(2012-08-03)</span>
+			</div>
+			<div class="bs-callout bs-callout-info">
+				<b>
 					<a href="https://blogs.apache.org/openmeetings/entry/apache_openmeetings_2_0_incubating" target="_blank" rel="nofollow">Version
 						2.0 released</a>
-					(2012-07-26)
-				</strong>
-			</p>
-			<p>
-				<strong>New committer: Timur Tleukenov (2012-03-06)</strong>
-			</p>
-			<p>
-				<strong>
+				</b>
+				<span class="date">(2012-07-26)</span>
+			</div>
+			<div class="bs-callout bs-callout-info">
+				<b>New committer: Timur Tleukenov</b>
+				<span class="date">(2012-03-06)</span>
+			</div>
+			<div class="bs-callout bs-callout-info">
+				<b>
 					<a href="https://demo-openmeetings.apache.org/openmeetings" target="_blank" rel="nofollow">Demo server</a>
-					updated to r1236172 (2012-01-26)
-				</strong>
-			</p>
-			<p>
-				<strong>New committer: German Grekhov (2011-12-26)</strong>
-			</p>
-			<p>
-				<strong>OpenMeetings has been accepted into the Apache Incubator (2011-11-12).</strong>
-			</p>
-
+					updated to r1236172
+				</b>
+				<span class="date">(2012-01-26)</span>
+			</div>
+			<div class="bs-callout bs-callout-info">
+				<b>New committer: German Grekhov</b>
+				<span class="date">(2011-12-26)</span>
+			</div>
+			<div class="bs-callout bs-callout-info">
+				<b>OpenMeetings has been accepted into the Apache Incubator.</b>
+				<span class="date">(2011-11-12)</span>
+			</div>
 		</section>
 
 		<section name="Community">
-			<div>
-				<strong>Who we are</strong>
-				<blockquote>
-					<a href="team-list.html">List of committers</a>.
-				</blockquote>
+			<div class="bs-callout bs-callout-info">
+				<b>Who we are</b>
+				<span><a href="team-list.html">List of committers</a>.</span>
 			</div>
-			<div>
-				<strong>Users!</strong>
-				<blockquote>
-					We'd love to have you involved. Check out the <a href="get-involved.html">Get involved</a>.
-				</blockquote>
+			<div class="bs-callout bs-callout-info">
+				<b>Users!</b>
+				<span>We'd love to have you involved. Check out the <a href="get-involved.html">Get involved</a>.</span>
 			</div>
 		</section>
 

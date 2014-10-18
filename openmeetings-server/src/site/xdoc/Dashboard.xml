@@ -33,41 +33,34 @@
 			<p></p>
 			<table>
 				<tr>
-					<th style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> Config-key </th>
-					<th style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> Values </th>
-					<th style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> Meaning </th>
+					<th> Config-key </th>
+					<th> Values </th>
+					<th> Meaning </th>
 				</tr>
 				<tr>
-					<td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> default.dashboard.tab </td>
-					<td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> 0,1,2 </td>
-					<td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> Which tab should be shown by default, counting
-						starts with 0
-					</td>
+					<td> dashboard.show.myrooms </td>
+					<td> 0 or 1 </td>
+					<td> If the MyRooms tab should be visible or not </td>
 				</tr>
 				<tr>
-					<td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> dashboard.show.myrooms </td>
-					<td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> 0 or 1 </td>
-					<td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> If the MyRooms tab should be visible or not </td>
+					<td> dashboard.show.chat </td>
+					<td> 0 or 1 </td>
+					<td> If the Chat tab should be visible or not </td>
 				</tr>
 				<tr>
-					<td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> dashboard.show.chat </td>
-					<td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> 0 or 1 </td>
-					<td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> If the Chat tab should be visible or not </td>
+					<td> dashboard.show.rssfeed </td>
+					<td> 0 or 1 </td>
+					<td> If the RSS-Feed tab should be visible or not </td>
 				</tr>
 				<tr>
-					<td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> dashboard.show.rssfeed </td>
-					<td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> 0 or 1 </td>
-					<td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> If the RSS-Feed tab should be visible or not </td>
+					<td> rss_feed1 </td>
+					<td> http-URL </td>
+					<td> ATOM-Feed URL for the dashboard RSS Tab </td>
 				</tr>
 				<tr>
-					<td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> rss_feed1 </td>
-					<td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> http-URL </td>
-					<td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> ATOM-Feed URL for the dashboard RSS Tab </td>
-				</tr>
-				<tr>
-					<td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> rss_feed2 </td>
-					<td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> http-URL </td>
-					<td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> ATOM-Feed URL for the dashboard RSS Tab </td>
+					<td> rss_feed2 </td>
+					<td> http-URL </td>
+					<td> ATOM-Feed URL for the dashboard RSS Tab </td>
 				</tr>
 			</table>
 			<p></p>
