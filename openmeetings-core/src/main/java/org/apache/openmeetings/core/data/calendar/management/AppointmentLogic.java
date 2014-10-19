@@ -325,6 +325,9 @@ public class AppointmentLogic {
 		a.setPassword(password);
 		a.setMeetingMembers(new ArrayList<MeetingMember>());
 		for (String singleClient : mmClient) {
+			if (Strings.isEmpty(singleClient)) {
+				continue;
+			}
 			MeetingMember mm = getMeetingMember(users_id, languageId, singleClient);
 			mm.setAppointment(a);
 			a.getMeetingMembers().add(mm);

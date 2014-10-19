@@ -87,7 +87,7 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 	private DialogButton delete = new DialogButton(deleteLbl);
 	private String enterRoomLbl = WebSession.getString(1282);
 	private DialogButton enterRoom = new DialogButton(enterRoomLbl);
-	private final CalendarPanel calendar;
+	private final CalendarPanel calendarPanel;
 	protected final FeedbackPanel feedback;
 	final MessageDialog confirmDelete;
 	private IModel<Collection<User>> attendeesModel = new CollectionModel<User>(new ArrayList<User>());
@@ -112,10 +112,10 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 		super.setModelObject(object);
 	}
 	
-	public AppointmentDialog(String id, String title, CalendarPanel calendar, IModel<Appointment> model) {
+	public AppointmentDialog(String id, String title, CalendarPanel calendarPanel, IModel<Appointment> model) {
 		super(id, title, model, true);
 		log.debug(" -- AppointmentDialog -- Current model " + getModel().getObject());
-		this.calendar = calendar;
+		this.calendarPanel = calendarPanel;
 		setOutputMarkupId(true);
 		feedback = new FeedbackPanel("feedback");
 		form = new AppointmentForm("appForm", model);
@@ -134,7 +134,7 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 
 	protected void deleteAppointment(AjaxRequestTarget target) {
 		getBean(AppointmentDao.class).delete(getModelObject(), getUserId());
-		calendar.refresh(target);		
+		calendarPanel.refresh(target);		
 	}
 
 	@Override
@@ -208,7 +208,7 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
         a.setMeetingMembers(attendees);
         getBean(AppointmentDao.class).update(a, getUserId());
 		target.add(feedback);
-		calendar.refresh(target);
+		calendarPanel.refresh(target);
 	}
 	
 	public static boolean isOwner(Appointment object) {
@@ -222,6 +222,11 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 		private DateTimePicker end;
 		private final PasswordTextField pwd = new PasswordTextField("password");
 		private final Label owner = new Label("owner");
+		private final DropDownChoice<RoomType> roomType = new RoomTypeDropDown("room.roomtype");
+		private final DropDownChoice<Room> room = new DropDownChoice<Room>(
+				"room"
+				, getRoomList()
+				, new ChoiceRenderer<Room>("name", "id"));
 
 		@Override
 		protected void onModelChanged() {
@@ -242,6 +247,9 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 			if (a.getRoom().getRoomtype() == null && !roomTypes.isEmpty()) {
 				a.getRoom().setRoomtype(roomTypes.get(0));
 			}
+			createRoom = Boolean.TRUE.equals(a.getRoom().getAppointment());
+			roomType.setEnabled(createRoom);
+			room.setEnabled(!createRoom);
 			if (a.getId() == null) {
 				java.util.Calendar start = WebSession.getCalendar();
 				start.setTime(a.getStart());
@@ -287,15 +295,10 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 					, remindTypes
 					, new ChoiceRenderer<AppointmentReminderType>("label.value", "id")));
 			
-			final DropDownChoice<RoomType> roomType = new RoomTypeDropDown("room.roomtype");
 			roomType.setEnabled(createRoom);
 			roomType.setOutputMarkupId(true);
 			add(roomType);
 			
-			final DropDownChoice<Room> room = new DropDownChoice<Room>(
-					"room"
-					, getRoomList()
-					, new ChoiceRenderer<Room>("name", "id"));
 			room.setEnabled(!createRoom);
 			room.setOutputMarkupId(true);
 			add(room);

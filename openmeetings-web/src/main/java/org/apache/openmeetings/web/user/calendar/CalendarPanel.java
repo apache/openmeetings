@@ -89,6 +89,10 @@ public class CalendarPanel extends UserPanel {
 		calendar.refresh(target);
 	}
 	
+	Calendar getCalendar() {
+		return calendar;
+	}
+	
 	@Override
 	public void renderHead(IHeaderResponse response) {
 		super.renderHead(response);
