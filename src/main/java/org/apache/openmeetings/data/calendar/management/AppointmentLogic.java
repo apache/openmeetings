@@ -49,6 +49,7 @@ import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.util.TimezoneUtil;
 import org.apache.openmeetings.util.CalendarPatterns;
+import org.apache.wicket.util.string.Strings;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -327,6 +328,9 @@ public class AppointmentLogic {
 		a.setPassword(password);
 		a.setMeetingMembers(new ArrayList<MeetingMember>());
 		for (String singleClient : mmClient) {
+			if (Strings.isEmpty(singleClient)) {
+				continue;
+			}
 			MeetingMember mm = getMeetingMember(users_id, languageId, singleClient);
 			mm.setAppointment(a);
 			a.getMeetingMembers().add(mm);
