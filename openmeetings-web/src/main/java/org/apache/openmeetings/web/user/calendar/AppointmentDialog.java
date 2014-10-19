@@ -247,7 +247,7 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 			if (a.getRoom().getRoomtype() == null && !roomTypes.isEmpty()) {
 				a.getRoom().setRoomtype(roomTypes.get(0));
 			}
-			createRoom = Boolean.TRUE.equals(a.getRoom().getAppointment());
+			createRoom = a.getRoom().isAppointment();
 			roomType.setEnabled(createRoom);
 			room.setEnabled(!createRoom);
 			if (a.getId() == null) {
