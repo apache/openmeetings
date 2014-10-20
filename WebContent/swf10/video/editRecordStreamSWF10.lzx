@@ -160,10 +160,6 @@
 		
 		//In case the user presses the Sync Button this box should
         //not close automatically and do the user-prefered values
-        if (canvas.currentRoomObject.roomtype.roomtypes_id == 3) {
-        	//restricted room
-        	return null;
-        }
 		if(save && !this.isSyncUpdate && this.checkLocalDataComplete()) {
 		    return g;
 		}

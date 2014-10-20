@@ -385,8 +385,7 @@
         <labelTooltip labelid="1213" />
     </miniIcons>              
     
-	<miniIcons name="_start_private_chat_rsc" x="172" y = "2" width="16" height="16"
-		resource="start_private_chat_rsc" showhandcursor="true">
+	<miniIcons name="_start_private_chat_rsc" x="172" y="2" width="16" height="16" resource="start_private_chat_rsc" showhandcursor="true">
 		
 		<handler name="onclick">
 			var refObj = parent.parent.parent.refObj;
