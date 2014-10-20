@@ -509,12 +509,13 @@
     </method>
 
 	<method name="immediateExitRoom" args="bool,ctx">
-		<![CDATA[
+	<![CDATA[
 		canvas.videoComp_lc.send(canvas.videoComp_lc_name, 'exitRoom', bool);
 		if (canvas.wicketsid != null && bool) {
+			clearAll();
 			flash.external.ExternalInterface.call("roomExit");
 		}
-		]]>
+	]]>
 	</method>
 
 	<method name="updateFirstLastName" args="publicSID,first,last">
