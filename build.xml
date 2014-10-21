@@ -556,7 +556,7 @@
 		</genkey>
 	</target>
 	
-	<target name="signWebStartJars" depends="generateSignKey,jar.screen.share">
+	<target name="repackWebStartJars" depends="jar.screen.share">
 		<taskdef resource="net/sf/antcontrib/antlib.xml">
 			<classpath refid="check.classpath" />
 		</taskdef>
@@ -566,6 +566,9 @@
 				<exclude name="*openmeetings*.jar"/>
 			</fileset>
 		</foreach>
+	</target>
+	
+	<target name="signWebStartJars" depends="generateSignKey,repackWebStartJars">
 		<signjar alias="${screensharing.keystore.alias}" keystore="${keystore.file}" storepass="${screensharing.keystore.password}"
 			lazy="false" sigalg="MD5withRSA" digestalg="SHA1">
 			<path>
