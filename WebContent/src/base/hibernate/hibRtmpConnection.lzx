@@ -225,7 +225,7 @@
 				           lz.ModeManager.releaseAll();
 				       }
 				       if ($debug) Debug.write("Error dialog is being closed, calling QUIT");
-				       canvas.doActionmenu('quit');
+				       canvas.sendViaLocalConnection(canvas.vid_lc_name, "immediateExitRoom", [true,null]);
 					}
 				});
 			this.showFullMessage = false;

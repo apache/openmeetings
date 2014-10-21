@@ -502,8 +502,14 @@
                 } else if (stringSub=='showSipDialer') {
                     new lz.sipDialer(canvas.main_content._content.inner);
                 } else if (stringSub=='quit') {
-                    canvas.thishib.disconnect();
-                    canvas.sendViaLocalConnection(canvas.vid_lc_name, "immediateExitRoom", [true,null]);
+					canvas.videoComp_lc.exitRoom = null;
+					canvas.thishib.src = null;
+					canvas.thishib.reconnectionAction = false;
+					canvas.thishib.reconnectAfterRoomleft = false;
+					canvas.thishib.counterror = 100;
+					canvas.thishib.disconnect();
+					canvas.thishib._nc.close();
+					flash.external.ExternalInterface.call("roomExit");
                 } else if( stringSub == "browser_open" ){
                     var browserPanelWidth  = canvas.browserPanelWidth;
                     var browserPanelHeight = canvas.browserPanelHeight;

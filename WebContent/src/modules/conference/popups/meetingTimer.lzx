@@ -50,7 +50,7 @@
                 lz.Timer.addTimer( new LzDelegate( this, "fadeText" ), 1000 );
             } else {
                 if ($debug) Debug.write("DEMO IS OVER ");
-                canvas.doActionmenu('quit');
+                canvas.sendViaLocalConnection(canvas.vid_lc_name, "immediateExitRoom", [true,null]);
             }
         ]]>
     </method>

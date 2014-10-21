@@ -510,10 +510,17 @@
 
 	<method name="immediateExitRoom" args="bool,ctx">
 	<![CDATA[
-		canvas.videoComp_lc.send(canvas.videoComp_lc_name, 'exitRoom', bool);
+		if($debug) Debug.write("0");
 		if (canvas.wicketsid != null && bool) {
+			if($debug) Debug.write("1");
 			clearAll();
-			flash.external.ExternalInterface.call("roomExit");
+			if($debug) Debug.write("2");
+			canvas.videoComp_lc.send(canvas.videoComp_lc_name, 'exitRoom', bool);
+			if($debug) Debug.write("3");
+			if($debug) Debug.write("Do disconnect 10:: ", canvas.thishib);
+			canvas.thishib.src = null;
+			canvas.thishib.disconnect();
+			canvas.thishib._nc.close();
 		}
 	]]>
 	</method>
