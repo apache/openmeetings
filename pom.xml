@@ -224,11 +224,18 @@
 			<archive>http://mail-archives.apache.org/mod_mbox/openmeetings-user</archive>
 		</mailingList>
 		<mailingList>
-			<name>Spanish User List</name>
+			<name>Lista de usuarios en español</name>
 			<post>user-espanol@openmeetings.apache.org</post>
 			<subscribe>user-espanol-subscribe@openmeetings.apache.org</subscribe>
 			<unsubscribe>user-espanol-unsubscribe@openmeetings.apache.org</unsubscribe>
 			<archive>http://mail-archives.apache.org/mod_mbox/openmeetings-user-espanol</archive>
+		</mailingList>
+		<mailingList>
+			<name>Русский список рассылки</name>
+			<post>user-russian@openmeetings.apache.org</post>
+			<subscribe>user-russian-subscribe@openmeetings.apache.org</subscribe>
+			<unsubscribe>user-russian-unsubscribe@openmeetings.apache.org</unsubscribe>
+			<archive>http://mail-archives.apache.org/mod_mbox/openmeetings-user-russian</archive>
 		</mailingList>
 		<mailingList>
 			<name>Development List</name>
