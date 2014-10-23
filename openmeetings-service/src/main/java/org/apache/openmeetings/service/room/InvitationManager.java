@@ -19,6 +19,7 @@
 package org.apache.openmeetings.service.room;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.wicketApplicationName;
 
 import java.security.NoSuchAlgorithmException;
 import java.util.Calendar;
@@ -226,7 +227,7 @@ public class InvitationManager implements IInvitationManager {
 	}
 	
 	public void sendInvitionLink(Invitation i, MessageType type, String subject, String message, boolean ical) throws Exception {
-		String invitation_link = ((IApplication)Application.get()).getOmInvitationLink(configDao.getBaseUrl(), i); //TODO check for exceptions
+		String invitation_link = ((IApplication)Application.get(wicketApplicationName)).getOmInvitationLink(configDao.getBaseUrl(), i); //TODO check for exceptions
 		User owner = i.getInvitedBy();
 		
 		String invitorName = owner.getFirstname() + " " + owner.getLastname();

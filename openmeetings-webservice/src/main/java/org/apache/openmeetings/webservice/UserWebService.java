@@ -23,7 +23,6 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import java.util.ArrayList;
 import java.util.Date;
 
-import javax.jws.WebMethod;
 import javax.jws.WebService;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
