@@ -294,6 +294,10 @@ public class OmUrlFragment implements Serializable {
 	}
 	
 	public String getLink() {
-		return getBean(ConfigurationDao.class).getBaseUrl() + "#" + getArea().name() + "/" + getType();
+		return getLink(getBean(ConfigurationDao.class).getBaseUrl());
+	}
+
+	public String getLink(String baseUrl) {
+		return baseUrl + "#" + getArea().name() + "/" + getType();
 	}
 }
