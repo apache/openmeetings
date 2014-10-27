@@ -58,4 +58,10 @@ $(document).ready(function() {
 		$('.carousel-control.right', c).attr('data-slide', 'next');
 		c.attr('data-ride', 'carousel').addClass('carousel slide');
 	}
+	// "New" markers
+	var topics = ["We need you", "Call For Logo"];
+	for (var i = 0; i < topics.length; ++i) {
+		$('ul.nav.nav-list ul.nav.nav-list li:contains("' + topics[i] + '") a').append('&nbsp;&nbsp;<span class="label label-success">New</span>');
+	}
+	$('ul.breadcrumb li:contains("We need you") a').prepend('&nbsp;&nbsp;<span class="label label-success">New</span>');
 })

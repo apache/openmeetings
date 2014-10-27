@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+ -->
+<document xmlns="http://maven.apache.org/XDOC/2.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/XDOC/2.0 http://maven.apache.org/xsd/xdoc-2.0.xsd">
+	<properties>
+		<title>Upgrade</title>
+		<author email="dev@openmeetings.apache.org">OpenMeetings Team</author>
+	</properties>
+	<body>
+		<section name="Openmeetings Needs Your Support">
+			<p>Please take the time to complete this survey:<br/> 
+				English: <a href="http://goo.gl/forms/rfuMrwCRC4">Survey in English</a><br/>
+				Spanish: <a href="https://docs.google.com/forms/d/1STqC3XblHlOJjnfIfBGqQTdj5DQk7qes5rL_UjaxeBg/viewform">Survey in Spanish</a><br/>
+			</p>
+			<p>As active members of the OpenMeetings community we are asking for your support to implement a broad initiative which focuses 
+				on transforming OpenMeetings into a highly reliable and robust open-source video conferencing platform.  
+				Like many users we have been frustrated by the pace of development, the quality of documentation, issues 
+				surrounding installation, upgrading to the next release, audio and video quality, and reliability.
+			</p>
+			<p>The goal of this initiative is to ensure the following happens within the near future:</p>
+			<ol>
+				<li>Maintenance and support for three (3) active demo instances hosted by a reliable vendor such as Amazon 
+					Web Services and which includes, at least, visual access to the Administrative Interface.
+					<ul>
+						<li>The current release - Open to the public and perhaps limited by the number of people allowed in a meeting.</li>
+						<li>The next release - Open only to users that agree to help test, committers, and commercial sponsors. 
+							The purpose of this environment is to provide a controllable version for which QA testing as a community can be accomplish</li>
+						<li>Sandbox for committers to test new code.  Open to Committers and Commercial sponsors.</li>
+					</ul>
+				</li>
+				<li>Organize the community into four groups:
+					<ul>
+						<li>Users</li>
+						<li>Committers</li>
+						<li>Testers</li>
+						<li>Commercial Sponsors (those who pay a very small monthly fee to gain access and advertising exposure - for example, 
+							$10 dollars/euros per month)</li>
+					</ul>
+				</li>
+				<li>Create a system so that donations to the OM Community can easily be made to support the demo environments and to hire 
+					engineers to code specific parts of the OM platform to ensure OM stays viable.</li>
+				<li>Set formal rules on deciding what features make it into the next release and which plugins and operating systems are to be formally supported.</li>
+				<li>Set formal rules on requirements for realizing a new version to include:
+					<ul>
+						<li>Clear and easy path to upgrade from the previous version</li>
+						<li>Robust testing of all features and interfaces</li>
+						<li>Capacity/Stress testing</li>
+					</ul>
+				</li>
+				<li>Identify all organizations currently using OM with details about their installation and a up-to-date contact person.</li>
+				<li>Ensure that OM is quickly transformed into a 100% HTML5 framework and that all OpenLazlo code is removed.</li>
+			</ol>
+			<p>We would like your suggestions on how to make OM better and ask that you complete the OM user survey by clicking here.
+				Each person who completes the survey will receive the results via email.</p>
+			<p>Thank-you for your support.</p>
+		</section>
+	</body>
+</document>

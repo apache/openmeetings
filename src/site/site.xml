@@ -12,8 +12,8 @@
    See the License for the specific language governing permissions and
    limitations under the License.
  -->
-<project xmlns="http://maven.apache.org/DECORATION/1.4.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/DECORATION/1.4.0 http://maven.apache.org/xsd/decoration-1.4.0.xsd"
+<project xmlns="http://maven.apache.org/DECORATION/1.6.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/DECORATION/1.6.0 http://maven.apache.org/xsd/decoration-1.6.0.xsd"
   name="Apache OpenMeetings Project">
 
     <bannerLeft>
@@ -36,6 +36,7 @@
 		</head>
 		
 		<links>
+			<item name="We need you" href="http://openmeetings.apache.org/WeNeedYou.html"/>
 			<item name="Demo" href="http://openmeetings.apache.org/demo.html"/>
 			<item name="Download" href="http://openmeetings.apache.org/downloads.html"/>
 			<item name="Installation" href="http://openmeetings.apache.org/installation.html"/>
