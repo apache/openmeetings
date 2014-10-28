@@ -60,70 +60,68 @@
 				}
 			//]]>
 			</script>
+			<h3>Big version</h3>
 			<ol>
 				<li>
 					<table>
 						<tr>
-							<th colspan="3">Current Logo:</th>
-						</tr>
-						<tr>
-							<td>Big version</td>
 							<td><img class="logo-big" src="images/logo-2.jpg" alt="Apache OpenMeetings"/></td>
 							<td><button class="btn btn-primary" onclick="applyLogoBig($(this));"/>Apply</td>
 						</tr>
 						<tr>
-							<td>Square version</td>
-							<td><img class="logo-square" src="images/logos/logo_om1.png" alt="Square version" width="50"/></td>
-							<td><button class="btn btn-primary" onclick="applyLogoSmall($(this));"/>Apply</td>
-						</tr>
-						<tr>
 							<td>Author</td>
-							<td>Alvaro Bustos, Denis Kandrov</td>
-							<td>&nbsp;</td>
+							<td>Alvaro Bustos</td>
 						</tr>
 					</table>
 				</li>
 				<li>
 					<table>
 						<tr>
-							<th colspan="3">Logo 1:</th>
-						</tr>
-						<tr>
-							<td>Big version</td>
 							<td><img class="logo-big" src="images/logos/logo_om_big2.jpg" alt="Apache OpenMeetings"/></td>
 							<td><button class="btn btn-primary" onclick="applyLogoBig($(this));"/>Apply</td>
 						</tr>
 						<tr>
-							<td>Square version</td>
+							<td>Author</td>
+							<td>Alvaro Bustos</td>
+						</tr>
+					</table>
+				</li>
+				<li>
+					<table>
+						<tr>
+							<td><img class="logo-big" src="images/logos/logo_om_big3.png" alt="Apache OpenMeetings"/></td>
+							<td><button class="btn btn-primary" onclick="applyLogoBig($(this));"/>Apply</td>
+						</tr>
+						<tr>
+							<td>Author</td>
+							<td>Vital Trizna</td>
+						</tr>
+					</table>
+				</li>
+			</ol>
+			<h3>Square version</h3>
+			<ol>
+				<li>
+					<table>
+						<tr>
+							<td><img class="logo-square" src="images/logos/logo_om1.png" alt="Square version" width="50"/></td>
+							<td><button class="btn btn-primary" onclick="applyLogoSmall($(this));"/>Apply</td>
+						</tr>
+						<tr>
+							<td>Author</td>
+							<td>Denis Kandrov</td>
+						</tr>
+					</table>
+				</li>
+				<li>
+					<table>
+						<tr>
 							<td><img class="logo-square" src="images/logos/logo_om_small2.png" alt="Square version" width="50"/></td>
 							<td><button class="btn btn-primary" onclick="applyLogoSmall($(this));"/>Apply</td>
 						</tr>
 						<tr>
 							<td>Author</td>
 							<td>Alvaro Bustos</td>
-							<td>&nbsp;</td>
-						</tr>
-					</table>
-				</li>
-				<li>
-					<table>
-						<tr>
-							<th colspan="3">Logo 1:</th>
-						</tr>
-						<tr>
-							<td>Big version</td>
-							<td><img class="logo-big" src="images/logos/logo_om_big3.png" alt="Apache OpenMeetings"/></td>
-							<td><button class="btn btn-primary" onclick="applyLogoBig($(this));"/>Apply</td>
-						</tr>
-						<!-- tr>
-							<td>Square version</td>
-							<td><img class="logo-square" src="images/logos/logo_om_small2.png" alt="Square version" width="50"/></td>
-							<td><button class="btn btn-primary" onclick="applyLogoSmall($(this));"/>Apply</td>
-						</tr-->
-						<tr>
-							<td>Author</td>
-							<td>Vital Trizna</td>
-							<td>&nbsp;</td>
 						</tr>
 					</table>
 				</li>
