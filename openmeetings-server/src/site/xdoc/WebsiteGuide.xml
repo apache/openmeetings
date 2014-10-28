@@ -16,21 +16,18 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://maven.apache.org/XDOC/2.0 http://maven.apache.org/xsd/xdoc-2.0.xsd">
 	<properties>
-		<title>Release Guide</title>
-		<author email="sebawagner@apache.org">
-			OpenMeetings Team
-		</author>
+		<title>Website Guide</title>
+		<author email="dev@openmeetings.apache.org">OpenMeetings Team</author>
 	</properties>
 
 	<body>
 
 		<section name="How to update Apache OpenMeetings website">
-
 			<subsection name="Required tools">
 				<div>
 					<ul>
-						<li>Sun JDK6 or 7</li>
-						<li>Apache ANT (1.8.3 or later)</li>
+						<li>Sun JDK7</li>
+						<li>Apache Maven (3.2.1 or later)</li>
 					</ul>
 				</div>
 			</subsection>
@@ -39,8 +36,8 @@
 				<div>
 					<p>
 						The Apache OpenMeetings HTML websites are generated from XML files. 
-						You edit the XML files, run the ANT command "ant anakia" that generates the HTML files 
-						and then you checkin to SVN both: XML and HTML files.
+						You edit the XML files, run the MAVEN command <source><![CDATA[mvn install -Dunpacked=true]]></source> that generates the HTML files 
+						and then you copy generated HTML files into appropriate place and commit to SVN both: XML and HTML files.
 					</p>
 					<p>
 						The website itself uses JQuery to generate the menu, the pop images and the image slider at the landing page.
