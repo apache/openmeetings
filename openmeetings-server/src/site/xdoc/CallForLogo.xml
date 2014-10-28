@@ -105,6 +105,28 @@
 						</tr>
 					</table>
 				</li>
+				<li>
+					<table>
+						<tr>
+							<th colspan="3">Logo 1:</th>
+						</tr>
+						<tr>
+							<td>Big version</td>
+							<td><img class="logo-big" src="images/logos/logo_om_big3.png" alt="Apache OpenMeetings"/></td>
+							<td><button class="btn btn-primary" onclick="applyLogoBig($(this));"/>Apply</td>
+						</tr>
+						<!-- tr>
+							<td>Square version</td>
+							<td><img class="logo-square" src="images/logos/logo_om_small2.png" alt="Square version" width="50"/></td>
+							<td><button class="btn btn-primary" onclick="applyLogoSmall($(this));"/>Apply</td>
+						</tr-->
+						<tr>
+							<td>Author</td>
+							<td>Vital Trizna</td>
+							<td>&nbsp;</td>
+						</tr>
+					</table>
+				</li>
 			</ol>
 		</section>
 	</body>
