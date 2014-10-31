@@ -208,6 +208,11 @@
 			<organization>VCRP</organization>
 			<organizationUrl>http://www.vcrp.de</organizationUrl>
 		</contributor>
+		<contributor>
+			<name>Keiji Ono</name>
+			<organization>net8</organization>
+			<organizationUrl>http://net8.co.jp/</organizationUrl>
+		</contributor>
 	</contributors>
 	<scm>
 		<connection>scm:svn:https://svn.apache.org/repos/asf/openmeetings/trunk/singlewebapp</connection>
