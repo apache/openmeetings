@@ -2031,7 +2031,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>メールを確認するにはここをクリックしてください</value>
   </string>
   <string id="669" name="errorMessage_UserActivationServlet [ActivateUser]">
-    <value>No user was found for this Hash.</value>
+    <value>このハッシュは無効です</value>
   </string>
   <string id="670" name="errorMessage_UserActivationServlet [ActivateUser]">
     <value>ユーザーは既に有効化されています!</value>
@@ -2385,7 +2385,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>カメラ・マイクへのアクセスを許可</value>
   </string>
   <string id="787" name="error message soap secure login">
-    <value>This Session Hash was already used. You cannot use it twice.</value>
+    <value>このセッションは既に使用済です</value>
   </string>
   <string id="788" name="dashboard button">
     <value>開始</value>
@@ -4671,7 +4671,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>ウィジェット</value>
   </string>
   <string id="1549" name="about_title">
-    <value>$APP_NAME について</value>
+    <value>について</value>
   </string>
   <string id="1550" name="about_name">
     <value>名称</value>
@@ -4740,87 +4740,87 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>OAuth2</value>
   </string>
   <string id="1572" name="oauth2">
-    <value>Manage OAuth2 configurations</value>
+    <value>OAuth2設定</value>
   </string>
   <string id="1573" name="oauth2">
-    <value>Name</value>
+    <value>名前</value>
   </string>
   <string id="1574" name="oauth2">
-    <value>Enabled</value>
+    <value>有効</value>
   </string>
   <string id="1575" name="oauth2">
-    <value>Icon URL</value>
+    <value>アイコンURL</value>
   </string>
   <string id="1576" name="oauth2">
-    <value>client_id</value>
+    <value>クライアントID</value>
   </string>
   <string id="1577" name="oauth2">
-    <value>client_secret</value>
+    <value>クライアント秘密鍵</value>
   </string>
   <string id="1578" name="oauth2">
-    <value>Request key URL</value>
+    <value>鍵のURL</value>
   </string>
   <string id="1579" name="oauth2">
-    <value>Request token URL</value>
+    <value>リクエストトークンURL</value>
   </string>
   <string id="1580" name="oauth2">
-    <value>Request info URL</value>
+    <value>リクエスト情報URL</value>
   </string>
   <string id="1581" name="oauth2">
-    <value>OAuth2 config</value>
+    <value>OAuth2設定</value>
   </string>
   <string id="1582" name="oauth2">
-    <value>Login param name</value>
+    <value>ログイン名</value>
   </string>
   <string id="1583" name="oauth2">
-    <value>Email param name</value>
+    <value>Email</value>
   </string>
   <string id="1584" name="oauth2">
-    <value>Firstname param name</value>
+    <value>姓</value>
   </string>
   <string id="1585" name="oauth2">
-    <value>Lastname param name</value>
+    <value>名</value>
   </string>
   <string id="1586" name="oauth2">
-    <value>Request token attributes</value>
+    <value>トークン属性値</value>
   </string>
   <string id="1587" name="oauth2">
-    <value>Redirect uri</value>
+    <value>リダイレクトURI</value>
   </string>
   <string id="1588" name="multiple_addresses">
-    <value>You can enter email address in the format: firstname1 lastname1 &lt;email1&gt; or "firstname2 lastname2" &lt;email2&gt; or 'firstname3 lastname3' &lt;email3&gt; or email</value>
+    <value>Emailアドレスを入力します: firstname1 lastname1 &lt;email1&gt; or "firstname2 lastname2" &lt;email2&gt; or 'firstname3 lastname3' &lt;email3&gt; or email</value>
   </string>
   <string id="1589" name="notify_on_disconnect">
-    <value>Notify on disconnect</value>
+    <value>通信切断時の処理</value>
   </string>
   <string id="1590" name="dashboard.display">
-    <value>Display</value>
+    <value>表示</value>
   </string>
   <string id="1591" name="register.confirmation.sent">
-    <value>Your account has been created. Confirmation email has been sent. You can now login.</value>
+    <value>アカウントが作成されました。メールを送信しましたのでご確認ください。すぐにログインできます。</value>
   </string>
   <string id="1592" name="end.date.is.earlier.than.start">
-    <value>End date entered is earlier than start date.</value>
+    <value>終了日をご確認ください</value>
   </string>
   <string id="1593" name="recording.errors.exit.val">
-    <value>Exit value</value>
+    <value>終了値</value>
   </string>
   <string id="1594" name="recording.errors.conversion.messages">
-    <value>Conversion messages</value>
+    <value>変換メッセージ</value>
   </string>
   <string id="1595" name="recording.errors.file.not.found">
-    <value>Recording file is not found</value>
+    <value>録音データがみつかりません</value>
   </string>
   <string id="1596" name="whiteboard.add_whiteboard">
-    <value>Add Whiteboard</value>
+    <value>ホワイトボード追加</value>
   </string>
   <string id="1597" name="multiple_addresses">
-    <value>You can enter address in the format: firstname1 lastname1 &lt;email1&gt; OR "firstname2 lastname2" &lt;email2&gt; OR 'firstname3 lastname3' &lt;email3&gt;</value>
+    <value>Emailアドレスを入力: firstname1 lastname1 &lt;email1&gt; OR "firstname2 lastname2" &lt;email2&gt; OR 'firstname3 lastname3' &lt;email3&gt;</value>
   </string>
   <string id="1598" name="security">
-    <value>Security</value>
+    <value>セキュリティ</value>
   </string>
   <string id="1599" name="security">
-    <value>Access denied. You have no rights to enter this room.</value>
+    <value>この会議室へは入れません</value>
   </string>
 </language>
