@@ -420,9 +420,6 @@ public class WebSession extends AbstractAuthenticatedWebSession {
 				browserTz = getClientInfo().getProperties().getTimeZone();
 				if (!AVAILABLE_TIMEZONE_SET.contains(browserTz.getID())) {
 					for (String availableID : AVAILABLE_TIMEZONES) {
-						if (availableID.startsWith("Etc")) {
-							continue; //somehow these timezones has reverted rules
-						}
 						TimeZone zone = TimeZone.getTimeZone(availableID);
 						if (zone.hasSameRules(browserTz)) {
 							browserTz = zone;
