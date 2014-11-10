@@ -191,7 +191,7 @@ public class MainService implements IPendingServiceCallback {
 					log.debug("[loginWicket] appointed room, isOwner ? " + allowed);
 					if (!allowed) {
 						for (MeetingMember mm : a.getMeetingMembers()) {
-							if (mm.getUser().getUser_id() == userId) {
+							if (mm.getUser().getUser_id().equals(userId)) {
 								allowed = true;
 								break;
 							}
