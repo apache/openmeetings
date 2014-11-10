@@ -24,7 +24,8 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.util.Date;
 import java.util.Properties;
 import java.util.Set;
@@ -170,18 +171,18 @@ public class LdapLoginManagement {
 		log.debug("LdapLoginmanagement.doLdapLogin");
 
 		Properties config = new Properties();
-		InputStream pis = null;
+		Reader r = null;
 		try {
 			LdapConfig ldapConfig = ldapConfigDao.get(domainId);
-			pis = new FileInputStream(new File(OmFileHelper.getConfDir(), ldapConfig.getConfigFileName()));
-			config.load(pis);
+			r = new InputStreamReader(new FileInputStream(new File(OmFileHelper.getConfDir(), ldapConfig.getConfigFileName())), "UTF-8");
+			config.load(r);
 		} catch (Exception e) {
 			log.error("Error on LdapLogin : Configurationdata couldnt be retrieved!");
 			return null;
 		} finally {
-			if (pis != null) {
+			if (r != null) {
 				try {
-					pis.close();
+					r.close();
 				} catch (IOException e) {
 					log.error("Error while closing ldap config file");
 					return null;
