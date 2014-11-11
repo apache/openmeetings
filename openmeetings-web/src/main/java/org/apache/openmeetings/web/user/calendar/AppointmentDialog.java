@@ -221,7 +221,7 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 		private DateTimePicker start;
 		private DateTimePicker end;
 		private final PasswordTextField pwd = new PasswordTextField("password");
-		private final Label owner = new Label("owner");
+		private final Label owner = new Label("aowner", Model.of(""));
 		private final DropDownChoice<RoomType> roomType = new RoomTypeDropDown("room.roomtype");
 		private final DropDownChoice<Room> room = new DropDownChoice<Room>(
 				"room"
@@ -324,7 +324,6 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 			add(new UserMultiChoice("attendees", attendeesModel));
 				
 			add(owner);
-
 		}
 		
 		private List<AppointmentReminderType> getRemindTypes() {

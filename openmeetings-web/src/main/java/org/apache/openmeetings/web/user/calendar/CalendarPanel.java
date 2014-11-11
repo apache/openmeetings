@@ -55,7 +55,12 @@ public class CalendarPanel extends UserPanel {
 	private static final long serialVersionUID = 1L;
 	private static final String javaScriptMarkup = "setCalendarHeight();";
 	private static final String javaScriptAddDatepicker = "addCalButton('left', 'Datepicker', 'datepicker');";
-	private static final SimpleDateFormat formatDateJava = new SimpleDateFormat("MM/dd/yy");
+	private static final ThreadLocal<SimpleDateFormat> formatDateJava = new ThreadLocal<SimpleDateFormat>() {
+		@Override
+		protected SimpleDateFormat initialValue() {
+			return new SimpleDateFormat("MM/dd/yy");
+		}
+	};
 	private final AbstractAjaxTimerBehavior refreshTimer = new AbstractAjaxTimerBehavior(Duration.seconds(10)) {
 		private static final long serialVersionUID = 1L;
 
@@ -192,7 +197,7 @@ public class CalendarPanel extends UserPanel {
 			
 			@Override
 			public void onSelect(AjaxRequestTarget target, CalendarView view, Date start, Date end, boolean allDay) {
-				target.appendJavaScript("setDatepickerDate('datepicker','" +  formatDateJava.format(start) + "');");
+				target.appendJavaScript("setDatepickerDate('datepicker','" +  formatDateJava.get().format(start) + "');");
 				Appointment a = getDefault();
 				if (CalendarView.month == view && start.equals(end)) {
 					java.util.Calendar cNow = java.util.Calendar.getInstance(getClientTimeZone());

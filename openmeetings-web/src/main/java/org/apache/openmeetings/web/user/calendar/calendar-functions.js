@@ -50,11 +50,11 @@ function addCalButton(where, text, id) {
 		changeDay: true,
 		onChangeMonthYear: function(year, month, inst) {
 		     var date = new Date();
-		     $('#${markupId}').fullCalendar('gotoDate', year, month-1, date.getDate());
+		     $('#${markupId}').fullCalendar('gotoDate', year + '-' + (month-1) + '-' + date.getDate());
 		},
 		onSelect: function(dateText, inst) {
 		     var date = new Date(dateText);
-		     $('#${markupId}').fullCalendar('gotoDate', date.getFullYear(), date.getMonth(), date.getDate());
+		     $('#${markupId}').fullCalendar('gotoDate', date.getFullYear() + '-' + date.getMonth() + '-' + date.getDate());
 		}
 	});
 	
