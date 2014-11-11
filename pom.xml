@@ -41,7 +41,7 @@
 		<maven.javadoc.version>2.10.1</maven.javadoc.version>
 		<maven.surefire.version>2.17</maven.surefire.version>
 		<maven-site.version>3.4</maven-site.version>
-		<wicket.version>7.0.0-M3</wicket.version>
+		<wicket.version>7.0.0-M4</wicket.version>
 		<wickets.version>7.0.0-M3</wickets.version>
 		<red5-server.version>1.0.3-RELEASE</red5-server.version>
 		<batik.version>1.7</batik.version>
@@ -684,7 +684,7 @@
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-assembly-plugin</artifactId>
-					<version>2.5</version>
+					<version>2.5.1</version>
 				</plugin>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
