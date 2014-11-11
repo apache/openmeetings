@@ -222,7 +222,7 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 		private final DateTimeField start;
 		private final DateTimeField end;
 		private final PasswordTextField pwd = new PasswordTextField("password");
-		private final Label owner = new Label("owner");
+		private final Label owner = new Label("aowner", Model.of(""));
 		private final DropDownChoice<RoomType> roomType = new RoomTypeDropDown("room.roomtype");
 		private final DropDownChoice<Room> room = new DropDownChoice<Room>(
 				"room"
@@ -232,7 +232,7 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 		@Override
 		protected void onModelChanged() {
 			super.onModelChanged();
-			
+
 			Appointment a = getModelObject();
 			List<AppointmentReminderTyps> remindTypes = getRemindTypes();
 			if (a.getRemind() == null && !remindTypes.isEmpty()) {
@@ -326,7 +326,6 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 			add(new UserMultiChoice("attendees", attendeesModel));
 				
 			add(owner);
-
 		}
 		
 		private List<AppointmentReminderTyps> getRemindTypes() {
