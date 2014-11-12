@@ -21,6 +21,7 @@ package org.apache.openmeetings.web.common;
 import org.apache.openmeetings.db.dao.basic.NavigationDao;
 import org.apache.openmeetings.db.entity.basic.Naviglobal;
 import org.apache.openmeetings.db.entity.basic.Navimain;
+import org.apache.openmeetings.db.entity.label.FieldLanguage;
 import org.apache.openmeetings.util.AuthLevelUtil;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
@@ -30,6 +31,8 @@ import org.apache.openmeetings.web.util.OmUrlFragment.MenuActions;
 import org.apache.openmeetings.web.util.OmUrlFragment.MenuParams;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
+import org.apache.wicket.markup.head.CssHeaderItem;
+import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
@@ -81,5 +84,14 @@ public class MenuPanel extends BasePanel {
 				}.setReuseItems(true));
 			}
 		}.setReuseItems(true));
+	}
+	
+	@Override
+	public void renderHead(IHeaderResponse response) {
+		super.renderHead(response);
+		FieldLanguage lang = WebSession.getLanguageObj();
+		if (Boolean.TRUE.equals(lang.getRtl())) {
+			response.render(CssHeaderItem.forUrl("css/jquery.ui.menubar-rtl.css"));
+		}
 	}
 }

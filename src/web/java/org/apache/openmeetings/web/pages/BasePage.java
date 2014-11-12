@@ -23,10 +23,12 @@ import java.util.Map;
 
 import org.apache.openmeetings.db.entity.label.FieldLanguage;
 import org.apache.openmeetings.web.app.Application;
+import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.HeaderPanel;
 import org.apache.openmeetings.web.util.OmUrlFragment;
 import org.apache.openmeetings.web.util.OmUrlFragment.AreaKeys;
 import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.head.PriorityHeaderItem;
@@ -78,5 +80,10 @@ public abstract class BasePage extends AsyncUrlFragmentAwarePage {
 	public void renderHead(IHeaderResponse response) {
 		response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forReference(Application.get().getJavaScriptLibrarySettings().getJQueryReference())));
 		super.renderHead(response);
+		
+		FieldLanguage lang = WebSession.getLanguageObj();
+		if (Boolean.TRUE.equals(lang.getRtl())) {
+			response.render(CssHeaderItem.forUrl("css/theme-rtl.css"));
+		}
 	}
 }
