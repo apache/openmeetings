@@ -50,7 +50,7 @@ public class FieldLanguageDao {
 		return q.getSingleResult() + 1L;
 	}
 	
-	public FieldLanguage addLanguage(int langId, String langName, Boolean langRtl, String code) {
+	public FieldLanguage addLanguage(int langId, String langName, boolean langRtl, String code) {
 		try {
 			FieldLanguage fl = new FieldLanguage();
 			fl.setId((long)langId);
