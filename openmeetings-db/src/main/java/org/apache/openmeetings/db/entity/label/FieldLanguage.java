@@ -65,7 +65,7 @@ public class FieldLanguage implements IDataProviderEntity {
 	private boolean deleted;
 	
 	@Column(name="rtl")
-	private Boolean rtl;
+	private boolean rtl;
 	
 	@Column(name="code")
 	private String code;
@@ -102,17 +102,17 @@ public class FieldLanguage implements IDataProviderEntity {
 		this.updatetime = updatetime;
 	}
 	
-	public boolean getDeleted() {
+	public boolean isDeleted() {
 		return deleted;
 	}
 	public void setDeleted(boolean deleted) {
 		this.deleted = deleted;
 	}
 
-	public Boolean getRtl() {
+	public boolean isRtl() {
 		return rtl;
 	}
-	public void setRtl(Boolean rtl) {
+	public void setRtl(boolean rtl) {
 		this.rtl = rtl;
 	}
 

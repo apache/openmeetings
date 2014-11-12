@@ -37,7 +37,7 @@ public abstract class BaseInitedPage extends BasePage {
 	}
 	
 	@Override
-	protected Boolean isRtl() {
-		return WebSession.getLanguageObj().getRtl();
+	protected boolean isRtl() {
+		return WebSession.getLanguageObj().isRtl();
 	}
 }

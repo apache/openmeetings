@@ -16,33 +16,42 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.web.pages;
+#header {
+	padding-left: initial !important;
+	padding-right: 150px;
+	background-position: right center;
+}
+#topLinks {
+	right: initial !important;
+	left: 10px;
+}
 
-import org.apache.openmeetings.installation.InstallationConfig;
-import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.request.IRequestParameters;
+#topLinks span {
+	border-right: none !important;
+	border-left: 1px solid black;
+}
 
-public abstract class BaseNotInitedPage extends BasePage {
-	private static final long serialVersionUID = 1L;
-	private static final InstallationConfig installCfg = new InstallationConfig(); 
+#topLinks span:last-child {
+	border-left: none;
+}
+#busy_indicator {
+	float: left !important;
+}
+#chatPanel {
+	right: initial !important;
+	left: 10px;
+}
 
-
-	@Override
-	protected String getApplicationName() {
-		return installCfg.appName;
-	}
-	
-	@Override
-	protected String getLanguageCode() {
-		return "en";
-	}
-	
-	@Override
-	protected boolean isRtl() {
-		return false;
-	}
-	
-	@Override
-	protected void onParameterArrival(IRequestParameters arg0, AjaxRequestTarget arg1) {
-	}
+/* Dashboard, need to be moved to the component*/
+.column {
+	float: right !important;
+}
+.dragbox-toggle {
+	float: right !important;
+}
+.dragbox-title {
+	float: right !important;
+}
+.dragbox-actions {
+	float: left !important;
 }

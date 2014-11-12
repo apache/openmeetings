@@ -20,10 +20,14 @@ package org.apache.openmeetings.web.common.menu;
 
 import java.util.List;
 
+import org.apache.openmeetings.db.entity.label.FieldLanguage;
+import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.BasePanel;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.behavior.AttributeAppender;
+import org.apache.wicket.markup.head.CssHeaderItem;
+import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListItem;
@@ -93,5 +97,14 @@ public class MenuPanel extends BasePanel {
 			}
 		});
 		add(new MenuFunctionsBehavior(menuContainer.getMarkupId(), id));
+	}
+	
+	@Override
+	public void renderHead(IHeaderResponse response) {
+		super.renderHead(response);
+		FieldLanguage lang = WebSession.getLanguageObj();
+		if (lang.isRtl()) {
+			response.render(CssHeaderItem.forUrl("css/jquery.ui.menubar-rtl.css"));
+		}
 	}
 }

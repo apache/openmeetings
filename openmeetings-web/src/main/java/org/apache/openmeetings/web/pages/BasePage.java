@@ -26,6 +26,7 @@ import org.apache.openmeetings.web.common.HeaderPanel;
 import org.apache.openmeetings.web.util.OmUrlFragment;
 import org.apache.openmeetings.web.util.OmUrlFragment.AreaKeys;
 import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.head.PriorityHeaderItem;
@@ -40,7 +41,7 @@ public abstract class BasePage extends AsyncUrlFragmentAwarePage {
 	private final Map<String, String> options;
 	private final HeaderPanel header;
 
-	protected abstract Boolean isRtl();
+	protected abstract boolean isRtl();
 	protected abstract String getLanguageCode();
 	protected abstract String getApplicationName();
 	
@@ -54,7 +55,7 @@ public abstract class BasePage extends AsyncUrlFragmentAwarePage {
 		add(new TransparentWebMarkupContainer("html")
 	    	.add(new AttributeModifier("xml:lang", code))
 	    	.add(new AttributeModifier("lang", code))
-	    	.add(new AttributeModifier("dir", Boolean.TRUE.equals(isRtl()) ? "rtl" : "ltr"))); 
+	    	.add(new AttributeModifier("dir", isRtl() ? "rtl" : "ltr"))); 
 		add(new Label("pageTitle", appName));
 		add(header = new HeaderPanel("header", appName));
 	}
@@ -82,5 +83,8 @@ public abstract class BasePage extends AsyncUrlFragmentAwarePage {
 	public void renderHead(IHeaderResponse response) {
 		response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forReference(Application.get().getJavaScriptLibrarySettings().getJQueryReference())));
 		super.renderHead(response);
+		if (isRtl()) {
+			response.render(CssHeaderItem.forUrl("css/theme-rtl.css"));
+		}
 	}
 }
