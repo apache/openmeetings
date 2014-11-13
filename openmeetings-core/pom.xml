@@ -146,7 +146,7 @@
 		<dependency>
 			<groupId>org.apache.directory.api</groupId>
 			<artifactId>api-all</artifactId>
-			<version>1.0.0-M24</version>
+			<version>1.0.0-M25</version>
 		</dependency>
 	</dependencies>
 </project>
