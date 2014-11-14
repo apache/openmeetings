@@ -72,7 +72,7 @@ public class WidgetsPanel extends Panel {
 						if (w == null && b) {
 							d.addWidget(dashboardContext.getWidgetFactory().createWidget(wd));
 						}
-						dashboardContext.getDashboardPersiter().save(d);
+						dashboardContext.getDashboardPersister().save(d);
 					}
 				});
 			}

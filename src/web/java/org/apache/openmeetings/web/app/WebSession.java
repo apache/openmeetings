@@ -442,7 +442,7 @@ public class WebSession extends AbstractAuthenticatedWebSession {
 	
 	private void initDashboard() {
 		DashboardContext dashboardContext = getDashboardContext();
-		dashboard = (UserDashboard)dashboardContext.getDashboardPersiter().load();
+		dashboard = (UserDashboard)dashboardContext.getDashboardPersister().load();
 		boolean existMyRoomWidget = false, existRssWidget = false;
 		ConfigurationDao cfgDao = getBean(ConfigurationDao.class);
 		boolean confShowMyRooms = 1 == cfgDao.getConfValue(CONFIG_DASHBOARD_SHOW_MYROOMS_KEY, Integer.class, "0");
@@ -494,7 +494,7 @@ public class WebSession extends AbstractAuthenticatedWebSession {
 			}
 		}
 		if (save) {
-			dashboardContext.getDashboardPersiter().save(dashboard);
+			dashboardContext.getDashboardPersister().save(dashboard);
 		}
 	}
 }

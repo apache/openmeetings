@@ -110,7 +110,7 @@ public class Application extends AuthenticatedWebApplication {
 		
 		// register some widgets
 		dashboardContext = new DashboardContext();
-		dashboardContext.setDashboardPersiter(new UserDashboardPersister());
+		dashboardContext.setDashboardPersister(new UserDashboardPersister());
 		WidgetRegistry widgetRegistry = dashboardContext.getWidgetRegistry();
 		widgetRegistry.registerWidget(new MyRoomsWidgetDescriptor());
 		widgetRegistry.registerWidget(new WelcomeWidgetDescriptor());
