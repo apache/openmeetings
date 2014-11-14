@@ -122,7 +122,7 @@ public class InvitationDialog extends AbstractFormDialog<Invitation> {
 		message.setObject(null);
 		modelTo.setObject(new ArrayList<User>());
 		tzId.setObject(u.getTimeZoneId());
-		lang.setObject(getBean(FieldLanguageDao.class).get(u.getLanguage_id()));
+		lang.setObject(getBean(FieldLanguageDao.class).get(u.getLanguageId()));
 		url.setModelObject(null);
 		form.setModelObject(i);
 		send.setEnabled(false, target);
@@ -204,7 +204,7 @@ public class InvitationDialog extends AbstractFormDialog<Invitation> {
 		i.setInvitee(u);
 		if (Type.contact == u.getType()) {
 			//TODO not sure it is right
-			u.setLanguage_id(lang.getObject().getId());
+			u.setLanguageId(lang.getObject().getId());
 		}
 		return getBean(InvitationDao.class).update(i);
 	}

@@ -183,8 +183,8 @@ public class User implements IDataProviderEntity {
 	private boolean deleted;
 
 	@Column(name = "language_id")
-	@Element(data = true, required = false)
-	private Long language_id;
+	@Element(name = "language_id", data = true, required = false)
+	private Long languageId;
 
 	@Column(name = "resethash")
 	@Element(data = true, required = false)
@@ -423,12 +423,12 @@ public class User implements IDataProviderEntity {
 		this.pictureuri = pictureuri;
 	}
 
-	public Long getLanguage_id() {
-		return language_id;
+	public Long getLanguageId() {
+		return languageId;
 	}
 
-	public void setLanguage_id(Long language_id) {
-		this.language_id = language_id;
+	public void setLanguageId(Long languageId) {
+		this.languageId = languageId;
 	}
 
 	public List<OrganisationUser> getOrganisationUsers() {
@@ -588,7 +588,7 @@ public class User implements IDataProviderEntity {
 		return "User [user_id=" + id + ", firstname=" + firstname
 				+ ", lastname=" + lastname + ", login=" + login
 				+ ", pictureuri=" + pictureuri + ", deleted=" + deleted
-				+ ", language_id=" + language_id + ", adresses=" + adresses
+				+ ", languageId=" + languageId + ", adresses=" + adresses
 				+ ", externalId=" + externalUserId + ", externalType="
 				+ externalUserType + ", type=" + type + "]";
 	}

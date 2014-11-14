@@ -74,7 +74,7 @@ public class StateDao {
 			st.setDeleted(false);
 
 			st = em.merge(st);
-			Long id = st.getState_id();
+			Long id = st.getId();
 
 			log.debug("added id " + id);
 

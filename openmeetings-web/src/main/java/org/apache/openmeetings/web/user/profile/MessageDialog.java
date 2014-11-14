@@ -208,7 +208,7 @@ public class MessageDialog extends AbstractFormDialog<PrivateMessage> {
 				if (p.isBookedRoom()) {
 					Invitation i = getBean(IInvitationManager.class).getInvitation(to, p.getRoom(),
 							false, null, Valid.Period
-							, userDao.get(getUserId()), userDao.get(getUserId()).getLanguage_id(),
+							, userDao.get(getUserId()), userDao.get(getUserId()).getLanguageId(),
 							modelStart.getObject(), modelEnd.getObject(), null);
 					
 					invitation_link = getInvitationLink(getBean(ConfigurationDao.class).getBaseUrl(), i);

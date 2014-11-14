@@ -109,7 +109,7 @@ public class GeneralUserForm extends Form<User> {
 
 				@Override
 				protected void onUpdate(AjaxRequestTarget target) {
-					GeneralUserForm.this.getModelObject().setLanguage_id(lang.getId());
+					GeneralUserForm.this.getModelObject().setLanguageId(lang.getId());
 				}
 			}));
 
@@ -135,8 +135,7 @@ public class GeneralUserForm extends Form<User> {
 		add(new TextField<String>("adresses.additionalname"));
 		add(new TextField<String>("adresses.zip"));
 		add(new TextField<String>("adresses.town"));
-		add(new DropDownChoice<State>("adresses.states", getBean(StateDao.class).getStates()
-				, new ChoiceRenderer<State>("name", "state_id")));
+		add(new DropDownChoice<State>("adresses.states", getBean(StateDao.class).getStates(), new ChoiceRenderer<State>("name", "id")));
 		add(new TextArea<String>("adresses.comment"));
 
 		final List<OrganisationUser> orgUsers;
@@ -188,7 +187,7 @@ public class GeneralUserForm extends Form<User> {
 
 	public void updateModelObject(User u) {
 		salutation = getBean(SalutationDao.class).get(u.getSalutations_id(), getLanguage());
-		lang = getBean(FieldLanguageDao.class).get(u.getLanguage_id());
+		lang = getBean(FieldLanguageDao.class).get(u.getLanguageId());
 	}
 	
 	@Override

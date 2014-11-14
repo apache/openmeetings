@@ -428,7 +428,7 @@ public class UserManager implements IUserManager {
 				 * (adress_emails_id==null) { return new Long(-112); }
 				 */
 
-				if (adr.getAdresses_id() > 0 && u.getId() > 0) {
+				if (adr.getId() > 0 && u.getId() > 0) {
 					return u.getId();
 				} else {
 					return -16L;

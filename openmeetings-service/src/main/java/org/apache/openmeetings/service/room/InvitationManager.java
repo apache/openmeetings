@@ -203,7 +203,7 @@ public class InvitationManager implements IInvitationManager {
 	private void sendInvitionLink(Appointment a, MeetingMember mm, MessageType type, boolean ical) throws Exception	{
 		User owner = a.getOwner();
 		String invitorName = owner.getFirstname() + " " + owner.getLastname();
-		Long langId = mm.getUser().getLanguage_id();
+		Long langId = mm.getUser().getLanguageId();
 		TimeZone tz = timezoneUtil.getTimeZone(mm.getUser());
 		String subject = null;
 		String message = null;
@@ -232,7 +232,7 @@ public class InvitationManager implements IInvitationManager {
 		
 		String invitorName = owner.getFirstname() + " " + owner.getLastname();
 		boolean isCanceled = (type == MessageType.Cancel); 
-		String template = InvitationTemplate.getEmail(i.getInvitee().getLanguage_id(), invitorName, message, invitation_link, isCanceled);
+		String template = InvitationTemplate.getEmail(i.getInvitee().getLanguageId(), invitorName, message, invitation_link, isCanceled);
 		String email = i.getInvitee().getAdresses().getEmail();
 		String replyToEmail = owner.getAdresses().getEmail();
 		
@@ -471,7 +471,7 @@ public class InvitationManager implements IInvitationManager {
 		invitation.setInvitedBy(createdBy);
 		invitation.setInvitee(inveetee);
 		if (language_id != null && Type.contact == invitation.getInvitee().getType()) {
-			invitation.getInvitee().setLanguage_id(language_id);
+			invitation.getInvitee().setLanguageId(language_id);
 		}
 		invitation.setRoom(room);
 		invitation.setInserted(new Date());

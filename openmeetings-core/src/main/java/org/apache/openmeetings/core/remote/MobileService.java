@@ -79,7 +79,7 @@ public class MobileService implements IPendingServiceCallback {
 			User u = userDao.login(login, password);
 			if (u != null) {
 				Sessiondata sd = sessionDao.startsession();
-				Boolean bool = sessionDao.updateUser(sd.getSession_id(), u.getId(), false, u.getLanguage_id());
+				Boolean bool = sessionDao.updateUser(sd.getSession_id(), u.getId(), false, u.getLanguageId());
 				if (bool == null) {
 					// Exception
 				} else if (!bool) {
@@ -108,7 +108,7 @@ public class MobileService implements IPendingServiceCallback {
 					result.put("firstname", u.getFirstname());
 					result.put("lastname", u.getLastname());
 					result.put("login", u.getLogin());
-					result.put("language", u.getLanguage_id()); //TODO rights
+					result.put("language", u.getLanguageId()); //TODO rights
 				}
 			}
 		} catch (Exception e) {
@@ -163,8 +163,8 @@ public class MobileService implements IPendingServiceCallback {
 		User u = userDao.get(c.getUser_id());
 		//my rooms
 		List<Room> myl = new ArrayList<Room>();
-		myl.add(roomManager.getRoomByOwnerAndTypeId(u.getId(), 1L, labelDao.getString(1306L, u.getLanguage_id())));
-		myl.add(roomManager.getRoomByOwnerAndTypeId(u.getId(), 3L, labelDao.getString(1307L, u.getLanguage_id())));
+		myl.add(roomManager.getRoomByOwnerAndTypeId(u.getId(), 1L, labelDao.getString(1306L, u.getLanguageId())));
+		myl.add(roomManager.getRoomByOwnerAndTypeId(u.getId(), 3L, labelDao.getString(1307L, u.getLanguageId())));
 		myl.addAll(roomDao.getAppointedRoomsByUser(u.getId()));
 		for (Room r : myl) {
 			addRoom("my", null, false, result, r);

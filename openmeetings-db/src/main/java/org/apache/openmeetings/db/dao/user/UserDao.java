@@ -100,7 +100,7 @@ public class UserDao implements IDataProviderDao<User> {
 		User user = new User();
 		user.setSalutations_id(1L); // TODO: Fix default selection to be configurable
 		user.setRights(getDefaultRights());
-		user.setLanguage_id(cfgDao.getConfValue(CONFIG_DEFAUT_LANG_KEY, Long.class, "1"));
+		user.setLanguageId(cfgDao.getConfValue(CONFIG_DEFAUT_LANG_KEY, Long.class, "1"));
 		user.setTimeZoneId(timezoneUtil.getTimeZone(currentUser).getID());
 		user.setForceTimeZoneCheck(false);
 		user.setSendSMS(false);
@@ -462,7 +462,7 @@ public class UserDao implements IDataProviderDao<User> {
 			to.setLogin(login.length() < getMinLoginLength(cfgDao) ? UUID.randomUUID().toString() : login);
 			to.setFirstname(firstName);
 			to.setLastname(lastName);
-			to.setLanguage_id(null == langId ? owner.getLanguage_id() : langId);
+			to.setLanguageId(null == langId ? owner.getLanguageId() : langId);
 			to.setOwnerId(owner.getId());
 			to.setAdresses(new Address());
 			to.getAdresses().setEmail(email);
@@ -648,7 +648,7 @@ public class UserDao implements IDataProviderDao<User> {
 		u.setShowContactDataToContacts(showContactDataToContacts);
 
 		// this is needed cause the language is not a needed data at registering
-		u.setLanguage_id(language_id != 0 ? language_id : null);
+		u.setLanguageId(language_id != 0 ? language_id : null);
 		if (!Strings.isEmpty(userpass)) {
 			u.updatePassword(cfgDao, userpass);
 		}

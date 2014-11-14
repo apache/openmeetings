@@ -27,11 +27,12 @@ import org.apache.openmeetings.db.entity.user.User.Type;
 
 public class UserDTO {
 	private Long id;
+	private String login;
+	private String password;
 	private String firstname;
 	private String lastname;
 	private Set<Right> rights;
-	private String login;
-	private Long language_id;
+	private Long languageId;
 	private Address adresses;
 	private String timeZoneId;
 	private Type type = Type.user;
@@ -42,7 +43,7 @@ public class UserDTO {
 		lastname = u.getLastname();
 		rights = u.getRights();
 		login = u.getLogin();
-		language_id = u.getLanguage_id();
+		languageId = u.getLanguageId();
 		adresses = u.getAdresses();
 		timeZoneId = u.getTimeZoneId();
 		type = u.getType();
@@ -88,12 +89,12 @@ public class UserDTO {
 		this.login = login;
 	}
 
-	public Long getLanguage_id() {
-		return language_id;
+	public Long getLanguageId() {
+		return languageId;
 	}
 
-	public void setLanguage_id(Long language_id) {
-		this.language_id = language_id;
+	public void setLanguageId(Long languageId) {
+		this.languageId = languageId;
 	}
 
 	public Address getAdresses() {
@@ -118,5 +119,13 @@ public class UserDTO {
 
 	public void setType(Type type) {
 		this.type = type;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
 	}
 }

@@ -45,7 +45,7 @@ public class TestInvitation extends AbstractJUnitDefaults {
 	public void testSendInvitationLink() {
 		Sessiondata sessionData = sessDao.startsession();
 		
-		Long uid = userWebService.loginUser(sessionData.getSession_id(), username, userpass);
+		Long uid = userWebService.login(sessionData.getSession_id(), username, userpass);
 		User us = userDao.get(uid);
 		
 		String date = new SimpleDateFormat("dd.MM.yyyy").format(new Date());

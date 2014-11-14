@@ -311,10 +311,6 @@
 	<bean id="serverWebService" class="org.apache.openmeetings.webservice.ServerWebService" />
 	
 	<!-- (writeXsiType=false) -->
-	<!-- bean id="jsonProvider" class="org.apache.cxf.jaxrs.provider.json.JSONProvider">
-		<property name="ignoreNamespaces" value="true" /> 
-	</bean>
-	<bean id="jaxbProvider" class="org.apache.cxf.jaxrs.provider.JAXBElementProvider"/-->
 	<jaxrs:server id="server" address="/">
 		<jaxrs:serviceBeans>
 			<ref bean="userWebService"/>
@@ -324,9 +320,6 @@
 			<ref bean="jabberWebService"/>
 			<ref bean="serverWebService"/>
 		</jaxrs:serviceBeans>
-		<!-- jaxrs:providers>
-			<ref bean="jaxbProvider"/>
-		</jaxrs:providers-->
 	</jaxrs:server>
 	<jaxws:endpoint id="userServiceWS" address="/UserService"
 		implementor="#userWebService" 

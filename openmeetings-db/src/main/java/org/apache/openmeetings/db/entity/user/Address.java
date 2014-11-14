@@ -18,7 +18,6 @@
  */
 package org.apache.openmeetings.db.entity.user;
 
-import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -32,19 +31,20 @@ import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import org.apache.openmeetings.db.entity.IDataProviderEntity;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
 
 @Entity
 @Table(name = "address")
 @Root(name="address")
-public class Address implements Serializable {
+public class Address implements IDataProviderEntity {
 
 	private static final long serialVersionUID = 1L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
-	private Long adresses_id;
+	private Long id;
 	
 	@Column(name = "additionalname")
 	@Element(data=true, required=false)
@@ -102,12 +102,12 @@ public class Address implements Serializable {
 		this.additionalname = additionalname;
 	}
 
-	public Long getAdresses_id() {
-		return adresses_id;
+	public Long getId() {
+		return id;
 	}
 
-	public void setAdresses_id(Long adresses_id) {
-		this.adresses_id = adresses_id;
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public String getComment() {
@@ -200,7 +200,7 @@ public class Address implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Address [id=" + adresses_id + ", states=" + states
+		return "Address [id=" + id + ", states=" + states
 				+ ", street=" + street + ", town=" + town + ", zip=" + zip
 				+ ", deleted=" + deleted + ", email=" + email + ", phone="
 				+ phone + "]";

@@ -173,7 +173,7 @@ public class RestClient {
 		
 		sessionId = client.getSession().getSession_id();
 
-		Long uId = client.loginUser(sessionId, user, pass);
+		Long uId = client.login(sessionId, user, pass);
 
 		loginSuccess = uId > 0;
 

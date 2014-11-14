@@ -167,7 +167,7 @@ public abstract class AbstractJUnitDefaults extends AbstractSpringTest {
 		u.setLastname("lastname" + rnd);
 		u.setLogin("login" + rnd);
 		u.updatePassword(configurationDao, "pass" + rnd);
-		u.setLanguage_id(1L);
+		u.setLanguageId(1L);
 		return u;
 	}
 

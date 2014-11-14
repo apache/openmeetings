@@ -40,6 +40,6 @@ public class StateConverter extends OmConverter<State> {
 
 	public void write(OutputNode node, State value) throws Exception {
 		node.setData(true);
-		node.setValue(value == null ? "0" : "" + value.getState_id());
+		node.setValue(value == null ? "0" : "" + value.getId());
 	}
 }

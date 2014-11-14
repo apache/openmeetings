@@ -23,6 +23,7 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import java.util.ArrayList;
 import java.util.Date;
 
+import javax.jws.WebParam;
 import javax.jws.WebService;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -41,6 +42,7 @@ import org.apache.openmeetings.db.dao.user.OrganisationUserDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.dto.basic.ErrorResult;
 import org.apache.openmeetings.db.dto.basic.SearchResult;
+import org.apache.openmeetings.db.dto.user.UserDTO;
 import org.apache.openmeetings.db.dto.user.UserSearchResult;
 import org.apache.openmeetings.db.entity.basic.ErrorType;
 import org.apache.openmeetings.db.entity.basic.ErrorValue;
@@ -57,6 +59,8 @@ import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.sun.istack.NotNull;
+
 /**
  * 
  * The Service contains methods to login and create hash to directly enter
@@ -69,7 +73,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 @WebService(name = "UserService")
 @Features(features = "org.apache.cxf.feature.LoggingFeature")
 @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-@Path("/UserService")
+@Path("/user")
 public class UserWebService {
 	private static final Logger log = Red5LoggerFactory.getLogger(UserWebService.class, webAppRootKey);
 
@@ -118,7 +122,9 @@ public class UserWebService {
 	 *            
 	 * @return - id of the logged in user, -1 in case of the error
 	 */
-	public Long loginUser(String SID, String username, String userpass) {
+	@GET
+	@Path("/login")
+	public Long login(@WebParam String SID, @WebParam String username, @WebParam String userpass) {
 		try {
 			log.debug("Login user SID : " + SID);
 			User u = userDao.login(username, userpass);
@@ -126,7 +132,7 @@ public class UserWebService {
 				return -1L;
 			}
 			
-			boolean bool = sessiondataDao.updateUser(SID, u.getId(), false, u.getLanguage_id());
+			boolean bool = sessiondataDao.updateUser(SID, u.getId(), false, u.getLanguageId());
 			if (!bool) {
 				// invalid Session-Object
 				return -35L;
@@ -138,7 +144,7 @@ public class UserWebService {
 				return oe.getCode();
 			}
 		} catch (Exception err) {
-			log.error("[loginUser]", err);
+			log.error("[login]", err);
 		}
 		return -1L;
 	}
@@ -158,7 +164,9 @@ public class UserWebService {
 	 *            
 	 * @return - error with the code given
 	 */
-	public ErrorResult getErrorByCode(String SID, long errorid, long langId) {
+	@GET
+	@Path("/getErrorByCode")
+	public ErrorResult getErrorByCode(@WebParam String SID, @WebParam long errorid, @WebParam long langId) {
 		try {
 			if (errorid < 0) {
 				ErrorValue eValues = errorDao.get(-1 * errorid);
@@ -215,10 +223,9 @@ public class UserWebService {
 	 * @return - id of the user added or error code
 	 * @throws ServiceException
 	 */
-	public Long addNewUser(String SID, String username, String userpass,
-			String lastname, String firstname, String email,
-			String additionalname, String street, String zip, String fax,
-			long states_id, String town, long language_id)
+	@GET
+	@Path("/addUser")
+	public Long addUser(@WebParam String SID, @WebParam @NotNull UserDTO userDto)
 			throws ServiceException {
 		try {
 			Long users_id = sessiondataDao.checkSession(SID);
@@ -227,9 +234,10 @@ public class UserWebService {
 
 				String jName_timeZone = configurationDao.getConfValue("default.timezone", String.class, "");
 
-				Long user_id = userManagement.registerUser(username, userpass,
-						lastname, firstname, email, new Date(), street,
-						additionalname, fax, zip, states_id, town, language_id,
+				Long user_id = userManagement.registerUser(userDto.getLogin(), userDto.getPassword(),
+						userDto.getLastname(), userDto.getFirstname(), userDto.getAdresses() != null ? userDto.getAdresses().getEmail() : "", new Date(), userDto.getAdresses().getStreet(), //FIXME NPE signature
+						userDto.getAdresses().getAdditionalname(), userDto.getAdresses().getFax(), userDto.getAdresses().getZip(), userDto.getAdresses().getStates().getId() //FIXME NPE signature
+						, userDto.getAdresses().getTown(), userDto.getLanguageId(), //FIXME NPE signature
 						"", false, true, // generate SIP Data if the config is enabled
 						jName_timeZone);
 

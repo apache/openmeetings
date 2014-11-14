@@ -157,7 +157,7 @@ public class AppointmentLogic {
 
 		TimeZone tZone = timezoneUtil.getTimeZone(u.getTimeZoneId());
 
-		long language_id = u.getLanguage_id();
+		long language_id = u.getLanguageId();
 		// Get the required labels one time for all meeting members. The
 		// Language of the email will be the system default language
 		String labelid1158 = langDao.getString(1158L, language_id);

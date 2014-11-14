@@ -18,7 +18,6 @@
  */
 package org.apache.openmeetings.db.entity.user;
 
-import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -30,19 +29,21 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
+import org.apache.openmeetings.db.entity.IDataProviderEntity;
+
 @Entity
 @NamedQueries({
-	@NamedQuery(name = "getStateById", query = "select c from State as c where c.state_id = :state_id AND c.deleted = false"),
+	@NamedQuery(name = "getStateById", query = "select c from State as c where c.id = :state_id AND c.deleted = false"),
 	@NamedQuery(name = "getStates", query = "select c from State as c where c.deleted = false"),
 	@NamedQuery(name = "getStateByName", query = "select c from State as c where lower(c.name) LIKE :name AND c.deleted = false")
 })
 @Table(name = "state")
-public class State implements Serializable {
+public class State implements IDataProviderEntity {
 	private static final long serialVersionUID = 1L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
-	private Long state_id;
+	private Long id;
 	
 	@Column(name = "name")
 	private String name;
@@ -70,12 +71,12 @@ public class State implements Serializable {
 		this.name = name;
 	}
 
-	public Long getState_id() {
-		return state_id;
+	public Long getId() {
+		return id;
 	}
 
-	public void setState_id(Long state_id) {
-		this.state_id = state_id;
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public Date getStarttime() {

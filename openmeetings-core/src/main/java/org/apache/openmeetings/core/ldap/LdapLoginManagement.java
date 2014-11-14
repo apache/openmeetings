@@ -339,7 +339,7 @@ public class LdapLoginManagement {
 						u.setAge(new Date());
 						u.setShowContactDataToContacts(true);
 						u.setAdresses(new Address());
-						u.setLanguage_id(cfgDao.getConfValue(CONFIG_DEFAUT_LANG_KEY, Long.class, "1"));
+						u.setLanguageId(cfgDao.getConfValue(CONFIG_DEFAUT_LANG_KEY, Long.class, "1"));
 						u.setSalutations_id(1L);
 					}
 					if ("true".equals(config.getProperty(CONFIGKEY_LDAP_SYNC_PASSWD_OM, ""))) {

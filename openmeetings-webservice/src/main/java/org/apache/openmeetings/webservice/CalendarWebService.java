@@ -576,7 +576,7 @@ public class CalendarWebService {
 			if (AuthLevelUtil.hasUserLevel(userDao.getRights(users_id))) {
 
 				User user = userDao.get(users_id);
-				long language_id = (user == null) ? 1 : user.getLanguage_id();
+				long language_id = (user == null) ? 1 : user.getLanguageId();
 				List<AppointmentReminderType> res = appointmentReminderTypDao
 						.getList(language_id);
 
