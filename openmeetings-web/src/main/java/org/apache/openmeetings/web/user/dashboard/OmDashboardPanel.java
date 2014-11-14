@@ -31,6 +31,6 @@ public class OmDashboardPanel extends UserPanel {
 	public OmDashboardPanel(String id) {
 		super(id);
 
-		add(new DashboardPanel("dashboard", new Model<Dashboard>(WebSession.getDashboard())));
+		add(new DashboardPanel("dashboard", new Model<Dashboard>(WebSession.getDashboard())).setRtlModel(Model.of(WebSession.getLanguageObj().isRtl())));
 	}
 }

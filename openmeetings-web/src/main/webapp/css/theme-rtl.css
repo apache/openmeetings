@@ -41,17 +41,3 @@
 	right: initial !important;
 	left: 10px;
 }
-
-/* Dashboard, need to be moved to the component*/
-.column {
-	float: right !important;
-}
-.dragbox-toggle {
-	float: right !important;
-}
-.dragbox-title {
-	float: right !important;
-}
-.dragbox-actions {
-	float: left !important;
-}

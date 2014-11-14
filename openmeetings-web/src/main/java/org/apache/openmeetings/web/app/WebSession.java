@@ -236,7 +236,7 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 	private void setUser(User u) {
 		userId = u.getId();
 		rights = Collections.unmodifiableSet(u.getRights());
-		languageId = u.getLanguage_id();
+		languageId = u.getLanguageId();
 		externalType = u.getExternalUserType();
 		tz = getBean(TimezoneUtil.class).getTimeZone(u);
 		ISO8601FORMAT.setTimeZone(tz);
@@ -301,7 +301,7 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 		WebSession session = get();
 		if (session.languageId < 0) {
 			if (session.isSignedIn()) {
-				session.languageId = getBean(UserDao.class).get(session.userId).getLanguage_id();
+				session.languageId = getBean(UserDao.class).get(session.userId).getLanguageId();
 			} else {
 				session.languageId = getBean(ConfigurationDao.class).getConfValue(CONFIG_DEFAUT_LANG_KEY, Long.class, "1");
 			}
@@ -443,7 +443,7 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 	
 	private void initDashboard() {
 		DashboardContext dashboardContext = getDashboardContext();
-		dashboard = (UserDashboard)dashboardContext.getDashboardPersiter().load();
+		dashboard = (UserDashboard)dashboardContext.getDashboardPersister().load();
 		boolean existMyRoomWidget = false, existRssWidget = false;
 		ConfigurationDao cfgDao = getBean(ConfigurationDao.class);
 		boolean showMyRoomConfValue = 1 == cfgDao.getConfValue(CONFIG_DASHBOARD_SHOW_MYROOMS_KEY, Integer.class, "0");
@@ -495,7 +495,7 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 			}
 		}
 		if (save) {
-			dashboardContext.getDashboardPersiter().save(dashboard);
+			dashboardContext.getDashboardPersister().save(dashboard);
 		}
 	}
 

@@ -127,7 +127,7 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 		
 		// register some widgets
 		dashboardContext = new DashboardContext();
-		dashboardContext.setDashboardPersiter(new UserDashboardPersister());
+		dashboardContext.setDashboardPersister(new UserDashboardPersister());
 		WidgetRegistry widgetRegistry = dashboardContext.getWidgetRegistry();
 		widgetRegistry.registerWidget(new MyRoomsWidgetDescriptor());
 		widgetRegistry.registerWidget(new WelcomeWidgetDescriptor());
@@ -382,8 +382,8 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 			if (i.getInvitee().getType() == Type.contact) {
 				link += "?invitationHash=" + i.getHash();
 		
-				if (i.getInvitee().getLanguage_id() > 0) {
-					link += "&language=" + i.getInvitee().getLanguage_id().toString();
+				if (i.getInvitee().getLanguageId() > 0) {
+					link += "&language=" + i.getInvitee().getLanguageId().toString();
 				}
 			} else {
 				link = getRoomUrlFragment(i.getRoom().getId()).getLink();
