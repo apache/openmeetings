@@ -70,6 +70,8 @@ import org.apache.openmeetings.web.common.tree.FileTreePanel;
 import org.apache.openmeetings.web.common.tree.MyRecordingTreeProvider;
 import org.apache.openmeetings.web.common.tree.PublicRecordingTreeProvider;
 import org.apache.openmeetings.web.pages.MainPage;
+import org.apache.openmeetings.web.room.activities.ActivitiesPanel;
+import org.apache.openmeetings.web.room.activities.Activity;
 import org.apache.openmeetings.web.room.message.RoomMessage;
 import org.apache.openmeetings.web.room.poll.CreatePollDialog;
 import org.apache.openmeetings.web.room.poll.PollResultsDialog;
@@ -224,6 +226,7 @@ public class RoomPanel extends BasePanel {
 	private final boolean showFiles;
 	private final Button shareBtn = new Button("share");
 	private final Button askBtn = new Button("ask");
+	private final ActivitiesPanel activities;
 	
 	public RoomPanel(String id, long _roomId) {
 		this(id, getBean(RoomDao.class).get(_roomId));
@@ -379,6 +382,7 @@ public class RoomPanel extends BasePanel {
 		room.add(createPoll = new CreatePollDialog("createPoll", roomId));
 		room.add(vote = new VoteDialog("vote", roomId));
 		room.add(pollResults = new PollResultsDialog("pollResults", roomId));
+		room.add((activities = new ActivitiesPanel("activitiesPanel", roomId)).setVisible(!r.isActivitiesHidden()));
 		add(room, accessDenied);
 	}
 
@@ -401,11 +405,13 @@ public class RoomPanel extends BasePanel {
 						updateUserMenuIcons(wsEvent.getHandler());
 						break;
 					case roomEnter:
+						activities.addActivity(m.getSentUserId(), Activity.Type.roomEnter, wsEvent.getHandler());
 						updateUserMenuIcons(wsEvent.getHandler());
 					case roomExit:
 						//TODO check user/remove tab
 						users.setList(getUsers());
 						wsEvent.getHandler().add(userList);
+						activities.addActivity(m.getSentUserId(), Activity.Type.roomExit, wsEvent.getHandler());
 						break;
 					default:
 						break;

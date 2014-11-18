@@ -20,7 +20,7 @@ var chatTabs, tabTemplate = "<li><a href='#{href}'>#{label}</a></li>"
 	, msgTemplate = "<div id='chat-msg-id-#{id}'><span class='from'>#{from}</span><span class='date'>#{sent}</span>#{msg}</div>"
 	, acceptTemplate = "<span class='tick om-icon align-right clickable' data-msgid='#{msgid}' data-roomid='#{roomid}' onclick='var e=$(this);acceptMessage(e.data(\"roomid\"),e.data(\"msgid\"));e.parent().remove();'></span>"
 	, closeBlock = "<span class='ui-icon ui-icon-close' role='presentation'></span>"
-	, closedHeight = "16px", openedHeight = "345px";
+	, closedHeight = "20px", openedHeight = "345px";
 $(function() {
 	Wicket.Event.subscribe("/websocket/message", function(jqEvent, msg) {
 		var m = jQuery.parseJSON(msg);
@@ -45,21 +45,21 @@ $(function() {
 	});
 });
 function openChat() {
-	if ($('#chatPanel').height() < 20) {
-		$('#chat #controlBlock #control').removeClass('ui-icon-carat-1-n').addClass('ui-icon-carat-1-s');
+	if ($('#chatPanel').height() < 24) {
+		$('#chat .control.block .ui-icon').removeClass('ui-icon-carat-1-n').addClass('ui-icon-carat-1-s');
 		$('#chatPanel, #chat').animate({height: openedHeight}, 1000);
 	}
 }
 function closeChat() {
 	var chat = $('#chatPanel');
-	if ($('#chatPanel').height() > 20) {
-		$('#chat #controlBlock #control').removeClass('ui-icon-carat-1-s').addClass('ui-icon-carat-1-n');
-		chat.animate({height: "16px"}, 1000);
+	if ($('#chatPanel').height() > 24) {
+		$('#chat .control.block .ui-icon').removeClass('ui-icon-carat-1-s').addClass('ui-icon-carat-1-n');
+		chat.animate({height: closedHeight}, 1000);
 		$('#chatPanel, #chat').animate({height: closedHeight}, 1000);
 	}
 }
 function toggleChat() {
-	if ($('#chatPanel').height() < 20) {
+	if ($('#chatPanel').height() < 24) {
 		openChat();
 	} else {
 		closeChat();

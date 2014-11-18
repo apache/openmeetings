@@ -168,7 +168,7 @@ public class RoomForm extends AdminBaseForm<Room> {
 
 		add(new CheckBox("hideTopBar"));
 		add(new CheckBox("chatHidden"));
-		add(new CheckBox("hideActivitiesAndActions"));
+		add(new CheckBox("activitiesHidden"));
 		add(new CheckBox("hideFilesExplorer"));
 		add(new CheckBox("hideActionsMenu"));
 		add(new CheckBox("hideScreenSharing"));

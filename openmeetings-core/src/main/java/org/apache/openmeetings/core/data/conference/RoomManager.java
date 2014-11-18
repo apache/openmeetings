@@ -446,7 +446,7 @@ public class RoomManager implements IRoomManager {
 			r.setAllowRecording(allowRecording);
 			
 			r.setChatHidden(hideChat);
-			r.setHideActivitiesAndActions(hideActivitiesAndActions);
+			r.setActivitiesHidden(hideActivitiesAndActions);
 			r.setHideActionsMenu(hideActionsMenu);
 			r.setHideFilesExplorer(hideFilesExplorer);
 			r.setHideScreenSharing(hideScreenSharing);	
@@ -787,7 +787,7 @@ public class RoomManager implements IRoomManager {
 			r.setAllowRecording(allowRecording);
 			
 			r.setChatHidden(hideChat);
-			r.setHideActivitiesAndActions(hideActivitiesAndActions);
+			r.setActivitiesHidden(hideActivitiesAndActions);
 			r.setHideActionsMenu(hideActionsMenu);
 			r.setHideFilesExplorer(hideFilesExplorer);
 			r.setHideScreenSharing(hideScreenSharing);

@@ -54,6 +54,7 @@ import org.apache.wicket.ajax.json.JSONException;
 import org.apache.wicket.ajax.json.JSONObject;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.behavior.Behavior;
+import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
@@ -66,7 +67,6 @@ import org.apache.wicket.protocol.ws.api.IWebSocketConnection;
 import org.apache.wicket.protocol.ws.api.registry.IWebSocketConnectionRegistry;
 import org.apache.wicket.protocol.ws.api.registry.PageIdKey;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
-import org.apache.wicket.request.resource.ResourceReference;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 
@@ -146,7 +146,6 @@ public class ChatPanel extends BasePanel {
 
 	public ChatPanel(String id) {
 		super(id);
-		setOutputMarkupId(true);
 		setOutputMarkupPlaceholderTag(true);
 		setMarkupId(id);
 
@@ -198,14 +197,11 @@ public class ChatPanel extends BasePanel {
 		target.appendJavaScript(sb);
 	}
 	
-	private ResourceReference newResourceReference() {
-		return new JavaScriptResourceReference(ChatPanel.class, "chat.js");
-	}
-	
 	@Override
 	public void renderHead(IHeaderResponse response) {
 		super.renderHead(response);
-		response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forReference(newResourceReference())));
+		response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forReference(new JavaScriptResourceReference(ChatPanel.class, "chat.js"))));
+		response.render(CssHeaderItem.forUrl("css/chat.css"));
 		response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forScript(getNamedFunction("acceptMessage", acceptMessage, explicit(PARAM_ROOM_ID), explicit(PARAM_MSG_ID)), "acceptMessage")));
 	}
 	

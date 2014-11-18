@@ -195,8 +195,8 @@ public class Room implements IDataProviderEntity {
 	private boolean chatHidden = false;
 
 	@Column(name = "hide_activities_and_actions")
-	@Element(data = true, required = false)
-	private Boolean hideActivitiesAndActions = false;
+	@Element(name = "hideActivitiesAndActions", data = true, required = false)
+	private boolean activitiesHidden = false;
 
 	@Column(name = "hide_files_explorer")
 	@Element(data = true, required = false)
@@ -469,12 +469,12 @@ public class Room implements IDataProviderEntity {
 		this.chatHidden = chatHidden;
 	}
 
-	public Boolean getHideActivitiesAndActions() {
-		return hideActivitiesAndActions;
+	public boolean isActivitiesHidden() {
+		return activitiesHidden;
 	}
 
-	public void setHideActivitiesAndActions(Boolean hideActivitiesAndActions) {
-		this.hideActivitiesAndActions = hideActivitiesAndActions;
+	public void setActivitiesHidden(boolean activitiesHidden) {
+		this.activitiesHidden = activitiesHidden;
 	}
 
 	public Boolean getHideFilesExplorer() {
