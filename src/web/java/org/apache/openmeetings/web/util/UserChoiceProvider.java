@@ -29,13 +29,12 @@ import java.util.Map;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Type;
+import org.apache.wicket.ajax.json.JSONException;
+import org.apache.wicket.ajax.json.JSONWriter;
 import org.apache.wicket.extensions.validation.validator.RfcCompliantEmailAddressValidator;
 import org.apache.wicket.validation.Validatable;
-import org.json.JSONException;
-import org.json.JSONWriter;
-
-import com.vaynberg.wicket.select2.ChoiceProvider;
-import com.vaynberg.wicket.select2.Response;
+import org.wicketstuff.select2.ChoiceProvider;
+import org.wicketstuff.select2.Response;
 
 public class UserChoiceProvider extends ChoiceProvider<User> {
 	private static final long serialVersionUID = 1L;

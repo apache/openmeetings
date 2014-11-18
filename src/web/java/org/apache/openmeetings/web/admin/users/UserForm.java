@@ -60,11 +60,11 @@ import org.apache.wicket.markup.html.panel.PanelMarkupSourcingStrategy;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.util.time.Duration;
+import org.wicketstuff.select2.Response;
+import org.wicketstuff.select2.Select2MultiChoice;
+import org.wicketstuff.select2.TextChoiceProvider;
 
 import com.googlecode.wicket.jquery.ui.widget.dialog.MessageDialog;
-import com.vaynberg.wicket.select2.Response;
-import com.vaynberg.wicket.select2.Select2MultiChoice;
-import com.vaynberg.wicket.select2.TextChoiceProvider;
 
 /**
  * CRUD operations in form for {@link User}

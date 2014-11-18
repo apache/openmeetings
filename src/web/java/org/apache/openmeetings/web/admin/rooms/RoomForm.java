@@ -71,11 +71,10 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.util.string.Strings;
 import org.apache.wicket.util.time.Duration;
-
-import com.vaynberg.wicket.select2.Response;
-import com.vaynberg.wicket.select2.Select2Choice;
-import com.vaynberg.wicket.select2.Select2MultiChoice;
-import com.vaynberg.wicket.select2.TextChoiceProvider;
+import org.wicketstuff.select2.Response;
+import org.wicketstuff.select2.Select2Choice;
+import org.wicketstuff.select2.Select2MultiChoice;
+import org.wicketstuff.select2.TextChoiceProvider;
 
 public class RoomForm extends AdminBaseForm<Room> {
 	private static final long serialVersionUID = 1L;

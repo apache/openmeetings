@@ -177,7 +177,7 @@ public class LdapLoginManagement {
 			r = new InputStreamReader(new FileInputStream(new File(OmFileHelper.getConfDir(), ldapConfig.getConfigFileName())), "UTF-8");
 			config.load(r);
 		} catch (Exception e) {
-			log.error("Error on LdapLogin : Configurationdata couldnt be retrieved!");
+			log.error("Error on LdapLogin : Configurationdata couldn't be retrieved!");
 			return null;
 		} finally {
 			if (r != null) {

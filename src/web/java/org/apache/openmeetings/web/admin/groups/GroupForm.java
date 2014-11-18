@@ -38,8 +38,7 @@ import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.util.time.Duration;
-
-import com.vaynberg.wicket.select2.Select2Choice;
+import org.wicketstuff.select2.Select2Choice;
 
 public class GroupForm extends AdminBaseForm<Organisation> {
 	private static final long serialVersionUID = -1720731686053912700L;
