@@ -24,7 +24,6 @@ import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.getClientTimeZone;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
@@ -55,12 +54,6 @@ public class CalendarPanel extends UserPanel {
 	private static final long serialVersionUID = 1L;
 	private static final String javaScriptMarkup = "setCalendarHeight();";
 	private static final String javaScriptAddDatepicker = "addCalButton('left', 'Datepicker', 'datepicker');";
-	private static final ThreadLocal<SimpleDateFormat> formatDateJava = new ThreadLocal<SimpleDateFormat>() {
-		@Override
-		protected SimpleDateFormat initialValue() {
-			return new SimpleDateFormat("MM/dd/yy");
-		}
-	};
 	private final AbstractAjaxTimerBehavior refreshTimer = new AbstractAjaxTimerBehavior(Duration.seconds(10)) {
 		private static final long serialVersionUID = 1L;
 
@@ -196,12 +189,12 @@ public class CalendarPanel extends UserPanel {
 			
 			@Override
 			public void onSelect(AjaxRequestTarget target, CalendarView view, Date start, Date end, boolean allDay) {
-				target.appendJavaScript("setDatepickerDate('datepicker','" +  formatDateJava.get().format(start) + "');");
+				java.util.Calendar cStart = java.util.Calendar.getInstance(getClientTimeZone());
+				cStart.setTime(start);
+				target.appendJavaScript(String.format("setDatepickerDate('datepicker', new Date(%s,%s,%s));", cStart.get(java.util.Calendar.YEAR), cStart.get(java.util.Calendar.MONTH), cStart.get(java.util.Calendar.DATE)));
 				Appointment a = getDefault();
 				if (CalendarView.month == view && start.equals(end)) {
 					java.util.Calendar cNow = java.util.Calendar.getInstance(getClientTimeZone());
-					java.util.Calendar cStart = java.util.Calendar.getInstance(getClientTimeZone());
-					cStart.setTime(start);
 					cStart.set(java.util.Calendar.HOUR_OF_DAY, cNow.get(java.util.Calendar.HOUR_OF_DAY));
 					cStart.set(java.util.Calendar.MINUTE, cNow.get(java.util.Calendar.MINUTE));
 					cStart.set(java.util.Calendar.SECOND, 0);
