@@ -109,7 +109,7 @@ public class RoomForm extends AdminBaseForm<Room> {
 				}));
 
 		add(new DropDownChoice<RoomType>("roomtype", Application.getBean(RoomTypeDao.class).getAll(WebSession.getLanguage()),
-				new ChoiceRenderer<RoomType>("label.value", "roomtypes_id")));
+				new ChoiceRenderer<RoomType>("label.value", "roomtypes_id")).setRequired(true).setLabel(Model.of(WebSession.getString(194))));
 
 		add(new TextArea<String>("comment"));
 
