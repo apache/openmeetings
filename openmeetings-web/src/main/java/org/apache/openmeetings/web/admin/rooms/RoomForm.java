@@ -106,7 +106,7 @@ public class RoomForm extends AdminBaseForm<Room> {
 					}
 				}));
 
-		add(new RoomTypeDropDown("roomtype"));
+		add(new RoomTypeDropDown("roomtype").setRequired(true).setLabel(Model.of(WebSession.getString(194))));
 
 		add(new TextArea<String>("comment"));
 
