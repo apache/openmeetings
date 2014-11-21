@@ -744,7 +744,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>Share/record screen</value>
   </string>
   <string id="240" name="screen_warnBandwidth">
-    <value>Unable to syncronize the screen. If this warning is shown often you should ask the moderator to reduce the quality.</value>
+    <value>Unable to synchronize the screen. If this warning is shown often you should ask the moderator to reduce the quality.</value>
   </string>
   <string id="241" name="screen_userlabel">
     <value>Screen of:</value>
@@ -1644,7 +1644,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>Audio/video</value>
   </string>
   <string id="540" name="audio_video">
-    <value>Syncronize audio/video</value>
+    <value>Synchronize audio/video</value>
   </string>
   <string id="541" name="errorCode_invalidSession">
     <value>Login was correct, but the session is not active or stored on the server</value>
