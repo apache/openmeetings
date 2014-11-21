@@ -26,7 +26,7 @@
 
 	<attribute name="error" value="" type="string" />
 	<attribute name="makeModal" value="false" type="boolean" />
-	<attribute name="onCloseFunc" type="object" balue="null"/>
+	<attribute name="onCloseFunc" type="object" value="null"/>
 		
 	<handler name="oninit">
 	   if (this.makeModal) {
