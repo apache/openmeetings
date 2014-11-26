@@ -126,6 +126,7 @@
 			<id>solomax</id>
 			<name>Maxim Solodovnik</name>
 			<email>solomax666@gmail.com</email>
+			<organizationUrl>http://unipro.ru</organizationUrl>
 			<roles>
 				<role>architect</role>
 				<role>developer</role>
@@ -135,10 +136,29 @@
 		<developer>
 			<id>vdegtyarev</id>
 			<name>Vasiliy Degtyarev</name>
-			<email>vdegtyarev@apache.org</email>
+			<email>vdegtyarev1964@gmail.com</email>
+			<organizationUrl>http://unipro.ru</organizationUrl>
 			<roles>
 				<role>developer</role>
 				<role>tester</role>
+				<role>pmc</role>
+			</roles>
+		</developer>
+		<developer>
+			<id>iarkh</id>
+			<name>Irina Arkhipets</name>
+			<email>Irina.Arkhipets@gmail.com</email>
+			<organizationUrl>http://unipro.ru</organizationUrl>
+			<roles>
+				<role>support</role>
+				<role>pmc</role>
+			</roles>
+		</developer>
+		<developer>
+			<name>Denis Kandrov</name>
+			<organizationUrl>http://unipro.ru</organizationUrl>
+			<roles>
+				<role>support</role>
 				<role>pmc</role>
 			</roles>
 		</developer>
@@ -169,6 +189,11 @@
 		</developer>
 		<developer>
 			<name>Timur Tleukenov</name>
+			<organizationUrl>http://unipro.ru</organizationUrl>
+			<roles>
+				<role>developer</role>
+				<role>pmc</role>
+			</roles>
 		</developer>
 		<developer>
 			<name>Alvaro Bustos</name>
@@ -180,17 +205,8 @@
 			<name>Stephen Cottham</name>
 		</developer>
 		<developer>
-			<name>Irina Arkhipets</name>
-			<roles>
-				<role>support</role>
-				<role>pmc</role>
-			</roles>
-		</developer>
-		<developer>
-			<name>Denis Kandrov</name>
-		</developer>
-		<developer>
 			<name>Yulia Algaer</name>
+			<organizationUrl>http://unipro.ru</organizationUrl>
 		</developer>
 		<developer>
 			<name>Artyom Horuzhenko</name>
