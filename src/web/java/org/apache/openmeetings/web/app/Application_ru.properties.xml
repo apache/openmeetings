@@ -119,7 +119,7 @@
 					Инструкций по установке из Сети. Вы должны установить libmp3lame!
 				</li>
 				<li>Установите <strong>SoX</strong> <a
-					href="http://sox.sourceforge.net/" target="_BLANK">http://sox.sourceforge.net/</a>.
+					href="http://sox.sourceforge.net/" target="_blank">http://sox.sourceforge.net/</a>.
 					Вы должны установить последнюю версию SoX! SoX 12.xx не будет
 					работать!
 				</li>
@@ -248,8 +248,8 @@
 	<entry key="install.wizard.params.step4.red5SipExtenContext.text">Окружение расширений Asterisk</entry>
 
 	<entry key="install.wizard.install.desc">Пожалуйста нажмите кнопку "Закончить" для запуска установки!</entry>
-	<entry key="install.wizard.install.started">Please wait, installation in progress</entry>
-	<entry key="install.wizard.install.failed">Installation is failed</entry>
+	<entry key="install.wizard.install.started">Пожалуйста подождите, идёт установка</entry>
+	<entry key="install.wizard.install.failed">Ошибка установки</entry>
 
 	<entry key="install.wizard.congrats.enter">Вход в приложение</entry>
 	<entry key="install.wizard.congrats.port">Если Ваш Red5-сервер запущен на другом порту или на другом домене</entry>
