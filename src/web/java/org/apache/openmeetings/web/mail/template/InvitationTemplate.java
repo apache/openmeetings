@@ -34,9 +34,10 @@ public class InvitationTemplate extends AbstractTemplatePanel {
 		ensureApplication(langId);
 
 		FieldLanguagesValuesDao dao = getBean(FieldLanguagesValuesDao.class);
-		add(new Label("titleLbl", dao.getString(500,  langId).replaceAll("\\$APP_NAME", getBean(ConfigurationDao.class).getAppName())));
-		add(new Label("userLbl", dao.getString(501,  langId)));
+		add(new Label("titleLbl", dao.getString(500, langId).replaceAll("\\$APP_NAME", getBean(ConfigurationDao.class).getAppName())));
+		add(new Label("userLbl", dao.getString(501, langId)));
 		add(new Label("user", invitorName));
+		add(new Label("messageLbl", dao.getString(502, langId)));
 		add(new Label("message", message).setEscapeModelStrings(false));
 		
 		add(new WebMarkupContainer("links")
