@@ -39,10 +39,14 @@ public class MenuFunctionsBehavior extends Behavior {
 		this.menuId = menuId;
 	}
 	
+	public String getInitScript() {
+		return String.format("initMenu('%s', '%s');", menuContainerId, menuId);
+	}
+	
 	@Override
 	public void renderHead(Component component, IHeaderResponse response) {
 		super.renderHead(component, response);
 		response.render(JavaScriptHeaderItem.forReference(MENU_FUNCTIONS));
-		response.render(OnDomReadyHeaderItem.forScript(String.format("initMenu('%s', '%s');", menuContainerId, menuId)));
+		response.render(OnDomReadyHeaderItem.forScript(getInitScript()));
 	}
 }

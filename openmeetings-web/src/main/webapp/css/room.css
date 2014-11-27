@@ -102,3 +102,10 @@
 	max-height: 100px;
 	overflow-y: auto;
 }
+.activity.item {
+	position: relative;
+}
+.activity.item .ui-dialog-titlebar-close {
+	width: 20px;
+	height: 20px;
+}

@@ -1,6 +1,7 @@
 package org.apache.openmeetings.web.room.activities;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.UUID;
 
 public class Activity implements Serializable {
@@ -12,12 +13,14 @@ public class Activity implements Serializable {
 	}
 	private String uid;
 	private Long sender;
+	private Date created;
 	private Type type;
 	
 	public Activity(Long sender, Type type) {
 		this.uid = UUID.randomUUID().toString();
 		this.sender = sender;
 		this.type = type;
+		this.created = new Date(); //TODO timezone
 	}
 
 	public String getUid() {
@@ -42,5 +45,13 @@ public class Activity implements Serializable {
 
 	public void setType(Type type) {
 		this.type = type;
+	}
+
+	public Date getCreated() {
+		return created;
+	}
+
+	public void setCreated(Date created) {
+		this.created = created;
 	}
 }

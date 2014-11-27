@@ -48,6 +48,8 @@ html, body {
 
 #menu, #roomMenu {
 	background-color: #AFCBFB;
+	max-height: 30px;
+	overflow-y: hidden;
 }
 .ui-menubar .ui-menu {
 	width: 250px;

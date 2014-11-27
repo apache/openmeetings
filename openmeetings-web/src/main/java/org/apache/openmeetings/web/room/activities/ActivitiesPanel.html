@@ -23,6 +23,14 @@
 	<div class="ui-widget-header">
 		<div onclick="toggleActivities();" class="control block ui-widget-header ui-state-active"><div class="ui-icon ui-icon-carat-1-n sort-icon"></div><div class="label"><wicket:ommessage key="1363"/></div></div>
 	</div>
-	<div wicket:id="container" class="area ui-widget-content"></div>
+	<div wicket:id="container" class="area ui-widget-content">
+		<div wicket:id="activities" class="activity item">
+			<div wicket:id="text"></div>
+			<button type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-icon-only ui-dialog-titlebar-close" role="button" title="Close">
+				<span class="ui-button-icon-primary ui-icon ui-icon-closethick"></span>
+				<span class="ui-button-text">Close</span>
+			</button>
+		</div>
+	</div>
 </wicket:panel>
 </html>

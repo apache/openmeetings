@@ -43,6 +43,7 @@ import org.apache.wicket.util.string.Strings;
 public class MenuPanel extends BasePanel {
 	private static final long serialVersionUID = 1L;
 	private final WebMarkupContainer menuContainer = new WebMarkupContainer("menuContainer");
+	private final MenuFunctionsBehavior mfb;
 
 	public MenuPanel(String id, List<MenuItem> menus) {
 		super(id);
@@ -96,9 +97,14 @@ public class MenuPanel extends BasePanel {
 					}).setVisible(null != gl.getChildren()));
 			}
 		});
-		add(new MenuFunctionsBehavior(menuContainer.getMarkupId(), id));
+		add(mfb = new MenuFunctionsBehavior(menuContainer.getMarkupId(), id));
 	}
 	
+	public void update(AjaxRequestTarget target) {
+		target.add(menuContainer);
+		//target.appendJavaScript(String.format("$(function() {%s;});", mfb.getInitScript()));
+		target.appendJavaScript(mfb.getInitScript());
+	}
 	@Override
 	public void renderHead(IHeaderResponse response) {
 		super.renderHead(response);

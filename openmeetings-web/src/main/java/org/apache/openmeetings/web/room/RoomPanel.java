@@ -405,8 +405,11 @@ public class RoomPanel extends BasePanel {
 						updateUserMenuIcons(wsEvent.getHandler());
 						break;
 					case roomEnter:
-						activities.addActivity(m.getSentUserId(), Activity.Type.roomEnter, wsEvent.getHandler());
 						updateUserMenuIcons(wsEvent.getHandler());
+						users.setList(getUsers());
+						wsEvent.getHandler().add(userList);
+						activities.addActivity(m.getSentUserId(), Activity.Type.roomEnter, wsEvent.getHandler());
+						break;
 					case roomExit:
 						//TODO check user/remove tab
 						users.setList(getUsers());
@@ -521,7 +524,8 @@ public class RoomPanel extends BasePanel {
 		pollVoteMenuItem.setActive(pollExists && notExternalUser && !getBean(PollDao.class).hasVoted(roomId, getUserId()));
 		pollResultMenuItem.setActive(pollExists || getBean(PollDao.class).getArchived(roomId).size() > 0);
 		//TODO sip menus
-		handler.add(menuPanel, askBtn.setVisible(!moder), shareBtn.setVisible(shareVisible));
+		menuPanel.update(handler);
+		handler.add(askBtn.setVisible(!moder), shareBtn.setVisible(shareVisible));
 	}
 	
 	private List<MenuItem> getMenu() {
