@@ -40,6 +40,7 @@ public class InvitationTemplate extends AbstractTemplatePanel {
 		add(new Label("titleLbl", dao.getString(500,  langId).replaceAll("\\$APP_NAME", a.getOmBean(ConfigurationDao.class).getAppName())));
 		add(new Label("userLbl", dao.getString(501,  langId)));
 		add(new Label("user", invitorName));
+		add(new Label("messageLbl", dao.getString(502, langId)));
 		add(new Label("message", message).setEscapeModelStrings(false));
 		
 		add(new WebMarkupContainer("links")
