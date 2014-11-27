@@ -108,6 +108,7 @@ public class MobileService implements IPendingServiceCallback {
 					result.put("firstname", u.getFirstname());
 					result.put("lastname", u.getLastname());
 					result.put("login", u.getLogin());
+					result.put("mail", u.getAdresses() == null ? "" : u.getAdresses().getEmail()); //FIXME should be renamed
 					result.put("language", u.getLanguage_id()); //TODO rights
 				}
 			}
@@ -133,6 +134,7 @@ public class MobileService implements IPendingServiceCallback {
 						map.put("firstname", c.getFirstname());
 						map.put("lastname", c.getLastname());
 						map.put("publicSid", c.getPublicSID());
+						map.put("mail", c.getMail()); //FIXME should be renamed
 						result.add(map);
 					}
 				}
