@@ -237,8 +237,8 @@
 	<entry key="install.wizard.params.step4.red5SipExtenContext">SIP extensiones contexto</entry>
 	<entry key="install.wizard.params.step4.red5SipExtenContext.text">Contexto de Asterisk extensiones</entry>
 
-	<entry key="install.wizard.install.desc">Por favor pulse el botón "Finalizar" para comenzar la instalación!</entry>
-	<entry key="install.wizard.install.started">Por favor aguarde, instalación en progreso</entry>
+	<entry key="install.wizard.install.desc">Por favor pulse el botón "Finalizar" para comenzar la instalación.</entry>
+	<entry key="install.wizard.install.started">Por favor aguarde, instalación en progreso...</entry>
 	<entry key="install.wizard.install.failed">Instalación fallida</entry>
 
 	<entry key="install.wizard.congrats.enter">Entrar a la Aplicación</entry>
