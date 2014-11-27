@@ -45,8 +45,11 @@ import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Type;
 import org.apache.openmeetings.db.util.TimezoneUtil;
+import org.apache.openmeetings.service.mail.template.AbstractAppointmentTemplate;
+import org.apache.openmeetings.service.mail.template.CanceledAppointmentTemplate;
+import org.apache.openmeetings.service.mail.template.CreatedAppointmentTemplate;
 import org.apache.openmeetings.service.mail.template.InvitationTemplate;
-import org.apache.openmeetings.util.CalendarPatterns;
+import org.apache.openmeetings.service.mail.template.UpdatedAppointmentTemplate;
 import org.apache.openmeetings.util.crypt.MD5;
 import org.apache.openmeetings.util.crypt.ManageCryptStyle;
 import org.apache.openmeetings.util.mail.IcalHandler;
@@ -77,119 +80,6 @@ public class InvitationManager implements IInvitationManager {
 	@Autowired
 	private ConfigurationDao configDao;
 
-	
-	private String formatSubject(Long langId, Appointment a, TimeZone tz) {
-		String message = langDao.getString(1151L, langId) + " " + a.getTitle();
-
-		message += " "
-				+ CalendarPatterns.getDateWithTimeByMiliSecondsAndTimeZone(a.getStart(), tz);
-
-		message += " - "
-				+ CalendarPatterns.getDateWithTimeByMiliSecondsAndTimeZone(a.getEnd(), tz);
-
-		return message;
-	}
-
-	private String formatMessage(Long langId, Appointment a, TimeZone tz, String invitorName) {
-		String message = langDao.getString(1151L, langId) + " " + a.getTitle();
-
-		if (!Strings.isEmpty(a.getDescription())) {
-			message += langDao.getString(1152L, langId) + a.getDescription();
-		}
-
-		message += "<br/>"
-				+ langDao.getString(1153L, langId)
-				+ ' '
-				+ CalendarPatterns.getDateWithTimeByMiliSecondsAndTimeZone(a.getStart(), tz)
-				+ "<br/>";
-
-		message += langDao.getString(1154L, langId)
-				+ ' '
-				+ CalendarPatterns.getDateWithTimeByMiliSecondsAndTimeZone(a.getEnd(), tz) + "<br/>";
-
-		message += langDao.getString(1156L, langId) + invitorName + "<br/>";
-
-		return message;
-	}
-
-	private String formatCancelSubject(Long langId, Appointment a, TimeZone tz) {
-		String message = langDao.getString(1157L, langId) + a.getTitle();
-
-		message += " "
-				+ CalendarPatterns.getDateWithTimeByMiliSecondsAndTimeZone(a.getStart(), tz)
-				+ " - "
-				+ CalendarPatterns.getDateWithTimeByMiliSecondsAndTimeZone(a.getEnd(), tz);
-
-		return message;
-	}
-
-	private String formatCancelMessage(Long langId, Appointment a, TimeZone tz, String invitorName) {
-		try {
-			String message = langDao.getString(1157L, langId) + a.getTitle();
-
-			if (!Strings.isEmpty(a.getDescription())) {
-				message += langDao.getString(1152L, langId) + a.getDescription();
-			}
-
-			message += "<br/>"
-					+ langDao.getString(1153L, langId)
-					+ ' '
-					+ CalendarPatterns.getDateWithTimeByMiliSecondsAndTimeZone(a.getStart(), tz)
-					+ "<br/>";
-
-			message += langDao.getString(1154L, langId)
-					+ ' '
-					+ CalendarPatterns.getDateWithTimeByMiliSecondsAndTimeZone(a.getEnd(), tz)
-					+ "<br/>";
-
-			message += langDao.getString(1156L, langId) + invitorName + "<br/>";
-
-			return message;
-		} catch (Exception err) {
-			log.error("Could not format cancel message", err);
-			return "Error formatCancelMessage";
-		}
-	}
-
-	private String formatUpdateSubject(Long langId, Appointment a, TimeZone tz) {
-		String message = langDao.getString(1155L, langId) + " " + a.getTitle();
-
-		message += " "
-				+ CalendarPatterns.getDateWithTimeByMiliSecondsAndTimeZone(a.getStart(), tz)
-				+ " - "
-				+ CalendarPatterns.getDateWithTimeByMiliSecondsAndTimeZone(a.getEnd(), tz);
-
-		return message;
-	}
-
-	private String formatUpdateMessage(Long langId, Appointment a, TimeZone tz, String invitorName) {
-		try {
-			String message = langDao.getString(1155L, langId) + " " + a.getTitle();
-
-			if (!Strings.isEmpty(a.getDescription())) {
-				message += langDao.getString(1152L, langId) + a.getDescription();
-			}
-
-			message += "<br/>"
-					+ langDao.getString(1153L, langId)
-					+ ' '
-					+ CalendarPatterns.getDateWithTimeByMiliSecondsAndTimeZone(a.getStart(), tz)
-					+ "<br/>";
-
-			message += langDao.getString(1154L, langId)
-					+ ' '
-					+ CalendarPatterns.getDateWithTimeByMiliSecondsAndTimeZone(a.getEnd(), tz)
-					+ "<br/>";
-
-			message += langDao.getString(1156L, langId) + invitorName + "<br/>";
-
-			return message;
-		} catch (Exception err) {
-			log.error("Could not format update message", err);
-			return "Error formatUpdateMessage";
-		}
-	}
-
 	/**
 	 * @author vasya
 	 * 
@@ -205,41 +95,36 @@ public class InvitationManager implements IInvitationManager {
 		String invitorName = owner.getFirstname() + " " + owner.getLastname();
 		Long langId = mm.getUser().getLanguageId();
 		TimeZone tz = timezoneUtil.getTimeZone(mm.getUser());
-		String subject = null;
-		String message = null;
+		AbstractAppointmentTemplate t = null;
 		switch (type) {
 			case Cancel:
-				subject = formatCancelSubject(langId, a, tz);
-				message = formatCancelMessage(langId, a, tz, invitorName);
+				t = new CanceledAppointmentTemplate(langId, a, tz, invitorName);
 				break;
 			case Create:
-				subject = formatSubject(langId, a, tz);
-				message = formatMessage(langId, a, tz, invitorName);
+				t = new CreatedAppointmentTemplate(langId, a, tz, invitorName);
 				break;
 			case Update:
 			default:
-				subject = formatUpdateSubject(langId, a, tz);
-				message = formatUpdateMessage(langId, a, tz, invitorName);
+				t = new UpdatedAppointmentTemplate(langId, a, tz, invitorName);
 				break;
 			
 		}
-		sendInvitionLink(mm.getInvitation(), type, subject, message, ical);
+		sendInvitionLink(mm.getInvitation(), type, t.getSubject(), t.getEmail(), ical);
 	}
 	
 	public void sendInvitionLink(Invitation i, MessageType type, String subject, String message, boolean ical) throws Exception {
-		String invitation_link = ((IApplication)Application.get(wicketApplicationName)).getOmInvitationLink(configDao.getBaseUrl(), i); //TODO check for exceptions
+		String invitation_link = type == MessageType.Cancel ? null : ((IApplication)Application.get(wicketApplicationName)).getOmInvitationLink(configDao.getBaseUrl(), i); //TODO check for exceptions
 		User owner = i.getInvitedBy();
 		
 		String invitorName = owner.getFirstname() + " " + owner.getLastname();
-		boolean isCanceled = (type == MessageType.Cancel); 
-		String template = InvitationTemplate.getEmail(i.getInvitee().getLanguageId(), invitorName, message, invitation_link, isCanceled);
+		String template = new InvitationTemplate(i.getInvitee().getLanguageId(), invitorName, message, invitation_link).getEmail();
 		String email = i.getInvitee().getAdresses().getEmail();
 		String replyToEmail = owner.getAdresses().getEmail();
 		
 		if (ical) {
 			String username = i.getInvitee().getLogin();
 			boolean isOwner = owner.getId().equals(i.getInvitee().getId());
-			IcalHandler handler = new IcalHandler(isCanceled ? IcalHandler.ICAL_METHOD_CANCEL : IcalHandler.ICAL_METHOD_REQUEST);
+			IcalHandler handler = new IcalHandler(MessageType.Cancel == type ? IcalHandler.ICAL_METHOD_CANCEL : IcalHandler.ICAL_METHOD_REQUEST);
 
 			HashMap<String, String> attendeeList = handler.getAttendeeData(email, username, isOwner);
 

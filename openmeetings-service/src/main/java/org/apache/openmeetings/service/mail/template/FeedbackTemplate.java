@@ -18,6 +18,8 @@
  */
 package org.apache.openmeetings.service.mail.template;
 
+import static org.apache.openmeetings.util.OpenmeetingsVariables.wicketApplicationName;
+
 import org.apache.openmeetings.core.IApplication;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.wicket.Application;
@@ -29,7 +31,7 @@ public class FeedbackTemplate extends AbstractTemplatePanel {
 
 	public FeedbackTemplate(String id, String username, String email, String message) {
 		super(id);
-		add(new Label("appname", ((IApplication)Application.get()).getOmBean(ConfigurationDao.class).getAppName()));
+		add(new Label("appname", ((IApplication)Application.get(wicketApplicationName)).getOmBean(ConfigurationDao.class).getAppName()));
 		add(new Label("username", username));
 		add(new Label("email", email));
 		add(new Label("message", message));

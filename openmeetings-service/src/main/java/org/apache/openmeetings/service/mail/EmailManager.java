@@ -19,6 +19,7 @@
 package org.apache.openmeetings.service.mail;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.wicketApplicationName;
 
 import org.apache.openmeetings.core.IApplication;
 import org.apache.openmeetings.core.IWebSession;
@@ -63,7 +64,7 @@ public class EmailManager {
 		log.debug("sendMail:: username = {}, email = {}", username, email);
 		Integer sendEmailAtRegister = configurationDao.getConfValue("sendEmailAtRegister", Integer.class, "0");
 
-		String link = ((IApplication)Application.get()).urlForActivatePage(new PageParameters().add("u",  hash));
+		String link = ((IApplication)Application.get(wicketApplicationName)).urlForActivatePage(new PageParameters().add("u",  hash));
 		
 		if (sendEmailAtRegister == 1) {
 			mailHandler.send(email, getString(512)
