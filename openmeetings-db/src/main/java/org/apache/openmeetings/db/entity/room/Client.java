@@ -162,9 +162,9 @@ public class Client implements IDataProviderEntity {
 	 * @see Client#getCanGiveAudio()
 	 */
 	@Column(name = "can_giveaudio")
-    private Boolean canGiveAudio = false;
+	private Boolean canGiveAudio = false;
 	
-    /**
+	/**
 	 * @see Client#getConnectedSince()
 	 */
 	@Column(name = "connected_since")
@@ -251,8 +251,8 @@ public class Client implements IDataProviderEntity {
 	/**
 	 * @see Client#getMail()
 	 */
-	@Column(name = "mail")
-	private String mail;
+	@Column(name = "email")
+	private String email;
 	
 	/**
 	 * @see Client#getLastLogin()
@@ -355,21 +355,21 @@ public class Client implements IDataProviderEntity {
 	 * @see Client#getExternalUserType()
 	 */
 	@Column(name = "external_user_type")
-    private String externalUserType;
+	private String externalUserType;
 	
-    /**
+	/**
 	 * @see Client#getInterviewPodId()
 	 */
 	@Column(name = "interview_pod_id")
-    private Integer interviewPodId = null;
+	private Integer interviewPodId = null;
 	
-    /**
+	/**
 	 * @see Client#getAllowRecording()
 	 */
 	@Column(name = "allow_recording")
-    private boolean allowRecording = true;
+	private boolean allowRecording = true;
 	
-    /**
+	/**
 	 * @see Client#getZombieCheckFlag()
 	 */
 	@Column(name = "zombie_check_flag")
@@ -379,21 +379,19 @@ public class Client implements IDataProviderEntity {
 	 * @see Client#getMicMuted()
 	 */
 	@Column(name = "mic_muted")
-    private Boolean micMuted = false;
+	private Boolean micMuted = false;
 	
-    /**
+	/**
 	 * @see Client#isSipTransport()
 	 */
 	@Column(name = "sip_transport")
-    private boolean sipTransport = false;
+	private boolean sipTransport = false;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "server_id")
 	private Server server;
     
-    public Client() {
-    	
-    }
+	public Client() {}
     
 	public Client(String streamid, String publicSID, Long room_id,
 			Long user_id, String firstname, String lastname, boolean isAVClient,
@@ -552,12 +550,12 @@ public class Client implements IDataProviderEntity {
 		this.lastname = lastname;
 	}
 
-	public String getMail() {
-		return mail;
+	public String getEmail() {
+		return email;
 	}
 
-	public void setMail(String mail) {
-		this.mail = mail;
+	public void setEmail(String email) {
+		this.email = email;
 	}
 
 	public String getOfficial_code() {
@@ -808,7 +806,7 @@ public class Client implements IDataProviderEntity {
 		this.canRemote = canRemote;
 	}
 
-    public Boolean getCanGiveAudio() {
+	public Boolean getCanGiveAudio() {
 		return canGiveAudio;
 	}
 

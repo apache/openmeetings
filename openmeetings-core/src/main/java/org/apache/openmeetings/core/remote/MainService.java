@@ -252,7 +252,7 @@ public class MainService implements IPendingServiceCallback {
 
 			currentClient.setFirstname(firstname);
 			currentClient.setLastname(lastname);
-			currentClient.setMail(email);
+			currentClient.setEmail(email);
 
 			// Log the User
 			conferenceLogDao.addConferenceLog(
@@ -260,7 +260,7 @@ public class MainService implements IPendingServiceCallback {
 					null, currentClient.getUserip(), currentClient.getScope(),
 					currentClient.getExternalUserId(),
 					currentClient.getExternalUserType(),
-					currentClient.getMail(), currentClient.getFirstname(),
+					currentClient.getEmail(), currentClient.getFirstname(),
 					currentClient.getLastname());
 
 			this.sessionManager.updateClientByStreamId(streamId,
@@ -337,7 +337,7 @@ public class MainService implements IPendingServiceCallback {
 
 					currentClient.setUserObject(userObject.getUsername(), userObject.getFirstname(), userObject.getLastname());
 					currentClient.setPicture_uri(userObject.getPictureUrl());
-					currentClient.setMail(userObject.getEmail());
+					currentClient.setEmail(userObject.getEmail());
 
 					log.debug("UPDATE USER BY STREAMID " + streamId);
 
