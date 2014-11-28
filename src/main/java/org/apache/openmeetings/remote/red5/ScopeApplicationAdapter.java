@@ -141,8 +141,8 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 			}
 			
 			InitializationContainer.initComplete = true;
-		    Version.logOMStarted();
-		    recordingDao.resetProcessingStatus(); //we are starting so all processing recordings are now errors
+			Version.logOMStarted();
+			recordingDao.resetProcessingStatus(); //we are starting so all processing recordings are now errors
 		} catch (Exception err) {
 			log.error("[appStart]", err);
 		}
@@ -184,7 +184,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 			conferenceLogDao.addConferenceLog("ClientConnect",
 					rcm.getUser_id(), streamId, null, rcm.getUserip(),
 					rcm.getScope(), rcm.getExternalUserId(),
-					rcm.getExternalUserType(), rcm.getMail(),
+					rcm.getExternalUserType(), rcm.getEmail(),
 					rcm.getFirstname(), rcm.getLastname());
 		} catch (Exception err) {
 			log.error("roomJoin", err);
@@ -533,7 +533,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 					room_id, currentClient.getUserip(), "",
 					currentClient.getExternalUserId(),
 					currentClient.getExternalUserType(),
-					currentClient.getMail(), currentClient.getFirstname(),
+					currentClient.getEmail(), currentClient.getFirstname(),
 					currentClient.getLastname());
 
 			// Remove User from Sync List's
@@ -735,8 +735,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 	public synchronized void streamBroadcastClose(IBroadcastStream stream) {
 
 		// Notify all the clients that the stream had been closed
-		log.debug("start streamBroadcastClose broadcast close: "
-				+ stream.getPublishedName());
+		log.debug("start streamBroadcastClose broadcast close: " + stream.getPublishedName());
 		try {
 			IConnection current = Red5.getConnectionLocal();
 			Client rcl = sessionManager.getClientByStreamId(current.getClient().getId(), null);
@@ -1234,16 +1233,13 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 				} else {
 					return true;
 				}
-
 			} else {
-
 				// FIXME: TODO: For Rooms that are created as Appointment we
 				// have to check that too
 				// but I don't know yet the Logic behind it - swagner 19.06.2009
 				return true;
 
 			}
-
 		} catch (Exception err) {
 			log.error("[checkRoomValues]", err);
 		}
@@ -1325,7 +1321,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 					currentClient.getUserip(), "",
 					currentClient.getExternalUserId(),
 					currentClient.getExternalUserType(),
-					currentClient.getMail(), currentClient.getFirstname(),
+					currentClient.getEmail(), currentClient.getFirstname(),
 					currentClient.getLastname());
 			
 			// Check for Moderation LogicalRoom ENTER
@@ -1400,9 +1396,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 							// whatever Role that should get the Moderation
 							currentClient.setIsMod(false);
 						}
-
 					}
-
 				}
 
 				// Update the Client List
