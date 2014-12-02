@@ -287,7 +287,11 @@ public class WebSession extends AbstractAuthenticatedWebSession {
 	}
 	
 	public static String getString(long id) {
-		String s = getBean(FieldLanguagesValuesDao.class).getString(id, getLanguage());
+		return getString(id, getLanguage());
+	}
+	
+	public static String getString(long id, long languageId) {
+		String s = getBean(FieldLanguagesValuesDao.class).getString(id, languageId);
 		return s == null ? "[Missing]" :
 			(STRINGS_WITH_APP.contains(id) ? s.replaceAll("\\$APP_NAME", getBean(ConfigurationDao.class).getAppName()) : s);
 	}
