@@ -18,16 +18,10 @@
  */
 package org.apache.openmeetings.service.mail.template;
 
-import static org.apache.openmeetings.util.OpenmeetingsVariables.wicketApplicationName;
-
 import java.util.TimeZone;
 
-import org.apache.openmeetings.core.IApplication;
-import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
-import org.apache.openmeetings.db.dao.label.FieldLanguagesValuesDao;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
 import org.apache.openmeetings.util.CalendarPatterns;
-import org.apache.wicket.Application;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.util.string.Strings;
@@ -35,37 +29,28 @@ import org.apache.wicket.util.string.Strings;
 public class CreatedAppointmentTemplate extends AbstractAppointmentTemplate {
 	private static final long serialVersionUID = 1L;
 
-	private String getTitleLbl(IApplication app, FieldLanguagesValuesDao dao) {
-		return dao.getString(1151L, langId).replaceAll("\\$APP_NAME", app.getOmBean(ConfigurationDao.class).getAppName());
-	}
-	
 	public CreatedAppointmentTemplate(Long langId, Appointment a, TimeZone tz, String invitorName) {
 		super(langId, a, tz, invitorName);
-		IApplication app = ((IApplication)Application.get(wicketApplicationName));
 		
-		FieldLanguagesValuesDao dao = app.getOmBean(FieldLanguagesValuesDao.class);
-		add(new Label("titleLbl", getTitleLbl(app, dao)));
+		add(new Label("titleLbl", getString(1151L, langId)));
 		add(new Label("title", a.getTitle()));
 		add(new WebMarkupContainer("descContainer")
-			.add(new Label("descLbl", dao.getString(1152L, langId)))
+			.add(new Label("descLbl", getString(1152L, langId)))
 			.add(new Label("desc", a.getDescription()))
 			.setVisible(!Strings.isEmpty(a.getDescription()))
 			);
-		add(new Label("startLbl", dao.getString(1153L, langId)));
+		add(new Label("startLbl", getString(1153L, langId)));
 		add(new Label("start", CalendarPatterns.getDateWithTimeByMiliSecondsAndTimeZone(a.getStart(), tz)));
-		add(new Label("endLbl", dao.getString(1154L, langId)));
+		add(new Label("endLbl", getString(1154L, langId)));
 		add(new Label("end", CalendarPatterns.getDateWithTimeByMiliSecondsAndTimeZone(a.getEnd(), tz)));
-		add(new Label("invitorLbl", dao.getString(1156L, langId)));
+		add(new Label("invitorLbl", getString(1156L, langId)));
 		add(new Label("invitor", invitorName));
 	}
 	
 	@Override
 	public String getSubject() {
-		IApplication app = ((IApplication)Application.get(wicketApplicationName));
-		
-		FieldLanguagesValuesDao dao = app.getOmBean(FieldLanguagesValuesDao.class);
 		StringBuilder sb = new StringBuilder();
-		sb.append(getTitleLbl(app, dao)).append(" ").append(a.getTitle())
+		sb.append(getString(1151L, langId)).append(" ").append(a.getTitle())
 			.append(" ").append(CalendarPatterns.getDateWithTimeByMiliSecondsAndTimeZone(a.getStart(), tz))
 			.append(" - ").append(CalendarPatterns.getDateWithTimeByMiliSecondsAndTimeZone(a.getEnd(), tz));
 
