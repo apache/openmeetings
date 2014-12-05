@@ -136,7 +136,7 @@ public class MobileService implements IPendingServiceCallback {
 						map.put("publicSid", c.getPublicSID());
 						map.put("login", c.getUsername());
 						map.put("email", c.getEmail() == null ? "" : c.getEmail());
-						map.put("avsettings", c.getAllowRecording());
+						map.put("avsettings", c.getAvsettings());
 						result.add(map);
 					}
 				}
