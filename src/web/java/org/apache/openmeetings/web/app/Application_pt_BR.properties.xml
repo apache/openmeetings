@@ -31,15 +31,15 @@
 					class="section_anchor"></a>
 			</h4>
 		<blockquote>
-			Por padr&atilde;o {0} o banco de dados Apache Derby integrado ao sistema &eacute; 
-			utilizado. Para o ambiente de produ&ccedil;&atilde;o voc&ecirc; deve considerar o uso do <a target="_blank"
+			Por padr&atilde;o o {0} utiliza o banco de dados Apache Derby integrado ao sistema. 
+			Para o ambiente de produ&ccedil;&atilde;o voc&ecirc; deve considerar o uso do <a target="_blank"
 				href="http://openmeetings.apache.org/MySQLConfig.html">MySQL</a>, <a
 				target="_blank"
 				href="http://openmeetings.apache.org/PostgresConfig.html">Postgres</a>
 			ou, por exemplo, <a target="_blank"
 				href="http://openmeetings.apache.org/IBMDB2Config.html">IBM DB2</a>
 			ou <a href="http://openmeetings.apache.org/OracleConfig.html"
-				target="_blank">Oracle</a>
+				target="_blank">Oracle</a>.
 		</blockquote>
 		</li>
 		<li><h4>
@@ -52,11 +52,11 @@
 				<li>Instale <strong>ImageMagick</strong> no servidor, voc&ecirc; pode
 					obter maiores informa&ccedil;&otilde;es em <a target="_blank"
 					href="http://www.imagemagick.org" rel="nofollow">http://www.imagemagick.org</a>, inclusive 
-					sobre a instala&ccedil;&atilde;o. As instru&ccedil;&otilde;es sobre a instala&ccedil;&atilde;o
-					podem ser encontradas aqui <a target="_blank"
+					sobre a instala&ccedil;&atilde;o. Instru&ccedil;&otilde;es sobre a instala&ccedil;&atilde;o
+					também podem ser encontradas aqui <a target="_blank"
 					href="http://www.imagemagick.org/script/binary-releases.php"
 					rel="nofollow">http://www.imagemagick.org/script/binary-releases.php</a>,
-					entretanto na maioria dos sistemas Linux voc&ecirc; poder&aacute; instal&aacute;-lo pelo seu 						gerenciador de pacotes favorito (ex.: apt-get)
+					entretanto na maioria dos sistemas Linux voc&ecirc; poder&aacute; instal&aacute;-lo pelo seu 						gerenciador de pacotes favorito (ex.: apt-get).
 				</li>
 			</ul>
 		</li>
@@ -70,8 +70,8 @@
 				<li>Instale <strong>GhostScript</strong> no servidor, voc&ecirc; pode
 					obter maiores informa&ccedil;&otilde;es em <a target="_blank"
 					href="http://pages.cs.wisc.edu/%7Eghost/" rel="nofollow">http://pages.cs.wisc.edu/~ghost/</a>,
-					inclusive sobre a instala&ccedil;&atilde;o. As instru&ccedil;&otilde;s sobre a 						instala&ccedil;&atilde;o podem ser encontradas neste mesmo link, entretanto na maioria dos 						sistemas Linux voc&ecirc; poder&aacute; instal&aacute;-lo pelo seu gerenciador 
-					de pacotes favorito (ex.: apt-get)
+					inclusive sobre a instala&ccedil;&atilde;o. Instru&ccedil;&otilde;es sobre a 						instala&ccedil;&atilde;o podem ser encontradas neste mesmo link, entretanto na maioria dos 						sistemas Linux voc&ecirc; poder&aacute; instal&aacute;-lo pelo seu gerenciador 
+					de pacotes favorito (ex.: apt-get).
 				</li>
 				<li>Instale <strong>SWFTools</strong> no servidor, voc&ecirc; pode
 					obter maiores informa&ccedil;&otilde;es em <a target="_blank"
@@ -80,8 +80,8 @@
 					possui em seus gerenciadores de pacote, veja <a target="_blank"
 					href="http://packages.debian.org/unstable/utils/swftools"
 					rel="nofollow">http://packages.debian.org/unstable/utils/swftools</a>.
-					A vers&atilde;o recomendada do <strong>SWFTools</strong> &eacute; 0.9, pois a vers&atilde;o 
-					anterior possui um bug que coloca o objeto na lousa com dimens&otilde;es incorretas	
+					A vers&atilde;o recomendada do <strong>SWFTools</strong> &eacute; a 0.9, pois a vers&atilde;o 
+					anterior possui um bug que coloca o objeto na lousa com dimens&otilde;es incorretas.	
 				</li>
 		</ul>
 		</li>
@@ -97,13 +97,13 @@
 				<li><strong>OpenOffice-Service</strong> iniciado e executando na 
 					porta 8100, veja <a target="_blank"
 					href="http://openmeetings.apache.org/OpenOfficeConverter.html">OpenOfficeConverter</a>
-					para detalhes</li>
+					para detalhes.</li>
 			</ul>
 		</li>
 		<li><h4>
 				<a
 					id="Enabling_Recording_and_import_of_.avi,_.flv,_.mov_and_.mp4_into"></a>Habilitando
-				Grava&ccedil;&otilde;es e importa&ccedil;&atilde;o de arquivos .avi, .flv, .mov e .mp4 na lousa<a
+				grava&ccedil;&otilde;es e importa&ccedil;&atilde;o de arquivos .avi, .flv, .mov e .mp4 na lousa<a
 					href="#Enabling_Recording_and_import_of_.avi,_.flv,_.mov_and_.mp4_into"
 					class="section_anchor"></a>
 			</h4>
@@ -111,8 +111,8 @@
 				<li>Instale <strong>FFMpeg</strong>. Voc&ecirc; deve obter a vers&atilde;o mais atual do FFMPEG!
 					Para Windows voc&ecirc; pode baixar a versão compilada, por exemplo, 
 					de <a target="_blank" href="http://ffmpeg.arrozcru.org/builds/"
-					rel="nofollow">http://ffmpeg.arrozcru.org/builds/</a> Usu&aacute;rios Linux ou OSx
-					dever&atilde;o usar uma das diversas instru&ccedil;&otilde;es de instala&ccedil;&atilde;o 
+					rel="nofollow">http://ffmpeg.arrozcru.org/builds/</a>. Usu&aacute;rios Linux ou OSx
+					dever&atilde;o utilizar uma das diversas instru&ccedil;&otilde;es de instala&ccedil;&atilde;o 
 					existentes na Web. Voc&ecirc; precisa habilitar o libmp3lame!
 				</li>
 				<li>Instale <strong>SoX</strong> <a
@@ -137,10 +137,9 @@
 		href="http://openmeetings.apache.org/mail-lists.html"
 		target="_blank">Lista de discuss&atilde;o</a></span>
 	<br />
+        <br />
 	
 	<b> <span style="font-size: 1.4em">Existem algumas empresas que tamb&eacute;m oferecem suporte comercial para o Apache OpenMeetings:</span></b>
-    <br />
-    <br />
     <br />
     <br />
     <span style="font-size: 1.3em"><a
@@ -164,7 +163,7 @@
 	<entry key="install.wizard.params.step2.allowFrontendRegister">Permitir auto-cadastro (allow_frontend_register)</entry>
 	<entry key="install.wizard.params.step2.sendEmailAtRegister"><![CDATA[Enviar e-mail para novos Usu&aacute;rios cadastrados (sendEmailAtRegister)]]></entry>
 	<entry key="install.wizard.params.step2.sendEmailWithVerficationCode"><![CDATA[Novos Usu&aacute;rios precisam validar seus e-mails (sendEmailWithVerficationCode)]]></entry>
-	<entry key="install.wizard.params.step2.createDefaultRooms"><![CDATA[Todos os tipos de Salas padr&atilde;o ser&amp;atildeo criadas]]></entry>
+	<entry key="install.wizard.params.step2.createDefaultRooms"><![CDATA[Todos os tipos de Salas padr&atilde;o ser&atilde;o criadas]]></entry>
 	<entry key="install.wizard.params.step2.mailReferer">E-mail do sistema (system_email_addr)</entry>
 	<entry key="install.wizard.params.step2.mailReferer.title">Digite um e-mail</entry>
 	<entry key="install.wizard.params.step2.smtpServer">Servidor SMTP (smtp_server)</entry>
@@ -176,19 +175,19 @@
 	<entry key="install.wizard.params.step2.mailAuthPass">Senha SMTP (email_userpass)</entry>
 	<entry key="install.wizard.params.step2.mailAuthPass.title">Digite a senha do e-mail</entry>
 	<entry key="install.wizard.params.step2.mailUseTls"><![CDATA[Habilitar TLS na autentica&ccedil;&atilde;o do e-mail]]></entry>
-	<entry key="install.wizard.params.step2.replyToOrganizer"><![CDATA[Marcar endere&ccedil;o de e-mail do convidador no campo ReplyTo do e-mail enviado ao convidado (inviter.email.as.replyto)]]></entry>
+	<entry key="install.wizard.params.step2.replyToOrganizer"><![CDATA[Incluir endere&ccedil;o de e-mail do convidador no campo "Responder Para" do e-mail enviado ao convidado (inviter.email.as.replyto)]]></entry>
 	<entry key="install.wizard.params.step2.defaultLangId"><![CDATA[Linguagem padr&atilde;o]]></entry>
 	<entry key="install.wizard.params.step2.defaultExportFont"><![CDATA[Fonte padr&atilde;o para exporta&ccedil;&atilde;o [default_export_font]]]></entry>
 
 	<entry key="install.wizard.params.step3.converters">Conversores</entry>
-	<entry key="install.wizard.params.step3.seeAlso"> Veja mais em</entry>
+	<entry key="install.wizard.params.step3.seeAlso"> Veja mais em </entry>
 	<entry key="install.wizard.params.step3.installation"><![CDATA[Instala&ccedil;&atilde;o]]></entry>
 	<entry key="install.wizard.params.step3.swfZoom">SWFTools Zoom</entry>
 	<entry key="install.wizard.params.step3.swfZoom.title"><![CDATA[Digite o dpi que o swftools usar&aacute; para a convers&atilde;o do PDF para SWF]]></entry>
 	<entry key="install.wizard.params.step3.swfZoom.text"><![CDATA[
 		Voc&ecirc; pode testar se o swftools está instalado no caminho do sistema
 		abrindo o shell ou prompt de comando e digitando pdf2swf. Digite o dpi 
-		que o swftools usar&aacute; para a convers&atilde;o do PDF para SWF. Padr&atilde;o 
+		que o swftools usar&aacute; para a convers&atilde;o do PDF para SWF. O padr&atilde;o 
 		&eacute; 100 dpi.
 	]]></entry>
 	<entry key="install.wizard.params.step3.swfJpegQuality">Qualidade JPEG no SWFTools</entry>
@@ -221,11 +220,11 @@
 	<entry key="install.wizard.params.step3.jodPath.title"><![CDATA[O diret&oacute;rio da biblioteca JOD (http://code.google.com/p/jodconverter), configure o mesmo para o ponto onde o diret&oacute;rio lib do JOD que também contenha o arquivo jodconverter-core-version.jar]]></entry>
 	<entry key="install.wizard.params.step3.jodPath.text"></entry>
 	<entry key="install.wizard.params.step3.officePath"><![CDATA[Diret&oacute;rio do OpenOffice/LibreOffice para jodconverter]]></entry>
-	<entry key="install.wizard.params.step3.officePath.title"><![CDATA[O diret&oacute;rio do OpenOffice/LibreOffice (opcional). Por favor configure este com o caminho real caso o jodconverter não encontre a instala&ccedil;&atilde;o do OpenOffice/LibreOffice automaticamente]]></entry>
+	<entry key="install.wizard.params.step3.officePath.title"><![CDATA[O diret&oacute;rio do OpenOffice/LibreOffice (opcional). Por favor configure este com o caminho real caso o jodconverter não encontre a instala&ccedil;&atilde;o do OpenOffice/LibreOffice automaticamente.]]></entry>
 	<entry key="install.wizard.params.step3.officePath.text"><![CDATA[
 		O diret&oacute;rio do OpenOffice/LibreOffice (opcional). 
 		Por favor configure este campo com o caminho real caso o jodconverter 
-		não encontre a instala&ccedil;&atilde;o do OpenOffice/LibreOffice automaticamente
+		não encontre a instala&ccedil;&atilde;o do OpenOffice/LibreOffice automaticamente.
 	]]></entry>
 
 	<entry key="install.wizard.params.step4.crypt">Crypt Type</entry>
@@ -234,13 +233,13 @@
 	<entry key="install.wizard.params.step4.cryptClassName.text"><![CDATA[
 		Voc&ecirc; pode usar este tipo padr&atilde;o de criptografia que &eacute; igual a 
 		fun&ccedil;&atilde;o PHP-MD5 ou a criptografia BSD-Style 
-		utilizando: <b>org.apache.openmeetings.utils.crypt.MD5CryptImplementation</b>
-		para maiores informa&ccedil;&otilde;es ou para escrever seu pr&oacute;prio Crypt-Style 
+		utilizando: <b>org.apache.openmeetings.utils.crypt.MD5CryptImplementation</b>. 
+		Para maiores informa&ccedil;&otilde;es ou para escrever seu pr&oacute;prio Crypt-Style 
 		veja: <a
 		href="http://openmeetings.apache.org/CustomCryptMechanism.html"
 		target="_blank">Mecanismo de Criptografia personalizado</a>
 		Voc&ecirc; pode editar este valor mais tarde MAS Usu&aacute;rios e Sess&otilde;es 
-		criadas podem n&atilde;o mais estarem acess&iacute;veis
+		criados podem n&atilde;o mais estar acess&iacute;veis.
 	]]></entry>
 	<entry key="install.wizard.params.step4.red5SIP"><![CDATA[Configura&ccedil;&atilde;o red5SIP]]></entry>
 	<entry key="install.wizard.params.step4.red5SipEnable">Habilitar SIP</entry>
@@ -250,11 +249,11 @@
 	<entry key="install.wizard.params.step4.red5SipExtenContext"><![CDATA[Contexto de extens&otilde;s SIP]]></entry>
 	<entry key="install.wizard.params.step4.red5SipExtenContext.text"><![CDATA[Contexto de extens&otilde;es Asterisk]]></entry>
 
-	<entry key="install.wizard.install.desc"><![CDATA[Por favor clique no bot&atilde;o "Finalizar" para inicar a instala&ccedil;&atilde;o!]]></entry>
-	<entry key="install.wizard.install.started">Please wait, installation in progress</entry>
-	<entry key="install.wizard.install.failed">Installation is failed</entry>
+	<entry key="install.wizard.install.desc"><![CDATA[Por favor clique no botão "Finalizar" para inicar a instalação!]]></entry>
+	<entry key="install.wizard.install.started">Por favor aguarde, instalação em progresso</entry>
+	<entry key="install.wizard.install.failed">Instalação falhou</entry>
 
-	<entry key="install.wizard.congrats.enter">Digite o Aplicativo</entry>
+	<entry key="install.wizard.congrats.enter">Acesse o Aplicativo</entry>
 	<entry key="install.wizard.congrats.port"><![CDATA[Se seu servidor Red5 &eacute; executado em uma porta ou dom&iacute;nio diferente]]></entry>
 	<entry key="install.wizard.congrats.config"><![CDATA[altere os valores da configura&ccedil;&atilde;o do cliente]]></entry>
 	<entry key="install.wizard.congrats.mail"><![CDATA[Listas de discuss&atilde;o]]></entry>
