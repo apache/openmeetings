@@ -133,7 +133,7 @@ public class MainService implements IPendingServiceCallback {
 		Long users_id = sessiondataDao.checkSession(SID);
 		Set<Right> rights = userDao.getRights(users_id);
 		if (AuthLevelUtil.hasAdminLevel(rights) || AuthLevelUtil.hasWebServiceLevel(rights)) {
-			users = userDao.get(new Long(USER_ID));
+			users = userDao.get(USER_ID);
 		} else {
 			users.setFirstname("No rights to do this");
 		}
@@ -148,8 +148,7 @@ public class MainService implements IPendingServiceCallback {
 			log.debug("getCurrentRoomClient -1- " + SID);
 			log.debug("getCurrentRoomClient -2- " + streamid);
 
-			Client currentClient = this.sessionManager
-					.getClientByStreamId(streamid, null);
+			Client currentClient = sessionManager.getClientByStreamId(streamid, null);
 			return currentClient;
 		} catch (Exception err) {
 			log.error("[getCurrentRoomClient]", err);
@@ -566,8 +565,7 @@ public class MainService implements IPendingServiceCallback {
 				if (status) {
 					Map<String, String> message = new HashMap<String, String>();
 					message.put("message", "roomClosed");
-					this.scopeApplicationAdapter.sendMessageByRoomAndDomain(
-							room_id, message);
+					scopeApplicationAdapter.sendMessageByRoomAndDomain(room_id, message);
 				}
 
 				return 1;

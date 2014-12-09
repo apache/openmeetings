@@ -30,6 +30,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicLong;
 
 import org.apache.openmeetings.data.calendar.management.AppointmentLogic;
 import org.apache.openmeetings.data.conference.RoomManager;
@@ -111,7 +112,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 	@Autowired
 	private ServerDao serverDao;
 
-	private static long broadCastCounter = 0;
+	private static AtomicLong broadCastCounter = new AtomicLong(0);
 
 	public synchronized void resultReceived(IPendingServiceCall arg0) {
 		// TODO Auto-generated method stub
@@ -162,7 +163,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 			}
 
 			log.debug("### Client connected to OpenMeetings, register Client StreamId: " + streamId + " scope "
-					+ conn.getScope().getName() + " isAVClient " + isAVClient + " params " + params);
+					+ conn.getScope().getName() + " isAVClient " + isAVClient);
 
 			// Set StreamId in Client
 			service.invoke("setId", new Object[] { streamId }, this);
@@ -254,8 +255,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 
 			List<Client> screenSharerList = new LinkedList<Client>();
 
-			Client currentClient = this.sessionManager
-					.getClientByStreamId(streamid, null);
+			Client currentClient = sessionManager.getClientByStreamId(streamid, null);
 
 			for (Client rcl : sessionManager.getClientListByRoomAll(currentClient.getRoom_id())) {
 				if (rcl.isStartStreaming()) {
@@ -394,13 +394,10 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
         String streamid = current.getClient().getId();
         for (IConnection conn : current.getScope().getClientConnections()) {
             if (conn != null) {
-                Client rcl = this.sessionManager
-                        .getClientByStreamId(conn
-                                .getClient().getId(), null);
+                Client rcl = sessionManager.getClientByStreamId(conn.getClient().getId(), null);
                 if (rcl == null) {
                     // continue;
-                } else if (rcl.getIsScreenClient() != null
-                        && rcl.getIsScreenClient()) {
+                } else if (rcl.getIsScreenClient() != null && rcl.getIsScreenClient()) {
                     // continue;
                 } else {
                     if (!streamid.equals(rcl.getStreamid())) {
@@ -410,9 +407,9 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
                         // as it will be already triggered
                         // in the result of this Function
                         // in the Client
-                    	Long id = Long.valueOf(rcl.getBroadCastID());
-                    	if (id != null && !broadcastList.contains(id)) {
-                    		broadcastList.add(id.intValue());
+                    	int id = (int)rcl.getBroadCastID();
+                    	if (!broadcastList.contains(id)) {
+                    		broadcastList.add(id);
                     	}
                     }
                 }
@@ -869,8 +866,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 						} else if (SessionVariablesUtil.isAVClient(client)) {
 							// AVClients or potential AVClients do not receive events
 							continue;
-						} if (client.getId().equals(
-									current.getClient().getId())) {
+						} if (client.getId().equals(current.getClient().getId())) {
 							// don't send back to same user
 							continue;
 						}
@@ -925,8 +921,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 		return -1L;
 	}
 
-	public synchronized Long setBroadCastingFlag(String publicSID,
-			boolean value, Integer interviewPodId) {
+	public synchronized Long setBroadCastingFlag(String publicSID, boolean value, Integer interviewPodId) {
 		try {
 			log.debug("-----------  setBroadCastingFlag: " + publicSID);
 
@@ -1091,13 +1086,13 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 	 * 
 	 * @return long broadCastId
 	 */
-	public synchronized long getBroadCastId() {
+	public long getBroadCastId() {
 		try {
 			log.debug("-----------  getBroadCastId");
 			IConnection current = Red5.getConnectionLocal();
 			String streamid = current.getClient().getId();
 			Client client = sessionManager.getClientByStreamId(streamid, null);
-			client.setBroadCastID(broadCastCounter++);
+			client.setBroadCastID(broadCastCounter.getAndIncrement());
 			sessionManager.updateClientByStreamId(streamid, client, false, null);
 			return client.getBroadCastID();
 		} catch (Exception err) {
@@ -1183,7 +1178,6 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 			// not really - default logic
 			if (room.getAppointment() == null || room.getAppointment() == false) {
 				if (room.getIsModeratedRoom()) {
-
 					// if this is a Moderated Room then the Room can be only
 					// locked off by the Moderator Bit
 					List<Client> clientModeratorListRoom = sessionManager.getCurrentModeratorByRoom(room_id);
@@ -1784,7 +1778,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 		return -1;
 	}
 
-	public synchronized int sendMessage(Object newMessage) {
+	public int sendMessage(Object newMessage) {
 		try {
 			
 			syncMessageToCurrentScope("sendVarsToMessage", newMessage, false);
@@ -1795,7 +1789,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 		return 1;
 	}
 	
-	public synchronized int sendMessageAll(Object newMessage) {
+	public int sendMessageAll(Object newMessage) {
 		try {
 			
 			syncMessageToCurrentScope("sendVarsToMessage", newMessage, true);
@@ -1820,8 +1814,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 
 			String action = newMessageList.get(0).toString();
 
-			BrowserStatus browserStatus = (BrowserStatus) current.getScope()
-					.getAttribute("browserStatus");
+			BrowserStatus browserStatus = (BrowserStatus) current.getScope().getAttribute("browserStatus");
 
 			if (browserStatus == null) {
 				browserStatus = new BrowserStatus();
@@ -1848,7 +1841,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 	 * wrapper method
 	 * @param newMessage
 	 */
-	public synchronized void sendMessageToMembers(Object newMessage) {
+	public void sendMessageToMembers(Object newMessage) {
 		//Sync to all users of current scope
 		syncMessageToCurrentScope("sendVarsToMessage", newMessage, false);
 	}
@@ -1867,7 +1860,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 	 * @param newMessage parameters
 	 * @param sendSelf send to the current client as well
 	 */
-	public synchronized void syncMessageToCurrentScope(String remoteMethodName, Object newMessage, boolean sendSelf) {
+	public void syncMessageToCurrentScope(String remoteMethodName, Object newMessage, boolean sendSelf) {
 		syncMessageToCurrentScope(remoteMethodName, newMessage, sendSelf, false);
 	}
 	
@@ -1880,7 +1873,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 	 * @return true
 	 */
 	@Deprecated
-	public synchronized boolean loadTestSyncMessage(String remoteMethodName, Object newMessage, boolean sendSelf) {
+	public boolean loadTestSyncMessage(String remoteMethodName, Object newMessage, boolean sendSelf) {
 		syncMessageToCurrentScope(remoteMethodName, newMessage, sendSelf, false);
 		return true;
 	}
@@ -1901,32 +1894,31 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 	 * @param sendSelf send to the current client as well
 	 * @param sendScreen send to the current client as well
 	 */
-	public synchronized void syncMessageToCurrentScope(String remoteMethodName, Object newMessage, boolean sendSelf, boolean sendScreen) {
+	public void syncMessageToCurrentScope(final String remoteMethodName, final Object newMessage, final boolean sendSelf, final boolean sendScreen) {
 		try {
-			IConnection current = Red5.getConnectionLocal();
+			final IConnection current = Red5.getConnectionLocal();
 
-			// Send to all Clients of that Scope(Room)
-			for (IConnection conn : current.getScope().getClientConnections()) {
-				if (conn != null) {
-					if (conn instanceof IServiceCapableConnection) {
-						IClient client = conn.getClient();
-						if (!sendScreen && SessionVariablesUtil.isScreenClient(client)) {
-							// screen sharing clients do not receive events
-							continue;
-						} else if (SessionVariablesUtil.isAVClient(client)) {
-							// AVClients or potential AVClients do not receive events
-							continue;
-						} else if (!sendSelf && client.getId().equals(
-								current.getClient().getId())) {
-							//Do not send back to self
-							continue;
+			new Thread(new Runnable() {
+			    public void run() {
+					for (IConnection conn : current.getScope().getClientConnections()) {
+						if (conn != null && conn instanceof IServiceCapableConnection) {
+							IClient client = conn.getClient();
+							if (!sendScreen && SessionVariablesUtil.isScreenClient(client)) {
+								// screen sharing clients do not receive events
+								continue;
+							} else if (SessionVariablesUtil.isAVClient(client)) {
+								// AVClients or potential AVClients do not receive events
+								continue;
+							} else if (!sendSelf && client.getId().equals(current.getClient().getId())) {
+								//Do not send back to self
+								continue;
+							}
+							((IServiceCapableConnection) conn).invoke(remoteMethodName, new Object[] { newMessage }, ScopeApplicationAdapter.this);
 						}
-						((IServiceCapableConnection) conn).invoke(
-								remoteMethodName, new Object[] { newMessage }, this);
-						
 					}
-				}
-			}
+			    }
+			}).start();
+			// Send to all Clients of that Scope(Room)
 		} catch (Exception err) {
 			log.error("[syncMessageToCurrentScope]", err);
 		}
@@ -1937,7 +1929,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 	 * @param newMessage
 	 * @return 1 in case of success, -1 otherwise
 	 */
-	public synchronized int sendMessageWithClient(Object newMessage) {
+	public int sendMessageWithClient(Object newMessage) {
 		try {
 			sendMessageWithClientWithSyncObject(newMessage, true);
 
@@ -1957,8 +1949,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 	public synchronized int sendMessageWithClientWithSyncObject(Object newMessage, boolean sync) {
 		try {
 			IConnection current = Red5.getConnectionLocal();
-			Client currentClient = this.sessionManager
-					.getClientByStreamId(current.getClient().getId(), null);
+			Client currentClient = sessionManager.getClientByStreamId(current.getClient().getId(), null);
 
 			HashMap<String, Object> hsm = new HashMap<String, Object>();
 			hsm.put("client", currentClient);
@@ -1982,8 +1973,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 	 * @param clientId
 	 * @return 1 in case of success, -1 otherwise
 	 */
-	public synchronized int sendMessageById(Object newMessage, String clientId,
-			IScope scope) {
+	public synchronized int sendMessageById(Object newMessage, String clientId, IScope scope) {
 		try {
 			log.debug("### sendMessageById ###" + clientId);
 
@@ -1995,9 +1985,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 				if (conn != null) {
 					if (conn instanceof IServiceCapableConnection) {
 						if (conn.getClient().getId().equals(clientId)) {
-							((IServiceCapableConnection) conn).invoke(
-									"sendVarsToMessageWithClient",
-									new Object[] { hsm }, this);
+							((IServiceCapableConnection) conn).invoke("sendVarsToMessageWithClient", new Object[] { hsm }, this);
 						}
 					}
 				}
@@ -2019,8 +2007,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 	public synchronized int sendMessageWithClientById(Object newMessage, String clientId) {
 		try {
 			IConnection current = Red5.getConnectionLocal();
-			Client currentClient = this.sessionManager
-					.getClientByStreamId(current.getClient().getId(), null);
+			Client currentClient = sessionManager.getClientByStreamId(current.getClient().getId(), null);
 
 			HashMap<String, Object> hsm = new HashMap<String, Object>();
 			hsm.put("client", currentClient);
@@ -2029,9 +2016,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 			// broadcast Message to specific user with id inside the same Scope
 			for (IConnection conn : current.getScope().getClientConnections()) {
 				if (conn.getClient().getId().equals(clientId)) {
-					((IServiceCapableConnection) conn).invoke(
-							"sendVarsToMessageWithClient",
-							new Object[] { hsm }, this);
+					((IServiceCapableConnection) conn).invoke("sendVarsToMessageWithClient", new Object[] { hsm }, this);
 				}
 			}
 		} catch (Exception err) {
@@ -2045,14 +2030,12 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 		try {
 			//if the upload is locally, just proceed to the normal function
 			//Search for RoomClient on current server (serverId == null means it will look on the master for the RoomClient)
-			Client currentClient = this.sessionManager
-								.getClientByPublicSID(publicSID, false, null);
+			Client currentClient = sessionManager.getClientByPublicSID(publicSID, false, null);
 			
 			if (currentClient != null) {
 				sendMessageWithClientByPublicSID(message, publicSID);
 			} else {
-				throw new Exception(
-						"Could not Find RoomClient on List publicSID: "+ publicSID);
+				throw new Exception("Could not Find RoomClient on List publicSID: "+ publicSID);
 			}
 			
 		} catch (Exception err) {
@@ -2061,25 +2044,20 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 	}
 	
 
-	public synchronized void sendMessageWithClientByPublicSID(Object message,
-			String publicSID) {
+	public synchronized void sendMessageWithClientByPublicSID(Object message, String publicSID) {
 		try {
 			// ApplicationContext appCtx = getContext().getApplicationContext();
 			IScope globalScope = getContext().getGlobalScope();
 
-			IScope webAppKeyScope = globalScope
-					.getScope(OpenmeetingsVariables.webAppRootKey);
+			IScope webAppKeyScope = globalScope.getScope(OpenmeetingsVariables.webAppRootKey);
 
 			// log.debug("webAppKeyScope "+webAppKeyScope);
 
 			// Get Room Id to send it to the correct Scope
-			Client currentClient = this.sessionManager
-					.getClientByPublicSID(publicSID, false, null);
+			Client currentClient = sessionManager.getClientByPublicSID(publicSID, false, null);
 
 			if (currentClient == null) {
-				throw new Exception(
-						"Could not Find RoomClient on List publicSID: "
-								+ publicSID);
+				throw new Exception("Could not Find RoomClient on List publicSID: " + publicSID);
 			}
 			// default Scope Name
 			String scopeName = "hibernate";
@@ -2465,11 +2443,8 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 		Client currentClient = sessionManager.getClientByStreamId(streamid, null);
 		try {
 			String sipNumber = getSipNumber(currentClient.getRoom_id());
-			log.debug("asterisk -rx \"originate Local/" + number + "@rooms-out extension " + sipNumber
-					+ "@rooms-originate\"");
-			Runtime.getRuntime().exec(
-					new String[] { "asterisk", "-rx",
-							"originate Local/" + number + "@rooms-out extension " + sipNumber + "@rooms-originate" });
+			log.debug("asterisk -rx \"originate Local/" + number + "@rooms-out extension " + sipNumber + "@rooms-originate\"");
+			Runtime.getRuntime().exec(new String[] { "asterisk", "-rx", "originate Local/" + number + "@rooms-out extension " + sipNumber + "@rooms-originate" });
 		} catch (IOException e) {
 			log.error("Executing asterisk originate error: ", e);
 		}

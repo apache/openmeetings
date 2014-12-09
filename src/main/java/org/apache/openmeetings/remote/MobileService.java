@@ -42,16 +42,13 @@ import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.remote.red5.ScopeApplicationAdapter;
 import org.apache.openmeetings.remote.util.SessionVariablesUtil;
 import org.red5.logging.Red5LoggerFactory;
-import org.red5.server.api.IClient;
 import org.red5.server.api.IConnection;
 import org.red5.server.api.Red5;
-import org.red5.server.api.service.IPendingServiceCall;
-import org.red5.server.api.service.IPendingServiceCallback;
 import org.red5.server.api.service.IServiceCapableConnection;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
-public class MobileService implements IPendingServiceCallback {
+public class MobileService {
 	private static final Logger log = Red5LoggerFactory.getLogger(MainService.class, webAppRootKey);
 	@Autowired
 	private UserDao userDao;
@@ -67,10 +64,6 @@ public class MobileService implements IPendingServiceCallback {
 	private FieldLanguagesValuesDao labelDao;
 	@Autowired
 	private ScopeApplicationAdapter scopeAdapter;
-
-	@Override
-	public void resultReceived(IPendingServiceCall call) {
-	}
 
 	public Map<String, Object> loginUser(String login, String password) {
 		Map<String, Object> result = new Hashtable<String, Object>();
@@ -123,22 +116,20 @@ public class MobileService implements IPendingServiceCallback {
 		// Notify all clients of the same scope (room)
 		IConnection current = Red5.getConnectionLocal();
 		for (IConnection conn : current.getScope().getClientConnections()) {
-			if (conn != null) {
-				if (conn instanceof IServiceCapableConnection) {
-					Client c = sessionManager.getClientByStreamId(conn.getClient().getId(), null);
-					if (c.getIsAVClient()) {
-						Map<String, Object> map = new Hashtable<String, Object>();
-						map.put("streamId", c.getStreamid());
-						map.put("broadCastId", c.getBroadCastID());
-						map.put("userId", c.getUser_id() == null ? "" : c.getUser_id());
-						map.put("firstname", c.getFirstname());
-						map.put("lastname", c.getLastname());
-						map.put("publicSid", c.getPublicSID());
-						map.put("login", c.getUsername());
-						map.put("email", c.getEmail() == null ? "" : c.getEmail());
-						map.put("avsettings", c.getAvsettings());
-						result.add(map);
-					}
+			if (conn != null && conn instanceof IServiceCapableConnection) {
+				Client c = sessionManager.getClientByStreamId(conn.getClient().getId(), null);
+				if (c.getIsAVClient()) {
+					Map<String, Object> map = new Hashtable<String, Object>();
+					map.put("streamId", c.getStreamid());
+					map.put("broadCastId", c.getBroadCastID());
+					map.put("userId", c.getUser_id() == null ? "" : c.getUser_id());
+					map.put("firstname", c.getFirstname());
+					map.put("lastname", c.getLastname());
+					map.put("publicSid", c.getPublicSID());
+					map.put("login", c.getUsername());
+					map.put("email", c.getEmail() == null ? "" : c.getEmail());
+					map.put("avsettings", c.getAvsettings());
+					result.add(map);
 				}
 			}
 		}
@@ -205,33 +196,11 @@ public class MobileService implements IPendingServiceCallback {
 		sessionManager.updateClientByStreamId(c.getStreamid(), c, false, null);
 		result.put("broadcastId", broadcastId);
 
-		//FIXME make it async + copy/paste
-		IConnection current = Red5.getConnectionLocal();
-		for (IConnection conn : current.getScope().getClientConnections()) {
-			if (conn != null) {
-				IClient client = conn.getClient();
-				if (SessionVariablesUtil.isScreenClient(client)) {
-					// screen sharing clients do not receive events
-					continue;
-				} else if (SessionVariablesUtil.isAVClient(client)) {
-					// AVClients or potential AVClients do not receive events
-					continue;
-				}
-
-				if (!client.getId().equals(current.getClient().getId())) {
-					// It is not needed to send back that event to the actual Moderator
-					// as it will be already triggered in the result of this Function in the Client
-					if (conn instanceof IServiceCapableConnection) {
-						((IServiceCapableConnection) conn).invoke("addNewUser", new Object[] { c }, this);
-						log.debug("sending Mobile client to " + conn);
-					}
-				}
-			}
-		}
+		scopeAdapter.syncMessageToCurrentScope("addNewUser", c, false, false);
 		return result;
 	}
 
-	public void updateAvMode(String avMode, String width, String height) {
+	public Map<String, Object> updateAvMode(String avMode, String width, String height) {
 		IConnection current = Red5.getConnectionLocal();
 		Client c = sessionManager.getClientByStreamId(current.getClient().getId(), null);
 		c.setAvsettings(avMode);
@@ -241,22 +210,12 @@ public class MobileService implements IPendingServiceCallback {
 		HashMap<String, Object> hsm = new HashMap<String, Object>();
 		hsm.put("client", c);
 		hsm.put("message", new String[]{"avsettings", "0", avMode});
-
-		//FIXME should be handled async + copy/paste
-		for (IConnection conn : current.getScope().getClientConnections()) {
-			if (conn != null) {
-				if (conn instanceof IServiceCapableConnection) {
-					IClient client = conn.getClient();
-					if (SessionVariablesUtil.isScreenClient(client)) {
-						// screen sharing clients do not receive events
-						continue;
-					} else if (SessionVariablesUtil.isAVClient(client)) {
-						// AVClients or potential AVClients do not receive events
-						continue;
-					}
-					((IServiceCapableConnection)conn).invoke("sendVarsToMessageWithClient", new Object[] { hsm }, this);
-				}
-			}
+		Map<String, Object> result = new Hashtable<String, Object>();
+		if (!"n".equals(avMode)) {
+			result.put("broadcastId", scopeAdapter.getBroadCastId());
 		}
+
+		scopeAdapter.syncMessageToCurrentScope("sendVarsToMessageWithClient", hsm, true, false);
+		return result;
 	}
 }
