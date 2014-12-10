@@ -15,7 +15,6 @@ public abstract class AbstractAppointmentTemplate extends AbstractTemplatePanel 
 		this.langId = langId == null ? 1 : langId;
 		this.a = a;
 		this.tz = tz;
-		ensureApplication(langId);
 	}
 
 	public String getEmail() {
