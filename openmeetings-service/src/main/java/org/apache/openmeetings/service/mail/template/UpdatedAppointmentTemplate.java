@@ -29,7 +29,7 @@ import org.apache.wicket.util.string.Strings;
 public class UpdatedAppointmentTemplate extends AbstractAppointmentTemplate {
 	private static final long serialVersionUID = 1L;
 
-	public UpdatedAppointmentTemplate(Long langId, Appointment a, TimeZone tz, String invitorName) {
+	private UpdatedAppointmentTemplate(Long langId, Appointment a, TimeZone tz, String invitorName) {
 		super(langId, a, tz, invitorName);
 
 		add(new Label("titleLbl", getString(1155L, langId)));
@@ -47,6 +47,11 @@ public class UpdatedAppointmentTemplate extends AbstractAppointmentTemplate {
 		add(new Label("invitor", invitorName));
 	}
 	
+	public static UpdatedAppointmentTemplate get(Long langId, Appointment a, TimeZone tz, String invitorName) {
+		ensureApplication(langId);
+		return new UpdatedAppointmentTemplate(langId, a, tz, invitorName);
+	}
+
 	@Override
 	public String getSubject() {
 		StringBuilder sb = new StringBuilder();

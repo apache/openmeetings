@@ -18,12 +18,6 @@
  */
 package org.apache.openmeetings.service.mail.template;
 
-import static org.apache.openmeetings.util.OpenmeetingsVariables.wicketApplicationName;
-
-import org.apache.openmeetings.core.IApplication;
-import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
-import org.apache.openmeetings.db.dao.label.FieldLanguagesValuesDao;
-import org.apache.wicket.Application;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.ExternalLink;
@@ -31,28 +25,26 @@ import org.apache.wicket.markup.html.link.ExternalLink;
 public class InvitationTemplate extends AbstractTemplatePanel {
 	private static final long serialVersionUID = 1L;
 
-	public InvitationTemplate(Long langId, String invitorName, String message, String link) {
+	private InvitationTemplate(Long langId, String invitorName, String message, String link) {
 		super(TemplatePage.COMP_ID);
-		ensureApplication(langId);
-		IApplication a = ((IApplication)Application.get(wicketApplicationName));
 		
-		FieldLanguagesValuesDao dao = a.getOmBean(FieldLanguagesValuesDao.class);
-		add(new Label("titleLbl", dao.getString(500,  langId).replaceAll("\\$APP_NAME", a.getOmBean(ConfigurationDao.class).getAppName())));
-		add(new Label("userLbl", dao.getString(501,  langId)));
+		add(new Label("titleLbl", getString(500,  langId)));
+		add(new Label("userLbl", getString(501,  langId)));
 		add(new Label("user", invitorName));
-		add(new Label("messageLbl", dao.getString(502, langId)));
+		add(new Label("messageLbl", getString(502, langId)));
 		add(new Label("message", message).setEscapeModelStrings(false));
 		
 		add(new WebMarkupContainer("links")
-			.add(new Label("comment_for_link1", dao.getString(503, langId)))
-			.add(new ExternalLink("invitation_link1", link).add(new Label("clickMe", dao.getString(504, langId))))
-			.add(new Label("comment_for_link2", dao.getString(505, langId)))
+			.add(new Label("comment_for_link1", getString(503, langId)))
+			.add(new ExternalLink("invitation_link1", link).add(new Label("clickMe", getString(504, langId))))
+			.add(new Label("comment_for_link2", getString(505, langId)))
 			.add(new Label("invitation_link2", link))
 			.setVisible(link != null)
 			);
 	}
 	
-	public String getEmail() {
-		return renderPanel(this).toString();
+	public static String getEmail(Long langId, String invitorName, String message, String link) {
+		ensureApplication(langId);
+		return renderPanel(new InvitationTemplate(langId, invitorName, message, link)).toString();
 	}
 }

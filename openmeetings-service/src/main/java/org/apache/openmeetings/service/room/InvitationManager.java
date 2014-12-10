@@ -98,14 +98,14 @@ public class InvitationManager implements IInvitationManager {
 		AbstractAppointmentTemplate t = null;
 		switch (type) {
 			case Cancel:
-				t = new CanceledAppointmentTemplate(langId, a, tz, invitorName);
+				t = CanceledAppointmentTemplate.get(langId, a, tz, invitorName);
 				break;
 			case Create:
-				t = new CreatedAppointmentTemplate(langId, a, tz, invitorName);
+				t = CreatedAppointmentTemplate.get(langId, a, tz, invitorName);
 				break;
 			case Update:
 			default:
-				t = new UpdatedAppointmentTemplate(langId, a, tz, invitorName);
+				t = UpdatedAppointmentTemplate.get(langId, a, tz, invitorName);
 				break;
 			
 		}
@@ -117,7 +117,7 @@ public class InvitationManager implements IInvitationManager {
 		User owner = i.getInvitedBy();
 		
 		String invitorName = owner.getFirstname() + " " + owner.getLastname();
-		String template = new InvitationTemplate(i.getInvitee().getLanguageId(), invitorName, message, invitation_link).getEmail();
+		String template = InvitationTemplate.getEmail(i.getInvitee().getLanguageId(), invitorName, message, invitation_link);
 		String email = i.getInvitee().getAdresses().getEmail();
 		String replyToEmail = owner.getAdresses().getEmail();
 		
