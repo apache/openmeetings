@@ -19,13 +19,12 @@
   
 -->
 
-<configuration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-    xsi:noNamespaceSchemaLocation="logback.xsd">
+<configuration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<contextName>${current_openmeetings_context_name}</contextName>
-	
+
 	<jmxConfigurator contextName="${current_openmeetings_context_name}" />
 
-  <appender name="FLOG2" class="ch.qos.logback.core.FileAppender">
+	<appender name="FLOG2" class="ch.qos.logback.core.rolling.RollingFileAppender">
 		<File>log/${current_openmeetings_context_name}.log</File>
 		<Append>false</Append>
 		<Encoding>UTF-8</Encoding>
@@ -36,23 +35,33 @@
 				%5p %d{MM-dd HH:mm:ss.SSS } %c{15}:%L [%t] - %m%n
 			</Pattern>
 		</layout>
-  </appender>
-  <appender name="CONSOLE2" class="ch.qos.logback.core.ConsoleAppender">
-    <layout class="ch.qos.logback.classic.PatternLayout">
-      <pattern>%5p %d{MM-dd HH:mm:ss.SSS } %F %r %L %c [%t] - %m%n</pattern>
-    </layout>
-  </appender>
-  <logger name="org.apache.axis2" level="ERROR"/>
-  <logger name="com.mchange.v2" level="ERROR"/>
-  <logger name="org.apache.axiom" level="ERROR"/>
-  <logger name="org.apache.commons.httpclient" level="ERROR"/>
-  <logger name="de.hunsicker.jalopy.io" level="ERROR"/>
-  <logger name="org.apache.axis2.enterprise" level="ERROR"/>
-  <logger name="httpclient.wire.header" level="ERROR"/>
-  <logger name="org.apache.directory" level="INFO"/>
-  <logger name="org.apache.mina.filter.ssl.SslFilter" level="ERROR"/>
-  <root level="DEBUG">
-    <appender-ref ref="FLOG2"/>
-    <appender-ref ref="CONSOLE2"/>
-  </root>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<!-- daily rollover -->
+			<fileNamePattern>log\${current_openmeetings_context_name}.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+			<timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+				<!-- or whenever the file size reaches 100MB -->
+				<maxFileSize>50MB</maxFileSize>
+			</timeBasedFileNamingAndTriggeringPolicy>
+			<!-- keep 30 days' worth of history -->
+			<maxHistory>50</maxHistory>
+		</rollingPolicy>
+	</appender>
+	<appender name="CONSOLE2" class="ch.qos.logback.core.ConsoleAppender">
+		<layout class="ch.qos.logback.classic.PatternLayout">
+			<pattern>%5p %d{MM-dd HH:mm:ss.SSS } %F %r %L %c [%t] - %m%n</pattern>
+		</layout>
+	</appender>
+	<logger name="org.apache.axis2" level="ERROR" />
+	<logger name="com.mchange.v2" level="ERROR" />
+	<logger name="org.apache.axiom" level="ERROR" />
+	<logger name="org.apache.commons.httpclient" level="ERROR" />
+	<logger name="de.hunsicker.jalopy.io" level="ERROR" />
+	<logger name="org.apache.axis2.enterprise" level="ERROR" />
+	<logger name="httpclient.wire.header" level="ERROR" />
+	<logger name="org.apache.directory" level="INFO" />
+	<logger name="org.apache.mina.filter.ssl.SslFilter" level="ERROR" />
+	<root level="DEBUG">
+		<appender-ref ref="FLOG2" />
+		<appender-ref ref="CONSOLE2" />
+	</root>
 </configuration>
