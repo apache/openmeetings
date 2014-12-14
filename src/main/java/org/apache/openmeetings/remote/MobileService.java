@@ -147,6 +147,7 @@ public class MobileService {
 		room.put("first", first);
 		room.put("users", sessionManager.getClientListByRoom(r.getRooms_id()).size());
 		room.put("total", r.getNumberOfPartizipants());
+		room.put("audioOnly", Boolean.TRUE.equals(r.getIsAudioOnly()));
 		result.add(room);
 	}
 	
