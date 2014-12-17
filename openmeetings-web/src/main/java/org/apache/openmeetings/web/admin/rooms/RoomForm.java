@@ -235,6 +235,9 @@ public class RoomForm extends AdminBaseForm<Room> {
 				User u = moderator2add.getObject();
 				boolean found = false;
 				if (u != null) {
+					if (r.getModerators() == null) {
+						r.setModerators(new ArrayList<RoomModerator>());
+					}
 					for (RoomModerator rm : r.getModerators()) {
 						if (rm.getUser().getId().equals(u.getId())) {
 							found = true;
