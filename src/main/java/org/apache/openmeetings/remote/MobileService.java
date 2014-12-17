@@ -41,6 +41,7 @@ import org.apache.openmeetings.db.entity.user.Organisation_Users;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.remote.red5.ScopeApplicationAdapter;
 import org.apache.openmeetings.remote.util.SessionVariablesUtil;
+import org.apache.wicket.util.string.Strings;
 import org.red5.logging.Red5LoggerFactory;
 import org.red5.server.api.IConnection;
 import org.red5.server.api.Red5;
@@ -118,7 +119,7 @@ public class MobileService {
 		for (IConnection conn : current.getScope().getClientConnections()) {
 			if (conn != null && conn instanceof IServiceCapableConnection) {
 				Client c = sessionManager.getClientByStreamId(conn.getClient().getId(), null);
-				if (c.getIsAVClient()) {
+				if (c.getIsAVClient() && !Strings.isEmpty(c.getAvsettings())) {
 					Map<String, Object> map = new Hashtable<String, Object>();
 					map.put("streamId", c.getStreamid());
 					map.put("broadCastId", c.getBroadCastID());
