@@ -116,7 +116,7 @@ public class FlvRecordingMetaDataDao {
 
 			flvRecordingMetaData.setRecordStart(recordStart);
 
-			flvRecordingMetaData.setIsAudioOnly(isAudioOnly);
+			flvRecordingMetaData.setAudioOnly(isAudioOnly);
 			flvRecordingMetaData.setIsVideoOnly(isVideoOnly);
 			flvRecordingMetaData.setScreenData(isScreenData);
 

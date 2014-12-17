@@ -501,7 +501,7 @@ public class ImportInitvalues {
 		r.setRoomtype(roomTypeDao.get(typeId));
 		r.setIspublic(isPublic);
 		r.setAllowUserQuestions(true);
-		r.setIsAudioOnly(false);
+		r.setAudioOnly(false);
 		r.setAllowFontStyles(true);
 
 		r.setAppointment(false);

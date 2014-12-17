@@ -108,11 +108,11 @@ Enter key password for <red5>
 					<source><![CDATA[keytool -import -alias red5 -keystore red5/conf/keystore -trustcacerts -file demo.openmeetings.de.crt]]></source>
 				</li>
 				<li>Please NOTE according to this <a href="http://javarevisited.blogspot.com/2012/09/difference-between-truststore-vs-keyStore-Java-SSL.html">http://javarevisited.blogspot.com/2012/09/difference-between-truststore-vs-keyStore-Java-SSL.html</a>
-					guide you can split keystore and truststore
+					guide you can split keystore and truststore (OPTIONAL you might just copy keystore to truststore)
 				</li>
-                <li>
-                Create additional certificate as described above.
-                Add this certificate to the following keystores: <tt>red5/conf/keystore.screen</tt> and <tt>red5/conf/keystore</tt>.
+                <li>Create additional certificate as described above.
+                	Add this certificate to the following keystores: <tt>red5/conf/keystore.screen</tt> and <tt>red5/conf/keystore</tt>. (This step is required to be able to use
+                	screen-sharing web application, you can copy "main" keystore while testing)
                 </li>
 			</ol>
 

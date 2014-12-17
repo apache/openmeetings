@@ -143,7 +143,7 @@ public class RoomPanel extends BasePanel {
 				Room r = getBean(RoomDao.class).get(roomId);
 				target.appendJavaScript(String.format("initVideo(%s);", new JSONObject()
 						.put("uid", c.getUid())
-						.put("audioOnly", r.getIsAudioOnly())
+						.put("audioOnly", r.isAudioOnly())
 						.put("SID", WebSession.getSid())
 						.put("interview", 4L == r.getRoomtype().getId()) //FIXME hardcoded
 						.put("protocol", cfgDao.getConfValue(CONFIG_FLASH_PROTOCOL, String.class, ""))

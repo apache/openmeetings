@@ -156,7 +156,7 @@ public class Room implements IDataProviderEntity {
 
 	@Column(name = "is_audio_only")
 	@Element(data = true, required = false)
-	private Boolean isAudioOnly;
+	private boolean audioOnly;
 	
 	@Column(name = "allow_font_styles", nullable = false)
 	@Element(data = true, required = false)
@@ -397,12 +397,12 @@ public class Room implements IDataProviderEntity {
 		this.allowUserQuestions = allowUserQuestions;
 	}
 
-	public Boolean getIsAudioOnly() {
-		return isAudioOnly;
+	public boolean isAudioOnly() {
+		return audioOnly;
 	}
 
-	public void setIsAudioOnly(Boolean isAudioOnly) {
-		this.isAudioOnly = isAudioOnly;
+	public void setAudioOnly(boolean audioOnly) {
+		this.audioOnly = audioOnly;
 	}
 
 	public boolean getAllowFontStyles() {

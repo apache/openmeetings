@@ -99,7 +99,7 @@ public class FlvRecordingMetaData implements IDataProviderEntity {
 
 	@Column(name = "is_audio_only")
 	@Element(data = true)
-	private Boolean isAudioOnly;
+	private boolean audioOnly;
 
 	@Column(name = "is_video_only")
 	@Element(data = true)
@@ -188,12 +188,12 @@ public class FlvRecordingMetaData implements IDataProviderEntity {
 		this.freeTextUserName = freeTextUserName;
 	}
 
-	public Boolean getIsAudioOnly() {
-		return isAudioOnly;
+	public boolean isAudioOnly() {
+		return audioOnly;
 	}
 
-	public void setIsAudioOnly(Boolean isAudioOnly) {
-		this.isAudioOnly = isAudioOnly;
+	public void setAudioOnly(boolean audioOnly) {
+		this.audioOnly = audioOnly;
 	}
 
 	public Boolean getIsVideoOnly() {

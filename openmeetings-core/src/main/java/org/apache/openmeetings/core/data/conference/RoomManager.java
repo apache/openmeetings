@@ -424,7 +424,7 @@ public class RoomManager implements IRoomManager {
 			r.setRoomtype(roomTypeDao.get(roomtypesId));
 			r.setIspublic(ispublic);
 			r.setAllowUserQuestions(allowUserQuestions);
-			r.setIsAudioOnly(isAudioOnly);
+			r.setAudioOnly(isAudioOnly);
 			r.setAllowFontStyles(allowFontStyles);
 
 			r.setAppointment(appointment);
@@ -527,7 +527,7 @@ public class RoomManager implements IRoomManager {
 			r.setIspublic(ispublic);
 
 			r.setAllowUserQuestions(allowUserQuestions);
-			r.setIsAudioOnly(isAudioOnly);
+			r.setAudioOnly(isAudioOnly);
 			r.setAllowFontStyles(allowFontStyles);
 
 			r.setAppointment(appointment);
@@ -769,7 +769,7 @@ public class RoomManager implements IRoomManager {
 			r.setRoomtype(roomTypeDao.get(roomtypesId));
 			r.setUpdatetime(new Date());
 			r.setAllowUserQuestions(allowUserQuestions);
-			r.setIsAudioOnly(isAudioOnly);
+			r.setAudioOnly(isAudioOnly);
 			r.setAllowFontStyles(allowFontStyles);
 
 			r.setIsDemoRoom(isDemoRoom);

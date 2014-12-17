@@ -41,6 +41,7 @@ import org.apache.openmeetings.db.entity.server.Sessiondata;
 import org.apache.openmeetings.db.entity.user.Organisation;
 import org.apache.openmeetings.db.entity.user.OrganisationUser;
 import org.apache.openmeetings.db.entity.user.User;
+import org.apache.wicket.util.string.Strings;
 import org.red5.logging.Red5LoggerFactory;
 import org.red5.server.api.IConnection;
 import org.red5.server.api.Red5;
@@ -118,7 +119,7 @@ public class MobileService {
 		for (IConnection conn : current.getScope().getClientConnections()) {
 			if (conn != null && conn instanceof IServiceCapableConnection) {
 				Client c = sessionManager.getClientByStreamId(conn.getClient().getId(), null);
-				if (c.getIsAVClient()) {
+				if (c.getIsAVClient() && !Strings.isEmpty(c.getAvsettings())) {
 					Map<String, Object> map = new Hashtable<String, Object>();
 					map.put("streamId", c.getStreamid());
 					map.put("broadCastId", c.getBroadCastID());
@@ -147,6 +148,7 @@ public class MobileService {
 		room.put("first", first);
 		room.put("users", sessionManager.getClientListByRoom(r.getId()).size());
 		room.put("total", r.getNumberOfPartizipants());
+		room.put("audioOnly", r.isAudioOnly());
 		result.add(room);
 	}
 	

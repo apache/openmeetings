@@ -159,7 +159,7 @@ public class RoomForm extends AdminBaseForm<Room> {
 		demoTime.setLabel(new Model<String>(WebSession.getString(637)));
 		add(demoTime);
 		add(new CheckBox("allowUserQuestions"));
-		add(new CheckBox("isAudioOnly"));
+		add(new CheckBox("audioOnly"));
 		add(new CheckBox("allowFontStyles"));
 		add(new CheckBox("isClosed"));
 		add(new TextField<String>("redirectURL"));
