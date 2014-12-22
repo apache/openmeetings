@@ -155,7 +155,7 @@ public class Room implements IDataProviderEntity {
 	private Boolean allowUserQuestions;
 
 	@Column(name = "is_audio_only")
-	@Element(data = true, required = false)
+	@Element(name = "isAudioOnly", data = true, required = false)
 	private boolean audioOnly;
 	
 	@Column(name = "allow_font_styles", nullable = false)

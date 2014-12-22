@@ -98,7 +98,7 @@ public class FlvRecordingMetaData implements IDataProviderEntity {
 	private String freeTextUserName;
 
 	@Column(name = "is_audio_only")
-	@Element(data = true)
+	@Element(name = "isAudioOnly", data = true)
 	private boolean audioOnly;
 
 	@Column(name = "is_video_only")
@@ -106,7 +106,7 @@ public class FlvRecordingMetaData implements IDataProviderEntity {
 	private Boolean isVideoOnly;
 
 	@Column(name = "is_screen_data")
-	@Element(data = true, name = "isScreenData")
+	@Element(name = "isScreenData", data = true)
 	private boolean screenData;
 
 	@Column(name = "inserted_by")
