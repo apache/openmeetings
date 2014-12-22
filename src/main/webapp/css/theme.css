@@ -594,3 +594,6 @@ select.messages.selector {
 .user.info.panel fieldset table, .user.info.panel fieldset table textarea {
 	width: 100%;
 }
+.date.time.picker {
+	font-size: 12px;
+}

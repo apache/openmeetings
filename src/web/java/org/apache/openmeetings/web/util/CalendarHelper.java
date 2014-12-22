@@ -16,21 +16,31 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.web.user.calendar;
+package org.apache.openmeetings.web.util;
 
-import org.apache.openmeetings.db.entity.calendar.Appointment;
-import org.apache.openmeetings.web.util.CalendarHelper;
+import static org.apache.openmeetings.web.app.WebSession.getUserTimeZone;
 
-import com.googlecode.wicket.jquery.ui.calendar.CalendarEvent;
+import java.util.Date;
 
-public class OmCalendarEvent extends CalendarEvent {
-	private static final long serialVersionUID = 1L;
+import org.threeten.bp.Instant;
+import org.threeten.bp.LocalDate;
+import org.threeten.bp.LocalDateTime;
+import org.threeten.bp.ZoneId;
+
+public class CalendarHelper {
+	public static ZoneId getZoneId() {
+		return ZoneId.of(getUserTimeZone().getID());
+	}
 	
-	public OmCalendarEvent(Appointment a) {
-		super(a.getId().intValue(), a.getTitle(), null);
-		setStart(CalendarHelper.getDate(a.getStart()));
-		setEnd(CalendarHelper.getDate(a.getEnd()));
-		setEditable(AppointmentDialog.isOwner(a));
-		setAllDay(false);
+	public static Date getDate(LocalDate d) {
+		return getDate(d.atStartOfDay());
+	}
+
+	public static Date getDate(LocalDateTime d) {
+		return new Date(d.atZone(getZoneId()).toInstant().toEpochMilli());
+	}
+
+	public static LocalDateTime getDate(Date d) {
+		return Instant.ofEpochMilli(d.getTime()).atZone(ZoneId.of(getUserTimeZone().getID())).toLocalDateTime();
 	}
 }

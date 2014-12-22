@@ -38,6 +38,7 @@ import org.apache.openmeetings.web.util.OmUrlFragment;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AbstractAjaxTimerBehavior;
+import org.apache.wicket.ajax.AjaxClientInfoBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
@@ -66,6 +67,7 @@ public class MainPage extends BaseInitedPage {
 	
 	public MainPage(PageParameters pp) {
 		super();
+		add(new AjaxClientInfoBehavior());
 		contents = new WebMarkupContainer("contents");
 		add(contents.add(new WebMarkupContainer(CHILD_ID)).setOutputMarkupId(true).setMarkupId("contents"));
 		menu = new MenuPanel("menu");
