@@ -49,11 +49,11 @@ function addCalButton(where, text, id) {
 		changeYear: true,
 		changeDay: true,
 		onChangeMonthYear: function(year, month, inst) {
-			$('#calendar').fullCalendar('gotoDate', year + '-' + ('0' + month).slice(-2) + '-' + inst.selectedDay);
+			$('#${markupId}').fullCalendar('gotoDate', year + '-' + ('0' + month).slice(-2) + '-' + inst.selectedDay);
 		},
 		onSelect: function(dateText, inst) {
 		     var date = new Date(dateText);
-		     $('#calendar').fullCalendar('gotoDate', date.getFullYear() + '-' + ('0' + (date.getMonth() + 1)).slice(-2) + '-' + date.getDate());
+		     $('#${markupId}').fullCalendar('gotoDate', date.getFullYear() + '-' + ('0' + (date.getMonth() + 1)).slice(-2) + '-' + date.getDate());
 		}
 	});
 	
