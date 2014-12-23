@@ -38,9 +38,9 @@
 			<url name="smslib" m2compatible="true">
 				<artifact pattern="http://smslib.org/maven2/v3/[organisation]/[artifact]/[revision]/[artifact]-[revision].[ext]" />
 			</url>
-			<url name="wicket-jquery-ui" m2compatible="true">
+			<!--url name="wicket-jquery-ui" m2compatible="true">
 				<artifact pattern="https://oss.sonatype.org/content/repositories/snapshots/[organisation]/[artifact]/6.18.1-SNAPSHOT/[artifact]-[revision].[ext]" />
-			</url>
+			</url-->
 		</chain>
 	</resolvers>
 	<triggers>
