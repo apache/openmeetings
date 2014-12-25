@@ -19,7 +19,6 @@
 package org.apache.openmeetings.util.stringhandlers;
 
 public class StringComparer {
-	
 	private static StringComparer instance = null;
 	
 	private StringComparer() {}
@@ -32,22 +31,20 @@ public class StringComparer {
 	}
 	
 	public String compareForRealPaths(String inputString) throws Exception{
-
-		String t = "";
-		for (int i=0;i<inputString.length();i++){
+		StringBuilder t = new StringBuilder();
+		for (int i = 0; i < inputString.length(); ++i) {
 			char c = inputString.charAt(i);
 			if (compareChars(c)) {
-				t += c;
+				t.append(c);
 			} else {
-				t += "_";
+				t.append('_');
 			}
-			
-		}		
-		return t;
+
+		}
+		return t.toString();
 	}
 	
 	private boolean compareChars(char inputChar){		
 		return Character.isLetterOrDigit(inputChar);
 	}
-
 }

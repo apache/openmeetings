@@ -1433,8 +1433,8 @@ public class RoomWebService {
 
 			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(users_id))) {
 
-				Date dFrom = null;
-				Date dTo = null;
+				Date dFrom = new Date();
+				Date dTo = new Date();
 
 				if (valid == 2) {
 					Integer validFromHour = Integer.valueOf(validFromTime.substring(0, 2));
@@ -1555,8 +1555,8 @@ public class RoomWebService {
 
 			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(users_id))) {
 
-				Date dFrom = null;
-				Date dTo = null;
+				Date dFrom = new Date();
+				Date dTo = new Date();
 
 				if (valid == 2) {
 					Integer validFromHour = Integer.valueOf(validFromTime.substring(0, 2));
@@ -1588,12 +1588,8 @@ public class RoomWebService {
 					dFrom = calFrom.getTime();
 					dTo = calTo.getTime();
 
-					log.info("validFromDate: "
-							+ CalendarPatterns
-									.getDateWithTimeByMiliSeconds(dFrom));
-					log.info("validToDate: "
-							+ CalendarPatterns
-									.getDateWithTimeByMiliSeconds(dTo));
+					log.info("validFromDate: " + CalendarPatterns.getDateWithTimeByMiliSeconds(dFrom));
+					log.info("validToDate: " + CalendarPatterns.getDateWithTimeByMiliSeconds(dTo));
 				}
 
 				User invitee = userDao.getContact(email, users_id);
@@ -1732,45 +1728,39 @@ public class RoomWebService {
 	 * @return - RoomReturn Objects with information of the current users
 	 * @throws ServiceException
 	 */
-	public List<RoomReturn> getRoomsWithCurrentUsersByList(String SID,
-			int start, int max, String orderby, boolean asc) throws ServiceException {
+	public List<RoomReturn> getRoomsWithCurrentUsersByList(String SID, int start, int max, String orderby, boolean asc) throws ServiceException {
 		try {
-			List<Room> rooms = conferenceService
-					.getRoomsWithCurrentUsersByList(SID, start, max, orderby,
-							asc);
+			List<Room> rooms = conferenceService.getRoomsWithCurrentUsersByList(SID, start, max, orderby, asc);
 
 			List<RoomReturn> returnObjList = new LinkedList<RoomReturn>();
-
-			for (Room room : rooms) {
-
-				RoomReturn roomReturn = new RoomReturn();
-
-				roomReturn.setRoom_id(room.getId());
-				roomReturn.setName(room.getName());
-
-				roomReturn.setCreator("SOAP");
-				roomReturn.setCreated(room.getStarttime());
-
-				RoomUser[] rUser = new RoomUser[room.getCurrentusers().size()];
-
-				int i = 0;
-				for (Client rcl : room.getCurrentusers()) {
-
-					RoomUser ru = new RoomUser();
-					ru.setFirstname(rcl.getFirstname());
-					ru.setLastname(rcl.getLastname());
-
-					rUser[i] = ru;
-
-					i++;
+			if (rooms != null) {
+				for (Room room : rooms) {
+					RoomReturn roomReturn = new RoomReturn();
+	
+					roomReturn.setRoom_id(room.getId());
+					roomReturn.setName(room.getName());
+	
+					roomReturn.setCreator("SOAP");
+					roomReturn.setCreated(room.getStarttime());
+	
+					RoomUser[] rUser = new RoomUser[room.getCurrentusers().size()];
+	
+					int i = 0;
+					for (Client rcl : room.getCurrentusers()) {
+	
+						RoomUser ru = new RoomUser();
+						ru.setFirstname(rcl.getFirstname());
+						ru.setLastname(rcl.getLastname());
+	
+						rUser[i] = ru;
+	
+						i++;
+					}
+	
+					roomReturn.setRoomUser(rUser);
+					returnObjList.add(roomReturn);
 				}
-
-				roomReturn.setRoomUser(rUser);
-
-				returnObjList.add(roomReturn);
-
 			}
-
 			return returnObjList;
 		} catch (Exception err) {
 			log.error("setUserObjectWithExternalUser", err);
@@ -1802,42 +1792,36 @@ public class RoomWebService {
 			int start, int max, String orderby, boolean asc,
 			String externalRoomType) throws ServiceException {
 		try {
-			List<Room> rooms = conferenceService
-					.getRoomsWithCurrentUsersByListAndType(SID, start, max,
-							orderby, asc, externalRoomType);
+			List<Room> rooms = conferenceService.getRoomsWithCurrentUsersByListAndType(SID, start, max, orderby, asc, externalRoomType);
 
 			List<RoomReturn> returnObjList = new LinkedList<RoomReturn>();
-
-			for (Room room : rooms) {
-
-				RoomReturn roomReturn = new RoomReturn();
-
-				roomReturn.setRoom_id(room.getId());
-				roomReturn.setName(room.getName());
-
-				roomReturn.setCreator("SOAP");
-				roomReturn.setCreated(room.getStarttime());
-
-				RoomUser[] rUser = new RoomUser[room.getCurrentusers().size()];
-
-				int i = 0;
-				for (Client rcl : room.getCurrentusers()) {
-
-					RoomUser ru = new RoomUser();
-					ru.setFirstname(rcl.getFirstname());
-					ru.setLastname(rcl.getLastname());
-
-					rUser[i] = ru;
-
-					i++;
+			if (rooms != null) {
+				for (Room room : rooms) {
+					RoomReturn roomReturn = new RoomReturn();
+	
+					roomReturn.setRoom_id(room.getId());
+					roomReturn.setName(room.getName());
+	
+					roomReturn.setCreator("SOAP");
+					roomReturn.setCreated(room.getStarttime());
+	
+					RoomUser[] rUser = new RoomUser[room.getCurrentusers().size()];
+	
+					int i = 0;
+					for (Client rcl : room.getCurrentusers()) {
+						RoomUser ru = new RoomUser();
+						ru.setFirstname(rcl.getFirstname());
+						ru.setLastname(rcl.getLastname());
+	
+						rUser[i] = ru;
+	
+						i++;
+					}
+	
+					roomReturn.setRoomUser(rUser);
+					returnObjList.add(roomReturn);
 				}
-
-				roomReturn.setRoomUser(rUser);
-
-				returnObjList.add(roomReturn);
-
 			}
-
 			return returnObjList;
 		} catch (Exception err) {
 			log.error("setUserObjectWithExternalUser", err);
@@ -1921,6 +1905,9 @@ public class RoomWebService {
 				Date fromDate = CalendarPatterns.parseDateBySeparator(validFromDate); // dd.MM.yyyy
 				Date toDate = CalendarPatterns.parseDateBySeparator(validToDate); // dd.MM.yyyy
 
+				if (fromDate == null || toDate == null) {
+					throw new ServiceException("Invalid dates are passed");
+				}
 				Calendar calFrom = Calendar.getInstance();
 				calFrom.setTime(fromDate);
 				calFrom.set(calFrom.get(Calendar.YEAR),
@@ -2138,7 +2125,9 @@ public class RoomWebService {
 				Class<?> valueClass = rw.getPropertyType(paramName);
 				Object val = null;
 				//don't like this code
-				if (valueClass.isAssignableFrom(String.class)) {
+				if (valueClass == null) {
+					//do nothing
+				} else if (valueClass.isAssignableFrom(String.class)) {
 					val = paramValue;
 				} else if (valueClass.isAssignableFrom(Boolean.class)) {
 					val = Boolean.parseBoolean(paramValue);

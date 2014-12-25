@@ -86,7 +86,7 @@ public class ActivitiesPanel extends BasePanel {
 				Activity a = get(uid);
 				if (a != null) {
 					if (action == Action.close && (a.getType() == Type.roomEnter || a.getType() == Type.roomExit)) {
-						activities.remove(uid);
+						activities.remove(a);
 					} else if (isModerator(getUserId(), roomId)) {
 						switch (a.getType()) {
 							case askModeration:

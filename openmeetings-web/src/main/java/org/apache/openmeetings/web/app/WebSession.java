@@ -140,9 +140,12 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 			if (!secureHash.isEmpty() || !invitationHash.isEmpty()) {
 				PageParameters pp = new PageParameters();
 				for (String p : params.getParameterNames()) {
-					for (StringValue sv : params.getParameterValues(p)) {
-						if (!sv.isEmpty()) {
-							pp.add(p, sv.toString());
+					List<StringValue> vals = params.getParameterValues(p);
+					if (vals != null) {
+						for (StringValue sv : vals) {
+							if (!sv.isEmpty()) {
+								pp.add(p, sv.toString());
+							}
 						}
 					}
 				}

@@ -157,16 +157,18 @@ public abstract class RecordingResourceReference extends ResourceReference {
 						@Override
 						public void writeData(Attributes attributes) throws IOException {
 							IResourceStream rStream = getResourceStream();
-							try {
-								writeStream(attributes, rStream.getInputStream());
-							} catch (ResourceStreamNotFoundException e1) {
-							} catch (ResponseIOException e) {
-								// in case of range operations we expecting such exceptions
-								if (!isRange) {
-									log.error("Error while playing the stream", e);
+							if (rStream != null) {
+								try {
+									writeStream(attributes, rStream.getInputStream());
+								} catch (ResourceStreamNotFoundException e1) {
+								} catch (ResponseIOException e) {
+									// in case of range operations we expecting such exceptions
+									if (!isRange) {
+										log.error("Error while playing the stream", e);
+									}
+								} finally {
+									rStream.close();
 								}
-							} finally {
-								rStream.close();
 							}
 						}
 					});

@@ -214,7 +214,7 @@ public class LangPanel extends AdminPanel {
 								Document doc = createDocument(flvList, getBean(FieldLanguagesValuesDao.class).getUntranslatedFieldValuesList(language.getId()));
 								sw = new StringWriter();
 								LangExport.serializetoXML(sw, "UTF-8", doc);
-								is = new ByteArrayInputStream(sw.toString().getBytes());
+								is = new ByteArrayInputStream(sw.toString().getBytes("UTF-8"));
 								return is;
 							} catch (Exception e) {
 								throw new ResourceStreamNotFoundException(e);

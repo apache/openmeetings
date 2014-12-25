@@ -83,6 +83,7 @@ import org.apache.wicket.settings.PageSettings;
 import org.apache.wicket.util.collections.ConcurrentHashSet;
 import org.apache.wicket.util.tester.WicketTester;
 import org.slf4j.Logger;
+import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.XmlWebApplicationContext;
 import org.wicketstuff.select2.ApplicationSettings;
 
@@ -302,7 +303,8 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 	
 	//TODO need more safe way FIXME
 	public <T> T _getBean(Class<T> clazz) {
-		return getWebApplicationContext(getServletContext()).getBean(clazz);
+		WebApplicationContext wac = getWebApplicationContext(getServletContext());
+		return wac == null ? null : wac.getBean(clazz);
 	}
 	
 	public static boolean isInstalled() {

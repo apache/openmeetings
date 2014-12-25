@@ -21,6 +21,7 @@ package org.apache.openmeetings.webservice;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.jws.WebService;
@@ -148,10 +149,9 @@ public class JabberWebService {
 		
 		if (AuthLevelUtil.hasUserLevel(userDao.getRights(users_id))) {
 			User invitee = userDao.getContact(username, username, username, users_id);
-			Invitation invitation = invitationManager.getInvitation(invitee, roomDao.get(room_id),
-							false, "", Valid.OneTime, userDao.get(users_id), 1L, null, null, null);
+			Invitation invitation = invitationManager.getInvitation(invitee, roomDao.get(room_id), false, "", Valid.OneTime, userDao.get(users_id), 1L, new Date(), new Date(), null);
 	
-			return ((invitation == null) ? null : invitation.getHash());
+			return invitation == null ? null : invitation.getHash();
 		} else {
 			return "Need Admin Privileges to perfom the Action";
 		}

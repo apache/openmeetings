@@ -502,20 +502,17 @@ public class CalendarWebService {
 	 */
 	public Appointment getAppointmentByRoomId(String SID, Long room_id) {
 		try {
-
 			Long users_id = sessiondataDao.checkSession(SID);
 			if (AuthLevelUtil.hasUserLevel(userDao.getRights(users_id))) {
-
-				Appointment appointment = new Appointment();
-
 				Appointment appStored = appointmentDao.getAppointmentByOwnerRoom(users_id, room_id);
-
-				appointment.setStart(appStored.getStart());
-				appointment.setEnd(appStored.getEnd());
-
-				return appointment;
+				if (appStored != null) {
+					Appointment appointment = new Appointment();
+					appointment.setStart(appStored.getStart());
+					appointment.setEnd(appStored.getEnd());
+		
+					return appointment;
+				}
 			}
-
 		} catch (Exception err) {
 			log.error("[getAppointmentByRoomId]", err);
 		}
