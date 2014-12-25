@@ -66,6 +66,9 @@ public class MobileService {
 	@Autowired
 	private ScopeApplicationAdapter scopeAdapter;
 
+	private void add(Map<String, Object> m, String key, Object v) {
+		m.put(key, v == null ? "" : v);
+	}
 	public Map<String, Object> loginUser(String login, String password) {
 		Map<String, Object> result = new Hashtable<String, Object>();
 		try {
@@ -95,15 +98,15 @@ public class MobileService {
 					//c.set
 					sessionManager.updateClientByStreamId(streamId, c, false, null);
 
-					result.put("sid", sd.getSession_id());
-					result.put("publicSid", c.getPublicSID());
-					result.put("status", 0);
-					result.put("userId", u.getId());
-					result.put("firstname", u.getFirstname());
-					result.put("lastname", u.getLastname());
-					result.put("login", u.getLogin());
-					result.put("email", u.getAdresses() == null ? "" : u.getAdresses().getEmail());
-					result.put("language", u.getLanguageId()); //TODO rights
+					add(result, "sid", sd.getSession_id());
+					add(result, "publicSid", c.getPublicSID());
+					add(result, "status", 0);
+					add(result, "userId", u.getId());
+					add(result, "firstname", u.getFirstname());
+					add(result, "lastname", u.getLastname());
+					add(result, "login", u.getLogin());
+					add(result, "email", u.getAdresses() == null ? "" : u.getAdresses().getEmail());
+					add(result, "language", u.getLanguageId()); //TODO rights
 				}
 			}
 		} catch (Exception e) {
@@ -121,15 +124,15 @@ public class MobileService {
 				Client c = sessionManager.getClientByStreamId(conn.getClient().getId(), null);
 				if (c.getIsAVClient() && !Strings.isEmpty(c.getAvsettings())) {
 					Map<String, Object> map = new Hashtable<String, Object>();
-					map.put("streamId", c.getStreamid());
-					map.put("broadCastId", c.getBroadCastID());
-					map.put("userId", c.getUser_id() == null ? "" : c.getUser_id());
-					map.put("firstname", c.getFirstname());
-					map.put("lastname", c.getLastname());
-					map.put("publicSid", c.getPublicSID());
-					map.put("login", c.getUsername());
-					map.put("email", c.getEmail() == null ? "" : c.getEmail());
-					map.put("avsettings", c.getAvsettings());
+					add(map, "streamId", c.getStreamid());
+					add(map, "broadCastId", c.getBroadCastID());
+					add(map, "userId", c.getUser_id());
+					add(map, "firstname", c.getFirstname());
+					add(map, "lastname", c.getLastname());
+					add(map, "publicSid", c.getPublicSID());
+					add(map, "login", c.getUsername());
+					add(map, "email", c.getEmail());
+					add(map, "avsettings", c.getAvsettings());
 					result.add(map);
 				}
 			}
