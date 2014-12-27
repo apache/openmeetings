@@ -52,22 +52,22 @@
 		<dependency org="asm" name="asm" rev="3.1" transitive="false">
 			<include type="jar" />
 		</dependency>
-		<dependency org="org.springframework" name="spring-aspects" rev="4.0.6.RELEASE" transitive="false">
+		<dependency org="org.springframework" name="spring-aspects" rev="4.0.8.RELEASE" transitive="false">
 			<include type="jar" />
 		</dependency>
-		<dependency org="org.springframework" name="spring-jdbc" rev="4.0.6.RELEASE" transitive="false">
+		<dependency org="org.springframework" name="spring-jdbc" rev="4.0.8.RELEASE" transitive="false">
 			<include type="jar" />
 		</dependency>
-		<dependency org="org.springframework" name="spring-orm" rev="4.0.6.RELEASE" transitive="false">
+		<dependency org="org.springframework" name="spring-orm" rev="4.0.8.RELEASE" transitive="false">
 			<include type="jar" />
 		</dependency>
-		<dependency org="org.springframework" name="spring-tx" rev="4.0.6.RELEASE" transitive="false">
+		<dependency org="org.springframework" name="spring-tx" rev="4.0.8.RELEASE" transitive="false">
 			<include type="jar" />
 		</dependency>
-		<dependency org="org.springframework" name="spring-webmvc" rev="4.0.6.RELEASE" transitive="false">
+		<dependency org="org.springframework" name="spring-webmvc" rev="4.0.8.RELEASE" transitive="false">
 			<include type="jar" />
 		</dependency>
-		<dependency org="org.springframework" name="spring-context-support" rev="4.0.6.RELEASE" transitive="false">
+		<dependency org="org.springframework" name="spring-context-support" rev="4.0.8.RELEASE" transitive="false">
 			<include type="jar" />
 		</dependency>
 		<!-- include type="bundle" / FIXME unable to get geronimo-jpa without  sources -->
@@ -353,7 +353,7 @@
 		<!--  END OF OPENMEETINGS -->
 
 		<!--  START OF JUNIT -->
-		<dependency org="org.springframework" name="spring-test" rev="4.0.6.RELEASE" conf="junit->*" transitive="false">
+		<dependency org="org.springframework" name="spring-test" rev="4.0.8.RELEASE" conf="junit->*" transitive="false">
 			<include type="jar" />
 		</dependency>
 		<dependency org="ant-contrib" name="ant-contrib" rev="1.0b3" conf="junit->*" transitive="false">
@@ -420,13 +420,13 @@
 		</dependency>
 
 		<!-- JGIT -->
-		<dependency org="org.eclipse.jgit" name="org.eclipse.jgit.ant" conf="jgit->*" rev="3.4.1.201406201815-r" transitive="true" >
+		<dependency org="org.eclipse.jgit" name="org.eclipse.jgit.ant" conf="jgit->*" rev="3.6.0.201412230720-r" transitive="true" >
 			<include type="jar" />
 			<exclude org="org.apache.ant"/>
 		</dependency>
 
 		<!-- red5-client -->
-		<dependency org="org.red5" name="red5-client" conf="red5-client->*" rev="1.0.3-RELEASE" transitive="false" >
+		<dependency org="org.red5" name="red5-client" conf="red5-client->*" rev="1.0.4-RELEASE" transitive="false" >
 			<include type="jar" />
 		</dependency>
 		
