@@ -36,20 +36,20 @@
 		<wicket.mode>DEPLOYMENT</wicket.mode>
 		<om.quick.build>false</om.quick.build>
 		<db>derby</db>
-		<spring.version>4.0.6.RELEASE</spring.version>
+		<spring.version>4.0.8.RELEASE</spring.version>
 		<junit.version>4.11</junit.version>
 		<maven.javadoc.version>2.10.1</maven.javadoc.version>
 		<maven.surefire.version>2.17</maven.surefire.version>
 		<maven-site.version>3.4</maven-site.version>
 		<wicket.version>7.0.0-M4</wicket.version>
 		<wickets.version>7.0.0-M4</wickets.version>
-		<red5-server.version>1.0.3-RELEASE</red5-server.version>
+		<red5-server.version>1.0.4-RELEASE</red5-server.version>
 		<batik.version>1.7</batik.version>
 		<commons-transaction.version>1.2</commons-transaction.version>
 		<ical4j.version>1.0.5.2</ical4j.version>
 		<cxf.version>3.0.1</cxf.version>
 		<selenium.version>2.42.2</selenium.version>
-		<red5-client.version>1.0.3-RELEASE</red5-client.version>
+		<red5-client.version>1.0.4-RELEASE</red5-client.version>
 		<simple-xml.version>2.7.1</simple-xml.version>
 		<jettison.version>1.3.5</jettison.version>
 		<site.basedir>${project.basedir}</site.basedir>
@@ -273,10 +273,6 @@
 		</mailingList>
 	</mailingLists>
 	<repositories>
-		<repository>
-			<id>Red5</id>
-			<url>http://red5.googlecode.com/svn/repository</url>
-		</repository>
 		<repository>
 			<id>flex-mojos-repository</id>
 			<url>https://oss.sonatype.org/content/groups/staging</url>
@@ -759,7 +755,7 @@
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-antrun-plugin</artifactId>
-					<version>1.7</version>
+					<version>1.8</version>
 				</plugin>
 				<plugin>
 					<groupId>org.codehaus.mojo</groupId>
