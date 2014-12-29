@@ -39,7 +39,7 @@
 		<spring.version>4.0.8.RELEASE</spring.version>
 		<junit.version>4.11</junit.version>
 		<maven.javadoc.version>2.10.1</maven.javadoc.version>
-		<maven.surefire.version>2.17</maven.surefire.version>
+		<maven.surefire.version>2.18.1</maven.surefire.version>
 		<maven-site.version>3.4</maven-site.version>
 		<wicket.version>7.0.0-M4</wicket.version>
 		<wickets.version>7.0.0-M4</wickets.version>
