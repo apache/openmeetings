@@ -146,12 +146,12 @@ public class FLVRecorderService implements IPendingServiceCallback {
 						Client rcl = sessionManager.getClientByStreamId(conn.getClient().getId(), null);
 
 						// Send every user a notification that the recording did start
-						if (!rcl.getIsAVClient()) {
+						if (!rcl.isAvClient()) {
 							((IServiceCapableConnection) conn).invoke("startedRecording", new Object[] { currentClient }, this);
 						}
 
 						// If its the recording client we need another type of Meta Data
-						if (rcl.getIsScreenClient()) {
+						if (rcl.isScreenClient()) {
 							if (rcl.getFlvRecordingId() != null && rcl.isScreenPublishStarted()) {
 								String streamName_Screen = generateFileName(flvRecordingId, rcl.getStreamPublishName().toString());
 
@@ -167,7 +167,7 @@ public class FLVRecorderService implements IPendingServiceCallback {
 
 								sessionManager.updateClientByStreamId(rcl.getStreamid(), rcl, false, null);
 							}
-						} else if (rcl.getIsAVClient()
+						} else if (rcl.isAvClient()
 								&& (rcl.getAvsettings().equals("av") || rcl.getAvsettings().equals("a") || rcl.getAvsettings().equals("v"))) {
 							// if the user does publish av, a, v
 							// But we only record av or a, video only is not interesting
@@ -329,7 +329,7 @@ public class FLVRecorderService implements IPendingServiceCallback {
 						}
 						log.debug("is this users still alive? stop it :" + rcl);
 
-						if (rcl.getIsScreenClient()) {
+						if (rcl.isScreenClient()) {
 							if (rcl.getFlvRecordingId() != null && rcl.isScreenPublishStarted()) {
 								// Stop FLV Recording
 								stopRecordingShow(conn, rcl.getStreamPublishName(), rcl.getFlvRecordingMetaDataId());
@@ -337,7 +337,7 @@ public class FLVRecorderService implements IPendingServiceCallback {
 								// Update Meta Data
 								metaDataDao.updateFlvRecordingMetaDataEndDate(rcl.getFlvRecordingMetaDataId(), new Date());
 							}
-						} else if (rcl.getIsAVClient()
+						} else if (rcl.isAvClient()
 								&& (rcl.getAvsettings().equals("av") || rcl.getAvsettings().equals("a") || rcl.getAvsettings().equals("v"))) {
 
 							stopRecordingShow(conn, String.valueOf(rcl.getBroadCastID()).toString(), rcl.getFlvRecordingMetaDataId());
@@ -412,7 +412,7 @@ public class FLVRecorderService implements IPendingServiceCallback {
 			// rcl.getUserip(), false);
 			log.debug("### stopRecordingShowForClient: " + rcl);
 
-			if (rcl.getIsScreenClient()) {
+			if (rcl.isScreenClient()) {
 
 				if (rcl.getFlvRecordingId() != null && rcl.isScreenPublishStarted()) {
 
@@ -426,7 +426,7 @@ public class FLVRecorderService implements IPendingServiceCallback {
 					metaDataDao.updateFlvRecordingMetaDataEndDate(rcl.getFlvRecordingMetaDataId(), new Date());
 				}
 
-			} else if (rcl.getIsAVClient()
+			} else if (rcl.isAvClient()
 					&& (rcl.getAvsettings().equals("a") || rcl.getAvsettings().equals("v") || rcl.getAvsettings().equals("av"))) {
 
 				// FIXME: Is there really a need to stop it manually if the user
@@ -449,7 +449,7 @@ public class FLVRecorderService implements IPendingServiceCallback {
 			Date now = new Date();
 
 			// If its the recording client we need another type of Meta Data
-			if (rcl.getIsScreenClient()) {
+			if (rcl.isScreenClient()) {
 				if (rcl.getFlvRecordingId() != null && rcl.isScreenPublishStarted()) {
 					String streamName_Screen = generateFileName(flvRecordingId, rcl.getStreamPublishName().toString());
 
@@ -467,7 +467,7 @@ public class FLVRecorderService implements IPendingServiceCallback {
 
 					sessionManager.updateClientByStreamId(rcl.getStreamid(), rcl, false, null);
 				}
-			} else if (rcl.getIsAVClient()
+			} else if (rcl.isAvClient()
 					&& (rcl.getAvsettings().equals("av") || rcl.getAvsettings().equals("a") || rcl.getAvsettings().equals("v"))) {
 				// if the user does publish av, a, v
 				// But we only record av or a, video only is not interesting

@@ -216,9 +216,7 @@ public class ConferenceLibrary implements IPendingServiceCallback {
 							Client rcl = this.sessionManager
 									.getClientByStreamId(conn.getClient()
 											.getId(), null);
-							if ((rcl == null)
-									|| (rcl.getIsScreenClient() != null && rcl
-											.getIsScreenClient())) {
+							if ((rcl == null) || rcl.isScreenClient()) {
 								continue;
 							} else {
 								((IServiceCapableConnection) conn).invoke(

@@ -180,13 +180,13 @@ public class Client implements IDataProviderEntity {
 	 * @see Client#getIsScreenClient()
 	 */
 	@Column(name = "is_screenclient")
-	private Boolean isScreenClient = false;
+	private boolean screenClient = false;
 	
 	/**
 	 * @see Client#getIsAVClient()
 	 */
 	@Column(name = "is_avclient")
-	private boolean isAVClient = false;
+	private boolean avClient = false;
 	
 	/**
 	 * @see Client#getUsercolor()
@@ -403,7 +403,7 @@ public class Client implements IDataProviderEntity {
 		this.user_id = user_id;
 		this.firstname = firstname;
 		this.lastname = lastname;
-		this.isAVClient = isAVClient;
+		this.avClient = isAVClient;
 		this.username = username;
 		this.connectedSince = CalendarPatterns.parseDateWithHour(connectedSince);
 		this.scope = scope;
@@ -702,12 +702,12 @@ public class Client implements IDataProviderEntity {
 		this.isSuperModerator = isSuperModerator;
 	}
 
-	public Boolean getIsScreenClient() {
-		return isScreenClient;
+	public boolean isScreenClient() {
+		return screenClient;
 	}
 
-	public void setIsScreenClient(Boolean isScreenClient) {
-		this.isScreenClient = isScreenClient;
+	public void setScreenClient(boolean screenClient) {
+		this.screenClient = screenClient;
 	}
 
 	public int getVWidth() {
@@ -822,12 +822,12 @@ public class Client implements IDataProviderEntity {
 		this.allowRecording = allowRecording;
 	}
 
-	public boolean getIsAVClient() {
-		return isAVClient;
+	public boolean isAvClient() {
+		return avClient;
 	}
 
-	public void setIsAVClient(boolean isAVClient) {
-		this.isAVClient = isAVClient;
+	public void setAvClient(boolean avClient) {
+		this.avClient = avClient;
 	}
 
 	public boolean isStreamPublishStarted() {
@@ -856,8 +856,8 @@ public class Client implements IDataProviderEntity {
 
 	@Override
 	public String toString() {
-		return "Client [streamid=" + streamid + ", publicSID=" + publicSID + ", isScreenClient=" + isScreenClient
-				+ ", isAVClient=" + isAVClient + ", room_id=" + room_id + ", broadCastID=" + broadCastID + ", user_id="
+		return "Client [streamid=" + streamid + ", publicSID=" + publicSID + ", isScreenClient=" + screenClient
+				+ ", isAVClient=" + avClient + ", room_id=" + room_id + ", broadCastID=" + broadCastID + ", user_id="
 				+ user_id + ", avsettings=" + avsettings + ", isRecording=" + isRecording + ", flvRecordingId="
 				+ flvRecordingId + ", flvRecordingMetaDataId=" + flvRecordingMetaDataId + ", screenPublishStarted="
 				+ screenPublishStarted + ", interviewPodId=" + interviewPodId + ", server=" + server + "]";

@@ -285,7 +285,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 				currentClient.setRoom_id(Long.parseLong(current.getScope().getName()));
 
 				// Set this connection to be a RTMP-Java Client
-				currentClient.setIsScreenClient(true);
+				currentClient.setScreenClient(true);
 				
 				SessionVariablesUtil.setIsScreenClient(current.getClient());
 				
@@ -388,7 +388,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
                 Client rcl = sessionManager.getClientByStreamId(conn.getClient().getId(), null);
                 if (rcl == null) {
                     // continue;
-                } else if (rcl.getIsScreenClient() != null && rcl.getIsScreenClient()) {
+                } else if (rcl.isScreenClient()) {
                     // continue;
                 } else {
                     if (!streamid.equals(rcl.getStreamid())) {
@@ -574,11 +574,11 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 							}
 							
 							//If the user was a avclient, we do not broadcast a message about that to everybody
-							if (currentClient.getIsAVClient()) {
+							if (currentClient.isAvClient()) {
 								continue;
 							}
 							
-							boolean isScreen = rcl.getIsScreenClient() != null && rcl.getIsScreenClient();
+							boolean isScreen = rcl.isScreenClient();
 							if (isScreen && currentClient.getPublicSID().equals(rcl.getStreamPublishName())) {
 								//going to terminate screen sharing started by this client
 								((IServiceCapableConnection) cons).invoke("stopStream", new Object[] { },this);
@@ -586,7 +586,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 							} else if (isScreen) {
 								// screen sharing clients do not receive events
 								continue;
-							} else if (rcl.getIsAVClient()) {
+							} else if (rcl.isAvClient()) {
 								// AVClients or potential AVClients do not receive events
 								continue;
 							}
@@ -631,14 +631,14 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 			log.debug("start streamPublishStart broadcast start: " + stream.getPublishedName() + " CONN " + current);
 
 			// In case its a screen sharing we start a new Video for that
-			if (currentClient.getIsScreenClient()) {
+			if (currentClient.isScreenClient()) {
 
 				currentClient.setScreenPublishStarted(true);
 
 				sessionManager.updateClientByStreamId(streamid, currentClient, false, null);
 			}
 			//If its an audio/video client then send the session object with the full data to everybody
-			else if (currentClient.getIsAVClient()) {
+			else if (currentClient.isAvClient()) {
 				clientObjectSendToSync = sessionManager.getClientByPublicSID(currentClient.getPublicSID(), false, null);
 			}
 			
@@ -667,11 +667,11 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 							log.debug("RCL getIsRecording newStream SEND");
 							flvRecorderService.addRecordingByStreamId(current, streamid, currentClient, rcl.getFlvRecordingId());
 						}
-						if (rcl.getIsAVClient()) {
+						if (rcl.isAvClient()) {
 							log.debug("RCL getIsAVClient newStream SEND");
 							continue;
 						}
-						if (rcl.getIsScreenClient() == null || rcl.getIsScreenClient()) {
+						if (rcl.isScreenClient()) {
 							log.debug("RCL getIsScreenClient newStream SEND");
 							continue;
 						}
@@ -775,7 +775,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 						} else {
 							Client rcl = sessionManager.getClientByStreamId(conn.getClient().getId(), null);
 							if (rcl != null) {
-								if (rcl.getIsScreenClient() != null && rcl.getIsScreenClient()) {
+								if (rcl.isScreenClient()) {
 									// continue;
 								} else {
 									log.debug("is this users still alive? :" + rcl);
@@ -977,7 +977,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 					Client rcl = sessionManager.getClientByStreamId(conn.getClient().getId(), null);
 					if (rcl == null) {
 						// continue;
-					} else if (rcl.getIsScreenClient() != null && rcl.getIsScreenClient()) {
+					} else if (rcl.isScreenClient()) {
 						// continue;
 					} else {
 						if (rcl != currentClient) {

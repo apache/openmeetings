@@ -94,7 +94,7 @@ public class SessionManager implements ISessionManager {
 				rcm.setSwfurl(swfUrl);
 				rcm.setIsMod(new Boolean(false));
 				rcm.setCanDraw(new Boolean(false));
-				rcm.setIsAVClient(isAVClient);
+				rcm.setAvClient(isAVClient);
 
 				if (cache.containsKey(null, streamId)) {
 					log.error("Tried to add an existing Client " + streamId);
@@ -134,7 +134,7 @@ public class SessionManager implements ISessionManager {
 		public Client getClientByPublicSID(String publicSID, boolean isAVClient, Server server) {
 			try {
 				for (Client rcl : cache.getClientsByPublicSID(server, publicSID)) {
-					if (rcl.getIsAVClient() != isAVClient) {
+					if (rcl.isAvClient() != isAVClient) {
 						continue;
 					}
 					return rcl;
@@ -149,7 +149,7 @@ public class SessionManager implements ISessionManager {
 			try {
 				for (Entry<Long,List<Client>> entry : cache.getClientsByPublicSID(publicSID).entrySet()) {
 					for (Client rcl : entry.getValue()) {
-						if (rcl.getIsAVClient() != isAVClient) {
+						if (rcl.isAvClient() != isAVClient) {
 							continue;
 						}
 						return new ClientSessionInfo(rcl, entry.getKey());
@@ -165,11 +165,11 @@ public class SessionManager implements ISessionManager {
 			try {
 				for (Client rcl : cache.getClientsByUserId(null, userId)) {
 					
-					if (rcl.getIsScreenClient() != null && rcl.getIsScreenClient()) {
+					if (rcl.isScreenClient()) {
 						continue;
 					}
 					
-					if (rcl.getIsAVClient()) {
+					if (rcl.isAvClient()) {
 						continue;
 					}
 					
@@ -247,10 +247,10 @@ public class SessionManager implements ISessionManager {
 
 				for (Client rcl : cache.getClientsByRoomId(roomId)) {
 
-					if (rcl.getIsScreenClient() == null || rcl.getIsScreenClient()) {
+					if (rcl.isScreenClient()) {
 						continue;
 					}
-					if (rcl.getIsAVClient()) {
+					if (rcl.isAvClient()) {
 						continue;
 					}
 
