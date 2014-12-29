@@ -123,7 +123,7 @@ public class MobileService {
 		for (IConnection conn : current.getScope().getClientConnections()) {
 			if (conn != null && conn instanceof IServiceCapableConnection) {
 				Client c = sessionManager.getClientByStreamId(conn.getClient().getId(), null);
-				if (c.getIsAVClient() && !Strings.isEmpty(c.getAvsettings())) {
+				if (c.getIsAVClient() && !Strings.isEmpty(c.getAvsettings()) && !Boolean.TRUE.equals(c.getIsScreenClient())) {
 					Map<String, Object> map = new Hashtable<String, Object>();
 					add(map, "streamId", c.getStreamid());
 					add(map, "broadCastId", c.getBroadCastID());
