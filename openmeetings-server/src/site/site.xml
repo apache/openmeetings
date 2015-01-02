@@ -90,6 +90,7 @@
 				</item>
 				<item name="Performance" href="#performance">
 					<item name="JVM performance tuning" href="/JVMPerformanceTuning.html" />
+					<item name="Network bandwidth calculator" href="/NetworkCalculator.html" />
 				</item>
 				<item name="User Interface" href="#interface">
 					<item name="Themes" href="/themes-and-branding.html" />
