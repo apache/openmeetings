@@ -189,8 +189,27 @@ public class MobileService {
 	
 	public Map<String, Object> roomConnect(String SID, Long userId) {
 		Map<String, Object> result = new Hashtable<String, Object>();
+		boolean isInterview = false;
 		User u = userDao.get(userId);
 		Client c = scopeAdapter.setUsernameReconnect(SID, userId, u.getLogin(), u.getFirstname(), u.getLastname(), u.getPictureuri());
+		// TODO check interview room
+		Room r = roomDao.get(Long.parseLong(c.getScope()));
+		if (r.getRoomtype().getRoomtypes_id() == 4) {
+			int pods[] = {-1, -1};
+			for (Client rcl : sessionManager.getClientListByRoom(r.getRooms_id())) {
+				if (!rcl.getStreamid().equals(c.getStreamid()) 
+						&& rcl.getInterviewPodId() != null) {
+					pods[rcl.getInterviewPodId() - 1] = 1;
+				}
+			}
+			if (pods[0] < 0) { 
+				c.setInterviewPodId(1);
+			} else if (pods[1] < 0) {
+				c.setInterviewPodId(2);
+			} else {
+				isInterview = true;
+			}
+		}
 		 //TODO check if we need anything here
 		long broadcastId = scopeAdapter.getBroadCastId();
 		c.setSipTransport(true);
@@ -199,6 +218,7 @@ public class MobileService {
 		c.setBroadCastID(broadcastId);
 		c.setIsBroadcasting(true);
 		sessionManager.updateClientByStreamId(c.getStreamid(), c, false, null);
+		result.put("isInterview", isInterview);
 		result.put("broadcastId", broadcastId);
 
 		scopeAdapter.syncMessageToCurrentScope("addNewUser", c, false, false);
