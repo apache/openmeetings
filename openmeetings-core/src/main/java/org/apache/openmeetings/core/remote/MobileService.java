@@ -194,9 +194,9 @@ public class MobileService {
 		Client c = scopeAdapter.setUsernameReconnect(SID, userId, u.getLogin(), u.getFirstname(), u.getLastname(), u.getPictureuri());
 		// TODO check interview room
 		Room r = roomDao.get(Long.parseLong(c.getScope()));
-		if (r.getRoomtype().getRoomtypes_id() == 4) {
+		if (r.getRoomtype().getId() == 4) {
 			int pods[] = {-1, -1};
-			for (Client rcl : sessionManager.getClientListByRoom(r.getRooms_id())) {
+			for (Client rcl : sessionManager.getClientListByRoom(r.getId())) {
 				if (!rcl.getStreamid().equals(c.getStreamid()) 
 						&& rcl.getInterviewPodId() != null) {
 					pods[rcl.getInterviewPodId() - 1] = 1;
