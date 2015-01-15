@@ -80,7 +80,7 @@ import com.googlecode.wicket.jquery.ui.plugins.fixedheadertable.FixedHeaderTable
 import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
 
 public class MessagesContactsPanel extends UserPanel {
-	private static final long serialVersionUID = 8098087441571734957L;
+	private static final long serialVersionUID = 1L;
 	private final static long MOVE_CHOOSE = -1;
 	private final static int SELECT_CHOOSE = 1252;
 	private final static int SELECT_ALL = 1239;
@@ -321,7 +321,8 @@ public class MessagesContactsPanel extends UserPanel {
 						PrivateMessageFolderDao fDao = getBean(PrivateMessageFolderDao.class);
 						fDao.delete(item.getModelObject(), getUserId());
 						foldersModel.setObject(fDao.get(0, Integer.MAX_VALUE));
-						target.add(folders);
+						updateMoveModel();
+						target.add(folders, moveDropDown);
 					}
 					
 					@Override
