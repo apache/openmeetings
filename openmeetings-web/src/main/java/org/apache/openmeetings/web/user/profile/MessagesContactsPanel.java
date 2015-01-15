@@ -322,7 +322,8 @@ public class MessagesContactsPanel extends UserPanel {
 						PrivateMessageFolderDao fDao = getBean(PrivateMessageFolderDao.class);
 						fDao.delete(item.getModelObject(), getUserId());
 						foldersModel.setObject(fDao.get(0, Integer.MAX_VALUE));
-						target.add(folders);
+						updateMoveModel();
+						target.add(folders, moveDropDown);
 					}
 					
 					@Override
