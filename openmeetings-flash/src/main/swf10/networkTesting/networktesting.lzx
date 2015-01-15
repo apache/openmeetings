@@ -89,7 +89,7 @@
 		if (!canvas.rtmpHost) {
 			canvas.rtmpHost = getBrowserHost();
 		}
-		canvas.setAttribute("rtmpPort", settingsPtr.xpathQuery("config/rtmpport/text()"));
+		canvas.setAttribute("rtmpPort", settingsPtr.xpathQuery("config/" + (useSSL ? "rtmpsslport" : "rtmpport") + "/text()"));
 		
 		canvas.setAttribute("httpProtocol", settingsPtr.xpathQuery("config/protocol/text()"));
 		canvas.setAttribute("httpHost", settingsPtr.xpathQuery("config/httphostlocal/text()"));
