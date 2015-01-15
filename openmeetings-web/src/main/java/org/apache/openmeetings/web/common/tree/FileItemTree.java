@@ -130,11 +130,7 @@ public class FileItemTree<T extends FileItem> extends DefaultNestedTree<T> {
 			
 			@Override
 			protected String getOtherStyleClass(T r) {
-				String style = getItemStyle(r, super.getOtherStyleClass(r));
-				if (isSelected()) {
-					style += " ui-state-active";
-				}
-				return style;
+				return getItemStyle(r, super.getOtherStyleClass(r));
 			}
 			
 			@Override
@@ -145,6 +141,11 @@ public class FileItemTree<T extends FileItem> extends DefaultNestedTree<T> {
 			@Override
 			protected String getClosedStyleClass() {
 				return getItemStyle(getModelObject(), super.getClosedStyleClass());
+			}
+			
+			@Override
+			protected String getSelectedStyleClass() {
+				return "ui-state-active";
 			}
 			
 			@Override

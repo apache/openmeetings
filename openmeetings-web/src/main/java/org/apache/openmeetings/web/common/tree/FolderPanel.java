@@ -102,7 +102,7 @@ public class FolderPanel extends Panel {
 			d.add(AttributeAppender.append("class", r instanceof FlvRecording ? "recorditem" : "fileitem"));
 			drag = d;
 		}
-		drag.add(r.getId() < 1 || r.getType() != Type.Folder ? new Label("name", r.getFileName()) : new AjaxEditableLabel<String>("name", Model.of(model.getObject().getFileName())) {
+		drag.add(r.getId() < 1 ? new Label("name", r.getFileName()) : new AjaxEditableLabel<String>("name", Model.of(model.getObject().getFileName())) {
 			private static final long serialVersionUID = 1L;
 			
 			@Override

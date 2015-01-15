@@ -72,13 +72,13 @@ import org.simpleframework.xml.Root;
 			+ "AND c.deleted = false") 
 	, @NamedQuery(name = "getRecordingsPublic", query = "SELECT f FROM FlvRecording f WHERE f.deleted = false AND f.ownerId IS NULL "
 			+ "AND f.organization_id IS NULL AND (f.parentItemId IS NULL OR f.parentItemId = 0) "
-			+ "ORDER BY f.type DESC, f.fileName")
+			+ "ORDER BY f.type DESC, f.inserted")
 	, @NamedQuery(name = "getRecordingsByOrganization", query = "SELECT f FROM FlvRecording f WHERE f.deleted = false AND f.ownerId IS NULL "
 			+ "AND f.organization_id = :organization_id AND (f.parentItemId IS NULL OR f.parentItemId = 0) "
-			+ "ORDER BY f.type DESC, f.fileName")
+			+ "ORDER BY f.type DESC, f.inserted")
 	, @NamedQuery(name = "getRecordingsByOwner", query = "SELECT f FROM FlvRecording f WHERE f.deleted = false AND f.ownerId = :ownerId "
 			+ "AND (f.parentItemId IS NULL OR f.parentItemId = 0) "
-			+ "ORDER BY f.type DESC, f.fileName ")
+			+ "ORDER BY f.type DESC, f.inserted")
 	, @NamedQuery(name = "resetRecordingProcessingStatus", query = "UPDATE FlvRecording f SET f.status = :error WHERE f.status = :processing")
 	, @NamedQuery(name = "getRecordingsAll", query = "SELECT c FROM FlvRecording c LEFT JOIN FETCH c.flvRecordingMetaData ORDER BY c.id")
 	, @NamedQuery(name = "getRecordingsByExternalRoomTypeAndOwner", query = "SELECT c FROM FlvRecording c, Room r WHERE c.roomId = r.id "
@@ -86,12 +86,12 @@ import org.simpleframework.xml.Root;
 	, @NamedQuery(name = "getRecordingsByExternalRoomType", query = "SELECT c FROM FlvRecording c, Room r WHERE c.roomId = r.id "
 			+ "AND r.externalRoomType LIKE :externalRoomType AND c.deleted = false")
 	, @NamedQuery(name = "getRecordingsByRoom", query = "SELECT c FROM FlvRecording c WHERE c.deleted = false AND c.roomId = :roomId "
-			+ "ORDER BY c.type ASC, c.fileName")
-	, @NamedQuery(name = "getRecordingsByParent", query = "SELECT c FROM FlvRecording c WHERE c.deleted = false AND c.parentItemId = :parentItemId "
-			+ "ORDER BY c.type ASC, c.fileName") 
+			+ "ORDER BY c.type ASC, c.inserted")
+	, @NamedQuery(name = "getRecordingsByParent", query = "SELECT f FROM FlvRecording f WHERE f.deleted = false AND f.parentItemId = :parentId "
+			+ "ORDER BY f.type ASC, f.inserted") 
 	, @NamedQuery(name = "getRecordingsByExternalType", query = "SELECT rec FROM FlvRecording rec, Room r, User u "
 			+ "WHERE rec.deleted = false AND rec.room_id = r.rooms_id AND rec.insertedBy = u.user_id "
-					+ "AND (r.externalRoomType = :externalType OR u.externalUserType = :externalType)")
+			+ "AND (r.externalRoomType = :externalType OR u.externalUserType = :externalType)")
 })
 @Table(name = "flvrecording")
 @Root(name = "flvrecording")

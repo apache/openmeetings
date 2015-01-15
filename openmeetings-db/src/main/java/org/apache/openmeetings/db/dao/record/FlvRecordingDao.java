@@ -194,18 +194,8 @@ public class FlvRecordingDao {
 		return null;
 	}
 
-	public List<FlvRecording> getFlvRecordingByParent(Long parentFileExplorerItemId) {
-		try {
-			TypedQuery<FlvRecording> query = em.createNamedQuery("getRecordingsByParent", FlvRecording.class);
-			query.setParameter("parentItemId", parentFileExplorerItemId);
-
-			List<FlvRecording> flvRecordingList = query.getResultList();
-
-			return flvRecordingList;
-		} catch (Exception ex2) {
-			log.error("[getFlvRecordingByParent]: ", ex2);
-		}
-		return null;
+	public List<FlvRecording> getFlvRecordingByParent(Long parentId) {
+		return em.createNamedQuery("getRecordingsByParent", FlvRecording.class).setParameter("parentId", parentId).getResultList();
 	}
 
 	public void updateFlvRecordingEndTime(Long flvRecordingId, Date recordEnd) {
