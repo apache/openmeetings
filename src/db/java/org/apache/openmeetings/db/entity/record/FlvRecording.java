@@ -63,28 +63,29 @@ import org.simpleframework.xml.Root;
 @NamedQueries({ 
 	@NamedQuery(name = "getRecordingById", query = "SELECT f FROM FlvRecording f WHERE f.flvRecordingId = :id") 
 	, @NamedQuery(name = "getRecordingByHash", query = "SELECT f FROM FlvRecording f WHERE f.fileHash = :fileHash") 
-	, @NamedQuery(name = "getRecordingsByExternalUser", query = "SELECT c "
-			+ "FROM FlvRecording c, User u "
+	, @NamedQuery(name = "getRecordingsByExternalUser", query = "SELECT c FROM FlvRecording c, User u "
 			+ "WHERE c.insertedBy = u.user_id AND u.externalUserId = :externalUserId  AND u.externalUserType = :externalUserType "
 			+ "AND c.deleted = false") 
 	, @NamedQuery(name = "getRecordingsPublic", query = "SELECT f FROM FlvRecording f WHERE f.deleted = false AND f.ownerId IS NULL "
 			+ "AND f.organization_id IS NULL AND (f.parentFileExplorerItemId IS NULL OR f.parentFileExplorerItemId = 0) "
-			+ "ORDER BY f.folder DESC, f.fileName")
+			+ "ORDER BY f.folder DESC, f.inserted")
 	, @NamedQuery(name = "getRecordingsByOrganization", query = "SELECT f FROM FlvRecording f WHERE f.deleted = false AND f.ownerId IS NULL "
 			+ "AND f.organization_id = :organization_id AND (f.parentFileExplorerItemId IS NULL OR f.parentFileExplorerItemId = 0) "
-			+ "ORDER BY f.folder DESC, f.fileName")
+			+ "ORDER BY f.folder DESC, f.inserted")
 	, @NamedQuery(name = "getRecordingsByOwner", query = "SELECT f FROM FlvRecording f WHERE f.deleted = false AND f.ownerId = :ownerId "
 			+ "AND (f.parentFileExplorerItemId IS NULL OR f.parentFileExplorerItemId = 0) "
-			+ "ORDER BY f.folder DESC, f.fileName ")
+			+ "ORDER BY f.folder DESC, f.inserted")
+	, @NamedQuery(name = "getRecordingsByParent", query = "SELECT f FROM FlvRecording f WHERE f.deleted = false AND f.parentFileExplorerItemId = :parentId "
+			+ "ORDER BY f.folder DESC, f.inserted")
 	, @NamedQuery(name = "resetRecordingProcessingStatus", query = "UPDATE FlvRecording f SET f.status = :error WHERE f.status = :processing")
 	, @NamedQuery(name = "getRecordingsByExternalType", query = "SELECT rec FROM FlvRecording rec, Room r, User u "
 			+ "WHERE rec.deleted = false AND rec.room_id = r.rooms_id AND rec.insertedBy = u.user_id "
-					+ "AND (r.externalRoomType = :externalType OR u.externalUserType = :externalType)")
+			+ "AND (r.externalRoomType = :externalType OR u.externalUserType = :externalType)")
 })
 @Table(name = "flvrecording")
 @Root(name = "flvrecording")
 public class FlvRecording implements Serializable {
-	private static final long serialVersionUID = -2234874663310617072L;
+	private static final long serialVersionUID = 1L;
 	
 	public enum Status {
 		NONE

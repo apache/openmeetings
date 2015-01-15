@@ -328,7 +328,8 @@ html, body {
 	clear: both;
 }
 .om-icon {
-	background-repeat: no-repeat;
+	background-repeat: no-repeat !important;
+	background-position: 0 0 !important;
 	width: 18px;
 	height: 18px;
 	border: none;
@@ -342,6 +343,7 @@ html, body {
 .trees a.om-icon span {
 	white-space: nowrap;
 	padding-right: 20px;
+	vertical-align: top;
 }
 .cross.om-icon {
 	background-image: url(images/cross.png);
@@ -356,47 +358,49 @@ html, body {
 	background-image: url(images/email_add.png);
 }
 .user.om-icon {
-	background: url(images/user.png) no-repeat;
+	background: url(images/user.png);
 }
 .refresh.om-icon {
-	background: url(images/refresh.gif) no-repeat;
+	background: url(images/refresh.gif);
 }
 .trash.om-icon {
-	background: url(images/trash.png) no-repeat;
+	background: url(images/trash.png);
 }
 .folder-create.om-icon {
-	background: url(images/folder_add.png) no-repeat;
+	background: url(images/folder_add.png);
 }
 .recording.om-icon {
 	padding-left: 18px;
 	background-image: url(images/film.png);
-	background-repeat: no-repeat;
 }
 .broken-recording.om-icon {
 	padding-left: 18px;
 	background-image: url(images/film_error.png);
-	background-repeat: no-repeat;
 }
 .processing-recording.om-icon {
 	padding-left: 18px;
 	background-image: url(images/film_processing.png);
-	background-repeat: no-repeat;
 }
 .my-recordings.om-icon {
 	padding-left: 18px;
 	background-image: url(images/house_link.png);
-	background-repeat: no-repeat;
 }
 .public-recordings.om-icon {
 	padding-left: 18px;
 	background-image: url(images/world_link.png);
-	background-repeat: no-repeat;
+}
+.tree-theme-windows span.tree-content {
+	display: flex !important;
 }
 .recording.item {
 	position: relative;
+	vertical-align: top;
 }
 .recording.item .name {
 	color: black;
+	display: block;
+	overflow: hidden;
+	width: 230px;
 }
 .recording.item .errors {
 	position: absolute;
@@ -417,10 +421,10 @@ html, body {
 }
 .recording.dialog.errors .message {
 	display: block;
-    unicode-bidi: embed;
-    font-family: monospace;
-    white-space: pre;
-    margin: 0;
+	unicode-bidi: embed;
+	font-family: monospace;
+	white-space: pre;
+	margin: 0;
 }
 .online.om-icon {
 	background-image: url(images/bullet_green.png);
@@ -432,11 +436,11 @@ html, body {
 	color: red;
 }
 .message {
-    margin: 50px;
-    border: 1px solid black;
-    padding: 15px;
-    -webkit-border-radius: 8px;
-    border-radius: 8px;
+	margin: 50px;
+	border: 1px solid black;
+	padding: 15px;
+	-webkit-border-radius: 8px;
+	border-radius: 8px;
 }
 .ui-progressbar div { 
 	text-align: center;

@@ -226,24 +226,8 @@ public class FlvRecordingDao {
 		return null;
 	}
 
-	public List<FlvRecording> getFlvRecordingByParent(Long parentFileExplorerItemId) {
-		try {
-
-			String hql = "SELECT c FROM FlvRecording c " + "WHERE c.deleted <> :deleted "
-					+ "AND c.parentFileExplorerItemId = :parentFileExplorerItemId "
-					+ "ORDER BY c.folder DESC, c.fileName ";
-
-			TypedQuery<FlvRecording> query = em.createQuery(hql, FlvRecording.class);
-			query.setParameter("deleted", true);
-			query.setParameter("parentFileExplorerItemId", parentFileExplorerItemId);
-
-			List<FlvRecording> flvRecordingList = query.getResultList();
-
-			return flvRecordingList;
-		} catch (Exception ex2) {
-			log.error("[getFlvRecordingByParent]: ", ex2);
-		}
-		return null;
+	public List<FlvRecording> getFlvRecordingByParent(Long parentId) {
+		return em.createNamedQuery("getRecordingsByParent", FlvRecording.class).setParameter("parentId", parentId).getResultList();
 	}
 
 	public void updateFlvRecordingEndTime(Long flvRecordingId, Date recordEnd, Long organization_id) {

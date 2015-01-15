@@ -19,6 +19,7 @@
 package org.apache.openmeetings.remote;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAUT_LANG_KEY;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -26,7 +27,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.TimeZone;
 
 import org.apache.openmeetings.data.calendar.management.AppointmentLogic;
 import org.apache.openmeetings.data.conference.RoomManager;
@@ -51,11 +51,7 @@ import org.apache.openmeetings.db.entity.server.Server;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.util.TimezoneUtil;
 import org.apache.openmeetings.util.AuthLevelUtil;
-import org.apache.openmeetings.util.CalendarPatterns;
-import org.apache.openmeetings.util.OpenmeetingsVariables;
 import org.red5.logging.Red5LoggerFactory;
-import org.red5.server.api.IConnection;
-import org.red5.server.api.Red5;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -65,9 +61,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  * 
  */
 public class ConferenceService {
-
-	private static final Logger log = Red5LoggerFactory.getLogger(
-			ConferenceService.class, OpenmeetingsVariables.webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(ConferenceService.class, webAppRootKey);
 
 	@Autowired
 	private AppointmentLogic appointmentLogic;
@@ -271,54 +265,6 @@ public class ConferenceService {
 	}
 
 	// --------------------------------------------------------------------------------------------
-
-	public Map<String, Object> getAppointMentAndTimeZones(Long room_id) {
-		try {
-			log.debug("getAppointMentDataForRoom");
-			
-			IConnection current = Red5.getConnectionLocal();
-			String streamid = current.getClient().getId();
-	
-			log.debug("getCurrentRoomClient -2- " + streamid);
-	
-			Client currentClient = this.sessionManager
-					.getClientByStreamId(streamid, null);
-	
-			Room room = roomDao.get(room_id);
-	
-			if (room.getAppointment() == false) {
-				throw new IllegalStateException("Room has no appointment");
-			}
-		
-			Appointment appointment = appointmentLogic
-					.getAppointmentByRoom(room_id);
-
-			Map<String, Object> returnMap = new HashMap<String, Object>();
-
-			returnMap.put("appointment", appointment);
-
-			User us = userDao.get(currentClient.getUser_id());
-			TimeZone timezone = timezoneUtil.getTimeZone(us);
-
-			returnMap.put("appointment", appointment);
-
-			returnMap.put(
-					"start",
-					CalendarPatterns.getDateWithTimeByMiliSeconds(
-							appointment.getStart(), timezone));
-			returnMap.put(
-					"end",
-					CalendarPatterns.getDateWithTimeByMiliSeconds(
-							appointment.getEnd(), timezone));
-			returnMap.put("timeZone", timezone.getDisplayName());
-
-			return returnMap;
-		} catch (Exception e) {
-			log.error("getAppointMentAndTimeZones " , e );
-			return null;
-		}
-
-	}
 
 	/**
 	 * 

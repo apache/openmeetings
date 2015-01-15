@@ -253,11 +253,7 @@ public class RecordingsPanel extends UserPanel {
 				
 				@Override
 				protected String getOtherStyleClass(FlvRecording r) {
-					String style = getRecordingStyle(r, super.getOtherStyleClass(r));
-					if (isSelected()) {
-						style += " ui-state-active";
-					}
-					return style;
+					return getRecordingStyle(r, super.getOtherStyleClass(r));
 				}
 				
 				@Override
@@ -268,6 +264,11 @@ public class RecordingsPanel extends UserPanel {
 				@Override
 				protected String getClosedStyleClass() {
 					return getRecordingStyle(getModelObject(), super.getClosedStyleClass());
+				}
+				
+				@Override
+				protected String getSelectedStyleClass() {
+					return "ui-state-active";
 				}
 				
 				@Override

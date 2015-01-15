@@ -93,7 +93,7 @@ public class RecordingPanel extends Panel {
 			d.add(AttributeAppender.append("class", "recorditem"));
 			drag = d;
 		}
-		drag.add(r.getFlvRecordingId() < 1 || !r.isFolder() ? new Label("name", r.getFileName()) : new AjaxEditableLabel<String>("name", Model.of(model.getObject().getFileName())) {
+		drag.add(r.getFlvRecordingId() < 1 ? new Label("name", r.getFileName()) : new AjaxEditableLabel<String>("name", Model.of(model.getObject().getFileName())) {
 			private static final long serialVersionUID = 1L;
 			
 			@Override
