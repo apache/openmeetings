@@ -99,13 +99,12 @@ public class ConverterProcessResult {
 	}
 
 	public String buildLogMessage() {
-		StringBuilder strBuilder = new StringBuilder();
-		strBuilder.append("process: ").append(getProcess()).append("\r\n");
-		strBuilder.append("command: ").append(getCommand()).append("\r\n");
-		strBuilder.append("exception: ").append(getException()).append("\r\n");
-		strBuilder.append("error: ").append(getError()).append("\r\n");
-		strBuilder.append("exitValue: ").append(getException()).append("\r\n");
-		strBuilder.append("out: ").append(getOut()).append("\r\n");
-		return strBuilder.toString();
+		return new StringBuilder()
+			.append("process: ").append(process).append("\r\n")
+			.append("command: ").append(command).append("\r\n")
+			.append("exception: ").append(exception).append("\r\n")
+			.append("error: ").append(error).append("\r\n")
+			.append("exitValue: ").append(exitValue).append("\r\n")
+			.append("out: ").append(out).append("\r\n").toString();
 	}
 }
