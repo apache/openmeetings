@@ -134,6 +134,7 @@ public class MobileService {
 					add(map, "login", c.getUsername());
 					add(map, "email", c.getEmail());
 					add(map, "avsettings", c.getAvsettings());
+					add(map, "interviewPodId", c.getInterviewPodId());
 					result.add(map);
 				}
 			}
@@ -208,8 +209,9 @@ public class MobileService {
 			} else if (pods[1] < 0) {
 				c.setInterviewPodId(2);
 			} else {
-				isInterview = true;
+				c.setInterviewPodId(-1);
 			}
+			isInterview = true;
 		}
 		 //TODO check if we need anything here
 		long broadcastId = scopeAdapter.getBroadCastId();
@@ -226,12 +228,15 @@ public class MobileService {
 		return result;
 	}
 
-	public Map<String, Object> updateAvMode(String avMode, String width, String height) {
+	public Map<String, Object> updateAvMode(String avMode, String width, String height, Integer interviewPodId) {
 		IConnection current = Red5.getConnectionLocal();
 		Client c = sessionManager.getClientByStreamId(current.getClient().getId(), null);
 		c.setAvsettings(avMode);
 		c.setVWidth(Integer.parseInt(width));
 		c.setVHeight(Integer.parseInt(height));
+		if (interviewPodId > 0) {
+			c.setInterviewPodId(interviewPodId);
+		}
 		sessionManager.updateClientByStreamId(c.getStreamid(), c, false, null);
 		HashMap<String, Object> hsm = new HashMap<String, Object>();
 		hsm.put("client", c);
