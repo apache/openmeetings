@@ -332,7 +332,6 @@
 			<fileset dir="${red5.server.lib}" includes="mina-core*.jar" />
 			<fileset dir="${red5.server.lib}" includes="red5-io*.jar" />
 			<fileset dir="${red5.server.lib}" includes="red5-server-common*.jar" />
-			<fileset dir="${red5.lib}" includes="red5-server.jar" />
 			<fileset dir="${red5.client.lib}" includes="red5*.jar" />
 		</copy>
 		<fileset id="screenshare.jars" dir="${screenshare.out.dir}" casesensitive="yes">
