@@ -4823,4 +4823,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
   <string id="1599" name="security">
     <value>この会議室へは入れません</value>
   </string>
+  <string id="1600" name="record-re-start">
+    <value>Re-convert</value>
+  </string>
 </language>

@@ -20,7 +20,7 @@
 -->
 <html xmlns:wicket="http://wicket.apache.org">
 <wicket:panel>
-	<div class="info" wicket:id="container">
+	<form class="info" wicket:id="form">
 		<table>
 			<tr>
 				<td><wicket:ommessage key="863"/></td>
@@ -36,15 +36,16 @@
 			</tr>
 			<tr>
 				<td><wicket:ommessage key="874"/></td>
-				<td><span wicket:id="room_id"></span></td>
+				<td><span wicket:id="roomName"></span></td>
 			</tr>
 		</table>
 		<table>
 			<tr>
-				<td><input type="button" wicket:id="dAVI" wicket:ommessage="value:884"/></td>
-				<td><input type="button" wicket:id="dFLV" wicket:ommessage="value:883"/></td>
+				<td><button wicket:id="dAVI"><wicket:ommessage key="884"/></button></td>
+				<td><button wicket:id="dFLV"><wicket:ommessage key="883"/></button></td>
+				<td><button wicket:id="re-convert"><wicket:ommessage key="1600"/></button></td>
 			</tr>
 		</table>
-	</div>
+	</form>
 </wicket:panel>
 </html>

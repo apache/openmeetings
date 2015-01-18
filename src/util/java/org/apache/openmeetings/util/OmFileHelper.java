@@ -209,6 +209,10 @@ public class OmFileHelper {
 		return getDir(getStreamsDir(), name);
 	}
 	
+	public static File getRecordingMetaData(Long roomId, String name) {
+		return new File(getStreamsSubDir(roomId), name + ".flv");
+	}
+	
 	public static File getLanguagesDir() {
 		return new File(OmFileHelper.OM_HOME, LANGUAGES_DIR);
 	}

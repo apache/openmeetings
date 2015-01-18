@@ -26,7 +26,6 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.openmeetings.converter.BaseConverter;
 import org.apache.openmeetings.data.flvrecord.converter.FlvInterviewConverterTask;
-import org.apache.openmeetings.data.flvrecord.converter.FlvInterviewReConverterTask;
 import org.apache.openmeetings.data.flvrecord.converter.FlvRecorderConverterTask;
 import org.apache.openmeetings.data.flvrecord.listener.StreamListener;
 import org.apache.openmeetings.db.dao.record.FlvRecordingDao;
@@ -42,7 +41,6 @@ import org.apache.openmeetings.db.entity.record.FlvRecordingMetaData;
 import org.apache.openmeetings.db.entity.record.FlvRecordingMetaData.Status;
 import org.apache.openmeetings.db.entity.room.Client;
 import org.apache.openmeetings.remote.red5.ScopeApplicationAdapter;
-import org.apache.openmeetings.util.AuthLevelUtil;
 import org.apache.openmeetings.util.CalendarPatterns;
 import org.red5.logging.Red5LoggerFactory;
 import org.red5.server.api.IConnection;
@@ -79,8 +77,6 @@ public class FLVRecorderService implements IPendingServiceCallback {
 	private FlvRecorderConverterTask flvRecorderConverterTask;
 	@Autowired
 	private FlvInterviewConverterTask flvInterviewConverterTask;
-	@Autowired
-	private FlvInterviewReConverterTask flvInterviewReConverterTask;
 	@Autowired
 	private FlvRecordingLogDao flvRecordingLogDaoImpl;
 	@Autowired
@@ -503,33 +499,4 @@ public class FLVRecorderService implements IPendingServiceCallback {
 			log.error("[addRecordingByStreamId]", err);
 		}
 	}
-
-	public Long restartConversion(String SID, Long flvRecordingId, Integer leftSideLoud, Integer rightSideLoud, Integer leftSideTime,
-			Integer rightSideTime) {
-		try {
-			Long users_id = sessiondataDao.checkSession(SID);
-			if (AuthLevelUtil.hasUserLevel(userDao.getRights(users_id))) {
-				log.debug("updateFileOrFolderName " + flvRecordingId);
-
-				FlvRecording flvRecording = flvRecordingDaoImpl.get(flvRecordingId);
-
-				flvRecording.setPreviewImage(null);
-
-				flvRecording.setProgressPostProcessing(0);
-
-				flvRecordingDaoImpl.update(flvRecording);
-
-				if (flvRecording.getIsInterview() == null || !flvRecording.getIsInterview()) {
-					flvRecorderConverterTask.startConversionThread(flvRecordingId);
-				} else {
-					flvInterviewReConverterTask.startConversionThread(flvRecordingId, leftSideLoud, rightSideLoud, leftSideTime,
-							rightSideTime);
-				}
-			}
-		} catch (Exception err) {
-			log.error("[restartInterviewConversion] ", err);
-		}
-		return null;
-	}
-
 }

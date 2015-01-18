@@ -49,18 +49,8 @@ public class FlvRecordingLogDao {
 				.setParameter("recId", recordingId).getResultList();
 	}	
 	
-	public void deleteByRecordingId(Long flvRecordingId) {
-		try {
-			List<FlvRecordingLog> flvRecordingLogs = getByRecordingId(flvRecordingId);
-			
-			for (FlvRecordingLog flvRecordingLog : flvRecordingLogs) {
-				flvRecordingLog = em.find(FlvRecordingLog.class, flvRecordingLog.getFlvRecordingLogId());
-				em.remove(flvRecordingLog);
-			}
-			
-		} catch (Exception ex2) {
-			log.error("[deleteFLVRecordingLogByRecordingId] ", ex2);
-		}
+	public void deleteByRecordingId(Long recordingId) {
+		em.createNamedQuery("deleteErrorRecordingLogsByRecording").setParameter("recId", recordingId).executeUpdate();
 	}
 	
 	public Long addFLVRecordingLog(String msgType, FlvRecording flvRecording, ConverterProcessResult returnMap) {
