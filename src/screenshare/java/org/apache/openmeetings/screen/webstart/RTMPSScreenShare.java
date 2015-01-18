@@ -18,7 +18,6 @@
  */
 package org.apache.openmeetings.screen.webstart;
 
-import org.red5.client.net.rtmp.ClientExceptionHandler;
 import org.red5.client.net.rtmps.RTMPSClient;
 import org.red5.server.api.service.IPendingServiceCallback;
 import org.red5.server.net.ICommand;
@@ -28,7 +27,7 @@ import org.red5.server.net.rtmp.message.Header;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class RTMPSScreenShare extends RTMPSClient implements ClientExceptionHandler, IScreenShare {
+public class RTMPSScreenShare extends RTMPSClient implements IScreenShare {
 	private static final Logger logger = LoggerFactory.getLogger(RTMPSScreenShare.class);
 
 	private CoreScreenShare core = null;

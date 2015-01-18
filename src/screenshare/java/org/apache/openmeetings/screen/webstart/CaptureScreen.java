@@ -33,6 +33,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
+import org.red5.server.api.Red5;
 import org.red5.server.net.rtmp.event.VideoData;
 import org.red5.server.stream.message.RTMPMessage;
 import org.slf4j.Logger;
@@ -136,6 +137,9 @@ final class CaptureScreen extends Thread {
 			if (sendCursor) {
 				cursorScheduler.scheduleWithFixedDelay(new Runnable() {
 					public void run() {
+						if (Red5.getConnectionLocal() == null) {
+							Red5.setConnectionLocal(client.getConnection());
+						}
 						core.sendCursorStatus();
 					}
 				}, 0, timeBetweenFrames * NANO_MULTIPLIER, TimeUnit.NANOSECONDS);
@@ -164,6 +168,9 @@ final class CaptureScreen extends Thread {
 	
 	private void pushVideo(VideoData data, int ts) throws IOException {
 		if (startPublish) {
+			if (Red5.getConnectionLocal() == null) {
+				Red5.setConnectionLocal(client.getConnection());
+			}
 			RTMPMessage rtmpMsg = RTMPMessage.build(data, ts);
 			client.publishStreamData(streamId, rtmpMsg);
 		}
