@@ -38,6 +38,7 @@ import org.apache.openmeetings.db.entity.IDataProviderEntity;
 @NamedQueries({ 
 	@NamedQuery(name = "getRecordingLogsByRecording", query = "SELECT fl FROM FlvRecordingLog fl WHERE fl.flvRecording.id = :recId")
 	, @NamedQuery(name = "countErrorRecordingLogsByRecording", query = "SELECT COUNT(fl) FROM FlvRecordingLog fl WHERE fl.flvRecording.id = :recId AND fl.exitValue <> '0'")
+	, @NamedQuery(name = "deleteErrorRecordingLogsByRecording", query = "DELETE FROM FlvRecordingLog fl WHERE fl.flvRecording.id = :recId")
 })
 @Table(name = "flvrecording_log")
 public class FlvRecordingLog implements IDataProviderEntity {
@@ -97,8 +98,7 @@ public class FlvRecordingLog implements IDataProviderEntity {
 		return fullMessage;
 	}
 	public void setFullMessage(String fullMessage) {
-		this.fullMessage = 
-				fullMessage == null || fullMessage.length() < MAX_LOG_SIZE ? fullMessage : fullMessage.substring(0,  MAX_LOG_SIZE);
+		this.fullMessage = fullMessage == null || fullMessage.length() < MAX_LOG_SIZE ? fullMessage : fullMessage.substring(0,  MAX_LOG_SIZE);
 	}
 	
 	public String getExitValue() {

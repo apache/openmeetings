@@ -22,6 +22,7 @@ import static org.apache.openmeetings.core.data.flvrecord.listener.async.BaseStr
 import static org.apache.openmeetings.util.OmFileHelper.MP4_EXTENSION;
 import static org.apache.openmeetings.util.OmFileHelper.OGG_EXTENSION;
 import static org.apache.openmeetings.util.OmFileHelper.getRecording;
+import static org.apache.openmeetings.util.OmFileHelper.getRecordingMetaData;
 import static org.apache.openmeetings.util.OmFileHelper.getStreamsSubDir;
 import static org.apache.openmeetings.util.OmFileHelper.isRecordingExists;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
@@ -147,11 +148,6 @@ public abstract class BaseConverter {
 		return argv;
 	}
 	
-	private static File getMetaFlv(FlvRecordingMetaData metaData) {
-		File metaDir = getStreamsSubDir(metaData.getFlvRecording().getRoomId());
-		return new File(metaDir, metaData.getStreamName() + ".flv");
-	}
-	
 	private static File getMetaFlvSer(FlvRecordingMetaData metaData) {
 		File metaDir = getStreamsSubDir(metaData.getFlvRecording().getRoomId());
 		return new File(metaDir, metaData.getStreamName() + ".flv.ser");
@@ -161,7 +157,7 @@ public abstract class BaseConverter {
 		if (log.isDebugEnabled()) {
 			log.debug(String.format("### %s:: recording id %s; stream with id %s; current status: %s ", prefix, metaData.getFlvRecording().getId()
 					, metaData.getId(), metaData.getStreamStatus()));
-			File metaFlv = getMetaFlv(metaData);
+			File metaFlv = getRecordingMetaData(metaData.getFlvRecording().getRoomId(), metaData.getStreamName());
 			File metaSer = getMetaFlvSer(metaData);
 			log.debug(String.format("### %s:: Flv file [%s] exists ? %s; size: %s, lastModified: %s ", prefix, metaFlv.getPath(), metaFlv.exists(), metaFlv.length(), metaFlv.lastModified()));
 			log.debug(String.format("### %s:: Ser file [%s] exists ? %s; size: %s, lastModified: %s ", prefix, metaSer.getPath(), metaSer.exists(), metaSer.length(), metaSer.lastModified()));
@@ -186,7 +182,7 @@ public abstract class BaseConverter {
 					doWait = false;
 					break;
 				} else {
-					File metaFlv = getMetaFlv(metaData);
+					File metaFlv = getRecordingMetaData(metaData.getFlvRecording().getRoomId(), metaData.getStreamName());
 					if (metaFlv.exists() && maxTimestamp < metaFlv.lastModified()) {
 						maxTimestamp = metaFlv.lastModified();
 					}

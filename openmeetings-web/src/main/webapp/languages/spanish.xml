@@ -4828,4 +4828,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
   <string id="1599" name="security">
     <value>Access denied. You have no rights to enter this room.</value>
   </string>
+  <string id="1600" name="record-re-start">
+    <value>Re-convert</value>
+  </string>
 </language>

@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.core.converter;
 
+import static org.apache.openmeetings.util.OmFileHelper.getRecordingMetaData;
 import static org.apache.openmeetings.util.OmFileHelper.getStreamsHibernateDir;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
@@ -42,7 +43,9 @@ public class FlvInterviewConverter extends BaseConverter {
 	private static class ReConverterParams {
 		private int leftSideLoud = 1;
 		private int rightSideLoud = 1;
+		@SuppressWarnings("unused")
 		private Integer leftSideTime = 0;
+		@SuppressWarnings("unused")
 		private Integer rightSideTime = 0;
 	}
 
@@ -55,26 +58,6 @@ public class FlvInterviewConverter extends BaseConverter {
 	private FlvRecordingLogDao logDao;
 	@Autowired
 	private GenerateThumbs generateThumbs;
-
-	public void startReConversion(Long flvRecordingId, Integer leftSideLoud, Integer rightSideLoud,
-			Integer leftSideTime, Integer rightSideTime) {
-
-		log.debug("++++++++++++ leftSideLoud :: " + leftSideLoud);
-		log.debug("++++++++++++ rightSideLoud :: " + rightSideLoud);
-
-		ReConverterParams rcv = new ReConverterParams();
-		rcv.leftSideLoud += leftSideLoud;
-		rcv.rightSideLoud += rightSideLoud;
-
-		rcv.leftSideTime = leftSideTime;
-		rcv.rightSideTime = rightSideTime;
-
-		log.debug("++++++++++++ this.leftSideLoud :: " + rcv.leftSideLoud);
-		log.debug("++++++++++++ this.rightSideLoud :: " + rcv.rightSideLoud);
-		log.debug("++++++++++++ this.leftSideTime :: " + rcv.leftSideTime);
-		log.debug("++++++++++++ this.rightSideTime :: " + rcv.rightSideTime);
-		startConversion(flvRecordingId, true, rcv);
-	}
 
 	private String[] mergeAudioToWaves(List<String> listOfFullWaveFiles, String outputFullWav,
 			List<FlvRecordingMetaData> metaDataList, ReConverterParams rcv) {
@@ -173,7 +156,7 @@ public class FlvInterviewConverter extends BaseConverter {
 			String[] pods = new String[2];
 			boolean found = false;
 			for (FlvRecordingMetaData meta : metaDataList) {
-				File flv = new File(streamFolder, meta.getStreamName() + ".flv");
+				File flv = getRecordingMetaData(flvRecording.getRoomId(), meta.getStreamName());
 
 				Integer pod = meta.getInteriewPodId();
 				if (flv.exists() && pod != null && pod > 0 && pod < 3) {
@@ -192,7 +175,6 @@ public class FlvInterviewConverter extends BaseConverter {
 					returnLog.add(r);
 					if ("0".equals(r.getExitValue())) {
 						//TODO need to remove smallest gap
-						
 						long diff = diff(meta.getRecordStart(), meta.getFlvRecording().getRecordStart());
 						if (diff != 0L) {
 							// stub to add
@@ -317,7 +299,6 @@ public class FlvInterviewConverter extends BaseConverter {
 			flvRecording.setStatus(FlvRecording.Status.PROCESSED);
 
 			logDao.deleteByRecordingId(flvRecording.getId());
-
 			for (ConverterProcessResult returnMap : returnLog) {
 				logDao.addFLVRecordingLog("generateFFMPEG", flvRecording, returnMap);
 			}
@@ -334,10 +315,5 @@ public class FlvInterviewConverter extends BaseConverter {
 			flvRecording.setStatus(FlvRecording.Status.ERROR);
 		}
 		recordingDao.update(flvRecording);
-	}
-
-	public ConverterProcessResult processImageWindows(String file1, String file2, String file3) {
-		return ProcessHelper.executeScriptWindows("processImageWindows", new String[] { getPathToImageMagick(), file1,
-				file2, "+append", file3 });
 	}
 }
