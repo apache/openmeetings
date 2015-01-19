@@ -38,7 +38,7 @@ import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
-public class FlvRecorderConverter extends BaseConverter {
+public class FlvRecorderConverter extends BaseConverter implements IRecordingConverter {
 
 	private static final Logger log = Red5LoggerFactory.getLogger(FlvRecorderConverter.class, webAppRootKey);
 
