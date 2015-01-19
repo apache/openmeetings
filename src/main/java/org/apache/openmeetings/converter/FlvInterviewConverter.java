@@ -38,7 +38,7 @@ import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
-public class FlvInterviewConverter extends BaseConverter {
+public class FlvInterviewConverter extends BaseConverter implements IRecordingConverter {
 	private static final Logger log = Red5LoggerFactory.getLogger(FlvInterviewConverter.class, webAppRootKey);
 	private static class ReConverterParams {
 		private int leftSideLoud = 1;

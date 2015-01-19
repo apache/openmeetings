@@ -28,6 +28,7 @@ import java.util.List;
 
 import org.apache.openmeetings.converter.FlvInterviewConverter;
 import org.apache.openmeetings.converter.FlvRecorderConverter;
+import org.apache.openmeetings.converter.IRecordingConverter;
 import org.apache.openmeetings.db.dao.record.FlvRecordingMetaDataDao;
 import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.entity.record.FlvRecording;
@@ -90,11 +91,12 @@ public class VideoInfo extends Panel {
 		
 		@Override
 		protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-			if (isInterview) {
-				getBean(FlvInterviewConverter.class).startConversion(rm.getObject().getFlvRecordingId());
-			} else {
-				getBean(FlvRecorderConverter.class).startConversion(rm.getObject().getFlvRecordingId());
-			}
+			final IRecordingConverter converter = getBean(isInterview ? FlvInterviewConverter.class : FlvRecorderConverter.class);
+			new Thread() {
+				public void run() {
+					converter.startConversion(rm.getObject().getFlvRecordingId());
+				}
+			}.start();
 		}
 	};
 	private final AjaxDownload download = new AjaxDownload();
