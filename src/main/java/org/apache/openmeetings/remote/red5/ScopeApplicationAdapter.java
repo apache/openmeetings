@@ -1836,7 +1836,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 						}
 					}
 				} catch (Exception err) {
-					log.error("[syncMessageToCurrentScope -> {}, {}] {}", remoteMethodName, newMessage, err);
+					log.error(String.format("[syncMessageToCurrentScope -> %s, %s]", remoteMethodName, newMessage), err);
 				}
 		    }
 		}.start();
