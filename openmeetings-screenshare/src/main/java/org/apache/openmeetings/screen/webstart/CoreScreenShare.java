@@ -44,6 +44,7 @@ import org.apache.commons.codec.binary.Hex;
 import org.apache.openmeetings.screen.webstart.gui.ScreenSharerFrame;
 import org.red5.client.net.rtmp.INetStreamEventHandler;
 import org.red5.io.utils.ObjectMap;
+import org.red5.server.api.Red5;
 import org.red5.server.api.event.IEvent;
 import org.red5.server.api.service.IPendingServiceCall;
 import org.red5.server.api.service.IPendingServiceCallback;
@@ -204,6 +205,9 @@ public class CoreScreenShare implements IPendingServiceCallback, INetStreamEvent
 			cursorPosition.put("cursor_y", y);
 
 			if (instance.getConnection() != null) {
+				if (Red5.getConnectionLocal() == null) {
+					Red5.setConnectionLocal(instance.getConnection());
+				}
 				instance.invoke("setNewCursorPosition", new Object[] { cursorPosition }, this);
 			}
 		} catch (NullPointerException npe) {
@@ -238,6 +242,9 @@ public class CoreScreenShare implements IPendingServiceCallback, INetStreamEvent
 
 			map.put("user_id", user_id);
 
+			if (Red5.getConnectionLocal() == null) {
+				Red5.setConnectionLocal(instance.getConnection());
+			}
 			instance.invoke("setConnectionAsSharingClient", new Object[] { map }, this);
 		} catch (Exception err) {
 			frame.setStatus("Error: " + err.getLocalizedMessage());
@@ -298,6 +305,9 @@ public class CoreScreenShare implements IPendingServiceCallback, INetStreamEvent
 			Map<String, Object> map = new HashMap<String, Object>();
 			map.put(action, true);
 
+			if (Red5.getConnectionLocal() == null) {
+				Red5.setConnectionLocal(instance.getConnection());
+			}
 			instance.invoke("screenSharerAction", new Object[] { map }, this);
 		} catch (Exception err) {
 			log.error("captureScreenStop Exception: ", err);
