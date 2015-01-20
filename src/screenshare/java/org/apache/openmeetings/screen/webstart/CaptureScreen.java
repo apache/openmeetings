@@ -137,9 +137,6 @@ final class CaptureScreen extends Thread {
 			if (sendCursor) {
 				cursorScheduler.scheduleWithFixedDelay(new Runnable() {
 					public void run() {
-						if (Red5.getConnectionLocal() == null) {
-							Red5.setConnectionLocal(client.getConnection());
-						}
 						core.sendCursorStatus();
 					}
 				}, 0, timeBetweenFrames * NANO_MULTIPLIER, TimeUnit.NANOSECONDS);

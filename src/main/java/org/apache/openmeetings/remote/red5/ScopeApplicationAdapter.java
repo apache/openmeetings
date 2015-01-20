@@ -1812,11 +1812,13 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 	 * @param sendScreen send to the current client as well
 	 */
 	public void syncMessageToCurrentScope(final String remoteMethodName, final Object newMessage, final boolean sendSelf, final boolean sendScreen) {
-		try {
-			final IConnection current = Red5.getConnectionLocal();
+		final IConnection current = Red5.getConnectionLocal();
 
-			new Thread(new Runnable() {
-			    public void run() {
+		new Thread() {
+			@Override
+		    public void run() {
+				try {
+					// Send to all Clients of that Scope(Room)
 					for (IConnection conn : current.getScope().getClientConnections()) {
 						if (conn != null && conn instanceof IServiceCapableConnection) {
 							IClient client = conn.getClient();
@@ -1833,12 +1835,11 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 							((IServiceCapableConnection) conn).invoke(remoteMethodName, new Object[] { newMessage }, ScopeApplicationAdapter.this);
 						}
 					}
-			    }
-			}).start();
-			// Send to all Clients of that Scope(Room)
-		} catch (Exception err) {
-			log.error("[syncMessageToCurrentScope]", err);
-		}
+				} catch (Exception err) {
+					log.error("[syncMessageToCurrentScope -> {}, {}] {}", remoteMethodName, newMessage, err);
+				}
+		    }
+		}.start();
 	}
 
 	/**
