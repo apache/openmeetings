@@ -61,36 +61,65 @@
     
     <attribute name="meetingTimer" value="null" />
     
-    <handler name="oninit">
-        <![CDATA[
-            _mainScrollBar.setAttribute("visibility","hidden");
-            
-            if ($debug) Debug.write("roomobj: ",this.roomobj);
-            
-            canvas.currentRoomObject = this.roomobj;
-            canvas.sendViaLocalConnection(canvas.rtmp_lc_name,"setRoomValues", [this.roomobj.roomtype.roomtypes_id,this.roomobj.rooms_id,this.roomobj]);
-            
-            if (this.roomobj.isClosed) {
-                canvas.roomClosed();
-            }
-            
-            if (this.roomobj.waitForRecording) {
-                new lz.labelerrorPopup(canvas, {labelid: 1316, errorlabelid: 1315});
-            }
-            
-            canvas.currentRoomObject = this.roomobj;
-            canvas._mainbgcontentNavi.setAttribute('height',0);
-            canvas.setAttribute('naviHeightDelta',28);
-            
-            if(this._chatPanelStrict){
-            	var hideChat = this.roomobj.hideChat != null && this.roomobj.hideChat;
-				this._chatPanelStrict.setAttribute('visible', !hideChat);
-                if (hideChat) {            
-                    this._chatPanelStrict.setAttribute('height', 28);                  
-                }
-            }            
-        ]]>
-    </handler>
+	<handler name="oninit">
+	<![CDATA[
+		_mainScrollBar.setAttribute("visibility","hidden");
+		
+		if ($debug) Debug.write("roomobj: ",this.roomobj);
+		
+		canvas.currentRoomObject = this.roomobj;
+		canvas.sendViaLocalConnection(canvas.rtmp_lc_name,"setRoomValues", [this.roomobj.roomtype.roomtypes_id,this.roomobj.rooms_id,this.roomobj]);
+		
+		if (this.roomobj.isClosed) {
+			canvas.roomClosed();
+		}
+		
+		if (this.roomobj.waitForRecording) {
+			new lz.labelerrorPopup(canvas, {labelid: 1316, errorlabelid: 1315});
+		}
+		
+		canvas._mainbgcontentNavi.setAttribute('height',0);
+		canvas.setAttribute('naviHeightDelta',28);
+		
+		if (this._chatPanelStrict) {
+			var hideChat = this.roomobj.hideChat != null && this.roomobj.hideChat;
+			this._chatPanelStrict.setAttribute('visible', !hideChat);
+			if (hideChat) {
+				this._chatPanelStrict.setAttribute('height', 28);
+			}
+		}
+		
+		if (this.roomobj.hideTopBar == null || !this.roomobj.hideTopBar) {
+			createMenu();
+			canvas._conferencemenu.setAttribute('visibility','visible');
+		} else {
+			canvas.setAttribute('naviHeight',0);
+			canvas._conferencemenu.setAttribute('visibility','hidden');
+			canvas._mainbgcontentNavi.setAttribute('visibility','hidden');
+		}
+		
+		if ($debug) Debug.write("this.roomobj ",this.roomobj);
+
+		new lz.moderationPanel(canvas._moderatormenu,{
+				name:'_moderationPanel',align:'right',
+				allowUserQuestions:this.roomobj.allowUserQuestions,
+				roomName:this.roomobj.name
+			});
+		if (roomobj.appointment) {
+			canvas.appointmentNotificationPopUp = new lz.appointmentNotificationPopUp(canvas.conferenceView,{name:'appDetail', roomobj:this.roomobj });
+		} else {
+			if ($debug) Debug.write("no appointed meeting");
+		}
+		
+		if (this.roomobj.isDemoRoom && this.roomobj.demoTime != null) {
+			if ($debug) Debug.warn("THIS IS A DEMO ROOM THAT SHOULD CLOSE AFTER SEC: ",this.roomobj.demoTime);
+			this.meetingTimer = new lz.meetingTimer(canvas,{refObj:this,roomobj:this.roomobj});
+		}
+		
+		canvas.currentBaseConferenceRoom = this;
+		canvas._videocontainer.setAttribute("allowUserQuestions",this.roomobj.allowUserQuestions);
+	]]>
+	</handler>
     
 	<handler name="onkeydown" reference="lz.Keys" args="keyCode">
 	<![CDATA[
@@ -123,6 +152,76 @@
        width="${ canvas.width - parent._sidePanel.width }" isopen="${ !canvas.currentRoomObj.chatOpened }" />
        <!-- isopen need to be reverted, will be toggled -->
        
+	<handler name="ontabcontentleave">
+		if ($debug) Debug.write("################# ontabcontentleave:",this);
+		
+		this._screenSharingAdapter.closeAllScreenSharings();
+		
+		canvas.currentBaseConferenceRoom = null;
+		
+		//reset the right to draw on WHiteboard as the RoomClient Object will be destroyed also
+		//on server-Side the canDraw status will be false again when you relogin the same room
+		canvas.isAllowedToDraw = true;
+		
+		_mainScrollBar.setAttribute("visibility","visible");
+		
+		//reset rights
+		canvas.isAllowedToGiveExclusiveAudio = false;
+		
+		if (canvas._videocontainer!=null) {
+			canvas._videocontainer.resetAllValues();
+			canvas._videocontainer = null;
+		}
+		if (canvas._chatcontent!=null) {
+			canvas._chatcontent = null;
+		}
+		if (canvas._mymod!=null) {
+			canvas._mymod = null;
+		}
+		
+		if (this.meetingTimer != null) {
+			this.meetingTimer.close();
+		}
+		
+		if (canvas._drawarea.letterObjectIsActive) {
+			canvas._drawarea.currentletterObj.destroy();
+		}
+		
+		if (canvas.currentFileExplorer != null) {
+			canvas.currentFileExplorer = null;
+		}
+		
+		if (canvas.currentActivityList != null) {
+			canvas.currentActivityList = null;
+		}
+		
+		//reset if the user was connected to any slave
+		canvas.isSlaveHosted = false;
+		
+		//@deprecated we will not use old screen sharing implementation
+		//canvas._screens.clearAllSessions();
+		this.logicalRoomLeave.doCall();
+		if ($debug) Debug.write("############ this.logicalRoomLeave ",this.logicalRoomLeave);
+	</handler>
+
+	<netRemoteCallHib name="logicalRoomLeave" funcname="logicalRoomLeave" remotecontext="$once{ canvas.thishib }" >
+		<handler name="ondata" args="value">
+			if ($debug) Debug.write("############# logicalRoomLeave: ",value);
+			//this.parent.destroy();
+			canvas.thishib.reconnectAfterRoomleft = true;
+			canvas.thishib.reconnectedRoomInstance = this.parent;
+			
+			// Reconnect User to default Scope
+			canvas.thishib.userScope = "hibernate";
+			var src = hib.getUrl();
+			canvas.thishib.setAttribute('src',src);
+			canvas.thishib.disconnect();
+			canvas._mainbgcontentNavi.setAttribute('height',canvas.naviHeight);
+			canvas.setAttribute('naviHeightDelta',canvas.naviHeight);
+			canvas._conferencemenu.removeAll();
+			canvas._conferencemenu.setAttribute('visibility','hidden');
+		</handler>
+	</netRemoteCallHib>
 </class>
 
 </library>

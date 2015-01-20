@@ -295,11 +295,7 @@
         canvas.videoComp_lc.exitRoom = function(confirm) {
             if ($debug) Debug.write("confirm exitRoom:", confirm);
             if (confirm) {
-                canvas.currentBaseConferenceRoom._screenSharingAdapter.closeAllScreenSharings();
-                if (canvas.appointmentNotificationPopUp != null) {
-                    canvas.appointmentNotificationPopUp.destroy();
-                }
-                canvas.doActionmenu('quit');
+            	logicalRoomLeave.doCall();
             }
         }
     
@@ -444,6 +440,17 @@
         ]]>
     </method>
     
+	<netRemoteCallHib name="logicalRoomLeave" funcname="logicalRoomLeave" remotecontext="$once{ canvas.thishib }" >
+		<handler name="ondata" args="value">
+			if ($debug) Debug.write("############# logicalRoomLeave: ",value);
+			canvas.currentBaseConferenceRoom._screenSharingAdapter.closeAllScreenSharings();
+			if (canvas.appointmentNotificationPopUp != null) {
+				canvas.appointmentNotificationPopUp.destroy();
+			}
+			canvas.doActionmenu('quit');
+		</handler>
+	</netRemoteCallHib>
+	
     <method name="getLabelName" args="id">
         //if($debug) Debug.write("main.lzx/getLabelName()",id);
         return getLabelTag(id);
