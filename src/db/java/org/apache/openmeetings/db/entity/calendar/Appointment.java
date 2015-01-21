@@ -95,7 +95,7 @@ import org.simpleframework.xml.Root;
 	    )
     , @NamedQuery(name="appointedRoomsInRangeByUser",
 		query="SELECT a.room FROM MeetingMember mm, IN(mm.appointment) a "
-			+ "WHERE mm.deleted <> true AND mm.user.user_id <> a.owner.user_id AND mm.user.user_id = :userId "
+			+ "WHERE mm.deleted = false AND mm.user.user_id <> a.owner.user_id AND mm.user.user_id = :userId "
 			+ "	AND ( "
 			+ "		(a.start BETWEEN :starttime AND :endtime) "
 			+ "		OR (a.end BETWEEN :starttime AND :endtime) "

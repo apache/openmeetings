@@ -59,13 +59,13 @@ import org.simpleframework.xml.Root;
 	@NamedQuery(name = "getRoomByOwnerAndTypeId", query = "select c from Room as c "
 					+ "where c.ownerId = :ownerId "
 					+ "AND c.roomtype.roomtypes_id = :roomtypesId "
-					+ "AND c.deleted <> :deleted"),	
+					+ "AND c.deleted = false"),	
 										
 	@NamedQuery(name = "selectMaxFromRooms", query = "select count(c.rooms_id) from Room c "
-			+ "where c.deleted <> true AND c.name LIKE :search "),
+			+ "where c.deleted = false AND c.name LIKE :search "),
 	@NamedQuery(name = "getRoomByExternalId", query = "select c from Room as c JOIN c.roomtype as rt "
 			+ "where c.externalRoomId = :externalRoomId AND c.externalRoomType = :externalRoomType "
-			+ "AND rt.roomtypes_id = :roomtypes_id AND c.deleted <> :deleted"),
+			+ "AND rt.roomtypes_id = :roomtypes_id AND c.deleted = false"),
 	@NamedQuery(name = "getPublicRoomsOrdered", query = "SELECT r from Room r WHERE r.ispublic= true AND r.deleted= false AND r.appointment = false ORDER BY r.name ASC"),
 	@NamedQuery(name = "getRoomById", query = "SELECT r FROM Room r WHERE r.deleted = false AND r.rooms_id = :id"),
 	@NamedQuery(name = "getSipRoomIdsByIds", query = "SELECT r.rooms_id FROM Room r WHERE r.deleted = false AND r.sipEnabled = true AND r.rooms_id IN :ids"),
@@ -79,7 +79,7 @@ import org.simpleframework.xml.Root;
 @Table(name = "room")
 @Root(name = "room")
 public class Room implements Serializable, IDataProviderEntity {
-	private static final long serialVersionUID = -2860312283159251568L;
+	private static final long serialVersionUID = 1L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
@@ -144,7 +144,7 @@ public class Room implements Serializable, IDataProviderEntity {
 	// moderator to come into the room
 	@Column(name = "ismoderatedroom")
 	@Element(data = true, required = false)
-	private Boolean isModeratedRoom;
+	private boolean isModeratedRoom;
 
 	@Column(name = "allow_user_questions")
 	@Element(data = true, required = false)

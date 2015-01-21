@@ -40,9 +40,11 @@
         if( $debug ) Debug.write("videoContainer: canvas.thishib: ",canvas.thishib.src,canvas.thishib);
         
         if (canvas.thishib.src != src) {
+	        if( $debug ) Debug.write("SRC is WRONG ");
             canvas.thishib.setAttribute('src',src);
 
 			if (canvas.wicketsid == null){            
+		        if( $debug ) Debug.write("Going to reconnect ");
 	            canvas.thishib.reconnectionAction = true;
 	            canvas.thishib.reconnectObjRef = this;
 	            canvas.thishib.disconnect();

@@ -106,7 +106,7 @@
 				roomName:this.roomobj.name
 			});
 		if (roomobj.appointment) {
-			canvas.appointmentNotificationPopUp = new lz.appointmentNotificationPopUp(canvas.conferenceView,{name:'appDetail', roomobj:this.roomobj });
+			canvas.appointmentNotificationPopUp = new lz.appointmentNotificationPopUp(this,{name:'appDetail', roomobj:this.roomobj });
 		} else {
 			if ($debug) Debug.write("no appointed meeting");
 		}

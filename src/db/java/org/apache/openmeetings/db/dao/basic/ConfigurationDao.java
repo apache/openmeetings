@@ -157,8 +157,7 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 				query += " DESC";
 			}
 
-			TypedQuery<Configuration> q = em.createQuery(query,
-					Configuration.class);
+			TypedQuery<Configuration> q = em.createQuery(query, Configuration.class);
 			q.setFirstResult(start);
 			q.setMaxResults(max);
 			return q.getResultList();
@@ -305,7 +304,7 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 	 * @param configurationDao
 	 * @return
 	 */
-	public final long getMaxUploadSize() {
+	public long getMaxUploadSize() {
 		try {
 			return getConfValue(CONFIG_MAX_UPLOAD_SIZE_KEY, Long.class, "" + DEFAULT_MAX_UPLOAD_SIZE);
 		} catch (Exception e) {

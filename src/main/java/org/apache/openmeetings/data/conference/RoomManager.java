@@ -97,7 +97,6 @@ public class RoomManager implements IRoomManager {
 			query.setParameter("externalRoomId", externalRoomId);
 			query.setParameter("externalRoomType", externalRoomType);
 			query.setParameter("roomtypes_id", roomtypes_id);
-			query.setParameter("deleted", true);
 			List<?> ll = query.getResultList();
 			if (ll.size() > 0) {
 				return (Room) ll.get(0);
@@ -1040,7 +1039,6 @@ public class RoomManager implements IRoomManager {
 			TypedQuery<Room> query = em.createNamedQuery("getRoomByOwnerAndTypeId", Room.class);
 			query.setParameter("ownerId", ownerId);
 			query.setParameter("roomtypesId", roomtypesId);
-			query.setParameter("deleted", true);
 			List<Room> ll = query.getResultList();
 			if (ll.size() > 0) {
 				room = ll.get(0);
