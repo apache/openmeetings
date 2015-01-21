@@ -142,7 +142,7 @@ public class VideoInfo extends Panel {
 			reconvLabel:
 			if (!metas.isEmpty()) {
 				for (FlvRecordingMetaData meta : metas) {
-					if (!getRecordingMetaData(r.getRoom_id(), meta.getStreamName()).exists()) {
+					if (r.getRoom_id() == null || !getRecordingMetaData(r.getRoom_id(), meta.getStreamName()).exists()) {
 						break reconvLabel;
 					}
 				}
