@@ -262,7 +262,7 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 	 * @param configurationDao
 	 * @return
 	 */
-	public final long getMaxUploadSize() {
+	public long getMaxUploadSize() {
 		try {
 			return getConfValue(CONFIG_MAX_UPLOAD_SIZE_KEY, Long.class, "" + DEFAULT_MAX_UPLOAD_SIZE);
 		} catch (Exception e) {
