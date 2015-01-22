@@ -49,6 +49,8 @@ import org.simpleframework.xml.Root;
 @Table(name = "appointments")
 @NamedQueries({
     @NamedQuery(name="getAppointmentById", query="SELECT a FROM Appointment a WHERE a.deleted = false AND a.id = :id")
+    , @NamedQuery(name="getAppointmentByIdAny", query="SELECT a FROM Appointment a WHERE a.id = :id")
+    , @NamedQuery(name="getAppointments", query="SELECT a FROM Appointment a LEFT JOIN FETCH a.meetingMembers WHERE a.deleted = false ORDER BY a.id")
     , @NamedQuery(name="appointmentsInRange",
     	query="SELECT a FROM Appointment a "
 			+ "WHERE a.deleted = false "

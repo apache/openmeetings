@@ -83,7 +83,7 @@ public class TestOldBackups extends AbstractJUnitDefaults {
 				long newUserCount = usersDao.count();
 				long newRoomCount = roomDao.count();
 				long newRoomOrgCount = roomOrganisationDao.get().size();
-				long newApptCount = appointmentDao.getAppointments().size();
+				long newApptCount = appointmentDao.get().size();
 				long newMeetingMembersCount = meetingMemberDao.getMeetingMembers().size();
 				assertTrue("Zero organizations were imported from " + name, newOrgCount > orgCount);
 				assertTrue("Zero users were imported from " + name, newUserCount > userCount);

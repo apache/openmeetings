@@ -91,10 +91,7 @@ public class AppointmentDao {
 	}
 
 	public Appointment getAppointmentByIdBackup(Long appointmentId) {
-		String hql = "select a from Appointment a WHERE a.id = :id ";
-
-		TypedQuery<Appointment> query = em.createQuery(hql, Appointment.class);
-		query.setParameter("id", appointmentId);
+		TypedQuery<Appointment> query = em.createNamedQuery("getAppointmentByIdAny", Appointment.class).setParameter("id", appointmentId);
 
 		Appointment appoint = null;
 		try {
@@ -105,18 +102,14 @@ public class AppointmentDao {
 		return appoint;
 	}
 
-	public List<Appointment> getAppointments() {
-		return em.createQuery(
-				"SELECT a FROM Appointment a LEFT JOIN FETCH a.meetingMembers WHERE a.deleted = false ORDER BY a.id"
-				, Appointment.class).getResultList();
+	public List<Appointment> get() {
+		return em.createNamedQuery("getAppointments", Appointment.class).getResultList();
 	}
 
 	public Long addAppointmentObj(Appointment ap) {
 		try {
-
 			ap.setInserted(new Date());
-
-			ap = em.merge(ap);
+			em.persist(ap);
 
 			return ap.getId();
 		} catch (Exception ex2) {

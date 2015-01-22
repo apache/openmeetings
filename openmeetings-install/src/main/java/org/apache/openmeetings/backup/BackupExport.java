@@ -194,7 +194,7 @@ public class BackupExport {
 		 * ##################### Backup Appointments
 		 */
 		{
-			List<Appointment> list = appointmentDao.getAppointments();
+			List<Appointment> list = appointmentDao.get();
 			Registry registry = new Registry();
 			Strategy strategy = new RegistryStrategy(registry);
 			Serializer serializer = new Persister(strategy);
