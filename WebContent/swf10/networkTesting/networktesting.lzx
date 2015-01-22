@@ -85,6 +85,7 @@
 		
 		var useSSL:Boolean = ("yes" == settingsPtr.xpathQuery("config/useSSL/text()"));
 		canvas.setAttribute("rtmpProtocol", useSSL ? "rtmps" : "rtmp");
+		canvas.setAttribute("proxyType", settingsPtr.xpathQuery("config/proxyType/text()"));
 		canvas.setAttribute("rtmpHost", settingsPtr.xpathQuery("config/rtmphostlocal/text()"));
 		if (!canvas.rtmpHost) {
 			canvas.rtmpHost = getBrowserHost();
