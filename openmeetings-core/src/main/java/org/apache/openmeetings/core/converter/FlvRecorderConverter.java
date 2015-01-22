@@ -184,6 +184,7 @@ public class FlvRecorderConverter extends BaseConverter implements IRecordingCon
 			convertToMp4(flvRecording, returnLog);
 			flvRecording.setStatus(FlvRecording.Status.PROCESSED);
 
+			logDao.deleteByRecordingId(flvRecording.getId());
 			for (ConverterProcessResult returnMap : returnLog) {
 				logDao.addFLVRecordingLog("generateFFMPEG", flvRecording, returnMap);
 			}
