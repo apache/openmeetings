@@ -20,6 +20,7 @@
 -->
 <library>
 
+<include href="rtmpConnection.lzx" />
 <include href="tests/" />
 <resource name="log" src="resources/edit-copy.png" />
 
