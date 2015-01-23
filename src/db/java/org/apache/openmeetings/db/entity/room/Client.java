@@ -389,6 +389,9 @@ public class Client implements IDataProviderEntity, Serializable {
 	@Column(name = "sip_transport")
 	private boolean sipTransport = false;
 	
+	@Column(name = "mobile")
+	private boolean mobile = false;
+
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "server_id")
 	private Server server;
@@ -864,10 +867,18 @@ public class Client implements IDataProviderEntity, Serializable {
 		this.server = server;
 	}
 
+	public boolean isMobile() {
+		return mobile;
+	}
+
+	public void setMobile(boolean mobile) {
+		this.mobile = mobile;
+	}
+
 	@Override
 	public String toString() {
 		return "Client [streamid=" + streamid + ", publicSID=" + publicSID + ", isScreenClient=" + isScreenClient
-				+ ", isAVClient=" + isAVClient + ", room_id=" + room_id + ", broadCastID=" + broadCastID + ", user_id="
+				+ ", isAVClient=" + isAVClient + ", isMobile = " + mobile + ", room_id=" + room_id + ", broadCastID=" + broadCastID + ", user_id="
 				+ user_id + ", avsettings=" + avsettings + ", isRecording=" + isRecording + ", flvRecordingId="
 				+ flvRecordingId + ", flvRecordingMetaDataId=" + flvRecordingMetaDataId + ", screenPublishStarted="
 				+ screenPublishStarted + ", interviewPodId=" + interviewPodId + ", server=" + server + "]";
