@@ -69,6 +69,7 @@ public class MobileService {
 	private void add(Map<String, Object> m, String key, Object v) {
 		m.put(key, v == null ? "" : v);
 	}
+	
 	public Map<String, Object> loginUser(String login, String password) {
 		Map<String, Object> result = new Hashtable<String, Object>();
 		try {
@@ -95,7 +96,7 @@ public class MobileService {
 					c.setUser_id(u.getId());
 					c.setFirstname(u.getFirstname());
 					c.setLastname(u.getLastname());
-					//c.set
+					c.setMobile(true);
 					sessionManager.updateClientByStreamId(streamId, c, false, null);
 
 					add(result, "sid", sd.getSession_id());
@@ -122,7 +123,7 @@ public class MobileService {
 		for (IConnection conn : current.getScope().getClientConnections()) {
 			if (conn != null && conn instanceof IServiceCapableConnection) {
 				Client c = sessionManager.getClientByStreamId(conn.getClient().getId(), null);
-				if (c.isAvClient() && !Strings.isEmpty(c.getAvsettings()) && !c.isScreenClient()) {
+				if ((c.isMobile() || c.isAvClient()) && !Strings.isEmpty(c.getAvsettings()) && !c.isScreenClient()) {
 					Map<String, Object> map = new Hashtable<String, Object>();
 					add(map, "streamId", c.getStreamid());
 					add(map, "broadCastId", c.getBroadCastID());
@@ -199,6 +200,7 @@ public class MobileService {
 		c.setRoom_id(Long.parseLong(c.getScope()));
 		c.setRoomEnter(new Date());
 		c.setBroadCastID(broadcastId);
+		c.setMobile(true);
 		c.setIsBroadcasting(true);
 		sessionManager.updateClientByStreamId(c.getStreamid(), c, false, null);
 		result.put("broadcastId", broadcastId);

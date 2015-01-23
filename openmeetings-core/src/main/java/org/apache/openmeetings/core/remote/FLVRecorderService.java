@@ -164,7 +164,7 @@ public class FLVRecorderService implements IPendingServiceCallback {
 
 								sessionManager.updateClientByStreamId(rcl.getStreamid(), rcl, false, null);
 							}
-						} else if (rcl.isAvClient()
+						} else if ((rcl.isMobile() || rcl.isAvClient())
 								&& (rcl.getAvsettings().equals("av") || rcl.getAvsettings().equals("a") || rcl.getAvsettings().equals("v"))) {
 							// if the user does publish av, a, v
 							// But we only record av or a, video only is not interesting
@@ -334,7 +334,7 @@ public class FLVRecorderService implements IPendingServiceCallback {
 								// Update Meta Data
 								metaDataDao.updateFlvRecordingMetaDataEndDate(rcl.getFlvRecordingMetaDataId(), new Date());
 							}
-						} else if (rcl.isAvClient()
+						} else if ((rcl.isMobile() || rcl.isAvClient())
 								&& (rcl.getAvsettings().equals("av") || rcl.getAvsettings().equals("a") || rcl.getAvsettings().equals("v"))) {
 
 							stopRecordingShow(conn, String.valueOf(rcl.getBroadCastID()).toString(), rcl.getFlvRecordingMetaDataId());
