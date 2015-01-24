@@ -195,6 +195,7 @@
 									<include>org.springframework:spring-context</include>
 									<include>org.springframework:spring-core</include>
 									<include>org.springframework:spring-beans</include>
+									<include>org.quartz-scheduler:quartz</include>
 								</includes>
 							</dependencies>
 							<jnlp>
@@ -235,6 +236,7 @@
 									<include>org.springframework:spring-context</include>
 									<include>org.springframework:spring-core</include>
 									<include>org.springframework:spring-beans</include>
+									<include>org.quartz-scheduler:quartz</include>
 								</includes>
 							</dependencies>
 							
