@@ -330,6 +330,7 @@
 			<fileset dir="${red5.server.lib}" includes="spring-beans-*.jar" />
 			<fileset dir="${red5.server.lib}" includes="logback*.jar" />
 			<fileset dir="${red5.server.lib}" includes="mina-core*.jar" />
+			<fileset dir="${red5.server.lib}" includes="quartz-*.jar" />
 			<fileset dir="${red5.server.lib}" includes="red5-io*.jar" />
 			<fileset dir="${red5.server.lib}" includes="red5-server-common*.jar" />
 			<fileset dir="${red5.client.lib}" includes="red5*.jar" />
@@ -503,6 +504,7 @@
 				<include name="META-INF/NOTICE" />
 			</fileset>
 			<fileset file="${screenshare.resources.dir}/logback.xml" />
+			<fileset file="${screenshare.resources.dir}/quartz.*" />
 			<manifest>
 				<attribute name="Built-By" value="OpenMeetings - http://openmeetings.apache.org" />
 				<attribute name="Built-On" value="${screensharing.build.TODAY}" />
