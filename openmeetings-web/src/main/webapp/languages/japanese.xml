@@ -3480,7 +3480,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>$APP_NAME会議が設定されました:</value>
   </string>
   <string id="1152" name="calendar invitation message">
-    <value>&lt;br/&gt;詳細:&lt;br/&gt;</value>
+    <value>詳細:</value>
   </string>
   <string id="1153" name="calendar invitation message">
     <value>開始時刻:</value>

@@ -34,7 +34,6 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import org.apache.cxf.feature.Features;
-import org.apache.openmeetings.core.data.calendar.management.AppointmentLogic;
 import org.apache.openmeetings.core.data.conference.RoomManager;
 import org.apache.openmeetings.core.remote.ConferenceService;
 import org.apache.openmeetings.core.remote.red5.ScopeApplicationAdapter;
@@ -95,8 +94,6 @@ public class RoomWebService {
 	private AppointmentCategoryDao appointmentCategoryDao;
 	@Autowired
 	private AppointmentReminderTypDao appointmentReminderTypDao;
-	@Autowired
-	private AppointmentLogic appointmentLogic;
 	@Autowired
 	private SessiondataDao sessiondataDao;
 	@Autowired
@@ -2026,7 +2023,7 @@ public class RoomWebService {
 			Long users_id = sessiondataDao.checkSession(SID);
 
 			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(users_id))) {
-				Appointment a = appointmentLogic.getAppointmentByRoom(room_id);
+				Appointment a = appointmentDao.getAppointmentByRoom(room_id);
 
 				if (email == null || a == null) {
 					return -1L;

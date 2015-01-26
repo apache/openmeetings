@@ -3480,7 +3480,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>New $APP_NAME conference:</value>
   </string>
   <string id="1152" name="calendar invitation message">
-    <value>Details:&lt;br/&gt;</value>
+    <value>Details:</value>
   </string>
   <string id="1153" name="calendar invitation message">
     <value>Start:</value>

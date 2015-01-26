@@ -16,10 +16,10 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.core.quartz.scheduler;
+package org.apache.openmeetings.service.quartz.scheduler;
 
 
-import org.apache.openmeetings.core.data.calendar.management.AppointmentLogic;
+import org.apache.openmeetings.service.calendar.AppointmentLogic;
 import org.apache.openmeetings.util.InitializationContainer;
 import org.apache.openmeetings.util.OpenmeetingsVariables;
 import org.red5.logging.Red5LoggerFactory;

@@ -347,6 +347,11 @@ public class AppointmentDao {
 				.setParameter("roomId", roomId)
 				.getResultList();
 
-		return list.size() > 0 ? list.get(0) : null;
+		Appointment a = list.size() > 0 ? list.get(0) : null;
+		if (a != null && !a.getRoom().isAppointment()) {
+			throw new RuntimeException("Room " + a.getRoom().getName() + " isnt part of an appointed meeting");
+		}
+
+		return a;
 	}
 }

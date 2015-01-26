@@ -32,13 +32,13 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicLong;
 
-import org.apache.openmeetings.core.data.calendar.management.AppointmentLogic;
 import org.apache.openmeetings.core.data.conference.RoomManager;
 import org.apache.openmeetings.core.data.whiteboard.WhiteboardManager;
 import org.apache.openmeetings.core.remote.FLVRecorderService;
 import org.apache.openmeetings.core.remote.WhiteBoardService;
 import org.apache.openmeetings.core.remote.util.SessionVariablesUtil;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
+import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
 import org.apache.openmeetings.db.dao.calendar.MeetingMemberDao;
 import org.apache.openmeetings.db.dao.log.ConferenceLogDao;
 import org.apache.openmeetings.db.dao.record.FlvRecordingDao;
@@ -91,7 +91,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 	@Autowired
 	private ConfigurationDao configurationDao;
 	@Autowired
-	private AppointmentLogic appointmentLogic;
+	private AppointmentDao appointmentDao;
 	@Autowired
 	private SessiondataDao sessiondataDao;
 	@Autowired
@@ -1283,7 +1283,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 			} else {
 				// If this is an Appointment then the Moderator will be set to the Invitor
 
-				Appointment ment = appointmentLogic.getAppointmentByRoom(room_id);
+				Appointment ment = appointmentDao.getAppointmentByRoom(room_id);
 
 				Long userIdInRoomClient = currentClient.getUser_id();
 

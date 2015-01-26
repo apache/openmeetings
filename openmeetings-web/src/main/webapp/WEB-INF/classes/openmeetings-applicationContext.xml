@@ -97,7 +97,7 @@
 	<bean id="openmeetings.FlvRecorderConverter" class="org.apache.openmeetings.core.converter.FlvRecorderConverter" />
 	<bean id="openmeetings.SlaveHTTPConnectionManager" class="org.apache.openmeetings.webservice.cluster.SlaveHTTPConnectionManager" />
 
-	<bean id="openmeetings.SessionClearJob" class="org.apache.openmeetings.core.quartz.scheduler.SessionClearJob" />
+	<bean id="openmeetings.SessionClearJob" class="org.apache.openmeetings.service.quartz.scheduler.SessionClearJob" />
 	<bean id="sessionClearJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
 		<property name="targetObject">
 			<ref bean="openmeetings.SessionClearJob" />
@@ -122,7 +122,7 @@
 		</property>
 	</bean>
 
-	<bean id="openmeetings.MeetingReminderJob" class="org.apache.openmeetings.core.quartz.scheduler.MeetingReminderJob" />
+	<bean id="openmeetings.MeetingReminderJob" class="org.apache.openmeetings.service.quartz.scheduler.MeetingReminderJob" />
 	<bean id="meetingReminderClear" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
 		<property name="targetObject">
 			<ref bean="openmeetings.MeetingReminderJob" />
@@ -146,7 +146,7 @@
 			<value>100000</value>
 		</property>
 	</bean>
-	<bean id="testSetupCleanupJob" class="org.apache.openmeetings.core.quartz.scheduler.TestSetupCleanupJob" />
+	<bean id="testSetupCleanupJob" class="org.apache.openmeetings.service.quartz.scheduler.TestSetupCleanupJob" />
 	<bean id="testSetupCleanup" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
 		<property name="targetObject">
 			<ref bean="testSetupCleanupJob" />
@@ -250,7 +250,7 @@
 	<bean id="fieldLanguagesValuesDAO" class="org.apache.openmeetings.db.dao.label.FieldLanguagesValuesDao" />
 	<bean id="configurationDaoImpl" class="org.apache.openmeetings.db.dao.basic.ConfigurationDao" />
 	<bean id="appointmentDao" class="org.apache.openmeetings.db.dao.calendar.AppointmentDao" />
-	<bean id="appointmentLogic" class="org.apache.openmeetings.core.data.calendar.management.AppointmentLogic" />
+	<bean id="appointmentLogic" class="org.apache.openmeetings.service.calendar.AppointmentLogic" />
 	<bean id="sessionManagement" class="org.apache.openmeetings.db.dao.server.SessiondataDao" />
 	<bean id="userManagement" class="org.apache.openmeetings.service.user.UserManager" />
 	<bean id="roomModeratorsDao" class="org.apache.openmeetings.db.dao.room.RoomModeratorsDao" />

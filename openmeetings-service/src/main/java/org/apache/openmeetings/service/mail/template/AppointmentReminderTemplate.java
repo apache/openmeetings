@@ -26,37 +26,35 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.util.string.Strings;
 
-public class CreatedAppointmentTemplate extends AbstractAppointmentTemplate {
+public class AppointmentReminderTemplate extends AbstractAppointmentTemplate {
 	private static final long serialVersionUID = 1L;
 
-	private CreatedAppointmentTemplate(Long langId, Appointment a, TimeZone tz, String invitorName) {
+	private AppointmentReminderTemplate(Long langId, Appointment a, TimeZone tz) {
 		super(langId, a, tz);
-		
-		add(new Label("titleLbl", getString(1151L, langId)));
+
+		add(new Label("titleLbl", getString(1158L, langId)));
 		add(new Label("title", a.getTitle()));
 		add(new WebMarkupContainer("descContainer")
 			.add(new Label("descLbl", getString(1152L, langId)))
-			.add(new Label("desc", a.getDescription()))
+			.add(new Label("desc", a.getDescription()).setEscapeModelStrings(false))
 			.setVisible(!Strings.isEmpty(a.getDescription()))
 			);
 		add(new Label("startLbl", getString(1153L, langId)));
 		add(new Label("start", CalendarPatterns.getDateWithTimeByMiliSecondsAndTimeZone(a.getStart(), tz)));
 		add(new Label("endLbl", getString(1154L, langId)));
 		add(new Label("end", CalendarPatterns.getDateWithTimeByMiliSecondsAndTimeZone(a.getEnd(), tz)));
-		add(new Label("invitorLbl", getString(1156L, langId)));
-		add(new Label("invitor", invitorName));
 	}
 	
-	public static CreatedAppointmentTemplate get(Long langId, Appointment a, TimeZone tz, String invitorName) {
+	public static AppointmentReminderTemplate get(Long langId, Appointment a, TimeZone tz) {
 		ensureApplication(langId);
-		return new CreatedAppointmentTemplate(langId, a, tz, invitorName);
+		return new AppointmentReminderTemplate(langId, a, tz);
 	}
 
 	@Override
 	public String getSubject() {
 		StringBuilder sb = new StringBuilder();
-		sb.append(getString(1151L, langId)).append(" ").append(a.getTitle())
-			.append(" ").append(CalendarPatterns.getDateWithTimeByMiliSecondsAndTimeZone(a.getStart(), tz))
+		sb.append(getString(1158L, langId)).append(" ").append(" ").append(a.getTitle()).append(' ')
+			.append(CalendarPatterns.getDateWithTimeByMiliSecondsAndTimeZone(a.getStart(), tz))
 			.append(" - ").append(CalendarPatterns.getDateWithTimeByMiliSecondsAndTimeZone(a.getEnd(), tz));
 
 		return sb.toString();

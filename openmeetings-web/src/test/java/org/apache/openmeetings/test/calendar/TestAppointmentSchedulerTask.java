@@ -21,7 +21,7 @@ package org.apache.openmeetings.test.calendar;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import static org.junit.Assert.assertTrue;
 
-import org.apache.openmeetings.core.data.calendar.management.AppointmentLogic;
+import org.apache.openmeetings.service.calendar.AppointmentLogic;
 import org.apache.openmeetings.test.AbstractJUnitDefaults;
 import org.junit.Test;
 import org.red5.logging.Red5LoggerFactory;

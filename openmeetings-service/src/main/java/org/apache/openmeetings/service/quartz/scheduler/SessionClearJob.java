@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.core.quartz.scheduler;
+package org.apache.openmeetings.service.quartz.scheduler;
 
 import org.apache.openmeetings.db.dao.server.SessiondataDao;
 import org.apache.openmeetings.util.InitializationContainer;

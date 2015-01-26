@@ -10,7 +10,7 @@ public abstract class AbstractAppointmentTemplate extends AbstractTemplatePanel 
 	protected Appointment a;
 	protected TimeZone tz;
 
-	public AbstractAppointmentTemplate(Long langId, Appointment a, TimeZone tz, String invitorName) {
+	public AbstractAppointmentTemplate(Long langId, Appointment a, TimeZone tz) {
 		super(TemplatePage.COMP_ID);
 		this.langId = langId == null ? 1 : langId;
 		this.a = a;

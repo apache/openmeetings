@@ -32,7 +32,6 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import org.apache.cxf.feature.Features;
-import org.apache.openmeetings.core.data.calendar.management.AppointmentLogic;
 import org.apache.openmeetings.core.data.conference.RoomManager;
 import org.apache.openmeetings.db.dao.calendar.AppointmentCategoryDao;
 import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
@@ -49,6 +48,7 @@ import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Right;
 import org.apache.openmeetings.db.util.AuthLevelUtil;
 import org.apache.openmeetings.db.util.TimezoneUtil;
+import org.apache.openmeetings.service.calendar.AppointmentLogic;
 import org.apache.openmeetings.webservice.error.ServiceException;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -212,8 +212,7 @@ public class CalendarWebService {
 			Long users_id = sessiondataDao.checkSession(SID);
 			if (AuthLevelUtil.hasUserLevel(userDao.getRights(users_id))) {
 
-				return appointmentLogic
-						.searchAppointmentByName(appointmentName);
+				return appointmentLogic.searchAppointmentByName(appointmentName);
 			}
 		} catch (Exception err) {
 			log.error("[searchAppointmentByName]", err);

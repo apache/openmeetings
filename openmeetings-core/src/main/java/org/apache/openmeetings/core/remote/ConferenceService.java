@@ -28,9 +28,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.openmeetings.core.data.calendar.management.AppointmentLogic;
 import org.apache.openmeetings.core.data.conference.RoomManager;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
+import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
 import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.dao.room.RoomModeratorsDao;
 import org.apache.openmeetings.db.dao.room.RoomTypeDao;
@@ -64,7 +64,7 @@ public class ConferenceService {
 	private static final Logger log = Red5LoggerFactory.getLogger(ConferenceService.class, webAppRootKey);
 
 	@Autowired
-	private AppointmentLogic appointmentLogic;
+	private AppointmentDao appointmentDao;
 	@Autowired
 	private SessiondataDao sessiondataDao;
 	@Autowired
@@ -253,7 +253,7 @@ public class ConferenceService {
 			return null;
 
 		try {
-			Appointment ment = appointmentLogic.getAppointmentByRoom(room_id);
+			Appointment ment = appointmentDao.getAppointmentByRoom(room_id);
 
 			return ment;
 		} catch (Exception e) {
@@ -276,8 +276,7 @@ public class ConferenceService {
 
 		if (AuthLevelUtil.hasUserLevel(userDao.getRights(users_id))) {
 
-			List<Appointment> points = appointmentLogic
-					.getTodaysAppointmentsForUser(users_id);
+			List<Appointment> points = appointmentDao.getTodaysAppointmentsbyRangeAndMember(users_id);
 			List<Room> result = new ArrayList<Room>();
 
 			if (points != null) {
@@ -314,8 +313,7 @@ public class ConferenceService {
 			Long users_id = sessiondataDao.checkSession(SID);
 
 			if (AuthLevelUtil.hasUserLevel(userDao.getRights(users_id))) {
-				List<Appointment> appointments = appointmentLogic
-						.getTodaysAppointmentsForUser(users_id);
+				List<Appointment> appointments = appointmentDao.getTodaysAppointmentsbyRangeAndMember(users_id);
 				List<Room> result = new ArrayList<Room>();
 
 				if (appointments != null) {

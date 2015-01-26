@@ -30,7 +30,7 @@ public class UpdatedAppointmentTemplate extends AbstractAppointmentTemplate {
 	private static final long serialVersionUID = 1L;
 
 	private UpdatedAppointmentTemplate(Long langId, Appointment a, TimeZone tz, String invitorName) {
-		super(langId, a, tz, invitorName);
+		super(langId, a, tz);
 
 		add(new Label("titleLbl", getString(1155L, langId)));
 		add(new Label("title", a.getTitle()));

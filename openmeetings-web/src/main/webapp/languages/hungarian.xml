@@ -3480,7 +3480,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>új $APP_NAME konferencia:</value>
   </string>
   <string id="1152" name="calendar invitation message">
-    <value>Részletek:&lt;br/&gt;</value>
+    <value>Részletek:</value>
   </string>
   <string id="1153" name="calendar invitation message">
     <value>Kezdődik:</value>

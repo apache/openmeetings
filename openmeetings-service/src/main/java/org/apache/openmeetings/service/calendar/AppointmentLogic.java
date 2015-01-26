@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.core.data.calendar.management;
+package org.apache.openmeetings.service.calendar;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_APPLICATION_BASE_URL;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_APPOINTMENT_REMINDER_MINUTES;
@@ -49,7 +49,7 @@ import org.apache.openmeetings.db.entity.room.Invitation.MessageType;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.util.TimezoneUtil;
-import org.apache.openmeetings.util.CalendarPatterns;
+import org.apache.openmeetings.service.mail.template.AppointmentReminderTemplate;
 import org.apache.wicket.util.string.Strings;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -85,40 +85,6 @@ public class AppointmentLogic {
 	@Autowired
 	private RoomTypeDao roomTypeDao;
 
-	public List<Appointment> getTodaysAppointmentsForUser(Long userId) {
-		try {
-			log.debug("getTodaysAppointmentsForUser");
-			List<Appointment> points = appointmentDao.getTodaysAppointmentsbyRangeAndMember(userId);
-			log.debug("Count Appointments for Today : " + points.size());
-			return points;
-		} catch (Exception err) {
-			log.error("[getTodaysAppointmentsForUser]", err);
-		}
-		return null;
-	}
-
-	/**
-	 * @author o.becherer
-	 * @param room_id
-	 * @return
-	 */
-	// --------------------------------------------------------------------------------------------
-	public Appointment getAppointmentByRoom(Long room_id) throws Exception {
-		log.debug("getAppointmentByRoom");
-
-		Room room = roomDao.get(room_id);
-
-		if (room == null) {
-			throw new Exception("Room does not exist in database!");
-		}
-
-		if (!room.isAppointment()) {
-			throw new Exception("Room " + room.getName() + " isnt part of an appointed meeting");
-		}
-
-		return appointmentDao.getAppointmentByRoom(room_id);
-	}
-
 	// --------------------------------------------------------------------------------------------
 
 	// next appointment to current date
@@ -145,6 +111,7 @@ public class AppointmentLogic {
 		i.setInvitedBy(u);
 		i.setInvitee(u);
 		i.setAppointment(a);
+		i.setRoom(a.getRoom());
 		sendReminder(u, a, i);
 	}
 	
@@ -155,23 +122,18 @@ public class AppointmentLogic {
 			return;
 		}
 
-		TimeZone tZone = timezoneUtil.getTimeZone(u.getTimeZoneId());
+		TimeZone tz = timezoneUtil.getTimeZone(u.getTimeZoneId());
 
-		long language_id = u.getLanguageId();
+		long langId = u.getLanguageId();
 		// Get the required labels one time for all meeting members. The
 		// Language of the email will be the system default language
-		String labelid1158 = langDao.getString(1158L, language_id);
-		String labelid1153 = langDao.getString(1153L, language_id);
-		String labelid1154 = langDao.getString(1154L, language_id);
 
-		String subject = generateSubject(labelid1158, a, tZone);
-		String smsSubject = generateSMSSubject(labelid1158, a);
+		String smsSubject = generateSMSSubject(langDao.getString(1158L, langId), a);
 
-		String message = generateMessage(labelid1158, a, language_id, labelid1153, labelid1154, tZone);
+		AppointmentReminderTemplate t = AppointmentReminderTemplate.get(langId, a, tz);
+		invitationManager.sendInvitionLink(inv, MessageType.Create, t.getSubject(), t.getEmail(), false);
 
-		invitationManager.sendInvitionLink(inv, MessageType.Create, subject, message, false);
-
-		invitationManager.sendInvitationReminderSMS(u.getAdresses().getPhone(), smsSubject, language_id);
+		invitationManager.sendInvitationReminderSMS(u.getAdresses().getPhone(), smsSubject, langId);
 		if (inv.getHash() != null) {
 			inv.setUpdated(new Date());
 			invitationDao.update(inv);
@@ -248,50 +210,11 @@ public class AppointmentLogic {
 		}
 	}
 
-	private String generateSubject(String labelid1158, Appointment ment, TimeZone timezone) {
-		StringBuilder message = new StringBuilder(labelid1158);
-		message.append(" ").append(ment.getTitle()).append(' ')
-			.append(CalendarPatterns.getDateWithTimeByMiliSecondsAndTimeZone(ment.getStart(), timezone))
-			.append(" - ").append(CalendarPatterns.getDateWithTimeByMiliSecondsAndTimeZone(ment.getEnd(), timezone));
-
-		return message.toString();
-
-	}
 
 	private String generateSMSSubject(String labelid1158, Appointment ment) {
 		String subj = configurationDao.getConfValue("sms.subject", String.class, null);
 		return subj == null || subj.length() == 0 ? 
 				labelid1158 + " " + ment.getTitle() : subj;
-	}
-	
-	/**
-	 * Generate a localized message including the time and date of the meeting
-	 * event
-	 * 
-	 * @param labelid1158
-	 * @param ment
-	 * @param language_id
-	 * @param labelid1153
-	 * @param jNameTimeZone
-	 * @param labelid1154
-	 * @return
-	 */
-	private String generateMessage(String labelid1158, Appointment ment, Long language_id,
-			String labelid1153, String labelid1154, TimeZone timezone) {
-		StringBuilder message = new StringBuilder(labelid1158);
-		message.append(" ").append(ment.getTitle());
-
-		if (ment.getDescription() != null && ment.getDescription().length() > 0) {
-			message.append(langDao.getString(1152L, language_id)).append(ment.getDescription());
-		}
-
-		message.append("<br/>").append(labelid1153).append(' ')
-			.append(CalendarPatterns.getDateWithTimeByMiliSecondsAndTimeZone(ment.getStart(), timezone))
-			.append("<br/>").append(labelid1154).append(' ')
-			.append(CalendarPatterns.getDateWithTimeByMiliSecondsAndTimeZone(ment.getEnd(), timezone))
-			.append("<br/>");
-
-		return message.toString();
 	}
 
 	public Appointment getAppointment(String appointmentName,

@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.core.quartz.scheduler;
+package org.apache.openmeetings.service.quartz.scheduler;
 
 import java.io.File;
 import java.io.FileFilter;
