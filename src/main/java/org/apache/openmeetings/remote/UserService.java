@@ -25,7 +25,6 @@ import java.util.List;
 import java.util.TimeZone;
 
 import org.apache.openmeetings.cluster.SlaveHTTPConnectionManager;
-import org.apache.openmeetings.data.basic.FieldManager;
 import org.apache.openmeetings.data.conference.InvitationManager;
 import org.apache.openmeetings.data.conference.RoomManager;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
@@ -89,8 +88,6 @@ public class UserService implements IUserService {
 	private ConfigurationDao configurationDao;
 	@Autowired
 	private UserDao userDao;
-	@Autowired
-	private FieldManager fieldManager;
 	@Autowired
 	private SalutationDao salutationmanagement;
 	@Autowired

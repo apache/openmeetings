@@ -31,7 +31,7 @@ public class CreatedAppointmentTemplate extends AbstractAppointmentTemplate {
 	private static final long serialVersionUID = 1L;
 
 	private CreatedAppointmentTemplate(Long langId, Appointment a, TimeZone tz, String invitorName) {
-		super(langId, a, tz, invitorName);
+		super(langId, a, tz);
 
 		add(new Label("titleLbl", WebSession.getString(1151L, langId)));
 		add(new Label("title", a.getTitle()));

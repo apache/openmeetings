@@ -31,13 +31,13 @@ public class CanceledAppointmentTemplate extends AbstractAppointmentTemplate {
 	private static final long serialVersionUID = 1L;
 
 	private CanceledAppointmentTemplate(Long langId, Appointment a, TimeZone tz, String invitorName) {
-		super(langId, a, tz, invitorName);
+		super(langId, a, tz);
 
 		add(new Label("titleLbl", WebSession.getString(1157L, langId)));
 		add(new Label("title", a.getTitle()));
 		add(new WebMarkupContainer("descContainer")
 			.add(new Label("descLbl", WebSession.getString(1152L, langId)))
-			.add(new Label("desc", a.getDescription()))
+			.add(new Label("desc", a.getDescription()).setEscapeModelStrings(false))
 			.setVisible(!Strings.isEmpty(a.getDescription()))
 			);
 		add(new Label("startLbl", WebSession.getString(1153L, langId)));

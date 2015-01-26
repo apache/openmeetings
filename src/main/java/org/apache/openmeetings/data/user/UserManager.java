@@ -35,7 +35,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
-import org.apache.openmeetings.data.basic.FieldManager;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.server.ISessionManager;
 import org.apache.openmeetings.db.dao.server.SessiondataDao;
@@ -81,8 +80,6 @@ public class UserManager implements IUserManager {
 	private SessiondataDao sessiondataDao;
 	@Autowired
 	private ConfigurationDao configurationDao;
-	@Autowired
-	private FieldManager fieldManager;
 	@Autowired
 	private StateDao statemanagement;
 	@Autowired

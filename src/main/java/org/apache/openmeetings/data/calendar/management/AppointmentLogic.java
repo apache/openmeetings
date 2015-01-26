@@ -29,7 +29,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
 
-import org.apache.openmeetings.data.basic.FieldManager;
 import org.apache.openmeetings.data.conference.InvitationManager;
 import org.apache.openmeetings.data.conference.RoomManager;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
@@ -38,6 +37,7 @@ import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
 import org.apache.openmeetings.db.dao.calendar.AppointmentReminderTypDao;
 import org.apache.openmeetings.db.dao.calendar.IInvitationManager.MessageType;
 import org.apache.openmeetings.db.dao.calendar.MeetingMemberDao;
+import org.apache.openmeetings.db.dao.label.FieldLanguagesValuesDao;
 import org.apache.openmeetings.db.dao.room.InvitationDao;
 import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.dao.room.RoomTypeDao;
@@ -48,7 +48,7 @@ import org.apache.openmeetings.db.entity.room.Invitation;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.util.TimezoneUtil;
-import org.apache.openmeetings.util.CalendarPatterns;
+import org.apache.openmeetings.web.mail.template.AppointmentReminderTemplate;
 import org.apache.wicket.util.string.Strings;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -66,7 +66,7 @@ public class AppointmentLogic {
 	@Autowired
 	private ConfigurationDao configurationDao;
 	@Autowired
-	private FieldManager fieldManager;
+	private FieldLanguagesValuesDao langDao;
 	@Autowired
 	private RoomDao roomDao;
 	@Autowired
@@ -146,6 +146,7 @@ public class AppointmentLogic {
 		i.setInvitedBy(u);
 		i.setInvitee(u);
 		i.setAppointment(a);
+		i.setRoom(a.getRoom());
 		sendReminder(u, a, i);
 	}
 	
@@ -156,23 +157,18 @@ public class AppointmentLogic {
 			return;
 		}
 
-		TimeZone tZone = timezoneUtil.getTimeZone(u.getTimeZoneId());
+		TimeZone tz = timezoneUtil.getTimeZone(u.getTimeZoneId());
 
-		long language_id = u.getLanguage_id();
+		long langId = u.getLanguage_id();
 		// Get the required labels one time for all meeting members. The
 		// Language of the email will be the system default language
-		String labelid1158 = fieldManager.getString(1158L, language_id);
-		String labelid1153 = fieldManager.getString(1153L, language_id);
-		String labelid1154 = fieldManager.getString(1154L, language_id);
 
-		String subject = generateSubject(labelid1158, a, tZone);
-		String smsSubject = generateSMSSubject(labelid1158, a);
+		String smsSubject = generateSMSSubject(langDao.getString(1158L, langId), a);
 
-		String message = generateMessage(labelid1158, a, language_id, labelid1153, labelid1154, tZone);
+		AppointmentReminderTemplate t = AppointmentReminderTemplate.get(langId, a, tz);
+		invitationManager.sendInvitionLink(inv, MessageType.Create, t.getSubject(), t.getEmail(), false);
 
-		invitationManager.sendInvitionLink(inv, MessageType.Create, subject, message, false);
-
-		invitationManager.sendInvitationReminderSMS(u.getAdresses().getPhone(), smsSubject, language_id);
+		invitationManager.sendInvitationReminderSMS(u.getAdresses().getPhone(), smsSubject, langId);
 		if (inv.getHash() != null) {
 			inv.setUpdated(new Date());
 			invitationDao.update(inv);
@@ -250,52 +246,12 @@ public class AppointmentLogic {
 		}
 	}
 
-	private String generateSubject(String labelid1158, Appointment ment, TimeZone timezone) {
-		StringBuilder message = new StringBuilder(labelid1158);
-		message.append(" ").append(ment.getTitle()).append(' ')
-			.append(CalendarPatterns.getDateWithTimeByMiliSecondsAndTimeZone(ment.getStart(), timezone))
-			.append(" - ").append(CalendarPatterns.getDateWithTimeByMiliSecondsAndTimeZone(ment.getEnd(), timezone));
-
-		return message.toString();
-
-	}
-
 	private String generateSMSSubject(String labelid1158, Appointment ment) {
 		String subj = configurationDao.getConfValue("sms.subject", String.class, null);
 		return subj == null || subj.length() == 0 ? 
 				labelid1158 + " " + ment.getTitle() : subj;
 	}
 	
-	/**
-	 * Generate a localized message including the time and date of the meeting
-	 * event
-	 * 
-	 * @param labelid1158
-	 * @param ment
-	 * @param language_id
-	 * @param labelid1153
-	 * @param jNameTimeZone
-	 * @param labelid1154
-	 * @return
-	 */
-	private String generateMessage(String labelid1158, Appointment ment, Long language_id,
-			String labelid1153, String labelid1154, TimeZone timezone) {
-		StringBuilder message = new StringBuilder(labelid1158);
-		message.append(" ").append(ment.getTitle());
-
-		if (ment.getDescription() != null && ment.getDescription().length() > 0) {
-			message.append(fieldManager.getString(1152L, language_id)).append(ment.getDescription());
-		}
-
-		message.append("<br/>").append(labelid1153).append(' ')
-			.append(CalendarPatterns.getDateWithTimeByMiliSecondsAndTimeZone(ment.getStart(), timezone))
-			.append("<br/>").append(labelid1154).append(' ')
-			.append(CalendarPatterns.getDateWithTimeByMiliSecondsAndTimeZone(ment.getEnd(), timezone))
-			.append("<br/>");
-
-		return message.toString();
-	}
-
 	public Appointment getAppointment(String appointmentName,
 			String appointmentLocation, String appointmentDescription,
 			Calendar appointmentstart, Calendar appointmentend,

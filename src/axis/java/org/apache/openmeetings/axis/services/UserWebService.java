@@ -22,7 +22,6 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import org.apache.axis2.AxisFault;
-import org.apache.openmeetings.data.basic.FieldManager;
 import org.apache.openmeetings.data.user.UserManager;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.basic.ErrorDao;
@@ -71,8 +70,6 @@ public class UserWebService {
 	private ConfigurationDao configurationDao;
 	@Autowired
 	private UserManager userManagement;
-	@Autowired
-	private FieldManager fieldManager;
 	@Autowired
 	private ErrorDao errorDao;
 	@Autowired

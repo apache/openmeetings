@@ -35,7 +35,6 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
-import org.apache.openmeetings.data.basic.FieldManager;
 import org.apache.openmeetings.db.dao.room.IRoomManager;
 import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.dao.room.RoomModeratorsDao;
@@ -73,8 +72,6 @@ public class RoomManager implements IRoomManager {
 	private UserDao usersDao;
 	@Autowired
 	private ISessionManager sessionManager;
-	@Autowired
-	private FieldManager fieldManager;
     @Autowired
 	private RoomDao roomDao;
     @Autowired

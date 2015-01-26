@@ -3480,7 +3480,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>新会议:</value>
   </string>
   <string id="1152" name="calendar invitation message">
-    <value>详细情况&lt;br/&gt;</value>
+    <value>详细情况</value>
   </string>
   <string id="1153" name="calendar invitation message">
     <value>开始时间:</value>

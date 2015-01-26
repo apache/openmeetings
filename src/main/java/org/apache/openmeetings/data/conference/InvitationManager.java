@@ -27,7 +27,6 @@ import java.util.HashMap;
 import java.util.TimeZone;
 import java.util.Vector;
 
-import org.apache.openmeetings.data.basic.FieldManager;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.calendar.IInvitationManager;
 import org.apache.openmeetings.db.dao.room.InvitationDao;
@@ -66,8 +65,6 @@ public class InvitationManager implements IInvitationManager {
 
 	@Autowired
 	private InvitationDao invitationDao;
-	@Autowired
-	private FieldManager fieldManager;
 	@Autowired
 	private MailHandler mailHandler;
 	@Autowired
