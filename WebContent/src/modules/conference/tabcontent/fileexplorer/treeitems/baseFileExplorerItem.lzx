@@ -541,6 +541,38 @@
 		</handler>
 	</view>
 	
+	<method name="getDownloadURL" args="fName, parentPath">
+	<![CDATA[
+		var downloadurl = canvas.getUrl() + 'DownloadHandler?' +
+			'fileName=' + fName +
+			'&moduleName=videoconf1' +
+			'&parentPath=/' + parentPath +
+			'&room_id=files'+
+			'&sid=' + canvas.sessionId +
+			"&fileExplorerItemId=" + this.fileExplorerItemId;
+		if ($debug) Debug.write("formatURL: ", this, downloadurl);
+		return downloadurl;
+	]]>
+	</method>
+
+	<method name="downloadDocumentByName">
+	<![CDATA[
+		var fName = this.fileHash;
+		var pos = this.fileName.lastIndexOf(".");
+		var strlen = this.fileName.length;
+		if (pos != -1 && strlen != pos + 1) {
+			var ext = this.fileName.split(".");
+			var len = ext.length;
+			var extension = ext[len - 1].toLowerCase();
+			fName += "." + extension;
+		}
+		lz.Browser.loadURL(this.getDownloadURL(fName, this.fileHash + '/'), '_parent');
+	]]>
+	</method>
+	
+	<method name="downloadImageByName">
+		lz.Browser.loadURL(this.getDownloadURL(this.fileHash, ''), '_parent');
+	</method>
 </class>
 
 

@@ -30,18 +30,18 @@
     
     <attribute name="uploadmoduleimgfolder" value="$once{ canvas.uploadmoduleimgfolder }" type="string" />
     
-    <method name="formatURL" args="filename">
-        <![CDATA[
-            var downloadurl = canvas.getUrl()+'DownloadHandler?' +
-                'fileName=' + encodeURIComponent(filename) +
-                '&moduleName=' + this.uploadmodul + 
-                '&parentPath=' + encodeURIComponent(this.uploadmoduleimgfolder + '/' )+
-                '&room_id=files'+
-                '&sid='+canvas.sessionId;
-            ////Debug.write("downloadurl: ",downloadurl);
-            return downloadurl;
-        ]]>
-    </method>    
+	<method name="formatURL" args="filename">
+	<![CDATA[
+		var downloadurl = canvas.getUrl() + 'DownloadHandler?' +
+			'fileName=' + encodeURIComponent(filename) +
+			'&moduleName=' + this.uploadmodul +
+			'&parentPath=' + encodeURIComponent(this.uploadmoduleimgfolder + '/') +
+			'&room_id=files' +
+			'&sid=' + canvas.sessionId;
+		////Debug.write("downloadurl: ",downloadurl);
+		return downloadurl;
+	]]>
+	</method>    
 
     <handler name="onmouseover">
         setCurrentMouseWheelObject(this.parent.parent._scrollbar);
