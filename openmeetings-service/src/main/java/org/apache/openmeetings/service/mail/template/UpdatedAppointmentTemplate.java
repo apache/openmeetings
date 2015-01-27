@@ -36,7 +36,7 @@ public class UpdatedAppointmentTemplate extends AbstractAppointmentTemplate {
 		add(new Label("title", a.getTitle()));
 		add(new WebMarkupContainer("descContainer")
 			.add(new Label("descLbl", getString(1152L, langId)))
-			.add(new Label("desc", a.getDescription()))
+			.add(new Label("desc", a.getDescription()).setEscapeModelStrings(false))
 			.setVisible(!Strings.isEmpty(a.getDescription()))
 			);
 		add(new Label("startLbl", getString(1153L, langId)));
