@@ -22,4 +22,5 @@ public interface IWebSession {
 	String getOmString(long id);
 	String getOmString(long id, long languageId);
 	void setLanguage(long languageId);
+	long getOmLanguage();
 }

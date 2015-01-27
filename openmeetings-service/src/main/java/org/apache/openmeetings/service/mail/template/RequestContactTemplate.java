@@ -18,27 +18,23 @@
  */
 package org.apache.openmeetings.service.mail.template;
 
-import static org.apache.openmeetings.util.OpenmeetingsVariables.wicketApplicationName;
-
-import org.apache.openmeetings.core.IApplication;
 import org.apache.openmeetings.db.entity.user.User;
-import org.apache.wicket.Application;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.ExternalLink;
 
 public class RequestContactTemplate extends AbstractTemplatePanel {
 	private static final long serialVersionUID = 1L;
 
-	public RequestContactTemplate(String id, User userToAdd, User user) {
-		super(id);
+	public RequestContactTemplate(User userToAdd, User user) {
+		super(getOmSession().getOmLanguage());
 		add(new Label("addedFirstName", userToAdd.getFirstname()));
 		add(new Label("addedLastName", userToAdd.getLastname()));
 		add(new Label("firstName", user.getFirstname()));
 		add(new Label("lastName", user.getLastname()));
-		add(new ExternalLink("link", ((IApplication)Application.get(wicketApplicationName)).getOmContactsLink()));
+		add(new ExternalLink("link", getApp().getOmContactsLink()));
 	}
 	
 	public static String getEmail(User userToAdd, User user) {
-		return renderPanel(new RequestContactTemplate(TemplatePage.COMP_ID, userToAdd, user)).toString();
+		return renderPanel(new RequestContactTemplate(userToAdd, user)).toString();
 	}
 }

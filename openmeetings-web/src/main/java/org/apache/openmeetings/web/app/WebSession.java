@@ -513,4 +513,8 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 	public String getOmString(long id, long languageId) {
 		return getString(id, languageId);
 	}
+	
+	public long getOmLanguage() {
+		return getLanguage();
+	}
 }

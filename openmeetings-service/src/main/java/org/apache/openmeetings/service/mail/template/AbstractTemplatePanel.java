@@ -18,14 +18,20 @@
  */
 package org.apache.openmeetings.service.mail.template;
 
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAUT_LANG_KEY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.wicketApplicationName;
 
 import org.apache.openmeetings.core.IApplication;
 import org.apache.openmeetings.core.IWebSession;
+import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
+import org.apache.openmeetings.db.dao.label.FieldLanguageDao;
+import org.apache.openmeetings.db.entity.label.FieldLanguage;
 import org.apache.wicket.Application;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ThreadContext;
+import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.IMarkupResourceStreamProvider;
+import org.apache.wicket.markup.html.TransparentWebMarkupContainer;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.mock.MockWebResponse;
@@ -42,13 +48,29 @@ import org.apache.wicket.util.resource.StringResourceStream;
 
 public abstract class AbstractTemplatePanel extends Panel {
 	private static final long serialVersionUID = 1L;
+	protected long langId;
 	
-	public AbstractTemplatePanel(String id) {
-		super(id);
+	public static IApplication getApp() {
+		return (IApplication)Application.get(wicketApplicationName);
+	}
+	
+	public static <T> T getBean(Class<T> clazz) {
+		return getApp().getOmBean(clazz);
+	}
+	
+	public static IWebSession getOmSession() {
+		return (IWebSession)WebSession.get();
+	}
+	
+	public AbstractTemplatePanel(Long langId) {
+		super(TemplatePage.COMP_ID);
+		this.langId = langId == null ? getBean(ConfigurationDao.class).getConfValue(CONFIG_DEFAUT_LANG_KEY, Long.class, "1") : langId;
+		FieldLanguage lang = getBean(FieldLanguageDao.class).get(langId);
+		add(new TransparentWebMarkupContainer("container").add(AttributeAppender.append("dir", lang.isRtl() ? "rtl" : "ltr")));
 	}
 	
 	public static String getString(long id, long languageId) {
-		return ((IWebSession)WebSession.get()).getOmString(id, languageId);
+		return getOmSession().getOmString(id, languageId);
 	}
 
 	/**

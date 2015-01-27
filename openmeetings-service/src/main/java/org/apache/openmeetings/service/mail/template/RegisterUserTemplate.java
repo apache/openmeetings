@@ -25,8 +25,8 @@ import org.apache.wicket.markup.html.link.ExternalLink;
 public class RegisterUserTemplate extends AbstractTemplatePanel {
 	private static final long serialVersionUID = 1L;
 
-	public RegisterUserTemplate(String id, String username, String userpass, String email, String verification_url) {
-		super(id);
+	public RegisterUserTemplate(String username, String userpass, String email, String verification_url) {
+		super(getOmSession().getOmLanguage());
 		add(new Label("username", username));
 		add(new Label("userpass", userpass));
 		add(new Label("email", email));
@@ -37,6 +37,6 @@ public class RegisterUserTemplate extends AbstractTemplatePanel {
 	}
 
 	public static String getEmail(String username, String userpass, String email, String verification_url) {
-		return renderPanel(new RegisterUserTemplate(TemplatePage.COMP_ID, username, userpass, email, verification_url)).toString();
+		return renderPanel(new RegisterUserTemplate(username, userpass, email, verification_url)).toString();
 	}
 }

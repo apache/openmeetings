@@ -25,8 +25,8 @@ import org.apache.wicket.markup.html.basic.Label;
 public class RequestContactConfirmTemplate extends AbstractTemplatePanel {
 	private static final long serialVersionUID = 1L;
 
-	public RequestContactConfirmTemplate(String id, User user, UserContact contact) {
-		super(id);
+	public RequestContactConfirmTemplate(User user, UserContact contact) {
+		super(getOmSession().getOmLanguage());
 		add(new Label("firstName", user.getFirstname()));
 		add(new Label("lastName", user.getLastname()));
 		add(new Label("addedFirstName", contact.getContact().getFirstname()));
@@ -34,6 +34,6 @@ public class RequestContactConfirmTemplate extends AbstractTemplatePanel {
 	}
 	
 	public static String getEmail(User user, UserContact contact) {
-		return renderPanel(new RequestContactConfirmTemplate(TemplatePage.COMP_ID, user, contact)).toString();
+		return renderPanel(new RequestContactConfirmTemplate(user, contact)).toString();
 	}
 }

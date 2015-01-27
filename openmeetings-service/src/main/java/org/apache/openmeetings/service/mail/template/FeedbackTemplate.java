@@ -18,20 +18,16 @@
  */
 package org.apache.openmeetings.service.mail.template;
 
-import static org.apache.openmeetings.util.OpenmeetingsVariables.wicketApplicationName;
-
-import org.apache.openmeetings.core.IApplication;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
-import org.apache.wicket.Application;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.ExternalLink;
 
 public class FeedbackTemplate extends AbstractTemplatePanel {
 	private static final long serialVersionUID = 1L;
 
-	public FeedbackTemplate(String id, String username, String email, String message) {
-		super(id);
-		add(new Label("appname", ((IApplication)Application.get(wicketApplicationName)).getOmBean(ConfigurationDao.class).getAppName()));
+	public FeedbackTemplate(String username, String email, String message) {
+		super(getOmSession().getOmLanguage());
+		add(new Label("appname", getBean(ConfigurationDao.class).getAppName()));
 		add(new Label("username", username));
 		add(new Label("email", email));
 		add(new Label("message", message));
@@ -39,6 +35,6 @@ public class FeedbackTemplate extends AbstractTemplatePanel {
 	}
 	
 	public static String getEmail(String username, String email, String message) {
-		return renderPanel(new FeedbackTemplate(TemplatePage.COMP_ID, username, email, message)).toString();
+		return renderPanel(new FeedbackTemplate(username, email, message)).toString();
 	}
 }
