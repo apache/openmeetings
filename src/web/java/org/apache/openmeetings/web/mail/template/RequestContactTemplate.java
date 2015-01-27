@@ -19,6 +19,7 @@
 package org.apache.openmeetings.web.mail.template;
 
 import org.apache.openmeetings.db.entity.user.User;
+import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.util.ContactsHelper;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.ExternalLink;
@@ -26,8 +27,8 @@ import org.apache.wicket.markup.html.link.ExternalLink;
 public class RequestContactTemplate extends AbstractTemplatePanel {
 	private static final long serialVersionUID = 1L;
 
-	public RequestContactTemplate(String id, User userToAdd, User user) {
-		super(id);
+	public RequestContactTemplate(User userToAdd, User user) {
+		super(WebSession.getLanguage());
 		add(new Label("addedFirstName", userToAdd.getFirstname()));
 		add(new Label("addedLastName", userToAdd.getLastname()));
 		add(new Label("firstName", user.getFirstname()));
@@ -36,6 +37,6 @@ public class RequestContactTemplate extends AbstractTemplatePanel {
 	}
 	
 	public static String getEmail(User userToAdd, User user) {
-		return renderPanel(new RequestContactTemplate(TemplatePage.COMP_ID, userToAdd, user)).toString();
+		return renderPanel(new RequestContactTemplate(userToAdd, user)).toString();
 	}
 }

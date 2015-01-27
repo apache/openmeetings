@@ -21,14 +21,15 @@ package org.apache.openmeetings.web.mail.template;
 import static org.apache.openmeetings.web.app.Application.getBean;
 
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
+import org.apache.openmeetings.web.app.WebSession;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.ExternalLink;
 
 public class FeedbackTemplate extends AbstractTemplatePanel {
 	private static final long serialVersionUID = 1L;
 
-	public FeedbackTemplate(String id, String username, String email, String message) {
-		super(id);
+	public FeedbackTemplate(String username, String email, String message) {
+		super(WebSession.getLanguage());
 		add(new Label("appname", getBean(ConfigurationDao.class).getAppName()));
 		add(new Label("username", username));
 		add(new Label("email", email));
@@ -37,6 +38,6 @@ public class FeedbackTemplate extends AbstractTemplatePanel {
 	}
 	
 	public static String getEmail(String username, String email, String message) {
-		return renderPanel(new FeedbackTemplate(TemplatePage.COMP_ID, username, email, message)).toString();
+		return renderPanel(new FeedbackTemplate(username, email, message)).toString();
 	}
 }

@@ -18,11 +18,19 @@
  */
 package org.apache.openmeetings.web.mail.template;
 
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAUT_LANG_KEY;
+import static org.apache.openmeetings.web.app.Application.getBean;
+
+import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
+import org.apache.openmeetings.db.dao.label.FieldLanguageDao;
+import org.apache.openmeetings.db.entity.label.FieldLanguage;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ThreadContext;
+import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.IMarkupResourceStreamProvider;
+import org.apache.wicket.markup.html.TransparentWebMarkupContainer;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.mock.MockWebResponse;
@@ -38,9 +46,13 @@ import org.apache.wicket.util.resource.StringResourceStream;
 
 public abstract class AbstractTemplatePanel extends Panel {
 	private static final long serialVersionUID = 1L;
+	protected long langId;
 	
-	public AbstractTemplatePanel(String id) {
-		super(id);
+	public AbstractTemplatePanel(Long langId) {
+		super(TemplatePage.COMP_ID);
+		this.langId = langId == null ? getBean(ConfigurationDao.class).getConfValue(CONFIG_DEFAUT_LANG_KEY, Long.class, "1") : langId;
+		FieldLanguage lang = getBean(FieldLanguageDao.class).getFieldLanguageById(langId);
+		add(new TransparentWebMarkupContainer("container").add(AttributeAppender.append("dir", Boolean.TRUE.equals(lang.getRtl()) ? "rtl" : "ltr")));
 	}
 	
 	/**

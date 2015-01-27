@@ -18,19 +18,20 @@
  */
 package org.apache.openmeetings.web.mail.template;
 
+import org.apache.openmeetings.web.app.WebSession;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.ExternalLink;
 
 public class ResetPasswordTemplate extends AbstractTemplatePanel {
 	private static final long serialVersionUID = 1L;
 
-	public ResetPasswordTemplate(String id, String link) {
-		super(id);
+	public ResetPasswordTemplate(String link) {
+		super(WebSession.getLanguage());
 		add(new ExternalLink("reset_link1", link));
 		add(new Label("reset_link2", link));
 	}
 	
 	public static String getEmail(String link) {
-		return renderPanel(new ResetPasswordTemplate(TemplatePage.COMP_ID, link)).toString();
+		return renderPanel(new ResetPasswordTemplate(link)).toString();
 	}
 }

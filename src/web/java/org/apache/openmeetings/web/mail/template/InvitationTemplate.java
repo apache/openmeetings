@@ -27,7 +27,7 @@ public class InvitationTemplate extends AbstractTemplatePanel {
 	private static final long serialVersionUID = 1L;
 
 	private InvitationTemplate(Long langId, String invitorName, String message, String link) {
-		super(TemplatePage.COMP_ID);
+		super(langId);
 
 		add(new Label("titleLbl", WebSession.getString(500, langId)));
 		add(new Label("userLbl", WebSession.getString(501, langId)));
