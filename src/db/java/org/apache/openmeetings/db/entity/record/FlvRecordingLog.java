@@ -42,7 +42,7 @@ import javax.persistence.Table;
 @Table(name = "flvrecording_log")
 public class FlvRecordingLog implements Serializable {
 	private static final long serialVersionUID = 1L;
-	public static final int MAX_LOG_SIZE = 1 * 1024 * 1024;
+	public static final int MAX_LOG_SIZE = 64 * 1024; //64K until column definition will be fixed
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="id")
