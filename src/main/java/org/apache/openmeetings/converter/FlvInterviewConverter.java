@@ -134,10 +134,9 @@ public class FlvInterviewConverter extends BaseConverter implements IRecordingCo
 				File outputWav = new File(streamFolderGeneral, "one_second.wav");
 
 				// Calculate delta at beginning
-				Long deltaTimeMilliSeconds = flvRecording.getRecordEnd().getTime() - flvRecording.getRecordStart().getTime();
-				Float deltaPadding = (Float.parseFloat(deltaTimeMilliSeconds.toString()) / 1000) - 1;
+				double deltaPadding = diffSeconds(flvRecording.getRecordEnd(), flvRecording.getRecordStart());
 
-				String[] argv_full_sox = new String[] { getPathToSoX(), outputWav.getCanonicalPath(), outputFullWav, "pad", "0", deltaPadding.toString() };
+				String[] argv_full_sox = new String[] { getPathToSoX(), outputWav.getCanonicalPath(), outputFullWav, "pad", "0", "" + deltaPadding };
 
 				returnLog.add(ProcessHelper.executeScript("generateSampleAudio", argv_full_sox));
 			}

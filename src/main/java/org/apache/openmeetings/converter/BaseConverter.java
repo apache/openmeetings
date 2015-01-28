@@ -91,6 +91,14 @@ public abstract class BaseConverter {
 		return from.getTime() - to.getTime();
 	}
 
+	protected double diffSeconds(Date from, Date to) {
+		return diffSeconds(diff(from, to));
+	}
+	
+	protected double diffSeconds(long val) {
+		return ((double)val) / 1000;
+	}
+	
 	protected String formatMillis(long millis) {
 		long hours = TimeUnit.MILLISECONDS.toHours(millis);
 		millis -= TimeUnit.HOURS.toMillis(hours);
@@ -133,7 +141,7 @@ public abstract class BaseConverter {
 				, metaDataDao.getAudioMetaDataByRecording(flvRecording.getFlvRecordingId()));
 	}
 	
-	private String[] addSoxPad(List<ConverterProcessResult> returnLog, String job, double length, double position, String inFile, String outFile) {
+	private String[] addSoxPad(List<ConverterProcessResult> returnLog, String job, double length, double position, File inFile, File outFile) throws IOException {
 		//FIXME need to check this
 		if (length < 0 || position < 0) {
 			log.debug("::addSoxPad " + job + " Invalid parameters: "
@@ -142,7 +150,7 @@ public abstract class BaseConverter {
 		length = length < 0 ? 0 : length;
 		position = position < 0 ? 0 : position;
 
-		String[] argv = new String[] { getPathToSoX(), inFile, outFile, "pad", "" + length, "" + position };
+		String[] argv = new String[] { getPathToSoX(), inFile.getCanonicalPath(), outFile.getCanonicalPath(), "pad", "" + length, "" + position };
 
 		returnLog.add(ProcessHelper.executeScript(job, argv));
 		return argv;
@@ -239,32 +247,27 @@ public abstract class BaseConverter {
 	
 				File inputFlvFile = new File(streamFolder, metaData.getStreamName() + ".flv");
 	
-				String hashFileName = metaData.getStreamName() + "_WAVE.wav";
-				String outputWav = new File(streamFolder, hashFileName).getCanonicalPath(); //FIXME
+				File outputWav = new File(streamFolder, metaData.getStreamName() + "_WAVE.wav");
 	
-				metaData.setWavAudioData(hashFileName);
+				metaData.setWavAudioData(outputWav.getName());
 	
 				
 				log.debug("FLV File Name: {} Length: {} ", inputFlvFile.getName(), inputFlvFile.length());
 	
-				metaData.setAudioIsValid(false);
 				if (inputFlvFile.exists()) {
-					String[] argv = new String[] {getPathToFFMPEG(), "-y", "-i", inputFlvFile.getCanonicalPath()
-							, "-af", "aresample=32k", outputWav};
+					String[] argv = new String[] {
+							getPathToFFMPEG(), "-y"
+							, "-i", inputFlvFile.getCanonicalPath()
+							, "-af", "aresample=min_comp=0.001:min_hard_comp=0.100000"
+							, outputWav.getCanonicalPath()};
 	
 					returnLog.add(ProcessHelper.executeScript("stripAudioFromFLVs", argv));
-	
-					// check if the resulting Audio is valid
-					File output_wav = new File(outputWav);
-	
-					if (output_wav.exists() && output_wav.length() != 0) {
-						metaData.setAudioIsValid(true);
-					}
 				}
 	
-				if (metaData.getAudioIsValid()) {
+				if (outputWav.exists() && outputWav.length() != 0) {
+					metaData.setAudioValid(true);
 					// Strip Wave to Full Length
-					String outputGapFullWav = outputWav;
+					File outputGapFullWav = outputWav;
 	
 					// Fix Start/End in Audio
 					List<FlvRecordingMetaDelta> flvRecordingMetaDeltas = metaDeltaDao.getFlvRecordingMetaDeltaByMetaId(metaId);
@@ -272,22 +275,21 @@ public abstract class BaseConverter {
 					int counter = 0;
 	
 					for (FlvRecordingMetaDelta metaDelta : flvRecordingMetaDeltas) {
-						String inputFile = outputGapFullWav;
+						File inputFile = outputGapFullWav;
 	
 						// Strip Wave to Full Length
 						String hashFileGapsFullName = metaData.getStreamName() + "_GAP_FULL_WAVE_" + counter + ".wav";
-						outputGapFullWav = new File(streamFolder, hashFileGapsFullName).getCanonicalPath();
+						outputGapFullWav = new File(streamFolder, hashFileGapsFullName);
 	
 						metaDelta.setWaveOutPutName(hashFileGapsFullName);
 	
 						String[] argv_sox = null;
 	
 						if (metaDelta.getDeltaTime() != null) {
-							if (metaDelta.getIsStartPadding() != null && metaDelta.getIsStartPadding()) {
-								double gapSeconds = ((double)metaDelta.getDeltaTime()) / 1000;
+							double gapSeconds = diffSeconds(metaDelta.getDeltaTime());
+							if (metaDelta.isStartPadding()) {
 								argv_sox = addSoxPad(returnLog, "fillGap", gapSeconds, 0, inputFile, outputGapFullWav);
-							} else if (metaDelta.getIsEndPadding() != null && metaDelta.getIsEndPadding()) {
-								double gapSeconds = ((double)metaDelta.getDeltaTime()) / 1000;
+							} else if (metaDelta.isEndPadding()) {
 								argv_sox = addSoxPad(returnLog, "fillGap", 0, gapSeconds, inputFile, outputGapFullWav);
 							}
 						}
@@ -304,33 +306,28 @@ public abstract class BaseConverter {
 	
 					// Strip Wave to Full Length
 					String hashFileFullName = metaData.getStreamName() + "_FULL_WAVE.wav";
-					String outputFullWav = new File(streamFolder, hashFileFullName).getCanonicalPath();
+					File outputFullWav = new File(streamFolder, hashFileFullName);
 	
 					// Calculate delta at beginning
-					long deltaTimeStartMilliSeconds = metaData.getRecordStart().getTime() - flvRecording.getRecordStart().getTime();
-	
-					double length = ((double)deltaTimeStartMilliSeconds) / 1000;
+					double startPad = diffSeconds(metaData.getRecordStart(), flvRecording.getRecordStart());
 	
 					// Calculate delta at ending
-					long deltaTimeEndMilliSeconds = flvRecording.getRecordEnd().getTime() - metaData.getRecordEnd().getTime();
+					double endPad = diffSeconds(flvRecording.getRecordEnd(), metaData.getRecordEnd());
 	
-					double endPadding = ((double)deltaTimeEndMilliSeconds) / 1000;
-	
-					addSoxPad(returnLog, "addStartEndToAudio", length, endPadding, outputGapFullWav, outputFullWav);
+					addSoxPad(returnLog, "addStartEndToAudio", startPad, endPad, outputGapFullWav, outputFullWav);
 	
 					// Fix for Audio Length - Invalid Audio Length in Recorded Files
 					// Audio must match 100% the Video
 					log.debug("############################################");
 					log.debug("Trim Audio to Full Length -- Start");
-					File aFile = new File(outputFullWav);
 	
-					if (!aFile.exists()) {
+					if (!outputFullWav.exists()) {
 						throw new Exception("Audio File does not exist , could not extract the Audio correctly");
 					}
 					metaData.setFullWavAudioData(hashFileFullName);
 	
 					// Finally add it to the row!
-					listOfFullWaveFiles.add(outputFullWav);
+					listOfFullWaveFiles.add(outputFullWav.getCanonicalPath());
 				}
 	
 				metaDataDao.update(metaData);

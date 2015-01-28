@@ -53,7 +53,7 @@ import org.simpleframework.xml.Root;
 	@NamedQuery(name = "getMetaById", query = "SELECT c FROM FlvRecordingMetaData c WHERE c.flvRecordingMetaDataId = :id")
 	, @NamedQuery(name = "getMetaByRecording", query = "SELECT c FROM FlvRecordingMetaData c WHERE c.flvRecording.flvRecordingId = :recordingId AND c.deleted = false")
 	, @NamedQuery(name = "getAudioMetaByRecording", query = "SELECT c FROM FlvRecordingMetaData c WHERE c.flvRecording.flvRecordingId = :recordingId "
-			+ "AND c.screenData = false AND c.streamStatus <> :none AND (c.isAudioOnly = true OR (c.isAudioOnly = false AND c.isVideoOnly = false))")
+			+ "AND c.screenData = false AND c.streamStatus <> :none AND (c.audioOnly = true OR (c.audioOnly = false AND c.videoOnly = false))")
 	, @NamedQuery(name = "getScreenMetaByRecording", query = "SELECT c FROM FlvRecordingMetaData c WHERE c.flvRecording.flvRecordingId = :recordingId"
 			+ " AND c.screenData = true")
 })
@@ -71,7 +71,7 @@ public class FlvRecordingMetaData implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
-	@Element(data = true, required = false)
+	@Element(name = "flvRecordingMetaDataId", data = true, required = false)
 	private long flvRecordingMetaDataId;
 
 	@ManyToOne(fetch = FetchType.EAGER)
@@ -96,15 +96,15 @@ public class FlvRecordingMetaData implements Serializable {
 	private String freeTextUserName;
 
 	@Column(name = "is_audio_only")
-	@Element(data = true)
-	private Boolean isAudioOnly;
+	@Element(name = "isAudioOnly", data = true)
+	private boolean audioOnly;
 
 	@Column(name = "is_video_only")
-	@Element(data = true)
-	private Boolean isVideoOnly;
+	@Element(name = "isVideoOnly", data = true)
+	private boolean videoOnly;
 
 	@Column(name = "is_screen_data")
-	@Element(data = true, name = "isScreenData")
+	@Element(name = "isScreenData", data = true)
 	private boolean screenData;
 
 	@Column(name = "inserted_by")
@@ -131,8 +131,8 @@ public class FlvRecordingMetaData implements Serializable {
 	private String fullWavAudioData;
 
 	@Column(name = "audio_is_valid")
-	@Element(data = true, required = false)
-	private Boolean audioIsValid;
+	@Element(name="audioIsValid", data = true, required = false)
+	private boolean audioValid;
 
 	@Column(name = "interiew_pod_id")
 	@Element(data = true, required = false)
@@ -186,20 +186,20 @@ public class FlvRecordingMetaData implements Serializable {
 		this.freeTextUserName = freeTextUserName;
 	}
 
-	public Boolean getIsAudioOnly() {
-		return isAudioOnly;
+	public boolean isAudioOnly() {
+		return audioOnly;
 	}
 
-	public void setIsAudioOnly(Boolean isAudioOnly) {
-		this.isAudioOnly = isAudioOnly;
+	public void setAudioOnly(boolean audioOnly) {
+		this.audioOnly = audioOnly;
 	}
 
-	public Boolean getIsVideoOnly() {
-		return isVideoOnly;
+	public boolean isVideoOnly() {
+		return videoOnly;
 	}
 
-	public void setIsVideoOnly(Boolean isVideoOnly) {
-		this.isVideoOnly = isVideoOnly;
+	public void setVideoOnly(boolean videoOnly) {
+		this.videoOnly = videoOnly;
 	}
 
 	public Long getInsertedBy() {
@@ -266,12 +266,12 @@ public class FlvRecordingMetaData implements Serializable {
 		this.fullWavAudioData = fullWavAudioData;
 	}
 
-	public Boolean getAudioIsValid() {
-		return audioIsValid;
+	public boolean isAudioValid() {
+		return audioValid;
 	}
 
-	public void setAudioIsValid(Boolean audioIsValid) {
-		this.audioIsValid = audioIsValid;
+	public void setAudioValid(boolean audioValid) {
+		this.audioValid = audioValid;
 	}
 
 	public Integer getInteriewPodId() {
