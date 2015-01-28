@@ -382,6 +382,8 @@ html, body {
 	width: 230px;
 }
 .file.item .errors {
+	position: absolute;
+	right: 0px;
 	background-image: url(images/script_error.png);
 	width: 16px;
 	height: 16px;
