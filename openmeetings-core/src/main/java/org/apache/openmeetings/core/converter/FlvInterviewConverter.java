@@ -134,10 +134,9 @@ public class FlvInterviewConverter extends BaseConverter implements IRecordingCo
 				File outputWav = new File(streamFolderGeneral, "one_second.wav");
 
 				// Calculate delta at beginning
-				Long deltaTimeMilliSeconds = flvRecording.getRecordEnd().getTime() - flvRecording.getRecordStart().getTime();
-				Float deltaPadding = (Float.parseFloat(deltaTimeMilliSeconds.toString()) / 1000) - 1;
+				double deltaPadding = diffSeconds(flvRecording.getRecordEnd(), flvRecording.getRecordStart());
 
-				String[] argv_full_sox = new String[] { getPathToSoX(), outputWav.getCanonicalPath(), outputFullWav, "pad", "0", deltaPadding.toString() };
+				String[] argv_full_sox = new String[] { getPathToSoX(), outputWav.getCanonicalPath(), outputFullWav, "pad", "0", "" + deltaPadding };
 
 				returnLog.add(ProcessHelper.executeScript("generateSampleAudio", argv_full_sox));
 			}
@@ -189,7 +188,7 @@ public class FlvInterviewConverter extends BaseConverter implements IRecordingCo
 									, "-pix_fmt", "yuv420p" //
 									, podPB };
 							returnLog.add(ProcessHelper.executeScript("blankFlvPod_" + pod , argsPodB));
-						
+							
 							//ffmpeg -y -i out.flv -i rec_15_stream_4_2014_07_15_20_41_03.flv -filter_complex '[0:0]setsar=1/1[sarfix];[1:0]scale=320:260,setsar=1/1[scale];[sarfix] [scale] concat=n=2:v=1:a=0 [v]' -map '[v]'  output1.flv
 							File podF = new File(streamFolder, meta.getStreamName() + "_pod_" + pod + ".flv");
 							String podP = podF.getCanonicalPath();
@@ -200,7 +199,7 @@ public class FlvInterviewConverter extends BaseConverter implements IRecordingCo
 									, "-map", "[v]" //
 									, podP };
 							returnLog.add(ProcessHelper.executeScript("shiftedFlvPod_" + pod , argsPod));
-
+	
 							pods[pod - 1] = podP;
 						} else {
 							pods[pod - 1] = path;

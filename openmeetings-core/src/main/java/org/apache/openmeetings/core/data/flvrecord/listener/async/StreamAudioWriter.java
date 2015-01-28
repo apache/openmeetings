@@ -98,8 +98,8 @@ public class StreamAudioWriter extends BaseStreamWriter {
 					metaDelta.setFlvRecordingMetaDataId(metaDataId);
 					metaDelta.setTimeStamp(0);
 					metaDelta.setDebugStatus("INIT AUDIO");
-					metaDelta.setIsStartPadding(true);
-					metaDelta.setIsEndPadding(false);
+					metaDelta.setStartPadding(true);
+					metaDelta.setEndPadding(false);
 					metaDelta.setDataLengthPacket(data.limit());
 					metaDelta.setReceivedAudioDataLength(byteCount);
 					metaDelta.setStartTime(startedSessionTimeDate);
@@ -145,9 +145,9 @@ public class StreamAudioWriter extends BaseStreamWriter {
 					metaDelta.setFlvRecordingMetaDataId(metaDataId);
 					metaDelta.setTimeStamp(timeStamp);
 					metaDelta.setDebugStatus("RUN AUDIO");
-					metaDelta.setIsStartPadding(false);
+					metaDelta.setStartPadding(false);
 					metaDelta.setLastTimeStamp(preLastTimeStamp);
-					metaDelta.setIsEndPadding(false);
+					metaDelta.setEndPadding(false);
 					metaDelta.setDataLengthPacket(data.limit());
 					metaDelta.setReceivedAudioDataLength(byteCount);
 					metaDelta.setStartTime(startedSessionTimeDate);
@@ -213,8 +213,8 @@ public class StreamAudioWriter extends BaseStreamWriter {
 			metaDelta.setFlvRecordingMetaDataId(metaDataId);
 			metaDelta.setTimeStamp(lastTimeStamp);
 			metaDelta.setDebugStatus("END AUDIO");
-			metaDelta.setIsStartPadding(false);
-			metaDelta.setIsEndPadding(true);
+			metaDelta.setStartPadding(false);
+			metaDelta.setEndPadding(true);
 			metaDelta.setDataLengthPacket(null);
 			metaDelta.setReceivedAudioDataLength(byteCount);
 			metaDelta.setStartTime(startedSessionTimeDate);

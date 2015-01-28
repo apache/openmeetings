@@ -23,7 +23,6 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.openmeetings.db.dao.record.FlvRecordingDao;
@@ -39,7 +38,6 @@ import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class FlvRecorderConverter extends BaseConverter implements IRecordingConverter {
-
 	private static final Logger log = Red5LoggerFactory.getLogger(FlvRecorderConverter.class, webAppRootKey);
 
 	// Spring loaded Beans
@@ -59,11 +57,12 @@ public class FlvRecorderConverter extends BaseConverter implements IRecordingCon
 				FFMPEG_MAP_PARAM = ".";
 			}
 
+			String finalNamePrefix = "flvRecording_" + flvRecordingId;
 			flvRecording = recordingDao.get(flvRecordingId);
 			log.debug("flvRecording " + flvRecording.getId());
 
 			List<ConverterProcessResult> returnLog = new ArrayList<ConverterProcessResult>();
-			List<String> listOfFullWaveFiles = new LinkedList<String>();
+			List<String> listOfFullWaveFiles = new ArrayList<String>();
 			File streamFolder = getStreamFolder(flvRecording);
 			
 			FlvRecordingMetaData screenMetaData = metaDataDao.getScreenMetaDataByRecording(flvRecording.getId());
@@ -81,8 +80,6 @@ public class FlvRecorderConverter extends BaseConverter implements IRecordingCon
 			stripAudioFirstPass(flvRecording, returnLog, listOfFullWaveFiles, streamFolder);
 
 			// Merge Wave to Full Length
-			String streamFolderGeneralName = getStreamsHibernateDir().getCanonicalPath() + File.separator; // FIXME
-
 			String hashFileFullName = screenMetaData.getStreamName() + "_FINAL_WAVE.wav";
 			String outputFullWav = new File(streamFolder, hashFileFullName).getCanonicalPath();
 
@@ -94,13 +91,12 @@ public class FlvRecorderConverter extends BaseConverter implements IRecordingCon
 				returnLog.add(ProcessHelper.executeScript("mergeAudioToWaves", argv_full_sox));
 			} else {
 				// create default Audio to merge it. strip to content length
-				String outputWav = streamFolderGeneralName + "one_second.wav";
+				String outputWav = new File(getStreamsHibernateDir(), "one_second.wav").getCanonicalPath();
 
 				// Calculate delta at beginning
-				Long deltaTimeMilliSeconds = flvRecording.getRecordEnd().getTime() - flvRecording.getRecordStart().getTime();
-				Float deltaPadding = (Float.parseFloat(deltaTimeMilliSeconds.toString()) / 1000) - 1;
+				double deltaPadding = diffSeconds(flvRecording.getRecordEnd(), flvRecording.getRecordStart());
 
-				String[] argv_full_sox = new String[] { getPathToSoX(), outputWav, outputFullWav, "pad", "0", deltaPadding.toString() };
+				String[] argv_full_sox = new String[] { getPathToSoX(), outputWav, outputFullWav, "pad", "0", "" + deltaPadding };
 
 				returnLog.add(ProcessHelper.executeScript("generateSampleAudio", argv_full_sox));
 			}
@@ -109,11 +105,9 @@ public class FlvRecorderConverter extends BaseConverter implements IRecordingCon
 
 			// Merge Audio with Video / Calculate resulting FLV
 
-			String inputScreenFullFlv = new File(streamFolder, screenMetaData.getStreamName() + ".flv")
-					.getCanonicalPath();
+			String inputScreenFullFlv = new File(streamFolder, screenMetaData.getStreamName() + ".flv").getCanonicalPath();
 
-			String hashFileFullNameFlv = "flvRecording_" + flvRecording.getId() + ".flv";
-			String outputFullFlv = streamFolderGeneralName + hashFileFullNameFlv;
+			File outputFullFlv = new File(getStreamsHibernateDir(), finalNamePrefix + ".flv");
 
 			// ffmpeg -vcodec flv -qscale 9.5 -r 25 -ar 22050 -ab 32k -s 320x240
 			// -i 65318fb5c54b1bc1b1bca077b493a914_28_12_2009_23_38_17_FINAL_WAVE.wav
@@ -136,7 +130,7 @@ public class FlvRecorderConverter extends BaseConverter implements IRecordingCon
 			flvRecording.setFlvHeight(flvHeight);
 
 			String[] argv_fullFLV = new String[] { getPathToFFMPEG(), "-y",//
-					"-itsoffset", formatMillis(diff(screenMetaData.getRecordStart(), screenMetaData.getFlvRecording().getRecordStart())),
+					"-itsoffset", formatMillis(diff(screenMetaData.getRecordStart(), flvRecording.getRecordStart())),
 					"-i", inputScreenFullFlv, "-i", outputFullWav, "-ar", "22050", //
 					"-acodec", "libmp3lame", //
 					"-ab", "32k", //
@@ -144,41 +138,39 @@ public class FlvRecorderConverter extends BaseConverter implements IRecordingCon
 					"-vcodec", "flashsv", //
 					"-map", "0" + FFMPEG_MAP_PARAM + "0", //
 					"-map", "1" + FFMPEG_MAP_PARAM + "0", //
-					outputFullFlv };
+					outputFullFlv.getCanonicalPath() };
 
 			returnLog.add(ProcessHelper.executeScript("generateFullFLV", argv_fullFLV));
 
-			flvRecording.setFileHash(hashFileFullNameFlv);
+			flvRecording.setFileHash(outputFullFlv.getName());
 
 			// Extract first Image for preview purpose
 			// ffmpeg -i movie.flv -vcodec mjpeg -vframes 1 -an -f rawvideo -s
 			// 320x240 movie.jpg
 
-			String hashFileFullNameJPEG = "flvRecording_" + flvRecording.getId() + ".jpg";
-			String outPutJpeg = streamFolderGeneralName + hashFileFullNameJPEG;
+			File outPutJpeg = new File(getStreamsHibernateDir(), finalNamePrefix + ".jpg");
 
-			flvRecording.setPreviewImage(hashFileFullNameJPEG);
+			flvRecording.setPreviewImage(outPutJpeg.getName());
 
 			String[] argv_previewFLV = new String[] { //
 					getPathToFFMPEG(), "-y",//
-					"-i", outputFullFlv, //
+					"-i", outputFullFlv.getCanonicalPath(), //
 					"-vcodec", "mjpeg", //
 					"-vframes", "1", "-an", //
 					"-f", "rawvideo", //
 					"-s", flvWidth + "x" + flvHeight, //
-					outPutJpeg };
+					outPutJpeg.getCanonicalPath() };
 
 			returnLog.add(ProcessHelper.executeScript("previewFullFLV", argv_previewFLV));
 
-			String alternateDownloadName = "flvRecording_" + flvRecording.getId() + ".avi";
-			String alternateDownloadFullName = streamFolderGeneralName + alternateDownloadName;
+			File alternateDownload = new File(getStreamsHibernateDir(), finalNamePrefix + ".avi");
 
-			String[] argv_alternateDownload = new String[] { getPathToFFMPEG(), "-y", "-i", outputFullFlv, "-vcodec",
-					"copy", alternateDownloadFullName };
+			String[] argv_alternateDownload = new String[] { getPathToFFMPEG(), "-y", "-i", outputFullFlv.getCanonicalPath(), "-vcodec",
+					"copy", alternateDownload.getCanonicalPath() };
 
 			returnLog.add(ProcessHelper.executeScript("alternateDownload", argv_alternateDownload));
 
-			flvRecording.setAlternateDownload(alternateDownloadName);
+			flvRecording.setAlternateDownload(alternateDownload.getName());
 
 			updateDuration(flvRecording);
 			convertToMp4(flvRecording, returnLog);

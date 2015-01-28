@@ -62,15 +62,7 @@ public class FlvRecordingMetaDataDao {
 	}
 
 	public List<FlvRecordingMetaData> getByRecording(Long recordingId) {
-		try {
-			TypedQuery<FlvRecordingMetaData> query = em.createNamedQuery("getMetaByRecording", FlvRecordingMetaData.class);
-			query.setParameter("recordingId", recordingId);
-
-			return query.getResultList();
-		} catch (Exception ex2) {
-			log.error("[getByRecording]: ", ex2);
-		}
-		return null;
+		return em.createNamedQuery("getMetaByRecording", FlvRecordingMetaData.class).setParameter("recordingId", recordingId).getResultList();
 	}
 
 	public List<FlvRecordingMetaData> getAudioMetaDataByRecording(Long recordingId) {
@@ -117,7 +109,7 @@ public class FlvRecordingMetaDataDao {
 			flvRecordingMetaData.setRecordStart(recordStart);
 
 			flvRecordingMetaData.setAudioOnly(isAudioOnly);
-			flvRecordingMetaData.setIsVideoOnly(isVideoOnly);
+			flvRecordingMetaData.setVideoOnly(isVideoOnly);
 			flvRecordingMetaData.setScreenData(isScreenData);
 
 			flvRecordingMetaData.setStreamName(streamName);

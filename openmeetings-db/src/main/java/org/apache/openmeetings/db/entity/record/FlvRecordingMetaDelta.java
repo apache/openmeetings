@@ -84,10 +84,10 @@ public class FlvRecordingMetaDelta implements IDataProviderEntity {
 	private Long receivedAudioDataLength;
 	
 	@Column(name="is_end_padding")
-	private Boolean isEndPadding;
+	private boolean endPadding;
 	
 	@Column(name="is_start_padding")
-	private Boolean isStartPadding;
+	private boolean startPadding;
 	
 	@Column(name="debug_status")
 	private String debugStatus;
@@ -176,18 +176,18 @@ public class FlvRecordingMetaDelta implements IDataProviderEntity {
 		this.currentTime = currentTime;
 	}
 	
-	public Boolean getIsEndPadding() {
-		return isEndPadding;
+	public boolean isEndPadding() {
+		return endPadding;
 	}
-	public void setIsEndPadding(Boolean isEndPadding) {
-		this.isEndPadding = isEndPadding;
+	public void setEndPadding(boolean endPadding) {
+		this.endPadding = endPadding;
 	}
 	
-	public Boolean getIsStartPadding() {
-		return isStartPadding;
+	public boolean isStartPadding() {
+		return startPadding;
 	}
-	public void setIsStartPadding(Boolean isStartPadding) {
-		this.isStartPadding = isStartPadding;
+	public void setStartPadding(boolean startPadding) {
+		this.startPadding = startPadding;
 	}
 	
 	public String getDebugStatus() {
