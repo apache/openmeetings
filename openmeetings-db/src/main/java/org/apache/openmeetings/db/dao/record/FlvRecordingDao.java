@@ -255,7 +255,11 @@ public class FlvRecordingDao {
 	}
 
 	public void resetProcessingStatus() {
-		em.createNamedQuery("resetRecordingProcessingStatus").setParameter("error", Status.ERROR).setParameter("processing", Status.PROCESSING).executeUpdate();
+		em.createNamedQuery("resetRecordingProcessingStatus")
+			.setParameter("error", Status.ERROR)
+			.setParameter("recording", Status.RECORDING)
+			.setParameter("converting", Status.CONVERTING)
+			.executeUpdate();
 	}
 	
 	public RecordingContainerData getRecordingContainerData(long userId) {

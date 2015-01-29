@@ -102,6 +102,8 @@ public class FlvInterviewConverter extends BaseConverter implements IRecordingCo
 		try {
 			flvRecording = recordingDao.get(flvRecordingId);
 			log.debug("flvRecording " + flvRecording.getId());
+			flvRecording.setStatus(FlvRecording.Status.CONVERTING);
+			flvRecording = recordingDao.update(flvRecording);
 
 			List<ConverterProcessResult> returnLog = new ArrayList<ConverterProcessResult>();
 			List<String> listOfFullWaveFiles = new LinkedList<String>();

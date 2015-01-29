@@ -121,6 +121,8 @@ public class ActivitiesPanel extends BasePanel {
 					text = String.format("%s %s %s [%s]", u.getFirstname(), u.getLastname(), WebSession.getString(1367), df.get().format(a.getCreated()));
 				}
 					break;
+				case askModeration:
+					break;
 			}
 			item.add(new Label("text", text));
 		}

@@ -118,7 +118,7 @@ public abstract class ConnectionPropertiesPatcher {
 	protected static void patchProp(String[] tokens, int idx, String name, String value) {
 		String prop = tokens[idx].trim();
 		if (prop.startsWith(name)) {
-			prop = name + "=" + StringEscapeUtils.escapeXml(value);
+			prop = name + "=" + StringEscapeUtils.escapeXml10(value);
 			tokens[idx] = prop;
 		}
 	}

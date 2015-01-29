@@ -24,7 +24,6 @@ import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.getClientTimeZone;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;

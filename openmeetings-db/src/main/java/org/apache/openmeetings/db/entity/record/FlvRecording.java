@@ -79,7 +79,7 @@ import org.simpleframework.xml.Root;
 	, @NamedQuery(name = "getRecordingsByOwner", query = "SELECT f FROM FlvRecording f WHERE f.deleted = false AND f.ownerId = :ownerId "
 			+ "AND (f.parentItemId IS NULL OR f.parentItemId = 0) "
 			+ "ORDER BY f.type DESC, f.inserted")
-	, @NamedQuery(name = "resetRecordingProcessingStatus", query = "UPDATE FlvRecording f SET f.status = :error WHERE f.status = :processing")
+	, @NamedQuery(name = "resetRecordingProcessingStatus", query = "UPDATE FlvRecording f SET f.status = :error WHERE f.status IN (:recording, :converting)")
 	, @NamedQuery(name = "getRecordingsAll", query = "SELECT c FROM FlvRecording c LEFT JOIN FETCH c.flvRecordingMetaData ORDER BY c.id")
 	, @NamedQuery(name = "getRecordingsByExternalRoomTypeAndOwner", query = "SELECT c FROM FlvRecording c, Room r WHERE c.roomId = r.id "
 			+ "AND r.externalRoomType LIKE :externalRoomType AND c.insertedBy LIKE :insertedBy AND c.deleted = false")
@@ -103,7 +103,8 @@ public class FlvRecording extends FileItem {
 	@XmlType(namespace="org.apache.openmeetings.record")
 	public enum Status {
 		NONE
-		, PROCESSING
+		, RECORDING
+		, CONVERTING
 		, PROCESSED
 		, ERROR
 	}

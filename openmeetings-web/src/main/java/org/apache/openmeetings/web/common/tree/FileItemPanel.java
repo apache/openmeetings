@@ -40,7 +40,7 @@ public class FileItemPanel extends FolderPanel {
 		if (model.getObject() instanceof FlvRecording) {
 			FlvRecording r = (FlvRecording)model.getObject();
 			long errorCount = getBean(FlvRecordingLogDao.class).countErrors(r.getId());
-			boolean visible = errorCount != 0 || (Status.PROCESSING != r.getStatus() && !isRecordingExists(r.getFileHash() + MP4_EXTENSION));
+			boolean visible = errorCount != 0 || (Status.RECORDING != r.getStatus() && Status.CONVERTING != r.getStatus() && !isRecordingExists(r.getFileHash() + MP4_EXTENSION));
 			errors.add(new AjaxEventBehavior("click") {
 				private static final long serialVersionUID = 1L;
 	

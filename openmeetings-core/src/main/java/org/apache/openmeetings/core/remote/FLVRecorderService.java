@@ -42,7 +42,6 @@ import org.apache.openmeetings.db.entity.record.FlvRecording;
 import org.apache.openmeetings.db.entity.record.FlvRecordingMetaData;
 import org.apache.openmeetings.db.entity.record.FlvRecordingMetaData.Status;
 import org.apache.openmeetings.db.entity.room.Client;
-import org.apache.openmeetings.db.util.AuthLevelUtil;
 import org.apache.openmeetings.util.CalendarPatterns;
 import org.red5.logging.Red5LoggerFactory;
 import org.red5.server.api.IConnection;
@@ -125,7 +124,7 @@ public class FLVRecorderService implements IPendingServiceCallback {
 			flvRecording.setHeight(currentClient.getVHeight());
 
 			flvRecording.setOwnerId(currentClient.getUser_id());
-			flvRecording.setStatus(FlvRecording.Status.PROCESSING);
+			flvRecording.setStatus(FlvRecording.Status.RECORDING);
 			flvRecording = recordingDao.update(flvRecording);
 			// Receive flvRecordingId
 			Long flvRecordingId = flvRecording.getId();

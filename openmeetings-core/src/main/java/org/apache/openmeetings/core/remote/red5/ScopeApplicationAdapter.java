@@ -856,9 +856,6 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 		try {
 			log.debug("-----------  removeModerator: " + publicSID);
 
-			IConnection current = Red5.getConnectionLocal();
-			// String streamid = current.getClient().getId();
-
 			Client currentClient = sessionManager.getClientByPublicSID(publicSID, false, null);
 
 			if (currentClient == null) {

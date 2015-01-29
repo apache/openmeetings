@@ -18,7 +18,6 @@
  */
 package org.apache.openmeetings.web.admin.connection;
 
-import static java.lang.Boolean.TRUE;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.getSid;
 
