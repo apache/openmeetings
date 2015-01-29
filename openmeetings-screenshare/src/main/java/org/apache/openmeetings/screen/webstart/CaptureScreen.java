@@ -106,7 +106,7 @@ class CaptureScreen extends Thread {
 			}
 
 			timeBetweenFrames = 1000 / FPS;
-			se = new ScreenV1Encoder(5 * FPS); //send keyframe every 5 seconds
+			se = new ScreenV1Encoder(3 * FPS); //send keyframe every 3 seconds
 			timeCaptureStarted = System.currentTimeMillis();
 
 			JobDetail encodeJob = JobBuilder.newJob(EncodeJob.class).withIdentity("EncodeJob", "ScreenShare").build();
