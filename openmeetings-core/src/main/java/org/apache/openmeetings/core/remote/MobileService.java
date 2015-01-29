@@ -204,6 +204,7 @@ public class MobileService {
 		c.setIsBroadcasting(true);
 		sessionManager.updateClientByStreamId(c.getStreamid(), c, false, null);
 		result.put("broadcastId", broadcastId);
+		result.put("publicSid", c.getPublicSID());
 
 		scopeAdapter.syncMessageToCurrentScope("addNewUser", c, false, false);
 		return result;
