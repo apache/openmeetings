@@ -880,8 +880,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 		try {
 			log.debug("-----------  setBroadCastingFlag: " + publicSID);
 
-
-            Client currentClient = sessionManager.getClientByPublicSID(publicSID, false, null);
+			Client currentClient = sessionManager.getClientByPublicSID(publicSID, false, null);
 
 			if (currentClient == null) {
 				return -1L;
@@ -890,8 +889,8 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 			currentClient.setIsBroadcasting(value);
 			currentClient.setInterviewPodId(interviewPodId);
 
-            // Put the mod-flag to true for this client
-		    sessionManager.updateClientByStreamId(currentClient.getStreamid(), currentClient, false, null);
+			// Put the mod-flag to true for this client
+			sessionManager.updateClientByStreamId(currentClient.getStreamid(), currentClient, false, null);
 		    
 			// Notify all clients of the same scope (room)
 		    syncMessageToCurrentScope("setNewBroadCastingFlag", currentClient, true);
@@ -967,25 +966,25 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 		return 0L;
 	}
 
-    public synchronized Boolean getMicMutedByPublicSID(String publicSID) {
-        try {
+	public synchronized Boolean getMicMutedByPublicSID(String publicSID) {
+		try {
 			Client currentClient = this.sessionManager.getClientByPublicSID(publicSID, false, null);
 			if (currentClient == null) {
 				return true;
 			}
 
 			//Put the mod-flag to true for this client
-            Boolean muted = currentClient.getMicMuted();
-            if (null == muted) {
-                muted = true;
-            }
+			Boolean muted = currentClient.getMicMuted();
+			if (null == muted) {
+				muted = true;
+			}
 
-            return muted;
-        } catch (Exception err) {
+			return muted;
+		} catch (Exception err) {
 			log.error("[getMicMutedByPublicSID]",err);
 		}
 		return true;
-    }
+	}
 
 	/**
 	 * Invoked by a User whenever he want to become moderator this is needed,
@@ -2213,19 +2212,8 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 			Map<String, String> interviewStatus = new HashMap<String, String>();
 			interviewStatus.put("action", "stop");
 
-			for (IConnection conn : currentScope.getClientConnections()) {
-				if (conn != null) {
-					IClient client = conn.getClient();
-					if (SessionVariablesUtil.isScreenClient(client)) {
-						// screen sharing clients do not receive events
-						continue;
-					} else if (SessionVariablesUtil.isAVClient(client)) {
-						// AVClients or potential AVClients do not receive events
-						continue;
-					}
-					((IServiceCapableConnection) conn).invoke("interviewStatus", new Object[] { interviewStatus }, this);
-				}
-			}
+			syncMessageToCurrentScope("interviewStatus", interviewStatus, true);
+			syncMessageToCurrentScope("stopRecordingMessage", currentClient, true);
 			return true;
 
 		} catch (Exception err) {
