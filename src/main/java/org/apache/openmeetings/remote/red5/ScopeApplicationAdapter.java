@@ -193,7 +193,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 
 	public synchronized Map<String, String> screenSharerAction(Map<String, Object> map) {
 		try {
-			log.debug("-----------  screenSharerAction");
+			log.debug("-----------  screenSharerAction ENTER");
 			IConnection current = Red5.getConnectionLocal();
 
 			Client rc = sessionManager.getClientByStreamId(current.getClient().getId(), null);
@@ -203,39 +203,49 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 			if (rc != null) {
 				boolean changed = false;
 				if (Boolean.valueOf("" + map.get("stopStreaming")) && rc.isStartStreaming()) {
+					log.debug("-----------  screenSharerAction:: stopStreaming ENTER");
 					changed = true;
 					rc.setStartStreaming(false);
 					//Send message to all users
 					syncMessageToCurrentScope("stopScreenSharingMessage", rc, false);
 					
 					returnMap.put("result", "stopSharingOnly");
+					log.debug("-----------  screenSharerAction:: stopStreaming EXIT");
 				}
 				if (Boolean.valueOf("" + map.get("stopRecording")) && rc.getIsRecording()) {
+					log.debug("-----------  screenSharerAction:: stopRecording ENTER");
 					changed = true;
 					rc.setStartRecording(false);
 					rc.setIsRecording(false);
 					
 					returnMap.put("result", "stopRecordingOnly");
 					//Send message to all users
+					log.debug("-----------  screenSharerAction:: stopRecording ->syncMessage");
 					syncMessageToCurrentScope("stopRecordingMessage", rc, false);
 
+					log.debug("-----------  screenSharerAction:: stopRecording ->stopRecordAndSave");
 					flvRecorderService.stopRecordAndSave(current.getScope(), rc, null);
+					log.debug("-----------  screenSharerAction:: stopRecording EXIT");
 				}
 				if (Boolean.valueOf("" + map.get("stopPublishing")) && rc.isScreenPublishStarted()) {
+					log.debug("-----------  screenSharerAction:: stopPublishing ENTER");
 					changed = true;
 					rc.setScreenPublishStarted(false);
 					returnMap.put("result", "stopPublishingOnly");
 					
 					//Send message to all users
 					syncMessageToCurrentScope("stopPublishingMessage", rc, false);
+					log.debug("-----------  screenSharerAction:: stopPublishing EXIT");
 				}
 				
 				if (changed) {
+					log.debug("-----------  screenSharerAction:: changed ENTER");
 					sessionManager.updateClientByStreamId(rc.getStreamid(), rc, false, null);
 					
 					if (!rc.isStartStreaming() && !rc.isStartRecording() && !rc.isStreamPublishStarted()) {
 						returnMap.put("result", "stopAll");
 					}
+					log.debug("-----------  screenSharerAction:: changed EXIT");
 				}
 			}
 			log.debug("-----------  screenSharerAction, return: " + returnMap);
