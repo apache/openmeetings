@@ -125,6 +125,12 @@ public class InstallWizard extends Wizard {
 		return bBar.replace(finish).setOutputMarkupId(true);
 	}
 	
+	@Override
+	protected void onDetach() {
+		model.detach();
+		super.onDetach();
+	}
+	
 	private abstract class BaseStep extends DynamicWizardStep {
 		private static final long serialVersionUID = 1L;
 
@@ -416,6 +422,12 @@ public class InstallWizard extends Wizard {
 			super(id);
 			propModel = InstallWizard.this.model.bind("cfg." + id);
 			setModel(new PropertyModel<T>(this, "option"));
+		}
+		
+		@Override
+		protected void onDetach() {
+			propModel.detach();
+			super.onDetach();
 		}
 	}
 	

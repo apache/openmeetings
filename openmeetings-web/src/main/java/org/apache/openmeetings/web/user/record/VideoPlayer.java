@@ -73,6 +73,12 @@ public class VideoPlayer extends Panel {
 		return this;
 	}
 	
+	@Override
+	protected void onDetach() {
+		playerModel.detach();
+		super.onDetach();
+	}
+	
 	private static class OmHtml5Video extends Html5Video {
 		private static final long serialVersionUID = 1L;
 		Long recId = null;

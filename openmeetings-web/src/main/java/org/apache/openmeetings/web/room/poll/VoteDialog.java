@@ -126,6 +126,11 @@ public class VoteDialog extends AbstractFormDialog<RoomPollAnswer> {
 		RoomPanel.broadcast(new RoomMessage(roomId, getUserId(), RoomMessage.Type.voted));
 	}
 	
+	@Override
+	protected void onDetach() {
+		user.detach();
+		super.onDetach();
+	}
 	private class PollAnswerForm extends Form<RoomPollAnswer> {
 		private static final long serialVersionUID = 1L;
 		private final WebMarkupContainer typeBool = new WebMarkupContainer("typeBool");

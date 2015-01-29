@@ -166,4 +166,12 @@ public abstract class FileTreePanel extends Panel {
 	public abstract void createFolder(String name);
 
 	public abstract void updateSizes();
+	
+	@Override
+	protected void onDetach() {
+		selectedFile.detach();
+		homeSize.detach();
+		publicSize.detach();
+		super.onDetach();
+	}
 }

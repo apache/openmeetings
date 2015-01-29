@@ -619,4 +619,10 @@ public class MessagesContactsPanel extends UserPanel {
 		});
 	}
 
+	@Override
+	protected void onDetach() {
+		foldersModel.detach();
+		selectedFolderModel.detach();
+		super.onDetach();
+	}
 }

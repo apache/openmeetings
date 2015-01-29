@@ -50,8 +50,7 @@ public class ServerForm extends AdminBaseForm<Server> {
 	private final WebMarkupContainer listContainer;
 	private static final long serialVersionUID = 1L;
 
-	public ServerForm(String id, WebMarkupContainer listContainer,
-			final Server server) {
+	public ServerForm(String id, WebMarkupContainer listContainer, final Server server) {
 		super(id, new CompoundPropertyModel<Server>(server));
 		setOutputMarkupId(true);
 		this.listContainer = listContainer;
@@ -79,10 +78,8 @@ public class ServerForm extends AdminBaseForm<Server> {
 
 	@Override
 	protected void onSaveSubmit(AjaxRequestTarget target, Form<?> form) {
-		Application.getBean(ServerDao.class).update(getModelObject(),
-				WebSession.getUserId());
-		Server server = Application.getBean(ServerDao.class).get(
-				getModelObject().getId());
+		Application.getBean(ServerDao.class).update(getModelObject(), WebSession.getUserId());
+		Server server = Application.getBean(ServerDao.class).get(getModelObject().getId());
 		setModelObject(server);
 		hideNewRecord();
 		target.add(this);
@@ -104,8 +101,7 @@ public class ServerForm extends AdminBaseForm<Server> {
 	protected void onRefreshSubmit(AjaxRequestTarget target, Form<?> form) {
 		Server server = getModelObject();
 		if (server.getId() > 0) {
-			server = Application.getBean(ServerDao.class).get(
-					server.getId());
+			server = Application.getBean(ServerDao.class).get(server.getId());
 		} else {
 			server = new Server();
 		}
@@ -116,8 +112,7 @@ public class ServerForm extends AdminBaseForm<Server> {
 
 	@Override
 	protected void onDeleteSubmit(AjaxRequestTarget target, Form<?> form) {
-		Application.getBean(ServerDao.class).delete(getModelObject(),
-				WebSession.getUserId());
+		Application.getBean(ServerDao.class).delete(getModelObject(), WebSession.getUserId());
 		this.setModelObject(new Server());
 		target.add(listContainer);
 		target.add(this);

@@ -77,8 +77,7 @@ public class RoomsPanel extends UserPanel {
 					}
 				}));
 				roomContainer.add(new Label("roomName", r.getName()));
-				final IModel<Integer> curUsersModel = new Model<Integer>(Application.getBean(ISessionManager.class).getClientListByRoom(r.getId()).size()); 
-				final Label curUsers = new Label("curUsers", curUsersModel);
+				final Label curUsers = new Label("curUsers", new Model<Integer>(Application.getBean(ISessionManager.class).getClientListByRoom(r.getId()).size()));
 				roomContainer.add(curUsers.setOutputMarkupId(true));
 				roomContainer.add(new Label("totalUsers", r.getNumberOfPartizipants()));
 				item.add(new Button("enter").add(new RoomEnterBehavior(r.getId())));
@@ -88,9 +87,7 @@ public class RoomsPanel extends UserPanel {
 					@Override
 					public void onClick(AjaxRequestTarget target) {
 						roomId = r.getId();
-						curUsersModel.setObject(Application.getBean(ISessionManager.class).getClientListByRoom(r.getId()).size());
-						target.add(curUsers);
-						updateRoomDetails(target);
+						target.add(curUsers.setDefaultModelObject(Application.getBean(ISessionManager.class).getClientListByRoom(r.getId()).size()));						updateRoomDetails(target);
 					}
 				});
 			}
@@ -155,5 +152,13 @@ public class RoomsPanel extends UserPanel {
 		roomName.setObject(room.getName());
 		roomComment.setObject(room.getComment());
 		target.add(clientsContainer, details);
+	}
+	
+	@Override
+	protected void onDetach() {
+		roomID.detach();
+		roomName.detach();
+		roomComment.detach();
+		super.onDetach();
 	}
 }

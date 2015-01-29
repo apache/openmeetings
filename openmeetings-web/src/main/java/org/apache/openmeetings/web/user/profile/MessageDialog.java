@@ -230,4 +230,12 @@ public class MessageDialog extends AbstractFormDialog<PrivateMessage> {
 			}
 		}
 	}
+	
+	@Override
+	protected void onDetach() {
+		modelEnd.detach();
+		modelStart.detach();
+		modelTo.detach();
+		super.onDetach();
+	}
 }

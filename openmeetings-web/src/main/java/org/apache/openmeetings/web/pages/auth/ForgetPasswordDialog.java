@@ -130,6 +130,12 @@ public class ForgetPasswordDialog extends AbstractFormDialog<String> {
 					}
 				}
 			}
+			
+			@Override
+			protected void onDetach() {
+				lblModel.detach();
+				super.onDetach();
+			}
 		});
 		confirmDialog = new MessageDialog("confirmDialog", WebSession.getString(312), WebSession.getString(321), DialogButtons.OK, DialogIcon.INFO){
 			private static final long serialVersionUID = 1L;

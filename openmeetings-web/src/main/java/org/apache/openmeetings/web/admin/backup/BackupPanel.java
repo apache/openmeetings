@@ -201,6 +201,11 @@ public class BackupPanel extends AdminPanel {
 			add(new Label("cmdLineDesc", WebSession.getString(1505)).setEscapeModelStrings(false));
 		}
 
+		@Override
+		protected void onDetach() {
+			includeFilesInBackup.detach();
+			super.onDetach();
+		}
 		private class BackupProcess implements Runnable {
 			private BackupExport backup;
 			private File backupDir;

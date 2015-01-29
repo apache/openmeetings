@@ -363,5 +363,12 @@ public class PollResultsDialog extends AbstractDialog<RoomPoll> {
 			Chart<?> chart = SIMPLE_CHART.equals(chartType.getModelObject()) ? barChart(poll) : pieChart(poll);
 			target.appendJavaScript(getScript(chart));
 		}
+		
+		@Override
+		protected void onDetach() {
+			name.detach();
+			count.detach();
+			super.onDetach();
+		}
 	}
 }

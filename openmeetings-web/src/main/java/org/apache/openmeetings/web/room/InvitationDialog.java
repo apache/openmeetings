@@ -301,4 +301,14 @@ public class InvitationDialog extends AbstractFormDialog<Invitation> {
 			}
 		}
 	}
+	
+	@Override
+	protected void onDetach() {
+		subject.detach();
+		message.detach();
+		tzId.detach();
+		lang.detach();
+		modelTo.detach();
+		super.onDetach();
+	}
 }

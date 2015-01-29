@@ -383,4 +383,10 @@ public class RoomForm extends AdminBaseForm<Room> {
 		updateClients(target);
 		target.appendJavaScript("omRoomPanelInit();");
 	}
+	
+	@Override
+	protected void onDetach() {
+		moderator2add.detach();
+		super.onDetach();
+	}
 }

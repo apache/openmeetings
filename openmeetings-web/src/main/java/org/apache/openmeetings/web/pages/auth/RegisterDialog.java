@@ -211,6 +211,11 @@ public class RegisterDialog extends AbstractFormDialog<String> {
 
 	}
 
+	@Override
+	protected void onDetach() {
+		tzModel.detach();
+		super.onDetach();
+	}
 	class RegisterForm extends StatelessForm<Void> {
 		private static final long serialVersionUID = 1L;
 		private PasswordTextField confirmPassword;

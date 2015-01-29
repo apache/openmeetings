@@ -166,4 +166,10 @@ public class FileItemTree<T extends FileItem> extends DefaultNestedTree<T> {
 			selectedItem.setObject(null);
 		}
 	}
+	
+	@Override
+	protected void onDetach() {
+		selectedItem.detach();
+		super.onDetach();
+	}
 }

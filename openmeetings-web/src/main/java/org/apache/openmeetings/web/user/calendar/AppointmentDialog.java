@@ -215,6 +215,12 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 		return object.getOwner() != null && getUserId() == object.getOwner().getId();
 	}
 	
+	@Override
+	protected void onDetach() {
+		attendeesModel.detach();
+		super.onDetach();
+	}
+	
 	private class AppointmentForm extends Form<Appointment> {
 		private static final long serialVersionUID = 1L;
 		private boolean createRoom = true;
