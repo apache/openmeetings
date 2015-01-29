@@ -135,6 +135,8 @@ public class MobileService {
 					add(map, "email", c.getEmail());
 					add(map, "avsettings", c.getAvsettings());
 					add(map, "interviewPodId", c.getInterviewPodId());
+					add(map, "vWidth", c.getVWidth());
+					add(map, "vHeight", c.getVHeight());
 					result.add(map);
 				}
 			}
