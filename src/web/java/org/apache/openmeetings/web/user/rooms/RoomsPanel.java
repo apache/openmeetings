@@ -20,6 +20,8 @@ package org.apache.openmeetings.web.user.rooms;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 
 import org.apache.openmeetings.db.dao.room.RoomDao;
@@ -46,7 +48,7 @@ import org.apache.wicket.util.io.IOUtils;
 import com.googlecode.wicket.jquery.ui.form.button.Button;
 
 public class RoomsPanel extends UserPanel {
-	private static final long serialVersionUID = -892281210307880052L;
+	private static final long serialVersionUID = 1L;
 	private final WebMarkupContainer clientsContainer = new WebMarkupContainer("clientsContainer");
 	private final WebMarkupContainer details = new WebMarkupContainer("details");
 	private final ListView<Client> clients;
@@ -59,7 +61,7 @@ public class RoomsPanel extends UserPanel {
 	public RoomsPanel(String id, List<Room> rooms) {
 		super(id);
 		add(new ListView<Room>("list", rooms) {
-			private static final long serialVersionUID = 9189085478336224890L;
+			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected void populateItem(ListItem<Room> item) {
@@ -75,19 +77,17 @@ public class RoomsPanel extends UserPanel {
 					}
 				}));
 				roomContainer.add(new Label("roomName", r.getName()));
-				final IModel<Integer> curUsersModel = new Model<Integer>(Application.getBean(ISessionManager.class).getClientListByRoom(r.getRooms_id()).size()); 
-				final Label curUsers = new Label("curUsers", curUsersModel);
+				final Label curUsers = new Label("curUsers", new Model<Integer>(Application.getBean(ISessionManager.class).getClientListByRoom(r.getRooms_id()).size()));
 				roomContainer.add(curUsers.setOutputMarkupId(true));
 				roomContainer.add(new Label("totalUsers", r.getNumberOfPartizipants()));
 				item.add(new Button("enter").add(new RoomEnterBehavior(r.getRooms_id())));
 				roomContainer.add(new AjaxLink<Void>("refresh") {
-					private static final long serialVersionUID = -3426813755917489787L;
+					private static final long serialVersionUID = 1L;
 
 					@Override
 					public void onClick(AjaxRequestTarget target) {
 						roomId = r.getRooms_id();
-						curUsersModel.setObject(Application.getBean(ISessionManager.class).getClientListByRoom(r.getRooms_id()).size());
-						target.add(curUsers);
+						target.add(curUsers.setDefaultModelObject(Application.getBean(ISessionManager.class).getClientListByRoom(r.getRooms_id()).size()));
 						updateRoomDetails(target);
 					}
 				});
@@ -123,9 +123,17 @@ public class RoomsPanel extends UserPanel {
 							uri = Application.getBean(UserDao.class).get(userId > 0 ? userId : -userId).getPictureuri();
 						}
 						File img = OmFileHelper.getUserProfilePicture(userId, uri);
+						InputStream is = null;
 						try {
-							return IOUtils.toByteArray(new FileInputStream(img));
+							is = new FileInputStream(img);
+							return IOUtils.toByteArray(is);
 						} catch (Exception e) {
+						} finally {
+							if (is != null) {
+								try {
+									is.close();
+								} catch (IOException e) {}
+							}
 						}
 						return null;
 					}
@@ -145,5 +153,13 @@ public class RoomsPanel extends UserPanel {
 		roomName.setObject(room.getName());
 		roomComment.setObject(room.getComment());
 		target.add(clientsContainer, details);
+	}
+	
+	@Override
+	protected void onDetach() {
+		roomID.detach();
+		roomName.detach();
+		roomComment.detach();
+		super.onDetach();
 	}
 }

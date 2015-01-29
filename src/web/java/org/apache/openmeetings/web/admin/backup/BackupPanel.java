@@ -45,7 +45,6 @@ import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.markup.html.form.upload.FileUploadField;
-import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.util.lang.Bytes;
 import org.apache.wicket.util.resource.FileResourceStream;
@@ -53,8 +52,10 @@ import org.apache.wicket.util.time.Duration;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 
+import com.googlecode.wicket.jquery.core.Options;
 import com.googlecode.wicket.jquery.ui.widget.progressbar.ProgressBar;
 
+import com.googlecode.wicket.kendo.ui.panel.KendoFeedbackPanel;
 /**
  * Panel component to manage Backup Import/Export
  * 
@@ -66,8 +67,7 @@ public class BackupPanel extends AdminPanel {
 
 	private static final long serialVersionUID = -1L;
 
-	// Create feedback panels
-	final FeedbackPanel uploadFeedback;
+	private final KendoFeedbackPanel feedback = new KendoFeedbackPanel("feedback", new Options("button", true));
 
 	/**
 	 * Form to handle upload files
@@ -128,13 +128,13 @@ public class BackupPanel extends AdminPanel {
 						, "Openmeetings - " + dateString).start();
 
 					// repaint the feedback panel so that it is hidden
-					target.add(uploadFeedback, progressBar.setVisible(true));
+					target.add(feedback, progressBar.setVisible(true));
 				}
 
 				@Override
 				protected void onError(AjaxRequestTarget target, Form<?> form) {
 					// repaint the feedback panel so errors are shown
-					target.add(uploadFeedback);
+					target.add(feedback);
 				}
 			});
 			add(timer = new AbstractAjaxTimerBehavior(Duration.ONE_SECOND) {
@@ -150,8 +150,8 @@ public class BackupPanel extends AdminPanel {
 						timer.stop(target);
 						//TODO change text, localize
 						progressBar.setVisible(false);
-						uploadFeedback.error(th);
-						target.add(uploadFeedback);
+						feedback.error(th);
+						target.add(feedback);
 					} else {
 						progressBar.setModelObject(progressHolder.getProgress());
 						progressBar.refresh(target);
@@ -180,28 +180,34 @@ public class BackupPanel extends AdminPanel {
 					FileUpload upload = fileUploadField.getFileUpload();
 					try {
 						if (upload == null || upload.getInputStream() == null) {
-							uploadFeedback.error("File is empty");
-							target.add(uploadFeedback);
+							feedback.error("File is empty");
+							target.add(feedback);
 							return;
 						}
 						getBean(BackupImport.class).performImport(upload.getInputStream());
 					} catch (Exception e) {
 						log.error("Exception on panel backup upload ", e);
-						uploadFeedback.error(e);
+						feedback.error(e);
 					}
 					// repaint the feedback panel so that it is hidden
-					target.add(uploadFeedback);
+					target.add(feedback);
 				}
 
 				@Override
 				protected void onError(AjaxRequestTarget target) {
 					// repaint the feedback panel so errors are shown
-					target.add(uploadFeedback);
+					target.add(feedback);
 				}
 			}));
 			add(new Label("cmdLineDesc", WebSession.getString(1505)).setEscapeModelStrings(false));
 		}
 
+		@Override
+		protected void onDetach() {
+			includeFilesInBackup.detach();
+			super.onDetach();
+		}
+		
 		private class BackupProcess implements Runnable {
 			private BackupExport backup;
 			private File backupDir;
@@ -230,11 +236,7 @@ public class BackupPanel extends AdminPanel {
 	public BackupPanel(String id) {
 		super(id);
 
-		// Create feedback panels
-		uploadFeedback = new FeedbackPanel("uploadFeedback");
-		// Set Id so that it can be replaced dynamically
-		uploadFeedback.setOutputMarkupId(true);
-		add(uploadFeedback);
+		add(feedback);
 
 		BackupForm backupForm = new BackupForm("backupUpload");
 

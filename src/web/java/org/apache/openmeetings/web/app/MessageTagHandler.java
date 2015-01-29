@@ -35,8 +35,7 @@ import org.apache.wicket.markup.parser.filter.WicketMessageTagHandler;
 import org.apache.wicket.markup.resolver.IComponentResolver;
 import org.apache.wicket.util.string.Strings;
 
-public class MessageTagHandler extends AbstractMarkupFilter implements
-		IComponentResolver {
+public class MessageTagHandler extends AbstractMarkupFilter implements IComponentResolver {
 	/** */
 	private static final long serialVersionUID = 1L;
 

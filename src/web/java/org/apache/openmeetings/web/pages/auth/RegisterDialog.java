@@ -66,7 +66,7 @@ import com.googlecode.wicket.jquery.ui.widget.dialog.DialogIcon;
 import com.googlecode.wicket.jquery.ui.widget.dialog.MessageDialog;
 
 public class RegisterDialog extends AbstractFormDialog<String> {
-	private static final long serialVersionUID = -8333305491376538792L;
+	private static final long serialVersionUID = 1L;
 	private static final Logger log = Red5LoggerFactory.getLogger(MainPage.class, webAppRootKey);
 	private DialogButton cancelBtn = new DialogButton(WebSession.getString(122));
 	private String registerLbl = WebSession.getString(121);
@@ -211,8 +211,14 @@ public class RegisterDialog extends AbstractFormDialog<String> {
 
 	}
 
+	@Override
+	protected void onDetach() {
+		tzModel.detach();
+		super.onDetach();
+	}
+	
 	class RegisterForm extends StatelessForm<Void> {
-		private static final long serialVersionUID = 1701373326213602431L;
+		private static final long serialVersionUID = 1L;
 		private PasswordTextField confirmPassword;
 		private PasswordTextField passwordField;
 		private RequiredTextField<String> emailField;
@@ -255,7 +261,7 @@ public class RegisterDialog extends AbstractFormDialog<String> {
 					getBean(StateDao.class).getStates(), new ChoiceRenderer<State>("name", "state_id")));
 			stateField.setRequired(true).setLabel(Model.of(WebSession.getString(120)));
 			add(new AjaxButton("submit") { // FAKE button so "submit-on-enter" works as expected
-				private static final long serialVersionUID = -3612671587183668912L;
+				private static final long serialVersionUID = 1L;
 
 				@Override
 				protected void onSubmit(AjaxRequestTarget target, Form<?> form) {

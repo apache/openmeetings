@@ -410,7 +410,7 @@ public class MessagesContactsPanel extends UserPanel {
 			}
 		};
 		PagedEntityListPanel navigator = new PagedEntityListPanel("navigator", dv) {
-			private static final long serialVersionUID = 5097048616003411362L;
+			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected void onEvent(AjaxRequestTarget target) {
@@ -553,7 +553,7 @@ public class MessagesContactsPanel extends UserPanel {
 				}
 				item.add(new Label("name", getName(uc)));	
 				item.add(new WebMarkupContainer("accept").add(new AjaxEventBehavior("onclick") {
-					private static final long serialVersionUID = 7223188816617664993L;
+					private static final long serialVersionUID = 1L;
 
 					@Override
 					protected void onEvent(AjaxRequestTarget target) {
@@ -618,4 +618,10 @@ public class MessagesContactsPanel extends UserPanel {
 		});
 	}
 
+	@Override
+	protected void onDetach() {
+		foldersModel.detach();
+		selectedFolderModel.detach();
+		super.onDetach();
+	}
 }

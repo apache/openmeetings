@@ -223,6 +223,12 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 		return object.getOwner() != null && getUserId() == object.getOwner().getUser_id();
 	}
 	
+	@Override
+	protected void onDetach() {
+		attendeesModel.detach();
+		super.onDetach();
+	}
+	
 	private class AppointmentForm extends Form<Appointment> {
 		private static final long serialVersionUID = 1L;
 		private boolean createRoom = true;
@@ -284,7 +290,6 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 		public AppointmentForm(String id, CompoundPropertyModel<Appointment> model) {
 			super(id, model);
 			setOutputMarkupId(true);
-			add(new AttributeAppender("class", new Model<String>("appointmentPopUp"), " "));
 			
 			add(feedback.setOutputMarkupId(true));
 			add(new RequiredTextField<String>("title").setLabel(Model.of(WebSession.getString(572))));

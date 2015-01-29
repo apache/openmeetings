@@ -279,6 +279,14 @@ public class RecordingsPanel extends UserPanel {
 		}
 	}
 	
+	@Override
+	protected void onDetach() {
+		rm.detach();
+		homeSize.detach();
+		publicSize.detach();
+		super.onDetach();
+	}
+	
 	class MyRecordingTreeProvider extends RecordingTreeProvider {
 		private static final long serialVersionUID = 1L;
 
@@ -349,6 +357,5 @@ public class RecordingsPanel extends UserPanel {
 			// TODO LDM should be used
 			return Model.of(object);
 		}
-		
 	}
 }

@@ -65,6 +65,7 @@ import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.apache.wicket.util.string.Strings;
 
 import com.googlecode.wicket.jquery.core.JQueryBehavior;
 import com.googlecode.wicket.jquery.core.Options;
@@ -74,7 +75,7 @@ import com.googlecode.wicket.jquery.ui.widget.dialog.AbstractFormDialog;
 import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
 
 public class SignInDialog extends AbstractFormDialog<String> {
-	private static final long serialVersionUID = 7746996016261051947L;
+	private static final long serialVersionUID = 1L;
 	private Form<String> form;
 	private DialogButton loginBtn = new DialogButton(WebSession.getString(112));
 	private String registerLbl = WebSession.getString(123);
@@ -105,7 +106,7 @@ public class SignInDialog extends AbstractFormDialog<String> {
 	protected void onInitialize() {
 		super.onInitialize();
 		add(new JQueryBehavior(JQueryWidget.getSelector(this), "dialog") {
-			private static final long serialVersionUID = -249782023133645704L;
+			private static final long serialVersionUID = 1L;
 
 			@Override
             protected String $()
@@ -209,7 +210,7 @@ public class SignInDialog extends AbstractFormDialog<String> {
 	}
 	
 	class SignInForm extends StatelessForm<String> {
-		private static final long serialVersionUID = 4079939497154278822L;
+		private static final long serialVersionUID = 1L;
 		private PasswordTextField passField;
 		private RequiredTextField<String> loginField;
 
@@ -232,7 +233,7 @@ public class SignInDialog extends AbstractFormDialog<String> {
 						, ldaps, new ChoiceRenderer<LdapConfig>("name", "ldapConfigId"))).setVisible(ldaps.size() > 1));
 			add(new CheckBox("rememberMe", new PropertyModel<Boolean>(SignInDialog.this, "rememberMe")).setOutputMarkupId(true));
 			add(new AjaxButton("submit") { //FAKE button so "submit-on-enter" works as expected
-				private static final long serialVersionUID = -3612671587183668912L;
+				private static final long serialVersionUID = 1L;
 
 				@Override
 				protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
@@ -245,7 +246,7 @@ public class SignInDialog extends AbstractFormDialog<String> {
 				}
 			});
 			add(new AjaxLink<Void>("forget") {
-				private static final long serialVersionUID = -7497568829491287604L;
+				private static final long serialVersionUID = 1L;
 
 				@Override
 				public void onClick(AjaxRequestTarget target) {
@@ -254,7 +255,7 @@ public class SignInDialog extends AbstractFormDialog<String> {
 				}
 			});
 			add(new Link<Void>("netTest") {
-				private static final long serialVersionUID = -9055312659797800331L;
+				private static final long serialVersionUID = 1L;
 
 				@Override
 				public void onClick() {
@@ -272,11 +273,9 @@ public class SignInDialog extends AbstractFormDialog<String> {
 					protected void populateItem(final ListItem<OAuthServer> item) {
 						Button btn = new Button("oauthBtn");
 						Image icon = new Image("icon", new Model<String>());
-						icon.setVisible(item.getModelObject().getIconUrl() != null && 
-								!"".equals(item.getModelObject().getIconUrl()));
+						icon.setVisible(!Strings.isEmpty(item.getModelObject().getIconUrl()));
 						icon.add(new AttributeModifier("src", new AbstractReadOnlyModel<String>() {
-
-							private static final long serialVersionUID = 7257002837120721882L;
+							private static final long serialVersionUID = 1L;
 
 							@Override
 							public String getObject() {

@@ -126,6 +126,12 @@ public class InstallWizard extends Wizard {
 		return bBar.replace(finish).setOutputMarkupId(true);
 	}
 	
+	@Override
+	protected void onDetach() {
+		model.detach();
+		super.onDetach();
+	}
+	
 	private abstract class BaseStep extends DynamicWizardStep {
 		private static final long serialVersionUID = 1L;
 
@@ -393,7 +399,7 @@ public class InstallWizard extends Wizard {
 	}
 	
 	private static class SelectOption implements Serializable {
-		private static final long serialVersionUID = 2559982745410615390L;
+		private static final long serialVersionUID = 1L;
 		private static SelectOption NO = new SelectOption("0", "No");
 		private static SelectOption NO_TEXT = new SelectOption("no", "No");
 		private static SelectOption YES = new SelectOption("1", "Yes");
@@ -409,7 +415,7 @@ public class InstallWizard extends Wizard {
 	}
 
 	private abstract class WizardDropDown<T>  extends DropDownChoice<T> {
-		private static final long serialVersionUID = 8870736740532631296L;
+		private static final long serialVersionUID = 1L;
 		T option;
 		IModel<Object> propModel;
 		
@@ -418,15 +424,20 @@ public class InstallWizard extends Wizard {
 			propModel = InstallWizard.this.model.bind("cfg." + id);
 			setModel(new PropertyModel<T>(this, "option"));
 		}
+		
+		@Override
+		protected void onDetach() {
+			propModel.detach();
+			super.onDetach();
+		}
 	}
 	
 	private final class TzDropDown extends WizardDropDown<String> {
 		private static final long serialVersionUID = 1L;
 
 		public void setOption() {
-			List<String> tzList = AVAILABLE_TIMEZONES;
 			String tzId = WebSession.get().getClientTZCode();
-			option = AVAILABLE_TIMEZONE_SET.contains(tzId) ? tzId : tzList.get(0);
+			option = AVAILABLE_TIMEZONE_SET.contains(tzId) ? tzId : AVAILABLE_TIMEZONES.get(0);
 		}
 		
 		public TzDropDown(String id) throws Exception {
@@ -453,7 +464,7 @@ public class InstallWizard extends Wizard {
 	}
 	
 	private class SelectOptionDropDown extends WizardDropDown<SelectOption> {
-		private static final long serialVersionUID = -1433015274371279328L;
+		private static final long serialVersionUID = 1L;
 
 		SelectOptionDropDown(String id) {
 			super(id);
@@ -470,7 +481,7 @@ public class InstallWizard extends Wizard {
 	}
 	
 	private final class YesNoDropDown extends SelectOptionDropDown {
-		private static final long serialVersionUID = 578375825530725477L;
+		private static final long serialVersionUID = 1L;
 		
 		YesNoDropDown(String id) {
 			super(id);
@@ -481,7 +492,7 @@ public class InstallWizard extends Wizard {
 	}
 	
 	private final class YesNoTextDropDown extends SelectOptionDropDown {
-		private static final long serialVersionUID = 578375825530725477L;
+		private static final long serialVersionUID = 1L;
 		
 		YesNoTextDropDown(String id) {
 			super(id);
@@ -492,7 +503,7 @@ public class InstallWizard extends Wizard {
 	}
 	
 	private final class LangDropDown extends SelectOptionDropDown {
-		private static final long serialVersionUID = -2826765890538795285L;
+		private static final long serialVersionUID = 1L;
 
 		public LangDropDown(String id) throws Exception {
 			super(id);
@@ -500,17 +511,17 @@ public class InstallWizard extends Wizard {
 			
 			List<SelectOption> list = new ArrayList<SelectOption>();
 			
-			for (Integer key : allLanguagesAll.keySet()) {
-				String langName = (String) allLanguagesAll.get(key).get("name");
-				String langCode = (String) allLanguagesAll.get(key).get("code");
-				SelectOption op = new SelectOption(key.toString(), langName);
+			for (Map.Entry<Integer,Map<String,Object>> me : allLanguagesAll.entrySet()) {
+				String langName = (String) me.getValue().get("name");
+				String langCode = (String) me.getValue().get("code");
+				SelectOption op = new SelectOption(me.getKey().toString(), langName);
 				if (langCode != null) {
 					if (getSession().getLocale().toString().startsWith(langCode)) {
 						option = op;
 					}
 					list.add(op);
 				}
-				if (option == null && key.toString().equals(cfg.defaultLangId)) {
+				if (option == null && me.getKey().toString().equals(cfg.defaultLangId)) {
 					option = op;
 				}
 			}
