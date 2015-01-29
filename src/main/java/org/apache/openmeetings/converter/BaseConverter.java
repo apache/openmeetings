@@ -258,7 +258,7 @@ public abstract class BaseConverter {
 					String[] argv = new String[] {
 							getPathToFFMPEG(), "-y"
 							, "-i", inputFlvFile.getCanonicalPath()
-							, "-af", "aresample=min_comp=0.001:min_hard_comp=0.100000"
+							, "-af", "aresample=32k:min_comp=0.001:min_hard_comp=0.100000"
 							, outputWav.getCanonicalPath()};
 	
 					returnLog.add(ProcessHelper.executeScript("stripAudioFromFLVs", argv));
