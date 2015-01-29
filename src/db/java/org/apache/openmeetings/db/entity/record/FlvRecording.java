@@ -77,7 +77,7 @@ import org.simpleframework.xml.Root;
 			+ "ORDER BY f.folder DESC, f.inserted")
 	, @NamedQuery(name = "getRecordingsByParent", query = "SELECT f FROM FlvRecording f WHERE f.deleted = false AND f.parentFileExplorerItemId = :parentId "
 			+ "ORDER BY f.folder DESC, f.inserted")
-	, @NamedQuery(name = "resetRecordingProcessingStatus", query = "UPDATE FlvRecording f SET f.status = :error WHERE f.status = :processing")
+	, @NamedQuery(name = "resetRecordingProcessingStatus", query = "UPDATE FlvRecording f SET f.status = :error WHERE f.status IN (:recording, :converting)")
 	, @NamedQuery(name = "getRecordingsByExternalType", query = "SELECT rec FROM FlvRecording rec, Room r, User u "
 			+ "WHERE rec.deleted = false AND rec.room_id = r.rooms_id AND rec.insertedBy = u.user_id "
 			+ "AND (r.externalRoomType = :externalType OR u.externalUserType = :externalType)")
@@ -89,7 +89,8 @@ public class FlvRecording implements Serializable {
 	
 	public enum Status {
 		NONE
-		, PROCESSING
+		, RECORDING
+		, CONVERTING
 		, PROCESSED
 		, ERROR
 	}

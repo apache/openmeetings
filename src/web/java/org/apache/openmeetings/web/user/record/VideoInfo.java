@@ -137,7 +137,7 @@ public class VideoInfo extends Panel {
 		}
 		
 		boolean reConvEnabled = false;
-		if (r.getOwnerId() != null && getUserId() == r.getOwnerId() && r.getStatus() != Status.PROCESSING) {
+		if (r.getOwnerId() != null && getUserId() == r.getOwnerId() && r.getStatus() != Status.RECORDING && r.getStatus() != Status.CONVERTING) {
 			List<FlvRecordingMetaData> metas = getBean(FlvRecordingMetaDataDao.class).getByRecording(r.getFlvRecordingId());
 			reconvLabel:
 			if (!metas.isEmpty()) {

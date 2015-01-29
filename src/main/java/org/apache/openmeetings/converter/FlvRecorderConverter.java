@@ -74,6 +74,8 @@ public class FlvRecorderConverter extends BaseConverter implements IRecordingCon
 			if (screenMetaData.getStreamStatus() == Status.NONE) {
 				throw new Exception("Stream has not been started, error in recording");
 			}
+			flvRecording.setStatus(FlvRecording.Status.CONVERTING);
+			flvRecording = recordingDao.update(flvRecording);
 
 			screenMetaData = waitForTheStream(screenMetaData.getFlvRecordingMetaDataId());
 
@@ -193,6 +195,8 @@ public class FlvRecorderConverter extends BaseConverter implements IRecordingCon
 			log.error("[startConversion]", err);
 			flvRecording.setStatus(FlvRecording.Status.ERROR);
 		}
-		recordingDao.update(flvRecording);
+		if (flvRecording != null) {
+			recordingDao.update(flvRecording);
+		}
 	}
 }

@@ -37,7 +37,7 @@ public class RecordingItemPanel extends RecordingPanel {
 		super(id, model, treePanel);
 		FlvRecording r = model.getObject();
 		long errorCount = getBean(FlvRecordingLogDao.class).countErrors(r.getFlvRecordingId());
-		boolean visible = errorCount != 0 || (Status.PROCESSING != r.getStatus() && !isRecordingExists(r.getFileHash() + MP4_EXTENSION));
+		boolean visible = errorCount != 0 || (Status.RECORDING != r.getStatus() && Status.CONVERTING != r.getStatus() && !isRecordingExists(r.getFileHash() + MP4_EXTENSION));
 		drag.add(new WebMarkupContainer("errors").add(new AjaxEventBehavior("click") {
 			private static final long serialVersionUID = 1L;
 

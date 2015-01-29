@@ -243,7 +243,7 @@ public class RecordingsPanel extends UserPanel {
 						style = def;
 					} else if (isRecordingExists(r.getFileHash() + MP4_EXTENSION)) {
 						style = "recording om-icon";
-					} else if (Status.PROCESSING == r.getStatus()) {
+					} else if (Status.RECORDING == r.getStatus() || Status.CONVERTING == r.getStatus()) {
 						style = "processing-recording om-icon";
 					} else {
 						style = "broken-recording om-icon";

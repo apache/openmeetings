@@ -126,7 +126,7 @@ public class FLVRecorderService implements IPendingServiceCallback {
 			flvRecording.setHeight(currentClient.getVHeight());
 
 			flvRecording.setOwnerId(currentClient.getUser_id());
-			flvRecording.setStatus(FlvRecording.Status.PROCESSING);
+			flvRecording.setStatus(FlvRecording.Status.RECORDING);
 			flvRecording = recordingDao.update(flvRecording);
 			// Receive flvRecordingId
 			Long flvRecordingId = flvRecording.getFlvRecordingId();
