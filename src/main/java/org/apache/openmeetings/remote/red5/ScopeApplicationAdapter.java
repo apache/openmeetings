@@ -278,7 +278,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 	 * 
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public synchronized Map setConnectionAsSharingClient(Map map) {
+	public Map setConnectionAsSharingClient(Map map) {
 		try {
 			log.debug("-----------  setConnectionAsSharingClient");
 			IConnection current = Red5.getConnectionLocal();

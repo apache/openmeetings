@@ -169,7 +169,8 @@ public class FLVRecorderService implements IPendingServiceCallback {
 								&& (rcl.getAvsettings().equals("av") || rcl.getAvsettings().equals("a") || rcl.getAvsettings().equals("v"))) {
 							// if the user does publish av, a, v
 							// But we only record av or a, video only is not interesting
-							String streamName = generateFileName(flvRecordingId, String.valueOf(rcl.getBroadCastID()).toString());
+							String broadcastId = "" + rcl.getBroadCastID();
+							String streamName = generateFileName(flvRecordingId, broadcastId);
 
 							// Add Meta Data
 							boolean isAudioOnly = false;
@@ -191,8 +192,7 @@ public class FLVRecorderService implements IPendingServiceCallback {
 							sessionManager.updateClientByStreamId(rcl.getStreamid(), rcl, false, null);
 
 							// Start FLV recording
-							recordShow(conn, String.valueOf(rcl.getBroadCastID()).toString(), streamName, metaId, !isAudioOnly,
-									isInterview);
+							recordShow(conn, broadcastId, streamName, metaId, !isAudioOnly, isInterview);
 						}
 					}
 				}
@@ -214,7 +214,7 @@ public class FLVRecorderService implements IPendingServiceCallback {
 	 * @param metaId
 	 * @throws Exception
 	 */
-	private synchronized void recordShow(IConnection conn, String broadcastid, String streamName, Long metaId, boolean isScreenData, Boolean isInterview) throws Exception {
+	private void recordShow(IConnection conn, String broadcastid, String streamName, Long metaId, boolean isScreenData, Boolean isInterview) throws Exception {
 		try {
 			log.debug("Recording show for: " + conn.getScope().getContextPath());
 			log.debug("Name of CLient and Stream to be recorded: " + broadcastid);
