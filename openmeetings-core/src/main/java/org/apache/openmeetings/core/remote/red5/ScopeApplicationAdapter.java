@@ -182,9 +182,9 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 		return true;
 	}
 
-	public synchronized Map<String, String> screenSharerAction(Map<String, Object> map) {
+	public Map<String, String> screenSharerAction(Map<String, Object> map) {
 		try {
-			log.debug("-----------  screenSharerAction");
+			log.debug("-----------  screenSharerAction ENTER");
 			IConnection current = Red5.getConnectionLocal();
 
 			Client rc = sessionManager.getClientByStreamId(current.getClient().getId(), null);
@@ -197,7 +197,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 					changed = true;
 					rc.setStartStreaming(false);
 					//Send message to all users
-					syncMessageToCurrentScope("stopScreenSharingMessage", rc, false);
+					sendMessageToCurrentScope("stopScreenSharingMessage", rc, false);
 					
 					returnMap.put("result", "stopSharingOnly");
 				}
@@ -208,7 +208,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 					
 					returnMap.put("result", "stopRecordingOnly");
 					//Send message to all users
-					syncMessageToCurrentScope("stopRecordingMessage", rc, false);
+					sendMessageToCurrentScope("stopRecordingMessage", rc, false);
 
 					flvRecorderService.stopRecordAndSave(current.getScope(), rc, null);
 				}
@@ -218,7 +218,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 					returnMap.put("result", "stopPublishingOnly");
 					
 					//Send message to all users
-					syncMessageToCurrentScope("stopPublishingMessage", rc, false);
+					sendMessageToCurrentScope("stopPublishingMessage", rc, false);
 				}
 				
 				if (changed) {
@@ -345,7 +345,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 						log.debug("start streamPublishStart Is Screen Sharing ");
 						
 						//Send message to all users
-						syncMessageToCurrentScope("newScreenSharing", currentClient, false);
+						sendMessageToCurrentScope("newScreenSharing", currentClient, false);
 					} else {
 						log.warn("Streaming is already started for the client id=" + currentClient.getId() + ". Second request is ignored.");
 					}
@@ -362,7 +362,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 					}
 				}
 				if (startPublishing) {
-					syncMessageToCurrentScope("startedPublishing", new Object[]{currentClient, "rtmp://" + map.get("publishingHost") + ":1935/"
+					sendMessageToCurrentScope("startedPublishing", new Object[]{currentClient, "rtmp://" + map.get("publishingHost") + ":1935/"
 							+ map.get("publishingApp") + "/" + map.get("publishingId")}, false, true);
 					returnMap.put("modus", "startPublishing");
 				}
@@ -415,13 +415,11 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 	 * 
 	 * @return publicSID of current client
 	 */
-	public synchronized String getPublicSID() {
+	public String getPublicSID() {
 		log.debug("-----------  getPublicSID");
 		IConnection current = Red5.getConnectionLocal();
-		Client currentClient = this.sessionManager
-				.getClientByStreamId(current.getClient().getId(), null);
-		sessionManager.updateClientByStreamId(current.getClient().getId(),
-				currentClient, false, null);
+		Client currentClient = sessionManager.getClientByStreamId(current.getClient().getId(), null);
+		sessionManager.updateClientByStreamId(current.getClient().getId(), currentClient, false, null);
 		return currentClient.getPublicSID();
 	}
 
@@ -430,7 +428,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 	 * 
 	 * @param newPublicSID
 	 */
-	public synchronized Boolean overwritePublicSID(String newPublicSID) {
+	public Boolean overwritePublicSID(String newPublicSID) {
 		try {
 			log.debug("-----------  overwritePublicSID");
 			IConnection current = Red5.getConnectionLocal();
@@ -457,8 +455,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 	@Override
 	public void roomLeave(IClient client, IScope room) {
 		try {
-			log.debug(String.format("roomLeave %s %s %s %s", client.getId(), room.getClients().size()
-					, room.getContextPath(), room.getName()));
+			log.debug(String.format("roomLeave %s %s %s %s", client.getId(), room.getClients().size(), room.getContextPath(), room.getName()));
 
 			Client currentClient = sessionManager.getClientByStreamId(client.getId(), null);
 
@@ -620,8 +617,8 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 		try {
 			log.debug("-----------  streamPublishStart");
 			IConnection current = Red5.getConnectionLocal();
-			String streamid = current.getClient().getId();
-			Client currentClient = sessionManager.getClientByStreamId(streamid, null);
+			final String streamid = current.getClient().getId();
+			final Client currentClient = sessionManager.getClientByStreamId(streamid, null);
 
 			//We make a second object the has the reference to the object 
 			//that we will use to send to all participents
@@ -632,9 +629,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 
 			// In case its a screen sharing we start a new Video for that
 			if (currentClient.isScreenClient()) {
-
 				currentClient.setScreenPublishStarted(true);
-
 				sessionManager.updateClientByStreamId(streamid, currentClient, false, null);
 			}
 			//If its an audio/video client then send the session object with the full data to everybody
@@ -642,52 +637,47 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 				clientObjectSendToSync = sessionManager.getClientByPublicSID(currentClient.getPublicSID(), false, null);
 			}
 			
-			log.debug("newStream SEND: "+currentClient);
+			log.debug("newStream SEND: " + currentClient);
 
 			// Notify all users of the same Scope
 			// We need to iterate through the streams to catch if anybody is recording
-			for (IConnection conn : current.getScope().getClientConnections()) {
-				if (conn != null) {
-					if (conn instanceof IServiceCapableConnection) {
-						
-						Client rcl = sessionManager.getClientByStreamId(conn.getClient().getId(), null);
-						
-						if (rcl == null) {
-							log.debug("RCL IS NULL newStream SEND");
-							continue;
-						}
-						
-						log.debug("check send to "+rcl);
-						
-						if (rcl.getPublicSID() == "") {
-							log.debug("publicSID IS NULL newStream SEND");
-							continue;
-						}
-						if (rcl.getIsRecording()) {
-							log.debug("RCL getIsRecording newStream SEND");
-							flvRecorderService.addRecordingByStreamId(current, streamid, currentClient, rcl.getFlvRecordingId());
-						}
-						if (rcl.isAvClient()) {
-							log.debug("RCL getIsAVClient newStream SEND");
-							continue;
-						}
-						if (rcl.isScreenClient()) {
-							log.debug("RCL getIsScreenClient newStream SEND");
-							continue;
-						}
-						
-						if (rcl.getPublicSID().equals(currentClient.getPublicSID())) {
-							log.debug("RCL publicSID is equal newStream SEND");
-							continue;
-						}
-						
-						log.debug("RCL SEND is equal newStream SEND "+rcl.getPublicSID()+" || "+rcl.getUserport());
-							
-						((IServiceCapableConnection) conn).invoke("newStream", new Object[] { clientObjectSendToSync }, this);
-
+			new MessageSender(current, "newStream", clientObjectSendToSync) {
+				@Override
+				public boolean filter(IConnection conn) {
+					Client rcl = sessionManager.getClientByStreamId(conn.getClient().getId(), null);
+					
+					if (rcl == null) {
+						log.debug("RCL IS NULL newStream SEND");
+						return true;
 					}
+					
+					log.debug("check send to "+rcl);
+					
+					if (rcl.getPublicSID() == "") {
+						log.debug("publicSID IS NULL newStream SEND");
+						return true;
+					}
+					if (rcl.getIsRecording()) {
+						log.debug("RCL getIsRecording newStream SEND");
+						flvRecorderService.addRecordingByStreamId(current, streamid, currentClient, rcl.getFlvRecordingId());
+					}
+					if (rcl.isAvClient()) {
+						log.debug("RCL getIsAVClient newStream SEND");
+						return true;
+					}
+					if (rcl.isScreenClient()) {
+						log.debug("RCL getIsScreenClient newStream SEND");
+						return true;
+					}
+					
+					if (rcl.getPublicSID().equals(currentClient.getPublicSID())) {
+						log.debug("RCL publicSID is equal newStream SEND");
+						return true;
+					}
+					log.debug("RCL SEND is equal newStream SEND "+rcl.getPublicSID()+" || "+rcl.getUserport());
+					return false;
 				}
-			}
+			}.start();
 		} catch (Exception err) {
 			log.error("[streamPublishStart]", err);
 		}
@@ -826,7 +816,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 			List<Client> currentMods = sessionManager.getCurrentModeratorByRoom(room_id);
 			
 			//Send message to all users
-			syncMessageToCurrentScope("setNewModeratorByList", currentMods, true);
+			sendMessageToCurrentScope("setNewModeratorByList", currentMods, true);
 
 		} catch (Exception err) {
 			log.error("[addModerator]", err);
@@ -846,7 +836,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 			Map cursor = (Map) item;
 			cursor.put("streamPublishName", currentClient.getStreamPublishName());
 
-		    syncMessageToCurrentScope("newRed5ScreenCursor", cursor, true, false);
+			sendMessageToCurrentScope("newRed5ScreenCursor", cursor, true, false);
 		} catch (Exception err) {
 			log.error("[setNewCursorPosition]", err);
 		}
@@ -869,7 +859,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 
 			List<Client> currentMods = sessionManager.getCurrentModeratorByRoom(room_id);
 
-		    syncMessageToCurrentScope("setNewModeratorByList", currentMods, true);
+			sendMessageToCurrentScope("setNewModeratorByList", currentMods, true);
 		} catch (Exception err) {
 			log.error("[addModerator]", err);
 		}
@@ -893,21 +883,21 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 			sessionManager.updateClientByStreamId(currentClient.getStreamid(), currentClient, false, null);
 		    
 			// Notify all clients of the same scope (room)
-		    syncMessageToCurrentScope("setNewBroadCastingFlag", currentClient, true);
+			sendMessageToCurrentScope("setNewBroadCastingFlag", currentClient, true);
 		} catch (Exception err) {
 			log.error("[setBroadCastingFlag]", err);
 		}
 		return -1L;
 	}
 
-	public synchronized Long giveExclusiveAudio(String publicSID) {
+	public Long giveExclusiveAudio(String publicSID) {
 		try {
 			log.debug("-----------  giveExclusiveAudio: " + publicSID);
 
 			IConnection current = Red5.getConnectionLocal();
 			// String streamid = current.getClient().getId();
 
-			Client currentClient = sessionManager.getClientByPublicSID(publicSID, false, null);
+			final Client currentClient = sessionManager.getClientByPublicSID(publicSID, false, null);
 
 			if (currentClient == null) {
 				return -1L;
@@ -918,33 +908,29 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 			sessionManager.updateClientByStreamId(currentClient.getStreamid(), currentClient, false, null);
 
 			// Notify all clients of the same scope (room)
-			for (IConnection conn : current.getScope().getClientConnections()) {
-				if (conn != null) {
+			new MessageSender(current, "receiveExclusiveAudioFlag", currentClient) {
+				@Override
+				public boolean filter(IConnection conn) {
 					Client rcl = sessionManager.getClientByStreamId(conn.getClient().getId(), null);
 					if (rcl == null) {
-						// continue;
 					} else if (rcl.isScreenClient()) {
-						// continue;
 					} else {
 						if (rcl != currentClient) {
 							rcl.setMicMuted(true);
 							sessionManager.updateClientByStreamId(rcl.getStreamid(), rcl, false, null);
 						}
-						log.debug("Send Flag to Client: " + rcl.getUsername());
-						if (conn instanceof IServiceCapableConnection) {
-							((IServiceCapableConnection) conn).invoke("receiveExclusiveAudioFlag", new Object[] { currentClient }, this);
-							log.debug("sending receiveExclusiveAudioFlag to " + conn);
-						}
+						return false;
 					}
+					return true;
 				}
-			}
+			}.start();
 		} catch (Exception err) {
 			log.error("[giveExclusiveAudio]", err);
 		}
 		return -1L;
 	}
 
-	public synchronized Long switchMicMuted(String publicSID, boolean mute) {
+	public Long switchMicMuted(String publicSID, boolean mute) {
 		try {
 			log.debug("-----------  switchMicMuted: " + publicSID);
 
@@ -966,9 +952,9 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 		return 0L;
 	}
 
-	public synchronized Boolean getMicMutedByPublicSID(String publicSID) {
+	public Boolean getMicMutedByPublicSID(String publicSID) {
 		try {
-			Client currentClient = this.sessionManager.getClientByPublicSID(publicSID, false, null);
+			Client currentClient = sessionManager.getClientByPublicSID(publicSID, false, null);
 			if (currentClient == null) {
 				return true;
 			}
@@ -1081,7 +1067,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 			hsm.put("client", currentClient);
 			hsm.put("message", newMessage);
 
-			syncMessageToCurrentScope("sendVarsToMessageWithClient", hsm, true);
+			sendMessageToCurrentScope("sendVarsToMessageWithClient", hsm, true);
 			return currentClient;
 		} catch (Exception err) {
 			log.error("[setUserAVSettings]", err);
@@ -1092,7 +1078,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 	/*
 	 * checks if the user is allowed to apply for Moderation
 	 */
-	public synchronized Boolean checkRoomValues(Long room_id) {
+	public Boolean checkRoomValues(Long room_id) {
 		try {
 
 			// appointed meeting or moderated Room?
@@ -1158,9 +1144,6 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 			Long organization_id, String colorObj) {
 		try {
 			log.debug("-----------  setRoomValues");
-			// Return Object
-			RoomStatus roomStatus = new RoomStatus();
-
 			IConnection current = Red5.getConnectionLocal();
 			String streamid = current.getClient().getId();
 			Client currentClient = sessionManager.getClientByStreamId(streamid, null);
@@ -1202,6 +1185,8 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 			// Check for Moderation LogicalRoom ENTER
 			List<Client> clientListRoom = sessionManager.getClientListByRoom(room_id);
 
+			// Return Object
+			RoomStatus roomStatus = new RoomStatus();
 			// appointed meeting or moderated Room? => Check Max Users first
 			if (room.getNumberOfPartizipants() != null && clientListRoom.size() > room.getNumberOfPartizipants()) {
 				roomStatus.setRoomFull(true);
@@ -1233,7 +1218,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 						List<Client> modRoomList = sessionManager.getCurrentModeratorByRoom(currentClient.getRoom_id());
 						
 						//Sync message to everybody
-						syncMessageToCurrentScope("setNewModeratorByList", modRoomList, false);
+						sendMessageToCurrentScope("setNewModeratorByList", modRoomList, false);
 					} else {
 						// The current User is not a Teacher/Admin or whatever
 						// Role that should get the
@@ -1264,7 +1249,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 							// already somebody in the Room waiting -swagner check this comment, 20.01.2012
 							
 							//Sync message to everybody
-							syncMessageToCurrentScope("setNewModeratorByList", modRoomList, false);
+							sendMessageToCurrentScope("setNewModeratorByList", modRoomList, false);
 
 						} else {
 							// The current User is not a Teacher/Admin or
@@ -1303,7 +1288,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 					// there could be already somebody in the Room waiting
 
 					//Sync message to everybody
-					syncMessageToCurrentScope("setNewModeratorByList", modRoomList, false);
+					sendMessageToCurrentScope("setNewModeratorByList", modRoomList, false);
 				}
 				if (!found) {
 					// Check if current user is set to moderator
@@ -1349,7 +1334,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 						// already somebody in the Room waiting
 
 						//Sync message to everybody
-						syncMessageToCurrentScope("setNewModeratorByList", modRoomList, false);
+						sendMessageToCurrentScope("setNewModeratorByList", modRoomList, false);
 						
 						sessionManager.updateClientByStreamId(streamid, currentClient, false, null);
 					}
@@ -1358,7 +1343,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 			}
 			
 			//Sync message to everybody
-			syncMessageToCurrentScope("addNewUser", currentClient, false);
+			sendMessageToCurrentScope("addNewUser", currentClient, false);
 
 			//Status object for Shared Browsing
 			BrowserStatus browserStatus = (BrowserStatus)current.getScope().getAttribute("browserStatus");
@@ -1392,9 +1377,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 	 * @param picture_uri
 	 * @return client being updated in case of success, null otherwise
 	 */
-	public synchronized Client setUsernameReconnect(String SID,
-			Long userId, String username, String firstname, String lastname,
-			String picture_uri) {
+	public Client setUsernameReconnect(String SID, Long userId, String username, String firstname, String lastname, String picture_uri) {
 		try {
 			log.debug("-----------  setUsernameReconnect");
 			IConnection current = Red5.getConnectionLocal();
@@ -1441,8 +1424,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 	 * @param lastname - lastname of the user
 	 * @return RoomClient in case of everything is OK, null otherwise
 	 */
-	public synchronized Client setUsernameAndSession(String SID,
-			Long userId, String username, String firstname, String lastname) {
+	public Client setUsernameAndSession(String SID, Long userId, String username, String firstname, String lastname) {
 		try {
 			log.debug("-----------  setUsernameAndSession");
 			IConnection current = Red5.getConnectionLocal();
@@ -1488,8 +1470,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 	 * @param message
 	 * @return the list of room clients
 	 */
-	public synchronized HashMap<String, Client> sendMessageByRoomAndDomain(
-			Long room_id, Object message) {
+	public HashMap<String, Client> sendMessageByRoomAndDomain(Long room_id, Object message) {
 		HashMap<String, Client> roomClientList = new HashMap<String, Client>();
 		try {
 
@@ -1502,30 +1483,13 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 
 			IScope scopeHibernate = webAppKeyScope.getScope(room_id.toString());
 
-			if (scopeHibernate != null) {
-
-				for (IConnection conn : webAppKeyScope.getScope(room_id.toString()).getClientConnections()) {
-					if (conn != null) {
-						if (conn instanceof IServiceCapableConnection) {
-							IClient client = conn.getClient();
-							if (SessionVariablesUtil.isScreenClient(client)) {
-								// screen sharing clients do not receive events
-								continue;
-							} else if (SessionVariablesUtil.isAVClient(client)) {
-								// AVClients or potential AVClients do not receive events
-								continue;
-							}
-							((IServiceCapableConnection) conn).invoke(
-									"newMessageByRoomAndDomain",
-									new Object[] { message }, this);
-						}
-					}
+			new MessageSender(scopeHibernate, "newMessageByRoomAndDomain", message) {
+				@Override
+				public boolean filter(IConnection conn) {
+					IClient client = conn.getClient();
+					return SessionVariablesUtil.isScreenClient(client) || SessionVariablesUtil.isAVClient(client);
 				}
-			} else {
-				log.debug("sendMessageByRoomAndDomain servlet not yet started  - roomID : '"
-						+ room_id + "'");
-			}
-
+			}.start();
 		} catch (Exception err) {
 			log.error("[getClientListBYRoomAndDomain]", err);
 		}
@@ -1551,8 +1515,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 	 * @param whiteboardId - id of whiteboard parameters will be send to
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public synchronized void sendVarsByWhiteboardId(
-			ArrayList whiteboardObjParam, Long whiteboardId) {
+	public void sendVarsByWhiteboardId(ArrayList whiteboardObjParam, Long whiteboardId) {
 		//
 		try {
 
@@ -1666,7 +1629,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 			if (ismod) {
 				log.debug("CurrentScope :" + current.getScope().getName());
 				// Send to all Clients of the same Scope
-				syncMessageToCurrentScope("sendVarsToModeratorGeneral", vars, false);
+				sendMessageToCurrentScope("sendVarsToModeratorGeneral", vars, false);
 				return 1;
 			} else {
 				// log.debug("*..*you are not allowed to send: "+ismod);
@@ -1681,7 +1644,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 	public int sendMessage(Object newMessage) {
 		try {
 			
-			syncMessageToCurrentScope("sendVarsToMessage", newMessage, false);
+			sendMessageToCurrentScope("sendVarsToMessage", newMessage, false);
 			
 		} catch (Exception err) {
 			log.error("[sendMessage]", err);
@@ -1692,7 +1655,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 	public int sendMessageAll(Object newMessage) {
 		try {
 			
-			syncMessageToCurrentScope("sendVarsToMessage", newMessage, true);
+			sendMessageToCurrentScope("sendVarsToMessage", newMessage, true);
 			
 		} catch (Exception err) {
 			log.error("[sendMessage]", err);
@@ -1729,7 +1692,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 
 			current.getScope().setAttribute("browserStatus", browserStatus);
 			
-			syncMessageToCurrentScope("sendVarsToMessage", newMessage, false);
+			sendMessageToCurrentScope("sendVarsToMessage", newMessage, false);
 
 		} catch (Exception err) {
 			log.error("[sendMessage]", err);
@@ -1743,7 +1706,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 	 */
 	public void sendMessageToMembers(Object newMessage) {
 		//Sync to all users of current scope
-		syncMessageToCurrentScope("sendVarsToMessage", newMessage, false);
+		sendMessageToCurrentScope("sendVarsToMessage", newMessage, false);
 	}
 	
 	/**
@@ -1760,8 +1723,8 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 	 * @param newMessage parameters
 	 * @param sendSelf send to the current client as well
 	 */
-	public void syncMessageToCurrentScope(String remoteMethodName, Object newMessage, boolean sendSelf) {
-		syncMessageToCurrentScope(remoteMethodName, newMessage, sendSelf, false);
+	public void sendMessageToCurrentScope(String remoteMethodName, Object newMessage, boolean sendSelf) {
+		sendMessageToCurrentScope(remoteMethodName, newMessage, sendSelf, false);
 	}
 	
 	/**
@@ -1774,7 +1737,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 	 */
 	@Deprecated
 	public boolean loadTestSyncMessage(String remoteMethodName, Object newMessage, boolean sendSelf) {
-		syncMessageToCurrentScope(remoteMethodName, newMessage, sendSelf, false);
+		sendMessageToCurrentScope(remoteMethodName, newMessage, sendSelf, false);
 		return true;
 	}
 	
@@ -1794,35 +1757,63 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 	 * @param sendSelf send to the current client as well
 	 * @param sendScreen send to the current client as well
 	 */
-	public void syncMessageToCurrentScope(final String remoteMethodName, final Object newMessage, final boolean sendSelf, final boolean sendScreen) {
-		final IConnection current = Red5.getConnectionLocal();
+	public void sendMessageToCurrentScope(final String remoteMethodName, final Object newMessage, final boolean sendSelf, final boolean sendScreen) {
+		new MessageSender(remoteMethodName, newMessage) {
+			public boolean filter(IConnection conn) {
+				IClient client = conn.getClient();
+				return (!sendScreen && SessionVariablesUtil.isScreenClient(client))
+						|| SessionVariablesUtil.isAVClient(client)
+						|| (!sendSelf && client.getId().equals(current.getClient().getId()));
+			}
+		}.start();
 
-		new Thread() {
-			@Override
-		    public void run() {
-				try {
+	}
+
+	public abstract class MessageSender extends Thread {
+		final IScope scope;
+		final IConnection current;
+		final String remoteMethodName;
+		final Object newMessage;
+		
+		public MessageSender(final String remoteMethodName, final Object newMessage) {
+			this((IScope)null, remoteMethodName, newMessage);
+		}
+		
+		public MessageSender(IScope _scope, String remoteMethodName, Object newMessage) {
+			this(Red5.getConnectionLocal(), _scope, remoteMethodName, newMessage);
+		}
+		
+		public MessageSender(IConnection current, String remoteMethodName, Object newMessage) {
+			this(current, null, remoteMethodName, newMessage);
+		}
+		
+		public MessageSender(IConnection current, IScope _scope, String remoteMethodName, Object newMessage) {
+			this.current = current;
+			scope = _scope == null ? current.getScope() : _scope;
+			this.remoteMethodName = remoteMethodName;
+			this.newMessage = newMessage;
+		}
+		
+		public abstract boolean filter(IConnection conn);
+		
+		@Override
+		public void run() {
+			try {
+				if (scope != null) {
 					// Send to all Clients of that Scope(Room)
-					for (IConnection conn : current.getScope().getClientConnections()) {
+					for (IConnection conn : scope.getClientConnections()) {
 						if (conn != null && conn instanceof IServiceCapableConnection) {
-							IClient client = conn.getClient();
-							if (!sendScreen && SessionVariablesUtil.isScreenClient(client)) {
-								// screen sharing clients do not receive events
-								continue;
-							} else if (SessionVariablesUtil.isAVClient(client)) {
-								// AVClients or potential AVClients do not receive events
-								continue;
-							} else if (!sendSelf && client.getId().equals(current.getClient().getId())) {
-								//Do not send back to self
+							if (filter(conn)) {
 								continue;
 							}
 							((IServiceCapableConnection) conn).invoke(remoteMethodName, new Object[] { newMessage }, ScopeApplicationAdapter.this);
 						}
 					}
-				} catch (Exception err) {
-					log.error(String.format("[syncMessageToCurrentScope -> %s, %s]", remoteMethodName, newMessage), err);
 				}
-		    }
-		}.start();
+			} catch (Exception err) {
+				log.error(String.format("[sendMessageToCurrentScope -> %s, %s]", remoteMethodName, newMessage), err);
+			}
+		}
 	}
 
 	/**
@@ -1847,7 +1838,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 	 * @param sync
 	 * @return 1 in case of success, -1 otherwise
 	 */
-	public synchronized int sendMessageWithClientWithSyncObject(Object newMessage, boolean sync) {
+	public int sendMessageWithClientWithSyncObject(Object newMessage, boolean sync) {
 		try {
 			IConnection current = Red5.getConnectionLocal();
 			Client currentClient = sessionManager.getClientByStreamId(current.getClient().getId(), null);
@@ -1857,7 +1848,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 			hsm.put("message", newMessage);
 			
 			//Sync to all users of current scope
-			syncMessageToCurrentScope("sendVarsToMessageWithClient", hsm, sync);
+			sendMessageToCurrentScope("sendVarsToMessageWithClient", hsm, sync);
 
 		} catch (Exception err) {
 			log.error("[sendMessageWithClient] ", err);
@@ -2061,7 +2052,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 	 *             recording instead of iterating through connections!
 	 * @return true in case there is recording session, false otherwise, null if any exception happend
 	 */
-	public synchronized Boolean getInterviewRecordingStatus() {
+	public Boolean getInterviewRecordingStatus() {
 		try {
 			IConnection current = Red5.getConnectionLocal();
 
@@ -2086,7 +2077,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 	 * @deprecated @see {@link ScopeApplicationAdapter#getInterviewRecordingStatus()}
 	 * @return - false if there were existing recording, true if recording was started successfully, null if any exception happens
 	 */
-	public synchronized Boolean startInterviewRecording() {
+	public Boolean startInterviewRecording() {
 		try {
 			log.debug("-----------  startInterviewRecording");
 			IConnection current = Red5.getConnectionLocal();
@@ -2137,7 +2128,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 	}
 
 	@SuppressWarnings({ "rawtypes" })
-	public synchronized Boolean sendRemoteCursorEvent(String streamid, Map messageObj) {
+	public Boolean sendRemoteCursorEvent(String streamid, Map messageObj) {
 		try {
 
 			IConnection current = Red5.getConnectionLocal();
@@ -2180,7 +2171,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 	 * 
 	 * @return true if interview was found
 	 */
-	public synchronized Boolean stopInterviewRecording() {
+	public Boolean stopInterviewRecording() {
 		IConnection current = Red5.getConnectionLocal();
 		Client currentClient = sessionManager.getClientByStreamId(current.getClient().getId(), null);
 		return _stopInterviewRecording(currentClient, current.getScope());
@@ -2191,7 +2182,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 	 * 
 	 * @return true if interview was found
 	 */
-	private synchronized Boolean _stopInterviewRecording(Client currentClient, IScope currentScope) {
+	private Boolean _stopInterviewRecording(Client currentClient, IScope currentScope) {
 		try {
 			log.debug("-----------  stopInterviewRecording");
 			Long flvRecordingId = currentClient.getFlvRecordingId();
@@ -2212,8 +2203,8 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 			Map<String, String> interviewStatus = new HashMap<String, String>();
 			interviewStatus.put("action", "stop");
 
-			syncMessageToCurrentScope("interviewStatus", interviewStatus, true);
-			syncMessageToCurrentScope("stopRecordingMessage", currentClient, true);
+			sendMessageToCurrentScope("interviewStatus", interviewStatus, true);
+			sendMessageToCurrentScope("stopRecordingMessage", currentClient, true);
 			return true;
 
 		} catch (Exception err) {
@@ -2231,11 +2222,9 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 	public synchronized List<Client> getClientListScope() {
 		try {
 			IConnection current = Red5.getConnectionLocal();
-			Client currentClient = this.sessionManager
-					.getClientByStreamId(current.getClient().getId(), null);
+			Client currentClient = sessionManager.getClientByStreamId(current.getClient().getId(), null);
 
 			return sessionManager.getClientListByRoom(currentClient.getRoom_id());
-
 		} catch (Exception err) {
 			log.debug("[getClientListScope]", err);
 		}
@@ -2250,7 +2239,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 		return configurationDao.getCryptKey();
 	}
 
-	public synchronized IScope getRoomScope(String room) {
+	public IScope getRoomScope(String room) {
 		try {
 
 			IScope globalScope = getContext().getGlobalScope();
@@ -2288,7 +2277,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 		return result.isEmpty() ? result : roomDao.getSipRooms(result);
 	}
 	
-	public synchronized List<Long> getActiveRoomIds() {
+	public List<Long> getActiveRoomIds() {
 		List<Long> result = getVerifiedActiveRoomIds(null);
 		for (Server s : serverDao.getActiveServers()) {
 			result.addAll(getVerifiedActiveRoomIds(s));
@@ -2370,6 +2359,6 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 		sessionManager.updateClientByStreamId(streamid, currentClient, false, null);
 		SessionVariablesUtil.initClient(c, false, publicSID);
 
-		syncMessageToCurrentScope("addNewUser", currentClient, false);
+		sendMessageToCurrentScope("addNewUser", currentClient, false);
 	}
 }
