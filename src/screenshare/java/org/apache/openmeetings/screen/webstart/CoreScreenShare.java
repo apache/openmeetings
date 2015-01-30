@@ -108,6 +108,7 @@ public class CoreScreenShare implements IPendingServiceCallback, INetStreamEvent
 
 	public CoreScreenShare(String[] args) {
 		try {
+			System.setProperty("org.terracotta.quartz.skipUpdateCheck", "true");
 			for (String arg : args) {
 				log.debug("arg: " + arg);
 			}
