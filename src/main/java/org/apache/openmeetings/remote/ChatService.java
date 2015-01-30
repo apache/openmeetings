@@ -276,7 +276,7 @@ public class ChatService implements IPendingServiceCallback {
 			
 			HashMap<String,Object> hsm = new HashMap<String,Object>();
 			
-			scopeApplicationAdapter.syncMessageToCurrentScope("clearChatContent", hsm, true);
+			scopeApplicationAdapter.sendMessageToCurrentScope("clearChatContent", hsm, true);
 			
 			return myChatList;
 			

@@ -373,7 +373,7 @@ public class WhiteBoardService implements IPendingServiceCallback {
 					room_id, syncListRoom);
 			
 			//Sync to clients
-			this.scopeApplicationAdapter.syncMessageToCurrentScope("sendSyncFlag", wSyncLockObject, true);
+			this.scopeApplicationAdapter.sendMessageToCurrentScope("sendSyncFlag", wSyncLockObject, true);
 
 			return wSyncLockObject;
 
@@ -415,7 +415,7 @@ public class WhiteBoardService implements IPendingServiceCallback {
 						.getNumberOfInitialLoaders(syncListRoom);
 
 				if (numberOfInitial == 0) {
-					this.scopeApplicationAdapter.syncMessageToCurrentScope("sendSyncCompleteFlag", wSyncLockObject, true);
+					scopeApplicationAdapter.sendMessageToCurrentScope("sendSyncCompleteFlag", wSyncLockObject, true);
 				} else {
 					return;
 				}
@@ -472,7 +472,7 @@ public class WhiteBoardService implements IPendingServiceCallback {
 			// Do only send the Token to show the Loading Splash for the
 			// initial-Request that starts the loading
 			if (isStarting) {
-				this.scopeApplicationAdapter.syncMessageToCurrentScope("sendObjectSyncFlag", wSyncLockObject, true);
+				scopeApplicationAdapter.sendMessageToCurrentScope("sendObjectSyncFlag", wSyncLockObject, true);
 			}
 
 		} catch (Exception err) {
@@ -525,7 +525,7 @@ public class WhiteBoardService implements IPendingServiceCallback {
 						+ numberOfInitial);
 
 				if (numberOfInitial == 0) {
-					scopeApplicationAdapter.syncMessageToCurrentScope("sendObjectSyncCompleteFlag", wSyncLockObject, true);
+					scopeApplicationAdapter.sendMessageToCurrentScope("sendObjectSyncCompleteFlag", wSyncLockObject, true);
 					return 1;
 				} else {
 					return -4;
@@ -572,7 +572,7 @@ public class WhiteBoardService implements IPendingServiceCallback {
 
 				if (numberOfInitial == 0 && scope != null) {
 					
-					scopeApplicationAdapter.syncMessageToCurrentScope("sendSyncCompleteFlag", wSyncLockObject, false);
+					scopeApplicationAdapter.sendMessageToCurrentScope("sendSyncCompleteFlag", wSyncLockObject, false);
 					
 				}
 
@@ -599,7 +599,7 @@ public class WhiteBoardService implements IPendingServiceCallback {
 						.getWhiteBoardObjectSyncListByRoomid(room_id).size();
 
 				if (numberOfImageLoaders == 0 && scope != null) {
-					scopeApplicationAdapter.syncMessageToCurrentScope("sendImagesSyncCompleteFlag", new Object[] { "remove" }, true);
+					scopeApplicationAdapter.sendMessageToCurrentScope("sendImagesSyncCompleteFlag", new Object[] { "remove" }, true);
 				}
 
 			}

@@ -241,7 +241,7 @@ public class MainService implements IPendingServiceCallback {
 					currentClient.setPicture_uri(u.getPictureuri());
 					sessionManager.updateClientByStreamId(streamId, currentClient, false, null);
 					
-					scopeApplicationAdapter.syncMessageToCurrentScope("roomConnect", currentClient, false);
+					scopeApplicationAdapter.sendMessageToCurrentScope("roomConnect", currentClient, false);
 					
 					return u;
 				}

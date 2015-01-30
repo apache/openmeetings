@@ -208,7 +208,7 @@ public class MobileService {
 		result.put("broadcastId", broadcastId);
 		result.put("publicSid", c.getPublicSID());
 
-		scopeAdapter.syncMessageToCurrentScope("addNewUser", c, false, false);
+		scopeAdapter.sendMessageToCurrentScope("addNewUser", c, false, false);
 		return result;
 	}
 
@@ -230,7 +230,7 @@ public class MobileService {
 			result.put("broadcastId", scopeAdapter.getBroadCastId());
 		}
 
-		scopeAdapter.syncMessageToCurrentScope("sendVarsToMessageWithClient", hsm, true, false);
+		scopeAdapter.sendMessageToCurrentScope("sendVarsToMessageWithClient", hsm, true, false);
 		return result;
 	}
 }

@@ -36,7 +36,6 @@ import org.red5.server.api.IConnection;
 import org.red5.server.api.Red5;
 import org.red5.server.api.service.IPendingServiceCall;
 import org.red5.server.api.service.IPendingServiceCallback;
-import org.red5.server.api.service.IServiceCapableConnection;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -67,19 +66,15 @@ public class PollService implements IPendingServiceCallback {
 			log.debug("createPoll: " + pollQuestion);
 
 			IConnection currentcon = Red5.getConnectionLocal();
-			Client rc = sessionManager.getClientByStreamId(currentcon
-					.getClient().getId(), null);
+			Client rc = sessionManager.getClientByStreamId(currentcon.getClient().getId(), null);
 
-			log.debug("rc: " + rc.getStreamid() + " " + rc.getUsername() + " "
-					+ rc.getIsMod());
+			log.debug("rc: " + rc.getStreamid() + " " + rc.getUsername() + " " + rc.getIsMod());
 
 			if (rc.getIsMod()) {
 				// will move all existing polls to the archive
 				pollManager.closePoll(rc.getRoom_id());
 				
-				sendNotification(currentcon, "newPoll",
-						new Object[] { pollManager.createPoll(rc,
-								pollName, pollQuestion, (long) pollTypeId) });
+				sendNotification(currentcon, "newPoll", pollManager.createPoll(rc, pollName, pollQuestion, (long) pollTypeId));
 				returnValue = "200";
 			} else {
 				returnValue = "202";
@@ -136,31 +131,18 @@ public class PollService implements IPendingServiceCallback {
 		return false;
 	}
 
-	public void sendNotification(IConnection current, String clientFunction,
-			Object[] obj) throws Exception {
-		// Notify all clients of the same scope (room)
-		Client rc = this.sessionManager.getClientByStreamId(current.getClient().getId(), null);
-		for (IConnection conn : current.getScope().getClientConnections()) {
-			if (conn != null) {
-				if (conn instanceof IServiceCapableConnection) {
-					Client rcl = this.sessionManager
-							.getClientByStreamId(conn.getClient().getId(), null);
-					if (rcl.getIsScreenClient() != null
-							&& rcl.getIsScreenClient()) {
-						// continue;
-					} else {
-						if (rcl.getRoom_id() != null && rcl.getRoom_id().equals(rc.getRoom_id())
-								&& userDao.get(rcl.getUser_id())!=null) {
-							((IServiceCapableConnection) conn).invoke(
-									clientFunction, obj,
-									scopeApplicationAdapter);
-							log.debug("sending " + clientFunction + " to "
-									+ conn + " " + conn.getClient().getId());
-						}
-					}
-				}
+	public void sendNotification(IConnection current, String clientFunction, RoomPoll poll) throws Exception {
+		Client rc = sessionManager.getClientByStreamId(current.getClient().getId(), null);
+		final Long roomId = rc.getRoom_id();
+		scopeApplicationAdapter.new MessageSender(current, clientFunction, poll) {
+			
+			@Override
+			public boolean filter(IConnection conn) {
+				Client rcl = sessionManager.getClientByStreamId(conn.getClient().getId(), null);
+				return (rcl.getIsScreenClient() != null && rcl.getIsScreenClient())
+						|| rcl.getRoom_id() == null || !rcl.getRoom_id().equals(roomId) || userDao.get(rcl.getUser_id()) == null;
 			}
-		}
+		}.start();
 	}
 
 	public List<PollType> getPollTypeList() {
@@ -229,8 +211,7 @@ public class PollService implements IPendingServiceCallback {
 	public RoomPoll getPoll() {
 		try {
 			IConnection current = Red5.getConnectionLocal();
-			Client rc = this.sessionManager.getClientByStreamId(current
-					.getClient().getId(), null);
+			Client rc = sessionManager.getClientByStreamId(current.getClient().getId(), null);
 
 			// get Poll
 			return pollManager.getPoll(rc.getRoom_id());
