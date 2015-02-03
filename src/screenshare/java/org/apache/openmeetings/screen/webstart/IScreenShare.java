@@ -18,6 +18,8 @@
  */
 package org.apache.openmeetings.screen.webstart;
 
+import java.util.Map;
+
 import org.red5.client.net.rtmp.ClientExceptionHandler;
 import org.red5.client.net.rtmp.INetStreamEventHandler;
 import org.red5.server.api.service.IPendingServiceCallback;
@@ -27,7 +29,8 @@ import org.red5.server.net.rtmp.RTMPConnection;
 public interface IScreenShare extends ClientExceptionHandler {
 	RTMPConnection getConnection();
 	void invoke(String method, Object[] params, IPendingServiceCallback callback);
-	void connect(String server, int port, String application, IPendingServiceCallback connectCallback);
+	Map<String, Object> makeDefaultConnectionParams(String server, int port, String application);
+	void connect(String server, int port, Map<String, Object> connectionParams, IPendingServiceCallback connectCallback);
 	void setServiceProvider(Object serviceProvider);
 	void disconnect();
 	void createStream(IPendingServiceCallback callback);
