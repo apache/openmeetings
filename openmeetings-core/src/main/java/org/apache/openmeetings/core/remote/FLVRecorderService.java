@@ -99,12 +99,11 @@ public class FLVRecorderService implements IPendingServiceCallback {
 		return "rec_" + flvRecording_id + "_stream_" + streamid + "_" + dateString;
 	}
 
-	public String recordMeetingStream(IConnection current, String roomRecordingName, String comment, Boolean isInterview) {
+	public String recordMeetingStream(IConnection current, Client client, String roomRecordingName, String comment, Boolean isInterview) {
 		try {
 			log.debug("##REC:: recordMeetingStream ::");
 
-			Client currentClient = sessionManager.getClientByStreamId(current.getClient().getId(), null);
-			Long room_id = currentClient.getRoom_id();
+			Long room_id = client.getRoom_id();
 
 			Date now = new Date();
 
@@ -112,7 +111,7 @@ public class FLVRecorderService implements IPendingServiceCallback {
 
 			flvRecording.setFileHash("");
 			flvRecording.setFileName(roomRecordingName);
-			flvRecording.setInsertedBy(currentClient.getUser_id());
+			flvRecording.setInsertedBy(client.getUser_id());
 			flvRecording.setType(Type.Recording);
 			flvRecording.setComment(comment);
 			flvRecording.setIsInterview(isInterview);
@@ -120,20 +119,20 @@ public class FLVRecorderService implements IPendingServiceCallback {
 			flvRecording.setRoomId(room_id);
 			flvRecording.setRecordStart(now);
 
-			flvRecording.setWidth(currentClient.getVWidth());
-			flvRecording.setHeight(currentClient.getVHeight());
+			flvRecording.setWidth(client.getVWidth());
+			flvRecording.setHeight(client.getVHeight());
 
-			flvRecording.setOwnerId(currentClient.getUser_id());
+			flvRecording.setOwnerId(client.getUser_id());
 			flvRecording.setStatus(FlvRecording.Status.RECORDING);
 			flvRecording = recordingDao.update(flvRecording);
 			// Receive flvRecordingId
 			Long flvRecordingId = flvRecording.getId();
-			log.debug("##REC:: recording created by USER: " + currentClient.getUser_id());
+			log.debug("##REC:: recording created by USER: " + client.getUser_id());
 
 			// Update Client and set Flag
-			currentClient.setIsRecording(true);
-			currentClient.setFlvRecordingId(flvRecordingId);
-			sessionManager.updateClientByStreamId(current.getClient().getId(), currentClient, false, null);
+			client.setIsRecording(true);
+			client.setFlvRecordingId(flvRecordingId);
+			sessionManager.updateClientByStreamId(client.getStreamid(), client, false, null);
 
 			// get all stream and start recording them
 			for (IConnection conn : current.getScope().getClientConnections()) {
@@ -143,7 +142,7 @@ public class FLVRecorderService implements IPendingServiceCallback {
 
 						// Send every user a notification that the recording did start
 						if (!rcl.isAvClient()) {
-							((IServiceCapableConnection) conn).invoke("startedRecording", new Object[] { currentClient }, this);
+							((IServiceCapableConnection) conn).invoke("startedRecording", new Object[] { client }, this);
 						}
 
 						// If its the recording client we need another type of Meta Data

@@ -143,42 +143,59 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 	public boolean roomConnect(IConnection conn, Object[] params) {
 		log.debug("roomConnect : ");
 
-		try {
+		IServiceCapableConnection service = (IServiceCapableConnection) conn;
+		String streamId = conn.getClient().getId();
+		
+		boolean isAVClient = params.length == 1 ? Boolean.valueOf("" + params[0]) : false;
 
-			IServiceCapableConnection service = (IServiceCapableConnection) conn;
-			String streamId = conn.getClient().getId();
-			
-			boolean isAVClient = false;
-			if (params.length == 1) {
-				isAVClient = Boolean.valueOf("" + params[0]);
+		log.debug("### Client connected to OpenMeetings, register Client StreamId: " + streamId + " scope "
+				+ conn.getScope().getName() + " isAVClient " + isAVClient);
+
+		// Set StreamId in Client
+		service.invoke("setId", new Object[] { streamId }, this);
+
+		Map<String, Object> map = conn.getConnectParams();
+		String swfURL = map.containsKey("swfUrl") ? (String)map.get("swfUrl") : "";
+
+		//TODO add similar code for other connections
+		if (map.containsKey("screenClient")) {
+			String parentSid = (String)map.get("parentSid");
+			Client parentClient = sessionManager.getClientByPublicSID(parentSid, false, null);
+			if (parentClient == null) {
+				rejectClient();
 			}
-
-			log.debug("### Client connected to OpenMeetings, register Client StreamId: " + streamId + " scope "
-					+ conn.getScope().getName() + " isAVClient " + isAVClient);
-
-			// Set StreamId in Client
-			service.invoke("setId", new Object[] { streamId }, this);
-
-			String swfURL = "";
-			if (conn.getConnectParams().get("swfUrl") != null) {
-				swfURL = conn.getConnectParams().get("swfUrl").toString();
-			}
-
-			Client rcm = sessionManager.addClientListItem(streamId,
-					conn.getScope().getName(), conn.getRemotePort(),
-					conn.getRemoteAddress(), swfURL, isAVClient, null);
-			
-			SessionVariablesUtil.initClient(conn.getClient(), isAVClient, rcm.getPublicSID());
-
-			// Log the User
-			conferenceLogDao.addConferenceLog("ClientConnect",
-					rcm.getUser_id(), streamId, null, rcm.getUserip(),
-					rcm.getScope(), rcm.getExternalUserId(),
-					rcm.getExternalUserType(), rcm.getEmail(),
-					rcm.getFirstname(), rcm.getLastname());
-		} catch (Exception err) {
-			log.error("roomJoin", err);
 		}
+		Client rcm = sessionManager.addClientListItem(conn.getClient().getId(),
+				conn.getScope().getName(), conn.getRemotePort(),
+				conn.getRemoteAddress(), swfURL, isAVClient, null);
+		
+		SessionVariablesUtil.initClient(conn.getClient(), isAVClient, rcm.getPublicSID());
+		//TODO add similar code for other connections, merge with above block
+		if (map.containsKey("screenClient")) {
+			//TODO add check for room rights
+			String parentSid = (String)map.get("parentSid");
+			rcm.setRoom_id(Long.parseLong(conn.getScope().getName()));
+			rcm.setScreenClient(true);
+			SessionVariablesUtil.setIsScreenClient(conn.getClient());
+			
+			rcm.setUser_id(((Integer)map.get("userId")).longValue());
+			SessionVariablesUtil.setUserId(conn.getClient(), rcm.getUser_id());
+
+			rcm.setStreamPublishName(parentSid);
+			User u = usersDao.get(rcm.getUser_id());
+			rcm.setUsername(u.getLogin());
+			rcm.setFirstname(u.getFirstname());
+			rcm.setLastname(u.getLastname());
+			log.debug("publishName :: " + rcm.getStreamPublishName());
+			sessionManager.updateClientByStreamId(streamId, rcm, false, null);
+		}
+
+		// Log the User
+		conferenceLogDao.addConferenceLog("ClientConnect",
+				rcm.getUser_id(), streamId, null, rcm.getUserip(),
+				rcm.getScope(), rcm.getExternalUserId(),
+				rcm.getExternalUserType(), rcm.getEmail(),
+				rcm.getFirstname(), rcm.getLastname());
 		return true;
 	}
 
@@ -187,44 +204,45 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 			log.debug("-----------  screenSharerAction ENTER");
 			IConnection current = Red5.getConnectionLocal();
 
-			Client rc = sessionManager.getClientByStreamId(current.getClient().getId(), null);
+			Client control = sessionManager.getClientByStreamId(current.getClient().getId(), null);
+			Client client = sessionManager.getClientByPublicSID(control.getStreamPublishName(), false, null);
 
 			Map<String, String> returnMap = new HashMap<String, String>();
 
-			if (rc != null) {
+			if (client != null) {
 				boolean changed = false;
-				if (Boolean.valueOf("" + map.get("stopStreaming")) && rc.isStartStreaming()) {
+				if (Boolean.valueOf("" + map.get("stopStreaming")) && client.isStartStreaming()) {
 					changed = true;
-					rc.setStartStreaming(false);
+					client.setStartStreaming(false);
 					//Send message to all users
-					sendMessageToCurrentScope("stopScreenSharingMessage", rc, false);
+					sendMessageToCurrentScope("stopScreenSharingMessage", client, false);
 					
 					returnMap.put("result", "stopSharingOnly");
 				}
-				if (Boolean.valueOf("" + map.get("stopRecording")) && rc.getIsRecording()) {
+				if (Boolean.valueOf("" + map.get("stopRecording")) && client.getIsRecording()) {
 					changed = true;
-					rc.setStartRecording(false);
-					rc.setIsRecording(false);
+					client.setStartRecording(false);
+					client.setIsRecording(false);
 					
 					returnMap.put("result", "stopRecordingOnly");
 					//Send message to all users
-					sendMessageToCurrentScope("stopRecordingMessage", rc, false);
+					sendMessageToCurrentScope("stopRecordingMessage", client, false);
 
-					flvRecorderService.stopRecordAndSave(current.getScope(), rc, null);
+					flvRecorderService.stopRecordAndSave(current.getScope(), client, null);
 				}
-				if (Boolean.valueOf("" + map.get("stopPublishing")) && rc.isScreenPublishStarted()) {
+				if (Boolean.valueOf("" + map.get("stopPublishing")) && client.isScreenPublishStarted()) {
 					changed = true;
-					rc.setScreenPublishStarted(false);
+					client.setScreenPublishStarted(false);
 					returnMap.put("result", "stopPublishingOnly");
 					
 					//Send message to all users
-					sendMessageToCurrentScope("stopPublishingMessage", rc, false);
+					sendMessageToCurrentScope("stopPublishingMessage", client, false);
 				}
 				
 				if (changed) {
-					sessionManager.updateClientByStreamId(rc.getStreamid(), rc, false, null);
+					sessionManager.updateClientByStreamId(client.getStreamid(), client, false, null);
 					
-					if (!rc.isStartStreaming() && !rc.isStartRecording() && !rc.isStreamPublishStarted()) {
+					if (!client.isStartStreaming() && !client.isStartRecording() && !client.isStreamPublishStarted()) {
 						returnMap.put("result", "stopAll");
 					}
 				}
@@ -268,75 +286,50 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 	 * @return returns key,value Map with multiple return values or null in case of exception
 	 * 
 	 */
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public Map setConnectionAsSharingClient(Map map) {
+	public Map<String, Object> setConnectionAsSharingClient(Map<String, Object> map) {
 		try {
 			log.debug("-----------  setConnectionAsSharingClient");
 			IConnection current = Red5.getConnectionLocal();
 
-			Client currentClient = sessionManager.getClientByStreamId(current.getClient().getId(), null);
+			Client control = sessionManager.getClientByStreamId(current.getClient().getId(), null);
+			Client client = sessionManager.getClientByPublicSID(control.getStreamPublishName(), false, null);
 
-			if (currentClient != null) {
+			if (client != null) {
 				boolean startRecording = Boolean.valueOf("" + map.get("startRecording"));
 				boolean startStreaming = Boolean.valueOf("" + map.get("startStreaming"));
-				boolean startPublishing = Boolean.valueOf("" + map.get("startPublishing"))
-					&& (0 == sessionManager.getPublishingCount(currentClient.getRoom_id()));
+				boolean startPublishing = Boolean.valueOf("" + map.get("startPublishing")) && (0 == sessionManager.getPublishingCount(client.getRoom_id()));
 
-				currentClient.setRoom_id(Long.parseLong(current.getScope().getName()));
-
-				// Set this connection to be a RTMP-Java Client
-				currentClient.setScreenClient(true);
-				
-				SessionVariablesUtil.setIsScreenClient(current.getClient());
-				
-				currentClient.setUser_id(Long.parseLong(map.get("user_id").toString()));
-				SessionVariablesUtil.setUserId(current.getClient(), Long.parseLong(map.get("user_id").toString()));
-
-				boolean alreadyStreaming = currentClient.isStartStreaming();
+				boolean alreadyStreaming = client.isStartStreaming();
 				if (startStreaming) {
-					currentClient.setStartStreaming(true);
+					client.setStartStreaming(true);
 				}
-				boolean alreadyRecording = currentClient.isStartRecording();
+				boolean alreadyRecording = client.isStartRecording();
 				if (startRecording) {
-					currentClient.setStartRecording(true);
+					client.setStartRecording(true);
 				}
 				if (startPublishing) {
-					currentClient.setStreamPublishStarted(true);
+					client.setStreamPublishStarted(true);
 				}
 
-				sessionManager.updateClientByStreamId(current.getClient().getId(), currentClient, false, null);
+				client.setVX(Integer.parseInt(map.get("screenX").toString()));
+				client.setVY(Integer.parseInt(map.get("screenY").toString()));
+				client.setVWidth(Integer.parseInt(map.get("screenWidth").toString()));
+				client.setVHeight(Integer.parseInt(map.get("screenHeight").toString()));
+				sessionManager.updateClientByStreamId(current.getClient().getId(), client, false, null);
 
-				Map returnMap = new HashMap();
+				Map<String, Object> returnMap = new HashMap<String, Object>();
 				returnMap.put("alreadyPublished", false);
 
 				// if is already started screen sharing, then there is no need
 				// to start it again
-				if (currentClient.isScreenPublishStarted()) {
+				if (client.isScreenPublishStarted()) {
 					returnMap.put("alreadyPublished", true);
 				}
 
-				currentClient.setVX(Integer.parseInt(map.get("screenX").toString()));
-				currentClient.setVY(Integer.parseInt(map.get("screenY").toString()));
-				currentClient.setVWidth(Integer.parseInt(map.get("screenWidth").toString()));
-				currentClient.setVHeight(Integer.parseInt(map.get("screenHeight").toString()));
-
-				log.debug("screen x,y,width,height " + currentClient.getVX()
-						+ " " + currentClient.getVY() + " "
-						+ currentClient.getVWidth() + " "
-						+ currentClient.getVHeight());
-
-				log.debug("publishName :: " + map.get("publishName"));
-
-				currentClient.setStreamPublishName(map.get("publishName").toString());
-
-				Client currentScreenUser = sessionManager.getClientByPublicSID(currentClient.getStreamPublishName(), false, null);
-
-				currentClient.setFirstname(currentScreenUser.getFirstname());
-				currentClient.setLastname(currentScreenUser.getLastname());
-
-				// This is duplicated, but its not sure that in the meantime
-				// somebody requests this Client Object Info
-				sessionManager.updateClientByStreamId(current.getClient().getId(), currentClient, false, null);
+				log.debug("screen x,y,width,height " + client.getVX()
+						+ " " + client.getVY() + " "
+						+ client.getVWidth() + " "
+						+ client.getVHeight());
 
 				if (startStreaming) {
 					if (!alreadyStreaming) {
@@ -345,9 +338,9 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 						log.debug("start streamPublishStart Is Screen Sharing ");
 						
 						//Send message to all users
-						sendMessageToCurrentScope("newScreenSharing", currentClient, false);
+						sendMessageToCurrentScope("newScreenSharing", client, false);
 					} else {
-						log.warn("Streaming is already started for the client id=" + currentClient.getId() + ". Second request is ignored.");
+						log.warn("Streaming is already started for the client id=" + client.getId() + ". Second request is ignored.");
 					}
 				}
 				if (startRecording) {
@@ -356,17 +349,16 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 	
 						String recordingName = "Recording " + CalendarPatterns.getDateWithTimeByMiliSeconds(new Date());
 	
-						flvRecorderService.recordMeetingStream(current, recordingName, "", false);
+						flvRecorderService.recordMeetingStream(current, client, recordingName, "", false);
 					} else {
-						log.warn("Recording is already started for the client id=" + currentClient.getId() + ". Second request is ignored.");
+						log.warn("Recording is already started for the client id=" + client.getId() + ". Second request is ignored.");
 					}
 				}
 				if (startPublishing) {
-					sendMessageToCurrentScope("startedPublishing", new Object[]{currentClient, "rtmp://" + map.get("publishingHost") + ":1935/"
+					sendMessageToCurrentScope("startedPublishing", new Object[]{client, "rtmp://" + map.get("publishingHost") + ":1935/"
 							+ map.get("publishingApp") + "/" + map.get("publishingId")}, false, true);
 					returnMap.put("modus", "startPublishing");
 				}
-
 				return returnMap;
 
 			} else {
@@ -827,10 +819,8 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 	@SuppressWarnings("unchecked")
 	public void setNewCursorPosition(Object item) {
 		try {
-
 			IConnection current = Red5.getConnectionLocal();
-			String streamid = current.getClient().getId();
-			Client currentClient = sessionManager.getClientByStreamId(streamid, null);
+			Client currentClient = sessionManager.getClientByStreamId(current.getClient().getId(), null);
 
 			@SuppressWarnings("rawtypes")
 			Map cursor = (Map) item;
@@ -1799,7 +1789,10 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 		@Override
 		public void run() {
 			try {
-				if (scope != null) {
+				if (scope == null) {
+					log.debug(String.format("[MessageSender] -> 'Unable to send message to NULL scope' %s, %s", remoteMethodName, newMessage));
+				} else {
+					log.trace(String.format("[MessageSender] -> 'sending message' %s, %s", remoteMethodName, newMessage));
 					// Send to all Clients of that Scope(Room)
 					for (IConnection conn : scope.getClientConnections()) {
 						if (conn != null && conn instanceof IServiceCapableConnection) {
@@ -1809,9 +1802,10 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 							((IServiceCapableConnection) conn).invoke(remoteMethodName, new Object[] { newMessage }, ScopeApplicationAdapter.this);
 						}
 					}
+					log.trace(String.format("[MessageSender] -> 'sending message DONE' %s", remoteMethodName));
 				}
 			} catch (Exception err) {
-				log.error(String.format("[sendMessageToCurrentScope -> %s, %s]", remoteMethodName, newMessage), err);
+				log.error(String.format("[MessageSender -> %s, %s]", remoteMethodName, newMessage), err);
 			}
 		}
 	}
@@ -2118,7 +2112,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 			}
 			String recordingName = "Interview " + CalendarPatterns.getDateWithTimeByMiliSeconds(new Date());
 
-			flvRecorderService.recordMeetingStream(current, recordingName, "", true);
+			flvRecorderService.recordMeetingStream(current, current_rcl, recordingName, "", true);
 
 			return true;
 		} catch (Exception err) {
@@ -2128,24 +2122,15 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 	}
 
 	@SuppressWarnings({ "rawtypes" })
-	public Boolean sendRemoteCursorEvent(String streamid, Map messageObj) {
-		try {
-
-			IConnection current = Red5.getConnectionLocal();
-
-			for (IConnection conn : current.getScope().getClientConnections()) {
-				if (conn != null) {
-					IClient client = conn.getClient();
-					if (SessionVariablesUtil.isScreenClient(client)) {
-						if (conn.getClient().getId().equals(streamid)) {
-							((IServiceCapableConnection) conn).invoke("sendRemoteCursorEvent", new Object[] { messageObj }, this);
-						}
-					}
-				}
+	public Boolean sendRemoteCursorEvent(final String streamid, Map messageObj) {
+		new MessageSender("sendRemoteCursorEvent", messageObj) {
+			
+			@Override
+			public boolean filter(IConnection conn) {
+				IClient client = conn.getClient();
+				return SessionVariablesUtil.isScreenClient(client) && conn.getClient().getId().equals(streamid);
 			}
-		} catch (Exception err) {
-			log.debug("[sendRemoteCursorEvent]", err);
-		}
+		}.start();
 		return null;
 	}
 

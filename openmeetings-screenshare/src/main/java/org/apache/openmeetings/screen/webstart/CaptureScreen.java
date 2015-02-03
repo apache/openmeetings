@@ -30,9 +30,6 @@ import java.awt.Rectangle;
 import java.awt.Robot;
 import java.io.IOException;
 import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
 import org.quartz.DisallowConcurrentExecution;
 import org.quartz.Job;
@@ -41,7 +38,9 @@ import org.quartz.JobDataMap;
 import org.quartz.JobDetail;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
+import org.quartz.JobKey;
 import org.quartz.Scheduler;
+import org.quartz.SchedulerException;
 import org.quartz.SchedulerFactory;
 import org.quartz.SimpleScheduleBuilder;
 import org.quartz.Trigger;
@@ -54,7 +53,9 @@ import org.slf4j.Logger;
 
 class CaptureScreen extends Thread {
 	private static final Logger log = getLogger(CaptureScreen.class);
-	private static final int NANO_MULTIPLIER = 1000 * 1000;
+	private final static String QUARTZ_GROUP_NAME = "ScreenShare";
+	private final static String QUARTZ_CURSOR_TRIGGER_NAME = "CursorTrigger";
+	private final static String QUARTZ_CURSOR_JOB_NAME = "CursorJob";
 	private CoreScreenShare core;
 	private int timeBetweenFrames;
 	private volatile int timestamp = 0;
@@ -68,8 +69,6 @@ class CaptureScreen extends Thread {
 	private int port = -1;
 	private int streamId;
 	private boolean startPublish = false;
-	private boolean sendCursor = false;
-	private final ScheduledExecutorService cursorScheduler = Executors.newScheduledThreadPool(1);
 	private Scheduler scheduler;
 
 	public CaptureScreen(CoreScreenShare coreScreenShare, IScreenShare client, String host, String app, int port) {
@@ -78,6 +77,12 @@ class CaptureScreen extends Thread {
 		this.host = host;
 		this.app = app;
 		this.port = port;
+		SchedulerFactory sf = new StdSchedulerFactory();
+		try {
+			scheduler = sf.getScheduler();
+		} catch (SchedulerException e) {
+			log.error("Unexpected error while creating scheduler", e);
+		}
 	}
 
 	public void release() {
@@ -86,11 +91,6 @@ class CaptureScreen extends Thread {
 				scheduler.shutdown(true);
 				scheduler = null;
 			}
-		} catch (Exception e) {
-			log.error("Unexpected error while shutting down scheduler", e);
-		}
-		try {
-			cursorScheduler.shutdownNow();
 		} catch (Exception e) {
 			log.error("Unexpected error while shutting down scheduler", e);
 		}
@@ -109,32 +109,22 @@ class CaptureScreen extends Thread {
 			se = new ScreenV1Encoder(3 * FPS); //send keyframe every 3 seconds
 			timeCaptureStarted = System.currentTimeMillis();
 
-			JobDetail encodeJob = JobBuilder.newJob(EncodeJob.class).withIdentity("EncodeJob", "ScreenShare").build();
+			JobDetail encodeJob = JobBuilder.newJob(EncodeJob.class).withIdentity("EncodeJob", QUARTZ_GROUP_NAME).build();
 			encodeJob.getJobDataMap().put(EncodeJob.CAPTURE_KEY, this);
 			Trigger encodeTrigger = TriggerBuilder.newTrigger()
-					.withIdentity("EncodeTrigger", "ScreenShare")
+					.withIdentity("EncodeTrigger", QUARTZ_GROUP_NAME)
 					.withSchedule(SimpleScheduleBuilder.simpleSchedule().withIntervalInMilliseconds(timeBetweenFrames).repeatForever())
 					.build();
-			JobDetail sendJob = JobBuilder.newJob(SendJob.class).withIdentity("SendJob", "ScreenShare").build();
+			JobDetail sendJob = JobBuilder.newJob(SendJob.class).withIdentity("SendJob", QUARTZ_GROUP_NAME).build();
 			Trigger sendTrigger = TriggerBuilder.newTrigger()
-					.withIdentity("SendTrigger", "ScreenShare")
+					.withIdentity("SendTrigger", QUARTZ_GROUP_NAME)
 					.withSchedule(SimpleScheduleBuilder.simpleSchedule().withIntervalInMilliseconds(timeBetweenFrames).repeatForever())
 					.build();
 			sendJob.getJobDataMap().put(SendJob.CAPTURE_KEY, this);
 
-			SchedulerFactory sf = new StdSchedulerFactory();
-			scheduler = sf.getScheduler();
 			scheduler.scheduleJob(encodeJob, encodeTrigger);
 			scheduler.scheduleJob(sendJob, sendTrigger);
 			scheduler.start();
-			
-			if (sendCursor) {
-				cursorScheduler.scheduleWithFixedDelay(new Runnable() {
-					public void run() {
-						core.sendCursorStatus();
-					}
-				}, 0, timeBetweenFrames * NANO_MULTIPLIER, TimeUnit.NANOSECONDS);
-			}
 		} catch (Exception e) {
 			log.error("Error while running: ", e);
 		}
@@ -229,6 +219,20 @@ class CaptureScreen extends Thread {
 		}
 	}
 	
+	@DisallowConcurrentExecution
+	public static class CursorJob implements Job {
+		private static final String CAPTURE_KEY = "capture";
+		
+		public CursorJob() {}
+		
+		@Override
+		public void execute(JobExecutionContext context) throws JobExecutionException {
+			JobDataMap data = context.getJobDetail().getJobDataMap();
+			CaptureScreen capture = (CaptureScreen)data.get(CAPTURE_KEY);
+			capture.core.sendCursorStatus();
+		}
+	}
+	
 	private void pushVideo(VideoData data, int ts) throws IOException {
 		if (startPublish) {
 			if (Red5.getConnectionLocal() == null) {
@@ -264,6 +268,20 @@ class CaptureScreen extends Thread {
 	}
 
 	public void setSendCursor(boolean sendCursor) {
-		this.sendCursor = sendCursor;
+		try {
+			if (sendCursor) {
+				JobDetail cursorJob = JobBuilder.newJob(CursorJob.class).withIdentity(QUARTZ_CURSOR_JOB_NAME, QUARTZ_GROUP_NAME).build();
+				Trigger cursorTrigger = TriggerBuilder.newTrigger()
+						.withIdentity(QUARTZ_CURSOR_TRIGGER_NAME, QUARTZ_GROUP_NAME)
+						.withSchedule(SimpleScheduleBuilder.simpleSchedule().withIntervalInMilliseconds(1000 / Math.min(2, FPS)).repeatForever())
+						.build();
+				cursorJob.getJobDataMap().put(CursorJob.CAPTURE_KEY, this);
+				scheduler.scheduleJob(cursorJob, cursorTrigger);
+			} else {
+				scheduler.deleteJob(JobKey.jobKey(QUARTZ_CURSOR_JOB_NAME, QUARTZ_GROUP_NAME));
+			}
+		} catch (SchedulerException e) {
+			log.error("Unexpected Error schedule/unschedule cursor job", e);
+		}
 	}
 }
