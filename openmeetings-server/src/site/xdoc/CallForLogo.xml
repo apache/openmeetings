@@ -77,7 +77,7 @@
 				<li>
 					<table>
 						<tr>
-							<td><img class="logo-big" src="images/logos/logo_om_big2.jpg" alt="Apache OpenMeetings"/></td>
+							<td><img class="logo-big" src="images/logos/logo_om_big2.png" alt="Apache OpenMeetings"/></td>
 							<td><button class="btn btn-primary" onclick="applyLogoBig($(this));"/>Apply</td>
 						</tr>
 						<tr>
