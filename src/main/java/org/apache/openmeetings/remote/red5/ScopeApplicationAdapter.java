@@ -335,10 +335,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 					returnMap.put("alreadyPublished", true);
 				}
 
-				log.debug("screen x,y,width,height " + client.getVX()
-						+ " " + client.getVY() + " "
-						+ client.getVWidth() + " "
-						+ client.getVHeight());
+				log.debug(String.format("screen x,y,width,height %s,%s,%s,%s", client.getVX(), client.getVY(), client.getVWidth(), client.getVHeight()));
 
 				if (startStreaming) {
 					if (!alreadyStreaming) {
