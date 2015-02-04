@@ -446,9 +446,6 @@ public class ImportInitvalues {
 		configurationDao.add(CONFIG_SCREENSHARING_FPS_SHOW, "true", null, "Is screensharing FPS should be displayed or not (true/false)");
 		configurationDao.add(CONFIG_SCREENSHARING_ALLOW_REMOTE, "true", null, "Is remote control will be enabled while screensharing. Allowing remote control will be not possible in case it is set to 'false' (true/false)");
 
-		configurationDao.add("default.dashboard.tab", "0", null,
-				"Default selection in Dashboard tabs as tab-index-id");
-
 		configurationDao.add(CONFIG_DASHBOARD_SHOW_MYROOMS_KEY, "1", null, "Show My Rooms Tab");
 
 		configurationDao.add("dashboard.show.chat", "1", null, "Show Chat Tab");
