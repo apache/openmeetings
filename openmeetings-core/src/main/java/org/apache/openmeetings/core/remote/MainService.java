@@ -156,7 +156,6 @@ public class MainService implements IPendingServiceCallback {
 		try {
 
 			log.debug("############### secureLoginByRemote " + secureHash);
-			System.out.println("############### secureLoginByRemote " + secureHash);
 
 			String clientURL = Red5.getConnectionLocal().getRemoteAddress();
 
@@ -189,7 +188,7 @@ public class MainService implements IPendingServiceCallback {
 				sessiondataDao.updateUser(SID, currentClient.getUser_id());
 			}
 
-			currentClient.setAllowRecording(soapLogin.getAllowRecording());
+			currentClient.setAllowRecording(soapLogin.isAllowRecording());
 			sessionManager.updateClientByStreamId(streamId, currentClient, false, null);
 
 			if (loginReturn == null) {

@@ -177,7 +177,7 @@ public class SOAPLogin implements Serializable {
 		this.landingZone = landingZone;
 	}
 	
-	public boolean getAllowRecording() {
+	public boolean isAllowRecording() {
 		return allowRecording;
 	}
 	public void setAllowRecording(boolean allowRecording) {

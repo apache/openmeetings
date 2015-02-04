@@ -100,7 +100,7 @@ public class StartSharingEventBehavior extends AbstractDefaultAjaxBehavior {
 					.replace("$defaultFps", cfgDao.getConfValue(CONFIG_SCREENSHARING_FPS, String.class, ""))
 					.replace("$showFps", cfgDao.getConfValue(CONFIG_SCREENSHARING_FPS_SHOW, String.class, "true"))
 					.replace("$allowRemote", cfgDao.getConfValue(CONFIG_SCREENSHARING_ALLOW_REMOTE, String.class, "true"))
-					.replace("$allowRecording", "true") //FIXME add/remove
+					.replace("$allowRecording", "true") //FIXME add/remove Room.allowRecording + Client.allowRecording
 					.replace("$allowPublishing", "true") //FIXME add/remove
 					.replace("$keystore", "--dummy--") //FIXME add/remove
 					.replace("$password", "--dummy--") //FIXME add/remove

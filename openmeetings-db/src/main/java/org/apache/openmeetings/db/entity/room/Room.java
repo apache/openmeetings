@@ -180,9 +180,8 @@ public class Room implements IDataProviderEntity {
 										// recording
 
 	@Column(name = "allow_recording")
-	@Element(data = true, required = false)
-	private Boolean allowRecording; // Show or show not the recording option in
-									// a conference room
+	@Element(name = "allowRecording", data = true, required = false)
+	private boolean allowRecording = true; // Show or show not the recording option in a conference room
 	/**
 	 * Layout of Room
 	 */
@@ -445,11 +444,11 @@ public class Room implements IDataProviderEntity {
 		this.waitForRecording = waitForRecording;
 	}
 
-	public Boolean getAllowRecording() {
+	public boolean isAllowRecording() {
 		return allowRecording;
 	}
 
-	public void setAllowRecording(Boolean allowRecording) {
+	public void setAllowRecording(boolean allowRecording) {
 		this.allowRecording = allowRecording;
 	}
 

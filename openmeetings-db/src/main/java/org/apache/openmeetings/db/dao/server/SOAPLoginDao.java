@@ -46,11 +46,9 @@ public class SOAPLoginDao {
 			boolean showNickNameDialog, String landingZone,
 			boolean allowRecording) {
 		try {
-
 			String thistime = "TIME_" + (new Date().getTime());
 
-			String hash = ManageCryptStyle.getInstanceOfCrypt()
-					.createPassPhrase(thistime);
+			String hash = ManageCryptStyle.getInstanceOfCrypt().createPassPhrase(thistime);
 
 			SOAPLogin soapLogin = new SOAPLogin();
 			soapLogin.setCreated(new Date());
