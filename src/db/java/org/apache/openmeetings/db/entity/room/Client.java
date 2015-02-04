@@ -366,7 +366,7 @@ public class Client implements IDataProviderEntity, Serializable {
 	private Integer interviewPodId = null;
 	
 	/**
-	 * @see Client#getAllowRecording()
+	 * @see Client#isAllowRecording()
 	 */
 	@Column(name = "allow_recording")
 	private boolean allowRecording = true;
@@ -827,7 +827,7 @@ public class Client implements IDataProviderEntity, Serializable {
 		this.canGiveAudio = canGiveAudio;
 	}
 
-	public boolean getAllowRecording() {
+	public boolean isAllowRecording() {
 		return allowRecording;
 	}
 

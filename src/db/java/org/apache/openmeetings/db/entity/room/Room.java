@@ -112,7 +112,7 @@ public class Room implements Serializable, IDataProviderEntity {
 	private boolean deleted;
 
 	@Column(name = "ispublic")
-	@Element(data = true, required = false)
+	@Element(name = "ispublic", data = true, required = false)
 	private boolean ispublic;
 
 	@Column(name = "numberOfPartizipants")
@@ -143,7 +143,7 @@ public class Room implements Serializable, IDataProviderEntity {
 	// If this is true all participants of a meeting have to wait for the
 	// moderator to come into the room
 	@Column(name = "ismoderatedroom")
-	@Element(data = true, required = false)
+	@Element(name="isModeratedRoom", data = true, required = false)
 	private boolean isModeratedRoom;
 
 	@Column(name = "allow_user_questions")
@@ -151,7 +151,7 @@ public class Room implements Serializable, IDataProviderEntity {
 	private Boolean allowUserQuestions;
 
 	@Column(name = "is_audio_only")
-	@Element(data = true, required = false)
+	@Element(name = "isAudioOnly", data = true, required = false)
 	private Boolean isAudioOnly;
 	
 	@Column(name = "allow_font_styles", nullable = false)
@@ -176,9 +176,8 @@ public class Room implements Serializable, IDataProviderEntity {
 										// recording
 
 	@Column(name = "allow_recording")
-	@Element(data = true, required = false)
-	private Boolean allowRecording; // Show or show not the recording option in
-									// a conference room
+	@Element(name = "allowRecording", data = true, required = false)
+	private boolean allowRecording = true; // Show or show not the recording option in a conference room
 	/**
 	 * Layout of Room
 	 */
@@ -187,11 +186,11 @@ public class Room implements Serializable, IDataProviderEntity {
 	private Boolean hideTopBar = false;
 
 	@Column(name = "hide_chat")
-	@Element(data = true, required = false)
+	@Element(name = "hideChat", data = true, required = false)
 	private Boolean hideChat = false;
 
 	@Column(name = "hide_activities_and_actions")
-	@Element(data = true, required = false)
+	@Element(name = "hideActivitiesAndActions", data = true, required = false)
 	private Boolean hideActivitiesAndActions = false;
 
 	@Column(name = "hide_files_explorer")
@@ -441,11 +440,11 @@ public class Room implements Serializable, IDataProviderEntity {
 		this.waitForRecording = waitForRecording;
 	}
 
-	public Boolean getAllowRecording() {
+	public boolean isAllowRecording() {
 		return allowRecording;
 	}
 
-	public void setAllowRecording(Boolean allowRecording) {
+	public void setAllowRecording(boolean allowRecording) {
 		this.allowRecording = allowRecording;
 	}
 

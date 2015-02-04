@@ -36,9 +36,11 @@ import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.openmeetings.data.basic.FieldManager;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
+import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.dao.server.ISessionManager;
 import org.apache.openmeetings.db.dao.server.SessiondataDao;
 import org.apache.openmeetings.db.entity.room.Client;
+import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.util.OmFileHelper;
 import org.apache.openmeetings.util.OpenmeetingsVariables;
 import org.apache.velocity.VelocityContext;
@@ -65,6 +67,8 @@ public class ScreenController {
 	public ConfigurationDao cfgDao;
 	@Autowired
 	public FieldManager fieldManager;
+	@Autowired
+	public RoomDao roomDao;
 
 	private enum ConnectionType {
 		rtmp
@@ -86,8 +90,7 @@ public class ScreenController {
 	}
 	
     @RequestMapping(value = "/screen.upload")
-	public void handleRequest(HttpServletRequest request,
-			HttpServletResponse response) {
+	public void handleRequest(HttpServletRequest request, HttpServletResponse response) {
 		try {
 			String sid = request.getParameter("sid");
 			Long users_id = sessiondataDao.checkSession(sid);
@@ -154,7 +157,8 @@ public class ScreenController {
 			if (roomId == null) {
 				throw new Exception("Client has no room " + rc);
 			}
-			boolean allowRecording = rc.getAllowRecording() && (0 == sessionManager.getRecordingCount(roomId));
+			Room room = roomDao.get(roomId);
+			boolean allowRecording = room.isAllowRecording() && rc.isAllowRecording() && (0 == sessionManager.getRecordingCount(roomId));
 			boolean allowPublishing = (0 == sessionManager.getPublishingCount(roomId));
 			
 			Context ctx = new VelocityContext();
