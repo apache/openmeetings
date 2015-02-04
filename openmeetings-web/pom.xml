@@ -350,32 +350,32 @@
 		<dependency>
 			<groupId>com.googlecode.wicket-jquery-ui</groupId>
 			<artifactId>wicket-jquery-ui-core</artifactId>
-			<version>${wickets.version}</version>
+			<version>${wicketju.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.googlecode.wicket-jquery-ui</groupId>
 			<artifactId>wicket-jquery-ui</artifactId>
-			<version>${wickets.version}</version>
+			<version>${wicketju.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.googlecode.wicket-jquery-ui</groupId>
 			<artifactId>wicket-jquery-ui-calendar</artifactId>
-			<version>${wickets.version}</version>
+			<version>${wicketju.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.googlecode.wicket-jquery-ui</groupId>
 			<artifactId>wicket-jquery-ui-plugins</artifactId>
-			<version>${wickets.version}</version>
+			<version>${wicketju.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.googlecode.wicket-jquery-ui</groupId>
 			<artifactId>wicket-kendo-ui</artifactId>
-			<version>${wickets.version}</version>
+			<version>${wicketju.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.googlecode.wicket-jquery-ui</groupId>
 			<artifactId>wicket-kendo-ui-theme-default</artifactId>
-			<version>${wickets.version}</version>
+			<version>${wicketju.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.wicketstuff</groupId>

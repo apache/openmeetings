@@ -18,13 +18,15 @@
  */
 package org.apache.openmeetings.web.user.calendar;
 
+import static org.apache.openmeetings.web.app.WebSession.getUserId;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
 import org.apache.openmeetings.web.app.Application;
-import org.apache.openmeetings.web.app.WebSession;
+import org.apache.openmeetings.web.util.CalendarHelper;
 
 import com.googlecode.wicket.jquery.ui.calendar.CalendarEvent;
 import com.googlecode.wicket.jquery.ui.calendar.CalendarModel;
@@ -40,9 +42,8 @@ public class AppointmentModel extends CalendarModel implements ICalendarVisitor 
 	@Override
 	protected List<? extends CalendarEvent> load() {
 		List<CalendarEvent> list = new ArrayList<CalendarEvent>();
-		for (Appointment a : Application.getBean(AppointmentDao.class).getAppointmentsByRange(WebSession.getUserId(), this.getStart(), this.getEnd())) {
-			CalendarEvent c = new OmCalendarEvent(a);
-			list.add(c);
+		for (Appointment a : Application.getBean(AppointmentDao.class).getAppointmentsByRange(getUserId(), CalendarHelper.getDate(getStart()), CalendarHelper.getDate(getEnd()))) {
+			list.add(new OmCalendarEvent(a));
 		}
 		return list;
 	}

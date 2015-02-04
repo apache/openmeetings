@@ -46,6 +46,7 @@ import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.pages.MainPage;
 import org.apache.openmeetings.web.user.rooms.RoomEnterBehavior;
+import org.apache.openmeetings.web.util.CalendarHelper;
 import org.apache.openmeetings.web.util.FormatHelper;
 import org.apache.openmeetings.web.util.RoomTypeDropDown;
 import org.apache.openmeetings.web.util.UserMultiChoice;
@@ -59,12 +60,14 @@ import org.apache.wicket.markup.html.form.PasswordTextField;
 import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
+import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.util.CollectionModel;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
+import org.threeten.bp.LocalDateTime;
 
 import com.googlecode.wicket.jquery.ui.plugins.wysiwyg.WysiwygEditor;
 import com.googlecode.wicket.jquery.ui.plugins.wysiwyg.toolbar.DefaultWysiwygToolbar;
@@ -74,7 +77,7 @@ import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
 import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButtons;
 import com.googlecode.wicket.jquery.ui.widget.dialog.DialogIcon;
 import com.googlecode.wicket.jquery.ui.widget.dialog.MessageDialog;
-import com.googlecode.wicket.kendo.ui.form.datetime.DateTimePicker;
+import com.googlecode.wicket.kendo.ui.form.datetime.local.DateTimePicker;
 
 public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 	private static final long serialVersionUID = 1L;
@@ -97,22 +100,24 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 		return 650;
 	}
 	
-	public void setModelObjectWithAjaxTarget(Appointment object, AjaxRequestTarget target) {
-		form.setModelObject(object);
-		form.setEnabled(isOwner(object));
-		log.debug(" -- setModelObjectWithAjaxTarget -- Current model " + object);
-		if (object.getId() != null) {
-			delete.setVisible(isOwner(object), target);
-			enterRoom.setVisible(object.getRoom() != null, target);
+	public void setModelObjectWithAjaxTarget(Appointment a, AjaxRequestTarget target) {
+		form.setModelObject(a);
+		form.start.setModelObject(CalendarHelper.getDate(a.getStart()));
+		form.end.setModelObject(CalendarHelper.getDate(a.getEnd()));
+		form.setEnabled(isOwner(a));
+		log.debug(" -- setModelObjectWithAjaxTarget -- Current model " + a);
+		if (a.getId() != null) {
+			delete.setVisible(isOwner(a), target);
+			enterRoom.setVisible(a.getRoom() != null, target);
 		} else {
 			delete.setVisible(false, target);
 			enterRoom.setVisible(false, target);
 		}
-		save.setVisible(isOwner(object), target);
-		super.setModelObject(object);
+		save.setVisible(isOwner(a), target);
+		super.setModelObject(a);
 	}
 	
-	public AppointmentDialog(String id, String title, CalendarPanel calendarPanel, IModel<Appointment> model) {
+	public AppointmentDialog(String id, String title, CalendarPanel calendarPanel, CompoundPropertyModel<Appointment> model) {
 		super(id, title, model, true);
 		log.debug(" -- AppointmentDialog -- Current model " + getModel().getObject());
 		this.calendarPanel = calendarPanel;
@@ -206,6 +211,8 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
         	}
         }
         a.setMeetingMembers(attendees);
+        a.setStart(CalendarHelper.getDate(form.start.getModelObject()));
+        a.setEnd(CalendarHelper.getDate(form.end.getModelObject()));
         getBean(AppointmentDao.class).update(a, getUserId());
 		target.add(feedback);
 		calendarPanel.refresh(target);
@@ -224,8 +231,8 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 	private class AppointmentForm extends Form<Appointment> {
 		private static final long serialVersionUID = 1L;
 		private boolean createRoom = true;
-		private DateTimePicker start;
-		private DateTimePicker end;
+		private DateTimePicker start = new DateTimePicker("start", Model.of(LocalDateTime.now()), "yyyy/MM/dd", "HH:mm:ss");  //FIXME use user locale
+		private DateTimePicker end = new DateTimePicker("end", Model.of(LocalDateTime.now()), "yyyy/MM/dd", "HH:mm:ss");  //FIXME use user locale
 		private final PasswordTextField pwd = new PasswordTextField("password");
 		private final Label owner = new Label("aowner", Model.of(""));
 		private final DropDownChoice<RoomType> roomType = new RoomTypeDropDown("room.roomtype");
@@ -237,7 +244,7 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 		@Override
 		protected void onModelChanged() {
 			super.onModelChanged();
-			
+
 			Appointment a = getModelObject();
 			List<AppointmentReminderType> remindTypes = getRemindTypes();
 			if (a.getRemind() == null && !remindTypes.isEmpty()) {
@@ -276,10 +283,10 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 			pwd.setEnabled(a.isPasswordProtected());
 			owner.setOutputMarkupPlaceholderTag(true).setOutputMarkupId(true);
 			owner.setDefaultModel(Model.of(FormatHelper.formatUser(a.getOwner())));
-			owner.setVisible(a.getOwner() != null);
+			owner.setVisible(!isOwner(a));
 		}
 		
-		public AppointmentForm(String id, IModel<Appointment> model) {
+		public AppointmentForm(String id, CompoundPropertyModel<Appointment> model) {
 			super(id, model);
 			setOutputMarkupId(true);
 			
@@ -289,8 +296,8 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 			add(toolbar);
 			add(new WysiwygEditor("description", toolbar));
 			add(new TextField<String>("location"));
-			add(start = new DateTimePicker("start", "yyyy/MM/dd", "HH:mm:ss")); //FIXME use user locale
-			add(end = new DateTimePicker("end", "yyyy/MM/dd", "HH:mm:ss")); //FIXME use user locale
+			add(start);
+			add(end);
 			pwd.setEnabled(getModelObject().isPasswordProtected());
 			pwd.setOutputMarkupId(true);
 			add(pwd);
@@ -352,7 +359,7 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 		
 		@Override
 		protected void onValidate() {
-			if (end.getConvertedInput().before(start.getConvertedInput())) {
+			if (end.getConvertedInput().isBefore(start.getConvertedInput())) {
 				error(WebSession.getString(1592));
 			}
 		}

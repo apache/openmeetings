@@ -35,10 +35,10 @@ $(function() {
 });
 
 function addCalButton(where, text, id) {
-	var my_button = '<span class="fc-header-space"></span>' +
-		'<span class="fc-button fc-state-default fc-corner-right fc-corner-left">' +
-		'<input type="text" id="' + id + '" value="' + text +'" /></span>';
-	$("td.fc-header-" + where).append(my_button);
+	var my_button = 
+		'<button class="fc-button fc-state-default fc-corner-right fc-corner-left">' +
+		'<input type="text" id="' + id + '" value="' + text +'" /></button>';
+	$(".fc .fc-toolbar .fc-" + where).append(my_button);
 	 
 	var dp = $("#"+id);
 	dp.datepicker({
@@ -49,12 +49,11 @@ function addCalButton(where, text, id) {
 		changeYear: true,
 		changeDay: true,
 		onChangeMonthYear: function(year, month, inst) {
-			//v2 version $('#${markupId}').fullCalendar('gotoDate', $.fullCalendar.moment(year + '-' + (month-1) + '-' + inst.currentDay));
-			$('#${markupId}').fullCalendar('gotoDate', year, month - 1, inst.currentDay);
+			$('#${markupId}').fullCalendar('gotoDate', year + '-' + ('0' + month).slice(-2) + '-' + inst.selectedDay);
 		},
 		onSelect: function(dateText, inst) {
 		     var date = new Date(dateText);
-		     $('#${markupId}').fullCalendar('gotoDate', date.getFullYear() + '-' + date.getMonth() + '-' + date.getDate());
+		     $('#${markupId}').fullCalendar('gotoDate', date.getFullYear() + '-' + ('0' + (date.getMonth() + 1)).slice(-2) + '-' + date.getDate());
 		}
 	});
 	

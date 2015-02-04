@@ -187,33 +187,24 @@ public class AppointmentDao {
 		a.setUpdated(new Date());
 		a.setDeleted(true);
 		a.setMeetingMembers(null);
-		if (Boolean.TRUE.equals(a.getRoom().isAppointment())) {
+		if (a.getRoom().isAppointment()) {
 			a.getRoom().setDeleted(true);
 		}
 		update(a, userId);
 	}
 	
 	public List<Appointment> getAppointmentsByRange(Long userId, Date start, Date end) {
-		Calendar calstart = Calendar.getInstance();
-		calstart.setTime(start);
-		calstart.set(Calendar.HOUR, 0);
-
-		Calendar calend = Calendar.getInstance();
-		calend.setTime(end);
-		calend.set(Calendar.HOUR, 23);
-		calend.set(Calendar.MINUTE, 59);
-		
-		log.debug("Start " + calstart.getTime() + " End " + calend.getTime());
+		log.debug("Start " + start + " End " + end);
 
 		TypedQuery<Appointment> query = em.createNamedQuery("appointmentsInRange", Appointment.class);
-		query.setParameter("starttime", calstart.getTime());
-		query.setParameter("endtime", calend.getTime());
+		query.setParameter("starttime", start);
+		query.setParameter("endtime", end);
 		query.setParameter("userId", userId);
 		
 		List<Appointment> listAppoints = new ArrayList<Appointment>(query.getResultList()); 
 		TypedQuery<Appointment> q1 = em.createNamedQuery("joinedAppointmentsInRange", Appointment.class);
-		q1.setParameter("starttime", calstart.getTime());
-		q1.setParameter("endtime", calend.getTime());
+		q1.setParameter("starttime", start);
+		q1.setParameter("endtime", end);
 		q1.setParameter("userId", userId);
 		for (Appointment a : q1.getResultList()) {
 			a.setConnectedEvent(true); //TODO need to be reviewed

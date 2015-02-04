@@ -21,7 +21,6 @@ package org.apache.openmeetings.web.user.calendar;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_CALENDAR_FIRST_DAY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.openmeetings.web.app.Application.getBean;
-import static org.apache.openmeetings.web.app.WebSession.getClientTimeZone;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 
 import java.util.Date;
@@ -33,6 +32,7 @@ import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.UserPanel;
+import org.apache.openmeetings.web.util.CalendarHelper;
 import org.apache.wicket.ajax.AbstractAjaxTimerBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.json.JSONArray;
@@ -44,6 +44,9 @@ import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.util.time.Duration;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
+import org.threeten.bp.LocalDateTime;
+import org.threeten.bp.ZonedDateTime;
+import org.threeten.bp.temporal.ChronoUnit;
 
 import com.googlecode.wicket.jquery.core.Options;
 import com.googlecode.wicket.jquery.ui.calendar.Calendar;
@@ -117,9 +120,9 @@ public class CalendarPanel extends UserPanel {
 		Options options = new Options();
 		options.set("header", "{left: 'prevYear,prev,next,nextYear today', center: 'title', right: 'month,agendaWeek,agendaDay'}");
 		options.set("allDaySlot", false);
-		options.set("axisFormat", "'HH(:mm)'");
+		options.set("axisFormat", Options.asString("H(:mm)"));
 		options.set("defaultEventMinutes", 60);
-		options.set("timeFormat", "{agenda: 'HH:mm{ - HH:mm}', '': 'HH(:mm)'}");
+		options.set("timeFormat", Options.asString("H(:mm)"));
 
 		options.set("buttonText", "{month: '" + WebSession.getString(801) +
 								"', week: '" + WebSession.getString(800) + 
@@ -189,24 +192,16 @@ public class CalendarPanel extends UserPanel {
 			//no need to override onDayClick
 			
 			@Override
-			public void onSelect(AjaxRequestTarget target, CalendarView view, Date start, Date end, boolean allDay) {
-				java.util.Calendar cStart = java.util.Calendar.getInstance(getClientTimeZone());
-				cStart.setTime(start);
-				target.appendJavaScript(String.format("setDatepickerDate('datepicker', new Date(%s,%s,%s));", cStart.get(java.util.Calendar.YEAR), cStart.get(java.util.Calendar.MONTH), cStart.get(java.util.Calendar.DATE)));
+			public void onSelect(AjaxRequestTarget target, CalendarView view, LocalDateTime start, LocalDateTime end, boolean allDay) {
 				Appointment a = getDefault();
-				if (CalendarView.month == view && start.equals(end)) {
-					java.util.Calendar cNow = java.util.Calendar.getInstance(getClientTimeZone());
-					cStart.set(java.util.Calendar.HOUR_OF_DAY, cNow.get(java.util.Calendar.HOUR_OF_DAY));
-					cStart.set(java.util.Calendar.MINUTE, cNow.get(java.util.Calendar.MINUTE));
-					cStart.set(java.util.Calendar.SECOND, 0);
-					cStart.set(java.util.Calendar.MILLISECOND, 0);
-					a.setStart(cStart.getTime());
-					cStart.add(java.util.Calendar.HOUR_OF_DAY, 1);
-					a.setEnd(cStart.getTime());
-				} else {
-					a.setStart(start);
-					a.setEnd(end);
+				LocalDateTime s = start, e = end;
+				if (CalendarView.month == view) {
+					LocalDateTime now = ZonedDateTime.now(CalendarHelper.getZoneId()).toLocalDateTime();
+					s = start.withHour(now.getHour()).withMinute(now.getMinute());
+					e = s.plus(1, ChronoUnit.HOURS);
 				}
+				a.setStart(CalendarHelper.getDate(s));
+				a.setEnd(CalendarHelper.getDate(e));
 				dialog.setModelObjectWithAjaxTarget(a, target);
 				
 				dialog.open(target);
