@@ -281,7 +281,7 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 				}
 			}
 			pwd.setEnabled(a.isPasswordProtected());
-			owner.setOutputMarkupId(true);
+			owner.setOutputMarkupPlaceholderTag(true).setOutputMarkupId(true);
 			owner.setDefaultModel(Model.of(FormatHelper.formatUser(a.getOwner())));
 			owner.setVisible(!isOwner(a));
 		}
