@@ -40,6 +40,8 @@ import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.dao.room.RoomTypeDao;
 import org.apache.openmeetings.db.dao.server.SessiondataDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
+import org.apache.openmeetings.db.dto.calendar.AppointmentDTO;
+import org.apache.openmeetings.db.dto.calendar.AppointmentReminderTypeDTO;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
 import org.apache.openmeetings.db.entity.calendar.AppointmentCategory;
 import org.apache.openmeetings.db.entity.calendar.AppointmentReminderType;
@@ -89,6 +91,14 @@ public class CalendarWebService {
 	@Autowired
 	private RoomTypeDao roomTypeDao;
 
+	private List<AppointmentDTO> getAppointments(List<Appointment> list) {
+		List<AppointmentDTO> result = new ArrayList<>(list.size());
+		for (Appointment a : list) {
+			result.add(new AppointmentDTO(a));
+		}
+		return result;
+	}
+	
 	/**
 	 * Load appointments by a start / end range for the current SID
 	 * 
@@ -101,15 +111,12 @@ public class CalendarWebService {
 	 *            
 	 * @return - list of appointments in range
 	 */
-	public List<Appointment> getAppointmentByRange(String SID, Date starttime,
-			Date endtime) {
-		log.debug("getAppointmentByRange : startdate - " + starttime
-				+ ", enddate - " + endtime);
+	public List<AppointmentDTO> getAppointmentByRange(String SID, Calendar starttime, Calendar endtime) {
+		log.debug("getAppointmentByRange : startdate - " + starttime.getTime() + ", enddate - " + endtime.getTime());
 		try {
 			Long users_id = sessiondataDao.checkSession(SID);
 			if (AuthLevelUtil.hasUserLevel(userDao.getRights(users_id))) {
-
-				return appointmentDao.getAppointmentsByRange(users_id, starttime, endtime);
+				return getAppointments(appointmentDao.getAppointmentsByRange(users_id, starttime.getTime(), endtime.getTime()));
 			}
 		} catch (Exception err) {
 			log.error("[getAppointmentByRange]", err);
@@ -131,15 +138,12 @@ public class CalendarWebService {
 	 *            
 	 * @return - list of appointments in range
 	 */
-	public List<Appointment> getAppointmentByRangeForUserId(String SID,
-			long userId, Date starttime, Date endtime) {
-		log.debug("getAppointmentByRange : startdate - " + starttime
-				+ ", enddate - " + endtime);
+	public List<AppointmentDTO> getAppointmentByRangeForUserId(String SID, long userId, Calendar starttime, Calendar endtime) {
+		log.debug("getAppointmentByRangeForUserId : startdate - " + starttime.getTime() + ", enddate - " + endtime.getTime());
 		try {
 			Long users_id = sessiondataDao.checkSession(SID);
 			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(users_id))) {
-
-				return appointmentDao.getAppointmentsByRange(userId, starttime, endtime);
+				return getAppointments(appointmentDao.getAppointmentsByRange(userId, starttime.getTime(), endtime.getTime()));
 			}
 		} catch (Exception err) {
 			log.error("[getAppointmentByRangeForUserId]", err);
@@ -154,14 +158,11 @@ public class CalendarWebService {
 	 *            The SID of the User. This SID must be marked as Loggedin
 	 * @return - next Calendar event
 	 */
-	public Appointment getNextAppointment(String SID) {
-
+	public AppointmentDTO getNextAppointment(String SID) {
 		try {
-
 			Long users_id = sessiondataDao.checkSession(SID);
 			if (AuthLevelUtil.hasUserLevel(userDao.getRights(users_id))) {
-
-				return appointmentLogic.getNextAppointment();
+				return new AppointmentDTO(appointmentLogic.getNextAppointment());
 			}
 		} catch (Exception err) {
 			log.error("[getNextAppointmentById]", err);
@@ -178,14 +179,11 @@ public class CalendarWebService {
 	 *            
 	 * @return - next Calendar event
 	 */
-	public Appointment getNextAppointmentForUserId(String SID, long userId) {
-
+	public AppointmentDTO getNextAppointmentForUserId(String SID, long userId) {
 		try {
-
 			Long users_id = sessiondataDao.checkSession(SID);
 			if (AuthLevelUtil.hasUserLevel(userDao.getRights(users_id))) {
-
-				return appointmentLogic.getNextAppointment();
+				return new AppointmentDTO(appointmentLogic.getNextAppointment());
 			}
 		} catch (Exception err) {
 			log.error("[getNextAppointmentById]", err);
@@ -204,15 +202,11 @@ public class CalendarWebService {
 	 *            
 	 * @return - calendar event list
 	 */
-	public List<Appointment> searchAppointmentByName(String SID,
-			String appointmentName) {
-
+	public List<AppointmentDTO> searchAppointmentByName(String SID, String appointmentName) {
 		try {
-
 			Long users_id = sessiondataDao.checkSession(SID);
 			if (AuthLevelUtil.hasUserLevel(userDao.getRights(users_id))) {
-
-				return appointmentLogic.searchAppointmentByName(appointmentName);
+				return getAppointments(appointmentLogic.searchAppointmentByName(appointmentName));
 			}
 		} catch (Exception err) {
 			log.error("[searchAppointmentByName]", err);
@@ -316,14 +310,11 @@ public class CalendarWebService {
 	 *            
 	 * @return - id of appointment updated
 	 */
-	public Long updateAppointmentTimeOnly(String SID, Long appointmentId,
-			Date appointmentstart, Date appointmentend, Long languageId) {
+	public Long updateAppointmentTimeOnly(String SID, Long appointmentId, Date appointmentstart, Date appointmentend, Long languageId) {
 		try {
-
 			Long users_id = sessiondataDao.checkSession(SID);
 			Set<Right> rights = userDao.getRights(users_id);
 			if (AuthLevelUtil.hasUserLevel(rights)) {
-
 				Appointment a = appointmentDao.get(appointmentId);
 				if (!AuthLevelUtil.hasAdminLevel(rights) && !a.getOwner().getId().equals(users_id)) {
 					throw new ServiceException("The Appointment cannot be updated by the given user");
@@ -499,17 +490,13 @@ public class CalendarWebService {
 	 * @param room_id
 	 * @return - calendar event by its room id
 	 */
-	public Appointment getAppointmentByRoomId(String SID, Long room_id) {
+	public AppointmentDTO getAppointmentByRoomId(String SID, Long room_id) {
 		try {
 			Long users_id = sessiondataDao.checkSession(SID);
 			if (AuthLevelUtil.hasUserLevel(userDao.getRights(users_id))) {
 				Appointment appStored = appointmentDao.getAppointmentByOwnerRoom(users_id, room_id);
 				if (appStored != null) {
-					Appointment appointment = new Appointment();
-					appointment.setStart(appStored.getStart());
-					appointment.setEnd(appStored.getEnd());
-		
-					return appointment;
+					return new AppointmentDTO(appStored);
 				}
 			}
 		} catch (Exception err) {
@@ -525,21 +512,17 @@ public class CalendarWebService {
 	 * @return - all categories of calendar events
 	 */
 	public List<AppointmentCategory> getAppointmentCategoryList(String SID) {
-		log.debug("AppointmenetCategoryService.getAppointmentCategoryList SID : "
-				+ SID);
+		log.debug("AppointmenetCategoryService.getAppointmentCategoryList SID : " + SID);
 
 		try {
-
 			Long users_id = sessiondataDao.checkSession(SID);
 
 			if (AuthLevelUtil.hasUserLevel(userDao.getRights(users_id))) {
+				List<AppointmentCategory> res = appointmentCategoryDao.getAppointmentCategoryList();
 
-				List<AppointmentCategory> res = appointmentCategoryDao
-						.getAppointmentCategoryList();
-
-				if (res == null || res.size() < 1)
+				if (res == null || res.size() < 1) {
 					log.debug("no AppointmentCategories found");
-				else {
+				} else {
 					for (int i = 0; i < res.size(); i++) {
 						AppointmentCategory ac = res.get(i);
 						log.debug("found appCategory : " + ac.getName());
@@ -557,14 +540,20 @@ public class CalendarWebService {
 
 	}
 
+	private List<AppointmentReminderTypeDTO> getReminders(List<AppointmentReminderType> list) {
+		List<AppointmentReminderTypeDTO> result = new ArrayList<>(list.size());
+		for (AppointmentReminderType rt : list) {
+			result.add(new AppointmentReminderTypeDTO(rt));
+		}
+		return result;
+	}
 	/**
 	 * Get all reminder types for calendar events
 	 * 
 	 * @param SID
 	 * @return - all reminder types for calendar events
 	 */
-	public List<AppointmentReminderType> getAppointmentReminderTypList(
-			String SID) {
+	public List<AppointmentReminderTypeDTO> getAppointmentReminderTypList(String SID) {
 		log.debug("getAppointmentReminderTypList");
 
 		try {
@@ -573,18 +562,7 @@ public class CalendarWebService {
 
 				User user = userDao.get(users_id);
 				long language_id = (user == null) ? 1 : user.getLanguageId();
-				List<AppointmentReminderType> res = appointmentReminderTypDao
-						.getList(language_id);
-
-				if (res == null || res.size() < 1) {
-					log.debug("no remindertyps found!");
-				} else {
-					for (int i = 0; i < res.size(); i++) {
-						log.debug("found reminder " + res.get(i).getName());
-					}
-				}
-
-				return res;
+				return getReminders(appointmentReminderTypDao.getList(language_id));
 			} else
 				log.debug("getAppointmentReminderTypList  :error - wrong authlevel!");
 		} catch (Exception err) {
