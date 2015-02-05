@@ -241,8 +241,7 @@ public class RoomManager implements IRoomManager {
 			String orderby, boolean asc, String search) {
 		try {
 
-			String hql = "select c from Room c "
-					+ "where c.deleted <> true AND c.name LIKE :search ";
+			String hql = "select c from Room c where c.deleted = false AND c.name LIKE :search ";
 
 			if (search.length() == 0) {
 				search = "%";
@@ -318,11 +317,10 @@ public class RoomManager implements IRoomManager {
 		try {
 			String hql = "select c from RoomOrganisation as c "
 					+ "where c.room.rooms_id = :rooms_id "
-					+ "AND c.deleted <> :deleted";
+					+ "AND c.deleted = false";
 			TypedQuery<RoomOrganisation> q = em.createQuery(hql, RoomOrganisation.class);
 
 			q.setParameter("rooms_id", rooms_id);
-			q.setParameter("deleted", true);
 			List<RoomOrganisation> ll = q.getResultList();
 			return ll;
 		} catch (Exception ex2) {
@@ -414,7 +412,7 @@ public class RoomManager implements IRoomManager {
 			List<Map<String, Object>> roomModerators,
 			Boolean allowUserQuestions, Boolean isAudioOnly, Boolean allowFontStyles, Boolean isClosed,
 			String redirectURL, String conferencePin,
-			Long ownerId, Boolean waitForRecording, Boolean allowRecording,
+			Long ownerId, Boolean waitForRecording, boolean allowRecording,
 			Boolean hideTopBar, Boolean hideChat, Boolean hideActivitiesAndActions, Boolean hideFilesExplorer, 
 			Boolean hideActionsMenu, Boolean hideScreenSharing, Boolean hideWhiteboard,
 			Boolean showMicrophoneStatus, Boolean chatModerated, boolean chatOpened
@@ -490,7 +488,25 @@ public class RoomManager implements IRoomManager {
 	 * 
 	 * @param name
 	 * @param roomtypes_id
+	 * @param comment
+	 * @param numberOfPartizipants
 	 * @param ispublic
+	 * @param organisations
+	 * @param appointment
+	 * @param isDemoRoom
+	 * @param demoTime
+	 * @param isModeratedRoom
+	 * @param roomModerators
+	 * @param externalRoomId
+	 * @param externalRoomType
+	 * @param allowUserQuestions
+	 * @param isAudioOnly
+	 * @param allowFontStyles
+	 * @param isClosed
+	 * @param redirectURL
+	 * @param waitForRecording
+	 * @param allowRecording
+	 * @param hideTopBar
 	 * @return id of (the newly created) room or NULL
 	 */
 	public Long addExternalRoom(String name, long roomtypes_id, String comment,
@@ -500,7 +516,7 @@ public class RoomManager implements IRoomManager {
 			Long externalRoomId, String externalRoomType,
 			Boolean allowUserQuestions, Boolean isAudioOnly, Boolean allowFontStyles, Boolean isClosed,
 			String redirectURL, Boolean waitForRecording,
-			Boolean allowRecording, Boolean hideTopBar) {
+			boolean allowRecording, Boolean hideTopBar) {
 
 		log.debug("addExternalRoom");
 
@@ -655,7 +671,6 @@ public class RoomManager implements IRoomManager {
 			return ll;
 		} catch (Exception ex2) {
 			log.error("[getPublicRoomsWithoutType] ", ex2);
-			ex2.printStackTrace();
 		}
 		return null;
 	}
@@ -706,7 +721,7 @@ public class RoomManager implements IRoomManager {
 		try {
 			String hql = "select c from RoomOrganisation as c "
 					+ "where c.organisation.organisation_id = :organisation_id "
-					+ "AND c.deleted <> :deleted";
+					+ "AND c.deleted = false";
 			if (orderby.startsWith("c.")) {
 				hql += "ORDER BY " + orderby;
 			} else {
@@ -721,7 +736,6 @@ public class RoomManager implements IRoomManager {
 			TypedQuery<RoomOrganisation> q = em.createQuery(hql, RoomOrganisation.class);
 
 			q.setParameter("organisation_id", organisation_id);
-			q.setParameter("deleted", true);
 			q.setFirstResult(start);
 			q.setMaxResults(max);
 			List<RoomOrganisation> ll = q.getResultList();
@@ -777,7 +791,7 @@ public class RoomManager implements IRoomManager {
 			Boolean isModeratedRoom, List<Map<String, Object>> roomModerators,
 			Boolean allowUserQuestions, Boolean isAudioOnly, Boolean allowFontStyles, Boolean isClosed,
 			String redirectURL, String conferencePin,
-			Long ownerId, Boolean waitForRecording, Boolean allowRecording,
+			Long ownerId, Boolean waitForRecording, boolean allowRecording,
 			Boolean hideTopBar, Boolean hideChat, Boolean hideActivitiesAndActions, Boolean hideFilesExplorer, 
 			Boolean hideActionsMenu, Boolean hideScreenSharing, Boolean hideWhiteboard, 
 			Boolean showMicrophoneStatus, Boolean chatModerated, boolean chatOpened, boolean filesOpened
@@ -1062,7 +1076,8 @@ public class RoomManager implements IRoomManager {
 						false, // isClosed
 						"", // redirectURL
 						"", // conferencePin
-						ownerId, null, null, 
+						ownerId, null,
+						true,  // allowRecording 
 						false, // hideTopBar
 						false, // hideChat
 						false, // hideActivitiesAndActions
