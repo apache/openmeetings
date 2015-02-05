@@ -23,38 +23,30 @@ import java.util.Date;
 import java.util.List;
 
 import org.apache.axis2.AxisFault;
-import org.apache.openmeetings.db.entity.calendar.Appointment;
+import org.apache.openmeetings.db.dto.calendar.AppointmentDTO;
+import org.apache.openmeetings.db.dto.calendar.AppointmentReminderTypeDTO;
 import org.apache.openmeetings.db.entity.calendar.AppointmentCategory;
-import org.apache.openmeetings.db.entity.calendar.AppointmentReminderTyps;
 
 public class CalendarWebServiceFacade extends BaseWebService {
 	
-	public List<Appointment> getAppointmentByRange(String SID, Date starttime,
-			Date endtime) throws AxisFault {
-		return getBean(CalendarWebService.class).getAppointmentByRange(SID, starttime,
-				endtime);
+	public List<AppointmentDTO> getAppointmentByRange(String SID, Calendar starttime, Calendar endtime) throws AxisFault {
+		return getBean(CalendarWebService.class).getAppointmentByRange(SID, starttime, endtime);
 	}
 
-	public List<Appointment> getAppointmentByRangeForUserId(String SID,
-			long userId, Date starttime, Date endtime) throws AxisFault {
-		return getBean(CalendarWebService.class).getAppointmentByRangeForUserId(SID,
-				userId, starttime, endtime);
+	public List<AppointmentDTO> getAppointmentByRangeForUserId(String SID, long userId, Calendar starttime, Calendar endtime) throws AxisFault {
+		return getBean(CalendarWebService.class).getAppointmentByRangeForUserId(SID, userId, starttime, endtime);
 	}
 
-	public Appointment getNextAppointment(String SID) throws AxisFault {
+	public AppointmentDTO getNextAppointment(String SID) throws AxisFault {
 		return getBean(CalendarWebService.class).getNextAppointment(SID);
 	}
 
-	public Appointment getNextAppointmentForUserId(String SID, long userId)
-			throws AxisFault {
-		return getBean(CalendarWebService.class).getNextAppointmentForUserId(SID,
-				userId);
+	public AppointmentDTO getNextAppointmentForUserId(String SID, long userId) throws AxisFault {
+		return getBean(CalendarWebService.class).getNextAppointmentForUserId(SID, userId);
 	}
 
-	public List<Appointment> searchAppointmentByName(String SID,
-			String appointmentName) throws AxisFault {
-		return getBean(CalendarWebService.class).searchAppointmentByName(SID,
-				appointmentName);
+	public List<AppointmentDTO> searchAppointmentByName(String SID, String appointmentName) throws AxisFault {
+		return getBean(CalendarWebService.class).searchAppointmentByName(SID, appointmentName);
 	}
 
 	public Long saveAppointment(String SID, String appointmentName,
@@ -71,10 +63,8 @@ public class CalendarWebServiceFacade extends BaseWebService {
 				isPasswordProtected, password, roomId);
 	}
 
-	public Long updateAppointmentTimeOnly(String SID, Long appointmentId,
-			Date appointmentstart, Date appointmentend, Long languageId) throws AxisFault {
-		return getBean(CalendarWebService.class).updateAppointmentTimeOnly(SID,
-				appointmentId, appointmentstart, appointmentend, languageId);
+	public Long updateAppointmentTimeOnly(String SID, Long appointmentId, Date appointmentstart, Date appointmentend, Long languageId) throws AxisFault {
+		return getBean(CalendarWebService.class).updateAppointmentTimeOnly(SID, appointmentId, appointmentstart, appointmentend, languageId);
 	}
 
 	public Long updateAppointment(String SID, Long appointmentId,
@@ -90,24 +80,19 @@ public class CalendarWebServiceFacade extends BaseWebService {
 				isYearly, categoryId, remind, mmClient, roomType, languageId, isPasswordProtected, password);
 	}
 
-	public Long deleteAppointment(String SID, Long appointmentId,
-			Long language_id) throws AxisFault {
-		return getBean(CalendarWebService.class).deleteAppointment(SID, appointmentId,
-				language_id);
+	public Long deleteAppointment(String SID, Long appointmentId, Long language_id) throws AxisFault {
+		return getBean(CalendarWebService.class).deleteAppointment(SID, appointmentId, language_id);
 	}
 
-	public Appointment getAppointmentByRoomId(String SID, Long room_id)
-			throws AxisFault {
+	public AppointmentDTO getAppointmentByRoomId(String SID, Long room_id) throws AxisFault {
 		return getBean(CalendarWebService.class).getAppointmentByRoomId(SID, room_id);
 	}
 
-	public List<AppointmentCategory> getAppointmentCategoryList(String SID)
-			throws AxisFault {
+	public List<AppointmentCategory> getAppointmentCategoryList(String SID) throws AxisFault {
 		return getBean(CalendarWebService.class).getAppointmentCategoryList(SID);
 	}
 
-	public List<AppointmentReminderTyps> getAppointmentReminderTypList(
-			String SID) throws AxisFault {
+	public List<AppointmentReminderTypeDTO> getAppointmentReminderTypList(String SID) throws AxisFault {
 		return getBean(CalendarWebService.class).getAppointmentReminderTypList(SID);
 	}
 }
