@@ -547,7 +547,9 @@ public class RoomWebService {
 						numberOfPartizipants, ispublic, null, appointment,
 						isDemoRoom, demoTime, isModeratedRoom, null, true,
 						false, true, false //isClosed
-						, "", "", null, null, null, false, // hideTopBar
+						, "", "", null, null,
+						true,  // allowRecording
+						false, // hideTopBar
 						false, // hideChat
 						false, // hideActivitiesAndActions
 						false, // hideFilesExplorer
@@ -617,7 +619,9 @@ public class RoomWebService {
 						isDemoRoom, demoTime, isModeratedRoom, null,
 						allowUserQuestions, false, true, false //isClosed
 						, "", "", null,
-						null, null, false, // hideTopBar
+						null, 
+						true,  // allowRecording
+						false, // hideTopBar
 						false, // hideChat
 						false, // hideActivitiesAndActions
 						false, // hideFilesExplorer
@@ -689,7 +693,9 @@ public class RoomWebService {
 						isDemoRoom, demoTime, isModeratedRoom, null,
 						allowUserQuestions, isAudioOnly, true, false //isClosed
 						, "", "",
-						null, null, null, false, // hideTopBar
+						null, null, 
+						true,  // allowRecording
+						false, // hideTopBar
 						false, // hideChat
 						false, // hideActivitiesAndActions
 						false, // hideFilesExplorer
@@ -781,7 +787,9 @@ public class RoomWebService {
 						isDemoRoom, demoTime, isModeratedRoom, null,
 						allowUserQuestions, isAudioOnly, true, false //isClosed
 						, "", "",
-						null, null, null, hideTopBar, hideChat,
+						null, null,
+						true,  // allowRecording
+						hideTopBar, hideChat,
 						hideActivitiesAndActions, hideFilesExplorer,
 						hideActionsMenu, hideScreenSharing, hideWhiteboard,
 						false, false, 
@@ -914,7 +922,8 @@ public class RoomWebService {
 				return roomManager.updateRoomInternal(room_id, roomtypesId,
 						name, ispublic, comment, numberOfPartizipants, null,
 						appointment, isDemoRoom, demoTime, isModeratedRoom,
-						null, true, false, true, false, "", "", null, null, null,
+						null, true, false, true, false, "", "", null, null,
+						true,  // allowRecording
 						false, // hideTopBar
 						false, // hideChat
 						false, // hideActivitiesAndActions
@@ -983,7 +992,9 @@ public class RoomWebService {
 						name, ispublic, comment, numberOfPartizipants, null,
 						appointment, isDemoRoom, demoTime, isModeratedRoom,
 						null, allowUserQuestions, false, true, false, "", "",
-						null, null, null, false, // hideTopBar
+						null, null, 
+						true,  // allowRecording 
+						false, // hideTopBar
 						false, // hideChat
 						false, // hideActivitiesAndActions
 						false, // hideFilesExplorer
@@ -1074,7 +1085,9 @@ public class RoomWebService {
 						name, ispublic, comment, numberOfPartizipants, null,
 						appointment, isDemoRoom, demoTime, isModeratedRoom,
 						null, allowUserQuestions, isAudioOnly, true, false, "", "",
-						null, null, null, hideTopBar, hideChat,
+						null, null,
+						true,  // allowRecording
+						hideTopBar, hideChat,
 						hideActivitiesAndActions, hideFilesExplorer,
 						hideActionsMenu, hideScreenSharing, hideWhiteboard,
 						false, // showMicrophoneStatus
@@ -1295,7 +1308,7 @@ public class RoomWebService {
 			Boolean ispublic, Boolean appointment, Boolean isDemoRoom,
 			Integer demoTime, Boolean isModeratedRoom, String externalRoomType,
 			Boolean allowUserQuestions, Boolean isAudioOnly,
-			Boolean waitForRecording, Boolean allowRecording) {
+			Boolean waitForRecording, boolean allowRecording) {
 		try {
 			Long users_id = sessiondataDao.checkSession(SID);
 			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(users_id))) {
@@ -1367,7 +1380,7 @@ public class RoomWebService {
 			Boolean isDemoRoom, Integer demoTime, Boolean isModeratedRoom,
 			String externalRoomType, Boolean allowUserQuestions,
 			Boolean isAudioOnly, Boolean waitForRecording,
-			Boolean allowRecording, Boolean hideTopBar) {
+			boolean allowRecording, Boolean hideTopBar) {
 		try {
 			Long users_id = sessiondataDao.checkSession(SID);
 			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(users_id))) {

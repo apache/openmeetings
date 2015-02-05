@@ -409,7 +409,7 @@ public class RoomManager implements IRoomManager {
 			List<Map<String, Object>> roomModerators,
 			Boolean allowUserQuestions, Boolean isAudioOnly, Boolean allowFontStyles, Boolean isClosed,
 			String redirectURL, String conferencePin,
-			Long ownerId, Boolean waitForRecording, Boolean allowRecording,
+			Long ownerId, Boolean waitForRecording, boolean allowRecording,
 			Boolean hideTopBar, Boolean hideChat, Boolean hideActivitiesAndActions, Boolean hideFilesExplorer, 
 			Boolean hideActionsMenu, Boolean hideScreenSharing, Boolean hideWhiteboard,
 			Boolean showMicrophoneStatus, Boolean chatModerated, boolean chatOpened
@@ -513,7 +513,7 @@ public class RoomManager implements IRoomManager {
 			Long externalRoomId, String externalRoomType,
 			Boolean allowUserQuestions, Boolean isAudioOnly, Boolean allowFontStyles, Boolean isClosed,
 			String redirectURL, Boolean waitForRecording,
-			Boolean allowRecording, Boolean hideTopBar) {
+			boolean allowRecording, Boolean hideTopBar) {
 
 		log.debug("addExternalRoom");
 
@@ -752,7 +752,7 @@ public class RoomManager implements IRoomManager {
 			Boolean isModeratedRoom, List<Map<String, Object>> roomModerators,
 			Boolean allowUserQuestions, Boolean isAudioOnly, Boolean allowFontStyles, Boolean isClosed,
 			String redirectURL, String conferencePin,
-			Long ownerId, Boolean waitForRecording, Boolean allowRecording,
+			Long ownerId, Boolean waitForRecording, boolean allowRecording,
 			Boolean hideTopBar, Boolean hideChat, Boolean hideActivitiesAndActions, Boolean hideFilesExplorer, 
 			Boolean hideActionsMenu, Boolean hideScreenSharing, Boolean hideWhiteboard, 
 			Boolean showMicrophoneStatus, Boolean chatModerated, boolean chatOpened, boolean filesOpened
@@ -1021,7 +1021,8 @@ public class RoomManager implements IRoomManager {
 						false, // isClosed
 						"", // redirectURL
 						"", // conferencePin
-						ownerId, null, null, 
+						ownerId, null,
+						true,  // allowRecording 
 						false, // hideTopBar
 						false, // hideChat
 						false, // hideActivitiesAndActions
