@@ -30,7 +30,6 @@ import java.util.List;
 import java.util.TimeZone;
 
 import org.apache.openmeetings.data.conference.InvitationManager;
-import org.apache.openmeetings.data.conference.RoomManager;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.calendar.AppointmentCategoryDao;
 import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
@@ -76,8 +75,6 @@ public class AppointmentLogic {
 	@Autowired
 	private InvitationDao invitationDao;
 	@Autowired
-	private RoomManager roomManager;
-	@Autowired
 	private UserDao userDao;
 	@Autowired
 	private MeetingMemberDao meetingMemberDao;
@@ -121,25 +118,6 @@ public class AppointmentLogic {
 	}
 
 	// --------------------------------------------------------------------------------------------
-
-	// next appointment to current date
-	public Appointment getNextAppointment() {
-		try {
-			return appointmentDao.getNextAppointment(new Date());
-		} catch (Exception err) {
-			log.error("[getNextAppointmentById]", err);
-		}
-		return null;
-	}
-
-	public List<Appointment> searchAppointmentByName(String appointmentName) {
-		try {
-			return appointmentDao.searchAppointmentsByName(appointmentName);
-		} catch (Exception err) {
-			log.error("[searchAppointmentByName]", err);
-		}
-		return null;
-	}
 
 	private void sendReminder(User u, Appointment a) throws Exception {
 		Invitation i = new Invitation();

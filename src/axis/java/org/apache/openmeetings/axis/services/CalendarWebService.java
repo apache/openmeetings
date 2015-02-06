@@ -152,7 +152,7 @@ public class CalendarWebService {
 		try {
 			Long users_id = sessiondataDao.checkSession(SID);
 			if (AuthLevelUtil.hasUserLevel(userDao.getRights(users_id))) {
-				return new AppointmentDTO(appointmentLogic.getNextAppointment());
+				return new AppointmentDTO(appointmentDao.getNextAppointment(users_id, new Date()));
 			}
 		} catch (Exception err) {
 			log.error("[getNextAppointmentById]", err);
@@ -172,8 +172,8 @@ public class CalendarWebService {
 	public AppointmentDTO getNextAppointmentForUserId(String SID, long userId) {
 		try {
 			Long users_id = sessiondataDao.checkSession(SID);
-			if (AuthLevelUtil.hasUserLevel(userDao.getRights(users_id))) {
-				return new AppointmentDTO(appointmentLogic.getNextAppointment());
+			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(users_id))) {
+				return new AppointmentDTO(appointmentDao.getNextAppointment(userId, new Date()));
 			}
 		} catch (Exception err) {
 			log.error("[getNextAppointmentById]", err);
@@ -192,11 +192,11 @@ public class CalendarWebService {
 	 *            
 	 * @return - calendar event list
 	 */
-	public List<AppointmentDTO> searchAppointmentByName(String SID, String appointmentName) {
+	public List<AppointmentDTO> searchAppointmentByTitle(String SID, String appointmentName) {
 		try {
 			Long users_id = sessiondataDao.checkSession(SID);
 			if (AuthLevelUtil.hasUserLevel(userDao.getRights(users_id))) {
-				return getAppointments(appointmentLogic.searchAppointmentByName(appointmentName));
+				return getAppointments(appointmentDao.searchAppointmentsByTitle(users_id, appointmentName));
 			}
 		} catch (Exception err) {
 			log.error("[searchAppointmentByName]", err);

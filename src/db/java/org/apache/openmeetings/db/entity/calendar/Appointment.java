@@ -104,6 +104,8 @@ import org.simpleframework.xml.Root;
 			+ "		OR (a.start < :starttime AND a.end > :endtime) "
 			+ "	)"
 	    )
+    , @NamedQuery(name="getNextAppointment", query="SELECT a FROM Appointment a WHERE a.deleted = false AND a.start > :start AND a.owner.user_id = :userId")
+    , @NamedQuery(name="getAppointmentsByTitle", query="SELECT a FROM Appointment a WHERE a.deleted = false AND a.title LIKE :title AND a.owner.user_id = :userId")
 })
 @Root(name="appointment")
 public class Appointment implements Serializable {

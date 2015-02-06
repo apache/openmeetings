@@ -277,47 +277,15 @@ public class AppointmentDao {
 	}
 
 	// next appointment to select date
-	public Appointment getNextAppointment(Date appointmentStarttime) {
-		try {
-
-			String hql = "select a from Appointment a "
-					+ "WHERE a.deleted false "
-					+ "AND a.start > :appointmentStarttime ";
-
-			TypedQuery<Appointment> query = em.createQuery(hql, Appointment.class);
-			query.setParameter("appointmentStarttime", appointmentStarttime);
-
-			Appointment appoint = null;
-			try {
-				appoint = query.getSingleResult();
-			} catch (NoResultException ex) {
-			}
-
-			return appoint;
-		} catch (Exception ex2) {
-			log.error("[getNextAppointmentById]: ", ex2);
-		}
-		return null;
+	public Appointment getNextAppointment(Long userId, Date start) {
+		List<Appointment> list = em.createNamedQuery("getNextAppointment", Appointment.class)
+				.setParameter("start", start).setParameter("userId", userId).getResultList();
+		return list == null || list.isEmpty() ? null : list.get(0);
 	}
 
-	public List<Appointment> searchAppointmentsByName(String name) {
-		try {
-
-			String hql = "select a from Appointment a "
-					+ "WHERE a.deleted false "
-					+ "AND a.title LIKE :appointmentName";
-
-			TypedQuery<Appointment> query = em.createQuery(hql,
-					Appointment.class);
-			query.setParameter("appointmentName", name);
-
-			List<Appointment> listAppoints = query.getResultList();
-
-			return listAppoints;
-		} catch (Exception ex2) {
-			log.error("[searchAppointmentsByName]: ", ex2);
-		}
-		return null;
+	public List<Appointment> searchAppointmentsByTitle(Long userId, String title) {
+		return em.createNamedQuery("getNextAppointment", Appointment.class)
+				.setParameter("title", title).setParameter("userId", userId).getResultList();
 	}
 
 	/**

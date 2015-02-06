@@ -45,8 +45,8 @@ public class CalendarWebServiceFacade extends BaseWebService {
 		return getBean(CalendarWebService.class).getNextAppointmentForUserId(SID, userId);
 	}
 
-	public List<AppointmentDTO> searchAppointmentByName(String SID, String appointmentName) throws AxisFault {
-		return getBean(CalendarWebService.class).searchAppointmentByName(SID, appointmentName);
+	public List<AppointmentDTO> searchAppointmentByTitle(String SID, String appointmentName) throws AxisFault {
+		return getBean(CalendarWebService.class).searchAppointmentByTitle(SID, appointmentName);
 	}
 
 	public Long saveAppointment(String SID, String appointmentName,
