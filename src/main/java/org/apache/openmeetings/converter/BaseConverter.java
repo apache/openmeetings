@@ -176,10 +176,9 @@ public abstract class BaseConverter {
 		FlvRecordingMetaData metaData = metaDataDao.get(metaId);
 		if (metaData.getStreamStatus() != Status.STOPPED) {
 			log.debug("### meta Stream not yet written to disk " + metaId);
-			boolean doWait = true;
 			long counter = 0;
 			long maxTimestamp = 0;
-			while(doWait) {
+			while(true) {
 				log.trace("### Stream not yet written Thread Sleep - " + metaId);
 				
 				metaData = metaDataDao.get(metaId);
@@ -187,7 +186,6 @@ public abstract class BaseConverter {
 				if (metaData.getStreamStatus() == Status.STOPPED) {
 					printMetaInfo(metaData, "Stream now written");
 					log.debug("### Thread continue ... " );
-					doWait = false;
 					break;
 				} else {
 					File metaFlv = getRecordingMetaData(metaData.getFlvRecording().getRoom_id(), metaData.getStreamName());
@@ -203,17 +201,19 @@ public abstract class BaseConverter {
 							log.debug("### long time without any update, trying to repair ... ");
 							try {
 								if (FLVWriter.repair(metaSer.getCanonicalPath(), null, null) && !metaSer.exists()) {
-									metaData.setStreamStatus(Status.STOPPED);
-									metaDataDao.update(metaData);
+									log.debug("### Repairing was successful ... ");
+								} else {
+									log.debug("### Repairing was NOT successful ... ");
 								}
 							} catch (IOException e) {
 								log.error("### Error while file repairing ... ", e);
 							}
 						} else {
 							log.debug("### long time without any update, closing ... ");
-							metaData.setStreamStatus(Status.STOPPED);
-							metaDataDao.update(metaData);
 						}
+						metaData.setStreamStatus(Status.STOPPED);
+						metaDataDao.update(metaData);
+						break;
 					}
 				}
 				if (++counter % 1000 == 0) {
