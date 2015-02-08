@@ -253,7 +253,7 @@
 		<dependency org="org.apache.wicket" name="wicket-devutils" rev="6.19.0" conf="openmeetings->*" transitive="false">
 			<include type="jar" />
 		</dependency>
-		<dependency org="org.apache.wicket" name="wicket-native-websocket-core" rev="6.18.0" conf="openmeetings->*" transitive="false">
+		<dependency org="org.apache.wicket" name="wicket-native-websocket-core" rev="6.19.0" conf="openmeetings->*" transitive="false">
 			<include type="jar" />
 		</dependency>
 		<dependency org="org.apache.wicket" name="wicket-native-websocket-tomcat" rev="6.19.0" conf="openmeetings->*" transitive="false">
@@ -272,13 +272,13 @@
 		<dependency org="com.google.code.gson" name="gson" rev="2.2.4" conf="openmeetings->*" transitive="false">
 			<include type="jar" />
 		</dependency>
-		<dependency org="org.wicketstuff" name="wicketstuff-urlfragment" rev="6.18.0" conf="openmeetings->*" transitive="false">
+		<dependency org="org.wicketstuff" name="wicketstuff-urlfragment" rev="6.19.0" conf="openmeetings->*" transitive="false">
 			<include type="jar" />
 		</dependency>
-		<dependency org="org.wicketstuff" name="wicketstuff-html5" rev="6.18.0" conf="openmeetings->*" transitive="false">
+		<dependency org="org.wicketstuff" name="wicketstuff-html5" rev="6.19.0" conf="openmeetings->*" transitive="false">
 			<include type="jar" />
 		</dependency>
-		<dependency org="org.wicketstuff" name="wicketstuff-select2" rev="6.18.0" conf="openmeetings->*" transitive="false">
+		<dependency org="org.wicketstuff" name="wicketstuff-select2" rev="6.19.0" conf="openmeetings->*" transitive="false">
 			<include type="jar" />
 		</dependency>
 		
