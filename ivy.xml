@@ -426,7 +426,7 @@
 		</dependency>
 
 		<!-- red5-client -->
-		<dependency org="org.red5" name="red5-client" conf="red5-client->*" rev="1.0.4-RELEASE" transitive="false" >
+		<dependency org="org.red5" name="red5-client" conf="red5-client->*" rev="1.0.5-RELEASE" transitive="false" >
 			<include type="jar" />
 		</dependency>
 		
