@@ -40,7 +40,7 @@ import javax.persistence.Table;
 })
 @Table(name = "state")
 public class State implements Serializable {
-	private static final long serialVersionUID = -1629546369219451403L;
+	private static final long serialVersionUID = 1L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
@@ -118,5 +118,11 @@ public class State implements Serializable {
 
 	public void setCode(int code) {
 		this.code = code;
+	}
+
+	@Override
+	public String toString() {
+		return "State [id=" + state_id + ", name=" + name + ", deleted="
+				+ deleted + ", shortName=" + shortName + ", code=" + code + "]";
 	}
 }

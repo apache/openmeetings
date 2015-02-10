@@ -49,7 +49,7 @@ import org.simpleframework.xml.Root;
 @Table(name = "organisation_users")
 @Root(name="user_organisation")
 public class Organisation_Users implements Serializable, IDataProviderEntity {
-	private static final long serialVersionUID = 7206870465903375817L;
+	private static final long serialVersionUID = 1L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
@@ -77,11 +77,8 @@ public class Organisation_Users implements Serializable, IDataProviderEntity {
 	private boolean deleted;
 	
 	@Column(name = "is_moderator")
-	@Element(data=true, required=false)
+	@Element(data = true, required = false)
 	private Boolean isModerator;
-	
-	public Organisation_Users() {
-	}
 	
 	public Organisation_Users(Organisation organisation) {
 		this.organisation = organisation;
@@ -167,4 +164,12 @@ public class Organisation_Users implements Serializable, IDataProviderEntity {
 			return false;
 		return true;
 	}
+
+	@Override
+	public String toString() {
+		return "Organisation_Users [id="
+				+ organisation_users_id + ", organisation=" + organisation
+				+ ", user=" + user + ", deleted=" + deleted + "]";
+	}
+	
 }

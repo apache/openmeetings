@@ -213,6 +213,10 @@ public class UserDao implements IDataProviderDao<User> {
 			u.setUpdatetime(new Date());
 			u =	em.merge(u);
 		}
+		//this is necessary due to organisation details are lost on update
+		for (Organisation_Users ou : u.getOrganisation_users()) {
+			em.refresh(ou);
+		}
 		return u;
 	}
 	

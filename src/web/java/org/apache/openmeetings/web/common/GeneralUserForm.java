@@ -134,8 +134,7 @@ public class GeneralUserForm extends Form<User> {
 		add(new TextField<String>("adresses.additionalname"));
 		add(new TextField<String>("adresses.zip"));
 		add(new TextField<String>("adresses.town"));
-		add(new DropDownChoice<State>("adresses.states", getBean(StateDao.class).getStates()
-				, new ChoiceRenderer<State>("name", "state_id")));
+		add(new DropDownChoice<State>("adresses.states", getBean(StateDao.class).getStates(), new ChoiceRenderer<State>("name", "state_id")));
 		add(new TextArea<String>("adresses.comment"));
 
 		final List<Organisation_Users> orgUsers;

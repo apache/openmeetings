@@ -20,12 +20,18 @@ package org.apache.openmeetings.web.common;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.model.IModel;
 
 public abstract class BasePanel extends Panel {
-	private static final long serialVersionUID = 8663740955529405678L;
+	private static final long serialVersionUID = 1L;
 
 	public BasePanel(String id) {
 		super(id);
+		setOutputMarkupId(true);
+	}
+
+	public BasePanel(String id, IModel<?> model) {
+		super(id, model);
 		setOutputMarkupId(true);
 	}
 

@@ -107,7 +107,6 @@ public class Organisation implements Serializable, IDataProviderEntity {
 		this.updatedby = updatedby;
 	}	
 	
-    
 	public Date getStarttime() {
 		return starttime;
 	}
@@ -127,5 +126,10 @@ public class Organisation implements Serializable, IDataProviderEntity {
 	}
 	public void setDeleted(boolean deleted) {
 		this.deleted = deleted;
+	}
+	@Override
+	public String toString() {
+		return "Organisation [id=" + organisation_id + ", name="
+				+ name + ", deleted=" + deleted + "]";
 	}	
 }

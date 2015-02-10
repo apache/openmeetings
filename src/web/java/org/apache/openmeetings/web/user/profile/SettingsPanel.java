@@ -18,13 +18,16 @@
  */
 package org.apache.openmeetings.web.user.profile;
 
+import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.UserPanel;
+import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.extensions.markup.html.tabs.AbstractTab;
 import org.apache.wicket.extensions.markup.html.tabs.ITab;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -46,12 +49,26 @@ public class SettingsPanel extends UserPanel {
 		super(id);
 		
 		List<ITab> tabs = new ArrayList<ITab>();
-		tabs.add(new AbstractTab(Model.of(WebSession.getString(1170))) {
+		tabs.add(new AjaxTab(Model.of(WebSession.getString(1170))) {
 			private static final long serialVersionUID = 1L;
+			UserProfilePanel profilePanel = null;
 
 			@Override
-			public WebMarkupContainer getPanel(String panelId) {
-				return new UserProfilePanel(panelId, getUserId());
+			protected WebMarkupContainer getLazyPanel(String panelId) {
+				if (profilePanel == null) {
+					profilePanel = new UserProfilePanel(panelId, getUserId());
+					profilePanel.setOutputMarkupId(true);
+				}
+				return profilePanel;
+			}
+			
+			@Override
+			public boolean load(AjaxRequestTarget target) {
+				if (profilePanel != null) {
+					profilePanel.setDefaultModelObject(getBean(UserDao.class).get(getUserId()));
+					target.add(profilePanel);
+				}
+				return super.load(target);
 			}
 		});
 		tabs.add(new AjaxTab(Model.of(WebSession.getString(1188))) {
@@ -59,7 +76,7 @@ public class SettingsPanel extends UserPanel {
 
 			@Override
 			protected WebMarkupContainer getLazyPanel(String panelId) {
-				return new MessagesContactsPanel(panelId); //TODO
+				return new MessagesContactsPanel(panelId);
 			}
 		});
 		tabs.add(new AbstractTab(Model.of(WebSession.getString(1171))) {
