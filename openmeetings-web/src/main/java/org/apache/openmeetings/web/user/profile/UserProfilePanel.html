@@ -30,10 +30,10 @@
 							<td><wicket:ommessage key="1164"/></td><td><span wicket:id="firstname"></span>&nbsp;<span wicket:id="lastname"></span></td>
 						</tr>
 						<tr>
-							<td><wicket:ommessage key="1165"/></td><td><span wicket:id="tz"></span></td>
+							<td><wicket:ommessage key="1165"/></td><td><span wicket:id="timeZoneId"></span></td>
 						</tr>
 						<tr>
-							<td><wicket:ommessage key="1296"/></td><td><span wicket:id="created"></span></td>
+							<td><wicket:ommessage key="1296"/></td><td><span wicket:id="regdate"></span></td>
 						</tr>
 					</table>
 				</td>
@@ -45,11 +45,11 @@
 				<table>
 					<tr>
 						<td><wicket:ommessage key="1162"/></td>
-						<td><textarea wicket:id="offer"></textarea></td>
+						<td><textarea wicket:id="userOffers"></textarea></td>
 					</tr>
 					<tr>
 						<td><wicket:ommessage key="1163"/></td>
-						<td><textarea wicket:id="interest"></textarea></td>
+						<td><textarea wicket:id="userSearchs"></textarea></td>
 					</tr>
 				</table>
 			</fieldset> 
@@ -60,23 +60,23 @@
 				<table wicket:id="address">
 					<tr>
 						<td><wicket:ommessage key="607" /></td>
-						<td><span wicket:id="phone"></span></td>
+						<td><span wicket:id="adresses.phone"></span></td>
 					</tr>
 					<tr>
 						<td><wicket:ommessage key="139" /></td>
-						<td><span wicket:id="street"></span>&nbsp;<span wicket:id="additionalname"></span></td>
+						<td><span wicket:id="adresses.street"></span>&nbsp;<span wicket:id="adresses.additionalname"></span></td>
 					</tr>
 					<tr>
 						<td><wicket:ommessage key="140" /></td>
-						<td><span wicket:id="zip"></span>&nbsp;<span wicket:id="town"></span></td>
+						<td><span wicket:id="adresses.zip"></span>&nbsp;<span wicket:id="adresses.town"></span></td>
 					</tr>
 					<tr>
 						<td><wicket:ommessage key="141" /></td>
-						<td><span wicket:id="state"></span></td>
+						<td><span wicket:id="adresses.states.name"></span></td>
 					</tr>
 					<tr>
 						<td><wicket:ommessage key="142" /></td>
-						<td><span wicket:id="address"></span></td>
+						<td><span wicket:id="adresses.comment"></span></td>
 					</tr>
 				</table>
 				<div wicket:id="addressDenied"></div>

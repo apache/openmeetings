@@ -79,9 +79,6 @@ public class OrganisationUser implements IDataProviderEntity {
 	@Element(data = true, required = false)
 	private Boolean isModerator;
 	
-	public OrganisationUser() {
-	}
-	
 	public OrganisationUser(Organisation organisation) {
 		this.organisation = organisation;
 	}
@@ -166,4 +163,12 @@ public class OrganisationUser implements IDataProviderEntity {
 			return false;
 		return true;
 	}
+
+	@Override
+	public String toString() {
+		return "Organisation_Users [id="
+				+ id + ", organisation=" + organisation
+				+ ", user=" + user + ", deleted=" + deleted + "]";
+	}
+	
 }

@@ -29,6 +29,7 @@ import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
+import org.apache.wicket.model.IModel;
 
 @AuthorizeInstantiation("Dashboard")
 public abstract class UserPanel extends BasePanel {
@@ -36,6 +37,10 @@ public abstract class UserPanel extends BasePanel {
 
 	public UserPanel(String id) {
 		super(id);
+	}
+	
+	public UserPanel(String id, IModel<?> model) {
+		super(id, model);
 	}
 	
 	public static List<Room> getMyRooms() {

@@ -118,4 +118,10 @@ public class State implements IDataProviderEntity {
 	public void setCode(int code) {
 		this.code = code;
 	}
+
+	@Override
+	public String toString() {
+		return "State [id=" + id + ", name=" + name + ", deleted="
+				+ deleted + ", shortName=" + shortName + ", code=" + code + "]";
+	}
 }

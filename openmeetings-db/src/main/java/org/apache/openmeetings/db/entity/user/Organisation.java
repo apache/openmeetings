@@ -126,5 +126,10 @@ public class Organisation implements IDataProviderEntity {
 	}
 	public void setDeleted(boolean deleted) {
 		this.deleted = deleted;
+	}
+	@Override
+	public String toString() {
+		return "Organisation [id=" + id + ", name="
+				+ name + ", deleted=" + deleted + "]";
 	}	
 }

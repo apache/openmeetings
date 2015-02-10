@@ -585,11 +585,11 @@ public class User implements IDataProviderEntity {
 
 	@Override
 	public String toString() {
-		return "User [user_id=" + id + ", firstname=" + firstname
+		return "User [id=" + id + ", firstname=" + firstname
 				+ ", lastname=" + lastname + ", login=" + login
 				+ ", pictureuri=" + pictureuri + ", deleted=" + deleted
 				+ ", languageId=" + languageId + ", adresses=" + adresses
-				+ ", externalId=" + externalUserId + ", externalType="
-				+ externalUserType + ", type=" + type + "]";
+				+ ", externalId=" + externalUserId + ", externalType=" + externalUserType
+				+ ", type=" + type + "]";
 	}
 }
