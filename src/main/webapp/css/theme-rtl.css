@@ -41,3 +41,6 @@
 	right: initial !important;
 	left: 10px;
 }
+.ui-tabs .ui-tabs-nav li {
+	float: right !important;
+}
