@@ -18,6 +18,9 @@
  */
 package org.apache.openmeetings.remote;
 
+import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -37,6 +40,7 @@ import org.apache.openmeetings.db.dao.room.RoomTypeDao;
 import org.apache.openmeetings.db.dao.server.ISessionManager;
 import org.apache.openmeetings.db.dao.server.ServerDao;
 import org.apache.openmeetings.db.dao.server.SessiondataDao;
+import org.apache.openmeetings.db.dao.user.IUserManager;
 import org.apache.openmeetings.db.dao.user.IUserService;
 import org.apache.openmeetings.db.dao.user.PrivateMessageFolderDao;
 import org.apache.openmeetings.db.dao.user.PrivateMessagesDao;
@@ -56,7 +60,7 @@ import org.apache.openmeetings.mail.MailHandler;
 import org.apache.openmeetings.remote.red5.ScopeApplicationAdapter;
 import org.apache.openmeetings.util.AuthLevelUtil;
 import org.apache.openmeetings.util.CalendarPatterns;
-import org.apache.openmeetings.util.OpenmeetingsVariables;
+import org.apache.openmeetings.web.mail.template.AbstractTemplatePanel;
 import org.apache.openmeetings.web.util.ContactsHelper;
 import org.red5.logging.Red5LoggerFactory;
 import org.red5.server.api.scope.IScope;
@@ -70,9 +74,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  * 
  */
 public class UserService implements IUserService {
-
-	private static final Logger log = Red5LoggerFactory.getLogger(
-			UserService.class, OpenmeetingsVariables.webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(UserService.class, webAppRootKey);
 
 	@Autowired
 	private ISessionManager sessionManager;
@@ -86,6 +88,8 @@ public class UserService implements IUserService {
 	private SessiondataDao sessiondataDao;
 	@Autowired
 	private ConfigurationDao configurationDao;
+	@Autowired
+	private IUserManager userManager;
 	@Autowired
 	private UserDao userDao;
 	@Autowired
@@ -360,29 +364,10 @@ public class UserService implements IUserService {
 			// users only
 			if (AuthLevelUtil.hasUserLevel(userDao.getRights(users_id))) {
 				User from = userDao.get(users_id);
-				TimeZone timezone = timezoneUtil.getTimeZone(from);
-
-				Date start = createCalendarDate(timezone, validFromDate, validFromTime);
-				Date end = createCalendarDate(timezone, validToDate, validToTime);
-
-				log.info("validFromDate: " + CalendarPatterns.getDateWithTimeByMiliSeconds(start));
-				log.info("validToDate: " + CalendarPatterns.getDateWithTimeByMiliSeconds(end));
 
 				Appointment a = new Appointment();
-				a.setTitle(subject);
-				a.setDescription(message);
-				a.setStart(start);
-				a.setEnd(end);
-				a.setCategory(appointmentCategoryDao.get(1L));
-				a.setOwner(from);
-				if (bookedRoom) {
-					a.setRoom(new Room());
-					a.getRoom().setAppointment(true);
-					a.getRoom().setName(subject);
-					a.getRoom().setRoomtype(roomTypeDao.get(roomtype_id));
-					a.getRoom().setNumberOfPartizipants(100L);
-					a.getRoom().setAllowUserQuestions(true);
-					a.getRoom().setAllowFontStyles(true);
+				if (a.getMeetingMembers() == null) {
+					a.setMeetingMembers(new ArrayList<MeetingMember>());
 				}
 				for (String email : recipients) {
 					MeetingMember mm = new MeetingMember();
@@ -390,31 +375,54 @@ public class UserService implements IUserService {
 					mm.setUser(userDao.getContact(email, users_id));
 					a.getMeetingMembers().add(mm);
 				}
-				a = appointmentDao.update(a, users_id);
+				if (bookedRoom) {
+					TimeZone timezone = timezoneUtil.getTimeZone(from);
+					Date start = createCalendarDate(timezone, validFromDate, validFromTime);
+					Date end = createCalendarDate(timezone, validToDate, validToTime);
+
+					log.info("validFromDate: " + CalendarPatterns.getDateWithTimeByMiliSeconds(start));
+					log.info("validToDate: " + CalendarPatterns.getDateWithTimeByMiliSeconds(end));
+
+					a.setTitle(subject);
+					a.setDescription(message);
+					a.setStart(start);
+					a.setEnd(end);
+					a.setCategory(appointmentCategoryDao.get(1L));
+					a.setOwner(from);
+					
+					a.setRoom(new Room());
+					a.getRoom().setAppointment(true);
+					a.getRoom().setName(subject);
+					a.getRoom().setRoomtype(roomTypeDao.get(roomtype_id));
+					a.getRoom().setNumberOfPartizipants(100L);
+					a.getRoom().setAllowUserQuestions(true);
+					a.getRoom().setAllowFontStyles(true);
+
+					a = appointmentDao.update(a, users_id);
+				}
 				for (MeetingMember mm : a.getMeetingMembers()) {
 					User to = mm.getUser();
 					Room room = a.getRoom();
 					
-					//TODO should be reviewed
-					if (!to.getUser_id().equals(from.getUser_id())) {
-						// One message to the Send
-						privateMessagesDao.addPrivateMessage(subject,
-								message, parentMessageId, from, to, from,
-								bookedRoom, room, false, 0L);
-
-						// One message to the Inbox
-						privateMessagesDao.addPrivateMessage(subject,
-								message, parentMessageId, from, to, to,
-								bookedRoom, room, false, 0L);
-					}
-
 					// We do not send an email to the one that has created the
 					// private message
-					if (to != null && to.getUser_id().equals(from.getUser_id())) {
+					if (to != null && from.getUser_id().equals(to.getUser_id())) {
 						continue;
 					}
 
+					//TODO should be reviewed
+					// One message to the Send
+					privateMessagesDao.addPrivateMessage(subject,
+							message, parentMessageId, from, to, from,
+							bookedRoom, room, false, 0L);
+
+					// One message to the Inbox
+					privateMessagesDao.addPrivateMessage(subject,
+							message, parentMessageId, from, to, to,
+							bookedRoom, room, false, 0L);
+
 					if (to.getAdresses() != null) {
+						AbstractTemplatePanel.ensureApplication(from.getLanguage_id());
 						String aLinkHTML = 	"<br/><br/>" + "<a href='" + ContactsHelper.getLink() + "'>"
 									+  fieldLanguagesValuesDao.get(1302, from.getLanguage_id()) + "</a><br/>";
 						

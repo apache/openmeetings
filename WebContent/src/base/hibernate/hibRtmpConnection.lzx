@@ -558,6 +558,7 @@
                     
                     if (canvas.landingZone == "dashboard") {
                         canvas.destroyExitButton = false;
+			            parent.setUsernameAndSession.doCall();
                         parent.getRoomTypes.doCall();
                     } else if (canvas.roomRecordingId > 0) {
                     	if (canvas.thishib.loaderVar != null) {
@@ -569,6 +570,7 @@
                         loadContent(obj,null,null);
                     } else if (canvas.wicketroomid > 0) {
                     	canvas.initroomid = canvas.wicketroomid;
+                        parent.getRoomTypes.doCall();
                         parent.getRoomById.doCall();
                     } else {
                     	if (canvas.thishib.loaderVar != null) {
@@ -631,8 +633,7 @@
                         if (canvas.thishib.loaderVar != null) {
                             canvas.thishib.loaderVar.setProgress();
                         }
-                        if($debug) Debug.write("getRoomTypes");
-                        parent.getRoomTypes.doCall();
+			            parent.setUsernameAndSession.doCall();
                     } else {
 						parent.initlanguageLoaded = true;
 						if($debug) Debug.write("getGeneralOptions");
@@ -640,6 +641,8 @@
 						if($debug) Debug.write("getTimeZones");
 						parent.getTimeZones.doCall(); // this is very long call let it be async
                     }
+                    if($debug) Debug.write("getRoomTypes");
+                    parent.getRoomTypes.doCall();
                 }
             ]]>
         </handler>  
@@ -861,13 +864,12 @@
         <netparam><method name="getValue">return canvas.sessionId;</method></netparam>
         <handler name="ondata" args="value">
             //The onResult-Handler will be called be the rtmpconnection
-            //Debug.write("getRoomTypes ",value);
+            if ($debug) Debug.write("getRoomTypes ", value);
             canvas.roomTypesInitValues = value;
             canvas.sendViaLocalConnection(canvas.rtmp_lc_name, "getRoomTypes", [value]);
 			if (canvas.thishib.loaderVar != null) {
             	canvas.thishib.loaderVar.setProgress();
             }
-            parent.setUsernameAndSession.doCall();
         </handler>  
     </netRemoteCallHib>      
     
