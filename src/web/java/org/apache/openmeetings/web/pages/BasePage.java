@@ -91,6 +91,7 @@ public abstract class BasePage extends AsyncUrlFragmentAwarePage {
 		if (rtl) {
 			response.render(CssHeaderItem.forUrl("css/theme-rtl.css"));
 			response.render(CssHeaderItem.forUrl("css/calendar-rtl.css"));
+			response.render(CssHeaderItem.forUrl("css/admin-rtl.css"));
 		}
 	}
 }

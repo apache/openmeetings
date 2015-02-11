@@ -175,6 +175,7 @@ html, body {
 
 .searchForm {
 	display: inline-block;
+	vertical-align: top;
 }
 
 .pagedEntityListPanel select, .adminForm .pagedEntityListPanel select {
@@ -527,7 +528,7 @@ select.messages.selector {
 .info-text {
 	background-image: url(images/information.png);
 	background-repeat: no-repeat;
-	background-position: 2px 2px;
+	background-position: left top;
 	cursor: default;
 	border: none;
 	padding-left: 20px;
