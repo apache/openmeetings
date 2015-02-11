@@ -43,7 +43,8 @@ import org.slf4j.Logger;
 
 public abstract class BaseStreamWriter implements Runnable {
 	private static final Logger log = Red5LoggerFactory.getLogger(BaseStreamWriter.class, webAppRootKey);
-	public final static int TIME_TO_WAIT_FOR_FRAME = 15 * 60 * 1000; //15 minutes
+	private final static int MINUTE_MULTIPLIER = 60 * 1000;
+	public final static int TIME_TO_WAIT_FOR_FRAME = 15 * MINUTE_MULTIPLIER;
 	protected int startTimeStamp = -1;
 	protected long initialDelta = 0;
 
@@ -125,7 +126,7 @@ public abstract class BaseStreamWriter implements Runnable {
 
 	public void run() {
 		log.debug("##REC:: stream writer started");
-		long lastPackedRecieved = Long.MAX_VALUE - TIME_TO_WAIT_FOR_FRAME - 1;
+		long lastPackedRecieved = System.currentTimeMillis() + TIME_TO_WAIT_FOR_FRAME;
 		long counter = 0;
 		while (!stopping) {
 			try {
@@ -139,6 +140,7 @@ public abstract class BaseStreamWriter implements Runnable {
 
 					packetReceived(item);
 				} else if (dostopping || lastPackedRecieved + TIME_TO_WAIT_FOR_FRAME < System.currentTimeMillis()) {
+					log.debug(String.format("##REC:: none packets received for: %s minutes, exiting", (System.currentTimeMillis() - lastPackedRecieved) / MINUTE_MULTIPLIER)); 
 					stopping = true;
 					closeStream();
 				}
