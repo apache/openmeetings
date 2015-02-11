@@ -59,7 +59,6 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.PasswordTextField;
 import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.form.TextField;
-import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
@@ -69,6 +68,7 @@ import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.threeten.bp.LocalDateTime;
 
+import com.googlecode.wicket.jquery.core.Options;
 import com.googlecode.wicket.jquery.ui.plugins.wysiwyg.WysiwygEditor;
 import com.googlecode.wicket.jquery.ui.plugins.wysiwyg.toolbar.DefaultWysiwygToolbar;
 import com.googlecode.wicket.jquery.ui.widget.dialog.AbstractDialog;
@@ -78,6 +78,7 @@ import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButtons;
 import com.googlecode.wicket.jquery.ui.widget.dialog.DialogIcon;
 import com.googlecode.wicket.jquery.ui.widget.dialog.MessageDialog;
 import com.googlecode.wicket.kendo.ui.form.datetime.local.DateTimePicker;
+import com.googlecode.wicket.kendo.ui.panel.KendoFeedbackPanel;
 
 public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 	private static final long serialVersionUID = 1L;
@@ -91,7 +92,7 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 	private String enterRoomLbl = WebSession.getString(1282);
 	private DialogButton enterRoom = new DialogButton(enterRoomLbl);
 	private final CalendarPanel calendarPanel;
-	protected final FeedbackPanel feedback;
+	private final KendoFeedbackPanel feedback = new KendoFeedbackPanel("feedback", new Options("button", true));
 	final MessageDialog confirmDelete;
 	private IModel<Collection<User>> attendeesModel = new CollectionModel<User>(new ArrayList<User>());
 	
@@ -122,7 +123,6 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 		log.debug(" -- AppointmentDialog -- Current model " + getModel().getObject());
 		this.calendarPanel = calendarPanel;
 		setOutputMarkupId(true);
-		feedback = new FeedbackPanel("feedback");
 		form = new AppointmentForm("appForm", model);
 		add(form);
 		confirmDelete = new MessageDialog("confirmDelete", WebSession.getString(814), WebSession.getString(833), DialogButtons.OK_CANCEL, DialogIcon.WARN){
@@ -308,13 +308,9 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 					, remindTypes
 					, new ChoiceRenderer<AppointmentReminderType>("label.value", "id")));
 			
-			roomType.setEnabled(createRoom);
-			roomType.setOutputMarkupId(true);
-			add(roomType);
+			add(roomType.setEnabled(createRoom).setOutputMarkupId(true));
 			
-			room.setEnabled(!createRoom);
-			room.setOutputMarkupId(true);
-			add(room);
+			add(room.setRequired(true).setLabel(Model.of(WebSession.getString(406))).setEnabled(!createRoom).setOutputMarkupId(true));
 			add(new AjaxCheckBox("createRoom", new PropertyModel<Boolean>(this, "createRoom")) {
 				private static final long serialVersionUID = 1L;
 
