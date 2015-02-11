@@ -117,7 +117,7 @@ public class CalendarPanel extends UserPanel {
 		add(dialog);
 		
 		boolean isRtl = Boolean.TRUE.equals(WebSession.getLanguageObj().getRtl());
-		javaScriptAddDatepicker = String.format("addCalButton(%s, 'Datepicker', 'datepicker');", isRtl);
+		javaScriptAddDatepicker = String.format("addCalButton(%s, 'datepicker');", isRtl);
 		Options options = new Options();
 		options.set("isRTL", isRtl);
 		options.set("header", isRtl ? "{left: 'agendaDay,agendaWeek,month', center: 'title', right: 'today nextYear,next,prev,prevYear'}"
