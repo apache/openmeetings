@@ -56,7 +56,7 @@ public class CalendarPanel extends UserPanel {
 	private static final Logger log = Red5LoggerFactory.getLogger(CalendarPanel.class, webAppRootKey);
 	private static final long serialVersionUID = 1L;
 	private static final String javaScriptMarkup = "setCalendarHeight();";
-	private static final String javaScriptAddDatepicker = "addCalButton('left', 'Datepicker', 'datepicker');";
+	private final String javaScriptAddDatepicker;
 	private final AbstractAjaxTimerBehavior refreshTimer = new AbstractAjaxTimerBehavior(Duration.seconds(10)) {
 		private static final long serialVersionUID = 1L;
 
@@ -117,8 +117,12 @@ public class CalendarPanel extends UserPanel {
 				, this, new CompoundPropertyModel<Appointment>(getDefault()));
 		add(dialog);
 		
+		boolean isRtl = WebSession.getLanguageObj().isRtl();
+		javaScriptAddDatepicker = String.format("addCalButton(%s, 'Datepicker', 'datepicker');", isRtl);
 		Options options = new Options();
-		options.set("header", "{left: 'prevYear,prev,next,nextYear today', center: 'title', right: 'month,agendaWeek,agendaDay'}");
+		options.set("isRTL", isRtl);
+		options.set("header", isRtl ? "{left: 'agendaDay,agendaWeek,month', center: 'title', right: 'today nextYear,next,prev,prevYear'}"
+				: "{left: 'prevYear,prev,next,nextYear today', center: 'title', right: 'month,agendaWeek,agendaDay'}");
 		options.set("allDaySlot", false);
 		options.set("axisFormat", Options.asString("H(:mm)"));
 		options.set("defaultEventMinutes", 60);

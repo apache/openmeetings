@@ -34,11 +34,15 @@ $(function() {
     $(window).load(function() { setCalendarHeight(); } );
 });
 
-function addCalButton(where, text, id) {
+function addCalButton(rtl, text, id) {
 	var my_button = 
 		'<button class="fc-button fc-state-default fc-corner-right fc-corner-left">' +
 		'<input type="text" id="' + id + '" value="' + text +'" /></button>';
-	$(".fc .fc-toolbar .fc-" + where).append(my_button);
+	if (rtl) {
+		$(".fc .fc-toolbar .fc-right").prepend(my_button);
+	} else {
+		$(".fc .fc-toolbar .fc-left").append(my_button);
+	}
 	 
 	var dp = $("#"+id);
 	dp.datepicker({
@@ -48,6 +52,12 @@ function addCalButton(where, text, id) {
 		changeMonth: true,
 		changeYear: true,
 		changeDay: true,
+		dayNames: $('#${markupId}').fullCalendar("option","dayNames"),
+		dayNamesShort: $('#${markupId}').fullCalendar("option","dayNamesShort"),
+		dayNamesMin: $('#${markupId}').fullCalendar("option","dayNamesShort"),
+		monthNames: $('#${markupId}').fullCalendar("option","monthNames"),
+		monthNamesShort: $('#${markupId}').fullCalendar("option","monthNamesShort"),
+		isRTL: rtl,
 		onChangeMonthYear: function(year, month, inst) {
 			$('#${markupId}').fullCalendar('gotoDate', year + '-' + ('0' + month).slice(-2) + '-' + inst.selectedDay);
 		},
@@ -56,13 +66,6 @@ function addCalButton(where, text, id) {
 		     $('#${markupId}').fullCalendar('gotoDate', date.getFullYear() + '-' + ('0' + (date.getMonth() + 1)).slice(-2) + '-' + date.getDate());
 		}
 	});
-	
-	dp.datepicker("option", "dayNames", $('#${markupId}').fullCalendar("option","dayNames"));
-	dp.datepicker("option", "dayNamesShort", $('#${markupId}').fullCalendar("option","dayNamesShort"));
-	dp.datepicker("option", "dayNamesMin", $('#${markupId}').fullCalendar("option","dayNamesShort"));
-	dp.datepicker("option", "monthNames", $('#${markupId}').fullCalendar("option","monthNames"));
-	dp.datepicker("option", "monthNamesShort", $('#${markupId}').fullCalendar("option","monthNamesShort"));
-	
 	dp.hide();
 }
  
