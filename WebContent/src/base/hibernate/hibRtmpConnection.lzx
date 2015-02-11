@@ -231,7 +231,12 @@
 			this.showFullMessage = false;
 			return;
 		} else if (this.showKickMessage) {
-			new lz.labelerrorPopup(canvas,{errorlabelid:606});
+			new lz.labelerrorPopup(canvas,{
+				errorlabelid:606
+				, onCloseFunc: function() {
+					canvas.quit();
+				}
+			});
 			canvas._loadingAll.hideContentOnly();
 			return;
 		} else if (this.reconnectionAction){

@@ -474,6 +474,17 @@
         }
     </method>
 
+	<method name="quit">
+		canvas.videoComp_lc.exitRoom = null;
+		canvas.thishib.src = null;
+		canvas.thishib.reconnectionAction = false;
+		canvas.thishib.reconnectAfterRoomleft = false;
+		canvas.thishib.counterror = 100;
+		canvas.thishib.disconnect();
+		canvas.thishib._nc.close();
+		flash.external.ExternalInterface.call("roomExit");
+	</method>
+	
 	<!---
 		Actions connected to the shortcuts
 	 -->
@@ -509,14 +520,7 @@
                 } else if (stringSub=='showSipDialer') {
                     new lz.sipDialer(canvas.main_content._content.inner);
                 } else if (stringSub=='quit') {
-					canvas.videoComp_lc.exitRoom = null;
-					canvas.thishib.src = null;
-					canvas.thishib.reconnectionAction = false;
-					canvas.thishib.reconnectAfterRoomleft = false;
-					canvas.thishib.counterror = 100;
-					canvas.thishib.disconnect();
-					canvas.thishib._nc.close();
-					flash.external.ExternalInterface.call("roomExit");
+					canvas.quit();
                 } else if( stringSub == "browser_open" ){
                     var browserPanelWidth  = canvas.browserPanelWidth;
                     var browserPanelHeight = canvas.browserPanelHeight;
