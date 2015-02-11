@@ -212,6 +212,7 @@ html, body {
 
 .start_step1, .start_step2, .start_step3, .start_step4  {
 	padding-left: 30px;
+	background-position: left top;
 	margin: 5px 0px 5px 0px; 
 	background-size: contain;
 	background-repeat: no-repeat;
