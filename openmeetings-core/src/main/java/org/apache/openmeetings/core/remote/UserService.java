@@ -18,6 +18,8 @@
  */
 package org.apache.openmeetings.core.remote;
 
+import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -49,7 +51,6 @@ import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.UserContact;
 import org.apache.openmeetings.db.util.AuthLevelUtil;
 import org.apache.openmeetings.db.util.TimezoneUtil;
-import org.apache.openmeetings.util.OpenmeetingsVariables;
 import org.red5.logging.Red5LoggerFactory;
 import org.red5.server.api.scope.IScope;
 import org.slf4j.Logger;
@@ -63,8 +64,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  */
 public class UserService implements IUserService {
 
-	private static final Logger log = Red5LoggerFactory.getLogger(
-			UserService.class, OpenmeetingsVariables.webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(UserService.class, webAppRootKey);
 
 	@Autowired
 	private ISessionManager sessionManager;

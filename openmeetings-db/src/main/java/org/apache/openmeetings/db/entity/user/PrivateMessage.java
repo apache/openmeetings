@@ -20,6 +20,7 @@ package org.apache.openmeetings.db.entity.user;
 
 import java.util.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -83,13 +84,13 @@ public class PrivateMessage implements IDataProviderEntity {
 	@Element(data = true, required = false)
 	private User from;
 
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
 	@JoinColumn(name = "to_id")
 	@ForeignKey(enabled = true)
 	@Element(data = true, required = false)
 	private User to;
 
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
 	@JoinColumn(name = "owner_id")
 	@ForeignKey(enabled = true)
 	@Element(data = true, required = false)
