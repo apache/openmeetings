@@ -66,3 +66,12 @@
 	margin-left: initial !important;
 	margin-right: 60px !important;
 }
+/**** FIXME need to be moved to wicket-jquery-ui **************/
+span.css-emoticon {
+	transform: rotate(-90deg) !important;
+}
+.chat.dropdown-menu {
+	left: initial !important;
+    right: -50px !important;
+	float: right !important;
+}
