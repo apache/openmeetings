@@ -274,6 +274,14 @@ table.adminListTable td div.four_column_layout_divcolumn4 {
 	height: 20px;
 	margin: 2px 2px;
 }
+.adminForm .input {
+	display: block;
+	float: left;
+	font-size: 14px;
+	padding: 0px 0px;
+	width: 280px;
+	margin: 2px 2px;
+}
 .adminForm input[type=checkbox], .adminForm input[type=radio] {
 	width: auto;
 }

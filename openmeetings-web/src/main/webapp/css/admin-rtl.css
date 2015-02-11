@@ -16,36 +16,6 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-#header {
-	padding-left: initial !important;
-	padding-right: 150px;
-	background-position: right center;
-}
-#topLinks {
-	right: initial !important;
-	left: 10px;
-}
-
-#topLinks span {
-	border-right: none !important;
-	border-left: 1px solid black;
-}
-
-#topLinks span:last-child {
-	border-left: none;
-}
-#busy_indicator {
-	float: left !important;
-}
-#chatPanel {
-	right: initial !important;
-	left: 10px;
-}
-.ui-tabs .ui-tabs-nav li {
+.adminForm label, .adminForm input, .adminForm select, .adminForm textarea, .adminForm .input {
 	float: right !important;
-}
-.info-text {
-	background-position: right top !important;
-	padding-left: initial !important;
-	padding-right: 20px;
 }

@@ -139,6 +139,7 @@ html, body {
 
 .searchForm {
 	display: inline-block;
+	vertical-align: top;
 }
 
 .pagedEntityListPanel select, .adminForm .pagedEntityListPanel select {
