@@ -34,17 +34,23 @@ $(function() {
     $(window).load(function() { setCalendarHeight(); } );
 });
 
-function addCalButton(rtl, text, id) {
+function toggleDatePicker(id) {
+	var dp = $("#" + id);
+	dp.datepicker(dp.datepicker("widget").is(":visible") ? "hide" : "show");
+	return false;
+}
+function addCalButton(rtl, id) {
 	var my_button = 
-		'<button class="fc-button fc-state-default fc-corner-right fc-corner-left">' +
-		'<input type="text" id="' + id + '" value="' + text +'" /></button>';
+		'<button class="fc-button fc-state-default fc-corner-right fc-corner-left" onclick="return toggleDatePicker(\'' + id + '\');">' +
+		'<input type="text" id="' + id + '" /></button>';
+
 	if (rtl) {
 		$(".fc .fc-toolbar .fc-right").prepend(my_button);
 	} else {
 		$(".fc .fc-toolbar .fc-left").append(my_button);
 	}
 	 
-	var dp = $("#"+id);
+	var dp = $("#" + id);
 	dp.datepicker({
 		showOn: "button",
 		buttonImage: "images/calendar.gif",
@@ -62,8 +68,8 @@ function addCalButton(rtl, text, id) {
 			$('#${markupId}').fullCalendar('gotoDate', year + '-' + ('0' + month).slice(-2) + '-' + inst.selectedDay);
 		},
 		onSelect: function(dateText, inst) {
-		     var date = new Date(dateText);
-		     $('#${markupId}').fullCalendar('gotoDate', date.getFullYear() + '-' + ('0' + (date.getMonth() + 1)).slice(-2) + '-' + date.getDate());
+			var date = new Date(dateText);
+			$('#${markupId}').fullCalendar('gotoDate', date.getFullYear() + '-' + ('0' + (date.getMonth() + 1)).slice(-2) + '-' + date.getDate());
 		}
 	});
 	dp.hide();
