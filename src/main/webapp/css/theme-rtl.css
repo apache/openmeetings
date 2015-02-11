@@ -49,3 +49,20 @@
 	padding-left: initial !important;
 	padding-right: 20px;
 }
+.start_step1, .start_step2, .start_step3, .start_step4 {
+	padding-left: initial !important;
+	padding-right: 30px;
+	background-position: right top !important;
+}
+.start_step2 {
+	margin-left: initial !important;
+	margin-right: 20px !important;
+}
+.start_step3 {
+	margin-left: initial !important;
+	margin-right: 40px !important;
+}
+.start_step4 {
+	margin-left: initial !important;
+	margin-right: 60px !important;
+}
