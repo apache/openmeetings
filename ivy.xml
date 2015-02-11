@@ -409,7 +409,7 @@
 		<!--  END OF Command Line Admin -->
 		
 		<!--  START OF MySQL Driver -->
-		<dependency org="mysql" name="mysql-connector-java" rev="5.1.26" conf="mysql->*" transitive="false">
+		<dependency org="mysql" name="mysql-connector-java" rev="5.1.34" conf="mysql->*" transitive="false">
 			<include type="jar" />
 		</dependency>
 		<!--  END OF MySQL Driver -->
