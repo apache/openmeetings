@@ -499,18 +499,20 @@ table.messages td.main {
 }
 input[type="text"].messages.text, .messages.text.to {
 	width: 100%;
+	max-height: 100px;
+	overflow-y: auto;
 }
 textarea.messages.body {
 	width: 100%;
 	height: 300px;
 }
 select.messages.selector {
-	width: 120px;
+	width: 220px;
 }
 .info-text {
 	background-image: url(images/information.png);
 	background-repeat: no-repeat;
-	background-position: 2px 2px;
+	background-position: left top;
 	cursor: default;
 	border: none;
 	padding-left: 20px;
@@ -601,4 +603,5 @@ form .input {
 }
 .date.time.picker {
 	font-size: 12px;
+	white-space: nowrap;
 }

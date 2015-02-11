@@ -49,7 +49,6 @@ import org.apache.openmeetings.web.util.RoomTypeDropDown;
 import org.apache.openmeetings.web.util.UserMultiChoice;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.extensions.yui.calendar.DateTimeField;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.Form;
@@ -59,23 +58,27 @@ import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.util.CollectionModel;
+import org.threeten.bp.LocalDateTime;
 
+import com.googlecode.wicket.jquery.core.Options;
 import com.googlecode.wicket.jquery.ui.plugins.wysiwyg.WysiwygEditor;
 import com.googlecode.wicket.jquery.ui.plugins.wysiwyg.toolbar.DefaultWysiwygToolbar;
 import com.googlecode.wicket.jquery.ui.widget.dialog.AbstractFormDialog;
 import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
+import com.googlecode.wicket.kendo.ui.form.datetime.local.DateTimePicker;
+import com.googlecode.wicket.kendo.ui.panel.KendoFeedbackPanel;
 
 public class MessageDialog extends AbstractFormDialog<PrivateMessage> {
 	private static final long serialVersionUID = 1L;
 	private final Form<PrivateMessage> form;
-	private FeedbackPanel feedback = new FeedbackPanel("feedback");
+	private final KendoFeedbackPanel feedback = new KendoFeedbackPanel("feedback", new Options("button", true));
 	String sendLbl = WebSession.getString(218);
 	DialogButton send = new DialogButton(sendLbl);
 	private DialogButton cancel = new DialogButton(WebSession.getString(219));
 	private final WebMarkupContainer roomParamsBlock = new WebMarkupContainer("roomParamsBlock");
 	private final WebMarkupContainer roomParams = new WebMarkupContainer("roomParams");
-	private final IModel<Date> modelStart = Model.of(new Date());
-	private final IModel<Date> modelEnd = Model.of(new Date());
+	private DateTimePicker start = new DateTimePicker("start", Model.of(LocalDateTime.now()), "yyyy/MM/dd", "HH:mm:ss");  //FIXME use user locale
+	private DateTimePicker end = new DateTimePicker("end", Model.of(LocalDateTime.now()), "yyyy/MM/dd", "HH:mm:ss");  //FIXME use user locale
 	private boolean isPrivate = false; 
 	private final IModel<Collection<User>> modelTo = new CollectionModel<User>(new ArrayList<User>());
 
@@ -90,8 +93,8 @@ public class MessageDialog extends AbstractFormDialog<PrivateMessage> {
 	}
 	
 	public MessageDialog reset(boolean isPrivate) {
-		modelStart.setObject(new Date());
-		modelEnd.setObject(new Date()); //TODO should we add 1 hour or generalize with Calendar???
+		start.setModelObject(LocalDateTime.now());
+		end.setModelObject(LocalDateTime.now()); //TODO should we add 1 hour or generalize with Calendar???
 		modelTo.setObject(new ArrayList<User>());
 		PrivateMessage p = new PrivateMessage();
 		p.setFrom(getBean(UserDao.class).get(getUserId()));
@@ -143,8 +146,8 @@ public class MessageDialog extends AbstractFormDialog<PrivateMessage> {
 		}));
 		roomParamsBlock.add(roomParams);
 		roomParams.add(new RoomTypeDropDown("room.roomtype"));
-		roomParams.add(new DateTimeField("start", modelStart));
-		roomParams.add(new DateTimeField("end", modelEnd));
+		roomParams.add(start);
+		roomParams.add(end);
 		add(form.setOutputMarkupId(true));
 	}
 
@@ -209,7 +212,7 @@ public class MessageDialog extends AbstractFormDialog<PrivateMessage> {
 					Invitation i = getBean(IInvitationManager.class).getInvitation(to, p.getRoom(),
 							false, null, Valid.Period
 							, userDao.get(getUserId()), userDao.get(getUserId()).getLanguageId(),
-							modelStart.getObject(), modelEnd.getObject(), null);
+							CalendarHelper.getDate(start.getModelObject()), CalendarHelper.getDate(end.getModelObject()), null);
 					
 					invitation_link = getInvitationLink(getBean(ConfigurationDao.class).getBaseUrl(), i);
 
@@ -233,8 +236,6 @@ public class MessageDialog extends AbstractFormDialog<PrivateMessage> {
 	
 	@Override
 	protected void onDetach() {
-		modelEnd.detach();
-		modelStart.detach();
 		modelTo.detach();
 		super.onDetach();
 	}

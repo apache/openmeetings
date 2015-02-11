@@ -16,6 +16,6 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-.adminForm label, .adminForm input, .adminForm select, .adminForm textarea, .adminForm .input {
+.adminForm label, .adminForm input, .adminForm select, .adminForm textarea {
 	float: right !important;
 }
