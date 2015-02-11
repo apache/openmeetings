@@ -40,7 +40,7 @@ import org.apache.wicket.util.string.StringValue;
 import org.wicketstuff.urlfragment.AsyncUrlFragmentAwarePage;
 
 public abstract class BasePage extends AsyncUrlFragmentAwarePage {
-	private static final long serialVersionUID = -6237917782433412496L;
+	private static final long serialVersionUID = 1L;
 	private final Map<String, String> options;
 
 	protected abstract FieldLanguage getLanguage();
@@ -90,6 +90,7 @@ public abstract class BasePage extends AsyncUrlFragmentAwarePage {
 		}
 		if (rtl) {
 			response.render(CssHeaderItem.forUrl("css/theme-rtl.css"));
+			response.render(CssHeaderItem.forUrl("css/calendar-rtl.css"));
 		}
 	}
 }
