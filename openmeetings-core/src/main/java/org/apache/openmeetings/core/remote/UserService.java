@@ -63,7 +63,6 @@ import org.springframework.beans.factory.annotation.Autowired;
  * 
  */
 public class UserService implements IUserService {
-
 	private static final Logger log = Red5LoggerFactory.getLogger(UserService.class, webAppRootKey);
 
 	@Autowired
@@ -105,7 +104,7 @@ public class UserService implements IUserService {
 	@Autowired
 	private ISlaveHTTPConnectionManager slaveHTTPConnectionManager;
 	@Autowired
-	private FieldLanguagesValuesDao fieldLanguagesValuesDao;
+	private FieldLanguagesValuesDao labelDao;
 	@Autowired
 	private RoomTypeDao roomTypeDao;
 
@@ -167,11 +166,8 @@ public class UserService implements IUserService {
 			Long users_id = sessiondataDao.checkSession(SID);
 			// admins only
 			if (AuthLevelUtil.hasAdminLevel(userDao.getRights(users_id))) {
-
 				if (serverId == 0) {
-
-					Client rcl = this.sessionManager
-							.getClientByStreamId(streamid, null);
+					Client rcl = sessionManager.getClientByStreamId(streamid, null);
 
 					if (rcl == null) {
 						return true;
@@ -180,21 +176,16 @@ public class UserService implements IUserService {
 					if (rcl.getRoom_id() != null) {
 						scopeName = rcl.getRoom_id().toString();
 					}
-					IScope currentScope = this.scopeApplicationAdapter
-							.getRoomScope(scopeName);
+					IScope currentScope = scopeApplicationAdapter.getRoomScope(scopeName);
 
 					HashMap<Integer, String> messageObj = new HashMap<Integer, String>();
 					messageObj.put(0, "kick");
-					this.scopeApplicationAdapter.sendMessageById(messageObj,
-							streamid, currentScope);
+					scopeApplicationAdapter.sendMessageById(messageObj, streamid, currentScope);
 
-					this.scopeApplicationAdapter.roomLeaveByScope(rcl,
-							currentScope, true);
+					scopeApplicationAdapter.roomLeaveByScope(rcl, currentScope, true);
 
 					return true;
-
 				} else {
-
 					Server server = serverDao.get(serverId);
 					Client rcl = sessionManager.getClientByStreamId(
 							streamid, server);
@@ -217,7 +208,6 @@ public class UserService implements IUserService {
 			Long users_id = sessiondataDao.checkSession(SID);
 			// users only
 			if (AuthLevelUtil.hasUserLevel(userDao.getRights(users_id))) {
-
 				User us = userDao.get(users_id);
 
 				us.setTimeZoneId(timezoneUtil.getTimezoneByInternalJName(jname).getID());
@@ -227,7 +217,6 @@ public class UserService implements IUserService {
 				userDao.update(us, users_id);
 				
 				return us;
-
 			}
 		} catch (Exception err) {
 			log.error("[updateUserTimeZone]", err);
@@ -240,13 +229,10 @@ public class UserService implements IUserService {
 			Long users_id = sessiondataDao.checkSession(SID);
 			// users only
 			if (AuthLevelUtil.hasUserLevel(userDao.getRights(users_id))) {
-
-				List<UserContact> uList = userContactsDao
-						.getContactRequestsByUserAndStatus(users_id, true);
+				List<UserContact> uList = userContactsDao.getContactRequestsByUserAndStatus(users_id, true);
 
 				return uList;
 			}
-
 		} catch (Exception err) {
 			log.error("[getPendingUserContact]", err);
 		}
@@ -258,13 +244,10 @@ public class UserService implements IUserService {
 			Long users_id = sessiondataDao.checkSession(SID);
 			// users only
 			if (AuthLevelUtil.hasUserLevel(userDao.getRights(users_id))) {
-
-				List<UserContact> uList = userContactsDao
-						.getContactsByUserAndStatus(users_id, false);
+				List<UserContact> uList = userContactsDao.getContactsByUserAndStatus(users_id, false);
 
 				return uList;
 			}
-
 		} catch (Exception err) {
 			log.error("[getPendingUserContact]", err);
 		}
@@ -276,16 +259,13 @@ public class UserService implements IUserService {
 			Long users_id = sessiondataDao.checkSession(SID);
 			// users only
 			if (AuthLevelUtil.hasUserLevel(userDao.getRights(users_id))) {
-
-				UserContact userContacts = userContactsDao
-						.get(userContactId);
+				UserContact userContacts = userContactsDao.get(userContactId);
 
 				if (userContacts == null) {
 					return -49;
 				}
 
 				return userContactsDao.deleteUserContact(userContactId);
-
 			}
 		} catch (Exception err) {
 			log.error("[removeContactUser]", err);
@@ -298,45 +278,34 @@ public class UserService implements IUserService {
 			Long users_id = sessiondataDao.checkSession(SID);
 			// users only
 			if (AuthLevelUtil.hasUserLevel(userDao.getRights(users_id))) {
-
-				List<UserContact> uList = userContactsDao
-						.getContactsByUserAndStatus(users_id, false);
+				List<UserContact> uList = userContactsDao.getContactsByUserAndStatus(users_id, false);
 
 				for (UserContact userContact : uList) {
-
 					if (userContact.getContact().getId().equals(user_id)) {
 						return true;
 					}
-
 				}
 
 				return false;
-
 			}
-
 		} catch (Exception err) {
 			log.error("[checkUserIsInContactList]", err);
 		}
 		return null;
 	}
 
-	public void shareCalendarUserContact(String SID, Long userContactId,
-			Boolean shareCalendar) {
+	public void shareCalendarUserContact(String SID, Long userContactId, Boolean shareCalendar) {
 		try {
 			Long users_id = sessiondataDao.checkSession(SID);
 
 			// users only
 			if (AuthLevelUtil.hasUserLevel(userDao.getRights(users_id))) {
-
-				UserContact userContacts = userContactsDao
-						.get(userContactId);
+				UserContact userContacts = userContactsDao.get(userContactId);
 
 				userContacts.setShareCalendar(shareCalendar);
 
 				userContactsDao.updateContact(userContacts);
-
 			}
-
 		} catch (Exception err) {
 			log.error("[shareCalendarUserContact]", err);
 		}
@@ -359,9 +328,7 @@ public class UserService implements IUserService {
 			Long users_id = sessiondataDao.checkSession(SID);
 			// users only
 			if (AuthLevelUtil.hasUserLevel(userDao.getRights(users_id))) {
-
-				Client rcl = this.sessionManager.getClientByPublicSID(
-						publicSID, false, null);
+				Client rcl = sessionManager.getClientByPublicSID(publicSID, false, null);
 
 				if (rcl == null) {
 					return true;
@@ -376,15 +343,11 @@ public class UserService implements IUserService {
 				HashMap<Integer, String> messageObj = new HashMap<Integer, String>();
 				messageObj.put(0, "kick");
 
-				this.scopeApplicationAdapter.sendMessageById(messageObj,
-						rcl.getStreamid(), currentScope);
-
-				this.scopeApplicationAdapter.roomLeaveByScope(rcl,
-						currentScope, true);
+				scopeApplicationAdapter.sendMessageById(messageObj, rcl.getStreamid(), currentScope);
+				scopeApplicationAdapter.roomLeaveByScope(rcl, currentScope, true);
 
 				return true;
 			}
-
 		} catch (Exception err) {
 			log.error("[kickUserByStreamId]", err);
 		}
