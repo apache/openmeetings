@@ -1833,13 +1833,13 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>Room / Scope</value>
   </string>
   <string id="603" name="connection administration panel">
-    <value>Unenrole user</value>
+    <value>Unenroll user</value>
   </string>
   <string id="604" name="kick user confirmation dialog">
-    <value>Unenrole user</value>
+    <value>Unenroll user</value>
   </string>
   <string id="605" name="kick user confirmation dialog">
-    <value>Do you really want to unenrole this client from the room?</value>
+    <value>Do you really want to unenroll this client from the room?</value>
   </string>
   <string id="606" name="kick user message dialog">
     <value>Your session has been closed by an administrator or moderator.</value>
@@ -3663,10 +3663,10 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>Enable full fit and the whiteboard will zoom the whole whiteboard so that all&lt;br/&gt;documents are visible according to each participants screen resolution.</value>
   </string>
   <string id="1213" name="user-list">
-    <value>Unenrole user</value>
+    <value>Unenroll user</value>
   </string>
   <string id="1214" name="user-list">
-    <value>You cannot unenrole yourself out of the conference room. If you want to leave it close the browser or use the exit button.</value>
+    <value>You cannot unenroll yourself out of the conference room. If you want to leave it close the browser or use the exit button.</value>
   </string>
   <string id="1215" name="kick-user">
     <value>Do you really want to disconnect this user from this conference room?</value>
@@ -3675,7 +3675,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>Confirm action ...</value>
   </string>
   <string id="1217" name="kick-user">
-    <value>You cannot unenrole a super moderator out of a room.</value>
+    <value>You cannot unenroll a super moderator out of a room.</value>
   </string>
   <string id="1218" name="private message">
     <value>Book conference room</value>
