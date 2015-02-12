@@ -18,6 +18,8 @@
  */
 package org.apache.openmeetings.remote;
 
+import static org.apache.openmeetings.db.entity.user.PrivateMessage.INBOX_FOLDER_ID;
+import static org.apache.openmeetings.db.entity.user.PrivateMessage.SENT_FOLDER_ID;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
 import java.util.ArrayList;
@@ -393,12 +395,12 @@ public class UserService implements IUserService {
 					//TODO should be reviewed
 					// One message to the Send
 					privateMessagesDao.addPrivateMessage(subject,
-							message, parentMessageId, from, to, from,
+							message, SENT_FOLDER_ID, from, to, from,
 							bookedRoom, room, false, 0L);
 
 					// One message to the Inbox
 					privateMessagesDao.addPrivateMessage(subject,
-							message, parentMessageId, from, to, to,
+							message, INBOX_FOLDER_ID, from, to, to,
 							bookedRoom, room, false, 0L);
 
 					if (to.getAdresses() != null) {
