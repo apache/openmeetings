@@ -214,10 +214,14 @@ admin.sh
 network_test.sh
 webapps/openmeetings/conf/om_ldap.cfg
 webapps/openmeetings/css/admin.css
+webapps/openmeetings/css/admin-rtl.css
 webapps/openmeetings/css/calendar.css
 webapps/openmeetings/css/forms.css
 webapps/openmeetings/css/history.css
+webapps/openmeetings/css/jquery.ui.menubar.css
+webapps/openmeetings/css/jquery.ui.menubar-rtl.css
 webapps/openmeetings/css/theme.css
+webapps/openmeetings/css/theme-rtl.css
 
 webapps/openmeetings/docs/*
 webapps/openmeetings/js/openmeetings_functions.js
@@ -355,15 +359,17 @@ webapps/openmeetings/WEB-INF/lib/batik-transcoder-jar-1.7.jar
 webapps/openmeetings/WEB-INF/lib/batik-ttf2svg-jar-1.7.jar
 webapps/openmeetings/WEB-INF/lib/batik-util-jar-1.7.jar
 webapps/openmeetings/WEB-INF/lib/batik-xml-jar-1.7.jar
+webapps/openmeetings/WEB-INF/lib/commons-collections-jar-3.2.1.jar
 webapps/openmeetings/WEB-INF/lib/commons-dbcp-jar-1.4.jar
 webapps/openmeetings/WEB-INF/lib/commons-digester-jar-2.1.jar
+webapps/openmeetings/WEB-INF/lib/commons-exec-jar-1.1.jar
 webapps/openmeetings/WEB-INF/lib/commons-httpclient-jar-3.1.jar
 webapps/openmeetings/WEB-INF/lib/commons-lang-jar-2.6.jar
-webapps/openmeetings/WEB-INF/lib/commons-net-jar-3.1.jar
+webapps/openmeetings/WEB-INF/lib/commons-net-jar-3.3.jar
 webapps/openmeetings/WEB-INF/lib/commons-transaction-jar-1.2.jar
-webapps/openmeetings/WEB-INF/lib/derby-jar-10.10.1.1.jar
-webapps/openmeetings/WEB-INF/lib/derbyclient-jar-10.10.1.1.jar
-webapps/openmeetings/WEB-INF/lib/derbynet-jar-10.10.1.1.jar
+webapps/openmeetings/WEB-INF/lib/derbyclient-jar-10.10.2.0.jar
+webapps/openmeetings/WEB-INF/lib/derby-jar-10.10.2.0.jar
+webapps/openmeetings/WEB-INF/lib/derbynet-jar-10.10.2.0.jar
 webapps/openmeetings/WEB-INF/lib/fop-jar-1.0.jar
 webapps/openmeetings/WEB-INF/lib/geronimo-activation_1.1_spec-bundle-1.1.jar
 webapps/openmeetings/WEB-INF/lib/geronimo-annotation_1.0_spec-jar-1.1.jar
@@ -375,31 +381,39 @@ webapps/openmeetings/WEB-INF/lib/geronimo-stax-api_1.0_spec-bundle-1.0.1.jar
 webapps/openmeetings/WEB-INF/lib/geronimo-ws-metadata_2.0_spec-jar-1.1.2.jar
 webapps/openmeetings/WEB-INF/lib/jsmpp-jar-2.1.0.jar
 webapps/openmeetings/WEB-INF/lib/neethi-bundle-3.0.3-SNAPSHOT.jar
-webapps/openmeetings/WEB-INF/lib/openjpa-bundle-2.2.2.jar
+webapps/openmeetings/WEB-INF/lib/openjpa-bundle-2.3.0.jar
+webapps/openmeetings/WEB-INF/lib/openjpa-jdbc-jar-2.3.0.jar
+webapps/openmeetings/WEB-INF/lib/openjpa-jest-jar-2.3.0.jar
+webapps/openmeetings/WEB-INF/lib/openjpa-kernel-jar-2.3.0.jar
+webapps/openmeetings/WEB-INF/lib/openjpa-lib-jar-2.3.0.jar
+webapps/openmeetings/WEB-INF/lib/openjpa-persistence-jar-2.3.0.jar
+webapps/openmeetings/WEB-INF/lib/openjpa-persistence-jdbc-jar-2.3.0.jar
+webapps/openmeetings/WEB-INF/lib/openjpa-slice-jar-2.3.0.jar
+webapps/openmeetings/WEB-INF/lib/openjpa-xmlstore-jar-2.3.0.jar
 webapps/openmeetings/WEB-INF/lib/simple-xml-jar-2.7.jar
 webapps/openmeetings/WEB-INF/lib/smslib-jar-3.5.3.jar
 webapps/openmeetings/WEB-INF/lib/stax-api-jar-1.0-2.jar
 webapps/openmeetings/WEB-INF/lib/stax2-api-jar-3.1.1.jar
 webapps/openmeetings/WEB-INF/lib/velocity-jar-1.7.jar
 webapps/openmeetings/WEB-INF/lib/velocity-tools-jar-2.0.jar
-webapps/openmeetings/WEB-INF/lib/wicket-auth-roles-jar-6.16.0.jar
-webapps/openmeetings/WEB-INF/lib/wicket-core-jar-6.16.0.jar
-webapps/openmeetings/WEB-INF/lib/wicket-dashboard-core-jar-0.10.jar
-webapps/openmeetings/WEB-INF/lib/wicket-datetime-jar-6.16.0.jar
-webapps/openmeetings/WEB-INF/lib/wicket-devutils-jar-6.16.0.jar
-webapps/openmeetings/WEB-INF/lib/wicket-extensions-jar-6.16.0.jar
-webapps/openmeetings/WEB-INF/lib/wicket-ioc-jar-6.16.0.jar
-webapps/openmeetings/WEB-INF/lib/wicket-jquery-ui-calendar-jar-6.16.0.jar
-webapps/openmeetings/WEB-INF/lib/wicket-jquery-ui-core-jar-6.16.0.jar
-webapps/openmeetings/WEB-INF/lib/wicket-jquery-ui-jar-6.16.0.jar
-webapps/openmeetings/WEB-INF/lib/wicket-jquery-ui-plugins-jar-6.16.0.jar
-webapps/openmeetings/WEB-INF/lib/wicket-native-websocket-core-jar-6.16.0.jar
-webapps/openmeetings/WEB-INF/lib/wicket-native-websocket-tomcat-jar-6.16.0.jar
-webapps/openmeetings/WEB-INF/lib/wicket-request-jar-6.16.0.jar
-webapps/openmeetings/WEB-INF/lib/wicket-select2-jar-2.2.2.jar
-webapps/openmeetings/WEB-INF/lib/wicketstuff-html5-jar-6.16.0.jar
-webapps/openmeetings/WEB-INF/lib/wicketstuff-urlfragment-jar-6.16.0.jar
-webapps/openmeetings/WEB-INF/lib/wicket-util-jar-6.16.0.jar
+webapps/openmeetings/WEB-INF/lib/wicket-auth-roles-jar-6.19.0.jar
+webapps/openmeetings/WEB-INF/lib/wicket-core-jar-6.19.0.jar
+webapps/openmeetings/WEB-INF/lib/wicket-dashboard-core-jar-0.12.0.jar
+webapps/openmeetings/WEB-INF/lib/wicket-datetime-jar-6.19.0.jar
+webapps/openmeetings/WEB-INF/lib/wicket-devutils-jar-6.19.0.jar
+webapps/openmeetings/WEB-INF/lib/wicket-extensions-jar-6.19.0.jar
+webapps/openmeetings/WEB-INF/lib/wicket-ioc-jar-6.19.0.jar
+webapps/openmeetings/WEB-INF/lib/wicket-jquery-ui-calendar-jar-6.19.0.jar
+webapps/openmeetings/WEB-INF/lib/wicket-jquery-ui-core-jar-6.19.0.jar
+webapps/openmeetings/WEB-INF/lib/wicket-jquery-ui-jar-6.19.0.jar
+webapps/openmeetings/WEB-INF/lib/wicket-jquery-ui-plugins-jar-6.19.0.jar
+webapps/openmeetings/WEB-INF/lib/wicket-native-websocket-core-jar-6.19.0.jar
+webapps/openmeetings/WEB-INF/lib/wicket-native-websocket-tomcat-jar-6.19.0.jar
+webapps/openmeetings/WEB-INF/lib/wicket-request-jar-6.19.0.jar
+webapps/openmeetings/WEB-INF/lib/wicketstuff-html5-jar-6.19.0.jar
+webapps/openmeetings/WEB-INF/lib/wicketstuff-select2-jar-6.19.0.jar
+webapps/openmeetings/WEB-INF/lib/wicketstuff-urlfragment-jar-6.19.0.jar
+webapps/openmeetings/WEB-INF/lib/wicket-util-jar-6.19.0.jar
 webapps/openmeetings/WEB-INF/lib/woden-core-bundle-1.0-SNAPSHOT.jar
 webapps/openmeetings/WEB-INF/lib/woodstox-core-asl-jar-4.1.4.jar
 webapps/openmeetings/WEB-INF/lib/ws-commons-util-jar-1.0.2.jar
@@ -412,21 +426,27 @@ webapps/openmeetings/WEB-INF/lib/xmlrpc-client-jar-3.1.3.jar
 webapps/openmeetings/WEB-INF/lib/xmlrpc-common-jar-3.1.3.jar
 webapps/openmeetings/WEB-INF/lib/XmlSchema-bundle-1.4.8-SNAPSHOT.jar
 
-webapps/openmeetings/screensharing/commons-beanutils-1.8.3.jar
+webapps/openmeetings/screensharing/commons-beanutils-1.9.2.jar
 webapps/openmeetings/screensharing/commons-codec-1.9.jar
 webapps/openmeetings/screensharing/commons-collections-3.2.1.jar
-webapps/openmeetings/screensharing/ehcache-core-2.5.0.jar
-webapps/openmeetings/screensharing/httpclient-4.2.1.jar
-webapps/openmeetings/screensharing/httpcore-4.2.1.jar
+webapps/openmeetings/screensharing/commons-lang3-3.3.2.jar
+webapps/openmeetings/screensharing/ehcache-core-2.6.9.jar
+webapps/openmeetings/screensharing/httpclient-4.3.5.jar
+webapps/openmeetings/screensharing/httpcore-4.3.2.jar
 webapps/openmeetings/screensharing/mina-core-2.0.8.jar
+webapps/openmeetings/screensharing/quartz-2.1.7.jar
+webapps/openmeetings/screensharing/red5-client-jar-1.0.5-RELEASE.jar
+webapps/openmeetings/screensharing/red5-io-1.0.5-RELEASE.jar
+webapps/openmeetings/screensharing/red5-server-common-1.0.5-RELEASE.jar
 webapps/openmeetings/screensharing/spring-beans-4.0.8.RELEASE.jar
 webapps/openmeetings/screensharing/spring-context-4.0.8.RELEASE.jar
 webapps/openmeetings/screensharing/spring-core-4.0.8.RELEASE.jar
 
-lib/cglib-jar-2.2.2.jar
+lib/cglib-nodep-2.2.2.jar
 lib/commons-beanutils-1.9.2.jar
 lib/commons-codec-1.9.jar
 lib/commons-collections-3.2.1.jar
+lib/commons-daemon-1.0.15.jar
 lib/commons-fileupload-jar-1.3.jar
 lib/commons-io-jar-2.4.jar
 lib/commons-lang3-3.3.2.jar
@@ -438,6 +458,7 @@ lib/httpcore-4.3.2.jar
 lib/mina-core-2.0.8.jar
 lib/mina-integration-beans-2.0.8.jar
 lib/mina-integration-jmx-2.0.8.jar
+lib/mina-integration-ognl-2.0.8.jar
 lib/quartz-2.1.7.jar
 lib/red5-*.jar
 lib/spring-aop-4.0.8.RELEASE.jar
@@ -450,7 +471,6 @@ lib/spring-core-4.0.8.RELEASE.jar
 lib/spring-expression-4.0.8.RELEASE.jar
 lib/spring-jdbc-jar-4.0.8.RELEASE.jar
 lib/spring-orm-jar-4.0.8.RELEASE.jar
-lib/spring-test-4.0.8.RELEASE.jar
 lib/spring-tx-jar-4.0.8.RELEASE.jar
 lib/spring-web-4.0.8.RELEASE.jar
 lib/spring-webmvc-jar-4.0.8.RELEASE.jar
@@ -458,8 +478,6 @@ lib/xercesImpl-2.9.1.jar
 
 plugins/tomcat-embed-core.jar
 plugins/tomcat-embed-jasper.jar
-plugins/tomcat-embed-logging-juli.jar
-plugins/tomcat-embed-logging-log4j.jar
 plugins/tomcatplugin-1.7.jar
 
 ======================================================================================================================
@@ -599,12 +617,12 @@ The GlassFish code released under the CDDL shall be governed by the laws of the 
 
 For SLF4J:
 
-webapps/openmeetings/screensharing/jcl-over-slf4j-1.7.7.jar
-webapps/openmeetings/screensharing/slf4j-api-1.7.7.jar
-lib/jcl-over-slf4j-1.7.7.jar
-lib/jul-to-slf4j-1.7.7.jar
-lib/log4j-over-slf4j-1.7.7.jar
-lib/slf4j-api-1.7.7.jar
+webapps/openmeetings/screensharing/jcl-over-slf4j-1.7.9.jar
+webapps/openmeetings/screensharing/slf4j-api-1.7.9.jar
+lib/jcl-over-slf4j-1.7.9.jar
+lib/jul-to-slf4j-1.7.9.jar
+lib/log4j-over-slf4j-1.7.9.jar
+lib/slf4j-api-1.7.9.jar
 
 Copyright (c) 2004-2008 QOS.ch
  All rights reserved.
@@ -638,7 +656,7 @@ Copyright (c) 2004-2008 QOS.ch
   
  ======================================================================================================================
  
-plugins/websocket-1.0.jar
+plugins/websocket-1.1.jar
 jaxb-api-jar-2.2.6.jar
 jaxb-impl-jar-2.2.6.jar
 jaxb-xjc-jar-2.2.6.jar
@@ -1177,7 +1195,7 @@ This Agreement is governed by the laws of the State of New York and the intellec
  
 ======================================================================================================================
 
-For lib/jython-standalone-2.5.2.jar
+For lib/jython-standalone-2.5.3.jar
 
 The Jython License
 A. TERMS AND CONDITIONS FOR ACCESSING OR OTHERWISE USING JYTHON
@@ -1214,8 +1232,8 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS'' AND
 
  For Bouncy Castle:
  
- lib/bcprov-jdk16-1.45.jar
- webapps/openmeetings/screensharing/bcprov-jdk16-1.45.jar
+ lib/bcprov-jdk15on-1.51.jar
+ webapps/openmeetings/screensharing/bcprov-jdk15on-1.51.jar
 
  Copyright (c) 2000 - 2011 The Legion Of The Bouncy Castle (http://www.bouncycastle.org)
 
@@ -1314,40 +1332,6 @@ CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING 
 WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
 DAMAGE.
  
-======================================================================================================================
-
-For ICAL4J components: ical4j-bundle-1.0.3.jar
-
-Copyright (c) 2012, Ben Fortuna
-All rights reserved.
-
-Redistribution and use in source and binary forms, with or without
-modification, are permitted provided that the following conditions
-are met:
-
-	o Redistributions of source code must retain the above copyright
-notice, this list of conditions and the following disclaimer.
-
-	o Redistributions in binary form must reproduce the above copyright
-notice, this list of conditions and the following disclaimer in the
-documentation and/or other materials provided with the distribution.
-
-	o Neither the name of Ben Fortuna nor the names of any other contributors
-may be used to endorse or promote products derived from this software
-without specific prior written permission.
-
-THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-"AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-A PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE COPYRIGHT OWNER OR
-CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
-EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
-PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
-PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
-SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-
 ======================================================================================================================
 
 For Red5 Components:
@@ -1489,7 +1473,7 @@ STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
 OF THE POSSIBILITY OF SUCH DAMAGE.
 
-postgresql-jar-9.3-1102-jdbc41.jar
+postgresql-jar-9.4-1200-jdbc41.jar
 	Containing Project URL: http://jdbc.postgresql.org
 	
 	The PostgreSQL JDBC driver is distributed under the BSD license, same as the server. The simplest explanation of the licensing terms is that you can do whatever you want with the product and source code as long as you don't claim you wrote it or sue us. You should give it a read though, it's only half a page.
@@ -1525,7 +1509,7 @@ POSSIBILITY OF SUCH DAMAGE.
 
 SERP License
 
-File: serp-jar-1.13.1.jar
+File: serp-jar-1.14.1.jar
 
 Copyright (c) 2002-2007, A. Abram White
 All rights reserved.
@@ -1596,8 +1580,10 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 For the components:
 
+webapps/openmeetings/screensharing/logback-access-1.1.2.jar
 webapps/openmeetings/screensharing/logback-classic-1.1.2.jar
 webapps/openmeetings/screensharing/logback-core-1.1.2.jar
+lib/logback-access-1.1.2.jar
 lib/logback-classic-1.1.2.jar
 lib/logback-core-1.1.2.jar
 lib/jruby-1.6.8.jar
@@ -1690,25 +1676,6 @@ All Recipient's rights under this Agreement shall terminate if it fails to compl
 Everyone is permitted to copy and distribute copies of this Agreement, but in order to avoid inconsistency the Agreement is copyrighted and may only be modified in the following manner. The Agreement Steward reserves the right to publish new versions (including revisions) of this Agreement from time to time. No one other than the Agreement Steward has the right to modify this Agreement. The Eclipse Foundation is the initial Agreement Steward. The Eclipse Foundation may assign the responsibility to serve as the Agreement Steward to a suitable separate entity. Each new version of the Agreement will be given a distinguishing version number. The Program (including Contributions) may always be distributed subject to the version of the Agreement under which it was received. In addition, after a new version of the Agreement is published, Contributor may elect to distribute the Program (including its Contributions) under the new version. Except as expressly stated in Sections 2(a) and 2(b) above, Recipient receives no rights or licenses to the intellectual property of any Contributor under this Agreement, whether expressly, by implication, estoppel or otherwise. All rights in the Program not expressly granted under this Agreement are reserved.
 
 This Agreement is governed by the laws of the State of New York and the intellectual property laws of the United States of America. No party to this Agreement will bring a legal action under this Agreement more than one year after the cause of action arose. Each party waives its rights to a jury trial in any resulting litigation.
-
-
-======================================================================================================================
-
-For component:
-
-lib/jython-standalone-2.5.2.jar
-
-Jython 2.0, 2.1 License
-
-Copyright (c) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007 Jython Developers All rights reserved.
-
-Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
-
-        Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
-        Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
-        Neither the name of the Jython Developers nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
-
-THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
 ======================================================================================================================

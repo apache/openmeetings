@@ -2,6 +2,84 @@ Apache OpenMeetings Change Log
 
 See http://issues.apache.org/jira/browse/OPENMEETINGS-* (where * is the number of the issue below)
 
+Release Notes - Openmeetings - Version 3.0.4
+================================================================================================================
+
+** Bug
+    * [OPENMEETINGS-878] - Sign Web-Start application with trusted root cert
+    * [OPENMEETINGS-1041] - It is impossible drag and drop recordings to public folder when recordings list is scrolled
+    * [OPENMEETINGS-1055] - Error is thrown and connection is closed when external user try to generate URL and send email invitation
+    * [OPENMEETINGS-1062] - Contact data of other users are shown not all.
+    * [OPENMEETINGS-1063] - When "Show contact data to contacts only" was selected, contact data are not showing for users from contacts.
+    * [OPENMEETINGS-1074] - Sharing of the screen gives remote access to the other user
+    * [OPENMEETINGS-1075] - system does not save the mark "do not ask me" when choosing a camera and video expansion
+    * [OPENMEETINGS-1079] - Synchronous backup does not work through the web interface with a large volume of data
+    * [OPENMEETINGS-1080] - Connection with the server is canceled after recordings
+    * [OPENMEETINGS-1083] - Impossible to add user to group, moderator to room
+    * [OPENMEETINGS-1084] - cannot remove auto created user by invite for conference room 
+    * [OPENMEETINGS-1087] - X-UA-Compatible should be set as first META tag
+    * [OPENMEETINGS-1088] - error installing with mssql
+    * [OPENMEETINGS-1089] - Spanish installation screens contains bad UTF-8 chars
+    * [OPENMEETINGS-1091] - the attendees can chaange the start and end dates of calendar appointment rooms !!!
+    * [OPENMEETINGS-1092] - users can use the calendar room to make conference after the end-date of the conference room!!!
+    * [OPENMEETINGS-1094] - Ldap authorisation is not working correctly if var ldap_search_scope=SUBTREE
+    * [OPENMEETINGS-1098] - Login via OAuth2 is broken due to redirectUri is wrong
+    * [OPENMEETINGS-1102] - Room web service is broken
+    * [OPENMEETINGS-1103] - Pressing 'play' on the video player while a video is already playing starts a new player
+    * [OPENMEETINGS-1105] - Dereferencing Aliases using LDAP and eDirectory.
+    * [OPENMEETINGS-1109] - Appointment with existing room is displayed as appointment with 'appointment special room'
+    * [OPENMEETINGS-1110] - Audio/video is being broadcasted to the room after room exit
+    * [OPENMEETINGS-1114] - LDAP config is not Unicode aware
+    * [OPENMEETINGS-1117] - RTL is not fully supported by OM
+    * [OPENMEETINGS-1121] - Blank field (invited user)
+    * [OPENMEETINGS-1123] - RedirectLoop while trying to install
+    * [OPENMEETINGS-1124] - Calendar interface bug
+    * [OPENMEETINGS-1126] - Timezone bug
+    * [OPENMEETINGS-1127] - Unexpected behaivor when user enter to the room if room type is udefined
+    * [OPENMEETINGS-1128] - users can not be deleted ("ghost users")
+    * [OPENMEETINGS-1131] - New events are not shown in the calendar
+    * [OPENMEETINGS-1134] - Removed folder shows in the "Move to folder..." dropdown box
+    * [OPENMEETINGS-1137] - Reducing load times of rooms via invitations api
+    * [OPENMEETINGS-1139] - When users are in different timezones, the meeting setup was not shown correctly on invitee's caleander
+    * [OPENMEETINGS-1143] - Recordings list order
+    * [OPENMEETINGS-1146] - RTMPS uses rtmpport
+    * [OPENMEETINGS-1149] - "AVI", "FLV" and "Re-convert" buttons are not visible on recordings panel when recordings list box is scrolled
+    * [OPENMEETINGS-1150] - NullPointerException is thrown when user try enter to the room via calendar
+    * [OPENMEETINGS-1151] - Recording Java Application is blocked by Security Settings
+    * [OPENMEETINGS-1153] - "Record started" remains in upper right corner after record was stoped (interviewroom)
+    * [OPENMEETINGS-1154] - Too big waiting time after pressing the "Stop recording" button
+    * [OPENMEETINGS-1156] - The "Allow recording" flag is not checked when screen sharing is started
+    * [OPENMEETINGS-1157] - Calendar web service is broken
+    * [OPENMEETINGS-1159] - Chat is not correctly aligned then language is RTL
+    * [OPENMEETINGS-1160] - Edit user settings is not correctly aligned when language is RTL
+    * [OPENMEETINGS-1162] - Admin->users is not correctly aligned when language is RTL
+    * [OPENMEETINGS-1163] - Admin->OAuth is not correctly aligned when language is RTL
+    * [OPENMEETINGS-1164] - Admin->Servers is not correctly aligned when language is RTL
+    * [OPENMEETINGS-1165] - Admin->Configurations is not correctly aligned when language is RTL
+    * [OPENMEETINGS-1166] - Admin->Groups is not correctly aligned when language is RTL
+    * [OPENMEETINGS-1167] - Admin->Labels is not correctly aligned when language is RTL
+    * [OPENMEETINGS-1169] - Send Message dialog is not properly aligned when RTL language is selected
+    * [OPENMEETINGS-1170] - Profile page is not updated when user changes settings
+    * [OPENMEETINGS-1173] - The "Internal error" is thrown when uncheck the "Create/Modify appointment special room" flag
+    * [OPENMEETINGS-1174] - Unenrolled user not redirected to Rooms list
+    * [OPENMEETINGS-1175] - It is impossible to send private message from the room
+    * [OPENMEETINGS-1177] - Calendar is not properly aligned when RTL language is selected
+
+** Improvement
+    * [OPENMEETINGS-547] - Deferred recordings converting possibility.
+    * [OPENMEETINGS-623] - OpenMeetings怎么修改发送邮件的格式
+    * [OPENMEETINGS-1082] - Library versions should be updated
+    * [OPENMEETINGS-1099] - Build should be ready for web-start code-signing
+    * [OPENMEETINGS-1130] - Emails should be created using templates, not string concatenation
+    * [OPENMEETINGS-1135] - logback config should be updated to use log rotation and keep old logs
+    * [OPENMEETINGS-1136] - Improving portuguese-brazil installation translation
+
+** New Feature
+    * [OPENMEETINGS-1104] - Enable change first day in the Calendar
+
+** Wish
+    * [OPENMEETINGS-1065] - add ability to minimize screen-sharing video
+
 
 Release Notes - Openmeetings - Version 3.0.3
 ================================================================================================================
