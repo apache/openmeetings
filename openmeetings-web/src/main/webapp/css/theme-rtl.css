@@ -69,6 +69,9 @@
 form .input {
 	float: right !important;
 }
+#searchUsersTable th, .fht-table th {
+	text-align: right !important;
+}
 
 /**** FIXME need to be moved to wicket-jquery-ui **************/
 span.css-emoticon {
