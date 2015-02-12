@@ -72,6 +72,16 @@ form .input {
 #searchUsersTable th, .fht-table th {
 	text-align: right !important;
 }
+.ui-dialog .ui-dialog-title {
+	float: right !important;
+}
+.ui-dialog .ui-dialog-titlebar-close {
+	right: initial !important;
+	left: .3em;
+}
+.ui-dialog .ui-dialog-buttonpane .ui-dialog-buttonset {
+	float: left !important;
+}
 
 /**** FIXME need to be moved to wicket-jquery-ui **************/
 span.css-emoticon {
