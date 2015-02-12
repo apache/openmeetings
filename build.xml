@@ -1231,6 +1231,7 @@
 		<delete dir="${red5.lib}/webapps/live" />
 		<delete dir="${red5.lib}/webapps/vod" />
 		<delete dir="${red5.lib}/webapps/chat" />
+		<delete dir="${red5.lib}/webapps/root/demos" />
 		<copy file="${webcontent.base.dir}/red5/index.html" todir="${red5.lib}/webapps/root" overwrite="true" force="true" />
 		<copy todir="${red5.lib}" overwrite="true" force="true">
 			<fileset dir="${webcontent.base.dir}/red5" includes="red5*,admin.*,network_test.sh"/>
