@@ -112,6 +112,39 @@
 
 		<section name="News">
 			<div class="bs-callout bs-callout-danger">
+				<b>Version 3.0.4 released!</b>
+				<span>Service release 4 for 3.0.0 contains following improvements and bug fixes:<br/>
+					<br/>
+					Screen-Sharing:<br/>
+					<ol>
+						<li>web application is now signed with trusted certificate (no warnings)</li>
+						<li>RTMPT/RTMPS works as expected</li>
+						<li>audio/video synchronization is improved</li>
+					</ol><br/>
+					Recordings:<br/>
+					<ol>
+						<li>It is now possible to rename the recording</li>
+						<li>Recordings stability is improved</li>
+					</ol>
+					<br/>
+					RTL:<br/>
+					<ol>
+						<li>Dashboard, Calendar, Settings and Admin are more RTL friendly</li>
+					</ol>
+					<br/>
+					Calendar:<br/>
+					<ol>
+						<li>Time zone support is greatly improved</li>
+					</ol>
+				</span>
+				<span>Service release 3 for 3.0.0, no new features were added, <br/>
+					More than 60 issues are fixed, recordings stability is improved, LDAP support is enhanced<br/>
+					please check <a href="https://www.apache.org/dist/openmeetings/3.0.4/CHANGELOG">CHANGELOG</a> for details
+				</span>
+				<span> See <a href="downloads.html">Downloads page</a>.</span>
+				<span class="date">(2015-02-15)</span>
+			</div>
+			<div class="bs-callout bs-callout-info">
 				<b>Version 3.0.3 released!</b>
 				<span>Service release 3 for 3.0.0, no new features were added, <br/>
 					More than 60 issues are fixed, recordings stability is improved, LDAP support is enhanced<br/>

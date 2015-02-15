@@ -122,6 +122,18 @@
 						</tr>
 					</table>
 				</li>
+				<li>
+					<table>
+						<tr>
+							<td><img class="logo-big" src="images/logos/logo_om_big6.png" alt="Apache OpenMeetings"/></td>
+							<td><button class="btn btn-primary" onclick="applyLogoBig($(this));"/>Apply</td>
+						</tr>
+						<tr>
+							<td>Author</td>
+							<td>Alvaro Bustos</td>
+						</tr>
+					</table>
+				</li>
 			</ol>
 			<h3>Square version</h3>
 			<ol>

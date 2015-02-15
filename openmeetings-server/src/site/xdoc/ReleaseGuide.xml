@@ -42,6 +42,9 @@
 						<li>You need to be online! The build process actively downloads
 							needed libraries and dependencies.
 						</li>
+						<li>Valid certficate to be able to enter <a href="https://securesigning.websecurity.symantec.com/csportal/">https://securesigning.websecurity.symantec.com/csportal/</a>
+							Please ask INFRA in case you need one.
+						</li>
 					</ul>
 				</div>
 
@@ -216,13 +219,34 @@ for f in `ls -1 *.tar.gz *.zip`; do gpg --verify $f.asc; done
 				</p>
 			</subsection>
 
-			<subsection name="Step3 - Distribute and announce">
+			<subsection name="Step3 - Sign web start application">
+				<p>If VOTEs positive: Sign screen sharing web application and re-pack the release</p>
+				<ul>
+					<li>Go to the folder you check out: https://svn.apache.org/repos/asf/openmeetings/tags/$BRANCHORTAG/</li>
+					<li>Run following command: <tt>ant repackWebStartJars</tt></li>
+					<li>Check any jar in <tt>dist/red5/webapps/openmeetings/screensharing/</tt>: Its META-INF/MANIFEST.MF file should NOT contain <tt>SHA1-Digest</tt> entries for classes</li>
+					<li>Go to <a href="https://securesigning.websecurity.symantec.com/csportal/">https://securesigning.websecurity.symantec.com/csportal/</a></li>
+					<li>Select "Signing Sets"</li>
+					<li>Select "Add signing set"</li>
+					<li>Enter ""Signing set name for ex. "3.0.4-RELEASE"</li>
+					<li>Enter "Version" for ex. "3.0.4-RELEASE"</li>
+					<li>Select "Java Signing" as "Signing service"</li>
+					<li>Select "Upload files" and add all <b>jar</b> files from <tt>dist/red5/webapps/openmeetings/screensharing/</tt></li>
+					<li>Select "Sign now"</li>
+					<li>Select "Type of signing" -> "Production"</li>
+					<li>Select "Sign"</li>
+					<li>Select "Download set"</li>
+					<li>Open binary artifacts of OM created on previous step (both <b>tar.gz</b> and <b>zip</b>)</li>
+					<li>Replace jar files inside artifacts <tt>webapps/openmeetings/screenshare</tt> with the signed ones</li>
+					<li>Re-create artifact signatures</li>
+				</ul>
+				<p>NOTE: "Type of signing" can be selected as "Test" to check everything works as expected</p>
+				
+			</subsection>
+			
+			<subsection name="Step4 - Distribute and announce">
 				<p>If VOTEs positive: Upload the release </p>
-				<source>
-svn mv https://dist.apache.org/repos/dist/dev/openmeetings/2.1/rc3 \
-	https://dist.apache.org/repos/dist/release/openmeetings/2.1 \
-	-m "RC3 is released as 2.1"
-				</source>
+				<p>Upload Artifacts with signatures created on the previous steps to https://dist.apache.org/repos/dist/release/openmeetings/CURRENT_VERSION</p>
 				<p>
 					Wait 24 hours (until all Apache mirrors have synced the packages)
 					and send an announcement to the mailing list + blog and any other
@@ -245,9 +269,6 @@ svn mv https://dist.apache.org/repos/dist/dev/openmeetings/2.1/rc3 \
 					Old releases should be deleted from <tt>https://dist.apache.org/repos/dist/release/openmeetings/</tt>
 				</p>
 			</subsection>
-
 		</section>
-
 	</body>
-
 </document>
