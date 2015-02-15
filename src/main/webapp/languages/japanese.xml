@@ -4671,11 +4671,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>ウィジェット</value>
   </string>
   <string id="1549" name="about_title">
-<<<<<<< .mine
-    <value>OpenMeetingsについて</value>
-=======
     <value>について</value>
->>>>>>> .r1649741
   </string>
   <string id="1550" name="about_name">
     <value>名称</value>
