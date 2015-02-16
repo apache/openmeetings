@@ -4824,6 +4824,6 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
     <value>この会議室へは入れません</value>
   </string>
   <string id="1600" name="record-re-start">
-    <value>Re-convert</value>
+    <value>再録音開始</value>
   </string>
 </language>
