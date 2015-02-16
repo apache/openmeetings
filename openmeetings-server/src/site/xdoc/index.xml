@@ -137,9 +137,7 @@
 						<li>Time zone support is greatly improved</li>
 					</ol>
 				</span>
-				<span>Service release 3 for 3.0.0, no new features were added, <br/>
-					More than 60 issues are fixed, recordings stability is improved, LDAP support is enhanced<br/>
-					please check <a href="https://www.apache.org/dist/openmeetings/3.0.4/CHANGELOG">CHANGELOG</a> for details
+				<span>67 issues are fixed please check <a href="https://www.apache.org/dist/openmeetings/3.0.4/CHANGELOG">CHANGELOG</a> for details
 				</span>
 				<span> See <a href="downloads.html">Downloads page</a>.</span>
 				<span class="date">(2015-02-15)</span>
