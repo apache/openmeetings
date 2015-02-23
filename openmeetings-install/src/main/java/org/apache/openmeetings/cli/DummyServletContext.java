@@ -105,16 +105,19 @@ public class DummyServletContext implements ServletContext {
 		return null;
 	}
 
+	@Deprecated
 	public Servlet getServlet(String name) throws ServletException {
 		// stab
 		return null;
 	}
 
+	@Deprecated
 	public Enumeration<Servlet> getServlets() {
 		// stab
 		return null;
 	}
 
+	@Deprecated
 	public Enumeration<String> getServletNames() {
 		// stab
 		return null;
@@ -124,6 +127,7 @@ public class DummyServletContext implements ServletContext {
 		// stab
 	}
 
+	@Deprecated
 	public void log(Exception exception, String msg) {
 		// stab
 	}

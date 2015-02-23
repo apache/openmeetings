@@ -378,6 +378,11 @@
 			<version>${wicketju.version}</version>
 		</dependency>
 		<dependency>
+			<groupId>com.googlecode.wicket-jquery-ui</groupId>
+			<artifactId>wicket-kendo-ui-culture</artifactId>
+			<version>${wicketju.version}</version>
+		</dependency>
+		<dependency>
 			<groupId>org.wicketstuff</groupId>
 			<artifactId>wicketstuff-urlfragment</artifactId>
 			<version>${wickets.version}</version>

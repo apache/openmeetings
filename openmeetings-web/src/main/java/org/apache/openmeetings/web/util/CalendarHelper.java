@@ -26,6 +26,7 @@ import org.threeten.bp.Instant;
 import org.threeten.bp.LocalDate;
 import org.threeten.bp.LocalDateTime;
 import org.threeten.bp.ZoneId;
+import org.threeten.bp.ZonedDateTime;
 
 public class CalendarHelper {
 	public static ZoneId getZoneId() {
@@ -40,7 +41,15 @@ public class CalendarHelper {
 		return new Date(d.atZone(getZoneId()).toInstant().toEpochMilli());
 	}
 
-	public static LocalDateTime getDate(Date d) {
-		return Instant.ofEpochMilli(d.getTime()).atZone(ZoneId.of(getUserTimeZone().getID())).toLocalDateTime();
+	public static ZonedDateTime getZoneDateTime(Date d) {
+		return Instant.ofEpochMilli(d.getTime()).atZone(ZoneId.of(getUserTimeZone().getID()));
+	}
+	
+	public static LocalDate getDate(Date d) {
+		return getZoneDateTime(d).toLocalDate();
+	}
+	
+	public static LocalDateTime getDateTime(Date d) {
+		return getZoneDateTime(d).toLocalDateTime();
 	}
 }

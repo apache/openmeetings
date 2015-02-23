@@ -44,6 +44,7 @@ import org.apache.openmeetings.db.entity.room.RoomType;
 import org.apache.openmeetings.db.entity.user.OrganisationUser;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.web.app.WebSession;
+import org.apache.openmeetings.web.common.OmDateTimePicker;
 import org.apache.openmeetings.web.pages.MainPage;
 import org.apache.openmeetings.web.user.rooms.RoomEnterBehavior;
 import org.apache.openmeetings.web.util.CalendarHelper;
@@ -103,8 +104,8 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 	
 	public void setModelObjectWithAjaxTarget(Appointment a, AjaxRequestTarget target) {
 		form.setModelObject(a);
-		form.start.setModelObject(CalendarHelper.getDate(a.getStart()));
-		form.end.setModelObject(CalendarHelper.getDate(a.getEnd()));
+		form.start.setModelObject(CalendarHelper.getDateTime(a.getStart()));
+		form.end.setModelObject(CalendarHelper.getDateTime(a.getEnd()));
 		form.setEnabled(isOwner(a));
 		log.debug(" -- setModelObjectWithAjaxTarget -- Current model " + a);
 		if (a.getId() != null) {
@@ -231,8 +232,8 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 	private class AppointmentForm extends Form<Appointment> {
 		private static final long serialVersionUID = 1L;
 		private boolean createRoom = true;
-		private DateTimePicker start = new DateTimePicker("start", Model.of(LocalDateTime.now()), "yyyy/MM/dd", "HH:mm:ss");  //FIXME use user locale
-		private DateTimePicker end = new DateTimePicker("end", Model.of(LocalDateTime.now()), "yyyy/MM/dd", "HH:mm:ss");  //FIXME use user locale
+		private final DateTimePicker start = new OmDateTimePicker("start", Model.of(LocalDateTime.now()));
+		private final DateTimePicker end = new OmDateTimePicker("end", Model.of(LocalDateTime.now()));
 		private final PasswordTextField pwd = new PasswordTextField("password");
 		private final Label owner = new Label("aowner", Model.of(""));
 		private final DropDownChoice<RoomType> roomType = new RoomTypeDropDown("room.roomtype");

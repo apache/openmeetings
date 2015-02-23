@@ -128,6 +128,7 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 		tz = null;
 		browserTz = null;
 		loginError = null;
+		browserLocale = null;
 	}
 	
 	@Override
@@ -243,6 +244,7 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 		externalType = u.getExternalUserType();
 		tz = getBean(TimezoneUtil.class).getTimeZone(u);
 		ISO8601FORMAT.setTimeZone(tz);
+		setLocale(languageId == 3 ? Locale.GERMANY : Locale.forLanguageTag(getLanguageObj().getCode())); //FIXME hack
 		//FIXMW locale need to be set by User language first
 		sdf = DateFormat.getDateTimeInstance(SHORT, SHORT, getLocale());
 		if (null == getId()) {

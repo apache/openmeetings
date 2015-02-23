@@ -45,6 +45,7 @@ import org.apache.openmeetings.db.entity.user.PrivateMessage;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Type;
 import org.apache.openmeetings.web.app.WebSession;
+import org.apache.openmeetings.web.common.OmDateTimePicker;
 import org.apache.openmeetings.web.util.CalendarHelper;
 import org.apache.openmeetings.web.util.RoomTypeDropDown;
 import org.apache.openmeetings.web.util.UserMultiChoice;
@@ -77,8 +78,8 @@ public class MessageDialog extends AbstractFormDialog<PrivateMessage> {
 	private DialogButton cancel = new DialogButton(WebSession.getString(219));
 	private final WebMarkupContainer roomParamsBlock = new WebMarkupContainer("roomParamsBlock");
 	private final WebMarkupContainer roomParams = new WebMarkupContainer("roomParams");
-	private DateTimePicker start = new DateTimePicker("start", Model.of(LocalDateTime.now()), "yyyy/MM/dd", "HH:mm:ss");  //FIXME use user locale
-	private DateTimePicker end = new DateTimePicker("end", Model.of(LocalDateTime.now()), "yyyy/MM/dd", "HH:mm:ss");  //FIXME use user locale
+	private final DateTimePicker start = new OmDateTimePicker("start", Model.of(LocalDateTime.now()));
+	private final DateTimePicker end = new OmDateTimePicker("end", Model.of(LocalDateTime.now()));
 	private boolean isPrivate = false; 
 	private final IModel<Collection<User>> modelTo = new CollectionModel<User>(new ArrayList<User>());
 
