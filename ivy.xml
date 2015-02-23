@@ -265,6 +265,7 @@
 		<dependency org="com.googlecode.wicket-jquery-ui" name="wicket-jquery-ui-plugins" rev="6.19.0" conf="openmeetings->*" transitive="false"/>
 		<dependency org="com.googlecode.wicket-jquery-ui" name="wicket-kendo-ui" rev="6.19.0" conf="openmeetings->*" transitive="false"/>
 		<dependency org="com.googlecode.wicket-jquery-ui" name="wicket-kendo-ui-theme-default" rev="6.19.0" conf="openmeetings->*" transitive="false"/>
+		<dependency org="com.googlecode.wicket-jquery-ui" name="wicket-kendo-ui-culture" rev="6.19.1" conf="openmeetings->*" transitive="false"/>
 		<dependency org="org.threeten" name="threetenbp" rev="1.2" conf="openmeetings->*" transitive="false"/>
 		<dependency org="ro.fortsoft.wicket.dashboard" name="wicket-dashboard-core" rev="0.12.0" conf="openmeetings->*" transitive="false">
 			<include type="jar" />

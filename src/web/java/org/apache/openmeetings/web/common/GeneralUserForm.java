@@ -41,11 +41,12 @@ import org.apache.openmeetings.db.entity.user.Salutation;
 import org.apache.openmeetings.db.entity.user.State;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.web.app.WebSession;
+import org.apache.openmeetings.web.util.CalendarHelper;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
-import org.apache.wicket.extensions.markup.html.form.DateTextField;
 import org.apache.wicket.extensions.validation.validator.RfcCompliantEmailAddressValidator;
-import org.apache.wicket.extensions.yui.calendar.DatePicker;
+import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
@@ -63,6 +64,9 @@ import org.apache.wicket.util.string.Strings;
 import org.wicketstuff.select2.Response;
 import org.wicketstuff.select2.Select2MultiChoice;
 import org.wicketstuff.select2.TextChoiceProvider;
+
+import com.googlecode.wicket.kendo.ui.form.datetime.local.AjaxDatePicker;
+import com.googlecode.wicket.kendo.ui.resource.KendoGlobalizeResourceReference;
 
 public class GeneralUserForm extends Form<User> {
 	private static final long serialVersionUID = 1L;
@@ -117,19 +121,14 @@ public class GeneralUserForm extends Form<User> {
 		email.add(RfcCompliantEmailAddressValidator.getInstance());
 		add(new TextField<String>("adresses.phone"));
 		add(new CheckBox("sendSMS"));
-		DateTextField age = new DateTextField("age");
-		DatePicker datePicker = new DatePicker() {
+		add(new AjaxDatePicker("age", Model.of(CalendarHelper.getDate(getModelObject().getAge())), WebSession.get().getLocale()) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			protected String getAdditionalJavaScript() {
-				return "${calendar}.cfg.setProperty(\"navigator\",true,false); ${calendar}.render();";
+			public void onValueChanged(AjaxRequestTarget target) {
+				GeneralUserForm.this.getModelObject().setAge(CalendarHelper.getDate(getModelObject()));
 			}
-		};
-		datePicker.setShowOnFieldClick(true);
-		datePicker.setAutoHide(true);
-		age.add(datePicker);
-		add(age);
+		});
 		add(new TextField<String>("adresses.street"));
 		add(new TextField<String>("adresses.additionalname"));
 		add(new TextField<String>("adresses.zip"));
@@ -204,5 +203,11 @@ public class GeneralUserForm extends Form<User> {
 	@Override
 	protected IMarkupSourcingStrategy newMarkupSourcingStrategy() {
 		return new PanelMarkupSourcingStrategy(false);
+	}
+
+	@Override
+	public void renderHead(IHeaderResponse response) {
+		super.renderHead(response);
+		response.render(JavaScriptHeaderItem.forReference(new KendoGlobalizeResourceReference(WebSession.get().getLocale())));
 	}
 }

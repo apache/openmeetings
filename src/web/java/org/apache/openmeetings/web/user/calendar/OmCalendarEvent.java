@@ -28,8 +28,8 @@ public class OmCalendarEvent extends CalendarEvent {
 	
 	public OmCalendarEvent(Appointment a) {
 		super(a.getId().intValue(), a.getTitle(), null);
-		setStart(CalendarHelper.getDate(a.getStart()));
-		setEnd(CalendarHelper.getDate(a.getEnd()));
+		setStart(CalendarHelper.getDateTime(a.getStart()));
+		setEnd(CalendarHelper.getDateTime(a.getEnd()));
 		setEditable(AppointmentDialog.isOwner(a));
 		setAllDay(false);
 	}

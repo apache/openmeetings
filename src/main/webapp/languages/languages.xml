@@ -29,8 +29,8 @@
 	<lang id="8" rightToLeft="false" code="es">spanish</lang>
 	<lang id="9" rightToLeft="false" code="ru">russian</lang>
 	<lang id="10" rightToLeft="false" code="sv">swedish</lang>
-	<lang id="11" rightToLeft="false" code="zh_CN">chinese simplified</lang>
-	<lang id="12" rightToLeft="false" code="zh_TW">chinese traditional</lang>
+	<lang id="11" rightToLeft="false" code="zh-CN">chinese simplified</lang>
+	<lang id="12" rightToLeft="false" code="zh-TW">chinese traditional</lang>
 	<lang id="13" rightToLeft="false" code="ko">korean</lang>
 	<lang id="14" rightToLeft="true" code="ar">arabic</lang>
 	<lang id="15" rightToLeft="false" code="ja">japanese</lang>

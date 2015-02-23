@@ -84,8 +84,7 @@ import ro.fortsoft.wicket.dashboard.WidgetFactory;
 import ro.fortsoft.wicket.dashboard.web.DashboardContext;
 
 public class WebSession extends AbstractAuthenticatedWebSession {
-	private static final long serialVersionUID = 1123393236459095315L;
-	
+	private static final long serialVersionUID = 1L;
 	public static int MILLIS_IN_MINUTE = 60000;
 	//private static final Map<String, Locale> LNG_TO_LOCALE_MAP = new HashMap<String, Locale> ();
 	private long userId = -1;
@@ -128,6 +127,7 @@ public class WebSession extends AbstractAuthenticatedWebSession {
 		tz = null;
 		browserTz = null;
 		loginError = null;
+		browserLocale = null;
 	}
 	
 	@Override
@@ -140,9 +140,12 @@ public class WebSession extends AbstractAuthenticatedWebSession {
 			if (!secureHash.isEmpty() || !invitationHash.isEmpty()) {
 				PageParameters pp = new PageParameters();
 				for (String p : params.getParameterNames()) {
-					for (StringValue sv : params.getParameterValues(p)) {
-						if (!sv.isEmpty()) {
-							pp.add(p, sv.toString());
+					List<StringValue> vals = params.getParameterValues(p);
+					if (vals != null) {
+						for (StringValue sv : vals) {
+							if (!sv.isEmpty()) {
+								pp.add(p, sv.toString());
+							}
 						}
 					}
 				}
@@ -240,6 +243,7 @@ public class WebSession extends AbstractAuthenticatedWebSession {
 		externalType = u.getExternalUserType();
 		tz = getBean(TimezoneUtil.class).getTimeZone(u);
 		ISO8601FORMAT.setTimeZone(tz);
+		setLocale(languageId == 3 ? Locale.GERMANY : Locale.forLanguageTag(getLanguageObj().getCode())); //FIXME hack
 		//FIXMW locale need to be set by User language first
 		sdf = DateFormat.getDateTimeInstance(SHORT, SHORT, getLocale());
 		if (null == getId()) {
@@ -273,7 +277,7 @@ public class WebSession extends AbstractAuthenticatedWebSession {
 			setUser(u);
 			return true;
 		} catch (OmException oe) {
-			loginError = oe.getCode() == null ? -1 : oe.getCode();
+			loginError = oe.getCode() == null ? -1L : oe.getCode();
 		}
 		return false;
 	}
@@ -295,7 +299,7 @@ public class WebSession extends AbstractAuthenticatedWebSession {
 		return s == null ? "[Missing]" :
 			(STRINGS_WITH_APP.contains(id) ? s.replaceAll("\\$APP_NAME", getBean(ConfigurationDao.class).getAppName()) : s);
 	}
-	
+
 	public void setLanguage(long languageId) {
 		this.languageId = languageId;
 	}
@@ -449,8 +453,8 @@ public class WebSession extends AbstractAuthenticatedWebSession {
 		dashboard = (UserDashboard)dashboardContext.getDashboardPersister().load();
 		boolean existMyRoomWidget = false, existRssWidget = false;
 		ConfigurationDao cfgDao = getBean(ConfigurationDao.class);
-		boolean confShowMyRooms = 1 == cfgDao.getConfValue(CONFIG_DASHBOARD_SHOW_MYROOMS_KEY, Integer.class, "0");
-		boolean confShowRss = 1 == cfgDao.getConfValue(CONFIG_DASHBOARD_SHOW_RSS_KEY, Integer.class, "0");
+		boolean showMyRoomConfValue = 1 == cfgDao.getConfValue(CONFIG_DASHBOARD_SHOW_MYROOMS_KEY, Integer.class, "0");
+		boolean showRssConfValue = 1 == cfgDao.getConfValue(CONFIG_DASHBOARD_SHOW_RSS_KEY, Integer.class, "0");
 		boolean save = false;
 
 		WidgetFactory widgetFactory = dashboardContext.getWidgetFactory();
@@ -460,10 +464,10 @@ public class WebSession extends AbstractAuthenticatedWebSession {
 
 			dashboard.addWidget(widgetFactory.createWidget(new WelcomeWidgetDescriptor()));
 			dashboard.addWidget(widgetFactory.createWidget(new StartWidgetDescriptor()));
-			if (confShowMyRooms) {
+			if (showMyRoomConfValue) {
 				dashboard.addWidget(widgetFactory.createWidget(new MyRoomsWidgetDescriptor()));
 			}
-			if (confShowRss) {
+			if (showRssConfValue) {
 				dashboard.addWidget(widgetFactory.createWidget(new RssWidgetDescriptor()));
 			}
 			save = true;
@@ -473,13 +477,13 @@ public class WebSession extends AbstractAuthenticatedWebSession {
 				// PrivateRoomWidget is stored in the profile of user. Now, Show_MyRooms_key is disable.
 				if (w.getClass().equals(MyRoomsWidget.class)) {
 					existMyRoomWidget = true;
-					if (!confShowMyRooms) {
+					if (!showMyRoomConfValue) {
 						iter.remove();
 					}
 				} else if ((w.getClass().equals(RssWidget.class))) {
 					// RssWidget is stored in the profile of user. Now, Show_RSS_Key is disable.
 					existRssWidget = true;
-					if (!confShowRss) {
+					if (!showRssConfValue) {
 						iter.remove();
 					}
 				} else {
@@ -487,12 +491,12 @@ public class WebSession extends AbstractAuthenticatedWebSession {
 				}
 			}
 			// PrivateRoomWidget was deleted from profile and now it's enabled. It's added again to dashboard.
-			if (!existMyRoomWidget && confShowMyRooms && !dashboard.isWidgetMyRoomsDeleted()) {
+			if (!existMyRoomWidget && showMyRoomConfValue && !dashboard.isWidgetMyRoomsDeleted()) {
 				dashboard.addWidget(widgetFactory.createWidget(new MyRoomsWidgetDescriptor()));
 				save = true;
 			}
 			// RssWidget was deleted from profile and now it's enabled. It's added again to dashboard.
-			if (!existRssWidget && confShowRss && !dashboard.isWidgetRssDeleted()) {
+			if (!existRssWidget && showRssConfValue && !dashboard.isWidgetRssDeleted()) {
 				dashboard.addWidget(widgetFactory.createWidget(new RssWidgetDescriptor()));
 				save = true;
 			}
