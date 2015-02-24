@@ -547,11 +547,13 @@
                     
                     canvas.setAttribute('allowRecording',value.allowRecording);
                     
-                    canvas.setAttribute('firstName',value.firstname);
-                    canvas.setAttribute('lastName',value.lastname);
+                    var fName = value.firstname == null ? "" : value.firstname;
+                    var lName = value.lastname == null ? "" : value.lastname;
+                    canvas.setAttribute('firstName', fName);
+                    canvas.setAttribute('lastName', lName);
                     
-                    hib.userobject.firstname = value.firstname;
-                    hib.userobject.lastname = value.lastname;
+                    hib.userobject.firstname = fName;
+                    hib.userobject.lastname = lName;
                     
                     canvas.setAttribute('mail','');
                     canvas.setAttribute('lastLogin','');
@@ -820,8 +822,8 @@
 			if ($debug) Debug.write("!!!!!!!!!!! loginWicket", value);
 			if (value != null) {
 				canvas.setAttribute('user_id',value.user_id);
-				canvas.setAttribute('firstName',value.firstname);
-				canvas.setAttribute('lastName',value.lastname);
+				canvas.setAttribute('firstName', value.firstname == null ? "" : value.firstname);
+				canvas.setAttribute('lastName', value.lastname == null ? "" : value.lastname);
 				canvas.setAttribute('mail','');
 				canvas.setAttribute('lastLogin','');
 				canvas.setAttribute('official_code','');

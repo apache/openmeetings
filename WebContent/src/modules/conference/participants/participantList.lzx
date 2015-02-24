@@ -74,7 +74,7 @@
                 }
             }
             
-            var lastname = object.lastname;
+            var lastname = object.lastname == null ? "" : object.lastname;
             
             if ($debug) Debug.write("object.isSuperModerator ",object.isSuperModerator);
             

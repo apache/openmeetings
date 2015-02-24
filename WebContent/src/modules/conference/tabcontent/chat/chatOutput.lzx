@@ -84,16 +84,8 @@
         <![CDATA[
             //if($debug) Debug.write("chatOutput/addChatHistory: ",value,client);
             canvas.currentBaseConferenceRoom._chatPanelStrict.startBlink();
-            //is Right To Left ? not checked for the moment
-            if (value[7]){
-                var username = client.firstname+" "+client.lastname;
-            } else {
-                var username = client.firstname+" "+client.lastname;
-            }
+            var username = (client.firstname == null ? "" : client.firstname) + " " + (client.lastname == null ? "" : client.lastname);
             var messageObj = value[value.length - 1];
-            //var newmessage = "<FONT COLOR='"+value[5]+"' size='11'>"+client.firstname+" "+client.lastname+"</FONT>:<FONT COLOR='0x000000' size='11'>"+value[4]+"</FONT><br />";
-            //Debug.write("newmessage: ",newmessage);
-            //this._cbtext.setAttribute('text',this._cbtext.text+newmessage);
             var usercolor = value[5];
             
             var isDirectLink = null;

@@ -113,11 +113,12 @@
                                             });
             var tempWidth = this.content.chatbar.getCurrentSize();
             
+            var tabname = (refObj.firstname == null ? "" : refObj.firstname) + " " + (refObj.lastname == null ? "" : refObj.lastname);
             var tWhiteboardBtn = new lz.chatMiniButton(this.content.chatbar,{
                                        objRef:chatTabPrivateRef,
                                        width:tempWidth,
                                        isactive:true,
-                                       btnName:refObj.firstname+" "+refObj.lastname
+                                       btnName: tabname
                                     });
             
             this.content.chatbar.currentBtn = tWhiteboardBtn;                       

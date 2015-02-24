@@ -159,17 +159,14 @@ function getLineHeight(){
 
 
 <method name="addChatHistory" args="value,client">
-  	<![CDATA[
-  	Debug.write("addChatHistory: ",value,client);
-    if (value[7]){
-          var newmessage = "<FONT COLOR='"+value[5]+"' size='11'>"+client.firstname+" "+client.lastname+"</FONT>:<FONT COLOR='0x000000' size='11'>"+value[4]+"</FONT><br />";
-    } else {
-          var newmessage = "<FONT COLOR='"+value[5]+"' size='11'>"+client.firstname+" "+client.lastname+"</FONT>:<FONT COLOR='0x000000' size='11'>"+value[4]+"</FONT><br />";
-    }
-  	//Debug.write("newmessage: ",newmessage);
-  	canvas._chatcontent.addChatItem(newmessage);  // Is "addChatItem()" used?  By what? h.kuze 2008/3/27
-  	canvas._chathistory.push(newmessage);
-  	]]>
+<![CDATA[
+	if ($debug) Debug.write("addChatHistory: ", value,client);
+	var name = (client.firstname == null ? "" : client.firstname) + " " + (client.lastname == null ? "" : client.lastname);
+	var newmessage = "<FONT COLOR='"+value[5]+"' size='11'>"+name+"</FONT>:<FONT COLOR='0x000000' size='11'>"+value[4]+"</FONT><br />";
+	//Debug.write("newmessage: ",newmessage);
+	canvas._chatcontent.addChatItem(newmessage);  // Is "addChatItem()" used?  By what? h.kuze 2008/3/27
+	canvas._chathistory.push(newmessage);
+]]>
 </method>
 
 <method name="resetFormatedChatHistory">
