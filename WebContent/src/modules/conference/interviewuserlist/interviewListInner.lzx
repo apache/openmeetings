@@ -57,16 +57,16 @@
                     return;
                 }
             }
-            var lastname = object.lastname;
+            var lastname = object.lastname == null ? "" : object.lastname;
             if (object.isSuperModerator) {
                 lastname += " *";
             }
             
             new lz.interviewUserListItem(list,{
                     user_id:object.user_id,
-                    firstname:object.firstname,
+                    firstname: object.firstname,
                     isSuperModerator:object.isSuperModerator,
-                    lastname:lastname,
+                    lastname: lastname,
                     refObj:object,
                     connectedSince:object.connectedSince,
                     isMod:object.isMod,

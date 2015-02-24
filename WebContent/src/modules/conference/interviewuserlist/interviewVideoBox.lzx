@@ -30,19 +30,17 @@
         this.getClientListScope.doCall();
     </handler>
     
-    <netRemoteCallHib name="getClientListScope" funcname="getClientListScope" 
-                      remotecontext="$once{ canvas.thishib }" >   
+    <netRemoteCallHib name="getClientListScope" funcname="getClientListScope" remotecontext="$once{ canvas.thishib }" >   
         <handler name="ondata" args="value">
-            <![CDATA[
-                if ($debug) Debug.write("+++++++++++++++++ getClientListScope : ",value);
-                
-                for (var i = 0; i < value.length; ++i) {
-                    parent._users.addItem(value[i].firstname+','+value[i].lastname+' ['+value[i].username+']',value[i].publicSID);
-                }
-                
-                parent._users.selectItemAt(0);
-            ]]>
-        </handler>  
+		<![CDATA[
+			if ($debug) Debug.write("+++++++++++++++++ getClientListScope : ",value);
+			for (var i = 0; i < value.length; ++i) {
+				var name = (value[i].firstname == null ? "" : value[i].firstname) + ',' + (value[i].lastname == null ? "" : value[i].lastname);
+				parent._users.addItem(name + ' [' + value[i].username + ']', value[i].publicSID);
+			}
+			parent._users.selectItemAt(0);
+		]]>
+		</handler>  
     </netRemoteCallHib>
     
     <labelText labelid="911" x="2" y="22"/>

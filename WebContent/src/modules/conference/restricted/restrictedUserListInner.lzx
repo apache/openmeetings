@@ -37,6 +37,8 @@
 	<![CDATA[
 		if ($debug) Debug.write("restrictedUserListInner::initialAddItem : ",object.publicSID);
 		
+		object.firstname = object.firstname == null ? "" : object.firstname;
+		object.lastname = object.lastname == null ? "" : object.lastname;
 		if (object.isSuperModerator) {
 			object.lastname += " *";
 		}
