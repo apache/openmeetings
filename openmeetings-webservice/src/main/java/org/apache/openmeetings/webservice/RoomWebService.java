@@ -2139,7 +2139,7 @@ public class RoomWebService {
 					//do nothing
 				} else if (valueClass.isAssignableFrom(String.class)) {
 					val = paramValue;
-				} else if (valueClass.isAssignableFrom(Boolean.class)) {
+				} else if (valueClass.isAssignableFrom(Boolean.class) || valueClass.isAssignableFrom(boolean.class)) {
 					val = Boolean.parseBoolean(paramValue);
 				} else if (valueClass.isAssignableFrom(RoomType.class)) {
 					val = roomTypeDao.get(Long.parseLong(paramValue));
