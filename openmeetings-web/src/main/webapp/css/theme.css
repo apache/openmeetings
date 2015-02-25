@@ -51,6 +51,9 @@ html, body {
 	max-height: 30px;
 	overflow-y: hidden;
 }
+#menu .ui-menubar.ui-widget-header.ui-helper-clearfix, #roomMenu .ui-menubar.ui-widget-header.ui-helper-clearfix {
+	border-right: 0;
+}
 .ui-menubar .ui-menu {
 	width: 250px;
 }
@@ -76,9 +79,10 @@ html, body {
 	font-size: 1em;
 	color: #FF0000;
 	height: 30px;
+	border: 0;
 }
 #busy_indicator span {
-	margin-top: 5px;
+	vertical-align: sub;
 }
 .clickable {
 	cursor: pointer;

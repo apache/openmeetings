@@ -59,7 +59,7 @@ public class LdapsPanel extends AdminPanel {
 			@Override
 			protected void populateItem(final Item<LdapConfig> item) {
 				final LdapConfig lc = item.getModelObject();
-				item.add(new Label("ldapConfigId", "" + lc.getId()));
+				item.add(new Label("id", "" + lc.getId()));
 				item.add(new Label("name", "" + lc.getName()));
 				item.add(new Label("configFileName", "" + lc.getConfigFileName()));
 				item.add(new AjaxEventBehavior("onclick") {
@@ -86,7 +86,7 @@ public class LdapsPanel extends AdminPanel {
 			}
 		};
 		DataViewContainer<LdapConfig> container = new DataViewContainer<LdapConfig>(listContainer, dataView, navigator);
-		container.addLink(new OmOrderByBorder<LdapConfig>("orderById", "ldapConfigId", container))
+		container.addLink(new OmOrderByBorder<LdapConfig>("orderById", "id", container))
 			.addLink(new OmOrderByBorder<LdapConfig>("orderByName", "name", container))
 			.addLink(new OmOrderByBorder<LdapConfig>("orderByFile", "configFileName", container));
 		add(container.getLinks());

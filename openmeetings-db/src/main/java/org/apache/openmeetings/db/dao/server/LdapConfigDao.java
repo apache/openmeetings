@@ -78,10 +78,10 @@ public class LdapConfigDao implements IDataProviderDao<LdapConfig> {
 			log.debug("addLdapConfig :2: " + insertedby);
 
 			ldapConfig = em.merge(ldapConfig);
-			Long ldapConfigId = ldapConfig.getId();
+			Long id = ldapConfig.getId();
 
-			if (ldapConfigId != null) {
-				return ldapConfigId;
+			if (id != null) {
+				return id;
 			} else {
 				throw new Exception("Could not store SOAPLogin");
 			}
@@ -99,10 +99,10 @@ public class LdapConfigDao implements IDataProviderDao<LdapConfig> {
 			ldapConfig.setInserted(new Date());
 
 			ldapConfig = em.merge(ldapConfig);
-			Long ldapConfigId = ldapConfig.getId();
+			Long id = ldapConfig.getId();
 
-			if (ldapConfigId != null) {
-				return ldapConfigId;
+			if (id != null) {
+				return id;
 			} else {
 				throw new Exception("Could not store SOAPLogin");
 			}
@@ -113,12 +113,12 @@ public class LdapConfigDao implements IDataProviderDao<LdapConfig> {
 		return null;
 	}
 
-	public Long updateLdapConfig(Long ldapConfigId, String name,
+	public Long updateLdapConfig(Long id, String name,
 			Boolean addDomainToUserName, String configFileName, String domain,
 			Long updatedby, Boolean isActive) {
 		try {
 
-			LdapConfig ldapConfig = get(ldapConfigId);
+			LdapConfig ldapConfig = get(id);
 
 			if (ldapConfig == null) {
 				return -1L;
@@ -139,9 +139,9 @@ public class LdapConfigDao implements IDataProviderDao<LdapConfig> {
 			log.debug("updateLdapConfig :2: " + updatedby);
 
 			ldapConfig = em.merge(ldapConfig);
-			ldapConfigId = ldapConfig.getId();
+			id = ldapConfig.getId();
 
-			return ldapConfigId;
+			return id;
 
 		} catch (Exception ex2) {
 			log.error("[updateLdapConfig]: ", ex2);
@@ -149,11 +149,11 @@ public class LdapConfigDao implements IDataProviderDao<LdapConfig> {
 		return -1L;
 	}
 
-	public LdapConfig get(long ldapConfigId) {
+	public LdapConfig get(long id) {
 		try {
 
 			TypedQuery<LdapConfig> query = em.createNamedQuery("getLdapConfigById", LdapConfig.class);
-			query.setParameter("id", ldapConfigId);
+			query.setParameter("id", id);
 
 			LdapConfig ldapConfig = null;
 			try {
