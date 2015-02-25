@@ -76,7 +76,7 @@
 		<exclude-unlisted-classes>false</exclude-unlisted-classes>
 		<properties>
 			<property name="openjpa.RuntimeUnenhancedClasses" value="unsupported" />
-			<property name="openjpa.ConnectionDriverName" value="org.apache.commons.dbcp.BasicDataSource" />
+			<property name="openjpa.ConnectionDriverName" value="org.apache.commons.dbcp2.BasicDataSource" />
 			<property name="openjpa.ConnectionProperties"
 				value="DriverClassName=com.ibm.db2.jcc.DB2Driver
 					, Url=jdbc:db2://localhost:50000/openmeet
