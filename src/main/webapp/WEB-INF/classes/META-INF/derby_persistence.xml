@@ -77,7 +77,7 @@
 			<property name="openjpa.RuntimeUnenhancedClasses" value="unsupported" />
 			<property name="openjpa.ConnectionDriverName" value="org.apache.commons.dbcp2.BasicDataSource" />
 			<property name="openjpa.ConnectionProperties"
-				value="DriverClassName=org.apache.derby.jdbc.ClientDriver,
+				value="DriverClassName=org.apache.derby.jdbc.EmbeddedDriver,
                                   Url=jdbc:derby:openmeetings;create=true, 
                                   create=true,
                                   MaxActive=100, 
