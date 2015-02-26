@@ -19,8 +19,10 @@
 package org.apache.openmeetings.db.dto.calendar;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 import org.apache.openmeetings.db.dto.room.RoomDTO;
 import org.apache.openmeetings.db.dto.user.UserDTO;
@@ -31,8 +33,8 @@ public class AppointmentDTO {
 	private Long id;
 	private String title;
 	private String location;
-	private Date start;
-	private Date end;
+	private Calendar start;
+	private Calendar end;
 	private String description;
 	private UserDTO owner;
 	private Date inserted;
@@ -51,8 +53,11 @@ public class AppointmentDTO {
 		id = a.getId();
 		title = a.getTitle();
 		location = a.getLocation();
-		start = a.getStart();
-		end = a.getEnd();
+		TimeZone tz = TimeZone.getTimeZone(a.getOwner().getTimeZoneId());
+		start = Calendar.getInstance(tz);
+		start.setTime(a.getStart());
+		end = Calendar.getInstance(tz);
+		end.setTime(a.getEnd());
 		description = a.getDescription();
 		owner = new UserDTO(a.getOwner());
 		inserted = a.getInserted();
@@ -95,19 +100,19 @@ public class AppointmentDTO {
 		this.location = location;
 	}
 
-	public Date getStart() {
+	public Calendar getStart() {
 		return start;
 	}
 
-	public void setStart(Date start) {
+	public void setStart(Calendar start) {
 		this.start = start;
 	}
 
-	public Date getEnd() {
+	public Calendar getEnd() {
 		return end;
 	}
 
-	public void setEnd(Date end) {
+	public void setEnd(Calendar end) {
 		this.end = end;
 	}
 
