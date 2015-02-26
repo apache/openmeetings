@@ -273,6 +273,9 @@
 			<subscribe>user-subscribe@openmeetings.apache.org</subscribe>
 			<unsubscribe>user-unsubscribe@openmeetings.apache.org</unsubscribe>
 			<archive>http://mail-archives.apache.org/mod_mbox/openmeetings-user</archive>
+			<otherArchives>
+				<otherArchive>http://openmeetings.markmail.org</otherArchive>
+			</otherArchives>
 		</mailingList>
 		<mailingList>
 			<name>Lista de usuarios en español</name>
@@ -280,6 +283,9 @@
 			<subscribe>user-espanol-subscribe@openmeetings.apache.org</subscribe>
 			<unsubscribe>user-espanol-unsubscribe@openmeetings.apache.org</unsubscribe>
 			<archive>http://mail-archives.apache.org/mod_mbox/openmeetings-user-espanol</archive>
+			<otherArchives>
+				<otherArchive>http://openmeetings.markmail.org</otherArchive>
+			</otherArchives>
 		</mailingList>
 		<mailingList>
 			<name>Русский список рассылки</name>
@@ -287,6 +293,9 @@
 			<subscribe>user-russian-subscribe@openmeetings.apache.org</subscribe>
 			<unsubscribe>user-russian-unsubscribe@openmeetings.apache.org</unsubscribe>
 			<archive>http://mail-archives.apache.org/mod_mbox/openmeetings-user-russian</archive>
+			<otherArchives>
+				<otherArchive>http://openmeetings.markmail.org</otherArchive>
+			</otherArchives>
 		</mailingList>
 		<mailingList>
 			<name>Development List</name>
@@ -294,6 +303,9 @@
 			<subscribe>dev-subscribe@openmeetings.apache.org</subscribe>
 			<unsubscribe>dev-unsubscribe@openmeetings.apache.org</unsubscribe>
 			<archive>http://mail-archives.apache.org/mod_mbox/openmeetings-dev</archive>
+			<otherArchives>
+				<otherArchive>http://openmeetings.markmail.org</otherArchive>
+			</otherArchives>
 		</mailingList>
 		<mailingList>
 			<name>Commits List</name>
