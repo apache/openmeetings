@@ -62,9 +62,7 @@ public class OmAuthenticationStrategy extends DefaultAuthenticationStrategy {
 
 	public void save(final String username, final String password, final Type type, final Long domainId) {
 		if (type != Type.oauth) {
-			String value = username + VALUE_SEPARATOR + password + VALUE_SEPARATOR + type.name() + VALUE_SEPARATOR + domainId;
-			String encryptedValue = getCrypt().encryptUrlSafe(value);
-			getCookieUtils().save(cookieKey, encryptedValue);
+			super.save(username, password, type.name(), "" + domainId);
 		}
 	}
 }

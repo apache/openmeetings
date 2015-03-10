@@ -36,7 +36,7 @@
 					<img src="images/installation_instructions.png" alt="Installation in 3 simple steps" />
 				</a>
 				<p>
-					<i>Note: OpenMeetings requires SUN/Oracle JRE 6, not openJDK!</i><br />
+					<i>Note: Openmeetings requires JRE 7/8, JRE 6 is NOT compatible!</i><br />
 					<i>
 						Since Version 2.0 you can also install OpenMeetings from command line. Just cd to the unpacked 
 						archive and type ./admin.sh or admin.bat, please see

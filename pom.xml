@@ -225,6 +225,9 @@
 			<id>albus</id>
 			<name>Alvaro Bustos</name>
 			<email>zurcamos@gmail.com</email>
+			<roles>
+				<role>pmc</role>
+			</roles>
 		</developer>
 		<developer>
 			<name>George Kirkham</name>
