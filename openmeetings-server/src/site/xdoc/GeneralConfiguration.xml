@@ -114,6 +114,54 @@
 
 				</tr>
 				<tr>
+					<td> smtp_server </td>
+					<td> localhost </td>
+					<td> this is the smtp server to send messages </td>
+					<td> 1.9.x </td>
+				</tr>
+				<tr>
+					<td> smtp_port </td>
+					<td> 25 </td>
+					<td> this is the smtp server port normally 25 </td>
+					<td> 1.9.x </td>
+				</tr>
+				<tr>
+					<td> email_username </td>
+					<td> </td>
+					<td> System auth email username </td>
+					<td> 1.9.x </td>
+				</tr>
+				<tr>
+					<td> email_userpass </td>
+					<td> </td>
+					<td> System auth email password </td>
+					<td> 1.9.x </td>
+				</tr>
+				<tr>
+					<td> mail.smtp.starttls.enable </td>
+					<td> 0 </td>
+					<td> Enable TLS 1=true, 0=false </td>
+					<td> 1.9.x </td>
+				</tr>
+				<tr>
+					<td> mail.smtp.connection.timeout </td>
+					<td> 30000 </td>
+					<td> Socket connection timeout value in milliseconds. Default is 30 seconds (30000). </td>
+					<td> 1.9.x </td>
+				</tr>
+				<tr>
+					<td> mail.smtp.timeout </td>
+					<td> 30000 </td>
+					<td> Socket I/O timeout value in milliseconds. Default is 30 seconds (30000). </td>
+					<td> 1.9.x </td>
+				</tr>
+				<tr>
+					<td> system_email_addr </td>
+					<td> noreply@openmeetings.apache.org </td>
+					<td> all send e-mails by the system will have this address </td>
+					<td> 1.9.x </td>
+				</tr>
+				<tr>
 					<td> inviter.email.as.replyto </td>
 					<td> 1 </td>
 					<td> Set inviter's email address as ReplyTo in email invitations (1 == set, 0 == NOT set)	</td>

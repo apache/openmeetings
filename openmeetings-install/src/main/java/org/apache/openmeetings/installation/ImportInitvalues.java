@@ -329,10 +329,10 @@ public class ImportInitvalues {
 		cfgDao.add("mail.smtp.starttls.enable", cfg.mailUseTls, null, "Enable TLS 1=true, 0=false");
 		
 		cfgDao.add("mail.smtp.connection.timeout", "30000", null,
-				"Socket connection timeout value in milliseconds. Default is infinite timeout.");
+				"Socket connection timeout value in milliseconds. Default is 30 seconds (30000).");
 		
 		cfgDao.add("mail.smtp.timeout", "30000", null,
-				"Socket I/O timeout value in milliseconds. Default is infinite timeout.");
+				"Socket I/O timeout value in milliseconds. Default is 30 seconds (30000).");
 
 		cfgDao.add(CONFIG_APPLICATION_NAME, ConfigurationDao.DEFAULT_APP_NAME, null, "Name of the Browser Title window");
 
