@@ -52,6 +52,7 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
@@ -323,7 +324,7 @@ public class ImportInitvalues {
 				"this is the smtp server port normally 25");
 
 		configurationDao.add("system_email_addr", cfg.mailReferer,
-				null, "all send EMails by the system will have this address");
+				null, "all send e-mails by the system will have this address");
 
 		configurationDao.add("email_username", cfg.mailAuthName,
 				null, "System auth email username");
@@ -335,10 +336,10 @@ public class ImportInitvalues {
 				cfg.mailUseTls, null, "Enable TLS 1=true, 0=false");
 		
 		configurationDao.add("mail.smtp.connection.timeout", "30000", null,
-				"Socket connection timeout value in milliseconds. Default is infinite timeout.");
+				"Socket connection timeout value in milliseconds. Default is 30 seconds (30000).");
 		
 		configurationDao.add("mail.smtp.timeout", "30000", null,
-				"Socket I/O timeout value in milliseconds. Default is infinite timeout.");
+				"Socket I/O timeout value in milliseconds. Default is 30 seconds (30000).");
 
 		configurationDao.add("application.name",
 				ConfigurationDao.DEFAULT_APP_NAME, null,
@@ -760,10 +761,10 @@ public class ImportInitvalues {
 	public void loadLanguagesFile(String langName) throws Exception {
 		Map<Integer, Map<String, Object>> listlanguages = getLanguageFiles();
 		log.debug("Number of languages found: " + listlanguages.size());
-		for (int langId : listlanguages.keySet()) {
-			Map<String, Object> langMap = listlanguages.get(langId);
+		for (Entry<Integer, Map<String, Object>> me : listlanguages.entrySet()) {
+			Map<String, Object> langMap = me.getValue();
 			if (langName.equals(langMap.get("name"))) {
-				loadLanguagesFile(listlanguages, new Hashtable<Long, Fieldvalues>(3000), langId);
+				loadLanguagesFile(listlanguages, new Hashtable<Long, Fieldvalues>(3000), me.getKey());
 				break;
 			}
 		}
@@ -780,15 +781,15 @@ public class ImportInitvalues {
 
 		log.debug("loadInitLanguages rtl from xml: " + rtl);
 
-		Boolean langRtl = false;
-
-		if (rtl != null && rtl.equals("true")) {
-			langRtl = true;
-		}
+		boolean langRtl = Boolean.TRUE.toString().equals(rtl);
 
 		long ticks = System.currentTimeMillis();
 		FieldLanguage lang = fieldLanguageDaoImpl.addLanguage(langId, langName, langRtl, code);
 
+		if (lang == null) {
+			log.error("Failed to create language");
+			throw new Exception("Failed to create language");
+		}
 		SAXReader reader = new SAXReader();
 		Document document = reader.read(new File(
 				OmFileHelper.getLanguagesDir(), langName + ".xml"));
@@ -843,17 +844,6 @@ public class ImportInitvalues {
 		lang.setLanguageValues(flvMap.values());
 		fieldLanguageDaoImpl.updateLanguage(lang);
 		log.debug("Lang ADDED: " + lang + "; seconds passed: " + (System.currentTimeMillis() - ticks) / 1000);
-	}
-	
-	public static void main(String... args) {
-		int pr = 22;
-		int progressDelta = 50 - pr;
-		
-		double deltaProgressPerLanguageFile = new Double(progressDelta)/new Double(34);
-		
-		pr += (2 * deltaProgressPerLanguageFile);
-		
-		System.err.println("deltaProgressPerLanguageFile: "+deltaProgressPerLanguageFile +" "+ pr);
 	}
 
 	public void loadLanguagesFiles() throws Exception {
