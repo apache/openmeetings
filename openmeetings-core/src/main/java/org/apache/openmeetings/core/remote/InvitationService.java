@@ -146,7 +146,7 @@ public class InvitationService implements IPendingServiceCallback {
 		Long users_id = sessiondataDao.checkSession(SID);
 
 		if (AuthLevelUtil.hasUserLevel(userDao.getRights(users_id))) {
-			Invitation inv = (Invitation)invitationManager.getInvitationByHashCode(invitationHash, true);
+			Invitation inv = (Invitation)invitationManager.getInvitationByHashCode(invitationHash, false);
 			inv.getInvitee().setLanguageId(language_id);
 			invitationManager.sendInvitionLink(inv, MessageType.Create, subject, message, false);
 		} else {
