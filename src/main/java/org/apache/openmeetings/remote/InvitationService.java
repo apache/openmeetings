@@ -140,7 +140,7 @@ public class InvitationService implements IPendingServiceCallback {
 		Long users_id = sessiondataDao.checkSession(SID);
 
 		if (AuthLevelUtil.hasUserLevel(userDao.getRights(users_id))) {
-			Invitation inv = (Invitation)invitationManager.getInvitationByHashCode(invitationHash, true);
+			Invitation inv = (Invitation)invitationManager.getInvitationByHashCode(invitationHash, false);
 			inv.getInvitee().setLanguage_id(language_id);
 			invitationManager.sendInvitionLink(inv, MessageType.Create, subject, message, false);
 		} else {
@@ -150,8 +150,7 @@ public class InvitationService implements IPendingServiceCallback {
 	}
 	
 	public Object getInvitationByHash(String hashCode) {
-		return invitationManager.getInvitationByHashCode(
-				hashCode, true);
+		return invitationManager.getInvitationByHashCode(hashCode, true);
 	}
 
 	public Object checkInvitationPass(String hashCode, String pass) {
