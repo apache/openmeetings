@@ -17,7 +17,7 @@
   xsi:schemaLocation="http://maven.apache.org/XDOC/2.0 http://maven.apache.org/xsd/xdoc-2.0.xsd">
 	<properties>
 		<title>Howto create a Custom Crypt styles</title>
-		<author email="sebawagner@apache.org">
+		<author email="dev@openmeetings.apache.org">
 			OpenMeetings Team
 		</author>
 	</properties>
@@ -30,10 +30,10 @@
 			</p>
 
 			<ul>
-				<li>org.xmlcrm.utils.crypt.MD5Implementation - this uses common MD5
+				<li>org.apache.openmeetings.util.crypt.MD5Implementation - this uses common MD5
 					Crypt like PHP does, this is the default one (results in something
 					like: fe01ce2a7fbac8fafaed7c982a04e229)</li>
-				<li>org.xmlcrm.utils.crypt.MD5CryptImplementation - does use
+				<li>org.apache.openmeetings.util.crypt.MD5CryptImplementation - does use
 					BSD-Style of encryption using a salt (results in something like:
 					$1$GMsj7F2I$5S3r9CeukXGXNwf6b4sph1)</li>
 			</ul>
@@ -47,19 +47,17 @@
 		<section name="Configuration of Custom Crypt-Style">
 			<p>
 				To add your own crypt style you need to write a class which
-				implements the interface: org.xmlcrm.utils.cryptCryptString
-				<br />
-				and extends the Adapter: org.xmlcrm.utils.CryptStringAdapter
+				implements the interface: org.apache.openmeetings.util.crypt.ICryptString
 				<br />
 				Example of an Implementation:
 			</p>
 			<source>
 <![CDATA[
-package org.xmlcrm.utils.crypt;
+package org.apache.openmeetings.util.crypt;
 
 import java.security.NoSuchAlgorithmException;
 
-public class MD5Implementation extends CryptStringAdapter implements CryptString {
+public class MD5Implementation implements ICryptString {
     @Override
     public String createPassPhrase(String userGivenPass) {
         String passPhrase = null;
@@ -81,7 +79,7 @@ public class MD5Implementation extends CryptStringAdapter implements CryptString
 			<p>To add your own Encryption-Class you need to add your class to the
 				OpenMeetings-Webapp (make it available to the webapp-classpath) and
 				use your custom-class-name instead of
-				org.xmlcrm.utils.crypt.MD5Implementation during the Installation or
+				org.apache.openmeetings.util.crypt.MD5Implementation during the Installation or
 				at runtime by editing the config-key crypt_ClassName</p>
 		</section>
 		<section name="Configuration of Custom Crypt-Style">
