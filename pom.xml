@@ -38,7 +38,7 @@
 		<db>derby</db>
 		<spring.version>4.0.8.RELEASE</spring.version>
 		<junit.version>4.11</junit.version>
-		<maven.javadoc.version>2.10.1</maven.javadoc.version>
+		<maven.javadoc.version>2.10.2</maven.javadoc.version>
 		<maven.surefire.version>2.18.1</maven.surefire.version>
 		<maven-site.version>3.4</maven-site.version>
 		<wicket.version>7.0.0-SNAPSHOT</wicket.version>
