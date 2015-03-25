@@ -90,7 +90,7 @@
 				<li>
 					ensure
 					<strong>
-						<tt>$APP_NAME</tt>
+						<tt>{0}</tt>
 					</strong>
 					placeholder is used in
 					<i>all</i>
