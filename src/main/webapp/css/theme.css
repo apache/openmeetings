@@ -618,3 +618,8 @@ form .input {
 	font-size: 12px;
 	white-space: nowrap;
 }
+.profile .ui-button-text-only .ui-button-text {
+	font-size: 12px;
+	padding-right: 0.2em;
+	padding-left: 0.2em;
+}
