@@ -228,7 +228,7 @@ for f in `ls -1 *.tar.gz *.zip`; do gpg --verify $f.asc; done
 					<li>Go to <a href="https://securesigning.websecurity.symantec.com/csportal/">https://securesigning.websecurity.symantec.com/csportal/</a></li>
 					<li>Select "Signing Sets"</li>
 					<li>Select "Add signing set"</li>
-					<li>Enter ""Signing set name for ex. "3.0.4-RELEASE"</li>
+					<li>Enter "Signing set name" (must include "Apache Openmeetings" and version) for ex. "Apache Openmeetings 3.0.4-RELEASE"</li>
 					<li>Enter "Version" for ex. "3.0.4-RELEASE"</li>
 					<li>Select "Java Signing" as "Signing service"</li>
 					<li>Select "Upload files" and add all <b>jar</b> files from <tt>dist/red5/webapps/openmeetings/screensharing/</tt></li>
