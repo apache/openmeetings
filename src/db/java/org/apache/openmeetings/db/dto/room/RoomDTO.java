@@ -32,6 +32,22 @@ public class RoomDTO {
 	private Long numberOfPartizipants = new Long(4);
 	private boolean appointment;
 	private String confno;
+	private boolean isPublic;
+	private boolean demo;
+	private Integer demoTime;
+	private boolean moderated;
+	private boolean allowUserQuestions;
+	private boolean audioOnly;
+	private boolean topBarHidden;
+	private boolean chatHidden;
+	private boolean activitiesHidden;
+	private boolean filesExplorerHidden;
+	private boolean actionsMenuHidden;
+	private boolean screenSharingHidden;
+	private boolean whiteboardHidden;
+
+	public RoomDTO() {
+	}
 	
 	public RoomDTO(Room r) {
 		id = r.getRooms_id();
@@ -41,6 +57,19 @@ public class RoomDTO {
 		numberOfPartizipants = r.getNumberOfPartizipants();
 		appointment = r.getAppointment();
 		confno = r.getConfno();
+		isPublic = Boolean.TRUE.equals(r.getIspublic());
+		demo = Boolean.TRUE.equals(r.getIsDemoRoom());
+		demoTime = r.getDemoTime();
+		moderated = Boolean.TRUE.equals(r.getIsModeratedRoom());
+		allowUserQuestions = Boolean.TRUE.equals(r.getAllowUserQuestions());
+		audioOnly = Boolean.TRUE.equals(r.getIsAudioOnly());
+		topBarHidden = Boolean.TRUE.equals(r.getHideTopBar());
+		chatHidden = Boolean.TRUE.equals(r.getHideChat());
+		activitiesHidden = Boolean.TRUE.equals(r.getHideActivitiesAndActions());
+		filesExplorerHidden = Boolean.TRUE.equals(r.getHideFilesExplorer());
+		actionsMenuHidden = Boolean.TRUE.equals(r.getHideActionsMenu());
+		screenSharingHidden = Boolean.TRUE.equals(r.getHideScreenSharing());
+		whiteboardHidden = Boolean.TRUE.equals(r.getHideWhiteboard());
 	}
 
 	public Long getId() {
@@ -107,5 +136,109 @@ public class RoomDTO {
 			}
 		}
 		return rList;
+	}
+
+	public boolean isDemo() {
+		return demo;
+	}
+
+	public void setDemo(boolean demo) {
+		this.demo = demo;
+	}
+
+	public Integer getDemoTime() {
+		return demoTime;
+	}
+
+	public void setDemoTime(Integer demoTime) {
+		this.demoTime = demoTime;
+	}
+
+	public boolean isModerated() {
+		return moderated;
+	}
+
+	public void setModerated(boolean moderated) {
+		this.moderated = moderated;
+	}
+
+	public boolean isAllowUserQuestions() {
+		return allowUserQuestions;
+	}
+
+	public void setAllowUserQuestions(boolean allowUserQuestions) {
+		this.allowUserQuestions = allowUserQuestions;
+	}
+
+	public boolean isAudioOnly() {
+		return audioOnly;
+	}
+
+	public void setAudioOnly(boolean audioOnly) {
+		this.audioOnly = audioOnly;
+	}
+
+	public boolean isTopBarHidden() {
+		return topBarHidden;
+	}
+
+	public void setTopBarHidden(boolean topBarHidden) {
+		this.topBarHidden = topBarHidden;
+	}
+
+	public boolean isChatHidden() {
+		return chatHidden;
+	}
+
+	public void setChatHidden(boolean chatHidden) {
+		this.chatHidden = chatHidden;
+	}
+
+	public boolean isActivitiesHidden() {
+		return activitiesHidden;
+	}
+
+	public void setActivitiesHidden(boolean activitiesHidden) {
+		this.activitiesHidden = activitiesHidden;
+	}
+
+	public boolean isFilesExplorerHidden() {
+		return filesExplorerHidden;
+	}
+
+	public void setFilesExplorerHidden(boolean filesExplorerHidden) {
+		this.filesExplorerHidden = filesExplorerHidden;
+	}
+
+	public boolean isActionsMenuHidden() {
+		return actionsMenuHidden;
+	}
+
+	public void setActionsMenuHidden(boolean actionsMenuHidden) {
+		this.actionsMenuHidden = actionsMenuHidden;
+	}
+
+	public boolean isScreenSharingHidden() {
+		return screenSharingHidden;
+	}
+
+	public void setScreenSharingHidden(boolean screenSharingHidden) {
+		this.screenSharingHidden = screenSharingHidden;
+	}
+
+	public boolean isWhiteboardHidden() {
+		return whiteboardHidden;
+	}
+
+	public void setWhiteboardHidden(boolean whiteboardHidden) {
+		this.whiteboardHidden = whiteboardHidden;
+	}
+
+	public boolean isPublic() {
+		return isPublic;
+	}
+
+	public void setPublic(boolean isPublic) {
+		this.isPublic = isPublic;
 	}
 }
