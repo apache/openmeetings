@@ -18,7 +18,9 @@
  */
 package org.apache.openmeetings.web.user.rooms;
 
+import static org.apache.openmeetings.web.app.Application.getBean;
 
+import org.apache.openmeetings.db.dao.server.SessiondataDao;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.BasePanel;
 import org.apache.wicket.RuntimeConfigurationType;
@@ -60,7 +62,7 @@ public class RoomPanel extends BasePanel {
 
 			@Override
 			protected void onTimer(AjaxRequestTarget target) {
-				WebSession.getString(1L); //dummy call to keep session alive
+				getBean(SessiondataDao.class).checkSession(WebSession.getSid()); //keep SID alive
 			}
 		});
 	}

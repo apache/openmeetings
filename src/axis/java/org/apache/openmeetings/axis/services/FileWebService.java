@@ -18,6 +18,8 @@
  */
 package org.apache.openmeetings.axis.services;
 
+import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.InputStream;
@@ -38,7 +40,6 @@ import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.documents.LoadLibraryPresentation;
 import org.apache.openmeetings.util.AuthLevelUtil;
 import org.apache.openmeetings.util.OmFileHelper;
-import org.apache.openmeetings.util.OpenmeetingsVariables;
 import org.apache.openmeetings.util.StoredFile;
 import org.apache.openmeetings.util.process.ConverterProcessResultList;
 import org.apache.openmeetings.util.process.FileImportError;
@@ -56,9 +57,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  * 
  */
 public class FileWebService {
-
-	private static final Logger log = Red5LoggerFactory.getLogger(
-			FileWebService.class, OpenmeetingsVariables.webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(FileWebService.class, webAppRootKey);
 	@Autowired
 	private SessiondataDao sessiondataDao;
 	@Autowired
