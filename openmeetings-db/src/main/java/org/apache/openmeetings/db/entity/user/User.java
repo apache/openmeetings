@@ -79,12 +79,8 @@ import org.simpleframework.xml.Root;
 @NamedQueries({
 	@NamedQuery(name = "getUserById", query = "SELECT u FROM User u WHERE u.id = :id"),
 	@NamedQuery(name = "getUsersByIds", query = "select c from User c where c.id IN :ids"),
-	@NamedQuery(name = "checkUserLogin", query = "SELECT COUNT(u) FROM User u WHERE ((:id > 0 AND u.id <> :id) OR (:id = 0)) "
-			+ "AND u.login = :login AND u.deleted = false"),
-	@NamedQuery(name = "checkUserEmail", query = "SELECT COUNT(u) FROM User u WHERE ((:id > 0 AND u.id <> :id) OR (:id = 0)) "
-			+ "AND u.adresses.email = :email AND u.deleted = false AND u.type <> :type"),
-	@NamedQuery(name = "getUserByLogin", query = "SELECT u FROM User u WHERE u.deleted = false AND u.type = :type AND u.login = :login"),
-	@NamedQuery(name = "getUserByEmail", query = "SELECT u FROM User u WHERE u.deleted = false AND u.type = :type AND u.adresses.email = :email"),
+	@NamedQuery(name = "getUserByLogin", query = "SELECT u FROM User u WHERE u.deleted = false AND u.type = :type AND u.login = :login AND ((:domainId = 0 AND domainId IS NULL) OR (:domainId > 0 AND domainId = :domainId))"),
+	@NamedQuery(name = "getUserByEmail", query = "SELECT u FROM User u WHERE u.deleted = false AND u.type = :type AND u.adresses.email = :email AND ((:domainId = 0 AND domainId IS NULL) OR (:domainId > 0 AND domainId = :domainId))"),
 	@NamedQuery(name = "getUserByHash",  query = "SELECT u FROM User u WHERE u.deleted = false AND u.type = :type AND u.resethash = :resethash"),
 	@NamedQuery(name = "getContactByEmailAndUser", query = "SELECT u FROM User u WHERE u.deleted = false AND u.adresses.email = :email AND u.type = :type AND u.ownerId = :ownerId"), 
 	@NamedQuery(name = "selectMaxFromUsersWithSearch", query = "select count(c.id) from User c "

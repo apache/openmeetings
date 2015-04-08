@@ -131,7 +131,7 @@ public class UserForm extends AdminBaseForm<User> {
 		if (user.getId() != null) {
 			user = getBean(UserDao.class).get(user.getId());
 		} else {
-			user = new User();
+			user = getBean(UserDao.class).getNewUserInstance(null);
 		}
 		setModelObject(user);
 		update(target);
@@ -249,7 +249,8 @@ public class UserForm extends AdminBaseForm<User> {
 	
 	@Override
 	protected void onValidate() {
-		if(!getBean(UserDao.class).checkUserLogin(login.getConvertedInput(), getModelObject().getId())) {
+		User u = getModelObject();
+		if(!getBean(UserDao.class).checkLogin(login.getConvertedInput(), u.getType(), u.getDomainId(), u.getId())) {
 			error(WebSession.getString(105));
 		}
 	}

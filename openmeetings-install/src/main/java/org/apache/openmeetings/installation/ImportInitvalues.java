@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.installation;
 
+import static org.apache.openmeetings.db.dao.basic.ConfigurationDao.DEFAULT_APP_NAME;
 import static org.apache.openmeetings.db.dao.basic.ConfigurationDao.DEFAULT_MAX_UPLOAD_SIZE;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_APPLICATION_BASE_URL;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_APPLICATION_NAME;
@@ -49,14 +50,12 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.USER_PASSWORD_M
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
 import java.io.File;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Set;
 
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.basic.ErrorDao;
@@ -70,7 +69,6 @@ import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.dao.room.RoomTypeDao;
 import org.apache.openmeetings.db.dao.room.SipDao;
 import org.apache.openmeetings.db.dao.server.OAuth2Dao;
-import org.apache.openmeetings.db.dao.user.IUserManager;
 import org.apache.openmeetings.db.dao.user.OrganisationDao;
 import org.apache.openmeetings.db.dao.user.SalutationDao;
 import org.apache.openmeetings.db.dao.user.StateDao;
@@ -83,6 +81,8 @@ import org.apache.openmeetings.db.entity.room.RoomOrganisation;
 import org.apache.openmeetings.db.entity.server.OAuthServer;
 import org.apache.openmeetings.db.entity.server.OAuthServer.RequestMethod;
 import org.apache.openmeetings.db.entity.user.Organisation;
+import org.apache.openmeetings.db.entity.user.OrganisationUser;
+import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Right;
 import org.apache.openmeetings.db.util.TimezoneUtil;
 import org.apache.openmeetings.util.OmFileHelper;
@@ -99,7 +99,7 @@ public class ImportInitvalues {
 	@Autowired
 	private ConfigurationDao cfgDao;
 	@Autowired
-	private UserDao usersDao;
+	private UserDao userDao;
 	@Autowired
 	private FieldLanguageDao fieldLanguageDaoImpl;
 	@Autowired
@@ -128,8 +128,6 @@ public class ImportInitvalues {
 	private RoomTypeDao roomTypeDao;
 	@Autowired
 	private OrganisationDao organisationDao;
-	@Autowired
-	private IUserManager userManager;
 	@Autowired
 	private RoomDao roomDao;
 	
@@ -320,7 +318,7 @@ public class ImportInitvalues {
 		cfgDao.add("smtp_port", "" + cfg.smtpPort, null,
 				"this is the smtp server port normally 25");
 
-		cfgDao.add("system_email_addr", cfg.mailReferer, null, "all send EMails by the system will have this address");
+		cfgDao.add("system_email_addr", cfg.mailReferer, null, "all send e-mails by the system will have this address");
 
 		cfgDao.add("email_username", cfg.mailAuthName, null, "System auth email username");
 
@@ -334,7 +332,7 @@ public class ImportInitvalues {
 		cfgDao.add("mail.smtp.timeout", "30000", null,
 				"Socket I/O timeout value in milliseconds. Default is 30 seconds (30000).");
 
-		cfgDao.add(CONFIG_APPLICATION_NAME, ConfigurationDao.DEFAULT_APP_NAME, null, "Name of the Browser Title window");
+		cfgDao.add(CONFIG_APPLICATION_NAME, DEFAULT_APP_NAME, null, "Name of the Browser Title window");
 
 		// "1" == "EN"
 		cfgDao.add(CONFIG_DEFAUT_LANG_KEY, cfg.defaultLangId, null, "Default System Language ID see languages.xml");
@@ -400,8 +398,6 @@ public class ImportInitvalues {
 		// ***************************************
 		// additional settings
 		// ***************************************
-
-		cfgDao.add("show.facebook.login", "" + 0, null, "Show Facebook Login");
 
 		cfgDao.add(CONFIG_SCREENSHARING_QUALITY, "1", null,
 				"Default selection in ScreenSharing Quality:\n 0 - bigger frame rate, no resize\n 1 - no resize\n 2 - size == 1/2 of selected area\n 3 - size == 3/8 of selected area");
@@ -564,8 +560,6 @@ public class ImportInitvalues {
 	}
 
 	public void loadInitUserAndOrganisation(InstallationConfig cfg) throws Exception {
-		Long default_lang_id = Long.parseLong(cfg.defaultLangId);
-
 		// Add default group
 		Organisation org = new Organisation();
 		org.setName(cfg.group);
@@ -574,20 +568,22 @@ public class ImportInitvalues {
 		org.setStarttime(new Date());
 		org = organisationDao.update(org, null);
 
-		Set<Right> rights = UserDao.getDefaultRights();
-		rights.add(Right.Admin);
-		rights.add(Right.Soap);
-		Long user_id = userManager.registerUserInit(rights, cfg.username, cfg.password, "lastname"
-				, "firstname", cfg.email, new Date() /* age/birthday */, "street", "no", "fax", "zip", 1
-				, "town", default_lang_id, false /* sendWelcomeMessage */
-				, Arrays.asList(org.getId()), "phone", false, false, timezoneUtil.getTimeZone(cfg.ical_timeZone),
-				false /* forceTimeZoneCheck */, "" /* userOffers */, "" /* userSearchs */, false /* showContactData */,
-				true /* showContactDataToContacts */, null);
+		User u = userDao.getNewUserInstance(null);
+		u.setType(User.Type.user);
+		u.getRights().add(Right.Admin);
+		u.getRights().add(Right.Soap);
+		u.setLogin(cfg.username);
+		u.setFirstname("firstname");
+		u.setLastname("lastname");
+		u.getAdresses().setEmail(cfg.email);
+		u.getOrganisationUsers().add(new OrganisationUser(org));
 
-		log.debug("Installation - User Added user-Id " + user_id);
+		u = userDao.update(u, cfg.password, -1);
 
-		if (user_id < 0) {
-			throw new Exception("Could not add user user returns a negative error message: " + user_id);
+		log.debug("Installation - User Added user-Id " + u.getId());
+
+		if (u.getId() == null) {
+			throw new Exception("Unable to add user");
 		}
 	}
 
@@ -795,14 +791,16 @@ public class ImportInitvalues {
 		yandexServer.setIconUrl("http://yandex.st/morda-logo/i/favicon.ico");
 		yandexServer.setClientId("<put your client_id>");
 		yandexServer.setClientSecret("<put your client_secret>");
-		yandexServer.setEmailParamName("default_email");
 		yandexServer.setEnabled(false);
-		yandexServer.setLoginParamName("default_email");
 		yandexServer.setRequestInfoUrl("https://login.yandex.ru/info?format=json&oauth_token={$access_token}");
 		yandexServer.setRequestTokenUrl("https://oauth.yandex.ru/token");
 		yandexServer.setRequestKeyUrl("https://oauth.yandex.ru/authorize?response_type=code&client_id={$client_id}");
 		yandexServer.setRequestTokenAttributes("grant_type=authorization_code&code={$code}&client_id={$client_id}&client_secret={$client_secret}");
 		yandexServer.setRequestTokenMethod(RequestMethod.POST);
+		yandexServer.setLoginParamName("login");
+		yandexServer.setEmailParamName("default_email");
+		yandexServer.setFirstnameParamName("first_name");
+		yandexServer.setLastnameParamName("last_name");
 		oauthDao.update(yandexServer, null);
 		
 		// Google
@@ -832,11 +830,11 @@ public class ImportInitvalues {
 		facebookServer.setClientId("<put your client_id>");
 		facebookServer.setClientSecret("<put your client_secret>");
 		facebookServer.setRequestKeyUrl("https://www.facebook.com/dialog/oauth?client_id={$client_id}&redirect_uri={$redirect_uri}&scope=email");
-		facebookServer.setRequestTokenUrl("https://graph.facebook.com/oauth/access_token");
+		facebookServer.setRequestTokenUrl("https://graph.facebook.com/v2.3/oauth/access_token");
 		facebookServer.setRequestTokenMethod(RequestMethod.POST);
 		facebookServer.setRequestTokenAttributes("client_id={$client_id}&redirect_uri={$redirect_uri}&client_secret={$client_secret}&code={$code}");
-		facebookServer.setRequestInfoUrl("https://graph.facebook.com/me?access_token={$access_token}&fields=username,first_name,last_name,email");
-		facebookServer.setLoginParamName("username");
+		facebookServer.setRequestInfoUrl("https://graph.facebook.com/me?access_token={$access_token}&fields=id,first_name,last_name,email");
+		facebookServer.setLoginParamName("id");
 		facebookServer.setEmailParamName("email");
 		facebookServer.setFirstnameParamName("first_name");
 		facebookServer.setLastnameParamName("last_name");
@@ -858,7 +856,7 @@ public class ImportInitvalues {
 
 	public void loadSystem(InstallationConfig cfg, boolean force) throws Exception {
 		// FIXME dummy check if installation was performed before
-		if (!force && usersDao.count() > 0) {
+		if (!force && userDao.count() > 0) {
 			log.debug("System contains users, no need to install data one more time.");
 		}
 		sipDao.delete();
@@ -895,7 +893,7 @@ public class ImportInitvalues {
 
 	public void loadAll(InstallationConfig cfg, boolean force) throws Exception {
 		// FIXME dummy check if installation was performed before
-		if (!force && usersDao.count() > 0) {
+		if (!force && userDao.count() > 0) {
 			log.debug("System contains users, no need to install data one more time.");
 			return;
 		}

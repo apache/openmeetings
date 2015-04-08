@@ -59,6 +59,7 @@ import org.apache.openmeetings.service.mail.EmailManager;
 import org.apache.openmeetings.util.CalendarPatterns;
 import org.apache.openmeetings.util.DaoHelper;
 import org.apache.openmeetings.util.crypt.ManageCryptStyle;
+import org.apache.wicket.util.string.Strings;
 import org.red5.logging.Red5LoggerFactory;
 import org.red5.server.api.scope.IScope;
 import org.slf4j.Logger;
@@ -184,12 +185,10 @@ public class UserManager implements IUserManager {
 		Userdata userdata = new Userdata();
 		if (user_id != null && user_id.longValue() > 0) {
 			try {
-				TypedQuery<Userdata> query = em
-						.createQuery("select c from Userdata as c where c.user_id = :user_id AND c.data_key = :data_key AND c.deleted = false", Userdata.class);
+				TypedQuery<Userdata> query = em.createQuery("select c from Userdata as c where c.user_id = :user_id AND c.data_key = :data_key AND c.deleted = false", Userdata.class);
 				query.setParameter("user_id", user_id);
 				query.setParameter("data_key", DATA_KEY);
-				for (Iterator<Userdata> it2 = query.getResultList().iterator(); it2
-						.hasNext();) {
+				for (Iterator<Userdata> it2 = query.getResultList().iterator(); it2.hasNext();) {
 					userdata = it2.next();
 				}
 			} catch (Exception ex2) {
@@ -383,8 +382,8 @@ public class UserManager implements IUserManager {
 		// Check for required data
 		if (login.length() >= getMinLoginLength(configurationDao)) {
 			// Check for duplicates
-			boolean checkName = usersDao.checkUserLogin(login, null);
-			boolean checkEmail = usersDao.checkUserEMail(email, null);
+			boolean checkName = usersDao.checkLogin(login, User.Type.user, null, null);
+			boolean checkEmail = Strings.isEmpty(email) || usersDao.checkEmail(email, User.Type.user, null, null);
 			if (checkName && checkEmail) {
 
 				String link = configurationDao.getBaseUrl();

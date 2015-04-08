@@ -122,10 +122,10 @@ public class ForgetPasswordDialog extends AbstractFormDialog<String> {
 				UserDao dao = getBean(UserDao.class);
 				String n = nameField.getConvertedInput();
 				if (n != null) {
-					if (type == Type.email && null == dao.getUserByEmail(n)) {
+					if (type == Type.email && null == dao.getByEmail(n)) {
 						error(WebSession.getString(318));
 					}
-					if (type == Type.login && null == dao.getByName(n, User.Type.user)) {
+					if (type == Type.login && null == dao.getByLogin(n, User.Type.user, null)) {
 						error(WebSession.getString(320));
 					}
 				}
@@ -214,7 +214,7 @@ public class ForgetPasswordDialog extends AbstractFormDialog<String> {
 			// check if Mail given
 			if (email.length() > 0) {
 				// log.debug("getAdresses_id "+addr_e.getAdresses_id());
-				User us = userDao.getUserByEmail(email);
+				User us = userDao.getByEmail(email);
 				if (us != null) {
 					sendHashByUser(us, appLink, userDao);
 					return new Long(-4);
@@ -222,7 +222,7 @@ public class ForgetPasswordDialog extends AbstractFormDialog<String> {
 					return new Long(-9);
 				}
 			} else if (username.length() > 0) {
-				User us = userDao.getByName(username, User.Type.user);
+				User us = userDao.getByLogin(username, User.Type.user, null);
 				if (us != null) {
 					sendHashByUser(us, appLink, userDao);
 					return new Long(-4);

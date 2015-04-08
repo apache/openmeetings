@@ -37,6 +37,7 @@ import org.apache.openmeetings.db.dao.user.StateDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.label.FieldLanguage;
 import org.apache.openmeetings.db.entity.user.State;
+import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.util.CalendarPatterns;
 import org.apache.openmeetings.util.crypt.ManageCryptStyle;
 import org.apache.openmeetings.web.app.WebSession;
@@ -280,10 +281,10 @@ public class RegisterDialog extends AbstractFormDialog<String> {
 					|| !passwordField.getConvertedInput().equals(confirmPassword.getConvertedInput())) {
 				error(WebSession.getString(232));
 			}
-			if (!getBean(UserDao.class).checkUserEMail(emailField.getConvertedInput(), null)) {
+			if (!getBean(UserDao.class).checkEmail(emailField.getConvertedInput(), User.Type.user, null, null)) {
 				error(WebSession.getString(1000));
 			}
-			if (!getBean(UserDao.class).checkUserLogin(loginField.getConvertedInput(), null)) {
+			if (!getBean(UserDao.class).checkLogin(loginField.getConvertedInput(), User.Type.user, null, null)) {
 				error(WebSession.getString(105));
 			}
 		}
