@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.installation;
 
+import static org.apache.openmeetings.db.dao.basic.ConfigurationDao.DEFAULT_APP_NAME;
 import static org.apache.openmeetings.db.dao.basic.ConfigurationDao.DEFAULT_MAX_UPLOAD_SIZE;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_APPLICATION_BASE_URL;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_APPOINTMENT_REMINDER_MINUTES;
@@ -46,14 +47,12 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.USER_PASSWORD_M
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
 import java.io.File;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Set;
 
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.basic.ErrorDao;
@@ -67,7 +66,6 @@ import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.dao.room.RoomTypeDao;
 import org.apache.openmeetings.db.dao.room.SipDao;
 import org.apache.openmeetings.db.dao.server.OAuth2Dao;
-import org.apache.openmeetings.db.dao.user.IUserManager;
 import org.apache.openmeetings.db.dao.user.OrganisationDao;
 import org.apache.openmeetings.db.dao.user.SalutationDao;
 import org.apache.openmeetings.db.dao.user.StateDao;
@@ -80,6 +78,8 @@ import org.apache.openmeetings.db.entity.room.RoomOrganisation;
 import org.apache.openmeetings.db.entity.server.OAuthServer;
 import org.apache.openmeetings.db.entity.server.OAuthServer.RequestMethod;
 import org.apache.openmeetings.db.entity.user.Organisation;
+import org.apache.openmeetings.db.entity.user.Organisation_Users;
+import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Right;
 import org.apache.openmeetings.db.util.TimezoneUtil;
 import org.apache.openmeetings.util.OmFileHelper;
@@ -94,9 +94,9 @@ public class ImportInitvalues {
 	private static final Logger log = Red5LoggerFactory.getLogger(ImportInitvalues.class, webAppRootKey);
 
 	@Autowired
-	private ConfigurationDao configurationDao;
+	private ConfigurationDao cfgDao;
 	@Autowired
-	private UserDao usersDao;
+	private UserDao userDao;
 	@Autowired
 	private FieldLanguageDao fieldLanguageDaoImpl;
 	@Autowired
@@ -125,8 +125,6 @@ public class ImportInitvalues {
 	private RoomTypeDao roomTypeDao;
 	@Autowired
 	private OrganisationDao organisationDao;
-	@Autowired
-	private IUserManager userManager;
 	@Autowired
 	private RoomDao roomDao;
 	
@@ -250,8 +248,7 @@ public class ImportInitvalues {
 
 	public void loadErrorMappingsFromXML() throws Exception {
 		SAXReader reader = new SAXReader();
-		Document document = reader.read(new File(
-				OmFileHelper.getLanguagesDir(), OmFileHelper.nameOfErrorFile));
+		Document document = reader.read(new File(OmFileHelper.getLanguagesDir(), OmFileHelper.nameOfErrorFile));
 
 		Element root = document.getRootElement();
 
@@ -265,24 +262,25 @@ public class ImportInitvalues {
 			Long errortype_id = null;
 
 			for (@SuppressWarnings("unchecked")
-			Iterator<Element> itSub = row.elementIterator("field"); itSub
-					.hasNext();) {
+			Iterator<Element> itSub = row.elementIterator("field"); itSub.hasNext();) {
 
 				Element field = itSub.next();
 
 				String name = field.attributeValue("name");
 				String text = field.getText();
 				// System.out.println("NAME | TEXT "+name+" | "+text);
-				if (name.equals("errorvalues_id"))
-					errorvalues_id = Long.valueOf(text).longValue();
-				if (name.equals("fieldvalues_id"))
-					fieldvalues_id = Long.valueOf(text).longValue();
-				if (name.equals("errortype_id"))
-					errortype_id = Long.valueOf(text).longValue();
+				if (name.equals("errorvalues_id")) {
+					errorvalues_id = Long.valueOf(text);
+				}
+				if (name.equals("fieldvalues_id")) {
+					fieldvalues_id = Long.valueOf(text);
+				}
+				if (name.equals("errortype_id")) {
+					errortype_id = Long.valueOf(text);
+				}
 			}
 
-			errorManagement.addErrorValues(errorvalues_id, errortype_id,
-					fieldvalues_id);
+			errorManagement.addErrorValues(errorvalues_id, errortype_id, fieldvalues_id);
 		}
 		log.debug("ErrorMappings ADDED");
 	}
@@ -297,130 +295,94 @@ public class ImportInitvalues {
 	}
 
 	public void loadConfiguration(InstallationConfig cfg) {
-		configurationDao
-				.add(
-						CONFIG_CRYPT_KEY,
-						cfg.cryptClassName,
-						null,
-						"This Class is used for Authentification-Crypting. "
-								+ "Be carefull what you do here! If you change it while "
-								+ "running previous Pass of users will not be workign anymore! "
-								+ "for more Information see http://openmeetings.apache.org/CustomCryptMechanism.html");
+		cfgDao.add(CONFIG_CRYPT_KEY, cfg.cryptClassName, null,
+				"This Class is used for Authentification-Crypting. "
+						+ "Be carefull what you do here! If you change it while "
+						+ "running previous Pass of users will not be workign anymore! "
+						+ "for more Information see http://openmeetings.apache.org/CustomCryptMechanism.html");
 
-		configurationDao.add(CONFIG_FRONTEND_REGISTER_KEY,
-				cfg.allowFrontendRegister, null, "Is user register available on login screen");
-		configurationDao.add(CONFIG_SOAP_REGISTER_KEY, "1", null, "Is user register available via SOAP/REST");
-		configurationDao.add("default_group_id", "1", null, "");
+		cfgDao.add(CONFIG_FRONTEND_REGISTER_KEY, cfg.allowFrontendRegister, null, "Is user register available on login screen");
+		cfgDao.add(CONFIG_SOAP_REGISTER_KEY, "1", null, "Is user register available via SOAP/REST");
+		cfgDao.add("default_group_id", "1", null, "");
 
 		// this domain_id is the Organisation of users who register through the
 		// frontend
-		configurationDao.add("default_domain_id", "1", null, "");
+		cfgDao.add("default_domain_id", "1", null, "");
 
 
-		configurationDao.add("smtp_server", cfg.smtpServer, null,
+		cfgDao.add("smtp_server", cfg.smtpServer, null,
 				"this is the smtp server to send messages");
 
-		configurationDao.add("smtp_port", "" + cfg.smtpPort, null,
+		cfgDao.add("smtp_port", "" + cfg.smtpPort, null,
 				"this is the smtp server port normally 25");
 
-		configurationDao.add("system_email_addr", cfg.mailReferer,
-				null, "all send e-mails by the system will have this address");
+		cfgDao.add("system_email_addr", cfg.mailReferer, null, "all send e-mails by the system will have this address");
 
-		configurationDao.add("email_username", cfg.mailAuthName,
-				null, "System auth email username");
+		cfgDao.add("email_username", cfg.mailAuthName, null, "System auth email username");
 
-		configurationDao.add("email_userpass", cfg.mailAuthPass,
-				null, "System auth email password");
+		cfgDao.add("email_userpass", cfg.mailAuthPass, null, "System auth email password");
 
-		configurationDao.add("mail.smtp.starttls.enable",
-				cfg.mailUseTls, null, "Enable TLS 1=true, 0=false");
+		cfgDao.add("mail.smtp.starttls.enable", cfg.mailUseTls, null, "Enable TLS 1=true, 0=false");
 		
-		configurationDao.add("mail.smtp.connection.timeout", "30000", null,
+		cfgDao.add("mail.smtp.connection.timeout", "30000", null,
 				"Socket connection timeout value in milliseconds. Default is 30 seconds (30000).");
 		
-		configurationDao.add("mail.smtp.timeout", "30000", null,
+		cfgDao.add("mail.smtp.timeout", "30000", null,
 				"Socket I/O timeout value in milliseconds. Default is 30 seconds (30000).");
 
-		configurationDao.add("application.name",
-				ConfigurationDao.DEFAULT_APP_NAME, null,
-				"Name of the Browser Title window");
+		cfgDao.add("application.name", DEFAULT_APP_NAME, null, "Name of the Browser Title window");
 
 		// "1" == "EN"
-		configurationDao.add(CONFIG_DEFAUT_LANG_KEY, cfg.defaultLangId,
-				null, "Default System Language ID see languages.xml");
+		cfgDao.add(CONFIG_DEFAUT_LANG_KEY, cfg.defaultLangId, null, "Default System Language ID see languages.xml");
 
-		configurationDao.add("swftools_zoom", "" + cfg.swfZoom, null,
+		cfgDao.add("swftools_zoom", "" + cfg.swfZoom, null,
 				"dpi for conversion of PDF to SWF (should be an integer between 50 and  600 with a default value of 100 dpi)");
 
-		configurationDao.add("swftools_jpegquality",
-				"" + cfg.swfJpegQuality, null,
+		cfgDao.add("swftools_jpegquality", "" + cfg.swfJpegQuality, null,
 				"compression quality for conversion of PDF to SWF (should be an integer between 1 and 100, with a default value of 85)");
 
-		configurationDao.add("swftools_path", cfg.swfPath, null,
-				"Path To SWF-Tools");
+		cfgDao.add("swftools_path", cfg.swfPath, null, "Path To SWF-Tools");
 
-		configurationDao.add("imagemagick_path",
-				cfg.imageMagicPath, null, "Path to ImageMagick tools");
+		cfgDao.add("imagemagick_path", cfg.imageMagicPath, null, "Path to ImageMagick tools");
 
-		configurationDao.add("sox_path", cfg.soxPath, null,
-				"Path To SoX-Tools");
+		cfgDao.add("sox_path", cfg.soxPath, null, "Path To SoX-Tools");
 
-		configurationDao.add("ffmpeg_path", cfg.ffmpegPath, null,
-				"Path To FFMPEG");
-		configurationDao.add(
-						"office.path",
-						cfg.officePath,
-						null,
-						"The path to OpenOffice/LibreOffice (optional) please set this to the real path in case jodconverter is unable to find OpenOffice/LibreOffice installation automatically");
-		configurationDao.add(
-						"jod.path",
-						cfg.jodPath,
-						null,
-						"The path to JOD library (http://code.google.com/p/jodconverter), configure the path to point to the lib directory of JOD that contains also the jodconverter-core-version.jar");
+		cfgDao.add("ffmpeg_path", cfg.ffmpegPath, null, "Path To FFMPEG");
+		cfgDao.add("office.path", cfg.officePath, null,
+				"The path to OpenOffice/LibreOffice (optional) please set this to the real path in case jodconverter is unable to find OpenOffice/LibreOffice installation automatically");
+		cfgDao.add("jod.path", cfg.jodPath, null,
+				"The path to JOD library (http://code.google.com/p/jodconverter), configure the path to point to the lib directory of JOD that contains also the jodconverter-core-version.jar");
 
-		configurationDao.add(CONFIG_RSS_FEED1_KEY, cfg.urlFeed, null,
-				"Feed URL");
+		cfgDao.add(CONFIG_RSS_FEED1_KEY, cfg.urlFeed, null, "Feed URL");
 
-		configurationDao.add(CONFIG_RSS_FEED2_KEY, cfg.urlFeed2, null,
-				"Feed URL 2");
+		cfgDao.add(CONFIG_RSS_FEED2_KEY, cfg.urlFeed2, null, "Feed URL 2");
 
-		configurationDao.add("sendEmailAtRegister", cfg.sendEmailAtRegister,
-						null,
-						"User get a EMail with their Account data. Values: 0(No) or 1(Yes)");
+		cfgDao.add("sendEmailAtRegister", cfg.sendEmailAtRegister, null,
+				"User get a EMail with their Account data. Values: 0(No) or 1(Yes)");
 
-		configurationDao.add(
-						"sendEmailWithVerficationCode",
-						cfg.sendEmailWithVerficationCode,
-						null,
-						"User must activate their account by clicking on the "
-								+ "activation-link in the registering Email. Values: 0(No) or 1(Yes) "
-								+ "It makes no sense to make this(sendEmailWithVerficationCode) 1(Yes) while "
-								+ "sendEmailAtRegister is 0(No) cause you need"
-								+ "to send a EMail.");
-		configurationDao.add(
-						"default_export_font",
-						cfg.defaultExportFont,
-						null,
-						"The Name of the Font used for exporting/render Images from Whiteboard"
-								+ "The Font has to exist on the Server which runs Red5");
+		cfgDao.add("sendEmailWithVerficationCode", cfg.sendEmailWithVerficationCode, null,
+				"User must activate their account by clicking on the "
+						+ "activation-link in the registering Email. Values: 0(No) or 1(Yes) "
+						+ "It makes no sense to make this(sendEmailWithVerficationCode) 1(Yes) while "
+						+ "sendEmailAtRegister is 0(No) cause you need"
+						+ "to send a EMail.");
+		cfgDao.add("default_export_font", cfg.defaultExportFont, null,
+				"The Name of the Font used for exporting/render Images from Whiteboard"
+						+ "The Font has to exist on the Server which runs Red5");
 
-		configurationDao.add("default.rpc.userid", "" + 1, null,
-				"The User-Id of the Control User in OpenMeetings");
+		cfgDao.add("default.rpc.userid", "" + 1, null, "The User-Id of the Control User in OpenMeetings");
 
-		configurationDao.add(CONFIG_APPLICATION_BASE_URL, cfg.baseUrl, null, "Base URL your OPenmeetings installation will be accessible at.");
+		cfgDao.add(CONFIG_APPLICATION_BASE_URL, cfg.baseUrl, null, "Base URL your OPenmeetings installation will be accessible at.");
 		
 		// ***************************************
 		// ***************************************
 		// red5SIP Integration Coniguration Values
 		// ***************************************
 
-		configurationDao.add("red5sip.enable", cfg.red5SipEnable,
-				null, "Enable to enable the red5SIP integration ");
-		configurationDao.add("red5sip.room_prefix",
-				cfg.red5SipRoomPrefix, null,
+		cfgDao.add("red5sip.enable", cfg.red5SipEnable, null, "Enable to enable the red5SIP integration ");
+		cfgDao.add("red5sip.room_prefix", cfg.red5SipRoomPrefix, null,
 				"Numerical prefix for OM rooms created inside the SIP");
-		configurationDao.add("red5sip.exten_context",
-				cfg.red5SipExtenContext, null,
+		cfgDao.add("red5sip.exten_context", cfg.red5SipExtenContext, null,
 				"Enable to enable the red5SIP integration ");
 
 		// ***************************************
@@ -428,114 +390,73 @@ public class ImportInitvalues {
 		// Timezone settings
 		// ***************************************
 
-		configurationDao.add("default.timezone",
-				cfg.ical_timeZone, null,
-				"This is the default timezone if nothing is specified");
+		cfgDao.add("default.timezone", cfg.ical_timeZone, null, "This is the default timezone if nothing is specified");
 
 		// ***************************************
 		// ***************************************
 		// additional settings
 		// ***************************************
 
-		configurationDao.add("show.facebook.login", "" + 0, null,
-				"Show Facebook Login");
-
-		configurationDao.add(CONFIG_SCREENSHARING_QUALITY, "1", null,
+		cfgDao.add(CONFIG_SCREENSHARING_QUALITY, "1", null,
 				"Default selection in ScreenSharing Quality:\n 0 - bigger frame rate, no resize\n 1 - no resize\n 2 - size == 1/2 of selected area\n 3 - size == 3/8 of selected area");
 
-		configurationDao.add(CONFIG_SCREENSHARING_FPS, "10", null, "Default selection in ScreenSharing FPS");
-		configurationDao.add(CONFIG_SCREENSHARING_FPS_SHOW, "true", null, "Is screensharing FPS should be displayed or not (true/false)");
-		configurationDao.add(CONFIG_SCREENSHARING_ALLOW_REMOTE, "true", null, "Is remote control will be enabled while screensharing. Allowing remote control will be not possible in case it is set to 'false' (true/false)");
+		cfgDao.add(CONFIG_SCREENSHARING_FPS, "10", null, "Default selection in ScreenSharing FPS");
+		cfgDao.add(CONFIG_SCREENSHARING_FPS_SHOW, "true", null, "Is screensharing FPS should be displayed or not (true/false)");
+		cfgDao.add(CONFIG_SCREENSHARING_ALLOW_REMOTE, "true", null, "Is remote control will be enabled while screensharing. Allowing remote control will be not possible in case it is set to 'false' (true/false)");
 
-		configurationDao.add(CONFIG_DASHBOARD_SHOW_MYROOMS_KEY, "1", null, "Show My Rooms Tab");
+		cfgDao.add(CONFIG_DASHBOARD_SHOW_MYROOMS_KEY, "1", null, "Show My Rooms Tab");
 
-		configurationDao.add("dashboard.show.chat", "1", null, "Show Chat Tab");
+		cfgDao.add("dashboard.show.chat", "1", null, "Show Chat Tab");
 
-		configurationDao.add(CONFIG_DASHBOARD_SHOW_RSS_KEY, "0", null, "Show RSS Tab");
+		cfgDao.add(CONFIG_DASHBOARD_SHOW_RSS_KEY, "0", null, "Show RSS Tab");
 
-		configurationDao
-				.add(
-						"show.whiteboard.draw.status",
-						"0",
-						null,
-						"Display name of the user who draw the current object (User Name auto-disapper after 3 seconds.");
+		cfgDao.add("show.whiteboard.draw.status", "0", null,
+				"Display name of the user who draw the current object (User Name auto-disapper after 3 seconds.");
 
-		configurationDao.add(CONFIG_MAX_UPLOAD_SIZE_KEY, ""
-				+ DEFAULT_MAX_UPLOAD_SIZE, null,
+		cfgDao.add(CONFIG_MAX_UPLOAD_SIZE_KEY, "" + DEFAULT_MAX_UPLOAD_SIZE, null,
 				"Maximum size of upload file (bytes)"); // defaults to 1GB
 
-		configurationDao
-				.add(
-						CONFIG_APPOINTMENT_REMINDER_MINUTES,
-						"15",
-						null,
-						"The number of minutes before reminder emails are send. Set to 0 to disable reminder emails");
+		cfgDao.add(CONFIG_APPOINTMENT_REMINDER_MINUTES, "15", null,
+				"The number of minutes before reminder emails are send. Set to 0 to disable reminder emails");
 
-		configurationDao.add(CONFIG_LOGIN_MIN_LENGTH_KEY, ""
-				+ USER_LOGIN_MINIMUM_LENGTH, null,
+		cfgDao.add(CONFIG_LOGIN_MIN_LENGTH_KEY, "" + USER_LOGIN_MINIMUM_LENGTH, null,
 				"Number of chars needed in a user login");
 
-		configurationDao.add(CONFIG_PASS_MIN_LENGTH_KEY, ""
-				+ USER_PASSWORD_MINIMUM_LENGTH, null,
+		cfgDao.add(CONFIG_PASS_MIN_LENGTH_KEY, "" + USER_PASSWORD_MINIMUM_LENGTH, null,
 				"Number of chars needed in a user login");
 
-		configurationDao
-				.add("calendar.conference.rooms.default.size", "50",
-						null,
-						"Default number of participants conference room created via calendar");
+		cfgDao.add("calendar.conference.rooms.default.size", "50", null,
+				"Default number of participants conference room created via calendar");
 
-		configurationDao
-				.add(
-						"use.old.style.ffmpeg.map.option",
-						"0",
-						null,
-						"specify a 1 if you would like to use old FFMPEG -map option with 0.0 instead of 0:0");
+		cfgDao.add("use.old.style.ffmpeg.map.option", "0", null,
+				"specify a 1 if you would like to use old FFMPEG -map option with 0.0 instead of 0:0");
 
 		// give exclusive audio key code
-		configurationDao
-				.add(
-						"exclusive.audio.keycode",
-						"123",
-						null,
-						"A hot key code for the 'give exclusive audio' functionality. Keycode 123 is F12");
+		cfgDao.add("exclusive.audio.keycode", "123", null,
+				"A hot key code for the 'give exclusive audio' functionality. Keycode 123 is F12");
 		// mute/unmute audio key code
-		configurationDao
-				.add(
-						"mute.keycode",
-						"118",
-						null,
-						"A hot key code for the 'mute/unmute audio' functionality. Keycode 118 is F7");
+		cfgDao.add("mute.keycode", "118", null,
+				"A hot key code for the 'mute/unmute audio' functionality. Keycode 118 is F7");
 		
 		// system-wide ldap params
-		configurationDao.add(CONFIG_DEFAULT_LDAP_ID, "0", null,
-				"Ldap domain selected by default in the login screen");
+		cfgDao.add(CONFIG_DEFAULT_LDAP_ID, "0", null, "Ldap domain selected by default in the login screen");
 
 		// set inviter's email address as ReplyTo in email invitations
-		configurationDao
-				.add(
-						"inviter.email.as.replyto",
-						cfg.replyToOrganizer,
-						null,
-						"Set inviter's email address as ReplyTo in email invitations (1 == set, 0 == NOT set)");
+		cfgDao.add("inviter.email.as.replyto", cfg.replyToOrganizer, null,
+				"Set inviter's email address as ReplyTo in email invitations (1 == set, 0 == NOT set)");
 
-		configurationDao.add(CONFIG_DEFAULT_LANDING_ZONE,
-				"user/dashboard"
-				, null
+		cfgDao.add(CONFIG_DEFAULT_LANDING_ZONE, "user/dashboard", null
 				, "Area to be shown to the user after login. Possible values are: "
 					+ "user/dashboard, user/calendar, user/record, rooms/my, rooms/group, rooms/public, admin/user, admin/connection"
 					+ ", admin/group, admin/room, admin/config, admin/lang, admin/ldap, admin/backup, admin/server, admin/oauth2");
 		
 		// oauth2 params
-		configurationDao
-				.add(
-						CONFIG_IGNORE_BAD_SSL,
-						"no", 
-						null, 
-						"Set \"yes\" or \"no\" to enable/disable ssl certifications checking for OAuth2");
+		cfgDao.add(CONFIG_IGNORE_BAD_SSL, "no", null, 
+				"Set \"yes\" or \"no\" to enable/disable ssl certifications checking for OAuth2");
 
-		configurationDao.add(CONFIG_REDIRECT_URL_FOR_EXTERNAL_KEY, "", null,
+		cfgDao.add(CONFIG_REDIRECT_URL_FOR_EXTERNAL_KEY, "", null,
 				"Users entered the room via invitationHash or secureHash will be redirected to this URL on connection lost");
-		configurationDao.add(CONFIG_CALENDAR_FIRST_DAY, "0", null, "The day that each week begins. The value must be a number that represents the day of the week. Sunday=0, Monday=1, Tuesday=2, etc.");
+		cfgDao.add(CONFIG_CALENDAR_FIRST_DAY, "0", null, "The day that each week begins. The value must be a number that represents the day of the week. Sunday=0, Monday=1, Tuesday=2, etc.");
 		
 		log.debug("Configurations ADDED");
 	}
@@ -633,11 +554,6 @@ public class ImportInitvalues {
 	}
 
 	public void loadInitUserAndOrganisation(InstallationConfig cfg) throws Exception {
-		Long default_lang_id = Long.parseLong(cfg.defaultLangId);
-		if (default_lang_id == null) {
-			default_lang_id = 1L;
-		}
-
 		// Add default group
 		Organisation org = new Organisation();
 		org.setName(cfg.group);
@@ -646,20 +562,22 @@ public class ImportInitvalues {
 		org.setStarttime(new Date());
 		org = organisationDao.update(org, null);
 
-		Set<Right> rights = UserDao.getDefaultRights();
-		rights.add(Right.Admin);
-		rights.add(Right.Soap);
-		Long user_id = userManager.registerUserInit(rights, cfg.username, cfg.password, "lastname"
-				, "firstname", cfg.email, new Date() /* age/birthday */, "street", "no", "fax", "zip", 1
-				, "town", default_lang_id, false /* sendWelcomeMessage */
-				, Arrays.asList(org.getOrganisation_id()), "phone", false, false, timezoneUtil.getTimeZone(cfg.ical_timeZone),
-				false /* forceTimeZoneCheck */, "" /* userOffers */, "" /* userSearchs */, false /* showContactData */,
-				true /* showContactDataToContacts */, null);
+		User u = userDao.getNewUserInstance(null);
+		u.setType(User.Type.user);
+		u.getRights().add(Right.Admin);
+		u.getRights().add(Right.Soap);
+		u.setLogin(cfg.username);
+		u.setFirstname("firstname");
+		u.setLastname("lastname");
+		u.getAdresses().setEmail(cfg.email);
+		u.getOrganisation_users().add(new Organisation_Users(org));
+		
+		u = userDao.update(u, cfg.password, -1);
 
-		log.debug("Installation - User Added user-Id " + user_id);
+		log.debug("Installation - User Added user-Id " + u.getUser_id());
 
-		if (user_id < 0) {
-			throw new Exception("Could not add user user returns a negative error message: " + user_id);
+		if (u.getUser_id() == null) {
+			throw new Exception("Unable to add user");
 		}
 	}
 
@@ -700,18 +618,16 @@ public class ImportInitvalues {
 		Map<Integer, Map<String, Object>> languages = new LinkedHashMap<Integer, Map<String, Object>>();
 
 		SAXReader reader = new SAXReader();
-		Document document = reader
-				.read(new File(OmFileHelper.getLanguagesDir(),
-						OmFileHelper.nameOfLanguageFile));
+		File langFile = new File(OmFileHelper.getLanguagesDir(), OmFileHelper.nameOfLanguageFile);
+		log.debug("File to load languages from is: " + langFile.getCanonicalPath());
 
-		Element root = document.getRootElement();
+		Element root = reader.read(langFile).getRootElement();
 
 		for (@SuppressWarnings("unchecked")
 		Iterator<Element> it = root.elementIterator("lang"); it.hasNext();) {
 			Element item = it.next();
 			String country = item.getText();
-			Integer id = Integer.valueOf(item.attribute("id").getValue())
-					.intValue();
+			Integer id = Integer.valueOf(item.attribute("id").getValue());
 
 			String rtl = item.attribute("rightToLeft").getValue();
 			String code = item.attribute("code").getValue();
@@ -802,7 +718,7 @@ public class ImportInitvalues {
 			Element item = (Element) it.next();
 			// log.error(item.getName());
 
-			Long id = Long.valueOf(item.attributeValue("id")).longValue();
+			Long id = Long.valueOf(item.attributeValue("id"));
 			String name = item.attributeValue("name");
 			String value = "";
 
@@ -870,14 +786,16 @@ public class ImportInitvalues {
 		yandexServer.setIconUrl("http://yandex.st/morda-logo/i/favicon.ico");
 		yandexServer.setClientId("<put your client_id>");
 		yandexServer.setClientSecret("<put your client_secret>");
-		yandexServer.setEmailParamName("default_email");
 		yandexServer.setEnabled(false);
-		yandexServer.setLoginParamName("default_email");
 		yandexServer.setRequestInfoUrl("https://login.yandex.ru/info?format=json&oauth_token={$access_token}");
 		yandexServer.setRequestTokenUrl("https://oauth.yandex.ru/token");
 		yandexServer.setRequestKeyUrl("https://oauth.yandex.ru/authorize?response_type=code&client_id={$client_id}");
 		yandexServer.setRequestTokenAttributes("grant_type=authorization_code&code={$code}&client_id={$client_id}&client_secret={$client_secret}");
 		yandexServer.setRequestTokenMethod(RequestMethod.POST);
+		yandexServer.setLoginParamName("login");
+		yandexServer.setEmailParamName("default_email");
+		yandexServer.setFirstnameParamName("first_name");
+		yandexServer.setLastnameParamName("last_name");
 		oauthDao.update(yandexServer, null);
 		
 		// Google
@@ -907,11 +825,11 @@ public class ImportInitvalues {
 		facebookServer.setClientId("<put your client_id>");
 		facebookServer.setClientSecret("<put your client_secret>");
 		facebookServer.setRequestKeyUrl("https://www.facebook.com/dialog/oauth?client_id={$client_id}&redirect_uri={$redirect_uri}&scope=email");
-		facebookServer.setRequestTokenUrl("https://graph.facebook.com/oauth/access_token");
+		facebookServer.setRequestTokenUrl("https://graph.facebook.com/v2.3/oauth/access_token");
 		facebookServer.setRequestTokenMethod(RequestMethod.POST);
 		facebookServer.setRequestTokenAttributes("client_id={$client_id}&redirect_uri={$redirect_uri}&client_secret={$client_secret}&code={$code}");
-		facebookServer.setRequestInfoUrl("https://graph.facebook.com/me?access_token={$access_token}&fields=username,first_name,last_name,email");
-		facebookServer.setLoginParamName("username");
+		facebookServer.setRequestInfoUrl("https://graph.facebook.com/me?access_token={$access_token}&fields=id,first_name,last_name,email");
+		facebookServer.setLoginParamName("id");
 		facebookServer.setEmailParamName("email");
 		facebookServer.setFirstnameParamName("first_name");
 		facebookServer.setLastnameParamName("last_name");
@@ -933,7 +851,7 @@ public class ImportInitvalues {
 
 	public void loadSystem(InstallationConfig cfg, boolean force) throws Exception {
 		// FIXME dummy check if installation was performed before
-		if (!force && usersDao.count() > 0) {
+		if (!force && userDao.count() > 0) {
 			log.debug("System contains users, no need to install data one more time.");
 		}
 		sipDao.delete();
@@ -970,7 +888,7 @@ public class ImportInitvalues {
 
 	public void loadAll(InstallationConfig cfg, boolean force) throws Exception {
 		// FIXME dummy check if installation was performed before
-		if (!force && usersDao.count() > 0) {
+		if (!force && userDao.count() > 0) {
 			log.debug("System contains users, no need to install data one more time.");
 			return;
 		}

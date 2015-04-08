@@ -80,12 +80,8 @@ import org.simpleframework.xml.Root;
 @NamedQueries({
 	@NamedQuery(name = "getUserById", query = "SELECT u FROM User u WHERE u.user_id = :id"),
 	@NamedQuery(name = "getUsersByIds", query = "select c from User c where c.user_id IN :ids"),
-	@NamedQuery(name = "checkUserLogin", query = "SELECT COUNT(u) FROM User u WHERE ((:id > 0 AND u.user_id <> :id) OR (:id = 0)) "
-			+ "AND u.login = :login AND u.deleted = false"),
-	@NamedQuery(name = "checkUserEmail", query = "SELECT COUNT(u) FROM User u WHERE ((:id > 0 AND u.user_id <> :id) OR (:id = 0)) "
-			+ "AND u.adresses.email = :email AND u.deleted = false AND u.type <> :type"),
-	@NamedQuery(name = "getUserByLogin", query = "SELECT u FROM User u WHERE u.deleted = false AND u.type = :type AND u.login = :login"),
-	@NamedQuery(name = "getUserByEmail", query = "SELECT u FROM User u WHERE u.deleted = false AND u.type = :type AND u.adresses.email = :email"),
+	@NamedQuery(name = "getUserByLogin", query = "SELECT u FROM User u WHERE u.deleted = false AND u.type = :type AND u.login = :login AND ((:domainId = 0 AND domainId IS NULL) OR (:domainId > 0 AND domainId = :domainId))"),
+	@NamedQuery(name = "getUserByEmail", query = "SELECT u FROM User u WHERE u.deleted = false AND u.type = :type AND u.adresses.email = :email AND ((:domainId = 0 AND domainId IS NULL) OR (:domainId > 0 AND domainId = :domainId))"),
 	@NamedQuery(name = "getUserByHash",  query = "SELECT u FROM User u WHERE u.deleted = false AND u.type = :type AND u.resethash = :resethash"),
 	@NamedQuery(name = "getContactByEmailAndUser", query = "SELECT u FROM User u WHERE u.deleted = false AND u.adresses.email = :email AND u.type = :type AND u.ownerId = :ownerId"), 
 	@NamedQuery(name = "selectMaxFromUsersWithSearch", query = "select count(c.user_id) from User c "
@@ -108,7 +104,7 @@ import org.simpleframework.xml.Root;
 @Table(name = "om_user")
 @Root(name = "user")
 public class User implements Serializable, IDataProviderEntity {
-	private static final long serialVersionUID = -2265479712596674065L;
+	private static final long serialVersionUID = 1L;
 	
 	@XmlType(namespace="org.apache.openmeetings.user.user.right")
 	public enum Right {
@@ -131,7 +127,7 @@ public class User implements Serializable, IDataProviderEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
-	@Element(data = true)
+	@Element(data = true, name = "user_id")
 	private Long user_id;
 
 	@Column(name = "age")
@@ -186,7 +182,7 @@ public class User implements Serializable, IDataProviderEntity {
 	private boolean deleted;
 
 	@Column(name = "language_id")
-	@Element(data = true, required = false)
+	@Element(name = "language_id", data = true, required = false)
 	private Long language_id;
 
 	@Column(name = "resethash")

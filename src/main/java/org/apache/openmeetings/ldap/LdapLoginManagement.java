@@ -18,7 +18,6 @@
  */
 package org.apache.openmeetings.ldap;
 
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAUT_LANG_KEY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
 import java.io.File;
@@ -26,9 +25,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
-import java.util.Date;
 import java.util.Properties;
-import java.util.Set;
 
 import org.apache.directory.api.ldap.model.cursor.CursorLdapReferralException;
 import org.apache.directory.api.ldap.model.cursor.EntryCursor;
@@ -51,7 +48,6 @@ import org.apache.openmeetings.db.dao.user.OrganisationDao;
 import org.apache.openmeetings.db.dao.user.StateDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.server.LdapConfig;
-import org.apache.openmeetings.db.entity.user.Address;
 import org.apache.openmeetings.db.entity.user.Organisation_Users;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Right;
@@ -167,8 +163,12 @@ public class LdapLoginManagement {
 	 * 
 	 */
 	// ----------------------------------------------------------------------------------------
-	public User login(String user, String passwd, Long domainId) throws OmException {
+	public User login(String login, String passwd, Long domainId) throws OmException {
 		log.debug("LdapLoginmanagement.doLdapLogin");
+		if (!userDao.validLogin(login)) {
+			log.error("Invalid login provided");
+			return null;
+		}
 
 		Properties config = new Properties();
 		Reader r = null;
@@ -196,7 +196,7 @@ public class LdapLoginManagement {
 
 		String ldap_use_lower_case = config.getProperty(CONFIGKEY_LDAP_USE_LOWER_CASE, "false");
 		if ("true".equals(ldap_use_lower_case)) {
-			user = user.toLowerCase();
+			login = login.toLowerCase();
 		}
 
 		String ldap_auth_type = config.getProperty(CONFIGKEY_LDAP_AUTH_TYPE, "");
@@ -261,7 +261,7 @@ public class LdapLoginManagement {
 				{
 					bindAdmin(conn, ldap_admin_dn, ldap_admin_passwd);
 					Dn baseDn = new Dn(config.getProperty(CONFIGKEY_LDAP_SEARCH_BASE, ""));
-					String searchQ = String.format(config.getProperty(CONFIGKEY_LDAP_SEARCH_QUERY, "%s"), user);
+					String searchQ = String.format(config.getProperty(CONFIGKEY_LDAP_SEARCH_QUERY, "%s"), login);
 					SearchScope scope = SearchScope.valueOf(config.getProperty(CONFIGKEY_LDAP_SEARCH_SCOPE, SearchScope.ONELEVEL.name()));
 			        
 					EntryCursor cursor = new EntryCursorImpl(conn.search(
@@ -296,7 +296,7 @@ public class LdapLoginManagement {
 					break;
 				case SIMPLEBIND:
 				{
-					userDn = getUserDn(config, user);
+					userDn = getUserDn(config, login);
 					conn.bind(userDn, passwd);
 				}
 					break;
@@ -305,12 +305,9 @@ public class LdapLoginManagement {
 					authenticated = false;
 					break;
 			}
-			u = authenticated ? userDao.getByName(user, Type.ldap) : userDao.login(user, passwd);
+			u = authenticated ? userDao.getByLogin(login, Type.ldap, domainId) : userDao.login(login, passwd);
 			if (u == null && Provisionning.AUTOCREATE != prov) {
 				log.error("User not found in OM DB and Provisionning.AUTOCREATE was not set");
-				throw new OmException(-11L);
-			} else if (u != null && !domainId.equals(u.getDomainId())) {
-				log.error("User found in OM DB, but domains are differ");
 				throw new OmException(-11L);
 			}
 			if (authenticated && entry == null) {
@@ -327,20 +324,13 @@ public class LdapLoginManagement {
 						throw new OmException(-11L);
 					}
 					if (u == null) {
-						Set<Right> rights = UserDao.getDefaultRights();
-						rights.remove(Right.Login);
-
-						u = new User();
+						u = userDao.getNewUserInstance(null);
 						u.setType(Type.ldap);
-						u.setRights(rights);
+						u.getRights().remove(Right.Login);
 						u.setDomainId(domainId);
 						u.getOrganisation_users().add(new Organisation_Users(orgDao.get(cfgDao.getConfValue("default_domain_id", Long.class, "-1"))));
-						u.setLogin(user);
-						u.setAge(new Date());
+						u.setLogin(login);
 						u.setShowContactDataToContacts(true);
-						u.setAdresses(new Address());
-						u.setLanguage_id(cfgDao.getConfValue(CONFIG_DEFAUT_LANG_KEY, Long.class, "1"));
-						u.setSalutations_id(1L);
 					}
 					if ("true".equals(config.getProperty(CONFIGKEY_LDAP_SYNC_PASSWD_OM, ""))) {
 						u.updatePassword(cfgDao, passwd);

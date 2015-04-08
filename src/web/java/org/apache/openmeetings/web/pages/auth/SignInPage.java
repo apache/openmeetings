@@ -51,10 +51,12 @@ import javax.net.ssl.X509TrustManager;
 import org.apache.commons.io.IOUtils;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.server.OAuth2Dao;
-import org.apache.openmeetings.db.dao.user.IUserManager;
+import org.apache.openmeetings.db.dao.user.OrganisationDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.server.OAuthServer;
+import org.apache.openmeetings.db.entity.user.Organisation_Users;
 import org.apache.openmeetings.db.entity.user.User;
+import org.apache.openmeetings.db.entity.user.User.Right;
 import org.apache.openmeetings.db.entity.user.User.Type;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
@@ -324,44 +326,48 @@ public class SignInPage extends BaseInitedPage {
 	
 	private void loginViaOAuth2(Map<String, String> params, long serverId) throws IOException, NoSuchAlgorithmException {
 		UserDao userDao = getBean(UserDao.class);
-		IUserManager userManager = getBean(IUserManager.class); 
-		ConfigurationDao configurationDao = getBean(ConfigurationDao.class);
+		ConfigurationDao cfgDao = getBean(ConfigurationDao.class);
 		String login = params.get("login");
 		String email = params.get("email");
 		String lastname = params.get("lastname");
 		String firstname = params.get("firstname");
-		if (firstname == null) firstname = "";
-		if (lastname == null) lastname = "";
-		User user = userDao.getByName(login, Type.oauth);
+		if (firstname == null) {
+			firstname = "";
+		}
+		if (lastname == null) {
+			lastname = "";
+		}
+		if (!userDao.validLogin(login)) {
+			log.error("Invalid login, please check parameters");
+			return;
+		}
+		User u = userDao.getByLogin(login, Type.oauth, serverId);
+		if (!userDao.checkEmail(email, Type.oauth, serverId, u == null ? null : u.getUser_id())) {
+			log.error("Another user with the same email exists");
+			return;
+		}
 		// generate random password
 		byte[] rawPass = new byte[16];
 		Random rnd = new Random();
-		for (int i = 0; i < 16; i++) {
-			rawPass[i] = (byte) (97 + rnd.nextInt(25));
+		for (int i = 0; i < 25; i++) {
+			rawPass[i] = (byte) ('!' + rnd.nextInt(93));
 		}
-		String pass = new String(rawPass);
+		String pass = new String(rawPass, "UTF-8");
 		// check if the user already exists and register new one if it's needed
-		if (user == null) {
-			Integer defaultlangId = Integer.valueOf(configurationDao.getConfValue("default_lang_id", String.class, "1"));
-			String defaultTimezone = configurationDao.getConfValue("default.timezone", String.class, "");		
-			Long res = userManager.registerUserNoEmail(login, pass, lastname, firstname, email, null, null, 
-					null, null, null, 0, null, defaultlangId, null, false, true, defaultTimezone);
-			if (res == null || res < 0) {
-				throw new RuntimeException("Couldn't register new oauth user");
-			}
-			user = userDao.get(res);
-			user.setType(Type.oauth);
-			user.setDomainId(serverId);
-			userDao.update(user, null);
-		} else { // just change password
-			// check user type before changing password, it must be match oauthServerId
-			if (user.getDomainId() == null || serverId != user.getDomainId()) {
-				log.error("User already registered! with different OAuth server");
-				return;
-			}
-			user.setLastlogin(new Date());
-			user = userDao.update(user, pass, -1);
+		if (u == null) {
+			u = userDao.getNewUserInstance(null);
+			u.setType(Type.oauth);
+			u.getRights().remove(Right.Login);;
+			u.setDomainId(serverId);
+			u.getOrganisation_users().add(new Organisation_Users(getBean(OrganisationDao.class).get(cfgDao.getConfValue("default_domain_id", Long.class, "-1"))));
+			u.setLogin(login);
+			u.setShowContactDataToContacts(true);
+			u.setLastname(lastname);
+			u.setFirstname(firstname);
+			u.getAdresses().setEmail(email);
 		}
+		u.setLastlogin(new Date());
+		u = userDao.update(u, pass, -1);
 		
 		if (WebSession.get().signIn(login, pass, Type.oauth, serverId)) {
  			setResponsePage(Application.get().getHomePage());

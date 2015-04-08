@@ -22,6 +22,8 @@ import java.io.Serializable;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -42,8 +44,7 @@ import org.simpleframework.xml.Root;
 		@NamedQuery(name = "countOAuthServers", query = "select count(s) from OAuthServer s WHERE s.deleted = false") })
 @Root
 public class OAuthServer implements Serializable, IDataProviderEntity {
-
-	private static final long serialVersionUID = -9034438721147720175L;
+	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -85,7 +86,8 @@ public class OAuthServer implements Serializable, IDataProviderEntity {
 	
 	@Column(name = "request_method")
 	@Element(data = true)
-	private RequestMethod requestTokenMethod;
+	@Enumerated(EnumType.STRING)
+	private RequestMethod requestTokenMethod = RequestMethod.POST;
 	
 	@Column(name = "request_info_url")
 	@Element(data = true)

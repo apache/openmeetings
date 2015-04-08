@@ -162,7 +162,6 @@ public class SignInDialog extends AbstractFormDialog<String> {
 	public Form<String> getForm() {
 		return form;
 	}
-	// TODO Auto-generated method stub
 	
 	private void shake(AjaxRequestTarget target) {
 		JQueryEffectBehavior shake = new JQueryEffectBehavior("#" + getMarkupId(), "shake");
@@ -232,7 +231,7 @@ public class SignInDialog extends AbstractFormDialog<String> {
 				.add(new DropDownChoice<LdapConfig>("domain", new PropertyModel<LdapConfig>(SignInDialog.this, "domain")
 						, ldaps, new ChoiceRenderer<LdapConfig>("name", "ldapConfigId"))).setVisible(ldaps.size() > 1));
 			add(new CheckBox("rememberMe", new PropertyModel<Boolean>(SignInDialog.this, "rememberMe")).setOutputMarkupId(true));
-			add(new AjaxButton("submit") { //FAKE button so "submit-on-enter" works as expected
+			AjaxButton ab = new AjaxButton("submit") { //FAKE button so "submit-on-enter" works as expected
 				private static final long serialVersionUID = 1L;
 
 				@Override
@@ -244,7 +243,9 @@ public class SignInDialog extends AbstractFormDialog<String> {
 				protected void onError(AjaxRequestTarget target, Form<?> form) {
 					SignInDialog.this.onError(target);
 				}
-			});
+			};
+			add(ab);
+			setDefaultButton(ab);
 			add(new AjaxLink<Void>("forget") {
 				private static final long serialVersionUID = 1L;
 

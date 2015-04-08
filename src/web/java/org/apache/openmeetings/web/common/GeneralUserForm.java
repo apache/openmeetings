@@ -190,7 +190,8 @@ public class GeneralUserForm extends Form<User> {
 	
 	@Override
 	protected void onValidate() {
-		if(!getBean(UserDao.class).checkUserEMail(email.getConvertedInput(), getModelObject().getUser_id())) {
+		User u = getModelObject();
+		if(!getBean(UserDao.class).checkEmail(email.getConvertedInput(), u.getType(), u.getDomainId(), u.getUser_id())) {
 			error(WebSession.getString(1000));
 		}
 		super.onValidate();

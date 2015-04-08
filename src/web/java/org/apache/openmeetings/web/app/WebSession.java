@@ -266,7 +266,7 @@ public class WebSession extends AbstractAuthenticatedWebSession {
 					break;
 				case oauth:
 					// we did all the checks at this stage, just set the user
-					u = getBean(UserDao.class).getByName(login, Type.oauth);
+					u = getBean(UserDao.class).getByLogin(login, Type.oauth, domainId);
 					break;
 				default:
 					throw new OmException(-1L);

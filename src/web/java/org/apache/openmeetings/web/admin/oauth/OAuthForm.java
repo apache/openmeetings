@@ -18,8 +18,11 @@
  */
 package org.apache.openmeetings.web.admin.oauth;
 
+import java.util.Arrays;
+
 import org.apache.openmeetings.db.dao.server.OAuth2Dao;
 import org.apache.openmeetings.db.entity.server.OAuthServer;
+import org.apache.openmeetings.db.entity.server.OAuthServer.RequestMethod;
 import org.apache.openmeetings.web.admin.AdminBaseForm;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
@@ -28,6 +31,8 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormValidatingBehavior;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.CheckBox;
+import org.apache.wicket.markup.html.form.ChoiceRenderer;
+import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.form.TextField;
@@ -55,6 +60,7 @@ public class OAuthForm extends AdminBaseForm<OAuthServer> {
 		add(new RequiredTextField<String>("requestTokenUrl").setLabel(Model.of(WebSession.getString(1579))));
 		add(new RequiredTextField<String>("requestTokenAttributes").setLabel(Model.of(WebSession.getString(1586))));
 		add(new RequiredTextField<String>("requestInfoUrl").setLabel(Model.of(WebSession.getString(1580))));
+		add(new DropDownChoice<RequestMethod>("requestTokenMethod", Arrays.asList(RequestMethod.values()), new ChoiceRenderer<RequestMethod>("name", "name")));
 		add(new RequiredTextField<String>("loginParamName").setLabel(Model.of(WebSession.getString(1582))));
 		add(new RequiredTextField<String>("emailParamName").setLabel(Model.of(WebSession.getString(1583))));
 		add(new TextField<String>("firstnameParamName").setLabel(Model.of(WebSession.getString(1584))));

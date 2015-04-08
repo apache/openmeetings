@@ -50,6 +50,7 @@ import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Right;
 import org.apache.openmeetings.db.entity.user.User.Type;
 import org.apache.openmeetings.db.util.TimezoneUtil;
+import org.apache.openmeetings.db.util.UserHelper;
 import org.apache.openmeetings.util.AuthLevelUtil;
 import org.apache.openmeetings.util.DaoHelper;
 import org.apache.openmeetings.util.OmException;
@@ -144,8 +145,8 @@ public class UserDao implements IDataProviderDao<User> {
 	}
 	
 	private void setAdditionalParams(TypedQuery<?> q, Map<String, Object> params) {
-		for (String key : params.keySet()) {
-			q.setParameter(key, params.get(key));
+		for (Map.Entry<String, Object> me: params.entrySet()) {
+			q.setParameter(me.getKey(), me.getValue());
 		}
 	}
 
@@ -324,63 +325,66 @@ public class UserDao implements IDataProviderDao<User> {
 	/**
 	 * check for duplicates
 	 * 
-	 * @param DataValue
+	 * @param login
+	 * @param type
+	 * @param domainId
+	 * @param id
 	 * @return
 	 */
-	public boolean checkUserLogin(String login, Long id) {
-		log.debug("checkUserLogin: login = {}, id = {}", login, id);
-		long count = em.createNamedQuery("checkUserLogin", Long.class)
-				.setParameter("login", login)
-				.setParameter("id", id == null ? 0 : id)
-				.getSingleResult();
-		return count == 0;
+	public boolean checkLogin(String login, Type type, Long domainId, Long id) {
+		User u = getByLogin(login, type, domainId);
+		return u == null || u.getUser_id().equals(id);
 	}
 
 	/**
 	 * Checks if a mail is already taken by someone else
 	 * 
 	 * @param email
+	 * @param type
+	 * @param domainId
+	 * @param id
 	 * @return
 	 */
-	public boolean checkUserEMail(String email, Long id) {
-		log.debug("checkUserMail: email = {}, id = {}", email, id);
-		if (email == null || email.length() == 0) {
-			return true;
-		}
-		long count = em.createNamedQuery("checkUserEmail", Long.class)
-			.setParameter("email", email)
-			.setParameter("id", id == null ? 0 : id)
-			.setParameter("type", Type.contact)
-			.getSingleResult();
-		log.debug("size: " + count);
-
-		return count == 0;
+	public boolean checkEmail(String email, Type type, Long domainId, Long id) {
+		log.debug("checkEmail: email = {}, id = {}", email, id);
+		User u = getByEmail(email, type, domainId);
+		return u == null || u.getUser_id().equals(id);
 	}
 	
-	public User getByName(String login, Type type) {
-		User us = null;
+	public boolean validLogin(String login) {
+		return !Strings.isEmpty(login) && login.length() >= UserHelper.getMinLoginLength(cfgDao);
+	}
+	
+	public User getByLogin(String login, Type type, Long domainId) {
+		User u = null;
 		try {
-			us = em.createNamedQuery("getUserByLogin", User.class)
+			u = em.createNamedQuery("getUserByLogin", User.class)
 					.setParameter("login", login)
 					.setParameter("type", type)
+					.setParameter("domainId", domainId == null ? 0 : domainId)
 					.getSingleResult();
 		} catch (NoResultException ex) {
 		}
-		return us;
+		return u;
 	}
 
-	public User getUserByEmail(String email) {
-		User us = null;
+	public User getByEmail(String email) {
+		return getByEmail(email, User.Type.user, null);
+	}
+
+	public User getByEmail(String email, User.Type type, Long domainId) {
+		User u = null;
 		try {
-			us = em.createNamedQuery("getUserByEmail", User.class)
+			u = em.createNamedQuery("getUserByEmail", User.class)
 					.setParameter("email", email)
-					.setParameter("type", User.Type.user)
+					.setParameter("type", type)
+					.setParameter("domainId", domainId == null ? 0 : domainId)
 					.getSingleResult();
 		} catch (NoResultException ex) {
 		}
-		return us;
+		return u;
 	}
-
+	
 	public Object getUserByHash(String hash) {
 		if (hash.length() == 0) {
 			return new Long(-5);
