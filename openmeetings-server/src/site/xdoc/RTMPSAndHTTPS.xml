@@ -127,7 +127,8 @@ Enter key password for <red5>
 
 				<li> Default RTMPS port is 8443, you can change it by editing <tt>red5/conf/red5.properties</tt> and change the port here: <tt>rtmps.port=8443</tt><br/>
 					Please set <tt>rtmps.keystorepass=password</tt> and <tt>rtmps.truststorepass=password</tt>
-					(password = password you set on your new keystore(s))
+					(password = password you set on your new keystore(s))<br/>
+					Additionally you need to set <tt>rtmps.screen.keystorepass=screenpassword</tt> (screenpassword = password you set on your keystore for screen-sharing application)
 				</li>
 			
 				<li>
