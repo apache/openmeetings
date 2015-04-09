@@ -69,6 +69,7 @@ import org.apache.wicket.markup.head.CssContentHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 import org.apache.wicket.request.IRequestParameters;
+import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.flow.RedirectToUrlException;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.string.StringValue;
@@ -121,6 +122,16 @@ public class SignInPage extends BaseInitedPage {
 				log.error("OAuth2 login error", e);
 			} catch (NoSuchAlgorithmException e) {
 				log.error("OAuth2 login error", e);
+			}
+		}
+		//will try to login directly using parameters sent by POST
+		IRequestParameters pp = RequestCycle.get().getRequest().getPostParameters();
+		StringValue login = pp.getParameterValue("login"), password = pp.getParameterValue("password");
+		if (!login.isEmpty() && !password.isEmpty()) {
+			if (WebSession.get().signIn(login.toString(), password.toString(), Type.user, null)) {
+	 			setResponsePage(Application.get().getHomePage());
+			} else {
+				log.error("Failed to login using POST parameters passed");
 			}
 		}
 		
