@@ -217,7 +217,7 @@ public class ScreenController {
 				fis.read(keyBytes);
 				
 				keystore = Hex.encodeHexString(keyBytes);
-				password = red5Props.getProperty("rtmps.keystorepass");
+				password = red5Props.getProperty("rtmps.screen.keystorepass");
 				
 				/*
 				KeyStore ksIn = KeyStore.getInstance(KeyStore.getDefaultType());
