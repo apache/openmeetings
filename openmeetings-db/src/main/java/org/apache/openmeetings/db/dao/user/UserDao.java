@@ -332,8 +332,13 @@ public class UserDao implements IDataProviderDao<User> {
 	 * @return
 	 */
 	public boolean checkLogin(String login, Type type, Long domainId, Long id) {
-		User u = getByLogin(login, type, domainId);
-		return u == null || u.getId().equals(id);
+		try {
+			User u = getByLogin(login, type, domainId);
+			return u == null || u.getId().equals(id);
+		} catch (Exception e) {
+			//exception is thrown in case of non-unique result
+			return false;
+		}
 	}
 
 	/**
@@ -347,9 +352,14 @@ public class UserDao implements IDataProviderDao<User> {
 	 */
 	public boolean checkEmail(String email, Type type, Long domainId, Long id) {
 		log.debug("checkEmail: email = {}, id = {}", email, id);
-		User u = getByEmail(email, type, domainId);
-		return u == null || u.getId().equals(id);
+		try {
+			User u = getByEmail(email, type, domainId);
+			return u == null || u.getId().equals(id);
+		} catch (Exception e) {
+			//exception is thrown in case of non-unique result
+			return false;
 		}
+	}
 
 	public boolean validLogin(String login) {
 		return !Strings.isEmpty(login) && login.length() >= UserHelper.getMinLoginLength(cfgDao);
