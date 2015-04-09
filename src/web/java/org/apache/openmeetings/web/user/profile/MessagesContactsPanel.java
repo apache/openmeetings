@@ -212,6 +212,9 @@ public class MessagesContactsPanel extends UserPanel {
 		selectedMessages.clear();
 		selectMessage(-1, target);
 		unread.setDefaultModelObject(getBean(PrivateMessagesDao.class).count(getUserId(), selectedFolderModel.getObject(), null));
+		if (target != null) {
+			target.add(unread);
+		}
 	}
 	
 	private String getDisplayName(User u) {
