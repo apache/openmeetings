@@ -28,12 +28,15 @@ public class RequestContactTemplate extends AbstractTemplatePanel {
 	private static final long serialVersionUID = 1L;
 
 	public RequestContactTemplate(User userToAdd, User user) {
-		super(WebSession.getLanguage());
+		super(userToAdd.getLanguage_id());
+		add(new Label("hi", WebSession.getString(1192, langId)));
 		add(new Label("addedFirstName", userToAdd.getFirstname()));
 		add(new Label("addedLastName", userToAdd.getLastname()));
 		add(new Label("firstName", user.getFirstname()));
 		add(new Label("lastName", user.getLastname()));
-		add(new ExternalLink("link", ContactsHelper.getLink()));
+		add(new Label("likeToAdd", WebSession.getString(1193, langId)));
+		add(new Label("check", WebSession.getString(1194, langId)));
+		add(new ExternalLink("link", ContactsHelper.getLink()).add(new Label("contactList", WebSession.getString(1196, langId))));
 	}
 	
 	public static String getEmail(User userToAdd, User user) {

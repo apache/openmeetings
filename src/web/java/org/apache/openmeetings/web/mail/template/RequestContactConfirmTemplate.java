@@ -18,7 +18,6 @@
  */
 package org.apache.openmeetings.web.mail.template;
 
-import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.UserContact;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.wicket.markup.html.basic.Label;
@@ -26,15 +25,17 @@ import org.apache.wicket.markup.html.basic.Label;
 public class RequestContactConfirmTemplate extends AbstractTemplatePanel {
 	private static final long serialVersionUID = 1L;
 
-	public RequestContactConfirmTemplate(User user, UserContact contact) {
-		super(WebSession.getLanguage());
-		add(new Label("firstName", user.getFirstname()));
-		add(new Label("lastName", user.getLastname()));
+	public RequestContactConfirmTemplate(UserContact contact) {
+		super(contact.getOwner().getLanguage_id());
+		add(new Label("hi", WebSession.getString(1192, langId)));
+		add(new Label("firstName", contact.getOwner().getFirstname()));
+		add(new Label("lastName", contact.getOwner().getLastname()));
 		add(new Label("addedFirstName", contact.getContact().getFirstname()));
 		add(new Label("addedLastName", contact.getContact().getLastname()));
+		add(new Label("confirmed", WebSession.getString(1198, langId)));
 	}
 	
-	public static String getEmail(User user, UserContact contact) {
-		return renderPanel(new RequestContactConfirmTemplate(user, contact)).toString();
+	public static String getEmail(UserContact contact) {
+		return renderPanel(new RequestContactConfirmTemplate(contact)).toString();
 	}
 }
