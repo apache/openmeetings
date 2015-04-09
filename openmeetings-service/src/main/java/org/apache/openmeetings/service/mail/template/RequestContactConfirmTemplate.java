@@ -18,22 +18,23 @@
  */
 package org.apache.openmeetings.service.mail.template;
 
-import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.UserContact;
 import org.apache.wicket.markup.html.basic.Label;
 
 public class RequestContactConfirmTemplate extends AbstractTemplatePanel {
 	private static final long serialVersionUID = 1L;
 
-	public RequestContactConfirmTemplate(User user, UserContact contact) {
-		super(getOmSession().getOmLanguage());
-		add(new Label("firstName", user.getFirstname()));
-		add(new Label("lastName", user.getLastname()));
+	public RequestContactConfirmTemplate(UserContact contact) {
+		super(contact.getOwner().getLanguageId());
+		add(new Label("hi", getString(1192, langId)));
+		add(new Label("firstName", contact.getOwner().getFirstname()));
+		add(new Label("lastName", contact.getOwner().getLastname()));
 		add(new Label("addedFirstName", contact.getContact().getFirstname()));
 		add(new Label("addedLastName", contact.getContact().getLastname()));
+		add(new Label("confirmed", getString(1198, langId)));
 	}
 	
-	public static String getEmail(User user, UserContact contact) {
-		return renderPanel(new RequestContactConfirmTemplate(user, contact)).toString();
+	public static String getEmail(UserContact contact) {
+		return renderPanel(new RequestContactConfirmTemplate(contact)).toString();
 	}
 }

@@ -78,13 +78,12 @@ public class ContactsHelper {
 		dao.updateContactStatus(userContactId, false);
 
 		contact = dao.get(userContactId);
-
-		dao.addUserContact(contact.getOwner().getId(), getUserId(), false, "");
-
 		User user = contact.getOwner();
 
+		dao.addUserContact(user.getId(), getUserId(), false, "");
+
 		if (user.getAdresses() != null) {
-			String message = RequestContactConfirmTemplate.getEmail(user, contact);
+			String message = RequestContactConfirmTemplate.getEmail(contact);
 
 			String subj = contact.getContact().getFirstname() + " " + contact.getContact().getLastname() + " " + WebSession.getString(1198);
 
