@@ -80,8 +80,8 @@ import org.simpleframework.xml.Root;
 @NamedQueries({
 	@NamedQuery(name = "getUserById", query = "SELECT u FROM User u WHERE u.user_id = :id"),
 	@NamedQuery(name = "getUsersByIds", query = "select c from User c where c.user_id IN :ids"),
-	@NamedQuery(name = "getUserByLogin", query = "SELECT u FROM User u WHERE u.deleted = false AND u.type = :type AND u.login = :login AND ((:domainId = 0 AND domainId IS NULL) OR (:domainId > 0 AND domainId = :domainId))"),
-	@NamedQuery(name = "getUserByEmail", query = "SELECT u FROM User u WHERE u.deleted = false AND u.type = :type AND u.adresses.email = :email AND ((:domainId = 0 AND domainId IS NULL) OR (:domainId > 0 AND domainId = :domainId))"),
+	@NamedQuery(name = "getUserByLogin", query = "SELECT u FROM User u WHERE u.deleted = false AND u.type = :type AND u.login = :login AND ((:domainId = 0 AND u.domainId IS NULL) OR (:domainId > 0 AND u.domainId = :domainId))"),
+	@NamedQuery(name = "getUserByEmail", query = "SELECT u FROM User u WHERE u.deleted = false AND u.type = :type AND u.adresses.email = :email AND ((:domainId = 0 AND u.domainId IS NULL) OR (:domainId > 0 AND u.domainId = :domainId))"),
 	@NamedQuery(name = "getUserByHash",  query = "SELECT u FROM User u WHERE u.deleted = false AND u.type = :type AND u.resethash = :resethash"),
 	@NamedQuery(name = "getContactByEmailAndUser", query = "SELECT u FROM User u WHERE u.deleted = false AND u.adresses.email = :email AND u.type = :type AND u.ownerId = :ownerId"), 
 	@NamedQuery(name = "selectMaxFromUsersWithSearch", query = "select count(c.user_id) from User c "
