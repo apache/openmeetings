@@ -347,9 +347,9 @@ public class SignInPage extends BaseInitedPage {
 			return;
 		}
 		// generate random password
-		byte[] rawPass = new byte[16];
+		byte[] rawPass = new byte[25];
 		Random rnd = new Random();
-		for (int i = 0; i < 25; i++) {
+		for (int i = 0; i < rawPass.length; ++i) {
 			rawPass[i] = (byte) ('!' + rnd.nextInt(93));
 		}
 		String pass = new String(rawPass, "UTF-8");
