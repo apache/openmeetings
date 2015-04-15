@@ -335,6 +335,9 @@
 			<fileset dir="${red5.server.lib}" includes="red5-server-common*.jar" />
 			<fileset dir="${red5.client.lib}" includes="red5*.jar" />
 		</copy>
+		<delete>
+			<fileset dir="${screenshare.out.dir}" includes="${project.distname}-screenshare*.jar" />
+		</delete>
 		<fileset id="screenshare.jars" dir="${screenshare.out.dir}" casesensitive="yes">
 			<include name="**/*.jar"/>
 		</fileset>
