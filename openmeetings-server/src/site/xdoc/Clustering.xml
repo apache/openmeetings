@@ -80,7 +80,7 @@
 			</ul> 
 		</section>
 		<section name="OM nodes configuration">
-			<p>In the file <tt>/opt/red5/webapps/openmeetings/WEB-INF/openmeetings-applicationContext.xml</tt>:</p>
+			<p>In the file <tt>/opt/red5/webapps/openmeetings/WEB-INF/classes/openmeetings-applicationContext.xml</tt>:</p>
 			<ul>
 				<li>
 					For each node uncomment line:

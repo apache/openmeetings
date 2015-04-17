@@ -57,7 +57,7 @@ public class ConnectionsPanel extends AdminPanel {
 			@Override
 			public Iterator<? extends Client> iterator(long first, long count) {
 				//FIXME add grouping by public SID
-				List<Client> l = new ArrayList<Client>(getBean(ISessionManager.class).getClients());
+				List<Client> l = new ArrayList<Client>(getBean(ISessionManager.class).getClientsWithServer());
 				return l.subList((int)Math.max(0, first), (int)Math.min(first + count, l.size())).iterator();
 			}
 			
