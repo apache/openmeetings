@@ -31,7 +31,7 @@
 	<description>TODO</description>
 	<properties>
 		<server.dir>${project.build.directory}/red5-server</server.dir>
-		<languages.dir>../openmeetings-web/src/main/webapp/languages</languages.dir>
+		<languages.dir>../openmeetings-web/src/main/java/org/apache/openmeetings/web/app</languages.dir>
 		<assembly.finalName>${project.build.finalName}</assembly.finalName>
 		<assembly.descriptor>server</assembly.descriptor>
 		<dist.dir>${project.build.directory}/${assembly.finalName}</dist.dir>

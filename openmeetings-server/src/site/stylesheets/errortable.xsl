@@ -51,7 +51,7 @@
 	</xsl:template>
 	
 	<xsl:template match="row">
-		<xsl:variable name="englishPath"><xsl:value-of select="concat($languagesDir, '/english.xml')"/></xsl:variable>
+		<xsl:variable name="englishPath"><xsl:value-of select="concat($languagesDir, '/Application.properties.xml')"/></xsl:variable>
 			<tr>
 				<td>-<xsl:value-of select="field[@name='errorvalues_id']"/></td>
 				<td>
@@ -62,11 +62,11 @@
 							<xsl:otherwise>323</xsl:otherwise>
 						</xsl:choose>
 					</xsl:variable>
-					<xsl:value-of select="document($englishPath)/language/string[@id=$x]/value" />
+					<xsl:value-of select="document($englishPath)/properties/entry[@key=$x]/text()" />
 				</td>
 				<td>
 					<xsl:variable name="descId" select="field[@name='fieldvalues_id']"/>
-					<xsl:value-of select="document($englishPath)/language/string[@id=$descId]/value" />
+					<xsl:value-of select="document($englishPath)/properties/entry[@key=$descId]/text()" />
 				</td>
 			</tr>
 	</xsl:template>
