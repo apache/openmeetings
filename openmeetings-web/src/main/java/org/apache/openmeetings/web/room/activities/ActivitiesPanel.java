@@ -30,7 +30,7 @@ import java.util.List;
 
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.user.User;
-import org.apache.openmeetings.web.app.WebSession;
+import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.common.BasePanel;
 import org.apache.openmeetings.web.room.activities.Activity.Type;
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
@@ -118,7 +118,7 @@ public class ActivitiesPanel extends BasePanel {
 				case roomExit:
 				{
 					User u = getBean(UserDao.class).get(a.getSender());
-					text = String.format("%s %s %s [%s]", u.getFirstname(), u.getLastname(), WebSession.getString(1367), df.get().format(a.getCreated()));
+					text = String.format("%s %s %s [%s]", u.getFirstname(), u.getLastname(), Application.getString(1367), df.get().format(a.getCreated()));
 				}
 					break;
 				case askModeration:

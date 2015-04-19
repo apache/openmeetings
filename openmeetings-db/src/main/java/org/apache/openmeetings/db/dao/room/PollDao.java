@@ -29,8 +29,6 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
-import org.apache.openmeetings.db.dao.label.FieldLanguagesValuesDao;
-import org.apache.openmeetings.db.dao.label.FieldValueDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.room.PollType;
 import org.apache.openmeetings.db.entity.room.RoomPoll;
@@ -47,10 +45,6 @@ public class PollDao {
 	@PersistenceContext
 	private EntityManager em;
 	@Autowired
-	private FieldValueDao fieldValDao;
-	@Autowired
-	private FieldLanguagesValuesDao labelDao;
-	@Autowired
 	private UserDao userDao;
 	@Autowired
 	private RoomDao roomDao;
@@ -58,7 +52,7 @@ public class PollDao {
 	public Long addPollType(Long labelId, Boolean isNumeric) {
 		log.debug("Adding poll type: " + labelId + ", " + isNumeric);
 		PollType pt = new PollType();
-		pt.setLabel(fieldValDao.get(labelId));
+		pt.setLabel(labelId);
 		pt.setNumeric(isNumeric);
 
 		em.persist(pt);
@@ -67,11 +61,7 @@ public class PollDao {
 	}
 	
 	public List<PollType> getTypes(long langId) {
-		List<PollType> l = em.createNamedQuery("getPollTypes", PollType.class).getResultList();
-		for (PollType t : l) {
-			t.getLabel().setFieldlanguagesvalue(labelDao.get(t.getLabel().getId(), langId));
-		}
-		return l;
+		return em.createNamedQuery("getPollTypes", PollType.class).getResultList();
 	}
 	
 	public PollType getType(Long typeId) {

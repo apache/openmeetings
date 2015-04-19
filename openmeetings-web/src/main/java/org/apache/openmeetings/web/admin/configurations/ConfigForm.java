@@ -25,6 +25,7 @@ import static org.apache.wicket.datetime.markup.html.basic.DateLabel.forDatePatt
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.entity.basic.Configuration;
 import org.apache.openmeetings.web.admin.AdminBaseForm;
+import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormValidatingBehavior;
@@ -59,17 +60,17 @@ public class ConfigForm extends AdminBaseForm<Configuration> {
 		super(id, new CompoundPropertyModel<Configuration>(configuration));
 		setOutputMarkupId(true);
 		this.listContainer = listContainer;
-		add(new RequiredTextField<String>("conf_key").setLabel(Model.of(WebSession.getString(267))).add(new IValidator<String>(){
+		add(new RequiredTextField<String>("conf_key").setLabel(Model.of(Application.getString(267))).add(new IValidator<String>(){
 			private static final long serialVersionUID = 1L;
 
 			public void validate(IValidatable<String> validatable) {
 				Configuration c = getBean(ConfigurationDao.class).forceGet(validatable.getValue());
 				if (c != null && !c.isDeleted() && !c.getId().equals(ConfigForm.this.getModelObject().getId())) {
-					error(WebSession.getString(1544L));
+					error(Application.getString(1544L));
 				}
 			}
 		}));
-		add(new TextField<String>("conf_value").setLabel(Model.of(WebSession.getString(271))));
+		add(new TextField<String>("conf_value").setLabel(Model.of(Application.getString(271))));
 		add(forDatePattern("updatetime", WEB_DATE_PATTERN));
 		add(new Label("user.login"));
 		add(new TextArea<String>("comment"));

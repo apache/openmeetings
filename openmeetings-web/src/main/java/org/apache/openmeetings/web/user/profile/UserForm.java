@@ -19,7 +19,7 @@
 package org.apache.openmeetings.web.user.profile;
 
 import org.apache.openmeetings.db.entity.user.User;
-import org.apache.openmeetings.web.app.WebSession;
+import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.common.GeneralUserForm;
 import org.apache.wicket.markup.html.form.PasswordTextField;
 import org.apache.wicket.model.IModel;
@@ -39,7 +39,7 @@ public class UserForm extends GeneralUserForm {
 	protected void onValidate() {
 		String pass = getPasswordField().getConvertedInput();
 		if (pass != null && !pass.isEmpty() && !pass.equals(confirmPassword.getConvertedInput())) {
-			error(WebSession.getString(232));
+			error(Application.getString(232));
 		}
 		super.onValidate();
 	}

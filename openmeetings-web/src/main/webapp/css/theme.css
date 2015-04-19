@@ -252,6 +252,9 @@ html, body {
 #feedcontainer {
 	overflow: auto;
 }
+#feeds.ui-accordion .ui-accordion-header {
+	margin-bottom: 2px;
+}
 .file.tree.container {
 	border: 1px solid #ccc;
 }

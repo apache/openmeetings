@@ -33,19 +33,23 @@ import javax.xml.xpath.XPathFactory;
 
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.openmeetings.cli.ConnectionProperties.DbType;
+import org.apache.openmeetings.util.ConnectionProperties;
+import org.apache.openmeetings.util.OmFileHelper;
+import org.apache.openmeetings.util.ConnectionProperties.DbType;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 public abstract class ConnectionPropertiesPatcher {
-	protected static final String URL_PREFIX = "Url=";
-	protected ConnectionProperties connectionProperties;
+	protected static final String URL_PREFIX = "Url";
+	protected static final String DRIVER_PREFIX = "DriverClassName";
+	protected static final String USER_PREFIX = "Username";
+	protected static final String PASS_PREFIX = "Password";
+	protected ConnectionProperties props;
 	
-	public static ConnectionPropertiesPatcher getPatcher(String _dbType, ConnectionProperties connectionProperties) {
-		DbType dbType = DbType.valueOf(_dbType);
+	public static ConnectionPropertiesPatcher getPatcher(ConnectionProperties props) {
 		ConnectionPropertiesPatcher patcher = null;
-		switch (dbType) {
+		switch (props.getDbType()) {
 			case db2:
 				patcher = new Db2Patcher();
 				break;
@@ -66,18 +70,18 @@ public abstract class ConnectionPropertiesPatcher {
 				patcher = new DerbyPatcher();
 				break;
 		}
-		patcher.connectionProperties = connectionProperties;
+		patcher.props = props;
 		return patcher;
 	}
 	
-	static ConnectionProperties getConnectionProperties(File conf) throws Exception {
-		ConnectionProperties connectionProperties = new ConnectionProperties();
+	public static ConnectionProperties getConnectionProperties(File conf) throws Exception {
+		ConnectionProperties props = new ConnectionProperties();
 		Document doc = getDocument(conf);
 		Attr attr = getConnectionProperties(doc);
 		String[] tokens = attr.getValue().split(",");
-		processBasicProperties(tokens, null, null, connectionProperties);
+		loadProperties(tokens, props);
 		
-		return connectionProperties;
+		return props;
 	}
 	
 	private static Document getDocument(File xml) throws Exception {
@@ -95,24 +99,41 @@ public abstract class ConnectionPropertiesPatcher {
 		return element.getAttributeNode("value");
 	}
 	
-	public void patch(File srcXml, File destXml, String host, String port, String db, String user, String pass) throws Exception {
-		Document doc = getDocument(srcXml);
-		
-		Attr val = getConnectionProperties(doc);
-		patchAttribute(val, host, port, db, user, pass);
+	public static void patch(ConnectionProperties props) throws Exception {
+		ConnectionPropertiesPatcher patcher = getPatcher(props);
+		Document doc = getDocument(OmFileHelper.getPersistence(props.getDbType()));
+		Attr attr = getConnectionProperties(doc);
+		String[] tokens = attr.getValue().split(",");
+		patcher.patchAttribute(tokens);
+		attr.setValue(StringUtils.join(tokens, ","));
 		
 		TransformerFactory transformerFactory = TransformerFactory.newInstance();
 		Transformer transformer = transformerFactory.newTransformer();
 		DOMSource source = new DOMSource(doc);
-		transformer.transform(source, new StreamResult(destXml.getCanonicalPath())); //this constructor is used to avoid transforming path to URI
+		transformer.transform(source, new StreamResult(OmFileHelper.getPersistence().getCanonicalPath())); //this constructor is used to avoid transforming path to URI
 	}
 	
-	protected Attr patchAttribute(Attr attr, String host, String port, String db, String user, String pass) {
-		String[] tokens = attr.getValue().split(",");
-		processBasicProperties(tokens, user, pass, connectionProperties);
-		patchDb(tokens, host, port, db);
-		attr.setValue(StringUtils.join(tokens, ","));
-		return attr;
+	public static ConnectionProperties patch(String dbType, String host, String port, String db, String user, String pass) throws Exception {
+		ConnectionProperties props = getConnectionProperties(OmFileHelper.getPersistence(dbType));
+		props.setLogin(user);
+		props.setPassword(pass);
+		ConnectionPropertiesPatcher patcher = getPatcher(props);
+		props.setURL(patcher.getUrl(props.getURL(), host, port, db));
+		patch(props);
+		return props;
+	}
+	
+	public static void updateUrl(ConnectionProperties props, String host, String port, String db) {
+		ConnectionPropertiesPatcher patcher = getPatcher(props);
+		props.setURL(patcher.getUrl(props.getURL(), host, port, db));
+	}
+	
+	protected void patchAttribute(String[] tokens) {
+		for (int i = 0; i < tokens.length; ++i) {
+			patchProp(tokens, i, USER_PREFIX, props.getLogin());
+			patchProp(tokens, i, PASS_PREFIX, props.getPassword());
+			patchProp(tokens, i, URL_PREFIX, props.getURL());
+		}
 	}
 
 	protected static void patchProp(String[] tokens, int idx, String name, String value) {
@@ -123,40 +144,30 @@ public abstract class ConnectionPropertiesPatcher {
 		}
 	}
 	
-	private static void processBasicProperties(String[] tokens, String user,
-			String pass, ConnectionProperties connectionProperties) {
+	private static void loadProperties(String[] tokens, ConnectionProperties connectionProperties) {
 		String prop;
 		for (int i = 0; i < tokens.length; ++i) {
-			prop = getPropFromPersistence(tokens, i, "DriverClassName");
+			prop = getPropFromPersistence(tokens, i, DRIVER_PREFIX);
 			if (prop != null) {
 				connectionProperties.setDriver(prop);
 			}
 			
-			if (user != null) {
-				patchProp(tokens, i, "Username", user);
-				connectionProperties.setLogin(user);
-			} else {
-				prop = getPropFromPersistence(tokens, i, "Username");
-				if (prop != null) {
-					connectionProperties.setLogin(prop);
-				}
+			prop = getPropFromPersistence(tokens, i, USER_PREFIX);
+			if (prop != null) {
+				connectionProperties.setLogin(prop);
 			}
 			
-			if (pass != null) {
-				patchProp(tokens, i, "Password", pass);
-				connectionProperties.setPassword(pass);
-			} else {
-				prop = getPropFromPersistence(tokens, i, "Password");
-				if (prop != null) {
-					connectionProperties.setPassword(prop);
-				}
+			prop = getPropFromPersistence(tokens, i, PASS_PREFIX);
+			if (prop != null) {
+				connectionProperties.setPassword(prop);
 			}
-			prop = getPropFromPersistence(tokens, i, "Url");
+
+			prop = getPropFromPersistence(tokens, i, URL_PREFIX);
 			if (prop != null) {
 				try {
 					//will try to "guess" dbType
 					String[] parts = prop.split(":");
-					connectionProperties.setDbType(DbType.valueOf(parts[1]));
+					connectionProperties.setDbType("sqlserver".equals(parts[1]) ? DbType.mssql : DbType.valueOf(parts[1]));
 				} catch (Exception e) {
 					//ignore
 				}
@@ -172,18 +183,6 @@ public abstract class ConnectionPropertiesPatcher {
 			return prop.substring(prop.indexOf("=") + 1);
 		}
 		return null;
-	}
-	
-	private void patchDb(String[] tokens, String host, String _port, String _db) {
-		for (int i = 0; i < tokens.length; ++i) {
-			String prop = tokens[i].trim();
-			if (prop.startsWith(URL_PREFIX)) {
-				String url = getUrl(prop.substring(URL_PREFIX.length()), host, _port, _db);
-				connectionProperties.setURL(url);
-				tokens[i] = URL_PREFIX + url;
-				break;
-			}
-		}
 	}
 	
 	protected abstract String getUrl(String url, String host, String port, String db);

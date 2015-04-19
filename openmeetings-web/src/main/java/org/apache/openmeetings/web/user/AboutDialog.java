@@ -21,13 +21,13 @@ package org.apache.openmeetings.web.user;
 import static org.apache.openmeetings.util.Version.getBuildDate;
 import static org.apache.openmeetings.util.Version.getRevision;
 import static org.apache.openmeetings.util.Version.getVersion;
+import static org.apache.openmeetings.web.app.Application.getBean;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
-import static org.apache.openmeetings.web.app.Application.getBean;
-import org.apache.openmeetings.web.app.WebSession;
+import org.apache.openmeetings.web.app.Application;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.basic.Label;
 
@@ -38,7 +38,7 @@ public class AboutDialog extends AbstractDialog<String> {
 	private static final long serialVersionUID = 1L;
 	
 	public AboutDialog(String id) {
-		super(id, WebSession.getString(1549));
+		super(id, Application.getString(1549));
 		
 		add(new Label("name", getBean(ConfigurationDao.class).getAppName()));
 		add(new Label("version", getVersion()));

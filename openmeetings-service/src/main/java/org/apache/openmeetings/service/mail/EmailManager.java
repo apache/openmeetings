@@ -21,8 +21,8 @@ package org.apache.openmeetings.service.mail;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.wicketApplicationName;
 
-import org.apache.openmeetings.core.IApplication;
-import org.apache.openmeetings.core.IWebSession;
+import org.apache.openmeetings.IApplication;
+import org.apache.openmeetings.IWebSession;
 import org.apache.openmeetings.core.mail.MailHandler;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.service.mail.template.FeedbackTemplate;
@@ -47,7 +47,7 @@ public class EmailManager {
 	private MailHandler mailHandler;
 
 	public static String getString(long id) {
-		return ((IWebSession)WebSession.get()).getOmString(512);
+		return ((IApplication)Application.get(wicketApplicationName)).getOmString(id);
 	}
 	
 	/**

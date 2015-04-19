@@ -30,6 +30,7 @@ import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
 import org.apache.openmeetings.db.dao.calendar.AppointmentReminderTypDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
+import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.UserPanel;
 import org.apache.openmeetings.web.util.CalendarHelper;
@@ -113,11 +114,11 @@ public class CalendarPanel extends UserPanel {
 		final Form<Date> form = new Form<Date>("form");
 		add(form);
 		
-		final AppointmentDialog dialog = new AppointmentDialog("appointment", WebSession.getString(815)
+		final AppointmentDialog dialog = new AppointmentDialog("appointment", Application.getString(815)
 				, this, new CompoundPropertyModel<Appointment>(getDefault()));
 		add(dialog);
 		
-		boolean isRtl = WebSession.getLanguageObj().isRtl();
+		boolean isRtl = isRtl();
 		javaScriptAddDatepicker = String.format("addCalButton(%s, 'datepicker');", isRtl);
 		Options options = new Options();
 		options.set("isRTL", isRtl);
@@ -128,10 +129,10 @@ public class CalendarPanel extends UserPanel {
 		options.set("defaultEventMinutes", 60);
 		options.set("timeFormat", Options.asString("H(:mm)"));
 
-		options.set("buttonText", "{month: '" + WebSession.getString(801) +
-								"', week: '" + WebSession.getString(800) + 
-								"', day: '"  + WebSession.getString(799) + 
-								"', today: '"  + WebSession.getString(1555) + 
+		options.set("buttonText", "{month: '" + Application.getString(801) +
+								"', week: '" + Application.getString(800) + 
+								"', day: '"  + Application.getString(799) + 
+								"', today: '"  + Application.getString(1555) + 
 								"'}");
 
 		JSONArray monthes = new JSONArray();
@@ -140,14 +141,14 @@ public class CalendarPanel extends UserPanel {
 		JSONArray shortDays = new JSONArray();
 		try {
 			// first week day must be Sunday
-			days.put(0, WebSession.getString(466));
-			shortDays.put(0, WebSession.getString(459));
+			days.put(0, Application.getString(466));
+			shortDays.put(0, Application.getString(459));
 			for (int i = 0; i < 12; i++) {
-				monthes.put(i, WebSession.getString(469 + i));
-				shortMonthes.put(i, WebSession.getString(1556 + i));
+				monthes.put(i, Application.getString(469 + i));
+				shortMonthes.put(i, Application.getString(1556 + i));
 				if (i + 1 < 7) {
-					days.put(i + 1, WebSession.getString(460 + i));
-					shortDays.put(i + 1, WebSession.getString(453 + i));
+					days.put(i + 1, Application.getString(460 + i));
+					shortDays.put(i + 1, Application.getString(453 + i));
 				}
 			}
 		} catch (JSONException e) {
@@ -265,7 +266,7 @@ public class CalendarPanel extends UserPanel {
 		Appointment a = new Appointment();
 		a.setRemind(getAppointmentReminderTypDao().get(3L)); //TODO: Make configurable
 		a.setOwner(getBean(UserDao.class).get(getUserId()));
-		a.setTitle(WebSession.getString(1444));
+		a.setTitle(Application.getString(1444));
 		log.debug(" -- getDefault -- Current model " + a);
 		return a;
 	}

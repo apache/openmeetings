@@ -22,9 +22,9 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
 import java.io.File;
 
-import org.apache.openmeetings.cli.ConnectionProperties;
 import org.apache.openmeetings.cli.ConnectionPropertiesPatcher;
 import org.apache.openmeetings.util.OmFileHelper;
+import org.apache.openmeetings.util.ConnectionProperties.DbType;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 
@@ -46,19 +46,13 @@ public class PrepareSystemFiles {
 			
 			String persistanceFileToPatch = args[2];
 			
-			ConnectionProperties connectionProperties = new ConnectionProperties();
-			
 			File conf = new File(persistanceFileToPatch);
 			
 			if (conf.exists()) {
 				conf.delete();
 			}
 			
-			String dbType = "derby";
-			File srcConf = new File(OmFileHelper.getWebinfDir(), "classes/META-INF/" + dbType + "_persistence.xml");
-			ConnectionPropertiesPatcher.getPatcher(dbType, connectionProperties).patch(
-					srcConf
-					, conf
+			ConnectionPropertiesPatcher.patch(DbType.derby.name()
 					, "localhost"
 					, "1527"
 					, databaseHomeDirectory + "openmeetings"

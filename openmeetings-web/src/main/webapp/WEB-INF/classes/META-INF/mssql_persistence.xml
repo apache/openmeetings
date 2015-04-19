@@ -45,9 +45,6 @@
 		<class>org.apache.openmeetings.db.entity.record.FlvRecordingMetaData</class>
 		<class>org.apache.openmeetings.db.entity.record.FlvRecordingMetaDelta</class>
 		<class>org.apache.openmeetings.db.entity.room.Invitation</class>
-		<class>org.apache.openmeetings.db.entity.label.FieldLanguage</class>
-		<class>org.apache.openmeetings.db.entity.label.Fieldlanguagesvalues</class>
-		<class>org.apache.openmeetings.db.entity.label.Fieldvalues</class>
 		<class>org.apache.openmeetings.db.entity.log.ConferenceLog</class>
 		<class>org.apache.openmeetings.db.entity.log.ConferenceLogType</class>
 		<class>org.apache.openmeetings.db.entity.room.PollType</class>

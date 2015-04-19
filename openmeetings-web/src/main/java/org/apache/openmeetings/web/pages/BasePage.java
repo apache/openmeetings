@@ -41,7 +41,7 @@ public abstract class BasePage extends AsyncUrlFragmentAwarePage {
 	private final Map<String, String> options;
 	private final HeaderPanel header;
 
-	protected abstract boolean isRtl();
+	public abstract boolean isRtl();
 	protected abstract String getLanguageCode();
 	protected abstract String getApplicationName();
 	

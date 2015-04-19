@@ -77,8 +77,8 @@ import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
 public class SignInDialog extends AbstractFormDialog<String> {
 	private static final long serialVersionUID = 1L;
 	private Form<String> form;
-	private DialogButton loginBtn = new DialogButton(WebSession.getString(112));
-	private String registerLbl = WebSession.getString(123);
+	private DialogButton loginBtn = new DialogButton(Application.getString(112));
+	private String registerLbl = Application.getString(123);
 	private DialogButton registerBtn = new DialogButton(registerLbl);
     private String password;
     private String login;
@@ -89,7 +89,7 @@ public class SignInDialog extends AbstractFormDialog<String> {
     private FeedbackPanel feedback = new FeedbackPanel("feedback");
     
 	public SignInDialog(String id) {
-		super(id, WebSession.getString(108));
+		super(id, Application.getString(108));
 		add(form = new SignInForm("signin"));
 		add(new AjaxClientInfoBehavior());
 	}
@@ -200,7 +200,7 @@ public class SignInDialog extends AbstractFormDialog<String> {
 			if (ws.getLoginError() != null) {
 				ErrorValue eValue = getBean(ErrorDao.class).get(-1 * ws.getLoginError());
 				if (eValue != null) {
-					error(WebSession.getString(eValue.getFieldvalues_id()));
+					error(Application.getString(eValue.getFieldvalues_id()));
 					target.add(feedback);
 				}
 			}
@@ -221,9 +221,9 @@ public class SignInDialog extends AbstractFormDialog<String> {
 			}
 			add(feedback.setOutputMarkupId(true));
 			add(loginField = new RequiredTextField<String>("login", new PropertyModel<String>(SignInDialog.this, "login")));
-			loginField.setLabel(Model.of(WebSession.getString(114)));
+			loginField.setLabel(Model.of(Application.getString(114)));
 			add(passField = new PasswordTextField("pass", new PropertyModel<String>(SignInDialog.this, "password")).setResetPassword(true));
-			passField.setLabel(Model.of(WebSession.getString(115)));
+			passField.setLabel(Model.of(Application.getString(115)));
 			List<LdapConfig> ldaps = getBean(LdapConfigDao.class).get();
 			int selectedLdap = getBean(ConfigurationDao.class).getConfValue(CONFIG_DEFAULT_LDAP_ID, Integer.class, "0");
 			domain = ldaps.get(selectedLdap < ldaps.size() && selectedLdap > 0 ? selectedLdap : 0);

@@ -29,8 +29,8 @@
 					, resizable: false
 				});
 				var documentHeight = $(document).height();
-                $('#adminForm').height(documentHeight-114);
-                $('#adminTable').height(documentHeight-164);
+                $('#adminForm').height(documentHeight - 114);
+                $('#adminTable').height(documentHeight - 172);
 			};
 		</script>
 		<div class="adminPanel">
@@ -39,21 +39,21 @@
 					<table>
 						<tr>
 							<td>
-								<div class="formNewButton" wicket:ommessage="title:362" 
+								<div class="formNewButton" wicket:message="title:362" 
 									onclick="$('#addLanguage :text').val(''); $('#addLanguage').dialog('open');"><input type="button" title=""/></div>
 							</td>
 							<td>
-								<div wicket:id="deleteLangBtn" class="formCancelButton" wicket:ommessage="title:363"><input type="button" title=""/></div>
+								<div wicket:id="deleteLangBtn" class="formCancelButton" wicket:message="title:363"><input type="button" title=""/></div>
 							</td>
 							<td>
 								<select wicket:id="language"></select>
 							</td>
 							<td>
-								<span wicket:id="export" class="btn"><wicket:ommessage key="360"/></span>
+								<span wicket:id="export" class="btn"><wicket:message key="360"/></span>
 							</td>
-							<td class="profile">
+							<td>
 								<div class="fileupload fileupload-new" data-provides="fileupload" style="margin: 0;">
-									<span class="btn btn-file"><wicket:ommessage key="387"/><input type="file" accept="text/xml" wicket:id="fileInput"/></span>
+									<span class="btn btn-file ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only"><span class="ui-button-text"><wicket:message key="387"/></span><input type="file" accept="text/xml" wicket:id="fileInput"/></span>
 								</div>
 								<span wicket:id="progress">[progressbar]</span>
 							</td>
@@ -64,9 +64,8 @@
 				<table class="adminListTable">
 					<thead>
 						<tr>
-							<th class="three_column_layout_column1 ui-widget-header"><span wicket:id="orderById"></span><wicket:ommessage key="350" /></th>
-							<th class="three_column_layout_column2 ui-widget-header"><span wicket:id="orderByName"></span><wicket:ommessage key="351" /></th>
-							<th class="three_column_layout_column3 ui-widget-header"><span wicket:id="orderByValue"></span><wicket:ommessage key="352" /></th>
+							<th class="two_column_layout_column1 ui-widget-header"><span wicket:id="orderByName"></span><wicket:message key="351" /></th>
+							<th class="two_column_layout_column2 ui-widget-header"><span wicket:id="orderByValue"></span><wicket:message key="352" /></th>
 						</tr>
 					</thead>	
 				</table>
@@ -74,9 +73,8 @@
 					<table class="adminListTable">
 						<tbody wicket:id="listContainer" >
 				    		<tr wicket:id="langList">
-								<td class="three_column_layout_column1"><div class="three_column_layout_divcolumn1"><span wicket:id="lblId"></span></div></td>
-								<td class="three_column_layout_column2"><div class="three_column_layout_divcolumn2"><span wicket:id="name"></span></div></td>
-								<td class="three_column_layout_column3"><div class="three_column_layout_divcolumn3"><span wicket:id="value"></span></div></td>
+								<td class="two_column_layout_column1"><div class="three_column_layout_divcolumn2"><span wicket:id="name"></span></div></td>
+								<td class="two_column_layout_column2"><div class="three_column_layout_divcolumn3"><span wicket:id="value"></span></div></td>
 							</tr>
 						</tbody>	
 					</table>
@@ -87,30 +85,24 @@
 					<div wicket:id="buttons"></div>
 					<div class="scrollcontent" id="adminForm">
 						<fieldset class="ui-widget-content">
-							<legend class="ui-widget-header"><wicket:ommessage key="353" /></legend>
-							<div class="formelement">
-	                             <label><wicket:ommessage key="356" /></label><span wicket:id="fieldvalues.id"></span>
-							</div>
+							<legend class="ui-widget-header"><wicket:message key="353" /></legend>
 	                         <div class="formelement">
-	                             <label><wicket:ommessage key="354" /></label><input type="text" wicket:id="fieldvalues.name"/>
+	                             <label><wicket:message key="354" /></label><input type="text" wicket:id="key"/>
 							</div>
 	                        <div class="formelement">
-	                             <label><wicket:ommessage key="355" /></label><textarea wicket:id="value"></textarea>
+	                             <label><wicket:message key="355" /></label><textarea wicket:id="value"></textarea>
 	                        </div> 
 						</fieldset>
 					</div>
 				</form>
 			</div>
 		</div>
-		<div id="addLanguage" wicket:ommessage="title:364" style="display: none;">
+		<div id="addLanguage" wicket:message="title:364" style="display: none;">
 			<form wicket:id="addLangForm">
+				<div wicket:id="feedback"></div>
 				<table>
 					<tr>
-						<td><wicket:ommessage key="365" /></td>
-						<td><input type="text" wicket:id="name"/></td>
-					</tr>
-					<tr>
-						<td><wicket:ommessage key="1422" /></td>
+						<td><wicket:message key="1422" /></td>
 						<td><input type="text" wicket:id="iso"/></td>
 					</tr>
 					<tr>

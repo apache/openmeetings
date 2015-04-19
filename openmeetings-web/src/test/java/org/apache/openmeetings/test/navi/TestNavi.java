@@ -38,19 +38,19 @@ public class TestNavi extends AbstractJUnitDefaults {
 	@Test
 	public void testGetNavi(){
 		
-        List<Naviglobal> ll = navimanagement.getMainMenu(true, 1L, 1L);
+        List<Naviglobal> ll = navimanagement.getMainMenu(true, 1L);
 
         assertTrue("GlobalNavi size should be greater than zero: " + ll.size(), ll.size() > 0);
         System.out.println("NaviGlobal size: " + ll.size());
 
         for (Naviglobal navigl : ll) {
         	assertNotNull("Naviglobal retrieved should not be null", navigl);
-            System.out.println("Naviglobal label: " + navigl.getLabel().getValue());
+            System.out.println("Naviglobal label: " + navigl.getLevel_id());
 
         	assertNotNull("Naviglobal retrieved should have Navimain entries", navigl.getMainnavi());
             for (Navimain navim : navigl.getMainnavi()) {
             	assertNotNull("Navimain retrieved should not be null", navim);
-                System.out.println("-->" + navim.getLabel().getValue());
+                System.out.println("-->" + navim.getFieldvalues_id());
             }
         }
 		

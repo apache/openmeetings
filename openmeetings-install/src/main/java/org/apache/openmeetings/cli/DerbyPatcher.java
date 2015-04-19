@@ -25,7 +25,7 @@ public class DerbyPatcher extends ConnectionPropertiesPatcher {
 		String suffix = _url.substring(_url.indexOf(';'));
 		
 		if (host != null && _port != null) {
-			return "jdbc:derby" + "://" + host + ":" + _port + "/" + db + suffix;
+			//return "jdbc:derby" + "://" + host + ":" + _port + "/" + db + suffix;
 		}
 		
 		return "jdbc:derby" + ":" + db + suffix; 

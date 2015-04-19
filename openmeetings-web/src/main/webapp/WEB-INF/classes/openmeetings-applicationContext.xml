@@ -245,9 +245,7 @@
 	<bean id="navimanagement" class="org.apache.openmeetings.db.dao.basic.NavigationDao" />
 	<bean id="pollManagement" class="org.apache.openmeetings.db.dao.room.PollDao" />
 	<bean id="statemanagement" class="org.apache.openmeetings.db.dao.user.StateDao" />
-	<bean id="fieldLanguageDaoImpl" class="org.apache.openmeetings.db.dao.label.FieldLanguageDao" />
-	<bean id="fieldValueDaoImpl" class="org.apache.openmeetings.db.dao.label.FieldValueDao" />
-	<bean id="fieldLanguagesValuesDAO" class="org.apache.openmeetings.db.dao.label.FieldLanguagesValuesDao" />
+	<bean id="labelDao" class="org.apache.openmeetings.db.dao.label.LabelDao" />
 	<bean id="configurationDaoImpl" class="org.apache.openmeetings.db.dao.basic.ConfigurationDao" />
 	<bean id="appointmentDao" class="org.apache.openmeetings.db.dao.calendar.AppointmentDao" />
 	<bean id="appointmentLogic" class="org.apache.openmeetings.service.calendar.AppointmentLogic" />
@@ -284,7 +282,6 @@
 	<bean id="generatePDF" class="org.apache.openmeetings.core.documents.GeneratePDF" />
 	<bean id="smsHandler" class="org.apache.openmeetings.core.mail.SMSHandler" />
 	<bean id="importInitvalues" class="org.apache.openmeetings.installation.ImportInitvalues" />
-	<bean id="languageImport" class="org.apache.openmeetings.backup.LanguageImport" />
 	<bean id="libraryWmlLoader" class="org.apache.openmeetings.core.documents.LibraryWmlLoader" />
 	<bean id="generateSWF" class="org.apache.openmeetings.core.converter.GenerateSWF" />
 	<bean id="fileUtils" class="org.apache.openmeetings.core.data.file.FileUtils" />

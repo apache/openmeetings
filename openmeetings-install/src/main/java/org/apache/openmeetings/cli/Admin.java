@@ -63,6 +63,7 @@ import org.apache.openmeetings.installation.ImportInitvalues;
 import org.apache.openmeetings.installation.InstallationConfig;
 import org.apache.openmeetings.installation.InstallationDocumentHandler;
 import org.apache.openmeetings.util.CalendarPatterns;
+import org.apache.openmeetings.util.ConnectionProperties;
 import org.apache.openmeetings.util.ImportHelper;
 import org.apache.openmeetings.util.OMContextListener;
 import org.apache.openmeetings.util.OmFileHelper;
@@ -80,7 +81,6 @@ public class Admin {
 	private Options opts = null;
 	private CommandLine cmdl = null;
 	private ClassPathXmlApplicationContext ctx = null;
-	private final static String PERSISTENCE_NAME = "classes/META-INF/persistence.xml";
 
 	private Admin() {
 		cfg = new InstallationConfig();
@@ -126,8 +126,6 @@ public class Admin {
 		options.addOption(new OmOption("i", null, "db-pass", true, "Password of the user with write access to the DB specified", true));
 		options.addOption(new OmOption("i", null, "drop", false, "Drop database before installation", true));
 		options.addOption(new OmOption("i", null, "force", false, "Install without checking the existence of old data in the database.", true));
-		//languages
-		options.addOption(new OmOption("l", "lang", "language", true, "Single language to be imported (id or name)", true));
 		//files
 		options.addOption(new OmOption("f", null, "cleanup", false, "Should intermediate files be clean up", true));
 		
@@ -138,7 +136,6 @@ public class Admin {
 		install
 		, backup
 		, restore
-		, languages
 		, files
 		, usage
 	}
@@ -209,8 +206,6 @@ public class Admin {
 			cmd = Command.backup;
 		} else if (cmdl.hasOption('r')) {
 			cmd = Command.restore;
-		} else if (cmdl.hasOption('l')) {
-			cmd = Command.languages;
 		} else if (cmdl.hasOption('f')) {
 			cmd = Command.files;
 		}
@@ -249,13 +244,10 @@ public class Admin {
 						cfg.mailUseTls = "1";
 					}
 					ConnectionProperties connectionProperties = new ConnectionProperties();
-					File conf = new File(OmFileHelper.getWebinfDir(), PERSISTENCE_NAME);
+					File conf = OmFileHelper.getPersistence();
 					if (!conf.exists() || cmdl.hasOption("db-type") || cmdl.hasOption("db-host") || cmdl.hasOption("db-port") || cmdl.hasOption("db-name") || cmdl.hasOption("db-user") || cmdl.hasOption("db-pass")) {
 						String dbType = cmdl.getOptionValue("db-type", "derby");
-						File srcConf = new File(OmFileHelper.getWebinfDir(), "classes/META-INF/" + dbType + "_persistence.xml");
-						ConnectionPropertiesPatcher.getPatcher(dbType, connectionProperties).patch(
-								srcConf
-								, conf
+						connectionProperties = ConnectionPropertiesPatcher.patch(dbType
 								, cmdl.getOptionValue("db-host", "localhost")
 								, cmdl.getOptionValue("db-port", null)
 								, cmdl.getOptionValue("db-name", null)
@@ -313,27 +305,6 @@ public class Admin {
 					restoreOm(ctxName, checkRestoreFile(file));
 				} catch (Exception e) {
 					handleError("Restore failed", e);
-				}
-				break;
-			case languages:
-				System.out.println("All language files will be reimported");
-				try {
-					ImportInitvalues importInit = getApplicationContext(ctxName).getBean(ImportInitvalues.class);
-					if (cmdl.hasOption("lang")) {
-						String lang = cmdl.getOptionValue("lang");
-						System.out.println("Only '" + lang + "' language will be reimported");
-						try {
-							int id = Integer.parseInt(lang);
-							importInit.loadLanguagesFile(id);
-						} catch (NumberFormatException e) {
-							importInit.loadLanguagesFile(lang);
-						}
-					} else {
-						System.out.println("All language files will be reimported");
-						importInit.loadLanguagesFiles();
-					}
-				} catch (Exception e) {
-					handleError("Language reimport failed", e);
 				}
 				break;
 			case files:
@@ -568,7 +539,7 @@ public class Admin {
 	}
 	
 	public void dropDB() throws Exception {
-		File conf = new File(OmFileHelper.getWebinfDir(), PERSISTENCE_NAME);
+		File conf = OmFileHelper.getPersistence();
 		ConnectionProperties connectionProperties = ConnectionPropertiesPatcher.getConnectionProperties(conf);
 		immediateDropDB(connectionProperties);
 	}
@@ -602,7 +573,7 @@ public class Admin {
 		}
     	JDBCConfigurationImpl conf = new JDBCConfigurationImpl();
         try {
-        	conf.setPropertiesFile(new File(OmFileHelper.getWebinfDir(), PERSISTENCE_NAME));
+        	conf.setPropertiesFile(OmFileHelper.getPersistence());
         	conf.setConnectionDriverName(props.getDriver());
         	conf.setConnectionURL(props.getURL());
         	conf.setConnectionUserName(props.getLogin());

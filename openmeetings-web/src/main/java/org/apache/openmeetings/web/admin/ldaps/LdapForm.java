@@ -20,11 +20,12 @@ package org.apache.openmeetings.web.admin.ldaps;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.WEB_DATE_PATTERN;
 import static org.apache.wicket.datetime.markup.html.basic.DateLabel.forDatePattern;
+import static org.apache.openmeetings.web.app.Application.getBean;
 
 import org.apache.openmeetings.db.dao.server.LdapConfigDao;
 import org.apache.openmeetings.db.entity.server.LdapConfig;
 import org.apache.openmeetings.web.admin.AdminBaseForm;
-import static org.apache.openmeetings.web.app.Application.getBean;
+import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormValidatingBehavior;
@@ -54,13 +55,13 @@ public class LdapForm extends AdminBaseForm<LdapConfig> {
 		setOutputMarkupId(true);
 		this.listContainer = listContainer;
 		
-		add(new RequiredTextField<String>("name").setLabel(Model.of(WebSession.getString(1108))));
+		add(new RequiredTextField<String>("name").setLabel(Model.of(Application.getString(1108))));
 		add(new CheckBox("active"));
 		add(forDatePattern("inserted", WEB_DATE_PATTERN));
 		add(new Label("insertedby.login"));
 		add(forDatePattern("updated", WEB_DATE_PATTERN));
 		add(new Label("updatedby.login"));
-		add(new RequiredTextField<String>("configFileName").setLabel(Model.of(WebSession.getString(1115))));
+		add(new RequiredTextField<String>("configFileName").setLabel(Model.of(Application.getString(1115))));
 		add(new CheckBox("addDomainToUserName"));
 		add(new TextField<String>("domain"));
 		add(new TextArea<String>("comment"));

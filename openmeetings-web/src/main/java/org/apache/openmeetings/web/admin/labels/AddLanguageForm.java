@@ -18,22 +18,24 @@
  */
 package org.apache.openmeetings.web.admin.labels;
 
-import java.util.Date;
+import java.util.IllformedLocaleException;
+import java.util.Locale;
+import java.util.Map;
 
-import org.apache.openmeetings.db.dao.label.FieldLanguageDao;
-import org.apache.openmeetings.db.entity.label.FieldLanguage;
+import org.apache.openmeetings.db.dao.label.LabelDao;
 import org.apache.openmeetings.web.app.Application;
-import org.apache.openmeetings.web.app.WebSession;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
-import org.red5.logging.Red5LoggerFactory;
-import org.slf4j.Logger;
+import org.apache.wicket.validation.IValidatable;
+import org.apache.wicket.validation.IValidator;
+import org.apache.wicket.validation.ValidationError;
 
-import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+import com.googlecode.wicket.jquery.core.Options;
+import com.googlecode.wicket.jquery.ui.form.button.AjaxButton;
+import com.googlecode.wicket.kendo.ui.panel.KendoFeedbackPanel;
 /**
  * 
  * @author solomax, swagner
@@ -41,44 +43,50 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
  */
 public class AddLanguageForm extends Form<Void> {
 	private static final long serialVersionUID = 1L;
-	private static final Logger log = Red5LoggerFactory.getLogger(AddLanguageForm.class, webAppRootKey);
-	private String newLanguageName;
+	private final KendoFeedbackPanel feedback = new KendoFeedbackPanel("feedback", new Options("button", true));
 	private String newLanguageISO;
 	
 	public AddLanguageForm(String id, final LangPanel langPanel) {
 		super(id);
-		
-		add(new RequiredTextField<String>("name", new PropertyModel<String>(this, "newLanguageName")));
-		add(new RequiredTextField<String>("iso", new PropertyModel<String>(this, "newLanguageISO")));
-		
-		add(new AjaxButton("add", Model.of(WebSession.getString(366L)), this) {
+		add(feedback);
+		add(new RequiredTextField<String>("iso", new PropertyModel<String>(this, "newLanguageISO")).add(new IValidator<String>() {
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			public void onSubmit(AjaxRequestTarget target, Form<?> form) {
-				FieldLanguageDao langDao = Application.getBean(FieldLanguageDao.class);
-				
-				FieldLanguage fl = new FieldLanguage();
-				fl.setId(langDao.getNextAvailableId());
-				fl.setStarttime(new Date());
-				fl.setDeleted(false);
-				fl.setName(newLanguageName);
-				fl.setRtl(false); //FIXME
-				fl.setCode(newLanguageISO);
-				
+			public void validate(IValidatable<String> s) {
 				try {
-					langDao.update(fl);
-				} catch (Exception e) {
-					// TODO add feedback message
-					log.error("Error while adding language", e);
+					new Locale.Builder().setLanguageTag(s.getValue());
+				} catch (IllformedLocaleException e) {
+					s.error(new ValidationError("Invalid code, please use ")); //FIXME TODO add proper key
+					return;
 				}
+				Locale l = Locale.forLanguageTag(s.getValue());
+				for (Map.Entry<Long, Locale> e : LabelDao.languages.entrySet()) {
+					if (e.getValue().equals(l)) {
+						s.error(new ValidationError("This code already added")); //FIXME TODO add proper key
+						break;
+					}
+				}
+			}
+		}));
+		add(new AjaxButton("add", Model.of(Application.getString(366L)), this) {
+			private static final long serialVersionUID = 1L;
 
-				langPanel.getLangForm().updateLanguages(target);
-				/* FIXME
-				languages.setChoices(langDao.getLanguages());
-				target.add(languages);
-				*/
-				target.appendJavaScript("$('#addLanguage').dialog('close');");
+			@Override
+			protected void onError(AjaxRequestTarget target, Form<?> form) {
+				target.add(feedback);
+			}
+			
+			@Override
+			public void onSubmit(AjaxRequestTarget target, Form<?> form) {
+				try {
+					LabelDao.add(Locale.forLanguageTag(newLanguageISO));
+					langPanel.getLangForm().updateLanguages(target);
+					target.appendJavaScript("$('#addLanguage').dialog('close');");
+				} catch (Exception e) {
+					error("Failed to add, " + e.getMessage()); //FIXME TODO add proper key
+					target.add(feedback);
+				}
 			}
 		});
 	}

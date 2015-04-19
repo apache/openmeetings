@@ -33,7 +33,7 @@ import org.apache.openmeetings.service.mail.template.RequestContactConfirmTempla
 import org.apache.openmeetings.service.mail.template.RequestContactTemplate;
 import org.apache.openmeetings.util.CalendarPatterns;
 import org.apache.openmeetings.util.crypt.ManageCryptStyle;
-import org.apache.openmeetings.web.app.WebSession;
+import org.apache.openmeetings.web.app.Application;
 
 public class ContactsHelper {
 	public static long addUserToContactList(long userIdToAdd) {
@@ -50,7 +50,7 @@ public class ContactsHelper {
 		User user = getBean(UserDao.class).get(getUserId());
 		User userToAdd = getBean(UserDao.class).get(userIdToAdd);
 
-		String subj = user.getFirstname() + " " + user.getLastname() + " " + WebSession.getString(1193);
+		String subj = user.getFirstname() + " " + user.getLastname() + " " + Application.getString(1193);
 		String message = RequestContactTemplate.getEmail(userToAdd, user);
 
 		getBean(PrivateMessagesDao.class).addPrivateMessage(
@@ -85,7 +85,7 @@ public class ContactsHelper {
 		if (user.getAdresses() != null) {
 			String message = RequestContactConfirmTemplate.getEmail(contact);
 
-			String subj = contact.getContact().getFirstname() + " " + contact.getContact().getLastname() + " " + WebSession.getString(1198);
+			String subj = contact.getContact().getFirstname() + " " + contact.getContact().getLastname() + " " + Application.getString(1198);
 
 			getBean(PrivateMessagesDao.class).addPrivateMessage(
 					subj, message,

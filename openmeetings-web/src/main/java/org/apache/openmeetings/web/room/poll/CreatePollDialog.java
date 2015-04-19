@@ -31,7 +31,7 @@ import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.room.PollType;
 import org.apache.openmeetings.db.entity.room.RoomPoll;
 import org.apache.openmeetings.db.entity.user.User;
-import org.apache.openmeetings.web.app.WebSession;
+import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.room.RoomPanel;
 import org.apache.openmeetings.web.room.message.RoomMessage;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -51,14 +51,14 @@ import com.googlecode.wicket.kendo.ui.panel.KendoFeedbackPanel;
 
 public class CreatePollDialog extends AbstractFormDialog<RoomPoll> {
 	private static final long serialVersionUID = 1L;
-	private final DialogButton create = new DialogButton(WebSession.getString(22));
-	private final DialogButton cancel = new DialogButton(WebSession.getString(25));
+	private final DialogButton create = new DialogButton(Application.getString(22));
+	private final DialogButton cancel = new DialogButton(Application.getString(25));
 	private final long roomId;
 	private final PollForm form;
 	private final KendoFeedbackPanel feedback = new KendoFeedbackPanel("feedback", new Options("button", true));
 
 	public CreatePollDialog(String id, long roomId) {
-		super(id, WebSession.getString(18), new CompoundPropertyModel<RoomPoll>(new RoomPoll()));
+		super(id, Application.getString(18), new CompoundPropertyModel<RoomPoll>(new RoomPoll()));
 		this.roomId = roomId;
 		add(form = new PollForm("form", getModel()));
 	}
@@ -105,11 +105,11 @@ public class CreatePollDialog extends AbstractFormDialog<RoomPoll> {
 		
 		public PollForm(String id, IModel<RoomPoll> model) {
 			super(id, model);
-			add(new RequiredTextField<String>("name").setLabel(Model.of(WebSession.getString(1410))));
+			add(new RequiredTextField<String>("name").setLabel(Model.of(Application.getString(1410))));
 			add(new TextArea<String>("question"));
 			add(new DropDownChoice<PollType>("type", getBean(PollDao.class).getTypes(getLanguage())
 					, new ChoiceRenderer<PollType>("label.fieldlanguagesvalue.value", "id"))
-					.setRequired(true).setLabel(Model.of(WebSession.getString(21))));
+					.setRequired(true).setLabel(Model.of(Application.getString(21))));
 			add(feedback);
 		}
 	}

@@ -24,7 +24,7 @@ import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import org.apache.openmeetings.db.dao.user.UserContactsDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.user.User;
-import org.apache.openmeetings.web.app.WebSession;
+import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.common.ProfileImagePanel;
 import org.apache.openmeetings.web.common.UserPanel;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -64,7 +64,7 @@ public class UserProfilePanel extends UserPanel {
 			address.add(new Label("adresses.comment"));
 		} else {
 			address.setVisible(false);
-			addressDenied.setDefaultModelObject(WebSession.getString(Boolean.TRUE.equals(model.getObject().isShowContactDataToContacts()) ? 1269 : 1268));
+			addressDenied.setDefaultModelObject(Application.getString(Boolean.TRUE.equals(model.getObject().isShowContactDataToContacts()) ? 1269 : 1268));
 		}
 		add(address.setDefaultModel(model));
 		add(addressDenied);

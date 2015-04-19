@@ -151,7 +151,6 @@ public class BackupExport {
 		 */
 		writeList(simpleSerializer, backup_dir, "organizations.xml",
 				"organisations", organisationDao.get(0, Integer.MAX_VALUE));
-
 		progressHolder.setProgress(5);
 		/*
 		 * ##################### Backup Users
@@ -542,8 +541,7 @@ public class BackupExport {
 				FileHelper.removeRec(backup_dir);
 			}
 		} else {
-			log.debug("ERROR LangExport: not authorized FileDownload "
-					+ (new Date()));
+			log.error("BackupExport: not authorized FileDownload ");
 		}
 	}
 

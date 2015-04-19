@@ -165,7 +165,7 @@ public class RoomPanel extends BasePanel {
 	private final VoteDialog vote;
 	private final PollResultsDialog pollResults;
 	private final MenuPanel menuPanel;
-	private final RoomMenuItem exitMenuItem = new RoomMenuItem(WebSession.getString(308), WebSession.getString(309), "room menu exit") {
+	private final RoomMenuItem exitMenuItem = new RoomMenuItem(Application.getString(308), Application.getString(309), "room menu exit") {
 		private static final long serialVersionUID = 1L;
 
 		@Override
@@ -173,9 +173,9 @@ public class RoomPanel extends BasePanel {
 			exit(target);
 		}
 	};
-	private final RoomMenuItem filesMenu = new RoomMenuItem(WebSession.getString(245), null, false);
-	private final RoomMenuItem actionsMenu = new RoomMenuItem(WebSession.getString(635), null, false);
-	private final RoomMenuItem inviteMenuItem = new RoomMenuItem(WebSession.getString(213), WebSession.getString(1489), false) {
+	private final RoomMenuItem filesMenu = new RoomMenuItem(Application.getString(245), null, false);
+	private final RoomMenuItem actionsMenu = new RoomMenuItem(Application.getString(635), null, false);
+	private final RoomMenuItem inviteMenuItem = new RoomMenuItem(Application.getString(213), Application.getString(1489), false) {
 		private static final long serialVersionUID = 1L;
 
 		@Override
@@ -184,7 +184,7 @@ public class RoomPanel extends BasePanel {
 			invite.open(target);
 		}
 	};
-	private final RoomMenuItem shareMenuItem = new RoomMenuItem(WebSession.getString(239), WebSession.getString(1480), false) {
+	private final RoomMenuItem shareMenuItem = new RoomMenuItem(Application.getString(239), Application.getString(1480), false) {
 		private static final long serialVersionUID = 1L;
 
 		@Override
@@ -192,10 +192,10 @@ public class RoomPanel extends BasePanel {
 			startSharing.respond(target);
 		}
 	};
-	private final RoomMenuItem applyModerMenuItem = new RoomMenuItem(WebSession.getString(784), WebSession.getString(1481), false);
-	private final RoomMenuItem applyWbMenuItem = new RoomMenuItem(WebSession.getString(785), WebSession.getString(1492), false);
-	private final RoomMenuItem applyAvMenuItem = new RoomMenuItem(WebSession.getString(786), WebSession.getString(1482), false);
-	private final RoomMenuItem pollCreateMenuItem = new RoomMenuItem(WebSession.getString(24), WebSession.getString(1483), false) {
+	private final RoomMenuItem applyModerMenuItem = new RoomMenuItem(Application.getString(784), Application.getString(1481), false);
+	private final RoomMenuItem applyWbMenuItem = new RoomMenuItem(Application.getString(785), Application.getString(1492), false);
+	private final RoomMenuItem applyAvMenuItem = new RoomMenuItem(Application.getString(786), Application.getString(1482), false);
+	private final RoomMenuItem pollCreateMenuItem = new RoomMenuItem(Application.getString(24), Application.getString(1483), false) {
 		private static final long serialVersionUID = 1L;
 
 		@Override
@@ -204,7 +204,7 @@ public class RoomPanel extends BasePanel {
 			createPoll.open(target);
 		}
 	};
-	private final RoomMenuItem pollVoteMenuItem = new RoomMenuItem(WebSession.getString(42), WebSession.getString(1485), false) {
+	private final RoomMenuItem pollVoteMenuItem = new RoomMenuItem(Application.getString(42), Application.getString(1485), false) {
 		private static final long serialVersionUID = 1L;
 
 		public void onClick(MainPage page, AjaxRequestTarget target) {
@@ -212,7 +212,7 @@ public class RoomPanel extends BasePanel {
 			vote.open(target);
 		}
 	};
-	private final RoomMenuItem pollResultMenuItem = new RoomMenuItem(WebSession.getString(37), WebSession.getString(1484), false) {
+	private final RoomMenuItem pollResultMenuItem = new RoomMenuItem(Application.getString(37), Application.getString(1484), false) {
 		private static final long serialVersionUID = 1L;
 
 		public void onClick(MainPage page, AjaxRequestTarget target) {
@@ -220,7 +220,7 @@ public class RoomPanel extends BasePanel {
 			pollResults.open(target);
 		}
 	};
-	private final RoomMenuItem sipDialerMenuItem = new RoomMenuItem(WebSession.getString(1447), WebSession.getString(1488), false);
+	private final RoomMenuItem sipDialerMenuItem = new RoomMenuItem(Application.getString(1447), Application.getString(1488), false);
 	private final WebMarkupContainer userList = new WebMarkupContainer("userList");
 	private final ListView<RoomClient> users;
 	private final boolean showFiles;
@@ -258,7 +258,7 @@ public class RoomPanel extends BasePanel {
 					allowed = true;
 				} else {
 					SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm"); //FIXME format
-					deniedMessage = WebSession.getString(1271) + String.format(" %s - %s", sdf.format(a.getStart()), sdf.format(a.getEnd()));
+					deniedMessage = Application.getString(1271) + String.format(" %s - %s", sdf.format(a.getStart()), sdf.format(a.getEnd()));
 				}
 				*/
 			}
@@ -282,7 +282,7 @@ public class RoomPanel extends BasePanel {
 		}
 		if (!allowed) {
 			if (deniedMessage == null) {
-				deniedMessage = WebSession.getString(1599);
+				deniedMessage = Application.getString(1599);
 			}
 			accessDenied = new ExpiredMessageDialog("accessDenied", deniedMessage);
 			room.setVisible(false);
@@ -368,7 +368,7 @@ public class RoomPanel extends BasePanel {
 		});
 		room.add(new Label("roomName", r.getName()));
 		room.add(new Label("recording", "Recording started").setVisible(false)); //FIXME add/remove
-		room.add(askBtn.setOutputMarkupPlaceholderTag(true).setVisible(false).add(new AttributeAppender("title", WebSession.getString(906))));
+		room.add(askBtn.setOutputMarkupPlaceholderTag(true).setVisible(false).add(new AttributeAppender("title", Application.getString(906))));
 		room.add(startSharing = new StartSharingEventBehavior(roomId));
 		room.add(shareBtn.add(new AjaxEventBehavior("click") {
 			private static final long serialVersionUID = 1L;
@@ -377,7 +377,7 @@ public class RoomPanel extends BasePanel {
 			protected void onEvent(AjaxRequestTarget target) {
 				startSharing.respond(target);
 			}
-		}).setOutputMarkupPlaceholderTag(true).setVisible(false).add(new AttributeAppender("title", WebSession.getString(1480))));
+		}).setOutputMarkupPlaceholderTag(true).setVisible(false).add(new AttributeAppender("title", Application.getString(1480))));
 		room.add(invite = new InvitationDialog("invite", roomId));
 		room.add(createPoll = new CreatePollDialog("createPoll", roomId));
 		room.add(vote = new VoteDialog("vote", roomId));
@@ -428,7 +428,7 @@ public class RoomPanel extends BasePanel {
 		JSONArray arr = new JSONArray();
 		try {
 			for (long id : ids) {
-				arr.put(new JSONObject().put("id", id).put("value", WebSession.getString(id)));
+				arr.put(new JSONObject().put("id", id).put("value", Application.getString(id)));
 			}
 		} catch (JSONException e) {
 			log.error("", e);
@@ -534,7 +534,7 @@ public class RoomPanel extends BasePanel {
 		menu.add(exitMenuItem);
 		
 		List<RoomMenuItem> fileItems = new ArrayList<RoomMenuItem>();
-		fileItems.add(new RoomMenuItem(WebSession.getString(15), WebSession.getString(1479)));
+		fileItems.add(new RoomMenuItem(Application.getString(15), Application.getString(1479)));
 		filesMenu.setChildren(fileItems);
 		menu.add(filesMenu);
 		
@@ -548,7 +548,7 @@ public class RoomPanel extends BasePanel {
 		actionItems.add(pollResultMenuItem); //FIXME enable/disable
 		actionItems.add(pollVoteMenuItem); //FIXME enable/disable
 		actionItems.add(sipDialerMenuItem);
-		actionItems.add(new RoomMenuItem(WebSession.getString(1126), WebSession.getString(1490)));
+		actionItems.add(new RoomMenuItem(Application.getString(1126), Application.getString(1490)));
 		actionsMenu.setChildren(actionItems);
 		menu.add(actionsMenu);
 		return menu;
@@ -658,10 +658,10 @@ public class RoomPanel extends BasePanel {
 			if (roomId == null) {
 				f.setId(0L);
 				f.setOwnerId(getUserId());
-				f.setFileName(WebSession.getString(706));
+				f.setFileName(Application.getString(706));
 			} else {
 				f.setId(-roomId);
-				f.setFileName(WebSession.getString(707));
+				f.setFileName(Application.getString(707));
 			}
 			return Arrays.asList(f).iterator();
 		}
@@ -672,7 +672,7 @@ public class RoomPanel extends BasePanel {
 		public boolean autoOpen = false;
 		
 		public ExpiredMessageDialog(String id, String message) {
-			super(id, WebSession.getString(204), message, DialogButtons.OK, DialogIcon.ERROR);
+			super(id, Application.getString(204), message, DialogButtons.OK, DialogIcon.ERROR);
 			autoOpen = true;
 		}
 		

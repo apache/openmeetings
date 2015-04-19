@@ -18,6 +18,8 @@
  */
 package org.apache.openmeetings.web.common;
 
+import org.apache.openmeetings.db.util.FormatHelper;
+import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.menu.MenuPanel;
 import org.apache.openmeetings.web.pages.MainPage;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -39,6 +41,10 @@ public abstract class BasePanel extends Panel {
 
 	protected MainPage getMainPage() {
 		return (MainPage)super.getPage();
+	}
+	
+	protected boolean isRtl() { //TODO unify, remove copy/paste
+		return FormatHelper.isRtlLanguage(WebSession.get().getLocale().toLanguageTag());
 	}
 	
 	/**

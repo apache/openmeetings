@@ -28,7 +28,6 @@ import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
-import org.apache.openmeetings.db.dao.label.FieldLanguagesValuesDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.calendar.AppointmentReminderType;
 import org.red5.logging.Red5LoggerFactory;
@@ -44,8 +43,6 @@ public class AppointmentReminderTypDao {
 	private EntityManager em;
 	@Autowired
 	private UserDao usersDao;
-	@Autowired
-	private FieldLanguagesValuesDao fieldLanguagesValuesDao;
 
 	public AppointmentReminderType get(Long typId) {
 		try {
@@ -142,9 +139,6 @@ public class AppointmentReminderTypDao {
 			TypedQuery<AppointmentReminderType> query = em.createNamedQuery("getAppointmentReminderTypes", AppointmentReminderType.class);
 
 			List<AppointmentReminderType> listAppointmentReminderTyp = query.getResultList();
-			for (AppointmentReminderType ti : listAppointmentReminderTyp) {
-				ti.setLabel(fieldLanguagesValuesDao.get(ti.getFieldvalues_id(), language_id));
-			}
 
 			return listAppointmentReminderTyp;
 		} catch (Exception ex2) {

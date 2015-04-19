@@ -18,7 +18,7 @@
  */
 package org.apache.openmeetings.web.admin;
 
-import org.apache.openmeetings.web.app.WebSession;
+import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.common.ConfirmCallListener;
 import org.apache.openmeetings.web.common.FormSaveRefreshPanel;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -35,7 +35,7 @@ public abstract class AdminSavePanel<T> extends FormSaveRefreshPanel<T> {
 	public AdminSavePanel(String id, final Form<T> form) {
 		super(id, form);
 		
-		newRecord = new Label("newRecord", Model.of(WebSession.getString(344L)));
+		newRecord = new Label("newRecord", Model.of(Application.getString(344L)));
 		add(newRecord.setVisible(false).setOutputMarkupId(true));
 		
 		// add a new button that can be used to submit the form via ajax

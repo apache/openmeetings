@@ -25,7 +25,7 @@ import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.web.admin.AdminPanel;
 import org.apache.openmeetings.web.admin.SearchableDataView;
-import org.apache.openmeetings.web.app.WebSession;
+import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.common.PagedEntityListPanel;
 import org.apache.openmeetings.web.data.DataViewContainer;
 import org.apache.openmeetings.web.data.OmOrderByBorder;
@@ -45,7 +45,7 @@ import com.googlecode.wicket.jquery.ui.widget.dialog.MessageDialog;
 public class UsersPanel extends AdminPanel {
 	private static final long serialVersionUID = 1L;
 	final WebMarkupContainer listContainer = new WebMarkupContainer("listContainer");
-	private final MessageDialog warning = new MessageDialog("warning", WebSession.getString(797), WebSession.getString(343), DialogButtons.OK, DialogIcon.WARN) {
+	private final MessageDialog warning = new MessageDialog("warning", Application.getString(797), Application.getString(343), DialogButtons.OK, DialogIcon.WARN) {
 		private static final long serialVersionUID = 1L;
 
 		public void onClose(AjaxRequestTarget target, DialogButton button) {

@@ -35,7 +35,7 @@ import org.apache.openmeetings.db.dao.calendar.AppointmentCategoryDao;
 import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
 import org.apache.openmeetings.db.dao.calendar.AppointmentReminderTypDao;
 import org.apache.openmeetings.db.dao.calendar.MeetingMemberDao;
-import org.apache.openmeetings.db.dao.label.FieldLanguagesValuesDao;
+import org.apache.openmeetings.db.dao.label.LabelDao;
 import org.apache.openmeetings.db.dao.room.IInvitationManager;
 import org.apache.openmeetings.db.dao.room.InvitationDao;
 import org.apache.openmeetings.db.dao.room.RoomDao;
@@ -66,7 +66,7 @@ public class AppointmentLogic {
 	@Autowired
 	private ConfigurationDao configurationDao;
 	@Autowired
-	private FieldLanguagesValuesDao langDao;
+	private LabelDao langDao;
 	@Autowired
 	private RoomDao roomDao;
 	@Autowired
@@ -187,7 +187,6 @@ public class AppointmentLogic {
 			}
 		}
 	}
-
 
 	private String generateSMSSubject(String labelid1158, Appointment ment) {
 		String subj = configurationDao.getConfValue("sms.subject", String.class, null);

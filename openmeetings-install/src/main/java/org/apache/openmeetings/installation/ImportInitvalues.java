@@ -51,19 +51,13 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
 import java.io.File;
 import java.util.Date;
-import java.util.Hashtable;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Map.Entry;
 
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.basic.ErrorDao;
 import org.apache.openmeetings.db.dao.basic.NavigationDao;
 import org.apache.openmeetings.db.dao.calendar.AppointmentCategoryDao;
 import org.apache.openmeetings.db.dao.calendar.AppointmentReminderTypDao;
-import org.apache.openmeetings.db.dao.label.FieldLanguageDao;
-import org.apache.openmeetings.db.dao.label.FieldValueDao;
 import org.apache.openmeetings.db.dao.room.PollDao;
 import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.dao.room.RoomTypeDao;
@@ -73,9 +67,6 @@ import org.apache.openmeetings.db.dao.user.OrganisationDao;
 import org.apache.openmeetings.db.dao.user.SalutationDao;
 import org.apache.openmeetings.db.dao.user.StateDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
-import org.apache.openmeetings.db.entity.label.FieldLanguage;
-import org.apache.openmeetings.db.entity.label.Fieldlanguagesvalues;
-import org.apache.openmeetings.db.entity.label.Fieldvalues;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.room.RoomOrganisation;
 import org.apache.openmeetings.db.entity.server.OAuthServer;
@@ -100,10 +91,6 @@ public class ImportInitvalues {
 	private ConfigurationDao cfgDao;
 	@Autowired
 	private UserDao userDao;
-	@Autowired
-	private FieldLanguageDao fieldLanguageDaoImpl;
-	@Autowired
-	private FieldValueDao fieldValueDao;
 	@Autowired
 	private StateDao statemanagement;
 	@Autowired
@@ -351,7 +338,7 @@ public class ImportInitvalues {
 
 		cfgDao.add("ffmpeg_path", cfg.ffmpegPath, null, "Path To FFMPEG");
 		cfgDao.add("office.path", cfg.officePath, null,
-						"The path to OpenOffice/LibreOffice (optional) please set this to the real path in case jodconverter is unable to find OpenOffice/LibreOffice installation automatically");
+				"The path to OpenOffice/LibreOffice (optional) please set this to the real path in case jodconverter is unable to find OpenOffice/LibreOffice installation automatically");
 		cfgDao.add("jod.path", cfg.jodPath, null,
 				"The path to JOD library (http://code.google.com/p/jodconverter), configure the path to point to the lib directory of JOD that contains also the jodconverter-core-version.jar");
 
@@ -613,52 +600,13 @@ public class ImportInitvalues {
 	}
 
 	/**
-	 * load all availible languages File names and language name's from the
-	 * config file
-	 * 
-	 * @param filePath
-	 * @return
-	 * @throws Exception
-	 */
-	public static Map<Integer, Map<String, Object>> getLanguageFiles() throws Exception {
-		Map<Integer, Map<String, Object>> languages = new LinkedHashMap<Integer, Map<String, Object>>();
-
-		SAXReader reader = new SAXReader();
-		File langFile = new File(OmFileHelper.getLanguagesDir(), OmFileHelper.nameOfLanguageFile);
-		log.debug("File to load languages from is: " + langFile.getCanonicalPath());
-		
-		Element root = reader.read(langFile).getRootElement();
-
-		for (@SuppressWarnings("unchecked")
-		Iterator<Element> it = root.elementIterator("lang"); it.hasNext();) {
-			Element item = it.next();
-			String country = item.getText();
-			Integer id = Integer.valueOf(item.attribute("id").getValue());
-
-			String rtl = item.attribute("rightToLeft").getValue();
-			String code = item.attribute("code").getValue();
-
-			LinkedHashMap<String, Object> lang = new LinkedHashMap<String, Object>();
-			lang.put("id", id);
-			lang.put("name", country);
-			lang.put("rtl", rtl);
-			lang.put("code", code);
-			// log.error("getLanguageFiles "+country);
-			languages.put(id, lang);
-		}
-		log.debug("Language files are loaded");
-		return languages;
-	}
-
-	/**
 	 * @author o.becherer initial fillment of Appointmentcategories
 	 */
 	// ------------------------------------------------------------------------------
 	public void loadInitAppointmentCategories() {
 		log.debug("ImportInitValues.loadInitAppointmentCategories");
 
-		appointmentCategoryDaoImpl.addAppointmentCategory(new Long(-1),
-				"default", "default");
+		appointmentCategoryDaoImpl.addAppointmentCategory(new Long(-1), "default", "default");
 	}
 
 	// ------------------------------------------------------------------------------
@@ -673,115 +621,6 @@ public class ImportInitvalues {
 		appointmentReminderTypDaoImpl.add(-1L, "do not send notification", 1568);
 		appointmentReminderTypDaoImpl.add(-1L, "simple email", 1569);
 		appointmentReminderTypDaoImpl.add(-1L, "iCal email", 1570);
-	}
-
-	public void loadLanguagesFile(int langId) throws Exception {
-		Map<Integer, Map<String, Object>> listlanguages = getLanguageFiles();
-		loadLanguagesFile(listlanguages, new Hashtable<Long, Fieldvalues>(3000), langId);
-	}
-
-	public void loadLanguagesFile(String langName) throws Exception {
-		Map<Integer, Map<String, Object>> listlanguages = getLanguageFiles();
-		log.debug("Number of languages found: " + listlanguages.size());
-		for (Entry<Integer, Map<String, Object>> me : listlanguages.entrySet()) {
-			Map<String, Object> langMap = me.getValue();
-			if (langName.equals(langMap.get("name"))) {
-				loadLanguagesFile(listlanguages, new Hashtable<Long, Fieldvalues>(3000), me.getKey());
-				break;
-			}
-		}
-	}
-
-	public void loadLanguagesFile(Map<Integer, Map<String, Object>> listlanguages, Map<Long, Fieldvalues> fieldCache, int langId)
-			throws Exception {
-		Map<String, Object> langMap = listlanguages.get(langId);
-		log.debug("loadInitLanguages lang: " + langMap);
-
-		String langName = (String) langMap.get("name");
-		String rtl = (String) langMap.get("rtl");
-		String code = (String) langMap.get("code");
-
-		log.debug("loadInitLanguages rtl from xml: " + rtl);
-
-		boolean langRtl = Boolean.TRUE.toString().equals(rtl);
-
-		long ticks = System.currentTimeMillis();
-		FieldLanguage lang = fieldLanguageDaoImpl.addLanguage(langId, langName, langRtl, code);
-		if (lang == null) {
-			log.error("Failed to create language");
-			throw new Exception("Failed to create language");
-		}
-		SAXReader reader = new SAXReader();
-		Document document = reader.read(new File(
-				OmFileHelper.getLanguagesDir(), langName + ".xml"));
-
-		Element root = document.getRootElement();
-
-		Map<Long, Fieldlanguagesvalues> flvMap = lang.getLanguageValuesMap();
-		for (@SuppressWarnings("rawtypes")
-		Iterator it = root.elementIterator("string"); it.hasNext();) {
-			Element item = (Element) it.next();
-			// log.error(item.getName());
-
-			Long id = Long.valueOf(item.attributeValue("id"));
-			String name = item.attributeValue("name");
-			String value = "";
-
-			for (@SuppressWarnings("rawtypes")
-			Iterator t2 = item.elementIterator("value"); t2.hasNext();) {
-				Element val = (Element) t2.next();
-				value = val.getText();
-			}
-
-			// log.error("result: "+langFieldIdIsInited+" "+id+" "+name+" "+value);
-
-			if (flvMap.containsKey(id)) {
-				Fieldlanguagesvalues flv = flvMap.get(id);
-				flv.setUpdatetime(new Date());
-				flv.setValue(value);
-			} else {
-				Fieldvalues fv = null;
-				// Only do that for the first field-set
-				if (!fieldCache.containsKey(id)) {
-					fv = new Fieldvalues();
-					fv.setId(id);
-					fv.setStarttime(new Date());
-					fv.setName(name);
-					fv.setDeleted(false);
-					fv = fieldValueDao.update(fv, null);
-					fieldCache.put(id, fv);
-				} else {
-					fv = fieldCache.get(id);
-				}
-				Fieldlanguagesvalues flv = new Fieldlanguagesvalues();
-				flv.setStarttime(new Date());
-				flv.setValue(value);
-				flv.setLanguage_id(lang.getId());
-				flv.setFieldvalues(fv);
-				flv.setDeleted(false);
-				flvMap.put(id, flv);
-			}
-		}
-		lang.setLanguageValues(flvMap.values());
-		fieldLanguageDaoImpl.update(lang);
-		log.debug("Lang ADDED: " + lang + "; seconds passed: " + (System.currentTimeMillis() - ticks) / 1000);
-	}
-	
-	public void loadLanguagesFiles() throws Exception {
-		Map<Integer, Map<String, Object>> listlanguages = getLanguageFiles();
-
-		Map<Long, Fieldvalues> fieldCache = new Hashtable<Long, Fieldvalues>(3000);
-		
-		int initProgress = progress;
-		int progressDelta = 76 - progress;
-		double deltaProgressPerLanguageFile = ((double)progressDelta) / listlanguages.size();
-		
-		/** Read all languages files */
-		for (int langId : listlanguages.keySet()) {
-			loadLanguagesFile(listlanguages, fieldCache, langId);
-			progress = (int)(initProgress + Math.round(deltaProgressPerLanguageFile * langId));
-		}
-		log.debug("All languages are imported");
 	}
 
 	public void loadInitialOAuthServers() throws Exception {
@@ -844,7 +683,7 @@ public class ImportInitvalues {
 	// ------------------------------------------------------------------------------
 
 	/**
-	 * Loading initial Language from xml Files into database
+	 * Create poll types
 	 */
 	// ------------------------------------------------------------------------------
 	public void loadPollTypes() {
@@ -860,35 +699,33 @@ public class ImportInitvalues {
 			log.debug("System contains users, no need to install data one more time.");
 		}
 		sipDao.delete();
-		progress = 6;
+		progress = 8;
 		loadMainMenu();
-		progress = 9;
+		progress = 16;
 		loadErrorTypes();
-		progress = 12;
+		progress = 24;
 		loadErrorMappingsFromXML();
-		progress = 15;
+		progress = 32;
 		loadCountriesFiles();
-		progress = 22;
-		loadLanguagesFiles();
-		progress = 76;
+		progress = 40;
 		loadSalutations();
-		progress = 78;
+		progress = 48;
 		// AppointMent Categories
 		loadInitAppointmentCategories();
-		progress = 80;
+		progress = 56;
 		// Appointment Reminder types
 		loadInitAppointmentReminderTypes();
-		progress = 82;
+		progress = 64;
 		// Appointment poll types
 		loadPollTypes();
-		progress = 84;
+		progress = 72;
 		loadRoomTypes();
-		progress = 86;
+		progress = 80;
 
 		loadConfiguration(cfg);
 		progress = 88;
 		loadInitialOAuthServers();
-		progress = 91;
+		progress = 96;
 	}
 
 	public void loadAll(InstallationConfig cfg, boolean force) throws Exception {

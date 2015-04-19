@@ -28,12 +28,10 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
-import org.apache.openmeetings.db.dao.label.FieldLanguagesValuesDao;
 import org.apache.openmeetings.db.entity.basic.Naviglobal;
 import org.apache.openmeetings.db.entity.basic.Navimain;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
@@ -42,9 +40,6 @@ public class NavigationDao {
 
 	@PersistenceContext
 	private EntityManager em;
-
-	@Autowired
-	private FieldLanguagesValuesDao labelDao;
 
 	public Naviglobal getGlobalMenuEntry(long globalId) {
 		try {
@@ -58,24 +53,10 @@ public class NavigationDao {
 
 	}
 
-	public List<Naviglobal> getMainMenu(boolean admin, long USER_ID, long language_id) {
-		List<Naviglobal> ll = getMainMenu(admin, USER_ID);
-		for (Naviglobal navigl : ll) {
-			navigl.setLabel(labelDao.get(navigl.getFieldvalues_id(), language_id));
-			navigl.setTooltip(labelDao.get(navigl.getTooltip_fieldvalues_id(), language_id));
-			for (Navimain navim : navigl.getMainnavi()) {
-				navim.setLabel(labelDao.get(navim.getFieldvalues_id(), language_id));
-				navim.setTooltip(labelDao.get(navim.getTooltip_fieldvalues_id(), language_id));
-			}
-		}
-		return ll;
-	}
-
 	public List<Naviglobal> getMainMenu(boolean admin, long USER_ID) {
-		TypedQuery<Naviglobal> query = em.createNamedQuery("getNavigation", Naviglobal.class);
-		query.setParameter("level_id", admin ? 3L : 1L);
-		List<Naviglobal> navi = query.getResultList();
-		return navi;
+		return em.createNamedQuery("getNavigation", Naviglobal.class)
+				.setParameter("level_id", admin ? 3L : 1L)
+				.getResultList();
 	}
 
 	public void addGlobalStructure(String action, int naviorder, long fieldvalues_id, boolean isleaf, boolean isopen, long level_id,

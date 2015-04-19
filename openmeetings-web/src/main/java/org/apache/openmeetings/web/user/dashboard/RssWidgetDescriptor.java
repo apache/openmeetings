@@ -18,7 +18,7 @@
  */
 package org.apache.openmeetings.web.user.dashboard;
 
-import org.apache.openmeetings.web.app.WebSession;
+import org.apache.openmeetings.web.app.Application;
 
 import ro.fortsoft.wicket.dashboard.WidgetDescriptor;
 
@@ -26,7 +26,7 @@ public class RssWidgetDescriptor implements WidgetDescriptor {
 	private static final long serialVersionUID = 1L;
 
 	public String getName() {
-		return WebSession.getString(277L);
+		return Application.getString(277L);
 	}
 
 	public String getProvider() {
@@ -34,7 +34,7 @@ public class RssWidgetDescriptor implements WidgetDescriptor {
 	}
 
 	public String getDescription() {
-		return WebSession.getString(277L);
+		return Application.getString(277L);
 	}
 
 	public String getWidgetClassName() {

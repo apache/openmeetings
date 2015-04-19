@@ -20,8 +20,6 @@ package org.apache.openmeetings.web.common.menu;
 
 import java.util.List;
 
-import org.apache.openmeetings.db.entity.label.FieldLanguage;
-import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.BasePanel;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
@@ -108,8 +106,7 @@ public class MenuPanel extends BasePanel {
 	@Override
 	public void renderHead(IHeaderResponse response) {
 		super.renderHead(response);
-		FieldLanguage lang = WebSession.getLanguageObj();
-		if (lang.isRtl()) {
+		if (isRtl()) {
 			response.render(CssHeaderItem.forUrl("css/jquery.ui.menubar-rtl.css"));
 		}
 	}

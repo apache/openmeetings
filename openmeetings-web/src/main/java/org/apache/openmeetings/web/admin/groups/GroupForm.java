@@ -28,7 +28,7 @@ import org.apache.openmeetings.db.entity.user.OrganisationUser;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.web.admin.AdminBaseForm;
 import org.apache.openmeetings.web.admin.AdminUserChoiceProvider;
-import org.apache.openmeetings.web.app.WebSession;
+import org.apache.openmeetings.web.app.Application;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.ajax.form.AjaxFormValidatingBehavior;
@@ -55,7 +55,7 @@ public class GroupForm extends AdminBaseForm<Organisation> {
 		this.groupList = groupList;
 		setOutputMarkupId(true);
 		
-		add(new RequiredTextField<String>("name").setLabel(Model.of(WebSession.getString(165))));
+		add(new RequiredTextField<String>("name").setLabel(Model.of(Application.getString(165))));
 		usersPanel = new GroupUsersPanel("users", getOrgId());
 		add(usersPanel);
 

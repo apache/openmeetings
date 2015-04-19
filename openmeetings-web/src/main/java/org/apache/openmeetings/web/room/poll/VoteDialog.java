@@ -29,7 +29,7 @@ import org.apache.openmeetings.db.dao.room.PollDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.room.RoomPollAnswer;
 import org.apache.openmeetings.db.entity.user.User;
-import org.apache.openmeetings.web.app.WebSession;
+import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.room.RoomPanel;
 import org.apache.openmeetings.web.room.message.RoomMessage;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -57,19 +57,19 @@ public class VoteDialog extends AbstractFormDialog<RoomPollAnswer> {
 	private final static List<Integer> answers = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);  //TODO max vote should be added 
 	private final long roomId;
 	private final PollAnswerForm form;
-	private final DialogButton vote = new DialogButton(WebSession.getString(32));
-	private final DialogButton cancel = new DialogButton(WebSession.getString(25));
+	private final DialogButton vote = new DialogButton(Application.getString(32));
+	private final DialogButton cancel = new DialogButton(Application.getString(25));
 	private final KendoFeedbackPanel feedback = new KendoFeedbackPanel("feedback", new Options("button", true));
 	private final IModel<String> user = Model.of((String)null);
 
 	public VoteDialog(String id, long roomId) {
-		super(id, WebSession.getString(18));
+		super(id, Application.getString(18));
 		this.roomId = roomId;
 		add(form = new PollAnswerForm("form", new CompoundPropertyModel<RoomPollAnswer>(new RoomPollAnswer())));
 	}
 	
 	static String getName(User u) {
-		return u == null ? "" : getUserId() == u.getId() ? WebSession.getString(1411) : u.getFirstname() + " " + u.getLastname();
+		return u == null ? "" : getUserId() == u.getId() ? Application.getString(1411) : u.getFirstname() + " " + u.getLastname();
 	}
 	
 	public void updateModel(AjaxRequestTarget target) {

@@ -32,7 +32,7 @@ import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.util.CalendarPatterns;
 import org.apache.openmeetings.util.OmFileHelper;
 import org.apache.openmeetings.web.admin.AdminPanel;
-import org.apache.openmeetings.web.app.WebSession;
+import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.util.AjaxDownload;
 import org.apache.openmeetings.web.util.BootstrapFileUploadBehavior;
 import org.apache.wicket.ajax.AbstractAjaxTimerBehavior;
@@ -198,7 +198,7 @@ public class BackupPanel extends AdminPanel {
 					target.add(feedback);
 				}
 			}));
-			add(new Label("cmdLineDesc", WebSession.getString(1505)).setEscapeModelStrings(false));
+			add(new Label("cmdLineDesc", Application.getString(1505)).setEscapeModelStrings(false));
 		}
 
 		@Override

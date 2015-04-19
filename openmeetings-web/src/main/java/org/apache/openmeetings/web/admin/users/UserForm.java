@@ -42,7 +42,7 @@ import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Right;
 import org.apache.openmeetings.db.entity.user.User.Type;
 import org.apache.openmeetings.web.admin.AdminBaseForm;
-import org.apache.openmeetings.web.app.WebSession;
+import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.common.ComunityUserForm;
 import org.apache.openmeetings.web.common.GeneralUserForm;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -60,11 +60,11 @@ import org.apache.wicket.markup.html.panel.PanelMarkupSourcingStrategy;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.util.time.Duration;
-
-import com.googlecode.wicket.jquery.ui.widget.dialog.MessageDialog;
 import org.wicketstuff.select2.Response;
 import org.wicketstuff.select2.Select2MultiChoice;
 import org.wicketstuff.select2.TextChoiceProvider;
+
+import com.googlecode.wicket.jquery.ui.widget.dialog.MessageDialog;
 
 /**
  * CRUD operations in form for {@link User}
@@ -150,7 +150,7 @@ public class UserForm extends AdminBaseForm<User> {
 	 */
 	private void addFormFields() {
 		ConfigurationDao cfgDao = getBean(ConfigurationDao.class);
-		login.setLabel(Model.of(WebSession.getString(132)));
+		login.setLabel(Model.of(Application.getString(132)));
 		add(login.add(minimumLength(getMinLoginLength(cfgDao))));
 
 		add(generalForm = new GeneralUserForm("general", getModel(), true));
@@ -251,7 +251,7 @@ public class UserForm extends AdminBaseForm<User> {
 	protected void onValidate() {
 		User u = getModelObject();
 		if(!getBean(UserDao.class).checkLogin(login.getConvertedInput(), u.getType(), u.getDomainId(), u.getId())) {
-			error(WebSession.getString(105));
+			error(Application.getString(105));
 		}
 	}
 

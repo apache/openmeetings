@@ -29,7 +29,6 @@ import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.web.app.Application;
-import org.apache.openmeetings.web.app.WebSession;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.markup.head.CssContentHeaderItem;
@@ -50,7 +49,7 @@ import com.googlecode.wicket.jquery.ui.widget.dialog.MessageDialog;
 
 public class ResetPasswordDialog extends AbstractFormDialog<String> {
 	private static final long serialVersionUID = 1L;
-	private String resetLbl = WebSession.getString(327);
+	private String resetLbl = Application.getString(327);
 	private DialogButton resetBtn = new DialogButton(resetLbl);
 	private Form<String> form;
 	private FeedbackPanel feedback = new FeedbackPanel("feedback");
@@ -59,7 +58,7 @@ public class ResetPasswordDialog extends AbstractFormDialog<String> {
     final MessageDialog confirmReset;
 
 	public ResetPasswordDialog(String id, final User user) {
-		super(id, WebSession.getString(325));
+		super(id, Application.getString(325));
 		this.user = user;
 		add(form = new Form<String>("form"){
 			private static final long serialVersionUID = 1L;
@@ -71,12 +70,12 @@ public class ResetPasswordDialog extends AbstractFormDialog<String> {
 				login.setOutputMarkupId(true);
 				add(password = new PasswordTextField("password", new Model<String>()));
 				password.setOutputMarkupId(true);
-				password.setLabel(Model.of(WebSession.getString(328)));
+				password.setLabel(Model.of(Application.getString(328)));
 				ConfigurationDao cfgDao = getBean(ConfigurationDao.class);
 				password.setRequired(false).add(minimumLength(getMinPasswdLength(cfgDao)));
 				add(confirmPassword = new PasswordTextField("confirmPassword", new Model<String>()));
 				confirmPassword.setOutputMarkupId(true);
-				confirmPassword.setLabel(Model.of(WebSession.getString(329)));
+				confirmPassword.setLabel(Model.of(Application.getString(329)));
 				confirmPassword.setRequired(true).add(minimumLength(getMinPasswdLength(cfgDao)));
 
 				add(new AjaxButton("submit") { //FAKE button so "submit-on-enter" works as expected
@@ -98,13 +97,13 @@ public class ResetPasswordDialog extends AbstractFormDialog<String> {
 			protected void onValidate() {
 				String pass = password.getConvertedInput();
 				if (pass != null && !pass.isEmpty() && !pass.equals(confirmPassword.getConvertedInput())) {
-					error(WebSession.getString(232));
+					error(Application.getString(232));
 				}
 				super.onValidate();
 			}
 			
 		});
-		confirmReset = new MessageDialog("confirmReset", WebSession.getString(325), WebSession.getString(332), DialogButtons.OK, DialogIcon.INFO){
+		confirmReset = new MessageDialog("confirmReset", Application.getString(325), Application.getString(332), DialogButtons.OK, DialogIcon.INFO){
 			private static final long serialVersionUID = 1L;
 
 			@Override

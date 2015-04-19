@@ -28,10 +28,8 @@ import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 
 import org.apache.openmeetings.db.entity.IDataProviderEntity;
-import org.apache.openmeetings.db.entity.label.Fieldlanguagesvalues;
 import org.simpleframework.xml.Element;
 
 @Entity
@@ -63,10 +61,6 @@ public class RoomType implements IDataProviderEntity {
 	@Element(data=true, required=false)
 	private Long fieldvalues_id;
 	
-	@Transient
-	private Fieldlanguagesvalues label;	
-
-    
 	public String getName() {
 		return name;
 	}
@@ -108,13 +102,4 @@ public class RoomType implements IDataProviderEntity {
 	public void setFieldvalues_id(Long fieldvalues_id) {
 		this.fieldvalues_id = fieldvalues_id;
 	}
-
-	public Fieldlanguagesvalues getLabel() {
-		return label;
-	}
-
-	public void setLabel(Fieldlanguagesvalues label) {
-		this.label = label;
-	}	
-
 }

@@ -29,17 +29,16 @@ import java.util.Collection;
 import java.util.List;
 
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
-import org.apache.openmeetings.db.dao.label.FieldLanguageDao;
 import org.apache.openmeetings.db.dao.user.OrganisationDao;
 import org.apache.openmeetings.db.dao.user.SalutationDao;
 import org.apache.openmeetings.db.dao.user.StateDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
-import org.apache.openmeetings.db.entity.label.FieldLanguage;
 import org.apache.openmeetings.db.entity.user.Organisation;
 import org.apache.openmeetings.db.entity.user.OrganisationUser;
 import org.apache.openmeetings.db.entity.user.Salutation;
 import org.apache.openmeetings.db.entity.user.State;
 import org.apache.openmeetings.db.entity.user.User;
+import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.util.CalendarHelper;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -71,7 +70,6 @@ import com.googlecode.wicket.kendo.ui.resource.KendoGlobalizeResourceReference;
 public class GeneralUserForm extends Form<User> {
 	private static final long serialVersionUID = 1L;
 	private Salutation salutation;
-	private FieldLanguage lang;
 	private PasswordTextField passwordField;
 	private RequiredTextField<String> email;
 
@@ -85,11 +83,22 @@ public class GeneralUserForm extends Form<User> {
 
 		updateModelObject(getModelObject());
 		SalutationDao salutDao = getBean(SalutationDao.class);
-		FieldLanguageDao langDao = getBean(FieldLanguageDao.class);
 		add(new DropDownChoice<Salutation>("salutation"
 				, new PropertyModel<Salutation>(this, "salutation")
 				, salutDao.getUserSalutations(getLanguage())
-				, new ChoiceRenderer<Salutation>("label.value", "salutations_id"))
+				, new ChoiceRenderer<Salutation>() {
+					private static final long serialVersionUID = 1L;
+
+					@Override
+					public Object getDisplayValue(Salutation object) {
+						return getString("" + object.getFieldvalues_id());
+					}
+
+					@Override
+					public String getIdValue(Salutation object, int index) {
+						return "" + object.getSalutations_id();
+					}
+				})
 			.add(new AjaxFormComponentUpdatingBehavior("onchange") {
 				private static final long serialVersionUID = 1L;
 
@@ -103,21 +112,10 @@ public class GeneralUserForm extends Form<User> {
 		
 		add(new DropDownChoice<String>("timeZoneId", AVAILABLE_TIMEZONES));
 
-		add(new DropDownChoice<FieldLanguage>("language"
-				, new PropertyModel<FieldLanguage>(this, "lang")
-				, langDao.get()
-				, new ChoiceRenderer<FieldLanguage>("name", "id"))
-			.add(new AjaxFormComponentUpdatingBehavior("onchange") {
-				private static final long serialVersionUID = 1L;
-
-				@Override
-				protected void onUpdate(AjaxRequestTarget target) {
-					GeneralUserForm.this.getModelObject().setLanguageId(lang.getId());
-				}
-			}));
+		add(new LanguageDropDown("language_id"));
 
 		add(email = new RequiredTextField<String>("adresses.email"));
-		email.setLabel(Model.of(WebSession.getString(137)));
+		email.setLabel(Model.of(Application.getString(137)));
 		email.add(RfcCompliantEmailAddressValidator.getInstance());
 		add(new TextField<String>("adresses.phone"));
 		add(new CheckBox("sendSMS"));
@@ -185,14 +183,13 @@ public class GeneralUserForm extends Form<User> {
 
 	public void updateModelObject(User u) {
 		salutation = getBean(SalutationDao.class).get(u.getSalutations_id(), getLanguage());
-		lang = getBean(FieldLanguageDao.class).get(u.getLanguageId());
 	}
 	
 	@Override
 	protected void onValidate() {
 		User u = getModelObject();
 		if(!getBean(UserDao.class).checkEmail(email.getConvertedInput(), u.getType(), u.getDomainId(), u.getId())) {
-			error(WebSession.getString(1000));
+			error(Application.getString(1000));
 		}
 		super.onValidate();
 	}

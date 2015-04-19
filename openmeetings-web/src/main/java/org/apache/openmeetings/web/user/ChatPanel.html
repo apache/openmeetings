@@ -21,10 +21,10 @@
 <html xmlns:wicket="http://wicket.apache.org">
 <wicket:panel>
 	<div id="chat" class="ui-widget-header">
-		<div onclick="toggleChat();" class=" control block clickable ui-widget-header ui-state-active"><div class="ui-icon ui-icon-carat-1-n sort-icon"></div><div class="label"><wicket:ommessage key="244"/></div></div>
+		<div onclick="toggleChat();" class=" control block clickable ui-widget-header ui-state-active"><div class="ui-icon ui-icon-carat-1-n sort-icon"></div><div class="label"><wicket:message key="244"/></div></div>
 		<div id="chatTabs">
 			<ul>
-				<li><a href="#chatTab-all"><wicket:ommessage key="1494"/></a></li>
+				<li><a href="#chatTab-all"><wicket:message key="1494"/></a></li>
 			</ul>
 			<div id="chatTab-all" class="messageArea"></div>
 		</div>
@@ -34,7 +34,7 @@
 				<tr>
 					<td><div id="chatMessage" wicket:id="chatMessage"></div></td>
 					<td style="width: 50px">
-						<div wicket:id="send"><wicket:ommessage key="220"/></div>
+						<div wicket:id="send"><wicket:message key="220"/></div>
 						<input type="hidden" wicket:id="activeTab" id="activeChatTab"/>
 					</td>
 				</tr>

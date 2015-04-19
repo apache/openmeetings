@@ -18,7 +18,7 @@
  */
 package org.apache.openmeetings.web.common;
 
-import org.apache.openmeetings.web.app.WebSession;
+import org.apache.openmeetings.web.app.Application;
 import org.apache.wicket.ajax.attributes.AjaxCallListener;
 import org.apache.wicket.core.util.string.JavaScriptUtils;
 
@@ -31,7 +31,7 @@ public class ConfirmCallListener extends AjaxCallListener {
 	
 	//TODO confirm need to be replaced with jQuery modal dialog
 	public ConfirmCallListener(long id, String js) {
-		onPrecondition("if (!confirm('" + JavaScriptUtils.escapeQuotes(WebSession.getString(id)) + "')) {" 
+		onPrecondition("if (!confirm('" + JavaScriptUtils.escapeQuotes(Application.getString(id)) + "')) {" 
 				+ js + "; hideBusyIndicator(); return false;}");
 	}
 }

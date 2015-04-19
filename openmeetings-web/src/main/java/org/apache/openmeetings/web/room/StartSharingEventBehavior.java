@@ -36,7 +36,7 @@ import java.net.URL;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
-import org.apache.openmeetings.db.dao.label.FieldLanguagesValuesDao;
+import org.apache.openmeetings.db.dao.label.LabelDao;
 import org.apache.openmeetings.web.util.AjaxDownload;
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -121,7 +121,7 @@ public class StartSharingEventBehavior extends AbstractDefaultAjaxBehavior {
 	private String getLabels(int ... ids) {
 		StringBuilder result = new StringBuilder();
 		boolean delim = false;
-		FieldLanguagesValuesDao labelDao = getBean(FieldLanguagesValuesDao.class);
+		LabelDao labelDao = getBean(LabelDao.class);
 		for (int id : ids) {
 			if (delim) {
 				result.append(';');

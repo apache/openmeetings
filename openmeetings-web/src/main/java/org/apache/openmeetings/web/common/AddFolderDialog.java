@@ -21,7 +21,7 @@ package org.apache.openmeetings.web.common;
 import java.util.Arrays;
 import java.util.List;
 
-import org.apache.openmeetings.web.app.WebSession;
+import org.apache.openmeetings.web.app.Application;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.markup.html.form.Form;
@@ -34,8 +34,8 @@ import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
 
 public abstract class AddFolderDialog extends AbstractFormDialog<String> {
 	private static final long serialVersionUID = 1L;
-	private final DialogButton add = new DialogButton(WebSession.getString(1261));
-	private final DialogButton cancel = new DialogButton(WebSession.getString(219));
+	private final DialogButton add = new DialogButton(Application.getString(1261));
+	private final DialogButton cancel = new DialogButton(Application.getString(219));
 	private final Form<String> form;
 	private final FeedbackPanel feedback = new FeedbackPanel("feedback");
 	private final String name;
@@ -46,13 +46,13 @@ public abstract class AddFolderDialog extends AbstractFormDialog<String> {
 	}
 	
 	public AddFolderDialog(String id, String name) {
-		super(id, WebSession.getString(1260), Model.of(name));
+		super(id, Application.getString(1260), Model.of(name));
 		this.name = name;
 		form = new Form<String>("form", getModel()) {
 			private static final long serialVersionUID = 1L;
 			{
 				add(title = new RequiredTextField<String>("title", getModel()));
-				title.setLabel(Model.of(WebSession.getString(572)));
+				title.setLabel(Model.of(Application.getString(572)));
 				add(feedback.setOutputMarkupId(true));
 				add(new AjaxButton("submit") { //FAKE button so "submit-on-enter" works as expected
 					private static final long serialVersionUID = 1L;

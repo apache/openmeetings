@@ -21,6 +21,7 @@ package org.apache.openmeetings.web.pages;
 import static org.apache.openmeetings.web.app.Application.getBean;
 
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
+import org.apache.openmeetings.db.util.FormatHelper;
 import org.apache.openmeetings.web.app.WebSession;
 
 public abstract class BaseInitedPage extends BasePage {
@@ -33,11 +34,11 @@ public abstract class BaseInitedPage extends BasePage {
 	
 	@Override
 	protected String getLanguageCode() {
-		return WebSession.getLanguageObj().getCode();
+		return WebSession.get().getLocale().toLanguageTag();
 	}
 	
 	@Override
-	protected boolean isRtl() {
-		return WebSession.getLanguageObj().isRtl();
+	public boolean isRtl() {
+		return FormatHelper.isRtlLanguage(getLanguageCode());
 	}
 }

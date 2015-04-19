@@ -32,11 +32,9 @@ import java.util.Collection;
 import java.util.List;
 
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
-import org.apache.openmeetings.db.dao.label.FieldLanguageDao;
 import org.apache.openmeetings.db.dao.room.InvitationDao;
 import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
-import org.apache.openmeetings.db.entity.label.FieldLanguage;
 import org.apache.openmeetings.db.entity.room.Invitation;
 import org.apache.openmeetings.db.entity.room.Invitation.MessageType;
 import org.apache.openmeetings.db.entity.room.Invitation.Valid;
@@ -45,13 +43,13 @@ import org.apache.openmeetings.db.entity.user.User.Type;
 import org.apache.openmeetings.service.room.InvitationManager;
 import org.apache.openmeetings.util.crypt.MD5;
 import org.apache.openmeetings.util.crypt.ManageCryptStyle;
-import org.apache.openmeetings.web.app.WebSession;
+import org.apache.openmeetings.web.app.Application;
+import org.apache.openmeetings.web.common.LanguageDropDown;
 import org.apache.openmeetings.web.util.UserMultiChoice;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.ajax.markup.html.form.AjaxCheckBox;
-import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.PasswordTextField;
@@ -62,6 +60,7 @@ import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.util.CollectionModel;
 import org.apache.wicket.util.string.Strings;
 import org.red5.logging.Red5LoggerFactory;
@@ -77,21 +76,21 @@ import com.googlecode.wicket.kendo.ui.panel.KendoFeedbackPanel;
 public class InvitationDialog extends AbstractFormDialog<Invitation> {
 	private static final long serialVersionUID = 1L;
 	private static final Logger log = Red5LoggerFactory.getLogger(InvitationDialog.class, webAppRootKey);
-	private final DialogButton generate = new DialogButton(WebSession.getString(1526));
-	private final DialogButton send = new DialogButton(WebSession.getString(218));
-	private final DialogButton cancel = new DialogButton(WebSession.getString(219));
+	private final DialogButton generate = new DialogButton(Application.getString(1526));
+	private final DialogButton send = new DialogButton(Application.getString(218));
+	private final DialogButton cancel = new DialogButton(Application.getString(219));
 	private final InvitationForm form;
 	private final KendoFeedbackPanel feedback = new KendoFeedbackPanel("feedback", new Options("button", true));
 	private final long roomId;
 	private final IModel<String> subject = Model.of((String)null);
 	private final IModel<String> message = Model.of((String)null);
 	private final IModel<String> tzId = Model.of((String)null);
-	private final IModel<FieldLanguage> lang = Model.of((FieldLanguage)null);
+	private Long lang;
 	private final IModel<Collection<User>> modelTo = new CollectionModel<User>(new ArrayList<User>());
 	private final TextField<String> url = new TextField<String>("url", Model.of((String)null));
 
 	public InvitationDialog(String id, long roomId) {
-		super(id, WebSession.getString(214), new CompoundPropertyModel<Invitation>(new Invitation()));
+		super(id, Application.getString(214), new CompoundPropertyModel<Invitation>(new Invitation()));
 		this.roomId = roomId;
 		add(form = new InvitationForm("form", getModel()));
 	}
@@ -122,7 +121,7 @@ public class InvitationDialog extends AbstractFormDialog<Invitation> {
 		message.setObject(null);
 		modelTo.setObject(new ArrayList<User>());
 		tzId.setObject(u.getTimeZoneId());
-		lang.setObject(getBean(FieldLanguageDao.class).get(u.getLanguageId()));
+		lang = u.getLanguageId();
 		url.setModelObject(null);
 		form.setModelObject(i);
 		send.setEnabled(false, target);
@@ -204,7 +203,7 @@ public class InvitationDialog extends AbstractFormDialog<Invitation> {
 		i.setInvitee(u);
 		if (Type.contact == u.getType()) {
 			//TODO not sure it is right
-			u.setLanguageId(lang.getObject().getId());
+			u.setLanguageId(lang);
 		}
 		return getBean(InvitationDao.class).update(i);
 	}
@@ -223,7 +222,7 @@ public class InvitationDialog extends AbstractFormDialog<Invitation> {
 		
 		public InvitationForm(String id, IModel<Invitation> model) {
 			super(id, model);
-			add(new UserMultiChoice("recipients", modelTo).setLabel(Model.of(WebSession.getString(216))).setRequired(true)
+			add(new UserMultiChoice("recipients", modelTo).setLabel(Model.of(Application.getString(216))).setRequired(true)
 					.add(new AjaxFormComponentUpdatingBehavior("change") {
 						private static final long serialVersionUID = 1L;
 		
@@ -274,7 +273,7 @@ public class InvitationDialog extends AbstractFormDialog<Invitation> {
 					));
 			add(passwd = new PasswordTextField("password"));
 			Invitation i = getModelObject();
-			passwd.setLabel(Model.of(WebSession.getString(525))).setOutputMarkupId(true).setEnabled(i.isPasswordProtected());
+			passwd.setLabel(Model.of(Application.getString(525))).setOutputMarkupId(true).setEnabled(i.isPasswordProtected());
 			add(from = new AjaxDateTimePicker("validFrom", "yyyy/MM/dd", "HH:mm:ss")); //FIXME use user locale
 			add(to = new AjaxDateTimePicker("validTo", "yyyy/MM/dd", "HH:mm:ss")); //FIXME use user locale
 			add(timeZoneId = new DropDownChoice<String>("timeZoneId", tzId, AVAILABLE_TIMEZONES));
@@ -289,7 +288,7 @@ public class InvitationDialog extends AbstractFormDialog<Invitation> {
 						//no-op added to preserve selection
 					}
 				});
-			add(new DropDownChoice<FieldLanguage>("language", lang, getBean(FieldLanguageDao.class).get(), new ChoiceRenderer<FieldLanguage>("name", "id")));
+			add(new LanguageDropDown("lang", new PropertyModel<Long>(InvitationDialog.this, "lang")));
 			add(url.setOutputMarkupId(true));
 			add(feedback);
 		}
@@ -297,7 +296,7 @@ public class InvitationDialog extends AbstractFormDialog<Invitation> {
 		@Override
 		protected void onValidate() {
 			if (from.getConvertedInput() != null && to.getConvertedInput() != null && from.getConvertedInput().after(to.getConvertedInput())) {
-				error(WebSession.getString(1592));
+				error(Application.getString(1592));
 			}
 		}
 	}
@@ -307,7 +306,6 @@ public class InvitationDialog extends AbstractFormDialog<Invitation> {
 		subject.detach();
 		message.detach();
 		tzId.detach();
-		lang.detach();
 		modelTo.detach();
 		super.onDetach();
 	}

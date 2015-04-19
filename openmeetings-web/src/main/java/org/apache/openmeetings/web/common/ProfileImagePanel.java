@@ -29,7 +29,7 @@ import java.net.URI;
 
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.util.OmFileHelper;
-import org.apache.openmeetings.web.app.WebSession;
+import org.apache.openmeetings.web.app.Application;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.TransparentWebMarkupContainer;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -56,7 +56,7 @@ public class ProfileImagePanel extends BasePanel {
 			//no-op
 		}
 		if (absolute) {
-			profile.add(new Image("img", WebSession.getString(5L)).add(AttributeModifier.replace("src", uri)));
+			profile.add(new Image("img", Application.getString(5L)).add(AttributeModifier.replace("src", uri)));
 		} else {
 			profile.add(new Image("img", new ByteArrayResource("image/jpeg") {
 				private static final long serialVersionUID = 1L;

@@ -26,10 +26,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 
 import org.apache.openmeetings.db.entity.IDataProviderEntity;
-import org.apache.openmeetings.db.entity.label.Fieldlanguagesvalues;
 
 @Entity
 @Table(name = "navimain")
@@ -40,7 +38,7 @@ public class Navimain implements IDataProviderEntity {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
 	private Long id;
-	
+
 	@Column(name = "global_id")
 	private Long global_id;
 
@@ -82,12 +80,6 @@ public class Navimain implements IDataProviderEntity {
 
 	@Column(name = "deleted")
 	private boolean deleted;
-
-	@Transient
-	private Fieldlanguagesvalues label;
-
-	@Transient
-	private Fieldlanguagesvalues tooltip;
 
 	@Column(name = "tooltip_fieldvalues_id")
 	private Long tooltip_fieldvalues_id;
@@ -204,28 +196,12 @@ public class Navimain implements IDataProviderEntity {
 		this.fieldvalues_id = fieldvalues_id;
 	}
 
-	public Fieldlanguagesvalues getLabel() {
-		return label;
-	}
-
-	public void setLabel(Fieldlanguagesvalues label) {
-		this.label = label;
-	}
-
 	public Long getTooltip_fieldvalues_id() {
 		return tooltip_fieldvalues_id;
 	}
 
 	public void setTooltip_fieldvalues_id(Long tooltip_fieldvalues_id) {
 		this.tooltip_fieldvalues_id = tooltip_fieldvalues_id;
-	}
-
-	public Fieldlanguagesvalues getTooltip() {
-		return tooltip;
-	}
-
-	public void setTooltip(Fieldlanguagesvalues tooltip) {
-		this.tooltip = tooltip;
 	}
 
 	public String getParams() {

@@ -56,7 +56,7 @@ public class LabelResourceLoader implements IStringResourceLoader {
 		Long labelId = STRING_LABEL_MAPPING.get(key);
 		if (labelId == null) 
 			return null;
-		return WebSession.getString(labelId);
+		return Application.getString(labelId);
 	}
 
 }

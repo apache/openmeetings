@@ -26,7 +26,7 @@ import java.util.Iterator;
 import org.apache.openmeetings.db.dao.record.FlvRecordingDao;
 import org.apache.openmeetings.db.entity.file.FileItem.Type;
 import org.apache.openmeetings.db.entity.record.FlvRecording;
-import org.apache.openmeetings.web.app.WebSession;
+import org.apache.openmeetings.web.app.Application;
 
 public class PublicRecordingTreeProvider extends RecordingTreeProvider {
 	private static final long serialVersionUID = 1L;
@@ -44,7 +44,7 @@ public class PublicRecordingTreeProvider extends RecordingTreeProvider {
 		r.setOrganization_id(orgId);
 		r.setOwnerId(null);
 		r.setType(Type.Folder);
-		String pub = WebSession.getString(861);
+		String pub = Application.getString(861);
 		r.setFileName(orgId == null ? pub : String.format("%s (%s)", pub, name));
 		return Arrays.asList(r).iterator();
 	}

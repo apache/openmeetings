@@ -26,7 +26,10 @@ import static org.red5.logging.Red5LoggerFactory.getLogger;
 import static org.springframework.web.context.WebApplicationContext.ROOT_WEB_APPLICATION_CONTEXT_ATTRIBUTE;
 import static org.springframework.web.context.support.WebApplicationContextUtils.getWebApplicationContext;
 
+import java.text.MessageFormat;
+import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -35,9 +38,9 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import javax.servlet.ServletContext;
 
-import org.apache.openmeetings.core.IApplication;
+import org.apache.openmeetings.IApplication;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
-import org.apache.openmeetings.db.dao.label.FieldLanguagesValuesDao;
+import org.apache.openmeetings.db.dao.label.LabelDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.room.Invitation;
 import org.apache.openmeetings.db.entity.user.User.Type;
@@ -60,16 +63,16 @@ import org.apache.openmeetings.web.util.JpgRecordingResourceReference;
 import org.apache.openmeetings.web.util.Mp4RecordingResourceReference;
 import org.apache.openmeetings.web.util.OggRecordingResourceReference;
 import org.apache.openmeetings.web.util.UserDashboardPersister;
+import org.apache.wicket.Localizer;
 import org.apache.wicket.Page;
 import org.apache.wicket.RestartResponseException;
+import org.apache.wicket.RuntimeConfigurationType;
+import org.apache.wicket.ThreadContext;
 import org.apache.wicket.authroles.authentication.AbstractAuthenticatedWebSession;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebApplication;
 import org.apache.wicket.core.request.handler.BookmarkableListenerInterfaceRequestHandler;
 import org.apache.wicket.core.request.handler.ListenerInterfaceRequestHandler;
 import org.apache.wicket.core.request.mapper.MountedMapper;
-import org.apache.wicket.markup.MarkupFactory;
-import org.apache.wicket.markup.MarkupParser;
-import org.apache.wicket.markup.MarkupResourceStream;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.request.IRequestHandler;
@@ -79,7 +82,6 @@ import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.mapper.info.PageComponentInfo;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.mapper.parameter.PageParametersEncoder;
-import org.apache.wicket.settings.PageSettings;
 import org.apache.wicket.util.collections.ConcurrentHashSet;
 import org.apache.wicket.util.tester.WicketTester;
 import org.slf4j.Logger;
@@ -99,22 +101,17 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 	private static Map<Long, Set<Client>> ROOMS = new ConcurrentHashMap<Long, Set<Client>>();
 	//additional maps for faster searching should be created
 	private DashboardContext dashboardContext;
+	private static Set<Long> STRINGS_WITH_APP = new HashSet<Long>(); //FIXME need to be removed
+	private static String appName;
+	static {
+		STRINGS_WITH_APP.addAll(Arrays.asList(499L, 500L, 506L, 511L, 512L, 513L, 517L, 532L, 622L, 804L
+				, 909L, 952L, 978L, 981L, 984L, 989L, 990L, 999L, 1151L, 1155L, 1157L, 1158L, 1194L));
+	}
 	
 	@Override
 	protected void init() {
 		wicketApplicationName = super.getName();
 		getSecuritySettings().setAuthenticationStrategy(new OmAuthenticationStrategy());
-		PageSettings pageSettings = getPageSettings();
-		pageSettings.addComponentResolver(new MessageResolver());
-		pageSettings.addComponentResolver(new MessageTagHandler());
-		getMarkupSettings().setMarkupFactory(new MarkupFactory(){
-			@Override
-			public MarkupParser newMarkupParser(MarkupResourceStream resource) {
-				MarkupParser mp = super.newMarkupParser(resource);
-				mp.add(new MessageTagHandler());
-				return mp;
-			}
-		});
 		
 		//Add custom resource loader at the beginning, so it will be checked first in the 
 		//chain of Resource Loaders, if not found it will search in Wicket's internal 
@@ -306,14 +303,45 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 		WebApplicationContext wac = getWebApplicationContext(getServletContext());
 		return wac == null ? null : wac.getBean(clazz);
 	}
+
+	public static String getString(long id) {
+		return getString(id, WebSession.getLanguage());
+	}
+
+	public static String getString(long id, final long languageId) {
+		Locale loc = LabelDao.languages.get(languageId);
+		if (loc == null) {
+			loc = WebSession.exists() ? WebSession.get().getLocale() : Locale.ENGLISH;
+		}
+		return getString(id, loc);
+	}
 	
+	public static String getString(long id, final Locale loc) {
+		return getString(id, loc, false);
+	}
+	
+	public static String getString(long id, final Locale loc, boolean noReplace) {
+		if (!exists()) {
+			ThreadContext.setApplication(Application.get(appName));
+		}
+		Localizer l = get().getResourceSettings().getLocalizer();
+		String value = l.getStringIgnoreSettings("" + id, null, null, loc, null, "[Missing]");
+		if (!noReplace && STRINGS_WITH_APP.contains(id)) {
+			final MessageFormat format = new MessageFormat(value, loc);
+			value = format.format(new Object[]{getBean(ConfigurationDao.class).getAppName()});
+		}
+		if (!noReplace && RuntimeConfigurationType.DEVELOPMENT == get().getConfigurationType()) {
+			value += String.format(" [%s]", id);
+		}
+		return value;
+	}
+
 	public static boolean isInstalled() {
 		boolean result = isInstalled;
 		if (!isInstalled) {
 			if (InitializationContainer.initComplete) {
 				//TODO can also check crypt class here
-				isInstalled = result = get()._getBean(UserDao.class).count() > 0
-						&& get()._getBean(FieldLanguagesValuesDao.class).count() > 0;
+				isInstalled = result = get()._getBean(UserDao.class).count() > 0;
 			}
 		}
 		return result;
@@ -405,5 +433,13 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 
 	public String urlForActivatePage(PageParameters pp) { //FIXME hack for email templates support (should be in separate module for now
 		return urlForPage(ActivatePage.class, pp);
+	}
+
+	public String getOmString(long id) {
+		return getString(id);
+	}
+	
+	public String getOmString(long id, long languageId) {
+		return getString(id, languageId);
 	}
 }

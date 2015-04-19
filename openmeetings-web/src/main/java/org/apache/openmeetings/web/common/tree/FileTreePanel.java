@@ -29,7 +29,7 @@ import org.apache.openmeetings.db.entity.file.FileExplorerItem;
 import org.apache.openmeetings.db.entity.file.FileItem;
 import org.apache.openmeetings.db.entity.file.FileItem.Type;
 import org.apache.openmeetings.db.entity.record.FlvRecording;
-import org.apache.openmeetings.web.app.WebSession;
+import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.common.AddFolderDialog;
 import org.apache.openmeetings.web.common.ConfirmableAjaxLink;
 import org.apache.wicket.Component;
@@ -64,7 +64,7 @@ public abstract class FileTreePanel extends Panel {
 		super(id);
 		defineTrees();
 		selectedFile.getObject().setId(Long.MIN_VALUE);
-		final AddFolderDialog addFolder = new AddFolderDialog("addFolder", WebSession.getString(712)) {
+		final AddFolderDialog addFolder = new AddFolderDialog("addFolder", Application.getString(712)) {
 			private static final long serialVersionUID = 1L;
 
 			@Override

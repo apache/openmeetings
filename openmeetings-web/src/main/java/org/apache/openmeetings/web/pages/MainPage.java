@@ -22,7 +22,6 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.openmeetings.web.app.Application.addOnlineUser;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.Application.removeOnlineUser;
-import static org.apache.openmeetings.web.app.WebSession.getLanguage;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import static org.apache.openmeetings.web.util.OmUrlFragment.CHILD_ID;
 import static org.apache.openmeetings.web.util.OmUrlFragment.PROFILE_EDIT;
@@ -169,8 +168,8 @@ public class MainPage extends BaseInitedPage {
 	
 	private List<MenuItem> getMainMenu() {
 		List<MenuItem> menu = new ArrayList<MenuItem>();
-		for (Naviglobal gl : getBean(NavigationDao.class).getMainMenu(AuthLevelUtil.hasAdminLevel(WebSession.getRights()), getUserId(), getLanguage())) {
-			MenuItem g = new MenuItem(gl.getLabel().getValue()) {
+		for (Naviglobal gl : getBean(NavigationDao.class).getMainMenu(AuthLevelUtil.hasAdminLevel(WebSession.getRights()), getUserId())) {
+			MenuItem g = new MenuItem(Application.getString(gl.getFieldvalues_id())) {
 				private static final long serialVersionUID = 1L;
 
 				@Override

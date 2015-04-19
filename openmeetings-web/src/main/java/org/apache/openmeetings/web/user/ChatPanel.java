@@ -115,11 +115,11 @@ public class ChatPanel extends BasePanel {
 			scopeName = String.format("%s %s", u.getFirstname(), u.getLastname());
 		} else if (m.getToRoom() != null) {
 			scope = ID_ROOM_PREFIX + m.getToRoom().getId();
-			scopeName = String.format("%s %s", WebSession.getString(406), m.getToRoom().getId());
+			scopeName = String.format("%s %s", Application.getString(406), m.getToRoom().getId());
 			o.put("needModeration", m.isNeedModeration());
 		} else {
 			scope = ID_ALL;
-			scopeName = WebSession.getString(1494);
+			scopeName = Application.getString(1494);
 		}
 		return o.put("scope", scope).put("scopeName", scopeName);
 	}
@@ -187,7 +187,7 @@ public class ChatPanel extends BasePanel {
 		}
 		StringBuilder sb = new StringBuilder();
 		sb.append("$(function() {");
-		sb.append(String.format("addChatTab('%1$s%2$d', '%3$s %2$d');", ID_ROOM_PREFIX, r.getId(), WebSession.getString(406)));
+		sb.append(String.format("addChatTab('%1$s%2$d', '%3$s %2$d');", ID_ROOM_PREFIX, r.getId(), Application.getString(406)));
 		sb.append(r.isChatOpened() ? "openChat();" : "closeChat();");
 		List<ChatMessage> list = getBean(ChatDao.class).getRoom(r.getId(), 0, 30, !r.isChatModerated() || isModerator(getUserId(), r.getId()));
 		if (list.size() > 0) {

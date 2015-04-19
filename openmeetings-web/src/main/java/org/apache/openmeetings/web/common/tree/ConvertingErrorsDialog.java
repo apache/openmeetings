@@ -28,7 +28,7 @@ import java.util.List;
 import org.apache.openmeetings.db.dao.record.FlvRecordingLogDao;
 import org.apache.openmeetings.db.entity.record.FlvRecording;
 import org.apache.openmeetings.db.entity.record.FlvRecordingLog;
-import org.apache.openmeetings.web.app.WebSession;
+import org.apache.openmeetings.web.app.Application;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -75,7 +75,7 @@ public class ConvertingErrorsDialog extends AbstractDialog<FlvRecording> {
 	}
 
 	public ConvertingErrorsDialog(String id, IModel<FlvRecording> model) {
-		super(id, WebSession.getString(887), model);
+		super(id, Application.getString(887), model);
 		add(container.add(message.setVisible(false), logView.setVisible(false)).setOutputMarkupId(true));
 	}
 	
@@ -85,10 +85,10 @@ public class ConvertingErrorsDialog extends AbstractDialog<FlvRecording> {
 		List<FlvRecordingLog> logs = getBean(FlvRecordingLogDao.class).getByRecordingId(f.getId());
 		if (f.getFileHash() == null) {
 			message.setVisible(true);
-			message.setDefaultModelObject(WebSession.getString(888));
+			message.setDefaultModelObject(Application.getString(888));
 		} else if (!isRecordingExists(f.getFileHash() + MP4_EXTENSION)) {
 			message.setVisible(true);
-			message.setDefaultModelObject(WebSession.getString(1595));
+			message.setDefaultModelObject(Application.getString(1595));
 		} else {
 			message.setVisible(false);
 		}

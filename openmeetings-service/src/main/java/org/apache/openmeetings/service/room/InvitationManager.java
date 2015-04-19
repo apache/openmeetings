@@ -28,11 +28,10 @@ import java.util.HashMap;
 import java.util.TimeZone;
 import java.util.Vector;
 
-import org.apache.openmeetings.core.IApplication;
+import org.apache.openmeetings.IApplication;
 import org.apache.openmeetings.core.mail.MailHandler;
 import org.apache.openmeetings.core.mail.SMSHandler;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
-import org.apache.openmeetings.db.dao.label.FieldLanguagesValuesDao;
 import org.apache.openmeetings.db.dao.room.IInvitationManager;
 import org.apache.openmeetings.db.dao.room.InvitationDao;
 import org.apache.openmeetings.db.entity.basic.MailMessage;
@@ -70,8 +69,6 @@ public class InvitationManager implements IInvitationManager {
 	@Autowired
 	private InvitationDao invitationDao;
 	@Autowired
-	private FieldLanguagesValuesDao langDao;
-	@Autowired
 	private MailHandler mailHandler;
 	@Autowired
 	private SMSHandler smsHandler;
@@ -83,11 +80,10 @@ public class InvitationManager implements IInvitationManager {
 	/**
 	 * @author vasya
 	 * 
-     * @param mm
-     * @param a
-     * @param message
-     * @param baseurl
-     * @param subject
+	 * @param mm
+	 * @param a
+	 * @param message
+	 * @param subject
 	 * @throws Exception 
 	 */
 	private void sendInvitionLink(Appointment a, MeetingMember mm, MessageType type, boolean ical) throws Exception	{
@@ -182,6 +178,7 @@ public class InvitationManager implements IInvitationManager {
 	 */
 	public Object getInvitationByHashCode(String hashCode, boolean hidePass) {
 		try {
+			log.debug("Invitation was requested by hashcode: " + hashCode);
 			Invitation invitation = invitationDao.getInvitationByHashCode(hashCode, hidePass);
 
 			if (invitation == null) {
@@ -279,7 +276,13 @@ public class InvitationManager implements IInvitationManager {
 		}
 		return new Long(-1);
 	}
-
+	
+	/**
+	 * @author vasya
+	 * 
+	 * @param member
+	 * @param a
+	 */
 	public void processInvitation(Appointment a, MeetingMember member, MessageType type) {
 		processInvitation(a, member, type, true);
 	}
@@ -294,13 +297,13 @@ public class InvitationManager implements IInvitationManager {
 			log.error("MeetingMember should not have invitation!");
 			return;
 		}
-	
+
 		log.debug(":::: processInvitation ..... " + remindType);
-	
+
 		// appointment.getRemind().getTypId() == 1 will not receive emails
 		if (remindType > 1) {
 			log.debug("Invitation for Appointment : simple email");
-	
+
 			try {
 				mm.setInvitation(getInvitation(mm.getInvitation()
 						, mm.getUser(), a.getRoom(), a.isPasswordProtected(), a.getPassword()
@@ -330,12 +333,12 @@ public class InvitationManager implements IInvitationManager {
 				throw new RuntimeException(e);
 			}
 		}
-	
+
 		invitation.setPasswordProtected(isPasswordProtected);
 		if (isPasswordProtected) {
 			invitation.setPassword(ManageCryptStyle.getInstanceOfCrypt().createPassPhrase(invitationpass));
 		}
-	
+
 		invitation.setUsed(false);
 		invitation.setValid(valid);
 		
@@ -350,9 +353,9 @@ public class InvitationManager implements IInvitationManager {
 			default:
 				break;
 		}
-	
+
 		invitation.setDeleted(false);
-	
+
 		invitation.setInvitedBy(createdBy);
 		invitation.setInvitee(inveetee);
 		if (language_id != null && Type.contact == invitation.getInvitee().getType()) {
@@ -361,10 +364,28 @@ public class InvitationManager implements IInvitationManager {
 		invitation.setRoom(room);
 		invitation.setInserted(new Date());
 		invitation.setAppointment(appointment);
-	
+
 		return invitation;
 	}
 
+	/**
+	 * Sending invitation within plain mail
+	 * 
+	 * @param user_level
+	 * @param username
+	 * @param message
+	 * @param email
+	 * @param subject
+	 * @param rooms_id
+	 * @param conferencedomain
+	 * @param isPasswordProtected
+	 * @param invitationpass
+	 * @param valid
+	 * @param validFrom
+	 * @param validTo
+	 * @param createdBy
+	 * @return
+	 */
 	public Invitation getInvitation(User inveetee, Room room, boolean isPasswordProtected, String invitationpass, Valid valid,
 			User createdBy, Long language_id, Date gmtTimeStart, Date gmtTimeEnd, Appointment appointment)
 	{
@@ -373,6 +394,4 @@ public class InvitationManager implements IInvitationManager {
 		i = invitationDao.update(i);
 		return i;
 	}
-
-	
 }

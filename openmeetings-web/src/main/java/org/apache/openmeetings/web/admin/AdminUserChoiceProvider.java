@@ -26,7 +26,6 @@ import java.util.List;
 
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.user.User;
-
 import org.wicketstuff.select2.Response;
 import org.wicketstuff.select2.TextChoiceProvider;
 
