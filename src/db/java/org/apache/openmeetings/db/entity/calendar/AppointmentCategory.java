@@ -38,7 +38,7 @@ import org.apache.openmeetings.db.entity.user.User;
 @Entity
 @Table(name = "appointmentcategory")
 public class AppointmentCategory implements Serializable {
-	private static final long serialVersionUID = 595713649933692774L;
+	private static final long serialVersionUID = 1L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="id")
@@ -113,6 +113,4 @@ public class AppointmentCategory implements Serializable {
 	public void setComment(String comment) {
 		this.comment = comment;
 	}
-	
-
 }

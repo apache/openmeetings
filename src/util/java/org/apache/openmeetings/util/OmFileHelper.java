@@ -26,6 +26,7 @@ import java.io.OutputStream;
 import java.text.DecimalFormat;
 
 import org.apache.commons.transaction.util.FileHelper;
+import org.apache.openmeetings.cli.ConnectionProperties.DbType;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 
@@ -57,6 +58,8 @@ public class OmFileHelper {
 	
 	public static final String SCREENSHARING_DIR = "screensharing";
 	
+	public static final String PERSISTENCE_NAME = "classes/META-INF/persistence.xml";
+	public static final String DB_PERSISTENCE_NAME = "classes/META-INF/%s_persistence.xml";
 	public static final String profilesPrefix = "profile_";
 	public static final String nameOfLanguageFile = "languages.xml";
 	public static final String nameOfCountriesFile = "countries.xml";
@@ -231,6 +234,18 @@ public class OmFileHelper {
 	
 	public static File getWebinfDir() {
 		return new File(OmFileHelper.OM_HOME, WEB_INF_DIR);
+	}
+	
+	public static File getPersistence() {
+		return getPersistence((DbType)null);
+	}
+	
+	public static File getPersistence(String dbType) {
+		return getPersistence(DbType.valueOf(dbType));
+	}
+	
+	public static File getPersistence(DbType dbType) {
+		return new File(OmFileHelper.getWebinfDir(), dbType == null ? PERSISTENCE_NAME : String.format(DB_PERSISTENCE_NAME, dbType));
 	}
 	
 	public static File getConfDir() {

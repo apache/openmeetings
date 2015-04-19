@@ -19,7 +19,6 @@
 package org.apache.openmeetings.web.pages.install;
 
 import org.apache.openmeetings.web.app.Application;
-import org.apache.openmeetings.web.common.ErrorMessagePanel;
 import org.apache.openmeetings.web.pages.BaseNotInitedPage;
 import org.apache.wicket.RestartResponseException;
 import org.apache.wicket.ajax.AjaxClientInfoBehavior;
@@ -27,30 +26,23 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.protocol.http.request.WebClientInfo;
 
 public class InstallWizardPage extends BaseNotInitedPage {
-	private static final long serialVersionUID = -438388395397826138L;
+	private static final long serialVersionUID = 1L;
 	private InstallWizard wizard = null;
 
 	public InstallWizardPage() {
 		if (Application.isInstalled()) {
 			throw new RestartResponseException(Application.get().getHomePage());
 		}
-		try {
-			add(wizard = new InstallWizard("wizard"));
-			// This code is required to detect time zone offset
-			add(new AjaxClientInfoBehavior() {
-				private static final long serialVersionUID = 1L;
+		add(wizard = new InstallWizard("wizard"));
+		// This code is required to detect time zone offset
+		add(new AjaxClientInfoBehavior() {
+			private static final long serialVersionUID = 1L;
 
-				@Override
-				protected void onClientInfo(AjaxRequestTarget target, WebClientInfo clientInfo) {
-					super.onClientInfo(target, clientInfo);
-					wizard.initTzDropDown();
-				}
-			});
-		} catch (RestartResponseException re) {
-			throw re;
-		} catch (Exception e) {
-			//TODO localization
-			add(new ErrorMessagePanel("wizard", "Error while running installer, please check your installation", e));
-		}
+			@Override
+			protected void onClientInfo(AjaxRequestTarget target, WebClientInfo clientInfo) {
+				super.onClientInfo(target, clientInfo);
+				wizard.initTzDropDown();
+			}
+		});
 	}
 }

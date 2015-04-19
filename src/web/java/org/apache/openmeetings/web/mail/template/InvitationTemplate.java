@@ -18,7 +18,7 @@
  */
 package org.apache.openmeetings.web.mail.template;
 
-import org.apache.openmeetings.web.app.WebSession;
+import org.apache.openmeetings.web.app.Application;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.ExternalLink;
@@ -29,16 +29,16 @@ public class InvitationTemplate extends AbstractTemplatePanel {
 	private InvitationTemplate(Long langId, String invitorName, String message, String link) {
 		super(langId);
 
-		add(new Label("titleLbl", WebSession.getString(500, langId)));
-		add(new Label("userLbl", WebSession.getString(501, langId)));
+		add(new Label("titleLbl", Application.getString(500, langId)));
+		add(new Label("userLbl", Application.getString(501, langId)));
 		add(new Label("user", invitorName));
-		add(new Label("messageLbl", WebSession.getString(502, langId)));
+		add(new Label("messageLbl", Application.getString(502, langId)));
 		add(new Label("message", message).setEscapeModelStrings(false));
 		
 		add(new WebMarkupContainer("links")
-			.add(new Label("comment_for_link1", WebSession.getString(503, langId)))
-			.add(new ExternalLink("invitation_link1", link).add(new Label("clickMe", WebSession.getString(504, langId))))
-			.add(new Label("comment_for_link2", WebSession.getString(505, langId)))
+			.add(new Label("comment_for_link1", Application.getString(503, langId)))
+			.add(new ExternalLink("invitation_link1", link).add(new Label("clickMe", Application.getString(504, langId))))
+			.add(new Label("comment_for_link2", Application.getString(505, langId)))
 			.add(new Label("invitation_link2", link))
 			.setVisible(link != null)
 			);

@@ -20,7 +20,6 @@ package org.apache.openmeetings.web.user.rooms;
 
 import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.web.app.Application;
-import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.UserPanel;
 import org.apache.openmeetings.web.util.OmUrlFragment.MenuParams;
 import org.apache.wicket.markup.html.basic.Label;
@@ -51,7 +50,7 @@ public class RoomsSelectorPanel extends UserPanel {
 				add(new RoomsPanel("rooms", roomDao.getPublicRooms()));
 				break;
 		}
-		add(new Label("title", WebSession.getString(title)));
-		add(new Label("desc", WebSession.getString(desc)));
+		add(new Label("title", Application.getString(title)));
+		add(new Label("desc", Application.getString(desc)));
 	}
 }

@@ -22,7 +22,7 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.mail.MailHandler;
-import org.apache.openmeetings.web.app.WebSession;
+import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.mail.template.FeedbackTemplate;
 import org.apache.openmeetings.web.mail.template.RegisterUserTemplate;
 import org.red5.logging.Red5LoggerFactory;
@@ -55,7 +55,7 @@ public class EmailManager {
 		Integer sendEmailAtRegister = configurationDao.getConfValue("sendEmailAtRegister", Integer.class, "0");
 
 		if (sendEmailAtRegister == 1) {
-			mailHandler.send(email, WebSession.getString(512)
+			mailHandler.send(email, Application.getString(512)
 				, RegisterUserTemplate.getEmail(username, userpass, email, sendEmailWithVerficationCode ? link : null));
 		}
 		return "success";
@@ -63,7 +63,7 @@ public class EmailManager {
 
 	//FIXME, seems to be not used
 	public void sendFeedback(String username, String email, String message) {
-		mailHandler.send("user@openmeetings.apache.org", WebSession.getString(499), FeedbackTemplate.getEmail(username, email, message));
+		mailHandler.send("user@openmeetings.apache.org", Application.getString(499), FeedbackTemplate.getEmail(username, email, message));
 	}
 	
 	public String addEmailCon(String EMail, int CONTACT_ID) {

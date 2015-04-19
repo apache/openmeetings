@@ -29,7 +29,6 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
-import org.apache.openmeetings.db.dao.label.FieldValueDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.room.Client;
 import org.apache.openmeetings.db.entity.room.PollType;
@@ -47,8 +46,6 @@ public class PollDao {
 	@PersistenceContext
 	private EntityManager em;
 	@Autowired
-	private FieldValueDao fieldValDao;
-	@Autowired
 	private UserDao userDao;
 	@Autowired
 	private RoomDao roomDao;
@@ -56,7 +53,7 @@ public class PollDao {
 	public Long addPollType(Long labelId, Boolean isNumeric) {
 		log.debug("Adding poll type: " + labelId + ", " + isNumeric);
 		PollType pt = new PollType();
-		pt.setLabel(fieldValDao.get(labelId));
+		pt.setLabel(labelId);
 		pt.setIsNumericAnswer(isNumeric);
 
 		em.persist(pt);

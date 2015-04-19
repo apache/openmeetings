@@ -74,11 +74,11 @@ import org.simpleframework.xml.Root;
 @Table(name = "user_contact")
 @Root(name="usercontact")
 public class UserContact implements Serializable {
-	private static final long serialVersionUID = 2391405538978996206L;
+	private static final long serialVersionUID = 1L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="id")
-	@Element(data=true)
+	@Element(data = true, name = "userContactId")
 	private long userContactId;
 	
 	@ManyToOne(fetch = FetchType.EAGER)

@@ -18,7 +18,11 @@
  */
 package org.apache.openmeetings.cli;
 
-public class ConnectionProperties {
+import java.io.Serializable;
+
+public class ConnectionProperties implements Serializable {
+	private static final long serialVersionUID = 1L;
+
 	public enum DbType {
 		db2
 		, derby
@@ -28,7 +32,7 @@ public class ConnectionProperties {
 		, postgresql
 	}
 
-	private String driver = "org.apache.derby.jdbc.ClientDriver";
+	private String driver = "org.apache.derby.jdbc.EmbeddedDriver";
 	private String url = "jdbc:derby:openmeetings";
 	private String login = "user";
 	private String password = "secret";

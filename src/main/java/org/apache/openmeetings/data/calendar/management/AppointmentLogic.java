@@ -36,7 +36,7 @@ import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
 import org.apache.openmeetings.db.dao.calendar.AppointmentReminderTypDao;
 import org.apache.openmeetings.db.dao.calendar.IInvitationManager.MessageType;
 import org.apache.openmeetings.db.dao.calendar.MeetingMemberDao;
-import org.apache.openmeetings.db.dao.label.FieldLanguagesValuesDao;
+import org.apache.openmeetings.db.dao.label.LabelDao;
 import org.apache.openmeetings.db.dao.room.InvitationDao;
 import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.dao.room.RoomTypeDao;
@@ -65,7 +65,7 @@ public class AppointmentLogic {
 	@Autowired
 	private ConfigurationDao configurationDao;
 	@Autowired
-	private FieldLanguagesValuesDao langDao;
+	private LabelDao langDao;
 	@Autowired
 	private RoomDao roomDao;
 	@Autowired
@@ -159,7 +159,6 @@ public class AppointmentLogic {
 	// ----------------------------------------------------------------------------------------------
 	public void doScheduledMeetingReminder() throws Exception {
 		// log.debug("doScheduledMeetingReminder");
-
 		String baseUrl = configurationDao.getConfValue(CONFIG_APPLICATION_BASE_URL, String.class, DEFAULT_BASE_URL);
 		if (baseUrl == null || baseUrl.length() < 1) {
 			log.error("Error retrieving baseUrl for application");
@@ -176,7 +175,7 @@ public class AppointmentLogic {
 			return;
 		}
 
-		long milliseconds = (minutesReminderSend * 60 * 1000);
+		long milliseconds = (minutesReminderSend * 60 * 1000L);
 		Calendar start = Calendar.getInstance();
 		if (milliseconds < 0) {
 			start.setTimeInMillis(start.getTimeInMillis() + milliseconds);
@@ -229,7 +228,7 @@ public class AppointmentLogic {
 		return subj == null || subj.length() == 0 ? 
 				labelid1158 + " " + ment.getTitle() : subj;
 	}
-	
+
 	public Appointment getAppointment(String appointmentName,
 			String appointmentLocation, String appointmentDescription,
 			Calendar appointmentstart, Calendar appointmentend,

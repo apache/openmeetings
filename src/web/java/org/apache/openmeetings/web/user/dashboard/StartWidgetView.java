@@ -21,10 +21,12 @@ package org.apache.openmeetings.web.user.dashboard;
 import static org.apache.openmeetings.web.util.OmUrlFragment.CALENDAR;
 import static org.apache.openmeetings.web.util.OmUrlFragment.ROOMS_PUBLIC;
 
+import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.pages.MainPage;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.Model;
 
 import ro.fortsoft.wicket.dashboard.Widget;
@@ -41,6 +43,7 @@ public class StartWidgetView extends WidgetView {
 		add(new WebMarkupContainer("step2").add(new PublicRoomsEventBehavior()));
 		add(new WebMarkupContainer("step3").add(new PublicRoomsEventBehavior()));
 		add(new WebMarkupContainer("step4").add(new PublicRoomsEventBehavior()));
+		add(new Label("desc", Application.getString(804L)));
 		add(new Button("start").add(new PublicRoomsEventBehavior()));
 		add(new Button("calendar").add(new AjaxEventBehavior("onclick") {
 			private static final long serialVersionUID = 1L;

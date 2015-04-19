@@ -21,11 +21,8 @@ package org.apache.openmeetings.web.pages;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.openmeetings.db.entity.label.FieldLanguage;
 import org.apache.openmeetings.web.app.Application;
-import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.HeaderPanel;
-import org.apache.openmeetings.web.util.FormatHelper;
 import org.apache.openmeetings.web.util.OmUrlFragment;
 import org.apache.openmeetings.web.util.OmUrlFragment.AreaKeys;
 import org.apache.wicket.AttributeModifier;
@@ -43,7 +40,8 @@ public abstract class BasePage extends AsyncUrlFragmentAwarePage {
 	private static final long serialVersionUID = 1L;
 	private final Map<String, String> options;
 
-	protected abstract FieldLanguage getLanguage();
+	public abstract boolean isRtl();
+	protected abstract String getLanguageCode();
 	protected abstract String getApplicationName();
 	
 	public BasePage() {
@@ -52,12 +50,11 @@ public abstract class BasePage extends AsyncUrlFragmentAwarePage {
 		options.put("keyValueDelimiter", "/");
 		String appName = getApplicationName();
 
-		FieldLanguage lang = getLanguage();
-		String code = lang.getCode();
+		String code = getLanguageCode();
 		add(new TransparentWebMarkupContainer("html")
 	    	.add(new AttributeModifier("xml:lang", code))
 	    	.add(new AttributeModifier("lang", code))
-	    	.add(new AttributeModifier("dir", Boolean.TRUE.equals(lang.getRtl()) ? "rtl" : "ltr"))); 
+	    	.add(new AttributeModifier("dir", isRtl() ? "rtl" : "ltr"))); 
 		add(new Label("pageTitle", appName));
 		add(new HeaderPanel("header", appName));
 	}
@@ -81,14 +78,7 @@ public abstract class BasePage extends AsyncUrlFragmentAwarePage {
 	public void renderHead(IHeaderResponse response) {
 		response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forReference(Application.get().getJavaScriptLibrarySettings().getJQueryReference())));
 		super.renderHead(response);
-		
-		boolean rtl = false;
-		if (Application.isInstalled()) {
-			rtl = Boolean.TRUE.equals(WebSession.getLanguageObj().getRtl());
-		} else {
-			rtl = FormatHelper.isRtlLanguage(WebSession.get().getLocale().toString());
-		}
-		if (rtl) {
+		if (isRtl()) {
 			response.render(CssHeaderItem.forUrl("css/theme-rtl.css"));
 			response.render(CssHeaderItem.forUrl("css/admin-rtl.css"));
 		}

@@ -282,6 +282,9 @@ html, body {
 #feedcontainer {
 	overflow: auto;
 }
+#feeds.ui-accordion .ui-accordion-header {
+	margin-bottom: 2px;
+}
 .recording {
 	width: 100%;
 	display: inline-block;

@@ -18,7 +18,7 @@
  */
 package org.apache.openmeetings.web.user.dashboard;
 
-import org.apache.openmeetings.web.app.WebSession;
+import org.apache.openmeetings.web.app.Application;
 import org.apache.wicket.model.Model;
 
 import ro.fortsoft.wicket.dashboard.AbstractWidget;
@@ -39,7 +39,7 @@ public class MyRoomsWidget extends AbstractWidget {
 	@Override
 	public void init() {
 		super.init();
-		title = WebSession.getString(781L);
+		title = Application.getString(781L);
 		id = WIDGET_ID_MY_ROOMS;
 	}
 	

@@ -23,11 +23,8 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAUT_L
 import java.util.List;
 import java.util.Map;
 
-import org.apache.openmeetings.data.basic.FieldManager;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
-import org.apache.openmeetings.db.dao.label.FieldLanguageDao;
-import org.apache.openmeetings.db.entity.label.FieldLanguage;
-import org.apache.openmeetings.db.entity.label.Fieldlanguagesvalues;
+import org.apache.openmeetings.db.dao.label.LabelDao;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
@@ -39,27 +36,13 @@ public class LanguageService {
 	@Autowired
 	private ConfigurationDao configurationDao;
 	@Autowired
-	private FieldManager fieldManager;
-	@Autowired
-	private FieldLanguageDao fieldLanguageDaoImpl;
+	private LabelDao labelDao;
 
 	/**
 	 * @return - List of all available Languages
 	 */
-	public List<FieldLanguage> getLanguages() {
-		return fieldLanguageDaoImpl.getLanguages();
-	}
-
-	/**
-	 * get all fields of a given Language_id
-	 * 
-	 * @param language_id
-	 * @deprecated
-	 * @return - all fields of a given Language_id
-	 */
-	@Deprecated
-	public List<Fieldlanguagesvalues> getLanguageById(Long language_id) {
-		return fieldManager.getAllFieldsByLanguage(language_id);
+	public List<Map<String, Object>> getLanguages() {
+		return labelDao.getLanguages();
 	}
 
 	public Integer getDefaultLanguage() {
@@ -70,10 +53,11 @@ public class LanguageService {
 	 * get all fields of a given Language_id by params
 	 * 
 	 * @param language_id
+	 * @param start
+	 * @param count
 	 * @return - all fields of a given Language_id in the range given
 	 */
-	public List<Map<String, Object>> getLanguageByIdAndMax(Long language_id,
-			int start, int max) {
-		return fieldManager.getLabelsByLanguage(language_id, start, max);
+	public List<Map<String, Object>> getLanguageByIdAndMax(int language_id, int start, int count) {
+		return labelDao.getStrings((long)language_id, start, count);
 	}
 }

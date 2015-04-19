@@ -38,7 +38,7 @@ public abstract class AdminBaseForm<T> extends Form<T> {
 		super(id, object);
 		
 		savePanel = new AdminSavePanel<T>("buttons", this) {
-			private static final long serialVersionUID = -5833647470067891270L;
+			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected void onSaveSubmit(AjaxRequestTarget target, Form<?> form) {

@@ -38,6 +38,7 @@ import org.apache.openmeetings.data.whiteboard.EmoticonsManager;
 import org.apache.openmeetings.data.whiteboard.WhiteboardManager;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.calendar.MeetingMemberDao;
+import org.apache.openmeetings.db.dao.label.LabelDao;
 import org.apache.openmeetings.db.dao.log.ConferenceLogDao;
 import org.apache.openmeetings.db.dao.record.FlvRecordingDao;
 import org.apache.openmeetings.db.dao.room.RoomDao;
@@ -122,6 +123,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 	public boolean appStart(IScope scope) {
 		try {
 			OmFileHelper.setOmHome(scope.getResource("/").getFile());
+			LabelDao.initLanguageMap();
 
 			log.debug("webAppPath : " + OmFileHelper.getOmHome());
 

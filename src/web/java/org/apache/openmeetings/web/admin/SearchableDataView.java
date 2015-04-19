@@ -30,7 +30,7 @@ import org.apache.wicket.markup.repeater.data.DataView;
  * @param <T>
  */
 public abstract class SearchableDataView<T extends IDataProviderEntity> extends DataView<T> {
-	private static final long serialVersionUID = -6251644410385789409L;
+	private static final long serialVersionUID = 1L;
 	private SearchableDataProvider<T> dp;
 	
 	public SearchableDataView(String id, SearchableDataProvider<T> dp) {

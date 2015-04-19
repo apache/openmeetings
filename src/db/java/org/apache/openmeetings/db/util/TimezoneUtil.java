@@ -44,27 +44,22 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class TimezoneUtil {
 	private static final Logger log = Red5LoggerFactory.getLogger(TimezoneUtil.class, webAppRootKey);
 	private static final Map<String, String> ICAL_TZ_MAP = new Hashtable<String, String>();
-	private static final Map<Long, String> ID_TZ_MAP = new Hashtable<Long, String>();
 
 	private static void initTimeZones() {
 		SAXReader reader = new SAXReader();
 		Document document;
 		try {
 			ICAL_TZ_MAP.clear();
-			ID_TZ_MAP.clear();
 			document = reader.read(new File(getLanguagesDir(), nameOfTimeZoneFile));
 
 			Element root = document.getRootElement();
 
-			// HACK based on the fact timezones are not changed
-			long id = 1;
 			for (@SuppressWarnings("rawtypes")
 			Iterator it = root.elementIterator("timezone"); it.hasNext();) {
 				Element item = (Element) it.next();
 				String timeZoneName = item.attributeValue("name");
 				String iCal = item.attributeValue("iCal");
 				ICAL_TZ_MAP.put(timeZoneName, iCal);
-				ID_TZ_MAP.put(id++, iCal);
 			}
 		} catch (DocumentException e) {
 			log.error("Unexpected error while reading old time zone list", e);
@@ -163,28 +158,6 @@ public class TimezoneUtil {
 		if (timeZone != null) {
 			return timeZone;
 		}
-		// if user has not time zone get one from the server configuration
-		return getDefaultTimeZone();
-	}
-
-	/**
-	 * Return the timezone based Id from omTimeZone table
-	 * 
-	 * @param jName
-	 * @return
-	 */
-	public TimeZone getTimezoneByOmTimeZoneId(Long omtimezoneId) {
-		if (ID_TZ_MAP.isEmpty()) {
-			initTimeZones();
-		}
-		String omTimeZone = ID_TZ_MAP.get(omtimezoneId);
-
-		TimeZone timeZone = TimeZone.getTimeZone(omTimeZone);
-
-		if (timeZone != null) {
-			return timeZone;
-		}
-
 		// if user has not time zone get one from the server configuration
 		return getDefaultTimeZone();
 	}

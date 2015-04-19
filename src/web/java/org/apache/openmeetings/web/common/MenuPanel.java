@@ -21,7 +21,6 @@ package org.apache.openmeetings.web.common;
 import org.apache.openmeetings.db.dao.basic.NavigationDao;
 import org.apache.openmeetings.db.entity.basic.Naviglobal;
 import org.apache.openmeetings.db.entity.basic.Navimain;
-import org.apache.openmeetings.db.entity.label.FieldLanguage;
 import org.apache.openmeetings.util.AuthLevelUtil;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
@@ -44,33 +43,33 @@ import org.apache.wicket.markup.html.list.ListView;
  *
  */
 public class MenuPanel extends BasePanel {
-	private static final long serialVersionUID = 6626039612808753514L;
+	private static final long serialVersionUID = 1L;
 
 	public MenuPanel(String id) {
 		super(id);
 		setMarkupId(id);
 		
 		final NavigationDao man = Application.getBean(NavigationDao.class);
-		add(new ListView<Naviglobal>("mainItem", man.getMainMenu(AuthLevelUtil.hasAdminLevel(WebSession.getRights()), WebSession.getUserId(), WebSession.getLanguage())) {
-			private static final long serialVersionUID = 2173926553418745231L;
+		add(new ListView<Naviglobal>("mainItem", man.getMainMenu(AuthLevelUtil.hasAdminLevel(WebSession.getRights()), WebSession.getUserId())) {
+			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected void populateItem(ListItem<Naviglobal> item) {
 				Naviglobal gl = item.getModelObject();
-				item.add(new Label("label", gl.getLabel().getValue()).setRenderBodyOnly(true));
+				item.add(new Label("label", getString("" + gl.getFieldvalues_id())).setRenderBodyOnly(true));
 				
 				item.add(new ListView<Navimain>("childItem", gl.getMainnavi()) {
-					private static final long serialVersionUID = 3609635268338379087L;
+					private static final long serialVersionUID = 1L;
 
 					@Override
 					protected void populateItem(ListItem<Navimain> item) {
 						Navimain m = item.getModelObject();
-						final String name = m.getLabel().getValue();
-						final String desc = m.getTooltip().getValue();
+						final String name = getString("" + m.getFieldvalues_id());
+						final String desc = getString("" + m.getTooltip_fieldvalues_id());
 						final MenuActions action = MenuActions.valueOf(m.getAction());
 						final MenuParams params = m.getParams() != null ? MenuParams.valueOf(m.getParams()) : MenuParams.publicTabButton;
 						item.add(new AjaxLink<Void>("link") {
-							private static final long serialVersionUID = 5632618935550133709L;
+							private static final long serialVersionUID = 1L;
 							{
 								add(new Label("name", name));
 								add(new Label("description", desc));
@@ -89,8 +88,7 @@ public class MenuPanel extends BasePanel {
 	@Override
 	public void renderHead(IHeaderResponse response) {
 		super.renderHead(response);
-		FieldLanguage lang = WebSession.getLanguageObj();
-		if (Boolean.TRUE.equals(lang.getRtl())) {
+		if (getMainPage().isRtl()) {
 			response.render(CssHeaderItem.forUrl("css/jquery.ui.menubar-rtl.css"));
 		}
 	}

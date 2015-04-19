@@ -34,8 +34,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.openmeetings.data.basic.FieldManager;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
+import org.apache.openmeetings.db.dao.label.LabelDao;
 import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.dao.server.ISessionManager;
 import org.apache.openmeetings.db.dao.server.SessiondataDao;
@@ -66,7 +66,7 @@ public class ScreenController {
 	@Autowired
 	public ConfigurationDao cfgDao;
 	@Autowired
-	public FieldManager fieldManager;
+	public LabelDao labelDao;
 	@Autowired
 	public RoomDao roomDao;
 
@@ -83,7 +83,7 @@ public class ScreenController {
 			if (delim) {
 				result.append(';');
 			}
-			result.append(fieldManager.getString((long)id, language_id));
+			result.append(labelDao.getString((long)id, language_id));
 			delim = true;
 		}
 		return result.toString();

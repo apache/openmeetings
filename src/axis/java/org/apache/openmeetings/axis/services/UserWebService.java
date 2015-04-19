@@ -18,6 +18,8 @@
  */
 package org.apache.openmeetings.axis.services;
 
+import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -25,7 +27,7 @@ import org.apache.axis2.AxisFault;
 import org.apache.openmeetings.data.user.UserManager;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.basic.ErrorDao;
-import org.apache.openmeetings.db.dao.label.FieldLanguagesValuesDao;
+import org.apache.openmeetings.db.dao.label.LabelDao;
 import org.apache.openmeetings.db.dao.server.SOAPLoginDao;
 import org.apache.openmeetings.db.dao.server.SessiondataDao;
 import org.apache.openmeetings.db.dao.user.OrganisationDao;
@@ -45,7 +47,6 @@ import org.apache.openmeetings.db.entity.user.User.Right;
 import org.apache.openmeetings.remote.MainService;
 import org.apache.openmeetings.util.AuthLevelUtil;
 import org.apache.openmeetings.util.OmException;
-import org.apache.openmeetings.util.OpenmeetingsVariables;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,9 +61,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  * 
  */
 public class UserWebService {
-
-	private static final Logger log = Red5LoggerFactory.getLogger(
-			UserWebService.class, OpenmeetingsVariables.webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(UserWebService.class, webAppRootKey);
 
 	@Autowired
 	private SessiondataDao sessiondataDao;
@@ -83,7 +82,7 @@ public class UserWebService {
 	@Autowired
 	private MainService mainService;
 	@Autowired
-	private FieldLanguagesValuesDao labelDao;
+	private LabelDao labelDao;
 
 	/**
 	 * load this session id before doing anything else Returns an Object of Type

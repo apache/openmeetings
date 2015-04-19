@@ -27,7 +27,7 @@ import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.openmeetings.db.dao.label.FieldLanguagesValuesDao;
+import org.apache.openmeetings.db.dao.label.LabelDao;
 import org.apache.openmeetings.db.dao.room.IRoomManager;
 import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.dao.server.ISessionManager;
@@ -62,7 +62,7 @@ public class MobileService {
 	@Autowired
 	private IRoomManager roomManager;
 	@Autowired
-	private FieldLanguagesValuesDao labelDao;
+	private LabelDao labelDao;
 	@Autowired
 	private ScopeApplicationAdapter scopeAdapter;
 

@@ -19,26 +19,19 @@
 package org.apache.openmeetings.web.admin.labels;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
-import static org.apache.openmeetings.web.app.Application.getBean;
-import static org.apache.openmeetings.web.app.WebSession.getUserId;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.StringWriter;
+import java.util.AbstractMap;
 import java.util.Iterator;
-import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
-import org.apache.openmeetings.backup.LanguageImport;
-import org.apache.openmeetings.db.dao.label.FieldLanguageDao;
-import org.apache.openmeetings.db.dao.label.FieldLanguagesValuesDao;
-import org.apache.openmeetings.db.dao.label.FieldValueDao;
-import org.apache.openmeetings.db.entity.label.FieldLanguage;
-import org.apache.openmeetings.db.entity.label.Fieldlanguagesvalues;
-import org.apache.openmeetings.db.entity.label.Fieldvalues;
-import org.apache.openmeetings.util.LangExport;
+import org.apache.openmeetings.db.dao.label.LabelDao;
+import org.apache.openmeetings.db.entity.label.StringLabel;
 import org.apache.openmeetings.web.admin.AdminPanel;
 import org.apache.openmeetings.web.admin.SearchableDataView;
+import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.common.PagedEntityListPanel;
 import org.apache.openmeetings.web.data.DataViewContainer;
 import org.apache.openmeetings.web.data.OmOrderByBorder;
@@ -49,21 +42,21 @@ import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormSubmitBehavior;
-import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.extensions.ajax.markup.html.form.upload.UploadProgressBar;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.markup.html.form.upload.FileUploadField;
-import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.util.resource.AbstractResourceStream;
 import org.apache.wicket.util.resource.ResourceStreamNotFoundException;
-import org.dom4j.Document;
-import org.dom4j.Element;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
+
+import com.googlecode.wicket.jquery.core.Options;
+import com.googlecode.wicket.jquery.ui.form.button.AjaxButton;
+import com.googlecode.wicket.kendo.ui.panel.KendoFeedbackPanel;
 
 /**
  * Language Editor, add/insert/update {@link Fieldlanguagesvalues} and
@@ -74,15 +67,14 @@ import org.slf4j.Logger;
  */
 public class LangPanel extends AdminPanel {
 	private static final Logger log = Red5LoggerFactory.getLogger(LangPanel.class, webAppRootKey);
-	
-	private static final long serialVersionUID = 5904180813198016592L;
+	private static final long serialVersionUID = 1L;
 
-	FieldLanguage language;
-	final WebMarkupContainer listContainer;
+	final WebMarkupContainer listContainer = new WebMarkupContainer("listContainer");;
 	private LangForm langForm;
+	Map.Entry<Long, Locale> language;
 	private FileUploadField fileUploadField;
 	// Create feedback panels
-	private final FeedbackPanel importFeedback = new FeedbackPanel("importFeedback");
+	private final KendoFeedbackPanel feedback = new KendoFeedbackPanel("feedback", new Options("button", true));
 	
 	@Override
 	public void onMenuPanelLoad(AjaxRequestTarget target) {
@@ -92,65 +84,58 @@ public class LangPanel extends AdminPanel {
 
 	public LangPanel(String id) {
 		super(id);
-		// Create feedback panels
-		add(importFeedback.setOutputMarkupId(true));
-		FieldLanguageDao langDao = getBean(FieldLanguageDao.class);
-		language = langDao.getFieldLanguageById(1L);
 
-		Fieldlanguagesvalues flv = new Fieldlanguagesvalues();
-		flv.setLanguage_id(language.getLanguage_id());
-		final LabelsForm form = new LabelsForm("form", this, flv);
+		// Create feedback panels
+		add(feedback.setOutputMarkupId(true));
+		language = new AbstractMap.SimpleEntry<Long, Locale>(1L, Locale.ENGLISH);
+
+		final LabelsForm form = new LabelsForm("form", this, new StringLabel(null, null));
 		form.showNewRecord();
 		add(form);
 
-		final SearchableDataView<Fieldvalues> dataView = new SearchableDataView<Fieldvalues>(
+		final SearchableDataView<StringLabel> dataView = new SearchableDataView<StringLabel>(
 				"langList"
-				, new SearchableDataProvider<Fieldvalues>(FieldValueDao.class) {
-					private static final long serialVersionUID = -6822789354860988626L;
+				, new SearchableDataProvider<StringLabel>(LabelDao.class) {
+					private static final long serialVersionUID = 1L;
 
 					@Override
-					protected FieldValueDao getDao() {
-						return (FieldValueDao)super.getDao();
+					protected LabelDao getDao() {
+						return (LabelDao)super.getDao();
 					}
 					
 					@Override
 					public long size() {
-						return search == null ? getDao().count() : getDao().count(language.getLanguage_id(), search);
+						return getDao().count(language.getValue(), search);
 					}
 					
-					public Iterator<? extends Fieldvalues> iterator(long first, long count) {
-						return (search == null && getSort() == null
-								? getDao().get(language.getLanguage_id(), (int)first, (int)count)
-								: getDao().get(language.getLanguage_id(), search, (int)first, (int)count, getSortStr())).iterator();
+					public Iterator<? extends StringLabel> iterator(long first, long count) {
+						return getDao().get(language.getValue(), search, (int)first, (int)count, getSort()).iterator();
 					}
 				}) {
-			private static final long serialVersionUID = 8715559628755439596L;
+			private static final long serialVersionUID = 1L;
 
 			@Override
-			protected void populateItem(final Item<Fieldvalues> item) {
-				final Fieldvalues fv = item.getModelObject();
-				item.add(new Label("lblId", "" + fv.getFieldvalues_id()));
-				item.add(new Label("name", fv.getName()));
-				item.add(new Label("value", fv.getFieldlanguagesvalue() != null ? fv.getFieldlanguagesvalue().getValue() : null));
+			protected void populateItem(final Item<StringLabel> item) {
+				final StringLabel fv = item.getModelObject();
+				item.add(new Label("name", fv.getKey()));
+				item.add(new Label("value", fv.getValue()));
 				item.add(new AjaxEventBehavior("onclick") {
-					private static final long serialVersionUID = -8069413566800571061L;
+					private static final long serialVersionUID = 1L;
 
 					protected void onEvent(AjaxRequestTarget target) {
-						form.setModelObject(fv.getFieldlanguagesvalue());
+						form.setModelObject(fv);
 						form.hideNewRecord();
 						target.add(form, listContainer);
 						target.appendJavaScript("labelsInit();");
 					}
 				});
-				Long formFvId = form.getModelObject().getFieldvalues() == null ? null : form.getModelObject().getFieldvalues().getFieldvalues_id();
-				item.add(AttributeModifier.append("class", "clickable ui-widget-content" + (fv.getFieldvalues_id().equals(formFvId) ? " ui-state-active" : "")));
+				item.add(AttributeModifier.append("class", "clickable ui-widget-content" + (fv.getKey().equals(form.getModelObject().getKey()) ? " ui-state-active" : "")));
 			}
 		};
 
-		listContainer = new WebMarkupContainer("listContainer");
 		add(listContainer.add(dataView).setOutputMarkupId(true));
 		PagedEntityListPanel navigator = new PagedEntityListPanel("navigator", dataView) {
-			private static final long serialVersionUID = 5097048616003411362L;
+			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected void onEvent(AjaxRequestTarget target) {
@@ -158,10 +143,10 @@ public class LangPanel extends AdminPanel {
 				target.add(listContainer);
 			}
 		};
-		DataViewContainer<Fieldvalues> container = new DataViewContainer<Fieldvalues>(listContainer, dataView, navigator);
-		container.addLink(new OmOrderByBorder<Fieldvalues>("orderById", "fieldvalues.fieldvalues_id", container))
-			.addLink(new OmOrderByBorder<Fieldvalues>("orderByName", "fieldvalues.name", container))
-			.addLink(new OmOrderByBorder<Fieldvalues>("orderByValue", "value", container));
+		DataViewContainer<StringLabel> container = new DataViewContainer<StringLabel>(listContainer, dataView, navigator);
+		container
+			.addLink(new OmOrderByBorder<StringLabel>("orderByName", "key", container))
+			.addLink(new OmOrderByBorder<StringLabel>("orderByValue", "value", container));
 		add(container.getLinks());
 		add(navigator);
 		langForm = new LangForm("langForm", listContainer, this);
@@ -169,25 +154,24 @@ public class LangPanel extends AdminPanel {
 		langForm.add(fileUploadField);
 		langForm.add(new UploadProgressBar("progress", langForm, fileUploadField));
 		fileUploadField.add(new AjaxFormSubmitBehavior(langForm, "onchange") {
-			private static final long serialVersionUID = 2160216679027859231L;
+			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected void onSubmit(AjaxRequestTarget target) {
 				FileUpload download = fileUploadField.getFileUpload();
 				try {
 					if (download == null || download.getInputStream() == null) {
-						importFeedback.error("File is empty");
+						feedback.error("File is empty");
 						return;
 					}
-					getBean(LanguageImport.class)
-						.addLanguageByDocument(language.getLanguage_id(), download.getInputStream(), getUserId());
+					LabelDao.upload(language.getValue(), download.getInputStream());
 				} catch (Exception e) {
 					log.error("Exception on panel language editor import ", e);
-					importFeedback.error(e);
+					feedback.error(e);
 				}
 
 				// repaint the feedback panel so that it is hidden
-				target.add(importFeedback);
+				target.add(listContainer, feedback);
 			}
 		});
 
@@ -199,48 +183,38 @@ public class LangPanel extends AdminPanel {
 			private static final long serialVersionUID = 1L;
 
 			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-
-				final List<Fieldlanguagesvalues> flvList = getBean(FieldLanguagesValuesDao.class).getMixedFieldValuesList(language.getLanguage_id());
-
-				FieldLanguage fl = getBean(FieldLanguageDao.class).getFieldLanguageById(language.getLanguage_id());
-				if (fl != null && flvList != null) {
-					download.setFileName(fl.getName() + ".xml");
-					download.setResourceStream(new AbstractResourceStream() {
-						private static final long serialVersionUID = 1L;
-						private transient StringWriter sw;
-						private transient InputStream is;
-						
-						public InputStream getInputStream() throws ResourceStreamNotFoundException {
-							try {
-								Document doc = createDocument(flvList, getBean(FieldLanguagesValuesDao.class).getUntranslatedFieldValuesList(language.getLanguage_id()));
-								sw = new StringWriter();
-								LangExport.serializetoXML(sw, "UTF-8", doc);
-								is = new ByteArrayInputStream(sw.toString().getBytes());
-								return is;
-							} catch (Exception e) {
-								throw new ResourceStreamNotFoundException(e);
-							}
+				final String name = LabelDao.getLabelFileName(language.getValue());
+				download.setFileName(name);
+				download.setResourceStream(new AbstractResourceStream() {
+					private static final long serialVersionUID = 1L;
+					private transient InputStream is;
+					
+					public InputStream getInputStream() throws ResourceStreamNotFoundException {
+						try {
+							is = Application.class.getResourceAsStream(name);
+							return is;
+						} catch (Exception e) {
+							throw new ResourceStreamNotFoundException(e);
 						}
-						
-						public void close() throws IOException {
-							if (is != null) {
-								is.close();
-								is = null;
-							}
-							sw = null;
+					}
+					
+					public void close() throws IOException {
+						if (is != null) {
+							is.close();
+							is = null;
 						}
-					});//new FileResourceStream(new File(requestedFile)));
-					download.initiate(target);
-				}
-				
+					}
+				});
+				download.initiate(target);
+
 				// repaint the feedback panel so that it is hidden
-				target.add(importFeedback);
+				target.add(feedback);
 			}
 			
 			@Override
 			protected void onError(AjaxRequestTarget target, Form<?> form) {
 				// repaint the feedback panel so errors are shown
-				target.add(importFeedback);
+				target.add(feedback);
 			}
 			
 		});
@@ -253,32 +227,4 @@ public class LangPanel extends AdminPanel {
 	public LangForm getLangForm() {
 		return langForm;
 	}
-
-	public static Document createDocument(List<Fieldlanguagesvalues> flvList, List<Fieldlanguagesvalues> untranslatedList) throws Exception {
-		Document document = LangExport.createDocument();
-		Element root = LangExport.createRoot(document);
-
-		for (Fieldlanguagesvalues flv : flvList) {
-			Element eTemp = root.addElement("string")
-					.addAttribute("id", flv.getFieldvalues().getFieldvalues_id().toString())
-					.addAttribute("name", flv.getFieldvalues().getName());
-			Element value = eTemp.addElement("value");
-			value.addText(flv.getValue());
-		}
-
-		//untranslated
-		if (untranslatedList.size() > 0) {
-			root.addComment("Untranslated strings");
-			for (Fieldlanguagesvalues flv : untranslatedList) {
-				Element eTemp = root.addElement("string")
-						.addAttribute("id", flv.getFieldvalues().getFieldvalues_id().toString())
-						.addAttribute("name", flv.getFieldvalues().getName());
-				Element value = eTemp.addElement("value");
-				value.addText(flv.getValue());
-			}
-		}
-
-		return document;
-	}
-
 }

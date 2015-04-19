@@ -26,11 +26,9 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
-import org.apache.openmeetings.db.dao.label.FieldLanguagesValuesDao;
 import org.apache.openmeetings.db.entity.user.Salutation;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
@@ -42,9 +40,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class SalutationDao {
 	private static final Logger log = Red5LoggerFactory.getLogger(SalutationDao.class, webAppRootKey);
-
-	@Autowired
-	private FieldLanguagesValuesDao fieldLangValDao;
 
 	@PersistenceContext
 	private EntityManager em;
@@ -82,9 +77,6 @@ public class SalutationDao {
 	public Salutation get(Long id, long language_id) {
 		List<Salutation> ll = em.createNamedQuery("getSalutationById", Salutation.class)
 				.setParameter("id", id).getResultList();
-		for (Salutation ti : ll) {
-			ti.setLabel(fieldLangValDao.get(ti.getFieldvalues_id(), language_id));
-		}
 		return ll.isEmpty() ? null : ll.get(0);
 	}
 	
@@ -96,9 +88,6 @@ public class SalutationDao {
 	 */
 	public List<Salutation> getUserSalutations(long language_id) {
 		List<Salutation> ll = em.createNamedQuery("getSalutations", Salutation.class).getResultList();
-		for (Salutation ti : ll) {
-			ti.setLabel(fieldLangValDao.get(ti.getFieldvalues_id(), language_id));
-		}
 		return ll;
 	}
 }

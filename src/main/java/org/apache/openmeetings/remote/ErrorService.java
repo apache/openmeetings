@@ -21,7 +21,7 @@ package org.apache.openmeetings.remote;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
 import org.apache.openmeetings.db.dao.basic.ErrorDao;
-import org.apache.openmeetings.db.dao.label.FieldLanguagesValuesDao;
+import org.apache.openmeetings.db.dao.label.LabelDao;
 import org.apache.openmeetings.db.dto.basic.ErrorResult;
 import org.apache.openmeetings.db.entity.basic.ErrorType;
 import org.apache.openmeetings.db.entity.basic.ErrorValue;
@@ -38,7 +38,7 @@ public class ErrorService {
 	private static final Logger log = Red5LoggerFactory.getLogger(ErrorService.class, webAppRootKey);
 
 	@Autowired
-	private FieldLanguagesValuesDao labelDao;
+	private LabelDao labelDao;
 	@Autowired
 	private ErrorDao errorDao;
 

@@ -408,6 +408,7 @@ public class BackupImport {
 			registry.bind(Date.class, DateConverter.class);
 			
 			List<Appointment> list = readList(serializer, f, "appointements.xml", "appointments", Appointment.class);
+			log.debug(list.size() + " Appointments found in backup");
 			for (Appointment a : list) {
 				Long appId = a.getId();
 

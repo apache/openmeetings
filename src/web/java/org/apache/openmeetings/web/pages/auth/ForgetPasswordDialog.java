@@ -30,7 +30,7 @@ import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.mail.MailHandler;
 import org.apache.openmeetings.util.crypt.ManageCryptStyle;
-import org.apache.openmeetings.web.app.WebSession;
+import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.mail.template.ResetPasswordTemplate;
 import org.apache.openmeetings.web.pages.ResetPage;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -60,9 +60,9 @@ import com.googlecode.wicket.jquery.ui.widget.dialog.MessageDialog;
 public class ForgetPasswordDialog extends AbstractFormDialog<String> {
 	private static final Logger log = Red5LoggerFactory.getLogger(ForgetPasswordDialog.class, webAppRootKey);
 	private static final long serialVersionUID = 1L;
-	private String sendLbl = WebSession.getString(317);
+	private String sendLbl = Application.getString(317);
 	private DialogButton send = new DialogButton(sendLbl);
-	private DialogButton cancel = new DialogButton(WebSession.getString(122));
+	private DialogButton cancel = new DialogButton(Application.getString(122));
 	private FeedbackPanel feedback = new FeedbackPanel("feedback");
 	private RequiredTextField<String> nameField;
 	private Form<String> form;
@@ -77,17 +77,17 @@ public class ForgetPasswordDialog extends AbstractFormDialog<String> {
 	}
 	
 	public ForgetPasswordDialog(String id) {
-		super(id, WebSession.getString(312));
+		super(id, Application.getString(312));
 		add(form = new Form<String>("form") {
 			private static final long serialVersionUID = 1L;
-			private IModel<String> lblModel = Model.of(WebSession.getString(315));
+			private IModel<String> lblModel = Model.of(Application.getString(315));
 			private Label label = new Label("label", lblModel);
 			
 			{
 				add(feedback.setOutputMarkupId(true));
 				add(label.setOutputMarkupId(true));
 				add(nameField = new RequiredTextField<String>("name", new PropertyModel<String>(ForgetPasswordDialog.this, "name")));
-				nameField.setLabel(Model.of(WebSession.getString(type == Type.email ? 315 : 316)));
+				nameField.setLabel(Model.of(Application.getString(type == Type.email ? 315 : 316)));
 				RadioGroup<Type> rg = new RadioGroup<Type>("type", new PropertyModel<Type>(ForgetPasswordDialog.this, "type"));
 				add(rg.add(new Radio<Type>("email", Model.of(Type.email)).setOutputMarkupId(true))
 						.add(new Radio<Type>("login", Model.of(Type.login)).setOutputMarkupId(true))
@@ -97,8 +97,8 @@ public class ForgetPasswordDialog extends AbstractFormDialog<String> {
 
 					@Override
 					protected void onUpdate(AjaxRequestTarget target) {
-						lblModel.setObject(WebSession.getString(type == Type.email ? 315 : 316));
-						nameField.setLabel(Model.of(WebSession.getString(type == Type.email ? 315 : 316)));
+						lblModel.setObject(Application.getString(type == Type.email ? 315 : 316));
+						nameField.setLabel(Model.of(Application.getString(type == Type.email ? 315 : 316)));
 						target.add(label);
 					}
 				});
@@ -123,10 +123,10 @@ public class ForgetPasswordDialog extends AbstractFormDialog<String> {
 				String n = nameField.getConvertedInput();
 				if (n != null) {
 					if (type == Type.email && null == dao.getByEmail(n)) {
-						error(WebSession.getString(318));
+						error(Application.getString(318));
 					}
 					if (type == Type.login && null == dao.getByLogin(n, User.Type.user, null)) {
-						error(WebSession.getString(320));
+						error(Application.getString(320));
 					}
 				}
 			}
@@ -137,7 +137,7 @@ public class ForgetPasswordDialog extends AbstractFormDialog<String> {
 				super.onDetach();
 			}
 		});
-		confirmDialog = new MessageDialog("confirmDialog", WebSession.getString(312), WebSession.getString(321), DialogButtons.OK, DialogIcon.INFO){
+		confirmDialog = new MessageDialog("confirmDialog", Application.getString(312), Application.getString(321), DialogButtons.OK, DialogIcon.INFO){
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -248,7 +248,7 @@ public class ForgetPasswordDialog extends AbstractFormDialog<String> {
 
 		String template = ResetPasswordTemplate.getEmail(reset_link);
 
-		getBean(MailHandler.class).send(email, WebSession.getString(517), template);
+		getBean(MailHandler.class).send(email, Application.getString(517), template);
 	}
 
 }

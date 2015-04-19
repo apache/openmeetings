@@ -54,9 +54,9 @@ public class ServerForm extends AdminBaseForm<Server> {
 		setOutputMarkupId(true);
 		this.listContainer = listContainer;
 
-		add(new RequiredTextField<String>("name").setLabel(Model.of(WebSession.getString(1500))));
+		add(new RequiredTextField<String>("name").setLabel(Model.of(Application.getString(1500))));
 		add(new CheckBox("active"));
-		add(new RequiredTextField<String>("address").setLabel(Model.of(WebSession.getString(1501))));
+		add(new RequiredTextField<String>("address").setLabel(Model.of(Application.getString(1501))));
 		add(new TextField<Integer>("port"));
 		add(new TextField<String>("user"));
 		add(new TextField<String>("pass"));

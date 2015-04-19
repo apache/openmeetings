@@ -28,7 +28,6 @@ import java.util.Collection;
 import java.util.List;
 
 import org.apache.openmeetings.db.dao.room.RoomDao;
-import org.apache.openmeetings.db.dao.room.RoomTypeDao;
 import org.apache.openmeetings.db.dao.server.ISessionManager;
 import org.apache.openmeetings.db.dao.user.IUserService;
 import org.apache.openmeetings.db.dao.user.OrganisationDao;
@@ -37,15 +36,14 @@ import org.apache.openmeetings.db.entity.room.Client;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.room.RoomModerator;
 import org.apache.openmeetings.db.entity.room.RoomOrganisation;
-import org.apache.openmeetings.db.entity.room.RoomType;
 import org.apache.openmeetings.db.entity.user.Address;
 import org.apache.openmeetings.db.entity.user.Organisation;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.web.admin.AdminBaseForm;
 import org.apache.openmeetings.web.admin.AdminUserChoiceProvider;
 import org.apache.openmeetings.web.app.Application;
-import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.ConfirmCallListener;
+import org.apache.openmeetings.web.util.RoomTypeDropDown;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
@@ -56,7 +54,6 @@ import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.CheckBox;
-import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
@@ -93,7 +90,7 @@ public class RoomForm extends AdminBaseForm<Room> {
 		this.roomList = roomList;
 		setOutputMarkupId(true);
 		RequiredTextField<String> name = new RequiredTextField<String>("name");
-		name.setLabel(new Model<String>(WebSession.getString(193)));
+		name.setLabel(new Model<String>(Application.getString(193)));
 		add(name);
 
 		add(new DropDownChoice<Long>("numberOfPartizipants", //
@@ -108,8 +105,7 @@ public class RoomForm extends AdminBaseForm<Room> {
 					}
 				}));
 
-		add(new DropDownChoice<RoomType>("roomtype", Application.getBean(RoomTypeDao.class).getAll(WebSession.getLanguage()),
-				new ChoiceRenderer<RoomType>("label.value", "roomtypes_id")).setRequired(true).setLabel(Model.of(WebSession.getString(194))));
+		add(new RoomTypeDropDown("roomtype").setRequired(true).setLabel(Model.of(Application.getString(194))));
 
 		add(new TextArea<String>("comment"));
 
@@ -159,7 +155,7 @@ public class RoomForm extends AdminBaseForm<Room> {
 
 		add(new CheckBox("isDemoRoom"));
 		TextField<Integer> demoTime = new TextField<Integer>("demoTime");
-		demoTime.setLabel(new Model<String>(WebSession.getString(637)));
+		demoTime.setLabel(new Model<String>(Application.getString(637)));
 		add(demoTime);
 		add(new CheckBox("allowUserQuestions"));
 		add(new CheckBox("isAudioOnly"));

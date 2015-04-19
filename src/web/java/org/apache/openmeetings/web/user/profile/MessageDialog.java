@@ -43,7 +43,7 @@ import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Type;
 import org.apache.openmeetings.mail.MailHandler;
 import org.apache.openmeetings.util.LinkHelper;
-import org.apache.openmeetings.web.app.WebSession;
+import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.common.OmDateTimePicker;
 import org.apache.openmeetings.web.util.CalendarHelper;
 import org.apache.openmeetings.web.util.ContactsHelper;
@@ -73,9 +73,9 @@ public class MessageDialog extends AbstractFormDialog<PrivateMessage> {
 	private static final long serialVersionUID = 1L;
 	private final Form<PrivateMessage> form;
 	private final KendoFeedbackPanel feedback = new KendoFeedbackPanel("feedback", new Options("button", true));
-	String sendLbl = WebSession.getString(218);
+	String sendLbl = Application.getString(218);
 	DialogButton send = new DialogButton(sendLbl);
-	private DialogButton cancel = new DialogButton(WebSession.getString(219));
+	private DialogButton cancel = new DialogButton(Application.getString(219));
 	private final WebMarkupContainer roomParamsBlock = new WebMarkupContainer("roomParamsBlock");
 	private final WebMarkupContainer roomParams = new WebMarkupContainer("roomParams");
 	private final DateTimePicker start = new OmDateTimePicker("start", Model.of(LocalDateTime.now()));
@@ -123,7 +123,7 @@ public class MessageDialog extends AbstractFormDialog<PrivateMessage> {
 	}
 	
 	public MessageDialog(String id, CompoundPropertyModel<PrivateMessage> model) {
-		super(id, WebSession.getString(1209), model);
+		super(id, Application.getString(1209), model);
 		form = new Form<PrivateMessage>("form", getModel());
 		
 		form.add(feedback.setOutputMarkupId(true));
@@ -207,7 +207,7 @@ public class MessageDialog extends AbstractFormDialog<PrivateMessage> {
 			msgDao.update(p, getUserId());
 			if (to.getAdresses() != null) {
 				String aLinkHTML = 	(isPrivate && to.getType() == Type.user) ? "<br/><br/>" + "<a href='" + ContactsHelper.getLink() + "'>"
-							+ WebSession.getString(1302) + "</a><br/>" : "";
+							+ Application.getString(1302) + "</a><br/>" : "";
 				String invitation_link = "";
 				if (p.isBookedRoom()) {
 					Invitation i = getBean(InvitationManager.class).getInvitation(to, p.getRoom(),
@@ -221,15 +221,15 @@ public class MessageDialog extends AbstractFormDialog<PrivateMessage> {
 						invitation_link = "";
 					} else {
 						invitation_link = "<br/>" //
-								+ WebSession.getString(503)
+								+ Application.getString(503)
 								+ "<br/><a href='" + invitation_link
 								+ "'>"
-								+ WebSession.getString(504) + "</a><br/>";
+								+ Application.getString(504) + "</a><br/>";
 					}
 				}
 				
 				getBean(MailHandler.class).send(to.getAdresses().getEmail(),
-						WebSession.getString(1301) + p.getSubject(),
+						Application.getString(1301) + p.getSubject(),
 						(p.getMessage() == null ? "" : p.getMessage().replaceAll("\\<.*?>", "")) + aLinkHTML + invitation_link);
 			}
 		}

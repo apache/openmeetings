@@ -51,20 +51,20 @@ public class OAuthForm extends AdminBaseForm<OAuthServer> {
 		setOutputMarkupId(true);
 		
 		add(new CheckBox("isEnabled"));
-		add(new RequiredTextField<String>("name").setLabel(Model.of(WebSession.getString(1573))));
-		add(new TextField<String>("iconUrl").setLabel(Model.of(WebSession.getString(1575))));
-		add(new RequiredTextField<String>("clientId").setLabel(Model.of(WebSession.getString(1576))));
-		add(new RequiredTextField<String>("clientSecret").setLabel(Model.of(WebSession.getString(1577))));
-		add(redirectUriText = (TextField<String>) new TextField<String>("redirectUri", Model.of("")).setLabel(Model.of(WebSession.getString(1587))));
-		add(new RequiredTextField<String>("requestKeyUrl").setLabel(Model.of(WebSession.getString(1578))));
-		add(new RequiredTextField<String>("requestTokenUrl").setLabel(Model.of(WebSession.getString(1579))));
-		add(new RequiredTextField<String>("requestTokenAttributes").setLabel(Model.of(WebSession.getString(1586))));
-		add(new RequiredTextField<String>("requestInfoUrl").setLabel(Model.of(WebSession.getString(1580))));
+		add(new RequiredTextField<String>("name").setLabel(Model.of(Application.getString(1573))));
+		add(new TextField<String>("iconUrl").setLabel(Model.of(Application.getString(1575))));
+		add(new RequiredTextField<String>("clientId").setLabel(Model.of(Application.getString(1576))));
+		add(new RequiredTextField<String>("clientSecret").setLabel(Model.of(Application.getString(1577))));
+		add(redirectUriText = (TextField<String>) new TextField<String>("redirectUri", Model.of("")).setLabel(Model.of(Application.getString(1587))));
+		add(new RequiredTextField<String>("requestKeyUrl").setLabel(Model.of(Application.getString(1578))));
+		add(new RequiredTextField<String>("requestTokenUrl").setLabel(Model.of(Application.getString(1579))));
+		add(new RequiredTextField<String>("requestTokenAttributes").setLabel(Model.of(Application.getString(1586))));
+		add(new RequiredTextField<String>("requestInfoUrl").setLabel(Model.of(Application.getString(1580))));
 		add(new DropDownChoice<RequestMethod>("requestTokenMethod", Arrays.asList(RequestMethod.values()), new ChoiceRenderer<RequestMethod>("name", "name")));
-		add(new RequiredTextField<String>("loginParamName").setLabel(Model.of(WebSession.getString(1582))));
-		add(new RequiredTextField<String>("emailParamName").setLabel(Model.of(WebSession.getString(1583))));
-		add(new TextField<String>("firstnameParamName").setLabel(Model.of(WebSession.getString(1584))));
-		add(new TextField<String>("lastnameParamName").setLabel(Model.of(WebSession.getString(1585))));
+		add(new RequiredTextField<String>("loginParamName").setLabel(Model.of(Application.getString(1582))));
+		add(new RequiredTextField<String>("emailParamName").setLabel(Model.of(Application.getString(1583))));
+		add(new TextField<String>("firstnameParamName").setLabel(Model.of(Application.getString(1584))));
+		add(new TextField<String>("lastnameParamName").setLabel(Model.of(Application.getString(1585))));
 		
 		// attach an ajax validation behavior to all form component's keydown
 		// event and throttle it down to once per second

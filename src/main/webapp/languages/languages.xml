@@ -19,36 +19,36 @@
   
 -->
 <language xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="languages.xsd">
-	<lang id="1" rightToLeft="false" code="en">english</lang>
-	<lang id="2" rightToLeft="false" code="de">deutsch</lang>
-	<lang id="3" rightToLeft="false" code="de-StudIP">deutsch (studIP)</lang>
-	<lang id="4" rightToLeft="false" code="fr">french</lang>
-	<lang id="5" rightToLeft="false" code="it">italian</lang>
-	<lang id="6" rightToLeft="false" code="pt">portugues</lang>
-	<lang id="7" rightToLeft="false" code="pt-br">portugues brazil</lang>
-	<lang id="8" rightToLeft="false" code="es">spanish</lang>
-	<lang id="9" rightToLeft="false" code="ru">russian</lang>
-	<lang id="10" rightToLeft="false" code="sv">swedish</lang>
-	<lang id="11" rightToLeft="false" code="zh-CN">chinese simplified</lang>
-	<lang id="12" rightToLeft="false" code="zh-TW">chinese traditional</lang>
-	<lang id="13" rightToLeft="false" code="ko">korean</lang>
-	<lang id="14" rightToLeft="true" code="ar">arabic</lang>
-	<lang id="15" rightToLeft="false" code="ja">japanese</lang>
-	<lang id="16" rightToLeft="false" code="id">indonesian</lang>
-	<lang id="17" rightToLeft="false" code="hu">hungarian</lang>
-	<lang id="18" rightToLeft="false" code="tr">turkish</lang>
-	<lang id="19" rightToLeft="false" code="uk">ukrainian</lang>
-	<lang id="20" rightToLeft="false" code="th">thai</lang>
-	<lang id="21" rightToLeft="false" code="fa">persian</lang>
-	<lang id="22" rightToLeft="false" code="cs">czech</lang>
-	<lang id="23" rightToLeft="false" code="gl">galician</lang>
-	<lang id="24" rightToLeft="false" code="fi">finnish</lang>
-	<lang id="25" rightToLeft="false" code="pl">polish</lang>
-	<lang id="26" rightToLeft="false" code="el">greek</lang>
-	<lang id="27" rightToLeft="false" code="nl">dutch</lang>
-	<lang id="28" rightToLeft="true" code="he">hebrew</lang>
-	<lang id="29" rightToLeft="false" code="ca">catalan</lang>
-	<lang id="30" rightToLeft="false" code="bg">bulgarian</lang>
-	<lang id="31" rightToLeft="false" code="da">danish</lang>
-	<lang id="32" rightToLeft="false" code="sk">slovak</lang>
+	<lang id="1" code="en">english</lang>
+	<lang id="2" code="de">deutsch</lang>
+	<lang id="3" code="de-StudIP">deutsch (studIP)</lang>
+	<lang id="4" code="fr">french</lang>
+	<lang id="5" code="it">italian</lang>
+	<lang id="6" code="pt">portugues</lang>
+	<lang id="7" code="pt-br">portugues brazil</lang>
+	<lang id="8" code="es">spanish</lang>
+	<lang id="9" code="ru">russian</lang>
+	<lang id="10" code="sv">swedish</lang>
+	<lang id="11" code="zh-CN">chinese simplified</lang>
+	<lang id="12" code="zh-TW">chinese traditional</lang>
+	<lang id="13" code="ko">korean</lang>
+	<lang id="14" code="ar">arabic</lang>
+	<lang id="15" code="ja">japanese</lang>
+	<lang id="16" code="id">indonesian</lang>
+	<lang id="17" code="hu">hungarian</lang>
+	<lang id="18" code="tr">turkish</lang>
+	<lang id="19" code="uk">ukrainian</lang>
+	<lang id="20" code="th">thai</lang>
+	<lang id="21" code="fa">persian</lang>
+	<lang id="22" code="cs">czech</lang>
+	<lang id="23" code="gl">galician</lang>
+	<lang id="24" code="fi">finnish</lang>
+	<lang id="25" code="pl">polish</lang>
+	<lang id="26" code="el">greek</lang>
+	<lang id="27" code="nl">dutch</lang>
+	<lang id="28" code="he">hebrew</lang>
+	<lang id="29" code="ca">catalan</lang>
+	<lang id="30" code="bg">bulgarian</lang>
+	<lang id="31" code="da">danish</lang>
+	<lang id="32" code="sk">slovak</lang>
 </language>

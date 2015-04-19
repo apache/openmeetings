@@ -22,10 +22,10 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAUT_L
 import static org.apache.openmeetings.web.app.Application.getBean;
 
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
-import org.apache.openmeetings.db.dao.label.FieldLanguageDao;
-import org.apache.openmeetings.db.entity.label.FieldLanguage;
+import org.apache.openmeetings.db.dao.label.LabelDao;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
+import org.apache.openmeetings.web.util.FormatHelper;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ThreadContext;
 import org.apache.wicket.behavior.AttributeAppender;
@@ -51,8 +51,7 @@ public abstract class AbstractTemplatePanel extends Panel {
 	public AbstractTemplatePanel(Long langId) {
 		super(TemplatePage.COMP_ID);
 		this.langId = langId == null ? getBean(ConfigurationDao.class).getConfValue(CONFIG_DEFAUT_LANG_KEY, Long.class, "1") : langId;
-		FieldLanguage lang = getBean(FieldLanguageDao.class).getFieldLanguageById(langId);
-		add(new TransparentWebMarkupContainer("container").add(AttributeAppender.append("dir", Boolean.TRUE.equals(lang.getRtl()) ? "rtl" : "ltr")));
+		add(new TransparentWebMarkupContainer("container").add(AttributeAppender.append("dir", FormatHelper.isRtlLanguage(LabelDao.languages.get(langId).toLanguageTag()) ? "rtl" : "ltr")));
 	}
 	
 	/**

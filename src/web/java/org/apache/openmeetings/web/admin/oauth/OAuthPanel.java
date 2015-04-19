@@ -43,7 +43,7 @@ public class OAuthPanel extends AdminPanel {
 		SearchableDataView<OAuthServer> dataView = new SearchableDataView<OAuthServer>("oauthServersList",
 				new SearchableDataProvider<OAuthServer>(OAuth2Dao.class)) {
 
-			private static final long serialVersionUID = -7701640237947383416L;
+			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected void populateItem(Item<OAuthServer> item) {
@@ -52,7 +52,7 @@ public class OAuthPanel extends AdminPanel {
 				item.add(new Label("name", server.getName()));
 				item.add(new AjaxEventBehavior("onclick") {
 
-					private static final long serialVersionUID = 7380727643346943181L;
+					private static final long serialVersionUID = 1L;
 
 					@Override
 					protected void onEvent(AjaxRequestTarget target) {

@@ -203,7 +203,7 @@ public class MainService implements IPendingServiceCallback {
 						allowed = true;
 					} else {
 						SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm"); //FIXME format
-						deniedMessage = WebSession.getString(1271) + String.format(" %s - %s", sdf.format(a.getStart()), sdf.format(a.getEnd()));
+						deniedMessage = Application.getString(1271) + String.format(" %s - %s", sdf.format(a.getStart()), sdf.format(a.getEnd()));
 					}
 					*/
 				}

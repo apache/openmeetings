@@ -69,7 +69,7 @@ public class GroupsPanel extends AdminPanel {
 				item.add(new Label("organisation_id", "" + o.getOrganisation_id()));
 				item.add(new Label("name", "" + o.getName()));
 				item.add(new AjaxEventBehavior("onclick") {
-					private static final long serialVersionUID = -8069413566800571061L;
+					private static final long serialVersionUID = 1L;
 
 					protected void onEvent(AjaxRequestTarget target) {
 						form.hideNewRecord();
@@ -87,7 +87,7 @@ public class GroupsPanel extends AdminPanel {
 		//Paging
 		add(listContainer.add(dataView).setOutputMarkupId(true));
 		PagedEntityListPanel navigator = new PagedEntityListPanel("navigator", dataView) {
-			private static final long serialVersionUID = 5097048616003411362L;
+			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected void onEvent(AjaxRequestTarget target) {

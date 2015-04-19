@@ -19,7 +19,7 @@
 package org.apache.openmeetings.web.mail.template;
 
 import org.apache.openmeetings.db.entity.user.User;
-import org.apache.openmeetings.web.app.WebSession;
+import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.util.ContactsHelper;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.ExternalLink;
@@ -29,14 +29,14 @@ public class RequestContactTemplate extends AbstractTemplatePanel {
 
 	public RequestContactTemplate(User userToAdd, User user) {
 		super(userToAdd.getLanguage_id());
-		add(new Label("hi", WebSession.getString(1192, langId)));
+		add(new Label("hi", Application.getString(1192, langId)));
 		add(new Label("addedFirstName", userToAdd.getFirstname()));
 		add(new Label("addedLastName", userToAdd.getLastname()));
 		add(new Label("firstName", user.getFirstname()));
 		add(new Label("lastName", user.getLastname()));
-		add(new Label("likeToAdd", WebSession.getString(1193, langId)));
-		add(new Label("check", WebSession.getString(1194, langId)));
-		add(new ExternalLink("link", ContactsHelper.getLink()).add(new Label("contactList", WebSession.getString(1196, langId))));
+		add(new Label("likeToAdd", Application.getString(1193, langId)));
+		add(new Label("check", Application.getString(1194, langId)));
+		add(new ExternalLink("link", ContactsHelper.getLink()).add(new Label("contactList", Application.getString(1196, langId))));
 	}
 	
 	public static String getEmail(User userToAdd, User user) {

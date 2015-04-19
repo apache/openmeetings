@@ -20,18 +20,12 @@ package org.apache.openmeetings.db.entity.room;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
-
-import org.apache.openjpa.persistence.jdbc.ForeignKey;
-import org.apache.openmeetings.db.entity.label.Fieldvalues;
 
 @Entity
 @NamedQueries({
@@ -46,10 +40,8 @@ public class PollType {
 	@Column(name = "id")
 	private Long pollTypesId;
 	
-	@OneToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "fieldvalues_id")
-	@ForeignKey(enabled = true)
-	private Fieldvalues label;
+	@Column(name = "fieldvalues_id")
+	private Long label;
 	
 	@Column(name = "numeric_answer")
 	private Boolean isNumericAnswer;
@@ -81,13 +73,13 @@ public class PollType {
 	/**
 	 * @return the pollTypeLabelid
 	 */
-	public Fieldvalues getLabel() {
+	public Long getLabel() {
 		return label;
 	}
 	/**
 	 * @param pollTypeLabelid the pollTypeLabelid to set
 	 */
-	public void setLabel(Fieldvalues label) {
+	public void setLabel(Long label) {
 		this.label = label;
 	}
 }

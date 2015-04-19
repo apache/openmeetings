@@ -20,7 +20,7 @@ package org.apache.openmeetings.test.selenium;
 
 import java.util.List;
 
-import org.apache.openmeetings.db.dao.label.FieldLanguagesValuesDao;
+import org.apache.openmeetings.db.dao.label.LabelDao;
 import org.apache.openmeetings.test.AbstractSpringTest;
 import org.junit.After;
 import org.junit.Before;
@@ -34,7 +34,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 public abstract class AbstractTestDefaults extends AbstractSpringTest {
 	
 	@Autowired
-	private FieldLanguagesValuesDao fieldLanguagesValuesDao;
+	private LabelDao fieldLanguagesValuesDao;
 
 	public WebDriver driver = null;
 	

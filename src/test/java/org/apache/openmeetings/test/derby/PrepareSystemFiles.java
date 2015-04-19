@@ -18,11 +18,15 @@
  */
 package org.apache.openmeetings.test.derby;
 
+import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+
 import java.io.File;
 
-import org.apache.openmeetings.cli.ConnectionProperties;
+import org.apache.openmeetings.cli.ConnectionProperties.DbType;
 import org.apache.openmeetings.cli.ConnectionPropertiesPatcher;
 import org.apache.openmeetings.util.OmFileHelper;
+import org.red5.logging.Red5LoggerFactory;
+import org.slf4j.Logger;
 
 /**
  * This file is called from command line to patch the derby configuration 
@@ -32,6 +36,7 @@ import org.apache.openmeetings.util.OmFileHelper;
  *
  */
 public class PrepareSystemFiles {
+	private static final Logger log = Red5LoggerFactory.getLogger(PrepareSystemFiles.class, webAppRootKey);
 	
 	public static void main(String... args) {
 		try {
@@ -41,19 +46,13 @@ public class PrepareSystemFiles {
 			
 			String persistanceFileToPatch = args[2];
 			
-			ConnectionProperties connectionProperties = new ConnectionProperties();
-			
 			File conf = new File(persistanceFileToPatch);
 			
 			if (conf.exists()) {
 				conf.delete();
 			}
 			
-			String dbType = "derby";
-			File srcConf = new File(OmFileHelper.getWebinfDir(), "classes/META-INF/" + dbType + "_persistence.xml");
-			ConnectionPropertiesPatcher.getPatcher(dbType, connectionProperties).patch(
-					srcConf
-					, conf
+			ConnectionPropertiesPatcher.patch(DbType.derby.name()
 					, "localhost"
 					, "1527"
 					, databaseHomeDirectory + "openmeetings"
@@ -61,7 +60,7 @@ public class PrepareSystemFiles {
 					, "secret"
 					);
 		} catch (Exception err) {
-			err.printStackTrace();
+			log.error("Error", err);
 		}
 	}
 

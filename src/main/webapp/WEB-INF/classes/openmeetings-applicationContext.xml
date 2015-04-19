@@ -63,8 +63,7 @@
 
 	<!-- Singletons for memory based cache -->
 	<bean id="openmeetings.HashMapStore" scope="singleton" class="org.apache.openmeetings.session.store.HashMapStore" />
-	<bean id="whiteBoardObjectListManagerById" scope="singleton"
-		class="org.apache.openmeetings.data.whiteboard.WhiteBoardObjectListManagerById" />
+	<bean id="whiteBoardObjectListManagerById" scope="singleton" class="org.apache.openmeetings.data.whiteboard.WhiteBoardObjectListManagerById" />
 	<!-- WhiteBoardObjectSyncManager can stay in the memory, even on cluster! -->
 	<bean id="whiteBoardObjectSyncManager" scope="singleton" class="org.apache.openmeetings.data.whiteboard.WhiteBoardObjectSyncManager" />
 
@@ -247,10 +246,7 @@
 	<bean id="navimanagement" class="org.apache.openmeetings.db.dao.basic.NavigationDao" />
 	<bean id="pollManagement" class="org.apache.openmeetings.db.dao.room.PollDao" />
 	<bean id="statemanagement" class="org.apache.openmeetings.db.dao.user.StateDao" />
-	<bean id="fieldLanguageDaoImpl" class="org.apache.openmeetings.db.dao.label.FieldLanguageDao" />
-	<bean id="fieldValueDaoImpl" class="org.apache.openmeetings.db.dao.label.FieldValueDao" />
-	<bean id="fieldLanguagesValuesDAO" class="org.apache.openmeetings.db.dao.label.FieldLanguagesValuesDao" />
-	<bean id="fieldmanagment" class="org.apache.openmeetings.data.basic.FieldManager" />
+	<bean id="labelDao" class="org.apache.openmeetings.db.dao.label.LabelDao" />
 	<bean id="configurationDaoImpl" class="org.apache.openmeetings.db.dao.basic.ConfigurationDao" />
 	<bean id="appointmentDao" class="org.apache.openmeetings.db.dao.calendar.AppointmentDao" />
 	<bean id="appointmentLogic" class="org.apache.openmeetings.data.calendar.management.AppointmentLogic" />
@@ -287,7 +283,6 @@
 	<bean id="generatePDF" class="org.apache.openmeetings.documents.GeneratePDF" />
 	<bean id="smsHandler" class="org.apache.openmeetings.mail.SMSHandler" />
 	<bean id="importInitvalues" class="org.apache.openmeetings.installation.ImportInitvalues" />
-	<bean id="languageImport" class="org.apache.openmeetings.backup.LanguageImport" />
 	<bean id="libraryWmlLoader" class="org.apache.openmeetings.documents.LibraryWmlLoader" />
 	<bean id="generateSWF" class="org.apache.openmeetings.converter.GenerateSWF" />
 	<bean id="fileUtils" class="org.apache.openmeetings.data.file.FileUtils" />

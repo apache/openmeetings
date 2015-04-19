@@ -37,17 +37,16 @@ import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Set;
 import java.util.TimeZone;
 
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
-import org.apache.openmeetings.db.dao.label.FieldLanguageDao;
-import org.apache.openmeetings.db.dao.label.FieldLanguagesValuesDao;
+import org.apache.openmeetings.db.dao.label.LabelDao;
 import org.apache.openmeetings.db.dao.server.SOAPLoginDao;
 import org.apache.openmeetings.db.dao.server.SessiondataDao;
 import org.apache.openmeetings.db.dao.user.StateDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
-import org.apache.openmeetings.db.entity.label.FieldLanguage;
 import org.apache.openmeetings.db.entity.server.RemoteSessionObject;
 import org.apache.openmeetings.db.entity.server.SOAPLogin;
 import org.apache.openmeetings.db.entity.server.Sessiondata;
@@ -86,7 +85,6 @@ import ro.fortsoft.wicket.dashboard.web.DashboardContext;
 public class WebSession extends AbstractAuthenticatedWebSession {
 	private static final long serialVersionUID = 1L;
 	public static int MILLIS_IN_MINUTE = 60000;
-	//private static final Map<String, Locale> LNG_TO_LOCALE_MAP = new HashMap<String, Locale> ();
 	private long userId = -1;
 	private Set<Right> rights = new HashSet<User.Right>(); //TODO renew somehow on user edit !!!!
 	private long languageId = -1; //TODO renew somehow on user edit !!!!
@@ -102,13 +100,8 @@ public class WebSession extends AbstractAuthenticatedWebSession {
 	private Long recordingId;
 	private Long loginError = null;
 	private String externalType;
-	private static Set<Long> STRINGS_WITH_APP = new HashSet<Long>(); //FIXME need to be removed
 	public final static List<String> AVAILABLE_TIMEZONES = Arrays.asList(TimeZone.getAvailableIDs());
 	public final static Set<String> AVAILABLE_TIMEZONE_SET = new LinkedHashSet<String>(AVAILABLE_TIMEZONES);
-	static {
-		STRINGS_WITH_APP.addAll(Arrays.asList(499L, 500L, 506L, 511L, 512L, 513L, 517L, 532L, 622L, 804L
-				, 909L, 952L, 978L, 981L, 984L, 989L, 990L, 999L, 1151L, 1155L, 1157L, 1158L, 1194L));
-	}
 	
 	public WebSession(Request request) {
 		super(request);
@@ -243,7 +236,7 @@ public class WebSession extends AbstractAuthenticatedWebSession {
 		externalType = u.getExternalUserType();
 		tz = getBean(TimezoneUtil.class).getTimeZone(u);
 		ISO8601FORMAT.setTimeZone(tz);
-		setLocale(languageId == 3 ? Locale.GERMANY : Locale.forLanguageTag(getLanguageObj().getCode())); //FIXME hack
+		setLocale(languageId == 3 ? Locale.GERMANY : LabelDao.languages.get(languageId)); //FIXME hack
 		//FIXMW locale need to be set by User language first
 		sdf = DateFormat.getDateTimeInstance(SHORT, SHORT, getLocale());
 		if (null == getId()) {
@@ -290,16 +283,6 @@ public class WebSession extends AbstractAuthenticatedWebSession {
 		return (WebSession)AbstractAuthenticatedWebSession.get();
 	}
 	
-	public static String getString(long id) {
-		return getString(id, getLanguage());
-	}
-	
-	public static String getString(long id, long languageId) {
-		String s = getBean(FieldLanguagesValuesDao.class).getString(id, languageId);
-		return s == null ? "[Missing]" :
-			(STRINGS_WITH_APP.contains(id) ? s.replaceAll("\\$APP_NAME", getBean(ConfigurationDao.class).getAppName()) : s);
-	}
-
 	public void setLanguage(long languageId) {
 		this.languageId = languageId;
 	}
@@ -314,10 +297,6 @@ public class WebSession extends AbstractAuthenticatedWebSession {
 			}
 		}
 		return session.languageId;
-	}
-	
-	public static FieldLanguage getLanguageObj() {
-		return getBean(FieldLanguageDao.class).getFieldLanguageById(getLanguage());
 	}
 	
 	public String getValidatedSid() {
@@ -400,14 +379,13 @@ public class WebSession extends AbstractAuthenticatedWebSession {
 		return browserLocale;
 	}
 
-	public FieldLanguage getLanguageByBrowserLocale() {
-		List<FieldLanguage> languages = getBean(FieldLanguageDao.class).getLanguages();
-		for (FieldLanguage l : languages) {
-			if (getBrowserLocale().getLanguage().equals(new Locale(l.getCode()).getLanguage())){
-				return l;
+	public Long getLanguageByBrowserLocale() {
+		for (Map.Entry<Long, Locale> e : LabelDao.languages.entrySet()) {
+			if (getBrowserLocale().equals(e.getValue())) {
+				return e.getKey();
 			}
 		}
-		return languages.get(0);
+		return getBean(ConfigurationDao.class).getConfValue(CONFIG_DEFAUT_LANG_KEY, Long.class, "1");
 	}
 
 	public State getCountryByBrowserLocale() {

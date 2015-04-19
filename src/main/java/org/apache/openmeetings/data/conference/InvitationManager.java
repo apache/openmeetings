@@ -75,133 +75,12 @@ public class InvitationManager implements IInvitationManager {
 	private ConfigurationDao configDao;
 
 	/**
-	 * Sending invitation within plain mail
-	 * 
-	 * @param user_level
-	 * @param username
-	 * @param message
-	 * @param email
-	 * @param subject
-	 * @param rooms_id
-	 * @param conferencedomain
-	 * @param isPasswordProtected
-	 * @param invitationpass
-	 * @param valid
-	 * @param validFrom
-	 * @param validTo
-	 * @param createdBy
-	 * @return
-	 */
-	// ---------------------------------------------------------------------------------------------------------
-	public Invitation getInvitation(User inveetee, Room room
-			, boolean isPasswordProtected, String invitationpass, Valid valid,
-			User createdBy, Long language_id, Date gmtTimeStart, Date gmtTimeEnd
-			, Appointment appointment)
-	{
-		Invitation i = getInvitation(null, inveetee, room, isPasswordProtected, invitationpass, valid, createdBy
-				, language_id, gmtTimeStart, gmtTimeEnd, appointment);
-		i = invitationDao.update(i);
-		return i;
-	}
-	
-	public Invitation getInvitation(Invitation _invitation, User inveetee, Room room
-			, boolean isPasswordProtected, String invitationpass, Valid valid,
-			User createdBy, Long language_id, Date gmtTimeStart, Date gmtTimeEnd
-			, Appointment appointment) {
-		
-		Invitation invitation = _invitation;
-		if (null == _invitation) {
-			invitation = new Invitation();
-			String hashRaw = "HASH" + (System.currentTimeMillis());
-			try {
-				invitation.setHash(MD5.do_checksum(hashRaw));
-			} catch (NoSuchAlgorithmException e) {
-				log.error("Unexpected error while creating invitation", e);
-				throw new RuntimeException(e);
-			}
-		}
-
-		invitation.setPasswordProtected(isPasswordProtected);
-		if (isPasswordProtected) {
-			invitation.setPassword(ManageCryptStyle.getInstanceOfCrypt().createPassPhrase(invitationpass));
-		}
-
-		invitation.setUsed(false);
-		invitation.setValid(valid);
-		
-		// valid period of Invitation
-		switch (valid) {
-			case Period:
-				invitation.setValidFrom(new Date(gmtTimeStart.getTime() - (5 * 60 * 1000)));
-				invitation.setValidTo(gmtTimeEnd);
-				break;
-			case Endless:
-			case OneTime:
-			default:
-				break;
-		}
-
-		invitation.setDeleted(false);
-
-		invitation.setInvitedBy(createdBy);
-		invitation.setInvitee(inveetee);
-		if (language_id != null && Type.contact == invitation.getInvitee().getType()) {
-			invitation.getInvitee().setLanguage_id(language_id);
-		}
-		invitation.setRoom(room);
-		invitation.setInserted(new Date());
-		invitation.setAppointment(appointment);
-
-		return invitation;
-	}
-	
-	/**
 	 * @author vasya
 	 * 
-	 * @param member
+	 * @param mm
 	 * @param a
-	 */
-	public void processInvitation(Appointment a, MeetingMember member, MessageType type) {
-		processInvitation(a, member, type, true);
-	}
-	
-	public void processInvitation(Appointment a, MeetingMember mm, MessageType type, boolean sendMail) {
-		if (a.getRemind() == null) {
-			log.error("Appointment doesn't have reminder set!");
-			return;
-		}
-		long remindType = a.getRemind().getTypId();
-		if (remindType < 2) {
-			log.error("MeetingMember should not have invitation!");
-			return;
-		}
-
-		log.debug(":::: processInvitation ..... " + remindType);
-
-		// appointment.getRemind().getTypId() == 1 will not receive emails
-		if (remindType > 1) {
-			log.debug("Invitation for Appointment : simple email");
-
-			try {
-				mm.setInvitation(getInvitation(mm.getInvitation()
-						, mm.getUser(), a.getRoom(), a.isPasswordProtected(), a.getPassword()
-						, Valid.Period, a.getOwner(), null, a.getStart(), a.getEnd(), a));
-				if (sendMail) {
-					sendInvitionLink(a, mm, type, remindType > 2);
-				}
-			} catch (Exception e) {
-				log.error("Unexpected error while setting invitation", e);
-			}
-		}
-	}
-
-	/**
-	 * @author vasya
-	 * 
-     * @param mm
-     * @param a
-     * @param message
-     * @param subject
+	 * @param message
+	 * @param subject
 	 * @throws Exception 
 	 */
 	private void sendInvitionLink(Appointment a, MeetingMember mm, MessageType type, boolean ical) throws Exception	{
@@ -296,6 +175,7 @@ public class InvitationManager implements IInvitationManager {
 	 */
 	public Object getInvitationByHashCode(String hashCode, boolean hidePass) {
 		try {
+			log.debug("Invitation was requested by hashcode: " + hashCode);
 			Invitation invitation = invitationDao.getInvitationByHashCode(hashCode, hidePass);
 
 			if (invitation == null) {
@@ -371,7 +251,7 @@ public class InvitationManager implements IInvitationManager {
 	 */
 	public Object checkInvitationPass(String hashCode, String pass) {
 		try {
-			Object obj = this.getInvitationByHashCode(hashCode, false);
+			Object obj = getInvitationByHashCode(hashCode, false);
 			log.debug("checkInvitationPass - obj: " + obj);
 			if (obj instanceof Invitation) {
 				Invitation invitation = (Invitation) obj;
@@ -393,6 +273,124 @@ public class InvitationManager implements IInvitationManager {
 		}
 		return new Long(-1);
 	}
-
 	
+	/**
+	 * @author vasya
+	 * 
+	 * @param member
+	 * @param a
+	 */
+	public void processInvitation(Appointment a, MeetingMember member, MessageType type) {
+		processInvitation(a, member, type, true);
+	}
+
+	public void processInvitation(Appointment a, MeetingMember mm, MessageType type, boolean sendMail) {
+		if (a.getRemind() == null) {
+			log.error("Appointment doesn't have reminder set!");
+			return;
+		}
+		long remindType = a.getRemind().getTypId();
+		if (remindType < 2) {
+			log.error("MeetingMember should not have invitation!");
+			return;
+		}
+
+		log.debug(":::: processInvitation ..... " + remindType);
+
+		// appointment.getRemind().getTypId() == 1 will not receive emails
+		if (remindType > 1) {
+			log.debug("Invitation for Appointment : simple email");
+
+			try {
+				mm.setInvitation(getInvitation(mm.getInvitation()
+						, mm.getUser(), a.getRoom(), a.isPasswordProtected(), a.getPassword()
+						, Valid.Period, a.getOwner(), null, a.getStart(), a.getEnd(), a));
+				if (sendMail) {
+					sendInvitionLink(a, mm, type, remindType > 2);
+				}
+			} catch (Exception e) {
+				log.error("Unexpected error while setting invitation", e);
+			}
+		}
+	}
+
+	public Invitation getInvitation(Invitation _invitation, User inveetee, Room room
+			, boolean isPasswordProtected, String invitationpass, Valid valid,
+			User createdBy, Long language_id, Date gmtTimeStart, Date gmtTimeEnd
+			, Appointment appointment) {
+		
+		Invitation invitation = _invitation;
+		if (null == _invitation) {
+			invitation = new Invitation();
+			String hashRaw = "HASH" + (System.currentTimeMillis());
+			try {
+				invitation.setHash(MD5.do_checksum(hashRaw));
+			} catch (NoSuchAlgorithmException e) {
+				log.error("Unexpected error while creating invitation", e);
+				throw new RuntimeException(e);
+			}
+		}
+
+		invitation.setPasswordProtected(isPasswordProtected);
+		if (isPasswordProtected) {
+			invitation.setPassword(ManageCryptStyle.getInstanceOfCrypt().createPassPhrase(invitationpass));
+		}
+
+		invitation.setUsed(false);
+		invitation.setValid(valid);
+		
+		// valid period of Invitation
+		switch (valid) {
+			case Period:
+				invitation.setValidFrom(new Date(gmtTimeStart.getTime() - (5 * 60 * 1000)));
+				invitation.setValidTo(gmtTimeEnd);
+				break;
+			case Endless:
+			case OneTime:
+			default:
+				break;
+		}
+
+		invitation.setDeleted(false);
+
+		invitation.setInvitedBy(createdBy);
+		invitation.setInvitee(inveetee);
+		if (language_id != null && Type.contact == invitation.getInvitee().getType()) {
+			invitation.getInvitee().setLanguage_id(language_id);
+		}
+		invitation.setRoom(room);
+		invitation.setInserted(new Date());
+		invitation.setAppointment(appointment);
+
+		return invitation;
+	}
+
+	/**
+	 * Sending invitation within plain mail
+	 * 
+	 * @param user_level
+	 * @param username
+	 * @param message
+	 * @param email
+	 * @param subject
+	 * @param rooms_id
+	 * @param conferencedomain
+	 * @param isPasswordProtected
+	 * @param invitationpass
+	 * @param valid
+	 * @param validFrom
+	 * @param validTo
+	 * @param createdBy
+	 * @return
+	 */
+	public Invitation getInvitation(User inveetee, Room room
+			, boolean isPasswordProtected, String invitationpass, Valid valid,
+			User createdBy, Long language_id, Date gmtTimeStart, Date gmtTimeEnd
+			, Appointment appointment)
+	{
+		Invitation i = getInvitation(null, inveetee, room, isPasswordProtected, invitationpass, valid, createdBy
+				, language_id, gmtTimeStart, gmtTimeEnd, appointment);
+		i = invitationDao.update(i);
+		return i;
+	}
 }

@@ -29,9 +29,7 @@ import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 
-import org.apache.openmeetings.db.entity.label.Fieldlanguagesvalues;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
 
@@ -43,7 +41,7 @@ import org.simpleframework.xml.Root;
 })
 @Root
 public class Salutation implements Serializable {
-	private static final long serialVersionUID = -5806449519074435223L;
+	private static final long serialVersionUID = 1L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="id")
@@ -68,9 +66,6 @@ public class Salutation implements Serializable {
 	@Element(data=true, required=false)
 	private Long fieldvalues_id;
 	
-	@Transient
-	private Fieldlanguagesvalues label;	
-
 	public String getName() {
 		return name;
 	}
@@ -113,13 +108,4 @@ public class Salutation implements Serializable {
 	public void setFieldvalues_id(Long fieldvalues_id) {
 		this.fieldvalues_id = fieldvalues_id;
 	}
-
-	public Fieldlanguagesvalues getLabel() {
-		return label;
-	}
-
-	public void setLabel(Fieldlanguagesvalues label) {
-		this.label = label;
-	}	
-	
 }

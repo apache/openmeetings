@@ -100,14 +100,14 @@ public class RoomsPanel extends UserPanel {
 		details.add(new Label("roomName", roomName));
 		details.add(new Label("roomComment", roomComment));
 		clients = new ListView<Client>("clients", clientsInRoom){
-			private static final long serialVersionUID = 8542589945574690054L;
+			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected void populateItem(final ListItem<Client> item) {
 				Client client = item.getModelObject();
 				final Long userId = client.getUser_id();
 				item.add(new Image("clientImage", new ByteArrayResource("image/jpeg") {
-					private static final long serialVersionUID = 6039580072791941591L;
+					private static final long serialVersionUID = 1L;
 
 					@Override
 					protected ResourceResponse newResourceResponse(Attributes attributes) {

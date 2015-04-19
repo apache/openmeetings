@@ -20,6 +20,7 @@ package org.apache.openmeetings.test;
 
 import static org.junit.Assert.fail;
 
+import org.apache.openmeetings.db.dao.label.LabelDao;
 import org.apache.openmeetings.util.OmFileHelper;
 import org.junit.Before;
 import org.junit.runner.RunWith;
@@ -36,6 +37,10 @@ public abstract class AbstractSpringTest extends AbstractJUnit4SpringContextTest
 	@Before
 	public void setUp() throws Exception {
 		setOmHome();
+		LabelDao.initLanguageMap();
+		if (LabelDao.languages.isEmpty()) {
+			fail("Failed to set languages");
+		}
 	}
 	
 	protected void setOmHome() {

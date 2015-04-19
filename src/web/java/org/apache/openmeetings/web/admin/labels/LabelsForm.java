@@ -18,71 +18,62 @@
  */
 package org.apache.openmeetings.web.admin.labels;
 
-import org.apache.openmeetings.db.dao.label.FieldLanguagesValuesDao;
-import org.apache.openmeetings.db.dao.label.FieldValueDao;
-import org.apache.openmeetings.db.entity.label.Fieldlanguagesvalues;
-import org.apache.openmeetings.db.entity.label.Fieldvalues;
+import static org.apache.openmeetings.web.app.Application.getBean;
+
+import org.apache.openmeetings.db.dao.label.LabelDao;
+import org.apache.openmeetings.db.entity.label.StringLabel;
 import org.apache.openmeetings.web.admin.AdminBaseForm;
-import org.apache.openmeetings.web.app.Application;
-import org.apache.openmeetings.web.app.WebSession;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.form.TextArea;
-import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.CompoundPropertyModel;
 
+
 /**
- * Add/edit/delete {@link Fieldlanguagesvalues}
+ * Add/edit/delete {@link StringLabel}
  * 
- * @author swagner
+ * @author solomax, swagner
  * 
  */
-public class LabelsForm extends AdminBaseForm<Fieldlanguagesvalues> {
-	private static final long serialVersionUID = -1309878909524329047L;
+public class LabelsForm extends AdminBaseForm<StringLabel> {
+	private static final long serialVersionUID = 1L;
 	private LangPanel panel;
-	
-	public LabelsForm(String id, LangPanel panel, Fieldlanguagesvalues fieldlanguagesvalues) {
-		super(id, new CompoundPropertyModel<Fieldlanguagesvalues>(fieldlanguagesvalues));
+	private String key, value;
+
+	public LabelsForm(String id, LangPanel panel, StringLabel label) {
+		super(id, new CompoundPropertyModel<StringLabel>(label));
 		this.panel = panel;
+		key = label.getKey();
+		value = label.getValue();
 		
-		add(new Label("fieldvalues.fieldvalues_id"));
-		add(new TextField<String>("fieldvalues.name"));
+		add(new RequiredTextField<String>("key"));
 		add(new TextArea<String>("value"));
 	}
 
 	@Override
 	protected void onNewSubmit(AjaxRequestTarget target, Form<?> f) {
-		Fieldlanguagesvalues flv = new Fieldlanguagesvalues();
-		flv.setLanguage_id(panel.language.getLanguage_id());
-		this.setModelObject(flv);
+		key = null;
+		value = null;
+		setModelObject(new StringLabel(key, value));
 		target.add(this);
 		target.appendJavaScript("labelsInit();");
 	}
 
 	@Override
 	protected void onRefreshSubmit(AjaxRequestTarget target, Form<?> form) {
-		Fieldlanguagesvalues flv = getModelObject();
-		if (flv.getFieldlanguagesvalues_id() != null) {
-			flv = Application.getBean(FieldLanguagesValuesDao.class)
-					.get(getModelObject().getFieldlanguagesvalues_id());
-		} else {
-			flv = new Fieldlanguagesvalues();
-		}
-		this.setModelObject(flv);
+		this.setModelObject(new StringLabel(key, value));
 		target.add(this);
 		target.appendJavaScript("labelsInit();");
 	}
 
 	@Override
 	protected void onSaveSubmit(AjaxRequestTarget target, Form<?> form) {
-		Fieldlanguagesvalues flv = getModelObject();
-		Fieldvalues fv = flv.getFieldvalues();
-		Application.getBean(FieldValueDao.class).update(fv, WebSession.getUserId());
-		
-		flv.setFieldvalues(fv);
-		Application.getBean(FieldLanguagesValuesDao.class)
-			.update(flv, WebSession.getUserId());
+		try {
+			getBean(LabelDao.class).update(panel.language.getValue(), getModelObject());
+		} catch (Exception e) {
+			error("Unexpected error while saving label:" + e.getMessage()); //TODO localize
+		}
 		hideNewRecord();
 		target.add(panel.listContainer);
 		target.appendJavaScript("labelsInit();");
@@ -90,8 +81,11 @@ public class LabelsForm extends AdminBaseForm<Fieldlanguagesvalues> {
 
 	@Override
 	protected void onDeleteSubmit(AjaxRequestTarget target, Form<?> form) {
-		Application.getBean(FieldLanguagesValuesDao.class)
-			.delete(getModelObject(), WebSession.getUserId());
+		try {
+			getBean(LabelDao.class).delete(panel.language.getValue(), getModelObject());
+		} catch (Exception e) {
+			error("Unexpected error while deleting label:" + e.getMessage()); //TODO localize
+		}
 		target.add(panel.listContainer);
 		target.appendJavaScript("labelsInit();");
 	}

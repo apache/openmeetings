@@ -55,13 +55,13 @@ public class LdapForm extends AdminBaseForm<LdapConfig> {
 		setOutputMarkupId(true);
 		this.listContainer = listContainer;
 		
-		add(new RequiredTextField<String>("name").setLabel(Model.of(WebSession.getString(1108))));
+		add(new RequiredTextField<String>("name").setLabel(Model.of(Application.getString(1108))));
 		add(new CheckBox("isActive"));
 		add(forDatePattern("inserted", WEB_DATE_PATTERN));
 		add(new Label("insertedby.login"));
 		add(forDatePattern("updated", WEB_DATE_PATTERN));
 		add(new Label("updatedby.login"));
-		add(new RequiredTextField<String>("configFileName").setLabel(Model.of(WebSession.getString(1115))));
+		add(new RequiredTextField<String>("configFileName").setLabel(Model.of(Application.getString(1115))));
 		add(new CheckBox("addDomainToUserName"));
 		add(new TextField<String>("domain"));
 		add(new TextArea<String>("comment"));
@@ -73,10 +73,8 @@ public class LdapForm extends AdminBaseForm<LdapConfig> {
 
 	@Override
 	protected void onSaveSubmit(AjaxRequestTarget target, Form<?> form) {
-		Application.getBean(LdapConfigDao.class).update(getModelObject(),
-				WebSession.getUserId());
-		LdapConfig ldapConfig = Application.getBean(LdapConfigDao.class)
-				.get(getModelObject().getLdapConfigId());
+		Application.getBean(LdapConfigDao.class).update(getModelObject(), WebSession.getUserId());
+		LdapConfig ldapConfig = Application.getBean(LdapConfigDao.class).get(getModelObject().getLdapConfigId());
 		this.setModelObject(ldapConfig);
 		hideNewRecord();
 		target.add(this);

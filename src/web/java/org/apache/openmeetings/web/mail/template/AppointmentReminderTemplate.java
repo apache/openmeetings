@@ -22,7 +22,7 @@ import java.util.TimeZone;
 
 import org.apache.openmeetings.db.entity.calendar.Appointment;
 import org.apache.openmeetings.util.CalendarPatterns;
-import org.apache.openmeetings.web.app.WebSession;
+import org.apache.openmeetings.web.app.Application;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.util.string.Strings;
@@ -33,16 +33,16 @@ public class AppointmentReminderTemplate extends AbstractAppointmentTemplate {
 	private AppointmentReminderTemplate(Long langId, Appointment a, TimeZone tz) {
 		super(langId, a, tz);
 
-		add(new Label("titleLbl", WebSession.getString(1158L, langId)));
+		add(new Label("titleLbl", Application.getString(1158L, langId)));
 		add(new Label("title", a.getTitle()));
 		add(new WebMarkupContainer("descContainer")
-			.add(new Label("descLbl", WebSession.getString(1152L, langId)))
+			.add(new Label("descLbl", Application.getString(1152L, langId)))
 			.add(new Label("desc", a.getDescription()).setEscapeModelStrings(false))
 			.setVisible(!Strings.isEmpty(a.getDescription()))
 			);
-		add(new Label("startLbl", WebSession.getString(1153L, langId)));
+		add(new Label("startLbl", Application.getString(1153L, langId)));
 		add(new Label("start", CalendarPatterns.getDateWithTimeByMiliSecondsAndTimeZone(a.getStart(), tz)));
-		add(new Label("endLbl", WebSession.getString(1154L, langId)));
+		add(new Label("endLbl", Application.getString(1154L, langId)));
 		add(new Label("end", CalendarPatterns.getDateWithTimeByMiliSecondsAndTimeZone(a.getEnd(), tz)));
 	}
 	
@@ -54,7 +54,7 @@ public class AppointmentReminderTemplate extends AbstractAppointmentTemplate {
 	@Override
 	public String getSubject() {
 		StringBuilder sb = new StringBuilder();
-		sb.append(WebSession.getString(1158L, langId)).append(" ").append(" ").append(a.getTitle()).append(' ')
+		sb.append(Application.getString(1158L, langId)).append(" ").append(" ").append(a.getTitle()).append(' ')
 			.append(CalendarPatterns.getDateWithTimeByMiliSecondsAndTimeZone(a.getStart(), tz))
 			.append(" - ").append(CalendarPatterns.getDateWithTimeByMiliSecondsAndTimeZone(a.getEnd(), tz));
 

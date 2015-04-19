@@ -28,7 +28,7 @@ import org.apache.openmeetings.db.entity.user.Organisation_Users;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.web.admin.AdminBaseForm;
 import org.apache.openmeetings.web.admin.AdminUserChoiceProvider;
-import org.apache.openmeetings.web.app.WebSession;
+import org.apache.openmeetings.web.app.Application;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.ajax.form.AjaxFormValidatingBehavior;
@@ -41,7 +41,7 @@ import org.apache.wicket.util.time.Duration;
 import org.wicketstuff.select2.Select2Choice;
 
 public class GroupForm extends AdminBaseForm<Organisation> {
-	private static final long serialVersionUID = -1720731686053912700L;
+	private static final long serialVersionUID = 1L;
 	private GroupUsersPanel usersPanel;
 	private WebMarkupContainer groupList;
 	private Select2Choice<User> userToadd = null;
@@ -55,7 +55,7 @@ public class GroupForm extends AdminBaseForm<Organisation> {
 		this.groupList = groupList;
 		setOutputMarkupId(true);
 		
-		add(new RequiredTextField<String>("name").setLabel(Model.of(WebSession.getString(165))));
+		add(new RequiredTextField<String>("name").setLabel(Model.of(Application.getString(165))));
 		usersPanel = new GroupUsersPanel("users", getOrgId());
 		add(usersPanel);
 

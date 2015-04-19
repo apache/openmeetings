@@ -43,6 +43,7 @@ import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.room.RoomType;
 import org.apache.openmeetings.db.entity.user.Organisation_Users;
 import org.apache.openmeetings.db.entity.user.User;
+import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.OmDateTimePicker;
 import org.apache.openmeetings.web.pages.MainPage;
@@ -57,6 +58,7 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.form.PasswordTextField;
 import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.form.TextField;
@@ -86,11 +88,11 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 	private static final Logger log = Red5LoggerFactory.getLogger(AppointmentDialog.class, webAppRootKey);
 	
 	private AppointmentForm form;
-	private DialogButton save = new DialogButton(WebSession.getString(813));
-	private DialogButton cancel = new DialogButton(WebSession.getString(1130));
-	private String deleteLbl = WebSession.getString(814);
+	private DialogButton save = new DialogButton(Application.getString(813));
+	private DialogButton cancel = new DialogButton(Application.getString(1130));
+	private String deleteLbl = Application.getString(814);
 	private DialogButton delete = new DialogButton(deleteLbl);
-	private String enterRoomLbl = WebSession.getString(1282);
+	private String enterRoomLbl = Application.getString(1282);
 	private DialogButton enterRoom = new DialogButton(enterRoomLbl);
 	private final CalendarPanel calendarPanel;
 	private final KendoFeedbackPanel feedback = new KendoFeedbackPanel("feedback", new Options("button", true));
@@ -126,7 +128,7 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 		setOutputMarkupId(true);
 		form = new AppointmentForm("appForm", model);
 		add(form);
-		confirmDelete = new MessageDialog("confirmDelete", WebSession.getString(814), WebSession.getString(833), DialogButtons.OK_CANCEL, DialogIcon.WARN){
+		confirmDelete = new MessageDialog("confirmDelete", Application.getString(814), Application.getString(833), DialogButtons.OK_CANCEL, DialogIcon.WARN){
 			private static final long serialVersionUID = 1L;
 
 			public void onClose(AjaxRequestTarget target, DialogButton button) {
@@ -292,7 +294,7 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 			setOutputMarkupId(true);
 			
 			add(feedback.setOutputMarkupId(true));
-			add(new RequiredTextField<String>("title").setLabel(Model.of(WebSession.getString(572))));
+			add(new RequiredTextField<String>("title").setLabel(Model.of(Application.getString(572))));
 			DefaultWysiwygToolbar toolbar = new DefaultWysiwygToolbar("toolbarContainer");
 			add(toolbar);
 			add(new WysiwygEditor("description", toolbar));
@@ -307,11 +309,23 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 			add(new DropDownChoice<AppointmentReminderTyps>(
 					"remind"
 					, remindTypes
-					, new ChoiceRenderer<AppointmentReminderTyps>("label.value", "typId")));
+					, new IChoiceRenderer<AppointmentReminderTyps>() {
+						private static final long serialVersionUID = 1L;
+
+						@Override
+						public Object getDisplayValue(AppointmentReminderTyps object) {
+							return getString("" + object.getFieldvalues_id());
+						}
+
+						@Override
+						public String getIdValue(AppointmentReminderTyps object, int index) {
+							return "" + object.getTypId();
+						}
+					}));
 			
 			add(roomType.setEnabled(createRoom).setOutputMarkupId(true));
 			
-			add(room.setRequired(true).setLabel(Model.of(WebSession.getString(406))).setEnabled(!createRoom).setOutputMarkupId(true));
+			add(room.setRequired(true).setLabel(Model.of(Application.getString(406))).setEnabled(!createRoom).setOutputMarkupId(true));
 			add(new AjaxCheckBox("createRoom", new PropertyModel<Boolean>(this, "createRoom")) {
 				private static final long serialVersionUID = 1L;
 
@@ -357,7 +371,7 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 		@Override
 		protected void onValidate() {
 			if (end.getConvertedInput().isBefore(start.getConvertedInput())) {
-				error(WebSession.getString(1592));
+				error(Application.getString(1592));
 			}
 		}
 	}

@@ -49,7 +49,7 @@ public class RoomsPanel extends AdminPanel {
 	public RoomsPanel(String id) {
 		super(id);
 		SearchableDataView<Room> dataView = new SearchableDataView<Room>("roomList", new SearchableDataProvider<Room>(RoomDao.class)) {
-			private static final long serialVersionUID = 8715559628755439596L;
+			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected void populateItem(final Item<Room> item) {
@@ -59,7 +59,7 @@ public class RoomsPanel extends AdminPanel {
 				item.add(new Label("name", "" + room.getName()));
 				item.add(new Label("ispublic", "" + room.getIspublic()));
 				item.add(new AjaxEventBehavior("onclick") {
-					private static final long serialVersionUID = -8069413566800571061L;
+					private static final long serialVersionUID = 1L;
 
 					protected void onEvent(AjaxRequestTarget target) {
 						form.hideNewRecord();

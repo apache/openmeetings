@@ -25,8 +25,8 @@ import java.util.List;
 
 import org.apache.openmeetings.db.dao.room.RoomTypeDao;
 import org.apache.openmeetings.db.entity.room.RoomType;
-import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
+import org.apache.wicket.markup.html.form.IChoiceRenderer;
 
 public class RoomTypeDropDown extends DropDownChoice<RoomType> {
 	private static final long serialVersionUID = 1L;
@@ -38,6 +38,18 @@ public class RoomTypeDropDown extends DropDownChoice<RoomType> {
 	public RoomTypeDropDown(String id) {
 		super(id);
 		setChoices(getRoomTypes());
-		setChoiceRenderer(new ChoiceRenderer<RoomType>("label.value", "roomtypes_id"));
+		setChoiceRenderer(new IChoiceRenderer<RoomType>() {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public Object getDisplayValue(RoomType object) {
+				return getString("" + object.getFieldvalues_id());
+			}
+
+			@Override
+			public String getIdValue(RoomType object, int index) {
+				return "" + object.getRoomtypes_id();
+			}
+		});
 	}
 }

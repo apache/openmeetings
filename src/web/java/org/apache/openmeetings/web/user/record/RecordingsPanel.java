@@ -35,7 +35,7 @@ import org.apache.openmeetings.db.entity.record.FlvRecording;
 import org.apache.openmeetings.db.entity.record.FlvRecording.Status;
 import org.apache.openmeetings.db.entity.user.Organisation;
 import org.apache.openmeetings.db.entity.user.Organisation_Users;
-import org.apache.openmeetings.web.app.WebSession;
+import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.common.AddFolderDialog;
 import org.apache.openmeetings.web.common.ConfirmableAjaxLink;
 import org.apache.openmeetings.web.common.UserPanel;
@@ -74,7 +74,7 @@ public class RecordingsPanel extends UserPanel {
 	public RecordingsPanel(String id) {
 		super(id);
 		rm.getObject().setFlvRecordingId(Long.MIN_VALUE);
-		final AddFolderDialog addFolder = new AddFolderDialog("addFolder", WebSession.getString(712)) {
+		final AddFolderDialog addFolder = new AddFolderDialog("addFolder", Application.getString(712)) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -190,7 +190,7 @@ public class RecordingsPanel extends UserPanel {
 		@Override
 		protected Component newContentComponent(String id, IModel<FlvRecording> node) {
 			return new Folder<FlvRecording>(id, this, node) {
-				private static final long serialVersionUID = 1020976220467419084L;
+				private static final long serialVersionUID = 1L;
 
 				@Override
 				protected Component newLabelComponent(String id, final IModel<FlvRecording> lm) {
@@ -293,7 +293,7 @@ public class RecordingsPanel extends UserPanel {
 		public Iterator<? extends FlvRecording> getRoots() {
 			FlvRecording r = new FlvRecording();
 			r.setFlvRecordingId(0);
-			r.setFileName(WebSession.getString(860));
+			r.setFileName(Application.getString(860));
 			r.setFolder(true);
 			r.setOwnerId(getUserId());
 			return Arrays.asList(r).iterator();
@@ -324,7 +324,7 @@ public class RecordingsPanel extends UserPanel {
 			r.setOrganization_id(orgId);
 			r.setOwnerId(null);
 			r.setFolder(true);
-			String pub = WebSession.getString(861);
+			String pub = Application.getString(861);
 			r.setFileName(orgId == null ? pub : String.format("%s (%s)", pub, name));
 			return Arrays.asList(r).iterator();
 		}

@@ -40,7 +40,7 @@ import org.apache.openmeetings.db.entity.user.PrivateMessageFolder;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.UserContact;
 import org.apache.openmeetings.web.admin.SearchableDataView;
-import org.apache.openmeetings.web.app.WebSession;
+import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.common.AddFolderDialog;
 import org.apache.openmeetings.web.common.PagedEntityListPanel;
 import org.apache.openmeetings.web.common.UserPanel;
@@ -118,7 +118,7 @@ public class MessagesContactsPanel extends UserPanel {
 			private static final long serialVersionUID = 1L;
 	
 			public Object getDisplayValue(Integer object) {
-				return WebSession.getString(object);
+				return Application.getString(object);
 			}
 			
 			public String getIdValue(Integer object, int index) {
@@ -197,7 +197,7 @@ public class MessagesContactsPanel extends UserPanel {
 		emptySelection(target);
 		selectDropDown.setModelObject(SELECT_CHOOSE);
 		moveDropDown.setModelObject(NOT_MOVE_FOLDER);
-		deleteBtn.add(AttributeModifier.replace("value", WebSession.getString(TRASH_FOLDER_ID == id ? 1256 : 1245)));
+		deleteBtn.add(AttributeModifier.replace("value", Application.getString(TRASH_FOLDER_ID == id ? 1256 : 1245)));
 		readBtn.setEnabled(false);
 		unreadBtn.setEnabled(false);
 		if (target != null) {
@@ -242,7 +242,7 @@ public class MessagesContactsPanel extends UserPanel {
 	public MessagesContactsPanel(String id) {
 		super(id);
 		NOT_MOVE_FOLDER.setPrivateMessageFolderId(MOVE_CHOOSE);
-		NOT_MOVE_FOLDER.setFolderName(WebSession.getString(1243));
+		NOT_MOVE_FOLDER.setFolderName(Application.getString(1243));
 		foldersModel = Model.ofList(getBean(PrivateMessageFolderDao.class).get(0, Integer.MAX_VALUE));
 		updateMoveModel();
 		add(newMessage = new MessageDialog("newMessage", new CompoundPropertyModel<PrivateMessage>(new PrivateMessage())) {
@@ -331,7 +331,7 @@ public class MessagesContactsPanel extends UserPanel {
 					@Override
 					protected void updateAjaxAttributes(AjaxRequestAttributes attributes) {
 						super.updateAjaxAttributes(attributes);
-						attributes.getAjaxCallListeners().add(new ConfirmAjaxCallListener(WebSession.getString(713)));
+						attributes.getAjaxCallListeners().add(new ConfirmAjaxCallListener(Application.getString(713)));
 					}
 				}));
 				item.add(new AjaxEventBehavior("click") {

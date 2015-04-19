@@ -40,7 +40,7 @@ import org.apache.wicket.markup.repeater.Item;
  * 
  */
 public class ConfigsPanel extends AdminPanel {
-	private static final long serialVersionUID = -1L;
+	private static final long serialVersionUID = 1L;
 	private ConfigForm form;
 	private final WebMarkupContainer listContainer = new WebMarkupContainer("listContainer");
 	
@@ -55,7 +55,7 @@ public class ConfigsPanel extends AdminPanel {
 		
 		SearchableDataView<Configuration> dataView = new SearchableDataView<Configuration>("configList"
 			, new SearchableDataProvider<Configuration>(ConfigurationDao.class)) {
-			private static final long serialVersionUID = 8715559628755439596L;
+			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected void populateItem(final Item<Configuration> item) {
@@ -64,7 +64,7 @@ public class ConfigsPanel extends AdminPanel {
 				item.add(new Label("conf_key", c.getConf_key()));
 				item.add(new Label("conf_value", c.getConf_value()));
 				item.add(new AjaxEventBehavior("onclick") {
-					private static final long serialVersionUID = -8069413566800571061L;
+					private static final long serialVersionUID = 1L;
 
 					protected void onEvent(AjaxRequestTarget target) {
 						form.hideNewRecord();
@@ -79,7 +79,7 @@ public class ConfigsPanel extends AdminPanel {
 		};
 		add(listContainer.add(dataView).setOutputMarkupId(true));
 		PagedEntityListPanel navigator = new PagedEntityListPanel("navigator", dataView) {
-			private static final long serialVersionUID = 5097048616003411362L;
+			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected void onEvent(AjaxRequestTarget target) {

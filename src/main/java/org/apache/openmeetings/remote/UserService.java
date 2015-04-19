@@ -36,7 +36,7 @@ import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.calendar.AppointmentCategoryDao;
 import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
 import org.apache.openmeetings.db.dao.calendar.MeetingMemberDao;
-import org.apache.openmeetings.db.dao.label.FieldLanguagesValuesDao;
+import org.apache.openmeetings.db.dao.label.LabelDao;
 import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.dao.room.RoomTypeDao;
 import org.apache.openmeetings.db.dao.server.ISessionManager;
@@ -119,7 +119,7 @@ public class UserService implements IUserService {
 	@Autowired
 	private SlaveHTTPConnectionManager slaveHTTPConnectionManager;
 	@Autowired
-	private FieldLanguagesValuesDao labelDao;
+	private LabelDao labelDao;
 	@Autowired
 	private RoomTypeDao roomTypeDao;
 

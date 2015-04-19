@@ -27,11 +27,9 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
-import org.apache.openmeetings.db.dao.label.FieldLanguagesValuesDao;
 import org.apache.openmeetings.db.entity.room.RoomType;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
@@ -39,9 +37,6 @@ public class RoomTypeDao {
 	private static final Logger log = Red5LoggerFactory.getLogger(RoomTypeDao.class, webAppRootKey);
 	@PersistenceContext
 	private EntityManager em;
-	
-	@Autowired
-	private FieldLanguagesValuesDao fieldLangValueDao;
 	
 	/**
 	 * get all availible RoomTypes
@@ -52,9 +47,6 @@ public class RoomTypeDao {
 		TypedQuery<RoomType> query = em.createNamedQuery("getAllRoomTypes", RoomType.class);
 		query.setParameter("deleted", true);
 		List<RoomType> ll = query.getResultList();
-		for (RoomType ti : ll) {
-			ti.setLabel(fieldLangValueDao.get(ti.getFieldvalues_id(), langId));
-		}
 		return ll;
 	}
 	

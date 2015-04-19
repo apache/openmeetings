@@ -21,11 +21,11 @@ package org.apache.openmeetings.web.pages;
 import static org.apache.openmeetings.web.app.Application.getBean;
 
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
-import org.apache.openmeetings.db.entity.label.FieldLanguage;
 import org.apache.openmeetings.web.app.WebSession;
+import org.apache.openmeetings.web.util.FormatHelper;
 
 public abstract class BaseInitedPage extends BasePage {
-	private static final long serialVersionUID = 5716753033219700254L;
+	private static final long serialVersionUID = 1L;
 
 	@Override
 	protected String getApplicationName() {
@@ -33,7 +33,12 @@ public abstract class BaseInitedPage extends BasePage {
 	}
 	
 	@Override
-	protected FieldLanguage getLanguage() {
-		return WebSession.getLanguageObj();
+	protected String getLanguageCode() {
+		return WebSession.get().getLocale().toLanguageTag();
+	}
+	
+	@Override
+	public boolean isRtl() {
+		return FormatHelper.isRtlLanguage(getLanguageCode());
 	}
 }

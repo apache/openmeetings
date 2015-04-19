@@ -18,7 +18,7 @@
  */
 package org.apache.openmeetings.web.admin;
 
-import org.apache.openmeetings.web.app.WebSession;
+import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.common.ConfirmCallListener;
 import org.apache.openmeetings.web.common.FormSaveRefreshPanel;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -29,18 +29,18 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.Model;
 
 public abstract class AdminSavePanel<T> extends FormSaveRefreshPanel<T> {
-	private static final long serialVersionUID = -8916631148087019924L;
+	private static final long serialVersionUID = 1L;
 	private Label newRecord;
 	
 	public AdminSavePanel(String id, final Form<T> form) {
 		super(id, form);
 		
-		newRecord = new Label("newRecord", Model.of(WebSession.getString(344L)));
+		newRecord = new Label("newRecord", Model.of(Application.getString(344L)));
 		add(newRecord.setVisible(false).setOutputMarkupId(true));
 		
 		// add a new button that can be used to submit the form via ajax
 		add(new AjaxButton("ajax-new-button", form) {
-			private static final long serialVersionUID = 839803820502260006L;
+			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
@@ -61,7 +61,7 @@ public abstract class AdminSavePanel<T> extends FormSaveRefreshPanel<T> {
 
 		// add a cancel button that can be used to submit the form via ajax
 		add(new AjaxButton("ajax-cancel-button", form) {
-			private static final long serialVersionUID = 839803820502260006L;
+			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected void updateAjaxAttributes(AjaxRequestAttributes attributes) {

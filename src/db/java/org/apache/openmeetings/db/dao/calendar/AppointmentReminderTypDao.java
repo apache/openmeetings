@@ -18,6 +18,8 @@
  */
 package org.apache.openmeetings.db.dao.calendar;
 
+import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+
 import java.util.Date;
 import java.util.List;
 
@@ -26,10 +28,8 @@ import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
-import org.apache.openmeetings.db.dao.label.FieldLanguagesValuesDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.calendar.AppointmentReminderTyps;
-import org.apache.openmeetings.util.OpenmeetingsVariables;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,17 +37,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
 public class AppointmentReminderTypDao {
-
-	private static final Logger log = Red5LoggerFactory.getLogger(
-			AppointmentReminderTypDao.class,
-			OpenmeetingsVariables.webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(AppointmentReminderTypDao.class, webAppRootKey);
 
 	@PersistenceContext
 	private EntityManager em;
 	@Autowired
 	private UserDao usersDao;
-	@Autowired
-	private FieldLanguagesValuesDao fieldLanguagesValuesDao;
 
 	public AppointmentReminderTyps get(Long typId) {
 		try {
@@ -154,18 +149,12 @@ public class AppointmentReminderTypDao {
 
 		try {
 
-			String hql = "select a from AppointmentReminderTyps a "
-					+ "WHERE a.deleted <> :deleted ";
+			String hql = "select a from AppointmentReminderTyps a WHERE a.deleted <> :deleted ";
 
 			TypedQuery<AppointmentReminderTyps> query = em.createQuery(hql, AppointmentReminderTyps.class);
 			query.setParameter("deleted", true);
 
-			List<AppointmentReminderTyps> listAppointmentReminderTyp = query
-					.getResultList();
-			for (AppointmentReminderTyps ti : listAppointmentReminderTyp) {
-				ti.setLabel(fieldLanguagesValuesDao.get(
-						ti.getFieldvalues_id(), language_id));
-			}
+			List<AppointmentReminderTyps> listAppointmentReminderTyp = query.getResultList();
 
 			return listAppointmentReminderTyp;
 		} catch (Exception ex2) {

@@ -34,21 +34,19 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 
 import org.apache.openjpa.persistence.jdbc.ForeignKey;
-import org.apache.openmeetings.db.entity.label.Fieldlanguagesvalues;
 
 @Entity
 @NamedQueries({
-		@NamedQuery(name = "getNavigation", query = "SELECT DISTINCT ng from Naviglobal ng " + "LEFT JOIN ng.mainnavi nm "
-				+ "WHERE nm.deleted = false " + "AND ng.level_id <= :level_id " + "AND nm.level_id <= :level_id "
-				+ "AND ng.deleted = false " + "order by ng.naviorder, nm.naviorder"),
+		@NamedQuery(name = "getNavigation", query = "SELECT DISTINCT ng from Naviglobal ng LEFT JOIN ng.mainnavi nm "
+				+ "WHERE nm.deleted = false AND ng.level_id <= :level_id AND nm.level_id <= :level_id "
+				+ "AND ng.deleted = false order by ng.naviorder, nm.naviorder"),
 		@NamedQuery(name = "getNavigationById", query = "SELECT ng from Naviglobal ng WHERE ng.global_id = :global_id") })
 @Table(name = "naviglobal")
 public class Naviglobal implements Serializable {
+	private static final long serialVersionUID = 1L;
 
-	private static final long serialVersionUID = 515828033813767719L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
@@ -93,16 +91,10 @@ public class Naviglobal implements Serializable {
 	@Column(name = "tooltip_fieldvalues_id")
 	private Long tooltip_fieldvalues_id;
 
-	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinColumn(name = "global_id")
 	@ForeignKey(enabled = true)
 	private List<Navimain> mainnavi;
-
-	@Transient
-	private Fieldlanguagesvalues label;
-
-	@Transient
-	private Fieldlanguagesvalues tooltip;
 
 	public String getAction() {
 		return action;
@@ -216,28 +208,12 @@ public class Naviglobal implements Serializable {
 		this.fieldvalues_id = fieldvalues_id;
 	}
 
-	public Fieldlanguagesvalues getLabel() {
-		return label;
-	}
-
-	public void setLabel(Fieldlanguagesvalues label) {
-		this.label = label;
-	}
-
 	public Long getTooltip_fieldvalues_id() {
 		return tooltip_fieldvalues_id;
 	}
 
 	public void setTooltip_fieldvalues_id(Long tooltip_fieldvalues_id) {
 		this.tooltip_fieldvalues_id = tooltip_fieldvalues_id;
-	}
-
-	public Fieldlanguagesvalues getTooltip() {
-		return tooltip;
-	}
-
-	public void setTooltip(Fieldlanguagesvalues tooltip) {
-		this.tooltip = tooltip;
 	}
 
 	@Override

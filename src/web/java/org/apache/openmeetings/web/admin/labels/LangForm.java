@@ -18,37 +18,46 @@
  */
 package org.apache.openmeetings.web.admin.labels;
 
-import static org.apache.openmeetings.web.app.Application.getBean;
+import java.util.AbstractMap;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
-import org.apache.openmeetings.db.dao.label.FieldLanguageDao;
-import org.apache.openmeetings.db.entity.label.FieldLanguage;
+import org.apache.openmeetings.db.dao.label.LabelDao;
 import org.apache.openmeetings.web.common.ConfirmCallListener;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
-import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.ajax.form.AjaxFormValidatingBehavior;
+import org.apache.wicket.ajax.form.OnChangeAjaxBehavior;
 import org.apache.wicket.markup.html.WebMarkupContainer;
-import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.util.time.Duration;
 
 /**
- * Modify the language selection, add/delete {@link FieldLanguage}
+ * Modify the language selection, add/delete language
  * 
- * @author swagner
+ * @author solomax, swagner
  * 
  */
 public class LangForm extends Form<Void> {
-	private static final long serialVersionUID = 2837702941211636609L;
-	private DropDownChoice<FieldLanguage> languages;
+	private static final long serialVersionUID = 1L;
+	private DropDownChoice<Map.Entry<Long, Locale>> languages;
 
+	private List<Map.Entry<Long, Locale>> getLanguages() {
+		List<Map.Entry<Long, Locale>> list = new ArrayList<Map.Entry<Long, Locale>>();
+		for (Map.Entry<Long, Locale> e : LabelDao.languages.entrySet()) {
+			list.add(new AbstractMap.SimpleEntry<Long,Locale>(e.getKey(), e.getValue()));
+		}
+		return list;
+	}
+	
 	public void updateLanguages(AjaxRequestTarget target) {
-		FieldLanguageDao langDao = getBean(FieldLanguageDao.class);
-		languages.setChoices(langDao.getLanguages());
-		// add(languages);
+		languages.setChoices(getLanguages());
 		target.add(languages);
 	}
 
@@ -64,15 +73,25 @@ public class LangForm extends Form<Void> {
 		super(id);
 		setOutputMarkupId(true);
 
-		FieldLanguageDao langDao = getBean(FieldLanguageDao.class);
-		
-		languages = new DropDownChoice<FieldLanguage>("language"
-				, new PropertyModel<FieldLanguage>(langPanel, "language")
-				, langDao.getLanguages()
-				, new ChoiceRenderer<FieldLanguage>("name", "language_id"));
+		languages = new DropDownChoice<Map.Entry<Long, Locale>>("language"
+				, new PropertyModel<Map.Entry<Long, Locale>>(langPanel, "language")
+				, getLanguages()
+				, new IChoiceRenderer<Map.Entry<Long, Locale>>() {
+					private static final long serialVersionUID = 1L;
+
+					@Override
+					public Object getDisplayValue(Map.Entry<Long, Locale> object) {
+						return object.getValue().getDisplayName();
+					}
+
+					@Override
+					public String getIdValue(Map.Entry<Long, Locale> object, int index) {
+						return "" + object.getKey();
+					}
+				});
 				
-		languages.add(new AjaxFormComponentUpdatingBehavior("onchange") {
-			private static final long serialVersionUID = -2055912815073387536L;
+		languages.add(new OnChangeAjaxBehavior() {
+			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected void onUpdate(AjaxRequestTarget target) {
@@ -82,7 +101,7 @@ public class LangForm extends Form<Void> {
 		add(languages);
 
 		add(new WebMarkupContainer("deleteLangBtn").add(new AjaxEventBehavior("onclick"){
-			private static final long serialVersionUID = -1650946343073068686L;
+			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected void updateAjaxAttributes(AjaxRequestAttributes attributes) {
@@ -92,18 +111,11 @@ public class LangForm extends Form<Void> {
 			
 			@Override
 			protected void onEvent(AjaxRequestTarget target) {
-				langPanel.language.setDeleted(true);
-				FieldLanguageDao langDao = getBean(FieldLanguageDao.class);
-				try {
-					langDao.updateLanguage(langPanel.language);
-				} catch (Exception e) {
-					// TODO add feedback message
-					e.printStackTrace();
-				}
-				languages.setChoices(langDao.getLanguages());
-				target.add(languages);
-				// FIXME need to force update list container
-				target.add(listContainer);
+				LabelDao.delete(langPanel.language.getValue());
+				List<Map.Entry<Long, Locale>> langs = getLanguages();
+				langPanel.language = langs.isEmpty() ? null : langs.get(0);
+				languages.setChoices(langs);
+				target.add(languages, listContainer);
 			}
 		})); 
 

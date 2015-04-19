@@ -350,8 +350,7 @@ public class BackupExport {
 		 * ##################### Config
 		 */
 		{
-			List<Configuration> list = configurationDao.getConfigurations(
-					0, Integer.MAX_VALUE, "c.configuration_id", true);
+			List<Configuration> list = configurationDao.getConfigurations(0, Integer.MAX_VALUE, "c.configuration_id", true);
 			Registry registry = new Registry();
 			registry.bind(State.class, StateConverter.class);
 			registry.bind(User.class, UserConverter.class);
@@ -542,8 +541,7 @@ public class BackupExport {
 				FileHelper.removeRec(backup_dir);
 			}
 		} else {
-			log.debug("ERROR LangExport: not authorized FileDownload "
-					+ (new Date()));
+			log.error("BackupExport: not authorized FileDownload ");
 		}
 	}
 
