@@ -60,11 +60,11 @@
 							<xsl:otherwise>323</xsl:otherwise>
 						</xsl:choose>
 					</xsl:variable>
-					<xsl:value-of select="document('../../src/main/webapp/languages/english.xml')/language/string[@id=$x]/value" />
+					<xsl:value-of select="document('../../src/web/java/org/apache/openmeetings/web/app/Application.properties.xml')/properties/entry[@key=$x]/text()" />
 				</td>
 				<td>
 					<xsl:variable name="descId" select="field[@name='fieldvalues_id']"/>
-					<xsl:value-of select="document('../../src/main/webapp/languages/english.xml')/language/string[@id=$descId]/value" />
+					<xsl:value-of select="document('../../src/web/java/org/apache/openmeetings/web/app/Application.properties.xml')/properties/entry[@key=$descId]/text()" />
 				</td>
 			</tr>
 	</xsl:template>
