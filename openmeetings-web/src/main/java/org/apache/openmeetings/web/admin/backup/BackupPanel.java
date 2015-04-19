@@ -149,7 +149,7 @@ public class BackupPanel extends AdminPanel {
 						timer.stop(target);
 						//TODO change text, localize
 						progressBar.setVisible(false);
-						feedback.error(th);
+						feedback.error(th.getMessage());
 						target.add(feedback);
 					} else {
 						progressBar.setModelObject(progressHolder.getProgress());
