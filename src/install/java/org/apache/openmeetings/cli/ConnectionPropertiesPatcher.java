@@ -130,7 +130,7 @@ public abstract class ConnectionPropertiesPatcher {
 	protected void patchAttribute(String[] tokens) {
 		for (int i = 0; i < tokens.length; ++i) {
 			patchProp(tokens, i, USER_PREFIX, props.getLogin());
-			patchProp(tokens, i, PASS_PREFIX, props.getPassword());
+			patchProp(tokens, i, PASS_PREFIX, props.getPassword() == null ? "" : props.getPassword());
 			patchProp(tokens, i, URL_PREFIX, props.getURL());
 		}
 	}
