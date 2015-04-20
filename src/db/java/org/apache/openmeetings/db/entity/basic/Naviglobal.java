@@ -33,15 +33,16 @@ import javax.persistence.JoinColumn;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 import javax.persistence.Table;
 
 import org.apache.openjpa.persistence.jdbc.ForeignKey;
 
 @Entity
 @NamedQueries({
-		@NamedQuery(name = "getNavigation", query = "SELECT DISTINCT ng from Naviglobal ng LEFT JOIN ng.mainnavi nm "
+		@NamedQuery(name = "getNavigation", query = "SELECT DISTINCT ng from Naviglobal ng JOIN ng.mainnavi nm "
 				+ "WHERE nm.deleted = false AND ng.level_id <= :level_id AND nm.level_id <= :level_id "
-				+ "AND ng.deleted = false order by ng.naviorder, nm.naviorder"),
+				+ "AND ng.deleted = false ORDER BY ng.naviorder ASC"),
 		@NamedQuery(name = "getNavigationById", query = "SELECT ng from Naviglobal ng WHERE ng.global_id = :global_id") })
 @Table(name = "naviglobal")
 public class Naviglobal implements Serializable {
@@ -94,6 +95,7 @@ public class Naviglobal implements Serializable {
 	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinColumn(name = "global_id")
 	@ForeignKey(enabled = true)
+	@OrderBy("naviorder")
 	private List<Navimain> mainnavi;
 
 	public String getAction() {
