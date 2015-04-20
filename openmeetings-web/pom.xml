@@ -33,7 +33,7 @@
 		<wicket-dashboard.version>0.13.0+wicket-7-SNAPSHOT</wicket-dashboard.version>
 		<commons-io.version>2.4</commons-io.version>
 		<commons-fileupload.version>1.3</commons-fileupload.version>
-		<mysql.version>5.1.34</mysql.version>
+		<mysql.version>5.1.35</mysql.version>
 		<old-backups.dir>${project.build.directory}/old-backups</old-backups.dir>
 		<backup.to.check>backup_v_3_0_0_r1573585.zip</backup.to.check>
 		<site.basedir>${project.parent.basedir}</site.basedir>
