@@ -1066,7 +1066,7 @@
 					</not>
 					<then>
 						<echo message="Backup file @{prop} does not exists. Downloading ..." />
-						<get src="http://openmeetings.googlecode.com/svn/repository/@{prop}" dest="${junit.backups.dir}" usetimestamp="true"/>
+						<get src="https://dl.bintray.com/openmeetings/generic/backups/@{prop}" dest="${junit.backups.dir}" usetimestamp="true"/>
 					</then>
 				</if>
 			</sequential>

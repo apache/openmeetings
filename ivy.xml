@@ -295,7 +295,7 @@
 		<dependency org="org.smslib" name="smslib" rev="3.5.4" conf="openmeetings->*" transitive="false">
 			<include type="jar" />
 		</dependency>
-		<dependency org="org.asteriskjava" name="asterisk-java" rev="1.0.0.CI-20130102.214528-1134" conf="openmeetings->*" transitive="false">
+		<dependency org="org.asteriskjava" name="asterisk-java" rev="1.0.0.CI-20150406" conf="openmeetings->*" transitive="false">
 			<include type="jar" />
 		</dependency>
 		<!-- Selenium -->
@@ -383,23 +383,23 @@
 		<dependency org="org.tmatesoft.svnkit" name="svnkit" rev="1.7.11" conf="svntask->*" transitive="true">
 			<include type="jar" />
 		</dependency>
-		<dependency org="svnant" name="svnant" rev="1.3.1" conf="svntask->*" transitive="false">
+		<dependency org="org.tigris.subclipse" name="svnant" rev="1.3.1" conf="svntask->*" transitive="false">
 			<include type="jar" />
 		</dependency>
-		<dependency org="svnClientAdapter" name="svnClientAdapter" rev="1.3.1" conf="svntask->*" transitive="false">
+		<dependency org="org.tigris.subclipse" name="svnclientadapter" rev="1.3.1" conf="svntask->*" transitive="false">
 			<include type="jar" />
 		</dependency>
 		<!--  END OF svntask -->
 		
 		<!--  START OF openlaszlo -->
-		<dependency org="openlaszlo" name="openlaszlo" rev="4.9" conf="openlaszlo->*" transitive="false">
+		<dependency org="org.openlaszlo" name="openlaszlo" rev="4.9" conf="openlaszlo->*" transitive="false">
 			<artifact name="openlaszlo" type="tgz"/>
 			<include type="tgz" />
 		</dependency>
 		<!--  END OF openlaszlo -->
 		
 		<!--  START OF openlaszlo46 -->
-		<dependency org="openlaszlo" name="openlaszlo" rev="4.9.5" conf="openlaszlo46->*" transitive="false">
+		<dependency org="org.openlaszlo" name="openlaszlo" rev="4.9.5" conf="openlaszlo46->*" transitive="false">
 			<artifact name="openlaszlo" type="tgz"/>
 			<include type="tgz" />
 		</dependency>
