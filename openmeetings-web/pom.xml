@@ -164,20 +164,41 @@
 				</executions>
 			</plugin>
 			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>wagon-maven-plugin</artifactId>
+				<groupId>com.soebes.maven.plugins</groupId>
+				<artifactId>iterator-maven-plugin</artifactId>
 				<executions>
 					<execution>
 						<id>download-test-data</id>
 						<phase>process-resources</phase>
 						<goals>
-							<goal>download</goal>
+							<goal>iterator</goal>
 						</goals>
 						<configuration>
-							<url>https://openmeetings.googlecode.com/svn/repository</url>
-							<includes>backup_*.zip</includes>
-							<toDir>${old-backups.dir}</toDir>
-							<skip>${old-backups.dwnd.skip}</skip>
+							<items>
+								<item>backup_v_1_4_rc1_r3326.zip</item>
+								<item>backup_v_1_5_rc1_r3393.zip</item>
+								<item>backup_v_1_6_2_r3675.zip</item>
+								<item>backup_v_1_7_0_r3822.zip</item>
+								<item>backup_v_1_8_8_r4555.zip</item>
+								<item>backup_v_1_9_1_r4707.zip</item>
+								<item>backup_v_2_0_0_r1361497.zip</item>
+								<item>backup_v_3_0_0_r1573585.zip</item>
+							</items>
+							<pluginExecutors>
+								<pluginExecutor>
+									<plugin>
+										<groupId>org.codehaus.mojo</groupId>
+										<artifactId>wagon-maven-plugin</artifactId>
+									</plugin>
+									<goal>download-single</goal>
+									<configuration>
+										<url>https://dl.bintray.com/openmeetings/generic/backups/</url>
+										<fromFile>@item@</fromFile>
+										<toDir>${old-backups.dir}</toDir>
+										<skip>${old-backups.dwnd.skip}</skip>
+									</configuration>
+								</pluginExecutor>
+							</pluginExecutors>
 						</configuration>
 					</execution>
 				</executions>
@@ -209,6 +230,11 @@
 		</testResources>
 		<pluginManagement>
 			<plugins>
+				<plugin>
+					<groupId>com.soebes.maven.plugins</groupId>
+					<artifactId>iterator-maven-plugin</artifactId>
+					<version>0.3</version>
+				</plugin>
 				<!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
 				<plugin>
 					<groupId>org.eclipse.m2e</groupId>
@@ -263,6 +289,25 @@
 										<versionRange>[2.4,)</versionRange>
 										<goals>
 											<goal>exploded</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore></ignore>
+									</action>
+								</pluginExecution>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>
+											com.soebes.maven.plugins
+										</groupId>
+										<artifactId>
+											iterator-maven-plugin
+										</artifactId>
+										<versionRange>
+											[0.3,)
+										</versionRange>
+										<goals>
+											<goal>iterator</goal>
 										</goals>
 									</pluginExecutionFilter>
 									<action>

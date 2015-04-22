@@ -22,13 +22,11 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.wicketApplicationName;
 
 import org.apache.openmeetings.IApplication;
-import org.apache.openmeetings.IWebSession;
 import org.apache.openmeetings.core.mail.MailHandler;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.service.mail.template.FeedbackTemplate;
 import org.apache.openmeetings.service.mail.template.RegisterUserTemplate;
 import org.apache.wicket.Application;
-import org.apache.wicket.protocol.http.WebSession;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
