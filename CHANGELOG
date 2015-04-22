@@ -2,6 +2,32 @@ Apache OpenMeetings Change Log
 
 See http://issues.apache.org/jira/browse/OPENMEETINGS-* (where * is the number of the issue below)
 
+Release Notes - Openmeetings - Version 3.0.5
+================================================================================================================
+
+** Bug
+    * [OPENMEETINGS-889] - "Upload new image" button should have the same style with other buttons
+    * [OPENMEETINGS-1161] - Dashboard start widget is not correctly aligned when language is RTL
+    * [OPENMEETINGS-1168] - Request for contact multi-language + RTL issues
+    * [OPENMEETINGS-1181] - Date pickers are not localized
+    * [OPENMEETINGS-1182] - User entered the room from Joomla plugin is displayed with "null" as lastname
+    * [OPENMEETINGS-1183] - It is impossible to change 'chatOpened' room parameter using modifyRoomParameter SOAP call
+    * [OPENMEETINGS-1185] - Appointments returned by SOAP service get wrong start/end time
+    * [OPENMEETINGS-1187] - Send One-Time Invitation does not work if we Generate URL first.
+    * [OPENMEETINGS-1188] - less data for getRoomById
+    * [OPENMEETINGS-1189] - Room' s session seems to expire in less than 1.5 hours when in rooms
+    * [OPENMEETINGS-1190] - keystore file pw is disclosed in the screen sharing log
+    * [OPENMEETINGS-1196] - Meaningless internal error in case OAuth email is in use
+    * [OPENMEETINGS-1199] - Cluster status is missed on admin->connection page
+    * [OPENMEETINGS-1200] - Main menu items shows incorrectly
+    * [OPENMEETINGS-1201] - Header of moderators list box shows incorrectly
+
+** Improvement
+    * [OPENMEETINGS-1133] - Direct sign-in from another site
+    * [OPENMEETINGS-1184] - Library versions should be updated (3.0.5)
+    * [OPENMEETINGS-1198] - Simplify Database Install
+
+
 Release Notes - Openmeetings - Version 3.0.4
 ================================================================================================================
 
