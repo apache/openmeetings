@@ -28,8 +28,8 @@
 		<section name="Downloads">
 			<p>
 				All downloads can be verified using the Apache OpenMeetings code
-				signing <a href="https://www.apache.org/dist/openmeetings/3.0.4/KEYS">KEYS</a>, changes: <a 
-					href="https://www.apache.org/dist/openmeetings/3.0.4/CHANGELOG">CHANGELOG</a>.
+				signing <a href="https://www.apache.org/dist/openmeetings/3.0.5/KEYS">KEYS</a>, changes: <a 
+					href="https://www.apache.org/dist/openmeetings/3.0.5/CHANGELOG">CHANGELOG</a>.
 			</p>
 			<p>
 				All are available for download as source and binary.
@@ -37,21 +37,21 @@
 			
 			<subsection name="Latest Official Release">
 				<p>
-					Apache Openmeetings 3.0.4
+					Apache Openmeetings 3.0.5
 				</p>
 				<ul>
 					<li>
 						Binaries:
 						<ul>
 							<li>
-								<a href="http://www.apache.org/dyn/closer.cgi/openmeetings/3.0.4/bin/apache-openmeetings-3.0.4.zip">apache-openmeetings-3.0.4.zip</a>
-								<a href="http://www.apache.org/dist/openmeetings/3.0.4/bin/apache-openmeetings-3.0.4.zip.asc">[SIG]</a>
-								<a href="http://www.apache.org/dist/openmeetings/3.0.4/bin/apache-openmeetings-3.0.4.zip.md5">[MD5]</a>
+								<a href="http://www.apache.org/dyn/closer.cgi/openmeetings/3.0.5/bin/apache-openmeetings-3.0.5.zip">apache-openmeetings-3.0.5.zip</a>
+								<a href="http://www.apache.org/dist/openmeetings/3.0.5/bin/apache-openmeetings-3.0.5.zip.asc">[SIG]</a>
+								<a href="http://www.apache.org/dist/openmeetings/3.0.5/bin/apache-openmeetings-3.0.5.zip.md5">[MD5]</a>
 							</li>
 							<li>
-								<a href="http://www.apache.org/dyn/closer.cgi/openmeetings/3.0.4/bin/apache-openmeetings-3.0.4.tar.gz">apache-openmeetings-3.0.4.tar.gz</a>
-								<a href="http://www.apache.org/dist/openmeetings/3.0.4/bin/apache-openmeetings-3.0.4.tar.gz.asc">[SIG]</a>
-								<a href="http://www.apache.org/dist/openmeetings/3.0.4/bin/apache-openmeetings-3.0.4.tar.gz.md5">[MD5]</a>
+								<a href="http://www.apache.org/dyn/closer.cgi/openmeetings/3.0.5/bin/apache-openmeetings-3.0.5.tar.gz">apache-openmeetings-3.0.5.tar.gz</a>
+								<a href="http://www.apache.org/dist/openmeetings/3.0.5/bin/apache-openmeetings-3.0.5.tar.gz.asc">[SIG]</a>
+								<a href="http://www.apache.org/dist/openmeetings/3.0.5/bin/apache-openmeetings-3.0.5.tar.gz.md5">[MD5]</a>
 							</li>
 						</ul>
 					</li>
@@ -59,14 +59,14 @@
 						Sources:
 						<ul>
 							<li>
-								<a href="http://www.apache.org/dyn/closer.cgi/openmeetings/3.0.4/src/apache-openmeetings-3.0.4-src.zip">apache-openmeetings-3.0.4-src.zip</a>
-								<a href="http://www.apache.org/dist/openmeetings/3.0.4/src/apache-openmeetings-3.0.4-src.zip.asc">[SIG]</a>
-								<a href="http://www.apache.org/dist/openmeetings/3.0.4/src/apache-openmeetings-3.0.4-src.zip.md5">[MD5]</a>
+								<a href="http://www.apache.org/dyn/closer.cgi/openmeetings/3.0.5/src/apache-openmeetings-3.0.5-src.zip">apache-openmeetings-3.0.5-src.zip</a>
+								<a href="http://www.apache.org/dist/openmeetings/3.0.5/src/apache-openmeetings-3.0.5-src.zip.asc">[SIG]</a>
+								<a href="http://www.apache.org/dist/openmeetings/3.0.5/src/apache-openmeetings-3.0.5-src.zip.md5">[MD5]</a>
 							</li>
 							<li>
-								<a href="http://www.apache.org/dyn/closer.cgi/openmeetings/3.0.4/src/apache-openmeetings-3.0.4-src.tar.gz">apache-openmeetings-3.0.4-src.tar.gz</a>
-								<a href="http://www.apache.org/dist/openmeetings/3.0.4/src/apache-openmeetings-3.0.4-src.tar.gz.asc">[SIG]</a>
-								<a href="http://www.apache.org/dist/openmeetings/3.0.4/src/apache-openmeetings-3.0.4-src.tar.gz.md5">[MD5]</a>
+								<a href="http://www.apache.org/dyn/closer.cgi/openmeetings/3.0.5/src/apache-openmeetings-3.0.5-src.tar.gz">apache-openmeetings-3.0.5-src.tar.gz</a>
+								<a href="http://www.apache.org/dist/openmeetings/3.0.5/src/apache-openmeetings-3.0.5-src.tar.gz.asc">[SIG]</a>
+								<a href="http://www.apache.org/dist/openmeetings/3.0.5/src/apache-openmeetings-3.0.5-src.tar.gz.md5">[MD5]</a>
 							</li>
 						</ul>
 					</li>

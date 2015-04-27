@@ -112,6 +112,31 @@
 
 		<section name="News">
 			<div class="bs-callout bs-callout-danger">
+				<b>Version 3.0.5 released!</b>
+				<span>Service release 5 for 3.0.0 contains following improvements and bug fixes:<br/>
+					<br/>
+					Installer:<br/>
+					<ul>
+						<li>Database configuration screen is added</li>
+					</ul><br/>
+					RTL:<br/>
+					<ul>
+						<li>Dashboard and Emails are more RTL friendly</li>
+					</ul>
+					<br/>
+					OAuth:<br/>
+					<ul>
+						<li>OAuth support is improved, crash is fixed</li>
+					</ul>
+					<br/>
+					Other fixes in SOAP, localizations, invitations etc.:<br/>
+				</span>
+				<span>67 issues are fixed please check <a href="https://www.apache.org/dist/openmeetings/3.0.4/CHANGELOG">CHANGELOG</a> for details
+				</span>
+				<span> See <a href="downloads.html">Downloads page</a>.</span>
+				<span class="date">(2015-04-26)</span>
+			</div>
+			<div class="bs-callout bs-callout-info">
 				<b>Version 3.0.4 released!</b>
 				<span>Service release 4 for 3.0.0 contains following improvements and bug fixes:<br/>
 					<br/>
