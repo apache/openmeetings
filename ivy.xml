@@ -309,35 +309,35 @@
 		<dependency org="org.apache.geronimo.specs" name="geronimo-jms_1.1_spec" rev="1.1.1" conf="openmeetings->*" transitive="false" >
 			<include type="jar" />
 		</dependency>
-		<dependency org="net.sourceforge.serp" name="serp" rev="1.14.1" conf="openmeetings->*" transitive="false" >
+		<dependency org="net.sourceforge.serp" name="serp" rev="1.15.1" conf="openmeetings->*" transitive="false" >
 			<include type="jar" />
 		</dependency>
-		<dependency org="org.apache.xbean" name="xbean-asm4-shaded" rev="3.14" conf="openmeetings->*" transitive="false" />
-		<dependency org="org.apache.openjpa" name="openjpa-jdbc" rev="2.3.0" conf="openmeetings->*" transitive="false" >
+		<dependency org="org.apache.xbean" name="xbean-asm5-shaded" rev="3.17" conf="openmeetings->*" transitive="false" />
+		<dependency org="org.apache.openjpa" name="openjpa-jdbc" rev="2.4.0" conf="openmeetings->*" transitive="false" >
 			<include type="jar" />
 		</dependency>
-		<dependency org="org.apache.openjpa" name="openjpa-jest" rev="2.3.0" conf="openmeetings->*" transitive="false" >
+		<dependency org="org.apache.openjpa" name="openjpa-jest" rev="2.4.0" conf="openmeetings->*" transitive="false" >
 			<include type="jar" />
 		</dependency>
-		<dependency org="org.apache.openjpa" name="openjpa-kernel" rev="2.3.0" conf="openmeetings->*" transitive="false" >
+		<dependency org="org.apache.openjpa" name="openjpa-kernel" rev="2.4.0" conf="openmeetings->*" transitive="false" >
 			<include type="jar" />
 		</dependency>
-		<dependency org="org.apache.openjpa" name="openjpa-lib" rev="2.3.0" conf="openmeetings->*" transitive="false" >
+		<dependency org="org.apache.openjpa" name="openjpa-lib" rev="2.4.0" conf="openmeetings->*" transitive="false" >
 			<include type="jar" />
 		</dependency>
-		<dependency org="org.apache.openjpa" name="openjpa-persistence" rev="2.3.0" conf="openmeetings->*" transitive="false" >
+		<dependency org="org.apache.openjpa" name="openjpa-persistence" rev="2.4.0" conf="openmeetings->*" transitive="false" >
 			<include type="jar" />
 		</dependency>
-		<dependency org="org.apache.openjpa" name="openjpa-persistence-jdbc" rev="2.3.0" conf="openmeetings->*" transitive="false" >
+		<dependency org="org.apache.openjpa" name="openjpa-persistence-jdbc" rev="2.4.0" conf="openmeetings->*" transitive="false" >
 			<include type="jar" />
 		</dependency>
-		<dependency org="org.apache.openjpa" name="openjpa-slice" rev="2.3.0" conf="openmeetings->*" transitive="false" >
+		<dependency org="org.apache.openjpa" name="openjpa-slice" rev="2.4.0" conf="openmeetings->*" transitive="false" >
 			<include type="jar" />
 		</dependency>
-		<dependency org="org.apache.openjpa" name="openjpa-xmlstore" rev="2.3.0" conf="openmeetings->*" transitive="false" >
+		<dependency org="org.apache.openjpa" name="openjpa-xmlstore" rev="2.4.0" conf="openmeetings->*" transitive="false" >
 			<include type="jar" />
 		</dependency>
-		<dependency org="org.apache.openjpa" name="openjpa" rev="2.3.0" conf="openmeetings->*" transitive="false" />
+		<dependency org="org.apache.openjpa" name="openjpa" rev="2.4.0" conf="openmeetings->*" transitive="false" />
 		<!-- END openjpa -->
 
 		<dependency org="org.mnode.ical4j" name="ical4j" rev="1.0.6" conf="openmeetings.ext->*" transitive="false"/>
