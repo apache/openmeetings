@@ -109,18 +109,23 @@ public abstract class AbstractTemplatePanel extends Panel {
 	}
 	
 	public static void ensureApplication(long langId) {
-		if (!Application.exists()) {
+		IApplication a = null;
+		if (Application.exists()) {
+			a = (IApplication)Application.get();
+		} else {
 			Application app = Application.get(wicketApplicationName);
 			ThreadContext.setApplication(app);
-			IApplication a = (IApplication)app;
-			
-			ServletWebRequest req = new ServletWebRequest(new MockHttpServletRequest(app, new MockHttpSession(a.getServletContext()), a.getServletContext()), "");
+			a = (IApplication)Application.get(wicketApplicationName);
+		}
+		if (ThreadContext.getRequestCycle() == null) {
+			ServletWebRequest req = new ServletWebRequest(new MockHttpServletRequest((Application)a, new MockHttpSession(a.getServletContext()), a.getServletContext()), "");
 			RequestCycleContext rctx = new RequestCycleContext(req, new MockWebResponse(), a.getRootRequestMapper(), a.getExceptionMapperProvider().get()); 
 			ThreadContext.setRequestCycle(new RequestCycle(rctx));
-			
-			WebSession session = WebSession.get();
-			((IWebSession)session).setLanguage(langId);
-			ThreadContext.setSession(session);
+		}
+		if (ThreadContext.getSession() == null) {
+			WebSession s = WebSession.get();
+			((IWebSession)s).setLanguage(langId);
+			ThreadContext.setSession(s);
 		}
 	}
 }
