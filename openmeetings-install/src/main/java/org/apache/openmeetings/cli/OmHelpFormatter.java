@@ -21,7 +21,6 @@ package org.apache.openmeetings.cli;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.LinkedHashMap;
@@ -42,7 +41,10 @@ public class OmHelpFormatter extends HelpFormatter {
 	private List<OmOption> getReqOptions(Options opts) {
 		//suppose we have only 1 group (for now)
 		OptionGroup g = ((List<OptionGroup>)opts.getRequiredOptions()).get(0);
-		List<OmOption> result = new ArrayList<OmOption>(g.getOptions());
+		List<OmOption> result = new ArrayList<OmOption>();
+		for (Option o : g.getOptions()) {
+			result.add((OmOption)o);
+		}
 		Collections.sort(result, new Comparator<OmOption>() {
 			public int compare(OmOption o1, OmOption o2) {
 				return o1.getOrder() - o2.getOrder();
@@ -51,7 +53,6 @@ public class OmHelpFormatter extends HelpFormatter {
 		return result;
 	}
 	
-	@SuppressWarnings("unchecked")
 	private LinkedHashMap<String, List<OmOption>> getOptions(Options opts, int leftPad) {
 		final String longOptSeparator = " ";
 		final String lpad = createPadding(leftPad);
@@ -62,7 +63,8 @@ public class OmHelpFormatter extends HelpFormatter {
 		for (OmOption o : reqOptions) {
 			map.put(o.getOpt(), new ArrayList<OmOption>());
 		}
-		for (OmOption o : (Collection<OmOption>)opts.getOptions()) {
+		for (Option _o : opts.getOptions()) {
+			OmOption o = (OmOption)_o;
 			//TODO need better check (required option should go first and should not be duplicated
 			boolean skipOption = map.containsKey(o.getOpt());
 			boolean mainOption = skipOption || o.getGroup() == null;
