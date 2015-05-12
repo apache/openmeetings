@@ -20,7 +20,10 @@ package org.apache.openmeetings.remote;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAUT_LANG_KEY;
 
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
@@ -41,8 +44,12 @@ public class LanguageService {
 	/**
 	 * @return - List of all available Languages
 	 */
-	public List<Map<String, Object>> getLanguages() {
-		return labelDao.getLanguages();
+	public List<Language> getLanguages() {
+		List<Language> result = new ArrayList<Language>();
+		for (Map.Entry<Long, Locale> e : LabelDao.languages.entrySet()) {
+			result.add(new Language(e.getKey(), e.getValue().toLanguageTag(), e.getValue().getDisplayName(Locale.ENGLISH)));
+		}
+		return result;
 	}
 
 	public Integer getDefaultLanguage() {
@@ -59,5 +66,20 @@ public class LanguageService {
 	 */
 	public List<Map<String, Object>> getLanguageByIdAndMax(int language_id, int start, int count) {
 		return labelDao.getStrings((long)language_id, start, count);
+	}
+
+	public static class Language implements Serializable {
+		private static final long serialVersionUID = 1L;
+		public long language_id;
+		public String code;
+		public String name;
+		
+		public Language() {}
+		
+		public Language(long language_id, String code, String name) {
+			this.language_id = language_id;
+			this.code = code;
+			this.name = name;
+		}
 	}
 }

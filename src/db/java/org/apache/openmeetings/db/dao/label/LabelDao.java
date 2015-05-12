@@ -77,18 +77,6 @@ public class LabelDao implements IDataProviderDao<StringLabel>{
 	public static final ConcurrentHashMap<Locale, List<StringLabel>> labelCache = new ConcurrentHashMap<Locale, List<StringLabel>>();
 	public static final Set<String> keys = new HashSet<String>();
 
-	public List<Map<String, Object>> getLanguages() {
-		List<Map<String, Object>> result = new ArrayList<Map<String, Object>>();
-		for (Map.Entry<Long, Locale> e : languages.entrySet()) {
-			Map<String, Object> map = new HashMap<String, Object>();
-			map.put("language_id", e.getKey());
-			map.put("code", e.getValue().toLanguageTag());
-			map.put("name", e.getValue().getDisplayName(Locale.ENGLISH));
-			result.add(map);
-		}
-		return result;
-	}
-	
 	private static void storeLanguages() throws Exception {
 		Document d = XmlExport.createDocument();
 		Element r = XmlExport.createRoot(d, "language");

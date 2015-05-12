@@ -330,17 +330,16 @@
         </handler>  
     </netRemoteCallHib>    
     
-    <netRemoteCallHib name="getLanguages" funcname="languageservice.getLanguages" 
-                      dataobject="languagesSet" >      
-        <handler name="ondata" args="value">
-            //The onResult-Handler will be called be the rtmpconnection
-            //Debug.write("getLanguages: ",value);
+	<netRemoteCallHib name="getLanguages" funcname="languageservice.getLanguages" dataobject="languagesSet" >
+		<handler name="ondata" args="value">
+			//The onResult-Handler will be called be the rtmpconnection
+			//if ($debug) Debug.write("getLanguages: ",value, languagesSet);
 			if (canvas.thishib.loaderVar != null) {
-            	canvas.thishib.loaderVar.setProgress();
-            }
-            parent.getDefaultLanguage.doCall();
-        </handler>  
-    </netRemoteCallHib>    
+				canvas.thishib.loaderVar.setProgress();
+			}
+			parent.getDefaultLanguage.doCall();
+		</handler>
+	</netRemoteCallHib>    
     
     <method name="setDefaultUserLanguage">
 	    <![CDATA[

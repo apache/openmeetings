@@ -91,14 +91,19 @@ public abstract class AbstractTemplatePanel extends Panel {
 	}
 	
 	public static void ensureApplication(long langId) {
-		if (!Application.exists()) {
-			Application a = (Application)Application.get(Application.getAppName());
+		Application a = null;
+		if (Application.exists()) {
+			a = Application.get();
+		} else {
+			a = (Application)Application.get(Application.getAppName());
 			ThreadContext.setApplication(a);
-			
+		}
+		if (ThreadContext.getRequestCycle() == null) {
 			ServletWebRequest req = new ServletWebRequest(new MockHttpServletRequest(a, new MockHttpSession(a.getServletContext()), a.getServletContext()), "");
 			RequestCycleContext rctx = new RequestCycleContext(req, new MockWebResponse(), a.getRootRequestMapper(), a.getExceptionMapperProvider().get()); 
 			ThreadContext.setRequestCycle(new RequestCycle(rctx));
-			
+		}
+		if (ThreadContext.getSession() == null) {
 			WebSession s = WebSession.get();
 			s.setLanguage(langId);
 			ThreadContext.setSession(s);
