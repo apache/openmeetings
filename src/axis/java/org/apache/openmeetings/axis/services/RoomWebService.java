@@ -1414,72 +1414,57 @@ public class RoomWebService {
 			Boolean isPasswordProtected, String invitationpass, Integer valid,
 			String validFromDate, String validFromTime, String validToDate,
 			String validToTime) throws AxisFault {
-		try {
-			Long users_id = sessiondataDao.checkSession(SID);
-
-			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(users_id))) {
-
-				Date dFrom = null;
-				Date dTo = null;
-
-				if (valid == 2) {
-					Integer validFromHour = Integer.valueOf(
-							validFromTime.substring(0, 2)).intValue();
-					Integer validFromMinute = Integer.valueOf(
-							validFromTime.substring(3, 5)).intValue();
-
-					Integer validToHour = Integer.valueOf(
-							validToTime.substring(0, 2)).intValue();
-					Integer validToMinute = Integer.valueOf(
-							validToTime.substring(3, 5)).intValue();
-
-					log.info("validFromHour: " + validFromHour);
-					log.info("validFromMinute: " + validFromMinute);
-
-					Date fromDate = CalendarPatterns.parseDate(validFromDate); // dd.MM.yyyy
-					Date toDate = CalendarPatterns.parseDate(validToDate); // dd.MM.yyyy
-
-					Calendar calFrom = Calendar.getInstance();
-					calFrom.setTime(fromDate);
-					calFrom.set(calFrom.get(Calendar.YEAR),
-							calFrom.get(Calendar.MONTH),
-							calFrom.get(Calendar.DATE), validFromHour,
-							validFromMinute, 0);
-
-					Calendar calTo = Calendar.getInstance();
-					calTo.setTime(toDate);
-					calTo.set(calTo.get(Calendar.YEAR),
-							calTo.get(Calendar.MONTH),
-							calTo.get(Calendar.DATE), validToHour,
-							validToMinute, 0);
-
-					dFrom = calFrom.getTime();
-					dTo = calTo.getTime();
-
-					log.info("validFromDate: "
-							+ CalendarPatterns
-									.getDateWithTimeByMiliSeconds(dFrom));
-					log.info("validToDate: "
-							+ CalendarPatterns
-									.getDateWithTimeByMiliSeconds(dTo));
-				}
-				User invitee = userDao.getContact(username, username, username, users_id);
-				Invitation invitation = invitationManager.getInvitation(invitee, roomDao.get(room_id),
-								isPasswordProtected, invitationpass, Valid.fromInt(valid)
-								, userDao.get(users_id), 1L, dFrom, dTo, null);
-
-				if (invitation != null) {
-					return invitation.getHash();
-				} else {
-					return "Sys - Error";
-				}
-			} else {
-				return "Need Admin Privileges to perfom the Action";
-			}
-		} catch (Exception err) {
-			log.error("[sendInvitationHash] ", err);
-			throw new AxisFault(err.getMessage());
-		}
+		return getInvitationHash(SID, username, username, username, room_id, isPasswordProtected, invitationpass, valid,
+				validFromDate, validFromTime, validToDate, validToTime);
+	}
+	/**
+	 * 
+	 * Create a Invitation hash and optionally send it by mail the From to Date
+	 * is as String as some SOAP libraries do not accept Date Objects in SOAP
+	 * Calls Date is parsed as dd.mm.yyyy, time as hh:mm (don't forget the
+	 * leading zero's)
+	 * 
+	 * @param SID
+	 *            The SID of the User. This SID must be marked as Loggedin a
+	 *            valid Session Token
+	 * @param username
+	 *            the username of the User that he will get
+	 * @param firstname
+	 *            the first name of the User that he will get
+	 * @param lastname
+	 *            the last name of the User that he will get
+	 * @param room_id
+	 *            the conference room id of the invitation
+	 * @param isPasswordProtected
+	 *            if the invitation is password protected
+	 * @param invitationpass
+	 *            the password for accessing the conference room via the
+	 *            invitation hash
+	 * @param valid
+	 *            the type of validation for the hash 1: endless, 2: from-to
+	 *            period, 3: one-time
+	 * @param validFromDate
+	 *            Date in Format of dd.mm.yyyy only of interest if valid is type
+	 *            2
+	 * @param validFromTime
+	 *            time in Format of hh:mm only of interest if valid is type 2
+	 * @param validToDate
+	 *            Date in Format of dd.mm.yyyy only of interest if valid is type
+	 *            2
+	 * @param validToTime
+	 *            time in Format of hh:mm only of interest if valid is type 2
+	 * @return a HASH value that can be made into a URL with
+	 *         http://$OPENMEETINGS_HOST
+	 *         :$PORT/openmeetings/?invitationHash="+invitationsHash;
+	 * @throws AxisFault
+	 */
+	public String getInvitationHash(String SID, String username, String firstname, String lastname, Long room_id,
+			Boolean isPasswordProtected, String invitationpass, Integer valid,
+			String validFromDate, String validFromTime, String validToDate,
+			String validToTime) throws AxisFault {
+		return sendInvitationHash(SID, username, firstname, lastname, null, null,
+				room_id, isPasswordProtected, invitationpass, valid, validFromDate,
+				validFromTime, validToDate, validToTime, 1L, false);
 	}
 
 	/**
@@ -1503,8 +1488,6 @@ public class RoomWebService {
 	 *            is true
 	 * @param room_id
 	 *            the conference room id of the invitation
-	 * @param conferencedomain
-	 *            the domain of the room (keep empty)
 	 * @param isPasswordProtected
 	 *            if the invitation is password protected
 	 * @param invitationpass
@@ -1534,30 +1517,31 @@ public class RoomWebService {
 	 *         :$PORT/openmeetings/?invitationHash="+invitationsHash;
 	 * @throws AxisFault
 	 */
-	public String sendInvitationHash(String SID, String username,
-			String message, String email, String subject,
-			Long room_id, String conferencedomain, Boolean isPasswordProtected,
-			String invitationpass, Integer valid, String validFromDate,
-			String validFromTime, String validToDate, String validToTime,
-			Long language_id, Boolean sendMail) throws AxisFault {
+	public String sendInvitationHash(String SID, String username, String message, String email, String subject,
+			Long room_id, Boolean isPasswordProtected, String invitationpass, Integer valid, String validFromDate,
+			String validFromTime, String validToDate, String validToTime, Long language_id, Boolean sendMail) throws AxisFault {
+		return sendInvitationHash(SID, email, username, username, message, subject,
+				room_id, isPasswordProtected, invitationpass, valid, validFromDate,
+				validFromTime, validToDate, validToTime, language_id, sendMail);
+	}
+
+	private String sendInvitationHash(String SID, String email, String firstname, String lastname, String message, String subject,
+			Long room_id, Boolean isPasswordProtected, String invitationpass, Integer valid, String validFromDate,
+			String validFromTime, String validToDate, String validToTime, Long language_id, Boolean sendMail) throws AxisFault {
 		try {
 			Long users_id = sessiondataDao.checkSession(SID);
 
 			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(users_id))) {
 
-				Date dFrom = null;
-				Date dTo = null;
+				Date dFrom = new Date();
+				Date dTo = new Date();
 
 				if (valid == 2) {
-					Integer validFromHour = Integer.valueOf(
-							validFromTime.substring(0, 2)).intValue();
-					Integer validFromMinute = Integer.valueOf(
-							validFromTime.substring(3, 5)).intValue();
+					Integer validFromHour = Integer.valueOf(validFromTime.substring(0, 2));
+					Integer validFromMinute = Integer.valueOf(validFromTime.substring(3, 5));
 
-					Integer validToHour = Integer.valueOf(
-							validToTime.substring(0, 2)).intValue();
-					Integer validToMinute = Integer.valueOf(
-							validToTime.substring(3, 5)).intValue();
+					Integer validToHour = Integer.valueOf(validToTime.substring(0, 2));
+					Integer validToMinute = Integer.valueOf(validToTime.substring(3, 5));
 
 					log.info("validFromHour: " + validFromHour);
 					log.info("validFromMinute: " + validFromMinute);
@@ -1582,15 +1566,11 @@ public class RoomWebService {
 					dFrom = calFrom.getTime();
 					dTo = calTo.getTime();
 
-					log.info("validFromDate: "
-							+ CalendarPatterns
-									.getDateWithTimeByMiliSeconds(dFrom));
-					log.info("validToDate: "
-							+ CalendarPatterns
-									.getDateWithTimeByMiliSeconds(dTo));
+					log.info("validFromDate: " + CalendarPatterns.getDateWithTimeByMiliSeconds(dFrom));
+					log.info("validToDate: " + CalendarPatterns.getDateWithTimeByMiliSeconds(dTo));
 				}
 
-				User invitee = userDao.getContact(email, users_id);
+				User invitee = userDao.getContact(email, firstname, lastname, users_id);
 				Invitation invitation = invitationManager.getInvitation(invitee, roomDao.get(room_id),
 								isPasswordProtected, invitationpass, Valid.fromInt(valid)
 								, userDao.get(users_id), language_id,

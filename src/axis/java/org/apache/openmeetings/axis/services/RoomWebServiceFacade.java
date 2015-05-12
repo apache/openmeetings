@@ -342,6 +342,55 @@ public class RoomWebServiceFacade extends BaseWebService {
 	}
 
 	/**
+	 * 
+	 * Create a Invitation hash and optionally send it by mail the From to Date
+	 * is as String as some SOAP libraries do not accept Date Objects in SOAP
+	 * Calls Date is parsed as dd.mm.yyyy, time as hh:mm (don't forget the
+	 * leading zero's)
+	 * 
+	 * @param SID
+	 *            a valid Session Token
+	 * @param username
+	 *            the username of the User that he will get
+	 * @param firstname
+	 *            the first name of the User that he will get
+	 * @param lastname
+	 *            the last name of the User that he will get
+	 * @param room_id
+	 *            the conference room id of the invitation
+	 * @param isPasswordProtected
+	 *            if the invitation is password protected
+	 * @param invitationpass
+	 *            the password for accessing the conference room via the
+	 *            invitation hash
+	 * @param valid
+	 *            the type of validation for the hash 1: endless, 2: from-to
+	 *            period, 3: one-time
+	 * @param validFromDate
+	 *            Date in Format of dd.mm.yyyy only of interest if valid is type
+	 *            2
+	 * @param validFromTime
+	 *            time in Format of hh:mm only of interest if valid is type 2
+	 * @param validToDate
+	 *            Date in Format of dd.mm.yyyy only of interest if valid is type
+	 *            2
+	 * @param validToTime
+	 *            time in Format of hh:mm only of interest if valid is type 2
+	 * @return a HASH value that can be made into a URL with
+	 *         http://$OPENMEETINGS_HOST
+	 *         :$PORT/openmeetings/?invitationHash="+invitationsHash;
+	 * @throws AxisFault
+	 */
+	public String getInvitationHash(String SID, String username, String firstname, String lastname, Long room_id,
+			Boolean isPasswordProtected, String invitationpass, Integer valid,
+			String validFromDate, String validFromTime, String validToDate,
+			String validToTime) throws AxisFault {
+		return getBean(RoomWebService.class).getInvitationHash(SID, username, firstname, lastname,
+				room_id, isPasswordProtected, invitationpass, valid, validFromDate, validFromTime, validToDate, validToTime);
+
+	}
+
+	/**
 	 * Create a Invitation hash and optionally send it by mail the From to Date
 	 * is as String as some SOAP libraries do not accept Date Objects in SOAP
 	 * Calls Date is parsed as dd.mm.yyyy, time as hh:mm (don't forget the
@@ -361,8 +410,6 @@ public class RoomWebServiceFacade extends BaseWebService {
 	 *            is true
 	 * @param room_id
 	 *            the conference room id of the invitation
-	 * @param conferencedomain
-	 *            the domain of the room (keep empty)
 	 * @param isPasswordProtected
 	 *            if the invitation is password protected
 	 * @param invitationpass
@@ -394,14 +441,12 @@ public class RoomWebServiceFacade extends BaseWebService {
 	 */
 	public String sendInvitationHash(String SID, String username,
 			String message, String email, String subject,
-			Long room_id, String conferencedomain, Boolean isPasswordProtected,
+			Long room_id, Boolean isPasswordProtected,
 			String invitationpass, Integer valid, String validFromDate,
 			String validFromTime, String validToDate, String validToTime,
 			Long language_id, Boolean sendMail) throws AxisFault {
-		return getBean(RoomWebService.class).sendInvitationHash(SID, username,
-				message, email, subject, room_id, conferencedomain,
-				isPasswordProtected, invitationpass, valid, validFromDate,
-				validFromTime, validToDate, validToTime, language_id, sendMail);
+		return getBean(RoomWebService.class).sendInvitationHash(SID, username, message, email, subject, room_id,
+				isPasswordProtected, invitationpass, valid, validFromDate, validFromTime, validToDate, validToTime, language_id, sendMail);
 	}
 
 	/**
@@ -454,24 +499,19 @@ public class RoomWebServiceFacade extends BaseWebService {
 			Long room_id, String conferencedomain, Boolean isPasswordProtected,
 			String invitationpass, Integer valid, Date fromDate, Date toDate,
 			Long language_id, Boolean sendMail) throws AxisFault {
-		return getBean(RoomWebService.class).sendInvitationHashWithDateObject(SID,
-				username, message, email, subject, room_id,
-				conferencedomain, isPasswordProtected, invitationpass, valid,
-				fromDate, toDate, language_id, sendMail);
+		return getBean(RoomWebService.class).sendInvitationHashWithDateObject(SID, username, message, email, subject, room_id,
+				conferencedomain, isPasswordProtected, invitationpass, valid, fromDate, toDate, language_id, sendMail);
 	}
 
 	public List<RoomReturn> getRoomsWithCurrentUsersByList(String SID,
 			int start, int max, String orderby, boolean asc) throws AxisFault {
-		return getBean(RoomWebService.class).getRoomsWithCurrentUsersByList(SID,
-				start, max, orderby, asc);
+		return getBean(RoomWebService.class).getRoomsWithCurrentUsersByList(SID, start, max, orderby, asc);
 	}
 
 	public List<RoomReturn> getRoomsWithCurrentUsersByListAndType(String SID,
 			int start, int max, String orderby, boolean asc,
 			String externalRoomType) throws AxisFault {
-		return getBean(RoomWebService.class)
-				.getRoomsWithCurrentUsersByListAndType(SID, start, max,
-						orderby, asc, externalRoomType);
+		return getBean(RoomWebService.class).getRoomsWithCurrentUsersByListAndType(SID, start, max, orderby, asc, externalRoomType);
 	}
 
 	public Long addRoomWithModerationAndExternalTypeAndStartEnd(String SID,
