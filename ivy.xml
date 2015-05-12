@@ -302,7 +302,7 @@
 		<dependency org="org.seleniumhq.selenium" name="selenium-java" conf="openmeetings->*" rev="2.42.2" >
 			<include type="jar" />
 		</dependency>
-		<dependency org="org.apache.directory.api" name="api-all" rev="1.0.0-M29" conf="openmeetings->*" >
+		<dependency org="org.apache.directory.api" name="api-all" rev="1.0.0-M30" conf="openmeetings->*" >
 			<include type="jar" />
 		</dependency>
 		<!-- BEGIN openjpa -->
@@ -406,7 +406,7 @@
 		<!--  END OF openlaszlo46 -->
 		
 		<!--  START OF Command Line Admin -->
-		<dependency org="commons-cli" name="commons-cli" rev="1.2" conf="cmdadmin->*" transitive="false">
+		<dependency org="commons-cli" name="commons-cli" rev="1.3" conf="cmdadmin->*" transitive="false">
 			<include type="jar" />
 		</dependency>
 		<!--  END OF Command Line Admin -->

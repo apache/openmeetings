@@ -24,7 +24,7 @@ import java.util.Map;
 import org.apache.commons.cli.Option;
 
 public class OmOption extends Option {
-	private static final long serialVersionUID = -544426769898915573L;
+	private static final long serialVersionUID = 1L;
 	private String group = null;
 	private Map<String, Boolean> optional = null;
 	private int order = 0;
