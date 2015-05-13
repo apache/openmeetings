@@ -1414,7 +1414,7 @@ public class RoomWebService {
 			Boolean isPasswordProtected, String invitationpass, Integer valid,
 			String validFromDate, String validFromTime, String validToDate,
 			String validToTime) throws AxisFault {
-		return getInvitationHash(SID, username, username, username, room_id, isPasswordProtected, invitationpass, valid,
+		return getInvitationHashFullName(SID, username, username, username, room_id, isPasswordProtected, invitationpass, valid,
 				validFromDate, validFromTime, validToDate, validToTime);
 	}
 	/**
@@ -1458,7 +1458,7 @@ public class RoomWebService {
 	 *         :$PORT/openmeetings/?invitationHash="+invitationsHash;
 	 * @throws AxisFault
 	 */
-	public String getInvitationHash(String SID, String username, String firstname, String lastname, Long room_id,
+	public String getInvitationHashFullName(String SID, String username, String firstname, String lastname, Long room_id,
 			Boolean isPasswordProtected, String invitationpass, Integer valid,
 			String validFromDate, String validFromTime, String validToDate,
 			String validToTime) throws AxisFault {

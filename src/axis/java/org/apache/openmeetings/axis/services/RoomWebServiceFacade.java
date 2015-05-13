@@ -381,11 +381,11 @@ public class RoomWebServiceFacade extends BaseWebService {
 	 *         :$PORT/openmeetings/?invitationHash="+invitationsHash;
 	 * @throws AxisFault
 	 */
-	public String getInvitationHash(String SID, String username, String firstname, String lastname, Long room_id,
+	public String getInvitationHashFullName(String SID, String username, String firstname, String lastname, Long room_id,
 			Boolean isPasswordProtected, String invitationpass, Integer valid,
 			String validFromDate, String validFromTime, String validToDate,
 			String validToTime) throws AxisFault {
-		return getBean(RoomWebService.class).getInvitationHash(SID, username, firstname, lastname,
+		return getBean(RoomWebService.class).getInvitationHashFullName(SID, username, firstname, lastname,
 				room_id, isPasswordProtected, invitationpass, valid, validFromDate, validFromTime, validToDate, validToTime);
 
 	}
