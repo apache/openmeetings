@@ -48,8 +48,8 @@
 		</script>
 	</wicket:head>
 	<wicket:panel>
-		<div id="chat">
-			<div id="controlBlock" onclick="toggleChat();"><div id="control" class="ui-icon ui-icon-carat-1-n sort-icon"></div></div>
+		<div id="chat" class="ui-state-default">
+			<div id="controlBlock" onclick="toggleChat();" class="ui-state-active clickable"><div id="control" class="ui-icon ui-icon-carat-1-n sort-icon"></div></div>
 			<div wicket:id="messages"></div>
 			<form wicket:id="sendForm">
 				<div wicket:id="toolbarContainer"></div>
