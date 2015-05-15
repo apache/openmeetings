@@ -49,6 +49,8 @@ public class AppointmentDTO {
 	private boolean connectedEvent;
 	private boolean reminderEmailSend;
 
+	public AppointmentDTO() {}
+
 	public AppointmentDTO(Appointment a) {
 		id = a.getId();
 		title = a.getTitle();

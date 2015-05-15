@@ -30,6 +30,8 @@ public class UserSearchResult {
 	private List<UserDTO> result;
 	private Long errorId;
 	
+	public UserSearchResult() {}
+
 	public UserSearchResult(SearchResult<User> copy) {
 		this.objectName = copy.getObjectName();
 		this.records = copy.getRecords();

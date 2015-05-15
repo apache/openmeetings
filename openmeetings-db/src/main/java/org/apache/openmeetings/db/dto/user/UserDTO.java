@@ -37,6 +37,8 @@ public class UserDTO {
 	private String timeZoneId;
 	private Type type = Type.user;
 
+	public UserDTO() {}
+
 	public UserDTO(User u) {
 		id = u.getId();
 		firstname = u.getFirstname();
