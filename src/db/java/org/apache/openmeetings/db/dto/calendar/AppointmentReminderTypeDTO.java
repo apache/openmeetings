@@ -24,6 +24,8 @@ public class AppointmentReminderTypeDTO {
 	private Long id;
 	private String name;
 
+	public AppointmentReminderTypeDTO() {}
+
 	public AppointmentReminderTypeDTO(AppointmentReminderTyps t) {
 		this.id = t.getTypId();
 		this.name = t.getName();

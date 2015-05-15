@@ -25,6 +25,8 @@ public class MeetingMemberDTO {
 	private Long id;
 	private UserDTO user;
 	
+	public MeetingMemberDTO() {}
+
 	public MeetingMemberDTO(MeetingMember mm) {
 		this.id = mm.getId();
 		this.user = new UserDTO(mm.getUser());
