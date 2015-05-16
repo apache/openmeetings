@@ -184,7 +184,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 			SessionVariablesUtil.setUserId(conn.getClient(), rcm.getUser_id());
 
 			rcm.setStreamPublishName(parentSid);
-			User u = usersDao.get(rcm.getUser_id());
+			User u = usersDao.get(rcm.getUser_id() < 0 ? -rcm.getUser_id() : rcm.getUser_id());
 			rcm.setUsername(u.getLogin());
 			rcm.setFirstname(u.getFirstname());
 			rcm.setLastname(u.getLastname());
