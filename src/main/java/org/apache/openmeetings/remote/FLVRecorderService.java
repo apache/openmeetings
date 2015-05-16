@@ -40,6 +40,7 @@ import org.apache.openmeetings.db.entity.record.FlvRecording;
 import org.apache.openmeetings.db.entity.record.FlvRecordingMetaData;
 import org.apache.openmeetings.db.entity.record.FlvRecordingMetaData.Status;
 import org.apache.openmeetings.db.entity.room.Client;
+import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.remote.red5.ScopeApplicationAdapter;
 import org.apache.openmeetings.util.CalendarPatterns;
 import org.red5.logging.Red5LoggerFactory;
@@ -110,7 +111,14 @@ public class FLVRecorderService implements IPendingServiceCallback {
 
 			flvRecording.setFileHash("");
 			flvRecording.setFileName(roomRecordingName);
-			flvRecording.setInsertedBy(client.getUser_id());
+			Long ownerId = client.getUser_id();
+			if (ownerId != null && ownerId < 0) {
+				User c = userDao.get(-ownerId);
+				if (c != null) {
+					ownerId = c.getOwnerId();
+				}
+			}
+			flvRecording.setInsertedBy(ownerId);
 			flvRecording.setFolder(false);
 			flvRecording.setIsImage(false);
 			flvRecording.setIsPresentation(false);
@@ -124,12 +132,12 @@ public class FLVRecorderService implements IPendingServiceCallback {
 			flvRecording.setWidth(client.getVWidth());
 			flvRecording.setHeight(client.getVHeight());
 
-			flvRecording.setOwnerId(client.getUser_id());
+			flvRecording.setOwnerId(ownerId);
 			flvRecording.setStatus(FlvRecording.Status.RECORDING);
 			flvRecording = recordingDao.update(flvRecording);
 			// Receive flvRecordingId
 			Long flvRecordingId = flvRecording.getFlvRecordingId();
-			log.debug("##REC:: recording created by USER: " + client.getUser_id());
+			log.debug("##REC:: recording created by USER: " + ownerId);
 
 			// Update Client and set Flag
 			client.setIsRecording(true);
