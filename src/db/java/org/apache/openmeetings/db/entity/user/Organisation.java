@@ -75,7 +75,7 @@ public class Organisation implements Serializable, IDataProviderEntity {
 	private Date updatetime;
 	
 	@Column(name="deleted")
-	@Element(data=true)
+	@Element(data = true, required = false)
 	private boolean deleted;
 	
 
