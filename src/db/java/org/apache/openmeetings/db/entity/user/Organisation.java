@@ -59,7 +59,7 @@ public class Organisation implements Serializable, IDataProviderEntity {
 	private Long organisation_id;
 	
 	@Column(name="name")
-	@Element(data=true)
+	@Element(data = true, required = false)
 	private String name;
 	
 	@Column(name="insertedby")
