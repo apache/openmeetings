@@ -74,7 +74,7 @@ public class Organisation implements IDataProviderEntity {
 	private Date updatetime;
 	
 	@Column(name="deleted")
-	@Element(data=true)
+	@Element(data = true, required = false)
 	private boolean deleted;
 	
 
