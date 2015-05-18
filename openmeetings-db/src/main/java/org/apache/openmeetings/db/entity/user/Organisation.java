@@ -58,7 +58,7 @@ public class Organisation implements IDataProviderEntity {
 	private Long id;
 	
 	@Column(name="name")
-	@Element(data=true)
+	@Element(data = true, required = false)
 	private String name;
 	
 	@Column(name="insertedby")
