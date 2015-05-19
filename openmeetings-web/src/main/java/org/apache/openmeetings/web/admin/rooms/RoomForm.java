@@ -122,7 +122,8 @@ public class RoomForm extends AdminBaseForm<Room> {
 
 			@Override
 			protected String getDisplayText(RoomOrganisation choice) {
-				return choice.getOrganisation().getName();
+				String name = choice.getOrganisation().getName();
+				return name == null ? "" : name;
 			}
 
 			@Override
