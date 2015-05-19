@@ -38,11 +38,11 @@ import javax.mail.internet.InternetAddress;
 import javax.servlet.ServletContextEvent;
 
 import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.CommandLineParser;
+import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.OptionGroup;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
-import org.apache.commons.cli.Parser;
-import org.apache.commons.cli.PosixParser;
 import org.apache.commons.transaction.util.FileHelper;
 import org.apache.openjpa.jdbc.conf.JDBCConfiguration;
 import org.apache.openjpa.jdbc.conf.JDBCConfigurationImpl;
@@ -189,7 +189,7 @@ public class Admin {
 		File home = new File(System.getenv("RED5_HOME"));
 		OmFileHelper.setOmHome(new File(new File(home, "webapps"), ctxName));
 		
-		Parser parser = new PosixParser();
+		CommandLineParser parser = new DefaultParser();
 		try {
 			cmdl = parser.parse(opts, args);
 		} catch (ParseException e) {
