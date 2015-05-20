@@ -18,7 +18,7 @@
  */
 package org.apache.openmeetings.remote;
 
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAUT_LANG_KEY;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_LANG_KEY;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -53,7 +53,7 @@ public class LanguageService {
 	}
 
 	public Integer getDefaultLanguage() {
-		return configurationDao.getConfValue(CONFIG_DEFAUT_LANG_KEY, Integer.class, "1");
+		return configurationDao.getConfValue(CONFIG_DEFAULT_LANG_KEY, Integer.class, "1");
 	}
 
 	/**

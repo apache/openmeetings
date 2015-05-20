@@ -22,7 +22,7 @@ public class OpenmeetingsVariables {
 	public static final String CONFIG_CRYPT_KEY = "crypt_ClassName";
 	public static final String CONFIG_DASHBOARD_SHOW_MYROOMS_KEY = "dashboard.show.myrooms";
 	public static final String CONFIG_DASHBOARD_SHOW_RSS_KEY = "dashboard.show.rssfeed";
-	public static final String CONFIG_DEFAUT_LANG_KEY = "default_lang_id";
+	public static final String CONFIG_DEFAULT_LANG_KEY = "default_lang_id";
 	public static final String CONFIG_FRONTEND_REGISTER_KEY = "allow_frontend_register";
 	public static final String CONFIG_SOAP_REGISTER_KEY = "allow.soap.register";
 	public static final String CONFIG_LOGIN_MIN_LENGTH_KEY = "user.login.minimum.length";
@@ -41,6 +41,7 @@ public class OpenmeetingsVariables {
 	public static final String CONFIG_SCREENSHARING_FPS_SHOW = "screensharing.fps.show";
 	public static final String CONFIG_SCREENSHARING_ALLOW_REMOTE = "screensharing.allow.remote";
 	public static final String CONFIG_CALENDAR_FIRST_DAY = "calendar.firstday";
+	public static final String CONFIG_DEFAULT_GROUP_ID = "default_group_id";
 
 	public static int DEFAULT_MINUTES_REMINDER_SEND = 15;
 	public static String DEFAULT_BASE_URL = "http://localhost:5080/openmeetings/";

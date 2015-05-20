@@ -26,9 +26,10 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_CALENDAR
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_CRYPT_KEY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DASHBOARD_SHOW_MYROOMS_KEY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DASHBOARD_SHOW_RSS_KEY;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_GROUP_ID;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_LANDING_ZONE;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_LANG_KEY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_LDAP_ID;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAUT_LANG_KEY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_FRONTEND_REGISTER_KEY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_IGNORE_BAD_SSL;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_LOGIN_MIN_LENGTH_KEY;
@@ -289,12 +290,8 @@ public class ImportInitvalues {
 
 		cfgDao.add(CONFIG_FRONTEND_REGISTER_KEY, cfg.allowFrontendRegister, null, "Is user register available on login screen");
 		cfgDao.add(CONFIG_SOAP_REGISTER_KEY, "1", null, "Is user register available via SOAP/REST");
-		cfgDao.add("default_group_id", "1", null, "");
-
-		// this domain_id is the Organisation of users who register through the
-		// frontend
-		cfgDao.add("default_domain_id", "1", null, "");
-
+		// this group_id is the Organisation of users who register through the frontend or SOAP
+		cfgDao.add(CONFIG_DEFAULT_GROUP_ID, "1", null, "");
 
 		cfgDao.add("smtp_server", cfg.smtpServer, null,
 				"this is the smtp server to send messages");
@@ -319,7 +316,7 @@ public class ImportInitvalues {
 		cfgDao.add("application.name", DEFAULT_APP_NAME, null, "Name of the Browser Title window");
 
 		// "1" == "EN"
-		cfgDao.add(CONFIG_DEFAUT_LANG_KEY, cfg.defaultLangId, null, "Default System Language ID see languages.xml");
+		cfgDao.add(CONFIG_DEFAULT_LANG_KEY, cfg.defaultLangId, null, "Default System Language ID see languages.xml");
 
 		cfgDao.add("swftools_zoom", "" + cfg.swfZoom, null,
 				"dpi for conversion of PDF to SWF (should be an integer between 50 and  600 with a default value of 100 dpi)");

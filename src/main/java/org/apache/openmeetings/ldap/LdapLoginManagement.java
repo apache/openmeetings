@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.ldap;
 
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_GROUP_ID;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
 import java.io.File;
@@ -328,7 +329,7 @@ public class LdapLoginManagement {
 						u.setType(Type.ldap);
 						u.getRights().remove(Right.Login);
 						u.setDomainId(domainId);
-						u.getOrganisation_users().add(new Organisation_Users(orgDao.get(cfgDao.getConfValue("default_domain_id", Long.class, "-1"))));
+						u.getOrganisation_users().add(new Organisation_Users(orgDao.get(cfgDao.getConfValue(CONFIG_DEFAULT_GROUP_ID, Long.class, "-1"))));
 						u.setLogin(login);
 						u.setShowContactDataToContacts(true);
 					}

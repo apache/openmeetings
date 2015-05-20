@@ -18,7 +18,7 @@
  */
 package org.apache.openmeetings.remote;
 
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAUT_LANG_KEY;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_LANG_KEY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
 import java.util.ArrayList;
@@ -351,7 +351,7 @@ public class ConferenceService {
 		if (AuthLevelUtil.hasUserLevel(userDao.getRights(users_id))) {
 			User user = userDao.get(users_id);
 			return roomTypeDao.getAll(user == null
-					? cfgDao.getConfValue(CONFIG_DEFAUT_LANG_KEY, Long.class, "1") : user.getLanguage_id());
+					? cfgDao.getConfValue(CONFIG_DEFAULT_LANG_KEY, Long.class, "1") : user.getLanguage_id());
 		}
 		return null;
 	}

@@ -18,7 +18,7 @@
  */
 package org.apache.openmeetings.web.mail.template;
 
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAUT_LANG_KEY;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_LANG_KEY;
 import static org.apache.openmeetings.web.app.Application.getBean;
 
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
@@ -50,7 +50,7 @@ public abstract class AbstractTemplatePanel extends Panel {
 	
 	public AbstractTemplatePanel(Long langId) {
 		super(TemplatePage.COMP_ID);
-		this.langId = langId == null ? getBean(ConfigurationDao.class).getConfValue(CONFIG_DEFAUT_LANG_KEY, Long.class, "1") : langId;
+		this.langId = langId == null ? getBean(ConfigurationDao.class).getConfValue(CONFIG_DEFAULT_LANG_KEY, Long.class, "1") : langId;
 		add(new TransparentWebMarkupContainer("container").add(AttributeAppender.append("dir", FormatHelper.isRtlLanguage(LabelDao.languages.get(langId).toLanguageTag()) ? "rtl" : "ltr")));
 	}
 	

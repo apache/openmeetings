@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.web.pages.auth;
 
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_GROUP_ID;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_FRONTEND_REGISTER_KEY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_IGNORE_BAD_SSL;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
@@ -370,7 +371,7 @@ public class SignInPage extends BaseInitedPage {
 			u.setType(Type.oauth);
 			u.getRights().remove(Right.Login);;
 			u.setDomainId(serverId);
-			u.getOrganisation_users().add(new Organisation_Users(getBean(OrganisationDao.class).get(cfgDao.getConfValue("default_domain_id", Long.class, "-1"))));
+			u.getOrganisation_users().add(new Organisation_Users(getBean(OrganisationDao.class).get(cfgDao.getConfValue(CONFIG_DEFAULT_GROUP_ID, Long.class, "-1"))));
 			u.setLogin(login);
 			u.setShowContactDataToContacts(true);
 			u.setLastname(lastname);
