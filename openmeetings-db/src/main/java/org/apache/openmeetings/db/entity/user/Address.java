@@ -174,7 +174,7 @@ public class Address implements IDataProviderEntity {
 		this.zip = zip;
 	}
 
-	public boolean getDeleted() {
+	public boolean isDeleted() {
 		return deleted;
 	}
 

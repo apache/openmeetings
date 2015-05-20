@@ -308,7 +308,7 @@ public class Room implements IDataProviderEntity {
 		this.updatetime = updatetime;
 	}
 
-	public boolean getDeleted() {
+	public boolean isDeleted() {
 		return deleted;
 	}
 

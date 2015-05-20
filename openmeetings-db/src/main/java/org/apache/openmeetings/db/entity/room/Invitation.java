@@ -171,7 +171,7 @@ public class Invitation implements IDataProviderEntity {
 		this.updated = updated;
 	}
 
-	public boolean getDeleted() {
+	public boolean isDeleted() {
 		return deleted;
 	}
 

@@ -220,7 +220,7 @@ public class FlvRecordingMetaData implements IDataProviderEntity {
 		this.inserted = inserted;
 	}
 
-	public boolean getDeleted() {
+	public boolean isDeleted() {
 		return deleted;
 	}
 

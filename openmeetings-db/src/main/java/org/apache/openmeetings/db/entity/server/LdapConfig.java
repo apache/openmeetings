@@ -179,7 +179,7 @@ public class LdapConfig implements IDataProviderEntity {
 		this.updatedby = updatedby;
 	}
 
-	public boolean getDeleted() {
+	public boolean isDeleted() {
 		return deleted;
 	}
 

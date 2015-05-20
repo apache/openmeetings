@@ -89,7 +89,7 @@ public class RoomType implements IDataProviderEntity {
 		this.updatetime = updatetime;
 	}	
 	
-	public boolean getDeleted() {
+	public boolean isDeleted() {
 		return deleted;
 	}
 	public void setDeleted(boolean deleted) {

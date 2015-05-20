@@ -103,7 +103,7 @@ public class Userdata implements Serializable {
 		this.updatetime = updatetime;
 	}
 	
-	public boolean getDeleted() {
+	public boolean isDeleted() {
 		return deleted;
 	}
 	public void setDeleted(boolean deleted) {
