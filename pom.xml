@@ -687,13 +687,13 @@
 			<plugin>
 				<groupId>org.apache.rat</groupId>
 				<artifactId>apache-rat-plugin</artifactId>
-				<!--executions>
+				<executions>
 					<execution>
 						<goals>
 							<goal>check</goal>
 						</goals>
 					</execution>
-				</executions-->
+				</executions>
 			</plugin>
 		</plugins>
  		<pluginManagement>
@@ -850,9 +850,8 @@
 				<plugin>
 					<groupId>org.apache.rat</groupId>
 					<artifactId>apache-rat-plugin</artifactId>
-					<version>0.11</version>
+					<version>0.12-SNAPSHOT</version>
 					<configuration>
-						<excludes></excludes>
 						<addDefaultLicenseMatchers>true</addDefaultLicenseMatchers>
 						<licenses>
 							<license implementation="org.apache.rat.analysis.license.SimplePatternBasedLicense">
@@ -872,14 +871,14 @@
 								</patterns>
 							</license>
 						</licenses>
-						<!--licenseFamilies>
+						<licenseFamilies>
 							<licenseFamily implementation="org.apache.rat.license.SimpleLicenseFamily">
 								<familyName>MIT and GPL v2</familyName>
 							</licenseFamily>
 							<licenseFamily implementation="org.apache.rat.license.SimpleLicenseFamily">
 								<familyName>MIT</familyName>
 							</licenseFamily>
-						</licenseFamilies-->
+						</licenseFamilies>
 				</configuration>
 				</plugin>
 				
