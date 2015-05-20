@@ -26,6 +26,6 @@ public class OmLabel extends Label {
 
 	public OmLabel(String id, String key, Object... parameters) {
 		super(id);
-		setDefaultModel(new StringResourceModel(key, this, null, parameters));
+		setDefaultModel(new StringResourceModel(key, this).setParameters(parameters));
 	}
 }

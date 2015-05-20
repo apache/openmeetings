@@ -244,7 +244,7 @@ public class InstallWizard extends Wizard {
 				try {
 					Class.forName(props.getDriver());
 				} catch (Exception e) {
-					form.error(new StringResourceModel("install.wizard.db.step.nodriver", InstallWizard.this, null, null, getString("install.wizard.db.step.instructions." + props.getDbType().name())).getObject());
+					form.error(new StringResourceModel("install.wizard.db.step.nodriver", InstallWizard.this).setParameters(getString("install.wizard.db.step.instructions." + props.getDbType().name())).getObject());
 					return;
 				}
 				Connection conn = null;
@@ -299,7 +299,7 @@ public class InstallWizard extends Wizard {
         			LocalEntityManagerFactoryBean emb = f.getBean(LocalEntityManagerFactoryBean.class);
         			emb.afterPropertiesSet();
         		} catch (Exception e) {
-					form.error(new StringResourceModel("install.wizard.db.step.error.patch", InstallWizard.this, null, null, e.getMessage()).getObject());
+					form.error(new StringResourceModel("install.wizard.db.step.error.patch", InstallWizard.this).setParameters(e.getMessage()).getObject());
 					log.error("error while patching", e);
         		}
         	}
