@@ -20,6 +20,7 @@ package org.apache.openmeetings.web.pages.auth;
 
 import static org.apache.openmeetings.db.util.UserHelper.getMinLoginLength;
 import static org.apache.openmeetings.db.util.UserHelper.getMinPasswdLength;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_GROUP_ID;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.AVAILABLE_TIMEZONES;
@@ -201,7 +202,7 @@ public class RegisterDialog extends AbstractFormDialog<String> {
 					, firstName, email, null /* age/birthday */, "" /* street */
 					, "" /* additionalname */, "" /* fax */, "" /* zip */, state.getId()
 					, "" /* town */, lang, true /* sendWelcomeMessage */
-					, Arrays.asList(getBean(ConfigurationDao.class).getConfValue("default_domain_id", Long.class, null)),
+					, Arrays.asList(getBean(ConfigurationDao.class).getConfValue(CONFIG_DEFAULT_GROUP_ID, Long.class, null)),
 					"" /* phone */, false, sendConfirmation, TimeZone.getTimeZone(tzModel.getObject()),
 					false /* forceTimeZoneCheck */, "" /* userOffers */, "" /* userSearchs */, false /* showContactData */,
 					true /* showContactDataToContacts */, hash);

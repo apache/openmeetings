@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.service.user;
 
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_GROUP_ID;
 import static org.apache.openmeetings.db.util.UserHelper.getMinLoginLength;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SOAP_REGISTER_KEY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
@@ -262,7 +263,7 @@ public class UserManager implements IUserManager {
 	 * Method to register a new User, User will automatically be added to the
 	 * default user_level(1) new users will be automatically added to the
 	 * Organisation with the id specified in the configuration value
-	 * default_domain_id
+	 * default_group_id
 	 * 
 	 * @param user_level
 	 * @param availible
@@ -322,7 +323,7 @@ public class UserManager implements IUserManager {
 				Long user_id = registerUserInit(UserDao.getDefaultRights(), login,
 						Userpass, lastname, firstname, email, age, street,
 						additionalname, fax, zip, states_id, town, language_id,
-						true, Arrays.asList(configurationDao.getConfValue("default_domain_id", Long.class, null)), phone,
+						true, Arrays.asList(configurationDao.getConfValue(CONFIG_DEFAULT_GROUP_ID, Long.class, null)), phone,
 						sendSMS, sendConfirmation, timezoneUtil.getTimeZone(jNameTimeZone), false, "", "", false, true, null);
 
 				if (user_id > 0 && sendConfirmation) {
