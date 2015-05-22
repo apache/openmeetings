@@ -2,6 +2,21 @@ Apache OpenMeetings Change Log
 
 See http://issues.apache.org/jira/browse/OPENMEETINGS-* (where * is the number of the issue below)
 
+Release Notes - Openmeetings - Version 3.0.6
+================================================================================================================
+
+** Bug
+    * [OPENMEETINGS-1202] - Send Invitation error with moodle
+    * [OPENMEETINGS-1203] - Screen sharing is not started when external guest try to start sharing
+    * [OPENMEETINGS-1205] - Invitation is not sent from the toom
+    * [OPENMEETINGS-1207] - Create a poll
+    * [OPENMEETINGS-1208] - default_group_id ...?
+
+** Improvement
+    * [OPENMEETINGS-1197] - Library versions should be updated (3.0.6)
+    * [OPENMEETINGS-1206] - Room service should be updated to be able to generate invitation hash with first and last name
+
+
 Release Notes - Openmeetings - Version 3.0.5
 ================================================================================================================
 
