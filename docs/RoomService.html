@@ -184,6 +184,13 @@
  leading zero's)</i></div>
                 </div>
                                                <div>
+                <a href="#getInvitationHashFullName"><b>getInvitationHashFullName</b></a><br/>
+                <div class="navigation_comment"><i >Create a Invitation hash and optionally send it by mail the From to Date
+ is as String as some SOAP libraries do not accept Date Objects in SOAP
+ Calls Date is parsed as dd.mm.yyyy, time as hh:mm (don't forget the
+ leading zero's)</i></div>
+                </div>
+                                               <div>
                 <a href="#sendInvitationHash"><b>sendInvitationHash</b></a><br/>
                 <div class="navigation_comment"><i >Create a Invitation hash and optionally send it by mail the From to Date
  is as String as some SOAP libraries do not accept Date Objects in SOAP
@@ -3384,6 +3391,166 @@
     	   				    		      <div class="method">
 		        <div class="method_header">
 		        <div style="margin-left:10px">
+    			<a name="getInvitationHashFullName" ><b>getInvitationHashFullName</b></a>
+    			</div>
+    			</div>
+    			
+    			Method: <i>getInvitationHashFullName (
+    			    			    			       			   String SID
+    			       			    			       			     , 
+    			       			   String username
+    			       			    			       			     , 
+    			       			   String firstname
+    			       			    			       			     , 
+    			       			   String lastname
+    			       			    			       			     , 
+    			       			   Long room_id
+    			       			    			       			     , 
+    			       			   Boolean isPasswordProtected
+    			       			    			       			     , 
+    			       			   String invitationpass
+    			       			    			       			     , 
+    			       			   Integer valid
+    			       			    			       			     , 
+    			       			   String validFromDate
+    			       			    			       			     , 
+    			       			   String validFromTime
+    			       			    			       			     , 
+    			       			   String validToDate
+    			       			    			       			     , 
+    			       			   String validToTime
+    			       			    			)
+    			</i><br/>
+    			<p>
+    			  Create a Invitation hash and optionally send it by mail the From to Date
+ is as String as some SOAP libraries do not accept Date Objects in SOAP
+ Calls Date is parsed as dd.mm.yyyy, time as hh:mm (don't forget the
+ leading zero's)
+    			</p>
+    			<p>
+                  Return Type: java.lang.String
+                </p>
+    			<p>Params:</p>
+    			    			
+    				    			<table rules="all" border="1">
+	    			   <thead>
+	    			   <tr>
+	    			     <th width="200" align="left">Type</th>
+	    			     <th width="200" align="left">Fieldname</th>
+	    			     <th width="400" align="left">Description</th>
+	    			   </tr>
+	    			   </thead>
+	    			   <tbody>
+	    			   	    			   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">SID</td>
+	                     <td valign="top">The SID of the User. This SID must be marked as Loggedin a
+            valid Session Token</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">username</td>
+	                     <td valign="top">the username of the User that he will get</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">firstname</td>
+	                     <td valign="top">the first name of the User that he will get</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">lastname</td>
+	                     <td valign="top">the last name of the User that he will get</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Long
+	                     		                     </td>
+	                     <td valign="top">room_id</td>
+	                     <td valign="top">the conference room id of the invitation</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Boolean
+	                     		                     </td>
+	                     <td valign="top">isPasswordProtected</td>
+	                     <td valign="top">if the invitation is password protected</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">invitationpass</td>
+	                     <td valign="top">the password for accessing the conference room via the
+            invitation hash</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		Integer
+	                     		                     </td>
+	                     <td valign="top">valid</td>
+	                     <td valign="top">the type of validation for the hash 1: endless, 2: from-to
+            period, 3: one-time</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">validFromDate</td>
+	                     <td valign="top">Date in Format of dd.mm.yyyy only of interest if valid is type
+            2</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">validFromTime</td>
+	                     <td valign="top">time in Format of hh:mm only of interest if valid is type 2</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">validToDate</td>
+	                     <td valign="top">Date in Format of dd.mm.yyyy only of interest if valid is type
+            2</td>
+	                   </tr>
+	                   
+	                   	                   	    			   <tr>
+	                     <td valign="top">
+	                     		                     		String
+	                     		                     </td>
+	                     <td valign="top">validToTime</td>
+	                     <td valign="top">time in Format of hh:mm only of interest if valid is type 2</td>
+	                   </tr>
+	                   
+	                   	                   	                   </tbody>
+	    			</table>
+    			    			<br/>
+    			REST Sample Call/URL:<br/>
+    			    			    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    												<a href="http://localhost:5080/openmeetings/services/RoomService/getInvitationHashFullName?SID=VALUE&username=VALUE&firstname=VALUE&lastname=VALUE&room_id=VALUE&isPasswordProtected=VALUE&invitationpass=VALUE&valid=VALUE&validFromDate=VALUE&validFromTime=VALUE&validToDate=VALUE&validToTime=VALUE">http://localhost:5080/openmeetings/services/RoomService/getInvitationHashFullName?SID=VALUE&amp;username=VALUE&amp;firstname=VALUE&amp;lastname=VALUE&amp;room_id=VALUE&amp;isPasswordProtected=VALUE&amp;invitationpass=VALUE&amp;valid=VALUE&amp;validFromDate=VALUE&amp;validFromTime=VALUE&amp;validToDate=VALUE&amp;validToTime=VALUE</a>
+    		  </div>
+    	   				    		      <div class="method">
+		        <div class="method_header">
+		        <div style="margin-left:10px">
     			<a name="sendInvitationHash" ><b>sendInvitationHash</b></a>
     			</div>
     			</div>
@@ -3400,8 +3567,6 @@
     			       			   String subject
     			       			    			       			     , 
     			       			   Long room_id
-    			       			    			       			     , 
-    			       			   String conferencedomain
     			       			    			       			     , 
     			       			   Boolean isPasswordProtected
     			       			    			       			     , 
@@ -3495,14 +3660,6 @@
 	                   
 	                   	                   	    			   <tr>
 	                     <td valign="top">
-	                     		                     		String
-	                     		                     </td>
-	                     <td valign="top">conferencedomain</td>
-	                     <td valign="top">the domain of the room (keep empty)</td>
-	                   </tr>
-	                   
-	                   	                   	    			   <tr>
-	                     <td valign="top">
 	                     		                     		Boolean
 	                     		                     </td>
 	                     <td valign="top">isPasswordProtected</td>
@@ -3583,7 +3740,7 @@
 	    			</table>
     			    			<br/>
     			REST Sample Call/URL:<br/>
-    			    			    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    												<a href="http://localhost:5080/openmeetings/services/RoomService/sendInvitationHash?SID=VALUE&username=VALUE&message=VALUE&email=VALUE&subject=VALUE&room_id=VALUE&conferencedomain=VALUE&isPasswordProtected=VALUE&invitationpass=VALUE&valid=VALUE&validFromDate=VALUE&validFromTime=VALUE&validToDate=VALUE&validToTime=VALUE&language_id=VALUE&sendMail=VALUE">http://localhost:5080/openmeetings/services/RoomService/sendInvitationHash?SID=VALUE&amp;username=VALUE&amp;message=VALUE&amp;email=VALUE&amp;subject=VALUE&amp;room_id=VALUE&amp;conferencedomain=VALUE&amp;isPasswordProtected=VALUE&amp;invitationpass=VALUE&amp;valid=VALUE&amp;validFromDate=VALUE&amp;validFromTime=VALUE&amp;validToDate=VALUE&amp;validToTime=VALUE&amp;language_id=VALUE&amp;sendMail=VALUE</a>
+    			    			    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    								    				    												<a href="http://localhost:5080/openmeetings/services/RoomService/sendInvitationHash?SID=VALUE&username=VALUE&message=VALUE&email=VALUE&subject=VALUE&room_id=VALUE&isPasswordProtected=VALUE&invitationpass=VALUE&valid=VALUE&validFromDate=VALUE&validFromTime=VALUE&validToDate=VALUE&validToTime=VALUE&language_id=VALUE&sendMail=VALUE">http://localhost:5080/openmeetings/services/RoomService/sendInvitationHash?SID=VALUE&amp;username=VALUE&amp;message=VALUE&amp;email=VALUE&amp;subject=VALUE&amp;room_id=VALUE&amp;isPasswordProtected=VALUE&amp;invitationpass=VALUE&amp;valid=VALUE&amp;validFromDate=VALUE&amp;validFromTime=VALUE&amp;validToDate=VALUE&amp;validToTime=VALUE&amp;language_id=VALUE&amp;sendMail=VALUE</a>
     		  </div>
     	   				    		      <div class="method">
 		        <div class="method_header">
