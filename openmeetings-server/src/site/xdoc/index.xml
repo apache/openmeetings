@@ -112,6 +112,24 @@
 
 		<section name="News">
 			<div class="bs-callout bs-callout-danger">
+				<b>Version 3.0.6 released!</b>
+				<span>Service release 6 for 3.0.0 contains following improvements and bug fixes:<br/>
+					<br/>
+					Invitation:<br/>
+					<ul>
+						<li>Invitation hash sending from the room is fixed</li>
+						<li>Invitation hash is now enable for plugin users</li>
+						<li>First and last name can be passed to SOAP function for hash generation</li>
+					</ul><br/>
+					<br/>
+					Other fixes<br/>
+				</span>
+				<span>7 issues are fixed please check <a href="https://www.apache.org/dist/openmeetings/3.0.6/CHANGELOG">CHANGELOG</a> for details
+				</span>
+				<span> See <a href="downloads.html">Downloads page</a>.</span>
+				<span class="date">(2015-05-25)</span>
+			</div>
+			<div class="bs-callout bs-callout-info">
 				<b>Version 3.0.5 released!</b>
 				<span>Service release 5 for 3.0.0 contains following improvements and bug fixes:<br/>
 					<br/>

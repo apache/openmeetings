@@ -976,8 +976,20 @@
 				<reportSets>
 					<reportSet>
 						<reports>
+							<report>index</report>
+							<report>cim</report>
 							<report>dependencies</report>
+							<report>dependency-convergence</report>
+							<report>dependency-management</report>
+							<report>distribution-management</report>
+							<report>issue-tracking</report>
+							<report>license</report>
+							<report>mailing-list</report>
+							<report>plugin-management</report>
+							<report>plugins</report>
 							<report>project-team</report>
+							<report>scm</report>
+							<report>summary</report>
 						</reports>
 					</reportSet>
 				</reportSets>
