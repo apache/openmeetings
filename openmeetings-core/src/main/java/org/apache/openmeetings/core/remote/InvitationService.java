@@ -115,6 +115,11 @@ public class InvitationService implements IPendingServiceCallback {
 				Calendar calFrom = getDate(validFromDate, validFromTime, iCalTz);
 				Calendar calTo = getDate(validToDate, validToTime, iCalTz);
 	
+				User owner = null;
+				if (users_id < 0) {
+					owner = userDao.get(-users_id);
+				}
+				users_id = owner == null ? users_id : owner.getUser_id();
 				User invitee = userDao.getContact(email, firstname, lastname, users_id);
 				Invitation invitation = invitationManager.getInvitation(invitee, roomDao.get(room_id),
 								isPasswordProtected, invitationpass, Valid.fromInt(valid)
