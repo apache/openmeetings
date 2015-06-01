@@ -113,7 +113,7 @@ public class InvitationService implements IPendingServiceCallback {
 				if (users_id < 0) {
 					owner = userDao.get(-users_id);
 				}
-				users_id = owner == null ? users_id : owner.getUser_id();
+				users_id = owner == null ? users_id : owner.getOwnerId();
 				User invitee = userDao.getContact(email, firstname, lastname, users_id);
 				Invitation invitation = invitationManager.getInvitation(invitee, roomDao.get(room_id),
 								isPasswordProtected, invitationpass, Valid.fromInt(valid)
