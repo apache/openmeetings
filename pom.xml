@@ -249,6 +249,12 @@
 			<organization>VCRP</organization>
 			<organizationUrl>http://www.vcrp.de</organizationUrl>
 		</developer>
+		<developer>
+			<id>onoke</id>
+			<name>Keiji Ono</name>
+			<organization>net8</organization>
+			<organizationUrl>http://net8.co.jp/</organizationUrl>
+		</developer>
 	</developers>
 	<contributors>
 		<contributor>
@@ -256,11 +262,6 @@
 		</contributor>
 		<contributor>
 			<name>Thibault Le Meur</name>
-		</contributor>
-		<contributor>
-			<name>Keiji Ono</name>
-			<organization>net8</organization>
-			<organizationUrl>http://net8.co.jp/</organizationUrl>
 		</contributor>
 	</contributors>
 	<scm>
@@ -406,6 +407,10 @@
 					<exclusion>
 						<groupId>c3p0</groupId>
 						<artifactId>c3p0</artifactId>
+					</exclusion>
+					<exclusion>
+						<groupId>commons-logging</groupId>
+						<artifactId>commons-logging</artifactId>
 					</exclusion>
 				</exclusions>
 				<optional>true</optional>
