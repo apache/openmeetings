@@ -41,7 +41,7 @@ public class PublicRecordingTreeProvider extends RecordingTreeProvider {
 	public Iterator<? extends FlvRecording> getRoots() {
 		FlvRecording r = new FlvRecording();
 		r.setId(orgId == null ? -1 : -orgId);
-		r.setOrganization_id(orgId);
+		r.setOrganizationId(orgId);
 		r.setOwnerId(null);
 		r.setType(Type.Folder);
 		String pub = Application.getString(861);

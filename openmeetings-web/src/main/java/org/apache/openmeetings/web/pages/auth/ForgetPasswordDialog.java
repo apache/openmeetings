@@ -213,7 +213,6 @@ public class ForgetPasswordDialog extends AbstractFormDialog<String> {
 
 			// check if Mail given
 			if (email.length() > 0) {
-				// log.debug("getAdresses_id "+addr_e.getAdresses_id());
 				User us = userDao.getByEmail(email);
 				if (us != null) {
 					sendHashByUser(us, appLink, userDao);
@@ -244,7 +243,7 @@ public class ForgetPasswordDialog extends AbstractFormDialog<String> {
 		userDao.update(us, -1L);
 		String reset_link = appLink + "?hash=" + us.getResethash();
 
-		String email = us.getAdresses().getEmail();
+		String email = us.getAddress().getEmail();
 
 		String template = ResetPasswordTemplate.getEmail(reset_link);
 

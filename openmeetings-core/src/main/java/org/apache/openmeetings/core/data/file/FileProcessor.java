@@ -59,7 +59,7 @@ public class FileProcessor {
 	@Autowired
 	private GeneratePDF generatePDF;
 
-	public ConverterProcessResultList processFile(Long userId, Long room_id, 
+	public ConverterProcessResultList processFile(Long userId, Long roomId, 
 			boolean isOwner, InputStream is, Long parentFolderId, String fileSystemName, 
 			Long externalFileId, String externalType) throws Exception {
 		
@@ -136,7 +136,7 @@ public class FileProcessor {
 
         Long fileExplorerItemId = fileExplorerItemDao.add(
                 fileSystemName, fileHashName, // The Hashname of the file
-                parentFolderId, ownerId, room_id, userId, false, // isFolder
+                parentFolderId, ownerId, roomId, userId, false, // isFolder
                 isImage, isPresentation, "", false, isChart, 
                 externalFileId, externalType);
         log.debug("fileExplorerItemId: " + fileExplorerItemId);

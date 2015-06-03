@@ -52,7 +52,7 @@ public class TestAppointmentAddAppointment extends AbstractWicketTester {
 
 		String appointmentName = "Test 01";
 		String appointmentDescription = "Descr";
-		Long users_id = 1L;
+		Long userId = 1L;
 		String appointmentLocation = "office";
 		Boolean isMonthly = false;
 		Boolean isDaily = false;
@@ -65,15 +65,15 @@ public class TestAppointmentAddAppointment extends AbstractWicketTester {
 			mmClient[0] = createClientObj("firstname" + i, "lastname" + i,
 					"first" + i + ".last" + i + "@webbase-design.de", "Etc/GMT+1");
 		}
-		Long language_id = 1L;
+		Long languageId = 1L;
 		Long roomType = 1L;
 
 		Appointment a = appointmentLogic.getAppointment(appointmentName,
 				appointmentLocation, appointmentDescription,
 				start, end, isDaily, isWeekly,
 				isMonthly, isYearly, categoryId, remind, mmClient,
-				roomType, language_id, false, "", -1, users_id);
-		a = appointmentDao.update(a, users_id);
+				roomType, languageId, false, "", -1, userId);
+		a = appointmentDao.update(a, userId);
 		
 		Thread.sleep(3000);
 		

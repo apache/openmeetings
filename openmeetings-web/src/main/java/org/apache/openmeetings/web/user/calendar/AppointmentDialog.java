@@ -20,7 +20,6 @@ package org.apache.openmeetings.web.user.calendar;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.openmeetings.web.app.Application.getBean;
-import static org.apache.openmeetings.web.app.WebSession.getLanguage;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import static org.apache.openmeetings.web.util.RoomTypeDropDown.getRoomTypes;
 
@@ -58,6 +57,7 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.form.PasswordTextField;
 import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.form.TextField;
@@ -308,7 +308,29 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 			add(new DropDownChoice<AppointmentReminderType>(
 					"remind"
 					, remindTypes
-					, new ChoiceRenderer<AppointmentReminderType>("label.value", "id")));
+					, new IChoiceRenderer<AppointmentReminderType>() {
+						private static final long serialVersionUID = 1L;
+
+						@Override
+						public Object getDisplayValue(AppointmentReminderType art) {
+							return getString("" + art.getLabelId());
+						}
+
+						@Override
+						public String getIdValue(AppointmentReminderType art, int index) {
+							return "" + art.getId();
+						}
+
+						@Override
+						public AppointmentReminderType getObject(String id, IModel<? extends List<? extends AppointmentReminderType>> choices) {
+							for (AppointmentReminderType art : choices.getObject()) {
+								if (getIdValue(art, -1).equals(id)) {
+									return art;
+								}
+							}
+							return null;
+						} //new ChoiceRenderer<AppointmentReminderType>("label.value", "id")
+					}));
 			
 			add(roomType.setEnabled(createRoom).setOutputMarkupId(true));
 			
@@ -338,7 +360,7 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 		}
 		
 		private List<AppointmentReminderType> getRemindTypes() {
-			return getBean(AppointmentReminderTypDao.class).getList(getLanguage());
+			return getBean(AppointmentReminderTypDao.class).get();
 		}
 		
 		private List<Room> getRoomList() {

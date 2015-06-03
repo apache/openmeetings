@@ -48,20 +48,13 @@ public class TestDatabaseStructureAppointmentReminderTyp extends AbstractJUnitDe
 			cal.getTime();
 
 			reminderTypeDao.add(1L, "test 5 min", -1);
-			List<AppointmentReminderType> listAppoints = reminderTypeDao.getList(1);
+			List<AppointmentReminderType> listAppoints = reminderTypeDao.get();
 
 			log.debug("Anzahl: " + listAppoints.size());
 
 			for (AppointmentReminderType appoints : listAppoints) {
-				// log.debug("Termin: "+appoints.getAppointmentName()+" startDate: "+appoints.getAppointmentStarttime()+
-				// " endDate: "+appoints.getAppointmentEndtime());
 				log.debug("AppointmentReminderType: " + appoints.getName());
 			}
-
-			// for (Iterator<Appointment> iter =
-			// listAppoints.iterator();iter.hasNext();) {
-			// log.debug(iter.next());
-			// }
 
 		} catch (Exception err) {
 

@@ -193,8 +193,8 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 		if (soapLogin != null && !soapLogin.getUsed()) { //add code for  || (soapLogin.getAllowSameURLMultipleTimes())
 			SessiondataDao sessionDao = getBean(SessiondataDao.class);
 			Sessiondata sd = sessionDao.getSessionByHash(soapLogin.getSessionHash());
-			if (sd != null && sd.getSessionXml() != null) {
-				RemoteSessionObject remoteUser = RemoteSessionObject.fromXml(sd.getSessionXml());
+			if (sd != null && sd.getXml() != null) {
+				RemoteSessionObject remoteUser = RemoteSessionObject.fromXml(sd.getXml());
 				if (remoteUser != null && !Strings.isEmpty(remoteUser.getExternalUserId())) {
 					UserDao userDao = getBean(UserDao.class);
 					User user = userDao.getExternalUser(remoteUser.getExternalUserId(), remoteUser.getExternalUserType());
@@ -203,10 +203,10 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 						user.setFirstname(remoteUser.getFirstname());
 						user.setLastname(remoteUser.getLastname());
 						user.setLogin(remoteUser.getUsername()); //FIXME check if login UNIQUE
-						user.setExternalUserId(remoteUser.getExternalUserId());
-						user.setExternalUserType(remoteUser.getExternalUserType());
+						user.setExternalId(remoteUser.getExternalUserId());
+						user.setExternalType(remoteUser.getExternalUserType());
 						user.getRights().add(Right.Room);
-						user.getAdresses().setEmail(remoteUser.getEmail());
+						user.getAddress().setEmail(remoteUser.getEmail());
 						user.setPictureuri(remoteUser.getPictureUrl());
 					} else {
 						user.setFirstname(remoteUser.getFirstname());
@@ -222,7 +222,7 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 
 					sessionDao.updateUser(SID, user.getId());
 					setUser(user);
-					recordingId = soapLogin.getRoomRecordingId();
+					recordingId = soapLogin.getRecordingId();
 					return true;
 				}
 			}
@@ -234,7 +234,7 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 		userId = u.getId();
 		rights = Collections.unmodifiableSet(u.getRights());
 		languageId = u.getLanguageId();
-		externalType = u.getExternalUserType();
+		externalType = u.getExternalType();
 		tz = getBean(TimezoneUtil.class).getTimeZone(u);
 		ISO8601FORMAT.setTimeZone(tz);
 		setLocale(languageId == 3 ? Locale.GERMANY : LabelDao.languages.get(languageId)); //FIXME hack
@@ -247,7 +247,7 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 	
 	public boolean signIn(String login, String password, Type type, Long domainId) {
 		Sessiondata sessData = getBean(SessiondataDao.class).startsession();
-		SID = sessData.getSession_id();
+		SID = sessData.getSessionId();
 		try {
 			User u = null;
 			switch (type) {
@@ -308,11 +308,11 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 			if (sessionData == null) {
 				sessionData = sessionDao.startsession();
 			}
-			if (!sessionDao.updateUser(sessionData.getSession_id(), userId, false, languageId)) {
+			if (!sessionDao.updateUser(sessionData.getSessionId(), userId, false, languageId)) {
 				//something bad, force user to re-login
 				invalidate();
 			} else {
-				SID = sessionData.getSession_id();
+				SID = sessionData.getSessionId();
 			}
 		}
 		return SID;
@@ -390,7 +390,7 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 	}
 
 	public State getCountryByBrowserLocale() {
-		List<State> states = getBean(StateDao.class).getStates();
+		List<State> states = getBean(StateDao.class).get();
 		String code = getBrowserLocale().getISO3Country().toUpperCase();
 		for (State s : states) {
 			if (s.getShortName().toUpperCase().equals(code)){

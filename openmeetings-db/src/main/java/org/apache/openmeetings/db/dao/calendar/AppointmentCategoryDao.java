@@ -72,7 +72,7 @@ public class AppointmentCategoryDao {
 			AppointmentCategory ac = get(categoryId);
 
 			ac.setName(name);
-			ac.setUpdatetime(new Date());
+			ac.setUpdated(new Date());
 
 			if (ac.getId() == null) {
 				em.persist(ac);
@@ -89,21 +89,20 @@ public class AppointmentCategoryDao {
 		return null;
 	}
 
-	public Long addAppointmentCategory(Long user_id, String name, String comment) {
+	public Long addAppointmentCategory(Long userId, String name, String comment) {
 		try {
 
 			AppointmentCategory ac = new AppointmentCategory();
 
 			ac.setName(name);
-			ac.setStarttime(new Date());
+			ac.setInserted(new Date());
 			ac.setDeleted(false);
-			ac.setUser(usersDao.get(user_id));
+			ac.setUser(usersDao.get(userId));
 			ac.setComment(comment);
 
 			ac = em.merge(ac);
-			Long category_id = ac.getId();
 
-			return category_id;
+			return ac.getId();
 		} catch (Exception ex2) {
 			log.error("[addAppointmentCategory]: ", ex2);
 		}
@@ -121,7 +120,7 @@ public class AppointmentCategoryDao {
 				log.debug("Already deleted / Could not find: " + categoryId);
 				return categoryId;
 			}
-			ac.setUpdatetime(new Date());
+			ac.setUpdated(new Date());
 			ac.setDeleted(true);
 			if (ac.getId() == null) {
 				em.persist(ac);

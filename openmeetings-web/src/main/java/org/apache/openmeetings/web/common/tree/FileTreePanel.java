@@ -155,7 +155,7 @@ public abstract class FileTreePanel extends Panel {
 			f.setParentItemId(parentId);
 		}
 		f.setOwnerId(p.getOwnerId());
-		f.setOrganization_id(p.getOrganization_id());
+		f.setOrganizationId(p.getOrganizationId());
 		getBean(FlvRecordingDao.class).update(f);
 	}
 	

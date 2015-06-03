@@ -75,11 +75,11 @@ public class GenerateImage extends BaseConverter {
 		return returnMap;
 	}
 
-	public ConverterProcessResultList convertImageUserProfile(File file, Long users_id, boolean skipConvertion) throws Exception {
+	public ConverterProcessResultList convertImageUserProfile(File file, Long userId, boolean skipConvertion) throws Exception {
 		ConverterProcessResultList returnMap = new ConverterProcessResultList();
 		
 		// User Profile Update
-		for (File f : getUploadProfilesUserDir(users_id).listFiles(new FileFilter() {
+		for (File f : getUploadProfilesUserDir(userId).listFiles(new FileFilter() {
 			public boolean accept(File pathname) {
 				return pathname.getName().endsWith(JPG_EXTENTION);
 			}
@@ -87,7 +87,7 @@ public class GenerateImage extends BaseConverter {
 			FileHelper.removeRec(f);
 		}
 		
-		File destinationFile = OmFileHelper.getNewFile(getUploadProfilesUserDir(users_id), profileFileName, JPG_EXTENTION);
+		File destinationFile = OmFileHelper.getNewFile(getUploadProfilesUserDir(userId), profileFileName, JPG_EXTENTION);
 		if (!skipConvertion) {
 			returnMap.addItem("processJPG", convertSingleJpg(file.getCanonicalPath(), destinationFile));
 		} else {
@@ -103,13 +103,13 @@ public class GenerateImage extends BaseConverter {
 		}
 
 		String pictureuri = destinationFile.getName();
-		User us = usersDao.get(users_id);
-		us.setUpdatetime(new java.util.Date());
+		User us = usersDao.get(userId);
+		us.setUpdated(new java.util.Date());
 		us.setPictureuri(pictureuri);
-		usersDao.update(us, users_id);
+		usersDao.update(us, userId);
 
 		//FIXME: After uploading a new picture all other clients should refresh
-		//scopeApplicationAdapter.updateUserSessionObject(users_id, pictureuri);
+		//scopeApplicationAdapter.updateUserSessionObject(userId, pictureuri);
 
 		return returnMap;
 	}

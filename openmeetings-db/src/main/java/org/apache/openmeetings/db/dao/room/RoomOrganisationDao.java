@@ -38,10 +38,10 @@ public class RoomOrganisationDao {
 
 	public RoomOrganisation update(RoomOrganisation entity, Long userId) {
 		if (entity.getId() == null) {
-			entity.setStarttime(new Date());
+			entity.setInserted(new Date());
 			em.persist(entity);
 		} else {
-			entity.setUpdatetime(new Date());
+			entity.setUpdated(new Date());
 			entity = em.merge(entity);
 		}
 		return entity;

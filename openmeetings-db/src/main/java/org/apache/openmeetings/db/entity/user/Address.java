@@ -59,14 +59,14 @@ public class Address implements IDataProviderEntity {
 	@Element(data=true, required=false)
 	private String fax;
 	
-	@Column(name = "starttime")
-	@Element(data=true, required=false)
-	private Date starttime;
+	@Column(name = "inserted")
+	@Element(name = "starttime",data=true, required=false)
+	private Date inserted;
 	
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "state_id")
 	@Element(name="state_id", data=true, required=false)
-	private State states;
+	private State state;
 	
 	@Column(name = "street")
 	@Element(data=true, required=false)
@@ -76,8 +76,8 @@ public class Address implements IDataProviderEntity {
 	@Element(data=true, required=false)
 	private String town;
 	
-	@Column(name = "updatetime")
-	private Date updatetime;
+	@Column(name = "updated")
+	private Date updated;
 	
 	@Column(name = "zip")
 	@Element(data=true, required=false)
@@ -126,20 +126,20 @@ public class Address implements IDataProviderEntity {
 		this.fax = fax;
 	}
 
-	public Date getStarttime() {
-		return starttime;
+	public Date getInserted() {
+		return inserted;
 	}
 
-	public void setStarttime(Date starttime) {
-		this.starttime = starttime;
+	public void setInserted(Date inserted) {
+		this.inserted = inserted;
 	}
 
-	public State getStates() {
-		return states;
+	public State getState() {
+		return state;
 	}
 
-	public void setStates(State states) {
-		this.states = states;
+	public void setState(State state) {
+		this.state = state;
 	}
 
 	public String getStreet() {
@@ -158,12 +158,12 @@ public class Address implements IDataProviderEntity {
 		this.town = town;
 	}
 
-	public Date getUpdatetime() {
-		return updatetime;
+	public Date getUpdated() {
+		return updated;
 	}
 
-	public void setUpdatetime(Date updatetime) {
-		this.updatetime = updatetime;
+	public void setUpdated(Date updated) {
+		this.updated = updated;
 	}
 
 	public String getZip() {
@@ -200,7 +200,7 @@ public class Address implements IDataProviderEntity {
 
 	@Override
 	public String toString() {
-		return "Address [id=" + id + ", states=" + states
+		return "Address [id=" + id + ", state=" + state
 				+ ", street=" + street + ", town=" + town + ", zip=" + zip
 				+ ", deleted=" + deleted + ", email=" + email + ", phone="
 				+ phone + "]";

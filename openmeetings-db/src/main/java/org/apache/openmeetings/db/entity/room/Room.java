@@ -105,11 +105,11 @@ public class Room implements IDataProviderEntity {
 	@Element(name = "roomtypeId", data = true, required = false)
 	private RoomType roomtype;
 
-	@Column(name = "starttime")
-	private Date starttime;
+	@Column(name = "inserted")
+	private Date inserted;
 
-	@Column(name = "updatetime")
-	private Date updatetime;
+	@Column(name = "updated")
+	private Date updated;
 
 	@Column(name = "deleted")
 	@Element(data = true)
@@ -292,20 +292,20 @@ public class Room implements IDataProviderEntity {
 		this.roomtype = roomtype;
 	}
 
-	public Date getStarttime() {
-		return starttime;
+	public Date getInserted() {
+		return inserted;
 	}
 
-	public void setStarttime(Date starttime) {
-		this.starttime = starttime;
+	public void setInserted(Date inserted) {
+		this.inserted = inserted;
 	}
 
-	public Date getUpdatetime() {
-		return updatetime;
+	public Date getUpdated() {
+		return updated;
 	}
 
-	public void setUpdatetime(Date updatetime) {
-		this.updatetime = updatetime;
+	public void setUpdated(Date updated) {
+		this.updated = updated;
 	}
 
 	public boolean isDeleted() {

@@ -101,7 +101,7 @@ public class PrivateMessage implements IDataProviderEntity {
 	private boolean bookedRoom;
 
 	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "rooms_id")
+	@JoinColumn(name = "room_id")
 	@ForeignKey(enabled = true)
 	@Element(data = true, required = false)
 	private Room room;

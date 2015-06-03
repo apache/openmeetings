@@ -30,6 +30,7 @@ import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.room.PollType;
 import org.apache.openmeetings.db.entity.room.RoomPoll;
+import org.apache.openmeetings.db.entity.room.RoomType;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.room.RoomPanel;
@@ -38,6 +39,7 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.model.CompoundPropertyModel;
@@ -108,7 +110,29 @@ public class CreatePollDialog extends AbstractFormDialog<RoomPoll> {
 			add(new RequiredTextField<String>("name").setLabel(Model.of(Application.getString(1410))));
 			add(new TextArea<String>("question"));
 			add(new DropDownChoice<PollType>("type", getBean(PollDao.class).getTypes(getLanguage())
-					, new ChoiceRenderer<PollType>("label.fieldlanguagesvalue.value", "id"))
+					, new IChoiceRenderer<PollType>() {
+						private static final long serialVersionUID = 1L;
+
+						@Override
+						public Object getDisplayValue(PollType pt) {
+							return getString("" + pt.getLabelId());
+						}
+
+						@Override
+						public String getIdValue(PollType pt, int index) {
+							return "" + pt.getId();
+						}
+
+						@Override
+						public PollType getObject(String id, IModel<? extends List<? extends PollType>> choices) {
+							for (PollType pt : choices.getObject()) {
+								if (getIdValue(pt, -1).equals(id)) {
+									return pt;
+								}
+							}
+							return null;
+						}
+					})
 					.setRequired(true).setLabel(Model.of(Application.getString(21))));
 			add(feedback);
 		}

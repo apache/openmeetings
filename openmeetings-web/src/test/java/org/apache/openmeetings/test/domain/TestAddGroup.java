@@ -55,6 +55,6 @@ public class TestAddGroup extends AbstractJUnitDefaults {
 		us = usersDao.update(us, null);
 
 		log.error(us.getLastname());
-		log.error(us.getAdresses().getTown());
+		log.error(us.getAddress().getTown());
 	}
 }

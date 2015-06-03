@@ -32,7 +32,7 @@ public class MainMenuItem extends MenuItem {
 	private MenuParams params;
 	
 	public MainMenuItem(Navimain m) {
-		super(Application.getString(m.getFieldvalues_id()), Application.getString(m.getTooltip_fieldvalues_id()));
+		super(Application.getString(m.getLabelId()), Application.getString(m.getTooltipLabelId()));
 		action = MenuActions.valueOf(m.getAction());
 		params = m.getParams() != null ? MenuParams.valueOf(m.getParams()) : MenuParams.publicTabButton;
 	}

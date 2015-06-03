@@ -56,7 +56,7 @@ public class TestConfig extends AbstractJUnitDefaults {
 			List<Configuration> list = configurationDao.get(4, 6);
 
 			for (Configuration conf : list) {
-				log.error("conf.getConf_key() " + conf.getConf_key());
+				log.error("conf.getKey() " + conf.getKey());
 				log.error("conf.getUser() " + conf.getUser());
 				if (conf.getUser() != null) {
 					log.error("conf.getUsers() " + conf.getUser().getLogin());

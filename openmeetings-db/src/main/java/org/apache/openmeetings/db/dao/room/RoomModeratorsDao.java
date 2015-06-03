@@ -56,10 +56,10 @@ public class RoomModeratorsDao {
 
 	public RoomModerator update(RoomModerator rm, Long userId) {
 		if (rm.getId() == 0) {
-			rm.setStarttime(new Date());
+			rm.setInserted(new Date());
 			em.persist(rm);
 		} else {
-			rm.setUpdatetime(new Date());
+			rm.setUpdated(new Date());
 			rm = em.merge(rm);
 		}
 		return rm;

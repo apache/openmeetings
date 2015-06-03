@@ -96,7 +96,7 @@ public class AppointmentLogic {
 	private void sendReminder(User u, Appointment a, Invitation inv) throws Exception {
 		if (inv == null) {
 			log.error(String.format("Error retrieving Invitation for member %s in Appointment %s"
-					, u.getAdresses().getEmail(), a.getTitle()));
+					, u.getAddress().getEmail(), a.getTitle()));
 			return;
 		}
 
@@ -111,7 +111,7 @@ public class AppointmentLogic {
 		AppointmentReminderTemplate t = AppointmentReminderTemplate.get(langId, a, tz);
 		invitationManager.sendInvitionLink(inv, MessageType.Create, t.getSubject(), t.getEmail(), false);
 
-		invitationManager.sendInvitationReminderSMS(u.getAdresses().getPhone(), smsSubject, langId);
+		invitationManager.sendInvitationReminderSMS(u.getAddress().getPhone(), smsSubject, langId);
 		if (inv.getHash() != null) {
 			inv.setUpdated(new Date());
 			invitationDao.update(inv);
@@ -179,7 +179,7 @@ public class AppointmentLogic {
 
 			// Iterate through all MeetingMembers
 			for (MeetingMember mm : members) {
-				log.debug("doScheduledMeetingReminder : Member " + mm.getUser().getAdresses().getEmail());
+				log.debug("doScheduledMeetingReminder : Member " + mm.getUser().getAddress().getEmail());
 
 				Invitation inv = mm.getInvitation();
 
@@ -200,7 +200,7 @@ public class AppointmentLogic {
 			Boolean isDaily, Boolean isWeekly, Boolean isMonthly,
 			Boolean isYearly, Long categoryId, Long remind, String[] mmClient,
 			Long roomType, Long languageId,
-			Boolean isPasswordProtected, String password, long roomId, Long users_id) {
+			Boolean isPasswordProtected, String password, long roomId, Long userId) {
 		Appointment a = new Appointment();
 		a.setTitle(appointmentName);
 		a.setLocation(appointmentLocation);
@@ -221,7 +221,7 @@ public class AppointmentLogic {
 			a.getRoom().setName(appointmentName);
 			a.getRoom().setRoomtype(roomTypeDao.get(roomType));
 		}
-		a.setOwner(userDao.get(users_id));
+		a.setOwner(userDao.get(userId));
 		a.setPasswordProtected(isPasswordProtected);
 		a.setPassword(password);
 		a.setMeetingMembers(new ArrayList<MeetingMember>());
@@ -229,7 +229,7 @@ public class AppointmentLogic {
 			if (Strings.isEmpty(singleClient)) {
 				continue;
 			}
-			MeetingMember mm = getMeetingMember(users_id, languageId, singleClient);
+			MeetingMember mm = getMeetingMember(userId, languageId, singleClient);
 			mm.setAppointment(a);
 			a.getMeetingMembers().add(mm);
 		}

@@ -77,7 +77,7 @@ public class TestUserContact extends AbstractWicketTester {
 		assertFalse("User list should not be empty ", users.isEmpty());
 		
 		User contact = createUserContact(random.nextInt(), getUserId());
-		String email = contact.getAdresses().getEmail();
+		String email = contact.getAddress().getEmail();
 		List<User> l = userDao.get(email, false, 0, 9999);
 		// check that contact is visible for admin
 		assertNotNull("Contact list should not be null for admin ", l);
@@ -94,7 +94,7 @@ public class TestUserContact extends AbstractWicketTester {
 		User u = createUser(random.nextInt());
 		User u1 = createUser(random.nextInt());
 		contact = createUserContact(random.nextInt(), u.getId());
-		email = contact.getAdresses().getEmail();
+		email = contact.getAddress().getEmail();
 		// check that contact is not visible for user that is not owner of this contact
 		l = userDao.get(email, 0, 9999, null, true, u1.getId());
 		assertTrue("Contact list should be empty for another user", l.isEmpty());

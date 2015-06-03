@@ -79,8 +79,8 @@ public abstract class AbstractJUnitDefaults extends AbstractSpringTest {
 		if (configKeyCryptClassName == null) {
 			assertNotNull("Crypt class name should not be null", configurationDao.getCryptKey());
 		}
-        remindTypes = reminderTypeDao.getList(1L);
-        roomTypes = roomTypeDao.getAll(1L);
+        remindTypes = reminderTypeDao.get();
+        roomTypes = roomTypeDao.get();
     }
 
 	public Appointment createAppointment() {

@@ -205,7 +205,7 @@ public class MessageDialog extends AbstractFormDialog<PrivateMessage> {
 			p.setOwner(to);
 			p.setFolderId(INBOX_FOLDER_ID);
 			msgDao.update(p, getUserId());
-			if (to.getAdresses() != null) {
+			if (to.getAddress() != null) {
 				String aLinkHTML = 	(isPrivate && to.getType() == Type.user) ? "<br/><br/>" + "<a href='" + getContactsLink() + "'>"
 							+ Application.getString(1302) + "</a><br/>" : "";
 				String invitation_link = "";
@@ -228,7 +228,7 @@ public class MessageDialog extends AbstractFormDialog<PrivateMessage> {
 					}
 				}
 				
-				getBean(MailHandler.class).send(to.getAdresses().getEmail(),
+				getBean(MailHandler.class).send(to.getAddress().getEmail(),
 						Application.getString(1301) + p.getSubject(),
 						(p.getMessage() == null ? "" : p.getMessage().replaceAll("\\<.*?>", "")) + aLinkHTML + invitation_link);
 			}

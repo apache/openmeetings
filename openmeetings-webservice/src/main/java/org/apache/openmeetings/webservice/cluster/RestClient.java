@@ -171,7 +171,7 @@ public class RestClient {
 	public void loginUser(Action action) throws Exception {
 		UserWebService client = getUserClient();
 		
-		sessionId = client.getSession().getSession_id();
+		sessionId = client.getSession().getSessionId();
 
 		Long uId = client.login(sessionId, user, pass);
 

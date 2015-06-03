@@ -103,6 +103,7 @@ public class MenuPanel extends BasePanel {
 		//target.appendJavaScript(String.format("$(function() {%s;});", mfb.getInitScript()));
 		target.appendJavaScript(mfb.getInitScript());
 	}
+	
 	@Override
 	public void renderHead(IHeaderResponse response) {
 		super.renderHead(response);

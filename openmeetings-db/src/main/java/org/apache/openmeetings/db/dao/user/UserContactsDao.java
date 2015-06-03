@@ -43,13 +43,13 @@ public class UserContactsDao {
     @Autowired
     private UserDao userDao;
 
-	public Long addUserContact(Long user_id, Long ownerId, Boolean pending, String hash) {
+	public Long addUserContact(Long userId, Long ownerId, Boolean pending, String hash) {
 		try {
 			
 			UserContact userContact = new UserContact();
 			userContact.setInserted(new Date());
 			userContact.setOwner(userDao.get(ownerId));
-			userContact.setContact(userDao.get(user_id));
+			userContact.setContact(userDao.get(userId));
 			userContact.setPending(pending);
 			userContact.setHash(hash);
 			
@@ -108,10 +108,10 @@ public class UserContactsDao {
 		return null;
 	}
 	
-	public Long checkUserContacts(Long user_id, Long ownerId) {
+	public Long checkUserContacts(Long userId, Long ownerId) {
 		try {
 			TypedQuery<Long> query = em.createNamedQuery("checkUserContacts", Long.class); 
-			query.setParameter("user_id", user_id);
+			query.setParameter("userId", userId);
 			query.setParameter("ownerId", ownerId);
 			List<Long> ll = query.getResultList();
 			
@@ -127,7 +127,7 @@ public class UserContactsDao {
 	
 	public List<UserContact> get(long ownerId, int first, int count) {
 		TypedQuery<UserContact> q = em.createNamedQuery("getContactsByUser", UserContact.class);
-		q.setParameter("user_id", ownerId);
+		q.setParameter("userId", ownerId);
 		q.setFirstResult(first);
 		q.setMaxResults(count);
 		return q.getResultList();
@@ -135,7 +135,7 @@ public class UserContactsDao {
 	
 	public long count(long ownerId) {
 		TypedQuery<Long> q = em.createNamedQuery("countContactsByUser", Long.class);
-		q.setParameter("user_id", ownerId);
+		q.setParameter("userId", ownerId);
 		return q.getSingleResult();
 	}
 	
@@ -181,10 +181,10 @@ public class UserContactsDao {
 		return null;
 	}
 	
-	public List<UserContact> getContactRequestsByUserAndStatus(Long user_id, Boolean pending) {
+	public List<UserContact> getContactRequestsByUserAndStatus(Long userId, Boolean pending) {
 		try {
 			TypedQuery<UserContact> query = em.createNamedQuery("getContactRequestsByUserAndStatus", UserContact.class); 
-			query.setParameter("user_id", user_id);
+			query.setParameter("userId", userId);
 			query.setParameter("pending", pending);
 			return query.getResultList();
 		} catch (Exception e) {

@@ -33,7 +33,7 @@ public class UserDTO {
 	private String lastname;
 	private Set<Right> rights;
 	private Long languageId;
-	private Address adresses;
+	private Address address;
 	private String timeZoneId;
 	private Type type = Type.user;
 
@@ -46,7 +46,7 @@ public class UserDTO {
 		rights = u.getRights();
 		login = u.getLogin();
 		languageId = u.getLanguageId();
-		adresses = u.getAdresses();
+		address = u.getAddress();
 		timeZoneId = u.getTimeZoneId();
 		type = u.getType();
 	}
@@ -99,12 +99,12 @@ public class UserDTO {
 		this.languageId = languageId;
 	}
 
-	public Address getAdresses() {
-		return adresses;
+	public Address getAddress() {
+		return address;
 	}
 
-	public void setAdresses(Address adresses) {
-		this.adresses = adresses;
+	public void setAddress(Address address) {
+		this.address = address;
 	}
 
 	public String getTimeZoneId() {

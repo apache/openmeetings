@@ -34,9 +34,9 @@ public class TestStateToLower extends AbstractJUnitDefaults {
 	@Test
 	public void doTestQuery() {
 		
-		State state_alabania = stateDao.getStateByName("Albania");
+		State state_alabania = stateDao.get("Albania");
 		
-		State state_alabania_lower = stateDao.getStateByName("albaNia");
+		State state_alabania_lower = stateDao.get("albaNia");
 		
 		assertTrue(state_alabania != null);
 		assertTrue(state_alabania_lower != null);

@@ -45,12 +45,11 @@ public class ErrorDao {
 		try {
 			ErrorType eType = new ErrorType();
 			eType.setId(id);
-			eType.setStarttime(new Date());
+			eType.setInserted(new Date());
 			eType.setDeleted(false);
-			eType.setFieldvalues_id(labelId);
+			eType.setLabelId(labelId);
 			eType = em.merge(eType);
-			Long newerrortype_id = eType.getId();
-			return newerrortype_id;
+			return eType.getId();
 		} catch (Exception ex2) {
 			log.error("[addErrorType]: ", ex2);
 		}
@@ -83,10 +82,10 @@ public class ErrorDao {
 		try {
 			ErrorValue eValue = new ErrorValue();
 			eValue.setId(id);
-			eValue.setErrortype_id(typeId);
+			eValue.setTypeId(typeId);
 			eValue.setDeleted(false);
-			eValue.setStarttime(new Date());
-			eValue.setFieldvalues_id(labelId);
+			eValue.setInserted(new Date());
+			eValue.setLabelId(labelId);
 			eValue = em.merge(eValue);
 			return eValue.getId();
 		} catch (Exception ex2) {
@@ -98,27 +97,25 @@ public class ErrorDao {
 	public Long getErrorValueById(Long typeId, Long labelId) {
 		try {
 			ErrorValue eValue = new ErrorValue();
-			eValue.setErrortype_id(typeId);
-			eValue.setStarttime(new Date());
-			eValue.setFieldvalues_id(labelId);
+			eValue.setTypeId(typeId);
+			eValue.setInserted(new Date());
+			eValue.setLabelId(labelId);
 			eValue = em.merge(eValue);
-			Long newerrorvalues_id = eValue.getId();
-			return newerrorvalues_id;
+			return eValue.getId();
 		} catch (Exception ex2) {
 			log.error("[getErrorValueById]: ", ex2);
 		}
 		return null;
 	}
 
-	public Long updateErrorValues(Long errortype_id, Long labelId) {
+	public Long updateErrorValues(Long typeId, Long labelId) {
 		try {
 			ErrorValue eValue = new ErrorValue();
-			eValue.setErrortype_id(errortype_id);
-			eValue.setStarttime(new Date());
-			eValue.setFieldvalues_id(labelId);
+			eValue.setTypeId(typeId);
+			eValue.setInserted(new Date());
+			eValue.setLabelId(labelId);
 			eValue = em.merge(eValue);
-			Long newerrorvalues_id = eValue.getId();
-			return newerrorvalues_id;
+			return eValue.getId();
 		} catch (Exception ex2) {
 			log.error("[addErrorType]: ", ex2);
 		}

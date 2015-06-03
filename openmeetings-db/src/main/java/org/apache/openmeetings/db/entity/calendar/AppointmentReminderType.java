@@ -59,18 +59,18 @@ public class AppointmentReminderType implements IDataProviderEntity {
 	@ForeignKey(enabled = true)
 	private User user;
 	
-	@Column(name="starttime")
-	private Date starttime;
+	@Column(name="inserted")
+	private Date inserted;
 	
-	@Column(name="updatetime")
-	private Date updatetime;
+	@Column(name="updated")
+	private Date updated;
 	
 	@Column(name="deleted")
 	private boolean deleted;
 	
-	@Column(name="fieldvalues_id")
+	@Column(name="label_id")
 	@Element(data=true, required=false)
-	private Long fieldvalues_id;
+	private Long labelId;
 	
 	public Long getId() {
 		return id;
@@ -93,18 +93,18 @@ public class AppointmentReminderType implements IDataProviderEntity {
 		this.user = user;
 	}
 	
-	public Date getStarttime() {
-		return starttime;
+	public Date getInserted() {
+		return inserted;
 	}
-	public void setStarttime(Date starttime) {
-		this.starttime = starttime;
+	public void setInserted(Date inserted) {
+		this.inserted = inserted;
 	}
 	
-	public Date getUpdatetime() {
-		return updatetime;
+	public Date getUpdated() {
+		return updated;
 	}
-	public void setUpdatetime(Date updatetime) {
-		this.updatetime = updatetime;
+	public void setUpdated(Date updated) {
+		this.updated = updated;
 	}
 	
 	public boolean isDeleted() {
@@ -114,10 +114,10 @@ public class AppointmentReminderType implements IDataProviderEntity {
 		this.deleted = deleted;
 	}
 
-	public Long getFieldvalues_id() {
-		return fieldvalues_id;
+	public Long getLabelId() {
+		return labelId;
 	}
-	public void setFieldvalues_id(Long fieldvalues_id) {
-		this.fieldvalues_id = fieldvalues_id;
+	public void setLabelId(Long labelId) {
+		this.labelId = labelId;
 	}
 }

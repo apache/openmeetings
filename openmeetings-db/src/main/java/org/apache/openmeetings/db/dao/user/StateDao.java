@@ -51,8 +51,8 @@ public class StateDao {
 	 * @param name
 	 * @return the id of the new state or null if an error occurred
 	 */
-	public Long addState(String name) {
-		return addState(name, "", 0);
+	public Long add(String name) {
+		return add(name, "", 0);
 	}
 	
 	/**
@@ -63,14 +63,14 @@ public class StateDao {
 	 * @param code the code of the country
 	 * @return the id of the new state or null if an error occurred
 	 */
-	public Long addState(String name, String shortName, int code) {
+	public Long add(String name, String shortName, int code) {
 		try {
 
 			State st = new State();
 			st.setName(name);
 			st.setShortName(shortName);
 			st.setCode(code);
-			st.setStarttime(new Date());
+			st.setInserted(new Date());
 			st.setDeleted(false);
 
 			st = em.merge(st);
@@ -88,13 +88,13 @@ public class StateDao {
 	/**
 	 * selects a state by its id
 	 * 
-	 * @param state_id
+	 * @param id
 	 * @return the state-object or null
 	 */
-	public State getStateById(long state_id) {
+	public State get(long id) {
 		try {
 			TypedQuery<State> query = em.createNamedQuery("getStateById", State.class);
-			query.setParameter("state_id", state_id);
+			query.setParameter("id", id);
 			List<State> ll = query.getResultList();
 			if (ll.size() > 0) {
 				return ll.get(0);
@@ -108,10 +108,10 @@ public class StateDao {
 	/**
 	 * selects a state by its name
 	 * 
-	 * @param state_id
+	 * @param name
 	 * @return the state-object or null
 	 */
-	public State getStateByName(String name) {
+	public State get(String name) {
 		try {
 			if (name == null) {
 				return null;
@@ -133,7 +133,7 @@ public class StateDao {
 	 * 
 	 * @return List of State Objects or null
 	 */
-	public List<State> getStates() {
+	public List<State> get() {
 		try {
 			TypedQuery<State> query = em.createNamedQuery("getStates", State.class);
 			List<State> ll = query.getResultList();

@@ -59,9 +59,9 @@ import org.apache.openmeetings.util.CalendarPatterns;
 	@NamedQuery(name = "getClientsByServer", query = "SELECT c FROM Client c WHERE c.server = :server"),
 	@NamedQuery(name = "getClients", query = "SELECT c FROM Client c"),
 	@NamedQuery(name = "getClientsWithServer", query = "SELECT c FROM Client c LEFT JOIN FETCH c.server"),
-	@NamedQuery(name = "getClientsByUserId", query = "SELECT c FROM Client c WHERE c.server = :server AND c.user_id = :user_id"),
-	@NamedQuery(name = "getClientsByRoomId", query = "SELECT c FROM Client c WHERE c.room_id = :room_id"),
-	@NamedQuery(name = "getRoomsIdsByServer", query = "SELECT c.room_id FROM Client c WHERE c.server = :server GROUP BY c.room_id")
+	@NamedQuery(name = "getClientsByUserId", query = "SELECT c FROM Client c WHERE c.server = :server AND c.userId = :userId"),
+	@NamedQuery(name = "getClientsByRoomId", query = "SELECT c FROM Client c WHERE c.roomId = :roomId"),
+	@NamedQuery(name = "getRoomsIdsByServer", query = "SELECT c.roomId FROM Client c WHERE c.server = :server GROUP BY c.roomId")
 })
 @Table(name = "client")
 @XmlRootElement
@@ -213,10 +213,10 @@ public class Client implements IDataProviderEntity {
 	private int userport;
 	
 	/**
-	 * @see Client#getRoom_id()
+	 * @see Client#getRoomId()
 	 */
 	@Column(name = "room_id")
-	private Long room_id;
+	private Long roomId;
 	
 	/**
 	 * @see Client#getRoomEnter()
@@ -231,10 +231,10 @@ public class Client implements IDataProviderEntity {
 	private long broadCastID = -2;
 	
 	/**
-	 * @see Client#getUser_id()
+	 * @see Client#getUserId()
 	 */
 	@Column(name = "user_id")
-	private Long user_id = null;
+	private Long userId = null;
 	
 	/**
 	 * @see Client#getFirstname()
@@ -396,14 +396,14 @@ public class Client implements IDataProviderEntity {
     
 	public Client() {}
     
-	public Client(String streamid, String publicSID, Long room_id,
-			Long user_id, String firstname, String lastname, boolean isAVClient,
+	public Client(String streamid, String publicSID, Long roomId,
+			Long userId, String firstname, String lastname, boolean isAVClient,
 			String username, String connectedSince, String scope) {
 		super();
 		this.streamid = streamid;
 		this.publicSID = publicSID;
-		this.room_id = room_id;
-		this.user_id = user_id;
+		this.roomId = roomId;
+		this.userId = userId;
 		this.firstname = firstname;
 		this.lastname = lastname;
 		this.avClient = isAVClient;
@@ -412,8 +412,8 @@ public class Client implements IDataProviderEntity {
 		this.scope = scope;
 	}
 
-	public void setUserObject(Long user_id, String username, String firstname, String lastname) {
-		this.user_id = user_id;
+	public void setUserObject(Long userId, String username, String firstname, String lastname) {
+		this.userId = userId;
 		this.username = username;
 		this.firstname = firstname;
 		this.lastname = lastname;
@@ -577,20 +577,20 @@ public class Client implements IDataProviderEntity {
 		this.picture_uri = picture_uri;
 	}
 
-	public Long getUser_id() {
-		return user_id;
+	public Long getUserId() {
+		return userId;
 	}
 
-	public void setUser_id(Long user_id) {
-		this.user_id = user_id;
+	public void setUserId(Long userId) {
+		this.userId = userId;
 	}
 
-	public Long getRoom_id() {
-		return room_id;
+	public Long getRoomId() {
+		return roomId;
 	}
 
-	public void setRoom_id(Long room_id) {
-		this.room_id = room_id;
+	public void setRoomId(Long roomId) {
+		this.roomId = roomId;
 	}
 
 	public Date getRoomEnter() {
@@ -868,8 +868,8 @@ public class Client implements IDataProviderEntity {
 	@Override
 	public String toString() {
 		return "Client [streamid=" + streamid + ", publicSID=" + publicSID + ", isScreenClient=" + screenClient
-				+ ", isAVClient=" + avClient + ", isMobile = " + mobile + ", room_id=" + room_id + ", broadCastID=" + broadCastID + ", user_id="
-				+ user_id + ", avsettings=" + avsettings + ", isRecording=" + isRecording + ", flvRecordingId="
+				+ ", isAVClient=" + avClient + ", isMobile = " + mobile + ", roomId=" + roomId + ", broadCastID=" + broadCastID + ", userId="
+				+ userId + ", avsettings=" + avsettings + ", isRecording=" + isRecording + ", flvRecordingId="
 				+ flvRecordingId + ", flvRecordingMetaDataId=" + flvRecordingMetaDataId + ", screenPublishStarted="
 				+ screenPublishStarted + ", interviewPodId=" + interviewPodId + ", server=" + server + "]";
 	}

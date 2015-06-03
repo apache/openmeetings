@@ -104,7 +104,7 @@ public class RoomsPanel extends UserPanel {
 			@Override
 			protected void populateItem(final ListItem<Client> item) {
 				Client client = item.getModelObject();
-				final Long userId = client.getUser_id();
+				final Long userId = client.getUserId();
 				item.add(new Image("clientImage", new ByteArrayResource("image/jpeg") {
 					private static final long serialVersionUID = 1L;
 

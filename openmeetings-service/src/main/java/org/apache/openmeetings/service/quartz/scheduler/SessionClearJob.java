@@ -29,6 +29,7 @@ public class SessionClearJob {
 	private static Logger log = Red5LoggerFactory.getLogger(SessionClearJob.class, OpenmeetingsVariables.webAppRootKey);
 	@Autowired
 	private SessiondataDao sessiondataDao;
+	private long timeout = 1800000L;
 
 	public void doIt() {
 		log.trace("SessionClearJob.execute");
@@ -37,9 +38,17 @@ public class SessionClearJob {
 		}
 		try {
 			// TODO Generate report
-			sessiondataDao.clearSessionTable();
+			sessiondataDao.clearSessionTable(timeout);
 		} catch (Exception err){
 			log.error("execute",err);
 		}
+	}
+
+	public long getTimeout() {
+		return timeout;
+	}
+
+	public void setTimeout(long timeout) {
+		this.timeout = timeout;
 	}
 }

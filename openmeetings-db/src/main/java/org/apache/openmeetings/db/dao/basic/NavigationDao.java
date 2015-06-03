@@ -53,35 +53,35 @@ public class NavigationDao {
 
 	}
 
-	public List<Naviglobal> getMainMenu(boolean admin, long USER_ID) {
+	public List<Naviglobal> getMainMenu(boolean admin) {
 		return em.createNamedQuery("getNavigation", Naviglobal.class)
-				.setParameter("level_id", admin ? 3L : 1L)
+				.setParameter("levelId", admin ? 3L : 1L)
 				.getResultList();
 	}
 
-	public void addGlobalStructure(String action, int naviorder, long fieldvalues_id, boolean isleaf, boolean isopen, long level_id,
-			String name, boolean deleted, Long tooltip_fieldvalues_id) {
+	public void addGlobalStructure(String action, int naviorder, long labelId, boolean isleaf, boolean isopen, long levelId,
+			String name, boolean deleted, Long tooltipLabelId) {
 		Naviglobal ng = new Naviglobal();
 		ng.setAction(action);
 		ng.setComment("");
 		ng.setIcon("");
 		ng.setNaviorder(naviorder);
-		ng.setFieldvalues_id(fieldvalues_id);
+		ng.setLabelId(labelId);
 		ng.setIsleaf(isleaf);
 		ng.setIsopen(isopen);
 		ng.setDeleted(deleted);
-		ng.setLevel_id(level_id);
+		ng.setLevelId(levelId);
 		ng.setName(name);
-		ng.setStarttime(new Date());
-		ng.setTooltip_fieldvalues_id(tooltip_fieldvalues_id);
+		ng.setInserted(new Date());
+		ng.setTooltipLabelId(tooltipLabelId);
 		// CriteriaBuilder crit = em.getCriteriaBuilder();
 
 		em.persist(ng);
 	}
 
-	public void addMainStructure(String action, String params, int naviorder, long fieldvalues_id, boolean isleaf, boolean isopen,
-			long level_id, String name, long global_id, boolean deleted, Long tooltip_fieldvalues_id) {
-		Naviglobal ng = getGlobalMenuEntry(global_id);
+	public void addMainStructure(String action, String params, int naviorder, long labelId, boolean isleaf, boolean isopen,
+			long levelId, String name, long globalId, boolean deleted, Long tooltipLabelId) {
+		Naviglobal ng = getGlobalMenuEntry(globalId);
 		List<Navimain> mainEntries = ng.getMainnavi();
 		mainEntries = (mainEntries == null) ? new ArrayList<Navimain>() : mainEntries;
 
@@ -90,16 +90,16 @@ public class NavigationDao {
 		nm.setParams(params);
 		nm.setComment("");
 		nm.setIcon("");
-		nm.setFieldvalues_id(fieldvalues_id);
+		nm.setLabelId(labelId);
 		nm.setIsleaf(isleaf);
 		nm.setNaviorder(naviorder);
 		nm.setIsopen(isopen);
-		nm.setLevel_id(level_id);
+		nm.setLevelId(levelId);
 		nm.setName(name);
 		nm.setDeleted(deleted);
-		nm.setGlobal_id(global_id);
-		nm.setStarttime(new Date());
-		nm.setTooltip_fieldvalues_id(tooltip_fieldvalues_id);
+		nm.setGlobalId(globalId);
+		nm.setInserted(new Date());
+		nm.setTooltipLabelId(tooltipLabelId);
 
 		mainEntries.add(nm);
 		ng.setMainnavi(mainEntries);

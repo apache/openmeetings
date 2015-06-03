@@ -55,9 +55,9 @@ import org.simpleframework.xml.Root;
     	query="SELECT a FROM Appointment a "
 			+ "WHERE a.deleted = false "
 			+ "	AND ( "
-			+ "		(a.start BETWEEN :starttime AND :endtime) "
-			+ "		OR (a.end BETWEEN :starttime AND :endtime) "
-			+ "		OR (a.start < :starttime AND a.end > :endtime) "
+			+ "		(a.start BETWEEN :start AND :end) "
+			+ "		OR (a.end BETWEEN :start AND :end) "
+			+ "		OR (a.start < :start AND a.end > :end) "
 			+ "	)"
 			+ "	AND a.owner.id = :userId"
     	)
@@ -67,9 +67,9 @@ import org.simpleframework.xml.Root;
 			+ "	AND a.id NOT IN (SELECT a.id FROM Appointment a WHERE a.owner.id = :userId)"
 			+ "	AND mm.connectedEvent = false " //TODO review: isConnectedEvent is set for the MeetingMember if event is created from "Private Messages", it is weird
 			+ "	AND ( "
-			+ "		(a.start BETWEEN :starttime AND :endtime) "
-			+ "		OR (a.end BETWEEN :starttime AND :endtime) "
-			+ "		OR (a.start < :starttime AND a.end > :endtime) "
+			+ "		(a.start BETWEEN :start AND :end) "
+			+ "		OR (a.end BETWEEN :start AND :end) "
+			+ "		OR (a.start < :start AND a.end > :end) "
 			+ "	)"
     	)
     , @NamedQuery(name="appointmentsInRangeRemind",
@@ -78,9 +78,9 @@ import org.simpleframework.xml.Root;
 			+ "WHERE a.deleted = false AND a.reminderEmailSend = false"
 			+ " AND (a.remind.id = 2 OR a.remind.id = 3) "
 			+ "	AND ( "
-			+ "		(a.start BETWEEN :starttime AND :endtime) "
-			+ "		OR (a.end BETWEEN :starttime AND :endtime) "
-			+ "		OR (a.start < :starttime AND a.end > :endtime) "
+			+ "		(a.start BETWEEN :start AND :end) "
+			+ "		OR (a.end BETWEEN :start AND :end) "
+			+ "		OR (a.start < :start AND a.end > :end) "
 			+ "	)"
     	)
     , @NamedQuery(name="getAppointmentByRoomId", query="SELECT a FROM Appointment a WHERE a.room.id = :roomId")
@@ -90,18 +90,18 @@ import org.simpleframework.xml.Root;
 		query="SELECT a FROM MeetingMember mm, IN(mm.appointment) a "
 			+ "WHERE mm.deleted = false AND mm.user.id <> a.owner.id AND mm.user.id = :userId "
 			+ "	AND ( "
-			+ "		(a.start BETWEEN :starttime AND :endtime) "
-			+ "		OR (a.end BETWEEN :starttime AND :endtime) "
-			+ "		OR (a.start < :starttime AND a.end > :endtime) "
+			+ "		(a.start BETWEEN :start AND :end) "
+			+ "		OR (a.end BETWEEN :start AND :end) "
+			+ "		OR (a.start < :start AND a.end > :end) "
 			+ "	)"
 	    )
     , @NamedQuery(name="appointedRoomsInRangeByUser",
 		query="SELECT a.room FROM MeetingMember mm, IN(mm.appointment) a "
 			+ "WHERE mm.deleted = false AND mm.user.id <> a.owner.id AND mm.user.id = :userId "
 			+ "	AND ( "
-			+ "		(a.start BETWEEN :starttime AND :endtime) "
-			+ "		OR (a.end BETWEEN :starttime AND :endtime) "
-			+ "		OR (a.start < :starttime AND a.end > :endtime) "
+			+ "		(a.start BETWEEN :start AND :end) "
+			+ "		OR (a.end BETWEEN :start AND :end) "
+			+ "		OR (a.start < :start AND a.end > :end) "
 			+ "	)"
 	    )
     , @NamedQuery(name="getNextAppointment", query="SELECT a FROM Appointment a WHERE a.deleted = false AND a.start > :start AND a.owner.id = :userId")
@@ -124,11 +124,11 @@ public class Appointment implements IDataProviderEntity {
 	@Element(name="appointmentLocation", data=true, required=false)
 	private String location;
 	
-	@Column(name = "appointment_starttime")
+	@Column(name = "start")
 	@Element(name="appointmentStarttime", data=true)
 	private Date start;
 	
-	@Column(name = "appointment_endtime")
+	@Column(name = "end")
 	@Element(name="appointmentEndtime", data=true)
 	private Date end;
 	
@@ -149,11 +149,11 @@ public class Appointment implements IDataProviderEntity {
 	@Element(name="users_id", data=true, required=false)
 	private User owner;
 
-	@Column(name = "starttime")
+	@Column(name = "inserted")
 	@Element(name="inserted", data=true, required=false)
 	private Date inserted;
 	
-	@Column(name = "updatetime")
+	@Column(name = "updated")
 	@Element(name="updated", data=true, required=false)
 	private Date updated;
 	

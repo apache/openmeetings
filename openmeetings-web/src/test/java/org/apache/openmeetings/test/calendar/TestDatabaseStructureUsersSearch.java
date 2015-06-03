@@ -42,13 +42,6 @@ public class TestDatabaseStructureUsersSearch extends AbstractJUnitDefaults {
 			 List<User> users = userDao.get("first", 0, 10, "lastname", false, 1);
 			 log.debug("[result]" + users.size());
 			 log.debug("[records]"+ users);
-			 
-			 //GroupMemberDaoImpl.getInstance().addGroupMember("Ad", "dir", Calendar.getInstance().getTime(), "1", "2", "interpol155", 1L, 1L);	
-			//GroupMemberDaoImpl.getInstance().addGroupMember(firstname, lastname, age, memberStatus, appointmentStatus, password, adresses_id, appointmentId);
-			
-			//GroupMemberDaoImpl.getInstance().getGroupMemberById(1L);
-			//GroupMemberDaoImpl.getInstance().deleteGroupMember(2L);
-			//GroupMemberDaoImpl.getInstance().updateGroupMember(1L, "Eugen", "Schwert", Calendar.getInstance().getTime(), "1", "2", "interpol155", 1L, 1L);
 		} catch (Exception err) {
 			log.error("[testAddingGroup]",err);
 		}

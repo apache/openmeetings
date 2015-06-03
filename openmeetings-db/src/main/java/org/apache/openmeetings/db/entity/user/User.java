@@ -80,9 +80,9 @@ import org.simpleframework.xml.Root;
 	@NamedQuery(name = "getUserById", query = "SELECT u FROM User u WHERE u.id = :id"),
 	@NamedQuery(name = "getUsersByIds", query = "select c from User c where c.id IN :ids"),
 	@NamedQuery(name = "getUserByLogin", query = "SELECT u FROM User u WHERE u.deleted = false AND u.type = :type AND u.login = :login AND ((:domainId = 0 AND u.domainId IS NULL) OR (:domainId > 0 AND u.domainId = :domainId))"),
-	@NamedQuery(name = "getUserByEmail", query = "SELECT u FROM User u WHERE u.deleted = false AND u.type = :type AND u.adresses.email = :email AND ((:domainId = 0 AND u.domainId IS NULL) OR (:domainId > 0 AND u.domainId = :domainId))"),
+	@NamedQuery(name = "getUserByEmail", query = "SELECT u FROM User u WHERE u.deleted = false AND u.type = :type AND u.address.email = :email AND ((:domainId = 0 AND u.domainId IS NULL) OR (:domainId > 0 AND u.domainId = :domainId))"),
 	@NamedQuery(name = "getUserByHash",  query = "SELECT u FROM User u WHERE u.deleted = false AND u.type = :type AND u.resethash = :resethash"),
-	@NamedQuery(name = "getContactByEmailAndUser", query = "SELECT u FROM User u WHERE u.deleted = false AND u.adresses.email = :email AND u.type = :type AND u.ownerId = :ownerId"), 
+	@NamedQuery(name = "getContactByEmailAndUser", query = "SELECT u FROM User u WHERE u.deleted = false AND u.address.email = :email AND u.type = :type AND u.ownerId = :ownerId"), 
 	@NamedQuery(name = "selectMaxFromUsersWithSearch", query = "select count(c.id) from User c "
 			+ "where c.deleted = false " + "AND ("
 			+ "lower(c.login) LIKE :search "
@@ -94,9 +94,9 @@ import org.simpleframework.xml.Root;
 	@NamedQuery(name = "updatePassword", query = "UPDATE User u SET u.password = :password WHERE u.id = :userId"), //
 	@NamedQuery(name = "getNondeletedUsers", query = "SELECT u FROM User u WHERE u.deleted = false"),
 	@NamedQuery(name = "countNondeletedUsers", query = "SELECT COUNT(u) FROM User u WHERE u.deleted = false"),
-	@NamedQuery(name = "getUsersByOrganisationId", query = "SELECT u FROM User u WHERE u.deleted = false AND u.organisationUsers.organisation.id = :organisation_id"), 
-	@NamedQuery(name = "getExternalUser", query = "SELECT u FROM User u WHERE u.deleted = false AND u.externalUserId LIKE :externalId AND u.externalUserType LIKE :externalType"),
-	@NamedQuery(name = "getUserByLoginOrEmail", query = "SELECT u from User u WHERE u.deleted = false AND u.type = :type AND (u.login = :userOrEmail OR u.adresses.email = :userOrEmail)")
+	@NamedQuery(name = "getUsersByOrganisationId", query = "SELECT u FROM User u WHERE u.deleted = false AND u.organisationUsers.organisation.id = :organisationId"), 
+	@NamedQuery(name = "getExternalUser", query = "SELECT u FROM User u WHERE u.deleted = false AND u.externalId LIKE :externalId AND u.externalType LIKE :externalType"),
+	@NamedQuery(name = "getUserByLoginOrEmail", query = "SELECT u from User u WHERE u.deleted = false AND u.type = :type AND (u.login = :userOrEmail OR u.address.email = :userOrEmail)")
 })
 @Table(name = "om_user")
 @Root(name = "user")
@@ -160,15 +160,15 @@ public class User implements IDataProviderEntity {
 	@Element(data = true, required = false)
 	private Date regdate;
 
-	@Column(name = "salutations_id")
+	@Column(name = "salutation_id")
 	@Element(name = "title_id", data = true, required = false)
-	private Long salutations_id;
+	private Long salutationId;
 
-	@Column(name = "starttime")
-	private Date starttime;
+	@Column(name = "inserted")
+	private Date inserted;
 
-	@Column(name = "updatetime")
-	private Date updatetime;
+	@Column(name = "updated")
+	private Date updated;
 
 	@Column(name = "pictureuri")
 	@Element(data = true, required = false)
@@ -191,10 +191,10 @@ public class User implements IDataProviderEntity {
 	private String activatehash;
 
 	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-	@JoinColumn(name = "adresses_id", insertable = true, updatable = true)
+	@JoinColumn(name = "address_id", insertable = true, updatable = true)
 	@ForeignKey(enabled = true)
 	@Element(name = "address", required = false)
-	private Address adresses;
+	private Address address;
 
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "user_id", insertable = true, updatable = true)
@@ -208,13 +208,13 @@ public class User implements IDataProviderEntity {
 	private AsteriskSipUser sipUser;
 
 	// Vars to simulate external Users
-	@Column(name = "externalUserId")
-	@Element(data = true, required = false)
-	private String externalUserId;
+	@Column(name = "external_id")
+	@Element(name = "externalUserId", data = true, required = false)
+	private String externalId;
 
-	@Column(name = "externalUserType")
-	@Element(data = true, required = false)
-	private String externalUserType;
+	@Column(name = "external_type")
+	@Element(name = "externalUserType", data = true, required = false)
+	private String externalType;
 
 	/**
 	 * java.util.TimeZone Id
@@ -278,12 +278,12 @@ public class User implements IDataProviderEntity {
 		this.id = id;
 	}
 
-	public Address getAdresses() {
-		return adresses;
+	public Address getAddress() {
+		return address;
 	}
 
-	public void setAdresses(Address adresses) {
-		this.adresses = adresses;
+	public void setAddress(Address address) {
+		this.address = address;
 	}
 
 	public Date getAge() {
@@ -379,28 +379,28 @@ public class User implements IDataProviderEntity {
 		this.regdate = regdate;
 	}
 
-	public Long getSalutations_id() {
-		return salutations_id;
+	public Long getSalutationId() {
+		return salutationId;
 	}
 
-	public void setSalutations_id(Long salutations_id) {
-		this.salutations_id = salutations_id;
+	public void setSalutationId(Long salutationId) {
+		this.salutationId = salutationId;
 	}
 
-	public Date getStarttime() {
-		return starttime;
+	public Date getInserted() {
+		return inserted;
 	}
 
-	public void setStarttime(Date starttime) {
-		this.starttime = starttime;
+	public void setInserted(Date inserted) {
+		this.inserted = inserted;
 	}
 
-	public Date getUpdatetime() {
-		return updatetime;
+	public Date getUpdated() {
+		return updated;
 	}
 
-	public void setUpdatetime(Date updatetime) {
-		this.updatetime = updatetime;
+	public void setUpdated(Date updated) {
+		this.updated = updated;
 	}
 
 	public boolean isDeleted() {
@@ -456,20 +456,20 @@ public class User implements IDataProviderEntity {
 		this.activatehash = activatehash;
 	}
 
-	public String getExternalUserId() {
-		return externalUserId;
+	public String getExternalId() {
+		return externalId;
 	}
 
-	public void setExternalUserId(String externalUserId) {
-		this.externalUserId = externalUserId;
+	public void setExternalId(String externalId) {
+		this.externalId = externalId;
 	}
 
-	public String getExternalUserType() {
-		return externalUserType;
+	public String getExternalType() {
+		return externalType;
 	}
 
-	public void setExternalUserType(String externalUserType) {
-		this.externalUserType = externalUserType;
+	public void setExternalType(String externalType) {
+		this.externalType = externalType;
 	}
 
 	public Sessiondata getSessionData() {
@@ -544,7 +544,7 @@ public class User implements IDataProviderEntity {
 	}
 
 	public String getPhoneForSMS() {
-		return getSendSMS() ? getAdresses().getPhone() : "";
+		return getSendSMS() ? getAddress().getPhone() : "";
 	}
 
 	public Type getType() {
@@ -584,8 +584,8 @@ public class User implements IDataProviderEntity {
 		return "User [id=" + id + ", firstname=" + firstname
 				+ ", lastname=" + lastname + ", login=" + login
 				+ ", pictureuri=" + pictureuri + ", deleted=" + deleted
-				+ ", languageId=" + languageId + ", adresses=" + adresses
-				+ ", externalId=" + externalUserId + ", externalType=" + externalUserType
+				+ ", languageId=" + languageId + ", address=" + address
+				+ ", externalId=" + externalId + ", externalType=" + externalType
 				+ ", type=" + type + "]";
 	}
 }

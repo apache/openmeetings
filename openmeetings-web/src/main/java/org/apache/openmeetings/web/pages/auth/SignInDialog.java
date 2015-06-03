@@ -200,7 +200,7 @@ public class SignInDialog extends AbstractFormDialog<String> {
 			if (ws.getLoginError() != null) {
 				ErrorValue eValue = getBean(ErrorDao.class).get(-1 * ws.getLoginError());
 				if (eValue != null) {
-					error(Application.getString(eValue.getFieldvalues_id()));
+					error(Application.getString(eValue.getLabelId()));
 					target.add(feedback);
 				}
 			}

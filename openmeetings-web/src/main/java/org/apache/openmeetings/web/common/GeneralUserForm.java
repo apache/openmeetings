@@ -21,7 +21,6 @@ package org.apache.openmeetings.web.common;
 import static org.apache.openmeetings.db.util.UserHelper.getMinPasswdLength;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.AVAILABLE_TIMEZONES;
-import static org.apache.openmeetings.web.app.WebSession.getLanguage;
 import static org.apache.wicket.validation.validator.StringValidator.minimumLength;
 
 import java.util.ArrayList;
@@ -85,18 +84,18 @@ public class GeneralUserForm extends Form<User> {
 		SalutationDao salutDao = getBean(SalutationDao.class);
 		add(new DropDownChoice<Salutation>("salutation"
 				, new PropertyModel<Salutation>(this, "salutation")
-				, salutDao.getUserSalutations(getLanguage())
+				, salutDao.get()
 				, new ChoiceRenderer<Salutation>() {
 					private static final long serialVersionUID = 1L;
 
 					@Override
 					public Object getDisplayValue(Salutation object) {
-						return getString("" + object.getFieldvalues_id());
+						return getString("" + object.getLabelId());
 					}
 
 					@Override
 					public String getIdValue(Salutation object, int index) {
-						return "" + object.getSalutations_id();
+						return "" + object.getId();
 					}
 				})
 			.add(new AjaxFormComponentUpdatingBehavior("onchange") {
@@ -104,7 +103,7 @@ public class GeneralUserForm extends Form<User> {
 
 				@Override
 				protected void onUpdate(AjaxRequestTarget target) {
-					GeneralUserForm.this.getModelObject().setSalutations_id(salutation.getSalutations_id());
+					GeneralUserForm.this.getModelObject().setSalutationId(salutation.getId());
 				}
 			}));
 		add(new TextField<String>("firstname"));
@@ -112,12 +111,12 @@ public class GeneralUserForm extends Form<User> {
 		
 		add(new DropDownChoice<String>("timeZoneId", AVAILABLE_TIMEZONES));
 
-		add(new LanguageDropDown("language_id"));
+		add(new LanguageDropDown("languageId"));
 
-		add(email = new RequiredTextField<String>("adresses.email"));
+		add(email = new RequiredTextField<String>("address.email"));
 		email.setLabel(Model.of(Application.getString(137)));
 		email.add(RfcCompliantEmailAddressValidator.getInstance());
-		add(new TextField<String>("adresses.phone"));
+		add(new TextField<String>("address.phone"));
 		add(new CheckBox("sendSMS"));
 		add(new AjaxDatePicker("age", Model.of(CalendarHelper.getDate(getModelObject().getAge())), WebSession.get().getLocale()) {
 			private static final long serialVersionUID = 1L;
@@ -127,12 +126,12 @@ public class GeneralUserForm extends Form<User> {
 				GeneralUserForm.this.getModelObject().setAge(CalendarHelper.getDate(getModelObject()));
 			}
 		});
-		add(new TextField<String>("adresses.street"));
-		add(new TextField<String>("adresses.additionalname"));
-		add(new TextField<String>("adresses.zip"));
-		add(new TextField<String>("adresses.town"));
-		add(new DropDownChoice<State>("adresses.states", getBean(StateDao.class).getStates(), new ChoiceRenderer<State>("name", "id")));
-		add(new TextArea<String>("adresses.comment"));
+		add(new TextField<String>("address.street"));
+		add(new TextField<String>("address.additionalname"));
+		add(new TextField<String>("address.zip"));
+		add(new TextField<String>("address.town"));
+		add(new DropDownChoice<State>("address.state", getBean(StateDao.class).get(), new ChoiceRenderer<State>("name", "id")));
+		add(new TextArea<String>("address.comment"));
 
 		final List<OrganisationUser> orgUsers;
 		if (isAdminForm) {
@@ -182,7 +181,7 @@ public class GeneralUserForm extends Form<User> {
 	}
 
 	public void updateModelObject(User u) {
-		salutation = getBean(SalutationDao.class).get(u.getSalutations_id(), getLanguage());
+		salutation = getBean(SalutationDao.class).get(u.getSalutationId());
 	}
 	
 	@Override

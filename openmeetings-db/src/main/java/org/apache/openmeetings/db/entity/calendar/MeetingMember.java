@@ -74,10 +74,10 @@ public class MeetingMember implements IDataProviderEntity {
 	@Element(data = true, required = false)
 	private String appointmentStatus; // status of the appointment denial, acceptance, wait.
 
-	@Column(name = "starttime")
+	@Column(name = "inserted")
 	private Date inserted;
 
-	@Column(name = "updatetime")
+	@Column(name = "updated")
 	private Date updated;
 
 	@Column(name = "deleted")
@@ -132,7 +132,7 @@ public class MeetingMember implements IDataProviderEntity {
 		this.invitation = invitation;
 	}
 
-	public Date getStarttime() {
+	public Date getInserted() {
 		return inserted;
 	}
 

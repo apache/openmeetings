@@ -43,10 +43,8 @@ public class RoomTypeDao {
 	 * 
 	 * @return List of RoomTypes
 	 */
-	public List<RoomType> getAll(long langId) {
-		TypedQuery<RoomType> query = em.createNamedQuery("getAllRoomTypes", RoomType.class);
-		List<RoomType> ll = query.getResultList();
-		return ll;
+	public List<RoomType> get() {
+		return em.createNamedQuery("getAllRoomTypes", RoomType.class).getResultList();
 	}
 	
 	public RoomType get(long id) {
@@ -65,16 +63,15 @@ public class RoomTypeDao {
 	 * @param name
 	 * @return ID of new created roomtype or null
 	 */
-	public Long addRoomType(String name, long fieldvalues_id, boolean deleted) {
+	public Long addRoomType(String name, long labelId, boolean deleted) {
 		try {
 			RoomType rtype = new RoomType();
 			rtype.setName(name);
-			rtype.setStarttime(new Date());
+			rtype.setInserted(new Date());
 			rtype.setDeleted(deleted);
-			rtype.setFieldvalues_id(fieldvalues_id);
+			rtype.setLabelId(labelId);
 			rtype = em.merge(rtype);
-			long returnId = rtype.getId();
-			return returnId;
+			return rtype.getId();
 		} catch (Exception ex2) {
 			log.error("[addRoomType] ", ex2);
 		}

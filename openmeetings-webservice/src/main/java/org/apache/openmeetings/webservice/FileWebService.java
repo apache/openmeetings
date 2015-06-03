@@ -85,10 +85,10 @@ public class FileWebService {
 	 * Import file from external source
 	 * 
 	 * to upload a file to a room-drive you specify: externalUserId, user if of openmeetings user for which we upload
-	 * the file room_id = openmeetings room id isOwner = 0 parentFolderId = 0
+	 * the file roomId = openmeetings room id isOwner = 0 parentFolderId = 0
 	 * 
 	 * to upload a file to a private-drive you specify: externalUserId, user if of openmeetings user for which we upload
-	 * the file room_id = openmeetings room id isOwner = 1 parentFolderId = -2
+	 * the file roomId = openmeetings room id isOwner = 1 parentFolderId = -2
 	 * 
 	 * @param SID
 	 *            The logged in session id with minimum webservice level
@@ -99,7 +99,7 @@ public class FileWebService {
 	 *            the external file-type to identify the file later
 	 * @param externalType
 	 *            the name of the external system
-	 * @param room_id
+	 * @param roomId
 	 *            the room Id, if the file goes to the private folder of an user, you can set a random number here
 	 * @param isOwner
 	 *            specify a 1/true AND parentFolderId==-2 to make the file goto the private section
@@ -114,13 +114,13 @@ public class FileWebService {
 	 * @throws ServiceException
 	 */
 	public FileImportError[] importFile(String SID, String externalUserId, Long externalFileId, String externalType,
-			Long room_id, boolean isOwner, String path, Long parentFolderId, String fileSystemName)
+			Long roomId, boolean isOwner, String path, Long parentFolderId, String fileSystemName)
 			throws ServiceException {
 		try {
 
-			Long users_id = sessiondataDao.checkSession(SID);
+			Long userId = sessiondataDao.checkSession(SID);
 
-			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(users_id))) {
+			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(userId))) {
 
 				URL url = new URL(path);
 				URLConnection uc = url.openConnection();
@@ -131,7 +131,7 @@ public class FileWebService {
 				LinkedHashMap<String, Object> hs = new LinkedHashMap<String, Object>();
 				hs.put("user", externalUser);
 
-				ConverterProcessResultList returnError = fileProcessor.processFile(externalUser.getId(), room_id,
+				ConverterProcessResultList returnError = fileProcessor.processFile(externalUser.getId(), roomId,
 						isOwner, inputstream, parentFolderId, fileSystemName, externalFileId, externalType);
 
 				// Flash cannot read the response of an upload
@@ -157,10 +157,10 @@ public class FileWebService {
 	 * Import file from external source
 	 * 
 	 * to upload a file to a room-drive you specify: internalUserId, user if of openmeetings user for which we upload
-	 * the file room_id = openmeetings room id isOwner = 0 parentFolderId = 0
+	 * the file roomId = openmeetings room id isOwner = 0 parentFolderId = 0
 	 * 
 	 * to upload a file to a private-drive you specify: internalUserId, user if of openmeetings user for which we upload
-	 * the file room_id = openmeetings room id isOwner = 1 parentFolderId = -2
+	 * the file roomId = openmeetings room id isOwner = 1 parentFolderId = -2
 	 * 
 	 * @param SID
 	 *            The SID of the User. This SID must be marked as logged in
@@ -171,7 +171,7 @@ public class FileWebService {
 	 *            the external file-type to identify the file later
 	 * @param externalType
 	 *            the name of the external system
-	 * @param room_id
+	 * @param roomId
 	 *            the room Id, if the file goes to the private folder of an user, you can set a random number here
 	 * @param isOwner
 	 *            specify a 1/true AND parentFolderId==-2 to make the file goto the private section
@@ -186,13 +186,13 @@ public class FileWebService {
 	 * @throws ServiceException
 	 */
 	public FileImportError[] importFileByInternalUserId(String SID, Long internalUserId, Long externalFileId,
-			String externalType, Long room_id, boolean isOwner, String path, Long parentFolderId, String fileSystemName)
+			String externalType, Long roomId, boolean isOwner, String path, Long parentFolderId, String fileSystemName)
 			throws ServiceException {
 		try {
 
-			Long users_id = sessiondataDao.checkSession(SID);
+			Long userId = sessiondataDao.checkSession(SID);
 
-			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(users_id))) {
+			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(userId))) {
 
 				URL url = new URL(path);
 				URLConnection uc = url.openConnection();
@@ -203,7 +203,7 @@ public class FileWebService {
 				LinkedHashMap<String, Object> hs = new LinkedHashMap<String, Object>();
 				hs.put("user", internalUser);
 
-				ConverterProcessResultList returnError = fileProcessor.processFile(internalUser.getId(), room_id,
+				ConverterProcessResultList returnError = fileProcessor.processFile(internalUser.getId(), roomId,
 						isOwner, inputstream, parentFolderId, fileSystemName, externalFileId, externalType);
 
 				// Flash cannot read the response of an upload
@@ -236,7 +236,7 @@ public class FileWebService {
 	 * @param parentId
 	 * @param folderName
 	 *            the name of the folder
-	 * @param room_id
+	 * @param roomId
 	 *            the room Id, if the file goes to the private folder of an user, you can set a random number here
 	 * @param isOwner
 	 *            specify a 1/true AND parentFolderId==-2 to make the file goto the private section
@@ -249,12 +249,12 @@ public class FileWebService {
 	 * @throws ServiceException
 	 */
 	public Long addFolderByExternalUserIdAndType(String SID, String externalUserId, Long parentId, String folderName,
-			Long room_id, Boolean isOwner, Long externalFilesid, String externalType) throws ServiceException {
+			Long roomId, Boolean isOwner, Long externalFilesid, String externalType) throws ServiceException {
 		try {
 
-			Long users_id = sessiondataDao.checkSession(SID);
+			Long authUserId = sessiondataDao.checkSession(SID);
 
-			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(users_id))) {
+			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(authUserId))) {
 
 				User userExternal = userDao.getExternalUser(externalUserId, externalType);
 
@@ -263,12 +263,12 @@ public class FileWebService {
 				log.debug("addFolder " + parentId);
 
 				if (parentId == -2 && isOwner) {
-					// users_id (OwnerID) => only set if its directly root in
+					// userId (OwnerID) => only set if its directly root in
 					// Owner Directory,
 					// other Folders and Files maybe are also in a Home
 					// directory
 					// but just because their parent is
-					return fileExplorerItemDao.add(folderName, "", 0L, userId, room_id, userId, true, // isFolder
+					return fileExplorerItemDao.add(folderName, "", 0L, userId, roomId, userId, true, // isFolder
 							false, // isImage
 							false, // isPresentation
 							"", // WML Path
@@ -276,7 +276,7 @@ public class FileWebService {
 							false, // isXmlFile
 							externalFilesid, externalType);
 				} else {
-					return fileExplorerItemDao.add(folderName, "", parentId, null, room_id, userId, true, // isFolder
+					return fileExplorerItemDao.add(folderName, "", parentId, null, roomId, userId, true, // isFolder
 							false, // isImage
 							false, // isPresentation
 							"", // WML Path
@@ -304,7 +304,7 @@ public class FileWebService {
 	 *            specify a parentFolderId==-2 AND isOwner == 1/true AND to make the file goto the private section
 	 * @param folderName
 	 *            the name of the folder
-	 * @param room_id
+	 * @param roomId
 	 *            the room Id, if the file goes to the private folder of an user, you can set a random number here
 	 * @param isOwner
 	 *            specify a 1/true AND parentFolderId==-2 to make the file goto the private section
@@ -316,13 +316,13 @@ public class FileWebService {
 	 * @return - id of the folder
 	 * @throws ServiceException
 	 */
-	public Long addFolderByUserId(String SID, Long userId, Long parentId, String folderName, Long room_id,
+	public Long addFolderByUserId(String SID, Long userId, Long parentId, String folderName, Long roomId,
 			Boolean isOwner, Long externalFilesid, String externalType) throws ServiceException {
 		try {
 
-			Long users_id = sessiondataDao.checkSession(SID);
+			Long authUserId = sessiondataDao.checkSession(SID);
 
-			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(users_id))) {
+			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(authUserId))) {
 
 				log.debug("addFolder " + parentId);
 
@@ -332,7 +332,7 @@ public class FileWebService {
 					// other Folders and Files maybe are also in a Home
 					// directory
 					// but just because their parent is
-					return fileExplorerItemDao.add(folderName, "", 0L, userId, room_id, userId, true, // isFolder
+					return fileExplorerItemDao.add(folderName, "", 0L, userId, roomId, userId, true, // isFolder
 							false, // isImage
 							false, // isPresentation
 							"", // WML Path
@@ -340,7 +340,7 @@ public class FileWebService {
 							false, // isXmlFile
 							externalFilesid, externalType);
 				} else {
-					return fileExplorerItemDao.add(folderName, "", parentId, null, room_id, userId, true, // isFolder
+					return fileExplorerItemDao.add(folderName, "", parentId, null, roomId, userId, true, // isFolder
 							false, // isImage
 							false, // isPresentation
 							"", // WML Path
@@ -366,16 +366,16 @@ public class FileWebService {
 	 *            parent folder id
 	 * @param fileName
 	 *            the file name
-	 * @param room_id
+	 * @param roomId
 	 *            the room id
 	 * @param isOwner
 	 * @return - id of the folder
 	 */
-	public Long addFolderSelf(String SID, Long parentId, String fileName, Long room_id, Boolean isOwner)
+	public Long addFolderSelf(String SID, Long parentId, String fileName, Long roomId, Boolean isOwner)
 			throws ServiceException {
 		try {
-			Long users_id = sessiondataDao.checkSession(SID);
-			if (AuthLevelUtil.hasUserLevel(userDao.getRights(users_id))) {
+			Long userId = sessiondataDao.checkSession(SID);
+			if (AuthLevelUtil.hasUserLevel(userDao.getRights(userId))) {
 
 				log.debug("addFolder " + parentId);
 
@@ -385,7 +385,7 @@ public class FileWebService {
 					// other Folders and Files maybe are also in a Home
 					// directory
 					// but just because their parent is
-					return fileExplorerItemDao.add(fileName, "", parentId, users_id, room_id, users_id, true, // isFolder
+					return fileExplorerItemDao.add(fileName, "", parentId, userId, roomId, userId, true, // isFolder
 							false, // isImage
 							false, // isPresentation
 							"", // WML Path
@@ -393,7 +393,7 @@ public class FileWebService {
 							false // isXmlFile
 							, 0L, "");
 				} else {
-					return fileExplorerItemDao.add(fileName, "", parentId, null, room_id, users_id, true, // isFolder
+					return fileExplorerItemDao.add(fileName, "", parentId, null, roomId, userId, true, // isFolder
 							false, // isImage
 							false, // isPresentation
 							"", // WML Paht
@@ -425,9 +425,9 @@ public class FileWebService {
 
 		try {
 
-			Long users_id = sessiondataDao.checkSession(SID);
+			Long userId = sessiondataDao.checkSession(SID);
 
-			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(users_id))) {
+			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(userId))) {
 
 				fileExplorerItemDao.deleteFileExplorerItemByExternalIdAndType(externalFilesid, externalType);
 
@@ -453,9 +453,9 @@ public class FileWebService {
 
 		try {
 
-			Long users_id = sessiondataDao.checkSession(SID);
+			Long userId = sessiondataDao.checkSession(SID);
 
-			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(users_id))) {
+			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(userId))) {
 
 				fileExplorerItemDao.delete(fileId);
 
@@ -481,9 +481,9 @@ public class FileWebService {
 
 		try {
 
-			Long users_id = sessiondataDao.checkSession(SID);
+			Long userId = sessiondataDao.checkSession(SID);
 
-			if (AuthLevelUtil.hasUserLevel(userDao.getRights(users_id))) {
+			if (AuthLevelUtil.hasUserLevel(userDao.getRights(userId))) {
 
 				// TODO: Check if user has access or not to the file
 
@@ -528,9 +528,9 @@ public class FileWebService {
 
 		try {
 
-			Long users_id = sessiondataDao.checkSession(SID);
+			Long userId = sessiondataDao.checkSession(SID);
 
-			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(users_id))) {
+			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(userId))) {
 
 				File working_dir = new File(OmFileHelper.getUploadProfilesDir(), parentFolder);
 				log.debug("############# working_dir : " + working_dir);
@@ -561,27 +561,27 @@ public class FileWebService {
 	 * 
 	 * @param SID
 	 *            The SID of the User. This SID must be marked as logged in
-	 * @param room_id
+	 * @param roomId
 	 *            Room id
-	 * @param owner_id
+	 * @param ownerId
 	 *            Owner id
 	 * @return - File Explorer Object by a given Room and owner id
 	 * @throws ServiceException
 	 */
-	public FileExplorerObject getFileExplorerByRoom(String SID, Long room_id, Long owner_id) throws ServiceException {
+	public FileExplorerObject getFileExplorerByRoom(String SID, Long roomId, Long ownerId) throws ServiceException {
 
 		try {
 
-			Long users_id = sessiondataDao.checkSession(SID);
+			Long userId = sessiondataDao.checkSession(SID);
 
-			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(users_id))) {
+			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(userId))) {
 
-				log.debug("room_id " + room_id);
+				log.debug("roomId " + roomId);
 
 				FileExplorerObject fileExplorerObject = new FileExplorerObject();
 
 				// Home File List
-				FileExplorerItem[] fList = fileExplorerItemDao.getByOwner(owner_id)
+				FileExplorerItem[] fList = fileExplorerItemDao.getByOwner(ownerId)
 						.toArray(new FileExplorerItem[0]);
 
 				long homeFileSize = 0;
@@ -595,7 +595,7 @@ public class FileWebService {
 				fileExplorerObject.setUserHomeSize(homeFileSize);
 
 				// Public File List
-				FileExplorerItem[] rList = fileExplorerItemDao.getByRoom(room_id).toArray(new FileExplorerItem[0]);
+				FileExplorerItem[] rList = fileExplorerItemDao.getByRoom(roomId).toArray(new FileExplorerItem[0]);
 
 				long roomFileSize = 0;
 
@@ -626,25 +626,25 @@ public class FileWebService {
 	 * 
 	 * @param SID
 	 *            The SID of the User. This SID must be marked as logged in
-	 * @param room_id
+	 * @param roomId
 	 *            Room Id
 	 * @return - File Explorer Object by a given Room
 	 * @throws ServiceException
 	 */
-	public FileExplorerObject getFileExplorerByRoomSelf(String SID, Long room_id) throws ServiceException {
+	public FileExplorerObject getFileExplorerByRoomSelf(String SID, Long roomId) throws ServiceException {
 
 		try {
 
-			Long users_id = sessiondataDao.checkSession(SID);
+			Long userId = sessiondataDao.checkSession(SID);
 
-			if (AuthLevelUtil.hasUserLevel(userDao.getRights(users_id))) {
+			if (AuthLevelUtil.hasUserLevel(userDao.getRights(userId))) {
 
-				log.debug("room_id " + room_id);
+				log.debug("roomId " + roomId);
 
 				FileExplorerObject fileExplorerObject = new FileExplorerObject();
 
 				// Home File List
-				FileExplorerItem[] fList = fileExplorerItemDao.getByOwner(users_id)
+				FileExplorerItem[] fList = fileExplorerItemDao.getByOwner(userId)
 						.toArray(new FileExplorerItem[0]);
 
 				long homeFileSize = 0;
@@ -658,7 +658,7 @@ public class FileWebService {
 				fileExplorerObject.setUserHomeSize(homeFileSize);
 
 				// Public File List
-				FileExplorerItem[] rList = fileExplorerItemDao.getByRoom(room_id).toArray(new FileExplorerItem[0]);
+				FileExplorerItem[] rList = fileExplorerItemDao.getByRoom(roomId).toArray(new FileExplorerItem[0]);
 
 				long roomFileSize = 0;
 
@@ -691,31 +691,31 @@ public class FileWebService {
 	 *            The SID of the User. This SID must be marked as logged in
 	 * @param parentId
 	 *            the parent folder id
-	 * @param room_id
+	 * @param roomId
 	 *            the room id
 	 * @param isOwner
 	 *            true if its a private drive
-	 * @param owner_id
+	 * @param ownerId
 	 *            the owner id
 	 * @return - FileExplorerItem list by parent folder
 	 * @throws ServiceException
 	 */
-	public FileExplorerItem[] getFileExplorerByParent(String SID, Long parentId, Long room_id, Boolean isOwner,
-			Long owner_id) throws ServiceException {
+	public FileExplorerItem[] getFileExplorerByParent(String SID, Long parentId, Long roomId, Boolean isOwner,
+			Long ownerId) throws ServiceException {
 
 		try {
 
-			Long users_id = sessiondataDao.checkSession(SID);
+			Long userId = sessiondataDao.checkSession(SID);
 
-			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(users_id))) {
+			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(userId))) {
 
 				log.debug("parentFileExplorerItemId " + parentId);
 
 				if (parentId == 0) {
 					if (isOwner) {
-						return fileExplorerItemDao.getByOwner(owner_id).toArray(new FileExplorerItem[0]);
+						return fileExplorerItemDao.getByOwner(ownerId).toArray(new FileExplorerItem[0]);
 					} else {
-						return fileExplorerItemDao.getByRoom(room_id).toArray(new FileExplorerItem[0]);
+						return fileExplorerItemDao.getByRoom(roomId).toArray(new FileExplorerItem[0]);
 					}
 				} else {
 					return fileExplorerItemDao.getByParent(parentId).toArray(new FileExplorerItem[0]);
@@ -736,29 +736,29 @@ public class FileWebService {
 	 *            SID The SID of the User. This SID must be marked as logged in
 	 * @param parentId
 	 *            the parent folder id
-	 * @param room_id
+	 * @param roomId
 	 *            the room id
 	 * @param isOwner
 	 *            true to request private drive
 	 * @return - list of file explorer items
 	 * @throws ServiceException
 	 */
-	public FileExplorerItem[] getFileExplorerByParentSelf(String SID, Long parentId, Long room_id, Boolean isOwner)
+	public FileExplorerItem[] getFileExplorerByParentSelf(String SID, Long parentId, Long roomId, Boolean isOwner)
 			throws ServiceException {
 
 		try {
 
-			Long users_id = sessiondataDao.checkSession(SID);
+			Long userId = sessiondataDao.checkSession(SID);
 
-			if (AuthLevelUtil.hasUserLevel(userDao.getRights(users_id))) {
+			if (AuthLevelUtil.hasUserLevel(userDao.getRights(userId))) {
 
 				log.debug("parentFileExplorerItemId " + parentId);
 
 				if (parentId == 0) {
 					if (isOwner) {
-						return fileExplorerItemDao.getByOwner(users_id).toArray(new FileExplorerItem[0]);
+						return fileExplorerItemDao.getByOwner(userId).toArray(new FileExplorerItem[0]);
 					} else {
-						return fileExplorerItemDao.getByRoom(room_id).toArray(new FileExplorerItem[0]);
+						return fileExplorerItemDao.getByRoom(roomId).toArray(new FileExplorerItem[0]);
 					}
 				} else {
 					return fileExplorerItemDao.getByParent(parentId).toArray(new FileExplorerItem[0]);
@@ -786,9 +786,9 @@ public class FileWebService {
 
 		try {
 
-			Long users_id = sessiondataDao.checkSession(SID);
+			Long userId = sessiondataDao.checkSession(SID);
 
-			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(users_id))) {
+			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(userId))) {
 
 				log.debug("deleteFileOrFolder " + fileId);
 
@@ -818,9 +818,9 @@ public class FileWebService {
 
 		try {
 
-			Long users_id = sessiondataDao.checkSession(SID);
+			Long userId = sessiondataDao.checkSession(SID);
 
-			if (AuthLevelUtil.hasUserLevel(userDao.getRights(users_id))) {
+			if (AuthLevelUtil.hasUserLevel(userDao.getRights(userId))) {
 
 				// TODO: check if this user is allowed to change this file
 				/*
@@ -850,39 +850,39 @@ public class FileWebService {
 	 *            current file or folder id to be moved
 	 * @param newParentId
 	 *            new parent folder id
-	 * @param room_id
+	 * @param roomId
 	 *            room id
 	 * @param isOwner
 	 *            if true owner id will be set
 	 * @param moveToHome
 	 *            if true move to private drive
-	 * @param owner_id
+	 * @param ownerId
 	 *            owner id
 	 * @return - null
 	 * @throws ServiceException
 	 */
-	public Long moveFile(String SID, Long fileId, Long newParentId, Long room_id, Boolean isOwner, Boolean moveToHome,
-			Long owner_id) throws ServiceException {
+	public Long moveFile(String SID, Long fileId, Long newParentId, Long roomId, Boolean isOwner, Boolean moveToHome,
+			Long ownerId) throws ServiceException {
 
 		try {
 
-			Long users_id = sessiondataDao.checkSession(SID);
+			Long userId = sessiondataDao.checkSession(SID);
 
-			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(users_id))) {
+			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(userId))) {
 
 				log.debug("deleteFileOrFolder " + fileId);
 
-				fileExplorerItemDao.moveFile(fileId, newParentId, room_id, isOwner, owner_id);
+				fileExplorerItemDao.moveFile(fileId, newParentId, roomId, isOwner, ownerId);
 
 				FileExplorerItem fileExplorerItem = fileExplorerItemDao.get(fileId);
 
 				if (moveToHome) {
 					// set this file and all subfiles and folders the ownerId
-					fileUtils.setFileToOwnerOrRoomByParent(fileExplorerItem, owner_id, null);
+					fileUtils.setFileToOwnerOrRoomByParent(fileExplorerItem, ownerId, null);
 
 				} else {
-					// set this file and all subfiles and folders the room_id
-					fileUtils.setFileToOwnerOrRoomByParent(fileExplorerItem, null, room_id);
+					// set this file and all subfiles and folders the roomId
+					fileUtils.setFileToOwnerOrRoomByParent(fileExplorerItem, null, roomId);
 
 				}
 
@@ -902,7 +902,7 @@ public class FileWebService {
 	 *            current file or folder id to be moved
 	 * @param newParentId
 	 *            new parent folder id
-	 * @param room_id
+	 * @param roomId
 	 *            room id
 	 * @param isOwner
 	 *            if true owner id will be set
@@ -911,30 +911,30 @@ public class FileWebService {
 	 * @return - null
 	 * @throws ServiceException
 	 */
-	public Long moveFileSelf(String SID, Long fileId, Long newParentId, Long room_id, Boolean isOwner,
+	public Long moveFileSelf(String SID, Long fileId, Long newParentId, Long roomId, Boolean isOwner,
 			Boolean moveToHome) throws ServiceException {
 
 		try {
 
-			Long users_id = sessiondataDao.checkSession(SID);
+			Long userId = sessiondataDao.checkSession(SID);
 
-			if (AuthLevelUtil.hasUserLevel(userDao.getRights(users_id))) {
+			if (AuthLevelUtil.hasUserLevel(userDao.getRights(userId))) {
 
 				// A test is required that checks if the user is allowed to move the file
 
 				log.debug("moveFileSelf " + fileId);
 
-				fileExplorerItemDao.moveFile(fileId, newParentId, room_id, isOwner, users_id);
+				fileExplorerItemDao.moveFile(fileId, newParentId, roomId, isOwner, userId);
 
 				FileExplorerItem fileExplorerItem = fileExplorerItemDao.get(fileId);
 
 				if (moveToHome) {
 					// set this file and all subfiles and folders the ownerId
-					fileUtils.setFileToOwnerOrRoomByParent(fileExplorerItem, users_id, null);
+					fileUtils.setFileToOwnerOrRoomByParent(fileExplorerItem, userId, null);
 
 				} else {
-					// set this file and all subfiles and folders the room_id
-					fileUtils.setFileToOwnerOrRoomByParent(fileExplorerItem, null, room_id);
+					// set this file and all subfiles and folders the roomId
+					fileUtils.setFileToOwnerOrRoomByParent(fileExplorerItem, null, roomId);
 
 				}
 

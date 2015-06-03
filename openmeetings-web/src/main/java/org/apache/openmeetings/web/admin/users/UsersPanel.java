@@ -97,7 +97,7 @@ public class UsersPanel extends AdminPanel {
 			}
 		};
 		DataViewContainer<User> container = new DataViewContainer<User>(listContainer, dataView, navigator);
-		container.addLink(new OmOrderByBorder<User>("orderById", "user_id", container))
+		container.addLink(new OmOrderByBorder<User>("orderById", "id", container))
 			.addLink(new OmOrderByBorder<User>("orderByLogin", "login", container))
 			.addLink(new OmOrderByBorder<User>("orderByFirstName", "firstname", container))
 			.addLink(new OmOrderByBorder<User>("orderByLastName", "lastname", container));

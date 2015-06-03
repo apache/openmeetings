@@ -151,7 +151,7 @@ public class UserWebService {
 
 	/**
 	 * loads an Error-Object. If a Method returns a negative Result, its an
-	 * Error-id, it needs a language_id to specify in which language you want to
+	 * Error-id, it needs a languageId to specify in which language you want to
 	 * display/read the error-message. English has the Language-ID one, for
 	 * different one see the list of languages
 	 * 
@@ -171,11 +171,11 @@ public class UserWebService {
 			if (errorid < 0) {
 				ErrorValue eValues = errorDao.get(-1 * errorid);
 				if (eValues != null) {
-					ErrorType eType = errorDao.getErrorType(eValues.getErrortype_id());
-					log.debug("eValues.getFieldvalues_id() = " + eValues.getFieldvalues_id());
+					ErrorType eType = errorDao.getErrorType(eValues.getTypeId());
+					log.debug("eValues.getLabelId() = " + eValues.getLabelId());
 					log.debug("eValues.getErrorType() = " + eType);
-					String eValue = labelDao.getString(eValues.getFieldvalues_id(), langId);
-					String tValue = labelDao.getString(eType.getFieldvalues_id(), langId);
+					String eValue = labelDao.getString(eValues.getLabelId(), langId);
+					String tValue = labelDao.getString(eType.getLabelId(), langId);
 					if (eValue != null) {
 						return new ErrorResult(errorid, eValue, tValue);
 					}
@@ -195,30 +195,8 @@ public class UserWebService {
 	 * 
 	 * @param SID
 	 *            The SID from getSession
-	 * @param username
-	 *            any username
-	 * @param userpass
-	 *            any userpass
-	 * @param lastname
-	 *            any lastname
-	 * @param firstname
-	 *            any firstname
-	 * @param email
-	 *            any email
-	 * @param additionalname
-	 *            any additionalname
-	 * @param street
-	 *            any street
-	 * @param zip
-	 *            any zip
-	 * @param fax
-	 *            any fax
-	 * @param states_id
-	 *            a valid states_id
-	 * @param town
-	 *            any town
-	 * @param language_id
-	 *            the language_id
+	 * @param userDTO
+	 *            user object
 	 *            
 	 * @return - id of the user added or error code
 	 * @throws ServiceException
@@ -228,34 +206,34 @@ public class UserWebService {
 	public Long addUser(@WebParam String SID, @WebParam @NotNull UserDTO userDto)
 			throws ServiceException {
 		try {
-			Long users_id = sessiondataDao.checkSession(SID);
+			Long authUserId = sessiondataDao.checkSession(SID);
 
-			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(users_id))) {
+			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(authUserId))) {
 
 				String jName_timeZone = configurationDao.getConfValue("default.timezone", String.class, "");
 
-				Long user_id = userManagement.registerUser(userDto.getLogin(), userDto.getPassword(),
-						userDto.getLastname(), userDto.getFirstname(), userDto.getAdresses() != null ? userDto.getAdresses().getEmail() : "", new Date(), userDto.getAdresses().getStreet(), //FIXME NPE signature
-						userDto.getAdresses().getAdditionalname(), userDto.getAdresses().getFax(), userDto.getAdresses().getZip(), userDto.getAdresses().getStates().getId() //FIXME NPE signature
-						, userDto.getAdresses().getTown(), userDto.getLanguageId(), //FIXME NPE signature
+				Long userId = userManagement.registerUser(userDto.getLogin(), userDto.getPassword(),
+						userDto.getLastname(), userDto.getFirstname(), userDto.getAddress() != null ? userDto.getAddress().getEmail() : "", new Date(), userDto.getAddress().getStreet(), //FIXME NPE signature
+						userDto.getAddress().getAdditionalname(), userDto.getAddress().getFax(), userDto.getAddress().getZip(), userDto.getAddress().getState().getId() //FIXME NPE signature
+						, userDto.getAddress().getTown(), userDto.getLanguageId(), //FIXME NPE signature
 						"", false, true, // generate SIP Data if the config is enabled
 						jName_timeZone);
 
-				if (user_id == null || user_id < 0) {
-					return user_id;
+				if (userId == null || userId < 0) {
+					return userId;
 				}
 
-				User user = userDao.get(user_id);
+				User user = userDao.get(userId);
 
 				// activate the User
 				user.getRights().add(Right.Dashboard);
 				user.getRights().add(Right.Login);
 				user.getRights().add(Right.Room);
-				user.setUpdatetime(new Date());
+				user.setUpdated(new Date());
 
-				userDao.update(user, users_id);
+				userDao.update(user, authUserId);
 
-				return user_id;
+				return userId;
 
 			} else {
 				return new Long(-26);
@@ -290,12 +268,12 @@ public class UserWebService {
 	 *            any zip
 	 * @param fax
 	 *            any fax
-	 * @param states_id
-	 *            a valid states_id
+	 * @param stateId
+	 *            a valid stateId
 	 * @param town
 	 *            any town
-	 * @param language_id
-	 *            the language_id
+	 * @param languageId
+	 *            the languageId
 	 * @param jNameTimeZone
 	 *            the name of the timezone for the user
 	 *            
@@ -305,15 +283,15 @@ public class UserWebService {
 	public Long addNewUserWithTimeZone(String SID, String username,
 			String userpass, String lastname, String firstname, String email,
 			String additionalname, String street, String zip, String fax,
-			long states_id, String town, long language_id, String jNameTimeZone) throws ServiceException {
+			long stateId, String town, long languageId, String jNameTimeZone) throws ServiceException {
 		try {
-			Long users_id = sessiondataDao.checkSession(SID);
+			Long authUserId = sessiondataDao.checkSession(SID);
 
-			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(users_id))) {
+			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(authUserId))) {
 
-				Long user_id = userManagement.registerUser(username, userpass,
+				Long userId = userManagement.registerUser(username, userpass,
 						lastname, firstname, email, new Date(), street,
-						additionalname, fax, zip, states_id, town, language_id,
+						additionalname, fax, zip, stateId, town, languageId,
 						"", false, true, // generate
 											// SIP
 											// Data
@@ -324,19 +302,19 @@ public class UserWebService {
 											// enabled
 						jNameTimeZone); 
 
-				if (user_id == null || user_id < 0) {
-					return user_id;
+				if (userId == null || userId < 0) {
+					return userId;
 				}
 
-				User user = userDao.get(user_id);
+				User user = userDao.get(userId);
 
 				// activate the User
 				user.getRights().add(Right.Login);
-				user.setUpdatetime(new Date());
+				user.setUpdated(new Date());
 
-				userDao.update(user, users_id);
+				userDao.update(user, authUserId);
 
-				return user_id;
+				return userId;
 
 			} else {
 				return new Long(-26);
@@ -375,12 +353,12 @@ public class UserWebService {
 	 *            any zip
 	 * @param fax
 	 *            any fax
-	 * @param states_id
-	 *            a valid states_id
+	 * @param stateId
+	 *            a valid stateId
 	 * @param town
 	 *            any town
-	 * @param language_id
-	 *            the language_id
+	 * @param languageId
+	 *            the languageId
 	 * @param jNameTimeZone
 	 *            the name of the timezone for the user
 	 * @param externalUserId
@@ -394,13 +372,13 @@ public class UserWebService {
 	public Long addNewUserWithExternalType(String SID, String username,
 			String userpass, String lastname, String firstname, String email,
 			String additionalname, String street, String zip, String fax,
-			long states_id, String town, long language_id,
+			long stateId, String town, long languageId,
 			String jNameTimeZone, String externalUserId, String externalUserType)
 			throws ServiceException {
 		try {
-			Long users_id = sessiondataDao.checkSession(SID);
+			Long authUserId = sessiondataDao.checkSession(SID);
 
-			if (AuthLevelUtil.hasAdminLevel(userDao.getRights(users_id))) {
+			if (AuthLevelUtil.hasAdminLevel(userDao.getRights(authUserId))) {
 
 				User testUser = userDao.getExternalUser(externalUserId, externalUserType);
 
@@ -409,27 +387,27 @@ public class UserWebService {
 				}
 
 				// This will send no email to the users
-				Long user_id = userManagement.registerUserNoEmail(username,
+				Long userId = userManagement.registerUserNoEmail(username,
 						userpass, lastname, firstname, email, new Date(),
-						street, additionalname, fax, zip, states_id, town,
-						language_id, "", false, true, // generate SIP Data if the config is enabled
+						street, additionalname, fax, zip, stateId, town,
+						languageId, "", false, true, // generate SIP Data if the config is enabled
 						jNameTimeZone);
 
-				if (user_id == null || user_id < 0) {
-					return user_id;
+				if (userId == null || userId < 0) {
+					return userId;
 				}
 
-				User user = userDao.get(user_id);
+				User user = userDao.get(userId);
 
 				// activate the User
 				user.getRights().add(Right.Login);
-				user.setUpdatetime(new Date());
-				user.setExternalUserId(externalUserId);
-				user.setExternalUserType(externalUserType);
+				user.setUpdated(new Date());
+				user.setExternalId(externalUserId);
+				user.setExternalType(externalUserType);
 
-				userDao.update(user, users_id);
+				userDao.update(user, authUserId);
 
-				return user_id;
+				return userId;
 
 			} else {
 				return new Long(-26);
@@ -455,9 +433,9 @@ public class UserWebService {
 	 */
 	public Long deleteUserById(String SID, Long userId) throws ServiceException {
 		try {
-			Long users_id = sessiondataDao.checkSession(SID);
+			Long authUserId = sessiondataDao.checkSession(SID);
 
-			if (AuthLevelUtil.hasAdminLevel(userDao.getRights(users_id))) {
+			if (AuthLevelUtil.hasAdminLevel(userDao.getRights(authUserId))) {
 
 				// Setting user deleted
 				userDao.deleteUserID(userId);
@@ -480,22 +458,22 @@ public class UserWebService {
 	 * 
 	 * @param SID
 	 *            The SID from getSession
-	 * @param externalUserId
+	 * @param externalId
 	 *            externalUserId
-	 * @param externalUserType
+	 * @param externalType
 	 *            externalUserId
 	 *            
 	 * @return - id of user deleted, or error code
 	 * @throws ServiceException
 	 */
 	public Long deleteUserByExternalUserIdAndType(String SID,
-			String externalUserId, String externalUserType) throws ServiceException {
+			String externalId, String externalType) throws ServiceException {
 		try {
-			Long users_id = sessiondataDao.checkSession(SID);
+			Long authUserId = sessiondataDao.checkSession(SID);
 
-			if (AuthLevelUtil.hasAdminLevel(userDao.getRights(users_id))) {
+			if (AuthLevelUtil.hasAdminLevel(userDao.getRights(authUserId))) {
 
-				User userExternal = userDao.getExternalUser(externalUserId, externalUserType);
+				User userExternal = userDao.getExternalUser(externalId, externalType);
 
 				Long userId = userExternal.getId();
 
@@ -535,7 +513,7 @@ public class UserWebService {
 	 *            if you have any external user Id you may set it here
 	 * @param externalUserType
 	 *            you can specify your system-name here, for example "moodle"
-	 * @param room_id
+	 * @param roomId
 	 *            the room id the user should be logged in
 	 * @param becomeModeratorAsInt
 	 *            0 means no Moderator, 1 means Moderator
@@ -549,11 +527,11 @@ public class UserWebService {
 	public String setUserObjectAndGenerateRoomHash(String SID, String username,
 			String firstname, String lastname, String profilePictureUrl,
 			String email, String externalUserId, String externalUserType,
-			Long room_id, int becomeModeratorAsInt, int showAudioVideoTestAsInt)
+			Long roomId, int becomeModeratorAsInt, int showAudioVideoTestAsInt)
 			throws ServiceException {
 		try {
-			Long users_id = sessiondataDao.checkSession(SID);
-			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(users_id))) {
+			Long userId = sessiondataDao.checkSession(SID);
+			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(userId))) {
 
 				RemoteSessionObject remoteSessionObject = new RemoteSessionObject(
 						username, firstname, lastname, profilePictureUrl,
@@ -577,9 +555,9 @@ public class UserWebService {
 					showAudioVideoTest = true;
 				}
 
-				String hash = soapLoginDao.addSOAPLogin(SID, room_id,
+				String hash = soapLoginDao.addSOAPLogin(SID, roomId,
 						becomeModerator, showAudioVideoTest, false, // allowSameURLMultipleTimes
-						null, // recording_id
+						null, // recordingId
 						false, // showNickNameDialogAsInt
 						"room", // LandingZone,
 						true // allowRecording
@@ -625,7 +603,7 @@ public class UserWebService {
 	 *            if you have any external user Id you may set it here
 	 * @param externalUserType
 	 *            you can specify your system-name here, for example "moodle"
-	 * @param room_id
+	 * @param roomId
 	 *            the room id the user should be logged in
 	 * @param becomeModeratorAsInt
 	 *            0 means no Moderator, 1 means Moderator
@@ -638,13 +616,13 @@ public class UserWebService {
 	public String setUserObjectAndGenerateRoomHashByURL(String SID,
 			String username, String firstname, String lastname,
 			String profilePictureUrl, String email, String externalUserId,
-			String externalUserType, Long room_id, int becomeModeratorAsInt,
+			String externalUserType, Long roomId, int becomeModeratorAsInt,
 			int showAudioVideoTestAsInt) throws ServiceException {
 
 		log.debug("UserService.setUserObjectAndGenerateRoomHashByURL");
 		try {
-			Long users_id = sessiondataDao.checkSession(SID);
-			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(users_id))) {
+			Long userId = sessiondataDao.checkSession(SID);
+			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(userId))) {
 
 				RemoteSessionObject remoteSessionObject = new RemoteSessionObject(
 						username, firstname, lastname, profilePictureUrl,
@@ -668,9 +646,9 @@ public class UserWebService {
 					showAudioVideoTest = true;
 				}
 
-				String hash = soapLoginDao.addSOAPLogin(SID, room_id,
+				String hash = soapLoginDao.addSOAPLogin(SID, roomId,
 						becomeModerator, showAudioVideoTest, true, // allowSameURLMultipleTimes
-						null, // recording_id
+						null, // recordingId
 						false, // showNickNameDialogAsInt
 						"room", // LandingZone,
 						true // allowRecording
@@ -718,7 +696,7 @@ public class UserWebService {
 	 *            if you have any external user Id you may set it here
 	 * @param externalUserType
 	 *            you can specify your system-name here, for example "moodle"
-	 * @param room_id
+	 * @param roomId
 	 *            the room id the user should be logged in
 	 * @param becomeModeratorAsInt
 	 *            0 means no Moderator, 1 means Moderator
@@ -733,11 +711,11 @@ public class UserWebService {
 	public String setUserObjectAndGenerateRoomHashByURLAndRecFlag(String SID,
 			String username, String firstname, String lastname,
 			String profilePictureUrl, String email, String externalUserId,
-			String externalUserType, Long room_id, int becomeModeratorAsInt,
+			String externalUserType, Long roomId, int becomeModeratorAsInt,
 			int showAudioVideoTestAsInt, int allowRecording) {
 		try {
-			Long users_id = sessiondataDao.checkSession(SID);
-			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(users_id))) {
+			Long userId = sessiondataDao.checkSession(SID);
+			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(userId))) {
 
 				RemoteSessionObject remoteSessionObject = new RemoteSessionObject(
 						username, firstname, lastname, profilePictureUrl,
@@ -766,9 +744,9 @@ public class UserWebService {
 					allowRecordingBool = true;
 				}
 
-				String hash = soapLoginDao.addSOAPLogin(SID, room_id,
+				String hash = soapLoginDao.addSOAPLogin(SID, roomId,
 						becomeModerator, showAudioVideoTest, true, // allowSameURLMultipleTimes
-						null, // recording_id
+						null, // recordingId
 						false, // showNickNameDialogAsInt
 						"room", // LandingZone,
 						allowRecordingBool // allowRecording
@@ -822,8 +800,8 @@ public class UserWebService {
 		log.debug("UserService.setUserObjectMainLandingZone");
 
 		try {
-			Long users_id = sessiondataDao.checkSession(SID);
-			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(users_id))) {
+			Long userId = sessiondataDao.checkSession(SID);
+			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(userId))) {
 
 				RemoteSessionObject remoteSessionObject = new RemoteSessionObject(
 						username, firstname, lastname, profilePictureUrl,
@@ -839,7 +817,7 @@ public class UserWebService {
 
 				String hash = soapLoginDao.addSOAPLogin(SID, null, false, true,
 						true, // allowSameURLMultipleTimes
-						null, // recording_id
+						null, // recordingId
 						false, // showNickNameDialogAsInt
 						"dashboard", // LandingZone,
 						true // allowRecording
@@ -889,7 +867,7 @@ public class UserWebService {
 	 *            if you have any external user Id you may set it here
 	 * @param externalUserType
 	 *            you can specify your system-name here, for example "moodle"
-	 * @param room_id
+	 * @param roomId
 	 *            the room id the user should be logged in
 	 * @param becomeModeratorAsInt
 	 *            0 means no Moderator, 1 means Moderator
@@ -905,11 +883,11 @@ public class UserWebService {
 	public String setUserAndNickName(String SID, String username,
 			String firstname, String lastname, String profilePictureUrl,
 			String email, String externalUserId, String externalUserType,
-			Long room_id, int becomeModeratorAsInt,
+			Long roomId, int becomeModeratorAsInt,
 			int showAudioVideoTestAsInt, int showNickNameDialogAsInt) {
 		try {
-			Long users_id = sessiondataDao.checkSession(SID);
-			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(users_id))) {
+			Long userId = sessiondataDao.checkSession(SID);
+			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(userId))) {
 
 				RemoteSessionObject remoteSessionObject = new RemoteSessionObject(
 						username, firstname, lastname, profilePictureUrl,
@@ -939,7 +917,7 @@ public class UserWebService {
 					showNickNameDialog = true;
 				}
 
-				String hash = soapLoginDao.addSOAPLogin(SID, room_id,
+				String hash = soapLoginDao.addSOAPLogin(SID, roomId,
 						becomeModerator, showAudioVideoTest, true, null,
 						showNickNameDialog, "room", // LandingZone,
 						true // allowRecording
@@ -973,7 +951,7 @@ public class UserWebService {
 	 *            if you have any external user Id you may set it here
 	 * @param externalUserType
 	 *            you can specify your system-name here, for example "moodle"
-	 * @param recording_id
+	 * @param recordingId
 	 *            the id of the recording, get a List of all Recordings with
 	 *            RoomService::getFlvRecordingByExternalRoomType
 	 *            
@@ -981,10 +959,10 @@ public class UserWebService {
 	 */
 	public String setUserObjectAndGenerateRecordingHashByURL(String SID,
 			String username, String firstname, String lastname,
-			String externalUserId, String externalUserType, Long recording_id) {
+			String externalUserId, String externalUserType, Long recordingId) {
 		try {
-			Long users_id = sessiondataDao.checkSession(SID);
-			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(users_id))) {
+			Long userId = sessiondataDao.checkSession(SID);
+			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(userId))) {
 
 				RemoteSessionObject remoteSessionObject = new RemoteSessionObject(
 						username, firstname, "", "", "", externalUserId,
@@ -1000,7 +978,7 @@ public class UserWebService {
 
 				String hash = soapLoginDao.addSOAPLogin(SID, null, false,
 						false, true, // allowSameURLMultipleTimes
-						recording_id, // recording_id
+						recordingId, // recordingId
 						false, // showNickNameDialogAsInt
 						"room", // LandingZone,
 						true // allowRecording
@@ -1025,25 +1003,25 @@ public class UserWebService {
 	 * 
 	 * @param SID
 	 *            The SID from getSession
-	 * @param user_id
+	 * @param userId
 	 *            the user id
-	 * @param organisation_id
+	 * @param organisationId
 	 *            the organization id
 	 * @param insertedby
 	 *            user id of the operating user
 	 * @return - id of the user added, or error id in case of the error
 	 */
-	public Long addUserToOrganisation(String SID, Long user_id,
-			Long organisation_id, Long insertedby) {
+	public Long addUserToOrganisation(String SID, Long userId,
+			Long organisationId, Long insertedby) {
 		try {
-			Long users_id = sessiondataDao.checkSession(SID);
-			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(users_id))) {
-				if (!orgUserDao.isUserInOrganization(organisation_id, user_id)) {
-					User u = userDao.get(user_id);
-					u.getOrganisationUsers().add(new OrganisationUser(orgDao.get(organisation_id)));
-					userDao.update(u, users_id);
+			Long authUserId = sessiondataDao.checkSession(SID);
+			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(authUserId))) {
+				if (!orgUserDao.isUserInOrganization(organisationId, userId)) {
+					User u = userDao.get(userId);
+					u.getOrganisationUsers().add(new OrganisationUser(orgDao.get(organisationId)));
+					userDao.update(u, authUserId);
 				}
-				return user_id;
+				return userId;
 			} else {
 				return new Long(-26);
 			}
@@ -1058,7 +1036,7 @@ public class UserWebService {
 	 * 
 	 * @param SID
 	 *            The SID from getSession
-	 * @param organisation_id
+	 * @param organisationId
 	 *            the organization id
 	 * @param start
 	 *            first record
@@ -1071,16 +1049,16 @@ public class UserWebService {
 	 * @return - users found
 	 */
 	public UserSearchResult getUsersByOrganisation(String SID,
-			long organisation_id, int start, int max, String orderby,
+			long organisationId, int start, int max, String orderby,
 			boolean asc) {
 		try {
-			Long users_id = sessiondataDao.checkSession(SID);
+			Long userId = sessiondataDao.checkSession(SID);
 			SearchResult<User> result = new SearchResult<User>();
 			result.setObjectName(User.class.getName());
-			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(users_id))) {
-				result.setRecords(orgUserDao.count(organisation_id));
+			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(userId))) {
+				result.setRecords(orgUserDao.count(organisationId));
 				result.setResult(new ArrayList<User>());
-				for (OrganisationUser ou : orgUserDao.get(organisation_id, null, start, max, orderby + " " + (asc ? "ASC" : "DESC"))) {
+				for (OrganisationUser ou : orgUserDao.get(organisationId, null, start, max, orderby + " " + (asc ? "ASC" : "DESC"))) {
 					result.getResult().add(ou.getUser());
 				}
 			} else {
@@ -1131,11 +1109,11 @@ public class UserWebService {
 	 * @throws ServiceException
 	 */
 	public Long addOrganisation(String SID, String name) throws ServiceException {
-		Long users_id = sessiondataDao.checkSession(SID);
-		if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(users_id))) {
+		Long userId = sessiondataDao.checkSession(SID);
+		if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(userId))) {
 			Organisation o = new Organisation();
 			o.setName(name);
-			return orgDao.update(o, users_id).getId();
+			return orgDao.update(o, userId).getId();
 		}
 		log.error("Could not create organization");
 		return -1L;

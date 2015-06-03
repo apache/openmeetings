@@ -42,14 +42,14 @@ public class ErrorType implements IDataProviderEntity {
 	@Column(name = "id")
 	private Long id;
 
-	@Column(name = "fieldvalues_id")
-	private Long fieldvalues_id;
+	@Column(name = "label_id")
+	private Long labelId;
 
-	@Column(name = "starttime")
-	private Date starttime;
+	@Column(name = "inserted")
+	private Date inserted;
 	
-	@Column(name = "updatetime")
-	private Date updatetime;
+	@Column(name = "updated")
+	private Date updated;
 	
 	@Column(name = "deleted")
 	private boolean deleted;
@@ -62,20 +62,20 @@ public class ErrorType implements IDataProviderEntity {
 		this.id = id;
 	}
 
-	public Date getStarttime() {
-		return starttime;
+	public Date getInserted() {
+		return inserted;
 	}
 
-	public void setStarttime(Date starttime) {
-		this.starttime = starttime;
+	public void setInserted(Date inserted) {
+		this.inserted = inserted;
 	}
 
-	public Date getUpdatetime() {
-		return updatetime;
+	public Date getUpdated() {
+		return updated;
 	}
 
-	public void setUpdatetime(Date updatetime) {
-		this.updatetime = updatetime;
+	public void setUpdated(Date updated) {
+		this.updated = updated;
 	}
 
 	public boolean isDeleted() {
@@ -86,12 +86,12 @@ public class ErrorType implements IDataProviderEntity {
 		this.deleted = deleted;
 	}
 
-	public Long getFieldvalues_id() {
-		return this.fieldvalues_id;
+	public Long getLabelId() {
+		return this.labelId;
 	}
 
-	public void setFieldvalues_id(Long fieldvalues_id) {
-		this.fieldvalues_id = fieldvalues_id;
+	public void setLabelId(Long labelId) {
+		this.labelId = labelId;
 	}
 
 }

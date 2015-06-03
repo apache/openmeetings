@@ -248,9 +248,9 @@ public class ImportInitvalues {
 
 			Element row = it.next();
 
-			Long errorvalues_id = null;
-			Long fieldvalues_id = null;
-			Long errortype_id = null;
+			Long errorvalueId = null;
+			Long labelId = null;
+			Long typeId = null;
 
 			for (@SuppressWarnings("unchecked")
 			Iterator<Element> itSub = row.elementIterator("field"); itSub.hasNext();) {
@@ -260,17 +260,17 @@ public class ImportInitvalues {
 				String text = field.getText();
 				// System.out.println("NAME | TEXT "+name+" | "+text);
 				if (name.equals("errorvalues_id")) {
-					errorvalues_id = Long.valueOf(text);
+					errorvalueId = Long.valueOf(text);
 				}
 				if (name.equals("fieldvalues_id")) {
-					fieldvalues_id = Long.valueOf(text);
+					labelId = Long.valueOf(text);
 				}
 				if (name.equals("errortype_id")) {
-					errortype_id = Long.valueOf(text);
+					typeId = Long.valueOf(text);
 				}
 			}
 
-			errorManagement.addErrorValues(errorvalues_id, errortype_id, fieldvalues_id);
+			errorManagement.addErrorValues(errorvalueId, typeId, labelId);
 		}
 		log.debug("ErrorMappings ADDED");
 	}
@@ -452,20 +452,17 @@ public class ImportInitvalues {
 	}
 
 	public void loadRoomTypes() {
-		long conference_Id = roomTypeDao.addRoomType(
-				"conference", 1541, false);
-		log.debug("conference_Id: " + conference_Id);
+		long conferenceId = roomTypeDao.addRoomType("conference", 1541, false);
+		log.debug("conferenceId: " + conferenceId);
 
 		// Audience room type is not in use anymore
 		roomTypeDao.addRoomType("audience", -1, true);
 
-		long restricted_Id = roomTypeDao.addRoomType(
-				"restricted", 1542, false);
-		log.debug("restricted_Id: " + restricted_Id);
+		long restrictedId = roomTypeDao.addRoomType("restricted", 1542, false);
+		log.debug("restrictedId: " + restrictedId);
 
-		long interview_Id = roomTypeDao.addRoomType(
-				"interview", 1543, false);
-		log.debug("interview_Id: " + interview_Id);
+		long interviewId = roomTypeDao.addRoomType("interview", 1543, false);
+		log.debug("interviewId: " + interviewId);
 
 		// Custom room type is not in use anymore
 		roomTypeDao.addRoomType("custom", -2, true);
@@ -476,7 +473,7 @@ public class ImportInitvalues {
 		Room r = new Room();
 		r.setName(name);
 		r.setComment("");
-		r.setStarttime(new Date());
+		r.setInserted(new Date());
 		r.setNumberOfPartizipants(capacity);
 		r.setRoomtype(roomTypeDao.get(typeId));
 		r.setIspublic(isPublic);
@@ -512,7 +509,7 @@ public class ImportInitvalues {
 			RoomOrganisation ro = new RoomOrganisation();
 			ro.setRoom(r);
 			ro.setOrganisation(organisationDao.get(orgId));
-			ro.setStarttime(new Date());
+			ro.setInserted(new Date());
 		}
 		r = roomDao.update(r, null);
 		return r;
@@ -520,26 +517,26 @@ public class ImportInitvalues {
 	public void loadDefaultRooms(boolean createRooms) {
 		if (createRooms) {
 			// hardcoded IDs (they are not intended to be changed)
-			long conference_Id = 1;
-			long restricted_Id = 3;
-			long interview_Id = 4;
+			long conferenceId = 1;
+			long restrictedId = 3;
+			long interviewId = 4;
 
-			createRoom("public Interview Room", interview_Id, 16L, true, null);
-			createRoom("public Conference Room", conference_Id, 32L, true, null);
-			Room r = createRoom("public Video Only Room", conference_Id, 32L, true, null);
+			createRoom("public Interview Room", interviewId, 16L, true, null);
+			createRoom("public Conference Room", conferenceId, 32L, true, null);
+			Room r = createRoom("public Video Only Room", conferenceId, 32L, true, null);
 			r.setHideWhiteboard(true);
 			roomDao.update(r, null);
-			createRoom("public Video And Whiteboard Room", conference_Id, 32L, true, null);
-			createRoom("public Restricted Room", restricted_Id, 100L, true, null);
-			r = createRoom("restricted room with micro option set", restricted_Id, 100L, true, null);
+			createRoom("public Video And Whiteboard Room", conferenceId, 32L, true, null);
+			createRoom("public Restricted Room", restrictedId, 100L, true, null);
+			r = createRoom("restricted room with micro option set", restrictedId, 100L, true, null);
 			r.setShowMicrophoneStatus(true);
 			roomDao.update(r, null);
 
-			r = createRoom("conference room with micro option set", conference_Id, 32L, true, null);
+			r = createRoom("conference room with micro option set", conferenceId, 32L, true, null);
 			r.setShowMicrophoneStatus(true);
 			roomDao.update(r, null);
 
-			createRoom("private Conference Room", conference_Id, 32L, false, 1L);
+			createRoom("private Conference Room", conferenceId, 32L, false, 1L);
 		}
 	}
 
@@ -549,7 +546,7 @@ public class ImportInitvalues {
 		org.setName(cfg.group);
 		org.setInsertedby(1L);
 		org.setDeleted(false);
-		org.setStarttime(new Date());
+		org.setInserted(new Date());
 		org = organisationDao.update(org, null);
 
 		User u = userDao.getNewUserInstance(null);
@@ -559,7 +556,7 @@ public class ImportInitvalues {
 		u.setLogin(cfg.username);
 		u.setFirstname("firstname");
 		u.setLastname("lastname");
-		u.getAdresses().setEmail(cfg.email);
+		u.getAddress().setEmail(cfg.email);
 		u.getOrganisationUsers().add(new OrganisationUser(org));
 
 		u = userDao.update(u, cfg.password, -1);
@@ -589,7 +586,7 @@ public class ImportInitvalues {
 		Iterator it = root.elementIterator("country"); it.hasNext();) {
 			Element item = (Element) it.next();
 
-			statemanagement.addState(item.attributeValue("name"),
+			statemanagement.add(item.attributeValue("name"),
 					item.attributeValue("short"),
 					Integer.parseInt(item.attributeValue("code")));
 		}

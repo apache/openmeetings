@@ -43,27 +43,24 @@ public class PollType implements IDataProviderEntity {
 	@Column(name = "id")
 	private Long id;
 	
-	@Column(name = "fieldvalues_id")
-	private Long label;
+	@Column(name = "label_id")
+	private Long labelId;
 	
 	@Column(name = "numeric_answer")
 	private boolean numeric;
 	
 	/**
-	 * @return the pollTypesId
+	 * @return the id
 	 */
 	public Long getId() {
 		return id;
 	}
 	/**
-	 * @param id the pollTypesId to set
+	 * @param id the id to set
 	 */
 	public void setId(Long id) {
 		this.id = id;
 	}
-	/**
-	 * @param pollTypeLabelid the pollTypeLabelid to set
-	 */
 	
 	public boolean isNumeric() {
 		return numeric;
@@ -73,15 +70,15 @@ public class PollType implements IDataProviderEntity {
 		this.numeric = numeric;
 	}
 	/**
-	 * @return the pollTypeLabelid
+	 * @return the label id
 	 */
-	public Long getLabel() {
-		return label;
+	public Long getLabelId() {
+		return labelId;
 	}
 	/**
-	 * @param pollTypeLabelid the pollTypeLabelid to set
+	 * @param labelid the labelid to set
 	 */
-	public void setLabel(Long label) {
-		this.label = label;
+	public void setLabelId(Long labelId) {
+		this.labelId = labelId;
 	}
 }

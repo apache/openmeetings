@@ -112,13 +112,13 @@ public class UserService implements IUserService {
 	 * get user by id, admin only
 	 * 
 	 * @param SID
-	 * @param user_id
+	 * @param userId
 	 * @return User with the id given
 	 */
-	public User getUserById(String SID, long user_id) {
-		Long users_id = sessiondataDao.checkSession(SID);
-		if (AuthLevelUtil.hasUserLevel(userDao.getRights(users_id))) {
-			return userDao.get(user_id);
+	public User getUserById(String SID, long userId) {
+		Long authUserId = sessiondataDao.checkSession(SID);
+		if (AuthLevelUtil.hasUserLevel(userDao.getRights(authUserId))) {
+			return userDao.get(userId);
 		}
 		return null;
 	}
@@ -129,8 +129,8 @@ public class UserService implements IUserService {
 	 * @param SID
 	 * @return all availible Salutations
 	 */
-	public List<Salutation> getUserSalutations(String SID, long language_id) {
-		return salutationmanagement.getUserSalutations(language_id);
+	public List<Salutation> getSalutations(String SID) {
+		return salutationmanagement.get();
 	}
 
 	/**
@@ -143,8 +143,8 @@ public class UserService implements IUserService {
 	 * @return whole user-list
 	 */
 	public List<User> getUserList(String SID, int start, int max, String orderby, boolean asc) {
-		Long users_id = sessiondataDao.checkSession(SID);
-		if (AuthLevelUtil.hasAdminLevel(userDao.getRights(users_id))) {
+		Long userId = sessiondataDao.checkSession(SID);
+		if (AuthLevelUtil.hasAdminLevel(userDao.getRights(userId))) {
 			return userDao.get("", start, max, orderby + (asc ? " ASC" : " DESC"));
 		}
 		return null;
@@ -163,9 +163,9 @@ public class UserService implements IUserService {
 	 */
 	public Boolean kickUserByStreamId(String SID, String streamid, long serverId) {
 		try {
-			Long users_id = sessiondataDao.checkSession(SID);
+			Long userId = sessiondataDao.checkSession(SID);
 			// admins only
-			if (AuthLevelUtil.hasAdminLevel(userDao.getRights(users_id))) {
+			if (AuthLevelUtil.hasAdminLevel(userDao.getRights(userId))) {
 				if (serverId == 0) {
 					Client rcl = sessionManager.getClientByStreamId(streamid, null);
 
@@ -173,8 +173,8 @@ public class UserService implements IUserService {
 						return true;
 					}
 					String scopeName = "hibernate";
-					if (rcl.getRoom_id() != null) {
-						scopeName = rcl.getRoom_id().toString();
+					if (rcl.getRoomId() != null) {
+						scopeName = rcl.getRoomId().toString();
 					}
 					IScope currentScope = scopeApplicationAdapter.getRoomScope(scopeName);
 
@@ -205,16 +205,16 @@ public class UserService implements IUserService {
 
 	public User updateUserSelfTimeZone(String SID, String jname) {
 		try {
-			Long users_id = sessiondataDao.checkSession(SID);
+			Long userId = sessiondataDao.checkSession(SID);
 			// users only
-			if (AuthLevelUtil.hasUserLevel(userDao.getRights(users_id))) {
-				User us = userDao.get(users_id);
+			if (AuthLevelUtil.hasUserLevel(userDao.getRights(userId))) {
+				User us = userDao.get(userId);
 
 				us.setTimeZoneId(timezoneUtil.getTimezoneByInternalJName(jname).getID());
 				us.setForceTimeZoneCheck(false);
-				us.setUpdatetime(new Date());
+				us.setUpdated(new Date());
 
-				userDao.update(us, users_id);
+				userDao.update(us, userId);
 				
 				return us;
 			}
@@ -226,10 +226,10 @@ public class UserService implements IUserService {
 
 	public List<UserContact> getPendingUserContacts(String SID) {
 		try {
-			Long users_id = sessiondataDao.checkSession(SID);
+			Long userId = sessiondataDao.checkSession(SID);
 			// users only
-			if (AuthLevelUtil.hasUserLevel(userDao.getRights(users_id))) {
-				List<UserContact> uList = userContactsDao.getContactRequestsByUserAndStatus(users_id, true);
+			if (AuthLevelUtil.hasUserLevel(userDao.getRights(userId))) {
+				List<UserContact> uList = userContactsDao.getContactRequestsByUserAndStatus(userId, true);
 
 				return uList;
 			}
@@ -241,10 +241,10 @@ public class UserService implements IUserService {
 
 	public List<UserContact> getUserContacts(String SID) {
 		try {
-			Long users_id = sessiondataDao.checkSession(SID);
+			Long userId = sessiondataDao.checkSession(SID);
 			// users only
-			if (AuthLevelUtil.hasUserLevel(userDao.getRights(users_id))) {
-				List<UserContact> uList = userContactsDao.getContactsByUserAndStatus(users_id, false);
+			if (AuthLevelUtil.hasUserLevel(userDao.getRights(userId))) {
+				List<UserContact> uList = userContactsDao.getContactsByUserAndStatus(userId, false);
 
 				return uList;
 			}
@@ -256,9 +256,9 @@ public class UserService implements IUserService {
 
 	public Integer removeContactUser(String SID, Long userContactId) {
 		try {
-			Long users_id = sessiondataDao.checkSession(SID);
+			Long userId = sessiondataDao.checkSession(SID);
 			// users only
-			if (AuthLevelUtil.hasUserLevel(userDao.getRights(users_id))) {
+			if (AuthLevelUtil.hasUserLevel(userDao.getRights(userId))) {
 				UserContact userContacts = userContactsDao.get(userContactId);
 
 				if (userContacts == null) {
@@ -273,15 +273,15 @@ public class UserService implements IUserService {
 		return null;
 	}
 
-	public Boolean checkUserIsInContactList(String SID, Long user_id) {
+	public Boolean checkUserIsInContactList(String SID, Long userId) {
 		try {
-			Long users_id = sessiondataDao.checkSession(SID);
+			Long authUserId = sessiondataDao.checkSession(SID);
 			// users only
-			if (AuthLevelUtil.hasUserLevel(userDao.getRights(users_id))) {
-				List<UserContact> uList = userContactsDao.getContactsByUserAndStatus(users_id, false);
+			if (AuthLevelUtil.hasUserLevel(userDao.getRights(authUserId))) {
+				List<UserContact> uList = userContactsDao.getContactsByUserAndStatus(authUserId, false);
 
 				for (UserContact userContact : uList) {
-					if (userContact.getContact().getId().equals(user_id)) {
+					if (userContact.getContact().getId().equals(userId)) {
 						return true;
 					}
 				}
@@ -294,13 +294,13 @@ public class UserService implements IUserService {
 		return null;
 	}
 
-	public void shareCalendarUserContact(String SID, Long userContactId, Boolean shareCalendar) {
+	public void shareCalendarUserContact(String SID, Long contactId, Boolean shareCalendar) {
 		try {
-			Long users_id = sessiondataDao.checkSession(SID);
+			Long userId = sessiondataDao.checkSession(SID);
 
 			// users only
-			if (AuthLevelUtil.hasUserLevel(userDao.getRights(users_id))) {
-				UserContact userContacts = userContactsDao.get(userContactId);
+			if (AuthLevelUtil.hasUserLevel(userDao.getRights(userId))) {
+				UserContact userContacts = userContactsDao.get(contactId);
 
 				userContacts.setShareCalendar(shareCalendar);
 
@@ -325,17 +325,17 @@ public class UserService implements IUserService {
 	 */
 	public Boolean kickUserByPublicSID(String SID, String publicSID) {
 		try {
-			Long users_id = sessiondataDao.checkSession(SID);
+			Long userId = sessiondataDao.checkSession(SID);
 			// users only
-			if (AuthLevelUtil.hasUserLevel(userDao.getRights(users_id))) {
+			if (AuthLevelUtil.hasUserLevel(userDao.getRights(userId))) {
 				Client rcl = sessionManager.getClientByPublicSID(publicSID, false, null);
 
 				if (rcl == null) {
 					return true;
 				}
 				String scopeName = "hibernate";
-				if (rcl.getRoom_id() != null) {
-					scopeName = rcl.getRoom_id().toString();
+				if (rcl.getRoomId() != null) {
+					scopeName = rcl.getRoomId().toString();
 				}
 				IScope currentScope = this.scopeApplicationAdapter
 						.getRoomScope(scopeName);

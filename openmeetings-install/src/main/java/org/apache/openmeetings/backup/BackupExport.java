@@ -358,7 +358,7 @@ public class BackupExport {
 			Serializer serializer = new Persister(strategy);
 	
 			if (list != null && list.size() > 0) {
-				registry.bind(list.get(0).getStarttime().getClass(), DateConverter.class);
+				registry.bind(list.get(0).getInserted().getClass(), DateConverter.class);
 			}
 			
 			writeList(serializer, backup_dir, "configs.xml", "configs", list);
@@ -482,11 +482,11 @@ public class BackupExport {
 		}
 		log.debug("sid: " + sid);
 
-		Long users_id = sessiondataDao.checkSession(sid);
-		Set<Right> rights = usersDao.get(users_id).getRights();
+		Long userId = sessiondataDao.checkSession(sid);
+		Set<Right> rights = usersDao.get(userId).getRights();
 
-		log.debug("users_id: " + users_id);
-		log.debug("user_level: " + rights);
+		log.debug("userId: " + userId);
+		log.debug("user level: " + rights);
 
 		if (AuthLevelUtil.hasAdminLevel(rights)) {
 			// if (true) {

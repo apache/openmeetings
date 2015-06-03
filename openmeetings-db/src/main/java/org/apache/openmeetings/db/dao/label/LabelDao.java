@@ -99,12 +99,12 @@ public class LabelDao implements IDataProviderDao<StringLabel>{
 		labelCache.put(l, new ArrayList<StringLabel>());
 	}
 	
-	public List<Map<String, Object>> getStrings(Long language_id, int start, int count) {
+	public List<Map<String, Object>> getStrings(Long languageId, int start, int count) {
 		List<Map<String, Object>> result = new ArrayList<Map<String, Object>>();
 		for (int i = 0; i < count; ++i) {
 			Map<String, Object> map = new HashMap<String, Object>();
 			map.put("id", start + i);
-			map.put("value", getString(start + i, language_id));
+			map.put("value", getString(start + i, languageId));
 			result.add(map);
 		}
 		return result;

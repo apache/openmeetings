@@ -33,7 +33,7 @@ public class TestAuth extends AbstractJUnitDefaults {
 	public void testTestAuth() {
 		Sessiondata sessionData = sessionDao.startsession();
 
-		System.out.println("sessionData: " + sessionData.getSession_id());
+		System.out.println("sessionData: " + sessionData.getSessionId());
 
 		String tTemp = ManageCryptStyle.getInstanceOfCrypt().createPassPhrase("test");
 

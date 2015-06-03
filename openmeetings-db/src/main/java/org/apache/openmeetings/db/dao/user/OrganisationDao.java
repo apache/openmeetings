@@ -40,7 +40,7 @@ public class OrganisationDao implements IDataProviderDao<Organisation> {
 
 	public Organisation get(long id) {
 		TypedQuery<Organisation> query = em.createNamedQuery("getOrganisationById", Organisation.class);
-		query.setParameter("organisation_id", id);
+		query.setParameter("organisationId", id);
 		Organisation o = null;
 		try {
 			o = query.getSingleResult();
@@ -83,13 +83,13 @@ public class OrganisationDao implements IDataProviderDao<Organisation> {
 			if (userId != null) {
 				entity.setInsertedby(userId);
 			}
-			entity.setStarttime(new Date());
+			entity.setInserted(new Date());
 			em.persist(entity);
 		} else {
 			if (userId != null) {
 				entity.setUpdatedby(userId);
 			}
-			entity.setUpdatetime(new Date());
+			entity.setUpdated(new Date());
 			em.merge(entity);
 		}
 		return entity;

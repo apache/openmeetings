@@ -273,7 +273,7 @@ public class ConferenceLibrary implements IPendingServiceCallback {
 				Client currentClient = this.sessionManager
 						.getClientByStreamId(streamid, null);
 
-				Long room_id = currentClient.getRoom_id();
+				Long room_id = currentClient.getRoomId();
 
 				if (room_id != null) {
 					File outputFullFlvFile = new File(OmFileHelper.getStreamsHibernateDir()

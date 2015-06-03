@@ -310,14 +310,14 @@ public class RoomManager implements IRoomManager {
 		return null;
 	}
 
-	public List<RoomOrganisation> getOrganisationsByRoom(long rooms_id) {
+	public List<RoomOrganisation> getOrganisationsByRoom(long roomId) {
 		try {
 			String hql = "select c from RoomOrganisation as c "
-					+ "where c.room.id = :rooms_id "
+					+ "where c.room.id = :id "
 					+ "AND c.deleted = false";
 			TypedQuery<RoomOrganisation> q = em.createQuery(hql, RoomOrganisation.class);
 
-			q.setParameter("rooms_id", rooms_id);
+			q.setParameter("id", roomId);
 			List<RoomOrganisation> ll = q.getResultList();
 			return ll;
 		} catch (Exception ex2) {
@@ -337,11 +337,11 @@ public class RoomManager implements IRoomManager {
 			queryString += "(";
 
 			int i = 0;
-			for (Integer room_id : roomIds) {
+			for (Integer roomId : roomIds) {
 				if (i != 0) {
 					queryString += " OR ";
 				}
-				queryString += " r.id = " + room_id;
+				queryString += " r.id = " + roomId;
 				i++;
 			}
 
@@ -363,11 +363,11 @@ public class RoomManager implements IRoomManager {
 
     /**
      * Returns number of SIP conference participants
-     * @param rooms_id id of room
+     * @param roomId id of room
      * @return number of participants
      */
-    public Integer getSipConferenceMembersNumber(Long rooms_id) {
-    	Room r = roomDao.get(rooms_id);
+    public Integer getSipConferenceMembersNumber(Long roomId) {
+    	Room r = roomDao.get(roomId);
     	return r == null || r.getConfno() == null ? null : sipDao.countUsers(r.getConfno());
     }
 
@@ -419,7 +419,7 @@ public class RoomManager implements IRoomManager {
 			Room r = new Room();
 			r.setName(name);
 			r.setComment(comment);
-			r.setStarttime(new Date());
+			r.setInserted(new Date());
 			r.setNumberOfPartizipants(numberOfPartizipants);
 			r.setRoomtype(roomTypeDao.get(roomtypesId));
 			r.setIspublic(ispublic);
@@ -521,7 +521,7 @@ public class RoomManager implements IRoomManager {
 			Room r = new Room();
 			r.setName(name);
 			r.setComment(comment);
-			r.setStarttime(new Date());
+			r.setInserted(new Date());
 			r.setNumberOfPartizipants(numberOfPartizipants);
 			r.setRoomtype(roomTypeDao.get(roomtypesId));
 			r.setIspublic(ispublic);
@@ -576,19 +576,18 @@ public class RoomManager implements IRoomManager {
 	/**
 	 * adds a new record to the table rooms_organisation
 	 * 
-	 * @param rooms_id
-	 * @param organisation_id
+	 * @param roomId
+	 * @param organisationId
 	 * @return the id of the newly created Rooms_Organisation or NULL
 	 */
-	public Long addRoomToOrganisation(long rooms_id,
-			long organisation_id) {
+	public Long addRoomToOrganisation(long roomId, long organisationId) {
 		try {
 			RoomOrganisation rOrganisation = new RoomOrganisation();
-			rOrganisation.setRoom(roomDao.get(rooms_id));
+			rOrganisation.setRoom(roomDao.get(roomId));
 			log.debug("addRoomToOrganisation rooms '"
 					+ rOrganisation.getRoom().getName() + "'");
-			rOrganisation.setStarttime(new Date());
-			rOrganisation.setOrganisation(orgDao.get(organisation_id));
+			rOrganisation.setInserted(new Date());
+			rOrganisation.setOrganisation(orgDao.get(organisationId));
 			rOrganisation.setDeleted(false);
 
 			rOrganisation = em.merge(rOrganisation);
@@ -603,15 +602,15 @@ public class RoomManager implements IRoomManager {
 	/**
 	 * get List of Rooms_Organisation by organisation and roomtype
 	 * 
-	 * @param organisation_id
+	 * @param organisationId
 	 * @param roomtypesId
 	 * @return
 	 */
-	public List<RoomOrganisation> getRoomsOrganisationByOrganisationIdAndRoomType(long organisation_id, long roomtypesId) {
+	public List<RoomOrganisation> getRoomsOrganisationByOrganisationIdAndRoomType(long organisationId, long roomtypesId) {
 		try {
 			TypedQuery<RoomOrganisation> q = em.createNamedQuery("getRoomsOrganisationByOrganisationIdAndRoomType", RoomOrganisation.class);
 			q.setParameter("roomtypesId", roomtypesId);
-			q.setParameter("organisation_id", organisation_id);
+			q.setParameter("organisationId", organisationId);
 			return q.getResultList();
 		} catch (Exception ex2) {
 			log.error("[getRoomsByOrganisation] ", ex2);
@@ -622,15 +621,15 @@ public class RoomManager implements IRoomManager {
 	/**
 	 * Gets all rooms by an organisation
 	 * 
-	 * @param organisation_id
+	 * @param organisationId
 	 * @return list of Rooms_Organisation with Rooms as Sub-Objects or null
 	 */
-	public List<RoomOrganisation> getRoomsOrganisationByOrganisationId(long organisation_id) {
+	public List<RoomOrganisation> getRoomsOrganisationByOrganisationId(long organisationId) {
 		try {
 			TypedQuery<RoomOrganisation> query = em.
 					createNamedQuery("getRoomsOrganisationByOrganisationId", RoomOrganisation.class);
 
-			query.setParameter("organisation_id", organisation_id);
+			query.setParameter("organisationId", organisationId);
 
 			List<RoomOrganisation> ll = query.getResultList();
 
@@ -641,14 +640,13 @@ public class RoomManager implements IRoomManager {
 		return null;
 	}
 
-	public SearchResult<RoomOrganisation> getRoomsOrganisationsByOrganisationId(long organisation_id, int start, int max, String orderby,
+	public SearchResult<RoomOrganisation> getRoomsOrganisationsByOrganisationId(long organisationId, int start, int max, String orderby,
 			boolean asc) {
 		try {
 			SearchResult<RoomOrganisation> sResult = new SearchResult<RoomOrganisation>();
 			sResult.setObjectName(RoomOrganisation.class.getName());
-			sResult.setRecords(this.selectMaxFromRoomsByOrganisation(
-					organisation_id).longValue());
-			sResult.setResult(getRoomsOrganisationByOrganisationId(organisation_id, start, max, orderby, asc));
+			sResult.setRecords(this.selectMaxFromRoomsByOrganisation(organisationId).longValue());
+			sResult.setResult(getRoomsOrganisationByOrganisationId(organisationId, start, max, orderby, asc));
 			return sResult;
 		} catch (Exception ex2) {
 			log.error("[getRoomsByOrganisation] ", ex2);
@@ -656,12 +654,12 @@ public class RoomManager implements IRoomManager {
 		return null;
 	}
 
-	public Integer selectMaxFromRoomsByOrganisation(long organisation_id) {
+	public Integer selectMaxFromRoomsByOrganisation(long organisationId) {
 		try {
 			// get all users
 			TypedQuery<RoomOrganisation> q = em.createNamedQuery("selectMaxFromRoomsByOrganisation", RoomOrganisation.class);
 
-			q.setParameter("organisation_id", organisation_id);
+			q.setParameter("organisationId", organisationId);
 			List<RoomOrganisation> ll = q.getResultList();
 
 			return ll.size();
@@ -673,18 +671,17 @@ public class RoomManager implements IRoomManager {
 
 	/**
 	 * 
-	 * @param organisation_id
+	 * @param organisationId
 	 * @param start
 	 * @param max
 	 * @param orderby
 	 * @param asc
 	 * @return
 	 */
-	private List<RoomOrganisation> getRoomsOrganisationByOrganisationId(
-			long organisation_id, int start, int max, String orderby,
+	private List<RoomOrganisation> getRoomsOrganisationByOrganisationId(long organisationId, int start, int max, String orderby,
 			boolean asc) {
 		try {
-			String hql = "select c from RoomOrganisation as c where c.organisation.id = :organisation_id AND c.deleted = false";
+			String hql = "select c from RoomOrganisation as c where c.organisation.id = :organisationId AND c.deleted = false";
 			if (orderby.startsWith("c.")) {
 				hql += "ORDER BY " + orderby;
 			} else {
@@ -698,7 +695,7 @@ public class RoomManager implements IRoomManager {
 
 			TypedQuery<RoomOrganisation> q = em.createQuery(hql, RoomOrganisation.class);
 
-			q.setParameter("organisation_id", organisation_id);
+			q.setParameter("organisationId", organisationId);
 			q.setFirstResult(start);
 			q.setMaxResults(max);
 			List<RoomOrganisation> ll = q.getResultList();
@@ -710,14 +707,13 @@ public class RoomManager implements IRoomManager {
 		return null;
 	}
 
-	public RoomOrganisation getRoomsOrganisationByOrganisationIdAndRoomId(
-			long organisation_id, long rooms_id) {
+	public RoomOrganisation getRoomsOrganisationByOrganisationIdAndRoomId(long organisationId, long roomId) {
 		try {
 			TypedQuery<RoomOrganisation> q = em.
 					createNamedQuery("getRoomsOrganisationByOrganisationIdAndRoomId", RoomOrganisation.class);
 
-			q.setParameter("rooms_id", rooms_id);
-			q.setParameter("organisation_id", organisation_id);
+			q.setParameter("roomId", roomId);
+			q.setParameter("organisationId", organisationId);
 			List<RoomOrganisation> ll = q.getResultList();
 
 			if (ll.size() > 0) {
@@ -731,13 +727,13 @@ public class RoomManager implements IRoomManager {
 
 	/**
 	 * 
-	 * @param organisation_id
+	 * @param roomId
 	 * @return
 	 */
-	public List<RoomOrganisation> getRoomsOrganisationByRoomsId(long rooms_id) {
+	public List<RoomOrganisation> getRoomsOrganisationByRoomsId(long roomId) {
 		try {
 			TypedQuery<RoomOrganisation> q = em.createNamedQuery("getRoomsOrganisationByRoomsId", RoomOrganisation.class);
-			q.setParameter("rooms_id", rooms_id);
+			q.setParameter("roomId", roomId);
 			return q.getResultList();
 		} catch (Exception ex2) {
 			log.error("[getRoomsByOrganisation] ", ex2);
@@ -745,7 +741,7 @@ public class RoomManager implements IRoomManager {
 		return null;
 	}
 
-	public Long updateRoomInternal(long rooms_id, long roomtypesId,
+	public Long updateRoomInternal(long roomId, long roomtypesId,
 			String name, boolean ispublic, String comment,
 			Long numberOfPartizipants, List<Integer> organisations,
 			Boolean appointment, Boolean isDemoRoom, Integer demoTime,
@@ -760,14 +756,14 @@ public class RoomManager implements IRoomManager {
 		try {
 			log.debug("*** updateRoom numberOfPartizipants: "
 					+ numberOfPartizipants);
-			Room r = roomDao.get(rooms_id);
+			Room r = roomDao.get(roomId);
 			r.setComment(comment);
 
 			r.setIspublic(ispublic);
 			r.setNumberOfPartizipants(numberOfPartizipants);
 			r.setName(name);
 			r.setRoomtype(roomTypeDao.get(roomtypesId));
-			r.setUpdatetime(new Date());
+			r.setUpdated(new Date());
 			r.setAllowUserQuestions(allowUserQuestions);
 			r.setAudioOnly(isAudioOnly);
 			r.setAllowFontStyles(allowFontStyles);
@@ -878,15 +874,15 @@ public class RoomManager implements IRoomManager {
 	}
 
 	/**
-	 * delete all Rooms_Organisations and Room by a given room_id
+	 * delete all Rooms_Organisations and Room by a given roomId
 	 * 
-	 * @param rooms_id
+	 * @param roomId
 	 */
-	public Long deleteRoomById(long rooms_id) {
+	public Long deleteRoomById(long roomId) {
 		try {
-			deleteAllRoomsOrganisationOfRoom(rooms_id);
-			roomDao.delete(roomDao.get(rooms_id), -1L);
-			return rooms_id;
+			deleteAllRoomsOrganisationOfRoom(roomId);
+			roomDao.delete(roomDao.get(roomId), -1L);
+			return roomId;
 		} catch (Exception ex2) {
 			log.error("[deleteRoomById] ", ex2);
 		}
@@ -894,14 +890,14 @@ public class RoomManager implements IRoomManager {
 	}
 
 	/**
-	 * delete all Rooms_Organisation by a rooms_id
+	 * delete all Rooms_Organisation by a roomId
 	 * 
-	 * @param rooms_id
+	 * @param roomId
 	 */
 	@SuppressWarnings("rawtypes")
-	public void deleteAllRoomsOrganisationOfRoom(long rooms_id) {
+	public void deleteAllRoomsOrganisationOfRoom(long roomId) {
 		try {
-			List ll = this.getRoomsOrganisationByRoomsId(rooms_id);
+			List ll = this.getRoomsOrganisationByRoomsId(roomId);
 			for (Iterator it = ll.iterator(); it.hasNext();) {
 				RoomOrganisation rOrg = (RoomOrganisation) it.next();
 				this.deleteRoomsOrganisation(rOrg);
@@ -914,11 +910,11 @@ public class RoomManager implements IRoomManager {
 	/**
 	 * Delete all room of a given Organisation
 	 * 
-	 * @param organisation_id
+	 * @param organisationId
 	 */
-	public void deleteAllRoomsOrganisationOfOrganisation(long organisation_id) {
+	public void deleteAllRoomsOrganisationOfOrganisation(long organisationId) {
 		try {
-			for (RoomOrganisation rOrg : getRoomsOrganisationByOrganisationId(organisation_id)) {
+			for (RoomOrganisation rOrg : getRoomsOrganisationByOrganisationId(organisationId)) {
 				this.deleteRoomsOrganisation(rOrg);
 			}
 		} catch (Exception ex2) {
@@ -926,12 +922,9 @@ public class RoomManager implements IRoomManager {
 		}
 	}
 
-	private Long deleteRoomFromOrganisationByRoomAndOrganisation(long rooms_id,
-			long organisation_id) {
+	private Long deleteRoomFromOrganisationByRoomAndOrganisation(long roomId, long organisationId) {
 		try {
-			RoomOrganisation rOrganisation = this
-					.getRoomsOrganisationByOrganisationIdAndRoomId(
-							organisation_id, rooms_id);
+			RoomOrganisation rOrganisation = getRoomsOrganisationByOrganisationIdAndRoomId(organisationId, roomId);
 			return this.deleteRoomsOrganisation(rOrganisation);
 		} catch (Exception ex2) {
 			log.error("[deleteRoomFromOrganisationByRoomAndOrganisation] ", ex2);
@@ -947,7 +940,7 @@ public class RoomManager implements IRoomManager {
 	public Long deleteRoomsOrganisation(RoomOrganisation rOrg) {
 		try {
 			rOrg.setDeleted(true);
-			rOrg.setUpdatetime(new Date());
+			rOrg.setUpdated(new Date());
 			if (rOrg.getId() == null) {
 				em.persist(rOrg);
 			} else {
@@ -964,10 +957,10 @@ public class RoomManager implements IRoomManager {
 
 	// --------------------------------------------------------------------------------------------
 
-	public void closeRoom(Long rooms_id, Boolean status) {
+	public void closeRoom(Long roomId, Boolean status) {
 		try {
 
-			Room room = roomDao.get(rooms_id);
+			Room room = roomDao.get(roomId);
 
 			room.setIsClosed(status);
 
@@ -981,7 +974,9 @@ public class RoomManager implements IRoomManager {
 	/**
 	 * Get a Rooms-Object or NULL
 	 * 
-	 * @param rooms_id
+	 * @param ownerId
+	 * @param roomtypesId
+	 * @param roomName
 	 * @return Rooms-Object or NULL
 	 */
 	public Room getRoomByOwnerAndTypeId(Long ownerId, Long roomtypesId, String roomName) {
@@ -1005,7 +1000,7 @@ public class RoomManager implements IRoomManager {
 			} else {
 				log.debug("Could not find room " + ownerId + " || " + roomtypesId);
 				
-				Long rooms_id = addRoom(roomName, roomtypesId,
+				Long roomId = addRoom(roomName, roomtypesId,
 						"My Rooms of ownerId " + ownerId,
 						(roomtypesId == 1) ? 25L : 150L, // numberOfPartizipants
 						false, // ispublic
@@ -1038,8 +1033,8 @@ public class RoomManager implements IRoomManager {
 						false //sipEnabled
 						);
 
-				if (rooms_id != null) {
-					return roomDao.get(rooms_id);
+				if (roomId != null) {
+					return roomDao.get(roomId);
 				}
 			}
 		} catch (Exception ex2) {

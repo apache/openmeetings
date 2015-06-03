@@ -288,7 +288,7 @@ public class InvitationDialog extends AbstractFormDialog<Invitation> {
 						//no-op added to preserve selection
 					}
 				});
-			add(new LanguageDropDown("lang", new PropertyModel<Long>(InvitationDialog.this, "lang")));
+			add(new LanguageDropDown("language", new PropertyModel<Long>(InvitationDialog.this, "lang")));
 			add(url.setOutputMarkupId(true));
 			add(feedback);
 		}

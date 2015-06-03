@@ -77,7 +77,7 @@ public class MobileService {
 			User u = userDao.login(login, password);
 			if (u != null) {
 				Sessiondata sd = sessionDao.startsession();
-				Boolean bool = sessionDao.updateUser(sd.getSession_id(), u.getId(), false, u.getLanguageId());
+				Boolean bool = sessionDao.updateUser(sd.getSessionId(), u.getId(), false, u.getLanguageId());
 				if (bool == null) {
 					// Exception
 				} else if (!bool) {
@@ -93,20 +93,20 @@ public class MobileService {
 					}
 					
 					SessionVariablesUtil.initClient(conn.getClient(), false, c.getPublicSID());
-					c.setUser_id(u.getId());
+					c.setUserId(u.getId());
 					c.setFirstname(u.getFirstname());
 					c.setLastname(u.getLastname());
 					c.setMobile(true);
 					sessionManager.updateClientByStreamId(streamId, c, false, null);
 
-					add(result, "sid", sd.getSession_id());
+					add(result, "sid", sd.getSessionId());
 					add(result, "publicSid", c.getPublicSID());
 					add(result, "status", 0);
 					add(result, "userId", u.getId());
 					add(result, "firstname", u.getFirstname());
 					add(result, "lastname", u.getLastname());
 					add(result, "login", u.getLogin());
-					add(result, "email", u.getAdresses() == null ? "" : u.getAdresses().getEmail());
+					add(result, "email", u.getAddress() == null ? "" : u.getAddress().getEmail());
 					add(result, "language", u.getLanguageId()); //TODO rights
 				}
 			}
@@ -127,7 +127,7 @@ public class MobileService {
 					Map<String, Object> map = new Hashtable<String, Object>();
 					add(map, "streamId", c.getStreamid());
 					add(map, "broadCastId", c.getBroadCastID());
-					add(map, "userId", c.getUser_id());
+					add(map, "userId", c.getUserId());
 					add(map, "firstname", c.getFirstname());
 					add(map, "lastname", c.getLastname());
 					add(map, "publicSid", c.getPublicSID());
@@ -165,7 +165,7 @@ public class MobileService {
 		// FIXME duplicated code
 		IConnection current = Red5.getConnectionLocal();
 		Client c = sessionManager.getClientByStreamId(current.getClient().getId(), null);
-		User u = userDao.get(c.getUser_id());
+		User u = userDao.get(c.getUserId());
 		//my rooms
 		List<Room> myl = new ArrayList<Room>();
 		myl.add(roomManager.getRoomByOwnerAndTypeId(u.getId(), 1L, labelDao.getString(1306L, u.getLanguageId())));
@@ -199,7 +199,7 @@ public class MobileService {
 		 //TODO check if we need anything here
 		long broadcastId = scopeAdapter.getBroadCastId();
 		c.setSipTransport(true);
-		c.setRoom_id(Long.parseLong(c.getScope()));
+		c.setRoomId(Long.parseLong(c.getScope()));
 		c.setRoomEnter(new Date());
 		c.setBroadCastID(broadcastId);
 		c.setMobile(true);

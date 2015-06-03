@@ -42,16 +42,16 @@ public class ErrorValue implements IDataProviderEntity {
 	private Long id;
 
 	@Column(name = "errortype_id")
-	private Long errortype_id;
+	private Long typeId;
 	
-	@Column(name = "fieldvalues_id")
-	private Long fieldvalues_id;
+	@Column(name = "label_id")
+	private Long labelId;
 	
-	@Column(name = "starttime")
-	private Date starttime;
+	@Column(name = "inserted")
+	private Date inserted;
 	
-	@Column(name = "updatetime")
-	private Date updatetime;
+	@Column(name = "updated")
+	private Date updated;
 	
 	@Column(name = "deleted")
 	private boolean deleted;
@@ -64,20 +64,20 @@ public class ErrorValue implements IDataProviderEntity {
 		this.id = id;
 	}
 
-	public Date getStarttime() {
-		return starttime;
+	public Date getInserted() {
+		return inserted;
 	}
 
-	public void setStarttime(Date starttime) {
-		this.starttime = starttime;
+	public void setInserted(Date inserted) {
+		this.inserted = inserted;
 	}
 
-	public Date getUpdatetime() {
-		return updatetime;
+	public Date getUpdated() {
+		return updated;
 	}
 
-	public void setUpdatetime(Date updatetime) {
-		this.updatetime = updatetime;
+	public void setUpdated(Date updated) {
+		this.updated = updated;
 	}
 
 	public boolean isDeleted() {
@@ -88,20 +88,19 @@ public class ErrorValue implements IDataProviderEntity {
 		this.deleted = deleted;
 	}
 	
-	public Long getFieldvalues_id() {
-		return fieldvalues_id;
+	public Long getLabelId() {
+		return labelId;
 	}
 
-	public void setFieldvalues_id(Long fieldvalues_id) {
-		this.fieldvalues_id = fieldvalues_id;
+	public void setLabelId(Long labelId) {
+		this.labelId = labelId;
 	}
 
-	public Long getErrortype_id() {
-		//return errorType.getErrortype_id();
-		return errortype_id;
+	public Long getTypeId() {
+		return typeId;
 	}
 
-	public void setErrortype_id(Long errortype_id) {
-		this.errortype_id = errortype_id;
+	public void setTypeId(Long typeId) {
+		this.typeId = typeId;
 	}
 }

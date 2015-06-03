@@ -48,19 +48,18 @@ public class SalutationDao {
 	 * Adds a new Salutation to the table Titles
 	 * 
 	 * @param titelname
-	 * @param fieldvalues_id
+	 * @param labelId
 	 * @return
 	 */
-	public Long addUserSalutation(String titelname, long fieldvalues_id) {
+	public Long addUserSalutation(String titelname, long labelId) {
 		try {
 			Salutation ti = new Salutation();
 			ti.setName(titelname);
 			ti.setDeleted(false);
-			ti.setFieldvalues_id(fieldvalues_id);
-			ti.setStarttime(new Date());
+			ti.setLabelId(labelId);
+			ti.setInserted(new Date());
 			ti = em.merge(ti);
-			Long salutations_id = ti.getSalutations_id();
-			return salutations_id;
+			return ti.getId();
 		} catch (Exception ex2) {
 			log.error("[addUserSalutation]", ex2);
 		}
@@ -71,10 +70,9 @@ public class SalutationDao {
 	 * get a Salutation by given id
 	 * 
 	 * @param id
-	 * @param language_id
 	 * @return
 	 */
-	public Salutation get(Long id, long language_id) {
+	public Salutation get(Long id) {
 		List<Salutation> ll = em.createNamedQuery("getSalutationById", Salutation.class)
 				.setParameter("id", id).getResultList();
 		return ll.isEmpty() ? null : ll.get(0);
@@ -83,10 +81,9 @@ public class SalutationDao {
 	/**
 	 * get a list of all availible Salutations
 	 * 
-	 * @param language_id
 	 * @return
 	 */
-	public List<Salutation> getUserSalutations(long language_id) {
+	public List<Salutation> get() {
 		List<Salutation> ll = em.createNamedQuery("getSalutations", Salutation.class).getResultList();
 		return ll;
 	}

@@ -60,7 +60,7 @@ public class ConfigForm extends AdminBaseForm<Configuration> {
 		super(id, new CompoundPropertyModel<Configuration>(configuration));
 		setOutputMarkupId(true);
 		this.listContainer = listContainer;
-		add(new RequiredTextField<String>("conf_key").setLabel(Model.of(Application.getString(267))).add(new IValidator<String>(){
+		add(new RequiredTextField<String>("key").setLabel(Model.of(Application.getString(267))).add(new IValidator<String>(){
 			private static final long serialVersionUID = 1L;
 
 			public void validate(IValidatable<String> validatable) {
@@ -70,8 +70,8 @@ public class ConfigForm extends AdminBaseForm<Configuration> {
 				}
 			}
 		}));
-		add(new TextField<String>("conf_value").setLabel(Model.of(Application.getString(271))));
-		add(forDatePattern("updatetime", WEB_DATE_PATTERN));
+		add(new TextField<String>("value").setLabel(Model.of(Application.getString(271))));
+		add(forDatePattern("updated", WEB_DATE_PATTERN));
 		add(new Label("user.login"));
 		add(new TextArea<String>("comment"));
 		
@@ -83,7 +83,7 @@ public class ConfigForm extends AdminBaseForm<Configuration> {
 	@Override
 	protected void onSaveSubmit(AjaxRequestTarget target, Form<?> form) {
 		ConfigurationDao cfgDao = getBean(ConfigurationDao.class);
-		Configuration c = cfgDao.forceGet(getModelObject().getConf_key());
+		Configuration c = cfgDao.forceGet(getModelObject().getKey());
 		if (c != null && c.isDeleted() && !c.getId().equals(getModelObject().getId())) {
 			getModelObject().setId(c.getId());
 		}

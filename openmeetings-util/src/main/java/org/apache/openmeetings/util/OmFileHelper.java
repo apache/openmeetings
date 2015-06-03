@@ -118,8 +118,8 @@ public class OmFileHelper {
 		return getDir(getUploadProfilesDir(), profilesPrefix + userId);
 	}
 	
-	public static File getUploadProfilesUserDir(String users_id) {
-		return getDir(getUploadProfilesDir(), profilesPrefix + users_id);
+	public static File getUploadProfilesUserDir(String userId) {
+		return getDir(getUploadProfilesDir(), profilesPrefix + userId);
 	}
 	
 	public static File getDefaultProfilePicture() {
@@ -166,8 +166,8 @@ public class OmFileHelper {
 		return getDir(getUploadTempDir(), PROFILES_DIR);
 	}
 	
-	public static File getUploadTempProfilesUserDir(Long users_id) {
-		return getDir(getUploadTempProfilesDir(), OmFileHelper.profilesPrefix + users_id);
+	public static File getUploadTempProfilesUserDir(Long userId) {
+		return getDir(getUploadTempProfilesDir(), OmFileHelper.profilesPrefix + userId);
 	}
 	
 	public static File getUploadTempRoomDir(String roomName) {

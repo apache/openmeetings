@@ -222,7 +222,7 @@ public class RoomForm extends AdminBaseForm<Room> {
 
 			@Override
 			protected String getDisplayText(User choice) {
-				Address a = choice.getAdresses();
+				Address a = choice.getAddress();
 				return String.format("\"%s %s\" <%s>", choice.getFirstname(), choice.getLastname(), a == null ? "" : a.getEmail());
 			}
 		});
@@ -268,7 +268,7 @@ public class RoomForm extends AdminBaseForm<Room> {
 				item.add(new CheckBox("superModerator", new PropertyModel<Boolean>(moderator, "superModerator")))
 					.add(new Label("userId", "" + moderator.getUser().getId()))
 					.add(name)
-					.add(new Label("email", moderator.getUser().getAdresses().getEmail()))
+					.add(new Label("email", moderator.getUser().getAddress().getEmail()))
 					.add(new WebMarkupContainer("delete").add(new AjaxEventBehavior("onclick"){
 						private static final long serialVersionUID = 1L;
 	

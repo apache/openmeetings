@@ -99,8 +99,8 @@ public class JabberWebService {
 			rl.addAll(pbl);
 		}
 
-		Long users_id = sessiondataDao.checkSession(SID);
-		User u = userDao.get(users_id);
+		Long userId = sessiondataDao.checkSession(SID);
+		User u = userDao.get(userId);
 		for (OrganisationUser ou : u.getOrganisationUsers()) {
 			List<RoomOrganisation> rol = conferenceService.getRoomsByOrganisationWithoutType(SID
 					, ou.getOrganisation().getId().longValue());
@@ -127,9 +127,9 @@ public class JabberWebService {
 	 * @return number of users as int
 	 */
 	public int getUserCount(String SID, Long roomId) {
-		Long users_id = sessiondataDao.checkSession(SID);
+		Long userId = sessiondataDao.checkSession(SID);
 
-		if (AuthLevelUtil.hasUserLevel(userDao.getRights(users_id))) {
+		if (AuthLevelUtil.hasUserLevel(userDao.getRights(userId))) {
 			return conferenceService.getRoomClientsListByRoomId(roomId).size();
 		}
 		return -1;
@@ -141,15 +141,15 @@ public class JabberWebService {
 	 * 
 	 * @param SID The SID from UserService.getSession
 	 * @param username The name of invited user, will be displayed in the rooms user list
-	 * @param room_id id of the room to get users
+	 * @param roomId id of the room to get users
 	 * @return hash to enter the room
 	 */
-	public String getInvitationHash(String SID, String username, Long room_id) {
-		Long users_id = sessiondataDao.checkSession(SID);
+	public String getInvitationHash(String SID, String username, Long roomId) {
+		Long userId = sessiondataDao.checkSession(SID);
 		
-		if (AuthLevelUtil.hasUserLevel(userDao.getRights(users_id))) {
-			User invitee = userDao.getContact(username, username, username, users_id);
-			Invitation invitation = invitationManager.getInvitation(invitee, roomDao.get(room_id), false, "", Valid.OneTime, userDao.get(users_id), 1L, new Date(), new Date(), null);
+		if (AuthLevelUtil.hasUserLevel(userDao.getRights(userId))) {
+			User invitee = userDao.getContact(username, username, username, userId);
+			Invitation invitation = invitationManager.getInvitation(invitee, roomDao.get(roomId), false, "", Valid.OneTime, userDao.get(userId), 1L, new Date(), new Date(), null);
 	
 			return invitation == null ? null : invitation.getHash();
 		} else {

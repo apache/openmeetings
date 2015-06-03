@@ -150,7 +150,7 @@ public class UserManager implements IUserManager {
 
 			if (sessionData != null) {
 
-				User u = usersDao.get(sessionData.getUser_id());
+				User u = usersDao.get(sessionData.getUserId());
 
 				sessiondataDao.updateUserWithoutSession(SID, u.getId());
 
@@ -163,16 +163,16 @@ public class UserManager implements IUserManager {
 		return null;
 	}
 
-	public Long logout(String SID, long USER_ID) {
+	public Long logout(String SID, long userId) {
 		sessiondataDao.updateUser(SID, 0, false, null);
 		return -12L;
 	}
 
-	public List<Userdata> getUserdataDashBoard(Long user_id) {
-		if (user_id != null && user_id.longValue() > 0) {
+	public List<Userdata> getUserdataDashBoard(Long userId) {
+		if (userId != null && userId.longValue() > 0) {
 			try {
-				TypedQuery<Userdata> query = em.createQuery("select c from Userdata as c where c.user_id = :user_id AND c.deleted = false", Userdata.class);
-				query.setParameter("user_id", user_id);
+				TypedQuery<Userdata> query = em.createQuery("select c from Userdata as c where c.userId = :userId AND c.deleted = false", Userdata.class);
+				query.setParameter("userId", userId);
 				List<Userdata> ll = query.getResultList();
 				return ll;
 			} catch (Exception ex2) {
@@ -182,13 +182,13 @@ public class UserManager implements IUserManager {
 		return null;
 	}
 
-	public Userdata getUserdataByKey(Long user_id, String DATA_KEY) {
+	public Userdata getUserdataByKey(Long userId, String key) {
 		Userdata userdata = new Userdata();
-		if (user_id != null && user_id.longValue() > 0) {
+		if (userId != null && userId.longValue() > 0) {
 			try {
-				TypedQuery<Userdata> query = em.createQuery("select c from Userdata as c where c.user_id = :user_id AND c.data_key = :data_key AND c.deleted = false", Userdata.class);
-				query.setParameter("user_id", user_id);
-				query.setParameter("data_key", DATA_KEY);
+				TypedQuery<Userdata> query = em.createQuery("select c from Userdata as c where c.userId = :userId AND c.key = :key AND c.deleted = false", Userdata.class);
+				query.setParameter("userId", userId);
+				query.setParameter("key", key);
 				for (Iterator<Userdata> it2 = query.getResultList().iterator(); it2.hasNext();) {
 					userdata = it2.next();
 				}
@@ -196,23 +196,23 @@ public class UserManager implements IUserManager {
 				log.error("getUserdataByKey", ex2);
 			}
 		} else {
-			userdata.setComment("Error: No USER_ID given");
+			userdata.setComment("Error: No user id given");
 		}
 		return userdata;
 	}
 
-	public String updateUserdata(int DATA_ID, long USER_ID, String DATA_KEY,
-			String DATA, String Comment) {
+	public String updateUserdata(int dataId, long userId, String key,
+			String data, String comment) {
 		String res = "Fehler beim Update";
 		try {
-			String hqlUpdate = "update userdata set DATA_KEY= :DATA_KEY, USER_ID = :USER_ID, DATA = :DATA, updatetime = :updatetime, comment = :Comment where DATA_ID= :DATA_ID";
+			String hqlUpdate = "update userdata set key= :key, userId = :userId, data = :data, updated = :updated, comment = :comment where id= :id";
 			int updatedEntities = em.createQuery(hqlUpdate)
-					.setParameter("DATA_KEY", DATA_KEY)
-					.setParameter("USER_ID", USER_ID)
-					.setParameter("DATA", DATA)
-					.setParameter("updatetime", -1L)
-					.setParameter("Comment", Comment)
-					.setParameter("DATA_ID", DATA_ID).executeUpdate();
+					.setParameter("key", key)
+					.setParameter("userId", userId)
+					.setParameter("data", data)
+					.setParameter("updated", -1L)
+					.setParameter("comment", comment)
+					.setParameter("id", dataId).executeUpdate();
 			res = "Success" + updatedEntities;
 		} catch (Exception ex2) {
 			log.error("updateUserdata", ex2);
@@ -220,18 +220,17 @@ public class UserManager implements IUserManager {
 		return res;
 	}
 
-	public String updateUserdataByKey(Long USER_ID, String DATA_KEY,
-			String DATA, String Comment) {
+	public String updateUserdataByKey(Long userId, String key, String data, String comment) {
 		String res = "Fehler beim Update";
 		try {
-			String hqlUpdate = "UPDATE Userdata set data = :data, updatetime = :updatetime, "
-					+ "comment = :comment where user_id= :user_id AND data_key = :data_key";
+			String hqlUpdate = "UPDATE Userdata set data = :data, updated = :updated, "
+					+ "comment = :comment where userId= :userId AND key = :key";
 			int updatedEntities = em.createQuery(hqlUpdate)
-					.setParameter("data", DATA)
-					.setParameter("updatetime", -1L)
-					.setParameter("comment", Comment)
-					.setParameter("user_id", USER_ID)
-					.setParameter("data_key", DATA_KEY).executeUpdate();
+					.setParameter("data", data)
+					.setParameter("updated", -1L)
+					.setParameter("comment", comment)
+					.setParameter("userId", userId)
+					.setParameter("key", key).executeUpdate();
 			res = "Success" + updatedEntities;
 		} catch (Exception ex2) {
 			log.error("updateUserdataByKey", ex2);
@@ -239,16 +238,15 @@ public class UserManager implements IUserManager {
 		return res;
 	}
 
-	public String addUserdata(long USER_ID, String DATA_KEY, String DATA,
-			String Comment) {
+	public String addUserdata(long userId, String key, String data, String comment) {
 		String ret = "Fehler beim speichern der Userdata";
 		Userdata userdata = new Userdata();
-		userdata.setData_key(DATA_KEY);
-		userdata.setData(DATA);
-		userdata.setStarttime(new Date());
-		userdata.setUpdatetime(null);
-		userdata.setComment(Comment);
-		userdata.setUser_id(USER_ID);
+		userdata.setKey(key);
+		userdata.setData(data);
+		userdata.setInserted(new Date());
+		userdata.setUpdated(null);
+		userdata.setComment(comment);
+		userdata.setUserId(userId);
 		userdata.setDeleted(false);
 		try {
 			em.merge(userdata);
@@ -278,15 +276,15 @@ public class UserManager implements IUserManager {
 	 * @param additionalname
 	 * @param fax
 	 * @param zip
-	 * @param states_id
+	 * @param stateId
 	 * @param town
-	 * @param language_id
+	 * @param languageId
 	 * @return
 	 */
 	public Long registerUser(String login, String Userpass, String lastname,
 			String firstname, String email, Date age, String street,
-			String additionalname, String fax, String zip, long states_id,
-			String town, long language_id, String phone, boolean sendSMS, boolean generateSipUserData, String jNameTimeZone) {
+			String additionalname, String fax, String zip, long stateId,
+			String town, long languageId, String phone, boolean sendSMS, boolean generateSipUserData, String jNameTimeZone) {
 		
 		String baseURL = configurationDao.getBaseUrl();
 		boolean sendConfirmation = baseURL != null
@@ -294,25 +292,25 @@ public class UserManager implements IUserManager {
 				&& 1 == configurationDao.getConfValue("sendEmailWithVerficationCode", Integer.class, "0");
 		
 		return registerUser(login, Userpass, lastname, firstname, email, age,
-				street, additionalname, fax, zip, states_id, town, language_id,
+				street, additionalname, fax, zip, stateId, town, languageId,
 				phone, sendSMS, generateSipUserData, jNameTimeZone, sendConfirmation);
 	}
 
 	public Long registerUserNoEmail(String login, String Userpass,
 			String lastname, String firstname, String email, Date age,
 			String street, String additionalname, String fax, String zip,
-			long states_id, String town, long language_id, String phone, boolean sendSMS, 
+			long stateId, String town, long languageId, String phone, boolean sendSMS, 
 			boolean generateSipUserData, String jNameTimeZone) {
 		
 		return registerUser(login, Userpass, lastname, firstname, email, age,
-				street, additionalname, fax, zip, states_id, town, language_id,
+				street, additionalname, fax, zip, stateId, town, languageId,
 				phone, sendSMS, generateSipUserData, jNameTimeZone, false);
 	}
 
 	private Long registerUser(String login, String Userpass, String lastname,
 			String firstname, String email, Date age, String street,
-			String additionalname, String fax, String zip, long states_id,
-			String town, long language_id, String phone, boolean sendSMS,
+			String additionalname, String fax, String zip, long stateId,
+			String town, long languageId, String phone, boolean sendSMS,
 			boolean generateSipUserData, String jNameTimeZone, Boolean sendConfirmation) {
 		try {
 			// Checks if FrontEndUsers can register
@@ -320,17 +318,17 @@ public class UserManager implements IUserManager {
 				
 				// TODO: Read and generate SIP-Data via RPC-Interface Issue 1098
 
-				Long user_id = registerUserInit(UserDao.getDefaultRights(), login,
+				Long userId = registerUserInit(UserDao.getDefaultRights(), login,
 						Userpass, lastname, firstname, email, age, street,
-						additionalname, fax, zip, states_id, town, language_id,
+						additionalname, fax, zip, stateId, town, languageId,
 						true, Arrays.asList(configurationDao.getConfValue(CONFIG_DEFAULT_GROUP_ID, Long.class, null)), phone,
 						sendSMS, sendConfirmation, timezoneUtil.getTimeZone(jNameTimeZone), false, "", "", false, true, null);
 
-				if (user_id > 0 && sendConfirmation) {
+				if (userId > 0 && sendConfirmation) {
 					return -40L;
 				}
 
-				return user_id;
+				return userId;
 			}
 		} catch (Exception e) {
 			log.error("[registerUser]", e);
@@ -352,9 +350,9 @@ public class UserManager implements IUserManager {
 	 * @param additionalname
 	 * @param fax
 	 * @param zip
-	 * @param states_id
+	 * @param stateId
 	 * @param town
-	 * @param language_id
+	 * @param languageId
 	 * @param sendWelcomeMessage
 	 * @param organisations
 	 * @param phone
@@ -373,8 +371,8 @@ public class UserManager implements IUserManager {
 	 */
 	public Long registerUserInit(Set<Right> rights, String login, String password, String lastname,
 			String firstname, String email, Date age, String street,
-			String additionalname, String fax, String zip, long states_id,
-			String town, long language_id, boolean sendWelcomeMessage,
+			String additionalname, String fax, String zip, long stateId,
+			String town, long languageId, boolean sendWelcomeMessage,
 			List<Long> organisations, String phone, boolean sendSMS, Boolean sendConfirmation,
 			TimeZone timezone, Boolean forceTimeZoneCheck,
 			String userOffers, String userSearchs, Boolean showContactData,
@@ -401,7 +399,7 @@ public class UserManager implements IUserManager {
 					if (!sendMail.equals("success"))
 						return -19L;
 				}
-				Address adr =  usersDao.getAddress(street, zip, town, states_id, additionalname, fax, phone, email);
+				Address adr =  usersDao.getAddress(street, zip, town, stateId, additionalname, fax, phone, email);
 
 				// If this user needs first to click his E-Mail verification
 				// code then set the status to 0
@@ -413,7 +411,7 @@ public class UserManager implements IUserManager {
 				for (Long id : organisations) {
 					orgList.add(new OrganisationUser(orgDao.get(id)));
 				}
-				User u = usersDao.addUser(rights, firstname, login, lastname, language_id,
+				User u = usersDao.addUser(rights, firstname, login, lastname, languageId,
 						password, adr, sendSMS, age, hash, timezone,
 						forceTimeZoneCheck, userOffers, userSearchs, showContactData,
 						showContactDataToContacts, null, null, orgList, null);
@@ -421,12 +419,6 @@ public class UserManager implements IUserManager {
 					return -111L;
 				}
 				log.debug("Added user-Id " + u.getId());
-
-				/*
-				 * Long adress_emails_id =
-				 * emailManagement.registerEmail(email, address_id,""); if
-				 * (adress_emails_id==null) { return new Long(-112); }
-				 */
 
 				if (adr.getId() > 0 && u.getId() > 0) {
 					return u.getId();
@@ -463,8 +455,8 @@ public class UserManager implements IUserManager {
 						return true;
 					}
 					String scopeName = "hibernate";
-					if (rcl.getRoom_id() != null) {
-						scopeName = rcl.getRoom_id().toString();
+					if (rcl.getRoomId() != null) {
+						scopeName = rcl.getRoomId().toString();
 					}
 					IScope currentScope = scopeApplicationAdapter
 							.getRoomScope(scopeName);
@@ -488,10 +480,10 @@ public class UserManager implements IUserManager {
 
 	public Boolean kickUserByPublicSID(String SID, String publicSID) {
 		try {
-			Long users_id = sessiondataDao.checkSession(SID);
+			Long userId = sessiondataDao.checkSession(SID);
 
 			// admins only
-			if (AuthLevelUtil.hasWebServiceLevel(usersDao.getRights(users_id))) {
+			if (AuthLevelUtil.hasWebServiceLevel(usersDao.getRights(userId))) {
 
 				Client rcl = sessionManager
 						.getClientByPublicSID(publicSID, false, null);
@@ -501,8 +493,8 @@ public class UserManager implements IUserManager {
 				}
 
 				String scopeName = "hibernate";
-				if (rcl.getRoom_id() != null) {
-					scopeName = rcl.getRoom_id().toString();
+				if (rcl.getRoomId() != null) {
+					scopeName = rcl.getRoomId().toString();
 				}
 				IScope currentScope = scopeApplicationAdapter
 						.getRoomScope(scopeName);

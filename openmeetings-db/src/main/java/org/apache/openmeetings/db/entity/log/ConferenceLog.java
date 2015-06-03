@@ -57,32 +57,17 @@ public class ConferenceLog implements IDataProviderEntity {
 	@Column(name="user_id")
 	private Long userId;
 	
-	@Column(name="external_user_id")
-	private String externalUserId;
-	
-	@Column(name="external_user_type")
-	private String externalUserType;
-	
 	@Column(name="streamid")
 	private String streamid;
 	
 	@Column(name="room_id")
-	private Long room_id;
+	private Long roomId;
 	
 	@Column(name="userip")
 	private String userip;
 	
 	@Column(name="scopename")
 	private String scopeName;
-	
-	@Column(name="email")
-	private String email;
-	
-	@Column(name="firstname")
-	private String firstname;
-	
-	@Column(name="lastname")
-	private String lastname;
 	
 	public Long getId() {
 		return id;
@@ -126,11 +111,11 @@ public class ConferenceLog implements IDataProviderEntity {
 		this.streamid = streamid;
 	}
 	
-	public Long getRoom_id() {
-		return room_id;
+	public Long getRoomId() {
+		return roomId;
 	}
-	public void setRoom_id(Long room_id) {
-		this.room_id = room_id;
+	public void setRoomId(Long roomId) {
+		this.roomId = roomId;
 	}
 	
 	public String getUserip() {
@@ -146,40 +131,4 @@ public class ConferenceLog implements IDataProviderEntity {
 	public void setScopeName(String scopeName) {
 		this.scopeName = scopeName;
 	}
-	
-	public String getExternalUserId() {
-		return externalUserId;
-	}
-	public void setExternalUserId(String externalUserId) {
-		this.externalUserId = externalUserId;
-	}
-	
-	public String getExternalUserType() {
-		return externalUserType;
-	}
-	public void setExternalUserType(String externalUserType) {
-		this.externalUserType = externalUserType;
-	}
-	
-	public String getEmail() {
-		return email;
-	}
-	public void setEmail(String email) {
-		this.email = email;
-	}
-	
-	public String getFirstname() {
-		return firstname;
-	}
-	public void setFirstname(String firstname) {
-		this.firstname = firstname;
-	}
-	
-	public String getLastname() {
-		return lastname;
-	}
-	public void setLastname(String lastname) {
-		this.lastname = lastname;
-	}
-	
 }

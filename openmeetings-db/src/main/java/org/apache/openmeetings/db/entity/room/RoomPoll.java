@@ -46,16 +46,16 @@ import org.simpleframework.xml.Root;
 @Entity
 @NamedQueries({
 		@NamedQuery(name = "closePoll", query = "UPDATE RoomPoll rp SET rp.archived = :archived "
-				+ "WHERE rp.room.id = :rooms_id"),
+				+ "WHERE rp.room.id = :roomId"),
 		@NamedQuery(name = "deletePoll", query = "DELETE FROM RoomPoll rp WHERE rp.id = :id"),
 		@NamedQuery(name = "getPollById", query = "SELECT rp FROM RoomPoll rp WHERE rp.id = :id"),
 		@NamedQuery(name = "getPoll", query = "SELECT rp FROM RoomPoll rp "
-				+ "WHERE rp.room.id = :room_id AND rp.archived = :archived"),
+				+ "WHERE rp.room.id = :roomId AND rp.archived = :archived"),
 		@NamedQuery(name = "getPollListBackup", query = "SELECT rp FROM RoomPoll rp ORDER BY rp.id"),
 		@NamedQuery(name = "getArchivedPollList", query = "SELECT rp FROM RoomPoll rp "
-				+ "WHERE rp.room.id = :room_id AND rp.archived = :archived ORDER BY rp.created DESC"),
+				+ "WHERE rp.room.id = :roomId AND rp.archived = :archived ORDER BY rp.created DESC"),
 		@NamedQuery(name = "hasPoll", query = "SELECT COUNT(rp) FROM RoomPoll rp "
-				+ "WHERE rp.room.id = :room_id AND rp.archived = :archived") })
+				+ "WHERE rp.room.id = :roomId AND rp.archived = :archived") })
 @Table(name = "room_poll")
 @Root(name = "roompoll")
 public class RoomPoll implements IDataProviderEntity {
@@ -95,7 +95,7 @@ public class RoomPoll implements IDataProviderEntity {
 	private User creator;
 
 	@OneToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "rooms_id")
+	@JoinColumn(name = "room_id")
 	@ForeignKey(enabled = true)
 	@Element(name = "roomid", data = true, required = false)
 	private Room room;

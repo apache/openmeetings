@@ -42,23 +42,23 @@ import org.simpleframework.xml.Root;
 @NamedQueries({
 	@NamedQuery(name = "getAllRoomsOrganisations", query = "select ro from RoomOrganisation ro ORDER BY ro.id"),
 	@NamedQuery(name = "getRoomsOrganisationByOrganisationIdAndRoomType", query = "select c from RoomOrganisation as c "
-			+ "where c.room.roomtype.id = :roomtypesId AND c.organisation.id = :organisation_id "
+			+ "where c.room.roomtype.id = :roomtypesId AND c.organisation.id = :organisationId "
 			+ "AND c.deleted = false"),
 	@NamedQuery(name = "getRoomsOrganisationByOrganisationId", query = "SELECT c FROM RoomOrganisation c "
 			+ "LEFT JOIN FETCH c.room "
-			+ "WHERE c.organisation.id = :organisation_id "
+			+ "WHERE c.organisation.id = :organisationId "
 			+ "AND c.deleted = false AND c.room.deleted = false AND c.room.appointment = false "
 			+ "AND c.organisation.deleted = false "
 			+ "ORDER BY c.room.name ASC"),
 	@NamedQuery(name = "selectMaxFromRoomsByOrganisation", query = "select c from Rooms_Organisation as c "
-			+ "where c.organisation.id = :organisation_id "
+			+ "where c.organisation.id = :organisationId "
 			+ "AND c.deleted = false"),
 	@NamedQuery(name = "getRoomsOrganisationByOrganisationIdAndRoomId", query = "select c from RoomOrganisation as c "
-			+ "where c.room.id = :rooms_id "
-			+ "AND c.organisation.id = :organisation_id "
+			+ "where c.room.id = :roomId "
+			+ "AND c.organisation.id = :organisationId "
 			+ "AND c.deleted = false"),
 	@NamedQuery(name = "getRoomsOrganisationByRoomsId", query = "select c from RoomOrganisation as c "
-			+ "where c.room.id = :rooms_id "
+			+ "where c.room.id = :roomId "
 			+ "AND c.deleted = false")
 })
 @Table(name = "rooms_organisation")
@@ -72,7 +72,7 @@ public class RoomOrganisation implements IDataProviderEntity {
 	private Long id;
 	
 	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name="rooms_id", nullable=true)
+	@JoinColumn(name="room_id", nullable=true)
 	@ForeignKey(enabled = true)
 	@Element(name="rooms_id", data=true, required=false)
 	private Room room;
@@ -83,11 +83,11 @@ public class RoomOrganisation implements IDataProviderEntity {
 	@Element(name="organisation_id", data=true, required=false)
 	private Organisation organisation;
 	
-	@Column(name = "starttime")
-	private Date starttime;
+	@Column(name = "inserted")
+	private Date inserted;
 	
-	@Column(name = "updatetime")
-	private Date updatetime;
+	@Column(name = "updated")
+	private Date updated;
 	
 	@Column(name = "deleted")
 	@Element(data=true)
@@ -122,18 +122,18 @@ public class RoomOrganisation implements IDataProviderEntity {
 		this.id = id;
 	}
     
-	public Date getStarttime() {
-		return starttime;
+	public Date getInserted() {
+		return inserted;
 	}
-	public void setStarttime(Date starttime) {
-		this.starttime = starttime;
+	public void setInserted(Date inserted) {
+		this.inserted = inserted;
 	}
     
-	public Date getUpdatetime() {
-		return updatetime;
+	public Date getUpdated() {
+		return updated;
 	}
-	public void setUpdatetime(Date updatetime) {
-		this.updatetime = updatetime;
+	public void setUpdated(Date updated) {
+		this.updated = updated;
 	}	
 	
 	public boolean isDeleted() {

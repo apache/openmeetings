@@ -40,9 +40,9 @@ public class SOAPLoginDao {
 	@PersistenceContext
 	private EntityManager em;
 
-	public String addSOAPLogin(String sessionHash, Long room_id,
+	public String addSOAPLogin(String sessionHash, Long roomId,
 			boolean becomemoderator, boolean showAudioVideoTest,
-			boolean allowSameURLMultipleTimes, Long recording_id,
+			boolean allowSameURLMultipleTimes, Long recordingId,
 			boolean showNickNameDialog, String landingZone,
 			boolean allowRecording) {
 		try {
@@ -53,10 +53,10 @@ public class SOAPLoginDao {
 			SOAPLogin soapLogin = new SOAPLogin();
 			soapLogin.setCreated(new Date());
 			soapLogin.setUsed(false);
-			soapLogin.setRoom_id(room_id);
+			soapLogin.setRoomId(roomId);
 			soapLogin.setAllowSameURLMultipleTimes(allowSameURLMultipleTimes);
 			soapLogin.setHash(hash);
-			soapLogin.setRoomRecordingId(recording_id);
+			soapLogin.setRecordingId(recordingId);
 			soapLogin.setSessionHash(sessionHash);
 			soapLogin.setBecomemoderator(becomemoderator);
 			soapLogin.setShowAudioVideoTest(showAudioVideoTest);

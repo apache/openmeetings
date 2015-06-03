@@ -171,7 +171,7 @@ public class FlvRecordingDao {
 	public List<FlvRecording> getFlvRecordingRootByPublic(Long orgId) {
 		TypedQuery<FlvRecording> q = em.createNamedQuery(orgId == null ? "getRecordingsPublic" : "getRecordingsByOrganization", FlvRecording.class);
 		if (orgId != null) {
-			q.setParameter("organization_id", orgId);
+			q.setParameter("organizationId", orgId);
 		}
 		return q.getResultList();
 	}
@@ -180,10 +180,10 @@ public class FlvRecordingDao {
 		return em.createNamedQuery("getRecordingsByOwner", FlvRecording.class).setParameter("ownerId", ownerId).getResultList();
 	}
 
-	public List<FlvRecording> getFlvRecordingByRoomId(Long room_id) {
+	public List<FlvRecording> getFlvRecordingByRoomId(Long roomId) {
 		try {
 			TypedQuery<FlvRecording> query = em.createNamedQuery("getRecordingsByRoom", FlvRecording.class);
-			query.setParameter("roomId", room_id);
+			query.setParameter("roomId", roomId);
 
 			List<FlvRecording> flvRecordingList = query.getResultList();
 

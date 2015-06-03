@@ -35,25 +35,25 @@ public class WhiteBoardObjectListManagerById {
 	
 	private Long whiteboardId = 0L;
 	
-	public Long getNewWhiteboardId(Long room_id) throws Exception {
+	public Long getNewWhiteboardId(Long roomId) throws Exception {
 		whiteboardId++;
-		this.setWhiteBoardObjectListRoomObjAndWhiteboardId(room_id, new WhiteboardObject(), whiteboardId);
+		this.setWhiteBoardObjectListRoomObjAndWhiteboardId(roomId, new WhiteboardObject(), whiteboardId);
 		return whiteboardId;
 	}
 	
 	/*
 	 * Room items a Whiteboard
 	 */
-	public synchronized WhiteboardObjectList getWhiteBoardObjectListByRoomId(Long room_id){
-		WhiteboardObjectList whiteboardObjectList = whiteBoardObjectList.get(room_id);
+	public synchronized WhiteboardObjectList getWhiteBoardObjectListByRoomId(Long roomId){
+		WhiteboardObjectList whiteboardObjectList = whiteBoardObjectList.get(roomId);
 		if (whiteboardObjectList == null) {
 			whiteboardObjectList = new WhiteboardObjectList();
 		}
 		return whiteboardObjectList;
 	}
 	
-	public synchronized WhiteboardObject getWhiteBoardObjectListByRoomIdAndWhiteboard(Long room_id, Long whiteBoardId){
-		WhiteboardObjectList whiteboardObjectList = whiteBoardObjectList.get(room_id);
+	public synchronized WhiteboardObject getWhiteBoardObjectListByRoomIdAndWhiteboard(Long roomId, Long whiteBoardId){
+		WhiteboardObjectList whiteboardObjectList = whiteBoardObjectList.get(roomId);
 		if (whiteboardObjectList == null) {
 			whiteboardObjectList = new WhiteboardObjectList();
 		}
@@ -69,18 +69,18 @@ public class WhiteBoardObjectListManagerById {
 	 * 
 	 */
 	
-	public synchronized void setWhiteBoardObjectListRoomObj(Long room_id, WhiteboardObjectList whiteboardObjectList){
-		whiteBoardObjectList.put(room_id, whiteboardObjectList);
+	public synchronized void setWhiteBoardObjectListRoomObj(Long roomId, WhiteboardObjectList whiteboardObjectList){
+		whiteBoardObjectList.put(roomId, whiteboardObjectList);
 	}
 	
-	public synchronized void setWhiteBoardObjectListRoomObjAndWhiteboardId(Long room_id, WhiteboardObject whiteboardObjects, Long whiteBoardId){
-		WhiteboardObjectList whiteboardObjectList = whiteBoardObjectList.get(room_id);
+	public synchronized void setWhiteBoardObjectListRoomObjAndWhiteboardId(Long roomId, WhiteboardObject whiteboardObjects, Long whiteBoardId){
+		WhiteboardObjectList whiteboardObjectList = whiteBoardObjectList.get(roomId);
 		if (whiteboardObjectList == null) {
 			whiteboardObjectList = new WhiteboardObjectList();
-			whiteboardObjectList.setRoom_id(room_id);
+			whiteboardObjectList.setRoomId(roomId);
 		}
 		whiteboardObjects.setWhiteBoardId(whiteBoardId);
 		whiteboardObjectList.getWhiteboardObjects().put(whiteBoardId, whiteboardObjects);
-		whiteBoardObjectList.put(room_id, whiteboardObjectList);
+		whiteBoardObjectList.put(roomId, whiteboardObjectList);
 	}
 }

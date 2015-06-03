@@ -31,14 +31,14 @@ public interface IUserManager {
 	
 	Long registerUser(String login, String Userpass, String lastname,
 			String firstname, String email, Date age, String street,
-			String additionalname, String fax, String zip, long states_id,
-			String town, long language_id, String phone, boolean sendSMS,
+			String additionalname, String fax, String zip, long stateId,
+			String town, long languageId, String phone, boolean sendSMS,
 			boolean generateSipUserData, String jNameTimeZone);
 	
 	Long registerUserInit(Set<Right> rights, String login, String password, String lastname,
 			String firstname, String email, Date age, String street,
-			String additionalname, String fax, String zip, long states_id,
-			String town, long language_id, boolean sendWelcomeMessage,
+			String additionalname, String fax, String zip, long stateId,
+			String town, long languageId, boolean sendWelcomeMessage,
 			List<Long> organisations, String phone, boolean sendSMS, Boolean sendConfirmation,
 			TimeZone timezone, Boolean forceTimeZoneCheck,
 			String userOffers, String userSearchs, Boolean showContactData,
@@ -47,14 +47,14 @@ public interface IUserManager {
 	Long registerUserNoEmail(String login, String Userpass,
 			String lastname, String firstname, String email, Date age,
 			String street, String additionalname, String fax, String zip,
-			long states_id, String town, long language_id, String phone, boolean sendSMS, 
+			long stateId, String town, long languageId, String phone, boolean sendSMS, 
 			boolean generateSipUserData, String jNameTimeZone);
 	
-	Boolean kickUserByStreamId(String SID, Long room_id);
+	Boolean kickUserByStreamId(String SID, Long roomId);
 	
 	Boolean kickUserByPublicSID(String SID, String publicSID);
 	
-	Long logout(String SID, long USER_ID);
+	Long logout(String SID, long userId);
 	
-	List<Userdata> getUserdataDashBoard(Long user_id);
+	List<Userdata> getUserdataDashBoard(Long userId);
 }

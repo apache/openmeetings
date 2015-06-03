@@ -61,8 +61,8 @@ public class ConfigsPanel extends AdminPanel {
 			protected void populateItem(final Item<Configuration> item) {
 				final Configuration c = item.getModelObject();
 				item.add(new Label("id", c.getId()));
-				item.add(new Label("conf_key", c.getConf_key()));
-				item.add(new Label("conf_value", c.getConf_value()));
+				item.add(new Label("key", c.getKey()));
+				item.add(new Label("value", c.getValue()));
 				item.add(new AjaxEventBehavior("onclick") {
 					private static final long serialVersionUID = 1L;
 
@@ -87,9 +87,9 @@ public class ConfigsPanel extends AdminPanel {
 			}
 		};
 		DataViewContainer<Configuration> container = new DataViewContainer<Configuration>(listContainer, dataView, navigator);
-		container.addLink(new OmOrderByBorder<Configuration>("orderById", "configuration_id", container))
-			.addLink(new OmOrderByBorder<Configuration>("orderByKey", "conf_key", container))
-			.addLink(new OmOrderByBorder<Configuration>("orderByValue", "conf_value", container));
+		container.addLink(new OmOrderByBorder<Configuration>("orderById", "id", container))
+			.addLink(new OmOrderByBorder<Configuration>("orderByKey", "key", container))
+			.addLink(new OmOrderByBorder<Configuration>("orderByValue", "value", container));
 		add(container.getLinks());
 		add(navigator);
 		

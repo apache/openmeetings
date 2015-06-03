@@ -82,10 +82,10 @@ public class FileUtils {
 		return 0;
 	}
 
-	public void setFileToOwnerOrRoomByParent(FileExplorerItem file, Long users_id, Long room_id) {
+	public void setFileToOwnerOrRoomByParent(FileExplorerItem file, Long userId, Long roomId) {
 		try {
-			file.setOwnerId(users_id);
-			file.setRoomId(room_id);
+			file.setOwnerId(userId);
+			file.setRoomId(roomId);
 
 			log.debug("calling [2] FileExplorerItemDaoImpl.updateFileOrFolder()");
 			fileExplorerItemDao.update(file);
@@ -93,7 +93,7 @@ public class FileUtils {
 			FileExplorerItem[] childElements = fileExplorerItemDao.getByParent(file.getId()).toArray(new FileExplorerItem[0]);
 
 			for (FileExplorerItem childExplorerItem : childElements) {
-				setFileToOwnerOrRoomByParent(childExplorerItem, users_id, room_id);
+				setFileToOwnerOrRoomByParent(childExplorerItem, userId, roomId);
 			}
 		} catch (Exception err) {
 			log.error("[setFileToOwnerOrRoomByParent] ", err);

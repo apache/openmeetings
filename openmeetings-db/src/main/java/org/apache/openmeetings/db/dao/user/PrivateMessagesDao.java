@@ -115,7 +115,7 @@ public class PrivateMessagesDao implements IDataProviderDao<PrivateMessage> {
 				.append("OR lower(m.from.firstname) LIKE :search ")
 				.append("OR lower(m.from.lastname) LIKE :search ")
 				.append("OR lower(m.from.login) LIKE :search ")
-				.append("OR lower(m.from.adresses.email) LIKE :search ")
+				.append("OR lower(m.from.address.email) LIKE :search ")
 				.append(" ) ");
 		}
 		

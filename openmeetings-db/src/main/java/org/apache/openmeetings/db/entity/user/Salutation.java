@@ -18,7 +18,6 @@
  */
 package org.apache.openmeetings.db.entity.user;
 
-import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -30,41 +29,42 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
+import org.apache.openmeetings.db.entity.IDataProviderEntity;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
 
 @Entity
 @Table(name = "salutation")
 @NamedQueries({
-	@NamedQuery(name = "getSalutationById", query = "SELECT s FROM Salutation AS s WHERE s.salutations_id = :id")
+	@NamedQuery(name = "getSalutationById", query = "SELECT s FROM Salutation AS s WHERE s.id = :id")
 	, @NamedQuery(name = "getSalutations", query = "SELECT s FROM Salutation AS s")
 })
 @Root
-public class Salutation implements Serializable {
+public class Salutation implements IDataProviderEntity {
 	private static final long serialVersionUID = 1L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="id")
 	@Element(name="id", data=true)
-	private Long salutations_id;
+	private Long id;
 	
 	@Column(name="name")
 	@Element(data=true, required=false)
 	private String name;
 	
-	@Column(name="starttime")
-	private Date starttime;
+	@Column(name="inserted")
+	private Date inserted;
 	
-	@Column(name="updatetime")
-	private Date updatetime;
+	@Column(name="updated")
+	private Date updated;
 	
 	@Column(name="deleted")
 	@Element(data=true, required=false)
 	private boolean deleted;
 	
-	@Column(name="fieldvalues_id")
-	@Element(data=true, required=false)
-	private Long fieldvalues_id;
+	@Column(name="label_id")
+	@Element(name="fieldvalues_id", data=true, required=false)
+	private Long labelId;
 	
 	public String getName() {
 		return name;
@@ -73,26 +73,26 @@ public class Salutation implements Serializable {
 		this.name = name;
 	}
     
-	public Long getSalutations_id() {
-		return salutations_id;
+	public Long getId() {
+		return id;
 	}
-	public void setSalutations_id(Long salutations_id) {
-		this.salutations_id = salutations_id;
+	public void setId(Long id) {
+		this.id = id;
 	}
 
     
-	public Date getStarttime() {
-		return starttime;
+	public Date getInserted() {
+		return inserted;
 	}
-	public void setStarttime(Date starttime) {
-		this.starttime = starttime;
+	public void setInserted(Date inserted) {
+		this.inserted = inserted;
 	}
     
-	public Date getUpdatetime() {
-		return updatetime;
+	public Date getUpdated() {
+		return updated;
 	}
-	public void setUpdatetime(Date updatetime) {
-		this.updatetime = updatetime;
+	public void setUpdated(Date updated) {
+		this.updated = updated;
 	}
 	
 	public boolean isDeleted() {
@@ -102,10 +102,10 @@ public class Salutation implements Serializable {
 		this.deleted = deleted;
 	}
 
-	public Long getFieldvalues_id() {
-		return fieldvalues_id;
+	public Long getLabelId() {
+		return labelId;
 	}
-	public void setFieldvalues_id(Long fieldvalues_id) {
-		this.fieldvalues_id = fieldvalues_id;
+	public void setLabelId(Long labelId) {
+		this.labelId = labelId;
 	}
 }

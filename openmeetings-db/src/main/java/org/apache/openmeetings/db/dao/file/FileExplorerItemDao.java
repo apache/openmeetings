@@ -47,12 +47,12 @@ public class FileExplorerItemDao {
 	private EntityManager em;
 
     public Long add(String fileName, String fileHash,
-            Long parentFileExplorerItemId, Long ownerId, Long room_id,
+            Long parentFileExplorerItemId, Long ownerId, Long roomId,
             Long insertedBy, Boolean isFolder, Boolean isImage,
             Boolean isPresentation, String wmlFilePath,
             Boolean isStoredWmlFile, Boolean isChart,
             Long externalFileId, String externalType) {
-        log.debug(".add(): adding file " + fileName+ " roomID: "+room_id);
+        log.debug(".add(): adding file " + fileName+ " roomID: "+roomId);
         try {
             FileExplorerItem fileItem = new FileExplorerItem();
             fileItem.setFileName(fileName);
@@ -60,7 +60,7 @@ public class FileExplorerItemDao {
             fileItem.setDeleted(false);
             fileItem.setParentItemId(parentFileExplorerItemId);
             fileItem.setOwnerId(ownerId);
-            fileItem.setRoomId(room_id);
+            fileItem.setRoomId(roomId);
             fileItem.setInserted(new Date());
             fileItem.setInsertedBy(insertedBy);
             Type t = null;
@@ -109,11 +109,11 @@ public class FileExplorerItemDao {
         return null;
     }
 
-	public List<FileExplorerItem> getFileExplorerItemsByRoomAndOwner(Long room_id, Long ownerId) {
+	public List<FileExplorerItem> getFileExplorerItemsByRoomAndOwner(Long roomId, Long ownerId) {
         log.debug(".getFileExplorerItemsByRoomAndOwner() started");
         try {
 			TypedQuery<FileExplorerItem> query = em.createNamedQuery("getFilesByRoomAndOwner", FileExplorerItem.class);
-			query.setParameter("room_id",room_id);
+			query.setParameter("roomId",roomId);
 			query.setParameter("ownerId",ownerId);
 			
 			List<FileExplorerItem> fileExplorerList = query.getResultList();
@@ -125,10 +125,10 @@ public class FileExplorerItemDao {
         return null;
     }
 
-    public List<FileExplorerItem> getByRoom(Long room_id) {
-        log.debug("getFileExplorerItemsByRoom room_id :: "+room_id);
+    public List<FileExplorerItem> getByRoom(Long roomId) {
+        log.debug("getFileExplorerItemsByRoom roomId :: "+roomId);
 		TypedQuery<FileExplorerItem> query = em.createNamedQuery("getFilesByRoom", FileExplorerItem.class);
-		query.setParameter("roomId",room_id);
+		query.setParameter("roomId",roomId);
 		
 		return query.getResultList();
     }
@@ -296,7 +296,7 @@ public class FileExplorerItemDao {
      * @param newParentFileExplorerItemId
      * @param isOwner
      */
-    public void moveFile(Long fileId, Long parentId, Long room_id, Boolean isOwner, Long ownerId) {
+    public void moveFile(Long fileId, Long parentId, Long roomId, Boolean isOwner, Long ownerId) {
         log.debug(".moveFile() started");
         try {
 
@@ -311,7 +311,7 @@ public class FileExplorerItemDao {
                 } else {
                     // move to public room folder
                     fId.setOwnerId(null);
-                    fId.setRoomId(room_id);
+                    fId.setRoomId(roomId);
                 }
             } else {
                 fId.setOwnerId(null);

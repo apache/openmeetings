@@ -71,10 +71,10 @@ import org.simpleframework.xml.Root;
 			+ "WHERE c.insertedBy = u.id AND u.externalUserId = :externalUserId  AND u.externalUserType = :externalUserType "
 			+ "AND c.deleted = false") 
 	, @NamedQuery(name = "getRecordingsPublic", query = "SELECT f FROM FlvRecording f WHERE f.deleted = false AND f.ownerId IS NULL "
-			+ "AND f.organization_id IS NULL AND (f.parentItemId IS NULL OR f.parentItemId = 0) "
+			+ "AND f.organizationId IS NULL AND (f.parentItemId IS NULL OR f.parentItemId = 0) "
 			+ "ORDER BY f.type DESC, f.inserted")
 	, @NamedQuery(name = "getRecordingsByOrganization", query = "SELECT f FROM FlvRecording f WHERE f.deleted = false AND f.ownerId IS NULL "
-			+ "AND f.organization_id = :organization_id AND (f.parentItemId IS NULL OR f.parentItemId = 0) "
+			+ "AND f.organizationId = :organizationId AND (f.parentItemId IS NULL OR f.parentItemId = 0) "
 			+ "ORDER BY f.type DESC, f.inserted")
 	, @NamedQuery(name = "getRecordingsByOwner", query = "SELECT f FROM FlvRecording f WHERE f.deleted = false AND f.ownerId = :ownerId "
 			+ "AND (f.parentItemId IS NULL OR f.parentItemId = 0) "
@@ -90,7 +90,7 @@ import org.simpleframework.xml.Root;
 	, @NamedQuery(name = "getRecordingsByParent", query = "SELECT f FROM FlvRecording f WHERE f.deleted = false AND f.parentItemId = :parentId "
 			+ "ORDER BY f.type ASC, f.inserted") 
 	, @NamedQuery(name = "getRecordingsByExternalType", query = "SELECT rec FROM FlvRecording rec, Room r, User u "
-			+ "WHERE rec.deleted = false AND rec.room_id = r.rooms_id AND rec.insertedBy = u.user_id "
+			+ "WHERE rec.deleted = false AND rec.roomId = r.id AND rec.insertedBy = u.id "
 			+ "AND (r.externalRoomType = :externalType OR u.externalUserType = :externalType)")
 })
 @Table(name = "flvrecording")
@@ -148,7 +148,7 @@ public class FlvRecording extends FileItem {
 
 	@Column(name = "organization_id")
 	@Element(data = true, required = false)
-	private Long organization_id;
+	private Long organizationId;
 
 	@Column(name = "is_interview")
 	@Element(data = true, required = false)
@@ -226,12 +226,12 @@ public class FlvRecording extends FileItem {
 		this.recorderStreamId = recorderStreamId;
 	}
 
-	public Long getOrganization_id() {
-		return organization_id;
+	public Long getOrganizationId() {
+		return organizationId;
 	}
 
-	public void setOrganization_id(Long organization_id) {
-		this.organization_id = organization_id;
+	public void setOrganizationId(Long organizationId) {
+		this.organizationId = organizationId;
 	}
 
 	public List<FlvRecordingMetaData> getFlvRecordingMetaData() {

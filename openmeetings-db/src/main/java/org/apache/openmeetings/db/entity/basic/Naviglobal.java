@@ -41,7 +41,7 @@ import org.apache.openmeetings.db.entity.IDataProviderEntity;
 @Entity
 @NamedQueries({
 		@NamedQuery(name = "getNavigation", query = "SELECT DISTINCT ng from Naviglobal ng JOIN ng.mainnavi nm "
-				+ "WHERE nm.deleted = false AND ng.level_id <= :level_id AND nm.level_id <= :level_id "
+				+ "WHERE nm.deleted = false AND ng.levelId <= :levelId AND nm.levelId <= :levelId "
 				+ "AND ng.deleted = false ORDER BY ng.naviorder ASC"),
 		@NamedQuery(name = "getNavigationById", query = "SELECT ng from Naviglobal ng WHERE ng.id = :id") })
 @Table(name = "naviglobal")
@@ -68,11 +68,11 @@ public class Naviglobal implements IDataProviderEntity {
 	@Column(name = "action")
 	private String action;
 
-	@Column(name = "updatetime")
-	private Date updatetime;
+	@Column(name = "updated")
+	private Date updated;
 
-	@Column(name = "starttime")
-	private Date starttime;
+	@Column(name = "inserted")
+	private Date inserted;
 
 	@Column(name = "comment_field")
 	private String comment;
@@ -81,16 +81,16 @@ public class Naviglobal implements IDataProviderEntity {
 	private Integer naviorder;
 
 	@Column(name = "level_id")
-	private Long level_id;
+	private Long levelId;
 
 	@Column(name = "deleted")
 	private boolean deleted;
 
-	@Column(name = "fieldvalues_id")
-	private Long fieldvalues_id;
+	@Column(name = "label_id")
+	private Long labelId;
 
-	@Column(name = "tooltip_fieldvalues_id")
-	private Long tooltip_fieldvalues_id;
+	@Column(name = "tooltip_label_id")
+	private Long tooltipLabelId;
 
 	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinColumn(name = "global_id")
@@ -146,20 +146,20 @@ public class Naviglobal implements IDataProviderEntity {
 		this.isopen = isopen;
 	}
 
-	public Date getStarttime() {
-		return starttime;
+	public Date getInserted() {
+		return inserted;
 	}
 
-	public void setStarttime(Date starttime) {
-		this.starttime = starttime;
+	public void setInserted(Date inserted) {
+		this.inserted = inserted;
 	}
 
-	public Date getUpdatetime() {
-		return updatetime;
+	public Date getUpdated() {
+		return updated;
 	}
 
-	public void setUpdatetime(Date updatetime) {
-		this.updatetime = updatetime;
+	public void setUpdated(Date updated) {
+		this.updated = updated;
 	}
 
 	public boolean isDeleted() {
@@ -186,12 +186,12 @@ public class Naviglobal implements IDataProviderEntity {
 		this.naviorder = naviorder;
 	}
 
-	public Long getLevel_id() {
-		return level_id;
+	public Long getLevelId() {
+		return levelId;
 	}
 
-	public void setLevel_id(Long level_id) {
-		this.level_id = level_id;
+	public void setLevelId(Long levelId) {
+		this.levelId = levelId;
 	}
 
 	public List<Navimain> getMainnavi() {
@@ -202,26 +202,26 @@ public class Naviglobal implements IDataProviderEntity {
 		this.mainnavi = mainnavi;
 	}
 
-	public Long getFieldvalues_id() {
-		return fieldvalues_id;
+	public Long getLabelId() {
+		return labelId;
 	}
 
-	public void setFieldvalues_id(Long fieldvalues_id) {
-		this.fieldvalues_id = fieldvalues_id;
+	public void setLabelId(Long labelId) {
+		this.labelId = labelId;
 	}
 
-	public Long getTooltip_fieldvalues_id() {
-		return tooltip_fieldvalues_id;
+	public Long getTooltipLabelId() {
+		return tooltipLabelId;
 	}
 
-	public void setTooltip_fieldvalues_id(Long tooltip_fieldvalues_id) {
-		this.tooltip_fieldvalues_id = tooltip_fieldvalues_id;
+	public void setTooltipLabelId(Long tooltipLabelId) {
+		this.tooltipLabelId = tooltipLabelId;
 	}
 
 	@Override
 	public String toString() {
 		return "Naviglobal [id=" + id + ", name=" + name + ", action=" + action + ", naviorder=" + naviorder + ", deleted="
-				+ deleted + ", fieldvalues_id=" + fieldvalues_id + ", tooltip_fieldvalues_id=" + tooltip_fieldvalues_id + "]";
+				+ deleted + ", labelId=" + labelId + ", tooltipLabelId=" + tooltipLabelId + "]";
 	}
 
 }

@@ -41,9 +41,7 @@ public class ConferenceLogDao {
 	private ConferenceLogTypeDao conferenceLogTypeDao;
 
 	public Long addConferenceLog(String eventType, Long userId, String streamid, 
-			Long room_id, String userip, String scopeName, 
-			String externalUserId, String externalUserType, String email,
-			String firstname, String lastname) {
+			Long roomId, String userip, String scopeName) {
 		try {
 			
 			ConferenceLogType confLogType = conferenceLogTypeDao.getConferenceLogTypeByEventName(eventType);
@@ -58,13 +56,8 @@ public class ConferenceLogDao {
 			confLog.setUserId(userId);
 			confLog.setStreamid(streamid);
 			confLog.setScopeName(scopeName);
-			confLog.setRoom_id(room_id);
+			confLog.setRoomId(roomId);
 			confLog.setUserip(userip);
-			confLog.setExternalUserId(externalUserId);
-			confLog.setExternalUserType(externalUserType);
-			confLog.setFirstname(firstname);
-			confLog.setLastname(lastname);
-			confLog.setEmail(email);
 			
 			confLog = em.merge(confLog);
 			Long confLogId = confLog.getId();

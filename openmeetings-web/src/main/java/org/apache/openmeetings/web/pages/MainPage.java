@@ -168,8 +168,8 @@ public class MainPage extends BaseInitedPage {
 	
 	private List<MenuItem> getMainMenu() {
 		List<MenuItem> menu = new ArrayList<MenuItem>();
-		for (Naviglobal gl : getBean(NavigationDao.class).getMainMenu(AuthLevelUtil.hasAdminLevel(WebSession.getRights()), getUserId())) {
-			MenuItem g = new MenuItem(Application.getString(gl.getFieldvalues_id())) {
+		for (Naviglobal gl : getBean(NavigationDao.class).getMainMenu(AuthLevelUtil.hasAdminLevel(WebSession.getRights()))) {
+			MenuItem g = new MenuItem(Application.getString(gl.getLabelId())) {
 				private static final long serialVersionUID = 1L;
 
 				@Override

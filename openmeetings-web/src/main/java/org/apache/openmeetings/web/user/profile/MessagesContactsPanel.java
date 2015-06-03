@@ -168,7 +168,7 @@ public class MessagesContactsPanel extends UserPanel {
 	}
 	
 	private String getEmail(User u) {
-		return u == null || u.getAdresses() == null ? "" : u.getAdresses().getEmail();
+		return u == null || u.getAddress() == null ? "" : u.getAddress().getEmail();
 	}
 	
 	private void selectMessage(long id, AjaxRequestTarget target) {

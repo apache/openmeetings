@@ -45,11 +45,11 @@ public class TestInvitation extends AbstractJUnitDefaults {
 	public void testSendInvitationLink() {
 		Sessiondata sessionData = sessDao.startsession();
 		
-		Long uid = userWebService.login(sessionData.getSession_id(), username, userpass);
+		Long uid = userWebService.login(sessionData.getSessionId(), username, userpass);
 		User us = userDao.get(uid);
 		
 		String date = new SimpleDateFormat("dd.MM.yyyy").format(new Date());
-		invitationService.sendInvitationHash(sessionData.getSession_id(), "Testname", "Testlastname", "message", "sebawagner@apache.org", 
+		invitationService.sendInvitationHash(sessionData.getSessionId(), "Testname", "Testlastname", "message", "sebawagner@apache.org", 
 				"subject", 1L, "", false, "", 1, date, "12:00", date, "14:00", 1L, us.getTimeZoneId(), true);
 	}
 }

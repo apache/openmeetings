@@ -66,7 +66,7 @@ public class AppointmentReminderTypDao {
 			AppointmentReminderType ac = get(typId);
 
 			ac.setName(name);
-			ac.setUpdatetime(new Date());
+			ac.setUpdated(new Date());
 
 			if (ac.getId() == null) {
 				em.persist(ac);
@@ -83,21 +83,20 @@ public class AppointmentReminderTypDao {
 		return null;
 	}
 
-	public Long add(Long user_id, String name, long fieldvalues_id) {
+	public Long add(Long userId, String name, long labelId) {
 		try {
 
 			AppointmentReminderType ac = new AppointmentReminderType();
 
 			ac.setName(name);
-			ac.setStarttime(new Date());
+			ac.setInserted(new Date());
 			ac.setDeleted(false);
-			ac.setUser(usersDao.get(user_id));
-			ac.setFieldvalues_id(fieldvalues_id);
+			ac.setUser(usersDao.get(userId));
+			ac.setLabelId(labelId);
 
 			ac = em.merge(ac);
-			Long category_id = ac.getId();
 
-			return category_id;
+			return ac.getId();
 		} catch (Exception ex2) {
 			log.error("[add]: ", ex2);
 		}
@@ -115,7 +114,7 @@ public class AppointmentReminderTypDao {
 				log.debug("Already deleted / Could not find: " + typId);
 				return typId;
 			}
-			ac.setUpdatetime(new Date());
+			ac.setUpdated(new Date());
 			ac.setDeleted(true);
 
 			if (ac.getId() == null) {
@@ -133,14 +132,10 @@ public class AppointmentReminderTypDao {
 		return null;
 	}
 
-	public List<AppointmentReminderType> getList(long language_id) {
+	public List<AppointmentReminderType> get() {
 		log.debug("getList");
 		try {
-			TypedQuery<AppointmentReminderType> query = em.createNamedQuery("getAppointmentReminderTypes", AppointmentReminderType.class);
-
-			List<AppointmentReminderType> listAppointmentReminderTyp = query.getResultList();
-
-			return listAppointmentReminderTyp;
+			return em.createNamedQuery("getAppointmentReminderTypes", AppointmentReminderType.class).getResultList();
 		} catch (Exception ex2) {
 			log.error("[getList]: " + ex2);
 		}

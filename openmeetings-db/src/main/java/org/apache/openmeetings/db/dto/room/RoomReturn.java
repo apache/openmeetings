@@ -22,18 +22,18 @@ import java.util.Date;
 
 public class RoomReturn {
 
-	private Long room_id;
+	private Long roomId;
 	private String name;
 	private String creator;
 	private Date created;
 	private RoomUser[] roomUser;
 
-	public Long getRoom_id() {
-		return room_id;
+	public Long getRoomId() {
+		return roomId;
 	}
 
-	public void setRoom_id(Long roomId) {
-		room_id = roomId;
+	public void setRoomId(Long roomId) {
+		this.roomId = roomId;
 	}
 
 	public String getName() {

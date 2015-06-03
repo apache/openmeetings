@@ -36,13 +36,13 @@ import org.simpleframework.xml.Root;
 @Entity
 @NamedQueries({
 	@NamedQuery(name="getOrganisationById",
-		query="SELECT c FROM Organisation AS c WHERE c.id = :organisation_id AND c.deleted = false")
+		query="SELECT c FROM Organisation AS c WHERE c.id = :organisationId AND c.deleted = false")
 	, @NamedQuery(name="getAnyOrganisationById",
-		query="SELECT c FROM Organisation AS c WHERE c.id = :organisation_id")
+		query="SELECT c FROM Organisation AS c WHERE c.id = :organisationId")
 	, @NamedQuery(name="getOrganisationsByIds",
 		query="SELECT c FROM Organisation AS c WHERE c.id IN :ids")
 	, @NamedQuery(name="getOrganisationsByUserId",
-		query="SELECT ou.organisation FROM User u, IN(u.organisationUsers) ou WHERE u.deleted = false AND u.id = :user_id")
+		query="SELECT ou.organisation FROM User u, IN(u.organisationUsers) ou WHERE u.deleted = false AND u.id = :userId")
 	, @NamedQuery(name="getNondeletedOrganisations", query="SELECT o FROM Organisation o WHERE o.deleted = false ORDER BY o.id")
 	, @NamedQuery(name="countOrganisations", query="SELECT COUNT(c) FROM Organisation AS c WHERE c.deleted = false")
 })
@@ -67,11 +67,11 @@ public class Organisation implements IDataProviderEntity {
 	@Column(name="updatedby")
 	private Long updatedby;
 	
-	@Column(name="starttime")
-	private Date starttime;
+	@Column(name="inserted")
+	private Date inserted;
 	
-	@Column(name="updatetime")
-	private Date updatetime;
+	@Column(name="updated")
+	private Date updated;
 	
 	@Column(name="deleted")
 	@Element(data = true, required = false)
@@ -107,18 +107,18 @@ public class Organisation implements IDataProviderEntity {
 	}	
 	
     
-	public Date getStarttime() {
-		return starttime;
+	public Date getInserted() {
+		return inserted;
 	}
-	public void setStarttime(Date starttime) {
-		this.starttime = starttime;
+	public void setInserted(Date inserted) {
+		this.inserted = inserted;
 	}
     
-	public Date getUpdatetime() {
-		return updatetime;
+	public Date getUpdated() {
+		return updated;
 	}
-	public void setUpdatetime(Date updatetime) {
-		this.updatetime = updatetime;
+	public void setUpdated(Date updated) {
+		this.updated = updated;
 	}
 	
 	public boolean isDeleted() {

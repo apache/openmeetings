@@ -184,8 +184,8 @@ public class MainService implements IPendingServiceCallback {
 			String streamId = current.getClient().getId();
 			Client currentClient = sessionManager.getClientByStreamId(streamId, null);
 
-			if (currentClient.getUser_id() != null) {
-				sessiondataDao.updateUser(SID, currentClient.getUser_id());
+			if (currentClient.getUserId() != null) {
+				sessiondataDao.updateUser(SID, currentClient.getUserId());
 			}
 
 			currentClient.setAllowRecording(soapLogin.isAllowRecording());
@@ -214,10 +214,10 @@ public class MainService implements IPendingServiceCallback {
 
 				SOAPLogin returnSoapLogin = new SOAPLogin();
 
-				returnSoapLogin.setRoom_id(soapLogin.getRoom_id());
+				returnSoapLogin.setRoomId(soapLogin.getRoomId());
 				returnSoapLogin.setBecomemoderator(soapLogin.getBecomemoderator());
 				returnSoapLogin.setShowAudioVideoTest(soapLogin.getShowAudioVideoTest());
-				returnSoapLogin.setRoomRecordingId(soapLogin.getRoomRecordingId());
+				returnSoapLogin.setRecordingId(soapLogin.getRecordingId());
 				returnSoapLogin.setShowNickNameDialog(soapLogin.getShowNickNameDialog());
 				returnSoapLogin.setLandingZone(soapLogin.getLandingZone());
 
@@ -254,12 +254,8 @@ public class MainService implements IPendingServiceCallback {
 
 			// Log the User
 			conferenceLogDao.addConferenceLog(
-					"nicknameEnter", currentClient.getUser_id(), streamId,
-					null, currentClient.getUserip(), currentClient.getScope(),
-					currentClient.getExternalUserId(),
-					currentClient.getExternalUserType(),
-					currentClient.getEmail(), currentClient.getFirstname(),
-					currentClient.getLastname());
+					"nicknameEnter", currentClient.getUserId(), streamId,
+					null, currentClient.getUserip(), currentClient.getScope());
 
 			this.sessionManager.updateClientByStreamId(streamId,
 					currentClient, false, null);
@@ -284,10 +280,10 @@ public class MainService implements IPendingServiceCallback {
 			Long users_id = sessiondataDao.checkSession(SID);
 			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(users_id))) {
 				Sessiondata sd = sessiondataDao.getSessionByHash(SID);
-				if (sd == null || sd.getSessionXml() == null) {
+				if (sd == null || sd.getXml() == null) {
 					return new Long(-37);
 				} else {
-					RemoteSessionObject userObject = RemoteSessionObject.fromXml(sd.getSessionXml());
+					RemoteSessionObject userObject = RemoteSessionObject.fromXml(sd.getXml());
 
 					log.debug(userObject.toString());
 
@@ -319,19 +315,19 @@ public class MainService implements IPendingServiceCallback {
 											, userObject.getExternalUserType(), null, userObject.getPictureUrl());
 
 							long userId = u.getId();
-							currentClient.setUser_id(userId);
+							currentClient.setUserId(userId);
 							SessionVariablesUtil.setUserId(current.getClient(), userId);
 						} else {
 							user.setPictureuri(userObject.getPictureUrl());
 
 							userDao.update(user, users_id);
 
-							currentClient.setUser_id(user.getId());
+							currentClient.setUserId(user.getId());
 							SessionVariablesUtil.setUserId(current.getClient(), user.getId());
 						}
 					}
 
-					log.debug("userObject.getExternalUserId() -2- " + currentClient.getUser_id());
+					log.debug("userObject.getExternalUserId() -2- " + currentClient.getUserId());
 
 					currentClient.setUserObject(userObject.getUsername(), userObject.getFirstname(), userObject.getLastname());
 					currentClient.setPicture_uri(userObject.getPictureUrl());
@@ -339,8 +335,8 @@ public class MainService implements IPendingServiceCallback {
 
 					log.debug("UPDATE USER BY STREAMID " + streamId);
 
-					if (currentClient.getUser_id() != null) {
-						sessiondataDao.updateUser(SID, currentClient.getUser_id());
+					if (currentClient.getUserId() != null) {
+						sessiondataDao.updateUser(SID, currentClient.getUserId());
 					}
 
 					sessionManager.updateClientByStreamId(streamId, currentClient, false, null);

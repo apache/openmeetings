@@ -53,10 +53,7 @@ public class BatikMethods {
 	public void paintTextByWidthHeight(SVGGraphics2D g2d, int x1, int y1, int width, int height,
 			String text, int style, int size, Color fontColor) throws Exception {
 
-		//String default_export_font = Configurationmanagement.getInstance().getConfKey(3,"default_export_font").getConf_value();
-		
 		this.drawTextByJTextArea(g2d, x1, y1, width, height, text, "Verdana", style, size, fontColor);
-
 	}
 	
 	public void _paintTextByWidthHeight(SVGGraphics2D g2d, int x1, int y1, int width, int height,
@@ -244,9 +241,6 @@ public class BatikMethods {
 	public void paintTextByWidthHeightAndDocument(SVGGraphics2D g2d, int x1, int y1, int width, int height,
 			String text, int style, int size, Color fontColor, Document document) throws Exception {
 
-		// String default_export_font =
-		// Configurationmanagement.getInstance().getConfKey("default_export_font").getConf_value();
-		
 		this.drawText(g2d, x1, y1, width, height, text, "Verdana", style, size, fontColor, document);
 
 	}

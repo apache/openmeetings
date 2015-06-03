@@ -104,7 +104,7 @@ public class FLVRecorderService implements IPendingServiceCallback {
 		try {
 			log.debug("##REC:: recordMeetingStream ::");
 
-			Long room_id = client.getRoom_id();
+			Long room_id = client.getRoomId();
 
 			Date now = new Date();
 
@@ -112,7 +112,7 @@ public class FLVRecorderService implements IPendingServiceCallback {
 
 			flvRecording.setFileHash("");
 			flvRecording.setFileName(roomRecordingName);
-			Long ownerId = client.getUser_id();
+			Long ownerId = client.getUserId();
 			if (ownerId != null && ownerId < 0) {
 				User c = userDao.get(-ownerId);
 				if (c != null) {
@@ -392,9 +392,9 @@ public class FLVRecorderService implements IPendingServiceCallback {
 
 			Client currentClient = sessionManager.getClientByStreamId(streamid, null);
 
-			log.debug("getCurrentRoomClient -#########################- " + currentClient.getRoom_id());
+			log.debug("getCurrentRoomClient -#########################- " + currentClient.getRoomId());
 
-			for (Client rcl : sessionManager.getClientListByRoomAll(currentClient.getRoom_id())) {
+			for (Client rcl : sessionManager.getClientListByRoomAll(currentClient.getRoomId())) {
 				if (rcl.getIsRecording()) {
 					return rcl;
 				}

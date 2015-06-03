@@ -22,7 +22,9 @@ function initMenu(menuContainerId, menuId) {
 		, menuIcon: true
 		, buttons: true
 		, position: {
-			within: $("#" + menuId).add(window).first()
+			my: "left top",
+			at: "left bottom",
+			collision: "none"
 		}
 		//, select: select
 	});

@@ -38,7 +38,7 @@ public class OrganisationUserDao implements IDataProviderDao<OrganisationUser> {
 	private EntityManager em;
 	@Autowired
 	private UserDao usersDao;
-	public final static String[] searchFields = {"user.lastname", "user.firstname", "user.login", "user.adresses.email"};
+	public final static String[] searchFields = {"user.lastname", "user.firstname", "user.login", "user.address.email"};
 
 	public OrganisationUser get(long id) {
 		TypedQuery<OrganisationUser> q = em.createNamedQuery("getOrganisationUsersById", OrganisationUser.class);
@@ -115,10 +115,10 @@ public class OrganisationUserDao implements IDataProviderDao<OrganisationUser> {
 	
 	public OrganisationUser update(OrganisationUser entity, Long userId) {
 		if (entity.getId() == null) {
-			entity.setStarttime(new Date());
+			entity.setInserted(new Date());
 			em.persist(entity);
 		} else {
-			entity.setUpdatetime(new Date());
+			entity.setUpdated(new Date());
 			entity = em.merge(entity);
 		}
 		updateUser(entity, false, userId);

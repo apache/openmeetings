@@ -42,13 +42,13 @@ import org.simpleframework.xml.Root;
 @Entity
 @NamedQueries({
 		@NamedQuery(name = "forceGetConfigurationByKey", query = "SELECT c FROM Configuration c " 
-				+ "WHERE c.conf_key LIKE :conf_key"),
+				+ "WHERE c.key LIKE :key"),
 		@NamedQuery(name = "getConfigurationsByKeys", query = "SELECT c FROM Configuration c "
-				+ "WHERE c.conf_key IN :conf_keys and c.deleted = false"),
+				+ "WHERE c.key IN :keys and c.deleted = false"),
 		@NamedQuery(name = "getNondeletedConfiguration", query = "SELECT c FROM Configuration c  "
 				+ "LEFT JOIN FETCH c.user WHERE c.deleted = false"),
 		@NamedQuery(name = "getConfigurationById", query = "SELECT c FROM Configuration c "
-				+ "LEFT JOIN FETCH c.user WHERE c.id = :configuration_id and c.deleted = false"),
+				+ "LEFT JOIN FETCH c.user WHERE c.id = :id and c.deleted = false"),
 		@NamedQuery(name = "countConfigurations", query = "SELECT COUNT(c) FROM Configuration c WHERE c.deleted = false")
 })
 @Table(name = "configuration")
@@ -62,21 +62,21 @@ public class Configuration implements IDataProviderEntity {
 	@Element(name = "id", data = true)
 	private Long id;
 	
-	@Column(name = "conf_key", unique = true)
+	@Column(name = "key", unique = true)
 	@Element(name = "key", data = true, required = false)
-	private String conf_key;
+	private String key;
 
-	@Column(name = "conf_value")
+	@Column(name = "value")
 	@Element(name = "value", data = true, required = false)
-	private String conf_value;
+	private String value;
 
-	@Column(name = "starttime")
+	@Column(name = "inserted")
 	@Element(name = "created", data = true, required = false)
-	private Date starttime;
+	private Date inserted;
 
-	@Column(name = "updatetime")
+	@Column(name = "updated")
 	@Element(name = "updated", data = true, required = false)
-	private Date updatetime;
+	private Date updated;
 
 	@Lob
 	@Column(name = "comment_field", length = 2048)
@@ -101,20 +101,20 @@ public class Configuration implements IDataProviderEntity {
 		this.comment = comment;
 	}
 
-	public String getConf_key() {
-		return conf_key;
+	public String getKey() {
+		return key;
 	}
 
-	public void setConf_key(String conf_key) {
-		this.conf_key = conf_key;
+	public void setKey(String key) {
+		this.key = key;
 	}
 
-	public String getConf_value() {
-		return conf_value;
+	public String getValue() {
+		return value;
 	}
 
-	public void setConf_value(String conf_value) {
-		this.conf_value = conf_value;
+	public void setValue(String value) {
+		this.value = value;
 	}
 
 	public Long getId() {
@@ -125,20 +125,20 @@ public class Configuration implements IDataProviderEntity {
 		this.id = id;
 	}
 
-	public Date getStarttime() {
-		return starttime;
+	public Date getInserted() {
+		return inserted;
 	}
 
-	public void setStarttime(Date starttime) {
-		this.starttime = starttime;
+	public void setInserted(Date inserted) {
+		this.inserted = inserted;
 	}
 
-	public Date getUpdatetime() {
-		return updatetime;
+	public Date getUpdated() {
+		return updated;
 	}
 
-	public void setUpdatetime(Date updatetime) {
-		this.updatetime = updatetime;
+	public void setUpdated(Date updated) {
+		this.updated = updated;
 	}
 
 	public boolean isDeleted() {

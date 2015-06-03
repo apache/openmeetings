@@ -138,8 +138,8 @@ public class RoomDao implements IDataProviderDao<Room> {
 
 		return em.createNamedQuery("appointedRoomsInRangeByUser", Room.class)
 				.setParameter("userId", userId)
-				.setParameter("starttime", startCal.getTime())
-				.setParameter("endtime", endCal.getTime())
+				.setParameter("start", startCal.getTime())
+				.setParameter("end", endCal.getTime())
 				.getResultList();
 	}
 	
@@ -161,10 +161,10 @@ public class RoomDao implements IDataProviderDao<Room> {
 	
 	public Room update(Room entity, Long userId) {
 		if (entity.getId() == null) {
-			entity.setStarttime(new Date());
+			entity.setInserted(new Date());
 			em.persist(entity);
 		} else {
-			entity.setUpdatetime(new Date());
+			entity.setUpdated(new Date());
 		}
 		if (entity.isSipEnabled() && isSipEnabled()) {
 			String sipNumber = getSipNumber(entity.getId());

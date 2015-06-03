@@ -42,7 +42,7 @@ import org.simpleframework.xml.Root;
 	@NamedQuery(name = "deleteUserContact", query = "delete from UserContact u where u.userContactId = :userContactDeleteId"),
 	@NamedQuery(name = "deleteAllUserContacts", query = "delete from UserContact u where u.owner.id = :ownerId"),
 	@NamedQuery(name = "checkUserContacts", query = "select count(c.userContactId) from UserContact c " +
-			"where c.contact.id = :user_id AND c.owner.id = :ownerId "),
+			"where c.contact.id = :userId AND c.owner.id = :ownerId "),
 	@NamedQuery(name = "getContactsByHash", query = "select c from UserContact c " +
 			"where c.hash like :hash "),
 	@NamedQuery(name = "getContactsByUserAndStatus", query = "select c from UserContact c " +
@@ -59,14 +59,14 @@ import org.simpleframework.xml.Root;
 			"AND c.shareCalendar = :shareCalendar " +
 			"AND c.contact.deleted = false"),
 	@NamedQuery(name = "getContactRequestsByUserAndStatus", query = "select c from UserContact c " +
-			"where c.contact.id = :user_id " +
+			"where c.contact.id = :userId " +
 			"AND c.pending = :pending " +
 			"AND c.contact.deleted = false"),
 	@NamedQuery(name = "getContactsByUser", query = "SELECT c FROM UserContact c " +
-			"WHERE c.contact.id = :user_id " +
+			"WHERE c.contact.id = :userId " +
 			"AND c.contact.deleted = false ORDER BY c.pending DESC"),
 	@NamedQuery(name = "countContactsByUser", query = "select COUNT(c) from UserContact c " +
-			"where c.contact.id = :user_id " +
+			"where c.contact.id = :userId " +
 			"AND c.contact.deleted = false"),
 	@NamedQuery(name = "getUserContactsById", query = "SELECT c FROM UserContact c WHERE c.userContactId = :userContactId"),
 	@NamedQuery(name = "getUserContacts", query = "SELECT c FROM UserContact c ORDER BY c.userContactId")

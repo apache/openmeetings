@@ -40,7 +40,7 @@ public class Navimain implements IDataProviderEntity {
 	private Long id;
 
 	@Column(name = "global_id")
-	private Long global_id;
+	private Long globalId;
 
 	@Column(name = "name")
 	private String name;
@@ -60,11 +60,11 @@ public class Navimain implements IDataProviderEntity {
 	@Column(name = "params")
 	private String params;
 
-	@Column(name = "updatetime")
-	private Date updatetime;
+	@Column(name = "updated")
+	private Date updated;
 
-	@Column(name = "starttime")
-	private Date starttime;
+	@Column(name = "inserted")
+	private Date inserted;
 
 	@Column(name = "comment_field")
 	private String comment;
@@ -73,16 +73,16 @@ public class Navimain implements IDataProviderEntity {
 	private Integer naviorder;
 
 	@Column(name = "level_id")
-	private Long level_id;
+	private Long levelId;
 
-	@Column(name = "fieldvalues_id")
-	private Long fieldvalues_id;
+	@Column(name = "label_id")
+	private Long labelId;
 
 	@Column(name = "deleted")
 	private boolean deleted;
 
-	@Column(name = "tooltip_fieldvalues_id")
-	private Long tooltip_fieldvalues_id;
+	@Column(name = "tooltip_label_id")
+	private Long tooltipLabelId;
 
 	public Long getId() {
 		return id;
@@ -100,20 +100,20 @@ public class Navimain implements IDataProviderEntity {
 		this.action = action;
 	}
 
-	public Long getLevel_id() {
-		return level_id;
+	public Long getLevelId() {
+		return levelId;
 	}
 
-	public void setLevel_id(Long level_id) {
-		this.level_id = level_id;
+	public void setLevelId(Long levelId) {
+		this.levelId = levelId;
 	}
 
-	public Long getGlobal_id() {
-		return global_id;
+	public Long getGlobalId() {
+		return globalId;
 	}
 
-	public void setGlobal_id(Long global_id) {
-		this.global_id = global_id;
+	public void setGlobalId(Long globalId) {
+		this.globalId = globalId;
 	}
 
 	public String getComment() {
@@ -148,20 +148,20 @@ public class Navimain implements IDataProviderEntity {
 		this.isopen = isopen;
 	}
 
-	public Date getStarttime() {
-		return starttime;
+	public Date getInserted() {
+		return inserted;
 	}
 
-	public void setStarttime(Date starttime) {
-		this.starttime = starttime;
+	public void setInserted(Date inserted) {
+		this.inserted = inserted;
 	}
 
-	public Date getUpdatetime() {
-		return updatetime;
+	public Date getUpdated() {
+		return updated;
 	}
 
-	public void setUpdatetime(Date updatetime) {
-		this.updatetime = updatetime;
+	public void setUpdated(Date updated) {
+		this.updated = updated;
 	}
 
 	public boolean isDeleted() {
@@ -188,20 +188,20 @@ public class Navimain implements IDataProviderEntity {
 		this.naviorder = naviorder;
 	}
 
-	public Long getFieldvalues_id() {
-		return fieldvalues_id;
+	public Long getLabelId() {
+		return labelId;
 	}
 
-	public void setFieldvalues_id(Long fieldvalues_id) {
-		this.fieldvalues_id = fieldvalues_id;
+	public void setLabelId(Long labelId) {
+		this.labelId = labelId;
 	}
 
-	public Long getTooltip_fieldvalues_id() {
-		return tooltip_fieldvalues_id;
+	public Long getTooltipLabelId() {
+		return tooltipLabelId;
 	}
 
-	public void setTooltip_fieldvalues_id(Long tooltip_fieldvalues_id) {
-		this.tooltip_fieldvalues_id = tooltip_fieldvalues_id;
+	public void setTooltipLabelId(Long tooltipLabelId) {
+		this.tooltipLabelId = tooltipLabelId;
 	}
 
 	public String getParams() {
@@ -214,8 +214,8 @@ public class Navimain implements IDataProviderEntity {
 
 	@Override
 	public String toString() {
-		return "Navimain [id=" + id + ", global_id=" + global_id + ", name=" + name + ", action=" + action + ", params=" + params
-				+ ", naviorder=" + naviorder + ", fieldvalues_id=" + fieldvalues_id + ", deleted=" + deleted + ", tooltip_fieldvalues_id="
-				+ tooltip_fieldvalues_id + "]";
+		return "Navimain [id=" + id + ", globalId=" + globalId + ", name=" + name + ", action=" + action + ", params=" + params
+				+ ", naviorder=" + naviorder + ", labelId=" + labelId + ", deleted=" + deleted + ", tooltipLabelId="
+				+ tooltipLabelId + "]";
 	}
 }

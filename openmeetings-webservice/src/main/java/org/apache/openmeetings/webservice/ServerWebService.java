@@ -71,9 +71,9 @@ public class ServerWebService {
 	 */
 	public Server[] getServers(String SID, int start, int max) throws ServiceException {
 		log.debug("getServers enter");
-		Long users_id = sessiondataDao.checkSession(SID);
+		Long userId = sessiondataDao.checkSession(SID);
 
-		if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(users_id))) {
+		if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(userId))) {
 			return serversDao.get(start, max).toArray(new Server[0]);
 		} else {
 			log.warn("Insuffisient permissions");
@@ -91,9 +91,9 @@ public class ServerWebService {
 	 */
 	public int getServerCount(String SID) throws ServiceException {
 		log.debug("getServerCount enter");
-		Long users_id = sessiondataDao.checkSession(SID);
+		Long userId = sessiondataDao.checkSession(SID);
 
-		if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(users_id))) {
+		if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(userId))) {
 			return (int) serversDao.count();
 		} else {
 			log.warn("Insuffisient permissions");
@@ -132,9 +132,9 @@ public class ServerWebService {
 			int port, String user, String pass, String webapp, String protocol,
 			Boolean active, String comment) throws ServiceException {
 		log.debug("saveServerCount enter");
-		Long users_id = sessiondataDao.checkSession(SID);
+		Long userId = sessiondataDao.checkSession(SID);
 
-		if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(users_id))) {
+		if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(userId))) {
 			Server s = serversDao.get(id);
 			if (s == null) {
 				s = new Server();
@@ -148,7 +148,7 @@ public class ServerWebService {
 			s.setProtocol(protocol);
 			s.setActive(active);
 			s.setComment(comment);
-			return serversDao.update(s, users_id).getId();
+			return serversDao.update(s, userId).getId();
 		} else {
 			log.warn("Insuffisient permissions");
 			return -1;
@@ -166,12 +166,12 @@ public class ServerWebService {
 	 */
 	public boolean deleteServer(String SID, long id) throws ServiceException {
 		log.debug("saveServerCount enter");
-		Long users_id = sessiondataDao.checkSession(SID);
+		Long userId = sessiondataDao.checkSession(SID);
 
-		if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(users_id))) {
+		if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(userId))) {
 			Server s = serversDao.get(id);
 			if (s != null) {
-				serversDao.delete(s, users_id);
+				serversDao.delete(s, userId);
 				return true;
 			}
 		} else {

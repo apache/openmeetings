@@ -35,11 +35,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Entity
 @NamedQueries({
 	@NamedQuery(name = "getSessionById", query = "select c from Sessiondata as c "
-					+ "where c.session_id LIKE :session_id"),
+					+ "where c.sessionId LIKE :sessionId"),
 	@NamedQuery(name = "getSessionToDelete", query = "Select c from Sessiondata c "
-					+ "WHERE c.refresh_time < :refresh_time " + "AND ( "
-					+ "c.storePermanent IS NULL " + "OR "
-					+ "c.storePermanent = false " + ")")
+					+ "WHERE c.refreshed < :refreshed AND (c.permanent = false)")
 })
 @Table(name = "sessiondata")
 @XmlRootElement
@@ -51,29 +49,29 @@ public class Sessiondata implements Serializable {
 	private Long id;
 	
 	@Column(name="user_id")
-	private Long user_id;
+	private Long userId;
 	
 	@Column(name="session_id")
-	private String session_id;
+	private String sessionId;
 	
-	@Column(name="starttermin_time")
-	private Date starttermin_time;
+	@Column(name="created")
+	private Date created;
 	
-	@Column(name="refresh_time")
-	private Date refresh_time;
+	@Column(name="refreshed")
+	private Date refreshed;
 	
 	@Lob
-	@Column(name="sessionXml")
-	private String sessionXml;
+	@Column(name="xml")
+	private String xml;
 	
-	@Column(name="storePermanent")
-	private Boolean storePermanent;
+	@Column(name="permanent")
+	private boolean permanent;
 	
 	@Column(name="language_id")
-	private Long language_id;
+	private Long languageId;
 	
 	@Column(name="organization_id")
-	private Long organization_id;
+	private Long organizationId;
 	
 	public Sessiondata() {
 	}
@@ -85,60 +83,60 @@ public class Sessiondata implements Serializable {
         this.id = id;
     }
     
-    public Date getRefresh_time() {
-        return refresh_time;
+    public Date getRefreshed() {
+        return refreshed;
     }
-    public void setRefresh_time(Date refresh_time) {
-        this.refresh_time = refresh_time;
-    }
-    
-    public String getSession_id() {
-        return session_id;
-    }
-    public void setSession_id(String session_id) {
-        this.session_id = session_id;
+    public void setRefreshed(Date refreshed) {
+        this.refreshed = refreshed;
     }
     
-    public Date getStarttermin_time() {
-        return starttermin_time;
+    public String getSessionId() {
+        return sessionId;
     }
-    public void setStarttermin_time(Date starttermin_time) {
-        this.starttermin_time = starttermin_time;
+    public void setSessionId(String sessionId) {
+        this.sessionId = sessionId;
     }
     
-    public Long getUser_id() {
-        return user_id;
+    public Date getCreated() {
+        return created;
     }
-    public void setUser_id(Long user_id) {
-        this.user_id = user_id;
+    public void setCreated(Date created) {
+        this.created = created;
+    }
+    
+    public Long getUserId() {
+        return userId;
+    }
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
-	public String getSessionXml() {
-		return sessionXml;
+	public String getXml() {
+		return xml;
 	}
-	public void setSessionXml(String sessionXml) {
-		this.sessionXml = sessionXml;
-	}
-
-	public Boolean getStorePermanent() {
-		return storePermanent;
-	}
-	public void setStorePermanent(Boolean storePermanent) {
-		this.storePermanent = storePermanent;
+	public void setXml(String xml) {
+		this.xml = xml;
 	}
 
-	public Long getLanguage_id() {
-		return language_id;
+	public boolean isPermanent() {
+		return permanent;
 	}
-	public void setLanguage_id(Long language_id) {
-		this.language_id = language_id;
+	public void setPermanent(boolean permanent) {
+		this.permanent = permanent;
 	}
 
-	public Long getOrganization_id() {
-		return organization_id;
+	public Long getLanguageId() {
+		return languageId;
 	}
-	public void setOrganization_id(Long organization_id) {
-		this.organization_id = organization_id;
+	public void setLanguageId(Long languageId) {
+		this.languageId = languageId;
+	}
+
+	public Long getOrganizationId() {
+		return organizationId;
+	}
+	public void setOrganizationId(Long organizationId) {
+		this.organizationId = organizationId;
 	}
 	
 }

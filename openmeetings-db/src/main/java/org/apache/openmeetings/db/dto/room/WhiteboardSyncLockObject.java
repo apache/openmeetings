@@ -27,7 +27,7 @@ public class WhiteboardSyncLockObject {
 	private boolean isCurrentLoadingItem = false;
 
 	private Date addtime;
-	private Date starttime;
+	private Date inserted;
 
 	public String getPublicSID() {
 		return publicSID;
@@ -45,12 +45,12 @@ public class WhiteboardSyncLockObject {
 		this.isInitialLoaded = isInitialLoaded;
 	}
 
-	public Date getStarttime() {
-		return starttime;
+	public Date getInserted() {
+		return inserted;
 	}
 
-	public void setStarttime(Date starttime) {
-		this.starttime = starttime;
+	public void setInserted(Date inserted) {
+		this.inserted = inserted;
 	}
 
 	public boolean isCurrentLoadingItem() {

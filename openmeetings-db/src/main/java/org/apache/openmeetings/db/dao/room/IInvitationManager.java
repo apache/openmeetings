@@ -35,12 +35,12 @@ public interface IInvitationManager {
 	
 	Invitation getInvitation(Invitation _invitation, User inveetee, Room room
 			, boolean isPasswordProtected, String invitationpass, Valid valid,
-			User createdBy, Long language_id, Date gmtTimeStart, Date gmtTimeEnd
+			User createdBy, Long languageId, Date gmtTimeStart, Date gmtTimeEnd
 			, Appointment appointment);
 	
 	Invitation getInvitation(User inveetee, Room room
 			, boolean isPasswordProtected, String invitationpass, Valid valid,
-			User createdBy, Long language_id, Date gmtTimeStart, Date gmtTimeEnd
+			User createdBy, Long languageId, Date gmtTimeStart, Date gmtTimeEnd
 			, Appointment appointment);
 	
 	void sendInvitionLink(Invitation i, MessageType type, String subject, String message, boolean ical) throws Exception ;
@@ -49,5 +49,5 @@ public interface IInvitationManager {
 	
 	Object getInvitationByHashCode(String hashCode, boolean hidePass);
 	
-	boolean sendInvitationReminderSMS(String phone, String subject, long language_id);
+	boolean sendInvitationReminderSMS(String phone, String subject, long languageId);
 }

@@ -95,7 +95,7 @@ public class InvitationService implements IPendingServiceCallback {
 	 * @param validFromTime
 	 * @param validToDate
 	 * @param validToTime
-	 * @param language_id
+	 * @param languageId
      * @param iCalTz
 	 * @return - invitation object in case of success, "Sys - Error" string or null in case of error
 	 */
@@ -104,7 +104,7 @@ public class InvitationService implements IPendingServiceCallback {
 			Long room_id, String conferencedomain, Boolean isPasswordProtected,
 			String invitationpass, Integer valid, String validFromDate,
 			String validFromTime, String validToDate, String validToTime,
-			Long language_id, String iCalTz, boolean sendMail) {
+			Long languageId, String iCalTz, boolean sendMail) {
 
 		try {
 			Long users_id = sessiondataDao.checkSession(SID);
@@ -123,7 +123,7 @@ public class InvitationService implements IPendingServiceCallback {
 				User invitee = userDao.getContact(email, firstname, lastname, users_id);
 				Invitation invitation = invitationManager.getInvitation(invitee, roomDao.get(room_id),
 								isPasswordProtected, invitationpass, Valid.fromInt(valid)
-								, userDao.get(users_id), language_id,
+								, userDao.get(users_id), languageId,
 								calFrom.getTime(), calTo.getTime(), null);
 
 				if (invitation != null) {

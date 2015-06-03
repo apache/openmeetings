@@ -244,22 +244,22 @@ public class BackupImport {
 			
 			List<Configuration> list = readList(serializer, f, "configs.xml", "configs", Configuration.class, true);
 			for (Configuration c : list) {
-				if (c.getConf_key() == null || c.isDeleted()) {
+				if (c.getKey() == null || c.isDeleted()) {
 					continue;
 				}
-				Configuration cfg = configurationDao.forceGet(c.getConf_key());
+				Configuration cfg = configurationDao.forceGet(c.getKey());
 				if (cfg != null && !cfg.isDeleted()) {
-					log.warn("Non deleted configuration with same key is found! old value: {}, new value: {}", cfg.getConf_value(), c.getConf_value());
+					log.warn("Non deleted configuration with same key is found! old value: {}, new value: {}", cfg.getValue(), c.getValue());
 				}
 				c.setId(cfg == null ? null : cfg.getId());
 				if (c.getUser() != null && c.getUser().getId() == null) {
 					c.setUser(null);
 				}
-				if (CONFIG_CRYPT_KEY.equals(c.getConf_key())) {
+				if (CONFIG_CRYPT_KEY.equals(c.getKey())) {
 					try {
-						Class.forName(c.getConf_value());
+						Class.forName(c.getValue());
 					} catch (ClassNotFoundException e) {
-						c.setConf_value(MD5Implementation.class.getCanonicalName());
+						c.setValue(MD5Implementation.class.getCanonicalName());
 					}
 				}
 				configurationDao.update(c, null);
@@ -307,7 +307,7 @@ public class BackupImport {
 					u.setForceTimeZoneCheck(false);
 				}
 				
-				u.setStarttime(new Date());
+				u.setInserted(new Date());
 				long userId = u.getId();
 				u.setId(null);
 				if (u.getSipUser() != null && u.getSipUser().getId() != 0) {
@@ -908,7 +908,7 @@ public class BackupImport {
 		return list;
 	}
 	
-	//FIXME (need to be removed in later versions) HACK to fix 2 deleted nodes in users.xml and inline Adresses and sipData
+	//FIXME (need to be removed in later versions) HACK to fix 2 deleted nodes in users.xml and inline Address and sipData
 	private List<User> readUserList(InputSource xml, String listNodeName) throws Exception {
 		Registry registry = new Registry();
 		Strategy strategy = new RegistryStrategy(registry);
@@ -924,10 +924,10 @@ public class BackupImport {
 		//add existence email from database
 		List<User>  users = usersDao.getAllUsers();
 		for (User u : users){
-			if (u.getAdresses() == null || u.getAdresses().getEmail() == null || User.Type.user != u.getType()) {
+			if (u.getAddress() == null || u.getAddress().getEmail() == null || User.Type.user != u.getType()) {
 				continue;
 			}
-			userEmailMap.put(u.getAdresses().getEmail(), -1);
+			userEmailMap.put(u.getAddress().getEmail(), -1);
 		}
 		Node nList = getNode(getNode(doc, "root"), listNodeName);
 		if (nList != null) {
@@ -970,9 +970,9 @@ public class BackupImport {
 				
 				boolean needToSkip1 = true;
 				//HACK to handle Address inside user
-				if (u.getAdresses() == null) {
+				if (u.getAddress() == null) {
 					Address a = ser.read(Address.class, item1, false);
-					u.setAdresses(a);
+					u.setAddress(a);
 					needToSkip1 = false;
 				}
 				if (needToSkip1) {
@@ -980,14 +980,14 @@ public class BackupImport {
 						item1 = listNode1.getNext(); //HACK to handle Address inside user
 					} while (item1 != null && !"user".equals(item1.getName()));
 				}
-				String level_id = null, status = null;
+				String levelId = null, status = null;
 				do {
 					if (u.getTimeZoneId() == null && "omTimeZone".equals(item2.getName())) {
 						String jName = item2.getValue();
 						u.setTimeZoneId(jName == null ? null : tzUtil.getTimezoneByInternalJName(jName).getID());
 					}
 					if ("level_id".equals(item2.getName())) {
-						level_id = item2.getValue();
+						levelId = item2.getValue();
 					}
 					if ("status".equals(item2.getName())) {
 						status = item2.getValue();
@@ -1000,22 +1000,22 @@ public class BackupImport {
 						u.getRights().add(Right.Dashboard);
 						u.getRights().add(Right.Login);
 					}
-					if ("3".equals(level_id)) {
+					if ("3".equals(levelId)) {
 						u.getRights().add(Right.Admin);
 						u.getRights().add(Right.Soap);
 					}
-					if ("4".equals(level_id)) {
+					if ("4".equals(levelId)) {
 						u.getRights().add(Right.Soap);
 					}
 				}
 				// check that email is unique
-				if (u.getAdresses() != null && u.getAdresses().getEmail() != null && User.Type.user == u.getType()) {
-					if (userEmailMap.containsKey(u.getAdresses().getEmail())) {
+				if (u.getAddress() != null && u.getAddress().getEmail() != null && User.Type.user == u.getType()) {
+					if (userEmailMap.containsKey(u.getAddress().getEmail())) {
 						log.warn("Email is duplicated for user " + u.toString());
-						String updateEmail = "modified_by_import_<" + list.size() + ">" + u.getAdresses().getEmail();
-						u.getAdresses().setEmail(updateEmail);
+						String updateEmail = "modified_by_import_<" + list.size() + ">" + u.getAddress().getEmail();
+						u.getAddress().setEmail(updateEmail);
 					}
-					userEmailMap.put(u.getAdresses().getEmail(), userEmailMap.size());
+					userEmailMap.put(u.getAddress().getEmail(), userEmailMap.size());
 				}
 				list.add(u);
 				item = listNode.getNext();

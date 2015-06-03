@@ -36,7 +36,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 public abstract class AbstractTestDefaults extends AbstractSpringTest {
 	
 	@Autowired
-	private LabelDao fieldLanguagesValuesDao;
+	private LabelDao labelDao;
 
 	public WebDriver driver = null;
 	
@@ -82,7 +82,7 @@ public abstract class AbstractTestDefaults extends AbstractSpringTest {
 	public boolean doTearDownAfterTest = false;
 	
 	public String getString(long id) {
-		return fieldLanguagesValuesDao.getString(id, getLanguageId());
+		return labelDao.getString(id, getLanguageId());
 	}
 
 	/**

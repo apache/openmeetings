@@ -39,7 +39,7 @@ public class ActivatePage extends BaseNotInitedPage {
 			if (!AuthLevelUtil.hasLoginLevel(user.getRights())) {
 				// activate
 				user.getRights().add(Right.Login);
-				user.setUpdatetime(new Date());
+				user.setUpdated(new Date());
 
 				Application.getBean(UserDao.class).update(user, null);
 	

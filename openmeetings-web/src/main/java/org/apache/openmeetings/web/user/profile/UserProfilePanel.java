@@ -55,13 +55,13 @@ public class UserProfilePanel extends UserPanel {
 				|| (model.getObject().isShowContactDataToContacts() && getBean(UserContactsDao.class).checkUserContacts(model.getObject().getId(), getUserId()) > 0))
 		{
 			addressDenied.setVisible(false);
-			address.add(new Label("adresses.phone"));
-			address.add(new Label("adresses.street"));
-			address.add(new Label("adresses.additionalname"));
-			address.add(new Label("adresses.zip"));
-			address.add(new Label("adresses.town"));
-			address.add(new Label("adresses.states.name"));
-			address.add(new Label("adresses.comment"));
+			address.add(new Label("address.phone"));
+			address.add(new Label("address.street"));
+			address.add(new Label("address.additionalname"));
+			address.add(new Label("address.zip"));
+			address.add(new Label("address.town"));
+			address.add(new Label("address.state.name"));
+			address.add(new Label("address.comment"));
 		} else {
 			address.setVisible(false);
 			addressDenied.setDefaultModelObject(Application.getString(Boolean.TRUE.equals(model.getObject().isShowContactDataToContacts()) ? 1269 : 1268));

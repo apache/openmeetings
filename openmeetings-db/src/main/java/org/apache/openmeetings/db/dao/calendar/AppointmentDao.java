@@ -197,14 +197,14 @@ public class AppointmentDao {
 		log.debug("Start " + start + " End " + end);
 
 		TypedQuery<Appointment> query = em.createNamedQuery("appointmentsInRange", Appointment.class);
-		query.setParameter("starttime", start);
-		query.setParameter("endtime", end);
+		query.setParameter("start", start);
+		query.setParameter("end", end);
 		query.setParameter("userId", userId);
 		
 		List<Appointment> listAppoints = new ArrayList<Appointment>(query.getResultList()); 
 		TypedQuery<Appointment> q1 = em.createNamedQuery("joinedAppointmentsInRange", Appointment.class);
-		q1.setParameter("starttime", start);
-		q1.setParameter("endtime", end);
+		q1.setParameter("start", start);
+		q1.setParameter("end", end);
 		q1.setParameter("userId", userId);
 		for (Appointment a : q1.getResultList()) {
 			a.setConnectedEvent(true); //TODO need to be reviewed
@@ -216,8 +216,8 @@ public class AppointmentDao {
 
 	public List<Appointment> getAppointmentsInRange(Calendar start, Calendar end) {
 		TypedQuery<Appointment> q = em.createNamedQuery("appointmentsInRangeRemind", Appointment.class);
-		q.setParameter("starttime", start.getTime());
-		q.setParameter("endtime", end.getTime());
+		q.setParameter("start", start.getTime());
+		q.setParameter("end", end.getTime());
 		return q.getResultList();
 	}
 	
@@ -276,8 +276,8 @@ public class AppointmentDao {
 
 		query.setParameter("userId", userId);
 
-		query.setParameter("starttime", startCal.getTime());
-		query.setParameter("endtime", endCal.getTime());
+		query.setParameter("start", startCal.getTime());
+		query.setParameter("end", endCal.getTime());
 
 		List<Appointment> listAppoints = query.getResultList();
 		return listAppoints;

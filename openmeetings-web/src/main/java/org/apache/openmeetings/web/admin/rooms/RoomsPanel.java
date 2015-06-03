@@ -55,7 +55,7 @@ public class RoomsPanel extends AdminPanel {
 			protected void populateItem(final Item<Room> item) {
 				Room room = item.getModelObject();
 				final long roomId = room.getId();
-				item.add(new Label("rooms_id", "" + room.getId()));
+				item.add(new Label("id", "" + room.getId()));
 				item.add(new Label("name", "" + room.getName()));
 				item.add(new Label("ispublic", "" + room.getIspublic()));
 				item.add(new AjaxEventBehavior("onclick") {
@@ -84,7 +84,7 @@ public class RoomsPanel extends AdminPanel {
 			}
 		};
 		DataViewContainer<Room> container = new DataViewContainer<Room>(listContainer, dataView, navigator);
-		container.addLink(new OmOrderByBorder<Room>("orderById", "rooms_id", container))
+		container.addLink(new OmOrderByBorder<Room>("orderById", "id", container))
 			.addLink(new OmOrderByBorder<Room>("orderByName", "name", container))
 			.addLink(new OmOrderByBorder<Room>("orderByPublic", "ispublic", container));
 		add(container.getLinks());

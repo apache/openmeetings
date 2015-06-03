@@ -166,8 +166,8 @@ public class UserForm extends AdminBaseForm<User> {
 		update(null);
 		add(domain.add(domainId).setOutputMarkupId(true).setOutputMarkupPlaceholderTag(true));
 		add(new Label("ownerId"));
-		add(forDatePattern("starttime", WEB_DATE_PATTERN));
-		add(forDatePattern("updatetime", WEB_DATE_PATTERN));
+		add(forDatePattern("inserted", WEB_DATE_PATTERN));
+		add(forDatePattern("updated", WEB_DATE_PATTERN));
 
 		add(new CheckBox("forceTimeZoneCheck"));
 

@@ -33,7 +33,7 @@ import org.apache.openmeetings.db.entity.IDataProviderEntity;
 
 @Entity
 @NamedQueries({
-	@NamedQuery(name = "getStateById", query = "select c from State as c where c.id = :state_id AND c.deleted = false"),
+	@NamedQuery(name = "getStateById", query = "select c from State as c where c.id = :id AND c.deleted = false"),
 	@NamedQuery(name = "getStates", query = "select c from State as c where c.deleted = false"),
 	@NamedQuery(name = "getStateByName", query = "select c from State as c where lower(c.name) LIKE :name AND c.deleted = false")
 })
@@ -48,11 +48,11 @@ public class State implements IDataProviderEntity {
 	@Column(name = "name")
 	private String name;
 	
-	@Column(name = "starttime")
-	private Date starttime;
+	@Column(name = "inserted")
+	private Date inserted;
 	
-	@Column(name = "updatetime")
-	private Date updatetime;
+	@Column(name = "updated")
+	private Date updated;
 	
 	@Column(name = "deleted")
 	private boolean deleted;
@@ -79,20 +79,20 @@ public class State implements IDataProviderEntity {
 		this.id = id;
 	}
 
-	public Date getStarttime() {
-		return starttime;
+	public Date getInserted() {
+		return inserted;
 	}
 
-	public void setStarttime(Date starttime) {
-		this.starttime = starttime;
+	public void setInserted(Date inserted) {
+		this.inserted = inserted;
 	}
 
-	public Date getUpdatetime() {
-		return updatetime;
+	public Date getUpdated() {
+		return updated;
 	}
 
-	public void setUpdatetime(Date updatetime) {
-		this.updatetime = updatetime;
+	public void setUpdated(Date updated) {
+		this.updated = updated;
 	}
 
 	public boolean isDeleted() {

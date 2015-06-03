@@ -204,12 +204,12 @@ public abstract class RecordingResourceReference extends ResourceReference {
 		if (r.getOwnerId() == null || getUserId() == r.getOwnerId()) {
 			return r;
 		}
-		if (r.getOrganization_id() == null || getBean(OrganisationUserDao.class).isUserInOrganization(r.getOrganization_id(), getUserId())) {
+		if (r.getOrganizationId() == null || getBean(OrganisationUserDao.class).isUserInOrganization(r.getOrganizationId(), getUserId())) {
 			return r;
 		}
 		//TODO external group check was added for plugin recording download
 		String extType = getExternalType();
-		if (extType != null && extType.equals(r.getCreator().getExternalUserType())) {
+		if (extType != null && extType.equals(r.getCreator().getExternalType())) {
 			return r;
 		}
 		return null;

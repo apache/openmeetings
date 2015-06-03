@@ -44,7 +44,7 @@ import org.simpleframework.xml.Root;
 	@NamedQuery(name = "getRoomModeratorsByIds", query = "select c from RoomModerator as c where c.id IN :ids"),
 	@NamedQuery(name = "getRoomModeratorByRoomId", query = "select c from RoomModerator as c where c.roomId = :roomId AND c.deleted = false"),
 	@NamedQuery(name = "getRoomModeratorByUserAndRoomId", query = "select c from RoomModerator as c "
-			+ "where c.roomId = :roomId AND c.deleted false AND c.user.id = :user_id")
+			+ "where c.roomId = :roomId AND c.deleted false AND c.user.id = :userId")
 })
 @Table(name = "rooms_moderator")
 @Root(name = "room_moderator")
@@ -69,11 +69,11 @@ public class RoomModerator implements Serializable {
 	@Element(name="user_id", data = true, required=false)
 	private User user;
 	
-	@Column(name = "starttime")
-	private Date starttime;
+	@Column(name = "inserted")
+	private Date inserted;
 	
-	@Column(name = "updatetime")
-	private Date updatetime;
+	@Column(name = "updated")
+	private Date updated;
 	
 	@Column(name = "deleted")
 	private boolean deleted;
@@ -100,18 +100,18 @@ public class RoomModerator implements Serializable {
 		this.user = user;
 	}
 	
-	public Date getStarttime() {
-		return starttime;
+	public Date getInserted() {
+		return inserted;
 	}
-	public void setStarttime(Date starttime) {
-		this.starttime = starttime;
+	public void setInserted(Date inserted) {
+		this.inserted = inserted;
 	}
 	
-	public Date getUpdatetime() {
-		return updatetime;
+	public Date getUpdated() {
+		return updated;
 	}
-	public void setUpdatetime(Date updatetime) {
-		this.updatetime = updatetime;
+	public void setUpdated(Date updated) {
+		this.updated = updated;
 	}
 	
 	public boolean isDeleted() {

@@ -376,7 +376,7 @@ public class SignInPage extends BaseInitedPage {
 			u.setShowContactDataToContacts(true);
 			u.setLastname(lastname);
 			u.setFirstname(firstname);
-			u.getAdresses().setEmail(email);
+			u.getAddress().setEmail(email);
 		}
 		u.setLastlogin(new Date());
 		u = userDao.update(u, pass, -1);

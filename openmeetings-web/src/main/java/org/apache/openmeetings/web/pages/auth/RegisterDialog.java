@@ -258,7 +258,7 @@ public class RegisterDialog extends AbstractFormDialog<String> {
 			langField.setRequired(true).setLabel(Model.of(Application.getString(111)));
 			add(tzDropDown.setRequired(true).setLabel(Model.of(Application.getString(1143))));
 			add(stateField = new DropDownChoice<State>("state", new PropertyModel<State>(RegisterDialog.this, "state"),
-					getBean(StateDao.class).getStates(), new ChoiceRenderer<State>("name", "id")));
+					getBean(StateDao.class).get(), new ChoiceRenderer<State>("name", "id")));
 			stateField.setRequired(true).setLabel(Model.of(Application.getString(120)));
 			add(new AjaxButton("submit") { // FAKE button so "submit-on-enter" works as expected
 				private static final long serialVersionUID = 1L;

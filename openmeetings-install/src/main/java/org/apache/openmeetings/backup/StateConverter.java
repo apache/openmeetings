@@ -35,7 +35,7 @@ public class StateConverter extends OmConverter<State> {
 	}
 	
 	public State read(InputNode node) throws Exception {
-		return statemanagement.getStateById(getlongValue(node));
+		return statemanagement.get(getlongValue(node));
 	}
 
 	public void write(OutputNode node, State value) throws Exception {

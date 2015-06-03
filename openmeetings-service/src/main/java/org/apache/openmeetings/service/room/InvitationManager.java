@@ -114,8 +114,8 @@ public class InvitationManager implements IInvitationManager {
 		
 		String invitorName = owner.getFirstname() + " " + owner.getLastname();
 		String template = InvitationTemplate.getEmail(i.getInvitee().getLanguageId(), invitorName, message, invitation_link);
-		String email = i.getInvitee().getAdresses().getEmail();
-		String replyToEmail = owner.getAdresses().getEmail();
+		String email = i.getInvitee().getAddress().getEmail();
+		String replyToEmail = owner.getAddress().getEmail();
 		
 		if (ical) {
 			String username = i.getInvitee().getLogin();
@@ -158,11 +158,11 @@ public class InvitationManager implements IInvitationManager {
 	 * @param subject 
 	 * @return
 	 */
-	public boolean sendInvitationReminderSMS(String phone, String subject, long language_id) {
+	public boolean sendInvitationReminderSMS(String phone, String subject, long languageId) {
 		if (!Strings.isEmpty(phone)) {
 			log.debug("sendInvitationReminderSMS to " + phone + ": " + subject);
 			try {
-				return smsHandler.sendSMS(phone, subject, language_id);
+				return smsHandler.sendSMS(phone, subject, languageId);
 			} catch (Exception e) {
 				log.error("sendInvitationReminderSMS", e);
 			}
@@ -259,10 +259,6 @@ public class InvitationManager implements IInvitationManager {
 			if (obj instanceof Invitation) {
 				Invitation invitation = (Invitation) obj;
 
-				// log.debug("invitationId "+invitation.getInvitations_id());
-				// log.debug("pass "+pass);
-				// log.debug("getInvitationpass "+invitation.getInvitationpass());
-
 				if (ManageCryptStyle.getInstanceOfCrypt().verifyPassword(pass, invitation.getPassword())) {
 					return new Long(1);
 				} else {
@@ -319,7 +315,7 @@ public class InvitationManager implements IInvitationManager {
 
 	public Invitation getInvitation(Invitation _invitation, User inveetee, Room room
 			, boolean isPasswordProtected, String invitationpass, Valid valid,
-			User createdBy, Long language_id, Date gmtTimeStart, Date gmtTimeEnd
+			User createdBy, Long languageId, Date gmtTimeStart, Date gmtTimeEnd
 			, Appointment appointment) {
 		
 		Invitation invitation = _invitation;
@@ -358,8 +354,8 @@ public class InvitationManager implements IInvitationManager {
 
 		invitation.setInvitedBy(createdBy);
 		invitation.setInvitee(inveetee);
-		if (language_id != null && Type.contact == invitation.getInvitee().getType()) {
-			invitation.getInvitee().setLanguageId(language_id);
+		if (languageId != null && Type.contact == invitation.getInvitee().getType()) {
+			invitation.getInvitee().setLanguageId(languageId);
 		}
 		invitation.setRoom(room);
 		invitation.setInserted(new Date());
@@ -387,10 +383,10 @@ public class InvitationManager implements IInvitationManager {
 	 * @return
 	 */
 	public Invitation getInvitation(User inveetee, Room room, boolean isPasswordProtected, String invitationpass, Valid valid,
-			User createdBy, Long language_id, Date gmtTimeStart, Date gmtTimeEnd, Appointment appointment)
+			User createdBy, Long languageId, Date gmtTimeStart, Date gmtTimeEnd, Appointment appointment)
 	{
 		Invitation i = getInvitation((Invitation)null, inveetee, room, isPasswordProtected, invitationpass, valid, createdBy
-				, language_id, gmtTimeStart, gmtTimeEnd, appointment);
+				, languageId, gmtTimeStart, gmtTimeEnd, appointment);
 		i = invitationDao.update(i);
 		return i;
 	}

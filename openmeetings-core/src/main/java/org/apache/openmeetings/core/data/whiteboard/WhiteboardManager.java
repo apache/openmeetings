@@ -39,7 +39,7 @@ public class WhiteboardManager {
 	private WhiteBoardObjectListManagerById wbListManagerById;
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public void addWhiteBoardObjectById(Long room_id, Map whiteboardObj, Long whiteBoardId) {
+	public void addWhiteBoardObjectById(Long roomId, Map whiteboardObj, Long whiteBoardId) {
 		try {
 			log.debug("addWhiteBoardObjectById: ", whiteboardObj);
 
@@ -60,18 +60,18 @@ public class WhiteboardManager {
 
 			if (action.equals("moveMap")) {
 				WhiteboardObject whiteboardObject = wbListManagerById
-						.getWhiteBoardObjectListByRoomIdAndWhiteboard(room_id,
+						.getWhiteBoardObjectListByRoomIdAndWhiteboard(roomId,
 								whiteBoardId);
 
 				whiteboardObject.setX(Integer.valueOf(actionObject.get(1).toString()));
 				whiteboardObject.setY(Integer.valueOf(actionObject.get(2).toString()));
 
 				wbListManagerById
-						.setWhiteBoardObjectListRoomObjAndWhiteboardId(room_id,
+						.setWhiteBoardObjectListRoomObjAndWhiteboardId(roomId,
 								whiteboardObject, whiteBoardId);
 			} else if (action.equals("draw") || action.equals("redo")) {
 				WhiteboardObject whiteboardObject = wbListManagerById
-						.getWhiteBoardObjectListByRoomIdAndWhiteboard(room_id,
+						.getWhiteBoardObjectListByRoomIdAndWhiteboard(roomId,
 								whiteBoardId);
 
 				// log.debug(actionObject);
@@ -86,19 +86,19 @@ public class WhiteboardManager {
 							.put(objectOID, actionObject);
 					wbListManagerById
 							.setWhiteBoardObjectListRoomObjAndWhiteboardId(
-									room_id, whiteboardObject, whiteBoardId);
+									roomId, whiteboardObject, whiteBoardId);
 				}
 			} else if (action.equals("clear")) {
 				WhiteboardObject whiteboardObject = wbListManagerById
-						.getWhiteBoardObjectListByRoomIdAndWhiteboard(room_id,
+						.getWhiteBoardObjectListByRoomIdAndWhiteboard(roomId,
 								whiteBoardId);
 				whiteboardObject.setRoomItems(new HashMap<String, List>());
 				wbListManagerById
-						.setWhiteBoardObjectListRoomObjAndWhiteboardId(room_id,
+						.setWhiteBoardObjectListRoomObjAndWhiteboardId(roomId,
 								whiteboardObject, whiteBoardId);
 			} else if (action.equals("delete") || action.equals("undo")) {
 				WhiteboardObject whiteboardObject = wbListManagerById
-						.getWhiteBoardObjectListByRoomIdAndWhiteboard(room_id,
+						.getWhiteBoardObjectListByRoomIdAndWhiteboard(roomId,
 								whiteBoardId);
 				String objectOID = actionObject.get(actionObject.size() - 1)
 						.toString();
@@ -171,7 +171,7 @@ public class WhiteboardManager {
 				whiteboardObject.getRoomItems().remove(objectOID);
 
 				wbListManagerById
-						.setWhiteBoardObjectListRoomObjAndWhiteboardId(room_id,
+						.setWhiteBoardObjectListRoomObjAndWhiteboardId(roomId,
 								whiteboardObject, whiteBoardId);
 			} else if (action.equals("size") || action.equals("editProp")
 					|| action.equals("editTextMindMapNode")
@@ -180,7 +180,7 @@ public class WhiteboardManager {
 					|| action.equals("editTextMindMapColor")
 					|| action.equals("editTextMindMapFontColor")) {
 				WhiteboardObject whiteboardObject = wbListManagerById
-						.getWhiteBoardObjectListByRoomIdAndWhiteboard(room_id,
+						.getWhiteBoardObjectListByRoomIdAndWhiteboard(roomId,
 								whiteBoardId);
 				String objectOID = actionObject.get(actionObject.size() - 1).toString();
 				// List roomItem = roomList.get(objectOID);
@@ -240,12 +240,12 @@ public class WhiteboardManager {
 				}
 
 				wbListManagerById
-						.setWhiteBoardObjectListRoomObjAndWhiteboardId(room_id,
+						.setWhiteBoardObjectListRoomObjAndWhiteboardId(roomId,
 								whiteboardObject, whiteBoardId);
 			} else if (action.equals("clearSlide")) {
 
 				WhiteboardObject whiteboardObject = wbListManagerById
-						.getWhiteBoardObjectListByRoomIdAndWhiteboard(room_id,
+						.getWhiteBoardObjectListByRoomIdAndWhiteboard(roomId,
 								whiteBoardId);
 
 				Map roomList = whiteboardObject.getRoomItems();
@@ -257,18 +257,18 @@ public class WhiteboardManager {
 				}
 
 				wbListManagerById
-						.setWhiteBoardObjectListRoomObjAndWhiteboardId(room_id,
+						.setWhiteBoardObjectListRoomObjAndWhiteboardId(roomId,
 								whiteboardObject, whiteBoardId);
 			} else if (action.equals("whiteboardObj")) {
 				WhiteboardObject whiteboardObject = wbListManagerById
-						.getWhiteBoardObjectListByRoomIdAndWhiteboard(room_id,
+						.getWhiteBoardObjectListByRoomIdAndWhiteboard(roomId,
 								whiteBoardId);
 
 				whiteboardObject.setFullFit((Boolean) actionObject.get(1));
 				whiteboardObject.setZoom((Integer) actionObject.get(2));
 
 				wbListManagerById
-				.setWhiteBoardObjectListRoomObjAndWhiteboardId(room_id,
+				.setWhiteBoardObjectListRoomObjAndWhiteboardId(roomId,
 						whiteboardObject, whiteBoardId);
 			} else {
 				log.warn("Unkown Type: " + action + " actionObject: "

@@ -64,24 +64,24 @@ public class TestDbSessionGetRoomIds extends AbstractJUnitDefaults {
 		Client cl1 = new Client();
 		cl1.setStreamid("1");
 		cl1.setServer(server);
-		cl1.setUser_id(1L);
-		cl1.setRoom_id(1L);
+		cl1.setUserId(1L);
+		cl1.setRoomId(1L);
 		cl1.setPublicSID("public1");
 		clientDao.add(cl1);
 
 		Client cl2 = new Client();
 		cl2.setStreamid("2");
 		cl2.setServer(server);
-		cl2.setRoom_id(1L);
-		cl2.setUser_id(2L);
+		cl2.setRoomId(1L);
+		cl2.setUserId(2L);
 		cl2.setPublicSID("public2");
 		clientDao.add(cl2);
 
 		Client cl3 = new Client();
 		cl3.setStreamid("3");
 		cl3.setServer(server);
-		cl3.setRoom_id(3L);
-		cl3.setUser_id(3L);
+		cl3.setRoomId(3L);
+		cl3.setUserId(3L);
 		cl3.setPublicSID("public3");
 		clientDao.add(cl3);
 		
