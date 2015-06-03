@@ -339,6 +339,10 @@
 			<id>flex-mojos-plugin-repository</id>
 			<url>https://oss.sonatype.org/content/groups/staging</url>
 		</pluginRepository>
+		<pluginRepository>
+			<id>apache-snapshots</id>
+			<url>https://repository.apache.org/content/groups/snapshots</url>
+		</pluginRepository>
 	</pluginRepositories>
 	<dependencyManagement>
 		<dependencies>
@@ -700,6 +704,19 @@
 					</execution>
 				</executions>
 			</plugin>
+			<!-- plugin>
+				<groupId>org.apache.creadur.whisker</groupId>
+				<artifactId>apache-whisker-plugin4maven</artifactId>
+				<executions>
+					<execution>
+						<id>generate-licensing-docs</id>
+						<phase>package</phase>
+						<goals>
+							<goal>generate</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin-->
 		</plugins>
  		<pluginManagement>
 			<plugins>
@@ -884,9 +901,17 @@
 								<familyName>MIT</familyName>
 							</licenseFamily>
 						</licenseFamilies>
-				</configuration>
+					</configuration>
 				</plugin>
-				
+				<!-- plugin>
+					<groupId>org.apache.creadur.whisker</groupId>
+					<artifactId>apache-whisker-plugin4maven</artifactId>
+					<version>0.2-SNAPSHOT</version>
+					<configuration>
+						<descriptor>openmeetings.xml</descriptor>
+					</configuration>
+				</plugin-->
+								
 				<!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
 				<plugin>
 					<groupId>org.eclipse.m2e</groupId>
