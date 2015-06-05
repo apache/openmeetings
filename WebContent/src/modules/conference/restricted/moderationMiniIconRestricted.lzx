@@ -279,8 +279,7 @@
         <labelTooltip labelid="1078" />
     </miniIcons>        
     
-    <miniIcons name="_allowDevice" x="80" width="40" height="16" 
-    		   resource="av_allow_rsc" showhandcursor="true">
+    <miniIcons name="_allowDevice" x="80" width="40" height="16" resource="av_allow_rsc" opacity="0.5" showhandcursor="true">
         <handler name="onclick">
             if ($debug) Debug.write("ALLOW: ",parent.parent.parent.refObj.publicSID);
             canvas.thishib.setBroadCastingFlag.publicSIDOfNewModerator = parent.parent.parent.refObj.publicSID;
@@ -290,8 +289,7 @@
         <labelTooltip labelid="683" />
     </miniIcons>
     
-    <miniIcons name="_denyDevice" x="80" width="40" height="16" resource="av_deny_rsc" 
-   				opacity="0.5" showhandcursor="true">
+    <miniIcons name="_denyDevice" x="80" width="40" height="16" resource="av_deny_rsc" showhandcursor="true">
         <handler name="onclick">
             if ($debug) Debug.write("ALLOW: ",parent.parent.parent.refObj.publicSID);
             canvas.thishib.setBroadCastingFlag.publicSIDOfNewModerator = parent.parent.parent.refObj.publicSID;
