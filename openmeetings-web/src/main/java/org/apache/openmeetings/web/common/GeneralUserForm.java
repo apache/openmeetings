@@ -59,6 +59,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.util.string.Strings;
+import org.threeten.bp.LocalDate;
 import org.wicketstuff.select2.Response;
 import org.wicketstuff.select2.Select2MultiChoice;
 import org.wicketstuff.select2.TextChoiceProvider;
@@ -69,6 +70,7 @@ import com.googlecode.wicket.kendo.ui.resource.KendoGlobalizeResourceReference;
 public class GeneralUserForm extends Form<User> {
 	private static final long serialVersionUID = 1L;
 	private Salutation salutation;
+	private LocalDate age;
 	private PasswordTextField passwordField;
 	private RequiredTextField<String> email;
 
@@ -118,12 +120,12 @@ public class GeneralUserForm extends Form<User> {
 		email.add(RfcCompliantEmailAddressValidator.getInstance());
 		add(new TextField<String>("address.phone"));
 		add(new CheckBox("sendSMS"));
-		add(new AjaxDatePicker("age", Model.of(CalendarHelper.getDate(getModelObject().getAge())), WebSession.get().getLocale()) {
+		add(new AjaxDatePicker("age", new PropertyModel<LocalDate>(this, "age"), WebSession.get().getLocale()) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
 			public void onValueChanged(AjaxRequestTarget target) {
-				GeneralUserForm.this.getModelObject().setAge(CalendarHelper.getDate(getModelObject()));
+				GeneralUserForm.this.getModelObject().setAge(CalendarHelper.getDate(age));
 			}
 		});
 		add(new TextField<String>("address.street"));
@@ -182,6 +184,7 @@ public class GeneralUserForm extends Form<User> {
 
 	public void updateModelObject(User u) {
 		salutation = getBean(SalutationDao.class).get(u.getSalutationId());
+		age = CalendarHelper.getDate(u.getAge());
 	}
 	
 	@Override
