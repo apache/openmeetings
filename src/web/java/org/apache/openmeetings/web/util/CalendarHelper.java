@@ -42,14 +42,23 @@ public class CalendarHelper {
 	}
 
 	public static ZonedDateTime getZoneDateTime(Date d) {
+		if (d == null) {
+			d = new Date();
+		}
 		return Instant.ofEpochMilli(d.getTime()).atZone(ZoneId.of(getUserTimeZone().getID()));
 	}
 	
 	public static LocalDate getDate(Date d) {
+		if (d == null) {
+			d = new Date();
+		}
 		return getZoneDateTime(d).toLocalDate();
 	}
 	
 	public static LocalDateTime getDateTime(Date d) {
+		if (d == null) {
+			d = new Date();
+		}
 		return getZoneDateTime(d).toLocalDateTime();
 	}
 }
