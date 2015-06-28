@@ -34,8 +34,8 @@ import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
 
 public abstract class AddFolderDialog extends AbstractFormDialog<String> {
 	private static final long serialVersionUID = 1L;
-	private final DialogButton add = new DialogButton(Application.getString(1261));
-	private final DialogButton cancel = new DialogButton(Application.getString(219));
+	private final DialogButton add = new DialogButton("add", Application.getString(1261));
+	private final DialogButton cancel = new DialogButton("cancel", Application.getString(219));
 	private final Form<String> form;
 	private final FeedbackPanel feedback = new FeedbackPanel("feedback");
 	private final String name;

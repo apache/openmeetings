@@ -57,8 +57,8 @@ public class VoteDialog extends AbstractFormDialog<RoomPollAnswer> {
 	private final static List<Integer> answers = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);  //TODO max vote should be added 
 	private final long roomId;
 	private final PollAnswerForm form;
-	private final DialogButton vote = new DialogButton(Application.getString(32));
-	private final DialogButton cancel = new DialogButton(Application.getString(25));
+	private final DialogButton vote = new DialogButton("vote", Application.getString(32));
+	private final DialogButton cancel = new DialogButton("cancel", Application.getString(25));
 	private final KendoFeedbackPanel feedback = new KendoFeedbackPanel("feedback", new Options("button", true));
 	private final IModel<String> user = Model.of((String)null);
 

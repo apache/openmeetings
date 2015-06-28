@@ -60,9 +60,8 @@ import com.googlecode.wicket.jquery.ui.widget.dialog.MessageDialog;
 public class ForgetPasswordDialog extends AbstractFormDialog<String> {
 	private static final Logger log = Red5LoggerFactory.getLogger(ForgetPasswordDialog.class, webAppRootKey);
 	private static final long serialVersionUID = 1L;
-	private String sendLbl = Application.getString(317);
-	private DialogButton send = new DialogButton(sendLbl);
-	private DialogButton cancel = new DialogButton(Application.getString(122));
+	private DialogButton send = new DialogButton("send", Application.getString(317));
+	private DialogButton cancel = new DialogButton("cancel", Application.getString(122));
 	private FeedbackPanel feedback = new FeedbackPanel("feedback");
 	private RequiredTextField<String> nameField;
 	private Form<String> form;

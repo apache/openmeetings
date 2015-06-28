@@ -74,9 +74,9 @@ public class PollResultsDialog extends AbstractDialog<RoomPoll> {
 	private final long roomId;
 	private final PollSelectForm selForm;
 	private final PollResultsForm dispForm;
-	private final DialogButton cancel = new DialogButton(Application.getString(25));
-	private final DialogButton close = new DialogButton(Application.getString(1418));
-	private final DialogButton delete = new DialogButton(Application.getString(1420));
+	private final DialogButton cancel = new DialogButton("cancel", Application.getString(25));
+	private final DialogButton close = new DialogButton("close", Application.getString(1418));
+	private final DialogButton delete = new DialogButton("delete", Application.getString(1420));
 	private boolean moderator = false;
 	private final MessageDialog closeConfirm;
 	private final MessageDialog deleteConfirm;
@@ -92,7 +92,7 @@ public class PollResultsDialog extends AbstractDialog<RoomPoll> {
 			@Override
 			public void onClose(AjaxRequestTarget target, DialogButton button) {
 				// TODO should rights be additionally checked here????
-				if(button != null && button.match(LBL_YES)) {
+				if(button != null && button.match(YES)) {
 					Long id = dispForm.getModelObject().getId();
 					getBean(PollDao.class).close(roomId);
 					selForm.updateModel(target);
@@ -111,7 +111,7 @@ public class PollResultsDialog extends AbstractDialog<RoomPoll> {
 			@Override
 			public void onClose(AjaxRequestTarget target, DialogButton button) {
 				// TODO should rights be additionally checked here????
-				if(button != null && button.match(LBL_YES)) {
+				if(button != null && button.match(YES)) {
 					getBean(PollDao.class).delete(dispForm.getModelObject());
 					selForm.updateModel(target);
 					dispForm.updateModel(selForm.select.getModelObject(), true, target);

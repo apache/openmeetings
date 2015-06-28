@@ -36,11 +36,9 @@ import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
 public class UserInfoDialog extends AbstractDialog<String> {
 	private static final long serialVersionUID = 1L;
 	private WebMarkupContainer container = new WebMarkupContainer("container");
-	private DialogButton cancel = new DialogButton(Application.getString(61));
-	private String messageLbl = Application.getString(1253);
-	private DialogButton message = new DialogButton(messageLbl);
-	private String contactsLbl = Application.getString(1186);
-	private DialogButton contacts = new DialogButton(contactsLbl);
+	private DialogButton cancel = new DialogButton("cancel", Application.getString(61));
+	private DialogButton message = new DialogButton("message", Application.getString(1253));
+	private DialogButton contacts = new DialogButton("contacts", Application.getString(1186));
 	private MessageDialog newMessage;
 	private long userId;
 	

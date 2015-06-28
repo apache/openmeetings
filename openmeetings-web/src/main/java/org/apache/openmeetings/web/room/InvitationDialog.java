@@ -76,9 +76,9 @@ import com.googlecode.wicket.kendo.ui.panel.KendoFeedbackPanel;
 public class InvitationDialog extends AbstractFormDialog<Invitation> {
 	private static final long serialVersionUID = 1L;
 	private static final Logger log = Red5LoggerFactory.getLogger(InvitationDialog.class, webAppRootKey);
-	private final DialogButton generate = new DialogButton(Application.getString(1526));
-	private final DialogButton send = new DialogButton(Application.getString(218));
-	private final DialogButton cancel = new DialogButton(Application.getString(219));
+	private final DialogButton generate = new DialogButton("generate", Application.getString(1526));
+	private final DialogButton send = new DialogButton("send", Application.getString(218));
+	private final DialogButton cancel = new DialogButton("cancel", Application.getString(219));
 	private final InvitationForm form;
 	private final KendoFeedbackPanel feedback = new KendoFeedbackPanel("feedback", new Options("button", true));
 	private final long roomId;

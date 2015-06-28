@@ -70,9 +70,8 @@ import com.googlecode.wicket.jquery.ui.widget.dialog.MessageDialog;
 public class RegisterDialog extends AbstractFormDialog<String> {
 	private static final long serialVersionUID = 1L;
 	private static final Logger log = Red5LoggerFactory.getLogger(MainPage.class, webAppRootKey);
-	private DialogButton cancelBtn = new DialogButton(Application.getString(122));
-	private String registerLbl = Application.getString(121);
-	private DialogButton registerBtn = new DialogButton(registerLbl);
+	private DialogButton cancelBtn = new DialogButton("cancel", Application.getString(122));
+	private DialogButton registerBtn = new DialogButton("register", Application.getString(121));
 	private FeedbackPanel feedback = new FeedbackPanel("feedback");
 	private final IModel<String> tzModel = Model.of(WebSession.get().getClientTZCode());
 	private final DropDownChoice<String> tzDropDown = new DropDownChoice<String>("tz", tzModel, AVAILABLE_TIMEZONES);

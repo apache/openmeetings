@@ -77,9 +77,8 @@ import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
 public class SignInDialog extends AbstractFormDialog<String> {
 	private static final long serialVersionUID = 1L;
 	private Form<String> form;
-	private DialogButton loginBtn = new DialogButton(Application.getString(112));
-	private String registerLbl = Application.getString(123);
-	private DialogButton registerBtn = new DialogButton(registerLbl);
+	private DialogButton loginBtn = new DialogButton("login", Application.getString(112));
+	private DialogButton registerBtn = new DialogButton("register", Application.getString(123));
     private String password;
     private String login;
     private boolean rememberMe = false;

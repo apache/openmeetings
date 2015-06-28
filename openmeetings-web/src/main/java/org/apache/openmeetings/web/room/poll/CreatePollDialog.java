@@ -30,13 +30,11 @@ import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.room.PollType;
 import org.apache.openmeetings.db.entity.room.RoomPoll;
-import org.apache.openmeetings.db.entity.room.RoomType;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.room.RoomPanel;
 import org.apache.openmeetings.web.room.message.RoomMessage;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
@@ -53,8 +51,8 @@ import com.googlecode.wicket.kendo.ui.panel.KendoFeedbackPanel;
 
 public class CreatePollDialog extends AbstractFormDialog<RoomPoll> {
 	private static final long serialVersionUID = 1L;
-	private final DialogButton create = new DialogButton(Application.getString(22));
-	private final DialogButton cancel = new DialogButton(Application.getString(25));
+	private final DialogButton create = new DialogButton("create", Application.getString(22));
+	private final DialogButton cancel = new DialogButton("cancel", Application.getString(25));
 	private final long roomId;
 	private final PollForm form;
 	private final KendoFeedbackPanel feedback = new KendoFeedbackPanel("feedback", new Options("button", true));
