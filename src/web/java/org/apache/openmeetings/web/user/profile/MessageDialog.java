@@ -73,9 +73,8 @@ public class MessageDialog extends AbstractFormDialog<PrivateMessage> {
 	private static final long serialVersionUID = 1L;
 	private final Form<PrivateMessage> form;
 	private final KendoFeedbackPanel feedback = new KendoFeedbackPanel("feedback", new Options("button", true));
-	String sendLbl = Application.getString(218);
-	DialogButton send = new DialogButton(sendLbl);
-	private DialogButton cancel = new DialogButton(Application.getString(219));
+	DialogButton send = new DialogButton("send", Application.getString(218));
+	private DialogButton cancel = new DialogButton("cancel", Application.getString(219));
 	private final WebMarkupContainer roomParamsBlock = new WebMarkupContainer("roomParamsBlock");
 	private final WebMarkupContainer roomParams = new WebMarkupContainer("roomParams");
 	private final DateTimePicker start = new OmDateTimePicker("start", Model.of(LocalDateTime.now()));

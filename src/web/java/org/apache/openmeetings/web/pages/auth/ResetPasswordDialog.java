@@ -49,8 +49,7 @@ import com.googlecode.wicket.jquery.ui.widget.dialog.MessageDialog;
 
 public class ResetPasswordDialog extends AbstractFormDialog<String> {
 	private static final long serialVersionUID = -523469331995677748L;
-	private String resetLbl = Application.getString(327);
-	private DialogButton resetBtn = new DialogButton(resetLbl);
+	private DialogButton resetBtn = new DialogButton("reset", Application.getString(327));
 	private Form<String> form;
 	private FeedbackPanel feedback = new FeedbackPanel("feedback");
 	private PasswordTextField password;
