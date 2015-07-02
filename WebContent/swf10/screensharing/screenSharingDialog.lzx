@@ -57,6 +57,17 @@
         ]]>
     </method>
     
+    <method name="hideChatContent" args="hide">
+        <![CDATA[
+            if ($debug) Debug.write("hideChatContent::isStarted ", this.subviews[0].isStarted);
+	        if (this.subviews[0] != null &&  this.subviews[0].isStarted) {
+	        	canvas.chatHeight = hide ? 22 : 200;
+	            if ($debug) Debug.write("hideChatContent::chatHeight ", canvas.chatHeight);
+	            this.subviews[0].startViewerSession();
+	        }
+        ]]>
+    </method>
+    
 </class>    
 
 <class name="screenSharingDialog" extends="labelExplorerBox" labelid="855"
@@ -96,7 +107,7 @@
             this._initText.setAttribute("visibility","hidden");
         
             this._showScreenSharing._y.setAttribute("to",0);
-            this._showScreenSharing._height.setAttribute("to",canvas.height);
+            this._showScreenSharing._height.setAttribute("to",canvas.height - canvas.chatHeight);
             this._showScreenSharing._width.setAttribute("to",canvas.width-260);
             this._showScreenSharing._x.setAttribute("to",260);
         
@@ -151,7 +162,7 @@
         }
         this.currentCursorObject.setAttribute("x",x * (this._zoombar._zoom.initialNumber/100));
         this.currentCursorObject.setAttribute("y",y * (this._zoombar._zoom.initialNumber/100));
-    </method>    
+    </method>        
     
     <view name="_initText">
         

@@ -27,9 +27,9 @@
 		to show a new screen sharing video
 		@param rcl RoomClient Object
 	 -->
-	<method name="newScreenSharing" args="rcl">
+	<method name="newScreenSharing" args="rcl, h">
 		//Send via LocalConnection to SWF10 container
-		canvas.sendViaLocalConnection(canvas.rtmp_lc_name, "newScreenSharing", [rcl]);
+		canvas.sendViaLocalConnection(canvas.rtmp_lc_name, "newScreenSharing", [rcl, h]);
 	</method>
 	
 	<!---
@@ -37,9 +37,9 @@
         to show multiple new screen sharing video
         @param rcl RoomClient Object Map/list
      -->
-    <method name="newScreenSharings" args="rcls">
+    <method name="newScreenSharings" args="rcls, h">
         //Send via LocalConnection to SWF10 container
-        canvas.sendViaLocalConnection(canvas.rtmp_lc_name, "newScreenSharings", [rcls]);
+        canvas.sendViaLocalConnection(canvas.rtmp_lc_name, "newScreenSharings", [rcls, h]);
     </method>
 	
 	<!--- 

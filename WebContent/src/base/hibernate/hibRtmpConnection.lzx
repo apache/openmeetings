@@ -1290,7 +1290,7 @@
                     if ($debug) Debug.write(" onResult newScreenSharing 4 : ",value.streamPublishName); 
                     if ($debug) Debug.write(" onResult newcreenSharing 5 : ",canvas.publicSID); 
                     
-                    canvas.currentBaseConferenceRoom._screenSharingAdapter.newScreenSharing(value);
+                    canvas.currentBaseConferenceRoom._screenSharingAdapter.newScreenSharing(value,canvas.currentBaseConferenceRoom._chatPanelStrict.height);
                 ]]>
             </handler>   
         </netRemoteCallHib>
@@ -1301,14 +1301,13 @@
                     //The onResult-Handler will be called be the rtmpconnection
                     if ($debug) Debug.write(" onResult checkScreenSharing : ",value);  
                     if (value != null) {
-                    	canvas.currentBaseConferenceRoom._screenSharingAdapter.newScreenSharings(value);
+                    	canvas.currentBaseConferenceRoom._screenSharingAdapter.newScreenSharings(value,canvas.currentBaseConferenceRoom._chatPanelStrict.height);
                     } else {
                         if ($debug) Debug.warn("Self Screen Sharing");
                     }
                 ]]>
             </handler>   
         </netRemoteCallHib>
-        
         
         <!--
         public synchronized Long applyForModeration(String publicSID)

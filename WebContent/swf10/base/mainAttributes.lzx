@@ -115,6 +115,8 @@
 	<attribute name="wicketsid" type="string" />
 	<attribute name="wicketroomid" value="0" type="number" />
 	
+	<!-- Attributes for show chat dialog when screen sharing open-->
+	<attribute name="chatHeight" value="0" type="number" />
 	
 	<method name="registerToolTip" args="viewInstance">
 		if (this.currentToolTip != null) {

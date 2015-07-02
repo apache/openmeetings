@@ -63,6 +63,7 @@
         client.closeScreenSharing = this.closeScreenSharing;
         client.closeAllScreenSharings = this.closeAllScreenSharings;
         client.updateCursorScreenSharing = this.updateCursorScreenSharing;
+        client.hideChatContent = this.hideChatContent;
         
         //Text RegExp 
         client.regExpTest = this.regExpTest;
@@ -275,8 +276,9 @@
     <!---
         Adds a new screen sharing playback video
      -->
-    <method name="newScreenSharing" args="value">
+    <method name="newScreenSharing" args="value, h">
     	<![CDATA[
+     		canvas.chatHeight = h;
     	   if (value.streamPublishName != canvas.publicSID) {
                 if (canvas.screenSharingDialogContainer == null) {
                     canvas.screenSharingDialogContainer = new lz.screenSharingDialogContainer(canvas);
@@ -294,10 +296,11 @@
         Add a list of screen sharing playback videos 
         (initially when entering the room invoked)
      -->
-    <method name="newScreenSharings" args="value">
+    <method name="newScreenSharings" args="value, h">
      	<![CDATA[
+     		canvas.chatHeight = h;
      	    for (var eg in value) {
-                this.newScreenSharing(value[eg]);
+                this.newScreenSharing(value[eg], h);
             }
      	]]>
     </method>
@@ -316,7 +319,7 @@
 			}
 		]]>
 	</method>
-	
+	    
 	<!---
 	   Closes all screen sharing playback videos, whiteboard videos, user videos 
 	   and closes the rtmp connection
@@ -333,6 +336,18 @@
             parent._videoComponent.clearAll();
             canvas.thishib.disconnect();
         ]]>
+    </method>
+    
+    <!---
+        change Screen Sharing farme height 
+     -->
+    <method name="hideChatContent" args="hide">
+     	<![CDATA[
+			if (canvas.screenSharingDialogContainer != null) {
+		        if ($debug) Debug.write("hideChatContent::hide " + hide);
+				canvas.screenSharingDialogContainer.hideChatContent(hide);
+			}
+     	]]>
     </method>
     
     <!---
