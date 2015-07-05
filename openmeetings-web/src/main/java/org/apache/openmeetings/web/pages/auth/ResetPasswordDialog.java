@@ -31,6 +31,7 @@ import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
+import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.markup.head.CssContentHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.html.form.Form;
@@ -112,7 +113,8 @@ public class ResetPasswordDialog extends AbstractFormDialog<String> {
 				behavior.setOption("closeOnEscape", false);
 			}
 			
-			public void onClose(AjaxRequestTarget target, DialogButton button) {
+			@Override
+			public void onClose(IPartialPageRequestHandler handler, DialogButton button) {
 				setResponsePage(Application.get().getSignInPageClass());
 			}
 		};
@@ -161,9 +163,9 @@ public class ResetPasswordDialog extends AbstractFormDialog<String> {
 	}
 	
 	@Override
-	public void onClose(AjaxRequestTarget target, DialogButton button) {
+	public void onClose(IPartialPageRequestHandler handler, DialogButton button) {
 		if (resetBtn.equals(button)){
-			confirmReset.open(target);
+			confirmReset.open(handler);
 		} else {
 			setResponsePage(Application.get().getSignInPageClass());
 		}

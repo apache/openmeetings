@@ -31,6 +31,7 @@ import org.apache.openmeetings.web.data.SearchableDataProvider;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.repeater.Item;
@@ -41,9 +42,9 @@ public class RoomsPanel extends AdminPanel {
 	private RoomForm form;
 	
 	@Override
-	public void onMenuPanelLoad(AjaxRequestTarget target) {
-		super.onMenuPanelLoad(target);
-		target.appendJavaScript("omRoomPanelInit();");
+	public void onMenuPanelLoad(IPartialPageRequestHandler handler) {
+		super.onMenuPanelLoad(handler);
+		handler.appendJavaScript("omRoomPanelInit();");
 	}
 
 	public RoomsPanel(String id) {

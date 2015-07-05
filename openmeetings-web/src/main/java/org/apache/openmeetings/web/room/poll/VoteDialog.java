@@ -33,6 +33,7 @@ import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.room.RoomPanel;
 import org.apache.openmeetings.web.room.message.RoomMessage;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.DropDownChoice;
@@ -72,7 +73,7 @@ public class VoteDialog extends AbstractFormDialog<RoomPollAnswer> {
 		return u == null ? "" : getUserId() == u.getId() ? Application.getString(1411) : u.getFirstname() + " " + u.getLastname();
 	}
 	
-	public void updateModel(AjaxRequestTarget target) {
+	public void updateModel(IPartialPageRequestHandler target) {
 		RoomPollAnswer a = new RoomPollAnswer();
 		a.setRoomPoll(getBean(PollDao.class).getPoll(roomId));
 		User u = getBean(UserDao.class).get(getUserId());

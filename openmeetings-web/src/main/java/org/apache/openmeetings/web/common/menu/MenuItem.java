@@ -30,7 +30,7 @@ public abstract class MenuItem implements Serializable {
 	protected String desc;
 	protected String cssClass;
 	protected boolean active = true;
-	protected List<? extends MenuItem> children = null;
+	protected List<MenuItem> children = null;
 	
 	public MenuItem() {}
 	
@@ -69,11 +69,11 @@ public abstract class MenuItem implements Serializable {
 		this.active = active;
 	}
 
-	public List<? extends MenuItem> getChildren() {
+	public List<MenuItem> getChildren() {
 		return children;
 	}
 
-	public void setChildren(List<? extends MenuItem> children) {
+	public void setChildren(List<MenuItem> children) {
 		this.children = children;
 	}
 

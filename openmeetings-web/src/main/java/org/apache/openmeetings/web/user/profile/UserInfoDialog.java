@@ -27,7 +27,7 @@ import java.util.List;
 import org.apache.openmeetings.db.dao.user.UserContactsDao;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.util.ContactsHelper;
-import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 
 import com.googlecode.wicket.jquery.ui.widget.dialog.AbstractDialog;
@@ -48,11 +48,11 @@ public class UserInfoDialog extends AbstractDialog<String> {
 		this.newMessage = newMessage;
 	}
 
-	public void open(AjaxRequestTarget target, long userId) {
+	public void open(IPartialPageRequestHandler handler, long userId) {
 		this.userId = userId;
 		container.replace(new UserProfilePanel("body", userId));
-		target.add(container);
-		open(target);
+		handler.add(container);
+		open(handler);
 	}
 	
 	public WebMarkupContainer getContainer() {
@@ -70,9 +70,10 @@ public class UserInfoDialog extends AbstractDialog<String> {
 				? Arrays.asList(message, cancel) : Arrays.asList(contacts, message, cancel);
 	}
 	
-	public void onClose(AjaxRequestTarget target, DialogButton button) {
+	@Override
+	public void onClose(IPartialPageRequestHandler handler, DialogButton button) {
 		if (message.equals(button)) {
-			newMessage.reset(false).open(target, userId);
+			newMessage.reset(false).open(handler, userId);
 		} else if (contacts.equals(button)) {
 			ContactsHelper.addUserToContactList(userId);
 		}

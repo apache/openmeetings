@@ -33,6 +33,7 @@ import org.apache.openmeetings.web.data.SearchableDataProvider;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.repeater.Item;
@@ -48,14 +49,15 @@ public class UsersPanel extends AdminPanel {
 	private final MessageDialog warning = new MessageDialog("warning", Application.getString(797), Application.getString(343), DialogButtons.OK, DialogIcon.WARN) {
 		private static final long serialVersionUID = 1L;
 
-		public void onClose(AjaxRequestTarget target, DialogButton button) {
+		@Override
+		public void onClose(IPartialPageRequestHandler handler, DialogButton button) {
 		}
 	};
 
 	@Override
-	public void onMenuPanelLoad(AjaxRequestTarget target) {
-		super.onMenuPanelLoad(target);
-		target.appendJavaScript("omUserPanelInit();");
+	public void onMenuPanelLoad(IPartialPageRequestHandler handler) {
+		super.onMenuPanelLoad(handler);
+		handler.appendJavaScript("omUserPanelInit();");
 	}
 
 	private UserForm form;

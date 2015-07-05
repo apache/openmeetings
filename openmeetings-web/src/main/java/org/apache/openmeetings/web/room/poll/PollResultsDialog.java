@@ -33,6 +33,7 @@ import org.apache.openmeetings.web.room.RoomPanel;
 import org.apache.openmeetings.web.room.message.RoomMessage;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
+import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
@@ -90,16 +91,16 @@ public class PollResultsDialog extends AbstractDialog<RoomPoll> {
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			public void onClose(AjaxRequestTarget target, DialogButton button) {
+			public void onClose(IPartialPageRequestHandler handler, DialogButton button) {
 				// TODO should rights be additionally checked here????
 				if(button != null && button.match(YES)) {
 					Long id = dispForm.getModelObject().getId();
 					getBean(PollDao.class).close(roomId);
-					selForm.updateModel(target);
+					selForm.updateModel(handler);
 
 					RoomPoll p = getBean(PollDao.class).get(id);
 					selForm.select.setModelObject(p);
-					dispForm.updateModel(p, false, target);
+					dispForm.updateModel(p, false, handler);
 					RoomPanel.broadcast(new RoomMessage(roomId, getUserId(), RoomMessage.Type.pollClosed));
 					//TODO result dialogs of other users should also be updated
 				}
@@ -109,12 +110,12 @@ public class PollResultsDialog extends AbstractDialog<RoomPoll> {
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			public void onClose(AjaxRequestTarget target, DialogButton button) {
+			public void onClose(IPartialPageRequestHandler handler, DialogButton button) {
 				// TODO should rights be additionally checked here????
 				if(button != null && button.match(YES)) {
 					getBean(PollDao.class).delete(dispForm.getModelObject());
-					selForm.updateModel(target);
-					dispForm.updateModel(selForm.select.getModelObject(), true, target);
+					selForm.updateModel(handler);
+					dispForm.updateModel(selForm.select.getModelObject(), true, handler);
 					RoomPanel.broadcast(new RoomMessage(roomId, getUserId(), RoomMessage.Type.pollDeleted));
 					//TODO result dialogs of other users should also be updated
 				}
@@ -196,7 +197,7 @@ public class PollResultsDialog extends AbstractDialog<RoomPoll> {
     }
     
     @Override
-    public void onClose(AjaxRequestTarget target, DialogButton button) {
+    public void onClose(IPartialPageRequestHandler handler, DialogButton button) {
     }
     
     private String[] getTicks(RoomPoll p) {
@@ -306,7 +307,7 @@ public class PollResultsDialog extends AbstractDialog<RoomPoll> {
 			updateModel(null);
 		}
 
-		public void updateModel(AjaxRequestTarget target) {
+		public void updateModel(IPartialPageRequestHandler handler) {
 			List<RoomPoll> list = new ArrayList<RoomPoll>();
 			RoomPoll p = getBean(PollDao.class).getPoll(roomId);
 			if (p != null) {
@@ -315,8 +316,8 @@ public class PollResultsDialog extends AbstractDialog<RoomPoll> {
 			list.addAll(getBean(PollDao.class).getArchived(roomId));
 			select.setChoices(list);
 			select.setModelObject(list.isEmpty() ? null : list.get(0));
-			if (target != null) {
-				target.add(this);
+			if (handler != null) {
+				handler.add(this);
 			}
 		}
 	}
@@ -346,22 +347,22 @@ public class PollResultsDialog extends AbstractDialog<RoomPoll> {
 			add(chartDiv.setOutputMarkupId(true));
 		}
 		
-		public void updateModel(RoomPoll poll, boolean redraw, AjaxRequestTarget target) {
+		public void updateModel(RoomPoll poll, boolean redraw, IPartialPageRequestHandler handler) {
 			setModelObject(poll);
 			name.setObject(poll == null ? "" : VoteDialog.getName(poll.getCreator()));
 			count.setObject(poll == null ? 0 : poll.getAnswers().size());
-			target.add(this);
-			close.setVisible(moderator && (poll != null && !poll.isArchived()), target);
-			delete.setVisible(moderator, target);
+			handler.add(this);
+			close.setVisible(moderator && (poll != null && !poll.isArchived()), handler);
+			delete.setVisible(moderator, handler);
 			if (redraw) {
-				redraw(target);
+				redraw(handler);
 			}
 		}
 		
-		private void redraw(AjaxRequestTarget target) {
+		private void redraw(IPartialPageRequestHandler handler) {
 			RoomPoll poll = getModelObject();
 			Chart<?> chart = SIMPLE_CHART.equals(chartType.getModelObject()) ? barChart(poll) : pieChart(poll);
-			target.appendJavaScript(getScript(chart));
+			handler.appendJavaScript(getScript(chart));
 		}
 		
 		@Override

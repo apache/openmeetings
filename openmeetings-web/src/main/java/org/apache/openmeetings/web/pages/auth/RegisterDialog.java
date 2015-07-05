@@ -45,6 +45,7 @@ import org.apache.openmeetings.web.common.LanguageDropDown;
 import org.apache.openmeetings.web.pages.MainPage;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
+import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.extensions.validation.validator.RfcCompliantEmailAddressValidator;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
@@ -106,8 +107,9 @@ public class RegisterDialog extends AbstractFormDialog<String> {
 				behavior.setOption("closeOnEscape", false);
 			}
 
-			public void onClose(AjaxRequestTarget target, DialogButton button) {
-				s.open(target);
+			@Override
+			public void onClose(IPartialPageRequestHandler handler, DialogButton button) {
+				s.open(handler);
 			}
 		};
 		add(confirmRegistration);

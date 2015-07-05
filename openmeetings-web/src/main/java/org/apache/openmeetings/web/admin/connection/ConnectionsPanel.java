@@ -38,6 +38,7 @@ import org.apache.openmeetings.web.data.SearchableDataProvider;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.repeater.Item;
@@ -135,7 +136,7 @@ public class ConnectionsPanel extends AdminPanel {
 	}
 
 	@Override
-	public void onMenuPanelLoad(AjaxRequestTarget target) {
-		super.onMenuPanelLoad(target);
+	public void onMenuPanelLoad(IPartialPageRequestHandler handler) {
+		super.onMenuPanelLoad(handler);
 	}
 }

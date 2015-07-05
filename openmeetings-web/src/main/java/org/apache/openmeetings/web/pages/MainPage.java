@@ -54,6 +54,7 @@ import org.apache.wicket.ajax.AbstractAjaxTimerBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
+import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.devutils.debugbar.DebugBar;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.link.ExternalLink;
@@ -175,7 +176,7 @@ public class MainPage extends BaseInitedPage {
 				@Override
 				public void onClick(MainPage page, AjaxRequestTarget terget) {}
 			};
-			List<MainMenuItem> l = new ArrayList<MainMenuItem>();
+			List<MenuItem> l = new ArrayList<MenuItem>();
 			for (Navimain nm : gl.getMainnavi()) {
 				l.add(new MainMenuItem(nm)); 
 			}
@@ -187,26 +188,26 @@ public class MainPage extends BaseInitedPage {
 		return menu;
 	}
 	
-	public void updateContents(OmUrlFragment f, AjaxRequestTarget target) {
-		updateContents(f, target, true);
+	public void updateContents(OmUrlFragment f, IPartialPageRequestHandler handler) {
+		updateContents(f, handler, true);
 	}
 	
-	public void updateContents(OmUrlFragment f, AjaxRequestTarget target, boolean updateFragment) {
+	public void updateContents(OmUrlFragment f, IPartialPageRequestHandler handler, boolean updateFragment) {
 		BasePanel panel = getPanel(f.getArea(), f.getType());
 		if (panel != null) {
 			Component prev = contents.get(CHILD_ID);
 			if (prev != null && prev instanceof BasePanel) {
-				((BasePanel)prev).cleanup(target);
+				((BasePanel)prev).cleanup(handler);
 			}
-			target.add(contents.replace(panel));
+			handler.add(contents.replace(panel));
 			if (updateFragment) {
-				UrlFragment uf = new UrlFragment(target);
+				UrlFragment uf = new UrlFragment(handler);
 				uf.set(f.getArea().name(), f.getType());
 			}
-			panel.onMenuPanelLoad(target);
+			panel.onMenuPanelLoad(handler);
 		}
 		if (dev != null){
-			target.add(dev);
+			handler.add(dev);
 		}
 	}
 	

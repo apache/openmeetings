@@ -85,6 +85,7 @@ import org.apache.wicket.ajax.json.JSONException;
 import org.apache.wicket.ajax.json.JSONObject;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.behavior.AttributeAppender;
+import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.event.IEvent;
 import org.apache.wicket.extensions.markup.html.repeater.tree.ITreeProvider;
 import org.apache.wicket.markup.head.IHeaderResponse;
@@ -533,12 +534,12 @@ public class RoomPanel extends BasePanel {
 		exitMenuItem.setActive(false);
 		menu.add(exitMenuItem);
 		
-		List<RoomMenuItem> fileItems = new ArrayList<RoomMenuItem>();
+		List<MenuItem> fileItems = new ArrayList<MenuItem>();
 		fileItems.add(new RoomMenuItem(Application.getString(15), Application.getString(1479)));
 		filesMenu.setChildren(fileItems);
 		menu.add(filesMenu);
 		
-		List<RoomMenuItem> actionItems = new ArrayList<RoomMenuItem>();
+		List<MenuItem> actionItems = new ArrayList<MenuItem>();
 		actionItems.add(inviteMenuItem);
 		actionItems.add(shareMenuItem); //FIXME enable/disable
 		actionItems.add(applyModerMenuItem); //FIXME enable/disable
@@ -555,21 +556,21 @@ public class RoomPanel extends BasePanel {
 	}
 	
 	@Override
-	public void onMenuPanelLoad(AjaxRequestTarget target) {
-		target.add(getMainPage().getHeader().setVisible(false), getMainPage().getMenu().setVisible(false)
+	public void onMenuPanelLoad(IPartialPageRequestHandler handler) {
+		handler.add(getMainPage().getHeader().setVisible(false), getMainPage().getMenu().setVisible(false)
 				, getMainPage().getTopLinks().setVisible(false));
-		target.appendJavaScript("roomLoad();");
+		handler.appendJavaScript("roomLoad();");
 	}
 	
 	@Override
-	public void cleanup(AjaxRequestTarget target) {
-		target.add(getMainPage().getHeader().setVisible(true), getMainPage().getMenu().setVisible(true)
+	public void cleanup(IPartialPageRequestHandler handler) {
+		handler.add(getMainPage().getHeader().setVisible(true), getMainPage().getMenu().setVisible(true)
 				, getMainPage().getTopLinks().setVisible(true));
 		Room r = getBean(RoomDao.class).get(roomId);
 		if (r.isChatHidden()) {
-			target.add(getMainPage().getChat().setVisible(true)); //FIXME chat is broken on this step
+			handler.add(getMainPage().getChat().setVisible(true)); //FIXME chat is broken on this step
 		}
-		target.appendJavaScript("$(window).off('resize.openmeetings'); $('.room.video').dialog('destroy');");
+		handler.appendJavaScript("$(window).off('resize.openmeetings'); $('.room.video').dialog('destroy');");
 	}
 
 	private ResourceReference newResourceReference() {
@@ -593,9 +594,9 @@ public class RoomPanel extends BasePanel {
 		return list;
 	}
 	
-	private void exit(AjaxRequestTarget target) {
+	private void exit(IPartialPageRequestHandler handler) {
 		if (WebSession.getRights().contains(Right.Dashboard)) {
-			getMainPage().updateContents(ROOMS_PUBLIC, target);
+			getMainPage().updateContents(ROOMS_PUBLIC, handler);
 		} else {
 			String url = getBean(ConfigurationDao.class).getConfValue(CONFIG_REDIRECT_URL_FOR_EXTERNAL_KEY, String.class, "");
 			if (Strings.isEmpty(url)) {
@@ -687,8 +688,8 @@ public class RoomPanel extends BasePanel {
 		}
 		
 		@Override
-		public void onClose(AjaxRequestTarget target, DialogButton button) {
-			RoomPanel.this.exit(target);
+		public void onClose(IPartialPageRequestHandler handler, DialogButton button) {
+			RoomPanel.this.exit(handler);
 		}
 	}
 }

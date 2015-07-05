@@ -434,11 +434,6 @@
 		</dependency>
 		<dependency>
 			<groupId>org.wicketstuff</groupId>
-			<artifactId>wicketstuff-html5</artifactId>
-			<version>${wickets.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.wicketstuff</groupId>
 			<artifactId>wicketstuff-whiteboard</artifactId>
 			<version>${wickets.version}</version>
 		</dependency>

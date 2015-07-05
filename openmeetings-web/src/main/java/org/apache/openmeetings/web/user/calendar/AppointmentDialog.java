@@ -53,6 +53,7 @@ import org.apache.openmeetings.web.util.RoomTypeDropDown;
 import org.apache.openmeetings.web.util.UserMultiChoice;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxCheckBox;
+import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
@@ -128,18 +129,19 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 		confirmDelete = new MessageDialog("confirmDelete", Application.getString(814), Application.getString(833), DialogButtons.OK_CANCEL, DialogIcon.WARN){
 			private static final long serialVersionUID = 1L;
 
-			public void onClose(AjaxRequestTarget target, DialogButton button) {
+			@Override
+			public void onClose(IPartialPageRequestHandler handler, DialogButton button) {
 				if (button != null && button.match(AbstractDialog.OK)){
-					deleteAppointment(target);
+					deleteAppointment(handler);
 				}
 			}
 		};
 		add(confirmDelete);
 	}
 
-	protected void deleteAppointment(AjaxRequestTarget target) {
+	protected void deleteAppointment(IPartialPageRequestHandler handler) {
 		getBean(AppointmentDao.class).delete(getModelObject(), getUserId());
-		calendarPanel.refresh(target);		
+		calendarPanel.refresh(handler);		
 	}
 
 	@Override
@@ -158,16 +160,16 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 	}
 
 	@Override
-	protected void onOpen(AjaxRequestTarget target) {
-		target.add(this.form);
+	protected void onOpen(IPartialPageRequestHandler handler) {
+		handler.add(this.form);
 	}
 	
 	@Override
-	public void onClose(AjaxRequestTarget target, DialogButton button) {
+	public void onClose(IPartialPageRequestHandler handler, DialogButton button) {
 		if (delete.equals(button)) {
-			confirmDelete.open(target);
+			confirmDelete.open(handler);
 		} else if (enterRoom.equals(button)) {
-			RoomEnterBehavior.roomEnter((MainPage)getPage(), target, getModelObject().getRoom().getId());
+			RoomEnterBehavior.roomEnter((MainPage)getPage(), handler, getModelObject().getRoom().getId());
 		}
 	}
 	

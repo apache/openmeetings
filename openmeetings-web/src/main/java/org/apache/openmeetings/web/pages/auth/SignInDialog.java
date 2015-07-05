@@ -47,6 +47,7 @@ import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
+import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.CheckBox;
@@ -135,10 +136,10 @@ public class SignInDialog extends AbstractFormDialog<String> {
 	}
 	
 	@Override
-	public void onClose(AjaxRequestTarget target, DialogButton button) {
+	public void onClose(IPartialPageRequestHandler handler, DialogButton button) {
 		if (registerBtn.equals(button)) {
 			r.setClientTimeZone();
-			r.open(target);
+			r.open(handler);
 		}
 	}
 	

@@ -56,6 +56,7 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
 import org.apache.wicket.ajax.form.OnChangeAjaxBehavior;
 import org.apache.wicket.behavior.AttributeAppender;
+import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -250,9 +251,9 @@ public class MessagesContactsPanel extends UserPanel {
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			public void onClose(AjaxRequestTarget target, DialogButton button) {
+			public void onClose(IPartialPageRequestHandler handler, DialogButton button) {
 				if (send.equals(button)) {
-					target.add(container);
+					handler.add(container);
 				}
 			}
 		});

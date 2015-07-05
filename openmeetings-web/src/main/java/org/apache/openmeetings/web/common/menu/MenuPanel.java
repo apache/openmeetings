@@ -24,6 +24,7 @@ import org.apache.openmeetings.web.common.BasePanel;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.behavior.AttributeAppender;
+import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -98,7 +99,7 @@ public class MenuPanel extends BasePanel {
 		add(mfb = new MenuFunctionsBehavior(menuContainer.getMarkupId(), id));
 	}
 	
-	public void update(AjaxRequestTarget target) {
+	public void update(IPartialPageRequestHandler target) {
 		target.add(menuContainer);
 		//target.appendJavaScript(String.format("$(function() {%s;});", mfb.getInitScript()));
 		target.appendJavaScript(mfb.getInitScript());

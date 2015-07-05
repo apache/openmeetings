@@ -23,6 +23,7 @@ import org.apache.openmeetings.web.util.OmUrlFragment;
 import org.apache.openmeetings.web.util.OmUrlFragment.AreaKeys;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 
 public class RoomEnterBehavior extends AjaxEventBehavior {
 	private static final long serialVersionUID = 1L;
@@ -37,8 +38,8 @@ public class RoomEnterBehavior extends AjaxEventBehavior {
 		return new OmUrlFragment(AreaKeys.room, "" + roomId);
 	}
 	
-	public static void roomEnter(MainPage page, AjaxRequestTarget target, long roomId) {
-		page.updateContents(getRoomUrlFragment(roomId), target);
+	public static void roomEnter(MainPage page, IPartialPageRequestHandler handler, long roomId) {
+		page.updateContents(getRoomUrlFragment(roomId), handler);
 	}
 	
 	@Override

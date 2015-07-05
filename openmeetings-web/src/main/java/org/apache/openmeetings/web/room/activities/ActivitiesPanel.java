@@ -35,6 +35,7 @@ import org.apache.openmeetings.web.common.BasePanel;
 import org.apache.openmeetings.web.room.activities.Activity.Type;
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
@@ -128,7 +129,7 @@ public class ActivitiesPanel extends BasePanel {
 		}
 	};
 
-	public void addActivity(Long userId, Activity.Type type, AjaxRequestTarget target) {
+	public void addActivity(Long userId, Activity.Type type, IPartialPageRequestHandler target) {
 		//if (getUserId() != userId) {//FIXME should be replaced with client-id
 			activities.add(new Activity(userId,  type));
 			target.add(container);

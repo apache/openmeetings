@@ -42,6 +42,7 @@ import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormSubmitBehavior;
+import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.extensions.ajax.markup.html.form.upload.UploadProgressBar;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
@@ -76,9 +77,9 @@ public class LangPanel extends AdminPanel {
 	private final KendoFeedbackPanel feedback = new KendoFeedbackPanel("feedback", new Options("button", true));
 	
 	@Override
-	public void onMenuPanelLoad(AjaxRequestTarget target) {
-		super.onMenuPanelLoad(target);
-		target.appendJavaScript("labelsInit();");
+	public void onMenuPanelLoad(IPartialPageRequestHandler handler) {
+		super.onMenuPanelLoad(handler);
+		handler.appendJavaScript("labelsInit();");
 	}
 
 	public LangPanel(String id) {

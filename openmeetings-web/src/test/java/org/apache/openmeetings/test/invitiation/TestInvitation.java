@@ -24,7 +24,7 @@ import java.util.Date;
 import org.apache.openmeetings.core.remote.InvitationService;
 import org.apache.openmeetings.db.dao.server.SessiondataDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
-import org.apache.openmeetings.db.entity.server.Sessiondata;
+import org.apache.openmeetings.db.dto.basic.ServiceResult;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.test.AbstractJUnitDefaults;
 import org.apache.openmeetings.webservice.UserWebService;
@@ -43,13 +43,11 @@ public class TestInvitation extends AbstractJUnitDefaults {
 	
 	@Test
 	public void testSendInvitationLink() {
-		Sessiondata sessionData = sessDao.startsession();
-		
-		Long uid = userWebService.login(sessionData.getSessionId(), username, userpass);
-		User us = userDao.get(uid);
+		ServiceResult result = userWebService.login(username, userpass);
+		User us = userDao.get(result.getCode());
 		
 		String date = new SimpleDateFormat("dd.MM.yyyy").format(new Date());
-		invitationService.sendInvitationHash(sessionData.getSessionId(), "Testname", "Testlastname", "message", "sebawagner@apache.org", 
+		invitationService.sendInvitationHash(result.getMessage(), "Testname", "Testlastname", "message", "sebawagner@apache.org", 
 				"subject", 1L, "", false, "", 1, date, "12:00", date, "14:00", 1L, us.getTimeZoneId(), true);
 	}
 }

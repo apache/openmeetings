@@ -20,21 +20,18 @@ package org.apache.openmeetings.web.user.record;
 
 import static org.apache.openmeetings.util.OmFileHelper.getMp4Recording;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 import org.apache.openmeetings.db.entity.record.FlvRecording;
 import org.apache.openmeetings.web.util.Mp4RecordingResourceReference;
 import org.apache.openmeetings.web.util.OggRecordingResourceReference;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.media.Source;
+import org.apache.wicket.markup.html.media.video.Video;
 import org.apache.wicket.markup.html.panel.Panel;
-import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.util.ListModel;
+import org.apache.wicket.request.Url;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.wicketstuff.html5.media.MediaSource;
-import org.wicketstuff.html5.media.video.Html5Video;
+import org.apache.wicket.request.resource.ResourceReference;
+import org.apache.wicket.request.resource.UrlResourceReference;
 
 public class VideoPlayer extends Panel {
 	private static final long serialVersionUID = 1L;
@@ -42,8 +39,9 @@ public class VideoPlayer extends Panel {
 	private final WebMarkupContainer container = new WebMarkupContainer("container");
 	private final Mp4RecordingResourceReference mp4res = new Mp4RecordingResourceReference();
 	private final OggRecordingResourceReference oggres = new OggRecordingResourceReference();
-	private final IModel<List<MediaSource>> playerModel = new ListModel<MediaSource>(new ArrayList<MediaSource>());
-	private final OmHtml5Video player = new OmHtml5Video("player", playerModel, null);
+	private final OmVideo player = new OmVideo("player", null);
+	private final Source mp4 = new Source("mp4", mp4res);
+	private final Source ogg = new Source("ogg", oggres);
 
 	public VideoPlayer(String id) {
 		this(id, null);
@@ -52,6 +50,11 @@ public class VideoPlayer extends Panel {
 	public VideoPlayer(String id, FlvRecording r) {
 		super(id);
 		add(container.setOutputMarkupPlaceholderTag(true));
+		mp4.setDisplayType(true);
+		mp4.setType("video/mp4");
+		ogg.setDisplayType(true);
+		ogg.setType("video/ogg");
+		player.add(mp4, ogg);
 		container.add(wait.setVisible(false), player);
 		update(null, r);
 	}
@@ -60,9 +63,8 @@ public class VideoPlayer extends Panel {
 		boolean videoExists = r != null && getMp4Recording(r.getFileHash()).exists();
 		if (videoExists) {
 			PageParameters pp = new PageParameters().add("id", r.getId());
-			playerModel.setObject(Arrays.asList(
-					new MediaSource("" + getRequestCycle().urlFor(mp4res, pp), "video/mp4")
-					, new MediaSource("" + getRequestCycle().urlFor(oggres, pp), "video/ogg")));
+			mp4.setPageParameters(pp);
+			ogg.setPageParameters(pp);
 			player.recId = r.getId();
 		}
 		container.setVisible(videoExists);
@@ -73,34 +75,28 @@ public class VideoPlayer extends Panel {
 		return this;
 	}
 	
-	@Override
-	protected void onDetach() {
-		playerModel.detach();
-		super.onDetach();
-	}
-	
-	private static class OmHtml5Video extends Html5Video {
+	private static class OmVideo extends Video {
 		private static final long serialVersionUID = 1L;
 		Long recId = null;
 		
-		OmHtml5Video(String id, IModel<List<MediaSource>> model, Long recId) {
-			super(id, model);
+		OmVideo(String id, Long recId) {
+			super(id);
 			this.recId = recId;
 		}
 		
 		@Override
-		protected boolean isAutoPlay() {
+		public boolean isAutoplay() {
 			return false;
 		}
 		
 		@Override
-		protected boolean isControls() {
+		public boolean hasControls() {
 			return true;
 		}
 		
 		@Override
-		protected String getPoster() {
-			return recId == null ? null : "recordings/jpg/" + recId;
+		public ResourceReference getPoster() {
+			return recId == null ? null : new UrlResourceReference(Url.parse("recordings/jpg/" + recId)).setContextRelative(true);
 		}
 	}
 }

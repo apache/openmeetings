@@ -39,6 +39,7 @@ import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormSubmitBehavior;
+import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
@@ -67,8 +68,8 @@ public class UserSearchPanel extends UserPanel {
 	private final WebMarkupContainer container = new WebMarkupContainer("container");
 	private final FixedHeaderTableBehavior fixedHeader = new FixedHeaderTableBehavior("#searchUsersTable", new Options("height", 400));
 
-	private void refresh(AjaxRequestTarget target) {
-		target.add(container.add(fixedHeader));
+	private void refresh(IPartialPageRequestHandler handler) {
+		handler.add(container.add(fixedHeader));
 	}
 	
 	public UserSearchPanel(String id) {
@@ -95,9 +96,9 @@ public class UserSearchPanel extends UserPanel {
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			public void onClose(AjaxRequestTarget target, DialogButton button) {
+			public void onClose(IPartialPageRequestHandler handler, DialogButton button) {
 				if (send.equals(button)) {
-					refresh(target);
+					refresh(handler);
 				}
 			}
 		});
