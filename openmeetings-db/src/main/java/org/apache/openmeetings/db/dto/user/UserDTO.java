@@ -35,6 +35,8 @@ public class UserDTO {
 	private Long languageId;
 	private Address address;
 	private String timeZoneId;
+	private String externalId;
+	private String externalType;
 	private Type type = Type.user;
 
 	public UserDTO() {}
@@ -49,6 +51,8 @@ public class UserDTO {
 		address = u.getAddress();
 		timeZoneId = u.getTimeZoneId();
 		type = u.getType();
+		externalId = u.getExternalId();
+		externalType = u.getExternalType();
 	}
 	
 	public Long getId() {
@@ -129,5 +133,21 @@ public class UserDTO {
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	public String getExternalId() {
+		return externalId;
+	}
+
+	public void setExternalId(String externalId) {
+		this.externalId = externalId;
+	}
+
+	public String getExternalType() {
+		return externalType;
+	}
+
+	public void setExternalType(String externalType) {
+		this.externalType = externalType;
 	}
 }

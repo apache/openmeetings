@@ -20,36 +20,32 @@ package org.apache.openmeetings.webservice;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
-import java.util.ArrayList;
 import java.util.Date;
 
 import javax.jws.WebParam;
 import javax.jws.WebService;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import org.apache.cxf.feature.Features;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
-import org.apache.openmeetings.db.dao.basic.ErrorDao;
-import org.apache.openmeetings.db.dao.label.LabelDao;
 import org.apache.openmeetings.db.dao.server.SOAPLoginDao;
 import org.apache.openmeetings.db.dao.server.SessiondataDao;
 import org.apache.openmeetings.db.dao.user.IUserManager;
-import org.apache.openmeetings.db.dao.user.OrganisationDao;
-import org.apache.openmeetings.db.dao.user.OrganisationUserDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
-import org.apache.openmeetings.db.dto.basic.ErrorResult;
-import org.apache.openmeetings.db.dto.basic.SearchResult;
+import org.apache.openmeetings.db.dto.basic.ServiceResult;
+import org.apache.openmeetings.db.dto.basic.ServiceResult.Type;
 import org.apache.openmeetings.db.dto.user.UserDTO;
-import org.apache.openmeetings.db.dto.user.UserSearchResult;
-import org.apache.openmeetings.db.entity.basic.ErrorType;
-import org.apache.openmeetings.db.entity.basic.ErrorValue;
 import org.apache.openmeetings.db.entity.server.RemoteSessionObject;
 import org.apache.openmeetings.db.entity.server.Sessiondata;
-import org.apache.openmeetings.db.entity.user.Organisation;
-import org.apache.openmeetings.db.entity.user.OrganisationUser;
+import org.apache.openmeetings.db.entity.user.Address;
+import org.apache.openmeetings.db.entity.user.State;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Right;
 import org.apache.openmeetings.db.util.AuthLevelUtil;
@@ -58,8 +54,6 @@ import org.apache.openmeetings.webservice.error.ServiceException;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import com.sun.istack.NotNull;
 
 /**
  * 
@@ -72,349 +66,131 @@ import com.sun.istack.NotNull;
  */
 @WebService(name = "UserService")
 @Features(features = "org.apache.cxf.feature.LoggingFeature")
+//@Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON, MediaType.TEXT_HTML})
 @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+//@Consumes({MediaType.APPLICATION_FORM_URLENCODED, MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
 @Path("/user")
 public class UserWebService {
 	private static final Logger log = Red5LoggerFactory.getLogger(UserWebService.class, webAppRootKey);
 
 	@Autowired
-	private SessiondataDao sessiondataDao;
-	@Autowired
 	private ConfigurationDao configurationDao;
 	@Autowired
 	private IUserManager userManagement;
-	@Autowired
-	private ErrorDao errorDao;
-	@Autowired
-	private OrganisationDao orgDao;
-	@Autowired
-	private OrganisationUserDao orgUserDao;
 	@Autowired
 	private SOAPLoginDao soapLoginDao;
 	@Autowired
 	private UserDao userDao;
 	@Autowired
 	private SessiondataDao sessionDao;
-	@Autowired
-	private LabelDao labelDao;
 
 	/**
-	 * load this session id before doing anything else Returns an Object of Type
-	 * Sessiondata, this contains a sessionId, use that sessionId in all Methods
-	 * 
-	 * @return - creates new session
-	 */
-	@GET
-	@Path("/getSession")
-	public Sessiondata getSession() {
-		log.debug("SPRING LOADED getSession -- ");
-		return sessionDao.startsession();
-	}
-
-	/**
-	 * Auth function, use the SID you get by getSession, return positive means
-	 * logged-in, if negative its an ErrorCode, you have to invoke the Method
-	 * getErrorByCode to get the Text-Description of that ErrorCode
-	 * 
-	 * @param SID - The SID from getSession
-	 * @param username - Username from OpenMeetings, the user has to have Admin-rights
-	 * @param userpass - Userpass from OpenMeetings
+	 * @param login - login or email of Openmeetings user with admin or SOAP-rights
+	 * @param pass - password
 	 *            
-	 * @return - id of the logged in user, -1 in case of the error
+	 * @return - {@link ServiceResult} with error code or SID and userId
 	 */
 	@GET
 	@Path("/login")
-	public Long login(@WebParam String SID, @WebParam String username, @WebParam String userpass) {
+	public ServiceResult login(@WebParam @QueryParam("user") String login, @WebParam @QueryParam("pass") String pass) {
 		try {
-			log.debug("Login user SID : " + SID);
-			User u = userDao.login(username, userpass);
+			log.debug("Login user");
+			User u = userDao.login(login, pass);
 			if (u == null) {
-				return -1L;
+				return new ServiceResult(-1L, "Login failed", Type.ERROR);
 			}
 			
-			boolean bool = sessiondataDao.updateUser(SID, u.getId(), false, u.getLanguageId());
-			if (!bool) {
-				// invalid Session-Object
-				return -35L;
+			Sessiondata sd = sessionDao.startsession();
+			log.debug("Login user SID : " + sd.getSessionId());
+			if (!sessionDao.updateUser(sd.getSessionId(), u.getId(), false, u.getLanguageId())) {
+				return new ServiceResult(-35L, "invalid Session-Object", Type.ERROR);
 			}
 			
-			return u.getId();
+			return new ServiceResult(u.getId(), sd.getSessionId(), Type.SUCCESS);
 		} catch (OmException oe) {
-			if (oe.getCode() != null) {
-				return oe.getCode();
-			}
+			return new ServiceResult(oe.getCode() == null ? -1 : oe.getCode(), oe.getMessage(), Type.ERROR);
 		} catch (Exception err) {
 			log.error("[login]", err);
+			return new ServiceResult(-1L, err.getMessage(), Type.ERROR);
 		}
-		return -1L;
-	}
-
-	/**
-	 * loads an Error-Object. If a Method returns a negative Result, its an
-	 * Error-id, it needs a languageId to specify in which language you want to
-	 * display/read the error-message. English has the Language-ID one, for
-	 * different one see the list of languages
-	 * 
-	 * @param SID
-	 *            The SID from getSession
-	 * @param errorid
-	 *            the error id (negative Value here!)
-	 * @param langId
-	 *            The id of the language
-	 *            
-	 * @return - error with the code given
-	 */
-	@GET
-	@Path("/getErrorByCode")
-	public ErrorResult getErrorByCode(@WebParam String SID, @WebParam long errorid, @WebParam long langId) {
-		try {
-			if (errorid < 0) {
-				ErrorValue eValues = errorDao.get(-1 * errorid);
-				if (eValues != null) {
-					ErrorType eType = errorDao.getErrorType(eValues.getTypeId());
-					log.debug("eValues.getLabelId() = " + eValues.getLabelId());
-					log.debug("eValues.getErrorType() = " + eType);
-					String eValue = labelDao.getString(eValues.getLabelId(), langId);
-					String tValue = labelDao.getString(eType.getLabelId(), langId);
-					if (eValue != null) {
-						return new ErrorResult(errorid, eValue, tValue);
-					}
-				}
-			} else {
-				return new ErrorResult(errorid, "Error ... please check your input", "Error");
-			}
-		} catch (Exception err) {
-			log.error("[getErrorByCode] ", err);
-		}
-		return null;
 	}
 
 	/**
 	 * Adds a new User like through the Frontend, but also does activates the
 	 * Account To do SSO see the methods to create a hash and use those ones!
 	 * 
-	 * @param SID
+	 * @param sid
 	 *            The SID from getSession
-	 * @param userDTO
+	 * @param user
 	 *            user object
+	 * @param email
+	 *            whatever or not to send email, leave empty for auto-send
 	 *            
 	 * @return - id of the user added or error code
 	 * @throws ServiceException
 	 */
-	@GET
-	@Path("/addUser")
-	public Long addUser(@WebParam String SID, @WebParam @NotNull UserDTO userDto)
-			throws ServiceException {
+	@POST
+	@Path("/")
+	public Long add(
+			@WebParam @QueryParam("sid") String sid
+			, @WebParam @QueryParam("user") UserDTO user
+			, @WebParam @QueryParam("email") Boolean email
+			) throws ServiceException
+	{
 		try {
-			Long authUserId = sessiondataDao.checkSession(SID);
+			Long authUserId = sessionDao.checkSession(sid);
 
 			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(authUserId))) {
-
-				String jName_timeZone = configurationDao.getConfValue("default.timezone", String.class, "");
-
-				Long userId = userManagement.registerUser(userDto.getLogin(), userDto.getPassword(),
-						userDto.getLastname(), userDto.getFirstname(), userDto.getAddress() != null ? userDto.getAddress().getEmail() : "", new Date(), userDto.getAddress().getStreet(), //FIXME NPE signature
-						userDto.getAddress().getAdditionalname(), userDto.getAddress().getFax(), userDto.getAddress().getZip(), userDto.getAddress().getState().getId() //FIXME NPE signature
-						, userDto.getAddress().getTown(), userDto.getLanguageId(), //FIXME NPE signature
-						"", false, true, // generate SIP Data if the config is enabled
-						jName_timeZone);
-
-				if (userId == null || userId < 0) {
-					return userId;
-				}
-
-				User user = userDao.get(userId);
-
-				// activate the User
-				user.getRights().add(Right.Dashboard);
-				user.getRights().add(Right.Login);
-				user.getRights().add(Right.Room);
-				user.setUpdated(new Date());
-
-				userDao.update(user, authUserId);
-
-				return userId;
-
-			} else {
-				return new Long(-26);
-			}
-		} catch (Exception err) {
-			log.error("addNewUser", err);
-			throw new ServiceException(err.getMessage());
-		}
-	}
-
-	/**
-	 * Adds a new User like through the Frontend, but also does activates the
-	 * Account
-	 * 
-	 * @param SID
-	 *            The SID from getSession
-	 * @param username
-	 *            any username
-	 * @param userpass
-	 *            any userpass
-	 * @param lastname
-	 *            any lastname
-	 * @param firstname
-	 *            any firstname
-	 * @param email
-	 *            any email
-	 * @param additionalname
-	 *            any additionalname
-	 * @param street
-	 *            any street
-	 * @param zip
-	 *            any zip
-	 * @param fax
-	 *            any fax
-	 * @param stateId
-	 *            a valid stateId
-	 * @param town
-	 *            any town
-	 * @param languageId
-	 *            the languageId
-	 * @param jNameTimeZone
-	 *            the name of the timezone for the user
-	 *            
-	 * @return - id of the user added or the error code
-	 * @throws ServiceException
-	 */
-	public Long addNewUserWithTimeZone(String SID, String username,
-			String userpass, String lastname, String firstname, String email,
-			String additionalname, String street, String zip, String fax,
-			long stateId, String town, long languageId, String jNameTimeZone) throws ServiceException {
-		try {
-			Long authUserId = sessiondataDao.checkSession(SID);
-
-			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(authUserId))) {
-
-				Long userId = userManagement.registerUser(username, userpass,
-						lastname, firstname, email, new Date(), street,
-						additionalname, fax, zip, stateId, town, languageId,
-						"", false, true, // generate
-											// SIP
-											// Data
-											// if
-											// the
-											// config
-											// is
-											// enabled
-						jNameTimeZone); 
-
-				if (userId == null || userId < 0) {
-					return userId;
-				}
-
-				User user = userDao.get(userId);
-
-				// activate the User
-				user.getRights().add(Right.Login);
-				user.setUpdated(new Date());
-
-				userDao.update(user, authUserId);
-
-				return userId;
-
-			} else {
-				return new Long(-26);
-			}
-		} catch (Exception err) {
-			log.error("addNewUserWithTimeZone", err);
-			throw new ServiceException(err.getMessage());
-		}
-	}
-
-	/**
-	 * Adds a new User like through the Frontend, but also does activates the
-	 * Account, sends NO email (no matter what you configured) and sets the
-	 * users external user id and type
-	 * 
-	 * Use the methods to create a hash for SSO, creating users is not required
-	 * for SSO
-	 * 
-	 * @param SID
-	 *            The SID from getSession
-	 * @param username
-	 *            any username
-	 * @param userpass
-	 *            any userpass
-	 * @param lastname
-	 *            any lastname
-	 * @param firstname
-	 *            any firstname
-	 * @param email
-	 *            any email
-	 * @param additionalname
-	 *            any additionalname
-	 * @param street
-	 *            any street
-	 * @param zip
-	 *            any zip
-	 * @param fax
-	 *            any fax
-	 * @param stateId
-	 *            a valid stateId
-	 * @param town
-	 *            any town
-	 * @param languageId
-	 *            the languageId
-	 * @param jNameTimeZone
-	 *            the name of the timezone for the user
-	 * @param externalUserId
-	 *            externalUserId
-	 * @param externalUserType
-	 *            externalUserType
-	 *            
-	 * @return - id of user added or error code
-	 * @throws ServiceException
-	 */
-	public Long addNewUserWithExternalType(String SID, String username,
-			String userpass, String lastname, String firstname, String email,
-			String additionalname, String street, String zip, String fax,
-			long stateId, String town, long languageId,
-			String jNameTimeZone, String externalUserId, String externalUserType)
-			throws ServiceException {
-		try {
-			Long authUserId = sessiondataDao.checkSession(SID);
-
-			if (AuthLevelUtil.hasAdminLevel(userDao.getRights(authUserId))) {
-
-				User testUser = userDao.getExternalUser(externalUserId, externalUserType);
+				User testUser = userDao.getExternalUser(user.getExternalId(), user.getExternalType());
 
 				if (testUser != null) {
-					throw new Exception("User does already exist!");
+					throw new ServiceException("User does already exist!");
 				}
 
-				// This will send no email to the users
-				Long userId = userManagement.registerUserNoEmail(username,
-						userpass, lastname, firstname, email, new Date(),
-						street, additionalname, fax, zip, stateId, town,
-						languageId, "", false, true, // generate SIP Data if the config is enabled
-						jNameTimeZone);
+				String jName_timeZone = configurationDao.getConfValue("default.timezone", String.class, "");
+				if (user.getAddress() == null) {
+					user.setAddress(new Address());
+					State s = new State();
+					s.setId(1L);
+					user.getAddress().setState(s);
+				}
+				if (user.getLanguageId() == null) {
+					user.setLanguageId(1L);
+				}
+				Long userId = userManagement.registerUser(user.getLogin(), user.getPassword(),
+						user.getLastname(), user.getFirstname(), user.getAddress().getEmail(), new Date(), user.getAddress().getStreet(),
+						user.getAddress().getAdditionalname(), user.getAddress().getFax(), user.getAddress().getZip(), user.getAddress().getState().getId()
+						, user.getAddress().getTown(), user.getLanguageId(),
+						"", false, true, // generate SIP Data if the config is enabled
+						jName_timeZone, email);
 
 				if (userId == null || userId < 0) {
 					return userId;
 				}
 
-				User user = userDao.get(userId);
+				User u = userDao.get(userId);
 
-				// activate the User
-				user.getRights().add(Right.Login);
-				user.setUpdated(new Date());
-				user.setExternalId(externalUserId);
-				user.setExternalType(externalUserType);
+				u.getRights().add(Right.Room);
+				if (user.getExternalId() == null && user.getExternalType() == null) {
+					// activate the User
+					u.getRights().add(Right.Login);
+					u.getRights().add(Right.Dashboard);
+				} else {
+					u.setExternalId(user.getExternalId());
+					u.setExternalType(user.getExternalType());
+				}
 
-				userDao.update(user, authUserId);
+				userDao.update(u, authUserId);
 
 				return userId;
 
 			} else {
 				return new Long(-26);
 			}
-
+		} catch (ServiceException err) {
+			throw err;
 		} catch (Exception err) {
-			log.error("addNewUserWithExternalType", err);
+			log.error("addNewUser", err);
 			throw new ServiceException(err.getMessage());
 		}
 	}
@@ -423,29 +199,27 @@ public class UserWebService {
 	 * 
 	 * Delete a certain user by its id
 	 * 
-	 * @param SID
+	 * @param sid
 	 *            The SID from getSession
-	 * @param userId
+	 * @param id
 	 *            the openmeetings user id
 	 *            
 	 * @return - id of the user deleted, error code otherwise
 	 * @throws ServiceException
 	 */
-	public Long deleteUserById(String SID, Long userId) throws ServiceException {
+	@DELETE
+	@Path("/{id}")
+	public ServiceResult delete(@WebParam @QueryParam("sid") String sid, @WebParam @PathParam("id") long id) throws ServiceException {
 		try {
-			Long authUserId = sessiondataDao.checkSession(SID);
+			Long authUserId = sessionDao.checkSession(sid);
 
 			if (AuthLevelUtil.hasAdminLevel(userDao.getRights(authUserId))) {
+				userDao.deleteUserID(id);
 
-				// Setting user deleted
-				userDao.deleteUserID(userId);
-
-				return userId;
-
+				return new ServiceResult(id, "Deleted", Type.SUCCESS);
 			} else {
-				return new Long(-26);
+				return new ServiceResult(-26L, "Insufficient permissins", Type.ERROR);
 			}
-
 		} catch (Exception err) {
 			log.error("deleteUserById", err);
 			throw new ServiceException(err.getMessage());
@@ -456,7 +230,7 @@ public class UserWebService {
 	 * 
 	 * Delete a certain user by its external user id
 	 * 
-	 * @param SID
+	 * @param sid
 	 *            The SID from getSession
 	 * @param externalId
 	 *            externalUserId
@@ -466,13 +240,18 @@ public class UserWebService {
 	 * @return - id of user deleted, or error code
 	 * @throws ServiceException
 	 */
-	public Long deleteUserByExternalUserIdAndType(String SID,
-			String externalId, String externalType) throws ServiceException {
+	@DELETE
+	@Path("/{externalType}/{externalId}")
+	public ServiceResult deleteExternal(
+			@QueryParam("sid") String sid
+			, @PathParam("externalType") String externalType
+			, @PathParam("externalId") String externalId
+			) throws ServiceException
+	{
 		try {
-			Long authUserId = sessiondataDao.checkSession(SID);
+			Long authUserId = sessionDao.checkSession(sid);
 
 			if (AuthLevelUtil.hasAdminLevel(userDao.getRights(authUserId))) {
-
 				User userExternal = userDao.getExternalUser(externalId, externalType);
 
 				Long userId = userExternal.getId();
@@ -480,12 +259,10 @@ public class UserWebService {
 				// Setting user deleted
 				userDao.deleteUserID(userId);
 
-				return userId;
-
+				return new ServiceResult(userId, "Deleted", Type.SUCCESS);
 			} else {
-				return new Long(-26);
+				return new ServiceResult(-26L, "Insufficient permissins", Type.ERROR);
 			}
-
 		} catch (Exception err) {
 			log.error("deleteUserByExternalUserIdAndType", err);
 			throw new ServiceException(err.getMessage());
@@ -530,7 +307,7 @@ public class UserWebService {
 			Long roomId, int becomeModeratorAsInt, int showAudioVideoTestAsInt)
 			throws ServiceException {
 		try {
-			Long userId = sessiondataDao.checkSession(SID);
+			Long userId = sessionDao.checkSession(SID);
 			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(userId))) {
 
 				RemoteSessionObject remoteSessionObject = new RemoteSessionObject(
@@ -543,7 +320,7 @@ public class UserWebService {
 
 				log.debug("xmlString " + xmlString);
 
-				sessiondataDao.updateUserRemoteSession(SID, xmlString);
+				sessionDao.updateUserRemoteSession(SID, xmlString);
 
 				boolean becomeModerator = false;
 				if (becomeModeratorAsInt != 0) {
@@ -621,7 +398,7 @@ public class UserWebService {
 
 		log.debug("UserService.setUserObjectAndGenerateRoomHashByURL");
 		try {
-			Long userId = sessiondataDao.checkSession(SID);
+			Long userId = sessionDao.checkSession(SID);
 			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(userId))) {
 
 				RemoteSessionObject remoteSessionObject = new RemoteSessionObject(
@@ -634,7 +411,7 @@ public class UserWebService {
 
 				log.debug("xmlString " + xmlString);
 
-				sessiondataDao.updateUserRemoteSession(SID, xmlString);
+				sessionDao.updateUserRemoteSession(SID, xmlString);
 
 				boolean becomeModerator = false;
 				if (becomeModeratorAsInt != 0) {
@@ -714,7 +491,7 @@ public class UserWebService {
 			String externalUserType, Long roomId, int becomeModeratorAsInt,
 			int showAudioVideoTestAsInt, int allowRecording) {
 		try {
-			Long userId = sessiondataDao.checkSession(SID);
+			Long userId = sessionDao.checkSession(SID);
 			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(userId))) {
 
 				RemoteSessionObject remoteSessionObject = new RemoteSessionObject(
@@ -727,7 +504,7 @@ public class UserWebService {
 
 				log.debug("xmlString " + xmlString);
 
-				sessiondataDao.updateUserRemoteSession(SID, xmlString);
+				sessionDao.updateUserRemoteSession(SID, xmlString);
 
 				boolean becomeModerator = false;
 				if (becomeModeratorAsInt != 0) {
@@ -800,7 +577,7 @@ public class UserWebService {
 		log.debug("UserService.setUserObjectMainLandingZone");
 
 		try {
-			Long userId = sessiondataDao.checkSession(SID);
+			Long userId = sessionDao.checkSession(SID);
 			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(userId))) {
 
 				RemoteSessionObject remoteSessionObject = new RemoteSessionObject(
@@ -813,7 +590,7 @@ public class UserWebService {
 
 				log.debug("xmlString " + xmlString);
 
-				sessiondataDao.updateUserRemoteSession(SID, xmlString);
+				sessionDao.updateUserRemoteSession(SID, xmlString);
 
 				String hash = soapLoginDao.addSOAPLogin(SID, null, false, true,
 						true, // allowSameURLMultipleTimes
@@ -886,7 +663,7 @@ public class UserWebService {
 			Long roomId, int becomeModeratorAsInt,
 			int showAudioVideoTestAsInt, int showNickNameDialogAsInt) {
 		try {
-			Long userId = sessiondataDao.checkSession(SID);
+			Long userId = sessionDao.checkSession(SID);
 			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(userId))) {
 
 				RemoteSessionObject remoteSessionObject = new RemoteSessionObject(
@@ -900,7 +677,7 @@ public class UserWebService {
 
 				log.debug("xmlString " + xmlString);
 
-				sessiondataDao.updateUserRemoteSession(SID, xmlString);
+				sessionDao.updateUserRemoteSession(SID, xmlString);
 
 				boolean becomeModerator = false;
 				if (becomeModeratorAsInt != 0) {
@@ -961,7 +738,7 @@ public class UserWebService {
 			String username, String firstname, String lastname,
 			String externalUserId, String externalUserType, Long recordingId) {
 		try {
-			Long userId = sessiondataDao.checkSession(SID);
+			Long userId = sessionDao.checkSession(SID);
 			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(userId))) {
 
 				RemoteSessionObject remoteSessionObject = new RemoteSessionObject(
@@ -974,7 +751,7 @@ public class UserWebService {
 
 				log.debug("xmlString " + xmlString);
 
-				sessiondataDao.updateUserRemoteSession(SID, xmlString);
+				sessionDao.updateUserRemoteSession(SID, xmlString);
 
 				String hash = soapLoginDao.addSOAPLogin(SID, null, false,
 						false, true, // allowSameURLMultipleTimes
@@ -998,81 +775,6 @@ public class UserWebService {
 	}
 
 	/**
-	 * 
-	 * Add a user to a certain organization
-	 * 
-	 * @param SID
-	 *            The SID from getSession
-	 * @param userId
-	 *            the user id
-	 * @param organisationId
-	 *            the organization id
-	 * @param insertedby
-	 *            user id of the operating user
-	 * @return - id of the user added, or error id in case of the error
-	 */
-	public Long addUserToOrganisation(String SID, Long userId,
-			Long organisationId, Long insertedby) {
-		try {
-			Long authUserId = sessiondataDao.checkSession(SID);
-			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(authUserId))) {
-				if (!orgUserDao.isUserInOrganization(organisationId, userId)) {
-					User u = userDao.get(userId);
-					u.getOrganisationUsers().add(new OrganisationUser(orgDao.get(organisationId)));
-					userDao.update(u, authUserId);
-				}
-				return userId;
-			} else {
-				return new Long(-26);
-			}
-		} catch (Exception err) {
-			log.error("addUserToOrganisation", err);
-		}
-		return new Long(-1);
-	}
-
-	/**
-	 * Search users and return them
-	 * 
-	 * @param SID
-	 *            The SID from getSession
-	 * @param organisationId
-	 *            the organization id
-	 * @param start
-	 *            first record
-	 * @param max
-	 *            max records
-	 * @param orderby
-	 *            orderby clause
-	 * @param asc
-	 *            asc or desc
-	 * @return - users found
-	 */
-	public UserSearchResult getUsersByOrganisation(String SID,
-			long organisationId, int start, int max, String orderby,
-			boolean asc) {
-		try {
-			Long userId = sessiondataDao.checkSession(SID);
-			SearchResult<User> result = new SearchResult<User>();
-			result.setObjectName(User.class.getName());
-			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(userId))) {
-				result.setRecords(orgUserDao.count(organisationId));
-				result.setResult(new ArrayList<User>());
-				for (OrganisationUser ou : orgUserDao.get(organisationId, null, start, max, orderby + " " + (asc ? "ASC" : "DESC"))) {
-					result.getResult().add(ou.getUser());
-				}
-			} else {
-				log.error("Need Administration Account");
-				result.setErrorId(-26L);
-			}
-			return new UserSearchResult(result);
-		} catch (Exception err) {
-			log.error("getUsersByOrganisation", err);
-		}
-		return null;
-	}
-
-	/**
 	 * Kick a user by its public SID
 	 * 
 	 * @param SID
@@ -1084,12 +786,11 @@ public class UserWebService {
 	 */
 	public Boolean kickUserByPublicSID(String SID, String publicSID) {
 		try {
-			Boolean success = false;
+			Boolean success = userManagement.kickUserByPublicSID(SID, publicSID);
 
-			success = userManagement.kickUserByPublicSID(SID, publicSID);
-
-			if (success == null)
+			if (success == null) {
 				success = false;
+			}
 
 			return success;
 		} catch (Exception err) {
@@ -1097,26 +798,4 @@ public class UserWebService {
 		}
 		return null;
 	}
-	
-	/**
-	 * add a new organisation
-	 * 
-	 * @param SID
-	 *            The SID from getSession
-	 * @param name
-	 *            the name of the org
-	 * @return the new id of the org or -1 in case an error happened
-	 * @throws ServiceException
-	 */
-	public Long addOrganisation(String SID, String name) throws ServiceException {
-		Long userId = sessiondataDao.checkSession(SID);
-		if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(userId))) {
-			Organisation o = new Organisation();
-			o.setName(name);
-			return orgDao.update(o, userId).getId();
-		}
-		log.error("Could not create organization");
-		return -1L;
-	}
-
 }

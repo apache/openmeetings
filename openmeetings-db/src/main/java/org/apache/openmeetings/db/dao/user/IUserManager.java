@@ -33,7 +33,7 @@ public interface IUserManager {
 			String firstname, String email, Date age, String street,
 			String additionalname, String fax, String zip, long stateId,
 			String town, long languageId, String phone, boolean sendSMS,
-			boolean generateSipUserData, String jNameTimeZone);
+			boolean generateSipUserData, String jNameTimeZone, Boolean sendConfirmation);
 	
 	Long registerUserInit(Set<Right> rights, String login, String password, String lastname,
 			String firstname, String email, Date age, String street,
@@ -44,12 +44,6 @@ public interface IUserManager {
 			String userOffers, String userSearchs, Boolean showContactData,
 			Boolean showContactDataToContacts, String activatedHash) throws Exception;
 
-	Long registerUserNoEmail(String login, String Userpass,
-			String lastname, String firstname, String email, Date age,
-			String street, String additionalname, String fax, String zip,
-			long stateId, String town, long languageId, String phone, boolean sendSMS, 
-			boolean generateSipUserData, String jNameTimeZone);
-	
 	Boolean kickUserByStreamId(String SID, Long roomId);
 	
 	Boolean kickUserByPublicSID(String SID, String publicSID);

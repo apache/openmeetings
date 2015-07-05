@@ -263,9 +263,6 @@ public class UserManager implements IUserManager {
 	 * Organisation with the id specified in the configuration value
 	 * default_group_id
 	 * 
-	 * @param user_level
-	 * @param availible
-	 * @param status
 	 * @param login
 	 * @param Userpass
 	 * @param lastname
@@ -279,35 +276,14 @@ public class UserManager implements IUserManager {
 	 * @param stateId
 	 * @param town
 	 * @param languageId
+	 * @param phone
+	 * @param sendSMS
+	 * @param generateSipUserData
+	 * @param jNameTimeZone
+	 * @param sendConfirmation
 	 * @return
 	 */
 	public Long registerUser(String login, String Userpass, String lastname,
-			String firstname, String email, Date age, String street,
-			String additionalname, String fax, String zip, long stateId,
-			String town, long languageId, String phone, boolean sendSMS, boolean generateSipUserData, String jNameTimeZone) {
-		
-		String baseURL = configurationDao.getBaseUrl();
-		boolean sendConfirmation = baseURL != null
-				&& !baseURL.isEmpty()
-				&& 1 == configurationDao.getConfValue("sendEmailWithVerficationCode", Integer.class, "0");
-		
-		return registerUser(login, Userpass, lastname, firstname, email, age,
-				street, additionalname, fax, zip, stateId, town, languageId,
-				phone, sendSMS, generateSipUserData, jNameTimeZone, sendConfirmation);
-	}
-
-	public Long registerUserNoEmail(String login, String Userpass,
-			String lastname, String firstname, String email, Date age,
-			String street, String additionalname, String fax, String zip,
-			long stateId, String town, long languageId, String phone, boolean sendSMS, 
-			boolean generateSipUserData, String jNameTimeZone) {
-		
-		return registerUser(login, Userpass, lastname, firstname, email, age,
-				street, additionalname, fax, zip, stateId, town, languageId,
-				phone, sendSMS, generateSipUserData, jNameTimeZone, false);
-	}
-
-	private Long registerUser(String login, String Userpass, String lastname,
 			String firstname, String email, Date age, String street,
 			String additionalname, String fax, String zip, long stateId,
 			String town, long languageId, String phone, boolean sendSMS,
@@ -315,7 +291,12 @@ public class UserManager implements IUserManager {
 		try {
 			// Checks if FrontEndUsers can register
 			if ("1".equals(configurationDao.getConfValue(CONFIG_SOAP_REGISTER_KEY, String.class, "0"))) {
-				
+				if (sendConfirmation == null) {
+					String baseURL = configurationDao.getBaseUrl();
+					sendConfirmation = baseURL != null
+							&& !baseURL.isEmpty()
+							&& 1 == configurationDao.getConfValue("sendEmailWithVerficationCode", Integer.class, "0");
+				}
 				// TODO: Read and generate SIP-Data via RPC-Interface Issue 1098
 
 				Long userId = registerUserInit(UserDao.getDefaultRights(), login,
@@ -484,9 +465,7 @@ public class UserManager implements IUserManager {
 
 			// admins only
 			if (AuthLevelUtil.hasWebServiceLevel(usersDao.getRights(userId))) {
-
-				Client rcl = sessionManager
-						.getClientByPublicSID(publicSID, false, null);
+				Client rcl = sessionManager.getClientByPublicSID(publicSID, false, null);
 
 				if (rcl == null) {
 					return true;
@@ -496,19 +475,16 @@ public class UserManager implements IUserManager {
 				if (rcl.getRoomId() != null) {
 					scopeName = rcl.getRoomId().toString();
 				}
-				IScope currentScope = scopeApplicationAdapter
-						.getRoomScope(scopeName);
+				IScope currentScope = scopeApplicationAdapter.getRoomScope(scopeName);
 
 				HashMap<Integer, String> messageObj = new HashMap<Integer, String>();
 				messageObj.put(0, "kick");
-				scopeApplicationAdapter.sendMessageById(messageObj,
-						rcl.getStreamid(), currentScope);
+				scopeApplicationAdapter.sendMessageById(messageObj, rcl.getStreamid(), currentScope);
 
 				scopeApplicationAdapter.roomLeaveByScope(rcl, currentScope, true);
 
 				return true;
 			}
-
 		} catch (Exception err) {
 			log.error("[kickUserByStreamId]", err);
 		}

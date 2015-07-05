@@ -25,6 +25,7 @@ import java.net.URL;
 import javax.xml.namespace.QName;
 import javax.xml.ws.Service;
 
+import org.apache.openmeetings.db.dto.basic.ServiceResult;
 import org.apache.openmeetings.db.entity.server.Server;
 import org.apache.openmeetings.webservice.UserWebService;
 import org.red5.logging.Red5LoggerFactory;
@@ -171,11 +172,9 @@ public class RestClient {
 	public void loginUser(Action action) throws Exception {
 		UserWebService client = getUserClient();
 		
-		sessionId = client.getSession().getSessionId();
+		ServiceResult result = client.login(user, pass);
 
-		Long uId = client.login(sessionId, user, pass);
-
-		loginSuccess = uId > 0;
+		loginSuccess = result.getCode() > 0;
 
 		switch (action) {
 			case KICK_USER:
