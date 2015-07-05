@@ -268,6 +268,8 @@
 
 	<!-- Axis2 Service Proxy's -->
 	<bean id="userWebService" class="org.apache.openmeetings.webservice.UserWebService" />
+	<bean id="errorWebService" class="org.apache.openmeetings.webservice.ErrorWebService" />
+	<bean id="groupWebService" class="org.apache.openmeetings.webservice.GroupWebService" />
 	<bean id="roomWebService" class="org.apache.openmeetings.webservice.RoomWebService" />
 	<bean id="fileWebService" class="org.apache.openmeetings.webservice.FileWebService" />
 	<bean id="calendarWebService" class="org.apache.openmeetings.webservice.CalendarWebService" />
@@ -278,6 +280,8 @@
 	<jaxrs:server id="server" address="/">
 		<jaxrs:serviceBeans>
 			<ref bean="userWebService"/>
+			<ref bean="errorWebService"/>
+			<ref bean="groupWebService"/>
 			<ref bean="roomWebService"/>
 			<ref bean="fileWebService"/>
 			<ref bean="calendarWebService"/>
@@ -289,6 +293,16 @@
 		implementor="#userWebService" 
 		endpointName="UserServiceEndpoint"
 		serviceName="UserService"
+		/>
+	<jaxws:endpoint id="errorServiceWS" address="/ErrorService"
+		implementor="#errorWebService" 
+		endpointName="ErrorServiceEndpoint"
+		serviceName="ErrorService"
+		/>
+	<jaxws:endpoint id="groupServiceWS" address="/GroupService"
+		implementor="#groupWebService" 
+		endpointName="GroupServiceEndpoint"
+		serviceName="GroupService"
 		/>
 	<jaxws:endpoint id="roomServiceWS" address="/RoomService"
 		implementor="#roomWebService" 
