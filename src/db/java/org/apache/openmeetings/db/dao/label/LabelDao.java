@@ -46,7 +46,15 @@ import org.apache.openmeetings.db.entity.label.StringLabel;
 import org.apache.openmeetings.util.OmFileHelper;
 import org.apache.openmeetings.util.XmlExport;
 import org.apache.openmeetings.web.app.Application;
+import org.apache.openmeetings.web.app.WebSession;
+import org.apache.wicket.ThreadContext;
 import org.apache.wicket.extensions.markup.html.repeater.util.SortParam;
+import org.apache.wicket.mock.MockWebResponse;
+import org.apache.wicket.protocol.http.mock.MockHttpServletRequest;
+import org.apache.wicket.protocol.http.mock.MockHttpSession;
+import org.apache.wicket.protocol.http.servlet.ServletWebRequest;
+import org.apache.wicket.request.cycle.RequestCycle;
+import org.apache.wicket.request.cycle.RequestCycleContext;
 import org.apache.wicket.util.string.Strings;
 import org.dom4j.Document;
 import org.dom4j.Element;
@@ -108,6 +116,23 @@ public class LabelDao implements IDataProviderDao<StringLabel>{
 	}
 
 	public String getString(long fieldValuesId, long langId) {
+		Application a = null;
+		if (Application.exists()) {
+			a = Application.get();
+		} else {
+			a = (Application)Application.get(Application.getAppName());
+			ThreadContext.setApplication(a);
+		}
+		if (ThreadContext.getRequestCycle() == null) {
+			ServletWebRequest req = new ServletWebRequest(new MockHttpServletRequest((Application)a, new MockHttpSession(a.getServletContext()), a.getServletContext()), "");
+			RequestCycleContext rctx = new RequestCycleContext(req, new MockWebResponse(), a.getRootRequestMapper(), a.getExceptionMapperProvider().get()); 
+			ThreadContext.setRequestCycle(new RequestCycle(rctx));
+		}
+		if (ThreadContext.getSession() == null) {
+			WebSession s = WebSession.get();
+			s.setLanguage(langId);
+			ThreadContext.setSession(s);
+		}
 		return Application.getString(fieldValuesId, langId);
 	}
 
