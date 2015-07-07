@@ -22,25 +22,23 @@ BrowserHistoryUtils = {
         if (elm.addEventListener) {
             elm.addEventListener(evType, fn, useCapture);
             return true;
-        }
-        else if (elm.attachEvent) {
+        } else if (elm.attachEvent) {
             var r = elm.attachEvent('on' + evType, fn);
             return r;
-        }
-        else {
+        } else {
             elm['on' + evType] = fn;
         }
     }
-};
+}
 
 BrowserHistory = (function() {
     // type of browser
     var browser = {
-        ie: false, 
-        ie8: false, 
-        firefox: false, 
-        safari: false, 
-        opera: false, 
+        ie: false,
+        ie8: false,
+        firefox: false,
+        safari: false,
+        opera: false,
         version: -1
     };
 
@@ -61,7 +59,7 @@ BrowserHistory = (function() {
 
     // History maintenance (used only by Safari)
     var currentHistoryLength = -1;
-    
+
     // Flag to denote the existence of onhashchange
     var browserHasHashChange = false;
 
@@ -82,8 +80,7 @@ BrowserHistory = (function() {
     } else if (useragent.indexOf("msie") != -1) {
         browser.ie = true;
         browser.version = parseFloat(useragent.substring(useragent.indexOf('msie') + 4));
-        if (browser.version == 8)
-        {
+        if (browser.version == 8) {
             browser.ie = false;
             browser.ie8 = true;
         }
@@ -98,8 +95,7 @@ BrowserHistory = (function() {
         window["_ie_firstload"] = false;
     }
 
-    function hashChangeHandler()
-    {
+    function hashChangeHandler() {
         currentHref = document.location.href;
         var flexAppUrl = getHash();
         //ADR: to fix multiple
@@ -114,34 +110,32 @@ BrowserHistory = (function() {
     }
 
     // Accessor functions for obtaining specific elements of the page.
-    function getHistoryFrame()
-    {
+
+    function getHistoryFrame() {
         return document.getElementById('ie_historyFrame');
     }
 
-    function getFormElement()
-    {
+    function getFormElement() {
         return document.getElementById('safari_formDiv');
     }
 
-    function getRememberElement()
-    {
+    function getRememberElement() {
         return document.getElementById("safari_remember_field");
     }
 
     // Get the Flash player object for performing ExternalInterface callbacks.
     // Updated for changes to SWFObject2.
+
     function getPlayer(id) {
         var i;
 
-		if (id && document.getElementById(id)) {
-			var r = document.getElementById(id);
-			if (typeof r.SetVariable != "undefined") {
-				return r;
-			}
-			else {
-				var o = r.getElementsByTagName("object");
-				var e = r.getElementsByTagName("embed");
+        if (id && document.getElementById(id)) {
+            var r = document.getElementById(id);
+            if (typeof r.SetVariable != "undefined") {
+                return r;
+            } else {
+                var o = r.getElementsByTagName("object");
+                var e = r.getElementsByTagName("embed");
                 for (i = 0; i < o.length; i++) {
                     if (typeof o[i].browserURLChange != "undefined")
                         return o[i];
@@ -150,42 +144,37 @@ BrowserHistory = (function() {
                     if (typeof e[i].browserURLChange != "undefined")
                         return e[i];
                 }
-			}
-		}
-		else {
-			var o = document.getElementsByTagName("object");
-			var e = document.getElementsByTagName("embed");
+            }
+        } else {
+            var o = document.getElementsByTagName("object");
+            var e = document.getElementsByTagName("embed");
             for (i = 0; i < e.length; i++) {
-                if (typeof e[i].browserURLChange != "undefined")
-                {
+                if (typeof e[i].browserURLChange != "undefined") {
                     return e[i];
                 }
             }
             for (i = 0; i < o.length; i++) {
-                if (typeof o[i].browserURLChange != "undefined")
-                {
+                if (typeof o[i].browserURLChange != "undefined") {
                     return o[i];
                 }
             }
-		}
-		return undefined;
-	}
-    
+        }
+        return undefined;
+    }
+
     function getPlayers() {
         var i;
         var players = [];
         if (players.length == 0) {
             var tmp = document.getElementsByTagName('object');
-            for (i = 0; i < tmp.length; i++)
-            {
+            for (i = 0; i < tmp.length; i++) {
                 if (typeof tmp[i].browserURLChange != "undefined")
                     players.push(tmp[i]);
             }
         }
         if (players.length == 0 || players[0].object == null) {
             var tmp = document.getElementsByTagName('embed');
-            for (i = 0; i < tmp.length; i++)
-            {
+            for (i = 0; i < tmp.length; i++) {
                 if (typeof tmp[i].browserURLChange != "undefined")
                     players.push(tmp[i]);
             }
@@ -193,36 +182,42 @@ BrowserHistory = (function() {
         return players;
     }
 
-	function getIframeHash() {
-		var doc = getHistoryFrame().contentWindow.document;
-		var hash = String(doc.location.search);
-		if (hash.length == 1 && hash.charAt(0) == "?") {
-			hash = "";
-		}
-		else if (hash.length >= 2 && hash.charAt(0) == "?") {
-			hash = hash.substring(1);
-		}
-		return hash;
-	}
-
-    /* Get the current location hash excluding the '#' symbol. */
-    function getHash() {
-       // It would be nice if we could use document.location.hash here,
-       // but it's faulty sometimes.
-       var idx = document.location.href.indexOf('#');
-       return (idx >= 0) ? document.location.href.substr(idx+1) : '';
+    function getIframeHash() {
+        var doc = getHistoryFrame().contentWindow.document;
+        var hash = String(doc.location.search);
+        if (hash.length == 1 && hash.charAt(0) == "?") {
+            hash = "";
+        } else if (hash.length >= 2 && hash.charAt(0) == "?") {
+            hash = hash.substring(1);
+        }
+        return hash;
     }
 
     /* Get the current location hash excluding the '#' symbol. */
+
+    function getHash() {
+        // It would be nice if we could use document.location.hash here,
+        // but it's faulty sometimes.
+        var idx = document.location.href.indexOf('#');
+        return (idx >= 0) ? document.location.href.substr(idx + 1) : '';
+    }
+
+    /* Get the current location hash excluding the '#' symbol. */
+
     function setHash(hash) {
-       // It would be nice if we could use document.location.hash here,
-       // but it's faulty sometimes.
-       if (hash == '') hash = '#';
-       document.location.hash = hash;
+        // It would be nice if we could use document.location.hash here,
+        // but it's faulty sometimes.
+        if (hash == '') hash = '#'
+        document.location.hash = hash;
     }
 
     function createState(baseUrl, newUrl, flexAppUrl) {
-        return { 'baseUrl': baseUrl, 'newUrl': newUrl, 'flexAppUrl': flexAppUrl, 'title': null };
+        return {
+            'baseUrl': baseUrl,
+            'newUrl': newUrl,
+            'flexAppUrl': flexAppUrl,
+            'title': null
+        };
     }
 
     /* Add a history entry to the browser.
@@ -230,6 +225,7 @@ BrowserHistory = (function() {
      *   newUrl: the entire new URL, including '#' and following fragment
      *   flexAppUrl: the portion of the location following the '#' only
      */
+
     function addHistoryEntry(baseUrl, newUrl, flexAppUrl) {
 
         //delete all the history entries
@@ -257,7 +253,7 @@ BrowserHistory = (function() {
             //ADR
             if (backStack.length == 0 && initialState.flexAppUrl == flexAppUrl) {
                 initialState = createState(baseUrl, newUrl, flexAppUrl);
-            } else if(backStack.length > 0 && backStack[backStack.length - 1].flexAppUrl == flexAppUrl) {
+            } else if (backStack.length > 0 && backStack[backStack.length - 1].flexAppUrl == flexAppUrl) {
                 backStack[backStack.length - 1] = createState(baseUrl, newUrl, flexAppUrl);
             }
 
@@ -265,8 +261,8 @@ BrowserHistory = (function() {
                 // for Safari, submit a form whose action points to the desired URL
                 if (browser.version <= 419.3) {
                     var file = window.location.pathname.toString();
-                    file = file.substring(file.lastIndexOf("/")+1);
-                    getFormElement().innerHTML = '<form name="historyForm" action="'+file+'#' + flexAppUrl + '" method="GET"></form>';
+                    file = file.substring(file.lastIndexOf("/") + 1);
+                    getFormElement().innerHTML = '<form name="historyForm" action="' + file + '#' + flexAppUrl + '" method="GET"></form>';
                     //get the current elements and add them to the form
                     var qs = window.location.search.substring(1);
                     var qs_arr = qs.split("&");
@@ -302,9 +298,11 @@ BrowserHistory = (function() {
     function handleBackButton() {
         //The "current" page is always at the top of the history stack.
         var current = backStack.pop();
-        if (!current) { return; }
+        if (!current) {
+            return;
+        }
         var last = backStack[backStack.length - 1];
-        if (!last && backStack.length == 0){
+        if (!last && backStack.length == 0) {
             last = initialState;
         }
         forwardStack.push(current);
@@ -314,7 +312,9 @@ BrowserHistory = (function() {
         //summary: private method. Do not call this directly.
 
         var last = forwardStack.pop();
-        if (!last) { return; }
+        if (!last) {
+            return;
+        }
         backStack.push(last);
     }
 
@@ -324,6 +324,7 @@ BrowserHistory = (function() {
     }
 
     /* Called periodically to poll to see if we need to detect navigation that has occurred */
+
     function checkForUrlChange() {
 
         if (browser.ie) {
@@ -338,12 +339,12 @@ BrowserHistory = (function() {
                     currentHref = document.location.href;
                     document.location.reload();
                 } else {
-					if (getHash() != getIframeHash()) {
-						// this.iframe.src = this.blankURL + hash;
-						var sourceToSet = historyFrameSourcePrefix + getHash();
-						getHistoryFrame().src = sourceToSet;
+                    if (getHash() != getIframeHash()) {
+                        // this.iframe.src = this.blankURL + hash;
+                        var sourceToSet = historyFrameSourcePrefix + getHash();
+                        getHistoryFrame().src = sourceToSet;
                         currentHref = document.location.href;
-					}
+                    }
                 }
             }
         }
@@ -353,13 +354,12 @@ BrowserHistory = (function() {
             if (currentHistoryLength >= 0 && history.length != currentHistoryLength) {
                 //alert("did change: " + history.length + ", " + historyHash.length + "|" + historyHash[history.length] + "|>" + historyHash.join("|"));
                 var flexAppUrl = getHash();
-                if (browser.version < 528.16 /* Anything earlier than Safari 4.0 */)
-                {    
+                if (browser.version < 528.16 /* Anything earlier than Safari 4.0 */ ) {
                     // If it did change and we're running Safari 3.x or earlier, 
                     // then we have to look the old state up in our hand-maintained 
                     // array since document.location.hash won't have changed, 
                     // then call back into BrowserManager.
-                currentHistoryLength = history.length;
+                    currentHistoryLength = history.length;
                     flexAppUrl = historyHash[currentHistoryLength];
                 }
 
@@ -380,8 +380,8 @@ BrowserHistory = (function() {
                 var bsl = backStack.length;
 
                 var urlActions = {
-                    back: false, 
-                    forward: false, 
+                    back: false,
+                    forward: false,
                     set: false
                 }
 
@@ -392,11 +392,11 @@ BrowserHistory = (function() {
                     // clearInterval(this.locationTimer);
                     handleBackButton();
                 }
-                
+
                 // first check to see if we could have gone forward. We always halt on
                 // a no-hash item.
                 if (forwardStack.length > 0) {
-                    if (forwardStack[forwardStack.length-1].flexAppUrl == getHash()) {
+                    if (forwardStack[forwardStack.length - 1].flexAppUrl == getHash()) {
                         urlActions.forward = true;
                         handleForwardButton();
                     }
@@ -409,10 +409,10 @@ BrowserHistory = (function() {
                         handleBackButton();
                     }
                 }
-                
+
                 if (!urlActions.back && !urlActions.forward) {
                     var foundInStacks = {
-                        back: -1, 
+                        back: -1,
                         forward: -1
                     }
 
@@ -447,12 +447,11 @@ BrowserHistory = (function() {
         }
     }
 
-    var _initialize = function () {
-        
+    var _initialize = function() {
+
         browserHasHashChange = ("onhashchange" in document.body);
-        
-        if (browser.ie)
-        {
+
+        if (browser.ie) {
             var scripts = document.getElementsByTagName('script');
             for (var i = 0, s; s = scripts[i]; i++) {
                 if (s.src.indexOf("history.js") > -1) {
@@ -465,19 +464,18 @@ BrowserHistory = (function() {
             var iframe = document.createElement("iframe");
             iframe.id = 'ie_historyFrame';
             iframe.name = 'ie_historyFrame';
-            iframe.src = 'javascript:false;'; 
+            iframe.src = 'javascript:false;';
 
             try {
                 document.body.appendChild(iframe);
-            } catch(e) {
+            } catch (e) {
                 setTimeout(function() {
                     document.body.appendChild(iframe);
                 }, 0);
             }
         }
 
-        if (browser.safari && !browserHasHashChange)
-        {
+        if (browser.safari && !browserHasHashChange) {
             var rememberDiv = document.createElement("div");
             rememberDiv.id = 'safari_rememberDiv';
             document.body.appendChild(rememberDiv);
@@ -501,58 +499,60 @@ BrowserHistory = (function() {
             reloader_content.style.left = reloader_content.style.top = '-9999px';
             iframe = reloader_content.getElementsByTagName('iframe')[0];
 
-            if (document.getElementById("safari_remember_field").value != "" ) {
+            if (document.getElementById("safari_remember_field").value != "") {
                 historyHash = document.getElementById("safari_remember_field").value.split(",");
             }
         }
 
-        if (browserHasHashChange)        
+        if (browserHasHashChange)
             document.body.onhashchange = hashChangeHandler;
     }
 
     return {
-        historyHash: historyHash, 
-        backStack: function() { return backStack; }, 
-        forwardStack: function() { return forwardStack }, 
-        getPlayer: getPlayer, 
+        historyHash: historyHash,
+        backStack: function() {
+            return backStack;
+        },
+        forwardStack: function() {
+            return forwardStack
+        },
+        getPlayer: getPlayer,
         initialize: function(src) {
             _initialize(src);
-        }, 
+        },
         setURL: function(url) {
             document.location.href = url;
-        }, 
+        },
         getURL: function() {
             return document.location.href;
-        }, 
+        },
         getTitle: function() {
             return document.title;
-        }, 
+        },
         setTitle: function(title) {
             try {
                 backStack[backStack.length - 1].title = title;
-            } catch(e) { }
+            } catch (e) {}
             //if on safari, set the title to be the empty string. 
             if (browser.safari) {
                 if (title == "") {
                     try {
-                    var tmp = window.location.href.toString();
-                    title = tmp.substring((tmp.lastIndexOf("/")+1), tmp.lastIndexOf("#"));
-                    } catch(e) {
+                        var tmp = window.location.href.toString();
+                        title = tmp.substring((tmp.lastIndexOf("/") + 1), tmp.lastIndexOf("#"));
+                    } catch (e) {
                         title = "";
                     }
                 }
             }
             document.title = title;
-        }, 
-        setDefaultURL: function(def)
-        {
+        },
+        setDefaultURL: function(def) {
             defaultHash = def;
             def = getHash();
             //trailing ? is important else an extra frame gets added to the history
             //when navigating back to the first page.  Alternatively could check
             //in history frame navigation to compare # and ?.
-            if (browser.ie)
-            {
+            if (browser.ie) {
                 window['_ie_firstload'] = true;
                 var sourceToSet = historyFrameSourcePrefix + def;
                 var func = function() {
@@ -562,13 +562,14 @@ BrowserHistory = (function() {
                 }
                 try {
                     func();
-                } catch(e) {
-                    window.setTimeout(function() { func(); }, 0);
+                } catch (e) {
+                    window.setTimeout(function() {
+                        func();
+                    }, 0);
                 }
             }
 
-            if (browser.safari)
-            {
+            if (browser.safari) {
                 currentHistoryLength = history.length;
                 if (historyHash.length == 0) {
                     historyHash[currentHistoryLength] = def;
@@ -579,20 +580,18 @@ BrowserHistory = (function() {
                 }
                 setInterval(checkForUrlChange, 50);
             }
-            
-            
-            if (browser.firefox || browser.opera)
-            {
+
+
+            if (browser.firefox || browser.opera) {
                 var reg = new RegExp("#" + def + "$");
-                if (window.location.toString().match(reg)) {
-                } else {
-                    var newloc ="#" + def;
+                if (window.location.toString().match(reg)) {} else {
+                    var newloc = "#" + def;
                     window.location.replace(newloc);
                 }
                 setInterval(checkForUrlChange, 50);
             }
 
-        }, 
+        },
 
         /* Set the current browser URL; called from inside BrowserManager to propagate
          * the application state out to the container.
@@ -601,39 +600,39 @@ BrowserHistory = (function() {
             if (browser.ie && typeof objectId != "undefined") {
                 currentObjectId = objectId;
             }
-           //fromIframe = fromIframe || false;
-           //fromFlex = fromFlex || false;
-           //alert("setBrowserURL: " + flexAppUrl);
-           //flexAppUrl = (flexAppUrl == "") ? defaultHash : flexAppUrl ;
+            //fromIframe = fromIframe || false;
+            //fromFlex = fromFlex || false;
+            //alert("setBrowserURL: " + flexAppUrl);
+            //flexAppUrl = (flexAppUrl == "") ? defaultHash : flexAppUrl ;
 
-           var pos = document.location.href.indexOf('#');
-           var baseUrl = pos != -1 ? document.location.href.substr(0, pos) : document.location.href;
-           var newUrl = baseUrl + '#' + flexAppUrl;
+            var pos = document.location.href.indexOf('#');
+            var baseUrl = pos != -1 ? document.location.href.substr(0, pos) : document.location.href;
+            var newUrl = baseUrl + '#' + flexAppUrl;
 
-           if (document.location.href != newUrl && document.location.href + '#' != newUrl) {
-               currentHref = newUrl;
-               addHistoryEntry(baseUrl, newUrl, flexAppUrl);
-               currentHistoryLength = history.length;
-           }
-        }, 
+            if (document.location.href != newUrl && document.location.href + '#' != newUrl) {
+                currentHref = newUrl;
+                addHistoryEntry(baseUrl, newUrl, flexAppUrl);
+                currentHistoryLength = history.length;
+            }
+        },
 
         browserURLChange: function(flexAppUrl) {
             var objectId = null;
             if (browser.ie && currentObjectId != null) {
                 objectId = currentObjectId;
             }
-            
+
             if (typeof BrowserHistory_multiple != "undefined" && BrowserHistory_multiple == true) {
                 var pl = getPlayers();
                 for (var i = 0; i < pl.length; i++) {
                     try {
                         pl[i].browserURLChange(flexAppUrl);
-                    } catch(e) { }
+                    } catch (e) {}
                 }
             } else {
                 try {
                     getPlayer(objectId).browserURLChange(flexAppUrl);
-                } catch(e) { }
+                } catch (e) {}
             }
 
             currentObjectId = null;
@@ -653,44 +652,52 @@ BrowserHistory = (function() {
 
 // Automated unit testing and other diagnostics
 
-function setURL(url)
-{
+function setURL(url) {
     document.location.href = url;
 }
 
-function backButton()
-{
+function backButton() {
     history.back();
 }
 
-function forwardButton()
-{
+function forwardButton() {
     history.forward();
 }
 
-function goForwardOrBackInHistory(step)
-{
+function goForwardOrBackInHistory(step) {
     history.go(step);
 }
 
 //BrowserHistoryUtils.addEvent(window, "load", function() { BrowserHistory.initialize(); });
 (function(i) {
-    var u =navigator.userAgent;var e=/*@cc_on!@*/false; 
+    var u = navigator.userAgent;
+    var e = /*@cc_on!@*/ false;
     var st = setTimeout;
-    if(/webkit/i.test(u)){
-        st(function(){
-            var dr=document.readyState;
-            if(dr=="loaded"||dr=="complete"){i();}
-            else{st(arguments.callee,10);}},10);
-    } else if((/mozilla/i.test(u)&&!/(compati)/.test(u)) || (/opera/i.test(u))){
-        document.addEventListener("DOMContentLoaded",i,false);
-    } else if(e){
-    (function(){
-        var t=document.createElement('doc:rdy');
-        try{t.doScroll('left');
-            i();t=null;
-        }catch(e){st(arguments.callee,0);}})();
-    } else{
-        window.onload=i;
+    if (/webkit/i.test(u)) {
+        st(function() {
+            var dr = document.readyState;
+            if (dr == "loaded" || dr == "complete") {
+                i()
+            } else {
+                st(arguments.callee, 10);
+            }
+        }, 10);
+    } else if ((/mozilla/i.test(u) && !/(compati)/.test(u)) || (/opera/i.test(u))) {
+        document.addEventListener("DOMContentLoaded", i, false);
+    } else if (e) {
+        (function() {
+            var t = document.createElement('doc:rdy');
+            try {
+                t.doScroll('left');
+                i();
+                t = null;
+            } catch (e) {
+                st(arguments.callee, 0);
+            }
+        })();
+    } else {
+        window.onload = i;
     }
-})( function() {BrowserHistory.initialize();} );
+})(function() {
+    BrowserHistory.initialize();
+});

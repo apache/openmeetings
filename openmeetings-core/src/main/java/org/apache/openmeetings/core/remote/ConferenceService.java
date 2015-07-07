@@ -514,48 +514,4 @@ public class ConferenceService {
 		}
 		return null;
 	}
-
-	/**
-	 * Gives a {@link Server} entity, in case there is a cluster configured
-	 * 
-	 * @param SID
-	 * @param roomId
-	 * @return null means the user should stay on the master, otherwise a
-	 *         {@link Server} entity is returned
-	 */
-	public ServerDTO getServerForSession(String SID, long roomId) {
-		Long userId = sessiondataDao.checkSession(SID);
-		if (AuthLevelUtil.hasUserLevel(userDao.getRights(userId))) {
-			List<Server> serverList = serverDao.getActiveServers();
-
-			long minimum = -1;
-			Server result = null;
-			Map<Server, List<Long>> activeRoomsMap = new HashMap<Server, List<Long>>();
-			for (Server server : serverList) {
-				List<Long> roomIds = sessionManager.getActiveRoomIdsByServer(server);
-				if (roomIds.contains(roomId)) {
-					// if the room is already opened on a server, redirect the user to that one,
-					log.debug("Room is already opened on a server " + server.getAddress());
-					return new ServerDTO(server);
-				}
-				activeRoomsMap.put(server, roomIds);
-			}
-			for (Map.Entry<Server, List<Long>> entry : activeRoomsMap.entrySet()) {
-				List<Long> roomIds = entry.getValue();
-				Long capacity = roomDao.getRoomsCapacityByIds(roomIds);
-				if (minimum < 0 || capacity < minimum) {
-					minimum = capacity;
-					result = entry.getKey();
-				}
-				log.debug("Checking server: " + entry.getKey() + " Number of rooms " + roomIds.size() + " RoomIds: "
-						+ roomIds + " max(Sum): " + capacity);
-			}
-			return result == null ? null : new ServerDTO(result);
-		}
-
-		log.error("Could not get server for cluster session");
-		// Empty server object
-		return null;
-	}
-	
 }
