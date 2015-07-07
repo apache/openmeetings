@@ -101,16 +101,7 @@ these properties will be overwritten by public/config.xml -->
 #############################################################
 Attributes needed for clustering -->
 
-<attribute name="isSlaveHosted" value="false" type="boolean" />
-
-<!-- server object's address (not loaded from public/config.xml cause this variable is empty by default) -->
-<attribute name="slaveRtmphostlocal" value="" type="string" />
-<!-- rtmpport from slave's public/config.xml  --> 
-<attribute name="slaveRtmpport" value="5080" type="string" />
-<!-- rtmpsslport from slave's public/config.xml -->
-<attribute name="slaveRtmpsslport" value="443" type="string" />
-<!-- from slave's public/config.xml -->
-<attribute name="slaveWebAppRootKey" value="" type="string" /> 
+<attribute name="isCluster" value="false" type="boolean" />
 
 <!--
 #############################################################

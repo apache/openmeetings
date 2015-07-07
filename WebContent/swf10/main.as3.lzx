@@ -93,26 +93,12 @@
         return "" + Math.floor(999999*Math.random());
     </method>
 
-	<method name="getAppBaseUrlWithoutSwfSuffix">
-	<![CDATA[
-		var urlObject = lz.Browser.getBaseURL();
-		//If Port is Null or undefinied use port 80
-		var port = (urlObject.port != null && urlObject.port != undefined) ? urlObject.port : 80;
-		//if($debug) Debug.write("getBaseUrl:: [urlObject, port]", urlObject, port);
-		var url = "" + urlObject.protocol + "://" + urlObject.host + (port != 80 ? ":" + port : "") + urlObject.path;
-		//if($debug) Debug.write("!!!!!!! getBaseUrl:: [urlObject, port, url]", urlObject, port, url);
-		url = url + (url.slice(-1) == '/' ? '' : '/');
-		//if($debug) Debug.write("!!!!!!! getBaseUrl:: [last, url]", url.slice(-1), url);
-		return url;
-	]]>
-	</method>
-
     <handler name="oninit"><![CDATA[
 		doDebugInit();
     
         var tInitArgsArry = new Array('secureHash','invitationHash','sid','roomid','directRoomId'
         	,'language','hash','cuser','tAccept','moodleRoom','becomemoderator','wwwroot','user_id'
-        	,'picture','scopeRoomId', 'wicketsid', 'wicketroomid');
+        	,'picture','scopeRoomId', 'wicketsid', 'wicketroomid', 'protocol', 'host', 'port', 'context');
     
         this.setAttribute('lc_SID', this.getLCSID());
         this.setAttribute('vid_lc_name', lc_SID + '__videoLC');
@@ -136,7 +122,7 @@
             }
         }
         
-        var tSWFURL = getAppBaseUrlWithoutSwfSuffix() + "main" + ($debug ? "debug" : "") + ".swf8.swf?lzproxied=solo&lc_SID="+lc_SID+tqueryString;
+        var tSWFURL = canvas.getLocalBaseUrl() + "main" + ($debug ? "debug" : "") + ".swf8.swf?lzproxied=solo&lc_SID="+lc_SID+tqueryString;
         
         if ($debug) Debug.write("tSWFURL :: ",tSWFURL);
         

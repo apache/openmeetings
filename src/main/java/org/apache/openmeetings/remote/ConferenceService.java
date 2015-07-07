@@ -23,10 +23,8 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 import org.apache.openmeetings.data.calendar.management.AppointmentLogic;
 import org.apache.openmeetings.data.conference.RoomManager;
@@ -40,14 +38,12 @@ import org.apache.openmeetings.db.dao.server.ServerDao;
 import org.apache.openmeetings.db.dao.server.SessiondataDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.dto.basic.SearchResult;
-import org.apache.openmeetings.db.dto.server.ServerDTO;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
 import org.apache.openmeetings.db.entity.room.Client;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.room.RoomModerator;
 import org.apache.openmeetings.db.entity.room.RoomOrganisation;
 import org.apache.openmeetings.db.entity.room.RoomType;
-import org.apache.openmeetings.db.entity.server.Server;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.util.TimezoneUtil;
 import org.apache.openmeetings.util.AuthLevelUtil;
@@ -522,48 +518,4 @@ public class ConferenceService {
 		}
 		return null;
 	}
-
-	/**
-	 * Gives a {@link Server} entity, in case there is a cluster configured
-	 * 
-	 * @param SID
-	 * @param roomId
-	 * @return null means the user should stay on the master, otherwise a
-	 *         {@link Server} entity is returned
-	 */
-	public ServerDTO getServerForSession(String SID, long roomId) {
-		Long users_id = sessiondataDao.checkSession(SID);
-		if (AuthLevelUtil.hasUserLevel(userDao.getRights(users_id))) {
-			List<Server> serverList = serverDao.getActiveServers();
-
-			long minimum = -1;
-			Server result = null;
-			HashMap<Server, List<Long>> activeRoomsMap = new HashMap<Server, List<Long>>();
-			for (Server server : serverList) {
-				List<Long> roomIds = sessionManager.getActiveRoomIdsByServer(server);
-				if (roomIds.contains(roomId)) {
-					// if the room is already opened on a server, redirect the user to that one,
-					log.debug("Room is already opened on a server " + server.getAddress());
-					return new ServerDTO(server);
-				}
-				activeRoomsMap.put(server, roomIds);
-			}
-			for (Map.Entry<Server, List<Long>> entry : activeRoomsMap.entrySet()) {
-				List<Long> roomIds = entry.getValue();
-				Long capacity = roomDao.getRoomsCapacityByIds(roomIds);
-				if (minimum < 0 || capacity < minimum) {
-					minimum = capacity;
-					result = entry.getKey();
-				}
-				log.debug("Checking server: " + entry.getKey() + " Number of rooms " + roomIds.size() + " RoomIds: "
-						+ roomIds + " max(Sum): " + capacity);
-			}
-			return result == null ? null : new ServerDTO(result);
-		}
-
-		log.error("Could not get server for cluster session");
-		// Empty server object
-		return null;
-	}
-	
 }

@@ -114,34 +114,19 @@
     
     <method name="getPort">
     	if (canvas.useSSL) {
-    		if (canvas.isSlaveHosted) {
-    			return canvas.slaveRtmpsslport;
-    		}
             return canvas.rtmpsslport;
         }
     	if (this.useRTMPT) {
-    		if (canvas.isSlaveHosted) {
-    			return canvas.red5httpport; //TODO probably slave equivalent need to be added (or maybe this is not used)
-    		}
     		return canvas.red5httpport;
-    	}
-    	if (canvas.isSlaveHosted) {
-    		return canvas.slaveRtmpport;
     	}
     	return canvas.rtmpport;
     </method>
     
     <method name="getHost">
-    	if (canvas.isSlaveHosted) {
-    		return canvas.slaveRtmphostlocal;
-    	}
     	return canvas.rtmphostlocal;
     </method>
     
     <method name="getWebappRootKey">
-    	if (canvas.isSlaveHosted) {
-    		return canvas.slaveWebAppRootKey;
-    	}
     	return canvas.webAppRootKey;
     </method>
          

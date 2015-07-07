@@ -20,8 +20,6 @@ package org.apache.openmeetings.web.util;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_LANDING_ZONE;
 import static org.apache.openmeetings.web.app.Application.getBean;
-import static org.apache.openmeetings.web.app.WebSession.getLanguage;
-import static org.apache.openmeetings.web.app.WebSession.getSid;
 import static org.apache.openmeetings.web.user.profile.SettingsPanel.EDIT_PROFILE_TAB_ID;
 import static org.apache.openmeetings.web.user.profile.SettingsPanel.MESSAGES_TAB_ID;
 
@@ -45,7 +43,6 @@ import org.apache.openmeetings.web.user.profile.SettingsPanel;
 import org.apache.openmeetings.web.user.record.RecordingsPanel;
 import org.apache.openmeetings.web.user.rooms.RoomPanel;
 import org.apache.openmeetings.web.user.rooms.RoomsSelectorPanel;
-import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 public class OmUrlFragment implements Serializable {
 	private static final long serialVersionUID = 7382435810352033914L;
@@ -259,11 +256,7 @@ public class OmUrlFragment implements Serializable {
 				try {
 					Long roomId = Long.parseLong(type);
 					if (roomId != null) {
-						PageParameters pp = new PageParameters();
-						pp.add("wicketsid", getSid());
-						pp.add("wicketroomid", roomId);
-						pp.add("language", getLanguage());
-						basePanel = new RoomPanel(CHILD_ID, pp);
+						basePanel = new RoomPanel(CHILD_ID, roomId);
 					}
 				} catch(NumberFormatException ne) {
 					//skipit, bad roomid passed

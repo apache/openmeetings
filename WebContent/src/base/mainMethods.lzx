@@ -152,23 +152,9 @@
 	]]>
 	</method>
 
-	<method name="getAppBaseUrlWithoutSwfSuffix">
-	<![CDATA[
-		var urlObject = lz.Browser.getBaseURL();
-		//If Port is Null or undefinied use port 80
-		var port = (urlObject.port != null && urlObject.port != undefined) ? urlObject.port : 80;
-		//if($debug) Debug.write("getBaseUrl:: [urlObject, port]", urlObject, port);
-		var url = "" + urlObject.protocol + "://" + urlObject.host + (port != 80 ? ":" + port : "") + urlObject.path;
-		//if($debug) Debug.write("!!!!!!! getBaseUrl:: [urlObject, port, url]", urlObject, port, url);
-		url = url + (url.slice(-1) == '/' ? '' : '/');
-		//if($debug) Debug.write("!!!!!!! getBaseUrl:: [last, url]", url.slice(-1), url);
-		return url.substring(0, url.length - 7); // the length of "public/"
-	]]>
-	</method>
-
 	<method name="getAppBaseUrl">
 	<![CDATA[
-		return getAppBaseUrlWithoutSwfSuffix() + "swf"
+		return canvas.getServerBaseUrl() + "swf"
 	]]>
 	</method>
 
@@ -178,7 +164,7 @@
 			? hib.currentdomainObj.organisation_id : 1;
 		if ($debug) Debug.write("mainMethods::getScreenSharingUrl ", hib.userobject, hib.currentdomainObj);
 		
-		var appBase = canvas.getAppBaseUrlWithoutSwfSuffix();
+		var appBase = canvas.getServerBaseUrl();
 		if ($debug) Debug.write("appBase=" + appBase);
 		var downloadurl = appBase + 'screen.upload?'
 			+'rtmphostlocal=' + canvas.getHttpHost()
@@ -195,13 +181,6 @@
 	]]>
 	</method>
 	
-    <dataset type="http" name="languageData" request="false" 
-        src="${ canvas.currentlanguage+'.xml' }" proxied="false">
-        <handler name="ondata" args="value">
-            parent.parseLanugageObject(value);
-        </handler>
-    </dataset>
-
     <method name="myinit">
         <![CDATA[
         canvas.mediaerrortimeout = 30000;
@@ -210,7 +189,9 @@
         if($debug) Debug.write("main.lzx/config.xml ondata",this);
         
         //Set Config-values by public/config.xml, see comments on public/config.xml
-        this.setAttribute('rtmphostlocal',canvas.myConfigSet.getPointer().xpathQuery('config/rtmphostlocal/text()'));   
+        if (!canvas.isCluster) {
+        	this.setAttribute('rtmphostlocal',canvas.myConfigSet.getPointer().xpathQuery('config/rtmphostlocal/text()'));
+        }   
         this.setAttribute('rtmpport',Number(canvas.myConfigSet.getPointer().xpathQuery('config/rtmpport/text()')));  
         this.setAttribute('rtmpsslport',Number(canvas.myConfigSet.getPointer().xpathQuery('config/rtmpsslport/text()'))); 
         
@@ -699,62 +680,6 @@
 	    //Debug.write(t);
 	    ]]>
 	</method>
-	
-	<!-- Data Source Definition -->
-	<dataset name="getSessionVarsData" request="false" proxied="false"
-	    querytype="POST" src="${ 'http://'+canvas.rtmphost+'/webrooms/checksession.php' }" 
-	    type="http" >
-	    <handler name="ondata" args="value">
-	    
-	        //Debug.write(value);
-	        canvas.setAttribute('currentcourse',value.childNodes[0].childNodes[0].childNodes[0].childNodes[0].data);
-	        canvas.setAttribute('currentcourseName',canvas.currentcourse);
-	        canvas.setAttribute('currentcourseNameLong',value.childNodes[0].childNodes[0].childNodes[1].childNodes[0].data);
-	        canvas.setAttribute('currentlanguage',value.childNodes[0].childNodes[0].childNodes[8].childNodes[0].data);
-	
-	        canvas.setAttribute('currentusename',value.childNodes[0].childNodes[1].childNodes[2].childNodes[0].data+' '+value.childNodes[0].childNodes[1].childNodes[1].childNodes[0].data);
-	        
-	        canvas.setAttribute('user_id',value.childNodes[0].childNodes[1].childNodes[0].childNodes[0].data);
-	        canvas.setAttribute('firstName',value.childNodes[0].childNodes[1].childNodes[1].childNodes[0].data);
-	        canvas.setAttribute('lastName',value.childNodes[0].childNodes[1].childNodes[2].childNodes[0].data);
-	        canvas.setAttribute('mail',value.childNodes[0].childNodes[1].childNodes[3].childNodes[0].data);
-	        canvas.setAttribute('lastLogin','');
-	        canvas.setAttribute('official_code',value.childNodes[0].childNodes[1].childNodes[5].childNodes[0].data);
-	        canvas.setAttribute('picture_uri','');
-	        canvas.setAttribute('language',value.childNodes[0].childNodes[1].childNodes[7].childNodes[0].data);
-	
-	        //Debug.write(value.childNodes[0].childNodes[1].childNodes[0].childNodes[0].data);
-	        //Debug.write(value.childNodes[0].childNodes[1].childNodes[1].childNodes[0].data);
-	        //Debug.write(value.childNodes[0].childNodes[1].childNodes[2].childNodes[0].data);
-	        //Debug.write(value.childNodes[0].childNodes[1].childNodes[3].childNodes[0].data);
-	        //Debug.write(value.childNodes[0].childNodes[1].childNodes[4].childNodes[0].data);
-	        //Debug.write(value.childNodes[0].childNodes[1].childNodes[5].childNodes[0].data);
-	        //Debug.write(value.childNodes[0].childNodes[1].childNodes[6].childNodes[0].data);
-	        //Debug.write(value.childNodes[0].childNodes[1].childNodes[7].childNodes[0].data);
-	        
-	        switch (canvas.currentlanguage){
-	            case 'english':
-	            break;
-	            case 'german':
-	            break;
-	            case 'french':
-	            break;          
-	            default:
-	            canvas.setAttribute('currentlanguage','english');
-	            break;
-	        }
-	        
-	        var addIt='conf';
-	        if (!canvas.isConference){
-	            addIt='meet'
-	        }
-	        canvas.setAttribute('currentcourse',canvas.rtmphost+canvas.currentcourse+addIt);
-	        canvas.setAttribute('currentuser',value.childNodes[0].childNodes[1].childNodes[5].childNodes[0].data);
-	        
-	        canvas.setAttribute('loadingmessage','loading language data');
-	        canvas.languageData.doRequest();
-	    </handler>
-	</dataset>
 	
 	<method name="addBrowserTabHistory" args="value">
 	    <![CDATA[

@@ -46,84 +46,19 @@ RTMP-host, RTMP/RTMPT-port for the session
     then the window just closed -->
     <attribute name="doJustClose" value="false" type="boolean" />
     
-    <handler name="oninit">
-    	<![CDATA[
-            this.getServerForSession.doCall();
-    	]]>
-    </handler>
-    
-    <!-- 
-    public Server getServerForSession(String SID, long roomId)
-     -->
-   	<netRemoteCallHib name="getServerForSession" funcname="conferenceservice.getServerForSession" remotecontext="$once{ canvas.thishib }" >      
-		<netparam><method name="getValue"> return canvas.sessionId; </method></netparam>
-		<netparam><method name="getValue"> return parent.parent.roomObj.rooms_id; </method></netparam>
-		<handler name="ondata" args="value">
-			if ($debug) Debug.write("getServerForSession ",value);
-			//if return value is null, everything stays the same, session is on the current host
-			if (value != null){
-				//is not loaded from public/config.xml from slave as this is variable is empty by default!
-				canvas.slaveRtmphostlocal = value.address;
-				
-				var slaveUrl = value.protocol + "://" + value.address + ":" + value.port + "/" + value.webapp + "/";
-				
-				var d = new Date();
-		        parent.myConfigSet.setAttribute("src", slaveUrl + "public/config.xml?random="+d.getTime());
-		        parent.myConfigSet.doRequest();
-				
-			} else {
-				//Hosted on master
-				canvas.isSlaveHosted = false;
-				this.parent.startConference();
-			}
-		</handler>
-	</netRemoteCallHib>	
-	
-	<!-- get values from public/config.xml from slave -->
-	<dataset type="http" name="myConfigSet" request="false" ondata="parent.parseResultsToSlaveClusterConfig()">
-	    <handler name="ondata">
-	        if ($debug) Debug.write("ondata");
-	    </handler>
-	    <handler name="onerror" args="e">
-	        if ($debug) Debug.write("onerror",e);
-	    </handler>
-	    <handler name="ontimeout" args="e">
-	        if ($debug) Debug.write("ontimeout",e);
-	    </handler>
-	</dataset>
-	
-	<!-- 
-		Parse the results so that the RTMP traffic points to the slave
-		and the HTTP traffic points to the master
-	 -->
-	<method name="parseResultsToSlaveClusterConfig">
+	<handler name="oninit">
+	<![CDATA[
+		clearStageContent();
+		if ($debug) Debug.warn("roomClassname : ", this.roomClassName);
+		if ($debug) Debug.warn("canvas.currentRoomObj will be : ", this.roomObj);
+		canvas.currentRoomObj = this.roomObj;
 		
-        canvas.slaveRtmpport = Number(this.myConfigSet.getPointer().xpathQuery('config/rtmpport/text()'));  
-        canvas.slaveRtmpsslport = Number(this.myConfigSet.getPointer().xpathQuery('config/rtmpsslport/text()')); 
-        canvas.slaveWebAppRootKey = this.myConfigSet.getPointer().xpathQuery('config/webAppRootKey/text()'); 
-		
-		if ($debug) Debug.write("parseResults: ",canvas.slaveRtmphostlocal,canvas.slaveRtmpport,canvas.slaveRtmpsslport,canvas.slaveWebAppRootKey);
-		
-		//Hosted on slave
-		canvas.isSlaveHosted = true;
-		this.startConference();
-	</method>
-    
-    <method name="startConference">
-    	<![CDATA[
-            clearStageContent();
-            if ($debug) Debug.warn("roomClassname : ", this.roomClassName);
-            if ($debug) Debug.warn("canvas.currentRoomObj will be : ", this.roomObj);
-            canvas.currentRoomObj = this.roomObj;
-            
-            new lz[this.roomClassName](canvas.main_content._content.inner, {
-                        roomobj:this.roomObj
-                    });
-    	
-            this.destroy();
-    	]]>
-    </method>
-
+		new lz[this.roomClassName](canvas.main_content._content.inner, {
+					roomobj:this.roomObj
+					});
+		this.destroy();
+	]]>
+	</handler>
 </class>
 
 
