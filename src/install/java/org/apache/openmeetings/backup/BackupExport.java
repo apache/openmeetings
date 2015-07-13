@@ -463,7 +463,8 @@ public class BackupExport {
 		registry.bind(Organisation.class, OrganisationConverter.class);
 		registry.bind(State.class, StateConverter.class);
 		if (list != null && list.size() > 0) {
-			registry.bind(list.get(0).getRegdate().getClass(), DateConverter.class);
+			Class<?> dateClass = list.get(0).getRegdate() != null ? list.get(0).getRegdate().getClass() : list.get(0).getStarttime().getClass();
+			registry.bind(dateClass, DateConverter.class);
 		}
 		
 		writeList(serializer, os, "users", list);
