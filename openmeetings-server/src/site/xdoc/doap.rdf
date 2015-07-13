@@ -23,14 +23,13 @@
     <license rdf:resource="http://usefulinc.com/doap/licenses/asl20"/>
     <bug-database rdf:resource="https://issues.apache.org/jira/browse/OPENMEETINGS"/>
     <download-page rdf:resource="http://openmeetings.apache.org/downloads.html"/>
-    <asfext:pmc rdf:resource="http://openmeetings.apache.org/"/>
 
     <shortdesc xml:lang="en">
-      The Apache Openmeetings application.
+      Video conferencing, instant messaging, white board and collaborative document editing application.
     </shortdesc>
 
     <description xml:lang="en">
-      The Apache Openmeetings provides video conferencing, instant messaging, white board, 
+      The Apache OpenMeetings provides video conferencing, instant messaging, white board, 
       collaborative document editing and other groupware tools using API functions 
       of the Red5 Streaming Server for Remoting and Streaming.
     </description>
@@ -44,11 +43,18 @@
 
     <mailing-list rdf:resource="http://openmeetings.apache.org/mail-lists.html"/>
  
+    <maintainer>
+      <foaf:Person>
+        <foaf:name>OpenMeetings PMC</foaf:name>
+        <foaf:mbox rdf:resource="mailto:dev@openmeetings.apache.org"/>
+      </foaf:Person>
+    </maintainer>
+    
     <release>
       <Version>
         <name>Recommended current 3.0.x release</name>
-        <created>2014-03-10</created>
-        <revision>3.0.0</revision>
+        <created>2015-05-25</created>
+        <revision>3.0.6</revision>
       </Version>
     </release>
     <release>
