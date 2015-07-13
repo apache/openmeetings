@@ -208,6 +208,9 @@ public class UserDao implements IDataProviderDao<User> {
 			}
 		}
 		if (u.getId() == null) {
+			if (u.getRegdate() == null) {
+				u.setRegdate(new Date());
+			}
 			u.setInserted(new Date());
 			em.persist(u);
 		} else {
