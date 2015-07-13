@@ -13,7 +13,12 @@
    limitations under the License.
  -->
 <?xml-stylesheet type="text/xsl" href="../xsl/p2.xsl"?>
-<rdf:RDF xmlns="http://usefulinc.com/ns/doap#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:asfext="http://projects.apache.org/ns/asfext#" xml:lang="en">
+<rdf:RDF xml:lang="en"
+		xmlns="http://usefulinc.com/ns/doap#"
+		xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+		xmlns:asfext="http://projects.apache.org/ns/asfext#"
+		xmlns:foaf="http://xmlsns.com/foaf/0.1/"
+	>
   <Project rdf:about="http://openmeetings.apache.org/">
     <name>Apache OpenMeetings</name>
     <homepage rdf:resource="http://openmeetings.apache.org/"/>
