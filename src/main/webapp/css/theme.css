@@ -84,12 +84,10 @@ html, body {
 	width: 600px;
 }
 #chatPanel #chat {
-	height: 10px;
+	height: 20px;
 }
 #chatPanel #chat #controlBlock #control {
 	text-align: center;
-	margin-left: 50%;
-	margin-right: 50%;
 }
 #chatPanel #chat #messageArea .date {
     margin-right: 5px;

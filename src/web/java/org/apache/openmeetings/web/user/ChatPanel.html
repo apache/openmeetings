@@ -24,9 +24,9 @@
 			function toggleChat() {
 				var chat = $('#chat');
 				$('#chat #controlBlock #control')
-					.removeClass('ui-icon-carat-1-' + (chat.height() < 20 ? 'n' : 's'))
-					.addClass('ui-icon-carat-1-' + (chat.height() < 20 ? 's' : 'n'));
-				chat.animate({ height: chat.height() < 20 ? "320px" : "16px" }, 1000);
+					.removeClass('ui-icon-carat-1-' + (chat.height() < 24 ? 'n' : 's'))
+					.addClass('ui-icon-carat-1-' + (chat.height() < 24 ? 's' : 'n'));
+				chat.animate({ height: chat.height() < 24 ? "320px" : "20px" }, 1000);
 			}
 			function addChatMessageInternal(m) {
 				if (m && m.type == "chat") {
@@ -49,7 +49,7 @@
 	</wicket:head>
 	<wicket:panel>
 		<div id="chat" class="ui-state-default">
-			<div id="controlBlock" onclick="toggleChat();" class="ui-state-active clickable"><div id="control" class="ui-icon ui-icon-carat-1-n sort-icon"></div></div>
+			<div id="controlBlock" onclick="toggleChat();" class="ui-state-active clickable"><span id="control" class="ui-icon ui-icon-carat-1-n sort-icon"></span><span><wicket:message key="244"/></span></div>
 			<div wicket:id="messages"></div>
 			<form wicket:id="sendForm">
 				<div wicket:id="toolbarContainer"></div>
