@@ -368,6 +368,11 @@
     <labelText name="_firstName" fontsize="10" x="40" text="${ parent.firstname == null ? '' : parent.firstname }" />
     <labelText name="_lastName" fontsize="10" x="40" y="20" text="${ parent.lastname == null ? '' : parent.lastname }" />
     
+	<typingIcon name="_user_typing" x="132" y="2" width="30" height="16" visible="false"/>
+	<method name="userTyping" args="v">
+		_user_typing.setAttribute("visible", v);
+	</method>
+	    
 	<miniIcons name="_start_private_chat_rsc" x="114" y = "2" width="16" height="16"
 		resource="start_private_chat_rsc" showhandcursor="true"
 		visible="${ (canvas.currentRoomObj.hideChat == null || !canvas.currentRoomObj.hideChat) &amp;&amp; parent.refObj.publicSID != canvas.publicSID }">

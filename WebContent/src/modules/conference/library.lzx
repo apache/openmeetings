@@ -22,6 +22,14 @@
 	
 	<!-- FamFam Icon Set -->
     <resource name="resyncuser_rsc" src="resources/arrow_refresh_small.png" />
+
+	<!-- Derivative from FamFam Icon Set, author solomax -->
+	<resource name="typing_rsc">
+		<frame src="resources/base0.png" />
+		<frame src="resources/base1.png" />
+		<frame src="resources/base2.png" />
+		<frame src="resources/base3.png" />
+	</resource>
     
     <!-- APL author sebawagner -->
     <resource name="speaking" src="resources/speaking.png" />
@@ -32,6 +40,7 @@
     <include href="commonVideoViewContent.lzx"/>
     <include href="commonVideoComponentAdapter.lzx"/>
     <include href="screenSharingAdapter.lzx" />
+    <include href="typing.lzx" />
 
 	<include href="whiteboard/" /> 
  	

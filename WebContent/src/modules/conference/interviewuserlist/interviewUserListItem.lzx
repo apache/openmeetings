@@ -114,6 +114,8 @@
         </handler>
     </image>
     
+	<method name="userTyping" args="v">
+	</method>
     <view name="userStatus" align="right" frame="1" 
     	  resource="userstatus_multiframe_rsc" />
     

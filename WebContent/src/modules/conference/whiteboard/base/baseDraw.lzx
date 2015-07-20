@@ -580,11 +580,12 @@
 		}
 		
 		if (canvas.ismoderator || canvas.isAllowedToDraw) {
-			
+			var knownModus = true;
+			var initialBoundingIsActive = this.boundingIsActive;
 			if (this.letterObjectIsActive){
 				this.currentletterObj.drawtoArray();
 				this.setModusWithUpdate("hand");
-				//bool = true;				
+				knownModus = false;
 			}
 			
 			if(this.drawmodus=="drag"){
@@ -635,22 +636,19 @@
 	  	 		this.startx = currentlayer.getMouse('x');
 				this.starty = currentlayer.getMouse('y'); 				
 	            mousetracker_del.register(lz.Idle,'onidle');
-	        }else if (this.drawmodus == 'paste') {
-				//this.startSelect(null);
+	        } else if (this.drawmodus == 'paste') {
 	  	 		var paste_x = parent.getMouse('x');
 				var paste_y = parent.getMouse('y'); 				
-	            //mousetracker_del.register(lz.Idle,'onidle');
 	            this.paste(paste_x, paste_y);
 	            
-	            //this.setModus("hand");
-				
 	            if ($debug) Debug.write("paste mouse down ",this);
-	            //if ($debug) Debug.write("onmousedownMethod Unkown Modus ",this.drawmodus);
 	        } else {
+	        	knownModus = false;
 	        	if ($debug) Debug.write("onmousedownMethod Unkown Modus ",this.drawmodus);
 	        }
-            
-            
+			if (knownModus && !initialBoundingIsActive && !this.letterObjectIsActive) {
+				startTyping();
+			}
         }
         ]]>
 	</method>
@@ -659,8 +657,8 @@
         if ($debug) Debug.write("onmouseupMethod this.drawmodus: ",this.drawmodus);
 		<![CDATA[	
 	        if (canvas.ismoderator || canvas.isAllowedToDraw) {
-				//var bool = false;
 				
+				var knownModus = true;
 	        	if(this.drawmodus=="drag"){
 	        		this.isDragging = false;
 	        		this.dragger.remove();
@@ -696,10 +694,6 @@
 					this.endUline();
 					mousetracker_del.unregisterAll();
 				} else if(this.drawmodus=="letter"){
-					//if (!this.letterObjectIsActive && !bool){
-					//	this.currentletterObj = new lz.baseDrawWords(canvas,{refObj:this,x:canvas.getMouse('x'),
-					//		y:canvas.getMouse('y')});
-					//}
 					this.endLetter();
 					mousetracker_del.unregisterAll();
 				} else if (this.drawmodus == 'rectangle') {
@@ -725,15 +719,15 @@
 		        } else if (this.drawmodus == 'hand') {
 					this.endSelect();
 		        	mousetracker_del.unregisterAll();
-		        }else if (this.drawmodus == 'paste') {
-					//this.setModus("hand");
-					//this.setAttribute('drawmodus','hand');
-					//if ($debug) Debug.write("onmouseupMethod paste ",this.drawmodus);
+		        } else if (this.drawmodus == 'paste') {
 		        } else {
+					knownModus = true;
 		        	if ($debug) Debug.write("onmouseupMethod Unkown Modus ",this.drawmodus);
 		        }
+				if (knownModus && !this.boundingIsActive && !this.letterObjectIsActive) {
+					endTyping();
+				}
 	                
-		        ////Debug.write("onmouseup: ",this.letterObjectIsActive,this.currentletterObj);	        
 				this.checkStepLayers();
 	        } else {
 	        	if (!this.restricted) {
@@ -742,6 +736,26 @@
             }
 		]]>
 	</method>  
+    
+    <method name="startTyping">
+		if ($debug) Debug.info("Start typing ..... ", canvas.publicSID);
+		var msg = new Array();
+		msg[0] = 'typingActivity';
+		msg[1] = true;
+		msg[2] = canvas.publicSID;
+		canvas.objMessage = msg;
+		canvas.thishib.sendMessage.doCall();
+    </method>
+    
+    <method name="endTyping">
+		if ($debug) Debug.info("..... end typing ", canvas.publicSID);
+		var msg = new Array();
+		msg[0] = 'typingActivity';
+		msg[1] = false;
+		msg[2] = canvas.publicSID;
+		canvas.objMessage = msg;
+		canvas.thishib.sendMessage.doCall();
+    </method>
     
     <!--
     <handler name="onclick" args="obj">

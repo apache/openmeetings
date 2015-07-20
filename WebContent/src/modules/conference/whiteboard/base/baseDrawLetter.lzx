@@ -316,7 +316,6 @@
 	    this.checkStepLayers();
 	    this.onsharedMessage('draw',actionObject);	
 	</method>
-	
 </class>
 
 </library>

@@ -111,11 +111,15 @@
     	}
     </method>
 
+	<method name="userTyping" args="v">
+		this._content._user_typing.setAttribute("visible", v);
+	</method>
 	<view name="_content" width="254">
 		<view name="_contentIsCurrent" visible="${ parent.parent.selfItem }" width="254" height="40" bgcolor="0x7CFC00"/>
           
     	<labelText name="_userName" x="2" y="2" text="${ (parent.parent.firstname == null ? '' : parent.parent.firstname) + ' ' + (parent.parent.lastname == null ? '' : parent.parent.lastname) }" />
     		   
+		<typingIcon name="_user_typing" x="132" y="2" width="30" height="16" visible="false"/>
 		<miniIcons name="_restartDevice" x="220" y="0" width="16" height="16" resource="resyncuser_rsc" showhandcursor="true"
 				visible="${ parent.parent.clickable &amp;&amp; parent.parent.selfItem &amp;&amp; canvas.isBroadCasting }">
 			<handler name="onclick">
