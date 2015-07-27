@@ -123,7 +123,7 @@ public class Application extends AuthenticatedWebApplication {
 		
 		getRootRequestMapperAsCompound().add(new NoVersionMapper(getHomePage()));
 		getRootRequestMapperAsCompound().add(new NoVersionMapper("notinited", NotInitedPage.class));
-		mountPage("swf", SwfPage.class);
+		getRootRequestMapperAsCompound().add(new NoVersionMapper("swf", SwfPage.class));
 		mountPage("install", InstallWizardPage.class);
 		mountPage("signin", getSignInPageClass());
 		mountPage("activate", ActivatePage.class);
