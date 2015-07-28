@@ -154,7 +154,7 @@
 
 	<method name="getAppBaseUrl">
 	<![CDATA[
-		return canvas.getServerBaseUrl() + "swf"
+		return getUrl() + "swf";
 	]]>
 	</method>
 
@@ -164,7 +164,7 @@
 			? hib.currentdomainObj.organisation_id : 1;
 		if ($debug) Debug.write("mainMethods::getScreenSharingUrl ", hib.userobject, hib.currentdomainObj);
 		
-		var appBase = canvas.getServerBaseUrl();
+		var appBase = canvas.getUrl();
 		if ($debug) Debug.write("appBase=" + appBase);
 		var downloadurl = appBase + 'screen.upload?'
 			+'rtmphostlocal=' + canvas.getHttpHost()
