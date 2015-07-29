@@ -18,7 +18,8 @@
  */
 package org.apache.openmeetings.db.dto.user;
 
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.openmeetings.db.entity.user.Address;
 import org.apache.openmeetings.db.entity.user.User;
@@ -29,7 +30,7 @@ public class UserDTO {
 	private Long id;
 	private String firstname;
 	private String lastname;
-	private Set<Right> rights;
+	private List<String> rights;
 	private String login;
 	private Long language_id;
 	private Address adresses;
@@ -42,7 +43,10 @@ public class UserDTO {
 		id = u.getUser_id();
 		firstname = u.getFirstname();
 		lastname = u.getLastname();
-		rights = u.getRights();
+		rights = new ArrayList<>();
+		for (Right r : u.getRights()) {
+			rights.add(r.name());
+		}
 		login = u.getLogin();
 		language_id = u.getLanguage_id();
 		adresses = u.getAdresses();
@@ -74,11 +78,11 @@ public class UserDTO {
 		this.lastname = lastname;
 	}
 
-	public Set<Right> getRights() {
+	public List<String> getRights() {
 		return rights;
 	}
 
-	public void setRights(Set<Right> rights) {
+	public void setRights(List<String> rights) {
 		this.rights = rights;
 	}
 
