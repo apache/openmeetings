@@ -363,8 +363,8 @@ public class RoomPanel extends BasePanel {
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			protected void renderScript(JavaScriptHeaderItem script, IHeaderResponse response) {
-				response.render(new PriorityHeaderItem(script));
+			protected void renderOnDomReadyScript(String script, IHeaderResponse response) {
+				response.render(new PriorityHeaderItem(OnDomReadyHeaderItem.forScript(script)));
 			}
 		});
 		room.add(new Label("roomName", r.getName()));

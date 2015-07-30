@@ -42,6 +42,7 @@ import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.util.CalendarHelper;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
+import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.extensions.validation.validator.RfcCompliantEmailAddressValidator;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
@@ -124,7 +125,7 @@ public class GeneralUserForm extends Form<User> {
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			public void onValueChanged(AjaxRequestTarget target) {
+			public void onValueChanged(IPartialPageRequestHandler target) {
 				GeneralUserForm.this.getModelObject().setAge(CalendarHelper.getDate(age));
 			}
 		});
