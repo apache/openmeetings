@@ -164,8 +164,7 @@ public class SignInDialog extends AbstractFormDialog<String> {
 	}
 	
 	private void shake(AjaxRequestTarget target) {
-		JQueryEffectBehavior shake = new JQueryEffectBehavior("#" + getMarkupId(), "shake");
-		target.appendJavaScript(shake.toString());
+		target.appendJavaScript(JQueryEffectBehavior.toString("#" + getMarkupId(), "shake"));
 	}
 	
 	@Override
