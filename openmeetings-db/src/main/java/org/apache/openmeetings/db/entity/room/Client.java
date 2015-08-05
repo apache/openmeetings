@@ -164,6 +164,8 @@ public class Client implements IDataProviderEntity {
 	@Column(name = "can_giveaudio")
 	private Boolean canGiveAudio = false;
 	
+	@Column(name = "can_video")
+	private boolean canVideo = false;
 	/**
 	 * @see Client#getConnectedSince()
 	 */
@@ -817,6 +819,13 @@ public class Client implements IDataProviderEntity {
 		this.canGiveAudio = canGiveAudio;
 	}
 
+	public boolean getCanVideo() {
+		return canVideo;
+	}
+
+	public void setCanVideo(boolean canVideo) {
+		this.canVideo = canVideo;
+	}
 	public boolean isAllowRecording() {
 		return allowRecording;
 	}
