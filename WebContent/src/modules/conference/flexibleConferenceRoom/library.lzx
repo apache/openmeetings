@@ -38,6 +38,10 @@
     <resource name="remote_deny_rsc" src="resources/mouse_delete.png" />
 	
 	<!-- FamFam Icon Set -->
+	<resource name="a_allow_rsc" src="resources/micro_small_add.png" />
+	<!-- FamFam Icon Set -->
+	<resource name="a_deny_rsc" src="resources/micro_small_no.png" />
+	<!-- FamFam Icon Set -->
 	<resource name="av_allow_rsc" src="resources/audio_and_video.png" />
 	<!-- FamFam Icon Set -->
 	<resource name="av_deny_rsc" src="resources/audio_and_video_no.png" />

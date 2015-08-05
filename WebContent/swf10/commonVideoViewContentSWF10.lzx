@@ -43,6 +43,7 @@
             var client = {};
             client.t = this;
 
+            client.toggleVideo = this.toggleVideo;
             client.createEditRecordStream = this.createEditRecordStream;
             client.createVideoObject = this.createVideoObject;
             client.createVideo = this.createVideo;
@@ -79,6 +80,11 @@
 
         ]]>
     </handler>
+    
+	<method name="toggleVideo" args="value">
+		if($debug) Debug.info("toggleVideo ", value);
+		canvas.userobject.canVideo = value;
+	</method>
     
 	<method name="createEditRecordStream" args="syncUpdate,isInterview,interviewPodId">
 		if($debug) Debug.info("createEditRecordStream,",syncUpdate,isInterview,interviewPodId);

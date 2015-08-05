@@ -864,7 +864,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 		return -1L;
 	}
 
-	public Long setBroadCastingFlag(String publicSID, boolean value, Integer interviewPodId) {
+	public Long setBroadCastingFlag(String publicSID, boolean value, boolean canVideo, Integer interviewPodId) {
 		try {
 			log.debug("-----------  setBroadCastingFlag: " + publicSID);
 
@@ -875,6 +875,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 			}
 
 			currentClient.setIsBroadcasting(value);
+			currentClient.setCanVideo(value && canVideo); //set to false in case NOT broadcasting
 			currentClient.setInterviewPodId(interviewPodId);
 
 			// Put the mod-flag to true for this client

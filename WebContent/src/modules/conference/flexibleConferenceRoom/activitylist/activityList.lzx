@@ -117,6 +117,7 @@
     
     <method name="applyObject">
         canvas.thishib.setBroadCastingFlag.publicSIDOfNewModerator = this.rcl.publicSID;
+        canvas.thishib.setBroadCastingFlag.canVideo = true;
         canvas.thishib.setBroadCastingFlag.isAllowedToBroadCastAV = true;
         canvas.thishib.setBroadCastingFlag.avsettings = "av";
         canvas.thishib.setBroadCastingFlag.doCall(); 
@@ -179,13 +180,14 @@
     
     <method name="applyObject">
         canvas.thishib.setBroadCastingFlag.publicSIDOfNewModerator = this.rcl.publicSID;
+        canvas.thishib.setBroadCastingFlag.canVideo = false;
         canvas.thishib.setBroadCastingFlag.isAllowedToBroadCastAV = true;
         canvas.thishib.setBroadCastingFlag.avsettings = "a";
         canvas.thishib.setBroadCastingFlag.doCall(); 
         this.sendClearMessage(true);
-    </method>   
+    </method>
     
-    <view resource="allow_audio_only_rsc" x="2" y="2" />
+    <view resource="a_allow_rsc" x="2" y="2" />
     
     <labelText text="$once{ parent.message }" multiline="true" x="20"
                width="$once{ parent.width - 40 }"/>
@@ -474,11 +476,11 @@
         <![CDATA[
             if (rcl.publicSID == canvas.publicSID) {
                 var txt = "<b>"+canvas.getLabelName(1362)+"</b> " +
-                           canvas.getLabelName(1080) + " [" + getStringTimeByTimeStamp(tStamp) + "]";
+                           canvas.getLabelName(1603) + " [" + getStringTimeByTimeStamp(tStamp) + "]";
             } else {
                 var txt = rcl.firstname + " " + rcl.lastname + " " +
                                    "[" + rcl.username + "] " +
-                                   canvas.getLabelName(1080) + " [" + getStringTimeByTimeStamp(tStamp) + "]";
+                                   canvas.getLabelName(1603) + " [" + getStringTimeByTimeStamp(tStamp) + "]";
             }
                            
             new lz.activityListRestrictedRoomA(this._list._list,{

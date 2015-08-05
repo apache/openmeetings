@@ -380,6 +380,7 @@ and some more references to temp-objects
 <attribute name="lastBroadCastingUser" value="null" />
 
 <attribute name="isBroadCasting" value="false" type="boolean" />
+<attribute name="canVideo" value="false" type="boolean" />
 
 <attribute name="currentContentView" value="null" />
 

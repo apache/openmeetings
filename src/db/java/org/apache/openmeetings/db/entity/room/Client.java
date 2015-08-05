@@ -63,7 +63,7 @@ import org.apache.openmeetings.util.CalendarPatterns;
 })
 @Table(name = "client")
 public class Client implements IDataProviderEntity, Serializable {
-	private static final long serialVersionUID = -5980636447877077730L;
+	private static final long serialVersionUID = 1L;
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -159,7 +159,10 @@ public class Client implements IDataProviderEntity, Serializable {
 	 */
 	@Column(name = "can_giveaudio")
 	private Boolean canGiveAudio = false;
-	
+
+	@Column(name = "can_video")
+	private boolean canVideo = false;
+
 	/**
 	 * @see Client#getConnectedSince()
 	 */
@@ -825,6 +828,14 @@ public class Client implements IDataProviderEntity, Serializable {
 
 	public void setCanGiveAudio(Boolean canGiveAudio) {
 		this.canGiveAudio = canGiveAudio;
+	}
+
+	public boolean getCanVideo() {
+		return canVideo;
+	}
+
+	public void setCanVideo(boolean canVideo) {
+		this.canVideo = canVideo;
 	}
 
 	public boolean isAllowRecording() {

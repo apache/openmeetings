@@ -440,8 +440,7 @@
 					var volume = parent.parent.getStreamVolume();
 
 					var sliderHeight = 120;
-					var sliderX =
-					this.getAttributeRelative('x',canvas) - 2;
+					var sliderX = this.getAttributeRelative('x',canvas) - 2;
 					var pick = new lz.VolumeSlider(canvas, {
 							height:sliderHeight,
 							x:sliderX,

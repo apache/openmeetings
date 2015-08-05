@@ -602,7 +602,7 @@
     <netRemoteCallHib name="getLanguageByIdAndMax" funcname="languageservice.getLanguageByIdAndMax" >
         <attribute name="start" value="0" type="number" />
         <attribute name="step" value="100" type="number" />
-        <attribute name="max" value="1600" type="number" />
+        <attribute name="max" value="1605" type="number" />
         <netparam><method name="getValue">return parent.parent.userlang;</method></netparam> 
         <netparam><method name="getValue">return parent.start;</method></netparam> 
         <netparam><method name="getValue">return parent.step;</method></netparam> 
@@ -925,14 +925,15 @@
                     
 					if (this.parent.modus == "conference") {
 						if ($debug) Debug.write("############## showDevicePopUp");
+						canvas.sendViaLocalConnection(canvas.vid_lc_name, "toggleVideo", [true]);
 						canvas._videocontainer._videoviewcontent.showDevicePopUp(false);
 					}
                     canvas._drawarea.onopenWhiteBoard.sendEvent();
                     
-                    if ($debug) Debug.write("roomType_id ",canvas.currentRoomObject);
+                    if ($debug) Debug.write("room ",canvas.currentRoomObject);
                     if ($debug) Debug.write("roomType_id ",canvas.currentRoomObject.roomtype.roomtypes_id);
                     
-                    if (canvas.currentRoomObject.roomtype.roomtypes_id!=3) {
+                    if (canvas.currentRoomObject.roomtype.roomtypes_id != 3) {
                         //We do not show this warning when the roomtype is 3 (restricted)
                         if (canvas.currentRoomObj.isModeratedRoom) {
                             if (value.length == 0 && !messageAlreadyThrown){
@@ -1166,15 +1167,17 @@
         </netRemoteCallHib>
         
         <!--
-        public synchronized Long setBroadCastingFlag(String publicSID, boolean value) 
+        public synchronized Long setBroadCastingFlag(String publicSID, boolean value, boolean canVideo, Integer podId) 
          -->
         <netRemoteCallHib name="setBroadCastingFlag" funcname="setBroadCastingFlag">
             <attribute name="publicSIDOfNewModerator" value="0" type="string" />
             <attribute name="isAllowedToBroadCastAV" value="false" type="boolean" />
+            <attribute name="canVideo" value="false" type="boolean" />
             <attribute name="avsettings" value="av" type="string" />
             <attribute name="interviewPodId" value="0" type="number" />
             <netparam><method name="getValue">return parent.publicSIDOfNewModerator;</method></netparam>
             <netparam><method name="getValue">return parent.isAllowedToBroadCastAV;</method></netparam>
+            <netparam><method name="getValue">return parent.canVideo;</method></netparam>
             <netparam><method name="getValue">return parent.interviewPodId;</method></netparam>
             <handler name="ondata" args="value">
                 <![CDATA[
@@ -1189,20 +1192,20 @@
             <handler name="ondata" args="value">
                 <![CDATA[
                     //The onResult-Handler will be called be the rtmpconnection
-                    //if ($debug) Debug.write(" onResult setNewBroadCastingFlag : ",value);   
+                    if ($debug) Debug.write(" onResult setNewBroadCastingFlag : ",value);
+                    canvas._videocontainer._participants.getUserListItemByPublicSID(value.publicSID).setAttribute("refObj", value);   
                     if (canvas.publicSID == value.publicSID) {
-                        if ($debug) Debug.write("Its about You ",value);
+						canvas.sendViaLocalConnection(canvas.vid_lc_name, "toggleVideo", [value.canVideo]);
+                        canvas.setAttribute("isBroadCasting", value.isBroadcasting);
+                        canvas.setAttribute("canVideo", value.canVideo);
+                        
+                        if ($debug) Debug.write("Its about You ", value);
                         if (value.isBroadcasting) {
-                            
                             if (canvas.thishib.modus == "interview") {
                                canvas._drawarea.newInterviewStarting(value);
                             } else {
                             	canvas._videocontainer._videoviewcontent.showDevicePopUp(false);
                             }
-                            
-                            canvas.setAttribute("isBroadCasting",true);
-                        } else {
-                            canvas.setAttribute("isBroadCasting",false);
                         }
                     } 
                     canvas.setAttribute("lastBroadCastingUser",value);

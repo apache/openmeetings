@@ -1620,6 +1620,13 @@
   <entry key="1598">Security</entry>
   <entry key="1599">Access denied. You have no rights to enter this room.</entry>
   <entry key="1600">Re-convert</entry>
+  <entry key="1601">Apply for audio access</entry>
+  <entry key="1602">Ask moderator to share your micro</entry>
+  <entry key="1603">would like to share his audio</entry>
+  <entry key="1604">Allow this user to publish their audio</entry>
+  <entry key="1605">Remove audio of this user</entry>
+  <entry key="1606">I would like to share my audio</entry>
+  <entry key="1607">You are allowed to share your audio</entry>
 	<entry key="install.wizard.install.header">Installation</entry>
 	<entry key="install.wizard.welcome.panel"><![CDATA[
 	<ol>

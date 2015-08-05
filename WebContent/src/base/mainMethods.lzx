@@ -61,6 +61,26 @@
     	</handler>
     </confmenucommand>
     
+    <baseconfmenucommand id="cmd_applyforA" tipLabelId="1602">
+    	<handler name="onselect" args="tSel">
+    		if (!this.enabled) {
+    			return;
+    		}
+    		if ($debug) Debug.write("cmd_applyforA onselect",canvas.ismoderator,tSel);
+    		if (canvas.ismoderator) {
+				//Do directly send confirmation to share Audio/Video to SELF! so that all users get
+				//the notification and the broadcasting Bit is set for this User
+				canvas.thishib.setBroadCastingFlag.publicSIDOfNewModerator = canvas.publicSID;
+				canvas.thishib.setBroadCastingFlag.isAllowedToBroadCastAV = true;
+				canvas.thishib.setBroadCastingFlag.canVideo = false;
+				canvas.thishib.setBroadCastingFlag.doCall();
+			} else {
+				//Apply for Right to Share Audio/Video
+				var tDate = new Date();
+				canvas.thishib.sendMessageWithClient.sendMessage("applyForA",tDate.getTime());
+			}
+    	</handler>
+    </baseconfmenucommand>
     <baseconfmenucommand id="cmd_applyforAV" tipLabelId="1482">
     	<handler name="onselect" args="tSel">
     		if (!this.enabled) {
@@ -72,6 +92,7 @@
 				//the notification and the broadcasting Bit is set for this User
 				canvas.thishib.setBroadCastingFlag.publicSIDOfNewModerator = canvas.publicSID;
 				canvas.thishib.setBroadCastingFlag.isAllowedToBroadCastAV = true;
+				canvas.thishib.setBroadCastingFlag.canVideo = true;
 				canvas.thishib.setBroadCastingFlag.doCall();
 			} else {
 				//Apply for Right to Share Audio/Video

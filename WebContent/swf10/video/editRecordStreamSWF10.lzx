@@ -454,6 +454,10 @@
 			}
 			this.parent.availableCamsLabel.setAttribute("visible", camVisible);
 			this.parent.availableCams.setAttribute("visible", camVisible);
+			this.parent._btnStartRecording.setAttribute("visible", camVisible || micVisible);
+			this.parent._video.setAttribute("visible", camVisible);
+			this.parent._play.setAttribute("visible", camVisible || micVisible);
+			this.parent._level_meter.setAttribute("visible", micVisible);
 			this.parent.availableMicsLabel.setAttribute("visible", micVisible);
 			this.parent.availableMics.setAttribute("visible", micVisible);
 			this.parent.infoTextNoAV.setAttribute("visible", textVisible);
@@ -518,7 +522,7 @@
 		selectListItem(availableMics, foundStoredMic, mics.length > 0);
 
 		// settings
-		var addCams = !canvas.currentRoomObject.isAudioOnly && cameras.length > 0;
+		var addCams = canvas.userobject.canVideo && !canvas.currentRoomObject.isAudioOnly && cameras.length > 0;
 		var addMics = mics.length > 0;
 		if (addCams && addMics) {
 			availableSettings.addItem(canvas.getLabelName(448), "av");

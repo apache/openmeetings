@@ -29,6 +29,7 @@
     </handler>	
     
     <method name="updateIcons">
+    <![CDATA[
         if (canvas.ismoderator) {
             this._isMod.setAttribute("visibility","visible");
             this._isModAddbutton.setAttribute("visibility","hidden");
@@ -103,15 +104,12 @@
         if ($debug) Debug.write("+ STATUS ICONS + ",this.showAvIcons,canvas.isBroadCasting);
         
         if (this.showAvIcons) {
-	        if (canvas.isBroadCasting) {
-	            this._allowDevice.setAttribute("visibility","hidden");
-	            this._denyDevice.setAttribute("visibility","visible");
-	        } else {
-	            this._allowDevice.setAttribute("visibility","visible");
-	            this._denyDevice.setAttribute("visibility","hidden");
-	        }
+            this._allowDevice.setAttribute("visible", !canvas.isBroadCasting || !canvas.canVideo);
+            this._denyDevice.setAttribute("visible", canvas.isBroadCasting && canvas.canVideo);
+
+            this._allowAudio.setAttribute("visible", !canvas.isBroadCasting);
+            this._denyAudio.setAttribute("visible", canvas.isBroadCasting);
         }
-        
         
         if (canvas.micMuted) {
             this._muteDevice.setAttribute("visibility","hidden");
@@ -120,9 +118,8 @@
             this._muteDevice.setAttribute("visibility","visible");
             this._unMuteDevice.setAttribute("visibility","hidden");
         }
-        
-        
-    </method>
+	]]>
+	</method>
     
     <simplelayout axis="x" spacing="2" />
 
@@ -220,7 +217,39 @@
     </miniIconsNew>      
           
     
-    <miniIconsNew name="_allowDevice" x="80" width="40" height="16" opacity="0.5" 
+    <miniIconsNew name="_allowAudio" x="80" width="16" height="16" 
+            visible="$once{ parent.showAvIcons }" innerResource="a_allow_rsc" showhandcursor="true">
+        <handler name="onclick">
+            if ($debug) Debug.write("NOTHING: ",canvas.publicSID);
+            if (canvas.ismoderator) {
+                //Do directly send confirmation to share Audio/Video to SELF! so that all users get
+                //the notification and the broadcasting Bit is set for this User
+                canvas.thishib.setBroadCastingFlag.publicSIDOfNewModerator = canvas.publicSID;
+                canvas.thishib.setBroadCastingFlag.canVideo = false;
+                canvas.thishib.setBroadCastingFlag.isAllowedToBroadCastAV = true;
+                canvas.thishib.setBroadCastingFlag.doCall(); 
+            } else {
+                //Apply for Right to Share Audio/Video
+                var tDate = new Date();
+                canvas.thishib.sendMessageWithClient.sendMessage("applyForA",tDate.getTime());
+            }
+        </handler>
+        <labelTooltip labelid="1606" />
+    </miniIconsNew>
+    
+    <miniIconsNew name="_denyAudio" x="80" width="16" height="16" opacity="0.5"
+            visible="$once{ parent.showAvIcons }" innerResource="a_deny_rsc" showhandcursor="false">
+        <handler name="onclick">
+            if ($debug) Debug.write("DENY: ",canvas.publicSID);
+            //Nothing happens here
+            canvas.thishib.setBroadCastingFlag.publicSIDOfNewModerator = canvas.publicSID;
+            canvas.thishib.setBroadCastingFlag.isAllowedToBroadCastAV = false;
+            canvas.thishib.setBroadCastingFlag.doCall(); 
+        </handler>
+        <labelTooltip name="_text" labelid="1607" />
+    </miniIconsNew>
+    
+    <miniIconsNew name="_allowDevice" x="100" width="16" height="16" 
             visible="$once{ parent.showAvIcons }" innerResource="av_allow_rsc" showhandcursor="true">
         <handler name="onclick">
             if ($debug) Debug.write("NOTHING: ",canvas.publicSID);
@@ -228,6 +257,7 @@
                 //Do directly send confirmation to share Audio/Video to SELF! so that all users get
                 //the notification and the broadcasting Bit is set for this User
                 canvas.thishib.setBroadCastingFlag.publicSIDOfNewModerator = canvas.publicSID;
+                canvas.thishib.setBroadCastingFlag.canVideo = true;
                 canvas.thishib.setBroadCastingFlag.isAllowedToBroadCastAV = true;
                 canvas.thishib.setBroadCastingFlag.doCall(); 
             } else {
@@ -239,13 +269,14 @@
         <labelTooltip labelid="687" />
     </miniIconsNew>
     
-    <miniIconsNew name="_denyDevice" x="80" width="40" height="16" 
-            visible="$once{ parent.showAvIcons }" innerResource="av_allow_rsc" showhandcursor="false">
+    <miniIconsNew name="_denyDevice" x="100" width="16" height="16" opacity="0.5"
+            visible="$once{ parent.showAvIcons }" innerResource="av_deny_rsc" showhandcursor="false">
         <handler name="onclick">
             if ($debug) Debug.write("DENY: ",canvas.publicSID);
             //Nothing happens here
             canvas.thishib.setBroadCastingFlag.publicSIDOfNewModerator = canvas.publicSID;
-            canvas.thishib.setBroadCastingFlag.isAllowedToBroadCastAV = false;
+                canvas.thishib.setBroadCastingFlag.canVideo = false;
+                canvas.thishib.setBroadCastingFlag.isAllowedToBroadCastAV = true;
             canvas.thishib.setBroadCastingFlag.doCall(); 
         </handler>
         <labelTooltip name="_text" labelid="690" />

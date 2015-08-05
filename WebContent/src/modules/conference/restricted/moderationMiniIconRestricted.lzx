@@ -117,12 +117,12 @@
             }
 		}
 		
-		if (refObj != null && refObj.isBroadcasting) {
-			this._allowDevice.setAttribute("visibility","hidden");
-			this._denyDevice.setAttribute("visibility","visible");
-		} else {
-			this._allowDevice.setAttribute("visibility","visible");
-            this._denyDevice.setAttribute("visibility","hidden");
+		if (refObj != null) {
+			this._allowDevice.setAttribute("visible", !refObj.isBroadcasting || !refObj.canVideo);
+			this._denyDevice.setAttribute("visible", refObj.isBroadcasting && refObj.canVideo);
+
+			this._allowAudio.setAttribute("visible", !refObj.isBroadcasting);
+			this._denyAudio.setAttribute("visible", refObj.isBroadcasting);
 		}
 		
 		if ($debug) Debug.write("Set micMuted ", (refObj != null && refObj.micMuted));
@@ -279,21 +279,42 @@
         <labelTooltip labelid="1078" />
     </miniIcons>        
     
-    <miniIcons name="_allowDevice" x="80" width="40" height="16" resource="av_allow_rsc" opacity="0.5" showhandcursor="true">
+    <miniIcons name="_allowAudio" x="80" width="16" height="16" resource="a_allow_rsc" showhandcursor="true">
         <handler name="onclick">
             if ($debug) Debug.write("ALLOW: ",parent.parent.parent.refObj.publicSID);
             canvas.thishib.setBroadCastingFlag.publicSIDOfNewModerator = parent.parent.parent.refObj.publicSID;
+            canvas.thishib.setBroadCastingFlag.canVideo = false;
+            canvas.thishib.setBroadCastingFlag.isAllowedToBroadCastAV = true;
+            canvas.thishib.setBroadCastingFlag.doCall(); 
+        </handler>
+        <labelTooltip labelid="1604" />
+    </miniIcons>
+    <miniIcons name="_denyAudio" x="80" width="16" height="16" resource="a_deny_rsc" opacity="0.5" showhandcursor="true">
+        <handler name="onclick">
+            if ($debug) Debug.write("ALLOW: ",parent.parent.parent.refObj.publicSID);
+            canvas.thishib.setBroadCastingFlag.publicSIDOfNewModerator = parent.parent.parent.refObj.publicSID;
+            canvas.thishib.setBroadCastingFlag.isAllowedToBroadCastAV = false;
+            canvas.thishib.setBroadCastingFlag.doCall(); 
+        </handler>
+        <labelTooltip labelid="1605" />
+    </miniIcons>
+    <miniIcons name="_allowDevice" x="100" width="16" height="16" resource="av_allow_rsc" showhandcursor="true">
+        <handler name="onclick">
+            if ($debug) Debug.write("ALLOW: ",parent.parent.parent.refObj.publicSID);
+            canvas.thishib.setBroadCastingFlag.publicSIDOfNewModerator = parent.parent.parent.refObj.publicSID;
+            canvas.thishib.setBroadCastingFlag.canVideo = true;
             canvas.thishib.setBroadCastingFlag.isAllowedToBroadCastAV = true;
             canvas.thishib.setBroadCastingFlag.doCall(); 
         </handler>
         <labelTooltip labelid="683" />
     </miniIcons>
     
-    <miniIcons name="_denyDevice" x="80" width="40" height="16" resource="av_deny_rsc" showhandcursor="true">
+    <miniIcons name="_denyDevice" x="100" width="16" height="16" resource="av_deny_rsc" opacity="0.5" showhandcursor="true">
         <handler name="onclick">
             if ($debug) Debug.write("ALLOW: ",parent.parent.parent.refObj.publicSID);
             canvas.thishib.setBroadCastingFlag.publicSIDOfNewModerator = parent.parent.parent.refObj.publicSID;
-            canvas.thishib.setBroadCastingFlag.isAllowedToBroadCastAV = false;
+            canvas.thishib.setBroadCastingFlag.canVideo = false;
+            canvas.thishib.setBroadCastingFlag.isAllowedToBroadCastAV = true;
             canvas.thishib.setBroadCastingFlag.doCall(); 
         </handler>
         <labelTooltip labelid="684" />
