@@ -211,7 +211,7 @@
 		<dependency org="commons-transaction" name="commons-transaction" rev="1.2" conf="openmeetings->*" transitive="false">
 			<include type="jar" />
 		</dependency>
-		<dependency org="org.apache.commons" name="commons-dbcp2" rev="2.1" conf="openmeetings->*" transitive="false">
+		<dependency org="org.apache.commons" name="commons-dbcp2" rev="2.1.1" conf="openmeetings->*" transitive="false">
 			<include type="jar" />
 		</dependency>
 		<dependency org="org.apache.commons" name="commons-pool2" rev="2.4.2" conf="openmeetings->*" transitive="false">

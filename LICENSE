@@ -360,7 +360,7 @@ webapps/openmeetings/WEB-INF/lib/batik-ttf2svg-jar-1.7.jar
 webapps/openmeetings/WEB-INF/lib/batik-util-jar-1.7.jar
 webapps/openmeetings/WEB-INF/lib/batik-xml-jar-1.7.jar
 webapps/openmeetings/WEB-INF/lib/commons-collections-jar-3.2.1.jar
-webapps/openmeetings/WEB-INF/lib/commons-dbcp2-jar-2.1.jar
+webapps/openmeetings/WEB-INF/lib/commons-dbcp2-jar-2.1.1.jar
 webapps/openmeetings/WEB-INF/lib/commons-digester-jar-2.1.jar
 webapps/openmeetings/WEB-INF/lib/commons-exec-jar-1.1.jar
 webapps/openmeetings/WEB-INF/lib/commons-httpclient-jar-3.1.jar
