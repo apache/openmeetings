@@ -31,8 +31,12 @@ import java.util.List;
 import org.apache.openmeetings.db.dao.server.ISessionManager;
 import org.apache.openmeetings.db.dao.user.IUserService;
 import org.apache.openmeetings.db.entity.room.Client;
+import org.apache.openmeetings.remote.UserService;
 import org.apache.openmeetings.web.admin.AdminPanel;
 import org.apache.openmeetings.web.admin.SearchableDataView;
+import org.apache.openmeetings.web.app.Application;
+import org.apache.openmeetings.web.app.WebClient;
+import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.ConfirmableAjaxLink;
 import org.apache.openmeetings.web.common.PagedEntityListPanel;
 import org.apache.openmeetings.web.data.SearchableDataProvider;
@@ -65,6 +69,21 @@ public class ConnectionsPanel extends AdminPanel {
 			@Override
 			public long size() {
 				return getBean(ISessionManager.class).getClients().size();
+			}
+		};
+		
+		SearchableDataProvider<WebClient> sdpWeb = new SearchableDataProvider<WebClient>(null) {
+			private static final long serialVersionUID = 1L;
+			
+			@Override
+			public Iterator<? extends WebClient> iterator(long first, long count) {
+				List<WebClient> l = new ArrayList<WebClient>(Application.getClients());
+				return l.subList((int)Math.max(0, first), (int)Math.min(first + count, l.size())).iterator();
+			}
+			
+			@Override
+			public long size() {
+				return Application.getClientsSize();
 			}
 		};
 		final WebMarkupContainer container = new WebMarkupContainer("container");
@@ -123,7 +142,63 @@ public class ConnectionsPanel extends AdminPanel {
 				item.add(AttributeModifier.append("class", "clickable ui-widget-content"));
 			}
 		};
-		add(container.add(dataView).setOutputMarkupId(true), details.setVisible(false).setOutputMarkupPlaceholderTag(true));
+		add(container.add(dataView).setOutputMarkupId(true));
+		
+		final WebMarkupContainer containerWeb = new WebMarkupContainer("containerWeb");
+		SearchableDataView<WebClient> dataViewWeb = new SearchableDataView<WebClient>("clientListWeb", sdpWeb) {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void populateItem(final Item<WebClient> item) {
+				WebClient c = item.getModelObject();
+				item.add(new Label("id", c.getUserId()));
+				item.add(new Label("login", getBean(UserService.class).getUserById(getSid(), c.getUserId()).getLogin()));
+				item.add(new Label("since", c.getConnectedSince()));
+				item.add(new Label("scope", "hibernate"));
+				item.add(new Label("server", "no cluster"));
+				item.add(new ConfirmableAjaxLink("kick", 605) {
+					private static final long serialVersionUID = 1L;
+
+					@Override
+					public void onClick(AjaxRequestTarget target) {
+						WebClient c = item.getModelObject();
+						getBean(IUserService.class).kickUserBySessionId(getSid(), c.getUserId()
+								, c.getSessionId());
+						target.add(containerWeb, details.setVisible(false));
+					}
+				}.setEnabled(!c.getSessionId().equals(WebSession.get().getId())));
+				item.add(new AjaxEventBehavior("onclick") {
+					private static final long serialVersionUID = 1L;
+
+					@Override
+					protected void onEvent(AjaxRequestTarget target) {
+						Field[] ff = WebClient.class.getDeclaredFields();
+						RepeatingView lines = new RepeatingView("line");
+						WebClient c = item.getModelObject();
+						for (Field f : ff) {
+							int mod = f.getModifiers();
+							if (Modifier.isStatic(mod) || Modifier.isTransient(mod)) {
+								continue;
+							}
+							WebMarkupContainer line = new WebMarkupContainer(lines.newChildId());
+							line.add(new Label("name", f.getName()));
+							String val = "";
+							try {
+								f.setAccessible(true);
+								val = "" + f.get(c);
+							} catch (Exception e) {
+							}
+							line.add(new Label("value", val));
+							lines.add(line);
+						}
+						details.addOrReplace(lines);
+						target.add(details.setVisible(true));
+					}
+				});
+				item.add(AttributeModifier.append("class", "clickable ui-widget-content"));
+			}
+		};
+		add(containerWeb.add(dataViewWeb).setOutputMarkupId(true), details.setVisible(false).setOutputMarkupPlaceholderTag(true));
 		
 		add(new PagedEntityListPanel("navigator", dataView) {
 			private static final long serialVersionUID = 1L;

@@ -24,7 +24,11 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DASHBOAR
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_LANG_KEY;
 import static org.apache.openmeetings.web.app.Application.getAuthenticationStrategy;
 import static org.apache.openmeetings.web.app.Application.getBean;
+import static org.apache.openmeetings.web.app.Application.getClientByKeys;
 import static org.apache.openmeetings.web.app.Application.getDashboardContext;
+import static org.apache.openmeetings.web.app.Application.isInvaldSession;
+import static org.apache.openmeetings.web.app.Application.removeInvalidSession;
+import static org.apache.openmeetings.web.app.Application.removeOnlineUser;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -100,6 +104,7 @@ public class WebSession extends AbstractAuthenticatedWebSession {
 	private Long recordingId;
 	private Long loginError = null;
 	private String externalType;
+	public static boolean kickedByAdmin = false;
 	public final static List<String> AVAILABLE_TIMEZONES = Arrays.asList(TimeZone.getAvailableIDs());
 	public final static Set<String> AVAILABLE_TIMEZONE_SET = new LinkedHashSet<String>(AVAILABLE_TIMEZONES);
 	
@@ -110,6 +115,7 @@ public class WebSession extends AbstractAuthenticatedWebSession {
 
 	@Override
 	public void invalidate() {
+		removeOnlineUser(getClientByKeys(getUserId(), get().getId()));
 		super.invalidate();
 		userId = -1;
 		rights = new HashSet<User.Right>();
@@ -288,6 +294,7 @@ public class WebSession extends AbstractAuthenticatedWebSession {
 	}
 	
 	public static long getLanguage() {
+		checkIsInvalid();
 		WebSession session = get();
 		if (session.languageId < 0) {
 			if (session.isSignedIn()) {
@@ -322,6 +329,7 @@ public class WebSession extends AbstractAuthenticatedWebSession {
 	}
 
 	public static long getUserId() {
+		checkIsInvalid();
 		return get().userId;
 	}
 	
@@ -354,7 +362,16 @@ public class WebSession extends AbstractAuthenticatedWebSession {
 	}
 	
 	public static Set<Right> getRights() {
+		checkIsInvalid();
 		return get().rights;
+	}
+	
+	public static void setKickedByAdmin(boolean kicked) {
+		kickedByAdmin = kicked;
+	}
+	
+	public boolean isKickedByAdmin() {
+		return kickedByAdmin;
 	}
 
 	public OmUrlFragment getArea() {
@@ -481,6 +498,16 @@ public class WebSession extends AbstractAuthenticatedWebSession {
 		}
 		if (save) {
 			dashboardContext.getDashboardPersister().save(dashboard);
+		}
+	}
+	
+	private static void checkIsInvalid() {
+		if (isInvaldSession(get().getId())) {
+			setKickedByAdmin(true);
+			removeInvalidSession(get().getId());
+			org.apache.wicket.Session session = (org.apache.wicket.Session)get();
+			session.invalidate();
+			Application.get().restartResponseAtSignInPage();
 		}
 	}
 }

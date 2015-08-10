@@ -81,6 +81,7 @@ public class SignInPage extends BaseInitedPage {
 	private static final long serialVersionUID = 1L;
 	private static final Logger log = Red5LoggerFactory.getLogger(SignInPage.class, webAppRootKey);
 	private SignInDialog d;
+	private KickMessageDialog m;
 	
 	static boolean allowRegister() {
 		return "1".equals(getBean(ConfigurationDao.class).getConfValue(CONFIG_FRONTEND_REGISTER_KEY, String.class, "0"));
@@ -143,7 +144,9 @@ public class SignInPage extends BaseInitedPage {
 		d.setForgetPasswordDialog(f);
 		r.setSignInDialog(d);
 		f.setSignInDialog(d);
-		add(d, r.setVisible(allowRegister()), f);
+		m = new KickMessageDialog("kick");
+		add(d.setVisible(!WebSession.get().isKickedByAdmin()), 
+				r.setVisible(allowRegister()), f, m.setVisible(WebSession.get().isKickedByAdmin()));
 	}
 	
 	public SignInPage() {
@@ -153,8 +156,7 @@ public class SignInPage extends BaseInitedPage {
 	@Override
 	public void renderHead(IHeaderResponse response) {
 		super.renderHead(response);
-		//TODO need to be removed if autoOen will be enabled
-		response.render(OnDomReadyHeaderItem.forScript("$('#" + d.getMarkupId() + "').dialog('open');"));
+		response.render(OnDomReadyHeaderItem.forScript(m.getOnClickJavaScript()));
 		response.render(new CssContentHeaderItem(".no-close .ui-dialog-titlebar-close { display: none; }", "dialog-noclose", ""));
 	}
 	

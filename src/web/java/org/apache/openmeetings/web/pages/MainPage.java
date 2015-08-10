@@ -20,6 +20,7 @@ package org.apache.openmeetings.web.pages;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.openmeetings.web.app.Application.addOnlineUser;
+import static org.apache.openmeetings.web.app.Application.getClientByKeys;
 import static org.apache.openmeetings.web.app.Application.removeOnlineUser;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import static org.apache.openmeetings.web.util.OmUrlFragment.CHILD_ID;
@@ -28,6 +29,7 @@ import static org.apache.openmeetings.web.util.OmUrlFragment.PROFILE_MESSAGES;
 import static org.apache.openmeetings.web.util.OmUrlFragment.getPanel;
 
 import org.apache.openmeetings.web.app.Application;
+import org.apache.openmeetings.web.app.WebClient;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.BasePanel;
 import org.apache.openmeetings.web.common.ConfirmableAjaxLink;
@@ -122,14 +124,15 @@ public class MainPage extends BaseInitedPage {
 			@Override
 			protected void onConnect(ConnectedMessage message) {
 				super.onConnect(message);
-				addOnlineUser(getUserId(), WebSession.get().getId());
+				addOnlineUser(new WebClient(WebSession.get().getId(), message.getKey(), getUserId()));
 				log.debug("WebSocketBehavior::onConnect");
 			}
 			
 			@Override
 			protected void onClose(ClosedMessage message) {
+				WebClient client = getClientByKeys(getUserId(), WebSession.get().getId());
+				removeOnlineUser(client);
 				super.onClose(message);
-				removeOnlineUser(getUserId(), WebSession.get().getId());
 				log.debug("WebSocketBehavior::onClose");
 			}
 		});

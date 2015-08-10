@@ -21,6 +21,7 @@ package org.apache.openmeetings.remote;
 import static org.apache.openmeetings.db.entity.user.PrivateMessage.INBOX_FOLDER_ID;
 import static org.apache.openmeetings.db.entity.user.PrivateMessage.SENT_FOLDER_ID;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+import static org.apache.openmeetings.web.app.Application.removeOnlineUser;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -62,6 +63,8 @@ import org.apache.openmeetings.mail.MailHandler;
 import org.apache.openmeetings.remote.red5.ScopeApplicationAdapter;
 import org.apache.openmeetings.util.AuthLevelUtil;
 import org.apache.openmeetings.util.CalendarPatterns;
+import org.apache.openmeetings.web.app.Application;
+import org.apache.openmeetings.web.app.WebClient;
 import org.apache.openmeetings.web.mail.template.AbstractTemplatePanel;
 import org.apache.openmeetings.web.util.ContactsHelper;
 import org.red5.logging.Red5LoggerFactory;
@@ -497,7 +500,24 @@ public class UserService implements IUserService {
 				return true;
 			}
 		} catch (Exception err) {
-			log.error("[kickUserByStreamId]", err);
+			log.error("[kickUserByPublicSID]", err);
+		}
+		return null;
+	}
+
+	@Override
+	public Boolean kickUserBySessionId(String SID, long userId, String sessionId) {
+		try {
+			Long users_id = sessiondataDao.checkSession(SID);
+			// admin only
+			if (AuthLevelUtil.hasAdminLevel(userDao.getRights(users_id))) {
+				WebClient client = Application.getClientByKeys(userId, sessionId);
+				if (client != null) {
+					removeOnlineUser(client);
+				}
+			}
+		} catch (Exception err) {
+			log.error("[kickUserBySessionId]", err);
 		}
 		return null;
 	}

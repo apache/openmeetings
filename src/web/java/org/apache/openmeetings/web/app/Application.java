@@ -24,8 +24,10 @@ import static org.springframework.web.context.WebApplicationContext.ROOT_WEB_APP
 import static org.springframework.web.context.support.WebApplicationContextUtils.getWebApplicationContext;
 
 import java.text.MessageFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
@@ -33,6 +35,9 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import javax.servlet.ServletContext;
 
+import org.apache.commons.collections.MapIterator;
+import org.apache.commons.collections.keyvalue.MultiKey;
+import org.apache.commons.collections.map.MultiKeyMap;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.label.LabelDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
@@ -72,7 +77,6 @@ import org.apache.wicket.request.Url;
 import org.apache.wicket.request.component.IRequestablePage;
 import org.apache.wicket.request.mapper.info.PageComponentInfo;
 import org.apache.wicket.request.mapper.parameter.PageParametersEncoder;
-import org.apache.wicket.util.collections.ConcurrentHashSet;
 import org.apache.wicket.util.tester.WicketTester;
 import org.slf4j.Logger;
 import org.springframework.web.context.WebApplicationContext;
@@ -86,7 +90,8 @@ import ro.fortsoft.wicket.dashboard.web.DashboardSettings;
 public class Application extends AuthenticatedWebApplication {
 	private static final Logger log = getLogger(Application.class, webAppRootKey);
 	private static boolean isInstalled;
-	private static Map<Long, Set<String>> ONLINE_USERS = new ConcurrentHashMap<Long, Set<String>>();
+	private static MultiKeyMap ONLINE_USERS = new MultiKeyMap(); 
+	private static Map<String, WebClient> INVALID_SESSIONS = new ConcurrentHashMap<String, WebClient>();
 	private DashboardContext dashboardContext;
 	private static Set<Long> STRINGS_WITH_APP = new HashSet<Long>(); //FIXME need to be removed
 	private static String appName;
@@ -187,30 +192,65 @@ public class Application extends AuthenticatedWebApplication {
 		return get().dashboardContext;
 	}
 	
-	public static void addOnlineUser(long userId, String sessionId) {
-		if (!ONLINE_USERS.containsKey(userId)) {
-			ONLINE_USERS.put(userId, new ConcurrentHashSet<String>());
+	public synchronized static void addOnlineUser(WebClient client) {
+		try {
+			ONLINE_USERS.put(client.getUserId(), client.getSessionId(), client);
+		} catch (Exception err) {
+			log.error("[addOnlineUser]", err);
 		}
-		ONLINE_USERS.get(userId).add(sessionId);
 	}
 	
-	public static void removeOnlineUser(long userId, String sessionId) {
-		if (ONLINE_USERS.containsKey(userId)) {
-			Set<String> sessions = ONLINE_USERS.get(userId);
-			if (sessions.isEmpty()) {
-				ONLINE_USERS.remove(userId);
-			} else if (sessions.contains(sessionId)) {
-				if (sessions.size() > 1) {
-					sessions.remove(sessionId);
-				} else {
-					ONLINE_USERS.remove(userId);
-				}
+	public synchronized static void removeOnlineUser(WebClient c) {
+		try {
+			if (c != null) {
+				ONLINE_USERS.remove(c.getUserId(), c.getSessionId());
+				invalidateClient(c);
 			}
+		} catch (Exception err) {
+			log.error("[removeOnlineUser]", err);
 		}
 	}
 	
-	public static boolean isUserOnline(long userId) {
-		return ONLINE_USERS.containsKey(userId);
+	public static boolean isUserOnline(Long userId) {
+        MapIterator it = ONLINE_USERS.mapIterator();
+        boolean isUserOnline = false;
+        while (it.hasNext()) {
+            MultiKey multi = (MultiKey) it.next();
+            if (multi.size() > 0 && userId.equals(multi.getKey(0))){
+            	isUserOnline = true;
+            	break;
+            }
+        } 
+		return isUserOnline;
+	}
+
+	@SuppressWarnings("unchecked")
+	public static List<WebClient> getClients() {
+		return new ArrayList<WebClient>(ONLINE_USERS.values());
+	}
+
+	public static int getClientsSize() {
+		return ONLINE_USERS.size();
+	}
+	
+	public static WebClient getClientByKeys(Long userId, String sessionId) {
+		return (WebClient) ONLINE_USERS.get(userId, sessionId);
+	}
+	
+	public static void invalidateClient(WebClient client) {
+		if (!INVALID_SESSIONS.containsKey(client.getSessionId())) {
+			INVALID_SESSIONS.put(client.getSessionId(), client);
+		}
+	}
+	
+	public static boolean isInvaldSession(String sessionId) {
+		return sessionId == null ? false : INVALID_SESSIONS.containsKey(sessionId);
+	}
+	
+	public static void removeInvalidSession(String sessionId) {
+		if (INVALID_SESSIONS.containsKey(sessionId)){
+			INVALID_SESSIONS.remove(sessionId);
+		}
 	}
 	
 	//TODO need more safe way FIXME

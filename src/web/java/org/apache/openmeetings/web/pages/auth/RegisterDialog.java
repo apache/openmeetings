@@ -42,7 +42,6 @@ import org.apache.openmeetings.util.crypt.ManageCryptStyle;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.LanguageDropDown;
-import org.apache.openmeetings.web.pages.MainPage;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.extensions.validation.validator.RfcCompliantEmailAddressValidator;
@@ -69,7 +68,7 @@ import com.googlecode.wicket.jquery.ui.widget.dialog.MessageDialog;
 
 public class RegisterDialog extends AbstractFormDialog<String> {
 	private static final long serialVersionUID = 1L;
-	private static final Logger log = Red5LoggerFactory.getLogger(MainPage.class, webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(RegisterDialog.class, webAppRootKey);
 	private DialogButton cancelBtn = new DialogButton("cancel", Application.getString(122));
 	private DialogButton registerBtn = new DialogButton("register", Application.getString(121));
 	private FeedbackPanel feedback = new FeedbackPanel("feedback");

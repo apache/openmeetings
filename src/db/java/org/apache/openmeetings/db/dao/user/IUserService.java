@@ -21,4 +21,5 @@ package org.apache.openmeetings.db.dao.user;
 //FIXME HACK to bypass cross project compilation
 public interface IUserService {
 	Boolean kickUserByStreamId(String SID, String streamid, long serverId);
+	Boolean kickUserBySessionId(String SID, long userId, String sessionId);
 }
