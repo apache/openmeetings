@@ -18,11 +18,17 @@
  */
 package org.apache.openmeetings.db.dao.user;
 
+import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 import java.util.Set;
 import java.util.TimeZone;
 
+import org.apache.openmeetings.db.entity.user.State;
+import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Right;
 
 //FIXME HACK to bypass cross project compilation
@@ -41,4 +47,8 @@ public interface IUserManager {
 			String street, String additionalname, String fax, String zip,
 			long states_id, String town, long language_id, String phone, boolean sendSMS, 
 			boolean generateSipUserData, String jNameTimeZone);
+	
+	Long getLanguage(Locale loc);
+	State getCountry(Locale loc);
+	User loginOAuth(Map<String, String> params, long serverId) throws IOException, NoSuchAlgorithmException;
 }

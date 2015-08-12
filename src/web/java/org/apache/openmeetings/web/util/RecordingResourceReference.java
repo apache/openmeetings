@@ -46,6 +46,7 @@ import org.apache.wicket.request.resource.ContentDisposition;
 import org.apache.wicket.request.resource.IResource;
 import org.apache.wicket.request.resource.IResource.Attributes;
 import org.apache.wicket.request.resource.ResourceReference;
+import org.apache.wicket.util.io.Streams;
 import org.apache.wicket.util.lang.Bytes;
 import org.apache.wicket.util.resource.FileResourceStream;
 import org.apache.wicket.util.resource.IResourceStream;
@@ -158,7 +159,8 @@ public abstract class RecordingResourceReference extends ResourceReference {
 						public void writeData(Attributes attributes) throws IOException {
 							IResourceStream rStream = getResourceStream();
 							try {
-								writeStream(attributes, rStream.getInputStream());
+								final Response response = attributes.getResponse();
+								Streams.copy(rStream.getInputStream(), response.getOutputStream());
 							} catch (ResourceStreamNotFoundException e1) {
 							} catch (ResponseIOException e) {
 								// in case of range operations we expecting such exceptions

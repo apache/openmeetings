@@ -18,7 +18,6 @@
  */
 package org.apache.openmeetings.web.pages.auth;
 
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_GROUP_ID;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_FRONTEND_REGISTER_KEY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_IGNORE_BAD_SSL;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
@@ -36,10 +35,8 @@ import java.net.URLEncoder;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Random;
 
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
@@ -52,12 +49,9 @@ import javax.net.ssl.X509TrustManager;
 import org.apache.commons.io.IOUtils;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.server.OAuth2Dao;
-import org.apache.openmeetings.db.dao.user.OrganisationDao;
-import org.apache.openmeetings.db.dao.user.UserDao;
+import org.apache.openmeetings.db.dao.user.IUserManager;
 import org.apache.openmeetings.db.entity.server.OAuthServer;
-import org.apache.openmeetings.db.entity.user.Organisation_Users;
 import org.apache.openmeetings.db.entity.user.User;
-import org.apache.openmeetings.db.entity.user.User.Right;
 import org.apache.openmeetings.db.entity.user.User.Type;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
@@ -339,51 +333,9 @@ public class SignInPage extends BaseInitedPage {
 	}
 	
 	private void loginViaOAuth2(Map<String, String> params, long serverId) throws IOException, NoSuchAlgorithmException {
-		UserDao userDao = getBean(UserDao.class);
-		ConfigurationDao cfgDao = getBean(ConfigurationDao.class);
-		String login = params.get("login");
-		String email = params.get("email");
-		String lastname = params.get("lastname");
-		String firstname = params.get("firstname");
-		if (firstname == null) {
-			firstname = "";
-		}
-		if (lastname == null) {
-			lastname = "";
-		}
-		if (!userDao.validLogin(login)) {
-			log.error("Invalid login, please check parameters");
-			return;
-		}
-		User u = userDao.getByLogin(login, Type.oauth, serverId);
-		if (!userDao.checkEmail(email, Type.oauth, serverId, u == null ? null : u.getUser_id())) {
-			log.error("Another user with the same email exists");
-			return;
-		}
-		// generate random password
-		byte[] rawPass = new byte[25];
-		Random rnd = new Random();
-		for (int i = 0; i < rawPass.length; ++i) {
-			rawPass[i] = (byte) ('!' + rnd.nextInt(93));
-		}
-		String pass = new String(rawPass, "UTF-8");
-		// check if the user already exists and register new one if it's needed
-		if (u == null) {
-			u = userDao.getNewUserInstance(null);
-			u.setType(Type.oauth);
-			u.getRights().remove(Right.Login);;
-			u.setDomainId(serverId);
-			u.getOrganisation_users().add(new Organisation_Users(getBean(OrganisationDao.class).get(cfgDao.getConfValue(CONFIG_DEFAULT_GROUP_ID, Long.class, "-1"))));
-			u.setLogin(login);
-			u.setShowContactDataToContacts(true);
-			u.setLastname(lastname);
-			u.setFirstname(firstname);
-			u.getAdresses().setEmail(email);
-		}
-		u.setLastlogin(new Date());
-		u = userDao.update(u, pass, -1);
+		User u = getBean(IUserManager.class).loginOAuth(params, serverId);
 		
-		if (WebSession.get().signIn(login, pass, Type.oauth, serverId)) {
+		if (u != null && WebSession.get().signIn(u)) {
  			setResponsePage(Application.get().getHomePage());
 		} else {
 			log.error("Failed to login via OAuth2!");
