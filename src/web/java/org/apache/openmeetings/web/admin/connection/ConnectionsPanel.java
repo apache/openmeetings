@@ -155,7 +155,6 @@ public class ConnectionsPanel extends AdminPanel {
 				item.add(new Label("login", getBean(UserService.class).getUserById(getSid(), c.getUserId()).getLogin()));
 				item.add(new Label("since", c.getConnectedSince()));
 				item.add(new Label("scope", "hibernate"));
-				item.add(new Label("server", "no cluster"));
 				item.add(new ConfirmableAjaxLink("kick", 605) {
 					private static final long serialVersionUID = 1L;
 
