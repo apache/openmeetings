@@ -202,9 +202,9 @@ public class RestClient {
 			}
 
 			UserWebService client = getUserClient();
-			Boolean result = client.kickUserByPublicSID(sessionId, publicSID);
+			ServiceResult result = client.kick(sessionId, publicSID);
 
-			if (!result) {
+			if (result.getCode() == 0) {
 				throw new Exception("Could not delete user from slave host");
 			}
 

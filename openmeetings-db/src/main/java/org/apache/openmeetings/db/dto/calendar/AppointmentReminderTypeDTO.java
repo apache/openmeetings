@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.db.dto.calendar;
 
+import org.apache.openmeetings.db.dao.calendar.AppointmentReminderTypeDao;
 import org.apache.openmeetings.db.entity.calendar.AppointmentReminderType;
 
 public class AppointmentReminderTypeDTO {
@@ -31,6 +32,10 @@ public class AppointmentReminderTypeDTO {
 		this.name = t.getName();
 	}
 
+	public AppointmentReminderType get(AppointmentReminderTypeDao remindDao) {
+		return remindDao.get(id);
+	}
+	
 	public Long getId() {
 		return id;
 	}

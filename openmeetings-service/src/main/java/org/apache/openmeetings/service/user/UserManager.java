@@ -439,20 +439,15 @@ public class UserManager implements IUserManager {
 					if (rcl.getRoomId() != null) {
 						scopeName = rcl.getRoomId().toString();
 					}
-					IScope currentScope = scopeApplicationAdapter
-							.getRoomScope(scopeName);
+					IScope currentScope = scopeApplicationAdapter.getRoomScope(scopeName);
 					scopeApplicationAdapter.roomLeaveByScope(rcl, currentScope, true);
 
 					HashMap<Integer, String> messageObj = new HashMap<Integer, String>();
 					messageObj.put(0, "kick");
-					scopeApplicationAdapter.sendMessageById(messageObj,
-							rcl.getStreamid(), currentScope);
-
+					scopeApplicationAdapter.sendMessageById(messageObj, rcl.getStreamid(), currentScope);
 				}
-
 				return true;
 			}
-
 		} catch (Exception err) {
 			log.error("[kickUserByStreamId]", err);
 		}

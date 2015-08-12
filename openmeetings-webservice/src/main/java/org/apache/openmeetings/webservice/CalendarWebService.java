@@ -26,16 +26,21 @@ import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
+import javax.jws.WebParam;
 import javax.jws.WebService;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import org.apache.cxf.feature.Features;
 import org.apache.openmeetings.core.data.conference.RoomManager;
 import org.apache.openmeetings.db.dao.calendar.AppointmentCategoryDao;
 import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
-import org.apache.openmeetings.db.dao.calendar.AppointmentReminderTypDao;
+import org.apache.openmeetings.db.dao.calendar.AppointmentReminderTypeDao;
 import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.dao.room.RoomTypeDao;
 import org.apache.openmeetings.db.dao.server.SessiondataDao;
@@ -50,6 +55,7 @@ import org.apache.openmeetings.db.entity.user.User.Right;
 import org.apache.openmeetings.db.util.AuthLevelUtil;
 import org.apache.openmeetings.db.util.TimezoneUtil;
 import org.apache.openmeetings.service.calendar.AppointmentLogic;
+import org.apache.openmeetings.util.CalendarPatterns;
 import org.apache.openmeetings.webservice.error.ServiceException;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -74,7 +80,7 @@ public class CalendarWebService {
 	@Autowired
 	private AppointmentLogic appointmentLogic;
 	@Autowired
-	private SessiondataDao sessiondataDao;
+	private SessiondataDao sessionDao;
 	@Autowired
 	private UserDao userDao;
 	@Autowired
@@ -84,90 +90,104 @@ public class CalendarWebService {
 	@Autowired
 	private AppointmentCategoryDao appointmentCategoryDao;
 	@Autowired
-	private AppointmentReminderTypDao appointmentReminderTypDao;
+	private AppointmentReminderTypeDao reminderTypeDao;
 	@Autowired
 	private TimezoneUtil timezoneUtil;
 	@Autowired
 	private RoomTypeDao roomTypeDao;
 
-	private List<AppointmentDTO> getAppointments(List<Appointment> list) {
-		List<AppointmentDTO> result = new ArrayList<>(list.size());
-		for (Appointment a : list) {
-			result.add(new AppointmentDTO(a));
-		}
-		return result;
-	}
-	
 	/**
 	 * Load appointments by a start / end range for the current SID
 	 * 
-	 * @param SID
+	 * @param sid
 	 *            The SID of the User. This SID must be marked as Loggedin
-	 * @param starttime
-	 *            start time, yyyy-mm-dd
-	 * @param endtime
-	 *            end time, yyyy-mm-dd
+	 * @param start
+	 *            start time
+	 * @param end
+	 *            end time
 	 *            
 	 * @return - list of appointments in range
 	 */
-	public List<AppointmentDTO> getAppointmentByRange(String SID, Calendar starttime, Calendar endtime) {
-		log.debug("getAppointmentByRange : startdate - " + starttime.getTime() + ", enddate - " + endtime.getTime());
+	@GET
+	@Path("/{start}/{end}")
+	public List<AppointmentDTO> range(@QueryParam("sid") @WebParam String sid, @PathParam("start") @WebParam Calendar start, @PathParam("end") @WebParam Calendar end) throws ServiceException {
+		log.debug("range : startdate - " + start.getTime() + ", enddate - " + end.getTime());
 		try {
-			Long userId = sessiondataDao.checkSession(SID);
+			Long userId = sessionDao.checkSession(sid);
 			if (AuthLevelUtil.hasUserLevel(userDao.getRights(userId))) {
-				return getAppointments(appointmentDao.getAppointmentsByRange(userId, starttime.getTime(), endtime.getTime()));
+				return AppointmentDTO.list(appointmentDao.getAppointmentsByRange(userId, start.getTime(), end.getTime()));
+			} else {
+				throw new ServiceException("Insufficient permissins"); //TODO code -26
 			}
+		} catch (ServiceException err) {
+			throw err;
 		} catch (Exception err) {
-			log.error("[getAppointmentByRange]", err);
+			log.error("[range]", err);
+			throw new ServiceException(err.getMessage());
 		}
-		return null;
 	}
 
 	/**
 	 * Load appointments by a start / end range for the userId
 	 * 
-	 * @param SID
+	 * @param sid
 	 *            The SID of the User. This SID must be marked as Loggedin
-	 * @param userId
+	 * @param userid
 	 *            the userId the calendar events should be loaded
-	 * @param starttime
-	 *            start time, yyyy-mm-dd
-	 * @param endtime
-	 *            end time, yyyy-mm-dd
+	 * @param start
+	 *            start time
+	 * @param end
+	 *            end time
 	 *            
 	 * @return - list of appointments in range
 	 */
-	public List<AppointmentDTO> getAppointmentByRangeForUserId(String SID, long userId, Calendar starttime, Calendar endtime) {
-		log.debug("getAppointmentByRangeForUserId : startdate - " + starttime.getTime() + ", enddate - " + endtime.getTime());
+	@GET
+	@Path("/{userid}/{start}/{end}")
+	public List<AppointmentDTO> rangeForUser(
+			@QueryParam("sid") @WebParam String sid
+			, @PathParam("userid") @WebParam long userid
+			, @PathParam("start") @WebParam Calendar start
+			, @PathParam("end") @WebParam Calendar end) throws ServiceException
+	{
+		log.debug("rangeForUser : startdate - " + start.getTime() + ", enddate - " + end.getTime());
 		try {
-			Long authUserId = sessiondataDao.checkSession(SID);
+			Long authUserId = sessionDao.checkSession(sid);
 			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(authUserId))) {
-				return getAppointments(appointmentDao.getAppointmentsByRange(userId, starttime.getTime(), endtime.getTime()));
+				return AppointmentDTO.list(appointmentDao.getAppointmentsByRange(userid, start.getTime(), end.getTime()));
+			} else {
+				throw new ServiceException("Insufficient permissins"); //TODO code -26
 			}
+		} catch (ServiceException err) {
+			throw err;
 		} catch (Exception err) {
-			log.error("[getAppointmentByRangeForUserId]", err);
+			log.error("[rangeForUser]", err);
+			throw new ServiceException(err.getMessage());
 		}
-		return null;
 	}
 
 	/**
 	 * Get the next Calendar event for the current user of the SID
 	 * 
-	 * @param SID
+	 * @param sid
 	 *            The SID of the User. This SID must be marked as Loggedin
 	 * @return - next Calendar event
 	 */
-	public AppointmentDTO getNextAppointment(String SID) {
+	@GET
+	@Path("/next")
+	public AppointmentDTO next(@QueryParam("sid") @WebParam String sid) throws ServiceException {
 		try {
-			Long userId = sessiondataDao.checkSession(SID);
+			Long userId = sessionDao.checkSession(sid);
 			if (AuthLevelUtil.hasUserLevel(userDao.getRights(userId))) {
 				return new AppointmentDTO(appointmentDao.getNextAppointment(userId, new Date()));
+			} else {
+				throw new ServiceException("Insufficient permissins"); //TODO code -26
 			}
+		} catch (ServiceException err) {
+			throw err;
 		} catch (Exception err) {
-			log.error("[getNextAppointmentById]", err);
+			log.error("[next]", err);
+			throw new ServiceException(err.getMessage());
 		}
-		return null;
-
 	}
 
 	/**
@@ -178,17 +198,52 @@ public class CalendarWebService {
 	 *            
 	 * @return - next Calendar event
 	 */
-	public AppointmentDTO getNextAppointmentForUserId(String SID, long userId) {
+	@GET
+	@Path("/next/{userid}")
+	public AppointmentDTO nextForUser(@QueryParam("sid") @WebParam String sid, @PathParam("userid") @WebParam long userid) throws ServiceException {
 		try {
-			Long authUserId = sessiondataDao.checkSession(SID);
+			Long authUserId = sessionDao.checkSession(sid);
 			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(authUserId))) {
-				return new AppointmentDTO(appointmentDao.getNextAppointment(userId, new Date()));
+				return new AppointmentDTO(appointmentDao.getNextAppointment(userid, new Date()));
+			} else {
+				throw new ServiceException("Insufficient permissins"); //TODO code -26
 			}
+		} catch (ServiceException err) {
+			throw err;
 		} catch (Exception err) {
-			log.error("[getNextAppointmentById]", err);
+			log.error("[nextForUser]", err);
+			throw new ServiceException(err.getMessage());
+		}
+	}
+
+	/**
+	 * 
+	 * Load a calendar event by its room id
+	 * 
+	 * @param SID
+	 * @param roomId
+	 * @return - calendar event by its room id
+	 */
+	@GET
+	@Path("/room/{roomid}")
+	public AppointmentDTO getByRoom(@QueryParam("sid") @WebParam String sid, @PathParam("roomid") @WebParam long roomid) throws ServiceException {
+		try {
+			Long userId = sessionDao.checkSession(sid);
+			if (AuthLevelUtil.hasUserLevel(userDao.getRights(userId))) {
+				Appointment app = appointmentDao.getAppointmentByOwnerRoom(userId, roomid);
+				if (app != null) {
+					return new AppointmentDTO(app);
+				}
+			} else {
+				throw new ServiceException("Insufficient permissins"); //TODO code -26
+			}
+		} catch (ServiceException err) {
+			throw err;
+		} catch (Exception err) {
+			log.error("[getByRoom]", err);
+			throw new ServiceException(err.getMessage());
 		}
 		return null;
-
 	}
 
 	/**
@@ -201,17 +256,22 @@ public class CalendarWebService {
 	 *            
 	 * @return - calendar event list
 	 */
-	public List<AppointmentDTO> searchAppointmentByTitle(String SID, String appointmentName) {
+	@GET
+	@Path("/title/{title}")
+	public List<AppointmentDTO> getByTitle(@QueryParam("sid") @WebParam String sid, @PathParam("title") @WebParam String title) throws ServiceException {
 		try {
-			Long userId = sessiondataDao.checkSession(SID);
+			Long userId = sessionDao.checkSession(sid);
 			if (AuthLevelUtil.hasUserLevel(userDao.getRights(userId))) {
-				return getAppointments(appointmentDao.searchAppointmentsByTitle(userId, appointmentName));
+				return AppointmentDTO.list(appointmentDao.searchAppointmentsByTitle(userId, title));
+			} else {
+				throw new ServiceException("Insufficient permissins"); //TODO code -26
 			}
+		} catch (ServiceException err) {
+			throw err;
 		} catch (Exception err) {
-			log.error("[searchAppointmentByName]", err);
+			log.error("[getByTitle]", err);
+			throw new ServiceException(err.getMessage());
 		}
-		return null;
-
 	}
 
 	/**
@@ -219,117 +279,34 @@ public class CalendarWebService {
 	 * 
 	 * @param SID
 	 *            The SID of the User. This SID must be marked as Loggedin
-	 * @param appointmentName
-	 *            name of the calendar event
-	 * @param appointmentLocation
-	 *            location info text of the calendar event
-	 * @param appointmentDescription
-	 *            description test of the calendar event
-	 * @param appointmentstart
-	 *            start as Date yyyy-mm-ddThh:mm:ss
-	 * @param appointmentend
-	 *            end as Date yyyy-mm-ddThh:mm:ss
-	 * @param isDaily
-	 *            if the calendar event should be repeated daily (not
-	 *            implemented)
-	 * @param isWeekly
-	 *            if the calendar event should be repeated weekly (not
-	 *            implemented)
-	 * @param isMonthly
-	 *            if the calendar event should be repeated monthly (not
-	 *            implemented)
-	 * @param isYearly
-	 *            if the calendar event should be repeated yearly (not
-	 *            implemented)
-	 * @param categoryId
-	 *            the category id of the calendar event
-	 * @param remind
-	 *            the reminder type of the calendar event
-	 * @param mmClient
-	 *            List of clients, comma separated string, <br/>
-	 *            sample: '1,firstname,lastname,hans.tier@gmail.com,1,Etc/GMT+1'
-	 *            to add multiple clients you can use the same GET parameter in
-	 *            the URL multiple times, for example:
-	 *            &amp;mmClient='1,firstname,lastname,hans.tier@gmail.com,1,Etc/GMT+1'&amp;mmClient='2,firstname,lastname,hans.tier@gmail.com,1,Etc/GMT+1'
-	 *             (Please NOTE mmClient value is enclosed in single quotes)
-	 * @param roomType
-	 *            the room type for the calendar event
-	 * @param languageId
-	 *            the language id of the calendar event, notification emails
-	 *            will be send in this language
-	 * @param isPasswordProtected
-	 *            if the room is password protected
-	 * @param password
-	 *            the password for the room
+	 * @param appointment
+	 *            calendar event 
 	 *            
-	 * @return - id of appointment saved
+	 * @return - appointment saved
 	 */
-	public Long saveAppointment(String SID, String appointmentName,
-			String appointmentLocation, String appointmentDescription,
-			Calendar appointmentstart, Calendar appointmentend,
-			Boolean isDaily, Boolean isWeekly, Boolean isMonthly,
-			Boolean isYearly, Long categoryId, Long remind, String[] mmClient,
-			Long roomType, Long languageId,
-			Boolean isPasswordProtected, String password, long roomId) {
+	@POST
+	@Path("/") //TODO FIXME update is also here for now
+	public AppointmentDTO save(@QueryParam("sid") @WebParam String sid, @QueryParam("appointment") @WebParam AppointmentDTO appointment) throws ServiceException {
 		//Seems to be create
-		log.debug("saveAppointMent SID:" + SID);
+		log.debug("save SID:" + sid);
 
 		try {
-			Long userId = sessiondataDao.checkSession(SID);
-			log.debug("saveAppointMent userId:" + userId);
+			Long userId = sessionDao.checkSession(sid);
+			log.debug("save userId:" + userId);
 
 			if (AuthLevelUtil.hasUserLevel(userDao.getRights(userId))) {
-				Appointment a = appointmentLogic.getAppointment(appointmentName, appointmentLocation, appointmentDescription,
-						appointmentstart, appointmentend, isDaily, isWeekly, isMonthly, isYearly, categoryId, remind,
-						mmClient, roomType, languageId, isPasswordProtected, password, roomId, userId);
-				return appointmentDao.update(a, userId).getId();
+				Appointment a = appointment.get(userDao, appointmentDao, reminderTypeDao, roomTypeDao);
+				return new AppointmentDTO(appointmentDao.update(a, userId));
 			} else {
-				log.error("saveAppointment : wrong user level");
+				log.error("save : wrong user level");
+				throw new ServiceException("Insufficient permissins"); //TODO code -26
 			}
+		} catch (ServiceException err) {
+			throw err;
 		} catch (Exception err) {
-			log.error("[saveAppointment]", err);
+			log.error("[save]", err);
+			throw new ServiceException(err.getMessage());
 		}
-		return null;
-
-	}
-
-	/**
-	 * Update an calendar event time only
-	 * 
-	 * @param SID
-	 *            The SID of the User. This SID must be marked as Loggedin
-	 * @param appointmentId
-	 *            the calendar event that should be updated
-	 * @param appointmentstart
-	 *            start yyyy-mm-dd
-	 * @param appointmentend
-	 *            end yyyy-mm-dd
-	 * @param languageId
-	 *            the language id
-	 *            
-	 * @return - id of appointment updated
-	 */
-	public Long updateAppointmentTimeOnly(String SID, Long appointmentId, Date appointmentstart, Date appointmentend, Long languageId) {
-		try {
-			Long userId = sessiondataDao.checkSession(SID);
-			Set<Right> rights = userDao.getRights(userId);
-			if (AuthLevelUtil.hasUserLevel(rights)) {
-				Appointment a = appointmentDao.get(appointmentId);
-				if (!AuthLevelUtil.hasAdminLevel(rights) && !a.getOwner().getId().equals(userId)) {
-					throw new ServiceException("The Appointment cannot be updated by the given user");
-				}
-				if (!a.getStart().equals(appointmentstart) || !a.getEnd().equals(appointmentend)) {
-					a.setStart(appointmentstart);
-					a.setEnd(appointmentend);
-					//FIXME this might change the owner!!!!!
-					return appointmentDao.update(a, userId).getId();
-				}					
-			}
-		} catch (Exception err) {
-			log.error("[updateAppointment]", err);
-		}
-		return null;
-
 	}
 
 	/**
@@ -393,7 +370,7 @@ public class CalendarWebService {
 			Boolean isPasswordProtected, String password) throws ServiceException {
 		try {
 
-			Long userId = sessiondataDao.checkSession(SID);
+			Long userId = sessionDao.checkSession(SID);
 			Set<Right> rights = userDao.getRights(userId);
 
 			if (AuthLevelUtil.hasWebServiceLevel(rights) || AuthLevelUtil.hasAdminLevel(rights)) {
@@ -419,7 +396,7 @@ public class CalendarWebService {
 			a.setIsMonthly(isMonthly);
 			a.setIsYearly(isYearly);
 			a.setCategory(appointmentCategoryDao.get(categoryId));
-			a.setRemind(appointmentReminderTypDao.get(remind));
+			a.setRemind(reminderTypeDao.get(remind));
 			a.getRoom().setComment(appointmentDescription);
 			a.getRoom().setName(appointmentName);
 			a.getRoom().setRoomtype(roomTypeDao.get(roomType));
@@ -459,7 +436,7 @@ public class CalendarWebService {
 	 */
 	public Long deleteAppointment(String SID, Long appointmentId, Long languageId) throws ServiceException {
 		try {
-			Long userId = sessiondataDao.checkSession(SID);
+			Long userId = sessionDao.checkSession(SID);
 			Set<Right> rights = userDao.getRights(userId);
 
 			Appointment a = appointmentDao.get(appointmentId);
@@ -482,29 +459,6 @@ public class CalendarWebService {
 	}
 
 	/**
-	 * 
-	 * Load a calendar event by its room id
-	 * 
-	 * @param SID
-	 * @param roomId
-	 * @return - calendar event by its room id
-	 */
-	public AppointmentDTO getAppointmentByRoomId(String SID, Long roomId) {
-		try {
-			Long userId = sessiondataDao.checkSession(SID);
-			if (AuthLevelUtil.hasUserLevel(userDao.getRights(userId))) {
-				Appointment appStored = appointmentDao.getAppointmentByOwnerRoom(userId, roomId);
-				if (appStored != null) {
-					return new AppointmentDTO(appStored);
-				}
-			}
-		} catch (Exception err) {
-			log.error("[getAppointmentByRoomId]", err);
-		}
-		return null;
-	}
-
-	/**
 	 * Get all categories of calendar events
 	 * 
 	 * @param SID
@@ -514,7 +468,7 @@ public class CalendarWebService {
 		log.debug("AppointmenetCategoryService.getAppointmentCategoryList SID : " + SID);
 
 		try {
-			Long userId = sessiondataDao.checkSession(SID);
+			Long userId = sessionDao.checkSession(SID);
 
 			if (AuthLevelUtil.hasUserLevel(userDao.getRights(userId))) {
 				List<AppointmentCategory> res = appointmentCategoryDao.getAppointmentCategoryList();
@@ -556,14 +510,238 @@ public class CalendarWebService {
 		log.debug("getAppointmentReminderTypList");
 
 		try {
-			Long userId = sessiondataDao.checkSession(SID);
+			Long userId = sessionDao.checkSession(SID);
 			if (AuthLevelUtil.hasUserLevel(userDao.getRights(userId))) {
-				return getReminders(appointmentReminderTypDao.get());
+				return getReminders(reminderTypeDao.get());
 			} else
 				log.debug("getAppointmentReminderTypList  :error - wrong authlevel!");
 		} catch (Exception err) {
 			log.error("[getAppointmentReminderTypList]", err);
 		}
 		return null;
+	}
+
+	/**
+	 * Adds a conference room that is only available for a period of time
+	 * 
+	 * @param SID
+	 *            The SID of the User. This SID must be marked as Loggedin
+	 * @param name
+	 *            new name of the room
+	 * @param roomtypesId
+	 *            new type of room (1 = Conference, 2 = Audience, 3 =
+	 *            Restricted, 4 = Interview)
+	 * @param comment
+	 *            new comment
+	 * @param numberOfPartizipants
+	 *            new numberOfParticipants
+	 * @param ispublic
+	 *            is public
+	 * @param appointment
+	 *            if the room is an appointment
+	 * @param isDemoRoom
+	 *            is it a Demo Room with limited time? (use false if not sure
+	 *            what that means)
+	 * @param demoTime
+	 *            time in seconds after the user will be logged out (only
+	 *            enabled if isDemoRoom is true)
+	 * @param isModeratedRoom
+	 *            Users have to wait until a Moderator arrives. Use the
+	 *            becomeModerator parameter in setUserObjectAndGenerateRoomHash
+	 *            to set a user as default Moderator
+	 * @param externalRoomType
+	 *            the external room type (can be used to identify different
+	 *            external systems using same OpenMeetings instance)
+	 * @param validFromDate
+	 *            valid from as Date format: dd.MM.yyyy
+	 * @param validFromTime
+	 *            valid to as time format: mm:hh
+	 * @param validToDate
+	 *            valid to Date format: dd.MM.yyyy
+	 * @param validToTime
+	 *            valid to time format: mm:hh
+	 * @param isPasswordProtected
+	 *            If the links send via EMail to invited people is password
+	 *            protected
+	 * @param password
+	 *            Password for Invitations send via Mail
+	 * @param reminderTypeId
+	 *            1=none, 2=simple mail, 3=ICAL
+	 * @param redirectURL
+	 *            URL Users will be lead to if the Conference Time is elapsed
+	 *            
+	 * @return - id of the room in case of success, error code otherwise
+	 * @throws ServiceException
+	 *//*
+	public Long addRoomWithModerationAndExternalTypeAndStartEnd(String SID,
+			String name, Long roomtypesId, String comment,
+			Long numberOfPartizipants, Boolean ispublic, Boolean appointment,
+			Boolean isDemoRoom, Integer demoTime, Boolean isModeratedRoom,
+			String externalRoomType, String validFromDate,
+			String validFromTime, String validToDate, String validToTime,
+			Boolean isPasswordProtected, String password, Long reminderTypeId,
+			String redirectURL) throws ServiceException {
+		try {
+			Long userId = sessionDao.checkSession(SID);
+
+			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(userId))) {
+				int validFromHour = Integer.valueOf(validFromTime.substring(0, 2)).intValue();
+				int validFromMinute = Integer.valueOf(validFromTime.substring(3, 5)).intValue();
+
+				int validToHour = Integer.valueOf(validToTime.substring(0, 2)).intValue();
+				int validToMinute = Integer.valueOf(validToTime.substring(3, 5)).intValue();
+
+				log.info("validFromHour: " + validFromHour);
+				log.info("validFromMinute: " + validFromMinute);
+
+				Date fromDate = CalendarPatterns.parseDateBySeparator(validFromDate); // dd.MM.yyyy
+				Date toDate = CalendarPatterns.parseDateBySeparator(validToDate); // dd.MM.yyyy
+
+				if (fromDate == null || toDate == null) {
+					throw new ServiceException("Invalid dates are passed");
+				}
+				Calendar calFrom = Calendar.getInstance();
+				calFrom.setTime(fromDate);
+				calFrom.set(calFrom.get(Calendar.YEAR),
+						calFrom.get(Calendar.MONTH),
+						calFrom.get(Calendar.DATE), validFromHour,
+						validFromMinute, 0);
+
+				Calendar calTo = Calendar.getInstance();
+				calTo.setTime(toDate);
+				calTo.set(calTo.get(Calendar.YEAR), calTo.get(Calendar.MONTH),
+						calTo.get(Calendar.DATE), validToHour, validToMinute, 0);
+
+				Date dFrom = calFrom.getTime();
+				Date dTo = calTo.getTime();
+
+				log.info("validFromDate: " + CalendarPatterns.getDateWithTimeByMiliSeconds(dFrom));
+				log.info("validToDate: " + CalendarPatterns.getDateWithTimeByMiliSeconds(dTo));
+
+				Long roomId = roomManager.addExternalRoom(name,
+						roomtypesId, comment, numberOfPartizipants, ispublic,
+						null, appointment, isDemoRoom, demoTime,
+						isModeratedRoom, null, null, externalRoomType, false, // allowUserQuestions
+						false, // isAudioOnly
+						true,  // allowFontStyles
+						false, // isClosed
+						redirectURL, false, true, false);
+
+				if (roomId <= 0) {
+					return roomId;
+				}
+
+				Appointment a = new Appointment();
+				a.setTitle("appointmentName");
+				a.setOwner(userDao.get(userId));
+				a.setLocation("appointmentLocation");
+				a.setDescription("appointmentDescription");
+				a.setStart(dFrom);
+				a.setEnd(dTo);
+				a.setCategory(appointmentCategoryDao.get(1L));
+				a.setRemind(reminderTypeDao.get(reminderTypeId));
+				a.setRoom(roomDao.get(roomId));
+				a.setPasswordProtected(isPasswordProtected);
+				a.setPassword(password);
+				a.setLanguageId(1L); //TODO check
+				appointmentDao.update(a, userId); //FIXME verify !!!
+
+				return roomId;
+
+			} else {
+				return -2L;
+			}
+		} catch (Exception err) {
+			log.error("[addRoomWithModeration] ", err);
+
+			throw new ServiceException(err.getMessage());
+		}
+		// return new Long(-1);
+		// return numberOfPartizipants;
+	}*/
+
+	/**
+	 * Add a meeting member to a certain room. This is the same as adding an
+	 * external user to a event in the calendar.
+	 * 
+	 * @param SID
+	 *            The SID of the User. This SID must be marked as Loggedin
+	 * @param roomId
+	 *            The Room Id the meeting member is going to be added
+	 * @param firstname
+	 *            The first name of the meeting member
+	 * @param lastname
+	 *            The last name of the meeting member
+	 * @param email
+	 *            The email of the Meeting member
+	 * @param languageId
+	 *            The ID of the language, for the email that is send to the
+	 *            meeting member
+	 *            
+	 * @return - id of the member in case of success, error code otherwise
+	 * @throws ServiceException
+	 */
+	public Long addMeetingMemberRemindToRoom(String SID, Long roomId,
+			String firstname, String lastname, String email, Long languageId) throws ServiceException {
+		return addExternalMeetingMemberRemindToRoom(SID, roomId, firstname, lastname, email, languageId, null, null);
+	}
+
+	/**
+	 * Add a meeting member to a certain room. This is the same as adding an
+	 * external user to a event in the calendar. with a certain time zone
+	 * 
+	 * @param SID
+	 *            The SID of the User. This SID must be marked as Loggedin
+	 * @param roomId
+	 *            The Room Id the meeting member is going to be added
+	 * @param firstname
+	 *            The first name of the meeting member
+	 * @param lastname
+	 *            The last name of the meeting member
+	 * @param email
+	 *            The email of the Meeting member
+	 * @param languageId
+	 *            The ID of the language, for the email that is send to the
+	 *            meeting member
+	 * @param jNameTimeZone
+	 *            name of the timezone
+	 * @param invitorName
+	 *            name of invitation creators
+	 *            
+	 * @return - id of the member in case of success, error code otherwise
+	 * @throws ServiceException
+	 */
+	public Long addExternalMeetingMemberRemindToRoom(String SID, Long roomId,
+			String firstname, String lastname, String email, Long languageId, String jNameTimeZone, String invitorName)
+			throws ServiceException {
+		try {
+			Long userId = sessionDao.checkSession(SID);
+
+			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(userId))) {
+				Appointment a = appointmentDao.getAppointmentByRoom(roomId);
+
+				if (email == null || a == null) {
+					return -1L;
+				}
+				for (MeetingMember mm : a.getMeetingMembers()) {
+					if (email.equals(mm.getUser().getAddress().getEmail())) {
+						return mm.getId();
+					}
+				}
+				MeetingMember mm = new MeetingMember();
+				mm.setAppointment(a);
+				mm.setUser(userDao.getContact(email, firstname, lastname, languageId, jNameTimeZone, userId));
+				a.getMeetingMembers().add(mm);
+				appointmentDao.update(a, userId);
+
+				return mm.getId(); //FIXME check to return ID
+			} else {
+				return -2L;
+			}
+		} catch (Exception err) {
+			log.error("[addExternalMeetingMemberRemindToRoom] ", err);
+
+			throw new ServiceException(err.getMessage());
+		}
 	}
 }

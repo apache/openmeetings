@@ -70,6 +70,7 @@ import org.simpleframework.xml.Root;
 			+ "AND rt.id = :roomtypesId AND c.deleted = false"),
 	@NamedQuery(name = "getPublicRoomsOrdered", query = "SELECT r from Room r WHERE r.ispublic= true AND r.deleted= false AND r.appointment = false ORDER BY r.name ASC"),
 	@NamedQuery(name = "getRoomById", query = "SELECT r FROM Room r WHERE r.deleted = false AND r.id = :id"),
+	@NamedQuery(name = "getRoomsByIds", query = "SELECT r FROM Room r WHERE r.deleted = false AND r.id IN :ids"),
 	@NamedQuery(name = "getSipRoomIdsByIds", query = "SELECT r.id FROM Room r WHERE r.deleted = false AND r.sipEnabled = true AND r.id IN :ids"),
 	@NamedQuery(name = "countRooms", query = "SELECT COUNT(r) FROM Room r WHERE r.deleted = false"),
 	@NamedQuery(name = "getBackupRooms", query = "SELECT r FROM Room r ORDER BY r.id"),
@@ -130,15 +131,15 @@ public class Room implements IDataProviderEntity {
 	// Vars to simulate external Room
 	@Column(name = "externalRoomId")
 	@Element(data = true, required = false)
-	private Long externalRoomId;
+	private Long externalId;
 
 	@Column(name = "externalRoomType")
 	@Element(data = true, required = false)
-	private String externalRoomType;
+	private String externalType;
 
 	@Column(name = "isdemoroom")
 	@Element(data = true, required = false)
-	private Boolean isDemoRoom;
+	private boolean isDemoRoom;
 
 	@Column(name = "demo_time")
 	@Element(data = true, required = false)
@@ -152,7 +153,7 @@ public class Room implements IDataProviderEntity {
 
 	@Column(name = "allow_user_questions")
 	@Element(data = true, required = false)
-	private Boolean allowUserQuestions;
+	private boolean allowUserQuestions;
 
 	@Column(name = "is_audio_only")
 	@Element(name = "isAudioOnly", data = true, required = false)
@@ -164,7 +165,7 @@ public class Room implements IDataProviderEntity {
 
 	@Column(name = "is_closed")
 	@Element(data = true, required = false)
-	private Boolean isClosed;
+	private boolean isClosed;
 
 	@Column(name = "redirect_url")
 	@Element(data = true, required = false)
@@ -176,7 +177,7 @@ public class Room implements IDataProviderEntity {
 
 	@Column(name = "wait_for_recording")
 	@Element(data = true, required = false)
-	private Boolean waitForRecording; // Show warning that user has to start
+	private boolean waitForRecording; // Show warning that user has to start
 										// recording
 
 	@Column(name = "allow_recording")
@@ -187,51 +188,51 @@ public class Room implements IDataProviderEntity {
 	 */
 	@Column(name = "hide_top_bar")
 	@Element(data = true, required = false)
-	private Boolean hideTopBar = false;
+	private boolean hideTopBar;
 
 	@Column(name = "hide_chat")
 	@Element(name = "hideChat", data = true, required = false)
-	private boolean chatHidden = false;
+	private boolean chatHidden;
 
 	@Column(name = "hide_activities_and_actions")
 	@Element(name = "hideActivitiesAndActions", data = true, required = false)
-	private boolean activitiesHidden = false;
+	private boolean activitiesHidden;
 
 	@Column(name = "hide_files_explorer")
 	@Element(data = true, required = false)
-	private Boolean hideFilesExplorer = false;
+	private boolean hideFilesExplorer;
 
 	@Column(name = "hide_actions_menu")
 	@Element(data = true, required = false)
-	private Boolean hideActionsMenu = false;
+	private boolean hideActionsMenu;
 
 	@Column(name = "hide_screen_sharing")
 	@Element(data = true, required = false)
-	private Boolean hideScreenSharing = false;
+	private boolean hideScreenSharing;
 
 	@Column(name = "hide_whiteboard")
 	@Element(data = true, required = false)
-	private Boolean hideWhiteboard = false;
+	private boolean hideWhiteboard;
 
 	@Column(name = "show_microphone_status")
 	@Element(data = true, required = false)
-	private Boolean showMicrophoneStatus = false;
+	private boolean showMicrophoneStatus;
 
 	@Column(name = "chat_moderated")
 	@Element(data = true, required = false)
-	private boolean chatModerated = false;
+	private boolean chatModerated;
 
 	@Column(name = "chat_opened")
 	@Element(data = true, required = false)
-	private boolean chatOpened = false;
+	private boolean chatOpened;
 
 	@Column(name = "files_opened")
 	@Element(data = true, required = false)
-	private boolean filesOpened = false;
+	private boolean filesOpened;
 
 	@Column(name = "auto_video_select")
 	@Element(data = true, required = false)
-	private boolean autoVideoSelect = false;
+	private boolean autoVideoSelect;
 
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "roomId")
@@ -348,11 +349,11 @@ public class Room implements IDataProviderEntity {
 		this.appointment = appointment;
 	}
 
-	public Boolean getIsDemoRoom() {
+	public boolean getIsDemoRoom() {
 		return isDemoRoom;
 	}
 
-	public void setIsDemoRoom(Boolean isDemoRoom) {
+	public void setIsDemoRoom(boolean isDemoRoom) {
 		this.isDemoRoom = isDemoRoom;
 	}
 
@@ -372,27 +373,27 @@ public class Room implements IDataProviderEntity {
 		this.moderated = moderated;
 	}
 
-	public Long getExternalRoomId() {
-		return externalRoomId;
+	public Long getExternalId() {
+		return externalId;
 	}
 
-	public void setExternalRoomId(Long externalRoomId) {
-		this.externalRoomId = externalRoomId;
+	public void setExternalId(Long externalId) {
+		this.externalId = externalId;
 	}
 
-	public String getExternalRoomType() {
-		return externalRoomType;
+	public String getExternalType() {
+		return externalType;
 	}
 
-	public void setExternalRoomType(String externalRoomType) {
-		this.externalRoomType = externalRoomType;
+	public void setExternalType(String externalType) {
+		this.externalType = externalType;
 	}
 
-	public Boolean getAllowUserQuestions() {
+	public boolean getAllowUserQuestions() {
 		return allowUserQuestions;
 	}
 
-	public void setAllowUserQuestions(Boolean allowUserQuestions) {
+	public void setAllowUserQuestions(boolean allowUserQuestions) {
 		this.allowUserQuestions = allowUserQuestions;
 	}
 
@@ -412,11 +413,11 @@ public class Room implements IDataProviderEntity {
 		this.allowFontStyles = allowFontStyles;
 	}
 
-	public Boolean getIsClosed() {
+	public boolean getIsClosed() {
 		return isClosed;
 	}
 
-	public void setIsClosed(Boolean isClosed) {
+	public void setIsClosed(boolean isClosed) {
 		this.isClosed = isClosed;
 	}
 
@@ -436,11 +437,11 @@ public class Room implements IDataProviderEntity {
 		this.ownerId = ownerId;
 	}
 
-	public Boolean getWaitForRecording() {
+	public boolean getWaitForRecording() {
 		return waitForRecording;
 	}
 
-	public void setWaitForRecording(Boolean waitForRecording) {
+	public void setWaitForRecording(boolean waitForRecording) {
 		this.waitForRecording = waitForRecording;
 	}
 
@@ -452,11 +453,11 @@ public class Room implements IDataProviderEntity {
 		this.allowRecording = allowRecording;
 	}
 
-	public Boolean getHideTopBar() {
+	public boolean getHideTopBar() {
 		return hideTopBar;
 	}
 
-	public void setHideTopBar(Boolean hideTopBar) {
+	public void setHideTopBar(boolean hideTopBar) {
 		this.hideTopBar = hideTopBar;
 	}
 
@@ -476,43 +477,43 @@ public class Room implements IDataProviderEntity {
 		this.activitiesHidden = activitiesHidden;
 	}
 
-	public Boolean getHideFilesExplorer() {
+	public boolean getHideFilesExplorer() {
 		return hideFilesExplorer;
 	}
 
-	public void setHideFilesExplorer(Boolean hideFilesExplorer) {
+	public void setHideFilesExplorer(boolean hideFilesExplorer) {
 		this.hideFilesExplorer = hideFilesExplorer;
 	}
 
-	public Boolean getHideActionsMenu() {
+	public boolean getHideActionsMenu() {
 		return hideActionsMenu;
 	}
 
-	public void setHideActionsMenu(Boolean hideActionsMenu) {
+	public void setHideActionsMenu(boolean hideActionsMenu) {
 		this.hideActionsMenu = hideActionsMenu;
 	}
 
-	public Boolean getHideScreenSharing() {
+	public boolean getHideScreenSharing() {
 		return hideScreenSharing;
 	}
 
-	public void setHideScreenSharing(Boolean hideScreenSharing) {
+	public void setHideScreenSharing(boolean hideScreenSharing) {
 		this.hideScreenSharing = hideScreenSharing;
 	}
 
-	public Boolean getHideWhiteboard() {
+	public boolean getHideWhiteboard() {
 		return hideWhiteboard;
 	}
 
-	public void setHideWhiteboard(Boolean hideWhiteboard) {
+	public void setHideWhiteboard(boolean hideWhiteboard) {
 		this.hideWhiteboard = hideWhiteboard;
 	}
 
-	public Boolean getShowMicrophoneStatus() {
+	public boolean getShowMicrophoneStatus() {
 		return showMicrophoneStatus;
 	}
 
-	public void setShowMicrophoneStatus(Boolean showMicrophoneStatus) {
+	public void setShowMicrophoneStatus(boolean showMicrophoneStatus) {
 		this.showMicrophoneStatus = showMicrophoneStatus;
 	}
 

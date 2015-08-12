@@ -54,9 +54,11 @@ public class RoomDao implements IDataProviderDao<Room> {
     @Autowired
     private SipDao sipDao;
 	@Autowired
-	private UserDao usersDao;
+	private UserDao userDao;
 	@Autowired
 	private TimezoneUtil timezoneUtil;
+	@Autowired
+	private RoomTypeDao roomTypeDao;
 
 	public Room get(long id) {
 		TypedQuery<Room> q = em.createNamedQuery("getRoomById", Room.class);
@@ -76,6 +78,10 @@ public class RoomDao implements IDataProviderDao<Room> {
 		return kq.getResultList();
 	}
 	
+	public List<Room> get(List<Long> ids) {
+		return em.createNamedQuery("getRoomsByIds", Room.class).setParameter("ids", ids).getResultList();
+	}
+
 	public List<Room> get(int start, int count) {
 		TypedQuery<Room> q = em.createNamedQuery("getNondeletedRooms", Room.class);
 		q.setFirstResult(start);
@@ -124,7 +130,7 @@ public class RoomDao implements IDataProviderDao<Room> {
 		//TODO generalize with AppointmentDao
 		log.debug("getAppointedRoomsByUser : UserID - " + userId);
 
-		TimeZone timeZone = timezoneUtil.getTimeZone(usersDao.get(userId));
+		TimeZone timeZone = timezoneUtil.getTimeZone(userDao.get(userId));
 
 		Calendar startCal = Calendar.getInstance(timeZone);
 		startCal.set(Calendar.MINUTE, 0);
@@ -185,5 +191,54 @@ public class RoomDao implements IDataProviderDao<Room> {
 		entity.setDeleted(true);
 		entity.setSipEnabled(false);
 		update(entity, userId);
+	}
+
+	public Room getUserRoom(Long ownerId, Long typeId, String name) {
+		if (typeId == null || typeId == 0) {
+			return null;
+		}
+		log.debug("getRoomByOwnerAndTypeId : " + ownerId + " || " + typeId);
+		Room room = null;
+		List<Room> ll = em.createNamedQuery("getRoomByOwnerAndTypeId", Room.class).setParameter("ownerId", ownerId).setParameter("roomtypesId", typeId).getResultList();
+		if (ll.size() > 0) {
+			room = ll.get(0);
+		}
+
+		if (room == null) {
+			log.debug("Could not find room " + ownerId + " || " + typeId);
+			
+			room = new Room();
+			room.setName(name);
+			room.setRoomtype(roomTypeDao.get(typeId));
+			room.setComment("My Rooms of ownerId " + ownerId);
+			room.setNumberOfPartizipants(typeId == 1 ? 25L : 150L);
+			room.setAllowUserQuestions(true);
+			room.setAllowFontStyles(true);
+			room.setOwnerId(ownerId);
+			room.setAllowRecording(true);
+
+			room = update(room, ownerId);
+			if (room.getId() != null) {
+				return room;
+			}
+			return null;
+		} else {
+			return room;
+		}
+	}
+
+	public Room getExternal(long typeId, String externalType, Long externalId) {
+		log.debug("getExternal : " + externalId + " - " + externalType + " - " + typeId);
+		List<Room> ll = em.createNamedQuery("getRoomByExternalId", Room.class)
+				.setParameter("externalRoomId", externalId)
+				.setParameter("externalRoomType", externalType)
+				.setParameter("roomtypesId", typeId)
+				.getResultList();
+		if (ll.size() > 0) {
+			return ll.get(0);
+		} else {
+			log.error("Could not find room " + externalId);
+			return null;
+		}
 	}
 }

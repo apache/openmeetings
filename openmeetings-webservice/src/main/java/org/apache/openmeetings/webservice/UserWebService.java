@@ -34,6 +34,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import org.apache.cxf.feature.Features;
+import org.apache.openmeetings.core.remote.ConferenceService;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.server.SOAPLoginDao;
 import org.apache.openmeetings.db.dao.server.SessiondataDao;
@@ -41,6 +42,8 @@ import org.apache.openmeetings.db.dao.user.IUserManager;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.dto.basic.ServiceResult;
 import org.apache.openmeetings.db.dto.basic.ServiceResult.Type;
+import org.apache.openmeetings.db.dto.room.RoomOptionsDTO;
+import org.apache.openmeetings.db.dto.user.ExternalUserDTO;
 import org.apache.openmeetings.db.dto.user.UserDTO;
 import org.apache.openmeetings.db.entity.server.RemoteSessionObject;
 import org.apache.openmeetings.db.entity.server.Sessiondata;
@@ -74,7 +77,7 @@ public class UserWebService {
 	private static final Logger log = Red5LoggerFactory.getLogger(UserWebService.class, webAppRootKey);
 
 	@Autowired
-	private ConfigurationDao configurationDao;
+	private ConfigurationDao cfgDao;
 	@Autowired
 	private IUserManager userManagement;
 	@Autowired
@@ -83,6 +86,8 @@ public class UserWebService {
 	private UserDao userDao;
 	@Autowired
 	private SessiondataDao sessionDao;
+	@Autowired
+	private ConferenceService conferenceService;
 
 	/**
 	 * @param login - login or email of Openmeetings user with admin or SOAP-rights
@@ -131,7 +136,7 @@ public class UserWebService {
 	 */
 	@POST
 	@Path("/")
-	public Long add(
+	public UserDTO add(
 			@WebParam @QueryParam("sid") String sid
 			, @WebParam @QueryParam("user") UserDTO user
 			, @WebParam @QueryParam("email") Boolean email
@@ -147,7 +152,7 @@ public class UserWebService {
 					throw new ServiceException("User does already exist!");
 				}
 
-				String jName_timeZone = configurationDao.getConfValue("default.timezone", String.class, "");
+				String jName_timeZone = cfgDao.getConfValue("default.timezone", String.class, "");
 				if (user.getAddress() == null) {
 					user.setAddress(new Address());
 					State s = new State();
@@ -165,7 +170,7 @@ public class UserWebService {
 						jName_timeZone, email);
 
 				if (userId == null || userId < 0) {
-					return userId;
+					throw new ServiceException("Unknown error");
 				}
 
 				User u = userDao.get(userId);
@@ -180,15 +185,12 @@ public class UserWebService {
 					u.setExternalType(user.getExternalType());
 				}
 
-				userDao.update(u, authUserId);
+				u = userDao.update(u, authUserId);
 
-				return userId;
-
+				return new UserDTO(u);
 			} else {
-				return new Long(-26);
+				throw new ServiceException("Insufficient permissins"); //TODO code -26
 			}
-		} catch (ServiceException err) {
-			throw err;
 		} catch (Exception err) {
 			log.error("addNewUser", err);
 			throw new ServiceException(err.getMessage());
@@ -274,45 +276,31 @@ public class UserWebService {
 	 * Session-Object you can use the SID + a RoomId to enter any Room. ...
 	 * Session-Hashs are deleted 15 minutes after the creation if not used.
 	 * 
-	 * @param SID
+	 * @param sid
 	 *            The SID from getSession
-	 * @param username
-	 *            any username
-	 * @param firstname
-	 *            any firstname
-	 * @param lastname
-	 *            any lastname
-	 * @param profilePictureUrl
-	 *            any profilePictureUrl
-	 * @param email
-	 *            any email
-	 * @param externalUserId
-	 *            if you have any external user Id you may set it here
-	 * @param externalUserType
-	 *            you can specify your system-name here, for example "moodle"
-	 * @param roomId
-	 *            the room id the user should be logged in
-	 * @param becomeModeratorAsInt
-	 *            0 means no Moderator, 1 means Moderator
-	 * @param showAudioVideoTestAsInt
-	 *            0 means don't show Audio/Video Test, 1 means show Audio/Video
-	 *            Test Application before the user is logged into the room
+	 * @param user
+	 *            user details to set
+	 * @param options
+	 *            room options to set
 	 *            
 	 * @return - secure hash or error code
 	 * @throws ServiceException
 	 */
-	public String setUserObjectAndGenerateRoomHash(String SID, String username,
-			String firstname, String lastname, String profilePictureUrl,
-			String email, String externalUserId, String externalUserType,
-			Long roomId, int becomeModeratorAsInt, int showAudioVideoTestAsInt)
-			throws ServiceException {
+	@POST
+	@Path("/hash")
+	public ServiceResult getRoomHash(
+			@WebParam @QueryParam("sid") String sid
+			, @WebParam @QueryParam("user") ExternalUserDTO user
+			, @WebParam @QueryParam("options") RoomOptionsDTO options
+			) throws ServiceException
+	{
 		try {
-			Long userId = sessionDao.checkSession(SID);
+			Long userId = sessionDao.checkSession(sid);
 			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(userId))) {
-
 				RemoteSessionObject remoteSessionObject = new RemoteSessionObject(
-						username, firstname, lastname, profilePictureUrl,
-						email, externalUserId, externalUserType);
+						user.getLogin(), user.getFirstname(), user.getLastname()
+						, user.getProfilePictureUrl(), user.getEmail()
+						, user.getExternalId(), user.getExternalType());
 
 				log.debug(remoteSessionObject.toString());
 
@@ -320,458 +308,28 @@ public class UserWebService {
 
 				log.debug("xmlString " + xmlString);
 
-				sessionDao.updateUserRemoteSession(SID, xmlString);
+				sessionDao.updateUserRemoteSession(sid, xmlString);
 
-				boolean becomeModerator = false;
-				if (becomeModeratorAsInt != 0) {
-					becomeModerator = true;
-				}
-
-				boolean showAudioVideoTest = false;
-				if (showAudioVideoTestAsInt != 0) {
-					showAudioVideoTest = true;
-				}
-
-				String hash = soapLoginDao.addSOAPLogin(SID, roomId,
-						becomeModerator, showAudioVideoTest, false, // allowSameURLMultipleTimes
-						null, // recordingId
-						false, // showNickNameDialogAsInt
+				//TODO LandingZone are not configurable for now
+				String hash = soapLoginDao.addSOAPLogin(sid, options.getRoomId(),
+						options.isModerator(), options.isShowAudioVideoTest(), options.isAllowSameURLMultipleTimes(),
+						options.getRecordingId(),
+						options.isShowNickNameDialog(),
 						"room", // LandingZone,
-						true // allowRecording
+						options.isAllowRecording()
 						);
 
 				if (hash != null) {
-					return hash;
+					return new ServiceResult(0, hash, Type.SUCCESS);
 				}
-
 			} else {
-				return "" + new Long(-26);
+				return new ServiceResult(-26L, "Insufficient permissins", Type.ERROR);
 			}
 		} catch (Exception err) {
 			log.error("setUserObjectWithAndGenerateRoomHash", err);
 			throw new ServiceException(err.getMessage());
 		}
-		return "" + new Long(-1);
-	}
-
-	/**
-	 * 
-	 * Description: sets the SessionObject for a certain SID, after setting this
-	 * Session-Object you can use the SID + a RoomId to enter any Room.
-	 * 
-	 * ++ the user can press f5 to reload the page / use the link several times,
-	 * the SOAP Gateway does remember the IP of the user and the will only the
-	 * first user that enters the room allow to re-enter. ... Session-Hashs are
-	 * deleted 15 minutes after the creation if not used.
-	 * 
-	 * @param SID
-	 *            The SID from getSession
-	 * @param username
-	 *            any username
-	 * @param firstname
-	 *            any firstname
-	 * @param lastname
-	 *            any lastname
-	 * @param profilePictureUrl
-	 *            any profilePictureUrl
-	 * @param email
-	 *            any email any email
-	 * @param externalUserId
-	 *            if you have any external user Id you may set it here
-	 * @param externalUserType
-	 *            you can specify your system-name here, for example "moodle"
-	 * @param roomId
-	 *            the room id the user should be logged in
-	 * @param becomeModeratorAsInt
-	 *            0 means no Moderator, 1 means Moderator
-	 * @param showAudioVideoTestAsInt
-	 *            0 means don't show Audio/Video Test, 1 means show Audio/Video
-	 *            Test Application before the user is logged into the room
-	 *            
-	 * @return - secure hash or error code
-	 */
-	public String setUserObjectAndGenerateRoomHashByURL(String SID,
-			String username, String firstname, String lastname,
-			String profilePictureUrl, String email, String externalUserId,
-			String externalUserType, Long roomId, int becomeModeratorAsInt,
-			int showAudioVideoTestAsInt) throws ServiceException {
-
-		log.debug("UserService.setUserObjectAndGenerateRoomHashByURL");
-		try {
-			Long userId = sessionDao.checkSession(SID);
-			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(userId))) {
-
-				RemoteSessionObject remoteSessionObject = new RemoteSessionObject(
-						username, firstname, lastname, profilePictureUrl,
-						email, externalUserId, externalUserType);
-
-				log.debug(remoteSessionObject.toString());
-
-				String xmlString = remoteSessionObject.toXml();
-
-				log.debug("xmlString " + xmlString);
-
-				sessionDao.updateUserRemoteSession(SID, xmlString);
-
-				boolean becomeModerator = false;
-				if (becomeModeratorAsInt != 0) {
-					becomeModerator = true;
-				}
-
-				boolean showAudioVideoTest = false;
-				if (showAudioVideoTestAsInt != 0) {
-					showAudioVideoTest = true;
-				}
-
-				String hash = soapLoginDao.addSOAPLogin(SID, roomId,
-						becomeModerator, showAudioVideoTest, true, // allowSameURLMultipleTimes
-						null, // recordingId
-						false, // showNickNameDialogAsInt
-						"room", // LandingZone,
-						true // allowRecording
-						);
-
-				if (hash != null) {
-					return hash;
-				}
-
-			} else {
-				return "" + new Long(-26);
-			}
-		} catch (Exception err) {
-			log.error("setUserObjectAndGenerateRoomHashByURL", err);
-			throw new ServiceException(err.getMessage());
-		}
-		return "" + new Long(-1);
-	}
-
-	/**
-	 * 
-	 * Description: sets the SessionObject for a certain SID, after setting this
-	 * Session-Object you can use the SID + a RoomId to enter any Room.
-	 * 
-	 * ++ the user can press f5 to reload the page / use the link several times,
-	 * the SOAP Gateway does remember the IP of the user and the will only the
-	 * first user that enters the room allow to re-enter. ... Session-Hashs are
-	 * deleted 15 minutes after the creation if not used.
-	 * 
-	 * ++ sets the flag if the user can do recording in the conference room
-	 * 
-	 * @param SID
-	 *            The SID from getSession
-	 * @param username
-	 *            any username
-	 * @param firstname
-	 *            any firstname
-	 * @param lastname
-	 *            any lastname
-	 * @param profilePictureUrl
-	 *            any profilePictureUrl
-	 * @param email
-	 *            any email
-	 * @param externalUserId
-	 *            if you have any external user Id you may set it here
-	 * @param externalUserType
-	 *            you can specify your system-name here, for example "moodle"
-	 * @param roomId
-	 *            the room id the user should be logged in
-	 * @param becomeModeratorAsInt
-	 *            0 means no Moderator, 1 means Moderator
-	 * @param showAudioVideoTestAsInt
-	 *            0 means don't show Audio/Video Test, 1 means show Audio/Video
-	 *            Test Application before the user is logged into the room
-	 * @param allowRecording
-	 *            0 means don't allow Recording, 1 means allow Recording
-	 *            
-	 * @return - secure hash or error code
-	 */
-	public String setUserObjectAndGenerateRoomHashByURLAndRecFlag(String SID,
-			String username, String firstname, String lastname,
-			String profilePictureUrl, String email, String externalUserId,
-			String externalUserType, Long roomId, int becomeModeratorAsInt,
-			int showAudioVideoTestAsInt, int allowRecording) {
-		try {
-			Long userId = sessionDao.checkSession(SID);
-			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(userId))) {
-
-				RemoteSessionObject remoteSessionObject = new RemoteSessionObject(
-						username, firstname, lastname, profilePictureUrl,
-						email, externalUserId, externalUserType);
-
-				log.debug(remoteSessionObject.toString());
-
-				String xmlString = remoteSessionObject.toXml();
-
-				log.debug("xmlString " + xmlString);
-
-				sessionDao.updateUserRemoteSession(SID, xmlString);
-
-				boolean becomeModerator = false;
-				if (becomeModeratorAsInt != 0) {
-					becomeModerator = true;
-				}
-
-				boolean showAudioVideoTest = false;
-				if (showAudioVideoTestAsInt != 0) {
-					showAudioVideoTest = true;
-				}
-
-				boolean allowRecordingBool = false;
-				if (allowRecording != 0) {
-					allowRecordingBool = true;
-				}
-
-				String hash = soapLoginDao.addSOAPLogin(SID, roomId,
-						becomeModerator, showAudioVideoTest, true, // allowSameURLMultipleTimes
-						null, // recordingId
-						false, // showNickNameDialogAsInt
-						"room", // LandingZone,
-						allowRecordingBool // allowRecording
-						);
-
-				if (hash != null) {
-					return hash;
-				}
-
-			} else {
-				return "" + new Long(-26);
-			}
-		} catch (Exception err) {
-			log.error("setUserObjectWithAndGenerateRoomHash", err);
-		}
-		return "" + new Long(-1);
-	}
-
-	/**
-	 * 
-	 * Description: sets the SessionObject for a certain SID, after setting this
-	 * Session-Object you can use the SID and directly login into the dashboard
-	 * 
-	 * ++ the user can press f5 to reload the page / use the link several times,
-	 * the SOAP Gateway does remember the IP of the user and the will only the
-	 * first user that enters the room allow to re-enter. ... Session-Hashs are
-	 * deleted 15 minutes after the creation if not used.
-	 * 
-	 * @param SID
-	 *            The SID from getSession
-	 * @param username
-	 *            any username
-	 * @param firstname
-	 *            any firstname
-	 * @param lastname
-	 *            any lastname
-	 * @param profilePictureUrl
-	 *            any absolute profilePictureUrl
-	 * @param email
-	 *            any email
-	 * @param externalUserId
-	 *            if you have any external user Id you may set it here
-	 * @param externalUserType
-	 *            you can specify your system-name here, for example "moodle"
-	 *            
-	 * @return - secure hash or error code
-	 */
-	public String setUserObjectMainLandingZone(String SID, String username,
-			String firstname, String lastname, String profilePictureUrl,
-			String email, String externalUserId, String externalUserType) {
-		log.debug("UserService.setUserObjectMainLandingZone");
-
-		try {
-			Long userId = sessionDao.checkSession(SID);
-			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(userId))) {
-
-				RemoteSessionObject remoteSessionObject = new RemoteSessionObject(
-						username, firstname, lastname, profilePictureUrl,
-						email, externalUserId, externalUserType);
-
-				log.debug(remoteSessionObject.toString());
-
-				String xmlString = remoteSessionObject.toXml();
-
-				log.debug("xmlString " + xmlString);
-
-				sessionDao.updateUserRemoteSession(SID, xmlString);
-
-				String hash = soapLoginDao.addSOAPLogin(SID, null, false, true,
-						true, // allowSameURLMultipleTimes
-						null, // recordingId
-						false, // showNickNameDialogAsInt
-						"dashboard", // LandingZone,
-						true // allowRecording
-						);
-
-				if (hash != null) {
-					return hash;
-				}
-
-			} else {
-				return "" + -26L;
-			}
-		} catch (Exception err) {
-			log.error("setUserObjectWithAndGenerateRoomHash", err);
-		}
-		return "" + -1L;
-	}
-
-	/**
-	 * 
-	 * Description: sets the SessionObject for a certain SID, after setting this
-	 * Session-Object you can use the SID + a RoomId to enter any Room.
-	 * 
-	 * ++ the user can press f5 to reload the page / use the link several times,
-	 * the SOAP Gateway does remember the IP of the user and the will only the
-	 * first user that enters the room allow to re-enter. ... Session-Hashs are
-	 * deleted 15 minutes after the creation if not used.
-	 * 
-	 * ++ Additionally you can set a param showNickNameDialogAsInt, the effect
-	 * if that param is 1 is, that the user gets a popup where he can enter his
-	 * nickname right before he enters the conference room. All nicknames and
-	 * emails users enter are logged in the conferencelog table.
-	 * 
-	 * @param SID
-	 *            The SID from getSession
-	 * @param username
-	 *            any username
-	 * @param firstname
-	 *            any firstname
-	 * @param lastname
-	 *            any lastname
-	 * @param profilePictureUrl
-	 *            any profilePictureUrl
-	 * @param email
-	 *            any email
-	 * @param externalUserId
-	 *            if you have any external user Id you may set it here
-	 * @param externalUserType
-	 *            you can specify your system-name here, for example "moodle"
-	 * @param roomId
-	 *            the room id the user should be logged in
-	 * @param becomeModeratorAsInt
-	 *            0 means no Moderator, 1 means Moderator
-	 * @param showAudioVideoTestAsInt
-	 *            0 means don't show Audio/Video Test, 1 means show Audio/Video
-	 *            Test Application before the user is logged into the room
-	 * @param showNickNameDialogAsInt
-	 *            0 means do not show the popup to enter a nichname, 1 means
-	 *            that there is a popup to enter the nickname for the conference
-	 *            
-	 * @return - secure hash, or error code 
-	 */
-	public String setUserAndNickName(String SID, String username,
-			String firstname, String lastname, String profilePictureUrl,
-			String email, String externalUserId, String externalUserType,
-			Long roomId, int becomeModeratorAsInt,
-			int showAudioVideoTestAsInt, int showNickNameDialogAsInt) {
-		try {
-			Long userId = sessionDao.checkSession(SID);
-			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(userId))) {
-
-				RemoteSessionObject remoteSessionObject = new RemoteSessionObject(
-						username, firstname, lastname, profilePictureUrl,
-						email, externalUserId, externalUserType);
-
-				log.debug(remoteSessionObject.toString());
-				log.debug("showNickNameDialogAsInt" + showNickNameDialogAsInt);
-
-				String xmlString = remoteSessionObject.toXml();
-
-				log.debug("xmlString " + xmlString);
-
-				sessionDao.updateUserRemoteSession(SID, xmlString);
-
-				boolean becomeModerator = false;
-				if (becomeModeratorAsInt != 0) {
-					becomeModerator = true;
-				}
-
-				boolean showAudioVideoTest = false;
-				if (showAudioVideoTestAsInt != 0) {
-					showAudioVideoTest = true;
-				}
-
-				boolean showNickNameDialog = false;
-				if (showNickNameDialogAsInt != 0) {
-					showNickNameDialog = true;
-				}
-
-				String hash = soapLoginDao.addSOAPLogin(SID, roomId,
-						becomeModerator, showAudioVideoTest, true, null,
-						showNickNameDialog, "room", // LandingZone,
-						true // allowRecording
-						);
-
-				if (hash != null) {
-					return hash;
-				}
-
-			} else {
-				return "" + new Long(-26);
-			}
-		} catch (Exception err) {
-			log.error("setUserObjectWithAndGenerateRoomHash", err);
-		}
-		return "" + new Long(-1);
-	}
-
-	/**
-	 * Use this method to access a Recording instead of Room
-	 * 
-	 * @param SID
-	 *            The SID from getSession
-	 * @param username
-	 *            any username
-	 * @param firstname
-	 *            any firstname
-	 * @param lastname
-	 *            any lastname
-	 * @param externalUserId
-	 *            if you have any external user Id you may set it here
-	 * @param externalUserType
-	 *            you can specify your system-name here, for example "moodle"
-	 * @param recordingId
-	 *            the id of the recording, get a List of all Recordings with
-	 *            RoomService::getFlvRecordingByExternalRoomType
-	 *            
-	 * @return - hash of the recording, or error id
-	 */
-	public String setUserObjectAndGenerateRecordingHashByURL(String SID,
-			String username, String firstname, String lastname,
-			String externalUserId, String externalUserType, Long recordingId) {
-		try {
-			Long userId = sessionDao.checkSession(SID);
-			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(userId))) {
-
-				RemoteSessionObject remoteSessionObject = new RemoteSessionObject(
-						username, firstname, "", "", "", externalUserId,
-						externalUserType);
-
-				log.debug(remoteSessionObject.toString());
-
-				String xmlString = remoteSessionObject.toXml();
-
-				log.debug("xmlString " + xmlString);
-
-				sessionDao.updateUserRemoteSession(SID, xmlString);
-
-				String hash = soapLoginDao.addSOAPLogin(SID, null, false,
-						false, true, // allowSameURLMultipleTimes
-						recordingId, // recordingId
-						false, // showNickNameDialogAsInt
-						"room", // LandingZone,
-						true // allowRecording
-						);
-
-				if (hash != null) {
-					return hash;
-				}
-
-			} else {
-				return "" + new Long(-26);
-			}
-		} catch (Exception err) {
-			log.error("setUserObjectWithAndGenerateRoomHash", err);
-		}
-		return "" + new Long(-1);
+		return new ServiceResult(-1L, "Unknown error", Type.ERROR);
 	}
 
 	/**
@@ -784,18 +342,40 @@ public class UserWebService {
 	 *            room)
 	 * @return - <code>true</code> if user was kicked
 	 */
-	public Boolean kickUserByPublicSID(String SID, String publicSID) {
+	@POST
+	@Path("/kick/{publicSID}")
+	public ServiceResult kick(@WebParam @QueryParam("sid") String sid, @PathParam("publicSID") String publicSID) throws ServiceException {
 		try {
-			Boolean success = userManagement.kickUserByPublicSID(SID, publicSID);
-
-			if (success == null) {
-				success = false;
+			Long userId = sessionDao.checkSession(sid);
+			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(userId))) {
+				Boolean success = userManagement.kickUserByPublicSID(sid, publicSID);
+	
+				return new ServiceResult(Boolean.TRUE.equals(success) ? 1L : 0L, Boolean.TRUE.equals(success) ? "deleted" : "not deleted", Type.SUCCESS);
+			} else {
+				return new ServiceResult(-26L, "Insufficient permissins", Type.ERROR);
 			}
-
-			return success;
 		} catch (Exception err) {
 			log.error("[kickUser]", err);
+			throw new ServiceException(err.getMessage());
 		}
-		return null;
+	}
+
+	/**
+	 * Returns the count of users currently in the Room with given id
+	 * No admin rights are necessary for this call
+	 * 
+	 * @param SID The SID from UserService.getSession
+	 * @param roomId id of the room to get users
+	 * @return number of users as int
+	 */
+	@GET
+	@Path("/count/{roomId}")
+	public int count(@WebParam @QueryParam("sid") String sid, @PathParam("roomId") Long roomId) {
+		Long userId = sessionDao.checkSession(sid);
+
+		if (AuthLevelUtil.hasUserLevel(userDao.getRights(userId))) {
+			return conferenceService.getRoomClientsListByRoomId(roomId).size();
+		}
+		return -1;
 	}
 }

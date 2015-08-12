@@ -36,8 +36,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
-public class AppointmentReminderTypDao {
-	private static final Logger log = Red5LoggerFactory.getLogger(AppointmentReminderTypDao.class, webAppRootKey);
+public class AppointmentReminderTypeDao {
+	private static final Logger log = Red5LoggerFactory.getLogger(AppointmentReminderTypeDao.class, webAppRootKey);
 
 	@PersistenceContext
 	private EntityManager em;

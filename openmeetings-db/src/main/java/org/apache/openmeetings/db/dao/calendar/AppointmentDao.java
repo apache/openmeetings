@@ -56,7 +56,7 @@ public class AppointmentDao {
 	@Autowired
 	private AppointmentCategoryDao appointmentCategoryDaoImpl;
 	@Autowired
-	private AppointmentReminderTypDao appointmentReminderTypDao;
+	private AppointmentReminderTypeDao reminderTypeDao;
 	@Autowired
 	private MeetingMemberDao meetingMemberDao;
 	@Autowired

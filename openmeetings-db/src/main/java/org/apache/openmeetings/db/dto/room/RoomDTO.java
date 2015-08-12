@@ -21,6 +21,7 @@ package org.apache.openmeetings.db.dto.room;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.openmeetings.db.dao.room.RoomTypeDao;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.room.RoomType;
 
@@ -28,15 +29,20 @@ public class RoomDTO {
 	private Long id;
 	private String name;
 	private String comment;
-	private RoomType roomtype;
+	private RoomType type;
 	private Long numberOfPartizipants = new Long(4);
 	private boolean appointment;
 	private String confno;
 	private boolean isPublic;
 	private boolean demo;
 	private Integer demoTime;
+	private Long externalId;
+	private String externalType;
+	private String redirectUrl;
 	private boolean moderated;
 	private boolean allowUserQuestions;
+	private boolean allowRecording;
+	private boolean waitForRecording;
 	private boolean audioOnly;
 	private boolean topBarHidden;
 	private boolean chatHidden;
@@ -53,25 +59,60 @@ public class RoomDTO {
 		id = r.getId();
 		name = r.getName();
 		comment = r.getComment();
-		roomtype = r.getRoomtype();
+		type = r.getRoomtype();
 		numberOfPartizipants = r.getNumberOfPartizipants();
 		appointment = r.isAppointment();
 		confno = r.getConfno();
-		isPublic = Boolean.TRUE.equals(r.getIspublic());
-		demo = Boolean.TRUE.equals(r.getIsDemoRoom());
+		isPublic = r.getIspublic();
+		demo = r.getIsDemoRoom();
 		demoTime = r.getDemoTime();
+		externalId = r.getExternalId();
+		externalType = r.getExternalType();
+		redirectUrl = r.getRedirectURL();
 		moderated = r.isModerated();
-		allowUserQuestions = Boolean.TRUE.equals(r.getAllowUserQuestions());
+		allowUserQuestions = r.getAllowUserQuestions();
+		allowRecording = r.isAllowRecording();
+		waitForRecording = r.getWaitForRecording();
 		audioOnly = r.isAudioOnly();
-		topBarHidden = Boolean.TRUE.equals(r.getHideTopBar());
+		topBarHidden = r.getHideTopBar();
 		chatHidden = r.isChatHidden();
 		activitiesHidden = r.isActivitiesHidden();
-		filesExplorerHidden = Boolean.TRUE.equals(r.getHideFilesExplorer());
-		actionsMenuHidden = Boolean.TRUE.equals(r.getHideActionsMenu());
-		screenSharingHidden = Boolean.TRUE.equals(r.getHideScreenSharing());
-		whiteboardHidden = Boolean.TRUE.equals(r.getHideWhiteboard());
+		filesExplorerHidden = r.getHideFilesExplorer();
+		actionsMenuHidden = r.getHideActionsMenu();
+		screenSharingHidden = r.getHideScreenSharing();
+		whiteboardHidden = r.getHideWhiteboard();
 	}
 
+	public Room get(RoomTypeDao roomTypeDao) {
+		Room r = new Room();
+		r.setId(id);
+		r.setName(name);
+		r.setComment(comment);
+		r.setRoomtype(roomTypeDao.get(type.getId()));
+		r.setNumberOfPartizipants(numberOfPartizipants);
+		r.setAppointment(appointment);
+		r.setConfno(confno);
+		r.setIspublic(isPublic);
+		r.setIsDemoRoom(demo);
+		r.setDemoTime(demoTime);
+		r.setExternalId(externalId);
+		r.setExternalType(externalType);
+		r.setRedirectURL(redirectUrl);
+		r.setModerated(moderated);
+		r.setAllowUserQuestions(allowUserQuestions);
+		r.setAllowRecording(allowRecording);
+		r.setWaitForRecording(waitForRecording);
+		r.setAudioOnly(audioOnly);
+		r.setHideTopBar(topBarHidden);
+		r.setChatHidden(chatHidden);
+		r.setActivitiesHidden(activitiesHidden);
+		r.setHideFilesExplorer(filesExplorerHidden);
+		r.setHideActionsMenu(actionsMenuHidden);
+		r.setHideScreenSharing(screenSharingHidden);
+		r.setHideWhiteboard(whiteboardHidden);
+		return r;
+	}
+	
 	public Long getId() {
 		return id;
 	}
@@ -96,12 +137,12 @@ public class RoomDTO {
 		this.comment = comment;
 	}
 
-	public RoomType getRoomtype() {
-		return roomtype;
+	public RoomType getType() {
+		return type;
 	}
 
-	public void setRoomtype(RoomType roomtype) {
-		this.roomtype = roomtype;
+	public void setType(RoomType type) {
+		this.type = type;
 	}
 
 	public Long getNumberOfPartizipants() {
@@ -126,16 +167,6 @@ public class RoomDTO {
 
 	public void setConfno(String confno) {
 		this.confno = confno;
-	}
-
-	public static List<RoomDTO> list(List<Room> l) {
-		List<RoomDTO> rList = new ArrayList<RoomDTO>();
-		if (l != null) {
-			for (Room r : l) {
-				rList.add(new RoomDTO(r));
-			}
-		}
-		return rList;
 	}
 
 	public boolean isDemo() {
@@ -168,6 +199,22 @@ public class RoomDTO {
 
 	public void setAllowUserQuestions(boolean allowUserQuestions) {
 		this.allowUserQuestions = allowUserQuestions;
+	}
+
+	public boolean isAllowRecording() {
+		return allowRecording;
+	}
+
+	public void setAllowRecording(boolean allowRecording) {
+		this.allowRecording = allowRecording;
+	}
+
+	public boolean isWaitForRecording() {
+		return waitForRecording;
+	}
+
+	public void setWaitForRecording(boolean waitForRecording) {
+		this.waitForRecording = waitForRecording;
 	}
 
 	public boolean isAudioOnly() {
@@ -240,5 +287,39 @@ public class RoomDTO {
 
 	public void setPublic(boolean isPublic) {
 		this.isPublic = isPublic;
+	}
+
+	public Long getExternalId() {
+		return externalId;
+	}
+
+	public void setExternalId(Long externalId) {
+		this.externalId = externalId;
+	}
+
+	public String getExternalType() {
+		return externalType;
+	}
+
+	public void setExternalType(String externalType) {
+		this.externalType = externalType;
+	}
+
+	public String getRedirectUrl() {
+		return redirectUrl;
+	}
+
+	public void setRedirectUrl(String redirectUrl) {
+		this.redirectUrl = redirectUrl;
+	}
+
+	public static List<RoomDTO> list(List<Room> l) {
+		List<RoomDTO> rList = new ArrayList<>();
+		if (l != null) {
+			for (Room r : l) {
+				rList.add(new RoomDTO(r));
+			}
+		}
+		return rList;
 	}
 }

@@ -58,7 +58,7 @@ import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.basic.ErrorDao;
 import org.apache.openmeetings.db.dao.basic.NavigationDao;
 import org.apache.openmeetings.db.dao.calendar.AppointmentCategoryDao;
-import org.apache.openmeetings.db.dao.calendar.AppointmentReminderTypDao;
+import org.apache.openmeetings.db.dao.calendar.AppointmentReminderTypeDao;
 import org.apache.openmeetings.db.dao.room.PollDao;
 import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.dao.room.RoomTypeDao;
@@ -103,7 +103,7 @@ public class ImportInitvalues {
 	@Autowired
 	private AppointmentCategoryDao appointmentCategoryDaoImpl;
 	@Autowired
-	private AppointmentReminderTypDao appointmentReminderTypDaoImpl;
+	private AppointmentReminderTypeDao reminderTypeDao;
 	@Autowired
 	private PollDao pollManager;
 	@Autowired
@@ -514,6 +514,7 @@ public class ImportInitvalues {
 		r = roomDao.update(r, null);
 		return r;
 	}
+	
 	public void loadDefaultRooms(boolean createRooms) {
 		if (createRooms) {
 			// hardcoded IDs (they are not intended to be changed)
@@ -612,9 +613,9 @@ public class ImportInitvalues {
 	public void loadInitAppointmentReminderTypes() {
 		log.debug("ImportInitValues.loadInitAppointmentReminderTypes");
 
-		appointmentReminderTypDaoImpl.add(-1L, "do not send notification", 1568);
-		appointmentReminderTypDaoImpl.add(-1L, "simple email", 1569);
-		appointmentReminderTypDaoImpl.add(-1L, "iCal email", 1570);
+		reminderTypeDao.add(-1L, "do not send notification", 1568);
+		reminderTypeDao.add(-1L, "simple email", 1569);
+		reminderTypeDao.add(-1L, "iCal email", 1570);
 	}
 
 	public void loadInitialOAuthServers() throws Exception {

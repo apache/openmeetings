@@ -251,6 +251,12 @@
 					<td> 3.0.x </td>
 				</tr>
 				<tr>
+					<td> allow.oauth.register </td>
+					<td> 1 </td>
+					<td> Is user register available via OAuth </td>
+					<td> 3.0.x </td>
+				</tr>
+				<tr>
 					<td> application.base.url </td>
 					<td> http://localhost:5080/openmeetings </td>
 					<td> Base URL your OPenmeetings installation will be accessible at. </td>

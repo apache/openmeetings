@@ -18,24 +18,24 @@
  */
 package org.apache.openmeetings.backup;
 
-import org.apache.openmeetings.db.dao.calendar.AppointmentReminderTypDao;
+import org.apache.openmeetings.db.dao.calendar.AppointmentReminderTypeDao;
 import org.apache.openmeetings.db.entity.calendar.AppointmentReminderType;
 import org.simpleframework.xml.stream.InputNode;
 import org.simpleframework.xml.stream.OutputNode;
 
 public class AppointmentReminderTypeConverter extends OmConverter<AppointmentReminderType> {
-	private AppointmentReminderTypDao appointmentReminderTypDaoImpl;
+	private AppointmentReminderTypeDao reminderTypeDao;
 	
 	public AppointmentReminderTypeConverter() {
 		//default constructor is for export
 	}
 	
-	public AppointmentReminderTypeConverter(AppointmentReminderTypDao appointmentReminderTypDaoImpl) {
-		this.appointmentReminderTypDaoImpl = appointmentReminderTypDaoImpl;
+	public AppointmentReminderTypeConverter(AppointmentReminderTypeDao reminderTypeDao) {
+		this.reminderTypeDao = reminderTypeDao;
 	}
 	
 	public AppointmentReminderType read(InputNode node) throws Exception {
-		return appointmentReminderTypDaoImpl.get(getlongValue(node));
+		return reminderTypeDao.get(getlongValue(node));
 	}
 
 	public void write(OutputNode node, AppointmentReminderType value) throws Exception {

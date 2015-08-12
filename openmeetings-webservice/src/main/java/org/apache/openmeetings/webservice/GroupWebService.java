@@ -33,6 +33,8 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import org.apache.cxf.feature.Features;
+import org.apache.openmeetings.db.dao.room.RoomDao;
+import org.apache.openmeetings.db.dao.room.RoomOrganisationDao;
 import org.apache.openmeetings.db.dao.server.SessiondataDao;
 import org.apache.openmeetings.db.dao.user.OrganisationDao;
 import org.apache.openmeetings.db.dao.user.OrganisationUserDao;
@@ -41,6 +43,8 @@ import org.apache.openmeetings.db.dto.basic.SearchResult;
 import org.apache.openmeetings.db.dto.basic.ServiceResult;
 import org.apache.openmeetings.db.dto.basic.ServiceResult.Type;
 import org.apache.openmeetings.db.dto.user.UserSearchResult;
+import org.apache.openmeetings.db.entity.room.Room;
+import org.apache.openmeetings.db.entity.room.RoomOrganisation;
 import org.apache.openmeetings.db.entity.user.Organisation;
 import org.apache.openmeetings.db.entity.user.OrganisationUser;
 import org.apache.openmeetings.db.entity.user.User;
@@ -73,7 +77,11 @@ public class GroupWebService {
 	@Autowired
 	private UserDao userDao;
 	@Autowired
+	private RoomDao roomDao;
+	@Autowired
 	private SessiondataDao sessionDao;
+	@Autowired
+	private RoomOrganisationDao roomOrgDao;
 
 	/**
 	 * add a new organisation
@@ -112,12 +120,12 @@ public class GroupWebService {
 	 * @return - id of the user added, or error id in case of the error
 	 */
 	@POST
-	@Path("/{id}/{userId}")
+	@Path("/{id}/users/add/{userId}")
 	public ServiceResult addUser(
 			@QueryParam("sid") @WebParam String sid
 			, @PathParam("id") @WebParam Long id
 			, @PathParam("userId") @WebParam Long userId
-			)
+			) throws ServiceException
 	{
 		try {
 			Long authUserId = sessionDao.checkSession(sid);
@@ -133,7 +141,54 @@ public class GroupWebService {
 			}
 		} catch (Exception err) {
 			log.error("addUserToOrganisation", err);
-			return new ServiceResult(-1L, err.getMessage(), Type.ERROR);
+			throw new ServiceException(err.getMessage());
+		}
+	}
+
+	/**
+	 * Adds a room to an organization
+	 * 
+	 * @param SID - The SID of the User. This SID must be marked as Loggedin
+	 * @param roomId - Id of room to be added
+	 * @param organisationId - Id of organisation that the room is being paired with
+	 * 
+	 * @return Id of the relation created, null or -1 in case of the error
+	 */
+	@POST
+	@Path("/{id}/rooms/add/{roomId}")
+	public ServiceResult addRoom(
+			@QueryParam("sid") @WebParam String sid
+			, @PathParam("id") @WebParam Long id
+			, @PathParam("roomId") @WebParam Long roomId
+			) throws ServiceException
+	{
+		try {
+			Long userId = sessionDao.checkSession(sid);
+			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(userId))) {
+				Room r = roomDao.get(roomId);
+				if (r != null) {
+					if (r.getRoomOrganisations() == null) {
+						r.setRoomOrganisations(new ArrayList<RoomOrganisation>());
+					}
+					boolean found = false;
+					for (RoomOrganisation ro : r.getRoomOrganisations()) {
+						if (ro.getOrganisation().getId().equals(id)) {
+							found = true;
+						}
+					}
+					if (!found) {
+						r.getRoomOrganisations().add(new RoomOrganisation(orgDao.get(id), r));
+						roomDao.update(r, userId);
+						return new ServiceResult(1L, "Success", Type.SUCCESS);
+					}
+				}
+				return new ServiceResult(0L, "Not added", Type.SUCCESS);
+			} else {
+				return new ServiceResult(-26L, "Insufficient permissins", Type.ERROR);
+			}
+		} catch (Exception err) {
+			log.error("[addRoomToOrg]", err);
+			throw new ServiceException(err.getMessage());
 		}
 	}
 
@@ -155,15 +210,15 @@ public class GroupWebService {
 	 * @return - users found
 	 */
 	@GET
-	@Path("/{id}")
-	public UserSearchResult getUsersByOrganisation(
+	@Path("/users/{id}")
+	public UserSearchResult getUsers(
 			@QueryParam("sid") @WebParam String sid
 			, @PathParam("id") @WebParam long id
 			, @QueryParam("start") @WebParam int start
 			, @QueryParam("max") @WebParam int max
 			, @QueryParam("orderby") @WebParam String orderby
 			, @QueryParam("asc") @WebParam boolean asc
-			)
+			) throws ServiceException
 	{
 		try {
 			Long userId = sessionDao.checkSession(sid);
@@ -182,7 +237,7 @@ public class GroupWebService {
 			return new UserSearchResult(result);
 		} catch (Exception err) {
 			log.error("getUsersByOrganisation", err);
+			throw new ServiceException(err.getMessage());
 		}
-		return null;
 	}
 }

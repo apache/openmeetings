@@ -59,7 +59,7 @@ import org.apache.openmeetings.db.dao.basic.ChatDao;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.calendar.AppointmentCategoryDao;
 import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
-import org.apache.openmeetings.db.dao.calendar.AppointmentReminderTypDao;
+import org.apache.openmeetings.db.dao.calendar.AppointmentReminderTypeDao;
 import org.apache.openmeetings.db.dao.calendar.MeetingMemberDao;
 import org.apache.openmeetings.db.dao.file.FileExplorerItemDao;
 import org.apache.openmeetings.db.dao.record.FlvRecordingDao;
@@ -139,7 +139,7 @@ public class BackupImport {
 	@Autowired
 	private AppointmentCategoryDao appointmentCategoryDaoImpl;
 	@Autowired
-	private AppointmentReminderTypDao appointmentReminderTypDaoImpl;
+	private AppointmentReminderTypeDao reminderTypeDao;
 	@Autowired
 	private UserDao usersDao;
 	@Autowired
@@ -404,7 +404,7 @@ public class BackupImport {
 	
 			registry.bind(AppointmentCategory.class, new AppointmentCategoryConverter(appointmentCategoryDaoImpl));
 			registry.bind(User.class, new UserConverter(usersDao, usersMap));
-			registry.bind(AppointmentReminderType.class, new AppointmentReminderTypeConverter(appointmentReminderTypDaoImpl));
+			registry.bind(AppointmentReminderType.class, new AppointmentReminderTypeConverter(reminderTypeDao));
 			registry.bind(Room.class, new RoomConverter(roomDao, roomsMap));
 			registry.bind(Date.class, DateConverter.class);
 			

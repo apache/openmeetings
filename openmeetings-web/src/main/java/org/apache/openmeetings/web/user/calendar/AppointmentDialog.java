@@ -32,7 +32,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
-import org.apache.openmeetings.db.dao.calendar.AppointmentReminderTypDao;
+import org.apache.openmeetings.db.dao.calendar.AppointmentReminderTypeDao;
 import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
@@ -360,7 +360,7 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 		}
 		
 		private List<AppointmentReminderType> getRemindTypes() {
-			return getBean(AppointmentReminderTypDao.class).get();
+			return getBean(AppointmentReminderTypeDao.class).get();
 		}
 		
 		private List<Room> getRoomList() {

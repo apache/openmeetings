@@ -193,7 +193,7 @@
 	<!-- End of Services -->
 
 	<!-- Interface Transactional -->
-	<bean id="appointmentReminderTypDaoImpl" class="org.apache.openmeetings.db.dao.calendar.AppointmentReminderTypDao" />
+	<bean id="appointmentReminderTypeDaoImpl" class="org.apache.openmeetings.db.dao.calendar.AppointmentReminderTypeDao" />
 	<bean id="appointmentCategoryDaoImpl" class="org.apache.openmeetings.db.dao.calendar.AppointmentCategoryDao" />
 	<bean id="roommanagement" class="org.apache.openmeetings.core.data.conference.RoomManager" />
 	<bean id="roomDao" class="org.apache.openmeetings.db.dao.room.RoomDao"/>
@@ -267,32 +267,35 @@
 	</bean>
 
 	<!-- Axis2 Service Proxy's -->
-	<bean id="userWebService" class="org.apache.openmeetings.webservice.UserWebService" />
-	<bean id="errorWebService" class="org.apache.openmeetings.webservice.ErrorWebService" />
-	<bean id="groupWebService" class="org.apache.openmeetings.webservice.GroupWebService" />
-	<bean id="roomWebService" class="org.apache.openmeetings.webservice.RoomWebService" />
-	<bean id="fileWebService" class="org.apache.openmeetings.webservice.FileWebService" />
 	<bean id="calendarWebService" class="org.apache.openmeetings.webservice.CalendarWebService" />
-	<bean id="jabberWebService" class="org.apache.openmeetings.webservice.JabberWebService" />
+	<bean id="errorWebService" class="org.apache.openmeetings.webservice.ErrorWebService" />
+	<bean id="fileWebService" class="org.apache.openmeetings.webservice.FileWebService" />
+	<bean id="groupWebService" class="org.apache.openmeetings.webservice.GroupWebService" />
+	<bean id="recordWebService" class="org.apache.openmeetings.webservice.RecordingWebService" />
+	<bean id="roomWebService" class="org.apache.openmeetings.webservice.RoomWebService" />
+	<bean id="roomTypeWebService" class="org.apache.openmeetings.webservice.RoomTypeWebService" />
+	<bean id="roomWebService" class="org.apache.openmeetings.webservice.RoomWebService" />
 	<bean id="serverWebService" class="org.apache.openmeetings.webservice.ServerWebService" />
+	<bean id="userWebService" class="org.apache.openmeetings.webservice.UserWebService" />
 	
 	<!-- (writeXsiType=false) -->
 	<jaxrs:server id="server" address="/">
 		<jaxrs:serviceBeans>
-			<ref bean="userWebService"/>
-			<ref bean="errorWebService"/>
-			<ref bean="groupWebService"/>
-			<ref bean="roomWebService"/>
-			<ref bean="fileWebService"/>
 			<ref bean="calendarWebService"/>
-			<ref bean="jabberWebService"/>
+			<ref bean="errorWebService"/>
+			<ref bean="fileWebService"/>
+			<ref bean="groupWebService"/>
+			<ref bean="recordWebService"/>
+			<ref bean="roomTypeWebService"/>
+			<ref bean="roomWebService"/>
 			<ref bean="serverWebService"/>
+			<ref bean="userWebService"/>
 		</jaxrs:serviceBeans>
 	</jaxrs:server>
-	<jaxws:endpoint id="userServiceWS" address="/UserService"
-		implementor="#userWebService" 
-		endpointName="UserServiceEndpoint"
-		serviceName="UserService"
+	<jaxws:endpoint id="calendarServiceWS" address="/CalendarService"
+		implementor="#calendarWebService" 
+		endpointName="CalendarServiceEndpoint"
+		serviceName="CalendarService"
 		/>
 	<jaxws:endpoint id="errorServiceWS" address="/ErrorService"
 		implementor="#errorWebService" 
@@ -304,29 +307,34 @@
 		endpointName="GroupServiceEndpoint"
 		serviceName="GroupService"
 		/>
-	<jaxws:endpoint id="roomServiceWS" address="/RoomService"
-		implementor="#roomWebService" 
-		endpointName="RoomServiceEndpoint"
-		serviceName="RoomService"
-		/>
 	<jaxws:endpoint id="fileServiceWS" address="/FileService"
 		implementor="#fileWebService" 
 		endpointName="FileServiceEndpoint"
 		serviceName="FileService"
 		/>
-	<jaxws:endpoint id="calendarServiceWS" address="/CalendarService"
-		implementor="#calendarWebService" 
-		endpointName="CalendarServiceEndpoint"
-		serviceName="CalendarService"
+	<jaxws:endpoint id="recordServiceWS" address="/RecordService"
+		implementor="#recordWebService" 
+		endpointName="RecordServiceEndpoint"
+		serviceName="RecordService"
 		/>
-	<jaxws:endpoint id="jabberServiceWS" address="/JabberService"
-		implementor="#jabberWebService" 
-		endpointName="JabberServiceEndpoint"
-		serviceName="JabberService"
+	<jaxws:endpoint id="roomTypeServiceWS" address="/RoomTypeService"
+		implementor="#roomTypeWebService" 
+		endpointName="RoomTypeServiceEndpoint"
+		serviceName="RoomTypeService"
+		/>
+	<jaxws:endpoint id="roomServiceWS" address="/RoomService"
+		implementor="#roomWebService" 
+		endpointName="RoomServiceEndpoint"
+		serviceName="RoomService"
 		/>
 	<jaxws:endpoint id="serverServiceWS" address="/ServerService"
 		implementor="#serverWebService" 
 		endpointName="ServerServiceEndpoint"
 		serviceName="ServerService"
+		/>
+	<jaxws:endpoint id="userServiceWS" address="/UserService"
+		implementor="#userWebService" 
+		endpointName="UserServiceEndpoint"
+		serviceName="UserService"
 		/>
 </beans>

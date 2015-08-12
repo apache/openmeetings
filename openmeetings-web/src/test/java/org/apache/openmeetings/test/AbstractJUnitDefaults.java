@@ -26,7 +26,7 @@ import java.util.List;
 
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
-import org.apache.openmeetings.db.dao.calendar.AppointmentReminderTypDao;
+import org.apache.openmeetings.db.dao.calendar.AppointmentReminderTypeDao;
 import org.apache.openmeetings.db.dao.room.RoomTypeDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
@@ -53,7 +53,7 @@ public abstract class AbstractJUnitDefaults extends AbstractSpringTest {
 	@Autowired
 	private AppointmentDao appointmentDao;
 	@Autowired
-	private AppointmentReminderTypDao reminderTypeDao;
+	private AppointmentReminderTypeDao reminderTypeDao;
 	@Autowired
 	private RoomTypeDao roomTypeDao;
 	@Autowired

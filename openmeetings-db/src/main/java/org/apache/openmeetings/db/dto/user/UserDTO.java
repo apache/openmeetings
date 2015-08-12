@@ -20,6 +20,7 @@ package org.apache.openmeetings.db.dto.user;
 
 import java.util.Set;
 
+import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.user.Address;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Right;
@@ -53,6 +54,20 @@ public class UserDTO {
 		type = u.getType();
 		externalId = u.getExternalId();
 		externalType = u.getExternalType();
+	}
+	
+	public User get(UserDao userDao) {
+		User u = id == null ? new User() : userDao.get(id);
+		u.setFirstname(firstname);
+		u.setLastname(lastname);
+		u.setRights(rights);
+		u.setLanguageId(languageId);
+		u.setAddress(address);
+		u.setTimeZoneId(timeZoneId);
+		u.setExternalId(externalId);
+		u.setExternalType(externalType);
+		u.setType(type);
+		return u;
 	}
 	
 	public Long getId() {

@@ -23,14 +23,11 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_REDIRECT
 
 import java.util.Arrays;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.TimeZone;
 
-import org.apache.openmeetings.core.data.conference.RoomManager;
 import org.apache.openmeetings.core.ldap.LdapLoginManagement;
 import org.apache.openmeetings.core.mail.MailHandler;
 import org.apache.openmeetings.core.remote.red5.ScopeApplicationAdapter;
@@ -86,8 +83,6 @@ public class MainService implements IPendingServiceCallback {
 	private IUserManager userManager;
 	@Autowired
 	private StateDao statemanagement;
-	@Autowired
-	private RoomManager roomManager;
 	@Autowired
 	private ConferenceLogDao conferenceLogDao;
 	@Autowired
@@ -450,30 +445,6 @@ public class MainService implements IPendingServiceCallback {
 		} else {
 			return null;
 		}
-	}
-
-	public int closeRoom(String SID, Long room_id, Boolean status) {
-		try {
-			Long users_id = sessiondataDao.checkSession(SID);
-			if (AuthLevelUtil.hasUserLevel(userDao.getRights(users_id))) {
-
-				roomManager.closeRoom(room_id, status);
-
-				if (status) {
-					Map<String, String> message = new HashMap<String, String>();
-					message.put("message", "roomClosed");
-					scopeApplicationAdapter.sendMessageByRoomAndDomain(room_id, message);
-				}
-
-				return 1;
-
-			}
-
-			return 1;
-		} catch (Exception err) {
-			log.error("[closeRoom]", err);
-		}
-		return -1;
 	}
 
 	public void resultReceived(IPendingServiceCall arg0) {

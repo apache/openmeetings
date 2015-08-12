@@ -47,4 +47,15 @@ public class RoomOrganisationDao {
 		return entity;
 	}
 
+	public RoomOrganisation get(long organisationId, long roomId) {
+		List<RoomOrganisation> ll = em.createNamedQuery("getRoomsOrganisationByOrganisationIdAndRoomId", RoomOrganisation.class)
+				.setParameter("roomId", roomId)
+				.setParameter("organisationId", organisationId)
+				.getResultList();
+
+		if (ll.size() > 0) {
+			return ll.get(0);
+		}
+		return null;
+	}
 }

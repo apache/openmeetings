@@ -30,7 +30,6 @@ import java.util.Map;
 import org.apache.openmeetings.core.remote.red5.ScopeApplicationAdapter;
 import org.apache.openmeetings.core.remote.util.SessionVariablesUtil;
 import org.apache.openmeetings.db.dao.label.LabelDao;
-import org.apache.openmeetings.db.dao.room.IRoomManager;
 import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.dao.server.ISessionManager;
 import org.apache.openmeetings.db.dao.server.SessiondataDao;
@@ -59,8 +58,6 @@ public class MobileService {
 	private ISessionManager sessionManager;
 	@Autowired
 	private RoomDao roomDao;
-	@Autowired
-	private IRoomManager roomManager;
 	@Autowired
 	private LabelDao labelDao;
 	@Autowired
@@ -168,8 +165,8 @@ public class MobileService {
 		User u = userDao.get(c.getUserId());
 		//my rooms
 		List<Room> myl = new ArrayList<Room>();
-		myl.add(roomManager.getRoomByOwnerAndTypeId(u.getId(), 1L, labelDao.getString(1306L, u.getLanguageId())));
-		myl.add(roomManager.getRoomByOwnerAndTypeId(u.getId(), 3L, labelDao.getString(1307L, u.getLanguageId())));
+		myl.add(roomDao.getUserRoom(u.getId(), 1L, labelDao.getString(1306L, u.getLanguageId())));
+		myl.add(roomDao.getUserRoom(u.getId(), 3L, labelDao.getString(1307L, u.getLanguageId())));
 		myl.addAll(roomDao.getAppointedRoomsByUser(u.getId()));
 		for (Room r : myl) {
 			addRoom("my", null, false, result, r);

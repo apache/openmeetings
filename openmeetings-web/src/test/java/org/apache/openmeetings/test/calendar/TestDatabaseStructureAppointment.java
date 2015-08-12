@@ -71,10 +71,6 @@ public class TestDatabaseStructureAppointment extends AbstractJUnitDefaults {
 			for (Iterator<Appointment> iter = listAppoints.iterator();iter.hasNext();) {
 				log.debug(""+iter.next());
 			}
-			
-			//AppointmentDaoImpl.getInstance().updateAppointment(1L,"neu", "erster Test",Calendar.getInstance().getTime() , 
-					//Calendar.getInstance().getTime(), true, false, false, false, new Long(1));
-			//log.debug("AppointmentReminderTypDaoImpl: "+appointmentReminderTypDaoImpl.getAppointmentReminderTypById(1L));
 		} catch (Exception err) {
 
 			log.error("[testAddingGroup]",err);

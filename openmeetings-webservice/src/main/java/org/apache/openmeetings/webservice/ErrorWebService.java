@@ -40,10 +40,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * 
- * The Service contains methods to login and create hash to directly enter
- * conference rooms, recordings or the application in general
+ * The Service contains methods to get localized errors
  * 
- * @author sebawagner
+ * @author solomax
  * @webservice ErrorService
  * 
  */

@@ -18,6 +18,9 @@
  */
 package org.apache.openmeetings.db.dto.server;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.openmeetings.db.entity.server.Server;
 
 /**
@@ -29,24 +32,48 @@ import org.apache.openmeetings.db.entity.server.Server;
  *
  */
 public class ServerDTO {
-
 	private Long id;
+	private String name;
 	private String address;
 	private int port;
-	private String protocol;
+	private String user;
+	private String password;
 	private String webapp;
+	private String protocol;
+	private boolean active;
+	private String comment;
 
-	public ServerDTO(Server server) {
-		if (server == null) {
+	public ServerDTO(Server s) {
+		if (s == null) {
 			return;
 		}
-		id = server.getId();
-		address = server.getAddress();
-		port = server.getPort();
-		protocol = server.getProtocol();
-		webapp = server.getWebapp();
+		id = s.getId();
+		name = s.getName();
+		address = s.getAddress();
+		port = s.getPort();
+		user = s.getUser();
+		password = s.getPass();
+		webapp = s.getWebapp();
+		protocol = s.getProtocol();
+		active = s.isActive();
+		comment = s.getComment();
 	}
 
+	public Server get() {
+		Server s = new Server();
+		s.setId(id);
+		s.setName(name);
+		s.setAddress(address);
+		s.setPort(port);
+		s.setUser(user);
+		s.setPass(password);
+		s.setWebapp(webapp);
+		s.setProtocol(protocol);
+		s.setActive(active);
+		s.setComment(comment);
+		return s;
+	}
+	
 	public Long getId() {
 		return id;
 	}
@@ -86,10 +113,59 @@ public class ServerDTO {
 	public void setWebapp(String webapp) {
 		this.webapp = webapp;
 	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getUser() {
+		return user;
+	}
+
+	public void setUser(String user) {
+		this.user = user;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	public boolean isActive() {
+		return active;
+	}
+
+	public void setActive(boolean active) {
+		this.active = active;
+	}
+
+	public String getComment() {
+		return comment;
+	}
+
+	public void setComment(String comment) {
+		this.comment = comment;
+	}
 	
 	@Override
 	public String toString() {
 		return "id "+id+" address "+address+" port "+port+" protocol "+protocol;
 	}
 
+	public static List<ServerDTO> list(List<Server> l) {
+		List<ServerDTO> list = new ArrayList<>();
+		if (l != null) {
+			for (Server s : l) {
+				list.add(new ServerDTO(s));
+			}
+		}
+		return list;
+	}
 }

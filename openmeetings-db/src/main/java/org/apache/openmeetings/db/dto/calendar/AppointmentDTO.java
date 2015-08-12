@@ -24,6 +24,10 @@ import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
 
+import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
+import org.apache.openmeetings.db.dao.calendar.AppointmentReminderTypeDao;
+import org.apache.openmeetings.db.dao.room.RoomTypeDao;
+import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.dto.room.RoomDTO;
 import org.apache.openmeetings.db.dto.user.UserDTO;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
@@ -43,8 +47,9 @@ public class AppointmentDTO {
 	private AppointmentReminderTypeDTO reminder;
 	private RoomDTO room;
 	private String icalId;
-	private List<MeetingMemberDTO> meetingMembers;
+	private List<MeetingMemberDTO> meetingMembers = new ArrayList<>();
 	private Long languageId;
+	private String password;
 	private boolean passwordProtected;
 	private boolean connectedEvent;
 	private boolean reminderEmailSend;
@@ -68,9 +73,10 @@ public class AppointmentDTO {
 		reminder = new AppointmentReminderTypeDTO(a.getRemind());
 		room = new RoomDTO(a.getRoom());
 		icalId = a.getIcalId();
-		meetingMembers = new ArrayList<>();
-		for(MeetingMember mm: a.getMeetingMembers()) {
-			meetingMembers.add(new MeetingMemberDTO(mm));
+		if (a.getMeetingMembers() != null) {
+			for(MeetingMember mm : a.getMeetingMembers()) {
+				meetingMembers.add(new MeetingMemberDTO(mm));
+			}
 		}
 		languageId = a.getLanguageId();
 		passwordProtected = a.isPasswordProtected();
@@ -78,6 +84,33 @@ public class AppointmentDTO {
 		reminderEmailSend = a.isReminderEmailSend();
 	}
 
+	public Appointment get(UserDao userDao, AppointmentDao appointmentDao, AppointmentReminderTypeDao remindDao, RoomTypeDao roomTypeDao) {
+		Appointment a = id == null ? new Appointment() : appointmentDao.get(id);
+		a.setId(id);
+		a.setTitle(title);
+		a.setLocation(location);
+		a.setStart(start.getTime());
+		a.setEnd(end.getTime());
+		a.setDescription(description);
+		a.setOwner(owner.get(userDao));
+		a.setInserted(inserted);
+		a.setUpdated(updated);
+		a.setDeleted(deleted);
+		a.setRemind(reminder.get(remindDao));
+		a.setRoom(room.get(roomTypeDao));
+		a.setIcalId(icalId);
+		a.setMeetingMembers(new ArrayList<MeetingMember>());
+		for(MeetingMemberDTO mm : meetingMembers) {
+			//TODO FIXME a.getMeetingMembers().add(mm.get());
+		}
+		//MeetingMember
+		a.setLanguageId(languageId);
+		a.setPasswordProtected(passwordProtected);
+		a.setConnectedEvent(connectedEvent);
+		a.setReminderEmailSend(reminderEmailSend);
+		return a;
+	}
+	
 	public Long getId() {
 		return id;
 	}
@@ -220,5 +253,21 @@ public class AppointmentDTO {
 
 	public void setReminderEmailSend(boolean reminderEmailSend) {
 		this.reminderEmailSend = reminderEmailSend;
+	}
+
+	public static List<AppointmentDTO> list(List<Appointment> list) {
+		List<AppointmentDTO> result = new ArrayList<>(list.size());
+		for (Appointment a : list) {
+			result.add(new AppointmentDTO(a));
+		}
+		return result;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
 	}
 }

@@ -33,7 +33,7 @@ import java.util.TimeZone;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.calendar.AppointmentCategoryDao;
 import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
-import org.apache.openmeetings.db.dao.calendar.AppointmentReminderTypDao;
+import org.apache.openmeetings.db.dao.calendar.AppointmentReminderTypeDao;
 import org.apache.openmeetings.db.dao.calendar.MeetingMemberDao;
 import org.apache.openmeetings.db.dao.label.LabelDao;
 import org.apache.openmeetings.db.dao.room.IInvitationManager;
@@ -62,7 +62,7 @@ public class AppointmentLogic {
 	@Autowired
 	private AppointmentCategoryDao appointmentCategoryDao;
 	@Autowired
-	private AppointmentReminderTypDao appointmentReminderTypDao;
+	private AppointmentReminderTypeDao reminderTypeDao;
 	@Autowired
 	private ConfigurationDao configurationDao;
 	@Autowired
@@ -212,7 +212,7 @@ public class AppointmentLogic {
 		a.setIsMonthly(isMonthly);
 		a.setIsYearly(isYearly);
 		a.setCategory(appointmentCategoryDao.get(categoryId));
-		a.setRemind(appointmentReminderTypDao.get(remind));
+		a.setRemind(reminderTypeDao.get(remind));
 		if (roomId > 0) {
 			a.setRoom(roomDao.get(roomId));
 		} else {

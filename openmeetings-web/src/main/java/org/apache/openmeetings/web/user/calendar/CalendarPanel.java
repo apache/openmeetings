@@ -27,7 +27,7 @@ import java.util.Date;
 
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
-import org.apache.openmeetings.db.dao.calendar.AppointmentReminderTypDao;
+import org.apache.openmeetings.db.dao.calendar.AppointmentReminderTypeDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
 import org.apache.openmeetings.web.app.Application;
@@ -84,8 +84,8 @@ public class CalendarPanel extends UserPanel {
 		return getBean(AppointmentDao.class);
 	}
 	
-	private AppointmentReminderTypDao getAppointmentReminderTypDao() {
-		return getBean(AppointmentReminderTypDao.class);
+	private AppointmentReminderTypeDao getReminderTypeDao() {
+		return getBean(AppointmentReminderTypeDao.class);
 	}
 	
 	public void refresh(IPartialPageRequestHandler handler) {
@@ -265,7 +265,7 @@ public class CalendarPanel extends UserPanel {
 	
 	private Appointment getDefault() {
 		Appointment a = new Appointment();
-		a.setRemind(getAppointmentReminderTypDao().get(3L)); //TODO: Make configurable
+		a.setRemind(getReminderTypeDao().get(3L)); //TODO: Make configurable
 		a.setOwner(getBean(UserDao.class).get(getUserId()));
 		a.setTitle(Application.getString(1444));
 		log.debug(" -- getDefault -- Current model " + a);
