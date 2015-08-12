@@ -18,6 +18,9 @@
  */
 package org.apache.openmeetings.core.remote;
 
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_FRONTEND_REGISTER_KEY;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_OAUTH_REGISTER_KEY;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SOAP_REGISTER_KEY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
 import java.util.ArrayList;
@@ -29,10 +32,12 @@ import java.util.Map;
 
 import org.apache.openmeetings.core.remote.red5.ScopeApplicationAdapter;
 import org.apache.openmeetings.core.remote.util.SessionVariablesUtil;
+import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.label.LabelDao;
 import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.dao.server.ISessionManager;
 import org.apache.openmeetings.db.dao.server.SessiondataDao;
+import org.apache.openmeetings.db.dao.user.IUserManager;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.room.Client;
 import org.apache.openmeetings.db.entity.room.Room;
@@ -51,7 +56,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class MobileService {
 	private static final Logger log = Red5LoggerFactory.getLogger(MainService.class, webAppRootKey);
 	@Autowired
+	private ConfigurationDao cfgDao;
+	@Autowired
 	private UserDao userDao;
+	@Autowired
+	private IUserManager userManager;
 	@Autowired
 	private SessiondataDao sessionDao;
 	@Autowired
@@ -67,48 +76,77 @@ public class MobileService {
 		m.put(key, v == null ? "" : v);
 	}
 	
-	public Map<String, Object> loginUser(String login, String password) {
-		Map<String, Object> result = new Hashtable<String, Object>();
+	public Map<String, Object> checkServer() {
+		Map<String, Object> result = new Hashtable<>();
+		result.put("allowSelfRegister",  "1".equals(cfgDao.getConfValue(CONFIG_FRONTEND_REGISTER_KEY, String.class, "0")));
+		result.put("allowSoapRegister",  "1".equals(cfgDao.getConfValue(CONFIG_SOAP_REGISTER_KEY, String.class, "0")));
+		result.put("allowOauthRegister",  "1".equals(cfgDao.getConfValue(CONFIG_OAUTH_REGISTER_KEY, String.class, "0")));
+		return result;
+	}
+	
+	public Map<String, Object> loginGoogle(Map<String, String> umap) {
+		Map<String, Object> result = getResult();
 		try {
-			result.put("status", -1);
-			User u = userDao.login(login, password);
-			if (u != null) {
-				Sessiondata sd = sessionDao.startsession();
-				Boolean bool = sessionDao.updateUser(sd.getSessionId(), u.getId(), false, u.getLanguageId());
-				if (bool == null) {
-					// Exception
-				} else if (!bool) {
-					// invalid Session-Object
-					result.put("status", -35);
-				} else {
-					IConnection conn = Red5.getConnectionLocal();
-					String streamId = conn.getClient().getId();
-					Client c = sessionManager.getClientByStreamId(streamId, null);
-					if (c == null) {
-						c = sessionManager.addClientListItem(streamId, conn.getScope().getName(), conn.getRemotePort(),
-							conn.getRemoteAddress(), "", false, null);
-					}
-					
-					SessionVariablesUtil.initClient(conn.getClient(), false, c.getPublicSID());
-					c.setUserId(u.getId());
-					c.setFirstname(u.getFirstname());
-					c.setLastname(u.getLastname());
-					c.setMobile(true);
-					sessionManager.updateClientByStreamId(streamId, c, false, null);
-
-					add(result, "sid", sd.getSessionId());
-					add(result, "publicSid", c.getPublicSID());
-					add(result, "status", 0);
-					add(result, "userId", u.getId());
-					add(result, "firstname", u.getFirstname());
-					add(result, "lastname", u.getLastname());
-					add(result, "login", u.getLogin());
-					add(result, "email", u.getAddress() == null ? "" : u.getAddress().getEmail());
-					add(result, "language", u.getLanguageId()); //TODO rights
-				}
-			}
+			User u = userManager.loginOAuth(umap, 2); //TODO hardcoded
+			result = login(u, result);
 		} catch (Exception e) {
 			log.error("[loginUser]", e);
+		}
+		return result;
+	}
+	
+	public Map<String, Object> loginUser(String login, String password) {
+		Map<String, Object> result = getResult();
+		try {
+			User u = userDao.login(login, password);
+			result = login(u, result);
+		} catch (Exception e) {
+			log.error("[loginUser]", e);
+		}
+		return result;
+	}
+	
+	private Map<String, Object> getResult() {
+		Map<String, Object> result = new Hashtable<>();
+		result.put("status", -1);
+		return result;
+	}
+	
+	private Map<String, Object> login(User u, Map<String, Object> result) {
+		if (u != null) {
+			Sessiondata sd = sessionDao.startsession();
+			Boolean bool = sessionDao.updateUser(sd.getSessionId(), u.getId(), false, u.getLanguageId());
+			if (bool == null) {
+				// Exception
+			} else if (!bool) {
+				// invalid Session-Object
+				result.put("status", -35);
+			} else {
+				IConnection conn = Red5.getConnectionLocal();
+				String streamId = conn.getClient().getId();
+				Client c = sessionManager.getClientByStreamId(streamId, null);
+				if (c == null) {
+					c = sessionManager.addClientListItem(streamId, conn.getScope().getName(), conn.getRemotePort(),
+						conn.getRemoteAddress(), "", false, null);
+				}
+				
+				SessionVariablesUtil.initClient(conn.getClient(), false, c.getPublicSID());
+				c.setUserId(u.getId());
+				c.setFirstname(u.getFirstname());
+				c.setLastname(u.getLastname());
+				c.setMobile(true);
+				sessionManager.updateClientByStreamId(streamId, c, false, null);
+
+				add(result, "sid", sd.getSessionId());
+				add(result, "publicSid", c.getPublicSID());
+				add(result, "status", 0);
+				add(result, "userId", u.getId());
+				add(result, "firstname", u.getFirstname());
+				add(result, "lastname", u.getLastname());
+				add(result, "login", u.getLogin());
+				add(result, "email", u.getAddress() == null ? "" : u.getAddress().getEmail());
+				add(result, "language", u.getLanguageId()); //TODO rights
+			}
 		}
 		return result;
 	}

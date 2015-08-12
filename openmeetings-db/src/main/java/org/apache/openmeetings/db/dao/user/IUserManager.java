@@ -18,11 +18,17 @@
  */
 package org.apache.openmeetings.db.dao.user;
 
+import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 import java.util.Set;
 import java.util.TimeZone;
 
+import org.apache.openmeetings.db.entity.user.State;
+import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Right;
 import org.apache.openmeetings.db.entity.user.Userdata;
 
@@ -44,6 +50,11 @@ public interface IUserManager {
 			String userOffers, String userSearchs, Boolean showContactData,
 			Boolean showContactDataToContacts, String activatedHash) throws Exception;
 
+	Long getLanguage(Locale loc);
+	State getCountry(Locale loc);
+	User loginOAuth(Map<String, String> params, long serverId) throws IOException, NoSuchAlgorithmException;
+
+	/** TODO FIXME seems to be unused **/
 	Boolean kickUserByStreamId(String SID, Long roomId);
 	
 	Boolean kickUserByPublicSID(String SID, String publicSID);

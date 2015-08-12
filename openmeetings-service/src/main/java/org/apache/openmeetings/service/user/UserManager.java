@@ -19,16 +19,22 @@
 package org.apache.openmeetings.service.user;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_GROUP_ID;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_LANG_KEY;
 import static org.apache.openmeetings.db.util.UserHelper.getMinLoginLength;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SOAP_REGISTER_KEY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
+import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Random;
 import java.util.Set;
 import java.util.TimeZone;
 
@@ -39,6 +45,7 @@ import javax.persistence.TypedQuery;
 import org.apache.openmeetings.core.mail.MailHandler;
 import org.apache.openmeetings.core.remote.red5.ScopeApplicationAdapter;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
+import org.apache.openmeetings.db.dao.label.LabelDao;
 import org.apache.openmeetings.db.dao.server.ISessionManager;
 import org.apache.openmeetings.db.dao.server.SessiondataDao;
 import org.apache.openmeetings.db.dao.user.IUserManager;
@@ -51,8 +58,10 @@ import org.apache.openmeetings.db.entity.room.Client;
 import org.apache.openmeetings.db.entity.server.Sessiondata;
 import org.apache.openmeetings.db.entity.user.Address;
 import org.apache.openmeetings.db.entity.user.OrganisationUser;
+import org.apache.openmeetings.db.entity.user.State;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Right;
+import org.apache.openmeetings.db.entity.user.User.Type;
 import org.apache.openmeetings.db.entity.user.Userdata;
 import org.apache.openmeetings.db.util.AuthLevelUtil;
 import org.apache.openmeetings.db.util.TimezoneUtil;
@@ -82,15 +91,15 @@ public class UserManager implements IUserManager {
 	@Autowired
 	private SessiondataDao sessiondataDao;
 	@Autowired
-	private ConfigurationDao configurationDao;
+	private ConfigurationDao cfgDao;
 	@Autowired
-	private StateDao statemanagement;
+	private StateDao stateDao;
 	@Autowired
 	private OrganisationDao orgDao;
 	@Autowired
 	private OrganisationUserDao orgUserDao;
 	@Autowired
-	private UserDao usersDao;
+	private UserDao userDao;
 	@Autowired
 	private EmailManager emailManagement;
 	@Autowired
@@ -107,7 +116,7 @@ public class UserManager implements IUserManager {
 		try {
 			SearchResult<User> sresult = new SearchResult<User>();
 			sresult.setObjectName(User.class.getName());
-			sresult.setRecords(usersDao.count(search));
+			sresult.setRecords(userDao.count(search));
 
 			String sort = null;
 			if (orderby != null && orderby.length() > 0) {
@@ -150,7 +159,7 @@ public class UserManager implements IUserManager {
 
 			if (sessionData != null) {
 
-				User u = usersDao.get(sessionData.getUserId());
+				User u = userDao.get(sessionData.getUserId());
 
 				sessiondataDao.updateUserWithoutSession(SID, u.getId());
 
@@ -290,19 +299,19 @@ public class UserManager implements IUserManager {
 			boolean generateSipUserData, String jNameTimeZone, Boolean sendConfirmation) {
 		try {
 			// Checks if FrontEndUsers can register
-			if ("1".equals(configurationDao.getConfValue(CONFIG_SOAP_REGISTER_KEY, String.class, "0"))) {
+			if ("1".equals(cfgDao.getConfValue(CONFIG_SOAP_REGISTER_KEY, String.class, "0"))) {
 				if (sendConfirmation == null) {
-					String baseURL = configurationDao.getBaseUrl();
+					String baseURL = cfgDao.getBaseUrl();
 					sendConfirmation = baseURL != null
 							&& !baseURL.isEmpty()
-							&& 1 == configurationDao.getConfValue("sendEmailWithVerficationCode", Integer.class, "0");
+							&& 1 == cfgDao.getConfValue("sendEmailWithVerficationCode", Integer.class, "0");
 				}
 				// TODO: Read and generate SIP-Data via RPC-Interface Issue 1098
 
 				Long userId = registerUserInit(UserDao.getDefaultRights(), login,
 						Userpass, lastname, firstname, email, age, street,
 						additionalname, fax, zip, stateId, town, languageId,
-						true, Arrays.asList(configurationDao.getConfValue(CONFIG_DEFAULT_GROUP_ID, Long.class, null)), phone,
+						true, Arrays.asList(cfgDao.getConfValue(CONFIG_DEFAULT_GROUP_ID, Long.class, null)), phone,
 						sendSMS, sendConfirmation, timezoneUtil.getTimeZone(jNameTimeZone), false, "", "", false, true, null);
 
 				if (userId > 0 && sendConfirmation) {
@@ -360,13 +369,13 @@ public class UserManager implements IUserManager {
 			Boolean showContactDataToContacts, String activatedHash) throws Exception {
 		// TODO: make phone number persistent
 		// Check for required data
-		if (login.length() >= getMinLoginLength(configurationDao)) {
+		if (login.length() >= getMinLoginLength(cfgDao)) {
 			// Check for duplicates
-			boolean checkName = usersDao.checkLogin(login, User.Type.user, null, null);
-			boolean checkEmail = Strings.isEmpty(email) || usersDao.checkEmail(email, User.Type.user, null, null);
+			boolean checkName = userDao.checkLogin(login, User.Type.user, null, null);
+			boolean checkEmail = Strings.isEmpty(email) || userDao.checkEmail(email, User.Type.user, null, null);
 			if (checkName && checkEmail) {
 
-				String link = configurationDao.getBaseUrl();
+				String link = cfgDao.getBaseUrl();
 				String hash = activatedHash;
 				if (hash == null){
 					hash = ManageCryptStyle.getInstanceOfCrypt().createPassPhrase(login
@@ -380,7 +389,7 @@ public class UserManager implements IUserManager {
 					if (!sendMail.equals("success"))
 						return -19L;
 				}
-				Address adr =  usersDao.getAddress(street, zip, town, stateId, additionalname, fax, phone, email);
+				Address adr =  userDao.getAddress(street, zip, town, stateId, additionalname, fax, phone, email);
 
 				// If this user needs first to click his E-Mail verification
 				// code then set the status to 0
@@ -392,7 +401,7 @@ public class UserManager implements IUserManager {
 				for (Long id : organisations) {
 					orgList.add(new OrganisationUser(orgDao.get(id)));
 				}
-				User u = usersDao.addUser(rights, firstname, login, lastname, languageId,
+				User u = userDao.addUser(rights, firstname, login, lastname, languageId,
 						password, adr, sendSMS, age, hash, timezone,
 						forceTimeZoneCheck, userOffers, userSearchs, showContactData,
 						showContactDataToContacts, null, null, orgList, null);
@@ -427,7 +436,7 @@ public class UserManager implements IUserManager {
 			Long users_id = sessiondataDao.checkSession(SID);
 
 			// admins only
-			if (AuthLevelUtil.hasAdminLevel(usersDao.getRights(users_id))) {
+			if (AuthLevelUtil.hasAdminLevel(userDao.getRights(users_id))) {
 
 				sessiondataDao.clearSessionByRoomId(room_id);
 
@@ -459,7 +468,7 @@ public class UserManager implements IUserManager {
 			Long userId = sessiondataDao.checkSession(SID);
 
 			// admins only
-			if (AuthLevelUtil.hasWebServiceLevel(usersDao.getRights(userId))) {
+			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(userId))) {
 				Client rcl = sessionManager.getClientByPublicSID(publicSID, false, null);
 
 				if (rcl == null) {
@@ -484,5 +493,88 @@ public class UserManager implements IUserManager {
 			log.error("[kickUserByStreamId]", err);
 		}
 		return null;
+	}
+	
+	public Long getLanguage(Locale loc) {
+		if (loc != null) {
+			for (Map.Entry<Long, Locale> e : LabelDao.languages.entrySet()) {
+				if (loc.equals(e.getValue())) {
+					return e.getKey();
+				}
+			}
+		}
+		return cfgDao.getConfValue(CONFIG_DEFAULT_LANG_KEY, Long.class, "1");
+	}
+
+	public State getCountry(Locale loc) {
+		List<State> states = stateDao.get();
+		if (loc != null) {
+			String code = loc.getISO3Country().toUpperCase();
+			for (State s : states) {
+				if (s.getShortName().toUpperCase().equals(code)) {
+					return s;
+				}
+			}
+		}
+		return states.get(0);
+	}
+
+	public User loginOAuth(Map<String, String> params, long serverId) throws IOException, NoSuchAlgorithmException {
+		String login = params.get("login");
+		String email = params.get("email");
+		String lastname = params.get("lastname");
+		String firstname = params.get("firstname");
+		if (firstname == null) {
+			firstname = "";
+		}
+		if (lastname == null) {
+			lastname = "";
+		}
+		if (!userDao.validLogin(login)) {
+			log.error("Invalid login, please check parameters");
+			return null; //TODO FIXME need to be checked
+		}
+		User u = userDao.getByLogin(login, Type.oauth, serverId);
+		if (!userDao.checkEmail(email, Type.oauth, serverId, u == null ? null : u.getId())) {
+			log.error("Another user with the same email exists");
+			return null; //TODO FIXME need to be checked
+		}
+		// generate random password
+		byte[] rawPass = new byte[25];
+		Random rnd = new Random();
+		for (int i = 0; i < rawPass.length; ++i) {
+			rawPass[i] = (byte) ('!' + rnd.nextInt(93));
+		}
+		String pass = new String(rawPass, "UTF-8");
+		// check if the user already exists and register new one if it's needed
+		if (u == null) {
+			u = userDao.getNewUserInstance(null);
+			u.setType(Type.oauth);
+			u.getRights().remove(Right.Login);;
+			u.setDomainId(serverId);
+			u.getOrganisationUsers().add(new OrganisationUser(orgDao.get(cfgDao.getConfValue(CONFIG_DEFAULT_GROUP_ID, Long.class, "-1"))));
+			u.setLogin(login);
+			u.setShowContactDataToContacts(true);
+			u.setLastname(lastname);
+			u.setFirstname(firstname);
+			u.getAddress().setEmail(email);
+			String picture = params.get("picture");
+			if (picture != null) {
+				u.setPictureuri(picture);
+			}
+			String locale = params.get("locale");
+			if (locale != null) {
+				Locale loc = Locale.forLanguageTag(locale);
+				if (loc != null) {
+					u.setLanguageId(getLanguage(loc));
+					u.getAddress().setState(getCountry(loc));
+				}
+			}
+		}
+		//TODO FIXME should we update fields on login ????
+		u.setLastlogin(new Date());
+		u = userDao.update(u, pass, -1);
+		
+		return u;
 	}
 }

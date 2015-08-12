@@ -37,7 +37,6 @@ import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 import java.util.Set;
 import java.util.TimeZone;
 
@@ -47,7 +46,7 @@ import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.label.LabelDao;
 import org.apache.openmeetings.db.dao.server.SOAPLoginDao;
 import org.apache.openmeetings.db.dao.server.SessiondataDao;
-import org.apache.openmeetings.db.dao.user.StateDao;
+import org.apache.openmeetings.db.dao.user.IUserManager;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.server.RemoteSessionObject;
 import org.apache.openmeetings.db.entity.server.SOAPLogin;
@@ -246,8 +245,6 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 	}
 	
 	public boolean signIn(String login, String password, Type type, Long domainId) {
-		Sessiondata sessData = getBean(SessiondataDao.class).startsession();
-		SID = sessData.getSessionId();
 		try {
 			User u = null;
 			switch (type) {
@@ -268,12 +265,22 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 			if (u == null) {
 				return false;
 			}
-			setUser(u);
+			signIn(u);
 			return true;
 		} catch (OmException oe) {
 			loginError = oe.getCode() == null ? -1L : oe.getCode();
 		}
 		return false;
+	}
+	
+	public boolean signIn(User u) {
+		Sessiondata sessData = getBean(SessiondataDao.class).startsession();
+		SID = sessData.getSessionId();
+		if (u == null) {
+			return false;
+		}
+		setUser(u);
+		return true;
 	}
 	
 	public Long getLoginError() {
@@ -381,23 +388,11 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 	}
 
 	public Long getLanguageByBrowserLocale() {
-		for (Map.Entry<Long, Locale> e : LabelDao.languages.entrySet()) {
-			if (getBrowserLocale().equals(e.getValue())) {
-				return e.getKey();
-			}
-		}
-		return getBean(ConfigurationDao.class).getConfValue(CONFIG_DEFAULT_LANG_KEY, Long.class, "1");
+		return getBean(IUserManager.class).getLanguage(getBrowserLocale());
 	}
 
 	public State getCountryByBrowserLocale() {
-		List<State> states = getBean(StateDao.class).get();
-		String code = getBrowserLocale().getISO3Country().toUpperCase();
-		for (State s : states) {
-			if (s.getShortName().toUpperCase().equals(code)){
-				return s;
-			}
-		}
-		return states.get(0);
+		return getBean(IUserManager.class).getCountry(getBrowserLocale());
 	}
 
 	public String getClientTZCode() {

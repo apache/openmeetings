@@ -37,6 +37,7 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_FRONTEND
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_IGNORE_BAD_SSL;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_LOGIN_MIN_LENGTH_KEY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_MAX_UPLOAD_SIZE_KEY;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_OAUTH_REGISTER_KEY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_PASS_MIN_LENGTH_KEY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_REDIRECT_URL_FOR_EXTERNAL_KEY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_RSS_FEED1_KEY;
@@ -293,6 +294,7 @@ public class ImportInitvalues {
 
 		cfgDao.add(CONFIG_FRONTEND_REGISTER_KEY, cfg.allowFrontendRegister, null, "Is user register available on login screen");
 		cfgDao.add(CONFIG_SOAP_REGISTER_KEY, "1", null, "Is user register available via SOAP/REST");
+		cfgDao.add(CONFIG_OAUTH_REGISTER_KEY, "1", null, "Is user register available via OAuth");
 		// this group_id is the Organisation of users who register through the frontend or SOAP
 		cfgDao.add(CONFIG_DEFAULT_GROUP_ID, "1", null, "");
 
