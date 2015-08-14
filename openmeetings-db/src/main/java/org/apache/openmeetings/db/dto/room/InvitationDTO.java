@@ -20,10 +20,15 @@ package org.apache.openmeetings.db.dto.room;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
+import java.io.Serializable;
 import java.security.NoSuchAlgorithmException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
 
 import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
@@ -35,7 +40,10 @@ import org.apache.openmeetings.util.crypt.ManageCryptStyle;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 
-public class InvitationDTO {
+@XmlRootElement
+@XmlAccessorType(XmlAccessType.FIELD)
+public class InvitationDTO implements Serializable {
+	private static final long serialVersionUID = 1L;
 	private static final Logger log = Red5LoggerFactory.getLogger(InvitationDTO.class, webAppRootKey);
 	private static ThreadLocal<SimpleDateFormat> SDF = new ThreadLocal<SimpleDateFormat>() {
 		protected SimpleDateFormat initialValue() {
@@ -55,6 +63,8 @@ public class InvitationDTO {
 	private String validFrom;
 	private String validTo;
 	private long languageId;
+	
+	public InvitationDTO() {}
 	
 	public String getEmail() {
 		return email;

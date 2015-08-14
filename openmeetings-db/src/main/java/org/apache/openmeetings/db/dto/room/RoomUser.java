@@ -27,6 +27,8 @@ public class RoomUser {
 	private Boolean isBroadCasting;
 	private String avsettings;
 	
+	public RoomUser() {}
+	
 	public String getFirstname() {
 		return firstname;
 	}

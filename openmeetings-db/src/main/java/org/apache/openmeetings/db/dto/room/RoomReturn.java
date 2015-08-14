@@ -28,6 +28,8 @@ public class RoomReturn {
 	private Date created;
 	private RoomUser[] roomUser;
 
+	public RoomReturn() {}
+	
 	public Long getRoomId() {
 		return roomId;
 	}

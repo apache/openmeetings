@@ -33,6 +33,9 @@ public class LiberaryObject {
 	private LinkedList<FoldersObject> foldersList;
 	private PresentationObject presentationObject;
 	private String error;
+	
+	public LiberaryObject() {}
+	
 	public LinkedList<FilesObject> getFilesList() {
 		return filesList;
 	}

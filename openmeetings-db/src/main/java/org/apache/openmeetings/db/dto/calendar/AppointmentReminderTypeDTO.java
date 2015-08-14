@@ -18,10 +18,19 @@
  */
 package org.apache.openmeetings.db.dto.calendar;
 
+import java.io.Serializable;
+
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
+
 import org.apache.openmeetings.db.dao.calendar.AppointmentReminderTypeDao;
 import org.apache.openmeetings.db.entity.calendar.AppointmentReminderType;
 
-public class AppointmentReminderTypeDTO {
+@XmlRootElement
+@XmlAccessorType(XmlAccessType.FIELD)
+public class AppointmentReminderTypeDTO implements Serializable {
+	private static final long serialVersionUID = 1L;
 	private Long id;
 	private String name;
 

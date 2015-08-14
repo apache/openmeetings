@@ -30,8 +30,7 @@ public class RoomSearchResult {
 	private List<RoomDTO> result;
 	private Long errorId;
 
-	public RoomSearchResult() {
-	}
+	public RoomSearchResult() {}
 	
 	public RoomSearchResult(SearchResult<Room> copy) {
 		if (copy != null) {

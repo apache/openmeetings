@@ -18,7 +18,16 @@
  */
 package org.apache.openmeetings.db.dto.room;
 
-public class RoomOptionsDTO {
+import java.io.Serializable;
+
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
+
+@XmlRootElement
+@XmlAccessorType(XmlAccessType.FIELD)
+public class RoomOptionsDTO implements Serializable {
+	private static final long serialVersionUID = 1L;
 	private Long roomId;
 	private Long recordingId;
 	private boolean moderator;
@@ -26,6 +35,8 @@ public class RoomOptionsDTO {
 	private boolean showNickNameDialog;
 	private boolean allowSameURLMultipleTimes;
 	private boolean allowRecording;
+	
+	public RoomOptionsDTO() {}
 	
 	public Long getRoomId() {
 		return roomId;

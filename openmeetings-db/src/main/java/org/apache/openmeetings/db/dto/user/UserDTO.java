@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.db.dto.user;
 
+import java.io.Serializable;
 import java.util.Set;
 
 import org.apache.openmeetings.db.dao.user.UserDao;
@@ -26,7 +27,8 @@ import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Right;
 import org.apache.openmeetings.db.entity.user.User.Type;
 
-public class UserDTO {
+public class UserDTO implements Serializable {
+	private static final long serialVersionUID = 1L;
 	private Long id;
 	private String login;
 	private String password;

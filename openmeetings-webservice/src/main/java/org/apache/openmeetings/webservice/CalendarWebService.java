@@ -658,8 +658,8 @@ public class CalendarWebService {
 		}
 		// return new Long(-1);
 		// return numberOfPartizipants;
-	}*/
-
+	}
+*/
 	/**
 	 * Add a meeting member to a certain room. This is the same as adding an
 	 * external user to a event in the calendar.

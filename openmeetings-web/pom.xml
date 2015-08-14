@@ -192,7 +192,7 @@
 									</plugin>
 									<goal>download-single</goal>
 									<configuration>
-										<url>https://dl.bintray.com/openmeetings/generic/backups/</url>
+										<url>https://dl.bintray.com/openmeetings/generic/backups</url>
 										<fromFile>@item@</fromFile>
 										<toDir>${old-backups.dir}</toDir>
 										<skip>${old-backups.dwnd.skip}</skip>

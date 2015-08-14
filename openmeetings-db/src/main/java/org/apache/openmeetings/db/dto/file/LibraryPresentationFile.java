@@ -25,6 +25,8 @@ public class LibraryPresentationFile {
 	private String lastmod = null;
 	private Long size = null;
 	
+	public LibraryPresentationFile() {}
+	
 	public String getName() {
 		return name;
 	}

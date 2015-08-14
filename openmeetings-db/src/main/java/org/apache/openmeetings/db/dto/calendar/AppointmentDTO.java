@@ -18,11 +18,16 @@
  */
 package org.apache.openmeetings.db.dto.calendar;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
+
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
 
 import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
 import org.apache.openmeetings.db.dao.calendar.AppointmentReminderTypeDao;
@@ -33,7 +38,10 @@ import org.apache.openmeetings.db.dto.user.UserDTO;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
 import org.apache.openmeetings.db.entity.calendar.MeetingMember;
 
-public class AppointmentDTO {
+@XmlRootElement
+@XmlAccessorType(XmlAccessType.FIELD)
+public class AppointmentDTO implements Serializable {
+	private static final long serialVersionUID = 1L;
 	private Long id;
 	private String title;
 	private String location;
@@ -101,7 +109,7 @@ public class AppointmentDTO {
 		a.setIcalId(icalId);
 		a.setMeetingMembers(new ArrayList<MeetingMember>());
 		for(MeetingMemberDTO mm : meetingMembers) {
-			//TODO FIXME a.getMeetingMembers().add(mm.get());
+			//a.getMeetingMembers().add(mm.get());
 		}
 		//MeetingMember
 		a.setLanguageId(languageId);

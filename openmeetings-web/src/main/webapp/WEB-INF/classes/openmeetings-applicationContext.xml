@@ -272,7 +272,6 @@
 	<bean id="fileWebService" class="org.apache.openmeetings.webservice.FileWebService" />
 	<bean id="groupWebService" class="org.apache.openmeetings.webservice.GroupWebService" />
 	<bean id="recordWebService" class="org.apache.openmeetings.webservice.RecordingWebService" />
-	<bean id="roomWebService" class="org.apache.openmeetings.webservice.RoomWebService" />
 	<bean id="roomTypeWebService" class="org.apache.openmeetings.webservice.RoomTypeWebService" />
 	<bean id="roomWebService" class="org.apache.openmeetings.webservice.RoomWebService" />
 	<bean id="serverWebService" class="org.apache.openmeetings.webservice.ServerWebService" />

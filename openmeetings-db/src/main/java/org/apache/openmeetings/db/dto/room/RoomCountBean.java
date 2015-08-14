@@ -24,6 +24,8 @@ public class RoomCountBean {
 	private Integer roomCount;
 	private Integer maxUser;
 	
+	public RoomCountBean() {}
+	
 	public long getRoomId() {
 		return roomId;
 	}

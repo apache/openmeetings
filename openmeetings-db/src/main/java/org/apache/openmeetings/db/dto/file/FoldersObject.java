@@ -27,6 +27,8 @@ public class FoldersObject {
 	private String folderName;
 	private String lastModified;
 	
+	public FoldersObject() {}
+	
 	public String getFolderName() {
 		return folderName;
 	}

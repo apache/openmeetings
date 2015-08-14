@@ -18,8 +18,13 @@
  */
 package org.apache.openmeetings.db.dto.server;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
 
 import org.apache.openmeetings.db.entity.server.Server;
 
@@ -31,7 +36,10 @@ import org.apache.openmeetings.db.entity.server.Server;
  * @author sebawagner
  *
  */
-public class ServerDTO {
+@XmlRootElement
+@XmlAccessorType(XmlAccessType.FIELD)
+public class ServerDTO implements Serializable {
+	private static final long serialVersionUID = 1L;
 	private Long id;
 	private String name;
 	private String address;
@@ -43,6 +51,8 @@ public class ServerDTO {
 	private boolean active;
 	private String comment;
 
+	public ServerDTO() {}
+	
 	public ServerDTO(Server s) {
 		if (s == null) {
 			return;

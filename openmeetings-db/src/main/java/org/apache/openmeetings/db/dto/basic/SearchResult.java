@@ -27,6 +27,8 @@ public class SearchResult<T> {
 	private Collection<T> result;
 	private Long errorId;
 	
+	public SearchResult() {}
+	
 	public String getObjectName() {
 		return objectName;
 	}

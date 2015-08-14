@@ -36,8 +36,7 @@ public class ServiceResult implements Serializable {
 		, SUCCESS
 	}
 
-	public ServiceResult() {
-	}
+	public ServiceResult() {}
 	
 	public ServiceResult(long code, String message, String type) {
 		super();

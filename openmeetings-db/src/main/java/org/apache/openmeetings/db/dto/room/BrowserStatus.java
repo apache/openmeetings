@@ -23,6 +23,8 @@ public class BrowserStatus {
 	private boolean browserInited = false;
 	private String currentURL = "";
 	
+	public BrowserStatus() {}
+	
 	public boolean isBrowserInited() {
 		return browserInited;
 	}

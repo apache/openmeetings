@@ -18,14 +18,22 @@
  */
 package org.apache.openmeetings.db.dto.room;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
 
 import org.apache.openmeetings.db.dao.room.RoomTypeDao;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.room.RoomType;
 
-public class RoomDTO {
+@XmlRootElement
+@XmlAccessorType(XmlAccessType.FIELD)
+public class RoomDTO implements Serializable {
+	private static final long serialVersionUID = 1L;
 	private Long id;
 	private String name;
 	private String comment;
@@ -52,8 +60,7 @@ public class RoomDTO {
 	private boolean screenSharingHidden;
 	private boolean whiteboardHidden;
 	
-	public RoomDTO() {
-	}
+	public RoomDTO() {}
 	
 	public RoomDTO(Room r) {
 		id = r.getId();

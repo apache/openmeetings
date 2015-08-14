@@ -18,7 +18,16 @@
  */
 package org.apache.openmeetings.db.dto.user;
 
-public class ExternalUserDTO {
+import java.io.Serializable;
+
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
+
+@XmlRootElement
+@XmlAccessorType(XmlAccessType.FIELD)
+public class ExternalUserDTO implements Serializable {
+	private static final long serialVersionUID = 1L;
 	private String login;
 	private String firstname;
 	private String lastname;
@@ -26,6 +35,8 @@ public class ExternalUserDTO {
 	private String email;
 	private String externalId;
 	private String externalType;
+	
+	public ExternalUserDTO() {}
 	
 	public String getLogin() {
 		return login;

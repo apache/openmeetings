@@ -31,6 +31,8 @@ public class FileExplorerObject {
 	private Long userHomeSize;
 	private Long roomHomeSize;
 	
+	public FileExplorerObject() {}
+	
 	public FileExplorerItem[] getUserHome() {
 		return userHome;
 	}
