@@ -18,17 +18,20 @@
  */
 package org.apache.openmeetings.core.remote;
 
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_GROUP_ID;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_FRONTEND_REGISTER_KEY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_OAUTH_REGISTER_KEY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SOAP_REGISTER_KEY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
+import java.util.TimeZone;
 
 import org.apache.openmeetings.core.remote.red5.ScopeApplicationAdapter;
 import org.apache.openmeetings.core.remote.util.SessionVariablesUtil;
@@ -38,13 +41,17 @@ import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.dao.server.ISessionManager;
 import org.apache.openmeetings.db.dao.server.SessiondataDao;
 import org.apache.openmeetings.db.dao.user.IUserManager;
+import org.apache.openmeetings.db.dao.user.StateDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.room.Client;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.server.Sessiondata;
 import org.apache.openmeetings.db.entity.user.Organisation;
 import org.apache.openmeetings.db.entity.user.OrganisationUser;
+import org.apache.openmeetings.db.entity.user.State;
 import org.apache.openmeetings.db.entity.user.User;
+import org.apache.openmeetings.util.CalendarPatterns;
+import org.apache.openmeetings.util.crypt.ManageCryptStyle;
 import org.apache.wicket.util.string.Strings;
 import org.red5.logging.Red5LoggerFactory;
 import org.red5.server.api.IConnection;
@@ -59,6 +66,8 @@ public class MobileService {
 	private ConfigurationDao cfgDao;
 	@Autowired
 	private UserDao userDao;
+	@Autowired
+	private StateDao stateDao;
 	@Autowired
 	private IUserManager userManager;
 	@Autowired
@@ -84,13 +93,80 @@ public class MobileService {
 		return result;
 	}
 	
+	public Map<Long, String> getStates() {
+		Map<Long, String> result = new Hashtable<>();
+		for (State s : stateDao.get()) {
+			result.put(s.getId(), s.getName());
+		}
+		return result;
+	}
+	
+	public String[] getTimezones() {
+		return TimeZone.getAvailableIDs();
+	}
+	
 	public Map<String, Object> loginGoogle(Map<String, String> umap) {
 		Map<String, Object> result = getResult();
 		try {
-			User u = userManager.loginOAuth(umap, 2); //TODO hardcoded
-			result = login(u, result);
+			if ("1".equals(cfgDao.getConfValue(CONFIG_OAUTH_REGISTER_KEY, String.class, "0"))) {
+				User u = userManager.loginOAuth(umap, 2); //TODO hardcoded
+				result = login(u, result);
+			}
 		} catch (Exception e) {
-			log.error("[loginUser]", e);
+			log.error("[loginGoogle]", e);
+		}
+		return result;
+	}
+	
+	public Map<String, Object> registerUser(Map<String, String> umap) {
+		Map<String, Object> result = getResult();
+		try {
+			if ("1".equals(cfgDao.getConfValue(CONFIG_FRONTEND_REGISTER_KEY, String.class, "0"))) {
+				String login = umap.get("login");
+				String email = umap.get("email");
+				String lastname = umap.get("lastname");
+				String firstname = umap.get("firstname");
+				if (firstname == null) {
+					firstname = "";
+				}
+				if (lastname == null) {
+					lastname = "";
+				}
+				String password = umap.get("password");
+				String tzId = umap.get("tzId");
+				Long stateId = Long.valueOf(umap.get("stateId"));
+				Long langId = Long.valueOf(umap.get("langId"));
+				
+				//FIXME TODO unify with Register dialog
+				String hash = ManageCryptStyle.getInstanceOfCrypt().createPassPhrase(
+						login + CalendarPatterns.getDateWithTimeByMiliSeconds(new Date()));
+
+				String baseURL = cfgDao.getBaseUrl();
+				boolean sendConfirmation = !Strings.isEmpty(baseURL)
+						&& 1 == cfgDao.getConfValue("sendEmailWithVerficationCode", Integer.class, "0");
+				Long userId = userManager.registerUserInit(UserDao.getDefaultRights(), login, password, lastname
+						, firstname, email, null /* age/birthday */, "" /* street */
+						, "" /* additionalname */, "" /* fax */, "" /* zip */, stateId
+						, "" /* town */, langId, true /* sendWelcomeMessage */
+						, Arrays.asList(cfgDao.getConfValue(CONFIG_DEFAULT_GROUP_ID, Long.class, null)),
+						"" /* phone */, false, sendConfirmation, TimeZone.getTimeZone(tzId),
+						false /* forceTimeZoneCheck */, "" /* userOffers */, "" /* userSearchs */, false /* showContactData */,
+						true /* showContactDataToContacts */, hash);
+				if (userId == null) {
+					//do nothing
+				} else if (userId > 0) {
+					User u = userDao.get(userId);
+					if (sendConfirmation) {
+						add(result, "status", -666L);
+					} else {
+						result = login(u, result);
+					}
+				} else {
+					add(result, "status", userId);
+				}
+			}
+		} catch (Exception e) {
+			log.error("[registerUser]", e);
 		}
 		return result;
 	}

@@ -42,7 +42,6 @@ import org.apache.openmeetings.util.crypt.ManageCryptStyle;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.LanguageDropDown;
-import org.apache.openmeetings.web.pages.MainPage;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
@@ -57,6 +56,7 @@ import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.util.string.Strings;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 
@@ -70,7 +70,7 @@ import com.googlecode.wicket.jquery.ui.widget.dialog.MessageDialog;
 
 public class RegisterDialog extends AbstractFormDialog<String> {
 	private static final long serialVersionUID = 1L;
-	private static final Logger log = Red5LoggerFactory.getLogger(MainPage.class, webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(RegisterDialog.class, webAppRootKey);
 	private DialogButton cancelBtn = new DialogButton("cancel", Application.getString(122));
 	private DialogButton registerBtn = new DialogButton("register", Application.getString(121));
 	private FeedbackPanel feedback = new FeedbackPanel("feedback");
@@ -153,12 +153,11 @@ public class RegisterDialog extends AbstractFormDialog<String> {
 	}
 
 	public void onOpen(AjaxRequestTarget target) {
-		String baseURL = getBean(ConfigurationDao.class).getBaseUrl();
-		sendEmailAtRegister = 1 == getBean(ConfigurationDao.class).getConfValue("sendEmailAtRegister", Integer.class, "0");
-		sendConfirmation = baseURL != null
-				&& !baseURL.isEmpty()
-				&& 1 == getBean(ConfigurationDao.class)
-						.getConfValue("sendEmailWithVerficationCode", Integer.class, "0");
+		ConfigurationDao cfgDao = getBean(ConfigurationDao.class);
+		String baseURL = cfgDao.getBaseUrl();
+		sendEmailAtRegister = 1 == cfgDao.getConfValue("sendEmailAtRegister", Integer.class, "0");
+		sendConfirmation = !Strings.isEmpty(baseURL)
+				&& 1 == cfgDao.getConfValue("sendEmailWithVerficationCode", Integer.class, "0");
 		long messageCode = 236;
 		if (sendConfirmation && sendEmailAtRegister) {
 			messageCode = 674;
