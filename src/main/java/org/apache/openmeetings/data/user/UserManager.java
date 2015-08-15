@@ -404,10 +404,10 @@ public class UserManager implements IUserManager {
 				link += "activate?u=" + hash;
 
 				if (sendWelcomeMessage && email.length() != 0) {
-					String sendMail = emailManagement.sendMail(login,
-							password, email, link, sendConfirmation);
-					if (!sendMail.equals("success"))
+					String sendMail = emailManagement.sendMail(login, password, email, link, sendConfirmation);
+					if (!sendMail.equals("success")) {
 						return -19L;
+					}
 				}
 				Address adr =  userDao.getAddress(street, zip, town, states_id, additionalname, fax, phone, email);
 

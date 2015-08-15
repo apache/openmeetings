@@ -55,6 +55,7 @@ import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.util.string.Strings;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 
@@ -105,6 +106,7 @@ public class RegisterDialog extends AbstractFormDialog<String> {
 				behavior.setOption("closeOnEscape", false);
 			}
 
+			@Override
 			public void onClose(AjaxRequestTarget target, DialogButton button) {
 				s.open(target);
 			}
@@ -150,12 +152,11 @@ public class RegisterDialog extends AbstractFormDialog<String> {
 	}
 
 	public void onOpen(AjaxRequestTarget target) {
-		String baseURL = getBean(ConfigurationDao.class).getBaseUrl();
-		sendEmailAtRegister = 1 == getBean(ConfigurationDao.class).getConfValue("sendEmailAtRegister", Integer.class, "0");
-		sendConfirmation = baseURL != null
-				&& !baseURL.isEmpty()
-				&& 1 == getBean(ConfigurationDao.class)
-						.getConfValue("sendEmailWithVerficationCode", Integer.class, "0");
+		ConfigurationDao cfgDao = getBean(ConfigurationDao.class);
+		String baseURL = cfgDao.getBaseUrl();
+		sendEmailAtRegister = 1 == cfgDao.getConfValue("sendEmailAtRegister", Integer.class, "0");
+		sendConfirmation = !Strings.isEmpty(baseURL)
+				&& 1 == cfgDao.getConfValue("sendEmailWithVerficationCode", Integer.class, "0");
 		long messageCode = 236;
 		if (sendConfirmation && sendEmailAtRegister) {
 			messageCode = 674;
