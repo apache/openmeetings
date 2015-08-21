@@ -58,13 +58,14 @@ public class EmailManager {
 	 * @return
 	 * @throws Exception
 	 */
-	public String sendMail(String username, String userpass, String email, String hash, Boolean sendEmailWithVerficationCode) {
+	public String sendMail(String username, String userpass, String email, String hash, Boolean sendEmailWithVerficationCode, Long langId) {
 		log.debug("sendMail:: username = {}, email = {}", username, email);
 		Integer sendEmailAtRegister = configurationDao.getConfValue("sendEmailAtRegister", Integer.class, "0");
 
 		String link = ((IApplication)Application.get(wicketApplicationName)).urlForActivatePage(new PageParameters().add("u",  hash));
 		
 		if (sendEmailAtRegister == 1) {
+			RegisterUserTemplate.ensureApplication(langId);
 			mailHandler.send(email, getString(512)
 				, RegisterUserTemplate.getEmail(username, userpass, email, sendEmailWithVerficationCode ? link : null));
 		}
