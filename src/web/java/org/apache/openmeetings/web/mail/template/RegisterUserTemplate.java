@@ -37,8 +37,7 @@ public class RegisterUserTemplate extends AbstractTemplatePanel {
 			.setVisible(verification_url != null));
 	}
 
-	public static String getEmail(String username, String userpass, String email, String verification_url, Long langId) {
-		ensureApplication(langId);
+	public static String getEmail(String username, String userpass, String email, String verification_url) {
 		return renderPanel(new RegisterUserTemplate(username, userpass, email, verification_url)).toString();
 	}
 }
