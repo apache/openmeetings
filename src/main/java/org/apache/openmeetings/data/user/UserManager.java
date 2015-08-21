@@ -404,7 +404,7 @@ public class UserManager implements IUserManager {
 				link += "activate?u=" + hash;
 
 				if (sendWelcomeMessage && email.length() != 0) {
-					String sendMail = emailManagement.sendMail(login, password, email, link, sendConfirmation);
+					String sendMail = emailManagement.sendMail(login, password, email, link, sendConfirmation, language_id);
 					if (!sendMail.equals("success")) {
 						return -19L;
 					}

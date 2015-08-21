@@ -50,13 +50,13 @@ public class EmailManager {
 	 * @return
 	 * @throws Exception
 	 */
-	public String sendMail(String username, String userpass, String email, String link, Boolean sendEmailWithVerficationCode) {
+	public String sendMail(String username, String userpass, String email, String link, Boolean sendEmailWithVerficationCode, Long langId) {
 		log.debug("sendMail:: username = {}, email = {}", username, email);
 		Integer sendEmailAtRegister = configurationDao.getConfValue("sendEmailAtRegister", Integer.class, "0");
 
 		if (sendEmailAtRegister == 1) {
-			mailHandler.send(email, Application.getString(512)
-				, RegisterUserTemplate.getEmail(username, userpass, email, sendEmailWithVerficationCode ? link : null));
+			mailHandler.send(email, langId == null ? Application.getString(512) : Application.getString(512, langId)  
+				, RegisterUserTemplate.getEmail(username, userpass, email, sendEmailWithVerficationCode ? link : null, langId));
 		}
 		return "success";
 	}
