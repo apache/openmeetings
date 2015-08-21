@@ -21,7 +21,6 @@ package org.apache.openmeetings.remote;
 import static org.apache.openmeetings.db.entity.user.PrivateMessage.INBOX_FOLDER_ID;
 import static org.apache.openmeetings.db.entity.user.PrivateMessage.SENT_FOLDER_ID;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
-import static org.apache.openmeetings.web.app.Application.removeOnlineUser;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -513,7 +512,7 @@ public class UserService implements IUserService {
 			if (AuthLevelUtil.hasAdminLevel(userDao.getRights(users_id))) {
 				WebClient client = Application.getClientByKeys(userId, sessionId);
 				if (client != null) {
-					removeOnlineUser(client);
+					Application.invalidateClient(client);
 				}
 			}
 		} catch (Exception err) {

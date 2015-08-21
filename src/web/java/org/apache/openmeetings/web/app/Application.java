@@ -204,7 +204,6 @@ public class Application extends AuthenticatedWebApplication {
 		try {
 			if (c != null) {
 				ONLINE_USERS.remove(c.getUserId(), c.getSessionId());
-				invalidateClient(c);
 			}
 		} catch (Exception err) {
 			log.error("[removeOnlineUser]", err);
@@ -240,6 +239,7 @@ public class Application extends AuthenticatedWebApplication {
 	public static void invalidateClient(WebClient client) {
 		if (!INVALID_SESSIONS.containsKey(client.getSessionId())) {
 			INVALID_SESSIONS.put(client.getSessionId(), client);
+			removeOnlineUser(client);
 		}
 	}
 	
