@@ -56,7 +56,7 @@ public class EmailManager {
 
 		if (sendEmailAtRegister == 1) {
 			RegisterUserTemplate.ensureApplication(langId);
-			mailHandler.send(email, langId == null ? Application.getString(512) : Application.getString(512, langId)  
+			mailHandler.send(email, Application.getString(512)  
 				, RegisterUserTemplate.getEmail(username, userpass, email, sendEmailWithVerficationCode ? link : null));
 		}
 		return "success";
