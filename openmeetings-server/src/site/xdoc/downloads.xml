@@ -44,12 +44,12 @@
 						Binaries:
 						<ul>
 							<li>
-								<a href="http://www.apache.org/dyn/closer.cgi/openmeetings/3.0.6/bin/apache-openmeetings-3.0.6.zip">apache-openmeetings-3.0.6.zip</a>
+								<a href="http://www.apache.org/dyn/closer.lua/openmeetings/3.0.6/bin/apache-openmeetings-3.0.6.zip">apache-openmeetings-3.0.6.zip</a>
 								<a href="http://www.apache.org/dist/openmeetings/3.0.6/bin/apache-openmeetings-3.0.6.zip.asc">[SIG]</a>
 								<a href="http://www.apache.org/dist/openmeetings/3.0.6/bin/apache-openmeetings-3.0.6.zip.md5">[MD5]</a>
 							</li>
 							<li>
-								<a href="http://www.apache.org/dyn/closer.cgi/openmeetings/3.0.6/bin/apache-openmeetings-3.0.6.tar.gz">apache-openmeetings-3.0.6.tar.gz</a>
+								<a href="http://www.apache.org/dyn/closer.lua/openmeetings/3.0.6/bin/apache-openmeetings-3.0.6.tar.gz">apache-openmeetings-3.0.6.tar.gz</a>
 								<a href="http://www.apache.org/dist/openmeetings/3.0.6/bin/apache-openmeetings-3.0.6.tar.gz.asc">[SIG]</a>
 								<a href="http://www.apache.org/dist/openmeetings/3.0.6/bin/apache-openmeetings-3.0.6.tar.gz.md5">[MD5]</a>
 							</li>
@@ -59,12 +59,12 @@
 						Sources:
 						<ul>
 							<li>
-								<a href="http://www.apache.org/dyn/closer.cgi/openmeetings/3.0.6/src/apache-openmeetings-3.0.6-src.zip">apache-openmeetings-3.0.6-src.zip</a>
+								<a href="http://www.apache.org/dyn/closer.lua/openmeetings/3.0.6/src/apache-openmeetings-3.0.6-src.zip">apache-openmeetings-3.0.6-src.zip</a>
 								<a href="http://www.apache.org/dist/openmeetings/3.0.6/src/apache-openmeetings-3.0.6-src.zip.asc">[SIG]</a>
 								<a href="http://www.apache.org/dist/openmeetings/3.0.6/src/apache-openmeetings-3.0.6-src.zip.md5">[MD5]</a>
 							</li>
 							<li>
-								<a href="http://www.apache.org/dyn/closer.cgi/openmeetings/3.0.6/src/apache-openmeetings-3.0.6-src.tar.gz">apache-openmeetings-3.0.6-src.tar.gz</a>
+								<a href="http://www.apache.org/dyn/closer.lua/openmeetings/3.0.6/src/apache-openmeetings-3.0.6-src.tar.gz">apache-openmeetings-3.0.6-src.tar.gz</a>
 								<a href="http://www.apache.org/dist/openmeetings/3.0.6/src/apache-openmeetings-3.0.6-src.tar.gz.asc">[SIG]</a>
 								<a href="http://www.apache.org/dist/openmeetings/3.0.6/src/apache-openmeetings-3.0.6-src.tar.gz.md5">[MD5]</a>
 							</li>
