@@ -40,8 +40,7 @@ public class OrganisationDao implements IDataProviderDao<Organisation> {
 
 	public Organisation get(long id) {
 		TypedQuery<Organisation> query = em.createNamedQuery("getOrganisationById", Organisation.class);
-		query.setParameter("organisation_id", id);
-		query.setParameter("deleted", false);
+		query.setParameter("id", id);
 		Organisation o = null;
 		try {
 			o = query.getSingleResult();
@@ -49,6 +48,11 @@ public class OrganisationDao implements IDataProviderDao<Organisation> {
 			// o = null;
 		}
 		return o;
+	}
+
+	public Organisation get(String name) {
+		List<Organisation> orgs = em.createNamedQuery("getOrganisationByName", Organisation.class).setParameter("name", name).getResultList();
+		return orgs == null || orgs.isEmpty() ? null : orgs.get(0);
 	}
 
 	public List<Organisation> get(int start, int count) {

@@ -37,7 +37,9 @@ import org.simpleframework.xml.Root;
 @Entity
 @NamedQueries({
 	@NamedQuery(name="getOrganisationById",
-		query="SELECT c FROM Organisation AS c WHERE c.organisation_id = :organisation_id AND c.deleted = :deleted")
+		query="SELECT c FROM Organisation AS c WHERE c.organisation_id = :id AND c.deleted = false")
+	, @NamedQuery(name="getOrganisationByName",
+		query="SELECT o FROM Organisation AS o WHERE o.name = :name AND o.deleted = false")
 	, @NamedQuery(name="getAnyOrganisationById",
 		query="SELECT c FROM Organisation AS c WHERE c.organisation_id = :organisation_id")
 	, @NamedQuery(name="getOrganisationsByIds",
@@ -50,7 +52,7 @@ import org.simpleframework.xml.Root;
 @Table(name = "organisation")
 @Root(name="organisation")
 public class Organisation implements Serializable, IDataProviderEntity {
-	private static final long serialVersionUID = 99123580264065654L;
+	private static final long serialVersionUID = 1L;
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
