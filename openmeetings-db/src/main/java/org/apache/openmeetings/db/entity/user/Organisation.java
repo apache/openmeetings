@@ -36,7 +36,9 @@ import org.simpleframework.xml.Root;
 @Entity
 @NamedQueries({
 	@NamedQuery(name="getOrganisationById",
-		query="SELECT c FROM Organisation AS c WHERE c.id = :organisationId AND c.deleted = false")
+		query="SELECT c FROM Organisation AS c WHERE c.id = :id AND c.deleted = false")
+	, @NamedQuery(name="getOrganisationByName",
+		query="SELECT o FROM Organisation AS o WHERE o.name = :name AND o.deleted = false")
 	, @NamedQuery(name="getAnyOrganisationById",
 		query="SELECT c FROM Organisation AS c WHERE c.id = :organisationId")
 	, @NamedQuery(name="getOrganisationsByIds",

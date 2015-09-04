@@ -26,6 +26,8 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 
 import org.apache.directory.api.ldap.model.cursor.CursorLdapReferralException;
@@ -40,6 +42,7 @@ import org.apache.directory.api.ldap.model.message.AliasDerefMode;
 import org.apache.directory.api.ldap.model.message.SearchRequestImpl;
 import org.apache.directory.api.ldap.model.message.SearchScope;
 import org.apache.directory.api.ldap.model.name.Dn;
+import org.apache.directory.api.ldap.model.name.Rdn;
 import org.apache.directory.ldap.client.api.EntryCursorImpl;
 import org.apache.directory.ldap.client.api.LdapConnection;
 import org.apache.directory.ldap.client.api.LdapNetworkConnection;
@@ -49,6 +52,7 @@ import org.apache.openmeetings.db.dao.user.OrganisationDao;
 import org.apache.openmeetings.db.dao.user.StateDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.server.LdapConfig;
+import org.apache.openmeetings.db.entity.user.Organisation;
 import org.apache.openmeetings.db.entity.user.OrganisationUser;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Right;
@@ -87,6 +91,8 @@ public class LdapLoginManagement {
 	private static final String CONFIGKEY_LDAP_USERDN_FORMAT = "ldap_userdn_format";
 	private static final String CONFIGKEY_LDAP_USE_ADMIN_4ATTRS = "ldap_use_admin_to_get_attrs";
 	private static final String CONFIGKEY_LDAP_DEREF_MODE = "ldap_deref_mode";
+	private static final String CONFIGKEY_LDAP_GROUP_MODE = "ldap_group_mode";
+	private static final String CONFIGKEY_LDAP_GROUP_QUERY = "ldap_group_query";
 	
 	// LDAP custom attribute mapping keys
 	private static final String CONFIGKEY_LDAP_KEY_LASTNAME = "ldap_user_attr_lastname";
@@ -99,7 +105,8 @@ public class LdapLoginManagement {
 	private static final String CONFIGKEY_LDAP_KEY_COUNTRY = "ldap_user_attr_country";
 	private static final String CONFIGKEY_LDAP_KEY_TOWN = "ldap_user_attr_town";
 	private static final String CONFIGKEY_LDAP_KEY_PHONE = "ldap_user_attr_phone";
-	private static final String CONFIGKEY_LDAP_PICTURE_URI = "ldap_user_picture_uri";
+	private static final String CONFIGKEY_LDAP_KEY_PICTURE_URI = "ldap_user_picture_uri";
+	private static final String CONFIGKEY_LDAP_KEY_GROUP = "ldap_group_attr";
 
 	// LDAP default attributes mapping
 	private static final String LDAP_KEY_LASTNAME = "sn";
@@ -114,6 +121,7 @@ public class LdapLoginManagement {
 	private static final String LDAP_KEY_PHONE = "telephoneNumber";
 	private static final String LDAP_KEY_TIMEZONE = "timezone";
 	private static final String LDAP_KEY_PICTURE_URI = "pictureUri";
+	private static final String LDAP_KEY_GROUP = "memberOf";
 
 	public enum AuthType {
 		NONE
@@ -127,6 +135,11 @@ public class LdapLoginManagement {
 		, AUTOCREATE
 	}
 	
+	public enum GroupMode {
+		NONE
+		, ATTRIBUTE
+		, QUERY
+	}
 	@Autowired
 	private ConfigurationDao cfgDao;
 	@Autowired
@@ -231,6 +244,12 @@ public class LdapLoginManagement {
 		boolean useAdminForAttrs = true;
 		try {
 			useAdminForAttrs = "true".equals(config.getProperty(CONFIGKEY_LDAP_USE_ADMIN_4ATTRS, ""));
+		} catch (Exception e) {
+			//no-op
+		}
+		GroupMode groupMode = GroupMode.NONE;
+		try {
+			groupMode = GroupMode.valueOf(config.getProperty(CONFIGKEY_LDAP_GROUP_MODE, "NONE"));
 		} catch (Exception e) {
 			//no-op
 		}
@@ -351,13 +370,66 @@ public class LdapLoginManagement {
 						tz = config.getProperty(CONFIGKEY_LDAP_TIMEZONE_NAME, null);
 					}
 					u.setTimeZoneId(timezoneUtil.getTimeZone(tz).getID());
-					String picture = getAttr(config, entry, CONFIGKEY_LDAP_PICTURE_URI, LDAP_KEY_PICTURE_URI);
+					String picture = getAttr(config, entry, CONFIGKEY_LDAP_KEY_PICTURE_URI, LDAP_KEY_PICTURE_URI);
 					if (picture == null) {
-						picture = config.getProperty(CONFIGKEY_LDAP_PICTURE_URI, null);
+						picture = config.getProperty(CONFIGKEY_LDAP_KEY_PICTURE_URI, null);
 					}
 					u.setPictureuri(picture);
 					
 					u = userDao.update(u, null);
+					List<Dn> groups = new ArrayList<>();
+					if (GroupMode.ATTRIBUTE == groupMode) {
+						Attribute a = entry.get(config.getProperty(CONFIGKEY_LDAP_KEY_GROUP, LDAP_KEY_GROUP));
+						String attr = a == null ? "" : a.getString();
+						for (String g : attr.split("|")) {
+							groups.add(new Dn(g));
+						}
+					} else if (GroupMode.QUERY == groupMode) {
+						Dn baseDn = new Dn(config.getProperty(CONFIGKEY_LDAP_SEARCH_BASE, ""));
+						String searchQ = String.format(config.getProperty(CONFIGKEY_LDAP_GROUP_QUERY, "%s"), login);
+				        
+						EntryCursor cursor = new EntryCursorImpl(conn.search(
+								new SearchRequestImpl()
+									.setBase(baseDn)
+									.setFilter(searchQ)
+									.setScope(SearchScope.SUBTREE)
+									.addAttributes("*")
+									.setDerefAliases(AliasDerefMode.DEREF_ALWAYS)));
+						while (cursor.next()) {
+							try {
+								Entry e = cursor.get();
+								groups.add(e.getDn());
+							} catch (CursorLdapReferralException cle) {
+								log.warn("Referral LDAP entry found, ignore it");
+							}
+						}
+						cursor.close();
+					}
+					for (Dn g : groups) {
+						Rdn namer = g.getRdn();
+						String name = namer.getValue().toString();
+						if (!Strings.isEmpty(name)) {
+							Organisation o = orgDao.get(name);
+							boolean found = false;
+							if (o == null) {
+								o = new Organisation();
+								o.setName(name);
+								o = orgDao.update(o, u.getId());
+							} else {
+								for (OrganisationUser ou : u.getOrganisationUsers()) {
+									if (ou.getOrganisation().getName().equals(name)) {
+										found = true;
+										break;
+									}
+								}
+							}
+							if (!found) {
+								u.getOrganisationUsers().add(new OrganisationUser(o));
+								userDao.update(u, u.getId());
+								log.debug("Going to add user to group:: " + name);
+							}
+						}
+					}
 					break;
 				case NONE:
 				default:
