@@ -48,7 +48,6 @@ import org.apache.openmeetings.db.dao.server.ISessionManager;
 import org.apache.openmeetings.db.dao.server.SessiondataDao;
 import org.apache.openmeetings.db.dao.user.IUserManager;
 import org.apache.openmeetings.db.dao.user.OrganisationDao;
-import org.apache.openmeetings.db.dao.user.OrganisationUserDao;
 import org.apache.openmeetings.db.dao.user.StateDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.dto.basic.SearchResult;
@@ -62,7 +61,6 @@ import org.apache.openmeetings.db.entity.user.User.Right;
 import org.apache.openmeetings.db.entity.user.User.Type;
 import org.apache.openmeetings.db.entity.user.Userdata;
 import org.apache.openmeetings.db.util.TimezoneUtil;
-import org.apache.openmeetings.mail.MailHandler;
 import org.apache.openmeetings.remote.red5.ScopeApplicationAdapter;
 import org.apache.openmeetings.util.AuthLevelUtil;
 import org.apache.openmeetings.util.CalendarPatterns;
@@ -96,15 +94,11 @@ public class UserManager implements IUserManager {
 	@Autowired
 	private OrganisationDao orgDao;
 	@Autowired
-	private OrganisationUserDao orgUserDao;
-	@Autowired
 	private UserDao userDao;
 	@Autowired
 	private EmailManager emailManagement;
 	@Autowired
 	private ScopeApplicationAdapter scopeApplicationAdapter;
-	@Autowired
-	private MailHandler mailHandler;
 	@Autowired
 	private ISessionManager sessionManager;
 	@Autowired

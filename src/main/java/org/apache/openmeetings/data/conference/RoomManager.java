@@ -37,7 +37,6 @@ import javax.persistence.criteria.Root;
 
 import org.apache.openmeetings.db.dao.room.IRoomManager;
 import org.apache.openmeetings.db.dao.room.RoomDao;
-import org.apache.openmeetings.db.dao.room.RoomModeratorsDao;
 import org.apache.openmeetings.db.dao.room.RoomTypeDao;
 import org.apache.openmeetings.db.dao.room.SipDao;
 import org.apache.openmeetings.db.dao.server.ISessionManager;
@@ -66,8 +65,6 @@ public class RoomManager implements IRoomManager {
 
 	@Autowired
 	private OrganisationDao orgDao;
-	@Autowired
-	private RoomModeratorsDao roomModeratorsDao;
 	@Autowired
 	private UserDao usersDao;
 	@Autowired

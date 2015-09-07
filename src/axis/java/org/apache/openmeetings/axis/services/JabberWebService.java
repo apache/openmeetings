@@ -22,7 +22,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.openmeetings.data.conference.InvitationManager;
-import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.dao.server.SessiondataDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
@@ -33,7 +32,6 @@ import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.room.RoomOrganisation;
 import org.apache.openmeetings.db.entity.user.Organisation_Users;
 import org.apache.openmeetings.db.entity.user.User;
-import org.apache.openmeetings.db.util.TimezoneUtil;
 import org.apache.openmeetings.remote.ConferenceService;
 import org.apache.openmeetings.util.AuthLevelUtil;
 import org.apache.openmeetings.util.OpenmeetingsVariables;
@@ -60,10 +58,6 @@ public class JabberWebService {
 	private ConferenceService conferenceService;
 	@Autowired
 	private InvitationManager invitationManager;
-	@Autowired
-	private ConfigurationDao configurationDao;
-	@Autowired
-	private TimezoneUtil timezoneUtil;
 	@Autowired
 	private RoomDao roomDao;
 

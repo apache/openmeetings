@@ -194,10 +194,8 @@ public class MobileService {
 	private Map<String, Object> login(User u, Map<String, Object> result) {
 		if (u != null) {
 			Sessiondata sd = sessionDao.startsession();
-			Boolean bool = sessionDao.updateUser(sd.getSession_id(), u.getUser_id(), false, u.getLanguage_id());
-			if (bool == null) {
-				// Exception
-			} else if (!bool) {
+			boolean bool = sessionDao.updateUser(sd.getSession_id(), u.getUser_id(), false, u.getLanguage_id());
+			if (!bool) {
 				// invalid Session-Object
 				result.put("status", -35);
 			} else {

@@ -21,7 +21,6 @@ package org.apache.openmeetings.remote;
 import java.util.Date;
 import java.util.List;
 
-import org.apache.openmeetings.data.user.UserManager;
 import org.apache.openmeetings.db.dao.room.PollDao;
 import org.apache.openmeetings.db.dao.server.ISessionManager;
 import org.apache.openmeetings.db.dao.user.UserDao;
@@ -51,8 +50,6 @@ public class PollService implements IPendingServiceCallback {
 
 	@Autowired
 	private ISessionManager sessionManager;
-	@Autowired
-	private UserManager userManager;
 	@Autowired
 	private UserDao userDao;
 	@Autowired

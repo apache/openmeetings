@@ -74,7 +74,6 @@ import org.apache.openmeetings.db.entity.user.Organisation;
 import org.apache.openmeetings.db.entity.user.Organisation_Users;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Right;
-import org.apache.openmeetings.db.util.TimezoneUtil;
 import org.apache.openmeetings.util.OmFileHelper;
 import org.dom4j.Document;
 import org.dom4j.Element;
@@ -108,8 +107,6 @@ public class ImportInitvalues {
 	private SipDao sipDao;
 	@Autowired
 	private OAuth2Dao oauthDao;
-	@Autowired
-	private TimezoneUtil timezoneUtil;
 	@Autowired
 	private RoomTypeDao roomTypeDao;
 	@Autowired

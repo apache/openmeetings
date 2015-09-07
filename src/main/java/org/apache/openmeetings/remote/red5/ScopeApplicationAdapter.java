@@ -37,7 +37,6 @@ import org.apache.openmeetings.data.conference.RoomManager;
 import org.apache.openmeetings.data.whiteboard.EmoticonsManager;
 import org.apache.openmeetings.data.whiteboard.WhiteboardManager;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
-import org.apache.openmeetings.db.dao.calendar.MeetingMemberDao;
 import org.apache.openmeetings.db.dao.label.LabelDao;
 import org.apache.openmeetings.db.dao.log.ConferenceLogDao;
 import org.apache.openmeetings.db.dao.record.FlvRecordingDao;
@@ -108,8 +107,6 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 	private RoomDao roomDao;
 	@Autowired
 	private FlvRecordingDao recordingDao;
-	@Autowired
-	private MeetingMemberDao meetingMemberDao;
 	@Autowired
 	private ServerDao serverDao;
 

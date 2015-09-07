@@ -28,7 +28,6 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import org.apache.openmeetings.backup.BackupImport;
-import org.apache.openmeetings.data.conference.RoomManager;
 import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
 import org.apache.openmeetings.db.dao.calendar.MeetingMemberDao;
 import org.apache.openmeetings.db.dao.room.RoomDao;
@@ -52,8 +51,6 @@ public class TestOldBackups extends AbstractJUnitDefaults {
 	private UserDao usersDao;
 	@Autowired
 	private RoomDao roomDao;
-	@Autowired
-	private RoomManager roomManager;
 	@Autowired
 	private AppointmentDao appointmentDao;
 	@Autowired

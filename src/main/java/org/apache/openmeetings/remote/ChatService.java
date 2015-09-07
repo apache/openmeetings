@@ -26,7 +26,6 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.apache.openmeetings.data.user.UserManager;
 import org.apache.openmeetings.data.whiteboard.EmoticonsManager;
 import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.dao.server.ISessionManager;
@@ -62,8 +61,6 @@ public class ChatService implements IPendingServiceCallback {
 	private EmoticonsManager emoticonsManager;
 	@Autowired
 	private RoomDao roomDao;
-	@Autowired
-	private UserManager userManager;
 	
 	//number of items in the chat room history
 	private static final int chatRoomHistory = 50;

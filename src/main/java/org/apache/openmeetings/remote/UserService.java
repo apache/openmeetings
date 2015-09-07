@@ -30,21 +30,14 @@ import java.util.List;
 import java.util.TimeZone;
 
 import org.apache.openmeetings.cluster.SlaveHTTPConnectionManager;
-import org.apache.openmeetings.data.conference.InvitationManager;
-import org.apache.openmeetings.data.conference.RoomManager;
-import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.calendar.AppointmentCategoryDao;
 import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
-import org.apache.openmeetings.db.dao.calendar.MeetingMemberDao;
 import org.apache.openmeetings.db.dao.label.LabelDao;
-import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.dao.room.RoomTypeDao;
 import org.apache.openmeetings.db.dao.server.ISessionManager;
 import org.apache.openmeetings.db.dao.server.ServerDao;
 import org.apache.openmeetings.db.dao.server.SessiondataDao;
-import org.apache.openmeetings.db.dao.user.IUserManager;
 import org.apache.openmeetings.db.dao.user.IUserService;
-import org.apache.openmeetings.db.dao.user.PrivateMessageFolderDao;
 import org.apache.openmeetings.db.dao.user.PrivateMessagesDao;
 import org.apache.openmeetings.db.dao.user.SalutationDao;
 import org.apache.openmeetings.db.dao.user.UserContactsDao;
@@ -91,31 +84,17 @@ public class UserService implements IUserService {
 	@Autowired
 	private SessiondataDao sessiondataDao;
 	@Autowired
-	private ConfigurationDao configurationDao;
-	@Autowired
-	private IUserManager userManager;
-	@Autowired
 	private UserDao userDao;
 	@Autowired
 	private SalutationDao salutationmanagement;
 	@Autowired
-	private RoomManager roomManager;
-	@Autowired
-	private RoomDao roomDao;
-	@Autowired
-	private MeetingMemberDao meetingMemberDao;
-	@Autowired
 	private PrivateMessagesDao privateMessagesDao;
-	@Autowired
-	private PrivateMessageFolderDao privateMessageFolderDao;
 	@Autowired
 	private UserContactsDao userContactsDao;
 	@Autowired
 	private MailHandler mailHandler;
 	@Autowired
 	private TimezoneUtil timezoneUtil;
-	@Autowired
-	private InvitationManager invitationManager;
 	@Autowired
 	private ServerDao serverDao;
 	@Autowired

@@ -54,7 +54,6 @@ import org.apache.openmeetings.db.entity.room.Invitation.Valid;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.room.RoomType;
 import org.apache.openmeetings.db.entity.user.User;
-import org.apache.openmeetings.db.util.TimezoneUtil;
 import org.apache.openmeetings.remote.ConferenceService;
 import org.apache.openmeetings.remote.red5.ScopeApplicationAdapter;
 import org.apache.openmeetings.util.AuthLevelUtil;
@@ -105,8 +104,6 @@ public class RoomWebService {
 	private RoomDao roomDao;
 	@Autowired
 	private RoomTypeDao roomTypeDao;
-	@Autowired
-	private TimezoneUtil timezoneUtil;
 
 	/**
 	 * Returns an Object of Type RoomsList which contains a list of

@@ -23,7 +23,6 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import java.util.Calendar;
 
 import org.apache.openmeetings.data.conference.InvitationManager;
-import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.calendar.IInvitationManager.MessageType;
 import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.dao.server.SessiondataDao;
@@ -43,8 +42,6 @@ public class InvitationService implements IPendingServiceCallback {
 	private static final Logger log = Red5LoggerFactory.getLogger(InvitationService.class, webAppRootKey);
 	@Autowired
 	private SessiondataDao sessiondataDao;
-	@Autowired
-	private ConfigurationDao configurationDao;
 	@Autowired
 	private UserDao userDao;
 	@Autowired

@@ -30,7 +30,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TimeZone;
 
-import org.apache.openmeetings.data.conference.InvitationManager;
 import org.apache.openmeetings.data.conference.RoomManager;
 import org.apache.openmeetings.data.user.UserManager;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
@@ -38,10 +37,8 @@ import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
 import org.apache.openmeetings.db.dao.log.ConferenceLogDao;
 import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.dao.server.ISessionManager;
-import org.apache.openmeetings.db.dao.server.LdapConfigDao;
 import org.apache.openmeetings.db.dao.server.SOAPLoginDao;
 import org.apache.openmeetings.db.dao.server.SessiondataDao;
-import org.apache.openmeetings.db.dao.user.StateDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.basic.Configuration;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
@@ -58,8 +55,6 @@ import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Right;
 import org.apache.openmeetings.db.entity.user.Userdata;
 import org.apache.openmeetings.db.util.TimezoneUtil;
-import org.apache.openmeetings.ldap.LdapLoginManagement;
-import org.apache.openmeetings.mail.MailHandler;
 import org.apache.openmeetings.remote.red5.ScopeApplicationAdapter;
 import org.apache.openmeetings.remote.util.SessionVariablesUtil;
 import org.apache.openmeetings.util.AuthLevelUtil;
@@ -93,8 +88,6 @@ public class MainService implements IPendingServiceCallback {
 	@Autowired
 	private UserManager userManager;
 	@Autowired
-	private StateDao statemanagement;
-	@Autowired
 	private RoomManager roomManager;
 	@Autowired
 	private ConferenceLogDao conferenceLogDao;
@@ -105,15 +98,7 @@ public class MainService implements IPendingServiceCallback {
 	@Autowired
 	private AppointmentDao appointmentDao;
 	@Autowired
-	private LdapConfigDao ldapConfigDao;
-	@Autowired
 	private SOAPLoginDao soapLoginDao;
-	@Autowired
-	private InvitationManager invitationManager;
-	@Autowired
-	private LdapLoginManagement ldapLoginManagement;
-	@Autowired
-	private MailHandler mailHandler;
 	@Autowired
 	private TimezoneUtil timezoneUtil;
 

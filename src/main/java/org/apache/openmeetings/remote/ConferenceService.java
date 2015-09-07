@@ -28,13 +28,11 @@ import java.util.List;
 
 import org.apache.openmeetings.data.calendar.management.AppointmentLogic;
 import org.apache.openmeetings.data.conference.RoomManager;
-import org.apache.openmeetings.data.user.UserManager;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.dao.room.RoomModeratorsDao;
 import org.apache.openmeetings.db.dao.room.RoomTypeDao;
 import org.apache.openmeetings.db.dao.server.ISessionManager;
-import org.apache.openmeetings.db.dao.server.ServerDao;
 import org.apache.openmeetings.db.dao.server.SessiondataDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.dto.basic.SearchResult;
@@ -45,7 +43,6 @@ import org.apache.openmeetings.db.entity.room.RoomModerator;
 import org.apache.openmeetings.db.entity.room.RoomOrganisation;
 import org.apache.openmeetings.db.entity.room.RoomType;
 import org.apache.openmeetings.db.entity.user.User;
-import org.apache.openmeetings.db.util.TimezoneUtil;
 import org.apache.openmeetings.util.AuthLevelUtil;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -64,8 +61,6 @@ public class ConferenceService {
 	@Autowired
 	private SessiondataDao sessiondataDao;
 	@Autowired
-	private UserManager userManager;
-	@Autowired
 	private UserDao userDao;
 	@Autowired
 	private RoomManager roomManager;
@@ -76,11 +71,7 @@ public class ConferenceService {
 	@Autowired
 	private RoomModeratorsDao roomModeratorsDao;
 	@Autowired
-	private TimezoneUtil timezoneUtil;
-	@Autowired
 	private ISessionManager sessionManager = null;
-	@Autowired
-	private ServerDao serverDao;
 	@Autowired
 	private ConfigurationDao cfgDao;
 

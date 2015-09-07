@@ -25,15 +25,11 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
-import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.room.RoomModerator;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
 public class RoomModeratorsDao {
-	@Autowired
-	private UserDao userDao;
 	@PersistenceContext
 	private EntityManager em;
 
