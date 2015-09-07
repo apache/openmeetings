@@ -22,12 +22,10 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
 import java.util.Calendar;
 
-import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.room.IInvitationManager;
 import org.apache.openmeetings.db.dao.room.InvitationDao;
 import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.dao.server.SessiondataDao;
-import org.apache.openmeetings.db.dao.user.IUserManager;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.room.Invitation;
 import org.apache.openmeetings.db.entity.room.Invitation.MessageType;
@@ -46,11 +44,7 @@ public class InvitationService implements IPendingServiceCallback {
 	@Autowired
 	private SessiondataDao sessiondataDao;
 	@Autowired
-	private ConfigurationDao configurationDao;
-	@Autowired
 	private UserDao userDao;
-	@Autowired
-	private IUserManager userManager;
 	@Autowired
 	private IInvitationManager invitationManager;
 	@Autowired

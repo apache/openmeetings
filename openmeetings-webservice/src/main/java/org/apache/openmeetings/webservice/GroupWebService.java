@@ -34,7 +34,6 @@ import javax.ws.rs.core.MediaType;
 
 import org.apache.cxf.feature.Features;
 import org.apache.openmeetings.db.dao.room.RoomDao;
-import org.apache.openmeetings.db.dao.room.RoomOrganisationDao;
 import org.apache.openmeetings.db.dao.server.SessiondataDao;
 import org.apache.openmeetings.db.dao.user.OrganisationDao;
 import org.apache.openmeetings.db.dao.user.OrganisationUserDao;
@@ -80,8 +79,6 @@ public class GroupWebService {
 	private RoomDao roomDao;
 	@Autowired
 	private SessiondataDao sessionDao;
-	@Autowired
-	private RoomOrganisationDao roomOrgDao;
 
 	/**
 	 * add a new organisation

@@ -28,18 +28,14 @@ import java.util.List;
 import java.util.Set;
 import java.util.TimeZone;
 
-import org.apache.openmeetings.core.ldap.LdapLoginManagement;
-import org.apache.openmeetings.core.mail.MailHandler;
 import org.apache.openmeetings.core.remote.red5.ScopeApplicationAdapter;
 import org.apache.openmeetings.core.remote.util.SessionVariablesUtil;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.log.ConferenceLogDao;
 import org.apache.openmeetings.db.dao.server.ISessionManager;
-import org.apache.openmeetings.db.dao.server.LdapConfigDao;
 import org.apache.openmeetings.db.dao.server.SOAPLoginDao;
 import org.apache.openmeetings.db.dao.server.SessiondataDao;
 import org.apache.openmeetings.db.dao.user.IUserManager;
-import org.apache.openmeetings.db.dao.user.StateDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.basic.Configuration;
 import org.apache.openmeetings.db.entity.room.Client;
@@ -82,19 +78,11 @@ public class MainService implements IPendingServiceCallback {
 	@Autowired
 	private IUserManager userManager;
 	@Autowired
-	private StateDao statemanagement;
-	@Autowired
 	private ConferenceLogDao conferenceLogDao;
 	@Autowired
 	private UserDao userDao;
 	@Autowired
-	private LdapConfigDao ldapConfigDao;
-	@Autowired
 	private SOAPLoginDao soapLoginDao;
-	@Autowired
-	private LdapLoginManagement ldapLoginManagement;
-	@Autowired
-	private MailHandler mailHandler;
 	@Autowired
 	private TimezoneUtil timezoneUtil;
 

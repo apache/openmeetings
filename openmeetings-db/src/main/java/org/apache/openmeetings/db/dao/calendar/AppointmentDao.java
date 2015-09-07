@@ -35,7 +35,6 @@ import javax.persistence.TypedQuery;
 
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.room.IInvitationManager;
-import org.apache.openmeetings.db.dao.room.InvitationDao;
 import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
@@ -54,10 +53,6 @@ public class AppointmentDao {
 	@PersistenceContext
 	private EntityManager em;
 	@Autowired
-	private AppointmentCategoryDao appointmentCategoryDaoImpl;
-	@Autowired
-	private AppointmentReminderTypeDao reminderTypeDao;
-	@Autowired
 	private MeetingMemberDao meetingMemberDao;
 	@Autowired
 	private UserDao usersDao;
@@ -67,8 +62,6 @@ public class AppointmentDao {
 	private ConfigurationDao cfgDao;
 	@Autowired
 	private TimezoneUtil timezoneUtil;
-	@Autowired
-	private InvitationDao invitationDao;
 	@Autowired
 	private IInvitationManager invitationManager;
 

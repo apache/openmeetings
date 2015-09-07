@@ -30,12 +30,9 @@ import org.apache.openmeetings.core.data.flvrecord.converter.FlvRecorderConverte
 import org.apache.openmeetings.core.data.flvrecord.listener.StreamListener;
 import org.apache.openmeetings.core.remote.red5.ScopeApplicationAdapter;
 import org.apache.openmeetings.db.dao.record.FlvRecordingDao;
-import org.apache.openmeetings.db.dao.record.FlvRecordingLogDao;
 import org.apache.openmeetings.db.dao.record.FlvRecordingMetaDataDao;
 import org.apache.openmeetings.db.dao.record.FlvRecordingMetaDeltaDao;
-import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.dao.server.ISessionManager;
-import org.apache.openmeetings.db.dao.server.SessiondataDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.file.FileItem.Type;
 import org.apache.openmeetings.db.entity.record.FlvRecording;
@@ -74,17 +71,11 @@ public class FLVRecorderService implements IPendingServiceCallback {
 	@Autowired
 	private UserDao userDao;
 	@Autowired
-	private RoomDao roomDao;
-	@Autowired
 	private FlvRecorderConverterTask flvRecorderConverterTask;
 	@Autowired
 	private FlvInterviewConverterTask flvInterviewConverterTask;
 	@Autowired
-	private FlvRecordingLogDao flvRecordingLogDaoImpl;
-	@Autowired
 	private FlvRecordingDao recordingDao;
-	@Autowired
-	private SessiondataDao sessiondataDao;
 	@Autowired
 	private ScopeApplicationAdapter scopeApplicationAdapter;
 	@Autowired

@@ -22,7 +22,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import org.apache.openmeetings.core.remote.InvitationService;
-import org.apache.openmeetings.db.dao.server.SessiondataDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.dto.basic.ServiceResult;
 import org.apache.openmeetings.db.entity.user.User;
@@ -34,8 +33,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class TestInvitation extends AbstractJUnitDefaults {
 	@Autowired
 	private InvitationService invitationService;
-	@Autowired
-	private SessiondataDao sessDao;
 	@Autowired
 	private UserWebService userWebService;
 	@Autowired

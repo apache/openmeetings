@@ -32,12 +32,8 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import org.apache.openmeetings.db.dao.room.RoomDao;
-import org.apache.openmeetings.db.dao.room.RoomModeratorsDao;
-import org.apache.openmeetings.db.dao.room.RoomTypeDao;
 import org.apache.openmeetings.db.dao.room.SipDao;
 import org.apache.openmeetings.db.dao.server.ISessionManager;
-import org.apache.openmeetings.db.dao.user.OrganisationDao;
-import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.dto.basic.SearchResult;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.room.RoomOrganisation;
@@ -59,19 +55,11 @@ public class RoomManager {
 	private EntityManager em;
 
 	@Autowired
-	private OrganisationDao orgDao;
-	@Autowired
-	private RoomModeratorsDao roomModeratorsDao;
-	@Autowired
-	private UserDao usersDao;
-	@Autowired
 	private ISessionManager sessionManager;
     @Autowired
 	private RoomDao roomDao;
     @Autowired
 	private SipDao sipDao;
-    @Autowired
-	private RoomTypeDao roomTypeDao;
 
 	public SearchResult<Room> getRooms(int start, int max, String orderby, boolean asc, String search) {
 		try {

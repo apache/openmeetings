@@ -28,11 +28,9 @@ import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 
-import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.calendar.MeetingMember;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
@@ -40,10 +38,6 @@ public class MeetingMemberDao {
 	private static final Logger log = Red5LoggerFactory.getLogger(MeetingMemberDao.class, webAppRootKey);
 	@PersistenceContext
 	private EntityManager em;
-	@Autowired
-	private AppointmentDao appointmentDao;
-	@Autowired
-	private UserDao usersDao;
 
 	public MeetingMember get(Long meetingMemberId) {
 		MeetingMember meetingMember = null;

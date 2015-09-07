@@ -29,13 +29,11 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
-import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.room.PollType;
 import org.apache.openmeetings.db.entity.room.RoomPoll;
 import org.apache.openmeetings.db.entity.room.RoomPollAnswer;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
@@ -44,10 +42,6 @@ public class PollDao {
 
 	@PersistenceContext
 	private EntityManager em;
-	@Autowired
-	private UserDao userDao;
-	@Autowired
-	private RoomDao roomDao;
 
 	public Long addPollType(Long labelId, Boolean isNumeric) {
 		log.debug("Adding poll type: " + labelId + ", " + isNumeric);

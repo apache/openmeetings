@@ -37,11 +37,9 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import org.apache.cxf.feature.Features;
-import org.apache.openmeetings.core.data.conference.RoomManager;
 import org.apache.openmeetings.db.dao.calendar.AppointmentCategoryDao;
 import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
 import org.apache.openmeetings.db.dao.calendar.AppointmentReminderTypeDao;
-import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.dao.room.RoomTypeDao;
 import org.apache.openmeetings.db.dao.server.SessiondataDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
@@ -53,9 +51,7 @@ import org.apache.openmeetings.db.entity.calendar.AppointmentReminderType;
 import org.apache.openmeetings.db.entity.calendar.MeetingMember;
 import org.apache.openmeetings.db.entity.user.User.Right;
 import org.apache.openmeetings.db.util.AuthLevelUtil;
-import org.apache.openmeetings.db.util.TimezoneUtil;
 import org.apache.openmeetings.service.calendar.AppointmentLogic;
-import org.apache.openmeetings.util.CalendarPatterns;
 import org.apache.openmeetings.webservice.error.ServiceException;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -84,15 +80,9 @@ public class CalendarWebService {
 	@Autowired
 	private UserDao userDao;
 	@Autowired
-	private RoomManager roomManager;
-	@Autowired
-	private RoomDao roomDao;
-	@Autowired
 	private AppointmentCategoryDao appointmentCategoryDao;
 	@Autowired
 	private AppointmentReminderTypeDao reminderTypeDao;
-	@Autowired
-	private TimezoneUtil timezoneUtil;
 	@Autowired
 	private RoomTypeDao roomTypeDao;
 

@@ -18,9 +18,9 @@
  */
 package org.apache.openmeetings.service.user;
 
+import static org.apache.openmeetings.db.util.UserHelper.getMinLoginLength;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_GROUP_ID;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_LANG_KEY;
-import static org.apache.openmeetings.db.util.UserHelper.getMinLoginLength;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SOAP_REGISTER_KEY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
@@ -42,7 +42,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
-import org.apache.openmeetings.core.mail.MailHandler;
 import org.apache.openmeetings.core.remote.red5.ScopeApplicationAdapter;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.label.LabelDao;
@@ -50,7 +49,6 @@ import org.apache.openmeetings.db.dao.server.ISessionManager;
 import org.apache.openmeetings.db.dao.server.SessiondataDao;
 import org.apache.openmeetings.db.dao.user.IUserManager;
 import org.apache.openmeetings.db.dao.user.OrganisationDao;
-import org.apache.openmeetings.db.dao.user.OrganisationUserDao;
 import org.apache.openmeetings.db.dao.user.StateDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.dto.basic.SearchResult;
@@ -97,15 +95,11 @@ public class UserManager implements IUserManager {
 	@Autowired
 	private OrganisationDao orgDao;
 	@Autowired
-	private OrganisationUserDao orgUserDao;
-	@Autowired
 	private UserDao userDao;
 	@Autowired
 	private EmailManager emailManagement;
 	@Autowired
 	private ScopeApplicationAdapter scopeApplicationAdapter;
-	@Autowired
-	private MailHandler mailHandler;
 	@Autowired
 	private ISessionManager sessionManager;
 	@Autowired

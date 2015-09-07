@@ -24,23 +24,11 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
-import org.apache.openmeetings.core.data.conference.RoomManager;
-import org.apache.openmeetings.core.mail.MailHandler;
 import org.apache.openmeetings.core.remote.red5.ScopeApplicationAdapter;
-import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
-import org.apache.openmeetings.db.dao.calendar.AppointmentCategoryDao;
-import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
-import org.apache.openmeetings.db.dao.calendar.MeetingMemberDao;
-import org.apache.openmeetings.db.dao.label.LabelDao;
-import org.apache.openmeetings.db.dao.room.RoomDao;
-import org.apache.openmeetings.db.dao.room.RoomTypeDao;
 import org.apache.openmeetings.db.dao.server.ISessionManager;
 import org.apache.openmeetings.db.dao.server.ServerDao;
 import org.apache.openmeetings.db.dao.server.SessiondataDao;
-import org.apache.openmeetings.db.dao.user.IUserManager;
 import org.apache.openmeetings.db.dao.user.IUserService;
-import org.apache.openmeetings.db.dao.user.PrivateMessageFolderDao;
-import org.apache.openmeetings.db.dao.user.PrivateMessagesDao;
 import org.apache.openmeetings.db.dao.user.SalutationDao;
 import org.apache.openmeetings.db.dao.user.UserContactsDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
@@ -70,43 +58,19 @@ public class UserService implements IUserService {
 	@Autowired
 	private ScopeApplicationAdapter scopeApplicationAdapter;
 	@Autowired
-	private AppointmentDao appointmentDao;
-	@Autowired
-	private AppointmentCategoryDao appointmentCategoryDao;
-	@Autowired
 	private SessiondataDao sessiondataDao;
-	@Autowired
-	private ConfigurationDao configurationDao;
-	@Autowired
-	private IUserManager userManager;
 	@Autowired
 	private UserDao userDao;
 	@Autowired
 	private SalutationDao salutationmanagement;
 	@Autowired
-	private RoomManager roomManager;
-	@Autowired
-	private RoomDao roomDao;
-	@Autowired
-	private MeetingMemberDao meetingMemberDao;
-	@Autowired
-	private PrivateMessagesDao privateMessagesDao;
-	@Autowired
-	private PrivateMessageFolderDao privateMessageFolderDao;
-	@Autowired
 	private UserContactsDao userContactsDao;
-	@Autowired
-	private MailHandler mailHandler;
 	@Autowired
 	private TimezoneUtil timezoneUtil;
 	@Autowired
 	private ServerDao serverDao;
 	@Autowired
 	private ISlaveHTTPConnectionManager slaveHTTPConnectionManager;
-	@Autowired
-	private LabelDao labelDao;
-	@Autowired
-	private RoomTypeDao roomTypeDao;
 
 	/**
 	 * get user by id, admin only

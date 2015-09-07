@@ -56,8 +56,6 @@ public class FlvInterviewConverter extends BaseConverter implements IRecordingCo
 	private FlvRecordingMetaDataDao metaDataDao;
 	@Autowired
 	private FlvRecordingLogDao logDao;
-	@Autowired
-	private GenerateThumbs generateThumbs;
 
 	private String[] mergeAudioToWaves(List<String> listOfFullWaveFiles, String outputFullWav,
 			List<FlvRecordingMetaData> metaDataList, ReConverterParams rcv) {
