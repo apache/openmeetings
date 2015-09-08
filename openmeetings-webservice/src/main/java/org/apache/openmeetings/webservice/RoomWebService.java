@@ -41,7 +41,6 @@ import org.apache.openmeetings.core.remote.red5.ScopeApplicationAdapter;
 import org.apache.openmeetings.db.dao.room.IInvitationManager;
 import org.apache.openmeetings.db.dao.room.InvitationDao;
 import org.apache.openmeetings.db.dao.room.RoomDao;
-import org.apache.openmeetings.db.dao.room.RoomTypeDao;
 import org.apache.openmeetings.db.dao.server.ISessionManager;
 import org.apache.openmeetings.db.dao.server.SessiondataDao;
 import org.apache.openmeetings.db.dao.user.IUserManager;
@@ -90,8 +89,6 @@ public class RoomWebService {
 	private ISessionManager sessionManager;
 	@Autowired
 	private RoomDao roomDao;
-	@Autowired
-	private RoomTypeDao roomTypeDao;
 
 	/**
 	 * Returns an Object of Type RoomsList which contains a list of
@@ -102,18 +99,18 @@ public class RoomWebService {
 	 * 
 	 * @param SID
 	 *            The SID of the User. This SID must be marked as Loggedin
-	 * @param roomtypesId
+	 * @param type
 	 * @return - list of public rooms
 	 * @throws ServiceException
 	 */
 	@GET
-	@Path("/public/{typeid}")
-	public List<RoomDTO> getPublic(@QueryParam("sid") @WebParam String sid, @PathParam("typeid") @WebParam Long typeid) throws ServiceException {
+	@Path("/public/{type}")
+	public List<RoomDTO> getPublic(@QueryParam("sid") @WebParam String sid, @PathParam("type") @WebParam String type) throws ServiceException {
 		try {
 			Long userId = sessionDao.checkSession(sid);
 
 			if (AuthLevelUtil.hasUserLevel(userDao.getRights(userId))) {
-				return RoomDTO.list(roomDao.getPublicRooms(typeid));
+				return RoomDTO.list(roomDao.getPublicRooms(Room.Type.valueOf(type)));
 			} else {
 				throw new ServiceException("Insufficient permissins"); //TODO code -26
 			}
@@ -152,10 +149,10 @@ public class RoomWebService {
 	 *            The SID of the User. This SID must be marked as Loggedin
 	 * @param typeId
 	 *            Id of the the room type
-	 * @param externalRoomType
+	 * @param externalType
 	 *            you can specify your system-name or type of room here, for
 	 *            example "moodle"
-	 * @param externalRoomId
+	 * @param externalId
 	 *            your external room id may set here
 	 * @param room
 	 *            details of the room to be created if not found
@@ -164,18 +161,18 @@ public class RoomWebService {
 	 * @throws ServiceException
 	 */
 	@GET
-	@Path("/{typeId}/{externalType}/{externalId}")
+	@Path("/{type}/{externalType}/{externalId}")
 	public RoomDTO getExternal(@WebParam @QueryParam("sid") String sid
-			, @PathParam("typeId") @WebParam long typeId
+			, @PathParam("type") @WebParam String type
 			, @PathParam("externalType") @WebParam String externalType
 			, @PathParam("externalId") @WebParam Long externalId
 			, @WebParam @QueryParam("room") RoomDTO room) throws ServiceException {
 		try {
 			Long userId = sessionDao.checkSession(sid);
 			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(userId))) {
-				Room r = roomDao.getExternal(typeId, externalType, externalId);
+				Room r = roomDao.getExternal(Room.Type.valueOf(type), externalType, externalId);
 				if (r == null) {
-					r = room.get(roomTypeDao);
+					r = room.get();
 					r = roomDao.update(r, userId);
 					return new RoomDTO(r);
 				} else {
@@ -209,7 +206,7 @@ public class RoomWebService {
 		try {
 			Long userId = sessionDao.checkSession(sid);
 			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(userId))) {
-				Room r = room.get(roomTypeDao);
+				Room r = room.get();
 				r = roomDao.update(r, userId);
 				return new RoomDTO(r);
 			} else {

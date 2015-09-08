@@ -54,7 +54,6 @@
 		<class>org.apache.openmeetings.db.entity.room.Client</class>
 		<class>org.apache.openmeetings.db.entity.room.RoomModerator</class>
 		<class>org.apache.openmeetings.db.entity.room.Room</class>
-		<class>org.apache.openmeetings.db.entity.room.RoomType</class>
 		<class>org.apache.openmeetings.db.entity.room.RoomOrganisation</class>
 		<class>org.apache.openmeetings.db.entity.room.Whiteboard</class>
 		<class>org.apache.openmeetings.db.entity.room.WhiteboardItem</class>

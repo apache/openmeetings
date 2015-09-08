@@ -35,6 +35,7 @@ import org.apache.openmeetings.db.dao.IDataProviderDao;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.room.Room;
+import org.apache.openmeetings.db.entity.room.Room.Type;
 import org.apache.openmeetings.db.util.TimezoneUtil;
 import org.apache.openmeetings.util.DaoHelper;
 import org.red5.logging.Red5LoggerFactory;
@@ -57,8 +58,6 @@ public class RoomDao implements IDataProviderDao<Room> {
 	private UserDao userDao;
 	@Autowired
 	private TimezoneUtil timezoneUtil;
-	@Autowired
-	private RoomTypeDao roomTypeDao;
 
 	public Room get(long id) {
 		TypedQuery<Room> q = em.createNamedQuery("getRoomById", Room.class);
@@ -110,8 +109,8 @@ public class RoomDao implements IDataProviderDao<Room> {
 		return em.createNamedQuery("getPublicRoomsOrdered", Room.class).getResultList();
 	}
 	
-	public List<Room> getPublicRooms(Long typeId) {
-		return em.createNamedQuery("getPublicRooms", Room.class).setParameter("typeId", typeId).getResultList();
+	public List<Room> getPublicRooms(Type type) {
+		return em.createNamedQuery("getPublicRooms", Room.class).setParameter("type", type).getResultList();
 	}
 	
 	public List<Long> getSipRooms(List<Long> ids) {
@@ -193,25 +192,22 @@ public class RoomDao implements IDataProviderDao<Room> {
 		update(entity, userId);
 	}
 
-	public Room getUserRoom(Long ownerId, Long typeId, String name) {
-		if (typeId == null || typeId == 0) {
-			return null;
-		}
-		log.debug("getRoomByOwnerAndTypeId : " + ownerId + " || " + typeId);
+	public Room getUserRoom(Long ownerId, Room.Type type, String name) {
+		log.debug("getRoomByOwnerAndTypeId : " + ownerId + " || " + type);
 		Room room = null;
-		List<Room> ll = em.createNamedQuery("getRoomByOwnerAndTypeId", Room.class).setParameter("ownerId", ownerId).setParameter("roomtypesId", typeId).getResultList();
+		List<Room> ll = em.createNamedQuery("getRoomByOwnerAndTypeId", Room.class).setParameter("ownerId", ownerId).setParameter("type", type).getResultList();
 		if (ll.size() > 0) {
 			room = ll.get(0);
 		}
 
 		if (room == null) {
-			log.debug("Could not find room " + ownerId + " || " + typeId);
+			log.debug("Could not find room " + ownerId + " || " + type);
 			
 			room = new Room();
 			room.setName(name);
-			room.setRoomtype(roomTypeDao.get(typeId));
+			room.setType(type);
 			room.setComment("My Rooms of ownerId " + ownerId);
-			room.setNumberOfPartizipants(typeId == 1 ? 25L : 150L);
+			room.setNumberOfPartizipants(Room.Type.conference == type ? 25L : 150L);
 			room.setAllowUserQuestions(true);
 			room.setAllowFontStyles(true);
 			room.setOwnerId(ownerId);
@@ -227,12 +223,12 @@ public class RoomDao implements IDataProviderDao<Room> {
 		}
 	}
 
-	public Room getExternal(long typeId, String externalType, Long externalId) {
-		log.debug("getExternal : " + externalId + " - " + externalType + " - " + typeId);
+	public Room getExternal(Type type, String externalType, Long externalId) {
+		log.debug("getExternal : " + externalId + " - " + externalType + " - " + type);
 		List<Room> ll = em.createNamedQuery("getRoomByExternalId", Room.class)
-				.setParameter("externalRoomId", externalId)
-				.setParameter("externalRoomType", externalType)
-				.setParameter("roomtypesId", typeId)
+				.setParameter("externalId", externalId)
+				.setParameter("externalType", externalType)
+				.setParameter("type", type)
 				.getResultList();
 		if (ll.size() > 0) {
 			return ll.get(0);

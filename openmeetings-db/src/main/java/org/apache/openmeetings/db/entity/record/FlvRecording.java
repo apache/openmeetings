@@ -81,17 +81,17 @@ import org.simpleframework.xml.Root;
 			+ "ORDER BY f.type DESC, f.inserted")
 	, @NamedQuery(name = "resetRecordingProcessingStatus", query = "UPDATE FlvRecording f SET f.status = :error WHERE f.status IN (:recording, :converting)")
 	, @NamedQuery(name = "getRecordingsAll", query = "SELECT c FROM FlvRecording c LEFT JOIN FETCH c.flvRecordingMetaData ORDER BY c.id")
-	, @NamedQuery(name = "getRecordingsByExternalRoomTypeAndOwner", query = "SELECT c FROM FlvRecording c, Room r WHERE c.roomId = r.id "
-			+ "AND r.externalRoomType LIKE :externalRoomType AND c.insertedBy LIKE :insertedBy AND c.deleted = false")
-	, @NamedQuery(name = "getRecordingsByExternalRoomType", query = "SELECT c FROM FlvRecording c, Room r WHERE c.roomId = r.id "
-			+ "AND r.externalRoomType LIKE :externalRoomType AND c.deleted = false")
+	, @NamedQuery(name = "getRecordingsByExternalTypeAndOwner", query = "SELECT c FROM FlvRecording c, Room r WHERE c.roomId = r.id "
+			+ "AND r.externalType LIKE :externalType AND c.insertedBy LIKE :insertedBy AND c.deleted = false")
+	, @NamedQuery(name = "getRecordingsByExternalType", query = "SELECT c FROM FlvRecording c, Room r WHERE c.roomId = r.id "
+			+ "AND r.externalType LIKE :externalType AND c.deleted = false")
 	, @NamedQuery(name = "getRecordingsByRoom", query = "SELECT c FROM FlvRecording c WHERE c.deleted = false AND c.roomId = :roomId "
 			+ "ORDER BY c.type ASC, c.inserted")
 	, @NamedQuery(name = "getRecordingsByParent", query = "SELECT f FROM FlvRecording f WHERE f.deleted = false AND f.parentItemId = :parentId "
 			+ "ORDER BY f.type ASC, f.inserted") 
 	, @NamedQuery(name = "getRecordingsByExternalType", query = "SELECT rec FROM FlvRecording rec, Room r, User u "
 			+ "WHERE rec.deleted = false AND rec.roomId = r.id AND rec.insertedBy = u.id "
-			+ "AND (r.externalRoomType = :externalType OR u.externalUserType = :externalType)")
+			+ "AND (r.externalType = :externalType OR u.externalType = :externalType)")
 })
 @Table(name = "flvrecording")
 @Root(name = "flvrecording")

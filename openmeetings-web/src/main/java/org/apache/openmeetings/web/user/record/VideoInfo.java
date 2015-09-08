@@ -128,7 +128,7 @@ public class VideoInfo extends Panel {
 				Room room = getBean(RoomDao.class).get(r.getRoomId());
 				if (room != null) {
 					name = room.getName();
-					isInterview = room.getRoomtype().getId() == 4;
+					isInterview = Room.Type.interview == room.getType();
 				}
 			}
 			roomName.setObject(name);

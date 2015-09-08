@@ -25,13 +25,14 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
-import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -57,17 +58,15 @@ import org.simpleframework.xml.Root;
 })
 @NamedQueries({
 	@NamedQuery(name = "getNondeletedRooms", query = "SELECT r FROM Room r WHERE r.deleted = false"),
-	@NamedQuery(name = "getPublicRooms", query = "SELECT r from Room r WHERE r.ispublic = true and r.deleted = false and r.roomtype.id = :typeId"),
-	@NamedQuery(name = "getRoomByOwnerAndTypeId", query = "select c from Room as c "
-					+ "where c.ownerId = :ownerId "
-					+ "AND c.roomtype.id = :roomtypesId "
-					+ "AND c.deleted = false"),	
+	@NamedQuery(name = "getPublicRooms", query = "SELECT r from Room r WHERE r.ispublic = true and r.deleted = false and r.type = :type"),
+	@NamedQuery(name = "getRoomByOwnerAndTypeId", query = "select c from Room as c where c.ownerId = :ownerId "
+					+ "AND c.type = :type AND c.deleted = false"),	
 										
 	@NamedQuery(name = "selectMaxFromRooms", query = "select count(c.id) from Room c "
 			+ "where c.deleted = false AND c.name LIKE :search "),
-	@NamedQuery(name = "getRoomByExternalId", query = "select c from Room as c JOIN c.roomtype as rt "
-			+ "where c.externalRoomId = :externalRoomId AND c.externalRoomType = :externalRoomType "
-			+ "AND rt.id = :roomtypesId AND c.deleted = false"),
+	@NamedQuery(name = "getRoomByExternalId", query = "select r from Room as r "
+			+ "where r.externalId = :externalId AND c.externalType = :externalType "
+			+ "AND r.type = :type AND c.deleted = false"),
 	@NamedQuery(name = "getPublicRoomsOrdered", query = "SELECT r from Room r WHERE r.ispublic= true AND r.deleted= false AND r.appointment = false ORDER BY r.name ASC"),
 	@NamedQuery(name = "getRoomById", query = "SELECT r FROM Room r WHERE r.deleted = false AND r.id = :id"),
 	@NamedQuery(name = "getRoomsByIds", query = "SELECT r FROM Room r WHERE r.deleted = false AND r.id IN :ids"),
@@ -85,6 +84,50 @@ import org.simpleframework.xml.Root;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Room implements IDataProviderEntity {
 	private static final long serialVersionUID = 1L;
+	public static final int CONFERENCE_TYPE_ID = 1;
+	public static final int RESTRICTED_TYPE_ID = 3;
+	public static final int INTERVIEW_TYPE_ID = 4;
+	
+	public enum Type {
+		conference(CONFERENCE_TYPE_ID)
+		//, audience(2)
+		, restricted(RESTRICTED_TYPE_ID)
+		, interview(INTERVIEW_TYPE_ID);
+		//, custom(5)
+		private int id;
+		
+		Type() {} //default;
+		Type(int id) {
+			this.id = id;
+		}
+		
+		public int getId() {
+			return id;
+		}
+		
+		public static Type get(Long type) {
+			return get(type == null ? 1 : type.intValue());
+		}
+		
+		public static Type get(Integer type) {
+			return get(type == null ? 1 : type.intValue());
+		}
+		
+		public static Type get(int type) {
+			Type rt = Type.conference;
+			switch (type) {
+				case RESTRICTED_TYPE_ID:
+					rt = Type.restricted;
+					break;
+				case INTERVIEW_TYPE_ID:
+					rt = Type.interview;
+					break;
+				default:
+					//no-op
+			}
+			return rt;
+		}
+	}
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
@@ -100,11 +143,10 @@ public class Room implements IDataProviderEntity {
 	@Element(data = true, required = false)
 	private String comment;
 
-	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "roomtypes_id")
-	@ForeignKey(enabled = true)
+	@Column(name = "type")
+	@Enumerated(EnumType.STRING)
 	@Element(name = "roomtypeId", data = true, required = false)
-	private RoomType roomtype;
+	private Type type = Type.conference;
 
 	@Column(name = "inserted")
 	private Date inserted;
@@ -129,11 +171,11 @@ public class Room implements IDataProviderEntity {
 	private boolean appointment;
 
 	// Vars to simulate external Room
-	@Column(name = "externalRoomId")
+	@Column(name = "externalId")
 	@Element(data = true, required = false)
 	private Long externalId;
 
-	@Column(name = "externalRoomType")
+	@Column(name = "externalType")
 	@Element(data = true, required = false)
 	private String externalType;
 
@@ -285,12 +327,12 @@ public class Room implements IDataProviderEntity {
 		this.id = id;
 	}
 
-	public RoomType getRoomtype() {
-		return roomtype;
+	public Type getType() {
+		return type;
 	}
 
-	public void setRoomtype(RoomType roomtype) {
-		this.roomtype = roomtype;
+	public void setType(Type type) {
+		this.type = type;
 	}
 
 	public Date getInserted() {

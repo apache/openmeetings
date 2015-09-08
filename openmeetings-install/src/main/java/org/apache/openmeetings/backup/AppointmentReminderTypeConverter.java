@@ -35,7 +35,7 @@ public class AppointmentReminderTypeConverter extends OmConverter<AppointmentRem
 	}
 	
 	public AppointmentReminderType read(InputNode node) throws Exception {
-		return reminderTypeDao.get(getlongValue(node));
+		return reminderTypeDao.get(getLong(node));
 	}
 
 	public void write(OutputNode node, AppointmentReminderType value) throws Exception {

@@ -31,7 +31,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
 import org.apache.openmeetings.db.dao.calendar.AppointmentReminderTypeDao;
-import org.apache.openmeetings.db.dao.room.RoomTypeDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.dto.room.RoomDTO;
 import org.apache.openmeetings.db.dto.user.UserDTO;
@@ -92,7 +91,7 @@ public class AppointmentDTO implements Serializable {
 		reminderEmailSend = a.isReminderEmailSend();
 	}
 
-	public Appointment get(UserDao userDao, AppointmentDao appointmentDao, AppointmentReminderTypeDao remindDao, RoomTypeDao roomTypeDao) {
+	public Appointment get(UserDao userDao, AppointmentDao appointmentDao, AppointmentReminderTypeDao remindDao) {
 		Appointment a = id == null ? new Appointment() : appointmentDao.get(id);
 		a.setId(id);
 		a.setTitle(title);
@@ -105,7 +104,7 @@ public class AppointmentDTO implements Serializable {
 		a.setUpdated(updated);
 		a.setDeleted(deleted);
 		a.setRemind(reminder.get(remindDao));
-		a.setRoom(room.get(roomTypeDao));
+		a.setRoom(room.get());
 		a.setIcalId(icalId);
 		a.setMeetingMembers(new ArrayList<MeetingMember>());
 		for(MeetingMemberDTO mm : meetingMembers) {

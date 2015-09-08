@@ -66,7 +66,6 @@ import org.apache.openmeetings.db.dao.record.FlvRecordingDao;
 import org.apache.openmeetings.db.dao.room.PollDao;
 import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.dao.room.RoomOrganisationDao;
-import org.apache.openmeetings.db.dao.room.RoomTypeDao;
 import org.apache.openmeetings.db.dao.server.LdapConfigDao;
 import org.apache.openmeetings.db.dao.server.OAuth2Dao;
 import org.apache.openmeetings.db.dao.server.ServerDao;
@@ -82,8 +81,8 @@ import org.apache.openmeetings.db.entity.calendar.Appointment;
 import org.apache.openmeetings.db.entity.calendar.AppointmentCategory;
 import org.apache.openmeetings.db.entity.calendar.AppointmentReminderType;
 import org.apache.openmeetings.db.entity.calendar.MeetingMember;
-import org.apache.openmeetings.db.entity.file.FileItem;
 import org.apache.openmeetings.db.entity.file.FileExplorerItem;
+import org.apache.openmeetings.db.entity.file.FileItem;
 import org.apache.openmeetings.db.entity.file.FileItem.Type;
 import org.apache.openmeetings.db.entity.record.FlvRecording;
 import org.apache.openmeetings.db.entity.record.FlvRecordingMetaData;
@@ -93,7 +92,6 @@ import org.apache.openmeetings.db.entity.room.RoomModerator;
 import org.apache.openmeetings.db.entity.room.RoomOrganisation;
 import org.apache.openmeetings.db.entity.room.RoomPoll;
 import org.apache.openmeetings.db.entity.room.RoomPollAnswer;
-import org.apache.openmeetings.db.entity.room.RoomType;
 import org.apache.openmeetings.db.entity.server.LdapConfig;
 import org.apache.openmeetings.db.entity.server.OAuthServer;
 import org.apache.openmeetings.db.entity.server.Server;
@@ -170,8 +168,6 @@ public class BackupImport {
 	private OAuth2Dao auth2Dao;
 	@Autowired
 	private OrganisationDao organisationDao;
-	@Autowired
-	private RoomTypeDao roomTypeDao;
 	@Autowired
 	private RoomOrganisationDao roomOrganisationDao;
 
@@ -331,7 +327,7 @@ public class BackupImport {
 			matcher.bind(Long.class, LongTransform.class);
 			matcher.bind(Integer.class, IntegerTransform.class);
 			registry.bind(User.class, new UserConverter(usersDao, usersMap));
-			registry.bind(RoomType.class, new RoomTypeConverter(roomTypeDao));
+			registry.bind(Room.Type.class, new RoomTypeConverter());
 			
 			List<Room> list = readList(serializer, f, "rooms.xml", "rooms", Room.class);
 			for (Room r : list) {

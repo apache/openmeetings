@@ -1560,9 +1560,6 @@
   <entry key="1538">Разрешить SIP транспорт в комнате</entry>
   <entry key="1539">Вы действительно хотите дать слово этому участнику?</entry>
   <entry key="1540">Укажите Ваш часовой пояс</entry>
-  <entry key="1541">конференц зал (1-25 участников)</entry>
-  <entry key="1542">ограниченная (1-150 участников)</entry>
-  <entry key="1543">интервью (1:1 встреча с записью)</entry>
   <entry key="1544">Конфигурация с этим ключем уже существует, пожалуйста укажите другой ключ или измените существующий</entry>
   <entry key="1545">Сохранение данных, подождите пожалуйста.</entry>
   <entry key="1546">Добро пожаловать</entry>
@@ -1882,4 +1879,7 @@
 	<entry key="install.wizard.congrats.mail">Список рассылки</entry>
 	<entry key="install.wizard.congrats.commercial">Это компании,
 		которые так же оказывают коммерческую поддержку Apache OpenMeetings:</entry>
+  <entry key="room.type.conference">конференц зал (1-25 участников)</entry>
+  <entry key="room.type.restricted">ограниченная (1-150 участников)</entry>
+  <entry key="room.type.interview">интервью (1:1 встреча с записью)</entry>
 </properties>

@@ -1560,9 +1560,6 @@
   <entry key="1538">Activer le transport SIP dans la salle</entry>
   <entry key="1539">Voulez-vous vraiment donner l'audio exclusif à cet utilisateur ?</entry>
   <entry key="1540">Veuillez spécifier votre fuseau horaire</entry>
-  <entry key="1541">conférence (1-25 utilisateurs)</entry>
-  <entry key="1542">restreint (1-150 utilisateurs)</entry>
-  <entry key="1543">interview (1:1 réunion avec enregistrement)</entry>
   <entry key="1544">Une configuration avec cette clé existe déjà, veuillez spécifier une autre clé ou éditer la configuration existante</entry>
   <entry key="1545">Sauvegarde, veuillez patienter.</entry>
   <entry key="1546">Bienvenue</entry>
@@ -1835,4 +1832,7 @@
 	<entry key="install.wizard.congrats.mail">Liste de diffusion</entry>
 	<entry key="install.wizard.congrats.commercial">Il existe des sociétés
 		qui offrent un support commercial pour Apache OpenMeetings :</entry>
+  <entry key="room.type.conference">conférence (1-25 utilisateurs)</entry>
+  <entry key="room.type.restricted">restreint (1-150 utilisateurs)</entry>
+  <entry key="room.type.interview">interview (1:1 réunion avec enregistrement)</entry>
 </properties>

@@ -112,10 +112,9 @@ public class RoomManager {
 		return null;
 	}
 
-	public List<Room> getRoomsWithCurrentUsersByListAndType(int start, int max, String orderby, boolean asc, String externalRoomType) {
+	public List<Room> getRoomsWithCurrentUsersByListAndType(int start, int max, String orderby, boolean asc, String externalType) {
 		try {
-			List<Room> rooms = this.getRoomsInternatlbyType(start, max,
-					orderby, asc, externalRoomType);
+			List<Room> rooms = this.getRoomsInternatlbyType(start, max, orderby, asc, externalType);
 
 			for (Room room : rooms) {
 				room.setCurrentusers(sessionManager.getClientListByRoom(room.getId()));
@@ -240,15 +239,13 @@ public class RoomManager {
 		return null;
 	}
 
-	public List<Room> getRoomsInternatlbyType(int start, int max,
-			String orderby, boolean asc, String externalRoomType) {
+	public List<Room> getRoomsInternatlbyType(int start, int max, String orderby, boolean asc, String externalType) {
 		try {
 			CriteriaBuilder cb = em.getCriteriaBuilder();
 			CriteriaQuery<Room> cq = cb.createQuery(Room.class);
 			Root<Room> c = cq.from(Room.class);
 			Predicate condition = cb.equal(c.get("deleted"), false);
-			Predicate subCondition = cb.equal(c.get("externalRoomType"),
-					externalRoomType);
+			Predicate subCondition = cb.equal(c.get("externalType"), externalType);
 			cq.where(condition, subCondition);
 			cq.distinct(asc);
 			if (asc) {
@@ -338,7 +335,7 @@ public class RoomManager {
 	public List<RoomOrganisation> getRoomsOrganisationByOrganisationIdAndRoomType(long organisationId, long roomtypesId) {
 		try {
 			TypedQuery<RoomOrganisation> q = em.createNamedQuery("getRoomsOrganisationByOrganisationIdAndRoomType", RoomOrganisation.class);
-			q.setParameter("roomtypesId", roomtypesId);
+			q.setParameter("types", Room.Type.get(roomtypesId));
 			q.setParameter("organisationId", organisationId);
 			return q.getResultList();
 		} catch (Exception ex2) {

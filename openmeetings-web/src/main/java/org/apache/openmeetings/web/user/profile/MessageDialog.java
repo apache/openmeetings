@@ -24,7 +24,6 @@ import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.Application.getContactsLink;
 import static org.apache.openmeetings.web.app.Application.getInvitationLink;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
-import static org.apache.openmeetings.web.util.RoomTypeDropDown.getRoomTypes;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -104,7 +103,7 @@ public class MessageDialog extends AbstractFormDialog<PrivateMessage> {
 		p.setFolderId(INBOX_FOLDER_ID);
 		Room r = new Room();
 		r.setAppointment(true);
-		r.setRoomtype(getRoomTypes().get(0));
+		r.setType(Room.Type.conference);
 		p.setRoom(r);
 		setModelObject(p);
 		roomParams.setVisible(getModelObject().isBookedRoom());
@@ -146,7 +145,7 @@ public class MessageDialog extends AbstractFormDialog<PrivateMessage> {
 			}
 		}));
 		roomParamsBlock.add(roomParams);
-		roomParams.add(new RoomTypeDropDown("room.roomtype"));
+		roomParams.add(new RoomTypeDropDown("room.type"));
 		roomParams.add(start);
 		roomParams.add(end);
 		add(form.setOutputMarkupId(true));

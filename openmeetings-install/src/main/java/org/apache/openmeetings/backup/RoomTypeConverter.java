@@ -18,28 +18,18 @@
  */
 package org.apache.openmeetings.backup;
 
-import org.apache.openmeetings.db.dao.room.RoomTypeDao;
-import org.apache.openmeetings.db.entity.room.RoomType;
+import org.apache.openmeetings.db.entity.room.Room.Type;
 import org.simpleframework.xml.stream.InputNode;
 import org.simpleframework.xml.stream.OutputNode;
 
-public class RoomTypeConverter extends OmConverter<RoomType> {
-	private RoomTypeDao dao;
+public class RoomTypeConverter extends OmConverter<Type> {
+	public RoomTypeConverter() {}
 	
-	public RoomTypeConverter() {
-		//default constructor is for export
-	}
-	
-	public RoomTypeConverter(RoomTypeDao dao) {
-		this.dao = dao;
-	}
-	
-	public RoomType read(InputNode node) throws Exception {
-		RoomType rt = dao.get(getlongValue(node));
-		return rt != null ? rt : dao.get(1); // conference type will be used in case of bad type
+	public Type read(InputNode node) throws Exception {
+		return Type.get(getInt(node));
 	}
 
-	public void write(OutputNode node, RoomType value) throws Exception {
+	public void write(OutputNode node, Type value) throws Exception {
 		node.setData(true);
 		node.setValue(value == null ? "0" : "" + value.getId());
 	}

@@ -39,7 +39,7 @@ public class UserConverter extends OmConverter<User> {
 	}
 	
 	public User read(InputNode node) throws Exception {
-		long oldId = getlongValue(node);
+		long oldId = getLong(node);
 		long newId = idMap.containsKey(oldId) ? idMap.get(oldId) : oldId;
 		
 		User u = userDao.get(newId);

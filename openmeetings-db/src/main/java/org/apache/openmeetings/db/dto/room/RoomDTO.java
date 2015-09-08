@@ -26,9 +26,7 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import org.apache.openmeetings.db.dao.room.RoomTypeDao;
 import org.apache.openmeetings.db.entity.room.Room;
-import org.apache.openmeetings.db.entity.room.RoomType;
 
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -37,7 +35,7 @@ public class RoomDTO implements Serializable {
 	private Long id;
 	private String name;
 	private String comment;
-	private RoomType type;
+	private Room.Type type;
 	private Long numberOfPartizipants = new Long(4);
 	private boolean appointment;
 	private String confno;
@@ -66,7 +64,7 @@ public class RoomDTO implements Serializable {
 		id = r.getId();
 		name = r.getName();
 		comment = r.getComment();
-		type = r.getRoomtype();
+		type = r.getType();
 		numberOfPartizipants = r.getNumberOfPartizipants();
 		appointment = r.isAppointment();
 		confno = r.getConfno();
@@ -90,12 +88,12 @@ public class RoomDTO implements Serializable {
 		whiteboardHidden = r.getHideWhiteboard();
 	}
 
-	public Room get(RoomTypeDao roomTypeDao) {
+	public Room get() {
 		Room r = new Room();
 		r.setId(id);
 		r.setName(name);
 		r.setComment(comment);
-		r.setRoomtype(roomTypeDao.get(type.getId()));
+		r.setType(type);
 		r.setNumberOfPartizipants(numberOfPartizipants);
 		r.setAppointment(appointment);
 		r.setConfno(confno);
@@ -144,11 +142,11 @@ public class RoomDTO implements Serializable {
 		this.comment = comment;
 	}
 
-	public RoomType getType() {
+	public Room.Type getType() {
 		return type;
 	}
 
-	public void setType(RoomType type) {
+	public void setType(Room.Type type) {
 		this.type = type;
 	}
 

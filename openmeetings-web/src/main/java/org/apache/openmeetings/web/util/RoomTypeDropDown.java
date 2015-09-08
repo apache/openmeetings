@@ -18,42 +18,40 @@
  */
 package org.apache.openmeetings.web.util;
 
-import static org.apache.openmeetings.web.app.Application.getBean;
-
+import java.util.Arrays;
 import java.util.List;
 
-import org.apache.openmeetings.db.dao.room.RoomTypeDao;
-import org.apache.openmeetings.db.entity.room.RoomType;
+import org.apache.openmeetings.db.entity.room.Room.Type;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.model.IModel;
 
-public class RoomTypeDropDown extends DropDownChoice<RoomType> {
+public class RoomTypeDropDown extends DropDownChoice<Type> {
 	private static final long serialVersionUID = 1L;
 	
-	public static List<RoomType> getRoomTypes() {
-		return getBean(RoomTypeDao.class).get();
+	public static List<Type> getRoomTypes() {
+		return Arrays.<Type>asList(Type.values());
 	}
 	
 	public RoomTypeDropDown(String id) {
 		super(id);
 		setChoices(getRoomTypes());
-		setChoiceRenderer(new IChoiceRenderer<RoomType>() {
+		setChoiceRenderer(new IChoiceRenderer<Type>() {
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			public String getIdValue(RoomType rt, int index) {
-				return "" + rt.getId();
+			public String getIdValue(Type rt, int index) {
+				return rt.name();
 			}
 			
-			public Object getDisplayValue(RoomType rt) {
-				return getString("" + rt.getLabelId());
+			public Object getDisplayValue(Type rt) {
+				return getString("room.type." + rt.name());
 			}
 
 			@Override
-			public RoomType getObject(String id, IModel<? extends List<? extends RoomType>> choices) {
-				for (RoomType rt : choices.getObject()) {
-					if (getIdValue(rt, -1).equals(id)) {
+			public Type getObject(String id, IModel<? extends List<? extends Type>> choices) {
+				for (Type rt : choices.getObject()) {
+					if (rt.name().equals(id)) {
 						return rt;
 					}
 				}

@@ -1560,9 +1560,6 @@
   <entry key="1538">Enable SIP transport in the room</entry>
   <entry key="1539">Do you really want to provide this user an exclusive audio?</entry>
   <entry key="1540">Please specify your timezone</entry>
-  <entry key="1541">conference (1-25 users)</entry>
-  <entry key="1542">restricted (1-150 users)</entry>
-  <entry key="1543">interview (1:1 meeting with recording)</entry>
   <entry key="1544">Configuration with given key already exists, please specify another key or edit existent configuration</entry>
   <entry key="1545">Content is Saving, Please wait.</entry>
   <entry key="1546">Welcome</entry>
@@ -1869,4 +1866,7 @@
 	<entry key="install.wizard.congrats.mail">Mailing list</entry>
 	<entry key="install.wizard.congrats.commercial">There are some companies
 			that also offer commercial support for Apache OpenMeetings:</entry>
+  <entry key="room.type.conference">conference (1-25 users)</entry>
+  <entry key="room.type.restricted">restricted (1-150 users)</entry>
+  <entry key="room.type.interview">interview (1:1 meeting with recording)</entry>
 </properties>

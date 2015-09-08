@@ -39,7 +39,6 @@ import org.apache.openmeetings.db.dao.label.LabelDao;
 import org.apache.openmeetings.db.dao.room.IInvitationManager;
 import org.apache.openmeetings.db.dao.room.InvitationDao;
 import org.apache.openmeetings.db.dao.room.RoomDao;
-import org.apache.openmeetings.db.dao.room.RoomTypeDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
 import org.apache.openmeetings.db.entity.calendar.MeetingMember;
@@ -79,8 +78,6 @@ public class AppointmentLogic {
 	private UserDao userDao;
 	@Autowired
 	private MeetingMemberDao meetingMemberDao;
-	@Autowired
-	private RoomTypeDao roomTypeDao;
 
 	// --------------------------------------------------------------------------------------------
 
@@ -219,7 +216,7 @@ public class AppointmentLogic {
 			a.setRoom(new Room());
 			a.getRoom().setComment(appointmentDescription);
 			a.getRoom().setName(appointmentName);
-			a.getRoom().setRoomtype(roomTypeDao.get(roomType));
+			a.getRoom().setType(Room.Type.get(roomType));
 		}
 		a.setOwner(userDao.get(userId));
 		a.setPasswordProtected(isPasswordProtected);

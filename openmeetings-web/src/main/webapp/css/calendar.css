@@ -41,7 +41,7 @@
 	width: 426px;
 }
 
-.appointmentPopUp select[name="room.roomtype"] {
+.appointmentPopUp select[name="room.type"] {
 	width: 426px;
 }
 

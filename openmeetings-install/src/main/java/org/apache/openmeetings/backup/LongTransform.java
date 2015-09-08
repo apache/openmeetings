@@ -22,7 +22,7 @@ import org.simpleframework.xml.transform.Transform;
 
 public class LongTransform implements Transform<Long>{
 	public Long read(String value) throws Exception {
-		return OmConverter.getlongValue(value);
+		return OmConverter.getLong(value);
 	}
 
 	public String write(Long value) throws Exception {

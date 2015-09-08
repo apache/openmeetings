@@ -157,7 +157,7 @@ public class ConferenceService {
 			Long userId = sessiondataDao.checkSession(SID);
 			if (AuthLevelUtil.hasUserLevel(userDao.getRights(userId))) {
 	
-				List<Room> roomList = roomDao.getPublicRooms(roomtypesId);
+				List<Room> roomList = roomDao.getPublicRooms(Room.Type.get(roomtypesId));
 	
 				// Filter : no appointed meetings
 				List<Room> filtered = new ArrayList<Room>();
@@ -264,12 +264,11 @@ public class ConferenceService {
 					Long roomId = ment.getRoom().getId();
 					Room room = roomDao.get(roomId);
 
-					if (!room.getRoomtype().getId()
-							.equals(roomTypeId))
+					if (roomTypeId == null || !roomTypeId.equals(room.getType().getId())) {
 						continue;
+					}
 
-					room.setCurrentusers(getRoomClientsListByRoomId(room
-							.getId()));
+					room.setCurrentusers(getRoomClientsListByRoomId(room.getId()));
 					result.add(room);
 				}
 			}
@@ -419,12 +418,12 @@ public class ConferenceService {
 		return null;
 	}
 
-	public List<Room> getRoomsWithCurrentUsersByListAndType(String SID, int start, int max, String orderby, boolean asc, String externalRoomType) {
+	public List<Room> getRoomsWithCurrentUsersByListAndType(String SID, int start, int max, String orderby, boolean asc, String externalType) {
 		log.debug("getRoomsWithCurrentUsersByListAndType");
 
 		Long userId = sessiondataDao.checkSession(SID);
 		if (AuthLevelUtil.hasAdminLevel(userDao.getRights(userId))) {
-			return roomManager.getRoomsWithCurrentUsersByListAndType(start, max, orderby, asc, externalRoomType);
+			return roomManager.getRoomsWithCurrentUsersByListAndType(start, max, orderby, asc, externalType);
 		}
 		return null;
 	}
@@ -432,7 +431,7 @@ public class ConferenceService {
 	public Room getRoomByOwnerAndType(String SID, Long roomtypesId, String roomName) {
 		Long userId = sessiondataDao.checkSession(SID);
 		if (AuthLevelUtil.hasUserLevel(userDao.getRights(userId))) {
-			return roomDao.getUserRoom(userId, roomtypesId, roomName);
+			return roomDao.getUserRoom(userId, Room.Type.get(roomtypesId), roomName);
 		}
 		return null;
 	}

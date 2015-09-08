@@ -110,22 +110,22 @@ public class FlvRecordingDao {
 		return null;
 	}
 
-	public List<FlvRecording> getFlvRecordingByExternalRoomTypeAndCreator(String externalRoomType, Long insertedBy) {
+	public List<FlvRecording> getFlvRecordingByExternalTypeAndCreator(String externalType, Long insertedBy) {
 		try {
 
-			log.debug("getFlvRecordingByExternalRoomType :externalRoomType: " + externalRoomType);
+			log.debug("getFlvRecordingByExternalType :externalType: " + externalType);
 
-			TypedQuery<FlvRecording> query = em.createNamedQuery("getRecordingsByExternalRoomTypeAndOwner", FlvRecording.class);
-			query.setParameter("externalRoomType", externalRoomType);
+			TypedQuery<FlvRecording> query = em.createNamedQuery("getRecordingsByExternalTypeAndOwner", FlvRecording.class);
+			query.setParameter("externalType", externalType);
 			query.setParameter("insertedBy", insertedBy);
 
 			List<FlvRecording> flvRecordingList = query.getResultList();
 
-			log.debug("getFlvRecordingByExternalRoomType :: " + flvRecordingList.size());
+			log.debug("getFlvRecordingByExternalType :: " + flvRecordingList.size());
 
 			return flvRecordingList;
 		} catch (Exception ex2) {
-			log.error("[getFlvRecordingByExternalRoomType]: ", ex2);
+			log.error("[getFlvRecordingByExternalType]: ", ex2);
 		}
 		return null;
 	}
@@ -141,20 +141,20 @@ public class FlvRecordingDao {
 		return null;
 	}
 
-	public List<FlvRecording> getFlvRecordingByExternalRoomType(String externalRoomType) {
+	public List<FlvRecording> getFlvRecordingByExternalType(String externalType) {
 		try {
-			log.debug("getFlvRecordingByExternalRoomType :externalRoomType: " + externalRoomType);
+			log.debug("getFlvRecordingByExternalType :externalType: " + externalType);
 
-			TypedQuery<FlvRecording> query = em.createQuery("getRecordingsByExternalRoomType", FlvRecording.class);
-			query.setParameter("externalRoomType", externalRoomType);
+			TypedQuery<FlvRecording> query = em.createQuery("getRecordingsByExternalType", FlvRecording.class);
+			query.setParameter("externalType", externalType);
 
 			List<FlvRecording> flvRecordingList = query.getResultList();
 
-			log.debug("getFlvRecordingByExternalRoomType :: " + flvRecordingList.size());
+			log.debug("getFlvRecordingByExternalType :: " + flvRecordingList.size());
 
 			return flvRecordingList;
 		} catch (Exception ex2) {
-			log.error("[getFlvRecordingByExternalRoomType]: ", ex2);
+			log.error("[getFlvRecordingByExternalType]: ", ex2);
 		}
 		return null;
 	}

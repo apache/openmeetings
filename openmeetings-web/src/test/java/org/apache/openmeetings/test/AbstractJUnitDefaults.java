@@ -27,12 +27,10 @@ import java.util.List;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
 import org.apache.openmeetings.db.dao.calendar.AppointmentReminderTypeDao;
-import org.apache.openmeetings.db.dao.room.RoomTypeDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
 import org.apache.openmeetings.db.entity.calendar.AppointmentReminderType;
 import org.apache.openmeetings.db.entity.room.Room;
-import org.apache.openmeetings.db.entity.room.RoomType;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.installation.ImportInitvalues;
 import org.apache.openmeetings.installation.InstallationConfig;
@@ -55,8 +53,6 @@ public abstract class AbstractJUnitDefaults extends AbstractSpringTest {
 	@Autowired
 	private AppointmentReminderTypeDao reminderTypeDao;
 	@Autowired
-	private RoomTypeDao roomTypeDao;
-	@Autowired
 	private UserDao userDao;
 	@Autowired
 	private ImportInitvalues importInitvalues;
@@ -64,7 +60,6 @@ public abstract class AbstractJUnitDefaults extends AbstractSpringTest {
 	private ConfigurationDao configurationDao;
 	
 	private List<AppointmentReminderType> remindTypes;
-	private List<RoomType> roomTypes;
 
 	@Before
 	public void setUp() throws Exception {
@@ -80,7 +75,6 @@ public abstract class AbstractJUnitDefaults extends AbstractSpringTest {
 			assertNotNull("Crypt class name should not be null", configurationDao.getCryptKey());
 		}
         remindTypes = reminderTypeDao.get();
-        roomTypes = roomTypeDao.get();
     }
 
 	public Appointment createAppointment() {
@@ -118,9 +112,7 @@ public abstract class AbstractJUnitDefaults extends AbstractSpringTest {
 		}
 		
 		Room r = new Room();
-		if (!roomTypes.isEmpty()) {
-			r.setRoomtype(roomTypes.get(0));
-		}
+		r.setType(Room.Type.conference);
 		r.setAppointment(true);
 		ap.setRoom(r);
 		return ap;

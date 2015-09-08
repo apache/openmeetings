@@ -35,7 +35,7 @@ public class AppointmentCategoryConverter  extends OmConverter<AppointmentCatego
 	}
 	
 	public AppointmentCategory read(InputNode node) throws Exception {
-		return appointmentCategoryDaoImpl.get(getlongValue(node));
+		return appointmentCategoryDaoImpl.get(getLong(node));
 	}
 
 	public void write(OutputNode node, AppointmentCategory value)

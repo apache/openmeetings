@@ -221,7 +221,6 @@
 	<bean id="userManagement" class="org.apache.openmeetings.service.user.UserManager" />
 	<bean id="roomModeratorsDao" class="org.apache.openmeetings.db.dao.room.RoomModeratorsDao" />
 	<bean id="roomOrganisationDao" class="org.apache.openmeetings.db.dao.room.RoomOrganisationDao"/>
-	<bean id="roomTypeDao" class="org.apache.openmeetings.db.dao.room.RoomTypeDao" />
 	<bean id="conferenceLogDao" class="org.apache.openmeetings.db.dao.log.ConferenceLogDao" />
 	<bean id="conferenceLogTypeDao" class="org.apache.openmeetings.db.dao.log.ConferenceLogTypeDao" />
 	<bean id="emailManagement" class="org.apache.openmeetings.service.mail.EmailManager" />
@@ -272,7 +271,6 @@
 	<bean id="fileWebService" class="org.apache.openmeetings.webservice.FileWebService" />
 	<bean id="groupWebService" class="org.apache.openmeetings.webservice.GroupWebService" />
 	<bean id="recordWebService" class="org.apache.openmeetings.webservice.RecordingWebService" />
-	<bean id="roomTypeWebService" class="org.apache.openmeetings.webservice.RoomTypeWebService" />
 	<bean id="roomWebService" class="org.apache.openmeetings.webservice.RoomWebService" />
 	<bean id="serverWebService" class="org.apache.openmeetings.webservice.ServerWebService" />
 	<bean id="userWebService" class="org.apache.openmeetings.webservice.UserWebService" />
@@ -285,7 +283,6 @@
 			<ref bean="fileWebService"/>
 			<ref bean="groupWebService"/>
 			<ref bean="recordWebService"/>
-			<ref bean="roomTypeWebService"/>
 			<ref bean="roomWebService"/>
 			<ref bean="serverWebService"/>
 			<ref bean="userWebService"/>
@@ -315,11 +312,6 @@
 		implementor="#recordWebService" 
 		endpointName="RecordServiceEndpoint"
 		serviceName="RecordService"
-		/>
-	<jaxws:endpoint id="roomTypeServiceWS" address="/RoomTypeService"
-		implementor="#roomTypeWebService" 
-		endpointName="RoomTypeServiceEndpoint"
-		serviceName="RoomTypeService"
 		/>
 	<jaxws:endpoint id="roomServiceWS" address="/RoomService"
 		implementor="#roomWebService" 

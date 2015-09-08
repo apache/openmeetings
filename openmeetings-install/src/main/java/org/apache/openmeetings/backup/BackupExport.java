@@ -66,7 +66,6 @@ import org.apache.openmeetings.db.entity.record.FlvRecording;
 import org.apache.openmeetings.db.entity.room.PollType;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.room.RoomPoll;
-import org.apache.openmeetings.db.entity.room.RoomType;
 import org.apache.openmeetings.db.entity.server.LdapConfig;
 import org.apache.openmeetings.db.entity.user.Organisation;
 import org.apache.openmeetings.db.entity.user.PrivateMessage;
@@ -167,7 +166,7 @@ public class BackupExport {
 			Serializer serializer = new Persister(strategy);
 	
 			registry.bind(User.class, UserConverter.class);
-			registry.bind(RoomType.class, RoomTypeConverter.class);
+			registry.bind(Room.Type.class, RoomTypeConverter.class);
 			
 			writeList(serializer, backup_dir, "rooms.xml", "rooms", roomDao.get());
 			progressHolder.setProgress(15);

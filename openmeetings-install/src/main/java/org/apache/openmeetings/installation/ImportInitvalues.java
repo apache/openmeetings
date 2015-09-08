@@ -62,7 +62,6 @@ import org.apache.openmeetings.db.dao.calendar.AppointmentCategoryDao;
 import org.apache.openmeetings.db.dao.calendar.AppointmentReminderTypeDao;
 import org.apache.openmeetings.db.dao.room.PollDao;
 import org.apache.openmeetings.db.dao.room.RoomDao;
-import org.apache.openmeetings.db.dao.room.RoomTypeDao;
 import org.apache.openmeetings.db.dao.room.SipDao;
 import org.apache.openmeetings.db.dao.server.OAuth2Dao;
 import org.apache.openmeetings.db.dao.user.OrganisationDao;
@@ -70,6 +69,7 @@ import org.apache.openmeetings.db.dao.user.SalutationDao;
 import org.apache.openmeetings.db.dao.user.StateDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.room.Room;
+import org.apache.openmeetings.db.entity.room.Room.Type;
 import org.apache.openmeetings.db.entity.room.RoomOrganisation;
 import org.apache.openmeetings.db.entity.server.OAuthServer;
 import org.apache.openmeetings.db.entity.server.OAuthServer.RequestMethod;
@@ -110,8 +110,6 @@ public class ImportInitvalues {
 	private SipDao sipDao;
 	@Autowired
 	private OAuth2Dao oauthDao;
-	@Autowired
-	private RoomTypeDao roomTypeDao;
 	@Autowired
 	private OrganisationDao organisationDao;
 	@Autowired
@@ -450,31 +448,13 @@ public class ImportInitvalues {
 		log.debug("Configurations ADDED");
 	}
 
-	public void loadRoomTypes() {
-		long conferenceId = roomTypeDao.addRoomType("conference", 1541, false);
-		log.debug("conferenceId: " + conferenceId);
-
-		// Audience room type is not in use anymore
-		roomTypeDao.addRoomType("audience", -1, true);
-
-		long restrictedId = roomTypeDao.addRoomType("restricted", 1542, false);
-		log.debug("restrictedId: " + restrictedId);
-
-		long interviewId = roomTypeDao.addRoomType("interview", 1543, false);
-		log.debug("interviewId: " + interviewId);
-
-		// Custom room type is not in use anymore
-		roomTypeDao.addRoomType("custom", -2, true);
-		log.debug("RoomTypes ADDED");
-	}
-
-	private Room createRoom(String name, long typeId, long capacity, boolean isPublic, Long orgId) {
+	private Room createRoom(String name, Room.Type type, long capacity, boolean isPublic, Long orgId) {
 		Room r = new Room();
 		r.setName(name);
 		r.setComment("");
 		r.setInserted(new Date());
 		r.setNumberOfPartizipants(capacity);
-		r.setRoomtype(roomTypeDao.get(typeId));
+		r.setType(type);
 		r.setIspublic(isPublic);
 		r.setAllowUserQuestions(true);
 		r.setAudioOnly(false);
@@ -516,27 +496,22 @@ public class ImportInitvalues {
 	
 	public void loadDefaultRooms(boolean createRooms) {
 		if (createRooms) {
-			// hardcoded IDs (they are not intended to be changed)
-			long conferenceId = 1;
-			long restrictedId = 3;
-			long interviewId = 4;
-
-			createRoom("public Interview Room", interviewId, 16L, true, null);
-			createRoom("public Conference Room", conferenceId, 32L, true, null);
-			Room r = createRoom("public Video Only Room", conferenceId, 32L, true, null);
+			createRoom("public Interview Room", Type.interview, 16L, true, null);
+			createRoom("public Conference Room", Type.conference, 32L, true, null);
+			Room r = createRoom("public Video Only Room", Type.conference, 32L, true, null);
 			r.setHideWhiteboard(true);
 			roomDao.update(r, null);
-			createRoom("public Video And Whiteboard Room", conferenceId, 32L, true, null);
-			createRoom("public Restricted Room", restrictedId, 100L, true, null);
-			r = createRoom("restricted room with micro option set", restrictedId, 100L, true, null);
+			createRoom("public Video And Whiteboard Room", Type.conference, 32L, true, null);
+			createRoom("public Restricted Room", Type.restricted, 100L, true, null);
+			r = createRoom("restricted room with micro option set", Type.restricted, 100L, true, null);
 			r.setShowMicrophoneStatus(true);
 			roomDao.update(r, null);
 
-			r = createRoom("conference room with micro option set", conferenceId, 32L, true, null);
+			r = createRoom("conference room with micro option set", Type.conference, 32L, true, null);
 			r.setShowMicrophoneStatus(true);
 			roomDao.update(r, null);
 
-			createRoom("private Conference Room", conferenceId, 32L, false, 1L);
+			createRoom("private Conference Room", Type.conference, 32L, false, 1L);
 		}
 	}
 
@@ -693,33 +668,31 @@ public class ImportInitvalues {
 			log.debug("System contains users, no need to install data one more time.");
 		}
 		sipDao.delete();
-		progress = 8;
+		progress = 9;
 		loadMainMenu();
-		progress = 16;
+		progress = 18;
 		loadErrorTypes();
-		progress = 24;
+		progress = 27;
 		loadErrorMappingsFromXML();
-		progress = 32;
+		progress = 36;
 		loadCountriesFiles();
-		progress = 40;
+		progress = 45;
 		loadSalutations();
-		progress = 48;
+		progress = 54;
 		// AppointMent Categories
 		loadInitAppointmentCategories();
-		progress = 56;
+		progress = 63;
 		// Appointment Reminder types
 		loadInitAppointmentReminderTypes();
-		progress = 64;
+		progress = 72;
 		// Appointment poll types
 		loadPollTypes();
-		progress = 72;
-		loadRoomTypes();
-		progress = 80;
+		progress = 81;
 
 		loadConfiguration(cfg);
-		progress = 88;
+		progress = 90;
 		loadInitialOAuthServers();
-		progress = 96;
+		progress = 99;
 	}
 
 	public void loadAll(InstallationConfig cfg, boolean force) throws Exception {

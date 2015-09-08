@@ -40,7 +40,6 @@ import org.apache.cxf.feature.Features;
 import org.apache.openmeetings.db.dao.calendar.AppointmentCategoryDao;
 import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
 import org.apache.openmeetings.db.dao.calendar.AppointmentReminderTypeDao;
-import org.apache.openmeetings.db.dao.room.RoomTypeDao;
 import org.apache.openmeetings.db.dao.server.SessiondataDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.dto.calendar.AppointmentDTO;
@@ -49,6 +48,7 @@ import org.apache.openmeetings.db.entity.calendar.Appointment;
 import org.apache.openmeetings.db.entity.calendar.AppointmentCategory;
 import org.apache.openmeetings.db.entity.calendar.AppointmentReminderType;
 import org.apache.openmeetings.db.entity.calendar.MeetingMember;
+import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.user.User.Right;
 import org.apache.openmeetings.db.util.AuthLevelUtil;
 import org.apache.openmeetings.service.calendar.AppointmentLogic;
@@ -83,8 +83,6 @@ public class CalendarWebService {
 	private AppointmentCategoryDao appointmentCategoryDao;
 	@Autowired
 	private AppointmentReminderTypeDao reminderTypeDao;
-	@Autowired
-	private RoomTypeDao roomTypeDao;
 
 	/**
 	 * Load appointments by a start / end range for the current SID
@@ -285,7 +283,7 @@ public class CalendarWebService {
 			log.debug("save userId:" + userId);
 
 			if (AuthLevelUtil.hasUserLevel(userDao.getRights(userId))) {
-				Appointment a = appointment.get(userDao, appointmentDao, reminderTypeDao, roomTypeDao);
+				Appointment a = appointment.get(userDao, appointmentDao, reminderTypeDao);
 				return new AppointmentDTO(appointmentDao.update(a, userId));
 			} else {
 				log.error("save : wrong user level");
@@ -389,7 +387,7 @@ public class CalendarWebService {
 			a.setRemind(reminderTypeDao.get(remind));
 			a.getRoom().setComment(appointmentDescription);
 			a.getRoom().setName(appointmentName);
-			a.getRoom().setRoomtype(roomTypeDao.get(roomType));
+			a.getRoom().setType(Room.Type.get(roomType));
 			a.setOwner(userDao.get(userId));
 			a.setPasswordProtected(isPasswordProtected);
 			a.setPassword(password);

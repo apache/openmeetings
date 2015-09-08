@@ -258,7 +258,7 @@ public class MobileService {
 		room.put("id", r.getId());
 		room.put("name", r.getName());
 		room.put("type", type);
-		room.put("roomTypeId", r.getRoomtype().getId());
+		room.put("roomTypeId", r.getType().getId());
 		if (org != null) {
 			room.put("org", org);
 		}
@@ -277,8 +277,8 @@ public class MobileService {
 		User u = userDao.get(c.getUserId());
 		//my rooms
 		List<Room> myl = new ArrayList<Room>();
-		myl.add(roomDao.getUserRoom(u.getId(), 1L, labelDao.getString(1306L, u.getLanguageId())));
-		myl.add(roomDao.getUserRoom(u.getId(), 3L, labelDao.getString(1307L, u.getLanguageId())));
+		myl.add(roomDao.getUserRoom(u.getId(), Room.Type.conference, labelDao.getString(1306L, u.getLanguageId())));
+		myl.add(roomDao.getUserRoom(u.getId(), Room.Type.restricted, labelDao.getString(1307L, u.getLanguageId())));
 		myl.addAll(roomDao.getAppointedRoomsByUser(u.getId()));
 		for (Room r : myl) {
 			addRoom("my", null, false, result, r);

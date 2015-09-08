@@ -146,7 +146,7 @@ public class RoomPanel extends BasePanel {
 						.put("uid", c.getUid())
 						.put("audioOnly", r.isAudioOnly())
 						.put("SID", WebSession.getSid())
-						.put("interview", 4L == r.getRoomtype().getId()) //FIXME hardcoded
+						.put("interview", Room.Type.interview == r.getType())
 						.put("protocol", cfgDao.getConfValue(CONFIG_FLASH_PROTOCOL, String.class, ""))
 						.put("host", url.getHost())
 						.put("port", cfgDao.getConfValue(CONFIG_FLASH_PORT, String.class, ""))
@@ -515,7 +515,7 @@ public class RoomPanel extends BasePanel {
 		boolean moder = c.hasRight(Client.Right.moderator);
 		inviteMenuItem.setActive(notExternalUser && moder);
 		//TODO add check "sharing started"
-		boolean shareVisible = 4 != r.getRoomtype().getId() && moder; //FIXME hardcoded
+		boolean shareVisible = Room.Type.interview != r.getType() && moder;
 		shareMenuItem.setActive(shareVisible);
 		shareBtn.setVisible(shareMenuItem.isActive());
 		applyModerMenuItem.setActive(!moder);

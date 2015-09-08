@@ -119,7 +119,7 @@ public class RecordingWebService {
 	 * 
 	 * @param SID
 	 *            The SID of the User. This SID must be marked as Loggedin
-	 * @param externalRoomType
+	 * @param externalType
 	 *            externalRoomType specified when creating the room
 	 * @param insertedBy
 	 *            the userId that created the recording
@@ -127,14 +127,14 @@ public class RecordingWebService {
 	 * @throws ServiceException
 	 */
 	public List<RecordingDTO> getFlvRecordingByExternalRoomTypeAndCreator(
-			String SID, String externalRoomType, Long insertedBy)
+			String SID, String externalType, Long insertedBy)
 			throws ServiceException {
 		try {
 
 			Long userId = sessionDao.checkSession(SID);
 
 			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(userId))) {
-				return RecordingDTO.list(recordingDao.getFlvRecordingByExternalRoomTypeAndCreator(externalRoomType, insertedBy));
+				return RecordingDTO.list(recordingDao.getFlvRecordingByExternalTypeAndCreator(externalType, insertedBy));
 			}
 
 			return null;
@@ -149,19 +149,18 @@ public class RecordingWebService {
 	 * 
 	 * @param SID
 	 *            The SID of the User. This SID must be marked as Loggedin
-	 * @param externalRoomType
+	 * @param externalType
 	 *            externalRoomType specified when creating the room
 	 * @return - list of flv recordings
 	 * @throws ServiceException
 	 */
-	public List<RecordingDTO> getFlvRecordingByExternalRoomTypeByList(
-			String SID, String externalRoomType) throws ServiceException {
+	public List<RecordingDTO> getFlvRecordingByExternalRoomTypeByList(String SID, String externalType) throws ServiceException {
 		try {
 
 			Long userId = sessionDao.checkSession(SID);
 
 			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(userId))) {
-				return RecordingDTO.list(recordingDao.getFlvRecordingByExternalRoomType(externalRoomType));
+				return RecordingDTO.list(recordingDao.getFlvRecordingByExternalType(externalType));
 
 			}
 
@@ -214,7 +213,7 @@ public class RecordingWebService {
 			Long userId = sessionDao.checkSession(SID);
 
 			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(userId))) {
-				return RecordingDTO.list(recordingDao.getFlvRecordingByExternalRoomType(externalRoomType));
+				return RecordingDTO.list(recordingDao.getFlvRecordingByExternalType(externalRoomType));
 			}
 
 			return null;

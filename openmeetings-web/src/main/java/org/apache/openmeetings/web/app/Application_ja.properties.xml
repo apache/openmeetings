@@ -1560,9 +1560,6 @@
   <entry key="1538">会議室のSIPトランスポートを有効にする</entry>
   <entry key="1539">このユーザーに単独話者権限を付与してよろしいですか？</entry>
   <entry key="1540">タイムゾーンを指定してください</entry>
-  <entry key="1541">会議(ユーザー数:1〜25)</entry>
-  <entry key="1542">大人数向け会議(ユーザー数:1〜150)</entry>
-  <entry key="1543">インタビュー(1対1のミーティング；録画付き)</entry>
   <entry key="1544">指定されたキーの構成は既に存在しています。別のキーを指定するか、既存の構成を編集してください。</entry>
   <entry key="1545">保存中です。しばらくお待ちください。</entry>
   <entry key="1546">ようこそ</entry>
@@ -1869,4 +1866,7 @@
 	<entry key="install.wizard.congrats.mail">Mailing list</entry>
 	<entry key="install.wizard.congrats.commercial">There are some companies
 			that also offer commercial support for Apache OpenMeetings:</entry>
+  <entry key="room.type.conference">会議(ユーザー数:1〜25)</entry>
+  <entry key="room.type.restricted">大人数向け会議(ユーザー数:1〜150)</entry>
+  <entry key="room.type.interview">インタビュー(1対1のミーティング；録画付き)</entry>
 </properties>

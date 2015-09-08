@@ -21,7 +21,6 @@ package org.apache.openmeetings.web.user.calendar;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
-import static org.apache.openmeetings.web.util.RoomTypeDropDown.getRoomTypes;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -39,7 +38,6 @@ import org.apache.openmeetings.db.entity.calendar.Appointment;
 import org.apache.openmeetings.db.entity.calendar.AppointmentReminderType;
 import org.apache.openmeetings.db.entity.calendar.MeetingMember;
 import org.apache.openmeetings.db.entity.room.Room;
-import org.apache.openmeetings.db.entity.room.RoomType;
 import org.apache.openmeetings.db.entity.user.OrganisationUser;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.util.FormatHelper;
@@ -237,7 +235,7 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 		private final DateTimePicker end = new OmDateTimePicker("end", Model.of(LocalDateTime.now()));
 		private final PasswordTextField pwd = new PasswordTextField("password");
 		private final Label owner = new Label("aowner", Model.of(""));
-		private final DropDownChoice<RoomType> roomType = new RoomTypeDropDown("room.roomtype");
+		private final DropDownChoice<Room.Type> roomType = new RoomTypeDropDown("room.type");
 		private final DropDownChoice<Room> room = new DropDownChoice<Room>(
 				"room"
 				, getRoomList()
@@ -253,14 +251,13 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 				a.setRemind(remindTypes.get(0));
 			}
 			
-			List<RoomType> roomTypes = getRoomTypes();
 			if (a.getRoom() == null) {
 				Room r = new Room();
 				r.setAppointment(true);
 				a.setRoom(r);
 			}
-			if (a.getRoom().getRoomtype() == null && !roomTypes.isEmpty()) {
-				a.getRoom().setRoomtype(roomTypes.get(0));
+			if (a.getRoom().getType() == null) {
+				a.getRoom().setType(Room.Type.conference);
 			}
 			createRoom = a.getRoom().isAppointment();
 			roomType.setEnabled(createRoom);

@@ -1560,9 +1560,6 @@
   <entry key="1538">SIP átvitel engedélyezése a szobában</entry>
   <entry key="1539">Egyéni hangkapcsolatot kezdeményez ezzel a felhasználóval?</entry>
   <entry key="1540">Adjameg az időzónáját</entry>
-  <entry key="1541">csoportmunka (n:n) konferencia (1-25 látogatóval)</entry>
-  <entry key="1542">moderált (1:n) konferencia (1-150 látogatóval)</entry>
-  <entry key="1543">interjú (1:1 megbeszélés felvétellel)</entry>
   <entry key="1544">Konfigurációs beállító kulcs már létezik, válasszon másikat, vagy szerkessze a meglévőt</entry>
   <entry key="1545">Tartalom mentése, kérem várjon...</entry>
   <entry key="1546">Üdvözöljük</entry>
@@ -1857,4 +1854,7 @@
 	<entry key="install.wizard.congrats.config">változtassa meg a kliens szükséges konfigurációit</entry>
 	<entry key="install.wizard.congrats.mail">Levelező lista</entry>
 	<entry key="install.wizard.congrats.commercial">Néhány cég, akik üzleti támogatást nyújthatnak Apache OpenMeetings:</entry>
+  <entry key="room.type.conference">csoportmunka (n:n) konferencia (1-25 látogatóval)</entry>
+  <entry key="room.type.restricted">moderált (1:n) konferencia (1-150 látogatóval)</entry>
+  <entry key="room.type.interview">interjú (1:1 megbeszélés felvétellel)</entry>
 </properties>

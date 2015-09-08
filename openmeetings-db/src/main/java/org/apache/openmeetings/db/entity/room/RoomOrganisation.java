@@ -42,7 +42,7 @@ import org.simpleframework.xml.Root;
 @NamedQueries({
 	@NamedQuery(name = "getAllRoomsOrganisations", query = "select ro from RoomOrganisation ro ORDER BY ro.id"),
 	@NamedQuery(name = "getRoomsOrganisationByOrganisationIdAndRoomType", query = "select c from RoomOrganisation as c "
-			+ "where c.room.roomtype.id = :roomtypesId AND c.organisation.id = :organisationId "
+			+ "where c.room.type = :type AND c.organisation.id = :organisationId "
 			+ "AND c.deleted = false"),
 	@NamedQuery(name = "getRoomsOrganisationByOrganisationId", query = "SELECT c FROM RoomOrganisation c "
 			+ "LEFT JOIN FETCH c.room "
