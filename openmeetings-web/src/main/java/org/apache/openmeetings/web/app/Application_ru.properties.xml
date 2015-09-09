@@ -280,8 +280,6 @@
   <entry key="258">На последнюю страницу</entry>
   <entry key="259">Уменьшение</entry>
   <entry key="260">Увеличение</entry>
-  <entry key="261">Г-н</entry>
-  <entry key="262">Г-жа</entry>
   <entry key="263">Конфигурация</entry>
   <entry key="264">ID</entry>
   <entry key="265">Ключ</entry>
@@ -341,8 +339,6 @@
   <entry key="319">Введите e-mail или имя пользователя</entry>
   <entry key="320">Никто больше не подключился с таким именем пользователя</entry>
   <entry key="321">Письмо, содержащее специальную ссылку, выслано на ваш e-mail, пожалуйста, проверьте ваш почтовый ящик. Если вы все еще не получили письмо, проверьте анти-спам фильтры и пошлите еще раз подтверждающее письмо.</entry>
-  <entry key="322">Информация</entry>
-  <entry key="323">Сообщение</entry>
   <entry key="324">Неверный хэш. Пользователь не найден.</entry>
   <entry key="325">Переустановить ваш пароль</entry>
   <entry key="326">Логин</entry>
@@ -860,8 +856,6 @@
   <entry key="838">Этот польз-ль - супермодератор. Вы не можете удалить флаг модератора у него.</entry>
   <entry key="839">Вы действительно хотите удалить этот файл/папку?</entry>
   <entry key="840">Удалить этот файл/папку?</entry>
-  <entry key="841">Г-жа</entry>
-  <entry key="842">Д-р</entry>
   <entry key="843">Свойства</entry>
   <entry key="844">Показывать позицию мыши зрителям</entry>
   <entry key="845">Совместно использовать аудио и SIP</entry>
@@ -1483,7 +1477,6 @@
   <entry key="1461">Экспорт/импорт системных бэкапов</entry>
   <entry key="1462">Вам нужны права модератора или права на рисование на доске, загрузку, выгрузку, добавление и удаление файлов и папок.</entry>
   <entry key="1463">Редактировать текст</entry>
-  <entry key="1464">Проф-р</entry>
   <entry key="1465">Опубликовать</entry>
   <entry key="1466">Начать публикацию</entry>
   <entry key="1467">Остановить</entry>
@@ -1584,9 +1577,6 @@
   <entry key="1565">Окт</entry>
   <entry key="1566">Ноя</entry>
   <entry key="1567">Дек</entry>
-  <entry key="1568">не посылать уведомление</entry>
-  <entry key="1569">обычный e-майл</entry>
-  <entry key="1570">iCal e-майл</entry>
   <entry key="1571">OAuth2</entry>
   <entry key="1572">Конфигурировать OAuth2</entry>
   <entry key="1573">Название</entry>
@@ -1882,4 +1872,14 @@
   <entry key="room.type.conference">конференц зал (1-25 участников)</entry>
   <entry key="room.type.restricted">ограниченная (1-150 участников)</entry>
   <entry key="room.type.interview">интервью (1:1 встреча с записью)</entry>
+  <entry key="appointment.reminder.none">не посылать уведомление</entry>
+  <entry key="appointment.reminder.email">обычный e-майл</entry>
+  <entry key="appointment.reminder.ical">iCal e-майл</entry>
+  <entry key="user.salutation.mr">Г-н</entry>
+  <entry key="user.salutation.ms">Г-жа</entry>
+  <entry key="user.salutation.mrs">Г-жа</entry>
+  <entry key="user.salutation.dr">Д-р</entry>
+  <entry key="user.salutation.prof">Проф-р</entry>
+  <entry key="error.type.error">Ошибка</entry>
+  <entry key="error.type.info">Сообщение</entry>
 </properties>

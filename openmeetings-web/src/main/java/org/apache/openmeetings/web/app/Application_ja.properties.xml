@@ -280,8 +280,6 @@
   <entry key="258">最後へ</entry>
   <entry key="259">縮小</entry>
   <entry key="260">拡大</entry>
-  <entry key="261">Mr.</entry>
-  <entry key="262">Ms.</entry>
   <entry key="263">グローバル設定</entry>
   <entry key="264">ID</entry>
   <entry key="265">キー</entry>
@@ -341,8 +339,6 @@
   <entry key="319">メール・アドレスまたはユーザー名を入力してください。</entry>
   <entry key="320">このユーザー名で接続するユーザーはありません。</entry>
   <entry key="321">専用リンクを含むメールをあなたのメール・アドレスに対して送信しました。メール受信箱をご確認ください。もし受信できない場合は、スパムとして除外されている可能性があります。その場合はスパム設定を見直し、再度、確認メールを送信してください。</entry>
-  <entry key="322">エラー</entry>
-  <entry key="323">メッセージ</entry>
   <entry key="324">ハッシュ値が不正です。ユーザーが見つかりません。</entry>
   <entry key="325">パスワードのリセット</entry>
   <entry key="326">ログイン</entry>
@@ -860,8 +856,6 @@
   <entry key="838">この参加者は、特別司会進行権を付与されています。あなたは、特別司会進行権保持者から当該権利を剥奪することはできません。</entry>
   <entry key="839">このファイル/フォルダを削除してよろしいですか？</entry>
   <entry key="840">ファイル/フォルダを削除しますか？</entry>
-  <entry key="841">Mrs.</entry>
-  <entry key="842">Dr.</entry>
   <entry key="843">プロパティ</entry>
   <entry key="844">ビューア上でマウス・ポインタを表示する</entry>
   <entry key="845">SIPアプレットと音声を共有する</entry>
@@ -1483,7 +1477,6 @@
   <entry key="1461">システム・バックアップをエクスポート／インポートする</entry>
   <entry key="1462">ファイル／フォルダのアップロード／追加／削除／ロードを行うためには、司会者であるか、あるいはホワイトボード描画権限が必要です。</entry>
   <entry key="1463">テキストを編集</entry>
-  <entry key="1464">教授</entry>
   <entry key="1465">共有画面公開</entry>
   <entry key="1466">共有画面を公開開始</entry>
   <entry key="1467">共有画面を公開終了</entry>
@@ -1584,9 +1577,6 @@
   <entry key="1565">10月</entry>
   <entry key="1566">11月</entry>
   <entry key="1567">12月</entry>
-  <entry key="1568">リマインダーを送信しない</entry>
-  <entry key="1569">Eメール</entry>
-  <entry key="1570">iCal Eメール</entry>
   <entry key="1571">OAuth2</entry>
   <entry key="1572">OAuth2設定</entry>
   <entry key="1573">名前</entry>
@@ -1869,4 +1859,14 @@
   <entry key="room.type.conference">会議(ユーザー数:1〜25)</entry>
   <entry key="room.type.restricted">大人数向け会議(ユーザー数:1〜150)</entry>
   <entry key="room.type.interview">インタビュー(1対1のミーティング；録画付き)</entry>
+  <entry key="appointment.reminder.none">リマインダーを送信しない</entry>
+  <entry key="appointment.reminder.email">Eメール</entry>
+  <entry key="appointment.reminder.ical">iCal Eメール</entry>
+  <entry key="user.salutation.mr">Mr.</entry>
+  <entry key="user.salutation.ms">Ms.</entry>
+  <entry key="user.salutation.mrs">Mrs.</entry>
+  <entry key="user.salutation.dr">Dr.</entry>
+  <entry key="user.salutation.prof">教授</entry>
+  <entry key="error.type.error">エラー</entry>
+  <entry key="error.type.info">メッセージ</entry>
 </properties>

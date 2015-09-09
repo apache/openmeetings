@@ -21,15 +21,14 @@ package org.apache.openmeetings.db.dao.basic;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
 import java.util.Date;
-import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
-import org.apache.openmeetings.db.entity.basic.ErrorType;
 import org.apache.openmeetings.db.entity.basic.ErrorValue;
+import org.apache.openmeetings.db.entity.basic.ErrorValue.Type;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.transaction.annotation.Transactional;
@@ -41,48 +40,11 @@ public class ErrorDao {
 	@PersistenceContext
 	private EntityManager em;
 
-	public Long addErrorType(Long id, Long labelId) {
-		try {
-			ErrorType eType = new ErrorType();
-			eType.setId(id);
-			eType.setInserted(new Date());
-			eType.setDeleted(false);
-			eType.setLabelId(labelId);
-			eType = em.merge(eType);
-			return eType.getId();
-		} catch (Exception ex2) {
-			log.error("[addErrorType]: ", ex2);
-		}
-		return null;
-	}
-
-	public List<ErrorType> getErrorTypes() {
-		try {
-			TypedQuery<ErrorType> query = em.createNamedQuery("getErrorTypes", ErrorType.class);
-			List<ErrorType> ll = query.getResultList();
-			return ll;
-		} catch (Exception ex2) {
-			log.error("[getErrorTypes]: ", ex2);
-		}
-		return null;
-	}
-
-	public ErrorType getErrorType(Long typeId) {
-		try {
-			TypedQuery<ErrorType> query = em.createNamedQuery("getErrorType", ErrorType.class);
-			query.setParameter("id", typeId);
-			return query.getSingleResult();
-		} catch (Exception ex2) {
-			log.error("[getErrorType(" + typeId + ")]", ex2);
-		}
-		return null;
-	}
-
-	public Long addErrorValues(Long id, Long typeId, Long labelId) {
+	public Long addErrorValues(Long id, Type type, Long labelId) {
 		try {
 			ErrorValue eValue = new ErrorValue();
 			eValue.setId(id);
-			eValue.setTypeId(typeId);
+			eValue.setType(type);
 			eValue.setDeleted(false);
 			eValue.setInserted(new Date());
 			eValue.setLabelId(labelId);
@@ -94,10 +56,10 @@ public class ErrorDao {
 		return null;
 	}
 
-	public Long getErrorValueById(Long typeId, Long labelId) {
+	public Long getErrorValueById(Type type, Long labelId) {
 		try {
 			ErrorValue eValue = new ErrorValue();
-			eValue.setTypeId(typeId);
+			eValue.setType(type);
 			eValue.setInserted(new Date());
 			eValue.setLabelId(labelId);
 			eValue = em.merge(eValue);
@@ -108,10 +70,10 @@ public class ErrorDao {
 		return null;
 	}
 
-	public Long updateErrorValues(Long typeId, Long labelId) {
+	public Long updateErrorValues(Type type, Long labelId) {
 		try {
 			ErrorValue eValue = new ErrorValue();
-			eValue.setTypeId(typeId);
+			eValue.setType(type);
 			eValue.setInserted(new Date());
 			eValue.setLabelId(labelId);
 			eValue = em.merge(eValue);

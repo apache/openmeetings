@@ -102,6 +102,11 @@ import org.simpleframework.xml.Root;
 @Root(name = "user")
 public class User implements IDataProviderEntity {
 	private static final long serialVersionUID = 1L;
+	public static final int SALUTATION_MR_ID = 1;
+	public static final int SALUTATION_MS_ID = 2;
+	public static final int SALUTATION_MRS_ID = 3;
+	public static final int SALUTATION_DR_ID = 4;
+	public static final int SALUTATION_PROF_ID = 5;
 	
 	@XmlType(namespace="org.apache.openmeetings.user.user.right")
 	public enum Right {
@@ -119,6 +124,52 @@ public class User implements IDataProviderEntity {
 		, oauth
 		, external
 		, contact
+	}
+	public enum Salutation {
+		mr(SALUTATION_MR_ID)
+		, ms(SALUTATION_MS_ID)
+		, mrs(SALUTATION_MRS_ID)
+		, dr(SALUTATION_DR_ID)
+		, prof(SALUTATION_PROF_ID);
+		private int id;
+		
+		Salutation() {} //default;
+		Salutation(int id) {
+			this.id = id;
+		}
+		
+		public int getId() {
+			return id;
+		}
+		
+		public static Salutation get(Long type) {
+			return get(type == null ? 1 : type.intValue());
+		}
+		
+		public static Salutation get(Integer type) {
+			return get(type == null ? 1 : type.intValue());
+		}
+		
+		public static Salutation get(int type) {
+			Salutation rt = Salutation.mr;
+			switch (type) {
+				case SALUTATION_MS_ID:
+					rt = Salutation.ms;
+					break;
+				case SALUTATION_MRS_ID:
+					rt = Salutation.mrs;
+					break;
+				case SALUTATION_DR_ID:
+					rt = Salutation.dr;
+					break;
+				case SALUTATION_PROF_ID:
+					rt = Salutation.prof;
+					break;
+				default:
+					//no-op
+			}
+			return rt;
+		}
 	}
 
 	@Id
@@ -160,9 +211,10 @@ public class User implements IDataProviderEntity {
 	@Element(data = true, required = false)
 	private Date regdate;
 
-	@Column(name = "salutation_id")
+	@Column(name = "salutation")
+	@Enumerated(EnumType.STRING)
 	@Element(name = "title_id", data = true, required = false)
-	private Long salutationId;
+	private Salutation salutation;
 
 	@Column(name = "inserted")
 	private Date inserted;
@@ -379,12 +431,12 @@ public class User implements IDataProviderEntity {
 		this.regdate = regdate;
 	}
 
-	public Long getSalutationId() {
-		return salutationId;
+	public Salutation getSalutation() {
+		return salutation;
 	}
 
-	public void setSalutationId(Long salutationId) {
-		this.salutationId = salutationId;
+	public void setSalutation(Salutation salutation) {
+		this.salutation = salutation;
 	}
 
 	public Date getInserted() {

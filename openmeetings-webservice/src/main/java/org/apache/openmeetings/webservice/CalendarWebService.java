@@ -37,16 +37,12 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import org.apache.cxf.feature.Features;
-import org.apache.openmeetings.db.dao.calendar.AppointmentCategoryDao;
 import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
-import org.apache.openmeetings.db.dao.calendar.AppointmentReminderTypeDao;
 import org.apache.openmeetings.db.dao.server.SessiondataDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.dto.calendar.AppointmentDTO;
-import org.apache.openmeetings.db.dto.calendar.AppointmentReminderTypeDTO;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
-import org.apache.openmeetings.db.entity.calendar.AppointmentCategory;
-import org.apache.openmeetings.db.entity.calendar.AppointmentReminderType;
+import org.apache.openmeetings.db.entity.calendar.Appointment.Reminder;
 import org.apache.openmeetings.db.entity.calendar.MeetingMember;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.user.User.Right;
@@ -79,10 +75,6 @@ public class CalendarWebService {
 	private SessiondataDao sessionDao;
 	@Autowired
 	private UserDao userDao;
-	@Autowired
-	private AppointmentCategoryDao appointmentCategoryDao;
-	@Autowired
-	private AppointmentReminderTypeDao reminderTypeDao;
 
 	/**
 	 * Load appointments by a start / end range for the current SID
@@ -283,7 +275,7 @@ public class CalendarWebService {
 			log.debug("save userId:" + userId);
 
 			if (AuthLevelUtil.hasUserLevel(userDao.getRights(userId))) {
-				Appointment a = appointment.get(userDao, appointmentDao, reminderTypeDao);
+				Appointment a = appointment.get(userDao, appointmentDao);
 				return new AppointmentDTO(appointmentDao.update(a, userId));
 			} else {
 				log.error("save : wrong user level");
@@ -383,8 +375,7 @@ public class CalendarWebService {
 			a.setIsWeekly(isWeekly);
 			a.setIsMonthly(isMonthly);
 			a.setIsYearly(isYearly);
-			a.setCategory(appointmentCategoryDao.get(categoryId));
-			a.setRemind(reminderTypeDao.get(remind));
+			a.setReminder(Reminder.get(remind));
 			a.getRoom().setComment(appointmentDescription);
 			a.getRoom().setName(appointmentName);
 			a.getRoom().setType(Room.Type.get(roomType));
@@ -447,69 +438,6 @@ public class CalendarWebService {
 	}
 
 	/**
-	 * Get all categories of calendar events
-	 * 
-	 * @param SID
-	 * @return - all categories of calendar events
-	 */
-	public List<AppointmentCategory> getAppointmentCategoryList(String SID) {
-		log.debug("AppointmenetCategoryService.getAppointmentCategoryList SID : " + SID);
-
-		try {
-			Long userId = sessionDao.checkSession(SID);
-
-			if (AuthLevelUtil.hasUserLevel(userDao.getRights(userId))) {
-				List<AppointmentCategory> res = appointmentCategoryDao.getAppointmentCategoryList();
-
-				if (res == null || res.size() < 1) {
-					log.debug("no AppointmentCategories found");
-				} else {
-					for (int i = 0; i < res.size(); i++) {
-						AppointmentCategory ac = res.get(i);
-						log.debug("found appCategory : " + ac.getName());
-					}
-				}
-
-				return res;
-			} else {
-				log.error("AppointmenetCategoryService.getAppointmentCategoryList : UserLevel Error");
-			}
-		} catch (Exception err) {
-			log.error("[getAppointmentCategory]", err);
-		}
-		return null;
-
-	}
-
-	private List<AppointmentReminderTypeDTO> getReminders(List<AppointmentReminderType> list) {
-		List<AppointmentReminderTypeDTO> result = new ArrayList<>(list.size());
-		for (AppointmentReminderType rt : list) {
-			result.add(new AppointmentReminderTypeDTO(rt));
-		}
-		return result;
-	}
-	/**
-	 * Get all reminder types for calendar events
-	 * 
-	 * @param SID
-	 * @return - all reminder types for calendar events
-	 */
-	public List<AppointmentReminderTypeDTO> getAppointmentReminderTypList(String SID) {
-		log.debug("getAppointmentReminderTypList");
-
-		try {
-			Long userId = sessionDao.checkSession(SID);
-			if (AuthLevelUtil.hasUserLevel(userDao.getRights(userId))) {
-				return getReminders(reminderTypeDao.get());
-			} else
-				log.debug("getAppointmentReminderTypList  :error - wrong authlevel!");
-		} catch (Exception err) {
-			log.error("[getAppointmentReminderTypList]", err);
-		}
-		return null;
-	}
-
-	/**
 	 * Adds a conference room that is only available for a period of time
 	 * 
 	 * @param SID
@@ -560,7 +488,7 @@ public class CalendarWebService {
 	 *            
 	 * @return - id of the room in case of success, error code otherwise
 	 * @throws ServiceException
-	 *//*
+	 */
 	public Long addRoomWithModerationAndExternalTypeAndStartEnd(String SID,
 			String name, Long roomtypesId, String comment,
 			Long numberOfPartizipants, Boolean ispublic, Boolean appointment,
@@ -581,7 +509,7 @@ public class CalendarWebService {
 
 				log.info("validFromHour: " + validFromHour);
 				log.info("validFromMinute: " + validFromMinute);
-
+/*
 				Date fromDate = CalendarPatterns.parseDateBySeparator(validFromDate); // dd.MM.yyyy
 				Date toDate = CalendarPatterns.parseDateBySeparator(validToDate); // dd.MM.yyyy
 
@@ -635,7 +563,7 @@ public class CalendarWebService {
 				appointmentDao.update(a, userId); //FIXME verify !!!
 
 				return roomId;
-
+*/
 			} else {
 				return -2L;
 			}
@@ -644,10 +572,10 @@ public class CalendarWebService {
 
 			throw new ServiceException(err.getMessage());
 		}
-		// return new Long(-1);
+		return new Long(-1);
 		// return numberOfPartizipants;
 	}
-*/
+
 	/**
 	 * Add a meeting member to a certain room. This is the same as adding an
 	 * external user to a event in the calendar.

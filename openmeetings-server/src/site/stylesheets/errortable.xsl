@@ -55,14 +55,8 @@
 			<tr>
 				<td>-<xsl:value-of select="field[@name='errorvalues_id']"/></td>
 				<td>
-					<xsl:variable name="typeId" select="field[@name='errortype_id']"/>
-					<xsl:variable name="x">
-						<xsl:choose>
-							<xsl:when test="$typeId='1'">322</xsl:when>
-							<xsl:otherwise>323</xsl:otherwise>
-						</xsl:choose>
-					</xsl:variable>
-					<xsl:value-of select="document($englishPath)/properties/entry[@key=$x]/text()" />
+					<xsl:variable name="type" select="field[@name='type']"/>
+					<xsl:value-of select="document($englishPath)/properties/entry[@key=error.type.$type]/text()" />
 				</td>
 				<td>
 					<xsl:variable name="descId" select="field[@name='fieldvalues_id']"/>

@@ -29,12 +29,10 @@ import org.apache.openmeetings.db.dao.server.ISessionManager;
 import org.apache.openmeetings.db.dao.server.ServerDao;
 import org.apache.openmeetings.db.dao.server.SessiondataDao;
 import org.apache.openmeetings.db.dao.user.IUserService;
-import org.apache.openmeetings.db.dao.user.SalutationDao;
 import org.apache.openmeetings.db.dao.user.UserContactsDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.room.Client;
 import org.apache.openmeetings.db.entity.server.Server;
-import org.apache.openmeetings.db.entity.user.Salutation;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.UserContact;
 import org.apache.openmeetings.db.util.AuthLevelUtil;
@@ -62,8 +60,6 @@ public class UserService implements IUserService {
 	@Autowired
 	private UserDao userDao;
 	@Autowired
-	private SalutationDao salutationmanagement;
-	@Autowired
 	private UserContactsDao userContactsDao;
 	@Autowired
 	private TimezoneUtil timezoneUtil;
@@ -85,16 +81,6 @@ public class UserService implements IUserService {
 			return userDao.get(userId);
 		}
 		return null;
-	}
-
-	/**
-	 * get all availible Salutations
-	 * 
-	 * @param SID
-	 * @return all availible Salutations
-	 */
-	public List<Salutation> getSalutations(String SID) {
-		return salutationmanagement.get();
 	}
 
 	/**

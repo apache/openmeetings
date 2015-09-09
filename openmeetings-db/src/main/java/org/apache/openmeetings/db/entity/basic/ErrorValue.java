@@ -22,6 +22,8 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -36,13 +38,19 @@ import org.apache.openmeetings.db.entity.IDataProviderEntity;
 @Table(name = "errorvalue")
 public class ErrorValue implements IDataProviderEntity {
 	private static final long serialVersionUID = 1L;
-
+	
+	public enum Type {
+		error
+		, info
+	}
+	
 	@Id
 	@Column(name = "id")
 	private Long id;
 
-	@Column(name = "errortype_id")
-	private Long typeId;
+	@Column(name = "type")
+	@Enumerated(EnumType.STRING)
+	private Type type;
 	
 	@Column(name = "label_id")
 	private Long labelId;
@@ -96,11 +104,11 @@ public class ErrorValue implements IDataProviderEntity {
 		this.labelId = labelId;
 	}
 
-	public Long getTypeId() {
-		return typeId;
+	public Type getType() {
+		return type;
 	}
 
-	public void setTypeId(Long typeId) {
-		this.typeId = typeId;
+	public void setType(Type type) {
+		this.type = type;
 	}
 }

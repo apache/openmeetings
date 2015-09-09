@@ -32,7 +32,6 @@ import org.apache.cxf.feature.Features;
 import org.apache.openmeetings.db.dao.basic.ErrorDao;
 import org.apache.openmeetings.db.dao.label.LabelDao;
 import org.apache.openmeetings.db.dto.basic.ServiceResult;
-import org.apache.openmeetings.db.entity.basic.ErrorType;
 import org.apache.openmeetings.db.entity.basic.ErrorValue;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -78,11 +77,10 @@ public class ErrorWebService {
 			if (id < 0) {
 				ErrorValue eValues = errorDao.get(-1 * id);
 				if (eValues != null) {
-					ErrorType eType = errorDao.getErrorType(eValues.getTypeId());
 					log.debug("eValues.getLabelId() = " + eValues.getLabelId());
-					log.debug("eValues.getErrorType() = " + eType);
+					log.debug("eValues.getErrorType() = " + eValues.getType());
 					String eValue = labelDao.getString(eValues.getLabelId(), lang);
-					String tValue = labelDao.getString(eType.getLabelId(), lang);
+					String tValue = labelDao.getString("error.type." + eValues.getType().name(), lang);
 					if (eValue != null) {
 						return new ServiceResult(id, eValue, tValue);
 					}

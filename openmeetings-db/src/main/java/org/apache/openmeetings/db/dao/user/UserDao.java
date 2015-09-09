@@ -48,6 +48,7 @@ import org.apache.openmeetings.db.entity.user.Address;
 import org.apache.openmeetings.db.entity.user.OrganisationUser;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Right;
+import org.apache.openmeetings.db.entity.user.User.Salutation;
 import org.apache.openmeetings.db.entity.user.User.Type;
 import org.apache.openmeetings.db.util.AuthLevelUtil;
 import org.apache.openmeetings.db.util.TimezoneUtil;
@@ -99,7 +100,7 @@ public class UserDao implements IDataProviderDao<User> {
 	 */
 	public User getNewUserInstance(User currentUser) {
 		User user = new User();
-		user.setSalutationId(1L); // TODO: Fix default selection to be configurable
+		user.setSalutation(Salutation.mr); // TODO: Fix default selection to be configurable
 		user.setRights(getDefaultRights());
 		user.setLanguageId(cfgDao.getConfValue(CONFIG_DEFAULT_LANG_KEY, Long.class, "1"));
 		user.setTimeZoneId(timezoneUtil.getTimeZone(currentUser).getID());
@@ -655,7 +656,7 @@ public class UserDao implements IDataProviderDao<User> {
 		u.setRights(rights);
 		u.setLastlogin(new Date());
 		u.setLasttrans(new Long(0));
-		u.setSalutationId(1L);
+		u.setSalutation(Salutation.mr);
 		u.setInserted(new Date());
 		u.setActivatehash(hash);
 		u.setTimeZoneId(timezone.getID());

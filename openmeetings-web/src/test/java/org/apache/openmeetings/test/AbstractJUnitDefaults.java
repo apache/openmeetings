@@ -22,14 +22,11 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.configKeyCryptC
 import static org.junit.Assert.assertNotNull;
 
 import java.util.Date;
-import java.util.List;
 
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
-import org.apache.openmeetings.db.dao.calendar.AppointmentReminderTypeDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
-import org.apache.openmeetings.db.entity.calendar.AppointmentReminderType;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.installation.ImportInitvalues;
@@ -51,15 +48,11 @@ public abstract class AbstractJUnitDefaults extends AbstractSpringTest {
 	@Autowired
 	private AppointmentDao appointmentDao;
 	@Autowired
-	private AppointmentReminderTypeDao reminderTypeDao;
-	@Autowired
 	private UserDao userDao;
 	@Autowired
 	private ImportInitvalues importInitvalues;
 	@Autowired
 	private ConfigurationDao configurationDao;
-	
-	private List<AppointmentReminderType> remindTypes;
 
 	@Before
 	public void setUp() throws Exception {
@@ -74,7 +67,6 @@ public abstract class AbstractJUnitDefaults extends AbstractSpringTest {
 		if (configKeyCryptClassName == null) {
 			assertNotNull("Crypt class name should not be null", configurationDao.getCryptKey());
 		}
-        remindTypes = reminderTypeDao.get();
     }
 
 	public Appointment createAppointment() {
@@ -107,8 +99,8 @@ public abstract class AbstractJUnitDefaults extends AbstractSpringTest {
 		ap.setOwner(userDao.get(1L));
 		ap.setConnectedEvent(false);
 
-		if (ap.getRemind() == null && !remindTypes.isEmpty()) {
-			ap.setRemind(remindTypes.get(0));
+		if (ap.getReminder() == null) {
+			ap.setReminder(Appointment.Reminder.none);
 		}
 		
 		Room r = new Room();

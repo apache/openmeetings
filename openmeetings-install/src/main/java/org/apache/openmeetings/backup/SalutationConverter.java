@@ -18,28 +18,16 @@
  */
 package org.apache.openmeetings.backup;
 
-import org.apache.openmeetings.db.dao.calendar.AppointmentCategoryDao;
-import org.apache.openmeetings.db.entity.calendar.AppointmentCategory;
+import org.apache.openmeetings.db.entity.user.User.Salutation;
 import org.simpleframework.xml.stream.InputNode;
 import org.simpleframework.xml.stream.OutputNode;
 
-public class AppointmentCategoryConverter  extends OmConverter<AppointmentCategory> {
-	private AppointmentCategoryDao appointmentCategoryDaoImpl;
-	
-	public AppointmentCategoryConverter() {
-		//default constructor is for export
-	}
-	
-	public AppointmentCategoryConverter(AppointmentCategoryDao appointmentCategoryDaoImpl) {
-		this.appointmentCategoryDaoImpl = appointmentCategoryDaoImpl;
-	}
-	
-	public AppointmentCategory read(InputNode node) throws Exception {
-		return appointmentCategoryDaoImpl.get(getLong(node));
+public class SalutationConverter extends OmConverter<Salutation> {
+	public Salutation read(InputNode node) throws Exception {
+		return Salutation.get(getInt(node));
 	}
 
-	public void write(OutputNode node, AppointmentCategory value)
-			throws Exception {
+	public void write(OutputNode node, Salutation value) throws Exception {
 		node.setData(true);
 		node.setValue(value == null ? "0" : "" + value.getId());
 	}

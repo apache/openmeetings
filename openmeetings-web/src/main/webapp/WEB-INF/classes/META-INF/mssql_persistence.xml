@@ -24,7 +24,6 @@
 	<persistence-unit name="openmeetings" transaction-type="RESOURCE_LOCAL">
 		<provider>org.apache.openjpa.persistence.PersistenceProviderImpl</provider>
 		<class>org.apache.openmeetings.db.entity.basic.Configuration</class>
-		<class>org.apache.openmeetings.db.entity.basic.ErrorType</class>
 		<class>org.apache.openmeetings.db.entity.basic.ErrorValue</class>
 		<class>org.apache.openmeetings.db.entity.server.LdapConfig</class>
 		<class>org.apache.openmeetings.db.entity.basic.MailMessage</class>
@@ -34,8 +33,6 @@
 		<class>org.apache.openmeetings.db.entity.server.SOAPLogin</class>
 		<class>org.apache.openmeetings.db.entity.server.Server</class>
 		<class>org.apache.openmeetings.db.entity.calendar.Appointment</class>
-		<class>org.apache.openmeetings.db.entity.calendar.AppointmentCategory</class>
-		<class>org.apache.openmeetings.db.entity.calendar.AppointmentReminderType</class>
 		<class>org.apache.openmeetings.db.entity.calendar.MeetingMember</class>
 		<class>org.apache.openmeetings.db.entity.basic.ChatMessage</class>
 		<class>org.apache.openmeetings.db.entity.user.Organisation</class>
@@ -60,7 +57,6 @@
 		<class>org.apache.openmeetings.db.entity.user.State</class>
 		<class>org.apache.openmeetings.db.entity.user.PrivateMessage</class>
 		<class>org.apache.openmeetings.db.entity.user.PrivateMessageFolder</class>
-		<class>org.apache.openmeetings.db.entity.user.Salutation</class>
 		<class>org.apache.openmeetings.db.entity.user.UserContact</class>
 		<class>org.apache.openmeetings.db.entity.user.Userdata</class>
 		<class>org.apache.openmeetings.db.entity.user.User</class>

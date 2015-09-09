@@ -33,6 +33,7 @@ public interface IApplication {
 	IProvider<IExceptionMapper> getExceptionMapperProvider();
 	String getOmString(long id);
 	String getOmString(long id, long languageId);
+	String getOmString(String key, long languageId);
 	String getOmContactsLink();
 	String getOmInvitationLink(String baseUrl, Invitation i);
 	String urlForActivatePage(PageParameters pp);

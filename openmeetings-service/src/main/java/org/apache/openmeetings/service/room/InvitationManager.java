@@ -36,6 +36,7 @@ import org.apache.openmeetings.db.dao.room.IInvitationManager;
 import org.apache.openmeetings.db.dao.room.InvitationDao;
 import org.apache.openmeetings.db.entity.basic.MailMessage;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
+import org.apache.openmeetings.db.entity.calendar.Appointment.Reminder;
 import org.apache.openmeetings.db.entity.calendar.MeetingMember;
 import org.apache.openmeetings.db.entity.room.Invitation;
 import org.apache.openmeetings.db.entity.room.Invitation.MessageType;
@@ -284,32 +285,27 @@ public class InvitationManager implements IInvitationManager {
 	}
 
 	public void processInvitation(Appointment a, MeetingMember mm, MessageType type, boolean sendMail) {
-		if (a.getRemind() == null) {
+		Reminder reminder = a.getReminder();
+		if (reminder == null) {
 			log.error("Appointment doesn't have reminder set!");
 			return;
 		}
-		long remindType = a.getRemind().getId();
-		if (remindType < 2) {
+		if (Reminder.none == reminder) {
 			log.error("MeetingMember should not have invitation!");
 			return;
 		}
 
-		log.debug(":::: processInvitation ..... " + remindType);
-
-		// appointment.getRemind().getTypId() == 1 will not receive emails
-		if (remindType > 1) {
-			log.debug("Invitation for Appointment : simple email");
-
-			try {
-				mm.setInvitation(getInvitation(mm.getInvitation()
-						, mm.getUser(), a.getRoom(), a.isPasswordProtected(), a.getPassword()
-						, Valid.Period, a.getOwner(), null, a.getStart(), a.getEnd(), a));
-				if (sendMail) {
-					sendInvitionLink(a, mm, type, remindType > 2);
-				}
-			} catch (Exception e) {
-				log.error("Unexpected error while setting invitation", e);
+		log.debug(":::: processInvitation ..... " + reminder);
+		log.debug("Invitation for Appointment : simple email");
+		try {
+			mm.setInvitation(getInvitation(mm.getInvitation()
+					, mm.getUser(), a.getRoom(), a.isPasswordProtected(), a.getPassword()
+					, Valid.Period, a.getOwner(), null, a.getStart(), a.getEnd(), a));
+			if (sendMail) {
+				sendInvitionLink(a, mm, type, Reminder.ical == reminder);
 			}
+		} catch (Exception e) {
+			log.error("Unexpected error while setting invitation", e);
 		}
 	}
 

@@ -30,11 +30,11 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
-import org.apache.openmeetings.db.dao.calendar.AppointmentReminderTypeDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.dto.room.RoomDTO;
 import org.apache.openmeetings.db.dto.user.UserDTO;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
+import org.apache.openmeetings.db.entity.calendar.Appointment.Reminder;
 import org.apache.openmeetings.db.entity.calendar.MeetingMember;
 
 @XmlRootElement
@@ -51,7 +51,7 @@ public class AppointmentDTO implements Serializable {
 	private Date inserted;
 	private Date updated;
 	private boolean deleted;
-	private AppointmentReminderTypeDTO reminder;
+	private Reminder reminder;
 	private RoomDTO room;
 	private String icalId;
 	private List<MeetingMemberDTO> meetingMembers = new ArrayList<>();
@@ -77,7 +77,7 @@ public class AppointmentDTO implements Serializable {
 		inserted = a.getInserted();
 		updated = a.getUpdated();
 		deleted = a.isDeleted();
-		reminder = new AppointmentReminderTypeDTO(a.getRemind());
+		reminder = a.getReminder();
 		room = new RoomDTO(a.getRoom());
 		icalId = a.getIcalId();
 		if (a.getMeetingMembers() != null) {
@@ -91,7 +91,7 @@ public class AppointmentDTO implements Serializable {
 		reminderEmailSend = a.isReminderEmailSend();
 	}
 
-	public Appointment get(UserDao userDao, AppointmentDao appointmentDao, AppointmentReminderTypeDao remindDao) {
+	public Appointment get(UserDao userDao, AppointmentDao appointmentDao) {
 		Appointment a = id == null ? new Appointment() : appointmentDao.get(id);
 		a.setId(id);
 		a.setTitle(title);
@@ -103,7 +103,7 @@ public class AppointmentDTO implements Serializable {
 		a.setInserted(inserted);
 		a.setUpdated(updated);
 		a.setDeleted(deleted);
-		a.setRemind(reminder.get(remindDao));
+		a.setReminder(reminder);
 		a.setRoom(room.get());
 		a.setIcalId(icalId);
 		a.setMeetingMembers(new ArrayList<MeetingMember>());
@@ -198,11 +198,11 @@ public class AppointmentDTO implements Serializable {
 		this.deleted = deleted;
 	}
 
-	public AppointmentReminderTypeDTO getReminder() {
+	public Reminder getReminder() {
 		return reminder;
 	}
 
-	public void setReminder(AppointmentReminderTypeDTO reminder) {
+	public void setReminder(Reminder reminder) {
 		this.reminder = reminder;
 	}
 

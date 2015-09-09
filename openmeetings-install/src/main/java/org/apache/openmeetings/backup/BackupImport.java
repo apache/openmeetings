@@ -57,9 +57,7 @@ import javax.xml.transform.stream.StreamResult;
 import org.apache.commons.transaction.util.FileHelper;
 import org.apache.openmeetings.db.dao.basic.ChatDao;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
-import org.apache.openmeetings.db.dao.calendar.AppointmentCategoryDao;
 import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
-import org.apache.openmeetings.db.dao.calendar.AppointmentReminderTypeDao;
 import org.apache.openmeetings.db.dao.calendar.MeetingMemberDao;
 import org.apache.openmeetings.db.dao.file.FileExplorerItemDao;
 import org.apache.openmeetings.db.dao.record.FlvRecordingDao;
@@ -78,8 +76,6 @@ import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.basic.ChatMessage;
 import org.apache.openmeetings.db.entity.basic.Configuration;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
-import org.apache.openmeetings.db.entity.calendar.AppointmentCategory;
-import org.apache.openmeetings.db.entity.calendar.AppointmentReminderType;
 import org.apache.openmeetings.db.entity.calendar.MeetingMember;
 import org.apache.openmeetings.db.entity.file.FileExplorerItem;
 import org.apache.openmeetings.db.entity.file.FileItem;
@@ -102,6 +98,7 @@ import org.apache.openmeetings.db.entity.user.PrivateMessageFolder;
 import org.apache.openmeetings.db.entity.user.State;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Right;
+import org.apache.openmeetings.db.entity.user.User.Salutation;
 import org.apache.openmeetings.db.entity.user.UserContact;
 import org.apache.openmeetings.db.util.TimezoneUtil;
 import org.apache.openmeetings.util.CalendarPatterns;
@@ -134,10 +131,6 @@ public class BackupImport {
 	private OrganisationDao orgDao;
 	@Autowired
 	private RoomDao roomDao;
-	@Autowired
-	private AppointmentCategoryDao appointmentCategoryDaoImpl;
-	@Autowired
-	private AppointmentReminderTypeDao reminderTypeDao;
 	@Autowired
 	private UserDao usersDao;
 	@Autowired
@@ -398,9 +391,8 @@ public class BackupImport {
 			Strategy strategy = new RegistryStrategy(registry);
 			Serializer serializer = new Persister(strategy);
 	
-			registry.bind(AppointmentCategory.class, new AppointmentCategoryConverter(appointmentCategoryDaoImpl));
 			registry.bind(User.class, new UserConverter(usersDao, usersMap));
-			registry.bind(AppointmentReminderType.class, new AppointmentReminderTypeConverter(reminderTypeDao));
+			registry.bind(Appointment.Reminder.class, new AppointmentReminderTypeConverter());
 			registry.bind(Room.class, new RoomConverter(roomDao, roomsMap));
 			registry.bind(Date.class, DateConverter.class);
 			
@@ -912,6 +904,7 @@ public class BackupImport {
 
 		registry.bind(Organisation.class, new OrganisationConverter(orgDao, organisationsMap));
 		registry.bind(State.class, new StateConverter(statemanagement));
+		registry.bind(Salutation.class, SalutationConverter.class);
 		registry.bind(Date.class, DateConverter.class);
 
 		DocumentBuilder dBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();

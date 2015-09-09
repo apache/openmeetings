@@ -24,24 +24,22 @@ import static org.apache.openmeetings.web.app.WebSession.AVAILABLE_TIMEZONES;
 import static org.apache.wicket.validation.validator.StringValidator.minimumLength;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.user.OrganisationDao;
-import org.apache.openmeetings.db.dao.user.SalutationDao;
 import org.apache.openmeetings.db.dao.user.StateDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.user.Organisation;
 import org.apache.openmeetings.db.entity.user.OrganisationUser;
-import org.apache.openmeetings.db.entity.user.Salutation;
 import org.apache.openmeetings.db.entity.user.State;
 import org.apache.openmeetings.db.entity.user.User;
+import org.apache.openmeetings.db.entity.user.User.Salutation;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.util.CalendarHelper;
-import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.extensions.validation.validator.RfcCompliantEmailAddressValidator;
 import org.apache.wicket.markup.head.IHeaderResponse;
@@ -70,7 +68,6 @@ import com.googlecode.wicket.kendo.ui.resource.KendoGlobalizeResourceReference;
 
 public class GeneralUserForm extends Form<User> {
 	private static final long serialVersionUID = 1L;
-	private Salutation salutation;
 	private LocalDate age;
 	private PasswordTextField passwordField;
 	private RequiredTextField<String> email;
@@ -84,31 +81,21 @@ public class GeneralUserForm extends Form<User> {
 		passwordField.setRequired(false).add(minimumLength(getMinPasswdLength(cfgDao)));
 
 		updateModelObject(getModelObject());
-		SalutationDao salutDao = getBean(SalutationDao.class);
 		add(new DropDownChoice<Salutation>("salutation"
-				, new PropertyModel<Salutation>(this, "salutation")
-				, salutDao.get()
+				, Arrays.asList(Salutation.values())
 				, new ChoiceRenderer<Salutation>() {
 					private static final long serialVersionUID = 1L;
 
 					@Override
 					public Object getDisplayValue(Salutation object) {
-						return getString("" + object.getLabelId());
+						return getString("user.salutation." + object.name());
 					}
 
 					@Override
 					public String getIdValue(Salutation object, int index) {
-						return "" + object.getId();
+						return object.name();
 					}
-				})
-			.add(new AjaxFormComponentUpdatingBehavior("onchange") {
-				private static final long serialVersionUID = 1L;
-
-				@Override
-				protected void onUpdate(AjaxRequestTarget target) {
-					GeneralUserForm.this.getModelObject().setSalutationId(salutation.getId());
-				}
-			}));
+				}));
 		add(new TextField<String>("firstname"));
 		add(new TextField<String>("lastname"));
 		
@@ -184,7 +171,6 @@ public class GeneralUserForm extends Form<User> {
 	}
 
 	public void updateModelObject(User u) {
-		salutation = getBean(SalutationDao.class).get(u.getSalutationId());
 		age = CalendarHelper.getDate(u.getAge());
 	}
 	

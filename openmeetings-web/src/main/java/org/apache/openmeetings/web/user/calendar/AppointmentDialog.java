@@ -31,11 +31,10 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
-import org.apache.openmeetings.db.dao.calendar.AppointmentReminderTypeDao;
 import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
-import org.apache.openmeetings.db.entity.calendar.AppointmentReminderType;
+import org.apache.openmeetings.db.entity.calendar.Appointment.Reminder;
 import org.apache.openmeetings.db.entity.calendar.MeetingMember;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.user.OrganisationUser;
@@ -246,9 +245,8 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 			super.onModelChanged();
 
 			Appointment a = getModelObject();
-			List<AppointmentReminderType> remindTypes = getRemindTypes();
-			if (a.getRemind() == null && !remindTypes.isEmpty()) {
-				a.setRemind(remindTypes.get(0));
+			if (a.getReminder() == null) {
+				a.setReminder(Reminder.none);
 			}
 			
 			if (a.getRoom() == null) {
@@ -301,27 +299,26 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 			pwd.setOutputMarkupId(true);
 			add(pwd);
 			
-			List<AppointmentReminderType> remindTypes = getRemindTypes();
-			add(new DropDownChoice<AppointmentReminderType>(
-					"remind"
-					, remindTypes
-					, new IChoiceRenderer<AppointmentReminderType>() {
+			add(new DropDownChoice<Reminder>(
+					"reminder"
+					, Arrays.asList(Reminder.values())
+					, new IChoiceRenderer<Reminder>() {
 						private static final long serialVersionUID = 1L;
 
 						@Override
-						public Object getDisplayValue(AppointmentReminderType art) {
-							return getString("" + art.getLabelId());
+						public Object getDisplayValue(Reminder art) {
+							return getString("appointment.reminder." + art.name());
 						}
 
 						@Override
-						public String getIdValue(AppointmentReminderType art, int index) {
-							return "" + art.getId();
+						public String getIdValue(Reminder art, int index) {
+							return art.name();
 						}
 
 						@Override
-						public AppointmentReminderType getObject(String id, IModel<? extends List<? extends AppointmentReminderType>> choices) {
-							for (AppointmentReminderType art : choices.getObject()) {
-								if (getIdValue(art, -1).equals(id)) {
+						public Reminder getObject(String id, IModel<? extends List<? extends Reminder>> choices) {
+							for (Reminder art : choices.getObject()) {
+								if (art.name().equals(id)) {
 									return art;
 								}
 							}
@@ -354,10 +351,6 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 			add(new UserMultiChoice("attendees", attendeesModel));
 				
 			add(owner);
-		}
-		
-		private List<AppointmentReminderType> getRemindTypes() {
-			return getBean(AppointmentReminderTypeDao.class).get();
 		}
 		
 		private List<Room> getRoomList() {

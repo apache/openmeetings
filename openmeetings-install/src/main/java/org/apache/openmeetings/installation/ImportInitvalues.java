@@ -58,16 +58,14 @@ import java.util.Iterator;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.basic.ErrorDao;
 import org.apache.openmeetings.db.dao.basic.NavigationDao;
-import org.apache.openmeetings.db.dao.calendar.AppointmentCategoryDao;
-import org.apache.openmeetings.db.dao.calendar.AppointmentReminderTypeDao;
 import org.apache.openmeetings.db.dao.room.PollDao;
 import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.dao.room.SipDao;
 import org.apache.openmeetings.db.dao.server.OAuth2Dao;
 import org.apache.openmeetings.db.dao.user.OrganisationDao;
-import org.apache.openmeetings.db.dao.user.SalutationDao;
 import org.apache.openmeetings.db.dao.user.StateDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
+import org.apache.openmeetings.db.entity.basic.ErrorValue;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.room.Room.Type;
 import org.apache.openmeetings.db.entity.room.RoomOrganisation;
@@ -97,13 +95,7 @@ public class ImportInitvalues {
 	@Autowired
 	private NavigationDao navimanagement;
 	@Autowired
-	private ErrorDao errorManagement;
-	@Autowired
-	private SalutationDao salutationmanagement;
-	@Autowired
-	private AppointmentCategoryDao appointmentCategoryDaoImpl;
-	@Autowired
-	private AppointmentReminderTypeDao reminderTypeDao;
+	private ErrorDao errorDao;
 	@Autowired
 	private PollDao pollManager;
 	@Autowired
@@ -227,12 +219,6 @@ public class ImportInitvalues {
 		log.debug("MainMenu ADDED");
 	}
 	
-	public void loadErrorTypes() {
-		errorManagement.addErrorType(new Long(1), new Long(322));
-		errorManagement.addErrorType(new Long(2), new Long(323));
-		log.debug("Error types ADDED");
-	}
-
 	public void loadErrorMappingsFromXML() throws Exception {
 		SAXReader reader = new SAXReader();
 		Document document = reader.read(new File(OmFileHelper.getLanguagesDir(), OmFileHelper.nameOfErrorFile));
@@ -246,7 +232,7 @@ public class ImportInitvalues {
 
 			Long errorvalueId = null;
 			Long labelId = null;
-			Long typeId = null;
+			ErrorValue.Type type = null;
 
 			for (@SuppressWarnings("unchecked")
 			Iterator<Element> itSub = row.elementIterator("field"); itSub.hasNext();) {
@@ -261,23 +247,14 @@ public class ImportInitvalues {
 				if (name.equals("fieldvalues_id")) {
 					labelId = Long.valueOf(text);
 				}
-				if (name.equals("errortype_id")) {
-					typeId = Long.valueOf(text);
+				if (name.equals("type")) {
+					type = ErrorValue.Type.valueOf(text);
 				}
 			}
 
-			errorManagement.addErrorValues(errorvalueId, typeId, labelId);
+			errorDao.addErrorValues(errorvalueId, type, labelId);
 		}
 		log.debug("ErrorMappings ADDED");
-	}
-
-	public void loadSalutations() {
-		salutationmanagement.addUserSalutation("Mr", 261);
-		salutationmanagement.addUserSalutation("Ms", 262);
-		salutationmanagement.addUserSalutation("Mrs", 841);
-		salutationmanagement.addUserSalutation("Dr", 842);
-		salutationmanagement.addUserSalutation("Prof", 1464);
-		log.debug("Salutations ADDED");
 	}
 
 	public void loadConfiguration(InstallationConfig cfg) {
@@ -568,29 +545,7 @@ public class ImportInitvalues {
 		log.debug("Countries ADDED");
 	}
 
-	/**
-	 * @author o.becherer initial fillment of Appointmentcategories
-	 */
 	// ------------------------------------------------------------------------------
-	public void loadInitAppointmentCategories() {
-		log.debug("ImportInitValues.loadInitAppointmentCategories");
-
-		appointmentCategoryDaoImpl.addAppointmentCategory(new Long(-1), "default", "default");
-	}
-
-	// ------------------------------------------------------------------------------
-
-	/**
-	 * @author o.becherer initial fillment of AppointMentReminderTypes
-	 */
-	// ------------------------------------------------------------------------------
-	public void loadInitAppointmentReminderTypes() {
-		log.debug("ImportInitValues.loadInitAppointmentReminderTypes");
-
-		reminderTypeDao.add(-1L, "do not send notification", 1568);
-		reminderTypeDao.add(-1L, "simple email", 1569);
-		reminderTypeDao.add(-1L, "iCal email", 1570);
-	}
 
 	public void loadInitialOAuthServers() throws Exception {
 		// Yandex
@@ -668,29 +623,19 @@ public class ImportInitvalues {
 			log.debug("System contains users, no need to install data one more time.");
 		}
 		sipDao.delete();
-		progress = 9;
+		progress = 14;
 		loadMainMenu();
-		progress = 18;
-		loadErrorTypes();
-		progress = 27;
+		progress = 28;
 		loadErrorMappingsFromXML();
-		progress = 36;
+		progress = 42;
 		loadCountriesFiles();
-		progress = 45;
-		loadSalutations();
-		progress = 54;
-		// AppointMent Categories
-		loadInitAppointmentCategories();
-		progress = 63;
-		// Appointment Reminder types
-		loadInitAppointmentReminderTypes();
-		progress = 72;
+		progress = 56;
 		// Appointment poll types
 		loadPollTypes();
-		progress = 81;
+		progress = 70;
 
 		loadConfiguration(cfg);
-		progress = 90;
+		progress = 84;
 		loadInitialOAuthServers();
 		progress = 99;
 	}

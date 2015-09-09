@@ -280,8 +280,6 @@
   <entry key="258">到最後一頁</entry>
   <entry key="259">縮小 --</entry>
   <entry key="260">放大 ++</entry>
-  <entry key="261">先生</entry>
-  <entry key="262">女士</entry>
   <entry key="263">配置</entry>
   <entry key="264">编号</entry>
   <entry key="265">關鍵</entry>
@@ -341,8 +339,6 @@
   <entry key="319">民調</entry>
   <entry key="320">有沒有用戶連接到該用戶名</entry>
   <entry key="321">該電郵載有一個特殊的聯繫已被發送到您的電子郵件地址，請檢查您的信箱。如果您還沒有收到郵件，請調整你的垃圾郵件設置，並重新發送確認郵件</entry>
-  <entry key="322">錯误</entry>
-  <entry key="323">訊息</entry>
   <entry key="324">無效散列。找不到用戶.</entry>
   <entry key="325">重置密碼</entry>
   <entry key="326">登錄</entry>
@@ -860,8 +856,6 @@
   <entry key="838">This User is a Super-Moderator. You cannot remove the Moderation flag from a Super-Moderator!</entry>
   <entry key="839">Do you really want to delete this File/Folder?</entry>
   <entry key="840">Delete File/Folder?</entry>
-  <entry key="841">Mrs.</entry>
-  <entry key="842">Dr.</entry>
   <entry key="843">Properties</entry>
   <entry key="844">Show mouse position to viewers</entry>
   <entry key="845">Share Audio with SIP Applet</entry>
@@ -1483,7 +1477,6 @@
   <entry key="1461">Export/Import System Backups</entry>
   <entry key="1462">You need moderation or the right to draw on whiteboard to upload, add, delete or load files and folders.</entry>
   <entry key="1463">Edit text</entry>
-  <entry key="1464">Prof</entry>
   <entry key="1465">Publish</entry>
   <entry key="1466">Start Publish</entry>
   <entry key="1467">Stop Publish</entry>
@@ -1584,9 +1577,6 @@
   <entry key="1565">Oct</entry>
   <entry key="1566">Nov</entry>
   <entry key="1567">Dec</entry>
-  <entry key="1568">do not send notification</entry>
-  <entry key="1569">simple email</entry>
-  <entry key="1570">iCal email</entry>
   <entry key="1571">OAuth2</entry>
   <entry key="1572">Manage OAuth2 configurations</entry>
   <entry key="1573">Name</entry>
@@ -1869,4 +1859,14 @@
   <entry key="room.type.conference">conference (1-25 users)</entry>
   <entry key="room.type.restricted">restricted (1-150 users)</entry>
   <entry key="room.type.interview">interview (1:1 meeting with recording)</entry>
+  <entry key="appointment.reminder.none">do not send notification</entry>
+  <entry key="appointment.reminder.email">simple email</entry>
+  <entry key="appointment.reminder.ical">iCal email</entry>
+  <entry key="user.salutation.mr">先生</entry>
+  <entry key="user.salutation.ms">女士</entry>
+  <entry key="user.salutation.mrs">Mrs.</entry>
+  <entry key="user.salutation.dr">Dr.</entry>
+  <entry key="user.salutation.prof">Prof</entry>
+  <entry key="error.type.error">錯误</entry>
+  <entry key="error.type.info">訊息</entry>
 </properties>

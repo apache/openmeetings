@@ -39,6 +39,7 @@ import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
 import org.apache.openmeetings.db.entity.calendar.MeetingMember;
+import org.apache.openmeetings.db.entity.calendar.Appointment.Reminder;
 import org.apache.openmeetings.db.entity.room.Invitation.MessageType;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.util.TimezoneUtil;
@@ -209,6 +210,7 @@ public class AppointmentDao {
 
 	public List<Appointment> getAppointmentsInRange(Calendar start, Calendar end) {
 		TypedQuery<Appointment> q = em.createNamedQuery("appointmentsInRangeRemind", Appointment.class);
+		q.setParameter("none", Reminder.none);
 		q.setParameter("start", start.getTime());
 		q.setParameter("end", end.getTime());
 		return q.getResultList();

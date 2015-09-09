@@ -31,9 +31,7 @@ import java.util.List;
 import java.util.TimeZone;
 
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
-import org.apache.openmeetings.db.dao.calendar.AppointmentCategoryDao;
 import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
-import org.apache.openmeetings.db.dao.calendar.AppointmentReminderTypeDao;
 import org.apache.openmeetings.db.dao.calendar.MeetingMemberDao;
 import org.apache.openmeetings.db.dao.label.LabelDao;
 import org.apache.openmeetings.db.dao.room.IInvitationManager;
@@ -41,6 +39,7 @@ import org.apache.openmeetings.db.dao.room.InvitationDao;
 import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
+import org.apache.openmeetings.db.entity.calendar.Appointment.Reminder;
 import org.apache.openmeetings.db.entity.calendar.MeetingMember;
 import org.apache.openmeetings.db.entity.room.Invitation;
 import org.apache.openmeetings.db.entity.room.Invitation.MessageType;
@@ -58,10 +57,6 @@ public class AppointmentLogic {
 
 	@Autowired
 	private AppointmentDao appointmentDao;
-	@Autowired
-	private AppointmentCategoryDao appointmentCategoryDao;
-	@Autowired
-	private AppointmentReminderTypeDao reminderTypeDao;
 	@Autowired
 	private ConfigurationDao configurationDao;
 	@Autowired
@@ -208,8 +203,7 @@ public class AppointmentLogic {
 		a.setIsWeekly(isWeekly);
 		a.setIsMonthly(isMonthly);
 		a.setIsYearly(isYearly);
-		a.setCategory(appointmentCategoryDao.get(categoryId));
-		a.setRemind(reminderTypeDao.get(remind));
+		a.setReminder(Reminder.get(remind));
 		if (roomId > 0) {
 			a.setRoom(roomDao.get(roomId));
 		} else {

@@ -59,8 +59,6 @@ import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.basic.ChatMessage;
 import org.apache.openmeetings.db.entity.basic.Configuration;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
-import org.apache.openmeetings.db.entity.calendar.AppointmentCategory;
-import org.apache.openmeetings.db.entity.calendar.AppointmentReminderType;
 import org.apache.openmeetings.db.entity.file.FileExplorerItem;
 import org.apache.openmeetings.db.entity.record.FlvRecording;
 import org.apache.openmeetings.db.entity.room.PollType;
@@ -72,6 +70,7 @@ import org.apache.openmeetings.db.entity.user.PrivateMessage;
 import org.apache.openmeetings.db.entity.user.State;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Right;
+import org.apache.openmeetings.db.entity.user.User.Salutation;
 import org.apache.openmeetings.db.util.AuthLevelUtil;
 import org.apache.openmeetings.util.CalendarPatterns;
 import org.apache.openmeetings.util.OmFileHelper;
@@ -197,9 +196,8 @@ public class BackupExport {
 			Strategy strategy = new RegistryStrategy(registry);
 			Serializer serializer = new Persister(strategy);
 	
-			registry.bind(AppointmentCategory.class, AppointmentCategoryConverter.class);
 			registry.bind(User.class, UserConverter.class);
-			registry.bind(AppointmentReminderType.class, AppointmentReminderTypeConverter.class);
+			registry.bind(Appointment.Reminder.class, AppointmentReminderTypeConverter.class);
 			registry.bind(Room.class, RoomConverter.class);
 			if (list != null && list.size() > 0) {
 				registry.bind(list.get(0).getStart().getClass(), DateConverter.class);
@@ -461,6 +459,7 @@ public class BackupExport {
 
 		registry.bind(Organisation.class, OrganisationConverter.class);
 		registry.bind(State.class, StateConverter.class);
+		registry.bind(Salutation.class, SalutationConverter.class);
 		if (list != null && list.size() > 0) {
 			Class<?> dateClass = list.get(0).getRegdate() != null ? list.get(0).getRegdate().getClass() : list.get(0).getInserted().getClass();
 			registry.bind(dateClass, DateConverter.class);

@@ -101,11 +101,11 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 	private static Map<Long, Set<Client>> ROOMS = new ConcurrentHashMap<Long, Set<Client>>();
 	//additional maps for faster searching should be created
 	private DashboardContext dashboardContext;
-	private static Set<Long> STRINGS_WITH_APP = new HashSet<Long>(); //FIXME need to be removed
+	private static Set<String> STRINGS_WITH_APP = new HashSet<>(); //FIXME need to be removed
 	private static String appName;
 	static {
-		STRINGS_WITH_APP.addAll(Arrays.asList(499L, 500L, 506L, 511L, 512L, 513L, 517L, 532L, 622L, 804L
-				, 909L, 952L, 978L, 981L, 984L, 989L, 990L, 999L, 1151L, 1155L, 1157L, 1158L, 1194L));
+		STRINGS_WITH_APP.addAll(Arrays.asList("499", "500", "506", "511", "512", "513", "517", "532", "622", "804"
+				, "909", "952", "978", "981", "984", "989", "990", "999", "1151", "1155", "1157", "1158", "1194"));
 	}
 	
 	@Override
@@ -308,30 +308,38 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 		return getString(id, WebSession.getLanguage());
 	}
 
-	public static String getString(long id, final long languageId) {
+	public static Locale getLocale(final long languageId) {
 		Locale loc = LabelDao.languages.get(languageId);
 		if (loc == null) {
 			loc = WebSession.exists() ? WebSession.get().getLocale() : Locale.ENGLISH;
 		}
-		return getString(id, loc);
+		return loc;
+	}
+	
+	public static String getString(String key, final long languageId) {
+		return getString(key, getLocale(languageId), false);
+	}
+	
+	public static String getString(long id, final long languageId) {
+		return getString(id, getLocale(languageId));
 	}
 	
 	public static String getString(long id, final Locale loc) {
-		return getString(id, loc, false);
+		return getString("" + id, loc, false);
 	}
 	
-	public static String getString(long id, final Locale loc, boolean noReplace) {
+	public static String getString(String key, final Locale loc, boolean noReplace) {
 		if (!exists()) {
 			ThreadContext.setApplication(Application.get(appName));
 		}
 		Localizer l = get().getResourceSettings().getLocalizer();
-		String value = l.getStringIgnoreSettings("" + id, null, null, loc, null, "[Missing]");
-		if (!noReplace && STRINGS_WITH_APP.contains(id)) {
+		String value = l.getStringIgnoreSettings(key, null, null, loc, null, "[Missing]");
+		if (!noReplace && STRINGS_WITH_APP.contains(key)) {
 			final MessageFormat format = new MessageFormat(value, loc);
 			value = format.format(new Object[]{getBean(ConfigurationDao.class).getAppName()});
 		}
 		if (!noReplace && RuntimeConfigurationType.DEVELOPMENT == get().getConfigurationType()) {
-			value += String.format(" [%s]", id);
+			value += String.format(" [%s]", key);
 		}
 		return value;
 	}
@@ -441,5 +449,9 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 	
 	public String getOmString(long id, long languageId) {
 		return getString(id, languageId);
+	}
+
+	public String getOmString(String key, long languageId) {
+		return getString(key, languageId);
 	}
 }

@@ -27,7 +27,6 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -108,17 +107,6 @@ public class LabelDao implements IDataProviderDao<StringLabel>{
 		labelCache.put(l, new ArrayList<StringLabel>());
 	}
 	
-	public List<Map<String, Object>> getStrings(Long languageId, int start, int count) {
-		List<Map<String, Object>> result = new ArrayList<Map<String, Object>>();
-		for (int i = 0; i < count; ++i) {
-			Map<String, Object> map = new HashMap<String, Object>();
-			map.put("id", start + i);
-			map.put("value", getString(start + i, languageId));
-			result.add(map);
-		}
-		return result;
-	}
-
 	public static IApplication getApp(long langId) {
 		IApplication a = null;
 		if (Application.exists()) {
@@ -143,6 +131,10 @@ public class LabelDao implements IDataProviderDao<StringLabel>{
 	
 	public String getString(long fieldValuesId, long langId) {
 		return getApp(langId).getOmString(fieldValuesId, langId);
+	}
+
+	public String getString(String key, long langId) {
+		return getApp(langId).getOmString(key, langId);
 	}
 
 	private static File getLangFile() {
