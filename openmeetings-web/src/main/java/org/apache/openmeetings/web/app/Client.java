@@ -19,9 +19,11 @@
 package org.apache.openmeetings.web.app;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.apache.openmeetings.db.entity.IDataProviderEntity;
 import org.apache.wicket.protocol.ws.api.registry.IKey;
 
 /**
@@ -29,7 +31,7 @@ import org.apache.wicket.protocol.ws.api.registry.IKey;
  * @author solomax
  *
  */
-public class Client implements Serializable {
+public class Client implements IDataProviderEntity, Serializable {
 	private static final long serialVersionUID = 1L;
 
 	public enum Right {
@@ -40,8 +42,10 @@ public class Client implements Serializable {
 	private long userId;
 	private String uid;
 	private Set<Right> rights = new HashSet<Right>();
+	private Date connectedSince;
 
 	public Client() {
+		this.connectedSince = new Date();
 	}
 	
 	public Client(String sessionId, IKey key, long userId) {
@@ -52,6 +56,7 @@ public class Client implements Serializable {
 		this.sessionId = sessionId;
 		this.pageId = pageId;
 		this.userId = userId;
+		this.connectedSince = new Date();
 	}
 
 	public String getSessionId() {
@@ -123,5 +128,25 @@ public class Client implements Serializable {
 
 	public boolean hasRight(Right right) {
 		return rights.contains(Right.moderator) ? true : rights.contains(right);
+	}
+
+	public Date getConnectedSince() {
+		return connectedSince;
+	}
+
+	public void setConnectedSince(Date connectedSince) {
+		this.connectedSince = connectedSince;
+	}
+
+	@Override
+	public Long getId() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setId(Long id) {
+		// TODO Auto-generated method stub
+		
 	}
 }

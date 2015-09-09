@@ -19,11 +19,13 @@
 package org.apache.openmeetings.core.remote;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.wicketApplicationName;
 
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
+import org.apache.openmeetings.IApplication;
 import org.apache.openmeetings.core.remote.red5.ScopeApplicationAdapter;
 import org.apache.openmeetings.db.dao.server.ISessionManager;
 import org.apache.openmeetings.db.dao.server.ServerDao;
@@ -37,6 +39,7 @@ import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.UserContact;
 import org.apache.openmeetings.db.util.AuthLevelUtil;
 import org.apache.openmeetings.db.util.TimezoneUtil;
+import org.apache.wicket.Application;
 import org.red5.logging.Red5LoggerFactory;
 import org.red5.server.api.scope.IScope;
 import org.slf4j.Logger;
@@ -299,7 +302,21 @@ public class UserService implements IUserService {
 				return true;
 			}
 		} catch (Exception err) {
-			log.error("[kickUserByStreamId]", err);
+			log.error("[kickUserByPublicSID]", err);
+		}
+		return null;
+	}
+
+	@Override
+	public Boolean kickUserBySessionId(String SID, long userId, String sessionId) {
+		try {
+			Long users_id = sessiondataDao.checkSession(SID);
+			// admin only
+			if (AuthLevelUtil.hasAdminLevel(userDao.getRights(users_id))) {
+				((IApplication)Application.get(wicketApplicationName)).invalidateClient(userId, sessionId);
+			}
+		} catch (Exception err) {
+			log.error("[kickUserBySessionId]", err);
 		}
 		return null;
 	}
