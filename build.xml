@@ -1252,6 +1252,11 @@
 		<delete>
 			<fileset dir="${red5.server.lib}" includes="jaudiotagger*.jar" />
 		</delete>
+		<antcall target="-retrieve" inheritAll="true" inheritRefs="true">
+			<param name="ivy.conf.name" value="tomcat-embed-websocket" />
+			<param name="ivy.lib.location" value="${red5.lib}/plugins" />
+			<param name="ivy.transitive" value="false" />
+		</antcall>
 		<antcall target="-patch-red5-server-start-script"/> 
 	</target>
 	

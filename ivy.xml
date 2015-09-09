@@ -39,6 +39,7 @@
 		<conf name="mysql" description="MySQL JDBC driver" />
 		<conf name="mvn" description="Maven Ant task to build Red5" />
 		<conf name="red5-client" description="Red5 Client/Server for screensharing" />
+		<conf name="tomcat-embed-websocket" description="Websocket support for tomcat" />
 		<conf name="jgit" description="JGit Ant task to retirieve Red5" />
 	</configurations>
 	<dependencies>
@@ -52,22 +53,19 @@
 		<dependency org="asm" name="asm" rev="3.1" transitive="false">
 			<include type="jar" />
 		</dependency>
-		<dependency org="org.springframework" name="spring-aspects" rev="4.0.8.RELEASE" transitive="false">
+		<dependency org="org.springframework" name="spring-aspects" rev="4.1.7.RELEASE" transitive="false">
 			<include type="jar" />
 		</dependency>
-		<dependency org="org.springframework" name="spring-jdbc" rev="4.0.8.RELEASE" transitive="false">
+		<dependency org="org.springframework" name="spring-jdbc" rev="4.1.7.RELEASE" transitive="false">
 			<include type="jar" />
 		</dependency>
-		<dependency org="org.springframework" name="spring-orm" rev="4.0.8.RELEASE" transitive="false">
+		<dependency org="org.springframework" name="spring-orm" rev="4.1.7.RELEASE" transitive="false">
 			<include type="jar" />
 		</dependency>
-		<dependency org="org.springframework" name="spring-tx" rev="4.0.8.RELEASE" transitive="false">
+		<dependency org="org.springframework" name="spring-tx" rev="4.1.7.RELEASE" transitive="false">
 			<include type="jar" />
 		</dependency>
-		<dependency org="org.springframework" name="spring-webmvc" rev="4.0.8.RELEASE" transitive="false">
-			<include type="jar" />
-		</dependency>
-		<dependency org="org.springframework" name="spring-context-support" rev="4.0.8.RELEASE" transitive="false">
+		<dependency org="org.springframework" name="spring-webmvc" rev="4.1.7.RELEASE" transitive="false">
 			<include type="jar" />
 		</dependency>
 		<!-- include type="bundle" / FIXME unable to get geronimo-jpa without  sources -->
@@ -259,7 +257,7 @@
 		<dependency org="org.apache.wicket" name="wicket-native-websocket-core" rev="6.20.0" conf="openmeetings->*" transitive="false">
 			<include type="jar" />
 		</dependency>
-		<dependency org="org.apache.wicket" name="wicket-native-websocket-tomcat" rev="6.20.0" conf="openmeetings->*" transitive="false">
+		<dependency org="org.wicketstuff" name="wicketstuff-native-websocket-javax" rev="6.20.0" conf="openmeetings->*" transitive="false">
 			<include type="jar" />
 		</dependency>
 		<dependency org="com.googlecode.wicket-jquery-ui" name="wicket-jquery-ui-core" rev="6.20.1" conf="openmeetings->*" transitive="false"/>
@@ -356,7 +354,7 @@
 		<!--  END OF OPENMEETINGS -->
 
 		<!--  START OF JUNIT -->
-		<dependency org="org.springframework" name="spring-test" rev="4.0.8.RELEASE" conf="junit->*" transitive="false">
+		<dependency org="org.springframework" name="spring-test" rev="4.1.7.RELEASE" conf="junit->*" transitive="false">
 			<include type="jar" />
 		</dependency>
 		<dependency org="ant-contrib" name="ant-contrib" rev="1.0b3" conf="junit->*" transitive="false">
@@ -429,7 +427,12 @@
 		</dependency>
 
 		<!-- red5-client -->
-		<dependency org="org.red5" name="red5-client" conf="red5-client->*" rev="1.0.5-RELEASE" transitive="false" >
+		<dependency org="org.red5" name="red5-client" conf="red5-client->*" rev="1.0.6-RELEASE" transitive="false" >
+			<include type="jar" />
+		</dependency>
+		
+		<!-- tomcat-embed-websocket -->
+		<dependency org="org.apache.tomcat.embed" name="tomcat-embed-websocket" conf="tomcat-embed-websocket->*" rev="8.0.26" transitive="false" >
 			<include type="jar" />
 		</dependency>
 		
