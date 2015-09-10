@@ -1691,15 +1691,15 @@ jquery.ui.menubar.css
 coin-slider.min.js	
 jquery.colorbox.js
 jquery-1.11.0.min.js	
-jquery-ui-1.10.4.custom.min.js
+jquery-ui-1.11.4.custom.min.js
 jquery-ui-1.10.4.custom.css
+jquery-ui-1.11.4.custom.css
 
 border.png
 controls.png
 loading.gif
 loading_background.png
 overlay.png
-animated-overlay.gif
 ui-bg_flat_0_000088_40x100.png
 ui-bg_flat_0_e6b900_40x100.png
 ui-bg_flat_100_eeeeee_40x100.png
