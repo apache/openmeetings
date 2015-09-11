@@ -27,6 +27,7 @@ public class RegisterUserTemplate extends AbstractTemplatePanel {
 
 	public RegisterUserTemplate(String username, String userpass, String email, String verification_url) {
 		super(getOmSession().getOmLanguage());
+		add(new Label("registrationLbl", getString(506, langId)));
 		add(new Label("username", username));
 		add(new Label("userpass", userpass));
 		add(new Label("email", email));
@@ -34,6 +35,7 @@ public class RegisterUserTemplate extends AbstractTemplatePanel {
 		add(verification.add(new Label("verification_url2", verification_url))
 			.add(new ExternalLink("verification_url1", verification_url))
 			.setVisible(verification_url != null));
+		add(new Label("organisationLbl", getString(511, langId)));
 	}
 
 	public static String getEmail(String username, String userpass, String email, String verification_url) {
