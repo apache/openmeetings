@@ -20,6 +20,7 @@ package org.apache.openmeetings.web.admin.users;
 
 import static org.apache.openmeetings.db.util.UserHelper.getMinLoginLength;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.WEB_DATE_PATTERN;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import static org.apache.wicket.datetime.markup.html.basic.DateLabel.forDatePattern;
@@ -32,6 +33,7 @@ import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.openmeetings.data.user.EmailManager;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.server.LdapConfigDao;
 import org.apache.openmeetings.db.dao.server.OAuth2Dao;
@@ -60,6 +62,8 @@ import org.apache.wicket.markup.html.panel.PanelMarkupSourcingStrategy;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.util.time.Duration;
+import org.red5.logging.Red5LoggerFactory;
+import org.slf4j.Logger;
 import org.wicketstuff.select2.Response;
 import org.wicketstuff.select2.Select2MultiChoice;
 import org.wicketstuff.select2.TextChoiceProvider;
@@ -74,6 +78,7 @@ import com.googlecode.wicket.jquery.ui.widget.dialog.MessageDialog;
  */
 public class UserForm extends AdminBaseForm<User> {
 	private static final long serialVersionUID = 1L;
+	private static final Logger log = Red5LoggerFactory.getLogger(UserForm.class, webAppRootKey);
 	private final WebMarkupContainer listContainer;
 	private final WebMarkupContainer domain = new WebMarkupContainer("domain");
 	private GeneralUserForm generalForm;
@@ -104,9 +109,20 @@ public class UserForm extends AdminBaseForm<User> {
 	protected void onSaveSubmit(AjaxRequestTarget target, Form<?> form) {
 		User u = getModelObject();
 		try {
+			boolean isNew = (u.getUser_id() == null);
 			u = getBean(UserDao.class).update(u, generalForm.getPasswordField().getConvertedInput(), getUserId());
+			boolean sendEmailAtRegister = (1 == getBean(ConfigurationDao.class).getConfValue("sendEmailAtRegister", Integer.class, "0"));
+			if (isNew && sendEmailAtRegister) {
+				String link = getBean(ConfigurationDao.class).getBaseUrl();
+				String sendMail = getBean(EmailManager.class).sendMail(login.getValue(),
+						generalForm.getPasswordField().getConvertedInput(), generalForm.getEmail(), link, false, null);
+				if (!sendMail.equals("success")) {
+					throw new Exception("Mail for new user is not sent");
+				}
+			}
 		} catch (Exception e) {
 			// FIXME update feedback with the error details
+			log.error("[onSaveSubmit]: ", e);
 		}
 		setModelObject(u);
 		hideNewRecord();

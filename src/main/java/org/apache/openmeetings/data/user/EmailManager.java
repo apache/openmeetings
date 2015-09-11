@@ -55,7 +55,9 @@ public class EmailManager {
 		Integer sendEmailAtRegister = configurationDao.getConfValue("sendEmailAtRegister", Integer.class, "0");
 
 		if (sendEmailAtRegister == 1) {
-			RegisterUserTemplate.ensureApplication(langId);
+			if (langId != null) {
+				RegisterUserTemplate.ensureApplication(langId);
+			}
 			mailHandler.send(email, Application.getString(512)  
 				, RegisterUserTemplate.getEmail(username, userpass, email, sendEmailWithVerficationCode ? link : null));
 		}

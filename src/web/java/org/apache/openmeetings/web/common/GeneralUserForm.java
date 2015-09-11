@@ -201,6 +201,11 @@ public class GeneralUserForm extends Form<User> {
 	public PasswordTextField getPasswordField() {
 		return passwordField;
 	}
+
+	
+	public String getEmail() {
+		return email.getValue();
+	}
 	
 	@Override
 	protected IMarkupSourcingStrategy newMarkupSourcingStrategy() {

@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.web.mail.template;
 
+import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
@@ -28,6 +29,7 @@ public class RegisterUserTemplate extends AbstractTemplatePanel {
 
 	public RegisterUserTemplate(String username, String userpass, String email, String verification_url) {
 		super(WebSession.getLanguage());
+		add(new Label("registrationLbl", Application.getString(506, langId)));
 		add(new Label("username", username));
 		add(new Label("userpass", userpass));
 		add(new Label("email", email));
@@ -35,6 +37,7 @@ public class RegisterUserTemplate extends AbstractTemplatePanel {
 		add(verification.add(new Label("verification_url2", verification_url))
 			.add(new ExternalLink("verification_url1", verification_url))
 			.setVisible(verification_url != null));
+		add(new Label("organisationLbl", Application.getString(511, langId)));
 	}
 
 	public static String getEmail(String username, String userpass, String email, String verification_url) {
