@@ -19,6 +19,7 @@
 package org.apache.openmeetings.data.user;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_LANG_KEY;
 
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.mail.MailHandler;
@@ -55,9 +56,8 @@ public class EmailManager {
 		Integer sendEmailAtRegister = configurationDao.getConfValue("sendEmailAtRegister", Integer.class, "0");
 
 		if (sendEmailAtRegister == 1) {
-			if (langId != null) {
-				RegisterUserTemplate.ensureApplication(langId);
-			}
+			RegisterUserTemplate.ensureApplication(langId != null ? langId :
+					configurationDao.getConfValue(CONFIG_DEFAULT_LANG_KEY, Long.class, "1"));
 			mailHandler.send(email, Application.getString(512)  
 				, RegisterUserTemplate.getEmail(username, userpass, email, sendEmailWithVerficationCode ? link : null));
 		}
