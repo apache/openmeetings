@@ -379,7 +379,7 @@
 		</dependency>
 		<dependency>
 			<groupId>org.apache.wicket</groupId>
-			<artifactId>wicket-native-websocket-tomcat</artifactId>
+			<artifactId>wicket-native-websocket-javax</artifactId>
 			<version>${wicket.version}</version>
 		</dependency>
 		<dependency>
@@ -436,6 +436,12 @@
 			<groupId>org.wicketstuff</groupId>
 			<artifactId>wicketstuff-whiteboard</artifactId>
 			<version>${wickets.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.apache.wicket</groupId>
+					<artifactId>wicket-native-websocket-tomcat</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>org.wicketstuff</groupId>
@@ -468,6 +474,17 @@
 			<version>${project.version}</version>
 			<type>test-jar</type>
 			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.tomcat.embed</groupId>
+			<artifactId>tomcat-embed-websocket</artifactId>
+			<version>8.0.26</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.apache.tomcat.embed</groupId>
+					<artifactId>tomcat-embed-core</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 	</dependencies>
 </project>

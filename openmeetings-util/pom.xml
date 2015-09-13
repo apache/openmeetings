@@ -33,7 +33,6 @@
 		<dom4j.version>1.6.1</dom4j.version>
 		<mail.version>1.4.7</mail.version>
 		<commons-codec.version>1.8</commons-codec.version>
-		<servlet-api.version>2.5</servlet-api.version>
 		<site.basedir>${project.parent.basedir}</site.basedir>
 		<skip.site.copy>false</skip.site.copy>
 	</properties>
@@ -72,12 +71,6 @@
 			<groupId>commons-codec</groupId>
 			<artifactId>commons-codec</artifactId>
 			<version>${commons-codec.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>javax.servlet</groupId>
-			<artifactId>servlet-api</artifactId>
-			<version>${servlet-api.version}</version>
-			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.wicket</groupId>
