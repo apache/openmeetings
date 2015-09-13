@@ -45,7 +45,7 @@ import org.apache.openjpa.persistence.OpenJPAQuery;
 import org.apache.openmeetings.db.dao.IDataProviderDao;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.entity.user.Address;
-import org.apache.openmeetings.db.entity.user.OrganisationUser;
+import org.apache.openmeetings.db.entity.user.GroupUser;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Right;
 import org.apache.openmeetings.db.entity.user.User.Salutation;
@@ -124,7 +124,7 @@ public class UserDao implements IDataProviderDao<User> {
 	}
 	
 	private String getAdditionalJoin(boolean filterContacts) {
-		return filterContacts ? "LEFT JOIN u.organisationUsers ou" : null;
+		return filterContacts ? "LEFT JOIN u.groupUsers ou" : null;
 	}
 	
 	private String getAdditionalWhere(boolean excludeContacts, Map<String, Object> params) {
@@ -139,7 +139,7 @@ public class UserDao implements IDataProviderDao<User> {
 		if (filterContacts) {
 			params.put("ownerId", ownerId);
 			params.put("contact", Type.contact);
-			return "((u.type <> :contact AND ou.organisation.id IN (SELECT ou.organisation.id FROM OrganisationUser ou WHERE ou.user.id = :ownerId)) "
+			return "((u.type <> :contact AND ou.group.id IN (SELECT ou.group.id FROM GroupUser ou WHERE ou.user.id = :ownerId)) "
 				+ "OR (u.type = :contact AND u.ownerId = :ownerId))";
 		}
 		return null;
@@ -203,8 +203,8 @@ public class UserDao implements IDataProviderDao<User> {
 	}
 
 	public User update(User u, Long userId) {
-		if (u.getOrganisationUsers() != null) {
-			for (OrganisationUser ou : u.getOrganisationUsers()) {
+		if (u.getGroupUsers() != null) {
+			for (GroupUser ou : u.getGroupUsers()) {
 				ou.setUser(u);
 			}
 		}
@@ -218,8 +218,8 @@ public class UserDao implements IDataProviderDao<User> {
 			u.setUpdated(new Date());
 			u =	em.merge(u);
 		}
-		//this is necessary due to organisation details are lost on update
-		for (OrganisationUser ou : u.getOrganisationUsers()) {
+		//this is necessary due to group details are lost on update
+		for (GroupUser ou : u.getGroupUsers()) {
 			em.refresh(ou);
 		}
 		return u;
@@ -257,7 +257,7 @@ public class UserDao implements IDataProviderDao<User> {
 			TypedQuery<User> q = oem.createNamedQuery("getUserById", User.class).setParameter("id", id);
 			@SuppressWarnings("unchecked")
 			OpenJPAQuery<User> kq = OpenJPAPersistence.cast(q);
-			kq.getFetchPlan().addFetchGroup("orgUsers");
+			kq.getFetchPlan().addFetchGroup("groupUsers");
 			if (force) {
 				kq.getFetchPlan().addFetchGroup("backupexport");
 			}
@@ -277,10 +277,10 @@ public class UserDao implements IDataProviderDao<User> {
 		try {
 			if (userId != 0) {
 				User us = get(userId);
-				for (OrganisationUser ou : us.getOrganisationUsers()){
+				for (GroupUser ou : us.getGroupUsers()){
 					em.remove(ou);
 				}
-				us.setOrganisationUsers(null);
+				us.setGroupUsers(null);
 				us.setDeleted(true);
 				us.setUpdated(new Date());
 				us.setSipUser(null);
@@ -318,7 +318,7 @@ public class UserDao implements IDataProviderDao<User> {
 			TypedQuery<User> q = em.createNamedQuery("getAllUsers", User.class);
 			@SuppressWarnings("unchecked")
 			OpenJPAQuery<User> kq = OpenJPAPersistence.cast(q);
-			kq.getFetchPlan().addFetchGroups("backupexport", "orgUsers");
+			kq.getFetchPlan().addFetchGroups("backupexport", "groupUsers");
 			return kq.getResultList();
 		} catch (Exception ex2) {
 			log.error("[getAllUsersDeleted] ", ex2);
@@ -618,9 +618,9 @@ public class UserDao implements IDataProviderDao<User> {
 		if (!AuthLevelUtil.hasLoginLevel(u.getRights())) {
 			throw new OmException(-41L);
 		}
-		log.debug("loginUser " + u.getOrganisationUsers());
-		if (u.getOrganisationUsers().isEmpty()) {
-			throw new OmException("No Organization assigned to user");
+		log.debug("loginUser " + u.getGroupUsers());
+		if (u.getGroupUsers().isEmpty()) {
+			throw new OmException("No Group assigned to user");
 		}
 		
 		u.setLastlogin(new Date());
@@ -644,7 +644,7 @@ public class UserDao implements IDataProviderDao<User> {
 	public User addUser(Set<Right> rights, String firstname, String login, String lastname, long languageId,
 			String userpass, Address adress, boolean sendSMS, Date age, String hash, TimeZone timezone,
 			Boolean forceTimeZoneCheck, String userOffers, String userSearchs, Boolean showContactData,
-			Boolean showContactDataToContacts, String externalId, String externalType, List<OrganisationUser> orgList, String pictureuri) throws NoSuchAlgorithmException {
+			Boolean showContactDataToContacts, String externalId, String externalType, List<GroupUser> orgList, String pictureuri) throws NoSuchAlgorithmException {
 		
 		User u = new User();
 		u.setFirstname(firstname);
@@ -677,7 +677,7 @@ public class UserDao implements IDataProviderDao<User> {
 		u.setRegdate(new Date());
 		u.setDeleted(false);
 		u.setPictureuri(pictureuri);
-		u.setOrganisationUsers(orgList);
+		u.setGroupUsers(orgList);
 		
 		return update(u, null);
 	}

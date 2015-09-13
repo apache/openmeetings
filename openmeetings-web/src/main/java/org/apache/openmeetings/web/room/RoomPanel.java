@@ -49,12 +49,12 @@ import org.apache.openmeetings.db.entity.calendar.MeetingMember;
 import org.apache.openmeetings.db.entity.file.FileExplorerItem;
 import org.apache.openmeetings.db.entity.file.FileItem;
 import org.apache.openmeetings.db.entity.file.FileItem.Type;
-import org.apache.openmeetings.db.entity.record.FlvRecording;
+import org.apache.openmeetings.db.entity.record.Recording;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.room.RoomModerator;
-import org.apache.openmeetings.db.entity.room.RoomOrganisation;
-import org.apache.openmeetings.db.entity.user.Organisation;
-import org.apache.openmeetings.db.entity.user.OrganisationUser;
+import org.apache.openmeetings.db.entity.room.RoomGroup;
+import org.apache.openmeetings.db.entity.user.Group;
+import org.apache.openmeetings.db.entity.user.GroupUser;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Right;
 import org.apache.openmeetings.db.util.AuthLevelUtil;
@@ -268,9 +268,9 @@ public class RoomPanel extends BasePanel {
 			log.debug("public ? " + r.getIspublic() + ", ownedId ? " + r.getOwnerId() + " " + allowed);
 			if (!allowed) {
 				User u = getBean(UserDao.class).get(getUserId());
-				for (RoomOrganisation ro : r.getRoomOrganisations()) {
-					for (OrganisationUser ou : u.getOrganisationUsers()) {
-						if (ro.getOrganisation().getId().equals(ou.getOrganisation().getId())) {
+				for (RoomGroup ro : r.getRoomGroups()) {
+					for (GroupUser ou : u.getGroupUsers()) {
+						if (ro.getGroup().getId().equals(ou.getGroup().getId())) {
 							allowed = true;
 							break;
 						}
@@ -317,17 +317,17 @@ public class RoomPanel extends BasePanel {
 				selectedFile.setObject(f);
 				treesView.add(selected = new FileItemTree<FileExplorerItem>(treesView.newChildId(), this, new FilesTreeProvider(null)));
 				treesView.add(new FileItemTree<FileExplorerItem>(treesView.newChildId(), this, new FilesTreeProvider(roomId)));
-				treesView.add(new FileItemTree<FlvRecording>(treesView.newChildId(), this, new MyRecordingTreeProvider()));
-				treesView.add(new FileItemTree<FlvRecording>(treesView.newChildId(), this, new PublicRecordingTreeProvider(null, null)));
-				for (OrganisationUser ou : getBean(UserDao.class).get(getUserId()).getOrganisationUsers()) {
-					Organisation o = ou.getOrganisation();
-					treesView.add(new FileItemTree<FlvRecording>(treesView.newChildId(), this, new PublicRecordingTreeProvider(o.getId(), o.getName())));
+				treesView.add(new FileItemTree<Recording>(treesView.newChildId(), this, new MyRecordingTreeProvider()));
+				treesView.add(new FileItemTree<Recording>(treesView.newChildId(), this, new PublicRecordingTreeProvider(null, null)));
+				for (GroupUser ou : getBean(UserDao.class).get(getUserId()).getGroupUsers()) {
+					Group o = ou.getGroup();
+					treesView.add(new FileItemTree<Recording>(treesView.newChildId(), this, new PublicRecordingTreeProvider(o.getId(), o.getName())));
 				}
 			}
 			
 			@Override
 			public void createFolder(String name) {
-				if (selectedFile.getObject() instanceof FlvRecording) {
+				if (selectedFile.getObject() instanceof Recording) {
 					createRecordingFolder(name);
 				} else {
 					FileExplorerItem f = new FileExplorerItem();
@@ -443,7 +443,7 @@ public class RoomPanel extends BasePanel {
 		if (room.isVisible()) {
 			c = addUserToRoom(roomId, getPage().getPageId());
 			User u = getBean(UserDao.class).get(getUserId());
-			//TODO do we need to check OrgModerationRights ????
+			//TODO do we need to check GroupModerationRights ????
 			if (AuthLevelUtil.hasAdminLevel(u.getRights())) {
 				c.getRights().add(Client.Right.moderator);
 			} else {

@@ -74,7 +74,7 @@ import org.simpleframework.xml.Root;
 @Entity
 @FetchGroups({
 	@FetchGroup(name = "backupexport", attributes = { @FetchAttribute(name = "password") })
-	, @FetchGroup(name = "orgUsers", attributes = { @FetchAttribute(name = "organisationUsers")})
+	, @FetchGroup(name = "groupUsers", attributes = { @FetchAttribute(name = "groupUsers")})
 })
 @NamedQueries({
 	@NamedQuery(name = "getUserById", query = "SELECT u FROM User u WHERE u.id = :id"),
@@ -94,7 +94,7 @@ import org.simpleframework.xml.Root;
 	@NamedQuery(name = "updatePassword", query = "UPDATE User u SET u.password = :password WHERE u.id = :userId"), //
 	@NamedQuery(name = "getNondeletedUsers", query = "SELECT u FROM User u WHERE u.deleted = false"),
 	@NamedQuery(name = "countNondeletedUsers", query = "SELECT COUNT(u) FROM User u WHERE u.deleted = false"),
-	@NamedQuery(name = "getUsersByOrganisationId", query = "SELECT u FROM User u WHERE u.deleted = false AND u.organisationUsers.organisation.id = :organisationId"), 
+	@NamedQuery(name = "getUsersByGroupId", query = "SELECT u FROM User u WHERE u.deleted = false AND u.groupUsers.group.id = :groupId"), 
 	@NamedQuery(name = "getExternalUser", query = "SELECT u FROM User u WHERE u.deleted = false AND u.externalId LIKE :externalId AND u.externalType LIKE :externalType"),
 	@NamedQuery(name = "getUserByLoginOrEmail", query = "SELECT u from User u WHERE u.deleted = false AND u.type = :type AND (u.login = :userOrEmail OR u.address.email = :userOrEmail)")
 })
@@ -252,7 +252,7 @@ public class User implements IDataProviderEntity {
 	@JoinColumn(name = "user_id", insertable = true, updatable = true)
 	@ElementList(name = "organisations", required = false)
 	@ElementDependent
-	private List<OrganisationUser> organisationUsers = new ArrayList<OrganisationUser>();
+	private List<GroupUser> groupUsers = new ArrayList<GroupUser>();
 
 	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@PrimaryKeyJoinColumn(name="sip_user_id", referencedColumnName="id")
@@ -479,16 +479,16 @@ public class User implements IDataProviderEntity {
 		this.languageId = languageId;
 	}
 
-	public List<OrganisationUser> getOrganisationUsers() {
-		if (organisationUsers == null) {
-			organisationUsers = new ArrayList<OrganisationUser>();
+	public List<GroupUser> getGroupUsers() {
+		if (groupUsers == null) {
+			groupUsers = new ArrayList<GroupUser>();
 		}
-		return organisationUsers;
+		return groupUsers;
 	}
 
-	public void setOrganisationUsers(List<OrganisationUser> organisationUsers) {
-		if (organisationUsers != null) {
-			this.organisationUsers = organisationUsers;
+	public void setGroupUsers(List<GroupUser> groupUsers) {
+		if (groupUsers != null) {
+			this.groupUsers = groupUsers;
 		}
 	}
 

@@ -31,12 +31,12 @@ public class TestDatabaseStructureGetUserStart extends AbstractJUnitDefaults {
 	private static final Logger log = Red5LoggerFactory.getLogger(TestDatabaseStructureGetUserStart.class, webAppRootKey);
 
 	@Autowired
-	private UserDao usersDao;
+	private UserDao userDao;
 	
 	@Test
 	public void testAddingGroup() {
 		try {
-			usersDao.get(new Long(1));
+			userDao.get(new Long(1));
 		} catch (Exception err) {
 			log.error("[testAddingGroup]", err);
 		}

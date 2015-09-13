@@ -27,7 +27,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.openmeetings.db.dao.file.FileExplorerItemDao;
-import org.apache.openmeetings.db.dao.record.FlvRecordingLogDao;
+import org.apache.openmeetings.db.dao.record.RecordingLogDao;
 import org.apache.openmeetings.db.entity.file.FileExplorerItem;
 import org.apache.openmeetings.db.entity.file.FileItem.Type;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
@@ -45,7 +45,7 @@ public class FlvExplorerConverter extends BaseConverter {
 	@Autowired
 	private FileExplorerItemDao fileExplorerItemDaoImpl;
 	@Autowired
-	private FlvRecordingLogDao flvRecordingLogDaoImpl;
+	private RecordingLogDao recordingLogDao;
 	
 	private static class FlvDimension {
 		public FlvDimension(int width, int height) {
@@ -120,7 +120,7 @@ public class FlvExplorerConverter extends BaseConverter {
 			fileExplorerItemDaoImpl.update(fileExplorerItem);
 
 			for (ConverterProcessResult returnMap : returnLog) {
-				flvRecordingLogDaoImpl.addFLVRecordingLog("generateFFMPEG", null, returnMap);
+				recordingLogDao.add("generateFFMPEG", null, returnMap);
 			}
 		} catch (Exception err) {
 			log.error("[convertToFLV]", err);

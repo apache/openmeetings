@@ -26,7 +26,9 @@ import org.apache.openmeetings.web.common.HeaderPanel;
 import org.apache.openmeetings.web.util.OmUrlFragment;
 import org.apache.openmeetings.web.util.OmUrlFragment.AreaKeys;
 import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.RuntimeConfigurationType;
 import org.apache.wicket.markup.head.CssHeaderItem;
+import org.apache.wicket.markup.head.CssReferenceHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.head.PriorityHeaderItem;
@@ -83,6 +85,8 @@ public abstract class BasePage extends AsyncUrlFragmentAwarePage {
 	public void renderHead(IHeaderResponse response) {
 		response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forReference(Application.get().getJavaScriptLibrarySettings().getJQueryReference())));
 		super.renderHead(response);
+		response.render(CssReferenceHeaderItem.forUrl(String.format("css/theme_om/jquery-ui-1.11.4.custom.%scss"
+				, RuntimeConfigurationType.DEVELOPMENT == getApplication().getConfigurationType() ? "" : "min.")));
 		if (isRtl()) {
 			response.render(CssHeaderItem.forUrl("css/theme-rtl.css"));
 			response.render(CssHeaderItem.forUrl("css/admin-rtl.css"));

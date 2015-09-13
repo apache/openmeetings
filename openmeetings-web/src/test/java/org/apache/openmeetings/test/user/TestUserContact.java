@@ -27,9 +27,9 @@ import static org.junit.Assert.assertTrue;
 import java.util.List;
 import java.util.Random;
 
-import org.apache.openmeetings.db.dao.user.OrganisationDao;
+import org.apache.openmeetings.db.dao.user.GroupDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
-import org.apache.openmeetings.db.entity.user.OrganisationUser;
+import org.apache.openmeetings.db.entity.user.GroupUser;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.test.AbstractWicketTester;
 import org.junit.Test;
@@ -39,7 +39,7 @@ public class TestUserContact extends AbstractWicketTester {
 	@Autowired
 	private UserDao userDao;
 	@Autowired
-	private OrganisationDao orgDao;
+	private GroupDao groupDao;
 	Random random = new Random();
 	
 	@Test
@@ -48,17 +48,17 @@ public class TestUserContact extends AbstractWicketTester {
 	}
 	
 	@Test
-	public void createUserWithOrganisation() throws Exception {
+	public void createUserWithGroup() throws Exception {
 		int rnd = random.nextInt();
 		User u = getUser(rnd);
-		u.getOrganisationUsers().add(new OrganisationUser(orgDao.get(1L)));
+		u.getGroupUsers().add(new GroupUser(groupDao.get(1L)));
 		u = userDao.update(u, null);
 		assertTrue("Password should be set as expected", userDao.verifyPassword(u.getId(), "pass" + rnd));
 		
 		User u1 = userDao.get(u.getId());
 		assertNotNull("Just created user should not be null", u1);
-		assertNotNull("Just created user should have non null org-users", u1.getOrganisationUsers());
-		assertFalse("Just created user should have not empty org-users", u1.getOrganisationUsers().isEmpty());
+		assertNotNull("Just created user should have non null org-users", u1.getGroupUsers());
+		assertFalse("Just created user should have not empty org-users", u1.getGroupUsers().isEmpty());
 	}
 	
 	@Test

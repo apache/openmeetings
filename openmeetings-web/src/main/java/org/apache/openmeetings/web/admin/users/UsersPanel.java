@@ -106,8 +106,8 @@ public class UsersPanel extends AdminPanel {
 		add(container.getLinks());
 		add(navigator);
 
-		UserDao usersDaoImpl = getBean(UserDao.class);
-		form = new UserForm("form", listContainer, usersDaoImpl.getNewUserInstance(usersDaoImpl.get(getUserId())), warning);
+		UserDao userDao = getBean(UserDao.class);
+		form = new UserForm("form", listContainer, userDao.getNewUserInstance(userDao.get(getUserId())), warning);
 		form.showNewRecord();
 		add(form, warning);
 	}

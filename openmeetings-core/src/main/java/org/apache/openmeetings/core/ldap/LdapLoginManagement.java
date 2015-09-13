@@ -48,12 +48,12 @@ import org.apache.directory.ldap.client.api.LdapConnection;
 import org.apache.directory.ldap.client.api.LdapNetworkConnection;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.server.LdapConfigDao;
-import org.apache.openmeetings.db.dao.user.OrganisationDao;
+import org.apache.openmeetings.db.dao.user.GroupDao;
 import org.apache.openmeetings.db.dao.user.StateDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.server.LdapConfig;
-import org.apache.openmeetings.db.entity.user.Organisation;
-import org.apache.openmeetings.db.entity.user.OrganisationUser;
+import org.apache.openmeetings.db.entity.user.Group;
+import org.apache.openmeetings.db.entity.user.GroupUser;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Right;
 import org.apache.openmeetings.db.entity.user.User.Type;
@@ -149,7 +149,7 @@ public class LdapLoginManagement {
 	@Autowired
 	private UserDao userDao;
 	@Autowired
-	private OrganisationDao orgDao;
+	private GroupDao groupDao;
 	@Autowired
 	private TimezoneUtil timezoneUtil;
 
@@ -348,7 +348,7 @@ public class LdapLoginManagement {
 						u.setType(Type.ldap);
 						u.getRights().remove(Right.Login);
 						u.setDomainId(domainId);
-						u.getOrganisationUsers().add(new OrganisationUser(orgDao.get(cfgDao.getConfValue(CONFIG_DEFAULT_GROUP_ID, Long.class, "-1"))));
+						u.getGroupUsers().add(new GroupUser(groupDao.get(cfgDao.getConfValue(CONFIG_DEFAULT_GROUP_ID, Long.class, "-1"))));
 						u.setLogin(login);
 						u.setShowContactDataToContacts(true);
 					}
@@ -409,22 +409,22 @@ public class LdapLoginManagement {
 						Rdn namer = g.getRdn();
 						String name = namer.getValue().toString();
 						if (!Strings.isEmpty(name)) {
-							Organisation o = orgDao.get(name);
+							Group o = groupDao.get(name);
 							boolean found = false;
 							if (o == null) {
-								o = new Organisation();
+								o = new Group();
 								o.setName(name);
-								o = orgDao.update(o, u.getId());
+								o = groupDao.update(o, u.getId());
 							} else {
-								for (OrganisationUser ou : u.getOrganisationUsers()) {
-									if (ou.getOrganisation().getName().equals(name)) {
+								for (GroupUser ou : u.getGroupUsers()) {
+									if (ou.getGroup().getName().equals(name)) {
 										found = true;
 										break;
 									}
 								}
 							}
 							if (!found) {
-								u.getOrganisationUsers().add(new OrganisationUser(o));
+								u.getGroupUsers().add(new GroupUser(o));
 								userDao.update(u, u.getId());
 								log.debug("Going to add user to group:: " + name);
 							}

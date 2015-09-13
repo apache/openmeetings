@@ -53,7 +53,7 @@ public class ServerDao implements IDataProviderDao<Server> {
 	private EntityManager em;
 
 	@Autowired
-	private UserDao usersDao;
+	private UserDao userDao;
 	
 	/**
 	 * Get a list of all available servers
@@ -163,13 +163,13 @@ public class ServerDao implements IDataProviderDao<Server> {
 		if (entity.getId() > 0) {
 			entity.setUpdated(new Date());
 			if (userId != null) {
-				entity.setUpdatedby(usersDao.get(userId));
+				entity.setUpdatedby(userDao.get(userId));
 			}
 			em.merge(entity);
 		} else {
 			entity.setInserted(new Date());
 			if (userId != null) {
-				entity.setInsertedby(usersDao.get(userId));
+				entity.setInsertedby(userDao.get(userId));
 			}
 			em.persist(entity);
 		}
@@ -187,7 +187,7 @@ public class ServerDao implements IDataProviderDao<Server> {
 		if (entity.getId() > 0) {
 			entity.setUpdated(new Date());
 			if (userId != null) {
-				entity.setUpdatedby(usersDao.get(userId));
+				entity.setUpdatedby(userDao.get(userId));
 			}
 			entity.setDeleted(true);
 			em.merge(entity);

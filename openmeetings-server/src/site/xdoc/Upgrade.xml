@@ -30,7 +30,7 @@
 					<a class="fancybox-buttons" href="images/backup.png"><img src="images/backup.png" alt="" width="600" /></a>
 					<p>
 						The Text in the Administration &gt; Backup section actually just says
-						it all. The backup contains users, rooms, organizations and
+						it all. The backup contains users, rooms, groups and
 						appointments (Invitations and Reminders are NOT included in the
 						Backup and Reminders will not be send again!). The Backup contains
 						also all uploaded Files and Documents and will re-import them again.

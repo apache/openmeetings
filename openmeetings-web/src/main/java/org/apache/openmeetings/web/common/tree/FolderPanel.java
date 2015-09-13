@@ -21,11 +21,11 @@ package org.apache.openmeetings.web.common.tree;
 import static org.apache.openmeetings.web.app.Application.getBean;
 
 import org.apache.openmeetings.db.dao.file.FileExplorerItemDao;
-import org.apache.openmeetings.db.dao.record.FlvRecordingDao;
+import org.apache.openmeetings.db.dao.record.RecordingDao;
 import org.apache.openmeetings.db.entity.file.FileExplorerItem;
 import org.apache.openmeetings.db.entity.file.FileItem;
 import org.apache.openmeetings.db.entity.file.FileItem.Type;
-import org.apache.openmeetings.db.entity.record.FlvRecording;
+import org.apache.openmeetings.db.entity.record.Recording;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -57,7 +57,7 @@ public class FolderPanel extends Panel {
 			public void onConfigure(JQueryBehavior behavior) {
 				super.onConfigure(behavior);
 				behavior.setOption("hoverClass", Options.asString("ui-state-hover"));
-				behavior.setOption("accept", Options.asString(getDefaultModelObject() instanceof FlvRecording ? ".recorditem" : ".fileitem"));
+				behavior.setOption("accept", Options.asString(getDefaultModelObject() instanceof Recording ? ".recorditem" : ".fileitem"));
 			}
 			
 			@Override
@@ -74,10 +74,10 @@ public class FolderPanel extends Panel {
 					f.setParentItemId(pid > 0 ? pid : null);
 					f.setOwnerId(p.getOwnerId());
 					f.setRoomId(p.getRoomId());
-					if (f instanceof FlvRecording) {
-						FlvRecording r = (FlvRecording)f;
-						r.setOrganizationId(((FlvRecording)p).getOrganizationId());
-						getBean(FlvRecordingDao.class).update(r);
+					if (f instanceof Recording) {
+						Recording r = (Recording)f;
+						r.setGroupId(((Recording)p).getGroupId());
+						getBean(RecordingDao.class).update(r);
 					} else {
 						getBean(FileExplorerItemDao.class).update((FileExplorerItem)f);
 					}
@@ -99,7 +99,7 @@ public class FolderPanel extends Panel {
 				}
 			};
 			d.setContainment(".file.tree");
-			d.add(AttributeAppender.append("class", r instanceof FlvRecording ? "recorditem" : "fileitem"));
+			d.add(AttributeAppender.append("class", r instanceof Recording ? "recorditem" : "fileitem"));
 			drag = d;
 		}
 		drag.add(r.getId() < 1 ? new Label("name", r.getFileName()) : new AjaxEditableLabel<String>("name", Model.of(model.getObject().getFileName())) {
@@ -115,8 +115,8 @@ public class FolderPanel extends Panel {
 				super.onSubmit(target);
 				FileItem fi = model.getObject();
 				fi.setFileName(getEditor().getModelObject());
-				if (fi instanceof FlvRecording) {
-					getBean(FlvRecordingDao.class).update((FlvRecording)fi);
+				if (fi instanceof Recording) {
+					getBean(RecordingDao.class).update((Recording)fi);
 				} else {
 					getBean(FileExplorerItemDao.class).update((FileExplorerItem)fi);
 				}

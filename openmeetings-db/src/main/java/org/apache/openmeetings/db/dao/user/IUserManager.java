@@ -45,7 +45,7 @@ public interface IUserManager {
 			String firstname, String email, Date age, String street,
 			String additionalname, String fax, String zip, long stateId,
 			String town, long languageId, boolean sendWelcomeMessage,
-			List<Long> organisations, String phone, boolean sendSMS, Boolean sendConfirmation,
+			List<Long> groups, String phone, boolean sendSMS, Boolean sendConfirmation,
 			TimeZone timezone, Boolean forceTimeZoneCheck,
 			String userOffers, String userSearchs, Boolean showContactData,
 			Boolean showContactDataToContacts, String activatedHash) throws Exception;

@@ -22,6 +22,7 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
 import java.util.Date;
 
+import javax.jws.WebMethod;
 import javax.jws.WebParam;
 import javax.jws.WebService;
 import javax.ws.rs.DELETE;
@@ -96,6 +97,7 @@ public class UserWebService {
 	 * @return - {@link ServiceResult} with error code or SID and userId
 	 */
 	@GET
+	@WebMethod
 	@Path("/login")
 	public ServiceResult login(@WebParam @QueryParam("user") String login, @WebParam @QueryParam("pass") String pass) {
 		try {
@@ -335,7 +337,7 @@ public class UserWebService {
 	/**
 	 * Kick a user by its public SID
 	 * 
-	 * @param SID
+	 * @param sid
 	 *            The SID from getSession
 	 * @param publicSID
 	 *            the publicSID (you can get it from the call to get users in a
@@ -343,8 +345,8 @@ public class UserWebService {
 	 * @return - <code>true</code> if user was kicked
 	 */
 	@POST
-	@Path("/kick/{publicSID}")
-	public ServiceResult kick(@WebParam @QueryParam("sid") String sid, @PathParam("publicSID") String publicSID) throws ServiceException {
+	@Path("/kick/{publicsid}")
+	public ServiceResult kick(@WebParam @QueryParam("sid") String sid, @PathParam("publicsid") String publicSID) throws ServiceException {
 		try {
 			Long userId = sessionDao.checkSession(sid);
 			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(userId))) {
@@ -355,7 +357,7 @@ public class UserWebService {
 				return new ServiceResult(-26L, "Insufficient permissins", Type.ERROR);
 			}
 		} catch (Exception err) {
-			log.error("[kickUser]", err);
+			log.error("[kick]", err);
 			throw new ServiceException(err.getMessage());
 		}
 	}
@@ -364,13 +366,13 @@ public class UserWebService {
 	 * Returns the count of users currently in the Room with given id
 	 * No admin rights are necessary for this call
 	 * 
-	 * @param SID The SID from UserService.getSession
+	 * @param sid The SID from UserService.getSession
 	 * @param roomId id of the room to get users
 	 * @return number of users as int
 	 */
 	@GET
 	@Path("/count/{roomId}")
-	public int count(@WebParam @QueryParam("sid") String sid, @PathParam("roomId") Long roomId) {
+	public int count(@WebParam @QueryParam("sid") String sid, @PathParam("roomid") Long roomId) {
 		Long userId = sessionDao.checkSession(sid);
 
 		if (AuthLevelUtil.hasUserLevel(userDao.getRights(userId))) {

@@ -49,7 +49,7 @@ import org.apache.openmeetings.db.entity.user.User;
 	@NamedQuery(name = "getInvitationByAppointment", query = "SELECT i FROM Invitation i "
 					+ "WHERE i.appointment.id = :appointmentId  ")
 })
-@Table(name = "invitations")
+@Table(name = "invitation")
 public class Invitation implements IDataProviderEntity {
 	private static final long serialVersionUID = 1L;
 

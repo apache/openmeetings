@@ -34,7 +34,7 @@ import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
 
 @Entity
-@Table(name = "sipusers")
+@Table(name = "sipuser")
 @Root(name="asterisksipuser")
 public class AsteriskSipUser implements Serializable {
 	private static final long serialVersionUID = 1L;

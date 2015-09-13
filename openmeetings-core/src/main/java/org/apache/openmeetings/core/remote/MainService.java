@@ -38,6 +38,7 @@ import org.apache.openmeetings.db.dao.server.SessiondataDao;
 import org.apache.openmeetings.db.dao.user.IUserManager;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.basic.Configuration;
+import org.apache.openmeetings.db.entity.log.ConferenceLog.Type;
 import org.apache.openmeetings.db.entity.room.Client;
 import org.apache.openmeetings.db.entity.server.RemoteSessionObject;
 import org.apache.openmeetings.db.entity.server.SOAPLogin;
@@ -125,12 +126,12 @@ public class MainService implements IPendingServiceCallback {
 		return null;
 	}
 
-	public Long setCurrentUserOrganization(String SID, Long organization_id) {
+	public Long setCurrentUserGroup(String SID, Long groupId) {
 		try {
-			sessiondataDao.updateUserOrg(SID, organization_id);
+			sessiondataDao.updateUserGroup(SID, groupId);
 			return 1L;
 		} catch (Exception err) {
-			log.error("[setCurrentUserOrganization]", err);
+			log.error("[setCurrentUserGroup]", err);
 		}
 		return -1L;
 	}
@@ -237,7 +238,7 @@ public class MainService implements IPendingServiceCallback {
 
 			// Log the User
 			conferenceLogDao.addConferenceLog(
-					"nicknameEnter", currentClient.getUserId(), streamId,
+					Type.nicknameEnter, currentClient.getUserId(), streamId,
 					null, currentClient.getUserip(), currentClient.getScope());
 
 			this.sessionManager.updateClientByStreamId(streamId,
@@ -334,8 +335,8 @@ public class MainService implements IPendingServiceCallback {
 	}
 
 	/**
-	 * this function returns a user object with organization objects set only
-	 * the organization is not available for users that are using a HASH mechanism
+	 * this function returns a user object with group objects set only
+	 * the group is not available for users that are using a HASH mechanism
 	 * cause the SOAP/REST API does not guarantee that the user connected to the HASH
 	 * has a valid user object set
 	 * 
@@ -350,7 +351,7 @@ public class MainService implements IPendingServiceCallback {
 			User defaultRpcUser = userDao.get(defaultRpcUserid);
 			
 			User user = new User();
-			user.setOrganisationUsers(defaultRpcUser.getOrganisationUsers());
+			user.setGroupUsers(defaultRpcUser.getGroupUsers());
 			
 			return user;
 			

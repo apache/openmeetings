@@ -212,9 +212,9 @@ public class SessiondataDao {
 		return false;
 	}
 
-	public Boolean updateUserOrg(String SID, Long organizationId) {
+	public Boolean updateUserGroup(String SID, Long groupId) {
 		try {
-			log.debug("updateUserOrg User: " + organizationId + " || " + SID);
+			log.debug("updateUserGroup User: " + groupId + " || " + SID);
 			TypedQuery<Sessiondata> query = em.createNamedQuery("getSessionById", Sessiondata.class).setParameter("sessionId", SID);
 
 			List<Sessiondata> sessions = query.getResultList();
@@ -229,10 +229,10 @@ public class SessiondataDao {
 				return false;
 			}
 			log.debug("Found session to update: " + sessiondata.getSessionId()
-					+ " organisationId: " + organizationId);
+					+ " groupId: " + groupId);
 
 			sessiondata.setRefreshed(new Date());
-			sessiondata.setOrganizationId(organizationId);
+			sessiondata.setGroupId(groupId);
 			if (sessiondata.getId() == null) {
 				em.persist(sessiondata);
 			} else {

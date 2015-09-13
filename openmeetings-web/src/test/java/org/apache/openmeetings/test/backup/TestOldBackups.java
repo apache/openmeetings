@@ -31,8 +31,8 @@ import org.apache.openmeetings.backup.BackupImport;
 import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
 import org.apache.openmeetings.db.dao.calendar.MeetingMemberDao;
 import org.apache.openmeetings.db.dao.room.RoomDao;
-import org.apache.openmeetings.db.dao.room.RoomOrganisationDao;
-import org.apache.openmeetings.db.dao.user.OrganisationDao;
+import org.apache.openmeetings.db.dao.room.RoomGroupDao;
+import org.apache.openmeetings.db.dao.user.GroupDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.test.AbstractJUnitDefaults;
 import org.junit.Test;
@@ -46,9 +46,9 @@ public class TestOldBackups extends AbstractJUnitDefaults {
 	@Autowired
 	private BackupImport backupController;
 	@Autowired
-	private OrganisationDao organisationDao;
+	private GroupDao groupDao;
 	@Autowired
-	private UserDao usersDao;
+	private UserDao userDao;
 	@Autowired
 	private RoomDao roomDao;
 	@Autowired
@@ -56,7 +56,7 @@ public class TestOldBackups extends AbstractJUnitDefaults {
 	@Autowired
 	private MeetingMemberDao meetingMemberDao;
 	@Autowired
-	private RoomOrganisationDao roomOrganisationDao;
+	private RoomGroupDao roomGroupDao;
 
 	@Test
 	public void importOldVersions() {
@@ -66,10 +66,10 @@ public class TestOldBackups extends AbstractJUnitDefaults {
 		if (!backupsHome.exists() || !backupsHome.isDirectory()) {
 			fail("Invalid directory is specified for backup files: " + backupsDir);
 		}
-		long orgCount = 0;
+		long groupCount = 0;
 		long userCount = 0;
 		long roomCount = 0;
-		long roomOrgCount = 0;
+		long roomGroupCount = 0;
 		long apptCount = 0;
 		long meetingMembersCount = 0;
 		for (File backup : backupsHome.listFiles()) {
@@ -79,23 +79,23 @@ public class TestOldBackups extends AbstractJUnitDefaults {
 			try {
 				is = new FileInputStream(backup);
 				backupController.performImport(is);
-				long newOrgCount = organisationDao.count();
-				long newUserCount = usersDao.count();
+				long newGroupCount = groupDao.count();
+				long newUserCount = userDao.count();
 				long newRoomCount = roomDao.count();
-				long newRoomOrgCount = roomOrganisationDao.get().size();
+				long newRoomGroupCount = roomGroupDao.get().size();
 				long newApptCount = appointmentDao.get().size();
 				long newMeetingMembersCount = meetingMemberDao.getMeetingMembers().size();
-				assertTrue("Zero organizations were imported from " + name, newOrgCount > orgCount);
+				assertTrue("Zero groups were imported from " + name, newGroupCount > groupCount);
 				assertTrue("Zero users were imported from " + name, newUserCount > userCount);
 				assertTrue("Zero rooms were imported from " + name, newRoomCount > roomCount);
-				assertTrue("Zero room organizations were imported from " + name, newRoomOrgCount > roomOrgCount);
+				assertTrue("Zero room groups were imported from " + name, newRoomGroupCount > roomGroupCount);
 				assertTrue("Zero appointments were imported from " + name, newApptCount > apptCount);
 				assertTrue("Zero meeting members were imported from " + name, newMeetingMembersCount > meetingMembersCount);
 				
-				orgCount = newOrgCount;
+				groupCount = newGroupCount;
 				userCount = newUserCount;
 				roomCount = newRoomCount;
-				roomOrgCount = newRoomOrgCount;
+				roomGroupCount = newRoomGroupCount;
 				apptCount = newApptCount;
 				meetingMembersCount = newMeetingMembersCount;
 			} catch (Exception e) {

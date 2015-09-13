@@ -97,7 +97,7 @@ public class RoomWebService {
 	 * them via SOAP. The Roomtype can be 1 for conference rooms or 2 for
 	 * audience rooms.
 	 * 
-	 * @param SID
+	 * @param sid
 	 *            The SID of the User. This SID must be marked as Loggedin
 	 * @param type
 	 * @return - list of public rooms
@@ -125,8 +125,8 @@ public class RoomWebService {
 	/**
 	 * returns a conference room object
 	 * 
-	 * @param SID - The SID of the User. This SID must be marked as Loggedin
-	 * @param roomId - the room id
+	 * @param sid - The SID of the User. This SID must be marked as Loggedin
+	 * @param id - the room id
 	 * @return - room with the id given
 	 */
 	@GET
@@ -147,8 +147,8 @@ public class RoomWebService {
 	 * 
 	 * @param sid
 	 *            The SID of the User. This SID must be marked as Loggedin
-	 * @param typeId
-	 *            Id of the the room type
+	 * @param type
+	 *            type of the room
 	 * @param externalType
 	 *            you can specify your system-name or type of room here, for
 	 *            example "moodle"
@@ -258,9 +258,8 @@ public class RoomWebService {
 	/**
 	 * Delete a room by its room id
 	 * 
-	 * @param SID
-	 *            The SID of the User. This SID must be marked as Loggedin
-	 * @param roomId
+	 * @param sid - The SID of the User. This SID must be marked as Loggedin
+	 * @param id - The id of the room
 	 * 
 	 * @return - id of the room deleted
 	 */
@@ -284,9 +283,9 @@ public class RoomWebService {
 	 * 
 	 * Returns positive value if authentication was successful.
 	 * 
-	 * @param SID
+	 * @param sid
 	 *            The SID of the User. This SID must be marked as Loggedin
-	 * @param roomId
+	 * @param id
 	 *            the room id
 	 *            
 	 * @return - 1 in case of success, -2 otherwise
@@ -329,9 +328,9 @@ public class RoomWebService {
 	 * 
 	 * Returns positive value if authentication was successful.
 	 * 
-	 * @param SID
+	 * @param sid
 	 *            The SID of the User. This SID must be marked as Loggedin
-	 * @param roomId
+	 * @param id
 	 *            the room id
 	 *            
 	 * @return - 1 in case of success, -2 otherwise
@@ -365,10 +364,10 @@ public class RoomWebService {
 	/**
 	 * kick all uses of a certain room
 	 * 
-	 * @param SID
+	 * @param sid
 	 *            The SID of the User. This SID must be marked as Loggedin
 	 *            _Admin
-	 * @param roomId
+	 * @param id
 	 *            the room id
 	 *            
 	 * @return - true if user was kicked, false otherwise
@@ -395,8 +394,8 @@ public class RoomWebService {
 	/**
 	 * Returns current users for rooms ids
 	 * 
-	 * @param SID - The SID of the User. This SID must be marked as Loggedin
-	 * @param ids
+	 * @param sid - The SID of the User. This SID must be marked as Loggedin
+	 * @param ids - id of the room you need counters for
 	 * @return - current users for rooms ids
 	 * @throws ServiceException
 	 */
@@ -430,6 +429,15 @@ public class RoomWebService {
 		return roomBeans;
 	}
 
+	/**
+	 * Method to get invitation hash with given parameters
+	 * 
+	 * @param sid - The SID of the User. This SID must be marked as Loggedin
+	 * @param invite - parameters of the invitation
+	 * @param sendmail - flag to determine if email should be sent or not
+	 * @return - serviceResult object with the result
+	 * @throws ServiceException - in case of any exception
+	 */
 	@POST
 	@Path("/hash")
 	private ServiceResult hash(@WebParam @QueryParam("sid") String sid, @WebParam @QueryParam("invite") InvitationDTO invite, @WebParam @QueryParam("sendmail") boolean sendmail) throws ServiceException {

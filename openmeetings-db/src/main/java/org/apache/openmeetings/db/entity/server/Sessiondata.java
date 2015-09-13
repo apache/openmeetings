@@ -70,8 +70,8 @@ public class Sessiondata implements Serializable {
 	@Column(name="language_id")
 	private Long languageId;
 	
-	@Column(name="organization_id")
-	private Long organizationId;
+	@Column(name="group_id")
+	private Long groupId;
 	
 	public Sessiondata() {
 	}
@@ -132,11 +132,11 @@ public class Sessiondata implements Serializable {
 		this.languageId = languageId;
 	}
 
-	public Long getOrganizationId() {
-		return organizationId;
+	public Long getGroupId() {
+		return groupId;
 	}
-	public void setOrganizationId(Long organizationId) {
-		this.organizationId = organizationId;
+	public void setGroupId(Long groupId) {
+		this.groupId = groupId;
 	}
 	
 }

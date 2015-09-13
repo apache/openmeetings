@@ -24,11 +24,11 @@ import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import java.util.Date;
 
 import org.apache.openmeetings.db.dao.file.FileExplorerItemDao;
-import org.apache.openmeetings.db.dao.record.FlvRecordingDao;
+import org.apache.openmeetings.db.dao.record.RecordingDao;
 import org.apache.openmeetings.db.entity.file.FileExplorerItem;
 import org.apache.openmeetings.db.entity.file.FileItem;
 import org.apache.openmeetings.db.entity.file.FileItem.Type;
-import org.apache.openmeetings.db.entity.record.FlvRecording;
+import org.apache.openmeetings.db.entity.record.Recording;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.common.AddFolderDialog;
 import org.apache.openmeetings.web.common.ConfirmableAjaxLink;
@@ -56,7 +56,7 @@ public abstract class FileTreePanel extends Panel {
 	protected final IModel<FileItem> selectedFile = new CompoundPropertyModel<FileItem>((FileItem)null);
 	protected final IModel<String> homeSize = Model.of((String)null);
 	protected final IModel<String> publicSize = Model.of((String)null);
-	final ConvertingErrorsDialog errorsDialog = new ConvertingErrorsDialog("errors", Model.of((FlvRecording)null));
+	final ConvertingErrorsDialog errorsDialog = new ConvertingErrorsDialog("errors", Model.of((Recording)null));
 	protected FileItemTree<? extends FileItem> selected;
 	protected RepeatingView treesView = new RepeatingView("tree");
 
@@ -134,8 +134,8 @@ public abstract class FileTreePanel extends Panel {
 	void delete(FileItem f, AjaxRequestTarget target) {
 		long id = f.getId();
 		if (id > 0) {
-			if (f instanceof FlvRecording) {
-				getBean(FlvRecordingDao.class).delete((FlvRecording)f);
+			if (f instanceof Recording) {
+				getBean(RecordingDao.class).delete((Recording)f);
 			} else {
 				getBean(FileExplorerItemDao.class).delete((FileExplorerItem)f);
 			}
@@ -144,19 +144,19 @@ public abstract class FileTreePanel extends Panel {
 	}
 	
 	public void createRecordingFolder(String name) {
-		FlvRecording f = new FlvRecording();
+		Recording f = new Recording();
 		f.setFileName(name);
 		f.setInsertedBy(getUserId());
 		f.setInserted(new Date());
 		f.setType(Type.Folder);;
-		FlvRecording p = (FlvRecording)selectedFile.getObject();
+		Recording p = (Recording)selectedFile.getObject();
 		long parentId = p.getId();
 		if (Type.Folder == p.getType()) {
 			f.setParentItemId(parentId);
 		}
 		f.setOwnerId(p.getOwnerId());
-		f.setOrganizationId(p.getOrganizationId());
-		getBean(FlvRecordingDao.class).update(f);
+		f.setGroupId(p.getGroupId());
+		getBean(RecordingDao.class).update(f);
 	}
 	
 	public abstract void defineTrees();

@@ -32,9 +32,9 @@ import java.io.InputStream;
 
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.openmeetings.db.dao.record.FlvRecordingDao;
-import org.apache.openmeetings.db.dao.user.OrganisationUserDao;
-import org.apache.openmeetings.db.entity.record.FlvRecording;
+import org.apache.openmeetings.db.dao.record.RecordingDao;
+import org.apache.openmeetings.db.dao.user.GroupUserDao;
+import org.apache.openmeetings.db.entity.record.Recording;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
@@ -70,7 +70,7 @@ public abstract class RecordingResourceReference extends ResourceReference {
 			@Override
 			protected ResourceResponse newResourceResponse(Attributes attributes) {
 				ResourceResponse rr = new ResourceResponse();
-				FlvRecording r = getRecording(attributes);
+				Recording r = getRecording(attributes);
 				if (r != null) {
 					file = getFile(r);
 					IResourceStream rs = file == null ? null : new FileResourceStream(file);
@@ -136,8 +136,8 @@ public abstract class RecordingResourceReference extends ResourceReference {
 	}
 
 	abstract String getContentType();
-	abstract String getFileName(FlvRecording r);
-	abstract File getFile(FlvRecording r);
+	abstract String getFileName(Recording r);
+	abstract File getFile(Recording r);
 	
 	private Long getLong(StringValue id) {
 		Long result = null;
@@ -149,8 +149,8 @@ public abstract class RecordingResourceReference extends ResourceReference {
 		return result;
 	}
 	
-	private FlvRecording getRecording(Long id) {
-		FlvRecording r = getBean(FlvRecordingDao.class).get(id);
+	private Recording getRecording(Long id) {
+		Recording r = getBean(RecordingDao.class).get(id);
 		// TODO should we process public?
 		// || r.getOwnerId() == 0 || r.getParentFileExplorerItemId() == null || r.getParentFileExplorerItemId() == 0
 		if (r == null) {
@@ -159,7 +159,7 @@ public abstract class RecordingResourceReference extends ResourceReference {
 		if (r.getOwnerId() == null || getUserId() == r.getOwnerId()) {
 			return r;
 		}
-		if (r.getOrganizationId() == null || getBean(OrganisationUserDao.class).isUserInOrganization(r.getOrganizationId(), getUserId())) {
+		if (r.getGroupId() == null || getBean(GroupUserDao.class).isUserInGroup(r.getGroupId(), getUserId())) {
 			return r;
 		}
 		//TODO external group check was added for plugin recording download
@@ -170,7 +170,7 @@ public abstract class RecordingResourceReference extends ResourceReference {
 		return null;
 	}
 	
-	private FlvRecording getRecording(Attributes attributes) {
+	private Recording getRecording(Attributes attributes) {
 		PageParameters params = attributes.getParameters();
 		StringValue idStr = params.get("id");
 		Long id = getLong(idStr);

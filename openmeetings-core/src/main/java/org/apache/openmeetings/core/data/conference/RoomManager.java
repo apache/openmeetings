@@ -36,7 +36,7 @@ import org.apache.openmeetings.db.dao.room.SipDao;
 import org.apache.openmeetings.db.dao.server.ISessionManager;
 import org.apache.openmeetings.db.dto.basic.SearchResult;
 import org.apache.openmeetings.db.entity.room.Room;
-import org.apache.openmeetings.db.entity.room.RoomOrganisation;
+import org.apache.openmeetings.db.entity.room.RoomGroup;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -264,18 +264,18 @@ public class RoomManager {
 		return null;
 	}
 
-	public List<RoomOrganisation> getOrganisationsByRoom(long roomId) {
+	public List<RoomGroup> getGroupsByRoom(long roomId) {
 		try {
-			String hql = "select c from RoomOrganisation as c "
+			String hql = "select c from RoomGroup as c "
 					+ "where c.room.id = :id "
 					+ "AND c.deleted = false";
-			TypedQuery<RoomOrganisation> q = em.createQuery(hql, RoomOrganisation.class);
+			TypedQuery<RoomGroup> q = em.createQuery(hql, RoomGroup.class);
 
 			q.setParameter("id", roomId);
-			List<RoomOrganisation> ll = q.getResultList();
+			List<RoomGroup> ll = q.getResultList();
 			return ll;
 		} catch (Exception ex2) {
-			log.error("[getOrganisationsByRoom] ", ex2);
+			log.error("[getGroupsByRoom] ", ex2);
 		}
 		return null;
 	}
@@ -326,38 +326,38 @@ public class RoomManager {
     }
 
 	/**
-	 * get List of Rooms_Organisation by organisation and roomtype
+	 * get List of RoomGroup by group and roomtype
 	 * 
-	 * @param organisationId
+	 * @param groupId
 	 * @param roomtypesId
 	 * @return
 	 */
-	public List<RoomOrganisation> getRoomsOrganisationByOrganisationIdAndRoomType(long organisationId, long roomtypesId) {
+	public List<RoomGroup> getRoomGroupByGroupIdAndRoomType(long groupId, long roomtypesId) {
 		try {
-			TypedQuery<RoomOrganisation> q = em.createNamedQuery("getRoomsOrganisationByOrganisationIdAndRoomType", RoomOrganisation.class);
+			TypedQuery<RoomGroup> q = em.createNamedQuery("getRoomGroupByGroupIdAndRoomType", RoomGroup.class);
 			q.setParameter("types", Room.Type.get(roomtypesId));
-			q.setParameter("organisationId", organisationId);
+			q.setParameter("groupId", groupId);
 			return q.getResultList();
 		} catch (Exception ex2) {
-			log.error("[getRoomsByOrganisation] ", ex2);
+			log.error("[getRoomGroupByGroupIdAndRoomType] ", ex2);
 		}
 		return null;
 	}
 
 	/**
-	 * Gets all rooms by an organisation
+	 * Gets all rooms by an group
 	 * 
-	 * @param organisationId
-	 * @return list of Rooms_Organisation with Rooms as Sub-Objects or null
+	 * @param groupId
+	 * @return list of RoomGroup with Rooms as Sub-Objects or null
 	 */
-	public List<RoomOrganisation> getRoomsOrganisationByOrganisationId(long organisationId) {
+	public List<RoomGroup> getRoomGroupByGroupId(long groupId) {
 		try {
-			TypedQuery<RoomOrganisation> query = em.
-					createNamedQuery("getRoomsOrganisationByOrganisationId", RoomOrganisation.class);
+			TypedQuery<RoomGroup> query = em.
+					createNamedQuery("getRoomGroupByGroupId", RoomGroup.class);
 
-			query.setParameter("organisationId", organisationId);
+			query.setParameter("groupId", groupId);
 
-			List<RoomOrganisation> ll = query.getResultList();
+			List<RoomGroup> ll = query.getResultList();
 
 			return ll;
 		} catch (Exception ex2) {
@@ -366,48 +366,47 @@ public class RoomManager {
 		return null;
 	}
 
-	public SearchResult<RoomOrganisation> getRoomsOrganisationsByOrganisationId(long organisationId, int start, int max, String orderby,
+	public SearchResult<RoomGroup> getRoomGroupByGroupId(long groupId, int start, int max, String orderby,
 			boolean asc) {
 		try {
-			SearchResult<RoomOrganisation> sResult = new SearchResult<RoomOrganisation>();
-			sResult.setObjectName(RoomOrganisation.class.getName());
-			sResult.setRecords(this.selectMaxFromRoomsByOrganisation(organisationId).longValue());
-			sResult.setResult(getRoomsOrganisationByOrganisationId(organisationId, start, max, orderby, asc));
+			SearchResult<RoomGroup> sResult = new SearchResult<RoomGroup>();
+			sResult.setObjectName(RoomGroup.class.getName());
+			sResult.setRecords(this.selectMaxFromRoomsByGroup(groupId).longValue());
+			sResult.setResult(getRoomGroupsByGroupId(groupId, start, max, orderby, asc));
 			return sResult;
 		} catch (Exception ex2) {
-			log.error("[getRoomsByOrganisation] ", ex2);
+			log.error("[getRoomGroupByGroupId] ", ex2);
 		}
 		return null;
 	}
 
-	public Integer selectMaxFromRoomsByOrganisation(long organisationId) {
+	public Integer selectMaxFromRoomsByGroup(long groupId) {
 		try {
 			// get all users
-			TypedQuery<RoomOrganisation> q = em.createNamedQuery("selectMaxFromRoomsByOrganisation", RoomOrganisation.class);
+			TypedQuery<RoomGroup> q = em.createNamedQuery("selectMaxFromRoomsByGroup", RoomGroup.class);
 
-			q.setParameter("organisationId", organisationId);
-			List<RoomOrganisation> ll = q.getResultList();
+			q.setParameter("groupId", groupId);
+			List<RoomGroup> ll = q.getResultList();
 
 			return ll.size();
 		} catch (Exception ex2) {
-			log.error("[selectMaxFromRooms] ", ex2);
+			log.error("[selectMaxFromRoomsByGroup] ", ex2);
 		}
 		return null;
 	}
 
 	/**
 	 * 
-	 * @param organisationId
+	 * @param groupId
 	 * @param start
 	 * @param max
 	 * @param orderby
 	 * @param asc
 	 * @return
 	 */
-	private List<RoomOrganisation> getRoomsOrganisationByOrganisationId(long organisationId, int start, int max, String orderby,
-			boolean asc) {
+	private List<RoomGroup> getRoomGroupsByGroupId(long groupId, int start, int max, String orderby, boolean asc) {
 		try {
-			String hql = "select c from RoomOrganisation as c where c.organisation.id = :organisationId AND c.deleted = false";
+			String hql = "select c from RoomGroup as c where c.group.id = :groupId AND c.deleted = false";
 			if (orderby.startsWith("c.")) {
 				hql += "ORDER BY " + orderby;
 			} else {
@@ -419,16 +418,16 @@ public class RoomManager {
 				hql += " DESC";
 			}
 
-			TypedQuery<RoomOrganisation> q = em.createQuery(hql, RoomOrganisation.class);
+			TypedQuery<RoomGroup> q = em.createQuery(hql, RoomGroup.class);
 
-			q.setParameter("organisationId", organisationId);
+			q.setParameter("groupId", groupId);
 			q.setFirstResult(start);
 			q.setMaxResults(max);
-			List<RoomOrganisation> ll = q.getResultList();
+			List<RoomGroup> ll = q.getResultList();
 
 			return ll;
 		} catch (Exception ex2) {
-			log.error("[getRoomsByOrganisation] ", ex2);
+			log.error("[getRoomsByGroup] ", ex2);
 		}
 		return null;
 	}

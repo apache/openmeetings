@@ -34,7 +34,7 @@ import org.apache.openmeetings.db.entity.IDataProviderEntity;
 	@NamedQuery(name = "getPollTypes", query = "SELECT pt FROM PollType pt"),
 	@NamedQuery(name = "getPollType", query = "SELECT pt FROM PollType pt WHERE pt.id = :pollTypesId")		
 })
-@Table(name = "poll_types")
+@Table(name = "poll_type")
 public class PollType implements IDataProviderEntity {
 	private static final long serialVersionUID = 1L;
 

@@ -35,7 +35,7 @@ public class RegisterUserTemplate extends AbstractTemplatePanel {
 		add(verification.add(new Label("verification_url2", verification_url))
 			.add(new ExternalLink("verification_url1", verification_url))
 			.setVisible(verification_url != null));
-		add(new Label("organisationLbl", getString(511, langId)));
+		add(new Label("groupLbl", getString(511, langId)));
 	}
 
 	public static String getEmail(String username, String userpass, String email, String verification_url) {

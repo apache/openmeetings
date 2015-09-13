@@ -48,14 +48,14 @@ import org.apache.openmeetings.db.dao.label.LabelDao;
 import org.apache.openmeetings.db.dao.server.ISessionManager;
 import org.apache.openmeetings.db.dao.server.SessiondataDao;
 import org.apache.openmeetings.db.dao.user.IUserManager;
-import org.apache.openmeetings.db.dao.user.OrganisationDao;
+import org.apache.openmeetings.db.dao.user.GroupDao;
 import org.apache.openmeetings.db.dao.user.StateDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.dto.basic.SearchResult;
 import org.apache.openmeetings.db.entity.room.Client;
 import org.apache.openmeetings.db.entity.server.Sessiondata;
 import org.apache.openmeetings.db.entity.user.Address;
-import org.apache.openmeetings.db.entity.user.OrganisationUser;
+import org.apache.openmeetings.db.entity.user.GroupUser;
 import org.apache.openmeetings.db.entity.user.State;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Right;
@@ -93,7 +93,7 @@ public class UserManager implements IUserManager {
 	@Autowired
 	private StateDao stateDao;
 	@Autowired
-	private OrganisationDao orgDao;
+	private GroupDao groupDao;
 	@Autowired
 	private UserDao userDao;
 	@Autowired
@@ -263,7 +263,7 @@ public class UserManager implements IUserManager {
 	/**
 	 * Method to register a new User, User will automatically be added to the
 	 * default user_level(1) new users will be automatically added to the
-	 * Organisation with the id specified in the configuration value
+	 * Group with the id specified in the configuration value
 	 * default_group_id
 	 * 
 	 * @param login
@@ -338,7 +338,7 @@ public class UserManager implements IUserManager {
 	 * @param town
 	 * @param languageId
 	 * @param sendWelcomeMessage
-	 * @param organisations
+	 * @param groups
 	 * @param phone
 	 * @param sendSMS
 	 * @param sendConfirmation
@@ -357,7 +357,7 @@ public class UserManager implements IUserManager {
 			String firstname, String email, Date age, String street,
 			String additionalname, String fax, String zip, long stateId,
 			String town, long languageId, boolean sendWelcomeMessage,
-			List<Long> organisations, String phone, boolean sendSMS, Boolean sendConfirmation,
+			List<Long> groups, String phone, boolean sendSMS, Boolean sendConfirmation,
 			TimeZone timezone, Boolean forceTimeZoneCheck,
 			String userOffers, String userSearchs, Boolean showContactData,
 			Boolean showContactDataToContacts, String activatedHash) throws Exception {
@@ -391,14 +391,14 @@ public class UserManager implements IUserManager {
 					rights.remove(Right.Login);
 				}
 
-				List<OrganisationUser> orgList = new ArrayList<OrganisationUser>();
-				for (Long id : organisations) {
-					orgList.add(new OrganisationUser(orgDao.get(id)));
+				List<GroupUser> groupList = new ArrayList<GroupUser>();
+				for (Long id : groups) {
+					groupList.add(new GroupUser(groupDao.get(id)));
 				}
 				User u = userDao.addUser(rights, firstname, login, lastname, languageId,
 						password, adr, sendSMS, age, hash, timezone,
 						forceTimeZoneCheck, userOffers, userSearchs, showContactData,
-						showContactDataToContacts, null, null, orgList, null);
+						showContactDataToContacts, null, null, groupList, null);
 				if (u == null) {
 					return -111L;
 				}
@@ -546,7 +546,7 @@ public class UserManager implements IUserManager {
 			u.setType(Type.oauth);
 			u.getRights().remove(Right.Login);;
 			u.setDomainId(serverId);
-			u.getOrganisationUsers().add(new OrganisationUser(orgDao.get(cfgDao.getConfValue(CONFIG_DEFAULT_GROUP_ID, Long.class, "-1"))));
+			u.getGroupUsers().add(new GroupUser(groupDao.get(cfgDao.getConfValue(CONFIG_DEFAULT_GROUP_ID, Long.class, "-1"))));
 			u.setLogin(login);
 			u.setShowContactDataToContacts(true);
 			u.setLastname(lastname);

@@ -25,9 +25,9 @@ import static org.apache.openmeetings.web.app.Application.getBean;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.openmeetings.db.dao.record.FlvRecordingLogDao;
-import org.apache.openmeetings.db.entity.record.FlvRecording;
-import org.apache.openmeetings.db.entity.record.FlvRecordingLog;
+import org.apache.openmeetings.db.dao.record.RecordingLogDao;
+import org.apache.openmeetings.db.entity.record.Recording;
+import org.apache.openmeetings.db.entity.record.RecordingLog;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
@@ -41,16 +41,16 @@ import org.apache.wicket.model.Model;
 import com.googlecode.wicket.jquery.ui.widget.dialog.AbstractDialog;
 import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
 
-public class ConvertingErrorsDialog extends AbstractDialog<FlvRecording> {
+public class ConvertingErrorsDialog extends AbstractDialog<Recording> {
 	private static final long serialVersionUID = 1L;
 	private final WebMarkupContainer container = new WebMarkupContainer("container");
 	private final Label message = new Label("message", Model.of((String)null));
-	private final ListView<FlvRecordingLog> logView = new ListView<FlvRecordingLog>("row") {
+	private final ListView<RecordingLog> logView = new ListView<RecordingLog>("row") {
 		private static final long serialVersionUID = 1L;
 
 		@Override
-		protected void populateItem(ListItem<FlvRecordingLog> item) {
-			FlvRecordingLog l = item.getModelObject();
+		protected void populateItem(ListItem<RecordingLog> item) {
+			RecordingLog l = item.getModelObject();
 			item.add(new Label("exitCode", l.getExitValue()));
 			item.add(new Label("message", l.getFullMessage()));
 			if (!"0".equals(l.getExitValue())) {
@@ -74,15 +74,15 @@ public class ConvertingErrorsDialog extends AbstractDialog<FlvRecording> {
 		return true;
 	}
 
-	public ConvertingErrorsDialog(String id, IModel<FlvRecording> model) {
+	public ConvertingErrorsDialog(String id, IModel<Recording> model) {
 		super(id, Application.getString(887), model);
 		add(container.add(message.setVisible(false), logView.setVisible(false)).setOutputMarkupId(true));
 	}
 	
 	@Override
 	protected void onOpen(IPartialPageRequestHandler handler) {
-		FlvRecording f = getModelObject();
-		List<FlvRecordingLog> logs = getBean(FlvRecordingLogDao.class).getByRecordingId(f.getId());
+		Recording f = getModelObject();
+		List<RecordingLog> logs = getBean(RecordingLogDao.class).getByRecordingId(f.getId());
 		if (f.getFileHash() == null) {
 			message.setVisible(true);
 			message.setDefaultModelObject(Application.getString(888));

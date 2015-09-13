@@ -141,7 +141,7 @@ public class ServerWebService {
 	/**
 	 * Method to delete server
 	 * 
-	 * @param SID
+	 * @param sid
 	 *            - session id to identify the user making request
 	 * @param id
 	 *            - the id of the server to delete

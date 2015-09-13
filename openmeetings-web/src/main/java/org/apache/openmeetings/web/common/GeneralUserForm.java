@@ -29,11 +29,11 @@ import java.util.Collection;
 import java.util.List;
 
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
-import org.apache.openmeetings.db.dao.user.OrganisationDao;
+import org.apache.openmeetings.db.dao.user.GroupDao;
 import org.apache.openmeetings.db.dao.user.StateDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
-import org.apache.openmeetings.db.entity.user.Organisation;
-import org.apache.openmeetings.db.entity.user.OrganisationUser;
+import org.apache.openmeetings.db.entity.user.Group;
+import org.apache.openmeetings.db.entity.user.GroupUser;
 import org.apache.openmeetings.db.entity.user.State;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Salutation;
@@ -123,47 +123,47 @@ public class GeneralUserForm extends Form<User> {
 		add(new DropDownChoice<State>("address.state", getBean(StateDao.class).get(), new ChoiceRenderer<State>("name", "id")));
 		add(new TextArea<String>("address.comment"));
 
-		final List<OrganisationUser> orgUsers;
+		final List<GroupUser> orgUsers;
 		if (isAdminForm) {
-			List<Organisation> orgList = getBean(OrganisationDao.class).get(0, Integer.MAX_VALUE);
-			orgUsers = new ArrayList<OrganisationUser>(orgList.size());
-			for (Organisation org : orgList) {
-				orgUsers.add(new OrganisationUser(org));
+			List<Group> orgList = getBean(GroupDao.class).get(0, Integer.MAX_VALUE);
+			orgUsers = new ArrayList<GroupUser>(orgList.size());
+			for (Group org : orgList) {
+				orgUsers.add(new GroupUser(org));
 			}
 		} else {
-			orgUsers = getModelObject().getOrganisationUsers();
+			orgUsers = getModelObject().getGroupUsers();
 		}
-		add(new Select2MultiChoice<OrganisationUser>("organisationUsers", null, new TextChoiceProvider<OrganisationUser>() {
+		add(new Select2MultiChoice<GroupUser>("groupUsers", null, new TextChoiceProvider<GroupUser>() {
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			protected String getDisplayText(OrganisationUser choice) {
-				return choice.getOrganisation().getName();
+			protected String getDisplayText(GroupUser choice) {
+				return choice.getGroup().getName();
 			}
 
 			@Override
-			protected Object getId(OrganisationUser choice) {
-				return choice.getOrganisation().getId();
+			protected Object getId(GroupUser choice) {
+				return choice.getGroup().getId();
 			}
 
 			@Override
-			public void query(String term, int page, Response<OrganisationUser> response) {
-				for (OrganisationUser ou : orgUsers) {
-					if (Strings.isEmpty(term) || (!Strings.isEmpty(term) && ou.getOrganisation().getName().contains(term))) {
+			public void query(String term, int page, Response<GroupUser> response) {
+				for (GroupUser ou : orgUsers) {
+					if (Strings.isEmpty(term) || (!Strings.isEmpty(term) && ou.getGroup().getName().contains(term))) {
 						response.add(ou);
 					}
 				}
 			}
 
 			@Override
-			public Collection<OrganisationUser> toChoices(Collection<String> _ids) {
+			public Collection<GroupUser> toChoices(Collection<String> _ids) {
 				List<Long> ids = new ArrayList<Long>();
 				for (String id : _ids) {
 					ids.add(Long.parseLong(id));
 				}
-				List<OrganisationUser> list = new ArrayList<OrganisationUser>();
-				for (Organisation o : getBean(OrganisationDao.class).get(ids)) {
-					list.add(new OrganisationUser(o));
+				List<GroupUser> list = new ArrayList<GroupUser>();
+				for (Group o : getBean(GroupDao.class).get(ids)) {
+					list.add(new GroupUser(o));
 				}
 				return list;
 			}

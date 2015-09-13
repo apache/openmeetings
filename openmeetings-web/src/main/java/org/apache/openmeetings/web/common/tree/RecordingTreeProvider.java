@@ -22,29 +22,29 @@ import static org.apache.openmeetings.web.app.Application.getBean;
 
 import java.util.Iterator;
 
-import org.apache.openmeetings.db.dao.record.FlvRecordingDao;
+import org.apache.openmeetings.db.dao.record.RecordingDao;
 import org.apache.openmeetings.db.entity.file.FileItem.Type;
-import org.apache.openmeetings.db.entity.record.FlvRecording;
+import org.apache.openmeetings.db.entity.record.Recording;
 import org.apache.wicket.extensions.markup.html.repeater.tree.ITreeProvider;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
-public abstract class RecordingTreeProvider implements ITreeProvider<FlvRecording> {
+public abstract class RecordingTreeProvider implements ITreeProvider<Recording> {
 	private static final long serialVersionUID = 1L;
 
 	public void detach() {
 		// TODO LDM should be used
 	}
 
-	public boolean hasChildren(FlvRecording node) {
+	public boolean hasChildren(Recording node) {
 		return node.getId() <= 0 || Type.Folder == node.getType();
 	}
 
-	public Iterator<? extends FlvRecording> getChildren(FlvRecording node) {
-		return getBean(FlvRecordingDao.class).getFlvRecordingByParent(node.getId()).iterator();
+	public Iterator<? extends Recording> getChildren(Recording node) {
+		return getBean(RecordingDao.class).getByParent(node.getId()).iterator();
 	}
 
-	public IModel<FlvRecording> model(FlvRecording object) {
+	public IModel<Recording> model(Recording object) {
 		// TODO LDM should be used
 		return Model.of(object);
 	}

@@ -32,7 +32,7 @@ import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
 
 @Entity
-@Table(name = "private_messages_folder")
+@Table(name = "private_message_folder")
 @Root(name="privatemessagefolder")
 public class PrivateMessageFolder implements IDataProviderEntity {
 	private static final long serialVersionUID = 1L;

@@ -22,13 +22,13 @@ import static org.apache.openmeetings.util.OmFileHelper.getHumanSize;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 
-import org.apache.openmeetings.db.dao.record.FlvRecordingDao;
+import org.apache.openmeetings.db.dao.record.RecordingDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.dto.record.RecordingContainerData;
 import org.apache.openmeetings.db.entity.file.FileItem;
-import org.apache.openmeetings.db.entity.record.FlvRecording;
-import org.apache.openmeetings.db.entity.user.Organisation;
-import org.apache.openmeetings.db.entity.user.OrganisationUser;
+import org.apache.openmeetings.db.entity.record.Recording;
+import org.apache.openmeetings.db.entity.user.Group;
+import org.apache.openmeetings.db.entity.user.GroupUser;
 import org.apache.openmeetings.web.common.UserPanel;
 import org.apache.openmeetings.web.common.tree.FileItemTree;
 import org.apache.openmeetings.web.common.tree.FileTreePanel;
@@ -48,18 +48,18 @@ public class RecordingsPanel extends UserPanel {
 
 			@Override
 			public void defineTrees() {
-				selectedFile.setObject(new FlvRecording());
-				treesView.add(selected = new FileItemTree<FlvRecording>(treesView.newChildId(), this, new MyRecordingTreeProvider()));
-				treesView.add(new FileItemTree<FlvRecording>(treesView.newChildId(), this, new PublicRecordingTreeProvider(null, null)));
-				for (OrganisationUser ou : getBean(UserDao.class).get(getUserId()).getOrganisationUsers()) {
-					Organisation o = ou.getOrganisation();
-					treesView.add(new FileItemTree<FlvRecording>(treesView.newChildId(), this, new PublicRecordingTreeProvider(o.getId(), o.getName())));
+				selectedFile.setObject(new Recording());
+				treesView.add(selected = new FileItemTree<Recording>(treesView.newChildId(), this, new MyRecordingTreeProvider()));
+				treesView.add(new FileItemTree<Recording>(treesView.newChildId(), this, new PublicRecordingTreeProvider(null, null)));
+				for (GroupUser ou : getBean(UserDao.class).get(getUserId()).getGroupUsers()) {
+					Group o = ou.getGroup();
+					treesView.add(new FileItemTree<Recording>(treesView.newChildId(), this, new PublicRecordingTreeProvider(o.getId(), o.getName())));
 				}
 			}
 			
 			@Override
 			public void updateSizes() {
-				RecordingContainerData sizeData = getBean(FlvRecordingDao.class).getRecordingContainerData(getUserId());
+				RecordingContainerData sizeData = getBean(RecordingDao.class).getContainerData(getUserId());
 				if (sizeData != null) {
 					homeSize.setObject(getHumanSize(sizeData.getUserHomeSize()));
 					publicSize.setObject(getHumanSize(sizeData.getPublicFileSize()));
@@ -68,8 +68,8 @@ public class RecordingsPanel extends UserPanel {
 			
 			@Override
 			public void update(AjaxRequestTarget target, FileItem f) {
-				video.update(target, (FlvRecording)f);
-				info.update(target, (FlvRecording)f);
+				video.update(target, (Recording)f);
+				info.update(target, (Recording)f);
 			}
 			
 			@Override

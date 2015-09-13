@@ -30,14 +30,14 @@ import java.util.List;
 import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.dao.server.ISessionManager;
 import org.apache.openmeetings.db.dao.user.IUserService;
-import org.apache.openmeetings.db.dao.user.OrganisationDao;
+import org.apache.openmeetings.db.dao.user.GroupDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.room.Client;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.room.RoomModerator;
-import org.apache.openmeetings.db.entity.room.RoomOrganisation;
+import org.apache.openmeetings.db.entity.room.RoomGroup;
 import org.apache.openmeetings.db.entity.user.Address;
-import org.apache.openmeetings.db.entity.user.Organisation;
+import org.apache.openmeetings.db.entity.user.Group;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.web.admin.AdminBaseForm;
 import org.apache.openmeetings.web.admin.AdminUserChoiceProvider;
@@ -112,43 +112,43 @@ public class RoomForm extends AdminBaseForm<Room> {
 		add(new CheckBox("appointment"));
 		add(new CheckBox("ispublic"));
 
-		List<Organisation> orgList = Application.getBean(OrganisationDao.class).get(0, Integer.MAX_VALUE);
-		final List<RoomOrganisation> orgRooms = new ArrayList<RoomOrganisation>(orgList.size());
-		for (Organisation org : orgList) {
-			orgRooms.add(new RoomOrganisation(org, getModelObject()));
+		List<Group> orgList = Application.getBean(GroupDao.class).get(0, Integer.MAX_VALUE);
+		final List<RoomGroup> orgRooms = new ArrayList<RoomGroup>(orgList.size());
+		for (Group org : orgList) {
+			orgRooms.add(new RoomGroup(org, getModelObject()));
 		}
-		add(new Select2MultiChoice<RoomOrganisation>("roomOrganisations", null, new TextChoiceProvider<RoomOrganisation>() {
+		add(new Select2MultiChoice<RoomGroup>("roomGroups", null, new TextChoiceProvider<RoomGroup>() {
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			protected String getDisplayText(RoomOrganisation choice) {
-				String name = choice.getOrganisation().getName();
+			protected String getDisplayText(RoomGroup choice) {
+				String name = choice.getGroup().getName();
 				return name == null ? "" : name;
 			}
 
 			@Override
-			protected Object getId(RoomOrganisation choice) {
-				return choice.getOrganisation().getId();
+			protected Object getId(RoomGroup choice) {
+				return choice.getGroup().getId();
 			}
 
 			@Override
-			public void query(String term, int page, Response<RoomOrganisation> response) {
-				for (RoomOrganisation or : orgRooms) {
-					if (Strings.isEmpty(term) || (!Strings.isEmpty(term) && or.getOrganisation().getName().contains(term))) {
+			public void query(String term, int page, Response<RoomGroup> response) {
+				for (RoomGroup or : orgRooms) {
+					if (Strings.isEmpty(term) || (!Strings.isEmpty(term) && or.getGroup().getName().contains(term))) {
 						response.add(or);
 					}
 				}
 			}
 
 			@Override
-			public Collection<RoomOrganisation> toChoices(Collection<String> _ids) {
+			public Collection<RoomGroup> toChoices(Collection<String> _ids) {
 				List<Long> ids = new ArrayList<Long>();
 				for (String id : _ids) {
 					ids.add(Long.parseLong(id));
 				}
-				List<RoomOrganisation> list = new ArrayList<RoomOrganisation>();
-				for (Organisation o : getBean(OrganisationDao.class).get(ids)) {
-					list.add(new RoomOrganisation(o, RoomForm.this.getModelObject()));
+				List<RoomGroup> list = new ArrayList<RoomGroup>();
+				for (Group o : getBean(GroupDao.class).get(ids)) {
+					list.add(new RoomGroup(o, RoomForm.this.getModelObject()));
 				}
 				return list;
 			}

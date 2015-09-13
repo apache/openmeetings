@@ -46,8 +46,8 @@ import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.room.Client;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.server.Sessiondata;
-import org.apache.openmeetings.db.entity.user.Organisation;
-import org.apache.openmeetings.db.entity.user.OrganisationUser;
+import org.apache.openmeetings.db.entity.user.Group;
+import org.apache.openmeetings.db.entity.user.GroupUser;
 import org.apache.openmeetings.db.entity.user.State;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.util.CalendarPatterns;
@@ -285,10 +285,10 @@ public class MobileService {
 		}
 		
 		//private rooms
-		for (OrganisationUser ou : u.getOrganisationUsers()) {
-			Organisation org = ou.getOrganisation();
+		for (GroupUser ou : u.getGroupUsers()) {
+			Group org = ou.getGroup();
 			boolean first = true;
-			for (Room r : roomDao.getOrganisationRooms(org.getId())) {
+			for (Room r : roomDao.getGroupRooms(org.getId())) {
 				addRoom("private", org.getName(), first, result, r);
 				first = false;
 			}

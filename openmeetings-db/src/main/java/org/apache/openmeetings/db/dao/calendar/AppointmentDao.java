@@ -56,7 +56,7 @@ public class AppointmentDao {
 	@Autowired
 	private MeetingMemberDao meetingMemberDao;
 	@Autowired
-	private UserDao usersDao;
+	private UserDao userDao;
 	@Autowired
 	private RoomDao roomDao;
 	@Autowired
@@ -255,7 +255,7 @@ public class AppointmentDao {
 	public List<Appointment> getTodaysAppointmentsbyRangeAndMember(Long userId) {
 		log.debug("getAppoitmentbyRangeAndMember : UserID - " + userId);
 
-		TimeZone timeZone = timezoneUtil.getTimeZone(usersDao.get(userId));
+		TimeZone timeZone = timezoneUtil.getTimeZone(userDao.get(userId));
 
 		Calendar startCal = Calendar.getInstance(timeZone);
 		startCal.set(Calendar.MINUTE, 0);

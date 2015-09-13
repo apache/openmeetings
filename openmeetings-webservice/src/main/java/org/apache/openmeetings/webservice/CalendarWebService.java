@@ -173,8 +173,10 @@ public class CalendarWebService {
 	/**
 	 * Get the next Calendar event for userId
 	 * 
-	 * @param SID
+	 * @param sid
 	 *            The SID of the User. This SID must be marked as Loggedin
+	 * @param userid
+	 *            the userId the calendar events should be loaded
 	 *            
 	 * @return - next Calendar event
 	 */
@@ -200,8 +202,8 @@ public class CalendarWebService {
 	 * 
 	 * Load a calendar event by its room id
 	 * 
-	 * @param SID
-	 * @param roomId
+	 * @param sid
+	 * @param roomid
 	 * @return - calendar event by its room id
 	 */
 	@GET
@@ -229,9 +231,9 @@ public class CalendarWebService {
 	/**
 	 * Search a calendar event for the current SID
 	 * 
-	 * @param SID
+	 * @param sid
 	 *            The SID of the User. This SID must be marked as Loggedin
-	 * @param appointmentName
+	 * @param title
 	 *            the search string
 	 *            
 	 * @return - calendar event list
@@ -257,7 +259,7 @@ public class CalendarWebService {
 	/**
 	 * Save an appointment
 	 * 
-	 * @param SID
+	 * @param sid
 	 *            The SID of the User. This SID must be marked as Loggedin
 	 * @param appointment
 	 *            calendar event 
@@ -501,6 +503,7 @@ public class CalendarWebService {
 			Long userId = sessionDao.checkSession(SID);
 
 			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(userId))) {
+				/*
 				int validFromHour = Integer.valueOf(validFromTime.substring(0, 2)).intValue();
 				int validFromMinute = Integer.valueOf(validFromTime.substring(3, 5)).intValue();
 
@@ -509,7 +512,6 @@ public class CalendarWebService {
 
 				log.info("validFromHour: " + validFromHour);
 				log.info("validFromMinute: " + validFromMinute);
-/*
 				Date fromDate = CalendarPatterns.parseDateBySeparator(validFromDate); // dd.MM.yyyy
 				Date toDate = CalendarPatterns.parseDateBySeparator(validToDate); // dd.MM.yyyy
 

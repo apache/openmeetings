@@ -35,17 +35,17 @@ import javax.ws.rs.core.MediaType;
 import org.apache.cxf.feature.Features;
 import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.dao.server.SessiondataDao;
-import org.apache.openmeetings.db.dao.user.OrganisationDao;
-import org.apache.openmeetings.db.dao.user.OrganisationUserDao;
+import org.apache.openmeetings.db.dao.user.GroupDao;
+import org.apache.openmeetings.db.dao.user.GroupUserDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.dto.basic.SearchResult;
 import org.apache.openmeetings.db.dto.basic.ServiceResult;
 import org.apache.openmeetings.db.dto.basic.ServiceResult.Type;
 import org.apache.openmeetings.db.dto.user.UserSearchResult;
 import org.apache.openmeetings.db.entity.room.Room;
-import org.apache.openmeetings.db.entity.room.RoomOrganisation;
-import org.apache.openmeetings.db.entity.user.Organisation;
-import org.apache.openmeetings.db.entity.user.OrganisationUser;
+import org.apache.openmeetings.db.entity.room.RoomGroup;
+import org.apache.openmeetings.db.entity.user.Group;
+import org.apache.openmeetings.db.entity.user.GroupUser;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.util.AuthLevelUtil;
 import org.apache.openmeetings.webservice.error.ServiceException;
@@ -70,9 +70,9 @@ public class GroupWebService {
 	private static final Logger log = Red5LoggerFactory.getLogger(GroupWebService.class, webAppRootKey);
 
 	@Autowired
-	private OrganisationDao orgDao;
+	private GroupDao groupDao;
 	@Autowired
-	private OrganisationUserDao orgUserDao;
+	private GroupUserDao groupUserDao;
 	@Autowired
 	private UserDao userDao;
 	@Autowired
@@ -81,7 +81,7 @@ public class GroupWebService {
 	private SessiondataDao sessionDao;
 
 	/**
-	 * add a new organisation
+	 * add a new group
 	 * 
 	 * @param sid
 	 *            The SID from getSession
@@ -95,59 +95,59 @@ public class GroupWebService {
 	public ServiceResult add(@QueryParam("sid") @WebParam String sid, @QueryParam("name") @WebParam String name) throws ServiceException {
 		Long userId = sessionDao.checkSession(sid);
 		if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(userId))) {
-			Organisation o = new Organisation();
+			Group o = new Group();
 			o.setName(name);
-			return new ServiceResult(orgDao.update(o, userId).getId(), "Success", Type.SUCCESS);
+			return new ServiceResult(groupDao.update(o, userId).getId(), "Success", Type.SUCCESS);
 		} else {
-			log.error("Could not create organization");
+			log.error("Could not create group");
 			return new ServiceResult(-26L, "Insufficient permissins", Type.ERROR);
 		}
 	}
 	
 	/**
 	 * 
-	 * Add a user to a certain organization
+	 * Add a user to a certain group
 	 * 
 	 * @param sid
 	 *            The SID from getSession
-	 * @param userId
+	 * @param userid
 	 *            the user id
 	 * @param id
-	 *            the organization id
+	 *            the group id
 	 * @return - id of the user added, or error id in case of the error
 	 */
 	@POST
-	@Path("/{id}/users/add/{userId}")
+	@Path("/{id}/users/add/{userid}")
 	public ServiceResult addUser(
 			@QueryParam("sid") @WebParam String sid
 			, @PathParam("id") @WebParam Long id
-			, @PathParam("userId") @WebParam Long userId
+			, @PathParam("userid") @WebParam Long userid
 			) throws ServiceException
 	{
 		try {
 			Long authUserId = sessionDao.checkSession(sid);
 			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(authUserId))) {
-				if (!orgUserDao.isUserInOrganization(id, userId)) {
-					User u = userDao.get(userId);
-					u.getOrganisationUsers().add(new OrganisationUser(orgDao.get(id)));
+				if (!groupUserDao.isUserInGroup(id, userid)) {
+					User u = userDao.get(userid);
+					u.getGroupUsers().add(new GroupUser(groupDao.get(id)));
 					userDao.update(u, authUserId);
 				}
-				return new ServiceResult(userId, "Success", Type.SUCCESS);
+				return new ServiceResult(userid, "Success", Type.SUCCESS);
 			} else {
 				return new ServiceResult(-26L, "Insufficient permissins", Type.ERROR);
 			}
 		} catch (Exception err) {
-			log.error("addUserToOrganisation", err);
+			log.error("addUser", err);
 			throw new ServiceException(err.getMessage());
 		}
 	}
 
 	/**
-	 * Adds a room to an organization
+	 * Adds a room to an group
 	 * 
-	 * @param SID - The SID of the User. This SID must be marked as Loggedin
-	 * @param roomId - Id of room to be added
-	 * @param organisationId - Id of organisation that the room is being paired with
+	 * @param sid - The SID of the User. This SID must be marked as Loggedin
+	 * @param id - Id of group that the room is being paired with
+	 * @param roomid - Id of room to be added
 	 * 
 	 * @return Id of the relation created, null or -1 in case of the error
 	 */
@@ -156,25 +156,25 @@ public class GroupWebService {
 	public ServiceResult addRoom(
 			@QueryParam("sid") @WebParam String sid
 			, @PathParam("id") @WebParam Long id
-			, @PathParam("roomId") @WebParam Long roomId
+			, @PathParam("roomid") @WebParam Long roomid
 			) throws ServiceException
 	{
 		try {
 			Long userId = sessionDao.checkSession(sid);
 			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(userId))) {
-				Room r = roomDao.get(roomId);
+				Room r = roomDao.get(roomid);
 				if (r != null) {
-					if (r.getRoomOrganisations() == null) {
-						r.setRoomOrganisations(new ArrayList<RoomOrganisation>());
+					if (r.getRoomGroups() == null) {
+						r.setRoomGroups(new ArrayList<RoomGroup>());
 					}
 					boolean found = false;
-					for (RoomOrganisation ro : r.getRoomOrganisations()) {
-						if (ro.getOrganisation().getId().equals(id)) {
+					for (RoomGroup ro : r.getRoomGroups()) {
+						if (ro.getGroup().getId().equals(id)) {
 							found = true;
 						}
 					}
 					if (!found) {
-						r.getRoomOrganisations().add(new RoomOrganisation(orgDao.get(id), r));
+						r.getRoomGroups().add(new RoomGroup(groupDao.get(id), r));
 						roomDao.update(r, userId);
 						return new ServiceResult(1L, "Success", Type.SUCCESS);
 					}
@@ -184,7 +184,7 @@ public class GroupWebService {
 				return new ServiceResult(-26L, "Insufficient permissins", Type.ERROR);
 			}
 		} catch (Exception err) {
-			log.error("[addRoomToOrg]", err);
+			log.error("[addRoom]", err);
 			throw new ServiceException(err.getMessage());
 		}
 	}
@@ -194,8 +194,8 @@ public class GroupWebService {
 	 * 
 	 * @param sid
 	 *            The SID from getSession
-	 * @param organisationId
-	 *            the organization id
+	 * @param id
+	 *            the group id
 	 * @param start
 	 *            first record
 	 * @param max
@@ -222,9 +222,9 @@ public class GroupWebService {
 			SearchResult<User> result = new SearchResult<User>();
 			result.setObjectName(User.class.getName());
 			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(userId))) {
-				result.setRecords(orgUserDao.count(id));
+				result.setRecords(groupUserDao.count(id));
 				result.setResult(new ArrayList<User>());
-				for (OrganisationUser ou : orgUserDao.get(id, null, start, max, orderby + " " + (asc ? "ASC" : "DESC"))) {
+				for (GroupUser ou : groupUserDao.get(id, null, start, max, orderby + " " + (asc ? "ASC" : "DESC"))) {
 					result.getResult().add(ou.getUser());
 				}
 			} else {
@@ -233,7 +233,7 @@ public class GroupWebService {
 			}
 			return new UserSearchResult(result);
 		} catch (Exception err) {
-			log.error("getUsersByOrganisation", err);
+			log.error("getUsers", err);
 			throw new ServiceException(err.getMessage());
 		}
 	}

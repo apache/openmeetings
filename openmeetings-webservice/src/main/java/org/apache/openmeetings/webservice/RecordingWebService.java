@@ -28,7 +28,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import org.apache.cxf.feature.Features;
-import org.apache.openmeetings.db.dao.record.FlvRecordingDao;
+import org.apache.openmeetings.db.dao.record.RecordingDao;
 import org.apache.openmeetings.db.dao.server.SessiondataDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.dto.record.RecordingDTO;
@@ -57,31 +57,31 @@ public class RecordingWebService {
 	@Autowired
 	private UserDao userDao;
 	@Autowired
-	private FlvRecordingDao recordingDao;
+	private RecordingDao recordingDao;
 
 	/**
 	 * Deletes a flv recording
 	 * 
 	 * @param SID
 	 *            The SID of the User. This SID must be marked as Loggedin
-	 * @param flvRecordingId
+	 * @param recordingId
 	 *            the id of the recording
 	 *            
 	 * @return - true if recording was deleted
 	 * @throws ServiceException
 	 */
-	public boolean deleteFlvRecording(String SID, Long flvRecordingId)
+	public boolean delete(String SID, Long recordingId)
 			throws ServiceException {
 		try {
 
 			Long userId = sessionDao.checkSession(SID);
 
 			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(userId))) {
-				return recordingDao.delete(flvRecordingId);
+				return recordingDao.delete(recordingId);
 			}
 
 		} catch (Exception err) {
-			log.error("[deleteFlvRecording] ", err);
+			log.error("[delete] ", err);
 			throw new ServiceException(err.getMessage());
 		}
 
@@ -92,24 +92,23 @@ public class RecordingWebService {
 	 * Gets a list of flv recordings
 	 * 
 	 * @param SID The SID of the User. This SID must be marked as Loggedin
-	 * @param externalUserId the externalUserId
-	 * @param externalUsertype the externalUserType
+	 * @param externalId the externalUserId
+	 * @param externalType the externalUserType
 	 *            
 	 * @return - list of flv recordings
 	 * @throws ServiceException
 	 */
-	public List<RecordingDTO> getFlvRecordingByExternalUserId(String SID,
-			String externalUserId, String externalUserType) throws ServiceException {
+	public List<RecordingDTO> getByExternalId(String SID, String externalId, String externalType) throws ServiceException {
 		try {
 			Long userId = sessionDao.checkSession(SID);
 
 			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(userId))) {
-				return RecordingDTO.list(recordingDao.getFlvRecordingByExternalUserId(externalUserId, externalUserType));
+				return RecordingDTO.list(recordingDao.getByExternalId(externalId, externalType));
 			}
 
 			return null;
 		} catch (Exception err) {
-			log.error("[getFlvRecordingByExternalUserId] ", err);
+			log.error("[getByExternalId] ", err);
 			throw new ServiceException(err.getMessage());
 		}
 	}
@@ -126,20 +125,16 @@ public class RecordingWebService {
 	 * @return - list of flv recordings
 	 * @throws ServiceException
 	 */
-	public List<RecordingDTO> getFlvRecordingByExternalRoomTypeAndCreator(
-			String SID, String externalType, Long insertedBy)
-			throws ServiceException {
+	public List<RecordingDTO> getByExternalTypeAndCreator(String SID, String externalType, Long insertedBy) throws ServiceException {
 		try {
-
 			Long userId = sessionDao.checkSession(SID);
 
 			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(userId))) {
-				return RecordingDTO.list(recordingDao.getFlvRecordingByExternalTypeAndCreator(externalType, insertedBy));
+				return RecordingDTO.list(recordingDao.getByExternalTypeAndCreator(externalType, insertedBy));
 			}
-
 			return null;
 		} catch (Exception err) {
-			log.error("[getFlvRecordingByExternalRoomTypeAndCreator] ", err);
+			log.error("[getByExternalTypeAndCreator] ", err);
 			throw new ServiceException(err.getMessage());
 		}
 	}
@@ -154,19 +149,19 @@ public class RecordingWebService {
 	 * @return - list of flv recordings
 	 * @throws ServiceException
 	 */
-	public List<RecordingDTO> getFlvRecordingByExternalRoomTypeByList(String SID, String externalType) throws ServiceException {
+	public List<RecordingDTO> getByExternalTypeByList(String SID, String externalType) throws ServiceException {
 		try {
 
 			Long userId = sessionDao.checkSession(SID);
 
 			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(userId))) {
-				return RecordingDTO.list(recordingDao.getFlvRecordingByExternalType(externalType));
+				return RecordingDTO.list(recordingDao.getByExternalType(externalType));
 
 			}
 
 			return null;
 		} catch (Exception err) {
-			log.error("[getFlvRecordingByExternalRoomTypeByList] ", err);
+			log.error("[getByExternalTypeByList] ", err);
 			throw new ServiceException(err.getMessage());
 		}
 	}
@@ -186,7 +181,7 @@ public class RecordingWebService {
 			Long userId = sessionDao.checkSession(SID);
 
 			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(userId))) {
-				return RecordingDTO.list(recordingDao.getRecordingsByExternalType(externalType));
+				return RecordingDTO.list(recordingDao.getByExternalType(externalType));
 			}
 
 			return null;
@@ -201,24 +196,23 @@ public class RecordingWebService {
 	 * 
 	 * @param SID
 	 *            The SID of the User. This SID must be marked as Loggedin
-	 * @param externalRoomType
+	 * @param externalType
 	 *            externalRoomType specified when creating the room
 	 * @return - list of flv recordings
 	 * @throws ServiceException
 	 */
-	public List<RecordingDTO> getFlvRecordingByExternalRoomType(String SID,
-			String externalRoomType) throws ServiceException {
+	public List<RecordingDTO> getByExternalType(String SID, String externalType) throws ServiceException {
 		try {
 
 			Long userId = sessionDao.checkSession(SID);
 
 			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(userId))) {
-				return RecordingDTO.list(recordingDao.getFlvRecordingByExternalType(externalRoomType));
+				return RecordingDTO.list(recordingDao.getByExternalType(externalType));
 			}
 
 			return null;
 		} catch (Exception err) {
-			log.error("[getFlvRecordingByExternalRoomType] ", err);
+			log.error("[getByExternalType] ", err);
 			throw new ServiceException(err.getMessage());
 		}
 	}
@@ -233,19 +227,19 @@ public class RecordingWebService {
 	 * @return - list of recordings
 	 * @throws ServiceException
 	 */
-	public List<RecordingDTO> getFlvRecordingByRoomId(String SID, Long roomId)
+	public List<RecordingDTO> getByRoomId(String SID, Long roomId)
 			throws ServiceException {
 		try {
 
 			Long userId = sessionDao.checkSession(SID);
 
 			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(userId))) {
-				return RecordingDTO.list(recordingDao.getFlvRecordingByRoomId(roomId));
+				return RecordingDTO.list(recordingDao.getByRoomId(roomId));
 			}
 
 			return null;
 		} catch (Exception err) {
-			log.error("[getFlvRecordingByExternalRoomType] ", err);
+			log.error("[getByRoomId] ", err);
 			throw new ServiceException(err.getMessage());
 		}
 	}

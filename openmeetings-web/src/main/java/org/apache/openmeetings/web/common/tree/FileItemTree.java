@@ -23,8 +23,8 @@ import static org.apache.openmeetings.util.OmFileHelper.isRecordingExists;
 
 import org.apache.openmeetings.db.entity.file.FileItem;
 import org.apache.openmeetings.db.entity.file.FileItem.Type;
-import org.apache.openmeetings.db.entity.record.FlvRecording;
-import org.apache.openmeetings.db.entity.record.FlvRecording.Status;
+import org.apache.openmeetings.db.entity.record.Recording;
+import org.apache.openmeetings.db.entity.record.Recording.Status;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.extensions.markup.html.repeater.tree.DefaultNestedTree;
@@ -106,7 +106,7 @@ public class FileItemTree<T extends FileItem> extends DefaultNestedTree<T> {
 							break;
 						case Recording:
 						{
-							FlvRecording r = (FlvRecording)f;
+							Recording r = (Recording)f;
 							if (isRecordingExists(r.getFileHash() + MP4_EXTENSION)) {
 								style = "recording om-icon";
 							} else if (Status.RECORDING == r.getStatus() || Status.CONVERTING == r.getStatus()) {

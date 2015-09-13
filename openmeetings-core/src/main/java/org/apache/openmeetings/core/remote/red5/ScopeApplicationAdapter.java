@@ -34,14 +34,14 @@ import java.util.concurrent.atomic.AtomicLong;
 
 import org.apache.openmeetings.core.data.conference.RoomManager;
 import org.apache.openmeetings.core.data.whiteboard.WhiteboardManager;
-import org.apache.openmeetings.core.remote.FLVRecorderService;
+import org.apache.openmeetings.core.remote.RecordingService;
 import org.apache.openmeetings.core.remote.WhiteBoardService;
 import org.apache.openmeetings.core.remote.util.SessionVariablesUtil;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
 import org.apache.openmeetings.db.dao.label.LabelDao;
 import org.apache.openmeetings.db.dao.log.ConferenceLogDao;
-import org.apache.openmeetings.db.dao.record.FlvRecordingDao;
+import org.apache.openmeetings.db.dao.record.RecordingDao;
 import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.dao.server.ISessionManager;
 import org.apache.openmeetings.db.dao.server.ServerDao;
@@ -51,6 +51,7 @@ import org.apache.openmeetings.db.dto.room.BrowserStatus;
 import org.apache.openmeetings.db.dto.room.RoomStatus;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
 import org.apache.openmeetings.db.entity.calendar.MeetingMember;
+import org.apache.openmeetings.db.entity.log.ConferenceLog.Type;
 import org.apache.openmeetings.db.entity.room.Client;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.server.Server;
@@ -87,7 +88,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 	@Autowired
 	private WhiteboardManager whiteboardManagement;
 	@Autowired
-	private FLVRecorderService flvRecorderService;
+	private RecordingService recordingService;
 	@Autowired
 	private ConfigurationDao configurationDao;
 	@Autowired
@@ -99,11 +100,11 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 	@Autowired
 	private ConferenceLogDao conferenceLogDao;
 	@Autowired
-	private UserDao usersDao;
+	private UserDao userDao;
 	@Autowired
 	private RoomDao roomDao;
 	@Autowired
-	private FlvRecordingDao recordingDao;
+	private RecordingDao recordingDao;
 	@Autowired
 	private ServerDao serverDao;
 
@@ -181,7 +182,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 			SessionVariablesUtil.setUserId(conn.getClient(), rcm.getUserId());
 
 			rcm.setStreamPublishName(parentSid);
-			User u = usersDao.get(rcm.getUserId() < 0 ? -rcm.getUserId() : rcm.getUserId());
+			User u = userDao.get(rcm.getUserId() < 0 ? -rcm.getUserId() : rcm.getUserId());
 			rcm.setUsername(u.getLogin());
 			rcm.setFirstname(u.getFirstname());
 			rcm.setLastname(u.getLastname());
@@ -190,7 +191,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 		}
 
 		// Log the User
-		conferenceLogDao.addConferenceLog("ClientConnect",
+		conferenceLogDao.addConferenceLog(Type.clientConnect,
 				rcm.getUserId(), streamId, null, rcm.getUserip(),
 				rcm.getScope());
 		return true;
@@ -225,7 +226,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 					//Send message to all users
 					sendMessageToCurrentScope("stopRecordingMessage", client, false);
 
-					flvRecorderService.stopRecordAndSave(current.getScope(), client, null);
+					recordingService.stopRecordAndSave(current.getScope(), client, null);
 				}
 				if (Boolean.valueOf("" + map.get("stopPublishing")) && client.isScreenPublishStarted()) {
 					changed = true;
@@ -343,7 +344,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 	
 						String recordingName = "Recording " + CalendarPatterns.getDateWithTimeByMiliSeconds(new Date());
 	
-						flvRecorderService.recordMeetingStream(current, client, recordingName, "", false);
+						recordingService.recordMeetingStream(current, client, recordingName, "", false);
 					} else {
 						log.warn("Recording is already started for the client id=" + client.getId() + ". Second request is ignored.");
 					}
@@ -497,7 +498,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 			Long roomId = currentClient.getRoomId();
 
 			// Log the User
-			conferenceLogDao.addConferenceLog("roomLeave",
+			conferenceLogDao.addConferenceLog(Type.roomLeave,
 					currentClient.getUserId(), currentClient.getStreamid(),
 					roomId, currentClient.getUserip(), "");
 
@@ -517,7 +518,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 					//interview, TODO need better check
 					_stopInterviewRecording(currentClient, currentScope);
 				} else {
-					flvRecorderService.stopRecordAndSave(currentScope, currentClient, null);
+					recordingService.stopRecordAndSave(currentScope, currentClient, null);
 
 					// set to true and overwrite the default one cause otherwise no
 					// notification is send
@@ -549,7 +550,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 							log.debug("###########[roomLeave]");
 							if (rcl.getIsRecording()) {
 								log.debug("*** roomLeave Any Client is Recording - stop that");
-								flvRecorderService.stopRecordingShowForClient(cons, currentClient);
+								recordingService.stopRecordingShowForClient(cons, currentClient);
 							}
 							
 							//If the user was a avclient, we do not broadcast a message about that to everybody
@@ -641,7 +642,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 					}
 					if (rcl.getIsRecording()) {
 						log.debug("RCL getIsRecording newStream SEND");
-						flvRecorderService.addRecordingByStreamId(current, streamid, currentClient, rcl.getFlvRecordingId());
+						recordingService.addRecordingByStreamId(current, streamid, currentClient, rcl.getRecordingId());
 					}
 					if (rcl.isAvClient()) {
 						log.debug("RCL getIsAVClient newStream SEND");
@@ -738,7 +739,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 									// StreamService.stopRecordingShowForClient(conn,
 									// currentClient,
 									// rcl.getRoomRecordingName(), false);
-									flvRecorderService.stopRecordingShowForClient(conn, currentClient);
+									recordingService.stopRecordingShowForClient(conn, currentClient);
 								}
 								// Don't notify current client
 								current.ping();
@@ -761,7 +762,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 								// recording of this stream
 								if (clientFunction.equals("closeStream") && rcl.getIsRecording()) {
 									log.debug("***  +++++++ ######## sendClientBroadcastNotifications Any Client is Recording - stop that");
-									flvRecorderService.stopRecordingShowForClient(conn, currentClient);
+									recordingService.stopRecordingShowForClient(conn, currentClient);
 								}
 							}
 						}
@@ -1117,12 +1118,12 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 	 * @param roomId - id of the room
 	 * @param becomeModerator - is user will become moderator
 	 * @param isSuperModerator - is user super moderator
-	 * @param organizationId - organization id of the user
+	 * @param groupId - group id of the user
 	 * @param colorObj - some color
 	 * @return RoomStatus object
 	 */
 	public synchronized RoomStatus setRoomValues(Long roomId, Boolean becomeModerator, Boolean isSuperModerator,
-			Long organizationId, String colorObj) {
+			Long groupId, String colorObj) {
 		try {
 			log.debug("-----------  setRoomValues");
 			IConnection current = Red5.getConnectionLocal();
@@ -1136,7 +1137,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 			// Inject externalUserId if nothing is set yet
 			if (currentClient.getExternalUserId() == null) {
 				if (currentClient.getUserId() != null) {
-					User us = usersDao.get(currentClient.getUserId());
+					User us = userDao.get(currentClient.getUserId());
 					if (us != null) {
 						currentClient.setExternalUserId(us.getExternalId());
 						currentClient.setExternalUserType(us.getExternalType());
@@ -1155,7 +1156,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
             }
 
 			// Log the User
-			conferenceLogDao.addConferenceLog("roomEnter",
+			conferenceLogDao.addConferenceLog(Type.roomEnter,
 					currentClient.getUserId(), streamid, roomId,
 					currentClient.getUserip(), "");
 			
@@ -1372,7 +1373,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 			// cause invited users have no associated User, so
 			// you cannot set the firstname,lastname from the UserRecord
 			if (userId != null) {
-				User us = usersDao.get(userId);
+				User us = userDao.get(userId);
 				
 				if (us != null) {
 					currentClient.setExternalUserId(us.getExternalId());
@@ -1417,7 +1418,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 			log.debug("UDPATE SESSION " + SID + ", " + userId);
 			sessiondataDao.updateUserWithoutSession(SID, userId);
 
-			User user = usersDao.get(userId);
+			User user = userDao.get(userId);
 
 			if (user != null) {
 				currentClient.setExternalUserId(user.getExternalId());
@@ -1427,7 +1428,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 			// only fill this value from User-Record
 			// cause invited users have non
 			// you cannot set the firstname,lastname from the UserRecord
-			User us = usersDao.get(userId);
+			User us = userDao.get(userId);
 			if (us != null && us.getPictureuri() != null) {
 				// set Picture-URI
 				currentClient.setPicture_uri(us.getPictureuri());
@@ -2098,7 +2099,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 			}
 			String recordingName = "Interview " + CalendarPatterns.getDateWithTimeByMiliSeconds(new Date());
 
-			flvRecorderService.recordMeetingStream(current, current_rcl, recordingName, "", true);
+			recordingService.recordMeetingStream(current, current_rcl, recordingName, "", true);
 
 			return true;
 		} catch (Exception err) {
@@ -2121,20 +2122,20 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 	}
 
 	private Long checkRecordingClient(IConnection conn) {
-		Long flvRecordingId = null;
+		Long recordingId = null;
 		if (conn != null) {
 			Client rcl = sessionManager.getClientByStreamId(conn.getClient().getId(), null);
 			if (rcl != null && rcl.getIsRecording() != null && rcl.getIsRecording()) {
 				rcl.setIsRecording(false);
-				flvRecordingId = rcl.getFlvRecordingId();
-				rcl.setFlvRecordingId(null);
+				recordingId = rcl.getRecordingId();
+				rcl.setRecordingId(null);
 
 				// Reset the Recording Flag to Record all
 				// Participants that enter later
 				sessionManager.updateClientByStreamId(conn.getClient().getId(), rcl, false, null);
 			}
 		}
-		return flvRecordingId;
+		return recordingId;
 	}
 	
 	/**
@@ -2156,20 +2157,20 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 	private Boolean _stopInterviewRecording(Client currentClient, IScope currentScope) {
 		try {
 			log.debug("-----------  stopInterviewRecording");
-			Long flvRecordingId = currentClient.getFlvRecordingId();
+			Long clientRecordingId = currentClient.getRecordingId();
 
 			for (IConnection conn : currentScope.getClientConnections()) {
 				Long recordingId = checkRecordingClient(conn);
 				if (recordingId != null) {
-					flvRecordingId = recordingId;
+					clientRecordingId = recordingId;
 				}
 			}
-			if (flvRecordingId == null) {
+			if (clientRecordingId == null) {
 				log.debug("stopInterviewRecording:: unable to find recording client");
 				return false;
 			}
 
-			flvRecorderService.stopRecordAndSave(scope, currentClient, flvRecordingId);
+			recordingService.stopRecordAndSave(scope, currentClient, clientRecordingId);
 
 			Map<String, String> interviewStatus = new HashMap<String, String>();
 			interviewStatus.put("action", "stop");

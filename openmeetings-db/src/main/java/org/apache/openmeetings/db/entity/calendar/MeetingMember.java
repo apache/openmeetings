@@ -41,7 +41,7 @@ import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
 
 @Entity
-@Table(name = "meeting_members")
+@Table(name = "meeting_member")
 @NamedQueries({
     @NamedQuery(name="getMeetingMemberById"
     		, query="SELECT mm FROM MeetingMember mm WHERE mm.deleted = false AND mm.id = :id")

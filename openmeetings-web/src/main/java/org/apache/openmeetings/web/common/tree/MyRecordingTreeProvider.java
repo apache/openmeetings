@@ -24,16 +24,16 @@ import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import java.util.Arrays;
 import java.util.Iterator;
 
-import org.apache.openmeetings.db.dao.record.FlvRecordingDao;
+import org.apache.openmeetings.db.dao.record.RecordingDao;
 import org.apache.openmeetings.db.entity.file.FileItem.Type;
-import org.apache.openmeetings.db.entity.record.FlvRecording;
+import org.apache.openmeetings.db.entity.record.Recording;
 import org.apache.openmeetings.web.app.Application;
 
 public class MyRecordingTreeProvider extends RecordingTreeProvider {
 	private static final long serialVersionUID = 1L;
 
-	public Iterator<? extends FlvRecording> getRoots() {
-		FlvRecording r = new FlvRecording();
+	public Iterator<? extends Recording> getRoots() {
+		Recording r = new Recording();
 		r.setId(0L);
 		r.setType(Type.Folder);
 		r.setFileName(Application.getString(860));
@@ -41,9 +41,9 @@ public class MyRecordingTreeProvider extends RecordingTreeProvider {
 		return Arrays.asList(r).iterator();
 	}
 	
-	public Iterator<? extends FlvRecording> getChildren(FlvRecording node) {
+	public Iterator<? extends Recording> getChildren(Recording node) {
 		if (node.getId() == 0) {
-			return getBean(FlvRecordingDao.class).getFlvRecordingRootByOwner(getUserId()).iterator();
+			return getBean(RecordingDao.class).getRootByOwner(getUserId()).iterator();
 		} else {
 			return super.getChildren(node);
 		}

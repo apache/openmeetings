@@ -55,7 +55,7 @@ public class LdapConfigDao implements IDataProviderDao<LdapConfig> {
 	private EntityManager em;
 
 	@Autowired
-	private UserDao usersDao;
+	private UserDao userDao;
 
 	public Long addLdapConfig(String name, Boolean addDomainToUserName,
 			String configFileName, String domain, Long insertedby,
@@ -71,8 +71,8 @@ public class LdapConfigDao implements IDataProviderDao<LdapConfig> {
 			ldapConfig.setName(name);
 			ldapConfig.setInserted(new Date());
 			if (insertedby != null) {
-				log.debug("addLdapConfig :1: " + usersDao.get(insertedby));
-				ldapConfig.setInsertedby(usersDao.get(insertedby));
+				log.debug("addLdapConfig :1: " + userDao.get(insertedby));
+				ldapConfig.setInsertedby(userDao.get(insertedby));
 			}
 
 			log.debug("addLdapConfig :2: " + insertedby);
@@ -132,8 +132,8 @@ public class LdapConfigDao implements IDataProviderDao<LdapConfig> {
 			ldapConfig.setName(name);
 			ldapConfig.setUpdated(new Date());
 			if (updatedby != null) {
-				log.debug("updateLdapConfig :1: " + usersDao.get(updatedby));
-				ldapConfig.setUpdatedby(usersDao.get(updatedby));
+				log.debug("updateLdapConfig :1: " + userDao.get(updatedby));
+				ldapConfig.setUpdatedby(userDao.get(updatedby));
 			}
 
 			log.debug("updateLdapConfig :2: " + updatedby);
@@ -228,14 +228,14 @@ public class LdapConfigDao implements IDataProviderDao<LdapConfig> {
 			if (entity.getId() == null) {
 				entity.setInserted(new Date());
 				if (userId != null) {
-					entity.setInsertedby(usersDao.get(userId));
+					entity.setInsertedby(userDao.get(userId));
 				}
 				entity.setDeleted(false);
 				em.persist(entity);
 			} else {
 				entity.setUpdated(new Date());
 				if (userId != null) {
-					entity.setUpdatedby(usersDao.get(userId));
+					entity.setUpdatedby(userDao.get(userId));
 				}
 				entity.setDeleted(false);
 				em.merge(entity);
@@ -250,7 +250,7 @@ public class LdapConfigDao implements IDataProviderDao<LdapConfig> {
 		if (entity.getId() != null) {
 			entity.setUpdated(new Date());
 			if (userId != null) {
-				entity.setUpdatedby(usersDao.get(userId));
+				entity.setUpdatedby(userDao.get(userId));
 			}
 			entity.setDeleted(true);
 			em.merge(entity);

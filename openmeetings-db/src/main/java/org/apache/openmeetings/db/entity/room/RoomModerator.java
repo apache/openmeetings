@@ -46,7 +46,7 @@ import org.simpleframework.xml.Root;
 	@NamedQuery(name = "getRoomModeratorByUserAndRoomId", query = "select c from RoomModerator as c "
 			+ "where c.roomId = :roomId AND c.deleted false AND c.user.id = :userId")
 })
-@Table(name = "rooms_moderator")
+@Table(name = "room_moderator")
 @Root(name = "room_moderator")
 public class RoomModerator implements Serializable {
 	private static final long serialVersionUID = 1L;

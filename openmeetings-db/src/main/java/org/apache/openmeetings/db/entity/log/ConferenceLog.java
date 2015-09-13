@@ -22,30 +22,34 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import org.apache.openjpa.persistence.jdbc.ForeignKey;
 import org.apache.openmeetings.db.entity.IDataProviderEntity;
 
 @Entity
 @Table(name = "conferencelog")
 public class ConferenceLog implements IDataProviderEntity {
 	private static final long serialVersionUID = 1L;
+	public enum Type {
+		clientConnect
+		, roomEnter
+		, roomLeave
+		, nicknameEnter
+	}
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="id")
 	private Long id;
 	
-	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name="conferencelogtype_id", updatable=true, insertable=true)
-	@ForeignKey(enabled = true)
-	private ConferenceLogType conferenceLogType;
+	@Enumerated(EnumType.STRING)
+	@Column(name = "type")
+	private Type type;
 	
 	@Column(name="inserted")
 	private Date inserted;
@@ -76,11 +80,11 @@ public class ConferenceLog implements IDataProviderEntity {
 		this.id = id;
 	}
 	
-	public ConferenceLogType getConferenceLogType() {
-		return conferenceLogType;
+	public Type getType() {
+		return type;
 	}
-	public void setConferenceLogType(ConferenceLogType conferenceLogType) {
-		this.conferenceLogType = conferenceLogType;
+	public void setType(Type type) {
+		this.type = type;
 	}
 	
 	public Date getInserted() {

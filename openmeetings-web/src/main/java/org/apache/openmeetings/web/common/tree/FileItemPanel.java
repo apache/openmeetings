@@ -22,10 +22,10 @@ import static org.apache.openmeetings.util.OmFileHelper.MP4_EXTENSION;
 import static org.apache.openmeetings.util.OmFileHelper.isRecordingExists;
 import static org.apache.openmeetings.web.app.Application.getBean;
 
-import org.apache.openmeetings.db.dao.record.FlvRecordingLogDao;
+import org.apache.openmeetings.db.dao.record.RecordingLogDao;
 import org.apache.openmeetings.db.entity.file.FileItem;
-import org.apache.openmeetings.db.entity.record.FlvRecording;
-import org.apache.openmeetings.db.entity.record.FlvRecording.Status;
+import org.apache.openmeetings.db.entity.record.Recording;
+import org.apache.openmeetings.db.entity.record.Recording.Status;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -37,9 +37,9 @@ public class FileItemPanel extends FolderPanel {
 
 	public FileItemPanel(String id, final IModel<? extends FileItem> model, final FileTreePanel fileTreePanel) {
 		super(id, model, fileTreePanel);
-		if (model.getObject() instanceof FlvRecording) {
-			FlvRecording r = (FlvRecording)model.getObject();
-			long errorCount = getBean(FlvRecordingLogDao.class).countErrors(r.getId());
+		if (model.getObject() instanceof Recording) {
+			Recording r = (Recording)model.getObject();
+			long errorCount = getBean(RecordingLogDao.class).countErrors(r.getId());
 			boolean visible = errorCount != 0 || (Status.RECORDING != r.getStatus() && Status.CONVERTING != r.getStatus() && !isRecordingExists(r.getFileHash() + MP4_EXTENSION));
 			errors.add(new AjaxEventBehavior("click") {
 				private static final long serialVersionUID = 1L;

@@ -37,7 +37,7 @@ import org.apache.openmeetings.db.entity.calendar.Appointment;
 import org.apache.openmeetings.db.entity.room.Client;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.room.RoomModerator;
-import org.apache.openmeetings.db.entity.room.RoomOrganisation;
+import org.apache.openmeetings.db.entity.room.RoomGroup;
 import org.apache.openmeetings.db.util.AuthLevelUtil;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -67,25 +67,25 @@ public class ConferenceService {
 	private ISessionManager sessionManager = null;
 
 	/**
-	 * ( get a List of all available Rooms of this organization
+	 * ( get a List of all available Rooms of this group
 	 * (non-appointments)
 	 * 
 	 * @param SID
-	 * @param organisationId
-	 * @return - all available Rooms of this organization
+	 * @param groupId
+	 * @return - all available Rooms of this group
 	 */
-	public List<RoomOrganisation> getRoomsByOrganisationAndType(String SID, long organisationId, long roomTypeId) {
+	public List<RoomGroup> getRoomsByGroupAndType(String SID, long groupId, long roomTypeId) {
 		try {
 			Long userId = sessiondataDao.checkSession(SID);
 			if (AuthLevelUtil.hasUserLevel(userDao.getRights(userId))) {
-				log.debug("getRoomsByOrganisationAndType");
-				List<RoomOrganisation> roomOrgsList = roomManager.getRoomsOrganisationByOrganisationIdAndRoomType(organisationId, roomTypeId);
+				log.debug("getRoomsByGroupAndType");
+				List<RoomGroup> roomGroupsList = roomManager.getRoomGroupByGroupIdAndRoomType(groupId, roomTypeId);
 	
-				List<RoomOrganisation> filtered = new ArrayList<RoomOrganisation>();
+				List<RoomGroup> filtered = new ArrayList<RoomGroup>();
 	
-				for (Iterator<RoomOrganisation> iter = roomOrgsList.iterator(); iter
+				for (Iterator<RoomGroup> iter = roomGroupsList.iterator(); iter
 						.hasNext();) {
-					RoomOrganisation orgRoom = iter.next();
+					RoomGroup orgRoom = iter.next();
 	
 					if (!orgRoom.getRoom().isAppointment()) {
 						orgRoom.getRoom().setCurrentusers(
@@ -97,48 +97,47 @@ public class ConferenceService {
 				return filtered;
 			}
 		} catch (Exception err) {
-			log.error("[getRoomsByOrganisationAndType]", err);
+			log.error("[getRoomsByGroupAndType]", err);
 		}
 		return null;
 	}
 
-	public List<RoomOrganisation> getRoomsByOrganisationWithoutType(
-			String SID, long organisationId) {
+	public List<RoomGroup> getRoomsByGroupWithoutType(String SID, long groupId) {
 		try {
 			Long userId = sessiondataDao.checkSession(SID);
 			if (AuthLevelUtil.hasUserLevel(userDao.getRights(userId))) {
-				log.debug("getRoomsByOrganisationAndType");
-				List<RoomOrganisation> roomOrgsList = roomManager.getRoomsOrganisationByOrganisationId(organisationId);
+				log.debug("getRoomsByGroupAndType");
+				List<RoomGroup> roomGroupsList = roomManager.getRoomGroupByGroupId(groupId);
 				
-				for (RoomOrganisation roomOrg : roomOrgsList) {
-					roomOrg.getRoom().setCurrentusers(sessionManager.getClientListByRoom(roomOrg.getRoom().getId()));
+				for (RoomGroup roomGroup : roomGroupsList) {
+					roomGroup.getRoom().setCurrentusers(sessionManager.getClientListByRoom(roomGroup.getRoom().getId()));
 				}
 	
-				return roomOrgsList;
+				return roomGroupsList;
 			}
 		} catch (Exception err) {
-			log.error("[getRoomsByOrganisationAndType]", err);
+			log.error("[getRoomsByGroupAndType]", err);
 		}
 		return null;
 	}
 
 	/**
-	 * gets all rooms of an organization TODO:check if the requesting user is
-	 * also member of that organization
+	 * gets all rooms of an group TODO:check if the requesting user is
+	 * also member of that group
 	 * 
 	 * @param SID
-	 * @param organisationId
-	 * @return - all rooms of an organization
+	 * @param groupId
+	 * @return - all rooms of an group
 	 */
-	public SearchResult<RoomOrganisation> getRoomsByOrganisation(String SID,
-			long organisationId, int start, int max, String orderby,
+	public SearchResult<RoomGroup> getRoomsByGroup(String SID,
+			long groupId, int start, int max, String orderby,
 			boolean asc) {
 
-		log.debug("getRoomsByOrganisation");
+		log.debug("getRoomsByGroup");
 
 		Long user_id = sessiondataDao.checkSession(SID);
-		if (AuthLevelUtil.hasModLevel(userDao.get(user_id), organisationId)) {
-			return roomManager.getRoomsOrganisationsByOrganisationId(organisationId, start, max, orderby, asc);
+		if (AuthLevelUtil.hasModLevel(userDao.get(user_id), groupId)) {
+			return roomManager.getRoomGroupByGroupId(groupId, start, max, orderby, asc);
 		}
 		return null;
 	}
@@ -175,7 +174,7 @@ public class ConferenceService {
 				return filtered;
 			}
 		} catch (Exception err) {
-			log.error("[getRoomsByOrganisationAndType]", err);
+			log.error("[getRoomsPublic]", err);
 		}
 		return null;
 	}

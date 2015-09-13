@@ -1764,9 +1764,9 @@
 	<entry key="install.wizard.params.step1.email">EMail</entry>
 	<entry key="install.wizard.params.step1.email.title">Enter a EMail</entry>
 	<entry key="install.wizard.params.step1.tz">User Time Zone</entry>
-	<entry key="install.wizard.params.step1.groupdata">Organisation(Domains)</entry>
+	<entry key="install.wizard.params.step1.groupdata">Group(Domains)</entry>
 	<entry key="install.wizard.params.step1.group">Name</entry>
-	<entry key="install.wizard.params.step1.group.title">Enter a default Organisation</entry>
+	<entry key="install.wizard.params.step1.group.title">Enter a default Group</entry>
 
 	<entry key="install.wizard.params.step2.configuration">Configuration</entry>
 	<entry key="install.wizard.params.step2.allowFrontendRegister">Allow self-registering (allow_frontend_register)</entry>

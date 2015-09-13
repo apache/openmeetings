@@ -360,7 +360,7 @@ webapps/openmeetings/WEB-INF/lib/batik-ttf2svg-jar-1.7.jar
 webapps/openmeetings/WEB-INF/lib/batik-util-jar-1.7.jar
 webapps/openmeetings/WEB-INF/lib/batik-xml-jar-1.7.jar
 webapps/openmeetings/WEB-INF/lib/commons-collections-jar-3.2.1.jar
-webapps/openmeetings/WEB-INF/lib/commons-dbcp2-jar-2.1.jar
+webapps/openmeetings/WEB-INF/lib/commons-dbcp2-jar-2.1.1.jar
 webapps/openmeetings/WEB-INF/lib/commons-digester-jar-2.1.jar
 webapps/openmeetings/WEB-INF/lib/commons-exec-jar-1.1.jar
 webapps/openmeetings/WEB-INF/lib/commons-httpclient-jar-3.1.jar
@@ -397,24 +397,27 @@ webapps/openmeetings/WEB-INF/lib/stax-api-jar-1.0-2.jar
 webapps/openmeetings/WEB-INF/lib/stax2-api-jar-3.1.1.jar
 webapps/openmeetings/WEB-INF/lib/velocity-jar-1.7.jar
 webapps/openmeetings/WEB-INF/lib/velocity-tools-jar-2.0.jar
-webapps/openmeetings/WEB-INF/lib/wicket-auth-roles-jar-7.0.0-M6.jar
-webapps/openmeetings/WEB-INF/lib/wicket-core-jar-7.0.0-M6.jar
-webapps/openmeetings/WEB-INF/lib/wicket-dashboard-core-jar-0.12.0.jar
-webapps/openmeetings/WEB-INF/lib/wicket-datetime-jar-7.0.0-M6.jar
-webapps/openmeetings/WEB-INF/lib/wicket-devutils-jar-7.0.0-M6.jar
-webapps/openmeetings/WEB-INF/lib/wicket-extensions-jar-7.0.0-M6.jar
-webapps/openmeetings/WEB-INF/lib/wicket-ioc-jar-7.0.0-M6.jar
-webapps/openmeetings/WEB-INF/lib/wicket-jquery-ui-calendar-jar-7.0.0-M6.jar
-webapps/openmeetings/WEB-INF/lib/wicket-jquery-ui-core-jar-7.0.0-M6.jar
-webapps/openmeetings/WEB-INF/lib/wicket-jquery-ui-jar-7.0.0-M6.jar
-webapps/openmeetings/WEB-INF/lib/wicket-jquery-ui-plugins-jar-7.0.0-M6.jar
-webapps/openmeetings/WEB-INF/lib/wicket-native-websocket-core-jar-7.0.0-M6.jar
-webapps/openmeetings/WEB-INF/lib/wicket-native-websocket-tomcat-jar-7.0.0-M6.jar
-webapps/openmeetings/WEB-INF/lib/wicket-request-jar-7.0.0-M6.jar
-webapps/openmeetings/WEB-INF/lib/wicketstuff-html5-jar-7.0.0-M6.jar
-webapps/openmeetings/WEB-INF/lib/wicketstuff-select2-jar-7.0.0-M6.jar
-webapps/openmeetings/WEB-INF/lib/wicketstuff-urlfragment-jar-7.0.0-M6.jar
-webapps/openmeetings/WEB-INF/lib/wicket-util-jar-7.0.0-M6.jar
+webapps/openmeetings/WEB-INF/lib/wicket-auth-roles-jar-7.0.0.jar
+webapps/openmeetings/WEB-INF/lib/wicket-core-jar-7.0.0.jar
+webapps/openmeetings/WEB-INF/lib/wicket-dashboard-core-jar-0.12.1+wicket-7.jar
+webapps/openmeetings/WEB-INF/lib/wicket-datetime-jar-7.0.0.jar
+webapps/openmeetings/WEB-INF/lib/wicket-devutils-jar-7.0.0.jar
+webapps/openmeetings/WEB-INF/lib/wicket-extensions-jar-7.0.0.jar
+webapps/openmeetings/WEB-INF/lib/wicket-ioc-jar-7.0.0.jar
+webapps/openmeetings/WEB-INF/lib/wicket-jquery-ui-calendar-jar-7.0.1.jar
+webapps/openmeetings/WEB-INF/lib/wicket-jquery-ui-core-jar-7.0.1.jar
+webapps/openmeetings/WEB-INF/lib/wicket-jquery-ui-jar-7.0.1.jar
+webapps/openmeetings/WEB-INF/lib/wicket-jquery-ui-plugins-jar-7.0.1.jar
+webapps/openmeetings/WEB-INF/lib/wicket-kendo-ui-bundle-7.0.1.jar
+webapps/openmeetings/WEB-INF/lib/wicket-kendo-ui-culture-bundle-7.0.1.jar
+webapps/openmeetings/WEB-INF/lib/wicket-kendo-ui-theme-default-bundle-7.0.1.jar
+webapps/openmeetings/WEB-INF/lib/wicket-native-websocket-core-jar-7.0.0.jar
+webapps/openmeetings/WEB-INF/lib/wicket-native-websocket-javax-jar-7.0.0.jar
+webapps/openmeetings/WEB-INF/lib/wicket-request-jar-7.0.0.jar
+webapps/openmeetings/WEB-INF/lib/wicketstuff-html5-jar-7.0.0.jar
+webapps/openmeetings/WEB-INF/lib/wicketstuff-select2-jar-7.0.0.jar
+webapps/openmeetings/WEB-INF/lib/wicketstuff-urlfragment-jar-7.0.0.jar
+webapps/openmeetings/WEB-INF/lib/wicket-util-jar-7.0.0.jar
 webapps/openmeetings/WEB-INF/lib/woden-core-bundle-1.0-SNAPSHOT.jar
 webapps/openmeetings/WEB-INF/lib/woodstox-core-asl-jar-4.1.4.jar
 webapps/openmeetings/WEB-INF/lib/ws-commons-util-jar-1.0.2.jar
@@ -1541,7 +1544,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ======================================================================================================================
  iCal4j - License
  
-webapps/openmeetings/WEB-INF/lib/ical4j-jar-1.0.5.jar
+webapps/openmeetings/WEB-INF/lib/ical4j-jar-1.0.6.jar
  
 ======================================================================================================================
 
@@ -1691,15 +1694,15 @@ jquery.ui.menubar.css
 coin-slider.min.js	
 jquery.colorbox.js
 jquery-1.11.0.min.js	
-jquery-ui-1.10.4.custom.min.js
+jquery-ui-1.11.4.custom.min.js
 jquery-ui-1.10.4.custom.css
+jquery-ui-1.11.4.custom.css
 
 border.png
 controls.png
 loading.gif
 loading_background.png
 overlay.png
-animated-overlay.gif
 ui-bg_flat_0_000088_40x100.png
 ui-bg_flat_0_e6b900_40x100.png
 ui-bg_flat_100_eeeeee_40x100.png

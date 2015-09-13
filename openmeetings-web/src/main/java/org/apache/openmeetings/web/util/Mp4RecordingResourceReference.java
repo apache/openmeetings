@@ -23,7 +23,7 @@ import static org.apache.openmeetings.util.OmFileHelper.getMp4Recording;
 
 import java.io.File;
 
-import org.apache.openmeetings.db.entity.record.FlvRecording;
+import org.apache.openmeetings.db.entity.record.Recording;
 
 public class Mp4RecordingResourceReference extends RecordingResourceReference {
 	private static final long serialVersionUID = 1L;
@@ -38,12 +38,12 @@ public class Mp4RecordingResourceReference extends RecordingResourceReference {
 	}
 	
 	@Override
-	String getFileName(FlvRecording r) {
+	String getFileName(Recording r) {
 		return r.getFileHash() + MP4_EXTENSION;
 	}
 	
 	@Override
-	File getFile(FlvRecording r) {
+	File getFile(Recording r) {
 		return getMp4Recording(r.getFileHash());
 	}
 }

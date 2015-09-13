@@ -20,7 +20,6 @@ package org.apache.openmeetings.web.pages.auth;
 
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
-import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.markup.html.basic.Label;
 
@@ -30,10 +29,6 @@ import com.googlecode.wicket.jquery.ui.widget.dialog.AbstractDialog;
 import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
 
 public class KickMessageDialog extends AbstractDialog<String> {
-
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
 	public KickMessageDialog(String id) {

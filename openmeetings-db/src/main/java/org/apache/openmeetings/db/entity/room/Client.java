@@ -306,16 +306,16 @@ public class Client implements IDataProviderEntity {
 	private String roomRecordingName;
 	
 	/**
-	 * @see Client#getFlvRecordingId()
+	 * @see Client#getRecordingId()
 	 */
-	@Column(name = "flvrecording_id")
-	private Long flvRecordingId;
+	@Column(name = "recording_id")
+	private Long recordingId;
 	
 	/**
-	 * @see Client#getFlvRecordingMetaDataId()
+	 * @see Client#getRecordingMetaDataId()
 	 */
-	@Column(name = "flvrecordingmetadata_id")
-	private Long flvRecordingMetaDataId;
+	@Column(name = "recording_metadata_id")
+	private Long recordingMetaDataId;
 	
 	/**
 	 * @see Client#isStartRecording()
@@ -755,20 +755,20 @@ public class Client implements IDataProviderEntity {
 		this.streamPublishName = streamPublishName;
 	}
 
-	public Long getFlvRecordingId() {
-		return flvRecordingId;
+	public Long getRecordingId() {
+		return recordingId;
 	}
 
-	public void setFlvRecordingId(Long flvRecordingId) {
-		this.flvRecordingId = flvRecordingId;
+	public void setRecordingId(Long recordingId) {
+		this.recordingId = recordingId;
 	}
 
-	public Long getFlvRecordingMetaDataId() {
-		return flvRecordingMetaDataId;
+	public Long getRecordingMetaDataId() {
+		return recordingMetaDataId;
 	}
 
-	public void setFlvRecordingMetaDataId(Long flvRecordingMetaDataId) {
-		this.flvRecordingMetaDataId = flvRecordingMetaDataId;
+	public void setRecordingMetaDataId(Long recordingMetaDataId) {
+		this.recordingMetaDataId = recordingMetaDataId;
 	}
 
 	public boolean isScreenPublishStarted() {
@@ -878,8 +878,8 @@ public class Client implements IDataProviderEntity {
 	public String toString() {
 		return "Client [streamid=" + streamid + ", publicSID=" + publicSID + ", isScreenClient=" + screenClient
 				+ ", isAVClient=" + avClient + ", isMobile = " + mobile + ", roomId=" + roomId + ", broadCastID=" + broadCastID + ", userId="
-				+ userId + ", avsettings=" + avsettings + ", isRecording=" + isRecording + ", flvRecordingId="
-				+ flvRecordingId + ", flvRecordingMetaDataId=" + flvRecordingMetaDataId + ", screenPublishStarted="
+				+ userId + ", avsettings=" + avsettings + ", isRecording=" + isRecording + ", recordingId="
+				+ recordingId + ", recordingMetaDataId=" + recordingMetaDataId + ", screenPublishStarted="
 				+ screenPublishStarted + ", interviewPodId=" + interviewPodId + ", server=" + server + "]";
 	}
 }

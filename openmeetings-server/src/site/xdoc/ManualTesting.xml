@@ -274,7 +274,7 @@
 								<li>Phone and SMS switch: if set and turned on, sms messages should pass </li>
 								<li>Change a status – non-active user cannot login </li>
 								<li>Change user role and re-login </li>
-								<li>Change user group  - user has an access only to the rooms belong to his organization </li>
+								<li>Change user group  - user has an access only to the rooms belong to his group </li>
 								<li>Change community settings and check </li>
 							</ol>
 						</li>
@@ -287,10 +287,10 @@
 							</ol>
 						</li>
 						<li>
-							Organizations 
+							Groups 
 							<ol>
-								<li>Add/remove/edit/search an organization </li>
-								<li>Add/remove a user from the user list of selected organization </li>
+								<li>Add/remove/edit/search an group </li>
+								<li>Add/remove a user from the user list of selected group </li>
 							</ol>
 						</li>
 						<li>

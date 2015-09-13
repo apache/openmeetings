@@ -27,7 +27,7 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import org.apache.openmeetings.db.entity.record.FlvRecording;
+import org.apache.openmeetings.db.entity.record.Recording;
 
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -45,7 +45,7 @@ public class RecordingDTO implements Serializable {
 
 	public RecordingDTO() {}
 	
-	public RecordingDTO(FlvRecording r) {
+	public RecordingDTO(Recording r) {
 		this.id = r.getId();
 		this.name = r.getFileName();
 		this.flvName = r.getFileHash();
@@ -129,10 +129,10 @@ public class RecordingDTO implements Serializable {
 		this.end = end;
 	}
 	
-	public static List<RecordingDTO> list(List<FlvRecording> l) {
+	public static List<RecordingDTO> list(List<Recording> l) {
 		List<RecordingDTO> rList = new ArrayList<RecordingDTO>();
 		if (l != null) {
-			for (FlvRecording r : l) {
+			for (Recording r : l) {
 				rList.add(new RecordingDTO(r));
 			}
 		}

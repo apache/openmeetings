@@ -21,10 +21,10 @@ package org.apache.openmeetings.web.admin.groups;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 
-import org.apache.openmeetings.db.dao.user.OrganisationDao;
-import org.apache.openmeetings.db.dao.user.OrganisationUserDao;
-import org.apache.openmeetings.db.entity.user.Organisation;
-import org.apache.openmeetings.db.entity.user.OrganisationUser;
+import org.apache.openmeetings.db.dao.user.GroupDao;
+import org.apache.openmeetings.db.dao.user.GroupUserDao;
+import org.apache.openmeetings.db.entity.user.Group;
+import org.apache.openmeetings.db.entity.user.GroupUser;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.web.admin.AdminBaseForm;
 import org.apache.openmeetings.web.admin.AdminUserChoiceProvider;
@@ -40,7 +40,7 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.util.time.Duration;
 import org.wicketstuff.select2.Select2Choice;
 
-public class GroupForm extends AdminBaseForm<Organisation> {
+public class GroupForm extends AdminBaseForm<Group> {
 	private static final long serialVersionUID = 1L;
 	private GroupUsersPanel usersPanel;
 	private WebMarkupContainer groupList;
@@ -50,13 +50,13 @@ public class GroupForm extends AdminBaseForm<Organisation> {
 		return String.format("%s [%s %s]", choice.getLogin(), choice.getFirstname(), choice.getLastname());
 	}
 	
-	public GroupForm(String id, WebMarkupContainer groupList, Organisation organisation) {
-		super(id, new CompoundPropertyModel<Organisation>(organisation));
+	public GroupForm(String id, WebMarkupContainer groupList, Group group) {
+		super(id, new CompoundPropertyModel<Group>(group));
 		this.groupList = groupList;
 		setOutputMarkupId(true);
 		
 		add(new RequiredTextField<String>("name").setLabel(Model.of(Application.getString(165))));
-		usersPanel = new GroupUsersPanel("users", getOrgId());
+		usersPanel = new GroupUsersPanel("users", getGroupId());
 		add(usersPanel);
 
 		add(userToadd = new Select2Choice<User>("user2add", Model.of((User)null), new AdminUserChoiceProvider() {
@@ -72,21 +72,21 @@ public class GroupForm extends AdminBaseForm<Organisation> {
 
 			@Override
 			protected void onUpdate(AjaxRequestTarget target) {
-				Organisation o = GroupForm.this.getModelObject();
+				Group o = GroupForm.this.getModelObject();
 				User u = userToadd.getModelObject();
 				boolean found = false;
 				if (o.getId() != null) {
-					found = null != getBean(OrganisationUserDao.class).getByOrganizationAndUser(o.getId(), u.getId());
+					found = null != getBean(GroupUserDao.class).getByGroupAndUser(o.getId(), u.getId());
 				}
 				if (!found && u != null) {
-					for (OrganisationUser ou : usersPanel.getUsers2add()) {
+					for (GroupUser ou : usersPanel.getUsers2add()) {
 						if (ou.getUser().getId().equals(u.getId())) {
 							found = true;
 							break;
 						}
 					}
 					if (!found) {
-						OrganisationUser ou = new OrganisationUser(o);
+						GroupUser ou = new GroupUser(o);
 						ou.setUser(u);
 						usersPanel.getUsers2add().add(ou);
 
@@ -103,28 +103,28 @@ public class GroupForm extends AdminBaseForm<Organisation> {
 	
 	public void updateView(AjaxRequestTarget target) {
 		userToadd.setModelObject(null);
-		usersPanel.update(getOrgId());
+		usersPanel.update(getGroupId());
 		target.add(this, groupList);
 		target.appendJavaScript("groupsInit();");
 	}
 
-	private long getOrgId() {
+	private long getGroupId() {
 		return getModelObject().getId() != null ? getModelObject().getId() : 0;
 	}
 	
 	@Override
 	protected void onNewSubmit(AjaxRequestTarget target, Form<?> f) {
-		setModelObject(new Organisation());
+		setModelObject(new Group());
 		updateView(target);
 	}
 	
 	@Override
 	protected void onRefreshSubmit(AjaxRequestTarget target, Form<?> form) {
-		Organisation org = getModelObject();
+		Group org = getModelObject();
 		if (org.getId() != null) {
-			org = getBean(OrganisationDao.class).get(org.getId());
+			org = getBean(GroupDao.class).get(org.getId());
 		} else {
-			org = new Organisation();
+			org = new Group();
 		}
 		setModelObject(org);
 		updateView(target);
@@ -132,17 +132,17 @@ public class GroupForm extends AdminBaseForm<Organisation> {
 	
 	@Override
 	protected void onDeleteSubmit(AjaxRequestTarget target, Form<?> form) {
-		getBean(OrganisationDao.class).delete(getModelObject(), getUserId());
-		setModelObject(new Organisation());
+		getBean(GroupDao.class).delete(getModelObject(), getUserId());
+		setModelObject(new Group());
 		updateView(target);
 	}
 	
 	@Override
 	protected void onSaveSubmit(AjaxRequestTarget target, Form<?> form) {
-		Organisation o = getModelObject();
-		o = getBean(OrganisationDao.class).update(o, getUserId());
+		Group o = getModelObject();
+		o = getBean(GroupDao.class).update(o, getUserId());
 		setModelObject(o);
-		getBean(OrganisationUserDao.class).update(usersPanel.getUsers2add(), getUserId());
+		getBean(GroupUserDao.class).update(usersPanel.getUsers2add(), getUserId());
 		hideNewRecord();
 		updateView(target);
 	}

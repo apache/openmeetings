@@ -28,6 +28,7 @@ import java.util.Set;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterRegistration;
+import javax.servlet.FilterRegistration.Dynamic;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.Servlet;
 import javax.servlet.ServletContext;
@@ -35,7 +36,6 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRegistration;
 import javax.servlet.SessionCookieConfig;
 import javax.servlet.SessionTrackingMode;
-import javax.servlet.ServletRegistration.Dynamic;
 import javax.servlet.descriptor.JspConfigDescriptor;
 
 public class DummyServletContext implements ServletContext {
@@ -44,265 +44,305 @@ public class DummyServletContext implements ServletContext {
 	public DummyServletContext(String ctx) {
 		this.ctx = ctx;
 	}
-	
-	public ServletContext getContext(String uripath) {
+
+	@Override
+	public Dynamic addFilter(String arg0, String arg1) {
 		// stab
 		return null;
 	}
 
-	public String getContextPath() {
-		return ctx;
-	}
-
-	public int getMajorVersion() {
-		// stab
-		return 0;
-	}
-
-	public int getMinorVersion() {
-		// stab
-		return 0;
-	}
-
-	public int getEffectiveMajorVersion() {
-		// stab
-		return 0;
-	}
-
-	public int getEffectiveMinorVersion() {
-		// stab
-		return 0;
-	}
-
-	public String getMimeType(String file) {
+	@Override
+	public Dynamic addFilter(String arg0, Filter arg1) {
 		// stab
 		return null;
 	}
 
-	public Set<String> getResourcePaths(String path) {
+	@Override
+	public Dynamic addFilter(String arg0, Class<? extends Filter> arg1) {
 		// stab
 		return null;
 	}
 
-	public URL getResource(String path)
-			throws MalformedURLException {
+	@Override
+	public void addListener(String arg0) {
+		// stab
+	}
+
+	@Override
+	public <T extends EventListener> void addListener(T arg0) {
+		// stab
+	}
+
+	@Override
+	public void addListener(Class<? extends EventListener> arg0) {
+		// stab
+	}
+
+	@Override
+	public javax.servlet.ServletRegistration.Dynamic addServlet(String arg0, String arg1) {
 		// stab
 		return null;
 	}
 
-	public InputStream getResourceAsStream(String path) {
+	@Override
+	public javax.servlet.ServletRegistration.Dynamic addServlet(String arg0, Servlet arg1) {
 		// stab
 		return null;
 	}
 
-	public RequestDispatcher getRequestDispatcher(String path) {
+	@Override
+	public javax.servlet.ServletRegistration.Dynamic addServlet(String arg0, Class<? extends Servlet> arg1) {
 		// stab
 		return null;
 	}
 
-	public RequestDispatcher getNamedDispatcher(String name) {
+	@Override
+	public <T extends Filter> T createFilter(Class<T> arg0) throws ServletException {
 		// stab
 		return null;
 	}
 
-	@Deprecated
-	public Servlet getServlet(String name) throws ServletException {
+	@Override
+	public <T extends EventListener> T createListener(Class<T> arg0) throws ServletException {
 		// stab
 		return null;
 	}
 
-	@Deprecated
-	public Enumeration<Servlet> getServlets() {
+	@Override
+	public <T extends Servlet> T createServlet(Class<T> arg0) throws ServletException {
 		// stab
 		return null;
 	}
 
-	@Deprecated
-	public Enumeration<String> getServletNames() {
+	@Override
+	public void declareRoles(String... arg0) {
+		// stab
+	}
+
+	@Override
+	public Object getAttribute(String arg0) {
 		// stab
 		return null;
 	}
 
-	public void log(String msg) {
-		// stab
-	}
-
-	@Deprecated
-	public void log(Exception exception, String msg) {
-		// stab
-	}
-
-	public void log(String message, Throwable throwable) {
-		// stab
-	}
-
-	public String getRealPath(String path) {
-		// stab
-		return null;
-	}
-
-	public String getServerInfo() {
-		// stab
-		return null;
-	}
-
-	public String getInitParameter(String name) {
-		// stab
-		return null;
-	}
-
-	public Enumeration<String> getInitParameterNames() {
-		// stab
-		return null;
-	}
-
-	public boolean setInitParameter(String name, String value) {
-		// stab
-		return false;
-	}
-
-	public Object getAttribute(String name) {
-		// stab
-		return null;
-	}
-
+	@Override
 	public Enumeration<String> getAttributeNames() {
 		// stab
 		return null;
 	}
 
-	public void setAttribute(String name, Object object) {
-		// stab
-	}
-
-	public void removeAttribute(String name) {
-		// stab
-	}
-
-	public String getServletContextName() {
-		// stab
-		return null;
-	}
-
-	public Dynamic addServlet(String servletName, String className) {
-		// stab
-		return null;
-	}
-
-	public Dynamic addServlet(String servletName, Servlet servlet) {
-		// stab
-		return null;
-	}
-
-	public Dynamic addServlet(String servletName,
-			Class<? extends Servlet> servletClass) {
-		// stab
-		return null;
-	}
-
-	public <T extends Servlet> T createServlet(Class<T> c)
-			throws ServletException {
-		// stab
-		return null;
-	}
-
-	public ServletRegistration getServletRegistration(
-			String servletName) {
-		// stab
-		return null;
-	}
-
-	public Map<String, ? extends ServletRegistration> getServletRegistrations() {
-		// stab
-		return null;
-	}
-
-	public javax.servlet.FilterRegistration.Dynamic addFilter(
-			String filterName, String className) {
-		// stab
-		return null;
-	}
-
-	public javax.servlet.FilterRegistration.Dynamic addFilter(
-			String filterName, Filter filter) {
-		// stab
-		return null;
-	}
-
-	public javax.servlet.FilterRegistration.Dynamic addFilter(
-			String filterName, Class<? extends Filter> filterClass) {
-		// stab
-		return null;
-	}
-
-	public <T extends Filter> T createFilter(Class<T> c)
-			throws ServletException {
-		// stab
-		return null;
-	}
-
-	public FilterRegistration getFilterRegistration(
-			String filterName) {
-		// stab
-		return null;
-	}
-
-	public Map<String, ? extends FilterRegistration> getFilterRegistrations() {
-		// stab
-		return null;
-	}
-
-	public SessionCookieConfig getSessionCookieConfig() {
-		// stab
-		return null;
-	}
-
-	public void setSessionTrackingModes(
-			Set<SessionTrackingMode> sessionTrackingModes)
-			throws IllegalStateException, IllegalArgumentException {
-		// stab
-	}
-
-	public Set<SessionTrackingMode> getDefaultSessionTrackingModes() {
-		// stab
-		return null;
-	}
-
-	public Set<SessionTrackingMode> getEffectiveSessionTrackingModes() {
-		// stab
-		return null;
-	}
-
-	public void addListener(
-			Class<? extends EventListener> listenerClass) {
-		// stab
-	}
-
-	public void addListener(String className) {
-		// stab
-	}
-
-	public <T extends EventListener> void addListener(T t) {
-		// stab
-	}
-
-	public <T extends EventListener> T createListener(Class<T> c)
-			throws ServletException {
-		// stab
-		return null;
-	}
-
-	public void declareRoles(String... roleNames) {
-		// stab
-	}
-
+	@Override
 	public ClassLoader getClassLoader() {
 		// stab
 		return null;
 	}
 
+	@Override
+	public ServletContext getContext(String arg0) {
+		// stab
+		return null;
+	}
+
+	@Override
+	public String getContextPath() {
+		return ctx;
+	}
+
+	@Override
+	public Set<SessionTrackingMode> getDefaultSessionTrackingModes() {
+		// stab
+		return null;
+	}
+
+	@Override
+	public int getEffectiveMajorVersion() {
+		// stab
+		return 0;
+	}
+
+	@Override
+	public int getEffectiveMinorVersion() {
+		// stab
+		return 0;
+	}
+
+	@Override
+	public Set<SessionTrackingMode> getEffectiveSessionTrackingModes() {
+		// stab
+		return null;
+	}
+
+	@Override
+	public FilterRegistration getFilterRegistration(String arg0) {
+		// stab
+		return null;
+	}
+
+	@Override
+	public Map<String, ? extends FilterRegistration> getFilterRegistrations() {
+		// stab
+		return null;
+	}
+
+	@Override
+	public String getInitParameter(String arg0) {
+		// stab
+		return null;
+	}
+
+	@Override
+	public Enumeration<String> getInitParameterNames() {
+		// stab
+		return null;
+	}
+
+	@Override
 	public JspConfigDescriptor getJspConfigDescriptor() {
 		// stab
 		return null;
+	}
+
+	@Override
+	public int getMajorVersion() {
+		// stab
+		return 0;
+	}
+
+	@Override
+	public String getMimeType(String arg0) {
+		// stab
+		return null;
+	}
+
+	@Override
+	public int getMinorVersion() {
+		// stab
+		return 0;
+	}
+
+	@Override
+	public RequestDispatcher getNamedDispatcher(String arg0) {
+		// stab
+		return null;
+	}
+
+	@Override
+	public String getRealPath(String arg0) {
+		// stab
+		return null;
+	}
+
+	@Override
+	public RequestDispatcher getRequestDispatcher(String arg0) {
+		// stab
+		return null;
+	}
+
+	@Override
+	public URL getResource(String arg0) throws MalformedURLException {
+		// stab
+		return null;
+	}
+
+	@Override
+	public InputStream getResourceAsStream(String arg0) {
+		// stab
+		return null;
+	}
+
+	@Override
+	public Set<String> getResourcePaths(String arg0) {
+		// stab
+		return null;
+	}
+
+	@Override
+	public String getServerInfo() {
+		// stab
+		return null;
+	}
+
+	@Override
+	public Servlet getServlet(String arg0) throws ServletException {
+		// stab
+		return null;
+	}
+
+	@Override
+	public String getServletContextName() {
+		// stab
+		return null;
+	}
+
+	@Override
+	public Enumeration<String> getServletNames() {
+		// stab
+		return null;
+	}
+
+	@Override
+	public ServletRegistration getServletRegistration(String arg0) {
+		// stab
+		return null;
+	}
+
+	@Override
+	public Map<String, ? extends ServletRegistration> getServletRegistrations() {
+		// stab
+		return null;
+	}
+
+	@Override
+	public Enumeration<Servlet> getServlets() {
+		// stab
+		return null;
+	}
+
+	@Override
+	public SessionCookieConfig getSessionCookieConfig() {
+		// stab
+		return null;
+	}
+
+	@Override
+	public String getVirtualServerName() {
+		// stab
+		return null;
+	}
+
+	@Override
+	public void log(String arg0) {
+		// stab
+	}
+
+	@Override
+	public void log(Exception arg0, String arg1) {
+		// stab
+	}
+
+	@Override
+	public void log(String arg0, Throwable arg1) {
+		// stab
+	}
+
+	@Override
+	public void removeAttribute(String arg0) {
+		// stab
+	}
+
+	@Override
+	public void setAttribute(String arg0, Object arg1) {
+		// stab
+	}
+
+	@Override
+	public boolean setInitParameter(String arg0, String arg1) {
+		// stab
+		return false;
+	}
+
+	@Override
+	public void setSessionTrackingModes(Set<SessionTrackingMode> arg0) {
+		// stab
 	}
 }

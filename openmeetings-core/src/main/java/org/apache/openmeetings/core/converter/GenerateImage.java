@@ -47,7 +47,7 @@ public class GenerateImage extends BaseConverter {
 	private static final Logger log = Red5LoggerFactory.getLogger(GenerateImage.class, webAppRootKey);
 
 	@Autowired
-	private UserDao usersDao;
+	private UserDao userDao;
 	@Autowired
 	private GenerateThumbs generateThumbs;
 
@@ -103,10 +103,10 @@ public class GenerateImage extends BaseConverter {
 		}
 
 		String pictureuri = destinationFile.getName();
-		User us = usersDao.get(userId);
+		User us = userDao.get(userId);
 		us.setUpdated(new java.util.Date());
 		us.setPictureuri(pictureuri);
-		usersDao.update(us, userId);
+		userDao.update(us, userId);
 
 		//FIXME: After uploading a new picture all other clients should refresh
 		//scopeApplicationAdapter.updateUserSessionObject(userId, pictureuri);

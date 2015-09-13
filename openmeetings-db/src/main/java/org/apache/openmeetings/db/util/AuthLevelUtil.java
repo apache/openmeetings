@@ -22,7 +22,7 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
 import java.util.Set;
 
-import org.apache.openmeetings.db.entity.user.OrganisationUser;
+import org.apache.openmeetings.db.entity.user.GroupUser;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Right;
 import org.red5.logging.Red5LoggerFactory;
@@ -41,11 +41,11 @@ public class AuthLevelUtil {
 		return check(rights, Right.Room);
 	}
 
-	public static boolean hasModLevel(User u, Long orgId) {
+	public static boolean hasModLevel(User u, Long groupId) {
 		boolean result = hasAdminLevel(u.getRights());
-		if (!result && orgId != null) {
-			for (OrganisationUser ou : u.getOrganisationUsers()) {
-				if (orgId.equals(ou.getOrganisation().getId())) {
+		if (!result && groupId != null) {
+			for (GroupUser ou : u.getGroupUsers()) {
+				if (groupId.equals(ou.getGroup().getId())) {
 					if (Boolean.TRUE.equals(ou.getIsModerator())) {
 						result = true;
 					}
