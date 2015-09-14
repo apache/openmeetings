@@ -28,8 +28,8 @@ import org.apache.openmeetings.web.pages.MainPage;
 import org.apache.openmeetings.web.util.OmUrlFragment;
 import org.apache.openmeetings.web.util.OmUrlFragment.MenuActions;
 import org.apache.openmeetings.web.util.OmUrlFragment.MenuParams;
+import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.html.basic.Label;
@@ -68,14 +68,12 @@ public class MenuPanel extends BasePanel {
 						final String desc = getString("" + m.getTooltip_fieldvalues_id());
 						final MenuActions action = MenuActions.valueOf(m.getAction());
 						final MenuParams params = m.getParams() != null ? MenuParams.valueOf(m.getParams()) : MenuParams.publicTabButton;
-						item.add(new AjaxLink<Void>("link") {
+						item.add(new Label("name", name), new Label("description", desc));
+						item.add(new AjaxEventBehavior("click") {
 							private static final long serialVersionUID = 1L;
-							{
-								add(new Label("name", name));
-								add(new Label("description", desc));
-							}
-							
-							public void onClick(AjaxRequestTarget target) {
+
+							@Override
+							protected void onEvent(AjaxRequestTarget target) {
 								((MainPage)getPage()).updateContents(new OmUrlFragment(action, params), target);
 							}
 						});
