@@ -21,6 +21,7 @@ package org.apache.openmeetings.web.common.menu;
 import java.util.List;
 
 import org.apache.openmeetings.web.common.BasePanel;
+import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.behavior.AttributeAppender;
@@ -81,14 +82,12 @@ public class MenuPanel extends BasePanel {
 						protected void populateItem(final ListItem<MenuItem> item1) {
 							final MenuItem m = item1.getModelObject();
 							item1.setVisible(m.isActive());
-							item1.add(new AjaxLink<Void>("link") {
+							item1.add(new Label("name", m.getName()), new Label("description", m.getDesc()));
+							item1.add(new AjaxEventBehavior("click") {
 								private static final long serialVersionUID = 1L;
-								{
-									add(new Label("name", m.getName()));
-									add(new Label("description", m.getDesc()));
-								}
-								
-								public void onClick(AjaxRequestTarget target) {
+
+								@Override
+								protected void onEvent(AjaxRequestTarget target) {
 									m.onClick(getMainPage(), target);
 								}
 							});
