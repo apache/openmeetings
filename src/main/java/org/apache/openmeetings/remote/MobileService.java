@@ -52,6 +52,7 @@ import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.remote.red5.ScopeApplicationAdapter;
 import org.apache.openmeetings.remote.util.SessionVariablesUtil;
 import org.apache.openmeetings.util.CalendarPatterns;
+import org.apache.openmeetings.util.OmException;
 import org.apache.openmeetings.util.crypt.ManageCryptStyle;
 import org.apache.wicket.util.string.Strings;
 import org.red5.logging.Red5LoggerFactory;
@@ -179,6 +180,8 @@ public class MobileService {
 		try {
 			User u = userDao.login(login, password);
 			result = login(u, result);
+		} catch (OmException e) {
+			result.put("status", e.getCode());
 		} catch (Exception e) {
 			log.error("[loginUser]", e);
 		}
