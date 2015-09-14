@@ -53,7 +53,8 @@
 
 	<bean id="openmeetings.SessionManager" class="org.apache.openmeetings.session.SessionManager">
 		<property name="cache">
-			<ref bean="openmeetings.HashMapStore" />  <!-- Memory based session cache by default -->
+			<!-- Memory based session cache by default -->
+			<ref bean="openmeetings.HashMapStore" />
 			<!-- The following section should be used in clustering mode
 			<ref bean="openmeetings.DatabaseStore" />
 			-->
@@ -71,7 +72,9 @@
 	<bean id="openmeetings.DatabaseStore" class="org.apache.openmeetings.session.store.DatabaseStore" />
 
 	<bean id="openmeetings.ServerUtil" scope="singleton" class="org.apache.openmeetings.session.ServerUtil">
-		<!-- Need to be uncommented and set to the real ID if in cluster mode <property name="serverId" value="1" /> -->
+		<!-- Need to be uncommented and set to the real ID if in cluster mode
+		<property name="serverId" value="1" />
+		-->
 	</bean>
 
 	<!-- Cluster related config start -->

@@ -68,8 +68,11 @@ public class RoomPanel extends BasePanel {
 		return pp.add("protocol", s.getProtocol()).add("host", s.getAddress()).add("port", s.getPort()).add("context", s.getWebapp());
 	}
 	
-	private static PageParameters addServer(long roomId) {
-		PageParameters pp = new PageParameters().add("wicketsid", getSid()).add("wicketroomid", roomId).add("language", getLanguage());
+	public static PageParameters addServer(long roomId, boolean addBasic) {
+		PageParameters pp = new PageParameters();
+		if (addBasic) {
+			pp.add("wicketsid", getSid()).add("wicketroomid", roomId).add("language", getLanguage());
+		}
 		List<Server> serverList = getBean(ServerDao.class).getActiveServers();
 
 		long minimum = -1;
@@ -98,7 +101,7 @@ public class RoomPanel extends BasePanel {
 	}
 
 	public RoomPanel(String id, long roomId) {
-		this(id, addServer(roomId));
+		this(id, addServer(roomId, true));
 	}
 	
 	public RoomPanel(String id, PageParameters pp) {
