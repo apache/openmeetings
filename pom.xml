@@ -136,7 +136,6 @@
 			<email>seba.wagner@gmail.com</email>
 			<url>https://twitter.com/#!/dead_lock</url>
 			<roles>
-				<role>chair</role>
 				<role>architect</role>
 				<role>developer</role>
 				<role>pmc</role>
@@ -149,6 +148,7 @@
 			<organization>Unipro</organization>
 			<organizationUrl>http://unipro.ru</organizationUrl>
 			<roles>
+				<role>chair</role>
 				<role>architect</role>
 				<role>developer</role>
 				<role>pmc</role>

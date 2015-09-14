@@ -22,6 +22,7 @@
   <Project rdf:about="http://openmeetings.apache.org/">
     <name>Apache OpenMeetings</name>
     <homepage rdf:resource="http://openmeetings.apache.org/"/>
+    <asfext:pmc rdf:resource="http://openmeetings.apache.org/team-list.html" />
     <programming-language>Java</programming-language>
     <category rdf:resource="http://projects.apache.org/category/network-server"/>
     <category rdf:resource="http://projects.apache.org/category/network-client"/>
