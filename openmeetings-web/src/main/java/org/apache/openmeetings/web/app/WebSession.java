@@ -89,6 +89,7 @@ import ro.fortsoft.wicket.dashboard.web.DashboardContext;
 public class WebSession extends AbstractAuthenticatedWebSession implements IWebSession {
 	private static final long serialVersionUID = 1L;
 	public static int MILLIS_IN_MINUTE = 60000;
+	public static final String SECURE_HASH = "secureHash";
 	private long userId = -1;
 	private Set<Right> rights = new HashSet<User.Right>(); //TODO renew somehow on user edit !!!!
 	private long languageId = -1; //TODO renew somehow on user edit !!!!
@@ -134,7 +135,7 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 		//first of all will check hashes
 		try {
 			IRequestParameters params = RequestCycle.get().getRequest().getRequestParameters();
-			StringValue secureHash = params.getParameterValue("secureHash");
+			StringValue secureHash = params.getParameterValue(SECURE_HASH);
 			StringValue invitationHash = params.getParameterValue("invitationHash");
 			if (!secureHash.isEmpty() || !invitationHash.isEmpty()) {
 				PageParameters pp = new PageParameters();

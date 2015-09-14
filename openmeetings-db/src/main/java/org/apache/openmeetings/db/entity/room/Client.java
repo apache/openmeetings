@@ -290,7 +290,7 @@ public class Client implements IDataProviderEntity {
 	 * @see Client#getSwfurl()
 	 */
 	// FIXME: Move to {@link ClientSession}
-	@Column(name = "swfurl")
+	@Column(name = "swfurl", length=2048)
 	private String swfurl;
 	
 	/**
