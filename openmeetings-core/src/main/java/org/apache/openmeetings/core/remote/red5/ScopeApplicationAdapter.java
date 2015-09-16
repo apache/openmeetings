@@ -1242,7 +1242,7 @@ public class ScopeApplicationAdapter extends ApplicationAdapter implements IPend
 			} else {
 				// If this is an Appointment then the Moderator will be set to the Invitor
 
-				Appointment ment = appointmentDao.getAppointmentByRoom(roomId);
+				Appointment ment = appointmentDao.getByRoom(roomId);
 
 				Long userIdInRoomClient = currentClient.getUserId();
 

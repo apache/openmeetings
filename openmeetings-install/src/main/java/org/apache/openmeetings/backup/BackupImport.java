@@ -406,8 +406,8 @@ public class BackupImport {
 				if (a.getRoom() != null && a.getRoom().getId() == null) {
 					a.setRoom(null);
 				}
-				Long newAppId = appointmentDao.addAppointmentObj(a);
-				appointmentsMap.put(appId, newAppId);
+				a = appointmentDao.update(a, null, false);
+				appointmentsMap.put(appId, a.getId());
 			}
 		}
 

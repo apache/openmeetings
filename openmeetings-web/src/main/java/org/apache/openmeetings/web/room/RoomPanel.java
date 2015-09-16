@@ -240,7 +240,7 @@ public class RoomPanel extends BasePanel {
 		boolean allowed = false;
 		String deniedMessage = null;
 		if (r.isAppointment()) {
-			Appointment a = getBean(AppointmentDao.class).getAppointmentByRoom(roomId);
+			Appointment a = getBean(AppointmentDao.class).getByRoom(roomId);
 			if (a != null && !a.isDeleted()) {
 				allowed = a.getOwner().getId().equals(getUserId());
 				log.debug("appointed room, isOwner ? " + allowed);

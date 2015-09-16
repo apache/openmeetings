@@ -85,7 +85,7 @@ public class TestDatabaseStructureGetAppointmentByRange extends AbstractJUnitDef
 		a3 = appointmentDao.update(a3, userId);
 		
 		int a1found = 0, a2found = 0, a3found = 0;
-		for (Appointment a : appointmentDao.getAppointmentsByRange(userId, rangeStart.getTime(), rangeEnd.getTime())) {
+		for (Appointment a : appointmentDao.getInRange(userId, rangeStart.getTime(), rangeEnd.getTime())) {
 			int mmCount = a.getMeetingMembers() == null ? 0 : a.getMeetingMembers().size();
 			if (a.getId().equals(a1.getId())) {
 				assertEquals("Inapropriate MeetingMembers count", 0, mmCount);

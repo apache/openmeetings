@@ -167,10 +167,9 @@ public class PrivateMessageDao implements IDataProviderDao<PrivateMessage> {
 		return query.executeUpdate();
 	}
 	
-	public List<PrivateMessage> getPrivateMessagesByRoom(Long roomId) {
-		TypedQuery<PrivateMessage> query = em.createNamedQuery("getPrivateMessagesByRoom", PrivateMessage.class); 
-		query.setParameter("roomId", roomId);
-		return query.getResultList();
+	public List<PrivateMessage> getByRoom(Long roomId) {
+		return em.createNamedQuery("getPrivateMessagesByRoom", PrivateMessage.class)
+				.setParameter("roomId", roomId).getResultList();
 	}
 
 	public List<PrivateMessage> get(String search, int start, int count, String order) {

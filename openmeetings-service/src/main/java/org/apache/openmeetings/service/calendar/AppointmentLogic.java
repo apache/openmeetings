@@ -142,7 +142,7 @@ public class AppointmentLogic {
 			end.setTimeInMillis(end.getTimeInMillis() + milliseconds);
 		}
 
-		for (Appointment a : appointmentDao.getAppointmentsInRange(start, end)) {
+		for (Appointment a : appointmentDao.getInRange(start, end)) {
 			// Prevent email from being send twice, even if the cycle takes
 			// very long to send each
 			if (a.isReminderEmailSend()) {
@@ -158,7 +158,7 @@ public class AppointmentLogic {
 			}
 			// Update Appointment to not send invitation twice
 			a.setReminderEmailSend(true);
-			appointmentDao.updateAppointment(a);
+			appointmentDao.update(a, null, false);
 
 			List<MeetingMember> members = a.getMeetingMembers();
 

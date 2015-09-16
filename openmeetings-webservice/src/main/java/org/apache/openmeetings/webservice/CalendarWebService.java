@@ -95,7 +95,7 @@ public class CalendarWebService {
 		try {
 			Long userId = sessionDao.checkSession(sid);
 			if (AuthLevelUtil.hasUserLevel(userDao.getRights(userId))) {
-				return AppointmentDTO.list(appointmentDao.getAppointmentsByRange(userId, start.getTime(), end.getTime()));
+				return AppointmentDTO.list(appointmentDao.getInRange(userId, start.getTime(), end.getTime()));
 			} else {
 				throw new ServiceException("Insufficient permissins"); //TODO code -26
 			}
@@ -133,7 +133,7 @@ public class CalendarWebService {
 		try {
 			Long authUserId = sessionDao.checkSession(sid);
 			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(authUserId))) {
-				return AppointmentDTO.list(appointmentDao.getAppointmentsByRange(userid, start.getTime(), end.getTime()));
+				return AppointmentDTO.list(appointmentDao.getInRange(userid, start.getTime(), end.getTime()));
 			} else {
 				throw new ServiceException("Insufficient permissins"); //TODO code -26
 			}
@@ -158,7 +158,7 @@ public class CalendarWebService {
 		try {
 			Long userId = sessionDao.checkSession(sid);
 			if (AuthLevelUtil.hasUserLevel(userDao.getRights(userId))) {
-				return new AppointmentDTO(appointmentDao.getNextAppointment(userId, new Date()));
+				return new AppointmentDTO(appointmentDao.getNext(userId, new Date()));
 			} else {
 				throw new ServiceException("Insufficient permissins"); //TODO code -26
 			}
@@ -186,7 +186,7 @@ public class CalendarWebService {
 		try {
 			Long authUserId = sessionDao.checkSession(sid);
 			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(authUserId))) {
-				return new AppointmentDTO(appointmentDao.getNextAppointment(userid, new Date()));
+				return new AppointmentDTO(appointmentDao.getNext(userid, new Date()));
 			} else {
 				throw new ServiceException("Insufficient permissins"); //TODO code -26
 			}
@@ -212,7 +212,7 @@ public class CalendarWebService {
 		try {
 			Long userId = sessionDao.checkSession(sid);
 			if (AuthLevelUtil.hasUserLevel(userDao.getRights(userId))) {
-				Appointment app = appointmentDao.getAppointmentByOwnerRoom(userId, roomid);
+				Appointment app = appointmentDao.getByRoom(userId, roomid);
 				if (app != null) {
 					return new AppointmentDTO(app);
 				}
@@ -636,7 +636,7 @@ public class CalendarWebService {
 			Long userId = sessionDao.checkSession(SID);
 
 			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(userId))) {
-				Appointment a = appointmentDao.getAppointmentByRoom(roomId);
+				Appointment a = appointmentDao.getByRoom(roomId);
 
 				if (email == null || a == null) {
 					return -1L;

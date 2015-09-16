@@ -42,7 +42,7 @@ public class AppointmentConverter extends OmConverter<Appointment> {
 		long oldId = getLong(node);
 		long newId = idMap.containsKey(oldId) ? idMap.get(oldId) : oldId;
 		
-		Appointment a = appointmentDao.getAppointmentByIdBackup(newId);
+		Appointment a = appointmentDao.getAny(newId);
 		return a == null ? new Appointment() : a;
 	}
 

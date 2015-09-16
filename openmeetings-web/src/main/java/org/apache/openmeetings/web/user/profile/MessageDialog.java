@@ -33,10 +33,13 @@ import java.util.List;
 
 import org.apache.openmeetings.core.mail.MailHandler;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
+import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
 import org.apache.openmeetings.db.dao.room.IInvitationManager;
 import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.dao.user.PrivateMessageDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
+import org.apache.openmeetings.db.entity.calendar.Appointment;
+import org.apache.openmeetings.db.entity.calendar.MeetingMember;
 import org.apache.openmeetings.db.entity.room.Invitation;
 import org.apache.openmeetings.db.entity.room.Invitation.Valid;
 import org.apache.openmeetings.db.entity.room.Room;
@@ -180,10 +183,29 @@ public class MessageDialog extends AbstractFormDialog<PrivateMessage> {
 			r.setName(p.getSubject());
 			r.setComment("");
 			r.setNumberOfPartizipants(100L);
-			r.setAppointment(false);
+			r.setAppointment(true);
 			r.setAllowUserQuestions(true);
 			r.setAllowFontStyles(true);
 			r = getBean(RoomDao.class).update(r, getUserId());
+			Appointment a = new Appointment();
+			a.setTitle(p.getSubject());
+			a.setDescription(p.getMessage());
+			a.setRoom(r);
+			a.setStart(CalendarHelper.getDate(start.getModelObject()));
+			a.setEnd(CalendarHelper.getDate(end.getModelObject()));
+			List<MeetingMember> attendees = new ArrayList<>();
+			for (User to : modelTo.getObject()) {
+        		MeetingMember mm = new MeetingMember();
+        		mm.setUser(to);
+        		mm.setDeleted(false);
+        		mm.setInserted(a.getInserted());
+        		mm.setUpdated(a.getUpdated());
+        		mm.setAppointment(a);
+        		attendees.add(mm);
+			}
+			a.setOwner(getBean(UserDao.class).get(getUserId()));
+			a.setMeetingMembers(attendees);
+	        getBean(AppointmentDao.class).update(a, getUserId(), false);
 			p.setRoom(r);
 		} else {
 			p.setRoom(null);

@@ -53,7 +53,7 @@ public class TestDatabaseStructureAppointment extends AbstractJUnitDefaults {
 				Date date = format.parse( "2008-17-08" );
 				Date date2 = format.parse( "2008-18-08" );
 		
-				List<Appointment> listAppoints =	appointmentDao.getAppointmentsByRange(1L, date, date2);
+				List<Appointment> listAppoints =	appointmentDao.getInRange(1L, date, date2);
 			//List<Appointment> listAppoints = AppointmentDaoImpl.getInstance().searchAppointmentsByName("%");
 			//AppointmentDaoImpl.getInstance().getNextAppointmentById(1L);
 			//AppointmentDaoImpl.getInstance().addAppointment("mezo",1L, "Pforzheim", "zweiter", Calendar.getInstance().getTime() , 

@@ -230,7 +230,7 @@ public class ConferenceService {
 			return null;
 
 		try {
-			Appointment ment = appointmentDao.getAppointmentByRoom(roomId);
+			Appointment ment = appointmentDao.getByRoom(roomId);
 
 			return ment;
 		} catch (Exception e) {
@@ -253,7 +253,7 @@ public class ConferenceService {
 
 		if (AuthLevelUtil.hasUserLevel(userDao.getRights(userId))) {
 
-			List<Appointment> points = appointmentDao.getTodaysAppointmentsbyRangeAndMember(userId);
+			List<Appointment> points = appointmentDao.getForToday(userId);
 			List<Room> result = new ArrayList<Room>();
 
 			if (points != null) {
@@ -289,7 +289,7 @@ public class ConferenceService {
 			Long userId = sessiondataDao.checkSession(SID);
 
 			if (AuthLevelUtil.hasUserLevel(userDao.getRights(userId))) {
-				List<Appointment> appointments = appointmentDao.getTodaysAppointmentsbyRangeAndMember(userId);
+				List<Appointment> appointments = appointmentDao.getForToday(userId);
 				List<Room> result = new ArrayList<Room>();
 
 				if (appointments != null) {
