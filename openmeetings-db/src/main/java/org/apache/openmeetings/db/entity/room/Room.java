@@ -295,7 +295,7 @@ public class Room implements IDataProviderEntity {
 	private String pin;
 	
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	@JoinColumn(name = "rooms_id", insertable = true, updatable = true)
+	@JoinColumn(name = "room_id", insertable = true, updatable = true)
 	@ElementDependent
 	@org.simpleframework.xml.Transient
 	private List<RoomGroup> roomGroups = new ArrayList<RoomGroup>();

@@ -35,7 +35,7 @@ import org.apache.openmeetings.core.mail.MailHandler;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.room.IInvitationManager;
 import org.apache.openmeetings.db.dao.room.RoomDao;
-import org.apache.openmeetings.db.dao.user.PrivateMessagesDao;
+import org.apache.openmeetings.db.dao.user.PrivateMessageDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.room.Invitation;
 import org.apache.openmeetings.db.entity.room.Invitation.Valid;
@@ -188,7 +188,7 @@ public class MessageDialog extends AbstractFormDialog<PrivateMessage> {
 		} else {
 			p.setRoom(null);
 		}
-		PrivateMessagesDao msgDao = getBean(PrivateMessagesDao.class);
+		PrivateMessageDao msgDao = getBean(PrivateMessageDao.class);
 		for (User to : modelTo.getObject()) {
 			UserDao userDao = getBean(UserDao.class); 
 			if (to.getId() == null) {

@@ -29,7 +29,7 @@ import org.apache.openmeetings.db.entity.room.RoomModerator;
 import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
-public class RoomModeratorsDao {
+public class RoomModeratorDao {
 	@PersistenceContext
 	private EntityManager em;
 

@@ -35,9 +35,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
-public class UserContactsDao {
+public class UserContactDao {
 	
-	private static final Logger log = Red5LoggerFactory.getLogger(UserContactsDao.class, OpenmeetingsVariables.webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(UserContactDao.class, OpenmeetingsVariables.webAppRootKey);
 	@PersistenceContext
 	private EntityManager em;
     @Autowired

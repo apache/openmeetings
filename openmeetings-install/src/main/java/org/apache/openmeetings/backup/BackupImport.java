@@ -69,9 +69,9 @@ import org.apache.openmeetings.db.dao.server.OAuth2Dao;
 import org.apache.openmeetings.db.dao.server.ServerDao;
 import org.apache.openmeetings.db.dao.user.GroupDao;
 import org.apache.openmeetings.db.dao.user.PrivateMessageFolderDao;
-import org.apache.openmeetings.db.dao.user.PrivateMessagesDao;
+import org.apache.openmeetings.db.dao.user.PrivateMessageDao;
 import org.apache.openmeetings.db.dao.user.StateDao;
-import org.apache.openmeetings.db.dao.user.UserContactsDao;
+import org.apache.openmeetings.db.dao.user.UserContactDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.basic.ChatMessage;
 import org.apache.openmeetings.db.entity.basic.Configuration;
@@ -136,7 +136,7 @@ public class BackupImport {
 	@Autowired
 	private PrivateMessageFolderDao privateMessageFolderDao;
 	@Autowired
-	private PrivateMessagesDao privateMessagesDao;
+	private PrivateMessageDao privateMessageDao;
 	@Autowired
 	private MeetingMemberDao meetingMemberDao;
 	@Autowired
@@ -144,7 +144,7 @@ public class BackupImport {
 	@Autowired
 	private FileExplorerItemDao fileExplorerItemDao;
 	@Autowired
-	private UserContactsDao userContactsDao;
+	private UserContactDao userContactDao;
 	@Autowired
 	private PollDao pollManager;
 	@Autowired
@@ -515,14 +515,14 @@ public class BackupImport {
 			List<UserContact> list = readList(serializer, f, "userContacts.xml", "usercontacts", UserContact.class, true);
 			for (UserContact uc : list) {
 				Long ucId = uc.getUserContactId();
-				UserContact storedUC = userContactsDao.get(ucId);
+				UserContact storedUC = userContactDao.get(ucId);
 
 				if (storedUC == null && uc.getContact() != null && uc.getContact().getId() != null) {
 					uc.setUserContactId(0);
 					if (uc.getOwner() != null && uc.getOwner().getId() == null) {
 						uc.setOwner(null);
 					}
-					Long newId = userContactsDao.addUserContactObj(uc);
+					Long newId = userContactDao.addUserContactObj(uc);
 					userContactsMap.put(ucId, newId);
 				}
 			}
@@ -572,7 +572,7 @@ public class BackupImport {
 				{
 					p.setFolderId(SENT_FOLDER_ID);
 				}
-				privateMessagesDao.update(p, null);
+				privateMessageDao.update(p, null);
 			}
 		}
 

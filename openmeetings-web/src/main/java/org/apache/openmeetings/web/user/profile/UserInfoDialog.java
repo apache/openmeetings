@@ -24,7 +24,7 @@ import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import java.util.Arrays;
 import java.util.List;
 
-import org.apache.openmeetings.db.dao.user.UserContactsDao;
+import org.apache.openmeetings.db.dao.user.UserContactDao;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.util.ContactsHelper;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
@@ -66,7 +66,7 @@ public class UserInfoDialog extends AbstractDialog<String> {
 	
 	@Override
 	protected List<DialogButton> getButtons() {
-		return userId != getUserId() && 0 == getBean(UserContactsDao.class).checkUserContacts(userId, getUserId())
+		return userId != getUserId() && 0 == getBean(UserContactDao.class).checkUserContacts(userId, getUserId())
 				? Arrays.asList(message, cancel) : Arrays.asList(contacts, message, cancel);
 	}
 	

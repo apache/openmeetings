@@ -53,8 +53,8 @@ import org.apache.openmeetings.db.dao.server.ServerDao;
 import org.apache.openmeetings.db.dao.server.SessiondataDao;
 import org.apache.openmeetings.db.dao.user.GroupDao;
 import org.apache.openmeetings.db.dao.user.PrivateMessageFolderDao;
-import org.apache.openmeetings.db.dao.user.PrivateMessagesDao;
-import org.apache.openmeetings.db.dao.user.UserContactsDao;
+import org.apache.openmeetings.db.dao.user.PrivateMessageDao;
+import org.apache.openmeetings.db.dao.user.UserContactDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.basic.ChatMessage;
 import org.apache.openmeetings.db.entity.basic.Configuration;
@@ -115,11 +115,11 @@ public class BackupExport {
 	@Autowired
 	private LdapConfigDao ldapConfigDao;
 	@Autowired
-	private PrivateMessagesDao privateMessagesDao;
+	private PrivateMessageDao privateMessageDao;
 	@Autowired
 	private PrivateMessageFolderDao privateMessageFolderDao;
 	@Autowired
-	private UserContactsDao userContactsDao;
+	private UserContactDao userContactDao;
 	@Autowired
 	private PollDao pollManager;
 	@Autowired
@@ -247,7 +247,7 @@ public class BackupExport {
 		 * ##################### Private Messages
 		 */
 		{
-			List<PrivateMessage> list = privateMessagesDao.get(0, Integer.MAX_VALUE);
+			List<PrivateMessage> list = privateMessageDao.get(0, Integer.MAX_VALUE);
 			Registry registry = new Registry();
 			Strategy strategy = new RegistryStrategy(registry);
 			Serializer serializer = new Persister(strategy);
@@ -281,7 +281,7 @@ public class BackupExport {
 			registry.bind(User.class, UserConverter.class);
 			
 			writeList(serializer, backup_dir, "userContacts.xml",
-					"usercontacts", userContactsDao.getUserContacts());
+					"usercontacts", userContactDao.getUserContacts());
 			progressHolder.setProgress(60);
 		}
 

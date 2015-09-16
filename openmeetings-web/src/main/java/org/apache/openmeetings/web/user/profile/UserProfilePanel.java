@@ -21,7 +21,7 @@ package org.apache.openmeetings.web.user.profile;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 
-import org.apache.openmeetings.db.dao.user.UserContactsDao;
+import org.apache.openmeetings.db.dao.user.UserContactDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.web.app.Application;
@@ -52,7 +52,7 @@ public class UserProfilePanel extends UserPanel {
 		add(new TextArea<String>("userOffers").setEnabled(false));
 		add(new TextArea<String>("userSearchs").setEnabled(false));
 		if (getUserId() == model.getObject().getId() || model.getObject().isShowContactData() 
-				|| (model.getObject().isShowContactDataToContacts() && getBean(UserContactsDao.class).checkUserContacts(model.getObject().getId(), getUserId()) > 0))
+				|| (model.getObject().isShowContactDataToContacts() && getBean(UserContactDao.class).checkUserContacts(model.getObject().getId(), getUserId()) > 0))
 		{
 			addressDenied.setVisible(false);
 			address.add(new Label("address.phone"));

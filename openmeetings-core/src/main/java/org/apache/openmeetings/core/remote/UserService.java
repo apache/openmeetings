@@ -31,7 +31,7 @@ import org.apache.openmeetings.db.dao.server.ISessionManager;
 import org.apache.openmeetings.db.dao.server.ServerDao;
 import org.apache.openmeetings.db.dao.server.SessiondataDao;
 import org.apache.openmeetings.db.dao.user.IUserService;
-import org.apache.openmeetings.db.dao.user.UserContactsDao;
+import org.apache.openmeetings.db.dao.user.UserContactDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.room.Client;
 import org.apache.openmeetings.db.entity.server.Server;
@@ -63,7 +63,7 @@ public class UserService implements IUserService {
 	@Autowired
 	private UserDao userDao;
 	@Autowired
-	private UserContactsDao userContactsDao;
+	private UserContactDao userContactDao;
 	@Autowired
 	private TimezoneUtil timezoneUtil;
 	@Autowired
@@ -182,7 +182,7 @@ public class UserService implements IUserService {
 			Long userId = sessiondataDao.checkSession(SID);
 			// users only
 			if (AuthLevelUtil.hasUserLevel(userDao.getRights(userId))) {
-				List<UserContact> uList = userContactsDao.getContactRequestsByUserAndStatus(userId, true);
+				List<UserContact> uList = userContactDao.getContactRequestsByUserAndStatus(userId, true);
 
 				return uList;
 			}
@@ -197,7 +197,7 @@ public class UserService implements IUserService {
 			Long userId = sessiondataDao.checkSession(SID);
 			// users only
 			if (AuthLevelUtil.hasUserLevel(userDao.getRights(userId))) {
-				List<UserContact> uList = userContactsDao.getContactsByUserAndStatus(userId, false);
+				List<UserContact> uList = userContactDao.getContactsByUserAndStatus(userId, false);
 
 				return uList;
 			}
@@ -212,13 +212,13 @@ public class UserService implements IUserService {
 			Long userId = sessiondataDao.checkSession(SID);
 			// users only
 			if (AuthLevelUtil.hasUserLevel(userDao.getRights(userId))) {
-				UserContact userContacts = userContactsDao.get(userContactId);
+				UserContact userContacts = userContactDao.get(userContactId);
 
 				if (userContacts == null) {
 					return -49;
 				}
 
-				return userContactsDao.deleteUserContact(userContactId);
+				return userContactDao.deleteUserContact(userContactId);
 			}
 		} catch (Exception err) {
 			log.error("[removeContactUser]", err);
@@ -231,7 +231,7 @@ public class UserService implements IUserService {
 			Long authUserId = sessiondataDao.checkSession(SID);
 			// users only
 			if (AuthLevelUtil.hasUserLevel(userDao.getRights(authUserId))) {
-				List<UserContact> uList = userContactsDao.getContactsByUserAndStatus(authUserId, false);
+				List<UserContact> uList = userContactDao.getContactsByUserAndStatus(authUserId, false);
 
 				for (UserContact userContact : uList) {
 					if (userContact.getContact().getId().equals(userId)) {
@@ -253,11 +253,11 @@ public class UserService implements IUserService {
 
 			// users only
 			if (AuthLevelUtil.hasUserLevel(userDao.getRights(userId))) {
-				UserContact userContacts = userContactsDao.get(contactId);
+				UserContact userContacts = userContactDao.get(contactId);
 
 				userContacts.setShareCalendar(shareCalendar);
 
-				userContactsDao.updateContact(userContacts);
+				userContactDao.updateContact(userContacts);
 			}
 		} catch (Exception err) {
 			log.error("[shareCalendarUserContact]", err);

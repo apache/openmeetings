@@ -360,24 +360,6 @@ public class InvitationManager implements IInvitationManager {
 		return invitation;
 	}
 
-	/**
-	 * Sending invitation within plain mail
-	 * 
-	 * @param user_level
-	 * @param username
-	 * @param message
-	 * @param email
-	 * @param subject
-	 * @param rooms_id
-	 * @param conferencedomain
-	 * @param isPasswordProtected
-	 * @param invitationpass
-	 * @param valid
-	 * @param validFrom
-	 * @param validTo
-	 * @param createdBy
-	 * @return
-	 */
 	public Invitation getInvitation(User inveetee, Room room, boolean isPasswordProtected, String invitationpass, Valid valid,
 			User createdBy, Long languageId, Date gmtTimeStart, Date gmtTimeEnd, Appointment appointment)
 	{

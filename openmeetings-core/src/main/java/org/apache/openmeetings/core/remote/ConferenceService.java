@@ -28,7 +28,7 @@ import java.util.List;
 import org.apache.openmeetings.core.data.conference.RoomManager;
 import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
 import org.apache.openmeetings.db.dao.room.RoomDao;
-import org.apache.openmeetings.db.dao.room.RoomModeratorsDao;
+import org.apache.openmeetings.db.dao.room.RoomModeratorDao;
 import org.apache.openmeetings.db.dao.server.ISessionManager;
 import org.apache.openmeetings.db.dao.server.SessiondataDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
@@ -62,7 +62,7 @@ public class ConferenceService {
 	@Autowired
 	private RoomDao roomDao;
 	@Autowired
-	private RoomModeratorsDao roomModeratorsDao;
+	private RoomModeratorDao roomModeratorDao;
 	@Autowired
 	private ISessionManager sessionManager = null;
 
@@ -296,11 +296,10 @@ public class ConferenceService {
 					for (int i = 0; i < appointments.size(); i++) {
 						Appointment ment = appointments.get(i);
 
-						Long rooms_id = ment.getRoom().getId();
-						Room rooom = roomDao.get(rooms_id);
+						Long roomId = ment.getRoom().getId();
+						Room rooom = roomDao.get(roomId);
 
-						rooom.setCurrentusers(this
-								.getRoomClientsListByRoomId(rooom.getId()));
+						rooom.setCurrentusers(getRoomClientsListByRoomId(rooom.getId()));
 						result.add(rooom);
 					}
 				}
@@ -364,7 +363,7 @@ public class ConferenceService {
 
 			if (AuthLevelUtil.hasUserLevel(userDao.getRights(userId))) {
 
-				return roomModeratorsDao.getByRoomId(roomId);
+				return roomModeratorDao.getByRoomId(roomId);
 
 			}
 

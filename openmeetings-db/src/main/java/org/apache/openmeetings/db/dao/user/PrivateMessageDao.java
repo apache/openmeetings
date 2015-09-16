@@ -41,8 +41,8 @@ import org.slf4j.Logger;
 import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
-public class PrivateMessagesDao implements IDataProviderDao<PrivateMessage> {
-	private static final Logger log = Red5LoggerFactory.getLogger(PrivateMessagesDao.class, webAppRootKey);
+public class PrivateMessageDao implements IDataProviderDao<PrivateMessage> {
+	private static final Logger log = Red5LoggerFactory.getLogger(PrivateMessageDao.class, webAppRootKey);
 	@PersistenceContext
 	private EntityManager em;
 	
