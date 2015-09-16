@@ -144,8 +144,8 @@ public abstract class AbstractJUnitDefaults extends AbstractSpringTest {
 
 		ap.setOwner(userDao.get(1L));
 		ap.setConnectedEvent(false);
-		Long id = appointmentDao.addAppointmentObj(ap);
-		assertNotNull("Cann't add appointment", id);
+		ap = appointmentDao.update(ap, null, false);
+		assertNotNull("Cann't add appointment", ap.getId());
 		return ap;
 	}
 

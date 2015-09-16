@@ -201,7 +201,7 @@ public class AppointmentLogic {
 			}
 			// Update Appointment to not send invitation twice
 			a.setReminderEmailSend(true);
-			appointmentDao.updateAppointment(a);
+			appointmentDao.update(a, null, false);
 
 			List<MeetingMember> members = a.getMeetingMembers();
 

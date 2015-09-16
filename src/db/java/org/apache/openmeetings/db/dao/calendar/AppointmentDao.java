@@ -117,58 +117,51 @@ public class AppointmentDao {
 		return em.createNamedQuery("getAppointments", Appointment.class).getResultList();
 	}
 
-	public Long addAppointmentObj(Appointment ap) {
-		try {
-			ap.setInserted(new Date());
-			em.persist(ap);
-
-			return ap.getId();
-		} catch (Exception ex2) {
-			log.error("[addAppointmentObj]: ", ex2);
-		}
-		return null;
-	}
-
 	public Appointment update(Appointment a, Long userId) {
+		return update(a, userId, true);
+	}
+	
+	public Appointment update(Appointment a, Long userId, boolean sendmails) {
 		Room r = a.getRoom();
 		if (r.getRooms_id() == null) {
 			r.setName(a.getTitle());
 			r.setNumberOfPartizipants(cfgDao.getConfValue("calendar.conference.rooms.default.size", Long.class, "50"));
 		}
 		roomDao.update(r, userId);
-		Set<Long> mmIds = a.getId() == null ? new HashSet<Long>()
-				: meetingMemberDao.getMeetingMemberIdsByAppointment(a.getId());
-		// update meeting members
-		//TODO update email need to be sent on meeting members list update
-		Appointment a0 = a.getId() == null ? null : get(a.getId());
-		boolean sendMail = a0 == null || !a0.getTitle().equals(a.getTitle()) ||
-				!(a0.getDescription() != null ? a0.getDescription().equals(a.getDescription()) : true) ||
-				!(a0.getLocation() != null ? a0.getLocation().equals(a.getLocation()) : true) ||
-				!a0.getStart().equals(a.getStart()) ||
-				!a0.getEnd().equals(a.getEnd());
-		List<MeetingMember> mmList = a.getMeetingMembers();
-		if (mmList != null){
-			for (MeetingMember mm : mmList) {
-				if (mm.getId() == null || !mmIds.contains(mm.getId())) {
-					invitationManager.processInvitation(a, mm, MessageType.Create);
-				} else {
-					mmIds.remove(mm.getId());
-					invitationManager.processInvitation(a, mm, MessageType.Update, sendMail);
+		if (sendmails) {
+			Set<Long> mmIds = a.getId() == null ? new HashSet<Long>()
+					: meetingMemberDao.getMeetingMemberIdsByAppointment(a.getId());
+			// update meeting members
+			Appointment a0 = a.getId() == null ? null : get(a.getId());
+			boolean sendMail = a0 == null || !a0.getTitle().equals(a.getTitle()) ||
+					!(a0.getDescription() != null ? a0.getDescription().equals(a.getDescription()) : true) ||
+					!(a0.getLocation() != null ? a0.getLocation().equals(a.getLocation()) : true) ||
+					!a0.getStart().equals(a.getStart()) ||
+					!a0.getEnd().equals(a.getEnd());
+			List<MeetingMember> mmList = a.getMeetingMembers();
+			if (mmList != null){
+				for (MeetingMember mm : mmList) {
+					if (mm.getId() == null || !mmIds.contains(mm.getId())) {
+						invitationManager.processInvitation(a, mm, MessageType.Create);
+					} else {
+						mmIds.remove(mm.getId());
+						invitationManager.processInvitation(a, mm, MessageType.Update, sendMail);
+					}
 				}
 			}
-		}
-		for (long id : mmIds) {
-			invitationManager.processInvitation(a, meetingMemberDao.get(id), MessageType.Cancel);
-		}
-		//notify owner
-		MeetingMember owner = new MeetingMember();
-		owner.setUser(a.getOwner());
-		if (a.getId() == null) {
-			invitationManager.processInvitation(a, owner, MessageType.Create);
-		} else if (a.isDeleted()) {
-			invitationManager.processInvitation(a, owner, MessageType.Cancel);
-		} else if (sendMail) {
-			invitationManager.processInvitation(a, owner, MessageType.Update, sendMail);
+			for (long id : mmIds) {
+				invitationManager.processInvitation(a, meetingMemberDao.get(id), MessageType.Cancel);
+			}
+			//notify owner
+			MeetingMember owner = new MeetingMember();
+			owner.setUser(a.getOwner());
+			if (a.getId() == null) {
+				invitationManager.processInvitation(a, owner, MessageType.Create);
+			} else if (a.isDeleted()) {
+				invitationManager.processInvitation(a, owner, MessageType.Cancel);
+			} else if (sendMail) {
+				invitationManager.processInvitation(a, owner, MessageType.Update, sendMail);
+			}
 		}
 		if (a.getId() == null) {
 			a.setInserted(new Date());
@@ -180,18 +173,6 @@ public class AppointmentDao {
 		return a;
 	}
 	
-	// ----------------------------------------------------------------------------------------------------------------------------
-
-	public Long updateAppointment(Appointment appointment) {
-		if (appointment.getId() != null) {
-			appointment = em.merge(appointment);
-			return appointment.getId();
-		} else {
-			log.error("[updateAppointment] " + "Error: No AppointmentId given");
-		}
-		return null;
-	}
-
 	public List<Appointment> getAppointmentsByRoomId(Long roomId) {
 		try {
 

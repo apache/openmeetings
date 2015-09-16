@@ -32,9 +32,12 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
 import org.apache.openmeetings.db.dao.user.PrivateMessageFolderDao;
 import org.apache.openmeetings.db.dao.user.PrivateMessagesDao;
 import org.apache.openmeetings.db.dao.user.UserContactsDao;
+import org.apache.openmeetings.db.entity.calendar.Appointment;
+import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.user.PrivateMessage;
 import org.apache.openmeetings.db.entity.user.PrivateMessageFolder;
 import org.apache.openmeetings.db.entity.user.User;
@@ -47,6 +50,7 @@ import org.apache.openmeetings.web.common.UserPanel;
 import org.apache.openmeetings.web.data.DataViewContainer;
 import org.apache.openmeetings.web.data.OmOrderByBorder;
 import org.apache.openmeetings.web.data.SearchableDataProvider;
+import org.apache.openmeetings.web.user.rooms.RoomEnterBehavior;
 import org.apache.openmeetings.web.util.ContactsHelper;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
@@ -72,12 +76,12 @@ import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
-import ro.fortsoft.wicket.dashboard.web.util.ConfirmAjaxCallListener;
-
 import com.googlecode.wicket.jquery.core.JQueryBehavior;
 import com.googlecode.wicket.jquery.core.Options;
 import com.googlecode.wicket.jquery.ui.plugins.fixedheadertable.FixedHeaderTableBehavior;
 import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
+
+import ro.fortsoft.wicket.dashboard.web.util.ConfirmAjaxCallListener;
 
 public class MessagesContactsPanel extends UserPanel {
 	private static final long serialVersionUID = 1L;
@@ -98,6 +102,7 @@ public class MessagesContactsPanel extends UserPanel {
 	private final WebMarkupContainer sent = new WebMarkupContainer("sent");
 	private final WebMarkupContainer trash = new WebMarkupContainer("trash");
 	private final WebMarkupContainer selectedMessage = new WebMarkupContainer("selectedMessage");
+	private final WebMarkupContainer roomContainer = new WebMarkupContainer("roomContainer");
 	private final WebMarkupContainer buttons = new WebMarkupContainer("buttons");
 	private final WebMarkupContainer contacts = new WebMarkupContainer("contacts");
 	private final MessageDialog newMessage;
@@ -176,6 +181,17 @@ public class MessagesContactsPanel extends UserPanel {
 		selectedMessage.addOrReplace(new Label("to", msg == null ? "" : getEmail(msg.getTo())));
 		selectedMessage.addOrReplace(new Label("subj", msg == null ? "" : msg.getSubject()));
 		selectedMessage.addOrReplace(new Label("body", msg == null ? "" : msg.getMessage()).setEscapeModelStrings(false));
+		if (msg != null) {
+			Room r = msg.getRoom();
+			if (r != null) {
+				//TODO add time check
+				Appointment a = getBean(AppointmentDao.class).getAppointmentByRoom(r.getRooms_id());
+				roomContainer.addOrReplace(new Label("start", a == null ? "" : getDateFormat().format(a.getStart())));
+				roomContainer.addOrReplace(new Label("end", a == null ? "" : getDateFormat().format(a.getEnd())));
+				roomContainer.addOrReplace(new Button("enter").add(new RoomEnterBehavior(r.getRooms_id())));
+			}
+			roomContainer.setVisible(r != null);
+		}
 		if (target != null) {
 			target.add(selectedMessage);
 			updateControls(target);
@@ -518,7 +534,7 @@ public class MessagesContactsPanel extends UserPanel {
 		selectMessage(-1, null);
 		add(container.add(dv).setOutputMarkupId(true));
 		//TODO add valid autoupdate add(new AjaxSelfUpdatingTimerBehavior(seconds(15)));
-		add(selectedMessage.setOutputMarkupId(true));
+		add(selectedMessage.add(roomContainer.setVisible(false)).setOutputMarkupId(true));
 		
 		IDataProvider<UserContact> dp = new IDataProvider<UserContact>() {
 			private static final long serialVersionUID = 1L;
