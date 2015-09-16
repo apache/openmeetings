@@ -74,16 +74,17 @@
         canvas._videocontainer._videoviewcontent.showDevicePopUpInterview(false,this.interviewPodId,tx,ty,this.width,this.height);
     </method>
 
-    <method name="sendConfirmation" args="publicSID">
-        if ($debug) Debug.write("sendConfirmation :: ",publicSID);
-        
-        canvas.thishib.setBroadCastingFlag.publicSIDOfNewModerator = publicSID;
-        canvas.thishib.setBroadCastingFlag.isAllowedToBroadCastAV = true;
-        canvas.thishib.setBroadCastingFlag.interviewPodId = this.interviewPodId;
-        canvas.thishib.setBroadCastingFlag.doCall(); 
-        
-        return true;
-    </method>
+	<method name="sendConfirmation" args="publicSID">
+		if ($debug) Debug.write("sendConfirmation :: ",publicSID);
+		
+		canvas.thishib.setBroadCastingFlag.publicSIDOfNewModerator = publicSID;
+		canvas.thishib.setBroadCastingFlag.isAllowedToBroadCastAV = true;
+		canvas.thishib.setBroadCastingFlag.canVideo = true;
+		canvas.thishib.setBroadCastingFlag.interviewPodId = this.interviewPodId;
+		canvas.thishib.setBroadCastingFlag.doCall();
+		
+		return true;
+	</method>
     
     <netRemoteCallHib name="sendMessageWithClientByPublicSID" funcname="sendMessageWithClientByPublicSID" 
                       remotecontext="$once{ canvas.thishib }" >  
