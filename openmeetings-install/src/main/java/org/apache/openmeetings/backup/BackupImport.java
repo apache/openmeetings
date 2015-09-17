@@ -300,6 +300,9 @@ public class BackupImport {
 				if (u.getSipUser() != null && u.getSipUser().getId() != 0) {
 					u.getSipUser().setId(0);
 				}
+				if (!Strings.isEmpty(u.getExternalType())) {
+					u.setType(Type.external);
+				}
 				userDao.update(u, -1L);
 				usersMap.put(userId, u.getId());
 			}
