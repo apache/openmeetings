@@ -108,6 +108,7 @@ import org.apache.openmeetings.db.util.TimezoneUtil;
 import org.apache.openmeetings.util.CalendarPatterns;
 import org.apache.openmeetings.util.OmFileHelper;
 import org.apache.openmeetings.util.crypt.MD5Implementation;
+import org.apache.wicket.util.string.Strings;
 import org.red5.logging.Red5LoggerFactory;
 import org.simpleframework.xml.Serializer;
 import org.simpleframework.xml.convert.Registry;
@@ -311,6 +312,9 @@ public class BackupImport {
 				u.setUser_id(null);
 				if (u.getSipUser() != null && u.getSipUser().getId() != 0) {
 					u.getSipUser().setId(0);
+				}
+				if (!Strings.isEmpty(u.getExternalUserType())) {
+					u.setType(Type.external);
 				}
 				usersDao.update(u, -1L);
 				usersMap.put(userId, u.getUser_id());

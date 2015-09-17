@@ -161,7 +161,7 @@ public class MainService implements IPendingServiceCallback {
 	}
 
 	public User loginWicket(String SID, String wicketSID, Long wicketroomid) {
-		log.debug("[loginWicket]");
+		log.debug("[loginWicket] SID: '{}'; wicketSID: '{}'; wicketroomid: '{}'", SID, wicketSID, wicketroomid);
 		Long userId = sessiondataDao.checkSession(wicketSID);
 		User u = userId == null ? null : userDao.get(userId);
 		if (u != null && wicketroomid != null) {

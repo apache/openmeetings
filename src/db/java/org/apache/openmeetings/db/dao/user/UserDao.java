@@ -662,6 +662,9 @@ public class UserDao implements IDataProviderDao<User> {
 		u.setForceTimeZoneCheck(forceTimeZoneCheck);
 		u.setExternalUserId(externalId);
 		u.setExternalUserType(externalType);
+		if (!Strings.isEmpty(u.getExternalUserType())) {
+			u.setType(Type.external);
+		}
 
 		u.setUserOffers(userOffers);
 		u.setUserSearchs(userSearchs);
