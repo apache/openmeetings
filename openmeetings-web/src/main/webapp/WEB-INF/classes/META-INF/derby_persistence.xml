@@ -80,7 +80,7 @@
 			<property name="openjpa.jdbc.SynchronizeMappings" value="buildSchema" />
 			<property name="openjpa.Log" value="DefaultLevel=WARN, Tool=INFO" />
 			<property name="openjpa.DataCache" value="true" />
-			<property name="openjpa.QueryCache" value="true" />
+			<property name="openjpa.QueryCache" value="false" />
 			<property name="openjpa.jdbc.DBDictionary" value="batchLimit=100" />
 			<property name="openjpa.jdbc.QuerySQLCache" value="false" />
 		</properties>
