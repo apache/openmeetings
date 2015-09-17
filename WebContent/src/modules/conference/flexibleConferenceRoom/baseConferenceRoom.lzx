@@ -68,7 +68,9 @@
 		if ($debug) Debug.write("roomobj: ",this.roomobj);
 		
 		canvas.currentRoomObject = this.roomobj;
-		canvas.sendViaLocalConnection(canvas.rtmp_lc_name,"setRoomValues", [this.roomobj.roomtype.roomtypes_id,this.roomobj.rooms_id,this.roomobj]);
+		var r = this.roomobj;
+		r.currentusers = ''; //this might be huge list
+		canvas.sendViaLocalConnection(canvas.rtmp_lc_name,"setRoomValues", [this.roomobj.roomtype.roomtypes_id,this.roomobj.rooms_id,r]);
 		
 		if (this.roomobj.isClosed) {
 			canvas.roomClosed();

@@ -590,7 +590,9 @@
 					canvas.thishib.loaderVar.close();
 				} else {
 					canvas.setRoomValues(value.roomtype.roomtypes_id,value.rooms_id,value);
-					canvas.sendViaLocalConnection(canvas.rtmp_lc_name,"setRoomValues",[value.roomtype.roomtypes_id,value.rooms_id,value]);
+					var r = value;
+					r.currentusers = ''; //this might be huge list
+					canvas.sendViaLocalConnection(canvas.rtmp_lc_name,"setRoomValues",[value.roomtype.roomtypes_id,value.rooms_id,r]);
 				}
 			} else {
 				new lz.labelerrorPopup(canvas,{errorlabelid:1286});

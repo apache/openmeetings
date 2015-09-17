@@ -1057,6 +1057,14 @@
 	</method>
 		
 	<method name="sendViaLocalConnection" args="lc_name,methodName,tArray">
+		var so:SharedObject = SharedObject.getLocal("__getObjectSizeHelper");
+		so.data.o = tArray;
+		var size:Number = so.getSize();
+		so.clear();
+		if (size > 35000) {
+			if ($debug) Debug.warn("Too big object being sent via localConnection ", size); //,tArray
+			return;
+		}
 		//if ($debug) Debug.info("sendViaLocalConnection ",lc_name,methodName); //,tArray
 		if (tArray == null || tArray.length == 0) {
 			canvas.lc.send(lc_name,methodName);
