@@ -146,8 +146,8 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 		getRootRequestMapperAsCompound().add(new NoVersionMapper(getHomePage()));
 		getRootRequestMapperAsCompound().add(new NoVersionMapper("notinited", NotInitedPage.class));
 		getRootRequestMapperAsCompound().add(new NoVersionMapper("swf", SwfPage.class));
+		getRootRequestMapperAsCompound().add(new NoVersionMapper("signin", getSignInPageClass()));
 		mountPage("install", InstallWizardPage.class);
-		mountPage("signin", getSignInPageClass());
 		mountPage("activate", ActivatePage.class);
 		mountPage("reset", ResetPage.class);
 		mountPage("/recording/${hash}", RecordingPage.class);
