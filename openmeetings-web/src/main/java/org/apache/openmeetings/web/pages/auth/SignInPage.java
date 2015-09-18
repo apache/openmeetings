@@ -184,12 +184,14 @@ public class SignInPage extends BaseInitedPage {
 		
 	public static String getRedirectUri(OAuthServer server, Component component) {
 		String result = "";
-		try {
-			String base = getBean(ConfigurationDao.class).getBaseUrl();
-			URI uri = new URI(base + component.urlFor(SignInPage.class, new PageParameters().add("oauthid", server.getId())));
-			result = uri.normalize().toString();
-		} catch (URISyntaxException e) {
-			log.error("Unexpected error while getting redirect URL", e);
+		if (server.getId() != null) {
+			try {
+				String base = getBean(ConfigurationDao.class).getBaseUrl();
+				URI uri = new URI(base + component.urlFor(SignInPage.class, new PageParameters().add("oauthid", server.getId())));
+				result = uri.normalize().toString();
+			} catch (URISyntaxException e) {
+				log.error("Unexpected error while getting redirect URL", e);
+			}
 		}
 		return result;
 	}
