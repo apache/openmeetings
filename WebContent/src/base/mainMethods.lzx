@@ -297,7 +297,12 @@
         canvas.videoComp_lc.exitRoom = function(confirm) {
             if ($debug) Debug.write("confirm exitRoom:", confirm);
             if (confirm) {
-            	logicalRoomLeave.doCall();
+	            if ($debug) Debug.write("logicalRoomLeave: ", canvas.thishib.connected);
+	            if (canvas.thishib.connected) {
+            		logicalRoomLeave.doCall();
+            	} else {
+            		canvas.doActionmenu('quit');
+            	}
             }
         }
     

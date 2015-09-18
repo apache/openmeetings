@@ -80,23 +80,26 @@
     </method>
     
     <method name="sortUserList">
-        <![CDATA[ 
-            if (this.sortType == "alphabetical") {
-                function sortByName(a,b) {
-                    if(a.firstname.toLowerCase() < b.firstname.toLowerCase()) return -1;
-                    else if(a.firstname.toLowerCase() > b.firstname.toLowerCase()) return 1;
-                    else return 0;
-                }
-                this._table.renderList.sort(sortByName);
-            } else {
-                function sortByStreamId(a,b) {
-                    if(Number(a.streamid) == Number(b.streamid)) return 0;
-                    else if(Number(a.streamid) > Number(b.streamid)) return 1;
-                    else return -1;
-                }
-                this._table.renderList.sort(sortByStreamId);
-            }
-        ]]>
+    <![CDATA[
+    	if (!this._table.renderList) {
+    		return;
+    	}
+    	if (this.sortType == "alphabetical") {
+    		function sortByName(a,b) {
+    			if(a.firstname.toLowerCase() < b.firstname.toLowerCase()) return -1;
+    			else if(a.firstname.toLowerCase() > b.firstname.toLowerCase()) return 1;
+    			else return 0;
+    		}
+    		this._table.renderList.sort(sortByName);
+    	} else {
+    		function sortByStreamId(a,b) {
+    			if(Number(a.streamid) == Number(b.streamid)) return 0;
+    			else if(Number(a.streamid) > Number(b.streamid)) return 1;
+    			else return -1;
+    		}
+    		this._table.renderList.sort(sortByStreamId);
+    	}
+    ]]>
     </method>
     
     <method name="initList">

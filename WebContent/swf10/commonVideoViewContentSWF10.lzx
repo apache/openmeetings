@@ -524,9 +524,13 @@
 			canvas.videoComp_lc.send(canvas.videoComp_lc_name, 'exitRoom', bool);
 			if($debug) Debug.write("3");
 			if($debug) Debug.write("Do disconnect 10:: ", canvas.thishib);
-			canvas.thishib.src = null;
+			if (canvas.thishib._nc) {
+				canvas.thishib._nc.close();
+			}
+			if($debug) Debug.write("4");
 			canvas.thishib.disconnect();
-			canvas.thishib._nc.close();
+			if($debug) Debug.write("5");
+			canvas.thishib.src = null;
 		}
 	]]>
 	</method>

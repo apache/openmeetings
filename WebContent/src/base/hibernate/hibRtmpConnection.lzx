@@ -101,6 +101,7 @@
     <attribute name="showFullMessage" value="false" type="boolean"/>
          
     <attribute name="useRTMPT" value="false" type="boolean" />
+    <attribute name="connected" value="false" type="boolean" />
     
     <method name="getProtocol">
     	if (canvas.useSSL) {
@@ -180,10 +181,12 @@
             //Load Session Data
             this.getsessiondata.callRPC();    
         }
+        connected = true;
     </handler>
     
     <handler name="ondisconnect">
         canvas.sendViaLocalConnection(canvas.rtmp_lc_name, "disconnect", [canvas.thishib.src]);
+        connected = false;
     </handler>
     
     <method name="reconnectComplete">
