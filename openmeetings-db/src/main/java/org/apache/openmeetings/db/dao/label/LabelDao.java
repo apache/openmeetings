@@ -284,7 +284,8 @@ public class LabelDao implements IDataProviderDao<StringLabel>{
 			CollectionUtils.filter(result, new Predicate() {
 				@Override
 				public boolean evaluate(Object o) {
-					return o != null && ((String)o).contains(search);
+					StringLabel sl = (StringLabel)o;
+					return o != null && (sl.getKey().contains(search) || sl.getValue().contains(search));
 				}
 			});
 		}
