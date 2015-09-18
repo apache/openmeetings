@@ -20,10 +20,9 @@ package org.apache.openmeetings.core.remote;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
-import java.util.Calendar;
+import java.util.Date;
 
 import org.apache.openmeetings.db.dao.room.IInvitationManager;
-import org.apache.openmeetings.db.dao.room.InvitationDao;
 import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.dao.server.SessiondataDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
@@ -32,12 +31,13 @@ import org.apache.openmeetings.db.entity.room.Invitation.MessageType;
 import org.apache.openmeetings.db.entity.room.Invitation.Valid;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.util.AuthLevelUtil;
-import org.apache.openmeetings.db.util.TimezoneUtil;
+import org.apache.openmeetings.util.CalendarHelper;
 import org.red5.logging.Red5LoggerFactory;
 import org.red5.server.api.service.IPendingServiceCall;
 import org.red5.server.api.service.IPendingServiceCallback;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.threeten.bp.LocalDateTime;
 
 public class InvitationService implements IPendingServiceCallback {
 	private static final Logger log = Red5LoggerFactory.getLogger(InvitationService.class, webAppRootKey);
@@ -48,27 +48,21 @@ public class InvitationService implements IPendingServiceCallback {
 	@Autowired
 	private IInvitationManager invitationManager;
 	@Autowired
-	private InvitationDao invitationDao;
-	@Autowired
-	private TimezoneUtil timezoneUtil;
-	@Autowired
 	private RoomDao roomDao;
 
 	public void resultReceived(IPendingServiceCall arg0) {
 		log.debug("InvitationService resultReceived" + arg0);
 	}
 
-	private Calendar getDate(String date, String time, String tzId) {
-		Calendar c = Calendar.getInstance(timezoneUtil.getTimeZone(tzId));
-		c.set(Calendar.YEAR, Integer.parseInt(date.substring(6)));
-		c.set(Calendar.MONTH, Integer.parseInt(date.substring(3, 5)) - 1);
-		c.set(Calendar.DAY_OF_MONTH, Integer.parseInt(date.substring(0, 2)));
-		c.set(Calendar.HOUR_OF_DAY, Integer.parseInt(time.substring(0, 2)));
-		c.set(Calendar.MINUTE, Integer.parseInt(time.substring(3, 5)));
-		c.set(Calendar.SECOND, 0);
-		c.set(Calendar.MILLISECOND, 0);
-		
-		return c;
+	private Date getDate(String date, String time, String tzId) {
+		LocalDateTime d = LocalDateTime.of(
+				Integer.parseInt(date.substring(6)) //year
+				, Integer.parseInt(date.substring(3, 5)) - 1 //month
+				, Integer.parseInt(date.substring(0, 2)) //dayOfMonth
+				, Integer.parseInt(time.substring(0, 2)) //hour
+				, Integer.parseInt(time.substring(3, 5)) //minute
+				);
+		return CalendarHelper.getDate(d, tzId);
 	}
 	
 	/**
@@ -106,8 +100,8 @@ public class InvitationService implements IPendingServiceCallback {
 			if (AuthLevelUtil.hasUserLevel(userDao.getRights(users_id))) {
 				log.debug("sendInvitationHash: ");
 	
-				Calendar calFrom = getDate(validFromDate, validFromTime, iCalTz);
-				Calendar calTo = getDate(validToDate, validToTime, iCalTz);
+				Date from = getDate(validFromDate, validFromTime, iCalTz);
+				Date to = getDate(validToDate, validToTime, iCalTz);
 	
 				User owner = null;
 				if (users_id < 0) {
@@ -118,7 +112,7 @@ public class InvitationService implements IPendingServiceCallback {
 				Invitation invitation = invitationManager.getInvitation(invitee, roomDao.get(room_id),
 								isPasswordProtected, invitationpass, Valid.fromInt(valid)
 								, userDao.get(users_id), languageId,
-								calFrom.getTime(), calTo.getTime(), null);
+								from, to, null);
 
 				if (invitation != null) {
 					if (sendMail) {
@@ -155,7 +149,7 @@ public class InvitationService implements IPendingServiceCallback {
 	}
 	
 	public Object getInvitationByHash(String hashCode) {
-		return invitationDao.getInvitationByHashCode(hashCode, true);
+		return invitationManager.getInvitationByHashCode(hashCode, true);
 	}
 
 	public Object checkInvitationPass(String hashCode, String pass) {

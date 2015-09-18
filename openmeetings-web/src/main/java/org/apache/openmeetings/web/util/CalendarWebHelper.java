@@ -22,43 +22,25 @@ import static org.apache.openmeetings.web.app.WebSession.getUserTimeZone;
 
 import java.util.Date;
 
-import org.threeten.bp.Instant;
+import org.apache.openmeetings.util.CalendarHelper;
 import org.threeten.bp.LocalDate;
 import org.threeten.bp.LocalDateTime;
 import org.threeten.bp.ZoneId;
-import org.threeten.bp.ZonedDateTime;
 
-public class CalendarHelper {
+public class CalendarWebHelper extends CalendarHelper {
 	public static ZoneId getZoneId() {
-		return ZoneId.of(getUserTimeZone().getID());
+		return getZoneId(getUserTimeZone().getID());
+	}
+	
+	public static Date getDate(LocalDateTime d) {
+		return getDate(d, getUserTimeZone().getID());
 	}
 	
 	public static Date getDate(LocalDate d) {
-		return getDate(d.atStartOfDay());
-	}
-
-	public static Date getDate(LocalDateTime d) {
-		return new Date(d.atZone(getZoneId()).toInstant().toEpochMilli());
-	}
-
-	public static ZonedDateTime getZoneDateTime(Date d) {
-		if (d == null) {
-			d = new Date();
-		}
-		return Instant.ofEpochMilli(d.getTime()).atZone(ZoneId.of(getUserTimeZone().getID()));
-	}
-	
-	public static LocalDate getDate(Date d) {
-		if (d == null) {
-			d = new Date();
-		}
-		return getZoneDateTime(d).toLocalDate();
+		return getDate(d, getUserTimeZone().getID());
 	}
 	
 	public static LocalDateTime getDateTime(Date d) {
-		if (d == null) {
-			d = new Date();
-		}
-		return getZoneDateTime(d).toLocalDateTime();
+		return getDateTime(d, getUserTimeZone().getID());
 	}
 }

@@ -37,9 +37,9 @@ import org.apache.openmeetings.db.entity.user.GroupUser;
 import org.apache.openmeetings.db.entity.user.State;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Salutation;
+import org.apache.openmeetings.util.CalendarHelper;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
-import org.apache.openmeetings.web.util.CalendarHelper;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.extensions.validation.validator.RfcCompliantEmailAddressValidator;
 import org.apache.wicket.markup.head.IHeaderResponse;
@@ -113,7 +113,8 @@ public class GeneralUserForm extends Form<User> {
 
 			@Override
 			public void onValueChanged(IPartialPageRequestHandler target) {
-				GeneralUserForm.this.getModelObject().setAge(CalendarHelper.getDate(age));
+				User u = GeneralUserForm.this.getModelObject();
+				u.setAge(CalendarHelper.getDate(age, u.getTimeZoneId()));
 			}
 		});
 		add(new TextField<String>("address.street"));
@@ -171,7 +172,7 @@ public class GeneralUserForm extends Form<User> {
 	}
 
 	public void updateModelObject(User u) {
-		age = CalendarHelper.getDate(u.getAge());
+		age = CalendarHelper.getDate(u.getAge(), u.getTimeZoneId());
 	}
 	
 	@Override

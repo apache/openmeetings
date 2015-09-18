@@ -18,8 +18,8 @@
  */
 package org.apache.openmeetings.web.user.calendar;
 
+import static org.apache.openmeetings.web.util.CalendarWebHelper.getDateTime;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
-import org.apache.openmeetings.web.util.CalendarHelper;
 
 import com.googlecode.wicket.jquery.ui.calendar.CalendarEvent;
 
@@ -28,8 +28,8 @@ public class OmCalendarEvent extends CalendarEvent {
 	
 	public OmCalendarEvent(Appointment a) {
 		super(a.getId().intValue(), a.getTitle(), null);
-		setStart(CalendarHelper.getDateTime(a.getStart()));
-		setEnd(CalendarHelper.getDateTime(a.getEnd()));
+		setStart(getDateTime(a.getStart()));
+		setEnd(getDateTime(a.getEnd()));
 		setEditable(AppointmentDialog.isOwner(a));
 		setAllDay(false);
 	}

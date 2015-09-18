@@ -77,5 +77,10 @@
 			<artifactId>wicket-util</artifactId>
 			<version>${wicket.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>org.threeten</groupId>
+			<artifactId>threetenbp</artifactId>
+			<version>1.2</version>
+		</dependency>
 	</dependencies>
 </project>
