@@ -22,6 +22,8 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_CALENDAR
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
+import static org.apache.openmeetings.web.util.CalendarWebHelper.getDate;
+import static org.apache.openmeetings.web.util.CalendarWebHelper.getZoneId;
 
 import java.util.Date;
 
@@ -33,7 +35,6 @@ import org.apache.openmeetings.db.entity.calendar.Appointment;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.UserPanel;
-import org.apache.openmeetings.web.util.CalendarHelper;
 import org.apache.wicket.ajax.AbstractAjaxTimerBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.json.JSONArray;
@@ -200,12 +201,12 @@ public class CalendarPanel extends UserPanel {
 				Appointment a = getDefault();
 				LocalDateTime s = start, e = end;
 				if (CalendarView.month == view) {
-					LocalDateTime now = ZonedDateTime.now(CalendarHelper.getZoneId()).toLocalDateTime();
+					LocalDateTime now = ZonedDateTime.now(getZoneId()).toLocalDateTime();
 					s = start.withHour(now.getHour()).withMinute(now.getMinute());
 					e = s.plus(1, ChronoUnit.HOURS);
 				}
-				a.setStart(CalendarHelper.getDate(s));
-				a.setEnd(CalendarHelper.getDate(e));
+				a.setStart(getDate(s));
+				a.setEnd(getDate(e));
 				dialog.setModelObjectWithAjaxTarget(a, target);
 				
 				dialog.open(target);

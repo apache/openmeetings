@@ -45,10 +45,11 @@ import org.apache.openmeetings.db.entity.user.PrivateMessage;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Type;
 import org.apache.openmeetings.mail.MailHandler;
+import org.apache.openmeetings.util.CalendarHelper;
 import org.apache.openmeetings.util.LinkHelper;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.common.OmDateTimePicker;
-import org.apache.openmeetings.web.util.CalendarHelper;
+import org.apache.openmeetings.web.util.CalendarWebHelper;
 import org.apache.openmeetings.web.util.ContactsHelper;
 import org.apache.openmeetings.web.util.RoomTypeDropDown;
 import org.apache.openmeetings.web.util.UserMultiChoice;
@@ -178,6 +179,8 @@ public class MessageDialog extends AbstractFormDialog<PrivateMessage> {
 	protected void onSubmit(AjaxRequestTarget target) {
 		PrivateMessage p = getModelObject();
 		p.setInserted(new Date());
+		UserDao userDao = getBean(UserDao.class); 
+		User owner = userDao.get(getUserId());
 		if (p.isBookedRoom()) {
 			Room r = p.getRoom();
 			r.setName(p.getSubject());
@@ -191,8 +194,8 @@ public class MessageDialog extends AbstractFormDialog<PrivateMessage> {
 			a.setTitle(p.getSubject());
 			a.setDescription(p.getMessage());
 			a.setRoom(r);
-			a.setStart(CalendarHelper.getDate(start.getModelObject()));
-			a.setEnd(CalendarHelper.getDate(end.getModelObject()));
+			a.setStart(CalendarWebHelper.getDate(start.getModelObject()));
+			a.setEnd(CalendarWebHelper.getDate(end.getModelObject()));
 			List<MeetingMember> attendees = new ArrayList<>();
 			for (User to : modelTo.getObject()) {
         		MeetingMember mm = new MeetingMember();
@@ -203,7 +206,7 @@ public class MessageDialog extends AbstractFormDialog<PrivateMessage> {
         		mm.setAppointment(a);
         		attendees.add(mm);
 			}
-			a.setOwner(getBean(UserDao.class).get(getUserId()));
+			a.setOwner(owner);
 			a.setMeetingMembers(attendees);
 	        getBean(AppointmentDao.class).update(a, getUserId(), false);
 			p.setRoom(r);
@@ -212,7 +215,6 @@ public class MessageDialog extends AbstractFormDialog<PrivateMessage> {
 		}
 		PrivateMessagesDao msgDao = getBean(PrivateMessagesDao.class);
 		for (User to : modelTo.getObject()) {
-			UserDao userDao = getBean(UserDao.class); 
 			if (to.getUser_id() == null) {
 				userDao.update(to, getUserId());
 			}
@@ -228,13 +230,13 @@ public class MessageDialog extends AbstractFormDialog<PrivateMessage> {
 			msgDao.update(p, getUserId());
 			if (to.getAdresses() != null) {
 				String aLinkHTML = 	(isPrivate && to.getType() == Type.user) ? "<br/><br/>" + "<a href='" + ContactsHelper.getLink() + "'>"
-							+ Application.getString(1302) + "</a><br/>" : "";
+							+ Application.getString(1302, to.getLanguage_id()) + "</a><br/>" : "";
 				String invitation_link = "";
 				if (p.isBookedRoom()) {
 					Invitation i = getBean(InvitationManager.class).getInvitation(to, p.getRoom(),
-							false, null, Valid.Period
-							, userDao.get(getUserId()), userDao.get(getUserId()).getLanguage_id(),
-							CalendarHelper.getDate(start.getModelObject()), CalendarHelper.getDate(end.getModelObject()), null);
+							false, null, Valid.Period, owner, to.getLanguage_id()
+							, CalendarHelper.getDate(start.getModelObject(), to.getTimeZoneId())
+							, CalendarHelper.getDate(end.getModelObject(), to.getTimeZoneId()), null);
 					
 					invitation_link = LinkHelper.getInvitationLink(getBean(ConfigurationDao.class).getBaseUrl(), i);
 
@@ -242,15 +244,15 @@ public class MessageDialog extends AbstractFormDialog<PrivateMessage> {
 						invitation_link = "";
 					} else {
 						invitation_link = "<br/>" //
-								+ Application.getString(503)
+								+ Application.getString(503, to.getLanguage_id())
 								+ "<br/><a href='" + invitation_link
 								+ "'>"
-								+ Application.getString(504) + "</a><br/>";
+								+ Application.getString(504, to.getLanguage_id()) + "</a><br/>";
 					}
 				}
 				
 				getBean(MailHandler.class).send(to.getAdresses().getEmail(),
-						Application.getString(1301) + p.getSubject(),
+						Application.getString(1301, to.getLanguage_id()) + p.getSubject(),
 						(p.getMessage() == null ? "" : p.getMessage().replaceAll("\\<.*?>", "")) + aLinkHTML + invitation_link);
 			}
 		}

@@ -22,6 +22,8 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.getLanguage;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
+import static org.apache.openmeetings.web.util.CalendarWebHelper.getDate;
+import static org.apache.openmeetings.web.util.CalendarWebHelper.getDateTime;
 import static org.apache.openmeetings.web.util.RoomTypeDropDown.getRoomTypes;
 
 import java.util.ArrayList;
@@ -48,7 +50,6 @@ import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.OmDateTimePicker;
 import org.apache.openmeetings.web.pages.MainPage;
 import org.apache.openmeetings.web.user.rooms.RoomEnterBehavior;
-import org.apache.openmeetings.web.util.CalendarHelper;
 import org.apache.openmeetings.web.util.FormatHelper;
 import org.apache.openmeetings.web.util.RoomTypeDropDown;
 import org.apache.openmeetings.web.util.UserMultiChoice;
@@ -104,8 +105,8 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 	
 	public void setModelObjectWithAjaxTarget(Appointment a, AjaxRequestTarget target) {
 		form.setModelObject(a);
-		form.start.setModelObject(CalendarHelper.getDateTime(a.getStart()));
-		form.end.setModelObject(CalendarHelper.getDateTime(a.getEnd()));
+		form.start.setModelObject(getDateTime(a.getStart()));
+		form.end.setModelObject(getDateTime(a.getEnd()));
 		form.setEnabled(isOwner(a));
 		log.debug(" -- setModelObjectWithAjaxTarget -- Current model " + a);
 		if (a.getId() != null) {
@@ -212,8 +213,8 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
         	}
         }
         a.setMeetingMembers(attendees);
-        a.setStart(CalendarHelper.getDate(form.start.getModelObject()));
-        a.setEnd(CalendarHelper.getDate(form.end.getModelObject()));
+        a.setStart(getDate(form.start.getModelObject()));
+        a.setEnd(getDate(form.end.getModelObject()));
         getBean(AppointmentDao.class).update(a, getUserId());
 		target.add(feedback);
 		calendarPanel.refresh(target);

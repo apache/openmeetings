@@ -21,7 +21,6 @@ package org.apache.openmeetings.data.conference;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
 import java.security.NoSuchAlgorithmException;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.TimeZone;
@@ -41,6 +40,7 @@ import org.apache.openmeetings.db.entity.user.User.Type;
 import org.apache.openmeetings.db.util.TimezoneUtil;
 import org.apache.openmeetings.mail.MailHandler;
 import org.apache.openmeetings.mail.SMSHandler;
+import org.apache.openmeetings.util.CalendarHelper;
 import org.apache.openmeetings.util.LinkHelper;
 import org.apache.openmeetings.util.crypt.MD5;
 import org.apache.openmeetings.util.crypt.ManageCryptStyle;
@@ -54,6 +54,7 @@ import org.apache.wicket.util.string.Strings;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.threeten.bp.LocalDateTime;
 
 /**
  * 
@@ -176,46 +177,42 @@ public class InvitationManager implements IInvitationManager {
 	public Object getInvitationByHashCode(String hashCode, boolean hidePass) {
 		try {
 			log.debug("Invitation was requested by hashcode: " + hashCode);
-			Invitation invitation = invitationDao.getInvitationByHashCode(hashCode, hidePass);
+			Invitation i = invitationDao.getInvitationByHashCode(hashCode, hidePass);
 
-			if (invitation == null) {
+			if (i == null) {
 				// already deleted or does not exist
 				return new Long(-31);
 			} else {
-				switch (invitation.getValid()) {
+				switch (i.getValid()) {
 					case OneTime:
 						// do this only if the user tries to get the Invitation, not
 						// while checking the PWD
 						if (hidePass) {
 							// one-time invitation
-							if (invitation.isUsed()) {
+							if (i.isUsed()) {
 								// Invitation is of type *only-one-time* and was
 								// already used
 								return new Long(-32);
 							} else {
 								// set to true if this is the first time / a normal
 								// getInvitation-Query
-								invitation.setUsed(true);
-								invitationDao.update(invitation);
+								i.setUsed(true);
+								invitationDao.update(i);
 								// invitation.setInvitationpass(null);
-								invitation.setAllowEntry(true);
+								i.setAllowEntry(true);
 							}
 						} else {
-							invitation.setAllowEntry(true);
+							i.setAllowEntry(true);
 						}
 						break;
 					case Period:
-						TimeZone tz = timezoneUtil.getTimeZone(invitation.getInvitee());
-						Calendar now = Calendar.getInstance(tz);
-						Calendar start = Calendar.getInstance(tz);
-						start.setTime(invitation.getValidFrom());
-
-						Calendar end = Calendar.getInstance(tz);
-						end.setTime(invitation.getValidTo());
-						if (now.after(start) && now.before(end)) {
-							invitationDao.update(invitation);
+						LocalDateTime now = LocalDateTime.now();
+						LocalDateTime from = CalendarHelper.getDateTime(i.getValidFrom(), i.getInvitee().getTimeZoneId());
+						LocalDateTime to = CalendarHelper.getDateTime(i.getValidTo(), i.getInvitee().getTimeZoneId());
+						if (now.isAfter(from) && now.isBefore(to)) {
+							invitationDao.update(i);
 							// invitation.setInvitationpass(null);
-							invitation.setAllowEntry(true);
+							i.setAllowEntry(true);
 						} else {
 
 							// Invitation is of type *period* and is not valid
@@ -223,18 +220,18 @@ public class InvitationManager implements IInvitationManager {
 							// correctly
 							// in the method where it shows that the hash code does
 							// not work anymore
-							invitation.setAllowEntry(false);
+							i.setAllowEntry(false);
 						}
 						break;
 					case Endless:
 					default:
-						invitationDao.update(invitation);
+						invitationDao.update(i);
 
-						invitation.setAllowEntry(true);
+						i.setAllowEntry(true);
 						// invitation.setInvitationpass(null);
 						break;
 				}
-				return invitation;
+				return i;
 			}
 
 		} catch (Exception err) {
@@ -256,9 +253,6 @@ public class InvitationManager implements IInvitationManager {
 			if (obj instanceof Invitation) {
 				Invitation invitation = (Invitation) obj;
 
-				// log.debug("invitationId "+invitation.getInvitations_id());
-				// log.debug("pass "+pass);
-				// log.debug("getInvitationpass "+invitation.getInvitationpass());
 
 				if (ManageCryptStyle.getInstanceOfCrypt().verifyPassword(pass, invitation.getPassword())) {
 					return new Long(1);

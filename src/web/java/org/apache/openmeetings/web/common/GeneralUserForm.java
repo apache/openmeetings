@@ -38,9 +38,9 @@ import org.apache.openmeetings.db.entity.user.Organisation_Users;
 import org.apache.openmeetings.db.entity.user.Salutation;
 import org.apache.openmeetings.db.entity.user.State;
 import org.apache.openmeetings.db.entity.user.User;
+import org.apache.openmeetings.util.CalendarHelper;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
-import org.apache.openmeetings.web.util.CalendarHelper;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.extensions.validation.validator.RfcCompliantEmailAddressValidator;
@@ -127,7 +127,8 @@ public class GeneralUserForm extends Form<User> {
 
 			@Override
 			public void onValueChanged(AjaxRequestTarget target) {
-				GeneralUserForm.this.getModelObject().setAge(CalendarHelper.getDate(age));
+				User u = GeneralUserForm.this.getModelObject();
+				u.setAge(CalendarHelper.getDate(age, u.getTimeZoneId()));
 			}
 		});
 		add(new TextField<String>("adresses.street"));
@@ -186,7 +187,7 @@ public class GeneralUserForm extends Form<User> {
 
 	public void updateModelObject(User u) {
 		salutation = getBean(SalutationDao.class).get(u.getSalutations_id(), getLanguage());
-		age = CalendarHelper.getDate(u.getAge());
+		age = CalendarHelper.getDate(u.getAge(), u.getTimeZoneId());
 	}
 	
 	@Override
