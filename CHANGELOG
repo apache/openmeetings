@@ -2,6 +2,36 @@ Apache OpenMeetings Change Log
 
 See http://issues.apache.org/jira/browse/OPENMEETINGS-* (where * is the number of the issue below)
 
+Release Notes - Openmeetings - Version 3.0.7
+================================================================================================================
+
+** Bug
+    * [OPENMEETINGS-1211] - the use of icons in users tab is illogical
+    * [OPENMEETINGS-1213] - Error is shown when contact try to send invitation
+    * [OPENMEETINGS-1218] - Wrong birthday date is displayed on the User datails at Administration->Users page
+    * [OPENMEETINGS-1221] - Language is not loaded after changes
+    * [OPENMEETINGS-1230] - Clustering seems not to work as expected
+    * [OPENMEETINGS-1231] - chat bar on landing page without lable an delete function missing
+    * [OPENMEETINGS-1234] - Unable to take backup using GUI or Admin.sh
+    * [OPENMEETINGS-1238] - Share/record screen: go to HTTP STATUS 404- Apache Tomcat page
+    * [OPENMEETINGS-1239] - Can't import REST URL properly
+    * [OPENMEETINGS-1248] - Clustering not working from external system (for ex. Moodle)
+    * [OPENMEETINGS-1249] - Guest can't enter to the room when room is booked via private message
+    * [OPENMEETINGS-1250] - Video is not availble in the interview rooms
+    * [OPENMEETINGS-1251] - When room is full kicked user not redirected to Rooms list
+    * [OPENMEETINGS-1253] - Crash when searching at language editor.
+    * [OPENMEETINGS-1254] - Crash when adding OAuth2 config
+
+** Improvement
+    * [OPENMEETINGS-954] - Need implement OM client for Android devices.
+    * [OPENMEETINGS-1100] - Seperate video/audio permissions capability 
+    * [OPENMEETINGS-1101] - Live presenter activity (typing , drawing)
+    * [OPENMEETINGS-1212] - Library versions should be updated (3.0.7)
+
+** Wish
+    * [OPENMEETINGS-1214] - LDAP import AD groups
+
+
 Release Notes - Openmeetings - Version 3.0.6
 ================================================================================================================
 
