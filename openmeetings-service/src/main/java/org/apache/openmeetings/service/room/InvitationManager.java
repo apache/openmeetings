@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.service.room;
 
+import static org.apache.openmeetings.util.CalendarHelper.getZoneId;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.wicketApplicationName;
 
@@ -59,6 +60,7 @@ import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.threeten.bp.LocalDateTime;
+import org.threeten.bp.ZonedDateTime;
 
 /**
  * 
@@ -210,7 +212,7 @@ public class InvitationManager implements IInvitationManager {
 						}
 						break;
 					case Period:
-						LocalDateTime now = LocalDateTime.now();
+						LocalDateTime now = ZonedDateTime.now(getZoneId(i.getInvitee().getTimeZoneId())).toLocalDateTime();
 						LocalDateTime from = CalendarHelper.getDateTime(i.getValidFrom(), i.getInvitee().getTimeZoneId());
 						LocalDateTime to = CalendarHelper.getDateTime(i.getValidTo(), i.getInvitee().getTimeZoneId());
 						if (now.isAfter(from) && now.isBefore(to)) {
