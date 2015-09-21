@@ -8,6 +8,22 @@ Apache Openmeetings provides video conferencing, instant messaging, white board,
 collaborative document editing and other groupware tools using API functions of 
 the Red5 Streaming Server for Remoting and Streaming. 
 
+Release Notes 3.0.7
+=============
+see CHANGELOG file for detailed log
+
+Service release 7 for 3.0.0 contains following improvements and bug fixes:
+
+Clustering:
+* Clustering was tested and fixed, now it works as expected both in OM and plugins
+* Moderator able to restrict video in restricted room from now on
+* Private messages with room booking are now works as expected
+* Crashes in admin are fixed
+* LDAP: group import
+
+Other fixes in admin, localizations, invitations etc.
+
+
 Release Notes 3.0.6
 =============
 see CHANGELOG file for detailed log
