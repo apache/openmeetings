@@ -22,6 +22,7 @@ import static org.apache.openmeetings.db.entity.user.PrivateMessage.INBOX_FOLDER
 import static org.apache.openmeetings.db.entity.user.PrivateMessage.SENT_FOLDER_ID;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
+import static org.apache.openmeetings.web.util.CalendarWebHelper.getZoneId;
 import static org.apache.openmeetings.web.util.RoomTypeDropDown.getRoomTypes;
 
 import java.util.ArrayList;
@@ -64,6 +65,8 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.util.CollectionModel;
 import org.threeten.bp.LocalDateTime;
+import org.threeten.bp.ZonedDateTime;
+import org.threeten.bp.temporal.ChronoUnit;
 
 import com.googlecode.wicket.jquery.core.Options;
 import com.googlecode.wicket.jquery.ui.plugins.wysiwyg.WysiwygEditor;
@@ -97,8 +100,10 @@ public class MessageDialog extends AbstractFormDialog<PrivateMessage> {
 	}
 	
 	public MessageDialog reset(boolean isPrivate) {
-		start.setModelObject(LocalDateTime.now());
-		end.setModelObject(LocalDateTime.now()); //TODO should we add 1 hour or generalize with Calendar???
+		//TODO should be 'in sync' with appointment
+		LocalDateTime now = ZonedDateTime.now(getZoneId()).toLocalDateTime();
+		start.setModelObject(now);
+		end.setModelObject(now.plus(1, ChronoUnit.HOURS));
 		modelTo.setObject(new ArrayList<User>());
 		PrivateMessage p = new PrivateMessage();
 		p.setFrom(getBean(UserDao.class).get(getUserId()));
